@@ -29,6 +29,8 @@
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
 
+#include <kis_properties_configuration.h>
+#include <kis_config.h>
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
@@ -76,8 +78,16 @@ KoFilter::ConversionStatus jp2Export::convert(const QByteArray& from, const QByt
 
     QWidget* wdg = new QWidget(kdb);
     optionsJP2.setupUi(wdg);
+
+
+    QString filterConfig = KisConfig().exportConfiguration("JP2");
+    KisPropertiesConfiguration cfg;
+    cfg.fromXML(filterConfig);
+    optionsJP2.numberResolutions->setValue(cfg.getInt("number_resolutions", 6));
+    optionsJP2.qualityLevel->setValue(cfg.getInt("quality", 100));
     
     kdb->setMainWidget(wdg);
+    kapp->restoreOverrideCursor();
 
     if (!m_chain->manager()->getBatchMode()) {
         if (kdb->exec() == QDialog::Rejected) {
@@ -87,7 +97,11 @@ KoFilter::ConversionStatus jp2Export::convert(const QByteArray& from, const QByt
     
     JP2ConvertOptions options;
     options.numberresolution = optionsJP2.numberResolutions->value();
+    cfg.setProperty("number_resolutions", options.numberresolution);
     options.rate = optionsJP2.qualityLevel->value();
+    cfg.setProperty("quality", options.rate);
+
+    KisConfig().setExportConfiguration("JP2", cfg);
 
     KUrl url;
     url.setPath(filename);

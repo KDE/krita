@@ -194,6 +194,13 @@
          </widget>
         </item>
         <item>
+         <widget class="QPushButton" name="span">
+          <property name="text">
+           <string>Span</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QPushButton" name="remove">
           <property name="text">
            <string>&lt;&lt;Remove</string>

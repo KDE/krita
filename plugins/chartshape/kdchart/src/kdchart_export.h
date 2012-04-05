@@ -23,7 +23,7 @@
 #ifndef KDCHART_EXPORT_H
 #define KDCHART_EXPORT_H
 
-#include <qglobal.h>
+#include <QtGlobal>
 
 # ifdef KDCHART_STATICLIB
 #  undef KDCHART_SHAREDLIB

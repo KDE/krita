@@ -62,8 +62,6 @@ private slots:
      */
     void maskToLayer();
 
-    void changeActivity(KisSelectionMask *mask,bool active);
-
 private:
     
     friend class KisNodeManager;

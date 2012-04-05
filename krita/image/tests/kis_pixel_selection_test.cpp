@@ -33,7 +33,8 @@
 #include "testutil.h"
 #include "kis_fill_painter.h"
 #include "kis_transaction.h"
-#include "kis_default_bounds.h"
+#include "commands/kis_selection_commands.h"
+
 
 void KisPixelSelectionTest::testCreation()
 {
@@ -46,7 +47,7 @@ void KisPixelSelectionTest::testCreation()
     QVERIFY(selection);
     QVERIFY(selection->isTotallyUnselected(QRect(0, 0, 512, 512)));
 
-    selection = new KisPixelSelection(new KisDefaultBounds(dev));
+    selection = new KisPixelSelection(new KisSelectionDefaultBounds(dev));
     QVERIFY(selection);
     QVERIFY(selection->isTotallyUnselected(QRect(0, 0, 512, 512)));
     selection->setDirty(QRect(10, 10, 10, 10));
@@ -65,7 +66,7 @@ void KisPixelSelectionTest::testSetSelected()
 void KisPixelSelectionTest::testInvert()
 {
     KisDefaultBounds defaultBounds;
-
+    
     KisPixelSelectionSP selection = new KisPixelSelection();
     selection->select(QRect(5, 5, 10, 10));
     selection->invert();
@@ -81,7 +82,7 @@ void KisPixelSelectionTest::testInvertWithImage()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 200, 200, cs, "merge test");
 
-    image->setGlobalSelection();
+    KisSetEmptyGlobalSelectionCommand(image).redo();
     KisPixelSelectionSP selection =  image->globalSelection()->getOrCreatePixelSelection();
     selection->select(QRect(5, 5, 10, 10));
     selection->invert();
@@ -179,7 +180,6 @@ void KisPixelSelectionTest::testTotally()
     sel->select(QRect(0, 0, 100, 100));
     QVERIFY(sel->isTotallyUnselected(QRect(100, 0, 100, 100)));
     QVERIFY(!sel->isTotallyUnselected(QRect(50, 0, 100, 100)));
-    QVERIFY(sel->isProbablyTotallyUnselected(QRect(128, 0, 100, 100)));
 }
 
 void KisPixelSelectionTest::testUpdateProjection()
@@ -196,8 +196,8 @@ void KisPixelSelectionTest::testExactRectWithImage()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 200, 200, cs, "merge test");
 
-    image->setGlobalSelection();
-    KisPixelSelectionSP selection =  image->globalSelection()->getOrCreatePixelSelection();
+    KisSetEmptyGlobalSelectionCommand(image).redo();
+    KisPixelSelectionSP selection = image->globalSelection()->getOrCreatePixelSelection();
     selection->select(QRect(100, 50, 200, 100));
     QCOMPARE(selection->selectedExactRect(), QRect(100, 50, 200, 100));
 }

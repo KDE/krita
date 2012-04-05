@@ -19,7 +19,7 @@
 #ifndef KIS_PERSPECTIVE_MATH_TEST_H
 #define KIS_PERSPECTIVE_MATH_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisPerspectiveMathTest : public QObject
 {

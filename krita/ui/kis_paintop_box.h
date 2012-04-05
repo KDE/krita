@@ -125,6 +125,7 @@ private slots:
     void slotSlider1Changed();
     void slotSlider2Changed();
     void slotToolChanged(KoCanvasController* canvas, int toolId);
+    void slotOpacityChanged(qreal);
     
 private:
     KisCanvasResourceProvider*           m_resourceProvider;
@@ -182,6 +183,7 @@ private:
     TabletToolMap    m_tabletToolMap;
     PaintOpPresetMap m_paintOpPresetMap;
     TabletToolID     m_currTabletToolID;
+    bool             m_presetsEnabled;
 };
 
 #endif //KIS_PAINTOP_BOX_H_

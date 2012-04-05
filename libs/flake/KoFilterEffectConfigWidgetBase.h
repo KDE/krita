@@ -21,7 +21,7 @@
 #define KOFILTEREFFECTCONFIGWIDGETBASE_H
 
 #include "flake_export.h"
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class KoFilterEffect;
 

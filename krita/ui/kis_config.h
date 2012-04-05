@@ -26,6 +26,7 @@
 #include <kconfiggroup.h>
 
 #include "kis_global.h"
+#include "kis_properties_configuration.h"
 #include "krita_export.h"
 
 class KoColorProfile;
@@ -221,6 +222,9 @@ public:
     int presetChooserViewMode() const;
     void setPresetChooserViewMode(const int mode);
 
+    bool presetShowAllMode() const;
+    void setPresetShowAllMode(bool showAll);
+
     bool firstRun() const;
     void setFirstRun(const bool firstRun) const;
 
@@ -253,6 +257,9 @@ public:
 
     QStringList favoriteCompositeOps() const;
     void setFavoriteCompositeOps(const QStringList& compositeOps);
+
+    QString exportConfiguration(const QString &filterId) const;
+    void setExportConfiguration(const QString &filterId, const KisPropertiesConfiguration &properties);
 
 private:
     KisConfig(const KisConfig&);

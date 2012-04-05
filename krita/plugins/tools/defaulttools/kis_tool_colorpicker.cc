@@ -302,11 +302,6 @@ QWidget* KisToolColorPicker::createOptionWidget()
     return m_optionsWidget;
 }
 
-QWidget* KisToolColorPicker::optionWidget()
-{
-    return m_optionsWidget;
-}
-
 void KisToolColorPicker::slotSetUpdateColor(bool state)
 {
     m_updateColor = state;

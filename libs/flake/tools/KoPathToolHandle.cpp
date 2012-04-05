@@ -36,7 +36,7 @@
 #include "KoViewConverter.h"
 #include "KoPointerEvent.h"
 #include "KoShapeController.h"
-#include <QtGui/QPainter>
+#include <QPainter>
 
 KoPathToolHandle::KoPathToolHandle(KoPathTool *tool)
         : m_tool(tool)

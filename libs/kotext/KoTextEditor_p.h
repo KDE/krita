@@ -31,9 +31,12 @@
 #include <KLocale>
 #include <kdebug.h>
 
+#include <QStack>
 #include <QTextBlock>
 #include <QTextDocument>
 #include <QTimer>
+
+class KUndo2Command;
 
 class KoTextEditor::Private
 {
@@ -53,25 +56,65 @@ public:
     void documentCommandAdded();
     void updateState(State newState, QString title = QString());
 
-    bool deleteInlineObjects(bool backwards = false);
-    void runDirectionUpdater();
+    void newLine(KUndo2Command *parent);
     void clearCharFormatProperty(int propertyId);
+
+    void emitTextFormatChanged();
 
     KoTextEditor *q;
     QTextCursor caret;
     QTextDocument *document;
-    KUndo2Command *headCommand;
+    QStack<KUndo2Command*> commandStack;
+    bool addNewCommand;
+    bool dummyMacroAdded;
+    int customCommandCount;
     QString commandTitle;
-    KoText::Direction direction;
-    bool isBidiDocument;
 
     State editorState;
 
-    QTimer updateRtlTimer;
-    QList<int> dirtyBlocks;
-
     bool editProtected;
     bool editProtectionCached;
+};
+
+class KoTextVisitor
+{
+public:
+    KoTextVisitor(KoTextEditor *editor)
+        : m_abortVisiting(false)
+        , m_editor(editor)
+    {
+    }
+
+    virtual ~KoTextVisitor() {}
+    // called whenever a visit was prevented by editprotection
+    virtual void nonVisit() {}
+
+    virtual void visitFragmentSelection(QTextCursor )
+    {
+    }
+
+    // The default implementation calls visitFragmentSelection on each fragment.intersect.selection
+    virtual void visitBlock(QTextBlock block, const QTextCursor &caret)
+    {
+        for (QTextBlock::iterator it = block.begin(); it != block.end(); ++it) {
+            QTextCursor fragmentSelection(caret);
+            fragmentSelection.setPosition(qMax(caret.selectionStart(), it.fragment().position()));
+            fragmentSelection.setPosition(qMin(caret.selectionEnd(), it.fragment().position() + it.fragment().length()), QTextCursor::KeepAnchor);
+
+            if (fragmentSelection.anchor() >= fragmentSelection.position()) {
+                continue;
+            }
+
+            visitFragmentSelection(fragmentSelection);
+        }
+    }
+
+    bool abortVisiting() { return m_abortVisiting;}
+    void setAbortVisiting(bool abort) {m_abortVisiting = abort;}
+    KoTextEditor * editor() {return m_editor;}
+private:
+    bool m_abortVisiting;
+    KoTextEditor *m_editor;
 };
 
 class BlockFormatVisitor
@@ -80,7 +123,7 @@ public:
     BlockFormatVisitor() {}
     virtual ~BlockFormatVisitor() {}
 
-    virtual void visit(QTextBlockFormat &format) const = 0;
+    virtual void visit(QTextBlock &block) const = 0;
 
     static void visitSelection(KoTextEditor *editor, const BlockFormatVisitor &visitor, QString title = i18n("Format"), bool resetProperties = false, bool registerChange = true) {
         int start = qMin(editor->position(), editor->anchor());
@@ -92,7 +135,7 @@ public:
 
         // now loop over all blocks that the selection contains and alter the text fragments where applicable.
         while (block.isValid() && block.position() <= end) {
-            QTextBlockFormat format = block.blockFormat();
+            QTextBlockFormat prevFormat = block.blockFormat();
             if (resetProperties) {
                 if (KoTextDocument(editor->document()).styleManager()) {
                     KoParagraphStyle *old = KoTextDocument(editor->document()).styleManager()->paragraphStyle(block.blockFormat().intProperty(KoParagraphStyle::StyleId));
@@ -100,12 +143,11 @@ public:
                         old->unapplyStyle(block);
                 }
             }
-            visitor.visit(format);
+            visitor.visit(block);
             QTextCursor cursor(block);
-            QTextBlockFormat prevFormat = cursor.blockFormat();
+            QTextBlockFormat format = cursor.blockFormat();
             if (registerChange)
                 editor->registerTrackedChange(cursor, KoGenChange::FormatChange, title, format, prevFormat, true);
-            cursor.setBlockFormat(format);
             block = block.next();
         }
     }

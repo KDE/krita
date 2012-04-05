@@ -38,7 +38,10 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_image_properties.cc
     dialogs/kis_dlg_layer_properties.cc
     dialogs/kis_dlg_preferences.cc
-    flake/kis_layer_container_shape.cc 
+    flake/kis_node_dummies_graph.cpp
+    flake/kis_dummies_facade_base.cpp
+    flake/kis_dummies_facade.cpp
+    flake/kis_node_shapes_graph.cpp
     flake/kis_node_shape.cpp
     flake/kis_shape_controller.cpp
     flake/kis_shape_layer.cc 
@@ -79,6 +82,9 @@ set(kritaui_LIB_SRCS
     kis_node_commands_adapter.cpp
     kis_node_manager.cpp 
     kis_node_model.cpp
+    kis_model_index_converter_base.cpp
+    kis_model_index_converter.cpp
+    kis_model_index_converter_show_all.cpp
     kis_painting_assistant.cc 
     kis_painting_assistants_manager.cc 
     kis_paintop_box.cc 
@@ -93,6 +99,7 @@ set(kritaui_LIB_SRCS
     kis_statusbar.cc
     kis_view2.cpp 
     kis_zoom_manager.cc
+    thememanager.cpp
     ko_favorite_resource_manager.cpp
     kis_workspace_resource.cpp
     kisexiv2/kis_exif_io.cpp
@@ -121,12 +128,14 @@ set(kritaui_LIB_SRCS
     recorder/kis_recorded_filter_action_creator.cpp
     recorder/kis_recorded_paint_action_editor.cc
     tool/kis_selection_tool_helper.cpp 
+    tool/kis_selection_tool_config_widget_helper.cpp 
     tool/kis_shape_tool_helper.cpp 
     tool/kis_tool.cc 
     tool/kis_tool_freehand.cc 
     tool/kis_painting_information_builder.cpp
     tool/kis_tool_freehand_helper.cpp
     tool/kis_tool_multihand_helper.cpp
+    tool/kis_figure_painting_tool_helper.cpp
     tool/kis_recording_adapter.cpp
     tool/kis_tool_paint.cc 
     tool/kis_tool_shape.cc
@@ -149,6 +158,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_filter_selector_widget.cc
     widgets/kis_gradient_chooser.cc 
     widgets/kis_gradient_slider_widget.cc
+    widgets/kis_gradient_slider.cpp
     widgets/kis_iconwidget.cc 
     widgets/kis_mask_widgets.cpp 
     widgets/kis_meta_data_merge_strategy_chooser_widget.cc
@@ -237,6 +247,8 @@ kde4_add_ui_files(kritaui_LIB_SRCS
 )
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
+
+target_link_libraries(kritaui ${X11_X11_LIB})
 
 if(GHNS)
     target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} kritaimage komain kowidgets ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})

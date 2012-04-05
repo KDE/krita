@@ -76,6 +76,7 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
 
     if (cs->colorModelId() == CMYKAColorModelID) {
         kdb->optionswdg->alpha->setChecked(false);
+        kdb->optionswdg->alpha->setEnabled(false);
     }
     if (!m_chain->manager()->getBatchMode()) {
         if (kdb->exec() == QDialog::Rejected) {
@@ -96,7 +97,7 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
     KUrl url;
     url.setPath(filename);
 
-    KisImageWSP image;
+    KisImageSP image;
 
     if (options.flatten) {
         image = new KisImage(0, output->image()->width(), output->image()->height(), output->image()->colorSpace(), "");

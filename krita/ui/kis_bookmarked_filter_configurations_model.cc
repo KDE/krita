@@ -19,7 +19,6 @@
 #include "kis_bookmarked_filter_configurations_model.h"
 
 #include <QFutureWatcher>
-#include <QPixmap>
 #include <QSignalMapper>
 #include <QtConcurrentRun>
 

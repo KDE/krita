@@ -109,6 +109,7 @@ protected:
 
     KisGbrBrush(const KisGbrBrush& rhs);
 
+    void setBrushType(enumBrushType type);
     virtual void setImage(const QImage& image);
 
     void toXML(QDomDocument& d, QDomElement& e) const;

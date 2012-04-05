@@ -78,8 +78,6 @@ BigBrotherPlugin::BigBrotherPlugin(QObject *parent, const QVariantList &)
     if (parent->inherits("KisView2")) {
         m_view = (KisView2*) parent;
 
-        setComponentData(BigBrotherPluginFactory::componentData());
-
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/bigbrother.rc"), true);
 
         KAction* action = 0;

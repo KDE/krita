@@ -19,14 +19,14 @@
 #ifndef KIS_SELECTION_MASK_TEST_H
 #define KIS_SELECTION_MASK_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisSelectionMaskTest : public QObject
 {
     Q_OBJECT
 private slots:
 
-    void testCreation();
+    void testActivation();
 
 };
 

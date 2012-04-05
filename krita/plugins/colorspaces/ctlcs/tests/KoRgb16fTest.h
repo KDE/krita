@@ -20,7 +20,7 @@
 #ifndef _KORGB32F_H_
 #define _KORGB32F_H_
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KoRgb16fTest : public QObject
 {

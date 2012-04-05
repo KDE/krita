@@ -22,7 +22,7 @@
 #define CONNECTIONPOINTWIDGET_H
 
 #include <ui_ConnectionPointWidget.h>
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class ConnectionTool;
 

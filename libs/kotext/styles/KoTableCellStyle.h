@@ -101,6 +101,7 @@ public:
         Shadow,                     ///< KoShadowStyle, the shadow of this cell
         CellIsProtected             ///< boolean, if true, the cell is protected against edits
                                         /// It's not really a property of KoTableCellStyle but defined here for convenience
+        ,LastCellStyleProperty
     };
 
     /// Constructor
@@ -112,6 +113,11 @@ public:
 
     /// Creates a KoTableCellStyle that represents the formatting of \a block.
     static KoTableCellStyle *fromTableCell(const QTextTableCell &table, QObject *parent = 0);
+
+    /// Creates a clean QTextCharFormat, but keeps all the table cell properties.
+    /// This is needed since block.charformat doubles as the QTextTableCellFormat
+    /// This method works even if \a charFormat is not a QTextTableCellFormat
+    static QTextCharFormat cleanCharFormat(const QTextCharFormat &charFormat);
 
     /// creates a clone of this style with the specified parent
     KoTableCellStyle *clone(QObject *parent = 0);

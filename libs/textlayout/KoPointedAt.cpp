@@ -30,6 +30,8 @@
 KoPointedAt::KoPointedAt()
     : position(-1)
     , bookmark(0)
+    , table(0)
+    , tableHit(None)
 {
 }
 
@@ -38,6 +40,12 @@ KoPointedAt::KoPointedAt(KoPointedAt *other)
     position = other->position;
     bookmark = other->bookmark;
     externalHRef = other->externalHRef;
+    tableHit = other->tableHit;
+    tableRowDivider = other->tableRowDivider;
+    tableColumnDivider = other->tableColumnDivider;
+    tableLeadSize = other->tableLeadSize;
+    tableTrailSize = other->tableTrailSize;
+    table = other->table;
 }
 
 void KoPointedAt::fillInBookmark(QTextCursor cursor, KoInlineTextObjectManager *inlineManager)
@@ -56,19 +64,10 @@ void KoPointedAt::fillInBookmark(QTextCursor cursor, KoInlineTextObjectManager *
         // local href starts with #
         if (href.startsWith("#")) {
             // however bookmark does not contain it, so strip it
-            href = href.right(href.size()-1);
+            href = href.right(href.size() - 1);
 
             if (!href.isEmpty()) {
-                bookmark =  inlineManager->bookmarkManager()->retrieveBookmark(href);
-                QList<QString> bookmarks = inlineManager->bookmarkManager()->bookmarkNameList();
-
-                // Is the href a bookmark ?
-                foreach(const QString& s, bookmarks) {
-                    if (s == href) {
-                        bookmark =  inlineManager->bookmarkManager()->retrieveBookmark(s);
-                        return;
-                    }
-                }
+                bookmark = inlineManager->bookmarkManager()->retrieveBookmark(href);
             }
             return;
         } else {

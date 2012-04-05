@@ -21,9 +21,10 @@
 
 
 #include <kis_debug.h>
-#include <qdom.h>
+#include <QDomDocument>
 #include <QString>
 
+#include "kis_image.h"
 #include "kis_transaction.h"
 #include "kis_undo_adapter.h"
 #include "kis_painter.h"

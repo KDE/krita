@@ -61,7 +61,7 @@ static int compareTabs(KoText::Tab &tab1, KoText::Tab &tab2)
 class KoParagraphStyle::Private
 {
 public:
-    Private() : listStyle(0), parentStyle(0), defaultStyle(0), list(0), next(0) {}
+    Private() : parentStyle(0), defaultStyle(0), list(0) {}
 
     ~Private()
     {
@@ -87,11 +87,9 @@ public:
     }
 
     QString name;
-    KoListStyle *listStyle;
     KoParagraphStyle *parentStyle;
     KoParagraphStyle *defaultStyle;
     KoList *list;
-    int next;
     StylePrivate stylesPrivate;
 };
 
@@ -251,7 +249,15 @@ void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const
     const QMap<int, QVariant> props = d->stylesPrivate.properties();
     QMap<int, QVariant>::const_iterator it = props.begin();
     while (it != props.end()) {
-        format.setProperty(it.key(), it.value());
+        if (it.key() == QTextBlockFormat::BlockLeftMargin) {
+            format.setLeftMargin(leftMargin());
+        } else if (it.key() == QTextBlockFormat::BlockRightMargin) {
+            format.setRightMargin(rightMargin());
+        } else if (it.key() == QTextBlockFormat::TextIndent) {
+            format.setTextIndent(textIndent());
+        } else {
+            format.setProperty(it.key(), it.value());
+        }
         ++it;
     }
     if ((hasProperty(DefaultOutlineLevel)) && (!format.hasProperty(OutlineLevel))) {
@@ -270,9 +276,40 @@ void KoParagraphStyle::applyStyle(QTextBlock &block, bool applyListStyle) const
     KoCharacterStyle::applyStyle(block);
 
     if (applyListStyle) {
-        if (d->listStyle) {
-            if (!d->list)
-                d->list = new KoList(block.document(), d->listStyle);
+        applyParagraphListStyle(block, format);
+    }
+}
+
+void KoParagraphStyle::applyParagraphListStyle(QTextBlock &block, const QTextBlockFormat &blockFormat) const
+{
+    //gopalakbhat: We need to differentiate between normal styles and styles with outline(part of heading)
+    //Styles part of outline: We ignore the listStyle()( even if this is a valid in ODF; even LibreOffice does the same)
+    //                        since we can specify all info required in text:outline-style
+    //Normal styles: we use the listStyle()
+    if (blockFormat.hasProperty(OutlineLevel)) {
+        if (! d->list) {
+            if (! KoTextDocument(block.document()).headingList()) {
+                if (KoTextDocument(block.document()).styleManager() && KoTextDocument(block.document()).styleManager()->outlineStyle()) {
+                    d->list = new KoList(block.document(), KoTextDocument(block.document()).styleManager()->outlineStyle());
+                    KoTextDocument(block.document()).setHeadingList(d->list);
+                }
+            } else {
+                d->list = KoTextDocument(block.document()).headingList();
+            }
+        }
+        if (d->list) {
+            d->list->applyStyle(block, KoTextDocument(block.document()).styleManager()->outlineStyle(), blockFormat.intProperty(OutlineLevel));
+        }
+    } else {
+        if (listStyle()) {
+            if (!d->list) {
+                d->list = new KoList(block.document(), listStyle());
+            }
+            //FIXME: Gopalakrishna Bhat A: This condition should never happen.
+            // i.e. d->list->style() should always be in sync with the listStyle()
+            if (d->list->style() != listStyle()) {
+                d->list->setStyle(listStyle());
+            }
             d->list->add(block, listLevel());
         } else {
             if (block.textList())
@@ -295,13 +332,32 @@ void KoParagraphStyle::unapplyStyle(QTextBlock &block) const
     QList<int> keys = d->stylesPrivate.keys();
     for (int i = 0; i < keys.count(); i++) {
         QVariant variant = d->stylesPrivate.value(keys[i]);
-        if (variant == format.property(keys[i]))
-            format.clearProperty(keys[i]);
+        if (keys[i] == QTextBlockFormat::BlockLeftMargin) {
+            if (leftMargin() == format.property(keys[i]))
+                format.clearProperty(keys[i]);
+        } else if (keys[i] == QTextBlockFormat::BlockRightMargin) {
+            if (rightMargin() == format.property(keys[i]))
+                format.clearProperty(keys[i]);
+        } else if (keys[i] == QTextBlockFormat::TextIndent) {
+            if (textIndent() == format.property(keys[i]))
+                format.clearProperty(keys[i]);
+        } else {
+            if (variant == format.property(keys[i]))
+                format.clearProperty(keys[i]);
+        }
     }
+
+    format.clearProperty(KoParagraphStyle::OutlineLevel);
+
     cursor.setBlockFormat(format);
     KoCharacterStyle::unapplyStyle(block);
-    if (d->listStyle && block.textList()) // TODO check its the same one?
-        block.textList()->remove(block);
+    if (listStyle() && block.textList()) { // TODO check its the same one?
+        KoList::remove(block);
+    }
+    if (d->list && block.textList()) { // TODO check its the same one?
+        KoList::remove(block);
+    }
+
 }
 
 void KoParagraphStyle::setLineHeightPercent(int lineHeight)
@@ -818,9 +874,12 @@ void KoParagraphStyle::setTextIndent(QTextLength margin)
     setProperty(QTextFormat::TextIndent, margin);
 }
 
-QTextLength KoParagraphStyle::textIndent() const
+qreal KoParagraphStyle::textIndent() const
 {
-    return propertyLength(QTextFormat::TextIndent);
+    if (parentStyle())
+        return propertyLength(QTextFormat::TextIndent).value(parentStyle()->textIndent());
+    else
+        return propertyLength(QTextFormat::TextIndent).value(0);
 }
 
 void KoParagraphStyle::setAutoTextIndent(bool on)
@@ -874,12 +933,12 @@ KoParagraphStyle *KoParagraphStyle::parentStyle() const
 
 void KoParagraphStyle::setNextStyle(int next)
 {
-    d->next = next;
+    setProperty(NextStyle, next);
 }
 
 int KoParagraphStyle::nextStyle() const
 {
-    return d->next;
+    return propertyInt(NextStyle);
 }
 
 QString KoParagraphStyle::name() const
@@ -907,7 +966,7 @@ int KoParagraphStyle::styleId() const
 
 void KoParagraphStyle::setStyleId(int id)
 {
-    setProperty(StyleId, id); if (d->next == 0) d->next = id;
+    setProperty(StyleId, id); if (nextStyle() == 0) setNextStyle(id);
     KoCharacterStyle::setStyleId(id);
 }
 
@@ -1002,17 +1061,29 @@ bool KoParagraphStyle::isListHeader() const
 }
 
 KoListStyle *KoParagraphStyle::listStyle() const
-{
-    return d->listStyle;
+{    
+    QVariant variant = value(ParagraphListStyleId);
+    if (variant.isNull())
+        return 0;
+    return variant.value<KoListStyle *>();
 }
 
 void KoParagraphStyle::setListStyle(KoListStyle *style)
 {
-    if (d->listStyle == style)
+    if (listStyle() == style)
         return;
-    if (d->listStyle && d->listStyle->parent() == this)
-        delete d->listStyle;
-    d->listStyle = style;
+    if (listStyle() && listStyle()->parent() == this)
+        delete listStyle();
+    QVariant variant;
+    KoListStyle *cloneStyle = 0;
+    if (style) {
+        cloneStyle = style->clone();
+        variant.setValue(cloneStyle);
+
+        setProperty(ParagraphListStyleId, variant);
+    } else {
+        d->stylesPrivate.remove(ParagraphListStyleId);
+    }
 }
 
 KoText::Direction KoParagraphStyle::textProgressionDirection() const
@@ -1546,9 +1617,13 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
         setDropCaps(true);
         const QString length = dropCap.attributeNS(KoXmlNS::style, "length", QString("1"));
         if (length.toLower() == "word") {
-            setDropCapsLength(-1); // -1 indicates drop caps of the whole first word
+            setDropCapsLength(0); // 0 indicates drop caps of the whole first word
         } else {
-            setDropCapsLength(length.toInt());
+            int l = length.toInt();
+            if (l > 0) // somefiles may use this to turn dropcaps off
+                setDropCapsLength(length.toInt());
+            else 
+                setDropCaps(false);
         }
         const QString lines = dropCap.attributeNS(KoXmlNS::style, "lines", QString("1"));
         setDropCapsLines(lines.toInt());
@@ -1815,12 +1890,11 @@ void KoParagraphStyle::copyProperties(const KoParagraphStyle *style)
     d->stylesPrivate = style->d->stylesPrivate;
     setName(style->name()); // make sure we emit property change
     KoCharacterStyle::copyProperties(style);
-    d->next = style->d->next;
     d->parentStyle = style->d->parentStyle;
-    d->listStyle = style->d->listStyle;
+    d->defaultStyle = style->d->defaultStyle;
 }
 
-KoParagraphStyle *KoParagraphStyle::clone(QObject *parent)
+KoParagraphStyle *KoParagraphStyle::clone(QObject *parent) const
 {
     KoParagraphStyle *newStyle = new KoParagraphStyle(parent);
     newStyle->copyProperties(this);
@@ -1852,10 +1926,10 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
     bool writtenLineSpacing = false;
     KoCharacterStyle::saveOdf(style);
 
-    if (d->listStyle) {
+    if (listStyle()) {
         KoGenStyle liststyle(KoGenStyle::ListStyle);
-        d->listStyle->saveOdf(liststyle, context);
-        QString name(QString(QUrl::toPercentEncoding(d->listStyle->name(), "", " ")).replace('%', '_'));
+        listStyle()->saveOdf(liststyle, context);
+        QString name(QString(QUrl::toPercentEncoding(listStyle()->name(), "", " ")).replace('%', '_'));
         if (name.isEmpty())
             name = 'L';
         style.addAttribute("style:list-style-name", context.mainStyles().insert(liststyle, name, KoGenStyles::DontAddNumberToName));
@@ -1998,7 +2072,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
             }
     //
         } else if (key == QTextFormat::TextIndent) {
-            style.addPropertyLength("fo:text-indent", textIndent(), KoGenStyle::ParagraphType);
+            style.addPropertyLength("fo:text-indent", propertyLength(QTextFormat::TextIndent), KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::AutoTextIndent) {
             style.addProperty("style:auto-text-indent", autoTextIndent(), KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::TabStopDistance) {
@@ -2118,7 +2192,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
         KoXmlWriter elementWriter(&buf, indentation);
         elementWriter.startElement("style:drop-cap");
         elementWriter.addAttribute("style:lines", QString::number(dropCapsLines()));
-        elementWriter.addAttribute("style:length", dropCapsLength() < 0 ? "word" : QString::number(dropCapsLength()));
+        elementWriter.addAttribute("style:length", dropCapsLength() == 0 ? "word" : QString::number(dropCapsLength()));
         if (dropCapsDistance())
             elementWriter.addAttributePt("style:distance", dropCapsDistance());
         elementWriter.endElement();
@@ -2193,6 +2267,11 @@ bool KoParagraphStyle::hasDefaults() const
         return true;
     }
     return false;
+}
+
+KoList *KoParagraphStyle::list()
+{
+    return d->list;
 }
 
 #include <KoParagraphStyle.moc>

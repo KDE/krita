@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2012 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,6 +26,9 @@
 #include <QObject>
 #include <QTextDocument>
 #include <QWeakPointer>
+#include <QSet>
+#include <QTextBlockFormat>
+#include <QTextCharFormat>
 
 /**
  * This object dies when the parent QTextDocument dies and in the destructor
@@ -45,8 +49,8 @@ public:
      * inside KoStyleManager is for memory management. A stylemanager can
      * maintain a lot of documents and these documents can be deleted without
      * telling the styleManager.  We use the QObject principle of children
-     * getting deleted when the parant gets deleted to track the document, which
-     * we use as the parant document.
+     * getting deleted when the parent gets deleted to track the document, which
+     * we use as the parent document.
      */
     ChangeFollower(QTextDocument *parent, KoStyleManager *manager);
 
@@ -54,20 +58,48 @@ public:
     ~ChangeFollower();
 
     /**
-     * Will update all the text in the document with the changes.
-     * The document this follower is associated with is scanned for
-     * text that has one of the changed styles and on those portions of the text
-     * the style will be (re)applied.
+     * Will collect the needed info from the document finding the autostyles that we
+     * need to preserve during theprocessUpdates
+     *
      * @param changedStyles a list of styleIds. from KoParagraphStyle::styleId
      *      and KoCharacterStyle::styleId
      */
-    void processUpdates(const QList<int> &changedStyles);
+    void collectNeededInfo(const QSet<int> &changedStyles);
+
+    /**
+     * Will update all the text in the document that were identified during the collect
+     * stage.
+     * during the apply stage the updated styles are applied.
+     */
+    void processUpdates();
+
     /// return the document this follower is following.
     const QTextDocument *document() const {
         return m_document;
     }
 
 private:
+    /**
+     * Helper function for clearing common properties.
+     *
+     * Clears properties in @a firstFormat that have the same value in @a secondFormat.
+     */
+    void clearCommonProperties(QTextFormat *firstFormat, const QTextFormat &secondFormat);
+
+private:
+    struct Memento
+    {
+        int blockPosition;
+        int paragraphStyleId;
+        QTextBlockFormat blockDirectFormat;
+        QTextBlockFormat blockParentFormat;
+        QTextCharFormat blockDirectCharFormat;
+        QTextCharFormat blockParentCharFormat;
+        QList<QTextCharFormat> fragmentDirectFormats;
+        QList<QTextCursor> fragmentCursors;
+        QList<int> fragmentStyleId;
+    };
+    QList<Memento *> m_mementos;
     QTextDocument *m_document;
     QWeakPointer<KoStyleManager> m_styleManager;
 };

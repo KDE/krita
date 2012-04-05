@@ -22,7 +22,10 @@
 #include <kundo2command.h>
 #include "kis_types.h"
 
-/// The command for setting the global selection
+/**
+ * This command sets the global selection of the image. No saving
+ * of the previous selection for "Reselect" action happens
+ */
 class KRITAIMAGE_EXPORT KisSetGlobalSelectionCommand : public KUndo2Command
 {
 
@@ -30,11 +33,10 @@ public:
     /**
      * Constructor
      * @param image the image to set the global selection on
-     * @param parent the parent command
-     * @param selection the selection that will be set a global selection, if 0 a new selection will be created
+     * @param selection the selection that will be set a global selection,
+     *        null selection will remove the selection
      */
-    KisSetGlobalSelectionCommand(KisImageWSP image, KUndo2Command * parent = 0, KisSelectionSP selection = 0);
-    virtual ~KisSetGlobalSelectionCommand();
+    KisSetGlobalSelectionCommand(KisImageWSP image, KisSelectionSP selection);
 
     virtual void redo();
     virtual void undo();
@@ -43,6 +45,16 @@ private:
     KisImageWSP m_image;
     KisSelectionSP m_newSelection;
     KisSelectionSP m_oldSelection;
+};
+
+/**
+ * Sets initial selection for the image. Nothing is selected,
+ * but the defaultBounds are set properly
+ */
+class KRITAIMAGE_EXPORT KisSetEmptyGlobalSelectionCommand : public KisSetGlobalSelectionCommand
+{
+public:
+    KisSetEmptyGlobalSelectionCommand(KisImageWSP image);
 };
 
 #endif //KIS_SET_GLOBAL_SELECTION_COMMAND_H

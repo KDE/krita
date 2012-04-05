@@ -64,9 +64,9 @@ public:
     void switchBackRequested();
     void selectionChanged(QList<KoShape*> shapes);
     void currentLayerChanged(const KoShapeLayer *layer);
+    void updateToolForProxy();
     void switchToolTemporaryRequested(const QString &id);
     CanvasData *createCanvasData(KoCanvasController *controller, KoInputDevice device);
-    bool toolCanBeUsed( const QString &activationShapeId);
 
     /**
      * Request a switch from to the param input device.
@@ -98,7 +98,7 @@ public:
 
     KoInputDevice inputDevice;
 
-    bool layerEnabled;
+    bool layerExplicitlyDisabled;
 };
 
 /// \internal
@@ -124,8 +124,6 @@ public:
     }
     /// wrapper around KoToolFactoryBase::shortcut()
     KShortcut shortcut() const;
-    /// wrapper around KoToolFactoryBase::inputDeviceAgnostic()
-    bool inputDeviceAgnostic() const;
     /// returns true if the factory will create a tool, false if it decided to not create one in createTool().
     bool canCreateTool(KoCanvasBase *canvas) const;
 

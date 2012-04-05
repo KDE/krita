@@ -105,14 +105,17 @@ KisTiledDataManager::~KisTiledDataManager()
 void KisTiledDataManager::setDefaultPixel(const quint8 *defaultPixel)
 {
     QWriteLocker locker(&m_lock);
+    setDefaultPixelImpl(defaultPixel);
+}
 
+void KisTiledDataManager::setDefaultPixelImpl(const quint8 *defaultPixel)
+{
     KisTileData *td = KisTileDataStore::instance()->createDefaultTileData(pixelSize(), defaultPixel);
     m_hashTable->setDefaultTileData(td);
     m_mementoManager->setDefaultTileData(td);
 
     memcpy(m_defaultPixel, defaultPixel, pixelSize());
 }
-
 
 bool KisTiledDataManager::write(KoStore *store)
 {
@@ -380,9 +383,10 @@ void KisTiledDataManager::clear(QRect clearRect, const quint8 *clearPixel)
                 const qint32 lineSize = clearTileRect.width() * pixelSize;
                 qint32 rowsRemaining = clearTileRect.height();
 
-                KisTileDataWrapper tw = pixelPtr(clearTileRect.left(),
-                                                 clearTileRect.top(),
-                                                 KisTileDataWrapper::WRITE);
+                KisTileDataWrapper tw(this,
+                                      clearTileRect.left(),
+                                      clearTileRect.top(),
+                                      KisTileDataWrapper::WRITE);
                 quint8* tileIt = tw.data();
 
                 if (pixelBytesAreTheSame) {
@@ -434,7 +438,9 @@ void KisTiledDataManager::clear()
     m_extentMaxY = qint32_MIN;
 }
 
-void KisTiledDataManager::bitBlt(KisTiledDataManager *srcDM, const QRect &rect)
+
+template<bool useOldSrcData>
+void KisTiledDataManager::bitBltImpl(KisTiledDataManager *srcDM, const QRect &rect)
 {
     QWriteLocker locker(&m_lock);
 
@@ -452,9 +458,11 @@ void KisTiledDataManager::bitBlt(KisTiledDataManager *srcDM, const QRect &rect)
     for (qint32 row = firstRow; row <= lastRow; ++row) {
         for (qint32 column = firstColumn; column <= lastColumn; ++column) {
 
-            // In most bitBlt code of Krita we do not use oldRawData
-            // so let's just conform this behavior
-            KisTileSP srcTile = srcDM->getTile(column, row, false);
+            // this is the only variation in the template
+            KisTileSP srcTile = useOldSrcData ?
+                srcDM->getOldTile(column, row) :
+                srcDM->getTile(column, row, false);
+
             QRect tileRect(column*KisTileData::WIDTH, row*KisTileData::HEIGHT,
                            KisTileData::WIDTH, KisTileData::HEIGHT);
             QRect cloneTileRect = rect & tileRect;
@@ -474,9 +482,10 @@ void KisTiledDataManager::bitBlt(KisTiledDataManager *srcDM, const QRect &rect)
                 const qint32 lineSize = cloneTileRect.width() * pixelSize;
                 qint32 rowsRemaining = cloneTileRect.height();
 
-                KisTileDataWrapper tw = pixelPtr(cloneTileRect.left(),
-                                                 cloneTileRect.top(),
-                                                 KisTileDataWrapper::WRITE);
+                KisTileDataWrapper tw(this,
+                                      cloneTileRect.left(),
+                                      cloneTileRect.top(),
+                                      KisTileDataWrapper::WRITE);
                 srcTile->lockForRead();
                 // We suppose that the shift in both tiles is the same
                 const quint8* srcTileIt = srcTile->data() + tw.offset();
@@ -495,7 +504,8 @@ void KisTiledDataManager::bitBlt(KisTiledDataManager *srcDM, const QRect &rect)
     }
 }
 
-void KisTiledDataManager::bitBltRough(KisTiledDataManager *srcDM, const QRect &rect)
+template<bool useOldSrcData>
+void KisTiledDataManager::bitBltRoughImpl(KisTiledDataManager *srcDM, const QRect &rect)
 {
     QWriteLocker locker(&m_lock);
 
@@ -515,7 +525,10 @@ void KisTiledDataManager::bitBltRough(KisTiledDataManager *srcDM, const QRect &r
              * to check any borders :)
              */
 
-            KisTileSP srcTile = srcDM->getOldTile(column, row);
+            // this is the only variation in the template
+            KisTileSP srcTile = useOldSrcData ?
+                srcDM->getOldTile(column, row) :
+                srcDM->getTile(column, row, false);
 
             m_hashTable->deleteTile(column, row);
 
@@ -528,6 +541,26 @@ void KisTiledDataManager::bitBltRough(KisTiledDataManager *srcDM, const QRect &r
             updateExtent(column, row);
         }
     }
+}
+
+void KisTiledDataManager::bitBlt(KisTiledDataManager *srcDM, const QRect &rect)
+{
+    bitBltImpl<false>(srcDM, rect);
+}
+
+void KisTiledDataManager::bitBltOldData(KisTiledDataManager *srcDM, const QRect &rect)
+{
+    bitBltImpl<true>(srcDM, rect);
+}
+
+void KisTiledDataManager::bitBltRough(KisTiledDataManager *srcDM, const QRect &rect)
+{
+    bitBltRoughImpl<false>(srcDM, rect);
+}
+
+void KisTiledDataManager::bitBltRoughOldData(KisTiledDataManager *srcDM, const QRect &rect)
+{
+    bitBltRoughImpl<true>(srcDM, rect);
 }
 
 void KisTiledDataManager::setExtent(qint32 x, qint32 y, qint32 w, qint32 h)
@@ -649,34 +682,10 @@ QRegion KisTiledDataManager::region() const
     return region;
 }
 
-KisTileDataWrapper KisTiledDataManager::pixelPtr(qint32 x, qint32 y,
-        enum KisTileDataWrapper::accessType type)
-{
-    const qint32 col = xToCol(x);
-    const qint32 row = yToRow(y);
-
-    /* FIXME: Always positive? */
-    const qint32 xInTile = x - col * KisTileData::WIDTH;
-    const qint32 yInTile = y - row * KisTileData::HEIGHT;
-
-    const qint32 pixelIndex = xInTile + yInTile * KisTileData::WIDTH;
-
-    /*    bool newTile;
-          KisTileSP tile = m_hashTable->getTileLazy(col, row, newTile);
-          if(newTile)
-          updateExtent(tile->col(), tile->row());
-    */
-    KisTileSP tile = getTile(col, row, type == KisTileDataWrapper::WRITE);
-
-    return KisTileDataWrapper(tile,
-                              pixelIndex*pixelSize(),
-                              type);
-}
-
 void KisTiledDataManager::setPixel(qint32 x, qint32 y, const quint8 * data)
 {
     QWriteLocker locker(&m_lock);
-    KisTileDataWrapper tw = pixelPtr(x, y, KisTileDataWrapper::WRITE);
+    KisTileDataWrapper tw(this, x, y, KisTileDataWrapper::WRITE);
     memcpy(tw.data(), data, pixelSize());
 }
 

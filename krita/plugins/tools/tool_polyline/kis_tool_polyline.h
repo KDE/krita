@@ -36,7 +36,8 @@ public:
     virtual ~KisToolPolyline();
 
 protected:
-    virtual void finishPolyline(const QVector<QPointF>& points);
+    QWidget* createOptionWidget();
+    void finishPolyline(const QVector<QPointF>& points);
 };
 
 
@@ -53,7 +54,6 @@ public:
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIcon("polyline");
         setPriority(5);
-        setInputDeviceAgnostic(false);
     }
 
     virtual ~KisToolPolylineFactory() {}

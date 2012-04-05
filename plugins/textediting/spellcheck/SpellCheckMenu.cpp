@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2010 Christoph Goerlich <chgoerlich@gmx.de>
+ * Copyright (C) 2012 Shreya Pandit <shreya@shreyapandit.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -111,9 +112,10 @@ void SpellCheckMenu::addWordToDictionary()
     m_currentMisspelledPosition = -1;
 }
 
-void SpellCheckMenu::setMisspelled(const QString word, int position)
+void SpellCheckMenu::setMisspelled(const QString word, int position,int length)
 {
     m_currentMisspelled = word;
+    m_lengthMisspelled=length;
     m_currentMisspelledPosition = position;
 }
 
@@ -146,7 +148,7 @@ void SpellCheckMenu::replaceWord(const QString &suggestion)
     if (suggestion.isEmpty() || m_currentMisspelledPosition < 0)
         return;
 
-    m_spellCheck->replaceWordBySuggestion(suggestion, m_currentMisspelledPosition);
+    m_spellCheck->replaceWordBySuggestion(suggestion, m_currentMisspelledPosition,m_lengthMisspelled);
 
     m_currentMisspelled.clear();
     m_currentMisspelledPosition = -1;

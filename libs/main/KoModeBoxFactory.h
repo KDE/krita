@@ -37,7 +37,7 @@ class KoCanvasControllerWidget;
 class KOMAIN_EXPORT KoModeBoxFactory : public KoDockFactoryBase
 {
 public:
-    explicit KoModeBoxFactory(KoCanvasControllerWidget *canvas, const QString& appName);
+    explicit KoModeBoxFactory(KoCanvasControllerWidget *canvas, const QString &applicationName, const QString& appName);
     ~KoModeBoxFactory();
 
     virtual QString id() const;

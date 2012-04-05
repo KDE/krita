@@ -23,8 +23,8 @@
 #ifndef KODOCUMENT_H
 #define KODOCUMENT_H
 
-#include <QtCore/QDateTime>
-#include <QtGui/QTransform>
+#include <QDateTime>
+#include <QTransform>
 #include <QList>
 
 #include <kparts/part.h>
@@ -307,6 +307,17 @@ public:
      */
     bool confirmNonNativeSave(const bool exporting) const;
     void setConfirmNonNativeSave(const bool exporting, const bool on);
+
+
+    /**
+     * @return true if saving/exporting should inhibit the option dialog
+     */
+    bool saveInBatchMode() const;
+
+    /**
+     * @param batchMode if true, do not show the option dialog when saving or exporting.
+     */
+    void setSaveInBatchMode(const bool batchMode);
 
     virtual bool wantExportConfirmation() const;
 
@@ -797,9 +808,9 @@ public:
     bool loadNativeFormatFromStore(QByteArray &data);
 
     /**
-    Adds a new version and then saves the whole document.
-    * @param comment the comment for the version
-    * @return true on success, otherwise false
+     * Adds a new version and then saves the whole document.
+     * @param comment the comment for the version
+     * @return true on success, otherwise false
     */
     bool addVersion(const QString& comment);
 

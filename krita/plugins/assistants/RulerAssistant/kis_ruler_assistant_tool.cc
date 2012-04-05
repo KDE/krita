@@ -18,8 +18,9 @@
 
 #include <kis_ruler_assistant_tool.h>
 
-#include <qpainter.h>
-#include <qxmlstream.h>
+#include <QPainter>
+#include <QXmlStreamReader>
+#include <QXmlStreamWriter>
 
 #include <kis_debug.h>
 #include <klocale.h>
@@ -114,6 +115,7 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
         }
         if (m_handleDrag) {
             if (event->modifiers() & Qt::ShiftModifier) {
+                m_handleDrag->uncache();
                 m_handleDrag = m_handleDrag->split()[0];
                 m_handles = m_canvas->view()->paintingAssistantManager()->handles();
             }
@@ -187,6 +189,7 @@ void KisRulerAssistantTool::mouseMoveEvent(KoPointerEvent *event)
     } else if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
         if (m_handleDrag) {
             *m_handleDrag = event->point;
+            m_handleDrag->uncache();
 
             m_handleCombine = 0;
             if (!(event->modifiers() & Qt::ShiftModifier)) {
@@ -227,6 +230,7 @@ void KisRulerAssistantTool::mouseReleaseEvent(KoPointerEvent *event)
         if (m_handleDrag) {
             if (!(event->modifiers() & Qt::ShiftModifier) && m_handleCombine) {
                 m_handleCombine->mergeWith(m_handleDrag);
+                m_handleCombine->uncache();
                 m_handles = m_canvas->view()->paintingAssistantManager()->handles();
             }
             m_handleDrag = m_handleCombine = 0;
@@ -248,7 +252,7 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
     QColor handlesColor(0, 0, 0, 125);
 
     if (m_newAssistant) {
-        m_newAssistant->drawAssistant(_gc, QRectF(QPointF(0, 0), QSizeF(m_canvas->image()->size())), m_canvas->coordinatesConverter());
+        m_newAssistant->drawAssistant(_gc, QRectF(QPointF(0, 0), QSizeF(m_canvas->image()->size())), m_canvas->coordinatesConverter(), false);
         foreach(const KisPaintingAssistantHandleSP handle, m_newAssistant->handles()) {
             QPainterPath path;
             path.addEllipse(QRectF(_converter.documentToView(*handle) -  QPointF(6, 6), QSizeF(12, 12)));

@@ -1,13 +1,19 @@
 [Desktop Entry]
 Name=Image Splitter
 Name[ca]=Separador d'imatges
+Name[ca@valencia]=Separador d'imatges
 Name[da]=Billedopdeler
 Name[el]=Διαχωριστής εικόνας
+Name[es]=Divisor de imágenes
 Name[et]=Pildipoolitaja
+Name[it]=Divisore di immagini
+Name[kk]=Кескін жіктеуіші
 Name[nb]=Bildedeler
+Name[nl]=Splitser van afbeeldingen
 Name[pl]=Podzielnik obrazu
 Name[pt]=Divisor de Imagens
 Name[pt_BR]=Divisão da imagem
+Name[ru]=Разделитель изображений
 Name[sv]=Bilddelning
 Name[uk]=Поділ зображень
 Name[x-test]=xxImage Splitterxx

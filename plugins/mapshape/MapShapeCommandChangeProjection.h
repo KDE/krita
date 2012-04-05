@@ -23,7 +23,7 @@
 
 #include <global.h>
 
-#include <QtGui/QUndoCommand>
+#include <QUndoCommand>
 #include <kundo2command.h>
 
 class MapShape;

@@ -21,7 +21,7 @@
 #define TESTBORDER_H
 
 #include <QObject>
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class TestBorder : public QObject
 {

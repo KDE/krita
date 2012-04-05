@@ -41,6 +41,12 @@ class KisTiledIterator;
 class KisTiledRandomAccessor;
 class KoStore;
 
+
+/**
+ * KisTileDataWrapper is a special object, that fetches the tile from
+ * the data manager according to the position, locks it and returns
+ * a pointer to the needed piece of data
+ */
 class KisTileDataWrapper
 {
 public:
@@ -48,30 +54,53 @@ public:
         READ,
         WRITE
     };
-    KisTileDataWrapper(KisTileSP tile, qint32 offset, accessType type)
-            : m_tile(tile), m_offset(offset) {
-        if (type == READ)
-            m_tile->lockForRead();
-        else
-            m_tile->lockForWrite();
-    }
 
-    virtual ~KisTileDataWrapper() {
+    /**
+     * Fetches the tile which contains point (\p x, \p y) from
+     * the data manager \p dm with access \p type
+     */
+    inline KisTileDataWrapper(KisTiledDataManager *dm,
+                              qint32 x, qint32 y,
+                              enum KisTileDataWrapper::accessType type);
+
+    virtual ~KisTileDataWrapper()
+    {
         m_tile->unlock();
     }
 
-    inline qint32 offset() const {
+    /**
+     * Returns the offset of the data in the tile's chunk of memory
+     *
+     * \see data()
+     */
+    inline qint32 offset() const
+    {
         return m_offset;
     }
 
-    inline KisTileSP& tile() {
+    /**
+     * Returns the fetched tile
+     */
+    inline KisTileSP& tile()
+    {
         return m_tile;
     }
 
-    inline quint8* data() const {
+    /**
+     * Returns the pointer to the pixel, that was passed to
+     * the constructor. This points to the raw data of the tile,
+     * so you should think about the borders of the tile yourself.
+     * When (x,y) is the top-left corner of the tile, the pointer
+     * will lead to the beginning of the tile's chunk of memory.
+     */
+    inline quint8* data() const
+    {
         return m_tile->data() + m_offset;
     }
+
 private:
+    Q_DISABLE_COPY(KisTileDataWrapper);
+
     KisTileSP m_tile;
     qint32 m_offset;
 };
@@ -116,15 +145,12 @@ protected:
     friend class KisTiledRandomAccessor;
     friend class KisRandomAccessor2;
     friend class KisStressJob;
-protected:
 
+public:
     void setDefaultPixel(const quint8 *defPixel);
     const quint8 *defaultPixel() const {
         return m_defaultPixel;
     }
-
-    /* FIXME:*/
-public:
 
     inline KisTileSP getTile(qint32 col, qint32 row, bool writable) {
         if (writable) {
@@ -147,7 +173,9 @@ public:
 
     KisMementoSP getMemento() {
         QWriteLocker locker(&m_lock);
-        return m_mementoManager->getMemento();
+        KisMementoSP memento = m_mementoManager->getMemento();
+        memento->saveOldDefaultPixel(m_defaultPixel, m_pixelSize);
+        return memento;
     }
 
     /**
@@ -155,19 +183,35 @@ public:
      */
     void commit() {
         QWriteLocker locker(&m_lock);
+
+        KisMementoSP memento = m_mementoManager->currentMemento();
+        if(memento) {
+            memento->saveNewDefaultPixel(m_defaultPixel, m_pixelSize);
+        }
+
         m_mementoManager->commit();
     }
 
     void rollback(KisMementoSP memento) {
-        Q_UNUSED(memento);
+        commit();
+
         QWriteLocker locker(&m_lock);
         m_mementoManager->rollback(m_hashTable);
+        const quint8 *defaultPixel = memento->oldDefaultPixel();
+        if(memcmp(m_defaultPixel, defaultPixel, m_pixelSize)) {
+            setDefaultPixelImpl(defaultPixel);
+        }
         recalculateExtent();
     }
     void rollforward(KisMementoSP memento) {
-        Q_UNUSED(memento);
+        commit();
+
         QWriteLocker locker(&m_lock);
         m_mementoManager->rollforward(m_hashTable);
+        const quint8 *defaultPixel = memento->newDefaultPixel();
+        if(memcmp(m_defaultPixel, defaultPixel, m_pixelSize)) {
+            setDefaultPixelImpl(defaultPixel);
+        }
         recalculateExtent();
     }
     bool hasCurrentMemento() const {
@@ -226,6 +270,11 @@ public:
     void bitBlt(KisTiledDataManager *srcDM, const QRect &rect);
 
     /**
+     * The same as \ref bitBlt(), but reads old data
+     */
+    void bitBltOldData(KisTiledDataManager *srcDM, const QRect &rect);
+
+    /**
      * Clones rect from another datamanager in a rough and fast way.
      * All the tiles touched by rect will be shared, between both
      * managers, that means it will copy a bigger area than was
@@ -233,6 +282,11 @@ public:
      * into temporary paint devices.
      */
     void bitBltRough(KisTiledDataManager *srcDM, const QRect &rect);
+
+    /**
+     * The same as \ref bitBltRough(), but reads old data
+     */
+    void bitBltRoughOldData(KisTiledDataManager *srcDM, const QRect &rect);
 
     /**
      * write the specified data to x, y. There is no checking on pixelSize!
@@ -316,21 +370,27 @@ private:
     // Allow compression routines to calculate (col,row) coordinates
     // and pixel size
     friend class KisAbstractTileCompressor;
+    friend class KisTileDataWrapper;
     qint32 xToCol(qint32 x) const;
     qint32 yToRow(qint32 y) const;
 
 private:
+    void setDefaultPixelImpl(const quint8 *defPixel);
+
     bool writeTilesHeader(KoStore *store, quint32 numTiles);
     bool processTilesHeader(QIODevice *stream, quint32 &numTiles);
 
     qint32 divideRoundDown(qint32 x, const qint32 y) const;
-    KisTileDataWrapper pixelPtr(qint32 x, qint32 y,
-                                enum KisTileDataWrapper::accessType type);
 
     void updateExtent(qint32 col, qint32 row);
     void recalculateExtent();
 
     quint8* duplicatePixel(qint32 num, const quint8 *pixel);
+
+    template<bool useOldSrcData>
+        void bitBltImpl(KisTiledDataManager *srcDM, const QRect &rect);
+    template<bool useOldSrcData>
+        void bitBltRoughImpl(KisTiledDataManager *srcDM, const QRect &rect);
 
     void writeBytesBody(const quint8 *data,
                         qint32 x, qint32 y, qint32 width, qint32 height);
@@ -372,6 +432,31 @@ inline qint32 KisTiledDataManager::yToRow(qint32 y) const
     return divideRoundDown(y, KisTileData::HEIGHT);
 }
 
+inline KisTileDataWrapper::KisTileDataWrapper(KisTiledDataManager *dm,
+                                              qint32 x, qint32 y,
+                                              enum KisTileDataWrapper::accessType type)
+{
+    const qint32 col = dm->xToCol(x);
+    const qint32 row = dm->yToRow(y);
+
+    /* FIXME: Always positive? */
+    const qint32 xInTile = x - col * KisTileData::WIDTH;
+    const qint32 yInTile = y - row * KisTileData::HEIGHT;
+
+    const qint32 pixelIndex = xInTile + yInTile * KisTileData::WIDTH;
+
+    KisTileSP tile = dm->getTile(col, row, type == WRITE);
+
+    m_tile = tile;
+    m_offset = pixelIndex * dm->pixelSize();
+
+    if (type == READ) {
+        m_tile->lockForRead();
+    }
+    else {
+        m_tile->lockForWrite();
+    }
+}
 
 // during development the following line helps to check the interface is correct
 // it should be safe to keep it here even during normal compilation

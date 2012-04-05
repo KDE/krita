@@ -43,7 +43,8 @@
 struct KisFilterDialog::Private {
     Private()
             : currentFilter(0)
-            , mask(0) {
+            , mask(0)
+            , resizeCount(0) {
     }
 
     KisFilterSP currentFilter;
@@ -51,6 +52,7 @@ struct KisFilterDialog::Private {
     KisFilterMaskSP mask;
     KisNodeSP node;
     KisImageWSP image;
+    int resizeCount;
 };
 
 KisFilterDialog::KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageWSP image, KisSelectionSP selection) :
@@ -158,6 +160,10 @@ void KisFilterDialog::previewCheckBoxChange(int state)
 {
     d->mask->setVisible(state == Qt::Checked);
     updatePreview();
+    if (state != Qt::Checked) {
+        // update node to hide what remains from the filter mask
+        d->node->setDirty(d->node->extent());
+    }
 
     KConfigGroup group(KGlobal::config(), "filterdialog");
     group.writeEntry("showPreview", d->uiFilterDialog.checkBoxPreview->isChecked());
@@ -168,14 +174,18 @@ void KisFilterDialog::resizeEvent(QResizeEvent* event)
 {
     QDialog::resizeEvent(event);
 
-    KisView2* view = dynamic_cast<KisView2*>(parentWidget());
-    if(view) {
-        QWidget* canvas = dynamic_cast<KisView2*>(parentWidget())->canvas();
-        QRect rect(canvas->mapToGlobal(canvas->geometry().topLeft()), size());
-        int deltaX = (canvas->geometry().width() - geometry().width())/2;
-        int deltaY = (canvas->geometry().height() - geometry().height())/2;
-        rect.translate(deltaX, deltaY);
-        setGeometry(rect);
+    // Workaround, after the initalisation don't center the dialog anymore
+    if(d->resizeCount < 2) {
+        KisView2* view = dynamic_cast<KisView2*>(parentWidget());
+        if(view) {
+            QWidget* canvas = dynamic_cast<KisView2*>(parentWidget())->canvas();
+            QRect rect(canvas->mapToGlobal(canvas->geometry().topLeft()), size());
+            int deltaX = (canvas->geometry().width() - geometry().width())/2;
+            int deltaY = (canvas->geometry().height() - geometry().height())/2;
+            rect.translate(deltaX, deltaY);
+            setGeometry(rect);
+        }
+        d->resizeCount++;
     }
 }
 

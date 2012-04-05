@@ -49,7 +49,7 @@ public:
      * an accociated image. All data transfers with
      * KisImage should happen here
      */
-    virtual void updateCache(KisPPUpdateInfoSP info) = 0;
+    virtual void updateCache(const QRect &dirtyImageRect) = 0;
 
     /**
      * Prescales the cache of the backend. It is intended to be

@@ -69,7 +69,7 @@ public:
 
     /// Gets the currently selected resource
     /// @returns the selected resource, 0 is no resource is selected
-    KoResource * currentResource();
+    KoResource *currentResource();
 
     /// Sets the item representing the resource as selected
     void setCurrentResource(KoResource* resource);
@@ -82,6 +82,16 @@ public:
     void setCurrentItem(int row, int column);
 
     void showButtons( bool show );
+
+    /// shows the aside preview with the resource's image
+    void showPreview(bool show);
+    /// determines whether the preview right or below the splitter
+    void setPreviewOrientation(Qt::Orientation orientation);
+    /// determines whether the preview should tile the resource's image or not
+    void setPreviewTiled(bool tiled);
+    /// shows the preview converted to grayscale
+    void setGrayscalePreview(bool grayscale);
+
 
     void showGetHotNewStuff( bool showDownload, bool showUpload);
     /// sets the visibilty of tagging KlineEdits.
@@ -100,7 +110,7 @@ public:
 signals:
     /// Emitted when a resource was selected
     void resourceSelected( KoResource * resource );
-
+    void splitterMoved();
 public slots:
     void slotButtonClicked( int button );
     
@@ -117,6 +127,7 @@ private slots:
 
 private:
     void updateButtonState();
+    void updatePreview(KoResource *resource);
 
     /// Resource for a given model index
     /// @returns the resource pointer, 0 is index not valid

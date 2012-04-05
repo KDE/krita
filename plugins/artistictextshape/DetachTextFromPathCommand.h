@@ -21,7 +21,7 @@
 #define DETACHTEXTFROMPATHCOMMAND_H
 
 #include <kundo2command.h>
-#include <QtGui/QPainterPath>
+#include <QPainterPath>
 
 class ArtisticTextShape;
 class KoPathShape;

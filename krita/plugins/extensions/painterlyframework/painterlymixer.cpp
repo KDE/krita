@@ -35,7 +35,6 @@ K_EXPORT_PLUGIN(PainterlyMixerFactory("krita"))
 PainterlyMixer::PainterlyMixer(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
-    setComponentData(PainterlyMixerFactory::componentData());
     KoDockRegistry::instance()->add(new KisPainterlyMixerDockerFactory());
 }
 

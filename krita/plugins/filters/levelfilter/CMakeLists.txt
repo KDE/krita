@@ -1,9 +1,6 @@
-
-
 set(kritalevelfilter_PART_SRCS
     levelfilter.cpp
     kis_level_filter.cpp
-    kgradientslider.cpp
     )
 
 kde4_add_ui_files(kritalevelfilter_PART_SRCS

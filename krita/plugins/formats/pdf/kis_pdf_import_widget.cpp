@@ -24,7 +24,7 @@
 #include <poppler-qt4.h>
 
 // Qt's headers
-#include <qradiobutton.h>
+#include <QRadioButton>
 
 // KDE's headers
 #include <kis_debug.h>

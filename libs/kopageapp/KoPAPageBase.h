@@ -120,6 +120,8 @@ public:
 
     QPixmap thumbnail( const QSize& size = QSize( 512, 512 ) );
 
+    virtual QImage thumbImage(const QSize &size = QSize(512, 512)) = 0;
+
     /**
      * This function is called when the content of the page changes
      *

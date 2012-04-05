@@ -20,7 +20,7 @@
 #ifndef TestPosition_H
 #define TestPosition_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KoShape;
 class KoShapeContainer;

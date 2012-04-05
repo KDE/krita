@@ -118,9 +118,26 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view,
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     connect(this, SIGNAL(canvasDestroyed(QWidget *)), this, SLOT(slotCanvasDestroyed(QWidget *)));
 
+    /**
+     * We switch the shape manager every time shape layer or
+     * shape selection is activated. Flake does not expect this
+     * and connects all the signals of the global shape manager
+     * to the clients in the constructor. To workaround this we
+     * forward the signals of local shape managers stored in the
+     * shape layers to the signals of global shape manager. So the
+     * sequence of signal deliveries is the following:
+     *
+     * shapeLayer.m_d.canvas.m_shapeManager.selection() ->
+     * shapeLayer ->
+     * shapeController ->
+     * globalShapeManager.selection()
+     */
+
     KisShapeController *kritaShapeController = dynamic_cast<KisShapeController*>(sc);
     connect(kritaShapeController, SIGNAL(selectionChanged()),
             globalShapeManager()->selection(), SIGNAL(selectionChanged()));
+    connect(kritaShapeController, SIGNAL(currentLayerChanged(const KoShapeLayer*)),
+            globalShapeManager()->selection(), SIGNAL(currentLayerChanged(const KoShapeLayer*)));
 }
 
 KisCanvas2::~KisCanvas2()
@@ -345,36 +362,30 @@ void KisCanvas2::createCanvas(bool useOpenGL)
 
 void KisCanvas2::connectCurrentImage()
 {
-    m_d->coordinatesConverter->setImage(m_d->view->image());
+    KisImageWSP image = m_d->view->image();
 
-    if (m_d->currentCanvasIsOpenGL) {
-#ifdef HAVE_OPENGL
-        Q_ASSERT(m_d->openGLImageTextures);
+    m_d->coordinatesConverter->setImage(image);
 
-        connect(m_d->view->image(), SIGNAL(sigSizeChanged(qint32, qint32)),
-                m_d->openGLImageTextures, SLOT(slotImageSizeChanged(qint32, qint32)));
-
-        QRect imageRect = m_d->view->image()->bounds();
-        m_d->openGLImageTextures->slotImageSizeChanged(imageRect.width(), imageRect.height());
-#else
-        qFatal("Bad use of connectCurrentImage(). It shouldn't have happened =(");
-#endif
-    } else {
-        connect(m_d->view->image(), SIGNAL(sigSizeChanged(qint32, qint32)),
-                SLOT(setImageSize(qint32, qint32)));
-
+    if (!m_d->currentCanvasIsOpenGL) {
         Q_ASSERT(m_d->prescaledProjection);
-        m_d->prescaledProjection->setImage(m_d->view->image());
-
+        m_d->prescaledProjection->setImage(image);
     }
 
-    connect(m_d->view->image(), SIGNAL(sigImageUpdated(const QRect &)),
+    connect(image, SIGNAL(sigImageUpdated(const QRect &)),
             SLOT(startUpdateCanvasProjection(const QRect &)),
             Qt::DirectConnection);
     connect(this, SIGNAL(sigCanvasCacheUpdated(KisUpdateInfoSP)),
             this, SLOT(updateCanvasProjection(KisUpdateInfoSP)));
 
-    emit imageChanged(m_d->view->image());
+    connect(image, SIGNAL(sigSizeChanged(qint32, qint32)),
+            SLOT(startResizingImage(qint32, qint32)),
+            Qt::DirectConnection);
+    connect(this, SIGNAL(sigContinueResizeImage(qint32, qint32)),
+            this, SLOT(finishResisingImage(qint32, qint32)));
+
+    startResizingImage(image->width(), image->height());
+
+    emit imageChanged(image);
 }
 
 void KisCanvas2::disconnectCurrentImage()
@@ -431,6 +442,42 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
     m_d->canvasWidget->widget()->update();
 }
 
+void KisCanvas2::startResizingImage(qint32 w, qint32 h)
+{
+    emit sigContinueResizeImage(w, h);
+
+    QRect imageBounds(0, 0, w, h);
+    if (m_d->currentCanvasIsOpenGL) {
+        startUpdateCanvasProjection(imageBounds);
+    } else {
+        // TODO: make configurable from KisImageConfig
+        const int patchSize = 512;
+        for (int y = 0; y < h; y += patchSize) {
+            for (int x = 0; x < w; x += patchSize) {
+                QRect patchRect(x, y, patchSize, patchSize);
+
+                startUpdateCanvasProjection(patchRect);
+            }
+        }
+    }
+}
+
+void KisCanvas2::finishResisingImage(qint32 w, qint32 h)
+{
+    if (m_d->currentCanvasIsOpenGL) {
+#ifdef HAVE_OPENGL
+        Q_ASSERT(m_d->openGLImageTextures);
+        m_d->openGLImageTextures->slotImageSizeChanged(w, h);
+
+#else
+        Q_ASSERT_X(0, "finishResisingImage()", "Bad use of finishResisingImage(). It shouldn't have happened =(");
+#endif
+    } else {
+        Q_ASSERT(m_d->prescaledProjection);
+        m_d->prescaledProjection->slotImageSizeChanged(w, h);
+    }
+}
+
 void KisCanvas2::startUpdateCanvasProjection(const QRect & rc)
 {
     if (m_d->currentCanvasIsOpenGL) {
@@ -448,8 +495,6 @@ void KisCanvas2::startUpdateCanvasProjection(const QRect & rc)
 
         emit sigCanvasCacheUpdated(info);
     }
-
-
 }
 
 void KisCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
@@ -544,12 +589,6 @@ KisImageWSP KisCanvas2::image()
 KisImageWSP KisCanvas2::currentImage()
 {
     return m_d->view->image();
-}
-
-void KisCanvas2::setImageSize(qint32 w, qint32 h)
-{
-    if (m_d->prescaledProjection)
-        m_d->prescaledProjection->setImageSize(w, h);
 }
 
 void KisCanvas2::documentOffsetMoved(const QPoint &documentOffset)

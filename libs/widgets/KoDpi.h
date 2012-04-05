@@ -22,9 +22,9 @@
 #ifndef KO_DPI_h
 #define KO_DPI_h
 
-#include <QtCore/QStringList>
-#include <QtGui/QFont>
-#include <QtCore/QMap>
+#include <QStringList>
+#include <QFont>
+#include <QMap>
 
 #include "kowidgets_export.h"
 

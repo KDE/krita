@@ -23,8 +23,8 @@
 #include "KoShapeBackground.h"
 #include "flake_export.h"
 
-#include <QtGui/QTransform>
-#include <QtGui/QGradient>
+#include <QTransform>
+#include <QGradient>
 
 class KoGradientBackgroundPrivate;
 

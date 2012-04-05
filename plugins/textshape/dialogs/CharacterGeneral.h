@@ -27,15 +27,13 @@
 class KoCharacterStyle;
 class FontDecorations;
 class CharacterHighlighting;
-class FontTab;
-class FontLayoutTab;
 class LanguageTab;
 
 class CharacterGeneral : public QWidget
 {
     Q_OBJECT
 public:
-    explicit CharacterGeneral(QWidget *parent = 0, bool uniqueFormat = true);
+    explicit CharacterGeneral(QWidget *parent = 0);
 
     void setStyle(KoCharacterStyle *style);
     void hideStyleName(bool hide);
@@ -65,10 +63,8 @@ private:
     bool m_blockSignals;
     bool m_nameHidden;
 
-    FontLayoutTab *m_layoutTab;
     FontDecorations *m_characterDecorations;
     CharacterHighlighting *m_characterHighlighting;
-    FontTab *m_fontTab;
     LanguageTab *m_languageTab;
 
     KoCharacterStyle *m_style;

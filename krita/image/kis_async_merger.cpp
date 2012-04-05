@@ -38,7 +38,6 @@
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
 #include "kis_selection.h"
-#include "kis_transaction.h"
 #include "kis_clone_layer.h"
 #include "kis_processing_information.h"
 #include "kis_node_progress_proxy.h"
@@ -93,7 +92,6 @@ public:
         KisPaintDeviceSP originalDevice = layer->original();
         originalDevice->clear(m_updateRect);
 
-        if(!m_projection) return true;
         QRect applyRect = m_updateRect & m_projection->extent();
 
         // If the intersection of the updaterect and the projection extent is
@@ -244,6 +242,15 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
     if(notifyClones) {
         doNotifyClones(walker);
     }
+
+    if(m_currentProjection) {
+        warnImage << "BUG: The walker hasn't reached the root layer!";
+        warnImage << "     Start node:" << walker.startNode() << "Requested rect:" << walker.requestedRect();
+        warnImage << "     There must be an inconsistency in the walkers happened!";
+        warnImage << "     Please report a bug describing how you got this message.";
+        // reset projection to avoid artefacts in next merges and allow people to work further
+        resetProjection();
+    }
 }
 
 bool KisAsyncMerger::isRootNode(KisNodeSP node) {
@@ -266,7 +273,6 @@ void KisAsyncMerger::setupProjection(KisNodeSP currentNode, const QRect& rect, b
         if (useTempProjection) {
             if(!m_cachedPaintDevice)
                 m_cachedPaintDevice = new KisPaintDevice(parentOriginal->colorSpace());
-
             m_currentProjection = m_cachedPaintDevice;
             m_currentProjection->prepareClone(parentOriginal);
             m_finalProjection = parentOriginal;
@@ -313,6 +319,7 @@ bool KisAsyncMerger::compositeWithProjection(KisLayerSP layer, const QRect &rect
     if(needRect.isEmpty()) return true;
 
     QBitArray channelFlags = layer->channelFlags();
+
 
     // if the color spaces don't match we will have a problem with the channel flags
     // because the channel flags from the source layer doesn't match with the colorspace of the projection device

@@ -27,7 +27,7 @@
 #include <KToggleAction>
 
 #include "kis_painting_assistant.h"
-#include <qpainter.h>
+#include <QPainter>
 
 struct KisPaintingAssistantsManager::Private {
     QList<KisPaintingAssistant*> assistants;
@@ -116,9 +116,7 @@ void KisPaintingAssistantsManager::setup(KActionCollection * collection)
 void KisPaintingAssistantsManager::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter)
 {
     foreach(KisPaintingAssistant* assistant, d->assistants) {
-        gc.save();
         assistant->drawAssistant(gc, updateRect, converter);
-        gc.restore();
     }
 }
 

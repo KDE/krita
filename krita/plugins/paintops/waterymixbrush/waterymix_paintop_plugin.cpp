@@ -40,8 +40,6 @@ K_EXPORT_PLUGIN(WateryMixPaintOpPluginFactory("krita"))
 WateryMixPaintOpPlugin::WateryMixPaintOpPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //
-    //setComponentData(WateryMixPaintOpPluginFactory::componentData());
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
     r->add(new KisSimplePaintOpFactory<KisWateryMixPaintOp, KisWateryMixPaintOpSettings, KisWateryMixPaintOpSettingsWidget>("waterymixbrush", i18n("Watery Mixbrush"), KisPaintOpFactory::categoryExperimental(),"krita-waterymix.png"));
 

@@ -242,18 +242,13 @@ void KoShapeFactoryBase::getDeferredPlugin()
     if (d->deferredFactory) return;
 
     const QString serviceType = "Calligra/Deferred";
-    QString query = QString::fromLatin1("(Type == 'Service') and (Name == '%1')").arg(d->deferredPluginName);
-    const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
+    const KService::List offers = KServiceTypeTrader::self()->query(serviceType, QString());
     Q_ASSERT(offers.size() > 0);
 
     foreach(KSharedPtr<KService> service, offers) {
-        QString error = 0;  // FIXME: From where does error get a value?
         KoDeferredShapeFactoryBase *plugin = service->createInstance<KoDeferredShapeFactoryBase>(this);
-        if (plugin) {
+        if (plugin && plugin->deferredPluginName() == d->deferredPluginName) {
             d->deferredFactory = plugin;
-        }
-        else {
-            kWarning(30003) << "loading plugin" << service->name() << "failed, " << error;
         }
     }
 

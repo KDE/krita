@@ -25,8 +25,8 @@
 
 #include <KDebug>
 
-#include <QtGui/QPainter>
-#include <QtGui/QFontMetrics>
+#include <QPainter>
+#include <QFontMetrics>
 
 ArtisticTextToolSelection::ArtisticTextToolSelection(KoCanvasBase *canvas, QObject *parent)
     : KoToolSelection(parent), m_canvas(canvas), m_currentShape(0)

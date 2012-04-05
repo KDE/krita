@@ -52,7 +52,6 @@ public:
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIcon("tool_polygon");
         setPriority(4);
-        setInputDeviceAgnostic(false);
     }
 
     virtual ~KisToolPolygonFactory() {}

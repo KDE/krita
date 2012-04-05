@@ -20,7 +20,7 @@
 #include <KoCanvasController.h>
 #include <KoPointerEvent.h>
 
-#include <qpainter.h>
+#include <QPainter>
 
 #include <kis_debug.h>
 #include <klocale.h>
@@ -45,16 +45,10 @@ KisToolGrid::~KisToolGrid()
 
 void KisToolGrid::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
+    KisTool::activate(toolActivation, shapes);
     m_canvas->view()->gridManager()->setVisible(true);
     m_canvas->view()->gridManager()->checkVisibilityAction(true);
     m_canvas->updateCanvas();
-    KisTool::activate(toolActivation, shapes);
-}
-
-void KisToolGrid::deactivate()
-{
-    // Add code here to initialize your tool when it got deactivated
-    KisTool::deactivate();
 }
 
 void KisToolGrid::mousePressEvent(KoPointerEvent *event)

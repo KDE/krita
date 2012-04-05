@@ -23,7 +23,7 @@
 #include "Property.h"
 #include "Utils.h"
 
-#include <qapplication.h>
+#include <QApplication>
 #include <QByteArray>
 
 #include <kdebug.h>

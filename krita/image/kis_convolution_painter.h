@@ -35,6 +35,13 @@ enum KisConvolutionBorderOp {
     BORDER_AVOID = 3 // Skip convolving the border pixels at all.
 };
 
+/**
+ * @brief The KisConvolutionPainter class applies a convolution kernel to a paint device.
+ *
+ *
+ * Note: https://bugs.kde.org/show_bug.cgi?id=220310 shows that there's something here
+ * that we need to fix...
+ */
 class KRITAIMAGE_EXPORT KisConvolutionPainter : public KisPainter
 {
 
@@ -52,7 +59,7 @@ public:
      *
      * The border op decides what to do with pixels too close to the edge of the rect as defined above.
      *
-     * The channels flag determines which set out of color channels, alpha channels, substance or substrate
+     * The channels flag determines which set out of color channels, alpha channels.
      * channels we convolve.
      *
      * Note that we do not (currently) support different kernels for

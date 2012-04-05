@@ -21,7 +21,7 @@
 #ifndef KOCOLORSPACEABSTRACT_H
 #define KOCOLORSPACEABSTRACT_H
 
-#include <QtCore/QBitArray>
+#include <QBitArray>
 #include <klocale.h>
 
 #include <KoColorSpace.h>

@@ -31,6 +31,7 @@
 #include "kis_paint_device.h"
 #include "kis_default_bounds.h"
 #include "kis_clone_layer.h"
+#include "kis_selection_mask.h"
 
 struct KisGroupLayer::Private
 {
@@ -50,7 +51,7 @@ KisGroupLayer::KisGroupLayer(KisImageWSP image, const QString &name, quint8 opac
         KisLayer(image, name, opacity),
         m_d(new Private())
 {
-    m_d->paintDevice = new KisPaintDevice(this, image->colorSpace(), new KisDefaultBounds(image));
+    resetCache();
 }
 
 KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) :
@@ -68,40 +69,51 @@ KisGroupLayer::~KisGroupLayer()
     delete m_d;
 }
 
-bool KisGroupLayer::allowAsChild(KisNodeSP node) const
+bool KisGroupLayer::checkCloneLayer(KisCloneLayerSP clone) const
 {
-    if (node->inherits("KisMask") && !parent())
-    {
-        return false;
-    }
+    KisNodeSP source = clone->copyFrom();
+    if (source) {
+        if(!allowAsChild(source)) return false;
 
-    if (node->inherits("KisCloneLayer")) {
-        KisNodeSP source = qobject_cast<KisCloneLayer*>(node.data())->copyFrom();
-        if (source) {
-            if (source->inherits("KisGroupLayer")) {
-                KisNodeSP parent = const_cast<KisGroupLayer*>(this);
-                while (parent && parent->parent()) {
-                    if (parent == source || !parent->allowAsChild(source)) {
-                        return false;
-                    }
-                    parent = parent->parent();
+        if (source->inherits("KisGroupLayer")) {
+            KisNodeSP newParent = const_cast<KisGroupLayer*>(this);
+            while (newParent) {
+                if (newParent == source) {
+                    return false;
                 }
-            } else if (source->inherits("KisCloneLayer")) {
-                return allowAsChild(source);
+                newParent = newParent->parent();
             }
         }
     }
 
-    if (node->inherits("KisGroupLayer")) {
+    return true;
+}
+
+bool KisGroupLayer::checkNodeRecursively(KisNodeSP node) const
+{
+    KisCloneLayerSP cloneLayer = dynamic_cast<KisCloneLayer*>(node.data());
+    if(cloneLayer) {
+        return checkCloneLayer(cloneLayer);
+    }
+    else if (node->inherits("KisGroupLayer")) {
         KisNodeSP child = node->firstChild();
         while (child) {
-            if (!allowAsChild(child)) {
+            if (!checkNodeRecursively(child)) {
                 return false;
             }
             child = child->nextSibling();
         }
     }
+
     return true;
+}
+
+bool KisGroupLayer::allowAsChild(KisNodeSP node) const
+{
+    return checkNodeRecursively(node) &&
+        (parent() ||
+         (node->inherits("KisSelectionMask") && !selectionMask()) ||
+         !node->inherits("KisMask"));
 }
 
 const KoColorSpace * KisGroupLayer::colorSpace() const
@@ -127,7 +139,7 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
 
     if (!m_d->paintDevice) {
 
-        m_d->paintDevice = new KisPaintDevice(colorSpace);
+        m_d->paintDevice = new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image()));
         m_d->paintDevice->setX(m_d->x);
         m_d->paintDevice->setY(m_d->y);
     }
@@ -147,23 +159,40 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
     }
 }
 
+KisLayer* KisGroupLayer::onlyMeaningfulChild() const
+{
+    KisNode *child = firstChild().data();
+
+    KisLayer *onlyLayer = 0;
+
+    while(child) {
+        KisLayer *layer = dynamic_cast<KisLayer*>(child);
+        if(layer) {
+            if(onlyLayer) return 0;
+            onlyLayer = layer;
+        }
+
+        child = child->nextSibling().data();
+    }
+
+    return onlyLayer;
+}
+
 KisPaintDeviceSP KisGroupLayer::tryObligeChild() const
 {
-    if (childCount() == 1) {
-        const KisLayer *child = dynamic_cast<KisLayer*>(firstChild().data());
+    const KisLayer *child = onlyMeaningfulChild();
 
-        if (child &&
-                child->channelFlags().isEmpty() &&
-                child->projection() &&
-                child->visible() &&
-                (child->compositeOpId() == COMPOSITE_OVER ||
-                 child->compositeOpId() == COMPOSITE_ALPHA_DARKEN ||
-                 child->compositeOpId() == COMPOSITE_COPY) &&
-                child->opacity() == OPACITY_OPAQUE_U8 &&
-                *child->projection()->colorSpace() == *colorSpace()) {
+    if (child &&
+        child->channelFlags().isEmpty() &&
+        child->projection() &&
+        child->visible() &&
+        (child->compositeOpId() == COMPOSITE_OVER ||
+         child->compositeOpId() == COMPOSITE_ALPHA_DARKEN ||
+         child->compositeOpId() == COMPOSITE_COPY) &&
+        child->opacity() == OPACITY_OPAQUE_U8 &&
+        *child->projection()->colorSpace() == *colorSpace()) {
 
-            return child->projection();
-        }
+        return child->projection();
     }
 
     return 0;

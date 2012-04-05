@@ -115,6 +115,10 @@ public:
     bool usingHDRExposureProgram() const;
 
 public:
+    inline QRect storedImageBounds() {
+        return m_storedImageBounds;
+    }
+
     inline int xToCol(int x) {
         return x / m_texturesInfo.effectiveWidth;
     }
@@ -148,11 +152,13 @@ protected:
     static bool imageCanShareTextures(KisImageWSP image);
 
 private:
+    QRect calculateTileRect(int col, int row) const;
     static void getTextureSize(KisGLTexturesInfo *texturesInfo);
     void updateTextureFormat();
 
 private:
     KisImageWSP m_image;
+    QRect m_storedImageBounds;
     KoColorProfile *m_monitorProfile;
     float m_exposure;
 

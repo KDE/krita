@@ -59,6 +59,14 @@ public:
         return KisNodeSP(new KisCloneLayer(*this));
     }
 
+    /**
+     * When the source layer of the clone is removed from the stack
+     * we should substitute the clone with a usual paint layer,
+     * because the source might become unreachable quite soon. This
+     * method builds a paint layer representation of this clone.
+     */
+    KisLayerSP reincarnateAsPaintLayer() const;
+
     bool allowAsChild(KisNodeSP) const;
 
     KisPaintDeviceSP original() const;

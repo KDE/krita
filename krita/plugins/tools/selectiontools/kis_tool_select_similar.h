@@ -18,44 +18,28 @@
 #ifndef KIS_TOOL_SELECT_SIMILAR_H_
 #define KIS_TOOL_SELECT_SIMILAR_H_
 
-#include <QtGui/QPainter>
 #include <KoToolFactoryBase.h>
-#include "flake/kis_node_shape.h"
 #include "kis_tool_select_base.h"
-
-class QWidget;
-class KoCanvasBase;
 
 /**
  * Tool to select colors by pointing at a color on the image.
  */
-
-class KisSelectionOptions;
-
 class KisToolSelectSimilar : public KisToolSelectBase
 {
     Q_OBJECT
 public:
     KisToolSelectSimilar(KoCanvasBase * canvas);
-    virtual ~KisToolSelectSimilar();
-
-    virtual void paint(QPainter& gc, const KoViewConverter &converter) {
-        Q_UNUSED(gc);
-        Q_UNUSED(converter);
-    }
-    virtual void mousePressEvent(KoPointerEvent *e);
-
+    void mousePressEvent(KoPointerEvent *e);
+    QWidget* createOptionWidget();
+    void paint(QPainter&, const KoViewConverter &) {}
 public slots:
     virtual void slotSetFuzziness(int);
 private:
-    virtual QWidget* createOptionWidget();
-
     int m_fuzziness;
 };
 
 class KisToolSelectSimilarFactory : public KoToolFactoryBase
 {
-
 public:
     KisToolSelectSimilarFactory(const QStringList&)
             : KoToolFactoryBase("KisToolSelectSimilar") {

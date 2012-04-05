@@ -58,8 +58,6 @@ ColorRange::ColorRange(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {
-        setComponentData(ColorRangeFactory::componentData());
-
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/colorrange.rc"),
                    true);
         m_view = dynamic_cast<KisView2*>(parent);
@@ -81,10 +79,7 @@ ColorRange::~ColorRange()
 
 void ColorRange::slotActivated()
 {
-    KisPaintDeviceSP layer = m_view->activeDevice();
-    if (!layer) return;
-
-    DlgColorRange * dlgColorRange = new DlgColorRange(m_view, layer, m_view, "ColorRange");
+    DlgColorRange *dlgColorRange = new DlgColorRange(m_view, m_view);
     Q_CHECK_PTR(dlgColorRange);
 
     dlgColorRange->exec();
@@ -96,14 +91,14 @@ void ColorRange::selectOpaque()
     if (!canvas)
         return;
     
-    KisLayerSP layer = m_view->activeLayer();
-    if(!layer)
+    KisNodeSP node = m_view->activeNode();
+    if(!node)
         return;
     
-    KisPaintDeviceSP device = layer->paintDevice();
+    KisPaintDeviceSP device = node->paintDevice();
     if (!device) return;
     
-    KisSelectionToolHelper helper(canvas, layer, i18n("Select Opaque"));
+    KisSelectionToolHelper helper(canvas, node, i18n("Select Opaque"));
     
     qint32 x, y, w, h;
     device->exactBounds(x, y, w, h);

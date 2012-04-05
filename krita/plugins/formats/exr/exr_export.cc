@@ -30,6 +30,8 @@
 #include <KoColorSpaceConstants.h>
 #include <KoFilterManager.h>
 
+#include <kis_properties_configuration.h>
+#include <kis_config.h>
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
@@ -61,16 +63,30 @@ KoFilter::ConversionStatus exrExport::convert(const QByteArray& from, const QByt
         return KoFilter::NotImplemented;
 
     KDialog dialog;
-    dialog.setWindowTitle(i18n("TIFF Export Options"));
+    dialog.setWindowTitle(i18n("OpenEXR Export Options"));
     dialog.setButtons(KDialog::Ok | KDialog::Cancel);
     Ui::ExrExportWidget widget;
-    widget.setupUi(&dialog);
+    QWidget *page = new QWidget(&dialog);
+    widget.setupUi(page);
+    dialog.setMainWidget(page);
+    dialog.resize(dialog.minimumSize());
+
+    QString filterConfig = KisConfig().exportConfiguration("EXR");
+    KisPropertiesConfiguration cfg;
+    cfg.fromXML(filterConfig);
+
+    widget.flatten->setChecked(cfg.getBool("flatten", false));
 
     if (!m_chain->manager()->getBatchMode() ) {
+        kapp->restoreOverrideCursor();
         if (dialog.exec() == QDialog::Rejected) {
             return KoFilter::UserCancelled;
         }
     }
+
+    cfg.setProperty("flatten", widget.flatten->isChecked());
+    KisConfig().setExportConfiguration("EXR", cfg);
+
     KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
 

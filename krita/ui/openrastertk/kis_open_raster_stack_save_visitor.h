@@ -18,6 +18,8 @@
 #ifndef KIS_OPEN_RASTER_STACK_SAVE_VISITOR_H_
 #define KIS_OPEN_RASTER_STACK_SAVE_VISITOR_H_
 
+#include <QSet>
+
 #include "kis_global.h"
 #include "kis_types.h"
 
@@ -37,7 +39,7 @@ class QDomElement;
 class KRITAUI_EXPORT KisOpenRasterStackSaveVisitor : public KisNodeVisitor
 {
 public:
-    KisOpenRasterStackSaveVisitor(KisOpenRasterSaveContext*);
+    KisOpenRasterStackSaveVisitor(KisOpenRasterSaveContext*, vKisNodeSP activeNodes);
     virtual ~KisOpenRasterStackSaveVisitor();
 
     using KisNodeVisitor::visit;

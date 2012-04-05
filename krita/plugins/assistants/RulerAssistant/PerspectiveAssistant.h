@@ -24,6 +24,7 @@
 #include <QObject>
 #include <QPolygonF>
 #include <QLineF>
+#include <QTransform>
 
 class PerspectiveAssistant : public KisPaintingAssistant, public KisAbstractPerspectiveGrid
 {
@@ -31,19 +32,28 @@ public:
     PerspectiveAssistant();
     virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
     virtual void endStroke();
-    void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter);
     virtual QPointF buttonPosition() const;
     virtual int numHandles() const { return 4; }
+    virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached = true);
 
     virtual bool contains(const QPointF& point) const;
     virtual qreal distance(const QPointF& point) const;
+protected:
+    virtual void drawCache(QPainter& gc, const KisCoordinatesConverter *converter);
 private:
     QPointF project(const QPointF& pt, const QPointF& strokeBegin);
     // creates the convex hull, returns false if it's not a quadrilateral
     bool quad(QPolygonF& out) const;
+    // finds the transform from perspective coordinates (a unit square) to the document
+    bool getTransform(QPolygonF& polyOut, QTransform& transformOut) const;
  
     // which direction to snap to (in transformed coordinates)
     QLineF snapLine;
+    // cached information
+    mutable QTransform cachedTransform;
+    mutable QPolygonF cachedPolygon;
+    mutable QPointF cachedPoints[4];
+    mutable bool cacheValid;
 };
 
 class PerspectiveAssistantFactory : public KisPaintingAssistantFactory

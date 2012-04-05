@@ -42,7 +42,7 @@
 class KoTableColumnStyle::Private : public QSharedData
 {
 public:
-    Private() : QSharedData(), parentStyle(0), next(0) {}
+    Private() : QSharedData(), parentStyle(0) {}
 
     ~Private() {
     }
@@ -53,7 +53,6 @@ public:
 
     QString name;
     KoTableColumnStyle *parentStyle;
-    int next;
     StylePrivate stylesPrivate;
 };
 
@@ -77,6 +76,20 @@ KoTableColumnStyle &KoTableColumnStyle::operator=(const KoTableColumnStyle &rhs)
 
 KoTableColumnStyle::~KoTableColumnStyle()
 {
+}
+
+void KoTableColumnStyle::copyProperties(const KoTableColumnStyle *style)
+{
+    d->stylesPrivate = style->d->stylesPrivate;
+    setName(style->name()); // make sure we emit property change
+    d->parentStyle = style->d->parentStyle;
+}
+
+KoTableColumnStyle *KoTableColumnStyle::clone() const
+{
+    KoTableColumnStyle *newStyle = new KoTableColumnStyle();
+    newStyle->copyProperties(this);
+    return newStyle;
 }
 
 void KoTableColumnStyle::setParentStyle(KoTableColumnStyle *parent)
@@ -212,7 +225,7 @@ int KoTableColumnStyle::styleId() const
 
 void KoTableColumnStyle::setStyleId(int id)
 {
-    setProperty(StyleId, id); if (d->next == 0) d->next = id;
+    setProperty(StyleId, id);
 }
 
 QString KoTableColumnStyle::masterPageName() const

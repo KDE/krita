@@ -25,7 +25,7 @@
 
 #include <kis_debug.h>
 #include <OpenCTL/Template.h>
-#include <qfileinfo.h>
+#include <QFileInfo>
 
 struct KoCtlTemplatesRegistry::Private {
     QList<OpenCTL::Template*> templates;

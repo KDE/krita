@@ -249,7 +249,8 @@ void KisOpenGLCanvas2::drawImage()
     qreal scaleX, scaleY;
     converter->imageScale(&scaleX, &scaleY);
 
-    QRect wr = widgetRectInImagePixels.toAlignedRect() & image->bounds();
+    QRect wr = widgetRectInImagePixels.toAlignedRect() &
+        m_d->openGLImageTextures->storedImageBounds();
 
 
     if (image->colorSpace()->hasHighDynamicRange()) {
@@ -402,6 +403,9 @@ bool KisOpenGLCanvas2::event(QEvent *e)
 
 void KisOpenGLCanvas2::enterEvent(QEvent* e)
 {
+    if(!hasFocus()) {
+        setFocus();
+    }
     QWidget::enterEvent(e);
 }
 

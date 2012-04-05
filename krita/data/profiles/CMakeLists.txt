@@ -1,21 +1,9 @@
 ########### install files ###############
 install(FILES
-    Adobe.icm 
-    Apple.icm 
-    CIE.icm 
-    ColorMatch.icm 
-    lcmslabi.icm 
-    lcmsxyzi.icm 
-    monoscnr.icm 
-    NTSC.icm 
-    PAL.icm 
-    SMPTE-C.icm 
-    sRGB.icm
+    lcmslabi.icm
+    lcmsxyzi.icm
+    README
     scRGB.icm
-    srgbspac.icm 
-    tifflab8spac.icm 
-    WideGamut.icm 
-    ycc601.icm 
-    ycc709.icm
-    ISO.icc
+    sRGB.icm
+    WideGamut.icm
     DESTINATION ${CMAKE_INSTALL_PREFIX}/share/color/icc/krita)

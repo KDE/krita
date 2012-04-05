@@ -24,7 +24,6 @@
 #include <QtScript>
 #include <QtTest>
 
-#include <KoStyleManager.h>
 #include <KoOdfStylesReader.h>
 #include <KoStore.h>
 #include <KoOdfStylesReader.h>
@@ -100,7 +99,7 @@ QTextDocument *TestChangeTracking::documentFromOdt(const QString &odt, const QSt
     KoXmlElement realBody(KoXml::namedItemNS(content, KoXmlNS::office, "body"));
     KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, "text");
 
-    KoStyleManager *styleManager = new KoStyleManager;
+    KoStyleManager *styleManager = new KoStyleManager(0);
     KoChangeTracker *changeTracker = new KoChangeTracker;
     KoInlineTextObjectManager *inlineTextObjectManager = new KoInlineTextObjectManager;
     if (changeFormat == "DeltaXML")
@@ -130,6 +129,8 @@ QTextDocument *TestChangeTracking::documentFromOdt(const QString &odt, const QSt
 
 QString TestChangeTracking::documentToOdt(const QString &testCase, QTextDocument *document)
 {
+    Q_UNUSED(testCase);
+
     QString odt("test.odt");
     if (QFile::exists(odt))
         QFile::remove(odt);
@@ -182,7 +183,7 @@ QString TestChangeTracking::documentToOdt(const QString &testCase, QTextDocument
 
     // Setup layout and managers just like kotext
     KoTextDocument(document).setInlineTextObjectManager(new KoInlineTextObjectManager()); // required while saving
-    KoStyleManager *styleManager = new KoStyleManager;
+    KoStyleManager *styleManager = new KoStyleManager(0);
     KoTextDocument(document).setStyleManager(styleManager);
     KoTextDocument(document).setTextEditor(new KoTextEditor(document));
 
@@ -196,7 +197,7 @@ QString TestChangeTracking::documentToOdt(const QString &testCase, QTextDocument
     contentWriter->startElement("office:body");
     contentWriter->startElement("office:text");
 
-    changes.saveOdfChanges(contentWriter);
+    changes.saveOdfChanges(contentWriter, false);
 
     contentWriter->addCompleteElement(&contentTmpFile);
 

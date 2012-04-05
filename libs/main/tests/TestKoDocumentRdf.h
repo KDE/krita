@@ -23,7 +23,7 @@
 #ifndef TEST_KO_DOCUMENT_RDF_H
 #define TEST_KO_DOCUMENT_RDF_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class QTextDocument;
 class KoTextEditor;

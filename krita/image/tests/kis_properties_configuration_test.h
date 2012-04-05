@@ -19,7 +19,7 @@
 #ifndef KIS_SERIALIZABLE_CONFIGURATION_TEST_H
 #define KIS_SERIALIZABLE_CONFIGURATION_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 #include "kis_cubic_curve.h"
 

@@ -8,6 +8,7 @@
    Copyright (C) 2005 Thomas Zander <zander@kde.org>
    Copyright (C) 2005-2008 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
+   Copyright (C) 2011 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,11 +31,12 @@
 
 #include <KoUnit.h>
 #include <KoCanvasObserverBase.h>
-#include <QtGui/QDockWidget>
+#include <QDockWidget>
+#include <KoMarkerData.h>
 
-class KoShapeBorderModel;
+class KoShapeStrokeModel;
 
-/// A docker for setting properties of a line border
+/// A docker for setting properties of a stroke
 class StrokeDocker : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
@@ -45,8 +47,8 @@ public:
     virtual ~StrokeDocker();
 
 public slots:
-    /// Sets the border to edit the properties of
-    virtual void setStroke( const KoShapeBorderModel * );
+    /// Sets the stroke to edit the properties of
+    virtual void setStroke( const KoShapeStrokeModel * );
     /// Sets the unit to be used for the line width editing
     virtual void setUnit( KoUnit unit );
 
@@ -61,6 +63,10 @@ private slots:
     void slotJoinChanged( int ID );
     /// miter limit has changed
     void miterLimitChanged();
+    /// start marker has changed
+    void startMarkerChanged();
+    /// end marker has changed
+    void endMarkerChanged();
 
     void resourceChanged(int key, const QVariant & value);
     void locationChanged(Qt::DockWidgetArea area);
@@ -72,10 +78,13 @@ private:
     /// apply line changes to the selected shape
     void applyChanges();
 
+    /// apply marker changes to the selected shape
+    void applyMarkerChanges(KoMarkerData::MarkerPosition position);
+
     /// reimplemented
     virtual void setCanvas( KoCanvasBase *canvas );
     virtual void unsetCanvas();
-    
+
 private:
     class Private;
     Private * const d;

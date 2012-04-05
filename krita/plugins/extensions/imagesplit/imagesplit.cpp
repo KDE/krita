@@ -37,12 +37,12 @@
 #include <kis_doc2.h>
 #include <KoDocument.h>
 #include <kmimetype.h>
-#include <qstringlist.h>
+#include <QStringList>
 #include <KoFilterManager.h>
 #include <kfiledialog.h>
 #include <kis_paint_layer.h>
 #include <kis_painter.h>
-#include <qdir.h>
+#include <QDir>
 
 #include <kis_paint_device.h>
 #include <kis_background.h>
@@ -55,7 +55,6 @@ Imagesplit::Imagesplit(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {
-        setComponentData(ImagesplitFactory::componentData());
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/imagesplit.rc"), true);
         KAction *action  = new KAction(i18n("Image Split "), this);
         actionCollection()->addAction("imagesplit", action);

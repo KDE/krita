@@ -37,41 +37,61 @@ public:
         enum DabType {
             POINT,
             LINE,
-            CURVE
+            CURVE,
+            POLYLINE,
+            POLYGON,
+            RECT,
+            ELLIPSE,
+            PAINTER_PATH
         };
 
-        Data(KisNodeSP _node, KisPainter *_painter,
-             const KisPaintInformation &_pi,
-             KisDistanceInformation &_dragDistance)
-            : node(_node), painter(_painter),
-              type(POINT), pi1(_pi),
-              dragDistance(_dragDistance)
+        Data(KisNodeSP _node, PainterInfo *_painterInfo,
+             const KisPaintInformation &_pi)
+            : node(_node), painterInfo(_painterInfo),
+              type(POINT), pi1(_pi)
         {}
 
-        Data(KisNodeSP _node, KisPainter *_painter,
+        Data(KisNodeSP _node, PainterInfo *_painterInfo,
              const KisPaintInformation &_pi1,
-             const KisPaintInformation &_pi2,
-             KisDistanceInformation &_dragDistance)
-            : node(_node), painter(_painter),
-              type(LINE), pi1(_pi1), pi2(_pi2),
-              dragDistance(_dragDistance)
+             const KisPaintInformation &_pi2)
+            : node(_node), painterInfo(_painterInfo),
+              type(LINE), pi1(_pi1), pi2(_pi2)
         {}
 
-        Data(KisNodeSP _node, KisPainter *_painter,
+        Data(KisNodeSP _node, PainterInfo *_painterInfo,
              const KisPaintInformation &_pi1,
              const QPointF &_control1,
              const QPointF &_control2,
-             const KisPaintInformation &_pi2,
-             KisDistanceInformation &_dragDistance)
-            : node(_node), painter(_painter),
+             const KisPaintInformation &_pi2)
+            : node(_node), painterInfo(_painterInfo),
               type(CURVE), pi1(_pi1), pi2(_pi2),
-              control1(_control1), control2(_control2),
-              dragDistance(_dragDistance)
+              control1(_control1), control2(_control2)
+        {}
+
+        Data(KisNodeSP _node, PainterInfo *_painterInfo,
+             DabType _type,
+             const vQPointF &_points)
+            : node(_node), painterInfo(_painterInfo),
+            type(_type), points(_points)
+        {}
+
+        Data(KisNodeSP _node, PainterInfo *_painterInfo,
+             DabType _type,
+             const QRectF &_rect)
+            : node(_node), painterInfo(_painterInfo),
+            type(_type), rect(_rect)
+        {}
+
+        Data(KisNodeSP _node, PainterInfo *_painterInfo,
+             DabType _type,
+             const QPainterPath &_path)
+            : node(_node), painterInfo(_painterInfo),
+            type(_type), path(_path)
         {}
 
 
         KisNodeSP node;
-        KisPainter *painter;
+        PainterInfo *painterInfo;
 
         DabType type;
         KisPaintInformation pi1;
@@ -79,17 +99,23 @@ public:
         QPointF control1;
         QPointF control2;
 
-        KisDistanceInformation &dragDistance;
+        vQPointF points;
+        QRectF rect;
+        QPainterPath path;
     };
 
 public:
+    // TODO: add i18n after 2.4
     FreehandStrokeStrategy(bool needsIndirectPainting,
                            KisResourcesSnapshotSP resources,
-                           KisPainter *painter);
+                           PainterInfo *painterInfo,
+                           const QString &name = "Freehand Stroke");
 
+    // TODO: add i18n after 2.4
     FreehandStrokeStrategy(bool needsIndirectPainting,
                            KisResourcesSnapshotSP resources,
-                           QVector<KisPainter*> painters);
+                           QVector<PainterInfo*> painterInfos,
+                           const QString &name = "Freehand Stroke");
 
     void doStrokeCallback(KisStrokeJobData *data);
 

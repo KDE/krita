@@ -34,6 +34,8 @@
 
 #include "LcmsColorProfileContainer.h"
 
+#include "lcms2.h"
+
 struct IccColorProfile::Data::Private {
     QByteArray rawData;
 };
@@ -185,9 +187,9 @@ bool IccColorProfile::load()
     QByteArray rawData = file.readAll();
     setRawData(rawData);
     file.close();
-    if (init())
+    if (init()) {
         return true;
-
+    }
     warnPigment << "Failed to load profile from " << fileName();
     return false;
 }

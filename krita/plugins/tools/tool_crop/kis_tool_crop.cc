@@ -93,6 +93,8 @@ void KisToolCrop::deactivate()
     m_rectCrop = QRect(0, 0, 0, 0);
     updateWidgetValues();
     updateCanvasPixelRect(image()->bounds());
+
+    KisTool::deactivate();
 }
 
 void KisToolCrop::resourceChanged(int key, const QVariant &res)
@@ -436,8 +438,6 @@ void KisToolCrop::paintOutlineWithHandles(QPainter& gc)
 
 void KisToolCrop::crop()
 {
-    // XXX: Should cropping be part of KisImage/KisPaintDevice's API?
-
     m_haveCropSelection = false;
     useCursor(cursor());
 
@@ -633,11 +633,6 @@ QWidget* KisToolCrop::createOptionWidget()
 
     m_optWidget->setFixedHeight(m_optWidget->sizeHint().height());
 
-    return m_optWidget;
-}
-
-QWidget* KisToolCrop::optionWidget()
-{
     return m_optWidget;
 }
 

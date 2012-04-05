@@ -81,6 +81,7 @@ public:
        , layoutScheduled(false)
        , continuousLayout(true)
        , layoutBlocked(false)
+       , changesBlocked(false)
        , restartLayout(false)
        , wordprocessingMode(false)
     {
@@ -118,6 +119,7 @@ public:
     bool layoutScheduled;
     bool continuousLayout;
     bool layoutBlocked;
+    bool changesBlocked;
     bool restartLayout;
     bool wordprocessingMode;
 };
@@ -254,8 +256,9 @@ qreal KoTextDocumentLayout::defaultTabSpacing()
 // this method is called on every char inserted or deleted, on format changes, setting/moving of variables or objects.
 void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int charsAdded)
 {
-    Q_UNUSED(charsAdded);
-    Q_UNUSED(charsRemoved);
+    if (d->changesBlocked) {
+        return;
+    }
 
     int from = position;
     const int to = from + charsAdded;
@@ -275,7 +278,12 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
     // Mark the to the position corresponding root-areas as dirty. If there is no root-area for the position then we
     // don't need to mark anything dirty but still need to go on to force a scheduled relayout.
     if (!d->rootAreaList.isEmpty()) {
-        KoTextLayoutRootArea *fromArea = rootAreaForPosition(position);
+        KoTextLayoutRootArea *fromArea;
+        if (position) {
+            fromArea = rootAreaForPosition(position-1);
+        } else {
+            fromArea = d->rootAreaList.at(0);
+        }
         int startIndex = fromArea ? qMax(0, d->rootAreaList.indexOf(fromArea)) : 0;
         int endIndex = startIndex;
         if (charsRemoved != 0 || charsAdded != 0) {
@@ -284,7 +292,7 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
             // and charsAdded>0 cause they are changing a range of characters. One case where both is zero is if
             // the content of a variable changed (see KoVariable::setValue which calls publicDocumentChanged). In
             // those cases we only need to relayout the root-area dirty where the variable is on.
-            KoTextLayoutRootArea *toArea = fromArea ? rootAreaForPosition(position + qMax(charsRemoved, charsAdded)) : 0;
+            KoTextLayoutRootArea *toArea = fromArea ? rootAreaForPosition(position + qMax(charsRemoved, charsAdded) + 1) : 0;
             if (toArea) {
                 if (toArea != fromArea) {
                     endIndex = qMax(startIndex, d->rootAreaList.indexOf(toArea));
@@ -331,7 +339,7 @@ KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPosition(int position) co
         qreal y = pos.y();
 
         //0.125 needed since Qt Scribe works with fixed point
-        if (x + 0.125 >= rect.x() && x<= rect.right() && y + 0.125 >= rect.y() && y <= rect.bottom()) {
+        if (x + 0.125 >= rect.x() && x<= rect.right() && y + line.height() + 0.125 >= rect.y() && y <= rect.bottom()) {
             return rootArea;
         }
     }
@@ -417,6 +425,7 @@ void KoTextDocumentLayout::positionAnchoredObstructions()
         AnchorStrategy *strategy = static_cast<AnchorStrategy *>(textAnchor->anchorStrategy());
 
         strategy->setPageRect(page->rect());
+        strategy->setPageContentRect(page->contentRect());
         strategy->setPageNumber(page->pageNumber());
 
         if (strategy->moveSubject()) {
@@ -773,6 +782,16 @@ void KoTextDocumentLayout::setBlockLayout(bool block)
 bool KoTextDocumentLayout::layoutBlocked() const
 {
     return d->layoutBlocked;
+}
+
+void KoTextDocumentLayout::setBlockChanges(bool block)
+{
+    d->changesBlocked = block;
+}
+
+bool KoTextDocumentLayout::changesBlocked() const
+{
+    return d->changesBlocked;
 }
 
 KoTextDocumentLayout* KoTextDocumentLayout::referencedLayout() const

@@ -21,11 +21,11 @@
 
 #include "kis_processing_visitor.h"
 
+
+#include <kis_types.h>
+
 #include <QPointF>
 #include <QTransform>
-
-#include "kis_layer.h"
-#include "kis_paint_device.h"
 
 class KisFilterStrategy;
 

@@ -19,7 +19,7 @@
 #include "kis_iterator.h"
 
 
-#include <qglobal.h>
+#include <QtGlobal>
 
 #include <kis_debug.h>
 

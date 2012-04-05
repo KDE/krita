@@ -1,6 +1,6 @@
 #include <kis_tool_%{APPNAMELC}.h>
 
-#include <qpainter.h>
+#include <QPainter>
 
 #include <kis_debug.h>
 #include <klocale.h>
@@ -63,11 +63,6 @@ void KisTool%{APPNAME}::paint(QPainter& gc, const KoViewConverter &converter)
 // QWidget* KisTool%{APPNAME}::createOptionWidget()
 // {
 //     return 0;
-// }
-//
-// QWidget* KisTool%{APPNAME}::optionWidget()
-// {
-//         return 0;
 // }
 
 

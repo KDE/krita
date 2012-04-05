@@ -858,6 +858,9 @@ void ChartProxyModel::invalidateDataSets()
 void ChartProxyModel::beginLoading()
 {
     Q_ASSERT( !d->isLoading );
+
+    beginResetModel();
+
     // FIXME: invalidateDataSets() used to be called explicitly at the beginning
     // of ChartShape::loadOdf(). Now beginLoading() is called instead.
     // So, is invalidateDataSets() still necessary here?
@@ -873,6 +876,13 @@ void ChartProxyModel::endLoading()
     // Doing this here is wrong, the data set's cell regions set in
     // DataSet::loadOdf() would get overridden.
     // d->rebuildDataMap();
+
+    endResetModel();
+}
+
+bool ChartProxyModel::isLoading() const
+{
+    return d->isLoading;
 }
 
 void ChartProxyModel::setDataDirection( Qt::Orientation orientation )

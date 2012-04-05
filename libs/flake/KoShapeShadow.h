@@ -22,8 +22,8 @@
 #define KOSHAPESHADOW_H
 
 #include "flake_export.h"
-#include <QtCore/QPointF>
-#include <QtGui/QColor>
+#include <QPointF>
+#include <QColor>
 
 class KoShape;
 class KoGenStyle;

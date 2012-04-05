@@ -19,7 +19,7 @@
 #ifndef KIS_BRUSH_TEST_H
 #define KIS_BRUSH_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisBrushTest : public QObject
 {

@@ -37,6 +37,8 @@ class KRecentFilesAction;
 class QDockWidget;
 class QLabel;
 
+struct KoPageLayout;
+
 // Calligra class but not in main module
 class KoDockerManager;
 
@@ -186,13 +188,6 @@ signals:
 
     /// This signal is emitted right after the docker states have been succefully restored from config
     void restoringDone();
-
-    /// This signal is emitted right before we handle loading or saving of toolbars
-    void beforeHandlingToolBars();
-
-    /// This signal is emitted right after we handled loading or saving of toolbars
-    void afterHandlingToolBars();
-
 public slots:
 
     /**
@@ -243,7 +238,8 @@ public slots:
     virtual void slotFilePrint();
     virtual void slotFilePrintPreview();
 
-    KoPrintJob* exportToPdf(QString fileName = QString());
+    KoPrintJob* exportToPdf(QString pdfFileName = QString());
+    KoPrintJob* exportToPdf(KoPageLayout pageLayout, QString pdfFileName = QString());
 
     /**
      * Show a dialog with author and document information.

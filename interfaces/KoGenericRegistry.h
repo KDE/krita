@@ -23,9 +23,9 @@
 
 #include <kdemacros.h>
 #include <kdebug.h>
-#include <QtCore/QList>
-#include <QtCore/QString>
-#include <QtCore/QHash>
+#include <QList>
+#include <QString>
+#include <QHash>
 
 /**
  * Base class for registry objects.
@@ -74,7 +74,6 @@ public:
         Q_ASSERT( item );
         QString id = item->id();
         if(m_hash.contains(id)) {
-            kWarning() << "Registry already contains item" << id;
             m_doubleEntries << value(id);
             remove(id);
         }
@@ -89,7 +88,6 @@ public:
     void add(const QString &id, T item) {
         Q_ASSERT( item );
         if(m_hash.contains(id)) {
-            kWarning() << "Registry already contains item" << id;
             m_doubleEntries << value(id);
             remove(id);
         }

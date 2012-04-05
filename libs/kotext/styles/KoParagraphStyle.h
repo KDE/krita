@@ -47,6 +47,7 @@ class KoGenStyle;
 class KoGenStyles;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
+class KoList;
 
 /**
  * A container for all properties for the paragraph wide style.
@@ -61,6 +62,7 @@ class KOTEXT_EXPORT KoParagraphStyle : public KoCharacterStyle
     Q_OBJECT
 public:
     enum Property {
+        // Every 10 properties, the decimal number shown indicates the decimal offstet over the QTextFormat::UserProperty enum value
         StyleId = QTextFormat::UserProperty + 1,
         // Linespacing properties
         PercentLineHeight,  ///< this propery is used for a percentage of the highest character on that line
@@ -71,7 +73,7 @@ public:
         AlignLastLine,      ///< When the paragraph is justified, what to do with the last word line
         WidowThreshold,     ///< If 'keep together'=false, amount of lines to keep it anyway.
         OrphanThreshold,   ///< If 'keep together'=false, amount of lines to keep it anyway.
-        DropCaps,       ///< defines if a paragraph renders its first char(s) with drop-caps
+        DropCaps, /*10*/   ///< defines if a paragraph renders its first char(s) with drop-caps
         DropCapsLength, ///< Number of glyphs to show as drop-caps
         DropCapsLines,  ///< Number of lines that the drop-caps span
         DropCapsDistance,   ///< Distance between drop caps and text
@@ -83,7 +85,7 @@ public:
         HasTopBorder,   ///< If true, paint a border on the top
         HasRightBorder, ///< If true, paint a border on the right
         HasBottomBorder,///< If true, paint a border on the bottom
-        BorderLineWidth,///< Thickness of inner-border
+        BorderLineWidth, /*20*/ ///< Thickness of inner-border
         SecondBorderLineWidth,  ///< Thickness of outer-border
         DistanceToSecondBorder, ///< Distance between inner and outer border
         LeftPadding,    ///< distance between text and border
@@ -93,7 +95,7 @@ public:
         LeftBorderWidth,        ///< The thickness of the border, or 0 if there is no border
         LeftInnerBorderWidth,   ///< In case of style being 'double' the thickness of the inner border line
         LeftBorderSpacing,      ///< In case of style being 'double' the space between the inner and outer border lines
-        LeftBorderStyle,        ///< The border style. (see BorderStyle)
+        LeftBorderStyle, /*30*/ ///< The border style. (see BorderStyle)
         LeftBorderColor,        ///< The border Color
         TopBorderWidth,         ///< The thickness of the border, or 0 if there is no border
         TopInnerBorderWidth,    ///< In case of style being 'double' the thickness of the inner border line
@@ -103,7 +105,7 @@ public:
         RightBorderWidth,       ///< The thickness of the border, or 0 if there is no border
         RightInnerBorderWidth,  ///< In case of style being 'double' the thickness of the inner border line
         RightBorderSpacing,     ///< In case of style being 'double' the space between the inner and outer border lines
-        RightBorderStyle,       ///< The border style. (see BorderStyle)
+        RightBorderStyle, /*40*/ ///< The border style. (see BorderStyle)
         RightBorderColor,       ///< The border Color
         BottomBorderWidth,      ///< The thickness of the border, or 0 if there is no border
         BottomInnerBorderWidth, ///< In case of style being 'double' the thickness of the inner border line
@@ -115,7 +117,7 @@ public:
         ListStyleId,            ///< Style Id of associated list style
         ListStartValue,         ///< Int with the list-value that that parag will have. Ignored if this is not a list.
         RestartListNumbering,   ///< boolean to indicate that this paragraph will have numbering restart at the list-start. Ignored if this is not a list.
-        ListLevel,               ///< int with the list-level that the paragraph will get when this is a list (numbered paragraphs)
+        ListLevel, /*50*/       ///< int with the list-level that the paragraph will get when this is a list (numbered paragraphs)
         IsListHeader,           ///< bool, if true the paragraph shows up as a list item, but w/o a list label.
         UnnumberedListItem,     ///< bool. if true this paragraph is part of a list but is not numbered
 
@@ -132,8 +134,8 @@ public:
         DefaultOutlineLevel,
 
         // numbering
-        LineNumbering,           ///< bool, specifies whether lines should be numbered in this paragraph
-        LineNumberStartValue,    ///< integer value that specifies the number for the first line in the paragraph
+        LineNumbering,         /*60*/   ///< bool, specifies whether lines should be numbered in this paragraph
+        LineNumberStartValue, ///< integer value that specifies the number for the first line in the paragraph
         SectionStartings,            ///< list of section definitions
         SectionEndings,               ///< list <end of a named section>
 // do 15.5.24
@@ -157,20 +159,24 @@ public:
         HyphenationLadderCount,   ///< int, 0 means no limit, else limit the number of successive hyphenated line areas in a block
         PunctuationWrap,          ///< bool, whether a punctuation mark can be at the end of a full line (false) or not (true)
         VerticalAlignment,        ///< KoParagraphStyle::VerticalAlign, the alignment of this paragraph text
+        HiddenByTable,        ///< dont let this paragraph have any height
 
         NormalLineHeight,         ///< bool, internal property for reserved usage
         BibliographyData,
 
         TableOfContentsData,      // set when block is instead a TableOfContents
         GeneratedDocument,  // set when block is instead a generated document
-        Shadow                    //< KoShadowStyle, the shadow of this paragraph
+        Shadow,                    //< KoShadowStyle, the shadow of this paragraph
+        NextStyle,                  ///< holds the styleId of the style to be used on a new paragraph
+        ParagraphListStyleId,        ///< this holds the listStyleId of the list got from style:list-style-name property from ODF 1.2
+        EndCharStyle           // QSharedPointer<KoCharacterStyle>  used when final line is empty
     };
 
     enum AutoSpace {
         NoAutoSpace,              ///< space should not be added between portions of Asian, Western and complex texts
         IdeographAlpha            ///< space should be added between portions of Asian, Western and complex texts
     };
-    
+
     enum VerticalAlign {
         VAlignAuto,
         VAlignBaseline,
@@ -178,8 +184,7 @@ public:
         VAlignMiddle,
         VAlignTop
     };
-        
-    
+
     /// Constructor
     KoParagraphStyle(QObject *parent = 0);
     /// Creates a KoParagrahStyle with the given block format, the block character format and \a parent
@@ -191,7 +196,7 @@ public:
     static KoParagraphStyle *fromBlock(const QTextBlock &block, QObject *parent = 0);
 
     /// creates a clone of this style with the specified parent
-    KoParagraphStyle *clone(QObject *parent = 0);
+    KoParagraphStyle *clone(QObject *parent = 0) const;
 
     //  ***** Linespacing
     /**
@@ -274,6 +279,7 @@ public:
      * frame, setting a widowThreshold of 4 will break at 6 lines instead to leave the
      * requested 4 lines.
      */
+
     void setWidowThreshold(int lines);
     /**
      * @see setWidowThreshold
@@ -287,6 +293,7 @@ public:
      * setting the orphanThreshold to something greater than 2 will move the whole paragraph
      * to the second frame.
      */
+
     void setOrphanThreshold(int lines);
     /**
      * @see setOrphanThreshold
@@ -298,6 +305,7 @@ public:
      * @see setDropCapsLines
      * @see dropCapsDistance
      */
+
     void setDropCaps(bool on);
     /**
      * @see setDropCaps
@@ -309,6 +317,7 @@ public:
      * @see setDropCapsLines
      * @see dropCapsDistance
      */
+
     void setDropCapsLength(int characters);
     /**
      * set dropCaps Length in characters
@@ -321,6 +330,7 @@ public:
      * @see setDropCaps
      * @see dropCapsDistance
      */
+
     void setDropCapsLines(int lines);
     /**
      * The dropCapsLines
@@ -333,6 +343,7 @@ public:
      * @see setDropCaps
      * @see setDropCapsLines
      */
+
     void setDropCapsDistance(qreal distance);
     /**
      * The dropCaps distance
@@ -368,46 +379,46 @@ public:
     QBrush background() const;
     /// See similar named method on QTextBlockFormat
     void clearBackground();
-    
+
     qreal backgroundTransparency() const;
     void setBackgroundTransparency(qreal transparency);
 
     bool snapToLayoutGrid() const;
     void setSnapToLayoutGrid(bool value);
-    
+
     bool registerTrue() const;
     void setRegisterTrue(bool value);
-    
+
     bool strictLineBreak() const;
     void setStrictLineBreak(bool value);
-    
+
     bool justifySingleWord() const;
     void setJustifySingleWord(bool value);
-    
+
     bool automaticWritingMode() const;
     void setAutomaticWritingMode(bool value);
-    
+
     void setPageNumber(int pageNumber);
     int pageNumber() const;
-    
+
     void setKeepWithNext(bool value);
     bool keepWithNext() const;
-    
+
     void setPunctuationWrap(bool value);
     bool punctuationWrap() const;
-    
+
     void setTextAutoSpace(AutoSpace value);
     AutoSpace textAutoSpace() const;
-    
+
     void setKeepHyphenation(bool value);
     bool keepHyphenation() const;
-    
+
     void setHyphenationLadderCount(int value);
     int hyphenationLadderCount() const;
-    
+
     VerticalAlign verticalAlignment() const;
     void setVerticalAlignment(VerticalAlign value);
-    
+
     void setBreakBefore(KoText::KoTextBreakProperty value);
     KoText::KoTextBreakProperty breakBefore() const;
     void setBreakAfter(KoText::KoTextBreakProperty value);
@@ -462,7 +473,7 @@ public:
     KoBorder::BorderStyle bottomBorderStyle() const;
     void setBottomBorderColor(const QColor &color);
     QColor bottomBorderColor() const;
-    
+ 
     bool joinBorder() const;
     void setJoinBorder(bool value);
 
@@ -499,7 +510,7 @@ public:
     /// duplicated property from QTextBlockFormat
     void setTextIndent(QTextLength margin);
     /// duplicated property from QTextBlockFormat
-    QTextLength textIndent() const;
+    qreal textIndent() const;
     /// Custom KoParagraphStyle property for auto-text-indent
     void setAutoTextIndent(bool on);
     bool autoTextIndent() const;
@@ -518,10 +529,10 @@ public:
     /// return the parent style
     KoParagraphStyle *parentStyle() const;
 
-    /// the 'next' style is the one used when the user creates a new paragrap after this one.
+    /// the 'next' style is the one used when the user creates a new paragraph after this one.
     void setNextStyle(int next);
 
-    /// the 'next' style is the one used when the user creates a new paragrap after this one.
+    /// the 'next' style is the one used when the user creates a new paragraph after this one.
     int nextStyle() const;
 
     /// return the name of the style.
@@ -704,6 +715,11 @@ public:
      * Note that the value of StyleId property is not considered
      */
     bool hasDefaults() const;
+
+    KoList *list();
+
+    void applyParagraphListStyle(QTextBlock &block, const QTextBlockFormat &blockFormat) const;
+
 signals:
     void nameChanged(const QString &newName);
 
@@ -722,5 +738,5 @@ private:
     class Private;
     Private * const d;
 };
-
+Q_DECLARE_METATYPE(KoListStyle *);
 #endif

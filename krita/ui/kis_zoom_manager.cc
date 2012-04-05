@@ -190,6 +190,7 @@ void KisZoomManager::changeAspectMode(bool aspectMode)
         m_zoomHandler->setResolutionToStandard();
 
     m_zoomController->setZoom(m_zoomHandler->zoomMode(), m_zoomHandler->zoom());
+    m_view->canvasBase()->notifyZoomChanged();
 }
 
 

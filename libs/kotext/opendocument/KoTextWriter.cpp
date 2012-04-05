@@ -68,11 +68,11 @@ void KoTextWriter::saveOdf(KoShapeSavingContext &context, KoDocumentRdfBase *rdf
     if (changeTracker) {
         changeSaveFormat = changeTracker->saveFormat();
         if (!changeTracker->displayChanges() && (changeSaveFormat == KoChangeTracker::DELTAXML)) {
-            KoTextDocument(document).textEditor()->addCommand(insertCommand, false);
+            KoTextDocument(document).textEditor()->instantlyExecuteCommand(insertCommand);
         }
 
         if (changeTracker->displayChanges() && (changeSaveFormat == KoChangeTracker::ODF_1_2)) {
-            KoTextDocument(document).textEditor()->addCommand(removeCommand, false);
+            KoTextDocument(document).textEditor()->instantlyExecuteCommand(removeCommand);
         }
     }
 
@@ -139,13 +139,8 @@ void KoTextWriter::write(const QTextDocument *document, int from, int to)
     d->styleManager = KoTextDocument(document).styleManager();
     d->changeTracker = KoTextDocument(document).changeTracker();
 
-    QVector<int> changesVector;
-    if (d->changeTracker) {
-        d->changeTracker->allChangeIds(changesVector);
-    }
-    foreach (int changeId, changesVector) {
-        d->saveChange(changeId);
-    }
+    d->saveAllChanges();
+
 
     QTextBlock fromblock = document->findBlock(from);
     QTextBlock toblock = document->findBlock(to);
@@ -156,7 +151,7 @@ void KoTextWriter::write(const QTextDocument *document, int from, int to)
     QTextList *currentList = fromcursor.currentList();
 
     // NOTE even better would be if we create a new table/list out of multiple selected
-    // tablecells/listitems thta contain only the selected cells/items. But following
+    // tablecells/listitems that contain only the selected cells/items. But following
     // at least enables copying a whole list/table while still being able to copy/paste
     // only parts of the text within a list/table (see also bug 275990).
     if (currentTable || currentList) {

@@ -23,12 +23,12 @@
 #include "KoResourceItemChooser.h"
 #include "kis_paintop_registry.h"
 
-#include <QtGui/QAbstractScrollArea>
-#include <QtGui/QMouseEvent>
-#include <QtCore/QTimer>
+#include <QAbstractScrollArea>
+#include <QMouseEvent>
+#include <QTimer>
 
 KisPresetSelectorStrip::KisPresetSelectorStrip(QWidget* parent)
-                      : QWidget(parent)
+    : QWidget(parent)
 {
     setupUi(this);
     smallPresetChooser->showButtons(false);

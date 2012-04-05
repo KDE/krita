@@ -29,7 +29,7 @@
 #include "KoSelection.h"
 #include "KoPointerEvent.h"
 #include "KoInsets.h"
-#include "KoShapeBorderModel.h"
+#include "KoShapeStrokeModel.h"
 #include "KoShapeBackground.h"
 #include "KoColorBackground.h"
 #include "KoGradientBackground.h"
@@ -40,7 +40,7 @@
 #include "KoShapeSavingContext.h"
 #include "KoShapeLoadingContext.h"
 #include "KoViewConverter.h"
-#include "KoLineBorder.h"
+#include "KoShapeStroke.h"
 #include "ShapeDeleter_p.h"
 #include "KoShapeShadow.h"
 #include "KoClipPath.h"
@@ -49,6 +49,7 @@
 #include "KoOdfWorkaround.h"
 #include "KoFilterEffectStack.h"
 #include <KoSnapData.h>
+#include <KoElementReference.h>
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -74,13 +75,13 @@
 // KoShapePrivate
 
 KoShapePrivate::KoShapePrivate(KoShape *shape)
-    : size(50, 50),
+    : q_ptr(shape),
+      size(50, 50),
       parent(0),
       userData(0),
       appData(0),
+      stroke(0),
       fill(0),
-      border(0),
-      q_ptr(shape),
       shadow(0),
       clipPath(0),
       filterEffectStack(0),
@@ -115,8 +116,8 @@ KoShapePrivate::~KoShapePrivate()
     }
     delete userData;
     delete appData;
-    if (border && !border->deref())
-        delete border;
+    if (stroke && !stroke->deref())
+        delete stroke;
     if (shadow && !shadow->deref())
         delete shadow;
     if (fill && !fill->deref())
@@ -137,13 +138,13 @@ void KoShapePrivate::shapeChanged(KoShape::ChangeType type)
         shape->shapeChanged(type, q);
 }
 
-void KoShapePrivate::updateBorder()
+void KoShapePrivate::updateStroke()
 {
     Q_Q(KoShape);
-    if (border == 0)
+    if (stroke == 0)
         return;
     KoInsets insets;
-    border->borderInsets(q, insets);
+    stroke->strokeInsets(q, insets);
     QSizeF inner = q->size();
     // update left
     q->update(QRectF(-insets.left, -insets.top, insets.left,
@@ -356,9 +357,9 @@ bool KoShape::hitTest(const QPointF &position) const
 
     QPointF point = absoluteTransformation(0).inverted().map(position);
     QRectF bb(QPointF(), size());
-    if (d->border) {
+    if (d->stroke) {
         KoInsets insets;
-        d->border->borderInsets(this, insets);
+        d->stroke->strokeInsets(this, insets);
         bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
     }
     if (bb.contains(point))
@@ -381,9 +382,9 @@ QRectF KoShape::boundingRect() const
 
     QTransform transform = absoluteTransformation(0);
     QRectF bb = outlineRect();
-    if (d->border) {
+    if (d->stroke) {
         KoInsets insets;
-        d->border->borderInsets(this, insets);
+        d->stroke->strokeInsets(this, insets);
         bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
     }
     bb = transform.mapRect(bb);
@@ -461,42 +462,77 @@ QTransform KoShape::transformation() const
     return d->localMatrix;
 }
 
+KoShape::ChildZOrderPolicy KoShape::childZOrderPolicy()
+{
+    return ChildZDefault;
+}
+
 bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2)
 {
-    bool foundCommonParent = false;
-    KoShape *parentShapeS1 = s1;
-    KoShape *parentShapeS2 = s2;
-    int index1 = parentShapeS1->zIndex();
-    int index2 = parentShapeS2->zIndex();
-    int runThrough1 = parentShapeS1->runThrough();
-    int runThrough2 = parentShapeS2->runThrough();
-    while (parentShapeS1 && !foundCommonParent) {
-        parentShapeS2 = s2;
-        index2 = parentShapeS2->zIndex();
-        runThrough2 = parentShapeS2->runThrough();
-        while (parentShapeS2) {
-            if (parentShapeS2 == parentShapeS1) {
-                foundCommonParent = true;
-                break;
-            }
-            index2 = parentShapeS2->zIndex();
-            runThrough2 = parentShapeS2->runThrough();
-            parentShapeS2 = parentShapeS2->parent();
-        }
-
-        if (!foundCommonParent) {
-            index1 = parentShapeS1->zIndex();
+    // First sort according to runThrough which is sort of a master level
+    KoShape *parentShapeS1 = s1->parent();
+    KoShape *parentShapeS2 = s2->parent();
+    int runThrough1 = s1->runThrough();
+    int runThrough2 = s2->runThrough();
+    while (parentShapeS1) {
+        if (parentShapeS1->childZOrderPolicy() == KoShape::ChildZParentChild) {
             runThrough1 = parentShapeS1->runThrough();
-            parentShapeS1 = parentShapeS1->parent();
+        } else {
+            runThrough1 = runThrough1 + parentShapeS1->runThrough();
         }
+        parentShapeS1 = parentShapeS1->parent();
     }
 
-    // If the shape runs through the foreground or background.
+    while (parentShapeS2) {
+        if (parentShapeS2->childZOrderPolicy() == KoShape::ChildZParentChild) {
+            runThrough2 = parentShapeS2->runThrough();
+        } else {
+            runThrough2 = runThrough2 + parentShapeS2->runThrough();
+        }
+        parentShapeS2 = parentShapeS2->parent();
+    }
+
     if (runThrough1 > runThrough2) {
         return false;
     }
     if (runThrough1 < runThrough2) {
         return true;
+    }
+
+    // If on the same runThrough level then the zIndex is all that matters.
+    //
+    // We basically walk up through the parents until we find a common base parent
+    // To do that we need two loops where the inner loop walks up through the parents
+    // of s2 every time we step up one parent level on s1
+    //
+    // We don't update the index value until after we have seen that it's not a common base
+    // That way we ensure that two children of a common base are sorted according to their respective
+    // z value
+    bool foundCommonParent = false;
+    int index1 = s1->zIndex();
+    int index2 = s2->zIndex();
+    parentShapeS1 = s1;
+    parentShapeS2 = s2;
+    while (parentShapeS1 && !foundCommonParent) {
+        parentShapeS2 = s2;
+        index2 = parentShapeS2->zIndex();
+        while (parentShapeS2) {
+            if (parentShapeS2 == parentShapeS1) {
+                foundCommonParent = true;
+                break;
+            }
+            if (parentShapeS2->childZOrderPolicy() == KoShape::ChildZParentChild) {
+                index2 = parentShapeS2->zIndex();
+            }
+            parentShapeS2 = parentShapeS2->parent();
+        }
+
+        if (!foundCommonParent) {
+            if (parentShapeS1->childZOrderPolicy() == KoShape::ChildZParentChild) {
+                index1 = parentShapeS1->zIndex();
+            }
+            parentShapeS1 = parentShapeS1->parent();
+        }
     }
 
     // If the one shape is a parent/child of the other then sort so.
@@ -685,12 +721,12 @@ qreal KoShape::transparency(bool recursive) const
     }
 }
 
-KoInsets KoShape::borderInsets() const
+KoInsets KoShape::strokeInsets() const
 {
     Q_D(const KoShape);
     KoInsets answer;
-    if (d->border)
-        d->border->borderInsets(this, answer);
+    if (d->stroke)
+        d->stroke->strokeInsets(this, answer);
     return answer;
 }
 
@@ -844,7 +880,7 @@ KoShape::TextRunAroundSide KoShape::textRunAroundSide() const
     return d->textRunAroundSide;
 }
 
-void KoShape::setTextRunAroundSide(TextRunAroundSide side, Through runThrought)
+void KoShape::setTextRunAroundSide(TextRunAroundSide side, RunThroughLevel runThrought)
 {
     Q_D(KoShape);
 
@@ -1047,23 +1083,23 @@ bool KoShape::collisionDetection()
     return d->detectCollision;
 }
 
-KoShapeBorderModel *KoShape::border() const
+KoShapeStrokeModel *KoShape::stroke() const
 {
     Q_D(const KoShape);
-    return d->border;
+    return d->stroke;
 }
 
-void KoShape::setBorder(KoShapeBorderModel *border)
+void KoShape::setStroke(KoShapeStrokeModel *stroke)
 {
     Q_D(KoShape);
-    if (border)
-        border->ref();
-    d->updateBorder();
-    if (d->border)
-        d->border->deref();
-    d->border = border;
-    d->updateBorder();
-    d->shapeChanged(BorderChanged);
+    if (stroke)
+        stroke->ref();
+    d->updateStroke();
+    if (d->stroke)
+        d->stroke->deref();
+    d->stroke = stroke;
+    d->updateStroke();
+    d->shapeChanged(StrokeChanged);
     notifyChanged();
 }
 
@@ -1151,7 +1187,7 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
 {
     Q_D(const KoShape);
     // and fill the style
-    KoShapeBorderModel *b = border();
+    KoShapeStrokeModel *b = stroke();
     if (b) {
         b->fillStyle(style, context);
     }
@@ -1251,16 +1287,16 @@ void KoShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &cont
         delete d->fill;
         d->fill = 0;
     }
-    if (d->border && !d->border->deref()) {
-        delete d->border;
-        d->border = 0;
+    if (d->stroke && !d->stroke->deref()) {
+        delete d->stroke;
+        d->stroke = 0;
     }
     if (d->shadow && !d->shadow->deref()) {
         delete d->shadow;
         d->shadow = 0;
     }
     setBackground(loadOdfFill(context));
-    setBorder(loadOdfStroke(element, context));
+    setStroke(loadOdfStroke(element, context));
     setShadow(d->loadOdfShadow(context));
 
     QString protect(styleStack.property(KoXmlNS::style, "protect"));
@@ -1346,11 +1382,10 @@ bool KoShape::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingConte
     }
 
     if (attributes & OdfId) {
-        if (element.hasAttributeNS(KoXmlNS::draw, "id")) {
-            QString id = element.attributeNS(KoXmlNS::draw, "id");
-            if (!id.isNull()) {
-                context.addShapeId(this, id);
-            }
+        KoElementReference ref;
+        ref.loadOdf(element);
+        if (ref.isValid()) {
+            context.addShapeId(this, ref.toString());
         }
     }
 
@@ -1450,7 +1485,7 @@ KoShapeBackground *KoShape::loadOdfFill(KoShapeLoadingContext &context) const
     return bg;
 }
 
-KoShapeBorderModel *KoShape::loadOdfStroke(const KoXmlElement &element, KoShapeLoadingContext &context) const
+KoShapeStrokeModel *KoShape::loadOdfStroke(const KoXmlElement &element, KoShapeLoadingContext &context) const
 {
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     KoOdfStylesReader &stylesReader = context.odfLoadingContext().stylesReader();
@@ -1459,41 +1494,41 @@ KoShapeBorderModel *KoShape::loadOdfStroke(const KoXmlElement &element, KoShapeL
     if (stroke == "solid" || stroke == "dash") {
         QPen pen = KoOdfGraphicStyles::loadOdfStrokeStyle(styleStack, stroke, stylesReader);
 
-        KoLineBorder *border = new KoLineBorder();
+        KoShapeStroke *stroke = new KoShapeStroke();
 
         if (styleStack.hasProperty(KoXmlNS::calligra, "stroke-gradient")) {
             QString gradientName = styleStack.property(KoXmlNS::calligra, "stroke-gradient");
             QBrush brush = KoOdfGraphicStyles::loadOdfGradientStyleByName(stylesReader, gradientName, size());
-            border->setLineBrush(brush);
+            stroke->setLineBrush(brush);
         } else {
-            border->setColor(pen.color());
+            stroke->setColor(pen.color());
         }
 
 #ifndef NWORKAROUND_ODF_BUGS
         KoOdfWorkaround::fixPenWidth(pen, context);
 #endif
-        border->setLineWidth(pen.widthF());
-        border->setJoinStyle(pen.joinStyle());
-        border->setLineStyle(pen.style(), pen.dashPattern());
-        border->setCapStyle(pen.capStyle());
+        stroke->setLineWidth(pen.widthF());
+        stroke->setJoinStyle(pen.joinStyle());
+        stroke->setLineStyle(pen.style(), pen.dashPattern());
+        stroke->setCapStyle(pen.capStyle());
 
-        return border;
+        return stroke;
 #ifndef NWORKAROUND_ODF_BUGS
     } else if (stroke.isEmpty()) {
         QPen pen = KoOdfGraphicStyles::loadOdfStrokeStyle(styleStack, "solid", stylesReader);
         if (KoOdfWorkaround::fixMissingStroke(pen, element, context, this)) {
-            KoLineBorder *border = new KoLineBorder();
+            KoShapeStroke *stroke = new KoShapeStroke();
 
 #ifndef NWORKAROUND_ODF_BUGS
             KoOdfWorkaround::fixPenWidth(pen, context);
 #endif
-            border->setLineWidth(pen.widthF());
-            border->setJoinStyle(pen.joinStyle());
-            border->setLineStyle(pen.style(), pen.dashPattern());
-            border->setCapStyle(pen.capStyle());
-            border->setColor(pen.color());
+            stroke->setLineWidth(pen.widthF());
+            stroke->setJoinStyle(pen.joinStyle());
+            stroke->setLineStyle(pen.style(), pen.dashPattern());
+            stroke->setCapStyle(pen.capStyle());
+            stroke->setColor(pen.color());
 
-            return border;
+            return stroke;
         }
 #endif
     }
@@ -1536,6 +1571,9 @@ void KoShape::loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingConte
         if (child.localName() != "glue-point")
             continue;
 
+        // NOTE: this uses draw:id, but apparently while ODF 1.2 has deprecated
+        // all use of draw:id for xml:id, it didn't specify that here, so it
+        // doesn't support xml:id (and so, maybe, shouldn't use KoElementReference.
         const QString id = child.attributeNS(KoXmlNS::draw, "id", QString());
         const int index = id.toInt();
         if(id.isEmpty() || index < 4 || d->connectors.contains(index)) {
@@ -1713,7 +1751,8 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
 
     if (attributes & OdfId)  {
         if (context.isSet(KoShapeSavingContext::DrawId)) {
-            context.xmlWriter().addAttribute("draw:id", context.drawId(this));
+            KoElementReference ref = context.xmlid(this, "shape", KoElementReference::Counter);
+            ref.saveOdf(&context.xmlWriter(), KoElementReference::DrawId);
         }
     }
 
@@ -1731,6 +1770,10 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
             }
             parent = parent->parent();
         }
+    }
+
+    if (attributes & OdfZIndex && context.isSet(KoShapeSavingContext::ZIndex)) {
+        context.xmlWriter().addAttribute("draw:z-index", zIndex());
     }
 
     if (attributes & OdfSize) {
@@ -1951,6 +1994,12 @@ bool KoShape::hasDependee(KoShape *shape) const
 {
     Q_D(const KoShape);
     return d->dependees.contains(shape);
+}
+
+QList<KoShape*> KoShape::dependees() const
+{
+    Q_D(const KoShape);
+    return d->dependees;
 }
 
 void KoShape::shapeChanged(ChangeType type, KoShape *shape)

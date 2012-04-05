@@ -39,7 +39,7 @@
 **
 ****************************************************************************/
 
-#include <QtCore/qdebug.h>
+#include <QDebug>
 #include <KDE/KLocale>
 #include <kstandardaction.h>
 #include <kicon.h>
@@ -111,11 +111,13 @@
     \sa ~KUndo2Command()
 */
 
-KUndo2Command::KUndo2Command(const QString &text, KUndo2Command *parent)
+KUndo2Command::KUndo2Command(const QString &text, KUndo2Command *parent):
+    m_hasParent(parent != 0)
 {
     d = new KUndo2CommandPrivate;
-    if (parent != 0)
+    if (parent != 0) {
         parent->d->child_list.append(this);
+    }
     setText(text);
 }
 
@@ -308,6 +310,11 @@ const KUndo2Command *KUndo2Command::child(int index) const
     if (index < 0 || index >= d->child_list.count())
         return 0;
     return d->child_list.at(index);
+}
+
+bool KUndo2Command::hasParent()
+{
+    return m_hasParent;
 }
 
 #endif // QT_NO_UNDOCOMMAND

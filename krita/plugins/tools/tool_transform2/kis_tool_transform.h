@@ -93,13 +93,14 @@ public:
     virtual ~KisToolTransform();
 
     virtual QWidget* createOptionWidget();
-    virtual QWidget* optionWidget();
 
     virtual void mousePressEvent(KoPointerEvent *e);
     virtual void mouseMoveEvent(KoPointerEvent *e);
     virtual void mouseReleaseEvent(KoPointerEvent *e);
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void keyReleaseEvent(QKeyEvent *event);
+
+    virtual void resourceChanged(int key, const QVariant& res);
 
 public:
     void paint(QPainter& gc, const KoViewConverter &converter);
@@ -315,10 +316,10 @@ private:
     bool m_boxValueChanged; // true if a boxValue has been changed directly by the user (not by click + move mouse)
     bool m_editWarpPoints;
 
-    QImage *m_origImg; // image of the pixels in selection bound rect
+    QImage m_origImg; // image of the pixels in selection bound rect
     QTransform m_transform; // transformation to apply on origImg
     QImage m_currImg; // origImg transformed using m_transform
-    QImage *m_origSelectionImg; // original selection with white used as alpha channel
+    QImage m_origSelectionImg; // original selection with white used as alpha channel
     QImage m_scaledOrigSelectionImg; // original selection to be drawn, scaled to the view
     QSizeF m_refSize; // used in paint() to check if the view has changed (need to update m_currSelectionImg)
 
@@ -397,6 +398,8 @@ private:
     QVector<QPointF> m_viewOrigPoints;
 	bool m_cursorOverPoint;
 	int m_pointUnderCursor; // the id of the point in the vector
+
+    bool m_isActive;
 
 private slots:
 

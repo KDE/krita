@@ -22,17 +22,16 @@
 #include <string.h>
 #include <cfloat>
 
-#include "qbrush.h"
-#include "qcolor.h"
-#include "qfontinfo.h"
-#include "qfontmetrics.h"
-#include "qpen.h"
-#include "qregion.h"
-#include "qmatrix.h"
+#include <QBrush>
+#include <QColor>
+#include <QFontInfo>
+#include <QFontMetrics>
+#include <QPen>
+#include <QRegion>
+#include <QMatrix>
 #include <QImage>
 #include <QMap>
 #include <QPainter>
-#include <QPixmap>
 #include <QRect>
 #include <QString>
 
@@ -616,7 +615,6 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
     }
 
     if (!progressUpdater() || (progressUpdater() && !progressUpdater()->interrupted())) {
-        // XXX: FIX ANTIALISED DRAWING OF GRADIENTS
         if (false && antiAliasThreshold < 1 - DBL_EPSILON) {
 
             QList<KoChannelInfo *> channels = colorSpace->channels();
@@ -632,7 +630,6 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                     memcpy(thisPixel, iter->rawData(), pixelSize);
                     quint8 thisPixelOpacity = colorSpace->opacityU8(thisPixel);
 
-                    // XXX: Move the distance computation into the colorspace when it works.
                     for (int yOffset = -1; yOffset < 2; yOffset++) {
                         for (int xOffset = -1; xOffset < 2; xOffset++) {
 
@@ -686,8 +683,6 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                             }
                         }
                     }
-
-                    // XXX: Move this averaging code into the colorspace
                     if (maxDistance > 3. * antiAliasThreshold * antiAliasThreshold) {
                         const int numSamples = 4;
 

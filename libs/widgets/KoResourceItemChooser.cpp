@@ -25,16 +25,25 @@
 #include <QGridLayout>
 #include <QButtonGroup>
 #include <QPushButton>
-#include <klineedit.h>
 #include <QHeaderView>
 #include <QAbstractProxyModel>
+#include <QLabel>
+#include <QScrollArea>
+#include <QImage>
+#include <QPixmap>
+#include <QPainter>
+#include <QToolButton>
+#include <QSplitter>
 
 #include <kfiledialog.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <klineedit.h>
+
 
 #ifdef GHNS
+#include <attica/version.h>
 #include <knewstuff3/downloaddialog.h>
 #include <knewstuff3/uploaddialog.h>
 #endif
@@ -48,19 +57,32 @@
 class KoResourceItemChooser::Private
 {
 public:
-    Private() : model(0), view(0), buttonGroup(0) {}
+    Private()
+        : model(0)
+        , view(0)
+        , buttonGroup(0)
+        , tiledPreview(false)
+        , grayscalePreview(false)
+    {}
     KoResourceModel* model;
     KoResourceItemView* view;
     QButtonGroup* buttonGroup;
     KLineEdit *tagSearchLineEdit, *tagOpLineEdit;
     QString knsrcFile;
     QCompleter *tagCompleter;
+    QScrollArea *previewScroller;
+    QLabel *previewLabel;
+    QSplitter *splitter;
+    bool tiledPreview;
+    bool grayscalePreview;
 };
 
-KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * resourceAdapter, QWidget *parent )
- : QWidget( parent ), d( new Private() )
+KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * resourceAdapter, QWidget *parent )
+    : QWidget( parent ), d( new Private() )
 {
     Q_ASSERT(resourceAdapter);
+    d->splitter = new QSplitter(this);
+
     d->model = new KoResourceModel(resourceAdapter, this);
     d->view = new KoResourceItemView(this);
     d->view->setModel(d->model);
@@ -68,6 +90,18 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     d->view->setSelectionMode( QAbstractItemView::SingleSelection );
     connect( d->view, SIGNAL(clicked( const QModelIndex & ) ),
              this, SLOT(activated ( const QModelIndex & ) ) );
+
+    d->previewScroller = new QScrollArea(this);
+    d->previewScroller->setWidgetResizable(true);
+    d->previewScroller->setBackgroundRole(QPalette::Dark);
+    d->previewScroller->setVisible(false);
+    d->previewScroller->setAlignment(Qt::AlignCenter);
+    d->previewLabel = new QLabel(this);
+    d->previewScroller->setWidget(d->previewLabel);
+
+    d->splitter->addWidget(d->view);
+    d->splitter->addWidget(d->previewScroller);
+    connect(d->splitter, SIGNAL(splitterMoved(int,int)), SIGNAL(splitterMoved()));
 
     d->buttonGroup = new QButtonGroup( this );
     d->buttonGroup->setExclusive( false );
@@ -83,7 +117,7 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
 
     QVBoxLayout* layout = new QVBoxLayout( this );
     layout->addWidget( d->tagSearchLineEdit );
-    layout->addWidget( d->view );
+    layout->addWidget( d->splitter );
 
     QGridLayout* buttonLayout = new QGridLayout;
 
@@ -117,7 +151,6 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     d->buttonGroup->addButton( button, Button_GhnsUpload);
     buttonLayout->addWidget( button, 0, 4 );
 
-
     connect( d->buttonGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotButtonClicked( int ) ));
 
     buttonLayout->setColumnStretch( 0, 1 );
@@ -140,8 +173,8 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     d->tagCompleter = new QCompleter(getTagNamesList(""),this);
     d->tagSearchLineEdit->setCompleter(d->tagCompleter);
 
-
     updateButtonState();
+    activated(d->model->index(0, 0));
 }
 
 KoResourceItemChooser::~KoResourceItemChooser()
@@ -186,17 +219,17 @@ void KoResourceItemChooser::slotButtonClicked( int button )
 
         foreach (const KNS3::Entry& e, dialog.changedEntries()) {
 
-             foreach(const QString &file, e.installedFiles()) {
-                 QFileInfo fi(file);
-                  d->model->resourceServerAdapter()->importResourceFile( fi.absolutePath()+'/'+fi.fileName() , false );
-              }
+            foreach(const QString &file, e.installedFiles()) {
+                QFileInfo fi(file);
+                d->model->resourceServerAdapter()->importResourceFile( fi.absolutePath()+'/'+fi.fileName() , false );
+            }
 
-       foreach(const QString &file, e.uninstalledFiles()) {
-                 QFileInfo fi(file);
-                 d->model->resourceServerAdapter()->removeResourceFile(fi.absolutePath()+'/'+fi.fileName());
-              }
-      }
-     }
+            foreach(const QString &file, e.uninstalledFiles()) {
+                QFileInfo fi(file);
+                d->model->resourceServerAdapter()->removeResourceFile(fi.absolutePath()+'/'+fi.fileName());
+            }
+        }
+    }
     else if (button == Button_GhnsUpload) {
 
         QModelIndex index = d->view->currentIndex();
@@ -225,8 +258,14 @@ void KoResourceItemChooser::showButtons( bool show )
 void KoResourceItemChooser::showGetHotNewStuff( bool showDownload, bool showUpload )
 {
 #ifdef GHNS
+
     QAbstractButton *button = d->buttonGroup->button(Button_GhnsDownload);
     showDownload ? button->show() : button->hide();
+
+    // attica < 2.9 is broken for upload, so don't show the upload button. 2.9 is released as 3.0
+    // because of binary incompatibility with 2.x.
+    if (LIBATTICA_VERSION_MAJOR < 3) return;
+
     button = d->buttonGroup->button(Button_GhnsUpload);
     showUpload ? button->show() : button->hide();
 #endif
@@ -276,9 +315,9 @@ void KoResourceItemChooser::setItemDelegate( QAbstractItemDelegate * delegate )
 KoResource *  KoResourceItemChooser::currentResource()
 {
     QModelIndex index = d->view->currentIndex();
-    if( index.isValid() )
+    if (index.isValid()) {
         return resourceFromModelIndex(index);
-
+    }
     return 0;
 }
 
@@ -290,6 +329,27 @@ void KoResourceItemChooser::setCurrentResource(KoResource* resource)
 
     d->view->setCurrentIndex(index);
     setTagOpLineEdit(d->model->resourceServerAdapter()->getAssignedTagsList(resource));
+    updatePreview(resource);
+}
+
+void KoResourceItemChooser::showPreview(bool show)
+{
+    d->previewScroller->setVisible(show);
+}
+
+void KoResourceItemChooser::setPreviewOrientation(Qt::Orientation orientation)
+{
+    d->splitter->setOrientation(orientation);
+}
+
+void KoResourceItemChooser::setPreviewTiled(bool tiled)
+{
+    d->tiledPreview = tiled;
+}
+
+void KoResourceItemChooser::setGrayscalePreview(bool grayscale)
+{
+    d->grayscalePreview = grayscale;
 }
 
 void KoResourceItemChooser::setCurrentItem(int row, int column)
@@ -299,6 +359,11 @@ void KoResourceItemChooser::setCurrentItem(int row, int column)
         return;
 
     d->view->setCurrentIndex(index);
+    if (index.isValid()) {
+        updatePreview(resourceFromModelIndex(index));
+    }
+
+
 }
 
 void KoResourceItemChooser::setProxyModel( QAbstractProxyModel* proxyModel )
@@ -307,15 +372,15 @@ void KoResourceItemChooser::setProxyModel( QAbstractProxyModel* proxyModel )
     d->view->setModel(proxyModel);
 }
 
-void KoResourceItemChooser::activated( const QModelIndex & index )
+void KoResourceItemChooser::activated(const QModelIndex &/*index*/)
 {
     KoResource* resource = currentResource();
-    if( resource ) {
+    if (resource) {
         emit resourceSelected( resource );
         setTagOpLineEdit(d->model->resourceServerAdapter()->getAssignedTagsList(resource));
+        updatePreview(resource);
+        updateButtonState();
     }
-
-    updateButtonState();
 }
 
 void KoResourceItemChooser::updateButtonState()
@@ -339,6 +404,40 @@ void KoResourceItemChooser::updateButtonState()
     removeButton->setEnabled( false );
     uploadButton->setEnabled(false);
     d->tagOpLineEdit->setEnabled( false );
+}
+
+void KoResourceItemChooser::updatePreview(KoResource *resource)
+{
+    if (!resource) return;
+
+    QImage image = resource->image();
+    if (d->tiledPreview) {
+        int width = qMax(d->previewScroller->width() * 4, image.width() * 4);
+        int height = qMax(d->previewScroller->height() * 4, image.height() * 4);
+        QImage img(width, height, image.format());
+        QPainter gc(&img);
+        gc.fillRect(img.rect(), Qt::white);
+        gc.setPen(Qt::NoPen);
+        gc.setBrush(QBrush(image));
+        gc.drawRect(img.rect());
+        image = img;
+    }
+
+    if (d->grayscalePreview) {
+        QRgb* pixel = reinterpret_cast<QRgb*>( image.bits() );
+        for (int row = 0; row < image.height(); ++row ) {
+            for (int col = 0; col < image.width(); ++col ){
+                const QRgb currentPixel = pixel[row * image.width() + col];
+                const int red = qRed(currentPixel);
+                const int green = qGreen(currentPixel);
+                const int blue = qBlue(currentPixel);
+                const int grayValue = (red * 11 + green * 16 + blue * 5) / 32;
+                pixel[row * image.width() + col] = qRgb(grayValue, grayValue, grayValue);
+            }
+        }
+    }
+    d->previewLabel->setPixmap(QPixmap::fromImage(image));
+
 }
 
 KoResource* KoResourceItemChooser::resourceFromModelIndex(const QModelIndex& index)
@@ -374,7 +473,7 @@ void KoResourceItemChooser::setTagOpLineEdit(QStringList tagsList)
         tags = tagsList.join(", ");
         tags.append(", ");
         d->tagOpLineEdit->setText(tags);
-     }
+    }
     else
     {
         d->tagOpLineEdit->clear();
@@ -402,13 +501,13 @@ void KoResourceItemChooser::tagOpLineEditActivated(QString lineEditText)
         if(!tagsList.contains(tag)) {
             d->model->resourceServerAdapter()->addTag(resource, tag);
         }
-     }
+    }
 
-     foreach(const QString& tag, tagsList) {
+    foreach(const QString& tag, tagsList) {
         if(!tagsListNew.contains(tag)) {
             d->model->resourceServerAdapter()->delTag(resource, tag);
         }
-     }
+    }
 
     setTagOpLineEdit( d->model->resourceServerAdapter()->getAssignedTagsList(resource));
 }
@@ -436,8 +535,8 @@ QStringList KoResourceItemChooser::getTagNamesList(QString lineEditText)
     if(lineEditText.contains(", ")) {
         QStringList tagsList = lineEditText.split(", ");
         if(tagsList.contains("")) {
-           tagsList.removeAll("");
-         }
+            tagsList.removeAll("");
+        }
 
         QStringList autoCompletionTagsList;
         QString joinText;
@@ -459,7 +558,7 @@ QStringList KoResourceItemChooser::getTagNamesList(QString lineEditText)
         return autoCompletionTagsList;
     }
     return tagNamesList;
- }
+}
 
 QStringList KoResourceItemChooser::getTaggedResourceFileNames(QString lineEditText)
 {

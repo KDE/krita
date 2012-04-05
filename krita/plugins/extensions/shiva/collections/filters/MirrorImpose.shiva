@@ -1,6 +1,6 @@
 kernel MirrorImpose
 {  
-  const float2 imsize = { IMAGE_WIDTH, IMAGE_HEIGHT };
+  dependent float2 imsize = { IMAGE_WIDTH, IMAGE_HEIGHT };
   float4 mix(float4 a, float4 b, float c)
   {
     return a * c + b * (1 - c);

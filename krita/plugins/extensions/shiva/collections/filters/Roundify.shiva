@@ -26,7 +26,7 @@
 >;  
 kernel Roundify
 {  
-  const float2 center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
+  dependent float2 center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
   void evaluatePixel(image img, out pixel result)
   {
     float2 vec = result.coord - center;

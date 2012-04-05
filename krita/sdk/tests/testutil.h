@@ -21,6 +21,7 @@
 
 #include <QList>
 #include <QTime>
+#include <QDir>
 #include <kundo2qstack.h>
 
 #include <KoColorSpace.h>
@@ -33,6 +34,9 @@
 #include <kis_undo_adapter.h>
 #include "kis_node_graph_listener.h"
 
+#include "kis_iterator_ng.h"
+
+
 /**
  * Routines that are useful for writing efficient tests
  */
@@ -40,7 +44,7 @@
 namespace TestUtil
 {
 
-void dumpNodeStack(KisNodeSP node, QString prefix = QString("\t"))
+inline void dumpNodeStack(KisNodeSP node, QString prefix = QString("\t"))
 {
     qDebug() << node->name();
     KisNodeSP child = node->firstChild();
@@ -89,7 +93,7 @@ private:
 };
 
 
-bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2, int fuzzy = 0)
+inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2, int fuzzy = 0)
 {
     //     QTime t;
     //     t.start();
@@ -126,7 +130,8 @@ bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2, i
                     pt.setY(y);
                     qDebug() << " Different at" << pt
                              << "source" << qRed(a) << qGreen(a) << qBlue(a) << qAlpha(a)
-                             << "dest" << qRed(b) << qGreen(b) << qBlue(b) << qAlpha(b);
+                             << "dest" << qRed(b) << qGreen(b) << qBlue(b) << qAlpha(b)
+                             << "fuzzy" << fuzzy;
                     return false;
                 }
             }
@@ -137,7 +142,7 @@ bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2, i
     return true;
 }
 
-bool comparePaintDevices(QPoint & pt, const KisPaintDeviceSP dev1, const KisPaintDeviceSP dev2)
+inline bool comparePaintDevices(QPoint & pt, const KisPaintDeviceSP dev1, const KisPaintDeviceSP dev2)
 {
     //     QTime t;
     //     t.start();
@@ -171,63 +176,121 @@ bool comparePaintDevices(QPoint & pt, const KisPaintDeviceSP dev1, const KisPain
     return true;
 }
 
-quint8 alphaDevicePixel(KisPaintDeviceSP dev, qint32 x, qint32 y)
+#ifdef FILES_OUTPUT_DIR
+
+inline bool checkQImage(const QImage &image, const QString &testName,
+                        const QString &prefix, const QString &name,
+                        int fuzzy = 0)
+{
+    Q_UNUSED(fuzzy);
+    QString filename(prefix + "_" + name + ".png");
+    QString dumpName(prefix + "_" + name + "_expected.png");
+
+    QImage ref(QString(FILES_DATA_DIR) + QDir::separator() +
+               testName + QDir::separator() +
+               prefix + QDir::separator() + filename);
+
+    bool valid = true;
+    QPoint t;
+    if(!compareQImages(t, image, ref)) {
+        qDebug() << "--- Wrong image:" << name;
+        valid = false;
+
+        image.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + filename);
+        ref.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + dumpName);
+    }
+
+    return valid;
+}
+
+#endif
+
+inline quint8 alphaDevicePixel(KisPaintDeviceSP dev, qint32 x, qint32 y)
 {
     KisHLineConstIteratorPixel iter = dev->createHLineConstIterator(x, y, 1);
     const quint8 *pix = iter.rawData();
     return *pix;
 }
 
-void alphaDeviceSetPixel(KisPaintDeviceSP dev, qint32 x, qint32 y, quint8 s)
+inline void alphaDeviceSetPixel(KisPaintDeviceSP dev, qint32 x, qint32 y, quint8 s)
 {
     KisHLineIteratorPixel iter = dev->createHLineIterator(x, y, 1);
     quint8 *pix = iter.rawData();
     *pix = s;
 }
 
+inline bool checkAlphaDeviceFilledWithPixel(KisPaintDeviceSP dev, const QRect &rc, quint8 expected)
+{
+    KisHLineIteratorSP it = dev->createHLineIteratorNG(rc.x(), rc.y(), rc.width());
 
-QList<const KoColorSpace*> allColorSpaces()
+    for (int y = rc.y(); y < rc.y() + rc.height(); y++) {
+        for (int x = rc.x(); x < rc.x() + rc.width(); x++) {
+
+            if(*((quint8*)it->rawData()) != expected) {
+                qCritical() << "At point:" << x << y;
+                qCritical() << "Expected pixel:" << expected;
+                qCritical() << "Actual pixel:  " << *((quint8*)it->rawData());
+                return false;
+            }
+
+            it->nextPixel();
+        }
+        it->nextRow();
+    }
+
+    return true;
+}
+
+
+inline QList<const KoColorSpace*> allColorSpaces()
 {
     return KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile);
 }
+
+class TestNode : public KisNode
+{
+    Q_OBJECT
+public:
+    KisNodeSP clone() const;
+    bool allowAsChild(KisNodeSP) const;
+    const KoColorSpace * colorSpace() const;
+    const KoCompositeOp * compositeOp() const;
+};
 
 class TestGraphListener : public KisNodeGraphListener
 {
 public:
 
-    virtual void aboutToAddANode(KisNode *, int) {
+    virtual void aboutToAddANode(KisNode *parent, int index) {
+        KisNodeGraphListener::aboutToAddANode(parent, index);
         beforeInsertRow = true;
     }
 
-    virtual void nodeHasBeenAdded(KisNode *, int) {
+    virtual void nodeHasBeenAdded(KisNode *parent, int index) {
+        KisNodeGraphListener::nodeHasBeenAdded(parent, index);
         afterInsertRow = true;
     }
 
-    virtual void aboutToRemoveANode(KisNode *, int) {
+    virtual void aboutToRemoveANode(KisNode *parent, int index) {
+        KisNodeGraphListener::aboutToRemoveANode(parent, index);
         beforeRemoveRow  = true;
     }
 
-    virtual void nodeHasBeenRemoved(KisNode *, int) {
+    virtual void nodeHasBeenRemoved(KisNode *parent, int index) {
+        KisNodeGraphListener::nodeHasBeenRemoved(parent, index);
         afterRemoveRow = true;
     }
 
 
-    virtual void aboutToMoveNode(KisNode *, int, int) {
+    virtual void aboutToMoveNode(KisNode *parent, int oldIndex, int newIndex) {
+        KisNodeGraphListener::aboutToMoveNode(parent, oldIndex, newIndex);
         beforeMove = true;
     }
 
-    virtual void nodeHasBeenMoved(KisNode *, int, int) {
+    virtual void nodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex) {
+        KisNodeGraphListener::nodeHasBeenMoved(parent, oldIndex, newIndex);
         afterMove = true;
     }
-
-    virtual void nodeChanged(KisNode*) {
-
-    }
-
-    virtual void requestProjectionUpdate(KisNode *, const QRect& ) {
-
-    }
-
 
     bool beforeInsertRow;
     bool afterInsertRow;

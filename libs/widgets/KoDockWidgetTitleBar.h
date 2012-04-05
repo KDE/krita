@@ -20,7 +20,7 @@
 #define KODOCKWIDGETTITLEBAR_H_
 
 #include "kowidgets_export.h"
-#include <QtGui/QDockWidget>
+#include <QDockWidget>
 
 /**
  * @short A custom title bar for dock widgets.
@@ -42,9 +42,11 @@ public:
     void setCollapsed(bool collapsed);
 
     void setCollapsable(bool collapsable);
-    void setTextVisible(bool visible);
-    /// Define wether the text size should be ignored in @ref sizeHint
-    void setIgnoreTextSize(bool ignore);
+
+    enum TextVisibilityMode {TextCanBeInvisible, FullTextAlwaysVisible};
+    /// Define whether the minimal width should ensure that the full text is visible.
+    /// textVisibilityMode is FullTextAlwaysVisible by default
+    void setTextVisibilityMode(TextVisibilityMode textVisibilityMode);
 
 protected:
     virtual void paintEvent(QPaintEvent* event); ///< reimplemented from QWidget

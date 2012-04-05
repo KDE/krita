@@ -4,6 +4,7 @@
  * Copyright (C) 2007 Pierre Ducroquet <pinaraf@gmail.com>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2009,2011 KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2011-2012 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -38,10 +39,10 @@
 
 #include <klocale.h>
 
+#include <QCache>
 #include <QFont>
+#include <QImage>
 #include <QPainter>
-#include <QPixmap>
-#include <QPixmapCache>
 #include <QRect>
 #include <QTextTable>
 #include <QTextTableFormat>
@@ -55,45 +56,52 @@
 class KoStyleThumbnailer::Private
 {
 public:
-    Private() : pixmapHelperDocument(0){ }
+    Private() :
+        thumbnailHelperDocument(new QTextDocument),
+        documentLayout(new KoTextDocumentLayout(thumbnailHelperDocument)),
+        defaultSize(QSize(250, 48))
+    {
+        thumbnailHelperDocument->setDocumentLayout(documentLayout);
+    }
 
-    QTextDocument *pixmapHelperDocument;
+    ~Private()
+    {
+        delete documentLayout;
+        delete thumbnailHelperDocument;
+    }
+
+    QTextDocument *thumbnailHelperDocument;
     KoTextDocumentLayout *documentLayout;
-    QPixmapCache pixmapCache; // cache of pixmap representations of the styles
+    QCache<QString, QImage> thumbnailCache; // cache of QImage representations of the styles
     QSize defaultSize;
 };
 
 KoStyleThumbnailer::KoStyleThumbnailer()
         : d(new Private())
 {
-    d->pixmapHelperDocument = new QTextDocument;
-    d->documentLayout = new KoTextDocumentLayout(d->pixmapHelperDocument);
-    d->pixmapHelperDocument->setDocumentLayout(d->documentLayout);
-    d->defaultSize = QSize(250, 48);
 }
 
 KoStyleThumbnailer::~KoStyleThumbnailer()
 {
-    delete d->documentLayout;
-    delete d->pixmapHelperDocument;
     delete d;
 }
 
-QPixmap KoStyleThumbnailer::thumbnail(KoParagraphStyle *style)
+QImage KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size, bool recreateThumbnail)
 {
-    return thumbnail(style, d->defaultSize);
-}
+    if (!style || style->name().isNull()) {
+        return QImage();
+    }
+    if (!size.isValid() || size.isNull()) {
+        size = d->defaultSize;
+    }
+    QString imageKey = "p_" + QString::number(style->styleId()) + "_" + QString::number(size.width()) + "_" + QString::number(size.height());
 
-QPixmap KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size)
-{
-    QString pixmapKey = "p_" + QString::number(style->styleId()) + "_" + QString::number(size.width()) + "_" + QString::number(size.height());
-    QPixmap pm(size.width(), size.height());
-
-    if (d->pixmapCache.find(pixmapKey, &pm)) {
-        return pm;
+    if (!recreateThumbnail && d->thumbnailCache.object(imageKey)) {
+        return QImage(*(d->thumbnailCache.object(imageKey)));
     }
 
-    pm.fill(Qt::transparent);
+    QImage *im = new QImage(size.width(), size.height(), QImage::Format_ARGB32_Premultiplied);
+    im->fill(QColor(Qt::transparent).rgba());
 
     KoParagraphStyle *clone = style->clone();
     //TODO: make the following real options
@@ -101,53 +109,64 @@ QPixmap KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size)
     clone->setMargin(QTextLength(QTextLength::FixedLength, 0));
     clone->setPadding(0);
     //
-    QTextCursor cursor(d->pixmapHelperDocument);
+    QTextCursor cursor(d->thumbnailHelperDocument);
     cursor.select(QTextCursor::Document);
     cursor.setBlockFormat(QTextBlockFormat());
     cursor.setBlockCharFormat(QTextCharFormat());
     cursor.setCharFormat(QTextCharFormat());
-    cursor.insertText(clone->name());
     QTextBlock block = cursor.block();
     clone->applyStyle(block, true);
 
-    layoutThumbnail(size, pm);
+    QTextCharFormat format;
+    clone->KoCharacterStyle::applyStyle(format);
+    cursor.insertText(clone->name(), format);
 
-    d->pixmapCache.insert(pixmapKey, pm);
+    layoutThumbnail(size, im);
+
+    d->thumbnailCache.insert(imageKey, im);
     delete clone;
-    return pm;
+    return QImage(*im);
 }
 
-QPixmap KoStyleThumbnailer::thumbnail(KoCharacterStyle *style)
+QImage KoStyleThumbnailer::thumbnail(KoCharacterStyle *characterStyle, KoParagraphStyle *paragraphStyle, QSize size, bool recreateThumbnail)
 {
-    return thumbnail(style, d->defaultSize);
-}
+    if (!characterStyle || characterStyle->name().isNull()) {
+        return QImage();
+    }
+    if (!size.isValid() || size.isNull()) {
+        size = d->defaultSize;
+    }
+    int paragraphStyleId = (paragraphStyle)?paragraphStyle->styleId():0;
+    QString imageKey = "c_" + QString::number(characterStyle->styleId()) + "_" + "p_" + QString::number(paragraphStyleId) + "_" + QString::number(size.width()) + "_" + QString::number(size.height());
 
-QPixmap KoStyleThumbnailer::thumbnail(KoCharacterStyle *style, QSize size)
-{
-    QString pixmapKey = "c_" + QString::number(style->styleId()) + "_" + QString::number(size.width()) + "_" + QString::number(size.height());
-    QPixmap pm(size.width(), size.height());
-
-    if (d->pixmapCache.find(pixmapKey, &pm)) {
-        return pm;
+    if (!recreateThumbnail && d->thumbnailCache.object(imageKey)) {
+        return QImage(*(d->thumbnailCache.object(imageKey)));
     }
 
-    pm.fill(Qt::transparent);
+    QImage *im = new QImage(size.width(), size.height(), QImage::Format_ARGB32_Premultiplied);
+    im->fill(QColor(Qt::transparent).rgba());
 
-    KoCharacterStyle *clone = style->clone();
-    QTextCursor cursor(d->pixmapHelperDocument);
+    QTextCursor cursor(d->thumbnailHelperDocument);
+    QTextCharFormat format;
+    if (paragraphStyle) {
+        KoParagraphStyle *paragraphStyleClone = paragraphStyle->clone();
+        paragraphStyleClone->KoCharacterStyle::applyStyle(format);
+        delete paragraphStyleClone;
+        paragraphStyleClone = 0;
+    }
+    KoCharacterStyle *characterStyleClone = characterStyle->clone();
+    characterStyleClone->applyStyle(format);
     cursor.select(QTextCursor::Document);
     cursor.setBlockFormat(QTextBlockFormat());
     cursor.setBlockCharFormat(QTextCharFormat());
     cursor.setCharFormat(QTextCharFormat());
-    cursor.insertText(clone->name());
-    QTextBlock block = cursor.block();
-    clone->applyStyle(block);
+    cursor.insertText(characterStyleClone->name(), format);
 
-    layoutThumbnail(size, pm);
+    layoutThumbnail(size, im);
 
-    d->pixmapCache.insert(pixmapKey, pm);
-    delete clone;
-    return pm;
+    d->thumbnailCache.insert(imageKey, im);
+    delete characterStyleClone;
+    return QImage(*im);
 }
 
 void KoStyleThumbnailer::setThumbnailSize(QSize size)
@@ -155,21 +174,21 @@ void KoStyleThumbnailer::setThumbnailSize(QSize size)
     d->defaultSize = size;
 }
 
-void KoStyleThumbnailer::layoutThumbnail(QSize size, QPixmap &pm)
+void KoStyleThumbnailer::layoutThumbnail(QSize size, QImage *im)
 {
-    QPainter p(&pm);
+    QPainter p(im);
     d->documentLayout->removeRootArea();
     KoTextLayoutRootArea rootArea(d->documentLayout);
     rootArea.setReferenceRect(0, size.width(), 0, 1E6);
     rootArea.setNoWrap(1E6);
 
-    FrameIterator frameCursor(d->pixmapHelperDocument->rootFrame());
+    FrameIterator frameCursor(d->thumbnailHelperDocument->rootFrame());
     rootArea.layoutRoot(&frameCursor);
 
     QSizeF documentSize = rootArea.boundingRect().size();
     if (documentSize.width() > size.width() || documentSize.height() > size.height()) {
         //calculate the space needed for the font size indicator (should the preview big too big with the style's font size
-        QTextCursor cursor(d->pixmapHelperDocument);
+        QTextCursor cursor(d->thumbnailHelperDocument);
         cursor.select(QTextCursor::Document);
         QString sizeHint = "\t" + QString::number(cursor.charFormat().fontPointSize()) + "pt";
         p.save();
@@ -178,14 +197,15 @@ void KoStyleThumbnailer::layoutThumbnail(QSize size, QPixmap &pm)
         p.setFont(sizeHintFont);
         QRectF sizeHintRect(p.boundingRect(0, 0, 1, 1, Qt::AlignCenter, sizeHint));
         p.restore();
+        qreal width = qMax<qreal>(0., size.width()-sizeHintRect.width());
         //calculate the font reduction factor so that the text + the sizeHint fits
-        qreal reductionFactor = qMin((size.width()-sizeHintRect.width())/documentSize.width(), size.height()/documentSize.height());
+        qreal reductionFactor = qMin(width/documentSize.width(), size.height()/documentSize.height());
         QTextCharFormat fmt = cursor.charFormat();
         fmt.setFontPointSize((int)(fmt.fontPointSize()*reductionFactor));
         cursor.mergeCharFormat(fmt);
 
-        frameCursor = FrameIterator(d->pixmapHelperDocument->rootFrame());
-        rootArea.setReferenceRect(0, size.width()-sizeHintRect.width(), 0, 1E6);
+        frameCursor = FrameIterator(d->thumbnailHelperDocument->rootFrame());
+        rootArea.setReferenceRect(0, width, 0, 1E6);
         rootArea.setNoWrap(1E6);
         rootArea.layoutRoot(&frameCursor);
         documentSize = rootArea.boundingRect().size();
@@ -214,5 +234,27 @@ void KoStyleThumbnailer::layoutThumbnail(QSize size, QPixmap &pm)
 
         KoTextDocumentLayout::PaintContext pc;
         rootArea.paint(&p, pc);
+    }
+}
+
+void KoStyleThumbnailer::removeFromCache(KoParagraphStyle *style)
+{
+    QString imageKey = "p_" + QString::number(style->styleId()) + "_";
+    removeFromCache(imageKey);
+}
+
+void KoStyleThumbnailer::removeFromCache(KoCharacterStyle *style)
+{
+    QString imageKey = "c_" + QString::number(style->styleId()) + "_";
+    removeFromCache(imageKey);
+}
+
+void KoStyleThumbnailer::removeFromCache(const QString &expr)
+{
+    QList<QString> keys = d->thumbnailCache.keys();
+    foreach (const QString &key, keys) {
+        if (key.contains(expr)) {
+            d->thumbnailCache.remove(key);
+        }
     }
 }

@@ -14,15 +14,18 @@
   </property>
   <layout class="QGridLayout" >
    <item row="0" column="0" >
-    <widget class="QGroupBox" name="groupBox" >
+    <widget class="QGroupBox">
      <property name="title" >
       <string>Indent</string>
      </property>
-     <layout class="QGridLayout" >
+     <layout class="QGridLayout" columnstretch="0,0,1">
       <item row="0" column="0" >
-       <widget class="QLabel" name="label" >
+       <widget class="QLabel">
         <property name="text" >
          <string>Left:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy" >
          <cstring>left</cstring>
@@ -37,18 +40,15 @@
         <property name="orientation" >
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" stdset="0" >
-         <size>
-          <width>40</width>
-          <height>71</height>
-         </size>
-        </property>
        </spacer>
       </item>
       <item row="1" column="0" >
-       <widget class="QLabel" name="label_2" >
+       <widget class="QLabel">
         <property name="text" >
          <string>Right:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy" >
          <cstring>right</cstring>
@@ -59,9 +59,12 @@
        <widget class="KoUnitDoubleSpinBox" name="right" />
       </item>
       <item row="2" column="0" >
-       <widget class="QLabel" name="label_3" >
+       <widget class="QLabel">
         <property name="text" >
          <string>First Line:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy" >
          <cstring>first</cstring>
@@ -82,25 +85,24 @@
     </widget>
    </item>
    <item row="1" column="0" >
-    <widget class="QGroupBox" name="groupBox_2" >
+    <widget class="QGroupBox">
      <property name="whatsThis" >
       <string>&lt;p>&lt;ul>&lt;li>&lt;b>Single&lt;/b>: The normal linespacing&lt;/li>&lt;/ul>&lt;/p> </string>
      </property>
      <property name="title" >
       <string>Line Spacing</string>
      </property>
-     <layout class="QGridLayout" >
-      <item row="0" column="0" colspan="2" >
+     <layout class="QVBoxLayout">
+       <item>
+     <layout class="QHBoxLayout" stretch="0,0,1">
+      <property name="margin" >
+       <number>0</number>
+      </property>
+      <item>
        <widget class="QComboBox" name="lineSpacing" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
-          <horstretch>1</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
        </widget>
       </item>
-      <item row="0" column="2" >
+      <item>
        <widget class="QStackedWidget" name="spacingStack" >
         <property name="currentIndex" >
          <number>1</number>
@@ -143,10 +145,22 @@
         </widget>
        </widget>
       </item>
-      <item row="1" column="0" >
-       <layout class="QGridLayout" >
+      <item>
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+      </item>
+      <item>
+       <layout class="QFormLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
         <item row="0" column="0" >
-         <widget class="QLabel" name="label_4" >
+         <widget class="QLabel">
           <property name="text" >
            <string>Use Font Metrics:</string>
           </property>
@@ -163,7 +177,7 @@
          </widget>
         </item>
         <item row="1" column="0" >
-         <widget class="QLabel" name="label_7" >
+         <widget class="QLabel">
           <property name="text" >
            <string>Minimum:</string>
           </property>
@@ -177,30 +191,17 @@
         </item>
        </layout>
       </item>
-      <item row="1" column="1" colspan="2" >
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0" >
-         <size>
-          <width>91</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
      </layout>
     </widget>
    </item>
    <item row="2" column="0" >
-    <widget class="QGroupBox" name="groupBox_3" >
+    <widget class="QGroupBox">
      <property name="title" >
       <string>Paragraph Space</string>
      </property>
-     <layout class="QGridLayout" >
+     <layout class="QFormLayout" >
       <item row="0" column="0" >
-       <widget class="QLabel" name="label_5" >
+       <widget class="QLabel">
         <property name="text" >
          <string>Before:</string>
         </property>
@@ -212,21 +213,8 @@
       <item row="0" column="1" >
        <widget class="KoUnitDoubleSpinBox" name="before" />
       </item>
-      <item rowspan="2" row="0" column="2" >
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0" >
-         <size>
-          <width>40</width>
-          <height>51</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
       <item row="1" column="0" >
-       <widget class="QLabel" name="label_6" >
+       <widget class="QLabel">
         <property name="text" >
          <string>After:</string>
         </property>

@@ -30,6 +30,7 @@ KisPhongBumpmapConfigWidget::KisPhongBumpmapConfigWidget(const KisPaintDeviceSP 
     Q_ASSERT(m_device);
     m_page = new KisPhongBumpmapWidget(this);
 
+    // Connect widgets to each other
     connect(m_page->azimuthDial1, SIGNAL(valueChanged(int)), m_page->azimuthSpinBox1, SLOT(setValue(int)));
     connect(m_page->azimuthDial2, SIGNAL(valueChanged(int)), m_page->azimuthSpinBox2, SLOT(setValue(int)));
     connect(m_page->azimuthDial3, SIGNAL(valueChanged(int)), m_page->azimuthSpinBox3, SLOT(setValue(int)));
@@ -47,6 +48,38 @@ KisPhongBumpmapConfigWidget::KisPhongBumpmapConfigWidget(const KisPaintDeviceSP 
             m_page->shinynessExponentKisSliderSpinBox, SLOT(setEnabled(bool)));
     connect(m_page->specularReflectivityCheckBox, SIGNAL(toggled(bool)),
             m_page->shinynessExponentLabel, SLOT(setEnabled(bool)));
+
+    //Let widgets warn the preview of when they are updated
+    connect(m_page->azimuthDial1, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->azimuthDial2, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->azimuthDial3, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->azimuthDial4, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+        
+    connect(m_page->lightKColorCombo1, SIGNAL(currentIndexChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->lightKColorCombo2, SIGNAL(currentIndexChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->lightKColorCombo3, SIGNAL(currentIndexChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->lightKColorCombo4, SIGNAL(currentIndexChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    
+    connect(m_page->inclinationSpinBox1, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->inclinationSpinBox2, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->inclinationSpinBox3, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->inclinationSpinBox4, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    
+    connect(m_page->diffuseReflectivityCheckBox, SIGNAL(stateChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->specularReflectivityCheckBox, SIGNAL(stateChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    
+    connect(m_page->ambientReflectivityKisDoubleSliderSpinBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->diffuseReflectivityKisDoubleSliderSpinBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->specularReflectivityKisDoubleSliderSpinBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->shinynessExponentKisSliderSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    
+    connect(m_page->heightChannelComboBox, SIGNAL(currentIndexChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    
+    connect(m_page->lightSourceGroupBox1, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->lightSourceGroupBox2, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->lightSourceGroupBox3, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->lightSourceGroupBox4, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
+
 
     QVBoxLayout *l = new QVBoxLayout(this);
     Q_CHECK_PTR(l);

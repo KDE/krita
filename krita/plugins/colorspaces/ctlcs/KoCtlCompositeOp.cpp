@@ -35,6 +35,7 @@
 #include <GTLCore/Value.h>
 #include <OpenCTL/Program.h>
 #include <OpenCTL/Module.h>
+#include <kis_gtl_lock.h>
 
 KoCTLCompositeOp::KoCTLCompositeOp(OpenCTL::Template* _template, const KoCtlColorSpace * cs, const GTLCore::PixelDescription& _pd)
     : KoCompositeOp(cs,
@@ -44,6 +45,7 @@ KoCTLCompositeOp::KoCTLCompositeOp(OpenCTL::Template* _template, const KoCtlColo
     , m_withMaskProgram(0)
     , m_withoutMaskProgram(0)
 {
+    KisGtlLocker gtlLocker;
     QMutexLocker lock(ctlMutex);
     OpenCTL::Module* module = _template->generateModule(_pd);
     module->compile();
@@ -85,6 +87,7 @@ void KoCTLCompositeOp::composite(quint8 *dstRowStart, qint32 dstRowStride,
                                  quint8 opacity,
                                  const QBitArray & channelFlags) const
 {
+    KisGtlLocker gtlLocker;
     Q_UNUSED(channelFlags);
 #ifdef __GNUC__
 #warning "Use channel flags, especially for alpha locking!"
@@ -125,8 +128,12 @@ QString KoCTLCompositeOp::idForFile(const std::string& _file)
     QString basename = fi.baseName();
     if (basename == "over") {
         return COMPOSITE_OVER;
-    } else if (basename == "alphadarken") {
-        return COMPOSITE_DARKEN;
+    }
+    else if (basename == "alphadarken") {
+        return COMPOSITE_ALPHA_DARKEN;
+    }
+    else if (basename == "erase") {
+        return COMPOSITE_ERASE;
     }
     qFatal("No id for: %s", _file.c_str());
     return QString::null; // Make gcc 4.5.1 happy
@@ -138,8 +145,12 @@ QString KoCTLCompositeOp::descriptionForFile(const std::string& _file)
     QString basename = fi.baseName();
     if (basename == "over") {
         return i18n("Normal");
-    } else if (basename == "alphadarken") {
+    }
+    else if (basename == "alphadarken") {
         return i18n("Alpha darken");
+    }
+    else if (basename == "erase") {
+        return i18n("Erase");
     }
     qFatal("No description for: %s", _file.c_str());
     return QString::null; // Make gcc 4.5.1 happy
@@ -149,7 +160,9 @@ QString KoCTLCompositeOp::categoryForFile(const std::string& _file)
 {
     QFileInfo fi(_file.c_str());
     QString basename = fi.baseName();
-    if (basename == "over" || basename == "alphadarken") {
+    if (basename == "over"
+            || basename == "alphadarken"
+            || basename == "erase") {
         return KoCompositeOp::categoryMix();
     }
     qFatal("No category for: %s", _file.c_str());

@@ -71,7 +71,7 @@ public:
                 q->connect(crp, SIGNAL(resourceChanged(int, const QVariant &)),
                         SLOT(resourceChanged(int, const QVariant &)));
 
-            // can be 0 in the case of Tables
+            // can be 0 in the case of Calligra Sheets
             KoDocumentResourceManager *scrm = canvas->shapeController()->resourceManager();
             if (scrm) {
                 q->connect(scrm, SIGNAL(resourceChanged(int, const QVariant &)),

@@ -35,8 +35,6 @@ class QWidget;
 class QLabel;
 class QCheckBox;
 class KisSliderSpinBox;
-//class KActionCollection;
-
 class KoCanvasBase;
 
 class KisToolFill : public KisToolPaint
@@ -94,7 +92,6 @@ public:
         setIcon("krita_tool_color_fill");
         //setShortcut( QKeySequence( Qt::Key_F ) );
         setPriority(14);
-        setInputDeviceAgnostic(false);
     }
 
     virtual ~KisToolFillFactory() {}

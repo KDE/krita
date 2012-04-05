@@ -63,7 +63,6 @@ public:
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
     virtual QWidget* createOptionWidget();
-    virtual QWidget* optionWidget();
 
 private:
     void drag(const QPoint& newPos);

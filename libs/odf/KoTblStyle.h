@@ -58,6 +58,10 @@ public:
     void setAllowBreakBetweenRows(bool allow);
     bool allowBreakBetweenRows() const;
 
+    void setMasterPageName(const QString& name);
+    void setMasterPageName(const char* name);
+    QString masterPageName() const;
+
     void setLeftMargin(qreal left);
     qreal leftMargin() const;
 
@@ -105,14 +109,14 @@ public:
     KeepWithNext keepWithNext() const;
 
     enum WritingMode {
-        LrTbWrittingMode,
-        RlTbWrittingMode,
-        TbRlWrittingMode,
-        TbLrWrittingMode,
-        LrWrittingMode,
-        RlWrittingMode,
-        TbWrittingMode,
-        PageWrittingMode
+        LrTbWritingMode,
+        RlTbWritingMode,
+        TbRlWritingMode,
+        TbLrWritingMode,
+        LrWritingMode,
+        RlWritingMode,
+        TbWritingMode,
+        PageWritingMode
     };
     void setWritingMode(WritingMode writingMode);
     WritingMode writingMode() const;
@@ -129,6 +133,8 @@ private:
     BreakType m_breakAfter;
     BreakType m_breakBefore;
     bool m_allowBreakBetweenRows;
+
+    QString m_masterPageName;
 
     qreal m_leftMargin;
     qreal m_topMargin;

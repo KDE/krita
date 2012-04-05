@@ -81,6 +81,7 @@ public:
     QHash<QString, KoParagraphStyle *> paragraphStylesDotXmlStyles;
     QHash<QString, KoCharacterStyle *> characterStylesDotXmlStyles;
     QHash<QString, KoListStyle *>      listStylesDotXmlStyles;
+    QHash<QString, KoListStyle *>       outlineStylesDotXmlStyles;
     QHash<QString, KoTableStyle *>      tableStylesDotXmlStyles;
     QHash<QString, KoTableColumnStyle *>      tableColumnStylesDotXmlStyles;
     QHash<QString, KoTableRowStyle *>      tableRowStylesDotXmlStyles;
@@ -248,6 +249,7 @@ QList<QPair<QString, KoParagraphStyle *> > KoTextSharedLoadingData::loadParagrap
     }
 
     // second pass; resolve all the 'next-style's and parent-style's.
+    // TODO iterate via values
     foreach (KoParagraphStyle *style, nextStyles.keys()) {
         KoParagraphStyle *next = d->namedParagraphStyles.value(nextStyles.value(style));
         if (next && next->styleId() >= 0)
@@ -659,3 +661,4 @@ void KoTextSharedLoadingData::addBibliographyConfiguration(KoShapeLoadingContext
     d->bibliographyConfiguration =
             context.odfLoadingContext().stylesReader().globalBibliographyConfiguration();
 }
+

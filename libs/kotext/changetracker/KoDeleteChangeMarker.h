@@ -33,13 +33,14 @@ class QTextDocument;
 
 class KOTEXT_EXPORT KoDeleteChangeMarker : public KoInlineObject
 {
+    Q_OBJECT
 public:
-    
+
     typedef enum {
         DeletedListItem = QTextFormat::UserProperty + 9999,
         DeletedList
     } listDeleteStatus;
-    
+
     /************************************ODF Bug (List Delete Changes) Workaround code *****************************/
     static const QString RDFListName;
     static const QString RDFListItemName;

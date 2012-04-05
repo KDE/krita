@@ -35,7 +35,7 @@
 #include <math.h>
 #endif
 
-#include <qglobal.h>
+#include <QtGlobal>
 
 
 #ifndef M_PI
@@ -48,7 +48,7 @@
 // We use our own ISNAN / ISINF in the code to detect
 // that we defined them.
 // reason: Windows / MacOS do not have isnan() / isinf()
-#if defined (Q_OS_WIN) && defined(_MSC_VER)
+#if defined (Q_OS_WIN)
 #include <float.h>
 #define ISNAN(x ) _isnan(x )
 #define ISINF(x ) (!(_finite(x ) + _isnan(x ) ) )
@@ -64,7 +64,7 @@
 // We wrap every for() by extra { } to work around
 // the scope bug for loop counters in MS Visual C++ v6
 #if defined(Q_CC_MSVC) && !defined(Q_CC_MSVC_NET)
-/* This is done in Qt41 qglobal.h but not Qt42*/
+/* This is done in Qt41 QtGlobal but not Qt42*/
 #if QT_VERSION < 0x040200
 #define for if (0) {} else for
 #endif

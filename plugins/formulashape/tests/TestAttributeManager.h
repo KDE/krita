@@ -2,7 +2,7 @@
 #define TESTATTRIBUTEMANAGER_H
 
 #include <QObject>
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class AttributeManager;
 class BasicElement;

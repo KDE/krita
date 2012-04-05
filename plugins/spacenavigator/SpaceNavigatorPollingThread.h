@@ -21,7 +21,7 @@
 #ifndef SPACENAVIGATORPOLLINGTHREAD_H
 #define SPACENAVIGATORPOLLINGTHREAD_H
 
-#include <QtCore/QThread>
+#include <QThread>
 
 class SpaceNavigatorPollingThread : public QThread
 {

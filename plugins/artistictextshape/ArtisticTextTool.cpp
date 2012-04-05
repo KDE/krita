@@ -40,7 +40,6 @@
 #include <KoPathShape.h>
 #include <KoShapeController.h>
 #include <KoShapeContainer.h>
-#include <KoLineBorder.h>
 #include <KoInteractionStrategy.h>
 
 #include <KLocale>
@@ -48,12 +47,12 @@
 #include <KStandardAction>
 #include <KDebug>
 
-#include <QtGui/QAction>
-#include <QtGui/QGridLayout>
-#include <QtGui/QToolButton>
-#include <QtGui/QCheckBox>
-#include <QtGui/QPainter>
-#include <QtGui/QPainterPath>
+#include <QAction>
+#include <QGridLayout>
+#include <QToolButton>
+#include <QCheckBox>
+#include <QPainter>
+#include <QPainterPath>
 #include <kundo2command.h>
 
 #include <float.h>
@@ -565,7 +564,7 @@ void ArtisticTextTool::convertText()
     KoPathShape * path = KoPathShape::createShapeFromPainterPath( m_currentShape->outline() );
     path->setParent( m_currentShape->parent() );
     path->setZIndex( m_currentShape->zIndex() );
-    path->setBorder( m_currentShape->border() );
+    path->setStroke( m_currentShape->stroke() );
     path->setBackground( m_currentShape->background() );
     path->setTransformation( m_currentShape->transformation() );
     path->setShapeId( KoPathShapeId );

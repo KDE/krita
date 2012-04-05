@@ -23,7 +23,7 @@
 #ifndef __KDCHARTGLOBAL_H__
 #define __KDCHARTGLOBAL_H__
 
-#include <qglobal.h>
+#include <QtGlobal>
 
 #include "kdchart_export.h"
 

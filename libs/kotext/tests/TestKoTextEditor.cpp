@@ -19,7 +19,7 @@
  */
 #include "TestKoTextEditor.h"
 
-#include <QtTest/QTest>
+#include <QTest>
 #include <QUuid>
 #include <QString>
 #include <QTextDocument>
@@ -60,6 +60,7 @@ void TestKoTextEditor::testInsertInlineObject()
     textDoc.setInlineTextObjectManager(&inlineObjectManager);
 
     KoTextEditor editor(&doc);
+    textDoc.setTextEditor(&editor);
 
     // enter some lorem ipsum
     editor.insertText(lorem);
@@ -92,6 +93,7 @@ void TestKoTextEditor::testRemoveSelectedText()
     textDoc.setInlineTextObjectManager(&inlineObjectManager);
 
     KoTextEditor editor(&doc);
+    textDoc.setTextEditor(&editor);
 
     // enter some lorem ipsum
     editor.insertText(lorem);
@@ -117,7 +119,7 @@ void TestKoTextEditor::testRemoveSelectedText()
     Q_ASSERT(editor.hasSelection());
 
     // remove the table + the markers from the document
-    editor.removeSelectedText();
+    editor.deleteChar();
 
     // check whether the bookmarks have gone.
     Q_ASSERT(inlineObjectManager.inlineTextObjects().length() == 0);
@@ -135,7 +137,7 @@ public:
         KoTextEditor *editor = new KoTextEditor(m_document);
 
         textDoc.setInlineTextObjectManager(&m_inlineObjectManager);
-        textDoc.setStyleManager(new KoStyleManager());
+        textDoc.setStyleManager(new KoStyleManager(0));
         textDoc.setTextEditor(editor);
 
     }

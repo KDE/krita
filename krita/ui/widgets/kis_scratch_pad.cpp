@@ -46,7 +46,7 @@
 #include "kis_tool_freehand_helper.h"
 #include "kis_image_patch.h"
 #include "kis_canvas_widget_base.h"
-#include "kis_image.h"
+
 
 class KisScratchPadNodeListener : public KisNodeGraphListener
 {
@@ -56,16 +56,8 @@ public:
     {
     }
 
-    void aboutToAddANode(KisNode *, int) {}
-    void nodeHasBeenAdded(KisNode *, int) {}
-    void aboutToRemoveANode(KisNode *, int) {}
-    void nodeHasBeenRemoved(KisNode *, int) {}
-    void aboutToMoveNode(KisNode *, int, int) {}
-    void nodeHasBeenMoved(KisNode *, int, int) {}
-    void nodeChanged(KisNode*) {}
-
     void requestProjectionUpdate(KisNode *node, const QRect& rect) {
-        Q_UNUSED(node);
+        KisNodeGraphListener::requestProjectionUpdate(node, rect);
 
         QMutexLocker locker(&m_lock);
         m_scratchPad->imageUpdated(rect);
@@ -138,6 +130,7 @@ KisScratchPad::KisScratchPad(QWidget *parent)
 KisScratchPad::~KisScratchPad() {
     delete m_helper;
     delete m_infoBuilder;
+
     delete m_undoAdapter;
     delete m_undoStore;
     delete m_updateScheduler;

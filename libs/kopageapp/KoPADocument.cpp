@@ -20,6 +20,8 @@
 
 #include "KoPADocument.h"
 
+#include <QPainter>
+
 #include <KoStore.h>
 #include <KoDocumentResourceManager.h>
 #include <KoXmlWriter.h>
@@ -39,11 +41,11 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoStyleManager.h>
 #include <KoPathShape.h>
-#include <KoLineBorder.h>
 #include <KoXmlNS.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 #include <KoDocumentInfo.h>
+#include <KoVariableManager.h>
 
 #include "KoPACanvas.h"
 #include "KoPAView.h"
@@ -276,7 +278,6 @@ QList<KoPAPageBase *> KoPADocument::loadOdfMasterPages( const QHash<QString, KoX
     int count = 0;
     for ( ; it != masterStyles.constEnd(); ++it )
     {
-        kDebug(30010) << "Master:" << it.key();
         KoPAMasterPage * masterPage = newMasterPage();
         masterPage->loadOdf( *( it.value() ), context );
         masterPages.append( masterPage );
@@ -314,6 +315,11 @@ QList<KoPAPageBase *> KoPADocument::loadOdfPages( const KoXmlElement & body, KoP
             KoPAPage *page = newPage(static_cast<KoPAMasterPage*>(d->masterPages.first()));
             page->loadOdf( element, context );
             pages.append( page );
+            // in case the page name is pageX where X is the page number remove the name as this is
+            // remove the page name and show the default page name like Slide X or Page X. 
+            if (page->name() == QString("page%1").arg(pages.size())) {
+                page->setName("");
+            }
         }
 
         if (d->odfPageProgressUpdater) {
@@ -338,6 +344,12 @@ bool KoPADocument::loadOdfProlog( const KoXmlElement & body, KoPALoadingContext 
 {
     Q_UNUSED( body );
     Q_UNUSED( context );
+
+    // Load user defined variable declarations
+    if (KoVariableManager *variableManager = inlineTextObjectManager()->variableManager()) {
+        variableManager->loadOdf(body);
+    }
+
     return true;
 }
 
@@ -349,7 +361,7 @@ bool KoPADocument::saveOdfPages( KoPASavingContext &paContext, QList<KoPAPageBas
     // save master pages
     foreach( KoPAPageBase *page, masterPages ) {
         if ( paContext.isSetClearDrawIds() ) {
-            paContext.clearDrawIds();
+            paContext.clearXmlIds("shape");
         }
         page->saveOdf( paContext );
     }
@@ -368,6 +380,12 @@ bool KoPADocument::saveOdfPages( KoPASavingContext &paContext, QList<KoPAPageBas
 bool KoPADocument::saveOdfProlog( KoPASavingContext & paContext )
 {
     Q_UNUSED( paContext );
+
+    // Save user defined variable declarations
+    if (KoVariableManager *variableManager = inlineTextObjectManager()->variableManager()) {
+        variableManager->saveOdf(&paContext.xmlWriter());
+    }
+
     return true;
 }
 
@@ -617,6 +635,13 @@ QPixmap KoPADocument::pageThumbnail(KoPAPageBase* page, const QSize& size)
     return page->thumbnail(size);
 }
 
+QImage KoPADocument::pageThumbImage(KoPAPageBase* page, const QSize& size)
+{
+    int pageNumber = pageIndex(page) + 1;
+    d->pageProvider->setPageData(pageNumber, page);
+    return page->thumbImage(size);
+}
+
 void KoPADocument::initEmpty()
 {
     d->masterPages.clear();
@@ -750,6 +775,8 @@ void KoPADocument::loadConfig()
         KConfigGroup configGroup = config->group( "Grid" );
         bool showGrid = configGroup.readEntry<bool>( "ShowGrid", defGrid.showGrid() );
         gridData().setShowGrid(showGrid);
+        bool paintGridInBackground = configGroup.readEntry("PaintGridInBackground", defGrid.paintGridInBackground());
+        gridData().setPaintGridInBackground(paintGridInBackground);
         bool snapToGrid = configGroup.readEntry<bool>( "SnapToGrid", defGrid.snapToGrid() );
         gridData().setSnapToGrid(snapToGrid);
         qreal spacingX = configGroup.readEntry<qreal>( "SpacingX", defGrid.gridX() );

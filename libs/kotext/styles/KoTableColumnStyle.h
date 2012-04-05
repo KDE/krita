@@ -30,6 +30,7 @@
 #include <QVector>
 #include <QString>
 #include <QVariant>
+#include <QExplicitlySharedDataPointer>
 
 struct Property;
 class QTextTable;
@@ -75,6 +76,10 @@ public:
     /// Destructor
     ~KoTableColumnStyle();
 
+    void copyProperties(const KoTableColumnStyle *style);
+
+    KoTableColumnStyle *clone() const;
+
     /// Set the column width.
     void setColumnWidth(qreal width);
 
@@ -89,10 +94,10 @@ public:
 
     /// Get the optimalColumnWidth state
     bool optimalColumnWidth() const;
-    
+
     /// Set the optimalColumnWidth state
     void setOptimalColumnWidth(bool state);
-    
+
     /// Set break before. See §7.19.2 of [XSL].
     void setBreakBefore(KoText::KoTextBreakProperty state);
 
@@ -140,7 +145,7 @@ public:
 
     /// Compare the properties of this style with the other.
     bool operator==(const KoTableColumnStyle &other) const;
-    
+
     /// Compare the properties of this style with the other.
     bool operator!=(const KoTableColumnStyle &other) const;
 
@@ -193,7 +198,7 @@ private:
     QColor propertyColor(int key) const;
 
     class Private;
-    QSharedDataPointer<Private> d;
+    QExplicitlySharedDataPointer<Private> d;
 };
 
 #endif

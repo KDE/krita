@@ -37,8 +37,7 @@ public:
     virtual void deactivate();
 
 protected:
-    virtual void finishEllipse(const QRectF& rect)=0;
-    void updateArea(const QRectF& rect);
+    virtual void finishEllipse(const QRectF& rect) = 0;
     void updateArea();
 
 private:

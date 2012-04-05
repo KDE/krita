@@ -62,7 +62,6 @@ void KisRoundCornersFilter::process(KisPaintDeviceSP device,
                                     KoUpdater* progressUpdater
                                    ) const
 {
-    QPoint srcTopLeft = applyRect.topLeft();
     Q_UNUSED(config);
     Q_ASSERT(!device.isNull());
 
@@ -80,15 +79,13 @@ void KisRoundCornersFilter::process(KisPaintDeviceSP device,
     }
 
     qint32 width = applyRect.width();
-    qint32 height = applyRect.height();
 
     KisHLineIteratorSP dstIt = device->createHLineIteratorNG(applyRect.x(), applyRect.y(), width);
 
     const KoColorSpace* cs = device->colorSpace();
 
-    qint32 x0 = srcTopLeft.x();
-    qint32 y0 = srcTopLeft.y();
-    for (qint32 y = 0; y < applyRect.height(); y++) {
+    QRect bounds = device->defaultBounds()->bounds();
+    for (qint32 y = applyRect.y(); y < applyRect.y() + applyRect.height(); y++) {
         qint32 x = applyRect.x();
         do {
             if (x <= radius && y <= radius) {
@@ -98,24 +95,24 @@ void KisRoundCornersFilter::process(KisPaintDeviceSP device,
                 if (dx >= sqrt(dradius*dradius - dy*dy)) {
                     cs->setOpacity(dstIt->rawData(), OPACITY_TRANSPARENT_U8, 1);
                 }
-            } else if (x >= x0 + width - radius && y <= radius) {
-                double dx = x + radius - x0 - width;
+            } else if (x >= bounds.width() - radius && y <= radius) {
+                double dx = x + radius - bounds.width();
                 double dy = radius - y;
                 double dradius = static_cast<double>(radius);
                 if (dx >= sqrt(dradius*dradius - dy*dy)) {
                     cs->setOpacity(dstIt->rawData(), OPACITY_TRANSPARENT_U8, 1);
                 }
-            } else if (x <= radius && y >= y0 + height - radius) {
+            } else if (x <= radius && y >= bounds.height() - radius) {
                 double dx = radius - x;
-                double dy = y + radius - y0 - height;
+                double dy = y + radius - bounds.height();
                 double dradius = static_cast<double>(radius);
                 if (dx >= sqrt(dradius*dradius - dy*dy)) {
                     cs->setOpacity(dstIt->rawData(), OPACITY_TRANSPARENT_U8, 1);
                 }
-            } else if (x >= x0 + width - radius && y >= y0 + height - radius) {
+            } else if (x >= bounds.width()  - radius && y >= bounds.height() - radius) {
 
-                double dx = x + radius - x0 - width;
-                double dy = y + radius - y0 - height;
+                double dx = x + radius - bounds.width() ;
+                double dy = y + radius - bounds.height();
                 double dradius = static_cast<double>(radius);
                 if (dx >= sqrt(dradius*dradius - dy*dy)) {
                     cs->setOpacity(dstIt->rawData(), OPACITY_TRANSPARENT_U8, 1);

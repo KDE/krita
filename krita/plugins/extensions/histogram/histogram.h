@@ -24,6 +24,7 @@
 #include <QVariant>
 
 #include <kparts/plugin.h>
+#include "kis_types.h"
 
 class KisView2;
 class KisImage;
@@ -40,7 +41,7 @@ private slots:
     void slotLayersChanged();
 
 private:
-    KisImage* m_image;
+    KisImageWSP m_image;
     KisView2 * m_view;
     KisPainter * m_painter;
     QAction * m_action;

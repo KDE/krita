@@ -31,6 +31,7 @@
 
 // KChart
 #include "DataSet.h"
+#include "PlotArea.h"
 
 // KDChart
 #include <KDChartGlobal>
@@ -41,10 +42,11 @@ using namespace KChart;
 
 class KDChartModel::Private {
 public:
-    Private( KDChartModel *parent );
+    Private( KDChartModel *parent, PlotArea *plotArea );
     ~Private();
 
     KDChartModel *const q;
+    PlotArea *const plotArea;
 
     /**
      * Returns the index of a given dataSet. If it is not present in
@@ -94,8 +96,9 @@ public:
 };
 
 
-KDChartModel::Private::Private( KDChartModel *parent )
+KDChartModel::Private::Private( KDChartModel *parent, PlotArea *_plotArea )
     : q( parent )
+    , plotArea( _plotArea )
 {
     dataDimensions      = 1;
     dataDirection       = Qt::Vertical;
@@ -165,9 +168,9 @@ QModelIndex KDChartModel::Private::dataPointLastModelIndex( int dataSetNumber, i
 //                     class KDChartModel
 
 
-KDChartModel::KDChartModel( QObject *parent /* = 0 */ )
+KDChartModel::KDChartModel( PlotArea *plotArea, QObject *parent )
     : QAbstractItemModel( parent ),
-      d( new Private( this ) )
+      d( new Private( this, plotArea ) )
 {
 }
 

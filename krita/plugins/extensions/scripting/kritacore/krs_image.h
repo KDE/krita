@@ -111,10 +111,10 @@ public slots:
      * @code
      * require 'Krita'
      * image = Krita.image()
-     * image.rotate(180.0)
+     * image.rotateImage(180.0)
      * @endcode
      */
-    void rotate(double angle);
+    void rotateImage(double angle);
 
     /**
      * Shear the image.

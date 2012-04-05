@@ -24,8 +24,8 @@
 
 #include "koproperty/Factory.h"
 
-#include <QtGui/QPixmap>
-#include <QtCore/QVariant>
+#include <QPixmap>
+#include <QVariant>
 
 class QLabel;
 class KPushButton;

@@ -196,11 +196,10 @@
 
 kernel Droste
 {  
-  const float pi = 3.14159265358979323846;
   const float2 I = { 0.0, 1.0};
   const float3 polarCoordinates = { 90, 0, 0 };
-  const float2 center = { xcenter, ycenter };
-  const float2 centerShift = { xcenterShift + 1.0, ycenterShift + 1.0 };
+  dependent float2 center = { xcenter * 1.0, ycenter * 1.0 };
+  dependent float2 centerShift = { xcenterShift + 1.0, ycenterShift + 1.0 };
   dependent float     r1, r2, p1, p2, alphaThreshold;
   dependent float2    _rotate, xBounds, yBounds, xyMiddle, minDimension, _zoom;
   dependent bool      showPoles, hyperDroste, tileBasedOnTransparency, transparentPointsIn, twist;
@@ -293,11 +292,11 @@ kernel Droste
     
     // Autoset periodicity
     if (setAutoPeriodicity == 1) {
-        p1 = p2/2.0 * (1.0 + sqrt(1.0 - pow(log(r2/r1)/pi, 2.0)));
+        p1 = p2/2.0 * (1.0 + sqrt(1.0 - pow(log(r2/r1)/PI, 2.0)));
     }
     
     // Set rotation
-    _rotate = float2((pi/180.0) * rotate, 0.0);
+    _rotate = float2((PI/180.0) * rotate, 0.0);
     // Set zoom
     _zoom = float2(exp(zoom) + innerRadius - 1.0, 0.0);
     
@@ -307,7 +306,7 @@ kernel Droste
         yBounds = float2(-r2, r2);
     } else {
         xBounds = float2(-log(r2/r1), log(r2/r1));
-        yBounds = float2(0.0, 2.1 * pi);
+        yBounds = float2(0.0, 2.1 * PI);
     }
     
     xyMiddle = float2(0.5 * (xBounds.x + xBounds.y), 0.5 * (yBounds.x + yBounds.y) );
@@ -340,7 +339,7 @@ kernel Droste
         polar = (float2(polarCoordinates.y, polarCoordinates.z) * IMAGE_WIDTH / s.x) / 100.0;
         
         if (showPoles) {
-            theta = (pi/180.0) * polarCoordinates.x;
+            theta = (PI/180.0) * polarCoordinates.x;
             
             div = (1.0 + pow(z.x, 2.0) + pow(z.y, 2.0) + ((1.0 - pow(z.x, 2.0) - pow(z.y, 2.0)) * cos(theta)) - (2.0 * z.x * sin(theta))) / 2.0;
             z.x = z.x * cos(theta) + ((1.0 - pow(z.x, 2.0) - pow(z.y, 2.0)) * sin(theta) / 2.0);
@@ -362,12 +361,12 @@ kernel Droste
         }
         
         // Start Droste-effect code
-        float2 alpha = float2(atan((p2/p1) * (log(r2/r1) / (2.0*pi))), 0.0);
+        float2 alpha = float2(atan((p2/p1) * (log(r2/r1) / (2.0*PI))), 0.0);
         float2 f = float2(cos(alpha.x), 0.0);
         float2 beta = complexMult(f, complexExp(complexMult(alpha, I)));
         
         //The angle of rotation between adjacent annular levels
-        float2 angle = float2(-2.0 * pi * p1, 0.0);
+        float2 angle = float2(-2.0 * PI * p1, 0.0);
         
         if (p2 > 0.0) angle = -angle;
         if (strandMirror == 1) angle /= strands;
@@ -388,7 +387,7 @@ kernel Droste
         float alphaRemaining = 1.0;
         float2 d = (z + centerShift) * minDimension ;
         pixel src = img.sampleNearest(d);
-        float alphasrc = src.alpha();
+        float alphasrc = src.opacity();
         float4 colorSoFar = (src * (alphasrc * alphaRemaining));
         alphaRemaining *= (1.0 - alphasrc);
 
@@ -429,7 +428,7 @@ kernel Droste
           z = complexMult(z, ratio);
           float2 d = (z + centerShift) * minDimension ;
           pixel src = img.sampleNearest(d);
-          float alphasrc = src.alpha();
+          float alphasrc = src.opacity();
           colorSoFar += (src * (alphasrc * alphaRemaining));
           alphaRemaining *= ( 1 - alphasrc );
           radius = length( z );

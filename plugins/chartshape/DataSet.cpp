@@ -90,6 +90,7 @@ public:
     ChartType    effectiveChartType() const;
     bool         isValidDataPoint( const QPoint &point ) const;
     QVariant     data( const CellRegion &region, int index, int role ) const;
+    QString      formatData( const CellRegion &region, int index, int role ) const;
 
     QBrush defaultBrush() const;
     QBrush defaultBrush( int section ) const;
@@ -182,6 +183,8 @@ public:
     bool symbolsActivated;
     int symbolID;
     int loadedDimensions;
+
+    KoOdfNumberStyles::NumericStyleFormat *numericStyleFormat;
 };
 
 DataSet::Private::Private( DataSet *parent, int dataSetNr ) :
@@ -207,12 +210,14 @@ DataSet::Private::Private( DataSet *parent, int dataSetNr ) :
     defaultLabel( i18n( "Series %1", dataSetNr + 1 ) ),
     symbolsActivated( true ),
     symbolID( 0 ),
-    loadedDimensions( 0 )
+    loadedDimensions( 0 ),
+    numericStyleFormat( 0 )
 {
 }
 
 DataSet::Private::~Private()
 {
+    delete numericStyleFormat;
 }
 
 KDChart::MarkerAttributes DataSet::Private::defaultMarkerAttributes() const
@@ -220,7 +225,8 @@ KDChart::MarkerAttributes DataSet::Private::defaultMarkerAttributes() const
     KDChart::MarkerAttributes ma;
     // Don't show markers unless we turn them on
     ma.setVisible( false );
-    //ma.setMarkerSizeMode( KDChart::MarkerAttributes::RelativeToDiagramWidthHeightMin );
+    // The marker size is specified in pixels, but scaled by the painter's zoom level
+    ma.setMarkerSizeMode( KDChart::MarkerAttributes::AbsoluteSizeScaled );
     return ma;
 }
 
@@ -391,6 +397,23 @@ QVariant DataSet::Private::data( const CellRegion &region, int index, int role )
             data = model->data( index, role );
     }
     return data;
+}
+
+QString DataSet::Private::formatData( const CellRegion &region, int index, int role ) const
+{
+    QVariant v = data(region, index, role);
+    QString s;
+    if ( v.type() == QVariant::Double ) {
+        // Don't use v.toString() else a double/float would lose precision
+        // and something like "36.5207" would become "36.520660888888912".
+        QTextStream ts(&s);
+        //ts.setRealNumberNotation(QTextStream::FixedNotation);
+        //ts.setRealNumberPrecision();
+        ts << v.toDouble();
+    } else {
+        s = v.toString();
+    }
+    return numericStyleFormat ? KoOdfNumberStyles::format(s, *numericStyleFormat) : s;
 }
 
 QBrush DataSet::Private::defaultBrush() const
@@ -660,11 +683,18 @@ KDChart::PieAttributes DataSet::pieAttributes() const
 
 QBrush DataSet::brush( int section ) const
 {
-    if ( d->brushes.contains( section ) )
-        return d->brushes[ section ];
-    if ( d->brushIsSet )
-        return brush();
-    return d->defaultBrush( section );
+    Qt::Orientation modelDataDirection = d->kdChartModel->dataDirection();
+    // Horizontally aligned diagrams have a specific color per category
+    // See for example pie or ring charts. A pie chart contains a single
+    // data set, but the slices must have different brushes.
+    if (modelDataDirection == Qt::Horizontal) {
+        if (d->brushes.contains( section )) {
+            return d->brushes[ section ];
+        }
+        return d->defaultBrush( section );
+    }
+    // Vertically aligned diagrams only have one brush per data set
+    return brush();
 }
 
 KDChart::PieAttributes DataSet::pieAttributes( int section ) const
@@ -762,16 +792,7 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes( int section /* = -1 *
         if ( !s.isEmpty() ) dataLabel += s + " ";
     }
     if ( type.number ) {
-        QVariant v = yData( section, Qt::DisplayRole );
-        QString s;
-        if ( v.type() == QVariant::Double ) {
-            // Don't use v.toString() else a double/float would lose precision
-            // and something like "36.5207" would become "36.520660888888912".
-            QTextStream ts(&s);
-            ts << v.toDouble();
-        } else {
-            s = v.toString().trimmed();
-        }
+        QString s = d->formatData( d->yDataRegion, section, Qt::DisplayRole );
         if ( !s.isEmpty() ) dataLabel += s + " ";
     }
     if ( type.percentage ) {
@@ -1100,7 +1121,7 @@ void DataSet::setLabelDataRegion( const CellRegion &region )
 
 int DataSet::size() const
 {
-    return d->size > 0 ? d->size : 1;
+    return qMax(1, d->size);
 }
 
 void DataSet::Private::dataChanged( KDChartModel::DataRole role, const QRect &rect ) const
@@ -1285,9 +1306,23 @@ bool DataSet::loadOdf( const KoXmlElement &n,
 {
     d->symbolsActivated = false;
     KoOdfLoadingContext &odfLoadingContext = context.odfLoadingContext();
+    KoOdfStylesReader &stylesReader = odfLoadingContext.stylesReader();
     KoStyleStack &styleStack = odfLoadingContext.styleStack();
     styleStack.clear();
     odfLoadingContext.fillStyleStack( n, KoXmlNS::chart, "style-name", "chart" );
+
+    QString styleName = n.attributeNS(KoXmlNS::chart, "style-name", QString());
+    const KoXmlElement *stylElement = stylesReader.findStyle(styleName, "chart");
+    if (stylElement) {
+        const QString dataStyleName = stylElement->attributeNS(KoXmlNS::style, "data-style-name", QString());
+        if (!dataStyleName.isEmpty()) {
+            if (stylesReader.dataFormats().contains(dataStyleName)) {
+                QPair<KoOdfNumberStyles::NumericStyleFormat, KoXmlElement*> dataStylePair = stylesReader.dataFormats()[dataStyleName];
+                delete d->numericStyleFormat;
+                d->numericStyleFormat = new KoOdfNumberStyles::NumericStyleFormat(dataStylePair.first);
+            }
+        }
+    }
 
     OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
     // OOo assumes that if we use an internal model only, the columns are
@@ -1545,6 +1580,11 @@ void DataSet::saveOdf( KoShapeSavingContext &context ) const
 
     KoGenStyle style( KoGenStyle::ChartAutoStyle, "chart" );
 
+    if (pieAttributes().explode()) {
+        const int pieExplode = (int)(pieAttributes().explodeFactor()*100);
+        style.addProperty("chart:pie-offset", pieExplode, KoGenStyle::ChartType);
+    }
+
     DataSet::ValueLabelType type = valueLabelType();
     if ( type.number && type.percentage )
         style.addProperty( "chart:data-label-number", "value-and-percentage" );
@@ -1573,6 +1613,21 @@ void DataSet::saveOdf( KoShapeSavingContext &context ) const
     QString label = labelDataRegion().toString();
     if (!label.isEmpty())
         bodyWriter.addAttribute( "chart:label-cell-address", label );
+
+    if (chartType() == KChart::CircleChartType || chartType() == KChart::RingChartType) {
+        for (int j=0; j<yDataRegion().cellCount(); ++j) {
+            bodyWriter.startElement("chart:data-point");
+
+            KoGenStyle dps(KoGenStyle::GraphicAutoStyle, "chart");
+            dps.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
+            dps.addProperty( "draw:fill-color", brush(j).color().name(), KoGenStyle::GraphicType );
+
+            const QString styleName = mainStyles.insert( dps, "ch");
+            bodyWriter.addAttribute( "chart:style-name", styleName );
+
+            bodyWriter.endElement();
+        }
+    }
 
     bodyWriter.endElement(); // chart:series
 }

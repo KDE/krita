@@ -19,7 +19,10 @@
 #define _KIS_NODE_H
 
 #include "kis_types.h"
+
+#include "kis_undo_adapter.h"
 #include "kis_base_node.h"
+
 #include "krita_export.h"
 
 #include <QVector>
@@ -160,9 +163,14 @@ public:
      */
     virtual QRect accessRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
 
-    virtual void setSystemLocked(bool l, bool update = true);
-
 public: // Graph methods
+
+    /**
+     * @return the graph sequence number calculated by the associated
+     * graph listener. You can use it for checking for changes in the
+     * graph.
+     */
+    int graphSequenceNumber() const;
 
     /**
      * @return the graph listener this node belongs to. 0 if the node
@@ -263,8 +271,8 @@ private:
     void createNodeProgressProxy();
 
 protected:
-
     KisBaseNodeSP parentCallback() const;
+    void baseNodeChangedCallback();
 
     /**
      * Re-implement this method if your node type has to do something

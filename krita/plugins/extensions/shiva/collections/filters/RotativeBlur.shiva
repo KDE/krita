@@ -18,8 +18,8 @@
 >;  
 kernel RotativeBlur
 {
-  const float2 center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
-  const float max = (IMAGE_WIDTH + IMAGE_HEIGHT) * 0.25;
+  dependent float2 center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
+  dependent float max = (IMAGE_WIDTH + IMAGE_HEIGHT) * 0.25;
   void evaluatePixel(input image img, output pixel result)
   {
     float2 vec = result.coord - center;

@@ -23,7 +23,7 @@
 #define SVGSTYLEPARSER_H
 
 #include "flake_export.h"
-#include <QtCore/QMap>
+#include <QMap>
 
 typedef QMap<QString, QString> SvgStyles;
 

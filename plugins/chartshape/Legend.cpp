@@ -42,7 +42,7 @@
 #include <KoGenStyles.h>
 #include <KoUnit.h>
 #include <KoColorBackground.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 
 // KDChart
 #include <KDChartChart>
@@ -79,7 +79,7 @@ public:
     QFont titleFont;
     QColor fontColor;
     Qt::Alignment alignment;
-    KoLineBorder *lineBorder;
+    KoShapeStroke *lineBorder;
 
     // The connection to KDChart
     KDChart::Legend *kdLegend;
@@ -94,7 +94,7 @@ public:
 
 Legend::Private::Private()
 {
-    lineBorder = new KoLineBorder( 0.5, Qt::black );
+    lineBorder = new KoShapeStroke( 0.5, Qt::black );
     showFrame = true;
     framePen = QPen();
     backgroundBrush = QBrush();
@@ -164,7 +164,7 @@ bool Legend::showFrame() const
 void Legend::setShowFrame( bool show )
 {
     d->showFrame = show;
-    setBorder( show ? d->lineBorder : 0 );
+    setStroke( show ? d->lineBorder : 0 );
 }
 
 QPen Legend::framePen() const
@@ -276,6 +276,24 @@ void Legend::setFontSize( qreal size )
     d->kdLegend->setTextAttributes( attributes );
 
     d->pixmapRepaintRequested = true;
+}
+
+void Legend::setFontColor( const QColor &color )
+{
+    KDChart::TextAttributes attributes = d->kdLegend->textAttributes();
+    QPen pen = attributes.pen();
+    pen.setColor(color);
+    attributes.setPen(pen);
+    d->kdLegend->setTextAttributes( attributes );
+
+    d->pixmapRepaintRequested = true;
+}
+
+QColor Legend::fontColor() const
+{
+    KDChart::TextAttributes attributes = d->kdLegend->textAttributes();
+    QPen pen = attributes.pen();
+    return pen.color();
 }
 
 QFont Legend::titleFont() const
@@ -510,6 +528,12 @@ bool Legend::loadOdf( const KoXmlElement &legendElement,
 
         if ( styleStack.hasProperty( KoXmlNS::fo, "font-size" ) ) {
             setFontSize( KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "font-size" ) ) );
+        }
+        if ( styleStack.hasProperty( KoXmlNS::fo, "font-color" ) ) {
+            QColor color = styleStack.property( KoXmlNS::fo, "font-color" );
+            if (color.isValid()) {
+                setFontColor(color);
+            }
         }
     }
     else {

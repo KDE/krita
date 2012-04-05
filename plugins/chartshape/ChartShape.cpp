@@ -87,9 +87,9 @@
 #include <KoSelection.h>
 #include <KoShapeBackground.h>
 #include <KoInsets.h>
-#include <KoShapeBorderModel.h>
+#include <KoShapeStrokeModel.h>
 #include <KoColorBackground.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoOdfWorkaround.h>
 
 // KChart
@@ -127,6 +127,7 @@ static const char *ODF_CHARTTYPES[ NUM_CHARTTYPES ] = {
     "chart:ring",
     "chart:scatter",
     "chart:radar",
+    "chart:filled-radar",
     "chart:stock",
     "chart:bubble",
     "chart:surface",
@@ -141,6 +142,7 @@ static const ChartSubtype defaultSubtypes[ NUM_CHARTTYPES ] = {
     NoChartSubtype,         // Ring
     NoChartSubtype,         // Scatter
     NormalChartSubtype,     // Radar
+    NormalChartSubtype,     // Filled Radar
     NoChartSubtype,         // Stock
     NoChartSubtype,         // Bubble
     NoChartSubtype,         // Surface
@@ -507,8 +509,8 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     KoColorBackground *background = new KoColorBackground( Qt::white );
     setBackground( background );
 
-    KoLineBorder *border = new KoLineBorder( 0, Qt::black );
-    setBorder( border );
+    KoShapeStroke *stroke = new KoShapeStroke( 0, Qt::black );
+    setStroke( stroke );
 
     ChartLayout *l = layout();
     l->setPosition( d->plotArea, CenterPosition );
@@ -634,8 +636,8 @@ void ChartShape::setInternalModel( QAbstractItemModel *model )
     Q_ASSERT( table );
     delete d->internalModelHelper;
     delete d->internalModel;
-    d->internalModelHelper = new SingleModelHelper( table, d->proxyModel );
     d->internalModel = model;
+    d->internalModelHelper = new SingleModelHelper( table, d->proxyModel );
 }
 
 TableSource *ChartShape::tableSource() const
@@ -749,7 +751,7 @@ void ChartShape::paintDecorations( QPainter &painter,
     if ( canvas->shapeManager()->selection()->selectedShapes().contains( this ) )
         return;
 
-    if ( border() )
+    if ( stroke() )
         return;
 
     QRectF border = QRectF( QPointF( -1.5, -1.5 ),
@@ -900,6 +902,8 @@ bool ChartShape::loadEmbeddedDocument( KoStore *store,
 bool ChartShape::loadOdf( const KoXmlElement &element,
                           KoShapeLoadingContext &context )
 {
+    //struct Timer{QTime t;Timer(){t.start();} ~Timer(){qDebug()<<">>>>>"<<t.elapsed();}} timer;
+
     // Load common attributes of (frame) shapes.  If you change here,
     // don't forget to also change in saveOdf().
     loadOdfAttributes( element, context, OdfAllAttributes );
@@ -923,7 +927,14 @@ bool ChartShape::loadOdfFrameElement( const KoXmlElement &element,
 bool ChartShape::loadOdfChartElement( const KoXmlElement &chartElement,
                                       KoShapeLoadingContext &context )
 {
-    proxyModel()->beginLoading();
+    // Use a helper-class created on the stack to be sure a we always leave
+    // this method with a call to endLoading proxyModel()->endLoading()
+    struct ProxyModelLoadState {
+        ChartProxyModel *m;
+        ProxyModelLoadState(ChartProxyModel *m) : m(m) { m->beginLoading(); }
+        ~ProxyModelLoadState() { m->endLoading(); }
+    };
+    ProxyModelLoadState proxyModelLoadState(proxyModel());
 
     // The shared data will automatically be deleted in the destructor
     // of KoShapeLoadingContext
@@ -1001,7 +1012,6 @@ bool ChartShape::loadOdfChartElement( const KoXmlElement &chartElement,
         return false;
     }
 
-
     // 2. Load the data
 //     int dimensions = numDimensions( chartType );
 //     qDebug() << "DIMENSIONS" << dimensions;
@@ -1069,8 +1079,6 @@ bool ChartShape::loadOdfChartElement( const KoXmlElement &chartElement,
     d->legend->update();
 
     requestRepaint();
-
-    proxyModel()->endLoading();
 
     return true;
 }
@@ -1180,6 +1188,12 @@ static void saveOdfDataRow( KoXmlWriter &bodyWriter, QAbstractItemModel *table, 
         //QVariant value( internalModel.cellVal( row, col ) );
         QModelIndex  index = table->index( row, col );
         QVariant     value = table->data( index );
+
+        bool ok;
+        double val = value.toDouble(&ok);
+        if (ok) {
+            value = val;
+        }
 
         QString  valType;
         QString  valStr;

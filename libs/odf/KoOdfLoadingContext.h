@@ -21,7 +21,7 @@
 #ifndef KOOASISLOADINGCONTEXT_H
 #define KOOASISLOADINGCONTEXT_H
 
-#include <QtCore/QString>
+#include <QString>
 
 #include <kcomponentdata.h>
 

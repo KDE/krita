@@ -28,8 +28,8 @@
 #include "SvgGraphicContext.h"
 #include "SvgUtil.h"
 
-#include <QtCore/QStringList>
-#include <QtGui/QColor>
+#include <QStringList>
+#include <QColor>
 
 class SvgStyleParser::Private
 {

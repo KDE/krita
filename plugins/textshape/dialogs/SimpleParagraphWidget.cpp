@@ -1,6 +1,8 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007, 2008, 2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2009-2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
+ * Copyright (C) 2011-2012 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,29 +23,42 @@
 #include "TextTool.h"
 #include <ListItemsHelper.h>
 #include "FormattingButton.h"
-#include "StylesWidget.h"
-#include "SpecialButton.h"
+#include <KoStyleThumbnailer.h>
 
-#include <KAction>
+#include "StylesCombo.h"
+#include "StylesModel.h"
+#include "StylesDelegate.h"
+#include "ListLevelChooser.h"
+#include "commands/ChangeListLevelCommand.h"
+
 #include <KoTextBlockData.h>
 #include <KoParagraphStyle.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTextDocumentLayout.h>
 #include <KoZoomHandler.h>
-#include <KoStyleThumbnailer.h>
 #include <KoStyleManager.h>
 #include <KoListLevelProperties.h>
 #include <KoShapePaintingContext.h>
 
-#include <KDebug>
+#include <KAction>
 
 #include <QTextLayout>
+#include <QFlags>
+#include <QMenu>
+#include <QWidgetAction>
+#include <QSignalMapper>
+
+#include <KDebug>
 
 SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
-        : QWidget(parent),
-        m_blockSignals(false),
-        m_tool(tool),
-        m_directionButtonState(Auto)
+        : QWidget(parent)
+        , m_styleManager(0)
+        , m_blockSignals(false)
+        , m_tool(tool)
+        , m_directionButtonState(Auto)
+        , m_thumbnailer(new KoStyleThumbnailer())
+        , m_mapper(new QSignalMapper(this))
+        , m_stylesModel(new StylesModel(0, StylesModel::ParagraphStyle))
 {
     widget.setupUi(this);
     widget.alignCenter->setDefaultAction(tool->action("format_aligncenter"));
@@ -60,6 +75,12 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
 
     widget.decreaseIndent->setDefaultAction(tool->action("format_decreaseindent"));
     widget.increaseIndent->setDefaultAction(tool->action("format_increaseindent"));
+    widget.changeTextDirection->setDefaultAction(tool->action("change_text_direction"));
+
+    widget.moreOptions->setText("...");
+    connect(widget.moreOptions, SIGNAL(clicked(bool)), tool->action("format_paragraph"), SLOT(trigger()));
+
+    connect(widget.changeTextDirection, SIGNAL(clicked()), this, SIGNAL(doneWithFocus()));
     connect(widget.alignCenter, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.alignBlock, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.alignLeft, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
@@ -67,99 +88,28 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
     connect(widget.decreaseIndent, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.increaseIndent, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
 
-    connect(widget.quickTable, SIGNAL(create(int, int)), this, SIGNAL(insertTableQuick(int, int)));
-    connect(widget.quickTable, SIGNAL(create(int, int)), this, SIGNAL(doneWithFocus()));
-
     widget.bulletListButton->setDefaultAction(tool->action("format_bulletlist"));
-    widget.numberedListButton->setDefaultAction(tool->action("format_numberlist"));
     widget.bulletListButton->setNumColumns(3);
-    widget.numberedListButton->setNumColumns(3);
  
     fillListButtons();
     widget.bulletListButton->addSeparator();
-    //widget.bulletListButton->addAction(new QAction("fgfd",0));
 
     connect(widget.bulletListButton, SIGNAL(itemTriggered(int)), this, SLOT(listStyleChanged(int)));
-    connect(widget.numberedListButton, SIGNAL(itemTriggered(int)), this, SLOT(listStyleChanged(int)));
-    connect(widget.reversedText, SIGNAL(clicked()), this, SLOT(directionChangeRequested()));
 
-    m_stylePopup = new StylesWidget(this, true, Qt::Popup);
-    m_stylePopup->setFrameShape(QFrame::StyledPanel);
-    m_stylePopup->setFrameShadow(QFrame::Raised);
-    widget.blockFrame->setStylesWidget(m_stylePopup);
+    m_stylesModel->setStyleThumbnailer(m_thumbnailer);
+    widget.paragraphStyleCombo->setStylesModel(m_stylesModel);
+    connect(widget.paragraphStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
+    connect(widget.paragraphStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(newStyleRequested(QString)));
+    connect(widget.paragraphStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(doneWithFocus()));
+    connect(widget.paragraphStyleCombo, SIGNAL(showStyleManager(int)), this, SLOT(slotShowStyleManager(int)));
 
-    connect(m_stylePopup, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)));
-    connect(m_stylePopup, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SIGNAL(doneWithFocus()));
-    connect(m_stylePopup, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(hidePopup()));
-
-    m_thumbnailer = new KoStyleThumbnailer();
+    connect(m_mapper, SIGNAL(mapped(int)), this, SLOT(changeListLevel(int)));
 }
 
 SimpleParagraphWidget::~SimpleParagraphWidget()
 {
+    //the style model is set on the comboBox who takes over ownership
     delete m_thumbnailer;
-}
-
-void SimpleParagraphWidget::directionChangeRequested()
-{
-    KoTextEditor *editor = m_tool->textEditor();
-    QTextBlockFormat format;
-    KoText::Direction dir = static_cast<KoText::Direction>(m_currentBlock.blockFormat()
-            .intProperty(KoParagraphStyle::TextProgressionDirection));
-    switch (dir) {
-    case KoText::PerhapsLeftRightTopBottom:
-    case KoText::LeftRightTopBottom:
-        format.setProperty(KoParagraphStyle::TextProgressionDirection, KoText::RightLeftTopBottom);
-        updateDirection(RTL);
-        break;
-    case KoText::InheritDirection:
-    case KoText::AutoDirection:
-        updateDirection(LTR);
-        format.setProperty(KoParagraphStyle::TextProgressionDirection, KoText::LeftRightTopBottom);
-        break;
-    case KoText::PerhapsRightLeftTopBottom:
-    case KoText::RightLeftTopBottom: {
-        updateDirection(Auto);
-        // clearProperty won't have any effect on merge below.
-        int start = qMin(editor->position(), editor->anchor());
-        int end = qMax(editor->position(), editor->anchor());
-        Q_ASSERT(start >= 0);
-        editor->setPosition(start);
-        while (editor->position() <= end) {
-            QTextBlockFormat bf = editor->blockFormat();
-            bf.clearProperty(KoParagraphStyle::TextProgressionDirection);
-            editor->setBlockFormat(bf);
-            if (!editor->movePosition(QTextCursor::NextBlock))
-                break;
-        }
-        emit doneWithFocus();
-        return;
-    }
-    case KoText::TopBottomRightLeft: ;// Unhandled.
-        break;
-    };
-    editor->mergeBlockFormat(format);
-    emit doneWithFocus();
-}
-
-void SimpleParagraphWidget::updateDirection(DirectionButtonState state)
-{
-    if (m_directionButtonState == state) return;
-    m_directionButtonState = state;
-    QString buttonText;
-    switch (state) {
-    case LTR:
-        buttonText = i18nc("Short for LeftToRight", "LTR");
-        break;
-    case RTL:
-        buttonText = i18nc("Short for RightToLeft", "RTL");
-        break;
-    default:
-    case Auto:
-        buttonText = i18nc("Automatic direction detection", "Auto");
-        break;
-    }
-    widget.reversedText->setText(buttonText);
 }
 
 void SimpleParagraphWidget::fillListButtons()
@@ -206,17 +156,39 @@ void SimpleParagraphWidget::fillListButtons()
 
             KoShapePaintingContext paintContext; //FIXME
             textShape.paintComponent(p, zoomHandler, paintContext);
-            if(KoListStyle::isNumberingStyle(item.style)) {
-                widget.numberedListButton->addItem(pm, static_cast<int> (item.style));
-            } else {
-                widget.bulletListButton->addItem(pm, static_cast<int> (item.style));
-            }
+            widget.bulletListButton->addItem(pm, static_cast<int> (item.style));
         }
     }
+
+    widget.bulletListButton->addSeparator();
+
+    KAction *action = new KAction(i18n("Change List Level"),this);
+
+    //TODO: Uncomment the below line when the string freeze is over
+    //action->setToolTip(i18n("Change the level the list is at"));
+
+    QMenu *listLevelMenu = new QMenu();
+    const int levelIndent = 13;
+    for (int level = 0; level < 10; ++level) {
+        QWidgetAction *wa = new QWidgetAction(listLevelMenu);
+        ListLevelChooser *chooserWidget = new ListLevelChooser((levelIndent * level) + 5);
+        wa->setDefaultWidget(chooserWidget);
+        listLevelMenu->addAction(wa);
+        m_mapper->setMapping(wa,level + 1);
+        connect(chooserWidget, SIGNAL(clicked()), wa, SLOT(trigger()));
+        connect(wa, SIGNAL(triggered()), m_mapper, SLOT(map()));
+    }
+
+    action->setMenu(listLevelMenu);
+    widget.bulletListButton->addAction(action);
 }
 
 void SimpleParagraphWidget::setCurrentBlock(const QTextBlock &block)
 {
+    if (block == m_currentBlock) {
+        return;
+    }
+
     m_currentBlock = block;
     m_blockSignals = true;
     struct Finally {
@@ -230,57 +202,125 @@ void SimpleParagraphWidget::setCurrentBlock(const QTextBlock &block)
     };
     Finally finally(this);
 
-    widget.reversedText->setVisible(m_tool->isBidiDocument());
     QTextLayout *layout = block.layout();
     if (layout) {
-        switch (layout->textOption().textDirection()) {
-        case Qt::LeftToRight: updateDirection(LTR); break;
-        case Qt::RightToLeft: updateDirection(RTL); break;
-        default:
+        switch(layout->textOption().textDirection())
+        {
+        case Qt::LeftToRight:
+             widget.changeTextDirection->setChecked(false);
+             break;
+        case Qt::RightToLeft:
+            widget.changeTextDirection->setChecked(true);
             break;
-        }
+        default:
+              break;
+            }
     }
 
-    QTextBlockFormat format;
-
-    int id = format.intProperty(KoParagraphStyle::StyleId);
-    KoParagraphStyle *style(m_styleManager->paragraphStyle(id));
-    if (style) {
-        widget.blockFrame->setStylePreview(m_thumbnailer->thumbnail(style, widget.blockFrame->size()));
-    }
-    m_stylePopup->setCurrentFormat(format);
+    setCurrentFormat(m_currentBlock.blockFormat());
 }
 
 void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
 {
-    if (format == m_currentBlockFormat)
+    if (!m_styleManager || format == m_currentBlockFormat)
         return;
     m_currentBlockFormat = format;
 
     int id = m_currentBlockFormat.intProperty(KoParagraphStyle::StyleId);
     KoParagraphStyle *style(m_styleManager->paragraphStyle(id));
     if (style) {
-        widget.blockFrame->setStylePreview(m_thumbnailer->thumbnail(m_styleManager->paragraphStyle(id), widget.blockFrame->contentsRect().size()));
+        bool unchanged = true;
+
+        foreach(int property, m_currentBlockFormat.properties().keys()) {
+            switch (property) {
+            case QTextFormat::ObjectIndex:
+            case KoParagraphStyle::ListStyleId:
+            case KoParagraphStyle::OutlineLevel:
+            case KoParagraphStyle::ListStartValue:
+            case KoParagraphStyle::IsListHeader:
+            case KoParagraphStyle::UnnumberedListItem:
+                continue;
+            // These can be both content and style properties so let's ignore
+            case KoParagraphStyle::BreakBefore:
+            case KoParagraphStyle::MasterPageName:
+                continue;
+
+            default:
+                break;
+            }
+            if (property == QTextBlockFormat::BlockAlignment) { //the default alignment can be retrieved in the defaultTextOption. However, calligra sets the Qt::AlignAbsolute flag, so we need to or this flag with the default alignment before comparing.
+                if ((m_currentBlockFormat.property(property) != style->value(property))
+                        && !(style->value(property).isNull()
+                             && ((m_currentBlockFormat.intProperty(property)) == int(m_currentBlock.document()->defaultTextOption().alignment()| Qt::AlignAbsolute)))) {
+                    unchanged = false;
+                    break;
+                }
+                else {
+                    continue;
+                }
+            }
+            if (property == KoParagraphStyle::TextProgressionDirection) {
+                if (style->value(property).isNull() && m_currentBlockFormat.intProperty(property) == KoText::LeftRightTopBottom) {
+                    //LTR seems to be Qt default when unset
+                    continue;
+                }
+            }
+            if ((m_currentBlockFormat.property(property) != style->value(property)) && !(style->value(property).isNull() && !m_currentBlockFormat.property(property).toBool())) {
+                //the last check seems to work. might be cause of a bug. The problem is when comparing an unset property in the style with a set to {0, false, ...) property in the format (eg. set then unset bold)
+                unchanged = false;
+                break;
+            }
+        }
+        //we are updating the combo's selected item to what is the current format. we do not want this to apply the style as it would mess up the undo stack, the change tracking,...
+        disconnect(widget.paragraphStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
+        widget.paragraphStyleCombo->setCurrentIndex(m_stylesModel->indexForParagraphStyle(*style).row());
+        widget.paragraphStyleCombo->setStyleIsOriginal(unchanged);
+        m_stylesModel->setCurrentParagraphStyle(id);
+        connect(widget.paragraphStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
     }
-    m_stylePopup->setCurrentFormat(format);
 }
 
 void SimpleParagraphWidget::setStyleManager(KoStyleManager *sm)
 {
     m_styleManager = sm;
-    m_stylePopup->setStyleManager(sm);
-}
-
-void SimpleParagraphWidget::hidePopup()
-{
-    widget.blockFrame->hidePopup();
+    //we want to disconnect this before setting the stylemanager. Populating the model apparently selects the first inserted item. We don't want this to actually set a new style.
+    disconnect(widget.paragraphStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
+    m_stylesModel->setStyleManager(sm);
+    connect(widget.paragraphStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
 }
 
 void SimpleParagraphWidget::listStyleChanged(int id)
 {
     emit doneWithFocus();
     if (m_blockSignals) return;
-    m_tool->textEditor()->setListProperties(static_cast<KoListStyle::Style> (id));
+    KoListLevelProperties llp;
+    llp.setStyle(static_cast<KoListStyle::Style>(id));
+    llp.setLevel(0);
+    m_tool->textEditor()->setListProperties(llp);
+}
+
+void SimpleParagraphWidget::styleSelected(int index)
+{
+    KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(m_stylesModel->index(index).internalId());
+    if (paragStyle) {
+        emit paragraphStyleSelected(paragStyle);
+    }
+    emit doneWithFocus();
+}
+
+void SimpleParagraphWidget::slotShowStyleManager(int index)
+{
+    int styleId = m_stylesModel->index(index).internalId();
+    emit showStyleManager(styleId);
+    emit doneWithFocus();
+}
+
+void SimpleParagraphWidget::changeListLevel(int level)
+{
+    emit doneWithFocus();
+    if (m_blockSignals) return;
+
+    m_tool->setListLevel(level);
 }
 
 #include <SimpleParagraphWidget.moc>

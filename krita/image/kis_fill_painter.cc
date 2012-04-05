@@ -25,15 +25,14 @@
 #include <cfloat>
 #include <stack>
 
-#include "qfontinfo.h"
-#include "qfontmetrics.h"
-#include "qpen.h"
-#include "qregion.h"
-#include "qmatrix.h"
+#include <QFontInfo>
+#include <QFontMetrics>
+#include <QPen>
+#include <QRegion>
+#include <QMatrix>
 #include <QImage>
 #include <QMap>
 #include <QPainter>
-#include <QPixmap>
 #include <QRect>
 #include <QString>
 
@@ -41,7 +40,6 @@
 
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
-#include "KoColor.h"
 
 #include "generator/kis_generator.h"
 #include "filter/kis_filter_configuration.h"
@@ -56,10 +54,13 @@
 #include "KoColorSpace.h"
 #include "kis_transaction.h"
 #include "kis_types.h"
-#include "kis_default_bounds.h"
+
 #include "kis_pixel_selection.h"
+
 #include "kis_random_accessor.h"
+
 #include "kis_iterator.h"
+#include "KoColor.h"
 #include "kis_selection.h"
 #include "kis_random_accessor_ng.h"
 
@@ -266,14 +267,14 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
 
     // Don't try to fill if we start outside the borders, just return an empty 'fill'
     if (startX < 0 || startY < 0 || startX >= m_width || startY >= m_height)
-        return new KisSelection(new KisDefaultBounds(device()));
+        return new KisSelection(new KisSelectionDefaultBounds(device()));
 
     KisPaintDeviceSP sourceDevice = KisPaintDeviceSP(0);
 
     // sample merged?
     if (m_sampleMerged) {
         if (!projection) {
-            return new KisSelection(new KisDefaultBounds(device()));
+            return new KisSelection(new KisSelectionDefaultBounds(device()));
         }
         sourceDevice = projection;
     } else {
@@ -282,7 +283,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
 
     m_size = m_width * m_height;
 
-    KisSelectionSP selection = new KisSelection(new KisDefaultBounds(device()));
+    KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(device()));
     KisPixelSelectionSP pSel = selection->getOrCreatePixelSelection();
 
     const KoColorSpace * devColorSpace = sourceDevice->colorSpace();
@@ -306,12 +307,8 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
     bool hasSelection = m_careForSelection && this->selection();
     KisSelectionSP srcSel;
 
-    KisRandomConstAccessorSP selectionAccessor;
-    bool minSelected = false;
-
     if (hasSelection) {
         srcSel = this->selection();
-        selectionAccessor = srcSel->projection()->createRandomConstAccessorNG(0, 0);
     }
 
     while (!stack.empty()) {
@@ -329,8 +326,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
         Q_ASSERT(x < m_width);
         Q_ASSERT(y >= 0);
         Q_ASSERT(y < m_height);
-        /* We need an iterator that is valid in the range (0,y) - (width,y). Therefore,
-        it is needed to start the iterator at the first position, and then skip to (x,y). */
+
         pixelIt->moveTo(x,y);
         quint8 diff;
         if (canOptimizeDifferences) {
@@ -346,19 +342,12 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
             diff = devColorSpace->difference(source, pixelIt->rawData());
         }
 
-        if (hasSelection) {
-            selectionAccessor->moveTo(x, y);
-            // XXX: this assumes one channel for the selection, of 8 bits...
-            minSelected = (selectionAccessor->oldRawData()[0] == MIN_SELECTED);
-        }
-
         if (diff > m_threshold
-                || (hasSelection && minSelected)) {
+                || (hasSelection && srcSel->selected(x, y) == MIN_SELECTED)) {
             //delete segment;
             continue;
         }
 
-        // Here as well: start the iterator at (0,y)
         KisRandomAccessorSP selIt = pSel->createRandomAccessorNG(x, y);
 
         if (m_fuzzy) {
@@ -408,15 +397,8 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
                 else {
                     diff = devColorSpace->difference(source, pixelIt->rawData());
                 }
-
-                if (hasSelection) {
-                    selectionAccessor->moveTo(x, y);
-                    // XXX: this assumes one channel for the selection, of 8 bits...
-                    minSelected = (selectionAccessor->oldRawData()[0] == MIN_SELECTED);
-                }
-
                 if (diff > m_threshold
-                        || (hasSelection && minSelected)) {
+                        || (hasSelection && srcSel->selected(x, y) == MIN_SELECTED)) {
                     stop = true;
                     continue;
                 }
@@ -488,14 +470,8 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
             }
             map[m_width * y + x] = Checked;
 
-            if (hasSelection) {
-                selectionAccessor->moveTo(x, y);
-                // XXX: this assumes one channel for the selection, of 8 bits...
-                minSelected = (selectionAccessor->oldRawData()[0] == MIN_SELECTED);
-            }
-
             if (diff > m_threshold
-                    || (hasSelection && minSelected)) {
+                    || (hasSelection && srcSel->selected(x, y) == MIN_SELECTED)) {
                 stop = true;
                 continue;
             }

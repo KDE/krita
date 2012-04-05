@@ -21,34 +21,30 @@
 #define KISTOOLSELECTBASE_H
 
 #include "kis_tool.h"
-#include "kis_selection.h"
-#include "kis_cursor.h"
+#include "kis_selection_tool_config_widget_helper.h"
 
 class KisSelectionOptions;
-//class KAction;
+
 
 class KRITAUI_EXPORT KisToolSelectBase : public KisTool
 {
     Q_OBJECT
 public:
-    KisToolSelectBase(KoCanvasBase *canvas, const QCursor& cursor=KisCursor::load("tool_rectangular_selection_cursor.png", 6, 6));
+    KisToolSelectBase(KoCanvasBase *canvas,
+                      const QCursor& cursor,
+                      const QString &windowTitle);
 
-    virtual QWidget* createOptionWidget();
-    virtual QWidget* optionWidget();
+    QWidget* createOptionWidget();
+    KisSelectionOptions* selectionOptionWidget();
 
-public slots:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-    void deactivate();
-
-    virtual void slotSetAction(int);
-    virtual void slotSetSelectionMode(int);
+    SelectionMode selectionMode() const;
+    SelectionAction selectionAction() const;
 
 protected:
     virtual void keyPressEvent(QKeyEvent *event);
 
-    KisSelectionOptions* m_optWidget;
-    selectionAction m_selectAction;
-    selectionMode m_selectionMode;
+private:
+    KisSelectionToolConfigWidgetHelper m_widgetHelper;
 };
 
 #endif // KISTOOLSELECTBASE_H

@@ -41,7 +41,7 @@
 #include <KoViewConverter.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 #include <KoToolProxy.h>
@@ -165,7 +165,7 @@ void KisSelectionManager::setup(KActionCollection * collection)
 
     m_copyToNewLayer  = new KAction(i18n("Copy Selection to New Layer"), this);
     collection->addAction("copy_selection_to_new_layer", m_copyToNewLayer);
-    m_copyToNewLayer->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_J));
+    m_copyToNewLayer->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_J));
     connect(m_copyToNewLayer, SIGNAL(triggered()), this, SLOT(copySelectionToNewLayer()));
 
     m_cutToNewLayer  = new KAction(i18n("Cut Selection to New Layer"), this);
@@ -175,7 +175,7 @@ void KisSelectionManager::setup(KActionCollection * collection)
 
     m_fillForegroundColor  = new KAction(i18n("Fill with Foreground Color"), this);
     collection->addAction("fill_selection_foreground_color", m_fillForegroundColor);
-    m_fillForegroundColor->setShortcut(QKeySequence(Qt::ALT + Qt::Key_Backspace));
+    m_fillForegroundColor->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Backspace));
     connect(m_fillForegroundColor, SIGNAL(triggered()), this, SLOT(fillForegroundColor()));
 
     m_fillBackgroundColor  = new KAction(i18n("Fill with Background Color"), this);
@@ -237,12 +237,11 @@ bool KisSelectionManager::havePixelsSelected()
 {
     KisLayerSP activeLayer = m_view->activeLayer();
     KisSelectionSP activeSelection;
-    if(activeLayer && !activeLayer->userLocked()
+    if (activeLayer && !activeLayer->userLocked()
        && activeLayer->visible()) {
 
         activeSelection = activeLayer->selection();
         return activeSelection &&
-            !activeSelection->isDeselected() &&
             !activeSelection->selectedRect().isEmpty();
     }
     return false;
@@ -290,12 +289,13 @@ void KisSelectionManager::updateGUI()
     bool haveDevice = m_view->activeDevice();
 
     KisLayerSP activeLayer = m_view->activeLayer();
-    KisSelectionSP activeSelection;
-    bool canReselect = activeLayer && !activeLayer->userLocked() &&
-        activeLayer->visible() &&
-        (activeSelection = activeLayer->selection()) &&
-        activeSelection->isDeselected() &&
-        !activeSelection->selectedRect().isEmpty();
+    KisImageWSP image = activeLayer ? activeLayer->image() : 0;
+    bool canReselect =
+        activeLayer && activeLayer->isEditable() &&
+        image && image->canReselectGlobalSelection();
+
+    bool canDeselect = activeLayer && activeLayer->isEditable() &&
+        image && image->globalSelection();
 
 
     m_clear->setEnabled(haveDevice || havePixelsSelected || haveShapesSelected);
@@ -318,7 +318,7 @@ void KisSelectionManager::updateGUI()
     m_fillPattern->setEnabled(haveDevice);
 
     m_selectAll->setEnabled(true);
-    m_deselect->setEnabled(havePixelsSelected);
+    m_deselect->setEnabled(canDeselect);
     m_reselect->setEnabled(canReselect);
 
 
@@ -354,7 +354,7 @@ void KisSelectionManager::cut()
     KisLayerSP layer = m_view->activeLayer();
     if (!layer) return;
 
-    if(haveShapesSelected()) {
+    if (haveShapesSelected()) {
         m_view->canvasBase()->toolProxy()->cut();
     }
     else {
@@ -362,12 +362,16 @@ void KisSelectionManager::cut()
 
         copy();
 
-        KisSelectedTransaction transaction(i18n("Cut"), layer);
+        KisUndoAdapter *undoAdapter = m_view->image()->undoAdapter();
+
+        undoAdapter->beginMacro(i18n("Cut"));
+        KisSelectedTransaction transaction("", layer);
 
         layer->paintDevice()->clearSelection(m_view->selection());
         QRect rect = m_view->selection()->selectedRect();
 
         transaction.commit(m_view->image()->undoAdapter());
+        undoAdapter->endMacro();
 
         layer->setDirty(rect);
     }
@@ -378,14 +382,17 @@ void KisSelectionManager::copy()
     KisLayerSP layer = m_view->activeLayer();
     if (!layer) return;
 
-    if(haveShapesSelected()) {
+    if (haveShapesSelected()) {
         m_view->canvasBase()->toolProxy()->copy();
     }
     else {
+        KisImageWSP image = m_view->image();
         KisPaintDeviceSP dev = m_view->activeDevice();
         if (!dev) return;
 
+        image->barrierLock();
         copyFromDevice(dev);
+        image->unlock();
     }
 }
 
@@ -394,7 +401,7 @@ void KisSelectionManager::copyMerged()
     KisImageWSP image = m_view->image();
     if (!image) return;
 
-    image->lock();
+    image->barrierLock();
     KisPaintDeviceSP dev = image->rootLayer()->projection();
     copyFromDevice(dev);
     image->unlock();
@@ -424,6 +431,13 @@ void KisSelectionManager::paste()
             viewConverter->viewToDocumentY(canvasBase->canvasController()->canvasOffsetY()) + center.y()));
 
     if (clip) {
+        // Pasted layer content could be outside image bounds and invisible, if that is the case move content into the bounds
+        QRect exactBounds = clip->exactBounds();
+        if (!exactBounds.isEmpty() && !exactBounds.intersects(image->bounds())) {
+            clip->setX(clip->x() - exactBounds.x());
+            clip->setY(clip->y() - exactBounds.y());
+        }
+
         KisPaintLayer *layer = new KisPaintLayer(image.data(), image->nextLayerName() + i18n("(pasted)"), OPACITY_OPAQUE_U8, clip);
         Q_CHECK_PTR(layer);
 
@@ -432,9 +446,6 @@ void KisSelectionManager::paste()
         } else {
             m_adapter->addNode(layer , image->rootLayer(), 0);
         }
-        layer->setDirty();
-        m_view->nodeManager()->activateNode(layer);
-
     } else
         m_view->canvasBase()->toolProxy()->paste();
 }
@@ -489,7 +500,7 @@ void KisSelectionManager::selectAll()
     undoAdapter->beginMacro(i18n("Select All"));
 
     if (!image->globalSelection()) {
-        KUndo2Command *cmd = new KisSetGlobalSelectionCommand(image, 0, 0);
+        KUndo2Command *cmd = new KisSetEmptyGlobalSelectionCommand(image);
         undoAdapter->addCommand(cmd);
     }
 
@@ -521,7 +532,7 @@ void KisSelectionManager::reselect()
     KisImageWSP image = m_view->image();
     if (!image) return;
 
-    if (image->globalSelection()) {
+    if (image->canReselectGlobalSelection()) {
         KUndo2Command *cmd = new KisReselectGlobalSelectionCommand(image);
         image->undoAdapter()->addCommand(cmd);
         selectionChanged();
@@ -555,14 +566,19 @@ void KisSelectionManager::fill(const KoColor& color, bool fillWithPattern, const
         filled->setDefaultPixel(color.data());
     }
 
-    KisPainter painter2(device, selection);
+    KisUndoAdapter *undoAdapter = m_view->undoAdapter();
 
-    painter2.beginTransaction(transactionText);
+    undoAdapter->beginMacro(transactionText);
+
+    KisPainter painter2(device, selection);
+    painter2.beginTransaction("");
     painter2.bitBlt(selectedRect.x(), selectedRect.y(),
                     filled,
                     selectedRect.x(), selectedRect.y(),
                     selectedRect.width(), selectedRect.height());
-    painter2.endTransaction(m_view->undoAdapter());
+    painter2.endTransaction(undoAdapter);
+
+    undoAdapter->endMacro();
 
     device->setDirty(selectedRect);
 }
@@ -613,14 +629,19 @@ void KisSelectionManager::applySelectionFilter(KisSelectionFilter *filter)
     KisSelectionSP selection = m_view->selection();
     if (!selection) return;
 
-    KisSelectionTransaction transaction(filter->name(), image, selection);
+    KisUndoAdapter *undoAdapter = m_view->undoAdapter();
+    undoAdapter->beginMacro(filter->name());
 
-    KisPixelSelectionSP mergedSelection = selection->mergedPixelSelection();
+    KisSelectionTransaction transaction("", image, selection);
+
+    KisPixelSelectionSP mergedSelection = selection->getOrCreatePixelSelection();
     QRect processingRect = filter->changeRect(mergedSelection->selectedExactRect());
-
     filter->process(mergedSelection, processingRect);
 
     transaction.commit(image->undoAdapter());
+
+    undoAdapter->endMacro();
+
     selection->setDirty(processingRect);
     selectionChanged();
 }
@@ -672,15 +693,16 @@ void KisSelectionManager::shapeSelectionChanged()
     KoSelection * selection = shapeManager->selection();
     QList<KoShape*> selectedShapes = selection->selectedShapes();
 
-    KoLineBorder* border = new KoLineBorder(0, Qt::lightGray);
+    KoShapeStroke* border = new KoShapeStroke(0, Qt::lightGray);
     foreach(KoShape* shape, shapeManager->shapes()) {
         if (dynamic_cast<KisShapeSelection*>(shape->parent())) {
             if (selectedShapes.contains(shape))
-                shape->setBorder(border);
+                shape->setStroke(border);
             else
-                shape->setBorder(0);
+                shape->setStroke(0);
         }
     }
+    updateGUI();
 }
 
 void KisSelectionManager::imageResizeToSelection()
@@ -718,10 +740,9 @@ void KisSelectionManager::copyFromDevice(KisPaintDeviceSP device)
 
     if (selection) {
         // Apply selection mask.
-        KisPixelSelectionSP selectionProjection = selection->projection();
+        KisPaintDeviceSP selectionProjection = selection->projection();
         KisHLineIteratorSP layerIt = clip->createHLineIteratorNG(0, 0, r.width());
         KisHLineConstIteratorPixel selectionIt = selectionProjection->createHLineIterator(r.x(), r.y(), r.width());
-        //KisHLineConstIteratorSP selectionIt = selectionProjection->createHLineConstIteratorNG(r.x(), r.y(), r.width());
 
         for (qint32 y = 0; y < r.height(); y++) {
 

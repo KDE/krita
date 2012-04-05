@@ -77,6 +77,7 @@ bool KoTosContainer::loadText(const KoXmlElement &element, KoShapeLoadingContext
             // everything, so we have to use the KoTextShapeData object instead.
             KoTextShapeDataBase *shapeData = qobject_cast<KoTextShapeDataBase*>(textShape->userData());
             Q_ASSERT(shapeData);
+            shapeData->loadStyle(element, context);
             bool loadOdf = shapeData->loadOdf(element, context);
             return loadOdf;
         }
@@ -218,7 +219,6 @@ KoShape *KoTosContainer::createTextShape(KoDocumentResourceManager *documentReso
         } else {
             textShape->setSize(size());
         }
-        textShape->setTransformation(transformation());
         if (d->resizeBehavior == TextFollowsPreferredTextRect) {
             textShape->setPosition(d->preferredTextRect.topLeft());
         } else {

@@ -29,7 +29,7 @@
 #include <QPixmap>
 #include <QPainter>
 #include <QLabel>
-#include <qdom.h>
+#include <QDomDocument>
 #include <QString>
 #include <QStringList>
 #include <QPushButton>

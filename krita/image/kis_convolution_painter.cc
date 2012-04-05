@@ -22,17 +22,16 @@
 #include <string.h>
 #include <cfloat>
 
-#include "qbrush.h"
-#include "qcolor.h"
-#include "qfontinfo.h"
-#include "qfontmetrics.h"
-#include "qpen.h"
-#include "qregion.h"
-#include "qmatrix.h"
+#include <QBrush>
+#include <QColor>
+#include <QFontInfo>
+#include <QFontMetrics>
+#include <QPen>
+#include <QRegion>
+#include <QMatrix>
 #include <QImage>
 #include <QMap>
 #include <QPainter>
-#include <QPixmap>
 #include <QRect>
 #include <QString>
 #include <QVector>

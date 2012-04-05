@@ -52,7 +52,7 @@ KoToolBase::~KoToolBase()
     delete d_ptr;
 }
 
-/// Ultimately only called from Tables
+/// Ultimately only called from Calligra Sheets
 void KoToolBase::updateShapeController(KoShapeBasedDocumentBase *shapeController)
 {
     if (shapeController) {
@@ -80,6 +80,11 @@ bool KoToolBase::wantsAutoScroll() const
 }
 
 void KoToolBase::mouseDoubleClickEvent(KoPointerEvent *event)
+{
+    event->ignore();
+}
+
+void KoToolBase::mouseTripleClickEvent(KoPointerEvent *event)
 {
     event->ignore();
 }

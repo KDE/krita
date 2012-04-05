@@ -150,3 +150,9 @@ void KisColorSelectorComponent::setConfiguration(Parameter param, Type type)
     m_parameter = param;
     m_type = type;
 }
+
+void KisColorSelectorComponent::setLastMousePosition(int x, int y)
+{
+   m_lastX = x;
+   m_lastY = y;
+}

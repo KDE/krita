@@ -34,7 +34,7 @@ class QString;
 
 class KoColorSpace;
 class KoColor;
-class KoShape;
+class KoShapeLayer;
 
 class KoShapeBasedDocumentBase;
 class KisView2;
@@ -137,12 +137,22 @@ public:
      */
     KoShapeBasedDocumentBase * shapeController() const;
 
-    KoShape * shapeForNode(KisNodeSP layer) const;
+    KoShapeLayer* shapeForNode(KisNodeSP layer) const;
 
     /**
-     * Add a node to the shape controller
+     * @return a list of all layers that are active in all current views
      */
-    KoShape * addShape(const KisNodeSP node);
+    vKisNodeSP activeNodes() const;
+
+    /**
+     * set the list of nodes that were marked as currently active
+     */
+    void setPreActivatedNode(KisNodeSP activatedNode);
+
+    /**
+     * @return the node that was set as active during loading
+     */
+    KisNodeSP preActivatedNode() const;
 
 signals:
 

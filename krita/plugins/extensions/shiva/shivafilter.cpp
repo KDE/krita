@@ -29,11 +29,11 @@
 #include "QVariantValue.h"
 #include <OpenShiva/Kernel.h>
 #include <OpenShiva/Source.h>
-#include METADATA_HEADER
+#include <GTLFragment/Metadata.h>
 #include <GTLCore/Region.h>
 
-#include "Version.h"
 #include "UpdaterProgressReport.h"
+#include <kis_gtl_lock.h>
 
 extern QMutex* shivaMutex;
 
@@ -75,18 +75,13 @@ void ShivaFilter::process(KisPaintDeviceSP dev,
     // TODO support for selection
     OpenShiva::Kernel kernel;
     kernel.setSource(*m_source);
-
     if (config) {
         QMap<QString, QVariant> map = config->getProperties();
         for (QMap<QString, QVariant>::iterator it = map.begin(); it != map.end(); ++it) {
             dbgPlugins << it.key() << " " << it.value();
             const GTLCore::Metadata::Entry* entry = kernel.metadata()->parameter(it.key().toAscii().data());
             if (entry && entry->asParameterEntry()) {
-#if OPENSHIVA_12
-                GTLCore::Value val = qvariantToValue(it.value(), entry->asParameterEntry()->valueType());
-#else
                 GTLCore::Value val = qvariantToValue(it.value(), entry->asParameterEntry()->type());
-#endif
                 if(val.isValid())
                 {
                     kernel.setParameter(it.key().toAscii().data(), val);
@@ -94,6 +89,11 @@ void ShivaFilter::process(KisPaintDeviceSP dev,
             }
         }
     }
+    
+    kernel.setParameter(OpenShiva::Kernel::IMAGE_WIDTH, float(dev->defaultBounds()->bounds().width()));
+    kernel.setParameter(OpenShiva::Kernel::IMAGE_HEIGHT, float(dev->defaultBounds()->bounds().height()));
+    
+    KisGtlLocker gtlLocker;
     {
         dbgPlugins << "Compile: " << m_source->name().c_str();
         QMutexLocker l(shivaMutex);
@@ -102,20 +102,11 @@ void ShivaFilter::process(KisPaintDeviceSP dev,
     if (kernel.isCompiled()) {
         ConstPaintDeviceImage pdisrc(dev);
         PaintDeviceImage pdi(dev);
-#if OPENSHIVA_12
-        std::list< GTLCore::AbstractImage* > inputs;
-        GTLCore::Region region(dstTopLeft.x(), dstTopLeft.y() , size.width(), size.height());
-#else
         std::list< const GTLCore::AbstractImage* > inputs;
         GTLCore::RegionI region(dstTopLeft.x(), dstTopLeft.y() , size.width(), size.height());
-#endif
         inputs.push_back(&pdisrc);
         dbgPlugins << "Run: " << m_source->name().c_str() << " " <<  dstTopLeft << " " << size;
-#if OPENSHIVA_12
-        kernel.evaluatePixeles(region, inputs, &pdi, report);
-#else
         kernel.evaluatePixels(region, inputs, &pdi, report );
-#endif
 
         }
 }

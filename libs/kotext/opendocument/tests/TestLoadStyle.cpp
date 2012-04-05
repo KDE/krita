@@ -89,7 +89,7 @@ QTextDocument *TestLoadStyle::documentFromOdt(const QString &odt)
     KoXmlElement realBody(KoXml::namedItemNS(content, KoXmlNS::office, "body"));
     KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, "text");
 
-    KoStyleManager *styleManager = new KoStyleManager;
+    KoStyleManager *styleManager = new KoStyleManager(0);
     KoChangeTracker *changeTracker = new KoChangeTracker;
 
     KoOdfLoadingContext odfLoadingContext(odfReadStore.styles(), odfReadStore.store(), *componentData);

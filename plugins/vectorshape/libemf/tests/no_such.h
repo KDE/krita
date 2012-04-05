@@ -18,7 +18,7 @@
 #ifndef NO_SUCH_H
 #define NO_SUCH_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class NoSuch: public QObject
 {

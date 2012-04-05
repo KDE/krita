@@ -42,9 +42,6 @@ ExtensionsManagerPlugin::ExtensionsManagerPlugin(QObject *parent, const QVariant
 {
     if (parent->inherits("KisView2")) {
         m_view = (KisView2*) parent;
-
-        setComponentData(ExtensionsManagerPluginFactory::componentData());
-
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/extensionsmanager.rc"), true);
 
         KAction *action  = new KAction(i18n("Extensions manager..."), this);

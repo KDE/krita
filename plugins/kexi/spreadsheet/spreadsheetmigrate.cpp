@@ -50,7 +50,7 @@ bool SpreadsheetMigrate::drv_connect()
     return false;
   
   if (!m_KSDoc) {
-      m_KSDoc = new Calligra::Tables::Doc();
+      m_KSDoc = new Calligra::Sheets::Doc();
   }
   kDebug();
   return m_KSDoc->openUrl(m_FileName);
@@ -68,11 +68,11 @@ bool SpreadsheetMigrate::drv_disconnect()
 
 bool SpreadsheetMigrate::drv_tableNames(QStringList& tablenames)
 {
-    QList<Calligra::Tables::Sheet*> sheets = m_KSDoc->map()->sheetList();
+    QList<Calligra::Sheets::Sheet*> sheets = m_KSDoc->map()->sheetList();
   
     kDebug() << sheets.size() << "sheets" << m_KSDoc->map()->sheetList().size();
   
-    foreach(Calligra::Tables::Sheet *sheet, sheets) {
+    foreach(Calligra::Sheets::Sheet *sheet, sheets) {
         tablenames << sheet->sheetName();
     }
   
@@ -81,7 +81,7 @@ bool SpreadsheetMigrate::drv_tableNames(QStringList& tablenames)
 
 bool SpreadsheetMigrate::drv_readTableSchema(const QString& originalName, KexiDB::TableSchema& tableSchema)
 {
-  Calligra::Tables::Sheet *sheet = m_KSDoc->map()->findSheet(originalName);
+  Calligra::Sheets::Sheet *sheet = m_KSDoc->map()->findSheet(originalName);
   
   if (!sheet)
   {
@@ -92,14 +92,14 @@ bool SpreadsheetMigrate::drv_readTableSchema(const QString& originalName, KexiDB
   int row=1, col = 1;
   QString fieldname;
   
-  Calligra::Tables::Cell *cell;
+  Calligra::Sheets::Cell *cell;
   KexiDB::Field *fld;
   tableSchema.setName(QString(originalName).replace(' ', '_').toLower());
   tableSchema.setCaption(originalName);
   
   do
   {
-      cell = new Calligra::Tables::Cell(sheet, col, row);
+      cell = new Calligra::Sheets::Cell(sheet, col, row);
 
       fieldname = cell->displayText();
       col++;
@@ -129,7 +129,7 @@ bool SpreadsheetMigrate::drv_moveNext()
   if (!m_CurSheet)
     return false;
   
-  Calligra::Tables::Cell cell = Calligra::Tables::Cell(m_CurSheet, 1, m_Row + 1);
+  Calligra::Sheets::Cell cell = Calligra::Sheets::Cell(m_CurSheet, 1, m_Row + 1);
   
   if (!cell.isEmpty())
   {
@@ -174,7 +174,7 @@ bool SpreadsheetMigrate::drv_moveLast()
 
 QVariant SpreadsheetMigrate::drv_value(uint i)
 {
-    return Calligra::Tables::Cell(m_CurSheet, i+1, m_Row).value().asVariant();
+    return Calligra::Sheets::Cell(m_CurSheet, i+1, m_Row).value().asVariant();
 }
 
 }

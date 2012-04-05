@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+             /* This file is part of the KDE project
  * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or

@@ -96,9 +96,10 @@ bool ChartTableModel::loadOdf( const KoXmlElement &tableElement,
     setRowCount( 0 );
     setColumnCount( 0 );
 
-    //const QDomNode &node = tableElement.asQDomNode( QDomDocument() );
+    //QDomDocument doc;
+    //KoXml::asQDomElement( doc, tableElement );
     //QTextStream stream(stdout);
-    //stream << node;
+    //stream << doc.documentElement();
 
     int row = 0;
     KoXmlElement  n;
@@ -162,7 +163,7 @@ bool ChartTableModel::loadOdf( const KoXmlElement &tableElement,
                     // Read the actual value in the cell.
                     QVariant value;
                     if ( valueString.isEmpty() )
-                        valueString = valueElement.text();
+                        valueString = valueElement.text().trimmed();
                     if ( valueType == "float" )
                         value = valueString.toDouble();
                     else if ( valueType == "boolean" )

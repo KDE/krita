@@ -16,8 +16,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_PAINT_DEVICE_H_
-#define KIS_PAINT_DEVICE_H_
+#ifndef KIS_PAINT_DEVICE_IMPL_H_
+#define KIS_PAINT_DEVICE_IMPL_H_
 
 #include <QObject>
 #include <QRect>
@@ -31,8 +31,9 @@
 #include "kis_global.h"
 #include "kis_shared.h"
 #include "kis_iterators_pixel.h"
+#include "kis_default_bounds_base.h"
+
 #include <krita_export.h>
-#include "kis_default_bounds.h"
 
 class KUndo2Command;
 class QRect;
@@ -50,6 +51,7 @@ class KisHLineIteratorNG;
 class KisRandomSubAccessorPixel;
 class KisDataManager;
 class KisSelectionComponent;
+
 
 typedef KisSharedPtr<KisDataManager> KisDataManagerSP;
 
@@ -86,9 +88,7 @@ public:
      * @param defaultBounds boundaries of the device in case it is empty
      * @param name for debugging purposes
      */
-    KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace,
-                   KisDefaultBounds *defaultBounds,
-                   const QString& name = QString());
+    KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, KisDefaultBoundsBaseSP defaultBounds = 0, const QString& name = QString());
 
     KisPaintDevice(const KisPaintDevice& rhs);
     virtual ~KisPaintDevice();
@@ -128,7 +128,12 @@ public:
      * set the default bounds for the paint device when
      * the default pixel in not completely transarent
      */
-    virtual void setDefaultBounds(KisDefaultBounds *bounds);
+    virtual void setDefaultBounds(KisDefaultBoundsBaseSP bounds);
+
+     /**
+     * the default bounds rect of the paint device
+     */
+    KisDefaultBoundsBaseSP defaultBounds() const;
 
     /**
      * Moves the device to these new coordinates (so no incremental move or so)
@@ -219,6 +224,13 @@ public:
     virtual void clear();
 
     /**
+     * Clear the given rectangle to transparent black. The paint device will expand to
+     * contain the given rect.
+     */
+    void clear(const QRect & rc);
+
+
+    /**
      * Sets the default pixel. New data will be initialised with this pixel. The pixel is copied: the
      * caller still owns the pointer and needs to delete it to avoid memory leaks.
      */
@@ -228,12 +240,6 @@ public:
      * Get a pointer to the default pixel.
      */
     const quint8 *defaultPixel() const;
-
-    /**
-     * Clear the given rectangle to transparent black. The paint device will expand to
-     * contain the given rect.
-     */
-    void clear(const QRect & rc);
 
     /**
      * Fill the given rectangle with the given pixel. The paint device will expand to
@@ -306,6 +312,11 @@ protected:
     void fastBitBlt(KisPaintDeviceSP src, const QRect &rect);
 
     /**
+     * The same as \ref fastBitBlt() but reads old data
+     */
+    void fastBitBltOldData(KisPaintDeviceSP src, const QRect &rect);
+
+    /**
      * Clones rect from another paint device in a rough and fast way.
      * All the tiles touched by rect will be shared, between both
      * devices, that means it will copy a bigger area than was
@@ -316,6 +327,11 @@ protected:
      * \see fastBitBlt
      */
     void fastBitBltRough(KisPaintDeviceSP src, const QRect &rect);
+
+    /**
+     * The same as \ref fastBitBltRough() but reads old data
+     */
+    void fastBitBltRoughOldData(KisPaintDeviceSP src, const QRect &rect);
 
 public:
     /**
@@ -442,7 +458,6 @@ public:
      * @param rect: only this rect will be used for the thumbnail
      *
      */
-
     virtual KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, const KisSelection *selection = 0, QRect rect = QRect()) const;
 
     /**
@@ -687,7 +702,7 @@ private:
     KisPaintDevice& operator=(const KisPaintDevice&);
     void init(KisDataManagerSP explicitDataManager,
               const KoColorSpace *colorSpace,
-              KisDefaultBounds *defaultBounds,
+              KisDefaultBoundsBaseSP defaultBounds,
               KisNodeWSP parent, const QString& name);
 
     // Only KisPainter is allowed to have access to these low-level methods
@@ -717,12 +732,9 @@ private:
      */
     QVector<qint32> channelSizes();
 
-
-    /**
-     * the default bounds rect of the paint device
-     */
-    KisDefaultBounds *defaultBounds() const;
-
+private:
+    friend class KisSelectionTest;
+    KisNodeWSP parentNode() const;
 
 private:
     KisDataManagerSP m_datamanager;
@@ -732,4 +744,4 @@ private:
 
 };
 
-#endif // KIS_PAINT_DEVICE_H_
+#endif // KIS_PAINT_DEVICE_IMPL_H_

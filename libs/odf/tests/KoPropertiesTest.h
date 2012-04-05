@@ -19,7 +19,7 @@
 #ifndef KO_PROPERTIES_TEST_H
 #define KO_PROPERTIES_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KoPropertiesTest : public QObject
 {

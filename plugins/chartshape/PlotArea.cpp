@@ -294,6 +294,9 @@ void PlotArea::plotAreaInit()
 
 void PlotArea::proxyModelStructureChanged()
 {
+    if (proxyModel()->isLoading())
+        return;
+
     Q_ASSERT( xAxis() );
     Q_ASSERT( yAxis() );
     QMap<DataSet*, Axis*> attachedAxes;
@@ -503,6 +506,7 @@ CoordinatePlaneList PlotArea::Private::coordinatePlanesForChartType( ChartType t
         result.append( kdPolarPlane );
         break;
     case RadarChartType:
+    case FilledRadarChartType:
         result.append( kdRadarPlane );
         break;
     case LastChartType:
@@ -606,10 +610,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
     context.odfLoadingContext().fillStyleStack( plotAreaElement, KoXmlNS::chart, "style-name", "chart" );
     loadOdfAttributes( plotAreaElement, context, OdfAllAttributes );
 
-    // First step is to load the axis. Datasets are attached to an
-    // axis and we need the axis to check for categories.
-
-    // Remove the default axes first.
+    // First step is to clear all old axis instances.
     while ( !d->axes.isEmpty() ) {
         Axis *axis = d->axes.takeLast();
         Q_ASSERT( axis );
@@ -620,40 +621,14 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
         delete axis;
     }
 
-    KoXmlElement n;
-    forEachElement ( n, plotAreaElement ) {
-        if ( n.namespaceURI() != KoXmlNS::chart )
-            continue;
-
-        if ( n.localName() == "axis" ) {
-            if ( !n.hasAttributeNS( KoXmlNS::chart, "dimension" ) )
-                // We have to know what dimension the axis is supposed to be..
-                continue;
-            const QString dimension = n.attributeNS( KoXmlNS::chart, "dimension", QString() );
-            AxisDimension dim;
-            if      ( dimension == "x" ) dim = XAxisDimension;
-            else if ( dimension == "y" ) dim = YAxisDimension;
-            else if ( dimension == "z" ) dim = ZAxisDimension;
-            else continue;
-            Axis *axis = new Axis( this, dim );
-            axis->loadOdf( n, context );
-        }
-    }
-
-    // 2 axes are mandatory, check that we have them.
-    if ( !xAxis() ) {
-        Axis *xAxis = new Axis( this, XAxisDimension );
-        xAxis->setVisible( false );
-    }
-    if ( !yAxis() ) {
-        Axis *yAxis = new Axis( this, YAxisDimension );
-        yAxis->setVisible( false );
-    }
-
-    // Find out about things that are in the plotarea style.
+    // Now find out about things that are in the plotarea style.
     //
     // These things include chart subtype, special things for some
     // chart types like line charts, stock charts, etc.
+    //
+    // Note that this has to happen BEFORE we create a axis and call
+    // there loadOdf method cause the axis will evaluate settings
+    // like the PlotArea::isVertical boolean.
     if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
         styleStack.clear();
         context.odfLoadingContext().fillStyleStack( plotAreaElement, KoXmlNS::chart, "style-name", "chart" );
@@ -696,6 +671,43 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
                 ;
         }
 #endif
+        styleStack.clear();
+        context.odfLoadingContext().fillStyleStack( plotAreaElement, KoXmlNS::chart, "style-name", "chart" );
+    }
+
+    // Now create and load the axis from the ODF. This needs to happen
+    // AFTER we did set some of the basic settings above so the axis
+    // can use those basic settings to evaluate it's own settings
+    // depending on them. This is especially required for the
+    // PlotArea::isVertical() boolean flag else things will go wrong.
+    KoXmlElement n;
+    forEachElement ( n, plotAreaElement ) {
+        if ( n.namespaceURI() != KoXmlNS::chart )
+            continue;
+
+        if ( n.localName() == "axis" ) {
+            if ( !n.hasAttributeNS( KoXmlNS::chart, "dimension" ) )
+                // We have to know what dimension the axis is supposed to be..
+                continue;
+            const QString dimension = n.attributeNS( KoXmlNS::chart, "dimension", QString() );
+            AxisDimension dim;
+            if      ( dimension == "x" ) dim = XAxisDimension;
+            else if ( dimension == "y" ) dim = YAxisDimension;
+            else if ( dimension == "z" ) dim = ZAxisDimension;
+            else continue;
+            Axis *axis = new Axis( this, dim );
+            axis->loadOdf( n, context );
+        }
+    }
+
+    // Two axes are mandatory, check that we have them.
+    if ( !xAxis() ) {
+        Axis *xAxis = new Axis( this, XAxisDimension );
+        xAxis->setVisible( false );
+    }
+    if ( !yAxis() ) {
+        Axis *yAxis = new Axis( this, YAxisDimension );
+        yAxis->setVisible( false );
     }
 
     // Now, after the axes, load the datasets.
@@ -801,10 +813,8 @@ void PlotArea::saveOdf( KoShapeSavingContext &context ) const
                              dataSourceHasLabels );
 
     // Save the axes.
-    if ( isCartesian( d->chartType ) ) {
-        foreach( Axis *axis, d->axes ) {
-            axis->saveOdf( context );
-        }
+    foreach( Axis *axis, d->axes ) {
+        axis->saveOdf( context );
     }
 
     // Save data series
@@ -898,6 +908,7 @@ void PlotArea::saveOdfSubType( KoXmlWriter& xmlWriter,
         // FIXME
         break;
     case RadarChartType:
+    case FilledRadarChartType:
         // Save subtype of the Radar chart.
         switch( d->chartSubtype ) {
         case NoChartSubtype:

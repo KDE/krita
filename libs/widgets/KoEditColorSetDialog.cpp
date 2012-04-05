@@ -39,7 +39,7 @@
 #include <KStandardDirs>
 #include <KDebug>
 
-KoEditColorSet::KoEditColorSet(const QList<KoColorSet *> &palettes, const QString &activePalette, QWidget *parent)
+KoEditColorSetWidget::KoEditColorSetWidget(const QList<KoColorSet *> &palettes, const QString &activePalette, QWidget *parent)
     : QWidget(parent),
     m_colorSets(palettes),
     m_gridLayout(0),
@@ -94,7 +94,7 @@ KoEditColorSet::KoEditColorSet(const QList<KoColorSet *> &palettes, const QStrin
     connect(widget.save, SIGNAL(clicked()), this, SLOT(save()));
 }
 
-KoEditColorSet::~KoEditColorSet()
+KoEditColorSetWidget::~KoEditColorSetWidget()
 {
     // only delete new color sets
     uint colorSetCount = m_colorSets.count();
@@ -108,7 +108,7 @@ KoEditColorSet::~KoEditColorSet()
     }
 }
 
-void KoEditColorSet::setActiveColorSet(int index)
+void KoEditColorSetWidget::setActiveColorSet(int index)
 {
     if (m_gridLayout) {
         delete m_gridLayout;
@@ -136,7 +136,7 @@ void KoEditColorSet::setActiveColorSet(int index)
     m_scrollArea->setWidget(wdg);
 }
 
-void KoEditColorSet::setTextLabel(KoColorPatch *patch)
+void KoEditColorSetWidget::setTextLabel(KoColorPatch *patch)
 {
     widget.colorName->setText(patch->color().toQColor().name());
     if (m_activePatch) {
@@ -149,7 +149,7 @@ void KoEditColorSet::setTextLabel(KoColorPatch *patch)
     widget.remove->setEnabled(true);
 }
 
-void KoEditColorSet::addColor()
+void KoEditColorSetWidget::addColor()
 {
     QColor color;
     int result = KColorDialog::getColor(color);
@@ -167,7 +167,7 @@ void KoEditColorSet::addColor()
     }
 }
 
-void KoEditColorSet::removeColor()
+void KoEditColorSetWidget::removeColor()
 {
     Q_ASSERT(m_activeColorSet);
     for (int i = 0; i < m_activeColorSet->nColors(); i++) {
@@ -179,7 +179,7 @@ void KoEditColorSet::removeColor()
     }
 }
 
-void KoEditColorSet::open()
+void KoEditColorSetWidget::open()
 {
     Q_ASSERT(m_activeColorSet);
     QString fileName = KFileDialog::getOpenFileName(KUrl("file://"+m_activeColorSet->filename()), "*.gpl", this);
@@ -190,14 +190,14 @@ void KoEditColorSet::open()
     widget.selector->setCurrentIndex(widget.selector->count() - 1);
 }
 
-void KoEditColorSet::save()
+void KoEditColorSetWidget::save()
 {
     Q_ASSERT(m_activeColorSet);
     if (!m_activeColorSet->save())
         KMessageBox::error(0, i18n("Cannot write to palette file %1. Maybe it is read-only. ", m_activeColorSet->filename()), i18n("Palette"));
 }
 
-KoColorSet *KoEditColorSet::activeColorSet()
+KoColorSet *KoEditColorSetWidget::activeColorSet()
 {
     m_activeColorSetRequested = true;
     return m_activeColorSet;
@@ -206,7 +206,7 @@ KoColorSet *KoEditColorSet::activeColorSet()
 KoEditColorSetDialog::KoEditColorSetDialog(const QList<KoColorSet *> &palettes, const QString &activePalette, QWidget *parent)
     : KDialog(parent)
 {
-    ui = new KoEditColorSet(palettes, activePalette, this);
+    ui = new KoEditColorSetWidget(palettes, activePalette, this);
     setMainWidget(ui);
     setCaption(i18n("Add/Remove Colors"));
     enableButton(KDialog::Ok, ui->isEnabled());

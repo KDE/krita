@@ -59,7 +59,13 @@ public:
     QPointF convertScreenPos(const QPointF &point) const;
 
     /// reimplemented
+    QPainterPath outline() const;
+
+    /// reimplemented
     QRectF outlineRect() const;
+
+    ///reimplemented
+    ChildZOrderPolicy childZOrderPolicy() {return KoShape::ChildZPassThrough;}
 
     /// set the image collection which is needed to draw bullet from images
     void setImageCollection(KoImageCollection *collection) { m_imageCollection = collection; }
@@ -113,6 +119,8 @@ private:
     KoPageProvider *m_pageProvider;
     KoImageCollection *m_imageCollection;
     QRegion m_paintRegion;
+    KoParagraphStyle * m_paragraphStyle;
+    bool m_clip;
 };
 
 #endif

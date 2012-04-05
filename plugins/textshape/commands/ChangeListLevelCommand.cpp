@@ -72,7 +72,7 @@ int ChangeListLevelCommand::effectiveLevel(int level)
     } else if (m_type == DecreaseLevel) {
         result = level - m_coefficient;
     } else if (m_type == SetLevel) {
-        result = level;
+        result = m_coefficient;
     }
     result = qMax(1, qMin(10, result));
     return result;
@@ -90,7 +90,7 @@ void ChangeListLevelCommand::redo()
         }
     }
     else {
-        for (int i = 0; i < m_blocks.size(); ++i) {
+        for (int i = 0; i < m_blocks.size() && m_lists.value(i); ++i) {
             if (!m_lists.value(i)->style()->hasLevelProperties(m_levels.value(i))) {
                 KoListLevelProperties llp = m_lists.value(i)->style()->levelProperties(m_levels.value(i));
                 llp.setIndent((m_levels.value(i)-1) * 20); //TODO make this configurable

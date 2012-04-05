@@ -23,7 +23,7 @@
 
 #include "flake_export.h"
 
-#include <QtGui/QBrush>
+#include <QBrush>
 
 class KoShape;
 class QGradient;
@@ -78,7 +78,7 @@ namespace KoFlake
      */
     enum StyleType {
         Background, ///< the background / fill style is active
-        Foreground  ///< the foreground / border style is active
+        Foreground  ///< the foreground / stroke style is active
     };
 
     /// clones the given gradient

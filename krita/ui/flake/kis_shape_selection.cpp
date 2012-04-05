@@ -27,7 +27,7 @@
 
 #include <ktemporaryfile.h>
 
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoPathShape.h>
 #include <KoShapeGroup.h>
 #include <KoCompositeOp.h>
@@ -49,6 +49,7 @@
 #include <KoShapeSavingContext.h>
 #include <KoStoreDevice.h>
 #include <KoShapeTransformCommand.h>
+#include <KoElementReference.h>
 
 #include "kis_painter.h"
 #include "kis_paint_device.h"
@@ -159,7 +160,10 @@ bool KisShapeSelection::saveSelection(KoStore * store) const
 
     shapeContext.xmlWriter().startElement("draw:page");
     shapeContext.xmlWriter().addAttribute("draw:name", "");
-    shapeContext.xmlWriter().addAttribute("draw:id", "page1");
+
+    KoElementReference elementRef;
+    elementRef.saveOdf(&shapeContext.xmlWriter(), KoElementReference::DrawId);
+
     shapeContext.xmlWriter().addAttribute("draw:master-page-name", "Default");
 
     saveOdf(shapeContext);
@@ -307,7 +311,7 @@ void KisShapeSelection::paintComponent(QPainter& painter, const KoViewConverter&
     Q_UNUSED(converter);
 }
 
-void KisShapeSelection::renderToProjection(KisPixelSelection* projection)
+void KisShapeSelection::renderToProjection(KisPaintDeviceSP projection)
 {
     Q_ASSERT(projection);
     Q_ASSERT(m_image);
@@ -318,13 +322,13 @@ void KisShapeSelection::renderToProjection(KisPixelSelection* projection)
     renderSelection(projection, boundingRect.toAlignedRect());
 }
 
-void KisShapeSelection::renderToProjection(KisPixelSelection* projection, const QRect& r)
+void KisShapeSelection::renderToProjection(KisPaintDeviceSP projection, const QRect& r)
 {
     Q_ASSERT(projection);
     renderSelection(projection, r);
 }
 
-void KisShapeSelection::renderSelection(KisPixelSelection* projection, const QRect& r)
+void KisShapeSelection::renderSelection(KisPaintDeviceSP projection, const QRect& r)
 {
     Q_ASSERT(projection);
     Q_ASSERT(m_image);

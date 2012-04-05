@@ -24,6 +24,8 @@
 #include "KoVariableManager.h"
 #include "kotext_export.h"
 
+#include <KoOdfBibliographyConfiguration.h>
+
 // Qt + kde
 #include <QHash>
 #include <QTextCharFormat>
@@ -83,6 +85,17 @@ public:
      * @param object the inline object to insert.
      */
     void insertInlineObject(QTextCursor &cursor, KoInlineObject *object);
+
+    /**
+     * Add inline object into the manager.
+     *
+     * This methods add the inline object into the manager. This is useful if you have a command
+     * that removes and adds a inline object to the manager. If the object already was inserted before
+     * (the object id is already set) it keeps the old id, otherwise a new id will be generated.
+     *
+     * @param object the inline object to insert.
+     */
+    void addInlineObject(KoInlineObject* object);
 
     /**
      * Remove an inline object from this manager (as well as the document).
@@ -164,6 +177,9 @@ public:
 
     QMap<QString, KoInlineCite*> citations(bool duplicatesEnabled = true) const;
 
+    QList<KoInlineCite*> citationsSortedByPosition(bool duplicatesEnabled = true,
+                                                           QTextBlock block = QTextBlock()) const;
+
 public slots:
     void documentInformationUpdated(const QString &info, const QString &data);
 
@@ -174,6 +190,7 @@ signals:
     void propertyChanged(int, const QVariant &variant);
 
 private:
+    void insertObject(KoInlineObject *object);
 
     QHash<int, KoInlineObject*> m_objects;
     QHash<int, KoInlineObject*> m_deletedObjects;

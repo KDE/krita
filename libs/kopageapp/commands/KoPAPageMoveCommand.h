@@ -20,7 +20,7 @@
 #ifndef KOPAPAGEMOVECOMMAND_H
 #define KOPAPAGEMOVECOMMAND_H
 
-#include <QtCore/QMap>
+#include <QMap>
 #include <kundo2command.h>
 
 #include "kopageapp_export.h"

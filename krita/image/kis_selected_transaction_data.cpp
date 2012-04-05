@@ -27,19 +27,23 @@
 KisSelectedTransactionData::KisSelectedTransactionData(const QString& name, KisNodeSP node, KUndo2Command* parent)
         : KisTransactionData(name, node->paintDevice(), parent)
         , m_selTransaction(0)
-        , m_hadSelection(false /*device->hasSelection()*/)
+        , m_hadSelection(false)
 {
-    m_layer = dynamic_cast<KisLayer*>(node.data());
-    while (!m_layer && node->parent()) {
-        m_layer = dynamic_cast<KisLayer*>(node->parent().data());
-        node = node->parent();
-    }
+    KisNodeSP currentNode = node;
 
-    if (m_layer->selection())
-        m_selTransaction = new KisTransactionData(name, KisPaintDeviceSP(m_layer->selection()->getOrCreatePixelSelection().data()));
-//     if(! m_hadSelection) {
-//         m_device->deselect(); // let us not be the cause of select
-//     }
+    do {
+        m_layer = dynamic_cast<KisLayer*>(currentNode.data());
+    } while(!m_layer && (currentNode = currentNode->parent()));
+
+    KisSelectionSP selection = m_layer->selection();
+    if(selection) {
+        KisPaintDeviceSP selectionPaintDevice =
+            selection->getOrCreatePixelSelection();
+
+        if(selectionPaintDevice != node->paintDevice()) {
+            m_selTransaction = new KisTransactionData(name, selectionPaintDevice);
+        }
+    }
 }
 
 KisSelectedTransactionData::~KisSelectedTransactionData()
@@ -54,10 +58,6 @@ void KisSelectedTransactionData::redo()
 
     if (m_selTransaction)
         m_selTransaction->redo();
-//     if(m_redoHasSelection)
-//         m_device->selection();
-//     else
-//         m_device->deselect();
 
     if (m_layer->selection()) {
         m_layer->selection()->updateProjection();
@@ -69,17 +69,11 @@ void KisSelectedTransactionData::redo()
 
 void KisSelectedTransactionData::undo()
 {
-//     m_redoHasSelection = m_device->hasSelection();
-
     KisTransactionData::undo();
 
     if (m_selTransaction)
         m_selTransaction->undo();
-//     if(m_hadSelection)
-//         m_device->selection();
-//     else
-//         m_device->deselect();
-//
+
     if (m_layer->selection()) {
         m_layer->selection()->updateProjection();
     }
@@ -90,14 +84,6 @@ void KisSelectedTransactionData::undo()
 
 void KisSelectedTransactionData::undoNoUpdate()
 {
-//     m_redoHasSelection = m_device->hasSelection();
-//
-//     KisTransactionData::undoNoUpdate();
-//     m_selTransaction->undoNoUpdate();
-//     if(m_hadSelection)
-//         m_device->selection();
-//     else
-//         m_device->deselect();
 }
 
 void KisSelectedTransactionData::endTransaction()

@@ -20,7 +20,7 @@
 #ifndef KOPROGRESSUPDATER_TEST_H
 #define KOPROGRESSUPDATER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 #include <threadweaver/Job.h>
 
 class KoProgressUpdaterTest : public QObject

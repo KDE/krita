@@ -22,9 +22,9 @@
 
 #include "testfindmatch.h"
 
-#include <QtGui/QTextDocument>
-#include <QtGui/QTextCursor>
-#include <QtTest/QTest>
+#include <QTextDocument>
+#include <QTextCursor>
+#include <QTest>
 
 #include "KoFindMatch.h"
 

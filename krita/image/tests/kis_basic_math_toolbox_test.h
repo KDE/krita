@@ -19,7 +19,7 @@
 #ifndef KIS_BASIC_MATH_TOOLBOX_TEST_H
 #define KIS_BASIC_MATH_TOOLBOX_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisBasicMathToolboxTest : public QObject
 {

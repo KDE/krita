@@ -24,12 +24,10 @@ class KoToolFactoryBase::Private
 public:
     Private(const QString &i)
             : priority(100),
-            inputDeviceAgnostic(true),
             id(i)
     {
     }
     int priority;
-    bool inputDeviceAgnostic;
     QString toolType;
     QString tooltip;
     QString activationId;
@@ -112,16 +110,6 @@ void KoToolFactoryBase::setPriority(int newPriority)
 void KoToolFactoryBase::setShortcut(const KShortcut & shortcut)
 {
     d->shortcut = shortcut;
-}
-
-void KoToolFactoryBase::setInputDeviceAgnostic(bool agnostic)
-{
-    d->inputDeviceAgnostic = agnostic;
-}
-
-bool KoToolFactoryBase::inputDeviceAgnostic() const
-{
-    return d->inputDeviceAgnostic;
 }
 
 bool KoToolFactoryBase::canCreateTool(KoCanvasBase *) const

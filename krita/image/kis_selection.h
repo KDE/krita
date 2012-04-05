@@ -24,12 +24,12 @@
 #include "krita_export.h"
 #include "kis_paint_device.h"
 
-enum selectionMode {
+enum SelectionMode {
     PIXEL_SELECTION,
     SHAPE_PROTECTION
 };
 
-enum selectionAction {
+enum SelectionAction {
     SELECTION_REPLACE,
     SELECTION_ADD,
     SELECTION_SUBTRACT,
@@ -42,7 +42,7 @@ enum selectionAction {
 class KisSelectionComponent;
 
 /**
- * KisSelection is a compisite object. It may contain an instance
+ * KisSelection is a composite object. It may contain an instance
  * of KisPixelSelection and a KisShapeSelection object. Both these
  * selections are merged into a projection of the KisSelection.
  *
@@ -55,28 +55,24 @@ class KisSelectionComponent;
  * automatic updating after changing the contents of one or more
  * of the selection components.
  */
-class KRITAIMAGE_EXPORT KisSelection : public QObject, public KisShared
+class KRITAIMAGE_EXPORT KisSelection : public KisShared
 {
-    Q_OBJECT
+
 public:
-
-    /**
-     * Create a new KisSelection.
-     */
-    KisSelection();
-
     /**
      * Create a new KisSelection.
      *
      * @param defaultBounds defines the bounds of the selection when
      * Select All is initiated.
      */
-    KisSelection(KisDefaultBounds *defaultBounds);
+    KisSelection(KisDefaultBoundsBaseSP defaultBounds = 0);
 
     /**
      * Copy the selection. The selection components are copied, too.
      */
     KisSelection(const KisSelection& rhs);
+
+    KisSelection &operator=(const KisSelection &rhs);
 
     /**
      * Delete the selection. The shape selection component is deleted, the
@@ -85,8 +81,18 @@ public:
      */
     virtual ~KisSelection();
 
+    /**
+     * The paint device of the pixel selection should report
+     * about it's setDirty events to its parent. The creator
+     * should set the parent manually if he wants to get the
+     * signals
+     */
+    void setParentNode(KisNodeWSP node);
+
     bool hasPixelSelection() const;
     bool hasShapeSelection() const;
+
+    QVector<QPolygon> outline() const;
 
     /**
      * return the pixel selection component of this selection or zero
@@ -115,7 +121,7 @@ public:
      * as pixel selection. You must read selection data from this
      * paint device only
      */
-    KisPixelSelectionSP projection() const;
+    KisPaintDeviceSP projection() const;
 
     /**
      * Updates the projection of the selection. You should call this
@@ -125,8 +131,6 @@ public:
     void updateProjection(const QRect& rect);
     void updateProjection();
 
-    void setDeselected(bool deselected);
-    bool isDeselected();
     void setVisible(bool visible);
     bool isVisible();
 
@@ -135,28 +139,40 @@ public:
      * of the underlying projection
      */
     bool isTotallyUnselected(const QRect & r) const;
-    bool isProbablyTotallyUnselected(const QRect & r) const;
+
     QRect selectedRect() const;
     QRect selectedExactRect() const;
+
     void setX(qint32 x);
     void setY(qint32 y);
+
     qint32 x() const;
     qint32 y() const;
 
-    void setDefaultBounds(KisDefaultBounds *bounds);
+    void setDefaultBounds(KisDefaultBoundsBaseSP bounds);
 
     void clear();
-    KisPixelSelectionSP mergedPixelSelection();
+
+    /**
+     * @brief flatten creates a new pixel selection component from the shape selection
+     * and throws away the shape selection. This has no effect if there is no
+     * shape selection.
+     */
+    void flatten();
 
     KDE_DEPRECATED quint8 selected(qint32 x, qint32 y) const;
     KDE_DEPRECATED void setDirty(const QRect &rc = QRect());
 
 private:
+    friend class KisSelectionTest;
+    friend class KisMaskTest;
+    friend class KisAdjustmentLayerTest;
+    KisNodeWSP parentNode() const;
 
-    KisDefaultBounds *defaultBounds() const;
+private:
 
     struct Private;
-    Private *const m_d;
+    Private * const m_d;
 };
 
 #endif // KIS_SELECTION_H_

@@ -85,14 +85,14 @@ void Image::scale(double widthfactor, double heightfactor)
     m_image->scaleImage(newSize, m_image->xRes(), m_image->yRes(), KisFilterStrategyRegistry::instance()->value("Mitchell"));
 }
 
-void Image::rotate(double angle)
+void Image::rotateImage(double angle)
 {
-    m_image->rotate(angle);
+    m_image->rotateImage(angle);
 }
 
 void Image::shear(double xangle, double yangle)
 {
-    m_image->shear(xangle, yangle, 0);
+    m_image->shear(xangle, yangle);
 }
 
 QObject* Image::createPaintLayer(const QString& name, int opacity)

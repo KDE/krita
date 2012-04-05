@@ -24,7 +24,6 @@
 #include <QCheckBox>
 #include <QSlider>
 #include <QComboBox>
-#include <QPixmap>
 #include <QImage>
 #include <QLabel>
 

@@ -26,7 +26,6 @@
 
 #include "kis_types.h"
 #include "kis_mask.h"
-#include "kis_image.h"
 
 /**
  * An selection mask is a single channel mask that applies a
@@ -63,25 +62,12 @@ public:
     bool accept(KisNodeVisitor &v);
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
-    /**
-     * @return the deselected selection or 0 if no selection was deselected
-     */
-    KisSelectionSP deleselectedSelection();
-
-    /**
-     * Set deselected selection
-     */
-    void setDeleselectedSelection(KisSelectionSP selection);
-
     virtual KoDocumentSectionModel::PropertyList sectionModelProperties() const;
     virtual void setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties);
 
     void setVisible(bool visible);
     bool active() const;
     void setActive(bool active);
-
-signals:
-    void changeActivity(KisSelectionMask* mask, bool active);
 
 private:
 

@@ -19,7 +19,7 @@
 #ifndef _KIS_CUBIC_CURVE_TEST_H_
 #define _KIS_CUBIC_CURVE_TEST_H_
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 #include "kis_types.h"
 

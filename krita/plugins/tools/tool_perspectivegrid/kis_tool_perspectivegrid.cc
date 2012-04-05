@@ -19,11 +19,11 @@
 
 #include "kis_tool_perspectivegrid.h"
 
-#include <qapplication.h>
-#include <qpainter.h>
-#include <qregion.h>
-#include <qwidget.h>
-#include <qlayout.h>
+#include <QApplication>
+#include <QPainter>
+#include <QRegion>
+#include <QWidget>
+#include <QLayout>
 
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -80,6 +80,8 @@ void KisToolPerspectiveGrid::deactivate()
         m_points.clear();
     }
     m_canvas->updateCanvas();
+
+    KisTool::deactivate();
 }
 
 bool KisToolPerspectiveGrid::mouseNear(const QPointF& mousep, const QPointF& point)

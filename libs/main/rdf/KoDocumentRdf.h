@@ -27,10 +27,10 @@
 #include <KoDataCenterBase.h>
 #include <kconfig.h>
 
-#include <QtCore/QObject>
-#include <QtCore/QMap>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
+#include <QObject>
+#include <QMap>
+#include <QString>
+#include <QStringList>
 #include <Soprano/Soprano>
 #include <QTextBlockUserData>
 #include <QTreeWidgetItem>
@@ -84,7 +84,7 @@ class KoRdfFoaF;
  * locations() methods of this class. Each of these methods optionally
  * takes a Soprano::Model and returns a list of SemanticItems of a
  * particular subclass. If you do not pass an Soprano::Model to the
- * methods the defualt model() of the KoDocumentRdf is used. By
+ * methods the default model() of the KoDocumentRdf is used. By
  * allowing you to pass a model explicitly, you can find contacts that
  * exist in a subset of the full Rdf graph for a document. This is
  * useful if you want to find the contacts in the users current
@@ -177,7 +177,7 @@ public:
 
     /**
      * Find all the KoTextInlineRdf objects that exist in the
-     * document and update the statements in the Soprano::model to
+     * document and update the statements in the Soprano::(model) to
      * reflect the current state of the inline Rdf.
      */
     void updateInlineRdfStatements(const QTextDocument *qdoc);
@@ -506,6 +506,15 @@ private:
      */
     void addLocations(Soprano::Model *m, QList<KoRdfLocation*> &ret,
                       bool isGeo84, const QString &sparql);
+
+
+    /**
+     * idrefList queries soprano after loading and creates a list of all rdfid's that
+     * where found in the manifest.rdf document. This list is used to make sure we do not
+     * create more inline rdf objects than necessary
+     * @return a list of xml-id's
+     */
+    QStringList idrefList() const;
 
 private:
 

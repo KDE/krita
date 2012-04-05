@@ -33,6 +33,7 @@
 
 #include <kdebug.h>
 #include <QTimer>
+#include <QApplication>
 
 KoToolProxyPrivate::KoToolProxyPrivate(KoToolProxy *p)
     : activeTool(0),
@@ -43,6 +44,7 @@ KoToolProxyPrivate::KoToolProxyPrivate(KoToolProxy *p)
 {
     scrollTimer.setInterval(100);
     mouseLeaveWorkaround = false;
+    multiClickCount = 0;
 }
 
 void KoToolProxyPrivate::timeout() // Auto scroll the canvas
@@ -191,67 +193,70 @@ void KoToolProxy::tabletEvent(QTabletEvent *event, const QPointF &point)
     d->mouseLeaveWorkaround = true;
 }
 
-void KoToolProxy::mousePressEvent(QMouseEvent *event, const QPointF &point)
+void KoToolProxy::mousePressEvent(KoPointerEvent *ev)
 {
     d->mouseLeaveWorkaround = false;
     KoInputDevice id;
     KoToolManager::instance()->priv()->switchInputDevice(id);
-    d->mouseDownPoint = event->pos();
+    d->mouseDownPoint = ev->pos();
 
     if (d->tabletPressed) // refuse to send a press unless there was a release first.
         return;
 
-    KoPointerEvent ev(event, point);
-    if (d->activeTool)
-        d->activeTool->mousePressEvent(&ev);
-    else
-        event->ignore();
+    QPointF globalPoint = ev->globalPos();
+    if (d->multiClickGlobalPoint != globalPoint) {
+        if (qAbs(globalPoint.x() - d->multiClickGlobalPoint.x()) > 5||
+            qAbs(globalPoint.y() - d->multiClickGlobalPoint.y()) > 5) {
+            d->multiClickCount = 0;
+        }
+        d->multiClickGlobalPoint = globalPoint;
+    }
+
+    if (d->multiClickCount && d->multiClickTimeStamp.elapsed() < QApplication::doubleClickInterval()) {
+        // One more multiclick;
+        d->multiClickCount++;
+    } else {
+        d->multiClickTimeStamp.start();
+        d->multiClickCount = 1;
+    }
+
+    if (d->activeTool) {
+        switch (d->multiClickCount) {
+        case 0:
+        case 1:
+            d->activeTool->mousePressEvent(ev);
+            break;
+        case 2:
+            d->activeTool->mouseDoubleClickEvent(ev);
+            break;
+        case 3:
+        default:
+            d->activeTool->mouseTripleClickEvent(ev);
+            break;
+        }
+    } else {
+        d->multiClickCount = 0;
+        ev->ignore();
+    }
 }
 
-void KoToolProxy::mousePressEvent(KoPointerEvent *event)
+void KoToolProxy::mousePressEvent(QMouseEvent *event, const QPointF &point)
 {
-    d->mouseLeaveWorkaround = false;
-    KoInputDevice id;
-    KoToolManager::instance()->priv()->switchInputDevice(id);
-    d->mouseDownPoint = event->pos();
-
-    if (d->tabletPressed) // refuse to send a press unless there was a release first.
-        return;
-
-    if (d->activeTool)
-        d->activeTool->mousePressEvent(event);
-    else
-        event->ignore();
+    KoPointerEvent ev(event, point);
+    mousePressEvent(&ev);
 }
 
 void KoToolProxy::mouseDoubleClickEvent(QMouseEvent *event, const QPointF &point)
 {
-    d->mouseLeaveWorkaround = false;
-    KoInputDevice id;
-    KoToolManager::instance()->priv()->switchInputDevice(id);
-    if (d->activeTool == 0) {
-        event->ignore();
-        return;
-    }
-
     KoPointerEvent ev(event, point);
-    d->activeTool->mouseDoubleClickEvent(&ev);
-    if (! event->isAccepted())
-        d->activeTool->canvas()->shapeManager()->suggestChangeTool(&ev);
+    mouseDoubleClickEvent(&ev);
 }
 
 void KoToolProxy::mouseDoubleClickEvent(KoPointerEvent *event)
 {
-    d->mouseLeaveWorkaround = false;
-    KoInputDevice id;
-    KoToolManager::instance()->priv()->switchInputDevice(id);
-    if (d->activeTool == 0) {
-        event->ignore();
-        return;
-    }
-
-    d->activeTool->mouseDoubleClickEvent(event);
-    if (!event->isAccepted())
+     // let us handle it as any other mousepress (where we then detect multi clicks
+    mousePressEvent(event);
+    if (!event->isAccepted() && d->activeTool)
         d->activeTool->canvas()->shapeManager()->suggestChangeTool(event);
 }
 

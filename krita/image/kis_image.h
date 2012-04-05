@@ -28,11 +28,14 @@
 
 #include <KoColorConversionTransformation.h>
 
+#include "kis_paint_device.h" // msvc cannot handle forward declarations, so include kis_paint_device here
 #include "kis_types.h"
 #include "kis_shared.h"
 #include "kis_node_graph_listener.h"
 #include "kis_node_facade.h"
+#include "kis_default_bounds.h"
 #include "kis_image_interfaces.h"
+
 
 class KoDocument;
 class KoColorSpace;
@@ -49,6 +52,7 @@ class KisFilterStrategy;
 class KoColorProfile;
 class KoUpdater;
 class KisPerspectiveGrid;
+class KisLayerComposition;
 
 namespace KisMetaData
 {
@@ -79,12 +83,8 @@ public:
 
 public: // KisNodeGraphListener implementation
 
-    void aboutToAddANode(KisNode *parent, int index);
     void nodeHasBeenAdded(KisNode *parent, int index);
     void aboutToRemoveANode(KisNode *parent, int index);
-    void nodeHasBeenRemoved(KisNode *parent, int index);
-    void aboutToMoveNode(KisNode * parent, int oldIndex, int newIndex);
-    void nodeHasBeenMoved(KisNode * parent, int oldIndex, int newIndex);
     void nodeChanged(KisNode * node);
     void requestProjectionUpdate(KisNode *node, const QRect& rect);
 
@@ -160,28 +160,6 @@ public:
     KisSelectionSP globalSelection() const;
 
     /**
-     * Replaces the current global selection with globalSelection. If
-     * globalSelection is empty, a new selection object will be
-     * created that is by default completely deselected.
-     */
-    void setGlobalSelection(KisSelectionSP globalSelection = 0);
-
-    /**
-     * Removes the global selection.
-     */
-    void removeGlobalSelection();
-
-    /**
-     * @return the deselected global selection or 0 if no global selection was deselected
-     */
-    KisSelectionSP deselectedGlobalSelection();
-
-    /**
-     * Set deselected global selection
-     */
-    void setDeleselectedGlobalSelection(KisSelectionSP selection);
-
-    /**
      * Retrieve the next automatic layername (XXX: fix to add option to return Mask X)
      */
     QString nextLayerName() const;
@@ -225,13 +203,26 @@ public:
 
     /**
      * Execute a rotate transform on all layers in this image.
+     * Image is resized to fit rotated image.
      */
-    void rotate(double radians);
+    void rotateImage(double radians);
+
+    /**
+     * Execute a rotate transform on on a subtree of this image.
+     * Image is not resized.
+     */
+    void rotateNode(KisNodeSP node, double radians);
 
     /**
      * Execute a shear transform on all layers in this image.
      */
-    void shear(double angleX, double angleY, KoUpdater *m_progress);
+    void shear(double angleX, double angleY);
+
+    /**
+     * Shear a node and all its children.
+     * @param angleX, @param angleY are given in degrees.
+     */
+    void shearNode(KisNodeSP node, double angleX, double angleY);
 
     /**
      * Convert the image and all its layers to the dstColorSpace
@@ -257,6 +248,9 @@ public:
      *
      * This is essential if you have loaded an image that didn't
      * have an embedded profile to which you want to attach the right profile.
+     *
+     * This does not create an undo action; only call it when creating or
+     * loading an image.
      */
     void assignImageProfile(const KoColorProfile *profile);
 
@@ -446,6 +440,8 @@ public:
      */
     KisLayerSP flattenLayer(KisLayerSP layer);
 
+
+    /// This overrides interface for KisDefaultBounds
     /// @return the exact bounds of the image in pixel coordinates.
     QRect bounds() const;
 
@@ -492,19 +488,29 @@ public:
 
     KisImageSignalRouter* signalRouter();
 
-signals:
+    /**
+     * Returns whether we can reselect current global selection
+     *
+     * \see reselectGlobalSelection()
+     */
+    bool canReselectGlobalSelection();
 
     /**
-     * Emitted when the list of layers has changed completely.
-     * This means e.g. when the image is flattened, but not when it is rotated,
-     * as the layers only change internally then.
+     * Returns the layer compositions for the image
      */
-    void sigLayersChanged(KisGroupLayerSP rootLayer);
+    QList<KisLayerComposition*> compositions();
+
     /**
-     * Emitted when the list of layers has changed completely, and emitted after \ref sigLayersChanged has been
-     * emitted.
+     * Adds a new layer composition, will be saved with the image
      */
-    void sigPostLayersChanged(KisGroupLayerSP rootLayer);
+    void addComposition(KisLayerComposition* composition);
+
+    /**
+     * Remove the layer compostion
+     */
+    void removeComposition(KisLayerComposition* composition);
+
+signals:
 
     /**
      *  Emitted whenever an action has caused the image to be
@@ -526,44 +532,48 @@ signals:
     void sigResolutionChanged(double xRes, double yRes);
 
     /**
-     * Inform the model that we're going to add a layer.
-     */
-    void sigAboutToAddANode(KisNode *parent, int index);
-
-    /**
-     * Inform the model we're done adding a layer.
-     */
-    void sigNodeHasBeenAdded(KisNode *parent, int index);
-
-    /**
-     * Inform the model we're going to remove a layer.
-     */
-    void sigAboutToRemoveANode(KisNode *parent, int index);
-
-    /**
-     * Inform the model we're done removing a layer.
-     */
-    void sigNodeHasBeenRemoved(KisNode *parent, int index);
-
-    /**
-     * Inform the model we're about to move a layer.
-     */
-    void sigAboutToMoveNode(KisNode *parent, int oldIndex, int newIndex);
-
-    /**
-     * Inform the model we're done moving a layer.
-     */
-    void sigNodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex);
-
-    /**
      * Inform the model that a node was changed
      */
-    void sigNodeChanged(KisNode * node);
+    void sigNodeChanged(KisNodeSP node);
 
     /**
      * Inform that the image is going to be deleted
      */
     void sigAboutToBeDeleted();
+
+    /**
+     * The signal is emitted right after a node has been connected
+     * to the graph of the nodes.
+     *
+     * WARNING: you must not request any graph-related information
+     * about the node being run in a not-scheduler thread. If you need
+     * information about the parent/siblings of the node connect
+     * with Qt::DirectConnection, get needed information and then
+     * emit another Qt::AutoConnection signal to pass this information
+     * to your thread. See details of the implementation
+     * in KisDummiesfacadeBase.
+     */
+    void sigNodeAddedAsync(KisNodeSP node);
+
+    /**
+     * This signal is emitted right before a node is going to removed
+     * from the graph of the nodes.
+     *
+     * WARNING: you must not request any graph-related information
+     * about the node being run in a not-scheduler thread.
+     *
+     * \see comment in sigNodeAddedAsync()
+     */
+    void sigRemoveNodeAsync(KisNodeSP node);
+
+    /**
+     * Emitted when the root node of the image has changed.
+     * It happens, e.g. when we flatten the image. When
+     * this happens the reciever should reload information
+     * about the image
+     */
+    void sigLayersChangedAsync();
+
 
 public slots:
     KisCompositeProgressProxy* compositeProgressProxy();
@@ -601,6 +611,11 @@ private:
     void emitSizeChanged();
 
     void resizeImageImpl(const QRect& newRect, bool cropLayers);
+    void rotateImpl(const QString &actionName, KisNodeSP rootNode,
+                    bool resizeImage, double radians);
+    void shearImpl(const QString &actionName, KisNodeSP rootNode,
+                   bool resizeImage, double angleX, double angleY,
+                   const QPointF &origin);
 
     void refreshHiddenArea(KisNodeSP rootNode, const QRect &preparedArea);
     static QRect realNodeExtent(KisNodeSP rootNode, QRect currentRect = QRect());
@@ -610,6 +625,33 @@ private:
 
     friend class KisImageSetProjectionColorSpaceCommand;
     void setProjectionColorSpace(const KoColorSpace * colorSpace);
+
+
+    friend class KisDeselectGlobalSelectionCommand;
+    friend class KisReselectGlobalSelectionCommand;
+    friend class KisSetGlobalSelectionCommand;
+    friend class KisImageTest;
+
+    /**
+     * Replaces the current global selection with globalSelection. If
+     * \p globalSelection is empty, removes the selection object, so that
+     * \ref globalSelection() will return 0 after that.
+     */
+    void setGlobalSelection(KisSelectionSP globalSelection);
+
+    /**
+     * Deselects current global selection.
+     * \ref globalSelection() will return 0 after that.
+     */
+    void deselectGlobalSelection();
+
+    /**
+     * Reselects current deselected selection
+     *
+     * \see deselectGlobalSelection()
+     */
+    void reselectGlobalSelection();
+
 private:
     class KisImagePrivate;
     KisImagePrivate * const m_d;

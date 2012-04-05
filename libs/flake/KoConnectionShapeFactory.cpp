@@ -27,7 +27,7 @@
 
 #include <KoXmlNS.h>
 #include <klocale.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoShapeLoadingContext.h>
 
 KoConnectionShapeFactory::KoConnectionShapeFactory()
@@ -42,7 +42,7 @@ KoConnectionShapeFactory::KoConnectionShapeFactory()
 KoShape* KoConnectionShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 {
     KoConnectionShape * shape = new KoConnectionShape();
-    shape->setBorder(new KoLineBorder());
+    shape->setStroke(new KoShapeStroke());
     shape->setShapeId(KoPathShapeId);
     return shape;
 }

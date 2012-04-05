@@ -25,6 +25,7 @@
 #include "flake_export.h"
 
 #include <QList>
+#include <QMetaType>
 
 class KoCanvasBase;
 class KoShape;
@@ -121,5 +122,7 @@ private:
     class Private;
     Private * const d;
 };
+
+Q_DECLARE_METATYPE(KoShapeController *)
 
 #endif

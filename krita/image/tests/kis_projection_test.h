@@ -19,7 +19,7 @@
 #ifndef KIS_PROJECTION_TEST_H
 #define KIS_PROJECTION_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisProjectionTest : public QObject
 {

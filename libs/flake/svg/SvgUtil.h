@@ -21,9 +21,9 @@
 #define SVGUTIL_H
 
 #include "flake_export.h"
-#include <QtCore/QPointF>
-#include <QtCore/QSizeF>
-#include <QtGui/QTransform>
+#include <QPointF>
+#include <QSizeF>
+#include <QTransform>
 
 class QString;
 class QRectF;

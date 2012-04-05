@@ -19,7 +19,7 @@
 #ifndef _KO_CONVERSIONS_H_
 #define _KO_CONVERSIONS_H_
 
-#include <qglobal.h>
+#include <QtGlobal>
 #include "pigment_export.h"
 
 /**

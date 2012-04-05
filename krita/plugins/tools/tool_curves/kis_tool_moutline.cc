@@ -92,6 +92,7 @@ void KisToolMagnetic::deactivate()
     m_actionOptions = NOOPTIONS;
     m_dragging = false;
     m_drawPivots = true;
+    KisToolCurve::deactivate();
 }
 
 void KisToolMagnetic::keyPress(QKeyEvent *event)

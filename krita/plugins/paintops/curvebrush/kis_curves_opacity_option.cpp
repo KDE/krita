@@ -27,7 +27,7 @@ KisCurvesOpacityOption::KisCurvesOpacityOption()
 }
 
 
-double KisCurvesOpacityOption::apply(const KisPaintInformation & info, qreal opacity) const
+qreal KisCurvesOpacityOption::apply(const KisPaintInformation & info, qreal opacity) const
 {
     if (!isChecked()) {
         return opacity;

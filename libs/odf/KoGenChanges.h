@@ -42,28 +42,14 @@ public:
     ~KoGenChanges();
 
     /**
-     * Look up a change in the collection, inserting it if necessary.
-     * This assigns a name to the change and returns it.
+     * Look up a change in the collection, inserting it if necessary. If the change already
+     * exists, return the existing name. If not, assign a name to the change and returns it.
      *
      * @param change the change to look up.
-     * @param name proposed internal name for the change.
-     * If this name is already in use (for another change), then a number is appended
-     * to it until unique.
-     *
+     * @param name proposed internal name for the change. It will be modified to be guaranteed unique.
      * @return the name for this change
      */
-    QString insert(const KoGenChange &change, const QString &name = QString());
-
-    /**
-     * Return the entire collection of styles
-     * Use this for saving the styles
-     */
-    QMap<KoGenChange, QString> changes() const;
-
-    /**
-     * @return an existing change by name
-     */
-    const KoGenChange *change(const QString &name) const;
+    QString insert(const KoGenChange &change);
 
     /**
      * Save changes.
@@ -74,7 +60,7 @@ public:
      * @param xmlWriter
      * @param stylesDotXml
      */
-    void saveOdfChanges(KoXmlWriter *xmlWriter) const;
+    void saveOdfChanges(KoXmlWriter *xmlWriter, bool trackChanges) const;
 
 private:
     class Private;

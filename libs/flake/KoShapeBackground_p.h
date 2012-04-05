@@ -20,7 +20,7 @@
 #ifndef KoShapeBackgroundPrivate_H
 #define KoShapeBackgroundPrivate_H
 
-#include <QtCore/QAtomicInt>
+#include <QAtomicInt>
 
 class KoShapeBackgroundPrivate
 {

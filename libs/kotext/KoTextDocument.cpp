@@ -26,6 +26,8 @@
 #include <QVariantList>
 
 #include <kdebug.h>
+#include <KoTextDebug.h>
+
 #include <kundo2stack.h>
 
 #include "KoTextDocument.h"
@@ -36,8 +38,12 @@
 #include "KoList.h"
 #include "KoOdfLineNumberingConfiguration.h"
 #include "changetracker/KoChangeTracker.h"
+#include <KoShapeController.h>
 
 Q_DECLARE_METATYPE(QAbstractTextDocumentLayout::Selection)
+Q_DECLARE_METATYPE(QTextFrame*)
+Q_DECLARE_METATYPE(QTextCharFormat)
+Q_DECLARE_METATYPE(QTextBlockFormat)
 
 const QUrl KoTextDocument::StyleManagerURL = QUrl("kotext://stylemanager");
 const QUrl KoTextDocument::ListsURL = QUrl("kotext://lists");
@@ -53,8 +59,9 @@ const QUrl KoTextDocument::SelectionsURL = QUrl("kotext://selections");
 const QUrl KoTextDocument::LayoutTextPageUrl = QUrl("kotext://layoutTextPage");
 const QUrl KoTextDocument::ParaTableSpacingAtStartUrl = QUrl("kotext://spacingAtStart");
 const QUrl KoTextDocument::IndexGeneratorManagerUrl = QUrl("kotext://indexGeneratorManager");
-
-Q_DECLARE_METATYPE(QTextFrame*)
+const QUrl KoTextDocument::FrameCharFormatUrl = QUrl("kotext://frameCharFormat");
+const QUrl KoTextDocument::FrameBlockFormatUrl = QUrl("kotext://frameBlockFormat");
+const QUrl KoTextDocument::ShapeControllerUrl = QUrl("kotext://shapeController");
 
 KoTextDocument::KoTextDocument(QTextDocument *document)
     : m_document(document)
@@ -138,6 +145,24 @@ KoChangeTracker *KoTextDocument::changeTracker() const
     }
 }
 
+void KoTextDocument::setShapeController(KoShapeController *controller)
+{
+    QVariant v;
+    v.setValue(controller);
+    m_document->addResource(KoTextDocument::ShapeController, ShapeControllerUrl, v);
+}
+
+KoShapeController *KoTextDocument::shapeController() const
+{
+    QVariant resource = m_document->resource(KoTextDocument::ShapeController, ShapeControllerUrl);
+    if (resource.isValid()) {
+        return resource.value<KoShapeController *>();
+    }
+    else {
+        return 0;
+    }
+}
+
 void KoTextDocument::setLineNumberingConfiguration(KoOdfLineNumberingConfiguration *lineNumberingConfiguration)
 {
     lineNumberingConfiguration->setParent(m_document);
@@ -170,6 +195,9 @@ void KoTextDocument::setUndoStack(KUndo2Stack *undoStack)
     QVariant v;
     v.setValue<void*>(undoStack);
     m_document->addResource(KoTextDocument::UndoStack, UndoStackURL, v);
+    if (styleManager()) {
+        styleManager()->setUndoStack(undoStack);
+    }
 }
 
 KUndo2Stack *KoTextDocument::undoStack() const
@@ -221,6 +249,9 @@ KoList *KoTextDocument::list(const QTextBlock &block) const
 
 KoList *KoTextDocument::list(QTextList *textList) const
 {
+    if (!textList) {
+        return 0;
+    }
     // FIXME: this is horrible.
     foreach(KoList *l, lists()) {
         if (l->textLists().contains(textList))
@@ -323,4 +354,32 @@ bool KoTextDocument::paraTableSpacingAtStart() const
         return resource.toBool();
     else
         return false;
+}
+
+QTextCharFormat KoTextDocument::frameCharFormat() const
+{
+    QVariant resource = m_document->resource(KoTextDocument::FrameCharFormat, FrameCharFormatUrl);
+    if (resource.isValid())
+        return resource.value<QTextCharFormat>();
+    else
+        return QTextCharFormat();
+}
+
+void KoTextDocument::setFrameCharFormat(QTextCharFormat format)
+{
+    m_document->addResource(KoTextDocument::FrameCharFormat, FrameCharFormatUrl, QVariant::fromValue(format));
+}
+
+QTextBlockFormat KoTextDocument::frameBlockFormat() const
+{
+    QVariant resource = m_document->resource(KoTextDocument::FrameBlockFormat, FrameBlockFormatUrl);
+    if (resource.isValid())
+        return resource.value<QTextBlockFormat>();
+    else
+        return QTextBlockFormat();
+}
+
+void KoTextDocument::setFrameBlockFormat(QTextBlockFormat format)
+{
+    m_document->addResource(KoTextDocument::FrameBlockFormat, FrameBlockFormatUrl, QVariant::fromValue(format));
 }

@@ -23,7 +23,6 @@
 #include "kis_transaction_data.h"
 
 #include "kis_selection.h"
-#include "kis_image.h"
 
 /**
  * KisSelectionTransactionData records changes to the selection for the undo stack. There
@@ -47,7 +46,6 @@ public:
 private:
     KisImageWSP m_image;
     KisSelectionSP m_selection;
-    bool m_wasDeselected;
 };
 
 #endif /* KIS_SELECTION_TRANSACTION_DATA_H_ */

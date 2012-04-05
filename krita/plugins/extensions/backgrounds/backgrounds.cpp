@@ -44,8 +44,6 @@ Backgrounds::Backgrounds(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {
-        setComponentData(BackgroundsFactory::componentData());
-
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/backgrounds.rc"), true);
 
         KAction *action  = new KAction(i18n("Select Image Background..."), this);

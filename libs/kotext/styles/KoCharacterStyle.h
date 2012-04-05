@@ -97,7 +97,6 @@ public:
         HyphenationPushCharCount,   ///< int
         HyphenationRemainCharCount, ///< int
         FontLetterSpacing,          ///< qreal, not the same format as the FontLetterSpacing in QTextFormat
-        FontPitch,                  ///< FontPitchMode
         PercentageFontSize, //font-size can be in % and this stores that value
         AdditionalFontSize, //font-size-rel can specify an addition to the parent value
         UseWindowFontColor, //boolean, same as odf
@@ -176,11 +175,6 @@ public:
     enum RotationScale {
         Fixed,
         LineHeight
-    };
-
-    enum FontPitchMode {
-        FixedWidth,
-        VariableWidth
     };
 
     /**
@@ -374,25 +368,22 @@ public:
 
     TextCombineType textCombine() const;
     void setTextCombine(TextCombineType type);
-    
+
     QChar textCombineStartChar() const;
     void setTextCombineStartChar(const QChar &character);
-    
+
     QChar textCombineEndChar() const;
     void setTextCombineEndChar(const QChar &character);
-    
-    
+
+
     ReliefType fontRelief() const;
     void setFontRelief(ReliefType relief);
-    
+
     EmphasisStyle textEmphasizeStyle() const;
     void setTextEmphasizeStyle(EmphasisStyle emphasis);
-    
+
     EmphasisPosition textEmphasizePosition() const;
     void setTextEmphasizePosition(EmphasisPosition position);
-
-    FontPitchMode fontPitch() const;
-    void setFontPitch(FontPitchMode mode);
 
     /// Set the country
     void setCountry(const QString &country);
@@ -424,7 +415,7 @@ public:
     void copyProperties(const KoCharacterStyle *style);
     void copyProperties(const QTextCharFormat &format);
 
-    KoCharacterStyle *clone(QObject *parent = 0);
+    KoCharacterStyle *clone(QObject *parent = 0) const;
 
     /// return the name of the style.
     QString name() const;
@@ -476,6 +467,8 @@ public:
 
     bool operator==(const KoCharacterStyle &other) const;
 
+    bool operator!=(const KoCharacterStyle &other) const;
+
     /**
      * Removes properties from this style that have the same value in other style.
      */
@@ -486,6 +479,15 @@ public:
      */
     void removeDuplicates(const QTextCharFormat &other_format);
 
+    /**
+     * Create an autostyle out of the format and baseFormat
+     * @param format the format that is converted to an autostyle.
+     * @param baseFormat the format (typically a blockCharFormat) that is the basis of the format,
+     * but not itself part of the character style inheritance.
+     * @return pointer to autostyle that has this as parent style
+     */
+    KoCharacterStyle *autoStyle(const QTextCharFormat &format, QTextCharFormat blockCharFormat) const;
+ 
     void saveOdf(KoGenStyle &style) const;
 
     /**

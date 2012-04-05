@@ -2,6 +2,8 @@
  * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2011 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
+ * Copyright (C) 2008, 2012 Pierre Stirnweiss <pstirnweiss@googlemail.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,6 +29,7 @@
 
 #include <KoToolBase.h>
 #include <KoTextCommandBase.h>
+#include <KoUnit.h>
 
 #include <QClipboard>
 #include <QHash>
@@ -34,6 +37,7 @@
 #include <QTextCursor>
 #include <QTimer>
 #include <QWeakPointer>
+#include <QRectF>
 
 class TextEditingPluginContainer;
 class InsertCharacter;
@@ -48,6 +52,7 @@ class KoTextEditor;
 class UndoTextCommand;
 
 class KAction;
+class KActionMenu;
 class KFontAction;
 class FontSizeAction;
 
@@ -73,9 +78,11 @@ public:
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
     /// reimplemented from superclass
-    virtual void mousePressEvent(KoPointerEvent *event) ;
+    virtual void mousePressEvent(KoPointerEvent *event);
     /// reimplemented from superclass
     virtual void mouseDoubleClickEvent(KoPointerEvent *event);
+    /// reimplemented from superclass
+    virtual void mouseTripleClickEvent(KoPointerEvent *event);
     /// reimplemented from superclass
     virtual void mouseMoveEvent(KoPointerEvent *event);
     /// reimplemented from superclass
@@ -116,8 +123,6 @@ public:
     /// reimplemented from superclass
     virtual void inputMethodEvent(QInputMethodEvent * event);
 
-    bool isBidiDocument() const;
-
 
     /// The following two methods allow an undo/redo command to tell the tool, it will modify the QTextDocument and wants to be parent of the undo/redo commands resulting from these changes.
 
@@ -144,20 +149,12 @@ public slots:
     void startTextEditingPlugin(const QString &pluginId);
     /// reimplemented from KoToolBase
     virtual void resourceChanged(int key, const QVariant &res);
-    //When enabled, display changes
-    void toggleShowChanges(bool);
-    /// When enabled, make the change tracker record changes made while typing
-    void toggleRecordChanges(bool);
-    /// Configure Change Tracking
-    void configureChangeTracking();
-    /// call this when the 'is-bidi' boolean has been changed.
-    void isBidiUpdated();
 
 signals:
     /// emitted every time a different styleManager is set.
     void styleManagerChanged(KoStyleManager *manager);
     /// emitted every time a caret move leads to a different character format being under the caret
-    void charFormatChanged(const QTextCharFormat &format);
+    void charFormatChanged(const QTextCharFormat &format, const QTextCharFormat& refBlockCharFormat);
     /// emitted every time a caret move leads to a different paragraph format being under the caret
     void blockFormatChanged(const QTextBlockFormat &format);
     /// emitted every time a caret move leads to a different paragraph format being under the caret
@@ -182,6 +179,8 @@ private slots:
     void softHyphen();
     /// insert a linebreak at the caret position
     void lineBreak();
+    /// force the remainder of the text into the next page
+    void insertFrameBreak();
     /// align all of the selected text left
     void alignLeft();
     /// align all of the selected text right
@@ -206,8 +205,6 @@ private slots:
     void setFontFamily(const QString &);
     /// Set Font size
     void setFontSize(qreal size);
-    /// Default Format
-    void setDefaultFormat();
     /// see KoTextEditor::insertIndexMarker
     void insertIndexMarker();
     /// shows a dialog to insert a table
@@ -235,7 +232,7 @@ private slots:
     /// select all text in the current document.
     void selectAll();
     /// show the style manager
-    void showStyleManager();
+    void showStyleManager(int styleId = -1);
     /// change color of a selected text
     void setTextColor(const KoColor &color);
     /// change background color of a selected text
@@ -250,6 +247,8 @@ private slots:
     void setStyle(KoParagraphStyle *syle);
     /// set the characterStyle of the current selection. see above.
     void setStyle(KoCharacterStyle *style);
+    /// set the level of current selected list
+    void setListLevel(int level);
 
     /// slot to call when a series of commands is started that together need to become 1 undo action.
     void startMacro(const QString &title);
@@ -283,21 +282,26 @@ private slots:
 
     void ensureCursorVisible(bool moveView = true);
 
+    void createStyleFromCurrentBlockFormat(QString name);
+    void createStyleFromCurrentCharFormat(QString name);
+
     void testSlot(bool);
+
+    /// change block text direction
+    void textDirectionChanged();
+
+    void updateActions();
 
 private:
     void repaintCaret();
     void repaintSelection();
     KoPointedAt hitTest(const QPointF & point) const;
-    void updateActions();
     void updateStyleManager();
     void updateSelectedShape(const QPointF &point);
     void updateSelectionHandler();
     void editingPluginEvents();
     void finishedWord();
     void finishedParagraph();
-    void readConfig();
-    void writeConfig();
     void runUrl(KoPointerEvent *event, QString &url);
 
 private:
@@ -310,9 +314,9 @@ private:
     KoTextShapeData *m_textShapeData; // where caret of m_textEditor currently is
     QWeakPointer<KoTextEditor> m_textEditor;
     KoChangeTracker *m_changeTracker;
+    KoUnit m_unit;
     bool m_allowActions;
     bool m_allowAddUndoCommand;
-    bool m_trackChanges;
     bool m_allowResourceManagerUpdates;
     int m_prevCursorPosition; /// used by editingPluginEvents
     int m_prevMouseSelectionStart, m_prevMouseSelectionEnd;
@@ -332,12 +336,12 @@ private:
     KAction *m_actionFormatSub;
     KAction *m_actionFormatIncreaseIndent;
     KAction *m_actionFormatDecreaseIndent;
-    KAction *m_actionShowChanges;
-    KAction *m_actionRecordChanges;
-    KAction *m_configureChangeTracking;
     KAction *m_growWidthAction;
     KAction *m_growHeightAction;
     KAction *m_shrinkToFitAction;
+    KAction *m_actionChangeDirection;
+    KActionMenu *m_variableMenu;
+
     FontSizeAction *m_actionFormatFontSize;
     KFontAction *m_actionFormatFontFamily;
     KoColorPopupAction *m_actionFormatTextColor;
@@ -358,8 +362,15 @@ private:
     int m_changeTipCursorPos;
     QPoint m_changeTipPos;
     bool m_delayedEnsureVisible;
-
     TextToolSelection *m_toolSelection;
+
+    KoPointedAt m_tableDragInfo;
+    bool m_tableDraggedOnce;
+    bool m_tableDragWithShift;
+    QPointF m_draggingOrigin;
+    qreal m_dx;
+    qreal m_dy;
+    mutable QRectF m_lastImMicroFocus;
 };
 
 #endif

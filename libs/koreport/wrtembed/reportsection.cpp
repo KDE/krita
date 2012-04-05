@@ -31,9 +31,9 @@
 #include "reportsceneview.h"
 
 // qt
-#include <qlabel.h>
-#include <qdom.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QDomDocument>
+#include <QLayout>
 #include <QGridLayout>
 #include <QMouseEvent>
 

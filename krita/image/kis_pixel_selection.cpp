@@ -38,19 +38,19 @@
 #include "kis_fill_painter.h"
 #include "kis_outline_generator.h"
 
-KisPixelSelection::KisPixelSelection()
-    : KisPaintDevice(0, KoColorSpaceRegistry::instance()->alpha8(), new KisDefaultBounds())
-{
-}
+struct KisPixelSelection::Private {
+};
 
-KisPixelSelection::KisPixelSelection(KisDefaultBounds *defaultBounds)
+KisPixelSelection::KisPixelSelection(KisDefaultBoundsBaseSP defaultBounds)
         : KisPaintDevice(0, KoColorSpaceRegistry::instance()->alpha8(), defaultBounds)
+        , m_d(new Private)
 {
 }
 
 KisPixelSelection::KisPixelSelection(const KisPixelSelection& rhs)
         : KisPaintDevice(rhs)
         , KisSelectionComponent(rhs)
+        , m_d(new Private)
 {
 }
 
@@ -61,6 +61,7 @@ KisSelectionComponent* KisPixelSelection::clone(KisSelection*)
 
 KisPixelSelection::~KisPixelSelection()
 {
+    delete m_d;
 }
 
 KisPaintDeviceSP KisPixelSelection::createThumbnailDevice(qint32 w, qint32 h, const KisSelection * selection, QRect rect) const
@@ -92,7 +93,7 @@ void KisPixelSelection::select(const QRect & rc, quint8 selectedness)
     }
 }
 
-void KisPixelSelection::applySelection(KisPixelSelectionSP selection, selectionAction action)
+void KisPixelSelection::applySelection(KisPixelSelectionSP selection, SelectionAction action)
 {
     switch (action) {
     case SELECTION_REPLACE:
@@ -213,15 +214,6 @@ bool KisPixelSelection::isTotallyUnselected(const QRect & r) const
     return ! r.intersects(sr);
 }
 
-bool KisPixelSelection::isProbablyTotallyUnselected(const QRect & r) const
-{
-    if (*defaultPixel() != MIN_SELECTED)
-        return false;
-    QRect sr = selectedRect();
-    return ! r.intersects(sr);
-}
-
-
 QRect KisPixelSelection::selectedRect() const
 {
     return extent();
@@ -232,7 +224,7 @@ QRect KisPixelSelection::selectedExactRect() const
     return exactBounds();
 }
 
-QVector<QPolygon> KisPixelSelection::outline()
+QVector<QPolygon> KisPixelSelection::outline() const
 {
     QRect selectionExtent = selectedExactRect();
     qint32 xOffset = selectionExtent.x();
@@ -240,31 +232,17 @@ QVector<QPolygon> KisPixelSelection::outline()
     qint32 width = selectionExtent.width();
     qint32 height = selectionExtent.height();
 
-    quint8* buffer = new quint8[width*height];
-
-#ifdef __GNUC__
-#warning "Do not deep copy the entire image here!"
-#else
-#pragma WARNING( "Do not deep copy the entire image here!" )
-#endif
-    readBytes(buffer, xOffset, yOffset, width, height);
-
-    KisOutlineGenerator generator(colorSpace(), *defaultPixel());
-    QVector<QPolygon> paths = generator.outline(buffer, xOffset, yOffset, width, height);
-
-    delete[] buffer;
-
-    return paths;
+    KisOutlineGenerator generator(colorSpace(), MIN_SELECTED);
+    return generator.outline(this, xOffset, yOffset, width, height);
 }
 
-void KisPixelSelection::renderToProjection(KisPixelSelection* projection)
+void KisPixelSelection::renderToProjection(KisPaintDeviceSP projection)
 {
     renderToProjection(projection, selectedExactRect());
 }
 
-void KisPixelSelection::renderToProjection(KisPixelSelection* projection, const QRect& rc)
+void KisPixelSelection::renderToProjection(KisPaintDeviceSP projection, const QRect& rc)
 {
-    // FIXME: use selectedRect() instead
     QRect updateRect = rc & selectedExactRect();
 
     if (updateRect.isValid()) {

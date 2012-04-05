@@ -20,7 +20,8 @@
 #include "KoResource.h"
 
 #include <QDomElement>
-#include <QtCore/QFileInfo>
+#include <QFileInfo>
+#include <QDebug>
 
 struct KoResource::Private {
     QString name;

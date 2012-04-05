@@ -35,7 +35,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 #include <QBuffer>
-#include <qdom.h>
+#include <QDomDocument>
 #include <QPainter>
 #include <kdebug.h>
 

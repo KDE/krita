@@ -176,6 +176,18 @@ public:
 
     KoDocumentResourceManager *documentResourceManager() const;
 
+    /**
+     * @brief get the rdf document
+     * @return the rdf document, or 0 if there is none set/
+     */
+    QObject *documentRdf() const;
+
+    /**
+     * @brief setDocumentRdf sets the rdf document for the loading context
+     * @param documentRdf the rdf document -- it needs to have been loaded already
+     */
+    void setDocumentRdf(QObject *documentRdf);
+
 private:
     // to allow only the KoShapeRegistry access to the KoShapeBasedDocumentBase
     class Private;

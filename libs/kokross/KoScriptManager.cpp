@@ -31,7 +31,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
-#include <QtGui/QBoxLayout>
+#include <QBoxLayout>
 
 /******************************************************************************
  * KoScriptManagerCollection

@@ -50,6 +50,7 @@
 
 #define MOVE_CONDITION(_event, _mode) (mode() == (_mode))
 
+class KActionCollection;
 class KoCanvasBase;
 class KisPattern;
 class KoAbstractGradient;
@@ -148,7 +149,6 @@ protected:
     void updateCanvasViewRect(const QRectF &viewRect);
 
     virtual QWidget* createOptionWidget();
-    virtual QWidget* optionWidget();
 
     inline void setOutlineStyle(PaintMode mode) {
         m_outlinePaintMode = mode;
@@ -170,15 +170,12 @@ protected:
 
     KisImageWSP currentImage();
     KisPattern* currentPattern();
-    KoAbstractGradient * currentGradient();
+    KoAbstractGradient *currentGradient();
     KisNodeSP currentNode();
     KoColor currentFgColor();
     KoColor currentBgColor();
     KisPaintOpPresetSP currentPaintOpPreset();
-    KisFilterConfiguration * currentGenerator();
-
-    /// convenience method to fill the painter's settings with all the current resources
-    virtual void setupPainter(KisPainter * painter);
+    KisFilterConfiguration *currentGenerator();
 
     virtual void setupPaintAction(KisRecordedPaintAction* action);
 
@@ -212,7 +209,7 @@ protected:
     };
 
     virtual void setMode(ToolMode mode);
-    virtual ToolMode mode();
+    virtual ToolMode mode() const;
 
 
 protected slots:

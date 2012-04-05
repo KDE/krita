@@ -36,6 +36,7 @@ class QTextFrame;
  */
 class KOTEXT_EXPORT KoInlineNote : public KoInlineObject
 {
+    Q_OBJECT
 public:
     /// The type of note specifies how the application will use the text from the note.
     enum Type {
@@ -71,20 +72,11 @@ public:
      */
     void setAutoNumber(int autoNumber);
 
-    /**
-     * Set the id that is used to reference this note.
-     * @param id the new id
-     */
-    void setId(const QString &id);
-
     /// return the current text
     QTextFrame *textFrame() const;
 
     /// return the current label
     QString label() const;
-
-    /// return the current id
-    QString id() const;
 
     /**
      * @return whether the label should be automatically recreated or if the label is static.

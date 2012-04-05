@@ -20,33 +20,37 @@
 #ifndef KIS_IMAGE_LAYER_REMOVE_COMMAND_H_
 #define KIS_IMAGE_LAYER_REMOVE_COMMAND_H_
 
+#include <QList>
+
 #include <krita_export.h>
 
 #include "kis_types.h"
 #include "kis_image_command.h"
 
 
-/// The command for removing a layer
+/// The command for removing a node
 class KRITAIMAGE_EXPORT KisImageLayerRemoveCommand : public KisImageCommand
 {
-
-
 public:
     /**
      * Constructor
      * @param image The image the command will be working on.
-     * @param layer the layer to remove
-     * @param wasParent the parent of the layer
-     * @param wasAbove the layer above the layer
+     * @param node the node to remove
      */
-    KisImageLayerRemoveCommand(KisImageWSP image, KisNodeSP layer);
+    KisImageLayerRemoveCommand(KisImageWSP image, KisNodeSP node);
+    ~KisImageLayerRemoveCommand();
 
     virtual void redo();
     virtual void undo();
 
 private:
-    KisNodeSP m_layer;
-    KisNodeSP m_prevParent;
-    KisNodeSP m_prevAbove;
+    void restoreClones();
+    void processClones(KisNodeSP node);
+    void moveChildren(KisNodeSP src, KisNodeSP dst);
+    void moveClones(KisLayerSP src, KisLayerSP dst);
+
+private:
+    struct Private;
+    Private * const m_d;
 };
 #endif

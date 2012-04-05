@@ -35,6 +35,8 @@
 #include "KoDocumentEntry.h"
 #include "KoDockerManager.h"
 
+#include <KoPageLayoutWidget.h>
+
 #include <kdeversion.h>
 #if KDE_IS_VERSION(4,6,0)
 #include <krecentdirs.h>
@@ -62,6 +64,9 @@
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kdeprintdialog.h>
+#include <kfilewidget.h>
+#include <kurlcombobox.h>
+#include <kdiroperator.h>
 
 //   // qt includes
 #include <QDockWidget>
@@ -70,10 +75,10 @@
 #include <QLabel>
 #include <QProgressBar>
 #include <QTabBar>
-#include <QtGui/QPrinter>
-#include <QtGui/QPrintDialog>
+#include <QPrinter>
+#include <QPrintDialog>
 #include <QDesktopWidget>
-#include <QtGui/QPrintPreviewDialog>
+#include <QPrintPreviewDialog>
 
 #include "calligraversion.h"
 
@@ -127,6 +132,7 @@ public:
         readOnly = false;
         dockWidgetMenu = 0;
         dockerManager = 0;
+        deferredClosingEvent = 0;
     }
     ~KoMainWindowPrivate() {
         qDeleteAll(toolbarList);
@@ -205,6 +211,8 @@ public:
     QList<QDockWidget *> dockWidgets;
     QList<QDockWidget *> hiddenDockwidgets; // List of dockers hiddent by the call to hideDocker
 
+    QCloseEvent *deferredClosingEvent;
+
 };
 
 KoMainWindow::KoMainWindow(const KComponentData &componentData)
@@ -213,7 +221,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
 {
     setStandardToolBarMenuEnabled(true);
     Q_ASSERT(componentData.isValid());
-    
+
     setTabPosition(Qt::AllDockWidgetAreas, QTabWidget::North);
 
     connect(this, SIGNAL(restoringDone()), this, SLOT(forceDockTabFonts()));
@@ -312,30 +320,49 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     KSharedConfigPtr configPtr = componentData.isValid() ? componentData.config() : KGlobal::config();
     d->recent->loadEntries(configPtr->group("RecentFiles"));
 
+
     createShellGUI();
     d->mainWindowGuiIsBuilt = true;
 
-    // Get screen geometry
-    const int scnum = QApplication::desktop()->screenNumber(parentWidget());
-    QRect desk = QApplication::desktop()->availableGeometry(scnum);
-
-    // if the desktop is virtual then use virtual screen size
-    if (QApplication::desktop()->isVirtualDesktop())
-        desk = QApplication::desktop()->availableGeometry(QApplication::desktop()->screen());
-
+    // if the user didn's specifiy the geometry on the command line (does anyone do that still?),
+    // we first figure out some good default size and restore the x,y position. See bug 285804Z.
     if (!initialGeometrySet()) {
-        // Default size
+
+        const int scnum = QApplication::desktop()->screenNumber(parentWidget());
+        QRect desk = QApplication::desktop()->availableGeometry(scnum);
+        // if the desktop is virtual then use virtual screen size
+        if (QApplication::desktop()->isVirtualDesktop()) {
+            desk = QApplication::desktop()->availableGeometry(QApplication::desktop()->screen());
+            desk = QApplication::desktop()->availableGeometry(QApplication::desktop()->screen(scnum));
+        }
+
+        quint32 x = desk.x();
+        quint32 y = desk.y();
+        quint32 w = 0;
+        quint32 h = 0;
+
+        // Default size -- maximize on small screens, something useful on big screens
         const int deskWidth = desk.width();
         if (deskWidth > 1024) {
             // a nice width, and slightly less than total available
             // height to componensate for the window decs
-            resize( ( deskWidth / 3 ) * 2, desk.height() - 50);
+            w = ( deskWidth / 3 ) * 2;
+            h = desk.height();
         }
         else {
-            resize( desk.size() );
+            w = desk.width();
+            h = desk.height();
         }
+        // KDE doesn't restore the x,y position, so let's do that ourselves
+        KConfigGroup cfg(KGlobal::config(), "MainWindow");
+        x = cfg.readEntry("ko_x", x);
+        y = cfg.readEntry("ko_y", y);
+        setGeometry(x, y, w, h);
     }
 
+    // Now ask kde to restore the size of the window; this could probably be replaced by
+    // QWidget::saveGeometry asnd QWidget::restoreGeometry, but let's stay with the KDE
+    // way of doing things.
     KConfigGroup config(KGlobal::config(), "MainWindow");
     restoreWindowSize( config );
 
@@ -344,6 +371,10 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
 
 KoMainWindow::~KoMainWindow()
 {
+    KConfigGroup cfg(KGlobal::config(), "MainWindow");
+    cfg.writeEntry("ko_x", frameGeometry().x());
+    cfg.writeEntry("ko_y", frameGeometry().y());
+
     // Explicitly delete the docker manager to ensure that it is deleted before the dockers
     delete d->dockerManager;
     d->dockerManager = 0;
@@ -711,6 +742,10 @@ void KoMainWindow::slotSaveCompleted()
     disconnect(pDoc, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
     disconnect(pDoc, SIGNAL(canceled(const QString &)),
                this, SLOT(slotSaveCanceled(const QString &)));
+
+    if (d->deferredClosingEvent) {
+        KParts::MainWindow::closeEvent(d->deferredClosingEvent);
+    }
 }
 
 // returns true if we should save, false otherwise.
@@ -1014,6 +1049,7 @@ void KoMainWindow::closeEvent(QCloseEvent *e)
         return;
     }
     if (queryClose()) {
+        d->deferredClosingEvent = e;
         if (d->docToOpen) {
             // The open pane is visible
             d->docToOpen->deleteOpenPane(true);
@@ -1029,9 +1065,9 @@ void KoMainWindow::closeEvent(QCloseEvent *e)
             foreach(QDockWidget* dockWidget, d->dockWidgetsMap)
                 dockWidget->setVisible(d->dockWidgetVisibilityMap.value(dockWidget));
         }
-        KParts::MainWindow::closeEvent(e);
-    } else
+    } else {
         e->setAccepted(false);
+    }
 }
 
 void KoMainWindow::saveWindowSettings()
@@ -1112,7 +1148,7 @@ bool KoMainWindow::queryClose()
         switch (res) {
         case KMessageBox::Yes : {
             bool isNative = (d->rootDoc->outputMimeType() == d->rootDoc->nativeFormatMimeType());
-            if (! saveDocument(!isNative))
+            if (!saveDocument(!isNative))
                 return false;
             break;
         }
@@ -1166,13 +1202,13 @@ void KoMainWindow::slotFileNew()
 
 void KoMainWindow::slotFileOpen()
 {
-#ifdef _WIN32
+#ifdef Q_WS_WIN
     // "kfiledialog:///OpenDialog" forces KDE style open dialog in Windows
 	// TODO provide support for "last visited" directory
     KFileDialog *dialog = new KFileDialog(KUrl(""), QString(), this);
 #else
     KFileDialog *dialog = new KFileDialog(KUrl("kfiledialog:///OpenDialog"), QString(), this);
-#endif    	
+#endif
     dialog->setObjectName("file dialog");
     dialog->setMode(KFile::File);
     if (!isImporting())
@@ -1297,12 +1333,72 @@ void KoMainWindow::slotFilePrintPreview()
     delete preview;
 }
 
+class ExportPdfDialog : public KPageDialog
+{
+public:
+    ExportPdfDialog(const KUrl &startUrl, const KoPageLayout &pageLayout) : KPageDialog() {
+        setFaceType(KPageDialog::List);
+        setCaption(i18n("Export to PDF"));
+
+        m_fileWidget = new KFileWidget(startUrl, this);
+        m_fileWidget->setOperationMode(KFileWidget::Saving);
+        m_fileWidget->setMode(KFile::File);
+        m_fileWidget->setMimeFilter(QStringList() << "application/pdf");
+        connect(m_fileWidget, SIGNAL(accepted()), this, SLOT(accept()));
+
+        KPageWidgetItem *fileItem = new KPageWidgetItem(m_fileWidget, i18n( "File" ));
+        fileItem->setIcon(KIcon("document-open"));
+        addPage(fileItem);
+
+        m_pageLayoutWidget = new KoPageLayoutWidget(this, pageLayout);
+        m_pageLayoutWidget->showUnitchooser(false);
+        KPageWidgetItem *optionsItem = new KPageWidgetItem(m_pageLayoutWidget, i18n("Configure"));
+        optionsItem->setIcon(KIcon("configure"));
+        addPage(optionsItem);
+
+        resize(QSize(800, 600).expandedTo(minimumSizeHint()));
+    }
+    KUrl selectedUrl() const {
+        // selectedUrl()( does not return the expected result. So, build up the KUrl the more complicated way
+        //return m_fileWidget->selectedUrl();
+
+        KUrl url = m_fileWidget->dirOperator()->url();
+        url.adjustPath(KUrl::AddTrailingSlash);
+        url.setFileName(m_fileWidget->locationEdit()->currentText());
+        return url;
+    }
+    KoPageLayout pageLayout() const {
+        return m_pageLayoutWidget->pageLayout();
+    }
+protected:
+    virtual void slotButtonClicked(int button) {
+        if (button == KDialog::Ok) {
+            m_fileWidget->slotOk();
+        } else {
+            KPageDialog::slotButtonClicked(button);
+        }
+    }
+private:
+    KFileWidget *m_fileWidget;
+    KoPageLayoutWidget *m_pageLayoutWidget;
+};
+
 KoPrintJob* KoMainWindow::exportToPdf(QString pdfFileName)
 {
     if (!rootView())
         return 0;
+    KoPageLayout pageLayout;
+    if (d->rootDoc)
+        pageLayout = d->rootDoc->pageLayout();
+    return exportToPdf(pageLayout, pdfFileName);
+}
+
+KoPrintJob* KoMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileName)
+{
+    if (!rootView())
+        return 0;
     if (pdfFileName.isEmpty()) {
-        KUrl startUrl = KUrl("kfiledialog:///SaveDialog/");
+        KUrl startUrl = KUrl("kfiledialog:///SavePdfDialog");
         KoDocument* pDoc = rootDocument();
         /** if document has a file name, take file name and replace extension with .pdf */
         if (pDoc && pDoc->url().isValid()) {
@@ -1312,16 +1408,16 @@ KoPrintJob* KoMainWindow::exportToPdf(QString pdfFileName)
             startUrl.setFileName( fileName );
         }
 
-        QStringList mimeTypes;
-        mimeTypes << "application/pdf" << "application/postscript";
-        KFileDialog dialog(startUrl, QString(), this);
-        dialog.setMimeFilter(mimeTypes);
-        dialog.setObjectName("print file");
-        dialog.setMode(KFile::File);
-        dialog.setCaption(i18n("Export to PDF"));
-        if (dialog.exec() != QDialog::Accepted)
+        QPointer<ExportPdfDialog> dialog(new ExportPdfDialog(startUrl, pageLayout));
+        if (dialog->exec() != QDialog::Accepted || !dialog) {
+            delete dialog;
             return 0;
-        KUrl url(dialog.selectedUrl());
+        }
+
+        KUrl url = dialog->selectedUrl();
+        pageLayout = dialog->pageLayout();
+        delete dialog;
+
         if (KIO::NetAccess::exists(url,  KIO::NetAccess::DestinationSide, this)) {
             bool overwrite = KMessageBox::questionYesNo(this,
                                             i18n("A document with this name already exists.\n"\
@@ -1332,19 +1428,35 @@ KoPrintJob* KoMainWindow::exportToPdf(QString pdfFileName)
             }
         }
         pdfFileName = url.toLocalFile();
+        if (pdfFileName.isEmpty())
+            return 0;
     }
+
     KoPrintJob *printJob = rootView()->createPdfPrintJob();
     if (printJob == 0)
         return 0;
-    d->applyDefaultSettings(printJob->printer());
 
+    d->applyDefaultSettings(printJob->printer());
     // TODO for remote files we have to first save locally and then upload.
     printJob->printer().setOutputFileName(pdfFileName);
     printJob->printer().setColorMode(QPrinter::Color);
+
+    if (pageLayout.format == KoPageFormat::CustomSize) {
+        printJob->printer().setPaperSize(QSizeF(pageLayout.width, pageLayout.height), QPrinter::Millimeter);
+    } else {
+        printJob->printer().setPaperSize(KoPageFormat::printerPageSize(pageLayout.format));
+    }
+
+    switch (pageLayout.orientation) {
+        case KoPageFormat::Portrait: printJob->printer().setOrientation(QPrinter::Portrait); break;
+        case KoPageFormat::Landscape: printJob->printer().setOrientation(QPrinter::Landscape); break;
+    }
+
+    printJob->printer().setPageMargins(pageLayout.leftMargin, pageLayout.topMargin, pageLayout.rightMargin, pageLayout.bottomMargin, QPrinter::Millimeter);
+
     printJob->startPrinting(KoPrintJob::DeleteWhenDone);
     return printJob;
 }
-
 
 void KoMainWindow::slotConfigureKeys()
 {
@@ -1381,9 +1493,12 @@ void KoMainWindow::slotConfigureToolbars()
 
 void KoMainWindow::slotNewToolbarConfig()
 {
-    if (rootDocument())
+    if (rootDocument()) {
         applyMainWindowSettings(KGlobal::config()->group(rootDocument()->componentData().componentName()));
+    }
+
     KXMLGUIFactory *factory = guiFactory();
+    Q_UNUSED(factory);
 
     // Check if there's an active view
     if (!d->activeView)
@@ -1500,9 +1615,6 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
         return;
     }
 
-    // important so dockermanager can move toolbars back
-    emit beforeHandlingToolBars();
-
 
     KXMLGUIFactory *factory = guiFactory();
 
@@ -1568,8 +1680,6 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
         d->activeView = 0;
         d->activePart = 0;
     }
-    // important so dockermanager can move toolbars where wanted
-    emit afterHandlingToolBars();
 // ###  setUpdatesEnabled( true );
 }
 
@@ -1604,18 +1714,24 @@ void KoMainWindow::slotEmailFile()
         bool const tmp_modified = rootDocument()->isModified();
         KUrl const tmp_url = rootDocument()->url();
         QByteArray const tmp_mimetype = rootDocument()->outputMimeType();
-        KTemporaryFile tmpfile; //TODO: The temorary file should be deleted when the mail program is closed
-        tmpfile.setAutoRemove(false);
-        tmpfile.open();
+
+        // a little open, close, delete dance to make sure we have a nice filename
+        // to use, but won't block windows from creating a new file with this name.
+        KTemporaryFile *tmpfile = new KTemporaryFile();
+        tmpfile->open();
+        QString fileName = tmpfile->fileName();
+        tmpfile->close();
+        delete tmpfile;
+
         KUrl u;
-        u.setPath(tmpfile.fileName());
+        u.setPath(fileName);
         rootDocument()->setUrl(u);
         rootDocument()->setModified(true);
         rootDocument()->setOutputMimeType(rootDocument()->nativeFormatMimeType());
 
         saveDocument(false, true);
 
-        fileURL = tmpfile.fileName();
+        fileURL = fileName;
         theSubject = i18n("Document");
         urls.append(fileURL);
 

@@ -65,14 +65,13 @@ public:
             inlineObjectDescent(0),
             pageNumber(-1)
     {
-        Q_ASSERT(shape);
     }
 
 
     virtual QDebug printDebug(QDebug dbg) const
     {
 #ifndef NDEBUG
-        dbg.nospace() << "KoTextAnchor";
+        dbg.space() << "KoTextAnchor" << this;
         dbg.space() << "offset:" << distance;
         dbg.space() << "shape:" << shape->name();
 #endif
@@ -129,7 +128,7 @@ void KoTextAnchor::setHorizontalPos(HorizontalPos hp)
     d->horizontalPos = hp;
 }
 
-KoTextAnchor::HorizontalPos KoTextAnchor::horizontalPos()
+KoTextAnchor::HorizontalPos KoTextAnchor::horizontalPos() const
 {
     Q_D(const KoTextAnchor);
     return d->horizontalPos;
@@ -141,7 +140,7 @@ void KoTextAnchor::setHorizontalRel(HorizontalRel hr)
     d->horizontalRel = hr;
 }
 
-KoTextAnchor::HorizontalRel KoTextAnchor::horizontalRel()
+KoTextAnchor::HorizontalRel KoTextAnchor::horizontalRel() const
 {
     Q_D(const KoTextAnchor);
     return d->horizontalRel;
@@ -153,7 +152,7 @@ void KoTextAnchor::setVerticalPos(VerticalPos vp)
     d->verticalPos = vp;
 }
 
-KoTextAnchor::VerticalPos KoTextAnchor::verticalPos()
+KoTextAnchor::VerticalPos KoTextAnchor::verticalPos() const
 {
     Q_D(const KoTextAnchor);
     return d->verticalPos;
@@ -165,7 +164,7 @@ void KoTextAnchor::setVerticalRel(VerticalRel vr)
     d->verticalRel = vr;
 }
 
-KoTextAnchor::VerticalRel KoTextAnchor::verticalRel()
+KoTextAnchor::VerticalRel KoTextAnchor::verticalRel() const
 {
     Q_D(const KoTextAnchor);
     return d->verticalRel;
@@ -315,7 +314,7 @@ void KoTextAnchor::paint(QPainter &painter, QPaintDevice *, const QTextDocument 
     KoChangeTracker *changeTracker = KoTextDocument(document).changeTracker();
     if (!changeTracker)
         return;
-    
+
     KoChangeTrackerElement *changeElement = changeTracker->elementById(changeId);
     if (changeElement && changeElement->getChangeType() == KoGenChange::DeleteChange) {
         changePen.setColor(changeTracker->getDeletionBgColor());
@@ -353,16 +352,16 @@ void KoTextAnchor::saveOdf(KoShapeSavingContext &context)
     // anchor-type
     switch (d->anchorType) {
     case AnchorToCharacter:
-        shape()->setAdditionalStyleAttribute("text:anchor-type", "char");
+        shape()->setAdditionalAttribute("text:anchor-type", "char");
         break;
     case AnchorAsCharacter:
-        shape()->setAdditionalStyleAttribute("text:anchor-type", "as-char");
+        shape()->setAdditionalAttribute("text:anchor-type", "as-char");
         break;
     case AnchorParagraph:
-        shape()->setAdditionalStyleAttribute("text:anchor-type", "paragraph");
+        shape()->setAdditionalAttribute("text:anchor-type", "paragraph");
         break;
     case AnchorPage:
-        shape()->setAdditionalStyleAttribute("text:anchor-type", "page");
+        shape()->setAdditionalAttribute("text:anchor-type", "page");
         break;
     default:
         break;

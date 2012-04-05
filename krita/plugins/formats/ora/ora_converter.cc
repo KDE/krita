@@ -46,7 +46,6 @@ OraConverter::~OraConverter()
 {
 }
 
-
 KisImageBuilder_Result OraConverter::buildImage(const KUrl& uri)
 {
     if (uri.isEmpty())
@@ -60,26 +59,30 @@ KisImageBuilder_Result OraConverter::buildImage(const KUrl& uri)
     if (!store) {
         return KisImageBuilder_RESULT_FAILURE;
     }
+    store->disallowNameExpansion();
 
     OraLoadContext olc(store);
     KisOpenRasterStackLoadVisitor orslv(m_doc, &olc);
     orslv.loadImage();
     m_image = orslv.image();
-
+    m_activeNodes = orslv.activeNodes();
     delete store;
 
     return KisImageBuilder_RESULT_OK;
 
 }
 
-
 KisImageWSP OraConverter::image()
 {
     return m_image;
 }
 
+vKisNodeSP OraConverter::activeNodes()
+{
+    return m_activeNodes;
+}
 
-KisImageBuilder_Result OraConverter::buildFile(const KUrl& uri, KisImageWSP image)
+KisImageBuilder_Result OraConverter::buildFile(const KUrl& uri, KisImageWSP image, vKisNodeSP activeNodes)
 {
 
     if (uri.isEmpty())
@@ -92,9 +95,9 @@ KisImageBuilder_Result OraConverter::buildFile(const KUrl& uri, KisImageWSP imag
     if (!store) {
         return KisImageBuilder_RESULT_FAILURE;
     }
-
+    store->disallowNameExpansion();
     OraSaveContext osc(store);
-    KisOpenRasterStackSaveVisitor orssv(&osc);
+    KisOpenRasterStackSaveVisitor orssv(&osc, activeNodes);
 
     image->rootLayer()->accept(orssv);
 

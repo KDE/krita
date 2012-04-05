@@ -24,19 +24,20 @@
 #ifndef KORESOURCESERVER_H
 #define KORESOURCESERVER_H
 
-#include <QtCore/QMutex>
-#include <QtCore/QMutexLocker>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QList>
-#include <QtCore/QFileInfo>
-
+#include <QMutex>
+#include <QMutexLocker>
+#include <QString>
+#include <QStringList>
+#include <QList>
+#include <QFileInfo>
+#include <QMultiMap>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
 
-#include  <QtCore/QXmlStreamReader>
-#include <qdom.h>
+#include <QXmlStreamReader>
+#include <QTemporaryFile>
+#include <QDomDocument>
 #include "KoResource.h"
 #include "KoResourceServerObserver.h"
 #include "KoResourceTagging.h"
@@ -128,7 +129,6 @@ public:
 
             QString fname = QFileInfo(front).fileName();
 
-            //kDebug(30009) << "Loading " << fname << " of type " << type();
             // XXX: Don't load resources with the same filename. Actually, we should look inside
             //      the resource to find out whether they are really the same, but for now this
             //      will prevent the same brush etc. showing up twice.
@@ -139,15 +139,15 @@ public:
                 foreach(T* resource, resources) {
                     Q_CHECK_PTR(resource);
                     if (resource->load() && resource->valid()) {
-
                         m_resourcesByFilename[resource->shortFilename()] = resource;
 
-                        if ( resource->name().isNull() ) {
+                        if ( resource->name().isEmpty() ) {
                             resource->setName( fname );
                         }
+                        if (m_resourcesByName.contains(resource->name())) {
+                            resource->setName(resource->name() + "(" + resource->shortFilename() + ")");
+                        }
                         m_resourcesByName[resource->name()] = resource;
-                        m_resources.append(resource);
-
                         notifyResourceAdded(resource);
                     }
                     else {
@@ -157,6 +157,13 @@ public:
                 m_loadLock.unlock();
             }
         }
+
+        QMap<QString, T*> sortedNames;
+        foreach(QString name, m_resourcesByName.keys()) {
+            sortedNames.insert(name.toLower(), m_resourcesByName[name]);
+        }
+        m_resources = sortedNames.values();
+
         kDebug(30009) << "done loading  resources for type " << type();
     }
 
@@ -167,6 +174,18 @@ public:
             kWarning(30009) << "Tried to add an invalid resource!";
             return false;
         }
+        QFileInfo fileInfo(resource->filename());
+
+        if (fileInfo.exists()) {
+           QString filename = fileInfo.path() + "/" + fileInfo.baseName() + "XXXXXX" + "." + fileInfo.suffix();
+           kDebug() << "fileName is " << filename;
+           QTemporaryFile file(filename);
+           if (file.open()) {
+               kDebug() << "now " << file.fileName();
+               resource->setFilename(file.fileName());
+           }
+        }
+
         if( save && ! resource->save()) {
             kWarning(30009) << "Could not save resource!";
             return false;

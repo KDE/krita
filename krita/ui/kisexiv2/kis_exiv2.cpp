@@ -18,7 +18,7 @@
  
 #include "kis_exiv2.h"
 
-#include <QtCore/QDateTime>
+#include <QDateTime>
 
 #include <kglobal.h>
 

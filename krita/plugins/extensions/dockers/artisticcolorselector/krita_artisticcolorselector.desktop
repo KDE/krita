@@ -1,11 +1,20 @@
 [Desktop Entry]
 Name=Artistic color selector
+Name[ca]=Selector artístic de color
+Name[ca@valencia]=Selector artístic de color
 Name[da]=Kunstnerisk farvevælger
+Name[el]=Καλλιτεχνικός χρωματικός επιλογέας
 Name[es]=Selector de color artístico
+Name[et]=Kunstniku värvivalija
+Name[it]=Selettore colore artistico
+Name[kk]=Көркем түс таңдағышы
 Name[nb]=Artistisk Fargevelger
 Name[nds]=Smuck Klöörköör
+Name[nl]=Artistieke kleurenkiezer
+Name[pl]=Artystyczne wybieranie kolorów
 Name[pt]=Selector de cores artísticas
 Name[pt_BR]=Seletor de cores artísticas
+Name[ru]=Художественный выбор цвета
 Name[sv]=Artistisk färgväljare
 Name[uk]=Художній вибір кольору
 Name[x-test]=xxArtistic color selectorxx

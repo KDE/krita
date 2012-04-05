@@ -19,7 +19,7 @@
 #ifndef KIS_CLONE_LAYER_TEST_H
 #define KIS_CLONE_LAYER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisCloneLayerTest : public QObject
 {
@@ -30,6 +30,10 @@ private slots:
     void testOriginalUpdates();
     void testOriginalUpdatesOutOfBounds();
     void testOriginalRefresh();
+
+    void testRemoveSourceLayer();
+    void testUndoingRemovingSource();
+    void testCyclingGroupLayer();
 };
 
 #endif

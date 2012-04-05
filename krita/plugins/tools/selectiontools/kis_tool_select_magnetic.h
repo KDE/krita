@@ -102,7 +102,7 @@ private:
 
     private:
         KisToolSelectMagnetic* const m_selectingTool;
-        KoLineBorder* m_borderBackup;
+        KoShapeStroke* m_borderBackup;
         QPolygonF m_outline;
         const KoColorSpace* m_colorSpace;
         KoColorTransformation* m_colorTransformation;

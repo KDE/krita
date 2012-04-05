@@ -1,13 +1,13 @@
 
 INCLUDE(FindPkgConfig)
 
-pkg_check_modules(QTSHIVA QtShiva>=0.9.0)
+pkg_check_modules(QTSHIVA QtShiva>=0.9.2)
 
 if (QTSHIVA_FOUND)
-    message(STATUS "QtShiva >= 0.9.0 was found")
+    message(STATUS "QtShiva >= 0.9.2 was found")
     set(HAVE_QTSHIVA TRUE)
     if (NOT QTSHIVA_FIND_QUIETLY)
-	message(STATUS "Found QtShiva: ${QTSHIVA_LIBRARIES}")
+        message(STATUS "Found QtShiva: ${QTSHIVA_LIBRARIES}")
     endif ()
 else ()
     if (NOT QtShiva_FIND_QUIETLY)

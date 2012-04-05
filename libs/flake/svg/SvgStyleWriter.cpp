@@ -44,16 +44,16 @@
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
 #include <KoPatternBackground.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoClipPath.h>
 #include <KoXmlWriter.h>
 
 #include <KMimeType>
 
-#include <QtCore/QBuffer>
-#include <QtGui/QGradient>
-#include <QtGui/QLinearGradient>
-#include <QtGui/QRadialGradient>
+#include <QBuffer>
+#include <QGradient>
+#include <QLinearGradient>
+#include <QRadialGradient>
 
 void SvgStyleWriter::saveSvgStyle(KoShape *shape, SvgSavingContext &context)
 {
@@ -101,7 +101,7 @@ void SvgStyleWriter::saveSvgFill(KoShape *shape, SvgSavingContext &context)
 
 void SvgStyleWriter::saveSvgStroke(KoShape *shape, SvgSavingContext &context)
 {
-    const KoLineBorder * line = dynamic_cast<const KoLineBorder*>(shape->border());
+    const KoShapeStroke * line = dynamic_cast<const KoShapeStroke*>(shape->stroke());
     if (! line)
         return;
 

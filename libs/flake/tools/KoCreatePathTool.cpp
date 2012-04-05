@@ -24,7 +24,7 @@
 #include "KoShapeController.h"
 #include "KoPointerEvent.h"
 #include "KoPathShape.h"
-#include "KoLineBorder.h"
+#include "KoShapeStroke.h"
 #include "KoSelection.h"
 #include "commands/KoPathPointMergeCommand.h"
 #include "SnapGuideConfigWidget.h"
@@ -34,8 +34,8 @@
 
 #include <KNumInput>
 
-#include <QtGui/QPainter>
-#include <QtGui/QLabel>
+#include <QPainter>
+#include <QLabel>
 
 #include "KoCreatePathTool_p.h"
 
@@ -112,9 +112,9 @@ void KoCreatePathTool::paintPath(KoPathShape& pathShape, QPainter &painter, cons
     KoShapePaintingContext paintContext; //FIXME
     pathShape.paint(painter, converter, paintContext);
     painter.restore();
-    if (pathShape.border()) {
+    if (pathShape.stroke()) {
         painter.save();
-        pathShape.border()->paint(d->shape, painter, converter);
+        pathShape.stroke()->paint(d->shape, painter, converter);
         painter.restore();
     }
 }
@@ -167,10 +167,10 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
         d->shape=pathShape;
         pathShape->setShapeId(KoPathShapeId);
 
-        KoLineBorder *border = new KoLineBorder(canvas()->resourceManager()->activeBorder());
-        border->setColor(canvas()->resourceManager()->foregroundColor().toQColor());
+        KoShapeStroke *stroke = new KoShapeStroke(canvas()->resourceManager()->activeStroke());
+        stroke->setColor(canvas()->resourceManager()->foregroundColor().toQColor());
 
-        pathShape->setBorder(border);
+        pathShape->setStroke(stroke);
         canvas()->updateCanvas(canvas()->snapGuide()->boundingRect());
         QPointF point = canvas()->snapGuide()->snap(event->point, event->modifiers());
 
@@ -382,7 +382,10 @@ QList<QWidget *> KoCreatePathTool::createOptionWidgets()
     angleEdit->setRange(1, 360, 1);
     angleEdit->setSuffix(QChar(Qt::Key_degree));
     layout->addWidget(angleEdit, 0, 1);
-    widget->setWindowTitle(i18n("Angle Constraints"));
+    QWidget *specialSpacer =new QWidget();
+    specialSpacer->setObjectName("SpecialSpacer");
+    layout->addWidget(specialSpacer, 1, 1);
+    angleWidget->setWindowTitle(i18n("Angle Constraints"));
     list.append(angleWidget);
 
     connect(angleEdit, SIGNAL(valueChanged(int)), this, SLOT(angleDeltaChanged(int)));

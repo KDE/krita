@@ -32,8 +32,8 @@ class KoFilterEffectLoadingContext;
 class KoXmlElement;
 
 #include "flake_export.h"
-#include <QtCore/QList>
-#include <QtGui/QImage>
+#include <QList>
+#include <QImage>
 
 /**
  * This is the base for filter effect (blur, invert...) that can be applied on a shape.

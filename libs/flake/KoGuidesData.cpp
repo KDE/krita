@@ -24,7 +24,7 @@
 #include <KoOasisSettings.h>
 #include <KoXmlWriter.h>
 
-#include <QtGui/QPainter>
+#include <QPainter>
 
 class KoGuidesData::Private
 {

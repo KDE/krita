@@ -39,11 +39,13 @@
 
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
+#include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoDocumentRdfBase.h>
 
 #include <KoXmlWriter.h>
+#include <KoXmlNS.h>
 
 #include "KoTextPage.h"
 
@@ -68,6 +70,7 @@ public:
             , direction(KoText::AutoDirection)
             , textpage(0)
             , rootArea(0)
+            , paragraphStyle(0)
     {
     }
 
@@ -77,12 +80,14 @@ public:
             delete document;
         }
         delete textpage;
+        delete paragraphStyle;
     }
 
     bool ownsDocument;
     KoText::Direction direction;
     KoTextPage *textpage;
     KoTextLayoutRootArea *rootArea;
+    KoParagraphStyle *paragraphStyle; // the paragraph style of the shape (part of the graphic style)
 };
 
 
@@ -111,7 +116,7 @@ void KoTextShapeData::setDocument(QTextDocument *document, bool transferOwnershi
     if (! d->document->useDesignMetrics())
         d->document->setUseDesignMetrics(true);
 
-    if (d->document->isEmpty()) { // apply app default style for first parag
+    if (d->document->isEmpty() && !d->document->firstBlock().blockFormat().hasProperty(KoParagraphStyle::StyleId)) { // apply app default style for first parag
         KoTextDocument doc(d->document);
         KoStyleManager *sm = doc.styleManager();
         if (sm) {
@@ -195,7 +200,6 @@ bool KoTextShapeData::loadOdf(const KoXmlElement &element, KoShapeLoadingContext
     KoTextEditor *editor = KoTextDocument(document()).textEditor();
     if (editor) { // at one point we have to get the position from the odf doc instead.
         editor->setPosition(0);
-        editor->finishedLoading();
     }
 
     return true;
@@ -206,6 +210,72 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext &context, KoDocumentRdfBase *
     Q_D(const KoTextShapeData);
 
     KoTextWriter::saveOdf(context, rdfData, d->document, from, to);
+}
+
+void KoTextShapeData::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context)
+{
+    Q_D(KoTextShapeData);
+    // load the (text) style of the frame
+    const KoXmlElement *style = 0;
+    if (element.hasAttributeNS(KoXmlNS::draw, "style-name")) {
+        style = context.odfLoadingContext().stylesReader().findStyle(
+                    element.attributeNS(KoXmlNS::draw, "style-name"), "graphic",
+                    context.odfLoadingContext().useStylesAutoStyles());
+        if (!style) {
+            kDebug(32500) << "graphic style not found:" << element.attributeNS(KoXmlNS::draw, "style-name");
+        }
+    }
+    if (element.hasAttributeNS(KoXmlNS::presentation, "style-name")) {
+        style = context.odfLoadingContext().stylesReader().findStyle(
+                    element.attributeNS(KoXmlNS::presentation, "style-name"), "presentation",
+                    context.odfLoadingContext().useStylesAutoStyles());
+        if (!style) {
+            kDebug(32500) << "presentation style not found:" << element.attributeNS(KoXmlNS::presentation, "style-name");
+        }
+    }
+
+    if (style) {
+        // graphic styles don't support inheritance yet therefor some additional work is needed here.
+        QList<KoParagraphStyle *> paragraphStyles;
+        while (style) {
+            KoParagraphStyle *pStyle = new KoParagraphStyle();
+            pStyle->loadOdf(style, context);
+            if (!paragraphStyles.isEmpty()) {
+                paragraphStyles.last()->setParentStyle(pStyle);
+            }
+            paragraphStyles.append(pStyle);
+            QString family = style->attributeNS(KoXmlNS::style, "family", "paragraph");
+            style = context.odfLoadingContext().stylesReader().findStyle(
+                    style->attributeNS(KoXmlNS::style, "parent-style-name"), family.toLocal8Bit().constData(),
+                    context.odfLoadingContext().useStylesAutoStyles());
+            if (!style && paragraphStyles.size() == 1) {
+                style = context.odfLoadingContext().stylesReader().findStyle(
+                        "standard", family.toLocal8Bit().constData(),
+                        context.odfLoadingContext().useStylesAutoStyles());
+            }
+        }
+
+        QTextDocument *document = this->document();
+        QTextCursor cursor(document);
+        QTextBlockFormat format;
+        paragraphStyles.first()->applyStyle(format);
+        cursor.setBlockFormat(format);
+        QTextCharFormat cformat;
+        paragraphStyles.first()->KoCharacterStyle::applyStyle(cformat);
+        cursor.setCharFormat(cformat);
+        cursor.setBlockCharFormat(cformat);
+
+        d->paragraphStyle = new KoParagraphStyle(format, cformat);
+        qDeleteAll(paragraphStyles);
+    }
+}
+
+void KoTextShapeData::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const
+{
+    Q_D(const KoTextShapeData);
+    if (d->paragraphStyle) {
+        d->paragraphStyle->saveOdf(style, context);
+    }
 }
 
 #include <KoTextShapeData.moc>

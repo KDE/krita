@@ -287,6 +287,10 @@ void TestImageCollection::testSameKey()
     KoImageData data7;
     data7.setImage(qImage4);
     QCOMPARE(data6.key(), data7.key());
+
+    // should reset the key so it's the same as data6
+    data2.setImage(qImage3);
+    QCOMPARE(data2.key(), data7.key());
 }
 
 void TestImageCollection::testIsValid()

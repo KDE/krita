@@ -165,7 +165,6 @@ void KoDocumentInfo::setAboutInfo(const QString& info, const QString& data)
 QString KoDocumentInfo::aboutInfo(const QString& info) const
 {
     if (!m_aboutTags.contains(info)) {
-        kWarning() << info + " page not found in documentInfo !";
         return QString();
     }
 

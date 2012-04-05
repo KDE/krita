@@ -251,11 +251,11 @@ static const char* const buttonwinding[]={
 #include <klocale.h>
 #include <kicon.h>
 
-#include <QtGui/QPixmap>
-#include <QtGui/QToolButton>
-#include <QtGui/QToolTip>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QGridLayout>
+#include <QPixmap>
+#include <QToolButton>
+#include <QToolTip>
+#include <QButtonGroup>
+#include <QGridLayout>
 
 class StyleButtonBox::Private
 {

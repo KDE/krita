@@ -44,6 +44,8 @@ class KoXmlWriter;
 class ChangeFollower;
 class KoShapeSavingContext;
 class KoTextShapeData;
+class KUndo2Stack;
+class ChangeStylesMacroCommand;
 
 /**
  * Manages all character, paragraph, table and table cell styles for any number
@@ -63,6 +65,38 @@ public:
      * Destructor.
      */
     virtual ~KoStyleManager();
+
+    /**
+     * This explicitly set the undo stack used for storing undo commands
+     *
+     * Please note that adding documents \ref add(QTextDocument *document)
+     * extracts the undo stack from those documents,
+     * which can override what you set here. This method is mostly for cases
+     * where you use the style manager, but don't have qtextdocuments.
+     */
+    void setUndoStack(KUndo2Stack *undoStack);
+
+    /**
+     * Mark the beginning of a sequence of style changes, additions, and deletions
+     *
+     * Important: This method must be called even if only working on a single style.
+     *
+     * See also \ref endEdit
+     */
+    void beginEdit();
+
+    /**
+     * Mark the end of a sequence of style changes, additions, and deletions.
+     *
+     * Manipulation to the styles happen immidiately, but calling this method
+     * will put a command on the stack for undo, plus it changes all the "listening"
+     * qtextdocuments to reflect the style changes.
+     *
+     * Important: This method must be called even if only working on a single style.
+     *
+     * See also \ref beginEdit
+     */
+    void endEdit();
 
     // load is not needed as it is done in KoTextSharedLoadingData
 
@@ -329,6 +363,12 @@ public:
     KoListStyle *defaultListStyle() const;
 
     /**
+     * Returns the default outline style to be used if outline-style is not specified in the document
+     * that do not specify a list-style
+     */
+    KoListStyle *defaultOutlineStyle() const;
+
+    /**
      * Sets the outline style to be used for headers that are not specified as lists
      */
     void setOutlineStyle(KoListStyle *listStyle);
@@ -368,6 +408,12 @@ public:
     /// returns the default style for the ToC title
     KoParagraphStyle *defaultTableOfcontentsTitleStyle();
 
+    /// returns the default style for the Bibliography entries for the specified bibliography type
+    KoParagraphStyle *defaultBibliographyEntryStyle(QString bibType);
+
+    /// returns the default style for the Bibliography title
+    KoParagraphStyle *defaultBibliographyTitleStyle();
+
     /// adds a paragraph style to unused paragraph style list
     void addUnusedStyle(KoParagraphStyle *style);
 
@@ -393,6 +439,8 @@ signals:
     void styleRemoved(KoTableRowStyle*);
     void styleRemoved(KoTableCellStyle*);
     void styleRemoved(KoSectionStyle*);
+    void styleAltered(KoParagraphStyle*);
+    void styleAltered(KoCharacterStyle*);
 
 public slots:
     /**
@@ -450,12 +498,9 @@ public slots:
      */
     void alteredStyle(const KoSectionStyle *style);
 
-private slots:
-    void updateAlteredStyles(); // for the QTimer::singleshot
-
 private:
     friend class ChangeFollower;
-    void requestFireUpdate();
+    friend class ChangeStylesMacroCommand;
     void remove(ChangeFollower *cf);
 
     friend class KoTextSharedLoadingData;

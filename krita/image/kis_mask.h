@@ -82,6 +82,12 @@ public:
 
     virtual ~KisMask();
 
+    /**
+     * @brief initSelection initializes the selection for the mask from
+     *   the given selection's projection.
+     * @param copyFrom the selection we base the mask on
+     * @param parentLayer the parent of this mask; it determines the default bounds of the mask.
+     */
     void initSelection(KisSelectionSP copyFrom, KisLayerSP parentLayer);
 
     const KoColorSpace * colorSpace() const;

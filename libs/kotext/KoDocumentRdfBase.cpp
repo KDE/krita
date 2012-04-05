@@ -40,19 +40,8 @@ const Soprano::Model *KoDocumentRdfBase::model() const
 void KoDocumentRdfBase::linkToResourceManager(KoDocumentResourceManager *rm)
 {
     QVariant variant;
-    variant.setValue<void*>(this);
+    variant.setValue<QObject*>(this);
     rm->setResource(KoText::DocumentRdf, variant);
-
-    kDebug(30015) << "setrm, rm" << rm;
-
-    // // DEBUG
-    // {
-    //     if (!rm->hasResource(KoText::DocumentRdf)) {
-    //         kDebug(30015) << "can not read back!";
-    //     }
-    //     KoDocumentRdfBase* b = static_cast<KoDocumentRdfBase*>(rm->resource(KoText::DocumentRdf).value<void*>());
-    //     kDebug(30015) << "read back" << b;
-    // }
 }
 
 void KoDocumentRdfBase::updateInlineRdfStatements(const QTextDocument *qdoc)
@@ -86,4 +75,9 @@ bool KoDocumentRdfBase::completeLoading(KoStore */*store*/)
 bool KoDocumentRdfBase::completeSaving(KoStore */*store*/, KoXmlWriter */*manifestWriter*/, KoShapeSavingContext */*context*/)
 {
     return false;
+}
+
+QStringList KoDocumentRdfBase::idrefList() const
+{
+    return QStringList();
 }

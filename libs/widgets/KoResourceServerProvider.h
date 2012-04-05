@@ -24,7 +24,7 @@
 
 #include <kowidgets_export.h>
 
-#include <QtCore/QThread>
+#include <QThread>
 
 #include <kdebug.h>
 

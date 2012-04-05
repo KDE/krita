@@ -44,7 +44,7 @@
 #include <ktemporaryfile.h>
 
 #include <QTimer>
-#include <QtGui/QDockWidget>
+#include <QDockWidget>
 #include <QToolBar>
 #include <QApplication>
 #include <QList>

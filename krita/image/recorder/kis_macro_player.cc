@@ -66,6 +66,10 @@ void KisMacroPlayer::run()
     d->paused = false;
     QList<KisRecordedAction*> actions = d->macro->actions();
 
+    if (actions.size() < 1) {
+        return;
+    }
+
     dbgImage << "Start playing macro with " << actions.size() << " actions";
     if (d->info.undoAdapter()) {
         d->info.undoAdapter()->beginMacro(i18n("Play macro"));
@@ -97,7 +101,7 @@ void KisMacroPlayer::run()
             d->info.undoAdapter()->undoLastCommand();
         }
     }
-    
+
 }
 
 #include "kis_macro_player.moc"

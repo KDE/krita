@@ -45,7 +45,7 @@ class QRectF;
 class QPainterPath;
 
 class KoShapeContainer;
-class KoShapeBorderModel;
+class KoShapeStrokeModel;
 class KoShapeBackground;
 class KoShapeManager;
 class KoShapeUserData;
@@ -122,7 +122,7 @@ public:
         ParentChanged,   ///< used after a setParent()
         CollisionDetected, ///< used when another shape moved in our boundingrect
         Deleted, ///< the shape was deleted
-        BorderChanged, ///< the shapes border has changed
+        StrokeChanged, ///< the shapes stroke has changed
         BackgroundChanged, ///< the shapes background has changed
         ShadowChanged, ///< the shapes shadow has changed
         ParameterChanged, ///< the shapes parameter has changed (KoParameterShape only)
@@ -147,7 +147,7 @@ public:
     /**
      * TODO
      */
-    enum Through {
+    enum RunThroughLevel {
         Background,
         Foreground
     };
@@ -256,7 +256,7 @@ public:
      * scaling is a so called secondary operation which is comparable to zooming in
      * instead of changing the size of the basic shape.
      * Easiest example of this difference is that using this method will not distort the
-     * size of pattern-fills and borders.
+     * size of pattern-fills and strokes.
      */
     virtual void setSize(const QSizeF &size);
 
@@ -301,7 +301,7 @@ public:
 
     /**
      * @brief Add a connector point to the shape
-     * 
+     *
      * A connector is a place on the shape that allows a graphical connection to be made
      * using a line, for example.
      *
@@ -318,7 +318,7 @@ public:
      * are fixed at their default position.
      * The function will insert a new connection point if the specified id was not used
      * before.
-     * 
+     *
      * @param connectionPointId the id of the connection point to set
      * @param point the connection point data
      * @return false if specified connection point id is invalid, else true
@@ -370,7 +370,7 @@ public:
      * @param side the requested side
      * @param runThrought run through the foreground or background or...
      */
-    void setTextRunAroundSide(TextRunAroundSide side, Through runThrought = Background);
+    void setTextRunAroundSide(TextRunAroundSide side, RunThroughLevel runThrough = Background);
 
     /**
      * The space between this shape's edge and text that runs around this shape.
@@ -593,6 +593,25 @@ public:
      */
     virtual void update(const QRectF &rect) const;
 
+    /// Used by compareShapeZIndex() to order shapes
+    enum ChildZOrderPolicy {
+        ChildZDefault,
+        ChildZParentChild = ChildZDefault, ///< normal parent/child ordering
+        ChildZPassThrough ///< children are considered equal to this shape
+    };
+
+   /**
+    * Returns if during compareShapeZIndex() how this shape portrays the values
+    * of its children. The default behaviour is to let this shape's z values take
+    * the place of its childrens values, so you get a parent/child relationship.
+    * The children are naturally still ordered relatively to their z values
+    *
+    * But for special cases (like Calligra's TextShape) it can be overloaded to return
+    * ChildZPassThrough which means the children keep their own z values
+    * @returns the z order policy of this shape
+    */
+    virtual ChildZOrderPolicy childZOrderPolicy();
+
     /**
      * This is a method used to sort a list using the STL sorting methods.
      * @param s1 the first shape
@@ -603,7 +622,7 @@ public:
     /**
      * returns the outline of the shape in the form of a path.
      * The outline returned will always be relative to the position() of the shape, so
-     * moving the shape will not alter the result.  The outline is used to draw the border
+     * moving the shape will not alter the result.  The outline is used to draw the stroke
      * on, for example.
      * @returns the outline of the shape in the form of a path.
      */
@@ -619,22 +638,22 @@ public:
     virtual QRectF outlineRect() const;
 
     /**
-     * Returns the currently set border, or 0 if there is no border.
-     * @return the currently set border, or 0 if there is no border.
+     * Returns the currently set stroke, or 0 if there is no stroke.
+     * @return the currently set stroke, or 0 if there is no stroke.
      */
-    KoShapeBorderModel *border() const;
+    KoShapeStrokeModel *stroke() const;
 
     /**
-     * Set a new border, removing the old one.
-     * @param border the new border, or 0 if there should be no border.
+     * Set a new stroke, removing the old one.
+     * @param stroke the new stroke, or 0 if there should be no stroke.
      */
-    void setBorder(KoShapeBorderModel *border);
+    void setStroke(KoShapeStrokeModel *stroke);
 
     /**
-     * Return the insets of the border.
-     * Convenience method for KoShapeBorderModel::borderInsets()
+     * Return the insets of the stroke.
+     * Convenience method for KoShapeStrokeModel::strokeInsets()
      */
-    KoInsets borderInsets() const;
+    KoInsets strokeInsets() const;
 
     /// Sets the new shadow, removing the old one
     void setShadow(KoShapeShadow *shadow);
@@ -883,6 +902,9 @@ public:
     /// Returns if the given shape is dependent on this shape
     bool hasDependee(KoShape *shape) const;
 
+    /// Returns list of shapes depending on this shape
+    QList<KoShape*> dependees() const;
+
     /// Returns additional snap data the shape wants to have snapping to
     virtual KoSnapData snapData() const;
 
@@ -1001,7 +1023,7 @@ protected:
         OdfStyle = 128,              ///< Store the style
         OdfId = 256,                 ///< Store the unique ID
         OdfName = 512,               ///< Store the name of the shape
-        OdfZIndex = 1024,            ///< This only loads the z-index; when saving, it is reflected by the order of the shapes.
+        OdfZIndex = 1024,            ///< Store the z-index
         OdfViewbox = 2048,           ///< Store the viewbox
 
         /// A mask for all mandatory attributes
@@ -1031,7 +1053,7 @@ protected:
     /**
      * @brief Saves the style used for the shape
      *
-     * This method fills the given style object with the border and
+     * This method fills the given style object with the stroke and
      * background properties and then adds the style to the context.
      *
      * @param style the style object to fill
@@ -1050,7 +1072,7 @@ protected:
     virtual void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     /// Loads the stroke style
-    KoShapeBorderModel *loadOdfStroke(const KoXmlElement &element, KoShapeLoadingContext &context) const;
+    KoShapeStrokeModel *loadOdfStroke(const KoXmlElement &element, KoShapeLoadingContext &context) const;
 
     /// Loads the shadow style
     KoShapeBackground *loadOdfFill(KoShapeLoadingContext &context) const;

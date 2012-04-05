@@ -68,6 +68,8 @@ TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager)
         , KoFrameShape(KoXmlNS::draw, "text-box")
         , m_pageProvider(0)
         , m_imageCollection(0)
+        , m_paragraphStyle(0)
+        , m_clip(true)
 {
     setShapeId(TextShape_SHAPEID);
     m_textShapeData = new KoTextShapeData();
@@ -151,6 +153,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     pc.showFormattingCharacters = paintContext.showFormattingCharacters;
     pc.showTableBorders = paintContext.showTableBorders;
     pc.showSpellChecking = paintContext.showSpellChecking;
+    pc.showSelections = paintContext.showSelections;
 
     // When clipping the painter we need to make sure not to cutoff cosmetic pens which
     // may used to draw e.g. table-borders for user convenience when on screen (but not
@@ -176,11 +179,22 @@ QPointF TextShape::convertScreenPos(const QPointF &point) const
     return p + QPointF(0.0, m_textShapeData->documentOffset());
 }
 
+
+QPainterPath TextShape::outline() const
+{
+    QPainterPath path;
+    path.addRect(QRectF(QPointF(0,0), size()));
+    return path;
+}
+
 QRectF TextShape::outlineRect() const
 {
     if (m_textShapeData->rootArea()) {
         QRectF rect = m_textShapeData->rootArea()->boundingRect();
         rect.moveTop(rect.top() - m_textShapeData->rootArea()->top());
+        if (m_clip) {
+            rect.setHeight(size().height());
+        }
         return rect | QRectF(QPointF(0, 0), size());
     }
     return QRectF(QPointF(0,0), size());
@@ -202,7 +216,16 @@ void TextShape::saveOdf(KoShapeSavingContext &context) const
     QString textHeight = additionalAttribute("fo:min-height");
     const_cast<TextShape*>(this)->removeAdditionalAttribute("fo:min-height");
     writer.startElement("draw:frame");
-    saveOdfAttributes(context, OdfAllAttributes);
+    // if the TextShape is wrapped in a shrink to fit container we need to save the geometry of the container as
+    // the geomerty of the shape might have been changed.
+    if (ShrinkToFitShapeContainer *stf = dynamic_cast<ShrinkToFitShapeContainer *>(this->parent())) {
+        stf->saveOdfAttributes(context, OdfSize | OdfPosition | OdfTransformation );
+        saveOdfAttributes(context, OdfAdditionalAttributes | OdfMandatories | OdfCommonChildElements);
+    }
+    else {
+        saveOdfAttributes(context, OdfAllAttributes);
+    }
+
     writer.startElement("draw:text-box");
     if (! textHeight.isEmpty())
         writer.addAttribute("fo:min-height", textHeight);
@@ -247,6 +270,8 @@ QString TextShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) c
         style.addProperty("draw:auto-grow-height", "false");
     if (resize == KoTextShapeData::ShrinkToFitResize)
         style.addProperty("draw:fit-to-size", "true");
+
+    m_textShapeData->saveStyle(style, context);
 
     return KoShape::saveStyle(style, context);
 }
@@ -310,52 +335,23 @@ bool TextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &cont
     m_textShapeData->document()->setUndoRedoEnabled(false);
     loadOdfAttributes(element, context, OdfAllAttributes);
 
-    // load the (text) style of the frame
-    const KoXmlElement *style = 0;
-    if (element.hasAttributeNS(KoXmlNS::draw, "style-name")) {
-        style = context.odfLoadingContext().stylesReader().findStyle(
-                    element.attributeNS(KoXmlNS::draw, "style-name"), "graphic",
-                    context.odfLoadingContext().useStylesAutoStyles());
-        if (!style) {
-            kDebug(32500) << "graphic style not found:" << element.attributeNS(KoXmlNS::draw, "style-name");
-        }
-    }
-    if (element.hasAttributeNS(KoXmlNS::presentation, "style-name")) {
-        style = context.odfLoadingContext().stylesReader().findStyle(
-                    element.attributeNS(KoXmlNS::presentation, "style-name"), "presentation",
-                    context.odfLoadingContext().useStylesAutoStyles());
-        if (!style) {
-            kDebug(32500) << "presentation style not found:" << element.attributeNS(KoXmlNS::presentation, "style-name");
-        }
-    }
-
-    if (style) {
-        KoParagraphStyle paragraphStyle;
-        paragraphStyle.loadOdf(style, context, true);
-        QTextDocument *document = m_textShapeData->document();
-        QTextCursor cursor(document);
-    QTextBlockFormat format;
-    paragraphStyle.applyStyle(format);
-    cursor.setBlockFormat(format);
-    QTextCharFormat cformat;
-    paragraphStyle.KoCharacterStyle::applyStyle(cformat);
-    cursor.setCharFormat(cformat);
-    cursor.setBlockCharFormat(cformat);
+    // this cannot be done in loadStyle as that fill the style stack wrongly and therefor it results 
+    // in wrong data to be loaded.
+    m_textShapeData->loadStyle(element, context);
 
 #ifndef NWORKAROUND_ODF_BUGS
-        KoTextShapeData::ResizeMethod method = m_textShapeData->resizeMethod();
-        if (KoOdfWorkaround::fixAutoGrow(method, context)) {
-            KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-            Q_ASSERT(lay);
-            if (lay) {
-                SimpleRootAreaProvider *provider = dynamic_cast<SimpleRootAreaProvider*>(lay->provider());
-                if (provider) {
-                    provider->m_fixAutogrow = true;
-                }
+    KoTextShapeData::ResizeMethod method = m_textShapeData->resizeMethod();
+    if (KoOdfWorkaround::fixAutoGrow(method, context)) {
+        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+        Q_ASSERT(lay);
+        if (lay) {
+            SimpleRootAreaProvider *provider = dynamic_cast<SimpleRootAreaProvider*>(lay->provider());
+            if (provider) {
+                provider->m_fixAutogrow = true;
             }
         }
-#endif
     }
+#endif
 
     bool answer = loadOdfFrame(element, context);
     m_textShapeData->document()->setUndoRedoEnabled(true);

@@ -36,24 +36,14 @@ public:
     void setDisplay(KoCharacterStyle *style);
     void save(KoCharacterStyle *style) const;
     
-signals:
-    void textColorChanged(QColor);
-    void backgroundColorChanged(QColor);
-
 private slots:
-    void textToggled(bool state);
-    void backgroundToggled(bool state);
-    void clearTextColor();
-    void clearBackgroundColor();
-    void textColorChanged();
-    void backgroundColorChanged();
+    void hyphenateStateChanged();
+
 
 private:
     Ui::FontDecorations widget;
 
-    bool m_textColorChanged, m_textColorReset;
-    bool m_backgroundColorChanged, m_backgroundColorReset;
-
+    bool m_hyphenateInherited;
     bool m_uniqueFormat;
 };
 

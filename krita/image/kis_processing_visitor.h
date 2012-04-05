@@ -20,7 +20,6 @@
 #define __KIS_PROCESSING_VISITOR_H
 
 #include "krita_export.h"
-
 #include "kis_shared.h"
 
 class KisNode;

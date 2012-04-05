@@ -28,52 +28,51 @@
 #include <KLocale>
 #include <KDebug>
 
-#define MARGIN_DEFAULT 10 // we consider it the default value
+#define MARGIN_DEFAULT 18 // we consider it the default value
 
-ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle::Style style, int level,
+ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, const KoListLevelProperties &levelProperties,
                                      KoTextEditor::ChangeListFlags flags, KUndo2Command *parent)
     : KoTextCommandBase(parent),
       m_flags(flags),
       m_first(true),
       m_alignmentMode(false)
 {
-    const bool styleCompletelySetAlready = extractTextBlocks(cursor, level, style);
+    setText(i18nc("(qtundo-format)", "Change List"));
+
+    const bool styleCompletelySetAlready = extractTextBlocks(cursor, levelProperties.level(), levelProperties.style());
     QSet<int> levels = m_levels.values().toSet();
+    KoListStyle::Style style = levelProperties.style();
     KoListStyle listStyle;
 
     // If the style is already completely set, we unset it instead
     if (styleCompletelySetAlready && !(m_flags & KoTextEditor::DontUnsetIfSame))
         style = KoListStyle::None;
 
-    int margin=MARGIN_DEFAULT;
-
     foreach (int lev, levels) {
         KoListLevelProperties llp;
         llp.setLevel(lev);
         llp.setStyle(style);
+        llp.setListItemPrefix(levelProperties.listItemPrefix());
+        llp.setListItemSuffix(levelProperties.listItemSuffix());
+
         if (KoListStyle::isNumberingStyle(style)) {
             llp.setStartValue(1);
             llp.setRelativeBulletSize(100); //we take the default value for numbering bullets as 100
-            llp.setListItemSuffix(".");
+            if (llp.listItemSuffix().isEmpty()) {
+                llp.setListItemSuffix(".");
+            }
         }
         else if (style == KoListStyle::CustomCharItem) {
             llp.setRelativeBulletSize(100); //we take the default value for numbering bullets as 100
-        }
-        else {
-            llp.setRelativeBulletSize(45);   //for non-numbering bullets the default relative bullet size is 45%(The spec does not say it; we take it)
+            llp.setBulletCharacter(levelProperties.bulletCharacter());
         }
 
-        if(m_alignmentMode) {
-            llp.setAlignmentMode(true); // when creating a new list we create it in this mode
-            llp.setLabelFollowedBy(KoListStyle::ListTab);
+        llp.setAlignmentMode(true); // when creating a new list we create it in this mode
+        llp.setLabelFollowedBy(KoListStyle::ListTab);
 
-            llp.setTabStopPosition(margin*(lev+2));
-            llp.setMargin(margin*(lev+1));
-            llp.setTextIndent(margin);
-        }
-
-        if (lev > 1)
-            llp.setIndent((lev-1) * 20); // make this configurable
+        llp.setTabStopPosition(MARGIN_DEFAULT*(lev+2));
+        llp.setMargin(MARGIN_DEFAULT*(lev+2));
+        llp.setTextIndent(- MARGIN_DEFAULT);
 
         listStyle.setLevelProperties(llp);
     }

@@ -121,7 +121,16 @@ void IccColorSpaceEngine::addProfile(const QString &filename)
     KoColorProfile *profile = new IccColorProfile(filename);
     Q_CHECK_PTR(profile);
 
+    // this our own loading code; sometimes it fails because of an lcms error
     profile->load();
+
+    // and then lcms can read the profile from file itself without problems,
+    // quite often, and we can initilize it
+    if (!profile->valid()) {
+        cmsHPROFILE cmsp = cmsOpenProfileFromFile(filename.toAscii(), "r");
+        profile = LcmsColorProfileContainer::createFromLcmsProfile(cmsp);
+    }
+
     if (profile->valid()) {
         kDebug(31000) << "Valid profile : " << profile->fileName() << profile->name();
         registry->addProfile(profile);

@@ -21,9 +21,9 @@
 #define KOCLIPPATH_H
 
 #include "flake_export.h"
-#include <QtCore/QList>
-#include <QtCore/QSharedData>
-#include <QtCore/qnamespace.h>
+#include <QList>
+#include <QSharedData>
+#include <qnamespace.h>
 
 class KoShape;
 class KoPathShape;

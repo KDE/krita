@@ -39,7 +39,7 @@
 #include <KoColorSpaceRegistry.h>
 
 #include <ktemporaryfile.h>
-#include <QtCore/qfileinfo.h>
+#include <QFileInfo>
 
 namespace TestUtil
 {
@@ -65,6 +65,7 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
 
             KisDoc2 doc;
             KoFilterManager manager(&doc);
+            manager.setBatchMode(true);
             QByteArray nativeFormat = doc.nativeFormatMimeType();
             KoFilter::ConversionStatus status;
             QString s = manager.importDocument(sourceFileInfo.absoluteFilePath(), QString(),

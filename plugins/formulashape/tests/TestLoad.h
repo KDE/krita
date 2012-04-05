@@ -20,7 +20,7 @@
 #ifndef _TESTLOAD_H_
 #define _TESTLOAD_H_
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class TestLoad : public QObject
 {

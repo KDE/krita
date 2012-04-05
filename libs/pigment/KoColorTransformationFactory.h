@@ -20,9 +20,9 @@
 #ifndef _KO_COLOR_TRANSFORMATION_FACTORY_H_
 #define _KO_COLOR_TRANSFORMATION_FACTORY_H_
 
-#include <QtCore/QList>
-#include <QtCore/QPair>
-#include <QtCore/QString>
+#include <QList>
+#include <QPair>
+#include <QString>
 
 class KoColorTransformation;
 class KoColorSpace;

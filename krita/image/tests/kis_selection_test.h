@@ -19,7 +19,7 @@
 #ifndef KIS_SELETION_TEST_H
 #define KIS_SELETION_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KoColorSpace;
 
@@ -36,6 +36,8 @@ private slots:
     void testUpdateSelectionProjection();
     void testCopy();
     void testSelectionExactBounds();
+    void testSetParentNodeAfterCreation();
+    void testSetParentNodeBeforeCreation();
 };
 
 #endif

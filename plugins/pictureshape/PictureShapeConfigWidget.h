@@ -22,7 +22,7 @@
 
 #include <KoShapeConfigWidgetBase.h>
 #include <kurl.h>
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class PictureShape;
 class KFileWidget;
@@ -47,6 +47,19 @@ public:
 private:
     PictureShape *m_shape;
     KFileWidget *m_fileWidget;
+};
+
+class LoadWaiter : public QObject
+{
+    Q_OBJECT
+public:
+    LoadWaiter(PictureShape *shape) : m_pictureShape(shape) { }
+
+public slots:
+    void setImageData(KJob *job);
+
+private:
+    PictureShape *m_pictureShape;
 };
 
 #endif //PICTURESHAPECONFIGWIDGET_H

@@ -73,9 +73,18 @@ void KoInlineTextObjectManager::insertInlineObject(QTextCursor &cursor, KoInline
     cf.setProperty(InlineInstanceId, ++m_lastObjectId);
     cursor.insertText(QString(QChar::ObjectReplacementCharacter), cf);
     object->setId(m_lastObjectId);
-    m_objects.insert(m_lastObjectId, object);
     object->setManager(this);
     object->setup();
+
+    insertObject(object);
+
+    // reset to use old format so that the InlineInstanceId is no longer set.
+    cursor.setCharFormat(oldCf);
+}
+
+void KoInlineTextObjectManager::insertObject(KoInlineObject *object)
+{
+    m_objects.insert(object->id(), object);
     if (object->propertyChangeListener()) {
         m_listeners.append(object);
         QHash<int, QVariant>::iterator i;
@@ -90,7 +99,24 @@ void KoInlineTextObjectManager::insertInlineObject(QTextCursor &cursor, KoInline
         m_bookmarkManager.insert(bookmark->name(), bookmark);
     }
     // reset to use old format so that the InlineInstanceId is no longer set.
-    cursor.setCharFormat(oldCf);
+}
+
+void KoInlineTextObjectManager::addInlineObject(KoInlineObject* object)
+{
+    if (!object) {
+        return;
+    }
+
+    int id = object->id();
+    if (id == -1) {
+        object->setId(++m_lastObjectId);
+        object->setManager(this);
+        object->setup();
+    }
+    else {
+        m_deletedObjects.remove(id);
+    }
+    insertObject(object);
 }
 
 bool KoInlineTextObjectManager::removeInlineObject(QTextCursor &cursor)
@@ -132,13 +158,16 @@ bool KoInlineTextObjectManager::removeInlineObject(QTextCursor &cursor)
     return false;
 }
 
+
 void KoInlineTextObjectManager::removeInlineObject(KoInlineObject *object)
 {
     if (!object) {
         return;
     }
 
-    m_objects.remove(object->id());
+    int id = object->id();
+    m_objects.remove(id);
+    m_deletedObjects[id] = object;
     m_listeners.removeAll(object);
 
     KoBookmark *bookmark = dynamic_cast<KoBookmark *>(object);
@@ -146,7 +175,6 @@ void KoInlineTextObjectManager::removeInlineObject(KoInlineObject *object)
         m_bookmarkManager.remove(bookmark->name());
     }
 
-    m_deletedObjects[object->id()] = object;
     // TODO dirty the document somehow
 }
 
@@ -251,9 +279,36 @@ QMap<QString, KoInlineCite*> KoInlineTextObjectManager::citations(bool duplicate
         KoInlineCite* cite = dynamic_cast<KoInlineCite*>(object);
         if (cite && (cite->type() == KoInlineCite::Citation ||
                      (duplicatesEnabled && cite->type() == KoInlineCite::ClonedCitation))) {
-            answers.insert(cite->identifier(),cite);
+            answers.insert(cite->identifier(), cite);
         }
     }
+    return answers;
+}
+
+QList<KoInlineCite*> KoInlineTextObjectManager::citationsSortedByPosition(bool duplicatesEnabled, QTextBlock block) const
+{
+    QList<KoInlineCite*> answers;
+
+    while (block.isValid()) {
+        QString text = block.text();
+        int pos = text.indexOf(QChar::ObjectReplacementCharacter);
+
+        while (pos >= 0 && pos <= block.length() ) {
+            QTextCursor cursor(block);
+            cursor.setPosition(block.position() + pos);
+            cursor.setPosition(cursor.position() + 1, QTextCursor::KeepAnchor);
+
+            KoInlineCite *cite = dynamic_cast<KoInlineCite*>(this->inlineTextObject(cursor));
+
+            if (cite && (cite->type() == KoInlineCite::Citation ||
+                         (duplicatesEnabled && cite->type() == KoInlineCite::ClonedCitation))) {
+                answers.append(cite);
+            }
+            pos = text.indexOf(QChar::ObjectReplacementCharacter, pos + 1);
+        }
+        block = block.next();
+    }
+
     return answers;
 }
 
@@ -263,6 +318,8 @@ void KoInlineTextObjectManager::documentInformationUpdated(const QString &info, 
         setProperty(KoInlineObject::Title, data);
     else if (info == "description")
         setProperty(KoInlineObject::Description, data);
+    else if (info == "comments")
+        setProperty(KoInlineObject::Comments, data);
     else if (info == "subject")
         setProperty(KoInlineObject::Subject, data);
     else if (info == "keyword")

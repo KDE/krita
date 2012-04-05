@@ -51,39 +51,18 @@ public:
     void emitNotification(KisImageSignalType type);
     void emitNotifications(KisImageSignalVector notifications);
 
-    void emitNodeChanged(KisNode *node);
-    void emitAboutToAddANode(KisNode *parent, int index);
+    void emitNodeChanged(KisNodeSP node);
     void emitNodeHasBeenAdded(KisNode *parent, int index);
     void emitAboutToRemoveANode(KisNode *parent, int index);
-    void emitNodeHasBeenRemoved(KisNode *parent, int index);
-    void emitAboutToMoveNode(KisNode *parent, int oldIndex, int newIndex);
-    void emitNodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex);
-
-private:
-    bool checkSameThread();
 
 private slots:
     void slotNotification(KisImageSignalType type);
 
 signals:
 
-    void __sigNotification(KisImageSignalType type);
-    void __sigNodeChanged(KisNode *node);
-    void __sigAboutToAddANode(KisNode *parent, int index);
-    void __sigNodeHasBeenAdded(KisNode *parent, int index);
-    void __sigAboutToRemoveANode(KisNode *parent, int index);
-    void __sigNodeHasBeenRemoved(KisNode *parent, int index);
-    void __sigAboutToMoveNode(KisNode *parent, int oldIndex, int newIndex);
-    void __sigNodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex);
-
-signals:
-
     void sigNotification(KisImageSignalType type);
 
     // Notifications
-    void sigLayersChanged(KisGroupLayerSP rootLayer);
-    void sigPostLayersChanged(KisGroupLayerSP rootLayer);
-
     void sigImageModified();
 
     void sigSizeChanged(qint32 w, qint32 h);
@@ -91,14 +70,11 @@ signals:
     void sigColorSpaceChanged(const KoColorSpace*  cs);
     void sigResolutionChanged(double xRes, double yRes);
 
-    // Synchronous
-    void sigNodeChanged(KisNode *node);
-    void sigAboutToAddANode(KisNode *parent, int index);
-    void sigNodeHasBeenAdded(KisNode *parent, int index);
-    void sigAboutToRemoveANode(KisNode *parent, int index);
-    void sigNodeHasBeenRemoved(KisNode *parent, int index);
-    void sigAboutToMoveNode(KisNode *parent, int oldIndex, int newIndex);
-    void sigNodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex);
+    // Graph change signals
+    void sigNodeChanged(KisNodeSP node);
+    void sigNodeAddedAsync(KisNodeSP node);
+    void sigRemoveNodeAsync(KisNodeSP node);
+    void sigLayersChangedAsync();
 
 private:
     KisImageWSP m_image;

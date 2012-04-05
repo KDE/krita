@@ -19,8 +19,6 @@
  */
 
 #include "CharacterGeneral.h"
-#include "FontLayoutTab.h"
-#include "FontTab.h"
 #include "CharacterHighlighting.h"
 #include "LanguageTab.h"
 #include "FontDecorations.h"
@@ -31,34 +29,25 @@
 
 #include "kdebug.h"
 
-CharacterGeneral::CharacterGeneral(QWidget *parent, bool uniqueFormat)
+CharacterGeneral::CharacterGeneral(QWidget *parent)
         : QWidget(parent),
         m_blockSignals(false),
         m_style(0)
 {
     widget.setupUi(this);
 
-    m_layoutTab = new FontLayoutTab(true, uniqueFormat, this);
-
-    m_characterDecorations = new FontDecorations(uniqueFormat, this);
-    connect(m_characterDecorations, SIGNAL(backgroundColorChanged(QColor)), this, SLOT(slotBackgroundColorChanged(QColor)));
-    connect(m_characterDecorations, SIGNAL(textColorChanged(QColor)), this, SLOT(slotTextColorChanged(QColor)));
-
-    m_characterHighlighting = new CharacterHighlighting(uniqueFormat, this);
+    m_characterHighlighting = new CharacterHighlighting(true, this);
     connect(m_characterHighlighting, SIGNAL(underlineChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor)), this, SLOT(slotUnderlineChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor)));
     connect(m_characterHighlighting, SIGNAL(strikethroughChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor)), this, SLOT(slotStrikethroughChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor)));
     connect(m_characterHighlighting, SIGNAL(capitalizationChanged(QFont::Capitalization)), this, SLOT(slotCapitalizationChanged(QFont::Capitalization)));
+    connect(m_characterHighlighting, SIGNAL(fontChanged(const QFont &)), this, SLOT(slotFontSelected(const QFont &)));
+    connect(m_characterHighlighting, SIGNAL(backgroundColorChanged(QColor)), this, SLOT(slotBackgroundColorChanged(QColor)));
+    connect(m_characterHighlighting, SIGNAL(textColorChanged(QColor)), this, SLOT(slotTextColorChanged(QColor)));
 
-    m_fontTab = new FontTab(uniqueFormat, this);
-    connect(m_fontTab, SIGNAL(fontChanged(const QFont &)), this, SLOT(slotFontSelected(const QFont &)));
+    m_languageTab = new LanguageTab(true, this);
 
-    m_languageTab = new LanguageTab(uniqueFormat, this);
+    widget.tabs->addTab(m_characterHighlighting, i18n("Font"));
 
-    widget.tabs->addTab(m_fontTab, i18n("Font"));
-    widget.tabs->addTab(m_characterDecorations, i18n("Decorations"));
-    widget.tabs->addTab(m_characterHighlighting, i18n("Highlighting"));
-    widget.tabs->addTab(m_layoutTab, i18n("Layout"));
-    //widget.tabs->addTab(m_languageTab, i18n("Language"));
     m_languageTab->setVisible(false);
 
     connect(widget.name, SIGNAL(textChanged(const QString &)), this, SIGNAL(nameChanged(const QString&)));
@@ -84,11 +73,9 @@ void CharacterGeneral::setStyle(KoCharacterStyle *style)
 
     if (!m_nameHidden)
         widget.name->setText(style->name());
-    m_fontTab->setDisplay(style);
-    m_layoutTab->setDisplay(style);
-    m_characterDecorations->setDisplay(style);
+
     m_characterHighlighting->setDisplay(style);
-    m_languageTab->setDisplay(style);
+    //m_languageTab->setDisplay(style);
 
     m_blockSignals = false;
 }
@@ -105,11 +92,8 @@ void CharacterGeneral::save(KoCharacterStyle *style)
     else
         savingStyle = style;
 
-    m_fontTab->save(savingStyle);
-    m_characterDecorations->save(savingStyle);
     m_characterHighlighting->save(savingStyle);
-    m_layoutTab->save(savingStyle);
-    m_languageTab->save(savingStyle);
+    //m_languageTab->save(savingStyle);
 
     emit styleAltered(savingStyle);
 }

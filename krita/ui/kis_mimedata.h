@@ -33,12 +33,7 @@ class KRITAUI_EXPORT KisMimeData : public QMimeData
 {
     Q_OBJECT
 public:
-    KisMimeData();
-
-    /**
-     * Set the node this KisMimeData instance contains. There can be only one node.
-     */
-    void setNode(KisNodeSP node);
+    KisMimeData(KisNodeSP node);
 
     /// return the node set on this mimedata object -- for internal use
     KisNodeSP node() const;

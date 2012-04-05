@@ -39,34 +39,12 @@
 #include "kis_canvas2.h"
 #include "kis_view2.h"
 #include "kis_node_manager.h"
+#include "kis_image.h"
 
 #include <kis_transaction.h>
 #include <commands/kis_image_layer_add_command.h>
 #include <commands/kis_deselect_global_selection_command.h>
 #include "strokes/move_stroke_strategy.h"
-
-/**
- * Deferred activation of a node. After it is actually added to the
- * layer stack. In the future it might be shared with the methods of
- * KisNodeManager which are not ported to strokes yet.
- */
-class ActivateNodeCommand : public KUndo2Command
-{
-public:
-    ActivateNodeCommand(KisView2 *view, KisNodeSP node)
-        : m_view(view), m_node(node)
-    {}
-
-    void redo() {
-        m_view->nodeManager()->activateNode(m_node);
-    }
-
-    void undo() {}
-
-private:
-    KisView2 *m_view;
-    KisNodeSP m_node;
-};
 
 KisToolMove::KisToolMove(KoCanvasBase * canvas)
         :  KisTool(canvas, KisCursor::moveCursor())
@@ -211,16 +189,10 @@ void KisToolMove::mousePressEvent(KoPointerEvent *event)
             !node->inherits("KisGroupLayer") &&
             node->paintDevice() &&
             selection &&
-            !selection->isDeselected() &&
             !selection->isTotallyUnselected(image->bounds())) {
 
             KisLayerSP oldLayer = dynamic_cast<KisLayer*>(node.data());
             KisLayerSP newLayer = createSelectionCopy(oldLayer, selection, image, m_strokeId);
-
-            KisView2 *view = dynamic_cast<KisCanvas2*>(canvas())->view();
-            image->addJob(m_strokeId,
-                          new KisStrokeStrategyUndoCommandBased::Data(
-                              new ActivateNodeCommand(view, newLayer)));
 
             node = newLayer;
         }
@@ -267,7 +239,7 @@ void KisToolMove::mouseReleaseEvent(KoPointerEvent *event)
 {
     if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
         setMode(KisTool::HOVER_MODE);
-        
+
         if (!m_strokeId)
         {
             return;
@@ -304,12 +276,3 @@ QWidget* KisToolMove::createOptionWidget()
     m_optionsWidget->setFixedHeight(m_optionsWidget->sizeHint().height());
     return m_optionsWidget;
 }
-
-
-QWidget* KisToolMove::optionWidget()
-{
-    return m_optionsWidget;
-}
-
-
-#include "kis_tool_move.moc"

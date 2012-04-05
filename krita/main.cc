@@ -53,8 +53,8 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     // first create the application so we can create a  pixmap
     KoApplication app;
 
-    // then create the pixmap from an xpm: we cannot get the 
-    // location of our datadir before we've started our components, 
+    // then create the pixmap from an xpm: we cannot get the
+    // location of our datadir before we've started our components,
     // so use an xpm.
     QPixmap pm(splash_screen_xpm);
     QSplashScreen *splash = new KSplashScreen(pm);

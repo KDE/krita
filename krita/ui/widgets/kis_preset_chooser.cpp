@@ -27,6 +27,7 @@
 #include <QAbstractItemDelegate>
 #include <QStyleOptionViewItem>
 #include <QSortFilterProxyModel>
+#include <QApplication>
 
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -42,6 +43,7 @@
 #include "kis_resource_server_provider.h"
 #include "kis_global.h"
 #include "kis_slider_spin_box.h"
+#include "kis_config.h"
 
 /// The resource item delegate for rendering the resource preview
 class KisPresetDelegate : public QAbstractItemDelegate
@@ -72,8 +74,11 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     KisPaintOpPreset* preset = static_cast<KisPaintOpPreset*>(index.internalPointer());
 
     if (option.state & QStyle::State_Selected) {
-        painter->setPen(QPen(option.palette.highlight(), 2.0));
+        painter->setPen(QPen(option.palette.highlightedText(), 2.0));
         painter->fillRect(option.rect, option.palette.highlight());
+    } else {
+        painter->setPen(QPen(option.palette.text(), 2.0));
+
     }
 
     QImage preview = preset->image();
@@ -91,7 +96,6 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
         painter->drawImage(paintRect.x(), paintRect.y(),
                            preview.scaled(pixSize, Qt::KeepAspectRatio));
 
-        painter->setPen(Qt::black);
         painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, preset->name());
     }
 
@@ -110,7 +114,10 @@ class KisPresetProxyAdapter : public KoResourceServerAdapter<KisPaintOpPreset>
 
 public:
     KisPresetProxyAdapter(KoResourceServer< KisPaintOpPreset >* resourceServer)
-        : KoResourceServerAdapter<KisPaintOpPreset>(resourceServer), m_showAll(false), m_filterNames(false){}
+        : KoResourceServerAdapter<KisPaintOpPreset>(resourceServer), m_filterNames(false)
+    {
+        m_showAll = KisConfig().presetShowAllMode();
+    }
     virtual ~KisPresetProxyAdapter() {}
 
     virtual QList< KoResource* > resources() {

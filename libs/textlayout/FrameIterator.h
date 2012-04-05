@@ -19,7 +19,6 @@
 #ifndef FRAMEITERATOR_H
 #define FRAMEITERATOR_H
 
-
 #include <QTextFrame>
 #include <QTextLine>
 #include <QTextTableCell>

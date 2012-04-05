@@ -36,15 +36,13 @@
 #include <QDomElement>
 #include <QTemporaryFile>
 
-KisMimeData::KisMimeData() :
-    QMimeData()
+KisMimeData::KisMimeData(KisNodeSP node)
+    : QMimeData()
+    , m_node(node)
 {
+    Q_ASSERT(m_node);
 }
 
-void KisMimeData::setNode(KisNodeSP node)
-{
-    m_node = node;
-}
 
 KisNodeSP KisMimeData::node() const
 {
@@ -55,17 +53,22 @@ QStringList KisMimeData::formats () const
 {
     QStringList f = QMimeData::formats();
     if (m_node) {
+#if QT_VERSION  < 0x040800
         f << "application/x-krita-node"
           << "application/x-qt-image";
+#else
+        f << "application/x-krita-node";
+#endif
     }
     return f;
 }
 
 QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type preferredType) const
 {
+    Q_ASSERT(m_node);
     if (mimetype == "application/x-qt-image") {
         KisConfig cfg;
-        return m_node->paintDevice()->convertToQImage(cfg.displayProfile());
+        return m_node->projection()->convertToQImage(cfg.displayProfile());
     }
     else if (mimetype == "application/x-krita-node"
              || mimetype == "application/zip") {
@@ -75,8 +78,8 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
         QByteArray ba;
         QBuffer buf(&ba);
         KoStore *store = KoStore::createStore(&buf, KoStore::Write);
-
         Q_ASSERT(!store->bad());
+        store->disallowNameExpansion();
 
         KisDoc2 doc;
 

@@ -23,28 +23,10 @@
 #include <KoXmlNS.h>
 #include <KoTextSharedLoadingData.h>
 #include <KoParagraphStyle.h>
+#include <KoOdfBibliographyConfiguration.h>
 
 #include <QTextCursor>
 
-const QList<QString> KoBibliographyInfo::bibTypes = QList<QString>() << "article" << "book" << "booklet" << "conference"
-                                                                     << "email" << "inbook" << "incollection"
-                                                                     << "inproceedings" << "journal" << "manual"
-                                                                     << "mastersthesis" << "misc" << "phdthesis"
-                                                                     << "proceedings" << "techreport" << "unpublished"
-                                                                     << "www" << "custom1" << "custom2"
-                                                                     << "custom3" << "custom4" << "custom5";
-
-const QList<QString> KoBibliographyInfo::bibDataFields = QList<QString>() << "address" << "annote" << "author"
-                                                                          << "bibliography-type" << "booktitle"
-                                                                          << "chapter" << "custom1" << "custom2"
-                                                                          << "custom3" << "custom4" << "custom5"
-                                                                          << "edition" << "editor" << "howpublished"
-                                                                          << "idenfier" << "institution" << "isbn"
-                                                                          << "issn" << "journal" << "month" << "note"
-                                                                          << "number" << "organizations" << "pages"
-                                                                          << "publisher" << "report-type" << "school"
-                                                                          << "series" << "title" << "url" << "volume"
-                                                                          << "year";
 int KoBibliographyInfo::styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, QString styleName)
 {
     KoParagraphStyle * style = sharedLoadingData->paragraphStyle(styleName, true);
@@ -154,6 +136,22 @@ void KoBibliographyInfo::setGenerator(BibliographyGeneratorInterface *generator)
 void KoBibliographyInfo::setEntryTemplates(QMap<QString, BibliographyEntryTemplate> &entryTemplates)
 {
     m_entryTemplate = entryTemplates;
+}
+
+KoBibliographyInfo *KoBibliographyInfo::clone()
+{
+    KoBibliographyInfo *newBibInfo = new KoBibliographyInfo();
+    newBibInfo->m_entryTemplate.clear();
+    newBibInfo->m_name = QString(m_name);
+    newBibInfo->m_styleName = QString(m_name);
+    newBibInfo->m_indexTitleTemplate = m_indexTitleTemplate;
+
+    for (int i = 0; i < m_entryTemplate.size() ; i++) {
+        newBibInfo->m_entryTemplate.insert(KoOdfBibliographyConfiguration::bibTypes.at(i),
+                                           m_entryTemplate[KoOdfBibliographyConfiguration::bibTypes.at(i)]);
+    }
+
+    return newBibInfo;
 }
 
 BibliographyGeneratorInterface *KoBibliographyInfo::generator() const

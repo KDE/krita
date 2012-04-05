@@ -481,12 +481,12 @@ public:
 
         KisPaintDeviceSP interm = new KisPaintDevice(pixelSelection->colorSpace());
         KisConvolutionPainter horizPainter(interm);
-        horizPainter.setChannelFlags(interm->colorSpace()->channelFlags(false, true, false, false));
+        horizPainter.setChannelFlags(interm->colorSpace()->channelFlags(false, true));
         horizPainter.applyMatrix(kernelHoriz, pixelSelection, rect.topLeft(), rect.topLeft(), rect.size(), BORDER_AVOID);
         horizPainter.end();
 
         KisConvolutionPainter verticalPainter(pixelSelection);
-        verticalPainter.setChannelFlags(pixelSelection->colorSpace()->channelFlags(false, true, false, false));
+        verticalPainter.setChannelFlags(pixelSelection->colorSpace()->channelFlags(false, true));
         verticalPainter.applyMatrix(kernelVertical, interm, rect.topLeft(), rect.topLeft(), rect.size(), BORDER_AVOID);
         verticalPainter.end();
     }

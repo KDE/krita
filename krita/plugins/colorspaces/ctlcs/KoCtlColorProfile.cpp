@@ -53,6 +53,7 @@
 #include "KoCtlUtils.h"
 
 #include "kis_debug.h"
+#include <kis_gtl_lock.h>
 
 struct ConversionInfo {
     QString sourceColorModelID;
@@ -142,6 +143,7 @@ bool KoCtlColorProfile::isSuitableForDisplay() const
 
 OpenCTL::Program* KoCtlColorProfile::createColorConversionProgram(const KoColorSpace* _srcCs, const KoColorSpace* _dstCs) const
 {
+    KisGtlLocker gtlLocker;
     QString srcModelId = _srcCs->colorModelId().id();
     QString srcDepthId = _srcCs->colorDepthId().id();
     QString dstModelId = _dstCs->colorModelId().id();

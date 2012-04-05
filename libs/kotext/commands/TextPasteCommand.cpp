@@ -36,6 +36,7 @@
 
 #include "ChangeTrackedDeleteCommand.h"
 #include "DeleteCommand.h"
+#include "KoDocumentRdfBase.h"
 
 #ifdef SHOULD_BUILD_RDF
 #include <rdf/KoDocumentRdf.h>
@@ -55,10 +56,10 @@ TextPasteCommand::TextPasteCommand(const QMimeData *mimeData,
       m_pasteAsText(pasteAsText),
       m_first(true)
 {
-    m_rdf = static_cast<KoDocumentRdfBase*>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<void*>());
+    m_rdf = qobject_cast<KoDocumentRdfBase*>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<QObject*>());
 
     if (m_pasteAsText)
-        setText(i18n("Paste As Text"));
+        setText(i18nc("(qtundo-format)", "Paste As Text"));
     else
         setText(i18nc("(qtundo-format)", "Paste"));
 }
@@ -78,16 +79,15 @@ void TextPasteCommand::redo()
     if (!m_first) {
         KUndo2Command::redo();
     } else {
-        //kDebug() << "begin paste command";
-        editor->beginEditBlock();
+        editor->beginEditBlock(); //this is needed so Qt does not merge successive paste actions together
         m_first = false;
         if (editor->hasSelection()) { //TODO
             // XXX: this was m_tool->m_actionShowChanges.isChecked -- but shouldn't we check
             // whether we should record changes here, instead of showing?
-            if (textDocument.changeTracker()->recordChanges()) {
-                editor->addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, m_document.data(), m_shapeController));
+            if (textDocument.changeTracker() && textDocument.changeTracker()->recordChanges()) {
+                editor->addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, m_document.data(), m_shapeController, this));
             } else {
-                editor->addCommand(new DeleteCommand(DeleteCommand::NextChar, m_document.data(), m_shapeController));
+                editor->addCommand(new DeleteCommand(DeleteCommand::NextChar, m_document.data(), m_shapeController, this));
             }
         }
 
@@ -114,10 +114,8 @@ void TextPasteCommand::redo()
                 }
 #endif
 
-                //kDebug() << "pasting odf text";
                 KoTextPaste paste(editor, m_shapeController, rdfModel);
                 paste.paste(odfType, m_mimeData);
-                //kDebug() << "done with pasting odf";
 
 #ifdef SHOULD_BUILD_RDF
                 if (m_rdf) {
@@ -129,14 +127,10 @@ void TextPasteCommand::redo()
 #endif
             }
         } else if (!m_pasteAsText && m_mimeData->hasHtml()) {
-            //kDebug() << "pasting html";
             editor->insertHtml(m_mimeData->html());
-            //kDebug() << "done with pasting";
         } else if (m_pasteAsText || m_mimeData->hasText()) {
-            //kDebug() << "pasting text";
             editor->insertText(m_mimeData->text());
-            //kDebug() << "done with pasting";
         }
-        editor->endEditBlock();
+        editor->endEditBlock(); //see above beginEditBlock
     }
 }

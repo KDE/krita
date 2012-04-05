@@ -22,7 +22,7 @@
 #include "Property.h"
 #include "Set.h"
 
-#include <QtCore/QHash>
+#include <QHash>
 
 #include <KLocale>
 #include <kdebug.h>

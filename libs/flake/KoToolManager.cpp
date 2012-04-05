@@ -89,11 +89,13 @@ public:
         // 2. disable conflicting actions
         // 3. replace conflicting actions in the action collection
         KActionCollection *ac = canvas->actionCollection();
+
         QHash<QString, KAction*> toolActions = activeTool->actions();
         QHash<QString, KAction*>::const_iterator it(toolActions.constBegin());
+
         for (; it != toolActions.constEnd(); ++it) {
             if (ac) {
-                QAction* action = ac->action(it.key());
+                KAction* action = qobject_cast<KAction*>(ac->action(it.key()));
                 if (action) {
                     ac->takeAction(action);
                     if (action != it.value()) {
@@ -104,7 +106,6 @@ public:
                             disabledDisabledActions.append(action);
                         }
                     }
-                    it.value()->setShortcut(action->shortcut());
                 }
                 ac->addAction(it.key(), it.value());
             }
@@ -114,16 +115,18 @@ public:
 
     void deactivateToolActions()
     {
+
         if (!activeTool)
             return;
         // disable actions of active tool
         foreach(KAction *action, activeTool->actions()) {
             action->setEnabled(false);
         }
-        // enable actions which where disables on activating the active tool
+
+        // enable actions which where disabled on activating the active tool
         // and re-add them to the action collection
         KActionCollection *ac = canvas->actionCollection();
-        foreach(QAction *action, disabledDisabledActions) {
+        foreach(KAction *action, disabledDisabledActions) {
             if(ac) {
                 ac->addAction(action->objectName(), action);
             }
@@ -147,14 +150,14 @@ public:
     const KoInputDevice inputDevice;
     QWidget *dummyToolWidget;  // the widget shown in the toolDocker.
     QLabel *dummyToolLabel;
-    QList<QAction*> disabledActions; ///< disabled conflicting actions
-    QList<QAction*> disabledDisabledActions; ///< disabled conflicting actions that were already disabled
+    QList<KAction*> disabledActions; ///< disabled conflicting actions
+    QList<KAction*> disabledDisabledActions; ///< disabled conflicting actions that were already disabled
 };
 
 KoToolManager::Private::Private(KoToolManager *qq)
     : q(qq),
     canvasData(0),
-    layerEnabled(true)
+    layerExplicitlyDisabled(false)
 {
 }
 
@@ -181,15 +184,6 @@ CanvasData *KoToolManager::Private::createCanvasData(KoCanvasController *control
     CanvasData *cd = new CanvasData(controller, device);
     cd->allTools = toolsHash;
     return cd;
-}
-
-bool KoToolManager::Private::toolCanBeUsed(const QString &activationShapeId)
-{
-    if (layerEnabled)
-        return true;
-    if (activationShapeId.endsWith(QLatin1String("/always")))
-        return true;
-    return false;
 }
 
 void KoToolManager::Private::setup()
@@ -226,7 +220,6 @@ void KoToolManager::Private::switchTool(KoToolBase *tool, bool temporary)
 
     if (newActiveTool) {
         canvasData->activeTool->repaintDecorations();
-        // check if this tool is inputDeviceAgnostic and used by other devices, in which case we should not deactivate.
         QList<CanvasData*> items = canvasses[canvasData->canvas];
         foreach(CanvasData *cd, items) {
             if (cd == canvasData) continue;
@@ -290,8 +283,6 @@ void KoToolManager::Private::switchTool(const QString &id, bool temporary)
 
     foreach(ToolHelper *th, tools) {
         if (th->id() == id) {
-            if (!toolCanBeUsed(th->activationShapeId()))
-                return;
             canvasData->activationShapeId = th->activationShapeId();
             break;
         }
@@ -341,12 +332,10 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
     }
 
     if (canvasData->canvas->canvas()) {
-        KoCanvasBase *canvas = canvasData->canvas->canvas();
         // Caller of postSwitchTool expect this to be called to update the selected tool
-        KoToolProxy *tp = proxies.value(canvas);
-        if (tp)
-            tp->setActiveTool(canvasData->activeTool);
+        updateToolForProxy();
         canvasData->activeTool->activate(toolActivation, shapesToOperateOn);
+        KoCanvasBase *canvas = canvasData->canvas->canvas();
         canvas->updateInputMethodInfo();
     } else {
         canvasData->activeTool->activate(toolActivation, shapesToOperateOn);
@@ -392,8 +381,6 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
 void KoToolManager::Private::toolActivated(ToolHelper *tool)
 {
     Q_ASSERT(tool);
-    if (!toolCanBeUsed(tool->activationShapeId()))
-        return;
 
     Q_ASSERT(canvasData);
     if (!canvasData) return;
@@ -428,6 +415,7 @@ void KoToolManager::Private::detachCanvas(KoCanvasController *controller)
             if (canvasControllerWidget) {
                 canvasControllerWidget->activate();
             }
+            postSwitchTool(false);
         } else {
             KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
             if (canvasControllerWidget) {
@@ -629,19 +617,20 @@ void KoToolManager::Private::selectionChanged(QList<KoShape*> shapes)
 
 void KoToolManager::Private::currentLayerChanged(const KoShapeLayer *layer)
 {
-    kDebug(30006) << "layer changed to" << layer;
-
     emit q->currentLayerChanged(canvasData->canvas, layer);
-    layerEnabled = layer == 0 || (layer->isEditable() && layer->isVisible());
+    layerExplicitlyDisabled = layer && !layer->isEditable();
+    updateToolForProxy();
 
-    kDebug(30006) << "and the layer enabled is" << (layerEnabled ? "true" : "false");
+    kDebug(30006) << "Layer changed to" << layer << "explicitly disabled:" << layerExplicitlyDisabled;
+}
 
+void KoToolManager::Private::updateToolForProxy()
+{
     KoToolProxy *proxy = proxies.value(canvasData->canvas->canvas());
-    kDebug(30006) << " and the proxy is" << proxy;
-    if (proxy) {
-        kDebug(30006) << " set" << canvasData->activeTool << (layerEnabled ? "enabled" : "disabled");
-        proxy->setActiveTool(toolCanBeUsed(canvasData->activationShapeId) ? canvasData->activeTool : 0);
-    }
+    if(!proxy) return;
+
+    bool canUseTool = !layerExplicitlyDisabled || canvasData->activationShapeId.endsWith(QLatin1String("/always"));
+    proxy->setActiveTool(canUseTool ? canvasData->activeTool : 0);
 }
 
 void KoToolManager::Private::switchInputDevice(const KoInputDevice &device)
@@ -947,6 +936,8 @@ void KoToolManager::injectDeviceEvent(KoInputDeviceHandlerEvent * event)
 void KoToolManager::addDeferredToolFactory(KoToolFactoryBase *toolFactory)
 {
     ToolHelper *tool = new ToolHelper(toolFactory);
+    // make sure all plugins are loaded as otherwise we will not load them
+    d->setup();
     d->tools.append(tool);
 
     // connect to all tools so we can hear their button-clicks
@@ -995,8 +986,7 @@ QPair<QString, KoToolBase*> KoToolManager::createTools(KoCanvasController *contr
         origHash = d->canvasses.value(controller).first()->allTools;
     }
 
-    if (tool->inputDeviceAgnostic() && origHash.contains(tool->id())) {
-        // reuse ones that are marked as inputDeviceAgnostic();
+    if (origHash.contains(tool->id())) {
         return QPair<QString, KoToolBase*>(tool->id(), origHash.value(tool->id()));
     }
 

@@ -51,7 +51,7 @@ private:
 
 };
 
-class ChalkProperties{
+class ChalkProperties {
 public:
     int radius;
     bool inkDepletion;

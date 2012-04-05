@@ -79,7 +79,12 @@ public:
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
 protected:
+    KisLayer* onlyMeaningfulChild() const;
     KisPaintDeviceSP tryObligeChild() const;
+
+private:
+    bool checkCloneLayer(KisCloneLayerSP clone) const;
+    bool checkNodeRecursively(KisNodeSP node) const;
 
 private:
     struct Private;

@@ -25,11 +25,11 @@
 #include "kis_group_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_paint_device.h"
-#include "kis_image.h"
+
 #include "kis_undo_stores.h"
 #include "kis_processing_applicator.h"
 #include "processing/kis_crop_processing_visitor.h"
-
+#include "kis_image.h"
 
 /*
   +----------+
@@ -58,7 +58,7 @@ KisImageSP createImage(KisUndoStore *undoStore,
     image->addNode(paintLayer1, image->rootLayer());
     image->addNode(paintLayer2, image->rootLayer());
 
-    image->refreshGraph();
+    image->initialRefreshGraph();
 
     return image;
 }

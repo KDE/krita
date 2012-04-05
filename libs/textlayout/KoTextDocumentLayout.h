@@ -70,6 +70,7 @@ public:
             , imageCollection(0)
             , showFormattingCharacters(false)
             , showSpellChecking(false)
+            , showSelections(true)
             , background(Qt::white)
         {
         }
@@ -83,6 +84,7 @@ public:
         bool showFormattingCharacters;
         bool showTableBorders;
         bool showSpellChecking;
+        bool showSelections;
         QColor background;
     };
 
@@ -222,6 +224,10 @@ public:
     /// Set \a layout() to be blocked (no layouting will happen)
     void setBlockLayout(bool block);
     bool layoutBlocked() const;
+
+    /// Set \a documentChanged() to be blocked (changes will not result in root-areas being marked dirty)
+    void setBlockChanges(bool block);
+    bool changesBlocked() const;
 
     KoTextDocumentLayout* referencedLayout() const;
     void setReferencedLayout(KoTextDocumentLayout *layout);

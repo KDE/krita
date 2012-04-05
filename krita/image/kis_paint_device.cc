@@ -45,8 +45,7 @@
 #include "kis_node.h"
 #include "commands/kis_paintdevice_convert_type_command.h"
 #include "kis_datamanager.h"
-#include "kis_paint_device.h"
-#include "kis_image.h"
+
 #include "kis_selection_component.h"
 #include "kis_pixel_selection.h"
 #include "kis_repeat_iterators_pixel.h"
@@ -133,7 +132,7 @@ public:
             cacheThumbnail(w, h, thumbnail);
         }
 
-        Q_ASSERT(!thumbnail.isNull());
+        Q_ASSERT(!thumbnail.isNull() || m_paintDevice->extent().isEmpty());
         return thumbnail;
     }
 
@@ -162,20 +161,15 @@ struct KisPaintDevice::Private
 public:
 
     Private(KisPaintDevice *paintDevice)
-        : cache(paintDevice)
-        , defaultBounds()
-        ,  x(0)
-        ,  y(0)
-    {
-    }
-
-    ~Private()
+        : cache(paintDevice),
+          x(0),
+          y(0)
     {
     }
 
     KisNodeWSP parent;
+    KisDefaultBoundsBaseSP defaultBounds;
     PaintDeviceCache cache;
-    KisDefaultBounds *defaultBounds;
     qint32 x;
     qint32 y;
     KoColorSpace* colorSpace;
@@ -189,7 +183,7 @@ KisPaintDevice::KisPaintDevice(const KoColorSpace * colorSpace, const QString& n
     init(0, colorSpace, new KisDefaultBounds(), 0, name);
 }
 
-KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace *colorSpace, KisDefaultBounds *defaultBounds, const QString& name)
+KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, KisDefaultBoundsBaseSP defaultBounds, const QString& name)
     : QObject(0)
     , m_d(new Private(this))
 {
@@ -209,11 +203,15 @@ KisPaintDevice::KisPaintDevice(KisDataManagerSP explicitDataManager,
 
 void KisPaintDevice::init(KisDataManagerSP explicitDataManager,
                           const KoColorSpace *colorSpace,
-                          KisDefaultBounds *defaultBounds,
+                          KisDefaultBoundsBaseSP defaultBounds,
                           KisNodeWSP parent, const QString& name)
 {
     Q_ASSERT(colorSpace);
     setObjectName(name);
+
+    if (!defaultBounds) {
+        defaultBounds = new KisDefaultBounds();
+    }
 
     m_d->colorSpace = KoColorSpaceRegistry::instance()->grabColorSpace(colorSpace);
     Q_ASSERT(m_d->colorSpace);
@@ -336,17 +334,19 @@ void KisPaintDevice::setParentNode(KisNodeWSP parent)
     m_d->parent = parent;
 }
 
-void KisPaintDevice::setDefaultBounds(KisDefaultBounds *defaultBounds)
+// for testing purposes only
+KisNodeWSP KisPaintDevice::parentNode() const
 {
-    if (!defaultBounds->parent()) {
-        defaultBounds->moveToThread(QThread::currentThread());
-        defaultBounds->setParent(this);
-    }
+    return m_d->parent;
+}
+
+void KisPaintDevice::setDefaultBounds(KisDefaultBoundsBaseSP defaultBounds)
+{
     m_d->defaultBounds = defaultBounds;
     m_d->cache.invalidate();
 }
 
-KisDefaultBounds *KisPaintDevice::defaultBounds() const
+KisDefaultBoundsBaseSP KisPaintDevice::defaultBounds() const
 {
     return m_d->defaultBounds;
 }
@@ -389,10 +389,8 @@ QRect KisPaintDevice::extent() const
     extent = QRect(x, y, w, h);
 
     quint8 defaultOpacity = colorSpace()->opacityU8(defaultPixel());
-
-    if (defaultOpacity != OPACITY_TRANSPARENT_U8) {
+    if (defaultOpacity != OPACITY_TRANSPARENT_U8)
         extent |= m_d->defaultBounds->bounds();
-    }
 
     return extent;
 }
@@ -419,14 +417,16 @@ QRect KisPaintDevice::exactBounds() const
 QRect KisPaintDevice::calculateExactBounds() const
 {
     quint8 defaultOpacity = colorSpace()->opacityU8(defaultPixel());
-    if (defaultOpacity != OPACITY_TRANSPARENT_U8) {
+    if(defaultOpacity != OPACITY_TRANSPARENT_U8) {
         /**
          * We will not calculate exact bounds for the device,
          * that is knows to be at least not smaller than image.
          * It isn't worth it.
          */
+
         return extent();
     }
+
     // Solution n°2
     qint32  x, y, w, h, boundX2, boundY2, boundW2, boundH2;
     QRect rc = extent();
@@ -1092,11 +1092,27 @@ void KisPaintDevice::fastBitBlt(KisPaintDeviceSP src, const QRect &rect)
     m_d->cache.invalidate();
 }
 
+void KisPaintDevice::fastBitBltOldData(KisPaintDeviceSP src, const QRect &rect)
+{
+    Q_ASSERT(fastBitBltPossible(src));
+
+    m_datamanager->bitBltOldData(src->dataManager(), rect.translated(-m_d->x, -m_d->y));
+    m_d->cache.invalidate();
+}
+
 void KisPaintDevice::fastBitBltRough(KisPaintDeviceSP src, const QRect &rect)
 {
     Q_ASSERT(fastBitBltPossible(src));
 
     m_datamanager->bitBltRough(src->dataManager(), rect.translated(-m_d->x, -m_d->y));
+    m_d->cache.invalidate();
+}
+
+void KisPaintDevice::fastBitBltRoughOldData(KisPaintDeviceSP src, const QRect &rect)
+{
+    Q_ASSERT(fastBitBltPossible(src));
+
+    m_datamanager->bitBltRoughOldData(src->dataManager(), rect.translated(-m_d->x, -m_d->y));
     m_d->cache.invalidate();
 }
 

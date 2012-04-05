@@ -30,7 +30,7 @@ class KoShapeSavingContext;
 /**
  * This is a KoVariable for chapter variables.
  */
-class ChapterVariable : public QObject, public KoVariable
+class ChapterVariable : public KoVariable
 {
     Q_OBJECT
 public:

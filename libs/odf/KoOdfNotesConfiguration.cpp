@@ -132,8 +132,23 @@ void KoOdfNotesConfiguration::loadOdf(const KoXmlElement &element)
         d->footnotesPosition = Document;
     }
 
-    d->footnotesContinuationForward = element.attributeNS(KoXmlNS::text, "note-continuation-notice-forward", "...");
-    d->footnotesContinuationBackward = element.attributeNS(KoXmlNS::text, "note-continuation-notice-backward", "...");
+    KoXmlElement child;
+    forEachElement(child, element) {
+        if (child.namespaceURI() == KoXmlNS::text) {
+            if (child.localName() == "note-continuation-notice-forward") {
+                KoXmlNode node = element.firstChild();
+                if (!node.isNull() && node.isText()) {
+                    d->footnotesContinuationForward = node.toText().data();
+                }
+            }
+            else if (child.localName() == "note-continuation-notice-backward") {
+                KoXmlNode node = element.firstChild();
+                if (!node.isNull() && node.isText()) {
+                    d->footnotesContinuationBackward = node.toText().data();
+                }
+            }
+        }
+    }
 }
 
 void KoOdfNotesConfiguration::saveOdf(KoXmlWriter *writer) const
@@ -178,8 +193,16 @@ void KoOdfNotesConfiguration::saveOdf(KoXmlWriter *writer) const
         writer->addAttribute("text:footnotes-position", "document");
         break;
     }
-    if (!d->footnotesContinuationForward.isNull()) {writer->addAttribute("text:note-continuation-notice-forward", d->footnotesContinuationForward); }
-    if (!d->footnotesContinuationBackward.isNull()) {writer->addAttribute("text:note-continuation-notice-backward", d->footnotesContinuationBackward); }
+    if (!d->footnotesContinuationForward.isNull()) {
+        writer->startElement("text:note-continuation-notice-forward", false);
+        writer->addTextNode(d->footnotesContinuationForward);
+        writer->endElement();
+    }
+    if (!d->footnotesContinuationBackward.isNull()) {
+        writer->startElement("text:note-continuation-notice-backward", false);
+        writer->addTextNode(d->footnotesContinuationBackward);
+        writer->endElement();
+    }
 
     writer->endElement(); //text:notes-configuration
 }

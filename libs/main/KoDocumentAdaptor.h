@@ -23,7 +23,7 @@
 
 #include <QMap>
 
-#include <QtCore/QObject>
+#include <QObject>
 #include <QtDBus/qdbusabstractadaptor.h>
 #include <QList>
 #include "komain_export.h"

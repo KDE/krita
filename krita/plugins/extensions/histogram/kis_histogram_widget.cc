@@ -20,11 +20,10 @@
 #include "kis_histogram_widget.h"
 
 #include <QPainter>
-#include <QPixmap>
 #include <QLabel>
 #include <QComboBox>
 #include <QPushButton>
-#include <qscrollbar.h>
+#include <QScrollBar>
 
 #include <kis_debug.h>
 

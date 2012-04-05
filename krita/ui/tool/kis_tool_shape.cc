@@ -46,6 +46,10 @@ KisToolShape::KisToolShape(KoCanvasBase * canvas, const QCursor & cursor)
 
 KisToolShape::~KisToolShape()
 {
+    // in case the widget hasn't been shown
+    if (m_shapeOptionsWidget && !m_shapeOptionsWidget->parent()) {
+        delete m_shapeOptionsWidget;
+    }
 }
 
 int KisToolShape::flags() const
@@ -99,13 +103,6 @@ KisPainter::StrokeStyle KisToolShape::strokeStyle(void)
     } else {
         return KisPainter::StrokeStyleNone;
     }
-}
-
-void KisToolShape::setupPainter(KisPainter * painter)
-{
-    KisToolPaint::setupPainter(painter);
-    painter->setFillStyle(fillStyle());
-    painter->setStrokeStyle(strokeStyle());
 }
 
 void KisToolShape::setupPaintAction(KisRecordedPaintAction* action)

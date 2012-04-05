@@ -80,8 +80,6 @@ ScriptingPart::ScriptingPart(QObject *parent, const QVariantList &)
         , d(new Private())
 {
     d->view = dynamic_cast<KisView2*>(parent);
-    dbgScript << "ScriptingPart Ctor";
-    setComponentData(ScriptingPart::componentData());
     setXMLFile(KStandardDirs::locate("data", "kritaplugins/scripting.rc"), true);
 #if 1
     // Add filters

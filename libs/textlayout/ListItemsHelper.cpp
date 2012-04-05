@@ -177,26 +177,26 @@ QList<ListStyleItem> Lists::genericListStyleItems()
 {
     QList<ListStyleItem> answer;
     answer.append(ListStyleItem(i18nc("Text list-style", "None"), KoListStyle::None));
+    answer.append(ListStyleItem(i18n("Small Bullet"), KoListStyle::Bullet));
+    answer.append(ListStyleItem(i18n("Circle Bullet"), KoListStyle::CircleItem));
+    answer.append(ListStyleItem(i18n("Square Bullet"), KoListStyle::SquareItem));
+    answer.append(ListStyleItem(i18n("Rhombus Bullet"), KoListStyle::RhombusItem));
+    answer.append(ListStyleItem(i18n("Check Mark Bullet"), KoListStyle::HeavyCheckMarkItem));
+    answer.append(ListStyleItem(i18n("Rightwards Arrow Bullet"), KoListStyle::RightArrowItem));
     answer.append(ListStyleItem(i18n("Arabic"), KoListStyle::DecimalItem));
     answer.append(ListStyleItem(i18n("Lower Alphabetical"), KoListStyle::AlphaLowerItem));
     answer.append(ListStyleItem(i18n("Upper Alphabetical"), KoListStyle::UpperAlphaItem));
     answer.append(ListStyleItem(i18n("Lower Roman"), KoListStyle::RomanLowerItem));
     answer.append(ListStyleItem(i18n("Upper Roman"), KoListStyle::UpperRomanItem));
-    answer.append(ListStyleItem(i18n("Small Bullet"), KoListStyle::Bullet));
-    answer.append(ListStyleItem(i18n("Large Bullet"), KoListStyle::BlackCircle));
-    answer.append(ListStyleItem(i18n("Circle Bullet"), KoListStyle::CircleItem));
-    answer.append(ListStyleItem(i18n("Square Bullet"), KoListStyle::SquareItem));
-    answer.append(ListStyleItem(i18n("Rhombus Bullet"), KoListStyle::RhombusItem));
-    answer.append(ListStyleItem(i18n("Check Mark Bullet"), KoListStyle::HeavyCheckMarkItem));
-    answer.append(ListStyleItem(i18n("Ballot X Bullet"), KoListStyle::BallotXItem));
-    answer.append(ListStyleItem(i18n("Rightwards Arrow Bullet"), KoListStyle::RightArrowItem));
-    answer.append(ListStyleItem(i18n("Rightwards Arrow Head Bullet"), KoListStyle::RightArrowHeadItem));
     return answer;
 }
 
 QList<ListStyleItem> Lists::otherListStyleItems()
 {
     QList<ListStyleItem> answer;
+    answer.append(ListStyleItem(i18n("Large Bullet"), KoListStyle::BlackCircle));
+    answer.append(ListStyleItem(i18n("Ballot X Bullet"), KoListStyle::BallotXItem));
+    answer.append(ListStyleItem(i18n("Rightwards Arrow Head Bullet"), KoListStyle::RightArrowHeadItem));
     answer.append(ListStyleItem(i18n("Bengali"), KoListStyle::Bengali));
     answer.append(ListStyleItem(i18n("Gujarati"), KoListStyle::Gujarati));
     answer.append(ListStyleItem(i18n("Gurumukhi"), KoListStyle::Gurumukhi));
@@ -244,29 +244,41 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
     int startValue = 1;
     if (format.hasProperty(KoListStyle::StartValue))
         startValue = format.intProperty(KoListStyle::StartValue);
-    if (format.boolProperty(KoListStyle::ContinueNumbering)) {
-        // Look for the index of a previous list of the same numbering style and level
-        for (QTextBlock tb = m_textList->item(0).previous(); tb.isValid(); tb = tb.previous()) {
-            if (!tb.textList() || tb.textList() == m_textList)
-                continue; // no list here or it's the same list; keep looking
 
-            if (isOutline != bool(tb.blockFormat().intProperty(KoParagraphStyle::OutlineLevel)))
-                continue; // one of them is an outline while the other is not
+    int index = startValue;
+    bool fixed = false;
+    if (blockFormat.boolProperty(KoParagraphStyle::RestartListNumbering)) {
+        index = format.intProperty(KoListStyle::StartValue);
+        fixed = true;
+    }
+    const int paragIndex = blockFormat.intProperty(KoParagraphStyle::ListStartValue);
+    if (paragIndex > 0) {
+        index = paragIndex;
+        fixed = true;
+    }
 
-            QTextListFormat otherFormat = tb.textList()->format();
-            if (otherFormat.intProperty(KoListStyle::Level) != level)
-                break; // found a different list but of a different level
-
-            if (otherFormat.style() == format.style()) {
-                if (KoTextBlockData *data = dynamic_cast<KoTextBlockData *>(tb.userData()))
-                    startValue = data->counterIndex() + 1; // Start from previous list value + 1
+    if (!fixed) {
+        //if this is the first item then find if the list has to be continued from any other list
+        KoList *listContinued = 0;
+        if (m_textList->itemNumber(block) == 0 && KoTextDocument(m_textList->document()).list(m_textList) && (listContinued = KoTextDocument(m_textList->document()).list(m_textList)->listContinuedFrom())) {
+            //find the previous list of the same level
+            QTextList *previousTextList = listContinued->textLists().at(level - 1).data();
+            if (previousTextList) {
+                const QTextBlock textBlock = previousTextList->item(previousTextList->count() - 1);
+                KoTextBlockData *blockData = 0;
+                if (textBlock.isValid() && (blockData = dynamic_cast<KoTextBlockData *>(textBlock.userData()))) {
+                    index = blockData->counterIndex() + 1; //resume the previous list count
+                }
             }
-
-            break;
+        } else if (m_textList->itemNumber(block) > 0) {
+            const QTextBlock textBlock = m_textList->item(m_textList->itemNumber(block) - 1);
+            KoTextBlockData *blockData = 0;
+            if (textBlock.isValid() && (blockData = dynamic_cast<KoTextBlockData *>(textBlock.userData()))) {
+                index = blockData->counterIndex() + 1; //resume the previous list count
+            }
         }
     }
 
-    int index = startValue;
     qreal width = 0.0;
     KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
     if (!data) {
@@ -280,58 +292,21 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
         data->setCounterPrefix(QString());
         data->setCounterSuffix(QString());
         data->setPartialCounterText(QString());
-        return;
-    }
-
-    bool fixed = false;
-    if (blockFormat.boolProperty(KoParagraphStyle::RestartListNumbering)) {
-        index = format.intProperty(KoListStyle::StartValue);
-        fixed = true;
-    }
-    const int paragIndex = blockFormat.intProperty(KoParagraphStyle::ListStartValue);
-    if (paragIndex > 0) {
-        index = paragIndex;
-        fixed = true;
-    }
-
-    if (!fixed) {
-        //check if this is the first of this level meaning we should start from startvalue
-        for (QTextBlock b = block.previous(); b.isValid(); b = b.previous()) {
-            if (b.textList() == 0)
-                continue; // we only look for lists
-
-            QTextListFormat otherFormat = b.textList()->format();
-
-            if (otherFormat.property(KoListStyle::StyleId) != format.property(KoListStyle::StyleId))
-                continue; // different liststyle what means it's another unrelated list
-
-            if (isOutline != bool(b.blockFormat().intProperty(KoParagraphStyle::OutlineLevel)))
-                continue; // one of them is an outline while the other is not
-
-            if (b.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem)) {
-                continue; //unnumbered listItems are irrelevant
-            }
-
-            if (b.textList() == m_textList) {
-                if (b.textList()->format().intProperty(KoListStyle::Level) == level)
-                    if (KoTextBlockData *otherData = dynamic_cast<KoTextBlockData *>(b.userData())) {
-                        index = otherData->counterIndex() + 1; // Start from previous list value + 1
-                        break;
-                    }
-            }
-            if (b.textList()->format().intProperty(KoListStyle::Level) < level) {
-                // Either a new list, that would mark the end (as in beginning) of our list, or the same
-                // list with a lower list-level (is that possible at all?). In both cases we can abort.
-                index = startValue;
-                break;
-            }
+        // set the counter for the current un-numbered list to the counter index of the previous list item.
+        // index-1 because the list counter would have already incremented by one
+        data->setCounterIndex(index - 1);
+        if (blockFormat.boolProperty(KoParagraphStyle::IsListHeader)) {
+            data->setCounterWidth(format.doubleProperty(KoListStyle::MinimumWidth));
+            data->setCounterSpacing(0);
         }
+        return;
     }
 
     QString item;
     if (displayLevel > 1) {
         int checkLevel = level;
         int tmpDisplayLevel = displayLevel;
+        bool counterResetRequired = true;
         for (QTextBlock b = block.previous(); tmpDisplayLevel > 1 && b.isValid(); b = b.previous()) {
             if (b.textList() == 0)
                 continue;
@@ -340,7 +315,20 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
                continue; // uninteresting for us
             if (isOutline != bool(b.blockFormat().intProperty(KoParagraphStyle::OutlineLevel)))
                 continue; // also uninteresting cause the one is an outline-listitem while the other is not
+
+            if (! KoListStyle::isNumberingStyle(static_cast<KoListStyle::Style>(lf.style()))) {
+                continue;
+            }
+
+            if (b.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem)) {
+                continue; //unnumbered listItems are irrelevant
+            }
+
             const int otherLevel  = lf.intProperty(KoListStyle::Level);
+            if (isOutline && checkLevel == otherLevel) {
+                counterResetRequired = false;
+            }
+
             if (checkLevel <= otherLevel)
                 continue;
             /*if(needsRecalc(b->textList())) {
@@ -369,6 +357,9 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
                 for (int i = otherLevel + 1; i < level; i++)
                     item += ".1"; // add missing counters.
                 tmpDisplayLevel = 0;
+                if (isOutline && counterResetRequired) {
+                    index = 1;
+                }
                 break;
             }
         }
@@ -406,6 +397,7 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
     case KoListStyle::SquareItem:
     case KoListStyle::Bullet:
     case KoListStyle::BlackCircle:
+    case KoListStyle::DiscItem:
     case KoListStyle::CircleItem:
     case KoListStyle::HeavyCheckMarkItem:
     case KoListStyle::BallotXItem:
@@ -471,17 +463,19 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
     width += m_fm.width(prefix + suffix);
 
     qreal counterSpacing = 0;
-    if (listStyle != KoListStyle::None) {
-        if (format.boolProperty(KoListStyle::AlignmentMode)) {
-            // for aligmentmode spacing should be 0
-            counterSpacing = 0;
-        } else {
+    if (format.boolProperty(KoListStyle::AlignmentMode)) {
+        // for aligmentmode spacing should be 0
+        counterSpacing = 0;
+    } else {
+        if (listStyle != KoListStyle::None) {
             // see ODF spec 1.2 item 20.422
             counterSpacing = format.doubleProperty(KoListStyle::MinimumDistance);
-            counterSpacing -= format.doubleProperty(KoListStyle::MinimumWidth) - width;
+            if (width < format.doubleProperty(KoListStyle::MinimumWidth)) {
+                counterSpacing -= format.doubleProperty(KoListStyle::MinimumWidth) - width;
+            }
             counterSpacing = qMax(counterSpacing, qreal(0.0));
-            width = qMax(width, format.doubleProperty(KoListStyle::MinimumWidth));
         }
+        width = qMax(width, format.doubleProperty(KoListStyle::MinimumWidth));
     }
     data->setCounterWidth(width);
     data->setCounterSpacing(counterSpacing);

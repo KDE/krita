@@ -47,8 +47,14 @@ public:
     KisPaintDeviceSP paintDevice(const KoColorSpace * colorSpace) const;
 
     KisPattern* clone() const;
+
+    /// compare the patterns using an md5 sum. This not const because we
+    /// want to cache the md5 sums!
+    bool operator==(KisPattern &other);
+
 private:
     mutable QMap<QString, KisPaintDeviceSP> m_colorspaces;
+    QByteArray m_md5;
 };
 
 #endif

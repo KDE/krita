@@ -193,34 +193,38 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, Ko
     //       and HorizontalOnOdd, which have to know which
     //       page they are on.  In those cases we treat it as
     //       no horizontal mirroring at all.
-    QTransform outputTransform = painter.transform();
-    QTransform worldTransform  = QTransform();
-    QSizeF     shapeSize       = size();
-
-    bool  flip = false;
-    qreal midpointX = 0.0;
-    qreal midpointY = 0.0;
-    qreal scaleX = 1.0;
-    qreal scaleY = 1.0;
+    bool   doFlip = false;
+    QSizeF shapeSize = size();
+    QSizeF viewSize = converter.documentToView(shapeSize);
+    qreal  midpointX = 0.0;
+    qreal  midpointY = 0.0;
+    qreal  scaleX = 1.0;
+    qreal  scaleY = 1.0;
     if (m_mirrorMode & MirrorHorizontal) {
-        midpointX = shapeSize.width() / qreal(2.0);
+        //midpointX = shapeSize.width() / qreal(2.0);
+        midpointX = viewSize.width() / qreal(2.0);
         scaleX = -1.0;
-        flip = true;
+        doFlip = true;
     }
     if (m_mirrorMode & MirrorVertical) {
-        midpointY = shapeSize.height() / qreal(2.0);
+        //midpointY = shapeSize.height() / qreal(2.0);
+        midpointY = viewSize.height() / qreal(2.0);
         scaleY = -1.0;
-        flip = true;
+        doFlip = true;
     }
-    if (flip) {
+    if (doFlip) {
+        QTransform outputTransform = painter.transform();
+        QTransform worldTransform  = QTransform();
+
         //kDebug(31000) << "Flipping" << midpointX << midpointY << scaleX << scaleY;
         worldTransform.translate(midpointX, midpointY);
         worldTransform.scale(scaleX, scaleY);
         worldTransform.translate(-midpointX, -midpointY);
-        //kDebug(31000) << "After flipping for window" << mWorldTransform;
+        //kDebug(31000) << "After flipping for window" << worldTransform;
+
+        QTransform newTransform = worldTransform * outputTransform;
+        painter.setWorldTransform(newTransform);
     }
-    QTransform newTransform = worldTransform * outputTransform;
-    painter.setWorldTransform(newTransform);
 
     // Paint the image as prepared in waitUntilReady()
     if (!m_printQualityImage.isNull() && pixmapSize != m_printQualityRequestedSize) {

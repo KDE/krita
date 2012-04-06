@@ -128,14 +128,14 @@ public:
      */
     KoImageCollection *imageCollection() const;
     KoImageData *imageData() const;
-    int mirrorMode() const;
+    QFlags<MirrorMode> mirrorMode() const;
     ColorMode colorMode() const;
     QRectF cropRect() const;
     bool isPictureInProportion() const;
 
     void setImageCollection(KoImageCollection *collection) { m_imageCollection = collection; }
     void setCropRect(const QRectF& rect);
-    void setMirrorMode(int mode);
+    void setMirrorMode(QFlags<MirrorMode> mode);
     void setColorMode(ColorMode mode);
 
 protected:
@@ -152,9 +152,9 @@ private:
     mutable QImage m_printQualityImage;
     mutable QSizeF m_printQualityRequestedSize;
 
-    int            m_mirrorMode;
-    ColorMode      m_colorMode;
-    ClippingRect   m_clippingRect;
+    QFlags<MirrorMode> m_mirrorMode;
+    ColorMode          m_colorMode;
+    ClippingRect       m_clippingRect;
 
     _Private::PictureShapeProxy m_proxy;
 };

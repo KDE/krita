@@ -189,7 +189,7 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, Ko
 
     // Handle style:mirror, i.e. mirroring horizontally and/or vertically.
     // 
-    // NOTE: At this point we don't handle HorizontalOnEven
+    // NOTE: At this time we don't handle HorizontalOnEven
     //       and HorizontalOnOdd, which have to know which
     //       page they are on.  In those cases we treat it as
     //       no horizontal mirroring at all.
@@ -201,13 +201,11 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, Ko
     qreal  scaleX = 1.0;
     qreal  scaleY = 1.0;
     if (m_mirrorMode & MirrorHorizontal) {
-        //midpointX = shapeSize.width() / qreal(2.0);
         midpointX = viewSize.width() / qreal(2.0);
         scaleX = -1.0;
         doFlip = true;
     }
     if (m_mirrorMode & MirrorVertical) {
-        //midpointY = shapeSize.height() / qreal(2.0);
         midpointY = viewSize.height() / qreal(2.0);
         scaleY = -1.0;
         doFlip = true;
@@ -434,7 +432,7 @@ void PictureShape::loadStyle(const KoXmlElement& element, KoShapeLoadingContext&
     if (styleStack.hasProperty(KoXmlNS::style, "mirror")) {
         QString mirrorMode = styleStack.property(KoXmlNS::style, "mirror");
 
-        int  mode = 0;
+        QFlags<PictureShape::MirrorMode>  mode = 0;
 
         // Only one of the horizontal modes
         if (mirrorMode.contains("horizontal-on-even")) {
@@ -478,7 +476,7 @@ void PictureShape::loadStyle(const KoXmlElement& element, KoShapeLoadingContext&
     m_clippingRect = parseClippingRectString(styleStack.property(KoXmlNS::fo, "clip"));
 }
 
-int PictureShape::mirrorMode() const
+QFlags<PictureShape::MirrorMode> PictureShape::mirrorMode() const
 {
     return m_mirrorMode;
 }
@@ -488,7 +486,7 @@ PictureShape::ColorMode PictureShape::colorMode() const
     return m_colorMode;
 }
 
-void PictureShape::setMirrorMode(int mode)
+void PictureShape::setMirrorMode(QFlags<PictureShape::MirrorMode> mode)
 {
     // Sanity check
     mode &= MirrorMask;

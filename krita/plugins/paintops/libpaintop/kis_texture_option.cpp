@@ -233,8 +233,6 @@ void KisTextureOption::resetGUI(KoResource* res)
 
 void KisTextureProperties::recalculateMask()
 {
-    static int i = 0;
-
     if (!pattern) return;
 
     m_mask = 0;
@@ -283,7 +281,8 @@ void KisTextureProperties::recalculateMask()
         }
         iter->nextRow();
     }
-    i++;
+
+    m_maskBounds = QRect(0, 0, width, height);
 }
 
 
@@ -331,24 +330,19 @@ void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset
     if (!enabled) return;
 
     KisPaintDeviceSP fillDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
-    QRect bounds = m_mask->exactBounds();
     QRect rect = dab->bounds();
 
-    int x = offset.x() % bounds.width() - offsetX;
-    int y = offset.y() % bounds.height() - offsetY;
+    int x = offset.x() % m_maskBounds.width() - offsetX;
+    int y = offset.y() % m_maskBounds.height() - offsetY;
 
     fillDevice->setX(x);
     fillDevice->setY(y);
 
     KisFillPainter fillPainter(fillDevice);
-    fillPainter.fillRect(x - 1, y - 1, rect.width() + 2, rect.height() + 2, m_mask, bounds);
+    fillPainter.fillRect(x - 1, y - 1, rect.width() + 2, rect.height() + 2, m_mask, m_maskBounds);
     fillPainter.end();
 
     quint8 *dabData = dab->data();
-
-    KoColor color(dab->colorSpace());
-    QColor qColor;
-    qreal h, s, l, a;
 
     KisHLineIteratorSP iter = fillDevice->createHLineIteratorNG(x, y, rect.width());
     for (int row = 0; row < rect.height(); ++row) {

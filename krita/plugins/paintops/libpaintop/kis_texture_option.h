@@ -26,6 +26,7 @@
 #include <kis_types.h>
 #include "kis_paintop_option.h"
 
+#include <QRect>
 
 class KisTextureOptionWidget;
 class KisPattern;
@@ -81,7 +82,7 @@ public:
     void fillProperties(const KisPropertiesConfiguration *setting);
 
 private:
-
+    QRect m_maskBounds; // this can be different from the extent if we mask out too many pixels in a big mask!
     KisPaintDeviceSP m_mask;
     void recalculateMask();
 };

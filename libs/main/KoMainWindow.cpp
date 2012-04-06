@@ -315,6 +315,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     d->dockWidgetMenu  = new KActionMenu(i18n("Dockers"), this);
     actionCollection()->addAction("settings_dockers_menu", d->dockWidgetMenu);
     d->dockWidgetMenu->setVisible(false);
+    d->dockWidgetMenu->setDelayed(false);
 
     // Load list of recent files
     KSharedConfigPtr configPtr = componentData.isValid() ? componentData.config() : KGlobal::config();

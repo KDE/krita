@@ -149,6 +149,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
         slSize->setRange(0.0, 1000.0, 2);
         slSize->setValue(100.0);
         slSize->setSingleStep(0.05);
+        slSize->setExponentRatio(3.0);
         slSize->setMinimumWidth(120);
     }
     

@@ -194,7 +194,7 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfiguration* setti
         bool found = false;
         foreach(KoResource *res, KisResourceServerProvider::instance()->patternServer()->resources()) {
             KisPattern *pat = static_cast<KisPattern *>(res);
-            if (pat == pattern) {
+            if (pat->md5() == pattern->md5()) {
                 delete pattern;
                 pattern = pat;
                 found = true;

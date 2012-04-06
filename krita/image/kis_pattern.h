@@ -28,6 +28,8 @@
 #include <krita_export.h>
 #include "kis_types.h"
 
+#include <QByteArray>
+
 class QImage;
 class KoColorSpace;
 class KisPaintDevice;
@@ -48,9 +50,7 @@ public:
 
     KisPattern* clone() const;
 
-    /// compare the patterns using an md5 sum. This not const because we
-    /// want to cache the md5 sums!
-    bool operator==(KisPattern &other);
+    QByteArray md5();
 
 private:
     mutable QMap<QString, KisPaintDeviceSP> m_colorspaces;

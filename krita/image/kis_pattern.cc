@@ -87,14 +87,11 @@ KisPattern* KisPattern::clone() const
     return pattern;
 }
 
-bool KisPattern::operator ==(KisPattern &other)
+QByteArray KisPattern::md5()
 {
     if (m_md5.isEmpty()) {
         m_md5 = generateMD5(image());
     }
-    if (other.m_md5.isEmpty()) {
-        other.m_md5 = generateMD5(other.image());
-    }
-    return m_md5 == other.m_md5;
+    return m_md5;
 }
 

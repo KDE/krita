@@ -541,7 +541,7 @@ void KisConfig::setCheckersColor(const QColor & v)
 
 bool KisConfig::antialiasCurves()
 {
-    return m_cfg.readEntry("antialiascurves", false);
+    return m_cfg.readEntry("antialiascurves", true);
 }
 
 void KisConfig::setAntialiasCurves(bool v)

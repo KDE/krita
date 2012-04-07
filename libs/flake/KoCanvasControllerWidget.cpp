@@ -358,14 +358,10 @@ int KoCanvasControllerWidget::visibleWidth() const
 
 int KoCanvasControllerWidget::canvasOffsetX() const
 {
-    int offset = 0;
+    int offset = -horizontalScrollBar()->value();
 
     if (d->canvas) {
-        offset = d->canvas->canvasWidget()->x() + frameWidth();
-    }
-
-    if (horizontalScrollBar()) {
-        offset -= horizontalScrollBar()->value();
+        offset += d->canvas->canvasWidget()->x() + frameWidth();
     }
 
     return offset;
@@ -373,14 +369,10 @@ int KoCanvasControllerWidget::canvasOffsetX() const
 
 int KoCanvasControllerWidget::canvasOffsetY() const
 {
-    int offset = 0;
+    int offset = -verticalScrollBar()->value();
 
     if (d->canvas) {
-        offset = d->canvas->canvasWidget()->y() + frameWidth();
-    }
-
-    if (verticalScrollBar()) {
-        offset -= verticalScrollBar()->value();
+        offset += d->canvas->canvasWidget()->y() + frameWidth();
     }
 
     return offset;
@@ -391,11 +383,9 @@ void KoCanvasControllerWidget::updateCanvasOffsetX()
     proxyObject->emitCanvasOffsetXChanged(canvasOffsetX());
     if (d->ignoreScrollSignals)
         return;
-    if (horizontalScrollBar()->isVisible())
-        setPreferredCenterFractionX((horizontalScrollBar()->value()
-                                     + horizontalScrollBar()->pageStep() / 2.0) / documentSize().width());
-    else
-        setPreferredCenterFractionX(0);
+
+    setPreferredCenterFractionX((horizontalScrollBar()->value()
+                                 + viewport()->width() / 2.0) / documentSize().width());
 }
 
 void KoCanvasControllerWidget::updateCanvasOffsetY()
@@ -403,11 +393,9 @@ void KoCanvasControllerWidget::updateCanvasOffsetY()
     proxyObject->emitCanvasOffsetYChanged(canvasOffsetY());
     if (d->ignoreScrollSignals)
         return;
-    if (verticalScrollBar()->isVisible())
-        setPreferredCenterFractionY((verticalScrollBar()->value()
-                                     + verticalScrollBar()->pageStep() / 2.0) / documentSize().height());
-    else
-        setPreferredCenterFractionY(0);
+
+    setPreferredCenterFractionY((verticalScrollBar()->value()
+                                 + viewport()->height() / 2.0) / documentSize().height());
 }
 
 bool KoCanvasControllerWidget::eventFilter(QObject *watched, QEvent *event)
@@ -625,7 +613,7 @@ void KoCanvasControllerWidget::wheelEvent(QWheelEvent *event)
 
 void KoCanvasControllerWidget::zoomRelativeToPoint(const QPoint &widgetPoint, qreal zoomCoeff)
 {
-    const QPoint offset(horizontalScrollBar()->value(), verticalScrollBar()->value());
+    const QPoint offset = scrollBarValue();
     const QPoint mousePos(widgetPoint + offset);
 
     QPointF oldCenter = preferredCenter();
@@ -651,27 +639,17 @@ QPoint KoCanvasControllerWidget::scrollBarValue() const
 {
     QScrollBar * hBar = horizontalScrollBar();
     QScrollBar * vBar = verticalScrollBar();
-    QPoint value;
-    if (hBar && !hBar->isHidden()) {
-        value.setX(hBar->value());
-    }
-    if (vBar && !vBar->isHidden()) {
-        value.setY(vBar->value());
-    }
 
-    return value;
+    return QPoint(hBar->value(), vBar->value());
 }
 
 void KoCanvasControllerWidget::setScrollBarValue(const QPoint &value)
 {
     QScrollBar * hBar = horizontalScrollBar();
     QScrollBar * vBar = verticalScrollBar();
-    if (hBar && !hBar->isHidden()) {
-        hBar->setValue(value.x());
-    }
-    if (vBar && !vBar->isHidden()) {
-        vBar->setValue(value.y());
-    }
+
+    hBar->setValue(value.x());
+    vBar->setValue(value.y());
 }
 
 KoCanvasControllerWidget::Private *KoCanvasControllerWidget::priv()

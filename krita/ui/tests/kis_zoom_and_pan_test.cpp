@@ -301,10 +301,8 @@ void KisZoomAndPanTest::testZoom100ChangingWidgetSize()
     QVERIFY(verifyOffset(t, QPoint(229,129)));
 }
 
-void KisZoomAndPanTest::testSequentialActionZoomAndPan()
+void KisZoomAndPanTest::initializeViewport(ZoomAndPanTester &t, bool fullscreenMode, bool rotate)
 {
-    ZoomAndPanTester t;
-
     QCOMPARE(t.image()->size(), QSize(640,441));
     QCOMPARE(t.image()->xRes(), 1.0);
     QCOMPARE(t.image()->yRes(), 1.0);
@@ -316,6 +314,44 @@ void KisZoomAndPanTest::testSequentialActionZoomAndPan()
     QCOMPARE(t.canvasWidget()->size(), QSize(483,483));
     QCOMPARE(t.canvasWidget()->size(), t.canvasController()->viewportSize());
     QVERIFY(verifyOffset(t, QPoint(79,-21)));
+
+    if (fullscreenMode) {
+        QCOMPARE(t.canvasController()->preferredCenter(), QPointF(320,220));
+
+        QAction *action = t.view()->actionCollection()->action("view_show_just_the_canvas");
+        action->setChecked(true);
+
+        QVERIFY(verifyOffset(t, QPoint(79,-21)));
+        QCOMPARE(t.canvasController()->preferredCenter(), QPointF(329,220));
+
+
+        t.canvasController()->resize(QSize(483,483));
+        QCOMPARE(t.canvasWidget()->size(), QSize(483,483));
+        QCOMPARE(t.canvasWidget()->size(), t.canvasController()->viewportSize());
+        QVERIFY(verifyOffset(t, QPoint(79,-21)));
+
+
+        /**
+         * FIXME: here is a small flaw in KoCanvasControllerWidget
+         * We cannot set the center point explicitly, because it'll be rounded
+         * up by recenterPreferred function, so real center point will be
+         * different. Make the preferredCenter() return real center of the
+         * image instead of the set value
+         */
+        QCOMPARE(t.canvasController()->preferredCenter(), QPointF(320.5,220));
+    }
+
+    if (rotate) {
+        t.canvas()->rotateCanvas(90);
+        QVERIFY(verifyOffset(t, QPoint(-21,79)));
+        QCOMPARE(t.canvasController()->preferredCenter(), QPointF(220.5,320.5));
+    }
+}
+
+void KisZoomAndPanTest::testSequentialActionZoomAndPan(bool fullscreenMode, bool rotate)
+{
+    ZoomAndPanTester t;
+    initializeViewport(t, fullscreenMode, rotate);
 
     QVERIFY(checkZoomWithAction(t, 0.5));
     QVERIFY(checkPan(t, QPoint(100,100)));
@@ -336,37 +372,10 @@ void KisZoomAndPanTest::testSequentialActionZoomAndPan()
     QVERIFY(checkPan(t, QPoint(100,100)));
 }
 
-void KisZoomAndPanTest::testSequentialWheelZoomAndPan(bool fullscreenMode)
+void KisZoomAndPanTest::testSequentialWheelZoomAndPan(bool fullscreenMode, bool rotate)
 {
     ZoomAndPanTester t;
-
-    QCOMPARE(t.image()->size(), QSize(640,441));
-    QCOMPARE(t.image()->xRes(), 1.0);
-    QCOMPARE(t.image()->yRes(), 1.0);
-
-    t.canvasController()->resize(QSize(500,500));
-    t.zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
-    t.canvasController()->setPreferredCenter(QPoint(320,220));
-
-    QCOMPARE(t.canvasWidget()->size(), QSize(483,483));
-    QCOMPARE(t.canvasWidget()->size(), t.canvasController()->viewportSize());
-    QVERIFY(verifyOffset(t, QPoint(79,-21)));
-
-    if (fullscreenMode) {
-        QCOMPARE(t.canvasController()->preferredCenter(), QPointF(320,220));
-
-        QAction *action = t.view()->actionCollection()->action("view_show_just_the_canvas");
-        action->setChecked(true);
-
-        QCOMPARE(t.canvasController()->preferredCenter(), QPointF(331,228));
-
-        t.canvasController()->resize(QSize(483,483));
-        QCOMPARE(t.canvasWidget()->size(), QSize(483,483));
-        QCOMPARE(t.canvasWidget()->size(), t.canvasController()->viewportSize());
-        QVERIFY(verifyOffset(t, QPoint(79,-21)));
-
-        QCOMPARE(t.canvasController()->preferredCenter(), QPointF(320,220));
-    }
+    initializeViewport(t, fullscreenMode, rotate);
 
     QVERIFY(checkZoomWithWheel(t, QPoint(100,100), 0.5));
     QVERIFY(checkPan(t, QPoint(100,100)));
@@ -391,14 +400,36 @@ void KisZoomAndPanTest::testSequentialWheelZoomAndPan(bool fullscreenMode)
     QVERIFY(checkPan(t, QPoint(-100,-100)));
 }
 
+void KisZoomAndPanTest::testSequentialActionZoomAndPan()
+{
+    testSequentialActionZoomAndPan(false, false);
+}
+
+void KisZoomAndPanTest::testSequentialActionZoomAndPanFullscreen()
+{
+    testSequentialActionZoomAndPan(true, false);
+}
+
+void KisZoomAndPanTest::testSequentialActionZoomAndPanRotate()
+{
+    testSequentialActionZoomAndPan(false, true);
+}
+
 void KisZoomAndPanTest::testSequentialWheelZoomAndPan()
 {
-    testSequentialWheelZoomAndPan(false);
+    testSequentialWheelZoomAndPan(false, false);
 }
 
 void KisZoomAndPanTest::testSequentialWheelZoomAndPanFullscreen()
 {
-    testSequentialWheelZoomAndPan(true);
+    testSequentialWheelZoomAndPan(true, false);
 }
+
+void KisZoomAndPanTest::testSequentialWheelZoomAndPanRotate()
+{
+    testSequentialWheelZoomAndPan(false, true);
+}
+
+
 
 QTEST_KDEMAIN(KisZoomAndPanTest, GUI)

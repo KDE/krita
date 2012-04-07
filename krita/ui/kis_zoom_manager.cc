@@ -175,7 +175,8 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
 
 void KisZoomManager::slotScrollAreaSizeChanged()
 {
-    QSize widgetSize = m_view->canvasBase()->coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect().size();
+    // round the size of the are to the nearest integer instead of getting aligned rect
+    QSize widgetSize = m_view->canvasBase()->coordinatesConverter()->imageRectInWidgetPixels().toRect().size();
     m_canvasController->updateDocumentSize(widgetSize, true);
     updateGUI();
 }

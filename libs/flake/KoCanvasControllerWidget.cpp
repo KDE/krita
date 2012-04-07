@@ -467,23 +467,17 @@ void KoCanvasControllerWidget::recenterPreferred()
     const bool oldIgnoreScrollSignals = d->ignoreScrollSignals;
     d->ignoreScrollSignals = true;
 
-    QPoint center = QPoint(int(documentSize().width() * preferredCenterFractionX()),
-                           int(documentSize().height() * preferredCenterFractionY()));
+    QPointF center = preferredCenter();
 
     // convert into a viewport based point
     center.rx() += d->canvas->canvasWidget()->x() + frameWidth();
     center.ry() += d->canvas->canvasWidget()->y() + frameWidth();
 
-    scrollToCenterPoint(center);
+    // scroll to a new center point
+    QPointF topLeft = center - 0.5 * QPointF(viewport()->width(), viewport()->height());
+    setScrollBarValue(topLeft.toPoint());
 
     d->ignoreScrollSignals = oldIgnoreScrollSignals;
-}
-
-void KoCanvasControllerWidget::scrollToCenterPoint(const QPoint &center)
-{
-    // calculate the difference to the viewport centerpoint
-    QPoint topLeft = center - 0.5 * QPoint(viewport()->width(), viewport()->height());
-    setScrollBarValue(topLeft);
 }
 
 void KoCanvasControllerWidget::zoomIn(const QPoint &center)
@@ -518,15 +512,7 @@ void KoCanvasControllerWidget::zoomTo(const QRect &viewRect)
     else
         scale = 1.0 * viewport()->width() / viewRect.width();
 
-    const qreal preferredCenterFractionX = 1.0 * viewRect.center().x() / documentSize().width();
-    const qreal preferredCenterFractionY = 1.0 * viewRect.center().y() / documentSize().height();
-
-    proxyObject->emitZoomBy(scale);
-
-    setPreferredCenterFractionX(preferredCenterFractionX);
-    setPreferredCenterFractionY(preferredCenterFractionY);
-    recenterPreferred();
-    d->canvas->canvasWidget()->update();
+    zoomBy(viewRect.center(), scale);
 }
 
 void KoCanvasControllerWidget::setToolOptionWidgets(const QList<QWidget *>&widgetMap)
@@ -575,18 +561,18 @@ void KoCanvasControllerWidget::pan(const QPoint &distance)
     setScrollBarValue(sourcePoint + distance);
 }
 
-void KoCanvasControllerWidget::setPreferredCenter(const QPoint &viewPoint)
+void KoCanvasControllerWidget::setPreferredCenter(const QPointF &viewPoint)
 {
-    setPreferredCenterFractionX(1.0 * viewPoint.x() / documentSize().width());
-    setPreferredCenterFractionY(1.0 * viewPoint.y() / documentSize().height());
+    setPreferredCenterFractionX(viewPoint.x() / documentSize().width());
+    setPreferredCenterFractionY(viewPoint.y() / documentSize().height());
     recenterPreferred();
 }
 
-QPoint KoCanvasControllerWidget::preferredCenter() const
+QPointF KoCanvasControllerWidget::preferredCenter() const
 {
-    QPoint center;
-    center.setX(qRound(preferredCenterFractionX() * documentSize().width()));
-    center.setY(qRound(preferredCenterFractionY() * documentSize().height()));
+    QPointF center;
+    center.setX(preferredCenterFractionX() * documentSize().width());
+    center.setY(preferredCenterFractionY() * documentSize().height());
     return center;
 }
 
@@ -627,8 +613,8 @@ void KoCanvasControllerWidget::wheelEvent(QWheelEvent *event)
         const bool oldIgnoreScrollSignals = d->ignoreScrollSignals;
         d->ignoreScrollSignals = true;
 
-        const qreal zoomLevel = event->delta() > 0 ? sqrt(2.0) : sqrt(0.5);
-        zoomRelativeToPoint(event->pos(), zoomLevel);
+        const qreal zoomCoeff = event->delta() > 0 ? sqrt(2.0) : sqrt(0.5);
+        zoomRelativeToPoint(event->pos(), zoomCoeff);
 
         event->accept();
 
@@ -637,15 +623,15 @@ void KoCanvasControllerWidget::wheelEvent(QWheelEvent *event)
         QAbstractScrollArea::wheelEvent(event);
 }
 
-void KoCanvasControllerWidget::zoomRelativeToPoint(const QPoint &widgetPoint, qreal zoomLevel)
+void KoCanvasControllerWidget::zoomRelativeToPoint(const QPoint &widgetPoint, qreal zoomCoeff)
 {
     const QPoint offset(horizontalScrollBar()->value(), verticalScrollBar()->value());
     const QPoint mousePos(widgetPoint + offset);
 
     QPointF oldCenter = preferredCenter();
-    const QPointF newCenter = mousePos - (1.0 / zoomLevel) * (mousePos - oldCenter);
+    const QPointF newCenter = mousePos - (1.0 / zoomCoeff) * (mousePos - oldCenter);
 
-    zoomBy(newCenter.toPoint(), zoomLevel);
+    zoomBy(newCenter.toPoint(), zoomCoeff);
 }
 
 bool KoCanvasControllerWidget::focusNextPrevChild(bool)

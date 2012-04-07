@@ -144,3 +144,9 @@ target_link_libraries(KisDummiesFacadeTest  ${KDE4_KDEUI_LIBS}  kritaui kritaima
 set(kis_model_index_converter_test_SRCS kis_model_index_converter_test.cpp ../../sdk/tests/testutil.cpp)
 kde4_add_unit_test(KisModelIndexConverterTest TESTNAME krita-ui-KisModelIndexConverterTest  ${kis_model_index_converter_test_SRCS})
 target_link_libraries(KisModelIndexConverterTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_zoom_and_pan_test_SRCS kis_zoom_and_pan_test.cpp ../../sdk/tests/testutil.cpp)
+kde4_add_unit_test(KisZoomAndPanTest TESTNAME krita-ui-KisZoomAndPanTest  ${kis_zoom_and_pan_test_SRCS})
+target_link_libraries(KisZoomAndPanTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})

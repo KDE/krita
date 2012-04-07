@@ -243,10 +243,10 @@ public:
      * Sets the preferred center point in view coordinates (pixels).
      * @param viewPoint the new preferred center
      */
-    virtual void setPreferredCenter(const QPoint &viewPoint) = 0;
+    virtual void setPreferredCenter(const QPointF &viewPoint) = 0;
 
     /// Returns the currently set preferred center point in view coordinates (pixels)
-    virtual QPoint preferredCenter() const = 0;
+    virtual QPointF preferredCenter() const = 0;
 
     /**
      * Move the canvas over the x and y distance of the parameter distance

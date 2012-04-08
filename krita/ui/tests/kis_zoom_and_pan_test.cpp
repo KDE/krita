@@ -60,6 +60,8 @@ public:
     }
 
     ~ZoomAndPanTester() {
+        m_image->waitForDone();
+
         delete m_shell;
         delete m_doc;
     }
@@ -328,7 +330,7 @@ void KisZoomAndPanTest::testZoom100ChangingWidgetSize()
     QVERIFY(verifyOffset(t, QPoint(229,129)));
 }
 
-void KisZoomAndPanTest::initializeViewport(ZoomAndPanTester &t, bool fullscreenMode, bool rotate)
+void KisZoomAndPanTest::initializeViewport(ZoomAndPanTester &t, bool fullscreenMode, bool rotate, bool mirror)
 {
     QCOMPARE(t.image()->size(), QSize(640,441));
     QCOMPARE(t.image()->xRes(), 1.0);
@@ -374,12 +376,19 @@ void KisZoomAndPanTest::initializeViewport(ZoomAndPanTester &t, bool fullscreenM
         QCOMPARE(t.canvasController()->preferredCenter(), QPointF(220.5,320.5));
         QCOMPARE(t.coordinatesConverter()->imageRectInWidgetPixels().topLeft().toPoint(), -t.coordinatesConverter()->documentOffset());
     }
+
+    if (mirror) {
+        t.canvasController()->mirrorCanvas(true);
+        QVERIFY(verifyOffset(t, QPoint(78, -21)));
+        QCOMPARE(t.canvasController()->preferredCenter(), QPointF(319.5,220));
+        QCOMPARE(t.coordinatesConverter()->imageRectInWidgetPixels().topLeft().toPoint(), -t.coordinatesConverter()->documentOffset());
+    }
 }
 
-void KisZoomAndPanTest::testSequentialActionZoomAndPan(bool fullscreenMode, bool rotate)
+void KisZoomAndPanTest::testSequentialActionZoomAndPan(bool fullscreenMode, bool rotate, bool mirror)
 {
     ZoomAndPanTester t;
-    initializeViewport(t, fullscreenMode, rotate);
+    initializeViewport(t, fullscreenMode, rotate, mirror);
 
     QVERIFY(checkZoomWithAction(t, 0.5));
     QVERIFY(checkPan(t, QPoint(100,100)));
@@ -400,10 +409,10 @@ void KisZoomAndPanTest::testSequentialActionZoomAndPan(bool fullscreenMode, bool
     QVERIFY(checkPan(t, QPoint(100,100)));
 }
 
-void KisZoomAndPanTest::testSequentialWheelZoomAndPan(bool fullscreenMode, bool rotate)
+void KisZoomAndPanTest::testSequentialWheelZoomAndPan(bool fullscreenMode, bool rotate, bool mirror)
 {
     ZoomAndPanTester t;
-    initializeViewport(t, fullscreenMode, rotate);
+    initializeViewport(t, fullscreenMode, rotate, mirror);
 
     QVERIFY(checkZoomWithWheel(t, QPoint(100,100), 0.5));
     QVERIFY(checkPan(t, QPoint(100,100)));
@@ -430,42 +439,52 @@ void KisZoomAndPanTest::testSequentialWheelZoomAndPan(bool fullscreenMode, bool 
 
 void KisZoomAndPanTest::testSequentialActionZoomAndPan()
 {
-    testSequentialActionZoomAndPan(false, false);
+    testSequentialActionZoomAndPan(false, false, false);
 }
 
 void KisZoomAndPanTest::testSequentialActionZoomAndPanFullscreen()
 {
-    testSequentialActionZoomAndPan(true, false);
+    testSequentialActionZoomAndPan(true, false, false);
 }
 
 void KisZoomAndPanTest::testSequentialActionZoomAndPanRotate()
 {
-    testSequentialActionZoomAndPan(false, true);
+    testSequentialActionZoomAndPan(false, true, false);
 }
 
 void KisZoomAndPanTest::testSequentialActionZoomAndPanRotateFullscreen()
 {
-    testSequentialActionZoomAndPan(true, true);
+    testSequentialActionZoomAndPan(true, true, false);
+}
+
+void KisZoomAndPanTest::testSequentialActionZoomAndPanMirror()
+{
+    testSequentialActionZoomAndPan(false, false, true);
 }
 
 void KisZoomAndPanTest::testSequentialWheelZoomAndPan()
 {
-    testSequentialWheelZoomAndPan(false, false);
+    testSequentialWheelZoomAndPan(false, false, false);
 }
 
 void KisZoomAndPanTest::testSequentialWheelZoomAndPanFullscreen()
 {
-    testSequentialWheelZoomAndPan(true, false);
+    testSequentialWheelZoomAndPan(true, false, false);
 }
 
 void KisZoomAndPanTest::testSequentialWheelZoomAndPanRotate()
 {
-    testSequentialWheelZoomAndPan(false, true);
+    testSequentialWheelZoomAndPan(false, true, false);
 }
 
 void KisZoomAndPanTest::testSequentialWheelZoomAndPanRotateFullscreen()
 {
-    testSequentialWheelZoomAndPan(true, true);
+    testSequentialWheelZoomAndPan(true, true, false);
+}
+
+void KisZoomAndPanTest::testSequentialWheelZoomAndPanMirror()
+{
+    testSequentialWheelZoomAndPan(false, false, true);
 }
 
 

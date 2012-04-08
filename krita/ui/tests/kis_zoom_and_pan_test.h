@@ -34,12 +34,13 @@ private slots:
     void testSequentialActionZoomAndPanFullscreen();
     void testSequentialActionZoomAndPanRotate();
     void testSequentialActionZoomAndPanRotateFullscreen();
+    void testSequentialActionZoomAndPanMirror();
 
     void testSequentialWheelZoomAndPan();
     void testSequentialWheelZoomAndPanFullscreen();
     void testSequentialWheelZoomAndPanRotate();
     void testSequentialWheelZoomAndPanRotateFullscreen();
-
+    void testSequentialWheelZoomAndPanMirror();
 
 private:
 
@@ -56,9 +57,9 @@ private:
     bool checkZoomWithWheel(ZoomAndPanTester &t, const QPoint &widgetPoint, qreal zoomCoeff);
     bool checkPan(ZoomAndPanTester &t, QPoint shift);
 
-    void initializeViewport(ZoomAndPanTester &t, bool fullscreenMode, bool rotate);
-    void testSequentialActionZoomAndPan(bool fullscreenMode, bool rotate);
-    void testSequentialWheelZoomAndPan(bool fullscreenMode, bool rotate);
+    void initializeViewport(ZoomAndPanTester &t, bool fullscreenMode, bool rotate, bool mirror);
+    void testSequentialActionZoomAndPan(bool fullscreenMode, bool rotate, bool mirror);
+    void testSequentialWheelZoomAndPan(bool fullscreenMode, bool rotate, bool mirror);
 };
 
 #endif /* __KIS_ZOOM_AND_PAN_TEST_H */

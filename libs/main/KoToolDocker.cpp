@@ -40,14 +40,15 @@
 #include <QStyleOptionFrame>
 #include <QToolButton>
 #include <QTabWidget>
+#include <QToolButton>
 
 class KoToolDocker::Private {
 public:
     Private(KoToolDocker *dock)
             : q(dock)
-            ,tabbed(false)
-            ,hasTitle(false)
-    {
+            , tabbed(false)
+            , hasTitle(false)
+   {
         lockIcon = KIcon("object-locked");
         unlockIcon = KIcon("object-unlocked");
         tabIcon = KIcon("tab-new");
@@ -70,6 +71,7 @@ public:
     KIcon unTabIcon;
     QToolButton *lockButton;
     QToolButton *tabButton;
+
 
     void resetWidgets()
     {
@@ -287,6 +289,16 @@ KoToolDocker::~KoToolDocker()
 bool KoToolDocker::hasOptionWidget()
 {
     return !d->currentWidgetList.isEmpty();
+}
+
+void KoToolDocker::setLockEnabled(bool enabled)
+{
+    d->lockButton->setVisible(enabled);
+}
+
+void KoToolDocker::setTabEnabled(bool enabled)
+{
+    d->tabButton->setVisible(enabled);
 }
 
 void KoToolDocker::setOptionWidgets(const QList<QWidget *> &optionWidgetList)

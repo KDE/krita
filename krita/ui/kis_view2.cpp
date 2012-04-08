@@ -357,6 +357,8 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
         connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
                 shell()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &)));
+
+        shell()->dockerManager()->setIcons(false);
     }
 
     m_d->statusBar = new KisStatusBar(this);

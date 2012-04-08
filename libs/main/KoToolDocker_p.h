@@ -51,6 +51,16 @@ public slots:
      */
     bool hasOptionWidget();
 
+    /**
+     * set the lock option
+     */
+    void setLockEnabled(bool enabled);
+
+    /**
+     * set the tab option
+     */
+    void setTabEnabled(bool enabled);
+
 private:
     Q_PRIVATE_SLOT(d, void toggleLock())
     Q_PRIVATE_SLOT(d, void toggleTab())

@@ -19,8 +19,12 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QTimer>
+#include <QCheckBox>
 
 #include <klocale.h>
+#include <kconfiggroup.h>
+#include <kconfig.h>
+#include <kglobal.h>
 
 #include <KoChannelInfo.h>
 #include <KoColorSpace.h>
@@ -42,14 +46,27 @@ KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
     m_delayTimer->setInterval(50);
     connect(m_delayTimer, SIGNAL(timeout()), this, SLOT(updateTimeout()));
 
+
     m_colorspaceSelector = new KisColorSpaceSelector(this);
     connect(m_colorspaceSelector, SIGNAL(colorSpaceChanged(const KoColorSpace*)), this, SLOT(setCustomColorSpace(const KoColorSpace*)));
+
+    m_chkShowColorSpaceSelector = new QCheckBox(i18n("Show Colorspace Selector"), this);
+    connect(m_chkShowColorSpaceSelector, SIGNAL(toggled(bool)), m_colorspaceSelector, SLOT(setVisible(bool)));
+
+    KConfigGroup cfg = KGlobal::config()->group("");
+    m_chkShowColorSpaceSelector->setChecked(cfg.readEntry("SpecificColorSelector/ShowColorSpaceSelector", true));
+    m_colorspaceSelector->setVisible(m_chkShowColorSpaceSelector->isChecked());
+    m_layout->addWidget(m_chkShowColorSpaceSelector);
     m_layout->addWidget(m_colorspaceSelector);
+
 
 }
 
 KisSpecificColorSelectorWidget::~KisSpecificColorSelectorWidget()
 {
+    KConfigGroup cfg = KGlobal::config()->group("");
+    cfg.writeEntry("SpecificColorSelector/ShowColorSpaceSelector", m_chkShowColorSpaceSelector->isChecked());
+
 }
 
 void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)

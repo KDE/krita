@@ -812,7 +812,7 @@ KoDocumentInfo *KoDocument::documentInfo() const
     return d->docInfo;
 }
 
-KoDocumentRdf *KoDocument::documentRdf() const
+KoDocumentRdfBase *KoDocument::documentRdf() const
 {
 #ifdef SHOULD_BUILD_RDF
     if (d->docRdf && d->docRdf->model()) {

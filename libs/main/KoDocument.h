@@ -595,7 +595,7 @@ public:
      * the RDF system and needs full access to the KoDocumentRdf object.
      * @see KoDocumentRdf
      */
-    KoDocumentRdf *documentRdf() const;
+    KoDocumentRdfBase *documentRdf() const;
 
     /**
      * Replace the current rdf document with the given rdf document. The existing RDF document

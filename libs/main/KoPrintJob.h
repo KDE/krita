@@ -35,7 +35,7 @@ class QWidget;
  * The printjob should be able to print again after a print job has been completed,
  * using the same QPrinter to allow the user to alter settings on the QPrinter and
  * call print again.
- * The printjob can thus see startPrinting() called more then once, and the implementation
+ * The printjob can thus see startPrinting() called more than once, and the implementation
  * of that signal should honor the removePolicy passed to it.
  */
 class KOMAIN_EXPORT KoPrintJob : public QObject

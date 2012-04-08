@@ -31,10 +31,11 @@ struct KisCanvasController::Private {
     {
     }
 
-    const KisCoordinatesConverter *coordinatesConverter;
+    KisCoordinatesConverter *coordinatesConverter;
     KisCanvasController *q;
 
     void emitPointerPositionChangedSignals(QEvent *event);
+    void updateDocumentSizeAfterTransform();
 };
 
 void KisCanvasController::Private::emitPointerPositionChangedSignals(QEvent *event)
@@ -58,6 +59,19 @@ void KisCanvasController::Private::emitPointerPositionChangedSignals(QEvent *eve
     q->proxyObject->emitCanvasMousePositionChanged(pointerPos);
 }
 
+void KisCanvasController::Private::updateDocumentSizeAfterTransform()
+{
+    // round the size of the are to the nearest integer instead of getting aligned rect
+    QSize widgetSize = coordinatesConverter->imageRectInWidgetPixels().toRect().size();
+    q->updateDocumentSize(widgetSize, true);
+
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(q->canvas());
+    Q_ASSERT(kritaCanvas);
+
+    kritaCanvas->notifyZoomChanged();
+}
+
+
 KisCanvasController::KisCanvasController(QWidget *parent, KActionCollection * actionCollection)
     : KoCanvasControllerWidget(actionCollection, parent),
       m_d(new Private(this))
@@ -74,7 +88,8 @@ void KisCanvasController::setCanvas(KoCanvasBase *canvas)
     KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas);
     Q_ASSERT(kritaCanvas);
 
-    m_d->coordinatesConverter = kritaCanvas->coordinatesConverter();
+    m_d->coordinatesConverter =
+        const_cast<KisCoordinatesConverter*>(kritaCanvas->coordinatesConverter());
     KoCanvasControllerWidget::setCanvas(canvas);
 }
 
@@ -89,4 +104,42 @@ bool KisCanvasController::eventFilter(QObject *watched, QEvent *event)
     }
 
     return KoCanvasControllerWidget::eventFilter(watched, event);
+}
+
+void KisCanvasController::updateDocumentSize(const QSize &sz, bool recalculateCenter)
+{
+    KoCanvasControllerWidget::updateDocumentSize(sz, recalculateCenter);
+
+    emit documentSizeChanged();
+}
+
+void KisCanvasController::mirrorCanvas(bool enable)
+{
+    QPoint newOffset = m_d->coordinatesConverter->mirror(m_d->coordinatesConverter->widgetCenterPoint(), false, enable);
+    m_d->updateDocumentSizeAfterTransform();
+    setScrollBarValue(newOffset);
+}
+
+void KisCanvasController::rotateCanvas(qreal angle)
+{
+    QPoint newOffset = m_d->coordinatesConverter->rotate(m_d->coordinatesConverter->widgetCenterPoint(), angle);
+    m_d->updateDocumentSizeAfterTransform();
+    setScrollBarValue(newOffset);
+}
+
+void KisCanvasController::rotateCanvasRight15()
+{
+    rotateCanvas(15.0);
+}
+
+void KisCanvasController::rotateCanvasLeft15()
+{
+    rotateCanvas(-15.0);
+}
+
+void KisCanvasController::resetCanvasTransformations()
+{
+    QPoint newOffset = m_d->coordinatesConverter->resetRotation(m_d->coordinatesConverter->widgetCenterPoint());
+    m_d->updateDocumentSizeAfterTransform();
+    setScrollBarValue(newOffset);
 }

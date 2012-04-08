@@ -136,6 +136,9 @@ signals:
      */
     void zoomedToAll();
 
+protected:
+    virtual QSize documentToViewport(const QSizeF &size);
+
 private:
     Q_PRIVATE_SLOT(d, void setAvailableSize())
     Q_PRIVATE_SLOT(d, void requestZoomBy(const qreal))

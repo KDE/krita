@@ -61,9 +61,9 @@ public:
     QPoint documentOffset() const;
     qreal rotationAngle() const;
     
-    void rotate(QPointF center, qreal angle);
-    void mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis, bool keepOrientation=false);
-    void resetRotation(QPointF center);
+    QPoint rotate(QPointF center, qreal angle);
+    QPoint mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis, bool keepOrientation=false);
+    QPoint resetRotation(QPointF center);
     
     virtual void setZoom(qreal zoom);
     
@@ -126,7 +126,9 @@ public:
     void imageScale(qreal *scaleX, qreal *scaleY) const;
 
 private:
-    void recalculateTransformations() const;
+    void correctOffsetToTransformation();
+    void correctTransformationToOffset();
+    void recalculateTransformations();
 
 private:
     struct Private;

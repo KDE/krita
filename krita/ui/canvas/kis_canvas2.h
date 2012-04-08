@@ -149,7 +149,6 @@ public: // KisCanvas2 methods
 signals:
 
     void documentOriginChanged();
-    void scrollAreaSizeChanged();
 
     void imageChanged(KisImageWSP image);
 
@@ -175,13 +174,6 @@ public slots:
 
     /// adjust the origin of the document
     void adjustOrigin();
-
-    /// slot for setting the mirroring
-    void mirrorCanvas(bool mirror);
-    void rotateCanvas(qreal angle, bool updateOffset=true);
-    void rotateCanvasRight15();
-    void rotateCanvasLeft15();
-    void resetCanvasTransformations();
 
 private slots:
 

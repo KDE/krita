@@ -46,6 +46,26 @@
 #include "kis_statusbar.h"
 #include "kis_config.h"
 
+class KisZoomController : public KoZoomController
+{
+public:
+    KisZoomController(KoCanvasController *co, KisCoordinatesConverter *zh, KActionCollection *actionCollection, KoZoomAction::SpecialButtons specialButtons, QObject *parent)
+        : KoZoomController(co, zh, actionCollection, specialButtons, parent),
+          m_converter(zh)
+    {
+    }
+
+protected:
+    QSize documentToViewport(const QSizeF &size) {
+        QRectF docRect(QPointF(), size);
+        return m_converter->documentToWidget(docRect).toRect().size();
+    }
+
+private:
+    KisCoordinatesConverter *m_converter;
+};
+
+
 KisZoomManager::KisZoomManager(KisView2 * view, KoZoomHandler * zoomHandler,
                                KoCanvasController * canvasController)
         : m_view(view)
@@ -71,8 +91,11 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
     KoZoomMode::setMinimumZoom(0.00391);
     KoZoomMode::setMaximumZoom(256.0);
 
+    KisCoordinatesConverter *converter =
+        dynamic_cast<KisCoordinatesConverter*>(m_zoomHandler);
+
     KisConfig cfg;
-    m_zoomController = new KoZoomController(m_canvasController, m_zoomHandler, actionCollection, KoZoomAction::AspectMode, this);
+    m_zoomController = new KisZoomController(m_canvasController, converter, actionCollection, KoZoomAction::AspectMode, this);
     m_zoomHandler->setZoomMode(KoZoomMode::ZOOM_PIXELS);
     m_zoomHandler->setZoom(1.0);
 
@@ -170,14 +193,10 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
     Q_UNUSED(zoom);
 
     m_view->canvasBase()->notifyZoomChanged();
-    m_canvasController->pan(m_view->canvasBase()->coordinatesConverter()->updateOffsetAfterTransform());
 }
 
 void KisZoomManager::slotScrollAreaSizeChanged()
 {
-    // round the size of the are to the nearest integer instead of getting aligned rect
-    QSize widgetSize = m_view->canvasBase()->coordinatesConverter()->imageRectInWidgetPixels().toRect().size();
-    m_canvasController->updateDocumentSize(widgetSize, true);
     updateGUI();
 }
 

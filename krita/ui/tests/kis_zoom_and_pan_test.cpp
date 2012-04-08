@@ -137,6 +137,7 @@ bool KisZoomAndPanTest::checkPan(ZoomAndPanTester &t, QPoint shift)
 
     QPoint newOffset  = t.coordinatesConverter()->documentOffset();
     QPointF newPrefCenter = t.canvasController()->preferredCenter();
+    QPointF newTopLeft = t.coordinatesConverter()->imageRectInWidgetPixels().topLeft();
 
     QPoint expectedOffset  = oldOffset + shift;
     QPointF expectedPrefCenter = oldPrefCenter + shift;
@@ -150,8 +151,12 @@ bool KisZoomAndPanTest::checkPan(ZoomAndPanTester &t, QPoint shift)
     bool preferredCenterAsExpected =
         compareWithRounding(expectedPrefCenter, newPrefCenter, 1.0);
 
+    bool topLeftAsExpected = newTopLeft.toPoint() == -newOffset;
 
-    if (!offsetAsExpected || !preferredCenterAsExpected) {
+    if (!offsetAsExpected ||
+        !preferredCenterAsExpected ||
+        !topLeftAsExpected) {
+
         qDebug() << "***** PAN *****************";
 
         if(!offsetAsExpected) {
@@ -162,14 +167,19 @@ bool KisZoomAndPanTest::checkPan(ZoomAndPanTester &t, QPoint shift)
             qDebug() << " ### Preferred center invariant broken";
         }
 
+        if(!topLeftAsExpected) {
+            qDebug() << " ### TopLeft invariant broken";
+        }
+
         qDebug() << ppVar(expectedOffset);
         qDebug() << ppVar(expectedPrefCenter);
         qDebug() << ppVar(oldOffset) << ppVar(newOffset);
         qDebug() << ppVar(oldPrefCenter) << ppVar(newPrefCenter);
+        qDebug() << ppVar(newTopLeft);
         qDebug() << "***************************";
     }
 
-    return offsetAsExpected && preferredCenterAsExpected;
+    return offsetAsExpected && preferredCenterAsExpected && topLeftAsExpected;
 }
 
 bool KisZoomAndPanTest::checkInvariants(const QPointF &baseFlakePoint,
@@ -178,7 +188,8 @@ bool KisZoomAndPanTest::checkInvariants(const QPointF &baseFlakePoint,
                                         qreal oldZoom,
                                         const QPoint &newOffset,
                                         const QPointF &newPreferredCenter,
-                                        qreal newZoom)
+                                        qreal newZoom,
+                                        QPointF newTopLeft)
 {
     qreal k = newZoom / oldZoom;
 
@@ -203,7 +214,12 @@ bool KisZoomAndPanTest::checkInvariants(const QPointF &baseFlakePoint,
         compareWithRounding(expectedPreferredCenter, newPreferredCenter,
                             qMax(1.0, k));
 
-    if (!offsetAsExpected || !preferredCenterAsExpected) {
+    bool topLeftAsExpected = newTopLeft.toPoint() == -newOffset;
+
+    if (!offsetAsExpected ||
+        !preferredCenterAsExpected ||
+        !topLeftAsExpected) {
+
         qDebug() << "***** ZOOM ****************";
 
         if(!offsetAsExpected) {
@@ -214,16 +230,21 @@ bool KisZoomAndPanTest::checkInvariants(const QPointF &baseFlakePoint,
             qDebug() << " ### Preferred center invariant broken";
         }
 
+        if(!topLeftAsExpected) {
+            qDebug() << " ### TopLeft invariant broken";
+        }
+
         qDebug() << ppVar(expectedOffset);
         qDebug() << ppVar(expectedPreferredCenter);
         qDebug() << ppVar(oldOffset) << ppVar(newOffset);
         qDebug() << ppVar(oldPreferredCenter) << ppVar(newPreferredCenter);
         qDebug() << ppVar(oldZoom) << ppVar(newZoom);
         qDebug() << ppVar(baseFlakePoint);
+        qDebug() << ppVar(newTopLeft);
         qDebug() << "***************************";
     }
 
-    return offsetAsExpected && preferredCenterAsExpected;
+    return offsetAsExpected && preferredCenterAsExpected && topLeftAsExpected;
 }
 
 bool KisZoomAndPanTest::checkZoomWithAction(ZoomAndPanTester &t, qreal newZoom)
@@ -234,13 +255,16 @@ bool KisZoomAndPanTest::checkZoomWithAction(ZoomAndPanTester &t, qreal newZoom)
 
     t.zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, newZoom);
 
+    QPointF newTopLeft = t.coordinatesConverter()->imageRectInWidgetPixels().topLeft();
+
     return checkInvariants(oldPrefCenter,
                            oldOffset,
                            oldPrefCenter,
                            oldZoom,
                            t.coordinatesConverter()->documentOffset(),
                            t.canvasController()->preferredCenter(),
-                           newZoom);
+                           newZoom,
+                           newTopLeft);
 }
 
 bool KisZoomAndPanTest::checkZoomWithWheel(ZoomAndPanTester &t, const QPoint &widgetPoint, qreal zoomCoeff)
@@ -251,13 +275,16 @@ bool KisZoomAndPanTest::checkZoomWithWheel(ZoomAndPanTester &t, const QPoint &wi
 
     t.canvasController()->zoomRelativeToPoint(widgetPoint, zoomCoeff);
 
+    QPointF newTopLeft = t.coordinatesConverter()->imageRectInWidgetPixels().topLeft();
+
     return checkInvariants(oldOffset + widgetPoint,
                            oldOffset,
                            oldPrefCenter,
                            oldZoom,
                            t.coordinatesConverter()->documentOffset(),
                            t.canvasController()->preferredCenter(),
-                           zoomCoeff * oldZoom);
+                           zoomCoeff * oldZoom,
+                           newTopLeft);
 }
 
 void KisZoomAndPanTest::testZoom100ChangingWidgetSize()
@@ -342,9 +369,10 @@ void KisZoomAndPanTest::initializeViewport(ZoomAndPanTester &t, bool fullscreenM
     }
 
     if (rotate) {
-        t.canvas()->rotateCanvas(90);
+        t.canvasController()->rotateCanvas(90);
         QVERIFY(verifyOffset(t, QPoint(-21,79)));
         QCOMPARE(t.canvasController()->preferredCenter(), QPointF(220.5,320.5));
+        QCOMPARE(t.coordinatesConverter()->imageRectInWidgetPixels().topLeft().toPoint(), -t.coordinatesConverter()->documentOffset());
     }
 }
 
@@ -415,6 +443,11 @@ void KisZoomAndPanTest::testSequentialActionZoomAndPanRotate()
     testSequentialActionZoomAndPan(false, true);
 }
 
+void KisZoomAndPanTest::testSequentialActionZoomAndPanRotateFullscreen()
+{
+    testSequentialActionZoomAndPan(true, true);
+}
+
 void KisZoomAndPanTest::testSequentialWheelZoomAndPan()
 {
     testSequentialWheelZoomAndPan(false, false);
@@ -428,6 +461,11 @@ void KisZoomAndPanTest::testSequentialWheelZoomAndPanFullscreen()
 void KisZoomAndPanTest::testSequentialWheelZoomAndPanRotate()
 {
     testSequentialWheelZoomAndPan(false, true);
+}
+
+void KisZoomAndPanTest::testSequentialWheelZoomAndPanRotateFullscreen()
+{
+    testSequentialWheelZoomAndPan(true, true);
 }
 
 

@@ -33,10 +33,12 @@ private slots:
     void testSequentialActionZoomAndPan();
     void testSequentialActionZoomAndPanFullscreen();
     void testSequentialActionZoomAndPanRotate();
+    void testSequentialActionZoomAndPanRotateFullscreen();
 
     void testSequentialWheelZoomAndPan();
     void testSequentialWheelZoomAndPanFullscreen();
     void testSequentialWheelZoomAndPanRotate();
+    void testSequentialWheelZoomAndPanRotateFullscreen();
 
 
 private:
@@ -47,7 +49,8 @@ private:
                          qreal oldZoom,
                          const QPoint &newOffset,
                          const QPointF &newPreferredCenter,
-                         qreal newZoom);
+                         qreal newZoom,
+                         QPointF newTopLeft);
 
     bool checkZoomWithAction(ZoomAndPanTester &t, qreal newZoom);
     bool checkZoomWithWheel(ZoomAndPanTester &t, const QPoint &widgetPoint, qreal zoomCoeff);

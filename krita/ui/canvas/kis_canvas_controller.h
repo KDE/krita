@@ -27,12 +27,26 @@
 
 class KRITAUI_EXPORT KisCanvasController : public KoCanvasControllerWidget
 {
+    Q_OBJECT
+
 public:
     KisCanvasController(QWidget *parent, KActionCollection * actionCollection);
     ~KisCanvasController();
 
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual bool eventFilter(QObject *watched, QEvent *event);
+    virtual void updateDocumentSize(const QSize &sz, bool recalculateCenter);
+
+
+public slots:
+    void mirrorCanvas(bool enable);
+    void rotateCanvas(qreal angle);
+    void rotateCanvasRight15();
+    void rotateCanvasLeft15();
+    void resetCanvasTransformations();
+
+signals:
+    void documentSizeChanged();
 
 private:
     struct Private;

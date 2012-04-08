@@ -47,7 +47,35 @@ struct KisCoordinatesConverter::Private {
     QTransform widgetToViewport;
 };
 
-void KisCoordinatesConverter::recalculateTransformations() const
+/**
+ * The document offset and the position of the top left corner of the
+ * image must always coincide, that is why we need to correct them to
+ * and fro.
+ *
+ * When we change zoom level, the calculation of the new offset is
+ * done by KoCanvasControllerWidget, that is why we just passively fix
+ * the flakeToWidget transform to conform the offset and wait until
+ * the canvas controller will recenter us.
+ *
+ * But when we do our own transformations of the canvas, like rotation
+ * and mirroring, we cannot rely on the centering of the canvas
+ * controller and we do it ourselves. Then we just set new offset and
+ * return its value to be set in the canvas controller explicitly.
+ */
+
+void KisCoordinatesConverter::correctOffsetToTransformation()
+{
+    m_d->documentOffset = -imageRectInWidgetPixels().topLeft().toPoint();
+}
+
+void KisCoordinatesConverter::correctTransformationToOffset()
+{
+    QPointF topLeft = imageRectInWidgetPixels().topLeft();
+    QPointF diff = (-topLeft) - m_d->documentOffset;
+    m_d->flakeToWidget *= QTransform::fromTranslate(diff.x(), diff.y());
+}
+
+void KisCoordinatesConverter::recalculateTransformations()
 {
     if(!m_d->image) return;
 
@@ -57,6 +85,8 @@ void KisCoordinatesConverter::recalculateTransformations() const
     qreal zoomX, zoomY;
     KoZoomHandler::zoom(&zoomX, &zoomY);
     m_d->documentToFlake = QTransform::fromScale(zoomX, zoomY);
+
+    correctTransformationToOffset();
 
     QRectF irect = imageRectInWidgetPixels();
     QRectF wrect = QRectF(QPoint(0,0), m_d->canvasWidgetSize);
@@ -129,7 +159,7 @@ void KisCoordinatesConverter::setZoom(qreal zoom)
     recalculateTransformations();
 }
 
-void KisCoordinatesConverter::rotate(QPointF center, qreal angle)
+QPoint KisCoordinatesConverter::rotate(QPointF center, qreal angle)
 {
     QTransform rot;
     rot.rotate(angle);
@@ -138,10 +168,14 @@ void KisCoordinatesConverter::rotate(QPointF center, qreal angle)
     m_d->flakeToWidget *= rot;
     m_d->flakeToWidget *= QTransform::fromTranslate(center.x(), center.y());
     m_d->rotationAngle = std::fmod(m_d->rotationAngle + angle, 360.0);
+
+    correctOffsetToTransformation();
     recalculateTransformations();
+
+    return m_d->documentOffset.toPoint();
 }
 
-void KisCoordinatesConverter::mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis, bool keepOrientation)
+QPoint KisCoordinatesConverter::mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis, bool keepOrientation)
 {
     bool       doXMirroring = m_d->isXAxisMirrored ^ mirrorXAxis;
     bool       doYMirroring = m_d->isYAxisMirrored ^ mirrorYAxis;
@@ -169,10 +203,14 @@ void KisCoordinatesConverter::mirror(QPointF center, bool mirrorXAxis, bool mirr
     
     m_d->isXAxisMirrored = mirrorXAxis;
     m_d->isYAxisMirrored = mirrorYAxis;
+
+    correctOffsetToTransformation();
     recalculateTransformations();
+
+    return m_d->documentOffset.toPoint();
 }
 
-void KisCoordinatesConverter::resetRotation(QPointF center)
+QPoint KisCoordinatesConverter::resetRotation(QPointF center)
 {
     QTransform rot;
     rot.rotate(-m_d->rotationAngle);
@@ -181,7 +219,11 @@ void KisCoordinatesConverter::resetRotation(QPointF center)
     m_d->flakeToWidget *= rot;
     m_d->flakeToWidget *= QTransform::fromTranslate(center.x(), center.y());
     m_d->rotationAngle = 0.0;
+
+    correctOffsetToTransformation();
     recalculateTransformations();
+
+    return m_d->documentOffset.toPoint();
 }
 
 QTransform KisCoordinatesConverter::imageToWidgetTransform() const{

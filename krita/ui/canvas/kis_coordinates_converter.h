@@ -119,7 +119,6 @@ public:
     QSizeF imageSizeInFlakePixels() const;
     QRectF widgetRectInFlakePixels() const;
 
-    QPoint updateOffsetAfterTransform() const;
     QPointF flakeCenterPoint() const;
     QPointF widgetCenterPoint() const;
 

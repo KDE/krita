@@ -341,16 +341,6 @@ QRectF KisCoordinatesConverter::widgetRectInFlakePixels() const
     return widgetToFlake(QRectF(QPoint(0,0), m_d->canvasWidgetSize));
 }
 
-QPoint KisCoordinatesConverter::updateOffsetAfterTransform() const
-{
-    QPointF oldOffset = m_d->documentOrigin + m_d->documentOffset;
-    QPointF newOffset = -imageRectInWidgetPixels().topLeft();
-    QPointF shift     = newOffset - oldOffset;
-    
-    m_d->documentOffset = newOffset;
-    return shift.toPoint();
-}
-
 QPointF KisCoordinatesConverter::flakeCenterPoint() const
 {
     QRectF widgetRect = widgetRectInFlakePixels();

@@ -114,12 +114,12 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
         }
     }
     bool allChannels8Bit = true;
-    foreach(KoChannelInfo* channel, channels) {
+    foreach (KoChannelInfo* channel, channels) {
         if (channel->channelType() == KoChannelInfo::COLOR && channel->channelValueType() != KoChannelInfo::UINT8) {
             allChannels8Bit = false;
         }
     }
-    if(allChannels8Bit) {
+    if (allChannels8Bit) {
         KisColorInput* input = new KisHexColorInput(this, &m_color);
         m_inputs.append(input);
         m_layout->addWidget(input);

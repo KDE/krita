@@ -106,7 +106,6 @@ void KoDockerManager::removeToolOptionsDocker()
 
 void KoDockerManager::setIcons(bool enabled)
 {
-    d->toolOptionsDocker->setLockEnabled(enabled);
     d->toolOptionsDocker->setTabEnabled(enabled);
 }
 

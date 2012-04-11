@@ -49,6 +49,7 @@
 #include <KoDpi.h>
 #include <KoXmlWriter.h>
 
+#include <kmimetype.h>
 #include <kdialog.h>
 #include <kfileitem.h>
 #include <kio/job.h>

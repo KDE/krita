@@ -20,6 +20,8 @@
 #include "SnapGuideConfigWidget.h"
 #include "KoSnapGuide.h"
 
+#include <KIcon>
+
 SnapGuideConfigWidget::SnapGuideConfigWidget(KoSnapGuide * snapGuide, QWidget * parent)
         : QWidget(parent), m_snapGuide(snapGuide)
 {

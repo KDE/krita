@@ -28,6 +28,7 @@
 #include <QHeaderView>
 #include <QHelpEvent>
 #include <QMenu>
+#include <QDrag>
 #include <QMouseEvent>
 #include <QPersistentModelIndex>
 #include <QApplication>

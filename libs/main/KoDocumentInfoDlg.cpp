@@ -35,6 +35,7 @@
 
 #include <kmimetype.h>
 #include <klocale.h>
+#include <kicon.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>

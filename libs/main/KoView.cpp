@@ -33,6 +33,7 @@
 
 #include <kactioncollection.h>
 #include <kglobalsettings.h>
+#include <kicon.h>
 #include <klocale.h>
 #include <kparts/partmanager.h>
 #include <kparts/event.h>

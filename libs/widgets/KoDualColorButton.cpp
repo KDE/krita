@@ -27,6 +27,7 @@
 #include <kglobalsettings.h>
 #include <QBitmap>
 #include <QBrush>
+#include <QDrag>
 #include <QDragEnterEvent>
 #include <QPainter>
 

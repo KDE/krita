@@ -49,6 +49,7 @@
 #include <KAction>
 #include <KLocale>
 #include <KDebug>
+#include <KIcon>
 #include <KStandardDirs>
 #include <kundo2command.h>
 

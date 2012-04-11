@@ -27,6 +27,7 @@
 #include <KoShapeController.h>
 
 #include <klocale.h>
+#include <kicon.h>
 
 KoPAConfigureDialog::KoPAConfigureDialog(KoPAView* parent)
 : KPageDialog(parent)

@@ -67,6 +67,7 @@
 //#include <ResizeTableCommand.h>
 
 #include <kdebug.h>
+#include <KIcon>
 #include <KRun>
 #include <KStandardShortcut>
 #include <KFontChooser>

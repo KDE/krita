@@ -21,7 +21,7 @@
 #define KOMARKERSELECTOR_H
 
 #include <QComboBox>
-#include <KoPathShape.h>
+#include <KoMarkerData.h>
 
 class KoMarker;
 

@@ -282,10 +282,10 @@ void PictureShape::waitUntilReady(const KoViewConverter &converter, bool asynchr
         m_printQualityImage = image.scaled(pixels, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     }
     else {
-        QSize pixels = converter.documentToView(QRectF(QPointF(0,0), size())).size().toSize();
-        QString key(generate_key(imageData->key(), pixels));
+        QSize pixmapSize = calcOptimalPixmapSize(converter.documentToView(QRectF(QPointF(0,0), size())).size(), imageData->image().size());
+        QString key(generate_key(imageData->key(), pixmapSize));
         if (QPixmapCache::find(key) == 0) {
-            QPixmap pixmap = imageData->pixmap(pixels);
+            QPixmap pixmap = imageData->pixmap(pixmapSize);
             QPixmapCache::insert(key, pixmap);
         }
     }

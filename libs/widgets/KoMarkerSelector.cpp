@@ -78,7 +78,7 @@ void KoMarkerSelector::paintEvent(QPaintEvent *pe)
     }
 
     // paint marker
-    QPen pen(option.palette.text(), 3);
+    QPen pen(option.palette.text(), 2);
     QPainterPath path = pathShape.pathStroke(pen);
     painter.fillPath(path, pen.brush());
 

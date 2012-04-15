@@ -1060,6 +1060,7 @@ private:
 
     bool saveToStream(QIODevice *dev);
 
+    QString checkImageMimeTypes(const QString &mimeType, const KUrl& url) const;
 
     /// @return the current KoMainWindow shell
     KoMainWindow *currentShell();

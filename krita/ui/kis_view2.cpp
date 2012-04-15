@@ -294,10 +294,6 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     actionCollection()->addAction("createTemplate", m_d->createTemplate);
     connect(m_d->createTemplate, SIGNAL(triggered()), this, SLOT(slotCreateTemplate()));
 
-    KAction *firstRun = new KAction( i18n( "Load Tutorial"), this);
-    actionCollection()->addAction("first_run", firstRun);
-    connect(firstRun, SIGNAL(triggered()), this, SLOT(slotFirstRun()));
-
     m_d->mirrorCanvas = new KToggleAction(i18n("Mirror Image"), this);
     m_d->mirrorCanvas->setChecked(false);
     actionCollection()->addAction("mirror_canvas", m_d->mirrorCanvas);
@@ -1207,26 +1203,6 @@ void KisView2::enableControls()
     foreach(QObject* child, m_d->controlFrame->paintopBox()->children()) {
         child->removeEventFilter(&m_d->blockingEventFilter);
     }
-}
-
-void KisView2::slotFirstRun()
-{
-    QString fname = KisFactory2::componentData().dirs()->findResource("kis_images", "krita_first_start.kra");
-    if (!fname.isEmpty()) {
-        KoDocumentEntry entry = KoDocumentEntry(KoDocument::readNativeService());
-        QString errorMsg;
-        KoDocument* doc = entry.createDoc(&errorMsg);
-        if (!doc) return;
-        KoMainWindow *shell = new KoMainWindow(doc->componentData());
-        shell->show();
-        QObject::connect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
-        // for initDoc to fill in the recent docs list
-        // and for KoDocument::slotStarted
-        doc->addShell(shell);
-        doc->showStartUpWidget(shell, true);
-        doc->openUrl(fname);
-    }
-
 }
 
 void KisView2::showStatusBar(bool toggled)

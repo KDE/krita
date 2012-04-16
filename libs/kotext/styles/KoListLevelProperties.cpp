@@ -250,7 +250,7 @@ QSharedPointer<KoCharacterStyle> KoListLevelProperties::characterProperties() co
 {
     const QVariant v = d->stylesPrivate.value(KoListStyle::CharacterProperties);
     if (v.isNull()) {
-        return static_cast< QSharedPointer<KoCharacterStyle> >(0);
+        return QSharedPointer<KoCharacterStyle>(0);
     }
     return v.value< QSharedPointer<KoCharacterStyle> >();
 }

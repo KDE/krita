@@ -41,8 +41,9 @@ ParagraphIndentSpacing::ParagraphIndentSpacing(QWidget *parent)
     widget.lineSpacing->addItem(i18nc("Line spacing type", "Proportional"));    // called Proportional like in OO
     widget.lineSpacing->addItem(i18nc("Line spacing type", "Additional"));    // normal distance + absolute value
     widget.lineSpacing->addItem(i18nc("Line spacing type", "Fixed"));
+    widget.lineSpacing->addItem(i18nc("Line spacing type", "At least"));
 
-    connect(widget.first, SIGNAL(valueChangedPt(qreal)), this, SLOT(firstIndenValueChanged()));
+    connect(widget.first, SIGNAL(valueChangedPt(qreal)), this, SLOT(firstIndentValueChanged()));
     connect(widget.left, SIGNAL(valueChangedPt(qreal)), this, SLOT(leftMarginValueChanged()));
     connect(widget.right, SIGNAL(valueChangedPt(qreal)), this, SLOT(rightMarginValueChanged()));
     connect(widget.after, SIGNAL(valueChangedPt(qreal)), this, SLOT(bottomMarginValueChanged()));
@@ -60,7 +61,7 @@ void ParagraphIndentSpacing::autoTextIndentChanged(int state)
     widget.first->setEnabled(state == Qt::Unchecked);
     m_autoTextIndentInherited = false;
 }
-void ParagraphIndentSpacing::firstIndenValueChanged()
+void ParagraphIndentSpacing::firstIndentValueChanged()
 {
     m_textIndentInherited = false;
 }
@@ -104,6 +105,8 @@ void ParagraphIndentSpacing::setDisplay(KoParagraphStyle *style)
 
     widget.autoTextIndent->setChecked(style->autoTextIndent());
 
+    m_spacingInherited = !(style->hasProperty(KoParagraphStyle::FixedLineHeight) || style->hasProperty(KoParagraphStyle::LineSpacing) || style->hasProperty(KoParagraphStyle::PercentLineHeight) ||style->hasProperty(KoParagraphStyle::MinimumLineHeight));
+
     int index;
     if (style->hasProperty(KoParagraphStyle::FixedLineHeight) && style->lineHeightAbsolute() != 0) {
         // this is the strongest; if this is set we don't care what other properties there are.
@@ -121,46 +124,33 @@ void ParagraphIndentSpacing::setDisplay(KoParagraphStyle *style)
             index = 2; // double
         else
             index = 3; // proportional
+    } else if (style->hasProperty(KoParagraphStyle::MinimumLineHeight) && style->minimumLineHeight() != 0) {
+        index = 6;
     } else {
         index = 0; // nothing set, default is 'single' just like for geeks.
     }
     widget.lineSpacing->setCurrentIndex(index);
-    widget.minimumLineSpacing->changeValue(style->minimumLineHeight());
+    //widget.minimumLineSpacing->changeValue(style->minimumLineHeight());
     widget.useFont->setChecked(style->lineSpacingFromFont());
     m_fontMetricsChecked = style->lineSpacingFromFont();
 }
 
 void ParagraphIndentSpacing::lineSpacingChanged(int row)
 {
-    qreal fixedLineHeight = 0, lineSpacing = 0, minimumLineSpacing = 0;
-    int percentHeight = 0;
-    bool useFontMetrics = (row != 5) && (widget.useFont->isChecked());
     bool percent = false, custom = false;
     qreal customValue = 0.0;
     switch (row) {
         case 0:
-            percentHeight = 120;
-            minimumLineSpacing = widget.minimumLineSpacing->value();
-            break;
         case 1:
-            percentHeight = 180;
-            minimumLineSpacing = widget.minimumLineSpacing->value();
-            break;
         case 2:
-            percentHeight = 240;
-            minimumLineSpacing = widget.minimumLineSpacing->value();
             break;
         case 3: // proportional
             percent = true;
             widget.proportional->setValue(m_style->lineHeightPercent());
-            percentHeight = m_style->lineHeightPercent();
-            minimumLineSpacing = widget.minimumLineSpacing->value();
             break;
         case 4: // additional
             custom = true;
             customValue = qMax(qreal(0.1), m_style->lineSpacing());
-            lineSpacing = qMax(qreal(0.1), m_style->lineSpacing());
-            minimumLineSpacing = widget.minimumLineSpacing->value();
             break;
         case 5: // fixed
             custom = true;
@@ -168,10 +158,15 @@ void ParagraphIndentSpacing::lineSpacingChanged(int row)
                 customValue = 12.0; // nice default value...
             else
                 customValue = m_style->lineHeightAbsolute();
-            fixedLineHeight = customValue;
+            break;
+        case 6: // minimum
+            custom = true;
+            customValue = m_style->minimumLineHeight();
             break;
         default:; // other cases don't need the spinboxes
     }
+
+    m_spacingInherited = false;
 
     if (custom) {
         widget.custom->setEnabled(true);
@@ -184,23 +179,22 @@ void ParagraphIndentSpacing::lineSpacingChanged(int row)
             widget.proportional->setValue(100);
     }
 
-    widget.minimumLineSpacing->setEnabled(row != 5);
     widget.useFont->setEnabled(row != 5);
     widget.useFont->setChecked(row == 5 ? false : m_fontMetricsChecked);
-
-    emit lineSpacingChanged(fixedLineHeight, lineSpacing, minimumLineSpacing, percentHeight, useFontMetrics);
 }
 
 void ParagraphIndentSpacing::spacingPercentChanged(int percent)
 {
+    m_spacingInherited = false;
     if (widget.lineSpacing->currentIndex() == 3)
-        emit lineSpacingChanged(0, 0, (qreal) widget.minimumLineSpacing->value(), percent, widget.useFont->isChecked());
+        emit lineSpacingChanged(0, 0, (qreal) 0, percent, widget.useFont->isChecked());
 }
 
 void ParagraphIndentSpacing::spacingValueChanged(qreal value)
 {
+    m_spacingInherited = false;
     if (widget.lineSpacing->currentIndex() == 4)
-        emit lineSpacingChanged(0, value, (qreal) widget.minimumLineSpacing->value(), 0, widget.useFont->isChecked());
+        emit lineSpacingChanged(0, value, (qreal) 0, 0, widget.useFont->isChecked());
     else if (widget.lineSpacing->currentIndex() == 5)
         emit lineSpacingChanged(value, 0, 0, 0, false);
 }
@@ -228,29 +222,31 @@ void ParagraphIndentSpacing::save(KoParagraphStyle *style)
     if (!m_autoTextIndentInherited){
         style->setAutoTextIndent(widget.autoTextIndent->isChecked());
     }
-    style->setLineHeightAbsolute(0); // since it trumps percentage based line heights, unset it.
-    style->setMinimumLineHeight(QTextLength(QTextLength::FixedLength, 0));
-    style->setLineSpacing(0);
-    switch (widget.lineSpacing->currentIndex()) {
-    case 0: style->setLineHeightPercent(120); break;
-    case 1: style->setLineHeightPercent(180); break;
-    case 2: style->setLineHeightPercent(240); break;
-    case 3: style->setLineHeightPercent(widget.proportional->value()); break;
-    case 4:
-        if (widget.custom->value() == 0.0) { // then we need to save it differently.
-            style->setLineHeightPercent(100);
-        } else {
-            style->setLineHeightPercent(0);
-            style->setLineSpacing(widget.custom->value());
+    if (!m_spacingInherited) {
+        style->setLineHeightAbsolute(0); // since it trumps percentage based line heights, unset it.
+        style->setMinimumLineHeight(QTextLength(QTextLength::FixedLength, 0));
+        style->setLineSpacing(0);
+        switch (widget.lineSpacing->currentIndex()) {
+        case 0: style->setLineHeightPercent(120); break;
+        case 1: style->setLineHeightPercent(180); break;
+        case 2: style->setLineHeightPercent(240); break;
+        case 3: style->setLineHeightPercent(widget.proportional->value()); break;
+        case 4:
+            if (widget.custom->value() == 0.0) { // then we need to save it differently.
+                style->setLineHeightPercent(100);
+            } else {
+                style->setLineSpacing(widget.custom->value());
+            }
+            break;
+        case 5:
+            style->setLineHeightAbsolute(widget.custom->value());
+            break;
+        case 6:
+            style->setMinimumLineHeight(QTextLength(QTextLength::FixedLength, widget.custom->value()));
+            break;
         }
-        break;
-    case 5: style->setLineHeightPercent(0);
-        style->setLineHeightAbsolute(widget.custom->value());
-        break;
+        style->setLineSpacingFromFont(widget.lineSpacing->currentIndex() != 5 && widget.useFont->isChecked());
     }
-    if (widget.lineSpacing->currentIndex() != 5)
-        style->setMinimumLineHeight(QTextLength(QTextLength::FixedLength, widget.minimumLineSpacing->value()));
-    style->setLineSpacingFromFont(widget.lineSpacing->currentIndex() != 5 && widget.useFont->isChecked());
 }
 
 void ParagraphIndentSpacing::setUnit(const KoUnit &unit)
@@ -261,7 +257,6 @@ void ParagraphIndentSpacing::setUnit(const KoUnit &unit)
     widget.before->setUnit(unit);
     widget.after->setUnit(unit);
     widget.custom->setUnit(unit);
-    widget.minimumLineSpacing->setUnit(unit);
 }
 
 void ParagraphIndentSpacing::useFontMetrices(bool on)

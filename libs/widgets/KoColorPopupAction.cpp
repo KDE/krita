@@ -25,6 +25,8 @@
 #include "KoColorSlider.h"
 #include "KoCheckerBoardPainter.h"
 #include "KoColorSpaceRegistry.h"
+#include <KoResourceServer.h>
+#include <KoResourceServerProvider.h>
 
 #include <QPainter>
 #include <QWidgetAction>
@@ -55,7 +57,7 @@ public:
         delete opacitySlider;
         delete menu;
     }
-    
+
     KoColor currentColor;
     KoColor buddyColor;
 
@@ -76,6 +78,11 @@ KoColorPopupAction::KoColorPopupAction(QObject *parent)
     QWidget *widget = new QWidget(d->menu);
     QWidgetAction *wdgAction = new QWidgetAction(d->menu);
     d->colorSetWidget = new KoColorSetWidget(widget);
+
+    KoResourceServer<KoColorSet>* srv = KoResourceServerProvider::instance()->paletteServer();
+    QList<KoColorSet*> palettes = srv->resources();
+    d->colorSetWidget->setColorSet(palettes.first());
+
     d->colorChooser = new KoTriangleColorSelector( widget );
     // prevent mouse release on color selector from closing popup
     d->colorChooser->setAttribute( Qt::WA_NoMousePropagation );

@@ -79,8 +79,6 @@ private slots:
     void slotToggleEncryption();
     /** Connected with clicked() from pbDelete - Delete all author metadata */
     void slotDeleteAuthorInfo();
-    /** Connected with clicked() from pbLoadKABC - Load metadata from KABC */
-    void slotLoadFromKABC();
     /** Saves the document with changed encryption */
     void slotSaveEncryption();
 

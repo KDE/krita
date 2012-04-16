@@ -253,9 +253,7 @@ void KoDocumentInfoDlg::initAboutTab()
 
 void KoDocumentInfoDlg::initAuthorTab()
 {
-    QPixmap p = KIconLoader::global()->loadIcon("office-address-book", KIconLoader::Small);
-    d->m_authorUi->pbLoadKABC->setIcon(QIcon(p));
-    p = KIconLoader::global()->loadIcon("edit-delete", KIconLoader::Small);
+    QPixmap p = KIconLoader::global()->loadIcon("edit-delete", KIconLoader::Small);
     d->m_authorUi->pbDelete->setIcon(QIcon(p));
 
     d->m_authorUi->leFullName->setText(d->m_info->authorInfo("creator"));
@@ -271,13 +269,6 @@ void KoDocumentInfoDlg::initAuthorTab()
     d->m_authorUi->leCity->setText(d->m_info->authorInfo("city"));
     d->m_authorUi->leStreet->setText(d->m_info->authorInfo("street"));
     d->m_authorUi->lePosition->setText(d->m_info->authorInfo("position"));
-
-#ifdef KDEPIMLIBS_FOUND
-    connect(d->m_authorUi->pbLoadKABC, SIGNAL(clicked()),
-            this, SLOT(slotLoadFromKABC()));
-#else
-    d->m_authorUi->pbLoadKABC->hide();
-#endif
 
     connect(d->m_authorUi->pbDelete, SIGNAL(clicked()),
             this, SLOT(slotDeleteAuthorInfo()));
@@ -399,44 +390,6 @@ void KoDocumentInfoDlg::slotDeleteAuthorInfo()
     d->m_authorUi->lePostal->clear();
     d->m_authorUi->leCity->clear();
     d->m_authorUi->leStreet->clear();
-}
-
-void KoDocumentInfoDlg::slotLoadFromKABC()
-{
-#ifdef KDEPIMLIBS_FOUND
-    KABC::StdAddressBook *ab = static_cast<KABC::StdAddressBook*>
-                               (KABC::StdAddressBook::self());
-    if (!ab)
-        return;
-
-    KABC::Addressee addr = ab->whoAmI();
-    if (addr.isEmpty()) {
-        KMessageBox::sorry(0, i18n("No personal contact data set, please use the option \
-                                    \"Set as Personal Contact Data\" from the \"Edit\"     menu in KAddressbook to set one."));
-        return;
-    }
-
-    d->m_authorUi->leFullName->setText(addr.formattedName());
-    d->m_authorUi->leInitials->setText(addr.givenName()[ 0 ] + ". " +
-                                       addr.familyName()[ 0 ] + '.');
-    d->m_authorUi->leTitle->setText(addr.title());
-    d->m_authorUi->leCompany->setText(addr.organization());
-    d->m_authorUi->leEmail->setText(addr.preferredEmail());
-
-    KABC::PhoneNumber phone = addr.phoneNumber(KABC::PhoneNumber::Home);
-    d->m_authorUi->lePhoneHome->setText(phone.number());
-    phone = addr.phoneNumber(KABC::PhoneNumber::Work);
-    d->m_authorUi->lePhoneWork->setText(phone.number());
-
-    phone = addr.phoneNumber(KABC::PhoneNumber::Fax);
-    d->m_authorUi->leFax->setText(phone.number());
-
-    KABC::Address a = addr.address(KABC::Address::Home);
-    d->m_authorUi->leCountry->setText(a.country());
-    d->m_authorUi->lePostal->setText(a.postalCode());
-    d->m_authorUi->leCity->setText(a.locality());
-    d->m_authorUi->leStreet->setText(a.street());
-#endif
 }
 
 void KoDocumentInfoDlg::slotSaveEncryption()

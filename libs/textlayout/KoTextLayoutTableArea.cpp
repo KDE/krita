@@ -282,24 +282,22 @@ bool KoTextLayoutTableArea::layoutTable(TableIterator *cursor)
     bool complete = first;
     qreal topBorderWidth = 0;
     qreal bottomBorderWidth = 0;
-    qreal nextTopBorderWidth = 0;
+    qreal dummyWidth = 0;
 
-    collectBorderThicknesss(cursor->row - 1, topBorderWidth, nextTopBorderWidth);
-    topBorderWidth = nextTopBorderWidth;
-
+    collectBorderThicknesss(cursor->row - 1, dummyWidth, topBorderWidth);
     collectBorderThicknesss(cursor->row, topBorderWidth, bottomBorderWidth);
     do {
-        nextTopBorderWidth = 0;
-        collectBorderThicknesss(cursor->row+1, bottomBorderWidth, nextTopBorderWidth);
+        qreal nextBottomBorderWidth = 0;
+        collectBorderThicknesss(cursor->row+1, bottomBorderWidth, nextBottomBorderWidth);
 
         d->lastRowHasSomething = false;
 
         complete = layoutRow(cursor, topBorderWidth, bottomBorderWidth);
 
-        bottomBorderWidth = topBorderWidth;
-        topBorderWidth = nextTopBorderWidth;
-
         setBottom(d->rowPositions[cursor->row + 1] + bottomBorderWidth);
+        topBorderWidth = bottomBorderWidth;
+        bottomBorderWidth = nextBottomBorderWidth;
+
 
         if (complete) {
             setVirginPage(false);
@@ -957,7 +955,6 @@ void KoTextLayoutTableArea::paintCellBorders(QPainter *painter, const KoTextDocu
                 qreal x = qMax(bRect.x(), belowBRect.x());
                 qreal x2 = qMin(bRect.right(), belowBRect.right());
                 KoTableCellStyle cellBelowStyle(belowTfm);
-                KoTextLayoutCellHelper cellBelowStyleHelper(cellBelowStyle);
                 cellStyleHelper.drawSharedHorizontalBorder(*painter, cellBelowStyle, x, bRect.bottom(), x2 - x, accuBlankBorders);
                 c = tableCellBelow.column() + tableCellBelow.columnSpan();
             }
@@ -976,13 +973,12 @@ void KoTextLayoutTableArea::paintCellBorders(QPainter *painter, const KoTextDocu
             while (r < row + tableCell.rowSpan()) {
                 QTextTableCell tableCellRight = d->table->cellAt(r, column + tableCell.columnSpan());
                 QTextTableCellFormat rightTfm(tableCellRight.format().toTableCellFormat());
-                KoTableCellStyle cellBelowRight(rightTfm);
-                KoTextLayoutCellHelper cellBelowRightHelper(cellBelowRight);
+                KoTableCellStyle cellRightStyle(rightTfm);
                 QRectF rightBRect = cellBoundingRect(tableCellRight);
                 qreal y = qMax(bRect.y(), rightBRect.y());
-                qreal y2 = qMin(bRect.bottom() + cellStyle.bottomOuterBorderWidth(), rightBRect.bottom() + cellBelowRight.bottomOuterBorderWidth());
-                cellBelowRightHelper.drawSharedVerticalBorder(*painter, cellBelowRight, bRect.right(), y, y2-y, accuBlankBorders);
-                r = tableCellRight.row() + rightTfm.tableCellRowSpan();
+                qreal y2 = qMin(bRect.bottom() + cellStyle.bottomOuterBorderWidth(), rightBRect.bottom() + cellRightStyle.bottomOuterBorderWidth());
+                cellStyleHelper.drawSharedVerticalBorder(*painter, cellRightStyle, bRect.right(), y, y2-y, accuBlankBorders);
+                r = tableCellRight.row() + tableCellRight.rowSpan();
             }
         }
 

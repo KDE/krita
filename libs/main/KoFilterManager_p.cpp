@@ -65,6 +65,8 @@ KoFilterChooser::KoFilterChooser(QWidget *parent, const QStringList &mimeTypes, 
             m_filterList->addItem(name);
     }
 
+    m_filterList->sortItems();
+
     if (nativeFormat == "application/x-words") {
         const int index = m_mimeTypes.indexOf("text/plain");
         if (index > -1)

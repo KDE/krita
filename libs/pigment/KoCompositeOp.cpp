@@ -59,13 +59,13 @@ KoCompositeOp::~KoCompositeOp()
     delete d;
 }
 
-KoCompositeOp::KoCompositeOp(const KoColorSpace * cs, const QString& id,  const QString& description, const QString & category)
+KoCompositeOp::KoCompositeOp(const KoColorSpace * cs, const QString& id,  const QString& description, const QString & _categoryMisc)
         : d(new Private)
 {
     d->colorSpace = cs;
     d->id = id;
     d->description = description;
-    d->category = category;
+    d->category = _categoryMisc;
     if (d->category.isEmpty()) {
         d->category = categoryMisc();
     }

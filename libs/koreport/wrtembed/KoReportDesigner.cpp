@@ -156,8 +156,6 @@ void KoReportDesigner::init()
 
     d->pageButton = new ReportPropertiesButton(this);
 
-    //Messy, but i cant find another way
-    delete d->hruler->tabChooser();
     d->hruler->setUnit(KoUnit(KoUnit::Centimeter));
 
     d->grid->addWidget(d->pageButton, 0, 0);

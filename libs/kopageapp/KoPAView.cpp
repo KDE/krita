@@ -290,6 +290,7 @@ void KoPAView::initGUI()
     d->tabBarLayout->addWidget(d->insideWidget, 1, 1);
     setTabBarPosition(Qt::Horizontal);
 
+    gridLayout->addWidget(d->horizontalRuler->tabChooser(), 0, 0);
     gridLayout->addWidget(d->horizontalRuler, 0, 1);
     gridLayout->addWidget(d->verticalRuler, 1, 0);
     gridLayout->addWidget(canvasController, 1, 1);

@@ -31,6 +31,7 @@
 #include <QMenu>
 #include <QWidgetAction>
 #include <QDir>
+#include <QPointer>
 #include <QScrollArea>
 
 #include <kglobal.h>
@@ -49,7 +50,7 @@
 class KoColorSetWidget::KoColorSetWidgetPrivate {
 public:
     KoColorSetWidget *thePublic;
-    KoColorSet *colorSet;
+    QPointer<KoColorSet> colorSet;
     QTimer m_timer;
     QVBoxLayout *mainLayout;
     bool firstShowOfContainer;

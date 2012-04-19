@@ -703,7 +703,7 @@ void KisTiledDataManager::readBytes(quint8 *data,
                                     qint32 width, qint32 height) const
 {
     QReadLocker locker(&m_lock);
-    // Actial bytes reading/writing is done in private header
+    // Actual bytes reading/writing is done in private header
     readBytesBody(data, x, y, width, height);
 }
 

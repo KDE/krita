@@ -138,7 +138,7 @@ bool KisTiledDataManager::write(KoStore *store)
     KisAbstractTileCompressorSP compressor =
         KisTileCompressorFactory::create(CURRENT_VERSION);
 
-    while (tile = iter.tile()) {
+    while ((tile = iter.tile())) {
         compressor->writeTile(tile, store);
         ++iter;
     }
@@ -287,7 +287,7 @@ void KisTiledDataManager::purge(const QRect& area)
         KisTileHashTableIterator iter(m_hashTable);
         KisTileSP tile;
 
-        while (tile = iter.tile()) {
+        while ((tile = iter.tile())) {
             if (tile->extent().intersects(area)) {
                 tile->lockForRead();
                 if(memcmp(defaultData, tile->data(), tileDataSize) == 0) {

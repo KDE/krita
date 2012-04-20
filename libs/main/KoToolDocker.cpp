@@ -250,6 +250,7 @@ KoToolDocker::KoToolDocker(QWidget *parent)
     d->scrollArea->setWidget(d->housekeeperWidget);
     d->scrollArea->setFrameShape(QFrame::NoFrame);
     d->scrollArea->setWidgetResizable(true);
+    d->scrollArea->setFocusPolicy(Qt::NoFocus);
 
     setWidget(d->scrollArea);
 

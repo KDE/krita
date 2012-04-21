@@ -137,22 +137,18 @@ QRectF KoShapeGroup::boundingRect() const
 {
     bool first = true;
     QRectF groupBound;
-    QList<KoShape*> shapes = this->shapes();
-    QList<KoShape*>::const_iterator it = shapes.constBegin();
-    for (; it != shapes.constEnd(); ++it) {
-        const QTransform shapeTransform = (*it)->absoluteTransformation(0);
-        const QRectF shapeRect(QRectF(QPointF(), (*it)->boundingRect().size()));
+    foreach(KoShape* shape, shapes()) {
         if (first) {
-            groupBound = shapeTransform.mapRect(shapeRect);
+            groupBound = shape->boundingRect();
             first = false;
         } else {
-            groupBound = groupBound.united(shapeTransform.mapRect(shapeRect));
+            groupBound = groupBound.united(shape->boundingRect());
         }
     }
 
-    if (this->shadow()) {
+    if (shadow()) {
         KoInsets insets;
-        this->shadow()->insets(insets);
+        shadow()->insets(insets);
         groupBound.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
     }
     return groupBound;

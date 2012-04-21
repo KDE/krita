@@ -24,7 +24,8 @@
 
 
 LoginWindow::LoginWindow(OnlineDocument::DocumentType type, QWidget *parent)
-        : m_type(type), QDialog(parent),
+	: QDialog(parent),
+          m_type(type),
           m_authDialog(new Ui_Dialog)
 {
     m_authDialog->setupUi(this);

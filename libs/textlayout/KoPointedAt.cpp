@@ -30,8 +30,8 @@
 KoPointedAt::KoPointedAt()
     : position(-1)
     , bookmark(0)
-    , table(0)
     , tableHit(None)
+    , table(0)
 {
 }
 

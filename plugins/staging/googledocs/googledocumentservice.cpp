@@ -33,9 +33,9 @@
 GoogleDocumentService::GoogleDocumentService(OnlineDocument::DocumentType type)
           : newInformation(true)
           , waitingForDoc(false)
-          , loggedin(false)
           , haveDocAuthToken(false)
           , documentList(0)
+          , loggedin(false)
           , m_type(type)
 {
     //QNetworkProxy::setApplicationProxy(QNetworkProxy(QNetworkProxy::HttpProxy, "proxy.jf.intel.com", 911));

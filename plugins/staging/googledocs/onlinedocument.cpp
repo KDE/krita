@@ -21,12 +21,18 @@
 #include <kcomponentdata.h>
 #include <kdebug.h>
 #include <kurl.h>
+#include <KMimeType>
+#include <KMimeTypeTrader>
+#include <kpluginfactory.h>
+#include <KCmdLineArgs>
+#include <KAboutData>
+
 #include <KoView.h>
 #include <KoDocument.h>
-#include <kpluginfactory.h>
-#include <kparts/partmanager.h>
 #include <KoMainWindow.h>
+#include <KoDocumentEntry.h>
 #include <onlinedocument.moc>
+
 #include "loginwindow.h"
 #include "googledocumentservice.h"
 
@@ -37,11 +43,25 @@ OnlineDocument::OnlineDocument(QObject *parent, const QVariantList &)
     : KParts::Plugin(parent)
     , m_login(0)
 {
+    qDebug("This is to find if the item is created every time I press OD");
     setComponentData(OnlineDocumentFactory::componentData());
 
     KAction *action  = new KAction(i18n("&Google Online Document..."), this);
     actionCollection()->addAction("google_docs", action );
     connect(action, SIGNAL(triggered(bool)), SLOT(slotOnlineDocument()));
+
+    const KAboutData *about = KCmdLineArgs::aboutData();
+    QString name = about->appName();
+
+    if (name.contains("words")) {
+        m_type = OnlineDocument::WORDS;
+    } else if (name.contains("stage")) {
+        m_type = OnlineDocument::STAGE;
+    } else if (name.contains("tables")) {
+        m_type = OnlineDocument::TABLES;
+    } else {
+        m_type = OnlineDocument::UNKNOWN;
+    }
 }
 
 OnlineDocument::~OnlineDocument()
@@ -51,24 +71,30 @@ OnlineDocument::~OnlineDocument()
 
 void OnlineDocument::slotOnlineDocument()
 {
-//    if (0 = m_login) {
-        m_login = new LoginWindow();
+    if (!m_login) {
+        m_login = new LoginWindow(m_type);
         if (QDialog::Accepted == m_login->exec()) {
             connect(m_login->googleService(), SIGNAL(receivedDocument(QString)), this,
                     SLOT(receivedOnlineDocument(QString )));
         }
-//    } else {
-//        m_login->
-//    }
+    } else {
+        m_login->googleService()->showDocumentListWindow(true);
+    }
 }
 
 void OnlineDocument::receivedOnlineDocument(QString  path)
 {
+//    QString mimetype = KMimeType::findByPath(path)->name();
+//    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(mimetype);
+//    QString error;
+//    KoDocument *doc = entry.createDoc(&error);
+//    KUrl url;
+//    url.setPath(path);
+//    doc->openUrl(url);
     KoView *view = dynamic_cast<KoView *>(parent());
     if (!view) {
         return;
     }
-
     KUrl url;
     url.setPath(path);
     view->shell()->openDocument(url);

@@ -87,8 +87,8 @@ bool VideoCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWriter
                 kWarning(30006) << "saving video failed: open store failed";
             }
             dataIt.value()->saveName.clear();
-            ++dataIt;
         }
+        ++dataIt;
     }
     saveCounter=0;
     return true;

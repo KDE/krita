@@ -339,7 +339,7 @@ void TextTool::createActions()
     addAction("insert_framebreak", action);
     action->setShortcut(KShortcut(Qt::CTRL + Qt::Key_Return));
     connect(action, SIGNAL(triggered()), this, SLOT(insertFrameBreak()));
-    action->setToolTip(i18n("Force the remainder of the text into the next page"));
+    action->setToolTip(i18n("Insert a page break"));
     action->setWhatsThis(i18n("All text after this point will be moved into the next page."));
 
 

@@ -2605,12 +2605,7 @@ void KoDocument::setUnit(const KoUnit &unit)
 
 void KoDocument::saveUnitOdf(KoXmlWriter *settingsWriter) const
 {
-    settingsWriter->addConfigItem("unit", unitName());
-}
-
-QString KoDocument::unitName() const
-{
-    return KoUnit::unitName(unit());
+    settingsWriter->addConfigItem("unit", unit().symbol());
 }
 
 void KoDocument::showStartUpWidget(KoMainWindow *mainWindow, bool alwaysShow)

@@ -253,7 +253,7 @@ void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPain
     qreal numberStep = d->numberStepForUnit(); // number step in unit
     QRectF activeRangeRectangle;
     int numberStepPixel = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(numberStep)));
-    const bool adjustMillimeters = d->unit.indexInList() == KoUnit::Millimeter;
+    const bool adjustMillimeters = (d->unit.type() == KoUnit::Millimeter);
     QFontMetrics fontMetrics(KGlobalSettings::toolBarFont());
 
     if (numberStepPixel == 0 || numberStep == 0)
@@ -485,7 +485,7 @@ void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainte
     QFontMetrics fontMetrics(KGlobalSettings::toolBarFont());
     // Calc the longest text length
     int textLength = 0;
-    const bool adjustMillimeters = d->unit.indexInList() == KoUnit::Millimeter;
+    const bool adjustMillimeters = (d->unit.type() == KoUnit::Millimeter);
     for(int i = 0; i < lengthInPixel; i += numberStepPixel) {
         int number = qRound((i / numberStepPixel) * numberStep);
         if (adjustMillimeters)
@@ -621,7 +621,7 @@ void HorizontalDistancesPaintingStrategy::drawDistanceLine(const KoRulerPrivate 
     font.setPointSize(6);
     QFontMetrics fontMetrics(font);
     QString label = d->unit.toUserStringValue(
-            d->viewConverter->viewToDocumentX(line.length())) + ' ' + KoUnit::unitName(d->unit);
+            d->viewConverter->viewToDocumentX(line.length())) + ' ' + d->unit.symbol();
     QPointF labelPosition = QPointF(midPoint.x() - fontMetrics.width(label)/2,
             midPoint.y() + fontMetrics.ascent()/2);
     painter.setFont(font);
@@ -711,7 +711,7 @@ KoRulerPrivate::~KoRulerPrivate()
 
 qreal KoRulerPrivate::numberStepForUnit() const
 {
-    switch(unit.indexInList()) {
+    switch(unit.type()) {
         case KoUnit::Inch:
         case KoUnit::Centimeter:
         case KoUnit::Decimeter:

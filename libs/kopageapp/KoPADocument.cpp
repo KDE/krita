@@ -440,7 +440,7 @@ void KoPADocument::loadOdfSettings(  const KoXmlDocument & settingsDoc )
     KoOasisSettings settings( settingsDoc );
     KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
     if ( !viewSettings.isNull() ) {
-        setUnit( KoUnit::unit( viewSettings.parseConfigItemString( "unit" ) ) );
+        setUnit(KoUnit::fromSymbol(viewSettings.parseConfigItemString("unit")));
         // FIXME: add other config here.
     }
 

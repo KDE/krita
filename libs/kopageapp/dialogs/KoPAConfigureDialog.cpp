@@ -47,7 +47,7 @@ KoPAConfigureDialog::KoPAConfigureDialog(KoPAView* parent)
     item->setHeader(i18n("Grid"));
     item->setIcon(KIcon(BarIcon("grid", KIconLoader::SizeMedium)));
 
-    connect(m_miscPage, SIGNAL(unitChanged(int)), m_gridPage, SLOT(slotUnitChanged(int)));
+    connect(m_miscPage, SIGNAL(unitChanged(KoUnit)), m_gridPage, SLOT(slotUnitChanged(KoUnit)));
 
     m_docPage = new KoConfigDocumentPage( parent->koDocument() );
     item = addPage( m_docPage, i18nc( "@title:tab Document settings page", "Document" ) );

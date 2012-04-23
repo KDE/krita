@@ -768,14 +768,6 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
     }
 }
 
-static QString toPoint(qreal number)
-{
-    QString str;
-    str.setNum(number, 'f', DBL_DIG);
-    str += "pt";
-    return str;
-}
-
 void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &context) const
 {
     bool isNumber = KoListStyle::isNumberingStyle(d->stylesPrivate.value(QTextListFormat::ListStyle).toInt());
@@ -862,16 +854,16 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
         writer->addAttribute("text:list-level-position-and-space-mode","label-width-and-position");
 
         if (d->stylesPrivate.contains(KoListStyle::Indent))
-            writer->addAttribute("text:space-before", toPoint(indent()));
+            writer->addAttributePt("text:space-before", indent());
 
         if (d->stylesPrivate.contains(KoListStyle::MinimumWidth))
-            writer->addAttribute("text:min-label-width", toPoint(minimumWidth()));
+            writer->addAttributePt("text:min-label-width", minimumWidth());
 
         if (d->stylesPrivate.contains(KoListStyle::Alignment))
             writer->addAttribute("fo:text-align", KoText::alignmentToString(alignment()));
 
         if (d->stylesPrivate.contains(KoListStyle::MinimumDistance))
-            writer->addAttribute("text:min-label-distance", toPoint(minimumDistance()));
+            writer->addAttributePt("text:min-label-distance", minimumDistance());
     } else {
         writer->addAttribute("text:list-level-position-and-space-mode","label-alignment");
 
@@ -880,27 +872,26 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
 
         writer->startElement("style:list-level-label-alignment");
 
-        KoUnit unit(KoUnit::Centimeter);
         if(labelFollowedBy()==KoListStyle::ListTab) {
             writer->addAttribute("text:label-followed-by","listtab");
-            writer->addAttribute("text:list-tab-stop-position",unit.toUserStringValue(tabStopPosition())+"cm");
+            writer->addAttributePt("text:list-tab-stop-position", tabStopPosition());
         } else if (labelFollowedBy()==KoListStyle::Nothing){
             writer->addAttribute("text:label-followed-by","nothing");
         }else{
             writer->addAttribute("text:label-followed-by","space");
         }
 
-        writer->addAttribute("fo:text-indent",unit.toUserStringValue(textIndent())+"cm");
-        writer->addAttribute("fo:margin-left",unit.toUserStringValue(margin())+"cm");
+        writer->addAttributePt("fo:text-indent", textIndent());
+        writer->addAttributePt("fo:margin-left", margin());
 
         writer->endElement();
     }
 
     if (d->stylesPrivate.contains(KoListStyle::Width)) {
-        writer->addAttribute("fo:width", toPoint(width()));
+        writer->addAttributePt("fo:width", width());
     }
     if (d->stylesPrivate.contains(KoListStyle::Height)) {
-        writer->addAttribute("fo:height", toPoint(height()));
+        writer->addAttributePt("fo:height", height());
     }
 
     writer->endElement(); // list-level-properties

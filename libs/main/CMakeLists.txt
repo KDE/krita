@@ -46,7 +46,6 @@ set(komain_LIB_SRCS
     KoFilterManager.cpp
     KoFilterChain.cpp
     KoFilter.cpp
-    KoEmbeddingFilter.cpp
     KoFilterEntry.cpp
     KoFilterManager_p.cpp
     KoFilterVertex.cpp
@@ -198,7 +197,6 @@ install( FILES
     KoDocumentEntry.h
     KoDocumentInfo.h
     KoDocumentSectionModel.h
-    KoEmbeddingFilter.h
     KoFactory.h
     KoFilter.h
     KoFilterChain.h

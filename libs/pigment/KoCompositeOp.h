@@ -79,7 +79,7 @@ public:
      * @param userVisible define whether or not that composite op should be visible in an user
      *                    interface
      */
-    KoCompositeOp(const KoColorSpace * cs, const QString& id, const QString& description, const QString & _categoryMisc = QString::null);
+    KoCompositeOp(const KoColorSpace * cs, const QString& id, const QString& description, const QString & category = categoryMisc());
     virtual ~KoCompositeOp();
 
     /**

@@ -43,7 +43,6 @@ OnlineDocument::OnlineDocument(QObject *parent, const QVariantList &)
     : KParts::Plugin(parent)
     , m_login(0)
 {
-    qDebug("This is to find if the item is created every time I press OD");
     setComponentData(OnlineDocumentFactory::componentData());
 
     KAction *action  = new KAction(i18n("&Google Online Document..."), this);

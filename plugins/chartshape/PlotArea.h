@@ -36,6 +36,9 @@ namespace KDChart {
 }
 
 
+class Ko3dScene;
+
+
 namespace KChart {
 
 /**
@@ -80,14 +83,15 @@ public:
     bool            addAxis( Axis *axis );
     bool            removeAxis( Axis *axis );
 
-    ThreeDScene *threeDScene() const;
     // TODO: Rename this into primaryXAxis()
     Axis *xAxis() const;
     // TODO: Rename this into primaryYAxis()
     Axis *yAxis() const;
     Axis *secondaryXAxis() const;
     Axis *secondaryYAxis() const;
+
     bool isThreeD() const;
+    Ko3dScene *threeDScene() const;
 
     /**
      * Determines from what range of cells the data in this chart

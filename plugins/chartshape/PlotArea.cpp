@@ -31,19 +31,20 @@
 #include <kdebug.h>
 
 // Calligra
+#include <KoUnit.h>
+#include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
+#include <KoOdfStylesReader.h>
+#include <KoGenStyles.h>
+#include <KoOdfLoadingContext.h>
+#include <Ko3dScene.h>
+#include <KoOdfGraphicStyles.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
-#include <KoGenStyles.h>
-#include <KoXmlNS.h>
 #include <KoTextShapeData.h>
-#include <KoOdfLoadingContext.h>
-#include <KoOdfStylesReader.h>
-#include <KoUnit.h>
 #include <KoViewConverter.h>
 #include <KoShapeBackground.h>
-#include <KoOdfGraphicStyles.h>
 
 // KDChart
 #include <KDChartChart>
@@ -73,7 +74,6 @@
 #include "Surface.h"
 #include "Axis.h"
 #include "DataSet.h"
-#include "ThreeDScene.h"
 #include "ChartProxyModel.h"
 #include "ScreenConversions.h"
 #include "ChartLayout.h"
@@ -112,8 +112,8 @@ public:
     QList<KoShape*>  automaticallyHiddenAxisTitles;
 
     // 3D properties
-    bool          threeD;
-    ThreeDScene  *threeDScene;
+    bool       threeD;
+    Ko3dScene *threeDScene;
 
     // ----------------------------------------------------------------
     // Data specific to each chart type
@@ -150,33 +150,33 @@ public:
     mutable bool pixmapRepaintRequested;
 };
 
-PlotArea::Private::Private( PlotArea *q, ChartShape *parent )
+PlotArea::Private::Private( PlotArea *q, ChartShape *parent)
     : q(q)
-    , shape( parent )
+    , shape(parent)
     // Default type: normal bar chart
-    ,chartType( BarChartType )
-    ,chartSubtype( NormalChartSubtype )
-    ,wall( 0 )
-    ,floor( 0 )
-    ,threeD( false )
-    ,threeDScene( 0 )
+    , chartType(BarChartType)
+    , chartSubtype(NormalChartSubtype)
+    , wall(0)
+    , floor(0)
+    , threeD(false)
+    , threeDScene(0)
     // By default, x and y axes are not swapped.
-    ,vertical( false )
+    , vertical(false)
     // Data specific for bar charts
-    ,gapBetweenBars( 0 )
-    ,gapBetweenSets( 100 )
+    , gapBetweenBars(0)
+    , gapBetweenSets(100)
     // OpenOffice.org's default. It means the first pie slice starts at the
     // very top (and then going counter-clockwise).
-    ,pieAngleOffset( 90.0 )
+    , pieAngleOffset(90.0)
     // KD Chart stuff
-    ,kdChart( new KDChart::Chart() )
-    , kdCartesianPlanePrimary( new KDChart::CartesianCoordinatePlane( kdChart ) )
-    , kdCartesianPlaneSecondary( new KDChart::CartesianCoordinatePlane( kdChart ) )
-    , kdPolarPlane( new KDChart::PolarCoordinatePlane( kdChart ) )
-    , kdRadarPlane( new KDChart::RadarCoordinatePlane( kdChart ) )
+    , kdChart(new KDChart::Chart())
+    , kdCartesianPlanePrimary(new KDChart::CartesianCoordinatePlane(kdChart))
+    , kdCartesianPlaneSecondary(new KDChart::CartesianCoordinatePlane(kdChart))
+    , kdPolarPlane(new KDChart::PolarCoordinatePlane(kdChart))
+    , kdRadarPlane(new KDChart::RadarCoordinatePlane(kdChart))
     // Cache
-    ,paintPixmap( true )
-    ,pixmapRepaintRequested( true )
+    , paintPixmap(true)
+    , pixmapRepaintRequested(true)
 {
     // --- Prepare Primary Cartesian Coordinate Plane ---
     KDChart::GridAttributes gridAttributes;
@@ -410,7 +410,7 @@ bool PlotArea::isVertical() const
     return d->vertical;
 }
 
-ThreeDScene *PlotArea::threeDScene() const
+Ko3dScene *PlotArea::threeDScene() const
 {
     return d->threeDScene;
 }
@@ -605,7 +605,9 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
          plotAreaElement.hasAttributeNS( KoXmlNS::svg, "y" ) ||
          plotAreaElement.hasAttributeNS( KoXmlNS::svg, "width" ) ||
          plotAreaElement.hasAttributeNS( KoXmlNS::svg, "height" ) )
+    {
         parent()->layout()->setPosition( this, FloatingPosition );
+    }
 
     context.odfLoadingContext().fillStyleStack( plotAreaElement, KoXmlNS::chart, "style-name", "chart" );
     loadOdfAttributes( plotAreaElement, context, OdfAllAttributes );
@@ -643,8 +645,10 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
                 setPieAngleOffset( angleOffset );
         }
 
+        // Check for 3D.
         if ( styleStack.hasProperty( KoXmlNS::chart, "three-dimensional" ) )
             setThreeD( styleStack.property( KoXmlNS::chart, "three-dimensional" ) == "true" );
+        d->threeDScene = load3dScene(plotAreaElement);
 
         // Set subtypes stacked or percent.
         // These are valid for Bar, Line, Area and Radar types.
@@ -809,12 +813,21 @@ void PlotArea::saveOdf( KoShapeSavingContext &context ) const
             dataSourceHasLabels = "none";
     }
     // Note: this is saved in the plotarea attributes and not the style.
-    bodyWriter.addAttribute( "chart:data-source-has-labels",
-                             dataSourceHasLabels );
+    bodyWriter.addAttribute( "chart:data-source-has-labels", dataSourceHasLabels );
+
+    if (d->threeDScene) {
+        d->threeDScene->saveOdfAttributes(bodyWriter);
+    }
+
+    // Done with the attributes, start writing the children.
 
     // Save the axes.
     foreach( Axis *axis, d->axes ) {
         axis->saveOdf( context );
+    }
+
+    if (d->threeDScene) {
+        d->threeDScene->saveOdfChildren(bodyWriter);
     }
 
     // Save data series
@@ -846,10 +859,11 @@ void PlotArea::saveOdfSubType( KoXmlWriter& xmlWriter,
             plotAreaStyle.addProperty( "chart:percentage", "true" );
             break;
         }
-        if ( d->threeD ) {
+
+        if (d->threeD) {
             plotAreaStyle.addProperty( "chart:three-dimensional", "true" );
-            // FIXME: Save all 3D attributes too.
         }
+
         // Data specific to bar charts
         if ( d->vertical )
             plotAreaStyle.addProperty( "chart:vertical", "true" );

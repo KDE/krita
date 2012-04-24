@@ -83,7 +83,7 @@ QStringList KoUnit::listOfUnitNameForUi(ListOptions listOptions)
     QStringList lst;
     for (int i = 0; i < KoUnit::TypeCount; ++i) {
         const Type type = typesInUi[i];
-        if ((type != Pixel) || (listOptions&HideMask == ListAll))
+        if ((type != Pixel) || ((listOptions & HideMask) == ListAll))
             lst.append(unitDescription(type));
     }
     return lst;

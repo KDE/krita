@@ -47,7 +47,7 @@ const QString COMPOSITE_MULT                  = "multiply";
 const QString COMPOSITE_DIVIDE                = "divide";
 const QString COMPOSITE_ARC_TANGENT           = "arc_tangent";
 const QString COMPOSITE_GEOMETRIC_MEAN        = "geometric_mean";
-const QString COMPOSITE_ADDITIVE_SUBSTRACTIVE = "additive_substractive";
+const QString COMPOSITE_ADDITIVE_SUBTRACTIVE = "additive_subtractive";
 const QString COMPOSITE_INVERTED_DIVIDE       = "inverted_divide"; // XXX: not implemented anywhere yet
 
 const QString COMPOSITE_EQUIVALENCE   = "equivalence";

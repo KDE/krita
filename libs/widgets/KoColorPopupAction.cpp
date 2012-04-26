@@ -81,7 +81,7 @@ KoColorPopupAction::KoColorPopupAction(QObject *parent)
 
     KoResourceServer<KoColorSet>* srv = KoResourceServerProvider::instance()->paletteServer();
     QList<KoColorSet*> palettes = srv->resources();
-    if (palettes.size() > 0) {
+    if (!palettes.empty()) {
         d->colorSetWidget->setColorSet(palettes.first());
     }
 

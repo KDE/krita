@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>161</width>
-    <height>77</height>
+    <width>267</width>
+    <height>64</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -16,7 +16,7 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,1">
+  <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,1,0">
    <property name="margin">
     <number>0</number>
    </property>
@@ -49,60 +49,86 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="3">
-      <widget class="QToolButton" name="mergeCells">
-       <property name="text">
-        <string>...</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="4">
-      <widget class="QToolButton" name="splitCells">
-       <property name="text">
-        <string>...</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
+     <item row="2" column="0">
       <widget class="QToolButton" name="addRowBelow">
        <property name="autoRaise">
         <bool>false</bool>
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item row="2" column="1">
       <widget class="QToolButton" name="deleteRow">
        <property name="autoRaise">
         <bool>false</bool>
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
+     <item row="2" column="2">
       <widget class="QToolButton" name="deleteColumn">
        <property name="autoRaise">
         <bool>false</bool>
        </property>
       </widget>
      </item>
-     <item row="1" column="3" colspan="2">
+     <item row="2" column="3" colspan="2">
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
        <property name="sizeType">
-        <enum>QSizePolicy::Minimum</enum>
+        <enum>QSizePolicy::Fixed</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>0</width>
+         <width>4</width>
          <height>13</height>
         </size>
        </property>
       </spacer>
      </item>
+     <item row="2" column="5">
+      <widget class="QToolButton" name="splitCells">
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="5">
+      <widget class="QToolButton" name="mergeCells">
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="6">
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Fixed</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>6</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="0" column="7">
+      <widget class="FormattingButton" name="border">
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="popupMode">
+        <enum>QToolButton::MenuButtonPopup</enum>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
-   <item row="0" column="1">
+   <item row="0" column="2">
     <spacer name="horizontalSpacer_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -146,6 +172,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>FormattingButton</class>
+   <extends>QToolButton</extends>
+   <header>dialogs/FormattingButton.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>addRowAbove</tabstop>
   <tabstop>addColumnLeft</tabstop>

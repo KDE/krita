@@ -85,6 +85,7 @@
 #include <QSignalMapper>
 #include <QGraphicsWidget>
 #include <QLinearGradient>
+#include <QBitmap>
 
 #include <KoDocumentRdfBase.h>
 
@@ -139,6 +140,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
         m_delayedEnsureVisible(false),
         m_toolSelection(0)
         , m_tableDraggedOnce(false)
+        , m_tablePenMode(false)
         ,m_lastImMicroFocus(QRectF(0,0,0,0))
 {
     setTextMode(true);
@@ -528,6 +530,7 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
     m_changeTipCursorPos(0)
     , m_delayedEnsureVisible(false)
     , m_tableDraggedOnce(false)
+    , m_tablePenMode(false)
 {
     // we could init some vars here, but we probably don't have to
     KGlobal::setLocale(new KLocale("en"));
@@ -684,6 +687,7 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
             } else {
                 label = m_unit.toUserStringValue(w);
                 labelWidth = QFontMetrics(QToolTip::font()).boundingRect(label).width();
+                drawRect.setHeight(boxHeight);
                 painter.fillRect(drawRect, QColor(64, 255, 64, 196));
             }
             painter.setPen(QColor(0, 0, 0, 196));
@@ -697,8 +701,20 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
                     painter.drawLine(drawRect.center() + QPointF(labelWidth/2+5, 0.0), centerRight);
                     painter.drawLine(centerRight, centerRight + QPointF(-7, -5));
                     painter.drawLine(centerRight, centerRight + QPointF(-7, 5));
-                    painter.drawText(drawRect, Qt::AlignCenter, label);
-                } else {
+                }
+                painter.drawText(drawRect, Qt::AlignCenter, label);
+            }
+            if (!m_tableDragWithShift) {
+                // let's draw a helper text too
+                label = i18n("Press shift to not resize this");
+                labelWidth = QFontMetrics(QToolTip::font()).boundingRect(label).width();
+                labelWidth += 10;
+                //if (labelWidth < drawRect.width())
+                {
+                    drawRect.moveTop(drawRect.top() + boxHeight);
+                    drawRect.moveLeft(drawRect.left() + (drawRect.width() - labelWidth)/2);
+                    drawRect.setWidth(labelWidth);
+                    painter.fillRect(drawRect, QColor(64, 255, 64, 196));
                     painter.drawText(drawRect, Qt::AlignCenter, label);
                 }
             }
@@ -859,8 +875,9 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
     KoPointedAt pointedAt = hitTest(event->point);
     m_tableDraggedOnce = false;
     if (pointedAt.position != -1) {
+        m_tablePenMode = false;
         if(event->button() == Qt::LeftButton || !m_textEditor.data()->hasSelection()) {
-            m_textEditor.data()->setPosition(pointedAt.position, shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
+            m_textEditor.data()->setPosition(pointedAt.position, shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);                useCursor(Qt::IBeamCursor);
         } else if (false /*within previous selection*/) {
             m_textEditor.data()->setPosition(pointedAt.position, shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
         }
@@ -872,15 +889,43 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
             m_caretTimerState = true; // turn caret instantly on on click
         }
     } else {
-        m_tableDragInfo = pointedAt;
         if (event->button() == Qt::RightButton) {
+            m_tablePenMode = false;
             KoTextEditingPlugin *plugin = m_textEditingPlugins->spellcheck();
             if (plugin)
                 plugin->setCurrentCursorPosition(m_textShapeData->document(), -1);
 
             event->ignore();
+        } else if (m_tablePenMode) {
+            m_textEditor.data()->beginEditBlock(i18nc("(qtundo-format)", "Change Border Formatting"));
+            if (pointedAt.tableHit == KoPointedAt::ColumnDivider) {
+                if (pointedAt.tableColumnDivider < pointedAt.table->columns()) {
+                    m_textEditor.data()->setTableBorderData(pointedAt.table,
+                        pointedAt.tableRowDivider, pointedAt.tableColumnDivider,
+                        KoBorder::Left, m_tablePenBorderData);
+                }
+                if (pointedAt.tableColumnDivider > 0) {
+                    m_textEditor.data()->setTableBorderData(pointedAt.table,
+                        pointedAt.tableRowDivider, pointedAt.tableColumnDivider - 1,
+                        KoBorder::Right, m_tablePenBorderData);
+                }
+            } else if (pointedAt.tableHit == KoPointedAt::RowDivider) {
+                if (pointedAt.tableRowDivider < pointedAt.table->rows()) {
+                    m_textEditor.data()->setTableBorderData(pointedAt.table,
+                        pointedAt.tableRowDivider, pointedAt.tableColumnDivider,
+                        KoBorder::Top, m_tablePenBorderData);
+                }
+                if (pointedAt.tableRowDivider > 0) {
+                    m_textEditor.data()->setTableBorderData(pointedAt.table,
+                        pointedAt.tableRowDivider-1, pointedAt.tableColumnDivider,
+                        KoBorder::Bottom, m_tablePenBorderData);
+                }
+            }
+            m_textEditor.data()->endEditBlock();
+        } else {
+            m_tableDragInfo = pointedAt;
+            m_tablePenMode = false;
         }
-
         return;
     }
     if (shiftPressed) // altered selection.
@@ -1097,6 +1142,16 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
     KoPointedAt pointedAt = hitTest(event->point);
 
     if (event->buttons() == Qt::NoButton) {
+        if (m_tablePenMode) {
+            if (pointedAt.tableHit == KoPointedAt::ColumnDivider || pointedAt.tableHit == KoPointedAt::RowDivider) {
+                useTableBorderCursor();
+            } else {
+                useCursor(Qt::IBeamCursor);
+            }
+            // do nothing else
+            return;
+        }
+
         if (!m_textShapeData || pointedAt.position < 0) {
             if (pointedAt.tableHit == KoPointedAt::ColumnDivider) {
                 useCursor(Qt::SplitHCursor);
@@ -1208,6 +1263,8 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
                 m_tableDraggedOnce = true;
             }
 
+        } else if (m_tablePenMode) {
+            // do nothing
         } else {
             useCursor(Qt::IBeamCursor);
             if (pointedAt.position == m_textEditor.data()->position()) return;
@@ -1277,6 +1334,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
     int destinationPosition = -1; // for those cases where the moveOperation is not relevant;
     QTextCursor::MoveOperation moveOperation = QTextCursor::NoMove;
     KoTextEditor *textEditor = m_textEditor.data();
+    m_tablePenMode = false; // keypress always stops the table (border) pen mode
     Q_ASSERT(textEditor);
     if (event->key() == Qt::Key_Backspace) {
         if (!textEditor->hasSelection() && textEditor->block().textList()
@@ -1824,6 +1882,7 @@ QList<QWidget *> TextTool::createOptionWidgets()
     // Connect to/with simple table widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), stw, SLOT(setStyleManager(KoStyleManager *)));
     connect(stw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+    connect(stw, SIGNAL(tableBorderDataUpdated(const KoBorder::BorderData &)), this, SLOT(setTableBorderData(const KoBorder::BorderData &)));
 
     // Connect to/with simple insert widget (docker)
     connect(siw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
@@ -2081,6 +2140,34 @@ void TextTool::mergeTableCells()
 void TextTool::splitTableCells()
 {
     m_textEditor.data()->splitTableCells();
+}
+
+void TextTool::useTableBorderCursor()
+{
+    static unsigned char data[] = {
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x30, 0x00, 0x00, 0x00, 0x68, 0x00,
+        0x00, 0x00, 0xf4, 0x00, 0x00, 0x00, 0xfa, 0x00, 0x00, 0x00, 0xfd, 0x00,
+        0x00, 0x80, 0x7e, 0x00, 0x00, 0x40, 0x3f, 0x00, 0x00, 0xa0, 0x1f, 0x00,
+        0x00, 0xd0, 0x0f, 0x00, 0x00, 0xe8, 0x07, 0x00, 0x00, 0xf4, 0x03, 0x00,
+        0x00, 0xe4, 0x01, 0x00, 0x00, 0xc2, 0x00, 0x00, 0x80, 0x41, 0x00, 0x00,
+        0x40, 0x32, 0x00, 0x00, 0xa0, 0x0f, 0x00, 0x00, 0xd0, 0x0f, 0x00, 0x00,
+        0xd0, 0x0f, 0x00, 0x00, 0xe8, 0x07, 0x00, 0x00, 0xf4, 0x01, 0x00, 0x00,
+        0x7e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    };
+
+    QBitmap result(32, 32);
+    result.fill(Qt::color0);
+    QPainter painter(&result);
+    painter.drawPixmap(0, 0, QBitmap::fromData(QSize(25, 23), data));
+    QBitmap brushMask = result.createHeuristicMask(false);
+
+    useCursor(QCursor(result, brushMask, 1, 21));
+}
+
+void TextTool::setTableBorderData(const KoBorder::BorderData &data)
+{
+    m_tablePenMode = true;
+    m_tablePenBorderData = data;
 }
 
 void TextTool::formatParagraph()

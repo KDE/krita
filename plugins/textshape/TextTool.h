@@ -30,6 +30,7 @@
 #include <KoToolBase.h>
 #include <KoTextCommandBase.h>
 #include <KoUnit.h>
+#include <KoBorder.h>
 
 #include <QClipboard>
 #include <QHash>
@@ -227,6 +228,8 @@ private slots:
     void mergeTableCells();
     /// split previous merged table cells
     void splitTableCells();
+    /// format the table border (enter table pen mode)
+    void setTableBorderData(const KoBorder::BorderData &data);
     /// shows a dialog to alter the paragraph properties
     void formatParagraph();
     /// select all text in the current document.
@@ -303,6 +306,7 @@ private:
     void finishedWord();
     void finishedParagraph();
     void runUrl(KoPointerEvent *event, QString &url);
+    void useTableBorderCursor();
 
 private:
     friend class UndoTextCommand;
@@ -370,6 +374,8 @@ private:
     QPointF m_draggingOrigin;
     qreal m_dx;
     qreal m_dy;
+    bool m_tablePenMode;
+    KoBorder::BorderData m_tablePenBorderData;
     mutable QRectF m_lastImMicroFocus;
 };
 

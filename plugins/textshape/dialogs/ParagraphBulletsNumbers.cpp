@@ -317,6 +317,7 @@ void ParagraphBulletsNumbers::recalcPreview()
             answer += ' ';
     }
     emit bulletListItemChanged(answer);
+    emit parStyleChanged();
 }
 
 void ParagraphBulletsNumbers::labelFollowedByIndexChanged(int index)
@@ -326,6 +327,7 @@ void ParagraphBulletsNumbers::labelFollowedByIndexChanged(int index)
     } else {
         widget.doubleSpinBox->setEnabled(true);
     }
+    emit parStyleChanged();
 }
 
 #include <ParagraphBulletsNumbers.moc>

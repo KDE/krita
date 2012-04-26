@@ -45,6 +45,7 @@ signals:
     void leftMarginChanged(qreal margin);
     void lineSpacingChanged(qreal fixedLineHeight, qreal lineSpacing, qreal minimumLineHeight, int percentLineSpacing, bool useFontProperties);
     void rightMarginChanged(qreal margin);
+    void parStyleChanged();
 
 private slots:
     void lineSpacingChanged(int);

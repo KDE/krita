@@ -49,6 +49,7 @@ public slots:
     void setCharacterStyle(KoCharacterStyle *style, bool canDelete = false);
 
 private slots:
+    void styleChanged(bool state = true);
     void addParagraphStyle(KoParagraphStyle*);
     void addCharacterStyle(KoCharacterStyle*);
     void removeParagraphStyle(KoParagraphStyle*);
@@ -69,6 +70,8 @@ private:
     KoCharacterStyle *m_selectedCharStyle;
 
     bool m_blockSignals;
+    bool m_blockStyleChangeSignals;
+    bool m_styleChanged;
 };
 
 #endif

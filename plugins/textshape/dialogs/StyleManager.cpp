@@ -33,14 +33,16 @@
 #include <KDebug>
 
 StyleManager::StyleManager(QWidget *parent)
-        : QWidget(parent),
-        m_styleManager(0),
-        m_paragraphStylesModel(new StylesModel(0, StylesModel::ParagraphStyle)),
-        m_characterStylesModel(new StylesModel(0, StylesModel::CharacterStyle)),
-        m_thumbnailer(new KoStyleThumbnailer()),
-        m_selectedParagStyle(0),
-        m_selectedCharStyle(0),
-        m_blockSignals(false)
+        : QWidget(parent)
+         ,m_styleManager(0)
+        , m_paragraphStylesModel(new StylesModel(0, StylesModel::ParagraphStyle))
+        , m_characterStylesModel(new StylesModel(0, StylesModel::CharacterStyle))
+        , m_thumbnailer(new KoStyleThumbnailer())
+        , m_selectedParagStyle(0)
+        , m_selectedCharStyle(0)
+        , m_blockSignals(false)
+        , m_blockStyleChangeSignals(false)
+        , m_styleChanged(false)
 {
     widget.setupUi(this);
     layout()->setMargin(0);
@@ -59,6 +61,9 @@ StyleManager::StyleManager(QWidget *parent)
 
     connect(widget.createPage, SIGNAL(newParagraphStyle(KoParagraphStyle*)), this, SLOT(addParagraphStyle(KoParagraphStyle*)));
     connect(widget.createPage, SIGNAL(newCharacterStyle(KoCharacterStyle*)), this, SLOT(addCharacterStyle(KoCharacterStyle*)));
+
+    connect(widget.paragraphStylePage, SIGNAL(styleChanged()), this, SLOT(styleChanged()));
+    connect(widget.characterStylePage, SIGNAL(styleChanged()), this, SLOT(styleChanged()));
 }
 
 StyleManager::~StyleManager()
@@ -99,6 +104,8 @@ void StyleManager::setStyleManager(KoStyleManager *sm)
 
 void StyleManager::setParagraphStyle(KoParagraphStyle *style)
 {
+    m_blockStyleChangeSignals = true;
+
     m_selectedCharStyle = 0;
     m_selectedParagStyle = style;
     widget.characterStylePage->save();
@@ -121,10 +128,13 @@ void StyleManager::setParagraphStyle(KoParagraphStyle *style)
     widget.tabs->setCurrentIndex(widget.tabs->indexOf(widget.paragraphStylesListView));
  //   widget.bDelete->setEnabled(canDelete);
 
+    m_blockStyleChangeSignals = false;
 }
 
 void StyleManager::setCharacterStyle(KoCharacterStyle *style, bool canDelete)
 {
+    m_blockStyleChangeSignals = true;
+
     m_selectedParagStyle = 0;
     m_selectedCharStyle = style;
     widget.paragraphStylePage->save();
@@ -147,6 +157,8 @@ void StyleManager::setCharacterStyle(KoCharacterStyle *style, bool canDelete)
     widget.stackedWidget->setCurrentWidget(widget.characterStylePage);
     widget.tabs->setCurrentIndex(widget.tabs->indexOf(widget.characterStylesListView));
  //   widget.bDelete->setEnabled(canDelete);
+
+    m_blockStyleChangeSignals = false;
 }
 
 void StyleManager::setUnit(const KoUnit &unit)
@@ -156,6 +168,9 @@ void StyleManager::setUnit(const KoUnit &unit)
 
 void StyleManager::save()
 {
+    if (!m_styleChanged)
+        return;
+
     m_blockSignals = true;
     widget.paragraphStylePage->save();
     widget.characterStylePage->save();
@@ -199,7 +214,17 @@ void StyleManager::save()
     else
         widget.paragraphStylePage->setStyle(0);
     m_blockSignals = false;
+
+    m_styleChanged = false;
 }
+
+void StyleManager::styleChanged(bool state)
+{
+    if (!m_blockStyleChangeSignals) {
+        m_styleChanged = state;
+    }
+}
+
 
 void StyleManager::addParagraphStyle(KoParagraphStyle *style)
 {

@@ -42,6 +42,9 @@ public:
 
   void setUnit(const KoUnit &unit);
 
+signals:
+  void parStyleChanged();
+
 private slots:
   void dropCapsStateChanged();
 

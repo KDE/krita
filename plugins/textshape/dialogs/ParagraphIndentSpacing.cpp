@@ -60,30 +60,36 @@ void ParagraphIndentSpacing::autoTextIndentChanged(int state)
 {
     widget.first->setEnabled(state == Qt::Unchecked);
     m_autoTextIndentInherited = false;
+    emit parStyleChanged();
 }
 void ParagraphIndentSpacing::firstIndentValueChanged()
 {
     m_textIndentInherited = false;
+    emit parStyleChanged();
 }
 
 void ParagraphIndentSpacing::rightMarginValueChanged()
 {
     m_rightMarginIngerited = false;
+    emit parStyleChanged();
 }
 
 void ParagraphIndentSpacing::leftMarginValueChanged()
 {
     m_leftMarginInherited = false;
+    emit parStyleChanged();
 }
 
 void ParagraphIndentSpacing::topMarginValueChanged()
 {
     m_topMarginInherited = false;
+    emit parStyleChanged();
 }
 
 void ParagraphIndentSpacing::bottomMarginValueChanged()
 {
     m_bottomMarginInherited = false;
+    emit parStyleChanged();
 }
 
 void ParagraphIndentSpacing::setDisplay(KoParagraphStyle *style)
@@ -181,6 +187,7 @@ void ParagraphIndentSpacing::lineSpacingChanged(int row)
 
     widget.useFont->setEnabled(row != 5);
     widget.useFont->setChecked(row == 5 ? false : m_fontMetricsChecked);
+    emit parStyleChanged();
 }
 
 void ParagraphIndentSpacing::spacingPercentChanged(int percent)
@@ -188,6 +195,7 @@ void ParagraphIndentSpacing::spacingPercentChanged(int percent)
     m_spacingInherited = false;
     if (widget.lineSpacing->currentIndex() == 3)
         emit lineSpacingChanged(0, 0, (qreal) 0, percent, widget.useFont->isChecked());
+    emit parStyleChanged();
 }
 
 void ParagraphIndentSpacing::spacingValueChanged(qreal value)
@@ -197,6 +205,7 @@ void ParagraphIndentSpacing::spacingValueChanged(qreal value)
         emit lineSpacingChanged(0, value, (qreal) 0, 0, widget.useFont->isChecked());
     else if (widget.lineSpacing->currentIndex() == 5)
         emit lineSpacingChanged(value, 0, 0, 0, false);
+    emit parStyleChanged();
 }
 
 void ParagraphIndentSpacing::save(KoParagraphStyle *style)
@@ -263,6 +272,7 @@ void ParagraphIndentSpacing::useFontMetrices(bool on)
 {
     if (widget.lineSpacing->currentIndex() != 5)
         m_fontMetricsChecked = on;
+    emit parStyleChanged();
 }
 
 #include <ParagraphIndentSpacing.moc>

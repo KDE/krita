@@ -38,6 +38,7 @@ public:
 
 signals:
     void horizontalAlignmentChanged(Qt::Alignment);
+    void parStyleChanged();
 
 private slots:
     void slotAlignChanged();

@@ -38,6 +38,8 @@ public:
     void setUnit(const KoUnit &unit);
 
 protected slots:
+    void styleChanged(bool state = true);
+
     void slotApply();
     void slotOk();
 
@@ -48,6 +50,7 @@ private:
     TextTool *m_tool;
     KoTextEditor *m_editor;
     bool m_uniqueFormat;
+    bool m_styleChanged;
 };
 
 #endif

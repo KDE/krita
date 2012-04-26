@@ -43,6 +43,7 @@ public:
 
 signals:
     void bulletListItemChanged(const QString &listItem);
+    void parStyleChanged();
 
 private slots:
     void styleChanged(int);

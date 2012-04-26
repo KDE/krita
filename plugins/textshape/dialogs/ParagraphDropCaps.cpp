@@ -43,6 +43,7 @@ void ParagraphDropCaps::dropCapsStateChanged()
     else {
         widget.setting->setEnabled(false);
     }
+    emit parStyleChanged();
 }
 
 void ParagraphDropCaps::setDisplay(KoParagraphStyle *style)

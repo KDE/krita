@@ -43,6 +43,7 @@ CharacterGeneral::CharacterGeneral(QWidget *parent)
     connect(m_characterHighlighting, SIGNAL(fontChanged(const QFont &)), this, SLOT(slotFontSelected(const QFont &)));
     connect(m_characterHighlighting, SIGNAL(backgroundColorChanged(QColor)), this, SLOT(slotBackgroundColorChanged(QColor)));
     connect(m_characterHighlighting, SIGNAL(textColorChanged(QColor)), this, SLOT(slotTextColorChanged(QColor)));
+    connect(m_characterHighlighting, SIGNAL(charStyleChanged()), this, SIGNAL(styleChanged()));
 
     m_languageTab = new LanguageTab(true, this);
 

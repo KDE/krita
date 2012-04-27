@@ -130,13 +130,14 @@ KoPointedAt KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccu
             pointedAt.tableHit = KoPointedAt::ColumnDivider;
             ++column;
         } else if (d->columnPositions[0] < point.x()
-                                && point.x() < d->columnPositions[d->table->columns()]) {
-            if (qAbs(d->rowPositions[row] - point.y()) < 3.0) {
-                pointedAt.tableHit = KoPointedAt::RowDivider;
-            } else if (qAbs(d->rowPositions[row+1] - point.y()) < 3.0) {
-                pointedAt.tableHit = KoPointedAt::RowDivider;
-                ++row;
-            }
+                            && point.x() < d->columnPositions[d->table->columns()]
+                            && qAbs(d->rowPositions[row] - point.y()) < 3.0) {
+            pointedAt.tableHit = KoPointedAt::RowDivider;
+        } else if (d->columnPositions[0] < point.x()
+                            && point.x() < d->columnPositions[d->table->columns()]
+                            && qAbs(d->rowPositions[row+1] - point.y()) < 3.0) {
+            pointedAt.tableHit = KoPointedAt::RowDivider;
+            ++row;
         } else {
             QTextTableCell cell = d->table->cellAt(row, column);
             pointedAt = d->cellAreas[cell.row()][cell.column()]->hitTest(point, accuracy);

@@ -1,0 +1,146 @@
+This text provides a very short introduction to the architecture of
+the formula shape. At this time it's work in progress.
+
+
+Part I: Components
+
+Part I describes the organization of the code and what can be found
+where.
+
+
+Subdirectories
+==============
+
+elements/       classes for XML elements in MathML
+fonts/          some fonts with mathematical characters
+pics/           pictures for the icons
+scripts/        a python script that generates the Dictionary class
+templates/      MathML templates (currently only one) - seems unused.
+tests/          test code (run it by 'make tests')
+
+
+Classes in the top directory
+============================
+
+Shape classes
+-------------
+KoFormulaShapePlugin    All these classes are standard KoShape classes
+KoFormulaShapeFactory
+KoFormulaShape
+KoFormulaToolFactory
+KoFormulaTool
+FormulaToolWidget
+FormulaToolWidget.ui
+
+FormulaDocument         This class inherits KoDocument. A formula and
+                        a chart are special shapes because they are
+                        their own document types, defined in ODF. This
+                        also means that they can be saved in a
+                        subdirectory or inline inside the XML tree.
+
+FormulaCommand          Commands for text editing (See the command design pattern)
+FormulaCommandUpdate    ?
+
+Formula classes
+---------------
+
+The following classes are central in the loading, rendering and
+editing of formulas.  
+
+AttributeManager        Manages attributes for elements (mostly
+                        styling for rendering) 
+Dictionary              Dictionary of MathML elements and entities
+ElementFactory          A factory that generates an Element from a tagname
+FormulaCursor           Points to a position in the MathML tree
+                        Also handles selections.
+FormulaData             A QObject wrapper around a FormulaElement (see below)
+                        Allows communication with the formula tool
+FormulaEditor           A class to perform programmatical manipulations
+                        of a formula. The tool goes through this class
+                        when editing.
+FormulaRenderer         Renders a formula in two steps:
+                          1. Calls layout() on each element
+                          2. Calls paint() on each element. 
+                        Also helps when something is updated through
+                        the FormulaEditor.
+
+
+Classes in elements/
+--------------------
+
+These classes store the actual data of the formula. Each class
+represents a type of element and has its own layout and rendering
+function. 
+
+The base class for them all is the BasicElement. This is the base
+class for all elements and defines the API for rendering and
+editing. 
+
+The classes forms the following inheritance tree:
+
+BasicElement			Element base class
+    RowElement                  A container for other elements aligned in a row.
+        ActionElement
+        EncloseElement
+        ErrorElement
+        FencedElement
+        FormulaElement
+        PaddedElement
+        PhantomElement
+        SquareRootElement
+        StyleElement
+        TableDataElement
+    AnnotationElement
+    FixedElement                A base class for MathML elements with
+                                a fixed number of children
+        FractionElement
+        MultiscriptElement
+        RootElement
+        SubSupElement
+        UnderOverElement
+    SpaceElement
+    TableElement
+    TableRowElement
+    TokenElement                A base class for MathML token
+                                elements. The inherited classes all
+                                hold some form of token (text or string).
+        GlyphElement
+        IdentifierElement
+        NumberElement
+        OperatorElement
+        StringElement
+        TextElement
+    UnknownElement              Used when an unknown MathML tag is parsed.
+
+
+Structurally, a formula tree in the formula shape always has a
+FormulaElement as the top node. This node has a size which is the
+union of all the child element's sizes.
+
+
+Part II: Functional description
+
+Part II contains high-level descriptions on key processes such as
+rendering and editing.
+
+
+Rendering
+=========
+
+Rendering is done in the following steps (see more details below):
+
+ 1. Call layout() on the top element, which in turn calls layout() 
+    recursively on all its children. This establishes the minimum size
+    of the formula tree.
+ 2. Call stretch() on the top element, which in turn calls stretch()
+    recursively on all its children.  This establishes the maximum size
+    of the formula tree.
+ 3. Given the layout created in step 1 and 2, call paint() on the top
+    element, which calls paint() recursively on its children and
+    then paints itself.
+
+
+Editing
+=======
+
+to be written.

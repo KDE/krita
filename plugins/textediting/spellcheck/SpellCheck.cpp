@@ -183,6 +183,12 @@ void SpellCheck::setSkipRunTogetherWords(bool on)
     m_speller.setAttribute(Speller::SkipRunTogether, on);
 }
 
+bool SpellCheck::addWordToPersonal(const QString &word)
+{
+    return m_bgSpellCheck->addWordToPersonal(word);
+}
+
+
 QString SpellCheck::defaultLanguage() const
 {
     return m_speller.defaultLanguage();

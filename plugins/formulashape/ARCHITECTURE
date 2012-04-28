@@ -143,4 +143,84 @@ Rendering is done in the following steps (see more details below):
 Editing
 =======
 
-to be written.
+This chapter describes the editing process and how the data structures
+are manipulated.
+
+Cursor position
+---------------
+
+Before we can describe the editing process, we have to define what a
+_position_ in a formula is. The formula shape uses a tree of objects
+which all ultimately inherit the BasicElement class. An element can
+hold one or more children. A position is an integer number that goes
+from 0 to n where n is the number of children. Position #0 is before
+the first child, #1 is after the first child, and #n is after the last
+child element. 
+
+The _cursor position_ is a combination of an object and a numeric
+position inside that object.  We denote this [<object>,position]
+here. 
+
+Consider the formula 'sqrt(a+b)' which in MathML is expressed:
+  <mroot>
+    <mrow>
+      <mi>a</mi>
+      <mo>+</mo>
+      <mi>b</mi>
+    </mrow>
+  </mroot>
+
+The cursor can have the following positions (marked with '*')
+
+  *sqrt(*a*+*b*)*
+
+Since the formula is always embedded into an implicit FormulaElemnt,
+the representaiton of this tree inside the formula shape is (with the
+same positions asa above marked):
+
+<formula>*
+  <mroot>
+    <mrow>*
+      <mi>a</mi>*
+      <mo>+</mo>*
+      <mi>b</mi>*
+    </mrow>
+  </mroot>*
+</formula>
+
+So the cursor position for the first and last asterisk is [<formula>,0] and 
+[<formula>,1] respectively. The cursor positions inside the root are
+[<mrow>,0], ..., [<mroot>,3]. The <mrow> element is implicit inside
+the <mroot> element and not visible from the outside. 
+
+
+Selection
+---------
+
+The class that keeps track of a cursor position is the FormulaCursor.
+The same class also keeps track of the current selection. The
+selection is kept as the objects between two different positions
+inside the same object. One end of the selection is the current cursor
+position. The other end is the so called _mark_, which is only an
+integer position in the same object as the cursor. This means that the
+selection can only span subobjects inside the same parent.
+
+
+Editing
+-------
+
+The root object of the formula tree inside the formula shape is a
+FormulaElement.  This FormulaElement is embedded into a FormulaData
+object which is a QObject. The purpose of the FormulaData object is to
+connect the formula tree with the outside world in the form of the
+shape and the formula tool.
+
+The formula shape inherits the standard KoShape base class and the
+formula tool inherits KoToolBase. This means that all events (mouse,
+keyboard, etc) is channeled into the FormulaTool which interprets the
+events and uses a FormulaEditor object to perform the actual
+changes. The formula tool also opens an option widget in the
+docker. This widget is created by the FormulaToolWidget class and
+communicates with the formula tool using signals and slots.
+
+The rest to be written.

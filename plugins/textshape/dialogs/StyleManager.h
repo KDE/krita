@@ -55,6 +55,8 @@ private slots:
     void removeParagraphStyle(KoParagraphStyle*);
     void removeCharacterStyle(KoCharacterStyle*);
     void slotStyleSelected(QModelIndex index);
+    void buttonNewPressed();
+    void tabChanged(int index);
 
 private:
     Ui::StyleManager widget;

@@ -47,11 +47,13 @@ StyleManager::StyleManager(QWidget *parent)
     widget.setupUi(this);
     layout()->setMargin(0);
 
+    widget.bNew->setEnabled(false);
     m_paragraphStylesModel->setStyleThumbnailer(m_thumbnailer);
     m_characterStylesModel->setStyleThumbnailer(m_thumbnailer);
     m_characterStylesModel->setProvideStyleNone(false);
     widget.paragraphStylesListView->setModel(m_paragraphStylesModel);
     widget.characterStylesListView->setModel(m_characterStylesModel);
+
     connect(widget.paragraphStylesListView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(slotStyleSelected(QModelIndex)));
     connect(widget.characterStylesListView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(slotStyleSelected(QModelIndex)));
 
@@ -59,8 +61,7 @@ StyleManager::StyleManager(QWidget *parent)
     connect(widget.bDelete, SIGNAL(pressed()), this, SLOT(buttonDeletePressed()));
     widget.bDelete->setVisible(false); // TODO make it visible when we can safely delete styles
 
-    connect(widget.createPage, SIGNAL(newParagraphStyle(KoParagraphStyle*)), this, SLOT(addParagraphStyle(KoParagraphStyle*)));
-    connect(widget.createPage, SIGNAL(newCharacterStyle(KoCharacterStyle*)), this, SLOT(addCharacterStyle(KoCharacterStyle*)));
+    connect(widget.tabs, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
 
     connect(widget.paragraphStylePage, SIGNAL(styleChanged()), this, SLOT(styleChanged()));
     connect(widget.characterStylePage, SIGNAL(styleChanged()), this, SLOT(styleChanged()));
@@ -235,9 +236,11 @@ void StyleManager::addParagraphStyle(KoParagraphStyle *style)
 
     if (m_blockSignals) return;
 
-//    m_styleManager->add(style);
+    widget.paragraphStylesListView->setCurrentIndex(m_paragraphStylesModel->indexForParagraphStyle(*style));
+    widget.paragraphStylePage->setStyle(style);
+//  m_styleManager->add(style);
     widget.paragraphStylePage->setParagraphStyles(m_styleManager->paragraphStyles());
-    widget.stackedWidget->setCurrentWidget(widget.welcomePage);
+    widget.stackedWidget->setCurrentWidget(widget.paragraphStylePage);
 }
 
 void StyleManager::addCharacterStyle(KoCharacterStyle *style)
@@ -245,7 +248,9 @@ void StyleManager::addCharacterStyle(KoCharacterStyle *style)
     if (m_blockSignals) return;
 
 //    m_styleManager->add(style);
-    widget.stackedWidget->setCurrentWidget(widget.welcomePage);
+    widget.characterStylesListView->setCurrentIndex(m_characterStylesModel->indexForCharacterStyle(*style));
+    widget.characterStylePage->setStyle(style);
+    widget.stackedWidget->setCurrentWidget(widget.characterStylePage);
 }
 
 void StyleManager::removeParagraphStyle(KoParagraphStyle* style)
@@ -263,6 +268,7 @@ void StyleManager::removeCharacterStyle(KoCharacterStyle* style)
 
 void StyleManager::slotStyleSelected(QModelIndex index)
 {
+    widget.bNew->setEnabled(true);
     KoParagraphStyle *paragraphStyle = m_styleManager->paragraphStyle(index.internalId());
     if (paragraphStyle) {
         setParagraphStyle(paragraphStyle);
@@ -273,6 +279,23 @@ void StyleManager::slotStyleSelected(QModelIndex index)
         setCharacterStyle(characterStyle, false);
         return;
     }
+}
+
+void StyleManager::buttonNewPressed()
+{
+    if (widget.tabs->indexOf(widget.paragraphStylesListView) == widget.tabs->currentIndex()){
+        KoParagraphStyle *newStyle = m_selectedParagStyle->clone();
+        m_styleManager->add(newStyle);
+    }
+    else {
+        KoCharacterStyle *newStyle = m_selectedCharStyle->clone();
+        m_styleManager->add(newStyle);
+    }
+}
+
+void StyleManager::tabChanged(int index)
+{
+    widget.bNew->setEnabled(false);
 }
 
 /* TODO

@@ -52,8 +52,8 @@ StyleManager::StyleManager(QWidget *parent)
     m_characterStylesModel->setProvideStyleNone(false);
     widget.paragraphStylesListView->setModel(m_paragraphStylesModel);
     widget.characterStylesListView->setModel(m_characterStylesModel);
-    connect(widget.paragraphStylesListView, SIGNAL(activated(const QModelIndex&)), this, SLOT(slotStyleSelected(QModelIndex)));
-    connect(widget.characterStylesListView, SIGNAL(activated(const QModelIndex&)), this, SLOT(slotStyleSelected(QModelIndex)));
+    connect(widget.paragraphStylesListView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(slotStyleSelected(QModelIndex)));
+    connect(widget.characterStylesListView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(slotStyleSelected(QModelIndex)));
 
     connect(widget.bNew, SIGNAL(pressed()), this, SLOT(buttonNewPressed()));
     connect(widget.bDelete, SIGNAL(pressed()), this, SLOT(buttonDeletePressed()));
@@ -85,13 +85,13 @@ void StyleManager::setStyleManager(KoStyleManager *sm)
     Q_ASSERT(sm);
     m_styleManager = sm;
     //we want to disconnect this before setting the stylemanager. Populating the model apparently selects the first inserted item. We don't want this to actually set a new style.
-    disconnect(widget.paragraphStylesListView, SIGNAL(activated(const QModelIndex&)), this, SLOT(slotStyleSelected(QModelIndex)));
+    disconnect(widget.paragraphStylesListView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(slotStyleSelected(QModelIndex)));
     m_paragraphStylesModel->setStyleManager(m_styleManager);
-    connect(widget.paragraphStylesListView, SIGNAL(activated(const QModelIndex&)), this, SLOT(slotStyleSelected(QModelIndex)));
+    connect(widget.paragraphStylesListView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(slotStyleSelected(QModelIndex)));
 
-    disconnect(widget.characterStylesListView, SIGNAL(activated(const QModelIndex&)), this, SLOT(slotStyleSelected(QModelIndex)));
+    disconnect(widget.characterStylesListView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(slotStyleSelected(QModelIndex)));
     m_characterStylesModel->setStyleManager(m_styleManager);
-    connect(widget.characterStylesListView, SIGNAL(activated(const QModelIndex&)), this, SLOT(slotStyleSelected(QModelIndex)));
+    connect(widget.characterStylesListView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(slotStyleSelected(QModelIndex)));
 
     widget.stackedWidget->setCurrentWidget(widget.welcomePage);
     widget.tabs->setCurrentIndex(widget.tabs->indexOf(widget.paragraphStylesListView));
@@ -120,9 +120,9 @@ void StyleManager::setParagraphStyle(KoParagraphStyle *style)
         localStyle = m_alteredParagraphStyles.value(style->styleId());
     }
 
-    disconnect(widget.paragraphStylesListView, SIGNAL(activated(const QModelIndex&)), this, SLOT(slotStyleSelected(QModelIndex)));
+    disconnect(widget.paragraphStylesListView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(slotStyleSelected(QModelIndex)));
     widget.paragraphStylesListView->setCurrentIndex(m_paragraphStylesModel->indexForParagraphStyle(*style));
-    connect(widget.paragraphStylesListView, SIGNAL(activated(const QModelIndex&)), this, SLOT(slotStyleSelected(QModelIndex)));
+    connect(widget.paragraphStylesListView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(slotStyleSelected(QModelIndex)));
     widget.paragraphStylePage->setStyle(localStyle);
     widget.stackedWidget->setCurrentWidget(widget.paragraphStylePage);
     widget.tabs->setCurrentIndex(widget.tabs->indexOf(widget.paragraphStylesListView));
@@ -150,9 +150,9 @@ void StyleManager::setCharacterStyle(KoCharacterStyle *style, bool canDelete)
         localStyle = m_alteredCharacterStyles.value(style->styleId());
     }
 
-    disconnect(widget.characterStylesListView, SIGNAL(activated(const QModelIndex&)), this, SLOT(slotStyleSelected(QModelIndex)));
+    disconnect(widget.characterStylesListView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(slotStyleSelected(QModelIndex)));
     widget.characterStylesListView->setCurrentIndex(m_characterStylesModel->indexForCharacterStyle(*style));
-    connect(widget.characterStylesListView, SIGNAL(activated(const QModelIndex&)), this, SLOT(slotStyleSelected(QModelIndex)));
+    connect(widget.characterStylesListView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(slotStyleSelected(QModelIndex)));
     widget.characterStylePage->setStyle(localStyle);
     widget.stackedWidget->setCurrentWidget(widget.characterStylePage);
     widget.tabs->setCurrentIndex(widget.tabs->indexOf(widget.characterStylesListView));

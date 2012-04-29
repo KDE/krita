@@ -73,7 +73,7 @@ public:
     /**
      * Adds a floating shape to the layout.
      */
-    void add( KoShape *shape );
+    void add(KoShape *shape);
 
     /**
      * Adds a shape to the layout.
@@ -84,22 +84,22 @@ public:
      *               A shape with a higher weight will be placed more towards
      *               the center (i.e., it "sinks" due to its higher weight)
      */
-    void add( KoShape *shape, Position pos, int weight = 0 );
+    void add(KoShape *shape, Position pos, int weight = 0);
 
     /**
      * Removes a shape from the layout.
      */
-    void remove( KoShape *shape );
+    void remove(KoShape *shape);
 
     /**
      * Turns clipping of a shape on or off.
      */
-    void setClipped( const KoShape *shape, bool clipping );
+    void setClipped(const KoShape *shape, bool clipping);
 
     /**
      * @see setClipping
      */
-    bool isClipped( const KoShape *shape ) const;
+    bool isClipped(const KoShape *shape) const;
 
     /// reimplemented
     virtual void setInheritsTransform(const KoShape *shape, bool inherit);
@@ -119,25 +119,25 @@ public:
     /**
      * Called whenever a property of the container (i.e. the ChartShape) is changed.
      */
-    void containerChanged( KoShapeContainer *container, KoShape::ChangeType type );
+    void containerChanged(KoShapeContainer *container, KoShape::ChangeType type);
 
     /**
      * Returns whether a shape is locked for user modifications.
      */
-    bool isChildLocked( const KoShape *shape ) const;
+    bool isChildLocked(const KoShape *shape) const;
 
     /**
      * Changes the layout position of a shape that is already contained
      * in this layout.
      */
-    void setPosition( const KoShape *shape, Position pos, int weight = 0 );
+    void setPosition(const KoShape *shape, Position pos, int weight = 0);
 
     /**
      * Called whenever a property of a shape in this layout has changed.
      *
      * All layout items effected by this change will be re-layouted.
      */
-    void childChanged( KoShape *shape, KoShape::ChangeType type );
+    void childChanged(KoShape *shape, KoShape::ChangeType type);
 
     /**
      * Does the layouting of shapes that have changed its size or position or
@@ -159,37 +159,37 @@ public:
     /**
      * Sets the horizontal and vertical margin that will be applied during layout
      */
-    void setMargins ( qreal hMargin, qreal vMargin );
+    void setMargins (qreal hMargin, qreal vMargin);
 
 private:
     /**
      * Lays out all items in TopPosition, and returns the y value of
      * the bottom-most item's bottom.
      */
-    qreal layoutTop( const QMap<int, KoShape*>& shapes );
+    qreal layoutTop(const QMap<int, KoShape*>& shapes);
 
     /**
      * Lays out all items in BottomPosition, and returns the y value of
      * the top-most item's top.
      */
-    qreal layoutBottom( const QMap<int, KoShape*>& shapes );
+    qreal layoutBottom(const QMap<int, KoShape*>& shapes);
 
     /**
      * Lays out all items in StartPosition, and returns the x value of
      * the right-most item's right.
      */
-    qreal layoutStart( const QMap<int, KoShape*>& shapes );
+    qreal layoutStart(const QMap<int, KoShape*>& shapes);
 
     /**
      * Lays out all items in EndPosition, and returns the x value of
      * the left-most item's left.
      */
-    qreal layoutEnd( const QMap<int, KoShape*>& shapes );
+    qreal layoutEnd(const QMap<int, KoShape*>& shapes);
 
-    void layoutTopStart( KoShape *shape );
-    void layoutBottomStart( KoShape *shape );
-    void layoutTopEnd( KoShape *shape );
-    void layoutBottomEnd( KoShape *shape );
+    void layoutTopStart(KoShape *shape);
+    void layoutBottomStart(KoShape *shape);
+    void layoutTopEnd(KoShape *shape);
+    void layoutBottomEnd(KoShape *shape);
 
     class LayoutData;
     bool m_doingLayout;

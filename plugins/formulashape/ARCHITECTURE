@@ -176,7 +176,7 @@ The cursor can have the following positions (marked with '*')
 
 Since the formula is always embedded into an implicit FormulaElemnt,
 the representaiton of this tree inside the formula shape is (with the
-same positions asa above marked):
+same positions as above marked):
 
 <formula>*
   <mroot>
@@ -190,7 +190,7 @@ same positions asa above marked):
 
 So the cursor position for the first and last asterisk is [<formula>,0] and 
 [<formula>,1] respectively. The cursor positions inside the root are
-[<mrow>,0], ..., [<mroot>,3]. The <mrow> element is implicit inside
+[<mrow>,0], ..., [<mrow>,3]. The <mrow> element is implicit inside
 the <mroot> element and not visible from the outside. 
 
 
@@ -199,11 +199,12 @@ Selection
 
 The class that keeps track of a cursor position is the FormulaCursor.
 The same class also keeps track of the current selection. The
-selection is kept as the objects between two different positions
-inside the same object. One end of the selection is the current cursor
-position. The other end is the so called _mark_, which is only an
-integer position in the same object as the cursor. This means that the
-selection can only span subobjects inside the same parent.
+selection is defined as the objects between two different cursor
+positions inside the same object. One end of the selection is the
+current cursor position. The other end is the so called _mark_, which
+is represented by an integer position in the same object as the
+cursor. This means that the selection can only span subobjects inside
+the same parent.
 
 
 Editing
@@ -217,7 +218,7 @@ shape and the formula tool.
 
 The formula shape inherits the standard KoShape base class and the
 formula tool inherits KoToolBase. This means that all events (mouse,
-keyboard, etc) is channeled into the FormulaTool which interprets the
+keyboard, etc) are channeled into the FormulaTool which interprets the
 events and uses a FormulaEditor object to perform the actual
 changes. The formula tool also opens an option widget in the
 docker. This widget is created by the FormulaToolWidget class and

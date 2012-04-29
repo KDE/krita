@@ -119,7 +119,7 @@ public:
     TextLabelData  *footerData() const;
     Legend         *legend() const;
     PlotArea       *plotArea() const;
-    ChartLayout         *layout() const;
+    ChartLayout    *layout() const;
 
     /**
      * Returns a list of all labels in this chart, visible and hidden.
@@ -144,7 +144,7 @@ public:
      * This method will assume that @a model has already been added to this
      * chart's TableSource.
      */
-    void setInternalModel( QAbstractItemModel *model );
+    void setInternalModel(QAbstractItemModel *model);
 
     /**
      * Returns a "map" containing all tables that are being used,
@@ -163,7 +163,7 @@ public:
      * For the first case, this method returns false, for the latter true.
      */
     bool usesInternalModelOnly() const;
-    void setUsesInternalModelOnly( bool doesSo );
+    void setUsesInternalModelOnly(bool doesSo);
 
     ChartType     chartType() const;
     ChartSubtype  chartSubType() const;
@@ -178,7 +178,7 @@ public:
      *
      * See kspread/SheetAccessModel.h for details.
      */
-    void setSheetAccessModel( QAbstractItemModel* model );
+    void setSheetAccessModel(QAbstractItemModel* model);
 
     /**
      * Re-initializes the chart with data from an arbitrary region.
@@ -191,36 +191,37 @@ public:
      *
      * @see ChartProxyModel::init()
      */
-    void reset( const QString& region,
-                bool firstRowIsLabel,
-                bool firstColumnIsLabel,
-                Qt::Orientation dataDirection );
+    void reset(const QString& region,
+               bool firstRowIsLabel,
+               bool firstColumnIsLabel,
+               Qt::Orientation dataDirection);
 
-    void setChartType( ChartType type );
-    void setChartSubType( ChartSubtype subType );
-    void setThreeD( bool threeD );
-
-    /// reimplemented
-    void paintComponent( QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
-    void paintDecorations( QPainter &painter, const KoViewConverter &converter,
-                           const KoCanvasBase *canvas );
+    void setChartType(ChartType type);
+    void setChartSubType(ChartSubtype subType);
+    void setThreeD(bool threeD);
 
     /// reimplemented
-    bool loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context );
-    bool loadOdfFrameElement( const KoXmlElement &element, KoShapeLoadingContext &context );
-    bool loadOdfData( const KoXmlElement &tableElement, KoShapeLoadingContext &context );
+    void paintComponent(QPainter &painter, const KoViewConverter &converter,
+                        KoShapePaintingContext &paintcontext);
+    void paintDecorations(QPainter &painter, const KoViewConverter &converter,
+                          const KoCanvasBase *canvas);
 
-    bool loadOdfChartElement( const KoXmlElement &chartElement, KoShapeLoadingContext &context );
     /// reimplemented
-    void saveOdf( KoShapeSavingContext &context ) const;
-    void saveOdfData( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const;
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdfData(const KoXmlElement &tableElement, KoShapeLoadingContext &context);
+
+    bool loadOdfChartElement(const KoXmlElement &chartElement, KoShapeLoadingContext &context);
+    /// reimplemented
+    void saveOdf(KoShapeSavingContext &context) const;
+    void saveOdfData(KoXmlWriter &bodyWriter, KoGenStyles &mainStyles) const;
 
     /**
      * Used by unit tests to disable popping up of message boxes.
      *
      * User interaction is enabled by default.
      */
-    static void setEnableUserInteraction( bool enable );
+    static void setEnableUserInteraction(bool enable);
 
     using KoShapeContainer::update;
     /// reimplemented
@@ -233,11 +234,11 @@ public:
     KoDocumentResourceManager *resourceManager() const;
 
 signals:
-    void chartTypeChanged( ChartType );
+    void chartTypeChanged(ChartType);
 
 private:
-    bool loadEmbeddedDocument( KoStore *store, const KoXmlElement &objectElement, const KoOdfLoadingContext &loadingContext );
-
+    bool loadEmbeddedDocument(KoStore *store, const KoXmlElement &objectElement,
+                              const KoOdfLoadingContext &loadingContext);
 
     class Private;
     Private *const d;

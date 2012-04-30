@@ -28,6 +28,7 @@
 #include "KoShape.h"
 #include "KoShapeStroke.h"
 #include "KoResourceManager_p.h"
+#include <KoColorSpaceRegistry.h>
 
 class KoCanvasResourceManager::Private
 {
@@ -39,6 +40,9 @@ KoCanvasResourceManager::KoCanvasResourceManager(QObject *parent)
         : QObject(parent),
         d(new Private())
 {
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+    setForegroundColor(KoColor(Qt::black, cs));
+    setBackgroundColor(KoColor(Qt::white, cs));
 }
 
 KoCanvasResourceManager::~KoCanvasResourceManager()

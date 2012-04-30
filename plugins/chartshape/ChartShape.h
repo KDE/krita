@@ -89,7 +89,7 @@ class ChartLayout;
 class TableSource;
 
 void saveOdfFont(KoGenStyle &style, const QFont& font, const QColor& color);
-QString saveOdfFont( KoGenStyles& mainStyles, const QFont& font, const QColor& color );
+QString saveOdfFont(KoGenStyles& mainStyles, const QFont& font, const QColor& color);
 QColor defaultDataSetColor(int dataSetNum);
 const char * odfCharttype(int charttype);
 

@@ -410,17 +410,13 @@ QRectF KoPathShape::boundingRect() const
     QTransform transform = absoluteTransformation(0);
     // calculate the bounding rect of the transformed outline
     QRectF bb;
-    if (d->startMarker.marker() || d->endMarker.marker()) {
-        KoShapeStroke *lineBorder = dynamic_cast<KoShapeStroke*>(stroke());
-        QPen pen;
-        if (lineBorder) {
-            pen.setWidthF(lineBorder->lineWidth());
-        }
-        bb = transform.map(pathStroke(pen)).boundingRect();
+    KoShapeStroke *lineBorder = dynamic_cast<KoShapeStroke*>(stroke());
+    QPen pen;
+    if (lineBorder) {
+        pen.setWidthF(lineBorder->lineWidth());
     }
-    else {
-        bb = transform.map(outline()).boundingRect();
-    }
+    bb = transform.map(pathStroke(pen)).boundingRect();
+
     if (stroke()) {
         KoInsets inset;
         stroke()->strokeInsets(this, inset);

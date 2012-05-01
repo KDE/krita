@@ -28,8 +28,6 @@ ChangeImageCommand::ChangeImageCommand(PictureShape *shape, KoImageData *newImag
     m_imageChanged(true),
     m_shape(shape),
     m_newImageData(newImageData),
-    m_oldSize(shape->size()),
-    m_newSize(newImageData->imageSize()),
     m_oldCroppingRect(shape->cropRect()),
     m_newCroppingRect(0, 0, 1, 1),
     m_oldColorMode(shape->colorMode()),
@@ -39,10 +37,6 @@ ChangeImageCommand::ChangeImageCommand(PictureShape *shape, KoImageData *newImag
 
     // we need new here as setUserData deletes the old data
     m_oldImageData = m_shape->imageData() ? new KoImageData(*m_shape->imageData()): 0;
-
-    qreal oldArea = m_oldSize.width() * m_oldSize.height();
-    qreal newArea = m_newSize.width() * m_newSize.height();
-    m_newSize *= std::sqrt(oldArea / newArea);
 }
 
 ChangeImageCommand::ChangeImageCommand(PictureShape *shape, const QRectF &croppingRect, KUndo2Command *parent):
@@ -51,8 +45,6 @@ ChangeImageCommand::ChangeImageCommand(PictureShape *shape, const QRectF &croppi
     m_shape(shape),
     m_oldImageData(0),
     m_newImageData(0),
-    m_oldSize(shape->size()),
-    m_newSize(shape->size()),
     m_oldCroppingRect(shape->cropRect()),
     m_newCroppingRect(croppingRect),
     m_oldColorMode(shape->colorMode()),
@@ -66,8 +58,6 @@ ChangeImageCommand::ChangeImageCommand(PictureShape *shape, PictureShape::ColorM
     m_shape(shape),
     m_oldImageData(0),
     m_newImageData(0),
-    m_oldSize(shape->size()),
-    m_newSize(shape->size()),
     m_oldCroppingRect(shape->cropRect()),
     m_newCroppingRect(shape->cropRect()),
     m_oldColorMode(shape->colorMode()),
@@ -88,7 +78,6 @@ void ChangeImageCommand::redo()
         m_shape->setUserData(m_newImageData ? new KoImageData(*m_newImageData): 0);
     }
 
-    m_shape->setSize(m_newSize);
     m_shape->setColorMode(m_newColorMode);
     m_shape->setCropRect(m_newCroppingRect);
     emit sigExecuted();
@@ -101,7 +90,6 @@ void ChangeImageCommand::undo()
         m_shape->setUserData(m_oldImageData ? new KoImageData(*m_oldImageData): 0);
     }
 
-    m_shape->setSize(m_oldSize);
     m_shape->setColorMode(m_oldColorMode);
     m_shape->setCropRect(m_oldCroppingRect);
     emit sigExecuted();

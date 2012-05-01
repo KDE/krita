@@ -350,7 +350,7 @@ ChartConfigWidget::ChartConfigWidget()
     QMenu *dataSetChartTypeMenu = new QMenu( this );
 
     // Default chart type is a bar chart
-    dataSetChartTypeMenu->setIcon( KIcon( "chart-bar" ) );
+    dataSetChartTypeMenu->setIcon(KIcon("office-chart-bar"));
 
 
     d->dataSetBarChartMenu = dataSetChartTypeMenu->addMenu( KIcon( "office-chart-bar" ), "Bar Chart" );
@@ -1395,37 +1395,37 @@ void ChartConfigWidget::ui_dataSetSelectionChanged( int index )
         case BarChartType:
             switch ( dataSet->chartSubType() ) {
             case StackedChartSubtype:
-                d->ui.dataSetChartTypeMenu->setIcon( KIcon( "chart_bar_stacked" ) );
+                d->ui.dataSetChartTypeMenu->setIcon(KIcon("office-chart-bar-stacked"));
                 break;
             case PercentChartSubtype:
-                d->ui.dataSetChartTypeMenu->setIcon( KIcon( "chart_bar_layer" ) );
+                d->ui.dataSetChartTypeMenu->setIcon(KIcon("office-chart-bar-percentage"));
                 break;
             default:
-                d->ui.dataSetChartTypeMenu->setIcon( KIcon( "chart_bar_beside" ) );
+                d->ui.dataSetChartTypeMenu->setIcon(KIcon("office-chart-bar"));
             }
             break;
         case LineChartType:
             switch ( dataSet->chartSubType() ) {
             case StackedChartSubtype:
-                d->ui.dataSetChartTypeMenu->setIcon( KIcon( "chart_line_stacked" ) );
+                d->ui.dataSetChartTypeMenu->setIcon(KIcon("office-chart-line-stacked"));
                 break;
             case PercentChartSubtype:
-                d->ui.dataSetChartTypeMenu->setIcon( KIcon( "chart_line_percent" ) );
+                d->ui.dataSetChartTypeMenu->setIcon(KIcon("office-chart-line-percentage"));
                 break;
             default:
-                d->ui.dataSetChartTypeMenu->setIcon( KIcon( "chart_line_normal" ) );
+                d->ui.dataSetChartTypeMenu->setIcon(KIcon("office-chart-line"));
             }
             break;
         case AreaChartType:
             switch ( dataSet->chartSubType() ) {
             case StackedChartSubtype:
-                d->ui.dataSetChartTypeMenu->setIcon( KIcon( "chart_area_stacked" ) );
+                d->ui.dataSetChartTypeMenu->setIcon(KIcon("office-chart-area-stacked"));
                 break;
             case PercentChartSubtype:
-                d->ui.dataSetChartTypeMenu->setIcon( KIcon( "chart_area_percent" ) );
+                d->ui.dataSetChartTypeMenu->setIcon(KIcon("office-chart-area-percentage"));
                 break;
             default:
-                d->ui.dataSetChartTypeMenu->setIcon( KIcon( "chart_area_normal" ) );
+                d->ui.dataSetChartTypeMenu->setIcon(KIcon("office-chart-area"));
             }
             break;
         case CircleChartType:

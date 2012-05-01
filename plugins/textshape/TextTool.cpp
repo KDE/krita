@@ -198,7 +198,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
 
 void TextTool::createActions()
 {
-    m_actionPasteAsText  = new KAction(KIcon("paste"), i18n("Paste As Text"), this);
+    m_actionPasteAsText  = new KAction(KIcon("edit-paste"), i18n("Paste As Text"), this);
     addAction("edit_paste_text", m_actionPasteAsText);
     m_actionPasteAsText->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_V);
     connect(m_actionPasteAsText, SIGNAL(triggered(bool)), this, SLOT(pasteAsText()));

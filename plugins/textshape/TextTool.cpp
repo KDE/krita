@@ -418,14 +418,6 @@ void TextTool::createActions()
     addAction("delete_tablerow", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableRow()));
 
-    action  = new KAction(KIcon("merge"), i18n("Merge Cells"), this);
-    addAction("merge_tablecells", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(mergeTableCells()));
-
-    action  = new KAction(KIcon("split"), i18n("Split Cells"), this);
-    addAction("split_tablecells", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(splitTableCells()));
-
     action  = new KAction(KIcon("edit-table-insert-row-above"), i18n("Row Above"), this);
     action->setToolTip(i18n("Insert Row Above"));
     addAction("insert_tablerow_above", action);

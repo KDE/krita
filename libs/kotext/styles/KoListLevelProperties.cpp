@@ -41,6 +41,7 @@
 #include <KoText.h>
 #include <KoImageCollection.h>
 #include <KoImageData.h>
+#include <KoImageData_p.h>
 #include <KoOdfNumberDefinition.h>
 #include <KoGenStyle.h>
 #include <KoTextSharedSavingData.h>
@@ -809,12 +810,14 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
     }
     else if (style() == KoListStyle::ImageItem) {
         KoImageData *imageData = d->stylesPrivate.value(KoListStyle::BulletImage).value<KoImageData *>();
-        if (imageData) {
+        Q_ASSERT(imageData->priv()->collection);
+        if (imageData && imageData->priv()->collection) {
             writer->startElement("text:list-level-style-image");
             writer->addAttribute("xlink:show", "embed");
             writer->addAttribute("xlink:actuate", "onLoad");
             writer->addAttribute("xlink:type", "simple");
             writer->addAttribute("xlink:href", context.imageHref(imageData));
+            context.addDataCenter(imageData->priv()->collection);
         }
     }
     else {
@@ -848,6 +851,13 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
         writer->addAttribute("style:num-suffix", d->stylesPrivate.value(KoListStyle::ListItemSuffix).toString());
 
     writer->startElement("style:list-level-properties", false);
+
+    if (d->stylesPrivate.contains(KoListStyle::Width)) {
+        writer->addAttributePt("fo:width", width());
+    }
+    if (d->stylesPrivate.contains(KoListStyle::Height)) {
+        writer->addAttributePt("fo:height", height());
+    }
 
     if(d->stylesPrivate.contains(KoListStyle::AlignmentMode) && alignmentMode()==false) {
 
@@ -885,13 +895,6 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
         writer->addAttributePt("fo:margin-left", margin());
 
         writer->endElement();
-    }
-
-    if (d->stylesPrivate.contains(KoListStyle::Width)) {
-        writer->addAttributePt("fo:width", width());
-    }
-    if (d->stylesPrivate.contains(KoListStyle::Height)) {
-        writer->addAttributePt("fo:height", height());
     }
 
     writer->endElement(); // list-level-properties

@@ -35,20 +35,20 @@ using namespace KChart;
 ChartToolFactory::ChartToolFactory()
     : KoToolFactoryBase("ChartToolFactory_ID")
 {
-    setToolTip ( i18n( "Chart Editing Tool" ) );
-    setToolType ( dynamicToolType() );
-    setIcon ( "kchart" );
-    setPriority ( 1 );
-    setActivationShapeId ( ChartShapeId );
+    setToolTip (i18n("Chart Editing Tool"));
+    setToolType (dynamicToolType());
+    setIcon ("kchart");
+    setPriority (1);
+    setActivationShapeId (ChartShapeId);
 }
 
 ChartToolFactory::~ChartToolFactory()
 {
 }
 
-KoToolBase *ChartToolFactory::createTool( KoCanvasBase *canvas )
+KoToolBase *ChartToolFactory::createTool(KoCanvasBase *canvas)
 {
-    return new ChartTool( canvas );
+    return new ChartTool(canvas);
 }
 
 

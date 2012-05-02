@@ -30,8 +30,8 @@
 using namespace KChart;
 
 OdfLoadingHelper::OdfLoadingHelper()
-    : tableSource( 0 )
-    , chartUsesInternalModelOnly( true )
-    , categoryRegionSpecifiedInXAxis( false )
+    : tableSource(0)
+    , chartUsesInternalModelOnly(true)
+    , categoryRegionSpecifiedInXAxis(false)
 {
 }

@@ -42,7 +42,7 @@ public:
     QString name() const { return m_name; }
 
 private:
-    Table( const QString &name, QAbstractItemModel *model );
+    Table(const QString &name, QAbstractItemModel *model);
 
     QString m_name;
     QAbstractItemModel *m_model;
@@ -64,7 +64,7 @@ public:
      * Note: The table name will be updated automatically when changed
      * by some "table source".
      */
-    Table *get( const QString &tableName ) const;
+    Table *get(const QString &tableName) const;
 
     /**
      * Returns the table (model/name pair) associated with @a model.
@@ -72,7 +72,7 @@ public:
      * Note: The table name will be updated automatically when changed
      * by some "table source".
      */
-    Table *get( const QAbstractItemModel *model ) const;
+    Table *get(const QAbstractItemModel *model) const;
 
     /**
      * Returns a map of all name/table pairs in this source.
@@ -87,14 +87,14 @@ public:
      * This method is only relevant if the chart is embedded in KSpread or
      * somehow needs access to KSpread's sheets.
      */
-    void setSheetAccessModel( QAbstractItemModel *model );
+    void setSheetAccessModel(QAbstractItemModel *model);
 
     /**
      * Adds a named model to this source.
      *
      * @return Pointer to new table (name/model pair) instance
      */
-    Table *add( const QString &name, QAbstractItemModel *model );
+    Table *add(const QString &name, QAbstractItemModel *model);
 
     /**
      * Makes sure that the name of the specified table always stays unique.
@@ -105,19 +105,19 @@ public:
      * collide with the new name.
      */
     // TODO
-    // void setRenameOnNameClash( const QString &tableName );
+    // void setRenameOnNameClash(const QString &tableName);
     // or
-    // void setRenameOnNameClash( Table *table );
+    // void setRenameOnNameClash(Table *table);
 
     /**
      * Removes a table from this source.
      */
-    void remove( const QString &name );
+    void remove(const QString &name);
 
     /**
      * Renames a table that has previously been added.
      */
-    void rename( const QString &from, const QString &to );
+    void rename(const QString &from, const QString &to);
 
     /**
      * Removes all tables and the sheetAccessModel.
@@ -131,7 +131,7 @@ signals:
     /**
      * Emitted whenever a table is added to this source.
      */
-    void tableAdded( Table *table );
+    void tableAdded(Table *table);
 
     /**
      * Emitted whenever a table is removed from this source
@@ -139,16 +139,16 @@ signals:
      * Note that right after this signal is emitted, the Table* instance
      * is deleted, thus you can't use it anymore afterwards.
      */
-    void tableRemoved( Table *table );
+    void tableRemoved(Table *table);
 
 private slots:
     /**
      * Methods that react on changes in the SheetAccessModel ("sam")
      */
-    void samColumnsInserted( QModelIndex, int, int );
-    void samColumnsRemoved( QModelIndex, int, int );
-    void samDataChanged( const QModelIndex &first, const QModelIndex &last );
-    void samHeaderDataChanged( Qt::Orientation, int, int );
+    void samColumnsInserted(QModelIndex, int, int);
+    void samColumnsRemoved(QModelIndex, int, int);
+    void samDataChanged(const QModelIndex &first, const QModelIndex &last);
+    void samHeaderDataChanged(Qt::Orientation, int, int );
 
 private:
     class Private;

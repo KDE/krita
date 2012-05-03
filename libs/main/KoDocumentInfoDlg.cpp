@@ -193,6 +193,7 @@ void KoDocumentInfoDlg::initAboutTab()
     if (!d->m_info->aboutInfo("keyword").isEmpty())
         d->m_aboutUi->leKeywords->setText(d->m_info->aboutInfo("keyword"));
 
+    d->m_aboutUi->meDescription->setPlainText(d->m_info->aboutInfo("description"));
     d->m_aboutUi->meComments->setPlainText(d->m_info->aboutInfo("comments"));
     if (!doc->mimeType().isEmpty()) {
         KMimeType::Ptr docmime = KMimeType::mimeType(doc->mimeType());
@@ -288,6 +289,7 @@ void KoDocumentInfoDlg::saveAboutData()
     d->m_info->setAboutInfo("keyword", d->m_aboutUi->leKeywords->text());
     d->m_info->setAboutInfo("title", d->m_aboutUi->leTitle->text());
     d->m_info->setAboutInfo("subject", d->m_aboutUi->leSubject->text());
+    d->m_info->setAboutInfo("description", d->m_aboutUi->meDescription->toPlainText());
     d->m_info->setAboutInfo("comments", d->m_aboutUi->meComments->toPlainText());
     d->m_applyToggleEncryption = d->m_toggleEncryption;
 }

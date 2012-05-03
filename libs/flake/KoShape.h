@@ -638,6 +638,18 @@ public:
     virtual QRectF outlineRect() const;
 
     /**
+     * returns the outline of the shape in the form of a path for the use of painting a shadow.
+     *
+     * Normally this would be the same as outline() if there is a fill (background) set on the
+     * shape and empty if not.  However, a shape could reimplement this to return an outline
+     * even if no fill is defined. A typical example of this would be the picture shape
+     * which has a picture but almost never a background. 
+     *
+     * @returns the outline of the shape in the form of a path.
+     */
+    virtual QPainterPath shadowOutline() const;
+
+    /**
      * Returns the currently set stroke, or 0 if there is no stroke.
      * @return the currently set stroke, or 0 if there is no stroke.
      */

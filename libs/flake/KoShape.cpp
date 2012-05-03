@@ -609,7 +609,17 @@ QPainterPath KoShape::outline() const
 QRectF KoShape::outlineRect() const
 {
     const QSizeF s = size();
-    return QRectF(QPointF(0, 0), QSizeF(qMax(s.width(), qreal(0.0001)), qMax(s.height(), qreal(0.0001))));
+    return QRectF(QPointF(0, 0), QSizeF(qMax(s.width(),  qreal(0.0001)),
+                                        qMax(s.height(), qreal(0.0001))));
+}
+
+QPainterPath KoShape::shadowOutline() const
+{
+    Q_D(const KoShape);
+    if (d->fill)
+        return outline();
+
+    return QPainterPath();
 }
 
 QPointF KoShape::absolutePosition(KoFlake::Position anchor) const

@@ -22,6 +22,7 @@
 #ifndef PICTURESHAPE_H
 #define PICTURESHAPE_H
 
+#include <QPainterPath>
 #include <QPixmap>
 #include <QImage>
 #include <QRunnable>
@@ -113,6 +114,8 @@ public:
 
     // reimplemented
     virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
+    // reimplemented
+    virtual QPainterPath shadowOutline() const;
     // reimplemented
     virtual void saveOdf(KoShapeSavingContext &context) const;
     // reimplemented

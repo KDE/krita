@@ -344,7 +344,7 @@ ChartConfigWidget::ChartConfigWidget()
     d->ui.chartTypeMenu->setIconSize(QSize(32, 32));
 
     connect(chartTypeMenu, SIGNAL(triggered(QAction*)),
-             this,          SLOT(chartTypeSelected(QAction*)));
+            this,          SLOT(chartTypeSelected(QAction*)));
 
     // Data set chart type button
     QMenu *dataSetChartTypeMenu = new QMenu(this);
@@ -383,51 +383,51 @@ ChartConfigWidget::ChartConfigWidget()
     d->ui.dataSetChartTypeMenu->setMenu(dataSetChartTypeMenu);
 
     connect(dataSetChartTypeMenu, SIGNAL(triggered(QAction*)),
-             this,                 SLOT(dataSetChartTypeSelected(QAction*)));
+            this,                 SLOT(dataSetChartTypeSelected(QAction*)));
 
     connect(d->ui.dataSetHasChartType, SIGNAL(toggled(bool)),
-             this,                      SLOT(ui_dataSetHasChartTypeChanged(bool)));
+            this,                      SLOT(ui_dataSetHasChartTypeChanged(bool)));
 
     // "Plot Area" tab
     connect(d->ui.showTitle,    SIGNAL(toggled(bool)),
-             this,               SIGNAL(showTitleChanged(bool)));
+            this,               SIGNAL(showTitleChanged(bool)));
     connect(d->ui.showSubTitle, SIGNAL(toggled(bool)),
-             this,               SIGNAL(showSubTitleChanged(bool)));
+            this,               SIGNAL(showSubTitleChanged(bool)));
     connect(d->ui.showFooter,   SIGNAL(toggled(bool)),
-             this,               SIGNAL(showFooterChanged(bool)));
+            this,               SIGNAL(showFooterChanged(bool)));
 
     connect(d->ui.threeDLook, SIGNAL(toggled(bool)),
-             this,             SLOT(setThreeDMode(bool)));
+            this,             SLOT(setThreeDMode(bool)));
     connect(d->ui.showLegend, SIGNAL(toggled(bool)),
-             this,             SIGNAL(showLegendChanged(bool)));
+            this,             SIGNAL(showLegendChanged(bool)));
 
     // "Datasets" tab
     connect(d->ui.datasetBrush, SIGNAL(changed(const QColor&)),
-             this, SLOT(datasetBrushSelected(const QColor&)));
+            this, SLOT(datasetBrushSelected(const QColor&)));
     connect(d->ui.datasetPen, SIGNAL(changed(const QColor&)),
-             this, SLOT(datasetPenSelected(const QColor&)));
+            this, SLOT(datasetPenSelected(const QColor&)));
     connect(d->ui.datasetShowCategory, SIGNAL(toggled(bool)),
-             this, SLOT(ui_datasetShowCategoryChanged(bool)));
+            this, SLOT(ui_datasetShowCategoryChanged(bool)));
     connect(d->ui.dataSetShowNumber, SIGNAL(toggled(bool)),
-             this, SLOT(ui_dataSetShowNumberChanged(bool)));
+            this, SLOT(ui_dataSetShowNumberChanged(bool)));
     connect(d->ui.datasetShowPercent, SIGNAL(toggled(bool)),
-             this, SLOT(ui_datasetShowPercentChanged(bool)));
+            this, SLOT(ui_datasetShowPercentChanged(bool)));
     connect(d->ui.datasetShowSymbol, SIGNAL(toggled(bool)),
-             this, SLOT(ui_datasetShowSymbolChanged(bool)));
+            this, SLOT(ui_datasetShowSymbolChanged(bool)));
     connect(d->ui.gapBetweenBars, SIGNAL(valueChanged(int)),
-             this, SIGNAL(gapBetweenBarsChanged(int)));
+            this, SIGNAL(gapBetweenBarsChanged(int)));
     connect(d->ui.gapBetweenSets, SIGNAL(valueChanged(int)),
-             this, SIGNAL(gapBetweenSetsChanged(int)));
+            this, SIGNAL(gapBetweenSetsChanged(int)));
     connect(d->ui.pieExplodeFactor, SIGNAL(valueChanged(int)),
-             this, SLOT(ui_dataSetPieExplodeFactorChanged(int)));
+            this, SLOT(ui_dataSetPieExplodeFactorChanged(int)));
 
     // "Legend" tab
     connect(d->ui.legendTitle, SIGNAL(textChanged(const QString&)),
-             this, SIGNAL(legendTitleChanged(const QString&)));
+            this, SIGNAL(legendTitleChanged(const QString&)));
     connect(d->ui.legendShowFrame, SIGNAL(toggled(bool)),
-             this, SIGNAL(legendShowFrameChanged(bool)));
+            this, SIGNAL(legendShowFrameChanged(bool)));
     connect(d->ui.legendOrientationIsVertical, SIGNAL(toggled(bool)),
-             this, SLOT(setLegendOrientationIsVertical(bool)));
+            this, SLOT(setLegendOrientationIsVertical(bool)));
 
     // Second part of "Plot Area" tab.
     // FIXME: Is there any particular reason it's separated from the Labels?
@@ -435,16 +435,16 @@ ChartConfigWidget::ChartConfigWidget()
     d->ui.removeAxis->setIcon(KIcon("list-remove"));
 
     connect(d->ui.axisTitle, SIGNAL(textChanged(const QString&)),
-             this, SLOT(ui_axisTitleChanged(const QString&)));
+            this, SLOT(ui_axisTitleChanged(const QString&)));
     connect(d->ui.axisShowTitle, SIGNAL(toggled(bool)),
-             this, SLOT(ui_axisShowTitleChanged(bool)));
+            this, SLOT(ui_axisShowTitleChanged(bool)));
     connect(d->ui.axisShowGridLines, SIGNAL(toggled(bool)),
-             this, SLOT(ui_axisShowGridLinesChanged(bool)));
-    connect (d->ui.axes, SIGNAL(currentIndexChanged(int)),
-              this, SLOT(ui_axisSelectionChanged(int)));
+            this, SLOT(ui_axisShowGridLinesChanged(bool)));
+    connect(d->ui.axes, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(ui_axisSelectionChanged(int)));
 
     connect(d->ui.dataSets, SIGNAL(currentIndexChanged(int)),
-             this, SLOT(ui_dataSetSelectionChanged(int)));
+            this, SLOT(ui_dataSetSelectionChanged(int)));
     connect(d->ui.dataSetAxes, SIGNAL(currentIndexChanged(int)),
             this, SLOT(ui_dataSetAxisSelectionChanged(int)));
 
@@ -536,25 +536,25 @@ void ChartConfigWidget::open(KoShape* shape)
         // dialog to edit the data ranges instead of the data itself.
         d->ui.editData->setText(i18n("Data Ranges..."));
         connect(d->ui.editData, SIGNAL(clicked(bool)),
-                 this, SLOT(slotShowCellRegionDialog()));
+                this, SLOT(slotShowCellRegionDialog()));
         connect(d->cellRegionDialog.xDataRegion, SIGNAL(editingFinished()),
-                 this, SLOT(ui_dataSetXDataRegionChanged()));
+                this, SLOT(ui_dataSetXDataRegionChanged()));
         connect(d->cellRegionDialog.yDataRegion, SIGNAL(editingFinished()),
-                 this, SLOT(ui_dataSetYDataRegionChanged()));
+                this, SLOT(ui_dataSetYDataRegionChanged()));
         connect(d->cellRegionDialog.labelDataRegion, SIGNAL(editingFinished()),
-                 this, SLOT(ui_dataSetLabelDataRegionChanged()));
+                this, SLOT(ui_dataSetLabelDataRegionChanged()));
         //connect(d->cellRegionDialog.customDataRegion, SIGNAL(textEdited(const QString&)),
-        //         this, SLOT(ui_dataSetCustomDataRegionChanged(const QString&)));
+        //        this, SLOT(ui_dataSetCustomDataRegionChanged(const QString&)));
         connect(d->cellRegionDialog.categoryDataRegion, SIGNAL(editingFinished()),
-                 this, SLOT(ui_dataSetCategoryDataRegionChanged()));
+                this, SLOT(ui_dataSetCategoryDataRegionChanged()));
         connect(d->cellRegionDialog.dataSets, SIGNAL(currentIndexChanged(int)),
-                 this, SLOT(ui_dataSetSelectionChanged_CellRegionDialog(int)));
+                this, SLOT(ui_dataSetSelectionChanged_CellRegionDialog(int)));
     }
     else {
         // This part is run when the data source is not external,
         // i.e. the data is handled by the chart shape itself.
         connect(d->ui.editData, SIGNAL(clicked(bool)),
-                 this,           SLOT(slotShowTableEditor()));
+                this,           SLOT(slotShowTableEditor()));
     }
 
     update();
@@ -949,7 +949,7 @@ void ChartConfigWidget::update()
                 (int)(d->shape->plotArea()->dataSets().at(0)->pieAttributes().explodeFactor()*100));
 
     if (   d->type    != d->shape->chartType()
-         || d->subtype != d->shape->chartSubType())
+        || d->subtype != d->shape->chartSubType())
     {
         // Update the chart type specific settings in the "Data Sets" tab
         bool needSeparator = false;
@@ -1073,9 +1073,9 @@ void ChartConfigWidget::setLegendAlignment(int boxEntryIndex)
 {
     Q_UNUSED(boxEntryIndex);
     if (   d->fixedPosition == KDChart::Position::North
-         || d->fixedPosition == KDChart::Position::South) {
+        || d->fixedPosition == KDChart::Position::South) {
         //d->lastHorizontalAlignment = d->ui.alignment->currentIndex();
-     } else if (  d->fixedPosition == KDChart::Position::East
+     } else if (   d->fixedPosition == KDChart::Position::East
                 || d->fixedPosition == KDChart::Position::West) {
         //d->lastVerticalAlignment = d->ui.alignment->currentIndex();
     }
@@ -1095,7 +1095,7 @@ void ChartConfigWidget::updateFixedPosition(Position position)
     Q_UNUSED(position);
 /*
     if (   position == KDChart::Position::North
-         || position == KDChart::Position::South) {
+        || position == KDChart::Position::South) {
         d->ui.alignment->setEnabled(true);
         d->ui.alignment->setItemText(0, i18n("Left"));
         d->ui.alignment->setItemData(0, Qt::AlignLeft);
@@ -1104,7 +1104,7 @@ void ChartConfigWidget::updateFixedPosition(Position position)
         d->ui.alignment->setItemData(2, Qt::AlignRight);
         // Set the alignment to the one last used for horizontal legend alignment
         if (   d->lastFixedPosition != KDChart::Position::North
-             && d->lastFixedPosition != KDChart::Position::South) {
+            && d->lastFixedPosition != KDChart::Position::South) {
             // Make sure that the combobox gets updated. Since we changed the values of the entries,
             // same index doesn't mean same value, though it will think so. Solution: Select no entry first
             d->ui.alignment->blockSignals(true);
@@ -1194,9 +1194,10 @@ void ChartConfigWidget::ui_axisSelectionChanged(int index)
 
     // Count how many axes there are of the same dimension
     int numAxesOfSameDimension = 0;
-    foreach (Axis *a, d->axes)
+    foreach (Axis *a, d->axes) {
         if (axis->dimension() == a->dimension())
-            numAxesOfSameDimension++;
+            ++numAxesOfSameDimension;
+    }
 
     // Don't let the user remove the last axis of a particular dimension
     d->ui.removeAxis->setEnabled(numAxesOfSameDimension > 1);
@@ -1477,7 +1478,7 @@ void ChartConfigWidget::ui_dataSetAxisSelectionChanged(int index)
 
 void ChartConfigWidget::ui_axisTitleChanged(const QString& title)
 {
-    if(d->ui.axes->currentIndex() < 0 || d->ui.axes->currentIndex() >= d->axes.size())
+    if (d->ui.axes->currentIndex() < 0 || d->ui.axes->currentIndex() >= d->axes.size())
         return;
 
     const int index = d->ui.axes->currentIndex();

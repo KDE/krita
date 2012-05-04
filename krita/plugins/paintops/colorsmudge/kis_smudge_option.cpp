@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "kis_rate_option.h"
+#include "kis_smudge_option.h"
 
 #include <klocale.h>
 
@@ -28,12 +28,11 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 
-#include <iostream>
+KisSmudgeOption::KisSmudgeOption(const QString& name, const QString& label, bool checked, const QString& category):
+    KisRateOption(name, label, checked, category),
+    mMode(SMEARING_MODE) { }
 
-KisRateOption::KisRateOption(const QString& name, const QString& label, bool checked, const QString& category):
-    KisCurveOption(label, name, category, checked) { }
-
-void KisRateOption::apply(KisPainter& painter, const KisPaintInformation& info, qreal scaleMin, qreal scaleMax, qreal multiplicator) const
+void KisSmudgeOption::apply(KisPainter& painter, const KisPaintInformation& info, qreal scaleMin, qreal scaleMax, qreal multiplicator) const
 {
     if(!isChecked()) {
         painter.setOpacity((quint8)(scaleMax * 255.0));
@@ -44,4 +43,20 @@ void KisRateOption::apply(KisPainter& painter, const KisPaintInformation& info, 
     quint8 opacity = qBound(OPACITY_TRANSPARENT_U8, (quint8)(rate * 255.0), OPACITY_OPAQUE_U8);
     
     painter.setOpacity(opacity);
+}
+
+void KisSmudgeOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+{
+    KisRateOption::writeOptionSetting(setting);
+    setting->setProperty(name() + "Mode", mMode);
+}
+
+void KisSmudgeOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+{
+    KisRateOption::readOptionSetting(setting);
+    
+    if(setting->hasProperty(name() + "Mode"))
+        mMode = (Mode)setting->getInt(name() + "Mode", mMode);
+    else
+        mMode = SMEARING_MODE;
 }

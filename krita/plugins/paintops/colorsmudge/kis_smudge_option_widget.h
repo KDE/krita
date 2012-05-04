@@ -18,29 +18,27 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_RATE_OPTION_H
-#define KIS_RATE_OPTION_H
+#ifndef KIS_SMUDGE_OPTION_WIDGET_H
+#define KIS_SMUDGE_OPTION_WIDGET_H
 
-#include "kis_curve_option.h"
-#include <kis_paint_information.h>
-#include <kis_types.h>
+#include <kis_curve_option_widget.h>
 
-class KisPropertiesConfiguration;
-class KisPainter;
+class QComboBox;
 
-class KisRateOption: public KisCurveOption
+class KisSmudgeOptionWidget: public KisCurveOptionWidget
 {
+    Q_OBJECT
+    
 public:
-    KisRateOption(const QString& name, const QString& label="", bool checked=true, const QString& category=KisPaintOpOption::brushCategory());
+    KisSmudgeOptionWidget(const QString& label, const QString& sliderLabel, const QString& name, bool checked);
     
-    /**
-     * Set the opacity of the painter based on the rate
-     * and the curve (if checked)
-     */
-    void apply(KisPainter& painter, const KisPaintInformation& info, qreal scaleMin=0.0, qreal scaleMax=1.0, qreal multiplicator=1.0) const;
+    virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
     
-    void setRate(qreal rate) { KisCurveOption::setValue(rate); }
-    qreal getRate() const { return KisCurveOption::value(); }
+private slots:
+    void slotCurrentIndexChanged(int index);
+    
+private:
+    QComboBox* mCbSmudgeMode;
 };
 
-#endif // KIS_RATE_OPTION_H
+#endif // KIS_SMUDGE_OPTION_WIDGET_H

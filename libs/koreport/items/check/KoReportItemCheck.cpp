@@ -24,7 +24,6 @@
 #include <klocalizedstring.h>
 #include <renderobjects.h>
 #include "renderer/scripting/krscripthandler.h"
-#include <KoLut.h>
 
 KoReportItemCheck::KoReportItemCheck(QDomNode &element) : m_value(false)
 {

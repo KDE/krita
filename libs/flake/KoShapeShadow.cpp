@@ -90,7 +90,6 @@ void KoShapeShadow::Private::paintShadow(KoShape *shape, QPainter &painter, cons
         painter.setBrush(QBrush(color));
 
         // Make sure the shadow has the same fill rule as the shape.
-        QPainterPath path(shape->outline());
         KoPathShape * pathShape = dynamic_cast<KoPathShape*>(shape);
         if (pathShape)
             path.setFillRule(pathShape->fillRule());

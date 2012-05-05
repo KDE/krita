@@ -1,0 +1,187 @@
+This text provides a very short introduction to the architecture of
+the chart shape. At this time it's work in progress.
+
+
+Part I: Components
+
+Part I describes the organization of the code and what can be found
+where.
+
+
+Subdirectories
+==============
+
+dialogs/        various dialogs for the chart tool
+commands/       undo/redo commands
+kdchart/        the chart drawing engine from KDAB.
+tests/          test code (run it by 'make tests')
+
+
+Classes in the top directory
+============================
+
+Shape classes
+-------------
+ChartShapeFactory       All these classes are standard KoShape classes
+ChartShape
+ChartToolFactory
+ChartTool
+ChartConfigWidget
+
+chartshape.desktop      The desktop file describing this plugin
+
+ChartDocument           This class inherits KoDocument. A chart and
+                        a formula are special shapes because they are
+                        their own document types, defined in ODF. This
+                        also means that they can be saved in a
+                        subdirectory or inline inside the XML tree.
+
+kchart_export.h         Defines import and export for exported classes.
+
+
+Chart classes
+-------------
+
+The following classes are central in the loading, rendering and
+editing of charts.  Most (all?) of the classes directly represent a
+chart entity defined in the ODF standard.
+
+Axis                    data about an axis in the chart
+DataSet                 stores data _about_ a dataset. The actual data
+                        is stored in a table.
+Legend                  stores information about the legend
+PlotArea                The main area where the chart itself is shown
+Surface                 Wall or Floor in a 3D chart
+CellRegion              A region in e.g. a spreadsheet where a dataset
+                        can fetch its values.
+
+
+Data classes
+------------
+
+KDChartModel            Takes a list of DataSet's and compiles them
+                        into a QAbstractItemModel for use with KDChart. 
+KDChartConversions      Conversions between odf concepts and KDChart
+                        concepts
+
+ChartProxyModel         Factory for DataSets and decoration of a
+                        ChartTableModel .
+ChartTableModel         Stores the numeric data if this isn't provided
+                        from the outside, e.g. from a spreadsheet.
+TableSource             FIXME: Something to do with connection to Sheets.
+OdfLoadingHelper        Helper for loading data when connected to a
+                        spreadsheet. FIXME: find out more.
+
+ChartTableView          A view of a table. Used in the data editor.
+
+
+Helper classes
+--------------
+
+kchart_global
+CellRegionStringValidator Validates a cell region descriptor string
+ChartLayout             Manages the layout of the parts (plot area,
+                        legend, titles, etc)
+ScreenConversions       Conversions between pt (distance) and px (pixels)
+SingleModelHelper       FIXME: No idea what this is
+TextLabelDummy          Place holder for text labels (title, etc)
+
+
+
+
+Part II: Functional description
+
+Part II contains high-level descriptions on key structures and
+processes.
+
+
+General Architecture
+====================
+
+The chart shape is a rather complex shape that inherits KoShape. It is
+also at the same time a KoShapeContainer, i.e. it can contain other
+KoShapes. The parts of a chart -- plot area, legend, axes titles,
+chart title, subtitle and footer -- are all KoShapes themselves, owned
+by the ChartShape class. The geometric relationship between them is
+managed by the ChartLayout class. This is especially visible when
+resizing the chart, something which sometimes rearranges the chart
+drastically if the available area becomes very small.
+
+The chart shape is also special because it publishes a small part of
+its internal API to the world. Normally the only external API for a
+shape is the generic one defined in KoShape.h. The more detailed API
+that is used by the tool(s) is seldom published. However, the chart
+shape is designed to be used by applications and controlled
+programmatically, e.g. from the spreadsheet. When a user updates the
+cell values then the chart also has to be updated. This API is
+published in interfaces/KoChartInterface.h. (As a side note, I think
+this could be done for more shapes.)
+
+The second thing that makes the chart shape special is that Charts
+(and Formulas) are defined as their own document types in the ODF
+standard.  This means that a chart can actually be its own standalone
+document with the file extension .odc. Everything that has to do with
+the chart document is collected into the class ChartDocument.
+
+The actual rendering of the chart parts is done with the KDChart
+engine from KDAB. This component is licensed under GPL (used here) and
+a commercial license. KDChart can render most chart types in ODF with
+the exception of 3D type charts. Surface charts are not handled at
+all, and 3D variants of 2D charts (bar, line, etc) are shown with
+simple extrusions and not real perspective 3D. 3D only types, like
+cylinder, cone, etc are not handled at all. Nevertheless, KDChart is
+quite capable and works well in general.
+
+
+ODF and KDChart
+---------------
+
+As described above, there are a number of classes which directly
+represent entities in the ODF chart standard. These are Axis, Legend,
+PlotArea, Surface, DataSet, and CellRegion. All these classes load and
+save their internal data to the ODF xml tree and also manage their
+respective counterparts from KDChart, so for instance the Axis class
+handles all settings and data of the KDChartAxis classes (different
+ones for Cartesian and Circular axes).
+
+Unfortunately there is not a perfect 1-to-1 relationship between the
+concepts in ODF charts and KDChart so there is some complexity in the
+mapping between them.  See below for more details.
+
+
+Chart Shape overview
+--------------------
+
+FIXME
+
+
+KDChart concepts
+----------------
+
+FIXME
+
+
+Mapping to KDChart classes
+--------------------------
+
+FIXME
+
+
+Layout and Rendering
+====================
+
+FIXME
+
+
+Editing
+=======
+
+Editing of the chart settings can be done only by the ChartTool. The
+chart tool uses the API calls in the different storage classes to
+change the values. All manipulations are direct and there is currently
+no undo/redo with the exception of setting the chart type. [This needs
+to be fixed.]
+
+Changing of the data values can be done through the sheet connection
+model that are used by e.g. Calligra Sheets (FIXME: Find out more
+details).

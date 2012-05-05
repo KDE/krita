@@ -96,7 +96,7 @@ void KisImageItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* opti
     painter->drawRect(boundingRect());
 }
 
-QSizeF KisImageItem::sizeHint(Qt::SizeHint which, const QSizeF& constraint) const
+QSizeF KisImageItem::sizeHint(Qt::SizeHint /*which*/, const QSizeF& /*constraint*/) const
 {
     return QSizeF(m_size, m_size);
 }

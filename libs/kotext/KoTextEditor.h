@@ -28,6 +28,7 @@
 #include "KoText.h"
 #include "styles/KoListStyle.h"
 #include <KoToolSelection.h>
+#include <KoBorder.h>
 
 #include <QClipboard>
 #include <QMetaType>
@@ -375,23 +376,34 @@ public slots:
 
     /**
      * Sets the width of a table column.
-     * @param table is tha table to be adjusted.
+     * @param table is the table to be adjusted.
+     * @param column the column that is to be adjusted.
      */
     void adjustTableColumnWidth(QTextTable *table, int column, qreal width, KUndo2Command *parentCommand = 0);
 
     /**
      * Sets the height of a table row.
-     * @param table is tha table to be adjusted.
+     * @param table is the table to be adjusted.
+     * @param row the row that is to be adjusted.
      */
     void adjustTableRowHeight(QTextTable *table, int row, qreal height, KUndo2Command *parentCommand = 0);
 
     /**
      * Changes the width of a table by adjusting the margins.
-     * @param table is tha table to be adjusted.
+     * @param table is the table to be adjusted.
      * @param dLeft delta value for the left margin.
      * @param dRight delta value for the right margin.
      */
     void adjustTableWidth(QTextTable *table, qreal dLeft, qreal dRight);
+
+    /**
+     * Sets the border formatting of a side in a table cell.
+     * @param table is the table to be adjusted.
+     * @param column the column coordinate of the cell that is to be adjusted.
+     * @param row the row coordinate of the cell that is to be adjusted.
+     */
+    void setTableBorderData(QTextTable *table, int row, int column, KoBorder::Side cellSide,
+                const KoBorder::BorderData &data);
 
     /**
      * Insert a footnote at the current cursor position

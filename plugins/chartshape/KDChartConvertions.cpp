@@ -29,9 +29,9 @@
 
 namespace KChart {
 
-KDChart::CartesianAxis::Position PositionToKDChartAxisPosition( Position position )
+KDChart::CartesianAxis::Position PositionToKDChartAxisPosition(Position position)
 {
-    switch ( position ) {
+    switch (position) {
     case BottomPosition:
         return KDChart::CartesianAxis::Bottom;
     case TopPosition:
@@ -42,43 +42,43 @@ KDChart::CartesianAxis::Position PositionToKDChartAxisPosition( Position positio
         return KDChart::CartesianAxis::Left;
     }
     
-    Q_ASSERT( "Unknown KDChart::CartesianAxis::Position!" );
+    Q_ASSERT("Unknown KDChart::CartesianAxis::Position!");
     return KDChart::CartesianAxis::Bottom;
 }
 
 // Used to save e.g. legend-position attribute to ODF. Do not change these strings.
-QString PositionToString( Position position )
+QString PositionToString(Position position)
 {
-    switch ( position ) {
+    switch (position) {
     case StartPosition:
-        return QString( "start" );
+        return QString("start");
     case TopPosition:
-        return QString( "top" );
+        return QString("top");
     case BottomPosition:
-        return QString( "bottom" );
+        return QString("bottom");
     case TopStartPosition:
-        return QString( "top-start" );
+        return QString("top-start");
     case BottomStartPosition:
-        return QString( "bottom-start" );
+        return QString("bottom-start");
     case TopEndPosition:
-        return QString( "top-end" );
+        return QString("top-end");
     case BottomEndPosition:
-        return QString( "bottom-end" );
+        return QString("bottom-end");
     case EndPosition:
-        return QString( "end" );
+        return QString("end");
     case CenterPosition:
-        return QString( "center" );
+        return QString("center");
     case FloatingPosition:
         return QString();
     }
     
-    Q_ASSERT( "Unknown Position!" );
+    Q_ASSERT("Unknown Position!");
     return QString();
 }
 
-KDChartEnums::PositionValue PositionToKDChartPositionValue( Position position )
+KDChartEnums::PositionValue PositionToKDChartPositionValue(Position position)
 {
-    switch ( position ) {
+    switch (position) {
     case StartPosition:
         return KDChartEnums::PositionWest;
     case TopPosition:
@@ -101,13 +101,13 @@ KDChartEnums::PositionValue PositionToKDChartPositionValue( Position position )
         return KDChartEnums::PositionFloating;
     }
     
-    Q_ASSERT( "Unknown Position!" );
+    Q_ASSERT("Unknown Position!");
     return KDChartEnums::PositionEast;
 }
 
-Position KDChartPositionValueToPosition( KDChartEnums::PositionValue position )
+Position KDChartPositionValueToPosition(KDChartEnums::PositionValue position)
 {
-    switch ( position ) {
+    switch (position) {
     case KDChartEnums::PositionNorthWest:
         return TopStartPosition;
     case KDChartEnums::PositionNorth:
@@ -134,13 +134,13 @@ Position KDChartPositionValueToPosition( KDChartEnums::PositionValue position )
         return FloatingPosition;
     }
     
-    Q_ASSERT( "Unknown KDChartEnums::PositionValue!" );
+    Q_ASSERT("Unknown KDChartEnums::PositionValue!");
     return FloatingPosition;
 }
 
-Qt::Orientation LegendExpansionToQtOrientation( LegendExpansion expansion )
+Qt::Orientation LegendExpansionToQtOrientation(LegendExpansion expansion)
 {
-    switch ( expansion ) {
+    switch (expansion) {
     case WideLegendExpansion:
         return Qt::Horizontal;
     case HighLegendExpansion:
@@ -151,20 +151,20 @@ Qt::Orientation LegendExpansionToQtOrientation( LegendExpansion expansion )
         return Qt::Vertical;
     }
     
-    Q_ASSERT( "Unknown Qt::Orientation!" );
+    Q_ASSERT("Unknown Qt::Orientation!");
     return Qt::Vertical;
 }
 
-LegendExpansion QtOrientationToLegendExpansion( Qt::Orientation orientation )
+LegendExpansion QtOrientationToLegendExpansion(Qt::Orientation orientation)
 {
-    switch ( orientation ) {
+    switch (orientation) {
     case Qt::Horizontal:
         return WideLegendExpansion;
     case Qt::Vertical:
         return HighLegendExpansion;
     }
     
-    Q_ASSERT( "Unknown LegendExpansion!" );
+    Q_ASSERT("Unknown LegendExpansion!");
     return HighLegendExpansion;
 }
 

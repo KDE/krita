@@ -50,20 +50,24 @@ ParagraphGeneral::ParagraphGeneral(QWidget *parent)
             widget.preview, SLOT(setRightMargin(qreal)));
     connect(m_paragraphIndentSpacing, SIGNAL(lineSpacingChanged(qreal,qreal,qreal,int,bool)),
             widget.preview, SLOT(setLineSpacing(qreal,qreal,qreal,int,bool)));
+    connect(m_paragraphIndentSpacing, SIGNAL(parStyleChanged()), this, SIGNAL(styleChanged()));
 
     m_paragraphLayout = new ParagraphLayout(this);
     widget.tabs->addTab(m_paragraphLayout, i18n("General Layout"));
     connect(m_paragraphLayout, SIGNAL(horizontalAlignmentChanged(Qt::Alignment)), this, SLOT(horizontalAlignmentChanged(Qt::Alignment)));
+    connect(m_paragraphLayout, SIGNAL(parStyleChanged()), this, SIGNAL(styleChanged()));
 
     m_paragraphBulletsNumbers = new ParagraphBulletsNumbers(this);
     widget.tabs->addTab(m_paragraphBulletsNumbers, i18n("Bullets/Numbers"));
     connect(m_paragraphBulletsNumbers, SIGNAL(bulletListItemChanged(const QString&)),
         this, SLOT(bulletListItemChanged(const QString&)));
+    connect(m_paragraphBulletsNumbers, SIGNAL(parStyleChanged()), this, SIGNAL(styleChanged()));
 
     m_paragraphDecorations = new ParagraphDecorations(this);
     widget.tabs->addTab(m_paragraphDecorations, i18n("Decorations"));
     connect(m_paragraphDecorations, SIGNAL(backgroundColorChanged(const QColor&)),
         this, SLOT(backgroundColorChanged(const QColor&)));
+    connect(m_paragraphDecorations, SIGNAL(parStyleChanged()), this, SIGNAL(styleChanged()));
 
     widget.preview->setText(QString("Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
 
@@ -72,6 +76,7 @@ ParagraphGeneral::ParagraphGeneral(QWidget *parent)
 
     m_paragraphDropCaps = new ParagraphDropCaps(this);
     widget.tabs->addTab(m_paragraphDropCaps, i18n("Drop Caps"));
+    connect(m_paragraphDropCaps, SIGNAL(parStyleChanged()), this, SIGNAL(styleChanged()));
 }
 
 void ParagraphGeneral::hideStyleName(bool hide)

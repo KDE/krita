@@ -25,6 +25,7 @@
 #include <QTextStream>
 #include <QtScript>
 #include <QtTest>
+#include <QApplication>
 
 #include <KoOdfStylesReader.h>
 #include <KoStore.h>

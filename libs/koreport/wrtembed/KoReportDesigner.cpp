@@ -156,8 +156,6 @@ void KoReportDesigner::init()
 
     d->pageButton = new ReportPropertiesButton(this);
 
-    //Messy, but i cant find another way
-    delete d->hruler->tabChooser();
     d->hruler->setUnit(KoUnit(KoUnit::Centimeter));
 
     d->grid->addWidget(d->pageButton, 0, 0);
@@ -331,10 +329,10 @@ QDomElement KoReportDesigner::document() const
     KoReportDesignerItemBase::addPropertyAsAttribute(&pagestyle, m_orientation);
 
     // -- margins
-    pagestyle.setAttribute("fo:margin-top", KoUnit::unit(m_topMargin->option("unit").toString()).toUserStringValue(m_topMargin->value().toDouble()) + m_topMargin->option("unit").toString());
-    pagestyle.setAttribute("fo:margin-bottom", KoUnit::unit(m_bottomMargin->option("unit").toString()).toUserStringValue(m_bottomMargin->value().toDouble()) + m_topMargin->option("unit").toString());
-    pagestyle.setAttribute("fo:margin-right", KoUnit::unit(m_rightMargin->option("unit").toString()).toUserStringValue(m_rightMargin->value().toDouble()) + m_topMargin->option("unit").toString());
-    pagestyle.setAttribute("fo:margin-left", KoUnit::unit(m_leftMargin->option("unit").toString()).toUserStringValue(m_leftMargin->value().toDouble()) + m_topMargin->option("unit").toString());
+    pagestyle.setAttribute("fo:margin-top", KoUnit::fromSymbol(m_topMargin->option("unit").toString()).toUserStringValue(m_topMargin->value().toDouble()) + m_topMargin->option("unit").toString());
+    pagestyle.setAttribute("fo:margin-bottom", KoUnit::fromSymbol(m_bottomMargin->option("unit").toString()).toUserStringValue(m_bottomMargin->value().toDouble()) + m_topMargin->option("unit").toString());
+    pagestyle.setAttribute("fo:margin-right", KoUnit::fromSymbol(m_rightMargin->option("unit").toString()).toUserStringValue(m_rightMargin->value().toDouble()) + m_topMargin->option("unit").toString());
+    pagestyle.setAttribute("fo:margin-left", KoUnit::fromSymbol(m_leftMargin->option("unit").toString()).toUserStringValue(m_leftMargin->value().toDouble()) + m_topMargin->option("unit").toString());
 
     content.appendChild(pagestyle);
 
@@ -621,7 +619,7 @@ void KoReportDesigner::createProperties()
 
     keys.clear(); strings.clear();
 
-    strings = KoUnit::listOfUnitName();
+    strings = KoUnit::listOfUnitNameForUi(KoUnit::HidePixel);
     QString unit;
     foreach(const QString &un, strings) {
         unit = un.mid(un.indexOf('(') + 1, 2);
@@ -634,13 +632,13 @@ void KoReportDesigner::createProperties()
     m_gridSnap = new KoProperty::Property("grid-snap", true, i18n("Grid Snap"), i18n("Grid Snap"));
     m_gridDivisions = new KoProperty::Property("grid-divisions", 4, i18n("Grid Divisions"), i18n("Grid Divisions"));
 
-    m_leftMargin = new KoProperty::Property("margin-left", KoUnit::unit("cm").fromUserValue(1.0),
+    m_leftMargin = new KoProperty::Property("margin-left", KoUnit(KoUnit::Centimeter).fromUserValue(1.0),
         i18n("Left Margin"), i18n("Left Margin"), KoProperty::Double);
-    m_rightMargin = new KoProperty::Property("margin-right", KoUnit::unit("cm").fromUserValue(1.0),
+    m_rightMargin = new KoProperty::Property("margin-right", KoUnit(KoUnit::Centimeter).fromUserValue(1.0),
         i18n("Right Margin"), i18n("Right Margin"), KoProperty::Double);
-    m_topMargin = new KoProperty::Property("margin-top", KoUnit::unit("cm").fromUserValue(1.0),
+    m_topMargin = new KoProperty::Property("margin-top", KoUnit(KoUnit::Centimeter).fromUserValue(1.0),
         i18n("Top Margin"), i18n("Top Margin"), KoProperty::Double);
-    m_bottomMargin = new KoProperty::Property("margin-bottom", KoUnit::unit("cm").fromUserValue(1.0),
+    m_bottomMargin = new KoProperty::Property("margin-bottom", KoUnit(KoUnit::Centimeter).fromUserValue(1.0),
         i18n("Bottom Margin"), i18n("Bottom Margin"), KoProperty::Double);
     m_leftMargin->setOption("unit", "cm");
     m_rightMargin->setOption("unit", "cm");
@@ -802,9 +800,9 @@ KoUnit KoReportDesigner::pageUnit() const
 
     u = m_unit->value().toString();
 
-    KoUnit unit = KoUnit::unit(u, &found);
+    KoUnit unit = KoUnit::fromSymbol(u, &found);
     if (!found) {
-        unit = KoUnit::unit("cm");
+        unit = KoUnit(KoUnit::Centimeter);
     }
 
     return unit;

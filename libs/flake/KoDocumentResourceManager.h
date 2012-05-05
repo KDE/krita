@@ -32,7 +32,6 @@
 #include <KoUnit.h>
 
 class KoShape;
-class KoLineBorder;
 class KUndo2Stack;
 class KoImageCollection;
 class KoOdfDocument;

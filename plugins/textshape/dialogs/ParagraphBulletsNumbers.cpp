@@ -156,7 +156,7 @@ void ParagraphBulletsNumbers::save(KoParagraphStyle *savingStyle)
 {
     Q_ASSERT(savingStyle);
 
-    KoUnit *unit=new KoUnit(KoUnit::Centimeter);
+    KoUnit unit(KoUnit::Centimeter);
 
     const int currentRow = widget.listTypes->currentRow();
     KoListStyle::Style style = m_mapping[currentRow];
@@ -182,7 +182,7 @@ void ParagraphBulletsNumbers::save(KoParagraphStyle *savingStyle)
         llp.setAlignmentMode(true);
         switch(widget.labelFollowedBy->currentIndex()) {
         case 0: llp.setLabelFollowedBy(KoListStyle::ListTab);
-            llp.setTabStopPosition(unit->fromUserValue(widget.doubleSpinBox->value()));
+            llp.setTabStopPosition(unit.fromUserValue(widget.doubleSpinBox->value()));
             break;
         case 1: llp.setLabelFollowedBy(KoListStyle::Space);
             break;
@@ -192,8 +192,8 @@ void ParagraphBulletsNumbers::save(KoParagraphStyle *savingStyle)
             Q_ASSERT(false);
         }
 
-        llp.setMargin(unit->fromUserValue(widget.doubleSpinBox_2->value()));
-        llp.setTextIndent(unit->fromUserValue(widget.doubleSpinBox_3->value())-unit->fromUserValue(widget.doubleSpinBox_2->value()));
+        llp.setMargin(unit.fromUserValue(widget.doubleSpinBox_2->value()));
+        llp.setTextIndent(unit.fromUserValue(widget.doubleSpinBox_3->value())-unit.fromUserValue(widget.doubleSpinBox_2->value()));
     }
 
     if (style == KoListStyle::CustomCharItem) {
@@ -217,8 +217,6 @@ void ParagraphBulletsNumbers::save(KoParagraphStyle *savingStyle)
     if (llp.level() != m_previousLevel)
         listStyle->removeLevelProperties(m_previousLevel);
     listStyle->setLevelProperties(llp);
-
-    delete unit;
 }
 
 void ParagraphBulletsNumbers::styleChanged(int index)
@@ -289,8 +287,8 @@ void ParagraphBulletsNumbers::recalcPreview()
     QString answer = "";
     if (style != KoListStyle::None) {
         QString suffix = widget.suffix->text();
-        if (suffix.isEmpty())
-            suffix = ".";
+        if (suffix.isEmpty() && KoListStyle::isNumberingStyle(style))
+            suffix = QLatin1Char('.');
         const int depth = widget.depth->value();
         const int displayLevels = qMin(widget.levels->value(), depth);
         for (int i = 1; i <= depth; ++i) {
@@ -319,6 +317,7 @@ void ParagraphBulletsNumbers::recalcPreview()
             answer += ' ';
     }
     emit bulletListItemChanged(answer);
+    emit parStyleChanged();
 }
 
 void ParagraphBulletsNumbers::labelFollowedByIndexChanged(int index)
@@ -328,6 +327,7 @@ void ParagraphBulletsNumbers::labelFollowedByIndexChanged(int index)
     } else {
         widget.doubleSpinBox->setEnabled(true);
     }
+    emit parStyleChanged();
 }
 
 #include <ParagraphBulletsNumbers.moc>

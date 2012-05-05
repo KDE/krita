@@ -29,8 +29,8 @@
 
 SimpleCitationBibliographyWidget::SimpleCitationBibliographyWidget(ReferencesTool *tool, QWidget *parent)
         : QWidget(parent),
-          m_referenceTool(tool),
           m_blockSignals(false),
+          m_referenceTool(tool),
           m_signalMapper(0)
 {
     widget.setupUi(this);

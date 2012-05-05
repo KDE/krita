@@ -20,9 +20,12 @@
 #ifndef VIDEOSHAPE_H
 #define VIDEOSHAPE_H
 
-#include <QPixmap>
 #include <KoShape.h>
 #include <KoFrameShape.h>
+
+#include <KIcon>
+
+#include <QPixmap>
 
 #define VIDEOSHAPEID "VideoShape"
 
@@ -57,6 +60,7 @@ protected:
 private:
     VideoCollection *m_videoCollection;
     VideoEventAction *m_videoEventAction;
+    KIcon m_icon;
 };
 
 #endif

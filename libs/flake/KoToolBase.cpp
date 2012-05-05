@@ -52,7 +52,7 @@ KoToolBase::~KoToolBase()
     delete d_ptr;
 }
 
-/// Ultimately only called from Tables
+/// Ultimately only called from Calligra Sheets
 void KoToolBase::updateShapeController(KoShapeBasedDocumentBase *shapeController)
 {
     if (shapeController) {

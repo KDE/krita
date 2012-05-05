@@ -29,7 +29,7 @@
 class QEvent;
 class QPaintEvent;
 class QBrush;
-class KoShapeBorderModel;
+class KoShapeStrokeModel;
 class KoShapeBackground;
 
 /// A widget to preview stroke and fill of a shape
@@ -53,7 +53,7 @@ public:
      * @param stroke the stroke to preview
      * @param fill the fill to preview
      */
-    void update(KoShapeBorderModel * stroke, KoShapeBackground * fill);
+    void update(KoShapeStrokeModel * stroke, KoShapeBackground * fill);
 
     virtual bool eventFilter(QObject* object, QEvent* event);
 
@@ -64,7 +64,7 @@ public:
 
 signals:
     /// Is emitted as soon as the stroke was changed
-    void strokeChanged(const KoShapeBorderModel &);
+    void strokeChanged(const KoShapeStrokeModel &);
     /// Is emitted as soon as the fill was changed
     void fillChanged(const QBrush&);
     /// Is emitted as soon as the stroke is selected
@@ -77,12 +77,12 @@ protected:
 
 private:
     void drawFill(QPainter & painter, const KoShapeBackground * fill);
-    void drawStroke(QPainter & painter, const KoShapeBorderModel*);
+    void drawStroke(QPainter & painter, const KoShapeStrokeModel*);
 
     bool m_strokeSelected; ///< true if stroke is selected, false if fill is selected
     QRectF m_strokeRect;
     QRectF m_fillRect;
-    KoShapeBorderModel *m_stroke; ///< the stroke to preview
+    KoShapeStrokeModel *m_stroke; ///< the stroke to preview
     KoShapeBackground  *m_fill; ///< the fill to preview
     KoCheckerBoardPainter m_checkerPainter;
 };

@@ -56,7 +56,18 @@ public:
     void updatePosition()
     {
         QPoint parentPos = m_parent->mapToGlobal(QPoint(0,0));
-        setGeometry(parentPos.x() - 100, parentPos.y(), 100, 100);
+        QRect availRect = QApplication::desktop()->availableGeometry(this);
+        QPoint targetPos;
+        if ( parentPos.x() - 100 > availRect.x() ) {
+            targetPos =  QPoint(parentPos.x() - 100, parentPos.y());
+        } else if ( parentPos.x() + m_parent->width() + 100 < availRect.right()) {
+            targetPos = m_parent->mapToGlobal(QPoint(m_parent->width(), 0));
+        } else if ( parentPos.y() - 100 > availRect.y() ) {
+            targetPos =  QPoint(parentPos.x(), parentPos.y() - 100);
+        } else {
+            targetPos =  QPoint(parentPos.x(), parentPos.y() + m_parent->height());
+        }
+        setGeometry(targetPos.x(), targetPos.y(), 100, 100);
     }
 
     void setColor(const QColor& color)

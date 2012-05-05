@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2010 Thomas Zander <zander@kde.org>
+ * Copyright 2012 Friedrich W. H. Kossebau <kossebau@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,26 +17,145 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
 #include "TestKoUnit.h"
 
 #include <KoUnit.h>
 
-void TestKoUnit::testUnit()
+
+Q_DECLARE_METATYPE(KoUnit::Type)
+Q_DECLARE_METATYPE(KoUnit::ListOptions)
+
+
+void TestKoUnit::testSimpleConstructor()
 {
-    KoUnit unit1;
-    KoUnit unit2(KoUnit::Point);
-    QCOMPARE(unit1, unit2);
+    KoUnit unit;
+    QCOMPARE(unit.type(), KoUnit::Point);
 
-    KoUnit unit3(KoUnit::Millimeter);
-    unit1 = unit3;
-    QCOMPARE(unit1, unit3);
+    KoUnit otherUnit;
+    QCOMPARE(unit, otherUnit);
+}
 
-    KoUnit scaled(KoUnit::Pixel, 0.5);
-    QCOMPARE(KoUnit::ptToUnit(100, scaled), (qreal)50);
+
+void TestKoUnit::testConstructor_data()
+{
+    QTest::addColumn<KoUnit::Type>("type");
+
+    QTest::newRow("point") << KoUnit::Point;
+    QTest::newRow("pica") << KoUnit::Pica;
+    QTest::newRow("millimeter") << KoUnit::Millimeter;
+}
+
+void TestKoUnit::testConstructor()
+{
+    QFETCH(KoUnit::Type, type);
+
+    KoUnit unit(type);
+    QCOMPARE(unit.type(), type);
+}
+
+void TestKoUnit::testPixelConstructor()
+{
+    KoUnit unit(KoUnit::Pixel, 0.5);
+    QCOMPARE(unit.type(), KoUnit::Pixel);
+    QCOMPARE(KoUnit::ptToUnit(100, unit), (qreal)50);
+}
+
+void TestKoUnit::testAssignOperator_data()
+{
+    QTest::addColumn<KoUnit::Type>("type");
+    QTest::addColumn<KoUnit::Type>("otherType");
+
+    QTest::newRow("point-pica") << KoUnit::Point << KoUnit::Pica;
+    QTest::newRow("pica-point") << KoUnit::Pica << KoUnit::Point;
+    QTest::newRow("millimeter-inch") << KoUnit::Millimeter << KoUnit::Inch;
+}
+
+void TestKoUnit::testAssignOperator()
+{
+    QFETCH(KoUnit::Type, type);
+    QFETCH(KoUnit::Type, otherType);
+
+    KoUnit unit(type);
+
+    KoUnit otherUnit(otherType);
+    unit = otherUnit;
+    QCOMPARE(unit, otherUnit);
+}
+
+void TestKoUnit::testVariant()
+{
+    KoUnit unit(KoUnit::Pixel, 0.5);
 
     QVariant variant;
-    variant.setValue(scaled);
-    QCOMPARE(scaled, variant.value<KoUnit>());
+    variant.setValue(unit);
+    QCOMPARE(variant.value<KoUnit>(), unit);
+}
+
+void TestKoUnit::testFromSymbol_data()
+{
+    QTest::addColumn<KoUnit::Type>("type");
+    QTest::addColumn<QString>("symbol");
+    QTest::addColumn<bool>("isOkay");
+
+    QTest::newRow("point") << KoUnit::Point << QString::fromLatin1("pt") << true;
+    QTest::newRow("pica") << KoUnit::Pica << QString::fromLatin1("pi") << true;
+    QTest::newRow("pixel") << KoUnit::Pixel << QString::fromLatin1("px") << true;
+    QTest::newRow("inch") << KoUnit::Inch << QString::fromLatin1("in") << true;
+    QTest::newRow("inch2") << KoUnit::Inch << QString::fromLatin1("inch") << true;
+    QTest::newRow("decimeter") << KoUnit::Decimeter << QString::fromLatin1("dm") << true;
+    QTest::newRow("badSymbol") << KoUnit::Point << QString::fromLatin1("badSymbol") << false;
+}
+
+void TestKoUnit::testFromSymbol()
+{
+    QFETCH(KoUnit::Type, type);
+    QFETCH(QString, symbol);
+    QFETCH(bool, isOkay);
+
+    bool ok;
+    KoUnit unit = KoUnit::fromSymbol(symbol, &ok);
+
+    QCOMPARE(ok, isOkay);
+    if (isOkay) {
+        QCOMPARE(unit.type(), type);
+    }
+}
+
+void TestKoUnit::testListForUi_data()
+{
+    QTest::addColumn<KoUnit::ListOptions>("listOptions");
+    QTest::addColumn<int>("index");
+
+    const QVector<KoUnit::ListOptions> optionsList =
+        QVector<KoUnit::ListOptions>() << KoUnit::HidePixel << KoUnit::ListAll;
+    static const char* const optionsName[2] = {"HidePixel", "ListDefault"};
+    static const char* const indexName[3] = {"-start", "-middle", "-end"};
+
+    for (int o = 0; o < optionsList.count(); ++o) {
+        const KoUnit::ListOptions options = optionsList.at(o);
+        const int unitCount = KoUnit::listOfUnitNameForUi(options).count();
+        for (int i = 0; i < 3; ++i) {
+            const int index =
+                (i == 0) ? 0 :
+                (i == 1) ? unitCount/2 :
+                /*i == 2*/ unitCount-1;
+
+            const QString rowName = QLatin1String(optionsName[o]) + QLatin1String(indexName[i]);
+
+            QTest::newRow(rowName.toLatin1().constData()) << options << index;
+        }
+    }
+}
+
+void TestKoUnit::testListForUi()
+{
+    QFETCH(KoUnit::ListOptions, listOptions);
+    QFETCH(int, index);
+
+    KoUnit unit = KoUnit::fromListForUi(index, listOptions);
+
+    QCOMPARE(unit.indexInListForUi(listOptions), index);
 }
 
 QTEST_MAIN(TestKoUnit)

@@ -37,6 +37,7 @@ public:
 
     void setStyle(KoCharacterStyle *style);
     void hideStyleName(bool hide);
+    bool isStyleChanged();
 
 public slots:
     void save(KoCharacterStyle *style = 0);
@@ -45,7 +46,8 @@ public slots:
 
 signals:
     void nameChanged(const QString &name);
-    void styleAltered(const KoCharacterStyle *style);
+    void styleAltered(const KoCharacterStyle *style); // when saving
+    void styleChanged(); /// when user modifying
 
 private slots:
     void setName(const QString &name);

@@ -23,8 +23,9 @@
 #include <QMessageBox>
 
 
-LoginWindow::LoginWindow(QWidget *parent)
-        : QDialog(parent),
+LoginWindow::LoginWindow(OnlineDocument::DocumentType type, QWidget *parent)
+	: QDialog(parent),
+          m_type(type),
           m_authDialog(new Ui_Dialog)
 {
     m_authDialog->setupUi(this);
@@ -51,9 +52,9 @@ LoginWindow::~LoginWindow()
 void LoginWindow::loginService()
 {
     if (0 == m_authDialog->comboBox->currentIndex()) {
-        gdoc = new GoogleDocumentService();
+        gdoc = new GoogleDocumentService(m_type);
         showProgressIndicator(true);
-        m_authDialog->label->setText("Signing in...");
+        m_authDialog->headerLabel->setText("Signing in...");
         gdoc->clientLogin(m_authDialog->userEdit->text(), m_authDialog->passwordEdit->text());
         connect(gdoc, SIGNAL(userAuthenticated(bool, QString)), this, SLOT(authenticated(bool, QString)));
         connect(gdoc, SIGNAL(progressUpdate(QString)), this, SLOT(updateProgress(QString)));
@@ -63,15 +64,15 @@ void LoginWindow::loginService()
 
 void LoginWindow::serviceSelected(int index)
 {
-    if (index == 0) {
-        m_authDialog->documentBox->setVisible(true);
-        m_authDialog->presentationBox->setVisible(true);
-        m_authDialog->spreadsheetBox->setVisible(true);
-    } else if (index == 1) {
-        m_authDialog->documentBox->setVisible(false);
-        m_authDialog->presentationBox->setVisible(true);
-        m_authDialog->spreadsheetBox->setVisible(false);
-    }
+//    if (index == 0) {
+//        m_authDialog->documentBox->setVisible(true);
+//        m_authDialog->presentationBox->setVisible(true);
+//        m_authDialog->spreadsheetBox->setVisible(true);
+//    } else if (index == 1) {
+//        m_authDialog->documentBox->setVisible(false);
+//        m_authDialog->presentationBox->setVisible(true);
+//        m_authDialog->spreadsheetBox->setVisible(false);
+//    }
 }
 
 void LoginWindow::authenticated(bool success, QString errorString)
@@ -85,7 +86,7 @@ void LoginWindow::authenticated(bool success, QString errorString)
         if (!errorString.isEmpty()) {
             msg = msg + "- " + errorString;
         }
-        m_authDialog->label->setText(msg);
+        m_authDialog->headerLabel->setText(msg);
         showProgressIndicator(false);
     }
 }
@@ -97,5 +98,5 @@ void LoginWindow::showProgressIndicator(bool visible)
 
 void LoginWindow::updateProgress(QString msg)
 {
-    m_authDialog->label->setText(msg);
+    m_authDialog->headerLabel->setText(msg);
 }

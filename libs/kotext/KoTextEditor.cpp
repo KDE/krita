@@ -50,6 +50,7 @@
 #include "styles/KoTableCellStyle.h"
 #include "styles/KoTableColumnStyle.h"
 #include "styles/KoTableRowStyle.h"
+#include "styles/KoTableStyle.h"
 #include "KoTableColumnAndRowStyleManager.h"
 #include "commands/DeleteTableRowCommand.h"
 #include "commands/DeleteTableColumnCommand.h"
@@ -986,6 +987,7 @@ void KoTextEditor::insertTable(int rows, int columns)
     QTextTableFormat tableFormat;
 
     tableFormat.setWidth(QTextLength(QTextLength::PercentageLength, 100));
+    tableFormat.setProperty(KoTableStyle::CollapsingBorders, true);
     tableFormat.setMargin(5);
 
     KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
@@ -1224,6 +1226,41 @@ void KoTextEditor::adjustTableWidth(QTextTable *table, qreal dLeft, qreal dRight
         fmt.setRightMargin(fmt.rightMargin() + dRight);
     }
     table->setFormat(fmt);
+    d->caret.endEditBlock();
+    d->updateState(KoTextEditor::Private::NoOp);
+}
+
+void KoTextEditor::setTableBorderData(QTextTable *table, int row, int column,
+         KoBorder::Side cellSide, const KoBorder::BorderData &data)
+{
+    d->updateState(KoTextEditor::Private::Custom, i18n("Change Border Formatting"));
+    d->caret.beginEditBlock();
+    QTextTableCell cell = table->cellAt(row, column);
+    QTextCharFormat fmt = cell.format();
+    KoBorder border = fmt.property(KoTableCellStyle::Borders).value<KoBorder>();
+
+    switch (cellSide) {
+    case KoBorder::Top:
+        border.setTopBorderData(data);
+        break;
+    case KoBorder::Left:
+        border.setLeftBorderData(data);
+        break;
+    case KoBorder::Bottom:
+        border.setBottomBorderData(data);
+        break;
+    case KoBorder::Right:
+        border.setRightBorderData(data);
+        break;
+    case KoBorder::TopLeftToBottomRight:
+        border.setTlbrBorderData(data);
+        break;
+    case KoBorder::BottomLeftToTopRight:
+        border.setTrblBorderData(data);
+        break;
+    }
+    fmt.setProperty(KoTableCellStyle::Borders, QVariant::fromValue<KoBorder>(border));
+    cell.setFormat(fmt);
     d->caret.endEditBlock();
     d->updateState(KoTextEditor::Private::NoOp);
 }

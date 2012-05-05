@@ -5,7 +5,6 @@ RCFILES=`find . -name \*.rc                                                   \
 	| grep -v plugins/extensions/metadataeditor/editors/exif.rc
          `
 $EXTRACTRC $RCFILES >> rc.cpp
-$EXTRACTATTR --attr=collection,text --attr=collection,comment --attr=script,text --attr=script,comment plugins/extensions/scripting/scripts/*.rc >> rc.cpp || exit 12
 $EXTRACTATTR --attr=info,name plugins/colorspaces/ctlcs/ctlcolorspaces/*.ctlcs >> rc.cpp || exit 12
 perl extracti18n.pl > i18ndata
 # ignore sdk/templates since it contains templates for use a future plugins, none of the strings there will ever be seen by any user

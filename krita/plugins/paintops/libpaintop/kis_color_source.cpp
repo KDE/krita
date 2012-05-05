@@ -37,7 +37,6 @@ const KoColor& KisColorSource::uniformColor() const
 
 KisUniformColorSource::KisUniformColorSource() : m_color(0), m_cachedColor(0)
 {
-
 }
 
 KisUniformColorSource::~KisUniformColorSource()
@@ -93,7 +92,6 @@ bool KisUniformColorSource::isUniformColor() const
 
 KisPlainColorSource::KisPlainColorSource(const KoColor& backGroundColor, const KoColor& foreGroundColor) : m_backGroundColor(backGroundColor), m_foreGroundColor(foreGroundColor), m_cachedBackGroundColor(0)
 {
-
 }
 
 KisPlainColorSource::~KisPlainColorSource()
@@ -166,7 +164,6 @@ void KisUniformRandomColorSource::selectColor(double mix)
 
 KisTotalRandomColorSource::KisTotalRandomColorSource() : m_colorSpace(KoColorSpaceRegistry::instance()->rgb8())
 {
-
 }
 
 KisTotalRandomColorSource::~KisTotalRandomColorSource()
@@ -182,6 +179,7 @@ const KoColorSpace* KisTotalRandomColorSource::colorSpace() const
 {
     return m_colorSpace;
 }
+
 void KisTotalRandomColorSource::colorize(KisPaintDeviceSP dev, const QRect& rect, const QPoint&) const
 {
     KoColor kc(dev->colorSpace());
@@ -213,7 +211,10 @@ void KisTotalRandomColorSource::resize(double , double) {}
 
 
 
-KisPatternColorSource::KisPatternColorSource(KisPaintDeviceSP _pattern, int _width, int _height, bool _locked) : m_device(_pattern), m_bounds(QRect(0, 0, _width, _height)), m_locked(_locked)
+KisPatternColorSource::KisPatternColorSource(KisPaintDeviceSP _pattern, int _width, int _height, bool _locked)
+    : m_device(_pattern)
+    , m_bounds(QRect(0, 0, _width, _height))
+    , m_locked(_locked)
 {
 }
 
@@ -246,7 +247,8 @@ void KisPatternColorSource::colorize(KisPaintDeviceSP device, const QRect& rect,
         int x = offset.x() % m_bounds.width();
         int y = offset.y() % m_bounds.height();
         
-        // Change the position, because the pattern is always applied starting from (0,0) in the paint device reference
+        // Change the position, because the pattern is always applied starting
+        // from (0,0) in the paint device reference
         device->setX(x);
         device->setY(y);
         painter.fillRect(rect.x() + x, rect.y() + y, rect.width(), rect.height(), m_device, m_bounds);

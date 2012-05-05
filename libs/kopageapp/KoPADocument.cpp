@@ -20,6 +20,8 @@
 
 #include "KoPADocument.h"
 
+#include <QPainter>
+
 #include <KoStore.h>
 #include <KoDocumentResourceManager.h>
 #include <KoXmlWriter.h>
@@ -39,7 +41,6 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoStyleManager.h>
 #include <KoPathShape.h>
-#include <KoLineBorder.h>
 #include <KoXmlNS.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
@@ -439,7 +440,7 @@ void KoPADocument::loadOdfSettings(  const KoXmlDocument & settingsDoc )
     KoOasisSettings settings( settingsDoc );
     KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
     if ( !viewSettings.isNull() ) {
-        setUnit( KoUnit::unit( viewSettings.parseConfigItemString( "unit" ) ) );
+        setUnit(KoUnit::fromSymbol(viewSettings.parseConfigItemString("unit")));
         // FIXME: add other config here.
     }
 

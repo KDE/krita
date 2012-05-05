@@ -70,8 +70,6 @@ ImageSize::ImageSize(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {
-        setComponentData(ImageSizeFactory::componentData());
-
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/imagesize.rc"), true);
 
         KAction *action  = new KAction(i18n("Scale To New Size..."), this);

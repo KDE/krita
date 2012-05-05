@@ -49,11 +49,14 @@ public slots:
     void setCharacterStyle(KoCharacterStyle *style, bool canDelete = false);
 
 private slots:
+    void styleChanged(bool state = true);
     void addParagraphStyle(KoParagraphStyle*);
     void addCharacterStyle(KoCharacterStyle*);
     void removeParagraphStyle(KoParagraphStyle*);
     void removeCharacterStyle(KoCharacterStyle*);
     void slotStyleSelected(QModelIndex index);
+    void buttonNewPressed();
+    void tabChanged(int index);
 
 private:
     Ui::StyleManager widget;
@@ -69,6 +72,8 @@ private:
     KoCharacterStyle *m_selectedCharStyle;
 
     bool m_blockSignals;
+    bool m_blockStyleChangeSignals;
+    bool m_styleChanged;
 };
 
 #endif

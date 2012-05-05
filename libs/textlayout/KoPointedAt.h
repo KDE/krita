@@ -47,13 +47,14 @@ public:
     int position;
     KoBookmark *bookmark;
     QString externalHRef;
+    QTextTable *table;
     TableHit tableHit;
     int tableRowDivider;
     int tableColumnDivider;
     qreal tableLeadSize;
     qreal tableTrailSize;
     QPointF tableDividerPos;
-    QTextTable *table;
+
 };
 
 #endif

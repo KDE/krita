@@ -24,7 +24,7 @@
 #include "StylePreview.h"
 
 #include <KoPathShape.h>
-#include <KoShapeBorderModel.h>
+#include <KoShapeStrokeModel.h>
 #include <KoZoomHandler.h>
 #include <KoGradientBackground.h>
 
@@ -138,7 +138,7 @@ bool StylePreview::eventFilter(QObject *, QEvent *event)
     return false;
 }
 
-void StylePreview::update(KoShapeBorderModel * stroke, KoShapeBackground * fill)
+void StylePreview::update(KoShapeStrokeModel * stroke, KoShapeBackground * fill)
 {
     bool updateNeeded = false;
     if (fill != m_fill) {
@@ -251,7 +251,7 @@ void StylePreview::drawFill(QPainter & painter, const KoShapeBackground * fill)
 }
 
 
-void StylePreview::drawStroke(QPainter & painter, const KoShapeBorderModel * stroke)
+void StylePreview::drawStroke(QPainter & painter, const KoShapeStrokeModel * stroke)
 {
     painter.save();
 
@@ -274,11 +274,11 @@ void StylePreview::drawStroke(QPainter & painter, const KoShapeBorderModel * str
         path.lineTo(middleRect.topRight());
         path.close();
 
-        KoShapeBorderModel * border = const_cast<KoShapeBorderModel *>(stroke);
+        KoShapeStrokeModel * stroke2 = const_cast<KoShapeStrokeModel *>(stroke);
         painter.save();
         painter.setRenderHint(QPainter::Antialiasing, true);
         painter.setClipRegion(clipRegion);
-        border->paint(&path, painter, zoomHandler);
+        stroke2->paint(&path, painter, zoomHandler);
         painter.restore();
     }
     else {

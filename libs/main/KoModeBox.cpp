@@ -256,7 +256,7 @@ void KoModeBox::setOptionWidgets(const QList<QWidget *> &optionWidgetList)
         if (widget != optionWidgetList.last()) {
             QFrame *s;
             layout->addWidget(s = new QFrame(), cnt++, 2, 1, 1);
-            s->setFrameShape(QFrame::HLine);
+            s->setFrameStyle(QFrame::HLine | QFrame::Sunken);
             d->currentAuxWidgets.insert(s);
         }
     }

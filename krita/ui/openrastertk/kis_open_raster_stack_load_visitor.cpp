@@ -43,6 +43,7 @@
 
 struct KisOpenRasterStackLoadVisitor::Private {
     KisImageWSP image;
+    vKisNodeSP activeNodes;
     KisDoc2* doc;
     KisOpenRasterLoadContext* loadContext;
 };
@@ -62,6 +63,11 @@ KisOpenRasterStackLoadVisitor::~KisOpenRasterStackLoadVisitor()
 KisImageWSP KisOpenRasterStackLoadVisitor::image()
 {
     return d->image;
+}
+
+vKisNodeSP KisOpenRasterStackLoadVisitor::activeNodes()
+{
+    return d->activeNodes;
 }
 
 void KisOpenRasterStackLoadVisitor::loadImage()
@@ -99,7 +105,7 @@ void KisOpenRasterStackLoadVisitor::loadImage()
     }
 }
 
-void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLayer* layer)
+void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLayerSP layer)
 {
     layer->setName(elem.attribute("name"));
     layer->setX(elem.attribute("x").toInt());
@@ -110,7 +116,10 @@ void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLa
         layer->setVisible(true);
     }
     if (elem.hasAttribute("edit-locked")) {
-        layer->setUserLocked(true);
+        layer->setUserLocked(elem.attribute("edit-locked") == "true");
+    }
+    if (elem.hasAttribute("selected") && elem.attribute("selected") == "true") {
+        d->activeNodes.append(layer);
     }
 
     QString compop = elem.attribute("composite-op");
@@ -134,16 +143,17 @@ void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLa
         layer->setCompositeOp(compop);
     }
 
+
 }
 
 void KisOpenRasterStackLoadVisitor::loadAdjustmentLayer(const QDomElement& elem, KisAdjustmentLayerSP aL)
 {
-    loadLayerInfo(elem, aL.data());
+    loadLayerInfo(elem, aL);
 }
 
 void KisOpenRasterStackLoadVisitor::loadPaintLayer(const QDomElement& elem, KisPaintLayerSP pL)
 {
-    loadLayerInfo(elem, pL.data());
+    loadLayerInfo(elem, pL);
 
     dbgFile << "Loading was unsuccessful";
 }
@@ -152,7 +162,7 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
 {
     dbgFile << "Loading group layer";
     QLocale c(QLocale::German);
-    loadLayerInfo(elem, gL.data());
+    loadLayerInfo(elem, gL);
     for (QDomNode node = elem.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement()) {
             QDomElement subelem = node.toElement();

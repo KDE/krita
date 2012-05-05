@@ -56,8 +56,6 @@ ShearImage::ShearImage(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {
-        setComponentData(ShearImageFactory::componentData());
-
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/shearimage.rc"),
                    true);
 

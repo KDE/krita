@@ -330,7 +330,7 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
         if (srcRect.isEmpty()) return;
 
         // Readjust the function paramenters to the new dimensions.
-        dstX += srcRect.x() - srcX;    // This will only add, not substract
+        dstX += srcRect.x() - srcX;    // This will only add, not subtract
         dstY += srcRect.y() - srcY;    // Idem
         srcX = srcRect.x();
         srcY = srcRect.y();
@@ -450,7 +450,7 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
             if (srcRect.isEmpty()) return;
 
             // Readjust the function paramenters to the new dimensions.
-            dstX += srcRect.x() - srcX;    // This will only add, not substract
+            dstX += srcRect.x() - srcX;    // This will only add, not subtract
             dstY += srcRect.y() - srcY;    // Idem
             srcX = srcRect.x();
             srcY = srcRect.y();

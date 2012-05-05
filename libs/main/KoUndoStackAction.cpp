@@ -22,6 +22,7 @@
 
 #include <kundo2stack.h>
 #include <klocale.h>
+#include <kicon.h>
 #include <kstandardshortcut.h>
 
 KoUndoStackAction::KoUndoStackAction(KUndo2Stack* stack, Type type)

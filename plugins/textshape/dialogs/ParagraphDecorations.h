@@ -38,6 +38,7 @@ public:
 
 signals:
     void backgroundColorChanged(const QColor&);
+    void parStyleChanged();
 
 private slots:
     void clearBackgroundColor();

@@ -269,11 +269,11 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
         p.setRenderHint(QPainter::Antialiasing);
 
     // Draw curve.
-    double prevY = wHeight - d->m_curve.value(0.) * wHeight;
-    double prevX = 0.;
     double curY;
     double normalizedX;
     int x;
+
+    QPolygonF poly;
 
     p.setPen(QPen(Qt::black, 1, Qt::SolidLine));
     for (x = 0 ; x < wWidth ; x++) {
@@ -285,13 +285,10 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
          * to ints mathematically, not just rounds down
          * like in C
          */
-        p.drawLine(QLineF(prevX, prevY,
-                          x, curY));
-        prevX = x;
-        prevY = curY;
+        poly.append(QPointF(x, curY));
     }
-    p.drawLine(QLineF(prevX, prevY ,
-                      x, wHeight - d->m_curve.value(1.0) * wHeight));
+    poly.append(QPointF(x, wHeight - d->m_curve.value(1.0) * wHeight));
+    p.drawPolyline(poly);
 
     // Drawing curve handles.
     double curveX;

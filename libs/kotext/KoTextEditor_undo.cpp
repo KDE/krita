@@ -94,9 +94,7 @@ void KoTextEditor::Private::documentCommandAdded()
             QTextDocument *doc = m_document.data();
             if (doc == 0)
                 return;
-            KoTextDocument(doc).textEditor()->cursor()->beginEditBlock(); //These are needed to get around a Qt bug in 4.8. A change through a QTextCursor outside an editBlock will crash (cursor position calculation on non layed out doc).
             doc->undo(KoTextDocument(doc).textEditor()->cursor());
-            KoTextDocument(doc).textEditor()->cursor()->endEditBlock();
             m_p->emitTextFormatChanged();
         }
 
@@ -104,9 +102,7 @@ void KoTextEditor::Private::documentCommandAdded()
             QTextDocument *doc = m_document.data();
             if (doc == 0)
                 return;
-            KoTextDocument(doc).textEditor()->cursor()->beginEditBlock(); //Same as above
             doc->redo(KoTextDocument(doc).textEditor()->cursor());
-            KoTextDocument(doc).textEditor()->cursor()->endEditBlock();
             m_p->emitTextFormatChanged();
         }
 

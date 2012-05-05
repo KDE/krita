@@ -39,7 +39,7 @@ class CHARTSHAPELIB_EXPORT Legend : public QObject, public KoShape
     Q_OBJECT
 
 public:
-    Legend( ChartShape *parent );
+    Legend(ChartShape *parent);
     ~Legend();
 
     QString title() const;
@@ -57,27 +57,27 @@ public:
     Qt::Alignment alignment() const;
     Position legendPosition() const;
 
-    void setTitle( const QString &title );
-    void setShowFrame( bool show );
-    void setFramePen( const QPen &pen );
-    void setFrameColor( const QColor &color );
-    void setBackgroundBrush( const QBrush &brush );
-    void setBackgroundColor( const QColor &color );
-    void setFont( const QFont &font );
-    void setFontSize( qreal size );
-    void setFontColor( const QColor &color );
-    void setTitleFont( const QFont &font );
-    void setTitleFontSize( qreal size );
-    void setExpansion( LegendExpansion expansion );
-    void setAlignment( Qt::Alignment alignment );
-    void setLegendPosition( Position position );
-    void setSize( const QSizeF &size );
+    void setTitle(const QString &title);
+    void setShowFrame(bool show);
+    void setFramePen(const QPen &pen);
+    void setFrameColor(const QColor &color);
+    void setBackgroundBrush(const QBrush &brush);
+    void setBackgroundColor(const QColor &color);
+    void setFont(const QFont &font);
+    void setFontSize(qreal size);
+    void setFontColor(const QColor &color);
+    void setTitleFont(const QFont &font);
+    void setTitleFontSize(qreal size);
+    void setExpansion(LegendExpansion expansion);
+    void setAlignment(Qt::Alignment alignment);
+    void setLegendPosition(Position position);
+    void setSize(const QSizeF &size);
 
-    void paint( QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
-    void paintPixmap( QPainter &painter, const KoViewConverter &converter );
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
+    void paintPixmap(QPainter &painter, const KoViewConverter &converter);
 
-    bool loadOdf( const KoXmlElement &legendElement, KoShapeLoadingContext &context );
-    void saveOdf( KoShapeSavingContext &context ) const;
+    bool loadOdf(const KoXmlElement &legendElement, KoShapeLoadingContext &context);
+    void saveOdf(KoShapeSavingContext &context) const;
 
     KDChart::Legend *kdLegend() const;
 
@@ -86,7 +86,7 @@ public:
     void update() const;
 
 private slots:
-    void slotChartTypeChanged( ChartType chartType );
+    void slotChartTypeChanged(ChartType chartType );
     void slotKdLegendChanged();
 
 private:

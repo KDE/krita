@@ -219,10 +219,11 @@ KoStore::~KoStore()
 KUrl KoStore::urlOfStore() const
 {
     Q_D(const KoStore);
-    if (d->fileMode == KoStorePrivate::RemoteRead || d->fileMode == KoStorePrivate::RemoteWrite)
+    if (d->fileMode == KoStorePrivate::RemoteRead || d->fileMode == KoStorePrivate::RemoteWrite) {
         return d->url;
-    else
+    } else {
         return KUrl(d->localFileName);
+    }
 }
 
 bool KoStore::open(const QString & _name)

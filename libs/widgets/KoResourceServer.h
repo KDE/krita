@@ -169,7 +169,7 @@ public:
 
 
     /// Adds an already loaded resource to the server
-    bool addResource(T* resource, bool save = true) {
+    bool addResource(T* resource, bool save = true, bool infront = false) {
         if (!resource->valid()) {
             kWarning(30009) << "Tried to add an invalid resource!";
             return false;
@@ -201,7 +201,12 @@ public:
 
         m_resourcesByFilename[resource->shortFilename()] = resource;
         m_resourcesByName[resource->name()] = resource;
-        m_resources.append(resource);
+        if (infront) {
+            m_resources.insert(0, resource);
+        }
+        else {
+            m_resources.append(resource);
+        }
 
         notifyResourceAdded(resource);
 

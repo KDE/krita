@@ -20,7 +20,7 @@
 
 #include <QPixmap>
 #include <QPainter>
-#include <QIcon>
+#include <KIcon>
 #include <QMouseEvent>
 
 namespace {

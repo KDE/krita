@@ -22,16 +22,18 @@
 class RulerTabChooser : public QWidget
 {
 public:
-    RulerTabChooser(QWidget *parent) : QWidget(parent), m_type(QTextOption::LeftTab) {}
+    RulerTabChooser(QWidget *parent) : QWidget(parent), m_type(QTextOption::LeftTab), m_showTabs(false) {}
     virtual ~RulerTabChooser() {}
 
     inline QTextOption::TabType type() {return m_type;}
+    void setShowTabs(bool showTabs) { if (m_showTabs == showTabs) return; m_showTabs = showTabs; update(); }
     void mousePressEvent(QMouseEvent *);
 
     void paintEvent(QPaintEvent *);
 
 private:
     QTextOption::TabType m_type;
+    bool m_showTabs :1;
 };
 
 class PaintingStrategy

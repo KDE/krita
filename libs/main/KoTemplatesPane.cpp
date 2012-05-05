@@ -24,6 +24,7 @@
 
 #include <QStandardItemModel>
 #include <kcomponentdata.h>
+#include <kurl.h>
 
 class KoTemplatesPanePrivate
 {

@@ -44,13 +44,14 @@ public:
 
     void switchToGeneralTab();
     void hideStyleName(bool hide);
+    bool isStyleChanged();
 
 public slots:
     void save(KoParagraphStyle *style = 0);
 
 signals:
     void nameChanged(const QString &name);
-    void styleAltered(const KoParagraphStyle *style);
+    void styleAltered(const KoParagraphStyle *style); /// when saving
 
 private slots:
     void setName(const QString &name);

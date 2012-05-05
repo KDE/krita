@@ -185,8 +185,6 @@ public:
     QString bibliographyType;
 };
 
-Q_DECLARE_METATYPE(KoBibliographyInfo *);
-Q_DECLARE_METATYPE(KoTableOfContentsGeneratorInfo *);
 Q_DECLARE_METATYPE(QTextDocument *);
 Q_DECLARE_METATYPE(IndexEntry::IndexEntryName);
 #endif // TOCBIBGENERATORINFO_H

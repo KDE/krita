@@ -54,6 +54,11 @@ KisSaveXmlVisitor::KisSaveXmlVisitor(QDomDocument doc, const QDomElement & eleme
     m_elem = element;
 }
 
+void KisSaveXmlVisitor::setSelectedNodes(vKisNodeSP selectedNodes)
+{
+    m_selectedNodes = selectedNodes;
+}
+
 bool KisSaveXmlVisitor::visit(KisExternalLayer * layer)
 {
     if (layer->inherits("KisShapeLayer")) {
@@ -103,6 +108,7 @@ bool KisSaveXmlVisitor::visit(KisGroupLayer *layer)
     Q_ASSERT(!layerElement.isNull());
     layerElement.appendChild(elem);
     KisSaveXmlVisitor visitor(m_doc, elem, m_count);
+    visitor.setSelectedNodes(m_selectedNodes);
     m_count++;
     bool success = visitor.visitAllInverse(layer);
 
@@ -208,6 +214,13 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
     el.setAttribute(Y, layer->y());
     el.setAttribute(UUID, layer->uuid().toString());
 
+    foreach (KisNodeSP node, m_selectedNodes) {
+        if (node.data() == layer) {
+            el.setAttribute("selected", "true");
+            break;
+        }
+    }
+
     m_nodeFileNames[layer] = LAYER + QString::number(m_count);
 
     dbgFile << "Saved layer "
@@ -242,6 +255,7 @@ bool KisSaveXmlVisitor::saveMasks(KisNode * node, QDomElement & layerElement)
         Q_ASSERT(!layerElement.isNull());
         layerElement.appendChild(elem);
         KisSaveXmlVisitor visitor(m_doc, elem, m_count);
+        visitor.setSelectedNodes(m_selectedNodes);
         bool success =  visitor.visitAllInverse(node);
 
         QMapIterator<const KisNode*, QString> i(visitor.nodeFileNames());

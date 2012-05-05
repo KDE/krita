@@ -41,10 +41,10 @@ using namespace KDChart;
 
 ChartTypeCommand::ChartTypeCommand(ChartShape* chart)
     : m_chart(chart)
-    , m_oldType( BarChartType )
-    , m_newType( BarChartType )
-    , m_oldSubtype( NormalChartSubtype )
-    , m_newSubtype( NormalChartSubtype )
+    , m_oldType(BarChartType)
+    , m_newType(BarChartType)
+    , m_oldSubtype(NormalChartSubtype)
+    , m_newSubtype(NormalChartSubtype)
 {
 }
 
@@ -59,22 +59,22 @@ void ChartTypeCommand::redo()
    // save the old type
     m_oldType    = m_chart->chartType();
     m_oldSubtype = m_chart->chartSubType();
-    if ( m_oldType == m_newType && m_oldSubtype == m_newSubtype )
+    if (m_oldType == m_newType && m_oldSubtype == m_newSubtype)
         return;
 
     // Actually do the work
-    m_chart->setChartType( m_newType );
-    m_chart->setChartSubType( m_newSubtype );
+    m_chart->setChartType(m_newType);
+    m_chart->setChartSubType(m_newSubtype);
 }
 
 void ChartTypeCommand::undo()
 {
-    if ( m_oldType == m_newType && m_oldSubtype == m_newSubtype )
+    if (m_oldType == m_newType && m_oldSubtype == m_newSubtype)
         return;
 
     //kDebug(35001) << m_oldType;
-    m_chart->setChartType( m_oldType );
-    m_chart->setChartSubType( m_oldSubtype );
+    m_chart->setChartType(m_oldType);
+    m_chart->setChartSubType(m_oldSubtype);
 }
 
 

@@ -15,6 +15,9 @@
      <property name="text" >
       <string>Path:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
    </item>
    <item row="0" column="1" colspan="2" >
@@ -36,6 +39,9 @@
      <property name="text" >
       <string>Title:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
      <property name="buddy" >
       <cstring>leTitle</cstring>
      </property>
@@ -49,6 +55,9 @@
      <property name="text" >
       <string>Subject:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
      <property name="buddy" >
       <cstring>leSubject</cstring>
      </property>
@@ -61,6 +70,9 @@
     <widget class="QLabel" name="lblKeywordsDesc" >
      <property name="text" >
       <string>Keywords:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="buddy" >
       <cstring>leKeywords</cstring>
@@ -80,7 +92,7 @@
       <string>Comments:</string>
      </property>
      <property name="alignment" >
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+      <set>Qt::AlignLeading|Qt::AlignRight|Qt::AlignTop</set>
      </property>
      <property name="buddy" >
       <cstring>meComments</cstring>
@@ -99,11 +111,8 @@
    </item>
    <item row="7" column="0" >
     <widget class="QLabel" name="lblTypeDesc" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="text" >
       <string>Type:</string>
@@ -119,14 +128,11 @@
    </item>
    <item row="8" column="0" >
     <widget class="QLabel" name="lblCreatedDesc" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="text" >
       <string>Created:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
@@ -139,14 +145,11 @@
    </item>
    <item row="9" column="0" >
     <widget class="QLabel" name="lblModifiedDesc" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="text" >
       <string>Modified:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
@@ -159,14 +162,11 @@
    </item>
    <item row="10" column="0" >
     <widget class="QLabel" name="lblLastPrintedDesc" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="text" >
       <string>Last printed:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
@@ -179,14 +179,11 @@
    </item>
    <item row="11" column="0" >
     <widget class="QLabel" name="lblEditingDesc" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="text" >
       <string>Total editing time:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="buddy" >
       <cstring>pbReset</cstring>
@@ -218,14 +215,11 @@
    </item>
    <item row="12" column="0" >
     <widget class="QLabel" name="lblRevisionDesc" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="text" >
       <string>Revision number:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
@@ -240,6 +234,9 @@
     <widget class="QLabel" name="lblEncryptedDesc" >
      <property name="text" >
       <string>Encryption:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>

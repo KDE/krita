@@ -22,7 +22,7 @@
 #define SVGGRAPHICCONTEXT_H
 
 #include "flake_export.h"
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 
 class FLAKE_EXPORT SvgGraphicsContext
 {
@@ -36,14 +36,14 @@ public:
 
     SvgGraphicsContext();
 
-    StyleType    fillType;  ///< the current fill type
-    Qt::FillRule fillRule;  ///< the current fill rule
-    QColor       fillColor; ///< the current fill color
-    QString      fillId;    ///< the current fill id (used for gradient/pattern fills)
+    StyleType     fillType;  ///< the current fill type
+    Qt::FillRule  fillRule;  ///< the current fill rule
+    QColor        fillColor; ///< the current fill color
+    QString       fillId;    ///< the current fill id (used for gradient/pattern fills)
 
-    StyleType    strokeType;///< the current stroke type
-    QString      strokeId;  ///< the current stroke id (used for gradient strokes)
-    KoLineBorder stroke;    ///< the current stroke
+    StyleType     strokeType;///< the current stroke type
+    QString       strokeId;  ///< the current stroke id (used for gradient strokes)
+    KoShapeStroke stroke;    ///< the current stroke
 
     QString filterId;       ///< the current filter id
     QString clipPathId;     ///< the current clip path id

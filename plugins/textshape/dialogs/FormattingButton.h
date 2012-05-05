@@ -38,9 +38,10 @@ public:
     FormattingButton(QWidget *parent = 0 );
 
     void setNumColumns(int columns);
-
-    void addItem(QPixmap pm, int id);
+    void setItemsBackground(const QColor &color);
+    void addItem(QPixmap pm, int id, QString toolTip= QString());
     void addAction(QAction *action);
+    void addBlanks(int n);
     void addSeparator();
     bool hasItemId(int id);
     bool isFirstTimeMenuShown();

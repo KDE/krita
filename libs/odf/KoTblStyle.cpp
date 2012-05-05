@@ -70,14 +70,14 @@ namespace {
     public:
         WritingModeMap()
         {
-            insert(KoTblStyle::LrTbWrittingMode, "lr-tb");
-            insert(KoTblStyle::RlTbWrittingMode, "rl-tb");
-            insert(KoTblStyle::TbRlWrittingMode, "tb-rl");
-            insert(KoTblStyle::TbLrWrittingMode, "tb-lr");
-            insert(KoTblStyle::LrWrittingMode, "lr");
-            insert(KoTblStyle::RlWrittingMode, "rl");
-            insert(KoTblStyle::TbWrittingMode, "tb");
-            insert(KoTblStyle::PageWrittingMode, "page");
+            insert(KoTblStyle::LrTbWritingMode, "lr-tb");
+            insert(KoTblStyle::RlTbWritingMode, "rl-tb");
+            insert(KoTblStyle::TbRlWritingMode, "tb-rl");
+            insert(KoTblStyle::TbLrWritingMode, "tb-lr");
+            insert(KoTblStyle::LrWritingMode, "lr");
+            insert(KoTblStyle::RlWritingMode, "rl");
+            insert(KoTblStyle::TbWritingMode, "tb");
+            insert(KoTblStyle::PageWritingMode, "page");
         }
     } writingModeMap;
 
@@ -86,22 +86,22 @@ namespace {
 }
 
 KoTblStyle::KoTblStyle()
-: KoStyle()
-, m_backgroundColor()
-, m_breakAfter(NoBreak)
-, m_breakBefore(NoBreak)
-, m_allowBreakBetweenRows(false)
-, m_leftMargin(0.0)
-, m_topMargin(0.0)
-, m_rightMargin(0.0)
-, m_bottomMargin(0.0)
-, m_width(0.0)
-, m_widthUnit(PointsUnit)
-, m_horizontalAlign(LeftAlign)
-, m_borderModel(CollapsingModel)
-, m_keepWithNext(AutoKeepWithNext)
-, m_writingMode(PageWrittingMode)
-, m_display(true)
+  : KoStyle()
+  , m_backgroundColor()
+  , m_breakAfter(NoBreak)
+  , m_breakBefore(NoBreak)
+  , m_allowBreakBetweenRows(false)
+  , m_leftMargin(0.0)
+  , m_topMargin(0.0)
+  , m_rightMargin(0.0)
+  , m_bottomMargin(0.0)
+  , m_width(0.0)
+  , m_widthUnit(PointsUnit)
+  , m_horizontalAlign(LeftAlign)
+  , m_borderModel(CollapsingModel)
+  , m_keepWithNext(AutoKeepWithNext)
+  , m_writingMode(PageWritingMode)
+  , m_display(true)
 {
 }
 

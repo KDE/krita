@@ -19,19 +19,10 @@
 
 #include "KoMarkerModel.h"
 
-#include <KoXmlReader.h>
-#include <KoXmlNS.h>
-#include <KoOdfStylesReader.h>
-#include <KoOdfLoadingContext.h>
-#include <KoShapeLoadingContext.h>
-#include <KoPathShape.h>
-
+// Calligra
 #include <KoMarker.h>
-
-#include <QBuffer>
-#include <QPointF>
+// Qt
 #include <QSize>
-#include <QList>
 
 
 KoMarkerModel::KoMarkerModel(const QList<KoMarker*> markers, KoMarkerData::MarkerPosition position, QObject *parent)
@@ -60,11 +51,7 @@ QVariant KoMarkerModel::data(const QModelIndex &index, int role) const
     switch(role) {
     case Qt::DecorationRole:
         if (index.row() < m_markers.size()) {
-            KoPathShape *pathShape = new KoPathShape();
-            pathShape->moveTo(QPointF(10, 15));
-            pathShape->lineTo(QPointF(70, 15));
-            pathShape->setMarker(m_markers.at(index.row()), m_markerPosition);
-            return QVariant::fromValue<KoPathShape*>(pathShape);
+            return QVariant::fromValue<KoMarker*>(m_markers.at(index.row()));
         }
         return QVariant();
     case Qt::SizeHintRole:

@@ -190,7 +190,7 @@ void KisLayer::disableAlphaChannel(bool disable)
 {
     if(m_d->channelFlags.isEmpty())
         m_d->channelFlags = colorSpace()->channelFlags(true, true);
-    
+
     if(disable)
         m_d->channelFlags &= colorSpace()->channelFlags(true, false);
     else

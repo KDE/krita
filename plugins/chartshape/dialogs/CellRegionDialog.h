@@ -30,7 +30,7 @@ namespace KChart {
 class CellRegionDialog : public QDialog, public Ui::CellRegionDialog
 {
 public:
-    CellRegionDialog( QWidget *parent = 0 );
+    CellRegionDialog(QWidget *parent = 0);
     ~CellRegionDialog();
 };
 

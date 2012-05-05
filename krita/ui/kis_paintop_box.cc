@@ -149,6 +149,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
         slSize->setRange(0.0, 1000.0, 2);
         slSize->setValue(100.0);
         slSize->setSingleStep(0.05);
+        slSize->setExponentRatio(3.0);
         slSize->setMinimumWidth(120);
     }
     
@@ -157,8 +158,13 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
 
     QLabel* labelMode = new QLabel(i18n("Mode: "), this);
     labelMode->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
-    m_cmbCompositeOp  = new KisCompositeOpComboBox();
-    m_paletteButton   = new QPushButton(i18n("Save to Palette"));
+
+    m_cmbCompositeOp = new KisCompositeOpComboBox();
+    m_cmbCompositeOp->setFixedHeight(30);
+
+    m_paletteButton = new QPushButton(i18n("Save to Palette"));
+    m_paletteButton->setFixedHeight(30);
+
     m_workspaceWidget = new KisPopupButton(view);
     m_workspaceWidget->setIcon(KIcon("document-multiple"));
     m_workspaceWidget->setToolTip(i18n("Choose workspace"));

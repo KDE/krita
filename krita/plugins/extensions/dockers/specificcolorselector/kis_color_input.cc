@@ -225,6 +225,7 @@ void KisHexColorInput::setValue()
     valueString.remove(QChar('#'));
 
     QList<KoChannelInfo*> channels = m_color->colorSpace()->channels();
+    channels = KoChannelInfo::displayOrderSorted(channels);
     foreach(KoChannelInfo* channel, channels) {
         if (channel->channelType() == KoChannelInfo::COLOR) {
             Q_ASSERT(channel->channelValueType() == KoChannelInfo::UINT8);
@@ -243,6 +244,7 @@ void KisHexColorInput::update()
     QString hexString("#");
 
     QList<KoChannelInfo*> channels = m_color->colorSpace()->channels();
+    channels = KoChannelInfo::displayOrderSorted(channels);
     foreach(KoChannelInfo* channel, channels) {
         if (channel->channelType() == KoChannelInfo::COLOR) {
             Q_ASSERT(channel->channelValueType() == KoChannelInfo::UINT8);

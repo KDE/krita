@@ -327,7 +327,7 @@ QString formatFraction(qreal value, const QString &format)
 
 }
 
-QString formatPercent(const QString &value, const QString &format, int precision)
+QString formatPercent(const QString &value, const QString &/*format*/, int precision)
 {
     if (value.contains('.')) {
         bool ok;

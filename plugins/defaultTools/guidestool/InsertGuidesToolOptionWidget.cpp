@@ -19,6 +19,8 @@
 
 #include "InsertGuidesToolOptionWidget.h"
 
+#include <KIcon>
+
 InsertGuidesToolOptionWidget::InsertGuidesToolOptionWidget(QWidget *parent)
     : QWidget(parent)
 {

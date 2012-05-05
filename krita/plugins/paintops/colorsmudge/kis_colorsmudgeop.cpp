@@ -203,7 +203,7 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     }
     
     // if the user selected the color smudge option
-    // we will mix some color into the temorary painting device (m_tempDev)
+    // we will mix some color into the temporary painting device (m_tempDev)
     if(m_colorRateOption.isChecked()) {
         // this will apply the opacy (selected by the user) to copyPainter
         // (but fit the rate inbetween the range 0.0 to (1.0-SmudgeRate))

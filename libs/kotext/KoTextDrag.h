@@ -58,21 +58,14 @@ public:
     void setData(const QString & mimeType, const QByteArray & data);
 
     /**
-     * Add the the mimeData to the clipboard
-     */
-    void addToClipboard();
-
-    /**
      * Get the mime data
      *
      * This transfers the ownership of the mimeData to the caller
-     *
-     * This function is for use in automated tests
      */
-    QMimeData * mimeData();
+    QMimeData *mimeData();
 
 private:
-    QMimeData * m_mimeData;
+    QMimeData *m_mimeData;
 };
 
 #endif /* KOTEXTDRAG_H */

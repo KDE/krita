@@ -162,7 +162,7 @@ public slots:
     /// The recording is automatically terminated when another command is added, which as mentioned
     /// can happen by executing some of the KoTextEditor methods.
     void addCommand(KUndo2Command *command);
-    
+
     /// This instantly "redo" the command thus placing all the text manipulation the "redo" does
     /// (should be implemented with a "first redo" pattern) in the qt text systems internal
     /// undostack while also adding representative subcommands to \ref command.
@@ -440,6 +440,8 @@ public slots:
     bool movePosition(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor, int n = 1);
 
     void newLine();
+
+    bool isWithinSelection(int position) const;
 
     int position() const;
 

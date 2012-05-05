@@ -49,7 +49,6 @@
 #include "kis_filter_strategy.h"
 #include "kis_group_layer.h"
 #include "commands/kis_image_commands.h"
-#include "kis_iterators_pixel.h"
 #include "kis_layer.h"
 #include "kis_meta_data_merge_strategy_registry.h"
 #include "kis_name_server.h"

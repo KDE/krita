@@ -23,10 +23,11 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 
-#include "kis_types.h"
-#include "kis_image.h"
-#include "kis_paint_layer.h"
-#include "kis_fill_painter.h"
+#include <kis_types.h>
+#include <kis_image.h>
+#include <kis_paint_layer.h>
+#include <kis_fill_painter.h>
+#include <kis_iterator_ng.h>
 
 void KisProjectionTest::testDirty()
 {
@@ -47,13 +48,12 @@ void KisProjectionTest::testDirty()
     QTest::qSleep(250);
 
     // Check that the projection is totally redistribute
-    KisRectConstIteratorPixel iter = image->projection()->createRectConstIterator(0, 0, 1000, 1000);
-    while (!iter.isDone()) {
+    KisRectConstIteratorSP it = image->projection()->createRectConstIteratorNG(0, 0, 1000, 1000);
+    do {
         QColor c;
-        image->colorSpace()->toQColor(iter.rawData(), &c, image->profile());
+        image->colorSpace()->toQColor(it->oldRawData(), &c, image->profile());
         QVERIFY(c == Qt::red);
-        ++iter;
-    }
+    } while (it->nextPixel());
 }
 
 QTEST_KDEMAIN(KisProjectionTest, NoGUI)

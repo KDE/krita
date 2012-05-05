@@ -154,7 +154,7 @@ void KisDoc2Test::testUndoRedoNotify()
 void KisDoc2Test::testOpenImageTwiceInSameDoc()
 {
     QString fname2 = QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra";
-    QString fname = KisFactory2::componentData().dirs()->findResource("kis_images", "krita_first_start.kra");
+    QString fname = QString(FILES_DATA_DIR) + QDir::separator() + "load_test2.kra";
 
 
     Q_ASSERT(!fname.isEmpty());

@@ -27,6 +27,7 @@
 #include "kis_layer.h"
 #include "kis_transaction.h"
 #include "kis_paint_layer.h"
+#include <kis_iterator_ng.h>
 
 #include "kis_threaded_applicator.h"
 #include "testutil.h"
@@ -49,23 +50,19 @@ public:
         QRect rc = m_rc;
 
         {
-            KisRectIteratorPixel it = m_dev->createRectIterator(rc.x(), rc.y(), rc.width(), rc.height());
-            while (!it.isDone()) {
-                QVERIFY(memcmp(it.oldRawData(), oldBytes, m_dev->colorSpace()->pixelSize()) == 0);
-                ++it;
-            }
+            KisRectIteratorSP it = m_dev->createRectIteratorNG(rc.x(), rc.y(), rc.width(), rc.height());
+            do {
+                QVERIFY(memcmp(it->oldRawData(), oldBytes, m_dev->colorSpace()->pixelSize()) == 0);
+            } while (it->nextPixel());
         }
 
         {
-            KisRectIteratorPixel it = m_dev->createRectIterator(m_rc.x(), m_rc.y(), m_rc.width(), m_rc.height());
-            while (!it.isDone()) {
-                memcpy(it.rawData(), newBytes, m_dev->colorSpace()->pixelSize());
-                ++it;
-            }
+            KisRectIteratorSP it = m_dev->createRectIteratorNG(m_rc.x(), m_rc.y(), m_rc.width(), m_rc.height());
+            do {
+                memcpy(it->rawData(), newBytes, m_dev->colorSpace()->pixelSize());
+            } while (it->nextPixel());
         }
-
     }
-
 };
 
 class TestJobFactory : public KisJobFactory
@@ -98,14 +95,13 @@ void KisThreadedApplicatorTest::testApplication()
     KisThreadedApplicator applicator(test, QRect(0, 0, 1000, 1000), &factory, &updater);
     applicator.execute();
 
-    KisRectConstIteratorPixel it = test->createRectConstIterator(0, 0, 1000, 1000);
-    while (!it.isDone()) {
-        QCOMPARE((int)it.rawData()[0], (int)255);
-        QCOMPARE((int)it.rawData()[1], (int)255);
-        QCOMPARE((int)it.rawData()[2], (int)255);
-        QCOMPARE((int)it.rawData()[3], (int)255);
-        ++it;
-    }
+    KisRectIteratorSP it = test->createRectIteratorNG(0, 0, 1000, 1000);
+    do {
+        QCOMPARE((int)it->rawData()[0], (int)255);
+        QCOMPARE((int)it->rawData()[1], (int)255);
+        QCOMPARE((int)it->rawData()[2], (int)255);
+        QCOMPARE((int)it->rawData()[3], (int)255);
+    }  while (it->nextPixel());
 }
 
 QTEST_KDEMAIN(KisThreadedApplicatorTest, NoGUI)

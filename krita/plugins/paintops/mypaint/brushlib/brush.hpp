@@ -491,7 +491,7 @@ private:
   }
 
   // How many dabs will be drawn between the current and the next (x, y, pressure, +dt) position?
-  float count_dabs_to (float x, float y, float pressure, float dt)
+  float count_dabs_to (float x, float y, float /*pressure*/, float dt)
   {
     float xx, yy;
     float res1, res2, res3;

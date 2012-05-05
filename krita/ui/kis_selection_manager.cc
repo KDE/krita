@@ -57,8 +57,6 @@
 #include "kis_fill_painter.h"
 #include "kis_group_layer.h"
 #include "kis_image.h"
-#include "kis_iterator_pixel_trait.h"
-#include "kis_iterators_pixel.h"
 #include "kis_layer.h"
 #include "kis_statusbar.h"
 #include "kis_paint_device.h"
@@ -80,7 +78,6 @@
 #include "kis_iterator_ng.h"
 #include "kis_clipboard.h"
 #include "kis_view2.h"
-
 #include "kis_selection_manager_p.h"
 
 
@@ -742,19 +739,19 @@ void KisSelectionManager::copyFromDevice(KisPaintDeviceSP device)
         // Apply selection mask.
         KisPaintDeviceSP selectionProjection = selection->projection();
         KisHLineIteratorSP layerIt = clip->createHLineIteratorNG(0, 0, r.width());
-        KisHLineConstIteratorPixel selectionIt = selectionProjection->createHLineIterator(r.x(), r.y(), r.width());
+        KisHLineConstIteratorSP selectionIt = selectionProjection->createHLineIteratorNG(r.x(), r.y(), r.width());
 
         for (qint32 y = 0; y < r.height(); y++) {
 
             for (qint32 x = 0; x < r.width(); x++) {
 
-                cs->applyAlphaU8Mask(layerIt->rawData(), selectionIt.oldRawData(), 1);
+                cs->applyAlphaU8Mask(layerIt->rawData(), selectionIt->oldRawData(), 1);
 
                 layerIt->nextPixel();
-                ++selectionIt;
+                selectionIt->nextPixel();
             }
             layerIt->nextRow();
-            selectionIt.nextRow();
+            selectionIt->nextRow();
         }
     }
 

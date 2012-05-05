@@ -37,7 +37,7 @@
 #include "kis_fill_painter.h"
 #include <kis_fixed_paint_device.h>
 #include "testutil.h"
-
+#include <kis_iterator_ng.h>
 
 void KisPainterTest::allCsApplicator(void (KisPainterTest::* funcPtr)(const KoColorSpace*cs))
 {
@@ -264,13 +264,12 @@ void KisPainterTest::testSelectionBltSelection()
 
     QCOMPARE(dst->selectedExactRect(), QRect(10, 10, 10, 10));
 
-    KisRectConstIteratorPixel it = dst->createRectConstIterator(10, 10, 10, 10);
-    while (!it.isDone()) {
+    KisRectConstIteratorSP it = dst->createRectConstIteratorNG(10, 10, 10, 10);
+    do {
         // These are selections, so only one channel and it should
         // be totally selected
-        QCOMPARE(it.rawData()[0], MAX_SELECTED);
-        ++it;
-    }
+        QCOMPARE(it->oldRawData()[0], MAX_SELECTED);
+    } while (it->nextPixel());
 }
 
 /*
@@ -400,13 +399,12 @@ void KisPainterTest::testSelectionBitBltEraseCompositeOp()
     //dst->convertToQImage(0).save("result.png");
 
     QRect erasedRect(50, 50, 50, 50);
-    KisRectConstIteratorPixel it = dst->createRectConstIterator(0, 0, 150, 150);
-    while (!it.isDone()) {
-        if(!erasedRect.contains(it.x(), it.y())) {
-             QVERIFY(memcmp(it.rawData(), c.data(), cs->pixelSize()) == 0);
+    KisRectConstIteratorSP it = dst->createRectConstIteratorNG(0, 0, 150, 150);
+    do {
+        if(!erasedRect.contains(it->x(), it->y())) {
+             QVERIFY(memcmp(it->oldRawData(), c.data(), cs->pixelSize()) == 0);
         }
-        ++it;
-    }
+    } while (it->nextPixel());
 
 }
 

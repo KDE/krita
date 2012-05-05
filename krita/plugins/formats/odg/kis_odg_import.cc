@@ -151,7 +151,7 @@ KoFilter::ConversionStatus KisODGImport::convert(const QByteArray& from, const Q
 
     KoXmlElement child;
     forEachElement(child, page) {
-        KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, shapeContext);
+        /*KoShape * shape = */KoShapeRegistry::instance()->createShapeFromOdf(child, shapeContext);
     }
 
     return KoFilter::OK;

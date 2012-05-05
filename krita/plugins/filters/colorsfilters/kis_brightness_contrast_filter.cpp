@@ -44,8 +44,6 @@
 
 #include "kis_bookmarked_configuration_manager.h"
 #include "kis_paint_device.h"
-#include "kis_iterators_pixel.h"
-#include "kis_iterator.h"
 #include "widgets/kis_curve_widget.h"
 #include "kis_histogram.h"
 #include "kis_painter.h"

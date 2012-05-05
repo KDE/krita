@@ -41,7 +41,6 @@
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
 #include <kis_image.h>
-#include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <widgets/kis_multi_integer_filter_widget.h>
 #include <kis_selection.h>

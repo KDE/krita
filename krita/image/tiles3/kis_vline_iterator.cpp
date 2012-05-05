@@ -26,6 +26,10 @@ KisVLineIterator2::KisVLineIterator2(KisDataManager *dataManager, qint32 x, qint
     x -= offsetX;
     y -= offsetY;
     Q_ASSERT(dataManager != 0);
+
+    Q_ASSERT(h > 0); // for us, to warn us when abusing the iterators
+    if (h < 1) h = 1;  // for release mode, to make sure there's always at least one pixel read.
+
     m_lineStride = m_pixelSize * KisTileData::WIDTH;
 
     m_x = x;

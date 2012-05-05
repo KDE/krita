@@ -51,14 +51,17 @@
 #include <KoShapeTransformCommand.h>
 #include <KoElementReference.h>
 
-#include "kis_painter.h"
-#include "kis_paint_device.h"
+#include <kis_painter.h>
+#include <kis_paint_device.h>
+#include <kis_image.h>
+#include <kis_iterator_ng.h>
+#include <kis_selection.h>
+
 #include "kis_shape_selection_model.h"
-#include "kis_image.h"
-#include "kis_selection.h"
 #include "kis_shape_selection_canvas.h"
 #include "kis_shape_layer_paste.h"
 #include "kis_image_view_converter.h"
+
 
 #include <kis_debug.h>
 
@@ -361,12 +364,11 @@ void KisShapeSelection::renderSelection(KisPaintDeviceSP projection, const QRect
             qint32 rectWidth = qMin(r.x() + r.width() - x, MASK_IMAGE_WIDTH);
             qint32 rectHeight = qMin(r.y() + r.height() - y, MASK_IMAGE_HEIGHT);
 
-            KisRectIterator rectIt = tmpMask->createRectIterator(x, y, rectWidth, rectHeight);
+            KisRectIteratorSP rectIt = tmpMask->createRectIteratorNG(x, y, rectWidth, rectHeight);
 
-            while (!rectIt.isDone()) {
-                (*rectIt.rawData()) = qRed(polygonMaskImage.pixel(rectIt.x() - x, rectIt.y() - y));
-                ++rectIt;
-            }
+            do {
+                (*rectIt->rawData()) = qRed(polygonMaskImage.pixel(rectIt->x() - x, rectIt->y() - y));
+            } while (rectIt->nextPixel());
         }
     }
     KisPainter painter(projection);

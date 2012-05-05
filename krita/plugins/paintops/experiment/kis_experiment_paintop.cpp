@@ -38,12 +38,10 @@
 #include <kis_types.h>
 #include <kis_paintop.h>
 #include <kis_selection.h>
-#include <kis_random_accessor.h>
+#include <kis_random_accessor_ng.h>
 #include <KoCompositeOp.h>
 
 #include <kis_experimentop_option.h>
-#include <kis_iterator_ng.h>
-
 #include <kis_transaction.h>
 #include "kis_fixed_painter.h"
 
@@ -91,7 +89,7 @@ KisExperimentPaintOp::~KisExperimentPaintOp()
 }
 
 
-KisDistanceInformation KisExperimentPaintOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist)
+KisDistanceInformation KisExperimentPaintOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& /*savedDist*/)
 {
     KisDistanceInformation kdi(0,0);
     if (!painter()) return kdi;
@@ -189,7 +187,6 @@ QPainterPath KisExperimentPaintOp::applyDisplace(const QPainterPath& path, int s
         QPainterPath::Element e = path.elementAt(i);
         switch(e.type){
             case QPainterPath::MoveToElement:{
-
                 newPath.moveTo(getAngle(QPointF(e.x,e.y),lastPoint,speed));
                 break;
             }
@@ -207,7 +204,8 @@ QPainterPath KisExperimentPaintOp::applyDisplace(const QPainterPath& path, int s
 
                 if (curveElementCounter == 1){
                     ctrl1 = QPointF(e.x,e.y);
-                }else if (curveElementCounter == 2){
+                }
+                else if (curveElementCounter == 2){
                     ctrl2 = QPointF(e.x,e.y);
                     newPath.cubicTo(ctrl1,ctrl2,endPoint);
                 }

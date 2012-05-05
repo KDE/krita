@@ -1153,16 +1153,20 @@ void ChartShape::saveOdf(KoShapeSavingContext & context) const
     bodyWriter.addAttribute("chart:class", ODF_CHARTTYPES[d->plotArea->chartType() ]);
 
     // 2. Write the title.
-    saveOdfLabel(d->title, bodyWriter, mainStyles, TitleLabelType);
+    if (d->title->isVisible())
+        saveOdfLabel(d->title, bodyWriter, mainStyles, TitleLabelType);
 
     // 3. Write the subtitle.
-    saveOdfLabel(d->subTitle, bodyWriter, mainStyles, SubTitleLabelType);
+    if (d->subTitle->isVisible())
+        saveOdfLabel(d->subTitle, bodyWriter, mainStyles, SubTitleLabelType);
 
     // 4. Write the footer.
-    saveOdfLabel(d->footer, bodyWriter, mainStyles, FooterLabelType);
+    if (d->footer->isVisible())
+        saveOdfLabel(d->footer, bodyWriter, mainStyles, FooterLabelType);
 
     // 5. Write the legend.
-    d->legend->saveOdf(context);
+    if (d->legend->isVisible())
+        d->legend->saveOdf(context);
 
     // 6. Write the plot area (this is where the real action is!).
     d->plotArea->saveOdf(context);

@@ -138,6 +138,8 @@ public:
     bool showMinorGrid;
     bool useAutomaticMajorInterval;
     bool useAutomaticMinorInterval;
+    bool useAutomaticMinimumRange;
+    bool useAutomaticMaximumRange;
 
     /// Font used for axis labels
     /// TODO: Save to ODF
@@ -225,12 +227,16 @@ Axis::Private::Private( Axis *axis, AxisDimension dim )
 
     useAutomaticMajorInterval = true;
     useAutomaticMinorInterval = true;
+    useAutomaticMinimumRange = true;
+    useAutomaticMaximumRange = true;
 
     majorInterval = 2;
     minorIntervalDivisor = 1;
 
     showMajorGrid = false;
     showMinorGrid = false;
+
+    logarithmicScaling = false;
 
     kdBarDiagram     = 0;
     kdLineDiagram    = 0;
@@ -1402,6 +1408,7 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
                 d->kdPlane->setVerticalRange( qMakePair( minimum, maximum ) );
             else
                 d->kdPlane->setHorizontalRange( qMakePair( minimum, maximum ) );
+            d->useAutomaticMinimumRange = false;
         }
         if ( styleStack.hasProperty( KoXmlNS::chart, "maximum" ) ) {
             const qreal minimum = orientation() == Qt::Vertical
@@ -1412,7 +1419,11 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
                 d->kdPlane->setVerticalRange( qMakePair( minimum, maximum ) );
             else
                 d->kdPlane->setHorizontalRange( qMakePair( minimum, maximum ) );
+            d->useAutomaticMaximumRange = false;
         }
+        /*if ( styleStack.hasProperty( KoXmlNS::chart, "origin" ) ) {
+            const qreal origin = KoUnit::parseValue( styleStack.property( KoXmlNS::chart, "origin" ) );
+        }*/
 
         styleStack.setTypeProperties( "text" );
         if ( styleStack.hasProperty( KoXmlNS::fo, "font-size" ) )
@@ -1535,7 +1546,48 @@ void Axis::saveOdf( KoShapeSavingContext &context )
     bodyWriter.startElement( "chart:axis" );
 
     KoGenStyle axisStyle( KoGenStyle::ChartAutoStyle, "chart" );
-    axisStyle.addProperty( "chart:display-label", "true" );
+    axisStyle.addProperty( "chart:logarithmic", scalingIsLogarithmic() );
+
+    KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>( kdPlane() );
+    bool reverseAxis;
+    if ( plane ) {
+        if ( orientation() == Qt::Horizontal )
+            reverseAxis = plane->isHorizontalRangeReversed();
+        else // Qt::Vertical
+            reverseAxis = plane->isVerticalRangeReversed();
+    }
+    axisStyle.addProperty( "chart:reverse-direction", reverseAxis );
+
+    axisStyle.addProperty( "chart:tick-marks-minor-inner", showInnerMinorTicks() );
+    axisStyle.addProperty( "chart:tick-marks-minor-outer", showOuterMinorTicks() );
+    axisStyle.addProperty( "chart:tick-marks-major-inner", showInnerMajorTicks() );
+    axisStyle.addProperty( "chart:tick-marks-major-outer", showOuterMajorTicks() );
+
+    axisStyle.addProperty( "chart:display-label", showLabels() );
+    axisStyle.addProperty( "chart:visible", isVisible() );
+    axisStyle.addPropertyPt( "chart:gap-width", d->gapBetweenSets );
+    axisStyle.addPropertyPt( "chart:overlap", -d->gapBetweenBars );
+
+    if (!d->useAutomaticMinimumRange) {
+        const qreal minimum = orientation() == Qt::Vertical
+                            ? d->kdPlane->verticalRange().first
+                            : d->kdPlane->horizontalRange().first;
+        axisStyle.addProperty( "chart:minimum", (int)minimum );
+    }
+    if (!d->useAutomaticMaximumRange) {
+        const qreal maximum = orientation() == Qt::Vertical
+                            ? d->kdPlane->verticalRange().second
+                            : d->kdPlane->horizontalRange().second;
+        axisStyle.addProperty( "chart:maximum", (int)maximum );
+    }
+
+    //axisStyle.addPropertyPt( "chart:origin", origin );
+
+    axisStyle.addPropertyPt( "fo:font-size", font().pointSize(), KoGenStyle::TextType);
+
+    KDChart::TextAttributes tatt =  kdAxis()->textAttributes();
+    QPen pen = tatt.pen();
+    axisStyle.addProperty( "fo:font-color", pen.color().name(), KoGenStyle::TextType);
 
     const QString styleName = mainStyles.insert( axisStyle, "ch" );
     bodyWriter.addAttribute( "chart:style-name", styleName );

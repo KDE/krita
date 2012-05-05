@@ -38,7 +38,8 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings,
     KisBrushBasedPaintOp(settings, painter),
     m_firstRun(true), m_tempDev(0), m_image(image),
     m_smudgeRateOption("SmudgeRate"),
-    m_colorRateOption("ColorRate")
+    m_colorRateOption("ColorRate"),
+    m_smudgeAccessor(painter->device()->createRandomAccessorNG(0, 0))
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
@@ -193,15 +194,12 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     }
     else {
         KoColorSpace* cs    = painter()->device()->colorSpace();
-        quint8*       color = new quint8[cs->pixelSize()];
         qint32        px    = x + m_maskBounds.width()  / 2;
         qint32        py    = y + m_maskBounds.height() / 2;
-        
         // get the pixel on the canvas that lies beneath the center
         // of the dab and fill  the temporary paint device with that color
-        painter()->device()->readBytes(color, px, py, 1, 1);
-        m_tempPainter->fill(0, 0, m_maskBounds.width(), m_maskBounds.height(), KoColor(color, cs));
-        delete[] color;
+        m_smudgeAccessor->moveTo(px, py);
+        m_tempPainter->fill(0, 0, m_maskBounds.width(), m_maskBounds.height(), KoColor(m_smudgeAccessor->rawData(), cs));
     }
     
     // if the user selected the color smudge option

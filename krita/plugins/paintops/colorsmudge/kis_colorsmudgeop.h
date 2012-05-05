@@ -34,6 +34,7 @@
 #include "kis_overlay_mode_option.h"
 #include "kis_rate_option.h"
 #include "kis_smudge_option.h"
+#include "kis_random_accessor_ng.h"
 
 class QPointF;
 class KoAbstractGradient;
@@ -70,6 +71,7 @@ private:
     KisPressureGradientOption m_gradientOption;
     QRect                     m_maskBounds;
     KisFixedPaintDeviceSP     m_maskDab;
+    KisRandomAccessorSP       m_smudgeAccessor;
 };
 
 #endif // _KIS_COLORSMUDGEOP_H_

@@ -406,7 +406,6 @@ QPainterPath KoPathShape::outline() const
 
 QRectF KoPathShape::boundingRect() const
 {
-    Q_D(const KoPathShape);
     QTransform transform = absoluteTransformation(0);
     // calculate the bounding rect of the transformed outline
     QRectF bb;

@@ -1687,7 +1687,7 @@ bool KoTextEditor::isWithinSelection(int position) const
     WithinSelectionVisitor visitor(const_cast<KoTextEditor *>(this), position);
 
     recursivelyVisitSelection(d->document->rootFrame()->begin(), visitor);
-    return visitor.m_within;
+    return visitor.m_returnValue;
 }
 
 int KoTextEditor::position() const

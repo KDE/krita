@@ -83,14 +83,17 @@ void KoShapeShadow::Private::paintGroupShadow(KoShapeGroup *group, QPainter &pai
 
 void KoShapeShadow::Private::paintShadow(KoShape *shape, QPainter &painter, const KoViewConverter &converter)
 {
-    if (shape->background()) {
+    QPainterPath path(shape->shadowOutline());
+    if (!path.isEmpty()) {
         painter.save();
         KoShape::applyConversion(painter, converter);
         painter.setBrush(QBrush(color));
-        QPainterPath path(shape->outline());
+
+        // Make sure the shadow has the same fill rule as the shape.
         KoPathShape * pathShape = dynamic_cast<KoPathShape*>(shape);
         if (pathShape)
             path.setFillRule(pathShape->fillRule());
+
         painter.drawPath(path);
         painter.restore();
     }
@@ -182,6 +185,11 @@ void KoShapeShadow::Private::blurShadow(QImage &image, int radius, const QColor&
     p.fillRect(image.rect(), shadowColor);
     p.end();
 }
+
+
+// ----------------------------------------------------------------
+//                         KoShapeShadow
+
 
 KoShapeShadow::KoShapeShadow()
         : d(new Private())

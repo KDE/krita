@@ -55,7 +55,7 @@ class CHARTSHAPELIB_EXPORT ChartProxyModel : public QAbstractTableModel
     Q_OBJECT
 
 public:
-    ChartProxyModel( ChartShape *shape, TableSource *source );
+    ChartProxyModel(ChartShape *shape, TableSource *source);
     ~ChartProxyModel();
 
     /**
@@ -79,7 +79,7 @@ public:
      * The ProxyModel will not react on insertions or removals in one of
      * these models.
      */
-    void reset( const CellRegion &region );
+    void reset(const CellRegion &region);
 
     /**
      * The CellRegion that data in this proxy model is taken from.
@@ -94,8 +94,9 @@ public:
     /**
     * Load series from ODF
     */
-    bool loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context, int seriesPerDataset, ChartType type );
-    void saveOdf( KoShapeSavingContext &context ) const;
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context,
+                 int seriesPerDataset, ChartType type);
+    void saveOdf(KoShapeSavingContext &context) const;
 
     /**
      * Returns data or properties of a data point.
@@ -103,7 +104,7 @@ public:
      * TODO: Not implemented yet. At the moment, DataSet's data and attribute
      * getter are used instead.
      */
-    virtual QVariant data( const QModelIndex &index, int role ) const;
+    virtual QVariant data(const QModelIndex &index, int role) const;
 
     /**
      * Returns properties that are global to either a data set or a category,
@@ -117,25 +118,25 @@ public:
      * TODO: Not implemented yet. At the moment, DataSet's data and attribute
      * getter are used instead.
      */
-    virtual QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
-    virtual QModelIndex parent( const QModelIndex &index ) const;
+    virtual QModelIndex parent(const QModelIndex &index) const;
 
     /**
      * Returns the number of data sets in this model.
      */
-    virtual int rowCount( const QModelIndex &parent = QModelIndex() ) const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
     /**
      * Returns maximum the number of data points the data sets have.
      */
-    virtual int columnCount( const QModelIndex &parent = QModelIndex() ) const;
+    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
     // The following methods are specific to the chart
-    void setFirstRowIsLabel( bool b );
-    void setFirstColumnIsLabel( bool b );
-    void setDataDirection( Qt::Orientation orientation );
-    void setDataDimensions( int dimensions );
+    void setFirstRowIsLabel(bool b);
+    void setFirstColumnIsLabel(bool b);
+    void setDataDirection(Qt::Orientation orientation);
+    void setDataDimensions(int dimensions);
 
     bool firstRowIsLabel() const;
     bool firstColumnIsLabel() const;
@@ -152,7 +153,7 @@ public:
      * on the x axis in a cartesian chart and what will be used as legend
      * items in a polar chart.
      */
-    void setCategoryDataRegion( const CellRegion &region );
+    void setCategoryDataRegion(const CellRegion &region);
 
     /**
      * A list of all data sets that are currently being used in the chart.
@@ -195,7 +196,7 @@ public slots:
     /**
      * Connected to dataChanged() signal of source models in TableSource.
      */
-    virtual void dataChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight );
+    virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
 
     /**
      * Called by the TableSource whenever a table is added to it.
@@ -204,12 +205,12 @@ public slots:
      * they are really in use. That is not necessarily the case if they
      * are in the TableSource.
      */
-    void addTable( Table *table );
+    void addTable(Table *table);
 
     /**
      * Called by the TableSource whenever a table is removed from it.
      */
-    void removeTable( Table *table );
+    void removeTable(Table *table);
 
 signals:
     void dataChanged();

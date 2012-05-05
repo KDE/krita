@@ -106,6 +106,13 @@ namespace KoOdfWorkaround
      * This methods returns true if we need to adjust the layout. The adjusting is handled at a different place.
      */
     FLAKE_EXPORT bool fixAutoGrow(KoTextShapeDataBase::ResizeMethod method, KoShapeLoadingContext &context);
+
+    /**
+     * OpenOffice and LibreOffice do not set the svg:width, svg:height, svg:x and svg:y correctly when saving
+     * parts of draw:ellipses or draw:circle
+     * This method returns true when the width, height, x and y is given for the full circle
+     */
+    FLAKE_EXPORT bool fixEllipse(const QString &kind, KoShapeLoadingContext &context);
 }
 
 #endif /* KOODFWORKAROUND_H */

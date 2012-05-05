@@ -18,20 +18,24 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_RATE_OPTION_H
-#define KIS_RATE_OPTION_H
+#ifndef KIS_SMUDGE_OPTION_H
+#define KIS_SMUDGE_OPTION_H
 
-#include "kis_curve_option.h"
+#include "kis_rate_option.h"
 #include <kis_paint_information.h>
 #include <kis_types.h>
+
+// static const QString SMUDGE_MODE = "SmudgeMode";
 
 class KisPropertiesConfiguration;
 class KisPainter;
 
-class KisRateOption: public KisCurveOption
+class KisSmudgeOption: public KisRateOption
 {
 public:
-    KisRateOption(const QString& name, const QString& label="", bool checked=true, const QString& category=KisPaintOpOption::brushCategory());
+    KisSmudgeOption(const QString& name, const QString& label="", bool checked=true, const QString& category=KisPaintOpOption::brushCategory());
+    
+    enum Mode { SMEARING_MODE, DULLING_MODE };
     
     /**
      * Set the opacity of the painter based on the rate
@@ -39,8 +43,14 @@ public:
      */
     void apply(KisPainter& painter, const KisPaintInformation& info, qreal scaleMin=0.0, qreal scaleMax=1.0, qreal multiplicator=1.0) const;
     
-    void setRate(qreal rate) { KisCurveOption::setValue(rate); }
-    qreal getRate() const { return KisCurveOption::value(); }
+    Mode getMode()          { return mMode;  }
+    void setMode(Mode mode) { mMode = mode; }
+    
+    virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
+    virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
+    
+private:
+    Mode mMode;
 };
 
-#endif // KIS_RATE_OPTION_H
+#endif // KIS_SMUDGE_OPTION_H

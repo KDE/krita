@@ -25,8 +25,8 @@
 
 using namespace KChart;
 
-ChartTableView::ChartTableView( QWidget *parent /* = 0 */ )
-   : QTableView( parent )
+ChartTableView::ChartTableView(QWidget *parent /* = 0 */)
+   : QTableView(parent)
 {
 }
 
@@ -37,10 +37,10 @@ ChartTableView::~ChartTableView()
 /**
  * \reimpl
  */
-void ChartTableView::currentChanged( const QModelIndex &current, 
-                                     const QModelIndex &previous )
+void ChartTableView::currentChanged(const QModelIndex &current, 
+                                    const QModelIndex &previous)
 {
-    Q_UNUSED( previous );
+    Q_UNUSED(previous);
 
-    emit currentIndexChanged( current );
+    emit currentIndexChanged(current);
 }

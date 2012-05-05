@@ -1573,6 +1573,27 @@ void DataSet::saveOdf(KoShapeSavingContext &context) const
     if (type.symbol)
         style.addProperty("chart:data-label-symbol", "true");
 
+    if (d->symbolsActivated)
+    {
+        QString symbolName = "";
+        QString symbolType = "named-symbol";
+
+        if (d->symbolID == 0)
+            symbolName = "square";
+        else if (d->symbolID == 1)
+            symbolName = "diamond";
+        else if (d->symbolID == 5)
+            symbolName = "circle";
+        else if (d->symbolID == 2)
+            symbolName = "x";
+        else
+            symbolType = "automatic";
+
+        style.addProperty("chart:symbol-type", symbolType, KoGenStyle::ChartType);
+        if (!symbolName.isEmpty())
+            style.addProperty("chart:symbol-name", symbolName, KoGenStyle::ChartType);
+    }
+
     KoOdfGraphicStyles::saveOdfFillStyle(style, mainStyles, brush());
     KoOdfGraphicStyles::saveOdfStrokeStyle(style, mainStyles, pen());
 

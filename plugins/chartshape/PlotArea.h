@@ -65,7 +65,7 @@ class CHARTSHAPELIB_EXPORT PlotArea : public QObject, public KoShape
     Q_OBJECT
     
 public:
-    PlotArea( ChartShape *parent );
+    PlotArea(ChartShape *parent);
     ~PlotArea();
     
     void plotAreaInit();
@@ -74,14 +74,14 @@ public:
 
     ChartType    chartType() const;
     ChartSubtype chartSubType() const;
-    void         setChartType( ChartType type );
-    void         setChartSubType( ChartSubtype subType );
+    void         setChartType(ChartType type);
+    void         setChartSubType(ChartSubtype subType);
     
     QList<Axis*>    axes() const;
     QList<DataSet*> dataSets() const;
     int             dataSetCount() const;
-    bool            addAxis( Axis *axis );
-    bool            removeAxis( Axis *axis );
+    bool            addAxis(Axis *axis);
+    bool            removeAxis(Axis *axis);
 
     // TODO: Rename this into primaryXAxis()
     Axis *xAxis() const;
@@ -120,39 +120,39 @@ public:
      */
     qreal pieAngleOffset() const;
 
-    void setGapBetweenBars( int percent );
-    void setGapBetweenSets( int percent );
+    void setGapBetweenBars(int percent);
+    void setGapBetweenSets(int percent);
 
     /**
      * @see pieAngleOffset
      */
-    void setPieAngleOffset( qreal angle );
+    void setPieAngleOffset(qreal angle);
 
-    bool loadOdf( const KoXmlElement &plotAreaElement, KoShapeLoadingContext &context );
-    bool loadOdfSeries( const KoXmlElement &seriesElement, KoShapeLoadingContext &context );
+    bool loadOdf(const KoXmlElement &plotAreaElement, KoShapeLoadingContext &context);
+    bool loadOdfSeries(const KoXmlElement &seriesElement, KoShapeLoadingContext &context);
     
-    void saveOdf( KoShapeSavingContext &context ) const;
-    void saveOdfSubType( KoXmlWriter &bodyWriter, KoGenStyle &plotAreaStyle ) const;
+    void saveOdf(KoShapeSavingContext &context) const;
+    void saveOdfSubType(KoXmlWriter &bodyWriter, KoGenStyle &plotAreaStyle) const;
     
     
-    void setThreeD( bool threeD );
+    void setThreeD(bool threeD);
 
     /**
      * @see cellRangeAddress
      */
-    void setCellRangeAddress( const CellRegion &region );
+    void setCellRangeAddress(const CellRegion &region);
 
     /**
      * @see isVertical
      */
-    void setVertical( bool vertical );
+    void setVertical(bool vertical);
     
     ChartShape *parent() const;
 
-    void paint( QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     
-    bool registerKdDiagram( KDChart::AbstractDiagram *diagram );
-    bool deregisterKdDiagram( KDChart::AbstractDiagram *diagram );
+    bool registerKdDiagram(KDChart::AbstractDiagram *diagram);
+    bool deregisterKdDiagram(KDChart::AbstractDiagram *diagram);
     
     void relayout() const;
     
@@ -162,15 +162,15 @@ public slots:
     void plotAreaUpdate() const;
     
 signals:
-    void gapBetweenBarsChanged( int );
-    void gapBetweenSetsChanged( int );
-    void pieAngleOffsetChanged( qreal );
+    void gapBetweenBarsChanged(int);
+    void gapBetweenSetsChanged(int);
+    void pieAngleOffsetChanged(qreal);
 
 private:
-    void paintPixmap( QPainter &painter, const KoViewConverter &converter );
+    void paintPixmap(QPainter &painter, const KoViewConverter &converter);
 
     // For class Axis
-    KDChart::CartesianCoordinatePlane *kdCartesianPlane( Axis *axis = 0 ) const;
+    KDChart::CartesianCoordinatePlane *kdCartesianPlane(Axis *axis = 0) const;
     KDChart::PolarCoordinatePlane *kdPolarPlane() const;
     KDChart::RadarCoordinatePlane *kdRadarPlane() const;
     KDChart::Chart *kdChart() const;

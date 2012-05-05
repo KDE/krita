@@ -1631,9 +1631,13 @@ void Axis::saveOdf(KoShapeSavingContext &context)
     bodyWriter.addAttributePt("svg:width", d->title->size().width());
     bodyWriter.addAttributePt("svg:height", d->title->size().height());
 
-    bodyWriter.startElement("text:p");
-    bodyWriter.addTextNode(d->titleData->document()->toPlainText());
-    bodyWriter.endElement(); // text:p
+    QString axisLabel = d->titleData->document()->toPlainText();
+    if (!axisLabel.isEmpty()) {
+        bodyWriter.startElement("text:p");
+        bodyWriter.addTextNode(axisLabel);
+        bodyWriter.endElement(); // text:p
+    }
+
     bodyWriter.endElement(); // chart:title
 
     if (plotArea()->proxyModel()->categoryDataRegion().isValid()) {

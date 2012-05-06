@@ -50,9 +50,9 @@ Axis                    data about an axis in the chart
 DataSet                 stores data _about_ a dataset. The actual data
                         is stored in a table.
 Legend                  stores information about the legend
-PlotArea                The main area where the chart itself is shown
-Surface                 Wall or Floor in a 3D chart
-CellRegion              A region in e.g. a spreadsheet where a dataset
+PlotArea                the main area where the chart itself is shown
+Surface                 wall or floor in a 3D chart
+CellRegion              a region in e.g. a spreadsheet where a dataset
                         can fetch its values.
 
 
@@ -149,28 +149,83 @@ concepts in ODF charts and KDChart so there is some complexity in the
 mapping between them.  See below for more details.
 
 
-Chart Shape overview
---------------------
-
-FIXME
-
-
 KDChart concepts
-----------------
+================
 
-FIXME
+Objects
+-------
+
+KDChart is a library of classes that are used to show a chart and also
+offers some interaction with them. All the classes are in the KDChart
+namespace but in the description below we shall forego the namespace
+prefix in the interest of clarity.
+
+The main class in KDChart is _Chart_. This class manages the rest of
+the classes and represents the canvas on which the chart parts are
+painted. On this Chart there can be zero or more _Diagrams_, each of
+which is what we in daily talk call a 'chart'.  There is one type of
+subclass to Diagram for each chart type, e.g. PieDiagram or
+BarDiagram. If we want to create new types we can subclass
+AbstractDiagram. 
+
+Each diagram is associated with a CoordinatePlane which defines the
+scale and transformation between data coordinates and pixel
+coordinates. There are 3 types of coordinate planes: Cartesian, Polar
+and Radar. One coordinate plane can be shared by several diagrams,
+making it possible to e.g. create a combined bar and line chart.
+
+A Chart can hold several CoordinatePlanes and/or Diagrams, making it
+possible to create advanced layouts with separate diagrams or diagrams
+that overlap. 
+
+An _Axis_ is what connects the coordinate plane with a diagram. The
+axis is owned by a diagram but can also be associated with other
+diagrams, thereby creating a shared axis.
+
+In addition to diagrams there are other types of visible objects on
+the Chart: Legends, Headers, Footers, or custom elements that inherit
+KDChart::Area. 
 
 
-Mapping to KDChart classes
---------------------------
+Styling
+-------
 
-FIXME
+Each type of object (Diagram, Axis, etc) in KDChart has a set of
+attributes associated with it, much like ODF styles.  These are all
+named after the object they describe, e.g. BarAttributes,
+RulerAttributes, etc.
+
+The normal way to configure an object is to fetch out the attributes,
+change some of them, and put them back into the object.
 
 
-Layout and Rendering
-====================
+Data
+----
 
-FIXME
+KDChart uses the Qt4 model/view paradigm. A class that inherits
+AbstractDiagram is at the same time a QAbstractItemView and takes a
+QAbstractItemModel as its data input.
+
+The item models that are given to the diagrams combine the numeric
+data in that is presented in the chart with some styling coming from
+the datasets, e.g. color, marker, etc.
+
+
+Mapping ODF concepts to KDChart classes
+=======================================
+
+The main KDChart::Chart instance is owned by PlotArea. PlotArea also
+holds 2 cartesian coordinate planes and one polar and one radar
+plane. Third, it holds a list of Diagrams, one per diagram type that
+was ever used(?).
+
+Each class that represents an ODF type (Axis, Legend, etc) also has
+ownership of the corresponding KDChart type. Some exceptions exist
+(FIXME: Check this in more detail).
+
+The class ChartProxyModel connects the ODF Datasets and numeric data
+with KDChart. It takes the numeric input and rearranges it in the
+order that is necessary for each chart type.
 
 
 Editing

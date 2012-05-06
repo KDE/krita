@@ -423,13 +423,13 @@ QString PictureShape::saveStyle(KoGenStyle& style, KoShapeSavingContext& context
         }
     }
 
-    return KoShape::saveStyle(style, context);
+    return KoTosContainer::saveStyle(style, context);
 }
 
 void PictureShape::loadStyle(const KoXmlElement& element, KoShapeLoadingContext& context)
 {
     // Load the common parts of the style.
-    KoShape::loadStyle(element, context);
+    KoTosContainer::loadStyle(element, context);
 
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.setTypeProperties("graphic");

@@ -23,6 +23,7 @@
 #include <KoConfigDocumentPage.h>
 #include <KoConfigGridPage.h>
 #include <KoConfigMiscPage.h>
+#include <KoConfigAuthorPage.h>
 #include <KoPACanvasBase.h>
 #include <KoShapeController.h>
 
@@ -54,6 +55,11 @@ KoPAConfigureDialog::KoPAConfigureDialog(KoPAView* parent)
     item->setHeader( i18n( "Document Settings" ) );
     item->setIcon(KIcon(BarIcon("document-properties", KIconLoader::SizeMedium)));
 
+    m_authorPage = new KoConfigAuthorPage();
+    item = addPage(m_authorPage, i18nc("@title:tab Author page", "Author"));
+    item->setHeader(i18n("Author"));
+    item->setIcon(KIcon("user-identity"));
+
     connect( this, SIGNAL( okClicked() ), this, SLOT( slotApply() ) );
     connect( this, SIGNAL( defaultClicked() ), this, SLOT( slotDefault() ) );
     connect( this, SIGNAL( applyClicked() ), this, SLOT( slotApply() ) );
@@ -64,6 +70,7 @@ void KoPAConfigureDialog::slotApply()
     m_docPage->apply();
     m_gridPage->apply();
     m_miscPage->apply();
+    m_authorPage->apply();
 }
 
 void KoPAConfigureDialog::slotDefault()

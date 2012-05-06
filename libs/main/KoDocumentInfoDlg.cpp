@@ -39,14 +39,12 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
-#include <kconfiggroup.h>
 
 #ifdef KDEPIMLIBS_FOUND
 #include <kabc/addressee.h>
 #include <kabc/stdaddressbook.h>
 #endif
 
-#include <KoGlobal.h>
 #include <KoEncryptionChecker.h>
 
 #include <QLabel>
@@ -125,7 +123,7 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo, K
     QWidget *authordlg = new QWidget();
     d->m_authorUi->setupUi(authordlg);
     page = new KPageWidgetItem(authordlg, i18n("Author"));
-    page->setHeader(i18n("Author"));
+    page->setHeader(i18n("Last saved by"));
     page->setIcon(KIcon("user-identity"));
     addPage(page);
     d->m_pages.append(page);
@@ -253,31 +251,24 @@ void KoDocumentInfoDlg::initAboutTab()
 
 void KoDocumentInfoDlg::initAuthorTab()
 {
-    QPixmap p = KIconLoader::global()->loadIcon("edit-delete", KIconLoader::Small);
-    d->m_authorUi->pbDelete->setIcon(QIcon(p));
-
-    d->m_authorUi->leFullName->setText(d->m_info->authorInfo("creator"));
-    d->m_authorUi->leInitials->setText(d->m_info->authorInfo("initial"));
-    d->m_authorUi->leTitle->setText(d->m_info->authorInfo("author-title"));
-    d->m_authorUi->leCompany->setText(d->m_info->authorInfo("company"));
-    d->m_authorUi->leEmail->setText(d->m_info->authorInfo("email"));
-    d->m_authorUi->lePhoneWork->setText(d->m_info->authorInfo("telephone-work"));
-    d->m_authorUi->lePhoneHome->setText(d->m_info->authorInfo("telephone"));
-    d->m_authorUi->leFax->setText(d->m_info->authorInfo("fax"));
-    d->m_authorUi->leCountry->setText(d->m_info->authorInfo("country"));
-    d->m_authorUi->lePostal->setText(d->m_info->authorInfo("postal-code"));
-    d->m_authorUi->leCity->setText(d->m_info->authorInfo("city"));
-    d->m_authorUi->leStreet->setText(d->m_info->authorInfo("street"));
-    d->m_authorUi->lePosition->setText(d->m_info->authorInfo("position"));
-
-    connect(d->m_authorUi->pbDelete, SIGNAL(clicked()),
-            this, SLOT(slotDeleteAuthorInfo()));
+    d->m_authorUi->fullName->setText(d->m_info->authorInfo("creator"));
+    d->m_authorUi->initials->setText(d->m_info->authorInfo("initial"));
+    d->m_authorUi->title->setText(d->m_info->authorInfo("author-title"));
+    d->m_authorUi->company->setText(d->m_info->authorInfo("company"));
+    d->m_authorUi->email->setText(d->m_info->authorInfo("email"));
+    d->m_authorUi->phoneWork->setText(d->m_info->authorInfo("telephone-work"));
+    d->m_authorUi->phoneHome->setText(d->m_info->authorInfo("telephone"));
+    d->m_authorUi->fax->setText(d->m_info->authorInfo("fax"));
+    d->m_authorUi->country->setText(d->m_info->authorInfo("country"));
+    d->m_authorUi->postal->setText(d->m_info->authorInfo("postal-code"));
+    d->m_authorUi->city->setText(d->m_info->authorInfo("city"));
+    d->m_authorUi->street->setText(d->m_info->authorInfo("street"));
+    d->m_authorUi->position->setText(d->m_info->authorInfo("position"));
 }
 
 void KoDocumentInfoDlg::slotApply()
 {
     saveAboutData();
-    saveAuthorData();
     if (d->m_rdfEditWidget) {
         d->m_rdfEditWidget->apply();
     }
@@ -290,34 +281,6 @@ void KoDocumentInfoDlg::saveAboutData()
     d->m_info->setAboutInfo("subject", d->m_aboutUi->leSubject->text());
     d->m_info->setAboutInfo("description", d->m_aboutUi->meComments->toPlainText());
     d->m_applyToggleEncryption = d->m_toggleEncryption;
-}
-
-void KoDocumentInfoDlg::saveAuthorData()
-{
-    d->m_info->setAuthorInfo("creator", d->m_authorUi->leFullName->text());
-    d->m_info->setAuthorInfo("initial", d->m_authorUi->leInitials->text());
-    d->m_info->setAuthorInfo("author-title", d->m_authorUi->leTitle->text());
-    d->m_info->setAuthorInfo("company", d->m_authorUi->leCompany->text());
-    d->m_info->setAuthorInfo("email", d->m_authorUi->leEmail->text());
-    d->m_info->setAuthorInfo("telephone-work", d->m_authorUi->lePhoneWork->text());
-    d->m_info->setAuthorInfo("telephone", d->m_authorUi->lePhoneHome->text());
-    d->m_info->setAuthorInfo("fax", d->m_authorUi->leFax->text());
-    d->m_info->setAuthorInfo("country", d->m_authorUi->leCountry->text());
-    d->m_info->setAuthorInfo("postal-code", d->m_authorUi->lePostal->text());
-    d->m_info->setAuthorInfo("city", d->m_authorUi->leCity->text());
-    d->m_info->setAuthorInfo("street", d->m_authorUi->leStreet->text());
-    d->m_info->setAuthorInfo("position", d->m_authorUi->lePosition->text());
-
-    KConfig* config = KoGlobal::calligraConfig();
-    KConfigGroup cgs(config, "Author");
-    cgs.writeEntry("telephone", d->m_authorUi->lePhoneHome->text());
-    cgs.writeEntry("telephone-work", d->m_authorUi->lePhoneWork->text());
-    cgs.writeEntry("fax", d->m_authorUi->leFax->text());
-    cgs.writeEntry("country", d->m_authorUi->leCountry->text());
-    cgs.writeEntry("postal-code", d->m_authorUi->lePostal->text());
-    cgs.writeEntry("city",  d->m_authorUi->leCity->text());
-    cgs.writeEntry("street", d->m_authorUi->leStreet->text());
-    cgs.sync();
 }
 
 void KoDocumentInfoDlg::slotResetMetaData()
@@ -374,22 +337,6 @@ void KoDocumentInfoDlg::slotToggleEncryption()
             d->m_aboutUi->pbEncrypt->setText(i18n("&Encrypt"));
         }
     }
-}
-
-void KoDocumentInfoDlg::slotDeleteAuthorInfo()
-{
-    d->m_authorUi->leFullName->clear();
-    d->m_authorUi->leInitials->clear();
-    d->m_authorUi->leTitle->clear();
-    d->m_authorUi->leCompany->clear();
-    d->m_authorUi->leEmail->clear();
-    d->m_authorUi->lePhoneHome->clear();
-    d->m_authorUi->lePhoneWork->clear();
-    d->m_authorUi->leFax->clear();
-    d->m_authorUi->leCountry->clear();
-    d->m_authorUi->lePostal->clear();
-    d->m_authorUi->leCity->clear();
-    d->m_authorUi->leStreet->clear();
 }
 
 void KoDocumentInfoDlg::slotSaveEncryption()

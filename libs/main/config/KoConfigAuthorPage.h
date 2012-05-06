@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
-   Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
+   Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2012 C. Boemann <cbo@boemann.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,33 +19,31 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOPACONFIGUREDIALOG_H
-#define KOPACONFIGUREDIALOG_H
+#ifndef KOCONFIGAUTHORPAGE_H
+#define KOCONFIGAUTHORPAGE_H
 
-#include <kpagedialog.h>
+#include <QWidget>
 
-class KoPAView;
-class KoConfigDocumentPage;
-class KoConfigGridPage;
-class KoConfigMiscPage;
-class KoConfigAuthorPage;
+#include "komain_export.h"
 
-class KoPAConfigureDialog : public KPageDialog
+class KOMAIN_EXPORT KoConfigAuthorPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    KoPAConfigureDialog(KoPAView *parent);
+    KoConfigAuthorPage();
+    ~KoConfigAuthorPage();
 
-public slots:
-    void slotApply();
-    void slotDefault();
+    void apply();
+
+private slots:
+    void profileChanged(int i);
+    void addUser();
+    void deleteUser();
 
 private:
-    KoConfigGridPage *m_gridPage;
-    KoConfigDocumentPage *m_docPage;
-    KoConfigMiscPage *m_miscPage;
-    KoConfigAuthorPage *m_authorPage;
+    class Private;
+    Private * const d;
 };
 
-#endif // KOPACONFIGUREDIALOG_H
+#endif // KOCONFIGAUTHORPAGE_H

@@ -43,6 +43,7 @@
 
 #include <libs/main/KoDocument.h>
 #include <KoColorProfile.h>
+#include <KoConfigAuthorPage.h>
 
 #include <kmessagebox.h>
 #include <kcolorbutton.h>
@@ -621,6 +622,14 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     m_fullscreenSettings = new FullscreenSettingsTab(vbox);
 
 
+    // author settings
+    vbox = new KVBox();
+    m_authorSettings = new KoConfigAuthorPage();
+    page = addPage(m_authorSettings, i18nc("@title:tab Author page", "Author"));
+    page->setHeader(i18n("Author"));
+    page->setIcon(KIcon("user-identity"));
+
+
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
     foreach (KisAbstractPreferenceSetFactory *preferenceSetFactory, preferenceSetRegistry->values()) {
         KisPreferenceSet* preferenceSet = preferenceSetFactory->createPreferenceSet();
@@ -748,6 +757,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setHideTitlebarFullscreen(dialog->m_fullscreenSettings->chkTitlebar->checkState());
         cfg.setHideToolbarFullscreen(dialog->m_fullscreenSettings->chkToolbar->checkState());
 
+        dialog->m_authorSettings->apply();
     }
     delete dialog;
     return baccept;

@@ -77,8 +77,6 @@ private slots:
     void slotResetMetaData();
     /** Connected with clicked() from pbEncrypt - Toggle the encryption of the document */
     void slotToggleEncryption();
-    /** Connected with clicked() from pbDelete - Delete all author metadata */
-    void slotDeleteAuthorInfo();
     /** Saves the document with changed encryption */
     void slotSaveEncryption();
 
@@ -89,8 +87,6 @@ private:
     void initAuthorTab();
     /** Saves the changed data back to the KoDocumentInfo class */
     void saveAboutData();
-    /** Saves the changed data back to the KoDocumentInfo class */
-    void saveAuthorData();
 
     void slotButtonClicked(int button);
 

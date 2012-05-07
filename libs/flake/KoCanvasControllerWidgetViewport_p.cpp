@@ -174,7 +174,7 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
             event->accept();
         }
     } else {
-        event->acceptProposedAction();
+        event->ignore();
     }
 }
 

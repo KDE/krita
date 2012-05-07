@@ -145,7 +145,7 @@ QSize PictureShape::calcOptimalPixmapSize(const QSizeF& shapeSize, const QSizeF&
         scale = shapeSize.height() / imageSize.height() / m_clippingRect.height();
     }
 
-    scale = qMin(1.0, scale); // prevent upscaling
+    scale = qMin<qreal>(1.0, scale); // prevent upscaling
     return (imageSize * scale).toSize();
 }
 

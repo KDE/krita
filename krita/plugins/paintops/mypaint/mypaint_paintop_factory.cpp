@@ -112,9 +112,13 @@ MyPaintBrushResource* MyPaintFactory::brush(const QString& fileName) const
 void MyPaintFactory::processAfterLoading()
 {
     KoResourceServer<KisPaintOpPreset>* rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+    QStringList blackList = rserver->blackListedFiles();
+
     QMapIterator<QString, MyPaintBrushResource*> i(m_d->brushes);
     while (i.hasNext()) {
         i.next();
+
+        if (blackList.contains(i.key())) continue;
 
         //Create a preset for every loaded brush
         KisPaintOpSettingsSP s = settings(0);

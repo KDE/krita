@@ -364,7 +364,7 @@ void SpellCheck::finishedRun()
                 block.layout()->clearAdditionalFormats();
             else
                 block.layout()->setAdditionalFormats(newRanges);
-            m_document->markContentsDirty(bl.start, bl.start + bl.length);
+            m_document->markContentsDirty(bl.start, bl.length);
         }
     }
     m_allowSignals = true;

@@ -195,10 +195,12 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     action = new KAction(i18n("Brush option slider 1"), this);
     view->actionCollection()->addAction("brushslider1", action);
     action->setDefaultWidget(m_sliderChooser[0]);
+    connect(action, SIGNAL(triggered()), m_sliderChooser[0], SLOT(showPopupWidget()));
 
     action = new KAction(i18n("Brush option slider 2"), this);
     view->actionCollection()->addAction("brushslider2", action);
     action->setDefaultWidget(m_sliderChooser[1]);
+    connect(action, SIGNAL(triggered()), m_sliderChooser[1], SLOT(showPopupWidget()));
 
     QWidget* mirrorActions = new QWidget(this);
     QHBoxLayout* mirrorLayout = new QHBoxLayout(mirrorActions);

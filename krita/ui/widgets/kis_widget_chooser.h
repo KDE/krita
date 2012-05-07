@@ -75,7 +75,8 @@ public:
     TWidget* getWidget(const QString& id) const {
         return dynamic_cast<TWidget*>(getWidget(id));
     }
-    
+public slots:
+
     void showPopupWidget();
     
 private:

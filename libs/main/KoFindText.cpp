@@ -80,12 +80,9 @@ QTextCharFormat KoFindText::Private::currentSelectionFormat;
 QTextCharFormat KoFindText::Private::replacedFormat;
 bool KoFindText::Private::formatsInitialized = false;
 
-KoFindText::KoFindText(const QList< QTextDocument* >& documents, QObject* parent)
+KoFindText::KoFindText(QObject* parent)
     : KoFindBase(parent), d(new Private(this))
 {
-    d->documents = documents;
-    d->updateDocumentList();
-
     d->initializeFormats();
 
     KoFindOptionSet *options = new KoFindOptionSet();
@@ -209,6 +206,11 @@ void KoFindText::clearMatches()
     d->currentMatch.first = 0;
 }
 
+QList< QTextDocument* > KoFindText::documents() const
+{
+    return d->documents;
+}
+
 void KoFindText::findNext()
 {
     if(d->selections.size() == 0) {
@@ -236,9 +238,10 @@ void KoFindText::setCurrentCursor(const QTextCursor &cursor)
     d->currentCursor = cursor;
 }
 
-void KoFindText::addDocuments(const QList<QTextDocument*> &documents)
+void KoFindText::setDocuments(const QList<QTextDocument*> &documents)
 {
-    d->documents.append(documents);
+    clearMatches();
+    d->documents = documents;
     d->updateDocumentList();
 }
 

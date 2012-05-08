@@ -1301,6 +1301,8 @@ void KoTextEditor::insertTableOfContents(KoTableOfContentsGeneratorInfo *info)
         tocFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
     }
 
+    d->caret.insertBlock();
+    d->caret.movePosition(QTextCursor::Left);
     d->caret.insertBlock(tocFormat);
     d->caret.movePosition(QTextCursor::Right);
 

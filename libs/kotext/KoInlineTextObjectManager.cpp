@@ -132,7 +132,6 @@ void KoInlineTextObjectManager::removeInlineObject(KoInlineObject *object)
 
     KoBookmark *bookmark = dynamic_cast<KoBookmark *>(object);
     if (bookmark) {
-            qDebug()<<" removing from bookmarkManager";
         m_bookmarkManager.remove(bookmark->name());
     }
 }

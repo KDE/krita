@@ -132,7 +132,7 @@ void TestKoInlineTextObjectManager::testRemoveInlineObject()
 
     int id = obj->id();
 
-    manager.removeInlineObject(id);
+    manager.removeInlineObject(obj);
 
     KoInlineObject *obj2 = manager.inlineTextObject(id);
     Q_ASSERT(obj2 == 0);

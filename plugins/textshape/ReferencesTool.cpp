@@ -103,7 +103,7 @@ void ReferencesTool::createActions()
     addAction("insert_autofootnote",action);
     connect(action, SIGNAL(triggered()), this, SLOT(insertAutoFootNote()));
 
-    action = new KAction(this);
+    action = new KAction(i18n("Insert Labeled Footnote"), this);
     QWidget *w = new LabeledNoteWidget(action);
     action->setDefaultWidget(w);
     addAction("insert_labeledfootnote", action);
@@ -113,13 +113,14 @@ void ReferencesTool::createActions()
     addAction("insert_autoendnote",action);
     connect(action, SIGNAL(triggered()), this, SLOT(insertAutoEndNote()));
 
-    action = new KAction(this);
+    action = new KAction(i18n("Insert Labeled Endnote"), this);
     w = new LabeledNoteWidget(action);
     action->setDefaultWidget(w);
     addAction("insert_labeledendnote", action);
     connect(w, SIGNAL(triggered(QString)), this, SLOT(insertLabeledEndNote(QString)));
 
     action = new KAction(this);
+    action->setText(i18n("Format Notes"));
     addAction("format_notes",action);
     action->setToolTip(i18n("Configure"));
     connect(action, SIGNAL(triggered()), this, SLOT(showNotesConfigureDialog()));

@@ -77,6 +77,8 @@ bool KoTosContainer::loadText(const KoXmlElement &element, KoShapeLoadingContext
             if (!textShape) {
                 return false;
             }
+            //apply the style properties to the loaded text
+            setTextAlignment(d->alignment);
 
             // In the case of text on shape, we cannot ask the text shape to load
             // the odf, since it expects a complete document with style info and
@@ -86,8 +88,6 @@ bool KoTosContainer::loadText(const KoXmlElement &element, KoShapeLoadingContext
             shapeData->loadStyle(element, context);
             bool loadOdf = shapeData->loadOdf(element, context);
 
-            //apply the style properties to the loaded text
-            setTextAlignment(d->alignment);
             return loadOdf;
         }
     }
@@ -130,8 +130,6 @@ void KoTosContainer::loadStyle(const KoXmlElement &element, KoShapeLoadingContex
 
 QString KoTosContainer::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const
 {
-    Q_D(const KoTosContainer);
-
     Qt::Alignment alignment = textAlignment();
     QString verticalAlignment = "top";
     Qt::Alignment vAlignment(alignment & Qt::AlignVertical_Mask);
@@ -232,8 +230,6 @@ void KoTosContainer::setTextAlignment(Qt::Alignment alignment)
 
 Qt::Alignment KoTosContainer::textAlignment() const
 {
-    Q_D(const KoTosContainer);
-
     KoShape *textShape = this->textShape();
     if (textShape == 0) {
         kWarning(30006) << "No text shape present in KoTosContainer";

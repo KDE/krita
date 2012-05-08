@@ -288,7 +288,7 @@ void DlgImageSize::slotWidthPhysicalChanged(double w)
 {
     blockAll();
 
-    KoUnit unit = KoUnit::fromListForUi(m_page->cmbWidthPixelUnit->currentIndex(), KoUnit::HidePixel);
+    KoUnit unit = KoUnit::fromListForUi(m_page->cmbWidthUnit->currentIndex(), KoUnit::HidePixel);
     m_width = unit.fromUserValue(w);
 
     if (m_page->lock_resolution->isLocked()) { // !m_page->chkAffectResolution->isChecked()) {

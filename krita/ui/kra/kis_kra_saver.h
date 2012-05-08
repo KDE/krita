@@ -41,7 +41,7 @@ public:
 
 private:
     void saveCompositions(QDomDocument& doc, QDomElement& element, KisImageWSP image);
-
+    bool saveAssistants(KoStore* store, const QString & uri, bool external);
     struct Private;
     Private * const m_d;
 };

@@ -81,6 +81,7 @@
 #include <kis_selection.h>
 #include <kis_fill_painter.h>
 #include <kis_undo_stores.h>
+#include <kis_painting_assistants_manager.h>
 
 // Local
 #include "kis_factory2.h"
@@ -517,6 +518,19 @@ vKisNodeSP KisDoc2::activeNodes() const
         }
     }
     return nodes;
+}
+
+QList<KisPaintingAssistant*> KisDoc2::assistants()
+{
+    QList<KisPaintingAssistant*> assistant;
+    foreach(KoView *v, views()) {
+        KisView2 *view = qobject_cast<KisView2*>(v);
+        if (view) {
+            KisPaintingAssistantsManager* assistantsmanager = view->paintingAssistantManager();
+            assistant.append(assistantsmanager->assistants());
+        }
+    }
+    return assistant;
 }
 
 void KisDoc2::setPreActivatedNode(KisNodeSP activatedNode)

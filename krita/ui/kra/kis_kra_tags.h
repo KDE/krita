@@ -37,6 +37,7 @@ const QString SEPARATOR = "/";
 const QString SHAPE_LAYER_PATH = "/shapelayers/";
 const QString EXIF_PATH = "/annotations/exif";
 const QString ICC_PATH = "/annotations/icc";
+const QString ASSISTANTS_PATH = "/assistants/";
 const QString LAYER_PATH = "/layers/";
 
 const QString ADJUSTMENT_LAYER = "adjustmentlayer";

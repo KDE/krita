@@ -37,6 +37,7 @@
 #include <kis_layer.h>
 #include <kis_adjustment_layer.h>
 #include <kis_layer_composition.h>
+#include <kis_painting_assistants_manager.h>
 
 #include "kis_doc2.h"
 
@@ -145,6 +146,7 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
             }
         }
     }
+    saveAssistants(store,uri,external);
     return true;
 }
 
@@ -155,4 +157,25 @@ void KisKraSaver::saveCompositions(QDomDocument& doc, QDomElement& element, KisI
         composition->save(doc, e);
     }
     element.appendChild(e);
+}
+
+bool KisKraSaver::saveAssistants(KoStore* store, const QString & uri, bool external)
+{
+    QString location;
+
+    // Save the layers data
+    quint32 count = 0;
+
+    QList<KisPaintingAssistant*> assistants =  m_d->doc->assistants();
+    if (!assistants.isEmpty()) {
+        foreach(KisPaintingAssistant* assist, assistants){
+            location = external ? QString::null : uri;
+            location += m_d->imageName + ASSISTANTS_PATH;
+            location += assist->id() + assist->name();
+            if (store->open(location + ".assistant")) {
+                store->close();
+            }
+        }
+    }
+    return true;
 }

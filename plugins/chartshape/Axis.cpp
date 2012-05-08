@@ -1720,49 +1720,58 @@ void Axis::plotAreaChartTypeChanged(ChartType newChartType)
 
     ChartType oldChartType = d->plotAreaChartType;
 
-    KDChart::AbstractDiagram *newDiagram = d->getDiagramAndCreateIfNeeded(newChartType);
+    // Change only the fill in case of type change from RadarChartType to FilledRadarChartType
+    // or viceversa as rest of the properties remain same
+    if (newChartType == RadarChartType && oldChartType == FilledRadarChartType) {
+        d->kdRadarDiagram->setFillAlpha(0);
+    } else if (newChartType == FilledRadarChartType && oldChartType == RadarChartType) {
+        d->kdRadarDiagram->setFillAlpha(0.4);
+    } else {
+        KDChart::AbstractDiagram *newDiagram = d->getDiagramAndCreateIfNeeded(newChartType);
 
-    KDChartModel *newModel = dynamic_cast<KDChartModel*>(newDiagram->model());
-    // FIXME: This causes a crash on unimplemented types. We should
-    //        handle that in some other way.
-    Q_ASSERT(newModel);
+        KDChartModel *newModel = dynamic_cast<KDChartModel*>(newDiagram->model());
+        // FIXME: This causes a crash on unimplemented types. We should
+        //        handle that in some other way.
+        Q_ASSERT(newModel);
 
-    foreach (DataSet *dataSet, d->dataSets) {
-        //if (dataSet->chartType() != LastChartType) {
-            dataSet->setChartType(LastChartType);
-            dataSet->setChartSubType(NoChartSubtype);
-        //}
-    }
+        foreach (DataSet *dataSet, d->dataSets) {
+            //if (dataSet->chartType() != LastChartType) {
+                dataSet->setChartType(LastChartType);
+                dataSet->setChartSubType(NoChartSubtype);
+            //}
+        }
 
-    KDChart::AbstractDiagram *oldDiagram = d->getDiagram(oldChartType);
-    Q_ASSERT(oldDiagram);
-    // We need to know the old model so that we can remove the data sets
-    // from the old model that we added to the new model.
-    KDChartModel *oldModel = dynamic_cast<KDChartModel*>(oldDiagram->model());
-    Q_ASSERT(oldModel);
+        KDChart::AbstractDiagram *oldDiagram = d->getDiagram(oldChartType);
+        Q_ASSERT(oldDiagram);
+        // We need to know the old model so that we can remove the data sets
+        // from the old model that we added to the new model.
+        KDChartModel *oldModel = dynamic_cast<KDChartModel*>(oldDiagram->model());
+        Q_ASSERT(oldModel);
 
-    foreach (DataSet *dataSet, d->dataSets) {
-        if (dataSet->chartType() != LastChartType)
-            continue;
+        foreach (DataSet *dataSet, d->dataSets) {
+            if (dataSet->chartType() != LastChartType)
+                continue;
 
-// FIXME: What does this do? Only the user may set a data set's pen through
-// a proper UI, in any other case the pen falls back to a default
-// which depends on the chart type, so setting it here will break the default
-// for other chart types.
-#if 0
-        Qt::PenStyle newPenStyle = newDiagram->pen().style();
-        QPen newPen = dataSet->pen();
-        newPen.setStyle(newPenStyle);
-        dataSet->setPen( newPen);
-#endif
-        newModel->addDataSet(dataSet);
-        const int dataSetCount = oldModel->dataDirection() == Qt::Vertical
-                                 ? oldModel->columnCount() : oldModel->rowCount();
-        if (dataSetCount == oldModel->dataDimensions())
-            // We need to call this method so set it sets d->kd[TYPE]Diagram to NULL
-            d->deleteDiagram(oldChartType);
-        else
-            oldModel->removeDataSet(dataSet);
+    // FIXME: What does this do? Only the user may set a data set's pen through
+    // a proper UI, in any other case the pen falls back to a default
+    // which depends on the chart type, so setting it here will break the default
+    // for other chart types.
+    #if 0
+            Qt::PenStyle newPenStyle = newDiagram->pen().style();
+            QPen newPen = dataSet->pen();
+            newPen.setStyle(newPenStyle);
+            dataSet->setPen( newPen);
+    #endif
+            newModel->addDataSet(dataSet);
+            const int dataSetCount = oldModel->dataDirection() == Qt::Vertical
+                                     ? oldModel->columnCount() : oldModel->rowCount();
+            if (dataSetCount == oldModel->dataDimensions())
+                // We need to call this method so set it sets d->kd[TYPE]Diagram to NULL
+                d->deleteDiagram(oldChartType);
+            else
+                oldModel->removeDataSet(dataSet);
+        }
+
     }
 
     d->plotAreaChartType = newChartType;

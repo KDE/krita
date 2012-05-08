@@ -33,7 +33,6 @@
 #include <kis_node.h>
 #include <kis_undo_adapter.h>
 #include "kis_node_graph_listener.h"
-
 #include "kis_iterator_ng.h"
 
 
@@ -155,22 +154,20 @@ inline bool comparePaintDevices(QPoint & pt, const KisPaintDeviceSP dev1, const 
         pt.setY(-1);
     }
 
-    KisHLineConstIteratorPixel iter1 = dev1->createHLineConstIterator(0, 0, rc1.width());
-    KisHLineConstIteratorPixel iter2 = dev2->createHLineConstIterator(0, 0, rc1.width());
+    KisHLineConstIteratorSP iter1 = dev1->createHLineConstIteratorNG(0, 0, rc1.width());
+    KisHLineConstIteratorSP iter2 = dev2->createHLineConstIteratorNG(0, 0, rc1.width());
 
     int pixelSize = dev1->pixelSize();
 
     for (int y = 0; y < rc1.height(); ++y) {
 
-        while (!iter1.isDone()) {
-            if (memcmp(iter1.rawData(), iter2.rawData(), pixelSize) != 0)
+        do {
+            if (memcmp(iter1->oldRawData(), iter2->oldRawData(), pixelSize) != 0)
                 return false;
-            ++iter1;
-            ++iter2;
-        }
+        } while (iter1->nextPixel() && iter2->nextPixel());
 
-        iter1.nextRow();
-        iter2.nextRow();
+        iter1->nextRow();
+        iter2->nextRow();
     }
     //     qDebug() << "comparePaintDevices time elapsed:" << t.elapsed();
     return true;
@@ -207,15 +204,15 @@ inline bool checkQImage(const QImage &image, const QString &testName,
 
 inline quint8 alphaDevicePixel(KisPaintDeviceSP dev, qint32 x, qint32 y)
 {
-    KisHLineConstIteratorPixel iter = dev->createHLineConstIterator(x, y, 1);
-    const quint8 *pix = iter.rawData();
+    KisHLineConstIteratorSP iter = dev->createHLineConstIteratorNG(x, y, 1);
+    const quint8 *pix = iter->oldRawData();
     return *pix;
 }
 
 inline void alphaDeviceSetPixel(KisPaintDeviceSP dev, qint32 x, qint32 y, quint8 s)
 {
-    KisHLineIteratorPixel iter = dev->createHLineIterator(x, y, 1);
-    quint8 *pix = iter.rawData();
+    KisHLineIteratorSP iter = dev->createHLineIteratorNG(x, y, 1);
+    quint8 *pix = iter->rawData();
     *pix = s;
 }
 
@@ -232,12 +229,10 @@ inline bool checkAlphaDeviceFilledWithPixel(KisPaintDeviceSP dev, const QRect &r
                 qCritical() << "Actual pixel:  " << *((quint8*)it->rawData());
                 return false;
             }
-
             it->nextPixel();
         }
         it->nextRow();
     }
-
     return true;
 }
 
@@ -280,7 +275,6 @@ public:
         KisNodeGraphListener::nodeHasBeenRemoved(parent, index);
         afterRemoveRow = true;
     }
-
 
     virtual void aboutToMoveNode(KisNode *parent, int oldIndex, int newIndex) {
         KisNodeGraphListener::aboutToMoveNode(parent, oldIndex, newIndex);

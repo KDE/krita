@@ -166,14 +166,6 @@ void KoTextDrag::setData(const QString & mimeType, const QByteArray & data)
     m_mimeData->setData(mimeType, data);
 }
 
-void KoTextDrag::addToClipboard()
-{
-    if (m_mimeData) {
-        QApplication::clipboard()->setMimeData(m_mimeData);
-        m_mimeData = 0;
-    }
-}
-
 QMimeData * KoTextDrag::mimeData()
 {
     QMimeData * mimeData = m_mimeData;

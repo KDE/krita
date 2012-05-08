@@ -21,7 +21,6 @@
 #include <KoColorModelStandardIds.h>
 
 #include <kis_paint_device.h>
-#include <kis_random_accessor.h>
 
 #include <GTLCore/PixelDescription.h>
 #include <GTLCore/Type.h>

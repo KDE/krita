@@ -298,6 +298,23 @@ void KoToolBase::copy() const
 {
 }
 
+void KoToolBase::dragMoveEvent(QDragMoveEvent *event, const QPointF &point)
+{
+    Q_UNUSED(event);
+    Q_UNUSED(point);
+}
+
+void KoToolBase::dragLeaveEvent(QDragLeaveEvent *event)
+{
+    Q_UNUSED(event);
+}
+
+void KoToolBase::dropEvent(QDropEvent *event, const QPointF &point)
+{
+    Q_UNUSED(event);
+    Q_UNUSED(point);
+}
+
 bool KoToolBase::hasSelection()
 {
     KoToolSelection *sel = selection();

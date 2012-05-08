@@ -33,7 +33,7 @@ inline double drand48() {
 #include <QVariant>
 #include <QHash>
 
-#include "kis_random_accessor.h"
+#include "kis_random_accessor_ng.h"
 #include <cmath>
 #include <ctime>
 
@@ -69,7 +69,7 @@ void ChalkBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
     m_counter++;
 
     qint32 pixelSize = dev->colorSpace()->pixelSize();
-    KisRandomAccessor accessor = dev->createRandomAccessor((int)x, (int)y);
+    KisRandomAccessorSP accessor = dev->createRandomAccessorNG((int)x, (int)y);
 
     qreal result;
     if (m_properties->inkDepletion) {
@@ -106,10 +106,9 @@ void ChalkBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
             pixelX = qRound(x + bx);
             pixelY = qRound(y + by);
 
-            accessor.moveTo(pixelX, pixelY);
-            memcpy(accessor.rawData(), m_inkColor.data(), pixelSize);
+            accessor->moveTo(pixelX, pixelY);
+            memcpy(accessor->rawData(), m_inkColor.data(), pixelSize);
         }
     }
-
 }
 

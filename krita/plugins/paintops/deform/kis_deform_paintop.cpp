@@ -32,7 +32,7 @@
 #include "kis_types.h"
 #include "kis_paintop.h"
 #include "kis_selection.h"
-#include "kis_random_accessor.h"
+#include "kis_random_accessor_ng.h"
 
 #include <kis_fixed_paint_device.h>
 

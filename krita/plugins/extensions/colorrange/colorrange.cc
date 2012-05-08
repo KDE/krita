@@ -47,6 +47,7 @@
 #include "kis_selection_manager.h"
 #include "kis_selection_tool_helper.h"
 #include "kis_canvas2.h"
+#include "kis_iterator_ng.h"
 
 #include "dlg_colorrange.h"
 #include <KoColorSpace.h>
@@ -101,22 +102,24 @@ void ColorRange::selectOpaque()
     KisSelectionToolHelper helper(canvas, node, i18n("Select Opaque"));
     
     qint32 x, y, w, h;
-    device->exactBounds(x, y, w, h);
+    QRect rc = device->exactBounds();
+    x = rc.x();
+    y = rc.y();
+    w = rc.width();
+    h = rc.height();
+    
     const KoColorSpace * cs = device->colorSpace();
     KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
 
-    KisHLineConstIterator deviter = device->createHLineConstIterator(x, y, w);
-    KisHLineIterator selIter = tmpSel ->createHLineIterator(x, y, w);
+    KisHLineConstIteratorSP deviter = device->createHLineConstIteratorNG(x, y, w);
+    KisHLineIteratorSP selIter = tmpSel ->createHLineIteratorNG(x, y, w);
 
     for (int row = y; row < h + y; ++row) {
-        while (!deviter.isDone()) {
-            *selIter.rawData() = cs->opacityU8(deviter.rawData());
-            
-            ++deviter;
-            ++selIter;            
-        }      
-        deviter.nextRow();
-        selIter.nextRow();
+        do {
+            *selIter->rawData() = cs->opacityU8(deviter->oldRawData());
+        } while (deviter->nextPixel() && selIter->nextPixel());
+        deviter->nextRow();
+        selIter->nextRow();
     }
 
     helper.selectPixelSelection(tmpSel, SELECTION_ADD);

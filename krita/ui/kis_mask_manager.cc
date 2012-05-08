@@ -49,7 +49,7 @@
 #include <KoColor.h>
 #include "kis_node_commands_adapter.h"
 #include "commands/kis_selection_commands.h"
-
+#include "kis_iterator_ng.h"
 
 KisMaskManager::KisMaskManager(KisView2 * view)
         : m_view(view)
@@ -228,14 +228,17 @@ void KisMaskManager::maskToLayer()
     QRect rc = selection->selectedExactRect();
     KoColor color(Qt::black, cs);
     int pixelsize = cs->pixelSize();
-    KisHLineIteratorPixel dstiter = layer->paintDevice()->createHLineIterator(rc.x(), rc.y(), rc.width(), selection);
+
+    KisHLineIteratorSP dstIter = layer->paintDevice()->createHLineIteratorNG(rc.x(), rc.y(), rc.width());
+    KisHLineConstIteratorSP selIter = selection->projection()->createHLineConstIteratorNG(rc.x(), rc.y(), rc.width());
+
     for (int row = 0; row < rc.height(); ++row) {
-        while (!dstiter.isDone()) {
-            cs->setOpacity(color.data(), dstiter.selectedness(), 1);
-            memcpy(dstiter.rawData(), color.data(), pixelsize);
-            ++dstiter;
-        }
-        dstiter.nextRow();
+        do {
+            cs->setOpacity(color.data(), *selIter->oldRawData(), 1);
+            memcpy(dstIter->rawData(), color.data(), pixelsize);
+        } while (dstIter->nextPixel() && selIter->nextPixel());
+        dstIter->nextRow();
+        selIter->nextRow();
     }
 
     m_commandsAdapter->beginMacro(i18n("Layer from Mask"));

@@ -29,7 +29,6 @@
 #include <kis_mask_generator.h>
 #include <kis_convolution_kernel.h>
 #include <kis_convolution_painter.h>
-#include <kis_iterators_pixel.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 #include <KoProgressUpdater.h>

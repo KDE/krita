@@ -43,7 +43,7 @@
 #include "kis_tool_colorpicker.moc"
 #include "KoPointerEvent.h"
 #include "KoCanvasBase.h"
-#include "kis_iterators_pixel.h"
+#include "kis_random_accessor_ng.h"
 #include "KoColor.h"
 #include "KoResourceServerProvider.h"
 #include "KoColorSet.h"
@@ -117,15 +117,16 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
             qint16* weights = new qint16[counts[m_radius]];
 
             int i = 0;
-            // dummy init
-            KisHLineConstIteratorPixel iter = dev->createHLineConstIterator(0, 0, 1);
-            for (int y = - m_radius; y <= m_radius; y++) {
-                for (int x = - m_radius; x <= m_radius; x++) {
+            KisRandomConstAccessorSP accessor = dev->createRandomConstAccessorNG(0, 0);
+
+            for (int y = -m_radius; y <= m_radius; y++) {
+                for (int x = -m_radius; x <= m_radius; x++) {
                     if (((x * x) + (y * y)) < m_radius * m_radius) {
-                        iter = dev->createHLineIterator(pos.x() + x, pos.y() + y, 1);
+
+                        accessor->moveTo(pos.x() + x, pos.y() + y);
 
                         pixels[i] = new quint8[pixelSize];
-                        memcpy(pixels[i], iter.rawData(), pixelSize);
+                        memcpy(pixels[i], accessor->oldRawData(), pixelSize);
 
                         if (x == 0 && y == 0) {
                             // Because the sum of the weights must be 255,

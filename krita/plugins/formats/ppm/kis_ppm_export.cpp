@@ -41,6 +41,7 @@
 #include <KoColorSpaceTraits.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
+#include "kis_iterator_ng.h"
 
 K_PLUGIN_FACTORY(KisPPMExportFactory, registerPlugin<KisPPMExport>();)
 K_EXPORT_PLUGIN(KisPPMExportFactory("krita"))
@@ -235,44 +236,43 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
     else flow = new KisPPMAsciiFlow(&fp);
 
     for (int y = 0; y < image->height(); ++y) {
-        KisHLineIterator it = pd->createHLineIterator(0, y, image->width());
+        KisHLineIteratorSP it = pd->createHLineIteratorNG(0, y, image->width());
         if (is16bit) {
             if (rgb) {
-                while (!it.isDone()) {
-                    flow->writeNumber(KoRgbU16Traits::red(it.rawData()));
-                    flow->writeNumber(KoRgbU16Traits::green(it.rawData()));
-                    flow->writeNumber(KoRgbU16Traits::blue(it.rawData()));
-                    ++it;
-                }
+                do {
+                    flow->writeNumber(KoRgbU16Traits::red(it->rawData()));
+                    flow->writeNumber(KoRgbU16Traits::green(it->rawData()));
+                    flow->writeNumber(KoRgbU16Traits::blue(it->rawData()));
+
+                } while (it->nextPixel());
             } else if (bitmap) {
-                while (!it.isDone()) {
-                    flow->writeBool(*reinterpret_cast<quint16*>(it.rawData()));
-                    ++it;
-                }
+                do {
+                    flow->writeBool(*reinterpret_cast<quint16*>(it->rawData()));
+
+                } while (it->nextPixel());
             } else {
-                while (!it.isDone()) {
-                    flow->writeNumber(*reinterpret_cast<quint16*>(it.rawData()));
-                    ++it;
-                }
+                do {
+                    flow->writeNumber(*reinterpret_cast<quint16*>(it->rawData()));
+                } while (it->nextPixel());
             }
         } else {
             if (rgb) {
-                while (!it.isDone()) {
-                    flow->writeNumber(KoRgbTraits<quint8>::red(it.rawData()));
-                    flow->writeNumber(KoRgbTraits<quint8>::green(it.rawData()));
-                    flow->writeNumber(KoRgbTraits<quint8>::blue(it.rawData()));
-                    ++it;
-                }
+                do {
+                    flow->writeNumber(KoRgbTraits<quint8>::red(it->rawData()));
+                    flow->writeNumber(KoRgbTraits<quint8>::green(it->rawData()));
+                    flow->writeNumber(KoRgbTraits<quint8>::blue(it->rawData()));
+
+                } while (it->nextPixel());
             } else if (bitmap) {
-                while (!it.isDone()) {
-                    flow->writeBool(*reinterpret_cast<quint8*>(it.rawData()));
-                    ++it;
-                }
+                do {
+                    flow->writeBool(*reinterpret_cast<quint8*>(it->rawData()));
+
+                } while (it->nextPixel());
             } else {
-                while (!it.isDone()) {
-                    flow->writeNumber(*reinterpret_cast<quint8*>(it.rawData()));
-                    ++it;
-                }
+                do {
+                    flow->writeNumber(*reinterpret_cast<quint8*>(it->rawData()));
+
+                } while (it->nextPixel());
             }
         }
     }

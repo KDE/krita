@@ -86,6 +86,10 @@
 #include <QGraphicsWidget>
 #include <QLinearGradient>
 #include <QBitmap>
+#include <QDrag>
+#include <QDragLeaveEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
 
 #include <KoDocumentRdfBase.h>
 
@@ -221,7 +225,7 @@ void TextTool::createActions()
     m_actionFormatUnderline->setCheckable(true);
     connect(m_actionFormatUnderline, SIGNAL(triggered(bool)), this, SLOT(underline(bool)));
 
-    m_actionFormatStrikeOut  = new KAction(KIcon("format-text-strikethrough"), i18n("Strike Out"), this);
+    m_actionFormatStrikeOut  = new KAction(KIcon("format-text-strikethrough"), i18n("Strikethrough"), this);
     addAction("format_strike", m_actionFormatStrikeOut);
     m_actionFormatStrikeOut->setCheckable(true);
     connect(m_actionFormatStrikeOut, SIGNAL(triggered(bool)), this, SLOT(strikeOut(bool)));
@@ -866,12 +870,15 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
     bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
     KoPointedAt pointedAt = hitTest(event->point);
     m_tableDraggedOnce = false;
+    m_clickWithinSelection = false;
     if (pointedAt.position != -1) {
         m_tablePenMode = false;
-        if(event->button() == Qt::LeftButton || !m_textEditor.data()->hasSelection()) {
+
+        if ((event->button() == Qt::LeftButton) && !shiftPressed && m_textEditor.data()->hasSelection() && m_textEditor.data()->isWithinSelection(pointedAt.position)) {
+            m_clickWithinSelection = true;
+            m_draggingOrigin = event->pos(); //we store the pixel pos
+        } else if (! (event->button() == Qt::RightButton && m_textEditor.data()->hasSelection())) {
             m_textEditor.data()->setPosition(pointedAt.position, shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);                useCursor(Qt::IBeamCursor);
-        } else if (false /*within previous selection*/) {
-            m_textEditor.data()->setPosition(pointedAt.position, shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
         }
         m_tableDragInfo.tableHit = KoPointedAt::None;
         if (m_caretTimer.isActive()) { // make the caret not blink, (blinks again after first draw)
@@ -1012,10 +1019,10 @@ void TextTool::updateSelectionHandler()
     m_allowResourceManagerUpdates = true;
 }
 
-void TextTool::copy() const
+QMimeData *TextTool::generateMimeData() const
 {
     if (!m_textShapeData || m_textEditor.isNull() || !m_textEditor.data()->hasSelection())
-        return;
+        return 0;
     int from = m_textEditor.data()->position();
     int to = m_textEditor.data()->anchor();
     KoTextOdfSaveHelper saveHelper(m_textShapeData->document(), from, to);
@@ -1036,7 +1043,16 @@ void TextTool::copy() const
     QTextDocumentFragment fragment = m_textEditor.data()->selection();
     drag.setData("text/html", fragment.toHtml("utf-8").toUtf8());
     drag.setData("text/plain", fragment.toPlainText().toUtf8());
-    drag.addToClipboard();
+
+    return drag.mimeData();
+}
+
+void TextTool::copy() const
+{
+    QMimeData *mimeData = generateMimeData();
+    if (mimeData) {
+        QApplication::clipboard()->setMimeData(mimeData);
+    }
 }
 
 void TextTool::deleteSelection()
@@ -1070,6 +1086,109 @@ QStringList TextTool::supportedPasteMimeTypes() const
     return list;
 }
 
+void TextTool::dragMoveEvent(QDragMoveEvent *event, const QPointF &point)
+{
+    if (event->mimeData()->hasFormat(KoOdf::mimeType(KoOdf::Text))
+                    || event->mimeData()->hasFormat(KoOdf::mimeType(KoOdf::OpenOfficeClipboard))
+                    || event->mimeData()->hasText()) {
+        if (m_drag) {
+            event->setDropAction(Qt::MoveAction);
+            event->accept();
+        } else if (event->proposedAction() == Qt::CopyAction) {
+            event->acceptProposedAction();
+        } else {
+            event->ignore();
+            return;
+        }
+        KoPointedAt pointedAt = hitTest(point);
+
+        if (pointedAt.position == -1) {
+            event->ignore();
+        }
+        if (m_caretTimer.isActive()) { // make the caret not blink, (blinks again after first draw)
+            m_caretTimer.stop();
+            m_caretTimer.setInterval(50);
+            m_caretTimer.start();
+            m_caretTimerState = true; // turn caret instantly on on click
+        }
+
+        if (m_preDragSelection.cursor.isNull()) {
+            repaintSelection();
+
+            m_preDragSelection.cursor = QTextCursor(*m_textEditor.data()->cursor());
+
+            if (m_drag) {
+                // Make a selection that looks like the current cursor selection
+                // so we can move the real carent around freely
+                QVector< QAbstractTextDocumentLayout::Selection > sels = KoTextDocument(m_textShapeData->document()).selections();
+
+                m_preDragSelection.format = QTextCharFormat();
+                m_preDragSelection.format.setBackground(qApp->palette().brush(QPalette::Highlight));
+                m_preDragSelection.format.setForeground(qApp->palette().brush(QPalette::HighlightedText));
+                sels.append(m_preDragSelection);
+                KoTextDocument(m_textShapeData->document()).setSelections(sels);
+            } // else we wantt the selection ot disappaear
+        }
+        repaintCaret(); // will erase caret
+        m_textEditor.data()->setPosition(pointedAt.position);
+        repaintCaret(); // will paint caret in new spot
+
+        // Selection has visually not appeared at a new spot so no need to repaint it
+    }
+}
+
+void TextTool::dragLeaveEvent(QDragLeaveEvent *event)
+{
+    if (m_drag) {
+        // restore the old selections
+        QVector< QAbstractTextDocumentLayout::Selection > sels = KoTextDocument(m_textShapeData->document()).selections();
+        sels.pop_back();
+        KoTextDocument(m_textShapeData->document()).setSelections(sels);
+    }
+
+    repaintCaret(); // will erase caret in old spot
+    m_textEditor.data()->setPosition(m_preDragSelection.cursor.anchor());
+    m_textEditor.data()->setPosition(m_preDragSelection.cursor.position(), QTextCursor::KeepAnchor);
+    repaintCaret(); // will paint caret in new spot
+
+    if (!m_drag) {
+        repaintSelection(); // will paint selection again
+    }
+
+    // mark that we now are back to normal selection
+    m_preDragSelection.cursor = QTextCursor();
+    event->accept();
+}
+
+void TextTool::dropEvent(QDropEvent *event, const QPointF &)
+{
+    if (m_drag) {
+        // restore the old selections
+        QVector< QAbstractTextDocumentLayout::Selection > sels = KoTextDocument(m_textShapeData->document()).selections();
+        sels.pop_back();
+        KoTextDocument(m_textShapeData->document()).setSelections(sels);
+    }
+
+    QTextCursor insertCursor(*m_textEditor.data()->cursor());
+
+    m_textEditor.data()->setPosition(m_preDragSelection.cursor.anchor());
+    m_textEditor.data()->setPosition(m_preDragSelection.cursor.position(), QTextCursor::KeepAnchor);
+    repaintSelection(); // will erase the selection in new spot
+    if (m_drag) {
+        m_textEditor.data()->deleteChar();
+    }
+    m_prevCursorPosition = insertCursor.position();
+    m_textEditor.data()->setPosition(m_prevCursorPosition);
+    m_textEditor.data()->paste(event->mimeData(), canvas()->shapeController());
+    m_textEditor.data()->setPosition(m_prevCursorPosition);
+    //since the paste made insertCursor we can now use that for the end position
+    m_textEditor.data()->setPosition(insertCursor.position(), QTextCursor::KeepAnchor);
+
+    // mark that we no are back to normal selection
+    m_preDragSelection.cursor = QTextCursor();
+    event->accept();
+}
+
 KoPointedAt TextTool::hitTest(const QPointF & point) const
 {
     if (!m_textShape || !m_textShapeData) {
@@ -1094,6 +1213,8 @@ void TextTool::mouseDoubleClickEvent(KoPointerEvent *event)
 
     m_textEditor.data()->select(QTextCursor::WordUnderCursor);
 
+    m_clickWithinSelection = false;
+
     repaintSelection();
     updateSelectionHandler();
 }
@@ -1113,6 +1234,8 @@ void TextTool::mouseTripleClickEvent(KoPointerEvent *event)
     m_textEditor.data()->clearSelection();
     m_textEditor.data()->movePosition(QTextCursor::StartOfBlock);
     m_textEditor.data()->movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+
+    m_clickWithinSelection = false;
 
     repaintSelection();
     updateSelectionHandler();
@@ -1257,6 +1380,19 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
 
         } else if (m_tablePenMode) {
             // do nothing
+        } else if (m_clickWithinSelection) {
+            if (!m_drag && (event->pos() - m_draggingOrigin).manhattanLength()
+          >= QApplication::startDragDistance()) {
+                QMimeData *mimeData = generateMimeData();
+                if (mimeData) {
+                    m_drag = new QDrag(canvas()->canvasWidget());
+                    m_drag->setMimeData(mimeData);
+
+                    m_drag->exec(Qt::MoveAction | Qt::CopyAction, Qt::CopyAction);
+
+                    m_drag = 0;
+                }
+            }
         } else {
             useCursor(Qt::IBeamCursor);
             if (pointedAt.position == m_textEditor.data()->position()) return;
@@ -1306,6 +1442,19 @@ void TextTool::mouseReleaseEvent(KoPointerEvent *event)
     }
 
     KoPointedAt pointedAt = hitTest(event->point);
+
+    if (m_clickWithinSelection && !m_drag) {
+        if (m_caretTimer.isActive()) { // make the caret not blink, (blinks again after first draw)
+            m_caretTimer.stop();
+            m_caretTimer.setInterval(50);
+            m_caretTimer.start();
+            m_caretTimerState = true; // turn caret instantly on on click
+        }
+        repaintCaret(); // will erase caret
+        repaintSelection(); // will erase selection
+        m_textEditor.data()->setPosition(pointedAt.position);
+        repaintCaret(); // will paint caret in new spot
+    }
 
     // Is there an anchor here ?
     if (!m_textEditor.data()->hasSelection()) {

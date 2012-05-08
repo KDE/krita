@@ -23,6 +23,7 @@
 #include <KoColorTransformation.h>
 #include <kis_datamanager.h>
 #include <kis_fill_painter.h>
+#include "kis_iterator_ng.h"
 
 KisColorSource::~KisColorSource() { }
 
@@ -188,15 +189,14 @@ void KisTotalRandomColorSource::colorize(KisPaintDeviceSP dev, const QRect& rect
 
     int pixelSize = dev->colorSpace()->pixelSize();
 
-    KisHLineIteratorPixel it = dev->createHLineIterator(rect.x(), rect.y(), rect.width(), 0);
+    KisHLineIteratorSP it = dev->createHLineIteratorNG(rect.x(), rect.y(), rect.width());
     for (int y = 0; y < rect.height(); y++) {
-        while (!it.isDone()) {
+        do {
             qc.setRgb((int)((255.0*rand()) / RAND_MAX), (int)((255.0*rand()) / RAND_MAX), (int)((255.0*rand()) / RAND_MAX));
             kc.fromQColor(qc);
-            memcpy(it.rawData(), kc.data(), pixelSize);
-            ++it;
-        }
-        it.nextRow();
+            memcpy(it->rawData(), kc.data(), pixelSize);
+        } while (it->nextPixel());
+        it->nextRow();
     }
 
 }

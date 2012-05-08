@@ -93,8 +93,6 @@ KisLayerBox::KisLayerBox()
 
     m_wdgLayerBox->setupUi(mainWidget);
 
-    setMinimumSize(mainWidget->minimumSizeHint());
-
     m_wdgLayerBox->listLayers->setDefaultDropAction(Qt::MoveAction);
     m_wdgLayerBox->listLayers->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
 

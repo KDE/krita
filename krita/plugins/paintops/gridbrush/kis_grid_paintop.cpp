@@ -102,7 +102,7 @@ qreal KisGridPaintOp::paintAt(const KisPaintInformation& info)
     qreal yStep = gridHeight / (qreal)divide;
     qreal xStep = gridWidth / (qreal)divide;
 
-    KisRandomSubAccessorPixel acc = m_settings->node()->paintDevice()->createRandomSubAccessor();
+    KisRandomSubAccessorSP acc = m_settings->node()->paintDevice()->createRandomSubAccessor();
 
     QRectF tile;
     KoColor color( painter()->paintColor() );
@@ -134,9 +134,10 @@ qreal KisGridPaintOp::paintAt(const KisPaintInformation& info)
             // do color transformation
             if (shouldColor){
                 if (m_colorProperties.sampleInputColor){
-                    acc.moveTo(tile.center().x(), tile.center().y());
-                    acc.sampledRawData( color.data() );
-                }else{
+                    acc->moveTo(tile.center().x(), tile.center().y());
+                    acc->sampledOldRawData( color.data() );
+                }
+                else {
                     memcpy(color.data(),painter()->paintColor().data(), m_pixelSize);
                 }
 

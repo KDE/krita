@@ -65,7 +65,7 @@
 
 static const int HIDE_OUTLINE_TIMEOUT = 800; // ms
 
-KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText)
+KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & /*transactionText*/)
     : KisToolPaint(canvas, cursor)
 {
     m_explicitShowOutline = false;

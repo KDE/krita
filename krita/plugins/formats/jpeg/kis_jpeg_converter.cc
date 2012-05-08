@@ -52,7 +52,6 @@ extern "C" {
 
 #include <kis_doc2.h>
 #include <kis_image.h>
-#include <kis_iterators_pixel.h>
 #include <kis_paint_layer.h>
 #include <kis_transaction.h>
 #include <kis_group_layer.h>
@@ -64,6 +63,7 @@ extern "C" {
 #include <kis_transform_worker.h>
 #include <kis_jpeg_source.h>
 #include <kis_jpeg_destination.h>
+#include "kis_iterator_ng.h"
 
 #include <KoColorProfile.h>
 #include <KoColorModelStandardIds.h>
@@ -243,41 +243,41 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     JSAMPROW row_pointer = new JSAMPLE[cinfo.image_width*cinfo.num_components];
 
     for (; cinfo.output_scanline < cinfo.image_height;) {
-        KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, cinfo.output_scanline, cinfo.image_width);
+        KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, cinfo.output_scanline, cinfo.image_width);
         jpeg_read_scanlines(&cinfo, &row_pointer, 1);
         quint8 *src = row_pointer;
         switch (cinfo.out_color_space) {
         case JCS_GRAYSCALE:
-            while (!it.isDone()) {
-                quint8 *d = it.rawData();
+            do {
+                quint8 *d = it->rawData();
                 d[0] = *(src++);
                 if (transform) transform->transform(d, d, 1);
                 d[1] = quint8_MAX;
-                ++it;
-            }
+
+            } while (it->nextPixel());
             break;
         case JCS_RGB:
-            while (!it.isDone()) {
-                quint8 *d = it.rawData();
+            do {
+                quint8 *d = it->rawData();
                 d[2] = *(src++);
                 d[1] = *(src++);
                 d[0] = *(src++);
                 if (transform) transform->transform(d, d, 1);
                 d[3] = quint8_MAX;
-                ++it;
-            }
+
+            } while (it->nextPixel());
             break;
         case JCS_CMYK:
-            while (!it.isDone()) {
-                quint8 *d = it.rawData();
+            do {
+                quint8 *d = it->rawData();
                 d[0] = quint8_MAX - *(src++);
                 d[1] = quint8_MAX - *(src++);
                 d[2] = quint8_MAX - *(src++);
                 d[3] = quint8_MAX - *(src++);
                 if (transform) transform->transform(d, d, 1);
                 d[4] = quint8_MAX;
-                ++it;
-            }
+
+            } while (it->nextPixel());
             break;
         default:
             return KisImageBuilder_RESULT_UNSUPPORTED;
@@ -443,7 +443,7 @@ KisImageWSP KisJPEGConverter::image()
 }
 
 
-KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options, KisMetaData::Store* metaData)
+KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLayerSP layer, vKisAnnotationSP_it /*annotationsStart*/, vKisAnnotationSP_it /*annotationsEnd*/, KisJPEGOptions options, KisMetaData::Store* metaData)
 {
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
@@ -620,65 +620,65 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     int color_nb_bits = 8 * layer->paintDevice()->pixelSize() / layer->paintDevice()->channelCount();
 
     for (; cinfo.next_scanline < height;) {
-        KisHLineConstIterator it = layer->paintDevice()->createHLineConstIterator(0, cinfo.next_scanline, width);
+        KisHLineConstIteratorSP it = layer->paintDevice()->createHLineConstIteratorNG(0, cinfo.next_scanline, width);
         quint8 *dst = row_pointer;
         switch (color_type) {
         case JCS_GRAYSCALE:
             if (color_nb_bits == 16) {
-                while (!it.isDone()) {
-                    //const quint16 *d = reinterpret_cast<const quint16 *>(it.rawData());
-                    const quint8 *d = it.rawData();
+                do {
+                    //const quint16 *d = reinterpret_cast<const quint16 *>(it->oldRawData());
+                    const quint8 *d = it->oldRawData();
                     *(dst++) = cs->scaleToU8(d, 0);//d[0] / quint8_MAX;
-                    ++it;
-                }
+
+                } while (it->nextPixel());
             } else {
-                while (!it.isDone()) {
-                    const quint8 *d = it.rawData();
+                do {
+                    const quint8 *d = it->oldRawData();
                     *(dst++) = d[0];
-                    ++it;
-                }
+
+                } while (it->nextPixel());
             }
             break;
         case JCS_RGB:
             if (color_nb_bits == 16) {
-                while (!it.isDone()) {
-                    //const quint16 *d = reinterpret_cast<const quint16 *>(it.rawData());
-                    const quint8 *d = it.rawData();
+                do {
+                    //const quint16 *d = reinterpret_cast<const quint16 *>(it->oldRawData());
+                    const quint8 *d = it->oldRawData();
                     *(dst++) = cs->scaleToU8(d, 2); //d[2] / quint8_MAX;
                     *(dst++) = cs->scaleToU8(d, 1); //d[1] / quint8_MAX;
                     *(dst++) = cs->scaleToU8(d, 0); //d[0] / quint8_MAX;
-                    ++it;
-                }
+
+                } while (it->nextPixel());
             } else {
-                while (!it.isDone()) {
-                    const quint8 *d = it.rawData();
+                do {
+                    const quint8 *d = it->oldRawData();
                     *(dst++) = d[2];
                     *(dst++) = d[1];
                     *(dst++) = d[0];
-                    ++it;
-                }
+
+                } while (it->nextPixel());
             }
             break;
         case JCS_CMYK:
             if (color_nb_bits == 16) {
-                while (!it.isDone()) {
-                    //const quint16 *d = reinterpret_cast<const quint16 *>(it.rawData());
-                    const quint8 *d = it.rawData();
+                do {
+                    //const quint16 *d = reinterpret_cast<const quint16 *>(it->oldRawData());
+                    const quint8 *d = it->oldRawData();
                     *(dst++) = cs->scaleToU8(d, 0);//quint8_MAX - d[0] / quint8_MAX;
                     *(dst++) = cs->scaleToU8(d, 1);//quint8_MAX - d[1] / quint8_MAX;
                     *(dst++) = cs->scaleToU8(d, 2);//quint8_MAX - d[2] / quint8_MAX;
                     *(dst++) = cs->scaleToU8(d, 3);//quint8_MAX - d[3] / quint8_MAX;
-                    ++it;
-                }
+
+                } while (it->nextPixel());
             } else {
-                while (!it.isDone()) {
-                    const quint8 *d = it.rawData();
+                do {
+                    const quint8 *d = it->oldRawData();
                     *(dst++) = quint8_MAX - d[0];
                     *(dst++) = quint8_MAX - d[1];
                     *(dst++) = quint8_MAX - d[2];
                     *(dst++) = quint8_MAX - d[3];
-                    ++it;
-                }
+
+                } while (it->nextPixel());
             }
             break;
         default:

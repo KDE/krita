@@ -35,32 +35,32 @@ KisNodeGraphListener::~KisNodeGraphListener()
     delete m_d;
 }
 
-void KisNodeGraphListener::aboutToAddANode(KisNode *parent, int index)
+void KisNodeGraphListener::aboutToAddANode(KisNode */*parent*/, int /*index*/)
 {
     m_d->sequenceNumber++;
 }
 
-void KisNodeGraphListener::nodeHasBeenAdded(KisNode *parent, int index)
+void KisNodeGraphListener::nodeHasBeenAdded(KisNode */*parent*/, int /*index*/)
 {
     m_d->sequenceNumber++;
 }
 
-void KisNodeGraphListener::aboutToRemoveANode(KisNode *parent, int index)
+void KisNodeGraphListener::aboutToRemoveANode(KisNode */*parent*/, int /*index*/)
 {
     m_d->sequenceNumber++;
 }
 
-void KisNodeGraphListener::nodeHasBeenRemoved(KisNode *parent, int index)
+void KisNodeGraphListener::nodeHasBeenRemoved(KisNode */*parent*/, int /*index*/)
 {
     m_d->sequenceNumber++;
 }
 
-void KisNodeGraphListener::aboutToMoveNode(KisNode * node, int oldIndex, int newIndex)
+void KisNodeGraphListener::aboutToMoveNode(KisNode * /*node*/, int /*oldIndex*/, int /*newIndex*/)
 {
     m_d->sequenceNumber++;
 }
 
-void KisNodeGraphListener::nodeHasBeenMoved(KisNode * node, int oldIndex, int newIndex)
+void KisNodeGraphListener::nodeHasBeenMoved(KisNode * /*node*/, int /*oldIndex*/, int /*newIndex*/)
 {
     m_d->sequenceNumber++;
 }
@@ -70,10 +70,10 @@ int KisNodeGraphListener::graphSequenceNumber() const
     return m_d->sequenceNumber;
 }
 
-void KisNodeGraphListener::nodeChanged(KisNode * node)
+void KisNodeGraphListener::nodeChanged(KisNode * /*node*/)
 {
 }
 
-void KisNodeGraphListener::requestProjectionUpdate(KisNode * node, const QRect& rect)
+void KisNodeGraphListener::requestProjectionUpdate(KisNode * /*node*/, const QRect& /*rect*/)
 {
 }

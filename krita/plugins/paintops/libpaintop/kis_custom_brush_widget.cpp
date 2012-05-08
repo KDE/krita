@@ -45,6 +45,7 @@
 #include "kis_group_layer.h"
 #include <kis_selection.h>
 #include <KoProperties.h>
+#include "kis_iterator_ng.h"
 
 KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& caption, KisImageWSP image)
         : KisWdgCustomBrush(parent)
@@ -198,21 +199,17 @@ void KisCustomBrushWidget::createBrush()
             QRect r = selection->selectedExactRect();
             dev->crop(r);
 
-            KisHLineIterator pixelIt = dev->createHLineIterator(r.x(), r.top(), r.width());
-            KisHLineConstIterator maskIt = selection->projection()->createHLineIterator(r.x(), r.top(), r.width());
+            KisHLineIteratorSP pixelIt = dev->createHLineIteratorNG(r.x(), r.top(), r.width());
+            KisHLineConstIteratorSP maskIt = selection->projection()->createHLineIteratorNG(r.x(), r.top(), r.width());
 
             for (qint32 y = r.top(); y <= r.bottom(); ++y) {
 
-                while (!pixelIt.isDone()) {
-                    // XXX: Optimize by using stretches
+                do {
+                    dev->colorSpace()->applyAlphaU8Mask(pixelIt->rawData(), maskIt->oldRawData(), 1);
+                } while (pixelIt->nextPixel() && maskIt->nextPixel());
 
-                    dev->colorSpace()->applyAlphaU8Mask(pixelIt.rawData(), maskIt.rawData(), 1);
-
-                    ++pixelIt;
-                    ++maskIt;
-                }
-                pixelIt.nextRow();
-                maskIt.nextRow();
+                pixelIt->nextRow();
+                maskIt->nextRow();
             }
 
             QRect rc = dev->exactBounds();

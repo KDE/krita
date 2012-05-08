@@ -59,6 +59,9 @@ class FontSizeAction;
 
 class KUndo2Command;
 
+class QDrag;
+class QMimeData;
+
 class MockCanvas;
 class TextToolSelection;
 
@@ -111,6 +114,13 @@ public:
     virtual bool paste();
     /// reimplemented from superclass
     virtual QStringList supportedPasteMimeTypes() const;
+    /// reimplemented from superclass
+    virtual void dragMoveEvent(QDragMoveEvent *event, const QPointF &point);
+    /// reimplemented from superclass
+    void dragLeaveEvent(QDragLeaveEvent *event);
+    /// reimplemented from superclass
+    virtual void dropEvent(QDropEvent *event, const QPointF &point);
+
     /// reimplemented from superclass
     virtual void repaintDecorations();
 
@@ -308,6 +318,8 @@ private:
     void runUrl(KoPointerEvent *event, QString &url);
     void useTableBorderCursor();
 
+    QMimeData *generateMimeData() const;
+
 private:
     friend class UndoTextCommand;
     friend class ChangeTracker;
@@ -377,6 +389,10 @@ private:
     bool m_tablePenMode;
     KoBorder::BorderData m_tablePenBorderData;
     mutable QRectF m_lastImMicroFocus;
+
+    bool m_clickWithinSelection;
+    QDrag *m_drag;
+    QAbstractTextDocumentLayout::Selection m_preDragSelection;
 };
 
 #endif

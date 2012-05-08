@@ -35,7 +35,6 @@
 #include <kis_processing_information.h>
 #include <kis_types.h>
 #include <kis_selection.h>
-#include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>

@@ -30,7 +30,6 @@
 #include "kis_types.h"
 #include "kis_global.h"
 #include "kis_shared.h"
-#include "kis_iterators_pixel.h"
 #include "kis_default_bounds_base.h"
 
 #include <krita_export.h>
@@ -197,9 +196,6 @@ public:
      * \see calculateExactBounds()
      */
     virtual QRect exactBounds() const;
-
-    /// Convience method for the above
-    KDE_DEPRECATED void exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const;
 
     /**
      * Returns a rough approximation of region covered by device.
@@ -571,35 +567,6 @@ public:
 
 public:
 
-    /**
-     * Create an iterator over a rectangle section of a paint device, the path followed by
-     * the iterator is not guaranteed, it is optimized for speed, which means that you shouldn't
-     * use this type of iterator if you are combining two differents layers.
-     * @param w width
-     * @param h height
-     * @param selection an up-to-date selection that has the same origin as the paint device
-     * @return an iterator which points to the first pixel of an rectangle
-     */
-    KDE_DEPRECATED KisRectIteratorPixel createRectIterator(qint32 left, qint32 top, qint32 w, qint32 h, const KisSelection * selection = 0);
-
-    /**
-     * Create an iterator over a rectangle section of a paint device, the path followed by
-     * the iterator is not guaranteed, it is optimized for speed, which means that you shouldn't
-     * use this type of iterator if you are combining two differents layers.
-     * @param w width
-     * @param h height
-     * @param selection an up-to-date selection that has the same origin as the paint device* @return an iterator which points to the first pixel of an rectangle, this iterator
-     * does not allow to change the pixel values
-     */
-    KDE_DEPRECATED  KisRectConstIteratorPixel createRectConstIterator(qint32 left, qint32 top, qint32 w, qint32 h, const KisSelection * selection = 0) const;
-
-    /**
-     * @param selection an up-to-date selection that has the same origin as the paint device
-     * @return an iterator which points to the first pixel of a horizontal line, this iterator
-     * does not allow to change the pixel values
-     */
-    KDE_DEPRECATED KisHLineConstIteratorPixel createHLineConstIterator(qint32 x, qint32 y, qint32 w, const KisSelection * selection = 0) const;
-
     KisHLineIteratorSP createHLineIteratorNG(qint32 x, qint32 y, qint32 w);
 
     KisHLineConstIteratorSP createHLineConstIteratorNG(qint32 x, qint32 y, qint32 w) const;
@@ -624,57 +591,20 @@ public:
      *
      * @param rc indicates the rectangle that truly contains data
      */
-    KisRepeatHLineConstIteratorPixel createRepeatHLineConstIterator(qint32 x, qint32 y, qint32 w, const QRect& _dataWidth, const KisSelection * selection = 0) const;
+    KisRepeatHLineConstIteratorSP createRepeatHLineConstIterator(qint32 x, qint32 y, qint32 w, const QRect& _dataWidth) const;
     /**
      * Create an iterator that will "artificially" extend the paint device with the
      * value of the border when trying to access values outside the range of data.
      *
      * @param rc indicates the rectangle that trully contains data
      */
-    KisRepeatVLineConstIteratorPixel createRepeatVLineConstIterator(qint32 x, qint32 y, qint32 h, const QRect& _dataWidth, const KisSelection * selection = 0) const;
-
-    /**
-    * @param selection an up-to-date selection that has the same origin as the paint device
-     * @return an iterator which points to the first pixel of a horizontal line
-     */
-    KDE_DEPRECATED KisHLineIteratorPixel createHLineIterator(qint32 x, qint32 y, qint32 w, const KisSelection * selection = 0);
-
-    /**
-     * @param selection an up-to-date selection that has the same origin as the paint device
-     * This function return an iterator which points to the first pixel of a vertical line
-     */
-    KDE_DEPRECATED KisVLineIteratorPixel createVLineIterator(qint32 x, qint32 y, qint32 h, const KisSelection * selection = 0);
-
-    /**
-     * @param selection an up-to-date selection that has the same origin as the paint device
-     * This function return an iterator which points to the first pixel of a vertical line
-     */
-    KDE_DEPRECATED KisVLineConstIteratorPixel createVLineConstIterator(qint32 x, qint32 y, qint32 h, const KisSelection * selection = 0) const;
-
-    /**
-     * This function creates a random accessor which allow to randomly access any pixels on
-     * the paint device.
-     * <b>Note:</b> random access is way slower than iterators, always use iterators whenever
-     * you can.
-     * @param x, y starting point of the accessor
-     * @param selection an up-to-date selection that has the same origin as the paint device
-     */
-    KDE_DEPRECATED KisRandomAccessorPixel createRandomAccessor(qint32 x, qint32 y, const KisSelection * selection = 0);
-
-    /**
-     * This function creates a random accessor which allow to randomly access any pixels on
-     * the paint device.
-     * <b>Note:</b> random access is way slower than iterators, always use iterators whenever
-     * you can.
-     * @param selection an up-to-date selection that has the same origin as the paint device
-     */
-    KDE_DEPRECATED KisRandomConstAccessorPixel createRandomConstAccessor(qint32 x, qint32 y, const KisSelection * selection = 0) const;
+    KisRepeatVLineConstIteratorSP createRepeatVLineConstIterator(qint32 x, qint32 y, qint32 h, const QRect& _dataWidth) const;
 
     /**
      * This function create a random accessor which can easily access to sub pixel values.
      * @param selection an up-to-date selection that has the same origin as the paint device
      */
-    KisRandomSubAccessorPixel createRandomSubAccessor(const KisSelection * selection = 0) const;
+    KisRandomSubAccessorSP createRandomSubAccessor() const;
 
 
     /** Clear the selected pixels from the paint device */

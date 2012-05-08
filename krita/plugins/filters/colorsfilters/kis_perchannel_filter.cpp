@@ -44,7 +44,6 @@
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
 
-#include "kis_iterators_pixel.h"
 #include "kis_histogram.h"
 #include "kis_painter.h"
 #include "widgets/kis_curve_widget.h"

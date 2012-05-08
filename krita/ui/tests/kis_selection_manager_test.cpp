@@ -52,10 +52,9 @@ public:
         shell = new KoMainWindow(doc->componentData());
         KisView2 *view = new KisView2(doc, shell);
 
-        QString name = "HR SketchPaper 01";
-        name[17] = '\0';
-        KisPattern *newPattern = KisResourceServerProvider::instance()->patternServer()->getResourceByName(name);
-        Q_ASSERT(newPattern);
+        KisPattern *newPattern = new KisPattern(QString(FILES_DATA_DIR) + QDir::separator() + "HR_SketchPaper_01.pat");
+        newPattern->load();
+        Q_ASSERT(newPattern->valid());
         view->resourceProvider()->slotPatternActivated(newPattern);
 
         KoColor fgColor(Qt::black, image->colorSpace());

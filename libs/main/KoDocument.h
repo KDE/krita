@@ -595,7 +595,7 @@ public:
      * the RDF system and needs full access to the KoDocumentRdf object.
      * @see KoDocumentRdf
      */
-    KoDocumentRdf *documentRdf() const;
+    KoDocumentRdfBase *documentRdf() const;
 
     /**
      * Replace the current rdf document with the given rdf document. The existing RDF document
@@ -777,13 +777,6 @@ public:
      * @param settingsWriter
      */
     void saveUnitOdf(KoXmlWriter *settingsWriter) const;
-
-    /**
-     * Returns the name of the unit used to display all measures/distances.
-     * Use this method for displaying it in the user interface, but use
-     * unit() for everything else (conversions etc.)
-     */
-    QString unitName() const;
 
     /**
      * Set the template type used. This is used by the start up widget to show
@@ -1060,6 +1053,7 @@ private:
 
     bool saveToStream(QIODevice *dev);
 
+    QString checkImageMimeTypes(const QString &mimeType, const KUrl& url) const;
 
     /// @return the current KoMainWindow shell
     KoMainWindow *currentShell();

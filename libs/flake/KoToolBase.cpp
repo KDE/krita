@@ -52,7 +52,7 @@ KoToolBase::~KoToolBase()
     delete d_ptr;
 }
 
-/// Ultimately only called from Tables
+/// Ultimately only called from Calligra Sheets
 void KoToolBase::updateShapeController(KoShapeBasedDocumentBase *shapeController)
 {
     if (shapeController) {
@@ -296,6 +296,23 @@ bool KoToolBase::paste()
 
 void KoToolBase::copy() const
 {
+}
+
+void KoToolBase::dragMoveEvent(QDragMoveEvent *event, const QPointF &point)
+{
+    Q_UNUSED(event);
+    Q_UNUSED(point);
+}
+
+void KoToolBase::dragLeaveEvent(QDragLeaveEvent *event)
+{
+    Q_UNUSED(event);
+}
+
+void KoToolBase::dropEvent(QDropEvent *event, const QPointF &point)
+{
+    Q_UNUSED(event);
+    Q_UNUSED(point);
 }
 
 bool KoToolBase::hasSelection()

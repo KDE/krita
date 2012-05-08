@@ -37,6 +37,7 @@
 #include <recorder/kis_node_query_path.h>
 
 #include <KoCanvasController.h>
+#include <KoShapeStroke.h>
 
 
 KisToolRectangle::KisToolRectangle(KoCanvasBase * canvas)
@@ -71,6 +72,8 @@ void KisToolRectangle::finishRect(const QRectF &rect)
     } else {
         QRectF r = convertToPt(rect);
         KoShape* shape = KisShapeToolHelper::createRectangleShape(r);
+        KoShapeStroke* border = new KoShapeStroke(1.0, currentFgColor().toQColor());
+        shape->setStroke(border);
         addShape(shape);
     }
 

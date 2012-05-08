@@ -1,7 +1,9 @@
-<!DOCTYPE RCC><RCC version="1.0">
-<qresource>
-     <file>images/document.png</file>
-     <file>images/presentation.png</file>
-     <file>images/spreadsheet.png</file>
-</qresource>
+<RCC>
+    <qresource prefix="/">
+        <file>images/document.png</file>
+        <file>images/presentation.png</file>
+        <file>images/spreadsheet.png</file>
+        <file>images/dialog-cancel.png</file>
+        <file>images/document-import.png</file>
+    </qresource>
 </RCC>

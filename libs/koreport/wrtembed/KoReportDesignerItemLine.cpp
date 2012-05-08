@@ -113,7 +113,7 @@ void KoReportDesignerItemLine::buildXML(QDomDocument & doc, QDomElement & parent
     QDomElement entity = doc.createElement("report:line");
 
     qreal sx, sy, ex, ey;
-    QString unitname = KoUnit::unitName(m_start.unit());
+    QString unitname = m_start.unit().symbol();
     
     sx = m_start.toUnit().x();
     sy = m_start.toUnit().y();

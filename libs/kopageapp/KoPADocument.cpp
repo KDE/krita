@@ -20,6 +20,8 @@
 
 #include "KoPADocument.h"
 
+#include <QPainter>
+
 #include <KoStore.h>
 #include <KoDocumentResourceManager.h>
 #include <KoXmlWriter.h>
@@ -39,7 +41,6 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoStyleManager.h>
 #include <KoPathShape.h>
-#include <KoLineBorder.h>
 #include <KoXmlNS.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
@@ -314,6 +315,11 @@ QList<KoPAPageBase *> KoPADocument::loadOdfPages( const KoXmlElement & body, KoP
             KoPAPage *page = newPage(static_cast<KoPAMasterPage*>(d->masterPages.first()));
             page->loadOdf( element, context );
             pages.append( page );
+            // in case the page name is pageX where X is the page number remove the name as this is
+            // remove the page name and show the default page name like Slide X or Page X. 
+            if (page->name() == QString("page%1").arg(pages.size())) {
+                page->setName("");
+            }
         }
 
         if (d->odfPageProgressUpdater) {
@@ -434,7 +440,7 @@ void KoPADocument::loadOdfSettings(  const KoXmlDocument & settingsDoc )
     KoOasisSettings settings( settingsDoc );
     KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
     if ( !viewSettings.isNull() ) {
-        setUnit( KoUnit::unit( viewSettings.parseConfigItemString( "unit" ) ) );
+        setUnit(KoUnit::fromSymbol(viewSettings.parseConfigItemString("unit")));
         // FIXME: add other config here.
     }
 

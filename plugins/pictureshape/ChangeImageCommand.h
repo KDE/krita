@@ -46,8 +46,6 @@ private:
     PictureShape *m_shape;
     KoImageData *m_oldImageData;
     KoImageData *m_newImageData;
-    QSizeF m_oldSize;
-    QSizeF m_newSize;
     QRectF m_oldCroppingRect;
     QRectF m_newCroppingRect;
     PictureShape::ColorMode m_oldColorMode;

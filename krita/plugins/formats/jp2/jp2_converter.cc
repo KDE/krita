@@ -41,7 +41,7 @@
 #include <kis_paint_layer.h>
 #include <kis_paint_device.h>
 #include <kis_transaction.h>
-#include <kis_iterator.h>
+#include "kis_iterator_ng.h"
 
 jp2Converter::jp2Converter(KisDoc2 *doc)
 {
@@ -234,29 +234,30 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
 
     // Set the data
     int pos = 0;
+    KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, 0, image->x1);
     for (int v = 0; v < image->y1; ++v) {
-        KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, v, image->x1);
         if (bitdepth == 16) {
-            while (!it.isDone()) {
-                quint16* px = reinterpret_cast<quint16*>(it.rawData());
+            do {
+                quint16* px = reinterpret_cast<quint16*>(it->rawData());
                 for (int i = 0; i < components; ++i) {
                     px[channelorder[i]] = image->comps[i].data[pos];
                 }
-                colorSpace->setOpacity(it.rawData(), OPACITY_OPAQUE_U8, 1);
+                colorSpace->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
                 ++pos;
-                ++it;
-            }
+
+            } while (it->nextPixel());
         } else if (bitdepth == 8) {
-            while (!it.isDone()) {
-                quint8* px = reinterpret_cast<quint8*>(it.rawData());
+            do {
+                quint8* px = reinterpret_cast<quint8*>(it->rawData());
                 for (int i = 0; i < components; ++i) {
                     px[channelorder[i]] = image->comps[i].data[pos];
                 }
                 colorSpace->setOpacity(px, OPACITY_OPAQUE_U8, 1);
                 ++pos;
-                ++it;
-            }
+
+            } while (it->nextPixel());
         }
+        it->nextRow();
     }
 
     return KisImageBuilder_RESULT_OK;
@@ -378,27 +379,28 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
 
     // Copy the data in the image
     int pos = 0;
+    KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, 0, image->x1);
     for (int v = 0; v < height; ++v) {
-        KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, v, image->x1);
         if (bitdepth == 16) {
-            while (!it.isDone()) {
-                quint16* px = reinterpret_cast<quint16*>(it.rawData());
+            do {
+                quint16* px = reinterpret_cast<quint16*>(it->rawData());
                 for (int i = 0; i < components; ++i) {
                     image->comps[i].data[pos] = px[channelorder[i]];
                 }
                 ++pos;
-                ++it;
-            }
+
+            } while (it->nextPixel());
         } else if (bitdepth == 8) {
-            while (!it.isDone()) {
-                quint8* px = reinterpret_cast<quint8*>(it.rawData());
+            do {
+                quint8* px = reinterpret_cast<quint8*>(it->rawData());
                 for (int i = 0; i < components; ++i) {
                     image->comps[i].data[pos] = px[channelorder[i]];
                 }
                 ++pos;
-                ++it;
-            }
+
+            } while (it->nextPixel());
         }
+        it->nextRow();
     }
 
     // coding format

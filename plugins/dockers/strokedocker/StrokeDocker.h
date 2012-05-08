@@ -34,9 +34,9 @@
 #include <QDockWidget>
 #include <KoMarkerData.h>
 
-class KoShapeBorderModel;
+class KoShapeStrokeModel;
 
-/// A docker for setting properties of a line border
+/// A docker for setting properties of a stroke
 class StrokeDocker : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
@@ -47,8 +47,8 @@ public:
     virtual ~StrokeDocker();
 
 public slots:
-    /// Sets the border to edit the properties of
-    virtual void setStroke( const KoShapeBorderModel * );
+    /// Sets the stroke to edit the properties of
+    virtual void setStroke( const KoShapeStrokeModel * );
     /// Sets the unit to be used for the line width editing
     virtual void setUnit( KoUnit unit );
 

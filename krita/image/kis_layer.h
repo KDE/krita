@@ -165,7 +165,7 @@ public:
     /**
      * Set the image this layer belongs to.
      */
-    void setImage(KisImageWSP image);
+    virtual void setImage(KisImageWSP image);
 
     /**
      * Clones should be informed about updates of the original

@@ -28,6 +28,7 @@
 #include "KoText.h"
 #include "styles/KoListStyle.h"
 #include <KoToolSelection.h>
+#include <KoBorder.h>
 
 #include <QClipboard>
 #include <QMetaType>
@@ -161,7 +162,7 @@ public slots:
     /// The recording is automatically terminated when another command is added, which as mentioned
     /// can happen by executing some of the KoTextEditor methods.
     void addCommand(KUndo2Command *command);
-    
+
     /// This instantly "redo" the command thus placing all the text manipulation the "redo" does
     /// (should be implemented with a "first redo" pattern) in the qt text systems internal
     /// undostack while also adding representative subcommands to \ref command.
@@ -326,52 +327,83 @@ public slots:
 
     bool hasComplexSelection() const;
 
-     /**
+    /**
      * Insert a table at the current cursor position.
      * @param rows the number of rows in the created table.
      * @param columns the number of columns in the created table.
      */
     void insertTable(int rows, int columns);
 
-     /**
+    /**
      * Insert a table row above the current cursor position (if in a table).
      */
     void insertTableRowAbove();
 
-     /**
+    /**
      * Insert a table row below the current cursor position (if in a table).
      */
     void insertTableRowBelow();
 
-     /**
+    /**
      * Insert a table column to the left of the current cursor position (if in a table).
      */
     void insertTableColumnLeft();
 
-     /**
+    /**
      * Insert a table column to the right of the current cursor position (if in a table).
      */
     void insertTableColumnRight();
 
-     /**
+    /**
      * Delete a table column where the cursor is (if in a table).
      */
     void deleteTableColumn();
 
-     /**
+    /**
      * Delete a table row where the cursor is (if in a table).
      */
     void deleteTableRow();
 
-     /**
+    /**
      * Merge table cells (selected by the cursor).
      */
     void mergeTableCells();
 
-     /**
+    /**
      * Split table cells (selected by the cursor) that were previously merged.
      */
     void splitTableCells();
+
+    /**
+     * Sets the width of a table column.
+     * @param table is the table to be adjusted.
+     * @param column the column that is to be adjusted.
+     */
+    void adjustTableColumnWidth(QTextTable *table, int column, qreal width, KUndo2Command *parentCommand = 0);
+
+    /**
+     * Sets the height of a table row.
+     * @param table is the table to be adjusted.
+     * @param row the row that is to be adjusted.
+     */
+    void adjustTableRowHeight(QTextTable *table, int row, qreal height, KUndo2Command *parentCommand = 0);
+
+    /**
+     * Changes the width of a table by adjusting the margins.
+     * @param table is the table to be adjusted.
+     * @param dLeft delta value for the left margin.
+     * @param dRight delta value for the right margin.
+     */
+    void adjustTableWidth(QTextTable *table, qreal dLeft, qreal dRight);
+
+    /**
+     * Sets the border formatting of a side in a table cell.
+     * @param table is the table to be adjusted.
+     * @param column the column coordinate of the cell that is to be adjusted.
+     * @param row the row coordinate of the cell that is to be adjusted.
+     */
+    void setTableBorderData(QTextTable *table, int row, int column, KoBorder::Side cellSide,
+                const KoBorder::BorderData &data);
 
     /**
      * Insert a footnote at the current cursor position
@@ -408,6 +440,8 @@ public slots:
     bool movePosition(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor, int n = 1);
 
     void newLine();
+
+    bool isWithinSelection(int position) const;
 
     int position() const;
 

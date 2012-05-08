@@ -26,8 +26,6 @@ SET (chartshape_LIB_SRCS
     ChartProxyModel.cpp
     KDChartModel.cpp
     Surface.cpp
-    ThreeDScene.cpp
-    ThreeDTransformation.cpp
     ChartDocument.cpp
     ChartShape.cpp
     ChartTool.cpp

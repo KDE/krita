@@ -69,6 +69,7 @@ TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager)
         , m_pageProvider(0)
         , m_imageCollection(0)
         , m_paragraphStyle(0)
+        , m_clip(true)
 {
     setShapeId(TextShape_SHAPEID);
     m_textShapeData = new KoTextShapeData();
@@ -178,11 +179,22 @@ QPointF TextShape::convertScreenPos(const QPointF &point) const
     return p + QPointF(0.0, m_textShapeData->documentOffset());
 }
 
+
+QPainterPath TextShape::outline() const
+{
+    QPainterPath path;
+    path.addRect(QRectF(QPointF(0,0), size()));
+    return path;
+}
+
 QRectF TextShape::outlineRect() const
 {
     if (m_textShapeData->rootArea()) {
         QRectF rect = m_textShapeData->rootArea()->boundingRect();
         rect.moveTop(rect.top() - m_textShapeData->rootArea()->top());
+        if (m_clip) {
+            rect.setHeight(size().height());
+        }
         return rect | QRectF(QPointF(0, 0), size());
     }
     return QRectF(QPointF(0,0), size());

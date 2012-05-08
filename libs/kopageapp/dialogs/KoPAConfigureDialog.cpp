@@ -23,10 +23,12 @@
 #include <KoConfigDocumentPage.h>
 #include <KoConfigGridPage.h>
 #include <KoConfigMiscPage.h>
+#include <KoConfigAuthorPage.h>
 #include <KoPACanvasBase.h>
 #include <KoShapeController.h>
 
 #include <klocale.h>
+#include <kicon.h>
 
 KoPAConfigureDialog::KoPAConfigureDialog(KoPAView* parent)
 : KPageDialog(parent)
@@ -46,12 +48,17 @@ KoPAConfigureDialog::KoPAConfigureDialog(KoPAView* parent)
     item->setHeader(i18n("Grid"));
     item->setIcon(KIcon(BarIcon("grid", KIconLoader::SizeMedium)));
 
-    connect(m_miscPage, SIGNAL(unitChanged(int)), m_gridPage, SLOT(slotUnitChanged(int)));
+    connect(m_miscPage, SIGNAL(unitChanged(KoUnit)), m_gridPage, SLOT(slotUnitChanged(KoUnit)));
 
     m_docPage = new KoConfigDocumentPage( parent->koDocument() );
     item = addPage( m_docPage, i18nc( "@title:tab Document settings page", "Document" ) );
     item->setHeader( i18n( "Document Settings" ) );
     item->setIcon(KIcon(BarIcon("document-properties", KIconLoader::SizeMedium)));
+
+    m_authorPage = new KoConfigAuthorPage();
+    item = addPage(m_authorPage, i18nc("@title:tab Author page", "Author"));
+    item->setHeader(i18n("Author"));
+    item->setIcon(KIcon("user-identity"));
 
     connect( this, SIGNAL( okClicked() ), this, SLOT( slotApply() ) );
     connect( this, SIGNAL( defaultClicked() ), this, SLOT( slotDefault() ) );
@@ -63,6 +70,7 @@ void KoPAConfigureDialog::slotApply()
     m_docPage->apply();
     m_gridPage->apply();
     m_miscPage->apply();
+    m_authorPage->apply();
 }
 
 void KoPAConfigureDialog::slotDefault()

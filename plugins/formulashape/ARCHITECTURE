@@ -1,0 +1,227 @@
+This text provides a very short introduction to the architecture of
+the formula shape. At this time it's work in progress.
+
+
+Part I: Components
+
+Part I describes the organization of the code and what can be found
+where.
+
+
+Subdirectories
+==============
+
+elements/       classes for XML elements in MathML
+fonts/          some fonts with mathematical characters
+pics/           pictures for the icons
+scripts/        a python script that generates the Dictionary class
+templates/      MathML templates (currently only one) - seems unused.
+tests/          test code (run it by 'make tests')
+
+
+Classes in the top directory
+============================
+
+Shape classes
+-------------
+KoFormulaShapePlugin    All these classes are standard KoShape classes
+KoFormulaShapeFactory
+KoFormulaShape
+KoFormulaToolFactory
+KoFormulaTool
+FormulaToolWidget
+FormulaToolWidget.ui
+
+FormulaDocument         This class inherits KoDocument. A formula and
+                        a chart are special shapes because they are
+                        their own document types, defined in ODF. This
+                        also means that they can be saved in a
+                        subdirectory or inline inside the XML tree.
+
+FormulaCommand          Commands for text editing (See the command design pattern)
+FormulaCommandUpdate    ?
+
+Formula classes
+---------------
+
+The following classes are central in the loading, rendering and
+editing of formulas.  
+
+AttributeManager        Manages attributes for elements (mostly
+                        styling for rendering) 
+Dictionary              Dictionary of MathML elements and entities
+ElementFactory          A factory that generates an Element from a tagname
+FormulaCursor           Points to a position in the MathML tree
+                        Also handles selections.
+FormulaData             A QObject wrapper around a FormulaElement (see below)
+                        Allows communication with the formula tool
+FormulaEditor           A class to perform programmatical manipulations
+                        of a formula. The tool goes through this class
+                        when editing.
+FormulaRenderer         Renders a formula in two steps:
+                          1. Calls layout() on each element
+                          2. Calls paint() on each element. 
+                        Also helps when something is updated through
+                        the FormulaEditor.
+
+
+Classes in elements/
+--------------------
+
+These classes store the actual data of the formula. Each class
+represents a type of element and has its own layout and rendering
+function. 
+
+The base class for them all is the BasicElement. This is the base
+class for all elements and defines the API for rendering and
+editing. 
+
+The classes forms the following inheritance tree:
+
+BasicElement			Element base class
+    RowElement                  A container for other elements aligned in a row.
+        ActionElement
+        EncloseElement
+        ErrorElement
+        FencedElement
+        FormulaElement
+        PaddedElement
+        PhantomElement
+        SquareRootElement
+        StyleElement
+        TableDataElement
+    AnnotationElement
+    FixedElement                A base class for MathML elements with
+                                a fixed number of children
+        FractionElement
+        MultiscriptElement
+        RootElement
+        SubSupElement
+        UnderOverElement
+    SpaceElement
+    TableElement
+    TableRowElement
+    TokenElement                A base class for MathML token
+                                elements. The inherited classes all
+                                hold some form of token (text or string).
+        GlyphElement
+        IdentifierElement
+        NumberElement
+        OperatorElement
+        StringElement
+        TextElement
+    UnknownElement              Used when an unknown MathML tag is parsed.
+
+
+Structurally, a formula tree in the formula shape always has a
+FormulaElement as the top node. This node has a size which is the
+union of all the child element's sizes.
+
+
+Part II: Functional description
+
+Part II contains high-level descriptions on key processes such as
+rendering and editing.
+
+
+Rendering
+=========
+
+Rendering is done in the following steps (see more details below):
+
+ 1. Call layout() on the top element, which in turn calls layout() 
+    recursively on all its children. This establishes the minimum size
+    of the formula tree.
+ 2. Call stretch() on the top element, which in turn calls stretch()
+    recursively on all its children.  This establishes the maximum size
+    of the formula tree.
+ 3. Given the layout created in step 1 and 2, call paint() on the top
+    element, which calls paint() recursively on its children and
+    then paints itself.
+
+
+Editing
+=======
+
+This chapter describes the editing process and how the data structures
+are manipulated.
+
+Cursor position
+---------------
+
+Before we can describe the editing process, we have to define what a
+_position_ in a formula is. The formula shape uses a tree of objects
+which all ultimately inherit the BasicElement class. An element can
+hold one or more children. A position is an integer number that goes
+from 0 to n where n is the number of children. Position #0 is before
+the first child, #1 is after the first child, and #n is after the last
+child element. 
+
+The _cursor position_ is a combination of an object and a numeric
+position inside that object.  We denote this [<object>,position]
+here. 
+
+Consider the formula 'sqrt(a+b)' which in MathML is expressed:
+  <mroot>
+    <mrow>
+      <mi>a</mi>
+      <mo>+</mo>
+      <mi>b</mi>
+    </mrow>
+  </mroot>
+
+The cursor can have the following positions (marked with '*')
+
+  *sqrt(*a*+*b*)*
+
+Since the formula is always embedded into an implicit FormulaElemnt,
+the representaiton of this tree inside the formula shape is (with the
+same positions as above marked):
+
+<formula>*
+  <mroot>
+    <mrow>*
+      <mi>a</mi>*
+      <mo>+</mo>*
+      <mi>b</mi>*
+    </mrow>
+  </mroot>*
+</formula>
+
+So the cursor position for the first and last asterisk is [<formula>,0] and 
+[<formula>,1] respectively. The cursor positions inside the root are
+[<mrow>,0], ..., [<mrow>,3]. The <mrow> element is implicit inside
+the <mroot> element and not visible from the outside. 
+
+
+Selection
+---------
+
+The class that keeps track of a cursor position is the FormulaCursor.
+The same class also keeps track of the current selection. The
+selection is defined as the objects between two different cursor
+positions inside the same object. One end of the selection is the
+current cursor position. The other end is the so called _mark_, which
+is represented by an integer position in the same object as the
+cursor. This means that the selection can only span subobjects inside
+the same parent.
+
+
+Editing
+-------
+
+The root object of the formula tree inside the formula shape is a
+FormulaElement.  This FormulaElement is embedded into a FormulaData
+object which is a QObject. The purpose of the FormulaData object is to
+connect the formula tree with the outside world in the form of the
+shape and the formula tool.
+
+The formula shape inherits the standard KoShape base class and the
+formula tool inherits KoToolBase. This means that all events (mouse,
+keyboard, etc) are channeled into the FormulaTool which interprets the
+events and uses a FormulaEditor object to perform the actual
+changes. The formula tool also opens an option widget in the
+docker. This widget is created by the FormulaToolWidget class and
+communicates with the formula tool using signals and slots.
+
+The rest to be written.

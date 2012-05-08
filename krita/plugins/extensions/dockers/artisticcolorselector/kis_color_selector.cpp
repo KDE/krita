@@ -539,7 +539,7 @@ void KisColorSelector::drawLightStrip(QPainter& painter, const QRect& rect)
     }
 }
 
-void KisColorSelector::paintEvent(QPaintEvent* event)
+void KisColorSelector::paintEvent(QPaintEvent* /*event*/)
 {
     // 0 red    -> (1,0,0)
     // 1 yellow -> (1,1,0)
@@ -653,7 +653,7 @@ void KisColorSelector::mouseMoveEvent(QMouseEvent* event)
     update();
 }
 
-void KisColorSelector::mouseReleaseEvent(QMouseEvent* event)
+void KisColorSelector::mouseReleaseEvent(QMouseEvent* /*event*/)
 {
     if (!m_mouseMoved && m_clickedRing >= 0) {
         Radian angle = std::atan2(m_clickPos.x(), m_clickPos.y()) - RAD_90;
@@ -678,7 +678,7 @@ void KisColorSelector::mouseReleaseEvent(QMouseEvent* event)
     update();
 }
 
-void KisColorSelector::resizeEvent(QResizeEvent* event)
+void KisColorSelector::resizeEvent(QResizeEvent* /*event*/)
 {
     recalculateAreas(quint8(getNumLightPieces()));
 }

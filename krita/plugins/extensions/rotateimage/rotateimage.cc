@@ -58,8 +58,6 @@ RotateImage::RotateImage(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {
-        setComponentData(RotateImageFactory::componentData());
-
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/rotateimage.rc"),
                    true);
         m_view = (KisView2*) parent;

@@ -52,10 +52,6 @@ public:
     // debugging
     void dump() const;
 
-    // This hack is only needed due to crappy Microsoft design and
-    // circular dependencies in their embedded files :}
-    int lruPartIndex() const;
-
     QPointer<KoUpdater> updater() const {
         return m_updater;
     }

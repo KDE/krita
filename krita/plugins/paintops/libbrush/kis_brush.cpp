@@ -37,11 +37,10 @@
 #include "kis_paint_device.h"
 #include "kis_global.h"
 #include "kis_boundary.h"
-#include "kis_iterators_pixel.h"
 #include "kis_image.h"
 #include "kis_scaled_brush.h"
 #include "kis_qimage_mask.h"
-
+#include "kis_iterator_ng.h"
 #include "kis_brush_registry.h"
 
 const static int MAXIMUM_MIPMAP_SCALE = 10;
@@ -72,13 +71,14 @@ void KisBrush::PlainColoringInformation::nextRow()
 {
 }
 
-KisBrush::PaintDeviceColoringInformation::PaintDeviceColoringInformation(const KisPaintDeviceSP source, int width) : m_source(source), m_iterator(new KisHLineConstIteratorPixel(m_source->createHLineConstIterator(0, 0, width)))
+KisBrush::PaintDeviceColoringInformation::PaintDeviceColoringInformation(const KisPaintDeviceSP source, int width)
+    : m_source(source)
+    , m_iterator(m_source->createHLineConstIteratorNG(0, 0, width))
 {
 }
 
 KisBrush::PaintDeviceColoringInformation::~PaintDeviceColoringInformation()
 {
-    delete m_iterator;
 }
 
 const quint8* KisBrush::PaintDeviceColoringInformation::color() const
@@ -88,7 +88,7 @@ const quint8* KisBrush::PaintDeviceColoringInformation::color() const
 
 void KisBrush::PaintDeviceColoringInformation::nextColumn()
 {
-    ++(*m_iterator);
+    m_iterator->nextPixel();
 }
 void KisBrush::PaintDeviceColoringInformation::nextRow()
 {
@@ -97,20 +97,31 @@ void KisBrush::PaintDeviceColoringInformation::nextRow()
 
 
 struct KisBrush::Private {
-    Private() : boundary(0), angle(0), scale(1.0), hasColor(false), brushType(INVALID) {}
+    Private()
+        : brushType(INVALID)
+        , hasColor(false)
+        , boundary(0)
+        , angle(0)
+        , scale(1.0)
+    {}
+
     ~Private() {
         delete boundary;
     }
+
+    mutable KisBoundary* boundary;
+    qreal angle;
+    qreal scale;
+    bool hasColor;
     enumBrushType brushType;
+
     qint32 width;
     qint32 height;
     double spacing;
     QPointF hotSpot;
     mutable QVector<KisScaledBrush> scaledBrushes;
-    bool hasColor;
-    mutable KisBoundary* boundary;
-    qreal angle;
-    qreal scale;
+
+
 };
 
 KisBrush::KisBrush()

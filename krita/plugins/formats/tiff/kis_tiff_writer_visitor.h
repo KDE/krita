@@ -22,8 +22,6 @@
 
 #include <kis_node_visitor.h>
 
-#include <kis_iterators_pixel.h>
-
 #include <tiffio.h>
 
 struct KisTIFFOptions;
@@ -73,7 +71,7 @@ private:
         return m_image;
     }
     inline bool saveAlpha();
-    bool copyDataToStrips(KisHLineConstIterator it, tdata_t buff, uint8 depth, uint8 nbcolorssamples, quint8* poses);
+    bool copyDataToStrips(KisHLineConstIteratorSP it, tdata_t buff, uint8 depth, uint8 nbcolorssamples, quint8* poses);
     bool saveLayerProjection(KisLayer *);
 private:
     TIFF* m_image;

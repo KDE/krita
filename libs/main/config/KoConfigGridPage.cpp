@@ -130,9 +130,8 @@ KoConfigGridPage::~KoConfigGridPage()
     delete d;
 }
 
-void KoConfigGridPage::slotUnitChanged(int u)
+void KoConfigGridPage::slotUnitChanged(const KoUnit &unit)
 {
-    KoUnit unit = KoUnit((KoUnit::Unit) u);
     d->spaceHorizUSpin->blockSignals(true);
     d->spaceVertUSpin->blockSignals(true);
     d->spaceHorizUSpin->setUnit(unit);

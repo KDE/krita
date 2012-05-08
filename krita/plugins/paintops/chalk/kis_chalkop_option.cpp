@@ -33,11 +33,11 @@ KisChalkOpOption::KisChalkOpOption()
 {
     m_checkable = false;
     m_options = new KisChalkOpOptionsWidget();
+    m_options->hide();
     connect(m_options->radiusSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->inkDepletionCHBox, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
     connect(m_options->opacity, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
     connect(m_options->saturation, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
-
     setConfigurationPage(m_options);
 }
 

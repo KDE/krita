@@ -202,8 +202,6 @@ inline int float2int(double x)
 
 #endif
 
-#include <KoLut.h>
-
 template<typename _T_>
 struct KoIntegerToFloat {
   inline float operator()(_T_ f) const

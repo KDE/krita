@@ -24,7 +24,7 @@
 #include "KoPathShape.h"
 #include "KoPathShape_p.h"
 #include "KoPathPoint.h"
-#include "KoShapeBorderModel.h"
+#include "KoShapeStrokeModel.h"
 #include "KoViewConverter.h"
 #include "KoPathShapeLoader.h"
 #include "KoShapeSavingContext.h"
@@ -35,7 +35,7 @@
 #include "KoFilterEffectStack.h"
 #include "KoMarker.h"
 #include "KoMarkerSharedLoadingData.h"
-#include "KoLineBorder.h"
+#include "KoShapeStroke.h"
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -199,7 +199,7 @@ QString KoPathShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context)
 
     style.addProperty("svg:fill-rule", d->fillRule == Qt::OddEvenFill ? "evenodd" : "nonzero");
 
-    KoLineBorder *lineBorder = dynamic_cast<KoLineBorder*>(border());
+    KoShapeStroke *lineBorder = dynamic_cast<KoShapeStroke*>(stroke());
     qreal lineWidth = 0;
     if (lineBorder) {
         lineWidth = lineBorder->lineWidth();
@@ -207,13 +207,13 @@ QString KoPathShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context)
     d->startMarker.saveStyle(style, lineWidth, context);
     d->endMarker.saveStyle(style, lineWidth, context);
 
-    return KoShape::saveStyle(style, context);
+    return KoTosContainer::saveStyle(style, context);
 }
 
 void KoPathShape::loadStyle(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
     Q_D(KoPathShape);
-    KoShape::loadStyle(element, context);
+    KoTosContainer::loadStyle(element, context);
 
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.setTypeProperties("graphic");
@@ -228,7 +228,7 @@ void KoPathShape::loadStyle(const KoXmlElement & element, KoShapeLoadingContext 
 #endif
     }
 
-    KoLineBorder *lineBorder = dynamic_cast<KoLineBorder*>(border());
+    KoShapeStroke *lineBorder = dynamic_cast<KoShapeStroke*>(stroke());
     qreal lineWidth = 0;
     if (lineBorder) {
         lineWidth = lineBorder->lineWidth();
@@ -406,24 +406,19 @@ QPainterPath KoPathShape::outline() const
 
 QRectF KoPathShape::boundingRect() const
 {
-    Q_D(const KoPathShape);
     QTransform transform = absoluteTransformation(0);
     // calculate the bounding rect of the transformed outline
     QRectF bb;
-    if (d->startMarker.marker() || d->endMarker.marker()) {
-        KoLineBorder *lineBorder = dynamic_cast<KoLineBorder*>(border());
-        QPen pen;
-        if (lineBorder) {
-            pen.setWidthF(lineBorder->lineWidth());
-        }
-        bb = transform.map(pathStroke(pen)).boundingRect();
+    KoShapeStroke *lineBorder = dynamic_cast<KoShapeStroke*>(stroke());
+    QPen pen;
+    if (lineBorder) {
+        pen.setWidthF(lineBorder->lineWidth());
     }
-    else {
-        bb = transform.map(outline()).boundingRect();
-    }
-    if (border()) {
+    bb = transform.map(pathStroke(pen)).boundingRect();
+
+    if (stroke()) {
         KoInsets inset;
-        border()->borderInsets(this, inset);
+        stroke()->strokeInsets(this, inset);
 
         // calculate transformed border insets
         QPointF center = transform.map(QPointF());
@@ -1114,7 +1109,7 @@ bool KoPathShape::separate(QList<KoPathShape*> & separatedPaths)
         KoPathShape *shape = new KoPathShape();
         if (! shape) continue;
 
-        shape->setBorder(border());
+        shape->setStroke(stroke());
         shape->setShapeId(shapeId());
 
         KoSubpath *newSubpath = new KoSubpath();
@@ -1379,9 +1374,9 @@ bool KoPathShape::hitTest(const QPointF &position) const
 
     QPointF point = absoluteTransformation(0).inverted().map(position);
     const QPainterPath outlinePath = outline();
-    if (border()) {
+    if (stroke()) {
         KoInsets insets;
-        border()->borderInsets(this, insets);
+        stroke()->strokeInsets(this, insets);
         QRectF roi(QPointF(-insets.left, -insets.top), QPointF(insets.right, insets.bottom));
         roi.moveCenter(point);
         if (outlinePath.intersects(roi) || outlinePath.contains(roi))

@@ -39,7 +39,8 @@
 #include <QTextCharFormat>
 
 SpellCheck::SpellCheck()
-    : m_bgSpellCheck(0),
+    : m_document(0),
+    m_bgSpellCheck(0),
     m_enableSpellCheck(true),
     m_allowSignals(true),
     m_documentIsLoading(false),
@@ -116,14 +117,14 @@ void SpellCheck::checkSection(QTextDocument *document, int startPosition, int en
     m_spellCheckMenu->setVisible(true);
 }
 
-void SpellCheck::setDocument(const QTextDocument *document)
+void SpellCheck::setDocument(QTextDocument *document)
 {
     if (m_document == document)
         return;
     if (m_document)
         disconnect (document, SIGNAL(contentsChange(int,int,int)), this, SLOT(documentChanged(int,int,int)));
-    // XXX: evil!
-    m_document = const_cast<QTextDocument*>(document);
+
+    m_document = document;
     connect (document, SIGNAL(contentsChange(int,int,int)), this, SLOT(documentChanged(int,int,int)));
 }
 
@@ -141,7 +142,7 @@ void SpellCheck::setDefaultLanguage(const QString &language)
 {
     m_speller.setDefaultLanguage(language);
     m_bgSpellCheck->setDefaultLanguage(language);
-    if (m_enableSpellCheck) {
+    if (m_enableSpellCheck && m_document) {
         checkSection(m_document, 0, m_document->characterCount() - 1);
     }
 }
@@ -181,6 +182,12 @@ void SpellCheck::setSkipRunTogetherWords(bool on)
 {
     m_speller.setAttribute(Speller::SkipRunTogether, on);
 }
+
+bool SpellCheck::addWordToPersonal(const QString &word)
+{
+    return m_bgSpellCheck->addWordToPersonal(word);
+}
+
 
 QString SpellCheck::defaultLanguage() const
 {
@@ -357,7 +364,7 @@ void SpellCheck::finishedRun()
                 block.layout()->clearAdditionalFormats();
             else
                 block.layout()->setAdditionalFormats(newRanges);
-            m_document->markContentsDirty(bl.start, bl.start + bl.length);
+            m_document->markContentsDirty(bl.start, bl.length);
         }
     }
     m_allowSignals = true;
@@ -365,7 +372,7 @@ void SpellCheck::finishedRun()
     QTimer::singleShot(0, this, SLOT(runQueue()));
 }
 
-void SpellCheck::setCurrentCursorPosition(const QTextDocument *document, int cursorPosition)
+void SpellCheck::setCurrentCursorPosition(QTextDocument *document, int cursorPosition)
 {
     setDocument(document);
     if (m_enableSpellCheck) {
@@ -427,7 +434,6 @@ void SpellCheck::replaceWordBySuggestion(const QString &word, int startPosition,
     if (!block.isValid())
         return;
 
-    int i=0;
     QTextCursor cursor(m_document);
     cursor.setPosition(startPosition);
     cursor.movePosition(QTextCursor::NextCharacter,QTextCursor::KeepAnchor, lengthOfWord);

@@ -30,9 +30,11 @@
 #include "KoViewAdaptor.h"
 #include "KoDockFactoryBase.h"
 #include "KoUndoStackAction.h"
+#include "KoGlobal.h"
 
 #include <kactioncollection.h>
 #include <kglobalsettings.h>
+#include <kicon.h>
 #include <klocale.h>
 #include <kparts/partmanager.h>
 #include <kparts/event.h>
@@ -42,6 +44,8 @@
 #include <kmessagebox.h>
 #include <kio/netaccess.h>
 #include <ktemporaryfile.h>
+#include <kselectaction.h>
+#include <kconfiggroup.h>
 
 #include <QTimer>
 #include <QDockWidget>
@@ -507,6 +511,30 @@ void KoView::setupGlobalActions()
 
     actionCollection()->addAction("edit_undo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::UNDO));
     actionCollection()->addAction("edit_redo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::RED0));
+
+    KSelectAction *actionAuthor  = new KSelectAction(KIcon("user-identity"), i18n("Active Author Profile"), this);
+    actionAuthor->addAction(i18n("Default Author Profile"));
+    actionAuthor->addAction(i18nc("choice for author profile", "Anonymous"));
+    KConfig *config = KoGlobal::calligraConfig();
+    KConfigGroup authorGroup(config, "Author");
+    QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
+
+    foreach (const QString &profile , profiles) {
+        actionAuthor->addAction(profile);
+    }
+    actionCollection()->addAction("settings_active_author", actionAuthor);
+
+    KConfigGroup appAuthorGroup(KGlobal::config(), "Author");
+    QString profileName = appAuthorGroup.readEntry("active-profile", "");
+    if (profileName == "anonymous") {
+        actionAuthor->setCurrentItem(1);
+    } else if (profiles.contains(profileName)) {
+        actionAuthor->setCurrentAction(profileName);
+    } else {
+        actionAuthor->setCurrentItem(0);
+    }
+
+    connect(actionAuthor, SIGNAL(triggered(const QString &)), this, SLOT(changeAuthorProfile(const QString &)));
 }
 
 void KoView::newView()
@@ -517,6 +545,19 @@ void KoView::newView()
     KoMainWindow *shell = new KoMainWindow(thisDocument->componentData());
     shell->setRootDocument(thisDocument);
     shell->show();
+}
+
+void KoView::changeAuthorProfile(const QString &profileName)
+{
+    KConfigGroup appAuthorGroup(KGlobal::config(), "Author");
+    if (profileName.isEmpty()) {
+        appAuthorGroup.writeEntry("active-profile", "");
+    } else if (profileName == i18nc("choice for author profile", "Anonymous")) {
+        appAuthorGroup.writeEntry("active-profile", "anonymous");
+    } else {
+        appAuthorGroup.writeEntry("active-profile", profileName);
+    }
+    appAuthorGroup.sync();
 }
 
 KoMainWindow * KoView::shell() const
@@ -561,21 +602,8 @@ QToolBar* KoView::viewBar()
 
 QList<QAction*> KoView::createChangeUnitActions()
 {
-    QActionGroup *unitGroup = new QActionGroup(this);
-    QList<QAction*> answer;
-    answer.append(new UnitChangeAction(KoUnit::Millimeter, unitGroup, d->document));
-    answer.append(new UnitChangeAction(KoUnit::Centimeter, unitGroup, d->document));
-    answer.append(new UnitChangeAction(KoUnit::Decimeter, unitGroup, d->document));
-    answer.append(new UnitChangeAction(KoUnit::Inch, unitGroup, d->document));
-    answer.append(new UnitChangeAction(KoUnit::Pica, unitGroup, d->document));
-    answer.append(new UnitChangeAction(KoUnit::Cicero, unitGroup, d->document));
-    answer.append(new UnitChangeAction(KoUnit::Point, unitGroup, d->document));
-
-    const int currentUnit = d->document.data()->unit().indexInList();
-    Q_ASSERT(currentUnit < answer.count());
-    if (currentUnit >= 0)
-        answer.value(currentUnit)->setChecked(true);
-    return answer;
+    UnitActionGroup* unitActions = new UnitActionGroup(d->document, this);
+    return unitActions->actions();
 }
 
 #include <KoView_p.moc>

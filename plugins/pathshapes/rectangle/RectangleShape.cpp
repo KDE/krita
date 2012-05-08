@@ -61,8 +61,8 @@ bool RectangleShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext 
         QString cornerRadius = element.attributeNS(KoXmlNS::draw, "corner-radius", "");
         if (! cornerRadius.isEmpty()) {
             float radius = KoUnit::parseValue(cornerRadius);
-            m_cornerRadiusX = radius / (0.5 * size().width()) * 100;
-            m_cornerRadiusY = radius / (0.5 * size().height()) * 100;
+            m_cornerRadiusX = qMin(radius / (0.5 * size().width()) * 100, qreal(100));
+            m_cornerRadiusY = qMin(radius / (0.5 * size().height()) * 100, qreal(100));
         }
     }
 

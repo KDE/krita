@@ -38,7 +38,6 @@
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
 
-#include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <kis_paint_device.h>
 #include <kis_selection.h>
@@ -48,7 +47,7 @@
 #include <kis_view2.h>
 #include <kis_transaction.h>
 #include <kis_cursor.h>
-
+#include "kis_iterator_ng.h"
 #include "kis_selection_tool_helper.h"
 
 namespace
@@ -262,19 +261,22 @@ void DlgColorRange::slotSelectClicked()
 {
     QApplication::setOverrideCursor(KisCursor::waitCursor());
     qint32 x, y, w, h;
-    m_view->activeDevice()->exactBounds(x, y, w, h);
+    QRect rc = m_view->activeDevice()->exactBounds();
+    x = rc.x();
+    y = rc.y();
+    w = rc.width();
+    h = rc.height();
+
     const KoColorSpace *cs = m_view->activeDevice()->colorSpace();
 
     KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(m_view->activeDevice(), m_view->image()));
 
-    KisHLineConstIterator hiter = m_view->activeDevice()->createHLineConstIterator(x, y, w);
-    KisHLineIterator selIter = selection->getOrCreatePixelSelection()->createHLineIterator(x, y, w);
-
+    KisHLineConstIteratorSP hiter = m_view->activeDevice()->createHLineConstIteratorNG(x, y, w);
+    KisHLineIteratorSP selIter = selection->getOrCreatePixelSelection()->createHLineIteratorNG(x, y, w);
+    QColor c;
     for (int row = y; row < h - y; ++row) {
-        while (!hiter.isDone()) {
-            QColor c;
-
-            cs->toQColor(hiter.rawData(), &c);
+        do {
+            cs->toQColor(hiter->oldRawData(), &c);
             // Don't try to select transparent pixels.
             if (c.alpha() > OPACITY_TRANSPARENT_U8) {
                 quint8 match = matchColors(c, m_currentAction);
@@ -282,34 +284,32 @@ void DlgColorRange::slotSelectClicked()
                 if (match) {
                     if (!m_invert) {
                         if (m_mode == SELECTION_ADD) {
-                            *(selIter.rawData()) =  match;
+                            *(selIter->rawData()) =  match;
                         } else if (m_mode == SELECTION_SUBTRACT) {
-                            quint8 selectedness = *(selIter.rawData());
+                            quint8 selectedness = *(selIter->rawData());
                             if (match < selectedness) {
-                                *(selIter.rawData()) = selectedness - match;
+                                *(selIter->rawData()) = selectedness - match;
                             } else {
-                                *(selIter.rawData()) = 0;
+                                *(selIter->rawData()) = 0;
                             }
                         }
                     } else {
                         if (m_mode == SELECTION_ADD) {
-                            quint8 selectedness = *(selIter.rawData());
+                            quint8 selectedness = *(selIter->rawData());
                             if (match < selectedness) {
-                                *(selIter.rawData()) = selectedness - match;
+                                *(selIter->rawData()) = selectedness - match;
                             } else {
-                                *(selIter.rawData()) = 0;
+                                *(selIter->rawData()) = 0;
                             }
                         } else if (m_mode == SELECTION_SUBTRACT) {
-                            *(selIter.rawData()) =  match;
+                            *(selIter->rawData()) =  match;
                         }
                     }
                 }
             }
-            ++hiter;
-            ++selIter;
-        }
-        hiter.nextRow();
-        selIter.nextRow();
+        } while (hiter->nextPixel() && selIter->nextPixel());
+        hiter->nextRow();
+        selIter->nextRow();
     }
 
     // Enable translation after 2.4 release

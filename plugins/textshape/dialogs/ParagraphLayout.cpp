@@ -51,21 +51,25 @@ void ParagraphLayout::slotAlignChanged()
     m_alignmentInherited = false;
 
     emit horizontalAlignmentChanged(align);
+    emit parStyleChanged();
 }
 
 void ParagraphLayout::breakAfterChanged()
 {
    m_breakAfterInherited = false;
+   emit parStyleChanged();
 }
 
 void ParagraphLayout::breakBeforeChanged()
 {
     m_breakBeforeInherited = false;
+    emit parStyleChanged();
 }
 
 void ParagraphLayout::thresholdValueChanged()
 {
     m_orphanThresholdInherited = false;
+    emit parStyleChanged();
 }
 
 void ParagraphLayout::setDisplay(KoParagraphStyle *style)

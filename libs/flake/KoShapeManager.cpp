@@ -28,7 +28,7 @@
 #include "KoShape_p.h"
 #include "KoCanvasBase.h"
 #include "KoShapeContainer.h"
-#include "KoShapeBorderModel.h"
+#include "KoShapeStrokeModel.h"
 #include "KoShapeGroup.h"
 #include "KoToolProxy.h"
 #include "KoShapeManagerPaintingStrategy.h"
@@ -372,9 +372,9 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
         painter.save();
         shape->paint(painter, converter, paintContext);
         painter.restore();
-        if (shape->border()) {
+        if (shape->stroke()) {
             painter.save();
-            shape->border()->paint(shape, painter, converter);
+            shape->stroke()->paint(shape, painter, converter);
             painter.restore();
         }
     } else {
@@ -414,9 +414,9 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
                 imagePainter.save();
                 shape->paint(imagePainter, converter, paintContext);
                 imagePainter.restore();
-                if (shape->border()) {
+                if (shape->stroke()) {
                     imagePainter.save();
-                    shape->border()->paint(shape, imagePainter, converter);
+                    shape->stroke()->paint(shape, imagePainter, converter);
                     imagePainter.restore();
                 }
                 imagePainter.end();

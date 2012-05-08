@@ -965,24 +965,26 @@ void KoTableCellStyle::setEdge(KoBorder::Side side, KoBorder::BorderStyle style,
     qreal innerWidth = 0;
     qreal middleWidth = 0;
     qreal space = 0;
+    QVector<qreal> dashes;
     switch (style) {
     case KoBorder::BorderNone:
         width = 0.0;
         break;
     case KoBorder::BorderDouble:
-        innerWidth = space = width/4; //some nice default look
+        innerWidth = space = width/3; //some nice default look
         width -= (space + innerWidth);
         edge.outerPen.setStyle(Qt::SolidLine);
         break;
     case KoBorder::BorderDotted:
-        edge.outerPen.setStyle(Qt::DotLine);
+        dashes << 1 << 1;
+        edge.outerPen.setDashPattern(dashes);
         break;
     case KoBorder::BorderDashed:
-        edge.outerPen.setStyle(Qt::DashLine);
+        dashes << 4 << 1;
+        edge.outerPen.setDashPattern(dashes);
         break;
     case KoBorder::BorderDashedLong: {
-        QVector<qreal> dashes;
-        dashes << 6 << 6;
+        dashes << 4 << 4;
         edge.outerPen.setDashPattern(dashes);
         break;
     }
@@ -992,10 +994,12 @@ void KoTableCellStyle::setEdge(KoBorder::Side side, KoBorder::BorderStyle style,
         edge.outerPen.setStyle(Qt::SolidLine);
         break;
     case KoBorder::BorderDashDot:
-        edge.outerPen.setStyle(Qt::DashDotLine);
+        dashes << 3 << 3<< 7 << 3;
+        edge.outerPen.setDashPattern(dashes);
         break;
     case KoBorder::BorderDashDotDot:
-        edge.outerPen.setStyle(Qt::DashDotDotLine);
+        dashes << 2 << 2<< 6 << 2 << 2 << 2;
+        edge.outerPen.setDashPattern(dashes);
         break;
     case KoBorder::BorderWave:
         edge.outerPen.setStyle(Qt::SolidLine);
@@ -1004,7 +1008,7 @@ void KoTableCellStyle::setEdge(KoBorder::Side side, KoBorder::BorderStyle style,
         edge.outerPen.setStyle(Qt::SolidLine);
         break;
     case KoBorder::BorderDoubleWave:
-        innerWidth = space = width/4; //some nice default look
+        innerWidth = space = width/3; //some nice default look
         width -= (space + innerWidth);
         edge.outerPen.setStyle(Qt::SolidLine);
         break;

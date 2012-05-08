@@ -50,7 +50,7 @@ class CHARTSHAPELIB_EXPORT ChartTableModel : public QStandardItemModel, public K
     Q_INTERFACES(KoChart::ChartModel)
 
 public:
-    ChartTableModel( QObject *parent = 0 );
+    ChartTableModel(QObject *parent = 0);
     ~ChartTableModel();
 
     // KoChart::ChartModel interface
@@ -61,9 +61,9 @@ public:
     // Load and save the contained data in an ODF DOM tree.
     // FIXME: Move saving/loading logic to helper class like TableLoaderAndSaver,
     // this class is outdated and should be removed.
-    bool loadOdf( const KoXmlElement &tableElement, 
-                  KoShapeLoadingContext &context );
-    bool saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const;
+    bool loadOdf(const KoXmlElement &tableElement, 
+                 KoShapeLoadingContext &context);
+    bool saveOdf(KoXmlWriter &bodyWriter, KoGenStyles &mainStyles) const;
 };
 
 }

@@ -482,6 +482,9 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const
             if (it.key() == QTextFormat::ForegroundBrush) {
                 clearProperty.append(KoCharacterStyle::UseWindowFontColor);
             }
+            else if (it.key() == KoCharacterStyle::UseWindowFontColor) {
+                clearProperty.append(QTextFormat::ForegroundBrush);
+            }
         }
         ++it;
     }
@@ -1911,16 +1914,34 @@ void KoCharacterStyle::removeDuplicates(const KoCharacterStyle &other)
     if (other.d->propertyBoolean(KoCharacterStyle::UseWindowFontColor) && !d->propertyBoolean(KoCharacterStyle::UseWindowFontColor)) {
         brush = foreground();
     }
+
+    // this properties should need to be kept if there is a font family defined as these are only evaluated if there is also a font family
+    int keepProperties[] = { QTextFormat::FontStyleHint, QTextFormat::FontFixedPitch, KoCharacterStyle::FontCharset };
+
+    QMap<int, QVariant> keep;
+    for (unsigned int i = 0; i < sizeof(keepProperties); ++i) {
+        if (hasProperty(keepProperties[i])) {
+            keep.insert(keepProperties[i], value(keepProperties[i]));
+        }
+    }
     this->d->stylesPrivate.removeDuplicates(other.d->stylesPrivate);
     if (brush.style() != Qt::NoBrush) {
         setForeground(brush);
     }
+
     // in case the char style has any of the following properties it also needs to have the fontFamily as otherwise 
     // these values will be ignored when loading according to the odf spec
-    if (!hasProperty(QTextFormat::FontFamily) && (hasProperty(QTextFormat::FontStyleHint) || hasProperty(QTextFormat::FontFixedPitch) || hasProperty(KoCharacterStyle::FontCharset))) {
-        QString fontFamily = other.fontFamily();
-        if (!fontFamily.isEmpty()) {
-            setFontFamily(fontFamily);
+    if (!hasProperty(QTextFormat::FontFamily)) {
+        if (hasProperty(QTextFormat::FontStyleHint) || hasProperty(QTextFormat::FontFixedPitch) || hasProperty(KoCharacterStyle::FontCharset)) {
+            QString fontFamily = other.fontFamily();
+            if (!fontFamily.isEmpty()) {
+                setFontFamily(fontFamily);
+            }
+        }
+    }
+    else {
+        for (QMap<int, QVariant>::const_iterator it(keep.constBegin()); it != keep.constEnd(); ++it) {
+            this->d->stylesPrivate.add(it.key(), it.value());
         }
     }
 }

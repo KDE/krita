@@ -24,9 +24,11 @@
 
 #include <QString>
 #include <QTextCursor>
+#include <QPointF>
 
 class KoBookmark;
 class QTextDocument;
+class QTexttable;
 class KoInlineTextObjectManager;
 
 class TEXTLAYOUT_EXPORT KoPointedAt
@@ -37,9 +39,22 @@ public:
 
     void fillInBookmark(QTextCursor cursor, KoInlineTextObjectManager *inlineManager);
 
+    enum TableHit {
+          None
+        , ColumnDivider
+        , RowDivider
+    };
     int position;
     KoBookmark *bookmark;
     QString externalHRef;
+    QTextTable *table;
+    TableHit tableHit;
+    int tableRowDivider;
+    int tableColumnDivider;
+    qreal tableLeadSize;
+    qreal tableTrailSize;
+    QPointF tableDividerPos;
+
 };
 
 #endif

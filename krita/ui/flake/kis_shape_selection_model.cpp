@@ -46,7 +46,7 @@ void KisShapeSelectionModel::add(KoShape *child)
     if (m_shapeMap.contains(child))
         return;
 
-    child->setBorder(0);
+    child->setStroke(0);
     child->setBackground(0);
     m_shapeMap.insert(child, child->boundingRect());
     m_shapeSelection->shapeManager()->addShape(child);

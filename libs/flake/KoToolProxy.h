@@ -39,6 +39,9 @@ class KoCanvasController;
 class KoToolProxyPrivate;
 class QInputMethodEvent;
 class KoPointerEvent;
+class QDragMoveEvent;
+class QDragLeaveEvent;
+class QDropEvent;
 
 /**
  * Tool proxy object which allows an application to address the current tool.
@@ -116,6 +119,13 @@ public:
     bool paste();
     /// Forwarded to the current KoToolBase
     QStringList supportedPasteMimeTypes() const;
+    /// Forwarded to the current KoToolBase
+    void dragMoveEvent(QDragMoveEvent *event, const QPointF &point);
+    /// Forwarded to the current KoToolBase
+    void dragLeaveEvent(QDragLeaveEvent *event);
+    /// Forwarded to the current KoToolBase
+    void dropEvent(QDropEvent *event, const QPointF &point);
+ 
     /// Set the new active tool.
     void setActiveTool(KoToolBase *tool);
 

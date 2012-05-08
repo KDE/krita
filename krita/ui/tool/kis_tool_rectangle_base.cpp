@@ -128,7 +128,7 @@ void KisToolRectangleBase::updateArea() {
     QRectF bound;
     bound.setTopLeft(m_dragStart);
     bound.setBottomRight(m_dragEnd);
-    canvas()->updateCanvas(convertToPt(bound.normalized()));
+    canvas()->updateCanvas(convertToPt(bound.normalized()).adjusted(-100, -100, +200, +200));
 }
 
 #include "kis_tool_rectangle_base.moc"

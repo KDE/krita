@@ -101,13 +101,6 @@ namespace CalligraFilter {
         kDebug(30500) << "   Link:" << m_filterEntry->service()->name();
     }
 
-    int ChainLink::lruPartIndex() const
-    {
-        if (m_filter && m_filter->inherits("KoEmbeddingFilter"))
-            return static_cast<KoEmbeddingFilter*>(m_filter)->lruPartIndex();
-        return -1;
-    }
-
     void ChainLink::setupCommunication(const KoFilter *const parentFilter) const
     {
         if (!parentFilter)

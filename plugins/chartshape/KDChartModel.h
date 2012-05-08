@@ -66,10 +66,10 @@ namespace KChart {
   *
   * Since KDChart extracts the legend items from horizontal header data (the headers
   * in each column) data sets have to be inserted row-wise instead of column-wise for
-  * these charts. To do so, KDChartModel::setDataDirection( Qt::Horizontal ) is used.
+  * these charts. To do so, KDChartModel::setDataDirection(Qt::Horizontal) is used.
   *
   * In all other cases, we show the data set labels in the legend. Therefore we insert
-  * data sets column-wise, which is done by calling setDataDirection( Qt::Vertical ).
+  * data sets column-wise, which is done by calling setDataDirection(Qt::Vertical).
   */
 
 class CHARTSHAPELIB_EXPORT KDChartModel : public QAbstractItemModel
@@ -77,7 +77,7 @@ class CHARTSHAPELIB_EXPORT KDChartModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
-    KDChartModel( PlotArea *plotArea, QObject *parent = 0 );
+    KDChartModel(PlotArea *plotArea, QObject *parent = 0);
     ~KDChartModel();
 
     enum DataRole {
@@ -100,7 +100,7 @@ public:
      *
      * See "Note on data directions in KDChart's models" above.
      */
-    void setDataDirection( Qt::Orientation direction );
+    void setDataDirection(Qt::Orientation direction);
     /**
      * See \a setDataDirection
      */
@@ -111,29 +111,29 @@ public:
     Qt::Orientation categoryDirection() const;
 
 public slots:
-    QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const;
-    QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
-    void slotColumnsInserted( const QModelIndex& parent, int start, int end );
+    void slotColumnsInserted(const QModelIndex& parent, int start, int end);
     
-    QModelIndex index( int row, int column, const QModelIndex &parent = QModelIndex() ) const;
-    QModelIndex parent( const QModelIndex &index ) const;
+    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+    QModelIndex parent(const QModelIndex &index) const;
 
-    int rowCount( const QModelIndex &parent = QModelIndex() ) const;
-    int columnCount( const QModelIndex &parent = QModelIndex() ) const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const;
     
-    void setDataDimensions( int dataDimensions );
+    void setDataDimensions(int dataDimensions);
     int dataDimensions() const;
 
-    void addDataSet( DataSet *dataSet );
-    void removeDataSet( DataSet *dataSet, bool silent = false );
+    void addDataSet(DataSet *dataSet);
+    void removeDataSet(DataSet *dataSet, bool silent = false);
     QList<DataSet*> dataSets() const;
 
     /**
      * Called by DataSet whenever a property that is global to all its data
      * points changes, e.g. its label or its pen
      */
-    void dataSetChanged( DataSet *dataSet );
+    void dataSetChanged(DataSet *dataSet);
 
     /**
      * Called by DataSet whenever one or more of its data points changes,
@@ -141,19 +141,19 @@ public slots:
      *
      * FIXME: @a role doesn't make sense here, it's not needed for emitting
      *        the dataChanged() signal. Removing it would conflict with
-     *        dataSetChanged( DataSet* ), that's why it's still there.
+     *        dataSetChanged(DataSet*), that's why it's still there.
      *
      * @param first First data point that changed. If -1 it is assumed that
      *              all data points in this series changed.
      * @param last Last data point that changed. If -1 it is assumed that
      *             only a single data point changed.
      */
-    void dataSetChanged( DataSet *dataSet, DataRole role, int first = -1, int last = -1 );
+    void dataSetChanged(DataSet *dataSet, DataRole role, int first = -1, int last = -1);
 
     /**
      * Called by DataSet when the total number of data points it has changed.
      */
-    void dataSetSizeChanged( DataSet *dataSet, int newSize );
+    void dataSetSizeChanged(DataSet *dataSet, int newSize);
 
 private:
     class Private;

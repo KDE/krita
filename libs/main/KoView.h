@@ -365,6 +365,7 @@ signals:
 
 protected slots:
     virtual void slotAutoScroll();
+    virtual void changeAuthorProfile(const QString &profileName);
 
 private:
     virtual void setupGlobalActions(void);

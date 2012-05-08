@@ -31,7 +31,6 @@
 #include "commands/KoPAPageDeleteCommand.h"
 
 #include <KoShapeManager.h>
-#include <KoShapeBorderModel.h>
 #include <KoShapeContainer.h>
 #include <KoToolManager.h>
 #include <KoCanvasBase.h>

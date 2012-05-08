@@ -26,6 +26,7 @@
 
 #include "komain_export.h"
 
+class KoUnit;
 class KoDocument;
 class KoDocumentResourceManager;
 
@@ -40,7 +41,7 @@ public:
     void apply();
 
 signals:
-    void unitChanged(int);
+    void unitChanged(const KoUnit &unit);
 
 public slots:
     void slotDefault();

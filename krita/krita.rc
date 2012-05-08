@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="37">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="38">
 
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
@@ -147,7 +147,9 @@
   <!--Action name="view_fullscreen" group="settings_show"/-->
   <!--Action name="view_toggledockers" group="settings_show"/-->
   <!--Action name="showStatusBar" group="settings_show"/-->
+  <Action name="settings_active_author" group="settings_configure"/>
   <Action name="preferences" group="settings_configure"/>
+  <Action name="theme_menu" />
 </Menu>
 
 

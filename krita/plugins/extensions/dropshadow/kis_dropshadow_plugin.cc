@@ -51,9 +51,6 @@ KisDropshadowPlugin::KisDropshadowPlugin(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {
-
-        setComponentData(KisDropshadowPluginFactory::componentData());
-
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/dropshadow.rc"), true);
 
         m_view = (KisView2*) parent;

@@ -26,8 +26,9 @@
 #include <KDebug>
 
 #include "KoShape.h"
-#include "KoLineBorder.h"
+#include "KoShapeStroke.h"
 #include "KoResourceManager_p.h"
+#include <KoColorSpaceRegistry.h>
 
 class KoCanvasResourceManager::Private
 {
@@ -39,6 +40,9 @@ KoCanvasResourceManager::KoCanvasResourceManager(QObject *parent)
         : QObject(parent),
         d(new Private())
 {
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+    setForegroundColor(KoColor(Qt::black, cs));
+    setBackgroundColor(KoColor(Qt::white, cs));
 }
 
 KoCanvasResourceManager::~KoCanvasResourceManager()
@@ -114,20 +118,20 @@ KoUnit KoCanvasResourceManager::unitResource(int key) const
 }
 
 
-void KoCanvasResourceManager::setActiveBorder(const KoLineBorder &border)
+void KoCanvasResourceManager::setActiveStroke(const KoShapeStroke &stroke)
 {
     QVariant v;
-    v.setValue(border);
-    setResource(ActiveBorder, v);
+    v.setValue(stroke);
+    setResource(ActiveStroke, v);
 }
 
-KoLineBorder KoCanvasResourceManager::activeBorder() const
+KoShapeStroke KoCanvasResourceManager::activeStroke() const
 {
-    if (!d->manager.hasResource(ActiveBorder)) {
-        KoLineBorder empty;
+    if (!d->manager.hasResource(ActiveStroke)) {
+        KoShapeStroke empty;
         return empty;
     }
-    return resource(ActiveBorder).value<KoLineBorder>();
+    return resource(ActiveStroke).value<KoShapeStroke>();
 }
 
 bool KoCanvasResourceManager::boolResource(int key) const

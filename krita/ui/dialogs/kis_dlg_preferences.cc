@@ -43,6 +43,7 @@
 
 #include <libs/main/KoDocument.h>
 #include <KoColorProfile.h>
+#include <KoConfigAuthorPage.h>
 
 #include <kmessagebox.h>
 #include <kcolorbutton.h>
@@ -316,12 +317,18 @@ void TabletSettingsTab::setDefault()
 TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget(parent)
 {
     setObjectName(name);
+
+    QGridLayout * l = new QGridLayout(this);
+    l->setSpacing(KDialog::spacingHint());
+    l->setMargin(0);
     m_page = new WdgTabletSettings(this);
+    l->addWidget(m_page, 0, 0);
 
     KisConfig cfg;
     KisCubicCurve curve;
     curve.fromString( cfg.pressureTabletCurve() );
 
+    m_page->pressureCurve->setMaximumSize(QSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX));
     m_page->pressureCurve->setCurve(curve);
 }
 
@@ -601,10 +608,10 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Tablet settings"));
     page->setHeader(i18n("Tablet"));
-    page->setIcon(KIcon("preferences-system-performance"));
+    page->setIcon(KIcon("input-tablet"));
     addPage(page);
     m_tabletSettings = new TabletSettingsTab(vbox);
-    m_tabletSettings->m_page->pressureCurve->setMaximumSize(QSize(1000, 1000));
+
 
     // full-screen mode
     vbox = new KVBox();
@@ -613,6 +620,14 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setIcon(KIcon("preferences-system-performance"));
     addPage(page);
     m_fullscreenSettings = new FullscreenSettingsTab(vbox);
+
+
+    // author settings
+    vbox = new KVBox();
+    m_authorSettings = new KoConfigAuthorPage();
+    page = addPage(m_authorSettings, i18nc("@title:tab Author page", "Author"));
+    page->setHeader(i18n("Author"));
+    page->setIcon(KIcon("user-identity"));
 
 
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
@@ -742,6 +757,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setHideTitlebarFullscreen(dialog->m_fullscreenSettings->chkTitlebar->checkState());
         cfg.setHideToolbarFullscreen(dialog->m_fullscreenSettings->chkToolbar->checkState());
 
+        dialog->m_authorSettings->apply();
     }
     delete dialog;
     return baccept;

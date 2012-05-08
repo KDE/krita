@@ -41,26 +41,32 @@ public:
     GradientResourceServer(const QString& type, const QString& extensions) :
             KoResourceServer<KoAbstractGradient>(type, extensions)
     {
+    }
+
+    void insertSpecialGradients()
+    {
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+        QList<KoGradientStop> stops;
+
         KoStopGradient* gradient = new KoStopGradient("");
         gradient->setType(QGradient::LinearGradient);
-        gradient->setName("Foreground to Background");
+        gradient->setName("Foreground to Transparent");
+        stops << KoGradientStop(0.0, KoColor(Qt::black, cs)) << KoGradientStop(1.0, KoColor(QColor(0, 0, 0, 0), cs));
 
-        QList<KoGradientStop> stops;
-        stops << KoGradientStop(0.0, KoColor(Qt::black, cs)) << KoGradientStop(1.0, KoColor(Qt::white, cs));
         gradient->setStops(stops);
         gradient->setValid(true);
-        addResource(gradient, false);
+        addResource(gradient, false, true);
 
         gradient = new KoStopGradient("");
         gradient->setType(QGradient::LinearGradient);
-        gradient->setName("Foreground to Transparent");
+        gradient->setName("Foreground to Background");
 
         stops.clear();
-        stops << KoGradientStop(0.0, KoColor(Qt::black, cs)) << KoGradientStop(1.0, KoColor(QColor(0, 0, 0, 0), cs));
+        stops << KoGradientStop(0.0, KoColor(Qt::black, cs)) << KoGradientStop(1.0, KoColor(Qt::white, cs));
+
         gradient->setStops(stops);
         gradient->setValid(true);
-        addResource(gradient, false);
+        addResource(gradient, false, true);
     }
 
 private:
@@ -161,6 +167,7 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
 
     d->m_gradientServer = new GradientResourceServer("ko_gradients", "*.kgr:*.svg:*.ggr");
     d->gradientThread = new KoResourceLoaderThread(d->m_gradientServer);
+    connect(d->gradientThread, SIGNAL(finished()), this, SLOT(allGradientsLoaded()));
     d->gradientThread->start();
 
     d->m_paletteServer = new KoResourceServer<KoColorSet>("ko_palettes", "*.gpl:*.pal:*.act");
@@ -204,4 +211,9 @@ KoResourceServer<KoColorSet>* KoResourceServerProvider::paletteServer()
 {
     d->patternThread->barrier();
     return d->m_paletteServer;
+}
+
+void KoResourceServerProvider::allGradientsLoaded()
+{
+    static_cast<GradientResourceServer*>(d->m_gradientServer)->insertSpecialGradients();
 }

@@ -37,6 +37,7 @@
 #include "ui_wdgfullscreensettings.h"
 
 class KoID;
+class KoConfigAuthorPage;
 
 /**
  *  "General"-tab for preferences dialog
@@ -275,6 +276,7 @@ protected:
     GridSettingsTab *m_gridSettings;
     TabletSettingsTab *m_tabletSettings;
     FullscreenSettingsTab *m_fullscreenSettings;
+    KoConfigAuthorPage *m_authorSettings;
 
 protected slots:
 

@@ -23,7 +23,7 @@
 
 #include <kis_paint_device.h>
 #include <kis_paint_information.h>
-#include <kis_random_accessor.h>
+#include <kis_random_accessor_ng.h>
 #include <kis_painter.h>
 #include "kis_curve_paintop_settings_widget.h"
 #include <KoColorSpace.h>
@@ -64,7 +64,7 @@ private:
     QPointF getLinearBezier(const QPointF &p1, const QPointF &p2, qreal u);
     void putPixel(QPointF pos, KoColor &color);
 
-    KisRandomAccessor * m_writeAccessor;
+    KisRandomAccessorSP m_writeAccessor;
     KoColorSpace * cs;
     quint32 m_pixelSize;
 

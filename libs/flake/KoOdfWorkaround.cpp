@@ -256,3 +256,14 @@ bool KoOdfWorkaround::fixAutoGrow(KoTextShapeDataBase::ResizeMethod method, KoSh
     }
     return fix;
 }
+
+bool KoOdfWorkaround::fixEllipse(const QString &kind, KoShapeLoadingContext &context)
+{
+    bool radiusGiven = false;
+    if (context.odfLoadingContext().generatorType() == KoOdfLoadingContext::OpenOffice) {
+        if (kind == "section" || kind == "arc") {
+            radiusGiven = true;
+        }
+    }
+    return radiusGiven;
+}

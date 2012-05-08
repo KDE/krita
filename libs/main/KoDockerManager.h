@@ -40,6 +40,9 @@ public:
 
     void removeToolOptionsDocker();
 
+    /// sets the visibility of the tab and lock icons
+    void setIcons(bool enabled);
+
 public slots:
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.
@@ -48,8 +51,6 @@ public slots:
 
 
 private:
-    Q_PRIVATE_SLOT(d, void moveToolBarsBack())
-    Q_PRIVATE_SLOT(d, void moveToolBars())
     Q_PRIVATE_SLOT(d, void restoringDone())
     class Private;
     Private * const d;

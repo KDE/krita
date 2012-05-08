@@ -67,6 +67,8 @@ public:
 private:
     void drag(const QPoint& newPos);
 
+    QPoint applyModifiers(Qt::KeyboardModifiers modifiers, QPoint pos);
+
 private:
 
     MoveToolOptionsWidget* m_optionsWidget;

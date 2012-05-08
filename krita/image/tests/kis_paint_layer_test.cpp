@@ -34,6 +34,7 @@
 #include "kis_selection.h"
 #include "kis_fill_painter.h"
 #include "kis_pixel_selection.h"
+#include <kis_iterator_ng.h>
 
 void KisPaintLayerTest::testProjection()
 {
@@ -80,11 +81,10 @@ void KisPaintLayerTest::testProjection()
     layer->updateProjection(qimage.rect());
 
     // By default a new transparency mask blanks out the entire layer (photoshop mode "hide all")
-    KisRectConstIterator it = layer->projection()->createRectConstIterator(0, 0, qimage.width(), qimage.height());
-    while (!it.isDone()) {
-        QVERIFY(cs->opacityU8(it.rawData()) == OPACITY_OPAQUE_U8);
-        ++it;
-    }
+    KisRectConstIteratorSP it = layer->projection()->createRectConstIteratorNG(0, 0, qimage.width(), qimage.height());
+    do {
+        QVERIFY(cs->opacityU8(it->oldRawData()) == OPACITY_OPAQUE_U8);
+    } while (it->nextPixel());
 
     // Now fill the layer with some opaque pixels
     transparencyMask->select(qimage.rect());

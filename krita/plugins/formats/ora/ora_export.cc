@@ -72,7 +72,7 @@ KoFilter::ConversionStatus OraExport::convert(const QByteArray& from, const QByt
 
     KisImageBuilder_Result res;
 
-    if ((res = kpc.buildFile(url, image)) == KisImageBuilder_RESULT_OK) {
+    if ((res = kpc.buildFile(url, image, output->activeNodes())) == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
         return KoFilter::OK;
     }

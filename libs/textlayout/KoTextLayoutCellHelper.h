@@ -25,14 +25,16 @@
 #ifndef KOTEXTLAYOUTCELLHELPER_H
 #define KOTEXTLAYOUTCELLHELPER_H
 
-#include <QObject>
+#include "textlayout_export.h"
+
 #include <KoBorder.h>
 #include <KoTableCellStyle.h>
 
-class KoTableBorderStyle;
+#include <QObject>
+
 class QPainter;
 
-class KoTextLayoutCellHelper : public QObject
+class TEXTLAYOUT_EXPORT KoTextLayoutCellHelper : public QObject
 {
     Q_OBJECT
 public:

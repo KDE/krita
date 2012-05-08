@@ -42,6 +42,7 @@
 FontDia::FontDia(KoTextEditor *editor, QWidget* parent)
         : KDialog(parent)
         , m_editor(editor)
+        , m_styleChanged(false)
 {
     m_initialFormat = m_editor->charFormat();
 
@@ -58,6 +59,9 @@ FontDia::FontDia(KoTextEditor *editor, QWidget* parent)
     connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
     connect(this, SIGNAL(resetClicked()), this, SLOT(slotReset()));
     initTabs();
+
+    // Do this after initTabs so it doesn't cause signals prematurely
+    connect(m_characterGeneral, SIGNAL(styleChanged()), this, SLOT(styleChanged()));
 }
 
 void FontDia::initTabs()
@@ -66,8 +70,16 @@ void FontDia::initTabs()
     m_characterGeneral->setStyle(&style);
 }
 
+void FontDia::styleChanged(bool state)
+{
+    m_styleChanged = state;
+}
+
 void FontDia::slotApply()
 {
+    if (!m_styleChanged)
+        return;
+
     m_editor->beginEditBlock(i18n("Font"));
     KoCharacterStyle chosenStyle;
     m_characterGeneral->save(&chosenStyle);
@@ -75,6 +87,8 @@ void FontDia::slotApply()
     chosenStyle.applyStyle(cformat);
     m_editor->mergeAutoStyle(cformat);
     m_editor->endEditBlock();
+
+    m_styleChanged = false;
 }
 
 void FontDia::slotOk()

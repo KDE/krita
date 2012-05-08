@@ -21,6 +21,8 @@
 #include "kis_color_patches.h"
 
 
+class KisCanvasResourceProvider;
+
 class KisColorHistory : public KisColorPatches
 {
     Q_OBJECT
@@ -37,7 +39,7 @@ public slots:
 
 private:
     QList<KoColor> m_colorHistory;
-    QObject *m_resourceProvider; // to disconnect...
+    KisCanvasResourceProvider  *m_resourceProvider; // to disconnect...
 };
 
 #endif // KIS_COLOR_HISTORY_H

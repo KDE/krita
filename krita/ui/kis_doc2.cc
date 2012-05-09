@@ -522,15 +522,15 @@ vKisNodeSP KisDoc2::activeNodes() const
 
 QList<KisPaintingAssistant*> KisDoc2::assistants()
 {
-    QList<KisPaintingAssistant*> assistant;
+    QList<KisPaintingAssistant*> assistants;
     foreach(KoView *v, views()) {
         KisView2 *view = qobject_cast<KisView2*>(v);
         if (view) {
             KisPaintingAssistantsManager* assistantsmanager = view->paintingAssistantManager();
-            assistant.append(assistantsmanager->assistants());
+            assistants.append(assistantsmanager->assistants());
         }
     }
-    return assistant;
+    return assistants;
 }
 
 void KisDoc2::setPreActivatedNode(KisNodeSP activatedNode)

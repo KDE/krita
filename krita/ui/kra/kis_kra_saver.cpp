@@ -25,6 +25,7 @@
 #include <QDomDocument>
 #include <QDomElement>
 #include <QString>
+#include <QMessageBox>
 
 #include <KoDocumentInfo.h>
 #include <KoColorSpace.h>
@@ -146,7 +147,7 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
             }
         }
     }
-    saveAssistants(store,uri,external);
+    saveAssistants(store, uri,external);
     return true;
 }
 
@@ -159,21 +160,51 @@ void KisKraSaver::saveCompositions(QDomDocument& doc, QDomElement& element, KisI
     element.appendChild(e);
 }
 
-bool KisKraSaver::saveAssistants(KoStore* store, const QString & uri, bool external)
+bool KisKraSaver::saveAssistants(KoStore* store ,const QString & uri, bool external)
 {
     QString location;
 
     // Save the layers data
-    quint32 count = 0;
-
+    quint32 count_ellipse = 0, count_perspective = 0, count_ruler = 0, count_spline = 0;
+    QList<QString> types;
     QList<KisPaintingAssistant*> assistants =  m_d->doc->assistants();
     if (!assistants.isEmpty()) {
         foreach(KisPaintingAssistant* assist, assistants){
             location = external ? QString::null : uri;
             location += m_d->imageName + ASSISTANTS_PATH;
-            location += assist->id() + assist->name();
-            if (store->open(location + ".assistant")) {
+            QMessageBox::warning(0,"test2",location);
+            location += assist->id()+ ".assistant";
+            if (!types.contains(assist->id())){
+                types.push_back(assist->id());
+            }
+            if (assist->id() == "ellipse"){
+                store->open(location);
+                assist->saveXml(location,count_ellipse);
+                count_ellipse++;
                 store->close();
+            }
+            else if (assist->id() == "spline"){
+                assist->saveXml(location,count_spline);
+                count_ellipse++;
+            }
+            else if(assist->id() == "perspective"){
+                assist->saveXml(location,count_perspective);
+                count_ellipse++;
+            }
+            else if(assist->id() == "ruler"){
+                assist->saveXml(location,count_ruler);
+                count_ellipse++;
+            }
+        }
+        foreach(QString type, types){
+            location = external ? QString::null : uri;
+            location += m_d->imageName + ASSISTANTS_PATH;
+            location += type + ".assistant";
+            QFile file(location);
+            if(file.open(QIODevice::WriteOnly | QIODevice::Text)){
+                QXmlStreamWriter xml(&file);
+                xml.writeEndDocument();
+                file.close();
             }
         }
     }

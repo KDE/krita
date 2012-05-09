@@ -22,9 +22,16 @@
 #include <QString>
 #include <QPointF>
 #include <QRect>
+#include <QFile>
+#include <QObject>
+#include <QMessageBox>
+#include <QFileDialog>
 
 #include <krita_export.h>
 #include <kis_shared.h>
+#include <kio/job.h>
+#include <kfiledialog.h>
+#include <KoStore.h>
 
 class QPainter;
 class QRect;
@@ -90,6 +97,9 @@ public:
     void uncache();
     const QList<KisPaintingAssistantHandleSP>& handles() const;
     QList<KisPaintingAssistantHandleSP> handles();
+    void saveXml(QString location, quint32 count);
+    void saveFinish(KJob* job);
+
 public:
     /**
      * This will paint a path using a white and black colors.
@@ -99,6 +109,7 @@ protected:
     virtual QRect boundingRect() const;
     virtual void drawCache(QPainter& gc, const KisCoordinatesConverter *converter) = 0;
     void initHandles(QList<KisPaintingAssistantHandleSP> _handles);
+    QList<KisPaintingAssistantHandleSP> m_handles;
 private:
     struct Private;
     Private* const d;

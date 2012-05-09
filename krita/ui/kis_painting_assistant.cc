@@ -17,6 +17,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <QXmlStreamReader>
+#include <QXmlStreamWriter>
+
 #include "kis_painting_assistant.h"
 #include "kis_coordinates_converter.h"
 #include "kis_debug.h"
@@ -233,6 +236,33 @@ QRect KisPaintingAssistant::boundingRect() const
         r = r.united(QRectF(*h, QSizeF(1,1)));
     }
     return r.adjusted(-2, -2, 2, 2).toAlignedRect();
+}
+
+void KisPaintingAssistant::saveXml(QString location, quint32 count)
+{
+        QMessageBox::warning(0,"Test",location);
+        QFile file(location);
+        if(file.open(QIODevice::WriteOnly | QIODevice::Text)){
+            QXmlStreamWriter xml(&file);
+            if(count == 0){
+                xml.writeStartDocument();
+            }
+            xml.writeStartElement("paintingassistant");
+            xml.writeStartElement("handles");
+            QMap<KisPaintingAssistantHandleSP, int> handleMap;
+            foreach(const KisPaintingAssistantHandleSP handle, d->handles) {
+                int id = handleMap.size();
+                handleMap.insert(handle, id);
+                xml.writeStartElement("handle");
+                xml.writeAttribute("id", QString::number(id));
+                xml.writeAttribute("x", QString::number(double(handle->x()), 'f', 3));
+                xml.writeAttribute("y", QString::number(double(handle->y()), 'f', 3));
+                xml.writeEndElement();
+            }
+            xml.writeEndElement();
+            xml.writeEndElement();
+            file.close();
+        }
 }
 
 const QList<KisPaintingAssistantHandleSP>& KisPaintingAssistant::handles() const

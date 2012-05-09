@@ -119,46 +119,6 @@ void KoInlineTextObjectManager::addInlineObject(KoInlineObject* object)
     insertObject(object);
 }
 
-bool KoInlineTextObjectManager::removeInlineObject(QTextCursor &cursor)
-{
-    KoInlineObject *object = inlineTextObject(cursor);
-    if (object->propertyChangeListener()) {
-        int position = m_listeners.indexOf(object);
-        m_listeners.removeAt(position);
-    }
-    // what if a KoTextLocator is removed? what to do with KoTextReference?
-    QTextCharFormat format = cursor.charFormat();
-    int id = format.intProperty(InlineInstanceId);
-    if (id <= 0)
-        return false;
-
-    int removed = m_objects.remove(id);
-
-    KoBookmark *bookmark = dynamic_cast<KoBookmark *>(object);
-    if (bookmark) {
-        if (bookmark->type() == KoBookmark::StartBookmark) {
-            m_bookmarkManager.remove(bookmark->name());
-            KoBookmark *endBookmark = bookmark->endBookmark();
-            endBookmark->setType(KoBookmark::SinglePosition);
-            m_bookmarkManager.insert(bookmark->name(), endBookmark);
-        } else if (bookmark->type() == KoBookmark::EndBookmark) {
-            KoBookmark *startBookmark = m_bookmarkManager.retrieveBookmark(bookmark->name());
-            startBookmark->setType(KoBookmark::SinglePosition);
-        } else
-            m_bookmarkManager.remove(bookmark->name());
-    }
-
-    delete object;
-    object = 0;
-
-    if (removed != 0) {
-        cursor.deletePreviousChar();
-        return true;
-    }
-    return false;
-}
-
-
 void KoInlineTextObjectManager::removeInlineObject(KoInlineObject *object)
 {
     if (!object) {
@@ -174,8 +134,6 @@ void KoInlineTextObjectManager::removeInlineObject(KoInlineObject *object)
     if (bookmark) {
         m_bookmarkManager.remove(bookmark->name());
     }
-
-    // TODO dirty the document somehow
 }
 
 void KoInlineTextObjectManager::setProperty(KoInlineObject::Property key, const QVariant &value)

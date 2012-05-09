@@ -186,6 +186,10 @@ In addition to diagrams there are other types of visible objects on
 the Chart: Legends, Headers, Footers, or custom elements that inherit
 KDChart::Area. 
 
+A KDChart::Chart is a QWidget, as are many other KDChart objects. The
+Legend is the only object that can be placed outside this widget
+according to the documentation.
+
 
 Styling
 -------
@@ -219,6 +223,17 @@ holds 2 cartesian coordinate planes and one polar and one radar
 plane. Third, it holds a list of Diagrams, one per diagram type that
 was ever used(?).
 
+The KDChart::Chart can show headers, footers, axis labels and other
+text items. The chart shape does not use this, but instead uses
+standard text shapes for them. There are several reasonso for this:
+ - The KDChart items are not interactively editable and styleable
+ - They cannot be easily moved around
+ - The loading and saving of them would be much more difficult,
+   especially if rich text is used.
+This means that the Chart inside the plotarea will only contain the
+diagrams and axes; all other areas are shown outside the Chart, but
+inside the ChartShape.
+
 Each class that represents an ODF type (Axis, Legend, etc) also has
 ownership of the corresponding KDChart type. Some exceptions exist
 (FIXME: Check this in more detail).
@@ -240,3 +255,10 @@ to be fixed.]
 Changing of the data values can be done through the sheet connection
 model that are used by e.g. Calligra Sheets (FIXME: Find out more
 details).
+
+
+Using External Data Sources
+===========================
+
+E.g. spreadsheets   FIXME: find out more and write this.
+

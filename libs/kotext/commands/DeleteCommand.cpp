@@ -131,6 +131,14 @@ void DeleteCommand::doDelete()
     QTextCharFormat charFormat = caret->charFormat();
     KoInlineTextObjectManager *inlineObjectManager = KoTextDocument(m_document).inlineTextObjectManager();
 
+    if (!textEditor->hasSelection()) {
+        if (m_mode == PreviousChar) {
+            caret->movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+        } else {
+            caret->movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+        }
+    }
+
     DeleteVisitor visitor(textEditor, this);
     textEditor->recursivelyVisitSelection(m_document.data()->rootFrame()->begin(), visitor);
     m_mergePossible = visitor.m_mergePossible;
@@ -141,14 +149,6 @@ void DeleteCommand::doDelete()
     }
     foreach (KoInlineObject *object, m_bookmarksToRemove) {
         inlineObjectManager->removeInlineObject(object); // doesn't remove the character
-    }
-
-    if (!textEditor->hasSelection()) {
-        if (m_mode == PreviousChar) {
-            caret->movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
-        } else {
-            caret->movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-        }
     }
 
     if (textEditor->hasComplexSelection()) {
@@ -178,7 +178,6 @@ void DeleteCommand::deleteBookmark(KoInlineObject *object)
 
         KoBookmark::BookmarkType type = bookmark->type();
         if (type == KoBookmark::StartBookmark) {
-
             KoBookmark *endmark = bookmark->endBookmark();
             Q_ASSERT(endmark);
             if (endmark && !m_invalidInlineObjects.contains(endmark)) {
@@ -195,6 +194,9 @@ void DeleteCommand::deleteBookmark(KoInlineObject *object)
             } else {
                 inlineObjectManager->removeInlineObject(object); // doesn't remove the character
             }
+        } else {
+            // single bookmark - can be removed right away
+            inlineObjectManager->removeInlineObject(object); // doesn't remove the character
         }
         // Note: Don't delete the object. Removed objects are stored by the bookmark manager
         // for future use. Also, start bookmarks might still have a reference to the end bookmark

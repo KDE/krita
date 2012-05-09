@@ -308,6 +308,7 @@ void TextTool::createActions()
     connect(action, SIGNAL(triggered()), this, SLOT(decreaseFontSize()));
 
     m_actionFormatFontFamily = new KFontAction(KFontChooser::SmoothScalableFonts, this);
+    m_actionFormatFontFamily->setText(i18n("Font Family"));
     addAction("format_fontfamily", m_actionFormatFontFamily);
     connect(m_actionFormatFontFamily, SIGNAL(triggered(const QString &)),
             this, SLOT(setFontFamily(const QString &)));
@@ -363,6 +364,7 @@ void TextTool::createActions()
     m_actionFormatTextColor = new KoColorPopupAction(this);
     m_actionFormatTextColor->setIcon(KIcon("format-text-color"));
     m_actionFormatTextColor->setToolTip(i18n("Text Color..."));
+    m_actionFormatTextColor->setText(i18n("Text Color"));
     addAction("format_textcolor", m_actionFormatTextColor);
     connect(m_actionFormatTextColor, SIGNAL(colorChanged(const KoColor &)), this, SLOT(setTextColor(const KoColor &)));
 

@@ -441,7 +441,10 @@ void Legend::paint(QPainter &painter, const KoViewConverter &converter, KoShapeP
 }
 
 
-// Only reimplemented because pure virtual in KoShape, but not needed
+// ----------------------------------------------------------------
+//                     loading and saving
+
+
 bool Legend::loadOdf(const KoXmlElement &legendElement,
                      KoShapeLoadingContext &context)
 {
@@ -462,13 +465,17 @@ bool Legend::loadOdf(const KoXmlElement &legendElement,
             attributesToLoad ^= OdfPosition;
         }
 
-        // FIXME according to odf if legend-position is provided the x and y value should not be used
-        // FIXME also with and height are not supported at this place
+        // FIXME according to odf if legend-position is provided the x
+        // and y value should not be used.
+        //
+        // FIXME also width and height are not supported at this place
         if (legendElement.hasAttributeNS(KoXmlNS::svg, "x") ||
-             legendElement.hasAttributeNS(KoXmlNS::svg, "y") ||
-             legendElement.hasAttributeNS(KoXmlNS::svg, "width") ||
-             legendElement.hasAttributeNS(KoXmlNS::svg, "height"))
+            legendElement.hasAttributeNS(KoXmlNS::svg, "y") ||
+            legendElement.hasAttributeNS(KoXmlNS::svg, "width") ||
+            legendElement.hasAttributeNS(KoXmlNS::svg, "height"))
+        {
             d->shape->layout()->setPosition(this, FloatingPosition);
+        }
 
         loadOdfAttributes(legendElement, context, attributesToLoad);
 
@@ -520,8 +527,7 @@ bool Legend::loadOdf(const KoXmlElement &legendElement,
         }
 
         if (legendElement.hasAttributeNS(KoXmlNS::calligra, "title")) {
-            setTitle(legendElement.attributeNS(KoXmlNS::calligra,
-                                                       "title", QString()));
+            setTitle(legendElement.attributeNS(KoXmlNS::calligra, "title", QString()));
         }
 
         styleStack.setTypeProperties("text");
@@ -543,8 +549,6 @@ bool Legend::loadOdf(const KoXmlElement &legendElement,
         setAlignment(Qt::AlignCenter);
     }
 
-    //d->chart->replaceLegend(d->legend, oldLegend);
-
     d->pixmapRepaintRequested = true;
 
     return true;
@@ -553,44 +557,36 @@ bool Legend::loadOdf(const KoXmlElement &legendElement,
 void Legend::saveOdf(KoShapeSavingContext &context) const
 {
     KoXmlWriter &bodyWriter = context.xmlWriter();
-    KoGenStyles &mainStyles = context.mainStyles();
 
     bodyWriter.startElement("chart:legend");
-
     saveOdfAttributes(context, OdfPosition);
 
+    // Legend specific attributes
     QString lp = PositionToString(d->position);
-
-    QString lalign;
-
     if (!lp.isEmpty()) {
         bodyWriter.addAttribute("chart:legend-position", lp);
     }
+    QString lalign;  // FIXME: This string is always empty.  What gives?
     if (!lalign.isEmpty()) {
         bodyWriter.addAttribute("chart:legend-align", lalign);
     }
 
+    // Legend style FIXME: Check if more styling then just the font goes here.
     KoGenStyle style(KoGenStyle::ChartAutoStyle, "chart", 0);
     saveOdfFont(style, d->font, d->fontColor);
-
     bodyWriter.addAttribute("chart:style-name", saveStyle(style, context));
 
     QString  lexpansion;
     switch (expansion()) {
-    case WideLegendExpansion:
-        lexpansion = "wide";
-        break;
-    case HighLegendExpansion:
-        lexpansion = "high";
-        break;
-    case BalancedLegendExpansion:
-        lexpansion = "balanced";
-        break;
+    case WideLegendExpansion:      lexpansion = "wide";      break;
+    case HighLegendExpansion:      lexpansion = "high";      break;
+    case BalancedLegendExpansion:  lexpansion = "balanced";  break;
     };
-
     bodyWriter.addAttribute("style:legend-expansion", lexpansion);
+
     if (!title().isEmpty())
         bodyWriter.addAttribute("office:title", title());
+
     bodyWriter.endElement(); // chart:legend
 }
 

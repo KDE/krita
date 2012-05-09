@@ -59,6 +59,7 @@ Pencil_chalk.kpp
 Pencil_draw_shade.kpp
 Pencil_shade_texture.kpp
 Pencil_shade_tilt.kpp
+pixel1.kpp
 Rake_paint_dry_bristle.kpp
 Rake_paint_texture.kpp
 Rake_smudge.kpp

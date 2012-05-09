@@ -8,9 +8,12 @@ Basic_ink_ballpen.kpp
 Basic_ink_tilt_10.kpp
 Basic_ink_tilt_20.kpp
 Basic_mix.kpp
+Basic_mix_dull.kpp
 Basic_mix_oil_over.kpp
 Basic_mix_over.kpp
+Basic_mix_over_dull.kpp
 Basic_mix_over_wet.kpp
+Basic_mix_over_wet_dull.kpp
 Basic_mix_small.kpp
 Basic_mix_soft.kpp
 Basic_paint_05.kpp

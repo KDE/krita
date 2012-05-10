@@ -238,16 +238,14 @@ QRect KisPaintingAssistant::boundingRect() const
     return r.adjusted(-2, -2, 2, 2).toAlignedRect();
 }
 
-void KisPaintingAssistant::saveXml(QString location, quint32 count)
+QByteArray KisPaintingAssistant::saveXml(quint32 count)
 {
-        QMessageBox::warning(0,"Test",location);
-        QFile file(location);
-        if(file.open(QIODevice::WriteOnly | QIODevice::Text)){
-            QXmlStreamWriter xml(&file);
+        QByteArray data;
+        QXmlStreamWriter xml(&data);
             if(count == 0){
                 xml.writeStartDocument();
             }
-            xml.writeStartElement("paintingassistant");
+            xml.writeStartElement(d->id + "assistant");
             xml.writeStartElement("handles");
             QMap<KisPaintingAssistantHandleSP, int> handleMap;
             foreach(const KisPaintingAssistantHandleSP handle, d->handles) {
@@ -261,8 +259,7 @@ void KisPaintingAssistant::saveXml(QString location, quint32 count)
             }
             xml.writeEndElement();
             xml.writeEndElement();
-            file.close();
-        }
+        return data;
 }
 
 const QList<KisPaintingAssistantHandleSP>& KisPaintingAssistant::handles() const

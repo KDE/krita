@@ -163,48 +163,62 @@ void KisKraSaver::saveCompositions(QDomDocument& doc, QDomElement& element, KisI
 bool KisKraSaver::saveAssistants(KoStore* store ,const QString & uri, bool external)
 {
     QString location;
-
+    QByteArray data_ellipse,data_perspective,data_spline,data_ruler,data_end;
     // Save the layers data
     quint32 count_ellipse = 0, count_perspective = 0, count_ruler = 0, count_spline = 0;
     QList<QString> types;
     QList<KisPaintingAssistant*> assistants =  m_d->doc->assistants();
     if (!assistants.isEmpty()) {
         foreach(KisPaintingAssistant* assist, assistants){
-            location = external ? QString::null : uri;
-            location += m_d->imageName + ASSISTANTS_PATH;
-            QMessageBox::warning(0,"test2",location);
-            location += assist->id()+ ".assistant";
             if (!types.contains(assist->id())){
                 types.push_back(assist->id());
             }
             if (assist->id() == "ellipse"){
-                store->open(location);
-                assist->saveXml(location,count_ellipse);
+                data_ellipse += assist->saveXml(count_ellipse);
                 count_ellipse++;
-                store->close();
             }
             else if (assist->id() == "spline"){
-                assist->saveXml(location,count_spline);
-                count_ellipse++;
+                data_spline += assist->saveXml(count_spline);
+                count_spline++;
             }
             else if(assist->id() == "perspective"){
-                assist->saveXml(location,count_perspective);
-                count_ellipse++;
+                data_perspective += assist->saveXml(count_perspective);
+                count_perspective++;
             }
             else if(assist->id() == "ruler"){
-                assist->saveXml(location,count_ruler);
-                count_ellipse++;
+                data_ruler += assist->saveXml(count_ruler);
+                count_ruler++;
             }
         }
         foreach(QString type, types){
             location = external ? QString::null : uri;
             location += m_d->imageName + ASSISTANTS_PATH;
             location += type + ".assistant";
-            QFile file(location);
-            if(file.open(QIODevice::WriteOnly | QIODevice::Text)){
-                QXmlStreamWriter xml(&file);
-                xml.writeEndDocument();
-                file.close();
+            QXmlStreamWriter xml(&data_end);
+            xml.writeEndDocument();
+            if (type == "ellipse"){
+                data_ellipse +=  data_end;
+                store->open(location);
+                store->write(data_ellipse);
+                store->close();
+            }
+            else if (type == "spline"){
+                data_spline +=  data_end;
+                store->open(location);
+                store->write(data_spline);
+                store->close();
+            }
+            else if (type == "perspective"){
+                data_perspective+=  data_end;
+                store->open(location);
+                store->write(data_perspective);
+                store->close();
+            }
+            else if(type == "ruler"){
+                data_ruler +=  data_end;
+                store->open(location);
+                store->write(data_ruler);
+                store->close();
             }
         }
     }

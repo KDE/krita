@@ -97,7 +97,7 @@ public:
     void uncache();
     const QList<KisPaintingAssistantHandleSP>& handles() const;
     QList<KisPaintingAssistantHandleSP> handles();
-    void saveXml(QString location, quint32 count);
+    QByteArray saveXml(quint32 count);
     void saveFinish(KJob* job);
 
 public:

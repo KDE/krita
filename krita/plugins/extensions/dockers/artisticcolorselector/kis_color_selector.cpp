@@ -732,9 +732,12 @@ void KisColorSelector::loadSettings()
                 );
     
     QList<float> angles = cfg.readList<float>("ArtColorSel.RingAngles");
-    
-    for(int i=0; i<m_colorRings.size(); ++i)
-        m_colorRings[i].angle = angles[i];
+
+    for (int i = 0; i < m_colorRings.size(); ++i) {
+        if (i < angles.size() && i < m_colorRings.size()) {
+            m_colorRings[i].angle = angles[i];
+        }
+    }
     
     selectColor(m_selectedColor);
     update();

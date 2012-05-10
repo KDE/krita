@@ -727,9 +727,9 @@ void KisColorSelector::loadSettings()
     setLight(cfg.readEntry<float>("ArtColorSel.Light", 0.5f), cfg.readEntry<bool>("ArtColorSel.RelativeLight", false));
     
     recalculateRings(
-        cfg.readEntry("ArtColorSel.NumRings"  , 11),
-        cfg.readEntry("ArtColorSel.RingPieces", 12)
-    );
+                cfg.readEntry("ArtColorSel.NumRings"  , 11),
+                cfg.readEntry("ArtColorSel.RingPieces", 12)
+                );
     
     QList<float> angles = cfg.readList<float>("ArtColorSel.RingAngles");
     

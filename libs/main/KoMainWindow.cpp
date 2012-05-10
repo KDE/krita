@@ -640,10 +640,7 @@ bool KoMainWindow::openDocument(const KUrl & url)
 bool KoMainWindow::openDocument(KoDocument *newdoc, const KUrl & url)
 {
     if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0)) {
-        if (!newdoc->checkAutoSaveFile()) {
-            newdoc->initEmpty(); //create an emtpy document
-        }
-
+        newdoc->initEmpty(); //create an empty document
         setRootDocument(newdoc);
         newdoc->setUrl(url);
         QString mime = KMimeType::findByUrl(url)->name();

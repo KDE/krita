@@ -116,6 +116,7 @@
 #include <kis_paint_layer.h>
 #include "kis_progress_widget.h"
 #include "kis_shape_layer.h"
+#include "widgets/kis_floating_message.h"
 
 #include <QDebug>
 #include <QPoint>
@@ -1261,6 +1262,13 @@ void KisView2::showJustTheCanvas(bool toggled)
             dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
             dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         }
+    }
+
+    if (toggled) {
+        // show a fading heads-up display about the shortcut to go back
+        KisFloatingMessage *floatingMessage = new KisFloatingMessage(i18n("Going into Canvas-Only mode.\nPress %1 to go back.",
+                                                                          actionCollection()->action("view_show_just_the_canvas")->shortcut().toString()), this);
+        floatingMessage->showMessage();
     }
 }
 

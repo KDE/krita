@@ -209,7 +209,7 @@ public:
     QMap<QDockWidget *, bool> dockWidgetVisibilityMap;
     KoDockerManager *dockerManager;
     QList<QDockWidget *> dockWidgets;
-    QList<QDockWidget *> hiddenDockwidgets; // List of dockers hiddent by the call to hideDocker
+    QByteArray m_dockerStateBeforeHiding;
 
     QCloseEvent *deferredClosingEvent;
 
@@ -1052,11 +1052,9 @@ void KoMainWindow::closeEvent(QCloseEvent *e)
             // The open pane is visible
             d->docToOpen->deleteOpenPane(true);
         }
-        // Reshow the docker that were temporarely hidden before saving settings
-        foreach(QDockWidget* dw, d->hiddenDockwidgets) {
-            dw->show();
+        if (!d->m_dockerStateBeforeHiding.isEmpty()) {
+            restoreState(d->m_dockerStateBeforeHiding);
         }
-        d->hiddenDockwidgets.clear();
         saveWindowSettings();
         setRootDocument(0);
         if (!d->dockWidgetVisibilityMap.isEmpty()) { // re-enable dockers for persistency
@@ -1944,25 +1942,22 @@ KoDockerManager * KoMainWindow::dockerManager() const
     return d->dockerManager;
 }
 
-void KoMainWindow::toggleDockersVisibility(bool v) const
+void KoMainWindow::toggleDockersVisibility(bool visible)
 {
-    Q_UNUSED(v);
-    if (d->hiddenDockwidgets.isEmpty()){
+    if (!visible) {
+        d->m_dockerStateBeforeHiding = saveState();
+
         foreach(QObject* widget, children()) {
             if (widget->inherits("QDockWidget")) {
                 QDockWidget* dw = static_cast<QDockWidget*>(widget);
                 if (dw->isVisible()) {
                     dw->hide();
-                    d->hiddenDockwidgets << dw;
                 }
             }
         }
     }
     else {
-        foreach(QDockWidget* dw, d->hiddenDockwidgets) {
-            dw->show();
-        }
-        d->hiddenDockwidgets.clear();
+        restoreState(d->m_dockerStateBeforeHiding);
     }
 }
 

@@ -67,6 +67,7 @@
 #include <kfilewidget.h>
 #include <kurlcombobox.h>
 #include <kdiroperator.h>
+#include <kmenubar.h>
 
 //   // qt includes
 #include <QDockWidget>
@@ -1055,6 +1056,9 @@ void KoMainWindow::closeEvent(QCloseEvent *e)
         if (!d->m_dockerStateBeforeHiding.isEmpty()) {
             restoreState(d->m_dockerStateBeforeHiding);
         }
+        statusBar()->setVisible(true);
+        menuBar()->setVisible(true);
+
         saveWindowSettings();
         setRootDocument(0);
         if (!d->dockWidgetVisibilityMap.isEmpty()) { // re-enable dockers for persistency

@@ -82,10 +82,15 @@ QTransform KisTransformWorker::transform() const
     return TS.inverted() * S * TS * SC * R * T;
 }
 
-void KisTransformWorker::rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst)
+QRect KisTransformWorker::rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst,
+                                     QRect boundRect,
+                                     KoUpdaterPtr progressUpdater,
+                                     int &lastProgressReport,
+                                     int &progressTotalSteps,
+                                     int &progressStep)
 {
     qint32 pixelSize = src->pixelSize();
-    QRect r(m_boundRect);
+    QRect r(boundRect);
     KoColorSpace *cs = src->colorSpace();
     Q_UNUSED(cs);
 
@@ -99,108 +104,101 @@ void KisTransformWorker::rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst)
         hit->nextRow();
         vit->nextRow();
 
-        //progress info
-        m_progressStep += r.width();
-        if (m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps) {
-            m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
-            if (!m_progressUpdater.isNull()) m_progressUpdater->setProgress(m_lastProgressReport);
-        }
-        if (!m_progressUpdater.isNull() && m_progressUpdater->interrupted()) {
-            break;
-        }
-    }
-}
-
-void KisTransformWorker::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP dst)
-{
-    qint32 pixelSize = src->pixelSize();
-    QRect r(m_boundRect);
-    KoColorSpace *cs = src->colorSpace();
-    Q_UNUSED(cs);
-
-    for (qint32 y = r.bottom(); y >= r.top(); --y) {
-        KisHLineIteratorSP hit = src->createHLineIteratorNG(r.x(), y, r.width());
-        KisVLineIteratorSP vit = dst->createVLineIteratorNG(-y, r.x(), r.width());
-
-        do {
-            memcpy(vit->rawData(), hit->rawData(), pixelSize);
-        } while (hit->nextPixel() && vit->nextPixel());
-
-        //progress info
-        m_progressStep += r.width();
-        if (m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps) {
-            m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
-            if (m_progressUpdater) m_progressUpdater->setProgress(m_lastProgressReport);
-        }
-        if (!m_progressUpdater.isNull() && m_progressUpdater->interrupted()) {
-            break;
-        }
-    }
-
-    m_boundRect = QRect(- r.top() - r.height(), r.x(), r.height(), r.width());
-}
-
-void KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst)
-{
-    qint32 pixelSize = src->pixelSize();
-    QRect r(m_boundRect);
-    KoColorSpace *cs = src->colorSpace();
-    Q_UNUSED(cs);
-
-    KisRandomConstAccessorSP accessor = src->createRandomConstAccessorNG(0, 0);
-    for (qint32 y = r.top(); y <= r.bottom(); ++y) {
-        for (qint32 y = r.top(); y <= r.bottom(); ++y) {
-            // Read the horizontal line from back to front, write onto the vertical column
-            KisVLineIteratorSP vit = dst->createVLineIteratorNG(y, -r.x() - r.width(), r.width());
-            for (int x = r.width() - 1; x >= 0; --x) {
-                accessor->moveTo(r.x() + x, y);
-                memcpy(vit->rawData(), accessor->oldRawData(), pixelSize);
+        if (!progressUpdater.isNull()) {
+            //progress info
+            progressStep += r.width();
+            if (lastProgressReport != (progressStep * 100) / progressTotalSteps) {
+                lastProgressReport = (progressStep * 100) / progressTotalSteps;
+                if (!progressUpdater.isNull()) progressUpdater->setProgress(lastProgressReport);
+            }
+            if (progressUpdater->interrupted()) {
+                break;
             }
         }
-        // Progress info
-        m_progressStep += r.width();
-        if (m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps) {
-            m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
-            if (m_progressUpdater) m_progressUpdater->setProgress(m_lastProgressReport);
-        }
-        if (!m_progressUpdater.isNull() && m_progressUpdater->interrupted()) {
-            break;
-        }
     }
-
-    m_boundRect = QRect(r.top(), - r.x() - r.width(), r.height(), r.width());
+    return r;
 }
 
-void KisTransformWorker::rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst)
+QRect rotateWithTf(int rotation, KisPaintDeviceSP src, KisPaintDeviceSP dst,
+                   QRect boundRect,
+                   KoUpdaterPtr progressUpdater,
+                   int &lastProgressReport,
+                   int &progressTotalSteps,
+                   int &progressStep)
 {
     qint32 pixelSize = src->pixelSize();
-    QRect r(m_boundRect);
+    QRect r(boundRect);
     KoColorSpace *cs = src->colorSpace();
     Q_UNUSED(cs);
 
-    KisRandomConstAccessorSP accessor = src->createRandomConstAccessorNG(0, 0);
+    KisRandomAccessorSP srcAcc = src->createRandomAccessorNG(0, 0);
+    KisRandomAccessorSP dstAcc = dst->createRandomAccessorNG(0, 0);
 
-    for (qint32 y = r.top(); y <= r.bottom(); ++y) {
-        KisHLineIteratorSP dstIt = dst->createHLineIteratorNG(-r.x() - r.width(), -y, r.width());
+    QTransform tf;
+    tf = tf.rotate(rotation);
 
-        for (int x = r.width() - 1; x >= 0; --x) {
-            accessor->moveTo(r.x() + x, y);
-            memcpy(dstIt->rawData(), accessor->oldRawData(), pixelSize);
-            dstIt->nextPixel();
+    int ty = 0;
+    int tx = 0;
+
+    for (qint32 y = r.y(); y <= r.height() + r.y(); ++y) {
+        for (qint32 x = r.x(); x <= r.width() + r.x(); ++x) {
+            tf.map(x, y, &tx, &ty);
+            qDebug() << x << "," << y << " -- "<< tx << "," << ty;
+            srcAcc->moveTo(x, y);
+            dstAcc->moveTo(tx, ty);
+            memcpy(dstAcc->rawData(), srcAcc->oldRawData(), pixelSize);
         }
 
-        //progress info
-        m_progressStep += r.width();
-        if (m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps) {
-            m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
-            if (m_progressUpdater) m_progressUpdater->setProgress(m_lastProgressReport);
-        }
-        if (!m_progressUpdater.isNull() && m_progressUpdater->interrupted()) {
-            break;
+        if (!progressUpdater.isNull()) {
+            // Progress info
+            progressStep += r.width();
+            if (lastProgressReport != (progressStep * 100) / progressTotalSteps) {
+                lastProgressReport = (progressStep * 100) / progressTotalSteps;
+                if (progressUpdater) progressUpdater->setProgress(lastProgressReport);
+            }
+            if (progressUpdater->interrupted()) {
+                break;
+            }
         }
     }
 
-    m_boundRect = QRect(- r.x() - r.width(), - r.top() - r.height(), r.width(), r.height());
+    return r;
+}
+
+QRect KisTransformWorker::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP dst,
+                                        QRect boundRect,
+                                        KoUpdaterPtr progressUpdater,
+                                        int &lastProgressReport,
+                                        int &progressTotalSteps,
+                                        int &progressStep)
+{
+    QRect r = rotateWithTf(90, src, dst, boundRect, progressUpdater, lastProgressReport, progressTotalSteps, progressStep);
+    qDebug() << r;
+    return QRect(- r.top() - r.height(), r.x(), r.height(), r.width());
+}
+
+QRect KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst,
+                                       QRect boundRect,
+                                       KoUpdaterPtr progressUpdater,
+                                       int &lastProgressReport,
+                                       int &progressTotalSteps,
+                                       int &progressStep)
+{
+    QRect r = rotateWithTf(270, src, dst, boundRect, progressUpdater, lastProgressReport, progressTotalSteps, progressStep);
+    qDebug() << r;
+    return QRect(r.top(), - r.x() - r.width(), r.height(), r.width());
+}
+
+QRect KisTransformWorker::rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst,
+                                    QRect boundRect,
+                                    KoUpdaterPtr progressUpdater,
+                                    int &lastProgressReport,
+                                    int &progressTotalSteps,
+                                    int &progressStep)
+{
+    QRect r = rotateWithTf(180, src, dst, boundRect, progressUpdater, lastProgressReport, progressTotalSteps, progressStep);
+    qDebug() << r;
+    return QRect(- r.x() - r.width(), - r.top() - r.height(), r.width(), r.height());
 }
 
 template <class iter> iter createIterator(KisPaintDevice *dev, qint32 start, qint32 lineNum, qint32 len);
@@ -526,7 +524,7 @@ bool KisTransformWorker::run()
     }
 
 
-    KisPaintDeviceSP tmpdev1 = KisPaintDeviceSP(new KisPaintDevice(m_dev->colorSpace()));
+    KisPaintDeviceSP tmpdev1 = new KisPaintDevice(m_dev->colorSpace());
     KisPaintDeviceSP srcdev = m_dev;
     tmpdev1->setDefaultPixel(srcdev->defaultPixel());
 
@@ -603,17 +601,17 @@ bool KisTransformWorker::run()
     case 0:
         break;
     case 1:
-        rotateRight90(srcdev, tmpdev1);
+        m_boundRect = rotateRight90(srcdev, tmpdev1, m_boundRect, m_progressUpdater, m_lastProgressReport, m_progressTotalSteps, m_progressStep);
         srcdev->clear();
         srcdev = tmpdev1;
         break;
     case 2:
-        rotate180(srcdev, tmpdev1);
+        m_boundRect = rotate180(srcdev, tmpdev1, m_boundRect, m_progressUpdater, m_lastProgressReport, m_progressTotalSteps, m_progressStep);
         srcdev->clear();
         srcdev = tmpdev1;
         break;
     case 3:
-        rotateLeft90(srcdev, tmpdev1);
+        m_boundRect = rotateLeft90(srcdev, tmpdev1, m_boundRect, m_progressUpdater, m_lastProgressReport, m_progressTotalSteps, m_progressStep);
         srcdev->clear();
         srcdev = tmpdev1;
         break;
@@ -630,7 +628,7 @@ bool KisTransformWorker::run()
             srcdev->move(srcdev->x() + xtranslate, srcdev->y() + ytranslate);
         } else {
             srcdev->move(srcdev->x() + xtranslate, srcdev->y() + ytranslate);
-            rotateNone(srcdev, m_dev); //copy it back
+            m_boundRect = rotateNone(srcdev, m_dev, m_boundRect, m_progressUpdater, m_lastProgressReport, m_progressTotalSteps, m_progressStep); //copy it back
         }
         //progress info
         if (!m_progressUpdater.isNull()) m_progressUpdater->setProgress(100);
@@ -666,7 +664,7 @@ bool KisTransformWorker::run()
         updateBounds <KisHLineIteratorSP>(m_boundRect, 1.0, 0, xtranslate);
 
         if (rotQuadrant != 0)  // no need to copy back if we have not copied the device in the first place
-            rotateNone(srcdev, m_dev);
+            m_boundRect = rotateNone(srcdev, m_dev, m_boundRect, m_progressUpdater, m_lastProgressReport, m_progressTotalSteps, m_progressStep);
     }
 
     //CBRm_dev->setDirty();

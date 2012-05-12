@@ -331,6 +331,10 @@ void KoPAView::initGUI()
 
         KoToolManager::instance()->requestToolActivation( d->canvasController );
     }
+    if (d->doc->inlineTextObjectManager()) {
+        connect(actionCollection()->action("settings_active_author"), SIGNAL(triggered(const QString &)),
+           d->doc->inlineTextObjectManager(), SLOT(activeAuthorUpdated(const QString &)));
+    }
 }
 
 void KoPAView::initActions()

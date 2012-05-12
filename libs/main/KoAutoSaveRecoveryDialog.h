@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C)  2001,2002,2003 Montel Laurent <lmontel@mandrakesoft.com>
-   Copyright (C)  2006-2007 Thomas Zander <zander@kde.org>
+   Copyright (C) 2012 Boudewijn Rempt <boud@valdyas.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,38 +14,38 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
+#ifndef KOAUTOSAVERECOVERYDIALOG_H
+#define KOAUTOSAVERECOVERYDIALOG_H
 
-#ifndef FONTDECORATIONS_H
-#define FONTDECORATIONS_H
+#include <kdialog.h>
+#include <QStringList>
+#include <QModelIndex>
 
-#include <ui_ParagraphDecorations.h>
+class QListView;
 
-#include <KoParagraphStyle.h>
+Q_DECLARE_METATYPE(QModelIndex)
 
-class ParagraphDecorations : public QWidget
+class KoAutoSaveRecoveryDialog : public KDialog
 {
     Q_OBJECT
-
 public:
-    explicit ParagraphDecorations(QWidget* parent = 0);
-    ~ParagraphDecorations() {}
 
-    void setDisplay(KoParagraphStyle *style);
-    void save(KoParagraphStyle *style) const;
+    KoAutoSaveRecoveryDialog(const QStringList &filenames, QWidget *parent = 0);
+    QStringList recoverableFiles();
 
-signals:
-    void parStyleChanged();
+public slots:
 
-private slots:
-    void clearBackgroundColor();
-    void slotBackgroundColorChanged();
+    void toggleFileItem(bool toggle);
 
 private:
-    Ui::ParagraphDecorations widget;
 
-    bool m_backgroundColorChanged, m_backgroundColorReset;
+    QListView *m_listView;
+
+    class FileItemModel;
+    FileItemModel *m_model;
 };
 
-#endif
+
+#endif // KOAUTOSAVERECOVERYDIALOG_H

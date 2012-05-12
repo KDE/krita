@@ -1208,54 +1208,27 @@ QPixmap KoDocument::generatePreview(const QSize& size)
 
 QString KoDocument::autoSaveFile(const QString & path) const
 {
+    QString retval;
+
     // Using the extension allows to avoid relying on the mime magic when opening
     KMimeType::Ptr mime = KMimeType::mimeType(nativeFormatMimeType());
     if (! mime) {
         qFatal("It seems your installation is broken/incomplete cause we failed to load the native mimetype \"%s\".", nativeFormatMimeType().constData());
     }
     QString extension = mime->property("X-KDE-NativeExtension").toString();
+    if (extension.isEmpty()) extension = mime->mainExtension();
+
     if (path.isEmpty()) {
-        // Never saved? Use a temp file in $HOME then
-        // Yes, two open unnamed docs will overwrite each other's autosave file,
-        // but hmm, we can only do something if that's in the same process anyway...
-        QString ret = QDir::homePath() + "/." + componentData().componentName() + ".autosave" + extension;
-        return ret;
+        // Never saved? Use a temp file in $HOME then. Mark it with the pid so two instances don't overwrite each other's autosave file
+        retval = QString("%1/.%2-%3-%4-autosave%5").arg(QDir::homePath()).arg(componentData().componentName()).arg(kapp->applicationPid()).arg(objectName()).arg(extension);
     } else {
         KUrl url = KUrl::fromPath(path);
         Q_ASSERT(url.isLocalFile());
         QString dir = url.directory(KUrl::AppendTrailingSlash);
         QString filename = url.fileName();
-        return dir + '.' + filename + ".autosave" + extension;
+        retval = QString("%1.%2-autosave%3").arg(dir).arg(filename).arg(extension);
     }
-}
-
-bool KoDocument::checkAutoSaveFile()
-{
-    QString asf = autoSaveFile(QString());   // the one in $HOME
-    //kDebug(30003) <<"asf=" << asf;
-    if (QFile::exists(asf)) {
-        QDateTime date = QFileInfo(asf).lastModified();
-        QString dateStr = date.toString(Qt::LocalDate);
-        int res = KMessageBox::warningYesNoCancel(
-                      0, i18n("An autosaved file for an unnamed document exists in %1.\nThis file is dated %2\nDo you want to open it?",
-                              asf, dateStr));
-        switch (res) {
-        case KMessageBox::Yes : {
-            KUrl url;
-            url.setPath(asf);
-            bool ret = openUrl(url);
-            if (ret)
-                resetURL();
-            return ret;
-        }
-        case KMessageBox::No :
-            QFile::remove(asf);
-            return false;
-        default: // Cancel
-            return false;
-        }
-    }
-    return false;
+    return retval;
 }
 
 bool KoDocument::importDocument(const KUrl & _url)
@@ -1321,8 +1294,11 @@ bool KoDocument::openUrl(const KUrl & _url)
 
     bool ret = KParts::ReadWritePart::openUrl(url);
 
-    if (autosaveOpened)
+    if (autosaveOpened) {
         resetURL(); // Force save to act like 'Save As'
+        setReadWrite(true); // enable save button
+        QFile::remove(url.toLocalFile()); // and remove the autosave file
+    }
     else {
         // We have no calligra shell when we are being embedded as a readonly part.
         //if ( d->shells.isEmpty() )
@@ -1331,11 +1307,12 @@ bool KoDocument::openUrl(const KUrl & _url)
         foreach(KoMainWindow *mainWindow, d->shells) {
             mainWindow->addRecentURL(_url);
         }
-    }
-    if (ret) {
-        // Detect readonly local-files; remote files are assumed to be writable, unless we add a KIO::stat here (async).
-        KFileItem file(url, mimeType(), KFileItem::Unknown);
-        setReadWrite(file.isWritable());
+
+        if (ret) {
+            // Detect readonly local-files; remote files are assumed to be writable, unless we add a KIO::stat here (async).
+            KFileItem file(url, mimeType(), KFileItem::Unknown);
+            setReadWrite(file.isWritable());
+        }
     }
     return ret;
 }

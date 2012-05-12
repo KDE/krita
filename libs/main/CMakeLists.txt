@@ -14,6 +14,7 @@ if( QCA2_FOUND )
 endif( QCA2_FOUND )
 
 set(komain_LIB_SRCS
+    KoAutoSaveRecoveryDialog.cpp
     KoApplicationAdaptor.cpp
     KoApplication.cpp
     KoDockerManager.cpp

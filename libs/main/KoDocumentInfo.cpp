@@ -146,7 +146,6 @@ void KoDocumentInfo::setAuthorInfo(const QString &info, const QString &data)
     } else {
         m_authorInfo.insert(info, data);
     }
-    emit infoUpdated(info, data);
 }
 
 QString KoDocumentInfo::authorInfo(const QString &info) const

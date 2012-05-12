@@ -40,33 +40,33 @@
 #include "kis_color_selector_container.h"
 
 KisColorSelector::KisColorSelector(Configuration conf, QWidget* parent)
-                                       : KisColorSelectorBase(parent),
-                                       m_ring(0),
-                                       m_triangle(0),
-                                       m_slider(0),
-                                       m_square(0),
-                                       m_wheel(0),
-                                       m_mainComponent(0),
-                                       m_subComponent(0),
-                                       m_grabbingComponent(0),
-                                       m_blipDisplay(true)
+    : KisColorSelectorBase(parent),
+      m_ring(0),
+      m_triangle(0),
+      m_slider(0),
+      m_square(0),
+      m_wheel(0),
+      m_mainComponent(0),
+      m_subComponent(0),
+      m_grabbingComponent(0),
+      m_blipDisplay(true)
 {
     init();
     setConfiguration(conf);
 }
 
 KisColorSelector::KisColorSelector(QWidget* parent)
-                                       : KisColorSelectorBase(parent),
-                                       m_ring(0),
-                                       m_triangle(0),
-                                       m_slider(0),
-                                       m_square(0),
-                                       m_wheel(0),
-                                       m_button(0),
-                                       m_mainComponent(0),
-                                       m_subComponent(0),
-                                       m_grabbingComponent(0),
-                                       m_blipDisplay(true)
+    : KisColorSelectorBase(parent),
+      m_ring(0),
+      m_triangle(0),
+      m_slider(0),
+      m_square(0),
+      m_wheel(0),
+      m_button(0),
+      m_mainComponent(0),
+      m_subComponent(0),
+      m_grabbingComponent(0),
+      m_blipDisplay(true)
 {
     init();
     updateSettings();

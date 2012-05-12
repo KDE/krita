@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
+ * Copyright (C) 2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -37,13 +38,8 @@ CharacterGeneral::CharacterGeneral(QWidget *parent)
     widget.setupUi(this);
 
     m_characterHighlighting = new CharacterHighlighting(true, this);
-    connect(m_characterHighlighting, SIGNAL(underlineChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor)), this, SLOT(slotUnderlineChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor)));
-    connect(m_characterHighlighting, SIGNAL(strikethroughChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor)), this, SLOT(slotStrikethroughChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor)));
-    connect(m_characterHighlighting, SIGNAL(capitalizationChanged(QFont::Capitalization)), this, SLOT(slotCapitalizationChanged(QFont::Capitalization)));
-    connect(m_characterHighlighting, SIGNAL(fontChanged(const QFont &)), this, SLOT(slotFontSelected(const QFont &)));
-    connect(m_characterHighlighting, SIGNAL(backgroundColorChanged(QColor)), this, SLOT(slotBackgroundColorChanged(QColor)));
-    connect(m_characterHighlighting, SIGNAL(textColorChanged(QColor)), this, SLOT(slotTextColorChanged(QColor)));
     connect(m_characterHighlighting, SIGNAL(charStyleChanged()), this, SIGNAL(styleChanged()));
+    connect(m_characterHighlighting, SIGNAL(charStyleChanged()), this, SLOT(setPreviewCharacterStyle()));
 
     m_languageTab = new LanguageTab(true, this);
 
@@ -78,6 +74,8 @@ void CharacterGeneral::setStyle(KoCharacterStyle *style)
     m_characterHighlighting->setDisplay(style);
     //m_languageTab->setDisplay(style);
 
+    widget.preview->setCharacterStyle(style);
+
     m_blockSignals = false;
 }
 
@@ -109,34 +107,15 @@ void CharacterGeneral::setName(const QString &name)
     m_style->setName(name);
 }
 
-void CharacterGeneral::slotCapitalizationChanged(QFont::Capitalization capitalisation)
+void CharacterGeneral::setPreviewCharacterStyle()
 {
-    widget.preview->setFontCapitalisation(capitalisation);
-}
+    KoCharacterStyle *charStyle=new KoCharacterStyle();
+    save(charStyle);
+    if (charStyle) {
+        widget.preview->setCharacterStyle(charStyle);
+    }
 
-void CharacterGeneral::slotFontSelected(const QFont &font)
-{
-    widget.preview->setFont(font);
-}
-
-void CharacterGeneral::slotBackgroundColorChanged(QColor color)
-{
-    widget.preview->setBackgroundColor(color);
-}
-
-void CharacterGeneral::slotTextColorChanged(QColor color)
-{
-    widget.preview->setTextColor(color);
-}
-
-void CharacterGeneral::slotUnderlineChanged(KoCharacterStyle::LineType lineType, KoCharacterStyle::LineStyle lineStyle, QColor lineColor)
-{
-    widget.preview->setUnderline(lineType, lineStyle, lineColor);
-}
-
-void CharacterGeneral::slotStrikethroughChanged(KoCharacterStyle::LineType lineType, KoCharacterStyle::LineStyle lineStyle, QColor lineColor)
-{
-    widget.preview->setStrikethrough(lineType, lineStyle, lineColor);
+    delete charStyle;
 }
 
 #include <CharacterGeneral.moc>

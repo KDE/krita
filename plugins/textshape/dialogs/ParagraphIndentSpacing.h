@@ -41,10 +41,6 @@ public:
     void save(KoParagraphStyle *style);
 
 signals:
-    void firstLineMarginChanged(qreal margin);
-    void leftMarginChanged(qreal margin);
-    void lineSpacingChanged(qreal fixedLineHeight, qreal lineSpacing, qreal minimumLineHeight, int percentLineSpacing, bool useFontProperties);
-    void rightMarginChanged(qreal margin);
     void parStyleChanged();
 
 private slots:
@@ -58,6 +54,9 @@ private slots:
     void rightMarginValueChanged();
     void bottomMarginValueChanged();
     void topMarginValueChanged();
+    void firstLineMarginChanged(qreal margin);
+    void leftMarginChanged(qreal margin);
+    void rightMarginChanged(qreal margin);
 
 private:
     Ui::ParagraphIndentSpacing widget;

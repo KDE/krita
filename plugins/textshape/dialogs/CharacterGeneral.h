@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -51,12 +52,7 @@ signals:
 
 private slots:
     void setName(const QString &name);
-    void slotFontSelected(const QFont &);
-    void slotBackgroundColorChanged(QColor);
-    void slotTextColorChanged(QColor);
-    void slotUnderlineChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor);
-    void slotStrikethroughChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor);
-    void slotCapitalizationChanged(QFont::Capitalization capitalisation);
+    void setPreviewCharacterStyle();
 
 protected:
     Ui::CharacterGeneral widget;

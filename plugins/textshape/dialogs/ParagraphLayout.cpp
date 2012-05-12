@@ -50,7 +50,6 @@ void ParagraphLayout::slotAlignChanged()
 
     m_alignmentInherited = false;
 
-    emit horizontalAlignmentChanged(align);
     emit parStyleChanged();
 }
 

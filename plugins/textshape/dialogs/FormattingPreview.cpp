@@ -120,7 +120,7 @@ void FormattingPreview::paintEvent(QPaintEvent *event)
     QRect rectang = contentsRect();
 
     p->fillRect(rectang, QBrush(QColor(Qt::white)));
-    p->drawImage(rectang, m_thumbnailer->thumbnail(m_characterStyle,m_paragraphStyle,rectang.size(),true, KoStyleThumbnailer::NoFlags));
+    p->drawImage(rectang, m_thumbnailer->thumbnail(m_characterStyle,m_paragraphStyle,rectang.size(),m_previewLayoutRequired, KoStyleThumbnailer::NoFlags));
 
     m_previewLayoutRequired = false;
 

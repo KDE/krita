@@ -612,7 +612,7 @@ void KisTransformWorkerTest::testRotation()
     QRect rc = dev->exactBounds();
 
     QCOMPARE(rc.width(), 702);
-    QCOMPARE(rc.height(), 628);
+    QCOMPARE(rc.height(), 629);
 
 //    KisTransaction t2("test", dev);
 //    KisRandomAccessorSP ac = dev->createRandomAccessorNG(rc.x(), rc.y());
@@ -738,8 +738,6 @@ void KisTransformWorkerTest::rotateNone()
     QRect rc = KisTransformWorker::rotateNone(dev2, tmpdev1, boundRect, 0, lastProgressReport, progressTotalSteps, progresStep);
     t.end();
 
-    qDebug() << rc << boundRect;
-
     QImage result = tmpdev1->convertToQImage(0, rc.x(), rc.y(), image.width(), image.height());
 
     QPoint errpoint;
@@ -770,8 +768,6 @@ void KisTransformWorkerTest::rotate90Left()
     KisTransaction t("rotate left 90", dev2);
     QRect rc = KisTransformWorker::rotateLeft90(dev2, tmpdev1, boundRect, 0, lastProgressReport, progressTotalSteps, progresStep);
     t.end();
-
-    qDebug() << rc << boundRect << ">>>>>>>>>" << tmpdev1->exactBounds();
 
     QImage result = tmpdev1->convertToQImage(0, rc.x(), rc.y(), image.width(), image.height());
     QTransform tf;
@@ -806,8 +802,6 @@ void KisTransformWorkerTest::rotate90Right()
     QRect rc = KisTransformWorker::rotateRight90(dev2, tmpdev1, boundRect, 0, lastProgressReport, progressTotalSteps, progresStep);
     t.end();
 
-    qDebug() << rc << boundRect << ">>>>>>>>>" << tmpdev1->exactBounds();
-
     QTransform tf;
     QImage rotatedimage = image.transformed(tf.rotate(90));
 
@@ -841,8 +835,6 @@ void KisTransformWorkerTest::rotate180()
     KisTransaction t("rotate 180", dev2);
     QRect rc = KisTransformWorker::rotate180(dev2, tmpdev1, boundRect, 0, lastProgressReport, progressTotalSteps, progresStep);
     t.end();
-
-    qDebug() << rc << boundRect << ">>>>>>>>>" << tmpdev1->exactBounds();
 
     QImage result = tmpdev1->convertToQImage(0, rc.x(), rc.y(), image.width(), image.height());
 

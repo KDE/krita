@@ -143,7 +143,6 @@ QRect rotateWithTf(int rotation, KisPaintDeviceSP src, KisPaintDeviceSP dst,
     for (qint32 y = r.y(); y <= r.height() + r.y(); ++y) {
         for (qint32 x = r.x(); x <= r.width() + r.x(); ++x) {
             tf.map(x, y, &tx, &ty);
-            qDebug() << x << "," << y << " -- "<< tx << "," << ty;
             srcAcc->moveTo(x, y);
             dstAcc->moveTo(tx, ty);
             memcpy(dstAcc->rawData(), srcAcc->oldRawData(), pixelSize);
@@ -173,7 +172,7 @@ QRect KisTransformWorker::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP d
                                         int &progressStep)
 {
     QRect r = rotateWithTf(90, src, dst, boundRect, progressUpdater, lastProgressReport, progressTotalSteps, progressStep);
-    qDebug() << r;
+    dst->move(dst->x() - 1, dst->y());
     return QRect(- r.top() - r.height(), r.x(), r.height(), r.width());
 }
 
@@ -185,7 +184,7 @@ QRect KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP ds
                                        int &progressStep)
 {
     QRect r = rotateWithTf(270, src, dst, boundRect, progressUpdater, lastProgressReport, progressTotalSteps, progressStep);
-    qDebug() << r;
+    dst->move(dst->x(), dst->y() -1);
     return QRect(r.top(), - r.x() - r.width(), r.height(), r.width());
 }
 
@@ -197,7 +196,7 @@ QRect KisTransformWorker::rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst,
                                     int &progressStep)
 {
     QRect r = rotateWithTf(180, src, dst, boundRect, progressUpdater, lastProgressReport, progressTotalSteps, progressStep);
-    qDebug() << r;
+    dst->move(dst->x() - 1, dst->y() -1);
     return QRect(- r.x() - r.width(), - r.top() - r.height(), r.width(), r.height());
 }
 

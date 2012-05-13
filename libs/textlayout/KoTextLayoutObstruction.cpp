@@ -23,6 +23,7 @@
 #include <KoShapeStrokeModel.h>
 #include <KoShapeShadow.h>
 #include <KoShapeGroup.h>
+#include <KoClipPath.h>
 
 #include <qnumeric.h>
 
@@ -72,7 +73,17 @@ QPainterPath KoTextLayoutObstruction::decoratedOutline(const KoShape *shape, qre
         return groupPath;
     }
 
-    QPainterPath path = shape->outline();
+    QPainterPath path;
+    if (shape->textRunAroundContour() != KoShape::ContourBox) {
+        KoClipPath *clipPath = shape->clipPath();
+        if (clipPath) {
+            path = clipPath->pathForSize(shape->size());
+        } else {
+            path = shape->outline();
+        }
+    } else {
+        path.addRect(shape->outlineRect());
+    }
 
     QRectF bb = shape->outlineRect();
     borderHalfWidth = 0;

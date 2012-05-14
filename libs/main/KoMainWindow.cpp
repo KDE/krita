@@ -1435,6 +1435,9 @@ KoPrintJob* KoMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileNa
     KoPrintJob *printJob = rootView()->createPdfPrintJob();
     if (printJob == 0)
         return 0;
+    if (isHidden()) {
+        printJob->setProperty("noprogressdialog", true);
+    }
 
     d->applyDefaultSettings(printJob->printer());
     // TODO for remote files we have to first save locally and then upload.

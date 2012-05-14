@@ -317,7 +317,13 @@ bool KoApplication::start()
         const bool benchmarkLoading = koargs->isSet("benchmark-loading")
                                       || koargs->isSet("benchmark-loading-show-window")
                                       || !roundtripFileName.isEmpty();
-        const bool showShell = koargs->isSet("benchmark-loading-show-window");
+        // only show the shell when no command-line mode option is passed
+        const bool showShell =
+                koargs->isSet("benchmark-loading-show-window") || (
+                    !koargs->isSet("export-pdf")
+                    && !koargs->isSet("benchmark-loading")
+                    && !koargs->isSet("roundtrip-filename")
+                    && roundtripFileName.isEmpty());
         const QString profileFileName = koargs->getOption("profile-filename");
         koargs->clear();
 
@@ -339,7 +345,7 @@ bool KoApplication::start()
             if (doc) {
                 // show a shell asap
                 KoMainWindow *shell = new KoMainWindow(doc->componentData());
-                if (showShell || !benchmarkLoading) {
+                if (showShell) {
                     shell->show();
                 }
                 if (benchmarkLoading) {

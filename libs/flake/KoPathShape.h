@@ -117,6 +117,15 @@ public:
     // reimplemented
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
+    // basically the same as loadOdf but adapted to the contour cases
+    // tag needs to be either contour-polygon or contour-path from another shape
+    bool loadContourOdf(const KoXmlElement & element, KoShapeLoadingContext &context, const QSizeF &scaleFactor);
+
+    /** basically the equivalent saveOdf but adapted to the contour cases
+     * @param originalSize the original size of the unscaled image.
+     */
+    void saveContourOdf(KoShapeSavingContext &context, const QSizeF &originalSize) const;
+
     /// Removes all subpaths and their points from the path
     void clear();
     /**

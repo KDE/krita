@@ -4,6 +4,7 @@
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  * Copyright (C) 2012 Inge Wallin <inge@lysator.liu.se>
+ * Copyright (C) 2012 C.Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -38,6 +39,7 @@
 #include <KoUnit.h>
 #include <KoGenStyle.h>
 #include <KoFilterEffectStack.h>
+#include <KoClipPath.h>
 #include <SvgSavingContext.h>
 #include <SvgLoadingContext.h>
 #include <SvgUtil.h>
@@ -50,6 +52,8 @@
 #include <QTimer>
 #include <QPixmapCache>
 #include <QThreadPool>
+#include <QImage>
+#include <QColor>
 
 QString generate_key(qint64 key, const QSize & size)
 {
@@ -58,7 +62,7 @@ QString generate_key(qint64 key, const QSize & size)
 
 // ----------------------------------------------------------------- //
 
-_Private::PixmapScaler::PixmapScaler(PictureShape* pictureShape, const QSize& pixmapSize):
+_Private::PixmapScaler::PixmapScaler(PictureShape *pictureShape, const QSize &pixmapSize):
     m_size(pixmapSize)
 {
     m_image = pictureShape->imageData()->image();
@@ -82,10 +86,69 @@ void _Private::PixmapScaler::run()
 
 // ----------------------------------------------------------------- //
 
-void _Private::PictureShapeProxy::setImage(const QString& key, const QImage& image)
+void _Private::PictureShapeProxy::setImage(const QString &key, const QImage &image)
 {
     QPixmapCache::insert(key, QPixmap::fromImage(image));
     m_pictureShape->update();
+}
+
+// ----------------------------------------------------------------- //
+
+QPainterPath _Private::generateOutline(const QImage &imageIn, int treshold)
+{
+    int leftArray[100];
+    int rightArray[100];
+
+    QImage image = imageIn.scaled(QSize(100, 100));
+
+    QPainterPath path;
+
+    for (int y = 0; y < 100; y++) {
+        leftArray[y] = -1;
+        for (int x = 0; x < 100; x++) {
+            int a = qAlpha(image.pixel(x,y));
+            if (a > treshold) {
+                leftArray[y] = x;
+                break;
+            }
+        }
+    }
+    for (int y = 0; y < 100; y++) {
+        rightArray[y] = -1;
+        if (leftArray[y] != -1) {
+            for (int x = 100-1; x >= 0; x--) {
+                int a = qAlpha(image.pixel(x,y));
+                if (a > treshold) {
+                    rightArray[y] = x;
+                    break;
+                }
+            }
+        }
+    }
+
+    // Now we know the outline let's make a path out of it
+    bool first = true;
+    for (int y = 0; y < 100; y++) {
+        if (rightArray[y] != -1) {
+            if (first) {
+                path.moveTo(rightArray[y] / 99.0, y / 99.0);
+                first = false;
+            } else {
+                path.lineTo(rightArray[y] / 99.0, y / 99.0);
+            }
+        }
+    }
+    if (first) {
+        // Completely empty
+        return path;
+    }
+
+    for (int y = 100-1; y >= first; y--) {
+        if (leftArray[y] != -1) {
+            path.lineTo(leftArray[y] / 99.0, y / 99.0);
+        }
+    }
+    return path;
 }
 
 // ----------------------------------------------------------------- //
@@ -318,6 +381,9 @@ void PictureShape::saveOdf(KoShapeSavingContext &context) const
     writer.addAttribute("xlink:href", name);
     saveText(context);
     writer.endElement(); // draw:image
+    QSizeF scaleFactor(imageData->imageSize().width() / size().width(),
+                  imageData->imageSize().height() / size().height());
+    saveOdfClipContour(context, scaleFactor);
     writer.endElement(); // draw:frame
 
     context.addDataCenter(m_imageCollection);
@@ -326,7 +392,19 @@ void PictureShape::saveOdf(KoShapeSavingContext &context) const
 bool PictureShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     loadOdfAttributes(element, context, OdfAllAttributes);
-    return loadOdfFrame(element, context);
+
+    if (loadOdfFrame(element, context)) {
+        // load contour (clip)
+        KoImageData *imageData = qobject_cast<KoImageData*>(userData());
+
+        QSizeF scaleFactor(size().width() / imageData->imageSize().width(),
+                 size().height() / imageData->imageSize().height());
+
+        loadOdfClipContour(element, context, scaleFactor);
+
+        return true;
+    }
+    return false;
 }
 
 bool PictureShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context)
@@ -367,6 +445,10 @@ QString PictureShape::saveStyle(KoGenStyle& style, KoShapeSavingContext& context
         style.addProperty("draw:image-opacity", QString("%1%").arg((1.0 - transparency()) * 100.0));
     }
 
+    // this attribute is need to work around a bug in LO 3.4 to make it recognice us as an
+    // image and not just any shape. But we shouldn't produce illegal odf so: only for testing!
+    // style.addAttribute("style:parent-style-name", "dummy");
+
     // Mirroring
     if (m_mirrorMode != MirrorNone) {
         QString mode;
@@ -406,8 +488,8 @@ QString PictureShape::saveStyle(KoGenStyle& style, KoShapeSavingContext& context
     KoImageData *imageData = qobject_cast<KoImageData*>(userData());
 
     if (imageData != 0) {
-        QSizeF       imageSize = imageData->imageSize();
-        ClippingRect rect      = m_clippingRect;
+        QSizeF imageSize = imageData->imageSize();
+        ClippingRect rect = m_clippingRect;
 
         rect.normalize(imageSize);
         rect.bottom = 1.0 - rect.bottom;
@@ -454,7 +536,7 @@ void PictureShape::loadStyle(const KoXmlElement& element, KoShapeLoadingContext&
         if (mirrorMode.contains("vertical")) {
             mode |= MirrorVertical;
         }
-        
+
         m_mirrorMode = mode;
     }
 

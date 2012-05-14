@@ -176,6 +176,11 @@ void KoListStyle::applyStyle(const QTextBlock &block, int level)
 
 void KoListStyle::loadOdf(KoShapeLoadingContext& scontext, const KoXmlElement& style)
 {
+    d->name = style.attributeNS(KoXmlNS::style, "display-name", QString());
+    // if no style:display-name is given us the style:name
+    if (d->name.isEmpty()) {
+        d->name = style.attributeNS(KoXmlNS::style, "name", QString());
+    }
     d->name = style.attributeNS(KoXmlNS::style, "name", QString());
 
     KoXmlElement styleElem;
@@ -199,6 +204,10 @@ void KoListStyle::loadOdf(KoShapeLoadingContext& scontext, const KoXmlElement& s
 
 void KoListStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context) const
 {
+    // style:display-name can be used in list styles but not in outline styles
+    if (!d->name.isEmpty() && !style.isDefaultStyle() && !isOulineStyle()) {
+        style.addAttribute("style:display-name", d->name);
+    }
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter elementWriter(&buffer);    // TODO pass indentation level

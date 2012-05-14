@@ -210,12 +210,45 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
         m_d->document->documentInfo()->setAboutInfo("title", m_d->imageName);
     if (m_d->document->documentInfo()->aboutInfo("comment").isNull())
         m_d->document->documentInfo()->setAboutInfo("comment", m_d->imageComment);
-
+    loadAssistants(store, uri, external);
 }
 
 vKisNodeSP KisKraLoader::selectedNodes() const
 {
     return m_d->selectedNodes;
+}
+
+void KisKraLoader::loadAssistants(KoStore *store, const QString &uri, bool external)
+{
+    QByteArray data;
+    QString location;
+    QMap<int ,KisPaintingAssistantHandleSP> handleMap;
+    QList<KisPaintingAssistant> assistants;
+    location = external ? QString::null : uri;
+    location += m_d->imageName + ASSISTANTS_PATH;
+    if(store->enterDirectory(location)){
+        if (store->hasFile("ellipse.assistant")){
+            store->open("ellipse.assistant");
+            data = store->read(store->size());
+            KisPaintingAssistant::loadXml(data, handleMap,assistants, m_d->document);
+        }
+        else if (store->hasFile("perspective.assistant")){
+            store->open("perspective.assistant");
+            data = store->read(store->size());
+            KisPaintingAssistant::loadXml(data, handleMap,assistants, m_d->document);
+        }
+        else if (store->hasFile("spline.assistant")){
+            store->open("spline.assistant");
+            data = store->read(store->size());
+            KisPaintingAssistant::loadXml(data, handleMap,assistants, m_d->document);
+        }
+        else if (store->hasFile("ruler.assistant")){
+            store->open("ruler.assistant");
+            data = store->read(store->size());
+            KisPaintingAssistant::loadXml(data, handleMap,assistants, m_d->document);
+        }
+    }
+
 }
 
 KisNode* KisKraLoader::loadNodes(const KoXmlElement& element, KisImageWSP image, KisNode* parent)

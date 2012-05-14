@@ -27,6 +27,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 
+#include <kis_doc2.h>
 #include <krita_export.h>
 #include <kis_shared.h>
 #include <kio/job.h>
@@ -37,6 +38,7 @@ class QPainter;
 class QRect;
 class QRectF;
 class KisCoordinatesConverter;
+class KisDoc2;
 
 #include <kis_shared_ptr.h>
 #include <KoGenericRegistry.h>
@@ -97,8 +99,8 @@ public:
     void uncache();
     const QList<KisPaintingAssistantHandleSP>& handles() const;
     QList<KisPaintingAssistantHandleSP> handles();
-    QByteArray saveXml(quint32 count);
-    void saveFinish(KJob* job);
+    QByteArray saveXml(quint32 count, QMap<KisPaintingAssistantHandleSP, int> &handleMap);
+    void loadXml(QByteArray data, QMap<int ,KisPaintingAssistantHandleSP> &handleMap, QList<KisPaintingAssistant> assistants, KisDoc2 *doc);
 
 public:
     /**

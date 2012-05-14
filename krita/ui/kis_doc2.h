@@ -41,6 +41,7 @@ class KoShapeBasedDocumentBase;
 class KisView2;
 class KisChildDoc;
 class KisUndoStore;
+class KisPaintingAssistant;
 
 /**
  * The class that represents a Krita document containing content and
@@ -158,7 +159,7 @@ public:
     /**
       *@return a list of all the assistants in all current views
       */
-    QList<KisPaintingAssistant*> assistants();
+    QList<KisPaintingAssistant *> assistants();
 
 signals:
 

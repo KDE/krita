@@ -54,6 +54,8 @@ public:
 
     vKisNodeSP selectedNodes() const;
 
+    void loadAssistants(KoStore* store, const QString & uri, bool external);
+
 private:
 
     KisNode* loadNodes(const KoXmlElement& element, KisImageWSP image, KisNode* parent);
@@ -79,7 +81,6 @@ private:
     KisNode* loadSelectionMask(KisImageWSP image, const KoXmlElement& elem);
 
     void loadCompositions(const KoXmlElement& elem, KisImageWSP image);
-
 private:
 
     struct Private;

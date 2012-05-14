@@ -238,19 +238,22 @@ QRect KisPaintingAssistant::boundingRect() const
     return r.adjusted(-2, -2, 2, 2).toAlignedRect();
 }
 
-QByteArray KisPaintingAssistant::saveXml(quint32 count)
+QByteArray KisPaintingAssistant::saveXml(quint32 count, QMap<KisPaintingAssistantHandleSP, int> &handleMap)
 {
         QByteArray data;
         QXmlStreamWriter xml(&data);
             if(count == 0){
                 xml.writeStartDocument();
             }
-            xml.writeStartElement(d->id + "assistant");
+            xml.writeStartElement("assistant");
+            xml.writeAttribute("type",d->id);
             xml.writeStartElement("handles");
-            QMap<KisPaintingAssistantHandleSP, int> handleMap;
             foreach(const KisPaintingAssistantHandleSP handle, d->handles) {
                 int id = handleMap.size();
-                handleMap.insert(handle, id);
+                if (!handleMap.contains(handle)){
+                    handleMap.insert(handle, id);
+                }
+                id = handleMap.value(handle);
                 xml.writeStartElement("handle");
                 xml.writeAttribute("id", QString::number(id));
                 xml.writeAttribute("x", QString::number(double(handle->x()), 'f', 3));
@@ -259,9 +262,12 @@ QByteArray KisPaintingAssistant::saveXml(quint32 count)
             }
             xml.writeEndElement();
             xml.writeEndElement();
-        return data;
+            return data;
 }
 
+void KisPaintingAssistant::loadXml(QByteArray data, QMap<int, KisPaintingAssistantHandleSP> &handleMap, QList<KisPaintingAssistant> assistants, KisDoc2* doc)
+{
+}
 const QList<KisPaintingAssistantHandleSP>& KisPaintingAssistant::handles() const
 {
     return d->handles;

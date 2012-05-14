@@ -168,25 +168,26 @@ bool KisKraSaver::saveAssistants(KoStore* store ,const QString & uri, bool exter
     quint32 count_ellipse = 0, count_perspective = 0, count_ruler = 0, count_spline = 0;
     QList<QString> types;
     QList<KisPaintingAssistant*> assistants =  m_d->doc->assistants();
+    QMap<KisPaintingAssistantHandleSP, int> handlemap;
     if (!assistants.isEmpty()) {
         foreach(KisPaintingAssistant* assist, assistants){
             if (!types.contains(assist->id())){
                 types.push_back(assist->id());
             }
             if (assist->id() == "ellipse"){
-                data_ellipse += assist->saveXml(count_ellipse);
+                data_ellipse += assist->saveXml(count_ellipse,handlemap);
                 count_ellipse++;
             }
             else if (assist->id() == "spline"){
-                data_spline += assist->saveXml(count_spline);
+                data_spline += assist->saveXml(count_spline,handlemap);
                 count_spline++;
             }
             else if(assist->id() == "perspective"){
-                data_perspective += assist->saveXml(count_perspective);
+                data_perspective += assist->saveXml(count_perspective,handlemap);
                 count_perspective++;
             }
             else if(assist->id() == "ruler"){
-                data_ruler += assist->saveXml(count_ruler);
+                data_ruler += assist->saveXml(count_ruler,handlemap);
                 count_ruler++;
             }
         }

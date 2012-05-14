@@ -27,6 +27,7 @@ class KoStore;
 class KisDoc2;
 class KisNode;
 class KoColorSpace;
+class KisPaintingAssistant;
 
 #include <kis_types.h>
 

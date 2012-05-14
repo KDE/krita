@@ -223,29 +223,33 @@ void KisKraLoader::loadAssistants(KoStore *store, const QString &uri, bool exter
     QByteArray data;
     QString location;
     QMap<int ,KisPaintingAssistantHandleSP> handleMap;
-    QList<KisPaintingAssistant> assistants;
+    QList<KisPaintingAssistant*> assistants;
     location = external ? QString::null : uri;
     location += m_d->imageName + ASSISTANTS_PATH;
     if(store->enterDirectory(location)){
         if (store->hasFile("ellipse.assistant")){
             store->open("ellipse.assistant");
             data = store->read(store->size());
-            KisPaintingAssistant::loadXml(data, handleMap,assistants, m_d->document);
+            KisPaintingAssistant* u;
+            u->loadXml(data, handleMap,assistants);
         }
         else if (store->hasFile("perspective.assistant")){
             store->open("perspective.assistant");
             data = store->read(store->size());
-            KisPaintingAssistant::loadXml(data, handleMap,assistants, m_d->document);
+            KisPaintingAssistant* u;
+            u->loadXml(data, handleMap,assistants);
         }
         else if (store->hasFile("spline.assistant")){
             store->open("spline.assistant");
             data = store->read(store->size());
-            KisPaintingAssistant::loadXml(data, handleMap,assistants, m_d->document);
+            KisPaintingAssistant* u;
+            u.loadXml(data, handleMap,assistants);
         }
         else if (store->hasFile("ruler.assistant")){
             store->open("ruler.assistant");
             data = store->read(store->size());
-            KisPaintingAssistant::loadXml(data, handleMap,assistants, m_d->document);
+            KisPaintingAssistant* u;
+            u.loadXml(data, handleMap,assistants);
         }
     }
 

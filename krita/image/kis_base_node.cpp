@@ -232,7 +232,15 @@ void KisBaseNode::setSystemLocked(bool locked, bool update)
 
 bool KisBaseNode::isEditable() const
 {
-    return (visible(true) && !userLocked() && !systemLocked());
+    bool editable = (m_d->properties.boolProperty("visible", true) && !userLocked() && !systemLocked());
+
+    if (editable) {
+        KisBaseNodeSP parentNode = parentCallback();
+        if (parentNode && parentNode != this) {
+            editable = parentNode->isEditable();
+        }
+    }
+    return editable;
 }
 
 QUuid KisBaseNode::uuid() const

@@ -163,65 +163,84 @@ void KisKraSaver::saveCompositions(QDomDocument& doc, QDomElement& element, KisI
 bool KisKraSaver::saveAssistants(KoStore* store ,const QString & uri, bool external)
 {
     QString location;
-    QByteArray data_ellipse,data_perspective,data_spline,data_ruler,data_end;
+    QByteArray data_ellipse,data_perspective,data_spline,data_ruler,data_info;
+    QXmlStreamWriter xml(&data_info);
     // Save the layers data
-    quint32 count_ellipse = 0, count_perspective = 0, count_ruler = 0, count_spline = 0;
+    int count_ellipse = 0, count_perspective = 0, count_ruler = 0, count_spline = 0;
     QList<QString> types;
     QList<KisPaintingAssistant*> assistants =  m_d->doc->assistants();
     QMap<KisPaintingAssistantHandleSP, int> handlemap;
     if (!assistants.isEmpty()) {
+        xml.writeStartDocument();
+        xml.writeStartElement("assistants");
         foreach(KisPaintingAssistant* assist, assistants){
             if (!types.contains(assist->id())){
                 types.push_back(assist->id());
             }
             if (assist->id() == "ellipse"){
-                data_ellipse += assist->saveXml(count_ellipse,handlemap);
-                count_ellipse++;
-            }
-            else if (assist->id() == "spline"){
-                data_spline += assist->saveXml(count_spline,handlemap);
-                count_spline++;
-            }
-            else if(assist->id() == "perspective"){
-                data_perspective += assist->saveXml(count_perspective,handlemap);
-                count_perspective++;
-            }
-            else if(assist->id() == "ruler"){
-                data_ruler += assist->saveXml(count_ruler,handlemap);
-                count_ruler++;
-            }
-        }
-        foreach(QString type, types){
-            location = external ? QString::null : uri;
-            location += m_d->imageName + ASSISTANTS_PATH;
-            location += type + ".assistant";
-            QXmlStreamWriter xml(&data_end);
-            xml.writeEndDocument();
-            if (type == "ellipse"){
-                data_ellipse +=  data_end;
+                location = external ? QString::null : uri;
+                location += m_d->imageName + ASSISTANTS_PATH;
+                location += QString("ellipse%1.assistant").arg(count_ellipse);
+                xml.writeStartElement("assistant");
+                xml.writeAttribute("type",assist->id());
+                xml.writeAttribute("path",location);
+                xml.writeEndElement();
+                data_ellipse = assist->saveXml(count_ellipse,handlemap);
                 store->open(location);
                 store->write(data_ellipse);
                 store->close();
+                count_ellipse++;
             }
-            else if (type == "spline"){
-                data_spline +=  data_end;
+            else if (assist->id() == "spline"){
+                location = external ? QString::null : uri;
+                location += m_d->imageName + ASSISTANTS_PATH;
+                location += QString("spline%1.assistant").arg(count_spline);
+                xml.writeStartElement("assistant");
+                xml.writeAttribute("type",assist->id());
+                xml.writeAttribute("path",location);
+                xml.writeEndElement();
+                data_spline = assist->saveXml(count_spline,handlemap);
                 store->open(location);
                 store->write(data_spline);
                 store->close();
+                count_spline++;
             }
-            else if (type == "perspective"){
-                data_perspective+=  data_end;
+            else if(assist->id() == "perspective"){
+                location = external ? QString::null : uri;
+                location += m_d->imageName + ASSISTANTS_PATH;
+                location += QString("perspective%1.assistant").arg(count_perspective);
+                xml.writeStartElement("assistant");
+                xml.writeAttribute("type",assist->id());
+                xml.writeAttribute("path",location);
+                xml.writeEndElement();
+                data_perspective = assist->saveXml(count_perspective,handlemap);
                 store->open(location);
                 store->write(data_perspective);
                 store->close();
+                count_perspective++;
             }
-            else if(type == "ruler"){
-                data_ruler +=  data_end;
+            else if(assist->id() == "ruler"){
+                location = external ? QString::null : uri;
+                location += m_d->imageName + ASSISTANTS_PATH;
+                location += QString("ruler%1.assistant").arg(count_ruler);
+                xml.writeStartElement("assistant");
+                xml.writeAttribute("type",assist->id());
+                xml.writeAttribute("path",location);
+                xml.writeEndElement();
+                data_ruler = assist->saveXml(count_ruler,handlemap);
                 store->open(location);
                 store->write(data_ruler);
                 store->close();
+                count_ruler++;
             }
         }
+        xml.writeEndElement();
+        xml.writeEndDocument();
+        location = external ? QString::null : uri;
+        location += "content.xml";
+        store->open(location);
+        store->write(data_info);
+        store->close();
     }
     return true;
 }

@@ -242,9 +242,7 @@ QByteArray KisPaintingAssistant::saveXml(quint32 count, QMap<KisPaintingAssistan
 {
         QByteArray data;
         QXmlStreamWriter xml(&data);
-            if(count == 0){
-                xml.writeStartDocument();
-            }
+            xml.writeStartDocument();
             xml.writeStartElement("assistant");
             xml.writeAttribute("type",d->id);
             xml.writeStartElement("handles");
@@ -262,61 +260,41 @@ QByteArray KisPaintingAssistant::saveXml(quint32 count, QMap<KisPaintingAssistan
             }
             xml.writeEndElement();
             xml.writeEndElement();
+            xml.writeEndDocument();
             return data;
 }
 
-void KisPaintingAssistant::loadXml(QByteArray data, QMap<int, KisPaintingAssistantHandleSP> &handleMap, QList<KisPaintingAssistant*> assistants)
+void KisPaintingAssistant::loadXml(KoStore* store, QMap<int, KisPaintingAssistantHandleSP> &handleMap, QString path)
 {
-     QXmlStreamReader xml(data);
-     int id ;
-     double x ,y;
-     KisPaintingAssistant* assistant = 0;
-     bool errors = false;
-     while (!xml.atEnd()) {
-         switch (xml.readNext()) {
-         case QXmlStreamReader::StartElement:
-             if (xml.name() == "handle") {
-                 QString strId = xml.attributes().value("id").toString(),
-                         strX = xml.attributes().value("x").toString(),
-                         strY = xml.attributes().value("y").toString();
-                 if (!strId.isEmpty() && !strX.isEmpty() && !strY.isEmpty()) {
-                     id = strId.toInt();
-                     x = strX.toDouble();
-                     y = strY.toDouble();
-                     if (!handleMap.contains(id)) {
-                         handleMap.insert(id, new KisPaintingAssistantHandle(x, y));
-                     } else {
-                         errors = true;
-                     }
-                 } else {
-                     errors = true;
-                 }
-                 if(assistant){
-                     assistant->addHandle(handleMap.value(id));
-                 }
-             } else if (xml.name() == "assistant") {
-                 const KisPaintingAssistantFactory* factory = KisPaintingAssistantFactoryRegistry::instance()->get(xml.attributes().value("type").toString());
-                 if (factory) {
-                     if (assistant) {
-                         errors = true;
-                         delete assistant;
-                     }
-                     assistant = factory->paintingAssistant();
-                     assistants.append(assistant);
-                 } else {
-                     errors = true;
-                 }
-             }
-             break;
-         default:
-             break;
-         }
-     }
-     if (xml.hasError()) {
-         QMessageBox::warning(0,"error loading assistants", xml.errorString());
-     }
-
+    int id;
+    double x,y ;
+    store->open(path);
+    QByteArray data = store->read(store->size());
+    QXmlStreamReader xml(data);
+    while (!xml.atEnd()) {
+        switch (xml.readNext()) {
+        case QXmlStreamReader::StartElement:
+            if (xml.name() == "handle") {
+                QString strId = xml.attributes().value("id").toString(),
+                strX = xml.attributes().value("x").toString(),
+                strY = xml.attributes().value("y").toString();
+                if (!strId.isEmpty() && !strX.isEmpty() && !strY.isEmpty()) {
+                    id = strId.toInt();
+                    x = strX.toDouble();
+                    y = strY.toDouble();
+                    if (!handleMap.contains(id)) {
+                        handleMap.insert(id, new KisPaintingAssistantHandle(x, y));
+                    }
+                }
+                addHandle(handleMap.value(id));
+            }
+            break;
+        default:
+            break;
+        }
+    }
 }
+
 const QList<KisPaintingAssistantHandleSP>& KisPaintingAssistant::handles() const
 {
     return d->handles;

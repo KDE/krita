@@ -339,7 +339,7 @@ QString PerspectiveAssistantFactory::name() const
     return i18n("Perspective");
 }
 
-KisPaintingAssistant* PerspectiveAssistantFactory::paintingAssistant(const QRectF& /*imageArea*/) const
+KisPaintingAssistant* PerspectiveAssistantFactory::createPaintingAssistant() const
 {
     return new PerspectiveAssistant;
 }

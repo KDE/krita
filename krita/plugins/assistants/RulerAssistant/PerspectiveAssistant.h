@@ -63,7 +63,7 @@ public:
     virtual ~PerspectiveAssistantFactory();
     virtual QString id() const;
     virtual QString name() const;
-    virtual KisPaintingAssistant* paintingAssistant(const QRectF& imageArea) const;
+    virtual KisPaintingAssistant* createPaintingAssistant() const;
 };
 
 #endif

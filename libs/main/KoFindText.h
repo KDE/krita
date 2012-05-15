@@ -42,8 +42,10 @@ class KoShape;
  *
  * The following options are defined:
  * <ul>
- *      <li>caseSensitive: Boolean. Use case-sensitive searching.</li>
- *      <li>wholeWords: Boolean. Only match whole words, not parts.</li>
+ *      <li><strong>caseSensitive</strong>: Boolean. Default false. Use case-sensitive searching.</li>
+ *      <li><strong>wholeWords</strong>: Boolean. Default false. Only match whole words, not parts.</li>
+ *      <li><strong>fromCursor</strong>: Boolean. Default true. Start searching from the current cursor
+ *          set through setCurrentCursor().</li>
  * </ul>
  *
  * \note Before you can use this class, be sure to set a list of QTextDocuments

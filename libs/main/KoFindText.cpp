@@ -88,6 +88,7 @@ KoFindText::KoFindText(QObject* parent)
     KoFindOptionSet *options = new KoFindOptionSet();
     options->addOption("caseSensitive", i18n("Case Sensitive"), i18n("Match cases when searching"), QVariant::fromValue<bool>(false));
     options->addOption("wholeWords", i18n("Whole Words Only"), i18n("Match only whole words"), QVariant::fromValue<bool>(false));
+    options->addOption("fromCursor", i18n("Find from Cursor"), i18n("Start searching from the current cursor"), QVariant::fromValue<bool>(true));
     setOptions(options);
 }
 
@@ -116,7 +117,7 @@ void KoFindText::findImplementation(const QString &pattern, QList<KoFindMatch> &
         return;
     }
 
-    bool before = !d->currentCursor.isNull();
+    bool before = opts->option("fromCursor")->value().toBool() && !d->currentCursor.isNull();
     QList<KoFindMatch> matchBefore;
     foreach(QTextDocument* document, d->documents) {
         QTextCursor cursor = document->find(pattern, start, flags);

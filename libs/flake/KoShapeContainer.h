@@ -146,7 +146,7 @@ public:
     bool isClipped(const KoShape *child) const;
 
     /**
-     * Return wheather the child has the effective state of being locked for user modifications.
+     * Return whether the child has the effective state of being locked for user modifications.
      * This method is deferred to the model, which should call the KoShape::isGeometryProtected() on the child.
      * @param child the shape that the user wants to move.
      */

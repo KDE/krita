@@ -160,31 +160,19 @@ void KisKraSaver::saveCompositions(QDomDocument& doc, QDomElement& element, KisI
     element.appendChild(e);
 }
 
-bool KisKraSaver::saveAssistants(KoStore* store ,const QString & uri, bool external)
+bool KisKraSaver::saveAssistants(KoStore* store, QString uri, bool external)
 {
     QString location;
     QByteArray data_ellipse,data_perspective,data_spline,data_ruler,data_info;
-    QXmlStreamWriter xml(&data_info);
-    // Save the layers data
     int count_ellipse = 0, count_perspective = 0, count_ruler = 0, count_spline = 0;
-    QList<QString> types;
     QList<KisPaintingAssistant*> assistants =  m_d->doc->assistants();
     QMap<KisPaintingAssistantHandleSP, int> handlemap;
     if (!assistants.isEmpty()) {
-        xml.writeStartDocument();
-        xml.writeStartElement("assistants");
         foreach(KisPaintingAssistant* assist, assistants){
-            if (!types.contains(assist->id())){
-                types.push_back(assist->id());
-            }
             if (assist->id() == "ellipse"){
                 location = external ? QString::null : uri;
                 location += m_d->imageName + ASSISTANTS_PATH;
                 location += QString("ellipse%1.assistant").arg(count_ellipse);
-                xml.writeStartElement("assistant");
-                xml.writeAttribute("type",assist->id());
-                xml.writeAttribute("path",location);
-                xml.writeEndElement();
                 data_ellipse = assist->saveXml(count_ellipse,handlemap);
                 store->open(location);
                 store->write(data_ellipse);
@@ -195,10 +183,6 @@ bool KisKraSaver::saveAssistants(KoStore* store ,const QString & uri, bool exter
                 location = external ? QString::null : uri;
                 location += m_d->imageName + ASSISTANTS_PATH;
                 location += QString("spline%1.assistant").arg(count_spline);
-                xml.writeStartElement("assistant");
-                xml.writeAttribute("type",assist->id());
-                xml.writeAttribute("path",location);
-                xml.writeEndElement();
                 data_spline = assist->saveXml(count_spline,handlemap);
                 store->open(location);
                 store->write(data_spline);
@@ -209,10 +193,6 @@ bool KisKraSaver::saveAssistants(KoStore* store ,const QString & uri, bool exter
                 location = external ? QString::null : uri;
                 location += m_d->imageName + ASSISTANTS_PATH;
                 location += QString("perspective%1.assistant").arg(count_perspective);
-                xml.writeStartElement("assistant");
-                xml.writeAttribute("type",assist->id());
-                xml.writeAttribute("path",location);
-                xml.writeEndElement();
                 data_perspective = assist->saveXml(count_perspective,handlemap);
                 store->open(location);
                 store->write(data_perspective);
@@ -223,10 +203,6 @@ bool KisKraSaver::saveAssistants(KoStore* store ,const QString & uri, bool exter
                 location = external ? QString::null : uri;
                 location += m_d->imageName + ASSISTANTS_PATH;
                 location += QString("ruler%1.assistant").arg(count_ruler);
-                xml.writeStartElement("assistant");
-                xml.writeAttribute("type",assist->id());
-                xml.writeAttribute("path",location);
-                xml.writeEndElement();
                 data_ruler = assist->saveXml(count_ruler,handlemap);
                 store->open(location);
                 store->write(data_ruler);
@@ -234,13 +210,43 @@ bool KisKraSaver::saveAssistants(KoStore* store ,const QString & uri, bool exter
                 count_ruler++;
             }
         }
-        xml.writeEndElement();
-        xml.writeEndDocument();
-        location = external ? QString::null : uri;
-        location += "content.xml";
-        store->open(location);
-        store->write(data_info);
-        store->close();
+
+    }
+    return true;
+}
+
+bool KisKraSaver::saveAssistantsList(QDomDocument& doc, QDomElement& element)
+{
+    QList<KisPaintingAssistant*> assistants =  m_d->doc->assistants();
+    if (!assistants.isEmpty()) {
+        QDomElement assistantsElement = doc.createElement("assistants");
+        foreach(KisPaintingAssistant* assist, assistants){
+            if (assist->id() == "ellipse"){
+                QDomElement assistantElement = doc.createElement("assistant");
+                assistantElement.setAttribute("type", "ellipse");
+                assistantElement.setAttribute("path", location);
+                assistantsElement.appendChild(assistantElement);
+            }
+            else if (assist->id() == "spline"){
+                QDomElement assistantElement = doc.createElement("assistant");
+                assistantElement.setAttribute("type", "spline");
+                assistantElement.setAttribute("path", location);
+                assistantsElement.appendChild(assistantElement);
+            }
+            else if(assist->id() == "perspective"){
+                QDomElement assistantElement = doc.createElement("assistant");
+                assistantElement.setAttribute("type", "perspective");
+                assistantElement.setAttribute("path", location);
+                assistantsElement.appendChild(assistantElement);
+            }
+            else if(assist->id() == "ruler"){
+                QDomElement assistantElement = doc.createElement("assistant");
+                assistantElement.setAttribute("type", "ruler");
+                assistantElement.setAttribute("path", location);
+                assistantsElement.appendChild(assistantElement);
+            }
+        }
+        element.appendChild(assistantsElement);
     }
     return true;
 }

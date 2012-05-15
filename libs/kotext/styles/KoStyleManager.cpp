@@ -247,7 +247,7 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
         if (name.isEmpty())
             name = 'T'; //TODO is this correct?
 
-        KoGenStyle style(KoGenStyle::TableStyle);
+        KoGenStyle style(KoGenStyle::TableStyle, "table");
         tableStyle->saveOdf(style);
         context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
     }
@@ -257,7 +257,7 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
         if (name.isEmpty())
             name = 'T'; //TODO is this correct?
 
-        KoGenStyle style(KoGenStyle::TableColumnStyle);
+        KoGenStyle style(KoGenStyle::TableColumnStyle, "table-column");
         tableColumnStyle->saveOdf(style);
         context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
     }
@@ -267,7 +267,7 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
         if (name.isEmpty())
             name = 'T'; //TODO is this correct?
 
-        KoGenStyle style(KoGenStyle::TableRowStyle);
+        KoGenStyle style(KoGenStyle::TableRowStyle, "table-row");
         tableRowStyle->saveOdf(style);
         context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
     }
@@ -277,7 +277,7 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
         if (name.isEmpty())
             name = "T."; //TODO is this correct?
 
-        KoGenStyle style(KoGenStyle::TableCellStyle);
+        KoGenStyle style(KoGenStyle::TableCellStyle, "table-cell");
         tableCellStyle->saveOdf(style, context);
         context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
     }
@@ -287,7 +287,7 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
         if (name.isEmpty())
             name = "T."; //TODO is this correct?
 
-        KoGenStyle style(KoGenStyle::SectionStyle);
+        KoGenStyle style(KoGenStyle::SectionStyle, "section");
         sectionStyle->saveOdf(style);
         context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
     }

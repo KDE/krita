@@ -56,7 +56,7 @@ Q: What is the .desktop file?
 
 A: It's responsible for the menu entry, standard KDE stuff. In Calligra
 we add a few useful tags to it, in particular the "native mime type"
-of the component (e.g. application/x-words for words).
+of the component (e.g. application/vnd.oasis.opendocument.text for Calligra Words).
 
 
 

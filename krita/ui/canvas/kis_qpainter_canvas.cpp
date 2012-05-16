@@ -136,6 +136,8 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
     gc.drawPolygon(polygon);
 
     gc.setTransform(imageTransform);
+    gc.setRenderHint(QPainter::SmoothPixmapTransform, true);
+
     QRectF viewportRect = converter->widgetToViewport(ev->rect());
 
     gc.setCompositionMode(QPainter::CompositionMode_SourceOver);

@@ -238,6 +238,11 @@ Axis::Private::Private(Axis *axis, AxisDimension dim)
 
     logarithmicScaling = false;
 
+    showInnerMinorTicks = false;
+    showOuterMinorTicks = false;
+    showInnerMajorTicks = false;
+    showOuterMajorTicks = true;
+
     kdBarDiagram     = 0;
     kdLineDiagram    = 0;
     kdAreaDiagram    = 0;

@@ -54,8 +54,6 @@ class KRITAIMAGE_EXPORT KisBaseNode : public QObject, public KisShared
 
 public:
 
-    enum { Visible = 1, Hidden = 2, UserLocked = 4, UserUnlocked = 8, Linked = 16, Unlinked = 32 };
-
     /**
      * Create a new, empty base node. The node is unnamed, unlocked
      * visible and unlinked.

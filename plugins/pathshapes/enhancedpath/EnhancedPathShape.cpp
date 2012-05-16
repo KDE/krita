@@ -391,8 +391,8 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
         // save the right size so that when loading we fit the viewbox
         // to the right size without getting any wrong scaling
         // -> calculate the right size from the current size/viewbound ratio
-        context.xmlWriter().addAttributePt("svg:width", m_viewBox.width()*currentSize.width()/m_viewBound.width());
-        context.xmlWriter().addAttributePt("svg:height", m_viewBox.height()*currentSize.height()/m_viewBound.height());
+        context.xmlWriter().addAttributePt("svg:width", currentSize.width() == 0 ? 0 : m_viewBox.width()*currentSize.width()/m_viewBound.width());
+        context.xmlWriter().addAttributePt("svg:height", currentSize.height() == 0 ? 0 : m_viewBox.height()*currentSize.height()/m_viewBound.height());
 
         saveText(context);
 

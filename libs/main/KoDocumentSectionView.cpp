@@ -47,7 +47,7 @@ public:
 
 KoDocumentSectionView::KoDocumentSectionView(QWidget *parent)
     : QTreeView(parent)
-    , m_dragingFlag(false)
+    , m_draggingFlag(false)
     , d(new Private)
 {
     d->delegate = new KoDocumentSectionDelegate(this, this);
@@ -374,12 +374,12 @@ void KoDocumentSectionView::dragLeaveEvent(QDragLeaveEvent *e)
 
 bool KoDocumentSectionView::isDraging() const
 {
-    return m_dragingFlag;
+    return m_draggingFlag;
 }
 
 void KoDocumentSectionView::setDragingFlag(bool flag)
 {
-    m_dragingFlag = flag;
+    m_draggingFlag = flag;
 }
 
 #include <KoDocumentSectionPropertyAction_p.moc>

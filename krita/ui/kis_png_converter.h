@@ -22,6 +22,7 @@
 
 #include <png.h>
 
+#include <QColor>
 #include <QVector>
 
 #include <kio/job.h>
@@ -42,7 +43,17 @@ class Store;
 }
 
 struct KisPNGOptions {
-    KisPNGOptions() : compression(0), interlace(false), alpha(true), exif(true), iptc(true), xmp(true), tryToSaveAsIndexed(true) {}
+    KisPNGOptions()
+        : compression(0)
+        , interlace(false)
+        , alpha(true)
+        , exif(true)
+        , iptc(true)
+        , xmp(true)
+        , tryToSaveAsIndexed(true)
+        , transparencyFillColor(Qt::white)
+    {}
+
     int compression;
     bool interlace;
     bool alpha;
@@ -51,6 +62,8 @@ struct KisPNGOptions {
     bool xmp;
     bool tryToSaveAsIndexed;
     QList<const KisMetaData::Filter*> filters;
+    QColor transparencyFillColor;
+
 };
 
 /**

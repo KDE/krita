@@ -125,6 +125,13 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     wdg->alpha->setVisible(isThereAlpha);
     wdg->tryToSaveAsIndexed->setVisible(!isThereAlpha);
 
+    wdg->bnTransparencyFillColor->setEnabled(!wdg->alpha->isChecked());
+
+    QStringList rgb = cfg.getString("transparencyFillcolor", "255,255,255").split(",");
+    wdg->bnTransparencyFillColor->setDefaultColor(Qt::white);
+    wdg->bnTransparencyFillColor->setColor(QColor(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt()));
+
+
     kdb->setMainWidget(wdg);
     kapp->restoreOverrideCursor();
     if (hasVisibleWidgets()) {
@@ -139,11 +146,13 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     bool interlace = wdg->interlacing->isChecked();
     int compression = wdg->compressionLevel->value();
     bool tryToSaveAsIndexed = wdg->tryToSaveAsIndexed->isChecked();
+    QColor c = wdg->bnTransparencyFillColor->color();
 
     cfg.setProperty("alpha", alpha);
     cfg.setProperty("indexed", tryToSaveAsIndexed);
     cfg.setProperty("compression", compression);
     cfg.setProperty("interlaced", interlace);
+    cfg.setProperty("transparencyFillcolor", QString("%1,%2,%3").arg(c.red()).arg(c.green()).arg(c.blue()));
 
     KisConfig().setExportConfiguration("PNG", cfg);
 
@@ -162,6 +171,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     options.interlace = interlace;
     options.compression = compression;
     options.tryToSaveAsIndexed = tryToSaveAsIndexed;
+    options.transparencyFillColor = c;
     KisExifInfoVisitor eIV;
     eIV.visit(image->rootLayer().data());
     KisMetaData::Store* eI = 0;
@@ -183,3 +193,8 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
 
 #include "kis_png_export.moc"
 
+
+void KisWdgOptionsPNG::on_alpha_toggled(bool checked)
+{
+    bnTransparencyFillColor->setEnabled(!checked);
+}

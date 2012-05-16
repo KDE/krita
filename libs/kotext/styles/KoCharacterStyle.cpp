@@ -503,7 +503,7 @@ KoCharacterStyle *KoCharacterStyle::autoStyle(const QTextCharFormat &format, QTe
     autoStyle->removeDuplicates(blockCharFormat);
     autoStyle->setParentStyle(const_cast<KoCharacterStyle*>(this));
     // remove StyleId if it is there as it is not a property of the style itself and will not be written out
-    // so it should not be part of the autostyle. As otherwise it can happen that the StyleId is the only 
+    // so it should not be part of the autostyle. As otherwise it can happen that the StyleId is the only
     // property left and then we write out an empty style which is unneeded.
     // we also need to remove the properties of links as they are saved differently
     autoStyle->d->stylesPrivate.remove(StyleId);
@@ -1995,7 +1995,10 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style) const
             bool ok = false;
             int styleHint = d->stylesPrivate.value(key).toInt(&ok);
             if (ok) {
-                style.addProperty("style:font-family-generic", exportOdfFontStyleHint((QFont::StyleHint) styleHint), KoGenStyle::TextType);
+                QString generic = exportOdfFontStyleHint((QFont::StyleHint) styleHint);
+                if (!generic.isEmpty()) {
+                    style.addProperty("style:font-family-generic", generic, KoGenStyle::TextType);
+                }
                 // if this property is saved we also need to save the fo:font-family attribute as otherwise it will be ignored on loading as defined in the spec
                 style.addProperty("fo:font-family", fontFamily(), KoGenStyle::TextType);
             }

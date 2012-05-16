@@ -369,6 +369,16 @@ public:
         return QRect();
     }
 
+    /**
+     * Sets the state of the node to the value of @param collapsed
+     */
+    void setCollapsed(bool collapsed);
+
+    /**
+     * returns the collapsed state of this node
+     */
+    bool collapsed() const;
+
 protected:
 
     /**

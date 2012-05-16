@@ -286,6 +286,7 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image)
 
     bool visible = element.attribute(VISIBLE, "1") == "0" ? false : true;
     bool locked = element.attribute(LOCKED, "0") == "0" ? false : true;
+    bool collapsed = element.attribute(COLLAPSED, "0") == "0" ? false : true;
 
     // Now find out the layer type and do specific handling
     QString nodeType;
@@ -332,6 +333,7 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image)
 
     node->setVisible(visible);
     node->setUserLocked(locked);
+    node->setCollapsed(collapsed);
     node->setX(x);
     node->setY(y);
     node->setName(name);

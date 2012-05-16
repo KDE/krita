@@ -34,6 +34,7 @@ public:
     bool systemLocked;
     KoDocumentSectionModel::Property hack_visible; //HACK
     QUuid id;
+    bool collapsed;
 };
 
 KisBaseNode::KisBaseNode()
@@ -50,6 +51,7 @@ KisBaseNode::KisBaseNode()
      */
     setVisible(true);
     setUserLocked(false);
+    setCollapsed(false);
 
     setSystemLocked(false);
     m_d->linkedTo = 0;
@@ -241,6 +243,16 @@ bool KisBaseNode::isEditable() const
         }
     }
     return editable;
+}
+
+void KisBaseNode::setCollapsed(bool collapsed)
+{
+    m_d->collapsed = collapsed;
+}
+
+bool KisBaseNode::collapsed() const
+{
+    return m_d->collapsed;
 }
 
 QUuid KisBaseNode::uuid() const

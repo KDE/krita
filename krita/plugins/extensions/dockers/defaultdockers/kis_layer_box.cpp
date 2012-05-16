@@ -98,6 +98,8 @@ KisLayerBox::KisLayerBox()
 
     connect(m_wdgLayerBox->listLayers, SIGNAL(contextMenuRequested(const QPoint&, const QModelIndex&)),
             this, SLOT(slotContextMenuRequested(const QPoint&, const QModelIndex&)));
+    connect(m_wdgLayerBox->listLayers, SIGNAL(collapsed(const QModelIndex&)), SLOT(slotCollapsed(const QModelIndex &)));
+    connect(m_wdgLayerBox->listLayers, SIGNAL(expanded(const QModelIndex&)), SLOT(slotExpanded(const QModelIndex &)));
 
     m_viewModeMenu = new KMenu(this);
     QActionGroup *group = new QActionGroup(this);
@@ -234,8 +236,34 @@ KisLayerBox::~KisLayerBox()
     delete m_wdgLayerBox;
 }
 
+
+void expandNodesRecursively(KisNodeSP root, QPointer<KisNodeModel> nodeModel, KoDocumentSectionView *sectionView)
+{
+    if (!root) return;
+    if (nodeModel.isNull()) return;
+    if (!sectionView) return;
+
+    sectionView->blockSignals(true);
+
+    KisNodeSP node = root->firstChild();
+    while (node) {
+        QModelIndex idx = nodeModel->indexFromNode(node);
+        if (idx.isValid()) {
+            if (node->collapsed()) {
+                sectionView->collapse(idx);
+            }
+        }
+        if (node->childCount() > 0) {
+            expandNodesRecursively(node, nodeModel, sectionView);
+        }
+        node = node->nextSibling();
+    }
+    sectionView->blockSignals(false);
+}
+
 void KisLayerBox::setCanvas(KoCanvasBase *canvas)
 {
+
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
         m_nodeModel->setDummiesFacade(0, 0);
@@ -274,10 +302,12 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
                 m_nodeManager, SLOT(addNodeDirect(KisNodeSP, KisNodeSP, KisNodeSP)));
         connect(m_nodeModel, SIGNAL(requestMoveNode(KisNodeSP, KisNodeSP, KisNodeSP)),
                 m_nodeManager, SLOT(moveNodeDirect(KisNodeSP, KisNodeSP, KisNodeSP)));
+
+        m_wdgLayerBox->listLayers->expandAll();
+        expandNodesRecursively(m_image->rootLayer(), m_nodeModel, m_wdgLayerBox->listLayers);
+        m_wdgLayerBox->listLayers->scrollToBottom();
     }
 
-    m_wdgLayerBox->listLayers->expandAll();
-    m_wdgLayerBox->listLayers->scrollToBottom();
 }
 
 
@@ -591,6 +621,21 @@ void KisLayerBox::slotOpacitySliderMoved(qreal opacity)
     m_delayTimer.start(200);
 }
 
+void KisLayerBox::slotCollapsed(const QModelIndex &index)
+{
+    KisNodeSP node = m_nodeModel->nodeFromIndex(index);
+    if (node) {
+        node->setCollapsed(true);
+    }
+}
+
+void KisLayerBox::slotExpanded(const QModelIndex &index)
+{
+    KisNodeSP node = m_nodeModel->nodeFromIndex(index);
+    if (node) {
+        node->setCollapsed(false);
+    }
+}
 
 
 #include "kis_layer_box.moc"

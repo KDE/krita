@@ -101,6 +101,7 @@ public:
     QList<KisPaintingAssistantHandleSP> handles();
     QByteArray saveXml(quint32 count, QMap<KisPaintingAssistantHandleSP, int> &handleMap);
     void loadXml(KoStore *store, QMap<int, KisPaintingAssistantHandleSP> &handleMap, QString path);
+    void saveXmlList(QDomDocument& doc, QDomElement& ssistantsElement, int count);
 
 public:
     /**
@@ -128,6 +129,7 @@ public:
     virtual QString id() const = 0;
     virtual QString name() const = 0;
     virtual KisPaintingAssistant* createPaintingAssistant() const = 0;
+
 };
 
 class KRITAUI_EXPORT KisPaintingAssistantFactoryRegistry : public KoGenericRegistry<KisPaintingAssistantFactory*>

@@ -293,6 +293,35 @@ void KisPaintingAssistant::loadXml(KoStore* store, QMap<int, KisPaintingAssistan
             break;
         }
     }
+    store->close();
+}
+
+void KisPaintingAssistant::saveXmlList(QDomDocument& doc, QDomElement& assistantsElement,int count)
+{
+    if (d->id == "ellipse"){
+        QDomElement assistantElement = doc.createElement("assistant");
+        assistantElement.setAttribute("type", "ellipse");
+        assistantElement.setAttribute("filename", QString("ellipse%1.assistant").arg(count));
+        assistantsElement.appendChild(assistantElement);
+    }
+    else if (d->id == "spline"){
+        QDomElement assistantElement = doc.createElement("assistant");
+        assistantElement.setAttribute("type", "spline");
+        assistantElement.setAttribute("filename", QString("spline%1.assistant").arg(count));
+        assistantsElement.appendChild(assistantElement);
+    }
+    else if(d->id == "perspective"){
+        QDomElement assistantElement = doc.createElement("assistant");
+        assistantElement.setAttribute("type", "perspective");
+        assistantElement.setAttribute("filename", QString("perspective%1.assistant").arg(count));
+        assistantsElement.appendChild(assistantElement);
+    }
+    else if(d->id == "ruler"){
+        QDomElement assistantElement = doc.createElement("assistant");
+        assistantElement.setAttribute("type", "ruler");
+        assistantElement.setAttribute("filename", QString("ruler%1.assistant").arg(count));
+        assistantsElement.appendChild(assistantElement);
+    }
 }
 
 const QList<KisPaintingAssistantHandleSP>& KisPaintingAssistant::handles() const

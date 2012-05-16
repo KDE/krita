@@ -140,6 +140,8 @@ public:
     QString error;
     bool dieOnError;
 
+    QList<KisPaintingAssistant*> assistants;
+
 };
 
 
@@ -531,6 +533,11 @@ QList<KisPaintingAssistant*> KisDoc2::assistants()
         }
     }
     return assistants;
+}
+
+QList<KisPaintingAssistant *> KisDoc2::assistantsList()
+{
+    return m_d->assistants;
 }
 
 void KisDoc2::setPreActivatedNode(KisNodeSP activatedNode)

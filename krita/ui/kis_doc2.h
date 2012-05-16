@@ -161,6 +161,8 @@ public:
       */
     QList<KisPaintingAssistant *> assistants();
 
+    QList<KisPaintingAssistant *> assistantsList();
+
 signals:
 
     void sigLoadingFinished();

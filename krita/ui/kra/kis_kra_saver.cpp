@@ -94,7 +94,7 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageWSP image)
     m_d->nodeFileNames = visitor.nodeFileNames();
 
     saveCompositions(doc, imageElement, image);
-
+    saveAssistantsList(doc,imageElement);
     return imageElement;
 }
 
@@ -217,33 +217,26 @@ bool KisKraSaver::saveAssistants(KoStore* store, QString uri, bool external)
 
 bool KisKraSaver::saveAssistantsList(QDomDocument& doc, QDomElement& element)
 {
+    int count_ellipse = 0, count_perspective = 0, count_ruler = 0, count_spline = 0;
     QList<KisPaintingAssistant*> assistants =  m_d->doc->assistants();
     if (!assistants.isEmpty()) {
         QDomElement assistantsElement = doc.createElement("assistants");
         foreach(KisPaintingAssistant* assist, assistants){
-            if (assist->id() == "ellipse"){
-                QDomElement assistantElement = doc.createElement("assistant");
-                assistantElement.setAttribute("type", "ellipse");
-                assistantElement.setAttribute("path", location);
-                assistantsElement.appendChild(assistantElement);
+            if(assist->id() == "ellipse"){
+                assist->saveXmlList(doc, assistantsElement, count_ellipse);
+                count_ellipse++;
             }
-            else if (assist->id() == "spline"){
-                QDomElement assistantElement = doc.createElement("assistant");
-                assistantElement.setAttribute("type", "spline");
-                assistantElement.setAttribute("path", location);
-                assistantsElement.appendChild(assistantElement);
+            else if(assist->id() == "spline"){
+                assist->saveXmlList(doc, assistantsElement, count_spline);
+                count_spline++;
             }
             else if(assist->id() == "perspective"){
-                QDomElement assistantElement = doc.createElement("assistant");
-                assistantElement.setAttribute("type", "perspective");
-                assistantElement.setAttribute("path", location);
-                assistantsElement.appendChild(assistantElement);
+                assist->saveXmlList(doc, assistantsElement, count_perspective);
+                count_perspective++;
             }
             else if(assist->id() == "ruler"){
-                QDomElement assistantElement = doc.createElement("assistant");
-                assistantElement.setAttribute("type", "ruler");
-                assistantElement.setAttribute("path", location);
-                assistantsElement.appendChild(assistantElement);
+                assist->saveXmlList(doc, assistantsElement, count_ruler);
+                count_ruler++;
             }
         }
         element.appendChild(assistantsElement);

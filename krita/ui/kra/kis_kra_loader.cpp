@@ -67,6 +67,8 @@ public:
     QMap<KisNode*, QString> layerFilenames; // temp storage during loading
     int syntaxVersion; // version of the fileformat we are loading
     vKisNodeSP selectedNodes; // the nodes that were active when saving the document.
+    QMap<int, QString> assistantsFilnames;
+    QMap<int, QString> assistantstypes;
 
 };
 
@@ -164,7 +166,13 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
             }
         }
     }
-
+    KoXmlNode child;
+    for (child = element.lastChild(); !child.isNull(); child = child.previousSibling()) {
+        KoXmlElement e = child.toElement();
+        if(e.tagName() == "assistants") {
+            loadAssistantsList(e);
+        }
+    }
     return image;
 }
 
@@ -220,48 +228,29 @@ vKisNodeSP KisKraLoader::selectedNodes() const
 
 void KisKraLoader::loadAssistants(KoStore *store, const QString &uri, bool external)
 {
-    QByteArray data;
     QString file_path, location;
     QMap<int ,KisPaintingAssistantHandleSP> handleMap;
     QList<KisPaintingAssistant*> assistants;
     KisPaintingAssistant* assistant = 0;
-    location = external ? QString::null : uri;
-    store->enterDirectory(location);
-    location += "content.xml";
-    QMessageBox::warning(0,"tp", "assist" + store->hasFile("content.xml"));
-    if (store->hasFile("content.xml")){
-        store->open(location);
-        data = store->read(store->size());
-        QXmlStreamReader xml(data);
+    int count = 0;
         bool errors = false;
-        while (!xml.atEnd()) {
-            switch (xml.readNext()) {
-            case QXmlStreamReader::StartElement:
-                if (xml.name() == "assistant") {
-                    /*QRectF imageArea = QRectF(pixelToView(QPoint(0, 0)),
-                                              m_canvas->image()->pixelToDocument(QPoint(m_canvas->image()->width(),
-                                                                                        m_canvas->image()->height())));*/
-                    const KisPaintingAssistantFactory* factory = KisPaintingAssistantFactoryRegistry::instance()->get(xml.attributes().value("type").toString());
-                    if (factory) {
-                        if (assistant) {
-                            errors = true;
-                            delete assistant;
-                        }
-                        assistant = factory->createPaintingAssistant();
-                        assistants.append(assistant);
-                        QMessageBox::warning(0,"check",xml.attributes().value("path").toString());
-                        file_path = xml.attributes().value("path").toString();
-                        assistant->loadXml(store,handleMap,file_path);
-                    }
+        while (!m_d->assistantsFilnames.value(count).isEmpty()) {
+            const KisPaintingAssistantFactory* factory = KisPaintingAssistantFactoryRegistry::instance()->get(m_d->assistantstypes.value(count));
+            if (factory) {
+                if (assistant) {
+                    errors = true;
+                    delete assistant;
                 }
-                break;
-            default:
-                break;
+                assistant = factory->createPaintingAssistant();
+                assistants.append(assistant);
+                location = external ? QString::null : uri;
+                location += m_d->imageName + ASSISTANTS_PATH;
+                file_path = location + m_d->assistantsFilnames.value(count);
+                assistant->loadXml(store,handleMap,file_path);
+                count++;
             }
         }
-
-
-    }
+        m_d->document->assistantsList().append(assistants);
 }
 
 KisNode* KisKraLoader::loadNodes(const KoXmlElement& element, KisImageWSP image, KisNode* parent)
@@ -629,5 +618,20 @@ void KisKraLoader::loadCompositions(const KoXmlElement& elem, KisImageWSP image)
         KisLayerComposition* composition = new KisLayerComposition(image, name);
         composition->load(e);
         image->addComposition(composition);
+    }
+}
+
+void KisKraLoader::loadAssistantsList(const KoXmlElement &elem)
+{
+    KoXmlNode child;
+    int count = 0;
+    for (child = elem.firstChild(); !child.isNull(); child = child.nextSibling()) {
+        KoXmlElement e = child.toElement();
+        QString type = e.attribute("type");
+        QString file_name = e.attribute("filename");
+        m_d->assistantsFilnames.insert(count,file_name);
+        m_d->assistantstypes.insert(count,type);
+        count++;
+
     }
 }

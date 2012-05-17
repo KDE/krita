@@ -166,7 +166,7 @@ You can uncheck the box if you are not using transparency and you want to make t
      <item>
       <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>Transparen pixel fill color:</string>
+        <string>Transparent pixel fill color:</string>
        </property>
       </widget>
      </item>

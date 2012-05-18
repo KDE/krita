@@ -332,14 +332,28 @@ void KoGenStyle::addPropertyLength(const QString& propName, const QTextLength &p
     }
 }
 
-
-
 void KoGenStyle::addAttributePt(const QString& attrName, qreal attrValue)
 {
     QString str;
     str.setNum(attrValue, 'f', DBL_DIG);
     str += "pt";
     m_attributes.insert(attrName, str);
+}
+
+void KoGenStyle::addAttributePercent(const QString &attrName, qreal value)
+{
+    QByteArray str;
+    str.setNum(value, 'f', FLT_DIG);
+    str += '%';
+    addAttribute(attrName, str.data());
+}
+
+void KoGenStyle::addAttributePercent(const QString &attrName, int value)
+{
+    QByteArray str;
+    str.setNum(value);
+    str += '%';
+    addAttribute(attrName, str.data());
 }
 
 void KoGenStyle::addStyleMap(const QMap<QString, QString>& styleMap)

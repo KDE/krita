@@ -1525,7 +1525,7 @@ bool DataSet::loadSeriesIntoDataset(const KoXmlElement &n, KoShapeLoadingContext
         else if (d->loadedDimensions == 1) {
             // as long as there is not default table for missing data series the same region is used twice
             // to ensure the diagram is displayed, even if not as expected from o office or ms office
-            setXDataRegion(CellRegion(region));
+            setYDataRegion(CellRegion(region));
             ++d->loadedDimensions;
         }
         else if (d->loadedDimensions == 2) {
@@ -1537,7 +1537,8 @@ bool DataSet::loadSeriesIntoDataset(const KoXmlElement &n, KoShapeLoadingContext
             ++d->loadedDimensions;
         }
     }
-    if (n.hasAttributeNS(KoXmlNS::chart, "label-cell-address") && !ignoreCellRanges) {
+    //store the cell address corresponding to the label of the correct data series
+    if (d->loadedDimensions == 2 && n.hasAttributeNS(KoXmlNS::chart, "label-cell-address") && !ignoreCellRanges) {
         const QString region = n.attributeNS(KoXmlNS::chart, "label-cell-address", QString());
         setLabelDataRegion(CellRegion(helper->tableSource, region));
     }

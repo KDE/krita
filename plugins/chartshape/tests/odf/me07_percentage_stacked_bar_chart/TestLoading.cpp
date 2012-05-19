@@ -42,46 +42,46 @@ TestLoading::TestLoading()
 void TestLoading::initTestCase()
 {
     // Fake sheet data from embedding document
-    m_sheet.setRowCount( 6 );
-    m_sheet.setColumnCount( 8 );
+    m_sheet.setRowCount(6);
+    m_sheet.setColumnCount(8);
     // Categories
-    m_sheet.setData( m_sheet.index( 3, 4 ), "Pass" );
-    m_sheet.setData( m_sheet.index( 3, 5 ), "Fail" );
-    m_sheet.setData( m_sheet.index( 3, 6 ), "NA" );
+    m_sheet.setData(m_sheet.index(3, 4), "Pass");
+    m_sheet.setData(m_sheet.index(3, 5), "Fail");
+    m_sheet.setData(m_sheet.index(3, 6), "NA");
     // Series label
-    m_sheet.setData( m_sheet.index( 4, 3 ), "Week" );
-    QVERIFY( tableSource() );
-    tableSource()->add( "Sheet1", &m_sheet );
+    m_sheet.setData(m_sheet.index(4, 3), "Week");
+    QVERIFY(tableSource());
+    tableSource()->add("Sheet1", &m_sheet);
     // No actual data needed
 
     // Tell the chart it's embedded
-    m_chart->setUsesInternalModelOnly( false );
+    m_chart->setUsesInternalModelOnly(false);
 
     TestLoadingBase::initTestCase();
 }
 
 void TestLoading::testInternalTable()
 {
-    QVERIFY( internalTable() );
+    QVERIFY(internalTable());
 }
 
 void TestLoading::testDataSets()
 {
     TableSource *source = tableSource();
-    QVERIFY( source );
-                               // y data
-    testDataSetCellRegions( 0, CellRegion( source, "Sheet1.E5:G5" ),
-                               // series label
-                               CellRegion( source, "Sheet1.D5" ),
-                               // categories (specified in x-axis)
-                               CellRegion( source, "Sheet1.E4:G4" ) );
+    QVERIFY(source);
+                              // y data
+    testDataSetCellRegions(0, CellRegion(source, "Sheet1.E5:G5"),
+                              // series label
+                              CellRegion(source, "Sheet1.D5"),
+                              // categories (specified in x-axis)
+                              CellRegion(source, "Sheet1.E4:G4"));
 }
 
 void TestLoading::testLegend()
 {
-    testElementIsVisible( m_chart->legend(), true );
-    testLegendElements( QStringList() << "Week" );
+    testElementIsVisible(m_chart->legend(), true);
+    testLegendElements(QStringList() << "Week");
 }
 
-QTEST_KDEMAIN( TestLoading, GUI )
+QTEST_KDEMAIN(TestLoading, GUI )
 

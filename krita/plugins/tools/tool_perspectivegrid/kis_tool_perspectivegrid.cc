@@ -214,13 +214,13 @@ void KisToolPerspectiveGrid::mouseMoveEvent(KoPointerEvent *event)
                 m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
             }
         } else {
-            if (m_internalMode == MODE_DRAGGING_NODE) {
+            if (m_selectedNode1 && m_internalMode == MODE_DRAGGING_NODE) {
                 QPointF pos = convertToPixelCoord(event);
                 m_selectedNode1->setX(pos.x());
                 m_selectedNode1->setY(pos.y());
                 m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
             }
-            if (m_internalMode == MODE_DRAGGING_TRANSLATING_TWONODES) {
+            if (m_selectedNode1 && m_selectedNode2 && m_internalMode == MODE_DRAGGING_TRANSLATING_TWONODES) {
                 QPointF translate = convertToPixelCoord(event->point) - m_dragEnd;
                 m_dragEnd = convertToPixelCoord(event->point);
                 *m_selectedNode1 += translate;;

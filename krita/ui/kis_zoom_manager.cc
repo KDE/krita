@@ -202,7 +202,7 @@ void KisZoomManager::pageOffsetChanged()
 
 void KisZoomManager::zoomTo100()
 {
-    m_zoomHandler->setZoom(1.0);
+    m_zoomController->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
     m_view->canvasBase()->notifyZoomChanged();
 }
 

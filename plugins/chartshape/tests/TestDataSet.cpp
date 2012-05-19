@@ -192,4 +192,4 @@ void TestDataSet::testFooDataMultipleTables()
     QCOMPARE(dataSet.customData(3), QVariant(12));
 }
 
-QTEST_MAIN(TestDataSet )
+QTEST_MAIN(TestDataSet)

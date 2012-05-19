@@ -30,7 +30,7 @@
 #include <QPainter>
 #include <QHash>
 #include <QApplication>
-
+#include <QTimer>
 
 class KoToolBox::Private
 {
@@ -242,7 +242,7 @@ void KoToolBox::resizeEvent(QResizeEvent* event)
 void KoToolBox::setOrientation(Qt::Orientation orientation)
 {
     d->layout->setOrientation(orientation);
-    QMetaObject::invokeMethod(this, SLOT(update()), Qt::QueuedConnection);
+    QTimer::singleShot(0, this, SLOT(update()));
     foreach(Section* section, d->sections) {
         section->setOrientation(orientation);
     }

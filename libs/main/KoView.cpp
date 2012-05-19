@@ -445,11 +445,6 @@ void KoView::disableAutoScroll()
     d->scrollTimer->stop();
 }
 
-void KoView::paintEverything(QPainter &painter, const QRect &rect)
-{
-    koDocument()->paintEverything(painter, rect, this);
-}
-
 int KoView::autoScrollAcceleration(int offset) const
 {
     if (offset < 40)

@@ -314,29 +314,17 @@ public:
     virtual KParts::Part *hitTest(QWidget *widget, const QPoint &globalPos);
 
     /**
-     *  Paints the whole document into the given painter object.
-     *
-     *  @param painter     The painter object onto which will be drawn.
-     *  @param rect        The rect that should be used in the painter object.
-     *  @param view        The KoView is needed to fiddle about with the active widget, when painting children.
-     */
-    virtual void paintEverything(QPainter &painter, const QRect &rect, KoView *view = 0);
-
-    /**
      * @brief Generates a preview picture of the document
      * @note The preview is used in the File Dialog and also to create the Thumbnail
      */
     virtual QPixmap generatePreview(const QSize& size);
 
     /**
-     *  Paints the data itself. Normally called by paintEverything(). It does not
-     *  paint the children.
+     *  Paints the data itself.
      *  It's this method that %Calligra Parts have to implement.
      *
      *  @param painter     The painter object onto which will be drawn.
      *  @param rect        The rect that should be used in the painter object.
-     *
-     *  @see #paintEverything
      */
     virtual void paintContent(QPainter &painter, const QRect &rect) = 0;
 

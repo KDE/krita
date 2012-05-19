@@ -750,7 +750,11 @@ void KoMainWindow::slotSaveCompleted()
 // returns true if we should save, false otherwise.
 bool KoMainWindow::exportConfirmation(const QByteArray &outputFormat)
 {
-    if (!rootDocument()->wantExportConfirmation()) return true;
+    KConfigGroup group = KGlobal::config()->group(rootDocument()->componentData().componentName());
+    if (!group.readEntry("WantExportConfirmation", true)) {
+        return false;
+    }
+
     KMimeType::Ptr mime = KMimeType::mimeType(outputFormat);
     QString comment = mime ? mime->comment() : i18n("%1 (unknown file type)", QString::fromLatin1(outputFormat));
 

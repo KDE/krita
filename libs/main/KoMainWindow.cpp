@@ -402,10 +402,8 @@ KoMainWindow::~KoMainWindow()
     }
 
     // We have to check if this was a root document.
-    // -> We aren't allowed to delete the (embedded) document!
     // This has to be checked from queryClose, too :)
-    if (d->rootDoc && d->rootDoc->viewCount() == 0 &&
-            !d->rootDoc->isEmbedded()) {
+    if (d->rootDoc && d->rootDoc->viewCount() == 0) {
         //kDebug(30003) <<"Destructor. No more views, deleting old doc" << d->rootDoc;
         delete d->rootDoc;
     }
@@ -693,7 +691,7 @@ void KoMainWindow::slotLoadCompleted()
     KoDocument* doc = rootDocument();
     KoDocument* newdoc = (KoDocument *)(sender());
 
-    if (doc && doc->isEmpty() && !doc->isEmbedded()) {
+    if (doc && doc->isEmpty()) {
         // Replace current empty document
         setRootDocument(newdoc);
     } else if (doc && !doc->isEmpty()) {
@@ -1126,10 +1124,6 @@ bool KoMainWindow::queryClose()
     //               << " shellcount=" << rootDocument()->shellCount() << endl;
     if (!d->forQuit && rootDocument()->shellCount() > 1)
         // there are more open, and we are closing just one, so no problem for closing
-        return true;
-
-    // see DTOR for a descr. of the test
-    if (d->rootDoc->isEmbedded())
         return true;
 
     // main doc + internally stored child documents

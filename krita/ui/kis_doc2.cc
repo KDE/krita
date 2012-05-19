@@ -145,8 +145,8 @@ public:
 };
 
 
-KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode)
-    : KoDocument(parentWidget, parent, singleViewMode, new UndoStack(this))
+KisDoc2::KisDoc2(QObject *parent)
+    : KoDocument(parent, new UndoStack(this))
         , m_d(new KisDocPrivate())
 {
     setComponentData(KisFactory2::componentData(), false);

@@ -30,7 +30,7 @@ class MockDocument : public KoPADocument
 {
 public:
     MockDocument()
-    : KoPADocument( 0, 0 )
+    : KoPADocument( 0 )
     {}
     KoView *createViewInstance( QWidget * /* parent */ ) { return 0; }
     const char *odfTagName( bool b ) { return KoOdf::bodyContentElement( KoOdf::Presentation, b ); }

@@ -199,7 +199,7 @@ KoView::~KoView()
     kDebug(30003) << "KoView::~KoView" << this;
     delete d->scrollTimer;
     if (!d->documentDeleted) {
-        if (koDocument() && !koDocument()->isSingleViewMode()) {
+        if (koDocument()) {
             if (d->manager && d->registered)   // if we aren't registered we mustn't unregister :)
                 d->manager->removePart(koDocument());
             d->document->removeView(this);
@@ -281,8 +281,7 @@ bool KoView::documentDeleted() const
 void KoView::setPartManager(KParts::PartManager *manager)
 {
     d->manager = manager;
-    if (!koDocument()->isSingleViewMode() &&
-            !manager->parts().contains(koDocument())) {  // is there another view registered?
+    if (!manager->parts().contains(koDocument())) {  // is there another view registered?
         d->registered = true; // no, so we have to register now and ungregister again in the DTOR
         manager->addPart(koDocument(), false);
     } else

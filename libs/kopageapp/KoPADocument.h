@@ -44,7 +44,7 @@ class KOPAGEAPP_EXPORT KoPADocument : public KoDocument, public KoShapeBasedDocu
     Q_OBJECT
 public:
 
-    explicit KoPADocument( QWidget* parentWidget, QObject* parent, bool singleViewMode = false );
+    explicit KoPADocument(QObject* parent);
     virtual ~KoPADocument();
 
     void paintContent( QPainter &painter, const QRect &rect);

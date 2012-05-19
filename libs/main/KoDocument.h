@@ -91,18 +91,11 @@ public:
      *        Usually passed by KPluginFactory::create.
      * @param parent may be another KoDocument, or anything else.
      *        Usually passed by KPluginFactory::create.
-     * @param singleViewMode determines whether the document may only have one view.
-     *        Usually passed by the derived factory, when KPluginFactory::create says the requested interface is not KoDocument.
-     *        In this case the @p parent must be a QWidget derived class.
-     *        KoDocument will then create a wrapper widget (KoViewWrapperWidget) which is a child of @p parentWidget.
-     *        This widget can be retrieved by calling widget().
      * @param undoStack accepts the stack for the document. You can create any type of stack if you need.
      *        The stack objects will become owned by the document. This is used by Krita's KisDoc2. The default value for this
      *        parameter is a usual Qt's stack.
      */
-    KoDocument(QWidget *parentWidget,
-               QObject *parent,
-               bool singleViewMode = false,
+    KoDocument(QObject *parent,
                KUndo2Stack *undoStack = new KUndo2Stack());
 
     /**
@@ -112,45 +105,6 @@ public:
      * delete the attached widget as returned by widget().
      */
     virtual ~KoDocument();
-
-    /**
-     * Tells whether this document is in singleview mode. This mode can only be set
-     * in the constructor.
-     */
-    bool isSingleViewMode() const;
-
-    /**
-     * @return true if the document is embedded in another odf document
-     */
-    bool isEmbedded() const;
-
-    /**
-     * Returns the action described action object. In fact only the "name" attribute
-     * of @p element is of interest here. The method searches first in the
-     * KActionCollection of the first view and then in the KActionCollection of this
-     * document.
-     * This allows %Calligra applications to define actions in both the view and the document.
-     * They should only define view-actions (like zooming and stuff) in the view.
-     * Every action which changes the document should be defined in the document.
-     *
-     * Please notice that KoDocument indirectly inherits KXMLGUIClient.
-     *
-     * @see KXMLGUIClient
-     * @see KXMLGUIClient::actionCollection
-     * @see KoView::action
-     */
-    virtual QAction *action(const QDomElement &element) const;
-
-    /**
-     * Returns the DOM document which describes the GUI of the
-     * first view.
-     */
-    virtual QDomDocument domDocument() const;
-
-    /**
-     * @internal
-     */
-    virtual void setManager(KParts::PartManager *manager);
 
     /**
      * Reimplemented from KParts::ReadWritePart for internal reasons

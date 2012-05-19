@@ -66,9 +66,7 @@ namespace KoChart
     {
         Q_OBJECT
     public:
-        Part( QWidget *parentWidget,
-              QObject *parent,
-              bool singleViewMode = false );
+        Part(QObject *parent);
 
         virtual ~Part();
 

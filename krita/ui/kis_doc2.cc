@@ -325,6 +325,9 @@ bool KisDoc2::completeLoading(KoStore *store)
         m_d->preActivatedNode = preselectedNodes.first();
     }
 
+    // before deleting the kraloader, get the list with preloaded assistants and save it
+    m_d->assistants = m_d->kraLoader->assistants();
+
     delete m_d->kraLoader;
     m_d->kraLoader = 0;
 
@@ -535,7 +538,7 @@ QList<KisPaintingAssistant*> KisDoc2::assistants()
     return assistants;
 }
 
-QList<KisPaintingAssistant *> KisDoc2::assistantsList()
+QList<KisPaintingAssistant *> KisDoc2::preLoadedAssistants()
 {
     return m_d->assistants;
 }

@@ -99,7 +99,7 @@ public:
     void uncache();
     const QList<KisPaintingAssistantHandleSP>& handles() const;
     QList<KisPaintingAssistantHandleSP> handles();
-    QByteArray saveXml(quint32 count, QMap<KisPaintingAssistantHandleSP, int> &handleMap);
+    QByteArray saveXml( QMap<KisPaintingAssistantHandleSP, int> &handleMap);
     void loadXml(KoStore *store, QMap<int, KisPaintingAssistantHandleSP> &handleMap, QString path);
     void saveXmlList(QDomDocument& doc, QDomElement& ssistantsElement, int count);
 

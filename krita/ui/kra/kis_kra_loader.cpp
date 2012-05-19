@@ -67,9 +67,8 @@ public:
     QMap<KisNode*, QString> layerFilenames; // temp storage during loading
     int syntaxVersion; // version of the fileformat we are loading
     vKisNodeSP selectedNodes; // the nodes that were active when saving the document.
-    QMap<int, QString> assistantsFilnames;
-    QMap<int, QString> assistantstypes;
-
+    QMap<QString, QString> assistantsFilenames;
+    QList<KisPaintingAssistant*> assistants;
 };
 
 KisKraLoader::KisKraLoader(KisDoc2 * document, int syntaxVersion)
@@ -226,31 +225,33 @@ vKisNodeSP KisKraLoader::selectedNodes() const
     return m_d->selectedNodes;
 }
 
+QList<KisPaintingAssistant *> KisKraLoader::assistants() const
+{
+    return m_d->assistants;
+}
+
 void KisKraLoader::loadAssistants(KoStore *store, const QString &uri, bool external)
 {
-    QString file_path, location;
+    QString file_path;
+    QString location;
     QMap<int ,KisPaintingAssistantHandleSP> handleMap;
-    QList<KisPaintingAssistant*> assistants;
     KisPaintingAssistant* assistant = 0;
-    int count = 0;
-        bool errors = false;
-        while (!m_d->assistantsFilnames.value(count).isEmpty()) {
-            const KisPaintingAssistantFactory* factory = KisPaintingAssistantFactoryRegistry::instance()->get(m_d->assistantstypes.value(count));
-            if (factory) {
-                if (assistant) {
-                    errors = true;
-                    delete assistant;
-                }
-                assistant = factory->createPaintingAssistant();
-                assistants.append(assistant);
-                location = external ? QString::null : uri;
-                location += m_d->imageName + ASSISTANTS_PATH;
-                file_path = location + m_d->assistantsFilnames.value(count);
-                assistant->loadXml(store,handleMap,file_path);
-                count++;
-            }
+    QMap<QString,QString>::const_iterator loadedAssistant = m_d->assistantsFilenames.constBegin();
+    while (loadedAssistant != m_d->assistantsFilenames.constEnd()){
+        qDebug() << loadedAssistant.key();
+        const KisPaintingAssistantFactory* factory = KisPaintingAssistantFactoryRegistry::instance()->get(loadedAssistant.value());
+        qDebug() << "factory" << factory; // so now it turns out we don't have a factory, so we cannot create an assistant.
+        if (factory) {
+            assistant = factory->createPaintingAssistant();
+            location = external ? QString::null : uri;
+            location += m_d->imageName + ASSISTANTS_PATH;
+            file_path = location + loadedAssistant.key();
+            qDebug() << "going to load" << file_path;
+            assistant->loadXml(store, handleMap, file_path);
+            m_d->assistants.append(assistant);
         }
-        m_d->document->assistantsList().append(assistants);
+        loadedAssistant++;
+    }
 }
 
 KisNode* KisKraLoader::loadNodes(const KoXmlElement& element, KisImageWSP image, KisNode* parent)
@@ -629,8 +630,7 @@ void KisKraLoader::loadAssistantsList(const KoXmlElement &elem)
         KoXmlElement e = child.toElement();
         QString type = e.attribute("type");
         QString file_name = e.attribute("filename");
-        m_d->assistantsFilnames.insert(count,file_name);
-        m_d->assistantstypes.insert(count,type);
+        m_d->assistantsFilenames.insert(file_name,type);
         count++;
 
     }

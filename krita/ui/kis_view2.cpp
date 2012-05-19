@@ -712,6 +712,14 @@ void KisView2::slotLoadingFinished()
         m_d->nodeManager->slotNonUiActivatedNode(activeNode);
     }
 
+
+    // get the assistants and push them to the manager
+    QList<KisPaintingAssistant*> paintingAssistants = m_d->doc->preLoadedAssistants();
+    foreach (KisPaintingAssistant* assistant, paintingAssistants) {
+        qDebug() << "Adding assistant" << assistant;
+        m_d->paintingAssistantManager->addAssistant(assistant);
+    }
+
     /**
      * Dirty hack alert
      */
@@ -720,9 +728,10 @@ void KisView2::slotLoadingFinished()
     if (m_d->zoomManager && m_d->zoomManager->zoomController())
         m_d->zoomManager->zoomController()->setAspectMode(true);
     if(m_d->paintingAssistantManager){
-        foreach(KisPaintingAssistant* assist, m_d->doc->assistantsList()){
+        foreach(KisPaintingAssistant* assist, m_d->doc->preLoadedAssistants()){
             m_d->paintingAssistantManager->addAssistant(assist);
         }
+        m_d->paintingAssistantManager->setVisible(true);
     }
     updateGUI();
 

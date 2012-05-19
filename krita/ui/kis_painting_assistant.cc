@@ -181,6 +181,7 @@ void KisPaintingAssistant::addHandle(KisPaintingAssistantHandleSP handle)
 {
     Q_ASSERT(!d->handles.contains(handle));
     d->handles.append(handle);
+    qDebug()<<"adding handle"<<handle;
     handle->registerAssistant(this);
 }
 
@@ -238,7 +239,7 @@ QRect KisPaintingAssistant::boundingRect() const
     return r.adjusted(-2, -2, 2, 2).toAlignedRect();
 }
 
-QByteArray KisPaintingAssistant::saveXml(quint32 count, QMap<KisPaintingAssistantHandleSP, int> &handleMap)
+QByteArray KisPaintingAssistant::saveXml(QMap<KisPaintingAssistantHandleSP, int> &handleMap)
 {
         QByteArray data;
         QXmlStreamWriter xml(&data);

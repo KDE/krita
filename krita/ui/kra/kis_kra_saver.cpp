@@ -173,7 +173,7 @@ bool KisKraSaver::saveAssistants(KoStore* store, QString uri, bool external)
                 location = external ? QString::null : uri;
                 location += m_d->imageName + ASSISTANTS_PATH;
                 location += QString("ellipse%1.assistant").arg(count_ellipse);
-                data_ellipse = assist->saveXml(count_ellipse,handlemap);
+                data_ellipse = assist->saveXml(handlemap);
                 store->open(location);
                 store->write(data_ellipse);
                 store->close();
@@ -183,7 +183,7 @@ bool KisKraSaver::saveAssistants(KoStore* store, QString uri, bool external)
                 location = external ? QString::null : uri;
                 location += m_d->imageName + ASSISTANTS_PATH;
                 location += QString("spline%1.assistant").arg(count_spline);
-                data_spline = assist->saveXml(count_spline,handlemap);
+                data_spline = assist->saveXml(handlemap);
                 store->open(location);
                 store->write(data_spline);
                 store->close();
@@ -193,7 +193,7 @@ bool KisKraSaver::saveAssistants(KoStore* store, QString uri, bool external)
                 location = external ? QString::null : uri;
                 location += m_d->imageName + ASSISTANTS_PATH;
                 location += QString("perspective%1.assistant").arg(count_perspective);
-                data_perspective = assist->saveXml(count_perspective,handlemap);
+                data_perspective = assist->saveXml(handlemap);
                 store->open(location);
                 store->write(data_perspective);
                 store->close();
@@ -203,7 +203,7 @@ bool KisKraSaver::saveAssistants(KoStore* store, QString uri, bool external)
                 location = external ? QString::null : uri;
                 location += m_d->imageName + ASSISTANTS_PATH;
                 location += QString("ruler%1.assistant").arg(count_ruler);
-                data_ruler = assist->saveXml(count_ruler,handlemap);
+                data_ruler = assist->saveXml(handlemap);
                 store->open(location);
                 store->write(data_ruler);
                 store->close();

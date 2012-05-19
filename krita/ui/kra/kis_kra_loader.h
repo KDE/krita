@@ -55,9 +55,13 @@ public:
 
     vKisNodeSP selectedNodes() const;
 
-    void loadAssistants(KoStore* store, const QString & uri, bool external);
+    // it's neater to follow the same design as with selectedNodes, so let's have a getter here
+    QList<KisPaintingAssistant*> assistants() const;
 
 private:
+
+    // this needs to be private, for neatness sake
+    void loadAssistants(KoStore* store, const QString & uri, bool external);
 
     KisNode* loadNodes(const KoXmlElement& element, KisImageWSP image, KisNode* parent);
 

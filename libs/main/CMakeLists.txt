@@ -54,6 +54,7 @@ set(komain_LIB_SRCS
     KoFilterEdge.cpp
     KoFilterChainLink.cpp
     KoFilterChainLinkList.cpp
+    KoServiceProvider.cpp
     KoStandardAction.cpp
     KoUndoStackAction.cpp
     config/KoConfigDocumentPage.cpp
@@ -218,6 +219,7 @@ install( FILES
     KoGridData.h
     KoMainWindow.h
     KoModeBoxFactory.h
+    KoServiceProvider.h
     KoPrintJob.h
     KoProgressUpdater.h
     KoProgressProxy.h

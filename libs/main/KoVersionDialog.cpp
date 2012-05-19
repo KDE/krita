@@ -22,6 +22,7 @@
 
 #include "KoMainWindow.h"
 #include "KoDocumentEntry.h"
+#include "KoServiceProvider.h"
 
 #include <QFile>
 #include <QGridLayout>
@@ -202,7 +203,7 @@ void KoVersionDialog::slotOpen()
     tmp.flush();
 
     if (!m_doc->shells().isEmpty()) { //open the version in a new window if possible
-        KoDocumentEntry entry = KoDocumentEntry(KoDocument::readNativeService());
+        KoDocumentEntry entry = KoDocumentEntry(KoServiceProvider::readNativeService());
         QString errorMsg;
         KoDocument* doc = entry.createDoc(&errorMsg);
         if (!doc) {

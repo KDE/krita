@@ -192,37 +192,6 @@ public:
     virtual void setReadWrite(bool readwrite = true);
 
     /**
-     * @brief Used by KoApplication, and by KoMainWindow, when no document exists yet.
-     *
-     * With the help of @p instance or KApplication::componentData() this
-     * method figures out which .desktop file matches this application. In this
-     * file it searches for the "X-KDE-NativeMimeType" entry and returns it.
-     *
-     * @see KService
-     * @see KDesktopFile
-     */
-    static QByteArray readNativeFormatMimeType(const KComponentData &instance = KComponentData());
-
-    /**
-     * Used by KoMainWindow, when no document exists yet.
-     *
-     * With the help of @p instance or KApplication::componentData() this
-     * method figures out which .desktop file matches this application. In this
-     * file it searches for the "X-KDE-ExtraNativeMimeTypes" entry and returns it.
-     *
-     * @see KService
-     * @see KDesktopFile
-     */
-    static QStringList readExtraNativeMimeTypes(const KComponentData &instance = KComponentData());
-
-    /**
-     * With the help of @p instance or KApplication::componentData() this
-     * method figures out which .desktop file matches this application,
-     * and returns the KService instance for it.
-     */
-    static KService::Ptr readNativeService(const KComponentData &instance = KComponentData());
-
-    /**
      * To be preferred when a document exists. It is fast when calling
      * it multiple times since it caches the result that readNativeFormatMimeType()
      * delivers.

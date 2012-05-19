@@ -24,6 +24,7 @@
 #include "KoDocument.h"
 #include "KoDocument_p.h"
 
+#include "KoServiceProvider.h"
 #include "KoDocumentAdaptor.h"
 #include "KoGlobal.h"
 #include "KoView.h"
@@ -580,6 +581,7 @@ bool KoDocument::saveFile()
 
     return ret;
 }
+
 
 QByteArray KoDocument::mimeType() const
 {
@@ -2244,7 +2246,7 @@ QDomDocument KoDocument::saveXML()
 KService::Ptr KoDocument::nativeService()
 {
     if (!d->nativeService)
-        d->nativeService = readNativeService(componentData());
+        d->nativeService = KoServiceProvider::readNativeService(componentData());
 
     return d->nativeService;
 }
@@ -2281,56 +2283,6 @@ QByteArray KoDocument::nativeOasisMimeType() const
 }
 
 
-//static
-KService::Ptr KoDocument::readNativeService(const KComponentData &componentData)
-{
-    QString instname = componentData.isValid() ? componentData.componentName() : KGlobal::mainComponent().componentName();
-
-    // The new way is: we look for a foopart.desktop in the kde_services dir.
-    QString servicepartname = instname + "part.desktop";
-    KService::Ptr service = KService::serviceByDesktopPath(servicepartname);
-    if (service)
-        kDebug(30003) << servicepartname << " found.";
-    if (!service) {
-        // The old way is kept as fallback for compatibility, but in theory this is really never used anymore.
-
-        // Try by path first, so that we find the global one (which has the native mimetype)
-        // even if the user created a words.desktop in ~/.kde/share/applnk or any subdir of it.
-        // If he created it under ~/.kde/share/applnk/Office/ then no problem anyway.
-        service = KService::serviceByDesktopPath(QString::fromLatin1("Office/%1.desktop").arg(instname));
-    }
-    if (!service)
-        service = KService::serviceByDesktopName(instname);
-
-    return service;
-}
-
-QByteArray KoDocument::readNativeFormatMimeType(const KComponentData &componentData)   //static
-{
-    KService::Ptr service = readNativeService(componentData);
-    if (!service)
-        return QByteArray();
-
-    if (service->property("X-KDE-NativeMimeType").toString().isEmpty()) {
-        // It may be that the servicetype "CalligraPart" is missing, which leads to this property not being known
-        KServiceType::Ptr ptr = KServiceType::serviceType("CalligraPart");
-        if (!ptr)
-            kError(30003) << "The serviceType CalligraPart is missing. Check that you have a calligrapart.desktop file in the share/servicetypes directory." << endl;
-        else {
-            kWarning(30003) << service->entryPath() << ": no X-KDE-NativeMimeType entry!";
-        }
-    }
-
-    return service->property("X-KDE-NativeMimeType").toString().toLatin1();
-}
-
-QStringList KoDocument::readExtraNativeMimeTypes(const KComponentData &componentData)   //static
-{
-    KService::Ptr service = readNativeService(componentData);
-    if (!service)
-        return QStringList();
-    return service->property("X-KDE-ExtraNativeMimeTypes").toStringList();
-}
 
 bool KoDocument::isNativeFormat(const QByteArray& mimetype, ImportExportType importExportType) const
 {
@@ -2661,8 +2613,8 @@ void KoDocument::startCustomDocument()
 KoOpenPane *KoDocument::createOpenPane(QWidget *parent, const KComponentData &componentData,
                                        const QString& templateType)
 {
-    const QStringList mimeFilter = KoFilterManager::mimeFilter(KoDocument::readNativeFormatMimeType(),
-                                                               KoFilterManager::Import, KoDocument::readExtraNativeMimeTypes());
+    const QStringList mimeFilter = KoFilterManager::mimeFilter(KoServiceProvider::readNativeFormatMimeType(),
+                                                               KoFilterManager::Import, KoServiceProvider::readExtraNativeMimeTypes());
 
     KoOpenPane *openPane = new KoOpenPane(parent, componentData, mimeFilter, templateType);
     QList<CustomDocumentWidgetItem> widgetList = createCustomDocumentWidgets(openPane);

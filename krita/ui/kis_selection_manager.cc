@@ -32,6 +32,7 @@
 #include <kstandardaction.h>
 #include <kactioncollection.h>
 
+#include <KoServiceProvider.h>
 #include "KoCanvasController.h"
 #include "KoChannelInfo.h"
 #include "KoIntegerMaths.h"
@@ -461,7 +462,7 @@ void KisSelectionManager::pasteNew()
     QRect rect = clip->exactBounds();
     if (rect.isEmpty()) return;
 
-    const QByteArray mimetype = KoDocument::readNativeFormatMimeType();
+    const QByteArray mimetype = KoServiceProvider::readNativeFormatMimeType();
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(mimetype);
 
     KisDoc2* doc = dynamic_cast<KisDoc2*>(entry.createDoc());

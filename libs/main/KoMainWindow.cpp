@@ -34,6 +34,7 @@
 #include "KoPrintJob.h"
 #include "KoDocumentEntry.h"
 #include "KoDockerManager.h"
+#include "KoServiceProvider.h"
 
 #include <KoPageLayoutWidget.h>
 
@@ -567,7 +568,7 @@ void KoMainWindow::reloadRecentFileList()
 
 KoDocument* KoMainWindow::createDoc() const
 {
-    KoDocumentEntry entry = KoDocumentEntry(KoDocument::readNativeService());
+    KoDocumentEntry entry = KoDocumentEntry(KoServiceProvider::readNativeService());
     QString errorMsg;
     return entry.createDoc(&errorMsg);
 }
@@ -1220,9 +1221,9 @@ void KoMainWindow::slotFileOpen()
     else
         dialog->setCaption(i18n("Import Document"));
 
-    const QStringList mimeFilter = KoFilterManager::mimeFilter(KoDocument::readNativeFormatMimeType(),
+    const QStringList mimeFilter = KoFilterManager::mimeFilter(KoServiceProvider::readNativeFormatMimeType(),
                                    KoFilterManager::Import,
-                                   KoDocument::readExtraNativeMimeTypes());
+                                   KoServiceProvider::readExtraNativeMimeTypes());
     dialog->setMimeFilter(mimeFilter);
     if (dialog->exec() != QDialog::Accepted) {
         delete dialog;

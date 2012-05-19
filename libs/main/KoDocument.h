@@ -439,7 +439,7 @@ public:
     /**
      *  @brief Saves a sub-document to a store.
      *
-     *  You should not have to reimplement this - but call it in saveChildren().
+     *  You should not have to reimplement this.
      */
     virtual bool saveToStore(KoStore *store, const QString& path);
 

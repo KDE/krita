@@ -241,7 +241,8 @@ Exiv2::Value* kmdValueToExivXmpValue(const KisMetaData::Value& value)
             arrV->setXmpArrayType(Exiv2::XmpValue::xaAlt);
             break;
         default:
-            qFatal("can't happen");
+            // Cannot happen
+            ;
         }
         foreach(const KisMetaData::Value& v, value.asArray()) {
             Exiv2::Value* ev = kmdValueToExivXmpValue(v);
@@ -269,12 +270,12 @@ Exiv2::Value* kmdValueToExivXmpValue(const KisMetaData::Value& value)
     }
     case KisMetaData::Value::Structure:
     default: {
-        qFatal("Unhandled value type");
+        warnKrita << "KisExiv2: Unhandled value type";
         return 0;
     }
 
     }
-    qFatal("Unhandled value type");
+    warnKrita << "KisExiv2: Unhandled value type";
     return 0;
 }
 

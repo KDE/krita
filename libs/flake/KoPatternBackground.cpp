@@ -368,9 +368,9 @@ void KoPatternBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &con
         QSizeF targetSize = d->targetSize();
         QSizeF imageSize = d->imageData->imageSize();
         if (targetSize.height() != imageSize.height())
-            style.addProperty("draw:fill-image-height", QString("%1").arg(targetSize.height()));
+            style.addPropertyPt("draw:fill-image-height", targetSize.height());
         if (targetSize.width() != imageSize.width())
-            style.addProperty("draw:fill-image-width", QString("%1").arg(targetSize.width()));
+            style.addPropertyPt("draw:fill-image-width", targetSize.width());
     }
 
     KoGenStyle patternStyle(KoGenStyle::FillImageStyle /*no family name*/);
@@ -380,7 +380,6 @@ void KoPatternBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &con
     patternStyle.addAttribute("xlink:href", context.imageHref(d->imageData));
 
     QString patternStyleName = context.mainStyles().insert(patternStyle, "picture");
-    context.mainStyles().insert(style, context.isSet(KoShapeSavingContext::PresentationShape) ? "pr" : "gr");
     style.addProperty("draw:fill", "bitmap");
     style.addProperty("draw:fill-image-name", patternStyleName);
 

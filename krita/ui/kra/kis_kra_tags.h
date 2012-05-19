@@ -78,6 +78,7 @@ const QString MASKS = "masks";
 const QString MIME = "mime";
 const QString NAME = "name";
 const QString OPACITY = "opacity";
+const QString COLLAPSED = "collapsed";
 const QString PAINT_LAYER = "paintlayer";
 const QString PROFILE = "profile";
 const QString ROTATION = "rotation";

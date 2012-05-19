@@ -420,11 +420,6 @@ public:
     virtual void paintContent(QPainter &painter, const QRect &rect) = 0;
 
     /**
-     * Called by koApplication to check for an autosave file in $HOME
-     */
-    bool checkAutoSaveFile();
-
-    /**
      * Creates and shows the start up widget.
      * @param parent the KoMainWindow used as parent for the widget.
      * @param alwaysShow always show the widget even if the user has configured it to not show.
@@ -561,7 +556,8 @@ public:
     /**
      * Set whether the next openUrl call should check for an auto-saved file
      * and offer to open it. This is usually true, but can be turned off
-     * (e.g. for the preview module).
+     * (e.g. for the preview module). This only checks for names auto-saved
+     * files, unnamed auto-saved files are only checked on KoApplication startup.
      */
     void setCheckAutoSaveFile(bool b);
 
@@ -734,7 +730,8 @@ public:
      * to set the url to KUrl()
      */
     void resetURL() {
-        setUrl(KUrl()); setLocalFilePath(QString());
+        setUrl(KUrl());
+        setLocalFilePath(QString());
     }
 
     /**
@@ -867,6 +864,7 @@ public slots:
      * Set the output stream to report profile information to.
      */
     void setProfileReferenceTime(const QTime& referenceTime);
+
 signals:
 
     /**
@@ -933,6 +931,8 @@ protected:
     QString newObjectName();
 
     QString autoSaveFile(const QString & path) const;
+
+
 
     virtual KoView *createViewInstance(QWidget *parent) = 0;
 

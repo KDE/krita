@@ -295,8 +295,12 @@ void KoTblStyle::prepareStyle(KoGenStyle& style) const
     if(m_backgroundColor.isValid()) {
         style.addProperty("fo:background-color", m_backgroundColor.name());
     }
-    style.addProperty("fo:break-after", breakStyleMap.value(m_breakAfter));
-    style.addProperty("fo:break-before", breakStyleMap.value(m_breakBefore));
+    if (m_breakAfter != KoTblStyle::NoBreak) {
+        style.addProperty("fo:break-after", breakStyleMap.value(m_breakAfter));
+    }
+    if (m_breakBefore != KoTblStyle::NoBreak) {
+        style.addProperty("fo:break-before", breakStyleMap.value(m_breakBefore));
+    }
     style.addProperty("fo:keep-with-next", keepWithNextMap.value(m_keepWithNext));
 
     style.addPropertyPt("fo:margin-top", m_topMargin);
@@ -304,20 +308,17 @@ void KoTblStyle::prepareStyle(KoGenStyle& style) const
     style.addPropertyPt("fo:margin-bottom", m_bottomMargin);
     style.addPropertyPt("fo:margin-left", m_leftMargin);
 
-
-    switch(m_widthUnit) {
-        case PercentageUnit:
-            style.addPropertyPt("style:rel-width", m_width);
-            break;
-        case PointsUnit:
-            style.addPropertyPt("style:width", m_width);
-            break;
+    // style:width may not be 0, use style:rel-width if width is 0
+    if (m_widthUnit == PercentageUnit || m_width <= 0) {
+        style.addProperty("style:rel-width", QString::number(m_width) + "%");
+    } else {
+        style.addPropertyPt("style:width", m_width);
     }
 
     style.addProperty("style:may-break-between-rows", m_allowBreakBetweenRows ? "true" : "false");
     style.addProperty("style:writing-mode", writingModeMap.value(m_writingMode));
     style.addProperty("table:align", horizontalAlignMap.value(m_horizontalAlign));
-    style.addProperty("fo:border-model", borderModelMap.value(m_borderModel));
+    style.addProperty("table:border-model", borderModelMap.value(m_borderModel));
 
     if(!m_display) {
         style.addProperty("table:display", "false");

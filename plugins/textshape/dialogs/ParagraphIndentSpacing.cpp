@@ -30,9 +30,9 @@ ParagraphIndentSpacing::ParagraphIndentSpacing(QWidget *parent)
 {
     widget.setupUi(this);
 
-    connect(widget.first, SIGNAL(valueChangedPt(qreal)), this, SIGNAL(firstLineMarginChanged(qreal)));
-    connect(widget.left, SIGNAL(valueChangedPt(qreal)), this, SIGNAL(leftMarginChanged(qreal)));
-    connect(widget.right, SIGNAL(valueChangedPt(qreal)), this, SIGNAL(rightMarginChanged(qreal)));
+    connect(widget.first, SIGNAL(valueChangedPt(qreal)), this, SLOT(firstLineMarginChanged(qreal)));
+    connect(widget.left, SIGNAL(valueChangedPt(qreal)), this, SLOT(leftMarginChanged(qreal)));
+    connect(widget.right, SIGNAL(valueChangedPt(qreal)), this, SLOT(rightMarginChanged(qreal)));
 
     // Keep order in sync with lineSpacingType() and display()
     widget.lineSpacing->addItem(i18nc("Line spacing value", "Single"));
@@ -193,18 +193,12 @@ void ParagraphIndentSpacing::lineSpacingChanged(int row)
 void ParagraphIndentSpacing::spacingPercentChanged(int percent)
 {
     m_spacingInherited = false;
-    if (widget.lineSpacing->currentIndex() == 3)
-        emit lineSpacingChanged(0, 0, (qreal) 0, percent, widget.useFont->isChecked());
     emit parStyleChanged();
 }
 
 void ParagraphIndentSpacing::spacingValueChanged(qreal value)
 {
     m_spacingInherited = false;
-    if (widget.lineSpacing->currentIndex() == 4)
-        emit lineSpacingChanged(0, value, (qreal) 0, 0, widget.useFont->isChecked());
-    else if (widget.lineSpacing->currentIndex() == 5)
-        emit lineSpacingChanged(value, 0, 0, 0, false);
     emit parStyleChanged();
 }
 
@@ -272,6 +266,24 @@ void ParagraphIndentSpacing::useFontMetrices(bool on)
 {
     if (widget.lineSpacing->currentIndex() != 5)
         m_fontMetricsChecked = on;
+    emit parStyleChanged();
+}
+
+void ParagraphIndentSpacing::firstLineMarginChanged(qreal margin)
+{
+    Q_UNUSED(margin);
+    emit parStyleChanged();
+}
+
+void ParagraphIndentSpacing::leftMarginChanged(qreal margin)
+{
+    Q_UNUSED(margin);
+    emit parStyleChanged();
+}
+
+void ParagraphIndentSpacing::rightMarginChanged(qreal margin)
+{
+    Q_UNUSED(margin);
     emit parStyleChanged();
 }
 

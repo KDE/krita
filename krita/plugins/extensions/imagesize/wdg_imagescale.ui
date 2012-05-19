@@ -191,7 +191,11 @@
        </widget>
       </item>
       <item row="3" column="1" colspan="3">
-       <widget class="KisCmbIDList" name="cmbFilterType" native="true"/>
+       <widget class="KisCmbIDList" name="cmbFilterType" native="true">
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Box&lt;/span&gt;: simple scaling, use when scaling at exact divisions.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Bilinear&lt;/span&gt;: use when upscaling or downscaling, with a scale from half to 2 times the original size &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Bicubic&lt;/span&gt;: sometimes better than bilinear, but could be a little blurry.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

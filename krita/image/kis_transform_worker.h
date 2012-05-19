@@ -37,7 +37,7 @@ class QTransform;
 class KRITAIMAGE_EXPORT KisTransformWorker
 {
 
-/*What are xshearOrigin, yshearOrigin :
+    /*What are xshearOrigin, yshearOrigin :
 * let's keep it simple and say we only have horizontal shearing (it's similar with vertical shearing)
 * that means we will apply the transformation :
 * x' = x + xshear * y and y' = y, where x,y are the old coordinates of the pixels, and x' y' the new coordinates
@@ -106,10 +106,35 @@ private:
                                           qint32 dx,
                                           KisFilterStrategy *filterStrategy, bool fixBorderAlpha);
 
-    void rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst);
-    void rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP dst);
-    void rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst);
-    void rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst);
+    friend class KisTransformWorkerTest;
+
+    static QRect rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst,
+                            QRect boundRect,
+                            KoUpdaterPtr progressUpdater,
+                            int &lastProgressReport,
+                            int &progressTotalSteps,
+                            int &progressStep);
+
+    static QRect rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP dst,
+                               QRect boundRect,
+                               KoUpdaterPtr progressUpdater,
+                               int &lastProgressReport,
+                               int &progressTotalSteps,
+                               int &progressStep);
+
+    static QRect rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst,
+                              QRect boundRect,
+                              KoUpdaterPtr progressUpdater,
+                              int &lastProgressReport,
+                              int &progressTotalSteps,
+                              int &progressStep);
+
+    static QRect rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst,
+                           QRect boundRect,
+                           KoUpdaterPtr progressUpdater,
+                           int &lastProgressReport,
+                           int &progressTotalSteps,
+                           int &progressStep);
 
 private:
     KisPaintDeviceSP m_dev;

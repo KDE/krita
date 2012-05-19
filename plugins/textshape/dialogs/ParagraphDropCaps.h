@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
-  Copyright (C)  2011 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
+
+   Copyright (C)  2011 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
+   Copyright (C)  2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -47,6 +49,9 @@ signals:
 
 private slots:
   void dropCapsStateChanged();
+  void paragraphDistanceChanged(qreal distance);
+  void dropsLineSpanChanged(int lineSpan);
+  void dropedCharacterCountChanged(int count);
 
 private:
     Ui::ParagraphDropCaps widget;

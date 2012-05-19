@@ -48,7 +48,7 @@ class Axis;
  * The philosophy is basically to do as many tests as possible by
  * using a helper method from this base class. Lines like these:
 
- * testLegendElements( QStringList() << "Row 1" << "Row 2" << "Row 3" );
+ * testLegendElements(QStringList() << "Row 1" << "Row 2" << "Row 3");
  *
  * are much more readable than using flat code by using copy&paste and doing
  * the same gets and checks over again in multiple unit tests.
@@ -68,30 +68,30 @@ protected:
     // Helper methods to be used by test functions
 
     // 0) Generics
-    void testElementIsVisible( KoShape *element, bool shouldBeVisible );
+    void testElementIsVisible(KoShape *element, bool shouldBeVisible);
 
     // 1) Legend
-    void testLegendElements( QStringList labels );
+    void testLegendElements(QStringList labels);
 
     // 2) Data Sets
-    void testDataSetCellRegions( int dataSetNr,
-                                 CellRegion yDataRegion,
-                                 CellRegion labelDataRegion    = CellRegion(),
-                                 CellRegion categoryDataRegion = CellRegion(),
-                                 CellRegion xDataRegion        = CellRegion(),
-                                 CellRegion customDataRegion   = CellRegion() );
+    void testDataSetCellRegions(int dataSetNr,
+                                CellRegion yDataRegion,
+                                CellRegion labelDataRegion    = CellRegion(),
+                                CellRegion categoryDataRegion = CellRegion(),
+                                CellRegion xDataRegion        = CellRegion(),
+                                CellRegion customDataRegion   = CellRegion());
 
     // 3) Internal Table
     void testHasOnlyInternalTable();
-    void testInternalTableSize( int rowCount, int colCount );
+    void testInternalTableSize(int rowCount, int colCount);
 
     // 4) Title, Subtitle and Footer
-    void testTitleText( const QString &text );
-    void testSubTitleText( const QString &text );
-    void testFooterText( const QString &text );
+    void testTitleText(const QString &text);
+    void testSubTitleText(const QString &text);
+    void testFooterText(const QString &text);
 
     // 5) Axes
-    void testAxisTitle( Axis *axis, const QString &text );
+    void testAxisTitle(Axis *axis, const QString &text);
 
     Table* internalTable();
     TableSource* tableSource();
@@ -103,7 +103,7 @@ protected:
 
 namespace QTest {
     template<>
-    char *toString( const KChart::CellRegion &region );
+    char *toString(const KChart::CellRegion &region);
 }
 
 #endif // KCHART_TESTLOADING_BASE

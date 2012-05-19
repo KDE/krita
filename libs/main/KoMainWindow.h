@@ -313,7 +313,7 @@ public slots:
     /**
      * Hide the dockers
      */
-    void toggleDockersVisibility(bool v) const;
+    void toggleDockersVisibility(bool visible);
 
 private:
 

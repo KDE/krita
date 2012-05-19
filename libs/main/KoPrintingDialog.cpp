@@ -278,8 +278,9 @@ void KoPrintingDialog::startPrinting(RemovePolicy removePolicy)
     }
 
     const bool blocking = property("blocking").toBool();
+    const bool noprogressdialog = property("noprogressdialog").toBool();
     if (d->index == 0 && d->pages.count() > 0 && d->printer) {
-        if (!blocking)
+        if (!blocking && !noprogressdialog)
             d->dialog->show();
         d->stop = false;
         delete d->painter;

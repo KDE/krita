@@ -14,6 +14,7 @@ if( QCA2_FOUND )
 endif( QCA2_FOUND )
 
 set(komain_LIB_SRCS
+    KoAutoSaveRecoveryDialog.cpp
     KoApplicationAdaptor.cpp
     KoApplication.cpp
     KoDockerManager.cpp
@@ -88,6 +89,7 @@ set(komain_LIB_SRCS
     KoFindToolbar.cpp
     KoFindOption.cpp
     KoFindOptionSet.cpp
+    KoFindStyle.cpp
 )
 if( Soprano_FOUND )
     set(komain_LIB_SRCS ${komain_LIB_SRCS}

@@ -144,6 +144,13 @@ public:
         RunThrough              ///< The text will completely ignore the frame and layout as if it was not there
     };
 
+    /// The behavior text should do when intersecting this shape.
+    enum TextRunAroundContour {
+        ContourBox,     /// Run other text around a bounding rect of the outline
+        ContourFull,   ///< Run other text around also on the inside
+        ContourOutside   ///< Run other text around only on the outside
+    };
+
     /**
      * TODO
      */
@@ -212,8 +219,18 @@ public:
      * This method can be used while saving the shape as Odf to add common child elements
      *
      * The office:event-listeners and draw:glue-point are saved.
+     * @param context the context for the current save.
      */
     void saveOdfCommonChildElements(KoShapeSavingContext &context) const;
+
+    /**
+     * This method can be used to save contour data from the clipPath()
+     *
+     * The draw:contour-polygon or draw:contour-path elements are saved.
+     * @param context the context for the current save.
+     * @param originalSize the original size of the unscaled image.
+     */
+    void saveOdfClipContour(KoShapeSavingContext &context, const QSizeF &originalSize) const;
 
     /**
      * @brief Scale the shape using the zero-point which is the top-left corner.
@@ -399,6 +416,18 @@ public:
      * @param threshold the new threshold
      */
     void setTextRunAroundThreshold(qreal threshold);
+
+    /**
+     * Return the how tight text run around is done around this shape.
+     * @return the contour
+     */
+    TextRunAroundContour textRunAroundContour() const;
+
+    /**
+     * Set how tight text run around is done around this shape.
+     * @param contour the new contour
+     */
+    void setTextRunAroundContour(TextRunAroundContour contour);
 
     /**
      * Set the background of the shape.
@@ -1091,6 +1120,9 @@ protected:
 
     /// Loads the connection points
     void loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingContext &context);
+
+    /// Loads the clip contour
+    void loadOdfClipContour(const KoXmlElement &element, KoShapeLoadingContext &context, const QSizeF &scaleFactor);
 
     /* ** end loading saving */
 

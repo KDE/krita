@@ -49,7 +49,9 @@ extern "C" {
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
+#include <KoColor.h>
 
+#include <kis_painter.h>
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>
@@ -612,6 +614,13 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     const KoColorProfile* colorProfile = layer->colorSpace()->profile();
     QByteArray colorProfileData = colorProfile->rawData();
 
+    KisPaintDeviceSP dev = new KisPaintDevice(layer->colorSpace());
+    KoColor c(options.transparencyFillColor, layer->colorSpace());
+    dev->fill(QRect(0, 0, width, height), c);
+    KisPainter gc(dev);
+    gc.bitBlt(QPoint(0, 0), layer->paintDevice(), QRect(0, 0, width, height));
+    gc.end();
+
     write_icc_profile(& cinfo, (uchar*) colorProfileData.data(), colorProfileData.size());
 
     // Write data information
@@ -620,7 +629,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     int color_nb_bits = 8 * layer->paintDevice()->pixelSize() / layer->paintDevice()->channelCount();
 
     for (; cinfo.next_scanline < height;) {
-        KisHLineConstIteratorSP it = layer->paintDevice()->createHLineConstIteratorNG(0, cinfo.next_scanline, width);
+        KisHLineConstIteratorSP it = dev->createHLineConstIteratorNG(0, cinfo.next_scanline, width);
         quint8 *dst = row_pointer;
         switch (color_type) {
         case JCS_GRAYSCALE:

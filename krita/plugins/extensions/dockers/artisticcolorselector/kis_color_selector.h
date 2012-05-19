@@ -42,8 +42,8 @@ class KisColorSelector: public QWidget
         ColorRing(): angle(0) { }
         
         Radian getPieceAngle() const { return RAD_360 / float(pieced.size()); }
-        Radian getShift     () const { return angle % getPieceAngle();                }
-        Radian getMovedAngel() const { return angle - tmpAngle;                       }
+        Radian getShift     () const { return angle % getPieceAngle();        }
+        Radian getMovedAngel() const { return angle - tmpAngle;               }
         
         void setTemporaries(const KisColor& color) {
             tmpAngle = angle;
@@ -78,10 +78,16 @@ public:
     void setFgColor(const KisColor& fgColor);
     void setBgColor(const KisColor& bgColor);
     
-    qint32 getNumRings      () const { return m_colorRings.size(); }
-    qint32 getNumPieces     () const { return m_numPieces;         }
-    qint32 getNumLightPieces() const { return m_numLightPieces;    }
-    qreal  getLight         () const { return m_light;             }
+    void saveSettings();
+    void loadSettings();
+    
+    KisColor::Type getColorSpace       () const { return m_colorSpace;        }
+    qint32         getNumRings         () const { return m_colorRings.size(); }
+    qint32         getNumPieces        () const { return m_numPieces;         }
+    qint32         getNumLightPieces   () const { return m_numLightPieces;    }
+    qreal          getLight            () const { return m_light;             }
+    bool           isSaturationInverted() const { return m_inverseSaturation; }
+    bool           islightRelative     () const { return m_relativeLight;     }
     
 signals:
     void sigFgColorChanged(const KisColor& color);

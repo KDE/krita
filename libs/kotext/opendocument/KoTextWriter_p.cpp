@@ -1458,8 +1458,12 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                     }
                 } else {
                     //This is a sub-list
-                    while (KoList::level(block) >= (level + 1)) {
+                    while (KoList::level(block) >= (level + 1) && !(headingLevel || numberedParagraphLevel)) {
                         block = saveList(block, listStyles, level + 1, currentTable);
+
+                        blockFormat = block.blockFormat();
+                        headingLevel = blockFormat.intProperty(KoParagraphStyle::OutlineLevel);
+                        numberedParagraphLevel = blockFormat.intProperty(KoParagraphStyle::ListLevel);
                     }
                     //saveList will return a block one-past the last block of the list.
                     //Since we are doing a block.next() below, we need to go one back.

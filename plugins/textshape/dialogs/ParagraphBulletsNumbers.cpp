@@ -282,41 +282,6 @@ void ParagraphBulletsNumbers::customCharButtonPressed()
 
 void ParagraphBulletsNumbers::recalcPreview()
 {
-    const int currentRow = widget.listTypes->currentRow();
-    KoListStyle::Style style = m_mapping[currentRow];
-    QString answer = "";
-    if (style != KoListStyle::None) {
-        QString suffix = widget.suffix->text();
-        if (suffix.isEmpty() && KoListStyle::isNumberingStyle(style))
-            suffix = QLatin1Char('.');
-        const int depth = widget.depth->value();
-        const int displayLevels = qMin(widget.levels->value(), depth);
-        for (int i = 1; i <= depth; ++i) {
-            if (depth - displayLevels >= i)
-                continue;
-
-            if (i == depth) {
-                answer += widget.prefix->text();
-
-                if (KoListStyle::isNumberingStyle(style)) {
-                    answer += widget.startValue->textFromValue(widget.startValue->value());
-                } else if(style == KoListStyle::CustomCharItem) {
-                   answer += widget.customCharacter->text().remove('&').at(0);
-                }else {
-                    answer += QString(QChar(KoListStyle::bulletCharacter(style)));
-                }
-
-                answer += suffix;
-            } else {
-                if (KoListStyle::isNumberingStyle(style)) {
-                    answer += widget.startValue->textFromValue(i).append('.');
-                }
-            }
-        }
-        if (!answer.isEmpty())
-            answer += ' ';
-    }
-    emit bulletListItemChanged(answer);
     emit parStyleChanged();
 }
 
@@ -328,6 +293,7 @@ void ParagraphBulletsNumbers::labelFollowedByIndexChanged(int index)
         widget.doubleSpinBox->setEnabled(true);
     }
     emit parStyleChanged();
+    emit recalcPreview();
 }
 
 #include <ParagraphBulletsNumbers.moc>

@@ -134,19 +134,22 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
 
     QList<KoFindOption *> options = finder->options()->options();
     foreach(KoFindOption * option, options) {
-        KAction *action = new KAction(option->title(), menu);
-        action->setHelpText(option->description());
-        action->setObjectName(option->name());
         if(option->value().type() == QVariant::Bool) {
+            KAction *action = new KAction(option->title(), menu);
+            action->setHelpText(option->description());
+            action->setObjectName(option->name());
             action->setCheckable(true);
             action->setChecked(option->value().toBool());
             connect(action, SIGNAL(triggered(bool)), this, SLOT(optionChanged()));
+            menu->addAction(action);
         }
-        menu->addAction(action);
     }
 
     d->optionsButton->setMenu(menu);
     d->optionsButton->setPopupMode(QToolButton::InstantPopup);
+    if(menu->actions().count() == 0) {
+        d->optionsButton->setEnabled(false);
+    }
     layout->addWidget(d->optionsButton, 0, 5);
 
     d->information = new KSqueezedTextLabel(this);
@@ -233,7 +236,7 @@ void KoFindToolbar::Private::matchFound()
     KColorScheme::adjustBackground(current, KColorScheme::PositiveBackground);
     searchLine->setPalette(current);
     replaceLine->setPalette(current);
-    
+
     information->setText(i18ncp("Total number of matches", "1 match found", "%1 matches found", finder->matches().count()));
 }
 

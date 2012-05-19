@@ -146,7 +146,6 @@ void KoDocumentInfo::setAuthorInfo(const QString &info, const QString &data)
     } else {
         m_authorInfo.insert(info, data);
     }
-    emit infoUpdated(info, data);
 }
 
 QString KoDocumentInfo::authorInfo(const QString &info) const
@@ -262,7 +261,7 @@ bool KoDocumentInfo::saveOasisAboutInfo(KoXmlWriter &xmlWriter)
                     xmlWriter.endElement();
                 }
             } else if (tag == "title" || tag == "description" || tag == "subject" ||
-                       tag == "date") {
+                       tag == "date" || tag == "language") {
                 QByteArray elementName(QString("dc:" + tag).toLatin1());
                 xmlWriter.startElement(elementName);
                 xmlWriter.addTextNode(aboutInfo(tag));

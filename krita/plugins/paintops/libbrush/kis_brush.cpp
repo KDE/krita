@@ -98,11 +98,11 @@ void KisBrush::PaintDeviceColoringInformation::nextRow()
 
 struct KisBrush::Private {
     Private()
-        : brushType(INVALID)
-        , hasColor(false)
-        , boundary(0)
+        : boundary(0)
         , angle(0)
         , scale(1.0)
+        , hasColor(false)
+	, brushType(INVALID)
     {}
 
     ~Private() {

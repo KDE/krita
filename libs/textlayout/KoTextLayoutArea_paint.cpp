@@ -936,8 +936,8 @@ int KoTextLayoutArea::decorateTabsAndFormatting(QPainter *painter, const QTextFr
             break;
 
         if (fragText[i] == '\t') {
-            qreal x1;
-            qreal x2;
+            qreal x1(0.0);
+            qreal x2(0.0);
 
             if (showFormattingCharacters) {
                 x1 = line.cursorToX(startOfFragmentInBlock + i);
@@ -955,6 +955,10 @@ int KoTextLayoutArea::decorateTabsAndFormatting(QPainter *painter, const QTextFr
                 painter->setPen(penBackup);
             }
             if (currentTabStop < tabList.size()) { // still tabsstops worth examining
+                if (!showFormattingCharacters) {
+                    // only then was it  not calculated
+                    x1 = line.cursorToX(startOfFragmentInBlock + i);
+                }
                 // find a tab-stop decoration for this tab position
                 // for eg., if there's a tab-stop at 1in, but the text before \t already spans 1.2in,
                 // we should look at the next tab-stop
@@ -964,11 +968,6 @@ int KoTextLayoutArea::decorateTabsAndFormatting(QPainter *painter, const QTextFr
                     currentTabStop++;
                     // comparing with x1 should work for all of left/right/center/char tabs
                 } while (tab.position <= x1 && currentTabStop < tabList.size());
-
-                if (!showFormattingCharacters) {
-                    // only then was it  not calculated
-                    x1 = line.cursorToX(startOfFragmentInBlock + i);
-                }
 
                 if (tab.position > x1) {
                     if (!showFormattingCharacters) {

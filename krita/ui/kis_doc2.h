@@ -163,7 +163,6 @@ public:
 
     /**
      * @return a list of assistants loaded from a document
-     * XXX: better rename to preLoadedAssistants or something else that doesn't cause confusion with the assistants() method
      */
     QList<KisPaintingAssistant *> preLoadedAssistants();
 

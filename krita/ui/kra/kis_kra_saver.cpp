@@ -41,6 +41,7 @@
 #include <kis_painting_assistants_manager.h>
 
 #include "kis_doc2.h"
+#include <string>
 
 
 using namespace KRA;
@@ -163,52 +164,23 @@ void KisKraSaver::saveCompositions(QDomDocument& doc, QDomElement& element, KisI
 bool KisKraSaver::saveAssistants(KoStore* store, QString uri, bool external)
 {
     QString location;
-    QByteArray data_ellipse,data_perspective,data_spline,data_ruler,data_info;
-    int count_ellipse = 0, count_perspective = 0, count_ruler = 0, count_spline = 0;
+    QMap<QString, int> assistantcounters;
+    QByteArray data;
     QList<KisPaintingAssistant*> assistants =  m_d->doc->assistants();
     QMap<KisPaintingAssistantHandleSP, int> handlemap;
     if (!assistants.isEmpty()) {
         foreach(KisPaintingAssistant* assist, assistants){
-            if (assist->id() == "ellipse"){
-                location = external ? QString::null : uri;
-                location += m_d->imageName + ASSISTANTS_PATH;
-                location += QString("ellipse%1.assistant").arg(count_ellipse);
-                data_ellipse = assist->saveXml(handlemap);
-                store->open(location);
-                store->write(data_ellipse);
-                store->close();
-                count_ellipse++;
+            if (!assistantcounters.contains(assist->id())){
+                assistantcounters.insert(assist->id(),0);
             }
-            else if (assist->id() == "spline"){
-                location = external ? QString::null : uri;
-                location += m_d->imageName + ASSISTANTS_PATH;
-                location += QString("spline%1.assistant").arg(count_spline);
-                data_spline = assist->saveXml(handlemap);
-                store->open(location);
-                store->write(data_spline);
-                store->close();
-                count_spline++;
-            }
-            else if(assist->id() == "perspective"){
-                location = external ? QString::null : uri;
-                location += m_d->imageName + ASSISTANTS_PATH;
-                location += QString("perspective%1.assistant").arg(count_perspective);
-                data_perspective = assist->saveXml(handlemap);
-                store->open(location);
-                store->write(data_perspective);
-                store->close();
-                count_perspective++;
-            }
-            else if(assist->id() == "ruler"){
-                location = external ? QString::null : uri;
-                location += m_d->imageName + ASSISTANTS_PATH;
-                location += QString("ruler%1.assistant").arg(count_ruler);
-                data_ruler = assist->saveXml(handlemap);
-                store->open(location);
-                store->write(data_ruler);
-                store->close();
-                count_ruler++;
-            }
+            location = external ? QString::null : uri;
+            location += m_d->imageName + ASSISTANTS_PATH;
+            location += QString(assist->id()+"%1.assistant").arg(assistantcounters[assist->id()]);
+            data = assist->saveXml(handlemap);
+            store->open(location);
+            store->write(data);
+            store->close();
+            assistantcounters[assist->id()]++;
         }
 
     }
@@ -222,19 +194,19 @@ bool KisKraSaver::saveAssistantsList(QDomDocument& doc, QDomElement& element)
     if (!assistants.isEmpty()) {
         QDomElement assistantsElement = doc.createElement("assistants");
         foreach(KisPaintingAssistant* assist, assistants){
-            if(assist->id() == "ellipse"){
+            if (assist->id() == "ellipse"){
                 assist->saveXmlList(doc, assistantsElement, count_ellipse);
                 count_ellipse++;
             }
-            else if(assist->id() == "spline"){
+            else if (assist->id() == "spline"){
                 assist->saveXmlList(doc, assistantsElement, count_spline);
                 count_spline++;
             }
-            else if(assist->id() == "perspective"){
+            else if (assist->id() == "perspective"){
                 assist->saveXmlList(doc, assistantsElement, count_perspective);
                 count_perspective++;
             }
-            else if(assist->id() == "ruler"){
+            else if (assist->id() == "ruler"){
                 assist->saveXmlList(doc, assistantsElement, count_ruler);
                 count_ruler++;
             }

@@ -116,19 +116,16 @@ void KisPaintingAssistantsManager::setup(KActionCollection * collection)
 void KisPaintingAssistantsManager::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter)
 {
     foreach(KisPaintingAssistant* assistant, d->assistants) {
-        qDebug()<<"drawing assistant" << assistant;
         assistant->drawAssistant(gc, updateRect, converter);
     }
 }
 
 QList<KisPaintingAssistantHandleSP> KisPaintingAssistantsManager::handles()
 {
-    qDebug()<<"in manager handles";
     QList<KisPaintingAssistantHandleSP> hs;
     foreach(KisPaintingAssistant* assistant, d->assistants) {
         foreach(const KisPaintingAssistantHandleSP handle, assistant->handles()) {
             if (!hs.contains(handle)) {
-                qDebug()<<"adding handle" << handle;
                 hs.push_back(handle);
             }
         }

@@ -181,7 +181,6 @@ void KisPaintingAssistant::addHandle(KisPaintingAssistantHandleSP handle)
 {
     Q_ASSERT(!d->handles.contains(handle));
     d->handles.append(handle);
-    qDebug()<<"adding handle"<<handle;
     handle->registerAssistant(this);
 }
 
@@ -311,13 +310,13 @@ void KisPaintingAssistant::saveXmlList(QDomDocument& doc, QDomElement& assistant
         assistantElement.setAttribute("filename", QString("spline%1.assistant").arg(count));
         assistantsElement.appendChild(assistantElement);
     }
-    else if(d->id == "perspective"){
+    else if (d->id == "perspective"){
         QDomElement assistantElement = doc.createElement("assistant");
         assistantElement.setAttribute("type", "perspective");
         assistantElement.setAttribute("filename", QString("perspective%1.assistant").arg(count));
         assistantsElement.appendChild(assistantElement);
     }
-    else if(d->id == "ruler"){
+    else if (d->id == "ruler"){
         QDomElement assistantElement = doc.createElement("assistant");
         assistantElement.setAttribute("type", "ruler");
         assistantElement.setAttribute("filename", QString("ruler%1.assistant").arg(count));

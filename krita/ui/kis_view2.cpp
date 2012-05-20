@@ -717,7 +717,6 @@ void KisView2::slotLoadingFinished()
     // get the assistants and push them to the manager
     QList<KisPaintingAssistant*> paintingAssistants = m_d->doc->preLoadedAssistants();
     foreach (KisPaintingAssistant* assistant, paintingAssistants) {
-        qDebug() << "Adding assistant" << assistant;
         m_d->paintingAssistantManager->addAssistant(assistant);
     }
 
@@ -728,7 +727,7 @@ void KisView2::slotLoadingFinished()
         m_d->viewConverter->setZoomMode(KoZoomMode::ZOOM_PAGE);
     if (m_d->zoomManager && m_d->zoomManager->zoomController())
         m_d->zoomManager->zoomController()->setAspectMode(true);
-    if(m_d->paintingAssistantManager){
+    if (m_d->paintingAssistantManager){
         foreach(KisPaintingAssistant* assist, m_d->doc->preLoadedAssistants()){
             m_d->paintingAssistantManager->addAssistant(assist);
         }

@@ -168,7 +168,7 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
     KoXmlNode child;
     for (child = element.lastChild(); !child.isNull(); child = child.previousSibling()) {
         KoXmlElement e = child.toElement();
-        if(e.tagName() == "assistants") {
+        if (e.tagName() == "assistants") {
             loadAssistantsList(e);
         }
     }
@@ -238,15 +238,12 @@ void KisKraLoader::loadAssistants(KoStore *store, const QString &uri, bool exter
     KisPaintingAssistant* assistant = 0;
     QMap<QString,QString>::const_iterator loadedAssistant = m_d->assistantsFilenames.constBegin();
     while (loadedAssistant != m_d->assistantsFilenames.constEnd()){
-        qDebug() << loadedAssistant.key();
         const KisPaintingAssistantFactory* factory = KisPaintingAssistantFactoryRegistry::instance()->get(loadedAssistant.value());
-        qDebug() << "factory" << factory; // so now it turns out we don't have a factory, so we cannot create an assistant.
         if (factory) {
             assistant = factory->createPaintingAssistant();
             location = external ? QString::null : uri;
             location += m_d->imageName + ASSISTANTS_PATH;
             file_path = location + loadedAssistant.key();
-            qDebug() << "going to load" << file_path;
             assistant->loadXml(store, handleMap, file_path);
             m_d->assistants.append(assistant);
         }

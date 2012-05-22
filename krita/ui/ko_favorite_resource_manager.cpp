@@ -44,8 +44,8 @@ KoFavoriteResourceManager::KoFavoriteResourceManager(KisPaintopBox *paintopBox, 
         :m_favoriteBrushManager(0)
         ,m_popupPalette(0)
         ,m_paintopBox(paintopBox)
-        ,m_blockUpdates(false)
         ,m_colorList(0)
+        ,m_blockUpdates(false)
 {
 
     //connect(paintopBox, SIGNAL(signalPaintopChanged(KisPaintOpPresetSP)), this, SLOT(slotChangePaintopLabel(KisPaintOpPresetSP)));

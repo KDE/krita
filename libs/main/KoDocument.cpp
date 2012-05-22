@@ -578,13 +578,6 @@ bool KoDocument::saveFile()
     }
     emit clearStatusBarMessage();
 
-    if (ret) {
-        KNotification *notify = new KNotification("DocumentSaved");
-        notify->setText(i18n("Document <i>%1</i> saved", url().url()));
-        notify->addContext("url", url().url());
-        QTimer::singleShot(0, notify, SLOT(sendEvent()));
-    }
-
     return ret;
 }
 

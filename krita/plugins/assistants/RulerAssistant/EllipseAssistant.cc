@@ -106,7 +106,7 @@ QString EllipseAssistantFactory::name() const
     return i18n("Ellipse");
 }
 
-KisPaintingAssistant* EllipseAssistantFactory::paintingAssistant(const QRectF& /*imageArea*/) const
+KisPaintingAssistant* EllipseAssistantFactory::createPaintingAssistant() const
 {
     return new EllipseAssistant;
 }

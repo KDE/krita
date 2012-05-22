@@ -142,9 +142,8 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
 
         // create new assistant
         QString key = m_options.comboBox->model()->index( m_options.comboBox->currentIndex(), 0 ).data(Qt::UserRole).toString();
-        QRectF imageArea = QRectF(pixelToView(QPoint(0, 0)),
-                                  m_canvas->image()->pixelToDocument(QPoint(m_canvas->image()->width(), m_canvas->image()->height())));
-        m_newAssistant = KisPaintingAssistantFactoryRegistry::instance()->get(key)->paintingAssistant(imageArea);
+
+        m_newAssistant = KisPaintingAssistantFactoryRegistry::instance()->get(key)->createPaintingAssistant();
         m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point));
         if (m_newAssistant->numHandles() <= 1) {
             addAssistant();
@@ -383,16 +382,13 @@ void KisRulerAssistantTool::openFinish(KJob* job)
                     }
                 }
             } else if (xml.name() == "assistant") {
-                QRectF imageArea = QRectF(pixelToView(QPoint(0, 0)),
-                                          m_canvas->image()->pixelToDocument(QPoint(m_canvas->image()->width(),
-                                                                                    m_canvas->image()->height())));
                 const KisPaintingAssistantFactory* factory = KisPaintingAssistantFactoryRegistry::instance()->get(xml.attributes().value("type").toString());
                 if (factory) {
                     if (assistant) {
                         errors = true;
                         delete assistant;
                     }
-                    assistant = factory->paintingAssistant(imageArea);
+                    assistant = factory->createPaintingAssistant();
                 } else {
                     errors = true;
                 }

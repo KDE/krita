@@ -71,6 +71,7 @@ private:
     Q_PRIVATE_SLOT(d, void optionChanged());
     Q_PRIVATE_SLOT(d, void replace());
     Q_PRIVATE_SLOT(d, void replaceAll());
+    Q_PRIVATE_SLOT(d, void inputTimeout());
 };
 
 #endif // KOFINDTOOLBAR_H

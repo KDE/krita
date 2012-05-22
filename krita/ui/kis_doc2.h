@@ -29,6 +29,7 @@
 #include "kis_types.h"
 
 #include <krita_export.h>
+#include <kis_painting_assistant.h>
 
 class QString;
 
@@ -40,6 +41,7 @@ class KoShapeBasedDocumentBase;
 class KisView2;
 class KisChildDoc;
 class KisUndoStore;
+class KisPaintingAssistant;
 
 /**
  * The class that represents a Krita document containing content and
@@ -153,6 +155,16 @@ public:
      * @return the node that was set as active during loading
      */
     KisNodeSP preActivatedNode() const;
+
+    /**
+      *@return a list of all the assistants in all current views
+      */
+    QList<KisPaintingAssistant *> assistants();
+
+    /**
+     * @return a list of assistants loaded from a document
+     */
+    QList<KisPaintingAssistant *> preLoadedAssistants();
 
 signals:
 

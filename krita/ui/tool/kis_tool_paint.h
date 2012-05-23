@@ -59,8 +59,7 @@ class KisSliderSpinBox;
 // wacom
 const static int LEVEL_OF_PRESSURE_RESOLUTION = 1024;
 
-class KRITAUI_EXPORT KisToolPaint
-        : public KisTool
+class KRITAUI_EXPORT KisToolPaint : public KisTool
 {
 
     Q_OBJECT

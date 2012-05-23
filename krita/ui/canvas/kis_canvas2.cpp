@@ -231,6 +231,14 @@ void KisCanvas2::resetCanvasTransformations()
     pan(m_d->coordinatesConverter->updateOffsetAfterTransform());
 }
 
+void KisCanvas2::setSmoothingEnabled(bool smooth)
+{
+    KisQPainterCanvas *canvas = dynamic_cast<KisQPainterCanvas*>(m_d->canvasWidget);
+    if (canvas) {
+        canvas->setSmoothingEnabled(smooth);
+    }
+}
+
 void KisCanvas2::addCommand(KUndo2Command *command)
 {
     m_d->view->koDocument()->addCommand(command);

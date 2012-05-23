@@ -183,6 +183,8 @@ public slots:
     void rotateCanvasLeft15();
     void resetCanvasTransformations();
 
+    void setSmoothingEnabled(bool smooth);
+
 private slots:
 
     /**

@@ -96,7 +96,7 @@ public: // KoCanvasBase implementation
 
     /**
      * Return the right shape manager for the current layer. That is
-     * to say, if the current layer is a shape layer, return the shape
+     * to say, if the current layer is a vector layer, return the shape
      * layer's canvas' shapemanager, else the shapemanager associated
      * with the global krita canvas.
      */

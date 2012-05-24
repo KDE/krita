@@ -34,7 +34,7 @@
 
 
 PatternDockerDock::PatternDockerDock( )
-    : QDockWidget(i18n("Pattern Palette"))
+    : QDockWidget(i18n("Patterns"))
     , m_canvas(0)
 {
     m_patternChooser = new KisPatternChooser(this);

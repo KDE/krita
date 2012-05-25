@@ -74,6 +74,8 @@ ParagraphGeneral::ParagraphGeneral(QWidget *parent)
     widget.tabs->addTab(m_paragraphDropCaps, i18n("Drop Caps"));
     connect(m_paragraphDropCaps, SIGNAL(parStyleChanged()), this, SIGNAL(styleChanged()));
     connect(m_paragraphDropCaps, SIGNAL(parStyleChanged()), this, SLOT(setPreviewParagraphStyle()));
+
+    connect(this, SIGNAL(styleAltered(const KoCharacterStyle*)),m_paragraphBulletsNumbers, SLOT(setFontSize(const KoCharacterStyle*)));
 }
 
 void ParagraphGeneral::hideStyleName(bool hide)
@@ -203,6 +205,11 @@ void ParagraphGeneral::setPreviewParagraphStyle()
     }
 
     delete parStyle;
+}
+
+void ParagraphGeneral::setImageCollection(KoImageCollection *imageCollection)
+{
+    m_paragraphBulletsNumbers->setImageCollection(imageCollection);
 }
 
 #include <ParagraphGeneral.moc>

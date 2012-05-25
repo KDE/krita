@@ -152,6 +152,16 @@ QColor KoListLevelProperties::propertyColor(int key) const
     return qvariant_cast<QColor>(variant);
 }
 
+QVariant KoListLevelProperties::property(int key) const
+{
+    QVariant variant = d->stylesPrivate.value(key);
+    if (!variant.isNull()) {
+        return variant;
+    } else {
+        return QVariant();
+    }
+}
+
 void KoListLevelProperties::applyStyle(QTextListFormat &format) const
 {
     QList<int> keys = d->stylesPrivate.keys();
@@ -319,6 +329,11 @@ qreal KoListLevelProperties::height() const
 void KoListLevelProperties::setBulletImage(KoImageData *imageData)
 {
     setProperty(KoListStyle::BulletImage, QVariant::fromValue(imageData));
+}
+
+KoImageData *KoListLevelProperties::bulletImage() const
+{
+    return property(KoListStyle::BulletImage).value< KoImageData * >();
 }
 
 KoListLevelProperties & KoListLevelProperties::operator=(const KoListLevelProperties & other)

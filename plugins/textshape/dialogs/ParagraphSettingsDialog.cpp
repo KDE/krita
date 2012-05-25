@@ -35,7 +35,6 @@ ParagraphSettingsDialog::ParagraphSettingsDialog(TextTool *tool, KoTextEditor *e
         , m_tool(tool)
         , m_editor(editor)
         , m_styleChanged(false)
-
 {
     setCaption(i18n("Paragraph Format"));
     setModal(true);
@@ -107,6 +106,11 @@ void ParagraphSettingsDialog::slotApply()
 void ParagraphSettingsDialog::setUnit(const KoUnit &unit)
 {
     m_paragraphGeneral->setUnit(unit);
+}
+
+void ParagraphSettingsDialog::setImageCollection(KoImageCollection *imageCollection)
+{
+    m_paragraphGeneral->setImageCollection(imageCollection);
 }
 
 #include <ParagraphSettingsDialog.moc>

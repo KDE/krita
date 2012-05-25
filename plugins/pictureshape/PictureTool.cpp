@@ -212,7 +212,6 @@ void PictureTool::setImageData(KJob *job)
 
     KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob*>(job);
     Q_ASSERT(transferJob);
-
     if (m_pictureshape->imageCollection()) {
         KoImageData        *data = m_pictureshape->imageCollection()->createImageData(transferJob->data());
         ChangeImageCommand *cmd  = new ChangeImageCommand(m_pictureshape, data);

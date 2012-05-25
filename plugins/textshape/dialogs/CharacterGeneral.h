@@ -39,6 +39,8 @@ public:
     void setStyle(KoCharacterStyle *style);
     void hideStyleName(bool hide);
     bool isStyleChanged();
+    QString styleName() const;
+    void selectName();
 
 public slots:
     void save(KoCharacterStyle *style = 0);
@@ -51,14 +53,12 @@ signals:
     void styleChanged(); /// when user modifying
 
 private slots:
-    void setName(const QString &name);
     void setPreviewCharacterStyle();
 
 protected:
     Ui::CharacterGeneral widget;
 
 private:
-    bool m_blockSignals;
     bool m_nameHidden;
 
     FontDecorations *m_characterDecorations;

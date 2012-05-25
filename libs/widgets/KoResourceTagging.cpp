@@ -23,6 +23,7 @@
 #include <QStringList>
 #include <kstandarddirs.h>
 #include <QFile>
+#include <QDir>
 
 #ifdef NEPOMUK
 #include <Nepomuk/ResourceManager>
@@ -190,6 +191,8 @@ void KoResourceTagging::writeXMLFile(bool serverIdentity)
 
    QStringList resourceNames = m_tagRepo.uniqueKeys();
 
+   resourceNames.replaceInStrings(QDir::homePath(),QString("~"));
+
    if(fileExists) {
        QDomNodeList resourceNodesList = root.childNodes();
        /// resource are checked and added or removed according to need.
@@ -200,7 +203,7 @@ void KoResourceTagging::writeXMLFile(bool serverIdentity)
                    resourceNames.removeAll(resourceEl.attribute("identifier"));
                    /// Tags are checked for a resource and added or removed according to need.
                    QDomNodeList tagNodesList = resourceNodesList.at(i).childNodes();
-                   QStringList tags = m_tagRepo.values(resourceEl.attribute("identifier"));
+                   QStringList tags = m_tagRepo.values((resourceEl.attribute("identifier")).replace(QString("~"),QDir::homePath()));
                    for(int j = 0; j < tagNodesList.count() ; j++) {
                        QDomElement tagEl = tagNodesList.at(j).toElement();
                        if(tags.contains(tagEl.text())) {
@@ -218,7 +221,7 @@ void KoResourceTagging::writeXMLFile(bool serverIdentity)
                    }
                }
                else {
-                    if( isServerResource(resourceEl.attribute("identifier")) || !serverIdentity) {
+                    if( isServerResource((resourceEl.attribute("identifier")).replace(QString("~"),QDir::homePath())) || !serverIdentity) {
                        root.removeChild(resourceNodesList.at(i--));
                    }
                }
@@ -231,7 +234,7 @@ void KoResourceTagging::writeXMLFile(bool serverIdentity)
        QDomElement resourceEl = doc.createElement("resource");
        resourceEl.setAttribute("identifier",resourceName);
 
-       QStringList tags = m_tagRepo.values(resourceName);
+       QStringList tags = m_tagRepo.values(resourceName.replace(QString("~"),QDir::homePath()));
        foreach (QString tag, tags) {
            QDomElement tagEl = doc.createElement("tag");
            QDomText tagNameText = doc.createTextNode(tag);
@@ -276,11 +279,13 @@ void KoResourceTagging::readXMLFile(bool serverIdentity)
     for(int i=0; i< resourceNodesList.count(); i++) {
         QDomElement resourceEl = resourceNodesList.at(i).toElement();
         if(resourceEl.tagName() == "resource") {
-            if (isServerResource(resourceEl.attribute("identifier")) || !serverIdentity) {
+            QString resourceName = resourceEl.attribute("identifier");
+            resourceName.replace(QString("~"),QDir::homePath());
+            if (isServerResource(resourceName) || !serverIdentity) {
                 QDomNodeList tagNodesList = resourceNodesList.at(i).childNodes();
                 for(int j = 0; j < tagNodesList.count() ; j++) {
                     QDomElement tagEl = tagNodesList.at(j).toElement();
-                    addTag(resourceEl.attribute("identifier"), tagEl.text());
+                    addTag(resourceName, tagEl.text());
                 }
             }
         }

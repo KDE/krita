@@ -25,6 +25,7 @@
 #include <QDomDocument>
 #include <QDomElement>
 #include <QString>
+#include <QMessageBox>
 
 #include <KoDocumentInfo.h>
 #include <KoColorSpace.h>
@@ -37,8 +38,10 @@
 #include <kis_layer.h>
 #include <kis_adjustment_layer.h>
 #include <kis_layer_composition.h>
+#include <kis_painting_assistants_manager.h>
 
 #include "kis_doc2.h"
+#include <string>
 
 
 using namespace KRA;
@@ -92,7 +95,7 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageWSP image)
     m_d->nodeFileNames = visitor.nodeFileNames();
 
     saveCompositions(doc, imageElement, image);
-
+    saveAssistantsList(doc,imageElement);
     return imageElement;
 }
 
@@ -145,6 +148,16 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
             }
         }
     }
+
+    const QByteArray mimetype = "application/x-krita";
+    location =  external ? QString::null : uri;
+    location += "mimetype";
+    if (store->open(location)) {
+        store->write(mimetype);
+        store->close();
+    }
+
+    saveAssistants(store, uri,external);
     return true;
 }
 
@@ -155,4 +168,59 @@ void KisKraSaver::saveCompositions(QDomDocument& doc, QDomElement& element, KisI
         composition->save(doc, e);
     }
     element.appendChild(e);
+}
+
+bool KisKraSaver::saveAssistants(KoStore* store, QString uri, bool external)
+{
+    QString location;
+    QMap<QString, int> assistantcounters;
+    QByteArray data;
+    QList<KisPaintingAssistant*> assistants =  m_d->doc->assistants();
+    QMap<KisPaintingAssistantHandleSP, int> handlemap;
+    if (!assistants.isEmpty()) {
+        foreach(KisPaintingAssistant* assist, assistants){
+            if (!assistantcounters.contains(assist->id())){
+                assistantcounters.insert(assist->id(),0);
+            }
+            location = external ? QString::null : uri;
+            location += m_d->imageName + ASSISTANTS_PATH;
+            location += QString(assist->id()+"%1.assistant").arg(assistantcounters[assist->id()]);
+            data = assist->saveXml(handlemap);
+            store->open(location);
+            store->write(data);
+            store->close();
+            assistantcounters[assist->id()]++;
+        }
+
+    }
+    return true;
+}
+
+bool KisKraSaver::saveAssistantsList(QDomDocument& doc, QDomElement& element)
+{
+    int count_ellipse = 0, count_perspective = 0, count_ruler = 0, count_spline = 0;
+    QList<KisPaintingAssistant*> assistants =  m_d->doc->assistants();
+    if (!assistants.isEmpty()) {
+        QDomElement assistantsElement = doc.createElement("assistants");
+        foreach(KisPaintingAssistant* assist, assistants){
+            if (assist->id() == "ellipse"){
+                assist->saveXmlList(doc, assistantsElement, count_ellipse);
+                count_ellipse++;
+            }
+            else if (assist->id() == "spline"){
+                assist->saveXmlList(doc, assistantsElement, count_spline);
+                count_spline++;
+            }
+            else if (assist->id() == "perspective"){
+                assist->saveXmlList(doc, assistantsElement, count_perspective);
+                count_perspective++;
+            }
+            else if (assist->id() == "ruler"){
+                assist->saveXmlList(doc, assistantsElement, count_ruler);
+                count_ruler++;
+            }
+        }
+        element.appendChild(assistantsElement);
+    }
+    return true;
 }

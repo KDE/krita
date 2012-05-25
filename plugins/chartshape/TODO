@@ -54,7 +54,7 @@ General
 
 
 Important bugs
- * 300190 crash in legend frame (assigned, see above)
+ * 300190 crash in legend frame (assigned, see above)           [erione]
  * Other crash bugs
  * 298525 Not possible to bring back deleted chart parts
 
@@ -62,7 +62,8 @@ Data loss
  * We should load/store/save floor and wall for 3D charts
 
 Implement missing ODF functionality
- * Separate chart types per dataset, e.g. mix of Bars and Lines.
+ * Separate chart types per dataset, e.g Bars and Lines.        [erione]
+   Bugs: 271771 and 288537
  * 2D surface charts
    This should be possible since kdchart has a relatively simple way
    of adding new chart types if they fit the existing model.

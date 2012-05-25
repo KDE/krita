@@ -91,18 +91,11 @@ public:
      *        Usually passed by KPluginFactory::create.
      * @param parent may be another KoDocument, or anything else.
      *        Usually passed by KPluginFactory::create.
-     * @param singleViewMode determines whether the document may only have one view.
-     *        Usually passed by the derived factory, when KPluginFactory::create says the requested interface is not KoDocument.
-     *        In this case the @p parent must be a QWidget derived class.
-     *        KoDocument will then create a wrapper widget (KoViewWrapperWidget) which is a child of @p parentWidget.
-     *        This widget can be retrieved by calling widget().
      * @param undoStack accepts the stack for the document. You can create any type of stack if you need.
      *        The stack objects will become owned by the document. This is used by Krita's KisDoc2. The default value for this
      *        parameter is a usual Qt's stack.
      */
-    KoDocument(QWidget *parentWidget,
-               QObject *parent,
-               bool singleViewMode = false,
+    KoDocument(QObject *parent,
                KUndo2Stack *undoStack = new KUndo2Stack());
 
     /**
@@ -112,45 +105,6 @@ public:
      * delete the attached widget as returned by widget().
      */
     virtual ~KoDocument();
-
-    /**
-     * Tells whether this document is in singleview mode. This mode can only be set
-     * in the constructor.
-     */
-    bool isSingleViewMode() const;
-
-    /**
-     * @return true if the document is embedded in another odf document
-     */
-    bool isEmbedded() const;
-
-    /**
-     * Returns the action described action object. In fact only the "name" attribute
-     * of @p element is of interest here. The method searches first in the
-     * KActionCollection of the first view and then in the KActionCollection of this
-     * document.
-     * This allows %Calligra applications to define actions in both the view and the document.
-     * They should only define view-actions (like zooming and stuff) in the view.
-     * Every action which changes the document should be defined in the document.
-     *
-     * Please notice that KoDocument indirectly inherits KXMLGUIClient.
-     *
-     * @see KXMLGUIClient
-     * @see KXMLGUIClient::actionCollection
-     * @see KoView::action
-     */
-    virtual QAction *action(const QDomElement &element) const;
-
-    /**
-     * Returns the DOM document which describes the GUI of the
-     * first view.
-     */
-    virtual QDomDocument domDocument() const;
-
-    /**
-     * @internal
-     */
-    virtual void setManager(KParts::PartManager *manager);
 
     /**
      * Reimplemented from KParts::ReadWritePart for internal reasons
@@ -190,37 +144,6 @@ public:
      * view.
      */
     virtual void setReadWrite(bool readwrite = true);
-
-    /**
-     * @brief Used by KoApplication, and by KoMainWindow, when no document exists yet.
-     *
-     * With the help of @p instance or KApplication::componentData() this
-     * method figures out which .desktop file matches this application. In this
-     * file it searches for the "X-KDE-NativeMimeType" entry and returns it.
-     *
-     * @see KService
-     * @see KDesktopFile
-     */
-    static QByteArray readNativeFormatMimeType(const KComponentData &instance = KComponentData());
-
-    /**
-     * Used by KoMainWindow, when no document exists yet.
-     *
-     * With the help of @p instance or KApplication::componentData() this
-     * method figures out which .desktop file matches this application. In this
-     * file it searches for the "X-KDE-ExtraNativeMimeTypes" entry and returns it.
-     *
-     * @see KService
-     * @see KDesktopFile
-     */
-    static QStringList readExtraNativeMimeTypes(const KComponentData &instance = KComponentData());
-
-    /**
-     * With the help of @p instance or KApplication::componentData() this
-     * method figures out which .desktop file matches this application,
-     * and returns the KService instance for it.
-     */
-    static KService::Ptr readNativeService(const KComponentData &instance = KComponentData());
 
     /**
      * To be preferred when a document exists. It is fast when calling
@@ -319,8 +242,6 @@ public:
      */
     void setSaveInBatchMode(const bool batchMode);
 
-    virtual bool wantExportConfirmation() const;
-
     /**
      * Sets the error message to be shown to the user (use i18n()!)
      * when loading or saving fails.
@@ -393,29 +314,17 @@ public:
     virtual KParts::Part *hitTest(QWidget *widget, const QPoint &globalPos);
 
     /**
-     *  Paints the whole document into the given painter object.
-     *
-     *  @param painter     The painter object onto which will be drawn.
-     *  @param rect        The rect that should be used in the painter object.
-     *  @param view        The KoView is needed to fiddle about with the active widget, when painting children.
-     */
-    virtual void paintEverything(QPainter &painter, const QRect &rect, KoView *view = 0);
-
-    /**
      * @brief Generates a preview picture of the document
      * @note The preview is used in the File Dialog and also to create the Thumbnail
      */
     virtual QPixmap generatePreview(const QSize& size);
 
     /**
-     *  Paints the data itself. Normally called by paintEverything(). It does not
-     *  paint the children.
+     *  Paints the data itself.
      *  It's this method that %Calligra Parts have to implement.
      *
      *  @param painter     The painter object onto which will be drawn.
      *  @param rect        The rect that should be used in the painter object.
-     *
-     *  @see #paintEverything
      */
     virtual void paintContent(QPainter &painter, const QRect &rect) = 0;
 
@@ -472,7 +381,7 @@ public:
     /**
      *  @brief Saves a sub-document to a store.
      *
-     *  You should not have to reimplement this - but call it in saveChildren().
+     *  You should not have to reimplement this.
      */
     virtual bool saveToStore(KoStore *store, const QString& path);
 

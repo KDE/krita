@@ -1549,7 +1549,7 @@ void Axis::saveOdf(KoShapeSavingContext &context)
     axisStyle.addProperty("chart:logarithmic", scalingIsLogarithmic());
 
     KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>(kdPlane());
-    bool reverseAxis;
+    bool reverseAxis = false;
     if (plane) {
         if (orientation() == Qt::Horizontal)
             reverseAxis = plane->isHorizontalRangeReversed();

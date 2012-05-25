@@ -66,7 +66,7 @@ FormulaDocument::Private::~Private()
 }
 
 FormulaDocument::FormulaDocument( KoFormulaShape *parent )
-    : KoDocument( 0, 0 )
+    : KoDocument(0)
     , d ( new Private )
 {
     d->parent = parent;

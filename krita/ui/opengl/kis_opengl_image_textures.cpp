@@ -146,13 +146,17 @@ void KisOpenGLImageTextures::createImageTextureTiles()
     const int pixelSize = 4;
     QByteArray emptyTileData((m_texturesInfo.width) * (m_texturesInfo.height) * pixelSize, 0);
 
+    KisConfig config;
+    KisTextureTile::FilterMode mode = config.useOpenGLTrilinearFiltering() ? KisTextureTile::TrilinearFilterMode : KisTextureTile::BilinearFilterMode;
+
     for (int row = 0; row <= lastRow; row++) {
         for (int col = 0; col <= lastCol; col++) {
             QRect tileRect = calculateTileRect(col, row);
 
             KisTextureTile *tile = new KisTextureTile(tileRect,
                                                       &m_texturesInfo,
-                                                      emptyTileData.constData());
+                                                      emptyTileData.constData(),
+                                                      mode);
             m_textureTiles.append(tile);
         }
     }

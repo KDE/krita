@@ -119,12 +119,12 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view,
     connect(this, SIGNAL(canvasDestroyed(QWidget *)), this, SLOT(slotCanvasDestroyed(QWidget *)));
 
     /**
-     * We switch the shape manager every time shape layer or
+     * We switch the shape manager every time vector layer or
      * shape selection is activated. Flake does not expect this
      * and connects all the signals of the global shape manager
      * to the clients in the constructor. To workaround this we
      * forward the signals of local shape managers stored in the
-     * shape layers to the signals of global shape manager. So the
+     * vector layers to the signals of global shape manager. So the
      * sequence of signal deliveries is the following:
      *
      * shapeLayer.m_d.canvas.m_shapeManager.selection() ->
@@ -229,6 +229,14 @@ void KisCanvas2::resetCanvasTransformations()
     m_d->coordinatesConverter->resetRotation(m_d->coordinatesConverter->widgetCenterPoint());
     notifyZoomChanged();
     pan(m_d->coordinatesConverter->updateOffsetAfterTransform());
+}
+
+void KisCanvas2::setSmoothingEnabled(bool smooth)
+{
+    KisQPainterCanvas *canvas = dynamic_cast<KisQPainterCanvas*>(m_d->canvasWidget);
+    if (canvas) {
+        canvas->setSmoothingEnabled(smooth);
+    }
 }
 
 void KisCanvas2::addCommand(KUndo2Command *command)

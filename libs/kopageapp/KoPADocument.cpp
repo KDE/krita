@@ -76,8 +76,8 @@ public:
     QPointer<KoUpdater> odfPageProgressUpdater;
 };
 
-KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleViewMode )
-: KoDocument( parentWidget, parent, singleViewMode ),
+KoPADocument::KoPADocument(QObject* parent)
+    : KoDocument(parent),
     d(new Private())
 {
     d->inlineTextObjectManager = resourceManager()->resource(KoText::InlineTextObjectManager).value<KoInlineTextObjectManager*>();

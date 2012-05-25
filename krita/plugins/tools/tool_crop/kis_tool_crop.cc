@@ -81,7 +81,7 @@ void KisToolCrop::activate(ToolActivation toolActivation, const QSet<KoShape*> &
     if(currentNode() && currentNode()->paintDevice()) {
         m_optWidget->cmbType->setEnabled(true);
     }
-    //shape layer
+    //vector layer
     else {
         m_optWidget->cmbType->setEnabled(false);
     }
@@ -106,7 +106,7 @@ void KisToolCrop::resourceChanged(int key, const QVariant &res)
     if(currentNode() && currentNode()->paintDevice()) {
         m_optWidget->cmbType->setEnabled(true);
     }
-    //shape layer
+    //vector layer
     else {
         m_optWidget->cmbType->setCurrentIndex(1);
         m_optWidget->cmbType->setEnabled(false);

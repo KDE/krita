@@ -14,7 +14,7 @@ Subdirectories
 dialogs/        various dialogs for the chart tool
 commands/       undo/redo commands
 kdchart/        the chart drawing engine from KDAB.
-tests/          test code (run it by 'make tests')
+tests/          test code -- run it by 'make tests' in the build dir
 
 
 Classes in the top directory
@@ -30,11 +30,11 @@ ChartConfigWidget
 
 chartshape.desktop      The desktop file describing this plugin
 
-ChartDocument           This class inherits KoDocument. A chart and
-                        a formula are special shapes because they are
-                        their own document types, defined in ODF. This
-                        also means that they can be saved in a
-                        subdirectory or inline inside the XML tree.
+ChartDocument           This class inherits KoDocument. The chart and
+                        the formula are special shapes because they
+                        are their own document types, defined in
+                        ODF. This also means that they can be saved in
+                        a subdirectory or inline inside the XML tree.
 
 kchart_export.h         Defines import and export for exported classes.
 
@@ -47,7 +47,7 @@ editing of charts.  Most (all?) of the classes directly represent a
 chart entity defined in the ODF standard.
 
 Axis                    data about an axis in the chart
-DataSet                 stores data _about_ a dataset. The actual data
+DataSet                 data _about_ a dataset. The actual data
                         is stored in a table.
 Legend                  stores information about the legend
 PlotArea                the main area where the chart itself is shown
@@ -66,26 +66,26 @@ KDChartConversions      Conversions between odf concepts and KDChart
 
 ChartProxyModel         Factory for DataSets and decoration of a
                         ChartTableModel .
-ChartTableModel         Stores the numeric data if this isn't provided
-                        from the outside, e.g. from a spreadsheet.
 TableSource             FIXME: Something to do with connection to Sheets.
 OdfLoadingHelper        Helper for loading data when connected to a
                         spreadsheet. FIXME: find out more.
 
+ChartTableModel         Stores the numeric data if this isn't provided
+                        from the outside, e.g. from a spreadsheet.
 ChartTableView          A view of a table. Used in the data editor.
 
 
 Helper classes
 --------------
 
-kchart_global
+kchart_global           Common definitions of enums and some
+                        category functions
 CellRegionStringValidator Validates a cell region descriptor string
 ChartLayout             Manages the layout of the parts (plot area,
                         legend, titles, etc)
 ScreenConversions       Conversions between pt (distance) and px (pixels)
 SingleModelHelper       FIXME: No idea what this is
 TextLabelDummy          Place holder for text labels (title, etc)
-
 
 
 
@@ -219,13 +219,13 @@ Mapping ODF concepts to KDChart classes
 =======================================
 
 The main KDChart::Chart instance is owned by PlotArea. PlotArea also
-holds 2 cartesian coordinate planes and one polar and one radar
+holds 2 cartesian coordinate plane, one polar and one radar
 plane. Third, it holds a list of Diagrams, one per diagram type that
 was ever used(?).
 
 The KDChart::Chart can show headers, footers, axis labels and other
-text items. The chart shape does not use this, but instead uses
-standard text shapes for them. There are several reasonso for this:
+text items. The chart shape does not use this but instead uses
+standard text shapes for them. There are several reasons for this:
  - The KDChart items are not interactively editable and styleable
  - They cannot be easily moved around
  - The loading and saving of them would be much more difficult,

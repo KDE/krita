@@ -106,7 +106,7 @@ KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs, KisSelection*
     bool success = paste.paste(KoOdf::Text, mimeData);
     Q_ASSERT(success);
     if (!success) {
-        warnUI << "Could not paste shape layer";
+        warnUI << "Could not paste vector layer";
     }
 }
 
@@ -275,7 +275,7 @@ bool KisShapeSelection::loadSelection(KoStore* store)
     KoXmlElement layerElement;
     forEachElement(layerElement, context.stylesReader().layerSet()) {
         if (!loadOdf(layerElement, shapeContext)) {
-            kWarning() << "Could not load shape layer!";
+            kWarning() << "Could not load vector layer!";
             return false;
         }
     }
@@ -413,7 +413,7 @@ void KisShapeSelection::moveY(qint32 y)
     }
 }
 
-// TODO same code as in shape layer, refactor!
+// TODO same code as in vector layer, refactor!
 KUndo2Command* KisShapeSelection::transform(const QTransform &transform) {
     QList<KoShape*> shapes = m_canvas->shapeManager()->shapes();
     if(shapes.isEmpty()) return 0;

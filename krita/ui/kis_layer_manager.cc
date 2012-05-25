@@ -285,7 +285,7 @@ void KisLayerManager::layerProperties()
             }
 
         }
-    } else { // If layer == normal painting layer, shape layer, or group layer
+    } else { // If layer == normal painting layer, vector layer, or group layer
         KisDlgLayerProperties *dialog = new KisDlgLayerProperties(layer, m_view, m_doc);
         dialog->resize(dialog->minimumSizeHint());
         dialog->setAttribute(Qt::WA_DeleteOnClose);

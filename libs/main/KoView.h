@@ -213,11 +213,6 @@ public:
     void disableAutoScroll();
 
     /**
-     * calls KoDocument::paintEverything()
-     */
-    virtual void paintEverything(QPainter &painter, const QRect &rect);
-
-    /**
      * In order to print the document represented by this view a new print job should
      * be constructed that is capable of doing the printing.
      * The default implementation returns 0, which silently cancels printing.

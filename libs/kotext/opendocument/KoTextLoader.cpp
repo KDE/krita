@@ -163,6 +163,9 @@ public:
 
     QMap<QString, KoList *> xmlIdToListMap;
     QVector<KoList *> m_previousList;
+
+    QMap<QString, KoList *> numberedParagraphListId;
+
     QStringList rdfIdList;
 
     /// level is between 1 and 10
@@ -1275,8 +1278,21 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
 
     // TODO: get level from the style, if it has a style:list-level attribute (new in ODF-1.2)
     if (numberedParagraph) {
+        if (element.hasAttributeNS(KoXmlNS::text, "list-id")) {
+            QString listId = element.attributeNS(KoXmlNS::text, "list-id");
+            if (d->numberedParagraphListId.contains(listId)) {
+                d->currentLists.fill(d->numberedParagraphListId.value(listId));
+            } else {
+                KoList *currentList = d->list(cursor.block().document(), listStyle, false);
+                d->currentLists.fill(currentList);
+                d->numberedParagraphListId.insert(listId, currentList);
+            }
+        } else {
+            d->currentLists.fill(d->list(cursor.block().document(), listStyle, true));
+        }
+
         level = element.attributeNS(KoXmlNS::text, "level", "1").toInt();
-        d->currentLists[d->currentListLevel - 1] = d->list(cursor.block().document(), listStyle, true);
+
         d->currentListStyle = listStyle;
     } else {
         if (!listStyle)

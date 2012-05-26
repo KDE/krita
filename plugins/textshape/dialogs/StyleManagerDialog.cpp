@@ -59,7 +59,7 @@ void StyleManagerDialog::accept()
 void StyleManagerDialog::reject()
 {
     if (m_styleManagerWidget->unappliedStyleChanges()){
-        int ans = QMessageBox::warning(this, i18n("save changes"), i18n("You have changes that are not applied,"
+        int ans = QMessageBox::warning(this, i18n("Save Changes"), i18n("You have changes that are not applied. "
         "What do you want to do with those changes?"), QMessageBox::Apply, QMessageBox::Discard, QMessageBox::Cancel);
         switch (ans) {
         case QMessageBox::Apply :

@@ -134,7 +134,7 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
 
     quint8 origOpacity = painter()->opacity();
     quint8 origFlow    = painter()->flow();
-    
+
     m_opacityOption.apply(painter(), info);
     m_colorSource->selectColor(m_mixOption.apply(info));
     m_darkenOption.apply(m_colorSource, info);
@@ -184,7 +184,7 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
 
     if (m_spacingOption.isChecked())
         return spacing(m_spacingOption.apply(info));
-    
+
     return spacing(scale);
 }
 

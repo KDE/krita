@@ -33,7 +33,10 @@ class PAINTOP_EXPORT KisPressureRotationOption : public KisCurveOption
 public:
     KisPressureRotationOption();
     double apply(const KisPaintInformation & info) const;
+    virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
 
+private:
+    qreal m_defaultAngle;
 
 };
 

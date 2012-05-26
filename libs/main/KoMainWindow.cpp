@@ -751,7 +751,7 @@ bool KoMainWindow::exportConfirmation(const QByteArray &outputFormat)
 {
     KConfigGroup group = KGlobal::config()->group(rootDocument()->componentData().componentName());
     if (!group.readEntry("WantExportConfirmation", true)) {
-        return false;
+        return true;
     }
 
     KMimeType::Ptr mime = KMimeType::mimeType(outputFormat);

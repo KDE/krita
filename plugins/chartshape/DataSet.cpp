@@ -1401,6 +1401,18 @@ bool DataSet::loadOdf(const KoXmlElement &n,
         setLabelDataRegion(CellRegion(helper->tableSource, region));
     }
 
+    if (n.hasAttributeNS(KoXmlNS::chart, "class") && !ignoreCellRanges) {
+        const QString chartClass = n.attributeNS(KoXmlNS::chart, "class", QString());
+        KChart::ChartType chartType = KChart::BarChartType;
+        for (int type = 0; type < (int)LastChartType; ++type) {
+            if (chartClass == odfCharttype(type)) {
+                chartType = (ChartType)type;
+                setChartType(chartType);
+                break;
+            }
+        }
+    }
+
     d->readValueLabelType(styleStack);
 
     if (styleStack.hasProperty(KoXmlNS::chart, "symbol-type")) {
@@ -1611,6 +1623,11 @@ void DataSet::saveOdf(KoShapeSavingContext &context) const
     QString label = labelDataRegion().toString();
     if (!label.isEmpty())
         bodyWriter.addAttribute("chart:label-cell-address", label);
+
+    int charttype = (chartType() < LastChartType) ? chartType() : 0;
+    QString chartClass = odfCharttype(charttype);
+    if (!chartClass.isEmpty())
+        bodyWriter.addAttribute("chart:class", chartClass);
 
     if (chartType() == KChart::CircleChartType || chartType() == KChart::RingChartType) {
         for (int j=0; j<yDataRegion().cellCount(); ++j) {

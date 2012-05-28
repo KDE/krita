@@ -270,9 +270,8 @@ Axis::Private::~Private()
 {
     Q_ASSERT(plotArea);
 
-    delete numericStyleFormat;
-
     delete kdBarDiagram;
+    delete kdLineDiagram;
     delete kdAreaDiagram;
     delete kdCircleDiagram;
     delete kdRingDiagram;
@@ -282,6 +281,8 @@ Axis::Private::~Private()
     delete kdBubbleDiagram;
     delete kdSurfaceDiagram;
     delete kdGanttDiagram;
+
+    delete numericStyleFormat;
 
     delete kdAxis;
 

@@ -209,10 +209,8 @@ void KoStyleThumbnailer::layoutThumbnail(QSize size, QImage *im, KoStyleThumbnai
     rootArea.layoutRoot(&frameCursor);
 
     QSizeF documentSize = rootArea.boundingRect().size();
-    qDebug()<<documentSize.height();
     documentSize.setWidth(documentSize.width() * qt_defaultDpiX() / 72.0);
     documentSize.setHeight(documentSize.height() * qt_defaultDpiY() / 72.0);
-    qDebug()<<documentSize<< size;
     if (documentSize.width() > size.width() || documentSize.height() > size.height()) {
         //calculate the space needed for the font size indicator (should the preview be too big with the style's font size
         QTextCursor cursor(d->thumbnailHelperDocument);

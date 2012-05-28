@@ -37,9 +37,10 @@ These issues are picked from the medium and long term issues and
 assigned to a person.
 
 Assigned issues
- * Fix bug 300190: crash in legend frame                        [erione]
+ * Fix bug 300190: crash in legend frame                        [ingwa]
  * Fix changing chart type to stock chart                       [erione]
  * Fix saving(?) of axes                                        [erione]
+ * 271774 Stock chart ... is not displaying.                    [erione]
 
 
 Medium term issues
@@ -54,22 +55,26 @@ General
 
 
 Important bugs
- * 300190 crash in legend frame (assigned, see above)           [erione]
+ * 300190 crash in legend frame (assigned, see above)           [ingwa]
  * Other crash bugs
  * 298525 Not possible to bring back deleted chart parts
+ * 271774 Stock chart ... is not displaying.                    [erione]
+ * Fix saving(?) of axes                                        [erione]
 
 Data loss
  * We should load/store/save floor and wall for 3D charts
 
 Implement missing ODF functionality
- * Separate chart types per dataset, e.g Bars and Lines.        [erione]
+ * Separate chart types per dataset, e.g Bars and Lines.        [DONE]
    Bugs: 271771 and 288537
  * 2D surface charts
-   This should be possible since kdchart has a relatively simple way
-   of adding new chart types if they fit the existing model.
+   This should be possible since kdchart has a relatively
+   simple way of adding new chart types if they fit the
+   existing model.
  * Gantt charts.
-   We have a gantt component in calligra already and kdgantt is now
-   part of kdchart.
+   We have a gantt component in calligra already and kdgantt
+   is now part of kdchart.
+ * Implement all marker types                                   [DONE]
 
 Improve usability
  * We should design a better data editor.

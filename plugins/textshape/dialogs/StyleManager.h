@@ -43,13 +43,17 @@ public:
 
     void setUnit(const KoUnit &unit);
 
+    //Check that the new name of style is unique or not
+    bool checkUniqueStyleName();
+
 public slots:
     void save();
     void setParagraphStyle(KoParagraphStyle *style);
     void setCharacterStyle(KoCharacterStyle *style, bool canDelete = false);
+    bool unappliedStyleChanges();
 
 private slots:
-    void styleChanged(bool state = true);
+    void currentStyleChanged();
     void addParagraphStyle(KoParagraphStyle*);
     void addCharacterStyle(KoCharacterStyle*);
     void removeParagraphStyle(KoParagraphStyle*);
@@ -64,6 +68,8 @@ private:
 
     QMap<int, KoParagraphStyle*> m_alteredParagraphStyles;
     QMap<int, KoCharacterStyle*> m_alteredCharacterStyles;
+    QMap<int, KoParagraphStyle*> m_draftParagraphStyles;
+    QMap<int, KoCharacterStyle*> m_draftCharacterStyles;
 
     StylesModel *m_paragraphStylesModel;
     StylesModel *m_characterStylesModel;
@@ -73,7 +79,8 @@ private:
 
     bool m_blockSignals;
     bool m_blockStyleChangeSignals;
-    bool m_styleChanged;
+    bool m_unappliedStyleChanges;
+    bool m_currentStyleChanged;
 };
 
 #endif

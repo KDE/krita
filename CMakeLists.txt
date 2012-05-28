@@ -28,8 +28,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 #
 #eg:
 #option(BUILD_kexi "Build directory kexi" OFF) # kexi isn't buildable at the moment
-option(BUILD_koabstraction "Build directory koabstraction" ON) # koabstraction isn't buildable at the moment
-option(BUILD_mobile "Build directory mobile" ON) # mobile depends on koabstraction it builds but does not run
 
 option(GHNS "support Get Hot New Stuff" ON)
 option(NEPOMUK "support NEPOMUK Tagging" ON)
@@ -48,7 +46,6 @@ IF (TINY)
     set(SHOULD_BUILD_PLAN FALSE)
     set(SHOULD_BUILD_KDGANTT FALSE)
     set(SHOULD_BUILD_SCRIPTING FALSE)
-    set(SHOULD_BUILD_MOBILE TRUE)
     set(SHOULD_BUILD_KOREPORT FALSE)
     set(SHOULD_BUILD_BRAINDUMP FALSE)
     set(SHOULD_BUILD_CALLIGRA FALSE)
@@ -66,7 +63,6 @@ ELSEIF (CREATIVEONLY)
     set(SHOULD_BUILD_PLAN FALSE)
     set(SHOULD_BUILD_KDGANTT FALSE)
     set(SHOULD_BUILD_SCRIPTING TRUE)
-    set(SHOULD_BUILD_MOBILE FALSE)
     set(SHOULD_BUILD_KOREPORT FALSE)
     set(SHOULD_BUILD_BRAINDUMP FALSE)
     set(SHOULD_BUILD_CALLIGRA FALSE)
@@ -84,7 +80,6 @@ ELSE()
     set(SHOULD_BUILD_PLAN TRUE)
     set(SHOULD_BUILD_KDGANTT TRUE)
     set(SHOULD_BUILD_SCRIPTING TRUE)
-    set(SHOULD_BUILD_MOBILE TRUE)
     set(SHOULD_BUILD_KOREPORT TRUE)
     set(SHOULD_BUILD_BRAINDUMP TRUE)
     set(SHOULD_BUILD_CALLIGRA TRUE)
@@ -605,18 +600,6 @@ endif(   NOT SHOULD_BUILD_SHEETS OR NOT BUILD_sheets
       OR NOT SHOULD_BUILD_STAGE OR NOT BUILD_stage
      )
 
-if(SHOULD_BUILD_KOABSTRACTION)
-    # koabstraction depends on kotext & flake
-    set(KOABSTRACTION_INCLUDES ${KDE4_INCLUDES}
-                        ${KOTEXT_INCLUDES}
-                        ${FLAKE_INCLUDES}
-                        ${KOPAGEAPP_INCLUDES}
-                        ${KOMAIN_INCLUDES}
-                        ${CMAKE_SOURCE_DIR}/tools/koabstraction)
-else(SHOULD_BUILD_KOABSTRACTION)
-    set(SHOULD_BUILD_MOBILE FALSE)
-endif(SHOULD_BUILD_KOABSTRACTION)
-
 if(SHOULD_BUILD_SHEETS AND SHOULD_BUILD_WORDS)
     # build cstester
 else(SHOULD_BUILD_SHEETS AND SHOULD_BUILD_WORDS)
@@ -655,7 +638,6 @@ macro_display_application_enabled(plan ${SHOULD_BUILD_PLAN})
 macro_display_application_enabled(krita ${SHOULD_BUILD_KRITA})
 macro_display_application_enabled(karbon ${SHOULD_BUILD_KARBON})
 macro_display_application_enabled(braindump ${SHOULD_BUILD_BRAINDUMP})
-macro_display_application_enabled(mobile ${SHOULD_BUILD_MOBILE})
 macro_display_application_enabled(calligra ${SHOULD_BUILD_CALLIGRA})
 macro_display_application_enabled(cstester ${SHOULD_BUILD_CSTESTER})
 macro_display_application_enabled(active ${SHOULD_BUILD_ACTIVE})

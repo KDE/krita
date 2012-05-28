@@ -26,6 +26,7 @@
 #include <QList>
 
 class KoParagraphStyle;
+class KoImageCollection;
 class KoUnit;
 class ParagraphBulletsNumbers;
 class ParagraphIndentSpacing;
@@ -46,6 +47,11 @@ public:
     void switchToGeneralTab();
     void hideStyleName(bool hide);
     bool isStyleChanged();
+    QString styleName() const;
+    void selectName();
+
+    void setImageCollection(KoImageCollection *imageCollection);
+    KoImageCollection *imageCollection();
 
 public slots:
     void save(KoParagraphStyle *style = 0);
@@ -55,11 +61,9 @@ signals:
     void styleAltered(const KoParagraphStyle *style); /// when saving
 
 private slots:
-    void setName(const QString &name);
     void setPreviewParagraphStyle();
 
 private:
-    bool m_blockSignals;
     bool m_nameHidden;
 
     ParagraphIndentSpacing *m_paragraphIndentSpacing;

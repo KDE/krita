@@ -171,6 +171,9 @@ public:
     /// @return loadable state of the settings, by default implementation return the same as isValid()
     virtual bool isLoadable();
 
+    void setCanvasRotation(qreal angle);
+    qreal canvasRotation() const;
+
 protected:
      /**
      * @return the option widget of the paintop (can be 0 is no option widgets is set)

@@ -2317,7 +2317,7 @@ void TextTool::formatParagraph()
 {
     ParagraphSettingsDialog *dia = new ParagraphSettingsDialog(this, m_textEditor.data());
     dia->setUnit(canvas()->unit());
-
+    dia->setImageCollection(m_textShape->imageCollection());
     dia->exec();
     delete dia;
     returnFocusToCanvas();

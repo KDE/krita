@@ -32,7 +32,6 @@
 
 CharacterGeneral::CharacterGeneral(QWidget *parent)
         : QWidget(parent),
-        m_blockSignals(false),
         m_style(0)
 {
     widget.setupUi(this);
@@ -48,14 +47,12 @@ CharacterGeneral::CharacterGeneral(QWidget *parent)
     m_languageTab->setVisible(false);
 
     connect(widget.name, SIGNAL(textChanged(const QString &)), this, SIGNAL(nameChanged(const QString&)));
-    connect(widget.name, SIGNAL(textChanged(const QString &)), this, SLOT(setName(const QString&)));
 }
 
 void CharacterGeneral::hideStyleName(bool hide)
 {
     if (hide) {
         disconnect(widget.name, SIGNAL(textChanged(const QString &)), this, SIGNAL(nameChanged(const QString&)));
-        disconnect(widget.name, SIGNAL(textChanged(const QString &)), this, SLOT(setName(const QString&)));
         widget.tabs->removeTab(0);
         m_nameHidden = true;
     }
@@ -66,7 +63,7 @@ void CharacterGeneral::setStyle(KoCharacterStyle *style)
     m_style = style;
     if (m_style == 0)
         return;
-    m_blockSignals = true;
+    blockSignals(true);
 
     if (!m_nameHidden)
         widget.name->setText(style->name());
@@ -76,7 +73,7 @@ void CharacterGeneral::setStyle(KoCharacterStyle *style)
 
     widget.preview->setCharacterStyle(style);
 
-    m_blockSignals = false;
+    blockSignals(false);
 }
 
 void CharacterGeneral::save(KoCharacterStyle *style)
@@ -93,8 +90,11 @@ void CharacterGeneral::save(KoCharacterStyle *style)
 
     m_characterHighlighting->save(savingStyle);
     //m_languageTab->save(savingStyle);
+    savingStyle->setName(widget.name->text());
 
-    emit styleAltered(savingStyle);
+    if (m_style == savingStyle) {
+        emit styleAltered(savingStyle);
+    }
 }
 
 void CharacterGeneral::switchToGeneralTab()
@@ -102,9 +102,11 @@ void CharacterGeneral::switchToGeneralTab()
     widget.tabs->setCurrentIndex(0);
 }
 
-void CharacterGeneral::setName(const QString &name)
+void CharacterGeneral::selectName()
 {
-    m_style->setName(name);
+    widget.tabs->setCurrentIndex(widget.tabs->indexOf(widget.generalTab));
+    widget.name->selectAll();
+    widget.name->setFocus(Qt::OtherFocusReason);
 }
 
 void CharacterGeneral::setPreviewCharacterStyle()
@@ -116,6 +118,11 @@ void CharacterGeneral::setPreviewCharacterStyle()
     }
 
     delete charStyle;
+}
+
+QString CharacterGeneral::styleName() const
+{
+    return widget.name->text();
 }
 
 #include <CharacterGeneral.moc>

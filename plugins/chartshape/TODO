@@ -39,7 +39,6 @@ assigned to a person.
 Assigned issues
  * Fix bug 300190: crash in legend frame                        [ingwa]
  * Fix changing chart type to stock chart                       [erione]
- * Fix saving(?) of axes                                        [erione]
  * 271774 Stock chart ... is not displaying.                    [erione]
 
 
@@ -59,7 +58,7 @@ Important bugs
  * Other crash bugs
  * 298525 Not possible to bring back deleted chart parts
  * 271774 Stock chart ... is not displaying.                    [erione]
- * Fix saving(?) of axes                                        [erione]
+ * Fix saving of axes                                           [DONE]
 
 Data loss
  * We should load/store/save floor and wall for 3D charts

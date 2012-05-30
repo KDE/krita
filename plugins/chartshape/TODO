@@ -36,6 +36,14 @@ Time frame: (days / weeks)
 These issues are picked from the medium and long term issues and
 assigned to a person.
 
+Until the branching of 2.5: in priority order
+ * Subtypes for stock charts.                                   [erione]
+    + Get a stock chart manual from KDAB                        [ingwa]
+ * Font editing for text items (header/etc, axis labels, ...)   [erione]
+ * Y error bars                                                 [erione]
+ * Edit marker type for dataset                                 [ingwa]
+ * Add/delete data set when in a spreadsheet                    [erione]
+
 Assigned issues
  * Fix bug 300190: crash in legend frame                        [ingwa]
  * Fix changing chart type to stock chart                       [erione]

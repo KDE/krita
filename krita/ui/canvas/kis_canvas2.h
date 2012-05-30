@@ -96,7 +96,7 @@ public: // KoCanvasBase implementation
 
     /**
      * Return the right shape manager for the current layer. That is
-     * to say, if the current layer is a shape layer, return the shape
+     * to say, if the current layer is a vector layer, return the shape
      * layer's canvas' shapemanager, else the shapemanager associated
      * with the global krita canvas.
      */
@@ -178,10 +178,14 @@ public slots:
 
     /// slot for setting the mirroring
     void mirrorCanvas(bool mirror);
+    /// canvas rotation in degrees
+    qreal rotationAngle() const;
     void rotateCanvas(qreal angle, bool updateOffset=true);
     void rotateCanvasRight15();
     void rotateCanvasLeft15();
     void resetCanvasTransformations();
+
+    void setSmoothingEnabled(bool smooth);
 
 private slots:
 

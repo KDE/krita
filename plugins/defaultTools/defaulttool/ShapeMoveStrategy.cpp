@@ -124,6 +124,12 @@ KUndo2Command* ShapeMoveStrategy::createCommand()
     return new KoShapeMoveCommand(m_selectedShapes, m_previousPositions, m_newPositions);
 }
 
+void ShapeMoveStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
+{
+    Q_UNUSED(modifiers);
+    tool()->canvas()->updateCanvas(tool()->canvas()->snapGuide()->boundingRect());
+}
+
 void ShapeMoveStrategy::paint( QPainter &painter, const KoViewConverter &converter)
 {
     SelectionDecorator decorator (KoFlake::NoHandle, false, false);

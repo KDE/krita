@@ -20,6 +20,7 @@
 #define STYLEMANAGERDIALOG_H
 
 #include <KDialog>
+#include <QCloseEvent>
 
 class StyleManager;
 
@@ -43,6 +44,11 @@ public slots:
     void setParagraphStyle(KoParagraphStyle *style);
     void setCharacterStyle(KoCharacterStyle *style, bool canDelete = false);
 
+private slots:
+    void applyClicked();
+
+protected:
+    void closeEvent(QCloseEvent *e);
 
 private:
     void accept();

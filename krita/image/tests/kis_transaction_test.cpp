@@ -53,6 +53,7 @@ void KisTransactionTest::testUndo()
 
     KisTransaction transaction("mirror", dev, 0);
     KisTransformWorker::mirrorX(dev);
+    transaction.commit(&undoAdapter);
 
     dev->pixel(5, 5, &c1);
     dev->pixel(517, 5, &c2);
@@ -60,7 +61,6 @@ void KisTransactionTest::testUndo()
     QVERIFY(c1 == Qt::black);
     QVERIFY(c2 == Qt::white);
 
-    transaction.commit(&undoAdapter);
     undoAdapter.undo();
 
     dev->pixel(5, 5, &c1);
@@ -94,6 +94,7 @@ void KisTransactionTest::testRedo()
 
     KisTransaction transaction("mirror", dev, 0);
     KisTransformWorker::mirrorX(dev);
+    transaction.commit(&undoAdapter);
 
     dev->pixel(5, 5, &c1);
     dev->pixel(517, 5, &c2);
@@ -101,7 +102,7 @@ void KisTransactionTest::testRedo()
     QVERIFY(c1 == Qt::black);
     QVERIFY(c2 == Qt::white);
 
-    transaction.commit(&undoAdapter);
+
     undoAdapter.undo();
 
     dev->pixel(5, 5, &c1);

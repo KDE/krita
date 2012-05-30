@@ -44,7 +44,7 @@ public:
 MyPaintFactory::MyPaintFactory()
     : m_d( new Private )
 {
-    KGlobal::mainComponent().dirs()->addResourceType("mypaint_brushes", "data", "krita/brushes/");
+    KGlobal::mainComponent().dirs()->addResourceType("mypaint_brushes", "data", "krita/mypaintbrushes/");
     KGlobal::mainComponent().dirs()->addResourceDir("mypaint_brushes", "/usr/share/mypaint/brushes/");
 
     m_d->brushServer = new KoResourceServer<MyPaintBrushResource>("mypaint_brushes", "*.myb");
@@ -112,9 +112,13 @@ MyPaintBrushResource* MyPaintFactory::brush(const QString& fileName) const
 void MyPaintFactory::processAfterLoading()
 {
     KoResourceServer<KisPaintOpPreset>* rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+    QStringList blackList = rserver->blackListedFiles();
+
     QMapIterator<QString, MyPaintBrushResource*> i(m_d->brushes);
     while (i.hasNext()) {
         i.next();
+
+        if (blackList.contains(i.key())) continue;
 
         //Create a preset for every loaded brush
         KisPaintOpSettingsSP s = settings(0);

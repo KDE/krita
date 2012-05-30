@@ -97,6 +97,12 @@ protected:
     /// constructor
     KoTosContainer(KoTosContainerPrivate &);
 
+    //reimplemented
+    void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
+
+    //reimplemented
+    virtual QString saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const;
+
     /**
      * Set the current prefered text rectangle. This rect contains the coordinates of
      * the embedded text shape relative to the content shape. This value is ignored if

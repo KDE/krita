@@ -210,6 +210,7 @@ QList<ListStyleItem> Lists::otherListStyleItems()
     answer.append(ListStyleItem(i18n("Abjad"), KoListStyle::Abjad));
     answer.append(ListStyleItem(i18n("AbjadMinor"), KoListStyle::AbjadMinor));
     answer.append(ListStyleItem(i18n("ArabicAlphabet"), KoListStyle::ArabicAlphabet));
+    answer.append(ListStyleItem(i18n("Image"), KoListStyle::ImageItem));
     return answer;
 }
 

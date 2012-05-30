@@ -28,8 +28,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 #
 #eg:
 #option(BUILD_kexi "Build directory kexi" OFF) # kexi isn't buildable at the moment
-option(BUILD_koabstraction "Build directory koabstraction" ON) # koabstraction isn't buildable at the moment
-option(BUILD_mobile "Build directory mobile" ON) # mobile depends on koabstraction it builds but does not run
 
 option(GHNS "support Get Hot New Stuff" ON)
 option(NEPOMUK "support NEPOMUK Tagging" ON)
@@ -47,9 +45,7 @@ IF (TINY)
     set(SHOULD_BUILD_FLOW FALSE)
     set(SHOULD_BUILD_PLAN FALSE)
     set(SHOULD_BUILD_KDGANTT FALSE)
-    set(SHOULD_BUILD_KOUNAVAIL FALSE)
     set(SHOULD_BUILD_SCRIPTING FALSE)
-    set(SHOULD_BUILD_MOBILE TRUE)
     set(SHOULD_BUILD_KOREPORT FALSE)
     set(SHOULD_BUILD_BRAINDUMP FALSE)
     set(SHOULD_BUILD_CALLIGRA FALSE)
@@ -66,9 +62,7 @@ ELSEIF (CREATIVEONLY)
     set(SHOULD_BUILD_FLOW FALSE)
     set(SHOULD_BUILD_PLAN FALSE)
     set(SHOULD_BUILD_KDGANTT FALSE)
-    set(SHOULD_BUILD_KOUNAVAIL FALSE)
     set(SHOULD_BUILD_SCRIPTING TRUE)
-    set(SHOULD_BUILD_MOBILE FALSE)
     set(SHOULD_BUILD_KOREPORT FALSE)
     set(SHOULD_BUILD_BRAINDUMP FALSE)
     set(SHOULD_BUILD_CALLIGRA FALSE)
@@ -85,9 +79,7 @@ ELSE()
     set(SHOULD_BUILD_FLOW TRUE)
     set(SHOULD_BUILD_PLAN TRUE)
     set(SHOULD_BUILD_KDGANTT TRUE)
-    set(SHOULD_BUILD_KOUNAVAIL TRUE)
     set(SHOULD_BUILD_SCRIPTING TRUE)
-    set(SHOULD_BUILD_MOBILE TRUE)
     set(SHOULD_BUILD_KOREPORT TRUE)
     set(SHOULD_BUILD_BRAINDUMP TRUE)
     set(SHOULD_BUILD_CALLIGRA TRUE)
@@ -156,6 +148,10 @@ macro_ensure_out_of_source_build("Compiling Calligra inside the source directory
 find_package(Perl REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(PNG REQUIRED)
+if (APPLE)
+    # this is not added correctly on OSX -- see http://forum.kde.org/viewtopic.php?f=139&t=101867&p=221242#p221242
+    include_directories(${PNG_INCLUDE_DIR})
+endif(APPLE)
 find_package(Boost REQUIRED) # for pigment and stage
 if (NOT Boost_FOUND)
     MESSAGE(FATAL_ERROR "Did not find Boost. Boost is required for the core libraries, stage, sheets and krita.")
@@ -278,18 +274,8 @@ endif( MARBLE_FOUND )
 ##
 ## Test for lcms
 ##
-macro_optional_find_package(LCMS)
-set(REQUIRED_LCMS_VERSION 118)
-if(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
-    set(HAVE_REQUIRED_LCMS_VERSION TRUE)
-    set(HAVE_LCMS TRUE)
-else(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
-    set(HAVE_REQUIRED_LCMS_VERSION FALSE)
-    set(HAVE_LCMS FALSE)
-endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
-
 macro_optional_find_package(LCMS2)
-macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "2.0" "Optional replacement for LittleCMS 1.18. Can be used for color management and Krita")
+macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "2.0" "Will be used for color management and is necesary for Krita")
 if(LCMS2_FOUND)
     set(HAVE_REQUIRED_LCMS_VERSION TRUE)
     set(HAVE_LCMS2 TRUE)
@@ -307,9 +293,6 @@ if(NEPOMUK)
     add_definitions(-DDISABLE_NEPOMUK_LEGACY)
     macro_log_feature(NEPOMUK_FOUND "Nepomuk" "Handles metadata of resources" FALSE  "Required to handle metadata of resources")
 endif(NEPOMUK)
-
-
-macro_log_feature(HAVE_REQUIRED_LCMS_VERSION "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "1.18" "Required for color management and Krita")
 
 #Set the build of TextShape changetraker
 
@@ -570,10 +553,6 @@ if (SHOULD_BUILD_FLOW)
     macro_optional_add_subdirectory(flow)
 endif (SHOULD_BUILD_FLOW)
 
-if (SHOULD_BUILD_KOUNAVAIL)
-    macro_optional_add_subdirectory(kounavail)
-endif (SHOULD_BUILD_KOUNAVAIL)
-
 if (SHOULD_BUILD_PLAN)
     macro_optional_add_subdirectory(kdgantt)
 endif (SHOULD_BUILD_PLAN)
@@ -621,18 +600,6 @@ endif(   NOT SHOULD_BUILD_SHEETS OR NOT BUILD_sheets
       OR NOT SHOULD_BUILD_STAGE OR NOT BUILD_stage
      )
 
-if(SHOULD_BUILD_KOABSTRACTION)
-    # koabstraction depends on kotext & flake
-    set(KOABSTRACTION_INCLUDES ${KDE4_INCLUDES}
-                        ${KOTEXT_INCLUDES}
-                        ${FLAKE_INCLUDES}
-                        ${KOPAGEAPP_INCLUDES}
-                        ${KOMAIN_INCLUDES}
-                        ${CMAKE_SOURCE_DIR}/tools/koabstraction)
-else(SHOULD_BUILD_KOABSTRACTION)
-    set(SHOULD_BUILD_MOBILE FALSE)
-endif(SHOULD_BUILD_KOABSTRACTION)
-
 if(SHOULD_BUILD_SHEETS AND SHOULD_BUILD_WORDS)
     # build cstester
 else(SHOULD_BUILD_SHEETS AND SHOULD_BUILD_WORDS)
@@ -671,7 +638,6 @@ macro_display_application_enabled(plan ${SHOULD_BUILD_PLAN})
 macro_display_application_enabled(krita ${SHOULD_BUILD_KRITA})
 macro_display_application_enabled(karbon ${SHOULD_BUILD_KARBON})
 macro_display_application_enabled(braindump ${SHOULD_BUILD_BRAINDUMP})
-macro_display_application_enabled(mobile ${SHOULD_BUILD_MOBILE})
 macro_display_application_enabled(calligra ${SHOULD_BUILD_CALLIGRA})
 macro_display_application_enabled(cstester ${SHOULD_BUILD_CSTESTER})
 macro_display_application_enabled(active ${SHOULD_BUILD_ACTIVE})

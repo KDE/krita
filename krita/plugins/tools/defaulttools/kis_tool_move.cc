@@ -218,14 +218,7 @@ void KisToolMove::mouseMoveEvent(KoPointerEvent *event)
         }
 
         QPoint pos = convertToPixelCoord(event).toPoint();
-        if ((event->modifiers() & Qt::AltModifier) ||
-            (event->modifiers() & Qt::ControlModifier)) {
-
-            if (qAbs(pos.x() - m_dragStart.x()) > qAbs(pos.y() - m_dragStart.y()))
-                pos.setY(m_dragStart.y());
-            else
-                pos.setX(m_dragStart.x());
-        }
+        pos = applyModifiers(event->modifiers(), pos);
         drag(pos);
 
         notifyModified();
@@ -246,6 +239,7 @@ void KisToolMove::mouseReleaseEvent(KoPointerEvent *event)
         }
 
         QPoint pos = convertToPixelCoord(event).toPoint();
+        pos = applyModifiers(event->modifiers(), pos);
         drag(pos);
 
         KisImageWSP image = currentImage();
@@ -275,4 +269,17 @@ QWidget* KisToolMove::createOptionWidget()
     m_optionsWidget = new MoveToolOptionsWidget(0);
     m_optionsWidget->setFixedHeight(m_optionsWidget->sizeHint().height());
     return m_optionsWidget;
+}
+
+QPoint KisToolMove::applyModifiers(Qt::KeyboardModifiers modifiers, QPoint pos)
+{
+    QPoint adjustedPos = pos;
+    if (modifiers & Qt::AltModifier || modifiers & Qt::ControlModifier) {
+
+        if (qAbs(pos.x() - m_dragStart.x()) > qAbs(pos.y() - m_dragStart.y()))
+            adjustedPos.setY(m_dragStart.y());
+        else
+            adjustedPos.setX(m_dragStart.x());
+    }
+    return adjustedPos;
 }

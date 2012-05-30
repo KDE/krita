@@ -1986,7 +1986,12 @@ void KisToolTransform::initTransform(ToolTransformArgs::TransfMode mode)
 }
     else if (dev) {
         // we take all of the paintDevice
-        dev->exactBounds(x, y, w, h);
+	QRect rc;
+	rc = dev->exactBounds();
+	x = rc.x();
+	y = rc.y();
+	w = rc.width();
+	h = rc.height();
         m_origSelection = 0;
     }
     else {

@@ -159,6 +159,7 @@ void KoModeBox::addItem(const KoToolButton button)
     }
     widget = new QWidget();
     widget->setLayout(layout);
+    layout->setContentsMargins(0,0,0,0);
     d->addedWidgets[button.buttonGroupId] = widget;
 
     QToolBox::addItem(widget, button.button->icon(), button.button->toolTip());
@@ -225,7 +226,7 @@ void KoModeBox::setOptionWidgets(const QList<QWidget *> &optionWidgetList)
     QGridLayout *layout = (QGridLayout *)d->addedWidgets[d->activeId]->layout();
     // need to unstretch row that have previously been stretched
     layout->setRowStretch(layout->rowCount()-1, 0);
-    layout->setColumnMinimumWidth(0, 16);
+    layout->setColumnMinimumWidth(0, 0); // used to be indent
     layout->setColumnStretch(1, 1);
     layout->setColumnStretch(2, 2);
     layout->setColumnStretch(3, 1);

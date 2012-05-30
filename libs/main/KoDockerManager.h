@@ -40,6 +40,9 @@ public:
 
     void removeToolOptionsDocker();
 
+    /// sets the visibility of the tab and lock icons
+    void setIcons(bool enabled);
+
 public slots:
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.

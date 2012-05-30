@@ -242,6 +242,19 @@ then you can try to enable this.</string>
         </property>
        </widget>
       </item>
+      <item row="5" column="0">
+       <widget class="QCheckBox" name="cbUseOpenGLTrilinearFiltering">
+        <property name="toolTip">
+         <string>Use trilinear filtering when zooming. Disabling this may improve painting performance.</string>
+        </property>
+        <property name="text">
+         <string>Use trilinear texture filtering</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>

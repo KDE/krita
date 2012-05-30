@@ -22,11 +22,12 @@
  */
 
 #include "KoDocument.h"
-#include "KoDocument_p.h"
 
+#include "KoServiceProvider.h"
 #include "KoDocumentAdaptor.h"
 #include "KoGlobal.h"
 #include "KoView.h"
+#include "KoEmbeddedDocumentSaver.h"
 #include "KoMainWindow.h"
 #include "KoFilterManager.h"
 #include "KoDocumentInfo.h"
@@ -38,7 +39,6 @@
 #include "KoOdfStylesReader.h"
 #include "KoOdfReadStore.h"
 #include "KoOdfWriteStore.h"
-#include "KoEmbeddedDocumentSaver.h"
 #include "KoXmlNS.h"
 #include "KoOpenPane.h"
 #include "KoApplication.h"
@@ -49,6 +49,7 @@
 #include <KoDpi.h>
 #include <KoXmlWriter.h>
 
+#include <kmimetype.h>
 #include <kdialog.h>
 #include <kfileitem.h>
 #include <kio/job.h>
@@ -93,7 +94,6 @@
 QList<KoDocument*> *KoDocument::s_documentList = 0;
 
 using namespace std;
-class KoViewWrapperWidget;
 
 /**********************************************************
  *
@@ -156,7 +156,6 @@ public:
     QList<KoView*> views;
     QList<KoMainWindow*> shells;
 
-    KoViewWrapperWidget *wrapperWidget;
     KoDocumentInfo *docInfo;
 #ifdef SHOULD_BUILD_RDF
     KoDocumentRdf *docRdf;
@@ -186,7 +185,6 @@ public:
     QString lastErrorMessage; // see openFile()
     int autoSaveDelay; // in seconds, 0 to disable.
     bool modifiedAfterAutosave;
-    bool bSingleViewMode;
     bool autosaving;
     bool shouldCheckAutoSaveFile; // usually true
     bool autoErrorHandlingEnabled; // usually true
@@ -214,70 +212,6 @@ public:
 
     QGraphicsItem *canvasItem;
 };
-
-// Used in singleViewMode
-class KoViewWrapperWidget : public QWidget
-{
-public:
-    KoViewWrapperWidget(QWidget *parent)
-            : QWidget(parent) {
-        KGlobal::locale()->insertCatalog("calligra");
-        // Tell the iconloader about share/apps/calligra/icons
-        KIconLoader::global()->addAppDir("calligra");
-        m_view = 0;
-        // Avoid warning from KParts - we'll have the KoView as focus proxy anyway
-        setFocusPolicy(Qt::ClickFocus);
-    }
-
-    virtual ~KoViewWrapperWidget() {
-        setFocusProxy(0);   // to prevent a crash due to clearFocus (#53466)
-    }
-
-    virtual void resizeEvent(QResizeEvent *) {
-        QWidget *wid = findChild<QWidget *>();
-        if (wid)
-            wid->setGeometry(0, 0, width(), height());
-    }
-
-    virtual void childEvent(QChildEvent *ev) {
-        if (ev->type() == QEvent::ChildAdded)
-            resizeEvent(0);
-    }
-
-    // Called by openFile()
-    void setKoView(KoView *view) {
-        m_view = view;
-        setFocusProxy(m_view);
-    }
-    KoView *koView() const {
-        return m_view;
-    }
-private:
-    KoView *m_view;
-};
-
-KoBrowserExtension::KoBrowserExtension(KoDocument *doc)
-        : KParts::BrowserExtension(doc)
-{
-    emit enableAction("print", true);
-}
-
-void KoBrowserExtension::print()
-{
-    kDebug(30003) << "implement; KoBrowserExtension::print";
-    /*
-        KoDocument *doc = static_cast<KoDocument *>( parent() );
-        KoViewWrapperWidget *wrapper = static_cast<KoViewWrapperWidget *>( doc->widget() );
-        KoView *view = wrapper->koView();
-        // TODO remove code duplication (KoMainWindow), by moving this to KoView
-        QPrinter printer;
-        QPrintDialog *printDialog = KdePrint::createPrintDialog(&printer, view->printDialogPages(), view);
-        // ### TODO: apply global calligra settings here
-        view->setupPrinter( printer, *printDialog );
-        if ( printDialog->exec() )
-            view->print( printer, *printDialog );
-    */
-}
 
 namespace {
     KoMainWindow *currentShell(KoDocument *doc)
@@ -331,7 +265,7 @@ namespace {
     };
 }
 
-KoDocument::KoDocument(QWidget *parentWidget, QObject *parent, bool singleViewMode, KUndo2Stack *undoStack)
+KoDocument::KoDocument(QObject *parent, KUndo2Stack *undoStack)
         : KParts::ReadWritePart(parent)
         , d(new Private)
 {
@@ -342,27 +276,10 @@ KoDocument::KoDocument(QWidget *parentWidget, QObject *parent, bool singleViewMo
     d->bEmpty = true;
     connect(&d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
     setAutoSave(defaultAutoSave());
-    d->bSingleViewMode = singleViewMode;
 
     setObjectName(newObjectName());
     new KoDocumentAdaptor(this);
     QDBusConnection::sessionBus().registerObject('/' + objectName(), this);
-
-
-    // the parent setting *always* overrides! (Simon)
-    if (parent) {
-        if (::qobject_cast<KoDocument *>(parent))
-            d->bSingleViewMode = ((KoDocument *)parent)->isSingleViewMode();
-        else if (::qobject_cast<KParts::Part*>(parent))
-            d->bSingleViewMode = true;
-    }
-
-    if (singleViewMode) {
-        d->wrapperWidget = new KoViewWrapperWidget(parentWidget);
-        setWidget(d->wrapperWidget);
-        kDebug(30003) << "creating KoBrowserExtension";
-        (void) new KoBrowserExtension(this);   // ## only if embedded into a browser?
-    }
 
     d->docInfo = new KoDocumentInfo(this);
     d->docRdf = 0;
@@ -391,9 +308,7 @@ KoDocument::KoDocument(QWidget *parentWidget, QObject *parent, bool singleViewMo
 
     connect(d->undoStack, SIGNAL(cleanChanged(bool)), this, SLOT(setDocumentClean(bool)));
 
-    // A way to 'fix' the job's window, since we have no widget known to KParts
-    if (!singleViewMode)
-        connect(this, SIGNAL(started(KIO::Job*)), SLOT(slotStarted(KIO::Job*)));
+    connect(this, SIGNAL(started(KIO::Job*)), SLOT(slotStarted(KIO::Job*)));
 }
 
 KoDocument::~KoDocument()
@@ -421,16 +336,6 @@ KoDocument::~KoDocument()
         delete s_documentList;
         s_documentList = 0;
     }
-}
-
-bool KoDocument::isSingleViewMode() const
-{
-    return d->bSingleViewMode;
-}
-
-bool KoDocument::isEmbedded() const
-{
-    return dynamic_cast<KoDocument *>(parent()) != 0;
 }
 
 KoView *KoDocument::createView(QWidget *parent)
@@ -577,15 +482,9 @@ bool KoDocument::saveFile()
     }
     emit clearStatusBarMessage();
 
-    if (ret) {
-        KNotification *notify = new KNotification("DocumentSaved");
-        notify->setText(i18n("Document <i>%1</i> saved", url().url()));
-        notify->addContext("url", url().url());
-        QTimer::singleShot(0, notify, SLOT(sendEvent()));
-    }
-
     return ret;
 }
+
 
 QByteArray KoDocument::mimeType() const
 {
@@ -641,11 +540,6 @@ void KoDocument::setSaveInBatchMode(const bool batchMode)
     d->filterManager->setBatchMode(batchMode);
 }
 
-bool KoDocument::wantExportConfirmation() const
-{
-    return true;
-}
-
 bool KoDocument::isImporting() const
 {
     return d->isImporting;
@@ -697,39 +591,6 @@ void KoDocument::slotAutoSave()
     }
 }
 
-QAction *KoDocument::action(const QDomElement &element) const
-{
-    // First look in the document itself
-    QAction *act = KParts::ReadWritePart::action(element);
-    if (act)
-        return act;
-
-    Q_ASSERT(d->bSingleViewMode);
-    // Then look in the first view (this is for the single view mode)
-    if (!d->views.isEmpty())
-        return d->views.first()->action(element);
-    else
-        return 0;
-}
-
-QDomDocument KoDocument::domDocument() const
-{
-    // When embedded into e.g. konqueror, we want the view's GUI (hopefully a reduced one)
-    // to be used.
-    Q_ASSERT(d->bSingleViewMode);
-    if (d->views.isEmpty())
-        return QDomDocument();
-    else
-        return d->views.first()->domDocument();
-}
-
-void KoDocument::setManager(KParts::PartManager *manager)
-{
-    KParts::ReadWritePart::setManager(manager);
-    if (d->bSingleViewMode && d->views.count() == 1)
-        d->views.first()->setPartManager(manager);
-}
-
 void KoDocument::setReadWrite(bool readwrite)
 {
     KParts::ReadWritePart::setReadWrite(readwrite);
@@ -746,7 +607,7 @@ void KoDocument::setReadWrite(bool readwrite)
 void KoDocument::setAutoSave(int delay)
 {
     d->autoSaveDelay = delay;
-    if (isReadWrite() && !isEmbedded() && d->autoSaveDelay > 0)
+    if (isReadWrite() && d->autoSaveDelay > 0)
         d->autoSaveTimer.start(d->autoSaveDelay * 1000);
     else
         d->autoSaveTimer.stop();
@@ -812,7 +673,7 @@ KoDocumentInfo *KoDocument::documentInfo() const
     return d->docInfo;
 }
 
-KoDocumentRdf *KoDocument::documentRdf() const
+KoDocumentRdfBase *KoDocument::documentRdf() const
 {
 #ifdef SHOULD_BUILD_RDF
     if (d->docRdf && d->docRdf->model()) {
@@ -838,12 +699,6 @@ KoDocumentRdfBase *KoDocument::documentRdfBase() const
     return d->docRdf;
 }
 
-
-void KoDocument::paintEverything(QPainter &painter, const QRect &rect, KoView *view)
-{
-    Q_UNUSED(view);
-    paintContent(painter, rect);
-}
 
 bool KoDocument::isModified() const
 {
@@ -1071,6 +926,38 @@ bool KoDocument::saveToStream(QIODevice *dev)
     return nwritten == (int)s.size();
 }
 
+QString KoDocument::checkImageMimeTypes(const QString &mimeType, const KUrl &url) const
+{
+    if (!url.isLocalFile()) return mimeType;
+
+    QStringList imageMimeTypes;
+    imageMimeTypes << "image/jpeg"
+                   << "image/x-psd" << "image/photoshop" << "image/x-photoshop" << "image/x-vnd.adobe.photoshop" << "image/vnd.adobe.photoshop"
+                   << "image/x-portable-pixmap" << "image/x-portable-graymap" << "image/x-portable-bitmap"
+                   << "application/pdf"
+                   << "image/x-exr"
+                   << "image/x-xcf"
+                   << "image/x-eps"
+                   << "image/x-nikon-nef" << "image/x-canon-cr2" << "image/x-sony-sr2" << "image/x-canon-crw" << "image/x-pentax-pef" << "image/x-sigma-x3f" << "image/x-kodak-kdc" << "image/x-minolta-mrw" << "image/x-sony-arw" << "image/x-kodak-k25" << "image/x-kodak-dcr" << "image/x-olympus-orf" << "image/x-panasonic-raw" << "image/x-panasonic-raw2" << "image/x-fuji-raf" << "image/x-sony-srf" << "image/x-adobe-dng"
+                   << "image/png"
+                   << "image/bmp" << "image/x-xpixmap" << "image/gif" << "image/x-xbitmap"
+                   << "image/tiff"
+                   << "image/openraster"
+                   << "image/jp2";
+
+    if (!imageMimeTypes.contains(mimeType)) return mimeType;
+
+    int accuracy = 0;
+
+    QFile f(url.toLocalFile());
+    f.open(QIODevice::ReadOnly);
+    QByteArray ba = f.read(qMin(f.size(), (qint64)512)); // should be enough for images
+    KMimeType::Ptr mime = KMimeType::findByContent(ba, &accuracy);
+    f.close();
+
+    return mime->name();
+}
+
 // Called for embedded documents
 bool KoDocument::saveToStore(KoStore *_store, const QString & _path)
 {
@@ -1167,7 +1054,7 @@ QPixmap KoDocument::generatePreview(const QSize& size)
 
     QPainter p;
     p.begin(&pix);
-    paintEverything(p, rc);
+    paintContent(p, rc);
     p.end();
 
     return pix.scaled(QSize(previewWidth, previewHeight), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
@@ -1175,54 +1062,27 @@ QPixmap KoDocument::generatePreview(const QSize& size)
 
 QString KoDocument::autoSaveFile(const QString & path) const
 {
+    QString retval;
+
     // Using the extension allows to avoid relying on the mime magic when opening
     KMimeType::Ptr mime = KMimeType::mimeType(nativeFormatMimeType());
     if (! mime) {
         qFatal("It seems your installation is broken/incomplete cause we failed to load the native mimetype \"%s\".", nativeFormatMimeType().constData());
     }
     QString extension = mime->property("X-KDE-NativeExtension").toString();
+    if (extension.isEmpty()) extension = mime->mainExtension();
+
     if (path.isEmpty()) {
-        // Never saved? Use a temp file in $HOME then
-        // Yes, two open unnamed docs will overwrite each other's autosave file,
-        // but hmm, we can only do something if that's in the same process anyway...
-        QString ret = QDir::homePath() + "/." + componentData().componentName() + ".autosave" + extension;
-        return ret;
+        // Never saved? Use a temp file in $HOME then. Mark it with the pid so two instances don't overwrite each other's autosave file
+        retval = QString("%1/.%2-%3-%4-autosave%5").arg(QDir::homePath()).arg(componentData().componentName()).arg(kapp->applicationPid()).arg(objectName()).arg(extension);
     } else {
         KUrl url = KUrl::fromPath(path);
         Q_ASSERT(url.isLocalFile());
         QString dir = url.directory(KUrl::AppendTrailingSlash);
         QString filename = url.fileName();
-        return dir + '.' + filename + ".autosave" + extension;
+        retval = QString("%1.%2-autosave%3").arg(dir).arg(filename).arg(extension);
     }
-}
-
-bool KoDocument::checkAutoSaveFile()
-{
-    QString asf = autoSaveFile(QString());   // the one in $HOME
-    //kDebug(30003) <<"asf=" << asf;
-    if (QFile::exists(asf)) {
-        QDateTime date = QFileInfo(asf).lastModified();
-        QString dateStr = date.toString(Qt::LocalDate);
-        int res = KMessageBox::warningYesNoCancel(
-                      0, i18n("An autosaved file for an unnamed document exists in %1.\nThis file is dated %2\nDo you want to open it?",
-                              asf, dateStr));
-        switch (res) {
-        case KMessageBox::Yes : {
-            KUrl url;
-            url.setPath(asf);
-            bool ret = openUrl(url);
-            if (ret)
-                resetURL();
-            return ret;
-        }
-        case KMessageBox::No :
-            QFile::remove(asf);
-            return false;
-        default: // Cancel
-            return false;
-        }
-    }
-    return false;
+    return retval;
 }
 
 bool KoDocument::importDocument(const KUrl & _url)
@@ -1288,8 +1148,11 @@ bool KoDocument::openUrl(const KUrl & _url)
 
     bool ret = KParts::ReadWritePart::openUrl(url);
 
-    if (autosaveOpened)
+    if (autosaveOpened) {
         resetURL(); // Force save to act like 'Save As'
+        setReadWrite(true); // enable save button
+        QFile::remove(url.toLocalFile()); // and remove the autosave file
+    }
     else {
         // We have no calligra shell when we are being embedded as a readonly part.
         //if ( d->shells.isEmpty() )
@@ -1298,11 +1161,12 @@ bool KoDocument::openUrl(const KUrl & _url)
         foreach(KoMainWindow *mainWindow, d->shells) {
             mainWindow->addRecentURL(_url);
         }
-    }
-    if (ret) {
-        // Detect readonly local-files; remote files are assumed to be writable, unless we add a KIO::stat here (async).
-        KFileItem file(url, mimeType(), KFileItem::Unknown);
-        setReadWrite(file.isWritable());
+
+        if (ret) {
+            // Detect readonly local-files; remote files are assumed to be writable, unless we add a KIO::stat here (async).
+            KFileItem file(url, mimeType(), KFileItem::Unknown);
+            setReadWrite(file.isWritable());
+        }
     }
     return ret;
 }
@@ -1401,12 +1265,13 @@ bool KoDocument::openFile()
 
     KUrl u(localFilePath());
     QString typeName = arguments().mimeType();
-    //kDebug(30003) << "mimetypes 1:" << typeName;
 
     if (typeName.isEmpty()) {
         typeName = KMimeType::findByUrl(u, 0, true)->name();
     }
-    //kDebug(30003) << "mimetypes 2:" << typeName;
+
+    // for images, always check content.
+    typeName = checkImageMimeTypes(typeName, u);
 
     // Sometimes it seems that arguments().mimeType() contains a much
     // too generic mime type.  In that case, let's try some educated
@@ -1414,7 +1279,7 @@ bool KoDocument::openFile()
     //
     // FIXME: Should we just ignore this and always call
     //        KMimeType::findByUrl()? David Faure says that it's
-    //        impossible for findByUrl() to fail ot initiate the
+    //        impossible for findByUrl() to fail to initiate the
     //        mimetype for "*.doc" to application/msword.  This hints
     //        that we should do that.  But why does it happen like
     //        this at all?
@@ -1635,32 +1500,6 @@ bool KoDocument::openFile()
 #endif
             QFile::remove(importedFile);
         }
-    }
-
-    if (ok && d->bSingleViewMode) {
-        // See addClient below
-        KXMLGUIFactory *guiFactory = factory();
-        if (guiFactory)  // 0 when splitting views in konq, for some reason
-            guiFactory->removeClient(this);
-
-        if (!d->views.isEmpty()) {
-            // We already had a view (this happens when doing reload in konqueror)
-            KoView *v = d->views.first();
-            if (guiFactory)
-                guiFactory->removeClient(v);
-            removeView(v);
-            delete v;
-            Q_ASSERT(d->views.isEmpty());
-        }
-
-        KoView *view = createView(d->wrapperWidget);
-        d->wrapperWidget->setKoView(view);
-        view->show();
-
-        // Ok, now we have a view, so action() and domDocument() will work as expected
-        // -> rebuild GUI
-        if (guiFactory)
-            guiFactory->addClient(this);
     }
 
     if (ok) {
@@ -2245,7 +2084,7 @@ QDomDocument KoDocument::saveXML()
 KService::Ptr KoDocument::nativeService()
 {
     if (!d->nativeService)
-        d->nativeService = readNativeService(componentData());
+        d->nativeService = KoServiceProvider::readNativeService(componentData());
 
     return d->nativeService;
 }
@@ -2282,56 +2121,6 @@ QByteArray KoDocument::nativeOasisMimeType() const
 }
 
 
-//static
-KService::Ptr KoDocument::readNativeService(const KComponentData &componentData)
-{
-    QString instname = componentData.isValid() ? componentData.componentName() : KGlobal::mainComponent().componentName();
-
-    // The new way is: we look for a foopart.desktop in the kde_services dir.
-    QString servicepartname = instname + "part.desktop";
-    KService::Ptr service = KService::serviceByDesktopPath(servicepartname);
-    if (service)
-        kDebug(30003) << servicepartname << " found.";
-    if (!service) {
-        // The old way is kept as fallback for compatibility, but in theory this is really never used anymore.
-
-        // Try by path first, so that we find the global one (which has the native mimetype)
-        // even if the user created a words.desktop in ~/.kde/share/applnk or any subdir of it.
-        // If he created it under ~/.kde/share/applnk/Office/ then no problem anyway.
-        service = KService::serviceByDesktopPath(QString::fromLatin1("Office/%1.desktop").arg(instname));
-    }
-    if (!service)
-        service = KService::serviceByDesktopName(instname);
-
-    return service;
-}
-
-QByteArray KoDocument::readNativeFormatMimeType(const KComponentData &componentData)   //static
-{
-    KService::Ptr service = readNativeService(componentData);
-    if (!service)
-        return QByteArray();
-
-    if (service->property("X-KDE-NativeMimeType").toString().isEmpty()) {
-        // It may be that the servicetype "CalligraPart" is missing, which leads to this property not being known
-        KServiceType::Ptr ptr = KServiceType::serviceType("CalligraPart");
-        if (!ptr)
-            kError(30003) << "The serviceType CalligraPart is missing. Check that you have a calligrapart.desktop file in the share/servicetypes directory." << endl;
-        else {
-            kWarning(30003) << service->entryPath() << ": no X-KDE-NativeMimeType entry!";
-        }
-    }
-
-    return service->property("X-KDE-NativeMimeType").toString().toLatin1();
-}
-
-QStringList KoDocument::readExtraNativeMimeTypes(const KComponentData &componentData)   //static
-{
-    KService::Ptr service = readNativeService(componentData);
-    if (!service)
-        return QStringList();
-    return service->property("X-KDE-ExtraNativeMimeTypes").toStringList();
-}
 
 bool KoDocument::isNativeFormat(const QByteArray& mimetype, ImportExportType importExportType) const
 {
@@ -2571,12 +2360,7 @@ void KoDocument::setUnit(const KoUnit &unit)
 
 void KoDocument::saveUnitOdf(KoXmlWriter *settingsWriter) const
 {
-    settingsWriter->addConfigItem("unit", unitName());
-}
-
-QString KoDocument::unitName() const
-{
-    return KoUnit::unitName(unit());
+    settingsWriter->addConfigItem("unit", unit().symbol());
 }
 
 void KoDocument::showStartUpWidget(KoMainWindow *mainWindow, bool alwaysShow)
@@ -2667,8 +2451,8 @@ void KoDocument::startCustomDocument()
 KoOpenPane *KoDocument::createOpenPane(QWidget *parent, const KComponentData &componentData,
                                        const QString& templateType)
 {
-    const QStringList mimeFilter = KoFilterManager::mimeFilter(KoDocument::readNativeFormatMimeType(),
-                                                               KoFilterManager::Import, KoDocument::readExtraNativeMimeTypes());
+    const QStringList mimeFilter = KoFilterManager::mimeFilter(KoServiceProvider::readNativeFormatMimeType(),
+                                                               KoFilterManager::Import, KoServiceProvider::readExtraNativeMimeTypes());
 
     KoOpenPane *openPane = new KoOpenPane(parent, componentData, mimeFilter, templateType);
     QList<CustomDocumentWidgetItem> widgetList = createCustomDocumentWidgets(openPane);
@@ -2830,5 +2614,4 @@ int KoDocument::defaultAutoSave()
     return 300;
 }
 
-#include <KoDocument_p.moc>
 #include <KoDocument.moc>

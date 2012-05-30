@@ -26,7 +26,7 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
-#include <kis_random_accessor.h>
+#include <kis_random_accessor_ng.h>
 #include <kis_painter.h>
 
 #include "mypaint_surface.h"

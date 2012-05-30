@@ -28,6 +28,10 @@
 #include <QWidget>
 
 class KoParagraphStyle;
+class KoCharacterStyle;
+class KoImageCollection;
+class KJob;
+class KoImageData;
 
 class ParagraphBulletsNumbers : public QWidget
 {
@@ -41,14 +45,21 @@ public:
 
     int addStyle(const Lists::ListStyleItem &lsi);
 
+    void setImageCollection(KoImageCollection *imageCollection);
+
 signals:
-    void bulletListItemChanged(const QString &listItem);
+    void parStyleChanged();
+
+public slots:
+    void setFontSize(const KoCharacterStyle *style);
 
 private slots:
     void styleChanged(int);
     void customCharButtonPressed();
     void recalcPreview();
     void labelFollowedByIndexChanged(int);
+    void selectListImage();
+    void setImageData(KJob *job);
 
 private:
     Ui::ParagraphBulletsNumbers widget;
@@ -57,6 +68,9 @@ private:
     int m_previousLevel;
     int m_blankCharIndex;
     bool m_alignmentMode;
+    KoImageCollection *m_imageCollection;
+    KoImageData *m_data;
+    int m_fontSize;
 };
 
 #endif

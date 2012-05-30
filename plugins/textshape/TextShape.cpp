@@ -407,3 +407,8 @@ void TextShape::waitUntilReady(const KoViewConverter &, bool asynchronous) const
         lay->layout();
     }
 }
+
+KoImageCollection *TextShape::imageCollection()
+{
+    return m_imageCollection;
+}

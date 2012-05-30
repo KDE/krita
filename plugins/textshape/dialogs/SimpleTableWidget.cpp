@@ -19,15 +19,22 @@
 #include "SimpleTableWidget.h"
 #include "TextTool.h"
 
+#include <KoTableCellStyle.h>
+#include <KoTextLayoutCellHelper.h>
+#include <KoZoomHandler.h>
+#include <KoColorPopupAction.h>
+
 #include <KAction>
 #include <KDebug>
 
 #include <QWidget>
+#include <QPixmap>
 
 SimpleTableWidget::SimpleTableWidget(TextTool *tool, QWidget *parent)
-        : QWidget(parent),
-        m_blockSignals(false),
-        m_tool(tool)
+        : QWidget(parent)
+        , m_blockSignals(false)
+        , m_tool(tool)
+        , m_lastStyleEmitted(2)
 {
     widget.setupUi(this);
     widget.addRowAbove->setDefaultAction(tool->action("insert_tablerow_above"));
@@ -39,6 +46,21 @@ SimpleTableWidget::SimpleTableWidget(TextTool *tool, QWidget *parent)
     widget.mergeCells->setDefaultAction(tool->action("merge_tablecells"));
     widget.splitCells->setDefaultAction(tool->action("split_tablecells"));
 
+     KAction *action = new KAction(KIcon("borderpainter"), "activate_borderpainter", this);
+    action->setToolTip(i18n("Select a border style and paint that style onto a table"));
+    connect(action, SIGNAL(activated()), this, SLOT(restartPainting()));
+    widget.border->setDefaultAction(action);
+
+    widget.border->setNumColumns(9);
+
+    fillBorderButton(QColor(0,0,0));
+
+    KoColorPopupAction *actionBorderColor = new KoColorPopupAction(this);
+    actionBorderColor->setIcon(KIcon("format-fill-color"));
+    actionBorderColor->setText(i18n("Set Border Color..."));
+    widget.border->addAction(actionBorderColor);
+    connect(actionBorderColor, SIGNAL(colorChanged(const KoColor &)), this, SLOT(setBorderColor(const KoColor &)));
+
     connect(widget.addRowAbove, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.addRowBelow, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.addColumnLeft, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
@@ -47,11 +69,146 @@ SimpleTableWidget::SimpleTableWidget(TextTool *tool, QWidget *parent)
     connect(widget.deleteColumn, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.mergeCells, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.splitCells, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.border, SIGNAL(itemTriggered(int)), this, SLOT(emitTableBorderDataUpdated(int)));
+    connect(widget.border, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.border, SIGNAL(doneWithFocus()), this, SIGNAL(doneWithFocus()));
+}
+
+void SimpleTableWidget::restartPainting()
+{
+    emitTableBorderDataUpdated(m_lastStyleEmitted);
+}
+
+void SimpleTableWidget::emitTableBorderDataUpdated(int i)
+{
+    m_lastStyleEmitted = i;
+    emit tableBorderDataUpdated(m_cellStyles[i-1]->getEdge(KoBorder::Top));
 }
 
 void SimpleTableWidget::setStyleManager(KoStyleManager *sm)
 {
     m_styleManager = sm;
+}
+
+void SimpleTableWidget::setBorderColor(const KoColor &koColor)
+{
+    fillBorderButton(koColor.toQColor());
+}
+
+void SimpleTableWidget::fillBorderButton(const QColor &color)
+{
+    qDeleteAll(m_cellStyles);
+    m_cellStyles.clear();
+
+    qreal thickness[9] = {0.25, 0.5, 0.75, 1.0, 1.5, 2.25, 3.0, 4.5, 6.0};
+ 
+    KoTableCellStyle cellStyle;
+    qDeleteAll(m_cellStyles);
+    m_cellStyles.append(KoTableCellStyle().clone());
+    for (int i=8; i<9; i++) {
+        cellStyle.setEdge(KoBorder::Top, KoBorder::BorderDoubleWave, thickness[i], color);
+        m_cellStyles.append(cellStyle.clone());
+    }
+    for (int i=6; i<8; i++) {
+        cellStyle.setEdge(KoBorder::Top, KoBorder::BorderWave, thickness[i], color);
+        m_cellStyles.append(cellStyle.clone());
+    }
+    for (int i=4; i<9; i++) {
+        cellStyle.setEdge(KoBorder::Top, KoBorder::BorderDouble, thickness[i]*1.5, color);
+        cellStyle.setEdgeDoubleBorderValues(KoBorder::Top, thickness[i], thickness[i]/4);
+        m_cellStyles.append(cellStyle.clone());
+    }
+    for (int i=6; i<7; i++) {
+        cellStyle.setEdge(KoBorder::Top, KoBorder::BorderSlash, thickness[i], color);
+        m_cellStyles.append(cellStyle.clone());
+    }
+    m_cellStyles.append(0);
+    for (int i=0; i<7; i++) {
+        cellStyle.setEdge(KoBorder::Top, KoBorder::BorderDouble, thickness[i]*3, color);
+        m_cellStyles.append(cellStyle.clone());
+    }
+    for (int i=0; i<9; i++) {
+        cellStyle.setEdge(KoBorder::Top, KoBorder::BorderDouble, thickness[i]*2, color);
+        cellStyle.setEdgeDoubleBorderValues(KoBorder::Top, thickness[i]/2, thickness[i]/2);
+        m_cellStyles.append(cellStyle.clone());
+    }
+    for (int i=0; i<9; i++) {
+        cellStyle.setEdge(KoBorder::Top, KoBorder::BorderSolid, thickness[i], color);
+        m_cellStyles.append(cellStyle.clone());
+    }
+    for (int i=0; i<9; i++) {
+        cellStyle.setEdge(KoBorder::Top, KoBorder::BorderDotted, thickness[i], color);
+        m_cellStyles.append(cellStyle.clone());
+    }
+    for (int i=0; i<9; i++) {
+        cellStyle.setEdge(KoBorder::Top, KoBorder::BorderDashed, thickness[i], color);
+        m_cellStyles.append(cellStyle.clone());
+    }
+    for (int i=0; i<9; i++) {
+        cellStyle.setEdge(KoBorder::Top, KoBorder::BorderDashedLong, thickness[i], color);
+        m_cellStyles.append(cellStyle.clone());
+    }
+    for (int i=0; i<9; i++) {
+        cellStyle.setEdge(KoBorder::Top, KoBorder::BorderDashDot, thickness[i], color);
+        m_cellStyles.append(cellStyle.clone());
+    }
+    for (int i=0; i<9; i++) {
+        cellStyle.setEdge(KoBorder::Top, KoBorder::BorderDashDotDot, thickness[i], color);
+        m_cellStyles.append(cellStyle.clone());
+    }
+
+    int i=1;
+    KoZoomHandler zoomHandler;
+    foreach(KoTableCellStyle *style, m_cellStyles) {
+        if (style == 0) {
+            widget.border->addBlanks(1);
+            i++;
+            continue;
+        }
+        QPixmap pm(48,16);
+
+        pm.fill(Qt::transparent);
+        QPainter p(&pm);
+        p.setRenderHint(QPainter::Antialiasing);
+
+        if(style->hasBorders()) {
+            p.scale(zoomHandler.zoomedResolutionX(),zoomHandler.zoomedResolutionY());
+            KoTextLayoutCellHelper cellStyleHelper(*style);
+            qreal width = style->topBorderWidth();
+            cellStyleHelper.drawTopHorizontalBorder(p, 0, 8/zoomHandler.zoomedResolutionY() - width/2, pm.width()/zoomHandler.zoomedResolutionX(), 0);
+
+            widget.border->addItem(pm, i, KoUnit().toUserStringValue(style->topBorderWidth())+"pt");
+        } else
+        {
+            p.drawText(0, 0, 48, 16, Qt::AlignCenter, i18nc("No border - has to fit in 48pixels","None"));
+            widget.border->addItem(pm, i, i18n("No Border"));
+        }
+        i++;
+    }
+    widget.border->setItemsBackground(QColor(Qt::white));
+
+   // widget.borderType->addItem("None");
+
+    widget.border->addSeparator();
+
+/*
+    //TODO: Uncomment the below line when the string freeze is over
+    //action->setToolTip(i18n("Change the level the list is at"));
+
+    QMenu *listLevelMenu = new QMenu();
+    const int levelIndent = 13;
+    for (int level = 0; level < 10; ++level) {
+        QWidgetAction *wa = new QWidgetAction(listLevelMenu);
+        ListLevelChooser *chooserWidget = new ListLevelChooser((levelIndent * level) + 5);
+        wa->setDefaultWidget(chooserWidget);
+        listLevelMenu->addAction(wa);
+        m_mapper->setMapping(wa,level + 1);
+        connect(chooserWidget, SIGNAL(clicked()), wa, SLOT(trigger()));
+        connect(wa, SIGNAL(triggered()), m_mapper, SLOT(map()));
+    }
+
+    action->setMenu(listLevelMenu);
+    */
 }
 
 #include <SimpleTableWidget.moc>

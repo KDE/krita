@@ -21,6 +21,7 @@
 #include <KoSnapGuide.h>
 
 #include <KLocale>
+#include <KIcon>
 
 GuidesToolOptionWidget::GuidesToolOptionWidget(QWidget *parent)
     :QWidget(parent)

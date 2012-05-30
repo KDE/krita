@@ -75,19 +75,14 @@ KisFactory2::~KisFactory2()
 /**
  * Create the document
  */
-QObject* KisFactory2::create( const char* iface, QWidget* parentWidget, QObject *parent,
+QObject* KisFactory2::create( const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent,
                              const QVariantList& args, const QString& keyword )
 {
     Q_UNUSED( args );
     Q_UNUSED( keyword );
-    bool bWantKoDocument = ( strcmp( iface, "KoDocument" ) == 0 );
 
-    KisDoc2 *doc = new KisDoc2(parentWidget, parent, !bWantKoDocument);
+    KisDoc2 *doc = new KisDoc2(parent);
     Q_CHECK_PTR(doc);
-
-    if (!bWantKoDocument)
-        doc->setReadWrite(false);
-
     return doc;
 }
 

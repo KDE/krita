@@ -32,6 +32,7 @@
 #include <QLabel>
 #include <QTabBar>
 
+#include <KoServiceProvider.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeFactoryBase.h>
 #include <KoProperties.h>
@@ -290,6 +291,7 @@ void KoPAView::initGUI()
     d->tabBarLayout->addWidget(d->insideWidget, 1, 1);
     setTabBarPosition(Qt::Horizontal);
 
+    gridLayout->addWidget(d->horizontalRuler->tabChooser(), 0, 0);
     gridLayout->addWidget(d->horizontalRuler, 0, 1);
     gridLayout->addWidget(d->verticalRuler, 1, 0);
     gridLayout->addWidget(canvasController, 1, 1);
@@ -329,6 +331,10 @@ void KoPAView::initGUI()
         connect(d->documentStructureDocker, SIGNAL(dockerReset()), this, SLOT(reinitDocumentDocker()));
 
         KoToolManager::instance()->requestToolActivation( d->canvasController );
+    }
+    if (d->doc->inlineTextObjectManager()) {
+        connect(actionCollection()->action("settings_active_author"), SIGNAL(triggered(const QString &)),
+           d->doc->inlineTextObjectManager(), SLOT(activeAuthorUpdated(const QString &)));
     }
 }
 
@@ -497,8 +503,8 @@ void KoPAView::importDocument()
 #if 1
     mimeFilter << KoOdf::mimeType( d->doc->documentType() ) << KoOdf::templateMimeType( d->doc->documentType() );
 #else
-    mimeFilter = KoFilterManager::mimeFilter( KoDocument::readNativeFormatMimeType(d->doc->componentData()), KoFilterManager::Import,
-                                              KoDocument::readExtraNativeMimeTypes() );
+    mimeFilter = KoFilterManager::mimeFilter( KoServiceProvider::readNativeFormatMimeType(d->doc->componentData()), KoFilterManager::Import,
+                                              KoServiceProvider::readExtraNativeMimeTypes() );
 #endif
 
     dialog->setMimeFilter( mimeFilter );

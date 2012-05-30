@@ -29,6 +29,7 @@
 #include <KLocale>
 #include <QPainter>
 #include <QRectF>
+#include <KIcon>
 #include <KDebug>
 
 #define DEFAULT_GRID_SIZE_MM 5.0

@@ -35,6 +35,7 @@
 #include <kcomponentdata.h>
 #include <kpushbutton.h>
 #include <kiconloader.h>
+#include <kicon.h>
 #include <kdebug.h>
 
 #include "KoTemplateTree.h"

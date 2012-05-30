@@ -68,8 +68,8 @@ KisZoomManager::~KisZoomManager()
 
 void KisZoomManager::setup(KActionCollection * actionCollection)
 {
-    KoZoomMode::setMinimumZoom(0.00391);
-    KoZoomMode::setMaximumZoom(256.0);
+    KoZoomMode::setMinimumZoom(0.125);
+    KoZoomMode::setMaximumZoom(64.0);
 
     KisConfig cfg;
     m_zoomController = new KoZoomController(m_canvasController, m_zoomHandler, actionCollection, KoZoomAction::AspectMode, this);
@@ -202,7 +202,7 @@ void KisZoomManager::pageOffsetChanged()
 
 void KisZoomManager::zoomTo100()
 {
-    m_zoomHandler->setZoom(1.0);
+    m_zoomController->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
     m_view->canvasBase()->notifyZoomChanged();
 }
 

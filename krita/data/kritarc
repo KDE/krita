@@ -1,3 +1,6 @@
+[krita]
+WantExportConfirmation=false
+
 favoriteCompositeOps=normal,erase,multiply
 
 [TemplateChooserDialog]

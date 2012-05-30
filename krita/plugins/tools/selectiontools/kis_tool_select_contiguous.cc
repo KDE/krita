@@ -43,7 +43,6 @@
 #include "kis_layer.h"
 #include "kis_selection_options.h"
 #include "kis_paint_device.h"
-#include "kis_iterators_pixel.h"
 #include "kis_fill_painter.h"
 #include "kis_pixel_selection.h"
 #include "kis_selection_tool_helper.h"

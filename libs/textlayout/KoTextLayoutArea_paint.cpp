@@ -934,11 +934,14 @@ int KoTextLayoutArea::decorateTabsAndFormatting(QPainter *painter, const QTextFr
     for (int i = searchForCharFrom ; i < searchForCharTill; i++) {
         if (currentTabStop >= tabList.size() && !showFormattingCharacters) // no more decorations
             break;
-        qreal x1 = line.cursorToX(startOfFragmentInBlock + i);
-        qreal x2 = line.cursorToX(startOfFragmentInBlock + i + 1);
 
         if (fragText[i] == '\t') {
+            qreal x1(0.0);
+            qreal x2(0.0);
+
             if (showFormattingCharacters) {
+                x1 = line.cursorToX(startOfFragmentInBlock + i);
+                x2 = line.cursorToX(startOfFragmentInBlock + i + 1);
                 qreal y = line.position().y() + line.ascent() - fm.xHeight()/2.0;
                 qreal arrowDim = fm.xHeight()/2.0;
                 QPen penBackup = painter->pen();
@@ -952,6 +955,10 @@ int KoTextLayoutArea::decorateTabsAndFormatting(QPainter *painter, const QTextFr
                 painter->setPen(penBackup);
             }
             if (currentTabStop < tabList.size()) { // still tabsstops worth examining
+                if (!showFormattingCharacters) {
+                    // only then was it  not calculated
+                    x1 = line.cursorToX(startOfFragmentInBlock + i);
+                }
                 // find a tab-stop decoration for this tab position
                 // for eg., if there's a tab-stop at 1in, but the text before \t already spans 1.2in,
                 // we should look at the next tab-stop
@@ -963,6 +970,10 @@ int KoTextLayoutArea::decorateTabsAndFormatting(QPainter *painter, const QTextFr
                 } while (tab.position <= x1 && currentTabStop < tabList.size());
 
                 if (tab.position > x1) {
+                    if (!showFormattingCharacters) {
+                        // only then was it not calculated
+                        x2 = line.cursorToX(startOfFragmentInBlock + i + 1);
+                    }
                     qreal tabStyleLeftLineMargin = tabStyleLineMargin;
                     qreal tabStyleRightLineMargin = tabStyleLineMargin;
                     // no margin if its adjacent char is also a tab
@@ -988,11 +999,16 @@ int KoTextLayoutArea::decorateTabsAndFormatting(QPainter *painter, const QTextFr
                 }
             }
         } else if (showFormattingCharacters) {
-            qreal y = line.position().y() + line.ascent();
             if (fragText[i] == ' ' || fragText[i] == QChar::Nbsp) {
-                painter->drawText(QPointF(x1, y), QChar((ushort)0xb7));
+                qreal x = line.cursorToX(startOfFragmentInBlock + i);
+                qreal y = line.position().y() + line.ascent();
+
+                painter->drawText(QPointF(x, y), QChar((ushort)0xb7));
             } else if (fragText[i] == QChar::LineSeparator){
-                painter->drawText(QPointF(x1, y), QChar((ushort)0x21B5));
+                qreal x = line.cursorToX(startOfFragmentInBlock + i);
+                qreal y = line.position().y() + line.ascent();
+
+                painter->drawText(QPointF(x, y), QChar((ushort)0x21B5));
             }
         }
     }

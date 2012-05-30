@@ -30,9 +30,9 @@
 #include <QTimer>
 
 KoReportPage::KoReportPage(QWidget *parent, ORODocument *document)
-        : QWidget(parent)
+        : QObject(parent), QGraphicsRectItem()
 {
-    setAttribute(Qt::WA_NoBackground);
+    //TODO setAttribute(Qt::WA_NoBackground);
     kDebug() << "CREATED PAGE";
     m_reportDocument = document;
     m_page = 0;
@@ -54,12 +54,11 @@ KoReportPage::KoReportPage(QWidget *parent, ORODocument *document)
         }
     }
 
-    setFixedSize(pageWidth, pageHeight);
+    setRect(0,0,pageWidth, pageHeight);
 
     kDebug() << "PAGE IS " << pageWidth << "x" << pageHeight;
 
     m_pixmap = new QPixmap(pageWidth, pageHeight);
-    setAutoFillBackground(true);
 
     m_renderer = m_factory.createInstance("screen");
     
@@ -79,10 +78,9 @@ KoReportPage::~KoReportPage()
     delete m_renderTimer;
 }
 
-void KoReportPage::paintEvent(QPaintEvent*)
+void KoReportPage::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
-    QPainter painter(this);
-    painter.drawPixmap(QPoint(0, 0), *m_pixmap);
+    painter->drawPixmap(QPoint(0, 0), *m_pixmap);
 }
 
 void KoReportPage::renderPage(int page)

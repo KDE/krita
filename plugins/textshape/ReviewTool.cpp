@@ -48,6 +48,8 @@
 #include <KUser>
 
 #include <QHBoxLayout>
+#include <QToolButton>
+#include <QCheckBox>
 #include <QKeyEvent>
 #include <QModelIndex>
 #include <QPainter>

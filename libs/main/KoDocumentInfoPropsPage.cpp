@@ -29,6 +29,7 @@
 #include <ktemporaryfile.h>
 
 #include <kfilterdev.h>
+#include <kicon.h>
 #include <kdebug.h>
 
 #include <QBuffer>

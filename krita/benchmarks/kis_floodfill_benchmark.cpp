@@ -22,7 +22,7 @@
 #include "kis_benchmark_values.h"
 
 #include "kis_paint_device.h"
-#include "kis_random_accessor.h"
+#include "kis_random_accessor_ng.h"
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -97,7 +97,7 @@ void KisFloodFillBenchmark::benchmarkFlood()
         fillPainter.setHeight(GMP_IMAGE_HEIGHT);
 
         // fill twice
-        fillPainter.fillColor(1, 1, 0);
+        fillPainter.fillColor(1, 1, m_device);
 
         fillPainter.deleteTransaction();
     }

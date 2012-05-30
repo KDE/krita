@@ -47,7 +47,7 @@ QVariant CompositionModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-QVariant CompositionModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant CompositionModel::headerData(int /*section*/, Qt::Orientation /*orientation*/, int /*role*/) const
 {
     return i18n("Composition");
 }

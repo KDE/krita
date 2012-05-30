@@ -41,11 +41,11 @@ enum ChartType {
     GanttChartType,
     LastChartType               // Not an actual type, just a place holder
 };
-const int NUM_CHARTTYPES = int ( LastChartType );
+const int NUM_CHARTTYPES = int (LastChartType);
 
-bool isPolar( ChartType type );
-bool isCartesian( ChartType type );
-int numDimensions( ChartType type );
+bool isPolar(ChartType type);
+bool isCartesian(ChartType type);
+int numDimensions(ChartType type);
 
 
 // Chart subtypes, applicable to Bar, Line, Area, and Radar
@@ -88,13 +88,13 @@ enum LegendExpansion {
 };
 
 enum ErrorCategory {
-	NoErrorCategory,
-	VarianceErrorCategory,
-	StandardDeviationErrorCategory,
-	StandardErrorErrorCategory,
-	PercentageErrorCategory,
-	ErrorMarginErrorCategory,
-	ConstantErrorCategory
+    NoErrorCategory,
+    VarianceErrorCategory,
+    StandardDeviationErrorCategory,
+    StandardErrorErrorCategory,
+    PercentageErrorCategory,
+    ErrorMarginErrorCategory,
+    ConstantErrorCategory
 };
 
 enum LabelType {

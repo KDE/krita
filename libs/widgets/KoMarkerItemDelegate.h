@@ -20,16 +20,21 @@
 #ifndef KOMARKERITEMDELEGATE_H
 #define KOMARKERITEMDELEGATE_H
 
+// Calligra
+#include <KoMarkerData.h>
+// Qt
 #include <QAbstractItemDelegate>
 
 class KoMarkerItemDelegate : public QAbstractItemDelegate
 {
 public:
-    KoMarkerItemDelegate(QObject *parent = 0);
+    explicit KoMarkerItemDelegate(KoMarkerData::MarkerPosition position, QObject *parent = 0);
     virtual ~KoMarkerItemDelegate();
 
     virtual void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     virtual QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &index) const;
+private:
+    KoMarkerData::MarkerPosition m_position;
 };
 
 #endif /* KOMARKERITEMDELEGATE_H */

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
    Copyright (C) 2009 Thomas Zander <zander@kde.org>
+   Copyright (C) 2012 Boudewijn Rempt <boud@valdyas.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,8 +27,9 @@
 #include "KoDocumentEntry.h"
 #include "KoDocument.h"
 #include "KoMainWindow.h"
-
+#include "KoAutoSaveRecoveryDialog.h"
 #include <KoDpi.h>
+#include "KoServiceProvider.h"
 
 #include <kdeversion.h>
 #include <klocale.h>
@@ -37,6 +39,7 @@
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 #include <kdebug.h>
+#include <kmimetype.h>
 
 #if KDE_IS_VERSION(4,6,0)
 #include <krecentdirs.h>
@@ -141,13 +144,11 @@ bool KoApplication::start()
         d->splashScreen->showMessage(".");
     }
 
-
-
     ResetStarting resetStarting(d->splashScreen); // reset m_starting to false when we're done
     Q_UNUSED(resetStarting);
 
     // Find the *.desktop file corresponding to the kapp instance name
-    KoDocumentEntry entry = KoDocumentEntry(KoDocument::readNativeService());
+    KoDocumentEntry entry = KoDocumentEntry(KoServiceProvider::readNativeService());
     if (entry.isEmpty()) {
         kError(30003) << KGlobal::mainComponent().componentName() << "part.desktop not found." << endl;
         kError(30003) << "Run 'kde4-config --path services' to see which directories were searched, assuming kde startup had the same environment as your current shell." << endl;
@@ -178,7 +179,6 @@ bool KoApplication::start()
             }
         }
     }
-
     // No argument -> create an empty document
     if (!argsCount) {
 #if KDE_IS_VERSION(4,6,0)
@@ -189,7 +189,7 @@ bool KoApplication::start()
         KRecentDirs::add(":OpenDialog", QDir::currentPath());
 #endif
         QString errorMsg;
-        KoDocument* doc = entry.createDoc(&errorMsg);
+        KoDocument *doc = entry.createDoc(&errorMsg);
         if (!doc) {
             if (!errorMsg.isEmpty())
                 KMessageBox::error(0, errorMsg);
@@ -202,15 +202,114 @@ bool KoApplication::start()
         // and for KoDocument::slotStarted
         doc->addShell(shell);
 
-        if (doc->checkAutoSaveFile()) {
-            shell->setRootDocument(doc);
-        } else {
+        // Check for autosave files from a previous run. There can be several, and
+        // we want to offer a restore for every one. Including a nice thumbnail!
+        QStringList autoSaveFiles;
+
+        // get all possible autosave files in the home dir, this is for unsaved document autosave files
+        // Using the extension allows to avoid relying on the mime magic when opening
+        KMimeType::Ptr mime = KMimeType::mimeType(doc->nativeFormatMimeType());
+        if (!mime) {
+            qFatal("It seems your installation is broken/incomplete cause we failed to load the native mimetype \"%s\".", doc->nativeFormatMimeType().constData());
+        }
+        QString extension = mime->property("X-KDE-NativeExtension").toString();
+        if (extension.isEmpty()) extension = mime->mainExtension();
+
+        QStringList filters;
+        filters << QString(".%1-%2-%3-autosave%4").arg(doc->componentData().componentName()).arg("*").arg("*").arg(extension);
+        QDir dir = QDir::home();
+
+        // all autosave files for our application
+        autoSaveFiles = dir.entryList(filters, QDir::Files | QDir::Hidden);
+
+        // all running instances of our application -- bit hackish, but we cannot get at the dbus name here, for some reason
+        QDBusReply<QStringList> reply = QDBusConnection::sessionBus().interface()->registeredServiceNames();
+        QStringList pids;
+        QString ourPid;
+        ourPid.setNum(kapp->applicationPid());
+
+        foreach (QString name, reply.value()) {
+            if (name.contains(doc->componentData().componentName())) {
+                // we got another instance of ourselves running, let's get the pid
+                QString pid = name.split("-").last();
+                if (pid != ourPid) {
+                    pids << pid;
+                }
+            }
+        }
+
+        // remove the autosave files that are saved for other, open instances of ourselves
+        foreach(const QString &autoSaveFileName, autoSaveFiles) {
+            if (!QFile::exists(QDir::homePath() + "/" + autoSaveFileName)) {
+                autoSaveFiles.removeAll(autoSaveFileName);
+                continue;
+            }
+            QStringList split = autoSaveFileName.split("-");
+            if (split.size() == 4) {
+                if (pids.contains(split[1])) {
+                    // We've got an active, owned autosave file. Remove.
+                    autoSaveFiles.removeAll(autoSaveFileName);
+                }
+            }
+        }
+
+        // Allow the user to make their selection
+        if (autoSaveFiles.size() > 0) {
+            KoAutoSaveRecoveryDialog dlg(autoSaveFiles);
+            if (dlg.exec() == QDialog::Accepted) {
+                QStringList filesToRecover = dlg.recoverableFiles();
+                foreach (const QString &autosaveFile, autoSaveFiles) {
+                    if (!filesToRecover.contains(autosaveFile)) {
+                        // remove the files the user didn't want to recover
+                        QFile::remove(QDir::homePath() + "/" + autosaveFile);
+                    }
+                }
+                autoSaveFiles = filesToRecover;
+            }
+            else {
+                // don't recover any of the files, but don't delete them either
+                autoSaveFiles.clear();
+            }
+        }
+
+        if (autoSaveFiles.size() > 0) {
+            short int numberOfOpenDocuments = 0; // number of documents open
+            KUrl url;
+            // bah, we need to re-use the document that was already created
+            url.setPath(QDir::homePath() + "/" + autoSaveFiles.takeFirst());
+            if (shell->openDocument(doc, url)) {
+                doc->resetURL();
+                doc->setModified(true);
+                QFile::remove(url.toLocalFile());
+                numberOfOpenDocuments++;
+            }
+
+            // And then for the other autosave files, we copy & paste the code
+            // and loop through them.
+            foreach(const QString &autoSaveFile, autoSaveFiles) {
+                // For now create an empty document
+                QString errorMsg;
+                KoDocument* doc = entry.createDoc(&errorMsg, 0);
+                if (doc) {
+                    url.setPath(QDir::homePath() + "/" + autoSaveFile);
+                    KoMainWindow *shell = new KoMainWindow(doc->componentData());
+                    shell->show();
+                    if (shell->openDocument(doc, url)) {
+                        doc->resetURL();
+                        doc->setModified(true);
+                        QFile::remove(url.toLocalFile());
+                        numberOfOpenDocuments++;
+                    }
+                }
+            }
+            return (numberOfOpenDocuments > 0);
+        }
+        else {
             doc->showStartUpWidget(shell);
         }
 
-        // FIXME This needs to be moved someplace else
-        QObject::disconnect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
-    } else {
+    }
+    else {
         const bool print = koargs->isSet("print");
         const bool exportAsPdf = koargs->isSet("export-pdf");
         const QString pdfFileName = koargs->getOption("export-filename");
@@ -219,7 +318,13 @@ bool KoApplication::start()
         const bool benchmarkLoading = koargs->isSet("benchmark-loading")
                                       || koargs->isSet("benchmark-loading-show-window")
                                       || !roundtripFileName.isEmpty();
-        const bool showShell = koargs->isSet("benchmark-loading-show-window");
+        // only show the shell when no command-line mode option is passed
+        const bool showShell =
+                koargs->isSet("benchmark-loading-show-window") || (
+                    !koargs->isSet("export-pdf")
+                    && !koargs->isSet("benchmark-loading")
+                    && !koargs->isSet("roundtrip-filename")
+                    && roundtripFileName.isEmpty());
         const QString profileFileName = koargs->getOption("profile-filename");
         koargs->clear();
 
@@ -232,16 +337,16 @@ bool KoApplication::start()
 
         // Loop through arguments
 
-        short int n = 0; // number of documents open
+        short int numberOfOpenDocuments = 0; // number of documents open
         short int nPrinted = 0;
-        for (int i = 0; i < argsCount; i++) {
+        for (int argNumber = 0; argNumber < argsCount; argNumber++) {
             // For now create an empty document
             QString errorMsg;
             KoDocument* doc = entry.createDoc(&errorMsg, 0);
             if (doc) {
                 // show a shell asap
                 KoMainWindow *shell = new KoMainWindow(doc->componentData());
-                if (showShell || !benchmarkLoading) {
+                if (showShell) {
                     shell->show();
                 }
                 if (benchmarkLoading) {
@@ -260,11 +365,11 @@ bool KoApplication::start()
                 // are we just trying to open a template?
                 if (doTemplate) {
                     QStringList paths;
-                    if (args->url(i).isLocalFile() && QFile::exists(args->url(i).toLocalFile())) {
-                        paths << QString(args->url(i).toLocalFile());
+                    if (args->url(argNumber).isLocalFile() && QFile::exists(args->url(argNumber).toLocalFile())) {
+                        paths << QString(args->url(argNumber).toLocalFile());
                         kDebug(30003) << "using full path...";
                     } else {
-                        QString desktopName(args->arg(i));
+                        QString desktopName(args->arg(argNumber));
                         QString appName = KGlobal::mainComponent().componentName();
 
                         paths = KGlobal::dirs()->findAllResources("data", appName + "/templates/*/" + desktopName);
@@ -293,7 +398,7 @@ bool KoApplication::start()
                             doc->setEmpty();
                             doc->setTitleModified();
                             kDebug(30003) << "Template loaded...";
-                            n++;
+                            numberOfOpenDocuments++;
                         } else {
                             KMessageBox::error(0, i18n("Template %1 failed to load.", templateURL.prettyUrl()));
                             delete shell;
@@ -301,7 +406,7 @@ bool KoApplication::start()
                     }
                     // now try to load
                 }
-                else if (shell->openDocument(doc, args->url(i))) {
+                else if (shell->openDocument(doc, args->url(argNumber))) {
                     if (benchmarkLoading) {
                         if (profileoutput.device()) {
                             profileoutput << "KoApplication::start\t"
@@ -327,7 +432,7 @@ bool KoApplication::start()
                         nPrinted++;
                     } else {
                         // Normal case, success
-                        n++;
+                        numberOfOpenDocuments++;
                     }
                 } else {
                     // .... if failed
@@ -347,7 +452,7 @@ bool KoApplication::start()
         }
         if (print || exportAsPdf)
             return nPrinted > 0;
-        if (n == 0) // no doc, e.g. all URLs were malformed
+        if (numberOfOpenDocuments == 0) // no doc, e.g. all URLs were malformed
             return false;
     }
 

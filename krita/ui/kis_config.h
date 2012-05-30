@@ -20,6 +20,7 @@
 
 #include <QString>
 #include <QStringList>
+#include <QList>
 #include <QColor>
 
 #include <ksharedconfig.h>
@@ -123,6 +124,9 @@ public:
 
     bool useOpenGLToolOutlineWorkaround() const;
     void setUseOpenGLToolOutlineWorkaround(bool useWorkaround);
+
+    bool useOpenGLTrilinearFiltering() const;
+    void setUseOpenGLTrilinearFiltering(bool useTrilinearFiltering);
 
     qint32 maxNumberOfThreads();
     void setMaxNumberOfThreads(qint32 numberOfThreads);
@@ -260,6 +264,26 @@ public:
 
     QString exportConfiguration(const QString &filterId) const;
     void setExportConfiguration(const QString &filterId, const KisPropertiesConfiguration &properties);
+
+    template<class T>
+    void writeEntry(const QString& name, const T& value) {
+        m_cfg.writeEntry(name, value);
+    }
+
+    template<class T>
+    void writeList(const QString& name, const QList<T>& value) {
+        m_cfg.writeEntry(name, value);
+    }
+
+    template<class T>
+    T readEntry(const QString& name, const T& defaultValue=T()) {
+        return m_cfg.readEntry(name, defaultValue);
+    }
+
+    template<class T>
+    QList<T> readList(const QString& name, const QList<T>& defaultValue=QList<T>()) {
+        return m_cfg.readEntry(name, defaultValue);
+    }
 
 private:
     KisConfig(const KisConfig&);

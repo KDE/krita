@@ -406,6 +406,11 @@ KisTool::ToolMode KisTool::mode() const {
 
 void KisTool::mousePressEvent(KoPointerEvent *event)
 {
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    if (kisCanvas) {
+        kisCanvas->setSmoothingEnabled(false);
+    }
+
     KisConfig cfg;
 
     if (mode() == KisTool::HOVER_MODE &&
@@ -430,7 +435,7 @@ void KisTool::mousePressEvent(KoPointerEvent *event)
 
 void KisTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    if(mode() == PAN_MODE) {
+    if (mode() == PAN_MODE) {
         pan(event->point);
         event->accept();
     }
@@ -444,6 +449,11 @@ void KisTool::mouseMoveEvent(KoPointerEvent *event)
 
 void KisTool::mouseReleaseEvent(KoPointerEvent *event)
 {
+
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    if (kisCanvas) {
+        kisCanvas->setSmoothingEnabled(true);
+    }
     KisConfig cfg;
 
     if(mode() == PAN_MODE) {
@@ -490,6 +500,7 @@ void KisTool::keyPressEvent(QKeyEvent *event)
 
 void KisTool::keyReleaseEvent(QKeyEvent* event)
 {
+
     if (event->key() == Qt::Key_Space) {
 
         if (!event->isAutoRepeat()) {

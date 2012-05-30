@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
-  Copyright (C)  2011 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
+
+   Copyright (C)  2011 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
+   Copyright (C)  2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,6 +35,9 @@ ParagraphDropCaps::ParagraphDropCaps(QWidget *parent) :
     widget.lines->setValue(2);
 
     connect(widget.capsState, SIGNAL(stateChanged(int)), this, SLOT(dropCapsStateChanged()));
+    connect(widget.distance, SIGNAL(valueChangedPt(qreal)), this, SLOT(paragraphDistanceChanged(qreal)));
+    connect(widget.characters, SIGNAL(valueChanged(int)), this, SLOT(dropedCharacterCountChanged(int)));
+    connect(widget.lines, SIGNAL(valueChanged(int)), this, SLOT(dropsLineSpanChanged(int)));
 }
 
 void ParagraphDropCaps::dropCapsStateChanged()
@@ -43,6 +48,7 @@ void ParagraphDropCaps::dropCapsStateChanged()
     else {
         widget.setting->setEnabled(false);
     }
+    emit parStyleChanged();
 }
 
 void ParagraphDropCaps::setDisplay(KoParagraphStyle *style)
@@ -78,4 +84,22 @@ void ParagraphDropCaps::save(KoParagraphStyle *style)
 void ParagraphDropCaps::setUnit(const KoUnit &unit)
 {
     widget.distance->setUnit(unit);
+}
+
+void ParagraphDropCaps::paragraphDistanceChanged(qreal distance)
+{
+    Q_UNUSED(distance);
+    emit parStyleChanged();
+}
+
+void ParagraphDropCaps::dropsLineSpanChanged(int lineSpan)
+{
+    Q_UNUSED(lineSpan);
+    emit parStyleChanged();
+}
+
+void ParagraphDropCaps::dropedCharacterCountChanged(int count)
+{
+    Q_UNUSED(count);
+    emit parStyleChanged();
 }

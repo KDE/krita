@@ -1,0 +1,9 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="calligragoogledocs" version="1">
+<MenuBar>
+    <Menu name="file"><text>&amp;File</text>
+	<Separator/>
+	<Action name="google_docs"/>
+    </Menu>
+</MenuBar>
+</kpartgui>

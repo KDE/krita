@@ -47,10 +47,12 @@ static inline QDockWidget *parentDock(QWidget *w)
 class KoDockWidgetTitleBar::Private
 {
 public:
-    Private(KoDockWidgetTitleBar* thePublic) : thePublic(thePublic),
+    Private(KoDockWidgetTitleBar* thePublic)
+        : thePublic(thePublic),
             openIcon(thePublic->style()->standardIcon(QStyle::SP_TitleBarShadeButton)),
             closeIcon(thePublic->style()->standardIcon(QStyle::SP_TitleBarUnshadeButton)),
-            textVisibilityMode(KoDockWidgetTitleBar::FullTextAlwaysVisible)
+            textVisibilityMode(KoDockWidgetTitleBar::FullTextAlwaysVisible),
+            preCollapsedWidth(-1)
     {
         if (openIcon.isNull())
             openIcon = KIcon("arrow-down");
@@ -64,6 +66,8 @@ public:
     QAbstractButton* collapseButton;
 
     KoDockWidgetTitleBar::TextVisibilityMode textVisibilityMode;
+
+    int preCollapsedWidth;
 
     void toggleFloating();
     void toggleCollapsed();
@@ -139,13 +143,18 @@ QSize KoDockWidgetTitleBar::sizeHint() const
     }
 
     /*
-     *Calculate the width of title and add to the total width of the docker window when collapsed.
+     * Calculate the width of title and add to the total width of the docker window when collapsed.
      */
     const int titleWidth =
         (d->textVisibilityMode == FullTextAlwaysVisible) ? (q->fontMetrics().width(q->windowTitle()) + 2*mw) :
                                                            0;
 
-    return QSize(buttonWidth /*+ height*/ + 2*mw + 2*fw + titleWidth, height);
+    if (d->preCollapsedWidth > 0) {
+        return QSize(d->preCollapsedWidth, height);
+    }
+    else {
+        return QSize(buttonWidth /*+ height*/ + 2*mw + 2*fw + titleWidth, height);
+    }
 }
 
 void KoDockWidgetTitleBar::paintEvent(QPaintEvent*)
@@ -233,6 +242,8 @@ void KoDockWidgetTitleBar::Private::toggleCollapsed()
     QDockWidget *q = qobject_cast<QDockWidget*>(thePublic->parentWidget());
     if (q == 0) // there does not *have* to be anything on the dockwidget.
         return;
+
+    preCollapsedWidth = q->widget()->isHidden() ? -1 : thePublic->width();
     q->setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX); // will be overwritten again next
     if (q->widget()) {
         q->widget()->setVisible(q->widget()->isHidden());

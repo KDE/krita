@@ -29,7 +29,7 @@ namespace KChart {
 class NewAxisDialog : public QDialog, public Ui::NewAxisDialog
 {
 public:
-    NewAxisDialog( QWidget *parent = 0 );
+    NewAxisDialog(QWidget *parent = 0);
     ~NewAxisDialog();
 };
 

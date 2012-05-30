@@ -460,7 +460,7 @@ bool KisShapeLayer::loadLayer(KoStore* store)
         // FIXME: investigate what is this
         //        KoShapeLayer * l = new KoShapeLayer();
         if (!loadOdf(layerElement, shapeContext)) {
-            kWarning() << "Could not load shape layer!";
+            kWarning() << "Could not load vector layer!";
             return false;
         }
     }

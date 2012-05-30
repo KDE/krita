@@ -1,0 +1,264 @@
+This text provides a very short introduction to the architecture of
+the chart shape. At this time it's work in progress.
+
+
+Part I: Components
+
+Part I describes the organization of the code and what can be found
+where.
+
+
+Subdirectories
+==============
+
+dialogs/        various dialogs for the chart tool
+commands/       undo/redo commands
+kdchart/        the chart drawing engine from KDAB.
+tests/          test code -- run it by 'make tests' in the build dir
+
+
+Classes in the top directory
+============================
+
+Shape classes
+-------------
+ChartShapeFactory       All these classes are standard KoShape classes
+ChartShape
+ChartToolFactory
+ChartTool
+ChartConfigWidget
+
+chartshape.desktop      The desktop file describing this plugin
+
+ChartDocument           This class inherits KoDocument. The chart and
+                        the formula are special shapes because they
+                        are their own document types, defined in
+                        ODF. This also means that they can be saved in
+                        a subdirectory or inline inside the XML tree.
+
+kchart_export.h         Defines import and export for exported classes.
+
+
+Chart classes
+-------------
+
+The following classes are central in the loading, rendering and
+editing of charts.  Most (all?) of the classes directly represent a
+chart entity defined in the ODF standard.
+
+Axis                    data about an axis in the chart
+DataSet                 data _about_ a dataset. The actual data
+                        is stored in a table.
+Legend                  stores information about the legend
+PlotArea                the main area where the chart itself is shown
+Surface                 wall or floor in a 3D chart
+CellRegion              a region in e.g. a spreadsheet where a dataset
+                        can fetch its values.
+
+
+Data classes
+------------
+
+KDChartModel            Takes a list of DataSet's and compiles them
+                        into a QAbstractItemModel for use with KDChart. 
+KDChartConversions      Conversions between odf concepts and KDChart
+                        concepts
+
+ChartProxyModel         Factory for DataSets and decoration of a
+                        ChartTableModel .
+TableSource             FIXME: Something to do with connection to Sheets.
+OdfLoadingHelper        Helper for loading data when connected to a
+                        spreadsheet. FIXME: find out more.
+
+ChartTableModel         Stores the numeric data if this isn't provided
+                        from the outside, e.g. from a spreadsheet.
+ChartTableView          A view of a table. Used in the data editor.
+
+
+Helper classes
+--------------
+
+kchart_global           Common definitions of enums and some
+                        category functions
+CellRegionStringValidator Validates a cell region descriptor string
+ChartLayout             Manages the layout of the parts (plot area,
+                        legend, titles, etc)
+ScreenConversions       Conversions between pt (distance) and px (pixels)
+SingleModelHelper       FIXME: No idea what this is
+TextLabelDummy          Place holder for text labels (title, etc)
+
+
+
+Part II: Functional description
+
+Part II contains high-level descriptions on key structures and
+processes.
+
+
+General Architecture
+====================
+
+The chart shape is a rather complex shape that inherits KoShape. It is
+also at the same time a KoShapeContainer, i.e. it can contain other
+KoShapes. The parts of a chart -- plot area, legend, axes titles,
+chart title, subtitle and footer -- are all KoShapes themselves, owned
+by the ChartShape class. The geometric relationship between them is
+managed by the ChartLayout class. This is especially visible when
+resizing the chart, something which sometimes rearranges the chart
+drastically if the available area becomes very small.
+
+The chart shape is also special because it publishes a small part of
+its internal API to the world. Normally the only external API for a
+shape is the generic one defined in KoShape.h. The more detailed API
+that is used by the tool(s) is seldom published. However, the chart
+shape is designed to be used by applications and controlled
+programmatically, e.g. from the spreadsheet. When a user updates the
+cell values then the chart also has to be updated. This API is
+published in interfaces/KoChartInterface.h. (As a side note, I think
+this could be done for more shapes.)
+
+The second thing that makes the chart shape special is that Charts
+(and Formulas) are defined as their own document types in the ODF
+standard.  This means that a chart can actually be its own standalone
+document with the file extension .odc. Everything that has to do with
+the chart document is collected into the class ChartDocument.
+
+The actual rendering of the chart parts is done with the KDChart
+engine from KDAB. This component is licensed under GPL (used here) and
+a commercial license. KDChart can render most chart types in ODF with
+the exception of 3D type charts. Surface charts are not handled at
+all, and 3D variants of 2D charts (bar, line, etc) are shown with
+simple extrusions and not real perspective 3D. 3D only types, like
+cylinder, cone, etc are not handled at all. Nevertheless, KDChart is
+quite capable and works well in general.
+
+
+ODF and KDChart
+---------------
+
+As described above, there are a number of classes which directly
+represent entities in the ODF chart standard. These are Axis, Legend,
+PlotArea, Surface, DataSet, and CellRegion. All these classes load and
+save their internal data to the ODF xml tree and also manage their
+respective counterparts from KDChart, so for instance the Axis class
+handles all settings and data of the KDChartAxis classes (different
+ones for Cartesian and Circular axes).
+
+Unfortunately there is not a perfect 1-to-1 relationship between the
+concepts in ODF charts and KDChart so there is some complexity in the
+mapping between them.  See below for more details.
+
+
+KDChart concepts
+================
+
+Objects
+-------
+
+KDChart is a library of classes that are used to show a chart and also
+offers some interaction with them. All the classes are in the KDChart
+namespace but in the description below we shall forego the namespace
+prefix in the interest of clarity.
+
+The main class in KDChart is _Chart_. This class manages the rest of
+the classes and represents the canvas on which the chart parts are
+painted. On this Chart there can be zero or more _Diagrams_, each of
+which is what we in daily talk call a 'chart'.  There is one type of
+subclass to Diagram for each chart type, e.g. PieDiagram or
+BarDiagram. If we want to create new types we can subclass
+AbstractDiagram. 
+
+Each diagram is associated with a CoordinatePlane which defines the
+scale and transformation between data coordinates and pixel
+coordinates. There are 3 types of coordinate planes: Cartesian, Polar
+and Radar. One coordinate plane can be shared by several diagrams,
+making it possible to e.g. create a combined bar and line chart.
+
+A Chart can hold several CoordinatePlanes and/or Diagrams, making it
+possible to create advanced layouts with separate diagrams or diagrams
+that overlap. 
+
+An _Axis_ is what connects the coordinate plane with a diagram. The
+axis is owned by a diagram but can also be associated with other
+diagrams, thereby creating a shared axis.
+
+In addition to diagrams there are other types of visible objects on
+the Chart: Legends, Headers, Footers, or custom elements that inherit
+KDChart::Area. 
+
+A KDChart::Chart is a QWidget, as are many other KDChart objects. The
+Legend is the only object that can be placed outside this widget
+according to the documentation.
+
+
+Styling
+-------
+
+Each type of object (Diagram, Axis, etc) in KDChart has a set of
+attributes associated with it, much like ODF styles.  These are all
+named after the object they describe, e.g. BarAttributes,
+RulerAttributes, etc.
+
+The normal way to configure an object is to fetch out the attributes,
+change some of them, and put them back into the object.
+
+
+Data
+----
+
+KDChart uses the Qt4 model/view paradigm. A class that inherits
+AbstractDiagram is at the same time a QAbstractItemView and takes a
+QAbstractItemModel as its data input.
+
+The item models that are given to the diagrams combine the numeric
+data in that is presented in the chart with some styling coming from
+the datasets, e.g. color, marker, etc.
+
+
+Mapping ODF concepts to KDChart classes
+=======================================
+
+The main KDChart::Chart instance is owned by PlotArea. PlotArea also
+holds 2 cartesian coordinate plane, one polar and one radar
+plane. Third, it holds a list of Diagrams, one per diagram type that
+was ever used(?).
+
+The KDChart::Chart can show headers, footers, axis labels and other
+text items. The chart shape does not use this but instead uses
+standard text shapes for them. There are several reasons for this:
+ - The KDChart items are not interactively editable and styleable
+ - They cannot be easily moved around
+ - The loading and saving of them would be much more difficult,
+   especially if rich text is used.
+This means that the Chart inside the plotarea will only contain the
+diagrams and axes; all other areas are shown outside the Chart, but
+inside the ChartShape.
+
+Each class that represents an ODF type (Axis, Legend, etc) also has
+ownership of the corresponding KDChart type. Some exceptions exist
+(FIXME: Check this in more detail).
+
+The class ChartProxyModel connects the ODF Datasets and numeric data
+with KDChart. It takes the numeric input and rearranges it in the
+order that is necessary for each chart type.
+
+
+Editing
+=======
+
+Editing of the chart settings can be done only by the ChartTool. The
+chart tool uses the API calls in the different storage classes to
+change the values. All manipulations are direct and there is currently
+no undo/redo with the exception of setting the chart type. [This needs
+to be fixed.]
+
+Changing of the data values can be done through the sheet connection
+model that are used by e.g. Calligra Sheets (FIXME: Find out more
+details).
+
+
+Using External Data Sources
+===========================
+
+E.g. spreadsheets   FIXME: find out more and write this.
+

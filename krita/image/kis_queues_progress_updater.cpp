@@ -71,7 +71,7 @@ void KisQueuesProgressUpdater::notifyJobDone(int sizeMetric)
     m_d->doneSizeMetric.fetchAndAddOrdered(sizeMetric);
 }
 
-void KisQueuesProgressUpdater::updateProgress(int queueSizeMetric, const QString &jobName)
+void KisQueuesProgressUpdater::updateProgress(int /*queueSizeMetric*/, const QString &/*jobName*/)
 {
 //    QMutexLocker locker(&m_d->mutex);
 //    m_d->queuedSizeMetric = queueSizeMetric;

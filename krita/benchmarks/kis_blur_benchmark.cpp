@@ -22,7 +22,6 @@
 #include "kis_benchmark_values.h"
 
 #include "kis_paint_device.h"
-#include "kis_iterators_pixel.h"
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -37,6 +36,7 @@
 #include "kis_processing_information.h"
 
 #include "kis_selection.h"
+#include <kis_iterator_ng.h>
 
 void KisBlurBenchmark::initTestCase()
 {
@@ -49,16 +49,15 @@ void KisBlurBenchmark::initTestCase()
     
     int r,g,b;
     
-    KisRectIterator it = m_device->createRectIterator(0,0,GMP_IMAGE_WIDTH, GMP_IMAGE_HEIGHT);
-    while (!it.isDone()) {
+    KisRectIteratorSP it = m_device->createRectIteratorNG(0,0,GMP_IMAGE_WIDTH, GMP_IMAGE_HEIGHT);
+    do {
         r = rand() % 255;
         g = rand() % 255;
         b = rand() % 255;
         
         m_color.fromQColor(QColor(r,g,b));
-        memcpy(it.rawData(), m_color.data(), m_colorSpace->pixelSize());
-        ++it;
-    }
+        memcpy(it->rawData(), m_color.data(), m_colorSpace->pixelSize());
+    } while (it->nextPixel());
 }
 
 void KisBlurBenchmark::cleanupTestCase()

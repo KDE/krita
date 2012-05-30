@@ -354,11 +354,22 @@ public:
     void addAttributePt(const QString &attrName, qreal attrValue);
 
     /**
+     * Add an attribute that represents a percentage value as defined in ODF
+     */
+    void addAttributePercent(const QString &attrName, qreal value);
+
+    /**
+     * Add an attribute that represents a percentage value as defined in ODF
+     */
+    void addAttributePercent(const QString &attrName, int value);
+
+    /**
      *  Remove an attribute from the style.
      */
     void removeAttribute(const QString &attrName) {
         m_attributes.remove(attrName);
     }
+
 
     /**
      * @brief Add a child element to the style properties.

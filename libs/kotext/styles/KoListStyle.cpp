@@ -181,6 +181,7 @@ void KoListStyle::loadOdf(KoShapeLoadingContext& scontext, const KoXmlElement& s
     if (d->name.isEmpty()) {
         d->name = style.attributeNS(KoXmlNS::style, "name", QString());
     }
+    d->name = style.attributeNS(KoXmlNS::style, "name", QString());
 
     KoXmlElement styleElem;
     forEachElement(styleElem, style) {
@@ -203,7 +204,8 @@ void KoListStyle::loadOdf(KoShapeLoadingContext& scontext, const KoXmlElement& s
 
 void KoListStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context) const
 {
-    if (!d->name.isEmpty() && !style.isDefaultStyle()) {
+    // style:display-name can be used in list styles but not in outline styles
+    if (!d->name.isEmpty() && !style.isDefaultStyle() && !isOulineStyle()) {
         style.addAttribute("style:display-name", d->name);
     }
     QBuffer buffer;

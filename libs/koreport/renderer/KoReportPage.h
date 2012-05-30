@@ -18,8 +18,8 @@
 #ifndef KEXIREPORTPAGE_H
 #define KEXIREPORTPAGE_H
 
-#include <QWidget>
 #include <KoReportRendererBase.h>
+#include <QGraphicsRectItem>
 
 class QTimer;
 class QPixmap;
@@ -31,7 +31,7 @@ class ORODocument;
  and ORODocument
  The widget is sized to the document size in pixels.
 */
-class KOREPORT_EXPORT KoReportPage : public QWidget
+class KOREPORT_EXPORT KoReportPage : public QObject, public QGraphicsRectItem
 {
     Q_OBJECT
 public:
@@ -42,7 +42,7 @@ public:
     void renderPage(int page);
 
 public slots:
-    virtual void paintEvent(QPaintEvent*);
+    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
     
     void pageUpdated(int pageNo);
 

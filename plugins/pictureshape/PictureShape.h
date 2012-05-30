@@ -22,6 +22,7 @@
 #ifndef PICTURESHAPE_H
 #define PICTURESHAPE_H
 
+#include <QPainterPath>
 #include <QPixmap>
 #include <QImage>
 #include <QRunnable>
@@ -69,17 +70,22 @@ namespace _Private
     {
         Q_OBJECT
     public:
-        PixmapScaler(PictureShape *pictureShape, const QSize& pixmapSize);
+        PixmapScaler(PictureShape *pictureShape, const QSize &pixmapSize);
         virtual void run();
 
     signals:
-        void finished(const QString&, const QImage&);
+        void finished(const QString &, const QImage &);
 
     private:
         QSize m_size;
         QImage m_image;
         quint64 m_imageKey;
     };
+
+    /**
+     * This method will create an outline path out of the image
+     */
+    QPainterPath generateOutline(const QImage &imageIn, int treshold = 20);
 }
 
 
@@ -114,6 +120,8 @@ public:
     // reimplemented
     virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     // reimplemented
+    virtual QPainterPath shadowOutline() const;
+    // reimplemented
     virtual void saveOdf(KoShapeSavingContext &context) const;
     // reimplemented
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
@@ -128,23 +136,23 @@ public:
      */
     KoImageCollection *imageCollection() const;
     KoImageData *imageData() const;
-    int mirrorMode() const;
+    QFlags<MirrorMode> mirrorMode() const;
     ColorMode colorMode() const;
     QRectF cropRect() const;
     bool isPictureInProportion() const;
 
     void setImageCollection(KoImageCollection *collection) { m_imageCollection = collection; }
     void setCropRect(const QRectF& rect);
-    void setMirrorMode(int mode);
+    void setMirrorMode(QFlags<MirrorMode> mode);
     void setColorMode(ColorMode mode);
 
 protected:
     virtual bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context);
     virtual QString saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const;
-    virtual void loadStyle(const KoXmlElement& element, KoShapeLoadingContext& context);
+    virtual void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
 
 private:
-    QSize calcOptimalPixmapSize(const QSizeF& shapeSize, const QSizeF& imageSize) const;
+    QSize calcOptimalPixmapSize(const QSizeF &shapeSize, const QSizeF &imageSize) const;
     ClippingRect parseClippingRectString(QString string) const;
 
 private:
@@ -152,9 +160,9 @@ private:
     mutable QImage m_printQualityImage;
     mutable QSizeF m_printQualityRequestedSize;
 
-    int            m_mirrorMode;
-    ColorMode      m_colorMode;
-    ClippingRect   m_clippingRect;
+    QFlags<MirrorMode> m_mirrorMode;
+    ColorMode m_colorMode;
+    ClippingRect m_clippingRect;
 
     _Private::PictureShapeProxy m_proxy;
 };

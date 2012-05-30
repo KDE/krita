@@ -14,6 +14,7 @@ if( QCA2_FOUND )
 endif( QCA2_FOUND )
 
 set(komain_LIB_SRCS
+    KoAutoSaveRecoveryDialog.cpp
     KoApplicationAdaptor.cpp
     KoApplication.cpp
     KoDockerManager.cpp
@@ -46,7 +47,6 @@ set(komain_LIB_SRCS
     KoFilterManager.cpp
     KoFilterChain.cpp
     KoFilter.cpp
-    KoEmbeddingFilter.cpp
     KoFilterEntry.cpp
     KoFilterManager_p.cpp
     KoFilterVertex.cpp
@@ -54,16 +54,17 @@ set(komain_LIB_SRCS
     KoFilterEdge.cpp
     KoFilterChainLink.cpp
     KoFilterChainLinkList.cpp
+    KoServiceProvider.cpp
     KoStandardAction.cpp
     KoUndoStackAction.cpp
     config/KoConfigDocumentPage.cpp
     config/KoConfigGridPage.cpp
     config/KoConfigMiscPage.cpp
+    config/KoConfigAuthorPage.cpp
 
     KoDocumentSectionDelegate.cpp
     KoDocumentSectionToolTip.cpp
     KoDocumentSectionView.cpp
-    KoItemToolTip.cpp
 
     KoProgressBar.cpp
     KoProgressUpdater.cpp
@@ -89,6 +90,7 @@ set(komain_LIB_SRCS
     KoFindToolbar.cpp
     KoFindOption.cpp
     KoFindOptionSet.cpp
+    KoFindStyle.cpp
 )
 if( Soprano_FOUND )
     set(komain_LIB_SRCS ${komain_LIB_SRCS}
@@ -122,6 +124,7 @@ endif( Soprano_FOUND )
 kde4_add_ui_files( komain_LIB_SRCS
    koDocumentInfoAboutWidget.ui
    koDocumentInfoAuthorWidget.ui
+   config/KoConfigAuthorPage.ui
    KoOpenPaneBase.ui
    KoDetailsPaneBase.ui
 )
@@ -198,7 +201,6 @@ install( FILES
     KoDocumentEntry.h
     KoDocumentInfo.h
     KoDocumentSectionModel.h
-    KoEmbeddingFilter.h
     KoFactory.h
     KoFilter.h
     KoFilterChain.h
@@ -217,6 +219,7 @@ install( FILES
     KoGridData.h
     KoMainWindow.h
     KoModeBoxFactory.h
+    KoServiceProvider.h
     KoPrintJob.h
     KoProgressUpdater.h
     KoProgressProxy.h

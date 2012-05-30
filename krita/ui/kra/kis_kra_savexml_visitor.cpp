@@ -213,6 +213,7 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
     el.setAttribute(X, layer->x());
     el.setAttribute(Y, layer->y());
     el.setAttribute(UUID, layer->uuid().toString());
+    el.setAttribute(COLLAPSED, layer->collapsed());
 
     foreach (KisNodeSP node, m_selectedNodes) {
         if (node.data() == layer) {

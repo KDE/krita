@@ -29,6 +29,13 @@
 #include "KoOdfNotesConfiguration.h"
 #include "KoTextDocument.h"
 #include "KoInlineCite.h"
+#include "KoInlineCite.h"
+
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
+#include <kglobal.h>
+#include <kuser.h>
+#include <klocale.h>
 
 #include <QTextCursor>
 #include <QPainter>
@@ -39,6 +46,11 @@ KoInlineTextObjectManager::KoInlineTextObjectManager(QObject *parent)
         m_lastObjectId(0),
         m_variableManager(this)
 {
+    KGlobal::config()->reparseConfiguration();
+    KConfigGroup appAuthorGroup(KGlobal::config(), "Author");
+    QString profile = appAuthorGroup.readEntry("active-profile", "");
+
+    activeAuthorUpdated(profile);
 }
 
 KoInlineTextObjectManager::~KoInlineTextObjectManager()
@@ -119,46 +131,6 @@ void KoInlineTextObjectManager::addInlineObject(KoInlineObject* object)
     insertObject(object);
 }
 
-bool KoInlineTextObjectManager::removeInlineObject(QTextCursor &cursor)
-{
-    KoInlineObject *object = inlineTextObject(cursor);
-    if (object->propertyChangeListener()) {
-        int position = m_listeners.indexOf(object);
-        m_listeners.removeAt(position);
-    }
-    // what if a KoTextLocator is removed? what to do with KoTextReference?
-    QTextCharFormat format = cursor.charFormat();
-    int id = format.intProperty(InlineInstanceId);
-    if (id <= 0)
-        return false;
-
-    int removed = m_objects.remove(id);
-
-    KoBookmark *bookmark = dynamic_cast<KoBookmark *>(object);
-    if (bookmark) {
-        if (bookmark->type() == KoBookmark::StartBookmark) {
-            m_bookmarkManager.remove(bookmark->name());
-            KoBookmark *endBookmark = bookmark->endBookmark();
-            endBookmark->setType(KoBookmark::SinglePosition);
-            m_bookmarkManager.insert(bookmark->name(), endBookmark);
-        } else if (bookmark->type() == KoBookmark::EndBookmark) {
-            KoBookmark *startBookmark = m_bookmarkManager.retrieveBookmark(bookmark->name());
-            startBookmark->setType(KoBookmark::SinglePosition);
-        } else
-            m_bookmarkManager.remove(bookmark->name());
-    }
-
-    delete object;
-    object = 0;
-
-    if (removed != 0) {
-        cursor.deletePreviousChar();
-        return true;
-    }
-    return false;
-}
-
-
 void KoInlineTextObjectManager::removeInlineObject(KoInlineObject *object)
 {
     if (!object) {
@@ -174,8 +146,6 @@ void KoInlineTextObjectManager::removeInlineObject(KoInlineObject *object)
     if (bookmark) {
         m_bookmarkManager.remove(bookmark->name());
     }
-
-    // TODO dirty the document somehow
 }
 
 void KoInlineTextObjectManager::setProperty(KoInlineObject::Property key, const QVariant &value)
@@ -324,32 +294,49 @@ void KoInlineTextObjectManager::documentInformationUpdated(const QString &info, 
         setProperty(KoInlineObject::Subject, data);
     else if (info == "keyword")
         setProperty(KoInlineObject::Keywords, data);
-    else if (info == "creator")
-        setProperty(KoInlineObject::AuthorName, data);
-    else if (info == "initial")
-        setProperty(KoInlineObject::AuthorInitials, data);
-    else if (info == "author-title")
-        setProperty(KoInlineObject::SenderTitle, data);
-    else if (info == "email")
-        setProperty(KoInlineObject::SenderEmail, data);
-    else if (info == "telephone")
-        setProperty(KoInlineObject::SenderPhonePrivate, data);
-    else if (info == "telephone-work")
-        setProperty(KoInlineObject::SenderPhoneWork, data);
-    else if (info == "fax")
-        setProperty(KoInlineObject::SenderFax, data);
-    else if (info == "country")
-        setProperty(KoInlineObject::SenderCountry, data);
-    else if (info == "postal-code")
-        setProperty(KoInlineObject::SenderPostalCode, data);
-    else if (info == "city")
-        setProperty(KoInlineObject::SenderCity, data);
-    else if (info == "street")
-        setProperty(KoInlineObject::SenderStreet, data);
-    else if (info == "position")
-        setProperty(KoInlineObject::SenderPosition, data);
-    else if (info == "company")
-        setProperty(KoInlineObject::SenderCompany, data);
+}
+
+void KoInlineTextObjectManager::activeAuthorUpdated(const QString &profile)
+{
+    KConfig config("calligrarc");
+    KConfigGroup authorGroup(&config, "Author");
+    QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
+
+    if (profiles.contains(profile)) {
+        KConfigGroup cgs(&authorGroup, "Author" + profile);
+        setProperty(KoInlineObject::AuthorName, cgs.readEntry("creator"));
+        setProperty(KoInlineObject::AuthorInitials, cgs.readEntry("initial"));
+        setProperty(KoInlineObject::SenderTitle, cgs.readEntry("author-title"));
+        setProperty(KoInlineObject::SenderEmail, cgs.readEntry("email"));
+        setProperty(KoInlineObject::SenderPhonePrivate, cgs.readEntry("telephone"));
+        setProperty(KoInlineObject::SenderPhoneWork, cgs.readEntry("telephone-work"));
+        setProperty(KoInlineObject::SenderFax, cgs.readEntry("fax"));
+        setProperty(KoInlineObject::SenderCountry,cgs.readEntry("country"));
+        setProperty(KoInlineObject::SenderPostalCode,cgs.readEntry("postal-code"));
+        setProperty(KoInlineObject::SenderCity, cgs.readEntry("city"));
+        setProperty(KoInlineObject::SenderStreet, cgs.readEntry("street"));
+        setProperty(KoInlineObject::SenderPosition, cgs.readEntry("position"));
+        setProperty(KoInlineObject::SenderCompany, cgs.readEntry("company"));
+    } else {
+        if (profile == "anonymous" || profile == i18nc("choice for author profile", "Anonymous")) {
+            setProperty(KoInlineObject::AuthorName, "");
+        } else {
+            KUser user(KUser::UseRealUserID);
+            setProperty(KoInlineObject::AuthorName, user.property(KUser::FullName).toString());
+        }
+        setProperty(KoInlineObject::AuthorInitials, "");
+        setProperty(KoInlineObject::SenderTitle, "");
+        setProperty(KoInlineObject::SenderEmail, "");
+        setProperty(KoInlineObject::SenderPhonePrivate, "");
+        setProperty(KoInlineObject::SenderPhoneWork, "");
+        setProperty(KoInlineObject::SenderFax, "");
+        setProperty(KoInlineObject::SenderCountry, "");
+        setProperty(KoInlineObject::SenderPostalCode, "");
+        setProperty(KoInlineObject::SenderCity, "");
+        setProperty(KoInlineObject::SenderStreet, "");
+        setProperty(KoInlineObject::SenderPosition, "");
+        setProperty(KoInlineObject::SenderCompany, "");
+    }
 }
 
 QList<KoInlineObject*> KoInlineTextObjectManager::inlineTextObjects() const

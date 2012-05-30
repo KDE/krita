@@ -23,18 +23,17 @@
 
 #include <kis_debug.h>
 
-#include <kis_iterators_pixel.h>
 #include <kis_paint_device.h>
-
+#include "kis_iterator_ng.h"
 #include "kis_buffer_stream.h"
 
 uint KisTIFFReaderTarget8bit::copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream)
 {
-    KisHLineIterator it = paintDevice() -> createHLineIterator(x, y, dataWidth);
+    KisHLineIteratorSP it = paintDevice()->createHLineIteratorNG(x, y, dataWidth);
     double coeff = quint8_MAX / (double)(pow(2.0, sourceDepth()) - 1);
 //         dbgFile <<" depth expension coefficient :" << coeff;
-    while (!it.isDone()) {
-        quint8 *d = it.rawData();
+    do {
+        quint8 *d = it->rawData();
         quint8 i;
         for (i = 0; i < nbColorsSamples() ; i++) {
             d[poses()[i]] = (quint8)(tiffstream->nextValue() * coeff);
@@ -48,17 +47,17 @@ uint KisTIFFReaderTarget8bit::copyDataToChannels(quint32 x, quint32 y, quint32 d
             else
                 tiffstream->nextValue();
         }
-        ++it;
-    }
+
+    } while (it->nextPixel());
     return 1;
 }
 uint KisTIFFReaderTarget16bit::copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream)
 {
-    KisHLineIterator it = paintDevice() -> createHLineIterator(x, y, dataWidth);
+    KisHLineIteratorSP it = paintDevice()->createHLineIteratorNG(x, y, dataWidth);
     double coeff = quint16_MAX / (double)(pow(2.0, sourceDepth()) - 1);
 //         dbgFile <<" depth expension coefficient :" << coeff;
-    while (!it.isDone()) {
-        quint16 *d = reinterpret_cast<quint16 *>(it.rawData());
+    do {
+        quint16 *d = reinterpret_cast<quint16 *>(it->rawData());
         quint8 i;
         for (i = 0; i < nbColorsSamples(); i++) {
             d[poses()[i]] = (quint16)(tiffstream->nextValue() * coeff);
@@ -72,18 +71,18 @@ uint KisTIFFReaderTarget16bit::copyDataToChannels(quint32 x, quint32 y, quint32 
             else
                 tiffstream->nextValue();
         }
-        ++it;
-    }
+
+    } while (it->nextPixel());
     return 1;
 }
 
 uint KisTIFFReaderTarget32bit::copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream)
 {
-    KisHLineIterator it = paintDevice() -> createHLineIterator(x, y, dataWidth);
+    KisHLineIteratorSP it = paintDevice()->createHLineIteratorNG(x, y, dataWidth);
     double coeff = quint32_MAX / (double)(pow(2.0, sourceDepth()) - 1);
 //         dbgFile <<" depth expension coefficient :" << coeff;
-    while (!it.isDone()) {
-        quint32 *d = reinterpret_cast<quint32 *>(it.rawData());
+    do {
+        quint32 *d = reinterpret_cast<quint32 *>(it->rawData());
         quint8 i;
         for (i = 0; i < nbColorsSamples(); i++) {
             d[poses()[i]] = (quint32)(tiffstream->nextValue() * coeff);
@@ -97,21 +96,21 @@ uint KisTIFFReaderTarget32bit::copyDataToChannels(quint32 x, quint32 y, quint32 
             else
                 tiffstream->nextValue();
         }
-        ++it;
-    }
+
+    } while (it->nextPixel());
     return 1;
 }
 uint KisTIFFReaderFromPalette::copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth,  KisBufferStreamBase* tiffstream)
 {
-    KisHLineIterator it = paintDevice() -> createHLineIterator(x, y, dataWidth);
-    while (!it.isDone()) {
-        quint16* d = reinterpret_cast<quint16 *>(it.rawData());
+    KisHLineIteratorSP it = paintDevice()->createHLineIteratorNG(x, y, dataWidth);
+    do {
+        quint16* d = reinterpret_cast<quint16 *>(it->rawData());
         uint32 index = tiffstream->nextValue();
         d[2] = m_red[index];
         d[1] = m_green[index];
         d[0] = m_blue[index];
         d[3] = quint16_MAX;
-        ++it;
-    }
+
+    } while (it->nextPixel());
     return 1;
 }

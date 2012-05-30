@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C)  2008 Pierre Stirnweiss <pstirnweiss@googlemail.com>
+   Copyright (C)  2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,83 +29,33 @@
 #include <QWidget>
 
 class QString;
+class KoStyleThumbnailer;
 
 class FormattingPreview : public QFrame
 {
     Q_OBJECT
 
 public:
-    enum PreviewType {
-        FontPreview,
-        ParagPreview
-    };
-
     explicit FormattingPreview(QWidget* parent = 0);
     ~FormattingPreview();
-
-    void setPreviewType(PreviewType type);
 
 public slots:
     ///Character properties
     void setCharacterStyle(const KoCharacterStyle *style);
+    void setParagraphStyle(const KoParagraphStyle *style);
 
-    void setBackgroundColor(QColor color);
-    void setFont(const QFont &font);
-    void setFontCapitalisation(QFont::Capitalization capitalisation);
-    void setStrikethrough(KoCharacterStyle::LineType strikethroughType, KoCharacterStyle::LineStyle striketrhoughStyle, const QColor &strikethroughColor);
     void setText(const QString &sampleText);
-    void setTextColor(QColor color);
-    void setUnderline(KoCharacterStyle::LineType underlineType, KoCharacterStyle::LineStyle underlineStyle, const QColor &underlineColor);
-
-    ///Paragraph properties
-    void setParagraphBackgroundColor(const QColor &color);
-    void setFirstLineMargin(qreal margin);
-    void setHorizontalAlign(Qt::Alignment);
-    void setLeftMargin(qreal margin);
-    void setLineSpacing(qreal fixedLineHeight, qreal lineSpacing, qreal minimumLineHeight, int percentLineSpacing, bool useFontProperties);
-    void setRightMargin(qreal margin);
-    void setListItemText(const QString &text);
 
 protected:
     void paintEvent(QPaintEvent *event);
-    void drawLine(QPainter &painter, qreal xstart, qreal xend, qreal y, qreal width, int underlineDist, KoCharacterStyle::LineType lineType, KoCharacterStyle::LineStyle lineStyle, QColor lineColor);
 
 private:
-    PreviewType m_previewType;
-
     QString m_sampleText;
-    QString m_listItemText;
 
-    ///Character properties
-    QColor m_backgroundColor;
-
-    QFont m_font;
-
-    QFont::Capitalization m_fontCapitalisation;
-
-    KoCharacterStyle::LineType m_strikethroughType;
-    KoCharacterStyle::LineStyle m_strikethroughStyle;
-    QColor m_strikethroughColor;
-
-    QColor m_textColor;
-
-    KoCharacterStyle::LineType m_underlineType;
-    KoCharacterStyle::LineStyle m_underlineStyle;
-    QColor m_underlineColor;
-
-    ///Paragraph properties
-    Qt::Alignment m_align;
-    QColor m_paragBackgroundColor;
-    qreal m_firstLineMargin;
-    qreal m_fixedLineHeight;
-    Qt::Alignment m_horizAlign;
-    qreal m_leftMargin;
-    qreal m_lineSpacing;
-    qreal m_minimumLineHeight;
-    int m_percentLineHeight;
-    qreal m_rightMargin;
-    bool m_useFontProperties;
-    Qt::Alignment m_vertAlign;
+    KoCharacterStyle *m_characterStyle;
+    KoParagraphStyle *m_paragraphStyle;
+    KoStyleThumbnailer *m_thumbnailer;
+    bool m_previewLayoutRequired;
 };
 
 #endif //FORMATTINGPREVIEW_H

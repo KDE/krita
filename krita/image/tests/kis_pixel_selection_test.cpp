@@ -99,7 +99,6 @@ void KisPixelSelectionTest::testClear()
     selection->select(QRect(5, 5, 300, 300));
     selection->clear(QRect(5, 5, 200, 200));
 
-
     QCOMPARE(TestUtil::alphaDevicePixel(selection, 0, 0), MIN_SELECTED);
     QCOMPARE(TestUtil::alphaDevicePixel(selection, 5, 5), MIN_SELECTED);
     QCOMPARE(TestUtil::alphaDevicePixel(selection, 10, 10), MIN_SELECTED);

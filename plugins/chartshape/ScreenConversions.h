@@ -35,17 +35,17 @@ class ScreenConversions
 {
 public:
     // pt --> px
-    static qreal ptToPxX( qreal pt );
-    static qreal ptToPxY( qreal pt );
-    static void   scaleFromPtToPx( QPainter &painter );
-    static QPoint scaleFromPtToPx( const QPointF &point );
-    static QSize  scaleFromPtToPx( const QSizeF &size );
-    static QRect  scaleFromPtToPx( const QRectF &rect );
+    static qreal ptToPxX(qreal pt);
+    static qreal ptToPxY(qreal pt);
+    static void   scaleFromPtToPx(QPainter &painter);
+    static QPoint scaleFromPtToPx(const QPointF &point);
+    static QSize  scaleFromPtToPx(const QSizeF &size);
+    static QRect  scaleFromPtToPx(const QRectF &rect);
 
     // px --> pt
-    static qreal pxToPtX( qreal px );
-    static qreal pxToPtY( qreal px );
-    static QSizeF scaleFromPxToPt( const QSize &size );
+    static qreal pxToPtX(qreal px);
+    static qreal pxToPtY(qreal px);
+    static QSizeF scaleFromPxToPt(const QSize &size);
 };
 
 } // namespace KChart

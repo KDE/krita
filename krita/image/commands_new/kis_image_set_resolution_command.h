@@ -48,7 +48,7 @@ private:
  * KisImageSetResolutionCommand.
  *
  * Usecase: When you change the resolution of the image, the
- * projection of the shape layer is still rendered in old
+ * projection of the vector layer is still rendered in old
  * resolution. So you should reset it and render again.
  */
 class KRITAIMAGE_EXPORT KisResetShapesCommand : public KUndo2Command

@@ -95,8 +95,8 @@ KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
     KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KoAbstractGradient>(rserver);
     m_gradientWidget->setResourceAdapter(adapter);
 
-    /**** Temporary hack to test the KoDualColorButton ***/
     KoDualColorButton * dual = new KoDualColorButton(view->resourceProvider()->fgColor(), view->resourceProvider()->bgColor(), view, view);
+    dual->setPopDialog(false);
     action  = new KAction(i18n("&Color"), this);
     view->actionCollection()->addAction("dual", action);
     action->setDefaultWidget(dual);
@@ -105,8 +105,6 @@ KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
     connect(view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor &)), dual, SLOT(setForegroundColor(const KoColor &)));
     connect(view->resourceProvider(), SIGNAL(sigBGColorChanged(const KoColor &)), dual, SLOT(setBackgroundColor(const KoColor &)));
     dual->setFixedSize(26, 26);
-    /*******/
-
 
     createPatternsChooser(m_view);
     createGradientsChooser(m_view);

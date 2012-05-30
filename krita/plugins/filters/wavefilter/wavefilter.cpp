@@ -38,7 +38,6 @@
 #include <KoUpdater.h>
 
 #include <kis_image.h>
-#include <kis_iterators_pixel.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
 #include <kis_layer.h>
@@ -163,12 +162,12 @@ void KisFilterWave::process(KisPaintDeviceSP device,
     else
         horizontalcurve = new KisSinusoidalWaveCurve(horizontalamplitude, horizontalwavelength, horizontalshift);
     
-    KisRandomSubAccessorPixel srcRSA = device->createRandomSubAccessor();
+    KisRandomSubAccessorSP srcRSA = device->createRandomSubAccessor();
     do {
         double xv = horizontalcurve->valueAt(dstIt->y(), dstIt->x());
         double yv = verticalcurve->valueAt(dstIt->x(), dstIt->y());
-        srcRSA.moveTo(QPointF(xv, yv));
-        srcRSA.sampledOldRawData(dstIt->rawData());
+        srcRSA->moveTo(QPointF(xv, yv));
+        srcRSA->sampledOldRawData(dstIt->rawData());
         if (progressUpdater) progressUpdater->setProgress((++count) / cost);
     }while (dstIt->nextPixel());
     delete horizontalcurve;

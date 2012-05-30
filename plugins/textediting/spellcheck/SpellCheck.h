@@ -67,6 +67,8 @@ public:
     bool skipAllUppercaseWords();
     bool skipRunTogetherWords();
 
+    bool addWordToPersonal(const QString &word);
+
     //reimplemented from Calligra2.0, we disconnect and re- connect the 'documentChanged' signal only when the document has replaced
     void setDocument(QTextDocument *document);
 

@@ -76,6 +76,7 @@ KoEncryptedStore::KoEncryptedStore(const QString & filename, Mode mode, const QB
 
     m_pZip = new KZip(filename);
     d->good = true;
+    d->localFileName = filename;
 
     init(mode, appIdentification);
 }

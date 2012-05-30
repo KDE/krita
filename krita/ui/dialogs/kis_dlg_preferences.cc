@@ -43,6 +43,7 @@
 
 #include <libs/main/KoDocument.h>
 #include <KoColorProfile.h>
+#include <KoConfigAuthorPage.h>
 
 #include <kmessagebox.h>
 #include <kcolorbutton.h>
@@ -362,10 +363,13 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         cbUseOpenGL->setEnabled(false);
         cbUseOpenGLShaders->setEnabled(false);
         cbUseOpenGLToolOutlineWorkaround->setEnabled(false);
+        cbUseOpenGLTrilinearFiltering->setEnabled(false);
     } else {
         cbUseOpenGL->setChecked(cfg.useOpenGL());
         cbUseOpenGLToolOutlineWorkaround->setEnabled(cfg.useOpenGL());
         cbUseOpenGLToolOutlineWorkaround->setChecked(cfg.useOpenGLToolOutlineWorkaround());
+        cbUseOpenGLTrilinearFiltering->setEnabled(cfg.useOpenGL());
+        cbUseOpenGLTrilinearFiltering->setChecked(cfg.useOpenGLTrilinearFiltering());
 #ifdef HAVE_GLEW
         if (KisOpenGL::hasShadingLanguage()) {
             cbUseOpenGLShaders->setChecked(cfg.useOpenGLShaders());
@@ -407,6 +411,8 @@ void DisplaySettingsTab::setDefault()
     cbUseOpenGLShaders->setEnabled(false);
     cbUseOpenGLToolOutlineWorkaround->setChecked(false);
     cbUseOpenGLToolOutlineWorkaround->setEnabled(false);
+    cbUseOpenGLTrilinearFiltering->setEnabled(false);
+    cbUseOpenGLTrilinearFiltering->setChecked(true);
     chkMoving->setChecked(true);
     intCheckSize->setValue(32);
     colorChecks->setColor(QColor(220, 220, 220));
@@ -422,6 +428,7 @@ void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
     }
 #endif
     cbUseOpenGLToolOutlineWorkaround->setEnabled(isChecked);
+    cbUseOpenGLTrilinearFiltering->setEnabled(isChecked);
 #else
     Q_UNUSED(isChecked);
 #endif
@@ -621,6 +628,14 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     m_fullscreenSettings = new FullscreenSettingsTab(vbox);
 
 
+    // author settings
+    vbox = new KVBox();
+    m_authorSettings = new KoConfigAuthorPage();
+    page = addPage(m_authorSettings, i18nc("@title:tab Author page", "Author"));
+    page->setHeader(i18n("Author"));
+    page->setIcon(KIcon("user-identity"));
+
+
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
     foreach (KisAbstractPreferenceSetFactory *preferenceSetFactory, preferenceSetRegistry->values()) {
         KisPreferenceSet* preferenceSet = preferenceSetFactory->createPreferenceSet();
@@ -717,6 +732,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setUseOpenGL(dialog->m_displaySettings->cbUseOpenGL->isChecked());
         cfg.setUseOpenGLShaders(dialog->m_displaySettings->cbUseOpenGLShaders->isChecked());
         cfg.setUseOpenGLToolOutlineWorkaround(dialog->m_displaySettings->cbUseOpenGLToolOutlineWorkaround->isChecked());
+        cfg.setUseOpenGLTrilinearFiltering(dialog->m_displaySettings->cbUseOpenGLTrilinearFiltering->isChecked());
 #else
         cfg.setUseOpenGLToolOutlineWorkaround(false);
 #endif
@@ -748,6 +764,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setHideTitlebarFullscreen(dialog->m_fullscreenSettings->chkTitlebar->checkState());
         cfg.setHideToolbarFullscreen(dialog->m_fullscreenSettings->chkToolbar->checkState());
 
+        dialog->m_authorSettings->apply();
     }
     delete dialog;
     return baccept;

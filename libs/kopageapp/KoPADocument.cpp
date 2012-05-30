@@ -76,8 +76,8 @@ public:
     QPointer<KoUpdater> odfPageProgressUpdater;
 };
 
-KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleViewMode )
-: KoDocument( parentWidget, parent, singleViewMode ),
+KoPADocument::KoPADocument(QObject* parent)
+    : KoDocument(parent),
     d(new Private())
 {
     d->inlineTextObjectManager = resourceManager()->resource(KoText::InlineTextObjectManager).value<KoInlineTextObjectManager*>();
@@ -440,7 +440,7 @@ void KoPADocument::loadOdfSettings(  const KoXmlDocument & settingsDoc )
     KoOasisSettings settings( settingsDoc );
     KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
     if ( !viewSettings.isNull() ) {
-        setUnit( KoUnit::unit( viewSettings.parseConfigItemString( "unit" ) ) );
+        setUnit(KoUnit::fromSymbol(viewSettings.parseConfigItemString("unit")));
         // FIXME: add other config here.
     }
 

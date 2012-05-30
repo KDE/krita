@@ -46,14 +46,14 @@ private:
     bool quad(QPolygonF& out) const;
     // finds the transform from perspective coordinates (a unit square) to the document
     bool getTransform(QPolygonF& polyOut, QTransform& transformOut) const;
- 
+
     // which direction to snap to (in transformed coordinates)
-    QLineF snapLine;
+    QLineF m_snapLine;
     // cached information
-    mutable QTransform cachedTransform;
-    mutable QPolygonF cachedPolygon;
-    mutable QPointF cachedPoints[4];
-    mutable bool cacheValid;
+    mutable QTransform m_cachedTransform;
+    mutable QPolygonF m_cachedPolygon;
+    mutable QPointF m_cachedPoints[4];
+    mutable bool m_cacheValid;
 };
 
 class PerspectiveAssistantFactory : public KisPaintingAssistantFactory
@@ -63,7 +63,7 @@ public:
     virtual ~PerspectiveAssistantFactory();
     virtual QString id() const;
     virtual QString name() const;
-    virtual KisPaintingAssistant* paintingAssistant(const QRectF& imageArea) const;
+    virtual KisPaintingAssistant* createPaintingAssistant() const;
 };
 
 #endif

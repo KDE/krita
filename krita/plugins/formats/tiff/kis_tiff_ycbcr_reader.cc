@@ -21,9 +21,8 @@
 
 #include <math.h>
 
-#include <kis_iterators_pixel.h>
 #include <kis_paint_device.h>
-
+#include "kis_iterator_ng.h"
 #include "kis_buffer_stream.h"
 
 
@@ -54,10 +53,10 @@ uint KisTIFFYCbCrReaderTarget8Bit::copyDataToChannels(quint32 x, quint32 y, quin
 //     dbgFile <<" y =" << y;
     uint buffPos = y / m_vsub * m_bufferWidth + x / m_hsub ;
     for (int index = 0; index < numcols; index++) {
-        KisHLineIterator it = paintDevice() -> createHLineIterator(x + m_hsub * index, y, m_hsub);
+        KisHLineIteratorSP it = paintDevice()->createHLineIteratorNG(x + m_hsub * index, y, m_hsub);
         for (int vindex = 0; vindex < m_vsub; vindex++) {
-            while (!it.isDone()) {
-                quint8 *d = it.rawData();
+            do {
+                quint8 *d = it->rawData();
                 d[0] = (quint8)(tiffstream->nextValue() * coeff);
                 d[3] = quint8_MAX;
                 for (int k = 0; k < nbExtraSamples(); k++) {
@@ -66,9 +65,8 @@ uint KisTIFFYCbCrReaderTarget8Bit::copyDataToChannels(quint32 x, quint32 y, quin
                     else
                         tiffstream->nextValue();
                 }
-                ++it;
-            }
-            it.nextRow();
+            } while (it->nextPixel());
+            it->nextRow();
         }
         m_bufferCb[ buffPos ] = (quint8)(tiffstream->nextValue() * coeff);
         m_bufferCr[ buffPos ] = (quint8)(tiffstream->nextValue() * coeff);
@@ -79,17 +77,17 @@ uint KisTIFFYCbCrReaderTarget8Bit::copyDataToChannels(quint32 x, quint32 y, quin
 
 void KisTIFFYCbCrReaderTarget8Bit::finalize()
 {
-    KisHLineIterator it = paintDevice() -> createHLineIterator(0, 0, m_imageWidth);
+    KisHLineIteratorSP it = paintDevice()->createHLineIteratorNG(0, 0, m_imageWidth);
     for (uint y = 0; y < m_imageHeight; y++) {
         int x = 0;
-        while (!it.isDone()) {
-            quint8 *d = it.rawData();
+        do {
+            quint8 *d = it->rawData();
             int index =  x / m_hsub + y / m_vsub * m_bufferWidth;
             d[1] = m_bufferCb[ index ];
             d[2] = m_bufferCr[ index ];
-            ++it; ++x;
-        }
-        it.nextRow();
+            ++x;
+        } while (it->nextPixel());
+        it->nextRow();
     }
 }
 
@@ -120,10 +118,10 @@ uint KisTIFFYCbCrReaderTarget16Bit::copyDataToChannels(quint32 x, quint32 y, qui
 //     dbgFile <<" y =" << y;
     uint buffPos = y / m_vsub * m_bufferWidth + x / m_hsub ;
     for (int index = 0; index < numcols; index++) {
-        KisHLineIterator it = paintDevice() -> createHLineIterator(x + m_hsub * index, y, m_hsub);
+        KisHLineIteratorSP it = paintDevice()->createHLineIteratorNG(x + m_hsub * index, y, m_hsub);
         for (int vindex = 0; vindex < m_vsub; vindex++) {
-            while (!it.isDone()) {
-                quint16 *d = reinterpret_cast<quint16 *>(it.rawData());
+            do {
+                quint16 *d = reinterpret_cast<quint16 *>(it->rawData());
                 d[0] = (quint16)(tiffstream->nextValue() * coeff);
                 d[3] = quint16_MAX;
                 for (int k = 0; k < nbExtraSamples(); k++) {
@@ -132,9 +130,8 @@ uint KisTIFFYCbCrReaderTarget16Bit::copyDataToChannels(quint32 x, quint32 y, qui
                     else
                         tiffstream->nextValue();
                 }
-                ++it;
-            }
-            it.nextRow();
+            } while (it->nextPixel());
+            it->nextRow();
         }
         m_bufferCb[ buffPos ] = (quint16)(tiffstream->nextValue() * coeff);
         m_bufferCr[ buffPos ] = (quint16)(tiffstream->nextValue() * coeff);
@@ -145,16 +142,16 @@ uint KisTIFFYCbCrReaderTarget16Bit::copyDataToChannels(quint32 x, quint32 y, qui
 
 void KisTIFFYCbCrReaderTarget16Bit::finalize()
 {
-    KisHLineIterator it = paintDevice() -> createHLineIterator(0, 0, m_imageWidth);
+    KisHLineIteratorSP it = paintDevice()->createHLineIteratorNG(0, 0, m_imageWidth);
     for (uint y = 0; y < m_imageHeight; y++) {
         int x = 0;
-        while (!it.isDone()) {
-            quint16 *d = reinterpret_cast<quint16 *>(it.rawData());
+        do {
+            quint16 *d = reinterpret_cast<quint16 *>(it->rawData());
             int index =  x / m_hsub + y / m_vsub * m_bufferWidth;
             d[1] = m_bufferCb[ index ];
             d[2] = m_bufferCr[ index ];
-            ++it; ++x;
-        }
-        it.nextRow();
+             ++x;
+        } while (it->nextPixel());
+        it->nextRow();
     }
 }

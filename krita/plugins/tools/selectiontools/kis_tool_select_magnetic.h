@@ -92,8 +92,8 @@ private:
         void paintOutline(QPainter* painter, const QPainterPath &path, qreal zoom);
         virtual void addPathShape(KoPathShape* pathShape);
         void computeOutline(const QPainterPath &pixelPath);
-        void computeEdge(const QVector2D &startPoint, const QVector2D &direction, KisRandomConstAccessor pixelAccessor);
-        FilterMatrix getMatrixForPoint(const QVector2D &point, KisRandomConstAccessor pixelAccessor) const;
+        void computeEdge(const QVector2D &startPoint, const QVector2D &direction, KisRandomConstAccessorSP pixelAccessor);
+        FilterMatrix getMatrixForPoint(const QVector2D &point, KisRandomConstAccessorSP pixelAccessor) const;
         FilterMatrix getHorizontalFilterMatrix() const;
         FilterMatrix getVerticalFilterMatrix() const;
 

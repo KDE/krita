@@ -54,6 +54,7 @@
 #include <commands/KoShapeUngroupCommand.h>
 #include <KoSnapGuide.h>
 
+#include <KIcon>
 #include <KAction>
 #include <QKeyEvent>
 #include <QClipboard>

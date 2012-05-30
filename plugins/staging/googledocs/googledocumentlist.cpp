@@ -22,6 +22,8 @@
 GoogleDocumentList::GoogleDocumentList()
 {
     docModel = new QStandardItemModel(0, 3);
+    docModel->setHeaderData(0, Qt::Horizontal, "FileName");
+    docModel->setHeaderData(2, Qt::Horizontal, "Type");
 }
 
 void GoogleDocumentList::setEtag(const QString  &etag)
@@ -79,7 +81,6 @@ void GoogleDocumentList::append(GoogleDocument *entry)
             return;
         }
 
-        m_entries.append(entry);
         int rows = docModel->rowCount();
         docModel->insertRows(rows, 1, QModelIndex());
         docModel->setData(docModel->index(rows, 0, QModelIndex()), entry->title());
@@ -87,16 +88,11 @@ void GoogleDocumentList::append(GoogleDocument *entry)
                           QPixmap(iconPath),
                           Qt::DecorationRole);
         docModel->setData(docModel->index(rows, 1, QModelIndex()), entry->documentUrl());
-        docModel->setData(docModel->index(rows, 2, QModelIndex()), entry->documentType());
+        docModel->setData(docModel->index(rows, 2, QModelIndex()), entry->documentType().toUpper());
     }
-}
-
-QList<GoogleDocument *> GoogleDocumentList::entries()
-{
-    return m_entries;
 }
 
 int GoogleDocumentList::documentsCount()
 {
-    return m_entries.count();
+    return docModel->rowCount();
 }

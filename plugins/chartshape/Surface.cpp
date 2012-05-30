@@ -88,16 +88,16 @@ Surface::Private::~Private()
 // ================================================================
 
 
-Surface::Surface( PlotArea *parent )
-    : d( new Private(parent) )
+Surface::Surface(PlotArea *parent)
+    : d(new Private(parent))
 {
-    Q_ASSERT( parent );
+    Q_ASSERT(parent);
 
     // FIXME: Make this class capable of storing floor-specific
     // attributes as well. Right now, it's really only used
     // and designed to load and save the chart's wall.
     d->kdPlane = d->plotArea->kdCartesianPlane();
-    Q_ASSERT( d->kdPlane );
+    Q_ASSERT(d->kdPlane);
 }
 
 Surface::~Surface()
@@ -111,7 +111,7 @@ QPointF Surface::position() const
     return d->position;
 }
 
-void Surface::setPosition( const QPointF &position )
+void Surface::setPosition(const QPointF &position)
 {
     d->position = position;
 }
@@ -121,7 +121,7 @@ int Surface::width() const
     return d->width;
 }
 
-void Surface::setWidth( int width )
+void Surface::setWidth(int width)
 {
     d->width = width;
 }
@@ -131,7 +131,7 @@ QBrush Surface::brush() const
     return d->brush;
 }
 
-void Surface::setBrush( const QBrush &brush )
+void Surface::setBrush(const QBrush &brush)
 {
     d->brush = brush;
 }
@@ -141,79 +141,80 @@ QPen Surface::framePen() const
     return d->framePen;
 }
 
-void Surface::setFramePen( const QPen &pen )
+void Surface::setFramePen(const QPen &pen)
 {
     d->framePen = pen;
 }
 
-bool Surface::loadOdf( const KoXmlElement &surfaceElement,
-                       KoShapeLoadingContext &context )
+bool Surface::loadOdf(const KoXmlElement &surfaceElement,
+                       KoShapeLoadingContext &context)
 {
     // Get the current style stack and save it's state.
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
 
     bool brushLoaded = false;
     
-    if ( surfaceElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
+    if (surfaceElement.hasAttributeNS(KoXmlNS::chart, "style-name")) {
         KDChart::BackgroundAttributes backgroundAttributes = d->kdPlane->backgroundAttributes();
         KDChart::FrameAttributes frameAttributes = d->kdPlane->frameAttributes();
         
         // Add the chart style to the style stack.
         styleStack.clear();
-        context.odfLoadingContext().fillStyleStack( surfaceElement, KoXmlNS::chart, "style-name", "chart" );
+        context.odfLoadingContext().fillStyleStack(surfaceElement, KoXmlNS::chart, "style-name", "chart");
         
-        styleStack.setTypeProperties( "graphic" );
+        styleStack.setTypeProperties("graphic");
         
         // If there is a "stroke" property, then get the stroke style
         // and set the pen accordingly.
-        if ( styleStack.hasProperty( KoXmlNS::draw, "stroke" ) ) {
-            frameAttributes.setVisible( true );
+        if (styleStack.hasProperty(KoXmlNS::draw, "stroke")) {
+            frameAttributes.setVisible(true);
 
-            QString  stroke = styleStack.property( KoXmlNS::draw, "stroke" );
-            QPen pen( Qt::NoPen );
-            if ( stroke == "solid" || stroke == "dash" )
-                pen = KoOdfGraphicStyles::loadOdfStrokeStyle( styleStack, stroke, context.odfLoadingContext().stylesReader() );
+            QString  stroke = styleStack.property(KoXmlNS::draw, "stroke");
+            QPen pen(Qt::NoPen);
+            if (stroke == "solid" || stroke == "dash")
+                pen = KoOdfGraphicStyles::loadOdfStrokeStyle(styleStack, stroke,
+                                                             context.odfLoadingContext().stylesReader());
 
-            frameAttributes.setPen( pen );
+            frameAttributes.setPen(pen);
         }
         
         // If there is a "fill" property, then get the fill style, and
         // set the brush for the surface accordingly.
-        if ( styleStack.hasProperty( KoXmlNS::draw, "fill" ) ) {
-            backgroundAttributes.setVisible( true );
+        if (styleStack.hasProperty(KoXmlNS::draw, "fill")) {
+            backgroundAttributes.setVisible(true);
 
             QBrush   brush;
-            QString  fill = styleStack.property( KoXmlNS::draw, "fill" );
-            if ( fill == "solid" || fill == "hatch" ) {
+            QString  fill = styleStack.property(KoXmlNS::draw, "fill");
+            if (fill == "solid" || fill == "hatch") {
                 brushLoaded = true;
-                brush = KoOdfGraphicStyles::loadOdfFillStyle( styleStack, fill,
-                                                              context.odfLoadingContext().stylesReader() );
+                brush = KoOdfGraphicStyles::loadOdfFillStyle(styleStack, fill,
+                                                             context.odfLoadingContext().stylesReader());
             }
-            else if ( fill == "gradient" ) {
+            else if (fill == "gradient") {
                 brushLoaded = true;
-                brush = KoOdfGraphicStyles::loadOdfGradientStyle( styleStack, context.odfLoadingContext().stylesReader(), QSizeF( 5.0, 60.0 ) );
+                brush = KoOdfGraphicStyles::loadOdfGradientStyle(styleStack, context.odfLoadingContext().stylesReader(), QSizeF(5.0, 60.0));
             }
-            else if ( fill == "bitmap" ) {
+            else if (fill == "bitmap") {
                 brushLoaded = true;
                 brush = loadOdfPatternStyle(styleStack, context.odfLoadingContext(), QSizeF(5.0, 60.0));
             }
 
-            backgroundAttributes.setBrush( brush );
+            backgroundAttributes.setBrush(brush);
         }
         
         // Finally actually set the attributes.
-        d->kdPlane->setBackgroundAttributes( backgroundAttributes );
-        d->kdPlane->setFrameAttributes( frameAttributes );
+        d->kdPlane->setBackgroundAttributes(backgroundAttributes);
+        d->kdPlane->setFrameAttributes(frameAttributes);
     }
 
 #ifndef NWORKAROUND_ODF_BUGS
-    if ( !brushLoaded ) {
+    if (!brushLoaded) {
         KDChart::BackgroundAttributes backgroundAttributes = d->kdPlane->backgroundAttributes();
-        QColor fillColor = KoOdfWorkaround::fixMissingFillColor( surfaceElement, context );
-        if ( fillColor.isValid() ) {
-            backgroundAttributes.setVisible( true );
-            backgroundAttributes.setBrush( fillColor );
-            d->kdPlane->setBackgroundAttributes( backgroundAttributes );
+        QColor fillColor = KoOdfWorkaround::fixMissingFillColor(surfaceElement, context);
+        if (fillColor.isValid()) {
+            backgroundAttributes.setVisible(true);
+            backgroundAttributes.setBrush(fillColor);
+            d->kdPlane->setBackgroundAttributes(backgroundAttributes);
         }
     }
 #endif
@@ -221,33 +222,32 @@ bool Surface::loadOdf( const KoXmlElement &surfaceElement,
     return true;
 }
 
-void Surface::saveOdf( KoShapeSavingContext &context, 
-                       const char *elementName )
+void Surface::saveOdf(KoShapeSavingContext &context, const char *elementName)
 {
     KoXmlWriter  &bodyWriter = context.xmlWriter();
     KoGenStyles  &mainStyles = context.mainStyles();
-    KoGenStyle    style      = KoGenStyle( KoGenStyle::GraphicAutoStyle, 
-                                           "chart" );
+    KoGenStyle    style      = KoGenStyle(KoGenStyle::GraphicAutoStyle, "chart");
 
     // elementName is chart:floor or chart:wall
-    bodyWriter.startElement( elementName );
+    bodyWriter.startElement(elementName);
 
     QBrush backgroundBrush;
-    if ( d->kdPlane->backgroundAttributes().isVisible() )
+    if (d->kdPlane->backgroundAttributes().isVisible())
         backgroundBrush = d->kdPlane->backgroundAttributes().brush();
-    QPen framePen( Qt::NoPen );
-    if ( d->kdPlane->frameAttributes().isVisible() )
+    QPen framePen(Qt::NoPen);
+    if (d->kdPlane->frameAttributes().isVisible())
         framePen = d->kdPlane->frameAttributes().pen();
 
-    KoOdfGraphicStyles::saveOdfFillStyle( style, mainStyles, backgroundBrush );
-    KoOdfGraphicStyles::saveOdfStrokeStyle( style, mainStyles, framePen );
+    KoOdfGraphicStyles::saveOdfFillStyle(style, mainStyles, backgroundBrush);
+    KoOdfGraphicStyles::saveOdfStrokeStyle(style, mainStyles, framePen);
 
-    bodyWriter.addAttribute( "chart:style-name", mainStyles.insert( style, "ch" ) );
+    bodyWriter.addAttribute("chart:style-name", mainStyles.insert(style, "ch"));
 
     bodyWriter.endElement(); // chart:floor or chart:wall
 }
 
-QBrush Surface::loadOdfPatternStyle(const KoStyleStack &styleStack, KoOdfLoadingContext & context, const QSizeF &size)
+QBrush Surface::loadOdfPatternStyle(const KoStyleStack &styleStack, 
+                                    KoOdfLoadingContext &context, const QSizeF &size)
 {
     QString styleName = styleStack.property(KoXmlNS::draw, "fill-image-name");
 

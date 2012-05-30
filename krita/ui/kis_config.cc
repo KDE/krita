@@ -352,6 +352,16 @@ void KisConfig::setUseOpenGLToolOutlineWorkaround(bool useWorkaround)
     m_cfg.writeEntry("useOpenGLToolOutlineWorkaround", useWorkaround);
 }
 
+bool KisConfig::useOpenGLTrilinearFiltering() const
+{
+    return m_cfg.readEntry("useOpenGLTrilinearFiltering", true);
+}
+
+void KisConfig::setUseOpenGLTrilinearFiltering(bool useTrilinearFiltering)
+{
+    m_cfg.writeEntry("useOpenGLTrilinearFiltering", useTrilinearFiltering);
+}
+
 qint32 KisConfig::maxNumberOfThreads()
 {
     return m_cfg.readEntry("maxthreads", QThread::idealThreadCount());
@@ -541,7 +551,7 @@ void KisConfig::setCheckersColor(const QColor & v)
 
 bool KisConfig::antialiasCurves()
 {
-    return m_cfg.readEntry("antialiascurves", false);
+    return m_cfg.readEntry("antialiascurves", true);
 }
 
 void KisConfig::setAntialiasCurves(bool v)

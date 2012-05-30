@@ -37,7 +37,19 @@ class KoShape;
  * \brief KoFindBase implementation for searching within text shapes.
  *
  * This class provides a link between KoFindBase and QTextDocument for searching.
- * It uses KoText::CurrentTextDocument for determining what text to search through.
+ * It uses a list of QTextDocument instances and searches through them using
+ * QTextDocument::find().
+ *
+ * The following options are defined:
+ * <ul>
+ *      <li><strong>caseSensitive</strong>: Boolean. Default false. Use case-sensitive searching.</li>
+ *      <li><strong>wholeWords</strong>: Boolean. Default false. Only match whole words, not parts.</li>
+ *      <li><strong>fromCursor</strong>: Boolean. Default true. Start searching from the current cursor
+ *          set through setCurrentCursor().</li>
+ * </ul>
+ *
+ * \note Before you can use this class, be sure to set a list of QTextDocuments
+ * using setDocuments().
  *
  * Matches created by this implementation use QTextDocument for the container and
  * QTextCursor for the location.
@@ -55,11 +67,8 @@ public:
 
     /**
      * Constructor.
-     *
-     * \param provider The current document's resource manager, used for retrieving
-     * the actual text to search through.
      */
-    KoFindText(const QList<QTextDocument*> &documents, QObject *parent = 0);
+    KoFindText(QObject *parent = 0);
     virtual ~KoFindText();
 
     /**
@@ -71,12 +80,23 @@ public:
      */
     virtual void findPrevious();
 
+    /**
+     * Retrieve the list of documents currently in use.
+     */
+    QList<QTextDocument*> documents() const;
+
+    /**
+     * Set the current cursor.
+     * Used for the "Start from cursor" find option.
+     *
+     * \param cursor The current cursor.
+     */
     virtual void setCurrentCursor(const QTextCursor &cursor);
 
     /**
-     * Set the format use.
+     * Set the format to use.
      *
-     * USe this function if you want to overwrite the default formating options.
+     * Use this function if you want to overwrite the default formatting options.
      */
     static void setFormat(FormatType formatType, const QTextCharFormat &format);
 
@@ -94,11 +114,15 @@ public:
 
 public Q_SLOTS:
     /**
-     * Append a list of documents to the documents that can be searched.
+     * Set the list of documents that can be searched.
      *
-     * \param documents The list of documents to append.
+     * Since there is no way of knowing how an application deals with text shapes
+     * and the QTextDocument instances inside those shapes, it is important to
+     * update the list of documents whenever something changes.
+     *
+     * \param documents The list of documents to search through.
      */
-    void addDocuments(const QList<QTextDocument*> &documents);
+    void setDocuments(const QList<QTextDocument*> &documents);
 
 protected:
     /**

@@ -31,9 +31,10 @@
 #include <QTimer>
 
 ParagraphSettingsDialog::ParagraphSettingsDialog(TextTool *tool, KoTextEditor *editor, QWidget* parent)
-        : KDialog(parent),
-        m_tool(tool),
-        m_editor(editor)
+        : KDialog(parent)
+        , m_tool(tool)
+        , m_editor(editor)
+        , m_styleChanged(false)
 {
     setCaption(i18n("Paragraph Format"));
     setModal(true);
@@ -44,9 +45,13 @@ ParagraphSettingsDialog::ParagraphSettingsDialog(TextTool *tool, KoTextEditor *e
     m_paragraphGeneral->hideStyleName(true);
     setMainWidget(m_paragraphGeneral);
 
+
     connect(this, SIGNAL(applyClicked()), this, SLOT(slotApply()));
     connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
     initTabs();
+
+    // Do this after initTabs so it doesn't cause signals prematurely
+    connect(m_paragraphGeneral, SIGNAL(styleChanged()), this, SLOT(styleChanged()));
 }
 
 ParagraphSettingsDialog::~ParagraphSettingsDialog()
@@ -59,6 +64,11 @@ void ParagraphSettingsDialog::initTabs()
     m_paragraphGeneral->setStyle(style, KoList::level(m_editor->block()));
 }
 
+void ParagraphSettingsDialog::styleChanged(bool state)
+{
+    m_styleChanged = state;
+}
+
 void ParagraphSettingsDialog::slotOk()
 {
     slotApply();
@@ -67,6 +77,9 @@ void ParagraphSettingsDialog::slotOk()
 
 void ParagraphSettingsDialog::slotApply()
 {
+    if (!m_styleChanged)
+        return;
+
     m_editor->beginEditBlock(i18n("Paragraph Settings"));
     KoParagraphStyle chosenStyle;
     m_paragraphGeneral->save(&chosenStyle);
@@ -87,11 +100,17 @@ void ParagraphSettingsDialog::slotApply()
         }
     }
     m_editor->endEditBlock();
+    m_styleChanged = false;
 }
 
 void ParagraphSettingsDialog::setUnit(const KoUnit &unit)
 {
     m_paragraphGeneral->setUnit(unit);
+}
+
+void ParagraphSettingsDialog::setImageCollection(KoImageCollection *imageCollection)
+{
+    m_paragraphGeneral->setImageCollection(imageCollection);
 }
 
 #include <ParagraphSettingsDialog.moc>

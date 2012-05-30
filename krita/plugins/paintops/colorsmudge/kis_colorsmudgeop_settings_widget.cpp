@@ -20,6 +20,7 @@
 #include "kis_brush_based_paintop_settings.h"
 #include "kis_overlay_mode_option.h"
 #include "kis_rate_option_widget.h"
+#include "kis_smudge_option_widget.h"
 
 #include <kis_properties_configuration.h>
 #include <kis_paintop_options_widget.h>
@@ -38,12 +39,14 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
     KisBrushBasedPaintopOptionWidget(parent)
 {
     setObjectName("brush option widget");
+    
+//     KisSmudgeOptionWidget* opt = 
 
     addPaintOpOption(new KisCompositeOpOption(true));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSpacingOption()));
-    addPaintOpOption(new KisRateOptionWidget(i18n("Smudge Rate"), i18n("Rate: "), "SmudgeRate", true));
+    addPaintOpOption(new KisSmudgeOptionWidget(i18n("Smudge Rate"), i18n("Rate: "), "SmudgeRate", true));
     addPaintOpOption(new KisRateOptionWidget(i18n("Color Rate") , i18n("Rate: "), "ColorRate" , false));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
     addPaintOpOption(new KisPressureScatterOptionWidget());

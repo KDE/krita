@@ -395,7 +395,7 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
                 this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
         connect(d->set, SIGNAL(propertyReset(KoProperty::Set&, KoProperty::Property&)),
                 this, SLOT(slotPropertyReset(KoProperty::Set&, KoProperty::Property&)));
-//NEEDED?        connect(d->set, SIGNAL(aboutToBeCleared()), this, SLOT(slotSetWillBeCleared()));
+        connect(d->set, SIGNAL(aboutToBeCleared()), this, SLOT(slotSetWillBeCleared()));
         connect(d->set, SIGNAL(aboutToBeDeleted()), this, SLOT(slotSetWillBeDeleted()));
     }
 
@@ -433,6 +433,11 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
 //   ensureItemVisible(item);
         }
     }
+}
+
+void EditorView::slotSetWillBeCleared()
+{
+    changeSet(0, QByteArray());
 }
 
 void EditorView::slotSetWillBeDeleted()

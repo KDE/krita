@@ -106,7 +106,7 @@ void KRSectionData::createProperties(const QDomElement & elemSource)
 {
     m_set = new KoProperty::Set(this, "Section");
 
-    m_height = new KoProperty::Property("height", KoUnit::unit("cm").fromUserValue(2.0), i18n("Height"));
+    m_height = new KoProperty::Property("height", KoUnit(KoUnit::Centimeter).fromUserValue(2.0), i18n("Height"));
     m_backgroundColor = new KoProperty::Property("background-color", Qt::white, i18n("Background Color"));
     m_height->setOption("unit", "cm");
     if (!elemSource.isNull())

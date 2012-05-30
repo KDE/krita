@@ -26,10 +26,10 @@
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
 
-#include "kis_iterators_pixel.h"
-#include "kis_random_accessor.h"
+#include "kis_random_accessor_ng.h"
 #include "kis_random_sub_accessor.h"
 #include <kis_iterator_ng.h>
+#include <kis_repeat_iterators_pixel.h>
 
 #include "kis_paint_device.h"
 
@@ -64,11 +64,10 @@ void KisIteratorBenchmark::rectIter(const KoColorSpace * colorSpace)
     t.start();
 
     for (int i = 0; i < 3; i++) {
-        KisRectIteratorPixel it = dev.createRectIterator(0, 0, TEST_WIDTH, TEST_HEIGHT);
-        while (!it.isDone()) {
-            //memcpy(it.rawData(), bytes, colorSpace->pixelSize());
-            ++it;
-        }
+        KisRectIteratorSP it = dev.createRectIteratorNG(0, 0, TEST_WIDTH, TEST_HEIGHT);
+        do {
+            //memcpy(it->rawData(), bytes, colorSpace->pixelSize());
+        } while (it->nextPixel());
 
         qDebug() << "RectIterator run " << i  << "took" << t.elapsed();
         t.restart();
@@ -89,13 +88,12 @@ void KisIteratorBenchmark::hLineIter(const KoColorSpace * colorSpace)
 
 
     for (int i = 0; i < 3; i++) {
-        KisHLineIteratorPixel it = dev.createHLineIterator(0, 0, TEST_WIDTH);
+        KisHLineIteratorSP it = dev.createHLineIteratorNG(0, 0, TEST_WIDTH);
         for (int j = 0; j < TEST_HEIGHT; j++) {
-            while (!it.isDone()) {
-                //memcpy(it.rawData(), bytes, colorSpace->pixelSize());
-                ++it;
-            }
-            it.nextRow();
+            do {
+                //memcpy(it->rawData(), bytes, colorSpace->pixelSize());
+            } while (it->nextPixel());
+            it->nextRow();
         }
 
         qDebug() << "HLineIterator run " << i  << "took" << t.elapsed();
@@ -103,25 +101,24 @@ void KisIteratorBenchmark::hLineIter(const KoColorSpace * colorSpace)
     }
 
     for (int i = 0; i < 3; i++) {
-        KisHLineIteratorPixel it = dev.createHLineIterator(0, 0, TEST_WIDTH);
+        KisHLineIteratorSP it = dev.createHLineIteratorNG(0, 0, TEST_WIDTH);
         for (int j = 0; j < TEST_HEIGHT; j++) {
-            while (!it.isDone()) {
-                int pixels = it.nConseqHPixels();
-                //memcpy(it.rawData(), bytes, colorSpace->pixelSize());
-                it += pixels;
-            }
-            it.nextRow();
+            int pixels = 0;
+            do {
+                pixels = it->nConseqPixels();
+                //memcpy(it->rawData(), bytes, colorSpace->pixelSize());
+            } while (it->nextPixels(pixels));
+            it->nextRow();
         }
 
         kDebug() << "HLineIterator with nConseqHPixels run " << i  << "took" << t.elapsed();
         t.restart();
     }
 
-    KisHLineConstIteratorPixel cit = dev.createHLineConstIterator(0, 0, TEST_WIDTH);
+    KisHLineConstIteratorSP cit = dev.createHLineConstIteratorNG(0, 0, TEST_WIDTH);
     for (int i = 0; i < TEST_HEIGHT; i++) {
-        while (!cit.isDone())
-            ++cit;
-        cit.nextRow();
+        do {} while (cit->nextPixel());
+        cit->nextRow();
     }
 
     qDebug() << "const HLineIterator took" << t.elapsed();
@@ -143,7 +140,7 @@ void KisIteratorBenchmark::hLineIterNG(const KoColorSpace * colorSpace)
         KisHLineIteratorSP it = dev.createHLineIteratorNG(0, 0, TEST_WIDTH);
         for (int j = 0; j < TEST_HEIGHT; j++) {
             do {
-                //memcpy(it.rawData(), bytes, colorSpace->pixelSize());
+                //memcpy(it->rawData(), bytes, colorSpace->pixelSize());
             } while (it->nextPixel());
             it->nextRow();
         }
@@ -158,7 +155,7 @@ void KisIteratorBenchmark::hLineIterNG(const KoColorSpace * colorSpace)
             int pixels;
             do {
                 pixels = it->nConseqPixels();
-                //memcpy(it.rawData(), bytes, colorSpace->pixelSize());
+                //memcpy(it->rawData(), bytes, colorSpace->pixelSize());
             } while (it->nextPixels(pixels));
             it->nextRow();
         }
@@ -192,25 +189,23 @@ void KisIteratorBenchmark::vLineIter(const KoColorSpace * colorSpace)
     t.start();
 
     for (int i = 0; i < 3; i++) {
-        KisVLineIteratorPixel it = dev.createVLineIterator(0, 0, TEST_HEIGHT);
+        KisVLineIteratorSP it = dev.createVLineIteratorNG(0, 0, TEST_HEIGHT);
         for (int j = 0; j < TEST_WIDTH; j++) {
-            while (!it.isDone()) {
-                //memcpy(it.rawData(), bytes, colorSpace->pixelSize());
-                ++it;
-            }
-            it.nextCol();
+            do {
+                //memcpy(it->rawData(), bytes, colorSpace->pixelSize());
+
+            } while (it->nextPixel());
+            it->nextColumn();
         }
 
         qDebug() << "VLineIterator run " << i  << " took" << t.elapsed();
         t.restart();
     }
 
-    KisVLineConstIteratorPixel cit = dev.createVLineConstIterator(0, 0, TEST_HEIGHT);
+    KisVLineConstIteratorSP cit = dev.createVLineConstIteratorNG(0, 0, TEST_HEIGHT);
     for (int i = 0; i < TEST_WIDTH; i++) {
-        while (!cit.isDone()) {
-            ++cit;
-        }
-        cit.nextCol();
+        do {} while (cit->nextPixel());
+        cit->nextColumn();
     }
     qDebug() << "const VLineIterator took" << t.elapsed();
 
@@ -232,7 +227,7 @@ void KisIteratorBenchmark::vLineIterNG(const KoColorSpace * colorSpace)
         KisVLineIteratorSP it = dev.createVLineIteratorNG(0, 0, TEST_HEIGHT);
         for (int j = 0; j < TEST_WIDTH; j++) {
             do {
-                //memcpy(it.rawData(), bytes, colorSpace->pixelSize());
+                //memcpy(it->rawData(), bytes, colorSpace->pixelSize());
             } while(it->nextPixel());
             it->nextColumn();
         }
@@ -243,9 +238,7 @@ void KisIteratorBenchmark::vLineIterNG(const KoColorSpace * colorSpace)
 
     KisVLineConstIteratorSP cit = dev.createVLineConstIteratorNG(0, 0, TEST_HEIGHT);
     for (int i = 0; i < TEST_WIDTH; i++) {
-        do {
-
-        } while(cit->nextPixel());
+        do {} while(cit->nextPixel());
         cit->nextColumn();
     }
     qDebug() << "const VLineIteratorNG took" << t.elapsed();
@@ -265,11 +258,11 @@ void KisIteratorBenchmark::randomAccessor(const KoColorSpace * colorSpace)
     t.start();
 
     for (int i = 0; i < 3; i++) {
-        KisRandomAccessorPixel ac = dev.createRandomAccessor(0, 0);
+        KisRandomAccessorSP ac = dev.createRandomAccessorNG(0, 0);
         for (int y = 0; y < TEST_HEIGHT; ++y) {
             for (int x = 0; x < TEST_WIDTH; ++x) {
-                ac.moveTo(x, y);
-                //             memcpy(ac.rawData(), bytes, colorSpace->pixelSize());
+                ac->moveTo(x, y);
+                //             memcpy(ac->rawData(), bytes, colorSpace->pixelSize());
             }
         }
 
@@ -277,10 +270,10 @@ void KisIteratorBenchmark::randomAccessor(const KoColorSpace * colorSpace)
         t.restart();
     }
 
-    KisRandomConstAccessorPixel cac = dev.createRandomConstAccessor(0, 0);
+    KisRandomConstAccessorSP cac = dev.createRandomConstAccessorNG(0, 0);
     for (int y = 0; y < TEST_HEIGHT; ++y) {
         for (int x = 0; x < TEST_WIDTH; ++x) {
-            cac.moveTo(x, y);
+            cac->moveTo(x, y);
         }
     }
 

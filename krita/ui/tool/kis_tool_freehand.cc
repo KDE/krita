@@ -65,7 +65,7 @@
 
 static const int HIDE_OUTLINE_TIMEOUT = 800; // ms
 
-KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText)
+KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & /*transactionText*/)
     : KisToolPaint(canvas, cursor)
 {
     m_explicitShowOutline = false;
@@ -222,6 +222,8 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
         if (canvas2)
             canvas2->view()->disableControls();
 
+
+        currentPaintOpPreset()->settings()->setCanvasRotation( static_cast<KisCanvas2*>(canvas())->rotationAngle() );
         initStroke(e);
 
         e->accept();
@@ -444,6 +446,10 @@ QPainterPath KisToolFreehand::getOutlinePath(const QPointF &documentPos,
     if (paintOp){
         scale = paintOp->currentScale();
         rotation = paintOp->currentRotation();
+    }
+
+    if (mode() == KisTool::HOVER_MODE) {
+        rotation += static_cast<KisCanvas2*>(canvas())->rotationAngle() * M_PI / 180.0;
     }
 
     QPointF imagePos = currentImage()->documentToPixel(documentPos);

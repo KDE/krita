@@ -39,13 +39,13 @@
 #include <QTextCharFormat>
 
 SpellCheck::SpellCheck()
-    : m_bgSpellCheck(0),
+    : m_document(0),
+    m_bgSpellCheck(0),
     m_enableSpellCheck(true),
     m_allowSignals(true),
     m_documentIsLoading(false),
     m_isChecking(false),
-    m_spellCheckMenu(0),
-    m_document(0)
+    m_spellCheckMenu(0)
 {
     /* setup actions for this plugin */
     KAction *configureAction = new KAction(i18n("Configure &Spell Checking..."), this);
@@ -182,6 +182,12 @@ void SpellCheck::setSkipRunTogetherWords(bool on)
 {
     m_speller.setAttribute(Speller::SkipRunTogether, on);
 }
+
+bool SpellCheck::addWordToPersonal(const QString &word)
+{
+    return m_bgSpellCheck->addWordToPersonal(word);
+}
+
 
 QString SpellCheck::defaultLanguage() const
 {
@@ -358,7 +364,7 @@ void SpellCheck::finishedRun()
                 block.layout()->clearAdditionalFormats();
             else
                 block.layout()->setAdditionalFormats(newRanges);
-            m_document->markContentsDirty(bl.start, bl.start + bl.length);
+            m_document->markContentsDirty(bl.start, bl.length);
         }
     }
     m_allowSignals = true;
@@ -428,7 +434,6 @@ void SpellCheck::replaceWordBySuggestion(const QString &word, int startPosition,
     if (!block.isValid())
         return;
 
-    int i=0;
     QTextCursor cursor(m_document);
     cursor.setPosition(startPosition);
     cursor.movePosition(QTextCursor::NextCharacter,QTextCursor::KeepAnchor, lengthOfWord);

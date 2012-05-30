@@ -35,9 +35,8 @@
 #include <math.h>
 
 // Qt
-//#include <QCheckBox>
 #include <QLabel>
-#include <QRadioButton>
+#include <QToolButton>
 #include <QWidget>
 #include <QGridLayout>
 #include <QButtonGroup>
@@ -110,30 +109,29 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     mainLayout->addWidget(capLabel, 2, 0);
     d->capGroup = new QButtonGroup(this);
     d->capGroup->setExclusive(true);
-    d->capGroup->setExclusive(true);
 
-    QRadioButton *button = 0;
+    QToolButton *button = 0;
 
-    button = new QRadioButton(this);
+    button = new QToolButton(this);
     button->setIcon(SmallIcon("cap_butt"));
     button->setCheckable(true);
     button->setToolTip(i18n("Butt cap"));
     d->capGroup->addButton(button, Qt::FlatCap);
     mainLayout->addWidget(button, 2, 1);
 
-    button = new QRadioButton(this);
+    button = new QToolButton(this);
     button->setIcon(SmallIcon("cap_round"));
     button->setCheckable(true);
     button->setToolTip(i18n("Round cap"));
     d->capGroup->addButton(button, Qt::RoundCap);
     mainLayout->addWidget(button, 2, 2);
 
-    button = new QRadioButton(this);
+    button = new QToolButton(this);
     button->setIcon(SmallIcon("cap_square"));
     button->setCheckable(true);
     button->setToolTip(i18n("Square cap"));
     d->capGroup->addButton(button, Qt::SquareCap);
-    mainLayout->addWidget(button, 2, 3);
+    mainLayout->addWidget(button, 2, 3, Qt::AlignLeft);
 
     // The join group
     QLabel* joinLabel = new QLabel(i18n("Join:"), this);
@@ -142,26 +140,26 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     d->joinGroup = new QButtonGroup(this);
     d->joinGroup->setExclusive(true);
 
-    button = new QRadioButton(this);
+    button = new QToolButton(this);
     button->setIcon(SmallIcon("join_miter"));
     button->setCheckable(true);
     button->setToolTip(i18n("Miter join"));
     d->joinGroup->addButton(button, Qt::MiterJoin);
     mainLayout->addWidget(button, 3, 1);
 
-    button = new QRadioButton(this);
+    button = new QToolButton(this);
     button->setIcon(SmallIcon("join_round"));
     button->setCheckable(true);
     button->setToolTip(i18n("Round join"));
     d->joinGroup->addButton(button, Qt::RoundJoin);
     mainLayout->addWidget(button, 3, 2);
 
-    button = new QRadioButton(this);
+    button = new QToolButton(this);
     button->setIcon(SmallIcon("join_bevel"));
     button->setCheckable(true);
     button->setToolTip(i18n("Bevel join"));
     d->joinGroup->addButton(button, Qt::BevelJoin);
-    mainLayout->addWidget(button, 3, 3);
+    mainLayout->addWidget(button, 3, 3, Qt::AlignLeft);
 
     // Miter limit
     QLabel* miterLabel = new QLabel(i18n("Miter limit:"), this);

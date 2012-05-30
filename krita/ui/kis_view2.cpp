@@ -116,6 +116,7 @@
 #include <kis_paint_layer.h>
 #include "kis_progress_widget.h"
 #include "kis_shape_layer.h"
+#include "widgets/kis_floating_message.h"
 
 #include <QDebug>
 #include <QPoint>
@@ -294,10 +295,6 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     actionCollection()->addAction("createTemplate", m_d->createTemplate);
     connect(m_d->createTemplate, SIGNAL(triggered()), this, SLOT(slotCreateTemplate()));
 
-    KAction *firstRun = new KAction( i18n( "Load Tutorial"), this);
-    actionCollection()->addAction("first_run", firstRun);
-    connect(firstRun, SIGNAL(triggered()), this, SLOT(slotFirstRun()));
-
     m_d->mirrorCanvas = new KToggleAction(i18n("Mirror Image"), this);
     m_d->mirrorCanvas->setChecked(false);
     actionCollection()->addAction("mirror_canvas", m_d->mirrorCanvas);
@@ -357,6 +354,8 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
         connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
                 shell()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &)));
+
+        shell()->dockerManager()->setIcons(false);
     }
 
     m_d->statusBar = new KisStatusBar(this);
@@ -714,6 +713,13 @@ void KisView2::slotLoadingFinished()
         m_d->nodeManager->slotNonUiActivatedNode(activeNode);
     }
 
+
+    // get the assistants and push them to the manager
+    QList<KisPaintingAssistant*> paintingAssistants = m_d->doc->preLoadedAssistants();
+    foreach (KisPaintingAssistant* assistant, paintingAssistants) {
+        m_d->paintingAssistantManager->addAssistant(assistant);
+    }
+
     /**
      * Dirty hack alert
      */
@@ -721,7 +727,12 @@ void KisView2::slotLoadingFinished()
         m_d->viewConverter->setZoomMode(KoZoomMode::ZOOM_PAGE);
     if (m_d->zoomManager && m_d->zoomManager->zoomController())
         m_d->zoomManager->zoomController()->setAspectMode(true);
-
+    if (m_d->paintingAssistantManager){
+        foreach(KisPaintingAssistant* assist, m_d->doc->preLoadedAssistants()){
+            m_d->paintingAssistantManager->addAssistant(assist);
+        }
+        m_d->paintingAssistantManager->setVisible(true);
+    }
     updateGUI();
 
     emit sigLoadingFinished();
@@ -1207,26 +1218,6 @@ void KisView2::enableControls()
     }
 }
 
-void KisView2::slotFirstRun()
-{
-    QString fname = KisFactory2::componentData().dirs()->findResource("kis_images", "krita_first_start.kra");
-    if (!fname.isEmpty()) {
-        KoDocumentEntry entry = KoDocumentEntry(KoDocument::readNativeService());
-        QString errorMsg;
-        KoDocument* doc = entry.createDoc(&errorMsg);
-        if (!doc) return;
-        KoMainWindow *shell = new KoMainWindow(doc->componentData());
-        shell->show();
-        QObject::connect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
-        // for initDoc to fill in the recent docs list
-        // and for KoDocument::slotStarted
-        doc->addShell(shell);
-        doc->showStartUpWidget(shell, true);
-        doc->openUrl(fname);
-    }
-
-}
-
 void KisView2::showStatusBar(bool toggled)
 {
     if (KoView::statusBar()) {
@@ -1283,6 +1274,13 @@ void KisView2::showJustTheCanvas(bool toggled)
             dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
             dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         }
+    }
+
+    if (toggled) {
+        // show a fading heads-up display about the shortcut to go back
+        KisFloatingMessage *floatingMessage = new KisFloatingMessage(i18n("Going into Canvas-Only mode.\nPress %1 to go back.",
+                                                                          actionCollection()->action("view_show_just_the_canvas")->shortcut().toString()), this);
+        floatingMessage->showMessage();
     }
 }
 

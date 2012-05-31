@@ -34,7 +34,6 @@
 #include "dialogs/FontDia.h"
 #include "dialogs/TableDialog.h"
 #include "dialogs/SimpleTableWidget.h"
-#include "commands/TextCutCommand.h"
 #include "commands/AutoResizeCommand.h"
 #include "commands/ChangeListLevelCommand.h"
 #include "FontSizeAction.h"
@@ -1099,7 +1098,12 @@ bool TextTool::paste()
 
 void TextTool::cut()
 {
-    m_textEditor.data()->addCommand(new TextCutCommand(this));
+    if (m_textEditor.data()->hasSelection()) {
+        copy();
+        KUndo2Command *topCmd = m_textEditor.data()->beginEditBlock(i18nc("(qtundo-format)", "Cut"));
+        m_textEditor.data()->deleteChar(false, topCmd);
+        m_textEditor.data()->endEditBlock();
+    }
 }
 
 QStringList TextTool::supportedPasteMimeTypes() const

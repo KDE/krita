@@ -318,13 +318,18 @@ public slots:
 
     const QTextDocument *document() const;
 
-    //Starts a new custom command. Everything between these two is one custom command. These should not be called from whithin a KUndo2Command
-//    void beginCustomCommand();
-//    void endCustomCommand();
-
-    //Same as Qt, only to be used inside KUndo2Commands
+    /// Same as Qt, only to be used inside KUndo2Commands
     KUndo2Command *beginEditBlock(QString title = QString());
     void endEditBlock();
+
+    /**
+     * Delete one character in the specified direction or a selection.
+     * Warning: From the outside this method should only be used with a parent command
+     * and only if there is a selection
+     * @param previous should be true if act like backspace
+     */
+    void deleteChar(bool previous, KUndo2Command *parent = 0);
+
 
     bool hasComplexSelection() const;
 
@@ -475,12 +480,6 @@ signals:
     void textFormatChanged();
 
 protected:
-    /**
-     * Delete one character in the specified direction or a selection.
-     * @param previous should be true if act like backspace
-     */
-    void deleteChar(bool previous, KUndo2Command *parent = 0);
-
     void recursivelyVisitSelection(QTextFrame::iterator it, KoTextVisitor &visitor) const;
 
 private:

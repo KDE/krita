@@ -174,7 +174,7 @@ QList<QWidget*> ReferencesTool::createOptionWidgets()
     m_stocw->setWindowTitle(i18n("Table of Contents"));
     widgets.append(m_stocw);
 
-    m_sfenw->setWindowTitle(i18n("Footnotes & Endnotes"));
+    m_sfenw->setWindowTitle(i18n("Footnotes and Endnotes"));
     widgets.append(m_sfenw);
 
     m_scbw->setWindowTitle(i18n("Citations and Bibliography"));

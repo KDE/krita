@@ -463,7 +463,8 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     const KoColorSpace * cs = layer->colorSpace();
     J_COLOR_SPACE color_type = getColorTypeforColorSpace(cs);
     if (color_type == JCS_UNKNOWN) {
-        layer->paintDevice()->convertTo(KoColorSpaceRegistry::instance()->rgb8());
+        KUndo2Command *tmp = layer->paintDevice()->convertTo(KoColorSpaceRegistry::instance()->rgb8());
+        delete tmp;
         color_type = JCS_RGB;
     }
 

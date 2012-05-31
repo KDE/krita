@@ -386,6 +386,7 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
 
 const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const KoColorProfile *profile)
 {
+    Q_ASSERT(!csID.isEmpty());
     if (profile) {
         const KoColorSpace *cs = 0;
         if (isCached(csID, profile->name())) {

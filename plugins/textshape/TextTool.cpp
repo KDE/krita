@@ -60,6 +60,7 @@
 #include <KoTextEditor.h>
 #include <KoChangeTracker.h>
 #include <KoChangeTrackerElement.h>
+#include <KoInlineNote.h>
 #include <KoBookmark.h>
 #include <KoBookmarkManager.h>
 #include <KoListLevelProperties.h>
@@ -588,6 +589,12 @@ void TextTool::showEditTip()
     if (m_editTipPointedAt.bookmark || !m_editTipPointedAt.externalHRef.isEmpty()) {
             QString help = i18n("Ctrl+click to go to link ");
             help += m_editTipPointedAt.externalHRef;
+            text += help + "</p>";
+            toolTipWidth = QFontMetrics(QToolTip::font()).boundingRect(help).width();
+    }
+
+    if (m_editTipPointedAt.note) {
+            QString help = i18n("Ctrl+click to go to the note ");
             text += help + "</p>";
             toolTipWidth = QFontMetrics(QToolTip::font()).boundingRect(help).width();
     }
@@ -1311,7 +1318,7 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
             }
         }
 
-        if ((pointedAt.bookmark || !pointedAt.externalHRef.isEmpty())) {
+        if ((pointedAt.bookmark || !pointedAt.externalHRef.isEmpty()) || pointedAt.note) {
             if (event->modifiers() & Qt::ControlModifier) {
                 useCursor(Qt::PointingHandCursor);
             }
@@ -1488,6 +1495,12 @@ void TextTool::mouseReleaseEvent(KoPointerEvent *event)
     if ((event->modifiers() & Qt::ControlModifier) && !m_textEditor.data()->hasSelection()) {
         if (pointedAt.bookmark) {
             m_textEditor.data()->setPosition(pointedAt.bookmark->position());
+            ensureCursorVisible();
+            event->accept();
+            return;
+        }
+        if (pointedAt.note) {
+            m_textEditor.data()->setPosition(pointedAt.note->textFrame()->firstPosition());
             ensureCursorVisible();
             event->accept();
             return;

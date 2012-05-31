@@ -131,6 +131,7 @@ private:
     friend class ChangeTrackedDeleteCommand;
     friend class DeleteCommand;
     friend class InsertInlineObjectCommand;
+    friend class InsertNoteCommand;
 
     // for unittests
     friend class TestKoInlineTextObjectManager;

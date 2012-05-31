@@ -95,7 +95,7 @@ J_COLOR_SPACE getColorTypeforColorSpace(const KoColorSpace * cs)
     if (KoID(cs->id()) == KoID("CMYK") || KoID(cs->id()) == KoID("CMYK16")) {
         return JCS_CMYK;
     }
-    KMessageBox::error(0, i18n("Cannot export images in %1.\n", cs->name())) ;
+    KMessageBox::information(0, i18n("Cannot export images in %1.\nWill save as RGB.", cs->name())) ;
     return JCS_UNKNOWN;
 }
 
@@ -450,7 +450,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
 
-    KisImageWSP image = KisImageWSP(layer -> image());
+    KisImageWSP image = KisImageWSP(layer->image());
     if (!image)
         return KisImageBuilder_RESULT_EMPTY;
 
@@ -459,6 +459,13 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
 
     if (!uri.isLocalFile())
         return KisImageBuilder_RESULT_NOT_LOCAL;
+
+    const KoColorSpace * cs = layer->colorSpace();
+    J_COLOR_SPACE color_type = getColorTypeforColorSpace(cs);
+    if (color_type == JCS_UNKNOWN) {
+        layer->paintDevice()->convertTo(KoColorSpaceRegistry::instance()->rgb8());
+        color_type = JCS_RGB;
+    }
 
     // Open file for writing
     QFile file(uri.toLocalFile());
@@ -477,16 +484,11 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     // Initialize output stream
     KisJPEGDestination::setDestination(&cinfo, &file);
 
-    const KoColorSpace * cs = image->colorSpace();
+
 
     cinfo.image_width = width;  // image width and height, in pixels
     cinfo.image_height = height;
     cinfo.input_components = cs->colorChannelCount(); // number of color channels per pixel */
-    J_COLOR_SPACE color_type = getColorTypeforColorSpace(cs);
-    if (color_type == JCS_UNKNOWN) {
-        (void)file.remove();
-        return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
-    }
     cinfo.in_color_space = color_type;   // colorspace of input image
 
     // Set default compression parameters

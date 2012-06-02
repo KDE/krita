@@ -515,7 +515,7 @@ if(BUILD_kexi AND SHOULD_BUILD_KEXI)
     ## Test for sqlite
     ##
     set(SQLITE_MIN_VERSION 3.6.16)
-    set(SQLITE_RECOMMENDED_VERSION 3.7.10)
+    set(SQLITE_RECOMMENDED_VERSION 3.7.12)
     set(SQLITE_LOAD_EXTENSION_REQUIRED ON)
     find_package(CalligraSqlite 3.6.16)
     macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine with enabled extensions loading"

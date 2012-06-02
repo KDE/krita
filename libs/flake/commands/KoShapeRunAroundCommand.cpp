@@ -26,16 +26,18 @@
 class KoShapeRunAroundCommand::Private
 {
 public:
-    Private(KoShape *s, KoShape::TextRunAroundSide side, int runThrough, qreal distance, qreal threshold)
+    Private(KoShape *s, KoShape::TextRunAroundSide side, int runThrough, qreal distance, qreal threshold, KoShape::TextRunAroundContour contour)
     : shape(s)
     , newSide(side)
     , newRunThrough(runThrough)
     , newDistance(distance)
     , newThreshold(threshold)
+    , newContour(contour)
     , oldSide(shape->textRunAroundSide())
     , oldRunThrough(shape->runThrough())
     , oldDistance(shape->textRunAroundDistance())
     , oldThreshold(shape->textRunAroundThreshold())
+    , oldContour(shape->textRunAroundContour())
     {}
 
     KoShape *shape;
@@ -43,15 +45,17 @@ public:
     int newRunThrough;
     qreal newDistance;
     qreal newThreshold;
+    KoShape::TextRunAroundContour newContour;
     KoShape::TextRunAroundSide oldSide;
     int oldRunThrough;
     qreal oldDistance;
     qreal oldThreshold;
+    KoShape::TextRunAroundContour oldContour;
 };
 
-KoShapeRunAroundCommand::KoShapeRunAroundCommand(KoShape *shape, KoShape::TextRunAroundSide side, int runThrough, qreal distance, qreal threshold, KUndo2Command *parent)
+KoShapeRunAroundCommand::KoShapeRunAroundCommand(KoShape *shape, KoShape::TextRunAroundSide side, int runThrough, qreal distance, qreal threshold, KoShape::TextRunAroundContour contour, KUndo2Command *parent)
 : KUndo2Command(parent)
-, d(new Private(shape, side, runThrough, distance, threshold))
+, d(new Private(shape, side, runThrough, distance, threshold, contour))
 {
     setText(i18nc("(qtundo-format)", "Change Shape RunAround"));
 }
@@ -68,6 +72,7 @@ void KoShapeRunAroundCommand::redo()
     d->shape->setRunThrough(d->newRunThrough);
     d->shape->setTextRunAroundDistance(d->newDistance);
     d->shape->setTextRunAroundThreshold(d->newThreshold);
+    d->shape->setTextRunAroundContour(d->newContour);
     d->shape->notifyChanged();
 }
 
@@ -78,5 +83,6 @@ void KoShapeRunAroundCommand::undo()
     d->shape->setRunThrough(d->oldRunThrough);
     d->shape->setTextRunAroundDistance(d->oldDistance);
     d->shape->setTextRunAroundThreshold(d->oldThreshold);
+    d->shape->setTextRunAroundContour(d->oldContour);
     d->shape->notifyChanged();
 }

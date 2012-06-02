@@ -152,6 +152,8 @@
   <Action name="theme_menu" />
 </Menu>
 
+</MenuBar>
+
 <ToolBar name="BrushesAndStuff" position="top">
      <Text>Brushes and Stuff</Text>
      <Action name="gradients"/>

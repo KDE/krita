@@ -137,6 +137,8 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
     if (!colorSpace)
         colorSpace = image()->colorSpace();
 
+    Q_ASSERT(colorSpace);
+
     if (!m_d->paintDevice) {
 
         m_d->paintDevice = new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image()));

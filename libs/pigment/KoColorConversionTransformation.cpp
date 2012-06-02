@@ -29,6 +29,9 @@ struct KoColorConversionTransformation::Private {
 
 KoColorConversionTransformation::KoColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs, Intent renderingIntent) : d(new Private)
 {
+    Q_ASSERT(srcCs);
+    Q_ASSERT(dstCs);
+
     d->srcColorSpace = srcCs;
     d->dstColorSpace = dstCs;
     d->renderingIntent = renderingIntent;

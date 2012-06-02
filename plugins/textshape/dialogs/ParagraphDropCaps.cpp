@@ -44,6 +44,7 @@ void ParagraphDropCaps::dropCapsStateChanged()
 {
     if (widget.capsState->isChecked()) {
         widget.setting->setEnabled(true);
+        m_dropCapsInherited = false;
     }
     else {
         widget.setting->setEnabled(false);
@@ -64,6 +65,11 @@ void ParagraphDropCaps::setDisplay(KoParagraphStyle *style)
     widget.distance->changeValue(style->dropCapsDistance());
     widget.characters->setValue(style->dropCapsLength());
     widget.lines->setValue(style->dropCapsLines());
+
+    m_dropCapsInherited = !style->hasProperty(KoParagraphStyle::DropCaps);
+    m_capsDistanceInherited = !style->hasProperty(KoParagraphStyle::DropCapsDistance);
+    m_capsLengthInherited = !style->hasProperty(KoParagraphStyle::DropCapsLength);
+    m_capsLinesInherited = !style->hasProperty(KoParagraphStyle::DropCapsLines);
 }
 
 void ParagraphDropCaps::save(KoParagraphStyle *style)
@@ -71,14 +77,21 @@ void ParagraphDropCaps::save(KoParagraphStyle *style)
     if (!style)
         return;
 
-    if (widget.capsState->isChecked()) {
-        style->setDropCaps(true);
+    if (!m_dropCapsInherited) {
+        style->setDropCaps(widget.capsState->isChecked());
+    }
+
+    if (!m_capsDistanceInherited) {
         style->setDropCapsDistance(widget.distance->value());
+    }
+
+    if (!m_capsLengthInherited) {
         style->setDropCapsLength(widget.characters->value());
+    }
+
+    if (!m_capsLinesInherited) {
         style->setDropCapsLines(widget.lines->value());
     }
-    else
-        style->setDropCaps(false);
 }
 
 void ParagraphDropCaps::setUnit(const KoUnit &unit)
@@ -89,17 +102,20 @@ void ParagraphDropCaps::setUnit(const KoUnit &unit)
 void ParagraphDropCaps::paragraphDistanceChanged(qreal distance)
 {
     Q_UNUSED(distance);
+    m_capsDistanceInherited = false;
     emit parStyleChanged();
 }
 
 void ParagraphDropCaps::dropsLineSpanChanged(int lineSpan)
 {
     Q_UNUSED(lineSpan);
+    m_capsLinesInherited = false;
     emit parStyleChanged();
 }
 
 void ParagraphDropCaps::dropedCharacterCountChanged(int count)
 {
     Q_UNUSED(count);
+    m_capsLengthInherited = false;
     emit parStyleChanged();
 }

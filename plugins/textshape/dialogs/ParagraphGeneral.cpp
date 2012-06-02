@@ -60,13 +60,16 @@ ParagraphGeneral::ParagraphGeneral(QWidget *parent)
 
     connect(m_paragraphDecorations, SIGNAL(parStyleChanged()), this, SIGNAL(styleChanged()));
 
+    m_paragraphDropCaps = new ParagraphDropCaps(this);
+    widget.tabs->addTab(m_paragraphDropCaps, i18n("Drop Caps"));
+
+    connect(m_paragraphDropCaps, SIGNAL(parStyleChanged()), this, SIGNAL(styleChanged()));
+
     widget.preview->setText(QString("Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
 
     connect(widget.name, SIGNAL(textChanged(const QString &)), this, SIGNAL(nameChanged(const QString&)));
+    connect(widget.nextStyle, SIGNAL(currentIndexChanged(int)), this, SIGNAL(styleChanged()));
 
-    m_paragraphDropCaps = new ParagraphDropCaps(this);
-    widget.tabs->addTab(m_paragraphDropCaps, i18n("Drop Caps"));
-    connect(m_paragraphDropCaps, SIGNAL(parStyleChanged()), this, SIGNAL(styleChanged()));
     connect(this, SIGNAL(styleChanged()), this, SLOT(setPreviewParagraphStyle()));
 }
 

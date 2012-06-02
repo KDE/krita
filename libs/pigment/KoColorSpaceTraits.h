@@ -317,6 +317,14 @@ struct KoRgbU8Traits : public KoRgbTraits<quint8> {
 struct KoRgbU16Traits : public KoRgbTraits<quint16> {
 };
 
+struct KoRgbF32Traits : public KoRgbTraits<float> {
+};
+
+struct KoRgbF64Traits : public KoRgbTraits<double> {
+};
+
+
+
 /** Base class for XYZ traits, it provides some convenient functions to
  * access XYZ channels through an explicit API.
  */

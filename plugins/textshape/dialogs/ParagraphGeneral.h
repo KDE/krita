@@ -26,6 +26,7 @@
 #include <QList>
 
 class KoParagraphStyle;
+class KoStyleManager;
 class KoImageCollection;
 class KoUnit;
 class ParagraphBulletsNumbers;
@@ -52,6 +53,7 @@ public:
 
     void setImageCollection(KoImageCollection *imageCollection);
     KoImageCollection *imageCollection();
+    void setStyleManager(KoStyleManager *sm);
 
 public slots:
     void save(KoParagraphStyle *style = 0);
@@ -74,6 +76,7 @@ private:
 
     KoParagraphStyle *m_style;
     QList<KoParagraphStyle*> m_paragraphStyles;
+    KoStyleManager *m_styleManager;
 };
 
 #endif

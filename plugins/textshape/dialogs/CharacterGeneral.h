@@ -26,9 +26,12 @@
 #include <QWidget>
 
 class KoCharacterStyle;
+class KoStyleManager;
+class KoStyleThumbnailer;
 class FontDecorations;
 class CharacterHighlighting;
 class LanguageTab;
+class StylesModel;
 
 class CharacterGeneral : public QWidget
 {
@@ -41,6 +44,9 @@ public:
     bool isStyleChanged();
     QString styleName() const;
     void selectName();
+    void setStyleManager(KoStyleManager *sm); // set style manager for m_paragraph style model
+    void updateStyleCombo(KoParagraphStyle *style); // set current style in next style combo
+    int nextStyleId(); //return the current style id in next style combo
 
 public slots:
     void save(KoCharacterStyle *style = 0);
@@ -66,6 +72,9 @@ private:
     LanguageTab *m_languageTab;
 
     KoCharacterStyle *m_style;
+    KoStyleManager *m_styleManager;
+    KoStyleThumbnailer *m_thumbnail;
+    StylesModel *m_paragraphStyleModel;
 };
 
 #endif

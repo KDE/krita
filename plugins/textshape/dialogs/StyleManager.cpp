@@ -101,8 +101,8 @@ void StyleManager::setStyleManager(KoStyleManager *sm)
     m_characterStylesModel->setStyleManager(m_styleManager);
     connect(widget.characterStylesListView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(slotStyleSelected(QModelIndex)));
 
+    widget.paragraphStylePage->setStyleManager(m_styleManager); //also updates style combos
     widget.tabs->setCurrentIndex(widget.tabs->indexOf(widget.paragraphStylesListView));
-    widget.paragraphStylePage->setParagraphStyles(sm->paragraphStyles());
     connect(sm, SIGNAL(styleAdded(KoParagraphStyle*)), this, SLOT(addParagraphStyle(KoParagraphStyle*)));
     connect(sm, SIGNAL(styleAdded(KoCharacterStyle*)), this, SLOT(addCharacterStyle(KoCharacterStyle*)));
     connect(sm, SIGNAL(styleRemoved(KoParagraphStyle*)), this, SLOT(removeParagraphStyle(KoParagraphStyle*)));
@@ -259,7 +259,7 @@ void StyleManager::addParagraphStyle(KoParagraphStyle *style)
 {
     if (m_blockSignals) return;
 
-    widget.paragraphStylePage->setParagraphStyles(m_styleManager->paragraphStyles());
+    widget.paragraphStylePage->setStyleManager(m_styleManager); //updates style combos
     setParagraphStyle(style);
     m_unappliedStyleChanges = true;
 }
@@ -276,7 +276,7 @@ void StyleManager::removeParagraphStyle(KoParagraphStyle* style)
 {
     if (m_alteredParagraphStyles.contains(style->styleId()))
         m_alteredParagraphStyles.remove(style->styleId());
-    widget.paragraphStylePage->setParagraphStyles(m_styleManager->paragraphStyles());
+    widget.paragraphStylePage->setStyleManager(m_styleManager); //updates style combos
 }
 
 void StyleManager::removeCharacterStyle(KoCharacterStyle* style)

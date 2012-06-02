@@ -34,7 +34,6 @@
 #include "dialogs/FontDia.h"
 #include "dialogs/TableDialog.h"
 #include "dialogs/SimpleTableWidget.h"
-#include "commands/TextCutCommand.h"
 #include "commands/AutoResizeCommand.h"
 #include "commands/ChangeListLevelCommand.h"
 #include "FontSizeAction.h"
@@ -1012,6 +1011,7 @@ void TextTool::setShapeData(KoTextShapeData *data)
         }
 
         connect(m_textEditor.data(), SIGNAL(textFormatChanged()), this, SLOT(updateActions()));
+        updateActions();
     }
 }
 
@@ -1099,7 +1099,12 @@ bool TextTool::paste()
 
 void TextTool::cut()
 {
-    m_textEditor.data()->addCommand(new TextCutCommand(this));
+    if (m_textEditor.data()->hasSelection()) {
+        copy();
+        KUndo2Command *topCmd = m_textEditor.data()->beginEditBlock(i18nc("(qtundo-format)", "Cut"));
+        m_textEditor.data()->deleteChar(false, topCmd);
+        m_textEditor.data()->endEditBlock();
+    }
 }
 
 QStringList TextTool::supportedPasteMimeTypes() const
@@ -1845,6 +1850,17 @@ void TextTool::updateActions()
 
     m_allowActions = true;
 
+    const QTextTable *table = textEditor->currentTable();
+
+    action("insert_tablerow_above")->setEnabled(table);
+    action("insert_tablerow_below")->setEnabled(table);
+    action("insert_tablecolumn_left")->setEnabled(table);
+    action("insert_tablecolumn_right")->setEnabled(table);
+    action("delete_tablerow")->setEnabled(table);
+    action("delete_tablecolumn")->setEnabled(table);
+    action("merge_tablecells")->setEnabled(table);
+    action("split_tablecells")->setEnabled(table);
+
     ///TODO if selection contains several different format
     emit blockChanged(textEditor->block());
     emit charFormatChanged(cf, textEditor->blockCharFormat());
@@ -2277,11 +2293,14 @@ void TextTool::insertTable()
     if (dia->exec() == TableDialog::Accepted)
         m_textEditor.data()->insertTable(dia->rows(), dia->columns());
     delete dia;
+
+    updateActions();
 }
 
 void TextTool::insertTableQuick(int rows, int columns)
 {
     m_textEditor.data()->insertTable(rows, columns);
+    updateActions();
 }
 
 void TextTool::insertTableRowAbove()

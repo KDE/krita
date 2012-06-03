@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006,2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2006-2012 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2006,2007 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
@@ -84,8 +84,10 @@ protected:
     virtual QList<QWidget *>  createOptionWidgets();
 
 private:
+    struct PathSegment;
+
     void updateOptionsWidget();
-    bool segmentAtPoint( const QPointF &point, KoPathShape* &shape, KoPathPoint* &segmentStart, qreal &pointParam );
+    PathSegment* segmentAtPoint(const QPointF &point);
 
 private slots:
     void pointTypeChanged(QAction *type);
@@ -110,10 +112,9 @@ private:
     KoPathToolHandle * m_activeHandle;       ///< the currently active handle
     int m_handleRadius;    ///< the radius of the control point handles
     uint m_grabSensitivity; ///< the grab sensitivity
-    /// the point selection
-    KoPathToolSelection m_pointSelection;
-    // needed for interaction strategy
-    QPointF m_lastPoint;
+    KoPathToolSelection m_pointSelection; ///< the point selection
+    QPointF m_lastPoint; ///< needed for interaction strategy
+    PathSegment *m_activeSegment;
 
     // make a frind so that it can test private member/methods
     friend class TestPathTool;

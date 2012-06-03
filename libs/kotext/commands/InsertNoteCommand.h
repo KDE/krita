@@ -1,6 +1,7 @@
 /*
  This file is part of the KDE project
- * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
+ * Copyright (C) 2009 Ganesh Paramasivam <ganesh@crystalfab.com>
+ * Copyright (C) 2012 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,37 +18,34 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.*/
 
-#include "TextCutCommand.h"
+#ifndef INSERTNODECOMMAND_H
+#define INSERTNODECOMMAND_H
 
-#include <KoTextEditor.h>
-#include <TextTool.h>
-#include <KAction>
-#include <klocale.h>
+#include "KoInlineNote.h"
 
-TextCutCommand::TextCutCommand(TextTool *tool, KUndo2Command *parent) :
-    KUndo2Command (parent),
-    m_tool(tool),
-    m_first(true)
+#include <kundo2qstack.h>
+
+#include <QWeakPointer>
+
+class QTextDocument;
+
+class QTextCursor;
+
+class InsertNoteCommand : public KUndo2Command
 {
-    setText(i18nc("(qtundo-format)", "Cut"));
-}
+public:
 
-void TextCutCommand::undo()
-{
-    KUndo2Command::undo();
-}
+    InsertNoteCommand(KoInlineNote::Type type, QTextDocument *document);
+    virtual ~InsertNoteCommand();
 
-void TextCutCommand::redo()
-{
-    if (!m_first) {
-        KUndo2Command::redo();
-    } else {
-        m_first = false;
-        m_tool->copy();
-        KoTextEditor *te = m_tool->m_textEditor.data();
-        if (te == 0)
-            return;
+    virtual void undo();
+    virtual void redo();
 
-        te->deleteChar();
-    }
-}
+    KoInlineNote *m_inlineNote;
+private:
+    QWeakPointer<QTextDocument> m_document;
+    bool m_first;
+    int m_framePosition; // a cursor position inside the frame at the time of creation
+};
+
+#endif // INSERTNODECOMMAND_H

@@ -34,7 +34,6 @@
 #include "dialogs/FontDia.h"
 #include "dialogs/TableDialog.h"
 #include "dialogs/SimpleTableWidget.h"
-#include "commands/TextCutCommand.h"
 #include "commands/AutoResizeCommand.h"
 #include "commands/ChangeListLevelCommand.h"
 #include "FontSizeAction.h"
@@ -60,6 +59,7 @@
 #include <KoTextEditor.h>
 #include <KoChangeTracker.h>
 #include <KoChangeTrackerElement.h>
+#include <KoInlineNote.h>
 #include <KoBookmark.h>
 #include <KoBookmarkManager.h>
 #include <KoListLevelProperties.h>
@@ -138,9 +138,8 @@ TextTool::TextTool(KoCanvasBase *canvas)
         m_currentCommandHasChildren(false),
         m_specialCharacterDocker(0),
         m_textTyping(false),
-        m_textDeleting(false),
-        m_changeTipTimer(this),
-        m_changeTipCursorPos(0),
+        m_textDeleting(false)
+        , m_editTipTimer(this),
         m_delayedEnsureVisible(false),
         m_toolSelection(0)
         , m_tableDraggedOnce(false)
@@ -195,9 +194,9 @@ TextTool::TextTool(KoCanvasBase *canvas)
     m_caretTimer.setInterval(500);
     connect(&m_caretTimer, SIGNAL(timeout()), this, SLOT(blinkCaret()));
 
-    m_changeTipTimer.setInterval(500);
-    m_changeTipTimer.setSingleShot(true);
-    connect(&m_changeTipTimer, SIGNAL(timeout()), this, SLOT(showChangeTip()));
+    m_editTipTimer.setInterval(500);
+    m_editTipTimer.setSingleShot(true);
+    connect(&m_editTipTimer, SIGNAL(timeout()), this, SLOT(showEditTip()));
 }
 
 void TextTool::createActions()
@@ -523,9 +522,8 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
     m_currentCommand(0),
     m_currentCommandHasChildren(false),
     m_specialCharacterDocker(0),
-    m_textEditingPlugins(0),
-    m_changeTipTimer(this),
-    m_changeTipCursorPos(0)
+    m_textEditingPlugins(0)
+    , m_editTipTimer(this)
     , m_delayedEnsureVisible(false)
     , m_tableDraggedOnce(false)
     , m_tablePenMode(false)
@@ -553,14 +551,18 @@ TextTool::~TextTool()
     delete m_toolSelection;
 }
 
-void TextTool::showChangeTip()
+void TextTool::showEditTip()
 {
-    if (!m_textShapeData || !m_changeTipCursorPos || !m_changeTracker->displayChanges())
+    if (!m_textShapeData || m_editTipPointedAt.position == -1)
         return;
 
     QTextCursor c(m_textShapeData->document());
-    c.setPosition(m_changeTipCursorPos);
-    if (m_changeTracker && m_changeTracker->containsInlineChanges(c.charFormat())) {
+    c.setPosition(m_editTipPointedAt.position);
+    QString text = "<p align=center style=\'white-space:pre\' >";
+    int toolTipWidth = 0;
+
+    if (m_changeTracker && m_changeTracker->containsInlineChanges(c.charFormat())
+        && m_changeTracker->displayChanges()) {
         KoChangeTrackerElement *element = m_changeTracker->elementById(c.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt());
         if (element->isEnabled()) {
             QString changeType;
@@ -571,20 +573,38 @@ void TextTool::showChangeTip()
             else
                 changeType = i18n("Formatting");
 
-            QString change = "<p align=center style=\'white-space:pre\' ><b>" + changeType + "</b><br/>";
+            text += "<b>" + changeType + "</b><br/>";
 
             QString date = element->getDate();
             //Remove the T which separates the Data and Time.
             date[10] = ' ';
-            change += element->getCreator() + " " + date + "</p>";
+            date = element->getCreator() + " " + date;
+            text += date + "</p>";
 
-            int toolTipWidth = QFontMetrics(QToolTip::font()).boundingRect(element->getDate() + ' ' + element->getCreator()).width();
-            m_changeTipPos.setX(m_changeTipPos.x() - toolTipWidth/2);
-
-            QToolTip::showText(m_changeTipPos,change,canvas()->canvasWidget());
-
+            toolTipWidth = QFontMetrics(QToolTip::font()).boundingRect(date).width();
         }
     }
+
+    if (m_editTipPointedAt.bookmark || !m_editTipPointedAt.externalHRef.isEmpty()) {
+            QString help = i18n("Ctrl+click to go to link ");
+            help += m_editTipPointedAt.externalHRef;
+            text += help + "</p>";
+            toolTipWidth = QFontMetrics(QToolTip::font()).boundingRect(help).width();
+    }
+
+    if (m_editTipPointedAt.note) {
+            QString help = i18n("Ctrl+click to go to the note ");
+            text += help + "</p>";
+            toolTipWidth = QFontMetrics(QToolTip::font()).boundingRect(help).width();
+    }
+
+    QToolTip::hideText();
+
+    if (toolTipWidth) {
+        QRect keepRect(m_editTipPos - QPoint(3,3), QSize(6,6));
+        QToolTip::showText(m_editTipPos - QPoint(toolTipWidth/2, 0), text, canvas()->canvasWidget(), keepRect);
+    }
+
 }
 
 void TextTool::blinkCaret()
@@ -991,6 +1011,7 @@ void TextTool::setShapeData(KoTextShapeData *data)
         }
 
         connect(m_textEditor.data(), SIGNAL(textFormatChanged()), this, SLOT(updateActions()));
+        updateActions();
     }
 }
 
@@ -1078,7 +1099,12 @@ bool TextTool::paste()
 
 void TextTool::cut()
 {
-    m_textEditor.data()->addCommand(new TextCutCommand(this));
+    if (m_textEditor.data()->hasSelection()) {
+        copy();
+        KUndo2Command *topCmd = m_textEditor.data()->beginEditBlock(i18nc("(qtundo-format)", "Cut"));
+        m_textEditor.data()->deleteChar(false, topCmd);
+        m_textEditor.data()->endEditBlock();
+    }
 }
 
 QStringList TextTool::supportedPasteMimeTypes() const
@@ -1245,13 +1271,13 @@ void TextTool::mouseTripleClickEvent(KoPointerEvent *event)
 
 void TextTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    m_changeTipPos = event->globalPos();
+    m_editTipPos = event->globalPos();
 
     if (event->buttons()) {
         updateSelectedShape(event->point);
     }
 
-    m_changeTipTimer.stop();
+    m_editTipTimer.stop();
 
     if (QToolTip::isVisible())
         QToolTip::hideText();
@@ -1289,12 +1315,24 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
         mouseOver.setPosition(pointedAt.position);
 
         if (m_changeTracker && m_changeTracker->containsInlineChanges(mouseOver.charFormat())) {
-            m_changeTipTimer.start();
-            m_changeTipCursorPos = pointedAt.position;
+            m_editTipPointedAt = pointedAt;
+            if (QToolTip::isVisible()) {
+                QTimer::singleShot(0, this, SLOT(showEditTip()));
+            }else {
+                m_editTipTimer.start();
+            }
         }
 
-        if (pointedAt.bookmark || !pointedAt.externalHRef.isEmpty()) {
-            useCursor(Qt::PointingHandCursor);
+        if ((pointedAt.bookmark || !pointedAt.externalHRef.isEmpty()) || pointedAt.note) {
+            if (event->modifiers() & Qt::ControlModifier) {
+                useCursor(Qt::PointingHandCursor);
+            }
+            m_editTipPointedAt = pointedAt;
+            if (QToolTip::isVisible()) {
+                QTimer::singleShot(0, this, SLOT(showEditTip()));
+            }else {
+                m_editTipTimer.start();
+            }
             return;
         }
 
@@ -1459,9 +1497,15 @@ void TextTool::mouseReleaseEvent(KoPointerEvent *event)
     }
 
     // Is there an anchor here ?
-    if (!m_textEditor.data()->hasSelection()) {
+    if ((event->modifiers() & Qt::ControlModifier) && !m_textEditor.data()->hasSelection()) {
         if (pointedAt.bookmark) {
             m_textEditor.data()->setPosition(pointedAt.bookmark->position());
+            ensureCursorVisible();
+            event->accept();
+            return;
+        }
+        if (pointedAt.note) {
+            m_textEditor.data()->setPosition(pointedAt.note->textFrame()->firstPosition());
             ensureCursorVisible();
             event->accept();
             return;
@@ -1805,6 +1849,17 @@ void TextTool::updateActions()
     m_actionFormatDecreaseIndent->setEnabled(textEditor->blockFormat().leftMargin() > 0.);
 
     m_allowActions = true;
+
+    const QTextTable *table = textEditor->currentTable();
+
+    action("insert_tablerow_above")->setEnabled(table);
+    action("insert_tablerow_below")->setEnabled(table);
+    action("insert_tablecolumn_left")->setEnabled(table);
+    action("insert_tablecolumn_right")->setEnabled(table);
+    action("delete_tablerow")->setEnabled(table);
+    action("delete_tablecolumn")->setEnabled(table);
+    action("merge_tablecells")->setEnabled(table);
+    action("split_tablecells")->setEnabled(table);
 
     ///TODO if selection contains several different format
     emit blockChanged(textEditor->block());
@@ -2238,11 +2293,14 @@ void TextTool::insertTable()
     if (dia->exec() == TableDialog::Accepted)
         m_textEditor.data()->insertTable(dia->rows(), dia->columns());
     delete dia;
+
+    updateActions();
 }
 
 void TextTool::insertTableQuick(int rows, int columns)
 {
     m_textEditor.data()->insertTable(rows, columns);
+    updateActions();
 }
 
 void TextTool::insertTableRowAbove()

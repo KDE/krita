@@ -60,6 +60,7 @@ public:
     KoShape *title() const;
     QString titleText() const;
     bool showLabels() const;
+    bool showOverlappingDataLabels() const;
     QString id() const;
     AxisDimension dimension() const;
     QList<DataSet*> dataSets() const;
@@ -81,6 +82,7 @@ public:
 
     void setTitleText(const QString &text);
     void setShowLabels(bool show);
+    void setShowOverlappingDataLabels(bool show);
 
     /**
      * Attaches a data set to this axis, adding it to a diagram

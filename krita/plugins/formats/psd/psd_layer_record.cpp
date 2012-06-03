@@ -572,16 +572,16 @@ bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io)
                 if (channelBytes.contains(-1)) {
                     opacity = channelBytes[-1].constData()[col];
                 }
-                KoRgbU8Traits::setOpacity(it->rawData(), opacity, 1);
+                KoBgrU8Traits::setOpacity(it->rawData(), opacity, 1);
 
                 quint8 red = channelBytes[0].constData()[col];
-                KoRgbU8Traits::setRed(it->rawData(), red);
+                KoBgrU8Traits::setRed(it->rawData(), red);
 
                 quint8 green = channelBytes[1].constData()[col];
-                KoRgbU8Traits::setGreen(it->rawData(), green);
+                KoBgrU8Traits::setGreen(it->rawData(), green);
 
                 quint8 blue = channelBytes[2].constData()[col];
-                KoRgbU8Traits::setBlue(it->rawData(), blue);
+                KoBgrU8Traits::setBlue(it->rawData(), blue);
 
             }
 
@@ -592,16 +592,16 @@ bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io)
                     opacity = channelBytes[-1].constData()[col];
                 }
                 // We don't have a convenient setOpacity function :-(
-                memcpy(it->rawData() + KoRgbU16Traits::alpha_pos, &opacity, sizeof(quint16));
+                memcpy(it->rawData() + KoBgrU16Traits::alpha_pos, &opacity, sizeof(quint16));
 
                 quint16 red = ntohs(reinterpret_cast<const quint16 *>(channelBytes[0].constData())[col]);
-                KoRgbU16Traits::setRed(it->rawData(), red);
+                KoBgrU16Traits::setRed(it->rawData(), red);
 
                 quint16 green = ntohs(reinterpret_cast<const quint16 *>(channelBytes[1].constData())[col]);
-                KoRgbU16Traits::setGreen(it->rawData(), green);
+                KoBgrU16Traits::setGreen(it->rawData(), green);
 
                 quint16 blue = ntohs(reinterpret_cast<const quint16 *>(channelBytes[2].constData())[col]);
-                KoRgbU16Traits::setBlue(it->rawData(), blue);
+                KoBgrU16Traits::setBlue(it->rawData(), blue);
 
             }
             else {
@@ -613,13 +613,13 @@ bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io)
             else if (channelSize == 4) {
 
                 quint16 red = ntohs(reinterpret_cast<const quint16 *>(channelBytes.constData())[col]);
-                KoRgbU16Traits::setRed(it->rawData(), red);
+                KoBgrU16Traits::setRed(it->rawData(), red);
 
                 quint16 green = ntohs(reinterpret_cast<const quint16 *>(channelBytes.constData())[col]);
-                KoRgbU16Traits::setGreen(it->rawData(), green);
+                KoBgrU16Traits::setGreen(it->rawData(), green);
 
                 quint16 blue = ntohs(reinterpret_cast<const quint16 *>(channelBytes.constData())[col]);
-                KoRgbU16Traits::setBlue(it->rawData(), blue);
+                KoBgrU16Traits::setBlue(it->rawData(), blue);
             }
 */
             it->nextPixel();

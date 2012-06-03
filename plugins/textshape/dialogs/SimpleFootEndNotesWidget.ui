@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>193</width>
-    <height>38</height>
+    <height>48</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -28,11 +28,17 @@
      <property name="text">
       <string>Endnote</string>
      </property>
+     <property name="iconSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
      <property name="popupMode">
       <enum>QToolButton::InstantPopup</enum>
      </property>
      <property name="toolButtonStyle">
-      <enum>Qt::ToolButtonTextOnly</enum>
+      <enum>Qt::ToolButtonIconOnly</enum>
      </property>
     </widget>
    </item>
@@ -57,11 +63,20 @@
      <property name="text">
       <string>Footnote</string>
      </property>
+     <property name="iconSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
      <property name="popupMode">
       <enum>QToolButton::InstantPopup</enum>
      </property>
      <property name="toolButtonStyle">
-      <enum>Qt::ToolButtonTextOnly</enum>
+      <enum>Qt::ToolButtonIconOnly</enum>
+     </property>
+     <property name="autoRaise">
+      <bool>false</bool>
      </property>
     </widget>
    </item>

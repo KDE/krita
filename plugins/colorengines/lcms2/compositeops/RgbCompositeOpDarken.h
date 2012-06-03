@@ -74,7 +74,7 @@ public:
                         srcBlend = srcAlpha;
                     } else {
                         channels_type newAlpha = dstAlpha + KoColorSpaceMaths<channels_type>::multiply(NATIVE_OPACITY_OPAQUE - dstAlpha, srcAlpha);
-                        dst[KoRgbU8Traits::alpha_pos] = newAlpha;
+                        dst[KoBgrU8Traits::alpha_pos] = newAlpha;
 
                         if (newAlpha != 0) {
                             srcBlend = KoColorSpaceMaths<channels_type>::divide(srcAlpha, newAlpha);

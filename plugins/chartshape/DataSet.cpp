@@ -66,18 +66,51 @@
 
 using namespace KChart;
 
-const int numDefaultMarkerTypes = 8;
+const int numDefaultMarkerTypes = 15;
+
+// These are the values that are defined for chart:symbol-name
+// Ref: ODF 1.2 20.54 chart:symbol-name, page 716
+const QByteArray symbolNames[] = {
+    "square", 
+    "diamond", 
+    "arrow-down",
+    "arrow-up", 
+    "arrow-right", 
+    "arrow-left", 
+    "bow-tie", 
+    "hourglass", 
+    "circle", 
+    "star", 
+    "x", 
+    "plus",
+    "asterisk", 
+    "horizontal-bar", 
+    "vertical-bar"
+};
 
 const KDChart::MarkerAttributes::MarkerStyle defaultMarkerTypes[]= { 
-                                              KDChart::MarkerAttributes::MarkerSquare,
-                                              KDChart::MarkerAttributes::MarkerDiamond,
-                                              KDChart::MarkerAttributes::MarkerCross,
-                                              KDChart::MarkerAttributes::MarkerRing,
-                                              KDChart::MarkerAttributes::Marker4Pixels,
-                                              KDChart::MarkerAttributes::MarkerCircle,
-                                              KDChart::MarkerAttributes::MarkerFastCross,
-                                              KDChart::MarkerAttributes::Marker1Pixel
-                                            };
+    KDChart::MarkerAttributes::MarkerSquare,     // 0
+    KDChart::MarkerAttributes::MarkerDiamond,    // 1
+    KDChart::MarkerAttributes::MarkerArrowDown,  // 2
+    KDChart::MarkerAttributes::MarkerArrowUp,    // 3
+    KDChart::MarkerAttributes::MarkerArrowRight, // 4
+    KDChart::MarkerAttributes::MarkerArrowLeft,  // 5
+    KDChart::MarkerAttributes::MarkerBowTie,     // 6
+    KDChart::MarkerAttributes::MarkerHourGlass,  // 7
+    KDChart::MarkerAttributes::MarkerCircle,     // 8
+    KDChart::MarkerAttributes::MarkerStar,       // 9
+    KDChart::MarkerAttributes::MarkerX,          // 10
+    KDChart::MarkerAttributes::MarkerCross,      // 11
+    KDChart::MarkerAttributes::MarkerAsterisk,   // 12
+    KDChart::MarkerAttributes::MarkerHorizontalBar,// 13
+    KDChart::MarkerAttributes::MarkerVerticalBar, // 14
+
+    // Not used:
+    KDChart::MarkerAttributes::MarkerRing,
+    KDChart::MarkerAttributes::MarkerFastCross,
+    KDChart::MarkerAttributes::Marker1Pixel,
+    KDChart::MarkerAttributes::Marker4Pixels,
+};
 
 class DataSet::Private
 {
@@ -1287,7 +1320,7 @@ void DataSet::Private::readValueLabelType(KoStyleStack &styleStack, int section 
 }
 
 bool DataSet::loadOdf(const KoXmlElement &n,
-                       KoShapeLoadingContext &context)
+                      KoShapeLoadingContext &context)
 {
     d->symbolsActivated = false;
     KoOdfLoadingContext &odfLoadingContext = context.odfLoadingContext();
@@ -1401,9 +1434,22 @@ bool DataSet::loadOdf(const KoXmlElement &n,
         setLabelDataRegion(CellRegion(helper->tableSource, region));
     }
 
+    if (n.hasAttributeNS(KoXmlNS::chart, "class") && !ignoreCellRanges) {
+        const QString chartClass = n.attributeNS(KoXmlNS::chart, "class", QString());
+        KChart::ChartType chartType = KChart::BarChartType;
+        for (int type = 0; type < (int)LastChartType; ++type) {
+            if (chartClass == odfCharttype(type)) {
+                chartType = (ChartType)type;
+                setChartType(chartType);
+                break;
+            }
+        }
+    }
+
     d->readValueLabelType(styleStack);
 
     if (styleStack.hasProperty(KoXmlNS::chart, "symbol-type")) {
+
         const QString name = styleStack.property(KoXmlNS::chart, "symbol-type");
         if (name == "automatic") {
             d->symbolsActivated = true;
@@ -1412,19 +1458,38 @@ bool DataSet::loadOdf(const KoXmlElement &n,
         else if (name == "named-symbol") {
             d->symbolsActivated = true;
             if (styleStack.hasProperty(KoXmlNS::chart, "symbol-name")) {
+
                 const QString type = styleStack.property(KoXmlNS::chart, "symbol-name");
                 if (type == "square")
                     d->symbolID = 0;
                 else if (type == "diamond")
                     d->symbolID = 1;
-                else if (type == "circle")
+                else if (type == "arrow-down")
+                    d->symbolID = 2;
+                else if (type == "arrow-up")
+                    d->symbolID = 3;
+                else if (type == "arrow-right")
+                    d->symbolID = 4;
+                else if (type == "arrow-left")
                     d->symbolID = 5;
+                else if (type == "bow-tie")
+                    d->symbolID = 6;
+                else if (type == "hourglass")
+                    d->symbolID = 7;
+                else if (type == "circle")
+                    d->symbolID = 8;
+                else if (type == "star")
+                    d->symbolID = 9;
                 else if (type == "x")
-                    d->symbolID = 2;
-                else if (type == "triangle")
-                    d->symbolID = 0;
+                    d->symbolID = 10;
                 else if (type == "plus")
-                    d->symbolID = 2;
+                    d->symbolID = 11;
+                else if (type == "asterisk")
+                    d->symbolID = 12;
+                else if (type == "horizontal-bar")
+                    d->symbolID = 13;
+                else if (type == "vertical-bar")
+                    d->symbolID = 14;
                 else
                     d->symbolID = 0;
             }
@@ -1525,7 +1590,7 @@ bool DataSet::loadSeriesIntoDataset(const KoXmlElement &n, KoShapeLoadingContext
         else if (d->loadedDimensions == 1) {
             // as long as there is not default table for missing data series the same region is used twice
             // to ensure the diagram is displayed, even if not as expected from o office or ms office
-            setXDataRegion(CellRegion(region));
+            setYDataRegion(CellRegion(region));
             ++d->loadedDimensions;
         }
         else if (d->loadedDimensions == 2) {
@@ -1537,7 +1602,8 @@ bool DataSet::loadSeriesIntoDataset(const KoXmlElement &n, KoShapeLoadingContext
             ++d->loadedDimensions;
         }
     }
-    if (n.hasAttributeNS(KoXmlNS::chart, "label-cell-address") && !ignoreCellRanges) {
+    //store the cell address corresponding to the label of the correct data series
+    if (d->loadedDimensions == 2 && n.hasAttributeNS(KoXmlNS::chart, "label-cell-address") && !ignoreCellRanges) {
         const QString region = n.attributeNS(KoXmlNS::chart, "label-cell-address", QString());
         setLabelDataRegion(CellRegion(helper->tableSource, region));
     }
@@ -1573,21 +1639,28 @@ void DataSet::saveOdf(KoShapeSavingContext &context) const
     if (type.symbol)
         style.addProperty("chart:data-label-symbol", "true");
 
-    if (d->symbolsActivated)
-    {
+    if (d->symbolsActivated) {
         QString symbolName = "";
         QString symbolType = "named-symbol";
 
-        if (d->symbolID == 0)
-            symbolName = "square";
-        else if (d->symbolID == 1)
-            symbolName = "diamond";
-        else if (d->symbolID == 5)
-            symbolName = "circle";
-        else if (d->symbolID == 2)
-            symbolName = "x";
-        else
-            symbolType = "automatic";
+        switch (d->symbolID) {
+        case 0: symbolName = "square"; break;
+        case 1: symbolName = "diamond"; break;
+        case 2: symbolName = "arrow-down"; break;
+        case 3: symbolName = "arrow-up"; break;
+        case 4: symbolName = "arrow-right"; break;
+        case 5: symbolName = "arrow-left"; break;
+        case 6: symbolName = "bow-tie"; break;
+        case 7: symbolName = "hourglass"; break;
+        case 8: symbolName = "circle"; break;
+        case 9: symbolName = "star"; break;
+        case 10: symbolName = "x"; break;
+        case 11: symbolName = "plus"; break;
+        case 12: symbolName = "asterisk"; break;
+        case 13: symbolName = "horizontal-bar"; break;
+        case 14: symbolName = "vertical-bar"; break;
+        default: symbolType = "automatic"; break;
+        }
 
         style.addProperty("chart:symbol-type", symbolType, KoGenStyle::ChartType);
         if (!symbolName.isEmpty())
@@ -1610,6 +1683,11 @@ void DataSet::saveOdf(KoShapeSavingContext &context) const
     QString label = labelDataRegion().toString();
     if (!label.isEmpty())
         bodyWriter.addAttribute("chart:label-cell-address", label);
+
+    int charttype = (chartType() < LastChartType) ? chartType() : 0;
+    QString chartClass = odfCharttype(charttype);
+    if (!chartClass.isEmpty())
+        bodyWriter.addAttribute("chart:class", chartClass);
 
     if (chartType() == KChart::CircleChartType || chartType() == KChart::RingChartType) {
         for (int j=0; j<yDataRegion().cellCount(); ++j) {

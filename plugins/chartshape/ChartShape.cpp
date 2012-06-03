@@ -498,6 +498,10 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     setClipped(d->footer, true);
     setInheritsTransform(d->footer, true);
 
+    // Set default contour (for how text run around is done around this shape)
+    // to prevent a crash in LO
+    setTextRunAroundContour(KoShape::ContourBox);
+
     // Enable auto-resizing of chart labels
     foreach(KoShape *label, labels()) {
         TextLabelData *labelData = qobject_cast<TextLabelData*>(label->userData());

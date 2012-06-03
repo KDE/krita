@@ -29,6 +29,7 @@ class KoChangeTracker;
 class KoStyleManager;
 
 class QTextFrame;
+class InsertNodeCommand;
 
 /**
  * This object is an inline object, which means it is anchored in the text-flow and it can hold note info.
@@ -111,6 +112,11 @@ protected:
                        const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
 
 private:
+    friend class InsertNoteCommand;
+
+    // only to be used on subsequent redo of insertion
+    void setTextFrame(QTextFrame *textFrame);
+
     class Private;
     Private * const d;
 };

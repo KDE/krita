@@ -191,6 +191,7 @@ public:
     // TODO: Save
     // See ODF v1.2 $19.12 (chart:display-label)
     bool showLabels;
+    bool showOverlappingDataLabels;
 
     bool isVisible;
 };
@@ -238,6 +239,13 @@ Axis::Private::Private(Axis *axis, AxisDimension dim)
 
     logarithmicScaling = false;
 
+    showInnerMinorTicks = false;
+    showOuterMinorTicks = false;
+    showInnerMajorTicks = false;
+    showOuterMajorTicks = true;
+
+    showOverlappingDataLabels = false;
+
     kdBarDiagram     = 0;
     kdLineDiagram    = 0;
     kdAreaDiagram    = 0;
@@ -262,9 +270,8 @@ Axis::Private::~Private()
 {
     Q_ASSERT(plotArea);
 
-    delete numericStyleFormat;
-
     delete kdBarDiagram;
+    delete kdLineDiagram;
     delete kdAreaDiagram;
     delete kdCircleDiagram;
     delete kdRingDiagram;
@@ -274,6 +281,8 @@ Axis::Private::~Private()
     delete kdBubbleDiagram;
     delete kdSurfaceDiagram;
     delete kdGanttDiagram;
+
+    delete numericStyleFormat;
 
     delete kdAxis;
 
@@ -494,6 +503,8 @@ void Axis::Private::createBarDiagram()
     kdBarDiagram->setOrientation(plotArea->isVertical() ? Qt::Horizontal : Qt::Vertical);
     kdBarDiagram->setPen(QPen(Qt::black, 0.0));
 
+    kdBarDiagram->setAllowOverlappingDataValueTexts(showOverlappingDataLabels);
+
     if (plotAreaChartSubType == StackedChartSubtype)
         kdBarDiagram->setType(KDChart::BarDiagram::Stacked);
     else if (plotAreaChartSubType == PercentChartSubtype) {
@@ -530,6 +541,8 @@ void Axis::Private::createLineDiagram()
 
     kdLineDiagram = new KDChart::LineDiagram(plotArea->kdChart(), kdPlane);
     registerDiagram(kdLineDiagram);
+
+    kdLineDiagram->setAllowOverlappingDataValueTexts(showOverlappingDataLabels);
 
     if (plotAreaChartSubType == StackedChartSubtype)
         kdLineDiagram->setType(KDChart::LineDiagram::Stacked);
@@ -574,6 +587,8 @@ void Axis::Private::createAreaDiagram()
     // KD Chart by default draws the first data set as last line in a normal
     // line diagram, we however want the first series to appear in front.
     kdAreaDiagram->setReverseDatasetOrder(true);
+
+    kdAreaDiagram->setAllowOverlappingDataValueTexts(showOverlappingDataLabels);
 
     if (plotAreaChartSubType == StackedChartSubtype)
         kdAreaDiagram->setType(KDChart::LineDiagram::Stacked);
@@ -906,6 +921,11 @@ bool Axis::showLabels() const
     return d->showLabels;
 }
 
+bool Axis::showOverlappingDataLabels() const
+{
+    return d->showOverlappingDataLabels;
+}
+
 QString Axis::id() const
 {
     return d->id;
@@ -1220,6 +1240,11 @@ void Axis::setShowLabels(bool show)
     d->kdAxis->setTextAttributes(textAttr);
 }
 
+void Axis::setShowOverlappingDataLabels(bool show)
+{
+    d->showOverlappingDataLabels = show;
+}
+
 Qt::Orientation Axis::orientation()
 {
     bool chartIsVertical = d->plotArea->isVertical();
@@ -1396,6 +1421,8 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
 
         if (styleStack.hasProperty(KoXmlNS::chart, "display-label"))
             setShowLabels(styleStack.property(KoXmlNS::chart, "display-label") != "false");
+        if (styleStack.hasProperty(KoXmlNS::chart, "text-overlap"))
+            setShowOverlappingDataLabels(styleStack.property(KoXmlNS::chart, "text-overlap") != "false");
         if (styleStack.hasProperty(KoXmlNS::chart, "visible"))
             setVisible(styleStack.property(KoXmlNS::chart, "visible")  != "false");
         if (styleStack.hasProperty(KoXmlNS::chart, "minimum")) {
@@ -1559,6 +1586,7 @@ void Axis::saveOdf(KoShapeSavingContext &context)
     axisStyle.addProperty("chart:tick-marks-major-outer", showOuterMajorTicks());
 
     axisStyle.addProperty("chart:display-label", showLabels());
+    axisStyle.addProperty("chart:text-overlap", showOverlappingDataLabels());
     axisStyle.addProperty("chart:visible", isVisible());
     axisStyle.addPropertyPt("chart:gap-width", d->gapBetweenSets);
     axisStyle.addPropertyPt("chart:overlap", -d->gapBetweenBars);

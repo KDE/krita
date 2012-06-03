@@ -263,26 +263,26 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
             if (m_channelSize == 1) {
 
                 quint8 red = channelBytes[0].constData()[col];
-                KoRgbU8Traits::setRed(it->rawData(), red);
+                KoBgrU8Traits::setRed(it->rawData(), red);
 
                 quint8 green = channelBytes[1].constData()[col];
-                KoRgbU8Traits::setGreen(it->rawData(), green);
+                KoBgrU8Traits::setGreen(it->rawData(), green);
 
                 quint8 blue = channelBytes[2].constData()[col];
-                KoRgbU8Traits::setBlue(it->rawData(), blue);
+                KoBgrU8Traits::setBlue(it->rawData(), blue);
 
             }
 
             else if (m_channelSize == 2) {
 
                 quint16 red = ntohs(reinterpret_cast<const quint16 *>(channelBytes[0].constData())[col]);
-                KoRgbU16Traits::setRed(it->rawData(), red);
+                KoBgrU16Traits::setRed(it->rawData(), red);
 
                 quint16 green = ntohs(reinterpret_cast<const quint16 *>(channelBytes[1].constData())[col]);
-                KoRgbU16Traits::setGreen(it->rawData(), green);
+                KoBgrU16Traits::setGreen(it->rawData(), green);
 
                 quint16 blue = ntohs(reinterpret_cast<const quint16 *>(channelBytes[2].constData())[col]);
-                KoRgbU16Traits::setBlue(it->rawData(), blue);
+                KoBgrU16Traits::setBlue(it->rawData(), blue);
 
             }
 
@@ -290,13 +290,13 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
             else if (m_channelSize == 4) {
 
                 quint16 red = ntohs(reinterpret_cast<const quint16 *>(channelBytes.constData())[col]);
-                KoRgbU16Traits::setRed(it->rawData(), red);
+                KoBgrU16Traits::setRed(it->rawData(), red);
 
                 quint16 green = ntohs(reinterpret_cast<const quint16 *>(channelBytes.constData())[col]);
-                KoRgbU16Traits::setGreen(it->rawData(), green);
+                KoBgrU16Traits::setGreen(it->rawData(), green);
 
                 quint16 blue = ntohs(reinterpret_cast<const quint16 *>(channelBytes.constData())[col]);
-                KoRgbU16Traits::setBlue(it->rawData(), blue);
+                KoBgrU16Traits::setBlue(it->rawData(), blue);
 
             }
 

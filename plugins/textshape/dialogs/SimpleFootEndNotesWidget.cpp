@@ -20,9 +20,11 @@
 #include "TextTool.h"
 #include "FormattingButton.h"
 
+#include <KoInlineNote.h>
+
 #include <KAction>
 #include <KDebug>
-#include <KoInlineNote.h>
+#include <KIcon>
 
 #include <QWidget>
 
@@ -33,8 +35,12 @@ SimpleFootEndNotesWidget::SimpleFootEndNotesWidget(TextTool *tool ,QWidget *pare
     widget.setupUi(this);
     widget.addFootnote->addAction(tool->action("insert_autofootnote"));
     widget.addFootnote->addAction(tool->action("insert_labeledfootnote"));
+    widget.addFootnote->setIcon(KIcon("insert-footnote"));
+    widget.addFootnote->setToolTip(i18n("Inserts a footnote at the current cursor position"));
     widget.addEndnote->addAction(tool->action("insert_autoendnote"));
     widget.addEndnote->addAction(tool->action("insert_labeledendnote"));
+    widget.addEndnote->setIcon(KIcon("insert-endnote"));
+    widget.addEndnote->setToolTip(i18n("Inserts an endnote at the current cursor position"));
     widget.settings->setDefaultAction(tool->action("format_notes"));
 
     connect(widget.addFootnote, SIGNAL(doneWithFocus()), this, SIGNAL(doneWithFocus()));

@@ -35,3 +35,4 @@ const KoID Integer8BitsColorDepthID("U8", ki18n("8 Bits"));
 const KoID Integer16BitsColorDepthID("U16", ki18n("16 Bits"));
 const KoID Float16BitsColorDepthID("F16", ki18n("16 Bits Float"));
 const KoID Float32BitsColorDepthID("F32", ki18n("32 Bits Float"));
+const KoID Float64BitsColorDepthID("F64", ki18n("64 Bits Float"));

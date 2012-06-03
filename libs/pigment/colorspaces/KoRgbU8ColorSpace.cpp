@@ -38,7 +38,7 @@
 
 KoRgbU8ColorSpace::KoRgbU8ColorSpace() :
 
-        KoSimpleColorSpace<KoRgbU8Traits>(colorSpaceId(),
+        KoSimpleColorSpace<KoBgrU8Traits>(colorSpaceId(),
                                           i18n("RGB (8-bit integer/channel, unmanaged)"),
                                           RGBAColorModelID,
                                           Integer8BitsColorDepthID)
@@ -50,7 +50,7 @@ KoRgbU8ColorSpace::KoRgbU8ColorSpace() :
     addChannel(new KoChannelInfo(i18n("Alpha"), 3, 3, KoChannelInfo::ALPHA, KoChannelInfo::UINT8));
 
     // ADD, ALPHA_DARKEN, BURN, DIVIDE, DODGE, ERASE, MULTIPLY, OVER, OVERLAY, SCREEN, SUBTRACT
-    addStandardCompositeOps<KoRgbU8Traits>(this);
+    addStandardCompositeOps<KoBgrU8Traits>(this);
 
 }
 

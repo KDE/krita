@@ -259,10 +259,10 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
                     if (isRgbA) {
                         // RGB image
                         do {
-                            KoRgbTraits<quint8>::setRed(it->rawData(), GET_RED(*data));
-                            KoRgbTraits<quint8>::setGreen(it->rawData(), GET_GREEN(*data));
-                            KoRgbTraits<quint8>::setBlue(it->rawData(), GET_BLUE(*data));
-                            KoRgbTraits<quint8>::setOpacity(it->rawData(), quint8(GET_ALPHA(*data)), 1);
+                            KoBgrTraits<quint8>::setRed(it->rawData(), GET_RED(*data));
+                            KoBgrTraits<quint8>::setGreen(it->rawData(), GET_GREEN(*data));
+                            KoBgrTraits<quint8>::setBlue(it->rawData(), GET_BLUE(*data));
+                            KoBgrTraits<quint8>::setOpacity(it->rawData(), quint8(GET_ALPHA(*data)), 1);
                             ++data;
                         } while (it->nextPixel());
                     } else {

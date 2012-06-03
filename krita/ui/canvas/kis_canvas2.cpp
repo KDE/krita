@@ -203,6 +203,11 @@ void KisCanvas2::mirrorCanvas(bool enable)
     pan(m_d->coordinatesConverter->updateOffsetAfterTransform());
 }
 
+qreal KisCanvas2::rotationAngle() const
+{
+	return m_d->coordinatesConverter->rotationAngle();
+}
+
 void KisCanvas2::rotateCanvas(qreal angle, bool updateOffset)
 {
     m_d->coordinatesConverter->rotate(m_d->coordinatesConverter->widgetCenterPoint(), angle);

@@ -716,6 +716,9 @@ void KisImage::assignImageProfile(const KoColorProfile *profile)
     const KoColorSpace *dstCs = KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->colorModelId().id(), colorSpace()->colorDepthId().id(), profile);
     const KoColorSpace *srcCs = colorSpace();
 
+    Q_ASSERT(dstCs);
+    Q_ASSERT(srcCs);
+
     m_d->colorSpace = dstCs;
 
     KisChangeProfileVisitor visitor(srcCs, dstCs);

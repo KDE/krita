@@ -21,6 +21,7 @@
 #include "KoPointedAt.h"
 
 #include <KoBookmark.h>
+#include <KoInlineNote.h>
 #include <KoInlineTextObjectManager.h>
 
 #include <KDebug>
@@ -30,6 +31,7 @@
 KoPointedAt::KoPointedAt()
     : position(-1)
     , bookmark(0)
+    , note(0)
     , table(0)
     , tableHit(None)
 {
@@ -39,6 +41,7 @@ KoPointedAt::KoPointedAt(KoPointedAt *other)
 {
     position = other->position;
     bookmark = other->bookmark;
+    note = other->note;
     externalHRef = other->externalHRef;
     tableHit = other->tableHit;
     tableRowDivider = other->tableRowDivider;
@@ -74,5 +77,15 @@ void KoPointedAt::fillInBookmark(QTextCursor cursor, KoInlineTextObjectManager *
             // Nope, then it must be external;
             externalHRef = href;
         }
+    } else {
+        cursor.setPosition(cursor.position() + 1, QTextCursor::KeepAnchor);
+
+        note = dynamic_cast<KoInlineNote*>(inlineManager->inlineTextObject(cursor));
+        if (!note) {
+            cursor.setPosition(cursor.position() - 1, QTextCursor::KeepAnchor);
+
+            note = dynamic_cast<KoInlineNote*>(inlineManager->inlineTextObject(cursor));
+        }
+
     }
 }

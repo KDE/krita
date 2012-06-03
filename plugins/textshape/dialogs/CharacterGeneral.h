@@ -45,7 +45,7 @@ public:
     QString styleName() const;
     void selectName();
     void setStyleManager(KoStyleManager *sm); // set style manager for m_paragraph style model
-    void updateStyleCombo(KoParagraphStyle *style); // set current style in next style combo
+    void updateNextStyleCombo(KoParagraphStyle *style); // set current style in next style combo
     int nextStyleId(); //return the current style id in next style combo
 
 public slots:

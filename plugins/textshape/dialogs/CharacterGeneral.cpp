@@ -59,6 +59,7 @@ CharacterGeneral::CharacterGeneral(QWidget *parent)
     widget.inheritStyle->showEditIcon(false);
     widget.inheritStyle->setStyleIsOriginal(true);
     //for character General
+    m_characterInheritedStyleModel->setStyleThumbnailer(m_thumbnail);
     widget.inheritStyle->setStylesModel(m_characterInheritedStyleModel);
     widget.inheritStyle->setEnabled(false);
 
@@ -99,6 +100,13 @@ void CharacterGeneral::setStyle(KoCharacterStyle *style)
 
     widget.preview->setCharacterStyle(style);
 
+    if (m_styleManager) {
+        KoCharacterStyle *parentStyle = style->parentStyle();
+        if (parentStyle) {
+            widget.inheritStyle->setCurrentIndex(m_characterInheritedStyleModel->indexForCharacterStyle(*parentStyle).row());
+        }
+    }
+
     blockSignals(false);
 }
 
@@ -137,7 +145,7 @@ void CharacterGeneral::selectName()
 
 void CharacterGeneral::setPreviewCharacterStyle()
 {
-    KoCharacterStyle *charStyle=new KoCharacterStyle();
+    KoCharacterStyle *charStyle = new KoCharacterStyle();
     save(charStyle);
     if (charStyle) {
         widget.preview->setCharacterStyle(charStyle);
@@ -160,7 +168,7 @@ void CharacterGeneral::setStyleManager(KoStyleManager *sm)
     m_characterInheritedStyleModel->setStyleManager(m_styleManager);
 }
 
-void CharacterGeneral::updateStyleCombo(KoParagraphStyle *style)
+void CharacterGeneral::updateNextStyleCombo(KoParagraphStyle *style)
 {
     widget.nextStyle->setCurrentIndex(m_paragraphStyleModel->indexForParagraphStyle(*style).row());
     m_paragraphStyleModel->setCurrentParagraphStyle(style->styleId());

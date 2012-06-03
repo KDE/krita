@@ -308,9 +308,9 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
         if (maxval <= 255) {
             if (channels == 3) {
                 do {
-                    KoRgbTraits<quint8>::setRed(it->rawData(), ppmFlow->nextUint8());
-                    KoRgbTraits<quint8>::setGreen(it->rawData(), ppmFlow->nextUint8());
-                    KoRgbTraits<quint8>::setBlue(it->rawData(), ppmFlow->nextUint8());
+                    KoBgrTraits<quint8>::setRed(it->rawData(), ppmFlow->nextUint8());
+                    KoBgrTraits<quint8>::setGreen(it->rawData(), ppmFlow->nextUint8());
+                    KoBgrTraits<quint8>::setBlue(it->rawData(), ppmFlow->nextUint8());
                     colorSpace->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
                 } while (it->nextPixel());
             } else if (channels == 1) {
@@ -331,9 +331,9 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
         } else {
             if (channels == 3) {
                 do {
-                    KoRgbU16Traits::setRed(it->rawData(), ppmFlow->nextUint16());
-                    KoRgbU16Traits::setGreen(it->rawData(), ppmFlow->nextUint16());
-                    KoRgbU16Traits::setBlue(it->rawData(), ppmFlow->nextUint16());
+                    KoBgrU16Traits::setRed(it->rawData(), ppmFlow->nextUint16());
+                    KoBgrU16Traits::setGreen(it->rawData(), ppmFlow->nextUint16());
+                    KoBgrU16Traits::setBlue(it->rawData(), ppmFlow->nextUint16());
                     colorSpace->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
                 } while (it->nextPixel());
             } else if (channels == 1) {

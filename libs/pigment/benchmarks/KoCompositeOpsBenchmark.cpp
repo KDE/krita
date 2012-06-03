@@ -48,8 +48,8 @@ const int TILES_IN_HEIGHT = IMG_HEIGHT / TILE_HEIGHT;
 #define COMPOSITE_BENCHMARK \
         for (int y = 0; y < TILES_IN_HEIGHT; y++){                                              \
             for (int x = 0; x < TILES_IN_WIDTH; x++){                                           \
-                compositeOp.composite(m_dstBuffer, TILE_WIDTH * KoRgbU16Traits::pixelSize,      \
-                                      m_srcBuffer, TILE_WIDTH * KoRgbU16Traits::pixelSize,      \
+                compositeOp.composite(m_dstBuffer, TILE_WIDTH * KoBgrU16Traits::pixelSize,      \
+                                      m_srcBuffer, TILE_WIDTH * KoBgrU16Traits::pixelSize,      \
                                       0, 0,                                                            \
                                       TILE_WIDTH, TILE_HEIGHT,                                         \
                                       OPACITY_HALF);                                                   \
@@ -58,15 +58,15 @@ const int TILES_IN_HEIGHT = IMG_HEIGHT / TILE_HEIGHT;
 
 void KoCompositeOpsBenchmark::initTestCase()
 {
-    m_dstBuffer = new quint8[ TILE_WIDTH * TILE_HEIGHT * KoRgbU16Traits::pixelSize ];
-    m_srcBuffer = new quint8[ TILE_WIDTH * TILE_HEIGHT * KoRgbU16Traits::pixelSize ];
+    m_dstBuffer = new quint8[ TILE_WIDTH * TILE_HEIGHT * KoBgrU16Traits::pixelSize ];
+    m_srcBuffer = new quint8[ TILE_WIDTH * TILE_HEIGHT * KoBgrU16Traits::pixelSize ];
 }
 
 // this is called before every benchmark
 void KoCompositeOpsBenchmark::init()
 {
-    memset(m_dstBuffer, 42 , TILE_WIDTH * TILE_HEIGHT * KoRgbU16Traits::pixelSize);
-    memset(m_srcBuffer, 42 , TILE_WIDTH * TILE_HEIGHT * KoRgbU16Traits::pixelSize);
+    memset(m_dstBuffer, 42 , TILE_WIDTH * TILE_HEIGHT * KoBgrU16Traits::pixelSize);
+    memset(m_srcBuffer, 42 , TILE_WIDTH * TILE_HEIGHT * KoBgrU16Traits::pixelSize);
 }
 
 
@@ -78,7 +78,7 @@ void KoCompositeOpsBenchmark::cleanupTestCase()
 
 void KoCompositeOpsBenchmark::benchmarkCompositeOver()
 {
-    KoCompositeOpOver<KoRgbU16Traits> compositeOp(0);
+    KoCompositeOpOver<KoBgrU16Traits> compositeOp(0);
     QBENCHMARK{
         COMPOSITE_BENCHMARK
     }
@@ -86,7 +86,7 @@ void KoCompositeOpsBenchmark::benchmarkCompositeOver()
 
 void KoCompositeOpsBenchmark::benchmarkCompositeAdd()
 {
-    KoCompositeOpAdd<KoRgbU16Traits> compositeOp(0);
+    KoCompositeOpAdd<KoBgrU16Traits> compositeOp(0);
     QBENCHMARK{
         COMPOSITE_BENCHMARK
     }
@@ -94,7 +94,7 @@ void KoCompositeOpsBenchmark::benchmarkCompositeAdd()
 
 void KoCompositeOpsBenchmark::benchmarkCompositeAlphaDarken()
 {
-    KoCompositeOpAlphaDarken<KoRgbU16Traits> compositeOp(0);
+    KoCompositeOpAlphaDarken<KoBgrU16Traits> compositeOp(0);
     QBENCHMARK{
         COMPOSITE_BENCHMARK
     }
@@ -102,7 +102,7 @@ void KoCompositeOpsBenchmark::benchmarkCompositeAlphaDarken()
 
 void KoCompositeOpsBenchmark::benchmarkCompositeBurn()
 {
-    KoCompositeOpBurn<KoRgbU16Traits> compositeOp(0);
+    KoCompositeOpBurn<KoBgrU16Traits> compositeOp(0);
     QBENCHMARK{
         COMPOSITE_BENCHMARK
     }
@@ -110,7 +110,7 @@ void KoCompositeOpsBenchmark::benchmarkCompositeBurn()
 
 void KoCompositeOpsBenchmark::benchmarkCompositeDivide()
 {
-    KoCompositeOpDivide<KoRgbU16Traits> compositeOp(0);
+    KoCompositeOpDivide<KoBgrU16Traits> compositeOp(0);
     QBENCHMARK{
         COMPOSITE_BENCHMARK
     }
@@ -118,7 +118,7 @@ void KoCompositeOpsBenchmark::benchmarkCompositeDivide()
 
 void KoCompositeOpsBenchmark::benchmarkCompositeDodge()
 {
-    KoCompositeOpDodge<KoRgbU16Traits> compositeOp(0);
+    KoCompositeOpDodge<KoBgrU16Traits> compositeOp(0);
     QBENCHMARK{
         COMPOSITE_BENCHMARK
     }
@@ -126,7 +126,7 @@ void KoCompositeOpsBenchmark::benchmarkCompositeDodge()
 
 void KoCompositeOpsBenchmark::benchmarkCompositeInversedSubtract()
 {
-    KoCompositeOpInversedSubtract<KoRgbU16Traits> compositeOp(0);
+    KoCompositeOpInversedSubtract<KoBgrU16Traits> compositeOp(0);
     QBENCHMARK{
         COMPOSITE_BENCHMARK
     }
@@ -134,7 +134,7 @@ void KoCompositeOpsBenchmark::benchmarkCompositeInversedSubtract()
 
 void KoCompositeOpsBenchmark::benchmarkCompositeMulitply()
 {
-    KoCompositeOpMultiply<KoRgbU16Traits> compositeOp(0);
+    KoCompositeOpMultiply<KoBgrU16Traits> compositeOp(0);
     QBENCHMARK{
         COMPOSITE_BENCHMARK
     }
@@ -142,7 +142,7 @@ void KoCompositeOpsBenchmark::benchmarkCompositeMulitply()
 
 void KoCompositeOpsBenchmark::benchmarkCompositeOverlay()
 {
-    KoCompositeOpOverlay<KoRgbU16Traits> compositeOp(0);
+    KoCompositeOpOverlay<KoBgrU16Traits> compositeOp(0);
     QBENCHMARK{
         COMPOSITE_BENCHMARK
     }
@@ -150,7 +150,7 @@ void KoCompositeOpsBenchmark::benchmarkCompositeOverlay()
 
 void KoCompositeOpsBenchmark::benchmarkCompositeScreen()
 {
-    KoCompositeOpScreen<KoRgbU16Traits> compositeOp(0);
+    KoCompositeOpScreen<KoBgrU16Traits> compositeOp(0);
     QBENCHMARK{
         COMPOSITE_BENCHMARK
     }
@@ -158,7 +158,7 @@ void KoCompositeOpsBenchmark::benchmarkCompositeScreen()
 
 void KoCompositeOpsBenchmark::benchmarkCompositeSubtract()
 {
-    KoCompositeOpSubtract<KoRgbU16Traits> compositeOp(0);
+    KoCompositeOpSubtract<KoBgrU16Traits> compositeOp(0);
     QBENCHMARK{
         COMPOSITE_BENCHMARK
     }

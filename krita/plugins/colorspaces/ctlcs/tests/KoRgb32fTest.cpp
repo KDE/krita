@@ -28,7 +28,7 @@
 #include <KoColorModelStandardIds.h>
 
 template<typename _T_>
-void randomizator(typename KoRgbTraits<_T_>::Pixel& p)
+void randomizator(typename KoBgrTraits<_T_>::Pixel& p)
 {
     p.red = rand();
     p.green = rand();
@@ -76,15 +76,15 @@ void KoRgb32fTest::testConversion()
 {
     const KoColorSpace* rgb32f = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), 0);
     QVERIFY(rgb32f);
-    KoRgbTraits<float>::Pixel p32f;
+    KoBgrTraits<float>::Pixel p32f;
     quint8* p32fPtr = reinterpret_cast<quint8*>(&p32f);
-    KoRgbTraits<float>::Pixel p32f1;
+    KoBgrTraits<float>::Pixel p32f1;
     quint8* p32fPtr1 = reinterpret_cast<quint8*>(&p32f1);
-    KoRgbTraits<float>::Pixel p32f2;
+    KoBgrTraits<float>::Pixel p32f2;
     quint8* p32fPtr2 = reinterpret_cast<quint8*>(&p32f2);
-    KoRgbTraits<float>::Pixel p32f3;
+    KoBgrTraits<float>::Pixel p32f3;
     quint8* p32fPtr3 = reinterpret_cast<quint8*>(&p32f3);
-    KoRgbU16Traits::Pixel p16u;
+    KoBgrU16Traits::Pixel p16u;
     quint8* p16uPtr = reinterpret_cast<quint8*>(&p16u);
 
     // Test alpha function

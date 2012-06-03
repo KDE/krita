@@ -233,7 +233,7 @@ void decodeData4(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP 
                 unmultipliedGreen /= rgba -> a;
                 unmultipliedBlue /= rgba -> a;
             }
-            typename KoRgbTraits<_T_>::Pixel* dst = reinterpret_cast<typename KoRgbTraits<_T_>::Pixel*>(it->rawData());
+            typename KoBgrTraits<_T_>::Pixel* dst = reinterpret_cast<typename KoBgrTraits<_T_>::Pixel*>(it->rawData());
 
             dst->red = unmultipliedRed;
             dst->green = unmultipliedGreen;

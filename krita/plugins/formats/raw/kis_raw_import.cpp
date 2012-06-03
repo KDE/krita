@@ -134,7 +134,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
         KisHLineIteratorSP it = device->createHLineIteratorNG(0, 0, width);
         for (int y = 0; y < height; ++y) {
             do {
-                KoRgbU16Traits::Pixel* pixel = reinterpret_cast<KoRgbU16Traits::Pixel*>(it->rawData());
+                KoBgrU16Traits::Pixel* pixel = reinterpret_cast<KoBgrU16Traits::Pixel*>(it->rawData());
                 quint16* ptr = ((quint16*)imageData.data()) + (y * width + it->x()) * 3;
 #if KDCRAW_VERSION < 0x000400
                 pixel->red = correctIndian(ptr[2]);

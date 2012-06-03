@@ -85,14 +85,18 @@ KoColorConversionSystem::Node* KoColorConversionSystem::insertEngine(const KoCol
 
 void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
 {
-    dbgPigmentCCS << "Inserting color space " << csf->name() << " (" << csf->id() << ") Model: " << csf->colorModelId() << " Depth: " << csf->colorDepthId() << " into the CCS";
+    dbgPigment << "Inserting color space " << csf->name() << " (" << csf->id() << ") Model: " << csf->colorModelId() << " Depth: " << csf->colorDepthId() << " into the CCS";
     QList<const KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor(csf);
     QString modelId = csf->colorModelId().id();
     QString depthId = csf->colorDepthId().id();
-    if (profiles.isEmpty()) { // There is no profile for this CS, create a node without profile name
-        Q_ASSERT(csf->colorSpaceEngine() != "icc");
-        Node* n = nodeFor(modelId, depthId, "");
-        n->init(csf);
+    if (profiles.isEmpty()) { // There is no profile for this CS, create a node without profile name if the color engine isn't icc-based
+        if (csf->colorSpaceEngine() != "icc") {
+            Node* n = nodeFor(modelId, depthId, "");
+            n->init(csf);
+        }
+        else {
+            warnPigment << "Cannot add node for " << csf->name() << ", since there are no profiles available";
+        }
     } else {
         // Initialise the nodes
         foreach(const KoColorProfile* profile, profiles) {
@@ -305,18 +309,28 @@ KoColorConversionTransformation* KoColorConversionSystem::createTransformationFr
     Q_ASSERT(srcColorSpace->colorDepthId().id() == path->startNode()->depthId);
     Q_ASSERT(dstColorSpace->colorModelId().id() == path->endNode()->modelId);
     Q_ASSERT(dstColorSpace->colorDepthId().id() == path->endNode()->depthId);
+
     KoColorConversionTransformation* transfo;
+
     QList< Path::node2factory > pathOfNode = path->compressedPath();
+
     if (pathOfNode.size() == 2) { // Direct connection
         transfo = pathOfNode[1].second->createColorTransformation(srcColorSpace, dstColorSpace, renderingIntent);
-    } else {
+    }
+    else {
+
         KoMultipleColorConversionTransformation* mccTransfo = new KoMultipleColorConversionTransformation(srcColorSpace, dstColorSpace, renderingIntent);
+
         transfo = mccTransfo;
+
         // Get the first intermediary color space
         dbgPigmentCCS << pathOfNode[ 0 ].first->id() << " to " << pathOfNode[ 1 ].first->id();
+
         const KoColorSpace* intermCS =
             defaultColorSpaceForNode(pathOfNode[1].first);
+
         mccTransfo->appendTransfo(pathOfNode[1].second->createColorTransformation(srcColorSpace, intermCS, renderingIntent));
+
         for (int i = 2; i < pathOfNode.size() - 1; i++) {
             dbgPigmentCCS << pathOfNode[ i - 1 ].first->id() << " to " << pathOfNode[ i ].first->id();
             const KoColorSpace* intermCS2 = defaultColorSpaceForNode(pathOfNode[i].first);
@@ -324,6 +338,7 @@ KoColorConversionTransformation* KoColorConversionSystem::createTransformationFr
             mccTransfo->appendTransfo(pathOfNode[i].second->createColorTransformation(intermCS, intermCS2, renderingIntent));
             intermCS = intermCS2;
         }
+
         dbgPigmentCCS << pathOfNode[ pathOfNode.size() - 2 ].first->id() << " to " << pathOfNode[ pathOfNode.size() - 1 ].first->id();
         mccTransfo->appendTransfo(pathOfNode.last().second->createColorTransformation(intermCS, dstColorSpace, renderingIntent));
     }

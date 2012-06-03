@@ -240,9 +240,9 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
         if (is16bit) {
             if (rgb) {
                 do {
-                    flow->writeNumber(KoRgbU16Traits::red(it->rawData()));
-                    flow->writeNumber(KoRgbU16Traits::green(it->rawData()));
-                    flow->writeNumber(KoRgbU16Traits::blue(it->rawData()));
+                    flow->writeNumber(KoBgrU16Traits::red(it->rawData()));
+                    flow->writeNumber(KoBgrU16Traits::green(it->rawData()));
+                    flow->writeNumber(KoBgrU16Traits::blue(it->rawData()));
 
                 } while (it->nextPixel());
             } else if (bitmap) {
@@ -258,9 +258,9 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
         } else {
             if (rgb) {
                 do {
-                    flow->writeNumber(KoRgbTraits<quint8>::red(it->rawData()));
-                    flow->writeNumber(KoRgbTraits<quint8>::green(it->rawData()));
-                    flow->writeNumber(KoRgbTraits<quint8>::blue(it->rawData()));
+                    flow->writeNumber(KoBgrTraits<quint8>::red(it->rawData()));
+                    flow->writeNumber(KoBgrTraits<quint8>::green(it->rawData()));
+                    flow->writeNumber(KoBgrTraits<quint8>::blue(it->rawData()));
 
                 } while (it->nextPixel());
             } else if (bitmap) {

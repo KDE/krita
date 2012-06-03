@@ -36,9 +36,6 @@ ParagraphGeneral::ParagraphGeneral(QWidget *parent)
         , m_styleManager(0)
 {
 //Disable for now
-    //inherit style
-    widget.label_3->setVisible(false);
-    widget.inheritStyle->setVisible(false);
     //include in TOC
     widget.inToc->setVisible(false);
 //

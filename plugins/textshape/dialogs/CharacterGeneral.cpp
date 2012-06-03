@@ -49,6 +49,7 @@ CharacterGeneral::CharacterGeneral(QWidget *parent)
     widget.label_2->setVisible(false);
     //
 
+    widget.nextStyle->showEditIcon(false);
     widget.nextStyle->setStyleIsOriginal(true);
     m_paragraphStyleModel->setStyleThumbnailer(m_thumbnail);
     widget.nextStyle->setStylesModel(m_paragraphStyleModel);

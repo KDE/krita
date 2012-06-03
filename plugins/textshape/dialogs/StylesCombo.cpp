@@ -179,5 +179,11 @@ void StylesCombo::slotDeleteStyle(QModelIndex index)
     emit deleteStyle(index.row());
 }
 
+void StylesCombo::showEditIcon(bool show){
+    StylesDelegate *delegate = new StylesDelegate();
+    delegate->setEditButtonEnable(show);
+    setItemDelegate(delegate);
+}
+
 #include <StylesCombo.moc>
 

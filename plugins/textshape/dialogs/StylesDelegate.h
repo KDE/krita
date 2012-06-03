@@ -39,6 +39,7 @@ public:
 
     virtual bool editorEvent(QEvent *event, QAbstractItemModel *model,
                             const QStyleOptionViewItem &option, const QModelIndex &index);
+    void setEditButtonEnable(bool enable);
 
 signals:
     void styleManagerButtonClicked(QModelIndex index);
@@ -49,6 +50,7 @@ signals:
 private:
     bool m_editButtonPressed;
     bool m_deleteButtonPressed;
+    bool m_enableEditButton;
 
     int m_buttonSize;
     int m_buttonDistance;

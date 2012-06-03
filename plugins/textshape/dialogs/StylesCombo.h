@@ -54,6 +54,9 @@ public:
 
     bool eventFilter(QObject *, QEvent *);
 
+    /** When we dont want edit icon for our items in combo */
+    void showEditIcon(bool show);
+
 public slots:
     /** This slot needs to be called if the preview in the main area needs to be updated for some reason */
     void slotUpdatePreview();

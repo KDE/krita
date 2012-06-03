@@ -50,7 +50,7 @@ public:
     void maximizeCroppedArea();
 
 signals:
-    void sigCropRegionChnaged(const QRectF&);
+    void sigCropRegionChanged(const QRectF&, bool undoLast);
 
 private:
     void calcImageRect();
@@ -64,6 +64,7 @@ private:
     QRectF m_oldSelectionRect;
     SelectionRect m_selectionRect;
     bool m_isMousePressed;
+    bool m_undoLast;
 };
 
 #endif // H_CROP_WIDGET_H

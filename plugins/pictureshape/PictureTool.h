@@ -60,9 +60,10 @@ protected:
 private slots:
     void colorModeChanged(int cmbBoxIndex);
     void changeUrlPressed();
-    void cropRegionChanged(const QRectF& rect);
+    void cropRegionChanged(const QRectF& rect, bool undoPrev);
     void cropEditFieldsChanged();
     void aspectCheckBoxChanged(bool checked);
+    void contourCheckBoxChanged(bool checked);
     void fillButtonPressed();
     void updateControlElements();
     void setImageData(KJob *job);

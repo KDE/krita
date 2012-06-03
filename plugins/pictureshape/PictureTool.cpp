@@ -34,6 +34,8 @@
 #include <KoImageData.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
+#include <KoShapeController.h>
+#include <KoDocumentResourceManager.h>
 #include <KoPointerEvent.h>
 #include <KoFilterEffect.h>
 #include <KoFilterEffectRegistry.h>
@@ -108,15 +110,18 @@ QWidget *PictureTool::createOptionWidget()
 
     updateControlElements();
 
+    m_pictureToolUI->cbContour->hide();
+
     connect(m_pictureToolUI->bnImageFile, SIGNAL(clicked(bool)), this, SLOT(changeUrlPressed()));
-    connect(m_pictureToolUI->cbAspect, SIGNAL(toggled(bool)), this, SLOT(aspectCheckBoxChanged(bool)));
+    connect(m_pictureToolUI->cmbColorMode, SIGNAL(currentIndexChanged(int)), this, SLOT(colorModeChanged(int)));
     connect(m_pictureToolUI->leftDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(cropEditFieldsChanged()));
     connect(m_pictureToolUI->rightDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(cropEditFieldsChanged()));
     connect(m_pictureToolUI->topDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(cropEditFieldsChanged()));
     connect(m_pictureToolUI->bottomDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(cropEditFieldsChanged()));
+    connect(m_pictureToolUI->cbAspect, SIGNAL(toggled(bool)), this, SLOT(aspectCheckBoxChanged(bool)));
     connect(m_pictureToolUI->bnFill, SIGNAL(pressed()), this, SLOT(fillButtonPressed()));
-    connect(m_pictureToolUI->cmbColorMode, SIGNAL(currentIndexChanged(int)), this, SLOT(colorModeChanged(int)));
-    connect(m_pictureToolUI->cropWidget, SIGNAL(sigCropRegionChnaged(QRectF)), this, SLOT(cropRegionChanged(QRectF)));
+    connect(m_pictureToolUI->cbContour, SIGNAL(toggled(bool)), this, SLOT(contourCheckBoxChanged(bool)));
+    connect(m_pictureToolUI->cropWidget, SIGNAL(sigCropRegionChanged(QRectF, bool)), this, SLOT(cropRegionChanged(QRectF, bool)));
 
     return m_pictureToolUI;
 }
@@ -176,8 +181,12 @@ void PictureTool::cropEditFieldsChanged()
     m_pictureToolUI->cropWidget->setCropRect(clippingRect.toRect());
 }
 
-void PictureTool::cropRegionChanged(const QRectF& rect)
+void PictureTool::cropRegionChanged(const QRectF& rect, bool undoPrev)
 {
+    if (undoPrev) {
+        canvas()->shapeController()->resourceManager()->undoStack()->undo();
+    }
+
     ChangeImageCommand *cmd = new ChangeImageCommand(m_pictureshape, rect);
     // connect before adding the command, so that "updateControlElements()" is executed
     // when the command is added to the undo stack.
@@ -198,6 +207,10 @@ void PictureTool::colorModeChanged(int cmbIndex)
 void PictureTool::aspectCheckBoxChanged(bool checked)
 {
     m_pictureToolUI->cropWidget->setKeepPictureProportion(checked);
+}
+
+void PictureTool::contourCheckBoxChanged(bool checked)
+{
 }
 
 void PictureTool::fillButtonPressed()

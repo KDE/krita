@@ -393,6 +393,13 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
     setAcceptDrops(true);
 
+    KConfigGroup group(KGlobal::config(), "krita/shortcuts");
+    foreach(KActionCollection *collection, KActionCollection::allCollections()) {
+        collection->setConfigGroup("krita/shortcuts");
+        collection->readSettings(&group);
+    }
+
+
 #if 0
     //check for colliding shortcuts
     QSet<QKeySequence> existingShortcuts;
@@ -410,8 +417,17 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
 KisView2::~KisView2()
 {
-    KConfigGroup group(KGlobal::config(), "theme");
-    group.writeEntry("Theme", m_d->themeManager->currentThemeName());
+    {
+        KConfigGroup group(KGlobal::config(), "theme");
+        group.writeEntry("Theme", m_d->themeManager->currentThemeName());
+    }
+    {
+        KConfigGroup group(KGlobal::config(), "krita/shortcuts");
+        foreach(KActionCollection *collection, KActionCollection::allCollections()) {
+            collection->setConfigGroup("krita/shortcuts");
+            collection->writeSettings(&group);
+        }
+    }
     delete m_d;
 }
 

@@ -25,15 +25,19 @@
 #include "ParagraphBulletsNumbers.h"
 #include "ParagraphDecorations.h"
 #include "ParagraphDropCaps.h"
+#include "StylesModel.h"
 
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
+#include <KoStyleThumbnailer.h>
 
 ParagraphGeneral::ParagraphGeneral(QWidget *parent)
         : CharacterGeneral(parent)
         , m_nameHidden(false)
         , m_style(0)
         , m_styleManager(0)
+        , m_thumbnail(new KoStyleThumbnailer())
+        , m_paragraphInheritedStyleModel(new StylesModel(0, StylesModel::ParagraphStyle))
 {
 //Disable for now
     //include in TOC
@@ -42,6 +46,8 @@ ParagraphGeneral::ParagraphGeneral(QWidget *parent)
     widget.nextStyle->setVisible(true);
     widget.label_2->setVisible(true);
 
+    m_paragraphInheritedStyleModel->setStyleThumbnailer(m_thumbnail);
+    widget.inheritStyle->setStylesModel(m_paragraphInheritedStyleModel);
 
     m_paragraphIndentSpacing = new ParagraphIndentSpacing(this);
     widget.tabs->addTab(m_paragraphIndentSpacing, i18n("Indent/Spacing"));
@@ -202,6 +208,7 @@ void ParagraphGeneral::setStyleManager(KoStyleManager *sm)
         return;
     m_styleManager = sm;
     CharacterGeneral::setStyleManager(m_styleManager);
+    m_paragraphInheritedStyleModel->setStyleManager(m_styleManager);
 }
 
 #include <ParagraphGeneral.moc>

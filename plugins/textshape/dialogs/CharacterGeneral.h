@@ -75,6 +75,7 @@ private:
     KoStyleManager *m_styleManager;
     KoStyleThumbnailer *m_thumbnail;
     StylesModel *m_paragraphStyleModel;
+    StylesModel *m_characterInheritedStyleModel;
 };
 
 #endif

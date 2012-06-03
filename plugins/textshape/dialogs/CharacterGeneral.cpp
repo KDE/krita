@@ -42,6 +42,7 @@ CharacterGeneral::CharacterGeneral(QWidget *parent)
         , m_styleManager(0)
         , m_thumbnail(new KoStyleThumbnailer())
         , m_paragraphStyleModel(new StylesModel(0,StylesModel::ParagraphStyle))
+        , m_characterInheritedStyleModel(new StylesModel(0, StylesModel::CharacterStyle))
 {
     widget.setupUi(this);
     // we dont have next style for character styles
@@ -49,10 +50,17 @@ CharacterGeneral::CharacterGeneral(QWidget *parent)
     widget.label_2->setVisible(false);
     //
 
+    // paragraph style model
     widget.nextStyle->showEditIcon(false);
     widget.nextStyle->setStyleIsOriginal(true);
     m_paragraphStyleModel->setStyleThumbnailer(m_thumbnail);
     widget.nextStyle->setStylesModel(m_paragraphStyleModel);
+    // inherited style model
+    widget.inheritStyle->showEditIcon(false);
+    widget.inheritStyle->setStyleIsOriginal(true);
+    //for character General
+    widget.inheritStyle->setStylesModel(m_characterInheritedStyleModel);
+    widget.inheritStyle->setEnabled(false);
 
     m_characterHighlighting = new CharacterHighlighting(true, this);
     connect(m_characterHighlighting, SIGNAL(charStyleChanged()), this, SIGNAL(styleChanged()));
@@ -149,6 +157,7 @@ void CharacterGeneral::setStyleManager(KoStyleManager *sm)
         return;
     m_styleManager = sm;
     m_paragraphStyleModel->setStyleManager(m_styleManager);
+    m_characterInheritedStyleModel->setStyleManager(m_styleManager);
 }
 
 void CharacterGeneral::updateStyleCombo(KoParagraphStyle *style)

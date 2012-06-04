@@ -266,7 +266,7 @@
      <item>
       <widget class="QCheckBox" name="chkBlackpoint">
        <property name="text">
-        <string>Use Blackpoint compensation</string>
+        <string>Use Blackpoint Compensation</string>
        </property>
        <property name="checked">
         <bool>true</bool>

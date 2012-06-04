@@ -25,38 +25,40 @@
 #include "kis_paint_device.h"
 #include "generator/kis_generator_layer.h"
 
-KisExposureVisitor::KisExposureVisitor(double exposure) : m_exposure(exposure)
+KisProfilePropertyVisitor::KisProfilePropertyVisitor(const QString &property, double value)
+    : m_property(property)
+    , m_value(value)
 {
 
 }
 
-void KisExposureVisitor::setExposureToProfile(KoColorProfile* profile)
+void KisProfilePropertyVisitor::setPropertyToProfile(KoColorProfile* profile)
 {
-    profile->setProperty("exposure", m_exposure);
+    profile->setProperty(m_property, m_value);
 }
 
-bool KisExposureVisitor::visit(KisExternalLayer * e)
+bool KisProfilePropertyVisitor::visit(KisExternalLayer * e)
 {
     Q_UNUSED(e);
     return true;
 }
-bool KisExposureVisitor::visit(KisPaintLayer *layer)
+bool KisProfilePropertyVisitor::visit(KisPaintLayer *layer)
 {
-    setExposureToProfile(layer->original()->colorSpace()->profile());
+    setPropertyToProfile(layer->original()->colorSpace()->profile());
     layer->setDirty();
     return true;
 }
 
-bool KisExposureVisitor::visit(KisGeneratorLayer *layer)
+bool KisProfilePropertyVisitor::visit(KisGeneratorLayer *layer)
 {
-    setExposureToProfile(layer->original()->colorSpace()->profile());
+    setPropertyToProfile(layer->original()->colorSpace()->profile());
     layer->setDirty();
     return true;
 }
 
-bool KisExposureVisitor::visit(KisGroupLayer *layer)
+bool KisProfilePropertyVisitor::visit(KisGroupLayer *layer)
 {
-    setExposureToProfile(layer->original()->colorSpace()->profile());
+    setPropertyToProfile(layer->original()->colorSpace()->profile());
     layer->setDirty();
     KisLayerSP child = dynamic_cast<KisLayer*>(layer->firstChild().data());
     while (child) {
@@ -65,7 +67,7 @@ bool KisExposureVisitor::visit(KisGroupLayer *layer)
     }
     return true;
 }
-bool KisExposureVisitor::visit(KisAdjustmentLayer* layer)
+bool KisProfilePropertyVisitor::visit(KisAdjustmentLayer* layer)
 {
     Q_UNUSED(layer);
     return true;

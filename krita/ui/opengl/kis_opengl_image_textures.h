@@ -80,8 +80,9 @@ public:
      * Set the exposure level used to display high dynamic range images. Typical values
      * are between -10 and 10.
      * @param exposure The exposure level
+     * @param gamma The gamma correction
      */
-    void setHDRExposure(float exposure);
+    void setHDRExposure(float exposure, float gamma = 2.2);
 
     /**
      * Generate a background texture from the given QImage. This is used for the checker

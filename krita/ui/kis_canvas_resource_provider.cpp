@@ -78,6 +78,9 @@ void KisCanvasResourceProvider::setResourceManager(KoCanvasResourceManager *reso
     setMirrorHorizontal(false);
     setMirrorVertical(false);
 
+    m_resourceManager->setResource(HdrExposure, 0.0);
+    m_resourceManager->setResource(HdrGamma, 2.2);
+
     connect(m_resourceManager, SIGNAL(resourceChanged(int, const QVariant &)),
             this, SLOT(slotResourceChanged(int, const QVariant&)));
 }
@@ -106,8 +109,23 @@ float KisCanvasResourceProvider::HDRExposure() const
 void KisCanvasResourceProvider::setHDRExposure(float exposure)
 {
     m_resourceManager->setResource(HdrExposure, static_cast<double>(exposure));
-    KisExposureVisitor eV(exposure);
+    KisProfilePropertyVisitor eV("exposure", exposure);
     m_view->image()->projection()->colorSpace()->profile()->setProperty("exposure", exposure);
+    m_view->image()->rootLayer()->accept(eV);
+    m_view->canvasBase()->updateCanvas();
+    m_view->canvasBase()->startUpdateCanvasProjection(m_view->image()->bounds());
+}
+
+float KisCanvasResourceProvider::HDRGamma() const
+{
+    return static_cast<float>(m_resourceManager->resource(HdrGamma).toDouble());
+}
+
+void KisCanvasResourceProvider::setHDRGamma(float gamma)
+{
+    m_resourceManager->setResource(HdrGamma, static_cast<double>(gamma));
+    KisProfilePropertyVisitor eV("gamma", gamma);
+    m_view->image()->projection()->colorSpace()->profile()->setProperty("gamma", gamma);
     m_view->image()->rootLayer()->accept(eV);
     m_view->canvasBase()->updateCanvas();
     m_view->canvasBase()->startUpdateCanvasProjection(m_view->image()->bounds());

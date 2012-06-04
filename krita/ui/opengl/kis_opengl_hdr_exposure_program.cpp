@@ -27,6 +27,7 @@
 KisOpenGLHDRExposureProgram::KisOpenGLHDRExposureProgram()
 {
     m_exposure = 0;
+    m_gamma = 2.2;
     createProgram();
 }
 
@@ -39,6 +40,15 @@ void KisOpenGLHDRExposureProgram::setExposure(float exposure)
     }
 }
 
+void KisOpenGLHDRExposureProgram::setGamma(float gamma)
+{
+    m_gamma = gamma;
+
+    if (active()) {
+        setGammaUniformVariable();
+    }
+}
+
 void KisOpenGLHDRExposureProgram::setExposureUniformVariable()
 {
     Q_ASSERT(active());
@@ -48,10 +58,19 @@ void KisOpenGLHDRExposureProgram::setExposureUniformVariable()
     setUniformVariable("exposure", exposure, exposure, exposure, 1.0);
 }
 
+void KisOpenGLHDRExposureProgram::setGammaUniformVariable()
+{
+    Q_ASSERT(active());
+    float gamma = 1.0 / m_gamma;
+    setUniformVariable("gamma", gamma, gamma, gamma, 1.0);
+}
+
+
 void KisOpenGLHDRExposureProgram::activate()
 {
     KisOpenGLProgram::activate();
     setExposureUniformVariable();
+    setGammaUniformVariable();
     setUniformVariable("image", ImageTextureUnit);
 }
 

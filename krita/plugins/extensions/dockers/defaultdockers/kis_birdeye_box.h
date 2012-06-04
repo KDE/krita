@@ -34,7 +34,9 @@ class KoBirdEyePanel;
 class KisDoubleWidget;
 class KoZoomAdapter;
 class KoColorSpace;
-
+class SqueezedComboBox;
+class QCheckBox;
+class KComboBox;
 /**
  * Image overview docker
  *
@@ -57,19 +59,28 @@ public:
 
 private slots:
 
-    void slotImageColorSpaceChanged(const KoColorSpace *cs);
+    void slotImageColorSpaceChanged(const KoColorSpace*);
     void exposureValueChanged(double exposure);
     void exposureSliderPressed();
     void exposureSliderReleased();
+    void gammaValueChanged(double exposure);
+    void gammaSliderPressed();
+    void gammaSliderReleased();
+    void updateDisplaySettings();
+
 
 private:
 
-    KisCanvas2* m_canvas;
+    KisCanvas2 *m_canvas;
 
-    KoBirdEyePanel * m_birdEyePanel;
-    KisDoubleWidget * m_exposureDoubleWidget;
-    QLabel *m_exposureLabel;
-    bool m_draggingExposureSlider;
+    KoBirdEyePanel *m_birdEyePanel;
+    KisDoubleWidget *m_exposureDoubleWidget;
+    KisDoubleWidget *m_gammaDoubleWidget;
+    SqueezedComboBox *m_cmbDisplayProfile;
+    KComboBox *m_cmbMonitorIntent;
+    QCheckBox *m_chkBlackPoint;
+
+    bool m_draggingSlider;
 };
 
 

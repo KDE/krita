@@ -39,6 +39,13 @@ public:
      */
     void setExposure(float exposure);
 
+
+    /**
+     * @brief setGamma set the gamma correction
+     * @param gamma in a range from 0 to 5; 2.2 is "standard"
+     */
+    void setGamma(float gamma);
+
     /**
      * Activate the program ready for rendering.
      */
@@ -47,11 +54,13 @@ public:
 private:
     virtual void createProgram();
     void setExposureUniformVariable();
+    void setGammaUniformVariable();
 
     static const GLint ImageTextureUnit = 0;
     static const GLint ImageTextureUnitEnum = GL_TEXTURE0 + ImageTextureUnit;
 
     GLfloat m_exposure;
+    GLfloat m_gamma;
 };
 
 #endif // KIS_OPENGL_HDR_EXPOSURE_PROGRAM_H_

@@ -301,7 +301,7 @@ void KisOpenGLImageTextures::setMonitorProfile(KoColorProfile *monitorProfile)
     }
 }
 
-void KisOpenGLImageTextures::setHDRExposure(float exposure)
+void KisOpenGLImageTextures::setHDRExposure(float exposure, float gamma)
 {
     if (exposure != m_exposure) {
         m_exposure = exposure;
@@ -310,6 +310,7 @@ void KisOpenGLImageTextures::setHDRExposure(float exposure)
 #ifdef HAVE_GLEW
             if (m_usingHDRExposureProgram) {
                 HDRExposureProgram->setExposure(exposure);
+                HDRExposureProgram->setGamma(gamma);
             } else {
 #endif
 

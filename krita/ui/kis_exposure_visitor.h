@@ -24,12 +24,12 @@
 class KoColorProfile;
 
 /**
- * Set the exposure
+ * Set the exposure and gamma
  */
-class KisExposureVisitor : public KisNodeVisitor
+class KisProfilePropertyVisitor : public KisNodeVisitor
 {
 public:
-    KisExposureVisitor(double exposure);
+    KisProfilePropertyVisitor(const QString &property, double value);
 
     using KisNodeVisitor::visit;
 
@@ -55,9 +55,10 @@ public:
     }
 
 protected:
-    void setExposureToProfile(KoColorProfile* profile);
+    void setPropertyToProfile(KoColorProfile* profile);
 private:
-    double m_exposure;
+    QString m_property;
+    double m_value;
 };
 
 

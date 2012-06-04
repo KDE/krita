@@ -177,8 +177,9 @@ QString KisConfig::monitorProfile() const
     return m_cfg.readEntry("monitorProfile", "");
 }
 
-void KisConfig::setMonitorProfile(const QString & monitorProfile)
+void KisConfig::setMonitorProfile(const QString & monitorProfile, bool override)
 {
+    m_cfg.writeEntry("monitorProfile/OverrideX11", override);
     m_cfg.writeEntry("monitorProfile", monitorProfile);
 }
 
@@ -225,7 +226,14 @@ const KoColorProfile *KisConfig::displayProfile(int screen)
 {
     // first try to get the screen profile set by the X11 _ICC_PROFILE atom (compatible with colord,
     // but colord can set the atom to none, in which case we cannot create a suitable profile)
-    const KoColorProfile *profile = KisConfig::getScreenProfile(screen);
+
+    // if the user plays with the settings, they can override the display profile, in which case
+    // we don't want the X11 atom setting.
+    bool override = m_cfg.readEntry("monitorProfile/OverrideX11", false);
+    const KoColorProfile *profile = 0;
+    if (!override) {
+        profile = KisConfig::getScreenProfile(screen);
+    }
 
     // if it fails. check the configuration
     if (!profile || !profile->isSuitableForDisplay()) {

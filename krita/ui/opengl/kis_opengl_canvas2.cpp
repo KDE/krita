@@ -257,7 +257,8 @@ void KisOpenGLCanvas2::drawImage()
         if (m_d->openGLImageTextures->usingHDRExposureProgram()) {
             m_d->openGLImageTextures->activateHDRExposureProgram();
         }
-        m_d->openGLImageTextures->setHDRExposure(canvas()->view()->resourceProvider()->HDRExposure());
+        m_d->openGLImageTextures->setHDRExposure(canvas()->view()->resourceProvider()->HDRExposure(),
+                                                 canvas()->view()->resourceProvider()->HDRGamma());
     }
 
     makeCurrent();

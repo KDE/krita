@@ -25,17 +25,17 @@
 
 #include "compositeops/KoCompositeOps.h"
 
-XyzU16ColorSpace::XyzU16ColorSpace(KoColorProfile *p) :
-        LcmsColorSpace<XyzU16Traits>("XYZA16", i18n("XYZ (16-bit integer/channel)"),  TYPE_XYZA_16, cmsSigXYZData, p)
+XyzU16ColorSpace::XyzU16ColorSpace(const QString &name, KoColorProfile *p) :
+        LcmsColorSpace<KoXyzU16Traits>(colorSpaceId(), name, TYPE_XYZA_16, cmsSigXYZData, p)
 {
-    addChannel(new KoChannelInfo(i18n("X"), XyzU16Traits::x_pos * sizeof(quint16), XyzU16Traits::x_pos, KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), Qt::cyan));
-    addChannel(new KoChannelInfo(i18n("Y"), XyzU16Traits::y_pos * sizeof(quint16), XyzU16Traits::y_pos, KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), Qt::magenta));
-    addChannel(new KoChannelInfo(i18n("Z"), XyzU16Traits::z_pos * sizeof(quint16), XyzU16Traits::z_pos, KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), Qt::yellow));
-    addChannel(new KoChannelInfo(i18n("Alpha"), XyzU16Traits::alpha_pos * sizeof(quint16), XyzU16Traits::alpha_pos, KoChannelInfo::ALPHA, KoChannelInfo::UINT16, sizeof(quint16)));
+    addChannel(new KoChannelInfo(i18n("X"), KoXyzU16Traits::x_pos * sizeof(quint16), KoXyzU16Traits::x_pos, KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), Qt::cyan));
+    addChannel(new KoChannelInfo(i18n("Y"), KoXyzU16Traits::y_pos * sizeof(quint16), KoXyzU16Traits::y_pos, KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), Qt::magenta));
+    addChannel(new KoChannelInfo(i18n("Z"), KoXyzU16Traits::z_pos * sizeof(quint16), KoXyzU16Traits::z_pos, KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), Qt::yellow));
+    addChannel(new KoChannelInfo(i18n("Alpha"), KoXyzU16Traits::alpha_pos * sizeof(quint16), KoXyzU16Traits::alpha_pos, KoChannelInfo::ALPHA, KoChannelInfo::UINT16, sizeof(quint16)));
     init();
 
     // ADD, ALPHA_DARKEN, BURN, DIVIDE, DODGE, ERASE, MULTIPLY, OVER, OVERLAY, SCREEN, SUBTRACT
-    addStandardCompositeOps<XyzU16Traits>(this);
+    addStandardCompositeOps<KoXyzU16Traits>(this);
 }
 
 bool XyzU16ColorSpace::willDegrade(ColorSpaceIndependence independence) const
@@ -48,26 +48,26 @@ bool XyzU16ColorSpace::willDegrade(ColorSpaceIndependence independence) const
 
 KoColorSpace* XyzU16ColorSpace::clone() const
 {
-    return new XyzU16ColorSpace(profile()->clone());
+    return new XyzU16ColorSpace(name(), profile()->clone());
 }
 
 void XyzU16ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
 {
-    const XyzU16Traits::Pixel* p = reinterpret_cast<const XyzU16Traits::Pixel*>(pixel);
+    const KoXyzU16Traits::Pixel* p = reinterpret_cast<const KoXyzU16Traits::Pixel*>(pixel);
     QDomElement labElt = doc.createElement("XYZ");
-    labElt.setAttribute("x", KoColorSpaceMaths< XyzU16Traits::channels_type, qreal>::scaleToA(p->X));
-    labElt.setAttribute("y", KoColorSpaceMaths< XyzU16Traits::channels_type, qreal>::scaleToA(p->Y));
-    labElt.setAttribute("z", KoColorSpaceMaths< XyzU16Traits::channels_type, qreal>::scaleToA(p->Z));
+    labElt.setAttribute("x", KoColorSpaceMaths< KoXyzU16Traits::channels_type, qreal>::scaleToA(p->x));
+    labElt.setAttribute("y", KoColorSpaceMaths< KoXyzU16Traits::channels_type, qreal>::scaleToA(p->y));
+    labElt.setAttribute("z", KoColorSpaceMaths< KoXyzU16Traits::channels_type, qreal>::scaleToA(p->z));
     labElt.setAttribute("space", profile()->name());
     colorElt.appendChild(labElt);
 }
 
 void XyzU16ColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) const
 {
-    XyzU16Traits::Pixel* p = reinterpret_cast<XyzU16Traits::Pixel*>(pixel);
-    p->X = KoColorSpaceMaths< qreal, XyzU16Traits::channels_type >::scaleToA(elt.attribute("x").toDouble());
-    p->Y = KoColorSpaceMaths< qreal, XyzU16Traits::channels_type >::scaleToA(elt.attribute("y").toDouble());
-    p->Z = KoColorSpaceMaths< qreal, XyzU16Traits::channels_type >::scaleToA(elt.attribute("z").toDouble());
+    KoXyzU16Traits::Pixel* p = reinterpret_cast<KoXyzU16Traits::Pixel*>(pixel);
+    p->x = KoColorSpaceMaths< qreal, KoXyzU16Traits::channels_type >::scaleToA(elt.attribute("x").toDouble());
+    p->y = KoColorSpaceMaths< qreal, KoXyzU16Traits::channels_type >::scaleToA(elt.attribute("y").toDouble());
+    p->z = KoColorSpaceMaths< qreal, KoXyzU16Traits::channels_type >::scaleToA(elt.attribute("z").toDouble());
     p->alpha = KoColorSpaceMathsTraits<quint16>::max;
 }
 

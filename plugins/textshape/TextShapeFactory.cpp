@@ -89,6 +89,9 @@ KoShape *TextShapeFactory::createDefaultShape(KoDocumentResourceManager *documen
         }
 
         text->setImageCollection(documentResources->imageCollection());
+
+        // this is needed so the shape can reinitialize itself with the stylemanager
+        text->textShapeData()->setDocument(text->textShapeData()->document(), true);
     }
 
     return text;

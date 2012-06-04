@@ -188,7 +188,7 @@ void addStandardCompositeOps(KoColorSpace* cs)
     typedef typename _Traits_::channels_type channels_type;
     
     static const bool useGeneralOps = true;
-    static const bool useRGBOps     = boost::is_base_of<KoRgbTraits<channels_type>, _Traits_>::value;
+    static const bool useRGBOps     = boost::is_base_of<KoBgrTraits<channels_type>, _Traits_>::value;
     
     _Private::AddGeneralOps<_Traits_, useGeneralOps>::add(cs);
     _Private::AddRGBOps    <_Traits_, useRGBOps    >::add(cs);

@@ -78,7 +78,7 @@ void clamp<float>(float* r, float* g, float* b)
 template<typename _channel_type_>
 class KisHSVAdjustment : public KoColorTransformation
 {
-    typedef KoRgbTraits<_channel_type_> RGBTrait;
+    typedef KoBgrTraits<_channel_type_> RGBTrait;
     typedef typename RGBTrait::Pixel RGBPixel;
 public:
     KisHSVAdjustment() {

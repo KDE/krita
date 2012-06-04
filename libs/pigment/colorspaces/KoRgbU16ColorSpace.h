@@ -33,7 +33,7 @@
  * The alpha mask is a special color strategy that treats all pixels as
  * alpha value with a color common to the mask. The default color is white.
  */
-class KoRgbU16ColorSpace : public KoSimpleColorSpace<KoRgbU16Traits>
+class KoRgbU16ColorSpace : public KoSimpleColorSpace<KoBgrU16Traits>
 {
 
 public:

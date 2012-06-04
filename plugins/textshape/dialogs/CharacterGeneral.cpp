@@ -2,6 +2,7 @@
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  * Copyright (C) 2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
+ * Copyright (C) 2012 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,16 +26,42 @@
 #include "FontDecorations.h"
 #include "FormattingPreview.h"
 
+#include "StylesCombo.h"
+#include "StylesModel.h"
+
+#include <KoParagraphStyle.h>
+#include <KoStyleThumbnailer.h>
 #include <KoStyleManager.h>
 #include <KoCharacterStyle.h>
 
 #include "kdebug.h"
 
 CharacterGeneral::CharacterGeneral(QWidget *parent)
-        : QWidget(parent),
-        m_style(0)
+        : QWidget(parent)
+        , m_style(0)
+        , m_styleManager(0)
+        , m_thumbnail(new KoStyleThumbnailer())
+        , m_paragraphStyleModel(new StylesModel(0,StylesModel::ParagraphStyle))
+        , m_characterInheritedStyleModel(new StylesModel(0, StylesModel::CharacterStyle))
 {
     widget.setupUi(this);
+    // we dont have next style for character styles
+    widget.nextStyle->setVisible(false);
+    widget.label_2->setVisible(false);
+    //
+
+    // paragraph style model
+    widget.nextStyle->showEditIcon(false);
+    widget.nextStyle->setStyleIsOriginal(true);
+    m_paragraphStyleModel->setStyleThumbnailer(m_thumbnail);
+    widget.nextStyle->setStylesModel(m_paragraphStyleModel);
+    // inherited style model
+    widget.inheritStyle->showEditIcon(false);
+    widget.inheritStyle->setStyleIsOriginal(true);
+    //for character General
+    m_characterInheritedStyleModel->setStyleThumbnailer(m_thumbnail);
+    widget.inheritStyle->setStylesModel(m_characterInheritedStyleModel);
+    widget.inheritStyle->setEnabled(false);
 
     m_characterHighlighting = new CharacterHighlighting(true, this);
     connect(m_characterHighlighting, SIGNAL(charStyleChanged()), this, SIGNAL(styleChanged()));
@@ -72,6 +99,13 @@ void CharacterGeneral::setStyle(KoCharacterStyle *style)
     //m_languageTab->setDisplay(style);
 
     widget.preview->setCharacterStyle(style);
+
+    if (m_styleManager) {
+        KoCharacterStyle *parentStyle = style->parentStyle();
+        if (parentStyle) {
+            widget.inheritStyle->setCurrentIndex(m_characterInheritedStyleModel->indexForCharacterStyle(*parentStyle).row());
+        }
+    }
 
     blockSignals(false);
 }
@@ -111,7 +145,7 @@ void CharacterGeneral::selectName()
 
 void CharacterGeneral::setPreviewCharacterStyle()
 {
-    KoCharacterStyle *charStyle=new KoCharacterStyle();
+    KoCharacterStyle *charStyle = new KoCharacterStyle();
     save(charStyle);
     if (charStyle) {
         widget.preview->setCharacterStyle(charStyle);
@@ -123,6 +157,26 @@ void CharacterGeneral::setPreviewCharacterStyle()
 QString CharacterGeneral::styleName() const
 {
     return widget.name->text();
+}
+
+void CharacterGeneral::setStyleManager(KoStyleManager *sm)
+{
+    if (!sm)
+        return;
+    m_styleManager = sm;
+    m_paragraphStyleModel->setStyleManager(m_styleManager);
+    m_characterInheritedStyleModel->setStyleManager(m_styleManager);
+}
+
+void CharacterGeneral::updateNextStyleCombo(KoParagraphStyle *style)
+{
+    widget.nextStyle->setCurrentIndex(m_paragraphStyleModel->indexForParagraphStyle(*style).row());
+    m_paragraphStyleModel->setCurrentParagraphStyle(style->styleId());
+}
+
+int CharacterGeneral::nextStyleId()
+{
+    return m_styleManager->paragraphStyle(m_paragraphStyleModel->index(widget.nextStyle->currentIndex()).internalId())->styleId();
 }
 
 #include <CharacterGeneral.moc>

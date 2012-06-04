@@ -25,25 +25,35 @@
 
 #include <KoColorModelStandardIds.h>
 
-typedef KoXyzTraits<quint16> XyzU16Traits;
+#define TYPE_XYZA_16 (COLORSPACE_SH(PT_XYZ)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1))
 
-class XyzU16ColorSpace : public LcmsColorSpace<XyzU16Traits>
+class XyzU16ColorSpace : public LcmsColorSpace<KoXyzU16Traits>
 {
 public:
-    XyzU16ColorSpace(KoColorProfile *p);
+    XyzU16ColorSpace(const QString &name, KoColorProfile *p);
+
     virtual bool willDegrade(ColorSpaceIndependence independence) const;
+
     virtual KoID colorModelId() const {
         return XYZAColorModelID;
     }
+
     virtual KoID colorDepthId() const {
         return Integer16BitsColorDepthID;
     }
-    virtual KoColorSpace* clone() const;
-    virtual void colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
-    virtual void colorFromXML(quint8* pixel, const QDomElement& elt) const;
-};
 
-#define TYPE_XYZA_16 (COLORSPACE_SH(PT_XYZ)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1))
+    virtual KoColorSpace* clone() const;
+
+    virtual void colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
+
+    virtual void colorFromXML(quint8* pixel, const QDomElement& elt) const;
+
+    static QString colorSpaceId()
+    {
+        return QString("XYZA16");
+    }
+
+};
 
 class XyzU16ColorSpaceFactory : public LcmsColorSpaceFactory
 {
@@ -51,7 +61,7 @@ public:
     XyzU16ColorSpaceFactory() : LcmsColorSpaceFactory(TYPE_XYZA_16, cmsSigXYZData) {
     }
     virtual QString id() const {
-        return "XYZA16";
+        return XyzU16ColorSpace::colorSpaceId();
     }
     virtual QString name() const {
         return i18n("XYZ (16-bit integer/channel)");
@@ -71,7 +81,7 @@ public:
     }
 
     virtual KoColorSpace *createColorSpace(const KoColorProfile *p) const {
-        return new XyzU16ColorSpace(p->clone());
+        return new XyzU16ColorSpace(name(), p->clone());
     }
 
     virtual QString defaultProfile() const {

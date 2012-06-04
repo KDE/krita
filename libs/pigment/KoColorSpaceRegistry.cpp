@@ -126,27 +126,28 @@ KoColorSpaceRegistry::KoColorSpaceRegistry() : d(new Private())
 
 KoColorSpaceRegistry::~KoColorSpaceRegistry()
 {
-    delete d->colorConversionSystem;
-    foreach(KoColorProfile* profile, d->profileMap) {
-        delete profile;
-    }
-    d->profileMap.clear();
+    // Just leak on exit... It's faster.
+//    delete d->colorConversionSystem;
+//    foreach(KoColorProfile* profile, d->profileMap) {
+//        delete profile;
+//    }
+//    d->profileMap.clear();
 
-    foreach(const KoColorSpace * cs, d->csMap) {
-        cs->d->deletability = OwnedByRegistryRegistryDeletes;
-        releaseColorSpace(const_cast<KoColorSpace*>(cs));
-    }
-    d->csMap.clear();
+//    foreach(const KoColorSpace * cs, d->csMap) {
+//        cs->d->deletability = OwnedByRegistryRegistryDeletes;
+//        releaseColorSpace(const_cast<KoColorSpace*>(cs));
+//    }
+//    d->csMap.clear();
 
-    // deleting colorspaces calls a function in the cache
-    delete d->colorConversionCache;
-    d->colorConversionCache = 0;
+//    // deleting colorspaces calls a function in the cache
+//    delete d->colorConversionCache;
+//    d->colorConversionCache = 0;
 
-    // Delete the colorspace factories
-    qDeleteAll(d->localFactories);
-#ifndef Q_WS_WIN
-    delete d->alphaCSF;
-#endif
+//    // Delete the colorspace factories
+//    qDeleteAll(d->localFactories);
+
+//    delete d->alphaCSF;
+
     delete d;
 }
 

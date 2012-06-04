@@ -26,17 +26,17 @@
 
 #include "compositeops/KoCompositeOps.h"
 
-CmykU8ColorSpace::CmykU8ColorSpace(KoColorProfile *p) :
-        LcmsColorSpace<CmykU8Traits>("CMYK", i18n("CMYK (8-bit integer/channel)"),  TYPE_CMYKA_8, cmsSigCmykData, p)
+CmykU8ColorSpace::CmykU8ColorSpace(const QString &name, KoColorProfile *p)
+    : LcmsColorSpace<CmykU8Traits>(colorSpaceId(), name,  TYPE_CMYKA_8, cmsSigCmykData, p)
 {
     addChannel(new KoChannelInfo(i18n("Cyan"), 0 * sizeof(quint8), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT8, sizeof(quint8), Qt::cyan));
     addChannel(new KoChannelInfo(i18n("Magenta"), 1 * sizeof(quint8), 1, KoChannelInfo::COLOR, KoChannelInfo::UINT8, sizeof(quint8), Qt::magenta));
     addChannel(new KoChannelInfo(i18n("Yellow"), 2 * sizeof(quint8), 2, KoChannelInfo::COLOR, KoChannelInfo::UINT8, sizeof(quint8), Qt::yellow));
     addChannel(new KoChannelInfo(i18n("Black"), 3 * sizeof(quint8), 3, KoChannelInfo::COLOR, KoChannelInfo::UINT8, sizeof(quint8), Qt::black));
     addChannel(new KoChannelInfo(i18n("Alpha"), 4 * sizeof(quint8), 4, KoChannelInfo::ALPHA, KoChannelInfo::UINT8, sizeof(quint8)));
+
     init();
 
-    // ADD, ALPHA_DARKEN, BURN, DIVIDE, DODGE, ERASE, MULTIPLY, OVER, OVERLAY, SCREEN, SUBTRACT
     addStandardCompositeOps<CmykU8Traits>(this);
 }
 
@@ -50,7 +50,7 @@ bool CmykU8ColorSpace::willDegrade(ColorSpaceIndependence independence) const
 
 KoColorSpace* CmykU8ColorSpace::clone() const
 {
-    return new CmykU8ColorSpace(profile()->clone());
+    return new CmykU8ColorSpace(name(), profile()->clone());
 }
 
 void CmykU8ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
@@ -74,4 +74,5 @@ void CmykU8ColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) const
     p->black = KoColorSpaceMaths< qreal, CmykU8Traits::channels_type >::scaleToA(elt.attribute("k").toDouble());
     p->alpha = KoColorSpaceMathsTraits<quint8>::max;
 }
+
 

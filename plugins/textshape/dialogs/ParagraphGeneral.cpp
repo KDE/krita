@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007, 2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
+ * Copyright (C) 2012 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,22 +25,30 @@
 #include "ParagraphBulletsNumbers.h"
 #include "ParagraphDecorations.h"
 #include "ParagraphDropCaps.h"
+#include "StylesModel.h"
 
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
+#include <KoStyleThumbnailer.h>
 
 ParagraphGeneral::ParagraphGeneral(QWidget *parent)
-        : CharacterGeneral(parent),
-        m_nameHidden(false),
-        m_style(0)
+        : CharacterGeneral(parent)
+        , m_nameHidden(false)
+        , m_style(0)
+        , m_styleManager(0)
+        , m_thumbnail(new KoStyleThumbnailer())
+        , m_paragraphInheritedStyleModel(new StylesModel(0, StylesModel::ParagraphStyle))
 {
 //Disable for now
-    //inherit style
-    widget.label_3->setVisible(false);
-    widget.inheritStyle->setVisible(false);
     //include in TOC
     widget.inToc->setVisible(false);
 //
+    widget.nextStyle->setVisible(true);
+    widget.label_2->setVisible(true);
+
+    m_paragraphInheritedStyleModel->setStyleThumbnailer(m_thumbnail);
+    widget.inheritStyle->setStylesModel(m_paragraphInheritedStyleModel);
+
     m_paragraphIndentSpacing = new ParagraphIndentSpacing(this);
     widget.tabs->addTab(m_paragraphIndentSpacing, i18n("Indent/Spacing"));
 
@@ -119,10 +128,12 @@ void ParagraphGeneral::setStyle(KoParagraphStyle *style, int level)
     if (!m_nameHidden)
         widget.name->setText(style->name());
 
-    for (int i = 0; i < widget.nextStyle->count(); i++) {
-        if (widget.nextStyle->itemData(i).toInt() == style->nextStyle()) {
-            widget.nextStyle->setCurrentIndex(i);
-            break;
+    if (m_styleManager) {
+        CharacterGeneral::updateNextStyleCombo(m_styleManager->paragraphStyle(style->nextStyle()));
+        KoParagraphStyle *parentStyle = style->parentStyle();
+        if (parentStyle) {
+            widget.inheritStyle->setCurrentIndex(m_paragraphInheritedStyleModel->indexForParagraphStyle(*parentStyle).row());
+            //m_paragraphInheritedStyleModel->setCurrentParagraphStyle(parentStyle->styleId());
         }
     }
 
@@ -135,14 +146,6 @@ void ParagraphGeneral::setStyle(KoParagraphStyle *style, int level)
     widget.preview->setParagraphStyle(style);
 
     blockSignals(false);
-}
-
-void ParagraphGeneral::setParagraphStyles(const QList<KoParagraphStyle*> styles)
-{
-    widget.nextStyle->clear();
-    m_paragraphStyles = styles;
-    foreach(KoParagraphStyle *style, m_paragraphStyles)
-        widget.nextStyle->addItem(style->name(), style->styleId());
 }
 
 void ParagraphGeneral::setUnit(const KoUnit &unit)
@@ -171,7 +174,7 @@ void ParagraphGeneral::save(KoParagraphStyle *style)
     m_paragraphDecorations->save(savingStyle);
     m_paragraphDropCaps->save(savingStyle);
     savingStyle->setName(widget.name->text());
-    savingStyle->setNextStyle(widget.nextStyle->itemData(widget.nextStyle->currentIndex()).toInt());
+    savingStyle->setNextStyle(CharacterGeneral::nextStyleId());
 
     if (m_style == savingStyle) {
         emit styleAltered(savingStyle);
@@ -202,6 +205,15 @@ void ParagraphGeneral::setImageCollection(KoImageCollection *imageCollection)
 QString ParagraphGeneral::styleName() const
 {
     return widget.name->text();
+}
+
+void ParagraphGeneral::setStyleManager(KoStyleManager *sm)
+{
+    if (!sm)
+        return;
+    m_styleManager = sm;
+    CharacterGeneral::setStyleManager(m_styleManager);
+    m_paragraphInheritedStyleModel->setStyleManager(m_styleManager);
 }
 
 #include <ParagraphGeneral.moc>

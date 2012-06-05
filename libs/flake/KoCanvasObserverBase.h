@@ -48,6 +48,9 @@ public:
      * re-implement to notify the observer that its canvas is no longer
      * among the living. The daisies, it is pushing up. This means you
      * don't have to unconnect, it's dead.
+     * Note that currently there is a bug where in certain specific
+     * circumstances unsetCanvas can be called when it shouldn't, see for
+     * example KWStatisticsDocker for a workaround for this problem.
      */
     virtual void unsetCanvas() = 0;
 

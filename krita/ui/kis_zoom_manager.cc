@@ -39,6 +39,7 @@
 #include <KoGlobal.h>
 #include <KoRulerController.h>
 
+#include "kis_doc2.h"
 #include "kis_view2.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_coordinates_converter.h"
@@ -116,6 +117,12 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
     m_verticalRuler->setVisible(show);
     m_showRulersAction->setChecked(show);
 
+    QList<QAction*> unitActions = m_view->createChangeUnitActions();
+    m_horizontalRuler->setPopupActionList(unitActions);
+    m_verticalRuler->setPopupActionList(unitActions);
+
+    connect(m_view->document(), SIGNAL(unitChanged(const KoUnit&)), m_horizontalRuler, SLOT(setUnit(const KoUnit&)));
+    connect(m_view->document(), SIGNAL(unitChanged(const KoUnit&)), m_verticalRuler, SLOT(setUnit(const KoUnit&)));
 
 
     layout->addWidget(m_horizontalRuler, 0, 1);

@@ -191,7 +191,7 @@ bool KoCtlColorSpace::profileIsCompatible(const KoCtlColorSpaceInfo* info, const
 
 bool KoCtlColorSpace::hasHighDynamicRange() const
 {
-    return false;
+    return true;
 }
 
 const KoColorProfile * KoCtlColorSpace::profile() const

@@ -460,8 +460,6 @@ void KisOpenGLImageTextures::updateTextureFormat()
 
 bool KisOpenGLImageTextures::imageCanUseHDRExposureProgram(KisImageWSP image)
 {
-    return false;
-    /*
 #ifdef HAVE_GLEW
 
     KisConfig cfg;
@@ -489,7 +487,6 @@ bool KisOpenGLImageTextures::imageCanUseHDRExposureProgram(KisImageWSP image)
     Q_UNUSED(image);
     return false;
 #endif
-    */
 }
 
 #include "kis_opengl_image_textures.moc"

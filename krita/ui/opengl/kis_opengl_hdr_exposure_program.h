@@ -39,7 +39,6 @@ public:
      */
     void setExposure(float exposure);
 
-
     /**
      * @brief setGamma set the gamma correction
      * @param gamma in a range from 0 to 5; 2.2 is "standard"

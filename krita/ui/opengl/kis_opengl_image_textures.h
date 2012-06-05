@@ -162,7 +162,7 @@ private:
     QRect m_storedImageBounds;
     KoColorProfile *m_monitorProfile;
     float m_exposure;
-
+    float m_gamma;
     GLuint m_backgroundTexture;
 
     KisGLTexturesInfo m_texturesInfo;

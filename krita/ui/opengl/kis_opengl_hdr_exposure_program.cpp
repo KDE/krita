@@ -26,7 +26,7 @@
 
 KisOpenGLHDRExposureProgram::KisOpenGLHDRExposureProgram()
 {
-    m_exposure = 0;
+    m_exposure = 0.0;
     m_gamma = 2.2;
     createProgram();
 }
@@ -52,9 +52,7 @@ void KisOpenGLHDRExposureProgram::setGamma(float gamma)
 void KisOpenGLHDRExposureProgram::setExposureUniformVariable()
 {
     Q_ASSERT(active());
-
     float exposure = pow(2, m_exposure + 2.47393);
-
     setUniformVariable("exposure", exposure, exposure, exposure, 1.0);
 }
 

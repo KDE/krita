@@ -55,7 +55,8 @@ KisOpenGLImageTextures::KisOpenGLImageTextures()
 {
     m_image = 0;
     m_monitorProfile = 0;
-    m_exposure = 0;
+    m_exposure = 0.0;
+    m_gamma = 2.2;
 }
 
 KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image, KoColorProfile *monitorProfile)
@@ -63,6 +64,7 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image, KoColorProfile
     m_image = image;
     m_monitorProfile = monitorProfile;
     m_exposure = 0;
+    m_gamma = 2.2;
 
     KisOpenGL::makeContextCurrent();
 
@@ -303,15 +305,16 @@ void KisOpenGLImageTextures::setMonitorProfile(KoColorProfile *monitorProfile)
 
 void KisOpenGLImageTextures::setHDRExposure(float exposure, float gamma)
 {
-    if (exposure != m_exposure) {
+    if (exposure != m_exposure || gamma != m_gamma) {
         m_exposure = exposure;
-
+        m_gamma = gamma;
         if (m_image->colorSpace()->hasHighDynamicRange()) {
 #ifdef HAVE_GLEW
             if (m_usingHDRExposureProgram) {
                 HDRExposureProgram->setExposure(exposure);
                 HDRExposureProgram->setGamma(gamma);
-            } else {
+            }
+            else {
 #endif
 
 #ifdef __GNUC__
@@ -457,6 +460,8 @@ void KisOpenGLImageTextures::updateTextureFormat()
 
 bool KisOpenGLImageTextures::imageCanUseHDRExposureProgram(KisImageWSP image)
 {
+    return false;
+    /*
 #ifdef HAVE_GLEW
 
     KisConfig cfg;
@@ -478,11 +483,13 @@ bool KisOpenGLImageTextures::imageCanUseHDRExposureProgram(KisImageWSP image)
               && (GLEW_ARB_texture_float || GLEW_ATI_texture_float))) {
         return false;
     }
+
     return true;
 #else
     Q_UNUSED(image);
     return false;
 #endif
+    */
 }
 
 #include "kis_opengl_image_textures.moc"

@@ -361,23 +361,3 @@ QByteArray KoCtlColorProfile::rawData() const
 {
     return d->profileSource.toUtf8();
 }
-
-QVariant KoCtlColorProfile::property(const QString& _name) const
-{
-    if (_name == "exposure") {
-        return d->exposure;
-    } else {
-        dbgPigment << "Not CTL property " << _name;
-        return KoColorProfile::property(_name);
-    }
-}
-
-void KoCtlColorProfile::setProperty(const QString& _name, const QVariant& _variant)
-{
-    if (_name == "exposure") {
-        d->exposure = pow(2, _variant.toDouble() + 2.47393) * d->middleGrayScaleFactor;
-    } else {
-        dbgPigment << "Not CTL property " << _name;
-        return KoColorProfile::setProperty(_name, _variant);
-    }
-}

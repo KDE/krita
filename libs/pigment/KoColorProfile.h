@@ -28,9 +28,11 @@
 /**
  * Contains information needed for color transformation.
  */
-class PIGMENTCMS_EXPORT KoColorProfile
+class PIGMENTCMS_EXPORT KoColorProfile : public QObject
 {
-    struct Private;
+    Q_OBJECT
+
+
 public:
 
     /**
@@ -109,16 +111,6 @@ public:
     virtual bool operator==(const KoColorProfile&) const = 0;
 
     /**
-     * @return the profile property given in argument
-     */
-    virtual QVariant property(const QString& _name) const;
-    /**
-     * Set a new value of a profile property.
-     *
-     */
-    virtual void setProperty(const QString& _name, const QVariant& _variant);
-
-    /**
      * @return an array with the raw data of the profile
      */
     virtual QByteArray rawData() const {
@@ -134,7 +126,9 @@ protected:
      * Allows to set the information string of that profile.
      */
     void setInfo(const QString &info);
+
 private:
+    struct Private;
     Private* const d;
 };
 

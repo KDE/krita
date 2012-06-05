@@ -67,7 +67,6 @@ set(kritaui_LIB_SRCS
     kis_custom_palette.cc
     kis_custom_pattern.cc
     kis_doc2.cc 
-    kis_exposure_visitor.cc 
     kis_factory2.cc
     kis_filter_handler.cc 
     kis_filter_manager.cc 

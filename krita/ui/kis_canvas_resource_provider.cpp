@@ -39,7 +39,6 @@
 #include <kis_paintop_settings.h>
 #include "ko_favorite_resource_manager.h"
 
-#include "kis_exposure_visitor.h"
 #include "kis_config.h"
 #include "kis_view2.h"
 #include "canvas/kis_canvas2.h"
@@ -109,11 +108,7 @@ float KisCanvasResourceProvider::HDRExposure() const
 void KisCanvasResourceProvider::setHDRExposure(float exposure)
 {
     m_resourceManager->setResource(HdrExposure, static_cast<double>(exposure));
-    KisProfilePropertyVisitor eV("exposure", exposure);
-    m_view->image()->projection()->colorSpace()->profile()->setProperty("exposure", exposure);
-    m_view->image()->rootLayer()->accept(eV);
     m_view->canvasBase()->updateCanvas();
-    m_view->canvasBase()->startUpdateCanvasProjection(m_view->image()->bounds());
 }
 
 float KisCanvasResourceProvider::HDRGamma() const
@@ -124,11 +119,7 @@ float KisCanvasResourceProvider::HDRGamma() const
 void KisCanvasResourceProvider::setHDRGamma(float gamma)
 {
     m_resourceManager->setResource(HdrGamma, static_cast<double>(gamma));
-    KisProfilePropertyVisitor eV("gamma", gamma);
-    m_view->image()->projection()->colorSpace()->profile()->setProperty("gamma", gamma);
-    m_view->image()->rootLayer()->accept(eV);
     m_view->canvasBase()->updateCanvas();
-    m_view->canvasBase()->startUpdateCanvasProjection(m_view->image()->bounds());
 }
 
 

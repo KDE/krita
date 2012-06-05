@@ -21,6 +21,7 @@
 #include "PictureTool.h"
 #include "PictureShape.h"
 #include "ChangeImageCommand.h"
+#include "ClipCommand.h"
 #include "CropWidget.h"
 
 #include <KLocale>
@@ -110,8 +111,6 @@ QWidget *PictureTool::createOptionWidget()
 
     updateControlElements();
 
-    m_pictureToolUI->cbContour->hide();
-
     connect(m_pictureToolUI->bnImageFile, SIGNAL(clicked(bool)), this, SLOT(changeUrlPressed()));
     connect(m_pictureToolUI->cmbColorMode, SIGNAL(currentIndexChanged(int)), this, SLOT(colorModeChanged(int)));
     connect(m_pictureToolUI->leftDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(cropEditFieldsChanged()));
@@ -151,6 +150,7 @@ void PictureTool::updateControlElements()
         m_pictureToolUI->rightDoubleSpinBox->setValue(clippingRect.right);
         m_pictureToolUI->topDoubleSpinBox->setValue(clippingRect.top);
         m_pictureToolUI->bottomDoubleSpinBox->setValue(clippingRect.bottom);
+        m_pictureToolUI->cbContour->setChecked(m_pictureshape->clipPath() != 0);
         m_pictureToolUI->blockAllSignals(false);
     }
 }
@@ -211,6 +211,7 @@ void PictureTool::aspectCheckBoxChanged(bool checked)
 
 void PictureTool::contourCheckBoxChanged(bool checked)
 {
+    canvas()->addCommand(new ClipCommand(m_pictureshape, checked));
 }
 
 void PictureTool::fillButtonPressed()

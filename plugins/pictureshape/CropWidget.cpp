@@ -21,6 +21,8 @@
 #include "PictureShape.h"
 #include "KoImageData.h"
 
+#include <KoClipPath.h>
+
 #include <QPainter>
 #include <QResizeEvent>
 
@@ -95,10 +97,19 @@ void CropWidget::paintEvent(QPaintEvent *event)
 
     painter.drawImage(QRectF(0, 0, 1, 1), image);
     painter.drawRect(m_selectionRect.getRect());
-    painter.setBrush(QBrush(Qt::yellow));
 
+    painter.setBrush(QBrush(Qt::yellow));
     for (int i=0; i<m_selectionRect.getNumHandles(); ++i)
         painter.drawRect(m_selectionRect.getHandleRect(m_selectionRect.getHandleFlags(i)));
+
+    KoClipPath *clipPath = m_pictureShape->clipPath();
+    if (clipPath) {
+        painter.scale(0.01, 0.01); // the path is defined in 100x100 equaling shapesize
+        painter.setBrush(Qt::NoBrush);
+        painter.setPen(Qt::red);
+        painter.drawPath(clipPath->path());
+    }
+
 }
 
 void CropWidget::mousePressEvent(QMouseEvent *event)

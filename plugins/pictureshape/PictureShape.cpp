@@ -43,6 +43,7 @@
 #include <SvgSavingContext.h>
 #include <SvgLoadingContext.h>
 #include <SvgUtil.h>
+#include <KoPathShape.h>
 
 #include <KDebug>
 #include <KJob>
@@ -615,6 +616,20 @@ void PictureShape::setColorMode(PictureShape::ColorMode mode)
         m_colorMode = mode;
         update();
     }
+}
+
+KoClipPath *PictureShape::generateClipPath()
+{
+    QPainterPath path = _Private::generateOutline(imageData()->image());
+    path = path * QTransform().scale(size().width(), size().height());
+
+    KoPathShape *pathShape = KoPathShape::createShapeFromPainterPath(path);
+
+    //createShapeFromPainterPath converts the path topleft into a shape topleft
+    //and the pathShape needs to be on top of us. So to preserve both we do:
+    pathShape->setTransformation(pathShape->transformation() * transformation());
+
+    return new KoClipPath(this, new KoClipData(pathShape));
 }
 
 bool PictureShape::saveSvg(SvgSavingContext &context)

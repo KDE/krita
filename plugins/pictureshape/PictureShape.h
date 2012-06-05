@@ -39,6 +39,8 @@ class KoImageData;
 class KoImageCollection;
 class KJob;
 class PictureShape;
+class KoPathShape;
+class KoClipPath;
 
 namespace _Private
 {
@@ -145,6 +147,8 @@ public:
     void setCropRect(const QRectF& rect);
     void setMirrorMode(QFlags<MirrorMode> mode);
     void setColorMode(ColorMode mode);
+    KoClipPath *generateClipPath();
+
 
 protected:
     virtual bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context);

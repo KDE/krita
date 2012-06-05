@@ -146,6 +146,7 @@ void KoTextShapeContainerModel::childChanged(KoShape *child, KoShape::ChangeType
     if (((type == KoShape::RotationChanged ||
           type == KoShape::ScaleChanged ||
           type == KoShape::ShearChanged ||
+          type == KoShape::ClipPathChanged ||
           type == KoShape::PositionChanged ||
           type == KoShape::SizeChanged) && child->textRunAroundSide() != KoShape::RunThrough) ||
           type == KoShape::TextRunAroundChanged) {

@@ -96,11 +96,14 @@ KisBirdEyeBox::KisBirdEyeBox()
     m_draggingSlider = false;
 
     layout->addRow(i18n("Exposure:"), m_exposureDoubleWidget);
-    layout->addRow(i18n("Gamma:"), m_gammaDoubleWidget);
+    //layout->addRow(i18n("Gamma:"), m_gammaDoubleWidget);
+    m_gammaDoubleWidget->setVisible(false);
     layout->addRow(i18n("Display profile"), m_cmbDisplayProfile);
     layout->addRow(i18n("Rendering Intent"), m_cmbMonitorIntent);
     layout->addWidget(m_chkBlackPoint);
     layout->addItem(new QSpacerItem(0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
+
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotImageColorSpaceChanged()));
 }
 
 KisBirdEyeBox::~KisBirdEyeBox()
@@ -111,11 +114,26 @@ void KisBirdEyeBox::setCanvas(KoCanvasBase* _canvas)
 {
     if (KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(_canvas)) {
         m_canvas = canvas;
+        if (m_canvas) {
+            connect(m_canvas->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), SLOT(slotImageColorSpaceChanged()), Qt::UniqueConnection);
+        }
+        slotImageColorSpaceChanged();
+    }
+}
+
+void KisBirdEyeBox::slotImageColorSpaceChanged()
+{
+    KisConfig cfg;
+
+    const KoColorSpace *cs = m_canvas->view()->image()->colorSpace();
+
+    m_exposureDoubleWidget->setEnabled(cs->hasHighDynamicRange() && cfg.useOpenGL() && cfg.useOpenGLShaders());
+    m_gammaDoubleWidget->setEnabled(cs->hasHighDynamicRange() && cfg.useOpenGL() && cfg.useOpenGLShaders());
+
+    if (m_canvas) {
 
         m_exposureDoubleWidget->setValue(m_canvas->view()->resourceProvider()->HDRExposure());
         m_gammaDoubleWidget->setValue(m_canvas->view()->resourceProvider()->HDRGamma());
-
-        connect(m_canvas->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), SLOT(slotImageColorSpaceChanged(const KoColorSpace*)), Qt::UniqueConnection);
 
         const KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->colorSpaceFactory("RGBA");
         m_cmbDisplayProfile->clear();
@@ -138,16 +156,11 @@ void KisBirdEyeBox::setCanvas(KoCanvasBase* _canvas)
             }
 
         }
-        KisConfig cfg;
+
         m_chkBlackPoint->setChecked(cfg.useBlackPointCompensation());
         m_cmbMonitorIntent->setCurrentIndex(cfg.renderIntent());
     }
-}
 
-void KisBirdEyeBox::slotImageColorSpaceChanged(const KoColorSpace *cs)
-{
-    m_exposureDoubleWidget->setEnabled(cs->hasHighDynamicRange() && m_canvas->canvasIsOpenGL());
-    m_gammaDoubleWidget->setEnabled(cs->hasHighDynamicRange() && m_canvas->canvasIsOpenGL());
 }
 
 void KisBirdEyeBox::exposureValueChanged(double exposure)

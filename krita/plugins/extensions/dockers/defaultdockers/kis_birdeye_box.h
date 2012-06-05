@@ -59,7 +59,7 @@ public:
 
 private slots:
 
-    void slotImageColorSpaceChanged(const KoColorSpace*);
+    void slotImageColorSpaceChanged();
     void exposureValueChanged(double exposure);
     void exposureSliderPressed();
     void exposureSliderReleased();

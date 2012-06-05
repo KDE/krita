@@ -18,9 +18,8 @@
 
 uniform sampler2D image;
 uniform vec4 exposure;
-uniform vec4 gamma
+uniform vec4 gamma;
 
-/*const vec4 gamma = vec4(0.45, 0.45, 0.45, 1.0);*/
 const vec4 grey = vec4(84.66 / 255.0, 84.66 / 255.0, 84.66 / 255.0, 1.0);
 
 void main(void)

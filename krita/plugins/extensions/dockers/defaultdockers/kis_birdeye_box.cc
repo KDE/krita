@@ -96,8 +96,8 @@ KisBirdEyeBox::KisBirdEyeBox()
     m_draggingSlider = false;
 
     layout->addRow(i18n("Exposure:"), m_exposureDoubleWidget);
-    //layout->addRow(i18n("Gamma:"), m_gammaDoubleWidget);
-    m_gammaDoubleWidget->setVisible(false);
+    layout->addRow(i18n("Gamma:"), m_gammaDoubleWidget);
+
     layout->addRow(i18n("Display profile"), m_cmbDisplayProfile);
     layout->addRow(i18n("Rendering Intent"), m_cmbMonitorIntent);
     layout->addWidget(m_chkBlackPoint);

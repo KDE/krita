@@ -622,9 +622,7 @@ bool KisCanvas2::usingHDRExposureProgram()
 {
 #ifdef HAVE_OPENGL
     if (m_d->currentCanvasIsOpenGL) {
-        if (m_d->openGLImageTextures->usingHDRExposureProgram()) {
-            return true;
-        }
+        return m_d->openGLImageTextures->usingHDRExposureProgram();
     }
 #endif
     return false;

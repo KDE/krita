@@ -481,9 +481,7 @@ void KoMainWindow::setRootDocument(KoDocument *doc)
     emit restoringDone();
 
     while(!oldRootViews.isEmpty()) {
-        KoView* view = oldRootViews.takeFirst();
-        view->setParent(0);
-        delete view;
+        delete oldRootViews.takeFirst();
     }
     if (oldRootDoc && oldRootDoc->viewCount() == 0) {
         //kDebug(30003) <<"No more views, deleting old doc" << oldRootDoc;

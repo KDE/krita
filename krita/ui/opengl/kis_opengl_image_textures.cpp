@@ -94,8 +94,7 @@ KisOpenGLImageTextures::~KisOpenGLImageTextures()
 
 bool KisOpenGLImageTextures::imageCanShareTextures(KisImageWSP image)
 {
-    return !image->colorSpace()->hasHighDynamicRange() ||
-        imageCanUseHDRExposureProgram(image);
+    return !image->colorSpace()->hasHighDynamicRange() || imageCanUseHDRExposureProgram(image);
 }
 
 KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP image, KoColorProfile *monitorProfile)
@@ -245,10 +244,10 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
             dstCS = KoColorSpaceRegistry::instance()->rgb16(m_monitorProfile);
             break;
         case GL_HALF_FLOAT_ARB:
-            dstCS = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F16", m_monitorProfile);
+            dstCS = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F16", 0);
             break;
         case GL_FLOAT:
-            dstCS = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F32", m_monitorProfile);
+            dstCS = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F32", 0);
             break;
 #endif
         default:
@@ -410,13 +409,12 @@ void KisOpenGLImageTextures::updateTextureFormat()
             if (GLEW_ARB_texture_float) {
                 m_texturesInfo.format = GL_RGBA16F_ARB;
                 dbgUI << "Using ARB half";
-            } else {
-                Q_ASSERT(GLEW_ATI_texture_float);
+            }
+            else if (GLEW_ATI_texture_float){
                 m_texturesInfo.format = GL_RGBA_FLOAT16_ATI;
                 dbgUI << "Using ATI half";
             }
-
-            if (GLEW_ARB_half_float_pixel) {
+            else if (GLEW_ARB_half_float_pixel) {
                 dbgUI << "Pixel type half";
                 m_texturesInfo.type = GL_HALF_FLOAT_ARB;
             } else {
@@ -432,16 +430,17 @@ void KisOpenGLImageTextures::updateTextureFormat()
             if (GLEW_ARB_texture_float) {
                 m_texturesInfo.format = GL_RGBA32F_ARB;
                 dbgUI << "Using ARB float";
-            } else {
-                Q_ASSERT(GLEW_ATI_texture_float);
+                m_texturesInfo.type = GL_FLOAT;
+                m_usingHDRExposureProgram = true;
+            }
+            else if (GLEW_ATI_texture_float) {
                 m_texturesInfo.format = GL_RGBA_FLOAT32_ATI;
                 dbgUI << "Using ATI float";
+                m_texturesInfo.type = GL_FLOAT;
+                m_usingHDRExposureProgram = true;
             }
-
-            m_texturesInfo.type = GL_FLOAT;
-            m_usingHDRExposureProgram = true;
         }
-        else if (colorDepthId != Integer8BitsColorDepthID) {
+        else if (colorDepthId == Integer16BitsColorDepthID) {
             dbgUI << "Using 16 bits rgba";
             m_texturesInfo.format = GL_RGBA16;
             m_texturesInfo.type = GL_UNSIGNED_SHORT;
@@ -478,10 +477,9 @@ bool KisOpenGLImageTextures::imageCanUseHDRExposureProgram(KisImageWSP image)
 
     if (!(    colorModelId == RGBAColorModelID
               && (colorDepthId == Float16BitsColorDepthID || colorDepthId == Float32BitsColorDepthID)
-              && (GLEW_ARB_texture_float || GLEW_ATI_texture_float))) {
+              && (GLEW_ARB_texture_float || GLEW_ATI_texture_float || GLEW_ARB_half_float_pixel))) {
         return false;
     }
-
     return true;
 #else
     Q_UNUSED(image);

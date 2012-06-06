@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
  *
  *  This program is free software; you can redistribute it and/or modify

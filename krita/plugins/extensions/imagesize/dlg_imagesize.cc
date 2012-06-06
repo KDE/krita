@@ -2,7 +2,7 @@
  *  dlg_imagesize.cc - part of KimageShop^WKrayon^WKrita
  *
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2009 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2009 C. Boemann <cbo@boemann.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

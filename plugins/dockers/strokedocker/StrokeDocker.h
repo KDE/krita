@@ -7,7 +7,7 @@
    Copyright (C) 2005 Inge Wallin <inge@lysator.liu.se>
    Copyright (C) 2005 Thomas Zander <zander@kde.org>
    Copyright (C) 2005-2008 Jan Hambrecht <jaham@gmx.net>
-   Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
+   Copyright (C) 2006 C. Boemann <cbo@boemann.dk>
    Copyright (C) 2011 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
 
    This library is free software; you can redistribute it and/or

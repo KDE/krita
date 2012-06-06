@@ -52,6 +52,16 @@ StyleManager::StyleManager(QWidget *parent)
     layout()->setMargin(0);
     widget.bNew->setToolTip(i18n("Create a new style inheriting the current style"));
 
+    // Force "Base" background of the style listviews to white, so the background
+    // is consistent with the one of the preview area. Also the usual document text colors
+    // are dark, because made for a white paper background, so with a dark UI
+    // color scheme they are hardly seen.
+    // TODO: update to background color of currently selected/focussed shape/page
+    QPalette palette = this->palette();
+    palette.setColor(QPalette::Base, QColor(Qt::white));
+    widget.paragraphStylesListView->setPalette(palette);
+    widget.characterStylesListView->setPalette(palette);
+
     m_paragraphStylesModel->setStyleThumbnailer(m_thumbnailer);
     m_characterStylesModel->setStyleThumbnailer(m_thumbnailer);
     m_characterStylesModel->setProvideStyleNone(false);

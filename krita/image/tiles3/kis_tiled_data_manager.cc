@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2004 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2004 C. Boemann <cbo@boemann.dk>
  *            (c) 2009 Dmitry  Kazakov <dimula73@gmail.com>
  *            (c) 2010 Cyrille Berger <cberger@cberger.net>
  *

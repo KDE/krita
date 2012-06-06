@@ -35,6 +35,8 @@ public:
 
     bool layout(FrameIterator *cursor);
 
+    KoPointedAt hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const;
+
 private:
     class Private;
     Private * const d;

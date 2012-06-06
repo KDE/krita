@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2006 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2006 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2010 Sven Langkamp <sven.langkamp@gmail.com>
  *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
  *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>

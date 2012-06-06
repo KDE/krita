@@ -126,13 +126,16 @@ QImage KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size, bool r
     clone->applyStyle(block, true);
 
     QTextCharFormat format;
+    // Default to black as text color, to match what KoTextLayoutArea::paint(...)
+    // does, setting solid black if no brush is set. Otherwise the UI text color
+    // would be used, which might be too bright with dark UI color schemes
+    format.setForeground(QColor(Qt::black));
     clone->KoCharacterStyle::applyStyle(format);
     if (flags & UseStyleNameText) {
         cursor.insertText(clone->name(), format);
     } else {
         cursor.insertText(d->thumbnailText, format);
     }
-
     layoutThumbnail(size, im, flags);
 
     d->thumbnailCache.insert(imageKey, im);
@@ -163,6 +166,10 @@ QImage KoStyleThumbnailer::thumbnail(KoCharacterStyle *characterStyle, KoParagra
 
     QTextCursor cursor(d->thumbnailHelperDocument);
     QTextCharFormat format;
+    // Default to black as text color, to match what KoTextLayoutArea::paint(...)
+    // does, setting solid black if no brush is set. Otherwise the UI text color
+    // would be used, which might be too bright with dark UI color schemes
+    format.setForeground(QColor(Qt::black));
     KoCharacterStyle *characterStyleClone = characterStyle->clone();
     characterStyleClone->applyStyle(format);
     cursor.select(QTextCursor::Document);

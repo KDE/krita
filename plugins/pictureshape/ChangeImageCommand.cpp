@@ -50,6 +50,7 @@ ChangeImageCommand::ChangeImageCommand(PictureShape *shape, const QRectF &croppi
     m_oldColorMode(shape->colorMode()),
     m_newColorMode(shape->colorMode())
 {
+    setText(i18nc("(qtundo-format)", "Crop image"));
 }
 
 ChangeImageCommand::ChangeImageCommand(PictureShape *shape, PictureShape::ColorMode colorMode, KUndo2Command *parent):
@@ -63,6 +64,7 @@ ChangeImageCommand::ChangeImageCommand(PictureShape *shape, PictureShape::ColorM
     m_oldColorMode(shape->colorMode()),
     m_newColorMode(colorMode)
 {
+    setText(i18nc("(qtundo-format)", "Change image color mode"));
 }
 
 ChangeImageCommand::~ChangeImageCommand()

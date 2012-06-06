@@ -176,6 +176,10 @@ void CharacterGeneral::updateNextStyleCombo(KoParagraphStyle *style)
 
 int CharacterGeneral::nextStyleId()
 {
+    if (!m_styleManager) {
+        return 0;
+    }
+
     return m_styleManager->paragraphStyle(m_paragraphStyleModel->index(widget.nextStyle->currentIndex()).internalId())->styleId();
 }
 

@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de> filters
- *  Copyright (c) 2005-2007 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005-2007 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2005, 2010 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
  *

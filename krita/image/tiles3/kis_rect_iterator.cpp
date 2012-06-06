@@ -1,7 +1,7 @@
 /*
  * This file is part of the KDE project
  *
- *  Copyright (c) 2004 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2004 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify

@@ -5,7 +5,7 @@
  * Copyright (C) 2008 Roopesh Chander <roop@forwardbias.in>
  * Copyright (C) 2007-2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  * Copyright (C) 2009-2011 KO GmbH <cbo@kogmbh.com>
- * Copyright (C) 2009-2011 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2009-2011 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2010 Nandita Suri <suri.nandita@gmail.com>
  * Copyright (C) 2010 Ajay Pundhir <ajay.pratap@iiitb.net>
  * Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>

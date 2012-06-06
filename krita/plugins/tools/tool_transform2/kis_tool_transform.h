@@ -2,7 +2,7 @@
  *  kis_tool_transform.h - part of Krita
  *
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
  *
  *  This program is free software; you can redistribute it and/or modify

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *
- * Copyright (c) 2010-2011 Casper Boemann <cbo@boemann.dk>
+ * Copyright (c) 2010-2011 C. Boemann <cbo@boemann.dk>
  * Copyright (c) 2005-2006 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (c) 2006 Thomas Zander <zander@kde.org>
  *
@@ -215,6 +215,7 @@ KoToolDocker::KoToolDocker(QWidget *parent)
     d->scrollArea->setWidget(d->housekeeperWidget);
     d->scrollArea->setFrameShape(QFrame::NoFrame);
     d->scrollArea->setWidgetResizable(true);
+    d->scrollArea->setFocusPolicy(Qt::NoFocus);
 
     setWidget(d->scrollArea);
 

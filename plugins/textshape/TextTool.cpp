@@ -598,6 +598,12 @@ void TextTool::showEditTip()
             toolTipWidth = QFontMetrics(QToolTip::font()).boundingRect(help).width();
     }
 
+    if (m_editTipPointedAt.noteReference>0) {
+            QString help = i18n("Ctrl+click to go to the note reference");
+            text += help + "</p>";
+            toolTipWidth = QFontMetrics(QToolTip::font()).boundingRect(help).width();
+    }
+
     QToolTip::hideText();
 
     if (toolTipWidth) {
@@ -1323,7 +1329,7 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
             }
         }
 
-        if ((pointedAt.bookmark || !pointedAt.externalHRef.isEmpty()) || pointedAt.note) {
+        if ((pointedAt.bookmark || !pointedAt.externalHRef.isEmpty()) || pointedAt.note || (pointedAt.noteReference>0)) {
             if (event->modifiers() & Qt::ControlModifier) {
                 useCursor(Qt::PointingHandCursor);
             }
@@ -1506,6 +1512,12 @@ void TextTool::mouseReleaseEvent(KoPointerEvent *event)
         }
         if (pointedAt.note) {
             m_textEditor.data()->setPosition(pointedAt.note->textFrame()->firstPosition());
+            ensureCursorVisible();
+            event->accept();
+            return;
+        }
+        if (pointedAt.noteReference>0) {
+            m_textEditor.data()->setPosition(pointedAt.noteReference);
             ensureCursorVisible();
             event->accept();
             return;

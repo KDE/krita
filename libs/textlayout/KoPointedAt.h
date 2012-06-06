@@ -49,6 +49,7 @@ public:
     KoBookmark *bookmark;
     QString externalHRef;
     KoInlineNote *note;
+    int noteReference;
     QTextTable *table;
     TableHit tableHit;
     int tableRowDivider;

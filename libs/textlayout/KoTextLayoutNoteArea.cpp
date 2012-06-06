@@ -33,6 +33,8 @@ public:
     KoInlineNote *note;
     QTextLayout *textLayout;
     qreal labelIndent;
+    qreal labelWidth;
+    qreal labelHeight;
 };
 
 KoTextLayoutNoteArea::KoTextLayoutNoteArea(KoInlineNote *note, KoTextLayoutArea *parent, KoTextDocumentLayout *documentLayout)
@@ -95,6 +97,22 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
         KoTextLayoutArea::setExtraTextIndent(-d->labelIndent);
     }
     d->labelIndent += pStyle.leftMargin();
+    d->labelWidth = line.naturalTextWidth();
+    d->labelHeight = line.naturalTextRect().bottom() - line.naturalTextRect().top();
 
     return KoTextLayoutArea::layout(cursor);
+}
+
+KoPointedAt KoTextLayoutNoteArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accuracy) const
+{
+    KoPointedAt pointedAt;
+    pointedAt.noteReference = -1;
+    pointedAt = KoTextLayoutArea::hitTest(p, accuracy);
+    if (p.x() > left() && p.x() < d->labelWidth && p.y() < top() + d->labelHeight)
+    {
+        pointedAt.noteReference = d->note->getPosInDocument();
+        pointedAt.position = p.x();
+    }
+
+    return pointedAt;
 }

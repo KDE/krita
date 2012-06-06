@@ -32,6 +32,7 @@ KoPointedAt::KoPointedAt()
     : position(-1)
     , bookmark(0)
     , note(0)
+    , noteReference(-1)
     , table(0)
     , tableHit(None)
 {
@@ -42,6 +43,7 @@ KoPointedAt::KoPointedAt(KoPointedAt *other)
     position = other->position;
     bookmark = other->bookmark;
     note = other->note;
+    noteReference = other->noteReference;
     externalHRef = other->externalHRef;
     tableHit = other->tableHit;
     tableRowDivider = other->tableRowDivider;

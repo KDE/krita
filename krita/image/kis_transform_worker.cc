@@ -482,6 +482,7 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
 
         //progress info
         m_progressStep += dstLen;
+        qDebug() << m_lastProgressReport << m_progressStep << m_progressTotalSteps;
         if (m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps) {
             m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
             if (!m_progressUpdater.isNull()) m_progressUpdater->setProgress(m_lastProgressReport);
@@ -507,7 +508,7 @@ bool KisTransformWorker::run()
     if (m_xscale == 0 || m_yscale == 0) return false;
 
     // Progress info
-    m_progressTotalSteps = 0;
+    m_progressTotalSteps = 1;
     m_progressStep = 0;
 
     KoColor defaultPixel(m_dev->defaultPixel(), m_dev->colorSpace());
@@ -534,9 +535,6 @@ bool KisTransformWorker::run()
     double rotation = m_rotation;
     qint32 xtranslate = m_xtranslate;
     qint32 ytranslate = m_ytranslate;
-
-
-    m_progressTotalSteps = 0;
 
     // Apply shear X and Y
     if (xshear != 0 || yshear != 0) {

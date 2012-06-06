@@ -174,7 +174,9 @@ void ParagraphGeneral::save(KoParagraphStyle *style)
     m_paragraphDecorations->save(savingStyle);
     m_paragraphDropCaps->save(savingStyle);
     savingStyle->setName(widget.name->text());
-    savingStyle->setNextStyle(CharacterGeneral::nextStyleId());
+    if (int nextStyleId = CharacterGeneral::nextStyleId()) {
+        savingStyle->setNextStyle(nextStyleId);
+    }
 
     if (m_style == savingStyle) {
         emit styleAltered(savingStyle);

@@ -34,7 +34,7 @@
 #include "kis_cursor.h"
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_view2.h"
+#include "kis_config.h"
 
 #include "lutdocker_dock.h"
 #include <KoDockRegistry.h>
@@ -84,21 +84,32 @@ private:
 LutDockerPlugin::LutDockerPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
-    try {
-        OCIO::ConstConfigRcPtr config = OCIO::GetCurrentConfig();
-        KoDockRegistry::instance()->add(new LutDockerDockFactory(config));
+    KisConfig cfg;
+    if (cfg.useOcio()) {
+        try {
+            OCIO::ConstConfigRcPtr config;
+            if (cfg.useOcioEnvironmentVariable()) {
+                dbgUI << "using OCIO from the environment";
+                config = OCIO::Config::CreateFromEnv();
+            }
+            else {
+                QString configFile = cfg.ocioConfigurationPath();
+                dbgUI << "using OCIO config file" << configFile;
+                config = OCIO::Config::CreateFromFile(configFile.toUtf8());
+            }
+            OCIO::SetCurrentConfig(config);
+            KoDockRegistry::instance()->add(new LutDockerDockFactory(config));
+        }
+        catch (OCIO::Exception &exception) {
+            kWarning() << "OpenColorIO Error:" << exception.what() << "Cannot create the LUT docker";
+        }
     }
-    catch (OCIO::Exception &exception) {
-        kWarning() << "OpenColorIO Error:" << exception.what() << "Cannot create the LUT docker";
-    }
-
 
 
 }
 
 LutDockerPlugin::~LutDockerPlugin()
 {
-    m_view = 0;
 }
 
 #include "lutdocker.moc"

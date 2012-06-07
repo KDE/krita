@@ -231,7 +231,7 @@ void ShapeCollectionDocker::loadDefaultShapes()
     int quickCount=0;
 
     QStringList quickShapes;
-    quickShapes << "TextShapeID" << "PictureShape" << "KoConnectionShape" << "ChartShape" << "ArtisticText";
+    quickShapes << "TextShapeID" << "PictureShape" << "ChartShape" << "ArtisticText";
     KConfigGroup cfg = KGlobal::config()->group("KoShapeCollection");
     quickShapes = cfg.readEntry("QuickShapes", quickShapes);
 
@@ -356,7 +356,7 @@ void ShapeCollectionDocker::activateShapeCreationTool(const QModelIndex& index)
         KoCreateShapesTool* tool = KoToolManager::instance()->shapeCreatorTool(canvasController->canvas());
         QString id = m_collectionView->model()->data(index, Qt::UserRole).toString();
         KoProperties* properties = static_cast<CollectionItemModel*>(m_collectionView->model())->properties(index);
-        
+
         tool->setShapeId(id);
         tool->setShapeProperties(properties);
         KoToolManager::instance()->switchToolRequested(KoCreateShapesTool_ID);

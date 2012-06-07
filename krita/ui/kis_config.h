@@ -265,6 +265,16 @@ public:
     QString exportConfiguration(const QString &filterId) const;
     void setExportConfiguration(const QString &filterId, const KisPropertiesConfiguration &properties);
 
+    bool useOcio();
+    void setUseOcio(bool useOCIO);
+
+    bool useOcioEnvironmentVariable();
+    void setUseOcioEnvironmentVariable(bool useOCIO);
+
+    QString ocioConfigurationPath();
+    void setOcioConfigurationPath(const QString &path);
+
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

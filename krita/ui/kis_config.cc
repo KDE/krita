@@ -845,3 +845,35 @@ void KisConfig::setExportConfiguration(const QString &filterId, const KisPropert
     m_cfg.writeEntry("ExportConfiguration-" + filterId, exportConfig);
 
 }
+
+
+bool KisConfig::useOcio()
+{
+    return m_cfg.readEntry("Krita/Ocio/UseOcio", true);
+}
+
+void KisConfig::setUseOcio(bool useOCIO)
+{
+    m_cfg.writeEntry("Krita/Ocio/UseOcio", useOCIO);
+}
+
+
+bool KisConfig::useOcioEnvironmentVariable()
+{
+    return m_cfg.readEntry("Krita/Ocio/UseEnvironment", true);
+}
+
+void KisConfig::setUseOcioEnvironmentVariable(bool useOCIO)
+{
+    m_cfg.writeEntry("Krita/Ocio/UseEnvironment", useOCIO);
+}
+
+QString KisConfig::ocioConfigurationPath()
+{
+    return m_cfg.readEntry("Krita/Ocio/OcioConfigPath", QString());
+}
+
+void KisConfig::setOcioConfigurationPath(const QString &path)
+{
+    m_cfg.writeEntry("Krita/Ocio/OcioConfigPath", path);
+}

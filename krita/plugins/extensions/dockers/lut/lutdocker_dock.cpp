@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_birdeye_box.h"
+#include "lutdocker_dock.h"
 
 #include <QLayout>
 #include <QLabel>
@@ -46,7 +46,7 @@
 #include <kis_image.h>
 #include "widgets/squeezedcombobox.h"
 
-KisBirdEyeBox::KisBirdEyeBox()
+LutDockerDock::LutDockerDock()
         : QDockWidget(i18n("Overview"))
         , m_canvas(0)
 {
@@ -106,11 +106,11 @@ KisBirdEyeBox::KisBirdEyeBox()
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotImageColorSpaceChanged()));
 }
 
-KisBirdEyeBox::~KisBirdEyeBox()
+LutDockerDock::~LutDockerDock()
 {
 }
 
-void KisBirdEyeBox::setCanvas(KoCanvasBase* _canvas)
+void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
 {
     if (KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(_canvas)) {
         m_canvas = canvas;
@@ -121,7 +121,7 @@ void KisBirdEyeBox::setCanvas(KoCanvasBase* _canvas)
     }
 }
 
-void KisBirdEyeBox::slotImageColorSpaceChanged()
+void LutDockerDock::slotImageColorSpaceChanged()
 {
     KisConfig cfg;
 
@@ -171,43 +171,43 @@ void KisBirdEyeBox::slotImageColorSpaceChanged()
 
 }
 
-void KisBirdEyeBox::exposureValueChanged(double exposure)
+void LutDockerDock::exposureValueChanged(double exposure)
 {
     if (m_canvas && (!m_draggingSlider || m_canvas->usingHDRExposureProgram())) {
         m_canvas->view()->resourceProvider()->setHDRExposure(exposure);
     }
 }
 
-void KisBirdEyeBox::exposureSliderPressed()
+void LutDockerDock::exposureSliderPressed()
 {
     m_draggingSlider = true;
 }
 
-void KisBirdEyeBox::exposureSliderReleased()
+void LutDockerDock::exposureSliderReleased()
 {
     m_draggingSlider = false;
     exposureValueChanged(m_exposureDoubleWidget->value());
 }
 
-void KisBirdEyeBox::gammaValueChanged(double gamma)
+void LutDockerDock::gammaValueChanged(double gamma)
 {
     if (m_canvas && (!m_draggingSlider || m_canvas->usingHDRExposureProgram())) {
         m_canvas->view()->resourceProvider()->setHDRGamma(gamma);
     }
 }
 
-void KisBirdEyeBox::gammaSliderPressed()
+void LutDockerDock::gammaSliderPressed()
 {
     m_draggingSlider = true;
 }
 
-void KisBirdEyeBox::gammaSliderReleased()
+void LutDockerDock::gammaSliderReleased()
 {
     m_draggingSlider = false;
     gammaValueChanged(m_gammaDoubleWidget->value());
 }
 
-void KisBirdEyeBox::updateDisplaySettings()
+void LutDockerDock::updateDisplaySettings()
 {
     KisConfig cfg;
     cfg.setMonitorProfile(m_cmbDisplayProfile->itemHighlighted(), true);
@@ -218,4 +218,4 @@ void KisBirdEyeBox::updateDisplaySettings()
     m_canvas->view()->resourceProvider()->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
 }
 
-#include "kis_birdeye_box.moc"
+#include "lutdocker_dock.moc"

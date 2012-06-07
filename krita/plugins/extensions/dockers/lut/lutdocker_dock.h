@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_BIRDEYE_BOX_H
-#define KIS_BIRDEYE_BOX_H
+#ifndef LUT_DOCKER_DOCK_H
+#define LUT_DOCKER_DOCK_H
 
 #include <QWidget>
 #include <QLabel>
@@ -30,7 +30,6 @@
 #include <kis_types.h>
 
 class KisCanvas2;
-class KoBirdEyePanel;
 class KisDoubleWidget;
 class KoZoomAdapter;
 class KoColorSpace;
@@ -44,14 +43,14 @@ class KComboBox;
  * as some pertinent information and the exposure slider. Apart from the exposure
  * slider, this has been broken since 2006 :-(
  */
-class KisBirdEyeBox : public QDockWidget, public KoCanvasObserverBase
+class LutDockerDock : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 
 public:
 
-    KisBirdEyeBox();
-    ~KisBirdEyeBox();
+    LutDockerDock();
+    ~LutDockerDock();
 
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
@@ -73,7 +72,6 @@ private:
 
     KisCanvas2 *m_canvas;
 
-    KoBirdEyePanel *m_birdEyePanel;
     KisDoubleWidget *m_exposureDoubleWidget;
     KisDoubleWidget *m_gammaDoubleWidget;
     SqueezedComboBox *m_cmbDisplayProfile;
@@ -84,25 +82,4 @@ private:
 };
 
 
-class KisBirdEyeBoxFactory : public KoDockFactoryBase
-{
-public:
-    KisBirdEyeBoxFactory() {}
-
-    virtual QString id() const {
-        return QString("KisBirdeyeBox");
-    }
-
-    virtual QDockWidget* createDockWidget() {
-        KisBirdEyeBox * dockWidget = new KisBirdEyeBox();
-        dockWidget->setObjectName(id());
-
-        return dockWidget;
-    }
-
-    DockPosition defaultDockPosition() const {
-        return DockMinimized;
-    }
-};
-
-#endif // KIS_BIRDEYE_BOX_H
+#endif // LUT_DOCKER_DOCK_H

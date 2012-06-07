@@ -83,12 +83,12 @@ KisBirdEyeBox::KisBirdEyeBox()
 
     m_cmbDisplayProfile = new SqueezedComboBox(w);
     m_cmbDisplayProfile->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    connect(m_cmbDisplayProfile, SIGNAL(activated(int)), SLOT(updateDisplaySettings()));
+    connect(m_cmbDisplayProfile, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
 
     m_cmbMonitorIntent = new KComboBox(w);
     m_cmbMonitorIntent->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_cmbMonitorIntent->addItems(QStringList() << i18n("Perceptual") << i18n("Relative Colorimetric") << i18n("Saturation") << i18n("Absolute Colorimetric"));
-    connect(m_cmbMonitorIntent, SIGNAL(activated(int)), SLOT(updateDisplaySettings()));
+    connect(m_cmbMonitorIntent, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
 
     m_chkBlackPoint = new QCheckBox(i18n("Use Blackpoint Compensation"));
     connect(m_chkBlackPoint, SIGNAL(toggled(bool)), SLOT(updateDisplaySettings()));
@@ -132,6 +132,10 @@ void KisBirdEyeBox::slotImageColorSpaceChanged()
 
     if (m_canvas) {
 
+        m_cmbDisplayProfile->blockSignals(true);
+        m_cmbMonitorIntent->blockSignals(true);
+        m_chkBlackPoint->blockSignals(true);
+
         m_exposureDoubleWidget->setValue(m_canvas->view()->resourceProvider()->HDRExposure());
         m_gammaDoubleWidget->setValue(m_canvas->view()->resourceProvider()->HDRGamma());
 
@@ -159,6 +163,10 @@ void KisBirdEyeBox::slotImageColorSpaceChanged()
 
         m_chkBlackPoint->setChecked(cfg.useBlackPointCompensation());
         m_cmbMonitorIntent->setCurrentIndex(cfg.renderIntent());
+
+        m_cmbDisplayProfile->blockSignals(false);
+        m_cmbMonitorIntent->blockSignals(false);
+        m_chkBlackPoint->blockSignals(false);
     }
 
 }

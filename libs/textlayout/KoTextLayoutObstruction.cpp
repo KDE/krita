@@ -119,22 +119,13 @@ void KoTextLayoutObstruction::init(const QTransform &matrix, const QPainterPath 
     QPainterPath path =  matrix.map(obstruction);
     m_bounds = path.boundingRect();
     distance += borderHalfWidth;
-    if (distance >= 0.0) {
-        QTransform grow = matrix;
-        grow.translate(m_bounds.width() / 2.0, m_bounds.height() / 2.0);
-        qreal scaleX = 2 * distance;
-        if (m_bounds.width() > 0)
-            scaleX = (m_bounds.width() + 2 * distance) / m_bounds.width();
-        qreal scaleY = 2 * distance;
-        if (m_bounds.height() > 0)
-            scaleY = (m_bounds.height() + 2 * distance) / m_bounds.height();
-        Q_ASSERT(!qIsNaN(scaleY));
-        Q_ASSERT(!qIsNaN(scaleX));
-        grow.scale(scaleX, scaleY);
-        grow.translate(-m_bounds.width() / 2.0, -m_bounds.height() / 2.0);
+    if (distance > 0.0) {
+        QPainterPathStroker stroker;
+        stroker.setWidth(2 * distance);
+        stroker.setJoinStyle(Qt::MiterJoin);
+        stroker.setCapStyle(Qt::SquareCap);
+        path = stroker.createStroke(path) + path;
 
-        path =  grow.map(obstruction);
-        // kDebug() <<"Grow" << distance <<", Before:" << m_bounds <<", after:" << path.boundingRect();
         m_bounds = path.boundingRect();
     }
 

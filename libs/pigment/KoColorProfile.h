@@ -28,10 +28,8 @@
 /**
  * Contains information needed for color transformation.
  */
-class PIGMENTCMS_EXPORT KoColorProfile : public QObject
+class PIGMENTCMS_EXPORT KoColorProfile
 {
-    Q_OBJECT
-
 
 public:
 
@@ -58,6 +56,7 @@ public:
      * must be duplicated while cloning.
      */
     virtual KoColorProfile* clone() const = 0;
+
     /**
      * Load the profile in memory.
      * @return true if the profile has been successfully loaded

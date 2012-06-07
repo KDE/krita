@@ -32,8 +32,6 @@ class LutDockerPlugin : public QObject
     public:
         LutDockerPlugin(QObject *parent, const QVariantList &);
         virtual ~LutDockerPlugin();
-    private:
-        KisView2* m_view;
 };
 
 #endif

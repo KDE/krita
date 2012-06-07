@@ -59,6 +59,9 @@ LutDockerDock::LutDockerDock(OCIO::ConstConfigRcPtr config)
 
     QFormLayout *layout = new QFormLayout(w);
 
+
+
+
     m_exposureDoubleWidget = new KisDoubleWidget(-10, 10, w);
     m_exposureDoubleWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_exposureDoubleWidget->setToolTip(i18n("Select the exposure (stops) for HDR images."));
@@ -131,7 +134,12 @@ void LutDockerDock::slotImageColorSpaceChanged()
         m_gammaDoubleWidget->setValue(m_canvas->view()->resourceProvider()->HDRGamma());
 
         m_cmbDisplayProfile->clear();
-
+        int numOcioColorSpaces = m_ocioConfig->getNumColorSpaces();
+        for(int i = 0; i < numOcioColorSpaces; ++i) {
+            const char *cs = m_ocioConfig->getColorSpaceNameByIndex(i);
+            OCIO::ConstColorSpaceRcPtr colorSpace = m_ocioConfig->getColorSpace(cs);
+            m_cmbDisplayProfile->addSqueezedItem(QString::fromUtf8(colorSpace->getDescription()).replace("\n", ""));
+        }
 
         m_updateDisplay = true;
     }

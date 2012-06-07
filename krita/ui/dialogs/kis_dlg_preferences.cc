@@ -218,7 +218,10 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
         m_page->cmbMonitorProfile->setCurrent(cfg.monitorProfile());
     if (m_page->cmbPrintProfile->contains(cfg.printerProfile()))
         m_page->cmbPrintProfile->setCurrentIndex(m_page->cmbPrintProfile->findText(cfg.printerProfile()));
+
+    // hide the blackpoint checkbox until it's used
     m_page->chkBlackpoint->setChecked(cfg.useBlackPointCompensation());
+    m_page->chkBlackpoint->hide();
 
     m_pasteBehaviourGroup.addButton(m_page->radioPasteWeb, PASTE_ASSUME_WEB);
     m_pasteBehaviourGroup.addButton(m_page->radioPasteMonitor, PASTE_ASSUME_MONITOR);
@@ -231,6 +234,9 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
         button->setChecked(true);
     }
 
+    // hide the rendering intent until it's actually used
+    m_page->lblRenderingIntent->hide();
+    m_page->cmbMonitorIntent->hide();
     m_page->cmbMonitorIntent->setCurrentIndex(cfg.renderIntent());
 
     // XXX: this needs to be available per screen!

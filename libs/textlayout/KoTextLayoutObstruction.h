@@ -35,6 +35,8 @@ class TEXTLAYOUT_EXPORT KoTextLayoutObstruction
 public:
     KoTextLayoutObstruction(KoShape *shape, const QTransform &matrix);
 
+    KoTextLayoutObstruction(QRectF rect, bool rtl);
+
     void init(const QTransform &matrix, const QPainterPath &obstruction, qreal distance, qreal borderHalfWidth);
 
     QRectF limit(const QRectF &content);
@@ -78,6 +80,7 @@ private:
     QRectF m_line;
     QMultiMap<qreal, QLineF> m_edges; //sorted with y-coord
     KoShape *m_shape;
+    QRectF m_rect;
     qreal m_distance;
     qreal m_borderHalfWidth;
     qreal m_runAroundThreshold;

@@ -30,7 +30,7 @@ NotesConfigurationDialog::NotesConfigurationDialog(QTextDocument *doc, QWidget *
           document(doc)
 {
     widget.setupUi(this);
-
+    footnoteSetup(true);
     connect(widget.footnote,SIGNAL(toggled(bool)),this,SLOT(footnoteSetup(bool)));
     connect(widget.endnote,SIGNAL(toggled(bool)),this,SLOT(endnoteSetup(bool)));
     connect(widget.buttonBox,SIGNAL(clicked(QAbstractButton*)),this,SLOT(apply(QAbstractButton*)));
@@ -48,8 +48,52 @@ void NotesConfigurationDialog::setStyleManager(KoStyleManager *sm)
 
 void NotesConfigurationDialog::footnoteSetup(bool on)
 {
-    if(on) {
-        widget.numStyleCombo->setCurrentIndex(0);
+    KoOdfNotesConfiguration *notesConfig = KoTextDocument(document).
+            styleManager()->notesConfiguration(KoOdfNotesConfiguration::Footnote);
+    if(on && notesConfig) {
+        widget.prefixLineEdit->setText(notesConfig->numberFormat().prefix());
+        widget.suffixLineEdit->setText(notesConfig->numberFormat().suffix());
+        widget.startAtSpinBox->setValue(notesConfig->startValue());
+        widget.endlineEdit->setText(notesConfig->footnoteContinuationForward());
+        widget.startlineEdit->setText(notesConfig->footnoteContinuationBackward());
+
+        switch(notesConfig->numberFormat().formatSpecification()) {
+        case KoOdfNumberDefinition::Numeric:
+            widget.numStyleCombo->setCurrentIndex(0);
+            break;
+        case KoOdfNumberDefinition::AlphabeticLowerCase:
+            if (notesConfig->numberFormat().letterSynchronization()) {
+                widget.numStyleCombo->setCurrentIndex(3);
+            } else {
+                widget.numStyleCombo->setCurrentIndex(1);
+            }
+            break;
+        case KoOdfNumberDefinition::AlphabeticUpperCase:
+            if (notesConfig->numberFormat().letterSynchronization()) {
+                widget.numStyleCombo->setCurrentIndex(4);
+            } else {
+                widget.numStyleCombo->setCurrentIndex(2);
+            }
+            break;
+        case KoOdfNumberDefinition::RomanLowerCase:
+            widget.numStyleCombo->setCurrentIndex(5);
+            break;
+        case KoOdfNumberDefinition::RomanUpperCase:
+            widget.numStyleCombo->setCurrentIndex(6);
+            break;
+        }
+
+        switch(notesConfig->numberingScheme()) {
+        case KoOdfNotesConfiguration::BeginAtDocument:
+            widget.beginAtCombo->setCurrentIndex(0);
+            break;
+        case KoOdfNotesConfiguration::BeginAtPage:
+            widget.beginAtCombo->setCurrentIndex(1);
+            break;
+        case KoOdfNotesConfiguration::BeginAtChapter:
+            widget.beginAtCombo->setCurrentIndex(2);
+            break;
+        }
     }
 }
 
@@ -57,8 +101,38 @@ void NotesConfigurationDialog::endnoteSetup(bool on)
 {
     widget.dockWidget_5->setHidden(on);
     widget.beginAtCombo->setDisabled(on);
-    if(on) {
-        widget.numStyleCombo->setCurrentIndex(5);
+    KoOdfNotesConfiguration *notesConfig = KoTextDocument(document).
+            styleManager()->notesConfiguration(KoOdfNotesConfiguration::Endnote);
+    if(on && notesConfig) {
+        widget.prefixLineEdit->setText(notesConfig->numberFormat().prefix());
+        widget.suffixLineEdit->setText(notesConfig->numberFormat().suffix());
+        widget.startAtSpinBox->setValue(notesConfig->startValue());
+
+        switch(notesConfig->numberFormat().formatSpecification()) {
+        case KoOdfNumberDefinition::Numeric:
+            widget.numStyleCombo->setCurrentIndex(0);
+            break;
+        case KoOdfNumberDefinition::AlphabeticLowerCase:
+            if (notesConfig->numberFormat().letterSynchronization()) {
+                widget.numStyleCombo->setCurrentIndex(3);
+            } else {
+                widget.numStyleCombo->setCurrentIndex(1);
+            }
+            break;
+        case KoOdfNumberDefinition::AlphabeticUpperCase:
+            if (notesConfig->numberFormat().letterSynchronization()) {
+                widget.numStyleCombo->setCurrentIndex(4);
+            } else {
+                widget.numStyleCombo->setCurrentIndex(2);
+            }
+            break;
+        case KoOdfNumberDefinition::RomanLowerCase:
+            widget.numStyleCombo->setCurrentIndex(5);
+            break;
+        case KoOdfNumberDefinition::RomanUpperCase:
+            widget.numStyleCombo->setCurrentIndex(6);
+            break;
+        }
     }
 
 }

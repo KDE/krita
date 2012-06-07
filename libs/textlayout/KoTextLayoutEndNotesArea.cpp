@@ -97,7 +97,7 @@ bool KoTextLayoutEndNotesArea::layout(FrameIterator *cursor)
         cursor->endNoteIndex++;
     }
     if (cursor->endNoteIndex == 0) {
-        setBottom(top());
+        setBottom(top() + shiftDown);
     }
     d->endOfArea = new FrameIterator(cursor);
     return true;

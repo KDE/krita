@@ -61,6 +61,27 @@ KoTextLayoutObstruction::KoTextLayoutObstruction(KoShape *shape, const QTransfor
     }
 }
 
+KoTextLayoutObstruction::KoTextLayoutObstruction(QRectF rect, bool rtl)
+    : m_side(None),
+    m_polygon(QPolygonF()),
+    m_line(QRectF()),
+    m_shape(0),
+    m_runAroundThreshold(0)
+{
+    qreal borderHalfWidth = 0;
+    qreal textRunAroundDistance = 1;
+
+    QPainterPath path;
+    path.addRect(rect);
+
+    init(QTransform(), path, textRunAroundDistance, borderHalfWidth);
+    if (rtl) {
+        m_side = Right;
+    } else {
+        m_side = Left;
+    }
+}
+
 QPainterPath KoTextLayoutObstruction::decoratedOutline(const KoShape *shape, qreal &borderHalfWidth) const
 {
     const KoShapeGroup *shapeGroup = dynamic_cast<const KoShapeGroup *>(shape);

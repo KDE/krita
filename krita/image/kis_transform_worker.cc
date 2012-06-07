@@ -482,7 +482,6 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
 
         //progress info
         m_progressStep += dstLen;
-        qDebug() << m_lastProgressReport << m_progressStep << m_progressTotalSteps;
         if (m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps) {
             m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
             if (!m_progressUpdater.isNull()) m_progressUpdater->setProgress(m_lastProgressReport);

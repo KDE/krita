@@ -46,9 +46,11 @@
 #include <kis_image.h>
 #include "widgets/squeezedcombobox.h"
 
-LutDockerDock::LutDockerDock()
-        : QDockWidget(i18n("Overview"))
+
+LutDockerDock::LutDockerDock(OCIO::ConstConfigRcPtr config)
+        : QDockWidget(i18n("LUT Management"))
         , m_canvas(0)
+        , m_ocioConfig(config)
 {
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
@@ -85,25 +87,16 @@ LutDockerDock::LutDockerDock()
     m_cmbDisplayProfile->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     connect(m_cmbDisplayProfile, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
 
-    m_cmbMonitorIntent = new KComboBox(w);
-    m_cmbMonitorIntent->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    m_cmbMonitorIntent->addItems(QStringList() << i18n("Perceptual") << i18n("Relative Colorimetric") << i18n("Saturation") << i18n("Absolute Colorimetric"));
-    connect(m_cmbMonitorIntent, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
-
-    m_chkBlackPoint = new QCheckBox(i18n("Use Blackpoint Compensation"));
-    connect(m_chkBlackPoint, SIGNAL(toggled(bool)), SLOT(updateDisplaySettings()));
-
     m_draggingSlider = false;
 
     layout->addRow(i18n("Exposure:"), m_exposureDoubleWidget);
     layout->addRow(i18n("Gamma:"), m_gammaDoubleWidget);
 
     layout->addRow(i18n("Display profile"), m_cmbDisplayProfile);
-    layout->addRow(i18n("Rendering Intent"), m_cmbMonitorIntent);
-    layout->addWidget(m_chkBlackPoint);
     layout->addItem(new QSpacerItem(0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotImageColorSpaceChanged()));
+
 }
 
 LutDockerDock::~LutDockerDock()
@@ -132,43 +125,16 @@ void LutDockerDock::slotImageColorSpaceChanged()
 
     if (m_canvas) {
 
-        m_cmbDisplayProfile->blockSignals(true);
-        m_cmbMonitorIntent->blockSignals(true);
-        m_chkBlackPoint->blockSignals(true);
+        m_updateDisplay = false;
 
         m_exposureDoubleWidget->setValue(m_canvas->view()->resourceProvider()->HDRExposure());
         m_gammaDoubleWidget->setValue(m_canvas->view()->resourceProvider()->HDRGamma());
 
-        const KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->colorSpaceFactory("RGBA");
         m_cmbDisplayProfile->clear();
 
-        if (csf) {
 
-            QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
-
-            foreach(const KoColorProfile *profile, profileList) {
-                if (profile->isSuitableForDisplay())
-                    m_cmbDisplayProfile->addSqueezedItem(profile->name());
-            }
-
-            KoColorProfile *monitorProfile = m_canvas->monitorProfile();
-            if (monitorProfile) {
-                m_cmbDisplayProfile->setCurrent(monitorProfile->name());
-            }
-            else {
-                m_cmbDisplayProfile->setCurrent(csf->defaultProfile());
-            }
-
-        }
-
-        m_chkBlackPoint->setChecked(cfg.useBlackPointCompensation());
-        m_cmbMonitorIntent->setCurrentIndex(cfg.renderIntent());
-
-        m_cmbDisplayProfile->blockSignals(false);
-        m_cmbMonitorIntent->blockSignals(false);
-        m_chkBlackPoint->blockSignals(false);
+        m_updateDisplay = true;
     }
-
 }
 
 void LutDockerDock::exposureValueChanged(double exposure)
@@ -209,13 +175,13 @@ void LutDockerDock::gammaSliderReleased()
 
 void LutDockerDock::updateDisplaySettings()
 {
-    KisConfig cfg;
-    cfg.setMonitorProfile(m_cmbDisplayProfile->itemHighlighted(), true);
-    cfg.setUseBlackPointCompensation(m_chkBlackPoint->isChecked());
-    cfg.setRenderIntent(m_cmbMonitorIntent->currentIndex());
+    if (m_updateDisplay) {
+        KisConfig cfg;
+        cfg.setMonitorProfile(m_cmbDisplayProfile->itemHighlighted(), true);
 
-    KisConfigNotifier::instance()->notifyConfigChanged();
-    m_canvas->view()->resourceProvider()->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
+        KisConfigNotifier::instance()->notifyConfigChanged();
+        m_canvas->view()->resourceProvider()->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
+    }
 }
 
 #include "lutdocker_dock.moc"

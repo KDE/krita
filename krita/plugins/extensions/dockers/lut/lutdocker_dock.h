@@ -29,6 +29,9 @@
 
 #include <kis_types.h>
 
+#include <OpenColorIO/OpenColorIO.h>
+namespace OCIO = OCIO_NAMESPACE;
+
 class KisCanvas2;
 class KisDoubleWidget;
 class KoZoomAdapter;
@@ -49,7 +52,7 @@ class LutDockerDock : public QDockWidget, public KoCanvasObserverBase
 
 public:
 
-    LutDockerDock();
+    LutDockerDock(OCIO::ConstConfigRcPtr config);
     ~LutDockerDock();
 
     /// reimplemented from KoCanvasObserverBase
@@ -75,10 +78,11 @@ private:
     KisDoubleWidget *m_exposureDoubleWidget;
     KisDoubleWidget *m_gammaDoubleWidget;
     SqueezedComboBox *m_cmbDisplayProfile;
-    KComboBox *m_cmbMonitorIntent;
-    QCheckBox *m_chkBlackPoint;
 
     bool m_draggingSlider;
+    bool m_updateDisplay;
+
+    OCIO::ConstConfigRcPtr m_ocioConfig;
 };
 
 

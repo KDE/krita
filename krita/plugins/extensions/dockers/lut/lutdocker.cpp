@@ -39,12 +39,17 @@
 #include "lutdocker_dock.h"
 #include <KoDockRegistry.h>
 
+#include <OpenColorIO/OpenColorIO.h>
+namespace OCIO = OCIO_NAMESPACE;
+
+
 K_PLUGIN_FACTORY(LutDockerPluginFactory, registerPlugin<LutDockerPlugin>();)
 K_EXPORT_PLUGIN(LutDockerPluginFactory( "krita" ) )
 
 class LutDockerDockFactory : public KoDockFactoryBase {
 public:
-    LutDockerDockFactory()
+    LutDockerDockFactory(OCIO::ConstConfigRcPtr config)
+        : m_config(config)
     {
     }
 
@@ -60,7 +65,7 @@ public:
 
     virtual QDockWidget* createDockWidget()
     {
-        LutDockerDock * dockWidget = new LutDockerDock();
+        LutDockerDock * dockWidget = new LutDockerDock(m_config);
         dockWidget->setObjectName(id());
 
         return dockWidget;
@@ -72,14 +77,23 @@ public:
     }
 private:
 
-
+    OCIO::ConstConfigRcPtr m_config;
 };
 
 
 LutDockerPlugin::LutDockerPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
-    KoDockRegistry::instance()->add(new LutDockerDockFactory());
+    try {
+        OCIO::ConstConfigRcPtr config = OCIO::GetCurrentConfig();
+        KoDockRegistry::instance()->add(new LutDockerDockFactory(config));
+    }
+    catch (OCIO::Exception &exception) {
+        kWarning() << "OpenColorIO Error:" << exception.what() << "Cannot create the LUT docker";
+    }
+
+
+
 }
 
 LutDockerPlugin::~LutDockerPlugin()

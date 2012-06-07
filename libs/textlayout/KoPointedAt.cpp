@@ -80,14 +80,11 @@ void KoPointedAt::fillInBookmark(QTextCursor cursor, KoInlineTextObjectManager *
             externalHRef = href;
         }
     } else {
-        cursor.setPosition(cursor.position() + 1, QTextCursor::KeepAnchor);
-
         note = dynamic_cast<KoInlineNote*>(inlineManager->inlineTextObject(cursor));
-        if (!note) {
-            cursor.setPosition(cursor.position() - 1, QTextCursor::KeepAnchor);
+        if (!note && cursor.position() < cursor.block().position() + cursor.block().length()) {
+            cursor.setPosition(cursor.position() + 1);
 
             note = dynamic_cast<KoInlineNote*>(inlineManager->inlineTextObject(cursor));
         }
-
     }
 }

@@ -32,6 +32,11 @@ else(HAVE_OPENGL)
 endif(HAVE_OPENGL)
 endif (NOT WIN32)
 
+macro_optional_find_package(OCIO)
+macro_log_feature(OCIO_FOUND "OCIO" "The OpenColorIO Library" "http://www.opencolorio.org" FALSE "" "Required by the Krita LUT docker")
+macro_bool_to_01(OCIO_FOUND HAVE_OCIO)
+configure_file(config-ocio.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ocio.h )
+
 if(UNIX)
     set(CMAKE_REQUIRED_LIBRARIES "${CMAKE_REQUIRED_LIBRARIES};m")
 endif(UNIX)

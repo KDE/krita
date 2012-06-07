@@ -139,6 +139,25 @@ void LutDockerDock::slotImageColorSpaceChanged()
             const char *cs = m_ocioConfig->getColorSpaceNameByIndex(i);
             OCIO::ConstColorSpaceRcPtr colorSpace = m_ocioConfig->getColorSpace(cs);
             m_cmbDisplayProfile->addSqueezedItem(QString::fromUtf8(colorSpace->getDescription()).replace("\n", ""));
+            qDebug() << colorSpace->getDescription();
+        }
+
+        int numRoles = m_ocioConfig->getNumRoles();
+        for (int i = 0; i < numRoles; ++i) {
+            qDebug() << "role" << m_ocioConfig->getRoleName(i);
+        }
+        int numDisplays = m_ocioConfig->getNumDisplays();
+        for (int i = 0; i < numDisplays; ++i) {
+            qDebug() << "display" << m_ocioConfig->getDisplay(i);
+            int numViews = m_ocioConfig->getNumViews(m_ocioConfig->getDisplay(i));
+            for (int j = 0; j < numViews; ++j) {
+                qDebug() << "\tview" << m_ocioConfig->getView(m_ocioConfig->getDisplay(i), j);
+            }
+
+        }
+        int numLooks = m_ocioConfig->getNumLooks();
+        for (int i = 0; i < numLooks; ++i) {
+            qDebug() << "look" << m_ocioConfig->getLookNameByIndex(i);
         }
 
         m_updateDisplay = true;

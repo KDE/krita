@@ -64,21 +64,21 @@ void KoCtlColorConversionTransformation::transform(const quint8 *src8, quint8 *d
     dbgPigment << "Transformation from " << srcColorSpace()->id() << " " << srcColorSpace()->profile()->name() << " to " << dstColorSpace()->id() << " " << dstColorSpace()->profile()->name();
     KoCtlBuffer src(reinterpret_cast<char*>(const_cast<quint8*>(src8)), nPixels * srcColorSpace()->pixelSize());
     KoCtlBuffer dst(reinterpret_cast<char*>(dst8), nPixels * dstColorSpace()->pixelSize());
-    const KoColorProfile* ctlp = d->srcIsCTL ? srcColorSpace()->profile() : dstColorSpace()->profile();
-    for (std::list<GTLCore::String>::const_iterator cit = d->program->varyings().begin();
-            cit != d->program->varyings().end(); ++cit) {
-        QVariant v = ctlp->property(cit->c_str());
-        dbgPigment << "Setting " << cit->c_str() << " to " << v;
-        if (v.type() == QVariant::Double) {
-            d->program->setVarying(*cit, (float)v.toDouble());
-        } else if (v.type() == QVariant::Int) {
-            d->program->setVarying(*cit, v.toInt());
-        } else if (v.type() == QVariant::Bool) {
-            d->program->setVarying(*cit, v.toBool());
-        } else {
-            dbgPigment << "Unsuitable type";
-        }
-    }
+//    const KoColorProfile* ctlp = d->srcIsCTL ? srcColorSpace()->profile() : dstColorSpace()->profile();
+//    for (std::list<GTLCore::String>::const_iterator cit = d->program->varyings().begin();
+//            cit != d->program->varyings().end(); ++cit) {
+//        QVariant v = ctlp->property(cit->c_str());
+//        dbgPigment << "Setting " << cit->c_str() << " to " << v;
+//        if (v.type() == QVariant::Double) {
+//            d->program->setVarying(*cit, (float)v.toDouble());
+//        } else if (v.type() == QVariant::Int) {
+//            d->program->setVarying(*cit, v.toInt());
+//        } else if (v.type() == QVariant::Bool) {
+//            d->program->setVarying(*cit, v.toBool());
+//        } else {
+//            dbgPigment << "Unsuitable type";
+//        }
+//    }
     d->program->apply(src, dst);
     
     KisGtlLock::unlock();

@@ -329,7 +329,9 @@ void ColorSettingsTab::refillPrintProfiles(const KoID & s)
 
 void ColorSettingsTab::selectOcioConfigPath()
 {
-    QString filename = KFileDialog::getOpenFileName(KUrl(), "*.ocio|OpenColorIO configuration (*.ocio)", m_page);
+    QString filename = m_page->txtOcioConfigPath->text();
+
+    filename = KFileDialog::getOpenFileName(QDir::cleanPath(filename), "*.ocio|OpenColorIO configuration (*.ocio)", m_page);
     QFile f(filename);
     if (f.exists()) {
         m_page->txtOcioConfigPath->setText(filename);

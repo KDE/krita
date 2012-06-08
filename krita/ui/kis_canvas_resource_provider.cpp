@@ -108,7 +108,6 @@ float KisCanvasResourceProvider::HDRExposure() const
 void KisCanvasResourceProvider::setHDRExposure(float exposure)
 {
     m_resourceManager->setResource(HdrExposure, static_cast<double>(exposure));
-    m_view->canvasBase()->updateCanvas();
 }
 
 float KisCanvasResourceProvider::HDRGamma() const
@@ -119,7 +118,6 @@ float KisCanvasResourceProvider::HDRGamma() const
 void KisCanvasResourceProvider::setHDRGamma(float gamma)
 {
     m_resourceManager->setResource(HdrGamma, static_cast<double>(gamma));
-    m_view->canvasBase()->updateCanvas();
 }
 
 

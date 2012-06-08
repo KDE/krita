@@ -74,6 +74,13 @@ private slots:
     void gammaSliderReleased();
     void updateDisplaySettings();
 
+    void updateWidgets();
+    void selectOcioConfiguration();
+    void updateOcioConfiguration();
+    void refillComboboxes();
+    void refillViewCombobox();
+    void selectLut();
+    void clearLut();
 
 private:
 

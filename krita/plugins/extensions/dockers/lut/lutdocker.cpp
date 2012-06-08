@@ -85,25 +85,24 @@ LutDockerPlugin::LutDockerPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     KisConfig cfg;
-    if (cfg.useOcio()) {
-        try {
-            OCIO::ConstConfigRcPtr config;
-            if (cfg.useOcioEnvironmentVariable()) {
-                dbgUI << "using OCIO from the environment";
-                config = OCIO::Config::CreateFromEnv();
-            }
-            else {
-                QString configFile = cfg.ocioConfigurationPath();
-                dbgUI << "using OCIO config file" << configFile;
-                config = OCIO::Config::CreateFromFile(configFile.toUtf8());
-            }
-            OCIO::SetCurrentConfig(config);
-            KoDockRegistry::instance()->add(new LutDockerDockFactory(config));
+    try {
+        OCIO::ConstConfigRcPtr config;
+        if (cfg.useOcioEnvironmentVariable()) {
+            dbgUI << "using OCIO from the environment";
+            config = OCIO::Config::CreateFromEnv();
         }
-        catch (OCIO::Exception &exception) {
-            kWarning() << "OpenColorIO Error:" << exception.what() << "Cannot create the LUT docker";
+        else {
+            QString configFile = cfg.ocioConfigurationPath();
+            dbgUI << "using OCIO config file" << configFile;
+            config = OCIO::Config::CreateFromFile(configFile.toUtf8());
         }
+        OCIO::SetCurrentConfig(config);
+        KoDockRegistry::instance()->add(new LutDockerDockFactory(config));
     }
+    catch (OCIO::Exception &exception) {
+        kWarning() << "OpenColorIO Error:" << exception.what() << "Cannot create the LUT docker";
+    }
+
 }
 
 LutDockerPlugin::~LutDockerPlugin()

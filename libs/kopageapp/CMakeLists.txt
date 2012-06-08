@@ -48,6 +48,8 @@ set( kopageapp_LIB_SRCS
      dialogs/KoPAMasterPageDialog.cpp
      dialogs/KoPAPageLayoutDialog.cpp
      dialogs/KoPAConfigureDialog.cpp
+     widgets/KoPageNavigator.cpp
+     widgets/KoPageNavigatorButton.cpp
 )
 
 kde4_add_library(kopageapp SHARED ${kopageapp_LIB_SRCS})

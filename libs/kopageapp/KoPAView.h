@@ -212,8 +212,6 @@ public slots:
     /// Delete the current page
     void deletePage();
 
-    void updatePageCount();
-
 protected slots:
 
     void viewSnapToGrid(bool snap);

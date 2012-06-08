@@ -1960,38 +1960,29 @@ void TextTool::repaintCaret()
 
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
     Q_ASSERT(lay);
-    KoTextLayoutRootArea *rootArea = lay->rootAreaForPosition(textEditor->position());
 
-    if (rootArea) {
-        // If we have changed root area we need to update m_textShape and m_textShapeData
-        if (m_delayedEnsureVisible) {
-            m_delayedEnsureVisible = false;
-            ensureCursorVisible();
-            return;
-        }
+    // If we have changed root area we need to update m_textShape and m_textShapeData
+    if (m_delayedEnsureVisible) {
+        m_delayedEnsureVisible = false;
+        ensureCursorVisible();
+        return;
+    }
 
-        ensureCursorVisible(false); // ensures the various vars are updated
+    ensureCursorVisible(false); // ensures the various vars are updated
 
-        TextShape *textShape = static_cast<TextShape*>(rootArea->associatedShape());
-        if (!textShape)
-            return;
-        if (!textShape->textShapeData())
-            return;
+    QRectF repaintRect = caretRect(textEditor->cursor());
+    repaintRect.moveTop(repaintRect.top() - m_textShapeData->documentOffset());
+    if (repaintRect.isValid()) {
+        repaintRect = m_textShape->absoluteTransformation(0).mapRect(repaintRect);
 
-        QRectF repaintRect = caretRect(textEditor->cursor());
-        repaintRect.moveTop(repaintRect.top() - textShape->textShapeData()->documentOffset());
-        if (repaintRect.isValid()) {
-            repaintRect = textShape->absoluteTransformation(0).mapRect(repaintRect);
+        // Make sure there is enough space to show an icon
+        QRectF iconSize = canvas()->viewConverter()->viewToDocument(QRect(0,0,16, 16));
+        repaintRect.setX(repaintRect.x() - iconSize.width() / 2);
+        repaintRect.setWidth(iconSize.width());
+        repaintRect.moveTop(repaintRect.y() - iconSize.height() / 2);
+        repaintRect.moveBottom(repaintRect.bottom() + iconSize.height() / 2);
 
-            // Make sure there is enough space to show an icon
-            QRectF iconSize = canvas()->viewConverter()->viewToDocument(QRect(0,0,16, 16));
-            repaintRect.setX(repaintRect.x() - iconSize.width() / 2);
-            repaintRect.setWidth(iconSize.width());
-            repaintRect.moveTop(repaintRect.y() - iconSize.height() / 2);
-            repaintRect.moveBottom(repaintRect.bottom() + iconSize.height() / 2);
-
-            canvas()->updateCanvas(repaintRect);
-        }
+        canvas()->updateCanvas(repaintRect);
     }
 }
 

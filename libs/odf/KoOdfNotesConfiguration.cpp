@@ -118,7 +118,7 @@ void KoOdfNotesConfiguration::loadOdf(const KoXmlElement &element)
         d->numberingScheme = BeginAtPage;
     }
 
-    QString footnotesPosition  = element.attributeNS(KoXmlNS::text, "footnotes-position", "document");
+    QString footnotesPosition  = element.attributeNS(KoXmlNS::text, "footnotes-position", "page");
     if (footnotesPosition == "text") {
         d->footnotesPosition = Text;
     }

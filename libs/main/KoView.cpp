@@ -31,6 +31,7 @@
 #include "KoDockFactoryBase.h"
 #include "KoUndoStackAction.h"
 #include "KoGlobal.h"
+#include "KoPageLayout.h"
 
 #include <kactioncollection.h>
 #include <kglobalsettings.h>
@@ -495,6 +496,11 @@ KoPrintJob * KoView::createPrintJob()
 KoPrintJob * KoView::createPdfPrintJob()
 {
     return createPrintJob();
+}
+
+KoPageLayout KoView::pageLayout() const
+{
+    return koDocument()->pageLayout();
 }
 
 void KoView::setupGlobalActions()

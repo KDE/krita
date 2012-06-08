@@ -274,6 +274,9 @@ public:
     QString ocioConfigurationPath();
     void setOcioConfigurationPath(const QString &path);
 
+    QString ocioLutPath();
+    void setOcioLutPath(const QString &path);
+
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

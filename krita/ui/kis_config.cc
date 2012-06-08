@@ -877,3 +877,14 @@ void KisConfig::setOcioConfigurationPath(const QString &path)
 {
     m_cfg.writeEntry("Krita/Ocio/OcioConfigPath", path);
 }
+
+
+QString KisConfig::ocioLutPath()
+{
+    return m_cfg.readEntry("Krita/Ocio/OcioLutPath", QString());
+}
+
+void KisConfig::setOcioLutPath(const QString &path)
+{
+    m_cfg.writeEntry("Krita/Ocio/OcioLutPath", path);
+}

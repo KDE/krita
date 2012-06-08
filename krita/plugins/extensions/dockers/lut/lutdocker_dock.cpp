@@ -27,6 +27,8 @@
 #include <QCheckBox>
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QToolButton>
+#include <QCheckBox>
 
 #include <klocale.h>
 #include <kcombobox.h>
@@ -55,15 +57,17 @@ LutDockerDock::LutDockerDock(OCIO::ConstConfigRcPtr config)
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
     QWidget * w = new QWidget(this);
+    setupUi(w);
     setWidget(w);
 
-    QFormLayout *layout = new QFormLayout(w);
+    KisConfig cfg;
+    m_chkEnableOcio->setChecked(cfg.useOcio());
 
+    m_bnSelectConfigurationFile->setToolTip(i18n("Select custom configuration file."));
+    m_bnSelectConfigurationFile->setIcon(KIcon(""));
 
+    m_bnSelectLut->setToolTip(i18n("Select LUT file"));
 
-
-    m_exposureDoubleWidget = new KisDoubleWidget(-10, 10, w);
-    m_exposureDoubleWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_exposureDoubleWidget->setToolTip(i18n("Select the exposure (stops) for HDR images."));
     m_exposureDoubleWidget->setPrecision(1);
     m_exposureDoubleWidget->setValue(0);
@@ -74,8 +78,6 @@ LutDockerDock::LutDockerDock(OCIO::ConstConfigRcPtr config)
     connect(m_exposureDoubleWidget, SIGNAL(sliderPressed()), SLOT(exposureSliderPressed()));
     connect(m_exposureDoubleWidget, SIGNAL(sliderReleased()), SLOT(exposureSliderReleased()));
 
-    m_gammaDoubleWidget = new KisDoubleWidget(0, 5, w);
-    m_gammaDoubleWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_gammaDoubleWidget->setToolTip(i18n("Select the amount of gamma modificiation for display. This does not affect the pixels of your image."));
     m_gammaDoubleWidget->setPrecision(2);
     m_gammaDoubleWidget->setValue(2.2);
@@ -86,17 +88,10 @@ LutDockerDock::LutDockerDock(OCIO::ConstConfigRcPtr config)
     connect(m_gammaDoubleWidget, SIGNAL(sliderPressed()), SLOT(gammaSliderPressed()));
     connect(m_gammaDoubleWidget, SIGNAL(sliderReleased()), SLOT(gammaSliderReleased()));
 
-    m_cmbDisplayProfile = new SqueezedComboBox(w);
-    m_cmbDisplayProfile->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    connect(m_cmbDisplayProfile, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
+    connect(m_cmbInputColorSpace, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
 
     m_draggingSlider = false;
 
-    layout->addRow(i18n("Exposure:"), m_exposureDoubleWidget);
-    layout->addRow(i18n("Gamma:"), m_gammaDoubleWidget);
-
-    layout->addRow(i18n("Display profile"), m_cmbDisplayProfile);
-    layout->addItem(new QSpacerItem(0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotImageColorSpaceChanged()));
 
@@ -133,12 +128,12 @@ void LutDockerDock::slotImageColorSpaceChanged()
         m_exposureDoubleWidget->setValue(m_canvas->view()->resourceProvider()->HDRExposure());
         m_gammaDoubleWidget->setValue(m_canvas->view()->resourceProvider()->HDRGamma());
 
-        m_cmbDisplayProfile->clear();
+        m_cmbInputColorSpace->clear();
         int numOcioColorSpaces = m_ocioConfig->getNumColorSpaces();
         for(int i = 0; i < numOcioColorSpaces; ++i) {
             const char *cs = m_ocioConfig->getColorSpaceNameByIndex(i);
             OCIO::ConstColorSpaceRcPtr colorSpace = m_ocioConfig->getColorSpace(cs);
-            m_cmbDisplayProfile->addSqueezedItem(QString::fromUtf8(colorSpace->getDescription()).replace("\n", ""));
+            m_cmbInputColorSpace->addSqueezedItem(QString::fromUtf8(colorSpace->getDescription()).replace("\n", ""));
             qDebug() << colorSpace->getDescription();
         }
 
@@ -204,7 +199,7 @@ void LutDockerDock::updateDisplaySettings()
 {
     if (m_updateDisplay) {
         KisConfig cfg;
-        cfg.setMonitorProfile(m_cmbDisplayProfile->itemHighlighted(), true);
+        cfg.setMonitorProfile(m_cmbInputColorSpace->itemHighlighted(), true);
 
         KisConfigNotifier::instance()->notifyConfigChanged();
         m_canvas->view()->resourceProvider()->resetDisplayProfile(QApplication::desktop()->screenNumber(this));

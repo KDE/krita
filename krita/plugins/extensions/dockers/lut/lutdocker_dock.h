@@ -29,6 +29,8 @@
 
 #include <kis_types.h>
 
+#include "ui_wdglut.h"
+
 #include <OpenColorIO/OpenColorIO.h>
 namespace OCIO = OCIO_NAMESPACE;
 
@@ -39,6 +41,8 @@ class KoColorSpace;
 class SqueezedComboBox;
 class QCheckBox;
 class KComboBox;
+class QToolButton;
+
 /**
  * Image overview docker
  *
@@ -46,7 +50,7 @@ class KComboBox;
  * as some pertinent information and the exposure slider. Apart from the exposure
  * slider, this has been broken since 2006 :-(
  */
-class LutDockerDock : public QDockWidget, public KoCanvasObserverBase
+class LutDockerDock : public QDockWidget, public KoCanvasObserverBase, public Ui_WdgLut
 {
     Q_OBJECT
 
@@ -75,10 +79,6 @@ private:
 
     KisCanvas2 *m_canvas;
 
-    KisDoubleWidget *m_exposureDoubleWidget;
-    KisDoubleWidget *m_gammaDoubleWidget;
-    SqueezedComboBox *m_cmbDisplayProfile;
-
     bool m_draggingSlider;
     bool m_updateDisplay;
 
@@ -87,3 +87,4 @@ private:
 
 
 #endif // LUT_DOCKER_DOCK_H
+

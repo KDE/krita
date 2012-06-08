@@ -104,8 +104,6 @@ LutDockerPlugin::LutDockerPlugin(QObject *parent, const QVariantList &)
             kWarning() << "OpenColorIO Error:" << exception.what() << "Cannot create the LUT docker";
         }
     }
-
-
 }
 
 LutDockerPlugin::~LutDockerPlugin()

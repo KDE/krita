@@ -194,9 +194,7 @@ void ReviewTool::paint(QPainter& painter, const KoViewConverter& converter)
                 if (! ts)
                     continue;
                 KoTextShapeData *data = ts->textShapeData();
-                // check if shape contains some of the selection, if not, skip
-                if (!data->isCursorVisible(&cursor))
-                    continue;
+
                 if (painter.hasClipping()) {
                     QRect rect = converter.documentToView(ts->boundingRect()).toRect();
                     if (painter.clipRegion().intersect(QRegion(rect)).isEmpty())

@@ -38,23 +38,7 @@
       <enum>QToolButton::InstantPopup</enum>
      </property>
      <property name="toolButtonStyle">
-      <enum>Qt::ToolButtonIconOnly</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="2">
-    <widget class="QToolButton" name="settings">
-     <property name="toolTip">
-      <string>Settings</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>25</width>
-       <height>25</height>
-      </size>
+      <enum>Qt::ToolButtonTextUnderIcon</enum>
      </property>
     </widget>
    </item>
@@ -73,7 +57,7 @@
       <enum>QToolButton::InstantPopup</enum>
      </property>
      <property name="toolButtonStyle">
-      <enum>Qt::ToolButtonIconOnly</enum>
+      <enum>Qt::ToolButtonTextUnderIcon</enum>
      </property>
      <property name="autoRaise">
       <bool>false</bool>

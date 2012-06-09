@@ -75,8 +75,10 @@ private slots:
     void insertAutoEndNote();
     /// insert a labeled endnote
     void insertLabeledEndNote(QString label);
-    /// show the configuration dialog for notes
-    void showNotesConfigureDialog();
+    /// show the configuration dialog for footnotes
+    void showFootnotesConfigureDialog();
+    /// show the configuration dialog for endnotes
+    void showEndnotesConfigureDialog();
     /// enable/disable buttons if cursor in notes' body or not
     void updateButtons();
 

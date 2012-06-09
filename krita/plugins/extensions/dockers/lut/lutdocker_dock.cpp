@@ -104,7 +104,7 @@ LutDockerDock::LutDockerDock(OCIO::ConstConfigRcPtr config)
 
     connect(m_cmbInputColorSpace, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
     connect(m_cmbDisplayDevice, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
-    connect(m_cmbLut, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
+    connect(m_cmbView, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
     connect(m_cmbComponents, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
 
     m_draggingSlider = false;

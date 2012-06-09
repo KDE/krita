@@ -208,7 +208,7 @@ void KoPageNavigator::onPageNumberEntered()
 
     KoPAPageBase* newPage = pages.value(pageNumber-1);
     if (newPage) {
-        d->view->setActivePage(newPage);
+        d->view->proxyObject->updateActivePage(newPage);
     }
     d->view->setFocus();
 }

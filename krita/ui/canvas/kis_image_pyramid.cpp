@@ -183,7 +183,9 @@ void KisImagePyramid::recalculateCache(KisPPUpdateInfoSP info)
     for (int i = FIRST_NOT_ORIGINAL_INDEX; i < m_pyramidHeight; i++) {
         src = m_pyramid[i-1].data();
         dst = m_pyramid[i].data();
-        currentSrcRect = downsampleByFactor2(currentSrcRect, src, dst);
+        if (!currentSrcRect.isEmpty()) {
+            currentSrcRect = downsampleByFactor2(currentSrcRect, src, dst);
+        }
     }
 
 #ifdef DEBUG_PYRAMID
@@ -207,6 +209,10 @@ QRect KisImagePyramid::downsampleByFactor2(const QRect& srcRect,
     qint32 srcX, srcY, srcWidth, srcHeight;
     srcRect.getRect(&srcX, &srcY, &srcWidth, &srcHeight);
     alignRectBy2(srcX, srcY, srcWidth, srcHeight);
+
+    // Nothing to do
+    if (srcWidth < 1) return QRect();
+    if (srcHeight < 1) return QRect();
 
     qint32 dstX = srcX / 2;
     qint32 dstY = srcY / 2;

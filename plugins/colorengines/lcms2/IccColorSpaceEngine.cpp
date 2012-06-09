@@ -82,35 +82,28 @@ private:
                                   LcmsColorProfileContainer *  srcProfile,
                                   quint32 dstColorSpaceType,
                                   LcmsColorProfileContainer *  dstProfile,
-                                  qint32 renderingIntent) const;
+                                  qint32 renderingIntent) const
+    {
+        KConfigGroup cfg = KGlobal::config()->group("");
+        bool bpCompensation = cfg.readEntry("useBlackPointCompensation", false);
+
+        int flags = 0;
+
+        if (bpCompensation) {
+            flags = cmsFLAGS_BLACKPOINTCOMPENSATION;
+        }
+        cmsHTRANSFORM tf = cmsCreateTransform(srcProfile->lcmsProfile(),
+                                              srcColorSpaceType,
+                                              dstProfile->lcmsProfile(),
+                                              dstColorSpaceType,
+                                              renderingIntent,
+                                              flags);
+
+        return tf;
+    }
 private:
     mutable cmsHTRANSFORM m_transform;
 };
-
-cmsHTRANSFORM KoLcmsColorConversionTransformation::createTransform(quint32 srcColorSpaceType,
-                                                                   LcmsColorProfileContainer *  srcProfile,
-                                                                   quint32 dstColorSpaceType,
-                                                                   LcmsColorProfileContainer *  dstProfile,
-                                                                   qint32 renderingIntent) const
-{
-    KConfigGroup cfg = KGlobal::config()->group("");
-    bool bpCompensation = cfg.readEntry("useBlackPointCompensation", false);
-
-    int flags = 0;
-
-    if (bpCompensation) {
-        flags = cmsFLAGS_BLACKPOINTCOMPENSATION;
-    }
-    cmsHTRANSFORM tf = cmsCreateTransform(srcProfile->lcmsProfile(),
-                                          srcColorSpaceType,
-                                          dstProfile->lcmsProfile(),
-                                          dstColorSpaceType,
-                                          renderingIntent,
-                                          flags);
-
-    return tf;
-}
-
 
 struct IccColorSpaceEngine::Private {
 };

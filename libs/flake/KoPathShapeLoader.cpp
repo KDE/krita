@@ -146,8 +146,16 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
             case 'Z': {
                 // reset curx, cury for next path
                 if (process) {
-                    curx = subpathx;
-                    cury = subpathy;
+                    // The "closepath" (Z or z) ends the current subpath and causes an automatic
+                    // straight line to be drawn from the current point to the initial point of the
+                    // current subpath. If a "closepath" is followed immediately by a "moveto", then
+                    // the "moveto" identifies the start point of the next subpath. If a "closepath"
+                    // is followed immediately by any other command, then the next subpath starts at
+                    // the same initial point as the current subpath.
+                    if (*ptr != 'm' && *ptr != 'M') {
+                        curx = subpathx;
+                        cury = subpathy;
+                    }
                 }
                 svgClosePath();
                 break;

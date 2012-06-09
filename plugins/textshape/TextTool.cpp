@@ -2005,10 +2005,9 @@ void TextTool::repaintSelection()
         if (textShape == 0) // when the shape is being deleted its no longer a TextShape but a KoShape
             continue;
 
-        if (textShape->textShapeData()->isCursorVisible(&cursor)) {
-            //Q_ASSERT(!shapes.contains(textShape));
-            if (!shapes.contains(textShape))
-                shapes.append(textShape);
+        //Q_ASSERT(!shapes.contains(textShape));
+        if (!shapes.contains(textShape)) {
+            shapes.append(textShape);
         }
     }
 

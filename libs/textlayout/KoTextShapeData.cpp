@@ -171,15 +171,6 @@ KoText::Direction KoTextShapeData::pageDirection() const
     return d->direction;
 }
 
-bool KoTextShapeData::isCursorVisible(QTextCursor *cursor) const
-{
-    Q_UNUSED(cursor);
-#ifdef __GNUC__
-    #warning FIXME: KoTextShapeData::isCursorVisible returns always true, why do we still need it?
-#endif
-    return true;
-}
-
 void KoTextShapeData::setRootArea(KoTextLayoutRootArea *rootArea)
 {
     Q_D(KoTextShapeData);

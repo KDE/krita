@@ -38,7 +38,7 @@ public:
     KoPointedAt();
     KoPointedAt(KoPointedAt *other);
 
-    void fillInBookmark(QTextCursor cursor, KoInlineTextObjectManager *inlineManager);
+    void fillInLinks(QTextCursor cursor, KoInlineTextObjectManager *inlineManager);
 
     enum TableHit {
           None

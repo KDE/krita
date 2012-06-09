@@ -200,7 +200,6 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
             QRectF lineRect = line.naturalTextRect();
             if (point.y() > line.y() + line.height()) {
                 pointedAt.position = block.position() + line.textStart() + line.textLength();
-                pointedAt.fillInBookmark(QTextCursor(block), m_documentLayout->inlineTextObjectManager());
                 continue;
             }
             if (accuracy == Qt::ExactHit && point.y() < line.y()) { // between lines
@@ -214,7 +213,6 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
                 // totally right of RTL text means the position is the start of the text.
                 //TODO how about the other side?
                 pointedAt.position = block.position() + line.textStart();
-                pointedAt.fillInBookmark(QTextCursor(block), m_documentLayout->inlineTextObjectManager());
                 return pointedAt;
             }
             if (basicallyFound && point.y() < lineRect.y()) {
@@ -225,11 +223,12 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
                 // right of line
                 basicallyFound = true;
                 pointedAt.position = block.position() + line.textStart() + line.textLength();
-                pointedAt.fillInBookmark(QTextCursor(block), m_documentLayout->inlineTextObjectManager());
                 continue; // don't break as next line may be on same baseline
             }
             pointedAt.position = block.position() + line.xToCursor(point.x());
-            pointedAt.fillInBookmark(QTextCursor(block), m_documentLayout->inlineTextObjectManager());
+            QTextCursor tmpCursor(block);
+            tmpCursor.setPosition(line.xToCursor(point.x(), QTextLine::CursorOnCharacter) + 1);
+            pointedAt.fillInLinks(tmpCursor, m_documentLayout->inlineTextObjectManager());
             return pointedAt;
         }
     }

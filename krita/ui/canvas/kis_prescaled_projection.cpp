@@ -141,8 +141,6 @@ void KisPrescaledProjection::initBackend()
 
 void KisPrescaledProjection::updateSettings()
 {
-
-
     if (m_d->projectionBackend == 0) {
         initBackend();
     }

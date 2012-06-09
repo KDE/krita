@@ -54,6 +54,7 @@
 #include "kis_selection.h"
 #include "kis_selection_component.h"
 #include "flake/kis_shape_selection.h"
+#include "kis_image_config.h"
 
 #include "opengl/kis_opengl_canvas2.h"
 #include "opengl/kis_opengl_image_textures.h"
@@ -191,7 +192,7 @@ bool KisCanvas2::snapToGrid() const
 void KisCanvas2::pan(QPoint shift)
 {
     KoCanvasControllerWidget* controller =
-        dynamic_cast<KoCanvasControllerWidget*>(canvasController());
+            dynamic_cast<KoCanvasControllerWidget*>(canvasController());
     controller->pan(shift);
     updateCanvas();
 }
@@ -205,7 +206,7 @@ void KisCanvas2::mirrorCanvas(bool enable)
 
 qreal KisCanvas2::rotationAngle() const
 {
-	return m_d->coordinatesConverter->rotationAngle();
+    return m_d->coordinatesConverter->rotationAngle();
 }
 
 void KisCanvas2::rotateCanvas(qreal angle, bool updateOffset)
@@ -432,8 +433,8 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
     KisConfig cfg;
 
     if (   (useOpenGL != m_d->currentCanvasIsOpenGL)
-        || (   m_d->currentCanvasIsOpenGL
-               && (cfg.useOpenGLShaders() != m_d->currentCanvasUsesOpenGLShaders))) {
+           || (   m_d->currentCanvasIsOpenGL
+                  && (cfg.useOpenGLShaders() != m_d->currentCanvasUsesOpenGLShaders))) {
 
         disconnectCurrentImage();
         createCanvas(useOpenGL);
@@ -463,12 +464,13 @@ void KisCanvas2::startResizingImage(qint32 w, qint32 h)
     if (m_d->currentCanvasIsOpenGL) {
         startUpdateCanvasProjection(imageBounds);
     } else {
-        // TODO: make configurable from KisImageConfig
-        const int patchSize = 512;
-        for (int y = 0; y < h; y += patchSize) {
-            for (int x = 0; x < w; x += patchSize) {
-                QRect patchRect(x, y, patchSize, patchSize);
+        KisImageConfig imageConfig;
+        int patchWidth = imageConfig.updatePatchWidth();
+        int patchHeight = imageConfig.updatePatchHeight();
 
+        for (int y = 0; y < h; y += patchHeight) {
+            for (int x = 0; x < w; x += patchWidth) {
+                QRect patchRect(x, y, patchWidth, patchHeight);
                 startUpdateCanvasProjection(patchRect);
             }
         }
@@ -534,7 +536,7 @@ void KisCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
         m_d->prescaledProjection->recalculateCache(info);
 
         QRect vRect = m_d->coordinatesConverter->
-            viewportToWidget(info->dirtyViewportRect()).toAlignedRect();
+                viewportToWidget(info->dirtyViewportRect()).toAlignedRect();
 
         if (!vRect.isEmpty()) {
             m_d->canvasWidget->widget()->update(vRect);
@@ -721,7 +723,7 @@ KoFavoriteResourceManager* KisCanvas2::favoriteResourceManager()
 bool KisCanvas2::handlePopupPaletteIsVisible()
 {
     if (favoriteResourceManager()
-        && favoriteResourceManager()->isPopupPaletteVisible()) {
+            && favoriteResourceManager()->isPopupPaletteVisible()) {
 
         favoriteResourceManager()->slotShowPopupPalette();
         return true;

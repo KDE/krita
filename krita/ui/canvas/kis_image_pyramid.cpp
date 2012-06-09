@@ -153,12 +153,19 @@ void KisImagePyramid::updateCache(const QRect &dirtyImageRect)
 void KisImagePyramid::retrieveImageData(const QRect &rect)
 {
     KisPaintDeviceSP originalProjection = m_originalImage->projection();
+    quint32 numPixels = rect.width() * rect.height();
 
-    KisPainter gc(m_pyramid[ORIGINAL_INDEX]);
-    gc.setCompositeOp(m_monitorColorSpace->compositeOp(COMPOSITE_COPY));
-    gc.setOpacity(OPACITY_OPAQUE_U8);
-    gc.bitBlt(rect.topLeft(), originalProjection, rect);
-    gc.end();
+    quint8 *originalBytes = originalProjection->colorSpace()->allocPixelBuffer(numPixels);
+    originalProjection->readBytes(originalBytes, rect);
+
+    quint8 *dstBytes = m_monitorColorSpace->allocPixelBuffer(numPixels);
+
+    originalProjection->colorSpace()->convertPixelsTo(originalBytes, dstBytes, m_monitorColorSpace, numPixels, m_renderingIntent);
+    m_pyramid[ORIGINAL_INDEX]->writeBytes(dstBytes, rect);
+
+    delete[] originalBytes;
+    delete[] dstBytes;
+
 }
 
 void KisImagePyramid::recalculateCache(KisPPUpdateInfoSP info)

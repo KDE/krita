@@ -1767,9 +1767,12 @@ void TextTool::ensureCursorVisible(bool moveView)
 
     const int position = textEditor->position();
 
+    bool upToDate;
+    QRectF cRect = caretRect(textEditor->cursor(), &upToDate);
+
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
     Q_ASSERT(lay);
-    KoTextLayoutRootArea *rootArea = lay->rootAreaForPosition(position);
+    KoTextLayoutRootArea *rootArea = lay->rootAreaForPoint(cRect.center());
     if (rootArea && rootArea->associatedShape() && m_textShapeData->rootArea() != rootArea) {
         // If we have changed root area we need to update m_textShape and m_textShapeData
         m_textShape = static_cast<TextShape*>(rootArea->associatedShape());
@@ -1784,14 +1787,14 @@ void TextTool::ensureCursorVisible(bool moveView)
         return;
     }
 
-    QRectF cursorPos = caretRect(textEditor->cursor());
-    if (! cursorPos.isValid()) { // paragraph is not yet layouted.
+    if (! upToDate) { // paragraph is not yet layouted.
         // The number one usecase for this is when the user pressed enter.
         // try to do it on next caret blink
         m_delayedEnsureVisible = true;
+        return; // we shouldn't move to an obsolete position
     }
-    cursorPos.moveTop(cursorPos.top() - m_textShapeData->documentOffset());
-    canvas()->ensureVisible(m_textShape->absoluteTransformation(0).mapRect(cursorPos));
+    cRect.moveTop(cRect.top() - m_textShapeData->documentOffset());
+    canvas()->ensureVisible(m_textShape->absoluteTransformation(0).mapRect(cRect));
 }
 
 void TextTool::keyReleaseEvent(QKeyEvent *event)
@@ -1970,7 +1973,8 @@ void TextTool::repaintCaret()
 
     ensureCursorVisible(false); // ensures the various vars are updated
 
-    QRectF repaintRect = caretRect(textEditor->cursor());
+    bool upToDate;
+    QRectF repaintRect = caretRect(textEditor->cursor(), &upToDate);
     repaintRect.moveTop(repaintRect.top() - m_textShapeData->documentOffset());
     if (repaintRect.isValid()) {
         repaintRect = m_textShape->absoluteTransformation(0).mapRect(repaintRect);
@@ -2019,15 +2023,21 @@ void TextTool::repaintSelection()
     }
 }
 
-QRectF TextTool::caretRect(QTextCursor *cursor) const
+QRectF TextTool::caretRect(QTextCursor *cursor, bool *upToDate) const
 {
     QTextCursor tmpCursor(*cursor);
     tmpCursor.setPosition(cursor->position()); // looses the anchor
 
     QRectF rect = textRect(tmpCursor);
     if (rect.size() == QSizeF(0,0)) {
+        if (upToDate) {
+            *upToDate = false;
+        }
         rect = m_lastImMicroFocus; // prevent block changed but layout not done
     } else {
+        if (upToDate) {
+            *upToDate = true;
+        }
         m_lastImMicroFocus = rect;
     }
     return rect;

@@ -71,18 +71,6 @@ public:
     void alignSourceRect(QRect& rect, qreal scale);
 
 private:
-    QVector<KisPaintDeviceSP> m_pyramid;
-    KisImageWSP  m_originalImage;
-    const KoColorProfile* m_monitorProfile;
-    const KoColorSpace* m_monitorColorSpace;
-    KoColorConversionTransformation::Intent m_renderingIntent;
-
-    /**
-     * Number of planes inside pyramid
-     */
-    qint32 m_pyramidHeight;
-
-private:
     void retrieveImageData(const QRect &rect);
     void rebuildPyramid();
     void clearPyramid();
@@ -116,6 +104,20 @@ private:
      */
     QImage convertToQImageFast(KisPaintDeviceSP paintDevice,
                                const QRect& unscaledRect);
+
+private:
+    QVector<KisPaintDeviceSP> m_pyramid;
+    KisImageWSP  m_originalImage;
+    const KoColorProfile* m_monitorProfile;
+    const KoColorSpace* m_monitorColorSpace;
+    KoColorConversionTransformation::Intent m_renderingIntent;
+
+    /**
+     * Number of planes inside pyramid
+     */
+    qint32 m_pyramidHeight;
+
+
 };
 
 #endif /* __KIS_IMAGE_PYRAMID */

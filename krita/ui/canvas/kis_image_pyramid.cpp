@@ -25,6 +25,7 @@
 #include "kis_datamanager.h"
 
 #include "kis_debug.h"
+#include "kis_config.h"
 
 //#define DEBUG_PYRAMID
 
@@ -104,16 +105,18 @@ void KisImagePyramid::setMonitorProfile(const KoColorProfile* monitorProfile)
      */
     m_monitorColorSpace = KoColorSpaceRegistry::instance()->rgb8(monitorProfile);
 
-    // Not used now
-    m_renderingIntent = KoColorConversionTransformation::IntentPerceptual;
+    KisConfig cfg;
+    m_renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();
+
     rebuildPyramid();
 }
 
 void KisImagePyramid::rebuildPyramid()
 {
     m_pyramid.clear();
-    for (qint32 i = 0; i < m_pyramidHeight; i++)
+    for (qint32 i = 0; i < m_pyramidHeight; i++) {
         m_pyramid.append(new KisPaintDevice(m_monitorColorSpace));
+    }
 }
 
 void KisImagePyramid::clearPyramid()

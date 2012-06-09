@@ -72,7 +72,6 @@ public:
 
 private:
     QVector<KisPaintDeviceSP> m_pyramid;
-    //QThreadPool m_pyramidUpdater;
     KisImageWSP  m_originalImage;
     const KoColorProfile* m_monitorProfile;
     const KoColorSpace* m_monitorColorSpace;

@@ -58,7 +58,7 @@ public:
      * @param image The image
      * @param monitorProfile The profile of the display device
      */
-    static KisOpenGLImageTexturesSP getImageTextures(KisImageWSP image, KoColorProfile *monitorProfile);
+    static KisOpenGLImageTexturesSP getImageTextures(KisImageWSP image, KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent);
 
     /**
      * Default constructor.
@@ -74,7 +74,7 @@ public:
      * Set the color profile of the display device.
      * @param profile The color profile of the display device
      */
-    void setMonitorProfile(KoColorProfile *profile);
+    void setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent);
 
     /**
      * Set the exposure level used to display high dynamic range images. Typical values
@@ -160,7 +160,8 @@ private:
 private:
     KisImageWSP m_image;
     QRect m_storedImageBounds;
-    KoColorProfile *m_monitorProfile;
+    const KoColorProfile *m_monitorProfile;
+    KoColorConversionTransformation::Intent m_renderingIntent;
     float m_exposure;
     float m_gamma;
     GLuint m_backgroundTexture;

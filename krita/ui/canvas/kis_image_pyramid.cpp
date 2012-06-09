@@ -96,7 +96,8 @@ KisImagePyramid::~KisImagePyramid()
     setImage(0);
 }
 
-void KisImagePyramid::setMonitorProfile(const KoColorProfile* monitorProfile)
+void KisImagePyramid::setMonitorProfile(const KoColorProfile* monitorProfile,
+                                        KoColorConversionTransformation::Intent renderingIntent)
 {
     m_monitorProfile = monitorProfile;
     /**
@@ -104,9 +105,7 @@ void KisImagePyramid::setMonitorProfile(const KoColorProfile* monitorProfile)
      * in optimized function downsamplePixels()
      */
     m_monitorColorSpace = KoColorSpaceRegistry::instance()->rgb8(monitorProfile);
-
-    KisConfig cfg;
-    m_renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();
+    m_renderingIntent = renderingIntent;
 
     rebuildPyramid();
 }
@@ -171,7 +170,6 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
 
     delete[] originalBytes;
     delete[] dstBytes;
-
 }
 
 void KisImagePyramid::recalculateCache(KisPPUpdateInfoSP info)

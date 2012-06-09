@@ -38,7 +38,7 @@ public:
 
     void setImage(KisImageWSP newImage);
     void setImageSize(qint32 w, qint32 h);
-    void setMonitorProfile(const KoColorProfile* monitorProfile);
+    void setMonitorProfile(const KoColorProfile* monitorProfile, KoColorConversionTransformation::Intent renderingIntent);
     void updateCache(const QRect &dirtyImageRect);
     void recalculateCache(KisPPUpdateInfoSP info);
 

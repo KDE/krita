@@ -38,6 +38,8 @@ class KisCoordinatesConverter;
 #include <kis_types.h>
 #include "kis_ui_types.h"
 
+
+
 /**
  * KisPrescaledProjection is responsible for keeping around a
  * prescaled QImage representation that is always suitable for
@@ -110,7 +112,7 @@ public slots:
     /**
      * Set the current monitor profile
      */
-    void setMonitorProfile(const KoColorProfile * profile);
+    void setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent);
 
     /**
      * Called whenever the zoom level changes or another chunk of the
@@ -125,12 +127,6 @@ private:
 
     KisPrescaledProjection(const KisPrescaledProjection &);
     KisPrescaledProjection operator=(const KisPrescaledProjection &);
-
-    /**
-     * Called from updateSettings to set up chosen backend:
-     * now there is only one option left: KisImagePyramid
-     */
-    void initBackend();
 
     void updateViewportSize();
 

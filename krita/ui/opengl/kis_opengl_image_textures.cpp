@@ -97,7 +97,7 @@ bool KisOpenGLImageTextures::imageCanShareTextures(KisImageWSP image)
     return !image->colorSpace()->hasHighDynamicRange() || imageCanUseHDRExposureProgram(image);
 }
 
-KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP image, KoColorProfile *monitorProfile)
+KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP image, KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent)
 {
     KisOpenGL::makeContextCurrent();
     createHDRExposureProgramIfCan();
@@ -107,7 +107,7 @@ KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP im
 
         if (it != imageTexturesMap.end()) {
             KisOpenGLImageTexturesSP textures = it.value();
-            textures->setMonitorProfile(monitorProfile);
+            textures->setMonitorProfile(monitorProfile, renderingIntent);
 
             return textures;
         } else {
@@ -293,12 +293,19 @@ void KisOpenGLImageTextures::slotImageSizeChanged(qint32 /*w*/, qint32 /*h*/)
     createImageTextureTiles();
 }
 
-void KisOpenGLImageTextures::setMonitorProfile(KoColorProfile *monitorProfile)
+void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent)
 {
-    if (monitorProfile != m_monitorProfile) {
+    if (monitorProfile != m_monitorProfile ||
+        renderingIntent != m_renderingIntent) {
+
         m_monitorProfile = monitorProfile;
-        KisOpenGLUpdateInfoSP info = updateCache(m_image->bounds());
-        recalculateCache(info);
+        m_renderingIntent = renderingIntent;
+
+#ifdef __GNUC__
+#warning "FIXME: m_renderingIntent is currently unused"
+#else
+#pragma WARNING( "FIXME: m_renderingIntent is currently unused") { )
+#endif
     }
 }
 

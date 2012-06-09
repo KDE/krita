@@ -21,7 +21,7 @@
 
 #include <QImage>
 #include <QVector>
-#include <QThreadPool>
+#include <QThreadStorage>
 
 #include <KoColorSpace.h>
 #include <kis_image.h>
@@ -116,7 +116,6 @@ private:
      * Number of planes inside pyramid
      */
     qint32 m_pyramidHeight;
-
 
 };
 

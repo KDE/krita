@@ -152,6 +152,9 @@ void KisImagePyramid::updateCache(const QRect &dirtyImageRect)
 
 void KisImagePyramid::retrieveImageData(const QRect &rect)
 {
+    // XXX: use QThreadStorage to cache the two patches (512x512) of pixels. Note
+    // that when we do that, we need to reset that cache when the projection's
+    // colorspace changes.
     KisPaintDeviceSP originalProjection = m_originalImage->projection();
     quint32 numPixels = rect.width() * rect.height();
 

@@ -85,9 +85,9 @@ inline void alignRectBy2(qint32 &x, qint32 &y, qint32 &w, qint32 &h)
 /************* class KisImagePyramid ********************************/
 
 KisImagePyramid::KisImagePyramid(qint32 pyramidHeight)
-        : m_monitorProfile(0),
-        m_monitorColorSpace(0),
-        m_pyramidHeight(pyramidHeight)
+        : m_monitorProfile(0)
+        , m_monitorColorSpace(0)
+        , m_pyramidHeight(pyramidHeight)
 {
 }
 
@@ -163,7 +163,10 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
 
     quint8 *dstBytes = m_monitorColorSpace->allocPixelBuffer(numPixels);
 
+
     originalProjection->colorSpace()->convertPixelsTo(originalBytes, dstBytes, m_monitorColorSpace, numPixels, m_renderingIntent);
+
+
     m_pyramid[ORIGINAL_INDEX]->writeBytes(dstBytes, rect);
 
     delete[] originalBytes;

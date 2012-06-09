@@ -82,9 +82,8 @@ void copyQImage(qint32 deltaX, qint32 deltaY, QImage* dstImage, const QImage& sr
 
 struct KisPrescaledProjection::Private {
     Private()
-            : viewportSize(0, 0)
-            , monitorProfile(0)
-            , projectionBackend(0) {
+        : viewportSize(0, 0)
+        , projectionBackend(0) {
     }
 
     QImage prescaledQImage;
@@ -94,7 +93,6 @@ struct KisPrescaledProjection::Private {
     QSize viewportSize;
     KisImageWSP image;
     KisCoordinatesConverter *coordinatesConverter;
-    const KoColorProfile* monitorProfile;
     KisProjectionBackend* projectionBackend;
 };
 
@@ -297,7 +295,6 @@ QRect KisPrescaledProjection::preScale(const QRect & rc)
 
 void KisPrescaledProjection::setMonitorProfile(const KoColorProfile * profile)
 {
-    m_d->monitorProfile = profile;
     m_d->projectionBackend->setMonitorProfile(profile);
 }
 

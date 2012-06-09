@@ -174,15 +174,15 @@ void KisImagePyramid::recalculateCache(KisPPUpdateInfoSP info)
     }
 
 #ifdef DEBUG_PYRAMID
-    QImage image = m_pyramid[ORIGINAL_INDEX]->convertToQImage(m_monitorProfile);
+    QImage image = m_pyramid[ORIGINAL_INDEX]->convertToQImage(m_monitorProfile, m_renderingIntent);
     image.save("./PYRAMID_BASE.png");
 
-    image = m_pyramid[1]->convertToQImage(m_monitorProfile);
+    image = m_pyramid[1]->convertToQImage(m_monitorProfile, m_renderingIntent);
     image.save("./LEVEL1.png");
 
-    image = m_pyramid[2]->convertToQImage(m_monitorProfile);
+    image = m_pyramid[2]->convertToQImage(m_monitorProfile, m_renderingIntent);
     image.save("./LEVEL2.png");
-    image = m_pyramid[3]->convertToQImage(m_monitorProfile);
+    image = m_pyramid[3]->convertToQImage(m_monitorProfile, m_renderingIntent);
     image.save("./LEVEL3.png");
 #endif
 }

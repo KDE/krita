@@ -65,10 +65,10 @@ KisPixelSelection::~KisPixelSelection()
     delete m_d;
 }
 
-KisPaintDeviceSP KisPixelSelection::createThumbnailDevice(qint32 w, qint32 h, const KisSelection * selection, QRect rect) const
+KisPaintDeviceSP KisPixelSelection::createThumbnailDevice(qint32 w, qint32 h, QRect rect) const
 {
     KisPaintDeviceSP dev =
-        KisPaintDevice::createThumbnailDevice(w, h, selection, rect);
+        KisPaintDevice::createThumbnailDevice(w, h, rect);
 
     QRect bounds = dev->exactBounds();
     KisHLineIteratorSP it = dev->createHLineIteratorNG(bounds.x(), bounds.y(), bounds.width());

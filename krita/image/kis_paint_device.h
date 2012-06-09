@@ -431,7 +431,7 @@ public:
      * case it's up to the color strategy to choose a profile (most
      * like sRGB).
      */
-    virtual QImage convertToQImage(const KoColorProfile *dstProfile, qint32 x, qint32 y, qint32 w, qint32 h) const;
+    virtual QImage convertToQImage(const KoColorProfile *dstProfile, qint32 x, qint32 y, qint32 w, qint32 h, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
 
     /**
      * Create an RGBA QImage from a rectangle in the paint device. The
@@ -441,7 +441,7 @@ public:
      * case it's up to the color strategy to choose a profile (most
      * like sRGB).
      */
-    virtual QImage convertToQImage(const KoColorProfile *  dstProfile) const;
+    virtual QImage convertToQImage(const KoColorProfile *  dstProfile, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
 
     /**
      * Creates a paint device thumbnail of the paint device, retaining
@@ -454,7 +454,7 @@ public:
      * @param rect: only this rect will be used for the thumbnail
      *
      */
-    virtual KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, const KisSelection *selection = 0, QRect rect = QRect()) const;
+    virtual KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, QRect rect = QRect()) const;
 
     /**
      * Creates a thumbnail of the paint device, retaining the aspect ratio.
@@ -463,15 +463,14 @@ public:
      *
      * @param maxw: maximum width
      * @param maxh: maximum height
-     * @param selection: if present, only the selected pixels will be added to the thumbnail. May be 0
      * @param rect: only this rect will be used for the thumbnail
      */
-    virtual QImage createThumbnail(qint32 maxw, qint32 maxh, const KisSelection *selection, QRect rect = QRect());
+    virtual QImage createThumbnail(qint32 maxw, qint32 maxh, QRect rect, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
 
     /**
      * Cached version of createThumbnail(qint32 maxw, qint32 maxh, const KisSelection *selection, QRect rect)
      */
-    virtual QImage createThumbnail(qint32 maxw, qint32 maxh);
+    virtual QImage createThumbnail(qint32 maxw, qint32 maxh, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
 
     /**
      * Fill c and opacity with the values found at x and y.

@@ -47,7 +47,7 @@ public:
 
     /**
      * Render the projection onto a QImage.
-     * Color profiling accurs here
+     * Color profiling occurs here
      */
     QImage convertToQImage(qreal scale,
                            const QRect& unscaledRect,

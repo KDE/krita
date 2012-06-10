@@ -73,12 +73,17 @@ KoShape *TextShapeFactory::createDefaultShape(KoDocumentResourceManager *documen
     TextShape *text = new TextShape(manager);
     if (documentResources) {
         KoTextDocument document(text->textShapeData()->document());
-        document.setUndoStack(documentResources->undoStack());
 
         if (documentResources->hasResource(KoText::StyleManager)) {
             KoStyleManager *styleManager = documentResources->resource(KoText::StyleManager).value<KoStyleManager*>();
             document.setStyleManager(styleManager);
         }
+
+        // this is needed so the shape can reinitialize itself with the stylemanager
+        text->textShapeData()->setDocument(text->textShapeData()->document(), true);
+
+        document.setUndoStack(documentResources->undoStack());
+
         if (documentResources->hasResource(KoText::PageProvider)) {
             KoPageProvider *pp = static_cast<KoPageProvider *>(documentResources->resource(KoText::PageProvider).value<void*>());
             text->setPageProvider(pp);
@@ -89,9 +94,6 @@ KoShape *TextShapeFactory::createDefaultShape(KoDocumentResourceManager *documen
         }
 
         text->setImageCollection(documentResources->imageCollection());
-
-        // this is needed so the shape can reinitialize itself with the stylemanager
-        text->textShapeData()->setDocument(text->textShapeData()->document(), true);
     }
 
     return text;

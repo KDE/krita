@@ -27,7 +27,8 @@
 KoPABackgroundToolFactory::KoPABackgroundToolFactory()
     : KoToolFactoryBase("KoPABackgroundTool")
 {
-    setToolTip( i18n( "Background editing tool" ) );
+    // TODO: use "Page" or "Slide" instead of "Document"
+    setToolTip(i18n("Document background"));
     setToolType( mainToolType() );
     setActivationShapeId("flake/always");
     setIcon( "backgroundtool" );

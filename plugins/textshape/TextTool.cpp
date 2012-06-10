@@ -826,34 +826,35 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
 
 void TextTool::updateSelectedShape(const QPointF &point)
 {
-    if (m_textShape && !m_textShape->boundingRect().contains(point)) {
-        QRectF area(point, QSizeF(1, 1));
-        if (m_textEditor.data()->hasSelection())
-            repaintSelection();
-        else
-            repaintCaret();
-        foreach (KoShape *shape, canvas()->shapeManager()->shapesAt(area, true)) {
-            if (shape->isContentProtected())
-                continue;
-            TextShape *textShape = dynamic_cast<TextShape*>(shape);
-            if (textShape) {
-                KoTextShapeData *d = static_cast<KoTextShapeData*>(textShape->userData());
-                const bool sameDocument = m_textShapeData ? d->document() == m_textShapeData->document() : false;
+    QRectF area(point, QSizeF(1, 1));
+    if (m_textEditor.data()->hasSelection())
+        repaintSelection();
+    else
+        repaintCaret();
+    QList<KoShape*> sortedShapes = canvas()->shapeManager()->shapesAt(area, true);
+    qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
+    for (int count = sortedShapes.count() - 1; count >= 0; count--) {
+        KoShape *shape = sortedShapes.at(count);
+
+        if (shape->isContentProtected())
+            continue;
+        TextShape *textShape = dynamic_cast<TextShape*>(shape);
+        if (textShape) {
+            if (textShape != m_textShape) {
                 m_textShape = textShape;
-                if (sameDocument)
-                    break; // stop looking.
+
+                setShapeData(static_cast<KoTextShapeData*>(m_textShape->userData()));
+
+                // This is how we inform the rulers of the active range
+                // For now we will not consider table cells, but just give the shape dimensions
+                QVariant v;
+                QRectF rect(QPoint(), m_textShape->size());
+                rect = m_textShape->absoluteTransformation(0).mapRect(rect);
+                v.setValue(rect);
+                canvas()->resourceManager()->setResource(KoCanvasResourceManager::ActiveRange, v);
             }
+            return;
         }
-
-        setShapeData(static_cast<KoTextShapeData*>(m_textShape->userData()));
-
-        // This is how we inform the rulers of the active range
-        // For now we will not consider table cells, but just give the shape dimensions
-        QVariant v;
-        QRectF rect(QPoint(), m_textShape->size());
-        rect = m_textShape->absoluteTransformation(0).mapRect(rect);
-        v.setValue(rect);
-        canvas()->resourceManager()->setResource(KoCanvasResourceManager::ActiveRange, v);
     }
 }
 
@@ -881,11 +882,6 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
             }
         }
     }
-
-    if (m_textEditor.data()->hasSelection())
-        repaintSelection(); // will erase selection
-    else
-        repaintCaret();
 
     updateSelectedShape(event->point);
 

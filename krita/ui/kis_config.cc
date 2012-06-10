@@ -46,6 +46,9 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_global.h"
 
+#include "config-ocio.h"
+
+
 namespace
 {
 const double IMAGE_DEFAULT_RESOLUTION = 100.0; // dpi
@@ -849,7 +852,11 @@ void KisConfig::setExportConfiguration(const QString &filterId, const KisPropert
 
 bool KisConfig::useOcio()
 {
+#ifdef HAVE_OCIO
     return m_cfg.readEntry("Krita/Ocio/UseOcio", true);
+#else
+    return false;
+#endif
 }
 
 void KisConfig::setUseOcio(bool useOCIO)

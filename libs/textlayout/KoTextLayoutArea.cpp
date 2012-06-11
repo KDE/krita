@@ -1226,7 +1226,10 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         runAroundHelper.setLine(this, line);
         runAroundHelper.setObstructions(documentLayout()->currentObstructions());
         QRectF anchoringRect = m_blockRects.last();
-//        qDebug() << anchoringRect.top() << m_anchoringParagraphTop;
+        anchoringRect.setTop(m_anchoringParagraphContentTop);
+        documentLayout()->setAnchoringParagraphContentRect(anchoringRect);
+        anchoringRect.setLeft(left());
+        anchoringRect.setWidth(right() - left());
         anchoringRect.setTop(m_anchoringParagraphTop);
         documentLayout()->setAnchoringParagraphRect(anchoringRect);
         documentLayout()->setAnchoringLayoutEnvironmentRect(layoutEnvironmentRect());
@@ -1974,6 +1977,7 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
             if (!m_blockRects.isEmpty()) {
                 m_blockRects.last().setBottom(divider);
             }
+            m_anchoringParagraphTop = m_y;
             m_y += spacing;
             m_blockRects.append(QRectF(x, divider, width, 1.0));
         } else {
@@ -1987,6 +1991,7 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
             if (!m_blockRects.isEmpty()) {
                 m_blockRects.last().setBottom(m_y);
             }
+            m_anchoringParagraphTop = m_y;
             m_y += spacing;
             if (paddingExpandsBorders) {
                 m_blockRects.append(QRectF(x - format.doubleProperty(KoParagraphStyle::LeftPadding), m_y,
@@ -2013,6 +2018,7 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
         if (!m_blockRects.isEmpty()) {
             m_blockRects.last().setBottom(m_y);
         }
+        m_anchoringParagraphTop = m_y;
         m_y += spacing;
         m_blockRects.append(QRectF(x, m_y, width, 1.0));
     }
@@ -2028,5 +2034,5 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
     }
     m_prevBorder = blockData->border();
     m_prevBorderPadding = format.doubleProperty(KoParagraphStyle::BottomPadding);
-    m_anchoringParagraphTop = divider;
+    m_anchoringParagraphContentTop = m_y;
 }

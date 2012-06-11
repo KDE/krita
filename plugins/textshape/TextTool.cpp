@@ -1767,9 +1767,12 @@ void TextTool::ensureCursorVisible(bool moveView)
 
     const int position = textEditor->position();
 
+    bool upToDate;
+    QRectF cRect = caretRect(textEditor->cursor(), &upToDate);
+
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
     Q_ASSERT(lay);
-    KoTextLayoutRootArea *rootArea = lay->rootAreaForPosition(position);
+    KoTextLayoutRootArea *rootArea = lay->rootAreaForPoint(cRect.center());
     if (rootArea && rootArea->associatedShape() && m_textShapeData->rootArea() != rootArea) {
         // If we have changed root area we need to update m_textShape and m_textShapeData
         m_textShape = static_cast<TextShape*>(rootArea->associatedShape());
@@ -1784,14 +1787,14 @@ void TextTool::ensureCursorVisible(bool moveView)
         return;
     }
 
-    QRectF cursorPos = caretRect(textEditor->cursor());
-    if (! cursorPos.isValid()) { // paragraph is not yet layouted.
+    if (! upToDate) { // paragraph is not yet layouted.
         // The number one usecase for this is when the user pressed enter.
         // try to do it on next caret blink
         m_delayedEnsureVisible = true;
+        return; // we shouldn't move to an obsolete position
     }
-    cursorPos.moveTop(cursorPos.top() - m_textShapeData->documentOffset());
-    canvas()->ensureVisible(m_textShape->absoluteTransformation(0).mapRect(cursorPos));
+    cRect.moveTop(cRect.top() - m_textShapeData->documentOffset());
+    canvas()->ensureVisible(m_textShape->absoluteTransformation(0).mapRect(cRect));
 }
 
 void TextTool::keyReleaseEvent(QKeyEvent *event)
@@ -1960,38 +1963,30 @@ void TextTool::repaintCaret()
 
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
     Q_ASSERT(lay);
-    KoTextLayoutRootArea *rootArea = lay->rootAreaForPosition(textEditor->position());
 
-    if (rootArea) {
-        // If we have changed root area we need to update m_textShape and m_textShapeData
-        if (m_delayedEnsureVisible) {
-            m_delayedEnsureVisible = false;
-            ensureCursorVisible();
-            return;
-        }
+    // If we have changed root area we need to update m_textShape and m_textShapeData
+    if (m_delayedEnsureVisible) {
+        m_delayedEnsureVisible = false;
+        ensureCursorVisible();
+        return;
+    }
 
-        ensureCursorVisible(false); // ensures the various vars are updated
+    ensureCursorVisible(false); // ensures the various vars are updated
 
-        TextShape *textShape = static_cast<TextShape*>(rootArea->associatedShape());
-        if (!textShape)
-            return;
-        if (!textShape->textShapeData())
-            return;
+    bool upToDate;
+    QRectF repaintRect = caretRect(textEditor->cursor(), &upToDate);
+    repaintRect.moveTop(repaintRect.top() - m_textShapeData->documentOffset());
+    if (repaintRect.isValid()) {
+        repaintRect = m_textShape->absoluteTransformation(0).mapRect(repaintRect);
 
-        QRectF repaintRect = caretRect(textEditor->cursor());
-        repaintRect.moveTop(repaintRect.top() - textShape->textShapeData()->documentOffset());
-        if (repaintRect.isValid()) {
-            repaintRect = textShape->absoluteTransformation(0).mapRect(repaintRect);
+        // Make sure there is enough space to show an icon
+        QRectF iconSize = canvas()->viewConverter()->viewToDocument(QRect(0,0,16, 16));
+        repaintRect.setX(repaintRect.x() - iconSize.width() / 2);
+        repaintRect.setWidth(iconSize.width());
+        repaintRect.moveTop(repaintRect.y() - iconSize.height() / 2);
+        repaintRect.moveBottom(repaintRect.bottom() + iconSize.height() / 2);
 
-            // Make sure there is enough space to show an icon
-            QRectF iconSize = canvas()->viewConverter()->viewToDocument(QRect(0,0,16, 16));
-            repaintRect.setX(repaintRect.x() - iconSize.width() / 2);
-            repaintRect.setWidth(iconSize.width());
-            repaintRect.moveTop(repaintRect.y() - iconSize.height() / 2);
-            repaintRect.moveBottom(repaintRect.bottom() + iconSize.height() / 2);
-
-            canvas()->updateCanvas(repaintRect);
-        }
+        canvas()->updateCanvas(repaintRect);
     }
 }
 
@@ -2010,10 +2005,9 @@ void TextTool::repaintSelection()
         if (textShape == 0) // when the shape is being deleted its no longer a TextShape but a KoShape
             continue;
 
-        if (textShape->textShapeData()->isCursorVisible(&cursor)) {
-            //Q_ASSERT(!shapes.contains(textShape));
-            if (!shapes.contains(textShape))
-                shapes.append(textShape);
+        //Q_ASSERT(!shapes.contains(textShape));
+        if (!shapes.contains(textShape)) {
+            shapes.append(textShape);
         }
     }
 
@@ -2028,15 +2022,21 @@ void TextTool::repaintSelection()
     }
 }
 
-QRectF TextTool::caretRect(QTextCursor *cursor) const
+QRectF TextTool::caretRect(QTextCursor *cursor, bool *upToDate) const
 {
     QTextCursor tmpCursor(*cursor);
     tmpCursor.setPosition(cursor->position()); // looses the anchor
 
     QRectF rect = textRect(tmpCursor);
     if (rect.size() == QSizeF(0,0)) {
+        if (upToDate) {
+            *upToDate = false;
+        }
         rect = m_lastImMicroFocus; // prevent block changed but layout not done
     } else {
+        if (upToDate) {
+            *upToDate = true;
+        }
         m_lastImMicroFocus = rect;
     }
     return rect;

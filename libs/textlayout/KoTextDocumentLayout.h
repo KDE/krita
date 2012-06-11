@@ -203,6 +203,9 @@ public:
      */
     KoTextLayoutRootArea *rootAreaForPosition(int position) const;
 
+
+    KoTextLayoutRootArea *rootAreaForPoint(const QPointF &point) const;
+
     /**
      * Remove the root-areas \p rootArea from the list of \a rootAreas() .
      * \param rootArea root-area to remove. If NULL then all root-areas are removed.
@@ -211,6 +214,8 @@ public:
 
     /// reimplemented from QAbstractTextDocumentLayout
     virtual void documentChanged(int position, int charsRemoved, int charsAdded);
+
+    void setContinuationObstruction(KoTextLayoutObstruction *continuationObstruction);
 
     /// Return a list of obstructions intersecting current root area (during layout)
     QList<KoTextLayoutObstruction *> currentObstructions();

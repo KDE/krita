@@ -61,6 +61,7 @@ bool KoTextLayoutRootArea::layoutRoot(FrameIterator *cursor)
     setVirginPage(true);
 
     bool retval = KoTextLayoutArea::layout(cursor);
+
     delete d->nextStartOfArea;
     d->nextStartOfArea = new FrameIterator(cursor);
     return retval;

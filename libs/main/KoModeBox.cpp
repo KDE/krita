@@ -219,6 +219,13 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
 void KoModeBox::setOptionWidgets(const QList<QWidget *> &optionWidgetList)
 {
     if (! d->addedWidgets.contains(d->activeId)) return;
+
+    // For some reason we need to set some attr on our placeholder widget here
+    // eventhough these settings should be default
+    // Otherwise Sheets' celltool's optionwidget looks ugly
+    d->addedWidgets[d->activeId]->setAutoFillBackground(false);
+    d->addedWidgets[d->activeId]->setBackgroundRole(QPalette::NoRole);
+
     qDeleteAll(d->currentAuxWidgets);
     d->currentAuxWidgets.clear();
 

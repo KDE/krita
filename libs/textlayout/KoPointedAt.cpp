@@ -53,15 +53,14 @@ KoPointedAt::KoPointedAt(KoPointedAt *other)
     table = other->table;
 }
 
-void KoPointedAt::fillInBookmark(QTextCursor cursor, KoInlineTextObjectManager *inlineManager)
+void KoPointedAt::fillInLinks(QTextCursor cursor, KoInlineTextObjectManager *inlineManager)
 {
     bookmark = 0;
     externalHRef.clear();
+    note = 0;
 
     if (!inlineManager)
         return;
-
-    cursor.setPosition(position);
 
     // Is there an href here ?
     if (cursor.charFormat().isAnchor()) {
@@ -80,14 +79,6 @@ void KoPointedAt::fillInBookmark(QTextCursor cursor, KoInlineTextObjectManager *
             externalHRef = href;
         }
     } else {
-        cursor.setPosition(cursor.position() + 1, QTextCursor::KeepAnchor);
-
         note = dynamic_cast<KoInlineNote*>(inlineManager->inlineTextObject(cursor));
-        if (!note) {
-            cursor.setPosition(cursor.position() - 1, QTextCursor::KeepAnchor);
-
-            note = dynamic_cast<KoInlineNote*>(inlineManager->inlineTextObject(cursor));
-        }
-
     }
 }

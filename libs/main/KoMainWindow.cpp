@@ -1387,8 +1387,7 @@ KoPrintJob* KoMainWindow::exportToPdf(QString pdfFileName)
     if (!rootView())
         return 0;
     KoPageLayout pageLayout;
-    if (d->rootDoc)
-        pageLayout = d->rootDoc->pageLayout();
+    pageLayout = rootView()->pageLayout();
     return exportToPdf(pageLayout, pdfFileName);
 }
 

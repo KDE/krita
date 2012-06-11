@@ -30,6 +30,7 @@ class KoMainWindow;
 class KoPrintJob;
 class KoViewPrivate;
 class KoZoomController;
+class KoPageLayout;
 
 // KDE classes
 class KStatusBar;
@@ -225,6 +226,13 @@ public:
      * The default implementation call createPrintJob.
      */
     virtual KoPrintJob * createPdfPrintJob();
+
+    /**
+     * @return the page layout to be used for printing.
+     * Default is the documents layout.
+     * Reimplement if your application needs to use a different layout.
+     */
+    virtual KoPageLayout pageLayout() const;
 
     /**
      * @return the KoMainWindow in which this view is currently.

@@ -111,6 +111,16 @@ public:
     /// The real bottom will be determined during layout
     qreal maximumAllowedBottom() const;
 
+    FrameIterator *footNoteCursorToNext() const;
+
+    KoInlineNote *continuedNoteToNext() const;
+
+    int footNoteAutoCount() const;
+
+    void setFootNoteCountInDoc(int count);
+
+    void setFootNoteFromPrevious(FrameIterator *footNoteCursor, KoInlineNote *note);
+
     /// Sets the maximum allowed width before wrapping text.
     /// Setting this also indicates that we don't want wrapping.
     /// 0 means wrapping is allowed
@@ -164,7 +174,7 @@ protected:
     /// If this area has the responsibility to show footnotes then store
     /// it so it can later bein the m_pregisteredFootnotes
     /// returns the height of the foot note
-    virtual qreal preregisterFootNote(KoInlineNote *note);
+    virtual qreal preregisterFootNote(KoInlineNote *note, const QTextLine &line);
 
     /// Takes all preregistered footnotes and create Areas out of them
     void confirmFootNotes();
@@ -238,6 +248,11 @@ private:
     QList<KoTextLayoutTableArea *> m_tableAreas;
     FrameIterator *m_startOfArea;
     FrameIterator *m_endOfArea;
+    FrameIterator *m_footNoteCursorToNext;
+    FrameIterator *m_footNoteCursorFromPrevious;
+    KoInlineNote *m_continuedNoteToNext;
+    KoInlineNote *m_continuedNoteFromPrevious;
+    int m_footNoteCountInDoc;
 
     bool m_acceptsPageBreak;
     bool m_virginPage;

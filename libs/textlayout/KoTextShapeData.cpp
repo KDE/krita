@@ -127,6 +127,10 @@ void KoTextShapeData::setDocument(QTextDocument *document, bool transferOwnershi
         }
     }
 
+    // After setting the document (even if not changing it) we need to explicitly set the root area
+    // to 0. Otherwise crashes may occur when inserting textshape in words (or resetting document)
+    d->rootArea = 0;
+
     if (d->document == document)
         return;
     d->document = document;
@@ -169,15 +173,6 @@ KoText::Direction KoTextShapeData::pageDirection() const
 {
     Q_D(const KoTextShapeData);
     return d->direction;
-}
-
-bool KoTextShapeData::isCursorVisible(QTextCursor *cursor) const
-{
-    Q_UNUSED(cursor);
-#ifdef __GNUC__
-    #warning FIXME: KoTextShapeData::isCursorVisible returns always true, why do we still need it?
-#endif
-    return true;
 }
 
 void KoTextShapeData::setRootArea(KoTextLayoutRootArea *rootArea)

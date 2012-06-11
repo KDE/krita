@@ -1,5 +1,6 @@
-/* This file is part of the KDE project
- * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+/*  This file is part of the Calligra project, made within the KDE community.
+ *
+ * Copyright 2012  Friedrich W. H. Kossebau <kossebau@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,33 +18,29 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOPABACKGROUNDTOOLWIDGET_H
-#define KOPABACKGROUNDTOOLWIDGET_H
+#ifndef KOPAGENAVIGATORBUTTON_H
+#define KOPAGENAVIGATORBUTTON_H
 
-#include <QWidget>
+// Qt
+#include <QToolButton>
 
-#include "ui_BackgroundToolWidget.h"
+class QAction;
 
-class KoPABackgroundTool;
-
-class KoPABackgroundToolWidget : public QWidget
+class KoPageNavigatorButton : public QToolButton
 {
     Q_OBJECT
+
 public:
-    explicit KoPABackgroundToolWidget( KoPABackgroundTool *tool, QWidget *parent = 0 );
-    virtual ~KoPABackgroundToolWidget();
+    KoPageNavigatorButton(const char *iconName, QWidget *parent);
 
-public slots:
-    void slotActivePageChanged();
+    void setAction(QAction *action);
 
-private slots:
-    void setBackgroundImage();
-    void useMasterBackground(bool doUse);
-    void displayMasterShapes(bool doDisplay);
+private Q_SLOTS:
+    void onActionChanged();
+    void onClicked();
 
 private:
-    Ui::BackgroundToolWidget widget;
-    KoPABackgroundTool * m_tool;
+    QAction *m_action;
 };
 
-#endif /* KOPABACKGROUNDTOOLWIDGET_H */
+#endif

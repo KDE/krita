@@ -1,5 +1,6 @@
-/* This file is part of the KDE project
- * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+/*  This file is part of the Calligra project, made within the KDE community.
+ *
+ * Copyright 2012  Friedrich W. H. Kossebau <kossebau@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,33 +18,41 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOPABACKGROUNDTOOLWIDGET_H
-#define KOPABACKGROUNDTOOLWIDGET_H
+#ifndef KOPAGENAVIGATOR_H
+#define KOPAGENAVIGATOR_H
 
-#include <QWidget>
+// Qt
+#include <QStackedWidget>
 
-#include "ui_BackgroundToolWidget.h"
+class KoPageNavigatorButton;
+class KoPAView;
+class KActionCollection;
 
-class KoPABackgroundTool;
 
-class KoPABackgroundToolWidget : public QWidget
+class KoPageNavigator : public QStackedWidget
 {
     Q_OBJECT
+
+    enum State {Display = 0, Edit = 1};
+
 public:
-    explicit KoPABackgroundToolWidget( KoPABackgroundTool *tool, QWidget *parent = 0 );
-    virtual ~KoPABackgroundToolWidget();
+    explicit KoPageNavigator(KoPAView *view);
+    virtual ~KoPageNavigator();
 
-public slots:
-    void slotActivePageChanged();
+    void initActions();
 
-private slots:
-    void setBackgroundImage();
-    void useMasterBackground(bool doUse);
-    void displayMasterShapes(bool doDisplay);
+protected:
+    virtual void enterEvent(QEvent *event);
+    virtual void leaveEvent(QEvent *event);
+    virtual bool eventFilter(QObject *watched, QEvent *event);
+
+private Q_SLOTS:
+    void updateDisplayLabel();
+    void onPageNumberEntered();
 
 private:
-    Ui::BackgroundToolWidget widget;
-    KoPABackgroundTool * m_tool;
+    class Private;
+    Private *const d;
 };
 
-#endif /* KOPABACKGROUNDTOOLWIDGET_H */
+#endif //KOPAGENAVIGATOR_H

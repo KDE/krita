@@ -38,7 +38,7 @@ QString Lists::intToRoman(int n)
     static const QByteArray RNUnits[] = {"", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"};
     static const QByteArray RNTens[] = {"", "x", "xx", "xxx", "xl", "l", "lx", "lxx", "lxxx", "xc"};
     static const QByteArray RNHundreds[] = {"", "c", "cc", "ccc", "cd", "d", "dc", "dcc", "dccc", "cm"};
-    static const QByteArray RNThousands[] = {"", "m", "mm", "mmm"};
+    static const QByteArray RNThousands[] = {"", "m", "mm", "mmm", "mmmm", "mmmmm", "mmmmmm", "mmmmmmm", "mmmmmmmm", "mmmmmmmmm"};
 
     if (n <= 0) {
         kWarning(32500) << "intToRoman called with negative number: n=" << n;

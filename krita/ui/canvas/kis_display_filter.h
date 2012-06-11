@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2012 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,10 +22,13 @@
 
 #include <KoColorSpace.h>
 
+
+#include <krita_export.h>
+
 /**
  * @brief The KisDisplayFilter class contains settings pertinent to
  */
-class KisDisplayFilter : public QObject
+class KRITAUI_EXPORT KisDisplayFilter : public QObject
 {
     Q_OBJECT
 public:

@@ -1,7 +1,7 @@
 include_directories( ${KRITA_INCLUDES} ${OCIO_INCLUDE_DIRECTORY})
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
-set(KRITA_LUTDOCKER_PART_SRCS lutdocker.cpp lutdocker_dock.cpp )
+set(KRITA_LUTDOCKER_PART_SRCS lutdocker.cpp lutdocker_dock.cpp ocio_display_filter.cpp )
 
 kde4_add_ui_files(KRITA_LUTDOCKER_PART_SRCS
     wdglut.ui

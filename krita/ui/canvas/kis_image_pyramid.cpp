@@ -19,6 +19,7 @@
 
 #include <KoCompositeOp.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoColorModelStandardIds.h>
 
 #include "kis_painter.h"
 #include "kis_iterator_ng.h"
@@ -29,6 +30,11 @@
 
 //#define DEBUG_PYRAMID
 
+#include "config-ocio.h"
+#ifdef HAVE_OCIO
+#include <OpenColorIO/OpenColorIO.h>
+#include <OpenColorIO/OpenColorTransforms.h>
+#endif
 
 #define ORIGINAL_INDEX           0
 #define FIRST_NOT_ORIGINAL_INDEX 1
@@ -161,9 +167,15 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
     originalProjection->readBytes(originalBytes, rect);
 
     quint8 *dstBytes = m_monitorColorSpace->allocPixelBuffer(numPixels);
+    KisConfig cfg;
+    if (cfg.useOcio() && originalProjection->colorSpace()->colorModelId() == RGBAColorModelID && originalProjection->colorSpace()->hasHighDynamicRange()) {
+#ifdef HAVE_OCIO
 
-
-    originalProjection->colorSpace()->convertPixelsTo(originalBytes, dstBytes, m_monitorColorSpace, numPixels, m_renderingIntent);
+#endif
+    }
+    else {
+        originalProjection->colorSpace()->convertPixelsTo(originalBytes, dstBytes, m_monitorColorSpace, numPixels, m_renderingIntent);
+    }
 
 
     m_pyramid[ORIGINAL_INDEX]->writeBytes(dstBytes, rect);

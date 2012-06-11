@@ -106,11 +106,16 @@ private:
                                const QRect& unscaledRect);
 
 private:
+
     QVector<KisPaintDeviceSP> m_pyramid;
     KisImageWSP  m_originalImage;
+
     const KoColorProfile* m_monitorProfile;
     const KoColorSpace* m_monitorColorSpace;
+
     KoColorConversionTransformation::Intent m_renderingIntent;
+
+
 
     /**
      * Number of planes inside pyramid

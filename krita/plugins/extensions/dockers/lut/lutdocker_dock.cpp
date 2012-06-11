@@ -78,6 +78,10 @@ LutDockerDock::LutDockerDock(OCIO::ConstConfigRcPtr config)
     connect(m_bnSelectLut, SIGNAL(clicked()), SLOT(selectLut()));
     connect(m_bnClearLut, SIGNAL(clicked()), SLOT(clearLut()));
 
+    m_lblLut->hide();
+    m_txtLut->hide();
+    m_bnSelectLut->hide();
+
     connect(m_cmbDisplayDevice, SIGNAL(currentIndexChanged(int)), SLOT(refillViewCombobox()));
 
     m_exposureDoubleWidget->setToolTip(i18n("Select the exposure (stops) for HDR images."));

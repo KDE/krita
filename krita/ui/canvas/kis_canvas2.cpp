@@ -496,6 +496,27 @@ void KisCanvas2::setMonitorProfile(KoColorProfile* monitorProfile,
     image->unlock();
 }
 
+void KisCanvas2::setDisplayFilter(KisDisplayFilter *displayFilter)
+{
+    KisImageWSP image = this->image();
+    image->barrierLock();
+
+    if (m_d->currentCanvasIsOpenGL) {
+#ifdef HAVE_OPENGL
+        Q_ASSERT(m_d->openGLImageTextures);
+        //m_d->openGLImageTextures->setMonitorProfile(monitorProfile, renderingIntent);
+#endif
+    } else {
+        Q_ASSERT(m_d->prescaledProjection);
+        m_d->prescaledProjection->setDisplayFilter(displayFilter);
+    }
+
+    startUpdateInPatches(image->bounds());
+
+    image->unlock();
+
+}
+
 void KisCanvas2::startResizingImage(qint32 w, qint32 h)
 {
     emit sigContinueResizeImage(w, h);

@@ -24,6 +24,7 @@
 class KoColorProfile;
 class UpdateInformation;
 class KisImagePatch;
+class KisDisplayFilter;
 
 /**
  * KisProjectionBackend is an abstract class representing
@@ -43,6 +44,7 @@ public:
     virtual void setImage(KisImageWSP image) = 0;
     virtual void setImageSize(qint32 w, qint32 h) = 0;
     virtual void setMonitorProfile(const KoColorProfile* monitorProfile, KoColorConversionTransformation::Intent renderingIntent) = 0;
+    virtual void setDisplayFilter(KisDisplayFilter *displayFilter) = 0;
 
     /**
      * Updates the cache of the backend by reading from

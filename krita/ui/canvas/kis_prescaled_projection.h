@@ -34,6 +34,7 @@ class QPainter;
 
 class KoColorProfile;
 class KisCoordinatesConverter;
+class KisDisplayFilter;
 
 #include <kis_types.h>
 #include "kis_ui_types.h"
@@ -113,6 +114,8 @@ public slots:
      * Set the current monitor profile
      */
     void setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent);
+
+    void setDisplayFilter(KisDisplayFilter *displayFilter);
 
     /**
      * Called whenever the zoom level changes or another chunk of the

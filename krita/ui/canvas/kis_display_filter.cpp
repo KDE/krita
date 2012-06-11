@@ -21,16 +21,3 @@ KisDisplayFilter::KisDisplayFilter(QObject *parent)
     : QObject(parent)
 {
 }
-
-
-KisLcmsDisplayFilter::KisLcmsDisplayFilter(const KoColorSpace *src, QObject *parent)
-{
-}
-
-void KisLcmsDisplayFilter::filter(quint8 *src, quint8 *dst, quint32 numPixels)
-{
-}
-
-void KisLcmsDisplayFilter::resetConfiguration()
-{
-}

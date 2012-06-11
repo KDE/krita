@@ -34,6 +34,7 @@
 #include <OpenColorIO/OpenColorIO.h>
 namespace OCIO = OCIO_NAMESPACE;
 
+class KisDisplayFilter;
 class KisCanvas2;
 class KisDoubleWidget;
 class KoZoomAdapter;
@@ -85,11 +86,13 @@ private slots:
 private:
 
     KisCanvas2 *m_canvas;
+    OCIO::ConstConfigRcPtr m_ocioConfig;
+    KisDisplayFilter *m_displayFilter;
 
     bool m_draggingSlider;
     bool m_updateDisplay;
 
-    OCIO::ConstConfigRcPtr m_ocioConfig;
+
 };
 
 

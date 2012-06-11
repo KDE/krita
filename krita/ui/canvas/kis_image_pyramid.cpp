@@ -21,6 +21,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
 
+#include "kis_display_filter.h"
 #include "kis_painter.h"
 #include "kis_iterator_ng.h"
 #include "kis_datamanager.h"
@@ -116,6 +117,11 @@ void KisImagePyramid::setMonitorProfile(const KoColorProfile* monitorProfile,
     rebuildPyramid();
 }
 
+void KisImagePyramid::setDisplayFilter(KisDisplayFilter *displayFilter)
+{
+    m_displayFilter = displayFilter;
+}
+
 void KisImagePyramid::rebuildPyramid()
 {
     m_pyramid.clear();
@@ -157,6 +163,8 @@ void KisImagePyramid::updateCache(const QRect &dirtyImageRect)
 
 void KisImagePyramid::retrieveImageData(const QRect &rect)
 {
+    qDebug() << "retrieveImageData()" << rect;
+
     // XXX: use QThreadStorage to cache the two patches (512x512) of pixels. Note
     // that when we do that, we need to reset that cache when the projection's
     // colorspace changes.
@@ -166,17 +174,20 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
     quint8 *originalBytes = originalProjection->colorSpace()->allocPixelBuffer(numPixels);
     originalProjection->readBytes(originalBytes, rect);
 
-    quint8 *dstBytes = m_monitorColorSpace->allocPixelBuffer(numPixels);
-    KisConfig cfg;
-    if (cfg.useOcio() && originalProjection->colorSpace()->colorModelId() == RGBAColorModelID && originalProjection->colorSpace()->hasHighDynamicRange()) {
-#ifdef HAVE_OCIO
 
+    KisConfig cfg;
+    qDebug() << "m_displayFilter" << m_displayFilter << "use ocio" << cfg.useOcio() << "rgb" << (originalProjection->colorSpace()->colorModelId() == RGBAColorModelID)
+             << "hdr" << (originalProjection->colorSpace()->hasHighDynamicRange());
+
+    if (m_displayFilter && cfg.useOcio() && originalProjection->colorSpace()->colorModelId() == RGBAColorModelID && originalProjection->colorSpace()->hasHighDynamicRange()) {
+#ifdef HAVE_OCIO
+        qDebug() << "going to ocio filter";
+        m_displayFilter->filter(originalBytes, originalBytes, numPixels);
 #endif
     }
-    else {
-        originalProjection->colorSpace()->convertPixelsTo(originalBytes, dstBytes, m_monitorColorSpace, numPixels, m_renderingIntent);
-    }
 
+    quint8 *dstBytes = m_monitorColorSpace->allocPixelBuffer(numPixels);
+    originalProjection->colorSpace()->convertPixelsTo(originalBytes, dstBytes, m_monitorColorSpace, numPixels, m_renderingIntent);
 
     m_pyramid[ORIGINAL_INDEX]->writeBytes(dstBytes, rect);
 

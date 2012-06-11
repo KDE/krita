@@ -41,6 +41,7 @@ class KisCanvasDecoration;
 class KisView2;
 class KisPaintopBox;
 class KoFavoriteResourceManager;
+class KisDisplayFilter;
 
 enum KisCanvasType {
     QPAINTER,
@@ -172,8 +173,13 @@ public slots:
     void updateCanvasProjection(KisUpdateInfoSP info);
 
     void startUpdateInPatches(QRect imageRect);
+
     void setMonitorProfile(KoColorProfile* monitorProfile,
                            KoColorConversionTransformation::Intent renderingIntent);
+
+
+
+    void setDisplayFilter(KisDisplayFilter *displayFilter);
 
     void startResizingImage(qint32 w, qint32 h);
     void finishResisingImage(qint32 w, qint32 h);

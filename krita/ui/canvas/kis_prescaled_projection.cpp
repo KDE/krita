@@ -283,6 +283,11 @@ void KisPrescaledProjection::setMonitorProfile(const KoColorProfile *monitorProf
     m_d->projectionBackend->setMonitorProfile(monitorProfile, renderingIntent);
 }
 
+void KisPrescaledProjection::setDisplayFilter(KisDisplayFilter *displayFilter)
+{
+    m_d->projectionBackend->setDisplayFilter(displayFilter);
+}
+
 
 void KisPrescaledProjection::updateViewportSize()
 {

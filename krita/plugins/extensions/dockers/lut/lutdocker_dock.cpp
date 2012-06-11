@@ -49,10 +49,13 @@
 #include "widgets/squeezedcombobox.h"
 
 
+#include "ocio_display_filter.h"
+
 LutDockerDock::LutDockerDock(OCIO::ConstConfigRcPtr config)
         : QDockWidget(i18n("LUT Management"))
         , m_canvas(0)
         , m_ocioConfig(config)
+        , m_displayFilter(0)
 {
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
@@ -114,10 +117,14 @@ LutDockerDock::LutDockerDock(OCIO::ConstConfigRcPtr config)
     m_draggingSlider = false;
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotImageColorSpaceChanged()));
+
+    m_displayFilter = new OcioDisplayFilter;
+
 }
 
 LutDockerDock::~LutDockerDock()
 {
+    delete m_displayFilter;
 }
 
 void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
@@ -126,8 +133,10 @@ void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
         m_canvas = canvas;
         if (m_canvas) {
             connect(m_canvas->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), SLOT(slotImageColorSpaceChanged()), Qt::UniqueConnection);
+            canvas->setDisplayFilter(m_displayFilter);
         }
         slotImageColorSpaceChanged();
+
     }
 
     updateDisplaySettings();
@@ -139,7 +148,7 @@ void LutDockerDock::slotImageColorSpaceChanged()
 
     const KoColorSpace *cs = m_canvas->view()->image()->colorSpace();
 
-    m_chkUseOcio->setEnabled(cs->hasHighDynamicRange() && cfg.useOpenGL() && cfg.useOpenGLShaders());
+    m_chkUseOcio->setEnabled(cs->hasHighDynamicRange());
 
     if (m_canvas) {
 
@@ -204,7 +213,7 @@ void LutDockerDock::gammaSliderReleased()
 void LutDockerDock::updateDisplaySettings()
 {
     if (m_updateDisplay) {
-        m_canvas->updateCanvas();
+        m_canvas->setDisplayFilter(m_displayFilter);
     }
 }
 

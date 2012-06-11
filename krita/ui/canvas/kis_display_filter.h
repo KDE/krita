@@ -26,7 +26,8 @@
 #include <krita_export.h>
 
 /**
- * @brief The KisDisplayFilter class contains settings pertinent to
+ * @brief The KisDisplayFilter class is the base class for filters that
+ * are applied by the canvas to the projection before displaying.
  */
 class KRITAUI_EXPORT KisDisplayFilter : public QObject
 {
@@ -37,29 +38,6 @@ public:
     virtual void filter(quint8 *src, quint8 *dst, quint32 numPixels) = 0;
 
 };
-
-class KisLcmsDisplayFilter : public KisDisplayFilter
-{
-    Q_OBJECT
-public:
-
-    KisLcmsDisplayFilter(const KoColorSpace *src, QObject *parent = 0);
-
-    virtual void filter(quint8 *src, quint8 *dst, quint32 numPixels);
-
-private slots:
-
-    void resetConfiguration();
-
-private:
-
-    const KoColorSpace *m_srcColorSpace;
-    const KoColorSpace *m_dstColorSpace;
-    KoColorProfile *m_monitorProfile;
-    KoColorConversionTransformation::Intent m_renderingIntent;
-
-};
-
 
 
 #endif

@@ -151,7 +151,7 @@
          </layout>
         </item>
         <item row="1" column="0">
-         <widget class="QLabel" name="lblLut">
+         <widget class="QLabel" name="m_lblLut">
           <property name="text">
            <string>LUT file:</string>
           </property>

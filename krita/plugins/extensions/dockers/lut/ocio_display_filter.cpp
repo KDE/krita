@@ -32,9 +32,12 @@ OcioDisplayFilter::OcioDisplayFilter(QObject *parent)
 
 void OcioDisplayFilter::filter(quint8 *src, quint8 */*dst*/, quint32 numPixels)
 {
+    qDebug() << "going to filter" << numPixels << "pixel";
     // processes that data _in_ place
-    OCIO::PackedImageDesc img(reinterpret_cast<float*>(src), numPixels, 1, 4);
-    m_processor->apply(img);
+    if (m_processor) {
+        OCIO::PackedImageDesc img(reinterpret_cast<float*>(src), numPixels, 1, 4);
+        m_processor->apply(img);
+    }
 
 }
 

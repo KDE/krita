@@ -1280,7 +1280,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             }
         }
 
-        findFootNotes(block, line);
+        findFootNotes(block, line, bottomOfText);
         if (bottomOfText > maximumAllowedBottom()) {
             // We can not fit line within our allowed space
             // in case we resume layout on next page the line is reused later
@@ -1813,7 +1813,7 @@ void KoTextLayoutArea::setBottom(qreal bottom)
     m_bottom = bottom;
 }
 
-void KoTextLayoutArea::findFootNotes(QTextBlock block, const QTextLine &line)
+void KoTextLayoutArea::findFootNotes(QTextBlock block, const QTextLine &line, qreal bottomOfText)
 {
     if (m_documentLayout->inlineTextObjectManager() == 0) {
         return;
@@ -1828,14 +1828,14 @@ void KoTextLayoutArea::findFootNotes(QTextBlock block, const QTextLine &line)
 
         KoInlineNote *note = dynamic_cast<KoInlineNote*>(m_documentLayout->inlineTextObjectManager()->inlineTextObject(c1));
         if (note && note->type() == KoInlineNote::Footnote) {
-            preregisterFootNote(note, line);
+            preregisterFootNote(note, bottomOfText);
         }
 
         pos = text.indexOf(QChar::ObjectReplacementCharacter, pos + 1);
     }
 }
 
-qreal KoTextLayoutArea::preregisterFootNote(KoInlineNote *note, const QTextLine &line)
+qreal KoTextLayoutArea::preregisterFootNote(KoInlineNote *note, qreal bottomOfText)
 {
     if (m_parent == 0) {
         // TODO to support footnotes at end of document this is
@@ -1849,33 +1849,34 @@ qreal KoTextLayoutArea::preregisterFootNote(KoInlineNote *note, const QTextLine 
             }
         }
 
-        QTextFrame *subFrame = note->textFrame();
-        m_footNoteCursorToNext = new FrameIterator(subFrame);
-        KoTextLayoutNoteArea *footNoteArea = new KoTextLayoutNoteArea(note, this, m_documentLayout);
-
-        m_preregisteredFootNoteFrames.append(subFrame);
-        qreal offset = 0.1;
-        footNoteArea->setReferenceRect(left(), right(), 0, maximumAllowedBottom() - line.height() - m_y + offset);
-        bool contNotNeeded = footNoteArea->layout(m_footNoteCursorToNext);
-        if (contNotNeeded) {
-            delete m_footNoteCursorToNext;
-            m_footNoteCursorToNext = 0;
-            m_continuedNoteToNext = 0;
-        } else {
-            m_continuedNoteToNext = note;
-
-            //layout again now it has set up a continuationObstruction
-            delete m_footNoteCursorToNext;
+        if (maximumAllowedBottom() - bottomOfText > 0) {
+            QTextFrame *subFrame = note->textFrame();
             m_footNoteCursorToNext = new FrameIterator(subFrame);
-            footNoteArea->setReferenceRect(left(), right(), 0, maximumAllowedBottom() - line.height() - m_y + offset);
-            footNoteArea->layout(m_footNoteCursorToNext);
-            documentLayout()->setContinuationObstruction(0); // remove it again
+            KoTextLayoutNoteArea *footNoteArea = new KoTextLayoutNoteArea(note, this, m_documentLayout);
+
+            m_preregisteredFootNoteFrames.append(subFrame);
+            footNoteArea->setReferenceRect(left(), right(), 0, maximumAllowedBottom() - bottomOfText);
+            bool contNotNeeded = footNoteArea->layout(m_footNoteCursorToNext);
+            if (contNotNeeded) {
+                delete m_footNoteCursorToNext;
+                m_footNoteCursorToNext = 0;
+                m_continuedNoteToNext = 0;
+            } else {
+                m_continuedNoteToNext = note;
+                //layout again now it has set up a continuationObstruction
+                delete m_footNoteCursorToNext;
+                m_footNoteCursorToNext = new FrameIterator(subFrame);
+                footNoteArea->setReferenceRect(left(), right(), 0, maximumAllowedBottom() - bottomOfText);
+                footNoteArea->layout(m_footNoteCursorToNext);
+                documentLayout()->setContinuationObstruction(0); // remove it again
+            }
+            m_preregisteredFootNotesHeight += footNoteArea->bottom() - footNoteArea->top();
+            m_preregisteredFootNoteAreas.append(footNoteArea);
+            return footNoteArea->bottom() - footNoteArea->top();
         }
-        m_preregisteredFootNotesHeight += footNoteArea->bottom() - footNoteArea->top();
-        m_preregisteredFootNoteAreas.append(footNoteArea);
-        return footNoteArea->bottom();
+        return 0.0;
     }
-    qreal h = m_parent->preregisterFootNote(note, line);
+    qreal h = m_parent->preregisterFootNote(note, bottomOfText);
     m_preregisteredFootNotesHeight += h;
     return h;
 }

@@ -74,6 +74,7 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, const KoListLeve
 
         llp.setAlignmentMode(true); // when creating a new list we create it in this mode
         llp.setLabelFollowedBy(KoListStyle::ListTab);
+        llp.setDisplayLevel(levelProperties.displayLevel());
 
         llp.setTabStopPosition(MARGIN_DEFAULT*(lev+2));
         llp.setMargin(MARGIN_DEFAULT*(lev+2));

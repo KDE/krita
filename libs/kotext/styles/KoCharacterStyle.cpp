@@ -2229,7 +2229,7 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style) const
         } else if (key == KoCharacterStyle::HyphenationRemainCharCount) {
             style.addProperty("fo:hyphenation-remain-char-count", hyphenationRemainCharCount(), KoGenStyle::TextType);
         } else if (key == KoCharacterStyle::Blink) {
-            style.addProperty("style:text-blinking", blinking());
+            style.addProperty("style:text-blinking", blinking(), KoGenStyle::TextType);
         }
     }
     //TODO: font name and family

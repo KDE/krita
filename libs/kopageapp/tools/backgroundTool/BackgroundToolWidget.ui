@@ -26,7 +26,7 @@
      <item>
       <widget class="QLabel" name="useStrokeAndFillDockerLabel" >
        <property name="text" >
-        <string>To change background color use Strock and Fill docker.</string>
+        <string>To change background color use Stroke and Fill docker.</string>
        </property>
        <property name="wordWrap">
         <bool>true</bool>

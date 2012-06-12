@@ -6,5 +6,5 @@
         <channel name="Alpha" shortName="a" index="1" channelType="Alpha" valueType="float16" size="2" />
     </channels>
     <isHdr />
-    <defaultProfile name="gray built-in" />
+    <defaultProfile name="Standard Linear Gray (scGRAY)" />
 </ctlcolorspace>

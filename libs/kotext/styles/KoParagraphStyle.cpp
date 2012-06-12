@@ -1258,18 +1258,7 @@ void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContex
             setDefaultOutlineLevel(level);
     }
 
-    //1.6: KoTextParag::loadOasis => KoParagLayout::loadOasisParagLayout
-    kDebug(32500) << "family" << family;
-    if (family == "graphic" || family == "presentation") {
-        QList<QString> typeProperties;
-        typeProperties.append("graphic");
-        typeProperties.append("paragraph");
-        // load all style attributes from "style::graphic-properties" and if not found there from "style:paragraph-properties"
-        context.styleStack().setTypeProperties(typeProperties);
-    }
-    else {
-        context.styleStack().setTypeProperties("paragraph");   // load all style attributes from "style:paragraph-properties"
-    }
+    context.styleStack().setTypeProperties("paragraph");   // load all style attributes from "style:paragraph-properties"
 
     loadOdfProperties(scontext);   // load the KoParagraphStyle from the stylestack
 

@@ -2197,7 +2197,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
             elementWriter.addAttributePt("style:distance", dropCapsDistance());
         elementWriter.endElement();
         QString elementContents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
-        style.addChildElement("style:drop-cap", elementContents);
+        style.addChildElement("style:drop-cap", elementContents, KoGenStyle::ParagraphType);
     }
     if (tabPositions().count() > 0) {
         QMap<int, QString> tabTypeMap, leaderTypeMap, leaderStyleMap, leaderWeightMap;
@@ -2256,7 +2256,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
         elementWriter.endElement();
         buf.close();
         QString elementContents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
-        style.addChildElement("style:tab-stops", elementContents);
+        style.addChildElement("style:tab-stops", elementContents, KoGenStyle::ParagraphType);
     }
 }
 

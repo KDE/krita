@@ -59,6 +59,7 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
     widget.superscript->setDefaultAction(tool->action("format_super"));
     widget.subscript->setDefaultAction(tool->action("format_sub"));
     widget.moreOptions->setText("...");
+    widget.moreOptions->setToolTip(i18n("Change font format"));
     connect(widget.moreOptions, SIGNAL(clicked(bool)), tool->action("format_font"), SLOT(trigger()));
 
     connect(widget.bold, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));

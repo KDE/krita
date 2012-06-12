@@ -81,6 +81,8 @@ LutDockerDock::LutDockerDock(OCIO::ConstConfigRcPtr config)
     connect(m_bnSelectLut, SIGNAL(clicked()), SLOT(selectLut()));
     connect(m_bnClearLut, SIGNAL(clicked()), SLOT(clearLut()));
 
+    // See http://groups.google.com/group/ocio-dev/browse_thread/thread/ec95c5f54a74af65 -- maybe need to be reinstated
+    // when people ask for it.
     m_lblLut->hide();
     m_txtLut->hide();
     m_bnSelectLut->hide();
@@ -212,6 +214,16 @@ void LutDockerDock::gammaSliderReleased()
 
 void LutDockerDock::updateDisplaySettings()
 {
+    m_displayFilter->srcColorSpace = m_ocioConfig->getColorSpaceNameByIndex(m_cmbInputColorSpace->currentItem());
+    m_displayFilter->displayColorSpaceName;
+    m_displayFilter->displayDevice = m_ocioConfig->getDisplay(m_cmbDisplayDevice->currentIndex());
+    m_displayFilter->view = m_ocioConfig->getView(m_displayFilter->displayDevice, m_cmbView->currentIndex(0));
+    m_displayFilter->gamma = m_gammaDoubleWidget->value();
+    m_displayFilter->exposure = m_exposureDoubleWidget->value();
+    m_displayFilter->swizzle = (OCIO_CHANNEL_SWIZZLE)m_cmbComponents->index();
+
+    m_displayFilter->updateProcessor();
+
     if (m_updateDisplay) {
         m_canvas->setDisplayFilter(m_displayFilter);
     }

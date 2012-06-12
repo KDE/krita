@@ -44,9 +44,9 @@ public:
 
 
     OCIO::ConstConfigRcPtr config;
-    QString lutFile;
+//    QString lutFile;
 
-    int srcColorSpaceIndex;
+    const char *srcColorSpace;
     const char *displayDevice;
     const char *displayColorSpaceName;
     const char *view;

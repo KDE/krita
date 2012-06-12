@@ -32,9 +32,11 @@
 #include "ui_wdglut.h"
 
 #include <OpenColorIO/OpenColorIO.h>
+
+
 namespace OCIO = OCIO_NAMESPACE;
 
-class KisDisplayFilter;
+
 class KisCanvas2;
 class KisDoubleWidget;
 class KoZoomAdapter;
@@ -43,6 +45,8 @@ class SqueezedComboBox;
 class QCheckBox;
 class KComboBox;
 class QToolButton;
+
+#include "ocio_display_filter.h"
 
 /**
  * Image overview docker
@@ -87,7 +91,7 @@ private:
 
     KisCanvas2 *m_canvas;
     OCIO::ConstConfigRcPtr m_ocioConfig;
-    KisDisplayFilter *m_displayFilter;
+    OcioDisplayFilter *m_displayFilter;
 
     bool m_draggingSlider;
     bool m_updateDisplay;

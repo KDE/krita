@@ -20,7 +20,7 @@
 
 OcioDisplayFilter::OcioDisplayFilter(QObject *parent)
     : KisDisplayFilter(parent)
-    , srcColorSpaceIndex(-1)
+    , srcColorSpace(0)
     , displayDevice(0)
     , displayColorSpaceName(0)
     , view(0)

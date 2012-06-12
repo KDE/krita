@@ -123,6 +123,11 @@ void KoZoomController::setPageSize(const QSizeF &pageSize)
         setZoom(KoZoomMode::ZOOM_PAGE, 0);
 }
 
+QSizeF KoZoomController::pageSize() const
+{
+    return d->pageSize;
+}
+
 void KoZoomController::setDocumentSize(const QSizeF &documentSize, bool recalculateCenter)
 {
     d->documentSize = documentSize;
@@ -130,6 +135,11 @@ void KoZoomController::setDocumentSize(const QSizeF &documentSize, bool recalcul
 
     // Finally ask the canvasController to recenter
     d->canvasController->recenterPreferred();
+}
+
+QSizeF KoZoomController::documentSize() const
+{
+    return d->documentSize;
 }
 
 void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom)

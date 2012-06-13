@@ -87,6 +87,7 @@ LutDockerDock::LutDockerDock(OCIO::ConstConfigRcPtr config)
     m_lblLut->hide();
     m_txtLut->hide();
     m_bnSelectLut->hide();
+    m_bnClearLut->hide();
 
     connect(m_cmbDisplayDevice, SIGNAL(currentIndexChanged(int)), SLOT(refillViewCombobox()));
 

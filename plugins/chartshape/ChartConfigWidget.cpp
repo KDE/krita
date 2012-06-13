@@ -423,23 +423,8 @@ ChartConfigWidget::ChartConfigWidget()
     connect(d->ui.dataSetHasChartType, SIGNAL(toggled(bool)),
             this,                      SLOT(ui_dataSetHasChartTypeChanged(bool)));
 
-    // Error bar type menu button
-    QMenu *errorBarTypeMenu = new QMenu(this);
-
-    errorBarTypeMenu->addAction(i18n("None"));
-    errorBarTypeMenu->addAction(i18n("Constant Error"));
-    errorBarTypeMenu->addAction(i18n("Percentage Error"));
-    errorBarTypeMenu->addAction(i18n("Error Margin"));
-    errorBarTypeMenu->addAction(i18n("Standard Deviation"));
-    errorBarTypeMenu->addAction(i18n("Variance"));
-    errorBarTypeMenu->addAction(i18n("From Data Table"));
-
-    d->ui.errorBarTypeMenu->setMenu(errorBarTypeMenu);
-    d->ui.errorBarTypeMenu->setEnabled(false);
+    // Insert error bar button
     d->ui.formatErrorBar->setEnabled(false);
-
-    connect(errorBarTypeMenu, SIGNAL(triggered(QAction*)),
-            this,             SLOT(errorBarTypeSelected(QAction*)));
 
     // "Plot Area" tab
     connect(d->ui.showTitle,    SIGNAL(toggled(bool)),
@@ -756,11 +741,6 @@ void ChartConfigWidget::chartTypeSelected(QAction *action)
     update();
 }
 
-void ChartConfigWidget::errorBarTypeSelected(QAction *action)
-{
-    d->ui.errorBarTypeMenu->setText(action->text());
-}
-
 /**
  * Enabled/Disabled menu actions to set a polar chart type
  */
@@ -789,6 +769,15 @@ void ChartConfigWidget::setCartesianChartTypesEnabled(bool enabled)
     //NYI:
     //surface
     //gantt
+}
+
+void ChartConfigWidget::ui_dataSetErrorBarTypeChanged()
+{
+    if (d->selectedDataSet < 0)
+        return;
+
+    QString type = d->formatErrorBarDialog.widget.errorType->currentText();
+    d->ui.formatErrorBar->setText(type);
 }
 
 void ChartConfigWidget::ui_dataSetPieExplodeFactorChanged(int percent)
@@ -1265,14 +1254,18 @@ void ChartConfigWidget::setupDialogs()
     // Edit Fonts
     connect(d->ui.axisEditFontButton, SIGNAL(clicked()),
              this, SLOT(ui_axisEditFontButtonClicked()));
-    connect(&d->axisFontEditorDialog, SIGNAL(accepted()), this, SLOT(ui_axisLabelsFontChanged()));
+    connect(&d->axisFontEditorDialog, SIGNAL(accepted()),
+             this, SLOT(ui_axisLabelsFontChanged()));
     connect(d->ui.legendEditFontButton, SIGNAL(clicked()),
              this, SLOT(ui_legendEditFontButtonClicked()));
-    connect(&d->legendFontEditorDialog, SIGNAL(accepted()), this, SLOT(ui_legendFontChanged()));
+    connect(&d->legendFontEditorDialog, SIGNAL(accepted()),
+             this, SLOT(ui_legendFontChanged()));
 
     // Format Error Bars
     connect(d->ui.formatErrorBar, SIGNAL(clicked()),
              this, SLOT(slotShowFormatErrorBarDialog()));
+    connect(&d->formatErrorBarDialog, SIGNAL(accepted()),
+             this, SLOT(ui_dataSetErrorBarTypeChanged()));
 }
 
 void ChartConfigWidget::createActions()
@@ -1756,7 +1749,6 @@ void ChartConfigWidget::ui_datasetShowErrorBarChanged(bool b)
     if (d->selectedDataSet < 0 || d->selectedDataSet >= d->dataSets.count())
         return;
 
-    d->ui.errorBarTypeMenu->setEnabled(b);
     d->ui.formatErrorBar->setEnabled(b);
 }
 

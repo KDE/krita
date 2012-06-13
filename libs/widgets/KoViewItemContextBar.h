@@ -19,56 +19,82 @@
 * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOSELECTIONMANAGER_H
-#define KOSELECTIONMANAGER_H
+#ifndef KOVIEWITEMCONTEXTBAR_H
+#define KOVIEWITEMCONTEXTBAR_H
 
 #include <QObject>
 #include "kowidgets_export.h"
+#include <QModelIndex>
 
 class QAbstractItemView;
-class QModelIndex;
 class QItemSelection;
-class KoSelectionToggle;
+class QToolButton;
+class QHBoxLayout;
+class QRect;
 
 /**
- * @brief Allows to select and deselect items for item views.
+ * @brief Add context buttons to items of QAbstractView subclasses
  *
  * Whenever an item is hovered by the mouse, a toggle button is shown
- * which allows to select/deselect the current item.
+ * which allows to select/deselect the current item, other buttons for
+ * custom actions could be added using addContextButton method.
  */
-class KOWIDGETS_EXPORT KoSelectionManager : public QObject
+class KOWIDGETS_EXPORT KoViewItemContextBar : public QObject
 {
     Q_OBJECT
 
 public:
-    KoSelectionManager(QAbstractItemView *parent);
-    virtual ~KoSelectionManager();
+    KoViewItemContextBar(QAbstractItemView *parent);
+    virtual ~KoViewItemContextBar();
     virtual bool eventFilter(QObject *watched, QEvent *event);
 
-public slots:
     /**
-     * Resets the selection manager so that the toggle button gets
-     * invisible.
+     * Add a button to the context bar
+     * @param text to be used for button tool tip
+     * @param iconName or name of the icon displayed on the button
+     * @return a QToolButton, so it could be connected to a slot.
      */
-    void reset();
+    QToolButton *addContextButton(QString text, QString iconName);
+    //Returns the index of the item under the mouse cursor
+    QModelIndex currentIndex();
+
+    int preferredWidth();
 
 signals:
     /** Is emitted if the selection has been changed by the toggle button. */
     void selectionChanged();
 
+public slots:
+    /** Hide context bar */
+    void reset();
+    void enableContextBar();
+    void disableContextBar();
+
 private slots:
     void slotEntered(const QModelIndex &index);
     void slotViewportEntered();
-    void setItemSelected(bool selected);
+    void setItemSelected();
+    /** Hide context bar if the selectem item has been removed */
     void slotRowsRemoved(const QModelIndex &parent, int start, int end);
-    void slotSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+    /** Updates contex bar buttons state*/
+    void updateHoverUi(const QModelIndex& index);
+    void showContextBar(const QRect &rect);
+    /** Updates Selection Button state*/
+    void updateToggleSelectionButton();
+    /** Update Bar */
+    void update();
 
 private:
     void applyPointingHandCursor();
     void restoreCursor();
     QAbstractItemView *m_view;
-    KoSelectionToggle *m_toggle;
-    bool m_connected;
+    bool m_enabled;
     bool m_appliedPointingHandCursor;
+    QModelIndex m_IndexUnderCursor;
+    QWidget *m_ContextBar;
+    QToolButton *m_ToggleSelectionButton;
+    QHBoxLayout *m_Layout;
+    QList <QToolButton*> m_contextBarButtons;
 };
-#endif // KOSELECTIONMANAGER_H
+
+#endif // KOVIEWITEMCONTEXTBAR_H

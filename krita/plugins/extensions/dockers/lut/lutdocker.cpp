@@ -100,7 +100,7 @@ LutDockerPlugin::LutDockerPlugin(QObject *parent, const QVariantList &)
         KoDockRegistry::instance()->add(new LutDockerDockFactory(config));
     }
     catch (OCIO::Exception &exception) {
-        kWarning() << "OpenColorIO Error:" << exception.what() << "Cannot create the LUT docker";
+        KoDockRegistry::instance()->add(new LutDockerDockFactory(OCIO::GetCurrentConfig()));
     }
 
 }

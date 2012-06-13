@@ -316,8 +316,12 @@ void KoPAView::initGUI()
     }
 
     connect(shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
+    connect(shapeManager(), SIGNAL(contentChanged()), this, SLOT(updateCanvasSize()));
+    connect(d->doc, SIGNAL(shapeAdded(KoShape *)), this, SLOT(updateCanvasSize()));
+    connect(d->doc, SIGNAL(shapeRemoved(KoShape *)), this, SLOT(updateCanvasSize()));
     connect(d->canvas, SIGNAL(documentSize(const QSize&)), d->canvasController->proxyObject, SLOT(updateDocumentSize(const QSize&)));
     connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), d->canvas, SLOT(slotSetDocumentOffset(const QPoint&)));
+    connect(d->canvasController->proxyObject, SIGNAL(sizeChanged(const QSize &)), this, SLOT(updateCanvasSize()));
 
     if (shell()) {
         KoPADocumentStructureDockerFactory structureDockerFactory( KoDocumentSectionView::ThumbnailMode, d->doc->pageType() );
@@ -650,12 +654,12 @@ void KoPAView::slotZoomChanged( KoZoomMode::Mode mode, qreal zoom )
     Q_UNUSED(zoom);
     if (d->activePage) {
         if (mode == KoZoomMode::ZOOM_PAGE) {
-            KoPageLayout &layout = d->activePage->pageLayout();
+            const KoPageLayout &layout = viewMode()->activePageLayout();
             QRectF pageRect( 0, 0, layout.width, layout.height );
             d->canvasController->ensureVisible(d->canvas->viewConverter()->documentToView(pageRect));
         } else if (mode == KoZoomMode::ZOOM_WIDTH) {
             // horizontally center the page
-            KoPageLayout &layout = d->activePage->pageLayout();
+            const KoPageLayout &layout = viewMode()->activePageLayout();
             QRectF pageRect( 0, 0, layout.width, layout.height );
             QRect viewRect = d->canvas->viewConverter()->documentToView(pageRect).toRect();
             viewRect.translate(d->canvas->documentOrigin());
@@ -663,7 +667,7 @@ void KoPAView::slotZoomChanged( KoZoomMode::Mode mode, qreal zoom )
             int horizontalMove = viewRect.center().x() - currentVisible.center().x();
             d->canvasController->pan(QPoint(horizontalMove, 0));
         }
-        d->canvas->update();
+        updateCanvasSize(true);
     }
 }
 
@@ -705,29 +709,62 @@ void KoPAView::reinitDocumentDocker()
     }
 }
 
-void KoPAView::doUpdateActivePage( KoPAPageBase * page )
+void KoPAView::updateCanvasSize(bool forceUpdate)
 {
-    // save the old offset into the page so we can use it also on the new page
+    const KoPageLayout &layout = viewMode()->activePageLayout();
     QPoint scrollValue(d->canvasController->scrollBarValue());
 
+    QSizeF pageSize(layout.width, layout.height);
+    QSizeF viewportSize = d->canvasController->viewportSize();
+
+    //calculate size of union page + viewport
+    QSizeF documentMinSize(qMax(zoomHandler()->unzoomItX(viewportSize.width()), layout.width),
+                        qMax(zoomHandler()->unzoomItY(viewportSize.height()), layout.height));
+
+    // create a rect out of it with origin in tp left of page
+    QRectF documentRect(QPointF((documentMinSize.width() - layout.width) * -0.5,
+                               (documentMinSize.height() - layout.height) * -0.5),
+                       documentMinSize);
+
+    // Now make a union with the bounding rect of all shapes
+    // Fetch boundingRect like this as a viewmode might have set other shapes than the page
+    foreach (KoShape *layer, d->canvas->shapeManager()->shapes()) {
+        if (! dynamic_cast<KoShapeLayer *>(layer)) {
+            documentRect = documentRect.united(layer->boundingRect());
+        }
+    }
+
+    QPointF offset = -documentRect.topLeft();
+    QPoint scrollChange = d->canvas->documentOrigin() - zoomHandler()->documentToView(offset).toPoint();
+
+    if (forceUpdate || scrollChange != QPoint(0, 0)
+                    || d->zoomController->documentSize() != documentRect.size()
+                    || d->zoomController->pageSize() != pageSize) {
+        d->horizontalRuler->setRulerLength(layout.width);
+        d->verticalRuler->setRulerLength(layout.height);
+        d->horizontalRuler->setActiveRange(layout.leftMargin, layout.width - layout.rightMargin);
+        d->verticalRuler->setActiveRange(layout.topMargin, layout.height - layout.bottomMargin);
+        QSizeF documentSize(documentRect.size());
+        QSizeF oldDocumentSize(d->zoomController->documentSize());
+        QPoint oldOffset(d->canvas->documentOrigin());
+        d->canvas->setDocumentOrigin(offset);
+        d->zoomController->setDocumentSize(documentSize);
+        d->zoomController->setPageSize(pageSize);
+
+        d->canvas->resourceManager()->setResource(KoCanvasResourceManager::PageSize, pageSize);
+
+        d->canvas->update();
+        QSize documentPxSize(zoomHandler()->zoomItX(documentRect.width()), zoomHandler()->zoomItY(documentRect.height()));
+        d->canvasController->proxyObject->updateDocumentSize(documentPxSize);
+    }
+}
+
+void KoPAView::doUpdateActivePage( KoPAPageBase * page )
+{
     bool pageChanged = page != d->activePage;
     setActivePage( page );
 
-    d->canvas->updateSize();
-    KoPageLayout &layout = d->activePage->pageLayout();
-    d->horizontalRuler->setRulerLength(layout.width);
-    d->verticalRuler->setRulerLength(layout.height);
-    d->horizontalRuler->setActiveRange(layout.leftMargin, layout.width - layout.rightMargin);
-    d->verticalRuler->setActiveRange(layout.topMargin, layout.height - layout.bottomMargin);
-
-    QSizeF pageSize( layout.width, layout.height );
-    d->canvas->setDocumentOrigin(QPointF(layout.width, layout.height));
-    // the page is in the center of the canvas
-    d->zoomController->setDocumentSize(pageSize * 3);
-    d->zoomController->setPageSize(pageSize);
-    d->canvas->resourceManager()->setResource( KoCanvasResourceManager::PageSize, pageSize );
-
-    d->canvas->update();
+    updateCanvasSize(true);
 
     updatePageNavigationActions();
 
@@ -736,7 +773,6 @@ void KoPAView::doUpdateActivePage( KoPAPageBase * page )
     }
 
     pageOffsetChanged();
-    d->canvasController->setScrollBarValue(scrollValue);
 }
 
 void KoPAView::setActivePage( KoPAPageBase* page )

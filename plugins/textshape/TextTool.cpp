@@ -278,11 +278,11 @@ void TextTool::createActions()
     m_actionFormatSub->setCheckable(true);
     connect(m_actionFormatSub, SIGNAL(triggered(bool)), this, SLOT(subScript(bool)));
 
-    KAction *action = new KAction(
+    m_actionFormatIncreaseIndent = new KAction(
         KIcon(QApplication::isRightToLeft() ? "format-indent-less" : "format-indent-more"),
         i18n("Increase Indent"), this);
-    addAction("format_increaseindent", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(increaseIndent()));
+    addAction("format_increaseindent", m_actionFormatIncreaseIndent);
+    connect(m_actionFormatIncreaseIndent, SIGNAL(triggered()), this, SLOT(increaseIndent()));
 
     m_actionFormatDecreaseIndent = new KAction(
         KIcon(QApplication::isRightToLeft() ? "format-indent-more" : "format-indent-less"),
@@ -290,7 +290,7 @@ void TextTool::createActions()
     addAction("format_decreaseindent", m_actionFormatDecreaseIndent);
     connect(m_actionFormatDecreaseIndent, SIGNAL(triggered()), this, SLOT(decreaseIndent()));
 
-    action = new KAction(KIcon("format-list-unordered"),  i18n("Bullet list"), this);
+    KAction *action = new KAction(KIcon("format-list-unordered"),  i18n("Bullet list"), this);
     addAction("format_bulletlist", action);
 
     action = new KAction(KIcon("format-list-ordered"),  i18n("Numbered list"), this);
@@ -1690,7 +1690,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
         ensureCursorVisible();
     else
         m_delayedEnsureVisible = true;
-
+updateActions();
     updateSelectionHandler();
 }
 
@@ -1861,7 +1861,22 @@ void TextTool::updateActions()
     else if (bf.alignment() == (Qt::AlignRight | Qt::AlignAbsolute))
         m_actionAlignRight->setChecked(true);
 
-    m_actionFormatDecreaseIndent->setEnabled(textEditor->blockFormat().leftMargin() > 0.);
+    if (textEditor->block().textList()) {
+        QTextListFormat listFormat = textEditor->block().textList()->format();
+        if(listFormat.intProperty(KoListStyle::Level) > 1) {
+            m_actionFormatDecreaseIndent->setEnabled(true);
+        } else {
+            m_actionFormatDecreaseIndent->setEnabled(false);
+        }
+
+        if (listFormat.intProperty(KoListStyle::Level) < 10) {
+            m_actionFormatIncreaseIndent->setEnabled(true);
+        } else {
+            m_actionFormatIncreaseIndent->setEnabled(false);
+        }
+    } else {
+        m_actionFormatDecreaseIndent->setEnabled(textEditor->blockFormat().leftMargin() > 0.);
+    }
 
     m_allowActions = true;
 
@@ -2231,15 +2246,29 @@ void TextTool::subScript(bool on)
 void TextTool::increaseIndent()
 {
     if (!m_allowActions || !m_textEditor.data()) return;
-    m_textEditor.data()->increaseIndent();
-    m_actionFormatDecreaseIndent->setEnabled(m_textEditor.data()->blockFormat().leftMargin() > 0.);
+    if (m_textEditor.data()->block().textList()) {
+        ChangeListLevelCommand::CommandType type = ChangeListLevelCommand::IncreaseLevel;
+        ChangeListLevelCommand *cll = new ChangeListLevelCommand(*(m_textEditor.data()->cursor()), type, 1);
+        m_textEditor.data()->addCommand(cll);
+        editingPluginEvents();
+    } else {
+        m_textEditor.data()->increaseIndent();
+    }
+    updateActions();
 }
 
 void TextTool::decreaseIndent()
 {
     if (!m_allowActions || !m_textEditor.data()) return;
-    m_textEditor.data()->decreaseIndent();
-    m_actionFormatDecreaseIndent->setEnabled(m_textEditor.data()->blockFormat().leftMargin() > 0.);
+    if (m_textEditor.data()->block().textList()) {
+        ChangeListLevelCommand::CommandType type = ChangeListLevelCommand::DecreaseLevel;
+        ChangeListLevelCommand *cll = new ChangeListLevelCommand(*(m_textEditor.data()->cursor()), type, 1);
+        m_textEditor.data()->addCommand(cll);
+        editingPluginEvents();
+    } else {
+        m_textEditor.data()->decreaseIndent();
+    }
+    updateActions();
 }
 
 void TextTool::decreaseFontSize()

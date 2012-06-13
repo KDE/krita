@@ -78,6 +78,7 @@ public:
     bool showMinorGrid() const;
     Qt::Orientation orientation();
     QFont font() const;
+    qreal fontSize() const;
     bool isVisible() const;
 
     void setTitleText(const QString &text);
@@ -116,6 +117,7 @@ public:
     void setShowMinorGrid(bool showGrid);
     void setThreeD(bool threeD);
     void setFont(const QFont &font);
+    void setFontSize(qreal size);
     void setVisible(bool visible);
 
     KoOdfNumberStyles::NumericStyleFormat *numericStyleFormat() const;

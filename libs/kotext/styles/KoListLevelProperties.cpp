@@ -65,6 +65,7 @@ KoListLevelProperties::KoListLevelProperties()
 
     setRelativeBulletSize(100);
     setAlignmentMode(false);
+    setDisplayLevel(1);
     connect(this,SIGNAL(styleChanged(int)),SLOT(onStyleChanged(int)));
 }
 

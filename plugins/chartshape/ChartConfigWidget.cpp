@@ -49,6 +49,8 @@
 #include <KDChartAbstractCartesianDiagram>
 #include <KDChartLegend>
 #include <KDChartDataValueAttributes>
+#include <KDChartTextAttributes>
+#include <KDChartMeasure>
 
 // KChart
 #include "ChartProxyModel.h"
@@ -60,6 +62,8 @@
 #include "ui_ChartConfigWidget.h"
 #include "NewAxisDialog.h"
 #include "AxisScalingDialog.h"
+#include "FontEditorDialog.h"
+#include "FormatErrorBarDialog.h"
 #include "CellRegionDialog.h"
 #include "TableEditorDialog.h"
 #include "commands/ChartTypeCommand.h"
@@ -95,6 +99,7 @@ public:
     QMenu *dataSetLineChartMenu;
     QMenu *dataSetAreaChartMenu;
     QMenu *dataSetRadarChartMenu;
+    QMenu *dataSetStockChartMenu;
 
     // chart type selection actions
     QAction  *normalBarChartAction;
@@ -117,7 +122,10 @@ public:
     QAction  *scatterChartAction;
     QAction  *bubbleChartAction;
 
-    QAction  *stockChartAction;
+    QAction  *hlcStockChartAction;
+    QAction  *ohlcStockChartAction;
+    QAction  *candlestickStockChartAction;
+
     QAction  *surfaceChartAction;
     QAction  *ganttChartAction;
 
@@ -140,7 +148,11 @@ public:
     QAction  *dataSetFilledRadarChartAction;
     QAction  *dataSetScatterChartAction;
     QAction  *dataSetBubbleChartAction;
-    QAction  *dataSetStockChartAction;
+
+    QAction  *dataSetHLCStockChartAction;
+    QAction  *dataSetOHLCStockChartAction;
+    QAction  *dataSetCandlestickStockChartAction;
+
     QAction  *dataSetSurfaceChartAction;
     QAction  *dataSetGanttChartAction;
 
@@ -167,6 +179,9 @@ public:
     // Dialogs
     NewAxisDialog     newAxisDialog;
     AxisScalingDialog axisScalingDialog;
+    FontEditorDialog axisFontEditorDialog;
+    FontEditorDialog legendFontEditorDialog;
+    FormatErrorBarDialog formatErrorBarDialog;
     CellRegionDialog  cellRegionDialog;
 
     CellRegionStringValidator *cellRegionStringValidator;
@@ -177,6 +192,9 @@ ChartConfigWidget::Private::Private(QWidget *parent)
     : tableEditorDialog(0)
     , newAxisDialog(parent)
     , axisScalingDialog(parent)
+    , axisFontEditorDialog(parent)
+    , legendFontEditorDialog(parent)
+    , formatErrorBarDialog(parent)
     , cellRegionDialog(parent)
 
 {
@@ -199,6 +217,7 @@ ChartConfigWidget::Private::Private(QWidget *parent)
     dataSetLineChartMenu = 0;
     dataSetAreaChartMenu = 0;
     dataSetRadarChartMenu = 0;
+    dataSetStockChartMenu = 0;
     dataSetNormalBarChartAction = 0;
     dataSetStackedBarChartAction = 0;
     dataSetPercentBarChartAction = 0;
@@ -213,7 +232,9 @@ ChartConfigWidget::Private::Private(QWidget *parent)
     dataSetScatterChartAction = 0;
     dataSetRadarChartAction = 0;
     dataSetFilledRadarChartAction = 0;
-    dataSetStockChartAction = 0;
+    dataSetHLCStockChartAction = 0;
+    dataSetOHLCStockChartAction = 0;
+    dataSetCandlestickStockChartAction = 0;
     dataSetBubbleChartAction = 0;
     dataSetSurfaceChartAction = 0;
     dataSetGanttChartAction = 0;
@@ -278,6 +299,8 @@ static QString chartTypeIcon(ChartType type, ChartSubtype subtype)
         return "office-chart-polar";
     case FilledRadarChartType:
         return "office-chart-polar-filled";
+    case ScatterChartType:
+        return "office-chart-scatter";
     default:
         return "";
     }
@@ -334,7 +357,15 @@ ChartConfigWidget::ChartConfigWidget()
 
     chartTypeMenu->addSeparator();
 
-    d->stockChartAction = chartTypeMenu->addAction(i18n("Stock Chart"));
+    // Stock Charts
+    QMenu *stockChartMenu = chartTypeMenu->addMenu(i18n("Stock Chart"));
+    d->hlcStockChartAction  = stockChartMenu->addAction(i18n("HighLowClose"));
+    d->hlcStockChartAction->setEnabled(false);
+    d->ohlcStockChartAction = stockChartMenu->addAction(i18n("OpenHighLowClose"));
+    d->ohlcStockChartAction->setEnabled(false);
+    d->candlestickStockChartAction = stockChartMenu->addAction(i18n("Candlestick"));
+    d->candlestickStockChartAction->setEnabled(false);
+
     d->surfaceChartAction = chartTypeMenu->addAction(i18n("Surface Chart"));
     d->surfaceChartAction->setEnabled(false);
     d->ganttChartAction = chartTypeMenu->addAction(i18n("Gantt Chart"));
@@ -375,7 +406,11 @@ ChartConfigWidget::ChartConfigWidget()
     d->dataSetRadarChartAction = d->dataSetRadarChartMenu->addAction(KIcon("office-chart-polar"), i18n("Normal"));
     d->dataSetFilledRadarChartAction = d->dataSetRadarChartMenu->addAction(KIcon("office-chart-polar-filled"), i18n("Filled"));
 
-    d->dataSetStockChartAction = dataSetChartTypeMenu->addAction(i18n("Stock Chart"));
+    d->dataSetStockChartMenu = dataSetChartTypeMenu->addMenu("Stock Chart");
+    d->dataSetHLCStockChartAction = d->dataSetStockChartMenu->addAction(i18n("HighLowClose"));
+    d->dataSetOHLCStockChartAction = d->dataSetStockChartMenu->addAction(i18n("OpenHighLowClose"));
+    d->dataSetCandlestickStockChartAction = d->dataSetStockChartMenu->addAction(i18n("Candlestick"));
+
     d->dataSetBubbleChartAction = dataSetChartTypeMenu->addAction(i18n("Bubble Chart"));
 
     d->dataSetScatterChartAction = dataSetChartTypeMenu->addAction(KIcon("office-chart-scatter"), i18n("Scatter Chart"));
@@ -387,6 +422,24 @@ ChartConfigWidget::ChartConfigWidget()
 
     connect(d->ui.dataSetHasChartType, SIGNAL(toggled(bool)),
             this,                      SLOT(ui_dataSetHasChartTypeChanged(bool)));
+
+    // Error bar type menu button
+    QMenu *errorBarTypeMenu = new QMenu(this);
+
+    errorBarTypeMenu->addAction(i18n("None"));
+    errorBarTypeMenu->addAction(i18n("Constant Error"));
+    errorBarTypeMenu->addAction(i18n("Percentage Error"));
+    errorBarTypeMenu->addAction(i18n("Error Margin"));
+    errorBarTypeMenu->addAction(i18n("Standard Deviation"));
+    errorBarTypeMenu->addAction(i18n("Variance"));
+    errorBarTypeMenu->addAction(i18n("From Data Table"));
+
+    d->ui.errorBarTypeMenu->setMenu(errorBarTypeMenu);
+    d->ui.errorBarTypeMenu->setEnabled(false);
+    d->ui.formatErrorBar->setEnabled(false);
+
+    connect(errorBarTypeMenu, SIGNAL(triggered(QAction*)),
+            this,             SLOT(errorBarTypeSelected(QAction*)));
 
     // "Plot Area" tab
     connect(d->ui.showTitle,    SIGNAL(toggled(bool)),
@@ -408,6 +461,8 @@ ChartConfigWidget::ChartConfigWidget()
             this, SLOT(datasetPenSelected(const QColor&)));
     connect(d->ui.datasetShowCategory, SIGNAL(toggled(bool)),
             this, SLOT(ui_datasetShowCategoryChanged(bool)));
+    connect(d->ui.datasetShowErrorBar, SIGNAL(toggled(bool)),
+            this, SLOT(ui_datasetShowErrorBarChanged(bool)));
     connect(d->ui.dataSetShowNumber, SIGNAL(toggled(bool)),
             this, SLOT(ui_dataSetShowNumberChanged(bool)));
     connect(d->ui.datasetShowPercent, SIGNAL(toggled(bool)),
@@ -638,9 +693,20 @@ void ChartConfigWidget::chartTypeSelected(QAction *action)
         subtype = NoChartSubtype;
     }
 
-    else if (action == d->stockChartAction) {
+    // Stock charts
+    else if (action == d->hlcStockChartAction) {
         type    = StockChartType;
-        subtype = NoChartSubtype;
+        subtype = HighLowCloseChartSubtype;
+    }
+
+    else if (action == d->ohlcStockChartAction) {
+        type    = StockChartType;
+        subtype = OpenHighLowCloseChartSubtype;
+    }
+
+    else if (action == d->candlestickStockChartAction) {
+        type    = StockChartType;
+        subtype = CandlestickChartSubtype;
     }
 
     else if (action == d->bubbleChartAction) {
@@ -690,6 +756,11 @@ void ChartConfigWidget::chartTypeSelected(QAction *action)
     update();
 }
 
+void ChartConfigWidget::errorBarTypeSelected(QAction *action)
+{
+    d->ui.errorBarTypeMenu->setText(action->text());
+}
+
 /**
  * Enabled/Disabled menu actions to set a polar chart type
  */
@@ -711,7 +782,7 @@ void ChartConfigWidget::setCartesianChartTypesEnabled(bool enabled)
     d->dataSetAreaChartMenu->setEnabled(enabled);
     d->dataSetRadarChartMenu->setEnabled(enabled);
     d->dataSetScatterChartAction->setEnabled(enabled);
-    d->dataSetStockChartAction->setEnabled(enabled);
+    d->dataSetStockChartMenu->setEnabled(enabled);
     d->dataSetBubbleChartAction->setEnabled(enabled);
     // FIXME: Enable for:
     // pie, ring?
@@ -802,8 +873,18 @@ void ChartConfigWidget::dataSetChartTypeSelected(QAction *action)
         type = RingChartType;
     else if (action == d->dataSetScatterChartAction)
         type = ScatterChartType;
-    else if (action == d->dataSetStockChartAction)
-        type = StockChartType;
+
+    else if (action == d->dataSetHLCStockChartAction) {
+        type    = StockChartType;
+        subtype = HighLowCloseChartSubtype;
+    } else if (action == d->dataSetStackedAreaChartAction) {
+        type    = StockChartType;
+        subtype = OpenHighLowCloseChartSubtype;
+    } else if (action == d->dataSetPercentAreaChartAction) {
+        type    = StockChartType;
+        subtype = CandlestickChartSubtype;
+    }
+
     else if (action == d->dataSetBubbleChartAction)
         type = BubbleChartType;
 
@@ -952,24 +1033,28 @@ void ChartConfigWidget::update()
         || d->subtype != d->shape->chartSubType())
     {
         // Update the chart type specific settings in the "Data Sets" tab
-        bool needSeparator = false;
+        bool needPropertiesSeparator = false;
         if (d->shape->chartType() == BarChartType) {
             d->ui.barProperties->show();
             d->ui.pieProperties->hide();
-            needSeparator = true;
-        } else if (d->shape->chartType() == CircleChartType) {
+            d->ui.errorBarProperties->show();
+            needPropertiesSeparator = true;
+        } else if (d->shape->chartType() == LineChartType || d->shape->chartType() == AreaChartType
+                   || d->shape->chartType() == ScatterChartType) {
+            d->ui.barProperties->hide();
+            d->ui.pieProperties->hide();
+            d->ui.errorBarProperties->show();
+        } else if (d->shape->chartType() == CircleChartType || d->shape->chartType() == RingChartType) {
             d->ui.barProperties->hide();
             d->ui.pieProperties->show();
-            needSeparator = true;
-        } else if (d->shape->chartType() == RingChartType) {
-            d->ui.barProperties->hide();
-            d->ui.pieProperties->show();
-            needSeparator = true;
+            d->ui.errorBarProperties->hide();
+            needPropertiesSeparator = true;
         } else {
             d->ui.barProperties->hide();
             d->ui.pieProperties->hide();
+            d->ui.errorBarProperties->hide();
         }
-        d->ui.propertiesSeparator->setVisible(needSeparator);
+        d->ui.propertiesSeparator->setVisible(needPropertiesSeparator);
 
         // Set the chart type icon in the chart type button.
         QString iconName = chartTypeIcon(d->shape->chartType(), d->shape->chartSubType());
@@ -1049,6 +1134,12 @@ void ChartConfigWidget::slotShowCellRegionDialog()
     ui_dataSetSelectionChanged_CellRegionDialog(selectedDataSet);
 
     d->cellRegionDialog.show();
+}
+
+
+void ChartConfigWidget::slotShowFormatErrorBarDialog()
+{
+    d->formatErrorBarDialog.show();
 }
 
 
@@ -1170,6 +1261,18 @@ void ChartConfigWidget::setupDialogs()
              this, SLOT(ui_axisSubStepWidthChanged(double)));
     connect (d->axisScalingDialog.automaticSubStepWidth, SIGNAL(toggled(bool)),
               this, SLOT(ui_axisUseAutomaticSubStepWidthChanged(bool)));
+
+    // Edit Fonts
+    connect(d->ui.axisEditFontButton, SIGNAL(clicked()),
+             this, SLOT(ui_axisEditFontButtonClicked()));
+    connect(&d->axisFontEditorDialog, SIGNAL(accepted()), this, SLOT(ui_axisLabelsFontChanged()));
+    connect(d->ui.legendEditFontButton, SIGNAL(clicked()),
+             this, SLOT(ui_legendEditFontButtonClicked()));
+    connect(&d->legendFontEditorDialog, SIGNAL(accepted()), this, SLOT(ui_legendFontChanged()));
+
+    // Format Error Bars
+    connect(d->ui.formatErrorBar, SIGNAL(clicked()),
+             this, SLOT(slotShowFormatErrorBarDialog()));
 }
 
 void ChartConfigWidget::createActions()
@@ -1430,28 +1533,31 @@ void ChartConfigWidget::ui_dataSetSelectionChanged(int index)
             }
             break;
         case CircleChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("chart_circle_normal"));
+            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("office-chart-pie"));
             break;
         case RingChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("chart_ring_normal"));
+            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("office-chart-ring"));
             break;
         case ScatterChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("chart_scatter_normal"));
+            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("office-chart-scatter"));
             break;
         case RadarChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("chart_radar_normal"));
+            d->ui.dataSetChartTypeMenu->setIcon(KIcon("office-chart-polar"));
+            break;
+        case FilledRadarChartType:
+            d->ui.dataSetChartTypeMenu->setIcon(KIcon("office-chart-polar-filled"));
             break;
         case StockChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("chart_stock_normal"));
+            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("office-chart-stock"));
             break;
         case BubbleChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("chart_bubble_normal"));
+            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("office-chart-bubble"));
             break;
         case SurfaceChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("chart_surface_normal"));
+            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("office-chart-surface"));
             break;
         case GanttChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("chart_gantt_normal"));
+            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("office-chart-gantt"));
             break;
 
             // Fixes a warning that LastChartType isn't handled.
@@ -1509,6 +1615,21 @@ void ChartConfigWidget::ui_axisShowGridLinesChanged(bool b)
         return;
 
     emit axisShowGridLinesChanged(d->axes[d->ui.axes->currentIndex()], b);
+}
+
+void ChartConfigWidget::ui_axisLabelsFontChanged()
+{
+    QFont font = d->axisFontEditorDialog.fontChooser->font();
+    Axis *axis = d->axes[d->ui.axes->currentIndex()];
+    axis->setFont(font);
+    axis->setFontSize(font.pointSizeF());
+}
+
+void ChartConfigWidget::ui_legendFontChanged()
+{
+    QFont font = d->legendFontEditorDialog.fontChooser->font();
+    d->shape->legend()->setFont(font);
+    d->shape->legend()->setFontSize(font.pointSizeF());
 }
 
 void ChartConfigWidget::ui_axisAdded()
@@ -1608,12 +1729,35 @@ void ChartConfigWidget::ui_axisScalingButtonClicked()
     d->axisScalingDialog.show();
 }
 
+void ChartConfigWidget::ui_axisEditFontButtonClicked()
+{
+    QFont font = d->axes[d->ui.axes->currentIndex()]->font();
+    d->axisFontEditorDialog.fontChooser->setFont(font);
+    d->axisFontEditorDialog.show();
+}
+
+void ChartConfigWidget::ui_legendEditFontButtonClicked()
+{
+    QFont font = d->shape->legend()->font();
+    d->legendFontEditorDialog.fontChooser->setFont(font);
+    d->legendFontEditorDialog.show();
+}
+
 void ChartConfigWidget::ui_datasetShowCategoryChanged(bool b)
 {
     if (d->selectedDataSet < 0 || d->selectedDataSet >= d->dataSets.count())
         return;
 
     emit datasetShowCategoryChanged(d->dataSets[d->selectedDataSet], b);
+}
+
+void ChartConfigWidget::ui_datasetShowErrorBarChanged(bool b)
+{
+    if (d->selectedDataSet < 0 || d->selectedDataSet >= d->dataSets.count())
+        return;
+
+    d->ui.errorBarTypeMenu->setEnabled(b);
+    d->ui.formatErrorBar->setEnabled(b);
 }
 
 void ChartConfigWidget::ui_dataSetShowNumberChanged(bool b)

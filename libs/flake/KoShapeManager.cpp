@@ -124,10 +124,12 @@ void KoShapeManager::Private::updateTree()
     // for detecting collisions between shapes.
     DetectCollision detector;
     bool selectionModified = false;
+    bool anyModified = false;
     foreach(KoShape *shape, aggregate4update) {
         if (shapeIndexesBeforeUpdate.contains(shape))
             detector.detect(tree, shape, shapeIndexesBeforeUpdate[shape]);
         selectionModified = selectionModified || selection->isSelected(shape);
+        anyModified = true;
     }
 
     foreach (KoShape *shape, aggregate4update) {
@@ -147,6 +149,9 @@ void KoShapeManager::Private::updateTree()
     if (selectionModified) {
         selection->updateSizeAndPosition();
         emit q->selectionContentChanged();
+    }
+    if (anyModified) {
+        emit q->contentChanged();
     }
 }
 

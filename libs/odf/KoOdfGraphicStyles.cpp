@@ -48,37 +48,37 @@ void KoOdfGraphicStyles::saveOdfFillStyle(KoGenStyle &styleFill, KoGenStyles& ma
                                             ? KoGenStyle::DefaultType : KoGenStyle::GraphicType;
     switch (brush.style()) {
     case Qt::Dense1Pattern:
-        styleFill.addProperty("draw:transparency", "94%", propertyType);
+        styleFill.addProperty("draw:opacity", "6%", propertyType);
         styleFill.addProperty("draw:fill", "solid", propertyType);
         styleFill.addProperty("draw:fill-color", brush.color().name(), propertyType);
         break;
     case Qt::Dense2Pattern:
-        styleFill.addProperty("draw:transparency", "88%", propertyType);
+        styleFill.addProperty("draw:opacity", "12%", propertyType);
         styleFill.addProperty("draw:fill", "solid", propertyType);
         styleFill.addProperty("draw:fill-color", brush.color().name(), propertyType);
         break;
     case Qt::Dense3Pattern:
-        styleFill.addProperty("draw:transparency", "63%", propertyType);
+        styleFill.addProperty("draw:opacity", "37%", propertyType);
         styleFill.addProperty("draw:fill", "solid", propertyType);
         styleFill.addProperty("draw:fill-color", brush.color().name(), propertyType);
         break;
     case Qt::Dense4Pattern:
-        styleFill.addProperty("draw:transparency", "50%", propertyType);
+        styleFill.addProperty("draw:opacity", "50%", propertyType);
         styleFill.addProperty("draw:fill", "solid", propertyType);
         styleFill.addProperty("draw:fill-color", brush.color().name(), propertyType);
         break;
     case Qt::Dense5Pattern:
-        styleFill.addProperty("draw:transparency", "37%", propertyType);
+        styleFill.addProperty("draw:opacity", "63%", propertyType);
         styleFill.addProperty("draw:fill", "solid", propertyType);
         styleFill.addProperty("draw:fill-color", brush.color().name(), propertyType);
         break;
     case Qt::Dense6Pattern:
-        styleFill.addProperty("draw:transparency", "12%", propertyType);
+        styleFill.addProperty("draw:opacity", "88%", propertyType);
         styleFill.addProperty("draw:fill", "solid", propertyType);
         styleFill.addProperty("draw:fill-color", brush.color().name(), propertyType);
         break;
     case Qt::Dense7Pattern:
-        styleFill.addProperty("draw:transparency", "6%", propertyType);
+        styleFill.addProperty("draw:opacity", "94%", propertyType);
         styleFill.addProperty("draw:fill", "solid", propertyType);
         styleFill.addProperty("draw:fill-color", brush.color().name(), propertyType);
         break;

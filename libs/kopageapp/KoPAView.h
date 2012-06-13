@@ -212,6 +212,9 @@ public slots:
     /// Delete the current page
     void deletePage();
 
+    /// Make sure the canvas size matches the content
+    void updateCanvasSize(bool forceUpdate = false);
+
 protected slots:
 
     void viewSnapToGrid(bool snap);

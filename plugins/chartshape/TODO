@@ -39,8 +39,12 @@ assigned to a person.
 Until the branching of 2.5: in priority order
  * Subtypes for stock charts.                                   [erione]
     + Get a stock chart manual from KDAB                        [ingwa]
- * Font editing for text items (header/etc, axis labels, ...)   [erione]
+    + UI							[Done]
+    + implementation						[erione]
+ * Font editing for text items (header/etc, axis labels, ...)   [DONE]
  * Y error bars                                                 [erione]
+    + UI							[Done]
+    + implementation						[erione]
  * Edit marker type for dataset                                 [ingwa]
  * Add/delete data set when in a spreadsheet                    [erione]
 

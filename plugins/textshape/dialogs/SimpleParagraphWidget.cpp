@@ -78,6 +78,7 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
     widget.changeTextDirection->setDefaultAction(tool->action("change_text_direction"));
 
     widget.moreOptions->setText("...");
+    widget.moreOptions->setToolTip(i18n("Change paragraph format"));
     connect(widget.moreOptions, SIGNAL(clicked(bool)), tool->action("format_paragraph"), SLOT(trigger()));
 
     connect(widget.changeTextDirection, SIGNAL(clicked()), this, SIGNAL(doneWithFocus()));

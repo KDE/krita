@@ -706,7 +706,7 @@ void KisToolTransform::setTransformFunction(QPointF mousePos, Qt::KeyboardModifi
         }
     }
     else {
-        if (modifiers & Qt::MetaModifier) {
+        if (modifiers & Qt::AltModifier) {
             m_function = PERSPECTIVE;
             setFunctionalCursor();
             return;
@@ -829,7 +829,7 @@ void KisToolTransform::setTransformFunction(QPointF mousePos, Qt::KeyboardModifi
 void KisToolTransform::mousePressEvent(KoPointerEvent *event)
 {
     if (!PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
-                       Qt::LeftButton, Qt::MetaModifier)) {
+                       Qt::LeftButton, Qt::AltModifier)) {
 
         KisTool::mousePressEvent(event);
         return;

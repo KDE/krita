@@ -53,7 +53,10 @@ enum ChartSubtype {
     NoChartSubtype,             // for charts with no subtypes
     NormalChartSubtype,         // For bar, line, area and radar charts
     StackedChartSubtype,
-    PercentChartSubtype
+    PercentChartSubtype,
+    HighLowCloseChartSubtype,               // For stock charts
+    OpenHighLowCloseChartSubtype,
+    CandlestickChartSubtype
 };
 
 enum AxisDimension {

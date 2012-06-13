@@ -938,6 +938,15 @@ void PlotArea::saveOdfSubType(KoXmlWriter& xmlWriter,
         break;
 
     case StockChartType:
+        switch(d->chartSubtype) {
+        case NoChartSubtype:
+        case HighLowCloseChartSubtype:
+        case OpenHighLowCloseChartSubtype:
+            break;
+        case CandlestickChartSubtype:
+            plotAreaStyle.addProperty("chart:japanese-candle-stick", "true");
+            break;
+        }
     case BubbleChartType:
     case SurfaceChartType:
     case GanttChartType:

@@ -245,6 +245,7 @@ Axis::Private::Private(Axis *axis, AxisDimension dim)
     showOuterMajorTicks = true;
 
     showOverlappingDataLabels = false;
+    showLabels = true;
 
     kdBarDiagram     = 0;
     kdLineDiagram    = 0;
@@ -1302,23 +1303,33 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
                     d->title->setPosition(QPointF(x, y));
                 }
 
-                if (n.hasAttributeNS(KoXmlNS::svg, "width")
-                    && n.hasAttributeNS(KoXmlNS::svg, "height"))
-                {
-                    const qreal width = KoUnit::parseValue(n.attributeNS(KoXmlNS::svg, "width"));
-                    const qreal height = KoUnit::parseValue(n.attributeNS(KoXmlNS::svg, "height"));
-                    d->title->setSize(QSizeF(width, height));
-                }
-
                 if (n.hasAttributeNS(KoXmlNS::chart, "style-name")) {
                     styleStack.clear();
                     context.odfLoadingContext().fillStyleStack(n, KoXmlNS::chart, "style-name", "chart");
+
+                    if (styleStack.hasProperty(KoXmlNS::style, "rotation-angle")) {
+                        qreal rotationAngle = 360 - KoUnit::parseValue(styleStack.property(KoXmlNS::style, "rotation-angle"));
+
+                        if (kdAxis()->position() == KDChart::CartesianAxis::Left)
+                            rotationAngle = 90 + rotationAngle;
+                        else if (kdAxis()->position() == KDChart::CartesianAxis::Right)
+                            rotationAngle = -90 + rotationAngle;
+                        d->title->rotate(rotationAngle);
+                    }
+
                     styleStack.setTypeProperties("text");
 
                     if (styleStack.hasProperty(KoXmlNS::fo, "font-size")) {
                         const qreal fontSize = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "font-size"));
                         QFont font = d->titleData->document()->defaultFont();
                         font.setPointSizeF(fontSize);
+                        d->titleData->document()->setDefaultFont(font);
+                    }
+
+                    if (styleStack.hasProperty(KoXmlNS::fo, "font-family")) {
+                        const QString fontFamily = styleStack.property(KoXmlNS::fo, "font-family");
+                        QFont font = d->titleData->document()->defaultFont();
+                        font.setFamily(fontFamily);
                         d->titleData->document()->setDefaultFont(font);
                     }
                 }
@@ -1330,6 +1341,18 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
                 }
                 else {
                     qWarning() << "Error: Axis' <chart:title> element contains no <text:p>";
+                }
+
+                if (n.hasAttributeNS(KoXmlNS::svg, "width")
+                    && n.hasAttributeNS(KoXmlNS::svg, "height"))
+                {
+                    const qreal width = KoUnit::parseValue(n.attributeNS(KoXmlNS::svg, "width"));
+                    const qreal height = KoUnit::parseValue(n.attributeNS(KoXmlNS::svg, "height"));
+                    d->title->setSize(QSizeF(width, height));
+                }  else {
+                    QTextDocument* doc = d->titleData->document();
+                    QRect r = QFontMetrics(doc->defaultFont()).boundingRect(doc->toPlainText());
+                    d->title->setSize(r.size());
                 }
             }
             else if (n.localName() == "grid") {
@@ -1606,11 +1629,11 @@ void Axis::saveOdf(KoShapeSavingContext &context)
 
     //axisStyle.addPropertyPt("chart:origin", origin);
 
-    axisStyle.addPropertyPt("fo:font-size", font().pointSize(), KoGenStyle::TextType);
-
     KDChart::TextAttributes tatt =  kdAxis()->textAttributes();
     QPen pen = tatt.pen();
     axisStyle.addProperty("fo:font-color", pen.color().name(), KoGenStyle::TextType);
+    axisStyle.addProperty("fo:font-family", tatt.font().family(), KoGenStyle::TextType);
+    axisStyle.addPropertyPt("fo:font-size", tatt.font().pointSize(), KoGenStyle::TextType);
 
     const QString styleName = mainStyles.insert(axisStyle, "ch");
     bodyWriter.addAttribute("chart:style-name", styleName);
@@ -1658,6 +1681,17 @@ void Axis::saveOdf(KoShapeSavingContext &context)
     bodyWriter.addAttributePt("svg:y", d->title->position().y());
     bodyWriter.addAttributePt("svg:width", d->title->size().width());
     bodyWriter.addAttributePt("svg:height", d->title->size().height());
+
+    KoGenStyle axisTitleStyle(KoGenStyle::ChartAutoStyle, "chart");
+    axisTitleStyle.addPropertyPt("style:rotation-angle", 360 - d->title->rotation());
+
+    QTextCursor cursor(d->titleData->document());
+    QFont titleFont = cursor.charFormat().font();
+    axisTitleStyle.addProperty("fo:font-family", titleFont.family(), KoGenStyle::TextType);
+    axisTitleStyle.addPropertyPt("fo:font-size", titleFont.pointSize(), KoGenStyle::TextType);
+
+    const QString titleStyleName = mainStyles.insert(axisTitleStyle, "ch");
+    bodyWriter.addAttribute("chart:style-name", titleStyleName);
 
     QString axisLabel = d->titleData->document()->toPlainText();
     if (!axisLabel.isEmpty()) {
@@ -1886,9 +1920,9 @@ void Axis::plotAreaChartSubTypeChanged(ChartSubtype subType)
             KDChart::StockDiagram::Type type;
             switch (subType) {
 #if 0
-            case StackedChartSubtype:
+            case CandlestickChartSubtype:
                 type = KDChart::StockDiagram::Candlestick; break;
-            case PercentChartSubtype:
+            case OpenHighLowCloseChartSubtype:
                 type = KDChart::StockDiagram::OpenHighLowClose; break;
 #endif
             default:
@@ -2089,6 +2123,21 @@ void Axis::setFont(const QFont &font)
     KDChart::TextAttributes attr = d->kdAxis->textAttributes();
     attr.setFont(font);
     d->kdAxis->setTextAttributes(attr);
+}
+
+qreal Axis::fontSize() const
+{
+    return d->font.pointSizeF();
+}
+
+void Axis::setFontSize(qreal size)
+{
+    d->font.setPointSizeF(size);
+
+    // KDChart
+    KDChart::TextAttributes attributes = d->kdAxis->textAttributes();
+    attributes.setFontSize(KDChart::Measure(size, KDChartEnums::MeasureCalculationModeAbsolute));
+    d->kdAxis->setTextAttributes(attributes);
 }
 
 bool Axis::isVisible() const

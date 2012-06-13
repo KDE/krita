@@ -69,16 +69,19 @@ public:
 public slots:
     void chartSubTypeSelected(int type);
     void chartTypeSelected(QAction *action);
+    void errorBarTypeSelected(QAction *action);
     void setThreeDMode(bool threeD);
     void update();
 
     void slotShowTableEditor();
     void slotShowCellRegionDialog();
+    void slotShowFormatErrorBarDialog();
 
     void dataSetChartTypeSelected(QAction *action);
     void datasetBrushSelected(const QColor& color);
     void datasetPenSelected(const QColor& color);
     void ui_datasetShowCategoryChanged(bool b);
+    void ui_datasetShowErrorBarChanged(bool b);
     void ui_dataSetShowNumberChanged(bool b);
     void ui_datasetShowPercentChanged(bool b);
     void ui_datasetShowSymbolChanged(bool b);
@@ -98,6 +101,8 @@ public slots:
     void setLegendAlignment(int boxEntryIndex);
     void setLegendFixedPosition(int buttonGroupIndex);
     //void setLegendShowTitle(bool toggled);
+    void ui_legendEditFontButtonClicked();
+    void ui_legendFontChanged();
     void updateFixedPosition(Position position);
     
     void ui_axisSelectionChanged(int index);
@@ -113,6 +118,8 @@ public slots:
     void ui_axisAdded();
     void ui_addAxisClicked();
     void ui_removeAxisClicked();
+    void ui_axisEditFontButtonClicked();
+    void ui_axisLabelsFontChanged();
 
 signals:
     void chartTypeChanged(ChartType type);

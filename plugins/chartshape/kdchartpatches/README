@@ -7,3 +7,7 @@ Patches:
 odf-marker-types.diff
   This patch implements missing marker types that are present in ODF
   1.1 and 1.2 but were not implemented in KDChart.
+
+text-overlap.diff
+  This patch takes into consideration the value of 'chart:text-overlap' attribute
+  while drawing labels

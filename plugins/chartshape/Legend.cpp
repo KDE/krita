@@ -526,14 +526,21 @@ bool Legend::loadOdf(const KoXmlElement &legendElement,
             setLegendPosition(EndPosition);
         }
 
-        if (legendElement.hasAttributeNS(KoXmlNS::calligra, "title")) {
-            setTitle(legendElement.attributeNS(KoXmlNS::calligra, "title", QString()));
+        if (legendElement.hasAttributeNS(KoXmlNS::office, "title")) {
+            setTitle(legendElement.attributeNS(KoXmlNS::office, "title", QString()));
         }
 
         styleStack.setTypeProperties("text");
 
+        if (styleStack.hasProperty(KoXmlNS::fo, "font-family")) {
+            QString fontFamily = styleStack.property(KoXmlNS::fo, "font-family");
+            QFont font = d->font;
+            font.setFamily(fontFamily);
+            setFont(font);
+        }
         if (styleStack.hasProperty(KoXmlNS::fo, "font-size")) {
-            setFontSize(KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "font-size")));
+            qreal fontSize = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "font-size"));
+            setFontSize(fontSize);
         }
         if (styleStack.hasProperty(KoXmlNS::fo, "font-color")) {
             QColor color = styleStack.property(KoXmlNS::fo, "font-color");

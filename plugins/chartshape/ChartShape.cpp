@@ -135,18 +135,18 @@ static const char *ODF_CHARTTYPES[NUM_CHARTTYPES] = {
 };
 
 static const ChartSubtype defaultSubtypes[NUM_CHARTTYPES] = {
-    NormalChartSubtype,     // Bar
-    NormalChartSubtype,     // Line
-    NormalChartSubtype,     // Area
-    NoChartSubtype,         // Circle
-    NoChartSubtype,         // Ring
-    NoChartSubtype,         // Scatter
-    NormalChartSubtype,     // Radar
-    NormalChartSubtype,     // Filled Radar
-    NoChartSubtype,         // Stock
-    NoChartSubtype,         // Bubble
-    NoChartSubtype,         // Surface
-    NoChartSubtype          // Gantt
+    NormalChartSubtype,         // Bar
+    NormalChartSubtype,         // Line
+    NormalChartSubtype,         // Area
+    NoChartSubtype,             // Circle
+    NoChartSubtype,             // Ring
+    NoChartSubtype,             // Scatter
+    NormalChartSubtype,         // Radar
+    NormalChartSubtype,         // Filled Radar
+    HighLowCloseChartSubtype,   // Stock
+    NoChartSubtype,             // Bubble
+    NoChartSubtype,             // Surface
+    NoChartSubtype              // Gantt
 };
 
 
@@ -191,8 +191,17 @@ void saveOdfLabel(KoShape *label, KoXmlWriter &bodyWriter,
 
     bodyWriter.addAttributePt("svg:x", label->position().x());
     bodyWriter.addAttributePt("svg:y", label->position().y());
+    bodyWriter.addAttributePt("svg:width", label->size().width());
+    bodyWriter.addAttributePt("svg:height", label->size().height());
+
     // TODO: Save text label color
-    bodyWriter.addAttribute("chart:style-name", saveOdfFont(mainStyles, labelData->document()->defaultFont(), QColor()));
+    QTextCursor cursor(labelData->document());
+    QFont labelFont = cursor.charFormat().font();
+
+    KoGenStyle autoStyle(KoGenStyle::ChartAutoStyle, "chart", 0);
+    autoStyle.addPropertyPt("style:rotation-angle", 360 - label->rotation());
+    saveOdfFont(autoStyle, labelFont, QColor());
+    bodyWriter.addAttribute("chart:style-name", mainStyles.insert(autoStyle, "ch"));
 
     bodyWriter.startElement("text:p");
     bodyWriter.addTextNode(labelData->document()->toPlainText());
@@ -245,7 +254,7 @@ public:
     Private(ChartShape *shape);
     ~Private();
 
-    bool loadOdfLabel(KoShape *label, KoXmlElement &labelElement);
+    bool loadOdfLabel(KoShape *label, KoXmlElement &labelElement, KoShapeLoadingContext &context);
     void setChildVisible(KoShape *label, bool doShow);
 
     // The components of a chart
@@ -300,7 +309,7 @@ ChartShape::Private::~Private()
 {
 }
 
-bool ChartShape::Private::loadOdfLabel(KoShape *label, KoXmlElement &labelElement)
+bool ChartShape::Private::loadOdfLabel(KoShape *label, KoXmlElement &labelElement, KoShapeLoadingContext &context)
 {
     TextLabelData *labelData = qobject_cast<TextLabelData*>(label->userData());
     if (!labelData)
@@ -331,14 +340,51 @@ bool ChartShape::Private::loadOdfLabel(KoShape *label, KoXmlElement &labelElemen
         label->setPosition(pos);
     }
 
-    // 3. set the size
-    QSizeF size = shape->size();
-    QRect r = QFontMetrics(doc->defaultFont()).boundingRect(
-                    labelData->shapeMargins().left, labelData->shapeMargins().top,
-                    qMax(CM_TO_POINT(5), qreal(size.width() - pos.x() * 2.0 - labelData->shapeMargins().right)),
-                    qMax(CM_TO_POINT(0.6), qreal(size.height() - labelData->shapeMargins().bottom)),
-                    Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap, doc->toPlainText());
-    label->setSize(r.size());
+    // 3. set the styles
+    if (labelElement.hasAttributeNS(KoXmlNS::chart, "style-name")) {
+        KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+        styleStack.clear();
+        context.odfLoadingContext().fillStyleStack(labelElement, KoXmlNS::chart, "style-name", "chart");
+
+        styleStack.setTypeProperties("chart");
+        if (styleStack.hasProperty(KoXmlNS::style, "rotation-angle")) {
+            qreal rotationAngle = 360 - KoUnit::parseValue(styleStack.property(KoXmlNS::style, "rotation-angle"));
+            label->rotate(rotationAngle);
+        }
+
+        styleStack.setTypeProperties("text");
+
+        if (styleStack.hasProperty(KoXmlNS::fo, "font-size")) {
+            const qreal fontSize = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "font-size"));
+            QFont font = doc->defaultFont();
+            font.setPointSizeF(fontSize);
+            doc->setDefaultFont(font);
+        }
+
+        if (styleStack.hasProperty(KoXmlNS::fo, "font-family")) {
+            const QString fontFamily = styleStack.property(KoXmlNS::fo, "font-family");
+            QFont font = doc->defaultFont();
+            font.setFamily(fontFamily);
+            doc->setDefaultFont(font);
+        }
+    }
+
+    // 4. set the size
+    if (labelElement.hasAttributeNS(KoXmlNS::svg, "width")
+        && labelElement.hasAttributeNS(KoXmlNS::svg, "height"))
+    {
+        const qreal width = KoUnit::parseValue(labelElement.attributeNS(KoXmlNS::svg, "width"));
+        const qreal height = KoUnit::parseValue(labelElement.attributeNS(KoXmlNS::svg, "height"));
+        label->setSize(QSizeF(width, height));
+    } else {
+        QSizeF size = shape->size();
+        QRect r = QFontMetrics(doc->defaultFont()).boundingRect(
+                        labelData->shapeMargins().left, labelData->shapeMargins().top,
+                        qMax(CM_TO_POINT(5), qreal(size.width() - pos.x() * 2.0 - labelData->shapeMargins().right)),
+                        qMax(CM_TO_POINT(0.6), qreal(size.height() - labelData->shapeMargins().bottom)),
+                        Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap, doc->toPlainText());
+        label->setSize(r.size());
+    }
 
     return true;
 }
@@ -1042,7 +1088,7 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement,
                                                  KoXmlNS::chart, "title");
     d->setChildVisible(d->title, !titleElem.isNull());
     if (!titleElem.isNull()) {
-        if (!d->loadOdfLabel(d->title, titleElem))
+        if (!d->loadOdfLabel(d->title, titleElem, context))
             return false;
     }
 
@@ -1050,7 +1096,7 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement,
     KoXmlElement subTitleElem = KoXml::namedItemNS(chartElement, KoXmlNS::chart, "subtitle");
     d->setChildVisible(d->subTitle, !subTitleElem.isNull());
     if (!subTitleElem.isNull()) {
-        if (!d->loadOdfLabel(d->subTitle, subTitleElem))
+        if (!d->loadOdfLabel(d->subTitle, subTitleElem, context))
             return false;
     }
 
@@ -1058,7 +1104,7 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement,
     KoXmlElement footerElem = KoXml::namedItemNS(chartElement, KoXmlNS::chart, "footer");
     d->setChildVisible(d->footer, !footerElem.isNull());
     if (!footerElem.isNull()) {
-        if (!d->loadOdfLabel(d->footer, footerElem))
+        if (!d->loadOdfLabel(d->footer, footerElem, context))
             return false;
     }
 

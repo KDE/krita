@@ -44,6 +44,11 @@
 
 /************* AUXILIARY FUNCTIONS **********************************/
 
+#include <KoConfig.h>
+#ifdef HAVE_OPENEXR
+#include <half.h>
+#endif
+
 #define ceiledSize(sz) QSize(ceil((sz).width()), ceil((sz).height()))
 #define isOdd(x) ((x) & 0x01)
 
@@ -163,31 +168,39 @@ void KisImagePyramid::updateCache(const QRect &dirtyImageRect)
 
 void KisImagePyramid::retrieveImageData(const QRect &rect)
 {
-    qDebug() << "retrieveImageData()" << rect;
-
     // XXX: use QThreadStorage to cache the two patches (512x512) of pixels. Note
     // that when we do that, we need to reset that cache when the projection's
     // colorspace changes.
+    const KoColorSpace *projectionCs = m_originalImage->projection()->colorSpace();
     KisPaintDeviceSP originalProjection = m_originalImage->projection();
     quint32 numPixels = rect.width() * rect.height();
 
     quint8 *originalBytes = originalProjection->colorSpace()->allocPixelBuffer(numPixels);
     originalProjection->readBytes(originalBytes, rect);
 
-
     KisConfig cfg;
-    qDebug() << "m_displayFilter" << m_displayFilter << "use ocio" << cfg.useOcio() << "rgb" << (originalProjection->colorSpace()->colorModelId() == RGBAColorModelID)
-             << "hdr" << (originalProjection->colorSpace()->hasHighDynamicRange());
 
-    if (m_displayFilter && cfg.useOcio() && originalProjection->colorSpace()->colorModelId() == RGBAColorModelID && originalProjection->colorSpace()->hasHighDynamicRange()) {
+    if (m_displayFilter && cfg.useOcio() && projectionCs ->colorModelId() == RGBAColorModelID && projectionCs->hasHighDynamicRange()) {
 #ifdef HAVE_OCIO
-        qDebug() << "going to ocio filter";
+        if (projectionCs->colorDepthId() == Float16BitsColorDepthID) {
+            projectionCs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), QString());
+
+            float *dst = reinterpret_cast<float*>(projectionCs->allocPixelBuffer(numPixels));
+            half *src = reinterpret_cast<half*>(originalBytes);
+
+            for (quint32 i = 0; i < numPixels; ++i) {
+                dst[i] = src[i];
+            }
+            delete[] originalBytes;
+            originalBytes = reinterpret_cast<quint8*>(dst);
+
+        }
         m_displayFilter->filter(originalBytes, originalBytes, numPixels);
 #endif
     }
 
     quint8 *dstBytes = m_monitorColorSpace->allocPixelBuffer(numPixels);
-    originalProjection->colorSpace()->convertPixelsTo(originalBytes, dstBytes, m_monitorColorSpace, numPixels, m_renderingIntent);
+    projectionCs->convertPixelsTo(originalBytes, dstBytes, m_monitorColorSpace, numPixels, m_renderingIntent);
 
     m_pyramid[ORIGINAL_INDEX]->writeBytes(dstBytes, rect);
 

@@ -3,7 +3,7 @@
  <class>FormatErrorBarDialog</class>
  <widget class="QDialog" name="FormatErrorBarDialog">
   <property name="windowModality">
-   <enum>Qt::WindowModal</enum>
+   <enum>Qt::NonModal</enum>
   </property>
   <property name="geometry">
    <rect>
@@ -56,7 +56,7 @@
          <rect>
           <x>5</x>
           <y>2</y>
-          <width>85</width>
+          <width>201</width>
           <height>30</height>
          </rect>
         </property>
@@ -273,7 +273,7 @@ p, li { white-space: pre-wrap; }
          <rect>
           <x>6</x>
           <y>2</y>
-          <width>83</width>
+          <width>121</width>
           <height>16</height>
          </rect>
         </property>

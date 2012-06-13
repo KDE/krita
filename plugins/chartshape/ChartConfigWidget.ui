@@ -583,7 +583,7 @@ p, li { white-space: pre-wrap; }
           <item>
            <widget class="QCheckBox" name="datasetShowErrorBar">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -594,17 +594,17 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="errorBarTypeMenu">
+           <widget class="QPushButton" name="formatErrorBar">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
             <property name="minimumSize">
              <size>
-              <width>80</width>
-              <height>0</height>
+              <width>50</width>
+              <height>24</height>
              </size>
             </property>
             <property name="maximumSize">
@@ -615,25 +615,6 @@ p, li { white-space: pre-wrap; }
             </property>
             <property name="text">
              <string>Insert</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="formatErrorBar">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>32</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>...</string>
             </property>
            </widget>
           </item>

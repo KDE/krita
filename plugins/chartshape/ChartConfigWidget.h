@@ -69,7 +69,6 @@ public:
 public slots:
     void chartSubTypeSelected(int type);
     void chartTypeSelected(QAction *action);
-    void errorBarTypeSelected(QAction *action);
     void setThreeDMode(bool threeD);
     void update();
 
@@ -95,6 +94,7 @@ public slots:
     void ui_dataSetSelectionChanged_CellRegionDialog(int index);
     void ui_dataSetHasChartTypeChanged(bool b);
     void ui_dataSetPieExplodeFactorChanged(int percent);
+    void ui_dataSetErrorBarTypeChanged();
 
     void setLegendOrientationIsVertical(bool);
     void setLegendOrientation(int boxEntryIndex);

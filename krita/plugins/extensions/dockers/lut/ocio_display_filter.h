@@ -22,6 +22,7 @@
 #include <OpenColorIO/OpenColorIO.h>
 #include <OpenColorIO/OpenColorTransforms.h>
 
+
 namespace OCIO = OCIO_NAMESPACE;
 
 enum OCIO_CHANNEL_SWIZZLE {
@@ -42,13 +43,10 @@ public:
     void filter(quint8 *src, quint8 *dst, quint32 numPixels);
     void updateProcessor();
 
-
     OCIO::ConstConfigRcPtr config;
-//    QString lutFile;
 
-    const char *srcColorSpace;
+    const char *inputColorSpaceName;
     const char *displayDevice;
-    const char *displayColorSpaceName;
     const char *view;
     OCIO_CHANNEL_SWIZZLE swizzle;
 

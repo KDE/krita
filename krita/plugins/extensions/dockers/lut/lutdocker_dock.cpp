@@ -37,6 +37,7 @@
 #include <KoColorSpaceFactory.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
+#include <KoColorModelStandardIds.h>
 
 #include <kis_view2.h>
 #include <kis_doc2.h>
@@ -92,18 +93,20 @@ LutDockerDock::LutDockerDock(OCIO::ConstConfigRcPtr config)
     m_exposureDoubleWidget->setToolTip(i18n("Select the exposure (stops) for HDR images."));
     m_exposureDoubleWidget->setRange(-10, 10);
     m_exposureDoubleWidget->setPrecision(1);
-    m_exposureDoubleWidget->setValue(0);
-    m_exposureDoubleWidget->setSingleStep(0.1);
+    m_exposureDoubleWidget->setValue(0.0);
+    m_exposureDoubleWidget->setSingleStep(0.25);
     m_exposureDoubleWidget->setPageStep(1);
 
     connect(m_exposureDoubleWidget, SIGNAL(valueChanged(double)), SLOT(exposureValueChanged(double)));
     connect(m_exposureDoubleWidget, SIGNAL(sliderPressed()), SLOT(exposureSliderPressed()));
     connect(m_exposureDoubleWidget, SIGNAL(sliderReleased()), SLOT(exposureSliderReleased()));
 
+    // Gamma needs to be exponential (gamma *= 1.1f, gamma /= 1.1f as steps)
+
     m_gammaDoubleWidget->setToolTip(i18n("Select the amount of gamma modificiation for display. This does not affect the pixels of your image."));
     m_gammaDoubleWidget->setRange(0, 5);
     m_gammaDoubleWidget->setPrecision(2);
-    m_gammaDoubleWidget->setValue(2.2);
+    m_gammaDoubleWidget->setValue(1.0);
     m_gammaDoubleWidget->setSingleStep(0.1);
     m_gammaDoubleWidget->setPageStep(1);
 
@@ -146,15 +149,12 @@ void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
 
 void LutDockerDock::slotImageColorSpaceChanged()
 {
-    KisConfig cfg;
-
     const KoColorSpace *cs = m_canvas->view()->image()->colorSpace();
+    m_updateDisplay = false;
 
     m_chkUseOcio->setEnabled(cs->hasHighDynamicRange());
 
     if (m_canvas) {
-
-        m_updateDisplay = false;
 
         refillComboboxes();
 
@@ -169,9 +169,10 @@ void LutDockerDock::slotImageColorSpaceChanged()
         }
         m_cmbComponents->setCurrentIndex(1); // All Channels...
 
-        m_updateDisplay = true;
+
     }
     updateDisplaySettings();
+    m_updateDisplay = true;
 }
 
 void LutDockerDock::exposureValueChanged(double exposure)
@@ -214,18 +215,20 @@ void LutDockerDock::gammaSliderReleased()
 
 void LutDockerDock::updateDisplaySettings()
 {
-    m_displayFilter->srcColorSpace = m_ocioConfig->getColorSpaceNameByIndex(m_cmbInputColorSpace->currentItem());
-    m_displayFilter->displayColorSpaceName;
-    m_displayFilter->displayDevice = m_ocioConfig->getDisplay(m_cmbDisplayDevice->currentIndex());
-    m_displayFilter->view = m_ocioConfig->getView(m_displayFilter->displayDevice, m_cmbView->currentIndex(0));
-    m_displayFilter->gamma = m_gammaDoubleWidget->value();
-    m_displayFilter->exposure = m_exposureDoubleWidget->value();
-    m_displayFilter->swizzle = (OCIO_CHANNEL_SWIZZLE)m_cmbComponents->index();
+    if (m_chkUseOcio->isChecked() && m_updateDisplay && m_ocioConfig) {
+        m_displayFilter->config = m_ocioConfig;
+        m_displayFilter->inputColorSpaceName = m_ocioConfig->getColorSpaceNameByIndex(m_cmbInputColorSpace->currentIndex());
+        m_displayFilter->displayDevice = m_ocioConfig->getDisplay(m_cmbDisplayDevice->currentIndex());
+        m_displayFilter->view = m_ocioConfig->getView(m_displayFilter->displayDevice, m_cmbView->currentIndex());
+        m_displayFilter->gamma = m_gammaDoubleWidget->value();
+        m_displayFilter->exposure = m_exposureDoubleWidget->value();
+        m_displayFilter->swizzle = (OCIO_CHANNEL_SWIZZLE)m_cmbComponents->currentIndex();
 
-    m_displayFilter->updateProcessor();
+        m_displayFilter->updateProcessor();
 
-    if (m_updateDisplay) {
-        m_canvas->setDisplayFilter(m_displayFilter);
+        if (m_updateDisplay) {
+            m_canvas->setDisplayFilter(m_displayFilter);
+        }
     }
 }
 
@@ -236,7 +239,7 @@ void LutDockerDock::updateWidgets()
 
     if (cfg.useOcioEnvironmentVariable() != m_chkUseOcioEnvironment->isChecked()) {
         cfg.setUseOcioEnvironmentVariable(m_chkUseOcioEnvironment->isChecked());
-        updateOcioConfiguration();
+        resetOcioConfiguration();
     }
     cfg.setOcioConfigurationPath(m_txtConfigurationPath->text());
 
@@ -254,11 +257,11 @@ void LutDockerDock::selectOcioConfiguration()
     QFile f(filename);
     if (f.exists() && filename != m_txtConfigurationPath->text()) {
         m_txtConfigurationPath->setText(filename);
-        updateOcioConfiguration();
+        resetOcioConfiguration();
     }
 }
 
-void LutDockerDock::updateOcioConfiguration()
+void LutDockerDock::resetOcioConfiguration()
 {
     KisConfig cfg;
     if (cfg.useOcio()) {

@@ -81,7 +81,7 @@ private slots:
 
     void updateWidgets();
     void selectOcioConfiguration();
-    void updateOcioConfiguration();
+    void resetOcioConfiguration();
     void refillComboboxes();
     void refillViewCombobox();
     void selectLut();

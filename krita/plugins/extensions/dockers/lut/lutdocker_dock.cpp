@@ -299,10 +299,10 @@ void LutDockerDock::refillComboboxes()
         m_cmbInputColorSpace->addSqueezedItem(QString::fromUtf8(colorSpace->getName()));
     }
 
-    int numRoles = m_ocioConfig->getNumRoles();
-    for (int i = 0; i < numRoles; ++i) {
-        qDebug() << "role" << m_ocioConfig->getRoleName(i);
-    }
+//    int numRoles = m_ocioConfig->getNumRoles();
+//    for (int i = 0; i < numRoles; ++i) {
+//        qDebug() << "role" << m_ocioConfig->getRoleName(i);
+//    }
 
     m_cmbDisplayDevice->clear();
     int numDisplays = m_ocioConfig->getNumDisplays();
@@ -313,11 +313,11 @@ void LutDockerDock::refillComboboxes()
 
     refillViewCombobox();
 
-    int numLooks = m_ocioConfig->getNumLooks();
-    qDebug() << "number of looks" << numLooks;
-    for (int i = 0; i < numLooks; ++i) {
-        qDebug() << "look" << m_ocioConfig->getLookNameByIndex(i);
-    }
+//    int numLooks = m_ocioConfig->getNumLooks();
+//    qDebug() << "number of looks" << numLooks;
+//    for (int i = 0; i < numLooks; ++i) {
+//        qDebug() << "look" << m_ocioConfig->getLookNameByIndex(i);
+//    }
 
 
 }
@@ -328,7 +328,7 @@ void LutDockerDock::refillViewCombobox()
     int numViews = m_ocioConfig->getNumViews(display);
     m_cmbView->clear();
     for (int j = 0; j < numViews; ++j) {
-        qDebug() << "\tview" << m_ocioConfig->getView(display, j);
+//        qDebug() << "\tview" << m_ocioConfig->getView(display, j);
         m_cmbView->addSqueezedItem(QString::fromUtf8(m_ocioConfig->getView(display, j)));
     }
 }

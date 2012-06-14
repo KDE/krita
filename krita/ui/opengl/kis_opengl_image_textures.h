@@ -44,6 +44,7 @@ typedef KisSharedPtr<KisOpenGLImageTextures> KisOpenGLImageTexturesSP;
 
 class KoColorSpace;
 class KoColorProfile;
+class KisDisplayFilter;
 
 /**
  * A set of OpenGL textures that contains the projection of a KisImage.
@@ -75,6 +76,14 @@ public:
      * @param profile The color profile of the display device
      */
     void setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent);
+
+    /**
+     * set the (ocio) display filter.
+     */
+    void setDisplayFilter(KisDisplayFilter *displayFilter)
+    {
+        m_displayFilter = displayFilter;
+    }
 
     /**
      * Set the exposure level used to display high dynamic range images. Typical values
@@ -174,6 +183,8 @@ private:
     bool m_usingHDRExposureProgram;
     static KisOpenGLHDRExposureProgram *HDRExposureProgram;
 #endif
+
+    KisDisplayFilter *m_displayFilter;
 
 private:
     typedef QMap<KisImageWSP, KisOpenGLImageTextures*> ImageTexturesMap;

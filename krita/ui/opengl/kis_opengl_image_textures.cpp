@@ -52,6 +52,7 @@ KisOpenGLHDRExposureProgram *KisOpenGLImageTextures::HDRExposureProgram = 0;
 #endif
 
 KisOpenGLImageTextures::KisOpenGLImageTextures()
+    : m_displayFilter(0)
 {
     m_image = 0;
     m_monitorProfile = 0;
@@ -60,6 +61,7 @@ KisOpenGLImageTextures::KisOpenGLImageTextures()
 }
 
 KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image, KoColorProfile *monitorProfile)
+    : m_displayFilter(0)
 {
     m_image = image;
     m_monitorProfile = monitorProfile;

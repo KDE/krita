@@ -504,9 +504,10 @@ void KisCanvas2::setDisplayFilter(KisDisplayFilter *displayFilter)
     if (m_d->currentCanvasIsOpenGL) {
 #ifdef HAVE_OPENGL
         Q_ASSERT(m_d->openGLImageTextures);
-        //m_d->openGLImageTextures->setMonitorProfile(monitorProfile, renderingIntent);
+        m_d->openGLImageTextures->setDisplayFilter(displayFilter);
 #endif
-    } else {
+    }
+    else {
         Q_ASSERT(m_d->prescaledProjection);
         m_d->prescaledProjection->setDisplayFilter(displayFilter);
     }

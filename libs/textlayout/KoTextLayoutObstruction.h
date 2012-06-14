@@ -37,7 +37,7 @@ public:
 
     KoTextLayoutObstruction(QRectF rect, bool rtl);
 
-    void init(const QTransform &matrix, const QPainterPath &obstruction, qreal distance, qreal borderHalfWidth);
+    void init(const QTransform &matrix, const QPainterPath &obstruction, qreal distanceLeft, qreal distanceTop, qreal distanceRight, qreal distanceBottom, qreal borderHalfWidth);
 
     QRectF limit(const QRectF &content);
 
@@ -81,7 +81,10 @@ private:
     QMultiMap<qreal, QLineF> m_edges; //sorted with y-coord
     KoShape *m_shape;
     QRectF m_rect;
-    qreal m_distance;
+    qreal m_distanceLeft;
+    qreal m_distanceTop;
+    qreal m_distanceRight;
+    qreal m_distanceBottom;
     qreal m_borderHalfWidth;
     qreal m_runAroundThreshold;
 };

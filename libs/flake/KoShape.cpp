@@ -97,7 +97,10 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
       detectCollision(false),
       protectContent(false),
       textRunAroundSide(KoShape::BiggestRunAroundSide),
-      textRunAroundDistance(1.0),
+      textRunAroundDistanceTop(0.0),
+      textRunAroundDistanceLeft(0.0),
+      textRunAroundDistanceRight(0.0),
+      textRunAroundDistanceBottom(0.0),
       textRunAroundThreshold(0.0),
       textRunAroundContour(KoShape::ContourFull)
 {
@@ -916,16 +919,52 @@ void KoShape::setTextRunAroundSide(TextRunAroundSide side, RunThroughLevel runTh
     d->shapeChanged(TextRunAroundChanged);
 }
 
-qreal KoShape::textRunAroundDistance() const
+qreal KoShape::textRunAroundDistanceTop() const
 {
     Q_D(const KoShape);
-    return d->textRunAroundDistance;
+    return d->textRunAroundDistanceTop;
 }
 
-void KoShape::setTextRunAroundDistance(qreal distance)
+void KoShape::setTextRunAroundDistanceTop(qreal distance)
 {
     Q_D(KoShape);
-    d->textRunAroundDistance = distance;
+    d->textRunAroundDistanceTop = distance;
+}
+
+qreal KoShape::textRunAroundDistanceLeft() const
+{
+    Q_D(const KoShape);
+    return d->textRunAroundDistanceLeft;
+}
+
+void KoShape::setTextRunAroundDistanceLeft(qreal distance)
+{
+    Q_D(KoShape);
+    d->textRunAroundDistanceLeft = distance;
+}
+
+qreal KoShape::textRunAroundDistanceRight() const
+{
+    Q_D(const KoShape);
+    return d->textRunAroundDistanceRight;
+}
+
+void KoShape::setTextRunAroundDistanceRight(qreal distance)
+{
+    Q_D(KoShape);
+    d->textRunAroundDistanceRight = distance;
+}
+
+qreal KoShape::textRunAroundDistanceBottom() const
+{
+    Q_D(const KoShape);
+    return d->textRunAroundDistanceBottom;
+}
+
+void KoShape::setTextRunAroundDistanceBottom(qreal distance)
+{
+    Q_D(KoShape);
+    d->textRunAroundDistanceBottom = distance;
 }
 
 qreal KoShape::textRunAroundThreshold() const
@@ -1309,7 +1348,16 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
             break;
     }
     style.addPropertyPt("style:wrap-dynamic-threshold", textRunAroundThreshold(), KoGenStyle::GraphicType);
-    style.addPropertyPt("fo:margin", textRunAroundDistance(), KoGenStyle::GraphicType);
+    if ((textRunAroundDistanceLeft() == textRunAroundDistanceRight())
+                && (textRunAroundDistanceTop() == textRunAroundDistanceBottom())
+                && (textRunAroundDistanceLeft() == textRunAroundDistanceTop())) {
+        style.addPropertyPt("fo:margin", textRunAroundDistanceLeft(), KoGenStyle::GraphicType);
+    } else {
+        style.addPropertyPt("fo:margin-left", textRunAroundDistanceLeft(), KoGenStyle::GraphicType);
+        style.addPropertyPt("fo:margin-top", textRunAroundDistanceTop(), KoGenStyle::GraphicType);
+        style.addPropertyPt("fo:margin-right", textRunAroundDistanceRight(), KoGenStyle::GraphicType);
+        style.addPropertyPt("fo:margin-bottom", textRunAroundDistanceBottom(), KoGenStyle::GraphicType);
+    }
 
     return context.mainStyles().insert(style, context.isSet(KoShapeSavingContext::PresentationShape) ? "pr" : "gr");
 }
@@ -1342,15 +1390,29 @@ void KoShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &cont
     setContentProtected(protect.contains("content"));
 
     QString margin = styleStack.property(KoXmlNS::fo, "margin");
-    if (margin.isEmpty())
-        margin = styleStack.property(KoXmlNS::fo, "margin-left");
-    if (margin.isEmpty())
-        margin = styleStack.property(KoXmlNS::fo, "margin-top");
-    if (margin.isEmpty())
-        margin = styleStack.property(KoXmlNS::fo, "margin-bottom");
-    if (margin.isEmpty())
-        margin = styleStack.property(KoXmlNS::fo, "margin-right");
-    setTextRunAroundDistance(KoUnit::parseValue(margin));
+    if (!margin.isEmpty()) {
+        setTextRunAroundDistanceLeft(KoUnit::parseValue(margin));
+        setTextRunAroundDistanceTop(KoUnit::parseValue(margin));
+        setTextRunAroundDistanceRight(KoUnit::parseValue(margin));
+        setTextRunAroundDistanceBottom(KoUnit::parseValue(margin));
+    }
+    margin = styleStack.property(KoXmlNS::fo, "margin-left");
+    if (!margin.isEmpty()) {
+        setTextRunAroundDistanceLeft(KoUnit::parseValue(margin));
+    }
+
+    margin = styleStack.property(KoXmlNS::fo, "margin-top");
+    if (!margin.isEmpty()) {
+        setTextRunAroundDistanceTop(KoUnit::parseValue(margin));
+    }
+    margin = styleStack.property(KoXmlNS::fo, "margin-right");
+    if (!margin.isEmpty()) {
+        setTextRunAroundDistanceRight(KoUnit::parseValue(margin));
+    }
+    margin = styleStack.property(KoXmlNS::fo, "margin-bottom");
+    if (!margin.isEmpty()) {
+        setTextRunAroundDistanceBottom(KoUnit::parseValue(margin));
+    }
 
     QString wrap;
     if (styleStack.hasProperty(KoXmlNS::style, "wrap")) {

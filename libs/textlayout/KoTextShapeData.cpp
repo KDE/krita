@@ -67,6 +67,10 @@ class KoTextShapeDataPrivate : public KoTextShapeDataBasePrivate
 public:
     KoTextShapeDataPrivate()
             : ownsDocument(true)
+            , topPadding(0)
+            , leftPadding(0)
+            , rightPadding(0)
+            , bottomPadding(0)
             , direction(KoText::AutoDirection)
             , textpage(0)
             , rootArea(0)
@@ -84,6 +88,10 @@ public:
     }
 
     bool ownsDocument;
+    qreal topPadding;
+    qreal leftPadding;
+    qreal rightPadding;
+    qreal bottomPadding;
     KoText::Direction direction;
     KoTextPage *textpage;
     KoTextLayoutRootArea *rootArea;
@@ -187,6 +195,62 @@ KoTextLayoutRootArea *KoTextShapeData::rootArea()
     return d->rootArea;
 }
 
+void KoTextShapeData::setLeftPadding(qreal padding)
+{
+    Q_D(KoTextShapeData);
+    d->leftPadding = padding;
+}
+
+qreal KoTextShapeData::leftPadding() const
+{
+    Q_D(const KoTextShapeData);
+    return d->leftPadding;
+}
+
+void KoTextShapeData::setTopPadding(qreal padding)
+{
+    Q_D(KoTextShapeData);
+    d->topPadding = padding;
+}
+
+qreal KoTextShapeData::topPadding() const
+{
+    Q_D(const KoTextShapeData);
+    return d->topPadding;
+}
+
+void KoTextShapeData::setRightPadding(qreal padding)
+{
+    Q_D(KoTextShapeData);
+    d->rightPadding = padding;
+}
+
+qreal KoTextShapeData::rightPadding() const
+{
+    Q_D(const KoTextShapeData);
+    return d->rightPadding;
+}
+
+void KoTextShapeData::setBottomPadding(qreal padding)
+{
+    Q_D(KoTextShapeData);
+    d->bottomPadding = padding;
+}
+
+qreal KoTextShapeData::bottomPadding() const
+{
+    Q_D(const KoTextShapeData);
+    return d->bottomPadding;
+}
+
+void KoTextShapeData::setPadding(qreal padding)
+{
+    setLeftPadding(padding);
+    setTopPadding(padding);
+    setRightPadding(padding);
+    setBottomPadding(padding);
+}
+
 bool KoTextShapeData::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context, KoDocumentRdfBase *rdfData, KoShape *shape)
 {
     Q_UNUSED(rdfData);
@@ -231,7 +295,33 @@ void KoTextShapeData::loadStyle(const KoXmlElement &element, KoShapeLoadingConte
         }
     }
 
+
     if (style) {
+        context.odfLoadingContext().addStyles(style, style->attributeNS(KoXmlNS::style, "family", "graphic").toLocal8Bit().constData());   // Load all parents
+        KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+        styleStack.setTypeProperties("graphic");
+        // Spacing (padding)
+        const QString paddingLeft(styleStack.property(KoXmlNS::fo, "padding-left" ));
+        if (!paddingLeft.isEmpty()) {
+            setLeftPadding(KoUnit::parseValue(paddingLeft));
+        }
+        const QString paddingRight(styleStack.property(KoXmlNS::fo, "padding-right" ));
+        if (!paddingRight.isEmpty()) {
+            setRightPadding(KoUnit::parseValue(paddingRight));
+        }
+        const QString paddingTop(styleStack.property(KoXmlNS::fo, "padding-top" ));
+        if (!paddingTop.isEmpty()) {
+            setTopPadding(KoUnit::parseValue(paddingTop));
+        }
+        const QString paddingBottom(styleStack.property(KoXmlNS::fo, "padding-bottom" ));
+        if (!paddingBottom.isEmpty()) {
+            setBottomPadding(KoUnit::parseValue(paddingBottom));
+        }
+        const QString padding(styleStack.property(KoXmlNS::fo, "padding"));
+        if (!padding.isEmpty()) {
+            setPadding(KoUnit::parseValue(padding));
+        }
+
         // graphic styles don't support inheritance yet therefor some additional work is needed here.
         QList<KoParagraphStyle *> paragraphStyles;
         while (style) {
@@ -269,6 +359,23 @@ void KoTextShapeData::loadStyle(const KoXmlElement &element, KoShapeLoadingConte
 
 void KoTextShapeData::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const
 {
+    if ((leftPadding() == rightPadding()) && (topPadding() == bottomPadding()) && (rightPadding() == topPadding())) {
+        style.addPropertyPt("fo:padding", leftPadding(), KoGenStyle::GraphicType);
+    } else {
+        if (leftPadding()) {
+            style.addPropertyPt("fo:padding-left", leftPadding(), KoGenStyle::GraphicType);
+        }
+        if (rightPadding()) {
+            style.addPropertyPt("fo:padding-right", rightPadding(), KoGenStyle::GraphicType);
+        }
+        if (topPadding()) {
+            style.addPropertyPt("fo:padding-top", topPadding(), KoGenStyle::GraphicType);
+        }
+        if (bottomPadding()) {
+            style.addPropertyPt("fo:padding-bottom", bottomPadding(), KoGenStyle::GraphicType);
+        }
+    }
+
     Q_D(const KoTextShapeData);
     if (d->paragraphStyle) {
         d->paragraphStyle->saveOdf(style, context);

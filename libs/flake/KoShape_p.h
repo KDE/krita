@@ -92,7 +92,10 @@ public:
     int protectContent : 1;
 
     KoShape::TextRunAroundSide textRunAroundSide;
-    qreal textRunAroundDistance;
+    qreal textRunAroundDistanceLeft;
+    qreal textRunAroundDistanceTop;
+    qreal textRunAroundDistanceRight;
+    qreal textRunAroundDistanceBottom;
     qreal textRunAroundThreshold;
     KoShape::TextRunAroundContour textRunAroundContour;
 

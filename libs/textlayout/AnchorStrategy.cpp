@@ -83,6 +83,16 @@ void AnchorStrategy::setParagraphRect(const QRectF &paragraphRect)
     m_paragraphRect = paragraphRect;
 }
 
+QRectF AnchorStrategy::paragraphContentRect()
+{
+    return m_paragraphContentRect;
+}
+
+void AnchorStrategy::setParagraphContentRect(const QRectF &paragraphContentRect)
+{
+    m_paragraphContentRect = paragraphContentRect;
+}
+
 QRectF AnchorStrategy::layoutEnvironmentRect()
 {
     return m_layoutEnvironmentRect;

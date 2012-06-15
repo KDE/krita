@@ -182,7 +182,7 @@ public slots:
     void setDisplayFilter(KisDisplayFilter *displayFilter);
 
     void startResizingImage(qint32 w, qint32 h);
-    void finishResisingImage(qint32 w, qint32 h);
+    void finishResizingImage(qint32 w, qint32 h);
 
     /// adjust the origin of the document
     void adjustOrigin();

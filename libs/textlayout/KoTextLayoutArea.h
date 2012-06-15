@@ -172,9 +172,9 @@ protected:
     void setBottom(qreal bottom);
 
     /// If this area has the responsibility to show footnotes then store
-    /// it so it can later bein the m_pregisteredFootnotes
+    /// it so it can later be in the m_pregisteredFootnotes
     /// returns the height of the foot note
-    virtual qreal preregisterFootNote(KoInlineNote *note, const QTextLine &line);
+    virtual qreal preregisterFootNote(KoInlineNote *note, qreal bottomOfText);
 
     /// Takes all preregistered footnotes and create Areas out of them
     void confirmFootNotes();
@@ -200,7 +200,7 @@ private:
     qreal addLine(QTextLine &line, FrameIterator *cursor, KoTextBlockData *blockData);
 
     /// looks for footnotes and preregisters them
-    void findFootNotes(QTextBlock block, const QTextLine &line);
+    void findFootNotes(QTextBlock block, const QTextLine &line, qreal bottomOfText);
 
     void clearPreregisteredFootNotes();
 
@@ -259,6 +259,7 @@ private:
     qreal m_verticalAlignOffset;
     QList<QRectF> m_blockRects;
     qreal m_anchoringParagraphTop;
+    qreal m_anchoringParagraphContentTop;
 
     qreal m_preregisteredFootNotesHeight;
     qreal m_footNotesHeight;

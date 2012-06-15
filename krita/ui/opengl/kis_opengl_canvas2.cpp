@@ -392,58 +392,9 @@ bool KisOpenGLCanvas2::event(QEvent *e)
     return QWidget::event(e);
 }
 
-void KisOpenGLCanvas2::enterEvent(QEvent* e)
-{
-    if(!hasFocus()) {
-        setFocus();
-    }
-    QWidget::enterEvent(e);
-}
-
-void KisOpenGLCanvas2::leaveEvent(QEvent* e)
-{
-    update();
-    QWidget::leaveEvent(e);
-}
-
 void KisOpenGLCanvas2::slotConfigChanged()
 {
     notifyConfigChanged();
-}
-
-void KisOpenGLCanvas2::mouseMoveEvent(QMouseEvent *e)
-{
-    processMouseMoveEvent(e);
-}
-
-void KisOpenGLCanvas2::contextMenuEvent(QContextMenuEvent *e)
-{
-    processContextMenuEvent(e);
-}
-
-void KisOpenGLCanvas2::mousePressEvent(QMouseEvent *e)
-{
-    processMousePressEvent(e);
-}
-
-void KisOpenGLCanvas2::mouseReleaseEvent(QMouseEvent *e)
-{
-    processMouseReleaseEvent(e);
-}
-
-void KisOpenGLCanvas2::mouseDoubleClickEvent(QMouseEvent *e)
-{
-    processMouseDoubleClickEvent(e);
-}
-
-void KisOpenGLCanvas2::keyPressEvent(QKeyEvent *e)
-{
-    processKeyPressEvent(e);
-}
-
-void KisOpenGLCanvas2::keyReleaseEvent(QKeyEvent *e)
-{
-    processKeyReleaseEvent(e);
 }
 
 QVariant KisOpenGLCanvas2::inputMethodQuery(Qt::InputMethodQuery query) const
@@ -454,16 +405,6 @@ QVariant KisOpenGLCanvas2::inputMethodQuery(Qt::InputMethodQuery query) const
 void KisOpenGLCanvas2::inputMethodEvent(QInputMethodEvent *event)
 {
     processInputMethodEvent(event);
-}
-
-void KisOpenGLCanvas2::tabletEvent(QTabletEvent *e)
-{
-    processTabletEvent(e);
-}
-
-void KisOpenGLCanvas2::wheelEvent(QWheelEvent *e)
-{
-    processWheelEvent(e);
 }
 
 bool KisOpenGLCanvas2::callFocusNextPrevChild(bool next)

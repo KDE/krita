@@ -62,40 +62,7 @@ public: // QWidget
     bool event(QEvent *);
 
     /// reimplemented method from superclass
-    void enterEvent(QEvent* e);
-
-    /// reimplemented method from superclass
-    void leaveEvent(QEvent* e);
-
-    /// reimplemented method from superclass
-    void keyPressEvent(QKeyEvent *e);
-
-    /// reimplemented method from superclass
-    void mouseMoveEvent(QMouseEvent *e);
-
-    /// reimplemented method from superclass
-    void contextMenuEvent(QContextMenuEvent *e);
-
-    /// reimplemented method from superclass
-    void mousePressEvent(QMouseEvent *e);
-
-    /// reimplemented method from superclass
-    void mouseReleaseEvent(QMouseEvent *e);
-
-    /// reimplemented method from superclass
-    void mouseDoubleClickEvent(QMouseEvent *e);
-
-    /// reimplemented method from superclass
-    void keyReleaseEvent(QKeyEvent *e);
-
-    /// reimplemented method from superclass
     void paintEvent(QPaintEvent * ev);
-
-    /// reimplemented method from superclass
-    void tabletEvent(QTabletEvent *e);
-
-    /// reimplemented method from superclass
-    void wheelEvent(QWheelEvent *e);
 
     /// reimplemented method from superclass
     void resizeEvent(QResizeEvent *e);

@@ -414,14 +414,6 @@ void KisTool::mousePressEvent(KoPointerEvent *event)
     KisConfig cfg;
 
     if (mode() == KisTool::HOVER_MODE &&
-        ((event->button() == Qt::MidButton &&
-          event->modifiers() == Qt::NoModifier) ||
-         (d->spacePressed && !cfg.clicklessSpacePan()))) {
-
-        initPan(event->point);
-        event->accept();
-    }
-    else if (mode() == KisTool::HOVER_MODE &&
              (event->button() == Qt::LeftButton &&
               event->modifiers() == Qt::ShiftModifier)) {
 
@@ -435,11 +427,7 @@ void KisTool::mousePressEvent(KoPointerEvent *event)
 
 void KisTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    if (mode() == PAN_MODE) {
-        pan(event->point);
-        event->accept();
-    }
-    else if (mode() == GESTURE_MODE) {
+    if (mode() == GESTURE_MODE) {
         processGesture(event->point);
         event->accept();
     }
@@ -456,15 +444,7 @@ void KisTool::mouseReleaseEvent(KoPointerEvent *event)
     }
     KisConfig cfg;
 
-    if(mode() == PAN_MODE) {
-        if (event->button() == Qt::MidButton ||
-            (event->button() == Qt::LeftButton && !cfg.clicklessSpacePan())) {
-
-            endPan();
-            event->accept();
-        }
-    }
-    else if (mode() == GESTURE_MODE) {
+    if (mode() == GESTURE_MODE) {
         if (event->button() == Qt::LeftButton) {
             endGesture();
             event->accept();
@@ -476,22 +456,7 @@ void KisTool::mouseReleaseEvent(KoPointerEvent *event)
 
 void KisTool::keyPressEvent(QKeyEvent *event)
 {
-    if (event->key() == Qt::Key_Space) {
-
-        if (!event->isAutoRepeat()) {
-            KisConfig cfg;
-            if(mode() == HOVER_MODE && cfg.clicklessSpacePan()) {
-                initPan(d->lastDocumentPoint);
-            }
-            else {
-                d->spacePressed = true;
-            }
-        }
-        event->accept();
-
-    } else if (mode() == GESTURE_MODE ||
-               mode() == PAN_MODE) {
-
+    if (mode() == GESTURE_MODE) {
         event->accept();
     } else {
         event->ignore();
@@ -500,52 +465,11 @@ void KisTool::keyPressEvent(QKeyEvent *event)
 
 void KisTool::keyReleaseEvent(QKeyEvent* event)
 {
-
-    if (event->key() == Qt::Key_Space) {
-
-        if (!event->isAutoRepeat()) {
-            KisConfig cfg;
-            if(mode() == PAN_MODE && cfg.clicklessSpacePan()) {
-                endPan();
-            }
-            else {
-                d->spacePressed = false;
-            }
-        }
-        event->accept();
-
-    } else if (mode() == GESTURE_MODE ||
-               mode() == PAN_MODE) {
-
+    if (mode() == GESTURE_MODE) {
         event->accept();
     } else {
         event->ignore();
     }
-}
-
-void KisTool::initPan(const QPointF &docPoint)
-{
-    setMode(PAN_MODE);
-    m_lastPosition = convertDocumentToWidget(docPoint);
-    useCursor(QCursor(Qt::ClosedHandCursor));
-}
-
-void KisTool::pan(const QPointF &docPoint)
-{
-    Q_ASSERT(canvas());
-    Q_ASSERT(canvas()->canvasController());
-
-    QPointF actualPosition = convertDocumentToWidget(docPoint);
-    QPointF distance(m_lastPosition - actualPosition);
-    canvas()->canvasController()->pan(distance.toPoint());
-
-    m_lastPosition = actualPosition;
-}
-
-void KisTool::endPan()
-{
-    setMode(HOVER_MODE);
-    resetCursorStyle();
 }
 
 void KisTool::initGesture(const QPointF &docPoint)

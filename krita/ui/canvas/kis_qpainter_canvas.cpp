@@ -178,56 +178,6 @@ bool KisQPainterCanvas::event(QEvent *e)
     return QWidget::event(e);
 }
 
-void KisQPainterCanvas::enterEvent(QEvent* e)
-{
-    if(!hasFocus()) {
-        setFocus();
-    }
-    QWidget::enterEvent(e);
-}
-
-void KisQPainterCanvas::leaveEvent(QEvent* e)
-{
-    QWidget::leaveEvent(e);
-}
-
-void KisQPainterCanvas::mouseMoveEvent(QMouseEvent *e)
-{
-    processMouseMoveEvent(e);
-}
-
-void KisQPainterCanvas::contextMenuEvent(QContextMenuEvent *e)
-{
-    processContextMenuEvent(e);
-}
-
-void KisQPainterCanvas::mousePressEvent(QMouseEvent *e)
-{
-    m_d->smooth = false;
-    processMousePressEvent(e);
-}
-
-void KisQPainterCanvas::mouseReleaseEvent(QMouseEvent *e)
-{
-    m_d->smooth = true;
-    processMouseReleaseEvent(e);
-}
-
-void KisQPainterCanvas::mouseDoubleClickEvent(QMouseEvent *e)
-{
-    processMouseDoubleClickEvent(e);
-}
-
-void KisQPainterCanvas::keyPressEvent(QKeyEvent *e)
-{
-    processKeyPressEvent(e);
-}
-
-void KisQPainterCanvas::keyReleaseEvent(QKeyEvent *e)
-{
-    processKeyReleaseEvent(e);
-}
-
 QVariant KisQPainterCanvas::inputMethodQuery(Qt::InputMethodQuery query) const
 {
     return processInputMethodQuery(query);
@@ -236,16 +186,6 @@ QVariant KisQPainterCanvas::inputMethodQuery(Qt::InputMethodQuery query) const
 void KisQPainterCanvas::inputMethodEvent(QInputMethodEvent *event)
 {
     processInputMethodEvent(event);
-}
-
-void KisQPainterCanvas::tabletEvent(QTabletEvent *e)
-{
-    processTabletEvent(e);
-}
-
-void KisQPainterCanvas::wheelEvent(QWheelEvent *e)
-{
-    processWheelEvent(e);
 }
 
 void KisQPainterCanvas::resizeEvent(QResizeEvent *e)

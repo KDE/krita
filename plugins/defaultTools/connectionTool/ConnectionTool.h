@@ -27,8 +27,8 @@
 #include <KoToolBase.h>
 #include <KoCanvasBase.h>
 #include <KoSnapGuide.h>
+#include <KoConnectionShape.h>
 
-class KoConnectionShape;
 class KAction;
 class QActionGroup;
 class KoShapeConfigWidgetBase;
@@ -68,8 +68,13 @@ public:
     virtual void deactivate();
     /// reimplemented from superclass
     virtual void deleteSelection();
+
 signals:
     void connectionPointEnabled(bool enabled);
+    void sendConnectionType(int type);
+
+public slots:
+    void toggleConnectionPointEditMode(int state);
 
 private slots:
     void horizontalAlignChanged();
@@ -77,6 +82,7 @@ private slots:
     void relativeAlignChanged();
     void escapeDirectionChanged();
     void connectionChanged();
+    void getConnectionType(int type);
 
 private:
     /// reimplemented from superclass
@@ -95,7 +101,7 @@ private:
     int handleAtPoint(KoShape *shape, const QPointF &mousePoint) const;
 
     enum EditMode {
-        Idle,               ///< we are idle, nothing interesting happens
+        Idle,               ///< in idle mode we can only start a connector creation, manipulation to existing connectors and connection points not allowed
         CreateConnection,   ///< we are creating a new connection
         EditConnection,     ///< we are editing a connection
         EditConnectionPoint ///< we are editing connection points
@@ -104,7 +110,7 @@ private:
     /// Sets the edit mode, current shape and active handle
     void setEditMode(EditMode mode, KoShape *currentShape, int handle);
 
-    /// Resets the current edit mode
+    /// Resets the current edit mode to Idle, standard connector type
     void resetEditMode();
 
     /// Returns the nearest connection shape within handle grab sensitiviy distance
@@ -116,6 +122,9 @@ private:
     /// Updates current shape and edit mode dependent on position
     KoShape * findShapeAtPosition(const QPointF &position) const;
 
+    /// Updates current shape and edit mode dependent on position excluding connection shapes
+    KoShape * findNonConnectionShapeAtPosition(const QPointF &position) const;
+
     /// Updates actions
     void updateActions();
 
@@ -123,6 +132,7 @@ private:
     void updateConnectionPoint();
 
     EditMode m_editMode; ///< the current edit mode
+    KoConnectionShape::Type m_connectionType;
     KoShape * m_currentShape; ///< the current shape we are working on
     int m_activeHandle;  ///< the currently active connection point/connection handle
     KoInteractionStrategy *m_currentStrategy; ///< the current editing strategy
@@ -134,6 +144,8 @@ private:
     QActionGroup *m_alignHorizontal;
     QActionGroup *m_alignRelative;
     QActionGroup *m_escapeDirections;
+
+    KAction * m_editConnectionPoint;
 
     KAction * m_alignPercent;
     KAction * m_alignLeft;

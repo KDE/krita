@@ -174,6 +174,10 @@ public:
     /// positionInlineObject()
     void setAnchoringParagraphRect(const QRectF &paragraphRect);
 
+    /// Sets the paragraph content rect that will be applied to anchorStrategies being created in
+    /// positionInlineObject()
+    void setAnchoringParagraphContentRect(const QRectF &paragraphContentRect);
+
     /// Sets the layoutEnvironment rect that will be applied to anchorStrategies being created in
     /// positionInlineObject()
     void setAnchoringLayoutEnvironmentRect(const QRectF &layoutEnvironmentRect);

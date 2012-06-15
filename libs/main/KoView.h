@@ -41,7 +41,7 @@ class KAction;
 class QToolBar;
 class QDragEnterEvent;
 class QDropEvent;
-
+class QPrintDialog;
 
 /**
  * This class is used to display a @ref KoDocument.
@@ -233,6 +233,11 @@ public:
      * Reimplement if your application needs to use a different layout.
      */
     virtual KoPageLayout pageLayout() const;
+
+    /**
+     * Create a QPrintDialog based on the @p printJob
+     */
+    virtual QPrintDialog *createPrintDialog(KoPrintJob *printJob, QWidget *parent);
 
     /**
      * @return the KoMainWindow in which this view is currently.

@@ -106,6 +106,7 @@ public:
     bool anAnchorIsPlaced;
     int anchoringSoftBreak;
     QRectF anchoringParagraphRect;
+    QRectF anchoringParagraphContentRect;
     QRectF anchoringLayoutEnvironmentRect;
     bool allowPositionInlineObject;
 
@@ -454,6 +455,11 @@ void KoTextDocumentLayout::setAnchoringParagraphRect(const QRectF &paragraphRect
     d->anchoringParagraphRect = paragraphRect;
 }
 
+void KoTextDocumentLayout::setAnchoringParagraphContentRect(const QRectF &paragraphContentRect)
+{
+    d->anchoringParagraphContentRect = paragraphContentRect;
+}
+
 void KoTextDocumentLayout::setAnchoringLayoutEnvironmentRect(const QRectF &layoutEnvironmentRect)
 {
     d->anchoringLayoutEnvironmentRect = layoutEnvironmentRect;
@@ -518,6 +524,7 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
             anchor->updatePosition(document(), position, cf);
         }
         static_cast<AnchorStrategy *>(anchor->anchorStrategy())->setParagraphRect(d->anchoringParagraphRect);
+        static_cast<AnchorStrategy *>(anchor->anchorStrategy())->setParagraphContentRect(d->anchoringParagraphContentRect);
         static_cast<AnchorStrategy *>(anchor->anchorStrategy())->setLayoutEnvironmentRect(d->anchoringLayoutEnvironmentRect);
     }
     else if (obj) {
@@ -873,7 +880,8 @@ void KoTextDocumentLayout::setContinuationObstruction(KoTextLayoutObstruction *c
 QList<KoTextLayoutObstruction *> KoTextDocumentLayout::currentObstructions()
 {
     if (d->continuationObstruction) {
-        return d->freeObstructions + d->anchoredObstructions.values() << d->continuationObstruction;
+        // () is needed so we append to a local list and not anchoredObstructions
+        return (d->freeObstructions + d->anchoredObstructions.values()) << d->continuationObstruction;
     } else {
         return d->freeObstructions + d->anchoredObstructions.values();
     }

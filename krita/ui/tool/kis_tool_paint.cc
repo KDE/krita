@@ -189,15 +189,7 @@ void KisToolPaint::setMode(ToolMode mode)
 
 void KisToolPaint::mousePressEvent(KoPointerEvent *event)
 {
-    if(mode() == KisTool::HOVER_MODE &&
-            (event->button() == Qt::LeftButton) &&
-            event->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier) &&
-            !specialModifierActive()) {
-        setMode(MIRROR_AXIS_SETUP_MODE);
-        useCursor(KisCursor::crossCursor());
-        canvas()->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxisCenter, convertToPixelCoord(event->point));
-    }
-    else if((event->button() == Qt::LeftButton || event->button() == Qt::RightButton) &&
+    if((event->button() == Qt::LeftButton || event->button() == Qt::RightButton) &&
             event->modifiers() & Qt::ControlModifier &&
             !specialModifierActive()) {
 
@@ -207,14 +199,6 @@ void KisToolPaint::mousePressEvent(KoPointerEvent *event)
         m_toForegroundColor = event->button() == Qt::LeftButton;
         pickColor(event->point, event->modifiers() & Qt::AltModifier,
                   m_toForegroundColor);
-        event->accept();
-    }
-    else if(mode() == KisTool::HOVER_MODE &&
-            event->button() == Qt::RightButton &&
-            event->modifiers() == Qt::NoModifier &&
-            !specialModifierActive()) {
-
-        emit sigFavoritePaletteCalled(event->pos());
         event->accept();
     }
     else {
@@ -229,9 +213,6 @@ void KisToolPaint::mouseMoveEvent(KoPointerEvent *event)
                   m_toForegroundColor);
         event->accept();
     }
-    else if (mode() == KisTool::MIRROR_AXIS_SETUP_MODE){
-        canvas()->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxisCenter, convertToPixelCoord(event->point));
-    }
     else {
         KisTool::mouseMoveEvent(event);
     }
@@ -239,11 +220,7 @@ void KisToolPaint::mouseMoveEvent(KoPointerEvent *event)
 
 void KisToolPaint::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if(mode() == KisTool::MIRROR_AXIS_SETUP_MODE) {
-        setMode(KisTool::HOVER_MODE);
-        resetCursorStyle();
-        event->accept();
-    } else if(mode() == KisTool::SECONDARY_PAINT_MODE) {
+    if(mode() == KisTool::SECONDARY_PAINT_MODE) {
         setMode(KisTool::HOVER_MODE);
         if(!(event->modifiers() == Qt::ControlModifier)) {
             resetCursorStyle();
@@ -257,19 +234,11 @@ void KisToolPaint::mouseReleaseEvent(KoPointerEvent *event)
 void KisToolPaint::keyPressEvent(QKeyEvent *event)
 {
     if (mode() == KisTool::HOVER_MODE &&
-        (event->key() == Qt::Key_Control || event->key() == Qt::Key_Shift) &&
-        (event->modifiers() == (Qt::ShiftModifier | Qt::ControlModifier))) {
-        useCursor(KisCursor::crossCursor());
-        m_specialHoverModifier = true;
-        event->accept();
-    } else if (mode() == KisTool::HOVER_MODE &&
                event->key() == Qt::Key_Control) {
         useCursor(KisCursor::pickerCursor());
         m_specialHoverModifier = true;
         event->accept();
-    } else if (mode() == KisTool::SECONDARY_PAINT_MODE ||
-               mode() == KisTool::MIRROR_AXIS_SETUP_MODE) {
-
+    } else if (mode() == KisTool::SECONDARY_PAINT_MODE) {
         event->accept();
     } else {
         KisTool::keyPressEvent(event);
@@ -278,23 +247,16 @@ void KisToolPaint::keyPressEvent(QKeyEvent *event)
 
 void KisToolPaint::keyReleaseEvent(QKeyEvent* event)
 {
-    bool mirrorCondition =
-        (event->key() == Qt::Key_Control && event->modifiers() == Qt::ShiftModifier) ||
-        (event->key() == Qt::Key_Shift && event->modifiers() == Qt::ControlModifier);
-
     bool pickerCondition =
         event->key() == Qt::Key_Control;
 
-    if(mirrorCondition || pickerCondition) {
+    if(pickerCondition) {
         m_specialHoverModifier = false;
-        if(mode() != KisTool::SECONDARY_PAINT_MODE &&
-           mode() != KisTool::MIRROR_AXIS_SETUP_MODE) {
+        if(mode() != KisTool::SECONDARY_PAINT_MODE) {
             resetCursorStyle();
             event->accept();
         }
-    } else if (mode() == KisTool::SECONDARY_PAINT_MODE ||
-               mode() == KisTool::MIRROR_AXIS_SETUP_MODE) {
-
+    } else if (mode() == KisTool::SECONDARY_PAINT_MODE) {
         event->accept();
     } else {
         KisTool::keyReleaseEvent(event);

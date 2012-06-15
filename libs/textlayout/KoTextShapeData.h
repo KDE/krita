@@ -79,6 +79,16 @@ public:
     /// the rootArea that is associated to the textshape
     KoTextLayoutRootArea *rootArea();
 
+    void setLeftPadding(qreal padding);
+    qreal leftPadding() const;
+    void setTopPadding(qreal padding);
+    qreal topPadding() const;
+    void setRightPadding(qreal padding);
+    qreal rightPadding() const;
+    void setBottomPadding(qreal padding);
+    qreal bottomPadding() const;
+    void setPadding(qreal padding);
+
     /**
     * Load the TextShape from ODF.
     *

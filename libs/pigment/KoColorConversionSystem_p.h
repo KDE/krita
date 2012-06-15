@@ -54,6 +54,7 @@ struct KoColorConversionSystem::Node {
         Q_ASSERT(!isInitialized);
         isEngine = true;
         isInitialized = true;
+        isHdr = true;
         engine = _engine;
     }
 

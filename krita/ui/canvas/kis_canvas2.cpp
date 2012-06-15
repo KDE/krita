@@ -65,6 +65,8 @@
 #include <ko_favorite_resource_manager.h>
 #include <kis_paintop_box.h>
 
+#include "input/kis_input_manager.h"
+
 struct KisCanvas2::KisCanvas2Private
 {
 
@@ -103,6 +105,8 @@ public:
 #endif
     KisPrescaledProjectionSP prescaledProjection;
     bool vastScrolling;
+
+    KisInputManager* inputManager;
 };
 
 KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view, KoShapeBasedDocumentBase * sc)
@@ -111,6 +115,9 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view,
 {
     // a bit of duplication from slotConfigChanged()
     KisConfig cfg;
+
+    m_d->inputManager = new KisInputManager(this, m_d->toolProxy);
+
     m_d->vastScrolling = cfg.vastScrolling();
     createCanvas(cfg.useOpenGL());
 
@@ -161,6 +168,7 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
     widget->setAttribute(Qt::WA_OpaquePaintEvent);
     widget->setMouseTracking(true);
     widget->setAcceptDrops(true);
+    widget->installEventFilter(m_d->inputManager);
     KoCanvasControllerWidget *controller = dynamic_cast<KoCanvasControllerWidget*>(canvasController());
     if (controller) {
         Q_ASSERT(controller->canvas() == this);
@@ -394,7 +402,7 @@ void KisCanvas2::connectCurrentImage()
             SLOT(startResizingImage(qint32, qint32)),
             Qt::DirectConnection);
     connect(this, SIGNAL(sigContinueResizeImage(qint32, qint32)),
-            this, SLOT(finishResisingImage(qint32, qint32)));
+            this, SLOT(finishResizingImage(qint32, qint32)));
 
     startResizingImage(image->width(), image->height());
 
@@ -475,7 +483,7 @@ void KisCanvas2::startResizingImage(qint32 w, qint32 h)
     }
 }
 
-void KisCanvas2::finishResisingImage(qint32 w, qint32 h)
+void KisCanvas2::finishResizingImage(qint32 w, qint32 h)
 {
     if (m_d->currentCanvasIsOpenGL) {
 #ifdef HAVE_OPENGL
@@ -483,7 +491,7 @@ void KisCanvas2::finishResisingImage(qint32 w, qint32 h)
         m_d->openGLImageTextures->slotImageSizeChanged(w, h);
 
 #else
-        Q_ASSERT_X(0, "finishResisingImage()", "Bad use of finishResisingImage(). It shouldn't have happened =(");
+        Q_ASSERT_X(0, "finishResizingImage()", "Bad use of finishResizingImage(). It shouldn't have happened =(");
 #endif
     } else {
         Q_ASSERT(m_d->prescaledProjection);

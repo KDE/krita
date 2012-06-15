@@ -252,6 +252,10 @@ void KisOpenGLCanvas2::drawImage()
     QRect wr = widgetRectInImagePixels.toAlignedRect() &
         m_d->openGLImageTextures->storedImageBounds();
 
+    if (image->colorSpace()->hasHighDynamicRange() && m_d->openGLImageTextures->usingHDRExposureProgram()) {
+        m_d->openGLImageTextures->activateHDRExposureProgram();
+    }
+
     makeCurrent();
 
     int firstColumn = m_d->openGLImageTextures->xToCol(wr.left());

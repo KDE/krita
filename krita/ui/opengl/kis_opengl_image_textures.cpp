@@ -301,12 +301,14 @@ void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProf
 
 void KisOpenGLImageTextures::setDisplayFilter(KisDisplayFilter *displayFilter)
 {
+//    qDebug() << "setting display filter with exposure" << displayFilter->exposure << "and program" << displayFilter->program();
     m_displayFilter = displayFilter;
 }
 
 bool KisOpenGLImageTextures::usingHDRExposureProgram() const
 {
 #ifdef HAVE_GLEW
+//    qDebug() << "usingHDRExposureProgram()" << m_usingHDRExposureProgram;
     return m_usingHDRExposureProgram;
 #else
     return false;
@@ -316,6 +318,7 @@ bool KisOpenGLImageTextures::usingHDRExposureProgram() const
 void KisOpenGLImageTextures::activateHDRExposureProgram()
 {
 #ifdef HAVE_GLEW
+//    qDebug() << "activateHDRExposureProgram();" << m_usingHDRExposureProgram << m_displayFilter << m_displayFilter->program();
     if (m_usingHDRExposureProgram && m_displayFilter && m_displayFilter->program()) {
         glUseProgram(m_displayFilter->program());
     }
@@ -325,7 +328,8 @@ void KisOpenGLImageTextures::activateHDRExposureProgram()
 void KisOpenGLImageTextures::deactivateHDRExposureProgram()
 {
 #ifdef HAVE_GLEW
-    if (m_usingHDRExposureProgram && m_displayFilter && m_displayFilter->program()) {
+//     qDebug() << "deactivateHDRExposureProgram();" << m_usingHDRExposureProgram;
+    if (m_usingHDRExposureProgram) {
         glUseProgram(0);
     }
 #endif
@@ -435,6 +439,8 @@ bool KisOpenGLImageTextures::imageCanUseHDRExposureProgram(KisImageWSP image)
               && (GLEW_ARB_texture_float || GLEW_ATI_texture_float || GLEW_ARB_half_float_pixel))) {
         return false;
     }
+
+//    qDebug() << "imageCanUseHDRExposureProgram()!";
     return true;
 #else
     Q_UNUSED(image);

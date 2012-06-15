@@ -230,7 +230,10 @@ void OcioDisplayFilter::updateProcessor()
     KisConfig cfg;
     if (!cfg.useOpenGLShaders()) return;
 
+    //qDebug() << "going to update the shader program!";
+
     if (m_lut3d.size() == 0) {
+        //qDebug() << "generating lut";
         glGenTextures(1, &m_lut3dTexID);
 
         int num3Dentries = 3 * LUT3D_EDGE_SIZE * LUT3D_EDGE_SIZE * LUT3D_EDGE_SIZE;
@@ -260,7 +263,7 @@ void OcioDisplayFilter::updateProcessor()
     QString lut3dCacheID = QString::fromAscii(m_processor->getGpuLut3DCacheID(shaderDesc));
     if(lut3dCacheID != m_lut3dcacheid)
     {
-//        qDebug() << "Computing 3DLut " << m_lut3dcacheid;
+        //qDebug() << "Computing 3DLut " << m_lut3dcacheid;
         m_lut3dcacheid = lut3dCacheID;
         m_processor->getGpuLut3D(&m_lut3d[0], shaderDesc);
 
@@ -275,14 +278,14 @@ void OcioDisplayFilter::updateProcessor()
     QString shaderCacheID = QString::fromAscii(m_processor->getGpuShaderTextCacheID(shaderDesc));
     if (m_program == 0 || shaderCacheID != m_shadercacheid)
     {
-//        qDebug() << "Computing Shader " << m_shadercacheid;
+        //qDebug() << "Computing Shader " << m_shadercacheid;
 
         m_shadercacheid = shaderCacheID;
 
         std::ostringstream os;
         os << m_processor->getGpuShaderText(shaderDesc) << "\n";
         os << m_fragShaderText;
-//        qDebug() << "shader" << os.str().c_str();
+        //qDebug() << "shader" << os.str().c_str();
 
         if (m_fragShader) {
             glDeleteShader(m_fragShader);

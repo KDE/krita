@@ -197,9 +197,16 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
 
         for (int i = 0; i < layout->lineCount(); i++) {
             QTextLine line = layout->lineAt(i);
+            if (block == m_startOfArea->it.currentBlock() && line.textStart() < m_startOfArea->lineTextStart) {
+                continue; // this line is part of a previous layoutArea
+            }
             QRectF lineRect = line.naturalTextRect();
             if (point.y() > line.y() + line.height()) {
                 pointedAt.position = block.position() + line.textStart() + line.textLength();
+                if (block == m_endOfArea->it.currentBlock() && line.textStart() + line.textLength() >= m_endOfArea->lineTextStart) {
+                    pointedAt.position = block.position() + line.xToCursor(point.x());
+                    break; // this and following lines are part of a next layoutArea
+                }
                 continue;
             }
             if (accuracy == Qt::ExactHit && point.y() < line.y()) { // between lines

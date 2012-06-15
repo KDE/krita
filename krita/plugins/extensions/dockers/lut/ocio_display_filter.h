@@ -22,6 +22,7 @@
 #include <OpenColorIO/OpenColorIO.h>
 #include <OpenColorIO/OpenColorTransforms.h>
 
+#include <opengl/kis_opengl.h>
 
 namespace OCIO = OCIO_NAMESPACE;
 
@@ -41,6 +42,11 @@ public:
     explicit OcioDisplayFilter(QObject *parent = 0);
 
     void filter(quint8 *src, quint8 *dst, quint32 numPixels);
+
+#ifdef HAVE_OPENGL
+    virtual GLuint program();
+#endif
+
     void updateProcessor();
 
     OCIO::ConstConfigRcPtr config;
@@ -53,6 +59,14 @@ public:
 private:
 
     OCIO::ConstProcessorRcPtr m_processor;
+#ifdef HAVE_OPENGL
+    GLuint m_fragShader;
+    GLuint m_program;
+    GLuint m_lut3dTexID;
+    QVector<float> m_lut3d;
+    QString m_lut3dcacheid;
+    QString m_shadercacheid;
+#endif
 
 };
 

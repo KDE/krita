@@ -116,9 +116,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     switch (event->type()) {
         case QEvent::MouseButtonPress:
         case QEvent::MouseButtonDblClick: {
-            QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
-            QPointF pixel = QPointF(mevent->pos().x() + 0.5f, mevent->pos().y() + 0.5f);
-            d->mousePosition = d->canvas->coordinatesConverter()->widgetToDocument(pixel);
+            d->mousePosition = widgetToPixel(static_cast<QMouseEvent*>(event)->posF());
 
             //If the palette is visible, then hide it.
             if (canvas()->favoriteResourceManager()->isPopupPaletteVisible()) {
@@ -157,9 +155,8 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         case QEvent::MouseMove:
             if (!d->currentAction) {
                 QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
-                QPointF pixel = QPointF(mevent->pos().x() + 0.5f, mevent->pos().y() + 0.5f);
                 //Update the current tool so things like the brush outline gets updated.
-                d->toolProxy->mouseMoveEvent(mevent, d->canvas->coordinatesConverter()->widgetToDocument(pixel));
+                d->toolProxy->mouseMoveEvent(mevent, widgetToPixel(mevent->posF()));
             } else {
                 d->currentAction->inputEvent(event);
             }
@@ -253,6 +250,12 @@ QTabletEvent* KisInputManager::tabletPressEvent() const
 void KisInputManager::setMirrorAxis()
 {
     d->canvas->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxisCenter, d->canvas->image()->documentToPixel(d->mousePosition));
+}
+
+QPointF KisInputManager::widgetToPixel(const QPointF& position)
+{
+    QPointF pixel = QPointF(position.x() + 0.5f, position.y() + 0.5f);
+    return d->canvas->coordinatesConverter()->widgetToDocument(pixel);
 }
 
 void KisInputManager::Private::match(QEvent* event)

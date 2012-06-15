@@ -40,7 +40,8 @@ public:
     virtual bool handleTablet() const;
 
 private:
-    bool m_tablet;
+    class Private;
+    Private * const d;
 };
 
 #endif // KISTOOLINVOCATIONACTION_H

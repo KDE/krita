@@ -268,7 +268,7 @@ void KoGenStyle::writeStyle(KoXmlWriter* writer, const KoGenStyles& styles, cons
         //write child elements of the properties elements
         it = m_childProperties[defaultPropertyType].constBegin();
         for (; it != m_childProperties[defaultPropertyType].constEnd(); ++it) {
-            if (!parentStyle || parentStyle->property(it.key(), defaultPropertyType) != it.value()) {
+            if (!parentStyle || parentStyle->childProperty(it.key(), defaultPropertyType) != it.value()) {
                 writer->addCompleteElement(it.value().toUtf8());
             }
         }
@@ -425,14 +425,24 @@ bool KoGenStyle::operator<(const KoGenStyle &other) const
     if (m_parentName != other.m_parentName) return m_parentName < other.m_parentName;
     if (m_familyName != other.m_familyName) return m_familyName < other.m_familyName;
     if (m_autoStyleInStylesDotXml != other.m_autoStyleInStylesDotXml) return m_autoStyleInStylesDotXml;
-    for (uint i = 0 ; i <= LastPropertyType; ++i)
-        if (m_properties[i].count() != other.m_properties[i].count())
+    for (uint i = 0 ; i <= LastPropertyType; ++i) {
+        if (m_properties[i].count() != other.m_properties[i].count()) {
             return m_properties[i].count() < other.m_properties[i].count();
+        }
+        if (m_childProperties[i].count() != other.m_childProperties[i].count()) {
+            return m_childProperties[i].count() < other.m_childProperties[i].count();
+        }
+    }
     if (m_attributes.count() != other.m_attributes.count()) return m_attributes.count() < other.m_attributes.count();
     if (m_maps.count() != other.m_maps.count()) return m_maps.count() < other.m_maps.count();
     // Same number of properties and attributes, no other choice than iterating
     for (uint i = 0 ; i <= LastPropertyType; ++i) {
         int comp = compareMap(m_properties[i], other.m_properties[i]);
+        if (comp != 0)
+            return comp < 0;
+    }
+    for (uint i = 0 ; i <= LastPropertyType; ++i) {
+        int comp = compareMap(m_childProperties[i], other.m_childProperties[i]);
         if (comp != 0)
             return comp < 0;
     }
@@ -453,14 +463,24 @@ bool KoGenStyle::operator==(const KoGenStyle &other) const
     if (m_parentName != other.m_parentName) return false;
     if (m_familyName != other.m_familyName) return false;
     if (m_autoStyleInStylesDotXml != other.m_autoStyleInStylesDotXml) return false;
-    for (uint i = 0 ; i <= LastPropertyType; ++i)
-        if (m_properties[i].count() != other.m_properties[i].count())
+    for (uint i = 0 ; i <= LastPropertyType; ++i) {
+        if (m_properties[i].count() != other.m_properties[i].count()) {
             return false;
+        }
+        if (m_childProperties[i].count() != other.m_childProperties[i].count()) {
+            return false;
+        }
+    }
     if (m_attributes.count() != other.m_attributes.count()) return false;
     if (m_maps.count() != other.m_maps.count()) return false;
     // Same number of properties and attributes, no other choice than iterating
     for (uint i = 0 ; i <= LastPropertyType; ++i) {
         int comp = compareMap(m_properties[i], other.m_properties[i]);
+        if (comp != 0)
+            return false;
+    }
+    for (uint i = 0 ; i <= LastPropertyType; ++i) {
+        int comp = compareMap(m_childProperties[i], other.m_childProperties[i]);
         if (comp != 0)
             return false;
     }

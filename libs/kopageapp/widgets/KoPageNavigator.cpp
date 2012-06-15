@@ -32,6 +32,7 @@
 // Qt
 #include <QLabel>
 #include <QHBoxLayout>
+#include <QWheelEvent>
 #include <QEvent>
 #include <QLineEdit>
 #include <QIntValidator>
@@ -93,10 +94,16 @@ KoPageNavigator::KoPageNavigator(KoPAView *view)
 
     // the original go-*-view-page icons as set for the actions are not reused,
     // because they look too complex, at least with the Oxygen icons
+    // also installing an event filter for all buttons, to get wheel events even
+    // for disabled buttons
     d->gotoFirstPageButton = new KoPageNavigatorButton("go-first-view", this);
+    d->gotoFirstPageButton->installEventFilter(this);
     d->gotoPreviousPageButton = new KoPageNavigatorButton("go-previous-view", this);
+    d->gotoPreviousPageButton->installEventFilter(this);
     d->gotoNextPageButton = new KoPageNavigatorButton("go-next-view", this);
+    d->gotoNextPageButton->installEventFilter(this);
     d->gotoLastPageButton = new KoPageNavigatorButton("go-last-view", this);
+    d->gotoLastPageButton->installEventFilter(this);
 
     d->pageNumberEdit = new QLineEdit(this);
     d->pageNumberEdit->installEventFilter(this);
@@ -157,20 +164,51 @@ void KoPageNavigator::leaveEvent(QEvent *event)
 {
     Q_UNUSED(event);
 
-    if (d->pageNumberEdit->hasFocus()) {
-        d->pageNumberEdit->installEventFilter(this);
-    } else {
+    if (! d->pageNumberEdit->hasFocus()) {
         setCurrentIndex(Display);
-        d->pageNumberEdit->removeEventFilter(this);
     }
 }
 
 bool KoPageNavigator::eventFilter(QObject *watched, QEvent *event)
 {
-    if (watched == d->pageNumberEdit && event->type() == QEvent::FocusOut && !d->pageNumberEdit->hasFocus()) {
-        d->pageNumberEdit->removeEventFilter(this);
+    if (event->type() == QEvent::FocusOut && watched == d->pageNumberEdit) {
+        if (! underMouse()) {
+            setCurrentIndex(Display);
+        }
 
-        setCurrentIndex(Display);
+        // reset editor in any case
+        KoPADocument *const kopaDocument = d->view->kopaDocument();
+        KoPAPageBase *const activePage = d->view->activePage();
+        const int pageNumber = kopaDocument->pageIndex(activePage) + 1;
+        const QString text = (pageNumber > 0) ? QString::number(pageNumber) : QString();
+        d->pageNumberEdit->setText(text);
+    } else if (event->type() == QEvent::Wheel) {
+        // Scroll the pages by the wheel
+        // Because the numbers are representatives of the actual pages
+        // and the list of pages is ordered by smaller number first,
+        // here an increasing delta means going up in the list, so go to
+        // smaller page numbers, and vice versa.
+        QWheelEvent *wheelEvent = static_cast<QWheelEvent*>(event);
+        const int delta = wheelEvent->delta();
+
+        // trigger the respective actions
+        if (delta > 0) {
+            QAction *gotoPreviousPageAction = d->gotoPreviousPageButton->action();
+            if (gotoPreviousPageAction->isEnabled()) {
+                gotoPreviousPageAction->activate(QAction::Trigger);
+            }
+        } else if (delta < 0) {
+            QAction *gotoNextPageAction = d->gotoNextPageButton->action();
+            if (gotoNextPageAction->isEnabled()) {
+                gotoNextPageAction->activate(QAction::Trigger);
+            }
+        }
+
+        // scroll wheel events also cancel the editing,
+        // so move focus out of the pageNumberEdit
+        if (d->pageNumberEdit->hasFocus()) {
+            d->view->setFocus();
+        }
     }
 
     return false;
@@ -190,8 +228,14 @@ void KoPageNavigator::updateDisplayLabel()
         const bool isSlideType = (d->view->kopaDocument()->pageType() == KoPageApp::Slide);
 
         d->displayLabel->setText(displayText(isMasterPage, isSlideType, pageNumber, pageCount));
+
         d->pageNumberEdit->setText(QString::number(pageNumber));
         d->pageNumberEditValidator->setTop(pageCount);
+    }
+
+    // also leave the editor if in it
+    if (d->pageNumberEdit->hasFocus()) {
+        d->view->setFocus();
     }
 }
 
@@ -210,5 +254,4 @@ void KoPageNavigator::onPageNumberEntered()
     if (newPage) {
         d->view->proxyObject->updateActivePage(newPage);
     }
-    d->view->setFocus();
 }

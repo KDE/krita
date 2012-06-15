@@ -620,11 +620,23 @@ QList<const KoColorSpace*> KoColorSpaceRegistry::allColorSpaces(ColorSpaceListVi
     foreach(KoColorSpaceFactory* factory, factories) {
         if (visibility == AllColorSpaces || factory->userVisible()) {
             if (pSelection == OnlyDefaultProfile) {
-                colorSpaces.append(colorSpace(factory->id(), 0));
+                const KoColorSpace *cs = colorSpace(factory->id(), 0);
+                if (cs) {
+                    colorSpaces.append(cs);
+                }
+                else {
+                    warnPigment << "Could not create colorspace for id" << factory->id() << "since there is no working default profile";
+                }
             } else {
                 QList<const KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor(factory->id());
                 foreach(const KoColorProfile * profile, profiles) {
-                    colorSpaces.append(colorSpace(factory->id(), profile));
+                    const KoColorSpace *cs = colorSpace(factory->id(), profile);
+                    if (cs) {
+                        colorSpaces.append(cs);
+                    }
+                    else {
+                        warnPigment << "Could not create colorspace for id" << factory->id() << "and profile" << profile->name();
+                    }
                 }
             }
         }

@@ -83,14 +83,6 @@ public:
     void setDisplayFilter(KisDisplayFilter *displayFilter);
 
     /**
-     * Set the exposure level used to display high dynamic range images. Typical values
-     * are between -10 and 10.
-     * @param exposure The exposure level
-     * @param gamma The gamma correction
-     */
-    void setHDRExposure(float exposure, float gamma = 2.2);
-
-    /**
      * Generate a background texture from the given QImage. This is used for the checker
      * pattern on which the image is rendered.
      */
@@ -154,7 +146,6 @@ protected:
     void createImageTextureTiles();
     void destroyImageTextureTiles();
 
-    static void createHDRExposureProgramIfCan();
     static bool imageCanUseHDRExposureProgram(KisImageWSP image);
     static bool imageCanShareTextures(KisImageWSP image);
 
@@ -168,8 +159,6 @@ private:
     QRect m_storedImageBounds;
     const KoColorProfile *m_monitorProfile;
     KoColorConversionTransformation::Intent m_renderingIntent;
-    float m_exposure;
-    float m_gamma;
     GLuint m_backgroundTexture;
 
     KisGLTexturesInfo m_texturesInfo;
@@ -178,7 +167,6 @@ private:
 
 #ifdef HAVE_GLEW
     bool m_usingHDRExposureProgram;
-    static KisOpenGLHDRExposureProgram *HDRExposureProgram;
 #endif
 
     KisDisplayFilter *m_displayFilter;

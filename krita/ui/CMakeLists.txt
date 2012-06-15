@@ -197,7 +197,6 @@ if(HAVE_OPENGL)
             opengl/kis_opengl_fragment_shader.cpp
             opengl/kis_opengl_vertex_shader.cpp
             opengl/kis_opengl_program.cpp
-            opengl/kis_opengl_hdr_exposure_program.cpp
             opengl/kis_opengl_gradient_program.cpp
             )
     endif(HAVE_GLEW)

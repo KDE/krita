@@ -26,7 +26,8 @@
 #include <sstream>
 
 #include <kdebug.h>
-\
+#include <kis_config.h>
+
 #ifdef HAVE_OPENGL
 
 static const int LUT3D_EDGE_SIZE = 32;
@@ -223,6 +224,11 @@ void OcioDisplayFilter::updateProcessor()
     m_processor = config->getProcessor(transform);
 
 #ifdef HAVE_OPENGL
+
+    // check whether we are allowed to use shaders -- though that should
+    // work for everyone these days
+    KisConfig cfg;
+    if (!cfg.useOpenGLShaders()) return;
 
     if (m_lut3d.size() == 0) {
         glGenTextures(1, &m_lut3dTexID);

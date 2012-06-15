@@ -33,10 +33,6 @@
 #include <half.h>
 #endif
 
-#ifdef HAVE_GLEW
-#include "opengl/kis_opengl_hdr_exposure_program.h"
-#endif
-
 #ifndef GL_CLAMP_TO_EDGE
 #define GL_CLAMP_TO_EDGE 0x812F
 #endif
@@ -48,17 +44,11 @@
 
 KisOpenGLImageTextures::ImageTexturesMap KisOpenGLImageTextures::imageTexturesMap;
 
-#ifdef HAVE_GLEW
-KisOpenGLHDRExposureProgram *KisOpenGLImageTextures::HDRExposureProgram = 0;
-#endif
-
 KisOpenGLImageTextures::KisOpenGLImageTextures()
     : m_displayFilter(0)
 {
     m_image = 0;
     m_monitorProfile = 0;
-    m_exposure = 0.0;
-    m_gamma = 2.2;
 }
 
 KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image, KoColorProfile *monitorProfile)
@@ -66,8 +56,6 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image, KoColorProfile
 {
     m_image = image;
     m_monitorProfile = monitorProfile;
-    m_exposure = 0;
-    m_gamma = 2.2;
 
     KisOpenGL::makeContextCurrent();
 
@@ -103,7 +91,6 @@ bool KisOpenGLImageTextures::imageCanShareTextures(KisImageWSP image)
 KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP image, KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent)
 {
     KisOpenGL::makeContextCurrent();
-    createHDRExposureProgramIfCan();
 
     if (imageCanShareTextures(image)) {
         ImageTexturesMap::iterator it = imageTexturesMap.find(image);
@@ -315,51 +302,6 @@ void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProf
 void KisOpenGLImageTextures::setDisplayFilter(KisDisplayFilter *displayFilter)
 {
     m_displayFilter = displayFilter;
-    setHDRExposure(displayFilter->exposure, displayFilter->gamma);
-}
-
-void KisOpenGLImageTextures::setHDRExposure(float exposure, float gamma)
-{
-    if (exposure != m_exposure || gamma != m_gamma) {
-        m_exposure = exposure;
-        m_gamma = gamma;
-        if (m_image->colorSpace()->hasHighDynamicRange()) {
-#ifdef HAVE_GLEW
-            if (m_usingHDRExposureProgram) {
-                HDRExposureProgram->setExposure(exposure);
-                HDRExposureProgram->setGamma(gamma);
-            }
-            else {
-#endif
-
-#ifdef __GNUC__
-#warning "FIXME: Move this setOverrideCursor to a higher level"
-#else
-#pragma WARNING( "FIXME: Move this setOverrideCursor to a higher level") { )
-#endif
-                QApplication::setOverrideCursor(Qt::WaitCursor);
-                KisOpenGLUpdateInfoSP info = updateCache(m_image->bounds());
-                recalculateCache(info);
-                QApplication::restoreOverrideCursor();
-#ifdef HAVE_GLEW
-            }
-#endif
-        }
-    }
-}
-
-void KisOpenGLImageTextures::createHDRExposureProgramIfCan()
-{
-    KisConfig cfg;
-    if (!cfg.useOpenGLShaders()) return;
-
-#ifdef HAVE_GLEW
-    if (!HDRExposureProgram && KisOpenGL::hasShadingLanguage()) {
-        dbgUI << "Creating shared HDR exposure program";
-        HDRExposureProgram = new KisOpenGLHDRExposureProgram();
-        Q_CHECK_PTR(HDRExposureProgram);
-    }
-#endif
 }
 
 bool KisOpenGLImageTextures::usingHDRExposureProgram() const
@@ -374,8 +316,8 @@ bool KisOpenGLImageTextures::usingHDRExposureProgram() const
 void KisOpenGLImageTextures::activateHDRExposureProgram()
 {
 #ifdef HAVE_GLEW
-    if (m_usingHDRExposureProgram) {
-        HDRExposureProgram->activate();
+    if (m_usingHDRExposureProgram && m_displayFilter && m_displayFilter->program()) {
+        glUseProgram(m_displayFilter->program());
     }
 #endif
 }
@@ -383,8 +325,8 @@ void KisOpenGLImageTextures::activateHDRExposureProgram()
 void KisOpenGLImageTextures::deactivateHDRExposureProgram()
 {
 #ifdef HAVE_GLEW
-    if (m_usingHDRExposureProgram) {
-        KisOpenGLProgram::deactivate();
+    if (m_usingHDRExposureProgram && m_displayFilter && m_displayFilter->program()) {
+        glUseProgram(0);
     }
 #endif
 }
@@ -480,10 +422,7 @@ bool KisOpenGLImageTextures::imageCanUseHDRExposureProgram(KisImageWSP image)
     KisConfig cfg;
 
     if (!image->colorSpace()->hasHighDynamicRange() ||
-        !cfg.useOpenGLShaders() ||
-        !HDRExposureProgram ||
-        !HDRExposureProgram->isValid()) {
-
+        !cfg.useOpenGLShaders()) {
         return false;
     }
 

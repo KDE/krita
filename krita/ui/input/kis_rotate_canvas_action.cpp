@@ -92,7 +92,7 @@ void KisRotateCanvasAction::inputEvent(QEvent* event)
             QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
             if (mevent->buttons()) {
                 QPointF relMovement = mevent->posF() - d->lastMousePosition;
-                float angle = relMovement.manhattanLength();
+                float angle = relMovement.manhattanLength() / 10.f;
 
                 Vector2f dir = Vector2f(relMovement.x(), relMovement.y()).normalized();
                 if (qAbs(dir.x()) > qAbs(dir.y())) {
@@ -101,7 +101,11 @@ void KisRotateCanvasAction::inputEvent(QEvent* event)
                     angle *= dir.y() / qAbs(dir.y());
                 }
 
-                inputManager()->canvas()->rotateCanvas(angle / 10.f);
+                if(isnan(angle) || isinf(angle)) {
+                    return;
+                }
+
+                inputManager()->canvas()->rotateCanvas(angle);
 
                 d->lastMousePosition = mevent->posF();
                 QApplication::changeOverrideCursor(Qt::ClosedHandCursor);

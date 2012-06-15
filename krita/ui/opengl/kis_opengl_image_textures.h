@@ -80,10 +80,7 @@ public:
     /**
      * set the (ocio) display filter.
      */
-    void setDisplayFilter(KisDisplayFilter *displayFilter)
-    {
-        m_displayFilter = displayFilter;
-    }
+    void setDisplayFilter(KisDisplayFilter *displayFilter);
 
     /**
      * Set the exposure level used to display high dynamic range images. Typical values

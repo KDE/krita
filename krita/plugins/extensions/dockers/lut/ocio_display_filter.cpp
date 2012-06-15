@@ -36,8 +36,6 @@ OcioDisplayFilter::OcioDisplayFilter(QObject *parent)
     , displayDevice(0)
     , view(0)
     , swizzle(RGBA)
-    , exposure(0.0)
-    , gamma(0.0)
 {
 }
 

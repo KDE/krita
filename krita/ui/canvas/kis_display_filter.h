@@ -35,6 +35,10 @@ class KRITAUI_EXPORT KisDisplayFilter : public QObject
 public:
     explicit KisDisplayFilter(QObject *parent = 0);
 
+    // temporary, for access in the opengl textures class
+    float exposure;
+    float gamma;
+
     virtual void filter(quint8 *src, quint8 *dst, quint32 numPixels) = 0;
 
 };

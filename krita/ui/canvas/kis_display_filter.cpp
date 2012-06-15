@@ -19,5 +19,7 @@
 
 KisDisplayFilter::KisDisplayFilter(QObject *parent)
     : QObject(parent)
+    , exposure(0.0)
+    , gamma(0.0)
 {
 }

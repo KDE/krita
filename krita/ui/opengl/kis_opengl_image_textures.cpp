@@ -27,6 +27,7 @@
 
 #include "kis_image.h"
 #include "kis_config.h"
+#include "kis_display_filter.h"
 
 #ifdef HAVE_OPENEXR
 #include <half.h>
@@ -309,6 +310,12 @@ void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProf
 #pragma WARNING( "FIXME: m_renderingIntent is currently unused") { )
 #endif
     }
+}
+
+void KisOpenGLImageTextures::setDisplayFilter(KisDisplayFilter *displayFilter)
+{
+    m_displayFilter = displayFilter;
+    setHDRExposure(displayFilter->exposure, displayFilter->gamma);
 }
 
 void KisOpenGLImageTextures::setHDRExposure(float exposure, float gamma)

@@ -50,9 +50,6 @@ public:
     const char *view;
     OCIO_CHANNEL_SWIZZLE swizzle;
 
-    float exposure;
-    float gamma;
-
 private:
 
     OCIO::ConstProcessorRcPtr m_processor;

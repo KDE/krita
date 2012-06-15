@@ -26,7 +26,7 @@
 class KisShortcut::Private
 {
 public:
-    Private() : action(0), shortcutIndex(0), wheelState(WheelUndefined), currentWheelState(WheelUndefined) { }
+    Private() : wheelState(WheelUndefined), currentWheelState(WheelUndefined), action(0), shortcutIndex(0) { }
     QList<Qt::Key> keys;
     QList<Qt::Key> keyState;
     QList<Qt::MouseButton> buttons;
@@ -49,7 +49,7 @@ KisShortcut::~KisShortcut()
 
 int KisShortcut::priority() const
 {
-    return d->keys.count() + d->buttons.count();
+    return d->keys.count() * 2 + d->buttons.count();
 }
 
 KisAbstractInputAction* KisShortcut::action() const
@@ -105,9 +105,6 @@ void KisShortcut::match(QEvent* event)
     switch (event->type()) {
         case QEvent::KeyPress: {
             QKeyEvent *kevent = static_cast<QKeyEvent*>(event);
-            if (kevent->isAutoRepeat() && d->action->isBlockingAutoRepeat()) {
-                break;
-            }
             Qt::Key key = static_cast<Qt::Key>(kevent->key());
             if (d->keys.contains(key) && !d->keyState.contains(key)) {
                 d->keyState.append(key);
@@ -116,9 +113,6 @@ void KisShortcut::match(QEvent* event)
         }
         case QEvent::KeyRelease: {
             QKeyEvent *kevent = static_cast<QKeyEvent*>(event);
-            if (kevent->isAutoRepeat() && d->action->isBlockingAutoRepeat()) {
-                break;
-            }
             Qt::Key key = static_cast<Qt::Key>(kevent->key());
             if (d->keyState.contains(key)) {
                 d->keyState.removeOne(key);

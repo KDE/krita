@@ -41,6 +41,8 @@ ConnectionPointWidget::ConnectionPointWidget(ConnectionTool *tool, QWidget * par
     widget.escapeRight->setDefaultAction(tool->action("escape-right"));
     widget.escapeUp->setDefaultAction(tool->action("escape-up"));
     widget.escapeDown->setDefaultAction(tool->action("escape-down"));
+
+    connect(widget.toggleEditMode, SIGNAL(stateChanged(int)), tool, SLOT(toggleConnectionPointEditMode(int)));
 }
 
 #include <ConnectionPointWidget.moc>

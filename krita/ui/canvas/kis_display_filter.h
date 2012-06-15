@@ -39,6 +39,9 @@ public:
     float exposure;
     float gamma;
 
+#ifdef HAVE_OPENGL
+    virtual GLuint program() = 0;
+#endif
     virtual void filter(quint8 *src, quint8 *dst, quint32 numPixels) = 0;
 
 };

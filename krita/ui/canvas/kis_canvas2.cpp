@@ -534,7 +534,7 @@ void KisCanvas2::startResizingImage(qint32 w, qint32 h)
     startUpdateInPatches(imageBounds);
 }
 
-void KisCanvas2::finishResisingImage(qint32 w, qint32 h)
+void KisCanvas2::finishResizingImage(qint32 w, qint32 h)
 {
     if (m_d->currentCanvasIsOpenGL) {
 #ifdef HAVE_OPENGL

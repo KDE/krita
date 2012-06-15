@@ -33,10 +33,12 @@
 class KisPanAction::Private
 {
 public:
-    Private() : panDistance(10) { }
+    Private() : active(false), panDistance(10) { }
     QPointF lastMousePosition;
 
     const int panDistance;
+
+    bool active;
 };
 
 KisPanAction::KisPanAction(KisInputManager *manager)
@@ -63,6 +65,7 @@ void KisPanAction::begin(int shortcut)
         case PanToggleShortcut:
             d->lastMousePosition = inputManager()->canvas()->coordinatesConverter()->documentToWidget(inputManager()->mousePosition());
             QApplication::setOverrideCursor(Qt::OpenHandCursor);
+            d->active = true;
             break;
         case PanLeftShortcut:
             inputManager()->canvas()->canvasController()->pan(QPoint(d->panDistance, 0));
@@ -81,6 +84,7 @@ void KisPanAction::begin(int shortcut)
 
 void KisPanAction::end()
 {
+    d->active = false;
     QApplication::restoreOverrideCursor();
 }
 
@@ -93,7 +97,7 @@ void KisPanAction::inputEvent(QEvent *event)
         }
         case QEvent::MouseMove: {
             QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
-            if(mevent->buttons()) {
+            if (mevent->buttons()) {
                 QPointF relMovement = -(mevent->posF() - d->lastMousePosition);
                 inputManager()->canvas()->canvasController()->pan(relMovement.toPoint());
                 d->lastMousePosition = mevent->posF();
@@ -106,4 +110,9 @@ void KisPanAction::inputEvent(QEvent *event)
         default:
             break;
     }
+}
+
+bool KisPanAction::isBlockingAutoRepeat() const
+{
+    return d->active;
 }

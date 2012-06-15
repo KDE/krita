@@ -32,7 +32,10 @@ using namespace Eigen;
 class KisRotateCanvasAction::Private
 {
 public:
+    Private() : active(false) { }
+
     QPointF lastMousePosition;
+    bool active;
 };
 
 KisRotateCanvasAction::KisRotateCanvasAction(KisInputManager* manager)
@@ -58,6 +61,7 @@ void KisRotateCanvasAction::begin(int shortcut)
         case RotateToggleShortcut:
             d->lastMousePosition = inputManager()->canvas()->coordinatesConverter()->documentToWidget(inputManager()->mousePosition());
             QApplication::setOverrideCursor(Qt::OpenHandCursor);
+            d->active = true;
             break;
         case RotateLeftShortcut:
             inputManager()->canvas()->rotateCanvasLeft15();
@@ -73,6 +77,7 @@ void KisRotateCanvasAction::begin(int shortcut)
 
 void KisRotateCanvasAction::end()
 {
+    d->active = false;
     QApplication::restoreOverrideCursor();
 }
 
@@ -107,4 +112,9 @@ void KisRotateCanvasAction::inputEvent(QEvent* event)
         default:
             break;
     }
+}
+
+bool KisRotateCanvasAction::isBlockingAutoRepeat() const
+{
+    return d->active;
 }

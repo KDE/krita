@@ -36,6 +36,8 @@ public:
     virtual void begin(int shortcut);
     virtual void end();
     virtual void inputEvent(QEvent* event);
+
+    virtual bool isBlockingAutoRepeat() const;
 };
 
 #endif // KISCHANGEPRIMARYSETTINGACTION_H

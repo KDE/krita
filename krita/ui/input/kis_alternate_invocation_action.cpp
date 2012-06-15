@@ -57,3 +57,8 @@ void KisAlternateInvocationAction::inputEvent(QEvent* event)
         inputManager()->toolProxy()->mouseMoveEvent(mevent, mevent->posF());
     }
 }
+
+bool KisAlternateInvocationAction::isBlockingAutoRepeat() const
+{
+    return true;
+}

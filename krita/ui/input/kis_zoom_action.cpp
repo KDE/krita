@@ -31,6 +31,9 @@
 class KisZoomAction::Private
 {
 public:
+    Private() : active(false) { }
+
+    bool active;
     QPointF mouseStart;
     QPointF lastMousePosition;
 };
@@ -61,6 +64,7 @@ void KisZoomAction::begin(int shortcut)
         case ZoomToggleShortcut:
             d->lastMousePosition = d->mouseStart = inputManager()->canvas()->coordinatesConverter()->documentToWidget(inputManager()->mousePosition());
             QApplication::setOverrideCursor(Qt::OpenHandCursor);
+            d->active = true;
             break;
         case ZoomInShortcut: {
             float zoom = inputManager()->canvas()->view()->zoomController()->zoomAction()->effectiveZoom();
@@ -101,6 +105,7 @@ void KisZoomAction::begin(int shortcut)
 
 void KisZoomAction::end()
 {
+    d->active = false;
     QApplication::restoreOverrideCursor();
 }
 
@@ -127,4 +132,9 @@ void KisZoomAction::inputEvent(QEvent* event)
         default:
             break;
     }
+}
+
+bool KisZoomAction::isBlockingAutoRepeat() const
+{
+    return d->active;
 }

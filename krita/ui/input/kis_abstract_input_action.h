@@ -85,6 +85,11 @@ public:
      */
     virtual QString description() const;
 
+    /**
+     * Does this action block auto repeat events?
+     */
+    virtual bool isBlockingAutoRepeat() const;
+
 protected:
     /**
      * The input manager this action belongs to.

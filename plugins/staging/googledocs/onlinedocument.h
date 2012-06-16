@@ -31,7 +31,7 @@ public:
     enum DocumentType {
         WORDS,
         STAGE,
-        TABLES,
+        SHEETS,
         UNKNOWN
     };
 

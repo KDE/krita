@@ -1920,10 +1920,6 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
         topMargin = formatStyle.topMargin();
     }
     qreal spacing = qMax(d->bottomSpacing, topMargin);
-    qreal divider = d->y;
-    if (spacing) {
-        divider += spacing * d->bottomSpacing / (d->bottomSpacing + topMargin);
-    }
     qreal dx = 0.0;
     qreal x = d->x;
     qreal width = d->width;
@@ -1960,12 +1956,16 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
         if (d->prevBorder && d->prevBorder->equals(border)) {
             blockData->setBorder(d->prevBorder);
             // Merged mean we don't have inserts inbetween the blocks
+            d->anchoringParagraphTop = d->y;
+            if (d->bottomSpacing + topMargin) {
+                d->anchoringParagraphTop += spacing * d->bottomSpacing / (d->bottomSpacing + topMargin);
+            }
             if (!d->blockRects.isEmpty()) {
-                d->blockRects.last().setBottom(divider);
+                d->blockRects.last().setBottom(d->anchoringParagraphTop);
             }
             d->anchoringParagraphTop = d->y;
             d->y += spacing;
-            d->blockRects.append(QRectF(x, divider, width, 1.0));
+            d->blockRects.append(QRectF(x, d->anchoringParagraphTop, width, 1.0));
         } else {
             // can't merge; then these are our new borders.
             KoTextBlockBorderData *newBorder = new KoTextBlockBorderData(border);
@@ -1978,6 +1978,9 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
                 d->blockRects.last().setBottom(d->y);
             }
             d->anchoringParagraphTop = d->y;
+            if (d->bottomSpacing + topMargin) {
+                d->anchoringParagraphTop += spacing * d->bottomSpacing / (d->bottomSpacing + topMargin);
+            }
             d->y += spacing;
             if (paddingExpandsBorders) {
                 d->blockRects.append(QRectF(x - format.doubleProperty(KoParagraphStyle::LeftPadding), d->y,
@@ -2005,6 +2008,9 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
             d->blockRects.last().setBottom(d->y);
         }
         d->anchoringParagraphTop = d->y;
+        if (d->bottomSpacing + topMargin) {
+            d->anchoringParagraphTop += spacing * d->bottomSpacing / (d->bottomSpacing + topMargin);
+        }
         d->y += spacing;
         d->blockRects.append(QRectF(x, d->y, width, 1.0));
     }

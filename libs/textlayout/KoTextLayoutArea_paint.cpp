@@ -199,10 +199,12 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
             // Check and update border drawing code
             if (lastBorder == 0) {
                 lastBorderRect = br;
-            } else if (lastBorder && lastBorder != border) {
+            } else if (lastBorder != border
+                        || lastBorderRect.width() != br.width()
+                        || lastBorderRect.x() != br.x()) {
                 lastBorder->paint(*painter, lastBorderRect);
                 lastBorderRect = br;
-            } else if (lastBorder == border) {
+            } else {
                 lastBorderRect = lastBorderRect.united(br);
             }
             lastBorder = border;

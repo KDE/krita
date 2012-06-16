@@ -1945,6 +1945,7 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
     border.setEdge(border.Bottom, format, KoParagraphStyle::BottomBorderStyle,
                    KoParagraphStyle::BottomBorderWidth, KoParagraphStyle::BottomBorderColor,
                    KoParagraphStyle::BottomBorderSpacing, KoParagraphStyle::BottomInnerBorderWidth);
+    border.setMergeWithNext(formatStyle.joinBorder());
 
     if (border.hasBorders()) {
         if (blockData == 0) {

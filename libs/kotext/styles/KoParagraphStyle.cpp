@@ -1168,7 +1168,7 @@ bool KoParagraphStyle::joinBorder() const
 {
     if (hasProperty(JoinBorder))
         return propertyBoolean(JoinBorder);
-    return false;
+    return true; //default is true
 }
 
 void KoParagraphStyle::setJoinBorder(bool value)

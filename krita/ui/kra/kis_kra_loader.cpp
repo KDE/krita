@@ -311,11 +311,12 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image)
         QString colorspacename = element.attribute(COLORSPACE_NAME);
         QString colorspaceModel = KoColorSpaceRegistry::instance()->colorSpaceColorModelId(colorspacename).id();
         QString colorspaceDepth = KoColorSpaceRegistry::instance()->colorSpaceColorDepthId(colorspacename).id();
-
+        dbgFile << "Searching color space: " << colorspacename << colorspaceModel << colorspaceDepth << " for layer: " << name;
         // use default profile - it will be replaced later in completeLoading
         colorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorspaceModel, colorspaceDepth, "");
-        dbgFile << "Using color space: " << colorspacename << colorspaceModel << colorspaceDepth << " " << colorSpace << " for layer: " << name;
+        dbgFile << "found colorspace" << colorSpace;
     }
+    Q_ASSERT(colorSpace);
 
     bool visible = element.attribute(VISIBLE, "1") == "0" ? false : true;
     bool locked = element.attribute(LOCKED, "0") == "0" ? false : true;

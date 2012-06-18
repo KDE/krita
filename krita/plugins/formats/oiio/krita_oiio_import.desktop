@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Krita OpenColorIO-based Import Filter
+X-KDE-Export=application/x-krita
+X-KDE-ServiceTypes=CalligraFilter
+Type=Service
+X-KDE-Import=image/cineon,image/dpx,image/fits,image/field3d,image/vnd.radiance,image/exr
+X-KDE-Weight=2
+X-KDE-Library=kritaoiioimport
+NoDisplay=true

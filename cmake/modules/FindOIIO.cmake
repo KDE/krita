@@ -33,7 +33,7 @@ find_path(OIIO_INCLUDE_DIR OpenImageIO/version.h
         /usr/local/include
         /sw/include
         /opt/local/include
-        DOC "The directory where OpenImageIO/version.h resides")
+        DOC "The directory where OpenImageIO/version.h resides"
 )
 
 find_library(OIIO_LIBRARIES
@@ -47,7 +47,7 @@ find_library(OIIO_LIBRARIES
         /usr/local/lib
         /sw/lib
         /opt/local/lib
-        DOC "The OIIO library")
+        DOC "The OIIO library"
 )
 
 if(OIIO_INCLUDE_DIR AND OIIO_LIBRARIES)

@@ -78,7 +78,7 @@ void KisCanvasResourceProvider::setResourceManager(KoCanvasResourceManager *reso
     setMirrorVertical(false);
 
     m_resourceManager->setResource(HdrExposure, 0.0);
-    m_resourceManager->setResource(HdrGamma, 2.2);
+    m_resourceManager->setResource(HdrGamma, 1.0);
 
     connect(m_resourceManager, SIGNAL(resourceChanged(int, const QVariant &)),
             this, SLOT(slotResourceChanged(int, const QVariant&)));

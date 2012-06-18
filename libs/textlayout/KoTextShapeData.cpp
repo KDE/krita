@@ -297,8 +297,9 @@ void KoTextShapeData::loadStyle(const KoXmlElement &element, KoShapeLoadingConte
 
 
     if (style) {
-        context.odfLoadingContext().addStyles(style, style->attributeNS(KoXmlNS::style, "family", "graphic").toLocal8Bit().constData());   // Load all parents
         KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+        styleStack.save();
+        context.odfLoadingContext().addStyles(style, style->attributeNS(KoXmlNS::style, "family", "graphic").toLocal8Bit().constData());   // Load all parents
         styleStack.setTypeProperties("graphic");
         // Spacing (padding)
         const QString paddingLeft(styleStack.property(KoXmlNS::fo, "padding-left" ));
@@ -321,6 +322,7 @@ void KoTextShapeData::loadStyle(const KoXmlElement &element, KoShapeLoadingConte
         if (!padding.isEmpty()) {
             setPadding(KoUnit::parseValue(padding));
         }
+        styleStack.restore();
 
         // graphic styles don't support inheritance yet therefor some additional work is needed here.
         QList<KoParagraphStyle *> paragraphStyles;

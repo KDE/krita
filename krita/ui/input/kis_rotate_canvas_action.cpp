@@ -32,7 +32,10 @@ using namespace Eigen;
 class KisRotateCanvasAction::Private
 {
 public:
+    Private() : active(false) { }
+
     QPointF lastMousePosition;
+    bool active;
 };
 
 KisRotateCanvasAction::KisRotateCanvasAction(KisInputManager* manager)
@@ -58,6 +61,7 @@ void KisRotateCanvasAction::begin(int shortcut)
         case RotateToggleShortcut:
             d->lastMousePosition = inputManager()->canvas()->coordinatesConverter()->documentToWidget(inputManager()->mousePosition());
             QApplication::setOverrideCursor(Qt::OpenHandCursor);
+            d->active = true;
             break;
         case RotateLeftShortcut:
             inputManager()->canvas()->rotateCanvasLeft15();
@@ -73,6 +77,7 @@ void KisRotateCanvasAction::begin(int shortcut)
 
 void KisRotateCanvasAction::end()
 {
+    d->active = false;
     QApplication::restoreOverrideCursor();
 }
 
@@ -87,7 +92,7 @@ void KisRotateCanvasAction::inputEvent(QEvent* event)
             QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
             if (mevent->buttons()) {
                 QPointF relMovement = mevent->posF() - d->lastMousePosition;
-                float angle = relMovement.manhattanLength();
+                float angle = relMovement.manhattanLength() / 10.f;
 
                 Vector2f dir = Vector2f(relMovement.x(), relMovement.y()).normalized();
                 if (qAbs(dir.x()) > qAbs(dir.y())) {
@@ -96,7 +101,11 @@ void KisRotateCanvasAction::inputEvent(QEvent* event)
                     angle *= dir.y() / qAbs(dir.y());
                 }
 
-                inputManager()->canvas()->rotateCanvas(angle / 10.f);
+                if(isnan(angle) || isinf(angle)) {
+                    return;
+                }
+
+                inputManager()->canvas()->rotateCanvas(angle);
 
                 d->lastMousePosition = mevent->posF();
                 QApplication::changeOverrideCursor(Qt::ClosedHandCursor);
@@ -107,4 +116,9 @@ void KisRotateCanvasAction::inputEvent(QEvent* event)
         default:
             break;
     }
+}
+
+bool KisRotateCanvasAction::isBlockingAutoRepeat() const
+{
+    return d->active;
 }

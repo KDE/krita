@@ -46,6 +46,8 @@ public:
     virtual void end();
     virtual void inputEvent(QEvent* event);
 
+    virtual bool isBlockingAutoRepeat() const;
+
 private:
     class Private;
     Private * const d;

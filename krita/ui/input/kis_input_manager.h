@@ -87,6 +87,11 @@ public:
      */
     QTabletEvent *tabletPressEvent() const;
 
+    /**
+     * Convert a widget position to a pixel position.
+     */
+    QPointF widgetToPixel(const QPointF &position);
+
 private Q_SLOTS:
     void setMirrorAxis();
 

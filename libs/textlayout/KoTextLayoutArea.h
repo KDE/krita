@@ -220,57 +220,9 @@ private:
 
     void handleBordersAndSpacing(KoTextBlockData *blockData, QTextBlock *block);
 
-    KoTextLayoutArea *m_parent; //  A pointer to the parent
-
-    KoTextDocumentLayout *m_documentLayout;
-
-    qreal m_left; // reference area left
-    qreal m_right; // reference area right
-    qreal m_top; // reference area top
-    qreal m_bottom; // reference area top
-    qreal m_maximalAllowedBottom;
-    qreal m_maximumAllowedWidth; // 0 indicates wrapping is allowed
-    QRectF m_boundingRect;
-    bool m_isLayoutEnvironment;
-    bool m_actsHorizontally;
-    KoTextBlockBorderData *m_prevBorder;
-    qreal m_prevBorderPadding;
-
-    qreal m_x; // text area starts here as defined by margins (so not == m_left)
-    qreal m_y;
-    qreal m_width; // of text area as defined by margins (so not == m_right - m_left)
-    qreal m_indent;
-    qreal m_dropCapsWidth;
-    qreal m_dropCapsDistance;
-    int m_dropCapsNChars;
-    bool m_isRtl;
-    qreal m_bottomSpacing;
-    QList<KoTextLayoutTableArea *> m_tableAreas;
-    FrameIterator *m_startOfArea;
-    FrameIterator *m_endOfArea;
-    FrameIterator *m_footNoteCursorToNext;
-    FrameIterator *m_footNoteCursorFromPrevious;
-    KoInlineNote *m_continuedNoteToNext;
-    KoInlineNote *m_continuedNoteFromPrevious;
-    int m_footNoteCountInDoc;
-
-    bool m_acceptsPageBreak;
-    bool m_virginPage;
-    qreal m_verticalAlignOffset;
-    QList<QRectF> m_blockRects;
-    qreal m_anchoringParagraphTop;
-    qreal m_anchoringParagraphContentTop;
-
-    qreal m_preregisteredFootNotesHeight;
-    qreal m_footNotesHeight;
-    int m_footNoteAutoCount;
-    qreal m_extraTextIndent;
-    QList<KoTextLayoutNoteArea *> m_preregisteredFootNoteAreas;
-    QList<KoTextLayoutNoteArea *> m_footNoteAreas;
-    QList<QTextFrame *> m_preregisteredFootNoteFrames;
-    QList<QTextFrame *> m_footNoteFrames;
-    KoTextLayoutEndNotesArea *m_endNotesArea;
-    QList<KoTextLayoutArea *> m_generatedDocAreas;
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif

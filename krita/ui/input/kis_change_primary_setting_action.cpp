@@ -54,3 +54,8 @@ void KisChangePrimarySettingAction::inputEvent(QEvent* event)
         inputManager()->toolProxy()->mouseMoveEvent(mevent, mevent->posF());
     }
 }
+
+bool KisChangePrimarySettingAction::isBlockingAutoRepeat() const
+{
+    return true;
+}

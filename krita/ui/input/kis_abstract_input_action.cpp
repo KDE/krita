@@ -80,3 +80,8 @@ void KisAbstractInputAction::setShortcutIndexes(const QHash< QString, int >& ind
 {
     d->indexes = indexes;
 }
+
+bool KisAbstractInputAction::isBlockingAutoRepeat() const
+{
+    return false;
+}

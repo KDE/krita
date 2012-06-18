@@ -144,34 +144,37 @@ void KoTextLayoutObstruction::init(const QTransform &matrix, const QPainterPath 
     m_distanceRight = distanceRight;
     m_distanceBottom = distanceBottom;
     QPainterPath path =  matrix.map(obstruction);
-    m_bounds = path.boundingRect();
     distanceLeft += borderHalfWidth;
     distanceTop += borderHalfWidth;
     distanceRight += borderHalfWidth;
     distanceBottom += borderHalfWidth;
 
-    // Let's extend the outline with at least the border half width in all directions.
-    // However since the distance can be express in 4 directions and QPainterPathStroker only
-    // handles a penWidth we do some tricks to get it working.
-    //
-    // Explaination in one dimension only: we sum the distances top and below and use that as the
-    // penWidth. afterwards we translate the result so it is destributed correctly by top and bottom
-    // Now by doing that we would also implicitly set the left+right size of the pen which is no good,
-    // so in order to set that to a minimal value (we choose 1, as 0 would give division by 0) we do
-    // the following:. We scale the original path by sumX, stroke the path with penwidth=sumY, then
-    // scale it back. Effectively we have now stroked with a pen sized 1 x sumY.
-    //
-    // The math to do both x an y in one go becomes a little more complex, but only a little.
-    qreal extraWidth = qMax(qreal(1.0), distanceLeft + distanceRight);
-    qreal extraHeight = qMax(qreal(1.0), distanceTop + distanceBottom);
+    qreal extraWidth = distanceLeft + distanceRight;
+    qreal extraHeight = distanceTop + distanceBottom;
+    if (extraWidth != 0.0 || extraHeight != 0.0) {
+        // Let's extend the outline with at least the border half width in all directions.
+        // However since the distance can be express in 4 directions and QPainterPathStroker only
+        // handles a penWidth we do some tricks to get it working.
+        //
+        // Explaination in one dimension only: we sum the distances top and below and use that as the
+        // penWidth. afterwards we translate the result so it is destributed correctly by top and bottom
+        // Now by doing that we would also implicitly set the left+right size of the pen which is no good,
+        // so in order to set that to a minimal value (we choose 1, as 0 would give division by 0) we do
+        // the following:. We scale the original path by sumX, stroke the path with penwidth=sumY, then
+        // scale it back. Effectively we have now stroked with a pen sized 1 x sumY.
+        //
+        // The math to do both x an y in one go becomes a little more complex, but only a little.
+        extraWidth = qMax(qreal(0.1), extraWidth);
+        extraHeight = qMax(qreal(0.1), extraHeight);
 
-    QPainterPathStroker stroker;
-    stroker.setWidth(extraWidth);
-    stroker.setJoinStyle(Qt::MiterJoin);
-    stroker.setCapStyle(Qt::SquareCap);
-    QPainterPath bigPath = stroker.createStroke(QTransform().scale(1.0, extraWidth / extraHeight).map(path));
-    bigPath = QTransform().scale(1.0, extraHeight / extraWidth). map(bigPath);
-    path += bigPath.translated(extraWidth / 2 - distanceLeft, extraHeight / 2 - distanceTop);
+        QPainterPathStroker stroker;
+        stroker.setWidth(extraWidth);
+        stroker.setJoinStyle(Qt::MiterJoin);
+        stroker.setCapStyle(Qt::SquareCap);
+        QPainterPath bigPath = stroker.createStroke(QTransform().scale(1.0, extraWidth / extraHeight).map(path));
+        bigPath = QTransform().scale(1.0, extraHeight / extraWidth). map(bigPath);
+        path += bigPath.translated(extraWidth / 2 - distanceLeft, extraHeight / 2 - distanceTop);
+    }
 
     m_bounds = path.boundingRect();
 

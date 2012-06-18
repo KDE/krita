@@ -70,31 +70,33 @@ extern int qt_defaultDpiY();
 
 #define DropCapsAdditionalFormattingId 25602902
 
+#include "KoTextLayoutArea_p.h"
+
 void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)
 {
-    if (m_startOfArea == 0 || m_endOfArea == 0) // We have not been layouted yet
+    if (d->startOfArea == 0 || d->endOfArea == 0) // We have not been layouted yet
         return;
 
     /*
     struct Timer {
-        QTime m_time;
-        Timer() { m_time.start(); }
-        ~Timer() { kDebug() << "elapsed=" << m_time.elapsed(); }
+        QTime d->time;
+        Timer() { d->time.start(); }
+        ~Timer() { kDebug() << "elapsed=" << d->time.elapsed(); }
     };
     Timer timer;
     */
 
     painter->save();
-    painter->translate(0, m_verticalAlignOffset);
+    painter->translate(0, d->verticalAlignOffset);
 
     painter->setPen(context.textContext.palette.color(QPalette::Text)); // for text that has no color.
     const QRegion clipRegion = painter->clipRegion(); // fetch after painter->translate so the clipRegion is correct
     KoTextBlockBorderData *lastBorder = 0;
     QRectF lastBorderRect;
 
-    QTextFrame::iterator it = m_startOfArea->it;
-    QTextFrame::iterator stop = m_endOfArea->it;
-    if (!stop.currentBlock().isValid() || m_endOfArea->lineTextStart >= 0) {
+    QTextFrame::iterator it = d->startOfArea->it;
+    QTextFrame::iterator stop = d->endOfArea->it;
+    if (!stop.currentBlock().isValid() || d->endOfArea->lineTextStart >= 0) {
         // Last thing we show is a frame (table) or first part of a paragraph split in two
         // The stop point should be the object after that
         // However if stop is already atEnd we shouldn't increment further
@@ -121,15 +123,15 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
         }
 
         if (table) {
-            if (tableAreaIndex >= m_tableAreas.size()) {
+            if (tableAreaIndex >= d->tableAreas.size()) {
                 continue;
             }
-            m_tableAreas[tableAreaIndex]->paint(painter, context);
+            d->tableAreas[tableAreaIndex]->paint(painter, context);
             ++tableAreaIndex;
             continue;
         } else if (subFrame) {
             if (subFrame->format().intProperty(KoText::SubFrameType) == KoText::AuxillaryFrameType) {
-                m_endNotesArea->paint(painter, context);
+                d->endNotesArea->paint(painter, context);
             }
             continue;
         } else {
@@ -151,7 +153,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
             foreach(const QAbstractTextDocumentLayout::Selection & selection,   context.textContext.selections) {
                 if (selection.cursor.selectionStart()  <= block.position()
                     && selection.cursor.selectionEnd() >= block.position()) {
-                    painter->fillRect(m_generatedDocAreas[tocIndex]->boundingRect(), selection.format.background());
+                    painter->fillRect(d->generatedDocAreas[tocIndex]->boundingRect(), selection.format.background());
                     if (pure) {
                         tocContext.textContext.selections.append(QAbstractTextDocumentLayout::Selection());
                         tocContext.textContext.selections[0].cursor = QTextCursor(generatedDocument);
@@ -161,7 +163,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
                     }
                 }
             }
-            m_generatedDocAreas[tocIndex]->paint(painter, tocContext);
+            d->generatedDocAreas[tocIndex]->paint(painter, tocContext);
             ++tocIndex;
             continue;
         }
@@ -169,9 +171,9 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
         QTextLayout *layout = block.layout();
         KoTextBlockBorderData *border = 0;
 
-        if (blockIndex >= m_blockRects.count())
+        if (blockIndex >= d->blockRects.count())
             break;
-        QRectF br = m_blockRects[blockIndex];
+        QRectF br = d->blockRects[blockIndex];
         ++blockIndex;
 
         if (!painter->hasClipping() || clipRegion.intersects(br.toRect())) {
@@ -197,10 +199,12 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
             // Check and update border drawing code
             if (lastBorder == 0) {
                 lastBorderRect = br;
-            } else if (lastBorder && lastBorder != border) {
+            } else if (lastBorder != border
+                        || lastBorderRect.width() != br.width()
+                        || lastBorderRect.x() != br.x()) {
                 lastBorder->paint(*painter, lastBorderRect);
                 lastBorderRect = br;
-            } else if (lastBorder == border) {
+            } else {
                 lastBorderRect = lastBorderRect.united(br);
             }
             lastBorder = border;
@@ -233,11 +237,11 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
                     if (selection.cursor.hasComplexSelection()) {
                         continue; // selections of several table cells are covered by the within drawBorders above.
                     }
-                    if (m_documentLayout->changeTracker()
-                        && !m_documentLayout->changeTracker()->displayChanges()
-                        && m_documentLayout->changeTracker()->containsInlineChanges(selection.format)
-                        && m_documentLayout->changeTracker()->elementById(selection.format.property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()
-                        && m_documentLayout->changeTracker()->elementById(selection.format.property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() == KoGenChange::DeleteChange) {
+                    if (d->documentLayout->changeTracker()
+                        && !d->documentLayout->changeTracker()->displayChanges()
+                        && d->documentLayout->changeTracker()->containsInlineChanges(selection.format)
+                        && d->documentLayout->changeTracker()->elementById(selection.format.property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()
+                        && d->documentLayout->changeTracker()->elementById(selection.format.property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() == KoGenChange::DeleteChange) {
                         continue; // Deletions should not be shown.
                     }
                     QTextLayout::FormatRange fr;
@@ -260,17 +264,17 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
 
                     QTextCharFormat format = currentFragment.charFormat();
                     int changeId = format.intProperty(KoCharacterStyle::ChangeTrackerId);
-                    if (changeId && m_documentLayout->changeTracker() && m_documentLayout->changeTracker()->displayChanges()) {
-                        KoChangeTrackerElement *changeElement = m_documentLayout->changeTracker()->elementById(changeId);
+                    if (changeId && d->documentLayout->changeTracker() && d->documentLayout->changeTracker()->displayChanges()) {
+                        KoChangeTrackerElement *changeElement = d->documentLayout->changeTracker()->elementById(changeId);
                         switch(changeElement->getChangeType()) {
                             case (KoGenChange::InsertChange):
-                            format.setBackground(QBrush(m_documentLayout->changeTracker()->getInsertionBgColor()));
+                            format.setBackground(QBrush(d->documentLayout->changeTracker()->getInsertionBgColor()));
                             break;
                             case (KoGenChange::FormatChange):
-                            format.setBackground(QBrush(m_documentLayout->changeTracker()->getFormatChangeBgColor()));
+                            format.setBackground(QBrush(d->documentLayout->changeTracker()->getFormatChangeBgColor()));
                             break;
                             case (KoGenChange::DeleteChange):
-                            format.setBackground(QBrush(m_documentLayout->changeTracker()->getDeletionBgColor()));
+                            format.setBackground(QBrush(d->documentLayout->changeTracker()->getDeletionBgColor()));
                             break;
                             case (KoGenChange::UNKNOWN):
                             break;
@@ -382,9 +386,9 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
         lastBorder->paint(*painter, lastBorderRect);
     }
 
-    painter->translate(0, -m_verticalAlignOffset);
-    painter->translate(0, bottom() - m_footNotesHeight);
-    foreach(KoTextLayoutNoteArea *footerArea, m_footNoteAreas) {
+    painter->translate(0, -d->verticalAlignOffset);
+    painter->translate(0, bottom() - d->footNotesHeight);
+    foreach(KoTextLayoutNoteArea *footerArea, d->footNoteAreas) {
         footerArea->paint(painter, context);
         painter->translate(0, footerArea->bottom() - footerArea->top());
     }
@@ -402,12 +406,12 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block)
     if (list && data->hasCounterData()) {
         QTextListFormat listFormat = list->format();
         if (! data->counterText().isEmpty()) {
-            QFont font(data->labelFormat().font(), m_documentLayout->paintDevice());
+            QFont font(data->labelFormat().font(), d->documentLayout->paintDevice());
 
             KoListStyle::Style listStyle = static_cast<KoListStyle::Style>(listFormat.style());
             QString result = data->counterText();
 
-            QTextLayout layout(result, font, m_documentLayout->paintDevice());
+            QTextLayout layout(result, font, d->documentLayout->paintDevice());
 
             QList<QTextLayout::FormatRange> layouts;
             QTextLayout::FormatRange format;
@@ -423,7 +427,7 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block)
             if (alignment == 0) {
                 alignment = Qt::AlignLeft | Qt::AlignAbsolute;
             }
-            if (m_isRtl && (alignment & Qt::AlignAbsolute) == 0) {
+            if (d->isRtl && (alignment & Qt::AlignAbsolute) == 0) {
                 if (alignment & Qt::AlignLeft) {
                     alignment = Qt::AlignRight;
                 } else if (alignment & Qt::AlignRight) {
@@ -472,7 +476,7 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block)
 
         KoListStyle::Style listStyle = static_cast<KoListStyle::Style>(listFormat.style());
         if (listStyle == KoListStyle::ImageItem) {
-            QFontMetricsF fm(data->labelFormat().font(), m_documentLayout->paintDevice());
+            QFontMetricsF fm(data->labelFormat().font(), d->documentLayout->paintDevice());
             qreal x = qMax(qreal(1), data->counterPosition().x());
             qreal width = qMax(listFormat.doubleProperty(KoListStyle::Width), (qreal)1.0);
             qreal height = qMax(listFormat.doubleProperty(KoListStyle::Height), (qreal)1.0);
@@ -766,7 +770,7 @@ void KoTextLayoutArea::drawStrikeOuts(QPainter *painter, const QTextCharFormat &
         if (valign == QTextCharFormat::AlignSubScript
                 || valign == QTextCharFormat::AlignSuperScript)
             font.setPointSize(qRound(font.pointSize() * 2 / 3.));
-        QFontMetricsF metrics(font, m_documentLayout->paintDevice());
+        QFontMetricsF metrics(font, d->documentLayout->paintDevice());
 
         qreal y = line.position().y();
         if (valign == QTextCharFormat::AlignSubScript)
@@ -819,7 +823,7 @@ void KoTextLayoutArea::drawOverlines(QPainter *painter, const QTextCharFormat &c
         if (valign == QTextCharFormat::AlignSubScript
                 || valign == QTextCharFormat::AlignSuperScript)
             font.setPointSize(font.pointSize() * 2 / 3);
-        QFontMetricsF metrics(font, m_documentLayout->paintDevice());
+        QFontMetricsF metrics(font, d->documentLayout->paintDevice());
 
         qreal y = line.position().y();
         if (valign == QTextCharFormat::AlignSubScript)
@@ -863,7 +867,7 @@ void KoTextLayoutArea::drawUnderlines(QPainter *painter, const QTextCharFormat &
         if (valign == QTextCharFormat::AlignSubScript
                 || valign == QTextCharFormat::AlignSuperScript)
             font.setPointSize(font.pointSize() * 2 / 3);
-        QFontMetricsF metrics(font, m_documentLayout->paintDevice());
+        QFontMetricsF metrics(font, d->documentLayout->paintDevice());
 
         qreal y = line.position().y();
         if (valign == QTextCharFormat::AlignSubScript)
@@ -905,7 +909,7 @@ int KoTextLayoutArea::decorateTabsAndFormatting(QPainter *painter, const QTextFr
 
     QString fragText = currentFragment.text();
 
-    QFontMetricsF fm(currentFragment.charFormat().font(), m_documentLayout->paintDevice());
+    QFontMetricsF fm(currentFragment.charFormat().font(), d->documentLayout->paintDevice());
     qreal tabStyleLineMargin = fm.averageCharWidth() / 4; // leave some margin for the tab decoration line
 
     // currentFragment.position() : start of this fragment w.r.t. the document

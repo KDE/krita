@@ -51,7 +51,6 @@ public:
         , toolProxy(0)
         , currentAction(0)
         , currentShortcut(0)
-        , eventCount(0)
         , tabletPressEvent(0)
     { }
 
@@ -74,8 +73,6 @@ public:
     QList<KisShortcut*> potentialShortcuts;
 
     QPointF mousePosition;
-
-    int eventCount;
 
     QTabletEvent *tabletPressEvent;
 };
@@ -274,12 +271,10 @@ void KisInputManager::Private::match(QEvent* event)
         //With the current input, there is simply no shortcut that matches,
         //so restart the matching.
         potentialShortcuts = shortcuts;
-        eventCount = 0;
         return;
     }
 
-    eventCount++;
-    if (potentialShortcuts.count() == 1 || event->type() == QEvent::MouseButtonPress || eventCount >= 5) {
+    if (potentialShortcuts.count() == 1 || event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonDblClick) {
         //Either we have only one possible match or we reached the queue threshold.
         KisShortcut* completedShortcut = 0;
         foreach (KisShortcut* shortcut, potentialShortcuts) {
@@ -299,8 +294,6 @@ void KisInputManager::Private::match(QEvent* event)
             currentAction = completedShortcut->action();
             currentAction->begin(completedShortcut->shortcutIndex());
         }
-
-        eventCount = 0;
     }
 }
 
@@ -412,12 +405,14 @@ void KisInputManager::Private::clearState()
     if (currentShortcut) {
         currentAction->end();
         currentAction = 0;
-        currentShortcut->clear();
         currentShortcut = 0;
         potentialShortcuts = shortcuts;
-        eventCount = 0;
 
         delete tabletPressEvent;
         tabletPressEvent = 0;
+    }
+
+    foreach (KisShortcut* shortcut, shortcuts) {
+        shortcut->clear();
     }
 }

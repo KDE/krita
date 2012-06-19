@@ -133,6 +133,12 @@ void KisShortcut::match(QEvent* event)
             }
             break;
         }
+        case QEvent::MouseButtonDblClick: {
+            Qt::MouseButton button = static_cast<QMouseEvent*>(event)->button();
+            if (d->buttons.contains(button) && !d->buttonState.contains(button)) {
+                d->buttonState.append(button);
+            }
+        }
         case QEvent::Wheel: {
             QWheelEvent *wevent = static_cast<QWheelEvent*>(event);
             if (wevent->delta() > 0) {

@@ -115,9 +115,10 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         case QEvent::MouseButtonDblClick: {
             d->mousePosition = widgetToPixel(static_cast<QMouseEvent*>(event)->posF());
 
-            //If the palette is visible, then hide it.
+            //If the palette is visible, then hide it and eat the event.
             if (canvas()->favoriteResourceManager()->isPopupPaletteVisible()) {
                 canvas()->favoriteResourceManager()->slotShowPopupPalette();
+                return true;
             }
         } //Intentional fall through
         case QEvent::KeyPress:

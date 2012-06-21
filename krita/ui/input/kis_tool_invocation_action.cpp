@@ -76,6 +76,7 @@ void KisToolInvocationAction::end()
     if(d->useTablet) {
         QTabletEvent *releaseEvent = new QTabletEvent(QEvent::TabletRelease, inputManager()->mousePosition().toPoint(), inputManager()->mousePosition().toPoint(), inputManager()->mousePosition(), d->tabletDevice, d->pointerType, 0.f, 0, 0, 0.f, 0.f, d->tabletZ, 0, d->tabletID);
         inputManager()->toolProxy()->tabletEvent(releaseEvent, inputManager()->mousePosition());
+        d->useTablet = false;
     } else {
         QMouseEvent *releaseEvent = new QMouseEvent(QEvent::MouseButtonRelease, inputManager()->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, 0);
         inputManager()->toolProxy()->mouseReleaseEvent(releaseEvent, inputManager()->mousePosition());

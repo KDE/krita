@@ -43,6 +43,7 @@ public:
     qint64 tabletID;
 
     QPointF mousePosition;
+    Qt::KeyboardModifiers modifiers;
 };
 
 KisToolInvocationAction::KisToolInvocationAction(KisInputManager *manager)
@@ -78,11 +79,11 @@ void KisToolInvocationAction::begin(int /*shortcut*/)
 void KisToolInvocationAction::end()
 {
     if(d->useTablet) {
-        QTabletEvent *releaseEvent = new QTabletEvent(QEvent::TabletRelease, d->mousePosition.toPoint(), d->mousePosition.toPoint(), d->mousePosition, d->tabletDevice, d->pointerType, 0.f, 0, 0, 0.f, 0.f, d->tabletZ, 0, d->tabletID);
+        QTabletEvent *releaseEvent = new QTabletEvent(QEvent::TabletRelease, d->mousePosition.toPoint(), d->mousePosition.toPoint(), d->mousePosition, d->tabletDevice, d->pointerType, 0.f, 0, 0, 0.f, 0.f, d->tabletZ, d->modifiers, d->tabletID);
         inputManager()->toolProxy()->tabletEvent(releaseEvent, d->mousePosition);
         d->useTablet = false;
     } else {
-        QMouseEvent *releaseEvent = new QMouseEvent(QEvent::MouseButtonRelease, d->mousePosition.toPoint(), Qt::LeftButton, Qt::LeftButton, 0);
+        QMouseEvent *releaseEvent = new QMouseEvent(QEvent::MouseButtonRelease, d->mousePosition.toPoint(), Qt::LeftButton, Qt::LeftButton, d->modifiers);
         inputManager()->toolProxy()->mouseReleaseEvent(releaseEvent, d->mousePosition);
     }
 }
@@ -92,10 +93,12 @@ void KisToolInvocationAction::inputEvent(QEvent* event)
     if(event->type() == QEvent::MouseMove) {
         QMouseEvent* mevent = static_cast<QMouseEvent*>(event);
         d->mousePosition = inputManager()->widgetToPixel(mevent->posF());
+        d->modifiers = mevent->modifiers();
         inputManager()->toolProxy()->mouseMoveEvent(mevent, d->mousePosition);
     } else if(event->type() == QEvent::TabletMove) {
         QTabletEvent* tevent = static_cast<QTabletEvent*>(event);
         d->mousePosition = d->tabletToPixel(tevent->hiResGlobalPos());
+        d->modifiers = tevent->modifiers();
         inputManager()->toolProxy()->tabletEvent(tevent, d->mousePosition);
     }
 }

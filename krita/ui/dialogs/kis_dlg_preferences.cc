@@ -200,6 +200,8 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
     KisConfig cfg;
 
+    m_page->chkUseSystemMonitorProfile->setChecked(cfg.useSystemMonitorProfile());
+
     m_page->cmbWorkingColorSpace->setIDList(KoColorSpaceRegistry::instance()->listKeys());
     m_page->cmbWorkingColorSpace->setCurrent(cfg.workingColorSpace());
 
@@ -234,10 +236,13 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     // XXX: this needs to be available per screen!
     const KoColorProfile *profile = KisConfig::getScreenProfile();
     if (profile && profile->isSuitableForDisplay()) {
-        // We've got an X11 profile, don't allow to override
-        m_page->cmbMonitorProfile->hide();
-        m_page->lblMonitorProfile->setText(i18n("Monitor profile: ") + profile->name());
+        if (cfg.useSystemMonitorProfile()) {
+            // We've got an X11 profile, don't allow to override
+            m_page->cmbMonitorProfile->hide();
+            m_page->lblMonitorProfile->setText(i18n("Monitor profile: ") + profile->name());
+        }
     } else {
+        m_page->chkUseSystemMonitorProfile->setEnabled(false);
         m_page->cmbMonitorProfile->show();
         m_page->lblMonitorProfile->setText(i18n("&Monitor profile: "));
     }
@@ -698,6 +703,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setZoomWithWheel(dialog->m_general->chkZoomWithWheel->isChecked());
 
         // Color settings
+        cfg.setUseSystemMonitorProfile(dialog->m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());
         cfg.setMonitorProfile(dialog->m_colorSettings->m_page->cmbMonitorProfile->itemHighlighted());
         cfg.setWorkingColorSpace(dialog->m_colorSettings->m_page->cmbWorkingColorSpace->currentItem().id());
         cfg.setPrinterColorSpace(dialog->m_colorSettings->m_page->cmbPrintingColorSpace->currentItem().id());

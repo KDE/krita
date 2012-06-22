@@ -265,6 +265,9 @@ public:
     QString exportConfiguration(const QString &filterId) const;
     void setExportConfiguration(const QString &filterId, const KisPropertiesConfiguration &properties);
 
+    bool useSystemMonitorProfile() const;
+    void setUseSystemMonitorProfile(bool _useSystemMonitorProfile);
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>586</width>
-    <height>457</height>
+    <width>760</width>
+    <height>546</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -65,6 +65,16 @@
       <property name="margin">
        <number>11</number>
       </property>
+      <item>
+       <widget class="QCheckBox" name="chkUseSystemMonitorProfile">
+        <property name="text">
+         <string>Use system monitor profile</string>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
       <item>
        <layout class="QHBoxLayout">
         <property name="spacing">

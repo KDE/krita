@@ -154,6 +154,22 @@ bool KoGradientBackground::loadStyle(KoOdfLoadingContext &context, const QSizeF 
         if (gradient) {
             d->gradient = KoFlake::cloneGradient(gradient);
             d->matrix = brush.transform();
+
+            //Gopalakrishna Bhat: If the brush has transparency then we ignore the draw:opacity property and use the brush transparency.
+            // Brush will have transparency if the svg:linearGradient stop point has stop-opacity property otherwise it is opaque
+            if (brush.isOpaque() && styleStack.hasProperty(KoXmlNS::draw, "opacity")) {
+                QString opacityPercent = styleStack.property(KoXmlNS::draw, "opacity");
+                if (! opacityPercent.isEmpty() && opacityPercent.right(1) == "%") {
+                    float opacity = qMin(opacityPercent.left(opacityPercent.length() - 1).toDouble(), 100.0) / 100;
+                    QGradientStops stops;
+                    foreach(QGradientStop stop, d->gradient->stops()) {
+                        stop.second.setAlphaF(opacity);
+                        stops << stop;
+                    }
+                    d->gradient->setStops(stops);
+                }
+            }
+
             return true;
         }
     }

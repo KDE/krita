@@ -277,6 +277,8 @@ public:
     QString ocioLutPath();
     void setOcioLutPath(const QString &path);
 
+    bool useSystemMonitorProfile() const;
+    void setUseSystemMonitorProfile(bool _useSystemMonitorProfile);
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

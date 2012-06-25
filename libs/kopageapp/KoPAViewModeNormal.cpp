@@ -62,9 +62,6 @@ void KoPAViewModeNormal::paint(KoPACanvasBase* canvas, QPainter& painter, const 
     QRectF updateRect = converter->viewToDocument( m_canvas->widgetToView( clipRect ) );
     m_view->activePage()->paintBackground( painter, *converter );
 
-    // paint the page margins
-    paintMargins( painter, *converter );
-
     const KoPageLayout &layout = activePageLayout();
     QSizeF pageSize(layout.width, layout.height);
     QRectF gridRect = QRectF(QPointF(), pageSize).intersected(updateRect);
@@ -72,6 +69,9 @@ void KoPAViewModeNormal::paint(KoPACanvasBase* canvas, QPainter& painter, const 
         painter.setRenderHint(QPainter::Antialiasing, false);
         m_canvas->document()->gridData().paintGrid(painter, *converter, gridRect );
     }
+
+    // paint the page margins
+    paintMargins( painter, *converter );
 
     painter.setRenderHint( QPainter::Antialiasing );
 

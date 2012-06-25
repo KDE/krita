@@ -849,7 +849,6 @@ void KisConfig::setExportConfiguration(const QString &filterId, const KisPropert
 
 }
 
-
 bool KisConfig::useOcio()
 {
 #ifdef HAVE_OCIO
@@ -894,4 +893,14 @@ QString KisConfig::ocioLutPath()
 void KisConfig::setOcioLutPath(const QString &path)
 {
     m_cfg.writeEntry("Krita/Ocio/OcioLutPath", path);
+}
+
+bool KisConfig::useSystemMonitorProfile() const
+{
+    return m_cfg.readEntry("ColorManagement/UseSystemMonitorProfile", false);
+}
+
+void KisConfig::setUseSystemMonitorProfile(bool _useSystemMonitorProfile)
+{
+    m_cfg.writeEntry("ColorManagement/UseSystemMonitorProfile", _useSystemMonitorProfile);
 }

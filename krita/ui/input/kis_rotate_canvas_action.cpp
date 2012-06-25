@@ -51,7 +51,7 @@ KisRotateCanvasAction::KisRotateCanvasAction(KisInputManager* manager)
 
 KisRotateCanvasAction::~KisRotateCanvasAction()
 {
-
+    delete d;
 }
 
 void KisRotateCanvasAction::begin(int shortcut)

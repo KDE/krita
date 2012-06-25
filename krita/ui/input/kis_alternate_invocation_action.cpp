@@ -39,14 +39,14 @@ KisAlternateInvocationAction::~KisAlternateInvocationAction()
 
 void KisAlternateInvocationAction::begin(int /*shortcut*/)
 {
-    QMouseEvent *mevent = new QMouseEvent(QEvent::MouseButtonPress, inputManager()->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
-    inputManager()->toolProxy()->mousePressEvent(mevent, inputManager()->mousePosition());
+    QMouseEvent mevent(QEvent::MouseButtonPress, inputManager()->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
+    inputManager()->toolProxy()->mousePressEvent(&mevent, inputManager()->mousePosition());
 }
 
 void KisAlternateInvocationAction::end()
 {
-    QMouseEvent *mevent = new QMouseEvent(QEvent::MouseButtonRelease, mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
-    inputManager()->toolProxy()->mouseReleaseEvent(mevent, mousePosition());
+    QMouseEvent mevent(QEvent::MouseButtonRelease, mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
+    inputManager()->toolProxy()->mouseReleaseEvent(&mevent, mousePosition());
 }
 
 void KisAlternateInvocationAction::inputEvent(QEvent* event)

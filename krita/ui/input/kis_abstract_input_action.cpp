@@ -41,7 +41,7 @@ KisAbstractInputAction::KisAbstractInputAction(KisInputManager* manager) : d(new
 
 KisAbstractInputAction::~KisAbstractInputAction()
 {
-
+    delete d;
 }
 
 bool KisAbstractInputAction::handleTablet() const

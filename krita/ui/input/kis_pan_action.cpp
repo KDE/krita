@@ -55,6 +55,7 @@ KisPanAction::KisPanAction(KisInputManager *manager)
 
 KisPanAction::~KisPanAction()
 {
+    delete d;
 }
 
 void KisPanAction::begin(int shortcut)

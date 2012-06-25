@@ -54,6 +54,7 @@ KisToolInvocationAction::KisToolInvocationAction(KisInputManager *manager)
 
 KisToolInvocationAction::~KisToolInvocationAction()
 {
+    delete d;
 }
 
 void KisToolInvocationAction::begin(int /*shortcut*/)
@@ -69,8 +70,8 @@ void KisToolInvocationAction::begin(int /*shortcut*/)
         setMousePosition(d->tabletToPixel(pressEvent->hiResGlobalPos()));
 
     } else {
-        QMouseEvent *pressEvent = new QMouseEvent(QEvent::MouseButtonPress, inputManager()->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, 0);
-        inputManager()->toolProxy()->mousePressEvent(pressEvent, inputManager()->mousePosition());
+        QMouseEvent pressEvent(QEvent::MouseButtonPress, inputManager()->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, 0);
+        inputManager()->toolProxy()->mousePressEvent(&pressEvent, inputManager()->mousePosition());
         setMousePosition(inputManager()->mousePosition());
     }
 }
@@ -78,12 +79,12 @@ void KisToolInvocationAction::begin(int /*shortcut*/)
 void KisToolInvocationAction::end()
 {
     if(d->useTablet) {
-        QTabletEvent *releaseEvent = new QTabletEvent(QEvent::TabletRelease, mousePosition().toPoint(), mousePosition().toPoint(), mousePosition(), d->tabletDevice, d->pointerType, 0.f, 0, 0, 0.f, 0.f, d->tabletZ, d->modifiers, d->tabletID);
-        inputManager()->toolProxy()->tabletEvent(releaseEvent, mousePosition());
+        QTabletEvent releaseEvent(QEvent::TabletRelease, mousePosition().toPoint(), mousePosition().toPoint(), mousePosition(), d->tabletDevice, d->pointerType, 0.f, 0, 0, 0.f, 0.f, d->tabletZ, d->modifiers, d->tabletID);
+        inputManager()->toolProxy()->tabletEvent(&releaseEvent, mousePosition());
         d->useTablet = false;
     } else {
-        QMouseEvent *releaseEvent = new QMouseEvent(QEvent::MouseButtonRelease, mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, d->modifiers);
-        inputManager()->toolProxy()->mouseReleaseEvent(releaseEvent, mousePosition());
+        QMouseEvent releaseEvent(QEvent::MouseButtonRelease, mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, d->modifiers);
+        inputManager()->toolProxy()->mouseReleaseEvent(&releaseEvent, mousePosition());
     }
 }
 

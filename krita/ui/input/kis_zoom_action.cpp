@@ -52,7 +52,7 @@ KisZoomAction::KisZoomAction(KisInputManager* manager)
 
 KisZoomAction::~KisZoomAction()
 {
-
+    delete d;
 }
 
 void KisZoomAction::begin(int shortcut)

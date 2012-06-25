@@ -37,14 +37,14 @@ KisChangePrimarySettingAction::~KisChangePrimarySettingAction()
 
 void KisChangePrimarySettingAction::begin(int shortcut)
 {
-    QMouseEvent *mevent = new QMouseEvent(QEvent::MouseButtonPress, inputManager()->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
-    inputManager()->toolProxy()->mousePressEvent(mevent, inputManager()->mousePosition());
+    QMouseEvent mevent(QEvent::MouseButtonPress, inputManager()->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
+    inputManager()->toolProxy()->mousePressEvent(&mevent, inputManager()->mousePosition());
 }
 
 void KisChangePrimarySettingAction::end()
 {
-    QMouseEvent *mevent = new QMouseEvent(QEvent::MouseButtonRelease, mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
-    inputManager()->toolProxy()->mouseReleaseEvent(mevent, mousePosition());
+    QMouseEvent mevent(QEvent::MouseButtonRelease, mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
+    inputManager()->toolProxy()->mouseReleaseEvent(&mevent, mousePosition());
 }
 
 void KisChangePrimarySettingAction::inputEvent(QEvent* event)

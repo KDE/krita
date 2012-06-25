@@ -44,7 +44,7 @@ KisShortcut::KisShortcut() : d(new Private)
 
 KisShortcut::~KisShortcut()
 {
-
+    delete d;
 }
 
 int KisShortcut::priority() const
@@ -138,6 +138,7 @@ void KisShortcut::match(QEvent* event)
             if (d->buttons.contains(button) && !d->buttonState.contains(button)) {
                 d->buttonState.append(button);
             }
+            break;
         }
         case QEvent::Wheel: {
             QWheelEvent *wevent = static_cast<QWheelEvent*>(event);
@@ -146,6 +147,7 @@ void KisShortcut::match(QEvent* event)
             } else {
                 d->currentWheelState = WheelDown;
             }
+            break;
         }
         default:
             break;

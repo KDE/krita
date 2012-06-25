@@ -43,15 +43,16 @@ void KisChangePrimarySettingAction::begin(int shortcut)
 
 void KisChangePrimarySettingAction::end()
 {
-    QMouseEvent *mevent = new QMouseEvent(QEvent::MouseButtonRelease, inputManager()->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
-    inputManager()->toolProxy()->mouseReleaseEvent(mevent, inputManager()->mousePosition());
+    QMouseEvent *mevent = new QMouseEvent(QEvent::MouseButtonRelease, mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
+    inputManager()->toolProxy()->mouseReleaseEvent(mevent, mousePosition());
 }
 
 void KisChangePrimarySettingAction::inputEvent(QEvent* event)
 {
     if(event->type() == QEvent::MouseMove) {
         QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
-        inputManager()->toolProxy()->mouseMoveEvent(mevent, mevent->posF());
+        setMousePosition(inputManager()->widgetToPixel(mevent->posF()));
+        inputManager()->toolProxy()->mouseMoveEvent(mevent, mousePosition());
     }
 }
 

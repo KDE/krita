@@ -34,7 +34,6 @@ class KisRotateCanvasAction::Private
 public:
     Private() : active(false) { }
 
-    QPointF lastMousePosition;
     bool active;
 };
 
@@ -59,7 +58,7 @@ void KisRotateCanvasAction::begin(int shortcut)
 {
     switch(shortcut) {
         case RotateToggleShortcut:
-            d->lastMousePosition = inputManager()->canvas()->coordinatesConverter()->documentToWidget(inputManager()->mousePosition());
+            setMousePosition(inputManager()->canvas()->coordinatesConverter()->documentToWidget(inputManager()->mousePosition()));
             QApplication::setOverrideCursor(Qt::OpenHandCursor);
             d->active = true;
             break;
@@ -85,13 +84,13 @@ void KisRotateCanvasAction::inputEvent(QEvent* event)
 {
     switch (event->type()) {
         case QEvent::MouseButtonPress: {
-            d->lastMousePosition = static_cast<QMouseEvent*>(event)->posF();
+            setMousePosition(static_cast<QMouseEvent*>(event)->posF());
             break;
         }
         case QEvent::MouseMove: {
             QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
             if (mevent->buttons()) {
-                QPointF relMovement = mevent->posF() - d->lastMousePosition;
+                QPointF relMovement = mevent->posF() - mousePosition();
                 float angle = relMovement.manhattanLength() / 10.f;
 
                 Vector2f dir = Vector2f(relMovement.x(), relMovement.y()).normalized();
@@ -107,7 +106,7 @@ void KisRotateCanvasAction::inputEvent(QEvent* event)
 
                 inputManager()->canvas()->rotateCanvas(angle);
 
-                d->lastMousePosition = mevent->posF();
+                setMousePosition(mevent->posF());
                 QApplication::changeOverrideCursor(Qt::ClosedHandCursor);
             } else {
                 QApplication::changeOverrideCursor(Qt::OpenHandCursor);

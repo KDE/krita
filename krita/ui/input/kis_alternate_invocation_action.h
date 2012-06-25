@@ -39,10 +39,6 @@ public:
     virtual void inputEvent(QEvent* event);
 
     virtual bool isBlockingAutoRepeat() const;
-
-private:
-    class Private;
-    Private * const d;
 };
 
 #endif // KIS_ALTERNATE_INVOCATION_ACTION_H

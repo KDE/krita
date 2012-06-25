@@ -18,6 +18,7 @@
 
 #include "kis_abstract_input_action.h"
 
+#include <QPointF>
 #include <KLocalizedString>
 
 class KisAbstractInputAction::Private
@@ -28,6 +29,8 @@ public:
     QString name;
     QString description;
     QHash<QString, int> indexes;
+
+    QPointF mousePosition;
 };
 
 KisAbstractInputAction::KisAbstractInputAction(KisInputManager* manager) : d(new Private)
@@ -84,4 +87,14 @@ void KisAbstractInputAction::setShortcutIndexes(const QHash< QString, int >& ind
 bool KisAbstractInputAction::isBlockingAutoRepeat() const
 {
     return false;
+}
+
+QPointF KisAbstractInputAction::mousePosition() const
+{
+    return d->mousePosition;
+}
+
+void KisAbstractInputAction::setMousePosition(const QPointF &position)
+{
+    d->mousePosition = position;
 }

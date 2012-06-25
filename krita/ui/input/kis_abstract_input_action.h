@@ -21,6 +21,7 @@
 
 #include <QHash>
 
+class QPointF;
 class QEvent;
 class KisInputManager;
 
@@ -113,6 +114,14 @@ protected:
      * \param indexes The new indexes.
      */
     void setShortcutIndexes(const QHash<QString, int> &indexes);
+    /**
+     * Return the locally cached mouse position.
+     */
+    QPointF mousePosition() const;
+    /**
+     * Set a mouse position to cache locally.
+     */
+    void setMousePosition(const QPointF &position);
 
 private:
     class Private;

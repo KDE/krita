@@ -26,9 +26,14 @@
 
 #include "kis_input_manager.h"
 
+class KisAlternateInvocationAction::Private
+{
+public:
+    QPointF mousePosition;
+};
 
 KisAlternateInvocationAction::KisAlternateInvocationAction(KisInputManager *manager)
-    : KisAbstractInputAction(manager)
+    : KisAbstractInputAction(manager), d(new Private)
 {
     setName(i18n("Alternate Invocation"));
     setDescription(i18n("Alternate Invocation performs an alternate action with the current tool. For example, using the brush tool it picks a color from the canvas."));
@@ -46,15 +51,16 @@ void KisAlternateInvocationAction::begin(int /*shortcut*/)
 
 void KisAlternateInvocationAction::end()
 {
-    QMouseEvent *mevent = new QMouseEvent(QEvent::MouseButtonRelease, inputManager()->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
-    inputManager()->toolProxy()->mousePressEvent(mevent, inputManager()->mousePosition());
+    QMouseEvent *mevent = new QMouseEvent(QEvent::MouseButtonRelease, d->mousePosition.toPoint(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
+    inputManager()->toolProxy()->mouseReleaseEvent(mevent, d->mousePosition);
 }
 
 void KisAlternateInvocationAction::inputEvent(QEvent* event)
 {
     if(event->type() == QEvent::MouseMove) {
         QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
-        inputManager()->toolProxy()->mouseMoveEvent(mevent, mevent->posF());
+        d->mousePosition = inputManager()->widgetToPixel(mevent->posF());
+        inputManager()->toolProxy()->mouseMoveEvent(mevent, d->mousePosition);
     }
 }
 

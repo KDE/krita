@@ -19,6 +19,7 @@
 
 #include <QIODevice>
 #include <QBuffer>
+#include <QDataStream>
 
 #include <kis_debug.h>
 
@@ -78,7 +79,6 @@ bool PSDResourceBlock::read(QIODevice* io)
         error = QString("Could not read data for resource block with name %1 of type %2").arg(name).arg(identifier);
         return false;
     }
-
 
     switch (identifier) {
     case PSDResourceSection::MAC_PRINT_INFO:
@@ -243,7 +243,10 @@ bool PSDResourceBlock::read(QIODevice* io)
     default:
         ;
     }
-    resource->interpretBlock(data);
+
+    if (resource) {
+        resource->interpretBlock(data);
+    }
 
     return valid();
 }
@@ -276,16 +279,20 @@ bool PSDResourceBlock::valid()
 bool RESN_INFO_1005::interpretBlock(QByteArray data)
 {
     // the resolution we set on the image should be dpi; we can also set the unit on the KoDocument.
-    QBuffer buf(&data);
-    bool retval = (psdread(&buf, &hRes)
-                   && psdread(&buf, &hResUnit)
-                   && psdread(&buf, &widthUnit)
-                   && psdread(&buf, &vRes)
-                   && psdread(&buf, &vRes)
-                   && psdread(&buf, &vResUnit)
-                   && psdread(&buf, &heightUnit));
+    QDataStream ds(data);
+    ds.setByteOrder(QDataStream::BigEndian);
 
-    return retval;
+    ds >> hRes >> hResUnit >> widthUnit >> vRes >> vResUnit >> heightUnit;
+
+    /* Resolution always recorded as pixels / inch in a fixed point implied
+       decimal int32 with 16 bits before point and 16 after (i.e. cast as
+       double and divide resolution by 2^16 */
+    qDebug() << "hres" << hRes / 65536.0 << "vres" << vRes / 65536.0;
+
+    hRes = hRes / 65536.0;
+    vRes = vRes / 65536.0;
+
+    return ds.atEnd();
 }
 
 bool RESN_INFO_1005::valid()

@@ -111,6 +111,7 @@ struct KisPaintingAssistant::Private {
     QList<KisPaintingAssistantHandleSP> handles;
     QPixmapCache::Key cached;
     QRect cachedRect; // relative to boundingRect().topLeft()
+    KisPaintingAssistantHandleSP topLeft, bottomLeft, topRight, bottomRight;
     struct TranslationInvariantTransform {
         qreal m11, m12, m21, m22;
         TranslationInvariantTransform() { }
@@ -187,7 +188,7 @@ void KisPaintingAssistant::addHandle(KisPaintingAssistantHandleSP handle)
 void KisPaintingAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool useCache)
 {
     Q_UNUSED(updateRect);
-
+    findHandleLocation();
     if (!useCache) {
         gc.save();
         drawCache(gc, converter);
@@ -322,6 +323,77 @@ void KisPaintingAssistant::saveXmlList(QDomDocument& doc, QDomElement& assistant
         assistantElement.setAttribute("filename", QString("ruler%1.assistant").arg(count));
         assistantsElement.appendChild(assistantElement);
     }
+}
+
+void KisPaintingAssistant::findHandleLocation() {
+    QList<KisPaintingAssistantHandleSP> handlesList;
+    uint hole = 0;
+    if (d->handles.size() == 4) {
+        foreach(const KisPaintingAssistantHandleSP handle,d->handles) {
+            handlesList.append(handle);
+            hole = handlesList.size() - 1;
+            while(hole > 0 && handlesList.at(hole -1).data()->x() > handle.data()->x()) {
+                handlesList.swap(hole-1, hole);
+                hole = hole - 1;
+            }
+        }
+        if(handlesList.at(0).data()->y() > handlesList.at(1).data()->y()) {
+            d->topLeft = handlesList.at(1);
+            d->bottomLeft= handlesList.at(0);
+        }
+        else {
+            d->topLeft = handlesList.at(0);
+            d->bottomLeft = handlesList.at(1);
+        }
+        if(handlesList.at(2).data()->y() > handlesList.at(3).data()->y()) {
+            d->topRight = handlesList.at(3);
+            d->bottomRight = handlesList.at(2);
+        }
+        else {
+            d->topRight= handlesList.at(2);
+            d->bottomRight = handlesList.at(3);
+        }
+    }
+}
+
+KisPaintingAssistantHandleSP KisPaintingAssistant::topLeft()
+{
+    return d->topLeft;
+}
+
+const KisPaintingAssistantHandleSP KisPaintingAssistant::topLeft() const
+{
+    return d->topLeft;
+}
+
+KisPaintingAssistantHandleSP KisPaintingAssistant::bottomLeft()
+{
+    return d->bottomLeft;
+}
+
+const KisPaintingAssistantHandleSP KisPaintingAssistant::bottomLeft() const
+{
+    return d->bottomLeft;
+}
+
+KisPaintingAssistantHandleSP KisPaintingAssistant::topRight()
+{
+    return d->topRight;
+}
+
+const KisPaintingAssistantHandleSP KisPaintingAssistant::topRight() const
+{
+    return d->topRight;
+}
+
+KisPaintingAssistantHandleSP KisPaintingAssistant::bottomRight()
+{
+    return d->bottomRight;
+}
+
+const KisPaintingAssistantHandleSP KisPaintingAssistant::bottomRight() const
+{
+    return d->bottomRight;
 }
 
 const QList<KisPaintingAssistantHandleSP>& KisPaintingAssistant::handles() const

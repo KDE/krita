@@ -433,7 +433,7 @@ public:
     /**
      * For debugging, output the model and a header string for identification
      */
-    void dumpModel(const QString &msg, QSharedPointer<Soprano::Model> m = 0) const;
+    void dumpModel(const QString &msg, QSharedPointer<Soprano::Model> m = QSharedPointer<Soprano::Model>(0)) const;
 
 signals:
     /**

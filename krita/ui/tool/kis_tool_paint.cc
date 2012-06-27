@@ -222,9 +222,7 @@ void KisToolPaint::mouseReleaseEvent(KoPointerEvent *event)
 {
     if(mode() == KisTool::SECONDARY_PAINT_MODE) {
         setMode(KisTool::HOVER_MODE);
-        if(!(event->modifiers() == Qt::ControlModifier)) {
-            resetCursorStyle();
-        }
+        resetCursorStyle();
         event->accept();
     } else {
         KisTool::mouseReleaseEvent(event);

@@ -34,8 +34,6 @@ public:
     Private() : active(false) { }
 
     bool active;
-    QPointF mouseStart;
-    QPointF lastMousePosition;
 };
 
 KisZoomAction::KisZoomAction(KisInputManager* manager)
@@ -54,7 +52,7 @@ KisZoomAction::KisZoomAction(KisInputManager* manager)
 
 KisZoomAction::~KisZoomAction()
 {
-
+    delete d;
 }
 
 void KisZoomAction::begin(int shortcut)
@@ -62,7 +60,7 @@ void KisZoomAction::begin(int shortcut)
     switch(shortcut)
     {
         case ZoomToggleShortcut:
-            d->lastMousePosition = d->mouseStart = inputManager()->canvas()->coordinatesConverter()->documentToWidget(inputManager()->mousePosition());
+            setMousePosition(inputManager()->canvas()->coordinatesConverter()->documentToWidget(inputManager()->mousePosition()));
             QApplication::setOverrideCursor(Qt::OpenHandCursor);
             d->active = true;
             break;
@@ -113,17 +111,17 @@ void KisZoomAction::inputEvent(QEvent* event)
 {
     switch (event->type()) {
         case QEvent::MouseButtonPress:
-            d->lastMousePosition = static_cast<QMouseEvent*>(event)->posF();
+            setMousePosition(static_cast<QMouseEvent*>(event)->posF());
             break;
         case QEvent::MouseMove: {
             QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
             if(mevent->buttons()) {
-                QPointF relMovement = -(mevent->posF() - d->lastMousePosition);
+                QPointF relMovement = -(mevent->posF() - mousePosition());
 
                 float zoom = inputManager()->canvas()->view()->zoomController()->zoomAction()->effectiveZoom() + relMovement.y() / 100;
                 inputManager()->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, zoom);
 
-                d->lastMousePosition = mevent->posF();
+                setMousePosition(mevent->posF());
                 QApplication::changeOverrideCursor(Qt::ClosedHandCursor);
             } else {
                 QApplication::changeOverrideCursor(Qt::OpenHandCursor);

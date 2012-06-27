@@ -34,14 +34,14 @@
 #endif
 
 
-KoRdfFoaFTreeWidgetItem::KoRdfFoaFTreeWidgetItem(QTreeWidgetItem *parent, KoRdfFoaF *foaf)
+KoRdfFoaFTreeWidgetItem::KoRdfFoaFTreeWidgetItem(QTreeWidgetItem *parent, hKoRdfFoaF foaf)
         : KoRdfSemanticTreeWidgetItem(parent, Type)
         , m_foaf(foaf)
 {
     setText(ColName, m_foaf->name());
 }
 
-KoRdfSemanticItem *KoRdfFoaFTreeWidgetItem::semanticItem() const
+hKoRdfSemanticItem KoRdfFoaFTreeWidgetItem::semanticItem() const
 {
     kDebug(30015) << "ret. m_foaf:" << m_foaf;
     return m_foaf;
@@ -52,7 +52,7 @@ QString KoRdfFoaFTreeWidgetItem::uIObjectName() const
     return i18n("Contact Information");
 }
 
-KoRdfFoaF *KoRdfFoaFTreeWidgetItem::foaf() const
+hKoRdfFoaF KoRdfFoaFTreeWidgetItem::foaf() const
 {
     return m_foaf;
 }

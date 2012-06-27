@@ -123,7 +123,7 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
 #ifdef SHOULD_BUILD_RDF
     kDebug(30015) << "helper has model" << ( helper.rdfModel() != 0 );
     // RDF: Copy relevant RDF to output ODF
-    if (const Soprano::Model *m = helper.rdfModel()) {
+    if (QSharedPointer<Soprano::Model> m = helper.rdfModel()) {
         kDebug(30015) << "rdf model size:" << m->statementCount();
         KoTextRdfCore::createAndSaveManifest(m, textSharedData->getRdfIdMapping(),
                                              store, manifestWriter);

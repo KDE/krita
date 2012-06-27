@@ -26,6 +26,7 @@
 #include <QMap>
 #include <QString>
 #include <QMetaType>
+#include <QSharedPointer>
 
 #include <KoDataCenterBase.h>
 
@@ -60,7 +61,7 @@ public:
      * Get the Soprano::Model that contains all the Rdf
      * You do not own the model, do not delete it.
      */
-    virtual const Soprano::Model *model() const;
+    virtual QSharedPointer<Soprano::Model> model() const;
     virtual void linkToResourceManager(KoDocumentResourceManager *rm);
 
     virtual void updateInlineRdfStatements(const QTextDocument *qdoc);

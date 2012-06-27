@@ -103,14 +103,12 @@ void TextPasteCommand::redo()
                 editor->insertText(m_mimeData->text());
             } else {
 
-                const Soprano::Model *rdfModel = 0;
+                QSharedPointer<Soprano::Model> rdfModel;
 #ifdef SHOULD_BUILD_RDF
-                bool weOwnRdfModel = true;
-                rdfModel = Soprano::createModel();
-                if (m_rdf) {
-                    delete rdfModel;
+                if(!m_rdf) {
+                    rdfModel = QSharedPointer<Soprano::Model>(Soprano::createModel());
+                } else {
                     rdfModel = m_rdf->model();
-                    weOwnRdfModel = false;
                 }
 #endif
 
@@ -120,9 +118,6 @@ void TextPasteCommand::redo()
 #ifdef SHOULD_BUILD_RDF
                 if (m_rdf) {
                     m_rdf->updateInlineRdfStatements(editor->document());
-                }
-                if (weOwnRdfModel && rdfModel) {
-                    delete rdfModel;
                 }
 #endif
             }

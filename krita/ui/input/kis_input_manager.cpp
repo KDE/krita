@@ -24,6 +24,7 @@
 #include <KAction>
 #include <KLocalizedString>
 #include <KActionCollection>
+#include <QApplication>
 
 #include <KoToolProxy.h>
 
@@ -52,6 +53,7 @@ public:
         , currentAction(0)
         , currentShortcut(0)
         , tabletPressEvent(0)
+        , setMirrorMode(false)
     { }
 
     void match(QEvent *event);
@@ -75,6 +77,8 @@ public:
     QPointF mousePosition;
 
     QTabletEvent *tabletPressEvent;
+
+    bool setMirrorMode;
 };
 
 KisInputManager::KisInputManager(KisCanvas2 *canvas, KoToolProxy *proxy)
@@ -118,6 +122,13 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
             //If the palette is visible, then hide it and eat the event.
             if (canvas()->favoriteResourceManager()->isPopupPaletteVisible()) {
                 canvas()->favoriteResourceManager()->slotShowPopupPalette();
+                return true;
+            }
+
+            if (d->setMirrorMode) {
+                d->canvas->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxisCenter, d->canvas->image()->documentToPixel(d->mousePosition));
+                QApplication::restoreOverrideCursor();
+                d->setMirrorMode = false;
                 return true;
             }
         } //Intentional fall through
@@ -247,7 +258,8 @@ QTabletEvent* KisInputManager::tabletPressEvent() const
 
 void KisInputManager::setMirrorAxis()
 {
-    d->canvas->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxisCenter, d->canvas->image()->documentToPixel(d->mousePosition));
+    d->setMirrorMode = true;
+    QApplication::setOverrideCursor(Qt::CrossCursor);
 }
 
 QPointF KisInputManager::widgetToPixel(const QPointF& position)

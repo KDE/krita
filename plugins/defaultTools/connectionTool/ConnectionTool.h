@@ -72,6 +72,7 @@ public:
 signals:
     void connectionPointEnabled(bool enabled);
     void sendConnectionType(int type);
+    void sendConnectionPointEditState(bool enabled);
 
 public slots:
     void toggleConnectionPointEditMode(int state);
@@ -137,7 +138,7 @@ private:
     int m_activeHandle;  ///< the currently active connection point/connection handle
     KoInteractionStrategy *m_currentStrategy; ///< the current editing strategy
     KoSnapGuide::Strategies m_oldSnapStrategies; ///< the previously enables snap strategies
-
+    bool m_resetPaint; ///< whether in initial paint mode
     QCursor m_connectCursor;
 
     QActionGroup *m_alignVertical;

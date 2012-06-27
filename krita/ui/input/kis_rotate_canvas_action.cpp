@@ -18,23 +18,20 @@
 
 #include "kis_rotate_canvas_action.h"
 
-#include <QDebug>
 #include <QApplication>
 
-#include <Eigen/Geometry>
 #include <KLocalizedString>
 
-#include "kis_canvas2.h"
-#include "kis_input_manager.h"
+#include <kis_canvas2.h>
+#include <kis_image.h>
 
-using namespace Eigen;
+#include "kis_input_manager.h"
 
 class KisRotateCanvasAction::Private
 {
 public:
     Private() : active(false) { }
 
-    QPointF lastMousePosition;
     bool active;
 };
 
@@ -52,14 +49,14 @@ KisRotateCanvasAction::KisRotateCanvasAction(KisInputManager* manager)
 
 KisRotateCanvasAction::~KisRotateCanvasAction()
 {
-
+    delete d;
 }
 
 void KisRotateCanvasAction::begin(int shortcut)
 {
     switch(shortcut) {
         case RotateToggleShortcut:
-            d->lastMousePosition = inputManager()->canvas()->coordinatesConverter()->documentToWidget(inputManager()->mousePosition());
+            setMousePosition(inputManager()->canvas()->coordinatesConverter()->documentToWidget(inputManager()->mousePosition()));
             QApplication::setOverrideCursor(Qt::OpenHandCursor);
             d->active = true;
             break;
@@ -85,29 +82,25 @@ void KisRotateCanvasAction::inputEvent(QEvent* event)
 {
     switch (event->type()) {
         case QEvent::MouseButtonPress: {
-            d->lastMousePosition = static_cast<QMouseEvent*>(event)->posF();
+            setMousePosition(static_cast<QMouseEvent*>(event)->posF());
             break;
         }
         case QEvent::MouseMove: {
             QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
             if (mevent->buttons()) {
-                QPointF relMovement = mevent->posF() - d->lastMousePosition;
-                float angle = relMovement.manhattanLength() / 10.f;
+                const KisCoordinatesConverter *converter = inputManager()->canvas()->coordinatesConverter();
+                QPointF centerPoint = converter->flakeToWidget(converter->flakeCenterPoint());
+                QPointF oldPoint = mousePosition() - centerPoint;
+                QPointF newPoint = mevent->posF() - centerPoint;
 
-                Vector2f dir = Vector2f(relMovement.x(), relMovement.y()).normalized();
-                if (qAbs(dir.x()) > qAbs(dir.y())) {
-                    angle *= dir.x() / qAbs(dir.x());
-                } else {
-                    angle *= dir.y() / qAbs(dir.y());
-                }
+                qreal oldAngle = atan2(oldPoint.y(), oldPoint.x());
+                qreal newAngle = atan2(newPoint.y(), newPoint.x());
 
-                if(isnan(angle) || isinf(angle)) {
-                    return;
-                }
+                float angle = (180 / M_PI) * (newAngle - oldAngle);
 
                 inputManager()->canvas()->rotateCanvas(angle);
 
-                d->lastMousePosition = mevent->posF();
+                setMousePosition(mevent->posF());
                 QApplication::changeOverrideCursor(Qt::ClosedHandCursor);
             } else {
                 QApplication::changeOverrideCursor(Qt::OpenHandCursor);

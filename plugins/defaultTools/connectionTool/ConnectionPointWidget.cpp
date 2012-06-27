@@ -43,6 +43,17 @@ ConnectionPointWidget::ConnectionPointWidget(ConnectionTool *tool, QWidget * par
     widget.escapeDown->setDefaultAction(tool->action("escape-down"));
 
     connect(widget.toggleEditMode, SIGNAL(stateChanged(int)), tool, SLOT(toggleConnectionPointEditMode(int)));
+    connect(tool, SIGNAL(sendConnectionPointEditState(bool)), this, SLOT(toggleEditModeCheckbox(bool)));
+}
+
+void ConnectionPointWidget::toggleEditModeCheckbox(bool checked)
+{
+    widget.toggleEditMode->blockSignals(true);
+    if (checked)
+        widget.toggleEditMode->setCheckState(Qt::Checked);
+    else
+        widget.toggleEditMode->setCheckState(Qt::Unchecked);
+    widget.toggleEditMode->blockSignals(false);
 }
 
 #include <ConnectionPointWidget.moc>

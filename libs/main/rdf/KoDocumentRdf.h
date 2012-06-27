@@ -58,6 +58,8 @@ class KoRdfCalendarEvent;
 class KoRdfLocation;
 class KoDocumentRdfPrivate;
 class KoRdfFoaF;
+
+
 /**
  * @short The central access point for the Rdf metadata of an ODF document.
  *
@@ -209,7 +211,7 @@ public:
      * Get the Soprano::Model that contains all the Rdf
      * You do not own the model, do not delete it.
      */
-    virtual const Soprano::Model *model() const;
+    virtual QSharedPointer<Soprano::Model> model() const;
 
     /**
      * Convert an inlineRdf object into a Soprano::Statement
@@ -260,13 +262,13 @@ public:
      *
      * Note that the returned model is owned by the caller, you must delete it.
      */
-    Soprano::Model *findStatements(const QString &xmlid, int depth = 1);
-    Soprano::Model *findStatements(KoTextEditor *handler, int depth = 1);
+    QSharedPointer<Soprano::Model> findStatements(const QString &xmlid, int depth = 1);
+    QSharedPointer<Soprano::Model> findStatements(KoTextEditor *handler, int depth = 1);
 
     /**
      * Add all the Rdf that is associated with the given xml:id
      */
-    void addStatements(Soprano::Model *model, const QString &xmlid);
+    void addStatements(QSharedPointer<Soprano::Model> model, const QString &xmlid);
 
     /**
      * Find an inline Rdf object from the xml:id which
@@ -278,20 +280,20 @@ public:
      * Obtain a list of Contact/FOAF semantic objects, if any, for the Rdf
      * in the default model() or the one you optionally pass in.
      */
-    QList<KoRdfFoaF*> foaf(Soprano::Model *m = 0);
+    QList<hKoRdfFoaF> foaf(QSharedPointer<Soprano::Model> m = QSharedPointer<Soprano::Model>(0));
 
 
     /**
      * Obtain a list of calendar/vevent semantic objects, if any, for the Rdf
      * in the default model() or the one you optionally pass in.
      */
-    QList<KoRdfCalendarEvent*> calendarEvents(Soprano::Model *m = 0);
+    QList<hKoRdfCalendarEvent> calendarEvents(QSharedPointer<Soprano::Model> m = QSharedPointer<Soprano::Model>(0));
 
     /**
      * Obtain a list of location semantic objects, if any, for the Rdf
      * in the default model() or the one you optionally pass in.
      */
-    QList<KoRdfLocation*> locations(Soprano::Model *m = 0);
+    QList<hKoRdfLocation> locations(QSharedPointer<Soprano::Model> m = QSharedPointer<Soprano::Model>(0));
 
     /**
      * For Rdf stored in manifest.rdf or another rdf file referenced
@@ -324,19 +326,19 @@ public:
      * look for and add
      * ?s2 ?p2 ?s
      */
-    void expandStatementsReferencingSubject(Soprano::Model *model) const;
+    void expandStatementsReferencingSubject(QSharedPointer<Soprano::Model> model) const;
 
     /**
      * If model contains ?s ?p ?o
      * look for and add
      * ?o ?p2 ?o2
      */
-    void expandStatementsSubjectPointsTo(Soprano::Model *model) const;
+    void expandStatementsSubjectPointsTo(QSharedPointer<Soprano::Model> model) const;
 
     /**
      * Add n ?p ?o from m_model to model
      */
-    void expandStatementsSubjectPointsTo(Soprano::Model *model, const Soprano::Node &n) const;
+    void expandStatementsSubjectPointsTo(QSharedPointer<Soprano::Model> model, const Soprano::Node &n) const;
 
     /**
      * Rdf allows for linked lists to be serialized as a graph. This method will
@@ -352,19 +354,19 @@ public:
      * ?nextN rdf:first  ?valueN
      * ?nextN rdf:rest   rdf:nil
      */
-    void expandStatementsToIncludeRdfLists(Soprano::Model *model) const;
+    void expandStatementsToIncludeRdfLists(QSharedPointer<Soprano::Model> model) const;
 
     /**
      * If model contains ?s ?p ?o
      * look for and add
      * ?s ?p3 ?o3
      */
-    void expandStatementsToIncludeOtherPredicates(Soprano::Model *model) const;
+    void expandStatementsToIncludeOtherPredicates(QSharedPointer<Soprano::Model> model) const;
 
     /**
      * One round of all expandStatements methods
      */
-    void expandStatements(Soprano::Model *model) const;
+    void expandStatements(QSharedPointer<Soprano::Model> model) const;
 
     /**
      * XXXX? What does this do?
@@ -388,12 +390,12 @@ public:
      */
     struct reflowItem
     {
-        KoRdfSemanticItem *m_si;
-        KoSemanticStylesheet *m_ss;
+        hKoRdfSemanticItem m_si;
+        hKoSemanticStylesheet m_ss;
         QString m_xmlid;
         QPair<int, int> m_extent;
 
-        reflowItem(KoRdfSemanticItem *si, const QString &xmlid, KoSemanticStylesheet *ss, const QPair<int, int> &extent);
+        reflowItem(hKoRdfSemanticItem si, const QString &xmlid, hKoSemanticStylesheet ss, const QPair<int, int> &extent);
     };
 
     /**
@@ -418,9 +420,9 @@ public:
      *
      * @see applyReflow()
      */
-    void insertReflow(QMap<int, reflowItem> &col, KoRdfSemanticItem *obj, KoSemanticStylesheet *ss);
-    void insertReflow(QMap<int, reflowItem> &col, KoRdfSemanticItem *obj, const QString &sheetType, const QString &stylesheetName);
-    void insertReflow(QMap<int, reflowItem> &col, KoRdfSemanticItem *obj);
+    void insertReflow(QMap<int, reflowItem> &col, hKoRdfSemanticItem obj, hKoSemanticStylesheet ss);
+    void insertReflow(QMap<int, reflowItem> &col, hKoRdfSemanticItem obj, const QString &sheetType, const QString &stylesheetName);
+    void insertReflow(QMap<int, reflowItem> &col, hKoRdfSemanticItem obj);
     /**
      * @short Apply the stylesheets built up with insertReflow().
      *
@@ -431,7 +433,7 @@ public:
     /**
      * For debugging, output the model and a header string for identification
      */
-    void dumpModel(const QString &msg, Soprano::Model *m = 0) const;
+    void dumpModel(const QString &msg, QSharedPointer<Soprano::Model> m = QSharedPointer<Soprano::Model>(0)) const;
 
 signals:
     /**
@@ -440,22 +442,22 @@ signals:
      * semanticObjectViewSiteUpdated is emitted the view will take care
      * of reflowing the semanitc item using it's stylesheet.
      */
-    void semanticObjectAdded(KoRdfSemanticItem *item) const;
-    void semanticObjectUpdated(KoRdfSemanticItem *item) const;
-    void semanticObjectViewSiteUpdated(KoRdfSemanticItem *item, const QString &xmlid) const;
+    void semanticObjectAdded(hKoRdfSemanticItem item) const;
+    void semanticObjectUpdated(hKoRdfSemanticItem item) const;
+    void semanticObjectViewSiteUpdated(hKoRdfSemanticItem item, const QString &xmlid) const;
 
 public:
-    void emitSemanticObjectAdded(KoRdfSemanticItem *item) const;
-    void emitSemanticObjectUpdated(KoRdfSemanticItem *item);
-    void emitSemanticObjectViewSiteUpdated(KoRdfSemanticItem *item, const QString &xmlid);
-    void emitSemanticObjectAddedConst(KoRdfSemanticItem *const item) const;
+    void emitSemanticObjectAdded(hKoRdfSemanticItem item) const;
+    void emitSemanticObjectUpdated(hKoRdfSemanticItem item);
+    void emitSemanticObjectViewSiteUpdated(hKoRdfSemanticItem item, const QString &xmlid);
+    void emitSemanticObjectAddedConst(hKoRdfSemanticItem const item) const;
 
     /**
      * You should use the KoRdfSemanticItem::userStylesheets() method instead of this one.
      * This is mainly an internal method to allow user stylesheets to be managed per document.
      */
-    QList<KoSemanticStylesheet*> userStyleSheetList(const QString& className) const;
-    void setUserStyleSheetList(const QString& className,const QList<KoSemanticStylesheet*>& l);
+    QList<hKoSemanticStylesheet> userStyleSheetList(const QString& className) const;
+    void setUserStyleSheetList(const QString& className,const QList<hKoSemanticStylesheet>& l);
 
 
 private:
@@ -463,7 +465,7 @@ private:
     /**
      * @see expandStatementsToIncludeRdfLists()
      */
-    void expandStatementsToIncludeRdfListsRecurse(Soprano::Model *model,
+    void expandStatementsToIncludeRdfListsRecurse(QSharedPointer<Soprano::Model> model,
             QList<Soprano::Statement> &addList,
             const Soprano::Node &n) const;
 
@@ -480,7 +482,7 @@ private:
      * statements to 'm' and be assured that no bnodes in 'm' are
      * going to accidentially be the same as a bnode in m_model.
      */
-    void freshenBNodes(Soprano::Model *m);
+    void freshenBNodes(QSharedPointer<Soprano::Model> m);
 
     /**
      * Used by loadOasis() to load Rdf from a particular external
@@ -504,7 +506,7 @@ private:
      *
      * @see locations()
      */
-    void addLocations(Soprano::Model *m, QList<KoRdfLocation*> &ret,
+    void addLocations(QSharedPointer<Soprano::Model> m, QList<hKoRdfLocation> &ret,
                       bool isGeo84, const QString &sparql);
 
 

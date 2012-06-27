@@ -96,7 +96,7 @@ public:
     {
         updateTriple(m_name, name, PREDBASE + "name");
         if (documentRdf()) {
-            const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(this);
+            const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(hKoRdfSemanticItem(this));
         }
     }
 
@@ -110,9 +110,9 @@ public:
         return "TestSemanticItem";
     }
 
-    virtual QList<KoSemanticStylesheet*> stylesheets() const
+    virtual QList<hKoSemanticStylesheet> stylesheets() const
     {
-        QList<KoSemanticStylesheet*> sheets;
+        QList<hKoSemanticStylesheet> sheets;
         return sheets;
     }
 
@@ -121,10 +121,10 @@ public:
         return m_linkingSubject;
     }
 
-    static QList<TestSemanticItem*> allObjects(KoDocumentRdf* rdf, Soprano::Model *model = 0)
+    static QList<TestSemanticItem*> allObjects(KoDocumentRdf* rdf, QSharedPointer<Soprano::Model> model = QSharedPointer<Soprano::Model>(0))
     {
         QList<TestSemanticItem*> result;
-        const Soprano::Model* m = model ? model : rdf->model();
+        QSharedPointer<Soprano::Model> m = model ? model : rdf->model();
 
         QString query =
                 "prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
@@ -147,10 +147,10 @@ public:
         return result;
     }
 
-    static QList<TestSemanticItem *> findItemsByName(const QString name, KoDocumentRdf* rdf, Soprano::Model *model = 0)
+    static QList<TestSemanticItem *> findItemsByName(const QString name, KoDocumentRdf* rdf, QSharedPointer<Soprano::Model> model = QSharedPointer<Soprano::Model>(0))
     {
         QList<TestSemanticItem*> result;
-        const Soprano::Model* m = model ? model : rdf->model();
+        QSharedPointer<Soprano::Model> m = model ? model : rdf->model();
 
         QString query(
                     "prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"

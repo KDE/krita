@@ -18,14 +18,13 @@
 
 #include "kis_alternate_invocation_action.h"
 
+#include <QApplication>
 #include <KLocalizedString>
 
 #include <KoToolProxy.h>
-
 #include <kis_canvas2.h>
 
 #include "kis_input_manager.h"
-
 
 KisAlternateInvocationAction::KisAlternateInvocationAction(KisInputManager *manager)
     : KisAbstractInputAction(manager)
@@ -40,21 +39,22 @@ KisAlternateInvocationAction::~KisAlternateInvocationAction()
 
 void KisAlternateInvocationAction::begin(int /*shortcut*/)
 {
-    QMouseEvent *mevent = new QMouseEvent(QEvent::MouseButtonPress, inputManager()->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
-    inputManager()->toolProxy()->mousePressEvent(mevent, inputManager()->mousePosition());
+    QMouseEvent mevent(QEvent::MouseButtonPress, inputManager()->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
+    inputManager()->toolProxy()->mousePressEvent(&mevent, inputManager()->mousePosition());
 }
 
 void KisAlternateInvocationAction::end()
 {
-    QMouseEvent *mevent = new QMouseEvent(QEvent::MouseButtonRelease, inputManager()->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
-    inputManager()->toolProxy()->mousePressEvent(mevent, inputManager()->mousePosition());
+    QMouseEvent mevent(QEvent::MouseButtonRelease, mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
+    inputManager()->toolProxy()->mouseReleaseEvent(&mevent, mousePosition());
 }
 
 void KisAlternateInvocationAction::inputEvent(QEvent* event)
 {
     if(event->type() == QEvent::MouseMove) {
         QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
-        inputManager()->toolProxy()->mouseMoveEvent(mevent, mevent->posF());
+        setMousePosition(inputManager()->widgetToPixel(mevent->posF()));
+        inputManager()->toolProxy()->mouseMoveEvent(mevent, mousePosition());
     }
 }
 

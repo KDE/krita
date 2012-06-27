@@ -144,10 +144,14 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs)
         , KoShapeLayer(new ShapeLayerContainerModel(this)) //no _rhs here otherwise both layer have the same KoShapeContainerModel
         , m_d(new Private())
 {
+    // Make sure our new layer is visible otherwise the shapes cannot be painted.
+    setVisible(true);
+
     KoShapeContainer::setParent(_rhs.KoShapeContainer::parent());
     initShapeLayer(_rhs.m_d->controller);
 
     KoShapeOdfSaveHelper saveHelper(_rhs.shapes());
+    qDebug() << _rhs.shapeCount() << _rhs.shapes().count();
     KoDrag drag;
     drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
     QMimeData* mimeData = drag.mimeData();

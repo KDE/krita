@@ -159,11 +159,7 @@ public:
             }
         }
 
-        QMap<QString, T*> sortedNames;
-        foreach(QString name, m_resourcesByName.keys()) {
-            sortedNames.insert(name.toLower(), m_resourcesByName[name]);
-        }
-        m_resources = sortedNames.values();
+        m_resources = sortedResources();
 
         kDebug(30009) << "done loading  resources for type " << type();
     }
@@ -439,6 +435,16 @@ protected:
 
     virtual T* createResource( const QString & filename ) { return new T(filename); }
 
+    /// Return the currently stored resources in alphabetical order, overwrite for customized sorting
+    virtual QList<T*> sortedResources()
+    {
+        QMap<QString, T*> sortedNames;
+        foreach(QString name, m_resourcesByName.keys()) {
+            sortedNames.insert(name.toLower(), m_resourcesByName[name]);
+        }
+        return sortedNames.values();
+    }
+
     void notifyResourceAdded(T* resource)
     {
         foreach(KoResourceServerObserver<T>* observer, m_observers) {
@@ -544,6 +550,7 @@ protected:
        metastream << doc.toByteArray();
        f.close();
     }
+
 private:
 
     QHash<QString, T*> m_resourcesByName;

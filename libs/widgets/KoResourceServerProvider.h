@@ -82,10 +82,6 @@ public:
     KoResourceServer<KoAbstractGradient>* gradientServer();
     KoResourceServer<KoColorSet>* paletteServer();
 
-private slots:
-
-    void allGradientsLoaded();
-
 private:
     KoResourceServerProvider();
     KoResourceServerProvider(const KoResourceServerProvider&);

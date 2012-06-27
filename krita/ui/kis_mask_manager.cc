@@ -327,17 +327,19 @@ void KisMaskManager::maskProperties()
     if (!m_activeMask) return;
 
     if (m_activeMask->inherits("KisFilterMask")) {
-        KisFilterMask * mask = static_cast<KisFilterMask*>(m_activeMask.data());
+        KisFilterMask *mask = static_cast<KisFilterMask*>(m_activeMask.data());
 
         KisLayerSP layer = dynamic_cast<KisLayer*>(mask->parent().data());
         if (! layer)
             return;
 
         KisPaintDeviceSP dev = layer->paintDevice();
-        KisDlgAdjLayerProps dlg(dev, layer->image(), mask->filter(), mask->name(), i18n("Effect Mask Properties"), m_view, "dlgeffectmaskprops");
+        KisDlgAdjLayerProps dlg(layer, mask, dev, layer->image(), mask->filter(), mask->name(), i18n("Effect Mask Properties"), m_view, "dlgeffectmaskprops");
+        KisFilterConfiguration* config = dlg.filterConfiguration();
         QString before;
-        if (dlg.filterConfiguration())
-            before = dlg.filterConfiguration()->toXML();
+        if (config) {
+            before = config->toXML();
+        }
         if (dlg.exec() == QDialog::Accepted) {
             QString after;
             if (dlg.filterConfiguration())
@@ -353,6 +355,16 @@ void KisMaskManager::maskProperties()
             m_view->document()->setModified(true);
             mask->setDirty();
         }
+        else {
+            if (dlg.filterConfiguration() && config) {
+                QString after = dlg.filterConfiguration()->toXML();
+                if (after != before) {
+                    mask->setFilter(config);
+                    mask->setDirty();
+                }
+            }
+        }
+
     } else {
         // Not much to show for transparency or selection masks?
     }

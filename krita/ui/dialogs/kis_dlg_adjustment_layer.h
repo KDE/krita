@@ -22,7 +22,6 @@
 #include <kdialog.h>
 #include <QLabel>
 
-class QTimer;
 class KisFilter;
 class QListWidgetItem;
 class QLabel;
@@ -70,17 +69,15 @@ protected slots:
 
     void slotNameChanged(const QString &);
     void slotConfigChanged();
-private slots:
-    void kickTimer();
 
 private:
 
     KisNodeSP m_node;
-    KisNodeFilterInterface* m_nodeFilterInterface;
+    KisNodeFilterInterface *m_nodeFilterInterface;
     Ui::WdgFilterNodeCreation wdgFilterNodeCreation;
     KisFilterConfiguration* m_currentFilter;
     bool m_freezeName;
-    QTimer * m_timer;
+
 };
 
 #endif

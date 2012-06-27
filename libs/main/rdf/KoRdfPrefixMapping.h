@@ -23,6 +23,7 @@
 #include "komain_export.h"
 #include "RdfForward.h"
 
+#include <QSharedPointer>
 #include <QObject>
 #include <QMap>
 #include <QString>
@@ -88,7 +89,7 @@ public:
      *
      * @see save()
      */
-    void load(Soprano::Model *model);
+    void load(QSharedPointer<Soprano::Model> model);
 
     /**
      * Save the prefix mapping into the given Rdf model. If there is
@@ -98,7 +99,7 @@ public:
      *
      * @see load()
      */
-    void save(Soprano::Model *model, Soprano::Node context) const;
+    void save(QSharedPointer<Soprano::Model> model, Soprano::Node context) const;
 
     /**
      * Debug method to capture the data structure in the logs.

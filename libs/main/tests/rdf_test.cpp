@@ -76,7 +76,7 @@ QString RdfTest::insertSemItem(KoTextEditor &editor,
                 Soprano::Node::createResourceNode(QUrl("http://docs.oasis-open.org/opendocument/meta/package/common#idref")), // predicate
                 Soprano::Node::createLiteralNode(newId), // object
                 rdfDoc.manifestRdfNode()); // manifest datastore
-    const_cast<Soprano::Model*>(rdfDoc.model())->addStatement(st);
+    rdfDoc.model()->addStatement(st);
     rdfDoc.rememberNewInlineRdfObject(inlineRdf);
 
     Q_ASSERT(rdfDoc.model()->statementCount() > 0);

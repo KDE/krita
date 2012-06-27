@@ -20,6 +20,8 @@
 #ifndef __rdf_RdfForward_h__
 #define __rdf_RdfForward_h__
 
+#include <QExplicitlySharedDataPointer>
+
 class KoDocumentRdf;
 class KoDocumentRdfEditWidget;
 class KoTextInlineRdf;
@@ -28,6 +30,9 @@ class KoRdfSemanticTreeWidgetItem;
 class KoRdfFoaFTreeWidgetItem;
 class KoTextEditor;
 class KoRdfSemanticItem;
+class KoRdfFoaF;
+class KoRdfCalendarEvent;
+class KoRdfLocation;
 class KoSemanticStylesheet;
 
 namespace Ui
@@ -45,5 +50,10 @@ namespace Soprano
     class Statement;
     class Node;
 }
+typedef QExplicitlySharedDataPointer<KoRdfSemanticItem> hKoRdfSemanticItem;
+typedef QExplicitlySharedDataPointer<KoRdfFoaF> hKoRdfFoaF;
+typedef QExplicitlySharedDataPointer<KoRdfCalendarEvent> hKoRdfCalendarEvent;
+typedef QExplicitlySharedDataPointer<KoRdfLocation> hKoRdfLocation;
+typedef QExplicitlySharedDataPointer<KoSemanticStylesheet> hKoSemanticStylesheet;
 
 #endif

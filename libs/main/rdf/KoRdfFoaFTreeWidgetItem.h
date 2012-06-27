@@ -38,11 +38,11 @@ public:
     enum {
         Type = KoRdfSemanticTreeWidgetItem::Type + 1
     };
-    KoRdfFoaFTreeWidgetItem(QTreeWidgetItem *parent, KoRdfFoaF *foaf);
+    KoRdfFoaFTreeWidgetItem(QTreeWidgetItem *parent, hKoRdfFoaF foaf);
 
     // inherited and reimplemented...
 
-    KoRdfFoaF *foaf() const;
+    hKoRdfFoaF foaf() const;
     virtual QList<KAction *> actions(QWidget *parent, KoCanvasBase *host = 0);
     virtual void insert(KoCanvasBase *host);
 
@@ -51,11 +51,11 @@ public slots:
     void exportToFile();
 
 protected:
-    virtual KoRdfSemanticItem *semanticItem() const;
+    virtual hKoRdfSemanticItem semanticItem() const;
     virtual QString uIObjectName() const;
 
 private:
-    KoRdfFoaF *m_foaf;
+    hKoRdfFoaF m_foaf;
 };
 
 #endif

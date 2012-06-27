@@ -216,14 +216,14 @@ void KoRdfCalendarEvent::updateFromEditorData()
     updateTriple(m_dtstart,   dtstart,  predBase + "dtstart");
     updateTriple(m_dtend,     dtend,    predBase + "dtend");
     if (documentRdf()) {
-        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(this);
+        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(hKoRdfSemanticItem(this));
     }
 }
 
 KoRdfSemanticTreeWidgetItem *KoRdfCalendarEvent::createQTreeWidgetItem(QTreeWidgetItem* parent)
 {
     KoRdfCalendarEventTreeWidgetItem *item  =
-        new KoRdfCalendarEventTreeWidgetItem(parent, this);
+        new KoRdfCalendarEventTreeWidgetItem(parent, hKoRdfSemanticItem(this));
     return item;
 }
 
@@ -279,25 +279,30 @@ void KoRdfCalendarEvent::exportToMime(QMimeData *md) const
     md->setText(data);
 }
 
-QList<KoSemanticStylesheet*> KoRdfCalendarEvent::stylesheets() const
+QList<hKoSemanticStylesheet> KoRdfCalendarEvent::stylesheets() const
 {
     // TODO we probably want a namespace for these (like KoXmlNS).
-    QList<KoSemanticStylesheet*> stylesheets;
+    QList<hKoSemanticStylesheet> stylesheets;
     stylesheets.append(
-        new KoSemanticStylesheet("92f5d6c5-2c3a-4988-9646-2f29f3731f89",
-                                 "name", "%NAME%"));
+        hKoSemanticStylesheet(
+            new KoSemanticStylesheet("92f5d6c5-2c3a-4988-9646-2f29f3731f89",
+                                     "name", "%NAME%")));
     stylesheets.append(
-        new KoSemanticStylesheet("b4817ce4-d2c3-4ed3-bc5a-601010b33363",
-                                 "summary", "%SUMMARY%"));
+        hKoSemanticStylesheet(
+            new KoSemanticStylesheet("b4817ce4-d2c3-4ed3-bc5a-601010b33363",
+                                     "summary", "%SUMMARY%")));
     stylesheets.append(
-        new KoSemanticStylesheet("853242eb-031c-4a36-abb2-7ef1881c777e",
-                                 "summary, location", "%SUMMARY%, %LOCATION%"));
+        hKoSemanticStylesheet(
+            new KoSemanticStylesheet("853242eb-031c-4a36-abb2-7ef1881c777e",
+                                     "summary, location", "%SUMMARY%, %LOCATION%")));
     stylesheets.append(
-        new KoSemanticStylesheet("2d6b87a8-23be-4b61-a881-876177812ad4",
-                                 "summary, location, start date/time", "%SUMMARY%, %LOCATION%, %START%"));
+        hKoSemanticStylesheet(
+            new KoSemanticStylesheet("2d6b87a8-23be-4b61-a881-876177812ad4",
+                                     "summary, location, start date/time", "%SUMMARY%, %LOCATION%, %START%")));
     stylesheets.append(
-        new KoSemanticStylesheet("115e3ceb-6bc8-445c-a932-baee09686895",
-                                 "summary, start date/time", "%SUMMARY%, %START%"));
+        hKoSemanticStylesheet(
+            new KoSemanticStylesheet("115e3ceb-6bc8-445c-a932-baee09686895",
+                                     "summary, start date/time", "%SUMMARY%, %START%")));
     return stylesheets;
 }
 

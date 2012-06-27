@@ -25,14 +25,15 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-KoRdfCalendarEventTreeWidgetItem::KoRdfCalendarEventTreeWidgetItem(QTreeWidgetItem* parent, KoRdfCalendarEvent *ev)
+KoRdfCalendarEventTreeWidgetItem::KoRdfCalendarEventTreeWidgetItem(QTreeWidgetItem* parent,
+                                                                   hKoRdfCalendarEvent ev)
         : KoRdfSemanticTreeWidgetItem(parent, Type)
         , m_semanticObject(ev)
 {
     setText(ColName, m_semanticObject->name());
 }
 
-KoRdfSemanticItem* KoRdfCalendarEventTreeWidgetItem::semanticItem() const
+hKoRdfSemanticItem KoRdfCalendarEventTreeWidgetItem::semanticItem() const
 {
     return m_semanticObject;
 }
@@ -63,7 +64,7 @@ QList<KAction *> KoRdfCalendarEventTreeWidgetItem::actions(QWidget *parent, KoCa
     return m_actions;
 }
 
-KoRdfCalendarEvent *KoRdfCalendarEventTreeWidgetItem::semanticObject() const
+hKoRdfCalendarEvent KoRdfCalendarEventTreeWidgetItem::semanticObject() const
 {
     return m_semanticObject;
 }

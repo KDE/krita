@@ -671,14 +671,12 @@ bool KoTextEditor::paste(KoTextEditor *editor,
         if (pasteAsText) {
             insertText(data->text());
         } else {
-            const Soprano::Model *rdfModel = 0;
+            QSharedPointer<Soprano::Model> rdfModel = QSharedPointer<Soprano::Model>(0);
 #ifdef SHOULD_BUILD_RDF
-            bool weOwnRdfModel = true;
-            rdfModel = Soprano::createModel();
-            if (rdf) {
-                delete rdfModel;
+            if(!rdf) {
+                rdfModel = QSharedPointer<Soprano::Model>(Soprano::createModel());
+            } else {
                 rdfModel = rdf->model();
-                weOwnRdfModel = false;
             }
 #endif
 
@@ -690,9 +688,6 @@ bool KoTextEditor::paste(KoTextEditor *editor,
 #ifdef SHOULD_BUILD_RDF
             if (rdf) {
                 rdf->updateInlineRdfStatements(d->document);
-            }
-            if (weOwnRdfModel && rdfModel) {
-                delete rdfModel;
             }
 #endif
         }

@@ -43,7 +43,7 @@ public:
      * @param shapeController the shapecontroller that gives access to the document's shapes and resourcemanager
      * @param rdfModel the rdfModel we'll insert the tuples into
      */
-    KoTextPaste(KoTextEditor *editor, KoShapeController *shapeController, const Soprano::Model *rdfModel);
+    KoTextPaste(KoTextEditor *editor, KoShapeController *shapeController, QSharedPointer<Soprano::Model> rdfModel);
     virtual ~KoTextPaste();
 
 protected:

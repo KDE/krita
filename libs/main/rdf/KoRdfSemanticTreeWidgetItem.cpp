@@ -43,7 +43,9 @@ class RdfSemanticTreeWidgetApplyStylesheet : public RdfSemanticTreeWidgetAction
 public:
 
     RdfSemanticTreeWidgetApplyStylesheet(QWidget *parent, KoCanvasBase *canvas,
-            const QString &name, hKoRdfSemanticItem si, hKoSemanticStylesheet ss = 0);
+                                         const QString &name,
+                                         hKoRdfSemanticItem si,
+                                         hKoSemanticStylesheet ss = hKoSemanticStylesheet(0));
     virtual ~RdfSemanticTreeWidgetApplyStylesheet();
     virtual void activated();
 };

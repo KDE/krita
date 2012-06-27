@@ -151,7 +151,6 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs)
     initShapeLayer(_rhs.m_d->controller);
 
     KoShapeOdfSaveHelper saveHelper(_rhs.shapes());
-    qDebug() << _rhs.shapeCount() << _rhs.shapes().count();
     KoDrag drag;
     drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
     QMimeData* mimeData = drag.mimeData();

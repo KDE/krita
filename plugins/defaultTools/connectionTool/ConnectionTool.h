@@ -72,6 +72,7 @@ public:
 signals:
     void connectionPointEnabled(bool enabled);
     void sendConnectionType(int type);
+    void sendConnectionPointEditState(bool enabled);
 
 public slots:
     void toggleConnectionPointEditMode(int state);

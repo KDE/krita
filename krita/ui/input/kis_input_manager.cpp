@@ -404,6 +404,9 @@ void KisInputManager::Private::setupActions()
 
     shortcut = createShortcut(action, 0);
     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::RightButton);
+
+    shortcut = createShortcut(action, 0);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_F);
 }
 
 KisShortcut* KisInputManager::Private::createShortcut(KisAbstractInputAction* action, int index)

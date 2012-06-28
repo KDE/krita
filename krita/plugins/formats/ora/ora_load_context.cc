@@ -48,7 +48,10 @@ KisPaintDeviceSP OraLoadContext::loadDeviceData(const QString & filename)
         pngConv.buildImage(&io);
         io.close();
         m_store->close();
-        return pngConv.image()->projection();
+        KisPaintDeviceSP dev = pngConv.image()->projection();
+        delete pngConv.image().data();
+        return dev;
+
     }
     return 0;
 }

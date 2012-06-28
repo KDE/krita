@@ -95,6 +95,7 @@ KisLayerBox::KisLayerBox()
 
     m_wdgLayerBox->listLayers->setDefaultDropAction(Qt::MoveAction);
     m_wdgLayerBox->listLayers->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
+    m_wdgLayerBox->listLayers->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     connect(m_wdgLayerBox->listLayers, SIGNAL(contextMenuRequested(const QPoint&, const QModelIndex&)),
             this, SLOT(slotContextMenuRequested(const QPoint&, const QModelIndex&)));

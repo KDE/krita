@@ -148,7 +148,7 @@ void KisAbstractSliderSpinBox::paintEvent(QPaintEvent* e)
         QStyleOptionFocusRect focusOpts;
         focusOpts.initFrom(this);
         focusOpts.rect = progressOpts.rect;
-        focusOpts.backgroundColor = palette().color(QPalette::Background);
+        focusOpts.backgroundColor = palette().color(QPalette::Window);
         style()->drawPrimitive(QStyle::PE_FrameFocusRect, &focusOpts, &painter, this);
     }
 

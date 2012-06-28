@@ -170,10 +170,10 @@ void KisCustomImageWidget::heightUnitChanged(int index)
 {
     doubleHeight->blockSignals(true);
 
-    m_widthUnit = KoUnit::fromListForUi(index, KoUnit::ListAll);
-    if (m_widthUnit.type() == KoUnit::Pixel) {
+    m_heightUnit = KoUnit::fromListForUi(index, KoUnit::ListAll);
+    if (m_heightUnit.type() == KoUnit::Pixel) {
         doubleHeight->setDecimals(0);
-        m_widthUnit.setFactor(doubleResolution->value() / 72.0);
+        m_heightUnit.setFactor(doubleResolution->value() / 72.0);
     } else {
         doubleHeight->setDecimals(2);
     }

@@ -285,9 +285,11 @@ void ConnectionTool::mousePressEvent(KoPointerEvent * event)
     if (m_editMode == EditConnection && hitHandle >= 0) {
         // create connection handle change strategy
         m_currentStrategy = new KoPathConnectionPointStrategy(this, dynamic_cast<KoConnectionShape*>(m_currentShape), hitHandle);
-    } else if (m_editMode == EditConnectionPoint && hitHandle >= KoConnectionPoint::FirstCustomConnectionPoint) {
-        // start moving custom connection point
-        m_currentStrategy = new MoveConnectionPointStrategy(m_currentShape, hitHandle, this);
+    } else if (m_editMode == EditConnectionPoint) {
+        if (hitHandle >= KoConnectionPoint::FirstCustomConnectionPoint) {
+            // start moving custom connection point
+            m_currentStrategy = new MoveConnectionPointStrategy(m_currentShape, hitHandle, this);
+        }
     } else if (m_editMode == CreateConnection) {
         // create new connection shape, connect it to the active connection point
         // and start editing the new connection
@@ -356,7 +358,7 @@ void ConnectionTool::mouseMoveEvent(KoPointerEvent *event)
         }
         repaintDecorations();
     } else if (m_editMode == EditConnectionPoint) {
-        KoShape *hoverShape = findShapeAtPosition(event->point);//TODO exclude connectors, need snap guide maybe?
+        KoShape *hoverShape = findNonConnectionShapeAtPosition(event->point);//TODO exclude connectors, need snap guide maybe?
         if (hoverShape) {
             m_currentShape = hoverShape;
             Q_ASSERT(m_currentShape);
@@ -370,6 +372,7 @@ void ConnectionTool::mouseMoveEvent(KoPointerEvent *event)
                 useCursor(Qt::CrossCursor);
             }
         }else {
+            m_currentShape = 0;
             useCursor(Qt::ArrowCursor);
         }
     } else if (m_editMode == EditConnection) {
@@ -652,6 +655,7 @@ void ConnectionTool::resetEditMode()
 {
     m_connectionType = KoConnectionShape::Standard;
     setEditMode(Idle, 0, -1);
+    emit sendConnectionPointEditState(false);
 }
 
 void ConnectionTool::updateActions()

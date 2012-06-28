@@ -57,22 +57,29 @@ KisToolInvocationAction::~KisToolInvocationAction()
     delete d;
 }
 
-void KisToolInvocationAction::begin(int /*shortcut*/)
+void KisToolInvocationAction::begin(int shortcut)
 {
-    if(inputManager()->tabletPressEvent()) {
-        QTabletEvent *pressEvent = inputManager()->tabletPressEvent();
-        inputManager()->toolProxy()->tabletEvent(pressEvent, d->tabletToPixel(pressEvent->hiResGlobalPos()));
-        d->useTablet = true;
-        d->pointerType = pressEvent->pointerType();
-        d->tabletDevice = pressEvent->device();
-        d->tabletZ = pressEvent->z();
-        d->tabletID = pressEvent->uniqueId();
-        setMousePosition(d->tabletToPixel(pressEvent->hiResGlobalPos()));
+    if (shortcut == ActivateShortcut) {
+        if (inputManager()->tabletPressEvent()) {
+            QTabletEvent *pressEvent = inputManager()->tabletPressEvent();
+            inputManager()->toolProxy()->tabletEvent(pressEvent, d->tabletToPixel(pressEvent->hiResGlobalPos()));
+            d->useTablet = true;
+            d->pointerType = pressEvent->pointerType();
+            d->tabletDevice = pressEvent->device();
+            d->tabletZ = pressEvent->z();
+            d->tabletID = pressEvent->uniqueId();
+            setMousePosition(d->tabletToPixel(pressEvent->hiResGlobalPos()));
 
+        } else {
+            QMouseEvent pressEvent(QEvent::MouseButtonPress, inputManager()->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, 0);
+            inputManager()->toolProxy()->mousePressEvent(&pressEvent, inputManager()->mousePosition());
+            setMousePosition(inputManager()->mousePosition());
+        }
     } else {
-        QMouseEvent pressEvent(QEvent::MouseButtonPress, inputManager()->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, 0);
-        inputManager()->toolProxy()->mousePressEvent(&pressEvent, inputManager()->mousePosition());
-        setMousePosition(inputManager()->mousePosition());
+        QKeyEvent pressEvent(QEvent::KeyPress, Qt::Key_Return, 0);
+        inputManager()->toolProxy()->keyPressEvent(&pressEvent);
+        QKeyEvent releaseEvent(QEvent::KeyRelease, Qt::Key_Return, 0);
+        inputManager()->toolProxy()->keyReleaseEvent(&releaseEvent);
     }
 }
 

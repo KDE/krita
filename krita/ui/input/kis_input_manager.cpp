@@ -316,8 +316,11 @@ void KisInputManager::Private::setupActions()
     KisAbstractInputAction* action = new KisToolInvocationAction(q);
     actions.append(action);
 
-    KisShortcut* shortcut = createShortcut(action, 0);
+    KisShortcut* shortcut = createShortcut(action, KisToolInvocationAction::ActivateShortcut);
     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::LeftButton);
+
+    shortcut = createShortcut(action, KisToolInvocationAction::ConfirmShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Return);
 
     action = new KisAlternateInvocationAction(q);
     actions.append(action);

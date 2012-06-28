@@ -92,7 +92,7 @@ private:
     }
 
     virtual QList< KoAbstractGradient* > sortedResources() {
-        QList< KoAbstractGradient* > resources = KoResourceServer::sortedResources();
+        QList< KoAbstractGradient* > resources = KoResourceServer<KoAbstractGradient>::sortedResources();
         QList< KoAbstractGradient* > sorted;
         if (m_foregroundToTransparent && resources.contains(m_foregroundToTransparent)) {
             sorted.append(resources.takeAt(resources.indexOf(m_foregroundToTransparent)));

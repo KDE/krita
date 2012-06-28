@@ -296,7 +296,7 @@ void SimpleParagraphWidget::listStyleChanged(int id)
     if (m_blockSignals) return;
     KoListLevelProperties llp;
     llp.setStyle(static_cast<KoListStyle::Style>(id));
-    llp.setLevel(0);
+    llp.setLevel(1);
     m_tool->textEditor()->setListProperties(llp);
 }
 

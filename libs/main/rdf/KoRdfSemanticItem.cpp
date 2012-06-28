@@ -254,6 +254,11 @@ void KoRdfSemanticItem::insert(KoCanvasBase *host)
     inlineRdf->setXmlId(newID);
     startmark->setInlineRdf(inlineRdf);
 
+    // we could do a paragraph relayout to update the position() values
+    // of the start and end, but this is more efficient.
+    startmark->updatePosition( (QTextDocument*)editor->document(),
+                               startmark->position()-1,
+                               QTextCharFormat() );
     if (documentRdf()) {
         Soprano::Statement st(
             linkingSubject(),
@@ -287,6 +292,10 @@ void KoRdfSemanticItem::insert(KoCanvasBase *host)
     startmark->setEndBookmark(endmark);
 
     editor->setPosition(editor->position() - 1, QTextCursor::MoveAnchor);
+    // let the RDF docker know about this new object too.
+    KoCanvasResourceManager *provider = host->resourceManager();
+    provider->setResource(KoText::CurrentTextPosition, editor->position() - 1);
+
     hKoSemanticStylesheet ss = defaultStylesheet();
     KoRdfSemanticItemViewSite vs(hKoRdfSemanticItem(this), newID);
     vs.applyStylesheet(editor, ss);

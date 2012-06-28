@@ -910,7 +910,7 @@ QPair<int, int> KoDocumentRdf::findExtent(const QString &xmlid) const
     KoTextInlineRdf *obj = findInlineRdfByID(xmlid);
     if (obj) {
         QPair<int, int> ret = obj->findExtent();
-        RDEBUG << "have inline obj, extent:" << ret;
+        RDEBUG << "(Semantic) have inline obj, extent:" << ret;
         return ret;
     }
     return QPair<int, int>(0, 0);

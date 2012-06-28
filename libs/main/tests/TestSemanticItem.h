@@ -36,6 +36,9 @@
 #include <KoTextDocument.h>
 #include <KoInlineTextObjectManager.h>
 
+class TestSemanticItem;
+typedef QExplicitlySharedDataPointer<TestSemanticItem> hTestSemanticItem;
+
 class TestSemanticItem : public KoRdfSemanticItem
 {
 public:
@@ -121,9 +124,9 @@ public:
         return m_linkingSubject;
     }
 
-    static QList<TestSemanticItem*> allObjects(KoDocumentRdf* rdf, QSharedPointer<Soprano::Model> model = QSharedPointer<Soprano::Model>(0))
+    static QList<hTestSemanticItem> allObjects(KoDocumentRdf* rdf, QSharedPointer<Soprano::Model> model = QSharedPointer<Soprano::Model>(0))
     {
-        QList<TestSemanticItem*> result;
+        QList<hTestSemanticItem> result;
         QSharedPointer<Soprano::Model> m = model ? model : rdf->model();
 
         QString query =
@@ -141,15 +144,15 @@ public:
                                                           Soprano::Query::QueryLanguageSparql);
 
         while (it.next()) {
-            TestSemanticItem *item = new TestSemanticItem(rdf, rdf, it);
+            hTestSemanticItem item(new TestSemanticItem(0, rdf, it));
             result << item;
         }
         return result;
     }
 
-    static QList<TestSemanticItem *> findItemsByName(const QString name, KoDocumentRdf* rdf, QSharedPointer<Soprano::Model> model = QSharedPointer<Soprano::Model>(0))
+    static QList<hTestSemanticItem> findItemsByName(const QString name, KoDocumentRdf* rdf, QSharedPointer<Soprano::Model> model = QSharedPointer<Soprano::Model>(0))
     {
-        QList<TestSemanticItem*> result;
+        QList<hTestSemanticItem> result;
         QSharedPointer<Soprano::Model> m = model ? model : rdf->model();
 
         QString query(
@@ -168,7 +171,7 @@ public:
                                                           Soprano::Query::QueryLanguageSparql);
 
         while (it.next()) {
-            TestSemanticItem *item = new TestSemanticItem(rdf, rdf, it);
+            hTestSemanticItem item(new TestSemanticItem(0, rdf, it));
             result << item;
         }
         return result;

@@ -40,6 +40,10 @@ KisStrokesQueue::KisStrokesQueue()
 
 KisStrokesQueue::~KisStrokesQueue()
 {
+    foreach(KisStrokeSP stroke, m_d->strokesQueue) {
+        stroke->cancelStroke();
+    }
+
     delete m_d;
 }
 

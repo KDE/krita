@@ -25,9 +25,9 @@
 
 // marble for geolocation
 #ifdef CAN_USE_MARBLE
-#include <LatLonEdit.h>
-#include <MarbleWidget.h>
-#include <MarbleWidgetInputHandler.h>
+#include <marble/LatLonEdit.h>
+#include <marble/MarbleWidget.h>
+#include <marble/MarbleWidgetInputHandler.h>
 #endif
 
 class KoRdfLocationEditWidgetPrivate

@@ -67,17 +67,17 @@
   <customwidget>
    <class>Marble::LatLonEdit</class>
    <extends>QWidget</extends>
-   <header>LatLonEdit.h</header>
+   <header>marble/LatLonEdit.h</header>
   </customwidget>
   <customwidget>
    <class>Marble::MarbleNavigator</class>
    <extends>QWidget</extends>
-   <header>MarbleNavigator.h</header>
+   <header>marble/MarbleNavigator.h</header>
   </customwidget>
   <customwidget>
    <class>Marble::MarbleWidget</class>
    <extends>QWidget</extends>
-   <header>MarbleWidget.h</header>
+   <header>marble/MarbleWidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

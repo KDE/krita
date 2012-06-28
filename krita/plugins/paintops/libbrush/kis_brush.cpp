@@ -481,7 +481,6 @@ KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
                                             double subPixelX, double subPixelY) const
 {
     Q_ASSERT(valid());
-    Q_UNUSED(colorSpace);
     Q_UNUSED(info);
     angle += d->angle;
 
@@ -569,6 +568,15 @@ KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
             dabPointer += pixelSize;
 
         }
+    }
+    if (colorSpace != KoColorSpaceRegistry::instance()->rgb8()) {
+        KisFixedPaintDeviceSP dab2 = new KisFixedPaintDevice(colorSpace);
+        dab2->setRect(outputImage.rect());
+        dab2->initialize();
+        dabPointer = dab->data();
+        quint8* dabPointer2 = dab2->data();
+        KoColorSpaceRegistry::instance()->rgb8()->convertPixelsTo(dabPointer, dabPointer2, colorSpace, outputWidth * outputHeight);
+        dab = dab2;
     }
     return dab;
 }

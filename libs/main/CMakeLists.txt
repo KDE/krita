@@ -137,17 +137,17 @@ if(Soprano_FOUND)
        rdf/KoSemanticStylesheetsEditor.ui
     )
 
-    if(MARBLE_FOUND)
-        kde4_add_ui_files( komain_LIB_SRCS
-           rdf/KoRdfLocationEditWidgetMarble.ui
-           rdf/KoRdfLocationViewWidgetMarble.ui
-        )
-    else(MARBLE_FOUND)
+#    if(MARBLE_FOUND)
+#        kde4_add_ui_files( komain_LIB_SRCS
+#           rdf/KoRdfLocationEditWidgetMarble.ui
+#           rdf/KoRdfLocationViewWidgetMarble.ui
+#        )
+#    else(MARBLE_FOUND)
         kde4_add_ui_files( komain_LIB_SRCS
            rdf/KoRdfLocationEditWidget.ui
            rdf/KoRdfLocationViewWidget.ui
         )
-    endif(MARBLE_FOUND)
+#    endif(MARBLE_FOUND)
 
 endif(Soprano_FOUND)
 

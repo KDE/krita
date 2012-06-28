@@ -29,11 +29,16 @@
 #include <kdebug.h>
 #include <kfiledialog.h>
 
+// Dont use this until we become a plugin.
+#ifdef CAN_USE_MARBLE
+#undef CAN_USE_MARBLE
+#endif
+
 // marble for geolocation
 #ifdef CAN_USE_MARBLE
-#include <LatLonEdit.h>
-#include <MarbleWidget.h>
-#include <MarbleWidgetInputHandler.h>
+#include <marble/LatLonEdit.h>
+#include <marble/MarbleWidget.h>
+#include <marble/MarbleWidgetInputHandler.h>
 #endif
 
 using namespace Soprano;

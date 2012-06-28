@@ -31,7 +31,9 @@
 #include "kis_paint_layer.h"
 #include <generator/kis_generator_layer.h>
 #include "kis_open_raster_save_context.h"
-
+#include <kis_clone_layer.h>
+#include <generator/kis_generator_layer.h>
+#include <kis_external_layer_iface.h>
 
 struct KisOpenRasterStackSaveVisitor::Private {
     Private() : currentElement(0) {}
@@ -84,22 +86,12 @@ void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* la
 
 bool KisOpenRasterStackSaveVisitor::visit(KisPaintLayer *layer)
 {
-    QString filename = d->saveContext->saveDeviceData(layer);
-
-    QDomElement elt = d->layerStack.createElement("layer");
-    saveLayerInfo(elt, layer);
-    elt.setAttribute("src", filename);
-    d->currentElement->insertBefore(elt, QDomNode());
-
-    return true;
+    return saveLayer(layer);
 }
 
 bool KisOpenRasterStackSaveVisitor::visit(KisGeneratorLayer* layer)
 {
-    Q_UNUSED(layer);
-    // XXX: implement!
-
-    return true;
+    return saveLayer(layer);
 }
 
 bool KisOpenRasterStackSaveVisitor::visit(KisGroupLayer *layer)
@@ -135,7 +127,27 @@ bool KisOpenRasterStackSaveVisitor::visit(KisAdjustmentLayer *layer)
     QDomElement elt = d->layerStack.createElement("filter");
     saveLayerInfo(elt, layer);
     elt.setAttribute("type", "applications:krita:" + layer->filter()->name());
+    return true;
+}
+
+bool KisOpenRasterStackSaveVisitor::visit(KisCloneLayer *layer)
+{
+    return saveLayer(layer);
+}
+
+bool KisOpenRasterStackSaveVisitor::visit(KisExternalLayer * layer)
+{
+    return saveLayer(layer);
+}
+
+bool KisOpenRasterStackSaveVisitor::saveLayer(KisLayer *layer)
+{
+    QString filename = d->saveContext->saveDeviceData(layer->projection(), layer->metaData(), layer->image());
+
+    QDomElement elt = d->layerStack.createElement("layer");
     saveLayerInfo(elt, layer);
+    elt.setAttribute("src", filename);
     d->currentElement->insertBefore(elt, QDomNode());
+
     return true;
 }

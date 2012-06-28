@@ -150,16 +150,25 @@ Cursor position
 ---------------
 
 Before we can describe the editing process, we have to define what a
-_position_ in a formula is. The formula shape uses a tree of objects
-which all ultimately inherit the BasicElement class. An element can
-hold one or more children. A position is an integer number that goes
-from 0 to n where n is the number of children. Position #0 is before
-the first child, #1 is after the first child, and #n is after the last
-child element. 
+_position_ in a formula is. There are two ways a position can be
+interpreted:
 
-The _cursor position_ is a combination of an object and a numeric
-position inside that object.  We denote this [<object>,position]
-here. 
+The formula shape uses a tree of objects which all ultimately inherit
+the BasicElement class. All elements except those inheriting the
+TokenElement class can hold one or more children. All elements which
+have child elements are either using implicit row elements or actually
+inheriting the RowElement. A token element is one of identifier (tag:
+mi), number (tag: mn) or operator (tag: mo).
+
+A position is an integer number that goes from 0 to n where n is the
+number of children (most elements) or number of characters (token
+elements). Position #0 is before the first child/character, #1 is
+after the first child/character, and #n is after the last child
+element / character.
+
+The _cursor position_ is a combination of an object, the so-called
+"Current Element" and a numeric position inside that object.  We will
+denote this [<object>,position] here.
 
 Consider the formula 'sqrt(a+b)' which in MathML is expressed:
   <mroot>
@@ -170,9 +179,11 @@ Consider the formula 'sqrt(a+b)' which in MathML is expressed:
     </mrow>
   </mroot>
 
-The cursor can have the following positions (marked with '*')
+The cursor can have the following positions (marked with '*' and
+'¤'). Possible positions inside a token element are shown as '¤' and
+possible positions inside an (inferred) row element are shown as '*'.
 
-  *sqrt(*a*+*b*)*
+  *sqrt(*¤a¤*¤+¤*¤b¤*)*
 
 Since the formula is always embedded into an implicit FormulaElemnt,
 the representaiton of this tree inside the formula shape is (with the
@@ -181,9 +192,9 @@ same positions as above marked):
 <formula>*
   <mroot>
     <mrow>*
-      <mi>a</mi>*
-      <mo>+</mo>*
-      <mi>b</mi>*
+      <mi>¤a¤</mi>*
+      <mo>¤+¤</mo>*
+      <mi>¤b¤</mi>*
     </mrow>
   </mroot>*
 </formula>

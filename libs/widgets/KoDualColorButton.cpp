@@ -133,16 +133,16 @@ void KoDualColorButton::paintEvent(QPaintEvent *)
   QBrush foregroundBrush( d->foregroundColor.toQColor(), Qt::SolidPattern );
   QBrush backgroundBrush( d->backgroundColor.toQColor(), Qt::SolidPattern );
 
-  qDrawShadeRect( &painter, backgroundRect, palette(), false, 2, 0,
+  qDrawShadeRect( &painter, backgroundRect, palette(), false, 1, 0,
                   isEnabled() ? &backgroundBrush : &defBrush );
 
-  qDrawShadeRect( &painter, foregroundRect, palette(), false, 2, 0,
+  qDrawShadeRect( &painter, foregroundRect, palette(), false, 1, 0,
                   isEnabled() ? &foregroundBrush : &defBrush );
 
   painter.setPen( palette().color( QPalette::Shadow ) );
 
-  painter.drawPixmap( foregroundRect.right() + 2, 0, d->arrowBitmap );
-  painter.drawPixmap( 0, foregroundRect.bottom() + 2, d->resetPixmap );
+  painter.drawPixmap( foregroundRect.right() + 1, 0, d->arrowBitmap );
+  painter.drawPixmap( 0, foregroundRect.bottom() + 1, d->resetPixmap );
 }
 
 void KoDualColorButton::dragEnterEvent( QDragEnterEvent *event )

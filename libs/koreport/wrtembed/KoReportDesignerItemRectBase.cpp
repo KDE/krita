@@ -286,7 +286,7 @@ QVariant KoReportDesignerItemRectBase::itemChange(GraphicsItemChange change, con
 
         return newPos;
     } else if (change == ItemPositionHasChanged && scene()) {
-        m_ppos->setScenePos(value.toPointF());
+        m_ppos->setScenePos(value.toPointF(), KRPos::DontUpdateProperty);
     } else if (change == ItemSceneHasChanged && scene() && m_psize) {
         QPointF newPos = pos();
 
@@ -301,7 +301,7 @@ QVariant KoReportDesignerItemRectBase::itemChange(GraphicsItemChange change, con
         else if (newPos.y() > (scene()->height() - rect().height()))
             newPos.setY(scene()->height() - rect().height());
 
-        setSceneRect(newPos, m_psize->toScene());
+        setSceneRect(newPos, m_psize->toScene(), KoReportDesignerItemRectBase::DontUpdateProperty);
     }
 
     return QGraphicsItem::itemChange(change, value);

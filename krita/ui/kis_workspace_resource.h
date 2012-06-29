@@ -21,9 +21,10 @@
 #define KIS_WORKSPACE_RESOURCE_H
 
 #include <KoResource.h>
+#include <kis_properties_configuration.h>
 
 /// Resource for storing of workspaces
-class KisWorkspaceResource : public KoResource
+class KisWorkspaceResource : public KoResource , public KisPropertiesConfiguration
 {
 
 public:
@@ -32,7 +33,7 @@ public:
     virtual bool save();
     virtual bool load();
     virtual QString defaultFileExtension() const;
-    
+
     void setDockerState(const QByteArray& state);
     QByteArray dockerState();
     

@@ -27,6 +27,7 @@
 #include <KoCanvasObserverBase.h>
 #include <KoResourceServerAdapter.h>
 
+class KisWorkspaceResource;
 class KoColorSetWidget;
 class KoColor;
 class KisView2;
@@ -56,6 +57,9 @@ private slots:
     void colorSelected(const KoColor& color, bool final);
     void resourceAddedToServer(KoResource* resource);
     void checkForDefaultResource();
+
+    void saveToWorkspace(KisWorkspaceResource* workspace);
+    void loadFromWorkspace(KisWorkspaceResource* workspace);
 
 private:
     void readNamedColor(void);

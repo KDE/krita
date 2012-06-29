@@ -247,6 +247,11 @@ void KoColorSetWidget::setColorSet(KoColorSet *colorSet)
     d->fillColors();
 }
 
+KoColorSet* KoColorSetWidget::colorSet()
+{
+    return d->colorSet;
+}
+
 void KoColorSetWidget::resizeEvent(QResizeEvent *event)
 {
     emit widgetSizeChanged(event->size());

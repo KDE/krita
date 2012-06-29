@@ -25,7 +25,9 @@
 #include <KoDockFactoryBase.h>
 #include <KoColorSet.h>
 #include <KoCanvasObserverBase.h>
+#include <KoResourceServerAdapter.h>
 
+class KoColorSetWidget;
 class KoColor;
 class KisView2;
 
@@ -52,6 +54,8 @@ public:
 private slots:
 
     void colorSelected(const KoColor& color, bool final);
+    void resourceAddedToServer(KoResource* resource);
+    void checkForDefaultResource();
 
 private:
     void readNamedColor(void);
@@ -59,6 +63,9 @@ private:
 protected:
     KoColorSet* m_currentPalette;
     KoCanvasBase* m_canvas;
+    KoColorSetWidget* m_chooser;
+    KoResourceServerAdapter<KoColorSet>* m_serverAdapter;
+    QString m_defaultPalette;
 };
 
 class KisPaletteDockerFactory : public KoDockFactoryBase

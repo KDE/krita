@@ -20,6 +20,7 @@
 
 #include <QComboBox>
 #include <QVBoxLayout>
+#include <QTimer>
 
 #include <KoCanvasBase.h>
 #include <KoResource.h>
@@ -27,6 +28,8 @@
 #include <KoColorSetWidget.h>
 #include <KoCanvasResourceManager.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoResourceServerProvider.h>
+#include <kis_config.h>
 
 KisPaletteDocker::KisPaletteDocker()
         : QDockWidget(i18n("Palettes"))
@@ -39,15 +42,29 @@ KisPaletteDocker::KisPaletteDocker()
 
     QVBoxLayout *layout = new QVBoxLayout(mainWidget);
 
-    KoColorSetWidget* chooser = new KoColorSetWidget(this);
-    layout->addWidget(chooser);
+    m_chooser = new KoColorSetWidget(this);
+    layout->addWidget(m_chooser);
     mainWidget->setLayout(layout);
 
-    connect(chooser, SIGNAL(colorChanged(const KoColor&, bool)), SLOT(colorSelected(const KoColor&, bool)));
+    connect(m_chooser, SIGNAL(colorChanged(const KoColor&, bool)), SLOT(colorSelected(const KoColor&, bool)));
+
+    KisConfig cfg;
+    m_defaultPalette = cfg.defaultPalette();
+
+    KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
+    m_serverAdapter = new KoResourceServerAdapter<KoColorSet>(rServer, this);
+    connect(m_serverAdapter, SIGNAL(resourceAdded(KoResource*)), this, SLOT(resourceAddedToServer(KoResource*)));
+    m_serverAdapter->connectToResourceServer();
+    checkForDefaultResource();
 }
 
 KisPaletteDocker::~KisPaletteDocker()
 {
+    KoColorSet* colorSet = m_chooser->colorSet();
+    if (colorSet) {
+        KisConfig cfg;
+        cfg.setDefaultPalette(colorSet->name());
+    }
 }
 
 void KisPaletteDocker::setCanvas(KoCanvasBase * canvas)
@@ -75,6 +92,21 @@ QDockWidget* KisPaletteDockerFactory::createDockWidget()
     return dockWidget;
 }
 
+void KisPaletteDocker::resourceAddedToServer(KoResource* resource)
+{
+    // Avoiding resource mutex deadlock
+    QTimer::singleShot( 0, this, SLOT( checkForDefaultResource() ) );
+}
+
+void KisPaletteDocker::checkForDefaultResource()
+{
+    foreach(KoResource* resource, m_serverAdapter->resources()) {
+        if (resource->name() == m_defaultPalette) {
+            KoColorSet* colorSet = static_cast<KoColorSet*>(resource);
+            m_chooser->setColorSet(colorSet);
+        }
+    }
+}
 
 #include "kis_palette_docker.moc"
 

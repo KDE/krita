@@ -129,6 +129,11 @@ QList<KisPaintingAssistantHandleSP> KisPaintingAssistantsManager::handles()
                 hs.push_back(handle);
             }
         }
+        foreach(const KisPaintingAssistantHandleSP handle, assistant->sideHandles()) {
+            if (!hs.contains(handle)) {
+                hs.push_back(handle);
+            }
+        }
     }
     return hs;
 }

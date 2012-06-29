@@ -95,10 +95,13 @@ public:
     virtual int numHandles() const = 0;
     void replaceHandle(KisPaintingAssistantHandleSP _handle, KisPaintingAssistantHandleSP _with);
     void addHandle(KisPaintingAssistantHandleSP handle);
+    void addSideHandle(KisPaintingAssistantHandleSP handle);
     virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, bool cached = true);
     void uncache();
     const QList<KisPaintingAssistantHandleSP>& handles() const;
     QList<KisPaintingAssistantHandleSP> handles();
+    const QList<KisPaintingAssistantHandleSP>& sideHandles() const;
+    QList<KisPaintingAssistantHandleSP> sideHandles();
     QByteArray saveXml( QMap<KisPaintingAssistantHandleSP, int> &handleMap);
     void loadXml(KoStore *store, QMap<int, KisPaintingAssistantHandleSP> &handleMap, QString path);
     void saveXmlList(QDomDocument& doc, QDomElement& ssistantsElement, int count);
@@ -115,6 +118,14 @@ public:
     KisPaintingAssistantHandleSP bottomLeft();
     const KisPaintingAssistantHandleSP bottomRight() const;
     KisPaintingAssistantHandleSP bottomRight();
+    const KisPaintingAssistantHandleSP topMiddle() const;
+    KisPaintingAssistantHandleSP topMiddle();
+    const KisPaintingAssistantHandleSP rightMiddle() const;
+    KisPaintingAssistantHandleSP rightMiddle();
+    const KisPaintingAssistantHandleSP leftMiddle() const;
+    KisPaintingAssistantHandleSP leftMiddle();
+    const KisPaintingAssistantHandleSP bottomMiddle() const;
+    KisPaintingAssistantHandleSP bottomMiddle();
 
 public:
     /**

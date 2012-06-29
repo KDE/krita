@@ -108,10 +108,10 @@ void KisPaintingAssistantHandle::uncache()
 struct KisPaintingAssistant::Private {
     QString id;
     QString name;
-    QList<KisPaintingAssistantHandleSP> handles;
+    QList<KisPaintingAssistantHandleSP> handles,sideHandles;
     QPixmapCache::Key cached;
     QRect cachedRect; // relative to boundingRect().topLeft()
-    KisPaintingAssistantHandleSP topLeft, bottomLeft, topRight, bottomRight;
+    KisPaintingAssistantHandleSP topLeft, bottomLeft, topRight, bottomRight, topMiddle, bottomMiddle, rightMiddle, leftMiddle;
     struct TranslationInvariantTransform {
         qreal m11, m12, m21, m22;
         TranslationInvariantTransform() { }
@@ -182,6 +182,13 @@ void KisPaintingAssistant::addHandle(KisPaintingAssistantHandleSP handle)
 {
     Q_ASSERT(!d->handles.contains(handle));
     d->handles.append(handle);
+    handle->registerAssistant(this);
+}
+
+void KisPaintingAssistant::addSideHandle(KisPaintingAssistantHandleSP handle)
+{
+    Q_ASSERT(!d->sideHandles.contains(handle));
+    d->sideHandles.append(handle);
     handle->registerAssistant(this);
 }
 
@@ -328,7 +335,7 @@ void KisPaintingAssistant::saveXmlList(QDomDocument& doc, QDomElement& assistant
 void KisPaintingAssistant::findHandleLocation() {
     QList<KisPaintingAssistantHandleSP> handlesList;
     uint hole = 0;
-    if (d->handles.size() == 4) {
+    if (d->handles.size() == 4 && d->id == "perspective") {
         foreach(const KisPaintingAssistantHandleSP handle,d->handles) {
             handlesList.append(handle);
             hole = handlesList.size() - 1;
@@ -352,6 +359,33 @@ void KisPaintingAssistant::findHandleLocation() {
         else {
             d->topRight= handlesList.at(2);
             d->bottomRight = handlesList.at(3);
+        }
+        qDebug()<< (d->bottomLeft.data()->x()+d->bottomRight.data()->x())*0.5 << (d->bottomLeft.data()->y()+ d->bottomRight.data()->y())*0.5;
+        if(!d->bottomMiddle && !d->topMiddle && !d->leftMiddle && !d->rightMiddle) {
+            d->bottomMiddle = new KisPaintingAssistantHandle((d->bottomLeft.data()->x() + d->bottomRight.data()->x())*0.5,
+                                                             (d->bottomLeft.data()->y() + d->bottomRight.data()->y())*0.5);
+            d->topMiddle = new KisPaintingAssistantHandle((d->topLeft.data()->x() + d->topRight.data()->x())*0.5,
+                                                             (d->topLeft.data()->y() + d->topRight.data()->y())*0.5);
+            d->rightMiddle= new KisPaintingAssistantHandle((d->topRight.data()->x() + d->bottomRight.data()->x())*0.5,
+                                                             (d->topRight.data()->y() + d->bottomRight.data()->y())*0.5);
+            d->leftMiddle= new KisPaintingAssistantHandle((d->bottomLeft.data()->x() + d->topLeft.data()->x())*0.5,
+                                                             (d->bottomLeft.data()->y() + d->topLeft.data()->y())*0.5);
+            addSideHandle(d->rightMiddle.data());
+            addSideHandle(d->leftMiddle.data());
+            addSideHandle(d->bottomMiddle.data());
+            addSideHandle(d->topMiddle.data());
+            qDebug() <<"in if"<< d->bottomMiddle.data()->x()<< d->bottomMiddle.data()->y() << d->topMiddle << d->leftMiddle << d->rightMiddle;
+        }
+        else {
+            d->bottomMiddle.data()->operator =(QPointF((d->bottomLeft.data()->x() + d->bottomRight.data()->x())*0.5,
+                                                             (d->bottomLeft.data()->y() + d->bottomRight.data()->y())*0.5));
+            d->topMiddle.data()->operator =(QPointF((d->topLeft.data()->x() + d->topRight.data()->x())*0.5,
+                                                             (d->topLeft.data()->y() + d->topRight.data()->y())*0.5));
+            d->rightMiddle.data()->operator =(QPointF((d->topRight.data()->x() + d->bottomRight.data()->x())*0.5,
+                                                             (d->topRight.data()->y() + d->bottomRight.data()->y())*0.5));
+            d->leftMiddle.data()->operator =(QPointF((d->bottomLeft.data()->x() + d->topLeft.data()->x())*0.5,
+                                                             (d->bottomLeft.data()->y() + d->topLeft.data()->y())*0.5));
+            qDebug() <<"in else"<< d->bottomMiddle.data()->x()<< d->bottomMiddle.data()->y()<< d->topMiddle << d->leftMiddle << d->rightMiddle;
         }
     }
 }
@@ -396,6 +430,46 @@ const KisPaintingAssistantHandleSP KisPaintingAssistant::bottomRight() const
     return d->bottomRight;
 }
 
+KisPaintingAssistantHandleSP KisPaintingAssistant::topMiddle()
+{
+    return d->topMiddle;
+}
+
+const KisPaintingAssistantHandleSP KisPaintingAssistant::topMiddle() const
+{
+    return d->topMiddle;
+}
+
+KisPaintingAssistantHandleSP KisPaintingAssistant::bottomMiddle()
+{
+    return d->bottomMiddle;
+}
+
+const KisPaintingAssistantHandleSP KisPaintingAssistant::bottomMiddle() const
+{
+    return d->bottomMiddle;
+}
+
+KisPaintingAssistantHandleSP KisPaintingAssistant::rightMiddle()
+{
+    return d->rightMiddle;
+}
+
+const KisPaintingAssistantHandleSP KisPaintingAssistant::rightMiddle() const
+{
+    return d->rightMiddle;
+}
+
+KisPaintingAssistantHandleSP KisPaintingAssistant::leftMiddle()
+{
+    return d->leftMiddle;
+}
+
+const KisPaintingAssistantHandleSP KisPaintingAssistant::leftMiddle() const
+{
+    return d->leftMiddle;
+}
+
 const QList<KisPaintingAssistantHandleSP>& KisPaintingAssistant::handles() const
 {
     return d->handles;
@@ -404,6 +478,16 @@ const QList<KisPaintingAssistantHandleSP>& KisPaintingAssistant::handles() const
 QList<KisPaintingAssistantHandleSP> KisPaintingAssistant::handles()
 {
     return d->handles;
+}
+
+const QList<KisPaintingAssistantHandleSP>& KisPaintingAssistant::sideHandles() const
+{
+    return d->sideHandles;
+}
+
+QList<KisPaintingAssistantHandleSP> KisPaintingAssistant::sideHandles()
+{
+    return d->sideHandles;
 }
 
 KisPaintingAssistantFactory::KisPaintingAssistantFactory()

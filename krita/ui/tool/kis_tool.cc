@@ -59,6 +59,7 @@
 #include <kis_pattern.h>
 #include <kis_transaction.h>
 #include <kis_selection.h>
+#include <kis_floating_message.h>
 
 #include "kis_canvas_resource_provider.h"
 #include "canvas/kis_canvas2.h"
@@ -688,6 +689,23 @@ void KisTool::setCurrentNodeLocked(bool locked)
     if (currentNode()) {
         currentNode()->setSystemLocked(locked, false);
     }
+}
+
+bool KisTool::nodeEditable()
+{
+    KisNodeSP node = currentNode();
+    if (!node) {
+        return false;
+    }
+    if (!node->isEditable()) {
+        KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+        KisFloatingMessage *floatingMessage = new KisFloatingMessage(i18n("Layer is locked."),
+                                                                     kiscanvas->canvasWidget());
+        floatingMessage->setShowOverParent(true);
+        floatingMessage->setIcon(KIcon("object-locked"));
+        floatingMessage->showMessage();
+    }
+    return node->isEditable();
 }
 
 #include "kis_tool.moc"

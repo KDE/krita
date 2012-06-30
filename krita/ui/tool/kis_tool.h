@@ -197,6 +197,9 @@ protected:
     /// Sets the systemLocked for the current node, this will not deactivate the tool buttons
     void setCurrentNodeLocked(bool locked);
 
+    /// Checks checks if the current node is editable
+    bool nodeEditable();
+
 protected:
     enum ToolMode {
         HOVER_MODE,

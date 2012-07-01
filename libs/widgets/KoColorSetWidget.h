@@ -59,6 +59,12 @@ public:
      * @param colorSet pointer to the color set
      */
     void setColorSet(KoColorSet *colorSet);
+    
+    /**
+     * Gets the current color set
+     * @returns current color set,, 0 if none set
+     */
+    KoColorSet* colorSet();
 
 protected:
     virtual void resizeEvent(QResizeEvent *event); ///< reimplemented from QFrame

@@ -409,4 +409,14 @@ qreal KisCanvasResourceProvider::opacity()
     return m_resourceManager->resource(Opacity).toDouble();
 }
 
+void KisCanvasResourceProvider::notifyLoadingWorkspace(KisWorkspaceResource* workspace)
+{
+    emit sigLoadingWorkspace(workspace);
+}
+
+void KisCanvasResourceProvider::notifySavingWorkspace(KisWorkspaceResource* workspace)
+{
+    emit sigSavingWorkspace(workspace);
+}
+
 #include "kis_canvas_resource_provider.moc"

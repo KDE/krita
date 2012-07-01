@@ -208,8 +208,8 @@ void KoRecentDocumentsPane::updatePreview(const KFileItem& fileItem, const QPixm
         if (item->fileItem().url() == fileItem.url()) {
             item->setData(preview, Qt::UserRole);
             QImage icon = preview.toImage();
+            icon = icon.convertToFormat(QImage::Format_ARGB32);
             icon = icon.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-            icon.convertToFormat(QImage::Format_ARGB32);
             icon = icon.copy((icon.width() - 64) / 2, (icon.height() - 64) / 2, 64, 64);
             item->setData(QPixmap::fromImage(icon), Qt::DecorationRole);
 

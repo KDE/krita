@@ -28,6 +28,7 @@
 #include "kis_types.h"
 #include "krita_export.h"
 
+class KisWorkspaceResource;
 class KoColorProfile;
 class KoAbstractGradient;
 class KoResource;
@@ -121,6 +122,12 @@ public:
 
     void setPaintOpPreset(const KisPaintOpPresetSP preset);
 
+    ///Notify that the workspace is saved and settings should be saved to it
+    void notifySavingWorkspace(KisWorkspaceResource* workspace);
+
+    ///Notify that the workspace is loaded and settings can be read
+    void notifyLoadingWorkspace(KisWorkspaceResource* workspace);
+
 public slots:
 
     void slotSetFGColor(const KoColor& c);
@@ -166,6 +173,8 @@ signals:
     void sigCompositeOpChanged(const QString &);
     void sigOnScreenResolutionChanged(qreal scaleX, qreal scaleY);
     void sigOpacityChanged(qreal);
+    void sigSavingWorkspace(KisWorkspaceResource* workspace);
+    void sigLoadingWorkspace(KisWorkspaceResource* workspace);
 
 private:
 

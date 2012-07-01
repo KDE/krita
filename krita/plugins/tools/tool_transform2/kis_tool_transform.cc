@@ -2142,6 +2142,10 @@ void KisToolTransform::applyTransform()
     if (!image() || !currentNode()->paintDevice() || currentNode()->systemLocked())
         return;
 
+    if (!nodeEditable()) {
+        return;
+    }
+
     KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
     if (!canvas)
         return;

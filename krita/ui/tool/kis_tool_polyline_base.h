@@ -44,6 +44,8 @@ protected:
     void cancel();
     void finish();
 
+    virtual bool canEdit();
+
 private:
 
     QPointF m_dragStart;

@@ -89,3 +89,8 @@ void KisToolSelectElliptical::finishEllipse(const QRectF &rect)
         helper.addSelectionShape(shape);
     }
 }
+
+bool KisToolSelectElliptical::canEdit()
+{
+    return selectionEditable();
+}

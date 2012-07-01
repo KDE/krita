@@ -61,6 +61,10 @@ void KisToolEllipseBase::mousePressEvent(KoPointerEvent *event)
         if (nodePaintAbility() == NONE)
             return;
 
+        if (!canEdit()) {
+            return;
+        }
+
         setMode(KisTool::PAINT_MODE);
 
         QPointF pos = convertToPixelCoord(event);
@@ -141,6 +145,11 @@ void KisToolEllipseBase::paintEllipse(QPainter& gc, const QRect&)
 void KisToolEllipseBase::updateArea()
 {
     canvas()->updateCanvas(convertToPt(QRectF(m_dragStart, m_dragEnd).normalized().adjusted(-10, -10, 10, 10)));
+}
+
+bool KisToolEllipseBase::canEdit()
+{
+    return nodeEditable();
 }
 
 #include "kis_tool_ellipse_base.moc"

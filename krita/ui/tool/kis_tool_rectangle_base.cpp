@@ -52,6 +52,10 @@ void KisToolRectangleBase::mousePressEvent(KoPointerEvent *event)
         if (nodePaintAbility() == NONE)
             return;
 
+        if (!canEdit()) {
+            return;
+        }
+
         setMode(KisTool::PAINT_MODE);
         m_dragStart = m_dragCenter = m_dragEnd = convertToPixelCoord(event);
     }
@@ -129,6 +133,11 @@ void KisToolRectangleBase::updateArea() {
     bound.setTopLeft(m_dragStart);
     bound.setBottomRight(m_dragEnd);
     canvas()->updateCanvas(convertToPt(bound.normalized()).adjusted(-100, -100, +200, +200));
+}
+
+bool KisToolRectangleBase::canEdit()
+{
+    return nodeEditable();
 }
 
 #include "kis_tool_rectangle_base.moc"

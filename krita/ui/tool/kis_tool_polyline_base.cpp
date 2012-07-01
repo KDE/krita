@@ -43,6 +43,10 @@ void KisToolPolylineBase::mousePressEvent(KoPointerEvent *event)
         return;
     }
 
+    if (!canEdit()) {
+        return;
+    }
+
     if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
                           Qt::LeftButton, Qt::ShiftModifier)) {
 
@@ -180,6 +184,11 @@ QRectF KisToolPolylineBase::dragBoundingRect()
     QRectF rect = pixelToView(QRectF(m_dragStart, m_dragEnd).normalized());
     rect.adjust(-PREVIEW_LINE_WIDTH, -PREVIEW_LINE_WIDTH, PREVIEW_LINE_WIDTH, PREVIEW_LINE_WIDTH);
     return rect;
+}
+
+bool KisToolPolylineBase::canEdit()
+{
+    return nodeEditable();
 }
 
 #include "kis_tool_polyline_base.moc"

@@ -200,6 +200,9 @@ protected:
     /// Checks checks if the current node is editable
     bool nodeEditable();
 
+    /// Checks checks if the selection is editable, only applies to local selection as global selection is always editable
+    bool selectionEditable();
+
 protected:
     enum ToolMode {
         HOVER_MODE,

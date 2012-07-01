@@ -114,6 +114,10 @@ void KisToolSelectBrush::mousePressEvent(KoPointerEvent *event)
             return;
         }
 
+        if (!selectionEditable()) {
+            return;
+        }
+
         setMode(KisTool::PAINT_MODE);
 
         m_lastPoint = convertToPixelCoord(event->point);

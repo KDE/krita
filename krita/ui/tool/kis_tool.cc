@@ -69,6 +69,7 @@
 #include "kis_config_notifier.h"
 #include "kis_cursor.h"
 #include <recorder/kis_recorded_paint_action.h>
+#include <kis_selection_mask.h>
 
 struct KisTool::Private {
     Private()
@@ -707,6 +708,26 @@ bool KisTool::nodeEditable()
     }
     return node->isEditable();
 }
+
+bool KisTool::selectionEditable()
+{
+    KoProperties properties;
+    QList<KisNodeSP> masks = currentNode()->childNodes(QStringList("KisSelectionMask"), properties);
+    if (masks.size() == 1) {
+        KisSelectionMaskSP selectionMask = dynamic_cast<KisSelectionMask*>(masks[0].data());
+        if (!selectionMask->isEditable()) {
+            KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+            KisFloatingMessage *floatingMessage = new KisFloatingMessage(i18n("Local selection is locked."),
+                                                                        kiscanvas->canvasWidget());
+            floatingMessage->setShowOverParent(true);
+            floatingMessage->setIcon(KIcon("object-locked"));
+            floatingMessage->showMessage();
+            return false;
+        }
+    }
+    return true;
+}
+
 
 #include "kis_tool.moc"
 

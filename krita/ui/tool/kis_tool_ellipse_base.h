@@ -40,6 +40,8 @@ protected:
     virtual void finishEllipse(const QRectF& rect) = 0;
     void updateArea();
 
+    virtual bool canEdit();
+
 private:
     void paintEllipse(QPainter& gc, const QRect& rc);
 

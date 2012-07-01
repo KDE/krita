@@ -37,6 +37,7 @@ public:
 
 protected:
     virtual void finishRect(const QRectF&)=0;
+    virtual bool canEdit();
 
 private:
     void paintRectangle(QPainter& gc, const QRect& rc);

@@ -90,3 +90,8 @@ void KisToolSelectRectangular::finishRect(const QRectF& rect)
         helper.addSelectionShape(KisShapeToolHelper::createRectangleShape(documentRect));
     }
 }
+
+bool KisToolSelectRectangular::canEdit()
+{
+    return selectionEditable();
+}

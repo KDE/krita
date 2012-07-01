@@ -96,3 +96,8 @@ void KisToolSelectPolygonal::finishPolyline(const QVector<QPointF> &points)
         helper.addSelectionShape(path);
     }
 }
+
+bool KisToolSelectPolygonal::canEdit()
+{
+    return selectionEditable();
+}

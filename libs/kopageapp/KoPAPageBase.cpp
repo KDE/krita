@@ -23,6 +23,7 @@
 #include "KoPAPixmapCache.h"
 #include "KoPAPageContainerModel.h"
 #include "KoPASavingContext.h"
+#include "KoPAUtil.h"
 
 #include <QPainter>
 
@@ -41,6 +42,8 @@
 #include <KoXmlWriter.h>
 #include <KoViewConverter.h>
 #include <KoShapeBackground.h>
+#include <KoZoomHandler.h>
+
 
 KoPAPageBase::KoPAPageBase()
 : KoShapeContainer( new KoPAPageContainerModel() )
@@ -296,6 +299,50 @@ QPixmap KoPAPageBase::thumbnail( const QSize& size )
 #else
     return generateThumbnail( size );
 #endif
+}
+
+QPixmap KoPAPageBase::generateThumbnail(const QSize &size)
+{
+    // don't paint null pixmap
+    if ( size.isEmpty() ) // either width or height is <= 0
+        return QPixmap();
+
+    KoZoomHandler zoomHandler;
+    QSize thumbnailSize(size);
+
+    KoPAUtil::setSizeAndZoom(pageLayout(), thumbnailSize, zoomHandler);
+
+    QPixmap pixmap(thumbnailSize);
+    // paint white as default page background
+    pixmap.fill(Qt::white);
+    QPainter painter(&pixmap);
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    paintPage(painter, zoomHandler);
+
+    return pixmap;
+}
+
+QImage KoPAPageBase::thumbImage(const QSize &size)
+{
+    if (size.isEmpty()) {
+        return QImage();
+    }
+
+    KoZoomHandler zoomHandler;
+    QSize thumbnailSize(size);
+
+    KoPAUtil::setSizeAndZoom(pageLayout(), thumbnailSize, zoomHandler);
+
+    QImage image(thumbnailSize, QImage::Format_RGB32);
+    // paint white as default page background
+    image.fill(QColor(Qt::white).rgb());
+    QPainter painter(&image);
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    paintPage(painter, zoomHandler);
+
+    return image;
 }
 
 void KoPAPageBase::pageUpdated()

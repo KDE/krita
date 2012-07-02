@@ -34,7 +34,7 @@
 #include "KoPAMasterPage.h"
 #include "KoPASavingContext.h"
 #include "KoPALoadingContext.h"
-#include "KoPAUtil.h"
+
 
 KoPAPage::KoPAPage( KoPAMasterPage * masterPage )
 : KoPAPageBase()
@@ -161,48 +161,6 @@ bool KoPAPage::displayShape(KoShape *shape) const
 {
     Q_UNUSED(shape);
     return true;
-}
-
-QImage KoPAPage::thumbImage(const QSize &size)
-{
-    if (size.isEmpty()) {
-        return QImage();
-    }
-    KoZoomHandler zoomHandler;
-    const KoPageLayout & layout = pageLayout();
-    KoPAUtil::setZoom(layout, size, zoomHandler);
-    QRect pageRect(KoPAUtil::pageRect(layout, size, zoomHandler));
-
-    QImage image(size, QImage::Format_RGB32);
-    image.fill(QColor(Qt::white).rgb());
-    QPainter painter(&image);
-    painter.setClipRect(pageRect);
-    painter.setRenderHint(QPainter::Antialiasing);
-    painter.translate(pageRect.topLeft());
-
-    paintPage(painter, zoomHandler);
-    return image;
-}
-
-QPixmap KoPAPage::generateThumbnail( const QSize& size )
-{
-    // don't paint null pixmap
-    if ( size.isEmpty() ) // either width or height is <= 0
-        return QPixmap();
-    KoZoomHandler zoomHandler;
-    const KoPageLayout & layout = pageLayout();
-    KoPAUtil::setZoom( layout, size, zoomHandler );
-    QRect pageRect( KoPAUtil::pageRect( layout, size, zoomHandler ) );
-
-    QPixmap pixmap(size);
-    pixmap.fill( Qt::white );
-    QPainter painter( &pixmap );
-    painter.setClipRect( pageRect );
-    painter.setRenderHint( QPainter::Antialiasing );
-    painter.translate( pageRect.topLeft() );
-
-    paintPage( painter, zoomHandler );
-    return pixmap;
 }
 
 void KoPAPage::paintPage( QPainter & painter, KoZoomHandler & zoomHandler )

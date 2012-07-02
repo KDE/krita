@@ -67,8 +67,6 @@ public:
     /// reimplemented
     virtual void paintPage( QPainter & painter, KoZoomHandler & zoomHandler );
 
-    virtual QImage thumbImage(const QSize &size = QSize(512, 512));
-
 protected:
     /**
      * DisplayMasterBackground and DisplayMasterShapes are only saved loaded in a presentation
@@ -90,9 +88,6 @@ protected:
 
     /// Reimplemented from KoPageBase
     virtual void saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const;
-
-    /// reimplemented
-    virtual QPixmap generateThumbnail( const QSize& size = QSize( 512, 512 ) );
 
     KoPAMasterPage * m_masterPage;
 

@@ -32,7 +32,6 @@
 
 #include "KoPASavingContext.h"
 #include "KoPALoadingContext.h"
-#include "KoPAUtil.h"
 #include "KoPAPixmapCache.h"
 
 KoPAMasterPage::KoPAMasterPage()
@@ -128,51 +127,6 @@ void KoPAMasterPage::pageUpdated()
     KoPAPageBase::pageUpdated();
     // TODO that is not the best way as it removes to much from the cache
     KoPAPixmapCache::instance()->clear( false );
-}
-
-QImage KoPAMasterPage::thumbImage(const QSize &size)
-{
-    if (size.isEmpty()) {
-        return QImage();
-    }
-    KoZoomHandler zoomHandler;
-    const KoPageLayout & layout = pageLayout();
-    KoPAUtil::setZoom(layout, size, zoomHandler);
-    QRect pageRect(KoPAUtil::pageRect(layout, size, zoomHandler));
-
-    QImage image(size, QImage::Format_RGB32);
-    // should it be transparent at the places where it is to big?
-    image.fill(QColor(Qt::white).rgb());
-    QPainter painter(&image);
-    painter.setClipRect(pageRect);
-    painter.setRenderHint(QPainter::Antialiasing);
-    painter.translate(pageRect.topLeft());
-
-    paintPage(painter, zoomHandler);
-    return image;
-}
-
-QPixmap KoPAMasterPage::generateThumbnail( const QSize& size )
-{
-    // don't paint null pixmap
-    if ( size.isEmpty() ) // either width or height is <= 0
-        return QPixmap();
-
-    KoZoomHandler zoomHandler;
-    const KoPageLayout & layout = pageLayout();
-    KoPAUtil::setZoom( layout, size, zoomHandler );
-    QRect pageRect( KoPAUtil::pageRect( layout, size, zoomHandler ) );
-
-    QPixmap pixmap( size.width(), size.height() );
-    // should it be transparent at the places where it is to big?
-    pixmap.fill( Qt::white );
-    QPainter painter( &pixmap );
-    painter.setClipRect( pageRect );
-    painter.setRenderHint( QPainter::Antialiasing );
-    painter.translate( pageRect.topLeft() );
-
-    paintPage( painter, zoomHandler );
-    return pixmap;
 }
 
 void KoPAMasterPage::paintPage( QPainter & painter, KoZoomHandler & zoomHandler )

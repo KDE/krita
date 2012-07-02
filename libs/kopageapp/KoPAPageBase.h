@@ -118,9 +118,9 @@ public:
      */
     virtual bool displayShape(KoShape *shape) const = 0;
 
-    QPixmap thumbnail( const QSize& size = QSize( 512, 512 ) );
+    virtual QPixmap thumbnail( const QSize& size = QSize( 512, 512 ) );
 
-    virtual QImage thumbImage(const QSize &size = QSize(512, 512)) = 0;
+    virtual QImage thumbImage(const QSize &size = QSize(512, 512));
 
     /**
      * This function is called when the content of the page changes
@@ -253,7 +253,7 @@ protected:
     /**
      * Create thumbnail for the page
      */
-    virtual QPixmap generateThumbnail( const QSize& size = QSize( 512, 512 ) ) = 0;
+    QPixmap generateThumbnail(const QSize &size = QSize(512,512));
 
     /**
      * Get the key used for caching the thumbnail pixmap

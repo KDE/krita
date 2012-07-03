@@ -58,7 +58,7 @@ void KoReportTest::pageOptions()
     QCOMPARE(designer.propertySet()->property("margin-left").value().toDouble(), KoUnit::parseValue("3.0cm"));
     QCOMPARE(designer.propertySet()->property("margin-right").value().toDouble(), KoUnit::parseValue("4.0cm"));
     
-    KoReportPreRenderer renderer( designer.document().documentElement() );
+    KoReportPreRenderer renderer( designer.document() );
     renderer.generate();
     ReportPageOptions opt = renderer.reportData()->pageOptions();
 

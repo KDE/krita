@@ -149,10 +149,9 @@ public:
      * To be preferred when a document exists. It is fast when calling
      * it multiple times since it caches the result that readNativeFormatMimeType()
      * delivers.
-     * This comes from the X-KDE-NativeMimeType key in the .desktop file
-     * You do NOT have to reimplement this (it is only virtual for kounavail).
+     * This comes from the X-KDE-NativeMimeType key in the .desktop file.
      */
-    virtual QByteArray nativeFormatMimeType() const;
+    QByteArray nativeFormatMimeType() const;
 
     /**
      * Returns the OASIS OpenDocument mimetype of the document, if supported

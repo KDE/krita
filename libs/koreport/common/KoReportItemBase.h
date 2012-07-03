@@ -111,6 +111,9 @@ public:
 
     virtual void setUnit(const KoUnit& u);
 
+    KRPos position() const;
+    KRSize size() const;
+
     qreal Z;
 protected:
     KoProperty::Set *m_set;

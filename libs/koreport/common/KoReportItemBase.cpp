@@ -156,3 +156,14 @@ void KoReportItemBase::setEntityName(const QString& n)
 {
     m_name->setValue(n);
 }
+
+KRPos KoReportItemBase::position() const
+{
+    return m_pos;
+}
+
+KRSize KoReportItemBase::size() const
+{
+    return m_size;
+}
+

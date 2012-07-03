@@ -26,7 +26,8 @@ class KoReportTest : public QObject
     Q_OBJECT
 private slots:
     void pageOptions();
-
+    void lineItem();
+    void rectItem();
 };
 
 #endif // KOREPORTTEST_H

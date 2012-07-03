@@ -298,3 +298,8 @@ KRSectionData* KoReportReportData::section(KRSectionData::Section s) const
     }
     return sec;
 }
+
+ReportPageOptions KoReportReportData::pageOptions() const
+{
+    return page;
+}

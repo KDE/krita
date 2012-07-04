@@ -62,61 +62,18 @@ void KoReportDesignerItemBase::buildXML(QGraphicsItem * item, QDomDocument & doc
 
 void KoReportDesignerItemBase::buildXMLRect(QDomDocument & doc, QDomElement & entity, KRPos *pos, KRSize *siz)
 {
-    Q_UNUSED(doc)
-    const QString unitSymbol = pos->unit().symbol();
-
-    entity.setAttribute("svg:x", QString::number(pos->toUnit().x()) + unitSymbol);
-    entity.setAttribute("svg:y", QString::number(pos->toUnit().y()) + unitSymbol);
-    entity.setAttribute("svg:width", QString::number(siz->toUnit().width()) + unitSymbol);
-    entity.setAttribute("svg:height", QString::number(siz->toUnit().height()) + unitSymbol);
+    Q_UNUSED(doc);
+    KRUtils::buildXMLRect(entity, pos, siz);
 }
 
 void KoReportDesignerItemBase::buildXMLTextStyle(QDomDocument & doc, QDomElement & entity, KRTextStyleData ts)
 {
-    QDomElement element = doc.createElement("report:text-style");
-
-    element.setAttribute("fo:background-color", ts.backgroundColor.name());
-    element.setAttribute("fo:foreground-color", ts.foregroundColor.name());
-    element.setAttribute("fo:background-opacity", QString::number(ts.backgroundOpacity) + '%');
-    KRUtils::writeFontAttributes(element, ts.font);
-
-    entity.appendChild(element);
+    KRUtils::buildXMLTextStyle(doc, entity, ts);
 }
 
 void KoReportDesignerItemBase::buildXMLLineStyle(QDomDocument & doc, QDomElement & entity, KRLineStyleData ls)
 {
-    QDomElement element = doc.createElement("report:line-style");
-
-    element.setAttribute("report:line-color", ls.lineColor.name());
-    element.setAttribute("report:line-weight", QString::number(ls.weight));
-
-    QString l;
-    switch (ls.style) {
-    case Qt::NoPen:
-        l = "nopen";
-        break;
-    case Qt::SolidLine:
-        l = "solid";
-        break;
-    case Qt::DashLine:
-        l = "dash";
-        break;
-    case Qt::DotLine:
-        l = "dot";
-        break;
-    case Qt::DashDotLine:
-        l = "dashdot";
-        break;
-    case Qt::DashDotDotLine:
-        l = "dashdotdot";
-        break;
-    default:
-        l = "solid";
-
-    }
-    element.setAttribute("report:line-style", l);
-
-    entity.appendChild(element);
+    KRUtils::buildXMLLineStyle(doc, entity, ls);
 }
 
 QString KoReportDesignerItemBase::dataSourceAndObjectTypeName(const QString& dataSource, const QString& objectTypeName)
@@ -127,18 +84,5 @@ QString KoReportDesignerItemBase::dataSourceAndObjectTypeName(const QString& dat
 // static
 void KoReportDesignerItemBase::addPropertyAsAttribute(QDomElement* e, KoProperty::Property* p)
 {
-    switch (p->value().type()) {
-    case QVariant::Int :
-        e->setAttribute(QLatin1String("report:") + p->name().toLower(), p->value().toInt());
-        break;
-    case QVariant::Double:
-        e->setAttribute(QLatin1String("report:") + p->name().toLower(), p->value().toDouble());
-        break;
-    case QVariant::Bool:
-        e->setAttribute(QLatin1String("report:") + p->name().toLower(), p->value().toInt());
-        break;
-    default:
-        e->setAttribute(QLatin1String("report:") + p->name().toLower(), p->value().toString());
-        break;
-    }
+    KRUtils::addPropertyAsAttribute(e, p);
 }

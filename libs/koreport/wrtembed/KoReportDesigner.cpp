@@ -27,7 +27,7 @@
 #include "reportpropertiesbutton.h"
 #include "sectioneditor.h"
 #include "reportsectiondetail.h"
-
+#include "krutils.h"
 #include "KoReportPluginInterface.h"
 #include "KoReportDesignerItemLine.h"
 
@@ -234,8 +234,8 @@ KoReportDesigner::KoReportDesigner(QWidget *parent, QDomElement data) : QWidget(
                     m_pageSize->setValue(it.toElement().attribute("report:page-size", "A4"));
                 } else if (pagetype == "custom") {
                     m_pageSize->setValue("custom");
-                    m_customHeight->setValue(it.toElement().attribute("report:custom-page-height", "").toDouble());
-                    m_leftMargin->setValue(it.toElement().attribute("report:custom-page-widtht", "").toDouble());
+                    m_customHeight->setValue(KoUnit::parseValue(it.toElement().attribute("report:custom-page-height", "")));
+                    m_customWidth->setValue(KoUnit::parseValue(it.toElement().attribute("report:custom-page-widtht", "")));
                 } else if (pagetype == "label") {
                     //TODO
                 }
@@ -278,6 +278,7 @@ KoReportDesigner::KoReportDesigner(QWidget *parent, QDomElement data) : QWidget(
     }
     this->slotPageButton_Pressed();
     emit reportDataChanged();
+    slotPropertyChanged(*m_set, *m_unit); // set unit for all items
     setModified(false);
 }
 
@@ -297,14 +298,14 @@ QDomElement KoReportDesigner::document() const
     content.appendChild(propertyToElement(&doc, m_title));
 
     QDomElement scr = propertyToElement(&doc, m_script);
-    KoReportDesignerItemBase::addPropertyAsAttribute(&scr, m_interpreter);
+    KRUtils::addPropertyAsAttribute(&scr, m_interpreter);
     content.appendChild(scr);
 
     QDomElement grd = doc.createElement("report:grid");
-    KoReportDesignerItemBase::addPropertyAsAttribute(&grd, m_showGrid);
-    KoReportDesignerItemBase::addPropertyAsAttribute(&grd, m_gridDivisions);
-    KoReportDesignerItemBase::addPropertyAsAttribute(&grd, m_gridSnap);
-    KoReportDesignerItemBase::addPropertyAsAttribute(&grd, m_unit);
+    KRUtils::addPropertyAsAttribute(&grd, m_showGrid);
+    KRUtils::addPropertyAsAttribute(&grd, m_gridDivisions);
+    KRUtils::addPropertyAsAttribute(&grd, m_gridSnap);
+    KRUtils::addPropertyAsAttribute(&grd, m_unit);
     content.appendChild(grd);
 
     // pageOptions
@@ -313,26 +314,26 @@ QDomElement KoReportDesigner::document() const
 
     if (m_pageSize->value().toString() == "Custom") {
         pagestyle.appendChild(doc.createTextNode("custom"));
-        pagestyle.setAttribute("report:page-width", QString::number(pageUnit().fromUserValue(m_customWidth->value().toDouble())));
-        pagestyle.setAttribute("report:page-height", QString::number(pageUnit().fromUserValue(m_customWidth->value().toDouble())));
+        KRUtils::setAttribute(pagestyle, "report:custom-page-width", m_customWidth->value().toDouble());
+        KRUtils::setAttribute(pagestyle, "report:custom-page-height", m_customHeight->value().toDouble());
 
     } else if (m_pageSize->value().toString() == "Label") {
         pagestyle.appendChild(doc.createTextNode("label"));
         pagestyle.setAttribute("report:page-label-type", m_labelType->value().toString());
     } else {
         pagestyle.appendChild(doc.createTextNode("predefined"));
-    KoReportDesignerItemBase::addPropertyAsAttribute(&pagestyle, m_pageSize);
+        KRUtils::addPropertyAsAttribute(&pagestyle, m_pageSize);
         //pagestyle.setAttribute("report:page-size", m_pageSize->value().toString());
     }
 
     // -- orientation
-    KoReportDesignerItemBase::addPropertyAsAttribute(&pagestyle, m_orientation);
+    KRUtils::addPropertyAsAttribute(&pagestyle, m_orientation);
 
-    // -- margins
-    pagestyle.setAttribute("fo:margin-top", KoUnit::fromSymbol(m_topMargin->option("unit").toString()).toUserStringValue(m_topMargin->value().toDouble()) + m_topMargin->option("unit").toString());
-    pagestyle.setAttribute("fo:margin-bottom", KoUnit::fromSymbol(m_bottomMargin->option("unit").toString()).toUserStringValue(m_bottomMargin->value().toDouble()) + m_topMargin->option("unit").toString());
-    pagestyle.setAttribute("fo:margin-right", KoUnit::fromSymbol(m_rightMargin->option("unit").toString()).toUserStringValue(m_rightMargin->value().toDouble()) + m_topMargin->option("unit").toString());
-    pagestyle.setAttribute("fo:margin-left", KoUnit::fromSymbol(m_leftMargin->option("unit").toString()).toUserStringValue(m_leftMargin->value().toDouble()) + m_topMargin->option("unit").toString());
+    // -- margins: save as points, and not localized
+    KRUtils::setAttribute(pagestyle, "fo:margin-top", m_topMargin->value().toDouble());
+    KRUtils::setAttribute(pagestyle, "fo:margin-bottom", m_bottomMargin->value().toDouble());
+    KRUtils::setAttribute(pagestyle, "fo:margin-right", m_rightMargin->value().toDouble());
+    KRUtils::setAttribute(pagestyle, "fo:margin-left", m_leftMargin->value().toDouble());
 
     content.appendChild(pagestyle);
 

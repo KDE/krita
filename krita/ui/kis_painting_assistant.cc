@@ -360,7 +360,6 @@ void KisPaintingAssistant::findHandleLocation() {
             d->topRight= handlesList.at(2);
             d->bottomRight = handlesList.at(3);
         }
-        qDebug()<< (d->bottomLeft.data()->x()+d->bottomRight.data()->x())*0.5 << (d->bottomLeft.data()->y()+ d->bottomRight.data()->y())*0.5;
         if(!d->bottomMiddle && !d->topMiddle && !d->leftMiddle && !d->rightMiddle) {
             d->bottomMiddle = new KisPaintingAssistantHandle((d->bottomLeft.data()->x() + d->bottomRight.data()->x())*0.5,
                                                              (d->bottomLeft.data()->y() + d->bottomRight.data()->y())*0.5);
@@ -374,7 +373,6 @@ void KisPaintingAssistant::findHandleLocation() {
             addSideHandle(d->leftMiddle.data());
             addSideHandle(d->bottomMiddle.data());
             addSideHandle(d->topMiddle.data());
-            qDebug() <<"in if"<< d->bottomMiddle.data()->x()<< d->bottomMiddle.data()->y() << d->topMiddle << d->leftMiddle << d->rightMiddle;
         }
         else {
             d->bottomMiddle.data()->operator =(QPointF((d->bottomLeft.data()->x() + d->bottomRight.data()->x())*0.5,
@@ -385,7 +383,6 @@ void KisPaintingAssistant::findHandleLocation() {
                                                              (d->topRight.data()->y() + d->bottomRight.data()->y())*0.5));
             d->leftMiddle.data()->operator =(QPointF((d->bottomLeft.data()->x() + d->topLeft.data()->x())*0.5,
                                                              (d->bottomLeft.data()->y() + d->topLeft.data()->y())*0.5));
-            qDebug() <<"in else"<< d->bottomMiddle.data()->x()<< d->bottomMiddle.data()->y()<< d->topMiddle << d->leftMiddle << d->rightMiddle;
         }
     }
 }

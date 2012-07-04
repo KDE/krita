@@ -115,6 +115,7 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
         setMode(KisTool::PAINT_MODE);
 
         if (m_newAssistant) {
+            m_internalMode = MODE_CREATION;
             *m_newAssistant->handles().back() = event->point;
             if (m_newAssistant->handles().size() == m_newAssistant->numHandles()) {
                 addAssistant();
@@ -137,7 +138,6 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
                     m_handleDrag = handle;
                 }
             }
-            uint flag = 0;
             if(m_handleDrag && assistant->id() == "perspective") {
                 // Look for the handle which was pressed
 
@@ -170,106 +170,69 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
                     m_internalMode = MODE_DRAGGING_TRANSLATING_TWONODES;
                     m_selectedNode1 = new KisPaintingAssistantHandle(assistant->topLeft().data()->x(),assistant->topLeft().data()->x());
                     m_selectedNode2 = new KisPaintingAssistantHandle(assistant->bottomLeft().data()->x(),assistant->bottomLeft().data()->y());
-                    qDebug() << "assistant create";
                     m_newAssistant = KisPaintingAssistantFactoryRegistry::instance()->get("perspective")->createPaintingAssistant();
-                    qDebug() << "assistant adding";
-                    m_canvas->view()->paintingAssistantManager()->addAssistant(m_newAssistant);
-                    qDebug() << " HANDLE adding";
-                    m_newAssistant->addHandle(m_selectedNode1);
                     m_newAssistant->addHandle(assistant->topLeft());
-                    m_newAssistant->addHandle(assistant->bottomLeft());
+                    m_newAssistant->addHandle(m_selectedNode1);
                     m_newAssistant->addHandle(m_selectedNode2);
-                    qDebug() << "get dragend";
+                    m_newAssistant->addHandle(assistant->bottomLeft());
                     m_dragEnd = event->point;
-                    m_newAssistant = 0;
-                    qDebug() << "new assistant purge";
                     m_handleDrag = 0;
                     m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
-                    qDebug() << "updated canvas";
+                    return;
                 } else if (m_handleDrag == assistant->rightMiddle()) {
                     qDebug() << " PRESS RIGHT HANDLE";
                     m_internalMode = MODE_DRAGGING_TRANSLATING_TWONODES;
                     m_selectedNode1 = new KisPaintingAssistantHandle(assistant->topRight().data()->x(),assistant->topRight().data()->y());
                     m_selectedNode2 = new KisPaintingAssistantHandle(assistant->bottomRight().data()->x(),assistant->bottomRight().data()->y());
-                    qDebug() << "assistant create";
                     m_newAssistant = KisPaintingAssistantFactoryRegistry::instance()->get("perspective")->createPaintingAssistant();
-                    qDebug() << "assistant adding";
-                    m_canvas->view()->paintingAssistantManager()->addAssistant(m_newAssistant);
                     m_newAssistant->addHandle(assistant->topRight());
                     m_newAssistant->addHandle(m_selectedNode1);
                     m_newAssistant->addHandle(m_selectedNode2);
                     m_newAssistant->addHandle(assistant->bottomRight());
-                    qDebug() << "get dragend";
                     m_dragEnd = event->point;
-                    m_newAssistant=0;
-                    qDebug() << "new assistant purge";
                     m_handleDrag = 0;
                     m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
-                    qDebug() << "updated canvas";
                     return;
                 } else if (m_handleDrag == assistant->topMiddle()) {
                     qDebug()<< " PRESS TOP HANDLE";
                     m_internalMode = MODE_DRAGGING_TRANSLATING_TWONODES;
                     m_selectedNode1 = new KisPaintingAssistantHandle(assistant->topLeft().data()->x(),assistant->topLeft().data()->y());
                     m_selectedNode2 = new KisPaintingAssistantHandle(assistant->topRight().data()->x(),assistant->topRight().data()->y());
-                    qDebug() << "assistant create";
                     m_newAssistant = KisPaintingAssistantFactoryRegistry::instance()->get("perspective")->createPaintingAssistant();
-                    qDebug() << "assistant adding";
-                    m_canvas->view()->paintingAssistantManager()->addAssistant(m_newAssistant);
                     m_newAssistant->addHandle(m_selectedNode1);
                     m_newAssistant->addHandle(m_selectedNode2);
                     m_newAssistant->addHandle(assistant->topRight());
                     m_newAssistant->addHandle(assistant->topLeft());
-                    qDebug() << "get dragend";
                     m_dragEnd = event->point;
-                    m_newAssistant=0;
-                    qDebug() << "new assistant purge";
                     m_handleDrag = 0;
                     m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
-                    qDebug() << "updated canvas";
                     return;
                 } else if (m_handleDrag == assistant->bottomMiddle()) {
                     qDebug() << " PRESS BOTTOM HANDLE";
                     m_internalMode = MODE_DRAGGING_TRANSLATING_TWONODES;
                     m_selectedNode1 = new KisPaintingAssistantHandle(assistant->bottomLeft().data()->x(),assistant->bottomLeft().data()->y());
                     m_selectedNode2 = new KisPaintingAssistantHandle(assistant->bottomRight().data()->x(),assistant->bottomRight().data()->y());
-                    qDebug() << "assistant create";
                     m_newAssistant = KisPaintingAssistantFactoryRegistry::instance()->get("perspective")->createPaintingAssistant();
-                    qDebug() << "assistant adding";
-                    m_canvas->view()->paintingAssistantManager()->addAssistant(m_newAssistant);
                     m_newAssistant->addHandle(assistant->bottomLeft());
                     m_newAssistant->addHandle(assistant->bottomRight());
                     m_newAssistant->addHandle(m_selectedNode2);
                     m_newAssistant->addHandle(m_selectedNode1);
-                    qDebug() << "get dragend";
                     m_dragEnd = event->point;
-                    m_newAssistant=0;
-                    qDebug() << "new assistant purge";
                     m_handleDrag = 0;
                     m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
-                    qDebug() << "updated canvas";
                     return;
                 }
             }
         }
-        qDebug() << "HANDLE drag start";
-        if (m_handleDrag && m_internalMode == MODE_DRAGGING_NODE) {
-            qDebug() << "HANDLE drag going on";
+        if (m_handleDrag) {
             if (event->modifiers() & Qt::ShiftModifier) {
-                qDebug() << "HANDLE being modified";
                 m_handleDrag->uncache();
                 m_handleDrag = m_handleDrag->split()[0];
                 m_handles = m_canvas->view()->paintingAssistantManager()->handles();
             }
             m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
-            qDebug() << "updated canvas";
             return;
         }
-        if (m_internalMode == MODE_DRAGGING_TRANSLATING_TWONODES) {
-            qDebug() << "returning";
-            return;
-        }
-        qDebug() << " 1";
         m_assistantDrag = 0;
         foreach(KisPaintingAssistant* assistant, m_canvas->view()->paintingAssistantManager()->assistants()) {
             QPointF iconPosition = m_canvas->viewConverter()->documentToView(assistant->buttonPosition());
@@ -290,10 +253,9 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
             }
         }
 
-        qDebug() << "create new assistant";
         QString key = m_options.comboBox->model()->index( m_options.comboBox->currentIndex(), 0 ).data(Qt::UserRole).toString();
-
         m_newAssistant = KisPaintingAssistantFactoryRegistry::instance()->get(key)->createPaintingAssistant();
+        m_internalMode = MODE_CREATION;
         m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point));
         if (m_newAssistant->numHandles() <= 1) {
             addAssistant();
@@ -301,7 +263,6 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
             m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point));
         }
         m_canvas->updateCanvas();
-
     } else {
         KisTool::mousePressEvent(event);
     }
@@ -333,13 +294,17 @@ void KisRulerAssistantTool::removeAssistant(KisPaintingAssistant* assistant)
 
 void KisRulerAssistantTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    if (m_newAssistant) {
-        qDebug()<<"in new ass";
+    if (m_newAssistant && m_internalMode == MODE_CREATION) {
         *m_newAssistant->handles().back() = event->point;
+        m_canvas->updateCanvas();
+    } else if (m_newAssistant && m_internalMode == MODE_DRAGGING_TRANSLATING_TWONODES) {
+        QPointF translate = event->point - m_dragEnd;
+        m_dragEnd = event->point;
+        m_selectedNode1.data()->operator =(QPointF(m_selectedNode1.data()->x(),m_selectedNode1.data()->y()) + translate);
+        m_selectedNode2.data()->operator = (QPointF(m_selectedNode2.data()->x(),m_selectedNode2.data()->y()) + translate);
         m_canvas->updateCanvas();
     } else if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
         if (m_handleDrag) {
-            qDebug()<< "handle move";
             *m_handleDrag = event->point;
             m_handleDrag->uncache();
 
@@ -366,15 +331,6 @@ void KisRulerAssistantTool::mouseMoveEvent(KoPointerEvent *event)
             m_mousePosition = event->point;
             m_canvas->updateCanvas();
 
-        } else if (m_selectedNode1 && m_selectedNode2 && m_internalMode == MODE_DRAGGING_TRANSLATING_TWONODES) {
-                qDebug()<< "in two move";
-                QPointF translate = event->point - m_dragEnd;
-                m_dragEnd = event->point;
-                qDebug()<<"updating" << translate;
-                m_selectedNode1.data()->operator =(QPointF(m_selectedNode1.data()->x(),m_selectedNode1.data()->y()) + translate);
-                m_selectedNode2.data()->operator = (QPointF(m_selectedNode2.data()->x(),m_selectedNode2.data()->y()) + translate);
-                qDebug() << m_selectedNode1.data()->x() << m_selectedNode1.data()->y();
-                m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
         } else {
             event->ignore();
         }
@@ -420,9 +376,15 @@ void KisRulerAssistantTool::mouseReleaseEvent(KoPointerEvent *event)
         } else if (m_assistantDrag) {
             m_assistantDrag = 0;
             m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
-        } else {
+        } else if(m_internalMode == MODE_DRAGGING_TRANSLATING_TWONODES) {
+            addAssistant();
+            m_internalMode==MODE_CREATION;
+            m_canvas->updateCanvas();
+        }
+        else {
             event->ignore();
         }
+
     }
     else {
         KisTool::mouseReleaseEvent(event);

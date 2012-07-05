@@ -40,6 +40,9 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QMenu>
 #include <QMessageBox>
+#include <KStandardGuiItem>
+#include <KGuiItem>
+#include <KStandardAction>
 
 #include <koproperty/EditorView.h>
 #include <KoRuler.h>
@@ -821,34 +824,32 @@ void KoReportDesigner::setGridOptions(bool vis, int div)
 void KoReportDesigner::sectionContextMenuEvent(ReportScene * s, QGraphicsSceneContextMenuEvent * e)
 {
     QMenu pop;
-    QAction *popCut = 0;
-    QAction *popCopy = 0;
-    QAction *popPaste = 0;
-    QAction* popDelete = 0;
 
     bool itemsSelected = selectionCount() > 0;
     if (itemsSelected) {
-        popCut = pop.addAction(i18n("Cut"));
-        popCopy = pop.addAction(i18n("Copy"));
+        QAction *a = KStandardAction::cut(this, SLOT(slotEditCut()), &pop);
+        a->setShortcut(QKeySequence::UnknownKey); // shortcuts have no effect in the popup menu
+        pop.addAction(a);
+        a = KStandardAction::copy(this, SLOT(slotEditCopy()), &pop);
+        a->setShortcut(QKeySequence::UnknownKey); // shortcuts have no effect in the popup menu
+        pop.addAction(a);
     }
-    if (!m_sectionData->copy_list.isEmpty())
-        popPaste = pop.addAction(i18n("Paste"));
+    if (!m_sectionData->copy_list.isEmpty()) {
+        QAction *a = KStandardAction::paste(this, SLOT(slotEditPaste()), &pop);
+        a->setShortcut(QKeySequence::UnknownKey); // shortcuts have no effect in the popup menu
+        pop.addAction(a);
+    }
 
     if (itemsSelected) {
         pop.addSeparator();
-        popDelete = pop.addAction(i18n("Delete"));
+        const KGuiItem del = KStandardGuiItem::del();
+        QAction *a = new KAction(del.icon(), del.text(), &pop);
+        a->setToolTip(del.toolTip());
+        connect(a, SIGNAL(activated()), SLOT(slotEditDelete()));
+        pop.addAction(a);
     }
-
-    if (pop.actions().count() > 0) {
-        QAction * ret = pop.exec(e->screenPos());
-        if (ret == popCut)
-            slotEditCut();
-        else if (ret == popCopy)
-            slotEditCopy();
-        else if (ret == popPaste)
-            slotEditPaste(s);
-        else if (ret == popDelete)
-            slotEditDelete();
+    if (!pop.actions().isEmpty()) {
+        pop.exec(e->screenPos());
     }
 }
 

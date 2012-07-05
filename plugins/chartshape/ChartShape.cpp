@@ -758,6 +758,7 @@ void ChartShape::setChartSubType(ChartSubtype subType)
 {
     Q_ASSERT(d->plotArea);
     d->plotArea->setChartSubType(subType);
+    emit updateConfigWidget();
 }
 
 void ChartShape::setThreeD(bool threeD)

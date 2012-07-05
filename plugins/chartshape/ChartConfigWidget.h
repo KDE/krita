@@ -71,7 +71,6 @@ public:
     void updateMarkers();
 
 public slots:
-    void chartSubTypeSelected(int type);
     void chartTypeSelected(QAction *action);
     void setThreeDMode(bool threeD);
     void update();
@@ -127,7 +126,7 @@ public slots:
     void ui_axisLabelsFontChanged();
 
 signals:
-    void chartTypeChanged(ChartType type);
+    void chartTypeChanged(ChartType type, ChartSubtype subType);
     void chartSubTypeChanged(ChartSubtype subType);
     void dataSetChartTypeChanged(DataSet *dataSet, ChartType type);
     void dataSetChartSubTypeChanged(DataSet *dataSet, ChartSubtype subType);

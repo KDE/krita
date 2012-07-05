@@ -806,34 +806,7 @@ void ChartConfigWidget::chartTypeSelected(QAction *action)
     }
 
 
-    // o Make sure polar and cartesian plots can't conflict and
-    //   don't allow the user to mix these two types
-    // o Hide axis configuration options for polar plots
-    if (isPolar(type)) {
-        setPolarChartTypesEnabled(true);
-        setCartesianChartTypesEnabled(false);
-
-        // Pie charts and ring charts have no axes but radar charts do.
-        // Disable choosing of attached axis if there is none.
-        bool hasAxes = !(type == CircleChartType || type == RingChartType);
-        d->ui.axisConfiguration->setEnabled(hasAxes);
-        d->ui.dataSetAxes->setEnabled(hasAxes);
-        d->ui.dataSetHasChartType->setEnabled(hasAxes);
-        d->ui.dataSetChartTypeMenu->setEnabled(hasAxes);
-    } else {
-        setPolarChartTypesEnabled(false);
-        setCartesianChartTypesEnabled(true);
-
-        // All the cartesian chart types have axes.
-        d->ui.axisConfiguration->setEnabled(true);
-        d->ui.dataSetAxes->setEnabled(true);
-        d->ui.dataSetHasChartType->setEnabled(true);
-        d->ui.dataSetChartTypeMenu->setEnabled(true);
-    }
-
-    emit chartTypeChanged(type);
-    emit chartSubTypeChanged(subtype);
-
+    emit chartTypeChanged(type, subtype);
     update();
 }
 
@@ -990,12 +963,6 @@ void ChartConfigWidget::dataSetChartTypeSelected(QAction *action)
     emit dataSetChartSubTypeChanged(dataSet, subtype);
 
     update();
-}
-
-void ChartConfigWidget::chartSubTypeSelected(int type)
-{
-    d->subtype = (ChartSubtype) type;
-    emit chartSubTypeChanged(d->subtype);
 }
 
 void ChartConfigWidget::datasetMarkerSelected(QAction *action)
@@ -1222,9 +1189,23 @@ void ChartConfigWidget::update()
         if (isPolar(d->shape->chartType())) {
             setPolarChartTypesEnabled(true);
             setCartesianChartTypesEnabled(false);
+
+            // Pie charts and ring charts have no axes but radar charts do.
+            // Disable choosing of attached axis if there is none.
+            bool hasAxes = !(d->shape->chartType() == CircleChartType || d->shape->chartType() == RingChartType);
+            d->ui.axisConfiguration->setEnabled(hasAxes);
+            d->ui.dataSetAxes->setEnabled(hasAxes);
+            d->ui.dataSetHasChartType->setEnabled(hasAxes);
+            d->ui.dataSetChartTypeMenu->setEnabled(hasAxes);
         } else {
             setPolarChartTypesEnabled(false);
             setCartesianChartTypesEnabled(true);
+
+            // All the cartesian chart types have axes.
+            d->ui.axisConfiguration->setEnabled(true);
+            d->ui.dataSetAxes->setEnabled(true);
+            d->ui.dataSetHasChartType->setEnabled(true);
+            d->ui.dataSetChartTypeMenu->setEnabled(true);
         }
 
         // ...and finally save the new chart type and subtype.

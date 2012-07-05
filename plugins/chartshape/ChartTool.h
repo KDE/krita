@@ -63,7 +63,7 @@ public:
     virtual QWidget *createOptionWidget();
 
 private slots:
-    void setChartType(ChartType type, ChartSubtype subtype = NoChartSubtype);
+    void setChartType(ChartType type, ChartSubtype subtype);
     void setChartSubType(ChartSubtype subtype);
     void setThreeDMode(bool threeD);
     void setDataDirection(Qt::Orientation);

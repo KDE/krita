@@ -16,8 +16,8 @@ cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
 
 # define the generic version of the Calligra libraries here
 # this makes it easy to advance it when the next Calligra release comes
-set(GENERIC_CALLIGRA_LIB_VERSION "10.0.0")
-set(GENERIC_CALLIGRA_LIB_SOVERSION "10")
+set(GENERIC_CALLIGRA_LIB_VERSION "11.0.0")
+set(GENERIC_CALLIGRA_LIB_SOVERSION "11")
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 

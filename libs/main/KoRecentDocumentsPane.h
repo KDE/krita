@@ -53,6 +53,7 @@ protected slots:
 
     void previewResult(KJob* job);
     void updatePreview(const KFileItem& fileItem, const QPixmap& preview);
+    void updateIcon(const KFileItem& fileItem, const QPixmap& pixmap);
 
 private:
     KoRecentDocumentsPanePrivate * const d;

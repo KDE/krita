@@ -79,7 +79,7 @@ public:
      * @param painter used to paint the background
      * @param converter to convert between internal and view coordinates
      */
-    virtual void paintBackground( QPainter & painter, const KoViewConverter & converter );
+    virtual void paintBackground( QPainter & painter, const KoViewConverter & converter, KoShapePaintingContext &paintContext );
 
     /**
      * Get if master shapes should be displayed

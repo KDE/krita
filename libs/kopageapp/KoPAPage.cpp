@@ -30,6 +30,7 @@
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoZoomHandler.h>
+#include <KoShapePaintingContext.h>
 
 #include "KoPAMasterPage.h"
 #include "KoPASavingContext.h"
@@ -114,16 +115,16 @@ void KoPAPage::setMasterPage( KoPAMasterPage * masterPage )
     m_masterPage = masterPage;
 }
 
-void KoPAPage::paintBackground( QPainter & painter, const KoViewConverter & converter )
+void KoPAPage::paintBackground( QPainter & painter, const KoViewConverter & converter, KoShapePaintingContext &paintContext )
 {
     if ( m_pageProperties & UseMasterBackground ) {
         if ( m_pageProperties & DisplayMasterBackground ) {
             Q_ASSERT( m_masterPage );
-            m_masterPage->paintBackground( painter, converter );
+            m_masterPage->paintBackground( painter, converter, paintContext );
         }
     }
     else {
-        KoPAPageBase::paintBackground( painter, converter );
+        KoPAPageBase::paintBackground( painter, converter, paintContext );
     }
 }
 
@@ -165,7 +166,8 @@ bool KoPAPage::displayShape(KoShape *shape) const
 
 void KoPAPage::paintPage( QPainter & painter, KoZoomHandler & zoomHandler )
 {
-    paintBackground( painter, zoomHandler );
+    KoShapePaintingContext context;
+    paintBackground( painter, zoomHandler, context );
 
     KoShapePainter shapePainter( getPaintingStrategy() );
     if ( displayMasterShapes() ) {

@@ -120,7 +120,7 @@ void KoOdfGradientBackground::saveOdf(KoGenStyle& styleFill, KoGenStyles& mainSt
     }
 }
 
-void KoOdfGradientBackground::paint(QPainter& painter, const QPainterPath& fillPath) const
+void KoOdfGradientBackground::paint(QPainter& painter, const KoViewConverter &/*converter*/, KoShapePaintingContext &/*context*/, const QPainterPath& fillPath) const
 {
     Q_D(const KoOdfGradientBackground);
     QRectF targetRect = fillPath.boundingRect();

@@ -29,6 +29,7 @@
 #include <KoOdfStylesReader.h>
 #include <KoOdfLoadingContext.h>
 #include <KoZoomHandler.h>
+#include <KoShapePaintingContext.h>
 
 #include "KoPASavingContext.h"
 #include "KoPALoadingContext.h"
@@ -131,7 +132,8 @@ void KoPAMasterPage::pageUpdated()
 
 void KoPAMasterPage::paintPage( QPainter & painter, KoZoomHandler & zoomHandler )
 {
-    paintBackground( painter, zoomHandler );
+    KoShapePaintingContext context;
+    paintBackground( painter, zoomHandler, context );
 
     KoShapePainter shapePainter;
     shapePainter.setShapes( shapes() );

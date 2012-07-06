@@ -389,7 +389,7 @@ void Legend::paintPixmap(QPainter &painter, const KoViewConverter &converter)
     d->kdLegend->paint(&pixmapPainter);
 }
 
-void Legend::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
+void Legend::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     //painter.save();
 
@@ -427,7 +427,7 @@ void Legend::paint(QPainter &painter, const KoViewConverter &converter, KoShapeP
     if (background()) {
         QPainterPath p;
         p.addRect(paintRect);
-        background()->paint(painter, p);
+        background()->paint(painter, converter, paintContext, p);
     }
 
     // KDChart thinks in pixels, Calligra in pt

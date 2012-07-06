@@ -74,7 +74,7 @@ void KoPAPageBase::paintComponent(QPainter& painter, const KoViewConverter& conv
     Q_UNUSED(converter);
 }
 
-void KoPAPageBase::paintBackground( QPainter & painter, const KoViewConverter & converter )
+void KoPAPageBase::paintBackground( QPainter & painter, const KoViewConverter & converter, KoShapePaintingContext &paintContext )
 {
     painter.save();
     applyConversion( painter, converter );
@@ -84,7 +84,7 @@ void KoPAPageBase::paintBackground( QPainter & painter, const KoViewConverter & 
     if (background()) {
         QPainterPath p;
         p.addRect( QRectF( 0.0, 0.0, layout.width, layout.height ) );
-        background()->paint( painter, p );
+        background()->paint( painter, converter, paintContext, p );
     }
     else {
         painter.setBrush(Qt::white);

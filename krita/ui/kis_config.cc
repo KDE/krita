@@ -849,7 +849,6 @@ void KisConfig::setExportConfiguration(const QString &filterId, const KisPropert
 
 }
 
-<<<<<<< HEAD
 bool KisConfig::useOcio()
 {
 #ifdef HAVE_OCIO

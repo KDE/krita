@@ -62,9 +62,9 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, const KComponentData &_compone
 
         QPixmap preview = t->loadPicture(componentData());
         QImage icon = preview.toImage();
-        icon = icon.scaled(iconExtent, iconExtent, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        icon = icon.scaled(IconExtent, IconExtent, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         icon.convertToFormat(QImage::Format_ARGB32);
-        icon = icon.copy((icon.width() - iconExtent) / 2, (icon.height() - iconExtent) / 2, iconExtent, iconExtent);
+        icon = icon.copy((icon.width() - IconExtent) / 2, (icon.height() - IconExtent) / 2, IconExtent, IconExtent);
         QStandardItem* item = new QStandardItem(QPixmap::fromImage(icon), t->name());
         item->setEditable(false);
         item->setData(t->description(), Qt::UserRole);

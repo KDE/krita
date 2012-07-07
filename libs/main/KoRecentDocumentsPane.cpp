@@ -123,9 +123,9 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentDa
 
 #if KDE_IS_VERSION(4,6,80)
     QStringList availablePlugins = KIO::PreviewJob::availablePlugins();
-    KIO::PreviewJob *previewJob = KIO::filePreview(fileList, QSize(iconExtent, iconExtent), &availablePlugins);
+    KIO::PreviewJob *previewJob = KIO::filePreview(fileList, QSize(IconExtent, IconExtent), &availablePlugins);
 #else
-    KIO::PreviewJob *previewJob = KIO::filePreview(fileList, iconExtent, iconExtent, 0);
+    KIO::PreviewJob *previewJob = KIO::filePreview(fileList, IconExtent, IconExtent, 0);
 #endif
 
     d->m_previewJobs.append(previewJob);
@@ -154,9 +154,9 @@ void KoRecentDocumentsPane::selectionChanged(const QModelIndex& index)
             const KFileItemList fileList = KFileItemList() << fileItem;
 #if KDE_IS_VERSION(4,6,80)
             QStringList availablePlugins = KIO::PreviewJob::availablePlugins();
-            KIO::PreviewJob *previewJob = KIO::filePreview(fileList, QSize(previewExtent, previewExtent), &availablePlugins);
+            KIO::PreviewJob *previewJob = KIO::filePreview(fileList, QSize(PreviewExtent, PreviewExtent), &availablePlugins);
 #else
-            KIO::PreviewJob *previewJob = KIO::filePreview(fileList, previewExtent, previewExtent, 0);
+            KIO::PreviewJob *previewJob = KIO::filePreview(fileList, PreviewExtent, PreviewExtent, 0);
 #endif
 
             d->m_previewJobs.append(previewJob);
@@ -165,9 +165,9 @@ void KoRecentDocumentsPane::selectionChanged(const QModelIndex& index)
                     SLOT(updatePreview(KFileItem,QPixmap)));
 
             // for now set preview to icon
-            preview = item->icon().pixmap(previewExtent);
-            if (preview.width() < previewExtent && preview.height() < previewExtent) {
-                preview = preview.scaled(previewExtent, previewExtent, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            preview = item->icon().pixmap(PreviewExtent);
+            if (preview.width() < PreviewExtent && preview.height() < PreviewExtent) {
+                preview = preview.scaled(PreviewExtent, PreviewExtent, Qt::KeepAspectRatio, Qt::SmoothTransformation);
             }
         }
         m_previewLabel->setPixmap(preview);
@@ -255,7 +255,7 @@ void KoRecentDocumentsPane::updateIcon(const KFileItem& fileItem, const QPixmap&
             // ensure squareness
             QImage icon = pixmap.toImage();
             icon = icon.convertToFormat(QImage::Format_ARGB32);
-            icon = icon.copy((icon.width() - iconExtent) / 2, (icon.height() - iconExtent) / 2, iconExtent, iconExtent);
+            icon = icon.copy((icon.width() - IconExtent) / 2, (icon.height() - IconExtent) / 2, IconExtent, IconExtent);
 
             item->setIcon(QIcon(QPixmap::fromImage(icon)));
 

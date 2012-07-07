@@ -700,8 +700,15 @@ bool KisTool::nodeEditable()
     }
     if (!node->isEditable()) {
         KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
-        KisFloatingMessage *floatingMessage = new KisFloatingMessage(i18n("Layer is locked."),
-                                                                     kiscanvas->canvasWidget());
+        QString message;
+        if (!node->visible() && node->userLocked()) {
+            message = i18n("Layer is locked and invisible.");
+        } else if (node->userLocked()) {
+            message = i18n("Layer is locked.");
+        } else {
+            message = i18n("Layer is invisible.");
+        }
+        KisFloatingMessage *floatingMessage = new KisFloatingMessage(message, kiscanvas->canvasWidget());
         floatingMessage->setShowOverParent(true);
         floatingMessage->setIcon(KIcon("object-locked"));
         floatingMessage->showMessage();

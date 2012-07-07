@@ -186,6 +186,7 @@ private slots:
     void slotPreferences();
     void slotEditPalette();
     void slotImageSizeChanged();
+    void slotNodeChanged();
     void slotTotalRefresh();
     void slotCreateTemplate();
     void slotDocumentSaved();

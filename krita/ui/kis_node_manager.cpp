@@ -94,8 +94,8 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
         KoShapeLayer * shapeLayer = dynamic_cast<KoShapeLayer*>(shape);
 
         Q_ASSERT(shapeLayer);
-        shapeLayer->setGeometryProtected(node->userLocked());
-        shapeLayer->setVisible(node->visible());
+//         shapeLayer->setGeometryProtected(node->userLocked());
+//         shapeLayer->setVisible(node->visible());
         selection->setActiveLayer(shapeLayer);
 
 

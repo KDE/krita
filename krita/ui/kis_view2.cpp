@@ -839,6 +839,7 @@ void KisView2::connectCurrentImage()
 
         connect(image(), SIGNAL(sigSizeChanged(qint32, qint32)), this, SLOT(slotImageSizeChanged()));
         connect(image(), SIGNAL(sigResolutionChanged(double, double)), this, SLOT(slotImageSizeChanged()));
+        connect(image(), SIGNAL(sigNodeChanged(KisNodeSP)), this, SLOT(slotNodeChanged()));
         connect(image()->undoAdapter(), SIGNAL(selectionChanged()), selectionManager(), SLOT(selectionChanged()));
 
         /**
@@ -919,6 +920,10 @@ void KisView2::slotImageSizeChanged()
     canvas()->update();
 }
 
+void KisView2::slotNodeChanged()
+{
+    updateGUI();
+}
 
 void KisView2::loadPlugins()
 {

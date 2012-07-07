@@ -70,7 +70,7 @@ KisNodeSP KisNodeShape::node()
 void KisNodeShape::setNodeVisible(bool v)
 {
     // Necessary because shapes are not QObjects
-    setVisible(v);
+//     setVisible(v);
 }
 
 bool KisNodeShape::checkIfDescendant(KoShapeLayer *activeLayer)

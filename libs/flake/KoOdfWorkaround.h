@@ -120,6 +120,12 @@ namespace KoOdfWorkaround
      * This method fixes the bad strings to the correct ones.
      */
     FLAKE_EXPORT void fixBadFormulaHiddenForStyleCellProtect(QString &value);
+
+    /**
+     * Calligra used to store text:time-value with a "0-00-00T" prefix
+     * This method removes that prefix.
+     */
+    FLAKE_EXPORT void fixBadDateForTextTime(QString &value);
 }
 
 #endif /* KOODFWORKAROUND_H */

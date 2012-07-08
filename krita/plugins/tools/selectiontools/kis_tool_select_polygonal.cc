@@ -35,7 +35,7 @@
 
 
 KisToolSelectPolygonal::KisToolSelectPolygonal(KoCanvasBase *canvas)
-    : KisToolPolylineBase(canvas,
+    : KisToolPolylineBase(canvas, KisToolPolylineBase::SELECT,
                           KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6)),
       m_widgetHelper(i18n("Polygonal Selection"))
 {
@@ -95,9 +95,4 @@ void KisToolSelectPolygonal::finishPolyline(const QVector<QPointF> &points)
 
         helper.addSelectionShape(path);
     }
-}
-
-bool KisToolSelectPolygonal::canEdit()
-{
-    return selectionEditable();
 }

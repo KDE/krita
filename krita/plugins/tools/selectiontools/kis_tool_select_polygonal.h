@@ -39,7 +39,6 @@ public:
 private:
     void keyPressEvent(QKeyEvent *event);
     void finishPolyline(const QVector<QPointF> &points);
-    virtual bool canEdit();
 private:
     KisSelectionToolConfigWidgetHelper m_widgetHelper;
 };

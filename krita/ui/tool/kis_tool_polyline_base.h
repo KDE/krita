@@ -27,7 +27,12 @@ class KRITAUI_EXPORT KisToolPolylineBase : public KisToolShape
 {
 Q_OBJECT
 public:
-    KisToolPolylineBase(KoCanvasBase * canvas, const QCursor & cursor=KisCursor::load("tool_polygon_cursor.png", 6, 6));
+    enum ToolType {
+        PAINT,
+        SELECT
+    };
+
+    KisToolPolylineBase(KoCanvasBase * canvas, KisToolPolylineBase::ToolType type, const QCursor & cursor=KisCursor::load("tool_polygon_cursor.png", 6, 6));
 
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseMoveEvent(KoPointerEvent *event);
@@ -44,14 +49,13 @@ protected:
     void cancel();
     void finish();
 
-    virtual bool canEdit();
-
 private:
 
     QPointF m_dragStart;
     QPointF m_dragEnd;
     bool m_dragging;
     vQPointF m_points;
+    ToolType m_type;
 };
 
 #endif // KIS_TOOL_POLYLINE_BASE_H

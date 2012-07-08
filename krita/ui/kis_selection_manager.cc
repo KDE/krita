@@ -288,13 +288,8 @@ void KisSelectionManager::updateGUI()
 
     KisLayerSP activeLayer = m_view->activeLayer();
     KisImageWSP image = activeLayer ? activeLayer->image() : 0;
-    bool canReselect =
-        activeLayer && activeLayer->isEditable() &&
-        image && image->canReselectGlobalSelection();
-
-    bool canDeselect = activeLayer && activeLayer->isEditable() &&
-        image && image->globalSelection();
-
+    bool canReselect = image && image->canReselectGlobalSelection();
+    bool canDeselect =  image && image->globalSelection();
 
     m_clear->setEnabled(haveDevice || havePixelsSelected || haveShapesSelected);
     m_cut->setEnabled(havePixelsSelected || haveShapesSelected);

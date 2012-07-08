@@ -38,7 +38,6 @@ public:
 private:
     void keyPressEvent(QKeyEvent *event);
     void finishRect(const QRectF& rect);
-    bool canEdit();
 
 private:
     KisSelectionToolConfigWidgetHelper m_widgetHelper;

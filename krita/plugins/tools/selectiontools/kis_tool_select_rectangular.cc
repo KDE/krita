@@ -37,7 +37,7 @@
 
 
 KisToolSelectRectangular::KisToolSelectRectangular(KoCanvasBase * canvas)
-    : KisToolRectangleBase(canvas,
+    : KisToolRectangleBase(canvas, KisToolRectangleBase::SELECT,
                            KisCursor::load("tool_rectangular_selection_cursor.png", 6, 6)),
       m_widgetHelper(i18n("Rectangular Selection"))
 {
@@ -89,9 +89,4 @@ void KisToolSelectRectangular::finishRect(const QRectF& rect)
         QRectF documentRect = convertToPt(rect);
         helper.addSelectionShape(KisShapeToolHelper::createRectangleShape(documentRect));
     }
-}
-
-bool KisToolSelectRectangular::canEdit()
-{
-    return selectionEditable();
 }

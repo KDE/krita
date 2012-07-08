@@ -705,8 +705,10 @@ bool KisTool::nodeEditable()
             message = i18n("Layer is locked and invisible.");
         } else if (node->userLocked()) {
             message = i18n("Layer is locked.");
-        } else {
+        } else if(!node->visible()) {
             message = i18n("Layer is invisible.");
+        } else {
+            message = i18n("Group not editable.");
         }
         KisFloatingMessage *floatingMessage = new KisFloatingMessage(message, kiscanvas->canvasWidget());
         floatingMessage->setShowOverParent(true);

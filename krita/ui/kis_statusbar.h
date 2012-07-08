@@ -65,7 +65,6 @@ private:
 
     KSqueezedTextLabel *m_statusBarStatusLabel;
     KSqueezedTextLabel *m_statusBarProfileLabel;
-    KSqueezedTextLabel *m_statusBarHelpLabel;
 
 };
 

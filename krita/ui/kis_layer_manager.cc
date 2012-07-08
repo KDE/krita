@@ -1012,6 +1012,13 @@ void KisLayerManager::saveGroupLayers()
     QWidget *page = new QWidget(&dlg);
     dlg.setMainWidget(page);
     QBoxLayout *layout = new QVBoxLayout(page);
+
+    KFileWidget *fd = new KFileWidget(m_view->document()->url().path(), page);
+    fd->setUrl(m_view->document()->url());
+    fd->setMimeFilter(listMimeFilter);
+    fd->setOperationMode(KAbstractFileWidget::Saving);
+    layout->addWidget(fd);
+
     QCheckBox *chkInvisible = new QCheckBox(i18n("Convert Invisible Groups"), page);
     chkInvisible->setChecked(false);
     layout->addWidget(chkInvisible);
@@ -1019,11 +1026,6 @@ void KisLayerManager::saveGroupLayers()
     chkDepth->setChecked(true);
     layout->addWidget(chkDepth);
 
-    KFileWidget *fd = new KFileWidget(m_view->document()->url().path(), page);
-    fd->setUrl(m_view->document()->url());
-    fd->setMimeFilter(listMimeFilter);
-    fd->setOperationMode(KAbstractFileWidget::Saving);
-    layout->addWidget(fd);
 
     if (!dlg.exec()) return;
 

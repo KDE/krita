@@ -31,13 +31,15 @@
 #include <QTimer>
 #include <QTimeLine>
 
+#include <krita_export.h>
+
 /**
  * @brief The KisFloatingMessage class shows the given message in a semi-transparent
  * bubble that doesn' take focus and slowly fades away.
  *
  * Heavily based on Amarok's Osd.cpp
  */
-class KisFloatingMessage : public QWidget
+class KRITAUI_EXPORT KisFloatingMessage : public QWidget
 {
     Q_OBJECT
 

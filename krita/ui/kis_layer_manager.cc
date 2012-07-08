@@ -22,6 +22,8 @@
 #include <QCursor>
 #include <QString>
 #include <QDialog>
+#include <QVBoxLayout>
+#include <QFileInfo>
 
 #include <kactioncollection.h>
 #include <ktoggleaction.h>
@@ -29,7 +31,10 @@
 #include <kstandardaction.h>
 #include <kmessagebox.h>
 #include <kfiledialog.h>
+#include <kfilewidget.h>
 #include <kurl.h>
+#include <kdiroperator.h>
+#include <kurlcombobox.h>
 
 #include <KoFilterManager.h>
 #include <KoDocument.h>
@@ -87,12 +92,145 @@
 #include "kis_node_manager.h"
 
 
+class KRITAIMAGE_EXPORT KisSaveGroupVisitor : public KisNodeVisitor
+{
+public:
+    KisSaveGroupVisitor(KisView2 *view,
+                        KisImageWSP image,
+                        bool saveInvisible,
+                        bool saveTopLevelOnly,
+                        const KUrl &url,
+                        const QString &baseName,
+                        const QString &extension,
+                        const QString &mimeFilter)
+        : m_view(view)
+        , m_image(image)
+        , m_saveInvisible(saveInvisible)
+        , m_saveTopLevelOnly(saveTopLevelOnly)
+        , m_url(url)
+        , m_baseName(baseName)
+        , m_extension(extension)
+        , m_mimeFilter(mimeFilter)
+    {
+    }
+
+    virtual ~KisSaveGroupVisitor()
+    {
+    }
+
+public:
+
+    bool visit(KisNode* ) {
+        return true;
+    }
+
+    bool visit(KisPaintLayer *) {
+        return true;
+    }
+
+    bool visit(KisAdjustmentLayer *) {
+        return true;
+    }
+
+
+    bool visit(KisExternalLayer *) {
+        return true;
+    }
+
+
+    bool visit(KisCloneLayer *) {
+        return true;
+    }
+
+
+    bool visit(KisFilterMask *) {
+        return true;
+    }
+
+
+    bool visit(KisTransparencyMask *) {
+        return true;
+    }
+
+
+    bool visit(KisGeneratorLayer * ) {
+        return true;
+    }
+
+    bool visit(KisSelectionMask* ) {
+        return true;
+    }
+
+    bool visit(KisGroupLayer *layer)
+    {
+        qDebug() << "Group" << layer->name();
+        if (layer == m_image->rootLayer()) {
+            KisLayerSP child = dynamic_cast<KisLayer*>(layer->firstChild().data());
+            while (child) {
+                child->accept(*this);
+                child = dynamic_cast<KisLayer*>(child->nextSibling().data());
+            }
+
+        }
+        else if (layer->visible() || m_saveInvisible) {
+            QRect r = m_image->bounds();
+
+            KisDoc2 d;
+            d.prepareForImport();
+
+            KisImageWSP dst = new KisImage(d.createUndoStore(), r.width(), r.height(), m_image->colorSpace(), layer->name());
+            dst->setResolution(m_image->xRes(), m_image->yRes());
+            d.setCurrentImage(dst);
+            KisPaintLayer* paintLayer = new KisPaintLayer(dst, "projection", layer->opacity());
+            KisPainter gc(paintLayer->paintDevice());
+            gc.bitBlt(QPoint(0, 0), layer->projection(), r);
+            dst->addNode(paintLayer, dst->rootLayer(), KisLayerSP(0));
+
+            dst->refreshGraph();
+
+            d.setOutputMimeType(m_mimeFilter.toLatin1());
+            d.setSaveInBatchMode(true);
+
+
+            KUrl url = m_url;
+            url.adjustPath(KUrl::AddTrailingSlash);
+
+            url.setFileName(m_baseName + "_" + layer->name().replace(" ", "_") + "." + m_extension);
+
+            d.exportDocument(url);
+
+            if (!m_saveTopLevelOnly) {
+                KisLayerSP child = dynamic_cast<KisLayer*>(layer->firstChild().data());
+                while (child) {
+                    child->accept(*this);
+                    child = dynamic_cast<KisLayer*>(child->nextSibling().data());
+                }
+            }
+        }
+        return true;
+    }
+
+private:
+
+    KisView2 *m_view;
+    KisImageWSP m_image;
+    bool m_saveInvisible;
+    bool m_saveTopLevelOnly;
+    KUrl m_url;
+    QString m_baseName;
+    QString m_extension;
+    QString m_mimeFilter;
+};
+
+
+
 KisLayerManager::KisLayerManager(KisView2 * view, KisDoc2 * doc)
     : m_view(view)
     , m_doc(doc)
     , m_imageFlatten(0)
     , m_imageMergeLayer(0)
     , m_layerSaveAs(0)
+    , m_groupLayersSave(0)
     , m_actLayerVis(false)
     , m_imageResizeToLayer(0)
     , m_flattenLayer(0)
@@ -156,6 +294,10 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     m_layerSaveAs  = new KAction(KIcon("document-save"), i18n("Save Layer as Image..."), this);
     actionCollection->addAction("save_layer_as_image", m_layerSaveAs);
     connect(m_layerSaveAs, SIGNAL(triggered()), this, SLOT(saveLayerAsImage()));
+
+    m_groupLayersSave = new KAction(KIcon("document-save"), i18n("Save Group Layers..."), this);
+    actionCollection->addAction("save_groups_as_images", m_groupLayersSave);
+    connect(m_groupLayersSave, SIGNAL(triggered()), this, SLOT(saveGroupLayers()));
 
     m_imageResizeToLayer  = new KAction(i18n("Size Canvas to Size of Current Layer"), this);
     actionCollection->addAction("resizeimagetolayer", m_imageResizeToLayer);
@@ -855,6 +997,62 @@ void KisLayerManager::saveLayerAsImage()
 
     d.setOutputMimeType(mimefilter.toLatin1());
     d.exportDocument(url);
+}
+
+void KisLayerManager::saveGroupLayers()
+{
+    qDebug() << "!";
+
+    QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
+    QString mimelist = listMimeFilter.join(" ");
+
+    qDebug() << listMimeFilter;
+
+    KDialog dlg;
+    QWidget *page = new QWidget(&dlg);
+    dlg.setMainWidget(page);
+    QBoxLayout *layout = new QVBoxLayout(page);
+    QCheckBox *chkInvisible = new QCheckBox(i18n("Convert Invisible Groups"), page);
+    chkInvisible->setChecked(false);
+    layout->addWidget(chkInvisible);
+    QCheckBox *chkDepth = new QCheckBox(i18n("Export Only Toplevel Groups"), page);
+    chkDepth->setChecked(true);
+    layout->addWidget(chkDepth);
+
+    KFileWidget *fd = new KFileWidget(m_view->document()->url().path(), page);
+    fd->setUrl(m_view->document()->url());
+    fd->setMimeFilter(listMimeFilter);
+    fd->setOperationMode(KAbstractFileWidget::Saving);
+    layout->addWidget(fd);
+
+    if (!dlg.exec()) return;
+
+    // selectedUrl()( does not return the expected result. So, build up the KUrl the more complicated way
+    //return m_fileWidget->selectedUrl();
+    KUrl url = fd->dirOperator()->url();
+    url.adjustPath(KUrl::AddTrailingSlash);
+    QString path = fd->locationEdit()->currentText();
+    QFileInfo f(path);
+    QString extension = f.completeSuffix();
+    QString basename = f.baseName();
+
+    QString mimefilter = fd->currentMimeFilter();
+
+    if (mimefilter.isEmpty()) {
+        KMimeType::Ptr mime = KMimeType::findByUrl(url);
+        mimefilter = mime->name();
+        extension = mime->extractKnownExtension(path);
+    }
+
+    if (url.isEmpty())
+        return;
+
+    KisImageWSP image = m_view->image();
+    if (!image) return;
+
+    KisSaveGroupVisitor v(m_view, image, chkInvisible->isChecked(), chkDepth->isChecked(), url, basename, extension, mimefilter);
+    image->rootLayer()->accept(v);
+
 }
 
 bool KisLayerManager::activeLayerHasSelection()

@@ -163,7 +163,6 @@ public:
 
     bool visit(KisGroupLayer *layer)
     {
-        qDebug() << "Group" << layer->name();
         if (layer == m_image->rootLayer()) {
             KisLayerSP child = dynamic_cast<KisLayer*>(layer->firstChild().data());
             while (child) {
@@ -200,10 +199,10 @@ public:
             d.exportDocument(url);
 
             if (!m_saveTopLevelOnly) {
-                KisLayerSP child = dynamic_cast<KisLayer*>(layer->firstChild().data());
+                KisGroupLayerSP child = dynamic_cast<KisGroupLayer*>(layer->firstChild().data());
                 while (child) {
                     child->accept(*this);
-                    child = dynamic_cast<KisLayer*>(child->nextSibling().data());
+                    child = dynamic_cast<KisGroupLayer*>(child->nextSibling().data());
                 }
             }
         }
@@ -1001,12 +1000,7 @@ void KisLayerManager::saveLayerAsImage()
 
 void KisLayerManager::saveGroupLayers()
 {
-    qDebug() << "!";
-
     QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
-    QString mimelist = listMimeFilter.join(" ");
-
-    qDebug() << listMimeFilter;
 
     KDialog dlg;
     QWidget *page = new QWidget(&dlg);
@@ -1025,7 +1019,6 @@ void KisLayerManager::saveGroupLayers()
     QCheckBox *chkDepth = new QCheckBox(i18n("Export Only Toplevel Groups"), page);
     chkDepth->setChecked(true);
     layout->addWidget(chkDepth);
-
 
     if (!dlg.exec()) return;
 

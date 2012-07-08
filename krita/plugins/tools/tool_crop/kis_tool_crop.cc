@@ -438,6 +438,10 @@ void KisToolCrop::paintOutlineWithHandles(QPainter& gc)
 
 void KisToolCrop::crop()
 {
+    if (!nodeEditable()) {
+        return;
+    }
+
     m_haveCropSelection = false;
     useCursor(cursor());
 
@@ -448,10 +452,6 @@ void KisToolCrop::crop()
 
     // The visitor adds the undo steps to the macro
     if (m_optWidget->cmbType->currentIndex() == 0 && currentNode()->paintDevice()) {
-        if (!nodeEditable()) {
-            return;
-        }
-
         currentImage()->cropNode(currentNode(), cropRect);
     } else {
         currentImage()->cropImage(cropRect);

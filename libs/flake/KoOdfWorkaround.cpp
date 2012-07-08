@@ -2,6 +2,7 @@
    Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2009 Johannes Simon <johannes.simon@gmail.com>
    Copyright (C) 2010,2011 Jan Hambrecht <jaham@gmx.net>
+   Copyright 2012 Friedrich W. H. Kossebau <kossebau@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -274,5 +275,12 @@ void KoOdfWorkaround::fixBadFormulaHiddenForStyleCellProtect(QString& value)
         const int length = value.length();
         value[length-14] = QLatin1Char('f');
         value[length-7] = QLatin1Char('-');
+    }
+}
+
+void KoOdfWorkaround::fixBadDateForTextTime(QString &value)
+{
+    if (value.startsWith(QLatin1String("0-00-00T"))) {
+        value.remove(0, 8);
     }
 }

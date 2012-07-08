@@ -903,6 +903,10 @@ void KisToolTransform::keyPressEvent(QKeyEvent *event)
 void KisToolTransform::keyReleaseEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Return) {
+        if (!nodeEditable()) {
+            return;
+        }
+
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         applyTransform();
         initTransform(m_currentArgs.mode());
@@ -2761,6 +2765,10 @@ void KisToolTransform::slotButtonBoxClicked(QAbstractButton *button)
     QAbstractButton *resetButton = m_optWidget->buttonBox->button(QDialogButtonBox::Reset);
 
     if (button == applyButton) {
+        if (!nodeEditable()) {
+            return;
+        }
+
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         applyTransform();
         initTransform(m_currentArgs.mode());

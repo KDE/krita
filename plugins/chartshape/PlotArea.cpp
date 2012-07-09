@@ -1082,7 +1082,7 @@ void PlotArea::paintPixmap(QPainter &painter, const KoViewConverter &converter)
     }
 }
 
-void PlotArea::paint(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &)
+void PlotArea::paint(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintContext)
 {
     //painter.save();
 
@@ -1097,7 +1097,7 @@ void PlotArea::paint(QPainter& painter, const KoViewConverter& converter, KoShap
     if (background()) {
         QPainterPath p;
         p.addRect(paintRect);
-        background()->paint(painter, p);
+        background()->paint(painter, converter, paintContext, p);
     }
 
     // Get the current zoom level

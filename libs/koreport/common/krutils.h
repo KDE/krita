@@ -20,8 +20,20 @@
 #ifndef KRUTILS_H
 #define KRUTILS_H
 
+class QDomDocument;
 class QDomElement;
 class QFont;
+class QPointF;
+class QSizeF;
+class QString;
+class KRPos;
+class KRSize;
+class KRTextStyleData;
+class KRLineStyleData;
+
+namespace KoProperty {
+    class Property;
+}
 
 namespace KRUtils
 {
@@ -36,6 +48,27 @@ namespace KRUtils
     //! Writes all attributes of font @a font into element @a el.
     //! @todo add unit tests
     void writeFontAttributes(QDomElement& el, const QFont &font);
+
+    //! Writes attributes for the rect position @p pos, @p siz
+    void buildXMLRect(QDomElement &entity, KRPos *pos, KRSize *siz);
+    //! Writes attributes for text style @p ts
+    void buildXMLTextStyle(QDomDocument & doc, QDomElement & entity, KRTextStyleData ts);
+    //! Writes attributes for line style @p ls
+    void buildXMLLineStyle(QDomDocument & doc, QDomElement & entity, KRLineStyleData ls);
+    //! Writes attributes for the property @p p
+    void addPropertyAsAttribute(QDomElement* e, KoProperty::Property* p);
+    //! Writes @p attribute to element @p e, @p value is stored in points with unit 'pt'
+    void setAttribute(QDomElement &e, const QString &attribute, double value);
+    //! Writes point @p value as attributes to element @p e
+    void setAttribute(QDomElement &e, const QPointF &value);
+    //! Writes size @p value as attributes to element @p e
+    void setAttribute(QDomElement &e, const QSizeF &value);
+    //! Reads attributes from @p elemSource into text style @p ts
+    bool parseReportTextStyleData(const QDomElement & elemSource, KRTextStyleData & ts);
+    //! Reads attributes from @p elemSource into line style @p ls
+    bool parseReportLineStyleData(const QDomElement & elemSource, KRLineStyleData & ls);
+    //! Reads attributes from @p elemSource into rect @p pos, @p siz
+    bool parseReportRect(const QDomElement & elemSource, KRPos *pos, KRSize *siz);
 }
 
 #endif

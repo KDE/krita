@@ -125,8 +125,10 @@ void Ko3dScene::Lightsource::saveOdf(KoXmlWriter &writer) const
     writer.startElement("dr3d:light");
 
     writer.addAttribute("dr3d:diffuse-color", m_diffuseColor.name());
-    writer.addAttribute("dr3d:direction", QString("(%1 %2 %3)").arg(m_direction.x())
-                        .arg(m_direction.y()).arg(m_direction.z()));
+    writer.addAttribute("dr3d:direction", (QString("(%1 %2 %3)")
+                                           .arg(m_direction.x(), 0, 'f', 11)
+                                           .arg(m_direction.y(), 0, 'f', 11)
+                                           .arg(m_direction.z(), 0, 'f', 11)));
     writer.addAttribute("dr3d:enabled", m_enabled);
     writer.addAttribute("dr3d:specular", m_specular);
 
@@ -251,12 +253,18 @@ void Ko3dScene::saveOdfAttributes(KoXmlWriter &writer) const
 {
     // 1. Write scene attributes
     // Camera attributes
-    writer.addAttribute("dr3d:vrp", QString("(%1 %2 %3)").arg(d->vrp.x())
-                        .arg(d->vrp.y()).arg(d->vrp.z()));
-    writer.addAttribute("dr3d:vpn", QString("(%1 %2 %3)").arg(d->vpn.x())
-                        .arg(d->vpn.y()).arg(d->vpn.z()));
-    writer.addAttribute("dr3d:vup", QString("(%1 %2 %3)").arg(d->vup.x())
-                        .arg(d->vup.y()).arg(d->vup.z()));
+    writer.addAttribute("dr3d:vrp", (QString("(%1 %2 %3)")
+                                     .arg(d->vrp.x(), 0, 'f', 11)
+                                     .arg(d->vrp.y(), 0, 'f', 11)
+                                     .arg(d->vrp.z(), 0, 'f', 11)));
+    writer.addAttribute("dr3d:vpn", (QString("(%1 %2 %3)")
+                                     .arg(d->vpn.x(), 0, 'f', 11)
+                                     .arg(d->vpn.y(), 0, 'f', 11)
+                                     .arg(d->vpn.z(), 0, 'f', 11)));
+    writer.addAttribute("dr3d:vup", (QString("(%1 %2 %3)")
+                                     .arg(d->vup.x(), 0, 'f', 11)
+                                     .arg(d->vup.y(), 0, 'f', 11)
+                                     .arg(d->vup.z(), 0, 'f', 11)));
 
     writer.addAttribute("dr3d:projection", (d->projection == Parallel) ? "parallel" : "perspective");
 

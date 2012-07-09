@@ -721,7 +721,7 @@ void KisColorSelector::loadSettings()
     m_selectedColor.setH(cfg.readEntry<float>("ArtColorSel.SelColorH", 0.0f));
     m_selectedColor.setS(cfg.readEntry<float>("ArtColorSel.SelColorS", 0.0f));
     m_selectedColor.setX(cfg.readEntry<float>("ArtColorSel.SelColorX", 0.0f));
-    m_selectedColor.setA(cfg.readEntry<float>("ArtColorSel.SelColorA", 0.0f));
+    m_selectedColor.setA(1.0f);
     
     setInverseSaturation(cfg.readEntry<bool>("ArtColorSel.InversedSaturation", false));
     setLight(cfg.readEntry<float>("ArtColorSel.Light", 0.5f), cfg.readEntry<bool>("ArtColorSel.RelativeLight", false));

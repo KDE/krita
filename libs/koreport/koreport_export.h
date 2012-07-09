@@ -36,5 +36,16 @@
 #  define KOREPORT_EXPORT_DEPRECATED KDE_DEPRECATED KOREPORT_EXPORT
 # endif
 
+/* Now the same for KOREPORT_TEST_EXPORT, if compiling with unit tests enabled */
+#ifdef COMPILING_TESTS
+# if defined(MAKE_KOREPORT_LIB)
+#  define KOREPORT_TEST_EXPORT KDE_EXPORT
+# else
+#   define KOREPORT_TEST_EXPORT KDE_IMPORT
+# endif
+#else /* not compiling tests */
+# define KOREPORT_TEST_EXPORT
+#endif
+
 #endif
 

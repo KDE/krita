@@ -65,11 +65,11 @@ ArtisticTextShape::~ArtisticTextShape()
     }
 }
 
-void ArtisticTextShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
+void ArtisticTextShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     applyConversion( painter, converter );
     if( background() )
-        background()->paint( painter, outline() );
+        background()->paint( painter, converter, paintContext, outline() );
 }
 
 void ArtisticTextShape::saveOdf(KoShapeSavingContext &context) const

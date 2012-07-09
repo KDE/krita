@@ -283,7 +283,7 @@ void KisConfig::setPrinterProfile(const QString & printerProfile)
 
 bool KisConfig::useBlackPointCompensation() const
 {
-    return m_cfg.readEntry("useBlackPointCompensation", false);
+    return m_cfg.readEntry("useBlackPointCompensation", true);
 }
 
 void KisConfig::setUseBlackPointCompensation(bool useBlackPointCompensation)

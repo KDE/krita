@@ -2143,19 +2143,19 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
             style.addProperty("fo:border-bottom", bottomBorder, KoGenStyle::ParagraphType);
     }
     QString leftBorderLineWidth, rightBorderLineWidth, topBorderLineWidth, bottomBorderLineWidth;
-    if (hasProperty(LeftInnerBorderWidth) || hasProperty(LeftBorderSpacing) || hasProperty(LeftBorderWidth))
+    if (leftBorderStyle() == KoBorder::BorderDouble)
         leftBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(leftInnerBorderWidth()),
                                   QString::number(leftBorderSpacing()),
                                   QString::number(leftBorderWidth()));
-    if (hasProperty(RightInnerBorderWidth) || hasProperty(RightBorderSpacing) || hasProperty(RightBorderWidth))
+    if (rightBorderStyle() == KoBorder::BorderDouble)
         rightBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(rightInnerBorderWidth()),
                                    QString::number(rightBorderSpacing()),
                                    QString::number(rightBorderWidth()));
-    if (hasProperty(TopInnerBorderWidth) || hasProperty(TopBorderSpacing) || hasProperty(TopBorderWidth))
+    if (topBorderStyle() == KoBorder::BorderDouble)
         topBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(topInnerBorderWidth()),
                                  QString::number(topBorderSpacing()),
                                  QString::number(topBorderWidth()));
-    if (hasProperty(BottomInnerBorderWidth) || hasProperty(BottomBorderSpacing) || hasProperty(BottomBorderWidth))
+    if (bottomBorderStyle() == KoBorder::BorderDouble)
         bottomBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(bottomInnerBorderWidth()),
                                     QString::number(bottomBorderSpacing()),
                                     QString::number(bottomBorderWidth()));

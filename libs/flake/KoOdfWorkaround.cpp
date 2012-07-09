@@ -267,3 +267,12 @@ bool KoOdfWorkaround::fixEllipse(const QString &kind, KoShapeLoadingContext &con
     }
     return radiusGiven;
 }
+
+void KoOdfWorkaround::fixBadFormulaHiddenForStyleCellProtect(QString& value)
+{
+    if (value.endsWith(QLatin1String("Formula.hidden"))) {
+        const int length = value.length();
+        value[length-14] = QLatin1Char('f');
+        value[length-7] = QLatin1Char('-');
+    }
+}

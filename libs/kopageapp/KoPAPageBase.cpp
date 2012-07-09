@@ -316,6 +316,7 @@ QPixmap KoPAPageBase::generateThumbnail(const QSize &size)
     // paint white as default page background
     pixmap.fill(Qt::white);
     QPainter painter(&pixmap);
+    painter.setClipRect(QRect(QPoint(0, 0), thumbnailSize));
     painter.setRenderHint(QPainter::Antialiasing);
 
     paintPage(painter, zoomHandler);
@@ -338,6 +339,7 @@ QImage KoPAPageBase::thumbImage(const QSize &size)
     // paint white as default page background
     image.fill(QColor(Qt::white).rgb());
     QPainter painter(&image);
+    painter.setClipRect(QRect(QPoint(0, 0), thumbnailSize));
     painter.setRenderHint(QPainter::Antialiasing);
 
     paintPage(painter, zoomHandler);

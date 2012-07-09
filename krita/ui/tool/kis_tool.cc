@@ -720,21 +720,19 @@ bool KisTool::nodeEditable()
 
 bool KisTool::selectionEditable()
 {
-    KoProperties properties;
-    QList<KisNodeSP> masks = currentNode()->childNodes(QStringList("KisSelectionMask"), properties);
-    if (masks.size() == 1) {
-        KisSelectionMaskSP selectionMask = dynamic_cast<KisSelectionMask*>(masks[0].data());
-        if (!selectionMask->isEditable()) {
-            KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
-            KisFloatingMessage *floatingMessage = new KisFloatingMessage(i18n("Local selection is locked."),
-                                                                        kiscanvas->canvasWidget());
-            floatingMessage->setShowOverParent(true);
-            floatingMessage->setIcon(KIcon("object-locked"));
-            floatingMessage->showMessage();
-            return false;
-        }
+    KisCanvas2 * kisCanvas = static_cast<KisCanvas2*>(canvas());
+    KisView2 * view = kisCanvas->view();
+
+    bool editable = view->selectionEditable();
+    if (!editable) {
+        KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+        KisFloatingMessage *floatingMessage = new KisFloatingMessage(i18n("Local selection is locked."),
+                                                                    kiscanvas->canvasWidget());
+        floatingMessage->setShowOverParent(true);
+        floatingMessage->setIcon(KIcon("object-locked"));
+        floatingMessage->showMessage();
     }
-    return true;
+    return editable;
 }
 
 

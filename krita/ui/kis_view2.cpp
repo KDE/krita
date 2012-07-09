@@ -79,6 +79,7 @@
 #include <KoTemplateCreateDia.h>
 #include <KoCanvasControllerWidget.h>
 #include <KoDocumentEntry.h>
+#include <KoProperties.h>
 
 #include <kis_image.h>
 #include <kis_undo_adapter.h>
@@ -679,6 +680,19 @@ KisSelectionSP KisView2::selection()
     return image()->globalSelection();
 }
 
+bool KisView2::selectionEditable()
+{
+    KisLayerSP layer = activeLayer();
+    if (layer) {
+        KoProperties properties;
+        QList<KisNodeSP> masks = layer->childNodes(QStringList("KisSelectionMask"), properties);
+        if (masks.size() == 1) {
+            return masks[0]->isEditable();
+        }
+    }
+    // global selection is always editable
+    return true;
+}
 
 KisUndoAdapter * KisView2::undoAdapter()
 {

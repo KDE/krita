@@ -106,12 +106,12 @@ ModifySelection::~ModifySelection()
 
 void ModifySelection::slotUpdateGUI()
 {
-    bool havePixelsSelected = m_view->selectionManager()->havePixelsSelected();
+    bool enable = m_view->selectionManager()->haveEditablePixelSelectionWithPixels();
 
-    m_growSelection->setEnabled(havePixelsSelected);
-    m_shrinkSelection->setEnabled(havePixelsSelected);
-    m_borderSelection->setEnabled(havePixelsSelected);
-    m_featherSelection->setEnabled(havePixelsSelected);
+    m_growSelection->setEnabled(enable);
+    m_shrinkSelection->setEnabled(enable);
+    m_borderSelection->setEnabled(enable);
+    m_featherSelection->setEnabled(enable);
 }
 
 void ModifySelection::slotGrowSelection()

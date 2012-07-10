@@ -43,6 +43,8 @@
 #include <KoFilterChain.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoProgressUpdater.h>
+#include <KoUpdater.h>
 
 // krita's headers
 #include <kis_doc2.h>
@@ -136,6 +138,8 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
     KisImageWSP image = new KisImage(doc->createUndoStore(), width, height, cs, "built image");
     // create a layer
     QList<int> pages = wdg->pages();
+    QPointer<KoUpdater> loadUpdater =  m_chain->outputDocument()->progressUpdater()->startSubtask(1, "load");
+    loadUpdater->setRange(0, pages.count());
     for (QList<int>::const_iterator it = pages.constBegin(); it != pages.constEnd(); ++it) {
         KisPaintLayer* layer = new KisPaintLayer(image.data(),
                 i18n("Page %1", *it + 1),
@@ -161,6 +165,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
 //        }
         delete page;
         image->addNode(layer, image->rootLayer(), 0);
+        loadUpdater->setProgress(*it + 1);
     }
 
     doc->setCurrentImage(image);

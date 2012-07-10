@@ -92,6 +92,10 @@ void KisToolSelectSimilar::mousePressEvent(KoPointerEvent *event)
         if (!dev || !currentNode()->visible())
             return;
 
+        if (!selectionEditable()) {
+            return;
+        }
+
         QPointF pos = convertToPixelCoord(event);
 
         KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());

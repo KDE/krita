@@ -216,6 +216,10 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
         if (nodePaintAbility() != PAINT)
             return;
 
+        if (!nodeEditable()) {
+            return;
+        }
+
         setMode(KisTool::PAINT_MODE);
 
         KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());

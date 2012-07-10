@@ -34,7 +34,7 @@
 #include "kis_selection_manager.h"
 
 KisToolSelectElliptical::KisToolSelectElliptical(KoCanvasBase *canvas)
-    : KisToolEllipseBase(canvas, KisCursor::load("tool_elliptical_selection_cursor.png", 6, 6)),
+    : KisToolEllipseBase(canvas, KisToolEllipseBase::SELECT, KisCursor::load("tool_elliptical_selection_cursor.png", 6, 6)),
       m_widgetHelper(i18n("Elliptical Selection"))
 {
 }

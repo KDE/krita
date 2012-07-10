@@ -116,4 +116,15 @@ void KisToolSelectPath::LocalTool::addPathShape(KoPathShape* pathShape)
     }
 }
 
+void KisToolSelectPath::mousePressEvent(KoPointerEvent* event)
+{
+    if (!selectionEditable()) {
+        return;
+    }
+
+    m_localTool->mousePressEvent(event);
+    KisTool::mousePressEvent(event);
+}
+
+
 #include "kis_tool_select_path.moc"

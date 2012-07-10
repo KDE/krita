@@ -182,6 +182,10 @@ void KisToolFill::mousePressEvent(KoPointerEvent *event)
     if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
                        Qt::LeftButton, Qt::NoModifier)) {
 
+        if (!nodeEditable()) {
+            return;
+        }
+
         setMode(KisTool::PAINT_MODE);
 
         m_startPos = convertToPixelCoord(event).toPoint();

@@ -35,13 +35,15 @@ public:
     virtual ~ColorRange();
 
 private slots:
+    void slotUpdateGUI();
     void slotActivated();
     void selectOpaque();
 
 private:
     KisView2 * m_view;
     KisPainter * m_painter;
-
+    KAction* m_selectRange;
+    KAction* m_selectOpaque;
 };
 
 #endif // COLORRANGE_H

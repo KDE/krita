@@ -39,7 +39,6 @@ public:
 private:
     void keyPressEvent(QKeyEvent *event);
     void finishPolyline(const QVector<QPointF> &points);
-
 private:
     KisSelectionToolConfigWidgetHelper m_widgetHelper;
 };

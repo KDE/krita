@@ -42,7 +42,7 @@ public:
     QString name;
     QString d;
     QPainterPath path;
-    QRectF viewBox;
+    QRect viewBox;
 };
 
 KoMarker::KoMarker()
@@ -88,8 +88,10 @@ QString KoMarker::saveOdf(KoShapeSavingContext &context) const
     KoGenStyle style(KoGenStyle::MarkerStyle);
     style.addAttribute("draw:display-name", d->name);
     style.addAttribute("svg:d", d->d);
-    QString viewBox = QString("0 0 %1 %2").arg(qRound(d->viewBox.width())).arg(qRound(d->viewBox.height()));
-    style.addAttribute("svg:viewBox", viewBox);
+    const QString viewBox = QString::fromLatin1("%1 %2 %3 %4")
+        .arg(d->viewBox.x()).arg(d->viewBox.y())
+        .arg(d->viewBox.width()).arg(d->viewBox.height());
+    style.addAttribute(QLatin1String("svg:viewBox"), viewBox);
     QString name = QString(QUrl::toPercentEncoding(d->name, "", " ")).replace('%', '_');
     return context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
 }
@@ -105,6 +107,7 @@ QPainterPath KoMarker::path(qreal width) const
         return QPainterPath();
     }
 
+    // TODO: currently the <min-x>, <min-y> properties of viewbox are ignored, why? OOo-compat?
     qreal height = width * d->viewBox.height() / d->viewBox.width();
 
     QTransform transform;

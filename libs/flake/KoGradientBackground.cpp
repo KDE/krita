@@ -122,7 +122,7 @@ KoGradientBackground &KoGradientBackground::operator = (const KoGradientBackgrou
     return *this;
 }
 
-void KoGradientBackground::paint(QPainter &painter, const QPainterPath &fillPath) const
+void KoGradientBackground::paint(QPainter &painter, const KoViewConverter &/*converter*/, KoShapePaintingContext &/*context*/, const QPainterPath &fillPath) const
 {
     Q_D(const KoGradientBackground);
     QBrush brush(*d->gradient);

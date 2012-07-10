@@ -45,7 +45,7 @@ Until the branching of 2.5: in priority order
  * Y error bars                                                 [erione]
     + UI							[Done]
     + implementation						[erione]
- * Edit marker type for dataset                                 [ingwa]
+ * Edit marker type for dataset                                 [DONE]
  * Add/delete data set when in a spreadsheet                    [erione]
 
 Assigned issues
@@ -96,7 +96,7 @@ Editing
     + axis labels
     + axis markers
     + data point numeric indicators
- * Edit marker type for datasets (see above)                    [ingwa]
+ * Edit marker type for datasets (see above)                    [DONE]
  * Edit (add/delete) datasets when in a spreadsheet
     + maybe move dataset areas into the DataSets tab
 

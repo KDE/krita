@@ -47,6 +47,7 @@ public:
     explicit KoPADocument(QObject* parent);
     virtual ~KoPADocument();
 
+    QPixmap generatePreview(const QSize& size);
     void paintContent( QPainter &painter, const QRect &rect);
 
     bool loadXML( const KoXmlDocument & doc, KoStore *store );

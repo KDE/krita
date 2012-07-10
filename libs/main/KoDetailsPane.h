@@ -31,6 +31,7 @@ class KoDetailsPanePrivate;
 class KoDetailsPane : public QWidget, public Ui_KoDetailsPaneBase
 {
     Q_OBJECT
+
 public:
     KoDetailsPane(QWidget* parent, const KComponentData &_componentData, const QString& header);
     virtual ~KoDetailsPane();
@@ -60,6 +61,12 @@ protected slots:
     virtual void openFile(const QModelIndex& index) = 0;
 
     void changePalette();
+
+protected:
+    enum Extents {
+        IconExtent = 64,
+        PreviewExtent = 128
+    };
 
 private:
     KoDetailsPanePrivate * const d;

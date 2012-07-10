@@ -27,6 +27,8 @@
 // Calligra
 #include <KoShapeConfigWidgetBase.h>
 
+// KDChart
+
 // KChart
 #include "ChartShape.h"
 #include "ui_ChartConfigWidget.h"
@@ -66,8 +68,9 @@ public:
     /// This is called when e.g. the tool is deactivated.
     void deleteSubDialogs();
 
+    void updateMarkers();
+
 public slots:
-    void chartSubTypeSelected(int type);
     void chartTypeSelected(QAction *action);
     void setThreeDMode(bool threeD);
     void update();
@@ -77,6 +80,7 @@ public slots:
     void slotShowFormatErrorBarDialog();
 
     void dataSetChartTypeSelected(QAction *action);
+    void datasetMarkerSelected(QAction *action);
     void datasetBrushSelected(const QColor& color);
     void datasetPenSelected(const QColor& color);
     void ui_datasetShowCategoryChanged(bool b);
@@ -122,7 +126,7 @@ public slots:
     void ui_axisLabelsFontChanged();
 
 signals:
-    void chartTypeChanged(ChartType type);
+    void chartTypeChanged(ChartType type, ChartSubtype subType);
     void chartSubTypeChanged(ChartSubtype subType);
     void dataSetChartTypeChanged(DataSet *dataSet, ChartType type);
     void dataSetChartSubTypeChanged(DataSet *dataSet, ChartSubtype subType);
@@ -142,6 +146,7 @@ signals:
     
     void datasetPenChanged(DataSet *dataSet, const QColor& color);
     void datasetBrushChanged(DataSet *dataSet, const QColor& color);
+    void dataSetMarkerChanged(DataSet *dataSet, OdfMarkerStyle style);
     void datasetShowCategoryChanged(DataSet *dataSet, bool b);
     void dataSetShowNumberChanged(DataSet *dataSet, bool b);
     void datasetShowPercentChanged(DataSet *dataSet, bool b);

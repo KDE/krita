@@ -26,6 +26,8 @@
 #include <KoPathShape.h>
 #include <KoShapeStrokeModel.h>
 #include <KoZoomHandler.h>
+#include <KoViewConverter.h>
+#include <KoShapePaintingContext.h>
 #include <KoGradientBackground.h>
 
 #include <QEvent>
@@ -219,7 +221,9 @@ void StylePreview::drawFill(QPainter & painter, const KoShapeBackground * fill)
             // use the background to draw
             QPainterPath p;
             p.addRect(m_fillRect);
-            fill->paint(painter, p);
+            KoViewConverter converter;
+            KoShapePaintingContext context;
+            fill->paint(painter, converter, context, p);
         }
     }
     else {

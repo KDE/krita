@@ -38,6 +38,11 @@ public:
     static void setZoom( const KoPageLayout & pageLayout, const QSize & size, KoZoomHandler & zoomHandler );
 
     /**
+     * Set the zoom and adapt the size, so the page fully fits into size and the size matches the page rect
+     */
+    static void setSizeAndZoom(const KoPageLayout &pageLayout, QSize &size, KoZoomHandler &zoomHandler);
+
+    /**
      * Get the page rect used
      */
     static QRect pageRect( const KoPageLayout & pageLayout, const QSize & size, const KoZoomHandler & zoomHandler );

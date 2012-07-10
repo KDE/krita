@@ -104,6 +104,14 @@ KoPADocument::~KoPADocument()
     delete d;
 }
 
+QPixmap KoPADocument::generatePreview(const QSize& size)
+{
+    // use first page as preview for all pages
+    KoPAPageBase *page = pageByIndex(0, false);
+    Q_ASSERT( page );
+    return pageThumbnail(page, size);
+}
+
 void KoPADocument::paintContent( QPainter &painter, const QRect &rect)
 {
     KoPAPageBase * page = pageByIndex( 0, false );

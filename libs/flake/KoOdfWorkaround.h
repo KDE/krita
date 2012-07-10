@@ -113,6 +113,13 @@ namespace KoOdfWorkaround
      * This method returns true when the width, height, x and y is given for the full circle
      */
     FLAKE_EXPORT bool fixEllipse(const QString &kind, KoShapeLoadingContext &context);
+
+    /**
+     * Calligra did use the bad strings "Formula.hidden" and "protected Formula.hidden" as values
+     * for style:cell-protect, instead of "formula-hidden" and "protected formula-hidden".
+     * This method fixes the bad strings to the correct ones.
+     */
+    FLAKE_EXPORT void fixBadFormulaHiddenForStyleCellProtect(QString &value);
 }
 
 #endif /* KOODFWORKAROUND_H */

@@ -369,7 +369,7 @@ void KoPathShape::clear()
     m_subpaths.clear();
 }
 
-void KoPathShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &/*paintcontext*/)
+void KoPathShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     Q_D(KoPathShape);
     applyConversion(painter, converter);
@@ -377,7 +377,7 @@ void KoPathShape::paint(QPainter &painter, const KoViewConverter &converter, KoS
     path.setFillRule(d->fillRule);
 
     if (background()) {
-        background()->paint(painter, path);
+        background()->paint(painter, converter, paintContext, path);
     }
     //d->paintDebug(painter);
 }

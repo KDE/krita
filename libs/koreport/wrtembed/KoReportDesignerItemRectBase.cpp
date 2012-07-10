@@ -66,7 +66,7 @@ QRectF KoReportDesignerItemRectBase::sceneRect()
     return QRectF(m_ppos->toScene(), m_psize->toScene());
 }
 
-QRectF KoReportDesignerItemRectBase::pointRect()
+QRectF KoReportDesignerItemRectBase::pointRect() const
 {
     if (m_ppos && m_psize)
         return QRectF(m_ppos->toPoint(), m_psize->toPoint());

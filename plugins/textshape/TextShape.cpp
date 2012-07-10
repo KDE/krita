@@ -120,7 +120,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     if (background()) {
         QPainterPath p;
         p.addRect(QRectF(QPointF(), size()));
-        background()->paint(painter, p);
+        background()->paint(painter, converter, paintContext, p);
     }
 
     // this enables to use the same shapes on different pages showing different page numbers

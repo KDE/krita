@@ -87,7 +87,7 @@ qreal KisFilterOp::paintAt(const KisPaintInformation& info)
     if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return spacing(scale);
 
     setCurrentScale(scale);
-    
+
     QPointF hotSpot = brush->hotSpot(scale, scale);
     QPointF pt = info.pos() - hotSpot;
 
@@ -111,7 +111,7 @@ qreal KisFilterOp::paintAt(const KisPaintInformation& info)
     QRect neededRect = m_filter->neededRect(rect.translated(x, y), m_filterConfiguration);
     KisPainter p(m_tmpDevice);
     p.bitBltOldData(QPoint(x-neededRect.x(), y-neededRect.y()), source(), neededRect);
-    
+
     m_filter->process(m_tmpDevice, rect, m_filterConfiguration, 0);
 
     // Apply the mask on the paint device (filter before mask because edge pixels may be important)

@@ -23,12 +23,14 @@
 #include <QWidget>
 #include "KoReportDesigner.h"
 
+#include "koreport_export.h"
+
 class QDomNode;
 class ReportSectionDetailGroup;
 /**
  @author
 */
-class ReportSectionDetail : public QWidget
+class KOREPORT_EXPORT ReportSectionDetail : public QWidget
 {
     Q_OBJECT
 public:

@@ -92,7 +92,7 @@
 #include "kis_node_manager.h"
 
 
-class KRITAIMAGE_EXPORT KisSaveGroupVisitor : public KisNodeVisitor
+class KisSaveGroupVisitor : public KisNodeVisitor
 {
 public:
     KisSaveGroupVisitor(KisView2 *view,

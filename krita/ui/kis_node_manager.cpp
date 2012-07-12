@@ -44,6 +44,7 @@
 #include "kis_layer_manager.h"
 #include "kis_selection_manager.h"
 #include "kis_node_commands_adapter.h"
+#include "kis_mirror_visitor.h"
 
 struct KisNodeManager::Private {
 
@@ -478,21 +479,27 @@ void KisNodeManager::removeNode(KisNodeSP node)
 void KisNodeManager::mirrorNodeX()
 {
     KisNodeSP node = activeNode();
+
+    QString commandName;
     if (node->inherits("KisLayer")) {
-        m_d->layerManager->mirrorLayerX();
+        commandName = i18n("Mirror Layer X");
     } else if (node->inherits("KisMask")) {
-        m_d->maskManager->mirrorMaskX();
+        commandName = i18n("Mirror Mask X");
     }
+    mirrorNode(node, commandName, Qt::Horizontal);
 }
 
 void KisNodeManager::mirrorNodeY()
 {
     KisNodeSP node = activeNode();
+
+    QString commandName;
     if (node->inherits("KisLayer")) {
-        m_d->layerManager->mirrorLayerY();
+        commandName = i18n("Mirror Layer Y");
     } else if (node->inherits("KisMask")) {
-        m_d->maskManager->mirrorMaskY();
+        commandName = i18n("Mirror Mask Y");
     }
+    mirrorNode(node, commandName, Qt::Vertical);
 }
 
 void KisNodeManager::mergeLayerDown()
@@ -533,6 +540,24 @@ void KisNodeManager::scale(double sx, double sy, KisFilterStrategy *filterStrate
 {
     // XXX: implement scale for masks as well
     m_d->layerManager->scaleLayer(sx, sy, filterStrategy);
+}
+
+void KisNodeManager::mirrorNode(KisNodeSP node, const QString& commandName, Qt::Orientation orientation)
+{
+    m_d->view->image()->undoAdapter()->beginMacro(commandName);
+
+    KisMirrorVisitor visitor(m_d->view->image(), orientation);
+    node->accept(visitor);
+
+    m_d->view->image()->undoAdapter()->endMacro();
+    m_d->doc->setModified(true);
+
+    if (node->inherits("KisLayer")) {
+        m_d->layerManager->layersUpdated();
+    } else if (node->inherits("KisMask")) {
+        m_d->maskManager->masksUpdated();
+    }
+    m_d->view->canvas()->update();
 }
 
 #include "kis_node_manager.moc"

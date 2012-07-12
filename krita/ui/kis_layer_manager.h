@@ -96,8 +96,6 @@ private slots:
     void layerFront();
     void layerBack();
 
-    void mirrorLayerX();
-    void mirrorLayerY();
     void flattenImage();
     
     void flattenLayer();

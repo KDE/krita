@@ -99,9 +99,9 @@ bool KisMirrorVisitor::visit(KisPaintLayer* layer)
 
     QRect dirty;
     if (m_orientation == Qt::Horizontal) {
-        dirty = KisTransformWorker::mirrorX(dev);
+        dirty = KisTransformWorker::mirrorX(dev, m_image->width()/2.0f);
     } else {
-        dirty = KisTransformWorker::mirrorY(dev);
+        dirty = KisTransformWorker::mirrorY(dev, m_image->height()/2.0f);
     }
     layer->setDirty(dirty);
 
@@ -133,9 +133,9 @@ bool KisMirrorVisitor::mirrorMask(KisMask* mask)
 
         QRect dirty;
         if (m_orientation == Qt::Horizontal) {
-            dirty = KisTransformWorker::mirrorX(dev);
+            dirty = KisTransformWorker::mirrorX(dev, m_image->width()/2.0f);
         } else {
-            dirty = KisTransformWorker::mirrorY(dev);
+            dirty = KisTransformWorker::mirrorY(dev, m_image->height()/2.0f);
         }
         mask->setDirty(dirty);
         transaction.commit(m_image->undoAdapter());   

@@ -23,7 +23,6 @@
 
 #include <QStringList>
 #include <QPixmap>
-#include <kcomponentdata.h>
 
 /** @internal */
 class KoTemplate
@@ -54,7 +53,7 @@ public:
     QString fileName() const {
         return m_fileName;
     }
-    const QPixmap &loadPicture(const KComponentData &instance);
+    const QPixmap &loadPicture();
 
     bool isHidden() const {
         return m_hidden;

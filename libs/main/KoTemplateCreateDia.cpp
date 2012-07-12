@@ -486,7 +486,7 @@ void KoTemplateCreateDia::updatePixmap() {
             kDebug(30004) <<"Trying to load picture" << d->m_customFile;
             // use the code in KoTemplate to load the image... hacky, I know :)
             KoTemplate t("foo", "bar", QString(), d->m_customFile);
-            d->m_customPixmap=t.loadPicture(d->m_tree->componentData());
+            d->m_customPixmap=t.loadPicture();
         }
         else
             kWarning(30004) << "Trying to load picture";

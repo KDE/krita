@@ -157,7 +157,7 @@ protected:
 
 private:
     QSize calcOptimalPixmapSize(const QSizeF &shapeSize, const QSizeF &imageSize) const;
-    ClippingRect parseClippingRectString(QString string) const;
+    ClippingRect parseClippingRectString(const QString &string) const;
 
 private:
     KoImageCollection *m_imageCollection;

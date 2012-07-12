@@ -126,6 +126,13 @@ namespace KoOdfWorkaround
      * This method removes that prefix.
      */
     FLAKE_EXPORT void fixBadDateForTextTime(QString &value);
+
+    /**
+     * OpenOffice.org used to write the "rect(...)" value for fo:clip without
+     * separating the 4 offset values by commas.
+     * This method changes the string with the offset values to have commas as separators.
+     */
+    FLAKE_EXPORT void fixClipRectOffsetValuesString(QString &offsetValuesString);
 }
 
 #endif /* KOODFWORKAROUND_H */

@@ -241,6 +241,7 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
             if (moveRect.contains(mousePos)) {
                 m_assistantDrag = assistant;
                 m_mousePosition = event->point;
+                m_internalMode = MODE_EDITING;
                 return;
             }
             if (deleteRect.contains(mousePos)) {
@@ -248,6 +249,8 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
                 if(m_canvas->view()->paintingAssistantManager()->assistants().isEmpty()) {
                     m_internalMode = MODE_CREATION;
                 }
+                else
+                    m_internalMode = MODE_EDITING;
                 m_canvas->updateCanvas();
                 return;
             }

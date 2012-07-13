@@ -56,6 +56,11 @@ void KisDummiesFacade::removeNodeImpl(KisNodeSP node)
     delete nodeDummy;
 }
 
+bool KisDummiesFacade::hasDummyForNode(KisNodeSP node) const
+{
+    return m_d->dummiesGraph.containsNode(node);
+}
+
 KisNodeDummy* KisDummiesFacade::dummyForNode(KisNodeSP node) const
 {
     return m_d->dummiesGraph.nodeToDummy(node);

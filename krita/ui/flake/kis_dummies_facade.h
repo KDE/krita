@@ -36,6 +36,7 @@ public:
     KisDummiesFacade(QObject *parent = 0);
     ~KisDummiesFacade();
 
+    virtual bool hasDummyForNode(KisNodeSP node) const;
     KisNodeDummy* dummyForNode(KisNodeSP node) const;
     KisNodeDummy* rootDummy() const;
     int dummiesCount() const;

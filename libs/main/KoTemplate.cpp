@@ -60,7 +60,7 @@ const QPixmap &KoTemplate::loadPicture()
         }
         const int maxHeightWidth = 128; // ### TODO: some people would surely like to have 128x128
         if (img.width() > maxHeightWidth || img.height() > maxHeightWidth) {
-            img = img.scaled(maxHeightWidth, maxHeightWidth, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+            img = img.scaled(maxHeightWidth, maxHeightWidth, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
         m_pixmap = QPixmap::fromImage(img);
         return m_pixmap;

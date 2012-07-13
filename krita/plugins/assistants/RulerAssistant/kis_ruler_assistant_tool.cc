@@ -168,7 +168,7 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
                 } else if (m_handleDrag == assistant->leftMiddle()) {
                     qDebug() << " PRESS LEFT HANDLE";
                     m_internalMode = MODE_DRAGGING_TRANSLATING_TWONODES;
-                    m_selectedNode1 = new KisPaintingAssistantHandle(assistant->topLeft().data()->x(),assistant->topLeft().data()->x());
+                    m_selectedNode1 = new KisPaintingAssistantHandle(assistant->topLeft().data()->x(),assistant->topLeft().data()->y());
                     m_selectedNode2 = new KisPaintingAssistantHandle(assistant->bottomLeft().data()->x(),assistant->bottomLeft().data()->y());
                     m_newAssistant = KisPaintingAssistantFactoryRegistry::instance()->get("perspective")->createPaintingAssistant();
                     m_newAssistant->addHandle(assistant->topLeft());

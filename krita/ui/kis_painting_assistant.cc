@@ -156,6 +156,11 @@ KisPaintingAssistant::~KisPaintingAssistant()
     foreach(KisPaintingAssistantHandleSP handle, d->handles) {
         handle->unregisterAssistant(this);
     }
+    if(d->sideHandles) {
+        foreach(KisPaintingAssistantHandleSP handle, d->sideHandles) {
+            handle->unregisterAssistant(this);
+        }
+    }
     delete d;
 }
 

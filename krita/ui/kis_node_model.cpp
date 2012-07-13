@@ -126,8 +126,12 @@ void KisNodeModel::progressPercentageChanged(int, const KisNodeSP node)
 {
     if(!m_d->dummiesFacade) return;
 
-    QModelIndex index = indexFromNode(node);
-    emit dataChanged(index, index);
+    // Need to check here as the node might already be removed, but there might
+    // still be some signals arriving from another thread
+    if (m_d->dummiesFacade->hasDummyForNode(node)) {
+        QModelIndex index = indexFromNode(node);
+        emit dataChanged(index, index);
+    }
 }
 
 void KisNodeModel::connectDummy(KisNodeDummy *dummy, bool needConnect)

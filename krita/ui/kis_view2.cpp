@@ -1296,5 +1296,12 @@ void KisView2::showJustTheCanvas(bool toggled)
     }
 }
 
+void KisView2::showFloatingMessage(const QString message, const QIcon& icon)
+{
+    KisFloatingMessage *floatingMessage = new KisFloatingMessage(message, mainWindow()->centralWidget());
+    floatingMessage->setShowOverParent(true);
+    floatingMessage->setIcon(icon);
+    floatingMessage->showMessage();
+}
 
 #include "kis_view2.moc"

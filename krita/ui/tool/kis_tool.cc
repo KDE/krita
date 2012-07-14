@@ -710,10 +710,7 @@ bool KisTool::nodeEditable()
         } else {
             message = i18n("Group not editable.");
         }
-        KisFloatingMessage *floatingMessage = new KisFloatingMessage(message, kiscanvas->canvasWidget());
-        floatingMessage->setShowOverParent(true);
-        floatingMessage->setIcon(KIcon("object-locked"));
-        floatingMessage->showMessage();
+        kiscanvas->view()->showFloatingMessage(message, KIcon("object-locked"));
     }
     return node->isEditable();
 }
@@ -726,11 +723,7 @@ bool KisTool::selectionEditable()
     bool editable = view->selectionEditable();
     if (!editable) {
         KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
-        KisFloatingMessage *floatingMessage = new KisFloatingMessage(i18n("Local selection is locked."),
-                                                                    kiscanvas->canvasWidget());
-        floatingMessage->setShowOverParent(true);
-        floatingMessage->setIcon(KIcon("object-locked"));
-        floatingMessage->showMessage();
+        kiscanvas->view()->showFloatingMessage(i18n("Local selection is locked."), KIcon("object-locked"));
     }
     return editable;
 }

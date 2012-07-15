@@ -85,7 +85,7 @@ void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
     view->style()->drawControl(QStyle::CE_PushButton, &optDel, painter, 0);
 */
     // Open style manager dialog button.
-    if (!m_enableEditButton) {  // when we dont want edit icon
+    if (!m_enableEditButton) {  // when we don't want edit icon
         return;
     }
     dx1 = option.rect.width() - qMin(option.rect.height()-2, m_buttonSize) -2;

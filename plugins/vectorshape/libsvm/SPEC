@@ -516,7 +516,7 @@ bool            isSet
 colorData       The color of the brush, in RGB format
                 (... QColor::fromRgb format) 
 
-isSet           Specifies wether the color should be be applied
+isSet           Specifies whether the color should be be applied
                 (true), or if the brush should be hidden (false) 
 
 

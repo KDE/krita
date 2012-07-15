@@ -25,7 +25,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Dont use this until we become a plugin.
+// Don't use this until we become a plugin.
 #ifdef CAN_USE_MARBLE
 #undef CAN_USE_MARBLE
 #endif

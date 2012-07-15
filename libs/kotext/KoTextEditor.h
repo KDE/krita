@@ -158,7 +158,7 @@ public slots:
     ///
     /// Note: Be aware that many KoTextEditor methods start their own commands thus terminating
     /// the recording of this \ref command. Only use QTextCursor manipulation (with all the issues
-    /// that brings) or only use KoTextEditor methods that don't start their own commmand.
+    /// that brings) or only use KoTextEditor methods that don't start their own command.
     ///
     /// The recording is automatically terminated when another command is added, which as mentioned
     /// can happen by executing some of the KoTextEditor methods.

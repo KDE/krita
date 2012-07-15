@@ -762,7 +762,7 @@ QRect KisTransformWorker::mirrorY(KisPaintDeviceSP dev, qreal axis, const KisSel
             r = dev->exactBounds();
 
         if (axis > 0) {
-            // Extend rect so it has the same heigt on both sides of the axis
+            // Extend rect so it has the same height on both sides of the axis
             qreal distanceFromAxis = qMax(fabs((qreal)r.top() - axis), fabs((qreal)r.bottom() - axis));
             QRect newRect(r.x(), floor(axis - distanceFromAxis), r.width(), ceil(2*distanceFromAxis));
             r = newRect.adjusted(0, -1, 0, 2);

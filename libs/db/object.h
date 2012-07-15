@@ -131,7 +131,7 @@ protected:
      although it is also adviced to set descriptive message \a msg.
      Eventually, if you omit all parameters, ERR_OTHER code will be set
      and default message for this will be set.
-     Use this in KexiDB::Object subclasses to informa the world about your
+     Use this in KexiDB::Object subclasses to inform the world about your
      object's state. */
     virtual void setError(int code = ERR_OTHER, const QString &msg = QString());
 

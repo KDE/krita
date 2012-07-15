@@ -988,7 +988,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     // Make a list of tabs that Qt can use
     QList<QTextOption::Tab> qTabs;
     // Note: Converting to Qt tabs is needed as long as we use Qt for layout, but we
-    // loose the posibility to do leader chars.
+    // loose the possibility to do leader chars.
     foreach (KoText::Tab kTab, tabs) {
         qreal value = kTab.position;
         if (value == MaximumTabPos) { // MaximumTabPos is used in index generators
@@ -1151,7 +1151,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             d->indent +=  labelBoxWidth - minLabelWidth;
             blockData->setCounterPosition(QPointF(d->x + d->indent - labelBoxWidth, d->y));
         } else if (labelBoxWidth > 0.0 || blockData->counterText().length() > 0) {
-            // Alignmentmode and there is a label (double check needed to acount for both
+            // Alignmentmode and there is a label (double check needed to account for both
             // picture bullets and non width chars)
             blockData->setCounterPosition(QPointF(d->x + labelBoxIndent, d->y));
             if (listFormat.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab

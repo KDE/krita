@@ -40,8 +40,8 @@ public:
     virtual ~KoResourceItemView() {}
     
     /** reimplemented
-    * This will draw a number of rows based on the number of colums if m_viewMode is FIXED_COLUMS
-    * And it will draw a number of colums based on the number of rows if m_viewMode is FIXED_ROWS
+    * This will draw a number of rows based on the number of columns if m_viewMode is FIXED_COLUMS
+    * And it will draw a number of columns based on the number of rows if m_viewMode is FIXED_ROWS
     */
     virtual void resizeEvent ( QResizeEvent * event );
     

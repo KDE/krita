@@ -46,12 +46,12 @@ public:
     QString name();
 
    /**
-    * Stores the current visiblity of all layers in the composition
+    * Stores the current visibility of all layers in the composition
     */
     void store();
     
    /**
-    * Applies the stored visiblity to all the nodes
+    * Applies the stored visibility to all the nodes
     */
     void apply();
 

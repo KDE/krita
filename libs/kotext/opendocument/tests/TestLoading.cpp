@@ -109,7 +109,7 @@ bool TestLoading::compareFragments(const QTextFragment &actualFragment, const QT
     bool equal = actualFormat.font() == expectedFormat.font()
                  && actualFormat.property(KoCharacterStyle::FontCharset).toString()
                  == expectedFormat.property(KoCharacterStyle::FontCharset).toString()
-                 && actualFormat.font().styleHint() == expectedFormat.font().styleHint() // test this explicity since font == ignores it
+                 && actualFormat.font().styleHint() == expectedFormat.font().styleHint() // test this explicitly since font == ignores it
                  && actualFormat.foreground() == expectedFormat.foreground()
                  && actualFormat.background() == expectedFormat.background()
                  && actualFormat.fontCapitalization() == expectedFormat.fontCapitalization()

@@ -105,7 +105,7 @@ public:
     /**
      * @brief saveOdf saves this element reference into the currently open element in the xml writer.
      * @param writer the writer we save to
-     * @param saveOptions determins which attributes we save. We always save the xml:id.
+     * @param saveOptions determines which attributes we save. We always save the xml:id.
      */
     void saveOdf(KoXmlWriter *writer, SaveOption saveOption = XmlId) const;
 

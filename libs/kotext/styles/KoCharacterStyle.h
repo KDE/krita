@@ -249,7 +249,7 @@ public:
     QFont::Capitalization fontCapitalization() const;
     /// Set font Y stretch
     void setFontYStretch(qreal stretch);
-    /// Return font Y stretch (value relevant for MS compatability)
+    /// Return font Y stretch (value relevant for MS compatibility)
     qreal fontYStretch() const;
 
 

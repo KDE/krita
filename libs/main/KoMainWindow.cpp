@@ -326,7 +326,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     createShellGUI();
     d->mainWindowGuiIsBuilt = true;
 
-    // if the user didn's specifiy the geometry on the command line (does anyone do that still?),
+    // if the user didn's specify the geometry on the command line (does anyone do that still?),
     // we first figure out some good default size and restore the x,y position. See bug 285804Z.
     if (!initialGeometrySet()) {
 

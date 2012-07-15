@@ -78,7 +78,7 @@ public:
     void convertTo(const KoColorSpace * cs);
 
     /// Replace the existing color data, and colorspace with the specified data.
-    /// The data pointer remains of the responsability of the caller, and this function
+    /// The data pointer remains of the responsibility of the caller, and this function
     /// might change the internal pointer and reallocate memory if necesserary.
     void setColor(const quint8 * data, const KoColorSpace * colorSpace = 0);
 

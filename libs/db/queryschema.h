@@ -390,7 +390,7 @@ public:
      with removeTable().
      Every query that has at least one table defined, should have
      assigned a master table.
-     If no master table is assigned explicitym but this method there is only
+     If no master table is assigned explicitly but this method there is only
      one table used for this query even if there are table aliases,
      a single table is returned here.
      (e.g. "T" table is returned for "SELECT T1.A, T2.B FROM T T1, T T2" statement). */

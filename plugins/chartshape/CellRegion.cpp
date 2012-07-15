@@ -367,7 +367,7 @@ CellRegion::CellRegion(TableSource *source, const QString& regions)
 {
     // A dollar sign before a part of the address means that this part
     // is absolute. This is irrelevant for us, however, thus we can remove
-    // all occurences of '$', and handle relative and absolute addresses in
+    // all occurrences of '$', and handle relative and absolute addresses in
     // the same way.
     // See ODF specs $8.3.1 "Referencing Table Cells"
     Parser parser(regions);

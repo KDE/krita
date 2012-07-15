@@ -219,7 +219,7 @@ KisLayerBox::KisLayerBox()
 
     /**
      * Connect model updateUI() to enable/disable controls.
-     * Note: nodeActivated() is connected seperately in setImage(), because
+     * Note: nodeActivated() is connected separately in setImage(), because
      *       it needs particular order of calls: first the connection to the
      *       node manager should be called, then updateUI()
      */

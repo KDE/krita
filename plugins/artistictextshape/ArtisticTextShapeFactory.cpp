@@ -29,7 +29,7 @@ ArtisticTextShapeFactory::ArtisticTextShapeFactory()
     : KoShapeFactoryBase(ArtisticTextShapeID, i18n("ArtisticTextShape"))
 {
     setToolTip(i18n("A shape which shows a single text line"));
-    setIcon( "text" );
+    setIcon( "x-shape-text-artistic" );
     setLoadingPriority( 5 );
     setXmlElementNames(KoXmlNS::svg, QStringList("text"));
 }

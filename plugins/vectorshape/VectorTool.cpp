@@ -72,7 +72,7 @@ QWidget * VectorTool::createOptionWidget()
     QToolButton *button = 0;
 
     button = new QToolButton(optionWidget);
-    button->setIcon(SmallIcon("open"));
+    button->setIcon(SmallIcon("document-open"));
     button->setToolTip(i18n( "Open EMF/WMF Shape"));
     layout->addWidget(button, 0, 0);
     connect(button, SIGNAL(clicked(bool)), this, SLOT(changeUrlPressed()));

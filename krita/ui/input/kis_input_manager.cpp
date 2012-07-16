@@ -409,7 +409,9 @@ void KisInputManager::Private::setupActions()
     shortcut = createShortcut(action, KisZoomAction::ZoomResetShortcut);
     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_1);
     shortcut = createShortcut(action, KisZoomAction::ZoomToPageShortcut);
-    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_0);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_2);
+    shortcut = createShortcut(action, KisZoomAction::ZoomToWidthShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_3);
 
     action = new KisShowPaletteAction(q);
     actions.append(action);

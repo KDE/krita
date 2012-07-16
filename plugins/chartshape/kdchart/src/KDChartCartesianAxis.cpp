@@ -999,7 +999,7 @@ void CartesianAxis::paintCtx( PaintContext* context )
 
                 bool painttick = true;
 
-                //Dont paint more ticks than we need
+                //Don't paint more ticks than we need
                 //when diagram type is Bar
                 if (  centerAbscissaTicks && i == maxValueX )
                     painttick = false;

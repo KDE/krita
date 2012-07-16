@@ -101,12 +101,12 @@ public:
     void setText(const QString &text);
 
     /**
-     * remove all occurences of the style from the cache
+     * remove all occurrences of the style from the cache
      */
     void removeFromCache(KoParagraphStyle *style);
 
     /**
-     * remove all occurences of the style from the cache
+     * remove all occurrences of the style from the cache
      */
     void removeFromCache(KoCharacterStyle *style);
 

@@ -54,7 +54,7 @@ public:
 
     bool eventFilter(QObject *, QEvent *);
 
-    /** When we dont want edit icon for our items in combo */
+    /** When we don't want edit icon for our items in combo */
     void showEditIcon(bool show);
 
 public slots:

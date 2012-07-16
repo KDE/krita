@@ -751,13 +751,13 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                 // Open a text:a
                 previousFragmentLink = charFormat.anchorHref();
                 TagInformation linkTagInformation;
-                if (previousFragmentLink.startsWith(QChar('#', 0))) {
+
+                if (charFormat.intProperty(KoCharacterStyle::AnchorType) == KoCharacterStyle::Bookmark) {
                     linkTagInformation.setTagName("text:bookmark-ref");
                     QString href = previousFragmentLink.right(previousFragmentLink.size()-1);
                     linkTagInformation.addAttribute("text:ref-name", href);
                     //linkTagInformation.addAttribute("text:ref-format", add the style of the ref here);
-                }
-                else {
+                } else {
                     linkTagInformation.setTagName("text:a");
                     linkTagInformation.addAttribute("xlink:type", "simple");
                     linkTagInformation.addAttribute("xlink:href", charFormat.anchorHref());
@@ -1295,6 +1295,7 @@ void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, QHash<Q
     localBlock.movePosition(QTextCursor::NextBlock);
     int endTitle = localBlock.position();
     writer->startElement("text:index-title");
+    writer->addAttribute("text:name", QString("%1_Head").arg(info->m_name));
     writeBlocks(tocDocument, 0, endTitle, listStyles);
     writer->endElement(); // text:index-title
 

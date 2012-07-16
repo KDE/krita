@@ -267,6 +267,7 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
                             // copy it to alter subset of properties
                             QTextCharFormat linkCf(savedCharFormat);
                             linkCf.setAnchor(true);
+                            linkCf.setProperty(KoCharacterStyle::AnchorType, KoCharacterStyle::Anchor);
                             linkCf.setAnchorHref('#'+ target);
 
                             QBrush foreground = linkCf.foreground();

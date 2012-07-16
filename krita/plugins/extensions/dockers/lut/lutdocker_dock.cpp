@@ -105,7 +105,7 @@ LutDockerDock::LutDockerDock(OCIO::ConstConfigRcPtr config)
     // Gamma needs to be exponential (gamma *= 1.1f, gamma /= 1.1f as steps)
 
     m_gammaDoubleWidget->setToolTip(i18n("Select the amount of gamma modificiation for display. This does not affect the pixels of your image."));
-    m_gammaDoubleWidget->setRange(0.1, 5);
+    m_gammaDoubleWidget->setRange(0, 5);
     m_gammaDoubleWidget->setPrecision(2);
     m_gammaDoubleWidget->setValue(1.0);
     m_gammaDoubleWidget->setSingleStep(0.1);

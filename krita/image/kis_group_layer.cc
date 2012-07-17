@@ -164,16 +164,14 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
 KisLayer* KisGroupLayer::onlyMeaningfulChild() const
 {
     KisNode *child = firstChild().data();
-
     KisLayer *onlyLayer = 0;
 
-    while(child) {
+    while (child) {
         KisLayer *layer = dynamic_cast<KisLayer*>(child);
-        if(layer) {
-            if(onlyLayer) return 0;
+        if (layer) {
+            if (onlyLayer) return 0;
             onlyLayer = layer;
         }
-
         child = child->nextSibling().data();
     }
 

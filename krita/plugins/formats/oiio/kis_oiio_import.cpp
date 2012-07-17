@@ -44,6 +44,10 @@
 #include <kis_node.h>
 #include <kis_group_layer.h>
 
+#include <OpenImageIO/imageio.h>
+#include <OpenImageIO/imagebuf.h>
+
+OIIO_NAMESPACE_USING
 
 K_PLUGIN_FACTORY(KisOiioImportFactory, registerPlugin<KisOiioImport>();)
 K_EXPORT_PLUGIN(KisOiioImportFactory("calligrafilters"))
@@ -90,16 +94,23 @@ KoFilter::ConversionStatus KisOiioImport::convert(const QByteArray& from, const 
         if (url.isEmpty())
             return KoFilter::FileNotFound;
 
-        if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, qApp -> activeWindow())) {
+        if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, qApp->activeWindow())) {
             return KoFilter::FileNotFound;
         }
 
 
         QString localFile = url.toLocalFile();
 
-        const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(),
-                                                                                      Float32BitsColorDepthID.id(),
-                                                                                      "");
+        ImageBuf buf(localFile::toStdString());
+        int nSubImages = buf.nsubimages();
+
+
+
+
+//        const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(),
+//                                                                                      Float32BitsColorDepthID.id(),
+//                                                                                      "");
+
 
 //        KisImageSP image = new KisImage(doc->createUndoStore(), img.width(), img.height(), colorSpace, localFile);
 

@@ -29,6 +29,8 @@
 #include <KoViewConverter.h>
 #include <KoToolProxy.h>
 #include <KoCanvasController.h>
+#include <KoShape.h>
+#include <KoSelection.h>
 
 #include "kis_coordinates_converter.h"
 #include "kis_canvas_decoration.h"
@@ -95,6 +97,21 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
 
     // Paint the shapes (other than the layers)
     m_d->canvas->globalShapeManager()->paint(gc, *m_d->viewConverter, false);
+
+
+    // draw green selection outlines around text shapes that are edited, so the user sees where they end
+    gc.save();
+    QTransform worldTransform = gc.worldTransform();
+    gc.setPen( Qt::green );
+
+    foreach (KoShape *shape, canvas()->shapeManager()->selection()->selectedShapes()) {
+        if (shape->shapeId() == "ArtisticText" || shape->shapeId() == "TextShapeID") {
+            gc.setWorldTransform(shape->absoluteTransformation(m_d->viewConverter) * worldTransform);
+            KoShape::applyConversion(gc, *m_d->viewConverter);
+            gc.drawRect(QRectF(QPointF(), shape->size()));
+        }
+    }
+    gc.restore();
 
     // - some tools do not restore gc, but that is not important here
     // - we need to disable clipping to draw handles properly

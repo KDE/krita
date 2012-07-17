@@ -92,7 +92,7 @@ KisPropertiesConfiguration* KisWdgFastColorTransfer::configuration() const
     }
     
     dbgPlugins << "convert ref to lab";
-    KUndo2Command* cmd = ref->convertTo(labCS);
+    KUndo2Command* cmd = ref->convertTo(labCS, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
     delete cmd;
     
     // Compute the means and sigmas of ref

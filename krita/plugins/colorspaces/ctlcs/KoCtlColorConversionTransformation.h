@@ -40,7 +40,7 @@ class PIGMENTCMS_EXPORT KoCtlColorConversionTransformationFactory : public KoCol
 public:
     KoCtlColorConversionTransformationFactory(QString _srcModelId, QString _srcDepthId, QString _srcProfile, QString _dstModelId, QString _dstDepthId, QString _dstProfile);
     virtual ~KoCtlColorConversionTransformationFactory();
-    virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual, bool blackpointCompensation = false) const;
+    virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) const;
     virtual bool conserveColorInformation() const;
     virtual bool conserveDynamicRange() const;
 private:

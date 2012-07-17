@@ -406,7 +406,7 @@ public:
      *
      * @return a command that can be used to undo the conversion.
      */
-    KUndo2Command* convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual, bool blackpointCompensation = false);
+    KUndo2Command* convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     /**
      * Changes the profile of the colorspace of this paint device to the given
@@ -431,7 +431,7 @@ public:
      * case it's up to the color strategy to choose a profile (most
      * like sRGB).
      */
-    virtual QImage convertToQImage(const KoColorProfile *dstProfile, qint32 x, qint32 y, qint32 w, qint32 h, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual, bool blackpointCompensation = false) const;
+    virtual QImage convertToQImage(const KoColorProfile *dstProfile, qint32 x, qint32 y, qint32 w, qint32 h, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) const;
 
     /**
      * Create an RGBA QImage from a rectangle in the paint device. The
@@ -441,7 +441,7 @@ public:
      * case it's up to the color strategy to choose a profile (most
      * like sRGB).
      */
-    virtual QImage convertToQImage(const KoColorProfile *  dstProfile, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual, bool blackpointCompensation = false) const;
+    virtual QImage convertToQImage(const KoColorProfile *  dstProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) const;
 
     /**
      * Creates a paint device thumbnail of the paint device, retaining
@@ -465,12 +465,12 @@ public:
      * @param maxh: maximum height
      * @param rect: only this rect will be used for the thumbnail
      */
-    virtual QImage createThumbnail(qint32 maxw, qint32 maxh, QRect rect, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual, bool blackpointCompensation = false);
+    virtual QImage createThumbnail(qint32 maxw, qint32 maxh, QRect rect, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     /**
      * Cached version of createThumbnail(qint32 maxw, qint32 maxh, const KisSelection *selection, QRect rect)
      */
-    virtual QImage createThumbnail(qint32 maxw, qint32 maxh, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual, bool blackpointCompensation = false);
+    virtual QImage createThumbnail(qint32 maxw, qint32 maxh, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     /**
      * Fill c and opacity with the values found at x and y.

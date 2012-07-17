@@ -148,7 +148,7 @@ void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
 
     KisPaintDeviceSP bumpmapPaintDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb16());
     bumpmapPaintDevice->writeBytes(bumpmap.data(), outputArea.x(), outputArea.y(), outputArea.width(), outputArea.height());
-    KUndo2Command *leaker = bumpmapPaintDevice->convertTo(device->colorSpace());
+    KUndo2Command *leaker = bumpmapPaintDevice->convertTo(device->colorSpace(), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
     KisPainter copier(device);
     copier.bitBlt(outputArea.x(), outputArea.y(), bumpmapPaintDevice,
                   outputArea.x(), outputArea.y(), outputArea.width(), outputArea.height());

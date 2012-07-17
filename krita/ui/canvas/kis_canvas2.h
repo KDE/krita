@@ -176,7 +176,7 @@ public slots:
 
     void setMonitorProfile(KoColorProfile* monitorProfile,
                            KoColorConversionTransformation::Intent renderingIntent,
-                           bool blackpointCompensation);
+                           KoColorConversionTransformation::ConversionFlags conversionFlags);
 
 
 

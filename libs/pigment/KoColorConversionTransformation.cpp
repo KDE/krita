@@ -25,13 +25,13 @@ struct KoColorConversionTransformation::Private {
     const KoColorSpace* srcColorSpace;
     const KoColorSpace* dstColorSpace;
     Intent renderingIntent;
-    bool blackpointCompensation;
+    ConversionFlags conversionFlags;
 };
 
 KoColorConversionTransformation::KoColorConversionTransformation(const KoColorSpace* srcCs,
                                                                  const KoColorSpace* dstCs,
                                                                  Intent renderingIntent,
-                                                                 bool _blackpointCompensation)
+                                                                 ConversionFlags conversionFlags)
     : d(new Private)
 {
     Q_ASSERT(srcCs);
@@ -40,7 +40,7 @@ KoColorConversionTransformation::KoColorConversionTransformation(const KoColorSp
     d->srcColorSpace = srcCs;
     d->dstColorSpace = dstCs;
     d->renderingIntent = renderingIntent;
-    d->blackpointCompensation = _blackpointCompensation;
+    d->conversionFlags = conversionFlags;
 }
 
 KoColorConversionTransformation::~KoColorConversionTransformation()
@@ -63,9 +63,9 @@ KoColorConversionTransformation::Intent KoColorConversionTransformation::renderi
     return d->renderingIntent;
 }
 
-bool KoColorConversionTransformation::blackpointCompensation() const
+KoColorConversionTransformation::ConversionFlags KoColorConversionTransformation::conversionFlags() const
 {
-    return d->blackpointCompensation;
+    return d->conversionFlags;
 }
 
 void KoColorConversionTransformation::setSrcColorSpace(const KoColorSpace* cs) const

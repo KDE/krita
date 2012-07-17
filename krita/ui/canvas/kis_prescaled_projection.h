@@ -113,7 +113,7 @@ public slots:
     /**
      * Set the current monitor profile
      */
-    void setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, bool blackpointCompensation);
+    void setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     void setDisplayFilter(KisDisplayFilter *displayFilter);
 

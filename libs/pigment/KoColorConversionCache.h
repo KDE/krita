@@ -46,8 +46,8 @@ public:
      */
     KoCachedColorConversionTransformation cachedConverter(const KoColorSpace* src,
                                                           const KoColorSpace* dst,
-                                                          KoColorConversionTransformation::Intent _renderingIntent = KoColorConversionTransformation::IntentPerceptual,
-                                                          bool blackpointCompensation = false);
+                                                          KoColorConversionTransformation::Intent _renderingIntent,
+                                                          KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     /**
      * This function is called by the destructor of the color space to

@@ -108,8 +108,8 @@ public:
      *   Converts the paint device to a different colorspace
      */
     void convertTo(const KoColorSpace * dstColorSpace,
-                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
-                   bool blackpointCompensation = false);
+                   KoColorConversionTransformation::Intent renderingIntent,
+                   KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     /**
      * Fill this paint device with the data from image

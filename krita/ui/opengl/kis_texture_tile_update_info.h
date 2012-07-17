@@ -68,7 +68,7 @@ public:
         quint8* dstBuffer = dstCS->allocPixelBuffer(numPixels);
         // FIXME: rendering intent
         Q_ASSERT(dstBuffer && m_patchPixels);
-        m_patchColorSpace->convertPixelsTo(m_patchPixels, dstBuffer, dstCS, numPixels);
+        m_patchColorSpace->convertPixelsTo(m_patchPixels, dstBuffer, dstCS, numPixels, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
         delete[] m_patchPixels;
         m_patchColorSpace = dstCS;
         m_patchPixels = dstBuffer;

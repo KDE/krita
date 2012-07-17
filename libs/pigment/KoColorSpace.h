@@ -304,8 +304,8 @@ public:
      */
     virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
                                    const KoColorProfile *  dstProfile,
-                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
-                                   bool blackpointCompensation = false) const;
+                                   KoColorConversionTransformation::Intent renderingIntent,
+                                   KoColorConversionTransformation::ConversionFlags conversionFlags) const;
 
     /**
      * This functions allocates the ncessary memory for numPixels number of pixels.
@@ -354,7 +354,9 @@ public:
     /**
      * Create a color conversion transformation.
      */
-    virtual KoColorConversionTransformation* createColorConverter(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual, bool blackpointCompensation = false) const;
+    virtual KoColorConversionTransformation* createColorConverter(const KoColorSpace * dstColorSpace,
+                                                                  KoColorConversionTransformation::Intent renderingIntent,
+                                                                  KoColorConversionTransformation::ConversionFlags conversionFlags) const;
 
     /**
      * Convert a byte array of srcLen pixels *src to the specified color space
@@ -369,8 +371,8 @@ public:
     virtual bool convertPixelsTo(const quint8 * src,
                                  quint8 * dst, const KoColorSpace * dstColorSpace,
                                  quint32 numPixels,
-                                 KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
-                                 bool blackpointCompensation = false) const;
+                                 KoColorConversionTransformation::Intent renderingIntent,
+                                 KoColorConversionTransformation::ConversionFlags conversionFlags) const;
 
 //============================== Manipulation functions ==========================//
 

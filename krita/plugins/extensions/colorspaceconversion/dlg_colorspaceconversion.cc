@@ -63,7 +63,7 @@ DlgColorSpaceConversion::DlgColorSpaceConversion(QWidget *  parent,
 
 }
 
-bool blackpointCompensation();
+
 
 DlgColorSpaceConversion::~DlgColorSpaceConversion()
 {

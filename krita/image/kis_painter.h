@@ -701,7 +701,7 @@ public:
 
 
     /**
-     * set the blackpoint compensation flag in case pixels need to be converted before painting
+     * set the conversion flags in case pixels need to be converted before painting
      */
 
 

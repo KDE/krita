@@ -29,8 +29,8 @@ class KoColorConversionFromAlphaTransformation : public KoColorConversionTransfo
 {
 public:
     KoColorConversionFromAlphaTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs,
-                                             Intent renderingIntent = IntentPerceptual,
-                                             bool blackpointCompensation = false);
+                                             Intent renderingIntent,
+                                             KoColorConversionTransformation::ConversionFlags conversionFlags);
     virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const;
 };
 
@@ -39,8 +39,8 @@ public:
 KoColorConversionFromAlphaTransformation::KoColorConversionFromAlphaTransformation(const KoColorSpace* srcCs,
                                                                                    const KoColorSpace* dstCs,
                                                                                    Intent renderingIntent,
-                                                                                   bool blackpointCompensation)
-    : KoColorConversionTransformation(srcCs, dstCs, renderingIntent, blackpointCompensation)
+                                                                                   ConversionFlags conversionFlags)
+    : KoColorConversionTransformation(srcCs, dstCs, renderingIntent, conversionFlags)
 {
 
 }
@@ -69,11 +69,11 @@ KoColorConversionFromAlphaTransformationFactory::KoColorConversionFromAlphaTrans
 KoColorConversionTransformation* KoColorConversionFromAlphaTransformationFactory::createColorTransformation(const KoColorSpace* srcColorSpace,
                                                                                                             const KoColorSpace* dstColorSpace,
                                                                                                             KoColorConversionTransformation::Intent renderingIntent,
-                                                                                                            bool blackpointCompensation) const
+                                                                                                            KoColorConversionTransformation::ConversionFlags conversionFlags) const
 {
     Q_ASSERT(canBeSource(srcColorSpace));
     Q_ASSERT(canBeDestination(dstColorSpace));
-    return new KoColorConversionFromAlphaTransformation(srcColorSpace, dstColorSpace, renderingIntent, blackpointCompensation);
+    return new KoColorConversionFromAlphaTransformation(srcColorSpace, dstColorSpace, renderingIntent, conversionFlags);
 }
 
 bool KoColorConversionFromAlphaTransformationFactory::conserveColorInformation() const
@@ -94,7 +94,7 @@ bool KoColorConversionFromAlphaTransformationFactory::conserveDynamicRange() con
 class KoColorConversionToAlphaTransformation : public KoColorConversionTransformation
 {
 public:
-    KoColorConversionToAlphaTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs, Intent renderingIntent = IntentPerceptual, bool blackpointCompensation = false);
+    KoColorConversionToAlphaTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs, Intent renderingIntent, ConversionFlags conversionFlags);
     virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const;
 };
 
@@ -102,8 +102,8 @@ public:
 KoColorConversionToAlphaTransformation::KoColorConversionToAlphaTransformation(const KoColorSpace* srcCs,
                                                                                const KoColorSpace* dstCs,
                                                                                Intent renderingIntent,
-                                                                               bool blackpointCompensation)
-    : KoColorConversionTransformation(srcCs, dstCs, renderingIntent, blackpointCompensation)
+                                                                               ConversionFlags conversionFlags)
+    : KoColorConversionTransformation(srcCs, dstCs, renderingIntent, conversionFlags)
 {
 
 }
@@ -134,11 +134,11 @@ KoColorConversionToAlphaTransformationFactory::KoColorConversionToAlphaTransform
 KoColorConversionTransformation* KoColorConversionToAlphaTransformationFactory::createColorTransformation(const KoColorSpace* srcColorSpace,
                                                                                                           const KoColorSpace* dstColorSpace,
                                                                                                           KoColorConversionTransformation::Intent renderingIntent,
-                                                                                                          bool blackpointCompensation) const
+                                                                                                          KoColorConversionTransformation::ConversionFlags conversionFlags) const
 {
     Q_ASSERT(canBeSource(srcColorSpace));
     Q_ASSERT(canBeDestination(dstColorSpace));
-    return new KoColorConversionToAlphaTransformation(srcColorSpace, dstColorSpace, renderingIntent, blackpointCompensation);
+    return new KoColorConversionToAlphaTransformation(srcColorSpace, dstColorSpace, renderingIntent, conversionFlags);
 }
 
 bool KoColorConversionToAlphaTransformationFactory::conserveColorInformation() const

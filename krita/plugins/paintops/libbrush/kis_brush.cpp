@@ -575,7 +575,7 @@ KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
         dab2->initialize();
         dabPointer = dab->data();
         quint8* dabPointer2 = dab2->data();
-        KoColorSpaceRegistry::instance()->rgb8()->convertPixelsTo(dabPointer, dabPointer2, colorSpace, outputWidth * outputHeight);
+        KoColorSpaceRegistry::instance()->rgb8()->convertPixelsTo(dabPointer, dabPointer2, colorSpace, outputWidth * outputHeight, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
         dab = dab2;
     }
     return dab;

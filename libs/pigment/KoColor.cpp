@@ -102,7 +102,7 @@ KoColor::KoColor(const KoColor &src, const KoColorSpace * colorSpace)
     d->data = new quint8[colorSpace->pixelSize()];
     memset(d->data, 0, d->colorSpace->pixelSize());
 
-    src.colorSpace()->convertPixelsTo(src.d->data, d->data, colorSpace, 1);
+    src.colorSpace()->convertPixelsTo(src.d->data, d->data, colorSpace, 1, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
 }
 
 KoColor::KoColor(const KoColor & rhs)
@@ -150,7 +150,7 @@ void KoColor::convertTo(const KoColorSpace * cs)
     quint8 * data = new quint8[cs->pixelSize()];
     memset(data, 0, cs->pixelSize());
 
-    d->colorSpace->convertPixelsTo(d->data, data, cs, 1);
+    d->colorSpace->convertPixelsTo(d->data, data, cs, 1, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
 
     delete [] d->data;
     d->data = data;
@@ -222,7 +222,7 @@ void KoColor::dump() const
 
 void KoColor::fromKoColor(const KoColor& src)
 {
-    src.colorSpace()->convertPixelsTo(src.d->data, d->data, colorSpace(), 1);
+    src.colorSpace()->convertPixelsTo(src.d->data, d->data, colorSpace(), 1, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
 }
 
 const KoColorProfile *  KoColor::profile() const

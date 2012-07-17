@@ -103,7 +103,9 @@ void ColorSpaceConversion::slotImageColorSpaceConversion()
         const KoColorSpace * cs = dlgColorSpaceConversion->m_page->colorSpaceSelector->currentColorSpace();
 
         QApplication::setOverrideCursor(KisCursor::waitCursor());
-        image->convertImageColorSpace(cs, (KoColorConversionTransformation::Intent)dlgColorSpaceConversion->m_intentButtonGroup.checkedId(), dlgColorSpaceConversion->m_page->chkBlackpointCompensation->isChecked());
+        KoColorConversionTransformation::ConversionFlags conversionFlags;
+        if (dlgColorSpaceConversion->m_page->chkBlackpointCompensation->isChecked()) conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
+        image->convertImageColorSpace(cs, (KoColorConversionTransformation::Intent)dlgColorSpaceConversion->m_intentButtonGroup.checkedId(), conversionFlags);
         QApplication::restoreOverrideCursor();
     }
     delete dlgColorSpaceConversion;
@@ -131,7 +133,9 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
 
         image->undoAdapter()->beginMacro(i18n("Convert Layer Type"));
 
-        KisColorSpaceConvertVisitor visitor(image, layer->colorSpace(), cs, (KoColorConversionTransformation::Intent)dlgColorSpaceConversion->m_intentButtonGroup.checkedId(), dlgColorSpaceConversion->m_page->chkBlackpointCompensation->isChecked() );
+        KoColorConversionTransformation::ConversionFlags conversionFlags;
+        if (dlgColorSpaceConversion->m_page->chkBlackpointCompensation->isChecked()) conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
+        KisColorSpaceConvertVisitor visitor(image, layer->colorSpace(), cs, (KoColorConversionTransformation::Intent)dlgColorSpaceConversion->m_intentButtonGroup.checkedId(), conversionFlags);
         layer->accept(visitor);
 
         image->undoAdapter()->endMacro();

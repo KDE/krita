@@ -151,8 +151,8 @@ public:
     virtual bool convertPixelsTo(const quint8 *src,
                                  quint8 *dst, const KoColorSpace *dstColorSpace,
                                  quint32 numPixels,
-                                 KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
-                                 bool blackpointCompensation = false) const
+                                 KoColorConversionTransformation::Intent renderingIntent,
+                                 KoColorConversionTransformation::ConversionFlags conversionFlags) const
     {
         
         // check whether we have the same profile and color model, but only a different bit
@@ -192,7 +192,7 @@ public:
             }
         }
         
-        return KoColorSpace::convertPixelsTo(src, dst, dstColorSpace, numPixels, renderingIntent, blackpointCompensation);
+        return KoColorSpace::convertPixelsTo(src, dst, dstColorSpace, numPixels, renderingIntent, conversionFlags);
     }
     
 private:

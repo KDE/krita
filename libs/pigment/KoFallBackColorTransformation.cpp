@@ -41,9 +41,9 @@ struct KoFallBackColorTransformation::Private {
 KoFallBackColorTransformation::KoFallBackColorTransformation(const KoColorSpace* _cs, const KoColorSpace* _fallBackCS, KoColorTransformation* _transfo) : d(new Private)
 {
     d->fallBackColorSpace = _fallBackCS;
-    d->csToFallBackCache = new KoCachedColorConversionTransformation(KoColorSpaceRegistry::instance()->colorConversionCache()->cachedConverter(_cs, _fallBackCS));
+    d->csToFallBackCache = new KoCachedColorConversionTransformation(KoColorSpaceRegistry::instance()->colorConversionCache()->cachedConverter(_cs, _fallBackCS, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation));
     d->csToFallBack = d->csToFallBackCache->transformation();
-    d->fallBackToCsCache = new KoCachedColorConversionTransformation(KoColorSpaceRegistry::instance()->colorConversionCache()->cachedConverter(_fallBackCS, _cs));
+    d->fallBackToCsCache = new KoCachedColorConversionTransformation(KoColorSpaceRegistry::instance()->colorConversionCache()->cachedConverter(_fallBackCS, _cs, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation));
     d->fallBackToCs = d->fallBackToCsCache->transformation();
     d->colorTransformation = _transfo;
     d->buff = 0;

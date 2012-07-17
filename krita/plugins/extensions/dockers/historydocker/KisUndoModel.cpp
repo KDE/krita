@@ -234,7 +234,7 @@ void KisUndoModel::addImage(int idx) {
     if( m_stack->count() == idx && !imageMap.contains(currentCommand)) {
         KisImageWSP historyImage = m_canvas->view()->image();
         KisPaintDeviceSP paintDevice = historyImage->projection();
-        QImage image = paintDevice->createThumbnail(32, 32);
+        QImage image = paintDevice->createThumbnail(32, 32, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
         imageMap[currentCommand] = image;
     }
     QList<const KUndo2Command*> list;

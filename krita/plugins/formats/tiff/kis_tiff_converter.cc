@@ -282,7 +282,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
     KoColorTransformation* transform = 0;
     if (profile && !profile->isSuitableForOutput()) {
         dbgFile << "The profile can't be used in krita, need conversion";
-        transform = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId.first, colorSpaceId.second, profile)->createColorConverter(cs);
+        transform = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId.first, colorSpaceId.second, profile)->createColorConverter(cs, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
     }
 
     // Check if there is an alpha channel

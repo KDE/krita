@@ -278,9 +278,9 @@ QRect KisPrescaledProjection::preScale(const QRect & rc)
     return QRect();
 }
 
-void KisPrescaledProjection::setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, bool blackpointCompensation)
+void KisPrescaledProjection::setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
-    m_d->projectionBackend->setMonitorProfile(monitorProfile, renderingIntent, blackpointCompensation);
+    m_d->projectionBackend->setMonitorProfile(monitorProfile, renderingIntent, conversionFlags);
 }
 
 void KisPrescaledProjection::setDisplayFilter(KisDisplayFilter *displayFilter)

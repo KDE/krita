@@ -38,8 +38,8 @@ public:
      */
     virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace,
                                                                        const KoColorSpace* dstColorSpace,
-                                                                       KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
-                                                                       bool blackpointCompensation = false) const = 0;
+                                                                       KoColorConversionTransformation::Intent renderingIntent,
+                                                                       KoColorConversionTransformation::ConversionFlags conversionFlags) const = 0;
 };
 
 #endif

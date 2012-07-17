@@ -88,7 +88,7 @@ bool KisOpenGLImageTextures::imageCanShareTextures(KisImageWSP image)
     return !image->colorSpace()->hasHighDynamicRange() || imageCanUseHDRExposureProgram(image);
 }
 
-KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP image, KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, bool blackpointCompensation)
+KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP image, KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
     KisOpenGL::makeContextCurrent();
 
@@ -97,7 +97,7 @@ KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP im
 
         if (it != imageTexturesMap.end()) {
             KisOpenGLImageTexturesSP textures = it.value();
-            textures->setMonitorProfile(monitorProfile, renderingIntent, blackpointCompensation);
+            textures->setMonitorProfile(monitorProfile, renderingIntent, conversionFlags);
 
             return textures;
         } else {
@@ -283,19 +283,19 @@ void KisOpenGLImageTextures::slotImageSizeChanged(qint32 /*w*/, qint32 /*h*/)
     createImageTextureTiles();
 }
 
-void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, bool blackpointCompensation)
+void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
     if (monitorProfile != m_monitorProfile ||
         renderingIntent != m_renderingIntent ||
-        blackpointCompensation != m_blackpointCompensation ) {
+        conversionFlags!= m_conversionFlags) {
 
         m_monitorProfile = monitorProfile;
         m_renderingIntent = renderingIntent;
-        m_blackpointCompensation = blackpointCompensation;
+        m_conversionFlags = conversionFlags;
 #ifdef __GNUC__
-#warning "FIXME: m_renderingIntent and blackpoint compensation is currently unused"
+#warning "FIXME: m_renderingIntent and conversion flags are currently unused"
 #else
-#pragma WARNING( "FIXME: m_renderingIntent and blackpoint compensation is currently unused") { )
+#pragma WARNING( "FIXME: m_renderingIntent and conversion flags currently unused") { )
 #endif
     }
 }

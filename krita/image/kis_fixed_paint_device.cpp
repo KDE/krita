@@ -82,7 +82,9 @@ quint8* KisFixedPaintDevice::data() const
     return const_cast<quint8*>(m_data.data());
 }
 
-void KisFixedPaintDevice::convertTo(const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, bool blackpointCompensation)
+void KisFixedPaintDevice::convertTo(const KoColorSpace* dstColorSpace,
+                                    KoColorConversionTransformation::Intent renderingIntent,
+                                    KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
     if (*m_colorSpace == *dstColorSpace) {
         return;
@@ -94,7 +96,7 @@ void KisFixedPaintDevice::convertTo(const KoColorSpace* dstColorSpace, KoColorCo
                                   dstColorSpace,
                                   size,
                                   renderingIntent,
-                                  blackpointCompensation);
+                                  conversionFlags);
 
     m_colorSpace = dstColorSpace;
     m_data = dstData;
@@ -117,7 +119,7 @@ void KisFixedPaintDevice::convertFromQImage(const QImage& _image, const QString 
     } else {
         KoColorSpaceRegistry::instance()
         ->colorSpace( RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), srcProfileName)
-        ->convertPixelsTo(image.bits(), data(), colorSpace(), image.width() * image.height());
+        ->convertPixelsTo(image.bits(), data(), colorSpace(), image.width() * image.height(), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
     }
 }
 
@@ -148,7 +150,7 @@ QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, 
 
     if (QRect(x1, y1, w, h) == m_bounds) {
         return colorSpace()->convertToQImage(data(), w, h, dstProfile,
-                                             KoColorConversionTransformation::IntentPerceptual);
+                                             KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
     } else {
         int pSize = pixelSize();
         int deviceWidth = m_bounds.width();
@@ -161,8 +163,7 @@ QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, 
             srcPtr += deviceWidth * pSize;
             dstPtr += w * pSize;
         }
-        QImage image = colorSpace()->convertToQImage(newData, w, h, dstProfile,
-                       KoColorConversionTransformation::IntentPerceptual);
+        QImage image = colorSpace()->convertToQImage(newData, w, h, dstProfile, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
         return image;
     }
 }

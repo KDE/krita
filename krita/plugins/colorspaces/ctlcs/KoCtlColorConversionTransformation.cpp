@@ -36,7 +36,9 @@ struct KoCtlColorConversionTransformation::Private {
     bool srcIsCTL;
 };
 
-KoCtlColorConversionTransformation::KoCtlColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs) : KoColorConversionTransformation(srcCs, dstCs), d(new Private)
+KoCtlColorConversionTransformation::KoCtlColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs)
+    : KoColorConversionTransformation(srcCs, dstCs, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation)
+    , d(new Private)
 {
     dbgPigment << "init KoCtlColorConversionTransformation " << srcCs->id() << " and " << dstCs->id();
     d->program = 0;
@@ -93,10 +95,10 @@ KoCtlColorConversionTransformationFactory::KoCtlColorConversionTransformationFac
 {
 }
 
-KoColorConversionTransformation* KoCtlColorConversionTransformationFactory::createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, bool blackpointCompensation) const
+KoColorConversionTransformation* KoCtlColorConversionTransformationFactory::createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) const
 {
     Q_UNUSED(renderingIntent);
-    Q_UNUSED(blackpointCompensation);
+    Q_UNUSED(conversionFlags);
     Q_ASSERT(canBeSource(srcColorSpace));
     Q_ASSERT(canBeDestination(dstColorSpace));
     dbgPigment << "Creating transformation from " << srcColorSpace->id() << " to " << dstColorSpace->id();

@@ -38,7 +38,7 @@ public:
                                 const KoColorSpace *srcColorSpace,
                                 const KoColorSpace *dstColorSpace,
                                 KoColorConversionTransformation::Intent renderingIntent,
-                                bool blackpointCompensation);
+                                KoColorConversionTransformation::ConversionFlags conversionFlags);
     virtual ~KisColorSpaceConvertVisitor();
 
 public:
@@ -73,7 +73,7 @@ private:
     const KoColorSpace *m_srcColorSpace;
     const KoColorSpace *m_dstColorSpace;
     KoColorConversionTransformation::Intent m_renderingIntent;
-    bool m_blackpointCompensation;
+    KoColorConversionTransformation::ConversionFlags m_conversionFlags;
     QBitArray m_emptyChannelFlags;
 };
 

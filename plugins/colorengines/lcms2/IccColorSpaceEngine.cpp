@@ -36,9 +36,9 @@ class KoLcmsColorConversionTransformation : public KoColorConversionTransformati
 public:
     KoLcmsColorConversionTransformation(const KoColorSpace* srcCs, quint32 srcColorSpaceType, LcmsColorProfileContainer* srcProfile,
                                         const KoColorSpace* dstCs, quint32 dstColorSpaceType, LcmsColorProfileContainer* dstProfile,
-                                        Intent renderingIntent = IntentPerceptual,
-                                        bool blackpointCompensation = false)
-        : KoColorConversionTransformation(srcCs, dstCs, renderingIntent, blackpointCompensation)
+                                        Intent renderingIntent,
+                                        ConversionFlags conversionFlags)
+        : KoColorConversionTransformation(srcCs, dstCs, renderingIntent, conversionFlags)
         , m_transform(0)
     {
         Q_ASSERT(srcCs);
@@ -49,7 +49,7 @@ public:
                                             dstColorSpaceType,
                                             dstProfile,
                                             renderingIntent,
-                                            blackpointCompensation);
+                                            conversionFlags);
         Q_ASSERT(m_transform);
     }
 
@@ -86,19 +86,16 @@ private:
                                   quint32 dstColorSpaceType,
                                   LcmsColorProfileContainer *  dstProfile,
                                   qint32 renderingIntent,
-                                  bool blackpointCompensation) const
+                                  KoColorConversionTransformation::ConversionFlags conversionFlags) const
     {
         int flags = 0;
-// XXX: add more flags here!
-        if (blackpointCompensation) {
-            flags = cmsFLAGS_BLACKPOINTCOMPENSATION;
-        }
+
         cmsHTRANSFORM tf = cmsCreateTransform(srcProfile->lcmsProfile(),
                                               srcColorSpaceType,
                                               dstProfile->lcmsProfile(),
                                               dstColorSpaceType,
                                               renderingIntent,
-                                              flags);
+                                              conversionFlags);
 
         return tf;
     }
@@ -161,7 +158,7 @@ void IccColorSpaceEngine::removeProfile(const QString &filename)
 KoColorConversionTransformation* IccColorSpaceEngine::createColorTransformation(const KoColorSpace* srcColorSpace,
                                                                                 const KoColorSpace* dstColorSpace,
                                                                                 KoColorConversionTransformation::Intent renderingIntent,
-                                                                                bool blackpointCompensation) const
+                                                                                KoColorConversionTransformation::ConversionFlags conversionFlags) const
 {
     Q_ASSERT(srcColorSpace);
     Q_ASSERT(dstColorSpace);
@@ -169,7 +166,7 @@ KoColorConversionTransformation* IccColorSpaceEngine::createColorTransformation(
     return new KoLcmsColorConversionTransformation(
                 srcColorSpace, computeColorSpaceType(srcColorSpace),
                 dynamic_cast<const IccColorProfile*>(srcColorSpace->profile())->asLcms(), dstColorSpace, computeColorSpaceType(dstColorSpace),
-                dynamic_cast<const IccColorProfile*>(dstColorSpace->profile())->asLcms(), renderingIntent, blackpointCompensation);
+                dynamic_cast<const IccColorProfile*>(dstColorSpace->profile())->asLcms(), renderingIntent, conversionFlags);
 
 }
 quint32 IccColorSpaceEngine::computeColorSpaceType(const KoColorSpace* cs) const

@@ -59,7 +59,7 @@ public:
      * @param image The image
      * @param monitorProfile The profile of the display device
      */
-    static KisOpenGLImageTexturesSP getImageTextures(KisImageWSP image, KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, bool blackpointCompensation);
+    static KisOpenGLImageTexturesSP getImageTextures(KisImageWSP image, KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     /**
      * Default constructor.
@@ -75,7 +75,7 @@ public:
      * Set the color profile of the display device.
      * @param profile The color profile of the display device
      */
-    void setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, bool blackpointCompensation);
+    void setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     /**
      * set the (ocio) display filter.
@@ -159,7 +159,7 @@ private:
     QRect m_storedImageBounds;
     const KoColorProfile *m_monitorProfile;
     KoColorConversionTransformation::Intent m_renderingIntent;
-    bool m_blackpointCompensation;
+    KoColorConversionTransformation::ConversionFlags m_conversionFlags;
     GLuint m_backgroundTexture;
 
     KisGLTexturesInfo m_texturesInfo;

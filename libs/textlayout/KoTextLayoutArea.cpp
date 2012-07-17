@@ -863,7 +863,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                     lineHeight = lineRepresentative.charFormat().fontPointSize();
                     qreal linespacing = pStyle.lineSpacing();
                     if (linespacing == 0) { // unset
-                        int percent = pStyle.lineHeightPercent();
+                        qreal percent = pStyle.lineHeightPercent();
                         if (percent != 0)
                             linespacing = lineHeight * ((percent - 100) / 100.0);
                         else if (linespacing == 0)
@@ -1634,7 +1634,7 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
     } else {
         qreal lineSpacing = format.doubleProperty(KoParagraphStyle::LineSpacing);
         if (lineSpacing == 0.0) { // unset
-            int percent = format.intProperty(KoParagraphStyle::PercentLineHeight);
+            qreal percent = format.doubleProperty(KoParagraphStyle::PercentLineHeight);
             if (percent != 0) {
                 height *= percent / 100.0;
             } else {

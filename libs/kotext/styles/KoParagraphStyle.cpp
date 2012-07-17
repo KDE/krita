@@ -360,7 +360,7 @@ void KoParagraphStyle::unapplyStyle(QTextBlock &block) const
 
 }
 
-void KoParagraphStyle::setLineHeightPercent(int lineHeight)
+void KoParagraphStyle::setLineHeightPercent(qreal lineHeight)
 {
     setProperty(PercentLineHeight, lineHeight);
     setProperty(FixedLineHeight, 0.0);
@@ -368,7 +368,7 @@ void KoParagraphStyle::setLineHeightPercent(int lineHeight)
     remove(NormalLineHeight);
 }
 
-int KoParagraphStyle::lineHeightPercent() const
+qreal KoParagraphStyle::lineHeightPercent() const
 {
     return propertyInt(PercentLineHeight);
 }
@@ -1061,7 +1061,7 @@ bool KoParagraphStyle::isListHeader() const
 }
 
 KoListStyle *KoParagraphStyle::listStyle() const
-{    
+{
     QVariant variant = value(ParagraphListStyleId);
     if (variant.isNull())
         return 0;
@@ -1236,7 +1236,7 @@ void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContex
     }
 
     QString family = element->attributeNS(KoXmlNS::style, "family", "paragraph");
- 
+
     context.styleStack().save();
     if (loadParents) {
         context.addStyles(element, family.toLocal8Bit().constData());   // Load all parent
@@ -1348,9 +1348,9 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     QString lineHeight(styleStack.property(KoXmlNS::fo, "line-height"));
     if (!lineHeight.isEmpty()) {
         if (lineHeight != "normal") {
-            if (lineHeight.indexOf('%') > -1) { // percent value is between 50% and 200%
+            if (lineHeight.indexOf('%') > -1) {
                 bool ok;
-                const int percent = lineHeight.remove('%').toInt(&ok);
+                const qreal percent = lineHeight.remove('%').toDouble(&ok);
                 if (ok) {
                     setLineHeightPercent(percent);
                 }
@@ -1611,7 +1611,7 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
             int l = length.toInt();
             if (l > 0) // somefiles may use this to turn dropcaps off
                 setDropCapsLength(length.toInt());
-            else 
+            else
                 setDropCaps(false);
         }
         const QString lines = dropCap.attributeNS(KoXmlNS::style, "lines", QString("1"));

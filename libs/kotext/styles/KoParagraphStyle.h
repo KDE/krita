@@ -207,9 +207,9 @@ public:
      *  be used instead of this value.
      * @see setLineSpacingFromFont
      */
-    void setLineHeightPercent(int lineHeight);
+    void setLineHeightPercent(qreal lineHeight);
     /// @see setLineHeightPercent
-    int lineHeightPercent() const;
+    qreal lineHeightPercent() const;
 
     /**
      * Sets the line height to a specific pt-based height, ignoring the font size.

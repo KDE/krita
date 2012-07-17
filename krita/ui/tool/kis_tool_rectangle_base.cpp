@@ -126,7 +126,7 @@ void KisToolRectangleBase::paintRectangle(QPainter& gc, const QRect&)
     Q_ASSERT(canvas() && currentImage());
 
     QPainterPath path;
-    path.addRect(QRectF(pixelToView(m_dragStart), pixelToView(m_dragEnd)));
+    path.addRect(pixelToView(QRectF(m_dragStart, m_dragEnd).toRect()));
     paintToolOutline(&gc, path);
 }
 

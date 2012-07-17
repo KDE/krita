@@ -37,7 +37,8 @@ public:
     KisColorSpaceConvertVisitor(KisImageWSP image,
                                 const KoColorSpace *srcColorSpace,
                                 const KoColorSpace *dstColorSpace,
-                                KoColorConversionTransformation::Intent renderingIntent);
+                                KoColorConversionTransformation::Intent renderingIntent,
+                                bool blackpointCompensation);
     virtual ~KisColorSpaceConvertVisitor();
 
 public:
@@ -72,6 +73,7 @@ private:
     const KoColorSpace *m_srcColorSpace;
     const KoColorSpace *m_dstColorSpace;
     KoColorConversionTransformation::Intent m_renderingIntent;
+    bool m_blackpointCompensation;
     QBitArray m_emptyChannelFlags;
 };
 

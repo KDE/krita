@@ -175,7 +175,8 @@ public slots:
     void startUpdateInPatches(QRect imageRect);
 
     void setMonitorProfile(KoColorProfile* monitorProfile,
-                           KoColorConversionTransformation::Intent renderingIntent);
+                           KoColorConversionTransformation::Intent renderingIntent,
+                           bool blackpointCompensation);
 
 
 

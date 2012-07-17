@@ -299,7 +299,8 @@ quint8 KoAlphaColorSpace::difference(const quint8 *src1, const quint8 *src2) con
 bool KoAlphaColorSpace::convertPixelsTo(const quint8 *src,
                                         quint8 *dst, const KoColorSpace * dstColorSpace,
                                         quint32 numPixels,
-                                        KoColorConversionTransformation::Intent /*renderingIntent*/) const
+                                        KoColorConversionTransformation::Intent /*renderingIntent*/,
+                                        bool /*blackpointCompensation*/) const
 {
     // No lcms trickery here, we are only a opacity channel
     qint32 size = dstColorSpace->pixelSize();
@@ -347,7 +348,9 @@ void KoAlphaColorSpace::convolveColors(quint8** colors, qreal * kernelValues, qu
 
 
 QImage KoAlphaColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 height,
-        const KoColorProfile *  /*dstProfile*/, KoColorConversionTransformation::Intent /*renderingIntent*/) const
+                                          const KoColorProfile *  /*dstProfile*/,
+                                          KoColorConversionTransformation::Intent /*renderingIntent*/,
+                                          bool /*blackpointCompensation*/) const
 {
     QImage img(width, height, QImage::Format_Indexed8);
     QVector<QRgb> table;

@@ -36,18 +36,20 @@ class KoLcmsColorConversionTransformation : public KoColorConversionTransformati
 public:
     KoLcmsColorConversionTransformation(const KoColorSpace* srcCs, quint32 srcColorSpaceType, LcmsColorProfileContainer* srcProfile,
                                         const KoColorSpace* dstCs, quint32 dstColorSpaceType, LcmsColorProfileContainer* dstProfile,
-                                        Intent renderingIntent = IntentPerceptual)
-        : KoColorConversionTransformation(srcCs, dstCs, renderingIntent), m_transform(0)
+                                        Intent renderingIntent = IntentPerceptual,
+                                        bool blackpointCompensation)
+        : KoColorConversionTransformation(srcCs, dstCs, renderingIntent, blackpointCompensation)
+        , m_transform(0)
     {
         Q_ASSERT(srcCs);
         Q_ASSERT(dstCs);
 
-        m_transform = this->createTransform(
-                    srcColorSpaceType,
-                    srcProfile,
-                    dstColorSpaceType,
-                    dstProfile,
-                    renderingIntent);
+        m_transform = this->createTransform(srcColorSpaceType,
+                                            srcProfile,
+                                            dstColorSpaceType,
+                                            dstProfile,
+                                            renderingIntent,
+                                            blackpointCompensation);
         Q_ASSERT(m_transform);
     }
 
@@ -78,18 +80,17 @@ public:
 
     }
 private:
+
     cmsHTRANSFORM createTransform(quint32 srcColorSpaceType,
                                   LcmsColorProfileContainer *  srcProfile,
                                   quint32 dstColorSpaceType,
                                   LcmsColorProfileContainer *  dstProfile,
-                                  qint32 renderingIntent) const
+                                  qint32 renderingIntent,
+                                  bool blackpointCompensation) const
     {
-        KConfigGroup cfg = KGlobal::config()->group("");
-        bool bpCompensation = cfg.readEntry("useBlackPointCompensation", false);
-
         int flags = 0;
-
-        if (bpCompensation) {
+// XXX: add more flags here!
+        if (blackpointCompensation) {
             flags = cmsFLAGS_BLACKPOINTCOMPENSATION;
         }
         cmsHTRANSFORM tf = cmsCreateTransform(srcProfile->lcmsProfile(),
@@ -157,7 +158,10 @@ void IccColorSpaceEngine::removeProfile(const QString &filename)
     }
 }
 
-KoColorConversionTransformation* IccColorSpaceEngine::createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent) const
+KoColorConversionTransformation* IccColorSpaceEngine::createColorTransformation(const KoColorSpace* srcColorSpace,
+                                                                                const KoColorSpace* dstColorSpace,
+                                                                                KoColorConversionTransformation::Intent renderingIntent,
+                                                                                bool blackpointCompensation) const
 {
     Q_ASSERT(srcColorSpace);
     Q_ASSERT(dstColorSpace);
@@ -165,7 +169,7 @@ KoColorConversionTransformation* IccColorSpaceEngine::createColorTransformation(
     return new KoLcmsColorConversionTransformation(
                 srcColorSpace, computeColorSpaceType(srcColorSpace),
                 dynamic_cast<const IccColorProfile*>(srcColorSpace->profile())->asLcms(), dstColorSpace, computeColorSpaceType(dstColorSpace),
-                dynamic_cast<const IccColorProfile*>(dstColorSpace->profile())->asLcms(), renderingIntent);
+                dynamic_cast<const IccColorProfile*>(dstColorSpace->profile())->asLcms(), renderingIntent, blackpointCompensation);
 
 }
 quint32 IccColorSpaceEngine::computeColorSpaceType(const KoColorSpace* cs) const

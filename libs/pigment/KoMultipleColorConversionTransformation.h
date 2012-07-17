@@ -41,7 +41,7 @@ public:
      * @param srcCs the first color space in the chain
      * @param dstCs the last color space in the chain
      */
-    KoMultipleColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs, Intent renderingIntent = IntentPerceptual);
+    KoMultipleColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs, Intent renderingIntent = IntentPerceptual, bool blackpointCompensation = false);
     ~KoMultipleColorConversionTransformation();
     /**
      * Add a transformation to the chain.

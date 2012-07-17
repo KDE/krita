@@ -46,7 +46,7 @@ public:
         IntentAbsoluteColorimetric = 3
     };
 public:
-    KoColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs, Intent renderingIntent = IntentPerceptual);
+    KoColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs, Intent renderingIntent = IntentPerceptual, bool blackpointCompensation);
     ~KoColorConversionTransformation();
 public:
     /**
@@ -61,7 +61,13 @@ public:
      * @return the rendering intent of this transformation (this is only useful
      * for ICC transformations)
      */
-    Intent renderingIntent();
+    Intent renderingIntent() const;
+
+    /**
+     * @return whether blackpointcompensation should be enabled for this transform
+     */
+    bool blackpointCompensation() const;
+
     /**
      * perform the color conversion between two buffers.
      * @param nPixels the number of pixels in the buffers.

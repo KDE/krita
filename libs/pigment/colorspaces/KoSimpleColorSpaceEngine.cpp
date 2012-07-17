@@ -73,8 +73,12 @@ KoSimpleColorSpaceEngine::~KoSimpleColorSpaceEngine()
 {
 }
 
-KoColorConversionTransformation* KoSimpleColorSpaceEngine::createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent) const
+KoColorConversionTransformation* KoSimpleColorSpaceEngine::createColorTransformation(const KoColorSpace* srcColorSpace,
+                                                                                     const KoColorSpace* dstColorSpace,
+                                                                                     KoColorConversionTransformation::Intent renderingIntent,
+                                                                                     bool blackpointCompensation) const
 {
     Q_UNUSED(renderingIntent);
+    Q_UNUSED(blackpointCompensation);
     return new KoSimpleColorConversionTransformation(srcColorSpace, dstColorSpace);
 }

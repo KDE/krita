@@ -112,7 +112,7 @@ public:
 
     }
 
-    QImage createThumbnail(qint32 w, qint32 h, KoColorConversionTransformation::Intent renderingIntent) {
+    QImage createThumbnail(qint32 w, qint32 h, KoColorConversionTransformation::Intent renderingIntent, bool blackpointCompensation) {
         QImage thumbnail;
 
         if(m_data->m_thumbnailsValid) {
@@ -124,7 +124,7 @@ public:
         }
 
         if(thumbnail.isNull()) {
-            thumbnail = m_paintDevice->createThumbnail(w, h, QRect(), renderingIntent);
+            thumbnail = m_paintDevice->createThumbnail(w, h, QRect(), renderingIntent, blackpointCompensation);
             cacheThumbnail(w, h, thumbnail);
         }
 
@@ -559,10 +559,10 @@ bool KisPaintDevice::read(KoStore *store)
     return retval;
 }
 
-KUndo2Command* KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent)
+KUndo2Command* KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, bool blackpointCompensation)
 {
     m_d->cache.invalidate();
-    dbgImage << this << colorSpace()->id() << dstColorSpace->id() << renderingIntent;
+    dbgImage << this << colorSpace()->id() << dstColorSpace->id() << renderingIntent << blackpointCompensation;
     if (*colorSpace() == *dstColorSpace) {
         return 0;
     }
@@ -598,7 +598,7 @@ KUndo2Command* KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoC
             const quint8 *srcData = srcIt->oldRawData();
             quint8 *dstData = dstIt->rawData();
 
-            m_d->colorSpace->convertPixelsTo(srcData, dstData, dstColorSpace, columns, renderingIntent);
+            m_d->colorSpace->convertPixelsTo(srcData, dstData, dstColorSpace, columns, renderingIntent, blackpointCompensation);
 
             column += columns;
             columnsRemaining -= columns;
@@ -668,7 +668,7 @@ void KisPaintDevice::convertFromQImage(const QImage& _image, const KoColorProfil
     m_d->cache.invalidate();
 }
 
-QImage KisPaintDevice::convertToQImage(const KoColorProfile *dstProfile, KoColorConversionTransformation::Intent renderingIntent) const
+QImage KisPaintDevice::convertToQImage(const KoColorProfile *dstProfile, KoColorConversionTransformation::Intent renderingIntent, bool blackpointCompensation) const
 {
     qint32 x1;
     qint32 y1;
@@ -684,10 +684,10 @@ QImage KisPaintDevice::convertToQImage(const KoColorProfile *dstProfile, KoColor
     w = rc.width();
     h = rc.height();
 
-    return convertToQImage(dstProfile, x1, y1, w, h, renderingIntent);
+    return convertToQImage(dstProfile, x1, y1, w, h, renderingIntent, blackpointCompensation);
 }
 
-QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint32 x1, qint32 y1, qint32 w, qint32 h, KoColorConversionTransformation::Intent renderingIntent) const
+QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint32 x1, qint32 y1, qint32 w, qint32 h, KoColorConversionTransformation::Intent renderingIntent, bool blackpointCompensation) const
 {
 
     if (w < 0)
@@ -709,7 +709,7 @@ QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint3
     // XXX: Is this really faster than converting line by line and building the QImage directly?
     //      This copies potentially a lot of data.
     readBytes(data, x1, y1, w, h);
-    QImage image = colorSpace()->convertToQImage(data, w, h, dstProfile, renderingIntent);
+    QImage image = colorSpace()->convertToQImage(data, w, h, dstProfile, renderingIntent, blackpointCompensation);
     delete[] data;
 
     return image;
@@ -761,16 +761,16 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h, QRect
 
 }
 
-QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h, QRect rect, KoColorConversionTransformation::Intent renderingIntent)
+QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h, QRect rect, KoColorConversionTransformation::Intent renderingIntent, bool blackpointCompensation)
 {
     KisPaintDeviceSP dev = createThumbnailDevice(w, h, rect);
-    QImage thumbnail = dev->convertToQImage(KoColorSpaceRegistry::instance()->rgb8()->profile(), renderingIntent);
+    QImage thumbnail = dev->convertToQImage(KoColorSpaceRegistry::instance()->rgb8()->profile(), renderingIntent, blackpointCompensation);
     return thumbnail;
 }
 
-QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h, KoColorConversionTransformation::Intent renderingIntent)
+QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h, KoColorConversionTransformation::Intent renderingIntent, bool blackpointCompensation)
 {
-    return m_d->cache.createThumbnail(w, h, renderingIntent);
+    return m_d->cache.createThumbnail(w, h, renderingIntent, blackpointCompensation);
 }
 
 KisHLineIteratorSP KisPaintDevice::createHLineIteratorNG(qint32 x, qint32 y, qint32 w)

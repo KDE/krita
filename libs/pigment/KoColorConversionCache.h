@@ -44,7 +44,7 @@ public:
      * @param src source color space
      * @param dst destination color space
      */
-    KoCachedColorConversionTransformation cachedConverter(const KoColorSpace* src, const KoColorSpace* dst, KoColorConversionTransformation::Intent _renderingIntent = KoColorConversionTransformation::IntentPerceptual);
+    KoCachedColorConversionTransformation cachedConverter(const KoColorSpace* src, const KoColorSpace* dst, KoColorConversionTransformation::Intent _renderingIntent = KoColorConversionTransformation::IntentPerceptual, bool blackpointCompensation);
 
     /**
      * This function is called by the destructor of the color space to

@@ -88,7 +88,7 @@ bool KisOpenGLImageTextures::imageCanShareTextures(KisImageWSP image)
     return !image->colorSpace()->hasHighDynamicRange() || imageCanUseHDRExposureProgram(image);
 }
 
-KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP image, KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent)
+KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP image, KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, bool blackpointCompensation)
 {
     KisOpenGL::makeContextCurrent();
 
@@ -97,7 +97,7 @@ KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP im
 
         if (it != imageTexturesMap.end()) {
             KisOpenGLImageTexturesSP textures = it.value();
-            textures->setMonitorProfile(monitorProfile, renderingIntent);
+            textures->setMonitorProfile(monitorProfile, renderingIntent, blackpointCompensation);
 
             return textures;
         } else {
@@ -283,18 +283,19 @@ void KisOpenGLImageTextures::slotImageSizeChanged(qint32 /*w*/, qint32 /*h*/)
     createImageTextureTiles();
 }
 
-void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent)
+void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, bool blackpointCompensation)
 {
     if (monitorProfile != m_monitorProfile ||
-        renderingIntent != m_renderingIntent) {
+        renderingIntent != m_renderingIntent ||
+        blackpointCompensation != m_blackpointCompensation ) {
 
         m_monitorProfile = monitorProfile;
         m_renderingIntent = renderingIntent;
-
+        m_blackpointCompensation = blackpointCompensation;
 #ifdef __GNUC__
-#warning "FIXME: m_renderingIntent is currently unused"
+#warning "FIXME: m_renderingIntent and blackpoint compensation is currently unused"
 #else
-#pragma WARNING( "FIXME: m_renderingIntent is currently unused") { )
+#pragma WARNING( "FIXME: m_renderingIntent and blackpoint compensation is currently unused") { )
 #endif
     }
 }

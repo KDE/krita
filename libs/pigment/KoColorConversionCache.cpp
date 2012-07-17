@@ -26,29 +26,49 @@
 #include <KoColorSpace.h>
 
 struct KoColorConversionCacheKey {
-    KoColorConversionCacheKey(const KoColorSpace* _src, const KoColorSpace* _dst, KoColorConversionTransformation::Intent _renderingIntent) : src(_src), dst(_dst), renderingIntent(_renderingIntent) {
+
+    KoColorConversionCacheKey(const KoColorSpace* _src,
+                              const KoColorSpace* _dst,
+                              KoColorConversionTransformation::Intent _renderingIntent,
+                              bool _blackpointCompensation = false)
+        : src(_src)
+        , dst(_dst)
+        , renderingIntent(_renderingIntent)
+        , blackpointCompensation(_blackpointCompensation)
+    {
     }
+
+    bool operator==(const KoColorConversionCacheKey& rhs) const {
+        return (*src == *(rhs.src)) && (*dst == *(rhs.dst))
+                && (renderingIntent == rhs.renderingIntent)
+                && (blackpointCompensation == rhs.blackpointCompensation);
+    }
+
     const KoColorSpace* src;
     const KoColorSpace* dst;
     KoColorConversionTransformation::Intent renderingIntent;
-    bool operator==(const KoColorConversionCacheKey& rhs) const {
-        return (*src == *(rhs.src)) && (*dst == *(rhs.dst)) && (renderingIntent == rhs.renderingIntent);
-    }
+    bool blackpointCompensation;
 };
 
 uint qHash(const KoColorConversionCacheKey& key)
 {
-    return qHash(key.src) + qHash(key.dst) + qHash(key.renderingIntent);
+    return qHash(key.src) + qHash(key.dst) + qHash(key.renderingIntent) + qHash(key.blackpointCompensation);
 }
 
 struct KoColorConversionCache::CachedTransformation {
-    CachedTransformation(KoColorConversionTransformation* _transfo) : transfo(_transfo), use(0) {}
+
+    CachedTransformation(KoColorConversionTransformation* _transfo)
+        : transfo(_transfo), use(0)
+    {}
+
     ~CachedTransformation() {
         delete transfo;
     }
+
     bool available() {
         return use == 0;
     }
+
     KoColorConversionTransformation* transfo;
     int use;
 };
@@ -71,10 +91,13 @@ KoColorConversionCache::~KoColorConversionCache()
     delete d;
 }
 
-KoCachedColorConversionTransformation KoColorConversionCache::cachedConverter(const KoColorSpace* src, const KoColorSpace* dst, KoColorConversionTransformation::Intent _renderingIntent)
+KoCachedColorConversionTransformation KoColorConversionCache::cachedConverter(const KoColorSpace* src,
+                                                                              const KoColorSpace* dst,
+                                                                              KoColorConversionTransformation::Intent _renderingIntent,
+                                                                              bool blackpointCompensation)
 {
     QMutexLocker lock(&d->cacheMutex);
-    KoColorConversionCacheKey key(src, dst, _renderingIntent);
+    KoColorConversionCacheKey key(src, dst, _renderingIntent, blackpointCompensation);
     QList< CachedTransformation* > cachedTransfos = d->cache.values(key);
     if (cachedTransfos.size() != 0) {
         foreach(CachedTransformation* ct, cachedTransfos) {
@@ -85,7 +108,7 @@ KoCachedColorConversionTransformation KoColorConversionCache::cachedConverter(co
             }
         }
     }
-    KoColorConversionTransformation* transfo = src->createColorConverter(dst, _renderingIntent);
+    KoColorConversionTransformation* transfo = src->createColorConverter(dst, _renderingIntent, blackpointCompensation);
     CachedTransformation* ct = new CachedTransformation(transfo);
     d->cache.insert(key, ct);
     return KoCachedColorConversionTransformation(this, ct);

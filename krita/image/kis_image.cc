@@ -690,7 +690,7 @@ void KisImage::shear(double angleX, double angleY)
               angleX, angleY, QPointF());
 }
 
-void KisImage::convertImageColorSpace(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent)
+void KisImage::convertImageColorSpace(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, bool blackpointCompensation)
 {
     if (*m_d->colorSpace == *dstColorSpace) return;
 
@@ -700,7 +700,7 @@ void KisImage::convertImageColorSpace(const KoColorSpace *dstColorSpace, KoColor
     undoAdapter()->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
     undoAdapter()->addCommand(new KisImageSetProjectionColorSpaceCommand(KisImageWSP(this), dstColorSpace));
 
-    KisColorSpaceConvertVisitor visitor(this, srcColorSpace, dstColorSpace, renderingIntent);
+    KisColorSpaceConvertVisitor visitor(this, srcColorSpace, dstColorSpace, renderingIntent, blackpointCompensation);
     m_d->rootLayer->accept(visitor);
 
     undoAdapter()->addCommand(new KisImageLockCommand(KisImageWSP(this), false));

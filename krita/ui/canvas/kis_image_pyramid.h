@@ -40,7 +40,7 @@ public:
 
     void setImage(KisImageWSP newImage);
     void setImageSize(qint32 w, qint32 h);
-    void setMonitorProfile(const KoColorProfile* monitorProfile, KoColorConversionTransformation::Intent renderingIntent);
+    void setMonitorProfile(const KoColorProfile* monitorProfile, KoColorConversionTransformation::Intent renderingIntent, bool blackpointCompensation);
 
     /// we don't own the display filter, it's the docker that owns it!
     void setDisplayFilter(KisDisplayFilter *displayFilter);
@@ -76,6 +76,7 @@ public:
     void alignSourceRect(QRect& rect, qreal scale);
 
 private:
+
     void retrieveImageData(const QRect &rect);
     void rebuildPyramid();
     void clearPyramid();
@@ -121,7 +122,7 @@ private:
     KisDisplayFilter *m_displayFilter;
 
     KoColorConversionTransformation::Intent m_renderingIntent;
-
+    bool m_blackpointCompensation;
 
 
     /**

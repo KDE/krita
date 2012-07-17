@@ -109,7 +109,8 @@ KisImagePyramid::~KisImagePyramid()
 }
 
 void KisImagePyramid::setMonitorProfile(const KoColorProfile* monitorProfile,
-                                        KoColorConversionTransformation::Intent renderingIntent)
+                                        KoColorConversionTransformation::Intent renderingIntent,
+                                        bool blackpointCompensation)
 {
     m_monitorProfile = monitorProfile;
     /**
@@ -118,6 +119,7 @@ void KisImagePyramid::setMonitorProfile(const KoColorProfile* monitorProfile,
      */
     m_monitorColorSpace = KoColorSpaceRegistry::instance()->rgb8(monitorProfile);
     m_renderingIntent = renderingIntent;
+    m_blackpointCompensation = blackpointCompensation;
 
     rebuildPyramid();
 }
@@ -200,7 +202,7 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
     }
 
     quint8 *dstBytes = m_monitorColorSpace->allocPixelBuffer(numPixels);
-    projectionCs->convertPixelsTo(originalBytes, dstBytes, m_monitorColorSpace, numPixels, m_renderingIntent);
+    projectionCs->convertPixelsTo(originalBytes, dstBytes, m_monitorColorSpace, numPixels, m_renderingIntent, m_blackpointCompensation);
 
     m_pyramid[ORIGINAL_INDEX]->writeBytes(dstBytes, rect);
 
@@ -223,15 +225,15 @@ void KisImagePyramid::recalculateCache(KisPPUpdateInfoSP info)
     }
 
 #ifdef DEBUG_PYRAMID
-    QImage image = m_pyramid[ORIGINAL_INDEX]->convertToQImage(m_monitorProfile, m_renderingIntent);
+    QImage image = m_pyramid[ORIGINAL_INDEX]->convertToQImage(m_monitorProfile, m_renderingIntent, m_blackpointCompensation);
     image.save("./PYRAMID_BASE.png");
 
-    image = m_pyramid[1]->convertToQImage(m_monitorProfile, m_renderingIntent);
+    image = m_pyramid[1]->convertToQImage(m_monitorProfile, m_renderingIntent, m_blackpointCompensation);
     image.save("./LEVEL1.png");
 
-    image = m_pyramid[2]->convertToQImage(m_monitorProfile, m_renderingIntent);
+    image = m_pyramid[2]->convertToQImage(m_monitorProfile, m_renderingIntent, m_blackpointCompensation);
     image.save("./LEVEL2.png");
-    image = m_pyramid[3]->convertToQImage(m_monitorProfile, m_renderingIntent);
+    image = m_pyramid[3]->convertToQImage(m_monitorProfile, m_renderingIntent, m_blackpointCompensation);
     image.save("./LEVEL3.png");
 #endif
 }

@@ -98,6 +98,7 @@ public:
     KoShapeManager *shapeManager;
     KoColorProfile *monitorProfile;
     KoColorConversionTransformation::Intent renderingIntent;
+    bool blackpointCompensation;
     bool currentCanvasIsOpenGL;
     bool currentCanvasUsesOpenGLShaders;
     KoToolProxy *toolProxy;
@@ -337,7 +338,7 @@ void KisCanvas2::createQPainterCanvas()
     KisQPainterCanvas * canvasWidget = new KisQPainterCanvas(this, m_d->coordinatesConverter, m_d->view);
     m_d->prescaledProjection = new KisPrescaledProjection();
     m_d->prescaledProjection->setCoordinatesConverter(m_d->coordinatesConverter);
-    m_d->prescaledProjection->setMonitorProfile(m_d->monitorProfile, m_d->renderingIntent);
+    m_d->prescaledProjection->setMonitorProfile(m_d->monitorProfile, m_d->renderingIntent, m_d->blackpointCompensation);
     canvasWidget->setPrescaledProjection(m_d->prescaledProjection);
     setCanvasWidget(canvasWidget);
 }
@@ -348,7 +349,7 @@ void KisCanvas2::createOpenGLCanvas()
     m_d->currentCanvasIsOpenGL = true;
 
     // XXX: The image isn't done loading here!
-    m_d->openGLImageTextures = KisOpenGLImageTextures::getImageTextures(m_d->view->image(), m_d->monitorProfile, m_d->renderingIntent);
+    m_d->openGLImageTextures = KisOpenGLImageTextures::getImageTextures(m_d->view->image(), m_d->monitorProfile, m_d->renderingIntent, m_d->blackpointCompensation);
     KisOpenGLCanvas2 * canvasWidget = new KisOpenGLCanvas2(this, m_d->coordinatesConverter, m_d->view, m_d->openGLImageTextures);
     m_d->currentCanvasUsesOpenGLShaders = m_d->openGLImageTextures->usingHDRExposureProgram();
     setCanvasWidget(canvasWidget);
@@ -362,6 +363,7 @@ void KisCanvas2::createCanvas(bool useOpenGL)
     KisConfig cfg;
     const KoColorProfile *profile = m_d->view->resourceProvider()->currentDisplayProfile();
     m_d->monitorProfile = const_cast<KoColorProfile*>(profile);
+    m_d->blackpointCompensation = cfg.useBlackPointCompensation();
     m_d->renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();
 
     if (useOpenGL) {
@@ -477,26 +479,28 @@ void KisCanvas2::startUpdateInPatches(QRect imageRect)
 }
 
 void KisCanvas2::setMonitorProfile(KoColorProfile* monitorProfile,
-                                   KoColorConversionTransformation::Intent renderingIntent)
+                                   KoColorConversionTransformation::Intent renderingIntent,
+                                   bool blackpointCompensation)
 {
     KisImageWSP image = this->image();
 
     m_d->monitorProfile = monitorProfile;
     m_d->renderingIntent = renderingIntent;
+    m_d->blackpointCompensation = blackpointCompensation;
 
     image->barrierLock();
 
     if (m_d->currentCanvasIsOpenGL) {
 #ifdef HAVE_OPENGL
         Q_ASSERT(m_d->openGLImageTextures);
-        m_d->openGLImageTextures->setMonitorProfile(monitorProfile, renderingIntent);
+        m_d->openGLImageTextures->setMonitorProfile(monitorProfile, renderingIntent, blackpointCompensation);
 
 #else
         Q_ASSERT_X(0, "KisCanvas2::setMonitorProfile", "Bad use of setMonitorProfile(). It shouldn't have happened =(");
 #endif
     } else {
         Q_ASSERT(m_d->prescaledProjection);
-        m_d->prescaledProjection->setMonitorProfile(monitorProfile, renderingIntent);
+        m_d->prescaledProjection->setMonitorProfile(monitorProfile, renderingIntent, blackpointCompensation);
     }
 
     startUpdateInPatches(image->bounds());

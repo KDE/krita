@@ -82,7 +82,7 @@ quint8* KisFixedPaintDevice::data() const
     return const_cast<quint8*>(m_data.data());
 }
 
-void KisFixedPaintDevice::convertTo(const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent)
+void KisFixedPaintDevice::convertTo(const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, bool blackpointCompensation)
 {
     if (*m_colorSpace == *dstColorSpace) {
         return;
@@ -93,7 +93,8 @@ void KisFixedPaintDevice::convertTo(const KoColorSpace* dstColorSpace, KoColorCo
     m_colorSpace->convertPixelsTo(data(), dstData.data(),
                                   dstColorSpace,
                                   size,
-                                  renderingIntent);
+                                  renderingIntent,
+                                  blackpointCompensation);
 
     m_colorSpace = dstColorSpace;
     m_data = dstData;
@@ -138,7 +139,7 @@ QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile)
 QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint32 x1, qint32 y1, qint32 w, qint32 h)
 {
     Q_ASSERT( m_bounds.contains(QRect(x1,y1,w,h)) );
-    
+
     if (w < 0)
         return QImage();
 
@@ -197,7 +198,7 @@ void KisFixedPaintDevice::fill(qint32 x, qint32 y, qint32 w, qint32 h, const qui
             memcpy(dabPointer, fillPixel, pixelSize);
             dabPointer += pixelSize;
         }
-        
+
     } else {
         int deviceWidth = bounds().width();
         quint8* rowPointer = dabPointer + ((y - bounds().y()) * deviceWidth + (x - bounds().x())) * pixelSize;
@@ -227,8 +228,8 @@ void KisFixedPaintDevice::readBytes(quint8* dstData, qint32 x, qint32 y, qint32 
 
     if (rc == m_bounds) {
             memcpy(dstData, dabPointer, pixelSize * w * h);
-    } 
-    else 
+    }
+    else
     {
         int deviceWidth = bounds().width();
         quint8* rowPointer = dabPointer + ((y - bounds().y()) * deviceWidth + (x - bounds().x())) * pixelSize;
@@ -245,14 +246,14 @@ void KisFixedPaintDevice::mirror(bool horizontal, bool vertical)
     if (!horizontal && !vertical){
         return;
     }
-    
+
     int pixelSize = m_colorSpace->pixelSize();
     int w = m_bounds.width();
     int h = m_bounds.height();
 
     if (horizontal){
         int rowSize = pixelSize * w;
-        
+
         quint8 * dabPointer = data();
         quint8 * row = new quint8[ rowSize ];
         quint8 * mirror = 0;
@@ -267,28 +268,28 @@ void KisFixedPaintDevice::mirror(bool horizontal, bool vertical)
                 mirror -= pixelSize;
             }
         }
-        
+
         delete [] row;
     }
 
     if (vertical){
         int rowsToMove = h / 2;
         int rowSize = pixelSize * w;
-        
+
         quint8 * startRow = data();
         quint8 * endRow = data() + (h-1) * w * pixelSize;
         quint8 * row = new quint8[ rowSize ];
-        
+
         for (int y = 0; y < rowsToMove; y++){
             memcpy(row, startRow, rowSize);
             memcpy(startRow, endRow, rowSize);
             memcpy(endRow, row, rowSize);
-            
+
             startRow += rowSize;
             endRow -= rowSize;
         }
-     
+
         delete [] row;
     }
-    
+
 }

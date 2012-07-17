@@ -224,12 +224,12 @@ void KoColorSpace::fromRgbA16(const quint8 * src, quint8 * dst, quint32 nPixels)
     fromRgbA16Converter()->transform(src, dst, nPixels);
 }
 
-KoColorConversionTransformation* KoColorSpace::createColorConverter(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent) const
+KoColorConversionTransformation* KoColorSpace::createColorConverter(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, bool blackpointCompensation) const
 {
     if (*this == *dstColorSpace) {
         return new KoCopyColorConversionTransformation(this);
     } else {
-        return KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(this, dstColorSpace, renderingIntent);
+        return KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(this, dstColorSpace, renderingIntent, blackpointCompensation);
     }
 }
 
@@ -237,12 +237,13 @@ bool KoColorSpace::convertPixelsTo(const quint8 * src,
                                    quint8 * dst,
                                    const KoColorSpace * dstColorSpace,
                                    quint32 numPixels,
-                                   KoColorConversionTransformation::Intent renderingIntent) const
+                                   KoColorConversionTransformation::Intent renderingIntent,
+                                   bool blackpointCompensation) const
 {
     if (*this == *dstColorSpace) {
         memcpy(dst, src, numPixels * sizeof(quint8) * pixelSize());
     } else {
-        KoCachedColorConversionTransformation cct = KoColorSpaceRegistry::instance()->colorConversionCache()->cachedConverter(this, dstColorSpace, renderingIntent);
+        KoCachedColorConversionTransformation cct = KoColorSpaceRegistry::instance()->colorConversionCache()->cachedConverter(this, dstColorSpace, renderingIntent, blackpointCompensation);
         cct.transformation()->transform(src, dst, numPixels);
     }
     return true;
@@ -320,20 +321,20 @@ void KoColorSpace::bitBlt(quint8* dst,
 void KoColorSpace::bitBlt(const KoColorSpace* srcSpace, const KoCompositeOp::ParameterInfo& params, const KoCompositeOp* op) const
 {
     Q_ASSERT_X(*op->colorSpace() == *this, "KoColorSpace::bitBlt", QString("Composite op is for color space %1 (%2) while this is %3 (%4)").arg(op->colorSpace()->id()).arg(op->colorSpace()->profile()->name()).arg(id()).arg(profile()->name()).toLatin1());
-    
+
     if(params.rows <= 0 || params.cols <= 0)
         return;
-    
+
     if(!(*this == *srcSpace)) {
         quint32           conversionBufferStride = params.cols * pixelSize();
         QVector<quint8> * conversionCache        = threadLocalConversionCache(params.rows * conversionBufferStride);
         quint8*           conversionData         = conversionCache->data();
-        
+
         for(qint32 row=0; row<params.rows; row++) {
             srcSpace->convertPixelsTo(params.srcRowStart + row*params.srcRowStride    ,
                                       conversionData     + row*conversionBufferStride, this, params.cols);
         }
-        
+
         KoCompositeOp::ParameterInfo paramInfo(params);
         paramInfo.srcRowStart  = conversionData;
         paramInfo.srcRowStride = conversionBufferStride;
@@ -380,7 +381,8 @@ KoColorTransformation* KoColorSpace::createColorTransformation(const QString & i
 
 QImage KoColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 height,
                                      const KoColorProfile *dstProfile,
-                                     KoColorConversionTransformation::Intent renderingIntent) const
+                                     KoColorConversionTransformation::Intent renderingIntent,
+                                     bool blackpointCompensation) const
 
 {
     QImage img = QImage(width, height, QImage::Format_ARGB32);
@@ -388,7 +390,7 @@ QImage KoColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 he
     const KoColorSpace * dstCS = KoColorSpaceRegistry::instance()->rgb8(dstProfile);
 
     if (data)
-        this->convertPixelsTo(const_cast<quint8 *>(data), img.bits(), dstCS, width * height, renderingIntent);
+        this->convertPixelsTo(const_cast<quint8 *>(data), img.bits(), dstCS, width * height, renderingIntent, blackpointCompensation);
 
     return img;
 }

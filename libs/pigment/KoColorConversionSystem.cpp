@@ -245,7 +245,7 @@ QList<KoColorConversionSystem::Node*> KoColorConversionSystem::nodesFor(const QS
     return nodes;
 }
 
-KoColorConversionTransformation* KoColorConversionSystem::createColorConverter(const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent) const
+KoColorConversionTransformation* KoColorConversionSystem::createColorConverter(const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, bool blackpointCompensation) const
 {
     if (*srcColorSpace == *dstColorSpace) {
         return new KoCopyColorConversionTransformation(srcColorSpace);
@@ -258,7 +258,7 @@ KoColorConversionTransformation* KoColorConversionSystem::createColorConverter(c
                      nodeFor(srcColorSpace),
                      nodeFor(dstColorSpace));
     Q_ASSERT(path);
-    KoColorConversionTransformation* transfo = createTransformationFromPath(path, srcColorSpace, dstColorSpace, renderingIntent);
+    KoColorConversionTransformation* transfo = createTransformationFromPath(path, srcColorSpace, dstColorSpace, renderingIntent, blackpointCompensation);
     delete path;
     Q_ASSERT(*transfo->srcColorSpace() == *srcColorSpace);
     Q_ASSERT(*transfo->dstColorSpace() == *dstColorSpace);
@@ -303,7 +303,7 @@ void KoColorConversionSystem::createColorConverters(const KoColorSpace* colorSpa
     Q_ASSERT(*fromCS->dstColorSpace() == *toCS->srcColorSpace());
 }
 
-KoColorConversionTransformation* KoColorConversionSystem::createTransformationFromPath(const Path* path, const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent) const
+KoColorConversionTransformation* KoColorConversionSystem::createTransformationFromPath(const Path* path, const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, bool blackpointCompensation) const
 {
     Q_ASSERT(srcColorSpace->colorModelId().id() == path->startNode()->modelId);
     Q_ASSERT(srcColorSpace->colorDepthId().id() == path->startNode()->depthId);
@@ -315,11 +315,11 @@ KoColorConversionTransformation* KoColorConversionSystem::createTransformationFr
     QList< Path::node2factory > pathOfNode = path->compressedPath();
 
     if (pathOfNode.size() == 2) { // Direct connection
-        transfo = pathOfNode[1].second->createColorTransformation(srcColorSpace, dstColorSpace, renderingIntent);
+        transfo = pathOfNode[1].second->createColorTransformation(srcColorSpace, dstColorSpace, renderingIntent, blackpointCompensation);
     }
     else {
 
-        KoMultipleColorConversionTransformation* mccTransfo = new KoMultipleColorConversionTransformation(srcColorSpace, dstColorSpace, renderingIntent);
+        KoMultipleColorConversionTransformation* mccTransfo = new KoMultipleColorConversionTransformation(srcColorSpace, dstColorSpace, renderingIntent, blackpointCompensation);
 
         transfo = mccTransfo;
 
@@ -329,18 +329,18 @@ KoColorConversionTransformation* KoColorConversionSystem::createTransformationFr
         const KoColorSpace* intermCS =
             defaultColorSpaceForNode(pathOfNode[1].first);
 
-        mccTransfo->appendTransfo(pathOfNode[1].second->createColorTransformation(srcColorSpace, intermCS, renderingIntent));
+        mccTransfo->appendTransfo(pathOfNode[1].second->createColorTransformation(srcColorSpace, intermCS, renderingIntent, blackpointCompensation));
 
         for (int i = 2; i < pathOfNode.size() - 1; i++) {
             dbgPigmentCCS << pathOfNode[ i - 1 ].first->id() << " to " << pathOfNode[ i ].first->id();
             const KoColorSpace* intermCS2 = defaultColorSpaceForNode(pathOfNode[i].first);
             Q_ASSERT(intermCS2);
-            mccTransfo->appendTransfo(pathOfNode[i].second->createColorTransformation(intermCS, intermCS2, renderingIntent));
+            mccTransfo->appendTransfo(pathOfNode[i].second->createColorTransformation(intermCS, intermCS2, renderingIntent, blackpointCompensation));
             intermCS = intermCS2;
         }
 
         dbgPigmentCCS << pathOfNode[ pathOfNode.size() - 2 ].first->id() << " to " << pathOfNode[ pathOfNode.size() - 1 ].first->id();
-        mccTransfo->appendTransfo(pathOfNode.last().second->createColorTransformation(intermCS, dstColorSpace, renderingIntent));
+        mccTransfo->appendTransfo(pathOfNode.last().second->createColorTransformation(intermCS, dstColorSpace, renderingIntent, blackpointCompensation));
     }
     return transfo;
 }

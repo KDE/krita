@@ -34,9 +34,10 @@ void KoCopyColorConversionTransformation::transform(const quint8 *srcU8, quint8 
 // --- KoCopyColorConversionTransformationFactory ---
 KoCopyColorConversionTransformationFactory::KoCopyColorConversionTransformationFactory(const QString& _colorModelId, const QString& _depthId, const QString& _profileName) : KoColorConversionTransformationFactory(_colorModelId, _depthId, _profileName, _colorModelId, _depthId, _profileName)
 {}
-KoColorConversionTransformation* KoCopyColorConversionTransformationFactory::createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent) const
+KoColorConversionTransformation* KoCopyColorConversionTransformationFactory::createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, bool blackpointCompensation) const
 {
     Q_UNUSED(renderingIntent);
+    Q_UNUSED(blackpointCompensation);
 #ifdef QT_NO_DEBUG
     Q_UNUSED(dstColorSpace);
 #endif

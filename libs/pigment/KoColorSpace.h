@@ -233,7 +233,7 @@ public:
      * Tests if the colorspace offers the specific composite op.
      */
     virtual bool hasCompositeOp(const QString & id) const;
-    
+
     /**
      * Returns the list of user-visible composite ops supported by this colorspace.
      */
@@ -303,7 +303,9 @@ public:
      * @param renderingIntent the rendering intent
      */
     virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                                   const KoColorProfile *  dstProfile, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const ;
+                                   const KoColorProfile *  dstProfile,
+                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
+                                   bool blackpointCompensation = false) const;
 
     /**
      * This functions allocates the ncessary memory for numPixels number of pixels.
@@ -352,7 +354,7 @@ public:
     /**
      * Create a color conversion transformation.
      */
-    virtual KoColorConversionTransformation* createColorConverter(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
+    virtual KoColorConversionTransformation* createColorConverter(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual, bool blackpointCompensation) const;
 
     /**
      * Convert a byte array of srcLen pixels *src to the specified color space
@@ -367,7 +369,8 @@ public:
     virtual bool convertPixelsTo(const quint8 * src,
                                  quint8 * dst, const KoColorSpace * dstColorSpace,
                                  quint32 numPixels,
-                                 KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
+                                 KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
+                                 bool blackpointCompensation = false) const;
 
 //============================== Manipulation functions ==========================//
 
@@ -510,7 +513,7 @@ public:
                         qint32 cols,
                         const KoCompositeOp* op,
                         const QBitArray& channelFlags=QBitArray()) const;
-    
+
     /**
     * Compose two arrays of pixels together. If source and target
     * are not the same color model, the source pixels will be
@@ -521,7 +524,7 @@ public:
     * @param param the information needed for blitting e.g. the source and destination pixel data,
     *        the opacity and flow, ...
     * @param op the composition operator to use, e.g. COPY_OVER
-    * 
+    *
     */
     virtual void bitBlt(const KoColorSpace* srcSpace, const KoCompositeOp::ParameterInfo& params, const KoCompositeOp* op) const;
 
@@ -540,7 +543,7 @@ public:
                         qint32 cols,
                         const QString& op,
                         const QBitArray& channelFlags=QBitArray()) const;
-    
+
     /**
      * Serialize this color following Create's swatch color specification available
      * at http://create.freedesktop.org/wiki/index.php/Swatches_-_colour_file_format

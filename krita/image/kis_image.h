@@ -227,7 +227,7 @@ public:
     /**
      * Convert the image and all its layers to the dstColorSpace
      */
-    void convertImageColorSpace(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
+    void convertImageColorSpace(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual, bool blackpointCompensation = false);
 
     /**
      * Set the color space of  the projection (and the root layer)

@@ -354,7 +354,7 @@ public:
     /**
      * Create a color conversion transformation.
      */
-    virtual KoColorConversionTransformation* createColorConverter(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual, bool blackpointCompensation) const;
+    virtual KoColorConversionTransformation* createColorConverter(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual, bool blackpointCompensation = false) const;
 
     /**
      * Convert a byte array of srcLen pixels *src to the specified color space

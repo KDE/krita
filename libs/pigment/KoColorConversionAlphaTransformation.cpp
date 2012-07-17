@@ -30,7 +30,7 @@ class KoColorConversionFromAlphaTransformation : public KoColorConversionTransfo
 public:
     KoColorConversionFromAlphaTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs,
                                              Intent renderingIntent = IntentPerceptual,
-                                             bool blackpointCompensation);
+                                             bool blackpointCompensation = false);
     virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const;
 };
 

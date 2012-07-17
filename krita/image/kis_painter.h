@@ -694,6 +694,17 @@ public:
     void setLockAlpha(bool protect);
     bool alphaLocked() const;
 
+
+    /**
+     * set the rendering intent in case pixels need to be converted before painting
+     */
+
+
+    /**
+     * set the blackpoint compensation flag in case pixels need to be converted before painting
+     */
+
+
 protected:
     /// Initialize, set everything to '0' or defaults
     void init();

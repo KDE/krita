@@ -37,7 +37,7 @@ public:
     KoLcmsColorConversionTransformation(const KoColorSpace* srcCs, quint32 srcColorSpaceType, LcmsColorProfileContainer* srcProfile,
                                         const KoColorSpace* dstCs, quint32 dstColorSpaceType, LcmsColorProfileContainer* dstProfile,
                                         Intent renderingIntent = IntentPerceptual,
-                                        bool blackpointCompensation)
+                                        bool blackpointCompensation = false)
         : KoColorConversionTransformation(srcCs, dstCs, renderingIntent, blackpointCompensation)
         , m_transform(0)
     {
@@ -205,7 +205,7 @@ quint32 IccColorSpaceEngine::computeColorSpaceType(const KoColorSpace* cs) const
             return 0;
         }
         // Compute the model part of the type
-        quint32 modelType;
+        quint32 modelType = 0;
 
         if (modelId == RGBAColorModelID.id()) {
             if (depthId.startsWith("U")) {

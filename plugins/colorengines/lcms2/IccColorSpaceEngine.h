@@ -34,7 +34,7 @@ public:
     virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace,
                                                                        const KoColorSpace* dstColorSpace,
                                                                        KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
-                                                                       bool blackpointCompensation) const;
+                                                                       bool blackpointCompensation = false) const;
     quint32 computeColorSpaceType(const KoColorSpace* cs) const;
 private:
     struct Private;

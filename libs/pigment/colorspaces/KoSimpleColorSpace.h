@@ -162,8 +162,11 @@ public:
     virtual bool convertPixelsTo(const quint8 *src,
                                  quint8 *dst, const KoColorSpace * dstColorSpace,
                                  quint32 numPixels,
-                                 KoColorConversionTransformation::Intent  renderingIntent = KoColorConversionTransformation::IntentPerceptual) const {
+                                 KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
+                                 bool blackpointCompensation = false) const
+    {
         Q_UNUSED(renderingIntent);
+        Q_UNUSED(blackpointCompensation);
 
         QColor c;
         quint32 srcPixelsize = this->pixelSize();

@@ -34,7 +34,10 @@ class KoCopyColorConversionTransformationFactory : public KoColorConversionTrans
 {
 public:
     KoCopyColorConversionTransformationFactory(const QString& _colorModelId, const QString& _depthId, const QString& _profileName);
-    virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual, bool blackpointCompensation) const;
+    virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace,
+                                                                       const KoColorSpace* dstColorSpace,
+                                                                       KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
+                                                                       bool blackpointCompensation = false) const;
     virtual bool conserveColorInformation() const;
     virtual bool conserveDynamicRange() const;
 };

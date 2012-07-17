@@ -93,9 +93,10 @@ KoCtlColorConversionTransformationFactory::KoCtlColorConversionTransformationFac
 {
 }
 
-KoColorConversionTransformation* KoCtlColorConversionTransformationFactory::createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent) const
+KoColorConversionTransformation* KoCtlColorConversionTransformationFactory::createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, bool blackpointCompensation) const
 {
     Q_UNUSED(renderingIntent);
+    Q_UNUSED(blackpointCompensation);
     Q_ASSERT(canBeSource(srcColorSpace));
     Q_ASSERT(canBeDestination(dstColorSpace));
     dbgPigment << "Creating transformation from " << srcColorSpace->id() << " to " << dstColorSpace->id();

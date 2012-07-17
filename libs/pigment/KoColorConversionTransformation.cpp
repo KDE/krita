@@ -28,7 +28,10 @@ struct KoColorConversionTransformation::Private {
     bool blackpointCompensation;
 };
 
-KoColorConversionTransformation::KoColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs, Intent renderingIntent, bool _blackpointCompensation())
+KoColorConversionTransformation::KoColorConversionTransformation(const KoColorSpace* srcCs,
+                                                                 const KoColorSpace* dstCs,
+                                                                 Intent renderingIntent,
+                                                                 bool _blackpointCompensation)
     : d(new Private)
 {
     Q_ASSERT(srcCs);

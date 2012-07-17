@@ -46,7 +46,10 @@ public:
         IntentAbsoluteColorimetric = 3
     };
 public:
-    KoColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs, Intent renderingIntent = IntentPerceptual, bool blackpointCompensation);
+    KoColorConversionTransformation(const KoColorSpace* srcCs,
+                                    const KoColorSpace* dstCs,
+                                    Intent renderingIntent = IntentPerceptual,
+                                    bool blackpointCompensation = false);
     ~KoColorConversionTransformation();
 public:
     /**

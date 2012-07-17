@@ -213,7 +213,7 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
             }
             pointedAt.position = block.position() + line.xToCursor(point.x());
             QTextCursor tmpCursor(block);
-            tmpCursor.setPosition(line.xToCursor(point.x(), QTextLine::CursorOnCharacter) + 1);
+            tmpCursor.setPosition(block.position() + line.xToCursor(point.x(), QTextLine::CursorOnCharacter) + 1);
             pointedAt.fillInLinks(tmpCursor, d->documentLayout->inlineTextObjectManager());
             return pointedAt;
         }

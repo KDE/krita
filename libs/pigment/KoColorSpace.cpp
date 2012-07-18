@@ -250,76 +250,9 @@ bool KoColorSpace::convertPixelsTo(const quint8 * src,
 }
 
 
-void KoColorSpace::bitBlt(quint8* dst,
-                          qint32 dststride,
-                          const KoColorSpace* srcSpace,
-                          const quint8* src,
-                          qint32 srcRowStride,
-                          const quint8* srcAlphaMask,
-                          qint32 maskRowStride,
-                          quint8 opacity,
-                          qint32 rows,
-                          qint32 cols,
-                          const QString& op,
-                          const QBitArray& channelFlags) const
-{
-    if (d->compositeOps.contains(op)) {
-        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, rows, cols, d->compositeOps.value(op), channelFlags);
-    } else {
-        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, rows, cols, d->compositeOps.value(COMPOSITE_OVER), channelFlags);
-    }
-
-}
-
-void KoColorSpace::bitBlt(quint8* dst,
-                          qint32 dstRowStride,
-                          const KoColorSpace* srcSpace,
-                          const quint8* src,
-                          qint32 srcRowStride,
-                          const quint8 *srcAlphaMask,
-                          qint32 maskRowStride,
-                          quint8 opacity,
-                          qint32 rows,
-                          qint32 cols,
-                          const KoCompositeOp* op,
-                          const QBitArray& channelFlags) const
-{
-    Q_ASSERT_X(*op->colorSpace() == *this, "KoColorSpace::bitBlt", QString("Composite op is for color space %1 (%2) while this is %3 (%4)").arg(op->colorSpace()->id()).arg(op->colorSpace()->profile()->name()).arg(id()).arg(profile()->name()).toLatin1());
-
-    if (rows <= 0 || cols <= 0)
-        return;
-
-    if (!(*this == *srcSpace)) {
-
-        quint32 conversionBufferStride = cols * pixelSize();
-        QVector<quint8> * conversionCache =
-            threadLocalConversionCache(rows * conversionBufferStride);
-
-        quint8* conversionData = conversionCache->data();
-
-        for (qint32 row = 0; row < rows; row++) {
-            srcSpace->convertPixelsTo(src + row * srcRowStride,
-                                      conversionData + row * conversionBufferStride,
-                                      this, cols,
-                                      KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
-        }
-
-        op->composite(dst, dstRowStride,
-                      conversionData, conversionBufferStride,
-                      srcAlphaMask, maskRowStride,
-                      rows,  cols,
-                      opacity, channelFlags);
-    } else {
-        op->composite(dst, dstRowStride,
-                      src, srcRowStride,
-                      srcAlphaMask, maskRowStride,
-                      rows,  cols,
-                      opacity, channelFlags);
-    }
-
-}
-
-void KoColorSpace::bitBlt(const KoColorSpace* srcSpace, const KoCompositeOp::ParameterInfo& params, const KoCompositeOp* op) const
+void KoColorSpace::bitBlt(const KoColorSpace* srcSpace, const KoCompositeOp::ParameterInfo& params, const KoCompositeOp* op,
+                          KoColorConversionTransformation::Intent renderingIntent,
+                          KoColorConversionTransformation::ConversionFlags conversionFlags) const
 {
     Q_ASSERT_X(*op->colorSpace() == *this, "KoColorSpace::bitBlt", QString("Composite op is for color space %1 (%2) while this is %3 (%4)").arg(op->colorSpace()->id()).arg(op->colorSpace()->profile()->name()).arg(id()).arg(profile()->name()).toLatin1());
 
@@ -334,7 +267,7 @@ void KoColorSpace::bitBlt(const KoColorSpace* srcSpace, const KoCompositeOp::Par
         for(qint32 row=0; row<params.rows; row++) {
             srcSpace->convertPixelsTo(params.srcRowStart + row*params.srcRowStride,
                                       conversionData     + row*conversionBufferStride, this, params.cols,
-                                      KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+                                      renderingIntent, conversionFlags);
         }
 
         KoCompositeOp::ParameterInfo paramInfo(params);

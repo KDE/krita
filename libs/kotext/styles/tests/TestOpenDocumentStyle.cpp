@@ -211,7 +211,8 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
         } else if (reference == "relativeLength") {
             result << "42*";
         } else if (reference == "shadowType") {
-            result << "none" << "red" << "#fff 1px 2pt 3pt" << "4pt 3px" /* is this one valid ? */ << "white 42px 23pt, red -3pt -5px 3px" << "red -3pt -5px";
+            result << "none" << "red" << "#fff 1px 2pt 3pt" << "4pt 3px" << "2pt 4pt blue"
+                   << "white 42px 23pt, red -3pt -5px 3px" << "red -3pt -5px";
         } else if (reference == "color") {
             result << "#ABCDEF" << "#0a1234";
         } else if (reference == "positiveInteger") {

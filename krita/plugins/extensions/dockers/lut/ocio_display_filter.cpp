@@ -88,7 +88,7 @@ const char * m_fragShaderText = ""
         "\n"
         "void main()\n"
         "{\n"
-        "    vec4 col = texture2D(tex1, gl_TexCoord[0].st);\n"
+        "    vec3 col = texture2D(tex1, gl_TexCoord[0].st);\n"
         "    gl_FragColor = OCIODisplay(col, tex2);\n"
         "}\n";
 

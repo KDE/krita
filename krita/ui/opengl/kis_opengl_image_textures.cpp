@@ -49,13 +49,26 @@ KisOpenGLImageTextures::KisOpenGLImageTextures()
 {
     m_image = 0;
     m_monitorProfile = 0;
+    KisConfig cfg;
+    m_renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();
+
+    m_conversionFlags = KoColorConversionTransformation::HighQuality;
+    if (cfg.useBlackPointCompensation()) {
+        m_conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
+    }
 }
 
-KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image, KoColorProfile *monitorProfile)
+KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
+                                               KoColorProfile *monitorProfile,
+                                               KoColorConversionTransformation::Intent renderingIntent,
+                                               KoColorConversionTransformation::ConversionFlags conversionFlags)
     : m_displayFilter(0)
 {
     m_image = image;
     m_monitorProfile = monitorProfile;
+    m_renderingIntent = renderingIntent;
+    Q_ASSERT(renderingIntent < 4);
+    m_conversionFlags = conversionFlags;
 
     KisOpenGL::makeContextCurrent();
 
@@ -88,7 +101,10 @@ bool KisOpenGLImageTextures::imageCanShareTextures(KisImageWSP image)
     return !image->colorSpace()->hasHighDynamicRange() || imageCanUseHDRExposureProgram(image);
 }
 
-KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP image, KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
+KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP image,
+                                                                  KoColorProfile *monitorProfile,
+                                                                  KoColorConversionTransformation::Intent renderingIntent,
+                                                                  KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
     KisOpenGL::makeContextCurrent();
 
@@ -101,14 +117,14 @@ KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP im
 
             return textures;
         } else {
-            KisOpenGLImageTextures *imageTextures = new KisOpenGLImageTextures(image, monitorProfile);
+            KisOpenGLImageTextures *imageTextures = new KisOpenGLImageTextures(image, monitorProfile, renderingIntent, conversionFlags);
             imageTexturesMap[image] = imageTextures;
             dbgUI << "Added shareable textures to map";
 
             return imageTextures;
         }
     } else {
-        return new KisOpenGLImageTextures(image, monitorProfile);
+        return new KisOpenGLImageTextures(image, monitorProfile, renderingIntent, conversionFlags);
     }
 }
 
@@ -285,6 +301,7 @@ void KisOpenGLImageTextures::slotImageSizeChanged(qint32 /*w*/, qint32 /*h*/)
 
 void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
+    Q_ASSERT(renderingIntent < 4);
     if (monitorProfile != m_monitorProfile ||
         renderingIntent != m_renderingIntent ||
         conversionFlags != m_conversionFlags) {
@@ -292,11 +309,6 @@ void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProf
         m_monitorProfile = monitorProfile;
         m_renderingIntent = renderingIntent;
         m_conversionFlags = conversionFlags;
-#ifdef __GNUC__
-#warning "FIXME: m_renderingIntent and conversion flags are currently unused"
-#else
-#pragma WARNING( "FIXME: m_renderingIntent and conversion flags currently unused") { )
-#endif
     }
 }
 

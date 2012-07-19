@@ -43,7 +43,7 @@ public:
     {
         Q_ASSERT(srcCs);
         Q_ASSERT(dstCs);
-
+        Q_ASSERT(renderingIntent < 4);
         m_transform = this->createTransform(srcColorSpaceType,
                                             srcProfile,
                                             dstColorSpaceType,
@@ -88,9 +88,7 @@ private:
                                   qint32 renderingIntent,
                                   KoColorConversionTransformation::ConversionFlags conversionFlags) const
     {
-        int flags = 0;
-
-        cmsHTRANSFORM tf = cmsCreateTransform(srcProfile->lcmsProfile(),
+           cmsHTRANSFORM tf = cmsCreateTransform(srcProfile->lcmsProfile(),
                                               srcColorSpaceType,
                                               dstProfile->lcmsProfile(),
                                               dstColorSpaceType,

@@ -324,11 +324,16 @@ void KisConfig::setPasteBehaviour(qint32 renderIntent)
 
 qint32 KisConfig::renderIntent() const
 {
-    return m_cfg.readEntry("renderIntent", INTENT_PERCEPTUAL);
+    qint32 intent = m_cfg.readEntry("renderIntent", INTENT_PERCEPTUAL);
+    if (intent > 3) intent = 3;
+    if (intent < 0) intent = 0;
+    return intent;
 }
 
 void KisConfig::setRenderIntent(qint32 renderIntent)
 {
+    if (renderIntent > 3) renderIntent = 3;
+    if (renderIntent < 0) renderIntent = 0;
     m_cfg.writeEntry("renderIntent", renderIntent);
 }
 

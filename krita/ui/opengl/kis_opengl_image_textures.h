@@ -59,7 +59,9 @@ public:
      * @param image The image
      * @param monitorProfile The profile of the display device
      */
-    static KisOpenGLImageTexturesSP getImageTextures(KisImageWSP image, KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags);
+    static KisOpenGLImageTexturesSP getImageTextures(KisImageWSP image,
+                                                     KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent,
+                                                     KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     /**
      * Default constructor.
@@ -75,7 +77,9 @@ public:
      * Set the color profile of the display device.
      * @param profile The color profile of the display device
      */
-    void setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags);
+    void setMonitorProfile(const KoColorProfile *monitorProfile,
+                           KoColorConversionTransformation::Intent renderingIntent,
+                           KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     /**
      * set the (ocio) display filter.
@@ -141,7 +145,9 @@ public slots:
     void slotImageSizeChanged(qint32 w, qint32 h);
 
 protected:
-    KisOpenGLImageTextures(KisImageWSP image, KoColorProfile *monitorProfile);
+    KisOpenGLImageTextures(KisImageWSP image, KoColorProfile *monitorProfile,
+                           KoColorConversionTransformation::Intent renderingIntent,
+                           KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     void createImageTextureTiles();
     void destroyImageTextureTiles();

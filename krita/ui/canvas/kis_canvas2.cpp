@@ -122,6 +122,7 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view,
     m_d->inputManager = new KisInputManager(this, m_d->toolProxy);
 
     m_d->vastScrolling = cfg.vastScrolling();
+    m_d->renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();
     createCanvas(cfg.useOpenGL());
 
     connect(view->canvasController()->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), SLOT(documentOffsetMoved(const QPoint&)));
@@ -364,8 +365,11 @@ void KisCanvas2::createCanvas(bool useOpenGL)
     const KoColorProfile *profile = m_d->view->resourceProvider()->currentDisplayProfile();
     m_d->monitorProfile = const_cast<KoColorProfile*>(profile);
 
+    m_d->conversionFlags = KoColorConversionTransformation::HighQuality;
     if (cfg.useBlackPointCompensation()) m_d->conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
     m_d->renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();
+
+    Q_ASSERT(m_d->renderingIntent < 4);
 
     if (useOpenGL) {
 #ifdef HAVE_OPENGL
@@ -483,8 +487,9 @@ void KisCanvas2::setMonitorProfile(KoColorProfile* monitorProfile,
                                    KoColorConversionTransformation::Intent renderingIntent,
                                    KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
-    qDebug() << "setMonitorProfile";
     KisImageWSP image = this->image();
+
+    Q_ASSERT(renderingIntent < 4);
 
     m_d->monitorProfile = monitorProfile;
     m_d->renderingIntent = renderingIntent;

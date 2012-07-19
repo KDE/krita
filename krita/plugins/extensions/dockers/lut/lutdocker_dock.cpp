@@ -57,6 +57,7 @@ LutDockerDock::LutDockerDock(OCIO::ConstConfigRcPtr config)
         , m_canvas(0)
         , m_ocioConfig(config)
         , m_displayFilter(0)
+        , m_updateDisplay(false)
 {
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
@@ -144,8 +145,8 @@ void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
         slotImageColorSpaceChanged();
 
     }
-
-    updateDisplaySettings();
+    m_updateDisplay = true;
+    //updateDisplaySettings();
 }
 
 void LutDockerDock::slotImageColorSpaceChanged()
@@ -172,7 +173,7 @@ void LutDockerDock::slotImageColorSpaceChanged()
 
 
     }
-    updateDisplaySettings();
+    //updateDisplaySettings();
     m_updateDisplay = true;
 }
 
@@ -225,9 +226,8 @@ void LutDockerDock::updateDisplaySettings()
         m_displayFilter->exposure = m_exposureDoubleWidget->value();
         m_displayFilter->swizzle = (OCIO_CHANNEL_SWIZZLE)m_cmbComponents->currentIndex();
 
-        m_displayFilter->updateProcessor();
-
         if (m_updateDisplay) {
+            m_displayFilter->updateProcessor();
             m_canvas->setDisplayFilter(m_displayFilter);
         }
     }
@@ -260,6 +260,7 @@ void LutDockerDock::selectOcioConfiguration()
         m_txtConfigurationPath->setText(filename);
         resetOcioConfiguration();
     }
+    updateWidgets();
 }
 
 void LutDockerDock::resetOcioConfiguration()

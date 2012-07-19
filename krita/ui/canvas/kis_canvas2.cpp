@@ -483,6 +483,7 @@ void KisCanvas2::setMonitorProfile(KoColorProfile* monitorProfile,
                                    KoColorConversionTransformation::Intent renderingIntent,
                                    KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
+    qDebug() << "setMonitorProfile";
     KisImageWSP image = this->image();
 
     m_d->monitorProfile = monitorProfile;
@@ -694,6 +695,7 @@ bool KisCanvas2::usingHDRExposureProgram()
 
 void KisCanvas2::slotConfigChanged()
 {
+    qDebug() << "slotConfigChanged";
     KisConfig cfg;
     m_d->vastScrolling = cfg.vastScrolling();
 
@@ -710,8 +712,15 @@ void KisCanvas2::slotConfigChanged()
 
 void KisCanvas2::slotSetDisplayProfile(const KoColorProfile * profile)
 {
-    m_d->monitorProfile = const_cast<KoColorProfile*>(profile);
-    slotConfigChanged();
+    qDebug() << "slotSetDisplayProfile";
+    KisConfig cfg;
+    KoColorConversionTransformation::Intent renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();
+    KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::HighQuality;
+
+    if (cfg.useBlackPointCompensation()) {
+        conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
+    }
+    setMonitorProfile(const_cast<KoColorProfile*>(profile), renderingIntent, conversionFlags);
 }
 
 void KisCanvas2::addDecoration(KisCanvasDecoration* deco)

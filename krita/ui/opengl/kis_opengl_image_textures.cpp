@@ -244,7 +244,7 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
             qFatal("Unknown m_imageTextureType");
         }
 
-        tileInfo.convertTo(dstCS);
+        tileInfo.convertTo(dstCS, m_renderingIntent, m_conversionFlags);
         KisTextureTile *tile = getTextureTileCR(tileInfo.tileCol(), tileInfo.tileRow());
         tile->update(tileInfo);
         tileInfo.destroy();
@@ -287,7 +287,7 @@ void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProf
 {
     if (monitorProfile != m_monitorProfile ||
         renderingIntent != m_renderingIntent ||
-        conversionFlags!= m_conversionFlags) {
+        conversionFlags != m_conversionFlags) {
 
         m_monitorProfile = monitorProfile;
         m_renderingIntent = renderingIntent;

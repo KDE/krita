@@ -123,7 +123,7 @@ void KisFixedPaintDevice::convertFromQImage(const QImage& _image, const QString 
     }
 }
 
-QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile)
+QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, KoColorConversionTransformation::Intent intent, KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
     qint32 x1;
     qint32 y1;
@@ -135,10 +135,10 @@ QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile)
     w = m_bounds.width();
     h = m_bounds.height();
 
-    return convertToQImage(dstProfile, x1, y1, w, h);
+    return convertToQImage(dstProfile, x1, y1, w, h, intent, conversionFlags);
 }
 
-QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint32 x1, qint32 y1, qint32 w, qint32 h)
+QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint32 x1, qint32 y1, qint32 w, qint32 h, KoColorConversionTransformation::Intent intent, KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
     Q_ASSERT( m_bounds.contains(QRect(x1,y1,w,h)) );
 
@@ -150,7 +150,7 @@ QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, 
 
     if (QRect(x1, y1, w, h) == m_bounds) {
         return colorSpace()->convertToQImage(data(), w, h, dstProfile,
-                                             KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+                                             intent, conversionFlags);
     } else {
         int pSize = pixelSize();
         int deviceWidth = m_bounds.width();
@@ -163,7 +163,7 @@ QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, 
             srcPtr += deviceWidth * pSize;
             dstPtr += w * pSize;
         }
-        QImage image = colorSpace()->convertToQImage(newData, w, h, dstProfile, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+        QImage image = colorSpace()->convertToQImage(newData, w, h, dstProfile, intent, conversionFlags);
         return image;
     }
 }

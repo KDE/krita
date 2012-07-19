@@ -107,10 +107,9 @@ public:
     /**
      *   Converts the paint device to a different colorspace
      */
-    void convertTo(const KoColorSpace * dstColorSpace,
-                   KoColorConversionTransformation::Intent renderingIntent,
-                   KoColorConversionTransformation::ConversionFlags conversionFlags);
-
+    void convertTo(const KoColorSpace * dstColorSpace = 0,
+                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
+                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::Empty);
     /**
      * Fill this paint device with the data from image
      *
@@ -129,7 +128,9 @@ public:
      * case it's up to the color strategy to choose a profile (most
      * like sRGB).
      */
-    virtual QImage convertToQImage(const KoColorProfile *  dstProfile, qint32 x, qint32 y, qint32 w, qint32 h);
+    virtual QImage convertToQImage(const KoColorProfile *dstProfile, qint32 x, qint32 y, qint32 w, qint32 h,
+                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
+                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::Empty);
 
     /**
      * Create an RGBA QImage from a rectangle in the paint device. The
@@ -139,7 +140,9 @@ public:
      * case it's up to the color strategy to choose a profile (most
      * like sRGB).
      */
-    virtual QImage convertToQImage(const KoColorProfile *  dstProfile = 0);
+    virtual QImage convertToQImage(const KoColorProfile *dstProfile,
+                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
+                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::Empty);
 
     /**
      * Clear the given rectangle to transparent black.

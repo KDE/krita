@@ -104,6 +104,8 @@ struct KisPainter::Private {
     bool                        mirrorHorizontaly;
     bool                        mirrorVerticaly;
     KoCompositeOp::ParameterInfo paramInfo;
+    KoColorConversionTransformation::Intent renderingIntent;
+    KoColorConversionTransformation::ConversionFlags conversionFlags;
 };
 
 KisPainter::KisPainter()
@@ -150,6 +152,8 @@ void KisPainter::init()
     d->mirrorVerticaly = false;
     d->paramInfo.opacity = 1.0f;
     d->paramInfo.flow = 1.0f;
+    d->renderingIntent = KoColorConversionTransformation::IntentPerceptual;
+    d->conversionFlags = KoColorConversionTransformation::Empty;
 }
 
 KisPainter::~KisPainter()
@@ -361,7 +365,7 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
         d->paramInfo.maskRowStride = srcWidth * selection->pixelSize();
         d->paramInfo.rows          = srcHeight;
         d->paramInfo.cols          = srcWidth;
-        d->colorSpace->bitBlt(srcDev->colorSpace(), d->paramInfo, d->compositeOp);
+        d->colorSpace->bitBlt(srcDev->colorSpace(), d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
     }
     else {
         /* Read the user selection (d->selection) bytes into an array, ready
@@ -388,7 +392,7 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
         d->paramInfo.srcRowStride  = srcWidth * srcDev->pixelSize();
         d->paramInfo.maskRowStart  = mergedSelectionBytes;
         d->paramInfo.maskRowStride = srcWidth * selection->pixelSize();
-        d->colorSpace->bitBlt(d->colorSpace, d->paramInfo, d->compositeOp);
+        d->colorSpace->bitBlt(d->colorSpace, d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
         delete[] mergedSelectionBytes;
     }
 
@@ -516,7 +520,7 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
                 d->paramInfo.maskRowStride = maskRowStride;
                 d->paramInfo.rows          = rows;
                 d->paramInfo.cols          = columns;
-                d->colorSpace->bitBlt(srcCs, d->paramInfo, d->compositeOp);
+                d->colorSpace->bitBlt(srcCs, d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
 
                 srcX_ += columns;
                 dstX_ += columns;
@@ -564,7 +568,7 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
                 d->paramInfo.maskRowStride = 0;
                 d->paramInfo.rows          = rows;
                 d->paramInfo.cols          = columns;
-                d->colorSpace->bitBlt(srcCs, d->paramInfo, d->compositeOp);
+                d->colorSpace->bitBlt(srcCs, d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
 
                 srcX_ += columns;
                 dstX_ += columns;
@@ -658,7 +662,7 @@ void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoC
                 d->paramInfo.maskRowStride = maskRowStride;
                 d->paramInfo.rows          = rows;
                 d->paramInfo.cols          = columns;
-                d->colorSpace->bitBlt(d->colorSpace, d->paramInfo, d->compositeOp);
+                d->colorSpace->bitBlt(d->colorSpace, d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
 
                 dstX             += columns;
                 columnsRemaining -= columns;
@@ -692,7 +696,7 @@ void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoC
                 d->paramInfo.maskRowStride = 0;
                 d->paramInfo.rows          = rows;
                 d->paramInfo.cols          = columns;
-                d->colorSpace->bitBlt(d->colorSpace, d->paramInfo, d->compositeOp);
+                d->colorSpace->bitBlt(d->colorSpace, d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
 
                 dstX             += columns;
                 columnsRemaining -= columns;
@@ -756,7 +760,7 @@ void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
     }
 
     // ...and then blit.
-    d->colorSpace->bitBlt(srcCs, d->paramInfo, d->compositeOp);
+    d->colorSpace->bitBlt(srcCs, d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
     d->device->writeBytes(dstBytes, dstX, dstY, srcWidth, srcHeight);
 
     delete[] d->paramInfo.maskRowStart;
@@ -816,7 +820,7 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
         d->paramInfo.maskRowStride = srcWidth * selection->pixelSize();
         d->paramInfo.rows          = srcHeight;
         d->paramInfo.cols          = srcWidth;
-        d->colorSpace->bitBlt(d->colorSpace, d->paramInfo, d->compositeOp);
+        d->colorSpace->bitBlt(d->colorSpace, d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
     }
     else {
         /* Read the user selection (d->selection) bytes into an array, ready
@@ -843,7 +847,7 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
         d->paramInfo.srcRowStride  = srcDev->bounds().width() * srcDev->pixelSize();
         d->paramInfo.maskRowStart  = mergedSelectionBytes;
         d->paramInfo.maskRowStride = srcWidth * selection->pixelSize();
-        d->colorSpace->bitBlt(d->colorSpace, d->paramInfo, d->compositeOp);
+        d->colorSpace->bitBlt(d->colorSpace, d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
 
         delete[] mergedSelectionBytes;
     }
@@ -2460,6 +2464,16 @@ bool KisPainter::alphaLocked() const
 {
     QBitArray switcher = d->colorSpace->channelFlags(false, true);
     return !(d->paramInfo.channelFlags & switcher).count(true);
+}
+
+void KisPainter::setRenderingIntent(KoColorConversionTransformation::Intent intent)
+{
+    d->renderingIntent = intent;
+}
+
+void KisPainter::setColorConversionFlags(KoColorConversionTransformation::ConversionFlags conversionFlags)
+{
+    d->conversionFlags = conversionFlags;
 }
 
 void KisPainter::renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab)

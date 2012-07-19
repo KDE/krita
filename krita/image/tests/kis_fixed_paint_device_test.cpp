@@ -130,7 +130,7 @@ void KisFixedPaintDeviceTest::testBltFixed()
     QPoint errpoint;
 
     if (!TestUtil::compareQImages(errpoint, image, result)) {
-        fdev->convertToQImage().save("kis_fixed_paint_device_test_test_blt_fixed_expected.png");
+        fdev->convertToQImage(0).save("kis_fixed_paint_device_test_test_blt_fixed_expected.png");
         result.save("kis_fixed_paint_device_test_test_blt_fixed_result.png");
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
     }

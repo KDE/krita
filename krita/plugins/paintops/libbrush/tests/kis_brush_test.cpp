@@ -61,7 +61,7 @@ void KisBrushTest::testMaskGenerationNoColor()
 
     QPoint errpoint;
     QImage result(QString(FILES_DATA_DIR) + QDir::separator() + "result_brush_1.png");
-    QImage image = fdev->convertToQImage();
+    QImage image = fdev->convertToQImage(0);
 
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("kis_brush_test_1.png");
@@ -71,7 +71,7 @@ void KisBrushTest::testMaskGenerationNoColor()
     brush->mask(fdev, 1.0, 1.0, 0.0, info);
 
     result = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "result_brush_2.png");
-    image = fdev->convertToQImage();
+    image = fdev->convertToQImage(0);
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("kis_brush_test_2.png");
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
@@ -100,7 +100,7 @@ void KisBrushTest::testMaskGenerationSingleColor()
 
     QPoint errpoint;
     QImage result = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "result_brush_3.png");
-    QImage image = fdev->convertToQImage();
+    QImage image = fdev->convertToQImage(0);
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("kis_brush_test_3.png");
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
@@ -134,7 +134,7 @@ void KisBrushTest::testMaskGenerationDevColor()
 
     QPoint errpoint;
     QImage result = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "result_brush_4.png");
-    QImage image = fdev->convertToQImage();
+    QImage image = fdev->convertToQImage(0);
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("kis_brush_test_4.png");
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
@@ -163,7 +163,7 @@ void KisBrushTest::testMaskGenerationDefaultColor()
 
     QPoint errpoint;
     QImage result = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "result_brush_3.png");
-    QImage image = fdev->convertToQImage();
+    QImage image = fdev->convertToQImage(0);
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("kis_brush_test_5.png");
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
@@ -184,7 +184,7 @@ void KisBrushTest::testImageGeneration()
 
     KisFixedPaintDeviceSP fdev = brush->paintDevice(cs, 1.0, 0.0, info);
 
-    fdev->convertToQImage().save("bla.png");
+    fdev->convertToQImage(0).save("bla.png");
 
     delete brush;
 }

@@ -27,6 +27,7 @@
 #include <QVector>
 
 #include <KoColorSpaceConstants.h>
+#include <KoColorConversionTransformation.h>
 
 #include "kis_distance_information.h"
 #include "kis_global.h"
@@ -698,12 +699,12 @@ public:
     /**
      * set the rendering intent in case pixels need to be converted before painting
      */
-
+    void setRenderingIntent(KoColorConversionTransformation::Intent intent);
 
     /**
      * set the conversion flags in case pixels need to be converted before painting
      */
-
+    void setColorConversionFlags(KoColorConversionTransformation::ConversionFlags conversionFlags);
 
 protected:
     /// Initialize, set everything to '0' or defaults

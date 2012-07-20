@@ -70,11 +70,19 @@ public:
 
     virtual QAbstractPrintDialog::PrintDialogOptions printDialogOptions() const;
 
+    /**
+     *@brief Check if the painter can print to the printer
+     *@returns true if the print job can print to the given printer
+     */
+    virtual bool canPrint();
+
 public slots:
     /**
      * This is called every time the job should be executed.
      * When called the document should be printed a new painter using the printer
      * of this printJob in order to honor the settings the user made on the printer.
+     * canPrint() should be called before startPrinting to check if the painter can print
+     * to the printer
      * @param removePolicy a policy that should be honored so the caller can make sure
      *   this job doesn't leak memory after being used.
      */

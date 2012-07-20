@@ -1451,6 +1451,11 @@ KoPrintJob* KoMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileNa
 
     printJob->printer().setPageMargins(pageLayout.leftMargin, pageLayout.topMargin, pageLayout.rightMargin, pageLayout.bottomMargin, QPrinter::Millimeter);
 
+    //before printing check if the printer can handle printing
+    if (!printJob->canPrint()) {
+        KMessageBox::error(this, i18n("Cannot export to the specified file"));
+    }
+
     printJob->startPrinting(KoPrintJob::DeleteWhenDone);
     return printJob;
 }

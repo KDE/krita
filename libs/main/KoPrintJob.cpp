@@ -20,6 +20,7 @@
 #include "KoPrintJob.h"
 
 #include <QWidget>
+#include <QPainter>
 
 KoPrintJob::KoPrintJob(QObject *parent)
         : QObject(parent)
@@ -43,6 +44,20 @@ QAbstractPrintDialog::PrintDialogOptions KoPrintJob::printDialogOptions() const
            QAbstractPrintDialog::PrintCollateCopies |
            QAbstractPrintDialog::DontUseSheet |
            QAbstractPrintDialog::PrintShowPageSize;
+}
+
+bool KoPrintJob::canPrint()
+{
+    if (! printer().isValid()) {
+        return false;
+    }
+
+    QPainter testPainter(&printer());
+    if (testPainter.isActive()) {
+        return true;
+    }
+
+    return false;
 }
 
 #include <KoPrintJob.moc>

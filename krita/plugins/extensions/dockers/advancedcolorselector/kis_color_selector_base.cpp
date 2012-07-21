@@ -223,6 +223,7 @@ void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
 
 void KisColorSelectorBase::mouseReleaseEvent(QMouseEvent *e) {
     Q_UNUSED(e);
+    hidePopup();
 }
 
 void KisColorSelectorBase::mouseMoveEvent(QMouseEvent* e)

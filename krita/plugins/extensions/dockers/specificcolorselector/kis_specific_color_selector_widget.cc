@@ -153,4 +153,5 @@ void KisSpecificColorSelectorWidget::setCustomColorSpace(const KoColorSpace *col
 {
     m_customColorSpaceSelected = true;
     setColorSpace(colorSpace);
+    setColor(m_color);
 }

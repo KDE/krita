@@ -59,6 +59,9 @@ void KisColorSelectorWheel::setColor(const QColor &c)
 
     m_lastClickPos.setX(cos(angle)*radius+0.5);
     m_lastClickPos.setY(sin(angle)*radius+0.5);
+
+    //workaround for bug 279500
+    setLastMousePosition(m_lastClickPos.x()*width(), m_lastClickPos.y()*height());
 }
 
 QColor KisColorSelectorWheel::selectColor(int x, int y)

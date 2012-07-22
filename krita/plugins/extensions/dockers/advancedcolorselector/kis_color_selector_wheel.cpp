@@ -107,7 +107,7 @@ QColor KisColorSelectorWheel::selectColor(int x, int y)
     m_lastClickPos.setX(cos(angle)*radius+0.5);
     m_lastClickPos.setY(sin(angle)*radius+0.5);
 
-    return colorAt(x, y);
+    return colorAt(x, y, true);
 }
 
 void KisColorSelectorWheel::paint(QPainter* painter)
@@ -157,7 +157,7 @@ void KisColorSelectorWheel::paint(QPainter* painter)
     }
 }
 
-const QColor& KisColorSelectorWheel::colorAt(int x, int y)
+const QColor& KisColorSelectorWheel::colorAt(int x, int y, bool forceValid)
 {
     Q_ASSERT(x>=0 && x<=width());
     Q_ASSERT(y>=0 && y<=height());
@@ -167,8 +167,12 @@ const QColor& KisColorSelectorWheel::colorAt(int x, int y)
 
     qreal radius = sqrt(xRel*xRel+yRel*yRel);
     if(radius>qMin(width(), height())/2) {
-        m_qcolor = QColor();
-        return m_qcolor;
+        if (!forceValid) {
+            m_qcolor = QColor();
+            return m_qcolor;
+        } else {
+            radius = qMin(width(), height())/2;
+        }
     }
     radius/=qMin(width(), height())/2.;
 

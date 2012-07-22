@@ -177,5 +177,6 @@ void KisColorSelectorComboBox::setConfiguration(KisColorSelector::Configuration 
 {
     m_configuration=conf;
     m_currentSelector.setConfiguration(conf);
+    m_currentSelector.setColor(QColor(255,0,0));
     update();
 }

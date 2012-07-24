@@ -107,6 +107,12 @@ void KisToolInvocationAction::inputEvent(QEvent* event)
         setMousePosition(d->tabletToPixel(tevent->hiResGlobalPos()));
         d->modifiers = tevent->modifiers();
         inputManager()->toolProxy()->tabletEvent(tevent, mousePosition());
+    } else if(event->type() == QEvent::KeyPress) {
+        QKeyEvent* kevent = static_cast<QKeyEvent*>(event);
+        inputManager()->toolProxy()->keyPressEvent(kevent);
+    } else if(event->type() == QEvent::KeyRelease) {
+        QKeyEvent* kevent = static_cast<QKeyEvent*>(event);
+        inputManager()->toolProxy()->keyReleaseEvent(kevent);
     }
 }
 

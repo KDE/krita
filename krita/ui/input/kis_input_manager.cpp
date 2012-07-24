@@ -1,3 +1,4 @@
+
 /* This file is part of the KDE project
  * Copyright (C) 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
  *
@@ -54,6 +55,7 @@ public:
         , currentShortcut(0)
         , tabletPressEvent(0)
         , setMirrorMode(false)
+        , fixedAction(false)
     { }
 
     void match(QEvent *event);
@@ -79,6 +81,7 @@ public:
     QTabletEvent *tabletPressEvent;
 
     bool setMirrorMode;
+    bool fixedAction;
 };
 
 KisInputManager::KisInputManager(KisCanvas2 *canvas, KoToolProxy *proxy)
@@ -102,6 +105,9 @@ KisInputManager::KisInputManager(KisCanvas2 *canvas, KoToolProxy *proxy)
     d->canvas->view()->actionCollection()->addAction("set_mirror_axis", setMirrorAxis);
     setMirrorAxis->setShortcut(QKeySequence("Shift+r"));
     connect(setMirrorAxis, SIGNAL(triggered(bool)), SLOT(setMirrorAxis()));
+
+    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
+            SLOT(slotToolChanged()));
 }
 
 KisInputManager::~KisInputManager()
@@ -151,7 +157,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
             if (d->currentAction) { //If we are currently performing an action, we only update the state of that action and shortcut.
                 d->currentShortcut->match(event);
 
-                if (d->currentShortcut->matchLevel() == KisShortcut::NoMatch) {
+                if (d->currentShortcut->matchLevel() == KisShortcut::NoMatch && !d->fixedAction) {
                     d->clearState();
                     break;
                 }
@@ -262,6 +268,18 @@ void KisInputManager::setMirrorAxis()
     QApplication::setOverrideCursor(Qt::CrossCursor);
 }
 
+void KisInputManager::slotToolChanged()
+{
+    QString toolId = KoToolManager::instance()->activeToolId();
+    kDebug() << "tool changed " << toolId;
+    if (toolId == "ArtisticTextToolFactoryID" || toolId == "TextToolFactory_ID") {
+        kDebug() << "fixed";
+        d->fixedAction = true;
+    } else {
+        d->fixedAction = false;
+    }
+}
+
 QPointF KisInputManager::widgetToPixel(const QPointF& position)
 {
     QPointF pixel = QPointF(position.x() + 0.5f, position.y() + 0.5f);
@@ -270,6 +288,10 @@ QPointF KisInputManager::widgetToPixel(const QPointF& position)
 
 void KisInputManager::Private::match(QEvent* event)
 {
+    kDebug() << "fixed " << fixedAction;
+    if (fixedAction) {
+        return;
+    }
     //Go through all possible shortcuts and update their state.
     foreach (KisShortcut* shortcut, potentialShortcuts) {
         shortcut->match(event);
@@ -435,6 +457,10 @@ KisShortcut* KisInputManager::Private::createShortcut(KisAbstractInputAction* ac
 
 void KisInputManager::Private::clearState()
 {
+    if (fixedAction) {
+        return;
+    }
+
     if (currentShortcut) {
         currentAction->end();
         currentAction = 0;

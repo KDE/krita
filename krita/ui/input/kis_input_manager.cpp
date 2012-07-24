@@ -271,7 +271,6 @@ void KisInputManager::setMirrorAxis()
 void KisInputManager::slotToolChanged()
 {
     QString toolId = KoToolManager::instance()->activeToolId();
-    kDebug() << "tool changed " << toolId;
     if (toolId == "ArtisticTextToolFactoryID" || toolId == "TextToolFactory_ID") {
         kDebug() << "fixed";
         d->fixedAction = true;

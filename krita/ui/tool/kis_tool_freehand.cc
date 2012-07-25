@@ -213,6 +213,11 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 
         requestUpdateOutline(e->point);
 
+        if (currentNode() && currentNode()->inherits("KisShapeLayer")) {
+            KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
+            canvas2->view()->showFloatingMessage(i18n("Can't paint on vector layer."), KIcon("draw-brush"));
+        }
+
         if (nodePaintAbility() != PAINT)
             return;
 

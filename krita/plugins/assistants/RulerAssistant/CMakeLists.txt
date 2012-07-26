@@ -12,6 +12,7 @@ set(kritarulerassistanttool_PART_SRCS
     )
 
 find_package(AssImp)
+
 if(ASSIMP_FOUND)
     include_directories(${ASSIMP_INCLUDE_DIR})
 endif(ASSIMP_FOUND)
@@ -23,6 +24,7 @@ target_link_libraries(kritarulerassistanttool kritaui flake ${KDE4_KPARTS_LIBS} 
 
 if(ASSIMP_FOUND)
     target_link_libraries(kritarulerassistanttool kritaui ${ASSIMP_LIBRARY})
+
 endif(ASSIMP_FOUND)
 
 install(TARGETS kritarulerassistanttool  DESTINATION ${PLUGIN_INSTALL_DIR})

@@ -41,6 +41,7 @@
 
 #include <kis_abstract_perspective_grid.h>
 #include <kis_painting_assistants_manager.h>
+#include <mesh_assistant.h>
 
 KisRulerAssistantTool::KisRulerAssistantTool(KoCanvasBase * canvas)
         : KisTool(canvas, KisCursor::arrowCursor()), m_canvas(dynamic_cast<KisCanvas2*>(canvas)),
@@ -456,7 +457,12 @@ void KisRulerAssistantTool::removeAllAssistants()
 
 void KisRulerAssistantTool::loadAssistants()
 {
-    KUrl file = KFileDialog::getOpenUrl(KUrl(), QString("*.krassistants"));
+    KUrl file = KFileDialog::getOpenUrl(KUrl(), QString("*.blend"));
+    if (m_options.comboBox->model()->index( m_options.comboBox->currentIndex(), 0 ).data(Qt::UserRole).toString()=="mesh"){
+        m_newAssistant = KisPaintingAssistantFactoryRegistry::instance()->get(key)->createPaintingAssistant();
+        m_newAssistant->Initialize(file);
+        m_newAssistant=0;
+    }
     if (file.isEmpty()) return;
     KIO::StoredTransferJob* job = KIO::storedGet(file);
     connect(job, SIGNAL(result(KJob*)), SLOT(openFinish(KJob*)));

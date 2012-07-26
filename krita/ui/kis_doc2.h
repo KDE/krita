@@ -63,14 +63,10 @@ class KRITAUI_EXPORT KisDoc2 : public KoDocument
     Q_OBJECT
 
 public:
-    KisDoc2(QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = true);
+    KisDoc2(QObject* parent = 0);
     virtual ~KisDoc2();
 
 public:
-    // Overide KoDocument
-    virtual bool wantExportConfirmation() const {
-        return false;
-    }
     virtual bool completeLoading(KoStore *store);
     virtual bool completeSaving(KoStore*);
 

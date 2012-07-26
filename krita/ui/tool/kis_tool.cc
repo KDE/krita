@@ -59,6 +59,7 @@
 #include <kis_pattern.h>
 #include <kis_transaction.h>
 #include <kis_selection.h>
+#include <kis_floating_message.h>
 
 #include "kis_canvas_resource_provider.h"
 #include "canvas/kis_canvas2.h"
@@ -68,6 +69,7 @@
 #include "kis_config_notifier.h"
 #include "kis_cursor.h"
 #include <recorder/kis_recorded_paint_action.h>
+#include <kis_selection_mask.h>
 
 struct KisTool::Private {
     Private()
@@ -406,17 +408,14 @@ KisTool::ToolMode KisTool::mode() const {
 
 void KisTool::mousePressEvent(KoPointerEvent *event)
 {
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    if (kisCanvas) {
+        kisCanvas->setSmoothingEnabled(false);
+    }
+
     KisConfig cfg;
 
     if (mode() == KisTool::HOVER_MODE &&
-        ((event->button() == Qt::MidButton &&
-          event->modifiers() == Qt::NoModifier) ||
-         (d->spacePressed && !cfg.clicklessSpacePan()))) {
-
-        initPan(event->point);
-        event->accept();
-    }
-    else if (mode() == KisTool::HOVER_MODE &&
              (event->button() == Qt::LeftButton &&
               event->modifiers() == Qt::ShiftModifier)) {
 
@@ -430,11 +429,7 @@ void KisTool::mousePressEvent(KoPointerEvent *event)
 
 void KisTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    if(mode() == PAN_MODE) {
-        pan(event->point);
-        event->accept();
-    }
-    else if (mode() == GESTURE_MODE) {
+    if (mode() == GESTURE_MODE) {
         processGesture(event->point);
         event->accept();
     }
@@ -444,17 +439,14 @@ void KisTool::mouseMoveEvent(KoPointerEvent *event)
 
 void KisTool::mouseReleaseEvent(KoPointerEvent *event)
 {
+
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    if (kisCanvas) {
+        kisCanvas->setSmoothingEnabled(true);
+    }
     KisConfig cfg;
 
-    if(mode() == PAN_MODE) {
-        if (event->button() == Qt::MidButton ||
-            (event->button() == Qt::LeftButton && !cfg.clicklessSpacePan())) {
-
-            endPan();
-            event->accept();
-        }
-    }
-    else if (mode() == GESTURE_MODE) {
+    if (mode() == GESTURE_MODE) {
         if (event->button() == Qt::LeftButton) {
             endGesture();
             event->accept();
@@ -466,22 +458,7 @@ void KisTool::mouseReleaseEvent(KoPointerEvent *event)
 
 void KisTool::keyPressEvent(QKeyEvent *event)
 {
-    if (event->key() == Qt::Key_Space) {
-
-        if (!event->isAutoRepeat()) {
-            KisConfig cfg;
-            if(mode() == HOVER_MODE && cfg.clicklessSpacePan()) {
-                initPan(d->lastDocumentPoint);
-            }
-            else {
-                d->spacePressed = true;
-            }
-        }
-        event->accept();
-
-    } else if (mode() == GESTURE_MODE ||
-               mode() == PAN_MODE) {
-
+    if (mode() == GESTURE_MODE) {
         event->accept();
     } else {
         event->ignore();
@@ -490,51 +467,11 @@ void KisTool::keyPressEvent(QKeyEvent *event)
 
 void KisTool::keyReleaseEvent(QKeyEvent* event)
 {
-    if (event->key() == Qt::Key_Space) {
-
-        if (!event->isAutoRepeat()) {
-            KisConfig cfg;
-            if(mode() == PAN_MODE && cfg.clicklessSpacePan()) {
-                endPan();
-            }
-            else {
-                d->spacePressed = false;
-            }
-        }
-        event->accept();
-
-    } else if (mode() == GESTURE_MODE ||
-               mode() == PAN_MODE) {
-
+    if (mode() == GESTURE_MODE) {
         event->accept();
     } else {
         event->ignore();
     }
-}
-
-void KisTool::initPan(const QPointF &docPoint)
-{
-    setMode(PAN_MODE);
-    m_lastPosition = convertDocumentToWidget(docPoint);
-    useCursor(QCursor(Qt::ClosedHandCursor));
-}
-
-void KisTool::pan(const QPointF &docPoint)
-{
-    Q_ASSERT(canvas());
-    Q_ASSERT(canvas()->canvasController());
-
-    QPointF actualPosition = convertDocumentToWidget(docPoint);
-    QPointF distance(m_lastPosition - actualPosition);
-    canvas()->canvasController()->pan(distance.toPoint());
-
-    m_lastPosition = actualPosition;
-}
-
-void KisTool::endPan()
-{
-    setMode(HOVER_MODE);
-    resetCursorStyle();
 }
 
 void KisTool::initGesture(const QPointF &docPoint)
@@ -754,6 +691,50 @@ void KisTool::setCurrentNodeLocked(bool locked)
         currentNode()->setSystemLocked(locked, false);
     }
 }
+
+bool KisTool::nodeEditable()
+{
+    KisNodeSP node = currentNode();
+    if (!node) {
+        return false;
+    }
+    if (!node->isEditable()) {
+        KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+        QString message;
+        if (!node->visible() && node->userLocked()) {
+            message = i18n("Layer is locked and invisible.");
+        } else if (node->userLocked()) {
+            message = i18n("Layer is locked.");
+        } else if(!node->visible()) {
+            message = i18n("Layer is invisible.");
+        } else {
+            message = i18n("Group not editable.");
+        }
+        KisFloatingMessage *floatingMessage = new KisFloatingMessage(message, kiscanvas->canvasWidget());
+        floatingMessage->setShowOverParent(true);
+        floatingMessage->setIcon(KIcon("object-locked"));
+        floatingMessage->showMessage();
+    }
+    return node->isEditable();
+}
+
+bool KisTool::selectionEditable()
+{
+    KisCanvas2 * kisCanvas = static_cast<KisCanvas2*>(canvas());
+    KisView2 * view = kisCanvas->view();
+
+    bool editable = view->selectionEditable();
+    if (!editable) {
+        KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+        KisFloatingMessage *floatingMessage = new KisFloatingMessage(i18n("Local selection is locked."),
+                                                                    kiscanvas->canvasWidget());
+        floatingMessage->setShowOverParent(true);
+        floatingMessage->setIcon(KIcon("object-locked"));
+        floatingMessage->showMessage();
+    }
+    return editable;
+}
+
 
 #include "kis_tool.moc"
 

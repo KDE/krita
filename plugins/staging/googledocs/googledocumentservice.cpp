@@ -88,7 +88,7 @@ void GoogleDocumentService::listDocuments()
     case OnlineDocument::STAGE:
         url = "https://docs.google.com/feeds/default/private/full/-/presentation";
         break;
-    case OnlineDocument::TABLES:
+    case OnlineDocument::SHEETS:
         url = "https://docs.google.com/feeds/default/private/full/-/spreadsheet";
         break;
     }

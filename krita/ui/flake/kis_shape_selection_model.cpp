@@ -29,9 +29,9 @@
 #include "kis_undo_adapter.h"
 
 KisShapeSelectionModel::KisShapeSelectionModel(KisImageWSP image, KisSelectionWSP selection, KisShapeSelection* shapeSelection)
-        : m_image(image)
-        , m_parentSelection(selection)
-        , m_shapeSelection(shapeSelection)
+    : m_image(image)
+    , m_parentSelection(selection)
+    , m_shapeSelection(shapeSelection)
 {
 }
 
@@ -43,6 +43,8 @@ KisShapeSelectionModel::~KisShapeSelectionModel()
 
 void KisShapeSelectionModel::add(KoShape *child)
 {
+    if (!m_shapeSelection) return;
+
     if (m_shapeMap.contains(child))
         return;
 
@@ -71,6 +73,8 @@ void KisShapeSelectionModel::add(KoShape *child)
 
 void KisShapeSelectionModel::remove(KoShape *child)
 {
+    if (!m_shapeMap.contains(child)) return;
+
     QRect updateRect = child->boundingRect().toAlignedRect();
     m_shapeMap.remove(child);
 
@@ -84,9 +88,9 @@ void KisShapeSelectionModel::remove(KoShape *child)
     updateRect = matrix.mapRect(updateRect);
     if (m_shapeSelection) { // No m_shapeSelection indicates the selection is being deleted
         m_parentSelection->updateProjection(updateRect);
+        m_image->undoAdapter()->emitSelectionChanged();
     }
 
-    m_image->undoAdapter()->emitSelectionChanged();
 }
 
 void KisShapeSelectionModel::setClipped(const KoShape *child, bool clipping)
@@ -128,8 +132,8 @@ void KisShapeSelectionModel::containerChanged(KoShapeContainer *, KoShape::Chang
 
 void KisShapeSelectionModel::childChanged(KoShape * child, KoShape::ChangeType type)
 {
-    if (type == KoShape::ParentChanged)
-        return;
+    if (!m_shapeSelection) return;
+    if (type == KoShape::ParentChanged) return;
 
     m_shapeSelection->setDirty();
     QRectF changedRect = m_shapeMap[child];

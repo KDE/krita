@@ -591,4 +591,12 @@ protected:
     Private * const d;
 };
 
+inline QDebug operator<<(QDebug dbg, const KoColorSpace *cs)
+{
+    dbg.nospace() << cs->name() << " (" << cs->colorModelId().id() << "," << cs->colorDepthId().id() << " )";
+
+    return dbg.space();
+}
+
+
 #endif // KOCOLORSPACE_H

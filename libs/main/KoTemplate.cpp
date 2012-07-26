@@ -46,7 +46,7 @@ KoTemplate::KoTemplate(const QString &name, const QString &description, const QS
 {
 }
 
-const QPixmap &KoTemplate::loadPicture(const KComponentData &componentData)
+const QPixmap &KoTemplate::loadPicture()
 {
     if (m_cached)
         return m_pixmap;
@@ -60,13 +60,12 @@ const QPixmap &KoTemplate::loadPicture(const KComponentData &componentData)
         }
         const int maxHeightWidth = 128; // ### TODO: some people would surely like to have 128x128
         if (img.width() > maxHeightWidth || img.height() > maxHeightWidth) {
-            img = img.scaled(maxHeightWidth, maxHeightWidth, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+            img = img.scaled(maxHeightWidth, maxHeightWidth, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
         m_pixmap = QPixmap::fromImage(img);
         return m_pixmap;
     } else { // relative path
-        KIconLoader iconLoader(componentData);
-        m_pixmap = iconLoader.loadIcon(m_picture, KIconLoader::Desktop, 128);
+        m_pixmap = KIconLoader::global()->loadIcon(m_picture, KIconLoader::Desktop, 128);
         return m_pixmap;
     }
 }

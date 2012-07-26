@@ -74,7 +74,7 @@ KoTableOfContentsGeneratorInfo::KoTableOfContentsGeneratorInfo(bool generateEntr
             // index-entry-chapter
             // use null String if the style name is not present, it means that we inherit it from the parent
             IndexEntryChapter *entryChapter = new IndexEntryChapter(QString());
-            entryChapter->display = "number-and-name";
+            entryChapter->display = "number";
             entryChapter->outlineLevel = level;
             tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryChapter));
 

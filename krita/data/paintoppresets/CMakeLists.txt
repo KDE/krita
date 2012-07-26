@@ -1,5 +1,7 @@
 install( FILES
 Basic_Airbrush.kpp
+Basic_airbrush_noisy.kpp
+Basic_airbrush_noisy_soft.kpp
 Basic_erase.kpp
 Basic_erase_soft.kpp
 Basic_ink_05.kpp
@@ -32,6 +34,7 @@ Block_paint_dirty_square.kpp
 Block_paint_squary.kpp
 Block_paint_tilt.kpp
 Block_smudge_tilt.kpp
+Bristle_mix_over_dull_light.kpp
 Curve_curvy.kpp
 Curve_ink.kpp
 Curve_recurvy.kpp
@@ -45,6 +48,12 @@ FX_glow_screen.kpp
 FX_overlay.kpp
 FX_splat_starfield.kpp
 Grid_square_25.kpp
+Hairy_clean.kpp
+Hairy_dirty.kpp
+Hairy_medium.kpp
+Hairy_thin_fat.kpp
+Hairy_thin_medium.kpp
+Hairy_thin_small.kpp
 Hatch_crispy.kpp
 Hatch_cross_regular.kpp
 Hatch_cross_small.kpp

@@ -54,6 +54,9 @@
 
 #include <kdebug.h>
 
+extern int qt_defaultDpiX();
+extern int qt_defaultDpiY();
+
 class KoStyleThumbnailer::Private
 {
 public:
@@ -123,13 +126,16 @@ QImage KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size, bool r
     clone->applyStyle(block, true);
 
     QTextCharFormat format;
+    // Default to black as text color, to match what KoTextLayoutArea::paint(...)
+    // does, setting solid black if no brush is set. Otherwise the UI text color
+    // would be used, which might be too bright with dark UI color schemes
+    format.setForeground(QColor(Qt::black));
     clone->KoCharacterStyle::applyStyle(format);
     if (flags & UseStyleNameText) {
         cursor.insertText(clone->name(), format);
     } else {
         cursor.insertText(d->thumbnailText, format);
     }
-
     layoutThumbnail(size, im, flags);
 
     d->thumbnailCache.insert(imageKey, im);
@@ -160,6 +166,10 @@ QImage KoStyleThumbnailer::thumbnail(KoCharacterStyle *characterStyle, KoParagra
 
     QTextCursor cursor(d->thumbnailHelperDocument);
     QTextCharFormat format;
+    // Default to black as text color, to match what KoTextLayoutArea::paint(...)
+    // does, setting solid black if no brush is set. Otherwise the UI text color
+    // would be used, which might be too bright with dark UI color schemes
+    format.setForeground(QColor(Qt::black));
     KoCharacterStyle *characterStyleClone = characterStyle->clone();
     characterStyleClone->applyStyle(format);
     cursor.select(QTextCursor::Document);
@@ -199,15 +209,17 @@ void KoStyleThumbnailer::layoutThumbnail(QSize size, QImage *im, KoStyleThumbnai
     QPainter p(im);
     d->documentLayout->removeRootArea();
     KoTextLayoutRootArea rootArea(d->documentLayout);
-    rootArea.setReferenceRect(0, size.width(), 0, 1E6);
+    rootArea.setReferenceRect(0, size.width() * 72.0 / qt_defaultDpiX(), 0, 1E6);
     rootArea.setNoWrap(1E6);
 
     FrameIterator frameCursor(d->thumbnailHelperDocument->rootFrame());
     rootArea.layoutRoot(&frameCursor);
 
     QSizeF documentSize = rootArea.boundingRect().size();
+    documentSize.setWidth(documentSize.width() * qt_defaultDpiX() / 72.0);
+    documentSize.setHeight(documentSize.height() * qt_defaultDpiY() / 72.0);
     if (documentSize.width() > size.width() || documentSize.height() > size.height()) {
-        //calculate the space needed for the font size indicator (should the preview big too big with the style's font size
+        //calculate the space needed for the font size indicator (should the preview be too big with the style's font size
         QTextCursor cursor(d->thumbnailHelperDocument);
         cursor.select(QTextCursor::Document);
         QString sizeHint = "\t" + QString::number(cursor.charFormat().fontPointSize()) + "pt";
@@ -230,28 +242,29 @@ void KoStyleThumbnailer::layoutThumbnail(QSize size, QImage *im, KoStyleThumbnai
         cursor.mergeCharFormat(fmt);
 
         frameCursor = FrameIterator(d->thumbnailHelperDocument->rootFrame());
-        rootArea.setReferenceRect(0, width, 0, 1E6);
+        rootArea.setReferenceRect(0, width * 72.0 / qt_defaultDpiX(), 0, 1E6);
         rootArea.setNoWrap(1E6);
         rootArea.layoutRoot(&frameCursor);
         documentSize = rootArea.boundingRect().size();
+        documentSize.setWidth(documentSize.width() * qt_defaultDpiX() / 72.0);
+        documentSize.setHeight(documentSize.height() * qt_defaultDpiY() / 72.0);
         //center the preview in the pixmap
         qreal yOffset = (size.height()-documentSize.height())/2;
+        p.save();
         if ((flags & CenterAlignThumbnail) && yOffset) {
             p.translate(0, yOffset);
         }
 
+        p.scale(qt_defaultDpiX() / 72.0, qt_defaultDpiY() / 72.0);
+
         KoTextDocumentLayout::PaintContext pc;
         rootArea.paint(&p, pc);
 
-        if ((flags & CenterAlignThumbnail) && yOffset) {
-            p.translate(0, -yOffset);
-        }
+        p.restore();
 
-        p.save();
         p.setFont(sizeHintFont);
         p.drawText(QRectF(size.width()-sizeHintRect.width(), 0, sizeHintRect.width(),
                           size.height() /*because we want to be vertically centered in the pixmap, like the style name*/),Qt::AlignCenter, sizeHint);
-        p.restore();
     }
     else {
         //center the preview in the pixmap
@@ -259,6 +272,8 @@ void KoStyleThumbnailer::layoutThumbnail(QSize size, QImage *im, KoStyleThumbnai
         if ((flags & CenterAlignThumbnail) && yOffset) {
             p.translate(0, yOffset);
         }
+
+        p.scale(qt_defaultDpiX() / 72.0, qt_defaultDpiY() / 72.0);
 
         KoTextDocumentLayout::PaintContext pc;
         rootArea.paint(&p, pc);

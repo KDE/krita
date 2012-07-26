@@ -50,8 +50,14 @@ inline QRect stretchRect(const QRect &rc, int delta)
 class KisTextureTile
 {
 public:
+    enum FilterMode {
+        NearestFilterMode,
+        BilinearFilterMode,
+        TrilinearFilterMode,
+    };
+
     KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texturesInfo,
-                   const GLvoid *fillData);
+                   const GLvoid *fillData, FilterMode mode);
     ~KisTextureTile();
 
     void update(const KisTextureTileUpdateInfo &updateInfo);

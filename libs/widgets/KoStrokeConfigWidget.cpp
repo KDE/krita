@@ -6,7 +6,7 @@
  * Copyright (C) 2005-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2005-2006, 2011 Inge Wallin <inge@lysator.liu.se>
  * Copyright (C) 2005-2008 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2006 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2006 Peter Simonsson <psn@linux.se>
  * Copyright (C) 2006 Laurent Montel <montel@kde.org>
  * Copyright (C) 2007,2011 Thorsten Zachmann <t.zachmann@zagge.de>

@@ -189,7 +189,7 @@ KoUnavailShape::~KoUnavailShape()
 }
 
 
-void KoUnavailShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
+void KoUnavailShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     applyConversion(painter, converter);
 
@@ -200,7 +200,7 @@ void KoUnavailShape::paint(QPainter &painter, const KoViewConverter &converter, 
         if (background()) {
             QPainterPath p;
             p.addRect(QRectF(QPointF(), size()));
-            background()->paint(painter, p);
+            background()->paint(painter, converter, paintContext, p);
         }
     } else {
         if(shapes().isEmpty()) {

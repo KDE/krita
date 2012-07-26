@@ -21,6 +21,7 @@
 #define __rdf_KoSopranoTableModel_h__
 
 #include <QAbstractTableModel>
+#include <QSharedPointer>
 #include <Soprano/Soprano>
 
 class KoDocumentRdf;
@@ -58,7 +59,7 @@ public:
      * Get the RDF model we this class is showing.
      * You should not delete the return value.
      */
-    const Soprano::Model *model() const;
+    QSharedPointer<Soprano::Model> model() const;
 
     enum {
         ColIsValid = 0,  // Is this triple valid

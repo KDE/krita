@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2011-2012 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -39,6 +39,7 @@ public:
 
     virtual bool editorEvent(QEvent *event, QAbstractItemModel *model,
                             const QStyleOptionViewItem &option, const QModelIndex &index);
+    void setEditButtonEnable(bool enable);
 
 signals:
     void styleManagerButtonClicked(QModelIndex index);
@@ -49,6 +50,7 @@ signals:
 private:
     bool m_editButtonPressed;
     bool m_deleteButtonPressed;
+    bool m_enableEditButton;
 
     int m_buttonSize;
     int m_buttonDistance;

@@ -128,6 +128,11 @@ KOODF_EXPORT QString name(Format format);
 KOODF_EXPORT QStringList allFormats();
 
 /**
+ * Lists the non-translated names of all the available formats
+ */
+KOODF_EXPORT QStringList allShortNames();
+
+/**
  * Try to find the paper format for the given width and height (in mm).
  * Useful to some import filters.
  */

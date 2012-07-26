@@ -2112,10 +2112,9 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style) const
                 style.addProperty("fo:background-color", brush.color().name(), KoGenStyle::TextType);
         } else if (key == QTextFormat::ForegroundBrush) {
             QBrush brush = d->stylesPrivate.value(key).value<QBrush>();
-            if (brush.style() == Qt::NoBrush)
-                style.addProperty("fo:color", "transparent", KoGenStyle::TextType);
-            else
+            if (brush.style() != Qt::NoBrush) {
                 style.addProperty("fo:color", brush.color().name(), KoGenStyle::TextType);
+            }
         } else if (key == KoCharacterStyle::UseWindowFontColor) {
             bool use = d->stylesPrivate.value(key).toBool();
             style.addProperty("style:use-window-font-color", use ? "true" : "false", KoGenStyle::TextType);
@@ -2230,7 +2229,7 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style) const
         } else if (key == KoCharacterStyle::HyphenationRemainCharCount) {
             style.addProperty("fo:hyphenation-remain-char-count", hyphenationRemainCharCount(), KoGenStyle::TextType);
         } else if (key == KoCharacterStyle::Blink) {
-            style.addProperty("style:text-blinking", blinking());
+            style.addProperty("style:text-blinking", blinking(), KoGenStyle::TextType);
         }
     }
     //TODO: font name and family

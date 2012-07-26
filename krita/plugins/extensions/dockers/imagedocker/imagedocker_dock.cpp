@@ -158,7 +158,7 @@ struct PopupWidgetUI: public QWidget, public Ui_wdgImageViewPopup
 // --------- ImageDockerDock ----------------------------------------------- //
 
 ImageDockerDock::ImageDockerDock():
-    QDockWidget(i18n("Image Docker")),
+    QDockWidget(i18n("Reference Images")),
     m_canvas(0),
     m_currImageID(-1)
 {

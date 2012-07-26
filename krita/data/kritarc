@@ -1,3 +1,6 @@
+[krita]
+WantExportConfirmation=false
+
 favoriteCompositeOps=normal,erase,multiply
 
 [TemplateChooserDialog]
@@ -155,7 +158,7 @@ ShapePluginsDisabled=musicshape,pictureshape,videoshape,chartshape,spreadsheetsh
 TextEditingPluginsDisabled=thesaurustool,changecase,autocorrect,spellcheck
 TextInlinePluginsDisabled=textvariables,kprvariables
 ToolPluginsDisabled=paragraphtool,kopabackgroundtool,calligrastagetoolanimation
-ToolsBlacklist=CreatePathTool,ConnectionTool,KarbonFilterEffectsTool
+ToolsBlacklist=CreatePathTool,ConnectionTool,KarbonFilterEffectsTool,PanTool,KoZoomToolId
 
 [favoriteList]
 favoriteBrushes=paintbrush,deformbrush,hairybrush,hatchingbrush,sketchbrush,smudge,spraybrush,

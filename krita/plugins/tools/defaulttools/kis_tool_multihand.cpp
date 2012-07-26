@@ -66,6 +66,10 @@ void KisToolMultihand::mousePressEvent(KoPointerEvent *e)
         e->accept();
     }
     else {
+        if (!nodeEditable()) {
+            return;
+        }
+
         initTransformations();
         KisToolFreehand::mousePressEvent(e);
     }

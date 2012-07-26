@@ -1,6 +1,6 @@
 /* This file is part of the Calligra project
  * Copyright (C) 2005 Thomas Zander <zander@kde.org>
- * Copyright (C) 2005 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2005 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -170,10 +170,10 @@ void KisCustomImageWidget::heightUnitChanged(int index)
 {
     doubleHeight->blockSignals(true);
 
-    m_widthUnit = KoUnit::fromListForUi(index, KoUnit::ListAll);
-    if (m_widthUnit.type() == KoUnit::Pixel) {
+    m_heightUnit = KoUnit::fromListForUi(index, KoUnit::ListAll);
+    if (m_heightUnit.type() == KoUnit::Pixel) {
         doubleHeight->setDecimals(0);
-        m_widthUnit.setFactor(doubleResolution->value() / 72.0);
+        m_heightUnit.setFactor(doubleResolution->value() / 72.0);
     } else {
         doubleHeight->setDecimals(2);
     }

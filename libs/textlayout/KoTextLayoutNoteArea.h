@@ -35,6 +35,12 @@ public:
 
     bool layout(FrameIterator *cursor);
 
+    void setAsContinuedArea(bool isContinuedArea);
+
+    KoPointedAt hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const;
+
+    QRectF selectionBoundingBox(QTextCursor &cursor) const;
+
 private:
     class Private;
     Private * const d;

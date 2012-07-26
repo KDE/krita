@@ -938,6 +938,15 @@ void PlotArea::saveOdfSubType(KoXmlWriter& xmlWriter,
         break;
 
     case StockChartType:
+        switch(d->chartSubtype) {
+        case NoChartSubtype:
+        case HighLowCloseChartSubtype:
+        case OpenHighLowCloseChartSubtype:
+            break;
+        case CandlestickChartSubtype:
+            plotAreaStyle.addProperty("chart:japanese-candle-stick", "true");
+            break;
+        }
     case BubbleChartType:
     case SurfaceChartType:
     case GanttChartType:
@@ -1073,7 +1082,7 @@ void PlotArea::paintPixmap(QPainter &painter, const KoViewConverter &converter)
     }
 }
 
-void PlotArea::paint(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &)
+void PlotArea::paint(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintContext)
 {
     //painter.save();
 
@@ -1088,7 +1097,7 @@ void PlotArea::paint(QPainter& painter, const KoViewConverter& converter, KoShap
     if (background()) {
         QPainterPath p;
         p.addRect(paintRect);
-        background()->paint(painter, p);
+        background()->paint(painter, converter, paintContext, p);
     }
 
     // Get the current zoom level

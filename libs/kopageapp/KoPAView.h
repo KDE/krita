@@ -212,7 +212,8 @@ public slots:
     /// Delete the current page
     void deletePage();
 
-    void updatePageCount();
+    /// Make sure the canvas size matches the content
+    void updateCanvasSize(bool forceUpdate = false);
 
 protected slots:
 

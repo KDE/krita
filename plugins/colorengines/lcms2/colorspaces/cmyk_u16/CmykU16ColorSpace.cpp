@@ -25,19 +25,17 @@
 
 #include "compositeops/KoCompositeOps.h"
 
-#define TYPE_CMYKA_16           (COLORSPACE_SH(PT_CMYK)|EXTRA_SH(1)|CHANNELS_SH(4)|BYTES_SH(2))
-
-CmykU16ColorSpace::CmykU16ColorSpace(KoColorProfile *p) :
-        LcmsColorSpace<CmykU16Traits>("CMYKA16", i18n("CMYK (16-bit integer/channel)"),  TYPE_CMYKA_16, cmsSigCmykData, p)
+CmykU16ColorSpace::CmykU16ColorSpace(const QString &name, KoColorProfile *p)
+    : LcmsColorSpace<CmykU16Traits>(colorSpaceId(), name,  TYPE_CMYKA_16, cmsSigCmykData, p)
 {
     addChannel(new KoChannelInfo(i18n("Cyan"), 0 * sizeof(quint16), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), Qt::cyan));
     addChannel(new KoChannelInfo(i18n("Magenta"), 1 * sizeof(quint16), 1, KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), Qt::magenta));
     addChannel(new KoChannelInfo(i18n("Yellow"), 2 * sizeof(quint16), 2, KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), Qt::yellow));
     addChannel(new KoChannelInfo(i18n("Black"), 3 * sizeof(quint16), 3, KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), Qt::black));
     addChannel(new KoChannelInfo(i18n("Alpha"), 4 * sizeof(quint16), 4, KoChannelInfo::ALPHA, KoChannelInfo::UINT16, sizeof(quint16)));
+
     init();
 
-    // ADD, ALPHA_DARKEN, BURN, DIVIDE, DODGE, ERASE, MULTIPLY, OVER, OVERLAY, SCREEN, SUBTRACT
     addStandardCompositeOps<CmykU16Traits>(this);
 }
 
@@ -51,7 +49,7 @@ bool CmykU16ColorSpace::willDegrade(ColorSpaceIndependence independence) const
 
 KoColorSpace* CmykU16ColorSpace::clone() const
 {
-    return new CmykU16ColorSpace(profile()->clone());
+    return new CmykU16ColorSpace(name(), profile()->clone());
 }
 
 void CmykU16ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
@@ -75,4 +73,3 @@ void CmykU16ColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) cons
     p->black = KoColorSpaceMaths< qreal, CmykU16Traits::channels_type >::scaleToA(elt.attribute("k").toDouble());
     p->alpha = KoColorSpaceMathsTraits<quint16>::max;
 }
-

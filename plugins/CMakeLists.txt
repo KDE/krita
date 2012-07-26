@@ -11,7 +11,10 @@ include_directories(
 
 IF (NOT TINY)
     macro_optional_add_subdirectory( colorengines )
-    macro_optional_add_subdirectory( musicshape )
+
+    IF (NOT CREATIVEONLY)
+        macro_optional_add_subdirectory( musicshape )
+    ENDIF (NOT CREATIVEONLY)
 
     macro_optional_find_package(Spnav)
     macro_log_feature(SPNAV_FOUND "Spnav" "3Dconnexion device driver and SDK" "http://spacenav.sourceforge.net/" FALSE "" "Required by SpaceNavigator 3D mouse plugin") 
@@ -23,31 +26,37 @@ IF (NOT TINY)
     if (SHOULD_BUILD_TEXTSHAPE)
         macro_optional_add_subdirectory( textediting )
     endif(SHOULD_BUILD_TEXTSHAPE)
-    macro_optional_add_subdirectory( commentshape )
-    macro_optional_add_subdirectory( staging )
+    IF (NOT CREATIVEONLY)
+        macro_optional_add_subdirectory( commentshape )
+        macro_optional_add_subdirectory( staging )
+    ENDIF (NOT CREATIVEONLY)
     if(SHOULD_BUILD_KEXI)
         macro_optional_add_subdirectory( kexi )
     endif(SHOULD_BUILD_KEXI)
 ENDIF (NOT TINY)
 
-macro_optional_add_subdirectory( variables )
 macro_optional_add_subdirectory( defaultTools )
 macro_optional_add_subdirectory( pathshapes )
-macro_optional_add_subdirectory( chartshape )
-macro_optional_add_subdirectory( pictureshape )
-macro_optional_add_subdirectory( videoshape )
+IF (NOT CREATIVEONLY)
+    macro_optional_add_subdirectory( variables )
+    macro_optional_add_subdirectory( chartshape )
+    macro_optional_add_subdirectory( pictureshape )
+    macro_optional_add_subdirectory( videoshape )
+ENDIF (NOT CREATIVEONLY)
 
 if (SHOULD_BUILD_TEXTSHAPE)
 macro_optional_add_subdirectory( textshape )
 endif(SHOULD_BUILD_TEXTSHAPE)
 
-macro_optional_add_subdirectory( pluginshape )
-macro_optional_add_subdirectory( formulashape )
+IF (NOT CREATIVEONLY)
+    macro_optional_add_subdirectory( pluginshape )
+    macro_optional_add_subdirectory( formulashape )
+    # as the vector shape depends on filters subdir (not really intuitive) lets allow disabling
+    macro_optional_add_subdirectory( vectorshape )
 
-# as the vector shape depends on filters subdir (not really intuitive) lets allow disabling
-macro_optional_add_subdirectory( vectorshape )
+    # only build the reporting plugins if building koreport
+    if(SHOULD_BUILD_KOREPORT)
+        macro_optional_add_subdirectory( reporting )
+    endif(SHOULD_BUILD_KOREPORT)
+ENDIF (NOT CREATIVEONLY)
 
-# only build the reporting plugins if building koreport
-if(SHOULD_BUILD_KOREPORT)
-    macro_optional_add_subdirectory( reporting )
-endif(SHOULD_BUILD_KOREPORT)

@@ -56,6 +56,8 @@ public:
 
     bool isValid() const;
 
+    const KoReportReportData *reportData() const;
+
 protected:
 
 private:

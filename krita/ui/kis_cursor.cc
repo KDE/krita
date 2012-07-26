@@ -26,6 +26,8 @@
 #include <QCursor>
 #include <QImage>
 #include <QPainter>
+#include <QtGlobal>
+#include <QtCore/qmath.h>
 
 #include <kcursor.h>
 #include <kiconloader.h>
@@ -357,8 +359,24 @@ QCursor KisCursor::load(const QString & iconName, int hotspotX, int hotspotY)
     Q_ASSERT(!cursorImage.isNull());
     Q_ASSERT(cursorImage.hasAlphaChannel());
 
+#ifdef Q_WS_WIN
+    // cursor width must be multiple of 16 on Windows
+    int bitmapWidth = qCeil(cursorImage.width() / 16.0) * 16; 
+    if (hotspotX < 0) {
+        hotspotX = cursorImage.width() / 2;
+    }
+
+    QBitmap bitmap(bitmapWidth, cursorImage.height());
+    QBitmap mask(bitmapWidth, cursorImage.height());
+
+    if (bitmapWidth != cursorImage.width()) {
+        bitmap.clear();
+        mask.clear();
+    }
+#else
     QBitmap bitmap(cursorImage.width(), cursorImage.height());
     QBitmap mask(cursorImage.width(), cursorImage.height());
+#endif
 
     QPainter bitmapPainter(&bitmap);
     QPainter maskPainter(&mask);

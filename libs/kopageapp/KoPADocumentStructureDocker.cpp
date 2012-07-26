@@ -45,7 +45,7 @@
 #include <KoShapeReorderCommand.h>
 #include <KoShapeLayer.h>
 #include <KoShapePaste.h>
-#include <KoSelectionManager.h>
+#include <KoViewItemContextBar.h>
 
 #include <KMenu>
 #include <klocale.h>
@@ -175,7 +175,6 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker(KoDocumentSectionView::
     m_sectionView->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_sectionView->setSelectionMode(QAbstractItemView::ExtendedSelection);
     m_sectionView->setDragDropMode(QAbstractItemView::InternalMove);
-    new KoSelectionManager(m_sectionView);
 
     connect(m_sectionView, SIGNAL(pressed(const QModelIndex&)), this, SLOT(itemClicked(const QModelIndex&)));
     connect(m_sectionView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
@@ -191,6 +190,8 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker(KoDocumentSectionView::
         setViewMode(mode);
     else
         setViewMode(viewModeFromString(viewModeString));
+
+    m_itemsContextBar = new KoViewItemContextBar(m_sectionView);
 }
 
 KoPADocumentStructureDocker::~KoPADocumentStructureDocker()
@@ -516,16 +517,19 @@ void KoPADocumentStructureDocker::setMasterMode(bool master)
 void KoPADocumentStructureDocker::minimalView()
 {
     setViewMode(KoDocumentSectionView::MinimalMode);
+    m_itemsContextBar->disableContextBar();
 }
 
 void KoPADocumentStructureDocker::detailedView()
 {
     setViewMode(KoDocumentSectionView::DetailedMode);
+    m_itemsContextBar->disableContextBar();
 }
 
 void KoPADocumentStructureDocker::thumbnailView()
 {
     setViewMode(KoDocumentSectionView::ThumbnailMode);
+    m_itemsContextBar->enableContextBar();
 }
 
 void KoPADocumentStructureDocker::setViewMode(KoDocumentSectionView::DisplayMode mode)

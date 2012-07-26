@@ -54,8 +54,8 @@ protected slots:
 private:
 
     void setupStylesheetsItems(const QString &semanticClass,
-                               KoRdfSemanticItem *si,
-                               const QList<KoSemanticStylesheet*> &ssl,
+                               hKoRdfSemanticItem si,
+                               const QList<hKoSemanticStylesheet> &ssl,
                                const QMap<QString, QTreeWidgetItem*> &m,
                                bool editable = false);
     void maskButtonsDependingOnCurrentItem(QTreeWidgetItem *current);

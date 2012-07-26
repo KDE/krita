@@ -742,9 +742,6 @@ bool ChartProxyModel::loadOdf(const KoXmlElement &element,
                 }
             }
         }
-        else {
-            qWarning() << "ChartProxyModel::loadOdf(): Unknown tag name \"" << n.localName() << "\"";
-        }
     }
 
     //rebuildDataMap();

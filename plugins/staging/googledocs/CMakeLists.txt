@@ -33,7 +33,7 @@ install(TARGETS calligragoogledocs  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  googledocs-stage.rc  DESTINATION ${DATA_INSTALL_DIR}/stage/kpartplugins)
-install( FILES  googledocs-tables.rc  DESTINATION ${DATA_INSTALL_DIR}/tables/kpartplugins)
+install( FILES  googledocs-sheets.rc  DESTINATION ${DATA_INSTALL_DIR}/sheets/kpartplugins)
 install( FILES  googledocs-words.rc  DESTINATION ${DATA_INSTALL_DIR}/words/kpartplugins)
 
 

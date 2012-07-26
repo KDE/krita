@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (c) 2006 Boudewijn Rempt (boud@valdyas.org)
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2008 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or

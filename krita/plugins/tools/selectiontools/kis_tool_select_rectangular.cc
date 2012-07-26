@@ -32,10 +32,12 @@
 #include "kis_shape_tool_helper.h"
 
 #include "kis_system_locker.h"
+#include "kis_view2.h"
+#include "kis_selection_manager.h"
 
 
 KisToolSelectRectangular::KisToolSelectRectangular(KoCanvasBase * canvas)
-    : KisToolRectangleBase(canvas,
+    : KisToolRectangleBase(canvas, KisToolRectangleBase::SELECT,
                            KisCursor::load("tool_rectangular_selection_cursor.png", 6, 6)),
       m_widgetHelper(i18n("Rectangular Selection"))
 {
@@ -68,6 +70,12 @@ void KisToolSelectRectangular::finishRect(const QRectF& rect)
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     if (!kisCanvas)
         return;
+
+    // If the user just clicks on the canvas deselect
+    if (rc.isEmpty()) {
+        kisCanvas->view()->selectionManager()->deselect();
+        return;
+    }
 
     KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Rectangular Selection"));
 

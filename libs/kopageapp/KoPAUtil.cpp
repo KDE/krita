@@ -32,6 +32,28 @@ void KoPAUtil::setZoom( const KoPageLayout & pageLayout, const QSize & size, KoZ
     zoomHandler.setZoom( zoom );
 }
 
+void KoPAUtil::setSizeAndZoom(const KoPageLayout &pageLayout, QSize &thumbnailSize, KoZoomHandler &zoomHandler)
+{
+    const qreal realWidth = zoomHandler.resolutionX() * pageLayout.width;
+    const qreal realHeight = zoomHandler.resolutionY() * pageLayout.height;
+
+    const qreal widthScale = thumbnailSize.width() / realWidth;
+    const qreal heightScale = thumbnailSize.height() / realHeight;
+
+    // adapt thumbnailSize to match the rendered page
+    if (widthScale > heightScale) {
+        const int thumbnailWidth = qMin(thumbnailSize.width(), qRound(realWidth*heightScale));
+        thumbnailSize.setWidth(thumbnailWidth);
+    } else {
+        const int thumbnailHeight = qMin(thumbnailSize.height(), qRound(realHeight*widthScale));
+        thumbnailSize.setHeight(thumbnailHeight);
+    }
+
+    // set zoom
+    const qreal zoom = (widthScale > heightScale) ? heightScale : widthScale;
+    zoomHandler.setZoom(zoom);
+}
+
 QRect KoPAUtil::pageRect( const KoPageLayout & pageLayout, const QSize & size, const KoZoomHandler & zoomHandler )
 {
     int width = int( 0.5 + zoomHandler.documentToViewX( pageLayout.width ) );

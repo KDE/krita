@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007,2009,2010 Thomas Zander <zander@kde.org>
- * Copyright (C) 2010 Casper Boemann <cbo@kogmbh.com>
+ * Copyright (C) 2010 C. Boemann <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -146,6 +146,7 @@ void KoTextShapeContainerModel::childChanged(KoShape *child, KoShape::ChangeType
     if (((type == KoShape::RotationChanged ||
           type == KoShape::ScaleChanged ||
           type == KoShape::ShearChanged ||
+          type == KoShape::ClipPathChanged ||
           type == KoShape::PositionChanged ||
           type == KoShape::SizeChanged) && child->textRunAroundSide() != KoShape::RunThrough) ||
           type == KoShape::TextRunAroundChanged) {

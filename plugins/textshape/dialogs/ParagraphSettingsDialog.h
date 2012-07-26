@@ -26,6 +26,7 @@
 
 class TextTool;
 class ParagraphGeneral;
+class KoImageCollection;
 
 /// A dialog to show the settings for a paragraph
 class ParagraphSettingsDialog : public KDialog
@@ -36,6 +37,8 @@ public:
     ~ParagraphSettingsDialog();
 
     void setUnit(const KoUnit &unit);
+
+    void setImageCollection(KoImageCollection *imageCollection);
 
 protected slots:
     void styleChanged(bool state = true);

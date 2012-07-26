@@ -32,9 +32,9 @@ KoDocumentRdfBase::KoDocumentRdfBase(QObject *parent)
 {
 }
 
-const Soprano::Model *KoDocumentRdfBase::model() const
+QSharedPointer<Soprano::Model> KoDocumentRdfBase::model() const
 {
-    return 0;
+    return QSharedPointer<Soprano::Model>(0);
 }
 
 void KoDocumentRdfBase::linkToResourceManager(KoDocumentResourceManager *rm)

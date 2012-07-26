@@ -7,8 +7,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>271</width>
-    <height>454</height>
+    <width>296</width>
+    <height>483</height>
    </rect>
   </property>
   <layout class="QGridLayout">
@@ -155,12 +155,23 @@ p, li { white-space: pre-wrap; }
             </property>
            </widget>
           </item>
-          <item row="5" column="0" colspan="3">
-           <widget class="QPushButton" name="axisScalingButton">
-            <property name="text">
-             <string>Scaling...</string>
-            </property>
-           </widget>
+          <item row="7" column="0" colspan="3">
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <widget class="QPushButton" name="axisScalingButton">
+              <property name="text">
+               <string>Scaling...</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="axisEditFontButton">
+              <property name="text">
+               <string>Edit Fonts...</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </widget>
@@ -185,7 +196,7 @@ p, li { white-space: pre-wrap; }
        <string>Data Sets</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0" colspan="3">
+       <item row="0" column="0" colspan="2">
         <widget class="QComboBox" name="dataSets">
          <property name="toolTip">
           <string>Select a data set</string>
@@ -195,7 +206,7 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="5" column="0" colspan="3">
+       <item row="7" column="0" colspan="2">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
           <widget class="QCheckBox" name="dataSetHasChartType">
@@ -234,7 +245,7 @@ p, li { white-space: pre-wrap; }
          </item>
         </layout>
        </item>
-       <item row="9" column="0" colspan="3">
+       <item row="14" column="0" colspan="2">
         <widget class="QWidget" name="barProperties" native="true">
          <layout class="QGridLayout" name="gridLayout">
           <property name="margin">
@@ -321,10 +332,13 @@ p, li { white-space: pre-wrap; }
          </layout>
         </widget>
        </item>
-       <item row="11" column="0" colspan="3">
+       <item row="16" column="0" colspan="2">
         <spacer>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Expanding</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -334,14 +348,14 @@ p, li { white-space: pre-wrap; }
          </property>
         </spacer>
        </item>
-       <item row="7" column="0" colspan="3">
+       <item row="12" column="0" colspan="2">
         <widget class="Line" name="propertiesSeparator">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
-       <item row="8" column="0" colspan="3">
+       <item row="13" column="0" colspan="2">
         <widget class="QWidget" name="pieProperties" native="true">
          <layout class="QGridLayout" name="gridLayout_4">
           <property name="leftMargin">
@@ -350,7 +364,7 @@ p, li { white-space: pre-wrap; }
           <property name="topMargin">
            <number>0</number>
           </property>
-          <item row="1" column="1">
+          <item row="2" column="1">
            <widget class="QSpinBox" name="pieExplodeFactor">
             <property name="suffix">
              <string>%</string>
@@ -363,18 +377,7 @@ p, li { white-space: pre-wrap; }
             </property>
            </widget>
           </item>
-          <item row="0" column="0" colspan="2">
-           <widget class="QLabel" name="label_5">
-            <property name="text">
-             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;Pie Properties&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
+          <item row="2" column="0">
            <widget class="QLabel" name="label_6">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -387,10 +390,21 @@ p, li { white-space: pre-wrap; }
             </property>
            </widget>
           </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:8pt; font-weight:600;&quot;&gt;Pie Properties&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
-       <item row="4" column="2">
+       <item row="4" column="1">
         <widget class="QComboBox" name="dataSetAxes">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -416,8 +430,66 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="2" column="0" colspan="3">
+       <item row="2" column="0" colspan="2">
         <layout class="QHBoxLayout" name="horizontalLayout_7">
+         <item>
+          <widget class="QLabel" name="datasetMarkerLabel">
+           <property name="text">
+            <string>Marker</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="datasetMarkerMenu">
+           <property name="minimumSize">
+            <size>
+             <width>45</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="popupMode">
+            <enum>QToolButton::InstantPopup</enum>
+           </property>
+           <property name="toolButtonStyle">
+            <enum>Qt::ToolButtonTextUnderIcon</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="datasetPenLabel">
+           <property name="text">
+            <string>Stroke</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="KColorButton" name="datasetPen">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>50</width>
+             <height>26</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>50</width>
+             <height>26</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
          <item>
           <widget class="QLabel" name="datasetColorLabel">
            <property name="enabled">
@@ -431,6 +503,9 @@ p, li { white-space: pre-wrap; }
            </property>
            <property name="text">
             <string>Fill</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
           </widget>
          </item>
@@ -447,96 +522,119 @@ p, li { white-space: pre-wrap; }
            </property>
            <property name="minimumSize">
             <size>
-             <width>60</width>
+             <width>50</width>
              <height>26</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>64</width>
+             <width>50</width>
              <height>26</height>
             </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_7">
-           <property name="text">
-            <string>Stroke</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="KColorButton" name="datasetPen">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>60</width>
-             <height>26</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>64</width>
-             <height>26</height>
-            </size>
-           </property>
-           <property name="text">
-            <string/>
            </property>
           </widget>
          </item>
         </layout>
        </item>
-       <item row="6" column="0" colspan="3">
-        <layout class="QGridLayout" name="gridLayout_5" rowminimumheight="0,0">
-         <item row="0" column="0">
-          <widget class="QCheckBox" name="datasetShowCategory">
-           <property name="text">
-            <string>Category</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QCheckBox" name="datasetShowSymbol">
-           <property name="text">
-            <string>Symbol</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QCheckBox" name="dataSetShowNumber">
-           <property name="text">
-            <string>Number</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QCheckBox" name="datasetShowPercent">
-           <property name="text">
-            <string>Percent</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+       <item row="8" column="0" colspan="2">
+        <widget class="QWidget" name="errorBarProperties" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>24</height>
+          </size>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QCheckBox" name="datasetShowErrorBar">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Error Bars</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="formatErrorBar">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>26</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Insert</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="9" column="0" colspan="2">
+        <widget class="QWidget" name="widget" native="true">
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="datasetShowCategory">
+            <property name="text">
+             <string>Category</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QCheckBox" name="datasetShowSymbol">
+            <property name="text">
+             <string>Symbol</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QCheckBox" name="dataSetShowNumber">
+            <property name="text">
+             <string>Number</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QCheckBox" name="datasetShowPercent">
+            <property name="text">
+             <string>Percent</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -619,11 +717,11 @@ p, li { white-space: pre-wrap; }
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../../../../../.designer/backup</normaloff>../../../../../.designer/backup</iconset>
+           <normaloff>.designer/backup</normaloff>.designer/backup</iconset>
          </property>
         </widget>
        </item>
-       <item row="5" column="0" colspan="2">
+       <item row="6" column="0" colspan="2">
         <spacer>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -635,6 +733,13 @@ p, li { white-space: pre-wrap; }
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="5" column="0" colspan="4">
+        <widget class="QPushButton" name="legendEditFontButton">
+         <property name="text">
+          <string>Edit Fonts...</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -668,7 +773,7 @@ p, li { white-space: pre-wrap; }
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>../../../../../.designer/backup</normaloff>../../../../../.designer/backup</iconset>
+       <normaloff>.designer/backup</normaloff>.designer/backup</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -688,6 +793,7 @@ p, li { white-space: pre-wrap; }
    <class>KColorButton</class>
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

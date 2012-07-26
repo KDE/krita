@@ -62,14 +62,6 @@ public:
     virtual ~KoOdfDocument();
 
     /**
-     *  Saves all internal children (only!), to the store, using the OASIS format.
-     *  This is called automatically during saveNativeFormat.
-     *  @see saveExternalChildren if you have external children.
-     *  Returns true on success.
-     */
-    bool saveChildrenOdf(SavingContext &documentContext);
-
-    /**
      * Return true if url() is a real filename, false if url() is
      * an internal url in the store, like "tar:/..."
      */

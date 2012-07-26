@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -75,8 +75,10 @@ private slots:
     void insertAutoEndNote();
     /// insert a labeled endnote
     void insertLabeledEndNote(QString label);
-    /// show the configuration dialog for notes
-    void showNotesConfigureDialog();
+    /// show the configuration dialog for footnotes
+    void showFootnotesConfigureDialog();
+    /// show the configuration dialog for endnotes
+    void showEndnotesConfigureDialog();
     /// enable/disable buttons if cursor in notes' body or not
     void updateButtons();
 

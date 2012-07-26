@@ -60,6 +60,7 @@ public:
     KoShape *title() const;
     QString titleText() const;
     bool showLabels() const;
+    bool showOverlappingDataLabels() const;
     QString id() const;
     AxisDimension dimension() const;
     QList<DataSet*> dataSets() const;
@@ -77,10 +78,12 @@ public:
     bool showMinorGrid() const;
     Qt::Orientation orientation();
     QFont font() const;
+    qreal fontSize() const;
     bool isVisible() const;
 
     void setTitleText(const QString &text);
     void setShowLabels(bool show);
+    void setShowOverlappingDataLabels(bool show);
 
     /**
      * Attaches a data set to this axis, adding it to a diagram
@@ -114,6 +117,7 @@ public:
     void setShowMinorGrid(bool showGrid);
     void setThreeD(bool threeD);
     void setFont(const QFont &font);
+    void setFontSize(qreal size);
     void setVisible(bool visible);
 
     KoOdfNumberStyles::NumericStyleFormat *numericStyleFormat() const;

@@ -143,7 +143,7 @@ public:
 
     void setShapeData(KoTextShapeData *data);
 
-    QRectF caretRect(QTextCursor *cursor) const;
+    QRectF caretRect(QTextCursor *cursor, bool *upToDate=0) const;
 
     QRectF textRect(QTextCursor &cursor) const;
 
@@ -285,8 +285,8 @@ private slots:
     // called when the m_textShapeData has been deleted.
     void shapeDataRemoved();
 
-    //Show tooltip with change info
-    void showChangeTip();
+    //Show tooltip with editing info
+    void showEditTip();
 
     /// print debug about the details of the text document
     void debugTextDocument();
@@ -374,9 +374,10 @@ private:
     bool m_textTyping;
     bool m_textDeleting;
 
-    QTimer m_changeTipTimer;
-    int m_changeTipCursorPos;
-    QPoint m_changeTipPos;
+    QTimer m_editTipTimer;
+    KoPointedAt m_editTipPointedAt;
+    QPoint m_editTipPos;
+
     bool m_delayedEnsureVisible;
     TextToolSelection *m_toolSelection;
 

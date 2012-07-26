@@ -31,21 +31,27 @@
 #include <QTimer>
 #include <QTimeLine>
 
+#include <krita_export.h>
+
 /**
  * @brief The KisFloatingMessage class shows the given message in a semi-transparent
  * bubble that doesn' take focus and slowly fades away.
  *
  * Heavily based on Amarok's Osd.cpp
  */
-class KisFloatingMessage : public QWidget
+class KRITAUI_EXPORT KisFloatingMessage : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    explicit KisFloatingMessage(const QString &message, QWidget *parent);
+    explicit KisFloatingMessage(const QString &message, QWidget *parent, bool showOverParent = false);
     void showMessage();
 
+    /// Show message above parent widget instead of screen
+    void setShowOverParent(bool show);
+
+    void setIcon(const QIcon& icon);
 protected:
 
     void paintEvent(QPaintEvent *e);
@@ -65,6 +71,7 @@ private:
     QTimer m_timer;
     int m_m;
     QTimeLine m_fadeTimeLine;
+    bool m_showOverParent;
 };
 
 #endif // KIS_FLOATING_MESSAGE_H

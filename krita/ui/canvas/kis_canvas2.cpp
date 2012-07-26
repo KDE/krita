@@ -65,6 +65,8 @@
 #include <ko_favorite_resource_manager.h>
 #include <kis_paintop_box.h>
 
+#include "input/kis_input_manager.h"
+
 struct KisCanvas2::KisCanvas2Private
 {
 
@@ -103,6 +105,8 @@ public:
 #endif
     KisPrescaledProjectionSP prescaledProjection;
     bool vastScrolling;
+
+    KisInputManager* inputManager;
 };
 
 KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view, KoShapeBasedDocumentBase * sc)
@@ -111,6 +115,9 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view,
 {
     // a bit of duplication from slotConfigChanged()
     KisConfig cfg;
+
+    m_d->inputManager = new KisInputManager(this, m_d->toolProxy);
+
     m_d->vastScrolling = cfg.vastScrolling();
     createCanvas(cfg.useOpenGL());
 
@@ -119,12 +126,12 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view,
     connect(this, SIGNAL(canvasDestroyed(QWidget *)), this, SLOT(slotCanvasDestroyed(QWidget *)));
 
     /**
-     * We switch the shape manager every time shape layer or
+     * We switch the shape manager every time vector layer or
      * shape selection is activated. Flake does not expect this
      * and connects all the signals of the global shape manager
      * to the clients in the constructor. To workaround this we
      * forward the signals of local shape managers stored in the
-     * shape layers to the signals of global shape manager. So the
+     * vector layers to the signals of global shape manager. So the
      * sequence of signal deliveries is the following:
      *
      * shapeLayer.m_d.canvas.m_shapeManager.selection() ->
@@ -161,6 +168,7 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
     widget->setAttribute(Qt::WA_OpaquePaintEvent);
     widget->setMouseTracking(true);
     widget->setAcceptDrops(true);
+    widget->installEventFilter(m_d->inputManager);
     KoCanvasControllerWidget *controller = dynamic_cast<KoCanvasControllerWidget*>(canvasController());
     if (controller) {
         Q_ASSERT(controller->canvas() == this);
@@ -203,6 +211,11 @@ void KisCanvas2::mirrorCanvas(bool enable)
     pan(m_d->coordinatesConverter->updateOffsetAfterTransform());
 }
 
+qreal KisCanvas2::rotationAngle() const
+{
+	return m_d->coordinatesConverter->rotationAngle();
+}
+
 void KisCanvas2::rotateCanvas(qreal angle, bool updateOffset)
 {
     m_d->coordinatesConverter->rotate(m_d->coordinatesConverter->widgetCenterPoint(), angle);
@@ -229,6 +242,14 @@ void KisCanvas2::resetCanvasTransformations()
     m_d->coordinatesConverter->resetRotation(m_d->coordinatesConverter->widgetCenterPoint());
     notifyZoomChanged();
     pan(m_d->coordinatesConverter->updateOffsetAfterTransform());
+}
+
+void KisCanvas2::setSmoothingEnabled(bool smooth)
+{
+    KisQPainterCanvas *canvas = dynamic_cast<KisQPainterCanvas*>(m_d->canvasWidget);
+    if (canvas) {
+        canvas->setSmoothingEnabled(smooth);
+    }
 }
 
 void KisCanvas2::addCommand(KUndo2Command *command)
@@ -381,7 +402,7 @@ void KisCanvas2::connectCurrentImage()
             SLOT(startResizingImage(qint32, qint32)),
             Qt::DirectConnection);
     connect(this, SIGNAL(sigContinueResizeImage(qint32, qint32)),
-            this, SLOT(finishResisingImage(qint32, qint32)));
+            this, SLOT(finishResizingImage(qint32, qint32)));
 
     startResizingImage(image->width(), image->height());
 
@@ -462,7 +483,7 @@ void KisCanvas2::startResizingImage(qint32 w, qint32 h)
     }
 }
 
-void KisCanvas2::finishResisingImage(qint32 w, qint32 h)
+void KisCanvas2::finishResizingImage(qint32 w, qint32 h)
 {
     if (m_d->currentCanvasIsOpenGL) {
 #ifdef HAVE_OPENGL
@@ -470,7 +491,7 @@ void KisCanvas2::finishResisingImage(qint32 w, qint32 h)
         m_d->openGLImageTextures->slotImageSizeChanged(w, h);
 
 #else
-        Q_ASSERT_X(0, "finishResisingImage()", "Bad use of finishResisingImage(). It shouldn't have happened =(");
+        Q_ASSERT_X(0, "finishResizingImage()", "Bad use of finishResizingImage(). It shouldn't have happened =(");
 #endif
     } else {
         Q_ASSERT(m_d->prescaledProjection);

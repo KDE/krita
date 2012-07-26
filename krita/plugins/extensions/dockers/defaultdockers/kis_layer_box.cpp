@@ -95,6 +95,7 @@ KisLayerBox::KisLayerBox()
 
     m_wdgLayerBox->listLayers->setDefaultDropAction(Qt::MoveAction);
     m_wdgLayerBox->listLayers->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
+    m_wdgLayerBox->listLayers->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     connect(m_wdgLayerBox->listLayers, SIGNAL(contextMenuRequested(const QPoint&, const QModelIndex&)),
             this, SLOT(slotContextMenuRequested(const QPoint&, const QModelIndex&)));
@@ -176,7 +177,7 @@ KisLayerBox::KisLayerBox()
     m_newCloneLayerAction = new KAction(KIcon("edit-copy"), i18n("&Clone Layer"), this);
     connect(m_newCloneLayerAction, SIGNAL(triggered(bool)), this, SLOT(slotNewCloneLayer()));
 
-    m_newShapeLayerAction = new KAction(KIcon("bookmark-new"), i18n("&Shape Layer"), this);
+    m_newShapeLayerAction = new KAction(KIcon("bookmark-new"), i18n("&Vector Layer"), this);
     connect(m_newShapeLayerAction, SIGNAL(triggered(bool)), this, SLOT(slotNewShapeLayer()));
 
     m_newAdjustmentLayerAction = new KAction(KIcon("view-filter"), i18n("&Filter Layer..."), this);

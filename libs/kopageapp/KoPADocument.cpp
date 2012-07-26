@@ -76,8 +76,8 @@ public:
     QPointer<KoUpdater> odfPageProgressUpdater;
 };
 
-KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleViewMode )
-: KoDocument( parentWidget, parent, singleViewMode ),
+KoPADocument::KoPADocument(QObject* parent)
+    : KoDocument(parent),
     d(new Private())
 {
     d->inlineTextObjectManager = resourceManager()->resource(KoText::InlineTextObjectManager).value<KoInlineTextObjectManager*>();
@@ -102,6 +102,14 @@ KoPADocument::~KoPADocument()
     qDeleteAll( d->masterPages );
     delete d->pageProvider;
     delete d;
+}
+
+QPixmap KoPADocument::generatePreview(const QSize& size)
+{
+    // use first page as preview for all pages
+    KoPAPageBase *page = pageByIndex(0, false);
+    Q_ASSERT( page );
+    return pageThumbnail(page, size);
 }
 
 void KoPADocument::paintContent( QPainter &painter, const QRect &rect)

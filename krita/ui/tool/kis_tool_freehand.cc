@@ -216,12 +216,18 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
         if (nodePaintAbility() != PAINT)
             return;
 
+        if (!nodeEditable()) {
+            return;
+        }
+
         setMode(KisTool::PAINT_MODE);
 
         KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
         if (canvas2)
             canvas2->view()->disableControls();
 
+
+        currentPaintOpPreset()->settings()->setCanvasRotation( static_cast<KisCanvas2*>(canvas())->rotationAngle() );
         initStroke(e);
 
         e->accept();
@@ -444,6 +450,10 @@ QPainterPath KisToolFreehand::getOutlinePath(const QPointF &documentPos,
     if (paintOp){
         scale = paintOp->currentScale();
         rotation = paintOp->currentRotation();
+    }
+
+    if (mode() == KisTool::HOVER_MODE) {
+        rotation += static_cast<KisCanvas2*>(canvas())->rotationAngle() * M_PI / 180.0;
     }
 
     QPointF imagePos = currentImage()->documentToPixel(documentPos);

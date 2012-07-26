@@ -21,6 +21,8 @@
 #ifndef KRREPORTDATA_H
 #define KRREPORTDATA_H
 
+#include "koreport_export.h"
+
 #include <QObject>
 #include <QDomDocument>
 #include "krsectiondata.h"
@@ -36,7 +38,7 @@ class Report;
 /**
  @author Adam Pigg <adam@piggz.co.uk>
 */
-class KoReportReportData : public QObject
+class KOREPORT_EXPORT KoReportReportData : public QObject
 {
     Q_OBJECT
 
@@ -98,6 +100,8 @@ public:
     QString name() const {
         return m_name;
     }
+
+    ReportPageOptions pageOptions() const;
 
 protected:
     QString m_title;

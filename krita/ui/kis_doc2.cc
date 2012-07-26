@@ -145,8 +145,8 @@ public:
 };
 
 
-KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode)
-    : KoDocument(parentWidget, parent, singleViewMode, new UndoStack(this))
+KisDoc2::KisDoc2(QObject *parent)
+    : KoDocument(parent, new UndoStack(this))
         , m_d(new KisDocPrivate())
 {
     setComponentData(KisFactory2::componentData(), false);
@@ -385,6 +385,8 @@ bool KisDoc2::newImage(const QString& name,
                        const KoColorSpace* cs, const KoColor &bgColor,
                        const QString &description, const double imageResolution)
 {
+    Q_ASSERT(cs);
+
     if (!init())
         return false;
 
@@ -402,6 +404,7 @@ bool KisDoc2::newImage(const QString& name,
 
     connect(image.data(), SIGNAL(sigImageModified()), this, SLOT(setModified()));
     image->setResolution(imageResolution, imageResolution);
+
     image->assignImageProfile(cs->profile());
     documentInfo()->setAboutInfo("title", name);
     documentInfo()->setAboutInfo("comments", description);

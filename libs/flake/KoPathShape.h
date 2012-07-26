@@ -87,7 +87,7 @@ public:
     virtual ~KoPathShape();
 
     /// reimplemented
-    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
     virtual void paintPoints(QPainter &painter, const KoViewConverter &converter, int handleRadius);
     /// reimplemented
     virtual QPainterPath outline() const;
@@ -449,7 +449,7 @@ public:
     static KoPathShape *createShapeFromPainterPath(const QPainterPath &path);
 
     /// Returns the viewbox from the given xml element.
-    static QRectF loadOdfViewbox(const KoXmlElement &element);
+    static QRect loadOdfViewbox(const KoXmlElement &element);
 
     /// Marker setter
     void setMarker(const KoMarkerData &markerData);

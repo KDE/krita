@@ -225,7 +225,10 @@ const KoColorProfile *KisConfig::displayProfile(int screen)
 {
     // first try to get the screen profile set by the X11 _ICC_PROFILE atom (compatible with colord,
     // but colord can set the atom to none, in which case we cannot create a suitable profile)
-    const KoColorProfile *profile = KisConfig::getScreenProfile(screen);
+    const KoColorProfile *profile = 0;
+    if (useSystemMonitorProfile()) {
+       profile = KisConfig::getScreenProfile(screen);
+    }
 
     // if it fails. check the configuration
     if (!profile || !profile->isSuitableForDisplay()) {
@@ -280,7 +283,7 @@ void KisConfig::setPrinterProfile(const QString & printerProfile)
 
 bool KisConfig::useBlackPointCompensation() const
 {
-    return m_cfg.readEntry("useBlackPointCompensation", false);
+    return m_cfg.readEntry("useBlackPointCompensation", true);
 }
 
 void KisConfig::setUseBlackPointCompensation(bool useBlackPointCompensation)
@@ -350,6 +353,16 @@ bool KisConfig::useOpenGLToolOutlineWorkaround() const
 void KisConfig::setUseOpenGLToolOutlineWorkaround(bool useWorkaround)
 {
     m_cfg.writeEntry("useOpenGLToolOutlineWorkaround", useWorkaround);
+}
+
+bool KisConfig::useOpenGLTrilinearFiltering() const
+{
+    return m_cfg.readEntry("useOpenGLTrilinearFiltering", true);
+}
+
+void KisConfig::setUseOpenGLTrilinearFiltering(bool useTrilinearFiltering)
+{
+    m_cfg.writeEntry("useOpenGLTrilinearFiltering", useTrilinearFiltering);
 }
 
 qint32 KisConfig::maxNumberOfThreads()
@@ -826,4 +839,24 @@ void KisConfig::setExportConfiguration(const QString &filterId, const KisPropert
     QString exportConfig = properties.toXML();
     m_cfg.writeEntry("ExportConfiguration-" + filterId, exportConfig);
 
+}
+
+QString KisConfig::defaultPalette()
+{
+    return m_cfg.readEntry("defaultPalette", QString());
+}
+
+void KisConfig::setDefaultPalette(const QString& name)
+{
+    m_cfg.writeEntry("defaultPalette", name);
+}
+
+bool KisConfig::useSystemMonitorProfile() const
+{
+    return m_cfg.readEntry("ColorManagement/UseSystemMonitorProfile", false);
+}
+
+void KisConfig::setUseSystemMonitorProfile(bool _useSystemMonitorProfile)
+{
+    m_cfg.writeEntry("ColorManagement/UseSystemMonitorProfile", _useSystemMonitorProfile);
 }

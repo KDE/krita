@@ -18,7 +18,7 @@
 # To acomplish that one should use the apropriate cmake syntax for
 # find_package(). For example to depend on SQLite >= 3.6.16 one should use:
 #
-#  find_package(SQLite 3.6.16 REQUIRED)
+#  find_package(CalligraSqlite 3.6.16 REQUIRED)
 #
 # Variables that FindSqlite.cmake sets:
 #  SQLITE_FOUND             TRUE if required version of Sqlite has been found
@@ -92,11 +92,11 @@ macro(_check_min_sqlite_version)
         math(EXPR SQLITE_MIN_VERSION_NUMBER
             "${SQLITE_MIN_VERSION_MAJOR} * 1000000 + ${SQLITE_MIN_VERSION_MINOR} * 1000 + ${SQLITE_MIN_VERSION_PATCH}")
         if(SQLITE_MIN_VERSION_NUMBER GREATER SQLITE_VERSION)
-            if(Sqlite_FIND_REQUIRED)
+            if(CalligraSqlite_FIND_REQUIRED)
                 message(FATAL_ERROR "Minimal SQLite version required: ${SQLITE_MIN_VERSION}, found ${SQLITE_VERSION_STRING}")
-            else(Sqlite_FIND_REQUIRED)
+            else(CalligraSqlite_FIND_REQUIRED)
                 message(STATUS "WARNING: Minimal SQLite version required: ${SQLITE_MIN_VERSION}, found ${SQLITE_VERSION_STRING}")
-            endif(Sqlite_FIND_REQUIRED)
+            endif(CalligraSqlite_FIND_REQUIRED)
             unset(SQLITE_FOUND)
             unset(SQLITE_FOUND CACHE)
         endif(SQLITE_MIN_VERSION_NUMBER GREATER SQLITE_VERSION)
@@ -117,7 +117,7 @@ macro(_check_recommended_sqlite_version)
         math(EXPR SQLITE_RECOMMENDED_VERSION_NUMBER
             "${SQLITE_RECOMMENDED_VERSION_MAJOR} * 1000000 + ${SQLITE_RECOMMENDED_VERSION_MINOR} * 1000 + ${SQLITE_RECOMMENDED_VERSION_PATCH}")
         if(SQLITE_RECOMMENDED_VERSION_NUMBER GREATER SQLITE_VERSION)
-            message(STATUS "WARNING: Recommended SQLite version is ${SQLITE_RECOMMENDED_VERSION}")
+            message(STATUS "NOTE: Recommended SQLite version is ${SQLITE_RECOMMENDED_VERSION}")
         endif(SQLITE_RECOMMENDED_VERSION_NUMBER GREATER SQLITE_VERSION)
     endif(SQLITE_RECOMMENDED_VERSION)
 endmacro(_check_recommended_sqlite_version)
@@ -174,11 +174,11 @@ if(SQLITE_FOUND)
       endif(OMIT_LOAD_EXTENSION)
    endif(SQLITE_LOAD_EXTENSION_REQUIRED)
 else(SQLITE_FOUND)
-   if(Sqlite_FIND_REQUIRED)
+   if(CalligraSqlite_FIND_REQUIRED)
       message(FATAL_ERROR "Required package SQLite NOT found")
-   else(Sqlite_FIND_REQUIRED)
+   else(CalligraSqlite_FIND_REQUIRED)
       message(STATUS "WARNING: SQLite NOT found")
-   endif(Sqlite_FIND_REQUIRED)
+   endif(CalligraSqlite_FIND_REQUIRED)
 endif(SQLITE_FOUND)
 
 if(SQLITE_FOUND)

@@ -30,6 +30,7 @@
 #include <QStringList>
 #include <QList>
 #include <QFileInfo>
+#include <QDir>
 #include <QMultiMap>
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -158,11 +159,7 @@ public:
             }
         }
 
-        QMap<QString, T*> sortedNames;
-        foreach(QString name, m_resourcesByName.keys()) {
-            sortedNames.insert(name.toLower(), m_resourcesByName[name]);
-        }
-        m_resources = sortedNames.values();
+        m_resources = sortedResources();
 
         kDebug(30009) << "done loading  resources for type " << type();
     }
@@ -438,6 +435,16 @@ protected:
 
     virtual T* createResource( const QString & filename ) { return new T(filename); }
 
+    /// Return the currently stored resources in alphabetical order, overwrite for customized sorting
+    virtual QList<T*> sortedResources()
+    {
+        QMap<QString, T*> sortedNames;
+        foreach(QString name, m_resourcesByName.keys()) {
+            sortedNames.insert(name.toLower(), m_resourcesByName[name]);
+        }
+        return sortedNames.values();
+    }
+
     void notifyResourceAdded(T* resource)
     {
         foreach(KoResourceServerObserver<T>* observer, m_observers) {
@@ -487,7 +494,7 @@ protected:
               QDomNode n = file.firstChild();
               QDomElement e = n.toElement();
               if (e.tagName() == "name") {
-                  filenameList.append(e.text());
+                  filenameList.append((e.text()).replace(QString("~"),QDir::homePath()));
               }
              file = file.nextSiblingElement("file");
         }
@@ -530,7 +537,7 @@ protected:
 
        QDomElement fileEl = doc.createElement("file");
        QDomElement nameEl = doc.createElement("name");
-       QDomText nameText = doc.createTextNode(fileName);
+       QDomText nameText = doc.createTextNode(fileName.replace(QDir::homePath(),QString("~")));
        nameEl.appendChild(nameText);
        fileEl.appendChild(nameEl);
        root.appendChild(fileEl);
@@ -543,6 +550,7 @@ protected:
        metastream << doc.toByteArray();
        f.close();
     }
+
 private:
 
     QHash<QString, T*> m_resourcesByName;

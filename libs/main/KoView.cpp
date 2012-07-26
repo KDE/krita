@@ -31,6 +31,8 @@
 #include "KoDockFactoryBase.h"
 #include "KoUndoStackAction.h"
 #include "KoGlobal.h"
+#include "KoPageLayout.h"
+#include "KoPrintJob.h"
 
 #include <kactioncollection.h>
 #include <kglobalsettings.h>
@@ -46,6 +48,7 @@
 #include <ktemporaryfile.h>
 #include <kselectaction.h>
 #include <kconfiggroup.h>
+#include <kdeprintdialog.h>
 
 #include <QTimer>
 #include <QDockWidget>
@@ -56,6 +59,8 @@
 #include <QDragEnterEvent>
 #include <QImage>
 #include <QUrl>
+#include <QPrintDialog>
+
 //static
 QString KoView::newObjectName()
 {
@@ -199,7 +204,7 @@ KoView::~KoView()
     kDebug(30003) << "KoView::~KoView" << this;
     delete d->scrollTimer;
     if (!d->documentDeleted) {
-        if (koDocument() && !koDocument()->isSingleViewMode()) {
+        if (koDocument()) {
             if (d->manager && d->registered)   // if we aren't registered we mustn't unregister :)
                 d->manager->removePart(koDocument());
             d->document->removeView(this);
@@ -281,8 +286,7 @@ bool KoView::documentDeleted() const
 void KoView::setPartManager(KParts::PartManager *manager)
 {
     d->manager = manager;
-    if (!koDocument()->isSingleViewMode() &&
-            !manager->parts().contains(koDocument())) {  // is there another view registered?
+    if (!manager->parts().contains(koDocument())) {  // is there another view registered?
         d->registered = true; // no, so we have to register now and ungregister again in the DTOR
         manager->addPart(koDocument(), false);
     } else
@@ -446,11 +450,6 @@ void KoView::disableAutoScroll()
     d->scrollTimer->stop();
 }
 
-void KoView::paintEverything(QPainter &painter, const QRect &rect)
-{
-    koDocument()->paintEverything(painter, rect, this);
-}
-
 int KoView::autoScrollAcceleration(int offset) const
 {
     if (offset < 40)
@@ -501,6 +500,20 @@ KoPrintJob * KoView::createPrintJob()
 KoPrintJob * KoView::createPdfPrintJob()
 {
     return createPrintJob();
+}
+
+KoPageLayout KoView::pageLayout() const
+{
+    return koDocument()->pageLayout();
+}
+
+QPrintDialog *KoView::createPrintDialog(KoPrintJob *printJob, QWidget *parent)
+{
+    QPrintDialog *printDialog = KdePrint::createPrintDialog(&printJob->printer(),
+                                printJob->createOptionWidgets(), parent);
+    printDialog->setMinMax(printJob->printer().fromPage(), printJob->printer().toPage());
+    printDialog->setEnabledOptions(printJob->printDialogOptions());
+    return printDialog;
 }
 
 void KoView::setupGlobalActions()

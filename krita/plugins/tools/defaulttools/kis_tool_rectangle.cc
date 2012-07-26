@@ -41,7 +41,7 @@
 
 
 KisToolRectangle::KisToolRectangle(KoCanvasBase * canvas)
-        : KisToolRectangleBase(canvas, KisCursor::load("tool_rectangle_cursor.png", 6, 6))
+        : KisToolRectangleBase(canvas, KisToolRectangleBase::PAINT, KisCursor::load("tool_rectangle_cursor.png", 6, 6))
 {
     setObjectName("tool_rectangle");
 }

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2006, 2008 Casper Boemann <cbr@boemann.dk>
+   Copyright (C) 2006, 2008 C. Boemann <cbo@boemann.dk>
    Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
    Copyright (C) 2007-2009,2011 Jan Hambrecht <jaham@gmx.net>
 
@@ -390,16 +390,52 @@ public:
     void setTextRunAroundSide(TextRunAroundSide side, RunThroughLevel runThrough = Background);
 
     /**
-     * The space between this shape's edge and text that runs around this shape.
+     * The space between this shape's left edge and text that runs around this shape.
      * @return the space around this shape to keep free from text
      */
-    qreal textRunAroundDistance() const;
+    qreal textRunAroundDistanceLeft() const;
 
     /**
-     * Set the space between this shape's edge and the text that run around this shape.
+     * Set the space between this shape's left edge and the text that run around this shape.
      * @param distance the space around this shape to keep free from text
      */
-    void setTextRunAroundDistance(qreal distance);
+    void setTextRunAroundDistanceLeft(qreal distance);
+
+    /**
+     * The space between this shape's top edge and text that runs around this shape.
+     * @return the space around this shape to keep free from text
+     */
+    qreal textRunAroundDistanceTop() const;
+
+    /**
+     * Set the space between this shape's top edge and the text that run around this shape.
+     * @param distance the space around this shape to keep free from text
+     */
+    void setTextRunAroundDistanceTop(qreal distance);
+
+    /**
+     * The space between this shape's right edge and text that runs around this shape.
+     * @return the space around this shape to keep free from text
+     */
+    qreal textRunAroundDistanceRight() const;
+
+    /**
+     * Set the space between this shape's right edge and the text that run around this shape.
+     * @param distance the space around this shape to keep free from text
+     */
+    void setTextRunAroundDistanceRight(qreal distance);
+
+    /**
+     * The space between this shape's bottom edge and text that runs around this shape.
+     * @return the space around this shape to keep free from text
+     */
+    qreal textRunAroundDistanceBottom() const;
+
+    /**
+     * Set the space between this shape's bottom edge and the text that run around this shape.
+     * @param distance the space around this shape to keep free from text
+     */
+    void setTextRunAroundDistanceBottom(qreal distance);
 
     /**
      * Return the threshold above which text should flow around this shape.

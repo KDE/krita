@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2007 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2007,2012 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -102,6 +102,12 @@ public slots:
     void setPageSize(const QSizeF &pageSize);
 
     /**
+    * Returns the size of the current page in document coordinates
+    * @returns the page size in points
+    */
+    QSizeF pageSize() const;
+
+    /**
     * Set the size of the whole document currently being shown on the canvas.
     * The document size will be used together with the current zoom level to calculate the size of the
     * canvas in the canvasController.
@@ -110,6 +116,12 @@ public slots:
     *        preferredCenterFraction
     */
     void setDocumentSize(const QSizeF &documentSize, bool recalculateCenter = false);
+
+    /**
+    * Returns the size of the whole document currently being shown on the canvas.
+    * @returns the document size in points
+    */
+    QSizeF documentSize() const;
 
 signals:
     /**

@@ -1168,7 +1168,7 @@ bool KoParagraphStyle::joinBorder() const
 {
     if (hasProperty(JoinBorder))
         return propertyBoolean(JoinBorder);
-    return false;
+    return true; //default is true
 }
 
 void KoParagraphStyle::setJoinBorder(bool value)
@@ -1258,18 +1258,7 @@ void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContex
             setDefaultOutlineLevel(level);
     }
 
-    //1.6: KoTextParag::loadOasis => KoParagLayout::loadOasisParagLayout
-    kDebug(32500) << "family" << family;
-    if (family == "graphic" || family == "presentation") {
-        QList<QString> typeProperties;
-        typeProperties.append("graphic");
-        typeProperties.append("paragraph");
-        // load all style attributes from "style::graphic-properties" and if not found there from "style:paragraph-properties"
-        context.styleStack().setTypeProperties(typeProperties);
-    }
-    else {
-        context.styleStack().setTypeProperties("paragraph");   // load all style attributes from "style:paragraph-properties"
-    }
+    context.styleStack().setTypeProperties("paragraph");   // load all style attributes from "style:paragraph-properties"
 
     loadOdfProperties(scontext);   // load the KoParagraphStyle from the stylestack
 
@@ -2154,19 +2143,19 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
             style.addProperty("fo:border-bottom", bottomBorder, KoGenStyle::ParagraphType);
     }
     QString leftBorderLineWidth, rightBorderLineWidth, topBorderLineWidth, bottomBorderLineWidth;
-    if (hasProperty(LeftInnerBorderWidth) || hasProperty(LeftBorderSpacing) || hasProperty(LeftBorderWidth))
+    if (leftBorderStyle() == KoBorder::BorderDouble)
         leftBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(leftInnerBorderWidth()),
                                   QString::number(leftBorderSpacing()),
                                   QString::number(leftBorderWidth()));
-    if (hasProperty(RightInnerBorderWidth) || hasProperty(RightBorderSpacing) || hasProperty(RightBorderWidth))
+    if (rightBorderStyle() == KoBorder::BorderDouble)
         rightBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(rightInnerBorderWidth()),
                                    QString::number(rightBorderSpacing()),
                                    QString::number(rightBorderWidth()));
-    if (hasProperty(TopInnerBorderWidth) || hasProperty(TopBorderSpacing) || hasProperty(TopBorderWidth))
+    if (topBorderStyle() == KoBorder::BorderDouble)
         topBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(topInnerBorderWidth()),
                                  QString::number(topBorderSpacing()),
                                  QString::number(topBorderWidth()));
-    if (hasProperty(BottomInnerBorderWidth) || hasProperty(BottomBorderSpacing) || hasProperty(BottomBorderWidth))
+    if (bottomBorderStyle() == KoBorder::BorderDouble)
         bottomBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(bottomInnerBorderWidth()),
                                     QString::number(bottomBorderSpacing()),
                                     QString::number(bottomBorderWidth()));
@@ -2197,7 +2186,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
             elementWriter.addAttributePt("style:distance", dropCapsDistance());
         elementWriter.endElement();
         QString elementContents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
-        style.addChildElement("style:drop-cap", elementContents);
+        style.addChildElement("style:drop-cap", elementContents, KoGenStyle::ParagraphType);
     }
     if (tabPositions().count() > 0) {
         QMap<int, QString> tabTypeMap, leaderTypeMap, leaderStyleMap, leaderWeightMap;
@@ -2256,7 +2245,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
         elementWriter.endElement();
         buf.close();
         QString elementContents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
-        style.addChildElement("style:tab-stops", elementContents);
+        style.addChildElement("style:tab-stops", elementContents, KoGenStyle::ParagraphType);
     }
 }
 

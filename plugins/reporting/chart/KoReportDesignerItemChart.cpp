@@ -179,7 +179,8 @@ void KoReportDesignerItemChart::slotPropertyChanged(KoProperty::Set &s, KoProper
         }
     } else if (p.name() == "chart-type") {
         if (m_chartWidget) {
-            m_chartWidget->setType((KDChart::Widget::ChartType) m_chartType->value().toInt());
+	    populateData();
+            //m_chartWidget->setType((KDChart::Widget::ChartType) m_chartType->value().toInt());
         }
     } else if (p.name() == "chart-sub-type") {
         if (m_chartWidget) {

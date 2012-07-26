@@ -19,9 +19,20 @@
 
 #include "krutils.h"
 
+#include "krpos.h"
+#include "krsize.h"
+#include "KoReportItemBase.h"
+
+#include "koproperty/Property.h"
+
+#include <QColor>
 #include <QFont>
+#include <QDomDocument>
 #include <QDomElement>
 #include <QVariant>
+#include <QString>
+
+#include <float.h>
 
 int KRUtils::readPercent(const QDomElement& el, const char* name, int defaultPercentValue, bool *ok)
 {
@@ -226,4 +237,158 @@ void KRUtils::writeFontAttributes(QDomElement& el, const QFont &font)
         // A positive value increases the letter spacing by the corresponding pixels; a negative value decreases the spacing.
         el.setAttribute("fo:letter-spacing", roundValueToString(font.letterSpacing()));
     }
+}
+
+
+void KRUtils::buildXMLRect(QDomElement & entity, KRPos *pos, KRSize *siz)
+{
+    KRUtils::setAttribute(entity, pos->toPoint() );
+    KRUtils::setAttribute(entity, siz->toPoint() );
+}
+
+void KRUtils::buildXMLTextStyle(QDomDocument & doc, QDomElement & entity, KRTextStyleData ts)
+{
+    QDomElement element = doc.createElement("report:text-style");
+
+    element.setAttribute("fo:background-color", ts.backgroundColor.name());
+    element.setAttribute("fo:foreground-color", ts.foregroundColor.name());
+    element.setAttribute("fo:background-opacity", QString::number(ts.backgroundOpacity) + '%');
+    KRUtils::writeFontAttributes(element, ts.font);
+
+    entity.appendChild(element);
+}
+
+void KRUtils::buildXMLLineStyle(QDomDocument & doc, QDomElement & entity, KRLineStyleData ls)
+{
+    QDomElement element = doc.createElement("report:line-style");
+
+    element.setAttribute("report:line-color", ls.lineColor.name());
+    element.setAttribute("report:line-weight", QString::number(ls.weight));
+
+    QString l;
+    switch (ls.style) {
+        case Qt::NoPen:
+            l = "nopen";
+            break;
+        case Qt::SolidLine:
+            l = "solid";
+            break;
+        case Qt::DashLine:
+            l = "dash";
+            break;
+        case Qt::DotLine:
+            l = "dot";
+            break;
+        case Qt::DashDotLine:
+            l = "dashdot";
+            break;
+        case Qt::DashDotDotLine:
+            l = "dashdotdot";
+            break;
+        default:
+            l = "solid";
+    }
+    element.setAttribute("report:line-style", l);
+
+    entity.appendChild(element);
+}
+
+void KRUtils::addPropertyAsAttribute(QDomElement* e, KoProperty::Property* p)
+{
+    switch (p->value().type()) {
+        case QVariant::Int :
+            e->setAttribute(QLatin1String("report:") + p->name().toLower(), p->value().toInt());
+            break;
+        case QVariant::Double:
+            e->setAttribute(QLatin1String("report:") + p->name().toLower(), p->value().toDouble());
+            break;
+        case QVariant::Bool:
+            e->setAttribute(QLatin1String("report:") + p->name().toLower(), p->value().toInt());
+            break;
+        default:
+            e->setAttribute(QLatin1String("report:") + p->name().toLower(), p->value().toString());
+            break;
+    }
+}
+
+void KRUtils::setAttribute(QDomElement &e, const QString &attribute, double value)
+{
+    QString s;
+    s.setNum(value, 'f', DBL_DIG);
+    e.setAttribute(attribute, s + "pt");
+}
+
+void KRUtils::setAttribute(QDomElement &e, const QPointF &value)
+{
+    KRUtils::setAttribute(e, "svg:x", value.x());
+    KRUtils::setAttribute(e, "svg:y", value.y());
+}
+
+void KRUtils::setAttribute(QDomElement &e, const QSizeF &value)
+{
+    KRUtils::setAttribute(e, "svg:width", value.width());
+    KRUtils::setAttribute(e, "svg:height", value.height());
+}
+
+bool KRUtils::parseReportTextStyleData(const QDomElement & elemSource, KRTextStyleData & ts)
+{
+    if (elemSource.tagName() != "report:text-style")
+        return false;
+    ts.backgroundColor = QColor(elemSource.attribute("fo:background-color", "#ffffff"));
+    ts.foregroundColor = QColor(elemSource.attribute("fo:foreground-color", "#000000"));
+
+    bool ok;
+    ts.backgroundOpacity = KRUtils::readPercent(elemSource, "fo:background-opacity", 100, &ok);
+    if (!ok) {
+        return false;
+    }
+    if (!KRUtils::readFontAttributes(elemSource, ts.font)) {
+        return false;
+    }
+    return true;
+}
+
+bool KRUtils::parseReportLineStyleData(const QDomElement & elemSource, KRLineStyleData & ls)
+{
+    if (elemSource.tagName() == "report:line-style") {
+        ls.lineColor = QColor(elemSource.attribute("report:line-color", "#ffffff"));
+        ls.weight = elemSource.attribute("report:line-weight", "0").toInt();
+
+        QString l = elemSource.attribute("report:line-style", "nopen");
+        if (l == "nopen") {
+            ls.style = Qt::NoPen;
+        } else if (l == "solid") {
+            ls.style = Qt::SolidLine;
+        } else if (l == "dash") {
+            ls.style = Qt::DashLine;
+        } else if (l == "dot") {
+            ls.style = Qt::DotLine;
+        } else if (l == "dashdot") {
+            ls.style = Qt::DashDotLine;
+        } else if (l == "dashdotdot") {
+            ls.style = Qt::DashDotDotLine;
+        }
+        return true;
+    }
+    return false;
+}
+
+bool KRUtils::parseReportRect(const QDomElement & elemSource, KRPos *pos, KRSize *siz)
+{
+    QStringList sl;
+    QDomNamedNodeMap map = elemSource.attributes();
+    for (int i=0; i < map.count(); ++i ) {
+        sl << map.item(i).nodeName();
+    }
+    QPointF _pos;
+    QSizeF _siz;
+
+    _pos.setX(KoUnit::parseValue(elemSource.attribute("svg:x", "1cm")));
+    _pos.setY(KoUnit::parseValue(elemSource.attribute("svg:y", "1cm")));
+    _siz.setWidth(KoUnit::parseValue(elemSource.attribute("svg:width", "1cm")));
+    _siz.setHeight(KoUnit::parseValue(elemSource.attribute("svg:height", "1cm")));
+
+    pos->setPointPos(_pos);
+    siz->setPointSize(_siz);
+    return true;
 }

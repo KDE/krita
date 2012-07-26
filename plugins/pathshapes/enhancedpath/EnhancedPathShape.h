@@ -49,7 +49,7 @@ class KoShapeLoadingContext;
 class EnhancedPathShape : public KoParameterShape
 {
 public:
-    explicit EnhancedPathShape(const QRectF &viewBox);
+    explicit EnhancedPathShape(const QRect &viewBox);
     virtual ~EnhancedPathShape();
 
     /**
@@ -95,7 +95,7 @@ public:
     void addCommand(const QString &command);
 
     /// Returns the viewbox of the enhanced path shape
-    QRectF viewBox() const;
+    QRect viewBox() const;
 
     /// Converts from shape coordinates to viewbox coordinates
     QPointF shapeToViewbox(const QPointF &point) const;
@@ -145,7 +145,7 @@ private:
     typedef QList<qreal> ModifierStore;
     typedef QMap<QString, EnhancedPathParameter*> ParameterStore;
 
-    QRectF m_viewBox;     ///< the viewbox rectangle
+    QRect m_viewBox;     ///< the viewbox rectangle
     QRectF m_viewBound;   ///< the bounding box of the path in viewbox coordinates
     QTransform m_viewMatrix; ///< matrix to convert from viewbox coordinates to shape coordinates
     QTransform m_mirrorMatrix; ///< matrix to used for mirroring

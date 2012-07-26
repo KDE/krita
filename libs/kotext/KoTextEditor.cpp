@@ -64,6 +64,7 @@
 #include "commands/InsertInlineObjectCommand.h"
 #include "commands/DeleteCommand.h"
 #include "commands/DeleteAnchorsCommand.h"
+#include "commands/InsertNoteCommand.h"
 
 #include <KoShapeCreateCommand.h>
 
@@ -670,14 +671,12 @@ bool KoTextEditor::paste(KoTextEditor *editor,
         if (pasteAsText) {
             insertText(data->text());
         } else {
-            const Soprano::Model *rdfModel = 0;
+            QSharedPointer<Soprano::Model> rdfModel = QSharedPointer<Soprano::Model>(0);
 #ifdef SHOULD_BUILD_RDF
-            bool weOwnRdfModel = true;
-            rdfModel = Soprano::createModel();
-            if (rdf) {
-                delete rdfModel;
+            if(!rdf) {
+                rdfModel = QSharedPointer<Soprano::Model>(Soprano::createModel());
+            } else {
                 rdfModel = rdf->model();
-                weOwnRdfModel = false;
             }
 #endif
 
@@ -689,9 +688,6 @@ bool KoTextEditor::paste(KoTextEditor *editor,
 #ifdef SHOULD_BUILD_RDF
             if (rdf) {
                 rdf->updateInlineRdfStatements(d->document);
-            }
-            if (weOwnRdfModel && rdfModel) {
-                delete rdfModel;
             }
 #endif
         }
@@ -1271,30 +1267,11 @@ KoInlineNote *KoTextEditor::insertFootNote()
         return 0;
     }
 
-    bool hasSelection = d->caret.hasSelection();
-    if (!hasSelection) {
-        d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Insert Footnote"));
-    } else {
-        KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Insert Footnote"));
-        deleteChar(false, topCommand);
-        d->caret.beginEditBlock();
-    }
-
-    KoInlineNote *note = new KoInlineNote(KoInlineNote::Footnote);
-    KoInlineTextObjectManager *manager = KoTextDocument(d->document).inlineTextObjectManager();
-    manager->insertInlineObject(d->caret,note);
-    note->setMotherFrame(KoTextDocument(d->caret.document()).auxillaryFrame());
-    cursor()->setPosition(note->textFrame()->lastPosition());
-
-    if (hasSelection) {
-        d->caret.endEditBlock();
-        endEditBlock();
-    } else {
-        d->updateState(KoTextEditor::Private::NoOp);
-    }
+    InsertNoteCommand *cmd = new InsertNoteCommand(KoInlineNote::Footnote, d->document);
+    addCommand(cmd);
 
     emit cursorPositionChanged();
-    return note;
+    return cmd->m_inlineNote;
 }
 
 KoInlineNote *KoTextEditor::insertEndNote()
@@ -1303,30 +1280,11 @@ KoInlineNote *KoTextEditor::insertEndNote()
         return 0;
     }
 
-    bool hasSelection = d->caret.hasSelection();
-    if (!hasSelection) {
-        d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Insert Endnote"));
-    } else {
-        KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Insert Endnote"));
-        deleteChar(false, topCommand);
-        d->caret.beginEditBlock();
-    }
-
-    KoInlineNote *note = new KoInlineNote(KoInlineNote::Endnote);
-    KoInlineTextObjectManager *manager = KoTextDocument(d->document).inlineTextObjectManager();
-    manager->insertInlineObject(d->caret,note);
-    note->setMotherFrame(KoTextDocument(d->caret.document()).auxillaryFrame());
-    cursor()->setPosition(note->textFrame()->lastPosition());
- 
-    if (hasSelection) {
-        d->caret.endEditBlock();
-        endEditBlock();
-    } else {
-        d->updateState(KoTextEditor::Private::NoOp);
-    }
+    InsertNoteCommand *cmd = new InsertNoteCommand(KoInlineNote::Endnote, d->document);
+    addCommand(cmd);
 
     emit cursorPositionChanged();
-    return note;
+    return cmd->m_inlineNote;
 }
 
 void KoTextEditor::insertTableOfContents(KoTableOfContentsGeneratorInfo *info)

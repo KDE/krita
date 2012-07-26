@@ -43,6 +43,8 @@
 #include <KoFilterChain.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoProgressUpdater.h>
+#include <KoUpdater.h>
 
 // krita's headers
 #include <kis_doc2.h>
@@ -136,6 +138,8 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
     KisImageWSP image = new KisImage(doc->createUndoStore(), width, height, cs, "built image");
     // create a layer
     QList<int> pages = wdg->pages();
+    QPointer<KoUpdater> loadUpdater =  m_chain->outputDocument()->progressUpdater()->startSubtask(1, "load");
+    loadUpdater->setRange(0, pages.count());
     for (QList<int>::const_iterator it = pages.constBegin(); it != pages.constEnd(); ++it) {
         KisPaintLayer* layer = new KisPaintLayer(image.data(),
                 i18n("Page %1", *it + 1),
@@ -144,15 +148,24 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
         KisTransaction(0, layer->paintDevice());
 
         Poppler::Page* page = pdoc->page(*it);
-        for (int x = 0; x < width; x += 1000) {
-            int currentWidth = (x + 1000 > width) ? (width - x) : 1000;
-            for (int y = 0; y < height; y += 1000) {
-                int currentHeight = (y + 1000 > height) ? (height - x) : 1000;
-                layer->paintDevice()->convertFromQImage(page->renderToImage(wdg->intHorizontal->value(), wdg->intVertical->value(), x, y, currentWidth, currentHeight), 0, x, y);
-            }
-        }
+
+        QImage img = page->renderToImage(wdg->intHorizontal->value(), wdg->intVertical->value(), 0, 0, width, height);
+        layer->paintDevice()->convertFromQImage(img, 0, 0, 0);
+
+// XXX: this rendering in tiles is a good idea, but: a) it is slower b) it is buggy -- see bug https://bugs.kde.org/show_bug.cgi?id=300554
+
+//        for (int x = 0; x < width; x += 1000) {
+//            int currentWidth = (x + 1000 > width) ? (width - x) : 1000;
+//            for (int y = 0; y < height; y += 1000) {
+//                int currentHeight = (y + 1000 > height) ? (height - x) : 1000;
+//                qDebug() << wdg->intHorizontal->value() << wdg->intVertical->value() << x << y << currentWidth << currentHeight;
+//                QImage img = page->renderToImage(wdg->intHorizontal->value(), wdg->intVertical->value(), x, y, currentWidth, currentHeight);
+//                layer->paintDevice()->convertFromQImage(img, 0, x, y);
+//            }
+//        }
         delete page;
         image->addNode(layer, image->rootLayer(), 0);
+        loadUpdater->setProgress(*it + 1);
     }
 
     doc->setCurrentImage(image);

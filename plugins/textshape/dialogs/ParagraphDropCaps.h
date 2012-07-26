@@ -55,6 +55,11 @@ private slots:
 
 private:
     Ui::ParagraphDropCaps widget;
+
+    bool m_dropCapsInherited;
+    bool m_capsDistanceInherited;
+    bool m_capsLengthInherited;
+    bool m_capsLinesInherited;
 };
 
 #endif // PARAGRAPHDROPCAPS_H

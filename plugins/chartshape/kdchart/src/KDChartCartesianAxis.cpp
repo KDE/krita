@@ -941,7 +941,7 @@ void CartesianAxis::paintCtx( PaintContext* context )
                     QPointF secondPos = diagramIsVertical ? QPointF( i + labelDiff, 0.0 ) : QPointF( 0.0, i + labelDiff );
                     secondPos = plane->translate( secondPos );
 
-                    if ( labelItem->intersects( *labelItem2, firstPos, secondPos ) )
+                    if ( labelItem->intersects( *labelItem2, firstPos, secondPos ) && !diagram()->allowOverlappingDataValueTexts() )
                     {
                         i = minValueX;
                         labelDiff += labelDiff;

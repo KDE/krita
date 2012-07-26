@@ -40,6 +40,8 @@ SET (chartshape_LIB_SRCS
     dialogs/NewAxisDialog.cpp
     dialogs/AxisScalingDialog.cpp
     dialogs/CellRegionDialog.cpp
+    dialogs/FontEditorDialog.cpp
+    dialogs/FormatErrorBarDialog.cpp
     commands/ChartTypeCommand.cpp
 )
 
@@ -49,6 +51,7 @@ kde4_add_ui_files(chartshape_LIB_SRCS
     dialogs/NewAxisDialog.ui
     dialogs/AxisScalingDialog.ui
     dialogs/CellRegionDialog.ui
+    dialogs/FormatErrorBarDialog.ui
 )
 
 kde4_add_library(chartshapelib SHARED ${chartshape_LIB_SRCS})

@@ -24,6 +24,8 @@
 #include "krpos.h"
 #include "krsize.h"
 
+#include "koreport_export.h"
+
 namespace Scripting
 {
 class Line;
@@ -32,7 +34,7 @@ class Line;
 /**
  @author
 */
-class KoReportItemLine : public KoReportItemBase
+class KOREPORT_EXPORT  KoReportItemLine : public KoReportItemBase
 {
 public:
     KoReportItemLine() {
@@ -46,7 +48,10 @@ public:
     using KoReportItemBase::render;
     
     virtual void setUnit(const KoUnit&);
-    
+
+    KRPos startPosition() const;
+    KRPos endPosition() const;
+
 protected:
     KRPos m_start;
     KRPos m_end;

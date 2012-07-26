@@ -49,6 +49,9 @@
 #include <KDChartAbstractCartesianDiagram>
 #include <KDChartLegend>
 #include <KDChartDataValueAttributes>
+#include <KDChartTextAttributes>
+#include <KDChartMarkerAttributes>
+#include <KDChartMeasure>
 
 // KChart
 #include "ChartProxyModel.h"
@@ -60,6 +63,8 @@
 #include "ui_ChartConfigWidget.h"
 #include "NewAxisDialog.h"
 #include "AxisScalingDialog.h"
+#include "FontEditorDialog.h"
+#include "FormatErrorBarDialog.h"
 #include "CellRegionDialog.h"
 #include "TableEditorDialog.h"
 #include "commands/ChartTypeCommand.h"
@@ -95,6 +100,7 @@ public:
     QMenu *dataSetLineChartMenu;
     QMenu *dataSetAreaChartMenu;
     QMenu *dataSetRadarChartMenu;
+    QMenu *dataSetStockChartMenu;
 
     // chart type selection actions
     QAction  *normalBarChartAction;
@@ -117,7 +123,10 @@ public:
     QAction  *scatterChartAction;
     QAction  *bubbleChartAction;
 
-    QAction  *stockChartAction;
+    QAction  *hlcStockChartAction;
+    QAction  *ohlcStockChartAction;
+    QAction  *candlestickStockChartAction;
+
     QAction  *surfaceChartAction;
     QAction  *ganttChartAction;
 
@@ -140,9 +149,34 @@ public:
     QAction  *dataSetFilledRadarChartAction;
     QAction  *dataSetScatterChartAction;
     QAction  *dataSetBubbleChartAction;
-    QAction  *dataSetStockChartAction;
+
+    QAction  *dataSetHLCStockChartAction;
+    QAction  *dataSetOHLCStockChartAction;
+    QAction  *dataSetCandlestickStockChartAction;
+
     QAction  *dataSetSurfaceChartAction;
     QAction  *dataSetGanttChartAction;
+
+    // marker selection actions for datasets
+    QAction *dataSetNoMarkerAction;
+    QAction *dataSetAutomaticMarkerAction;
+    QAction *dataSetMarkerCircleAction;
+    QAction *dataSetMarkerSquareAction;
+    QAction *dataSetMarkerDiamondAction;
+    QAction *dataSetMarkerRingAction;
+    QAction *dataSetMarkerCrossAction;
+    QAction *dataSetMarkerFastCrossAction;
+    QAction *dataSetMarkerArrowDownAction;
+    QAction *dataSetMarkerArrowUpAction;
+    QAction *dataSetMarkerArrowRightAction;
+    QAction *dataSetMarkerArrowLeftAction;
+    QAction *dataSetMarkerBowTieAction;
+    QAction *dataSetMarkerHourGlassAction;
+    QAction *dataSetMarkerStarAction;
+    QAction *dataSetMarkerXAction;
+    QAction *dataSetMarkerAsteriskAction;
+    QAction *dataSetMarkerHorizontalBarAction;
+    QAction *dataSetMarkerVerticalBarAction;
 
     // Table Editor (a.k.a. the data editor)
     TableEditorDialog    *tableEditorDialog;
@@ -167,6 +201,9 @@ public:
     // Dialogs
     NewAxisDialog     newAxisDialog;
     AxisScalingDialog axisScalingDialog;
+    FontEditorDialog axisFontEditorDialog;
+    FontEditorDialog legendFontEditorDialog;
+    FormatErrorBarDialog formatErrorBarDialog;
     CellRegionDialog  cellRegionDialog;
 
     CellRegionStringValidator *cellRegionStringValidator;
@@ -177,6 +214,9 @@ ChartConfigWidget::Private::Private(QWidget *parent)
     : tableEditorDialog(0)
     , newAxisDialog(parent)
     , axisScalingDialog(parent)
+    , axisFontEditorDialog(parent)
+    , legendFontEditorDialog(parent)
+    , formatErrorBarDialog(parent)
     , cellRegionDialog(parent)
 
 {
@@ -199,6 +239,7 @@ ChartConfigWidget::Private::Private(QWidget *parent)
     dataSetLineChartMenu = 0;
     dataSetAreaChartMenu = 0;
     dataSetRadarChartMenu = 0;
+    dataSetStockChartMenu = 0;
     dataSetNormalBarChartAction = 0;
     dataSetStackedBarChartAction = 0;
     dataSetPercentBarChartAction = 0;
@@ -213,7 +254,9 @@ ChartConfigWidget::Private::Private(QWidget *parent)
     dataSetScatterChartAction = 0;
     dataSetRadarChartAction = 0;
     dataSetFilledRadarChartAction = 0;
-    dataSetStockChartAction = 0;
+    dataSetHLCStockChartAction = 0;
+    dataSetOHLCStockChartAction = 0;
+    dataSetCandlestickStockChartAction = 0;
     dataSetBubbleChartAction = 0;
     dataSetSurfaceChartAction = 0;
     dataSetGanttChartAction = 0;
@@ -278,6 +321,8 @@ static QString chartTypeIcon(ChartType type, ChartSubtype subtype)
         return "office-chart-polar";
     case FilledRadarChartType:
         return "office-chart-polar-filled";
+    case ScatterChartType:
+        return "office-chart-scatter";
     default:
         return "";
     }
@@ -334,7 +379,15 @@ ChartConfigWidget::ChartConfigWidget()
 
     chartTypeMenu->addSeparator();
 
-    d->stockChartAction = chartTypeMenu->addAction(i18n("Stock Chart"));
+    // Stock Charts
+    QMenu *stockChartMenu = chartTypeMenu->addMenu(i18n("Stock Chart"));
+    d->hlcStockChartAction  = stockChartMenu->addAction(i18n("HighLowClose"));
+    d->hlcStockChartAction->setEnabled(false);
+    d->ohlcStockChartAction = stockChartMenu->addAction(i18n("OpenHighLowClose"));
+    d->ohlcStockChartAction->setEnabled(false);
+    d->candlestickStockChartAction = stockChartMenu->addAction(i18n("Candlestick"));
+    d->candlestickStockChartAction->setEnabled(false);
+
     d->surfaceChartAction = chartTypeMenu->addAction(i18n("Surface Chart"));
     d->surfaceChartAction->setEnabled(false);
     d->ganttChartAction = chartTypeMenu->addAction(i18n("Gantt Chart"));
@@ -375,7 +428,11 @@ ChartConfigWidget::ChartConfigWidget()
     d->dataSetRadarChartAction = d->dataSetRadarChartMenu->addAction(KIcon("office-chart-polar"), i18n("Normal"));
     d->dataSetFilledRadarChartAction = d->dataSetRadarChartMenu->addAction(KIcon("office-chart-polar-filled"), i18n("Filled"));
 
-    d->dataSetStockChartAction = dataSetChartTypeMenu->addAction(i18n("Stock Chart"));
+    d->dataSetStockChartMenu = dataSetChartTypeMenu->addMenu("Stock Chart");
+    d->dataSetHLCStockChartAction = d->dataSetStockChartMenu->addAction(i18n("HighLowClose"));
+    d->dataSetOHLCStockChartAction = d->dataSetStockChartMenu->addAction(i18n("OpenHighLowClose"));
+    d->dataSetCandlestickStockChartAction = d->dataSetStockChartMenu->addAction(i18n("Candlestick"));
+
     d->dataSetBubbleChartAction = dataSetChartTypeMenu->addAction(i18n("Bubble Chart"));
 
     d->dataSetScatterChartAction = dataSetChartTypeMenu->addAction(KIcon("office-chart-scatter"), i18n("Scatter Chart"));
@@ -387,6 +444,41 @@ ChartConfigWidget::ChartConfigWidget()
 
     connect(d->ui.dataSetHasChartType, SIGNAL(toggled(bool)),
             this,                      SLOT(ui_dataSetHasChartTypeChanged(bool)));
+
+    // Setup marker menu
+    QMenu *datasetMarkerMenu = new QMenu(this);
+
+    // Default marker is Automatic
+    datasetMarkerMenu->setIcon(QIcon());
+
+    d->dataSetNoMarkerAction = datasetMarkerMenu->addAction(i18n("None"));
+    d->dataSetAutomaticMarkerAction = datasetMarkerMenu->addAction(i18n("Automatic"));
+
+    QMenu *datasetSelectMarkerMenu = datasetMarkerMenu->addMenu(i18n("Select"));
+    d->dataSetMarkerSquareAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerDiamondAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerArrowDownAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerArrowUpAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerArrowRightAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerArrowLeftAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerBowTieAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerHourGlassAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerCircleAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerStarAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerXAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerCrossAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerAsteriskAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerHorizontalBarAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerVerticalBarAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerRingAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerFastCrossAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+
+    d->ui.datasetMarkerMenu->setMenu(datasetMarkerMenu);
+    connect(datasetMarkerMenu, SIGNAL(triggered(QAction*)),
+            this,              SLOT(datasetMarkerSelected(QAction*)));
+
+    // Insert error bar button
+    d->ui.formatErrorBar->setEnabled(false);
 
     // "Plot Area" tab
     connect(d->ui.showTitle,    SIGNAL(toggled(bool)),
@@ -408,6 +500,8 @@ ChartConfigWidget::ChartConfigWidget()
             this, SLOT(datasetPenSelected(const QColor&)));
     connect(d->ui.datasetShowCategory, SIGNAL(toggled(bool)),
             this, SLOT(ui_datasetShowCategoryChanged(bool)));
+    connect(d->ui.datasetShowErrorBar, SIGNAL(toggled(bool)),
+            this, SLOT(ui_datasetShowErrorBarChanged(bool)));
     connect(d->ui.dataSetShowNumber, SIGNAL(toggled(bool)),
             this, SLOT(ui_dataSetShowNumberChanged(bool)));
     connect(d->ui.datasetShowPercent, SIGNAL(toggled(bool)),
@@ -572,6 +666,48 @@ KAction* ChartConfigWidget::createAction()
     return 0;
 }
 
+void ChartConfigWidget::updateMarkers()
+{
+    DataSet *dataSet = d->dataSets[d->selectedDataSet];
+
+    d->dataSetMarkerCircleAction->setIcon(dataSet->markerIcon(MarkerCircle));
+    d->dataSetMarkerSquareAction->setIcon(dataSet->markerIcon(MarkerSquare));
+    d->dataSetMarkerDiamondAction->setIcon(dataSet->markerIcon(MarkerDiamond));
+    d->dataSetMarkerRingAction->setIcon(dataSet->markerIcon(MarkerRing));
+    d->dataSetMarkerCrossAction->setIcon(dataSet->markerIcon(MarkerCross));
+    d->dataSetMarkerFastCrossAction->setIcon(dataSet->markerIcon(MarkerFastCross));
+    d->dataSetMarkerArrowDownAction->setIcon(dataSet->markerIcon(MarkerArrowDown));
+    d->dataSetMarkerArrowUpAction->setIcon(dataSet->markerIcon(MarkerArrowUp));
+    d->dataSetMarkerArrowRightAction->setIcon(dataSet->markerIcon(MarkerArrowRight));
+    d->dataSetMarkerArrowLeftAction->setIcon(dataSet->markerIcon(MarkerArrowLeft));
+    d->dataSetMarkerBowTieAction->setIcon(dataSet->markerIcon(MarkerBowTie));
+    d->dataSetMarkerHourGlassAction->setIcon(dataSet->markerIcon(MarkerHourGlass));
+    d->dataSetMarkerStarAction->setIcon(dataSet->markerIcon(MarkerStar));
+    d->dataSetMarkerXAction->setIcon(dataSet->markerIcon(MarkerX));
+    d->dataSetMarkerAsteriskAction->setIcon(dataSet->markerIcon(MarkerAsterisk));
+    d->dataSetMarkerHorizontalBarAction->setIcon(dataSet->markerIcon(MarkerHorizontalBar));
+    d->dataSetMarkerVerticalBarAction->setIcon(dataSet->markerIcon(MarkerVerticalBar));
+
+    Q_ASSERT(dataSet);
+    if (!dataSet)
+        return;
+
+    OdfMarkerStyle style = dataSet->markerStyle();
+    QIcon icon = dataSet->markerIcon(style);
+    if (!icon.isNull()) {
+        if (dataSet->markerAutoSet()) {
+            d->ui.datasetMarkerMenu->setText("Auto");
+            d->ui.datasetMarkerMenu->setIcon(QIcon());
+        } else {
+            d->ui.datasetMarkerMenu->setIcon(icon);
+            d->ui.datasetMarkerMenu->setText("");
+        }
+    } else {
+        d->ui.datasetMarkerMenu->setText("None");
+        d->ui.datasetMarkerMenu->setIcon(QIcon());
+    }
+}
+
 void ChartConfigWidget::chartTypeSelected(QAction *action)
 {
     ChartType     type = LastChartType;
@@ -638,9 +774,20 @@ void ChartConfigWidget::chartTypeSelected(QAction *action)
         subtype = NoChartSubtype;
     }
 
-    else if (action == d->stockChartAction) {
+    // Stock charts
+    else if (action == d->hlcStockChartAction) {
         type    = StockChartType;
-        subtype = NoChartSubtype;
+        subtype = HighLowCloseChartSubtype;
+    }
+
+    else if (action == d->ohlcStockChartAction) {
+        type    = StockChartType;
+        subtype = OpenHighLowCloseChartSubtype;
+    }
+
+    else if (action == d->candlestickStockChartAction) {
+        type    = StockChartType;
+        subtype = CandlestickChartSubtype;
     }
 
     else if (action == d->bubbleChartAction) {
@@ -659,34 +806,7 @@ void ChartConfigWidget::chartTypeSelected(QAction *action)
     }
 
 
-    // o Make sure polar and cartesian plots can't conflict and
-    //   don't allow the user to mix these two types
-    // o Hide axis configuration options for polar plots
-    if (isPolar(type)) {
-        setPolarChartTypesEnabled(true);
-        setCartesianChartTypesEnabled(false);
-
-        // Pie charts and ring charts have no axes but radar charts do.
-        // Disable choosing of attached axis if there is none.
-        bool hasAxes = !(type == CircleChartType || type == RingChartType);
-        d->ui.axisConfiguration->setEnabled(hasAxes);
-        d->ui.dataSetAxes->setEnabled(hasAxes);
-        d->ui.dataSetHasChartType->setEnabled(hasAxes);
-        d->ui.dataSetChartTypeMenu->setEnabled(hasAxes);
-    } else {
-        setPolarChartTypesEnabled(false);
-        setCartesianChartTypesEnabled(true);
-
-        // All the cartesian chart types have axes.
-        d->ui.axisConfiguration->setEnabled(true);
-        d->ui.dataSetAxes->setEnabled(true);
-        d->ui.dataSetHasChartType->setEnabled(true);
-        d->ui.dataSetChartTypeMenu->setEnabled(true);
-    }
-
-    emit chartTypeChanged(type);
-    emit chartSubTypeChanged(subtype);
-
+    emit chartTypeChanged(type, subtype);
     update();
 }
 
@@ -711,13 +831,22 @@ void ChartConfigWidget::setCartesianChartTypesEnabled(bool enabled)
     d->dataSetAreaChartMenu->setEnabled(enabled);
     d->dataSetRadarChartMenu->setEnabled(enabled);
     d->dataSetScatterChartAction->setEnabled(enabled);
-    d->dataSetStockChartAction->setEnabled(enabled);
+    d->dataSetStockChartMenu->setEnabled(enabled);
     d->dataSetBubbleChartAction->setEnabled(enabled);
     // FIXME: Enable for:
     // pie, ring?
     //NYI:
     //surface
     //gantt
+}
+
+void ChartConfigWidget::ui_dataSetErrorBarTypeChanged()
+{
+    if (d->selectedDataSet < 0)
+        return;
+
+    QString type = d->formatErrorBarDialog.widget.errorType->currentText();
+    d->ui.formatErrorBar->setText(type);
 }
 
 void ChartConfigWidget::ui_dataSetPieExplodeFactorChanged(int percent)
@@ -802,8 +931,18 @@ void ChartConfigWidget::dataSetChartTypeSelected(QAction *action)
         type = RingChartType;
     else if (action == d->dataSetScatterChartAction)
         type = ScatterChartType;
-    else if (action == d->dataSetStockChartAction)
-        type = StockChartType;
+
+    else if (action == d->dataSetHLCStockChartAction) {
+        type    = StockChartType;
+        subtype = HighLowCloseChartSubtype;
+    } else if (action == d->dataSetStackedAreaChartAction) {
+        type    = StockChartType;
+        subtype = OpenHighLowCloseChartSubtype;
+    } else if (action == d->dataSetPercentAreaChartAction) {
+        type    = StockChartType;
+        subtype = CandlestickChartSubtype;
+    }
+
     else if (action == d->dataSetBubbleChartAction)
         type = BubbleChartType;
 
@@ -826,10 +965,74 @@ void ChartConfigWidget::dataSetChartTypeSelected(QAction *action)
     update();
 }
 
-void ChartConfigWidget::chartSubTypeSelected(int type)
+void ChartConfigWidget::datasetMarkerSelected(QAction *action)
 {
-    d->subtype = (ChartSubtype) type;
-    emit chartSubTypeChanged(d->subtype);
+    if (d->selectedDataSet < 0)
+        return;
+
+    const int numDefaultMarkerTypes = 15;
+    bool isAuto = false;
+    OdfMarkerStyle style = MarkerSquare;
+    QString type = QString("");
+    if (action == d->dataSetNoMarkerAction) {
+        style = NoMarker;
+        type = "None";
+    } else if (action == d->dataSetAutomaticMarkerAction) {
+        style = (OdfMarkerStyle) (d->selectedDataSet % numDefaultMarkerTypes);
+        type = "Auto";
+        isAuto = true;
+    } else if (action == d->dataSetMarkerCircleAction) {
+        style = MarkerCircle;
+    } else if (action == d->dataSetMarkerSquareAction) {
+        style = MarkerSquare;
+    } else if (action == d->dataSetMarkerDiamondAction) {
+        style = MarkerDiamond;
+    } else if (action == d->dataSetMarkerRingAction) {
+        style = MarkerRing;
+    } else if (action == d->dataSetMarkerCrossAction) {
+        style = MarkerCross;
+    } else if (action == d->dataSetMarkerFastCrossAction) {
+        style = MarkerFastCross;
+    } else if (action == d->dataSetMarkerArrowDownAction) {
+        style = MarkerArrowDown;
+    } else if (action == d->dataSetMarkerArrowUpAction) {
+        style = MarkerArrowUp;
+    } else if (action == d->dataSetMarkerArrowRightAction) {
+        style = MarkerArrowRight;
+    } else if (action == d->dataSetMarkerArrowLeftAction) {
+        style = MarkerArrowLeft;
+    } else if (action == d->dataSetMarkerBowTieAction) {
+        style = MarkerBowTie;
+    } else if (action == d->dataSetMarkerHourGlassAction) {
+        style = MarkerHourGlass;
+    } else if (action == d->dataSetMarkerStarAction) {
+        style = MarkerStar;
+    } else if (action == d->dataSetMarkerXAction) {
+        style = MarkerX;
+    } else if (action == d->dataSetMarkerAsteriskAction) {
+        style = MarkerAsterisk;
+    } else if (action == d->dataSetMarkerHorizontalBarAction) {
+        style = MarkerHorizontalBar;
+    } else if (action == d->dataSetMarkerVerticalBarAction) {
+        style = MarkerVerticalBar;
+    }
+
+    DataSet *dataSet = d->dataSets[d->selectedDataSet];
+    Q_ASSERT(dataSet);
+    if (!dataSet)
+        return;
+
+    dataSet->setAutoMarker(isAuto);
+    if (type.isEmpty()) {
+        d->ui.datasetMarkerMenu->setIcon(dataSet->markerIcon(style));
+        d->ui.datasetMarkerMenu->setText("");
+    } else {
+        d->ui.datasetMarkerMenu->setText(type);
+        d->ui.datasetMarkerMenu->setIcon(QIcon());
+    }
+    emit dataSetMarkerChanged(dataSet, style);
+
+    update();
 }
 
 void ChartConfigWidget::datasetBrushSelected(const QColor& color)
@@ -838,6 +1041,7 @@ void ChartConfigWidget::datasetBrushSelected(const QColor& color)
         return;
 
     emit datasetBrushChanged(d->dataSets[d->selectedDataSet], color);
+    updateMarkers();
 }
 
 void ChartConfigWidget::datasetPenSelected(const QColor& color)
@@ -846,6 +1050,7 @@ void ChartConfigWidget::datasetPenSelected(const QColor& color)
         return;
 
     emit datasetPenChanged(d->dataSets[d->selectedDataSet], color);
+    updateMarkers();
 }
 
 void ChartConfigWidget::setThreeDMode(bool threeD)
@@ -952,24 +1157,28 @@ void ChartConfigWidget::update()
         || d->subtype != d->shape->chartSubType())
     {
         // Update the chart type specific settings in the "Data Sets" tab
-        bool needSeparator = false;
+        bool needPropertiesSeparator = false;
         if (d->shape->chartType() == BarChartType) {
             d->ui.barProperties->show();
             d->ui.pieProperties->hide();
-            needSeparator = true;
-        } else if (d->shape->chartType() == CircleChartType) {
+            d->ui.errorBarProperties->show();
+            needPropertiesSeparator = true;
+        } else if (d->shape->chartType() == LineChartType || d->shape->chartType() == AreaChartType
+                   || d->shape->chartType() == ScatterChartType) {
+            d->ui.barProperties->hide();
+            d->ui.pieProperties->hide();
+            d->ui.errorBarProperties->show();
+        } else if (d->shape->chartType() == CircleChartType || d->shape->chartType() == RingChartType) {
             d->ui.barProperties->hide();
             d->ui.pieProperties->show();
-            needSeparator = true;
-        } else if (d->shape->chartType() == RingChartType) {
-            d->ui.barProperties->hide();
-            d->ui.pieProperties->show();
-            needSeparator = true;
+            d->ui.errorBarProperties->hide();
+            needPropertiesSeparator = true;
         } else {
             d->ui.barProperties->hide();
             d->ui.pieProperties->hide();
+            d->ui.errorBarProperties->hide();
         }
-        d->ui.propertiesSeparator->setVisible(needSeparator);
+        d->ui.propertiesSeparator->setVisible(needPropertiesSeparator);
 
         // Set the chart type icon in the chart type button.
         QString iconName = chartTypeIcon(d->shape->chartType(), d->shape->chartSubType());
@@ -980,9 +1189,23 @@ void ChartConfigWidget::update()
         if (isPolar(d->shape->chartType())) {
             setPolarChartTypesEnabled(true);
             setCartesianChartTypesEnabled(false);
+
+            // Pie charts and ring charts have no axes but radar charts do.
+            // Disable choosing of attached axis if there is none.
+            bool hasAxes = !(d->shape->chartType() == CircleChartType || d->shape->chartType() == RingChartType);
+            d->ui.axisConfiguration->setEnabled(hasAxes);
+            d->ui.dataSetAxes->setEnabled(hasAxes);
+            d->ui.dataSetHasChartType->setEnabled(hasAxes);
+            d->ui.dataSetChartTypeMenu->setEnabled(hasAxes);
         } else {
             setPolarChartTypesEnabled(false);
             setCartesianChartTypesEnabled(true);
+
+            // All the cartesian chart types have axes.
+            d->ui.axisConfiguration->setEnabled(true);
+            d->ui.dataSetAxes->setEnabled(true);
+            d->ui.dataSetHasChartType->setEnabled(true);
+            d->ui.dataSetChartTypeMenu->setEnabled(true);
         }
 
         // ...and finally save the new chart type and subtype.
@@ -1021,10 +1244,9 @@ void ChartConfigWidget::update()
         d->ui.legendTitle->blockSignals(false);
     }
 
-    // "Fill" property of data set doesn't make sense for 2D line
-    // charts, there's nothing to fill.
-    bool enableFill = d->type != LineChartType || d->threeDMode;
-    d->ui.datasetBrush->setEnabled(enableFill);
+    bool enableMarkers = !(d->type == BarChartType || d->type == StockChartType || d->type == CircleChartType
+                           || d->type == RingChartType || d->type == BubbleChartType);
+    d->ui.datasetMarkerMenu->setEnabled(enableMarkers);
 
     blockSignals(false);
 }
@@ -1049,6 +1271,12 @@ void ChartConfigWidget::slotShowCellRegionDialog()
     ui_dataSetSelectionChanged_CellRegionDialog(selectedDataSet);
 
     d->cellRegionDialog.show();
+}
+
+
+void ChartConfigWidget::slotShowFormatErrorBarDialog()
+{
+    d->formatErrorBarDialog.show();
 }
 
 
@@ -1170,6 +1398,22 @@ void ChartConfigWidget::setupDialogs()
              this, SLOT(ui_axisSubStepWidthChanged(double)));
     connect (d->axisScalingDialog.automaticSubStepWidth, SIGNAL(toggled(bool)),
               this, SLOT(ui_axisUseAutomaticSubStepWidthChanged(bool)));
+
+    // Edit Fonts
+    connect(d->ui.axisEditFontButton, SIGNAL(clicked()),
+             this, SLOT(ui_axisEditFontButtonClicked()));
+    connect(&d->axisFontEditorDialog, SIGNAL(accepted()),
+             this, SLOT(ui_axisLabelsFontChanged()));
+    connect(d->ui.legendEditFontButton, SIGNAL(clicked()),
+             this, SLOT(ui_legendEditFontButtonClicked()));
+    connect(&d->legendFontEditorDialog, SIGNAL(accepted()),
+             this, SLOT(ui_legendFontChanged()));
+
+    // Format Error Bars
+    connect(d->ui.formatErrorBar, SIGNAL(clicked()),
+             this, SLOT(slotShowFormatErrorBarDialog()));
+    connect(&d->formatErrorBarDialog, SIGNAL(accepted()),
+             this, SLOT(ui_dataSetErrorBarTypeChanged()));
 }
 
 void ChartConfigWidget::createActions()
@@ -1430,28 +1674,31 @@ void ChartConfigWidget::ui_dataSetSelectionChanged(int index)
             }
             break;
         case CircleChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("chart_circle_normal"));
+            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("office-chart-pie"));
             break;
         case RingChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("chart_ring_normal"));
+            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("office-chart-ring"));
             break;
         case ScatterChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("chart_scatter_normal"));
+            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("office-chart-scatter"));
             break;
         case RadarChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("chart_radar_normal"));
+            d->ui.dataSetChartTypeMenu->setIcon(KIcon("office-chart-polar"));
+            break;
+        case FilledRadarChartType:
+            d->ui.dataSetChartTypeMenu->setIcon(KIcon("office-chart-polar-filled"));
             break;
         case StockChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("chart_stock_normal"));
+            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("office-chart-stock"));
             break;
         case BubbleChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("chart_bubble_normal"));
+            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("office-chart-bubble"));
             break;
         case SurfaceChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("chart_surface_normal"));
+            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("office-chart-surface"));
             break;
         case GanttChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("chart_gantt_normal"));
+            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("office-chart-gantt"));
             break;
 
             // Fixes a warning that LastChartType isn't handled.
@@ -1461,6 +1708,7 @@ void ChartConfigWidget::ui_dataSetSelectionChanged(int index)
     }
 
     d->selectedDataSet = index;
+    updateMarkers();
 }
 
 void ChartConfigWidget::ui_dataSetAxisSelectionChanged(int index)
@@ -1509,6 +1757,21 @@ void ChartConfigWidget::ui_axisShowGridLinesChanged(bool b)
         return;
 
     emit axisShowGridLinesChanged(d->axes[d->ui.axes->currentIndex()], b);
+}
+
+void ChartConfigWidget::ui_axisLabelsFontChanged()
+{
+    QFont font = d->axisFontEditorDialog.fontChooser->font();
+    Axis *axis = d->axes[d->ui.axes->currentIndex()];
+    axis->setFont(font);
+    axis->setFontSize(font.pointSizeF());
+}
+
+void ChartConfigWidget::ui_legendFontChanged()
+{
+    QFont font = d->legendFontEditorDialog.fontChooser->font();
+    d->shape->legend()->setFont(font);
+    d->shape->legend()->setFontSize(font.pointSizeF());
 }
 
 void ChartConfigWidget::ui_axisAdded()
@@ -1608,12 +1871,34 @@ void ChartConfigWidget::ui_axisScalingButtonClicked()
     d->axisScalingDialog.show();
 }
 
+void ChartConfigWidget::ui_axisEditFontButtonClicked()
+{
+    QFont font = d->axes[d->ui.axes->currentIndex()]->font();
+    d->axisFontEditorDialog.fontChooser->setFont(font);
+    d->axisFontEditorDialog.show();
+}
+
+void ChartConfigWidget::ui_legendEditFontButtonClicked()
+{
+    QFont font = d->shape->legend()->font();
+    d->legendFontEditorDialog.fontChooser->setFont(font);
+    d->legendFontEditorDialog.show();
+}
+
 void ChartConfigWidget::ui_datasetShowCategoryChanged(bool b)
 {
     if (d->selectedDataSet < 0 || d->selectedDataSet >= d->dataSets.count())
         return;
 
     emit datasetShowCategoryChanged(d->dataSets[d->selectedDataSet], b);
+}
+
+void ChartConfigWidget::ui_datasetShowErrorBarChanged(bool b)
+{
+    if (d->selectedDataSet < 0 || d->selectedDataSet >= d->dataSets.count())
+        return;
+
+    d->ui.formatErrorBar->setEnabled(b);
 }
 
 void ChartConfigWidget::ui_dataSetShowNumberChanged(bool b)

@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -240,6 +240,10 @@ void KisSaveXmlVisitor::saveMask(QDomElement & el, const QString & maskType, con
     el.setAttribute(X, mask->x());
     el.setAttribute(Y, mask->y());
     el.setAttribute(UUID, mask->uuid().toString());
+
+    if (maskType == SELECTION_MASK) {
+        el.setAttribute(ACTIVE, mask->nodeProperties().boolProperty("visible"));
+    }
 
     m_nodeFileNames[mask] = MASK + QString::number(m_count);
 

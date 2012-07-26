@@ -22,11 +22,12 @@
  */
 
 #include "KoDocument.h"
-#include "KoDocument_p.h"
 
+#include "KoServiceProvider.h"
 #include "KoDocumentAdaptor.h"
 #include "KoGlobal.h"
 #include "KoView.h"
+#include "KoEmbeddedDocumentSaver.h"
 #include "KoMainWindow.h"
 #include "KoFilterManager.h"
 #include "KoDocumentInfo.h"
@@ -38,7 +39,6 @@
 #include "KoOdfStylesReader.h"
 #include "KoOdfReadStore.h"
 #include "KoOdfWriteStore.h"
-#include "KoEmbeddedDocumentSaver.h"
 #include "KoXmlNS.h"
 #include "KoOpenPane.h"
 #include "KoApplication.h"
@@ -94,7 +94,6 @@
 QList<KoDocument*> *KoDocument::s_documentList = 0;
 
 using namespace std;
-class KoViewWrapperWidget;
 
 /**********************************************************
  *
@@ -157,7 +156,6 @@ public:
     QList<KoView*> views;
     QList<KoMainWindow*> shells;
 
-    KoViewWrapperWidget *wrapperWidget;
     KoDocumentInfo *docInfo;
 #ifdef SHOULD_BUILD_RDF
     KoDocumentRdf *docRdf;
@@ -187,7 +185,6 @@ public:
     QString lastErrorMessage; // see openFile()
     int autoSaveDelay; // in seconds, 0 to disable.
     bool modifiedAfterAutosave;
-    bool bSingleViewMode;
     bool autosaving;
     bool shouldCheckAutoSaveFile; // usually true
     bool autoErrorHandlingEnabled; // usually true
@@ -215,70 +212,6 @@ public:
 
     QGraphicsItem *canvasItem;
 };
-
-// Used in singleViewMode
-class KoViewWrapperWidget : public QWidget
-{
-public:
-    KoViewWrapperWidget(QWidget *parent)
-            : QWidget(parent) {
-        KGlobal::locale()->insertCatalog("calligra");
-        // Tell the iconloader about share/apps/calligra/icons
-        KIconLoader::global()->addAppDir("calligra");
-        m_view = 0;
-        // Avoid warning from KParts - we'll have the KoView as focus proxy anyway
-        setFocusPolicy(Qt::ClickFocus);
-    }
-
-    virtual ~KoViewWrapperWidget() {
-        setFocusProxy(0);   // to prevent a crash due to clearFocus (#53466)
-    }
-
-    virtual void resizeEvent(QResizeEvent *) {
-        QWidget *wid = findChild<QWidget *>();
-        if (wid)
-            wid->setGeometry(0, 0, width(), height());
-    }
-
-    virtual void childEvent(QChildEvent *ev) {
-        if (ev->type() == QEvent::ChildAdded)
-            resizeEvent(0);
-    }
-
-    // Called by openFile()
-    void setKoView(KoView *view) {
-        m_view = view;
-        setFocusProxy(m_view);
-    }
-    KoView *koView() const {
-        return m_view;
-    }
-private:
-    KoView *m_view;
-};
-
-KoBrowserExtension::KoBrowserExtension(KoDocument *doc)
-        : KParts::BrowserExtension(doc)
-{
-    emit enableAction("print", true);
-}
-
-void KoBrowserExtension::print()
-{
-    kDebug(30003) << "implement; KoBrowserExtension::print";
-    /*
-        KoDocument *doc = static_cast<KoDocument *>( parent() );
-        KoViewWrapperWidget *wrapper = static_cast<KoViewWrapperWidget *>( doc->widget() );
-        KoView *view = wrapper->koView();
-        // TODO remove code duplication (KoMainWindow), by moving this to KoView
-        QPrinter printer;
-        QPrintDialog *printDialog = KdePrint::createPrintDialog(&printer, view->printDialogPages(), view);
-        // ### TODO: apply global calligra settings here
-        view->setupPrinter( printer, *printDialog );
-        if ( printDialog->exec() )
-            view->print( printer, *printDialog );
-    */
-}
 
 namespace {
     KoMainWindow *currentShell(KoDocument *doc)
@@ -332,7 +265,7 @@ namespace {
     };
 }
 
-KoDocument::KoDocument(QWidget *parentWidget, QObject *parent, bool singleViewMode, KUndo2Stack *undoStack)
+KoDocument::KoDocument(QObject *parent, KUndo2Stack *undoStack)
         : KParts::ReadWritePart(parent)
         , d(new Private)
 {
@@ -343,27 +276,10 @@ KoDocument::KoDocument(QWidget *parentWidget, QObject *parent, bool singleViewMo
     d->bEmpty = true;
     connect(&d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
     setAutoSave(defaultAutoSave());
-    d->bSingleViewMode = singleViewMode;
 
     setObjectName(newObjectName());
     new KoDocumentAdaptor(this);
     QDBusConnection::sessionBus().registerObject('/' + objectName(), this);
-
-
-    // the parent setting *always* overrides! (Simon)
-    if (parent) {
-        if (::qobject_cast<KoDocument *>(parent))
-            d->bSingleViewMode = ((KoDocument *)parent)->isSingleViewMode();
-        else if (::qobject_cast<KParts::Part*>(parent))
-            d->bSingleViewMode = true;
-    }
-
-    if (singleViewMode) {
-        d->wrapperWidget = new KoViewWrapperWidget(parentWidget);
-        setWidget(d->wrapperWidget);
-        kDebug(30003) << "creating KoBrowserExtension";
-        (void) new KoBrowserExtension(this);   // ## only if embedded into a browser?
-    }
 
     d->docInfo = new KoDocumentInfo(this);
     d->docRdf = 0;
@@ -392,9 +308,7 @@ KoDocument::KoDocument(QWidget *parentWidget, QObject *parent, bool singleViewMo
 
     connect(d->undoStack, SIGNAL(cleanChanged(bool)), this, SLOT(setDocumentClean(bool)));
 
-    // A way to 'fix' the job's window, since we have no widget known to KParts
-    if (!singleViewMode)
-        connect(this, SIGNAL(started(KIO::Job*)), SLOT(slotStarted(KIO::Job*)));
+    connect(this, SIGNAL(started(KIO::Job*)), SLOT(slotStarted(KIO::Job*)));
 }
 
 KoDocument::~KoDocument()
@@ -422,16 +336,6 @@ KoDocument::~KoDocument()
         delete s_documentList;
         s_documentList = 0;
     }
-}
-
-bool KoDocument::isSingleViewMode() const
-{
-    return d->bSingleViewMode;
-}
-
-bool KoDocument::isEmbedded() const
-{
-    return dynamic_cast<KoDocument *>(parent()) != 0;
 }
 
 KoView *KoDocument::createView(QWidget *parent)
@@ -578,15 +482,9 @@ bool KoDocument::saveFile()
     }
     emit clearStatusBarMessage();
 
-    if (ret) {
-        KNotification *notify = new KNotification("DocumentSaved");
-        notify->setText(i18n("Document <i>%1</i> saved", url().url()));
-        notify->addContext("url", url().url());
-        QTimer::singleShot(0, notify, SLOT(sendEvent()));
-    }
-
     return ret;
 }
+
 
 QByteArray KoDocument::mimeType() const
 {
@@ -642,11 +540,6 @@ void KoDocument::setSaveInBatchMode(const bool batchMode)
     d->filterManager->setBatchMode(batchMode);
 }
 
-bool KoDocument::wantExportConfirmation() const
-{
-    return true;
-}
-
 bool KoDocument::isImporting() const
 {
     return d->isImporting;
@@ -698,39 +591,6 @@ void KoDocument::slotAutoSave()
     }
 }
 
-QAction *KoDocument::action(const QDomElement &element) const
-{
-    // First look in the document itself
-    QAction *act = KParts::ReadWritePart::action(element);
-    if (act)
-        return act;
-
-    Q_ASSERT(d->bSingleViewMode);
-    // Then look in the first view (this is for the single view mode)
-    if (!d->views.isEmpty())
-        return d->views.first()->action(element);
-    else
-        return 0;
-}
-
-QDomDocument KoDocument::domDocument() const
-{
-    // When embedded into e.g. konqueror, we want the view's GUI (hopefully a reduced one)
-    // to be used.
-    Q_ASSERT(d->bSingleViewMode);
-    if (d->views.isEmpty())
-        return QDomDocument();
-    else
-        return d->views.first()->domDocument();
-}
-
-void KoDocument::setManager(KParts::PartManager *manager)
-{
-    KParts::ReadWritePart::setManager(manager);
-    if (d->bSingleViewMode && d->views.count() == 1)
-        d->views.first()->setPartManager(manager);
-}
-
 void KoDocument::setReadWrite(bool readwrite)
 {
     KParts::ReadWritePart::setReadWrite(readwrite);
@@ -747,7 +607,7 @@ void KoDocument::setReadWrite(bool readwrite)
 void KoDocument::setAutoSave(int delay)
 {
     d->autoSaveDelay = delay;
-    if (isReadWrite() && !isEmbedded() && d->autoSaveDelay > 0)
+    if (isReadWrite() && d->autoSaveDelay > 0)
         d->autoSaveTimer.start(d->autoSaveDelay * 1000);
     else
         d->autoSaveTimer.stop();
@@ -839,12 +699,6 @@ KoDocumentRdfBase *KoDocument::documentRdfBase() const
     return d->docRdf;
 }
 
-
-void KoDocument::paintEverything(QPainter &painter, const QRect &rect, KoView *view)
-{
-    Q_UNUSED(view);
-    paintContent(painter, rect);
-}
 
 bool KoDocument::isModified() const
 {
@@ -1200,7 +1054,7 @@ QPixmap KoDocument::generatePreview(const QSize& size)
 
     QPainter p;
     p.begin(&pix);
-    paintEverything(p, rc);
+    paintContent(p, rc);
     p.end();
 
     return pix.scaled(QSize(previewWidth, previewHeight), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
@@ -1646,32 +1500,6 @@ bool KoDocument::openFile()
 #endif
             QFile::remove(importedFile);
         }
-    }
-
-    if (ok && d->bSingleViewMode) {
-        // See addClient below
-        KXMLGUIFactory *guiFactory = factory();
-        if (guiFactory)  // 0 when splitting views in konq, for some reason
-            guiFactory->removeClient(this);
-
-        if (!d->views.isEmpty()) {
-            // We already had a view (this happens when doing reload in konqueror)
-            KoView *v = d->views.first();
-            if (guiFactory)
-                guiFactory->removeClient(v);
-            removeView(v);
-            delete v;
-            Q_ASSERT(d->views.isEmpty());
-        }
-
-        KoView *view = createView(d->wrapperWidget);
-        d->wrapperWidget->setKoView(view);
-        view->show();
-
-        // Ok, now we have a view, so action() and domDocument() will work as expected
-        // -> rebuild GUI
-        if (guiFactory)
-            guiFactory->addClient(this);
     }
 
     if (ok) {
@@ -2256,7 +2084,7 @@ QDomDocument KoDocument::saveXML()
 KService::Ptr KoDocument::nativeService()
 {
     if (!d->nativeService)
-        d->nativeService = readNativeService(componentData());
+        d->nativeService = KoServiceProvider::readNativeService(componentData());
 
     return d->nativeService;
 }
@@ -2293,56 +2121,6 @@ QByteArray KoDocument::nativeOasisMimeType() const
 }
 
 
-//static
-KService::Ptr KoDocument::readNativeService(const KComponentData &componentData)
-{
-    QString instname = componentData.isValid() ? componentData.componentName() : KGlobal::mainComponent().componentName();
-
-    // The new way is: we look for a foopart.desktop in the kde_services dir.
-    QString servicepartname = instname + "part.desktop";
-    KService::Ptr service = KService::serviceByDesktopPath(servicepartname);
-    if (service)
-        kDebug(30003) << servicepartname << " found.";
-    if (!service) {
-        // The old way is kept as fallback for compatibility, but in theory this is really never used anymore.
-
-        // Try by path first, so that we find the global one (which has the native mimetype)
-        // even if the user created a words.desktop in ~/.kde/share/applnk or any subdir of it.
-        // If he created it under ~/.kde/share/applnk/Office/ then no problem anyway.
-        service = KService::serviceByDesktopPath(QString::fromLatin1("Office/%1.desktop").arg(instname));
-    }
-    if (!service)
-        service = KService::serviceByDesktopName(instname);
-
-    return service;
-}
-
-QByteArray KoDocument::readNativeFormatMimeType(const KComponentData &componentData)   //static
-{
-    KService::Ptr service = readNativeService(componentData);
-    if (!service)
-        return QByteArray();
-
-    if (service->property("X-KDE-NativeMimeType").toString().isEmpty()) {
-        // It may be that the servicetype "CalligraPart" is missing, which leads to this property not being known
-        KServiceType::Ptr ptr = KServiceType::serviceType("CalligraPart");
-        if (!ptr)
-            kError(30003) << "The serviceType CalligraPart is missing. Check that you have a calligrapart.desktop file in the share/servicetypes directory." << endl;
-        else {
-            kWarning(30003) << service->entryPath() << ": no X-KDE-NativeMimeType entry!";
-        }
-    }
-
-    return service->property("X-KDE-NativeMimeType").toString().toLatin1();
-}
-
-QStringList KoDocument::readExtraNativeMimeTypes(const KComponentData &componentData)   //static
-{
-    KService::Ptr service = readNativeService(componentData);
-    if (!service)
-        return QStringList();
-    return service->property("X-KDE-ExtraNativeMimeTypes").toStringList();
-}
 
 bool KoDocument::isNativeFormat(const QByteArray& mimetype, ImportExportType importExportType) const
 {
@@ -2673,8 +2451,8 @@ void KoDocument::startCustomDocument()
 KoOpenPane *KoDocument::createOpenPane(QWidget *parent, const KComponentData &componentData,
                                        const QString& templateType)
 {
-    const QStringList mimeFilter = KoFilterManager::mimeFilter(KoDocument::readNativeFormatMimeType(),
-                                                               KoFilterManager::Import, KoDocument::readExtraNativeMimeTypes());
+    const QStringList mimeFilter = KoFilterManager::mimeFilter(KoServiceProvider::readNativeFormatMimeType(),
+                                                               KoFilterManager::Import, KoServiceProvider::readExtraNativeMimeTypes());
 
     KoOpenPane *openPane = new KoOpenPane(parent, componentData, mimeFilter, templateType);
     QList<CustomDocumentWidgetItem> widgetList = createCustomDocumentWidgets(openPane);
@@ -2836,5 +2614,4 @@ int KoDocument::defaultAutoSave()
     return 300;
 }
 
-#include <KoDocument_p.moc>
 #include <KoDocument.moc>

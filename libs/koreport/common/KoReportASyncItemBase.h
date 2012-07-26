@@ -29,7 +29,7 @@ class KOREPORT_EXPORT KoReportASyncItemBase : public KoReportItemBase
 {
     Q_OBJECT
 public:
-    
+    using KoReportItemBase::render;
     virtual int render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script) = 0;
     
 protected:    

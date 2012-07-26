@@ -183,9 +183,9 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
             opj_destroy_decompress(dinfo);
             return KisImageBuilder_RESULT_FAILURE;
         }
-        channelorder[0] = KoRgbU16Traits::red_pos;
-        channelorder[1] = KoRgbU16Traits::green_pos;
-        channelorder[2] = KoRgbU16Traits::blue_pos;
+        channelorder[0] = KoBgrU16Traits::red_pos;
+        channelorder[1] = KoBgrU16Traits::green_pos;
+        channelorder[2] = KoBgrU16Traits::blue_pos;
         break;
     }
     case CLRSPC_GRAY: {
@@ -336,9 +336,9 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
         clrspc = CLRSPC_SRGB;
         components = 3;
         channelorder.resize(components);
-        channelorder[0] = KoRgbU16Traits::red_pos;
-        channelorder[1] = KoRgbU16Traits::green_pos;
-        channelorder[2] = KoRgbU16Traits::blue_pos;
+        channelorder[0] = KoBgrU16Traits::red_pos;
+        channelorder[1] = KoBgrU16Traits::green_pos;
+        channelorder[2] = KoBgrU16Traits::blue_pos;
     } else {
         KMessageBox::error(0, i18n("Cannot export images in %1.\n", layer->colorSpace()->name())) ;
         return KisImageBuilder_RESULT_FAILURE;

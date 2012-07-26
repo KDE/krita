@@ -37,19 +37,21 @@ using namespace Soprano;
 
 class RdfSemanticTreeWidgetApplyStylesheet : public RdfSemanticTreeWidgetAction
 {
-    KoRdfSemanticItem *si;
-    KoSemanticStylesheet *ss;
+    hKoRdfSemanticItem si;
+    hKoSemanticStylesheet ss;
 
 public:
 
     RdfSemanticTreeWidgetApplyStylesheet(QWidget *parent, KoCanvasBase *canvas,
-            const QString &name, KoRdfSemanticItem *si, KoSemanticStylesheet *ss = 0);
+                                         const QString &name,
+                                         hKoRdfSemanticItem si,
+                                         hKoSemanticStylesheet ss = hKoSemanticStylesheet(0));
     virtual ~RdfSemanticTreeWidgetApplyStylesheet();
     virtual void activated();
 };
 
 RdfSemanticTreeWidgetApplyStylesheet::RdfSemanticTreeWidgetApplyStylesheet(QWidget *parent,
-        KoCanvasBase *canvas, const QString &name, KoRdfSemanticItem* si, KoSemanticStylesheet *ss )
+        KoCanvasBase *canvas, const QString &name, hKoRdfSemanticItem si, hKoSemanticStylesheet ss )
             : RdfSemanticTreeWidgetAction(parent, canvas, name)
             , si(si)
             , ss(ss)
@@ -113,7 +115,7 @@ void KoRdfSemanticTreeWidgetItem::addApplyStylesheetActions(QWidget *parent,
     actions.append(topMenu);
     KActionMenu *subMenu = new KActionMenu(i18n("System"), topMenu);
     topMenu->addAction(subMenu);
-    foreach (KoSemanticStylesheet *ss, semanticItem()->stylesheets()) {
+    foreach (hKoSemanticStylesheet ss, semanticItem()->stylesheets()) {
         kDebug(30015) << "format(), sheet:" << ss->name() << " xmlid:" << xmlid;
         KAction* action = new RdfSemanticTreeWidgetApplyStylesheet(parent,
                                                                    host, ss->name(),
@@ -122,7 +124,7 @@ void KoRdfSemanticTreeWidgetItem::addApplyStylesheetActions(QWidget *parent,
     }
     subMenu = new KActionMenu(i18n("User"), topMenu);
     topMenu->addAction(subMenu);
-    foreach (KoSemanticStylesheet *ss, semanticItem()->userStylesheets()) {
+    foreach (hKoSemanticStylesheet ss, semanticItem()->userStylesheets()) {
         kDebug(30015) << "format(), sheet:" << ss->name() << " xmlid:" << xmlid;
         KAction *action = new RdfSemanticTreeWidgetApplyStylesheet(parent,
                                                                    host, ss->name(),
@@ -132,7 +134,7 @@ void KoRdfSemanticTreeWidgetItem::addApplyStylesheetActions(QWidget *parent,
     // add reapply current sheet option
     topMenu->addSeparator();
     KoRdfSemanticItemViewSite vs(semanticItem(), xmlid);
-    if (KoSemanticStylesheet *ss = vs.stylesheet()) {
+    if (hKoSemanticStylesheet ss = vs.stylesheet()) {
         KAction *action = new RdfSemanticTreeWidgetApplyStylesheet(parent,
                                                                    host, i18n("Reapply Current"),
                                                                    semanticItem(), ss);
@@ -140,7 +142,7 @@ void KoRdfSemanticTreeWidgetItem::addApplyStylesheetActions(QWidget *parent,
     }
     KAction *action = new RdfSemanticTreeWidgetApplyStylesheet(parent,
                                                                host, i18n("Disassociate"),
-                                                               semanticItem());
+                                                               semanticItem(), hKoSemanticStylesheet(0));
     topMenu->addAction(action);
 }
 

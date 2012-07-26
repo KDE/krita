@@ -26,12 +26,16 @@
 #include <QList>
 
 class KoParagraphStyle;
+class KoStyleThumbnailer;
+class KoStyleManager;
+class KoImageCollection;
 class KoUnit;
 class ParagraphBulletsNumbers;
 class ParagraphIndentSpacing;
 class ParagraphLayout;
 class ParagraphDecorations;
 class ParagraphDropCaps;
+class StylesModel;
 
 class ParagraphGeneral : public CharacterGeneral
 {
@@ -46,6 +50,12 @@ public:
     void switchToGeneralTab();
     void hideStyleName(bool hide);
     bool isStyleChanged();
+    QString styleName() const;
+    void selectName();
+
+    void setImageCollection(KoImageCollection *imageCollection);
+    KoImageCollection *imageCollection();
+    void setStyleManager(KoStyleManager *sm);
 
 public slots:
     void save(KoParagraphStyle *style = 0);
@@ -55,11 +65,9 @@ signals:
     void styleAltered(const KoParagraphStyle *style); /// when saving
 
 private slots:
-    void setName(const QString &name);
     void setPreviewParagraphStyle();
 
 private:
-    bool m_blockSignals;
     bool m_nameHidden;
 
     ParagraphIndentSpacing *m_paragraphIndentSpacing;
@@ -70,6 +78,10 @@ private:
 
     KoParagraphStyle *m_style;
     QList<KoParagraphStyle*> m_paragraphStyles;
+    KoStyleManager *m_styleManager;
+
+    KoStyleThumbnailer *m_thumbnail;
+    StylesModel *m_paragraphInheritedStyleModel;
 };
 
 #endif

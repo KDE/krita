@@ -41,7 +41,7 @@
   <customwidget>
    <class>Marble::MarbleWidget</class>
    <extends>QWidget</extends>
-   <header>MarbleWidget.h</header>
+   <header>marble/MarbleWidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

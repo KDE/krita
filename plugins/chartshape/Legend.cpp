@@ -389,7 +389,7 @@ void Legend::paintPixmap(QPainter &painter, const KoViewConverter &converter)
     d->kdLegend->paint(&pixmapPainter);
 }
 
-void Legend::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
+void Legend::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     //painter.save();
 
@@ -427,7 +427,7 @@ void Legend::paint(QPainter &painter, const KoViewConverter &converter, KoShapeP
     if (background()) {
         QPainterPath p;
         p.addRect(paintRect);
-        background()->paint(painter, p);
+        background()->paint(painter, converter, paintContext, p);
     }
 
     // KDChart thinks in pixels, Calligra in pt
@@ -526,14 +526,21 @@ bool Legend::loadOdf(const KoXmlElement &legendElement,
             setLegendPosition(EndPosition);
         }
 
-        if (legendElement.hasAttributeNS(KoXmlNS::calligra, "title")) {
-            setTitle(legendElement.attributeNS(KoXmlNS::calligra, "title", QString()));
+        if (legendElement.hasAttributeNS(KoXmlNS::office, "title")) {
+            setTitle(legendElement.attributeNS(KoXmlNS::office, "title", QString()));
         }
 
         styleStack.setTypeProperties("text");
 
+        if (styleStack.hasProperty(KoXmlNS::fo, "font-family")) {
+            QString fontFamily = styleStack.property(KoXmlNS::fo, "font-family");
+            QFont font = d->font;
+            font.setFamily(fontFamily);
+            setFont(font);
+        }
         if (styleStack.hasProperty(KoXmlNS::fo, "font-size")) {
-            setFontSize(KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "font-size")));
+            qreal fontSize = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "font-size"));
+            setFontSize(fontSize);
         }
         if (styleStack.hasProperty(KoXmlNS::fo, "font-color")) {
             QColor color = styleStack.property(KoXmlNS::fo, "font-color");
@@ -625,8 +632,8 @@ void Legend::slotChartTypeChanged(ChartType chartType)
     // more clever.
     switch (chartType) {
     case LineChartType:
-    //case ScatterChartType:
-        d->kdLegend->setLegendStyle(KDChart::Legend::LinesOnly);
+    case ScatterChartType:
+        d->kdLegend->setLegendStyle(KDChart::Legend::MarkersAndLines);
         break;
     default:
         d->kdLegend->setLegendStyle(KDChart::Legend::MarkersOnly);

@@ -36,7 +36,7 @@
 #include <KoOdfWorkaround.h>
 #include <KoPathPoint.h>
 
-EnhancedPathShape::EnhancedPathShape(const QRectF &viewBox)
+EnhancedPathShape::EnhancedPathShape(const QRect &viewBox)
 : m_viewBox(viewBox), m_viewBoxOffset(0.0, 0.0), m_mirrorVertically(false), m_mirrorHorizontally(false)
 , m_cacheResults(false)
 {
@@ -152,7 +152,7 @@ void EnhancedPathShape::evaluateHandles()
     setHandles(handles);
 }
 
-QRectF EnhancedPathShape::viewBox() const
+QRect EnhancedPathShape::viewBox() const
 {
     return m_viewBox;
 }
@@ -486,18 +486,15 @@ bool EnhancedPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
         KoOdfWorkaround::fixEnhancedPath(path, enhancedGeometry, context);
 #endif
         // load the viewbox
-        QRectF viewBox = loadOdfViewbox(enhancedGeometry);
-        if (!viewBox.isEmpty()) {
-            m_viewBox = viewBox;
-        }
+        m_viewBox = loadOdfViewbox(enhancedGeometry);
 
         if (!path.isEmpty()) {
             parsePathData(path);
         }
 
-        if (viewBox.isEmpty()) {
+        if (m_viewBox.isEmpty()) {
             // if there is no view box defined make it is big as the path.
-            m_viewBox = m_viewBound;
+            m_viewBox = m_viewBound.toAlignedRect();
         }
 
     }

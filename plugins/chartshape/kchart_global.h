@@ -53,7 +53,10 @@ enum ChartSubtype {
     NoChartSubtype,             // for charts with no subtypes
     NormalChartSubtype,         // For bar, line, area and radar charts
     StackedChartSubtype,
-    PercentChartSubtype
+    PercentChartSubtype,
+    HighLowCloseChartSubtype,               // For stock charts
+    OpenHighLowCloseChartSubtype,
+    CandlestickChartSubtype
 };
 
 enum AxisDimension {
@@ -102,6 +105,27 @@ enum LabelType {
     SubTitleLabelType,
     FooterLabelType
 };
+
+enum OdfMarkerStyle { MarkerSquare         = 0,
+                      MarkerDiamond        = 1,
+                      MarkerArrowDown      = 2,
+                      MarkerArrowUp        = 3,
+                      MarkerArrowRight     = 4,
+                      MarkerArrowLeft      = 5,
+                      MarkerBowTie         = 6,
+                      MarkerHourGlass      = 7,
+                      MarkerCircle         = 8,
+                      MarkerStar           = 9,
+                      MarkerX              = 10,
+                      MarkerCross          = 11,
+                      MarkerAsterisk       = 12,
+                      MarkerHorizontalBar  = 13,
+                      MarkerVerticalBar    = 14,
+                      MarkerRing           = 15,
+                      MarkerFastCross      = 16,
+                      Marker1Pixel         = 17,
+                      Marker4Pixels        = 18,
+                      NoMarker             = 19 };
 
 } // Namespace KChart
 

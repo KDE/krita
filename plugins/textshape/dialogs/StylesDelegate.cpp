@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2011-2012 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -40,7 +40,8 @@
 StylesDelegate::StylesDelegate()
     : QStyledItemDelegate(),
       m_editButtonPressed(false),
-      m_deleteButtonPressed(false)
+      m_deleteButtonPressed(false),
+      m_enableEditButton(true)
 {
     m_buttonSize = 16;
     m_buttonDistance = 2;
@@ -84,6 +85,9 @@ void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
     view->style()->drawControl(QStyle::CE_PushButton, &optDel, painter, 0);
 */
     // Open style manager dialog button.
+    if (!m_enableEditButton) {  // when we dont want edit icon
+        return;
+    }
     dx1 = option.rect.width() - qMin(option.rect.height()-2, m_buttonSize) -2;
     dy1 = 1 + (option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
     dx2 = -2;
@@ -203,4 +207,9 @@ bool StylesDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const
         return false;
     }
     return false;
+}
+
+void StylesDelegate::setEditButtonEnable(bool enable)
+{
+    m_enableEditButton = enable;
 }

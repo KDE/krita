@@ -54,13 +54,13 @@ public:
     /**
      * Performing actions on a specific reference to a semantic item in the document.
      */
-    KoRdfSemanticItemViewSite(KoRdfSemanticItem* si, const QString &xmlid);
+    KoRdfSemanticItemViewSite(hKoRdfSemanticItem si, const QString &xmlid);
     ~KoRdfSemanticItemViewSite();
 
     /**
      * The stylesheet that has been set for this view site
      */
-    KoSemanticStylesheet *stylesheet() const;
+    hKoSemanticStylesheet stylesheet() const;
 
     /**
      * If there is a stylesheet set for this view site it is forgotten
@@ -81,7 +81,7 @@ public:
      * @see setStylesheetWithoutReflow()
      * @see reflowUsingCurrentStylesheet()
      */
-    void applyStylesheet(KoTextEditor *editor, KoSemanticStylesheet *ss);
+    void applyStylesheet(KoTextEditor *editor, hKoSemanticStylesheet ss);
     /**
      * Remember that a specific stylesheet should be applied for this
      * semantic item. No reflow of the document is performed and thus
@@ -89,7 +89,7 @@ public:
      *
      * @see applyStylesheet()
      */
-    void setStylesheetWithoutReflow(KoSemanticStylesheet *ss);
+    void setStylesheetWithoutReflow(hKoSemanticStylesheet ss);
 
     /**
      * Reflow the text that shows the user this semantic item in the

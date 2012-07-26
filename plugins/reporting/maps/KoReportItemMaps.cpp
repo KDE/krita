@@ -25,8 +25,8 @@
 #include <QBuffer>
 #include <kcodecs.h>
 #include <renderobjects.h>
-#include <MarbleWidget.h>
-#include <MarbleModel.h>
+#include <marble/MarbleWidget.h>
+#include <marble/MarbleModel.h>
 #include <QImage>
 #include <QPixmap>
 #include <sys/socket.h>

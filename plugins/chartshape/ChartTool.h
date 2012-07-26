@@ -28,7 +28,6 @@
 // KChart
 #include "ChartShape.h"
 
-
 class QAction;
 
 
@@ -64,7 +63,7 @@ public:
     virtual QWidget *createOptionWidget();
 
 private slots:
-    void setChartType(ChartType type, ChartSubtype subtype = NoChartSubtype);
+    void setChartType(ChartType type, ChartSubtype subtype);
     void setChartSubType(ChartSubtype subtype);
     void setThreeDMode(bool threeD);
     void setDataDirection(Qt::Orientation);
@@ -89,6 +88,7 @@ private slots:
 
     void setDataSetPen(DataSet *dataSet, const QColor& color);
     void setDataSetBrush(DataSet *dataSet, const QColor& color);
+    void setDataSetMarker(DataSet *dataSet, OdfMarkerStyle style);
     void setDataSetAxis(DataSet *dataSet, Axis *axis);
     
     // Plot Area

@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de> filters
- *  Copyright (c) 2005-2007 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005-2007 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2005, 2010 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
  *
@@ -507,7 +507,7 @@ bool KisTransformWorker::run()
     if (m_xscale == 0 || m_yscale == 0) return false;
 
     // Progress info
-    m_progressTotalSteps = 0;
+    m_progressTotalSteps = 1;
     m_progressStep = 0;
 
     KoColor defaultPixel(m_dev->defaultPixel(), m_dev->colorSpace());
@@ -534,9 +534,6 @@ bool KisTransformWorker::run()
     double rotation = m_rotation;
     qint32 xtranslate = m_xtranslate;
     qint32 ytranslate = m_ytranslate;
-
-
-    m_progressTotalSteps = 0;
 
     // Apply shear X and Y
     if (xshear != 0 || yshear != 0) {
@@ -677,7 +674,7 @@ bool KisTransformWorker::run()
     return true;
 }
 
-QRect KisTransformWorker::mirrorX(KisPaintDeviceSP dev, const KisSelection* selection)
+QRect KisTransformWorker::mirrorX(KisPaintDeviceSP dev, qreal axis, const KisSelection* selection)
 {
     int pixelSize = dev->pixelSize();
     KisPaintDeviceSP dst = new KisPaintDevice(dev->colorSpace());
@@ -692,6 +689,13 @@ QRect KisTransformWorker::mirrorX(KisPaintDeviceSP dev, const KisSelection* sele
             r = dev->dataManager()->extent();
         else
             r = dev->exactBounds();
+
+        if (axis > 0) {
+            // Extend rect so it has the same width on both sides of the axis
+            qreal distanceFromAxis = qMax(fabs((qreal)r.left() - axis), fabs((qreal)r.right() - axis));
+            QRect newRect(floor(axis - distanceFromAxis), r.y(), ceil(2*distanceFromAxis), r.height());
+            r = newRect.adjusted(-1, 0, 2, 0);
+        }
     }
     {
         quint8 *dstPixels = new quint8[r.width() * pixelSize];
@@ -741,7 +745,7 @@ QRect KisTransformWorker::mirrorX(KisPaintDeviceSP dev, const KisSelection* sele
     return r;
 }
 
-QRect KisTransformWorker::mirrorY(KisPaintDeviceSP dev, const KisSelection* selection)
+QRect KisTransformWorker::mirrorY(KisPaintDeviceSP dev, qreal axis, const KisSelection* selection)
 {
     int pixelSize = dev->pixelSize();
     KisPaintDeviceSP dst = new KisPaintDevice(dev->colorSpace());
@@ -756,6 +760,13 @@ QRect KisTransformWorker::mirrorY(KisPaintDeviceSP dev, const KisSelection* sele
             r = dev->dataManager()->extent();
         else
             r = dev->exactBounds();
+
+        if (axis > 0) {
+            // Extend rect so it has the same heigt on both sides of the axis
+            qreal distanceFromAxis = qMax(fabs((qreal)r.top() - axis), fabs((qreal)r.bottom() - axis));
+            QRect newRect(r.x(), floor(axis - distanceFromAxis), r.width(), ceil(2*distanceFromAxis));
+            r = newRect.adjusted(0, -1, 0, 2);
+        }
     }
     {
         qint32 y1, y2;

@@ -62,20 +62,30 @@ ColorRange::ColorRange(QObject *parent, const QVariantList &)
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/colorrange.rc"),
                    true);
         m_view = dynamic_cast<KisView2*>(parent);
-        QAction *action  = new KAction(i18n("Select from Color Range..."), this);
-        actionCollection()->addAction("colorrange", action);
-        connect(action, SIGNAL(triggered()), this, SLOT(slotActivated()));
-        m_view->selectionManager()->addSelectionAction(action);
+        m_selectRange = new KAction(i18n("Select from Color Range..."), this);
+        actionCollection()->addAction("colorrange", m_selectRange);
+        connect(m_selectRange, SIGNAL(triggered()), this, SLOT(slotActivated()));
+        m_view->selectionManager()->addSelectionAction(m_selectRange);
 
-        action  = new KAction(i18n("Select Opaque"), this);
-        actionCollection()->addAction("selectopaque", action);
-        connect(action, SIGNAL(triggered()), this, SLOT(selectOpaque()));
-        m_view->selectionManager()->addSelectionAction(action);
+        m_selectOpaque  = new KAction(i18n("Select Opaque"), this);
+        actionCollection()->addAction("selectopaque", m_selectOpaque);
+        connect(m_selectOpaque, SIGNAL(triggered()), this, SLOT(selectOpaque()));
+        m_view->selectionManager()->addSelectionAction(m_selectOpaque);
+
+        connect(m_view->selectionManager(), SIGNAL(signalUpdateGUI()),
+                SLOT(slotUpdateGUI()));
     }
 }
 
 ColorRange::~ColorRange()
 {
+}
+
+void ColorRange::slotUpdateGUI()
+{
+    bool enable = m_view->selectionEditable();
+    m_selectRange->setEnabled(enable);
+    m_selectOpaque->setEnabled(enable);
 }
 
 void ColorRange::slotActivated()

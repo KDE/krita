@@ -128,16 +128,6 @@ private:
     void maskToBottom();
 
     /**
-     * Mirror the mask around the X axis
-     */
-    void mirrorMaskX();
-
-    /**
-     * Mirror the mask around the Y axis
-     */
-    void mirrorMaskY();
-
-    /**
      * Show the mask properties dialog
      */
     void maskProperties();

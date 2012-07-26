@@ -280,7 +280,7 @@ QStyleOptionViewItem KoDocumentSectionDelegate::getOptions(const QStyleOptionVie
         option.palette.setColor(QPalette::Text, v.value<QColor>());
     v = index.data(Qt::BackgroundColorRole);
     if (v.isValid())
-        option.palette.setColor(QPalette::Background, v.value<QColor>());
+        option.palette.setColor(QPalette::Window, v.value<QColor>());
 
    return option;
 }

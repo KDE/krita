@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (c) 2007 Casper Boemann <cbr@boemann.dk>
+   Copyright (c) 2007 C. Boemann <cbo@boemann.dk>
    Copyright (c) 2007 Fredy Yanardi <fyanardi@gmail.com>
 
    This library is free software; you can redistribute it and/or
@@ -59,6 +59,12 @@ public:
      * @param colorSet pointer to the color set
      */
     void setColorSet(KoColorSet *colorSet);
+    
+    /**
+     * Gets the current color set
+     * @returns current color set,, 0 if none set
+     */
+    KoColorSet* colorSet();
 
 protected:
     virtual void resizeEvent(QResizeEvent *event); ///< reimplemented from QFrame

@@ -37,6 +37,7 @@ KoConnectionShapeFactory::KoConnectionShapeFactory()
     setIcon("x-shape-connection");
     setXmlElementNames(KoXmlNS::draw, QStringList("connector"));
     setLoadingPriority(1);
+    setHidden(true); // Don't show this shape in collections. Only ConnectionTool should create
 }
 
 KoShape* KoConnectionShapeFactory::createDefaultShape(KoDocumentResourceManager *) const

@@ -20,18 +20,27 @@
 #include "KoConnectionShapeConfigWidget.h"
 #include "commands/KoConnectionShapeTypeCommand.h"
 #include <klocale.h>
+#include <KIcon>
 
 KoConnectionShapeConfigWidget::KoConnectionShapeConfigWidget()
 {
     widget.setupUi(this);
 
     widget.connectionType->clear();
-    widget.connectionType->addItem(i18n("Standard"));
-    widget.connectionType->addItem(i18n("Lines"));
-    widget.connectionType->addItem(i18n("Straight"));
-    widget.connectionType->addItem(i18n("Curve"));
+    widget.connectionType->addItem(KIcon("standard-connector"), i18n("Standard"));
+    widget.connectionType->addItem(KIcon("lines-connector"), i18n("Lines"));
+    widget.connectionType->addItem(KIcon("straight-connector"), i18n("Straight"));
+    widget.connectionType->addItem(KIcon("curve-connector"), i18n("Curve"));
 
     connect(widget.connectionType, SIGNAL(currentIndexChanged(int)), this, SIGNAL(propertyChanged()));
+    connect(widget.connectionType, SIGNAL(currentIndexChanged(int)), this, SIGNAL(connectionTypeChanged(int)));
+}
+
+void KoConnectionShapeConfigWidget::setConnectionType(int type)
+{
+    widget.connectionType->blockSignals(true);
+    widget.connectionType->setCurrentIndex(type);
+    widget.connectionType->blockSignals(false);
 }
 
 void KoConnectionShapeConfigWidget::open(KoShape *shape)
@@ -41,17 +50,15 @@ void KoConnectionShapeConfigWidget::open(KoShape *shape)
         return;
 
     widget.connectionType->blockSignals(true);
-
     widget.connectionType->setCurrentIndex(m_connection->type());
-
     widget.connectionType->blockSignals(false);
 }
 
 void KoConnectionShapeConfigWidget::save()
 {
-    if (! m_connection)
+    if (!m_connection) {
         return;
-
+    }
     m_connection->setType(static_cast<KoConnectionShape::Type>(widget.connectionType->currentIndex()));
 }
 

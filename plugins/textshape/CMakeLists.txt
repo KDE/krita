@@ -89,7 +89,6 @@ SET ( textshape_SRCS
     dialogs/ListLevelChooser.cpp
 
     commands/ChangeListLevelCommand.cpp
-    commands/TextCutCommand.cpp
     commands/ShowChangesCommand.cpp
     commands/AcceptChangeCommand.cpp
     commands/RejectChangeCommand.cpp

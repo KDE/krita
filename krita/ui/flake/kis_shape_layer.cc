@@ -144,6 +144,9 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs)
         , KoShapeLayer(new ShapeLayerContainerModel(this)) //no _rhs here otherwise both layer have the same KoShapeContainerModel
         , m_d(new Private())
 {
+    // Make sure our new layer is visible otherwise the shapes cannot be painted.
+    setVisible(true);
+
     KoShapeContainer::setParent(_rhs.KoShapeContainer::parent());
     initShapeLayer(_rhs.m_d->controller);
 
@@ -460,7 +463,7 @@ bool KisShapeLayer::loadLayer(KoStore* store)
         // FIXME: investigate what is this
         //        KoShapeLayer * l = new KoShapeLayer();
         if (!loadOdf(layerElement, shapeContext)) {
-            kWarning() << "Could not load shape layer!";
+            kWarning() << "Could not load vector layer!";
             return false;
         }
     }

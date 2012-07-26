@@ -47,7 +47,7 @@ struct KoTextOdfSaveHelper::Private {
     int from;
     int to;
 
-    const Soprano::Model *rdfModel; //< This is so cut/paste can serialize the relevant RDF to the clipboard
+    QSharedPointer<Soprano::Model> rdfModel; //< This is so cut/paste can serialize the relevant RDF to the clipboard
 };
 
 
@@ -87,12 +87,12 @@ KoShapeSavingContext * KoTextOdfSaveHelper::context(KoXmlWriter * bodyWriter,
     return d->context;
 }
 
-void KoTextOdfSaveHelper::setRdfModel(const Soprano::Model *m)
+void KoTextOdfSaveHelper::setRdfModel(QSharedPointer<Soprano::Model> m)
 {
     d->rdfModel = m;
 }
 
-const Soprano::Model *KoTextOdfSaveHelper::rdfModel() const
+QSharedPointer<Soprano::Model> KoTextOdfSaveHelper::rdfModel() const
 {
     return d->rdfModel;
 }

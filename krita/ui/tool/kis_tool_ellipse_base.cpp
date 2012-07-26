@@ -24,13 +24,13 @@
 #include <KoCanvasController.h>
 #include <KoViewConverter.h>
 
-#include <kis_system_locker.h>
 #include "kis_canvas2.h"
 
-KisToolEllipseBase::KisToolEllipseBase(KoCanvasBase * canvas, const QCursor & cursor) :
+KisToolEllipseBase::KisToolEllipseBase(KoCanvasBase * canvas, KisToolEllipseBase::ToolType type, const QCursor & cursor) :
         KisToolShape(canvas, cursor),
         m_dragStart(0,0),
-        m_dragEnd(0,0)
+        m_dragEnd(0,0),
+        m_type(type)
 {
 }
 
@@ -58,9 +58,15 @@ void KisToolEllipseBase::mousePressEvent(KoPointerEvent *event)
     if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
                        Qt::LeftButton, Qt::NoModifier)) {
 
-        if (nodePaintAbility() == NONE)
-            return;
-
+        if (m_type == PAINT) {
+            if (!nodeEditable() || nodePaintAbility() == NONE) {
+                return;
+            }
+        } else {
+            if (!selectionEditable()) {
+                return;
+            }
+        }
         setMode(KisTool::PAINT_MODE);
 
         QPointF pos = convertToPixelCoord(event);
@@ -119,7 +125,6 @@ void KisToolEllipseBase::mouseReleaseEvent(KoPointerEvent *event)
 
         updateArea();
 
-        KisSystemLocker locker(currentNode());
         finishEllipse(QRectF(m_dragStart, m_dragEnd).normalized());
         event->accept();
     }

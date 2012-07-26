@@ -127,6 +127,28 @@ void KisSelectionTest::testInvertSelection()
     QCOMPARE(TestUtil::alphaDevicePixel(selection->projection(), 512, 512), MAX_SELECTED);
 }
 
+void KisSelectionTest::testInvertSelectionSemi()
+{
+    KisSelectionSP selection = new KisSelection();
+    KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
+    quint8 selectedness = 42;
+    pixelSelection->select(QRect(20, 20, 20, 20), selectedness);
+
+    QCOMPARE(TestUtil::alphaDevicePixel(pixelSelection, 30, 30), selectedness);
+    QCOMPARE(TestUtil::alphaDevicePixel(pixelSelection, 0, 0), MIN_SELECTED);
+
+    pixelSelection->invert();
+
+    quint8 invertedSelectedness = MAX_SELECTED - selectedness;
+    QCOMPARE(TestUtil::alphaDevicePixel(pixelSelection, 30, 30), invertedSelectedness);
+    QCOMPARE(TestUtil::alphaDevicePixel(pixelSelection, 0, 0), MAX_SELECTED);
+
+    selection->updateProjection();
+    QCOMPARE(TestUtil::alphaDevicePixel(selection->projection(), 30, 30), invertedSelectedness);
+    QCOMPARE(TestUtil::alphaDevicePixel(selection->projection(), 0, 0), MAX_SELECTED);
+}
+
+
 void KisSelectionTest::testUpdateSelectionProjection()
 {
     KisSelectionSP selection = new KisSelection();

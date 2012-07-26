@@ -59,6 +59,7 @@
 #include <kis_pattern.h>
 #include <kis_transaction.h>
 #include <kis_selection.h>
+#include <kis_floating_message.h>
 
 #include "kis_canvas_resource_provider.h"
 #include "canvas/kis_canvas2.h"
@@ -68,6 +69,7 @@
 #include "kis_config_notifier.h"
 #include "kis_cursor.h"
 #include <recorder/kis_recorded_paint_action.h>
+#include <kis_selection_mask.h>
 
 struct KisTool::Private {
     Private()
@@ -689,6 +691,43 @@ void KisTool::setCurrentNodeLocked(bool locked)
         currentNode()->setSystemLocked(locked, false);
     }
 }
+
+bool KisTool::nodeEditable()
+{
+    KisNodeSP node = currentNode();
+    if (!node) {
+        return false;
+    }
+    if (!node->isEditable()) {
+        KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+        QString message;
+        if (!node->visible() && node->userLocked()) {
+            message = i18n("Layer is locked and invisible.");
+        } else if (node->userLocked()) {
+            message = i18n("Layer is locked.");
+        } else if(!node->visible()) {
+            message = i18n("Layer is invisible.");
+        } else {
+            message = i18n("Group not editable.");
+        }
+        kiscanvas->view()->showFloatingMessage(message, KIcon("object-locked"));
+    }
+    return node->isEditable();
+}
+
+bool KisTool::selectionEditable()
+{
+    KisCanvas2 * kisCanvas = static_cast<KisCanvas2*>(canvas());
+    KisView2 * view = kisCanvas->view();
+
+    bool editable = view->selectionEditable();
+    if (!editable) {
+        KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+        kiscanvas->view()->showFloatingMessage(i18n("Local selection is locked."), KIcon("object-locked"));
+    }
+    return editable;
+}
+
 
 #include "kis_tool.moc"
 

@@ -93,7 +93,7 @@ public:
     IndexEntry *clone();
     virtual void addAttributes(KoXmlWriter* writer) const;
     // for saving let's save the original unit,
-    // for KoText::Tab we need to covert to PostScript points
+    // for KoText::Tab we need to convert to PostScript points
     void setPosition(const QString &position);
 
     KoText::Tab tab;

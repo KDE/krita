@@ -421,6 +421,7 @@ public:
 
         if (fragmentSelection.charFormat().isAnchor()) {
             format.setAnchor(true);
+            format.setProperty(KoCharacterStyle::AnchorType, fragmentSelection.charFormat().intProperty(KoCharacterStyle::AnchorType));
             format.setAnchorHref(fragmentSelection.charFormat().anchorHref());
         }
 

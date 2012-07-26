@@ -42,7 +42,7 @@ StylesCombo::StylesCombo(QWidget *parent)
     // color scheme they are hardly seen.
     // Force palette entry "Text" to black as contrast, as the pop-up button
     // symbol is often drawn with this palette entry
-    // TODO: update to background color of currently selected/focussed shape/page
+    // TODO: update to background color of currently selected/focused shape/page
     QPalette palette = this->palette();
     palette.setColor(QPalette::Base, QColor(Qt::white));
     palette.setColor(QPalette::Text, QColor(Qt::black));

@@ -41,7 +41,7 @@
 
 
 KisToolRectangle::KisToolRectangle(KoCanvasBase * canvas)
-        : KisToolRectangleBase(canvas, KisCursor::load("tool_rectangle_cursor.png", 6, 6))
+        : KisToolRectangleBase(canvas, KisToolRectangleBase::PAINT, KisCursor::load("tool_rectangle_cursor.png", 6, 6))
 {
     setObjectName("tool_rectangle");
 }
@@ -52,7 +52,6 @@ KisToolRectangle::~KisToolRectangle()
 
 void KisToolRectangle::finishRect(const QRectF &rect)
 {
-    KisSystemLocker locker(currentNode());
     if (rect.isNull())
         return;
 
@@ -63,6 +62,7 @@ void KisToolRectangle::finishRect(const QRectF &rect)
     }
 
     if (!currentNode()->inherits("KisShapeLayer")) {
+        KisSystemLocker locker(currentNode());
         KisFigurePaintingToolHelper helper(i18n("Rectangle"),
                                            image(),
                                            canvas()->resourceManager(),

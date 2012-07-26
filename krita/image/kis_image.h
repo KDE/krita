@@ -571,7 +571,7 @@ signals:
     /**
      * Emitted when the root node of the image has changed.
      * It happens, e.g. when we flatten the image. When
-     * this happens the reciever should reload information
+     * this happens the receiver should reload information
      * about the image
      */
     void sigLayersChangedAsync();

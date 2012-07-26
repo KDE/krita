@@ -23,12 +23,10 @@
 #include <KoTemplateCreateDia.h>
 
 #include <QFile>
-#include <QLayout>
 #include <QLabel>
 #include <QRadioButton>
 #include <QPushButton>
 #include <QCheckBox>
-#include <QToolTip>
 #include <QVBoxLayout>
 #include <QPixmap>
 #include <QHBoxLayout>
@@ -41,6 +39,7 @@
 #include <ktemporaryfile.h>
 #include <klineedit.h>
 #include <klocale.h>
+#include <KoDocument.h>
 #include <KoTemplates.h>
 #include <KoTemplateTree.h>
 #include <KoTemplateGroup.h>
@@ -48,24 +47,24 @@
 #include <kicondialog.h>
 #include <kinputdialog.h>
 #include <kmessagebox.h>
-#include <kimageio.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <kio/netaccess.h>
 #include <kiconloader.h>
 #include <kaboutdata.h>
-#include <kconfigbase.h>
-#include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kio/job.h>
-#include <stdlib.h>
 #include <kcomponentdata.h>
 
+// ODF thumbnail extent
+static const int thumbnailExtent = 128;
 
 class KoTemplateCreateDiaPrivate {
 public:
-    KoTemplateCreateDiaPrivate( QWidget* /*parent*/, const KComponentData &componentData)
+    KoTemplateCreateDiaPrivate(const KComponentData &componentData, const QString &filePath, const QPixmap &thumbnail)
          : m_componentData( componentData )
+         , m_filePath(filePath)
+         , m_thumbnail(thumbnail)
     {
         m_tree=0;
         m_name=0;
@@ -93,6 +92,8 @@ public:
     QPushButton *m_add, *m_remove;
     QCheckBox *m_defaultTemplate;
     KComponentData m_componentData;
+    QString m_filePath;
+    QPixmap m_thumbnail;
     bool m_changed;
 };
 
@@ -103,9 +104,10 @@ public:
  *
  ****************************************************************************/
 
-KoTemplateCreateDia::KoTemplateCreateDia( const QByteArray &templateType, const KComponentData &componentData,
-                                          const QString &file, const QPixmap &pix, QWidget *parent ) :
-    KDialog( parent ), m_file(file), m_pixmap(pix), d( new KoTemplateCreateDiaPrivate( parent, componentData ) )
+KoTemplateCreateDia::KoTemplateCreateDia(const char *templateType, const KComponentData &componentData,
+                                         const QString &filePath, const QPixmap &thumbnail, QWidget *parent)
+  : KDialog(parent)
+  , d(new KoTemplateCreateDiaPrivate(componentData, filePath, thumbnail))
 {
 
     setButtons( KDialog::Ok|KDialog::Cancel );
@@ -116,12 +118,10 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QByteArray &templateType, const 
 
     QWidget *mainwidget=mainWidget();
     QHBoxLayout *mbox=new QHBoxLayout( mainwidget );
-    mbox->setSpacing( KDialog::spacingHint() );
     QVBoxLayout* leftbox = new QVBoxLayout();
     mbox->addLayout( leftbox );
 
     QLabel *label=new QLabel(i18n("Name:"), mainwidget);
-    leftbox->addSpacing(label->fontMetrics().height()/2);
     QHBoxLayout *namefield=new QHBoxLayout();
     leftbox->addLayout( namefield );
     namefield->addWidget(label);
@@ -158,34 +158,23 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QByteArray &templateType, const 
     QGroupBox *pixbox = new QGroupBox(i18n("Picture"), mainwidget);
     rightbox->addWidget(pixbox);
     QVBoxLayout *pixlayout=new QVBoxLayout(pixbox );
-    pixlayout->setMargin(KDialog::marginHint());
-    pixlayout->setSpacing( KDialog::spacingHint());
-    pixlayout->addSpacing(pixbox->fontMetrics().height()/2);
-    pixlayout->addStretch(1);
-    d->m_default=new QRadioButton(i18n("&Default"), pixbox);
+    d->m_default=new QRadioButton(i18n("&Preview"), pixbox);
     d->m_default->setChecked(true);
     connect(d->m_default, SIGNAL(clicked()), this, SLOT(slotDefault()));
     pixlayout->addWidget(d->m_default);
     QHBoxLayout *custombox=new QHBoxLayout();
-    pixlayout->addItem(custombox);
-    d->m_custom=new QRadioButton(i18n("Custom"), pixbox);
+    d->m_custom=new QRadioButton(i18n("Custom:"), pixbox);
     d->m_custom->setChecked(false);
     connect(d->m_custom, SIGNAL(clicked()), this, SLOT(slotCustom()));
     custombox->addWidget(d->m_custom);
     d->m_select=new QPushButton(i18n("&Select..."), pixbox);
     connect(d->m_select, SIGNAL(clicked()), this, SLOT(slotSelect()));
-    custombox->addWidget(d->m_select, 1);
+    custombox->addWidget(d->m_select);
     custombox->addStretch(1);
-    pixlayout->addStretch(1);
-    label=new QLabel(i18n("Preview:"), pixbox);
-    pixlayout->addWidget(label);
-    QHBoxLayout *previewbox=new QHBoxLayout();
-    pixlayout->addItem(previewbox);
-    previewbox->addStretch(10);
+    pixlayout->addLayout(custombox);
     d->m_preview=new QLabel(pixbox); // setPixmap() -> auto resize?
-    previewbox->addWidget(d->m_preview);
-    previewbox->addStretch(10);
-    pixlayout->addStretch(8);
+    pixlayout->addWidget(d->m_preview, 0, Qt::AlignCenter);
+    pixlayout->addStretch(1);
 
     d->m_defaultTemplate = new QCheckBox( i18n("Use the new template as default"), mainwidget );
     d->m_defaultTemplate->setChecked( true );
@@ -219,12 +208,42 @@ void KoTemplateCreateDia::slotSelectionChanged()
     }
 }
 
-void KoTemplateCreateDia::createTemplate( const QByteArray &templateType, const KComponentData &componentData,
-                                          const QString &file, const QPixmap &pix, QWidget *parent ) {
+void KoTemplateCreateDia::createTemplate(const char *templateType,
+                                         const char *suffix,
+                                         const KComponentData &componentData,
+                                         KoDocument *document, QWidget *parent)
+{
+    KTemporaryFile *tempFile = new KTemporaryFile();
+    tempFile->setSuffix(QLatin1String(suffix));
+    //Check that creation of temp file was successful
+    if (!tempFile->open()) {
+        qWarning("Creation of temporary file to store template failed.");
+        return;
+    }
+    const QString fileName = tempFile->fileName();
+    tempFile->close(); // need to close on Windows before we can open it again to save
+    delete tempFile; // now the file has disappeared and we can create a new file with the generated name
 
-    KoTemplateCreateDia *dia = new KoTemplateCreateDia( templateType, componentData, file, pix, parent );
+    document->saveNativeFormat(fileName);
+
+    const QPixmap thumbnail = document->generatePreview(QSize(thumbnailExtent, thumbnailExtent));
+
+    KoTemplateCreateDia *dia = new KoTemplateCreateDia(templateType, componentData, fileName, thumbnail, parent);
     dia->exec();
     delete dia;
+
+    QDir d;
+    d.remove(fileName);
+}
+
+static void
+saveAsQuadraticPng(const QPixmap &pixmap, const QString &fileName)
+{
+    QImage icon = pixmap.toImage();
+    icon = icon.convertToFormat(QImage::Format_ARGB32);
+    const int iconExtent = qMax(icon.width(), icon.height());
+    icon = icon.copy((icon.width() - iconExtent) / 2, (icon.height() - iconExtent) / 2, iconExtent, iconExtent);
+    icon.save(fileName, "PNG");
 }
 
 void KoTemplateCreateDia::slotOk() {
@@ -273,10 +292,10 @@ void KoTemplateCreateDia::slotOk() {
     icon+=".png";
 
     // try to find the extension for the template file :P
-    const int pos = m_file.lastIndexOf( '.' );
+    const int pos = d->m_filePath.lastIndexOf(QLatin1Char('.'));
     QString ext;
     if ( pos > -1 )
-        ext = m_file.mid( pos );
+        ext = d->m_filePath.mid(pos);
     else
         kWarning(30004) << "Template extension not found!";
 
@@ -319,18 +338,20 @@ void KoTemplateCreateDia::slotOk() {
     }
 
     KUrl orig;
-    orig.setPath( m_file );
+    orig.setPath(d->m_filePath);
     // don't overwrite the hidden template file with a new non-hidden one
     if ( !ignore )
     {
-        QFile::copy(m_file, dest.toLocalFile());
-        // save the picture
-        if(d->m_default->isChecked() && !m_pixmap.isNull())
-            m_pixmap.save(icon, "PNG");
-        else if(!d->m_customPixmap.isNull())
-            d->m_customPixmap.save(icon, "PNG");
-        else
+        QFile::copy(d->m_filePath, dest.toLocalFile());
+        // save the picture as icon
+        // (needs to be square, otherwise KIconLoader dpes nasty changes)
+        if(d->m_default->isChecked() && !d->m_thumbnail.isNull()) {
+            saveAsQuadraticPng(d->m_thumbnail, icon);
+        } else if(!d->m_customPixmap.isNull()) {
+            saveAsQuadraticPng(d->m_customPixmap, icon);
+        } else {
             kWarning(30004) << "Could not save the preview picture!";
+        }
     }
 
     // if there's a .directory file, we copy this one, too
@@ -393,7 +414,7 @@ void KoTemplateCreateDia::slotSelect() {
         }
         return;
     }
-    QString path = KIconLoader::global()->iconPath(name, KIconLoader::Desktop);
+    const QString path = KIconLoader::global()->iconPath(name, -thumbnailExtent);
     d->m_customFile = path;
     d->m_customPixmap=QPixmap();
     updatePixmap();
@@ -479,14 +500,14 @@ void KoTemplateCreateDia::slotRemove() {
 
 void KoTemplateCreateDia::updatePixmap() {
 
-    if(d->m_default->isChecked() && !m_pixmap.isNull())
-        d->m_preview->setPixmap(m_pixmap);
+    if(d->m_default->isChecked() && !d->m_thumbnail.isNull())
+        d->m_preview->setPixmap(d->m_thumbnail);
     else if(d->m_custom->isChecked() && !d->m_customFile.isEmpty()) {
         if(d->m_customPixmap.isNull()) {
             kDebug(30004) <<"Trying to load picture" << d->m_customFile;
             // use the code in KoTemplate to load the image... hacky, I know :)
             KoTemplate t("foo", "bar", QString(), d->m_customFile);
-            d->m_customPixmap=t.loadPicture(d->m_tree->componentData());
+            d->m_customPixmap=t.loadPicture();
         }
         else
             kWarning(30004) << "Trying to load picture";

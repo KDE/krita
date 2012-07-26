@@ -237,6 +237,16 @@ QVector<QPolygon> KisPixelSelection::outline() const
     qint32 height = selectionExtent.height();
 
     KisOutlineGenerator generator(colorSpace(), MIN_SELECTED);
+    // If the selection is small using a buffer is much fast
+    if (width*height < 5000000) {
+        quint8* buffer = new quint8[width*height];
+        readBytes(buffer, xOffset, yOffset, width, height);
+
+        QVector<QPolygon> paths = generator.outline(buffer, xOffset, yOffset, width, height);
+
+        delete[] buffer;
+        return paths;
+    }
     return generator.outline(this, xOffset, yOffset, width, height);
 }
 

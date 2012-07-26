@@ -114,8 +114,13 @@ QColor KisColorSelectorRing::selectColor(int x, int y) {
 
 void KisColorSelectorRing::setColor(const QColor &color)
 {
-    emit paramChanged(color.hueF(), -1, -1, -1, -1);
-    m_lastHue=color.hueF();
+    // selector keeps the position on the ring if hue is undefined (when saturation is 0)
+    if (!qFuzzyCompare(color.saturationF(), 0.0)) {
+        emit paramChanged(color.hueF(), -1, -1, -1, -1);
+        m_lastHue=color.hueF();
+    } else {
+        emit paramChanged(m_lastHue, -1, -1, -1, -1);
+    }
     emit update();
 }
 

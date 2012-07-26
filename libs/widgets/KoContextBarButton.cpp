@@ -89,7 +89,7 @@ void KoContextBarButton::paintEvent(QPaintEvent*)
     painter.fillPath(path, color);
 
     if (opt.state & QStyle::State_Raised && opt.state & QStyle::State_Enabled) {
-        // Botton shadow
+        // Bottom shadow
         QLinearGradient gradient(rectF.bottomLeft(), rectF.bottomLeft() - QPoint(0, 5));
         gradient.setColorAt(0, QColor::fromHsvF(0, 0, 0, .3));
         gradient.setColorAt(1, Qt::transparent);

@@ -312,7 +312,7 @@ KoDocumentSectionModel::PropertyList KoPADocumentModel::properties( KoShape* sha
         l << Property(i18n("Slide"), QString::number(m_document->pageIndex(page) + 1));
     }
 
-    l << Property(i18n("Visible"), SmallIcon("14_layer_visible"), SmallIcon("14_layer_novisible"), shape->isVisible());
+    l << Property(i18n("Visible"), SmallIcon("layer-visible-on"), SmallIcon("layer-visible-off"), shape->isVisible());
     l << Property(i18n("Locked"), SmallIcon("object-locked"), SmallIcon("object-unlocked"), shape->isGeometryProtected());
     return l;
 }

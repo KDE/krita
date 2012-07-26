@@ -44,34 +44,11 @@ class VectorShape;
 
 #define VectorShape_SHAPEID "VectorShapeID"
 
-class RenderThread : public QObject, public QRunnable
-{
-    Q_OBJECT
-public:
-    RenderThread(const VectorShape* const shape, const QSizeF &size, const QSize &boundingSize, qreal zoomX, qreal zoomY);
-    virtual ~RenderThread();
-    virtual void run();
-Q_SIGNALS:
-    void finished(QSize boundingSize, QImage *image);
-protected:
-    void draw(QPainter &painter);
-    void drawNull(QPainter &painter) const;
-    void drawWmf(QPainter &painter) const;
-    void drawEmf(QPainter &painter) const;
-    void drawSvm(QPainter &painter) const;
-private:
-    const VectorShape* const m_shape;
-    QSizeF m_size;
-    QSize m_boundingSize;
-    qreal m_zoomX, m_zoomY;
-};
-
 class VectorShape : public QObject, public KoShape, public KoFrameShape {
     Q_OBJECT
 public:
     // Type of vector file. Add here when we get support for more.
     enum VectorType {
-        VectorTypeUndetermined, // not yet checked
         VectorTypeNone,         // Uninitialized
         VectorTypeWmf,          // Windows MetaFile
         VectorTypeEmf,          // Extended MetaFile
@@ -98,17 +75,18 @@ public:
 
     // Methods specific to the vector shape.
     QByteArray  compressedContents() const;
-    void  setCompressedContents( const QByteArray &newContents );
+    VectorType vectorType() const;
+    void  setCompressedContents(const QByteArray &newContents, VectorType vectorType);
 
-    static bool isWmf(const QByteArray &bytes);
-    static bool isEmf(const QByteArray &bytes);
-    static bool isSvm(const QByteArray &bytes);
+    static VectorShape::VectorType vectorType(const QByteArray &contents);
 
 private Q_SLOTS:
     void renderFinished(QSize boundingSize, QImage *image);
 
 private:
-    friend class RenderThread;
+    static bool isWmf(const QByteArray &bytes);
+    static bool isEmf(const QByteArray &bytes);
+    static bool isSvm(const QByteArray &bytes);
 
     // Member variables
     mutable VectorType  m_type;
@@ -118,6 +96,31 @@ private:
     QCache<int, QImage> m_cache;
 
     QImage* render(const KoViewConverter &converter, bool asynchronous, bool useCache) const;
+};
+
+
+class RenderThread : public QObject, public QRunnable
+{
+    Q_OBJECT
+public:
+    RenderThread(const QByteArray &contents, VectorShape::VectorType type,
+                 const QSizeF &size, const QSize &boundingSize, qreal zoomX, qreal zoomY);
+    virtual ~RenderThread();
+    virtual void run();
+Q_SIGNALS:
+    void finished(QSize boundingSize, QImage *image);
+private:
+    void draw(QPainter &painter);
+    void drawNull(QPainter &painter) const;
+    void drawWmf(QPainter &painter) const;
+    void drawEmf(QPainter &painter) const;
+    void drawSvm(QPainter &painter) const;
+private:
+    const QByteArray m_contents;
+    VectorShape::VectorType m_type;
+    QSizeF m_size;
+    QSize m_boundingSize;
+    qreal m_zoomX, m_zoomY;
 };
 
 #endif

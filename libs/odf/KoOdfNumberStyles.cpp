@@ -45,7 +45,7 @@ namespace KoOdfNumberStyles
     static void parseOdfTimeKlocale(KoXmlWriter &elementWriter, QString &format, QString &text);
     static void addCalligraNumericStyleExtension(KoXmlWriter &elementWriter, const QString &_suffix, const QString &_prefix);
 
-QString format(const QString &value, NumericStyleFormat format)
+QString format(const QString &value, const NumericStyleFormat &format)
 {
     switch (format.type) {
         case Number: {
@@ -611,7 +611,7 @@ kDebug()<<"99 ******************************************************************
     return QPair<QString, NumericStyleFormat>(styleName, dataStyle);
 }
 
-QString saveOdfNumberStyle(KoGenStyles &mainStyles, NumericStyleFormat format)
+QString saveOdfNumberStyle(KoGenStyles &mainStyles, const NumericStyleFormat &format)
 {
     QString styleName;
     switch (format.type) {
@@ -654,7 +654,7 @@ QString saveOdfNumberStyle(KoGenStyles &mainStyles, NumericStyleFormat format)
             elementWriter.startElement( "number:text" ); \
             elementWriter.addTextNode( text ); \
             elementWriter.endElement(); \
-            text=""; \
+            text.clear(); \
         } \
     }
 
@@ -1363,31 +1363,27 @@ QString saveOdfCurrencyStyle(KoGenStyles &mainStyles,
 
 QString saveOdfTextStyle(KoGenStyles &mainStyles, const QString &_format, const QString &_prefix, const QString &_suffix)
 {
+    Q_UNUSED(_format);
 
     //<number:text-style style:name="N100">
     //<number:text-content/>
     ///</number:text-style>
 
     //kDebug(30003) << "QString saveOdfTextStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
-    QString format(_format);
 
     KoGenStyle currentStyle(KoGenStyle::NumericTextStyle);
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter elementWriter(&buffer);    // TODO pass indentation level
-    QString text;
-    do {
-        format.remove(0, 1);
-    } while (format.length() > 0);
-    text =  _prefix ;
+    QString text =  _prefix ;
     addTextNumber(text, elementWriter);
 
-    elementWriter.startElement("number:text-style");
+    elementWriter.startElement("number:text-content");
+    elementWriter.endElement();
 
     text =  _suffix ;
     addTextNumber(text, elementWriter);
     addCalligraNumericStyleExtension(elementWriter, _suffix, _prefix);
-    elementWriter.endElement();
 
     QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
     currentStyle.addChildElement("number", elementContents);

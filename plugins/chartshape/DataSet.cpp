@@ -833,7 +833,7 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */
         ma.setVisible(true);
         d->symbolsActivated = true;
 //             attr.setVisible(true);
-        // Do not overwrite visiblity in this case. It could very well have
+        // Do not overwrite visibility in this case. It could very well have
         // been set to 'visible' on purpose by e.g. loadOdf().
         //else
         //    ma.setVisible(false);
@@ -1383,7 +1383,7 @@ bool loadBrushAndPen(KoStyleStack &styleStack, KoShapeLoadingContext &context,
 * The question is if this is 100% the correct thing to do or if we
 * need more logic that e.g. differs between where the data-labels got
 * defined? It would make sense but there is no information about that
-* available and it seems OO.org/LO just save redundant informations
+* available and it seems OO.org/LO just save redundant information
 * here at least with pie-charts...
 */
 void DataSet::Private::readValueLabelType(KoStyleStack &styleStack, int section /* = -1 */)

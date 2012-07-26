@@ -16,132 +16,101 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QCheckBox" name="m_verticalCheckBox">
-       <property name="toolTip">
-        <string>Insert this number of vertical equally spaced guides.</string>
-       </property>
-       <property name="whatsThis">
-        <string/>
-       </property>
-       <property name="text">
-        <string>Vertical</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QSpinBox" name="m_verticalSpinBox">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>100</number>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item>
-      <widget class="QCheckBox" name="m_horizontalCheckBox">
-       <property name="toolTip">
-        <string>Insert this number of horizontal equally spaced guides.</string>
-       </property>
-       <property name="whatsThis">
-        <string/>
-       </property>
+      <widget class="QLabel">
        <property name="text">
         <string>Horizontal</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="m_horizontalSpinBox">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
+      <widget class="KIntNumInput" name="m_horizontalSpinBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="specialValueText">
+        <string>None</string>
+       </property>
        <property name="minimum">
-        <number>1</number>
+        <number>0</number>
        </property>
        <property name="maximum">
         <number>100</number>
+       </property>
+       <property name="toolTip">
+        <string>Insert this number of horizontal equally spaced guides.</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="m_horizontalEdgesCheckBox">
+       <property name="toolTip">
+        <string>Insert guides at the horizontal edges.</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QCheckBox" name="m_erasePreviousCheckBox">
-       <property name="toolTip">
-        <string>Erase previous guides.</string>
-       </property>
-       <property name="whatsThis">
-        <string/>
-       </property>
+      <widget class="QLabel">
        <property name="text">
-        <string/>
+        <string>Vertical</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="m_verticalEdgesCheckBox">
+      <widget class="KIntNumInput" name="m_verticalSpinBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="specialValueText">
+        <string>None</string>
+       </property>
+       <property name="minimum">
+        <number>0</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+       <property name="toolTip">
+        <string>Insert this number of vertical equally spaced guides.</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="m_verticalEdgesCheckBox">
        <property name="toolTip">
         <string>Insert guides at the vertical edges.</string>
        </property>
-       <property name="whatsThis">
-        <string/>
-       </property>
-       <property name="text">
-        <string/>
+       <property name="checkable">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QCheckBox" name="m_horizontalEdgesCheckBox">
-       <property name="toolTip">
-        <string>Insert guides at the horizontal edges.</string>
-       </property>
-       <property name="whatsThis">
-        <string/>
-       </property>
+      <widget class="QCheckBox" name="m_erasePreviousCheckBox">
        <property name="text">
-        <string/>
+        <string>Erase previous guides</string>
        </property>
       </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
      </item>
      <item>
       <widget class="KPushButton" name="m_createButton">
@@ -160,12 +129,6 @@
      <property name="sizeType">
       <enum>QSizePolicy::MinimumExpanding</enum>
      </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>0</height>
-      </size>
-     </property>
     </spacer>
    </item>
   </layout>
@@ -175,6 +138,11 @@
    <class>KPushButton</class>
    <extends>QPushButton</extends>
    <header>kpushbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KIntNumInput</class>
+   <extends>QWidget</extends>
+   <header>knuminput.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

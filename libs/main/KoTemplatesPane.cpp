@@ -60,7 +60,7 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, const KComponentData &_compone
         if (t->isHidden())
             continue;
 
-        QPixmap preview = t->loadPicture(componentData());
+        QPixmap preview = t->loadPicture();
         QImage icon = preview.toImage();
         icon = icon.scaled(IconExtent, IconExtent, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         icon.convertToFormat(QImage::Format_ARGB32);

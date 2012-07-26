@@ -73,7 +73,7 @@ QRectF KoPathShapePrivate::handleRect(const QPointF &p, qreal radius) const
 void KoPathShapePrivate::applyViewboxTransformation(const KoXmlElement &element)
 {
     // apply viewbox transformation
-    QRectF viewBox = KoPathShape::loadOdfViewbox(element);
+    const QRect viewBox = KoPathShape::loadOdfViewbox(element);
     if (! viewBox.isEmpty()) {
         // load the desired size
         QSizeF size;
@@ -176,7 +176,7 @@ void KoPathShape::saveOdf(KoShapeSavingContext & context) const
     context.xmlWriter().endElement();
 }
 
-bool KoPathShape::loadContourOdf(const KoXmlElement & element, KoShapeLoadingContext &/*context*/, const QSizeF &scaleFactor)
+bool KoPathShape::loadContourOdf(const KoXmlElement & element, KoShapeLoadingContext &, const QSizeF &scaleFactor)
 {
     Q_D(KoPathShape);
 
@@ -209,7 +209,7 @@ bool KoPathShape::loadContourOdf(const KoXmlElement & element, KoShapeLoadingCon
     }
 
     // apply viewbox transformation
-    QRectF viewBox = KoPathShape::loadOdfViewbox(element);
+    const QRect viewBox = KoPathShape::loadOdfViewbox(element);
     if (! viewBox.isEmpty()) {
         QSizeF size;
         size.setWidth(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "width", QString())));
@@ -342,17 +342,17 @@ void KoPathShape::loadStyle(const KoXmlElement & element, KoShapeLoadingContext 
     d->endMarker.loadOdf(lineWidth, context);
 }
 
-QRectF KoPathShape::loadOdfViewbox(const KoXmlElement & element)
+QRect KoPathShape::loadOdfViewbox(const KoXmlElement & element)
 {
-    QRectF viewbox;
+    QRect viewbox;
 
-    QString data = element.attributeNS(KoXmlNS::svg, "viewBox");
+    QString data = element.attributeNS(KoXmlNS::svg, QLatin1String("viewBox"));
     if (! data.isEmpty()) {
-        data.replace(',', ' ');
-        QStringList coordinates = data.simplified().split(' ', QString::SkipEmptyParts);
+        data.replace(QLatin1Char(','), QLatin1Char(' '));
+        const QStringList coordinates = data.simplified().split(QLatin1Char(' '), QString::SkipEmptyParts);
         if (coordinates.count() == 4) {
-            viewbox.setRect(coordinates[0].toDouble(), coordinates[1].toDouble(),
-                            coordinates[2].toDouble(), coordinates[3].toDouble());
+            viewbox.setRect(coordinates.at(0).toInt(), coordinates.at(1).toInt(),
+                            coordinates.at(2).toInt(), coordinates.at(3).toInt());
         }
     }
 

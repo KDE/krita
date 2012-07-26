@@ -61,7 +61,6 @@
 #include <kxmlguiwindow.h>
 #include <kxmlguifactory.h>
 #include <kmessagebox.h>
-#include <ktemporaryfile.h>
 #include <kactioncollection.h>
 
 #include <KoStore.h>
@@ -79,6 +78,7 @@
 #include <KoTemplateCreateDia.h>
 #include <KoCanvasControllerWidget.h>
 #include <KoDocumentEntry.h>
+#include <KoProperties.h>
 
 #include <kis_image.h>
 #include <kis_undo_adapter.h>
@@ -679,6 +679,19 @@ KisSelectionSP KisView2::selection()
     return image()->globalSelection();
 }
 
+bool KisView2::selectionEditable()
+{
+    KisLayerSP layer = activeLayer();
+    if (layer) {
+        KoProperties properties;
+        QList<KisNodeSP> masks = layer->childNodes(QStringList("KisSelectionMask"), properties);
+        if (masks.size() == 1) {
+            return masks[0]->isEditable();
+        }
+    }
+    // global selection is always editable
+    return true;
+}
 
 KisUndoAdapter * KisView2::undoAdapter()
 {
@@ -839,6 +852,7 @@ void KisView2::connectCurrentImage()
 
         connect(image(), SIGNAL(sigSizeChanged(qint32, qint32)), this, SLOT(slotImageSizeChanged()));
         connect(image(), SIGNAL(sigResolutionChanged(double, double)), this, SLOT(slotImageSizeChanged()));
+        connect(image(), SIGNAL(sigNodeChanged(KisNodeSP)), this, SLOT(slotNodeChanged()));
         connect(image()->undoAdapter(), SIGNAL(selectionChanged()), selectionManager(), SLOT(selectionChanged()));
 
         /**
@@ -919,6 +933,10 @@ void KisView2::slotImageSizeChanged()
     canvas()->update();
 }
 
+void KisView2::slotNodeChanged()
+{
+    updateGUI();
+}
 
 void KisView2::loadPlugins()
 {
@@ -980,30 +998,8 @@ void KisView2::slotTotalRefresh()
 
 void KisView2::slotCreateTemplate()
 {
-    int width = 60;
-    int height = 60;
-    QPixmap pix = m_d->doc->generatePreview(QSize(width, height));
-
-    KTemporaryFile *tempFile = new KTemporaryFile();
-    tempFile->setSuffix(".kra");
-
-    //Check that creation of temp file was successful
-    if (!tempFile->open()) {
-        qWarning("Creation of temporary file to store template failed.");
-        return;
-    }
-    QString fileName = tempFile->fileName();
-    tempFile->close(); // need to close on Windows before we can open it again to save
-    delete tempFile; // now the file has disappeared and we can create a new file with the generated name
-
-    m_d->doc->saveNativeFormat(fileName);
-    KoTemplateCreateDia::createTemplate("krita_template", KisFactory2::componentData(),
-                                        fileName, pix, this);
-
-    KisFactory2::componentData().dirs()->addResourceType("krita_template", "data", "krita/templates/");
-
-    QDir d;
-    d.remove(fileName);
+    KoTemplateCreateDia::createTemplate("krita_template", ".kra",
+                                        KisFactory2::componentData(), m_d->doc, this);
 }
 
 void KisView2::slotDocumentSaved()
@@ -1297,5 +1293,12 @@ void KisView2::showJustTheCanvas(bool toggled)
     }
 }
 
+void KisView2::showFloatingMessage(const QString message, const QIcon& icon)
+{
+    KisFloatingMessage *floatingMessage = new KisFloatingMessage(message, mainWindow()->centralWidget());
+    floatingMessage->setShowOverParent(true);
+    floatingMessage->setIcon(icon);
+    floatingMessage->showMessage();
+}
 
 #include "kis_view2.moc"

@@ -116,8 +116,12 @@ public:
     /**
      * @return the mimetype for the document in the given path using the manifest
      * The mimetype is defined in the manifest.xml document.
+     * @param path The path to get the mimetpye for
+     * @param guess If set to true it tries to guess the mimetype in case it is not provided in the manifest
+                    Note: Be sure to call this function with a closed store when guess is set to true as otherwise
+                    it will fail.
      */
-    QString mimeTypeForPath(const QString& path) const;
+    QString mimeTypeForPath(const QString& path, bool guess = false) const;
 
     /**
      * @return the full list of entries from the manifest file

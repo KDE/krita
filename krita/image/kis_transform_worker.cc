@@ -674,7 +674,7 @@ bool KisTransformWorker::run()
     return true;
 }
 
-QRect KisTransformWorker::mirrorX(KisPaintDeviceSP dev, const KisSelection* selection)
+QRect KisTransformWorker::mirrorX(KisPaintDeviceSP dev, qreal axis, const KisSelection* selection)
 {
     int pixelSize = dev->pixelSize();
     KisPaintDeviceSP dst = new KisPaintDevice(dev->colorSpace());
@@ -689,6 +689,13 @@ QRect KisTransformWorker::mirrorX(KisPaintDeviceSP dev, const KisSelection* sele
             r = dev->dataManager()->extent();
         else
             r = dev->exactBounds();
+
+        if (axis > 0) {
+            // Extend rect so it has the same width on both sides of the axis
+            qreal distanceFromAxis = qMax(fabs((qreal)r.left() - axis), fabs((qreal)r.right() - axis));
+            QRect newRect(floor(axis - distanceFromAxis), r.y(), ceil(2*distanceFromAxis), r.height());
+            r = newRect.adjusted(-1, 0, 2, 0);
+        }
     }
     {
         quint8 *dstPixels = new quint8[r.width() * pixelSize];
@@ -738,7 +745,7 @@ QRect KisTransformWorker::mirrorX(KisPaintDeviceSP dev, const KisSelection* sele
     return r;
 }
 
-QRect KisTransformWorker::mirrorY(KisPaintDeviceSP dev, const KisSelection* selection)
+QRect KisTransformWorker::mirrorY(KisPaintDeviceSP dev, qreal axis, const KisSelection* selection)
 {
     int pixelSize = dev->pixelSize();
     KisPaintDeviceSP dst = new KisPaintDevice(dev->colorSpace());
@@ -753,6 +760,13 @@ QRect KisTransformWorker::mirrorY(KisPaintDeviceSP dev, const KisSelection* sele
             r = dev->dataManager()->extent();
         else
             r = dev->exactBounds();
+
+        if (axis > 0) {
+            // Extend rect so it has the same height on both sides of the axis
+            qreal distanceFromAxis = qMax(fabs((qreal)r.top() - axis), fabs((qreal)r.bottom() - axis));
+            QRect newRect(r.x(), floor(axis - distanceFromAxis), r.width(), ceil(2*distanceFromAxis));
+            r = newRect.adjusted(0, -1, 0, 2);
+        }
     }
     {
         qint32 y1, y2;

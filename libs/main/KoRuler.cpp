@@ -263,8 +263,7 @@ void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPain
     int textLength = 0;
     for(int i = 0; i < lengthInPixel; i += numberStepPixel) {
         int number = qRound((i / numberStepPixel) * numberStep);
-        if (adjustMillimeters)
-            number /= 10;
+
         textLength = qMax(textLength, fontMetrics.width(QString::number(number)));
     }
     textLength += 4;  // Add some padding
@@ -317,8 +316,7 @@ void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPain
                                  QPointF(pos, rectangle.bottom() - fullStepMarkerLength));
 
             int number = qRound(stepCount * numberStep);
-            if (adjustMillimeters)
-                number /= 10;
+
             QString numberText = QString::number(number);
             int x = pos;
             if (d->rightToLeft) { // this is done in a hacky way with the fine tuning done above
@@ -485,11 +483,9 @@ void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainte
     QFontMetrics fontMetrics(KGlobalSettings::toolBarFont());
     // Calc the longest text length
     int textLength = 0;
-    const bool adjustMillimeters = (d->unit.type() == KoUnit::Millimeter);
+
     for(int i = 0; i < lengthInPixel; i += numberStepPixel) {
         int number = qRound((i / numberStepPixel) * numberStep);
-        if (adjustMillimeters)
-            number /= 10;
         textLength = qMax(textLength, fontMetrics.width(QString::number(number)));
     }
     textLength += 4;  // Add some padding
@@ -537,8 +533,6 @@ void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainte
 
             painter.rotate(-90);
             int number = qRound(stepCount * numberStep);
-            if (adjustMillimeters)
-                number /= 10;
             QString numberText = QString::number(number);
             painter.setPen(numberPen);
             painter.drawText(QPointF(-fontMetrics.width(numberText) / 2.0, -measurementTextAboveBelowMargin), numberText);
@@ -715,8 +709,8 @@ qreal KoRulerPrivate::numberStepForUnit() const
         case KoUnit::Inch:
         case KoUnit::Centimeter:
         case KoUnit::Decimeter:
-            return 1.0;
         case KoUnit::Millimeter:
+            return 1.0;
         case KoUnit::Pica:
         case KoUnit::Cicero:
             return 10.0;

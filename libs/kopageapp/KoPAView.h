@@ -181,9 +181,9 @@ public:
     void restoreCentralWidget();
 
 signals:
-    /// emited when select All action is triggered and the view is not visible
+    /// emitted when select All action is triggered and the view is not visible
     void selectAllRequested();
-    /// emited when deselect All action is triggered and the view is not visible
+    /// emitted when deselect All action is triggered and the view is not visible
     void deselectAllRequested();
 
 protected:

@@ -74,6 +74,10 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent *event)
         if (!dev || !currentNode()->visible())
             return;
 
+        if (!selectionEditable()) {
+            return;
+        }
+
         QApplication::setOverrideCursor(KisCursor::waitCursor());
 
         QPoint pos = convertToIntPixelCoord(event);

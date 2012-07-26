@@ -171,6 +171,10 @@ void KisToolMove::mousePressEvent(KoPointerEvent *event)
             }
         }
 
+        if (!nodeEditable()) {
+            return;
+        }
+
         /**
          * NOTE: we use deferred initialization of the node of
          * the stroke here. First, we set the node to null in

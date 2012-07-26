@@ -149,6 +149,9 @@ public:  // Krita specific interfaces
     /// the global selection.
     KisSelectionSP selection();
 
+    /// Checks if the current global or local selection is editable
+    bool selectionEditable();
+
     /// The undo adapter is used to add commands to the undo stack
     KisUndoAdapter * undoAdapter();
 
@@ -176,6 +179,9 @@ public:  // Krita specific interfaces
     void enableControls();
     void disableControls();
 
+    /// shows a floating message in the top right corner of the canvas
+    void showFloatingMessage(const QString message, const QIcon& icon);
+
 signals:
 
     void sigLoadingFinished();
@@ -186,6 +192,7 @@ private slots:
     void slotPreferences();
     void slotEditPalette();
     void slotImageSizeChanged();
+    void slotNodeChanged();
     void slotTotalRefresh();
     void slotCreateTemplate();
     void slotDocumentSaved();

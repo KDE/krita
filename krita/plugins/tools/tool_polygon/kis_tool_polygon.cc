@@ -35,9 +35,11 @@
 #include <recorder/kis_recorded_path_paint_action.h>
 #include <recorder/kis_node_query_path.h>
 
+#include <kis_system_locker.h>
+
 
 KisToolPolygon::KisToolPolygon(KoCanvasBase *canvas)
-        : KisToolPolylineBase(canvas, KisCursor::load("tool_polygon_cursor.png", 6, 6))
+        : KisToolPolylineBase(canvas,  KisToolPolylineBase::PAINT, KisCursor::load("tool_polygon_cursor.png", 6, 6))
 {
     setObjectName("tool_polygon");
 }
@@ -56,6 +58,7 @@ void KisToolPolygon::finishPolyline(const QVector<QPointF>& points)
         image()->actionRecorder()->addAction(linePaintAction);
     }
     if (!currentNode()->inherits("KisShapeLayer")) {
+        KisSystemLocker locker(currentNode());
         KisFigurePaintingToolHelper helper(i18n("Polygon"),
                                            image(),
                                            canvas()->resourceManager(),

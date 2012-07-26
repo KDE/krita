@@ -123,9 +123,10 @@ namespace ShadowEngine
 
 #define OSD_WINDOW_OPACITY 0.74
 
-KisFloatingMessage::KisFloatingMessage(const QString &message, QWidget *parent)
+KisFloatingMessage::KisFloatingMessage(const QString &message, QWidget *parent, bool showOverParent)
     : QWidget(parent)
     , m_message(message)
+    , m_showOverParent(showOverParent)
 {
     KIcon icon("krita");
     m_icon = icon.pixmap(256, 256).toImage();
@@ -150,6 +151,16 @@ void KisFloatingMessage::showMessage()
 
     QWidget::setVisible(true);
     m_timer.start(4500);
+}
+
+void KisFloatingMessage::setShowOverParent(bool show)
+{
+    m_showOverParent = show;
+}
+
+void KisFloatingMessage::setIcon(const QIcon& icon)
+{
+    m_icon = icon.pixmap(256, 256).toImage();
 }
 
 const int MARGIN = 20;
@@ -190,7 +201,11 @@ QRect KisFloatingMessage::determineMetrics( const int M )
     rect.adjust( -M, -M, M, M );
 
     const QSize newSize = rect.size();
-    const QRect screen = QApplication::desktop()->screenGeometry(parentWidget());
+    QRect screen = QApplication::desktop()->screenGeometry(parentWidget());
+    if (parentWidget() && m_showOverParent) {
+        screen = parentWidget()->geometry();
+        screen.setTopLeft(parentWidget()->mapToGlobal(QPoint(0, 0)));
+    }
     QPoint newPos(MARGIN, MARGIN);
 
     // move to the right
@@ -203,6 +218,10 @@ QRect KisFloatingMessage::determineMetrics( const int M )
 
     // correct for screen position
     newPos += screen.topLeft();
+    if (parentWidget()) {
+        // Move a bit to the left as there could be a scrollbar
+        newPos.setX(newPos.x() - MARGIN);
+    }
 
     QRect rc(newPos, rect.size());
 

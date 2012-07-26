@@ -255,7 +255,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
             // is a bug in Qt that can hit when text lines overlap each other. In case a format range
             // is used for formating it can clip the lines above/below as Qt creates a clip rect for
             // the places it already painted for the format range which results in clippling. So use
-            // the format range allways to paint the text.
+            // the format range always to paint the text.
             QVector<QTextLayout::FormatRange> workaroundFormatRanges;
             for (QTextBlock::iterator it = block.begin(); !(it.atEnd()); ++it) {
                 QTextFragment currentFragment = it.fragment();

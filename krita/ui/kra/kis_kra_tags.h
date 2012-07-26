@@ -98,6 +98,7 @@ const QString Y_RESOLUTION = "y-res";
 const QString Y_SCALE = "y_scale";
 const QString Y_SHEAR = "y_shear";
 const QString Y_TRANSLATION = "y_translation";
+const QString ACTIVE = "active";
 }
 
 

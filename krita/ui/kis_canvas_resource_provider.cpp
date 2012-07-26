@@ -323,6 +323,7 @@ void KisCanvasResourceProvider::slotResourceChanged(int key, const QVariant & re
         break;
     case(CurrentCompositeOp) :
         emit sigCompositeOpChanged(currentCompositeOp());
+        break;
     case (Opacity):
     {
         emit sigOpacityChanged(res.toDouble());

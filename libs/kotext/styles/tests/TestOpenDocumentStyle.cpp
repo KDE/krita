@@ -211,7 +211,8 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
         } else if (reference == "relativeLength") {
             result << "42*";
         } else if (reference == "shadowType") {
-            result << "none" << "red" << "#fff 1px 2pt 3pt" << "4pt 3px" /* is this one valid ? */ << "white 42px 23pt, red -3pt -5px 3px" << "red -3pt -5px";
+            result << "none" << "red" << "#fff 1px 2pt 3pt" << "4pt 3px" << "2pt 4pt blue"
+                   << "white 42px 23pt, red -3pt -5px 3px" << "red -3pt -5px";
         } else if (reference == "color") {
             result << "#ABCDEF" << "#0a1234";
         } else if (reference == "positiveInteger") {
@@ -224,7 +225,7 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
             // This is not in the spec
             result << "100%" << "42%" << "-30%";
         } else if (reference == "borderWidths") {
-            result << "42px 42pt 12cm" << "2pt 23pt 0cm";
+            result << "42px 42pt 12cm" << "2pt 23pt 0.5cm";
         } else if (reference == "angle") {
             result << "5deg" << "1rad" << "400grad" << "3.14159265rad" << "45";    // OpenDocument 1.1 : no unit == degrees
         } else if (reference == "zeroToHundredPercent") {
@@ -681,7 +682,7 @@ void TestOpenDocumentStyle::testParagraphStyle_data()
     QTest::addColumn<QString>("value");
     foreach (Attribute *attribute, attributes) {
         foreach (QString value, attribute->listValues()) {
-            QTest::newRow(attribute->name().toLatin1()) << attribute << value;
+            QTest::newRow((attribute->name()+QLatin1Char('/')+value).toLatin1()) << attribute << value;
         }
     }
 }

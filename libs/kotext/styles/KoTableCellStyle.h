@@ -92,7 +92,7 @@ public:
         Direction,                  ///< The direction of the text in the cell. This is a CellTextDirection.
         RotationAlign,              ///< How the edge of the text is aligned after rotation. This is a RotationAlignment
         TextWritingMode,            ///< KoText::Direction, the direction for writing text in the cell
-        VerticalGlyphOrientation,   ///< bool, specify wether this feature is enabled or not
+        VerticalGlyphOrientation,   ///< bool, specify whether this feature is enabled or not
         CellBackgroundBrush,        ///< the cell background brush, as QTextFormat::BackgroundBrush is used by paragraphs
         VerticalAlignment,          ///< the vertical alignment oinside the cell
         MasterPageName,             ///< Optional name of the master-page

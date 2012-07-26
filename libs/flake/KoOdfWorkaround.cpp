@@ -284,3 +284,11 @@ void KoOdfWorkaround::fixBadDateForTextTime(QString &value)
         value.remove(0, 8);
     }
 }
+
+void KoOdfWorkaround::fixClipRectOffsetValuesString(QString &offsetValuesString)
+{
+    if (! offsetValuesString.contains(QLatin1Char(','))) {
+        // assumes no spaces existing between values and units
+        offsetValuesString = offsetValuesString.simplified().replace(QLatin1Char(' '), QLatin1Char(','));
+    }
+}

@@ -127,7 +127,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
     if (!cs) {
         if (colorSpaceId.first.contains("LABA") && colorSpaceId.second.contains("U8"))
         {
-            qDebug()<<"Krita Has Got LAB with 8 Bit Depth, which doesnt seem to be in kolospacemath so i upscale to 16 bit";
+            qDebug()<<"Krita Has Got LAB with 8 Bit Depth, which does not seem to be in kolospacemath so i upscale to 16 bit";
             cs = KoColorSpaceRegistry::instance()->colorSpace("LABA",  "U16", profile);
         }
         else{

@@ -104,6 +104,10 @@ void KisToolLine::mousePressEvent(KoPointerEvent *event)
            return;
         }
 
+        if (!nodeEditable()) {
+            return;
+        }
+
         setMode(KisTool::PAINT_MODE);
 
         m_startPos = KisPaintInformation(

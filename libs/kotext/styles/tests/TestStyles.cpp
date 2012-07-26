@@ -160,20 +160,20 @@ void TestStyles::testApplyParagraphStyleWithParent()
     style3.setLineSpacing(23.45);
     style3.setLineHeightPercent(150);
     style3.setLineHeightAbsolute(8.0);
-    QCOMPARE(style3.lineHeightPercent(), 0);
+    QCOMPARE(style3.lineHeightPercent(), 0.0);
     QCOMPARE(style3.lineHeightAbsolute(), 8.0);
     QCOMPARE(style3.lineSpacing(), 23.45);
     QVERIFY(!style3.hasNormalLineHeight());
 
     style3.setNormalLineHeight();
-    QCOMPARE(style3.lineHeightPercent(), 0);
+    QCOMPARE(style3.lineHeightPercent(), 0.0);
     QCOMPARE(style3.lineHeightAbsolute(), 0.0);
     QCOMPARE(style3.lineSpacing(), 0.0);
     QVERIFY(style3.hasNormalLineHeight());
 
     style3.setLineHeightPercent(150);
     style3.setLineSpacing(56.78);
-    QCOMPARE(style3.lineHeightPercent(), 150);
+    QCOMPARE(style3.lineHeightPercent(), 150.0);
     QCOMPARE(style3.lineHeightAbsolute(), 0.0);
     QCOMPARE(style3.lineSpacing(), 56.78);
     QVERIFY(!style3.hasNormalLineHeight());
@@ -230,7 +230,7 @@ void TestStyles::testCopyParagraphStyle()
     QTextLength length1(QTextLength::FixedLength, 10.0);
     QTextLength length2(QTextLength::FixedLength, 20.0);
     QTextLength length3(QTextLength::FixedLength, 30.0);
-    
+
     KoParagraphStyle style1;
     KoParagraphStyle style2;
     style2.setParentStyle(&style1);
@@ -251,7 +251,7 @@ void TestStyles::testUnapplyStyle()
     QColor testOverlineColor(255, 128, 64);
     KoCharacterStyle::LineWeight testOverlineWeight = KoCharacterStyle::ThickLineWeight;
     qreal testOverlineWidth = 1.5;
-    
+
     // in this test we should avoid testing any of the hardcodedDefaultProperties; see KoCharacterStyle for details!
     KoParagraphStyle headers;
     headers.setOverlineColor(testOverlineColor);
@@ -292,7 +292,7 @@ void TestStyles::testUnapplyStyle()
     QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineMode), false);
     QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineStyle), false);
     QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineType), false);
-    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineWeight), false);    
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineWeight), false);
     QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineWidth), false);
 
     doc.clear();
@@ -310,7 +310,7 @@ void TestStyles::testUnapplyStyle()
     QCOMPARE(cf.intProperty(KoCharacterStyle::OverlineType), (int) KoCharacterStyle::DoubleLine);
     QCOMPARE(cf.intProperty(KoCharacterStyle::OverlineWeight), (int) testOverlineWeight);
     QCOMPARE(cf.doubleProperty(KoCharacterStyle::OverlineWidth), testOverlineWidth);
-    
+
 
     head1.unapplyStyle(block);
     bf = cursor.blockFormat();

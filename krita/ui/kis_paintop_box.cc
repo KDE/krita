@@ -81,6 +81,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     , m_previousNode(0)
     , m_currTabletToolID(KoToolManager::instance()->currentInputDevice())
     , m_presetsEnabled(true)
+    , m_blockUpdate(false)
 {
     Q_ASSERT(view != 0);
 
@@ -526,6 +527,8 @@ void KisPaintopBox::slotSaveActivePreset()
 
 void KisPaintopBox::slotUpdatePreset()
 {
+    // block updates of avoid some over updating of the option widget
+    m_blockUpdate = true;
     m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_activePreset->settings().data()));
     
     setSliderValue("size", m_activePreset->settings()->paintOpSize().width());
@@ -559,6 +562,7 @@ void KisPaintopBox::slotUpdatePreset()
         updateCompositeOp(KoCompositeOpRegistry::instance().getDefaultCompositeOp().id());
         setWidgetState(DISABLE_COMPOSITEOP);
     }
+    m_blockUpdate = false;
 }
 
 void KisPaintopBox::slotSetupDefaultPreset()
@@ -704,10 +708,21 @@ void KisPaintopBox::slotToolChanged(KoCanvasController* canvas, int toolId)
 
 void KisPaintopBox::slotOpacityChanged(qreal opacity)
 {
+    if (m_blockUpdate) {
+        return;
+    }
+    m_blockUpdate = true;
+
     for (int i = 0; i < 2; ++i) {
         KisDoubleSliderSpinBox *opacitySlider = m_sliderChooser[i]->getWidget<KisDoubleSliderSpinBox>("opacity");
         opacitySlider->blockSignals(true);
         opacitySlider->setValue(opacity);
         opacitySlider->blockSignals(false);
     }
+    if(m_presetsEnabled) {
+        if(m_activePreset->settings()->hasProperty("OpacityValue"))
+            m_activePreset->settings()->setProperty("OpacityValue", opacity);
+        m_optionWidget->setConfiguration(m_activePreset->settings().data());
+    }
+    m_blockUpdate = false;
 }

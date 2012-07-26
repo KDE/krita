@@ -83,7 +83,7 @@ protected:
         p.fillRect(0,0, width(), width(), m_color);
     }
 
-    // these are hacks, as it seems, that at a time only one widget can be a Qt::Popup and therefore grab the mouse globaly
+    // these are hacks, as it seems, that at a time only one widget can be a Qt::Popup and therefore grab the mouse globally
     void mouseReleaseEvent(QMouseEvent *e) {
         QMouseEvent* newEvent = new QMouseEvent(e->type(),
                                              m_parent->mapFromGlobal(e->globalPos()),
@@ -223,6 +223,7 @@ void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
 
 void KisColorSelectorBase::mouseReleaseEvent(QMouseEvent *e) {
     Q_UNUSED(e);
+    hidePopup();
 }
 
 void KisColorSelectorBase::mouseMoveEvent(QMouseEvent* e)

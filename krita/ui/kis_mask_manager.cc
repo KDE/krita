@@ -278,50 +278,6 @@ void KisMaskManager::removeMask()
     masksUpdated();
 }
 
-void KisMaskManager::mirrorMaskX()
-{
-    // XXX_NODE: This is a load of copy-past from KisLayerManager -- how can I fix that?
-    // XXX_NODE: we should also mirror the shape-based part of the selection!
-    if (!m_activeMask) return;
-
-    KisPaintDeviceSP dev = m_activeMask->selection()->getOrCreatePixelSelection();
-    if (!dev) return;
-
-    KisTransaction transaction(i18n("Mirror Mask X"), dev);
-
-    QRect dirty = KisTransformWorker::mirrorX(dev, m_view->selection());
-    m_activeMask->setDirty(dirty);
-
-    transaction.commit(m_view->image()->undoAdapter());
-
-    m_view->document()->setModified(true);
-    m_activeMask->selection()->updateProjection();
-    masksUpdated();
-    m_view->canvas()->update();
-}
-
-void KisMaskManager::mirrorMaskY()
-{
-    // XXX_NODE: This is a load of copy-past from KisLayerManager -- how can I fix that?
-    // XXX_NODE: we should also mirror the shape-based part of the selection!
-    if (!m_activeMask) return;
-
-    KisPaintDeviceSP dev = m_activeMask->selection()->getOrCreatePixelSelection();
-    if (!dev) return;
-
-    KisTransaction transaction(i18n("Mirror Layer Y"), dev);
-
-    QRect dirty = KisTransformWorker::mirrorY(dev, m_view->selection());
-    m_activeMask->setDirty(dirty);
-
-    transaction.commit(m_view->image()->undoAdapter());
-
-    m_view->document()->setModified(true);
-    m_activeMask->selection()->updateProjection();
-    masksUpdated();
-    m_view->canvas()->update();
-}
-
 void KisMaskManager::maskProperties()
 {
     if (!m_activeMask) return;

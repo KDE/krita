@@ -646,10 +646,12 @@ void KisToolTransform::setFunctionalCursor()
             useCursor(m_scaleCursors[rotOctant]);
             break;
         case TOPRIGHTSCALE:
-        case TOPLEFTSCALE:
         case BOTTOMLEFTSCALE:
+            useCursor(KisCursor::KisCursor::sizeBDiagCursor());
+            break;
+        case TOPLEFTSCALE:
         case BOTTOMRIGHTSCALE:
-            useCursor(KisCursor::sizeAllCursor());
+            useCursor(KisCursor::KisCursor::sizeFDiagCursor());
             break;
         case MOVECENTER:
             useCursor(KisCursor::handCursor());
@@ -903,6 +905,10 @@ void KisToolTransform::keyPressEvent(QKeyEvent *event)
 void KisToolTransform::keyReleaseEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Return) {
+        if (!nodeEditable()) {
+            return;
+        }
+
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         applyTransform();
         initTransform(m_currentArgs.mode());
@@ -2142,6 +2148,10 @@ void KisToolTransform::applyTransform()
     if (!image() || !currentNode()->paintDevice() || currentNode()->systemLocked())
         return;
 
+    if (!nodeEditable()) {
+        return;
+    }
+
     KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
     if (!canvas)
         return;
@@ -2757,6 +2767,10 @@ void KisToolTransform::slotButtonBoxClicked(QAbstractButton *button)
     QAbstractButton *resetButton = m_optWidget->buttonBox->button(QDialogButtonBox::Reset);
 
     if (button == applyButton) {
+        if (!nodeEditable()) {
+            return;
+        }
+
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         applyTransform();
         initTransform(m_currentArgs.mode());

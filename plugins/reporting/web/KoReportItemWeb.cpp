@@ -139,7 +139,7 @@ int KoReportItemWeb::render(OROPage *page, OROSection *section,  QPointF offset,
         m_webPage->mainFrame()->setHtml(data.toString());
     }
     
-    return 0; //Item doesnt stretch the section height
+    return 0; //Item doesn't stretch the section height
 }
 
 QString KoReportItemWeb::itemDataSource() const

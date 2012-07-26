@@ -38,7 +38,7 @@ public:
     KoPointedAt();
     KoPointedAt(KoPointedAt *other);
 
-    void fillInLinks(QTextCursor cursor, KoInlineTextObjectManager *inlineManager);
+    void fillInLinks(const QTextCursor &cursor, KoInlineTextObjectManager *inlineManager);
 
     enum TableHit {
           None

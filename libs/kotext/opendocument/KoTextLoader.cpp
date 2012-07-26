@@ -1845,6 +1845,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             }
             QTextCharFormat newCharFormat = cursor.charFormat();
             newCharFormat.setAnchor(true);
+            newCharFormat.setProperty(KoCharacterStyle::AnchorType, KoCharacterStyle::Anchor);
             newCharFormat.setAnchorHref(target);
             cursor.setCharFormat(newCharFormat);
 
@@ -1920,6 +1921,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             if (!bookmarkName.isEmpty()) {
                 QTextCharFormat linkCf(cf); // and copy it to alter it
                 linkCf.setAnchor(true);
+                linkCf.setProperty(KoCharacterStyle::AnchorType, KoCharacterStyle::Bookmark);
                 QStringList anchorName;
                 anchorName << bookmarkName;
                 linkCf.setAnchorHref('#'+ bookmarkName);

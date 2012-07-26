@@ -29,7 +29,7 @@ PictureToolFactory::PictureToolFactory()
     : KoToolFactoryBase("PictureToolFactoryId")
 {
     setToolTip( i18n( "Picture editing tool" ) );
-    setIcon( "pictureshape" );
+    setIcon("x-shape-image");
     setToolType( dynamicToolType() );
     setPriority( 1 );
     setActivationShapeId( PICTURESHAPEID );

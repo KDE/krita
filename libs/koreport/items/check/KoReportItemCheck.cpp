@@ -161,7 +161,7 @@ int KoReportItemCheck::render(OROPage* page, OROSection* section,  QPointF offse
         delete chk;
     }
         
-    return 0; //Item doesnt stretch the section height
+    return 0; //Item doesn't stretch the section height
 }
 
 bool KoReportItemCheck::value()

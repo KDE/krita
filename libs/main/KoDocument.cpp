@@ -938,7 +938,6 @@ QString KoDocument::checkImageMimeTypes(const QString &mimeType, const KUrl &url
                    << "image/x-exr"
                    << "image/x-xcf"
                    << "image/x-eps"
-                   << "image/x-nikon-nef" << "image/x-canon-cr2" << "image/x-sony-sr2" << "image/x-canon-crw" << "image/x-pentax-pef" << "image/x-sigma-x3f" << "image/x-kodak-kdc" << "image/x-minolta-mrw" << "image/x-sony-arw" << "image/x-kodak-k25" << "image/x-kodak-dcr" << "image/x-olympus-orf" << "image/x-panasonic-raw" << "image/x-panasonic-raw2" << "image/x-fuji-raf" << "image/x-sony-srf" << "image/x-adobe-dng"
                    << "image/png"
                    << "image/bmp" << "image/x-xpixmap" << "image/gif" << "image/x-xbitmap"
                    << "image/tiff"

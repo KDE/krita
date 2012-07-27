@@ -93,7 +93,7 @@ private:
                                               dstProfile->lcmsProfile(),
                                               dstColorSpaceType,
                                               renderingIntent,
-                                              conversionFlags);
+                                              conversionFlags | cmsFLAGS_NOOPTIMIZE);
 
         return tf;
     }

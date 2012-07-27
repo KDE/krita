@@ -147,7 +147,8 @@ void TestKoLcmsColorProfile::testConversion()
 
     linearRgb->convertPixelsTo((quint8*)&src, (quint8*)&dst, sRgb, 1, KoColorConversionTransformation::IntentRelativeColorimetric, KoColorConversionTransformation::BlackpointCompensation);
 
-    qDebug() << dst[0] << dst[1] << dst[2];
+    quint16 dst2[4];
+    memset(&dst2, 0, 8);
 
     cmsHPROFILE sRgbProfile = cmsCreate_sRGBProfile();
     QByteArray rawData = linearRgb->profile()->rawData();
@@ -158,11 +159,12 @@ void TestKoLcmsColorProfile::testConversion()
                                           sRgbProfile,
                                           TYPE_BGRA_16,
                                           INTENT_RELATIVE_COLORIMETRIC,
-                                          cmsFLAGS_NOOPTIMIZE | cmsFLAGS_BLACKPOINTCOMPENSATION | cmsFLAGS_HIGHRESPRECALC);
+                                          cmsFLAGS_NOOPTIMIZE);
 
-    cmsDoTransform(tf, (quint8*)&src, (quint8*)&dst, 1);
+    cmsDoTransform(tf, (quint8*)&src, (quint8*)&dst2, 1);
 
-    qDebug() << dst[0] << dst[1] << dst[2];
+    Q_ASSERT(dst[0] == dst2[0]);
+
 }
 
 QTEST_MAIN(TestKoLcmsColorProfile)

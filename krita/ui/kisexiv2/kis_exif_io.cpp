@@ -470,7 +470,7 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
 #endif
                 }
                 if (v && v->typeId() != Exiv2::invalidTypeId) {
-                    dbgFile << "Saving key" << exivKey; // << " of KMD value" << entry.value();
+                    dbgFile << "Saving key" << exivKey << " of KMD value" << entry.value();
                     exifData.add(exifKey, v);
                 } else {
                     dbgFile << "No exif value was created for" << entry.qualifiedName() << " as" << exivKey;// << " of KMD value" << entry.value();

@@ -1,6 +1,11 @@
 
 #include "TestKoLcmsColorProfile.h"
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+#include <LcmsColorProfileContainer.h>
 
+#include <KoColor.h>
+#include <lcms2.h>
 #include <cmath>
 
 qreal testRounding(qreal value)
@@ -122,6 +127,42 @@ void TestKoLcmsColorProfile::testProfileCreationFromChromaticities()
     QCOMPARE(profile->name(), testProfileName);
     QCOMPARE(QString(cmsTakeProductDesc(lcmsProfile)), testProfileName);
 #endif
+}
+
+void TestKoLcmsColorProfile::testConversion()
+{
+    const KoColorSpace *sRgb = KoColorSpaceRegistry::instance()->rgb16("sRGB built-in");
+    Q_ASSERT(sRgb);
+    const KoColorSpace *linearRgb = KoColorSpaceRegistry::instance()->rgb16("scRGB (linear)");
+    Q_ASSERT(linearRgb);
+
+    quint16 src[4];
+    src[0] = 257;
+    src[1] = 257;
+    src[2] = 257;
+    src[3] = 65535;
+
+    quint16 dst[4];
+    memset(&dst, 0, 8);
+
+    linearRgb->convertPixelsTo((quint8*)&src, (quint8*)&dst, sRgb, 1, KoColorConversionTransformation::IntentRelativeColorimetric, KoColorConversionTransformation::BlackpointCompensation);
+
+    qDebug() << dst[0] << dst[1] << dst[2];
+
+    cmsHPROFILE sRgbProfile = cmsCreate_sRGBProfile();
+    QByteArray rawData = linearRgb->profile()->rawData();
+    cmsHPROFILE linearRgbProfile = cmsOpenProfileFromMem((void*)rawData.constData(), rawData.size());
+
+    cmsHTRANSFORM tf = cmsCreateTransform(linearRgbProfile,
+                                          TYPE_BGRA_16,
+                                          sRgbProfile,
+                                          TYPE_BGRA_16,
+                                          INTENT_RELATIVE_COLORIMETRIC,
+                                          cmsFLAGS_NOOPTIMIZE | cmsFLAGS_BLACKPOINTCOMPENSATION | cmsFLAGS_HIGHRESPRECALC);
+
+    cmsDoTransform(tf, (quint8*)&src, (quint8*)&dst, 1);
+
+    qDebug() << dst[0] << dst[1] << dst[2];
 }
 
 QTEST_MAIN(TestKoLcmsColorProfile)

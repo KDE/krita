@@ -445,17 +445,6 @@ void KisToolCrop::crop()
         if (!nodeEditable()) {
             return;
         }
-    } else {
-        //Cropping image
-        bool editable = checkNodeEditableRecursive(KisNodeSP(currentImage()->rootLayer().data()));
-        if (!editable) {
-            KisFloatingMessage *floatingMessage = new KisFloatingMessage(i18n("Image contains locked or invisible layers"),
-                                                                         canvas()->canvasWidget());
-            floatingMessage->setShowOverParent(true);
-            floatingMessage->setIcon(KIcon("object-locked"));
-            floatingMessage->showMessage();
-            return;
-        }
     }
 
     m_haveCropSelection = false;
@@ -694,17 +683,6 @@ QRectF KisToolCrop::upperHandleRect(QRectF cropBorderRect)
 QRectF KisToolCrop::leftHandleRect(QRectF cropBorderRect)
 {
     return QRectF(cropBorderRect.left() - m_handleSize / 2.0, cropBorderRect.top() + (cropBorderRect.height() - m_handleSize) / 2.0, m_handleSize, m_handleSize);
-}
-
-bool KisToolCrop::checkNodeEditableRecursive(KisNodeSP node)
-{
-    bool result = node->isEditable();
-    KisNodeSP child = node->firstChild();
-    while (child) {
-        result = result && checkNodeEditableRecursive(child);
-        child = child->nextSibling();
-    }
-    return result;
 }
 
 QPainterPath KisToolCrop::handlesPath()

@@ -406,6 +406,7 @@ void KoRdfSemanticItem::defaultStylesheet(hKoSemanticStylesheet ss)
     QString uuid = ss->uuid();
     QString name = ss->name();
     QString semanticClass = metaObject()->className();
+    
     m->removeAllStatements(
         Statement(Node::createResourceNode(QUrl("http://calligra.org/rdf/document/" + semanticClass)),
                   Node::createResourceNode(QUrl("http://calligra.org/rdf/stylesheet")),

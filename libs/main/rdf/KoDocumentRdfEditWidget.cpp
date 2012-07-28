@@ -99,7 +99,11 @@ public:
     KoSopranoTableModel *m_sparqlResultModel;
     QSortFilterProxyModel *m_tripleProxyModel;
     KoRdfSemanticTree m_semanticItemsTree;
-
+    hKoRdfSemanticItem m_semItemContactTemplate;
+    hKoRdfSemanticItem m_semItemEventTemplate;
+    hKoRdfSemanticItem m_semItemLocationTemplate;
+    QList<hKoSemanticStylesheet> m_stylesheets;
+    
     KoDocumentRdfEditWidgetPrivate(KoDocumentRdf *m_rdf)
             : m_rdf(m_rdf) , m_tripleProxyModel(0) {
         m_ui = new Ui::KoDocumentRdfEditWidget();
@@ -142,12 +146,13 @@ public:
         m_semanticItemsTree = KoRdfSemanticTree::createTree(v);
         m_semanticItemsTree.update(m_rdf);
         // stylesheets page
-        buildComboBox(m_ui->m_defaultContactsSheet,
-                      KoRdfSemanticItem::createSemanticItem(kdrew, m_rdf, "Contact"));
-        buildComboBox(m_ui->m_defaultEventsSheet,
-                      KoRdfSemanticItem::createSemanticItem(kdrew, m_rdf, "Event"));
-        buildComboBox(m_ui->m_defaultLocationsSheet,
-                      KoRdfSemanticItem::createSemanticItem(kdrew, m_rdf, "Location"));
+        m_semItemContactTemplate  = KoRdfSemanticItem::createSemanticItem(kdrew, m_rdf, "Contact");
+        m_semItemEventTemplate    = KoRdfSemanticItem::createSemanticItem(kdrew, m_rdf, "Event");
+        m_semItemLocationTemplate = KoRdfSemanticItem::createSemanticItem(kdrew, m_rdf, "Location");
+        
+        buildComboBox(m_ui->m_defaultContactsSheet,  m_semItemContactTemplate );
+        buildComboBox(m_ui->m_defaultEventsSheet,    m_semItemEventTemplate );
+        buildComboBox(m_ui->m_defaultLocationsSheet, m_semItemLocationTemplate );
         kDebug(30015) << "format(), setting up ss page.";
         QList<hKoRdfFoaF> foaf = m_rdf->foaf();
         kDebug(30015) << "format(), setting up ss page, foaf.sz:" << foaf.size();
@@ -162,6 +167,7 @@ public:
         kDebug(30015) << "format(), activeSheet:" << activeSheet->name();
 
         foreach (hKoSemanticStylesheet ss, si->stylesheets()) {
+            m_stylesheets << ss;
             QVariant ud = QVariant::fromValue(ss.data());
             w->addItem(ss->name(), ud);
             if (activeSheet->name() == ss->name()) {
@@ -169,6 +175,7 @@ public:
             }
         }
         foreach (hKoSemanticStylesheet ss, si->userStylesheets()) {
+            m_stylesheets << ss;
             QVariant ud = QVariant::fromValue(ss.data());
             w->addItem(ss->name(), ud);
             if (activeSheet->name() == ss->name()) {
@@ -303,11 +310,11 @@ void KoDocumentRdfEditWidget::apply()
     KoDocumentRdf *rdf = d->m_rdf;
     if (hKoRdfSemanticItem si = KoRdfSemanticItem::createSemanticItem(0, rdf, "Contact")) {
         si->defaultStylesheet(
-                stylesheetFromComboBox(d->m_ui->m_defaultContactsSheet));
+            stylesheetFromComboBox(d->m_ui->m_defaultContactsSheet));
     }
     if (hKoRdfSemanticItem si = KoRdfSemanticItem::createSemanticItem(0, rdf, "Event")) {
         si->defaultStylesheet(
-                stylesheetFromComboBox(d->m_ui->m_defaultEventsSheet));
+            stylesheetFromComboBox(d->m_ui->m_defaultEventsSheet));
     }
     if (hKoRdfSemanticItem si = KoRdfSemanticItem::createSemanticItem(0, rdf, "Location")) {
         si->defaultStylesheet(

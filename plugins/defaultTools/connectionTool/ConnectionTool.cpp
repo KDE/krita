@@ -392,7 +392,7 @@ void ConnectionTool::mouseMoveEvent(KoPointerEvent *event)
             useCursor(Qt::ArrowCursor);
         }
     } else {// Idle and no current strategy
-        KoShape *hoverShape = findNonConnectionShapeAtPosition(event->point);
+        KoShape *hoverShape = findShapeAtPosition(event->point);
         int hoverHandle = -1;
         if (hoverShape) {
             KoConnectionShape * connectionShape = dynamic_cast<KoConnectionShape*>(hoverShape);
@@ -478,8 +478,8 @@ void ConnectionTool::mouseDoubleClickEvent(KoPointerEvent *event)
         //deactivate connection tool when double click blank region on canvas
         KoShape *hitShape = findShapeAtPosition(event->point);
         if (!hitShape) {
-           deactivate();
-           emit done();
+            deactivate();
+            emit done();
         } else if (dynamic_cast<KoConnectionShape*>(hitShape)) {
             repaintDecorations();
             setEditMode(EditConnection, m_currentShape, -1);
@@ -539,7 +539,16 @@ KoShape * ConnectionTool::findShapeAtPosition(const QPointF &position) const
         // is not at the top of the shape stack at the mouse position
         KoConnectionShape *connectionShape = nearestConnectionShape(shapes, position);
         // use best connection shape or first shape from stack (last in the list) if not found
-        return connectionShape ? connectionShape : shapes.last();
+        if (connectionShape) {
+            return connectionShape;
+        } else {
+            for (QList<KoShape*>::const_iterator end = shapes.constEnd()-1; end >= shapes.constBegin(); end--) {
+                KoShape* shape = *end;
+                if (!dynamic_cast<KoConnectionShape*>(shape) && shape->shapeId() != TextShape_SHAPEID) {
+                    return shape;
+                }
+            }
+        }
     }
 
     return 0;

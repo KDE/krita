@@ -139,7 +139,7 @@ public:
     DataFormatsMap dataFormats() const;
 
     /**
-     * Return the notes configration for the given note class (footnote or endnote).
+     * Return the notes configuration for the given note class (footnote or endnote).
      *
      * Note that ODF supports different notes configurations for sections, but we don't
      * support that yet.

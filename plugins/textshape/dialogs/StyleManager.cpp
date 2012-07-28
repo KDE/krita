@@ -56,7 +56,7 @@ StyleManager::StyleManager(QWidget *parent)
     // is consistent with the one of the preview area. Also the usual document text colors
     // are dark, because made for a white paper background, so with a dark UI
     // color scheme they are hardly seen.
-    // TODO: update to background color of currently selected/focussed shape/page
+    // TODO: update to background color of currently selected/focused shape/page
     QPalette palette = this->palette();
     palette.setColor(QPalette::Base, QColor(Qt::white));
     widget.paragraphStylesListView->setPalette(palette);

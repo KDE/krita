@@ -213,7 +213,7 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
             }
             pointedAt.position = block.position() + line.xToCursor(point.x());
             QTextCursor tmpCursor(block);
-            tmpCursor.setPosition(line.xToCursor(point.x(), QTextLine::CursorOnCharacter) + 1);
+            tmpCursor.setPosition(block.position() + line.xToCursor(point.x(), QTextLine::CursorOnCharacter) + 1);
             pointedAt.fillInLinks(tmpCursor, d->documentLayout->inlineTextObjectManager());
             return pointedAt;
         }
@@ -863,7 +863,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                     lineHeight = lineRepresentative.charFormat().fontPointSize();
                     qreal linespacing = pStyle.lineSpacing();
                     if (linespacing == 0) { // unset
-                        int percent = pStyle.lineHeightPercent();
+                        qreal percent = pStyle.lineHeightPercent();
                         if (percent != 0)
                             linespacing = lineHeight * ((percent - 100) / 100.0);
                         else if (linespacing == 0)
@@ -988,7 +988,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     // Make a list of tabs that Qt can use
     QList<QTextOption::Tab> qTabs;
     // Note: Converting to Qt tabs is needed as long as we use Qt for layout, but we
-    // loose the posibility to do leader chars.
+    // loose the possibility to do leader chars.
     foreach (KoText::Tab kTab, tabs) {
         qreal value = kTab.position;
         if (value == MaximumTabPos) { // MaximumTabPos is used in index generators
@@ -1151,7 +1151,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             d->indent +=  labelBoxWidth - minLabelWidth;
             blockData->setCounterPosition(QPointF(d->x + d->indent - labelBoxWidth, d->y));
         } else if (labelBoxWidth > 0.0 || blockData->counterText().length() > 0) {
-            // Alignmentmode and there is a label (double check needed to acount for both
+            // Alignmentmode and there is a label (double check needed to account for both
             // picture bullets and non width chars)
             blockData->setCounterPosition(QPointF(d->x + labelBoxIndent, d->y));
             if (listFormat.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab
@@ -1634,7 +1634,7 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
     } else {
         qreal lineSpacing = format.doubleProperty(KoParagraphStyle::LineSpacing);
         if (lineSpacing == 0.0) { // unset
-            int percent = format.intProperty(KoParagraphStyle::PercentLineHeight);
+            qreal percent = format.doubleProperty(KoParagraphStyle::PercentLineHeight);
             if (percent != 0) {
                 height *= percent / 100.0;
             } else {

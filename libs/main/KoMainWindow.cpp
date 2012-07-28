@@ -247,6 +247,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     actionCollection()->addAction(KStandardAction::New, "file_new", this, SLOT(slotFileNew()));
     actionCollection()->addAction(KStandardAction::Open, "file_open", this, SLOT(slotFileOpen()));
     d->recent = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(const KUrl&)), actionCollection());
+    connect(d->recent, SIGNAL(recentListCleared()), this, SLOT(saveRecentFiles()));
     d->saveAction = actionCollection()->addAction(KStandardAction::Save,  "file_save", this, SLOT(slotFileSave()));
     d->saveActionAs = actionCollection()->addAction(KStandardAction::SaveAs,  "file_save_as", this, SLOT(slotFileSaveAs()));
     d->printAction = actionCollection()->addAction(KStandardAction::Print,  "file_print", this, SLOT(slotFilePrint()));
@@ -326,7 +327,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     createShellGUI();
     d->mainWindowGuiIsBuilt = true;
 
-    // if the user didn's specifiy the geometry on the command line (does anyone do that still?),
+    // if the user didn's specify the geometry on the command line (does anyone do that still?),
     // we first figure out some good default size and restore the x,y position. See bug 285804Z.
     if (!initialGeometrySet()) {
 
@@ -1450,6 +1451,11 @@ KoPrintJob* KoMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileNa
     }
 
     printJob->printer().setPageMargins(pageLayout.leftMargin, pageLayout.topMargin, pageLayout.rightMargin, pageLayout.bottomMargin, QPrinter::Millimeter);
+
+    //before printing check if the printer can handle printing
+    if (!printJob->canPrint()) {
+        KMessageBox::error(this, i18n("Cannot export to the specified file"));
+    }
 
     printJob->startPrinting(KoPrintJob::DeleteWhenDone);
     return printJob;

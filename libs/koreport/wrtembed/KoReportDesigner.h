@@ -215,7 +215,7 @@ public:
     void sectionMouseReleaseEvent(ReportSceneView *, QMouseEvent * e);
 
     /**
-    @brief Sets the property set for the currenty selected item
+    @brief Sets the property set for the currently selected item
     @param set Property set of item
     */
     void changeSet(KoProperty::Set *);

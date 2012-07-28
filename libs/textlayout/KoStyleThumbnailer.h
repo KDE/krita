@@ -47,7 +47,7 @@ public:
         CenterAlignThumbnail = 1, ///< Vertically Center Align the layout of the thumbnail
                                   ///     i.e the layout is done at the center of the area
         UseStyleNameText = 2, ///< Use the style name as the text that is layouted inside the thumbnail
-        ScaleThumbnailFont = 4 ///< If set, then when the layout size is more than the size avaliable
+        ScaleThumbnailFont = 4 ///< If set, then when the layout size is more than the size available
                                ///  the font size is scaled down to fit the space availiable
     };
     Q_DECLARE_FLAGS(KoStyleThumbnailerFlags, KoStyleThumbnailerFlag)
@@ -101,12 +101,12 @@ public:
     void setText(const QString &text);
 
     /**
-     * remove all occurences of the style from the cache
+     * remove all occurrences of the style from the cache
      */
     void removeFromCache(KoParagraphStyle *style);
 
     /**
-     * remove all occurences of the style from the cache
+     * remove all occurrences of the style from the cache
      */
     void removeFromCache(KoCharacterStyle *style);
 

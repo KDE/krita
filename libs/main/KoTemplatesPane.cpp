@@ -60,11 +60,11 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, const KComponentData &_compone
         if (t->isHidden())
             continue;
 
-        QPixmap preview = t->loadPicture(componentData());
+        QPixmap preview = t->loadPicture();
         QImage icon = preview.toImage();
-        icon = icon.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        icon = icon.scaled(IconExtent, IconExtent, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         icon.convertToFormat(QImage::Format_ARGB32);
-        icon = icon.copy((icon.width() - 64) / 2, (icon.height() - 64) / 2, 64, 64);
+        icon = icon.copy((icon.width() - IconExtent) / 2, (icon.height() - IconExtent) / 2, IconExtent, IconExtent);
         QStandardItem* item = new QStandardItem(QPixmap::fromImage(icon), t->name());
         item->setEditable(false);
         item->setData(t->description(), Qt::UserRole);

@@ -132,7 +132,7 @@ void KoDeleteChangeMarker::updatePosition(const QTextDocument *document, int pos
 {
     d->position = posInDocument;
     if (document != d->document)
-        d->document = const_cast<QTextDocument*>(document); //TODO: when we get rid of the current visualisation of deleted changes (ie inserting them in the doc), we can get rid of this.
+        d->document = const_cast<QTextDocument*>(document); //TODO: when we get rid of the current visualization of deleted changes (ie inserting them in the doc), we can get rid of this.
 
     Q_UNUSED(format);
 }

@@ -53,7 +53,7 @@ void PluginShape::paint(QPainter &painter, const KoViewConverter &converter, KoS
     if (!m_mimetype.isEmpty()) {
         mimetype = m_mimetype;
     }
-    painter.drawText(pixelsF, Qt::AlignCenter, i18n("Plugin of mimetype: %1").arg(mimetype));
+    painter.drawText(pixelsF, Qt::AlignCenter, i18n("Plugin of mimetype: %1", mimetype));
 }
 
 void PluginShape::saveOdf(KoShapeSavingContext &context) const
@@ -63,12 +63,15 @@ void PluginShape::saveOdf(KoShapeSavingContext &context) const
     writer.startElement("draw:frame");
     saveOdfAttributes(context, OdfAllAttributes);
     writer.startElement("draw:plugin");
+    // cannot use "this" as referent for context.xmlid, already done for getting the xml:id for the frame
+    // so (randomly) choosing m_xlinkhref to get another, separate unique referent for this shape
+    const QString xmlId = context.xmlid(&m_xlinkhref, QLatin1String("plugin"), KoElementReference::Counter).toString();
+    writer.addAttribute("xml:id", xmlId);
     writer.addAttribute("draw:mime-type", m_mimetype);
     writer.addAttribute("xlink:type", m_xlinktype);
     writer.addAttribute("xlink:show", m_xlinkshow);
     writer.addAttribute("xlink:actuate", m_xlinkactuate);
     writer.addAttribute("xlink:href", m_xlinkhref);
-    writer.addAttribute("xml:id", m_xmlid);
 
     QMap<QString,QString>::const_iterator itr = m_drawParams.constBegin();
     while (itr != m_drawParams.constEnd()) {
@@ -98,12 +101,11 @@ bool PluginShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadin
     }
 
     if(element.localName() == "plugin") {
-        m_mimetype  = element.attributeNS(KoXmlNS::draw, "mime-type", QString::null);
-        m_xlinktype  = element.attributeNS(KoXmlNS::xlink, "type", QString::null);
-        m_xlinkshow  = element.attributeNS(KoXmlNS::xlink, "show", QString::null);
-        m_xlinkactuate  = element.attributeNS(KoXmlNS::xlink, "actuate", QString::null);
-        m_xlinkhref  = element.attributeNS(KoXmlNS::xlink, "href", QString::null);
-        m_xmlid = element.attribute("xml:id", QString::null);
+        m_mimetype  = element.attributeNS(KoXmlNS::draw, "mime-type");
+        m_xlinktype  = element.attributeNS(KoXmlNS::xlink, "type");
+        m_xlinkshow  = element.attributeNS(KoXmlNS::xlink, "show");
+        m_xlinkactuate  = element.attributeNS(KoXmlNS::xlink, "actuate");
+        m_xlinkhref  = element.attributeNS(KoXmlNS::xlink, "href");
         m_drawParams.clear();
         if(element.hasChildNodes()) {
             KoXmlNode node = element.firstChild();
@@ -111,9 +113,9 @@ bool PluginShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadin
                 if(node.isElement()) {
                     KoXmlElement nodeElement = node.toElement();
                     if(nodeElement.localName() == "param") {
-                        QString name = nodeElement.attributeNS(KoXmlNS::draw, "name", QString::null);
-                        if(!name.isNull()) {
-                            m_drawParams.insert(name,nodeElement.attributeNS(KoXmlNS::draw, "value", QString::null));
+                        QString name = nodeElement.attributeNS(KoXmlNS::draw, "name");
+                        if(!name.isEmpty()) {
+                            m_drawParams.insert(name,nodeElement.attributeNS(KoXmlNS::draw, "value"));
                         }
                     }
                 }

@@ -38,7 +38,7 @@
 
 
 KisToolEllipse::KisToolEllipse(KoCanvasBase * canvas)
-        : KisToolEllipseBase(canvas, KisCursor::load("tool_ellipse_cursor.png", 6, 6))
+        : KisToolEllipseBase(canvas, KisToolEllipseBase::PAINT, KisCursor::load("tool_ellipse_cursor.png", 6, 6))
 {
     setObjectName("tool_ellipse");
 }
@@ -59,6 +59,7 @@ void KisToolEllipse::finishEllipse(const QRectF& rect)
     }
 
     if (!currentNode()->inherits("KisShapeLayer")) {
+        KisSystemLocker locker(currentNode());
         KisFigurePaintingToolHelper helper(i18n("Ellipse"),
                                            image(),
                                            canvas()->resourceManager(),

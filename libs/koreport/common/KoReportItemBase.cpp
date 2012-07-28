@@ -40,65 +40,18 @@ void KoReportItemBase::addDefaultProperties()
 
 bool KoReportItemBase::parseReportTextStyleData(const QDomElement & elemSource, KRTextStyleData & ts)
 {
-    if (elemSource.tagName() != "report:text-style")
-        return false;
-    ts.backgroundColor = QColor(elemSource.attribute("fo:background-color", "#ffffff"));
-    ts.foregroundColor = QColor(elemSource.attribute("fo:foreground-color", "#000000"));
-
-    bool ok;
-    ts.backgroundOpacity = KRUtils::readPercent(elemSource, "fo:background-opacity", 100, &ok);
-    if (!ok)
-        return false;
-
-    if (!KRUtils::readFontAttributes(elemSource, ts.font))
-        return false;
-    return true;
+    return KRUtils::parseReportTextStyleData(elemSource, ts);
 }
 
 bool KoReportItemBase::parseReportLineStyleData(const QDomElement & elemSource, KRLineStyleData & ls)
 {
-    if (elemSource.tagName() == "report:line-style") {
-        ls.lineColor = QColor(elemSource.attribute("report:line-color", "#ffffff"));
-        ls.weight = elemSource.attribute("report:line-weight", "0").toInt();
-
-        QString l = elemSource.attribute("report:line-style", "nopen");
-        if (l == "nopen") {
-            ls.style = Qt::NoPen;
-        } else if (l == "solid") {
-            ls.style = Qt::SolidLine;
-        } else if (l == "dash") {
-            ls.style = Qt::DashLine;
-        } else if (l == "dot") {
-            ls.style = Qt::DotLine;
-        } else if (l == "dashdot") {
-            ls.style = Qt::DashDotLine;
-        } else if (l == "dashdotdot") {
-            ls.style = Qt::DashDotDotLine;
-        }
-        return true;
-    }
-    return false;
+    return KRUtils::parseReportLineStyleData(elemSource, ls);
 }
 
 
 bool KoReportItemBase::parseReportRect(const QDomElement & elemSource, KRPos *pos, KRSize *siz)
 {
-    QString sUnit = elemSource.attribute("svg:x", "1cm").right(2);
-    const KoUnit unit = KoUnit::fromSymbol(sUnit);
-	pos->setUnit(unit);
-	siz->setUnit(unit);
-	QPointF _pos;
-	QSizeF _siz;
-	
-	_pos.setX(KoUnit::parseValue(elemSource.attribute("svg:x", "1cm")));
-	_pos.setY(KoUnit::parseValue(elemSource.attribute("svg:y", "1cm")));
-	_siz.setWidth(KoUnit::parseValue(elemSource.attribute("svg:width", "1cm")));
-	_siz.setHeight(KoUnit::parseValue(elemSource.attribute("svg:height", "1cm")));
-	
-	pos->setPointPos(_pos);
-	siz->setPointSize(_siz);
-	
-    return true;
+    return KRUtils::parseReportRect(elemSource, pos, siz);
 }
 
 void KoReportItemBase::setUnit(const KoUnit& u)
@@ -156,3 +109,14 @@ void KoReportItemBase::setEntityName(const QString& n)
 {
     m_name->setValue(n);
 }
+
+KRPos KoReportItemBase::position() const
+{
+    return m_pos;
+}
+
+KRSize KoReportItemBase::size() const
+{
+    return m_size;
+}
+

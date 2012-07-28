@@ -55,7 +55,8 @@ public:
     virtual ~KisToolSelectPath();
 
     void paint(QPainter& gc, const KoViewConverter &converter) {m_localTool->paint(gc, converter);}
-    REDIRECT_EVENT_1P(mousePressEvent, KoPointerEvent*);
+
+    void mousePressEvent(KoPointerEvent* event);
     REDIRECT_EVENT_1P(mouseMoveEvent, KoPointerEvent*);
     REDIRECT_EVENT_1P(mouseReleaseEvent, KoPointerEvent*);
     REDIRECT_EVENT_1P(keyPressEvent, QKeyEvent*);

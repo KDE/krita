@@ -27,7 +27,12 @@ class KRITAUI_EXPORT KisToolEllipseBase : public KisToolShape
 {
 Q_OBJECT
 public:
-    KisToolEllipseBase(KoCanvasBase * canvas, const QCursor & cursor=KisCursor::load("tool_ellipse_cursor.png", 6, 6));
+    enum ToolType {
+        PAINT,
+        SELECT
+    };
+
+    KisToolEllipseBase(KoCanvasBase * canvas, KisToolEllipseBase::ToolType type, const QCursor & cursor=KisCursor::load("tool_ellipse_cursor.png", 6, 6));
     ~KisToolEllipseBase();
 
     virtual void mousePressEvent(KoPointerEvent *event);
@@ -46,6 +51,7 @@ private:
     QPointF m_dragCenter;
     QPointF m_dragStart;
     QPointF m_dragEnd;
+    ToolType m_type;
 };
 
 #endif // KIS_TOOL_ELLIPSE_BASE_H

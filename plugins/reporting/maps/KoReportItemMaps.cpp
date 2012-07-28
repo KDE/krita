@@ -235,7 +235,7 @@ int KoReportItemMaps::render(OROPage* page,
     oroIds.marbleWidget = marble;
     m_marbleImgs[marble->model()]=oroIds;
     
-    return 0; //Item doesnt stretch the section height
+    return 0; //Item doesn't stretch the section height
 }
 
 void KoReportItemMaps::requestRedraw()

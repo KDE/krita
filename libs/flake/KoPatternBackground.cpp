@@ -31,6 +31,7 @@
 #include <KoOdfStylesReader.h>
 #include <KoStoreDevice.h>
 #include <KoUnit.h>
+#include <KoViewConverter.h>
 #include <KoXmlWriter.h>
 
 #include <KDebug>
@@ -280,7 +281,7 @@ KoPatternBackground &KoPatternBackground::operator = (const KoPatternBackground 
     return *this;
 }
 
-void KoPatternBackground::paint(QPainter &painter, const QPainterPath &fillPath) const
+void KoPatternBackground::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &/*context*/, const QPainterPath &fillPath) const
 {
     Q_D(const KoPatternBackground);
     if (! d->imageData)
@@ -317,10 +318,16 @@ void KoPatternBackground::paint(QPainter &painter, const QPainterPath &fillPath)
         painter.setClipPath(fillPath);
         painter.drawPixmap(targetRect, d->imageData->pixmap(sourceRect.size().toSize()), sourceRect);
     } else if (d->repeat == Stretched) {
-        QRectF sourceRect(QPointF(0, 0), d->imageData->imageSize());
-        QRectF targetRect(fillPath.boundingRect());
         painter.setClipPath(fillPath);
-        painter.drawPixmap(targetRect, d->imageData->pixmap(sourceRect.size().toSize()), sourceRect);
+        // undo conversion of the scaling so that we can use a nicely scaled image of the correct size
+        qreal zoomX, zoomY;
+        converter.zoom(&zoomX, &zoomY);
+        zoomX = zoomX ? 1 / zoomX : zoomX;
+        zoomY = zoomY ? 1 / zoomY : zoomY;
+        painter.scale(zoomX, zoomY);
+
+        QRectF targetRect = converter.documentToView(fillPath.boundingRect());
+        painter.drawPixmap(targetRect.topLeft(), d->imageData->pixmap(targetRect.size().toSize()));
     }
 
     painter.restore();

@@ -283,7 +283,7 @@ void KisConfig::setPrinterProfile(const QString & printerProfile)
 
 bool KisConfig::useBlackPointCompensation() const
 {
-    return m_cfg.readEntry("useBlackPointCompensation", false);
+    return m_cfg.readEntry("useBlackPointCompensation", true);
 }
 
 void KisConfig::setUseBlackPointCompensation(bool useBlackPointCompensation)
@@ -841,6 +841,15 @@ void KisConfig::setExportConfiguration(const QString &filterId, const KisPropert
 
 }
 
+QString KisConfig::defaultPalette()
+{
+    return m_cfg.readEntry("defaultPalette", QString());
+}
+
+void KisConfig::setDefaultPalette(const QString& name)
+{
+    m_cfg.writeEntry("defaultPalette", name);
+}
 
 bool KisConfig::useSystemMonitorProfile() const
 {

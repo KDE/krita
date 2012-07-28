@@ -37,7 +37,7 @@ public:
 protected:
     virtual QColor selectColor(int x, int y);
     virtual void paint(QPainter*);
-    const QColor& colorAt(int x, int y);
+    const QColor& colorAt(int x, int y, bool forceValid = false);
 
 private:
     QPointF m_lastClickPos;

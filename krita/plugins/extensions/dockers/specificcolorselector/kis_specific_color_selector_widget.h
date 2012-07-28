@@ -35,6 +35,8 @@ class KisSpecificColorSelectorWidget : public QWidget
 public:
     KisSpecificColorSelectorWidget(QWidget* parent);
     ~KisSpecificColorSelectorWidget();
+
+    bool customColorSpaceUsed();
 public slots:
     void setColorSpace(const KoColorSpace*);
     void setColor(const KoColor&);

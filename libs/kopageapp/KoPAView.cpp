@@ -293,7 +293,7 @@ void KoPAView::initGUI()
     gridLayout->addWidget(d->verticalRuler, 1, 0);
     gridLayout->addWidget(canvasController, 1, 1);
 
-    //tab bar is hidden by default a method is provided to acces to the tab bar
+    //tab bar is hidden by default a method is provided to access to the tab bar
     d->tabBar->hide();
 
     connect(d->canvasController->proxyObject, SIGNAL(canvasOffsetXChanged(int)),
@@ -745,17 +745,16 @@ void KoPAView::updateCanvasSize(bool forceUpdate)
         d->horizontalRuler->setActiveRange(layout.leftMargin, layout.width - layout.rightMargin);
         d->verticalRuler->setActiveRange(layout.topMargin, layout.height - layout.bottomMargin);
         QSizeF documentSize(documentRect.size());
-        QSizeF oldDocumentSize(d->zoomController->documentSize());
-        QPoint oldOffset(d->canvas->documentOrigin());
         d->canvas->setDocumentOrigin(offset);
         d->zoomController->setDocumentSize(documentSize);
-        d->zoomController->setPageSize(pageSize);
 
         d->canvas->resourceManager()->setResource(KoCanvasResourceManager::PageSize, pageSize);
 
         d->canvas->update();
         QSize documentPxSize(zoomHandler()->zoomItX(documentRect.width()), zoomHandler()->zoomItY(documentRect.height()));
         d->canvasController->proxyObject->updateDocumentSize(documentPxSize);
+        // this can trigger a change of the zoom level in "fit to mode" and therefore this needs to be at the end as it calls this function again
+        d->zoomController->setPageSize(pageSize);
     }
 }
 

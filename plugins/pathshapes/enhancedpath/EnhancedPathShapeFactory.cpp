@@ -51,7 +51,7 @@ EnhancedPathShapeFactory::EnhancedPathShapeFactory()
 
 KoShape *EnhancedPathShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 {
-    EnhancedPathShape *shape = new EnhancedPathShape(QRectF(0, 0, 100, 100));
+    EnhancedPathShape *shape = new EnhancedPathShape(QRect(0, 0, 100, 100));
     shape->setStroke(new KoShapeStroke(1.0));
     shape->setShapeId(KoPathShapeId);
 
@@ -78,14 +78,12 @@ KoShape *EnhancedPathShapeFactory::createDefaultShape(KoDocumentResourceManager 
 
 KoShape *EnhancedPathShapeFactory::createShape(const KoProperties *params, KoDocumentResourceManager *) const
 {
-    QRectF viewBox(0, 0, 100, 100);
     QVariant viewboxData;
-    if (params->property("viewBox", viewboxData))
-        viewBox = viewboxData.toRectF();
+    const QRect viewBox = (params->property(QLatin1String("viewBox"), viewboxData)) ?
+        viewboxData.toRect() :
+        QRect(0, 0, 100, 100);
 
     EnhancedPathShape *shape = new EnhancedPathShape(viewBox);
-    if (! shape)
-        return 0;
 
     shape->setShapeId(KoPathShapeId);
     shape->setStroke(new KoShapeStroke(1.0));
@@ -194,7 +192,7 @@ void EnhancedPathShapeFactory::addArrow()
         t.name = i18n("Arrow");
         t.family = "arrow";
         t.toolTip = i18n("An arrow");
-        t.icon = "arrow-right-calligra";
+        t.icon = "draw-arrow-forward";
         t.properties = dataToProperties(modifiers, commands, handles, formulae);
 
         addTemplate(t);
@@ -227,7 +225,7 @@ void EnhancedPathShapeFactory::addArrow()
         t.name = i18n("Arrow");
         t.family = "arrow";
         t.toolTip = i18n("An arrow");
-        t.icon = "arrow-left-calligra";
+        t.icon = "draw-arrow-back";
         t.properties = dataToProperties(modifiers, commands, handles, formulae);
 
         addTemplate(t);
@@ -260,7 +258,7 @@ void EnhancedPathShapeFactory::addArrow()
         t.name = i18n("Arrow");
         t.family = "arrow";
         t.toolTip = i18n("An arrow");
-        t.icon = "arrow-up-calligra";
+        t.icon = "draw-arrow-up";
         t.properties = dataToProperties(modifiers, commands, handles, formulae);
 
         addTemplate(t);
@@ -293,7 +291,7 @@ void EnhancedPathShapeFactory::addArrow()
         t.name = i18n("Arrow");
         t.family = "arrow";
         t.toolTip = i18n("An arrow");
-        t.icon = "arrow-down-calligra";
+        t.icon = "draw-arrow-down";
         t.properties = dataToProperties(modifiers, commands, handles, formulae);
 
         addTemplate(t);
@@ -374,7 +372,7 @@ void EnhancedPathShapeFactory::addCallout()
     t.toolTip = i18n("A callout");
     t.icon = "callout-shape";
     t.properties = dataToProperties(modifiers, commands, handles, formulae);
-    t.properties->setProperty("viewBox", QRectF(0, 0, 21600, 21600));
+    t.properties->setProperty(QLatin1String("viewBox"), QRect(0, 0, 21600, 21600));
 
     addTemplate(t);
 }
@@ -419,7 +417,7 @@ void EnhancedPathShapeFactory::addSmiley()
     t.toolTip = i18n("Smiley");
     t.icon = "smiley-shape";
     t.properties = dataToProperties(modifiers, commands, handles, formulae);
-    t.properties->setProperty("viewBox", QRectF(0, 0, 21600, 21600));
+    t.properties->setProperty(QLatin1String("viewBox"), QRect(0, 0, 21600, 21600));
 
     addTemplate(t);
 }
@@ -498,7 +496,7 @@ void EnhancedPathShapeFactory::addCircularArrow()
     t.toolTip = i18n("A circular-arrow");
     t.icon = "circular-arrow-shape";
     t.properties = dataToProperties(modifiers, commands, handles, formulae);
-    t.properties->setProperty("viewBox", QRectF(0, 0, 21600, 21600));
+    t.properties->setProperty(QLatin1String("viewBox"), QRect(0, 0, 21600, 21600));
     addTemplate(t);
 }
 
@@ -543,7 +541,7 @@ void EnhancedPathShapeFactory::addGearhead()
     t.icon = "gearhead-shape";
     t.properties = dataToProperties(QString(), commands, ListType(), ComplexType());
     t.properties->setProperty("background", QVariant::fromValue<QColor>(QColor(Qt::blue)));
-    t.properties->setProperty("viewBox", QRectF(0, 0, 40, 90));
+    t.properties->setProperty(QLatin1String("viewBox"), QRect(0, 0, 40, 90));
     addTemplate(t);
 }
 

@@ -37,7 +37,8 @@ public:
         ZoomInShortcut, ///< Zoom in by a fixed amount.
         ZoomOutShortcut, ///< Zoom out by a fixed amount.
         ZoomResetShortcut, ///< Reset zoom to 100%.
-        ZoomToPageShortcut ///< Zoom fit to page.
+        ZoomToPageShortcut, ///< Zoom fit to page.
+        ZoomToWidthShortcut ///< Zoom fit to width.
     };
     explicit KisZoomAction(KisInputManager* manager);
     virtual ~KisZoomAction();

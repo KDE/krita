@@ -61,6 +61,7 @@ public:
     KisCanvasResourceProvider *resourceProvider;
     bool detached;
     bool ignoreHideEvents;
+    QSize minimumSettingsWidgetSize;
 };
 
 KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resourceProvider, QWidget * parent)
@@ -136,7 +137,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     KisConfig cfg;
     m_d->detached = !cfg.paintopPopupDetached();
     m_d->ignoreHideEvents = false;
-
+    m_d->minimumSettingsWidgetSize = QSize(0, 0);
 }
 
 
@@ -184,8 +185,10 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
     if (widget) {
         widget->setFont(m_d->smallFont);
 
-        widget->setFixedSize(QSize(600, 450));
-        m_d->settingsWidget->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
+        QSize hint = widget->sizeHint();
+        m_d->minimumSettingsWidgetSize = QSize(qMax(hint.width(), m_d->minimumSettingsWidgetSize.width()),
+                                               qMax(hint.height(), m_d->minimumSettingsWidgetSize.height()));
+        widget->setMinimumSize(m_d->minimumSettingsWidgetSize);
         m_d->layout->addWidget(widget);
 
         m_d->layout->update();

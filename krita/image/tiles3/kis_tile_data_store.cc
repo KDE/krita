@@ -87,7 +87,7 @@ KisTileDataStore::~KisTileDataStore()
         qCritical() << "CRITICAL: Tiles in memory:" << numTilesInMemory()
                     << "Total tiles:" << numTiles();
 
-#ifndef HAVE_MEMORY_LEAK_TRACKER
+#ifdef HAVE_MEMORY_LEAK_TRACKER
         Q_ASSERT_X(0, "KisTileDataStore::~KisTileDataStore",
                    "Let's crash to be on the safe side! ;)");
 #endif /* HAVE_MEMORY_LEAK_TRACKER */

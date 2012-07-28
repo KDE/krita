@@ -23,13 +23,17 @@
 #include <kapplication.h>
 #include <kdialog.h>
 #include <kpluginfactory.h>
+#include <kmessagebox.h>
 
 #include <KoFilterChain.h>
 
 #include <kis_doc2.h>
 #include <kis_image.h>
+#include <kis_node.h>
 #include <kis_group_layer.h>
 #include <kis_paint_layer.h>
+#include <kis_shape_layer.h>
+#include <KoProperties.h>
 
 #include "ora_converter.h"
 
@@ -44,6 +48,26 @@ OraExport::OraExport(QObject *parent, const QVariantList &) : KoFilter(parent)
 
 OraExport::~OraExport()
 {
+}
+
+
+bool hasShapeLayerChild(KisNodeSP node)
+{
+    if (!node) return false;
+
+    foreach(KisNodeSP child, node->childNodes(QStringList(), KoProperties())) {
+        if (child->inherits("KisShapeLayer")
+                || child->inherits("KisGeneratorLayer")
+                || child->inherits("KisCloneLayer")) {
+            return true;
+        }
+        else {
+            if (hasShapeLayerChild(child)) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 KoFilter::ConversionStatus OraExport::convert(const QByteArray& from, const QByteArray& to)
@@ -67,6 +91,13 @@ KoFilter::ConversionStatus OraExport::convert(const QByteArray& from, const QByt
 
     KisImageWSP image = output->image();
     Q_CHECK_PTR(image);
+
+    if (hasShapeLayerChild(image->root())) {
+        KMessageBox::information(0,
+                                 i18n("This image contains vector, clone or generated layers..\nThese layers will be saved as raster layers."),
+                                 i18n("Warning"),
+                                 "krita/ora/vector");
+    }
 
     OraConverter kpc(output);
 

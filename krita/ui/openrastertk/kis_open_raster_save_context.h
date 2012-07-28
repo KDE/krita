@@ -27,7 +27,7 @@ class KisOpenRasterSaveContext
 {
 public:
     virtual ~KisOpenRasterSaveContext() {}
-    virtual QString saveDeviceData(KisPaintLayerSP device) = 0;
+    virtual QString saveDeviceData(KisPaintDeviceSP dev, KisMetaData::Store *metaData, KisImageWSP image) = 0;
     virtual void saveStack(const QDomDocument& doc) = 0;
 };
 

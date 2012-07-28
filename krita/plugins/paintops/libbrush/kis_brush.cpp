@@ -481,7 +481,6 @@ KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
                                             double subPixelX, double subPixelY) const
 {
     Q_ASSERT(valid());
-    Q_UNUSED(colorSpace);
     Q_UNUSED(info);
     angle += d->angle;
 
@@ -570,6 +569,15 @@ KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
 
         }
     }
+    if (colorSpace != KoColorSpaceRegistry::instance()->rgb8()) {
+        KisFixedPaintDeviceSP dab2 = new KisFixedPaintDevice(colorSpace);
+        dab2->setRect(outputImage.rect());
+        dab2->initialize();
+        dabPointer = dab->data();
+        quint8* dabPointer2 = dab2->data();
+        KoColorSpaceRegistry::instance()->rgb8()->convertPixelsTo(dabPointer, dabPointer2, colorSpace, outputWidth * outputHeight);
+        dab = dab2;
+    }
     return dab;
 }
 
@@ -590,7 +598,7 @@ void KisBrush::createScaledBrushes() const
 
     // Construct a series of brushes where each one's dimensions are
     // half the size of the previous one.
-    // IMORTANT: and make sure that a brush with a size > MAXIMUM_MIPMAP_SIZE
+    // IMPORTANT: and make sure that a brush with a size > MAXIMUM_MIPMAP_SIZE
     // will not get scaled up anymore or the memory consumption gets too high
     // also don't scale the brush up more then MAXIMUM_MIPMAP_SCALE times
     int scale  = qBound(1, MAXIMUM_MIPMAP_SIZE*2 / qMax(image().width(),image().height()), MAXIMUM_MIPMAP_SCALE);

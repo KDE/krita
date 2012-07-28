@@ -107,7 +107,7 @@ QWidget *PictureTool::createOptionWidget()
     m_pictureToolUI->cmbColorMode->addItem(i18n("Greyscale") , PictureShape::Greyscale);
     m_pictureToolUI->cmbColorMode->addItem(i18n("Monochrome"), PictureShape::Mono);
     m_pictureToolUI->cmbColorMode->addItem(i18n("Watermark") , PictureShape::Watermark);
-    m_pictureToolUI->bnImageFile->setIcon(SmallIcon("open"));
+    m_pictureToolUI->bnImageFile->setIcon(SmallIcon("document-open"));
 
     updateControlElements();
 

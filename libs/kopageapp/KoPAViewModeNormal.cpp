@@ -25,6 +25,7 @@
 
 #include <KoToolProxy.h>
 #include <KoShapeManager.h>
+#include <KoShapePaintingContext.h>
 #include "KoPACanvas.h"
 #include "KoPADocument.h"
 #include "KoPAPage.h"
@@ -60,7 +61,8 @@ void KoPAViewModeNormal::paint(KoPACanvasBase* canvas, QPainter& painter, const 
 
     KoViewConverter * converter = m_view->viewConverter( m_canvas );
     QRectF updateRect = converter->viewToDocument( m_canvas->widgetToView( clipRect ) );
-    m_view->activePage()->paintBackground( painter, *converter );
+    KoShapePaintingContext context;
+    m_view->activePage()->paintBackground( painter, *converter, context );
 
     const KoPageLayout &layout = activePageLayout();
     QSizeF pageSize(layout.width, layout.height);

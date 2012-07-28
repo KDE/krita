@@ -33,11 +33,14 @@
 #include <KIcon>
 #include <KDebug>
 
+#include <KoCanvasResourceManager.h>
+
 #include "kis_color_selector_ring.h"
 #include "kis_color_selector_triangle.h"
 #include "kis_color_selector_simple.h"
 #include "kis_color_selector_wheel.h"
 #include "kis_color_selector_container.h"
+#include "kis_canvas2.h"
 
 KisColorSelector::KisColorSelector(Configuration conf, QWidget* parent)
     : KisColorSelectorBase(parent),
@@ -218,7 +221,13 @@ void KisColorSelector::resizeEvent(QResizeEvent* e) {
             }
         }
     }
-
+    if(m_canvas) {
+        if (m_lastColorRole==Foreground) {
+            setColor(m_canvas->resourceManager()->foregroundColor().toQColor());
+        } else {
+            setColor(m_canvas->resourceManager()->backgroundColor().toQColor());
+        }
+    }
     KisColorSelectorBase::resizeEvent(e);
 }
 
@@ -249,12 +258,11 @@ void KisColorSelector::mouseReleaseEvent(QMouseEvent* e)
     KisColorSelectorBase::mouseReleaseEvent(e);
     if(m_lastColor!=m_currentColor && m_currentColor.isValid()) {
         m_lastColor=m_currentColor;
-        ColorRole role;
         if(e->button() == Qt::LeftButton)
-            role=Foreground;
+            m_lastColorRole=Foreground;
         else
-            role=Background;
-        commitColor(KoColor(m_currentColor, colorSpace()), role);
+            m_lastColorRole=Background;
+        commitColor(KoColor(m_currentColor, colorSpace()), m_lastColorRole);
 
         if(isPopup() && m_mainComponent->containsPoint(e->pos())) {
             hidePopup();

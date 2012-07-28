@@ -182,7 +182,7 @@ int KoReportItemImage::render(OROPage* page, OROSection* section,  QPointF offse
         delete id;
     }
     
-    return 0; //Item doesnt stretch the section height
+    return 0; //Item doesn't stretch the section height
 }
 
 

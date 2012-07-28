@@ -107,7 +107,7 @@ void KisPaintOpPresetsChooserPopup::slotDetailMode()
 void KisPaintOpPresetsChooserPopup::paintEvent(QPaintEvent* event)
 {
     QWidget::paintEvent(event);
-    //Workaround to get the colum and row size right
+    //Workaround to get the column and row size right
     if(m_d->firstShown) {
         m_d->uiWdgPaintOpPresets.wdgPresetChooser->updateViewSettings();
         m_d->firstShown = false;

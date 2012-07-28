@@ -55,7 +55,7 @@ public:
     /// Sets number of columns in the view and causes the number of rows to be calculated accordingly
     void setColumnCount( int columnCount );
 
-    /// Sets number of rows in the view and causes the number of colums to be calculated accordingly
+    /// Sets number of rows in the view and causes the number of columns to be calculated accordingly
     void setRowCount( int rowCount );
     
     /// Sets the height of the view rows

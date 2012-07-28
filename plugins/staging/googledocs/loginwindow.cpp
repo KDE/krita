@@ -82,7 +82,7 @@ void LoginWindow::authenticated(bool success, QString errorString)
 //        m_authDialog->label->setText("Successfully authenticated!!! Retreiving document list...");
 //        accept();
     } else {
-        QString msg = "Error occured while signing in ";
+        QString msg = "Error occurred while signing in ";
         if (!errorString.isEmpty()) {
             msg = msg + "- " + errorString;
         }

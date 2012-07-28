@@ -231,7 +231,7 @@ void KoOpenPane::initTemplates(const QString& templateType)
                     this, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)));
             connect(this, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)),
                     pane, SLOT(resizeSplitter(KoDetailsPane*, const QList<int>&)));
-            QTreeWidgetItem* item = addPane(group->name(), group->templates().first()->loadPicture(d->m_componentData),
+            QTreeWidgetItem* item = addPane(group->name(), group->templates().first()->loadPicture(),
                                            pane, group->sortingWeight() + templateOffset);
 
             if (!firstItem) {

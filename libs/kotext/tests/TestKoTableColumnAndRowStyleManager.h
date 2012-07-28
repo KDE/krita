@@ -30,7 +30,7 @@ public:
     TestKoTableColumnAndRowStyleManager() {}
 
 private slots:
-    // basic testing of the colums insertion and removal
+    // basic testing of the columns insertion and removal
     void testColumns();
     // basic testing of the rows insertion and removal
     void testRows();

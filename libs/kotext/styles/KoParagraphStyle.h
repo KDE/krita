@@ -159,7 +159,7 @@ public:
         HyphenationLadderCount,   ///< int, 0 means no limit, else limit the number of successive hyphenated line areas in a block
         PunctuationWrap,          ///< bool, whether a punctuation mark can be at the end of a full line (false) or not (true)
         VerticalAlignment,        ///< KoParagraphStyle::VerticalAlign, the alignment of this paragraph text
-        HiddenByTable,        ///< dont let this paragraph have any height
+        HiddenByTable,        ///< don't let this paragraph have any height
 
         NormalLineHeight,         ///< bool, internal property for reserved usage
         BibliographyData,
@@ -207,9 +207,9 @@ public:
      *  be used instead of this value.
      * @see setLineSpacingFromFont
      */
-    void setLineHeightPercent(int lineHeight);
+    void setLineHeightPercent(qreal lineHeight);
     /// @see setLineHeightPercent
-    int lineHeightPercent() const;
+    qreal lineHeightPercent() const;
 
     /**
      * Sets the line height to a specific pt-based height, ignoring the font size.

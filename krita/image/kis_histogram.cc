@@ -79,7 +79,7 @@ void KisHistogram::updateHistogram()
     //      if the paint device had a selection. When we changed that to passing an
     //      explicit selection to the createRectIterator call, that broke because
     //      paint devices didn't know about their selections anymore.
-    //      updateHistogram should get a selection paramater.
+    //      updateHistogram should get a selection parameter.
     do {
         i = srcIt->nConseqPixels();
         m_producer->addRegionToBin(srcIt->oldRawData(), 0, i, cs);

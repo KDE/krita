@@ -24,7 +24,7 @@
 #include "kis_types.h"
 
 #include "kis_node_visitor.h"
-
+#include "kis_layer.h"
 #include <krita_export.h>
 
 class KisOpenRasterSaveContext;
@@ -53,9 +53,9 @@ public:
     bool visit(KisNode*) {
         return true;
     }
-    bool visit(KisCloneLayer*) {
-        return true;
-    }
+
+    bool visit(KisCloneLayer*);
+
     bool visit(KisFilterMask*) {
         return true;
     }
@@ -65,11 +65,11 @@ public:
     bool visit(KisSelectionMask*) {
         return true;
     }
-    bool visit(KisExternalLayer*) {
-        return true;
-    }
+
+    bool visit(KisExternalLayer*);
 
 private:
+    bool saveLayer(KisLayer *layer);
     void saveLayerInfo(QDomElement& elt, KisLayer* layer);
     struct Private;
     Private* const d;

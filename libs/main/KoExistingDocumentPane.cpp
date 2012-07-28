@@ -65,7 +65,7 @@ void KoExistingDocumentPane::onAccepted()
         m_seen = false;
     }
     // Don't set the flag after emiting Signal, Then end up emiting the signal twice
-    // before settiing the falg
+    // before setting the flag
 }
 
 #include <KoExistingDocumentPane.moc>

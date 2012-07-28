@@ -31,6 +31,7 @@
 #include <QString>
 #include <QPen>
 #include <QColor>
+#include <QPainter>
 
 // KDE
 #include <KLocale>
@@ -110,7 +111,10 @@ const KDChart::MarkerAttributes::MarkerStyle defaultMarkerTypes[]= {
     KDChart::MarkerAttributes::MarkerFastCross,
     KDChart::MarkerAttributes::Marker1Pixel,
     KDChart::MarkerAttributes::Marker4Pixels,
+    KDChart::MarkerAttributes::NoMarker
 };
+
+static KDChart::MarkerAttributes::MarkerStyle odf2kdMarker(OdfMarkerStyle style);
 
 class DataSet::Private
 {
@@ -177,6 +181,8 @@ public:
     bool penIsSet;
     // Determines whether brush has been set
     bool brushIsSet;
+    // Determines whether marker has been set automatically
+    bool markerIsAutoSet;
     QPen pen;
     QBrush brush;
     QMap<int, DataSet::ValueLabelType> valueLabelType;
@@ -234,6 +240,7 @@ DataSet::Private::Private(DataSet *parent, int dataSetNr) :
     upperErrorLimit(0.0),
     penIsSet(false),
     brushIsSet(false),
+    markerIsAutoSet(true),
     pen(QPen(Qt::black)),
     brush(QColor(Qt::white)),
     dataValueAttributes(defaultDataValueAttributes()),
@@ -474,9 +481,13 @@ QPen DataSet::Private::defaultPen() const
     QPen pen(Qt::black);
     ChartType chartType = effectiveChartType();
     if (chartType == LineChartType ||
-         chartType == ScatterChartType)
-        pen = QPen(defaultDataSetColor(num));
-
+         chartType == ScatterChartType) {
+        if (penIsSet) {
+            pen = pen;
+        } else {
+            pen = QPen(defaultDataSetColor(num));
+        }
+    }
     return pen;
 }
 
@@ -688,6 +699,27 @@ QBrush DataSet::brush() const
     return d->brushIsSet ? d->brush : d->defaultBrush();
 }
 
+OdfMarkerStyle DataSet::markerStyle() const
+{
+    OdfMarkerStyle style = (OdfMarkerStyle)(d->symbolID);
+    return style;
+}
+
+QIcon DataSet::markerIcon(OdfMarkerStyle markerStyle)
+{
+    if (markerStyle != NoMarker) {
+        QPixmap *markerPixmap = new QPixmap(16,16);
+        markerPixmap->fill(QColor(255,255,255,0));
+        QPainter *painter = new QPainter(markerPixmap);
+        KDChart::MarkerAttributes matt;
+        matt.setMarkerStyle(odf2kdMarker(markerStyle));
+        KDChart::AbstractDiagram::paintMarker(painter, matt, brush(), pen(), QPointF(7,7), QSizeF(12,12));
+        QIcon markerIcon = QIcon(*markerPixmap);
+        return markerIcon;
+    }
+    return QIcon();
+}
+
 QPen DataSet::pen(int section) const
 {
     if (d->pens.contains(section))
@@ -759,6 +791,18 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */
 //         ma.setMarkerStyle(defaultMarkerTypes[number() % numDefaultMarkerTypes]);
 //         ma.setVisible(true);
 //         break;
+    case BarChartType:
+    case CircleChartType:
+    case RingChartType:
+    case StockChartType:
+    {
+        Q_ASSERT(attr.isVisible());
+        ma.setMarkerStyle(KDChart::MarkerAttributes::MarkerSquare);
+        ma.setMarkerSize(QSize(10, 10));
+        ma.setVisible(true);
+        d->symbolsActivated = false;
+        break;
+    }
     case BubbleChartType:
     {
         Q_ASSERT(attachedAxis());
@@ -777,19 +821,19 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */
             ma.setMarkerSizeMode(KDChart::MarkerAttributes::RelativeToDiagramWidthHeightMin);
             ma.setMarkerSize(QSizeF(bubbleWidth, bubbleWidth));
         }
-        ma.setVisible(true);        
+        ma.setVisible(true);
+        d->symbolsActivated = false;
         break;
     }
     default:
         // TODO: Make markers customizable even for other types
-        if (d->symbolsActivated) {            
-            Q_ASSERT(attr.isVisible());
-            ma.setMarkerStyle(defaultMarkerTypes[d->symbolID]);
-            ma.setMarkerSize(QSize(10, 10));
-            ma.setVisible(true);
+        Q_ASSERT(attr.isVisible());
+        ma.setMarkerStyle(odf2kdMarker((OdfMarkerStyle)d->symbolID));
+        ma.setMarkerSize(QSize(10, 10));
+        ma.setVisible(true);
+        d->symbolsActivated = true;
 //             attr.setVisible(true);
-        }
-        // Do not overwrite visiblity in this case. It could very well have
+        // Do not overwrite visibility in this case. It could very well have
         // been set to 'visible' on purpose by e.g. loadOdf().
         //else
         //    ma.setVisible(false);
@@ -834,6 +878,42 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */
     attr.setMarkerAttributes(ma);
 
     return attr;
+}
+
+KDChart::MarkerAttributes DataSet::getMarkerAttributes(int section, bool *success) const
+{
+    KDChart::DataValueAttributes attr(d->dataValueAttributes);
+    Q_ASSERT(attr.isVisible() == d->dataValueAttributes.isVisible());
+    if (d->sectionsDataValueAttributes.contains(section))
+        attr = d->sectionsDataValueAttributes[section];
+
+    KDChart::MarkerAttributes ma(attr.markerAttributes());
+    ma.setMarkerStyle(odf2kdMarker((OdfMarkerStyle)d->symbolID));
+    ma.setMarkerSize(QSize(10, 10));
+    ma.setVisible(true);
+
+    return ma;
+}
+
+bool DataSet::markerAutoSet() const
+{
+    return d->markerIsAutoSet;
+}
+
+void DataSet::setMarkerAttributes(const KDChart::MarkerAttributes &attribs, int section)
+{
+    KDChart::DataValueAttributes attr(d->dataValueAttributes);
+    Q_ASSERT(attr.isVisible() == d->dataValueAttributes.isVisible());
+    if (d->sectionsDataValueAttributes.contains(section))
+        attr = d->sectionsDataValueAttributes[section];
+
+    attr.setMarkerAttributes(attribs);
+    d->dataValueAttributes = attr;
+}
+
+void DataSet::setAutoMarker(bool isAuto)
+{
+    d->markerIsAutoSet = isAuto;
 }
 
 void DataSet::setPen(const QPen &pen)
@@ -898,6 +978,16 @@ void DataSet::setBrush(int section, const QBrush &brush)
 //     KDChart::MarkerAttributes mas(d->sectionsDataValueAttributes[section].markerAttributes());
 //     mas.setMarkerColor(brush.color());
 //     d->sectionsDataValueAttributes[section].setMarkerAttributes(mas);
+}
+
+void DataSet::setMarkerStyle(OdfMarkerStyle style)
+{
+    KDChart::MarkerAttributes matt = getMarkerAttributes();
+    matt.setMarkerStyle(odf2kdMarker(style));
+    setMarkerAttributes(matt);
+
+    d->symbolsActivated = true;
+    d->symbolID = style;
 }
 
 void DataSet::setPieExplodeFactor(int section, int factor)
@@ -1293,7 +1383,7 @@ bool loadBrushAndPen(KoStyleStack &styleStack, KoShapeLoadingContext &context,
 * The question is if this is 100% the correct thing to do or if we
 * need more logic that e.g. differs between where the data-labels got
 * defined? It would make sense but there is no information about that
-* available and it seems OO.org/LO just save redundant informations
+* available and it seems OO.org/LO just save redundant information
 * here at least with pie-charts...
 */
 void DataSet::Private::readValueLabelType(KoStyleStack &styleStack, int section /* = -1 */)
@@ -1454,9 +1544,11 @@ bool DataSet::loadOdf(const KoXmlElement &n,
         if (name == "automatic") {
             d->symbolsActivated = true;
             d->symbolID = d->num % numDefaultMarkerTypes;
+            d->markerIsAutoSet = true;
         }
         else if (name == "named-symbol") {
             d->symbolsActivated = true;
+            d->markerIsAutoSet = false;
             if (styleStack.hasProperty(KoXmlNS::chart, "symbol-name")) {
 
                 const QString type = styleStack.property(KoXmlNS::chart, "symbol-name");
@@ -1493,6 +1585,10 @@ bool DataSet::loadOdf(const KoXmlElement &n,
                 else
                     d->symbolID = 0;
             }
+        } else if (name == "none") {
+            d->symbolsActivated = false;
+            d->symbolID = 19;
+            d->markerIsAutoSet = false;
         }
     }
 
@@ -1643,23 +1739,28 @@ void DataSet::saveOdf(KoShapeSavingContext &context) const
         QString symbolName = "";
         QString symbolType = "named-symbol";
 
-        switch (d->symbolID) {
-        case 0: symbolName = "square"; break;
-        case 1: symbolName = "diamond"; break;
-        case 2: symbolName = "arrow-down"; break;
-        case 3: symbolName = "arrow-up"; break;
-        case 4: symbolName = "arrow-right"; break;
-        case 5: symbolName = "arrow-left"; break;
-        case 6: symbolName = "bow-tie"; break;
-        case 7: symbolName = "hourglass"; break;
-        case 8: symbolName = "circle"; break;
-        case 9: symbolName = "star"; break;
-        case 10: symbolName = "x"; break;
-        case 11: symbolName = "plus"; break;
-        case 12: symbolName = "asterisk"; break;
-        case 13: symbolName = "horizontal-bar"; break;
-        case 14: symbolName = "vertical-bar"; break;
-        default: symbolType = "automatic"; break;
+        if (!d->markerIsAutoSet) {
+            switch (d->symbolID) {
+            case 0: symbolName = "square"; break;
+            case 1: symbolName = "diamond"; break;
+            case 2: symbolName = "arrow-down"; break;
+            case 3: symbolName = "arrow-up"; break;
+            case 4: symbolName = "arrow-right"; break;
+            case 5: symbolName = "arrow-left"; break;
+            case 6: symbolName = "bow-tie"; break;
+            case 7: symbolName = "hourglass"; break;
+            case 8: symbolName = "circle"; break;
+            case 9: symbolName = "star"; break;
+            case 10: symbolName = "x"; break;
+            case 11: symbolName = "plus"; break;
+            case 12: symbolName = "asterisk"; break;
+            case 13: symbolName = "horizontal-bar"; break;
+            case 14: symbolName = "vertical-bar"; break;
+            case 19: symbolType = "none"; break;
+            default: symbolType = "automatic"; break;
+            }
+        } else {
+            symbolType = "automatic";
         }
 
         style.addProperty("chart:symbol-type", symbolType, KoGenStyle::ChartType);
@@ -1705,4 +1806,51 @@ void DataSet::saveOdf(KoShapeSavingContext &context) const
     }
 
     bodyWriter.endElement(); // chart:series
+}
+
+static KDChart::MarkerAttributes::MarkerStyle odf2kdMarker(OdfMarkerStyle style) {
+    switch (style) {
+    case MarkerSquare:
+        return KDChart::MarkerAttributes::MarkerSquare;
+    case MarkerDiamond:
+        return KDChart::MarkerAttributes::MarkerDiamond;
+    case MarkerArrowDown:
+        return KDChart::MarkerAttributes::MarkerArrowDown;
+    case MarkerArrowUp:
+        return KDChart::MarkerAttributes::MarkerArrowUp;
+    case MarkerArrowRight:
+        return KDChart::MarkerAttributes::MarkerArrowRight;
+    case MarkerArrowLeft:
+        return KDChart::MarkerAttributes::MarkerArrowLeft;
+    case MarkerBowTie:
+        return KDChart::MarkerAttributes::MarkerBowTie;
+    case MarkerHourGlass:
+        return KDChart::MarkerAttributes::MarkerHourGlass;
+    case MarkerCircle:
+        return KDChart::MarkerAttributes::MarkerCircle;
+    case MarkerStar:
+        return KDChart::MarkerAttributes::MarkerStar;
+    case MarkerX:
+        return KDChart::MarkerAttributes::MarkerX;
+    case MarkerCross:
+        return KDChart::MarkerAttributes::MarkerCross;
+    case MarkerAsterisk:
+        return KDChart::MarkerAttributes::MarkerAsterisk;
+    case MarkerHorizontalBar:
+        return KDChart::MarkerAttributes::MarkerHorizontalBar;
+    case MarkerVerticalBar:
+        return KDChart::MarkerAttributes::MarkerVerticalBar;
+    case MarkerRing:
+        return KDChart::MarkerAttributes::MarkerRing;
+    case MarkerFastCross:
+        return KDChart::MarkerAttributes::MarkerFastCross;
+    case Marker1Pixel:
+        return KDChart::MarkerAttributes::Marker1Pixel;
+    case Marker4Pixels:
+        return KDChart::MarkerAttributes::Marker4Pixels;
+    case NoMarker:
+        return KDChart::MarkerAttributes::NoMarker;
+    }
+
+    return KDChart::MarkerAttributes::MarkerSquare;
 }

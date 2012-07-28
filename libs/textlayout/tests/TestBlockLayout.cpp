@@ -196,7 +196,7 @@ void TestBlockLayout::testFixedLineSpacing()
     m_layout->layout();
     QTextLayout *blockLayout = block.layout();
 
-    // lines with fontsize less than the fixed height are bottom aligned, resulting in 
+    // lines with fontsize less than the fixed height are bottom aligned, resulting in
     // positive y for first line
     QCOMPARE(blockLayout->lineAt(0).y(), 28.0-12.0);
     QCOMPARE(blockLayout->lineAt(1).y(), 28.0 + 28.0-12.0);
@@ -210,7 +210,7 @@ void TestBlockLayout::testFixedLineSpacing()
     m_layout->layout();
     blockLayout = block.layout();
 
-    // lines with fontsize more than the fixed height are bottom aligned, resulting in 
+    // lines with fontsize more than the fixed height are bottom aligned, resulting in
     //negative y for first line
     QCOMPARE(blockLayout->lineAt(0).y(), 8.0-12.0);
     QCOMPARE(blockLayout->lineAt(1).y(), 8.0-12.0 + 8.0);
@@ -228,7 +228,7 @@ void TestBlockLayout::testPercentageLineSpacing()
     QTextBlock block = m_doc->begin();
     style.applyStyle(block);
 
-    QCOMPARE(block.blockFormat().intProperty(KoParagraphStyle::PercentLineHeight), 150);
+    QCOMPARE(block.blockFormat().doubleProperty(KoParagraphStyle::PercentLineHeight), 150.0);
 
     m_layout->layout();
     QTextLayout *blockLayout = block.layout();
@@ -240,7 +240,7 @@ void TestBlockLayout::testPercentageLineSpacing()
     style.setLineHeightPercent(50);
     style.applyStyle(block);
 
-    QCOMPARE(block.blockFormat().intProperty(KoParagraphStyle::PercentLineHeight), 50);
+    QCOMPARE(block.blockFormat().doubleProperty(KoParagraphStyle::PercentLineHeight), 50.0);
 
     m_layout->layout();
     blockLayout = block.layout();
@@ -262,13 +262,13 @@ void TestBlockLayout::testAdvancedLineSpacing()
     style.applyStyle(block);
 
     // check if styles do their work ;)
-    QCOMPARE(block.blockFormat().intProperty(KoParagraphStyle::PercentLineHeight), 80);
+    QCOMPARE(block.blockFormat().doubleProperty(KoParagraphStyle::PercentLineHeight), 80.0);
 
     block = block.next();
     QVERIFY(block.isValid()); //line2
     style.setLineHeightAbsolute(28.0); // removes the percentage
     style.applyStyle(block);
-    QCOMPARE(block.blockFormat().intProperty(KoParagraphStyle::PercentLineHeight), 0);
+    QCOMPARE(block.blockFormat().doubleProperty(KoParagraphStyle::PercentLineHeight), 0.0);
     QCOMPARE(block.blockFormat().doubleProperty(KoParagraphStyle::FixedLineHeight), 28.0);
 
     block = block.next();
@@ -656,12 +656,12 @@ void TestBlockLayout::testTabs()
         { true, 20, 10, 5, 70},
         { true, 20, -10, 0, 20},
         { true, 20, -10, 5, 20},
-        { true, -20, 0, 0+20, 30}, //+20 to avoid extra tab fitting in 
-        { true, -20, 0, 5+20, 30}, //+20 to avoid extra tab fitting in 
-        { true, -20, 10, 0+20, 30}, //+20 to avoid extra tab fitting in 
-        { true, -20, 10, 5+20, 30}, //+20 to avoid extra tab fitting in 
-        { true, -20, -10, 0+20, -20}, //+20 to avoid extra tab fitting in 
-        { true, -20, -10, 5+20, -20}, //+20 to avoid extra tab fitting in 
+        { true, -20, 0, 0+20, 30}, //+20 to avoid extra tab fitting in
+        { true, -20, 0, 5+20, 30}, //+20 to avoid extra tab fitting in
+        { true, -20, 10, 0+20, 30}, //+20 to avoid extra tab fitting in
+        { true, -20, 10, 5+20, 30}, //+20 to avoid extra tab fitting in
+        { true, -20, -10, 0+20, -20}, //+20 to avoid extra tab fitting in
+        { true, -20, -10, 5+20, -20}, //+20 to avoid extra tab fitting in
 
         { false, 0, 0, 0, 50},
         { false, 0, 0, 5, 50},
@@ -675,12 +675,12 @@ void TestBlockLayout::testTabs()
         { false, 20, 10, 5, 50},
         { false, 20, -10, 0, 50},
         { false, 20, -10, 5, 50},
-        { false, -20, 0, 0+70, 0}, //+70 to avoid extra tab fitting in 
-        { false, -20, 0, 5+70, 0}, //+70 to avoid extra tab fitting in 
-        { false, -20, 10, 0+70, 0}, //+70 to avoid extra tab fitting in 
-        { false, -20, 10, 5+70, 0}, //+70 to avoid extra tab fitting in 
-        { false, -20, -10, 0+70, 0}, //+70 to avoid extra tab fitting in 
-        { false, -20, -10, 5+70, 0}, //+70 to avoid extra tab fitting in 
+        { false, -20, 0, 0+70, 0}, //+70 to avoid extra tab fitting in
+        { false, -20, 0, 5+70, 0}, //+70 to avoid extra tab fitting in
+        { false, -20, 10, 0+70, 0}, //+70 to avoid extra tab fitting in
+        { false, -20, 10, 5+70, 0}, //+70 to avoid extra tab fitting in
+        { false, -20, -10, 0+70, 0}, //+70 to avoid extra tab fitting in
+        { false, -20, -10, 5+70, 0}, //+70 to avoid extra tab fitting in
     };
 
     m_layout->setTabSpacing(50.0);

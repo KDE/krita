@@ -27,6 +27,7 @@
 #include "filters/MonoFilterEffect.h"
 #include "filters/WatermarkFilterEffect.h"
 
+#include <KoOdfWorkaround.h>
 #include <KoViewConverter.h>
 #include <KoImageCollection.h>
 #include <KoImageData.h>
@@ -213,17 +214,38 @@ QSize PictureShape::calcOptimalPixmapSize(const QSizeF& shapeSize, const QSizeF&
     return (imageSize * scale).toSize();
 }
 
-ClippingRect PictureShape::parseClippingRectString(QString string) const
+ClippingRect PictureShape::parseClippingRectString(const QString &originalString) const
 {
     ClippingRect rect;
-    string = string.trimmed();
+    QString string = originalString.trimmed();
 
-    if ((!string.isEmpty()) && string.startsWith("rect")) {
-        QStringList points = string.replace("rect("," ").replace(QChar(')'), QChar(' ')).trimmed().split(",");
+    if (string.startsWith(QLatin1String("rect(")) &&
+        string.endsWith(QLatin1Char(')'))) {
+        // remove "rect(" & ")"
+        string.remove(0,5).chop(1);
+
+#ifndef NWORKAROUND_ODF_BUGS
+        KoOdfWorkaround::fixClipRectOffsetValuesString(string);
+#endif
+        // split into the 4 values
+        const QStringList valueStrings = string.split(QLatin1Char(','));
+
+        if (valueStrings.count() != 4) {
+            kWarning() << "Not exactly 4 values for attribute fo:clip=rect(...):" << originalString << ", please report.";
+            // hard to guess which value is for which offset, so just cancel parsing and return with the default rect
+            return rect;
+        }
+
+        // default is 0.0 for all offsets
         qreal values[4] = { 0, 0, 0, 0 };
+        const QLatin1String autoValueString("auto");
 
-        for (int i=0; i<points.size(); ++i) {
-            values[i] = KoUnit::parseValue(points[i].trimmed(), 0.0);
+        for (int i=0; i<4; ++i) {
+            const QString valueString = valueStrings.at(i).trimmed();
+            // "auto" means: keep default 0.0
+            if (valueString != autoValueString) {
+                values[i] = KoUnit::parseValue(valueString, 0.0);
+            }
         }
 
         rect.top = values[0];

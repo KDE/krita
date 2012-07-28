@@ -23,6 +23,7 @@
 
 // VectorShape
 #include "VectorShape.h"
+#include "VectorShapeConfigWidget.h"
 
 // Calligra
 #include <KoXmlNS.h>
@@ -38,8 +39,9 @@
 VectorShapeFactory::VectorShapeFactory()
     : KoShapeFactoryBase(VectorShape_SHAPEID, i18n("Vector image"))
 {
-    setToolTip(i18n("A shape that shows a vector image"));
-    setIcon( "vector-shape" );
+    setToolTip(i18n("A shape that shows a vector image (EMF/WMF/SVM)"));
+    // FIXME: x-shape-vectorimage
+    setIcon("application-x-wmf");
     setXmlElementNames(KoXmlNS::draw, QStringList("image"));
     setLoadingPriority(2);
 }
@@ -61,9 +63,16 @@ bool VectorShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext 
             if (href.startsWith("./")) {
                 href.remove(0,2);
             }
-            QString mimetype = context.odfLoadingContext().mimeTypeForPath(href);
-            // don't try to load image types
-            return !mimetype.startsWith("image");
+            // LO 3.5 does not write a mimetype for embedded wmf files, so guess also from content
+            const QString mimetype = context.odfLoadingContext().mimeTypeForPath(href, true);
+
+            return
+                mimetype == QLatin1String("application/x-svm") ||
+                mimetype == QLatin1String("image/x-emf") ||
+                mimetype == QLatin1String("image/x-wmf") ||
+                // next two for backward compatibility with Calligra
+                mimetype == QLatin1String("application/x-emf") ||
+                mimetype == QLatin1String("application/x-wmf");
         }
         return true;
     }
@@ -74,6 +83,6 @@ bool VectorShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext 
 QList<KoShapeConfigWidgetBase*> VectorShapeFactory::createShapeOptionPanels()
 {
     QList<KoShapeConfigWidgetBase*> result;
-
+    result.append(new VectorShapeConfigWidget());
     return result;
 }

@@ -205,7 +205,7 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
 
     QString tocEntryText = block.text();
     tocEntryText.remove(QChar::ObjectReplacementCharacter);
-    // some headings contain tabs, replace all occurences with spaces
+    // some headings contain tabs, replace all occurrences with spaces
     tocEntryText.replace('\t',' ').remove(0x200B);
     tocEntryText = removeWhitespacePrefix(tocEntryText);
 
@@ -267,6 +267,7 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
                             // copy it to alter subset of properties
                             QTextCharFormat linkCf(savedCharFormat);
                             linkCf.setAnchor(true);
+                            linkCf.setProperty(KoCharacterStyle::AnchorType, KoCharacterStyle::Anchor);
                             linkCf.setAnchorHref('#'+ target);
 
                             QBrush foreground = linkCf.foreground();

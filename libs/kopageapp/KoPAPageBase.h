@@ -79,7 +79,7 @@ public:
      * @param painter used to paint the background
      * @param converter to convert between internal and view coordinates
      */
-    virtual void paintBackground( QPainter & painter, const KoViewConverter & converter );
+    virtual void paintBackground( QPainter & painter, const KoViewConverter & converter, KoShapePaintingContext &paintContext );
 
     /**
      * Get if master shapes should be displayed
@@ -118,9 +118,9 @@ public:
      */
     virtual bool displayShape(KoShape *shape) const = 0;
 
-    QPixmap thumbnail( const QSize& size = QSize( 512, 512 ) );
+    virtual QPixmap thumbnail( const QSize& size = QSize( 512, 512 ) );
 
-    virtual QImage thumbImage(const QSize &size = QSize(512, 512)) = 0;
+    virtual QImage thumbImage(const QSize &size = QSize(512, 512));
 
     /**
      * This function is called when the content of the page changes
@@ -253,7 +253,7 @@ protected:
     /**
      * Create thumbnail for the page
      */
-    virtual QPixmap generateThumbnail( const QSize& size = QSize( 512, 512 ) ) = 0;
+    QPixmap generateThumbnail(const QSize &size = QSize(512,512));
 
     /**
      * Get the key used for caching the thumbnail pixmap

@@ -52,8 +52,6 @@ struct KisPaintOp::Private {
     }
 
     KisFixedPaintDeviceSP dab;
-    KoColor color;
-    KoColor previousPaintColor;
     KisPainter* painter;
     qreal currentScale;
     qreal currentRotation;

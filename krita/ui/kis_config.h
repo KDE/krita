@@ -268,6 +268,9 @@ public:
     bool useSystemMonitorProfile() const;
     void setUseSystemMonitorProfile(bool _useSystemMonitorProfile);
 
+    QString defaultPalette();
+    void setDefaultPalette(const QString& name);
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

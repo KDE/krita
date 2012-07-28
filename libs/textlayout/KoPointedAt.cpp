@@ -53,7 +53,7 @@ KoPointedAt::KoPointedAt(KoPointedAt *other)
     table = other->table;
 }
 
-void KoPointedAt::fillInLinks(QTextCursor cursor, KoInlineTextObjectManager *inlineManager)
+void KoPointedAt::fillInLinks(const QTextCursor &cursor, KoInlineTextObjectManager *inlineManager)
 {
     bookmark = 0;
     externalHRef.clear();

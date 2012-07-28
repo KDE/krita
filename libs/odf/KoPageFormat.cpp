@@ -164,3 +164,12 @@ QStringList KoPageFormat::allFormats()
     }
     return lst;
 }
+
+QStringList KoPageFormat::allShortNames()
+{
+    QStringList lst;
+    for (int i = 0; pageFormatInfo[i].format != -1 ;i++) {
+        lst << pageFormatInfo[ i ].shortName;
+    }
+    return lst;
+}

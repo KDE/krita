@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Name=OpenRaster Archiving Images
+
+X-KDE-ServiceTypes=ThumbCreator
+MimeType=image/openraster;
+
+X-KDE-Library=calligraimagethumbnail
+CacheThumbnail=true

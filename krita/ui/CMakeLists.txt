@@ -102,6 +102,7 @@ set(kritaui_LIB_SRCS
     thememanager.cpp
     ko_favorite_resource_manager.cpp
     kis_workspace_resource.cpp
+    kis_mirror_visitor.cpp
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp
     kisexiv2/kis_iptc_io.cpp
@@ -262,9 +263,9 @@ kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
 target_link_libraries(kritaui ${X11_X11_LIB})
 
 if(GHNS)
-    target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} kritaimage komain kowidgets ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
+    target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KFILE_LIBRARY} kritaimage komain kowidgets ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
 else(GHNS)
-    target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} kritaimage komain kowidgets ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
+    target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KFILE_LIBRARY} kritaimage komain kowidgets ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
 endif (GHNS)
 
 if(HAVE_OPENGL)

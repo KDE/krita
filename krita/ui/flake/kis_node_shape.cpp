@@ -70,7 +70,7 @@ KisNodeSP KisNodeShape::node()
 void KisNodeShape::setNodeVisible(bool v)
 {
     // Necessary because shapes are not QObjects
-    setVisible(v);
+//     setVisible(v);
 }
 
 bool KisNodeShape::checkIfDescendant(KoShapeLayer *activeLayer)
@@ -87,8 +87,11 @@ bool KisNodeShape::checkIfDescendant(KoShapeLayer *activeLayer)
 
 void KisNodeShape::editabilityChanged()
 {
-    setGeometryProtected(!m_d->node->isEditable());
-
+    if (m_d->node->inherits("KisShapeLayer")) {
+        setGeometryProtected(!m_d->node->isEditable());
+    } else {
+        setGeometryProtected(false);
+    }
     /**
      * Editability of a child depends on the editablity
      * of its parent. So when we change one's editability,

@@ -69,6 +69,11 @@ KisSpecificColorSelectorWidget::~KisSpecificColorSelectorWidget()
 
 }
 
+bool KisSpecificColorSelectorWidget::customColorSpaceUsed()
+{
+    return m_customColorSpaceSelected;
+}
+
 void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
 {
     Q_ASSERT(cs);
@@ -127,6 +132,10 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
         connect(this,  SIGNAL(updated()), input, SLOT(update()));
     }
     m_layout->addStretch(10);
+
+    m_colorspaceSelector->blockSignals(true);
+    m_colorspaceSelector->setCurrentColorSpace(cs);
+    m_colorspaceSelector->blockSignals(false);
 }
 
 void KisSpecificColorSelectorWidget::update()
@@ -153,4 +162,5 @@ void KisSpecificColorSelectorWidget::setCustomColorSpace(const KoColorSpace *col
 {
     m_customColorSpaceSelected = true;
     setColorSpace(colorSpace);
+    setColor(m_color);
 }

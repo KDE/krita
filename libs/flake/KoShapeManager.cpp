@@ -439,7 +439,7 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
                 QPainter fillPainter(&fillPaint);
                 QPainterPath fillPath;
                 fillPath.addRect(fillPaint.rect().adjusted(-1,-1,1,1));
-                shape->background()->paint(fillPainter, fillPath);
+                shape->background()->paint(fillPainter, converter, paintContext, fillPath);
             } else {
                 fillPaint.fill(qRgba(0,0,0,0));
             }

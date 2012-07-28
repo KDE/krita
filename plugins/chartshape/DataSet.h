@@ -45,7 +45,6 @@ namespace KChart {
 
 class KDChartModel;
 
-
 /**
  * @brief The DataSet class stores properties of a single data series.
  * 
@@ -125,6 +124,8 @@ public:
     // Graphics properties for the visualization of this dataset.
     QPen   pen() const;
     QBrush brush() const;
+    OdfMarkerStyle markerStyle() const;
+    QIcon markerIcon(OdfMarkerStyle markerStyle);
     KDChart::PieAttributes pieAttributes() const;
     QPen   pen(int section) const;
     QBrush brush(int section) const;
@@ -143,6 +144,7 @@ public:
     qreal errorMargin() const;
     qreal lowerErrorLimit() const;
     qreal upperErrorLimit() const;
+    bool markerAutoSet() const;
 
     // Setter methods
     void setChartType(ChartType type);
@@ -153,6 +155,8 @@ public:
     void setBrush(const QBrush &brush);
     void setPen(int section, const QPen &pen);
     void setBrush(int section, const QBrush &brush);
+    void setMarkerStyle(OdfMarkerStyle style);
+    void setAutoMarker(bool isAuto);
 
     void setPieExplodeFactor(int factor);
     void setPieExplodeFactor(int section, int factor);

@@ -94,6 +94,7 @@ public:
 
 private Q_SLOTS:
     void setMirrorAxis();
+    void slotToolChanged();
 
 private:
     class Private;

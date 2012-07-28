@@ -499,13 +499,18 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
 
     static int rootCallChecker = 0;
     if (rootCallChecker == 0) {
-        //This is the first call of loadBody.
-        //Store the default block and char formats
-        //Will be used whenever a new block is inserted
-        d->defaultBlockFormat = cursor.blockFormat();
-        d->defaultCharFormat = cursor.charFormat();
-        KoTextDocument(document).setFrameCharFormat(cursor.blockCharFormat());
-        KoTextDocument(document).setFrameBlockFormat(cursor.blockFormat());
+        if (document->resource(KoTextDocument::FrameCharFormat, KoTextDocument::FrameCharFormatUrl).isValid()) {
+            d->defaultBlockFormat = KoTextDocument(document).frameBlockFormat();
+            d->defaultCharFormat = KoTextDocument(document).frameCharFormat();
+        } else {
+            // This is the first call of loadBody on the document.
+            // Store the default block and char formats
+            // Will be used whenever a new block is inserted
+            d->defaultCharFormat = cursor.charFormat();
+            KoTextDocument(document).setFrameCharFormat(cursor.blockCharFormat());
+            d->defaultBlockFormat = cursor.blockFormat();
+            KoTextDocument(document).setFrameBlockFormat(cursor.blockFormat());
+        }
     }
     rootCallChecker++;
 
@@ -1840,6 +1845,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             }
             QTextCharFormat newCharFormat = cursor.charFormat();
             newCharFormat.setAnchor(true);
+            newCharFormat.setProperty(KoCharacterStyle::AnchorType, KoCharacterStyle::Anchor);
             newCharFormat.setAnchorHref(target);
             cursor.setCharFormat(newCharFormat);
 
@@ -1915,6 +1921,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             if (!bookmarkName.isEmpty()) {
                 QTextCharFormat linkCf(cf); // and copy it to alter it
                 linkCf.setAnchor(true);
+                linkCf.setProperty(KoCharacterStyle::AnchorType, KoCharacterStyle::Bookmark);
                 QStringList anchorName;
                 anchorName << bookmarkName;
                 linkCf.setAnchorHref('#'+ bookmarkName);

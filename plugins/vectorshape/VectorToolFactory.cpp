@@ -29,8 +29,9 @@
 VectorToolFactory::VectorToolFactory()
     : KoToolFactoryBase("VectorToolFactoryId")
 {
-    setToolTip( i18n( "EMF/WMF Vector Shape tool" ) );
-    setIcon( "vectorshape" );
+    setToolTip(i18n("Vector Image (EMF/WMF/SVM) tool"));
+    // FIXME: x-shape-vectorimage
+    setIcon("application-x-wmf");
     setToolType( dynamicToolType() );
     setPriority( 1 );
     setActivationShapeId( VectorShape_SHAPEID );

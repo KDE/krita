@@ -1111,7 +1111,7 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
         } else if (b.tagName() == "use") {
             shapes += parseUse(b);
         } else {
-            // this is an unkown element, so try to load it anyway
+            // this is an unknown element, so try to load it anyway
             // there might be a shape that handles that element
             KoShape *shape = createObject(b);
             if (shape) {

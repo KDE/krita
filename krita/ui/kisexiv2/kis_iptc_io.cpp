@@ -106,10 +106,17 @@ bool KisIptcIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
             it != store->end(); ++it) {
         const KisMetaData::Entry& entry = *it;
         if (d->kmdToIPTC.contains(entry.qualifiedName())) {
-            QString iptcKeyStr = d->kmdToIPTC[ entry.qualifiedName()].exivTag;
-            Exiv2::IptcKey iptcKey(qPrintable(iptcKeyStr));
-            iptcData.add(iptcKey, kmdValueToExivValue(entry.value(),
-                         Exiv2::IptcDataSets::dataSetType(iptcKey.tag(), iptcKey.record())));
+            try {
+                QString iptcKeyStr = d->kmdToIPTC[ entry.qualifiedName()].exivTag;
+                Exiv2::IptcKey iptcKey(qPrintable(iptcKeyStr));
+                Exiv2::Value *v = kmdValueToExivValue(entry.value(),
+                                                      Exiv2::IptcDataSets::dataSetType(iptcKey.tag(), iptcKey.record()));
+                if (v && v->typeId() != Exiv2::invalidTypeId) {
+                    iptcData.add(iptcKey, v);
+                }
+            } catch (Exiv2::AnyError& e) {
+                dbgFile << "exiv error " << e.what();
+            }
         }
     }
 #if EXIV2_MAJOR_VERSION == 0 && EXIV2_MINOR_VERSION <= 17

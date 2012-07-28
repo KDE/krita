@@ -316,6 +316,7 @@ void KisCanvasResourceProvider::slotResourceChanged(int key, const QVariant & re
         break;
     case(CurrentCompositeOp) :
         emit sigCompositeOpChanged(currentCompositeOp());
+        break;
     case (Opacity):
     {
         emit sigOpacityChanged(res.toDouble());
@@ -400,6 +401,16 @@ void KisCanvasResourceProvider::setOpacity(qreal opacity)
 qreal KisCanvasResourceProvider::opacity()
 {
     return m_resourceManager->resource(Opacity).toDouble();
+}
+
+void KisCanvasResourceProvider::notifyLoadingWorkspace(KisWorkspaceResource* workspace)
+{
+    emit sigLoadingWorkspace(workspace);
+}
+
+void KisCanvasResourceProvider::notifySavingWorkspace(KisWorkspaceResource* workspace)
+{
+    emit sigSavingWorkspace(workspace);
 }
 
 #include "kis_canvas_resource_provider.moc"

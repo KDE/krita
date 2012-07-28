@@ -16,7 +16,6 @@
  */
 
 #include "kis_color_selector_simple.h"
-
 #include <QImage>
 #include <QPainter>
 #include <QColor>
@@ -74,7 +73,7 @@ void KisColorSelectorSimple::setColor(const QColor &c)
         emit paramChanged(c.hueF(), -1, -1, c.hslSaturationF(), -1);
         break;
     case KisColorSelector::L:
-        m_lastClickPos.setX(1-c.lightnessF());
+        m_lastClickPos.setX(c.lightnessF());
         emit paramChanged(-1, -1, -1, -1, c.lightnessF());
         break;
     case KisColorSelector::V:
@@ -90,7 +89,7 @@ void KisColorSelectorSimple::setColor(const QColor &c)
         emit paramChanged(-1, -1, -1, c.hslSaturationF(), -1);
         break;
     case KisColorSelector::H:
-        m_lastClickPos.setX(1-qBound<qreal>(0., c.hueF(), 1.));
+        m_lastClickPos.setX(qBound<qreal>(0., c.hueF(), 1.));
         emit paramChanged(c.hueF(), -1, -1, -1, -1);
         break;
     default:
@@ -113,7 +112,7 @@ QColor KisColorSelectorSimple::selectColor(int x, int y)
     if(height()>width())
         relPos = 1.-y/qreal(height());
     else
-        relPos = 1.-x/qreal(width());
+        relPos = x/qreal(width());
 
     switch (m_parameter) {
     case KisColorSelector::H:
@@ -227,7 +226,7 @@ const QColor& KisColorSelectorSimple::colorAt(int x, int y)
     if(height()>width())
         relPos = 1.-y/qreal(height());
     else
-        relPos = 1.-x/qreal(width());
+        relPos = x/qreal(width());
 
     QColor color;
     color.setHsvF(m_hue, 1.0, 1.0);

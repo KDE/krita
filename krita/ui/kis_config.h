@@ -107,6 +107,10 @@ public:
     bool useBlackPointCompensation() const;
     void setUseBlackPointCompensation(bool useBlackPointCompensation);
 
+    bool allowLCMSOptimization() const;
+    void setAllowLCMSOptimization(bool allowLCMSOptimization);
+
+
     bool showRulers() const;
     void setShowRulers(bool rulers);
 

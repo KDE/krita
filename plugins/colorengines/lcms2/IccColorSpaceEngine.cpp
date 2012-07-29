@@ -82,18 +82,25 @@ public:
 private:
 
     cmsHTRANSFORM createTransform(quint32 srcColorSpaceType,
-                                  LcmsColorProfileContainer *  srcProfile,
+                                  LcmsColorProfileContainer *srcProfile,
                                   quint32 dstColorSpaceType,
-                                  LcmsColorProfileContainer *  dstProfile,
+                                  LcmsColorProfileContainer *dstProfile,
                                   qint32 renderingIntent,
                                   KoColorConversionTransformation::ConversionFlags conversionFlags) const
     {
-           cmsHTRANSFORM tf = cmsCreateTransform(srcProfile->lcmsProfile(),
+
+        if (srcProfile->name().toLower().contains("linear") ||
+            dstProfile->name().toLower().contains("linear") &&
+            !conversionFlags.testFlag(KoColorConversionTransformation::NoOptimization) ) {
+            conversionFlags |= KoColorConversionTransformation::NoOptimization;
+        }
+
+        cmsHTRANSFORM tf = cmsCreateTransform(srcProfile->lcmsProfile(),
                                               srcColorSpaceType,
                                               dstProfile->lcmsProfile(),
                                               dstColorSpaceType,
                                               renderingIntent,
-                                              conversionFlags | cmsFLAGS_NOOPTIMIZE);
+                                              conversionFlags);
 
         return tf;
     }

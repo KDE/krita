@@ -222,6 +222,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
         m_page->cmbPrintProfile->setCurrentIndex(m_page->cmbPrintProfile->findText(cfg.printerProfile()));
 
     m_page->chkBlackpoint->setChecked(cfg.useBlackPointCompensation());
+    m_page->chkAllowLCMSOptimization->setChecked(cfg.allowLCMSOptimization());
 
     m_pasteBehaviourGroup.addButton(m_page->radioPasteWeb, PASTE_ASSUME_WEB);
     m_pasteBehaviourGroup.addButton(m_page->radioPasteMonitor, PASTE_ASSUME_MONITOR);
@@ -275,6 +276,7 @@ void ColorSettingsTab::setDefault()
     refillMonitorProfiles(KoID("RGBA", ""));
 
     m_page->chkBlackpoint->setChecked(false);
+    m_page->chkAllowLCMSOptimization->setChecked(true);
     m_page->cmbMonitorIntent->setCurrentIndex(INTENT_PERCEPTUAL);
 
     m_page->chkOcioUseEnvironment->setChecked(true);
@@ -745,6 +747,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setPrinterProfile(dialog->m_colorSettings->m_page->cmbPrintProfile->itemHighlighted());
 
         cfg.setUseBlackPointCompensation(dialog->m_colorSettings->m_page->chkBlackpoint->isChecked());
+        cfg.setAllowLCMSOptimization(dialog->m_colorSettings->m_page->chkAllowLCMSOptimization->isChecked());
         cfg.setPasteBehaviour(dialog->m_colorSettings->m_pasteBehaviourGroup.checkedId());
         cfg.setRenderIntent(dialog->m_colorSettings->m_page->cmbMonitorIntent->currentIndex());
 

@@ -53,9 +53,8 @@ KisOpenGLImageTextures::KisOpenGLImageTextures()
     m_renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();
 
     m_conversionFlags = KoColorConversionTransformation::HighQuality;
-    if (cfg.useBlackPointCompensation()) {
-        m_conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
-    }
+    if (cfg.useBlackPointCompensation()) m_conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
+    if (!cfg.allowLCMSOptimization()) m_conversionFlags |= KoColorConversionTransformation::NoOptimization;
 }
 
 KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,

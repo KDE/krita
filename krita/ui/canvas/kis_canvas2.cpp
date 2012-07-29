@@ -367,6 +367,7 @@ void KisCanvas2::createCanvas(bool useOpenGL)
 
     m_d->conversionFlags = KoColorConversionTransformation::HighQuality;
     if (cfg.useBlackPointCompensation()) m_d->conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
+    if (!cfg.allowLCMSOptimization()) m_d->conversionFlags |= KoColorConversionTransformation::NoOptimization;
     m_d->renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();
 
     Q_ASSERT(m_d->renderingIntent < 4);
@@ -722,9 +723,9 @@ void KisCanvas2::slotSetDisplayProfile(const KoColorProfile * profile)
     KoColorConversionTransformation::Intent renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();
     KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::HighQuality;
 
-    if (cfg.useBlackPointCompensation()) {
-        conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
-    }
+    if (cfg.useBlackPointCompensation()) conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
+    if (!cfg.allowLCMSOptimization()) conversionFlags |= KoColorConversionTransformation::NoOptimization;
+
     setMonitorProfile(const_cast<KoColorProfile*>(profile), renderingIntent, conversionFlags);
 }
 

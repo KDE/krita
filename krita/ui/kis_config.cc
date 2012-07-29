@@ -299,6 +299,16 @@ void KisConfig::setUseBlackPointCompensation(bool useBlackPointCompensation)
     m_cfg.writeEntry("useBlackPointCompensation", useBlackPointCompensation);
 }
 
+bool KisConfig::allowLCMSOptimization() const
+{
+    return m_cfg.readEntry("allowLCMSOptimization", true);
+}
+
+void KisConfig::setAllowLCMSOptimization(bool allowLCMSOptimization)
+{
+    m_cfg.writeEntry("allowLCMSOptimization", allowLCMSOptimization);
+}
+
 
 bool KisConfig::showRulers() const
 {

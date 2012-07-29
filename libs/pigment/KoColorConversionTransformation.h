@@ -52,6 +52,7 @@ public:
      */
     enum ConversionFlag {
         Empty                   = 0x0,
+        NoOptimization          = 0x0100,
         GamutCheck              = 0x1000,    // Out of Gamut alarm
         SoftProofing            = 0x4000,    // Do softproofing
         BlackpointCompensation  = 0x2000,

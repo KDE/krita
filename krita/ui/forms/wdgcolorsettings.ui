@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>586</width>
-    <height>507</height>
+    <height>534</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -271,6 +271,16 @@
       <widget class="QCheckBox" name="chkBlackpoint">
        <property name="text">
         <string>Use Blackpoint Compensation</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="chkAllowLCMSOptimization">
+       <property name="text">
+        <string>Allow Little CMS optimizations (uncheck when using linear light RGB or XYZ)</string>
        </property>
        <property name="checked">
         <bool>true</bool>

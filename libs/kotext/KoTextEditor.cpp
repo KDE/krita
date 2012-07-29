@@ -591,6 +591,11 @@ void KoTextEditor::insertFrameBreak()
         return;
     }
 
+    QTextCursor curr(d->caret.block());
+    if (dynamic_cast<QTextTable *> (curr.currentFrame())) {
+        return;
+    }
+
     d->updateState(KoTextEditor::Private::KeyPress, i18n("Insert Break"));
     QTextBlock block = d->caret.block();
     if (d->caret.position() == block.position() && block.length() > 0) { // start of parag

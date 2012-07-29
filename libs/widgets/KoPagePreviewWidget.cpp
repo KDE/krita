@@ -38,8 +38,6 @@ KoPagePreviewWidget::KoPagePreviewWidget(QWidget *parent)
     : QWidget(parent)
     , d(new Private)
 {
-    d->columns.columns = 1;
-    d->columns.columnSpacing = 0;
     setMinimumSize( 100, 100 );
 }
 
@@ -123,11 +121,31 @@ void KoPagePreviewWidget::drawPage(QPainter &painter, qreal zoom, const QRect &d
     painter.setBrush( QBrush( palette().color(QPalette::ButtonText), Qt::HorPattern ) );
     painter.setPen( palette().color(QPalette::Dark) );
 
-    qreal columnWidth = (textArea.width() + (d->columns.columnSpacing * zoom)) / d->columns.columns;
-    int width = qRound(columnWidth - d->columns.columnSpacing * zoom);
-    for ( int i = 0; i < d->columns.columns; ++i )
-        painter.drawRect( qRound(textArea.x() + i * columnWidth), textArea.y(), width, textArea.height());
+    // uniform columns?
+    if (d->columns.columnData.isEmpty()) {
+        qreal columnWidth = (textArea.width() + (d->columns.gapWidth * zoom)) / d->columns.count;
+        int width = qRound(columnWidth - d->columns.gapWidth * zoom);
+        for ( int i = 0; i < d->columns.count; ++i )
+            painter.drawRect( qRound(textArea.x() + i * columnWidth), textArea.y(), width, textArea.height());
+    } else {
+        qreal totalRelativeWidth = 0.0;
+        foreach(const KoColumns::ColumnDatum &cd, d->columns.columnData) {
+            totalRelativeWidth += cd.relativeWidth;
+        }
+        int relativeColumnXOffset = 0;
+        for (int i = 0; i < d->columns.count; i++) {
+            const KoColumns::ColumnDatum &columnDatum = d->columns.columnData.at(i);
+            const qreal columnWidth = textArea.width() * columnDatum.relativeWidth / totalRelativeWidth;
+            const qreal columnXOffset = textArea.width() * relativeColumnXOffset / totalRelativeWidth;
 
+            painter.drawRect( qRound(textArea.x() + columnXOffset + columnDatum.leftMargin * zoom),
+                              qRound(textArea.y()  + columnDatum.topMargin * zoom),
+                              qRound(columnWidth - (columnDatum.leftMargin + columnDatum.rightMargin) * zoom),
+                              qRound(textArea.height() - (columnDatum.topMargin + columnDatum.bottomMargin) * zoom));
+
+            relativeColumnXOffset += columnDatum.relativeWidth;
+        }
+    }
 }
 
 void KoPagePreviewWidget::setPageLayout(const KoPageLayout &layout)

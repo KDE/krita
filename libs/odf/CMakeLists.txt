@@ -35,6 +35,7 @@ set(koodf_LIB_SRCS
     KoShadowStyle.cpp
     KoPageLayout.cpp
     KoPageFormat.cpp
+    KoColumns.cpp
     KoStore.cpp
     KoTarStore.cpp
     KoDirectoryStore.cpp

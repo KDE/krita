@@ -647,11 +647,11 @@ void KisToolTransform::setFunctionalCursor()
             break;
         case TOPRIGHTSCALE:
         case BOTTOMLEFTSCALE:
-            useCursor(KisCursor::KisCursor::sizeBDiagCursor());
+            useCursor(KisCursor::sizeBDiagCursor());
             break;
         case TOPLEFTSCALE:
         case BOTTOMRIGHTSCALE:
-            useCursor(KisCursor::KisCursor::sizeFDiagCursor());
+            useCursor(KisCursor::sizeFDiagCursor());
             break;
         case MOVECENTER:
             useCursor(KisCursor::handCursor());

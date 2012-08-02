@@ -171,7 +171,7 @@ find_package(CalligraSqlite 3.6.16 REQUIRED)
 macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine with enabled extensions loading"
                     "http://www.sqlite.org" FALSE "${SQLITE_MIN_VERSION}"
                     "Required by Calligra's default database handler.")
-
+if (NOT CREATIVEONLY)
 ##
 ## Test for ICU
 ##
@@ -180,6 +180,7 @@ macro_log_feature(ICU_FOUND "ICU" "International Components for Unicode (ICU) Li
                     "http://icu-project.org" FALSE ""
                     "Required by Calligra's default database handler.")
 
+endif (NOT CREATIVEONLY)
  ################################
 #################################
 ## Check for OpenEXR           ##

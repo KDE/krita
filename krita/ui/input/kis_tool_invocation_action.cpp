@@ -97,7 +97,17 @@ void KisToolInvocationAction::end()
 
 void KisToolInvocationAction::inputEvent(QEvent* event)
 {
-    if(event->type() == QEvent::MouseMove) {
+    if(event->type() == QEvent::MouseButtonPress) {
+        QMouseEvent* mevent = static_cast<QMouseEvent*>(event);
+        setMousePosition(inputManager()->widgetToPixel(mevent->posF()));
+        d->modifiers = mevent->modifiers();
+        inputManager()->toolProxy()->mousePressEvent(mevent, mousePosition());
+    } else if(event->type() == QEvent::MouseButtonRelease) {
+        QMouseEvent* mevent = static_cast<QMouseEvent*>(event);
+        setMousePosition(inputManager()->widgetToPixel(mevent->posF()));
+        d->modifiers = mevent->modifiers();
+        inputManager()->toolProxy()->mouseReleaseEvent(mevent, mousePosition());
+    } else if(event->type() == QEvent::MouseMove) {
         QMouseEvent* mevent = static_cast<QMouseEvent*>(event);
         setMousePosition(inputManager()->widgetToPixel(mevent->posF()));
         d->modifiers = mevent->modifiers();

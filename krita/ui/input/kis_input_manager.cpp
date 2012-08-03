@@ -272,8 +272,12 @@ void KisInputManager::slotToolChanged()
 {
     QString toolId = KoToolManager::instance()->activeToolId();
     if (toolId == "ArtisticTextToolFactoryID" || toolId == "TextToolFactory_ID") {
-        kDebug() << "fixed";
         d->fixedAction = true;
+        if (!d->currentAction) {
+            d->currentShortcut = d->shortcuts.at(0);
+            d->currentAction = d->currentShortcut->action();
+            d->currentAction->begin(d->currentShortcut->shortcutIndex());
+        }
     } else {
         d->fixedAction = false;
     }
@@ -287,7 +291,6 @@ QPointF KisInputManager::widgetToPixel(const QPointF& position)
 
 void KisInputManager::Private::match(QEvent* event)
 {
-    kDebug() << "fixed " << fixedAction;
     if (fixedAction) {
         return;
     }

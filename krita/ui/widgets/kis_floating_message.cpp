@@ -133,6 +133,7 @@ KisFloatingMessage::KisFloatingMessage(const QString &message, QWidget *parent, 
 
     setWindowFlags(Qt::WindowStaysOnBottomHint | Qt::FramelessWindowHint | Qt::Tool);
     setFocusPolicy(Qt::NoFocus);
+    setAttribute(Qt::WA_ShowWithoutActivating);
 
     setFont(QFont("sans-serif"));
 

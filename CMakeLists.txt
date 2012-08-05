@@ -197,7 +197,7 @@ macro_log_feature(ICU_FOUND "ICU" "International Components for Unicode (ICU) Li
 		    "Required by Calligra's default database handler for Kexi and Words.")
 
 ##
-## Check for OpenEXR
+## Check for OpenEXR 
 ##
 
 macro_optional_find_package(OpenEXR)

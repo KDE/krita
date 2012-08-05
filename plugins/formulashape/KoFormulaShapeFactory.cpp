@@ -23,6 +23,7 @@
 
 #include <KoShapeFactoryBase.h>
 #include <KoShapeLoadingContext.h>
+#include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
 
 #include "KoFormulaShape.h"
@@ -71,14 +72,22 @@ KoShape *KoFormulaShapeFactory::createDefaultShape(KoDocumentResourceManager *re
 bool KoFormulaShapeFactory::supports(const KoXmlElement& e, KoShapeLoadingContext &context) const
 {
     Q_UNUSED(context);
-    bool retval = ((e.localName() == "math"
-                    && e.namespaceURI() == KoXmlNS::math)
-                   || (e.localName() == "object"
-                       && e.namespaceURI() == KoXmlNS::draw));
+    if ((e.localName() == "math" && e.namespaceURI() == KoXmlNS::math)) {
+        return true;
+    }
 
-    // Should be 39001 (kformula) instead of 31000 (calligra)
-    //kDebug(31000) << e.nodeName() << " - "<< e.namespaceURI();
-    //kDebug(31000) << "Return value = " << retval;
+    if (e.localName() == "object" && e.namespaceURI() == KoXmlNS::draw) {
+        QString href = e.attribute("href");
+        if (!href.isEmpty()) {
+            // check the mimetype
+            if (href.startsWith("./")) {
+                href.remove(0,2);
+            }
 
-    return retval;
+            const QString mimetype = context.odfLoadingContext().mimeTypeForPath(href);
+            return mimetype.isEmpty() || mimetype == "application/vnd.oasis.opendocument.formula";
+        }
+    }
+
+    return false;
 }

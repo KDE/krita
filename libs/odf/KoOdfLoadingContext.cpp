@@ -255,6 +255,11 @@ bool KoOdfLoadingContext::useStylesAutoStyles() const
 QString KoOdfLoadingContext::mimeTypeForPath(const QString& path, bool guess) const
 {
     QHash<QString, KoOdfManifestEntry *>::iterator it(d->manifestEntries.find(path));
+    if (it == d->manifestEntries.end()) {
+        // try to find it with an added / at the end
+        QString dirPath = path + '/';
+        it = d->manifestEntries.find(dirPath);
+    }
     if (it != d->manifestEntries.end()) {
         QString mimeType = it.value()->mediaType();
 

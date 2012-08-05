@@ -687,7 +687,7 @@ void SimpleEntryTool::voiceChanged(int voice)
 void SimpleEntryTool::addBars()
 {
     bool ok;
-    int barCount = KInputDialog::getInteger("Add measures", "Add how many measures?", 1, 1, 1000, 1, &ok);
+    int barCount = KInputDialog::getInteger(i18n("Add measures"), i18n("Add how many measures?"), 1, 1, 1000, 1, &ok);
     if (!ok) return;
     addCommand(new AddBarsCommand(m_musicshape, barCount));
 }

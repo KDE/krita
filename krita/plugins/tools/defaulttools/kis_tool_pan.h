@@ -22,6 +22,7 @@
 #include <KoPanTool.h>
 #include <KoToolFactoryBase.h>
 #include <kis_tool.h>
+#include <KoIcon.h>
 
 class KoCanvasBase;
 class KisCanvas2;
@@ -72,7 +73,7 @@ public:
         setToolType(navigationToolType());
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID_ALWAYS_ACTIVE);
         setPriority(5);
-        setIcon("krita_tool_pan");
+        setIconName(koIconNameCStr("krita_tool_pan"));
         //setShortcut( QKeySequence( Qt::SHIFT + Qt::Key_V ) );
     }
 

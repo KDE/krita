@@ -24,6 +24,7 @@
 #include "kis_tool_select_base.h"
 
 #include <KoPointerEvent.h>
+#include <KoIcon.h>
 
 class KoCanvasBase;
 class KoShapeStroke;
@@ -91,7 +92,7 @@ public:
         setToolTip(i18n("Select an area of the image with path."));
         setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
-        setIcon("tool_path_selection");
+        setIconName(koIconNameCStr("tool_path_selection"));
         setPriority(58);
     }
 

@@ -22,12 +22,14 @@
 #include "CommentShapeFactory.h"
 #include "CommentTool.h"
 
+#include <KoIcon.h>
+
 CommentToolFactory::CommentToolFactory()
 : KoToolFactoryBase("CommentToolFactory")
 {
     setToolTip(i18n("Comment Tool"));
     setToolType(mainToolType());
-    setIcon("commentTool");
+    setIconName(koIconNameCStr("tool_comment"));
     setActivationShapeId(COMMENTSHAPEID);
 }
 

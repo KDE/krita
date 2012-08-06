@@ -42,11 +42,11 @@
 #include <QDebug>
 #include <KDE/KLocale>
 #include <kstandardaction.h>
-#include <kicon.h>
 #include <kactioncollection.h>
 #include "kundo2stack.h"
 #include "kundo2stack_p.h"
 #include "kundo2group.h"
+#include <KoIcon.h>
 
 #ifndef QT_NO_UNDOCOMMAND
 
@@ -1077,7 +1077,7 @@ QAction* KUndo2Stack::createRedoAction(KActionCollection* actionCollection, cons
         action->setObjectName(actionName);
     }
 
-    action->setIcon(KIcon("edit-redo"));
+    action->setIcon(koIcon("edit-redo"));
     action->setIconText(i18n("Redo"));
     action->setShortcuts(KStandardShortcut::redo());
 
@@ -1096,7 +1096,7 @@ QAction* KUndo2Stack::createUndoAction(KActionCollection* actionCollection, cons
         action->setObjectName(actionName);
     }
 
-    action->setIcon(KIcon("edit-undo"));
+    action->setIcon(koIcon("edit-undo"));
     action->setIconText(i18n("Undo"));
     action->setShortcuts(KStandardShortcut::undo());
 

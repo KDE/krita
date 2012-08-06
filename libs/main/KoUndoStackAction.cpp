@@ -20,9 +20,10 @@
 
 #include "KoUndoStackAction.h"
 
+#include <KoIcon.h>
+
 #include <kundo2stack.h>
 #include <klocale.h>
-#include <kicon.h>
 #include <kstandardshortcut.h>
 
 KoUndoStackAction::KoUndoStackAction(KUndo2Stack* stack, Type type)
@@ -33,7 +34,7 @@ KoUndoStackAction::KoUndoStackAction(KUndo2Stack* stack, Type type)
         connect(this, SIGNAL(triggered()), stack, SLOT(undo()));
         connect(stack, SIGNAL(canUndoChanged(bool)), this, SLOT(setEnabled(bool)));
         connect(stack, SIGNAL(undoTextChanged(QString)), this, SLOT(slotUndoTextChanged(QString)));
-        setIcon(KIcon("edit-undo"));
+        setIcon(koIcon("edit-undo"));
         setText(i18n("Undo"));
         setShortcuts(KStandardShortcut::undo());
         setEnabled(stack->canUndo());
@@ -41,7 +42,7 @@ KoUndoStackAction::KoUndoStackAction(KUndo2Stack* stack, Type type)
         connect(this, SIGNAL(triggered()), stack, SLOT(redo()));
         connect(stack, SIGNAL(canRedoChanged(bool)), this, SLOT(setEnabled(bool)));
         connect(stack, SIGNAL(redoTextChanged(QString)), this, SLOT(slotUndoTextChanged(QString)));
-        setIcon(KIcon("edit-redo"));
+        setIcon(koIcon("edit-redo"));
         setText(i18n("Redo"));
         setShortcuts(KStandardShortcut::redo());
         setEnabled(stack->canRedo());

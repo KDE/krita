@@ -24,6 +24,7 @@
 #include "KoMarkerCollection.h"
 #include "KoDocumentResourceManager.h"
 #include "KoShapeLoadingContext.h"
+#include <KoIcon.h>
 
 #include <klocale.h>
 
@@ -34,7 +35,7 @@ KoPathShapeFactory::KoPathShapeFactory(const QStringList&)
         : KoShapeFactoryBase(KoPathShapeId, i18n("Simple path shape"))
 {
     setToolTip(i18n("A simple path shape"));
-    setIcon("pathshape");
+    setIconName(koIconNameCStr("pathshape"));
     QStringList elementNames;
     elementNames << "path" << "line" << "polyline" << "polygon";
     setXmlElementNames(KoXmlNS::draw, elementNames);

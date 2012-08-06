@@ -23,6 +23,7 @@
 #include <KoShapeStroke.h>
 #include <KoShapeLoadingContext.h>
 
+#include <KoIcon.h>
 #include <klocale.h>
 
 
@@ -30,7 +31,7 @@ SpiralShapeFactory::SpiralShapeFactory()
 : KoShapeFactoryBase(SpiralShapeId, i18n("Spiral"))
 {
     setToolTip(i18n("A spiral shape"));
-    setIcon("spiral-shape");
+    setIconName(koIconNameCStr("spiral-shape"));
     setFamily("geometric");
     setLoadingPriority(1);
 }

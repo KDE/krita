@@ -33,7 +33,6 @@
 
 // KDE
 #include <KLocale>
-#include <KIcon>
 #include <KDebug>
 
 // Calligra
@@ -97,12 +96,12 @@ ChartTool::ChartTool(KoCanvasBase *canvas)
     // Create QActions here.
 #if 0
     QActionGroup *group = new QActionGroup(this);
-    m_foo  = new QAction(KIcon("this-action"), i18n("Do something"), this);
+    m_foo  = new QAction(koIcon("this-action"), i18n("Do something"), this);
     m_foo->setCheckable(true);
     group->addAction(m_foo);
     connect(m_foo, SIGNAL(toggled(bool)), this, SLOT(catchFoo(bool)));
 
-    m_bar  = new QAction(KIcon("that-action"), i18n("Do something else"), this);
+    m_bar  = new QAction(koIcon("that-action"), i18n("Do something else"), this);
     m_bar->setCheckable(true);
     group->addAction(m_bar);
     connect(m_foo, SIGNAL(toggled(bool)), this, SLOT(catchBar(bool)));

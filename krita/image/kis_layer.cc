@@ -21,9 +21,7 @@
 #include "kis_layer.h"
 
 
-#include <kicon.h>
 #include <klocale.h>
-#include <QIcon>
 #include <QImage>
 #include <QBitArray>
 #include <QStack>

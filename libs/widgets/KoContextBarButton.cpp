@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <kiconloader.h>
+#include <KIcon>
 #include <KGlobalSettings>
 
 // Qt
@@ -49,10 +50,10 @@ KoContextBarButton::KoContextBarButton(const QString &iconName, QWidget* parent)
 , m_fadingValue(0)
 , m_fadingTimeLine(0)
 {
-    const int size = KIconLoader::global()->currentSize(KIconLoader::Small);
+    const int size = IconSize(KIconLoader::Small);
     setIconSize(QSize(size, size));
     setAutoRaise(true);
-    setIcon(SmallIcon(iconName));
+    setIcon(KIcon(iconName));
 }
 
 

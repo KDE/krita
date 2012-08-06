@@ -33,7 +33,6 @@
 #include <QVector>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kpluginfactory.h>

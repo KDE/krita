@@ -19,7 +19,6 @@
 #define _KIS_SELECTION_MASK_
 
 #include <QRect>
-#include "kicon.h"
 
 #include "KoDocumentSectionModel.h"
 #include <KoProperties.h>
@@ -48,9 +47,7 @@ public:
 
     bool allowAsChild(KisNodeSP) const;
 
-    QIcon icon() const {
-        return KIcon("edit-paste");
-    }
+    QIcon icon() const;
 
     KisNodeSP clone() const {
         return KisNodeSP(new KisSelectionMask(*this));

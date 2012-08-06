@@ -30,6 +30,7 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 
+#include <KoIcon.h>
 #include <KoPointerEvent.h>
 #include <KoViewConverter.h>
 #include <KoCanvasController.h>
@@ -215,7 +216,7 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 
         if (currentNode() && currentNode()->inherits("KisShapeLayer")) {
             KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
-            canvas2->view()->showFloatingMessage(i18n("Can't paint on vector layer."), KIcon("draw-brush"));
+            canvas2->view()->showFloatingMessage(i18n("Can't paint on vector layer."), koIcon("draw-brush"));
         }
 
         if (nodePaintAbility() != PAINT)

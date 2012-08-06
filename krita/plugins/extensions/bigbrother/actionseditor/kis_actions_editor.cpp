@@ -26,11 +26,15 @@
 #include <recorder/kis_macro.h>
 #include <recorder/kis_recorded_action_editor_factory_registry.h>
 #include <recorder/kis_recorded_action_creator_factory_registry.h>
-#include <QMenu>
-#include <QSignalMapper>
 #include <recorder/kis_recorded_action_creator_factory.h>
 #include <recorder/kis_recorded_action_creator.h>
+
+#include <KoIcon.h>
+
 #include <KMessageBox>
+
+#include <QMenu>
+#include <QSignalMapper>
 
 KisActionsEditor::KisActionsEditor(QWidget* parent) : QWidget(parent), m_currentEditor(0), m_form(new Ui::ActionsEditor), m_macro(0), m_model(0), m_widgetLayout(0)
 
@@ -38,7 +42,7 @@ KisActionsEditor::KisActionsEditor(QWidget* parent) : QWidget(parent), m_current
     m_form->setupUi(this);
 
     // Setup buttons
-    m_form->bnAdd->setIcon(SmallIcon("list-add"));
+    m_form->bnAdd->setIcon(koIcon("list-add"));
     QSignalMapper* mapper = new QSignalMapper(this);
     connect(mapper, SIGNAL(mapped(QString)), SLOT(slotCreateAction(QString)));
     QMenu* addMenu = new QMenu;
@@ -50,16 +54,16 @@ KisActionsEditor::KisActionsEditor(QWidget* parent) : QWidget(parent), m_current
     m_form->bnAdd->setMenu(addMenu);
     
 
-    m_form->bnDelete->setIcon(SmallIcon("list-remove"));
+    m_form->bnDelete->setIcon(koIcon("list-remove"));
     connect(m_form->bnDelete, SIGNAL(released()), SLOT(slotBtnDelete()));
 
-    m_form->bnRaise->setIcon(SmallIcon("go-up"));
+    m_form->bnRaise->setIcon(koIcon("go-up"));
     connect(m_form->bnRaise, SIGNAL(released()), SLOT(slotBtnRaise()));
 
-    m_form->bnLower->setIcon(SmallIcon("go-down"));
+    m_form->bnLower->setIcon(koIcon("go-down"));
     connect(m_form->bnLower, SIGNAL(released()), SLOT(slotBtnLower()));
 
-    m_form->bnDuplicate->setIcon(SmallIcon("edit-copy"));
+    m_form->bnDuplicate->setIcon(koIcon("edit-copy"));
     connect(m_form->bnDuplicate, SIGNAL(released()), SLOT(slotBtnDuplicate()));
 
     // Setup actions list

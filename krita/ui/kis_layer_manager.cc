@@ -36,6 +36,7 @@
 #include <kdiroperator.h>
 #include <kurlcombobox.h>
 
+#include <KoIcon.h>
 #include <KoFilterManager.h>
 #include <KoDocument.h>
 #include <KoColorSpace.h>
@@ -291,11 +292,11 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     actionCollection->addAction("rasterize_layer", m_rasterizeLayer);
     connect(m_rasterizeLayer, SIGNAL(triggered()), this, SLOT(rasterizeLayer()));
 
-    m_layerSaveAs  = new KAction(KIcon("document-save"), i18n("Save Layer as Image..."), this);
+    m_layerSaveAs  = new KAction(koIcon("document-save"), i18n("Save Layer as Image..."), this);
     actionCollection->addAction("save_layer_as_image", m_layerSaveAs);
     connect(m_layerSaveAs, SIGNAL(triggered()), this, SLOT(saveLayerAsImage()));
 
-    m_groupLayersSave = new KAction(KIcon("document-save"), i18n("Save Group Layers..."), this);
+    m_groupLayersSave = new KAction(koIcon("document-save"), i18n("Save Group Layers..."), this);
     actionCollection->addAction("save_groups_as_images", m_groupLayersSave);
     connect(m_groupLayersSave, SIGNAL(triggered()), this, SLOT(saveGroupLayers()));
 

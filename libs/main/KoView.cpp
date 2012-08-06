@@ -35,9 +35,10 @@
 #include "KoPageLayout.h"
 #include "KoPrintJob.h"
 
+#include <KoIcon.h>
+
 #include <kactioncollection.h>
 #include <kglobalsettings.h>
-#include <kicon.h>
 #include <klocale.h>
 #include <kparts/partmanager.h>
 #include <kparts/event.h>
@@ -521,14 +522,14 @@ QPrintDialog *KoView::createPrintDialog(KoPrintJob *printJob, QWidget *parent)
 
 void KoView::setupGlobalActions()
 {
-    KAction *actionNewView  = new KAction(KIcon("window-new"), i18n("&New View"), this);
+    KAction *actionNewView  = new KAction(koIcon("window-new"), i18n("&New View"), this);
     actionCollection()->addAction("view_newview", actionNewView);
     connect(actionNewView, SIGNAL(triggered(bool)), this, SLOT(newView()));
 
     actionCollection()->addAction("edit_undo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::UNDO));
     actionCollection()->addAction("edit_redo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::RED0));
 
-    KSelectAction *actionAuthor  = new KSelectAction(KIcon("user-identity"), i18n("Active Author Profile"), this);
+    KSelectAction *actionAuthor  = new KSelectAction(koIcon("user-identity"), i18n("Active Author Profile"), this);
     actionAuthor->addAction(i18n("Default Author Profile"));
     actionAuthor->addAction(i18nc("choice for author profile", "Anonymous"));
     KConfig *config = KoGlobal::calligraConfig();

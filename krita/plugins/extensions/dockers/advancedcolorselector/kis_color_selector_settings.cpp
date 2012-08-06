@@ -24,8 +24,8 @@
 #include <QPushButton>
 
 #include <KConfigGroup>
-#include <KIcon>
 
+#include <KoIcon.h>
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoColorProfile.h"
@@ -92,7 +92,7 @@ QString KisColorSelectorSettings::header()
 
 KIcon KisColorSelectorSettings::icon()
 {
-    return KIcon("extended_color_selector");
+    return koIcon("extended_color_selector");
 }
 
 

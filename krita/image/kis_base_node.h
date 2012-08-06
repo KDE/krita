@@ -23,8 +23,6 @@
 #include <QUuid>
 #include <QString>
 
-#include <kicon.h>
-
 #include "KoDocumentSectionModel.h"
 
 #include "kis_shared.h"

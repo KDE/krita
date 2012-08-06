@@ -65,9 +65,9 @@
 #include <KoListLevelProperties.h>
 #include <KoTextLayoutRootArea.h>
 //#include <ResizeTableCommand.h>
+#include <KoIcon.h>
 
 #include <kdebug.h>
-#include <KIcon>
 #include <KRun>
 #include <KStandardShortcut>
 #include <KFontChooser>
@@ -201,64 +201,64 @@ TextTool::TextTool(KoCanvasBase *canvas)
 
 void TextTool::createActions()
 {
-    m_actionPasteAsText  = new KAction(KIcon("edit-paste"), i18n("Paste As Text"), this);
+    m_actionPasteAsText  = new KAction(koIcon("edit-paste"), i18n("Paste As Text"), this);
     addAction("edit_paste_text", m_actionPasteAsText);
     m_actionPasteAsText->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_V);
     connect(m_actionPasteAsText, SIGNAL(triggered(bool)), this, SLOT(pasteAsText()));
 
-    m_actionFormatBold  = new KAction(KIcon("format-text-bold"), i18n("Bold"), this);
+    m_actionFormatBold  = new KAction(koIcon("format-text-bold"), i18n("Bold"), this);
     addAction("format_bold", m_actionFormatBold);
     m_actionFormatBold->setShortcut(Qt::CTRL + Qt::Key_B);
     m_actionFormatBold->setCheckable(true);
     connect(m_actionFormatBold, SIGNAL(triggered(bool)), this, SLOT(bold(bool)));
 
-    m_actionFormatItalic  = new KAction(KIcon("format-text-italic"), i18n("Italic"), this);
+    m_actionFormatItalic  = new KAction(koIcon("format-text-italic"), i18n("Italic"), this);
     addAction("format_italic", m_actionFormatItalic);
     m_actionFormatItalic->setShortcut(Qt::CTRL + Qt::Key_I);
     m_actionFormatItalic->setCheckable(true);
     connect(m_actionFormatItalic, SIGNAL(triggered(bool)), this, SLOT(italic(bool)));
 
-    m_actionFormatUnderline  = new KAction(KIcon("format-text-underline"), i18nc("Text formatting", "Underline"), this);
+    m_actionFormatUnderline  = new KAction(koIcon("format-text-underline"), i18nc("Text formatting", "Underline"), this);
     addAction("format_underline", m_actionFormatUnderline);
     m_actionFormatUnderline->setShortcut(Qt::CTRL + Qt::Key_U);
     m_actionFormatUnderline->setCheckable(true);
     connect(m_actionFormatUnderline, SIGNAL(triggered(bool)), this, SLOT(underline(bool)));
 
-    m_actionFormatStrikeOut  = new KAction(KIcon("format-text-strikethrough"), i18n("Strikethrough"), this);
+    m_actionFormatStrikeOut  = new KAction(koIcon("format-text-strikethrough"), i18n("Strikethrough"), this);
     addAction("format_strike", m_actionFormatStrikeOut);
     m_actionFormatStrikeOut->setCheckable(true);
     connect(m_actionFormatStrikeOut, SIGNAL(triggered(bool)), this, SLOT(strikeOut(bool)));
 
     QActionGroup *alignmentGroup = new QActionGroup(this);
-    m_actionAlignLeft  = new KAction(KIcon("format-justify-left"), i18n("Align Left"), this);
+    m_actionAlignLeft  = new KAction(koIcon("format-justify-left"), i18n("Align Left"), this);
     addAction("format_alignleft", m_actionAlignLeft);
     m_actionAlignLeft->setShortcut(Qt::CTRL + Qt::Key_L);
     m_actionAlignLeft->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignLeft);
     connect(m_actionAlignLeft, SIGNAL(triggered(bool)), this, SLOT(alignLeft()));
 
-    m_actionAlignRight  = new KAction(KIcon("format-justify-right"), i18n("Align Right"), this);
+    m_actionAlignRight  = new KAction(koIcon("format-justify-right"), i18n("Align Right"), this);
     addAction("format_alignright", m_actionAlignRight);
     m_actionAlignRight->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_R);
     m_actionAlignRight->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignRight);
     connect(m_actionAlignRight, SIGNAL(triggered(bool)), this, SLOT(alignRight()));
 
-    m_actionAlignCenter  = new KAction(KIcon("format-justify-center"), i18n("Align Center"), this);
+    m_actionAlignCenter  = new KAction(koIcon("format-justify-center"), i18n("Align Center"), this);
     addAction("format_aligncenter", m_actionAlignCenter);
     m_actionAlignCenter->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_C);
     m_actionAlignCenter->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignCenter);
     connect(m_actionAlignCenter, SIGNAL(triggered(bool)), this, SLOT(alignCenter()));
 
-    m_actionAlignBlock  = new KAction(KIcon("format-justify-fill"), i18n("Align Block"), this);
+    m_actionAlignBlock  = new KAction(koIcon("format-justify-fill"), i18n("Align Block"), this);
     addAction("format_alignblock", m_actionAlignBlock);
     m_actionAlignBlock->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_R);
     m_actionAlignBlock->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignBlock);
     connect(m_actionAlignBlock, SIGNAL(triggered(bool)), this, SLOT(alignBlock()));
 
-    m_actionChangeDirection = new KAction(KIcon("format-text-direction-rtl"), i18n("Change text direction"), this);
+    m_actionChangeDirection = new KAction(koIcon("format-text-direction-rtl"), i18n("Change text direction"), this);
     addAction("change_text_direction", m_actionChangeDirection);
     m_actionChangeDirection->setToolTip(i18n("Change writing direction"));
     m_actionChangeDirection->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_D);
@@ -266,34 +266,37 @@ void TextTool::createActions()
     connect(m_actionChangeDirection, SIGNAL(triggered()), this, SLOT(textDirectionChanged()));
 
 
-    m_actionFormatSuper = new KAction(KIcon("format-text-superscript"), i18n("Superscript"), this);
+    m_actionFormatSuper = new KAction(koIcon("format-text-superscript"), i18n("Superscript"), this);
     m_actionFormatSuper->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_P);
     addAction("format_super", m_actionFormatSuper);
     m_actionFormatSuper->setCheckable(true);
     connect(m_actionFormatSuper, SIGNAL(triggered(bool)), this, SLOT(superScript(bool)));
 
-    m_actionFormatSub = new KAction(KIcon("format-text-subscript"), i18n("Subscript"), this);
+    m_actionFormatSub = new KAction(koIcon("format-text-subscript"), i18n("Subscript"), this);
     m_actionFormatSub->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_B);
     addAction("format_sub", m_actionFormatSub);
     m_actionFormatSub->setCheckable(true);
     connect(m_actionFormatSub, SIGNAL(triggered(bool)), this, SLOT(subScript(bool)));
 
+    const char* const increaseIndentActionIconName =
+        QApplication::isRightToLeft() ? koIconNameCStr("format-indent-less") : koIconNameCStr("format-indent-more");
     m_actionFormatIncreaseIndent = new KAction(
-        KIcon(QApplication::isRightToLeft() ? "format-indent-less" : "format-indent-more"),
+        KIcon(QLatin1String(increaseIndentActionIconName)),
         i18n("Increase Indent"), this);
     addAction("format_increaseindent", m_actionFormatIncreaseIndent);
     connect(m_actionFormatIncreaseIndent, SIGNAL(triggered()), this, SLOT(increaseIndent()));
 
-    m_actionFormatDecreaseIndent = new KAction(
-        KIcon(QApplication::isRightToLeft() ? "format-indent-more" : "format-indent-less"),
-        i18n("Decrease Indent"), this);
+    const char* const decreaseIndentActionIconName =
+        QApplication::isRightToLeft() ? koIconNameCStr("format-indent-more") : koIconNameCStr("format-indent-less");
+    m_actionFormatDecreaseIndent = new KAction(KIcon(QLatin1String(decreaseIndentActionIconName)),
+                                               i18n("Decrease Indent"), this);
     addAction("format_decreaseindent", m_actionFormatDecreaseIndent);
     connect(m_actionFormatDecreaseIndent, SIGNAL(triggered()), this, SLOT(decreaseIndent()));
 
-    KAction *action = new KAction(KIcon("format-list-unordered"),  i18n("Bullet list"), this);
+    KAction *action = new KAction(koIcon("format-list-unordered"),  i18n("Bullet list"), this);
     addAction("format_bulletlist", action);
 
-    action = new KAction(KIcon("format-list-ordered"),  i18n("Numbered list"), this);
+    action = new KAction(koIcon("format-list-ordered"),  i18n("Numbered list"), this);
     addAction("format_numberlist", action);
 
     action = new KAction(i18n("Increase Font Size"), this);
@@ -341,7 +344,7 @@ void TextTool::createActions()
     action->setShortcut(Qt::SHIFT + Qt::Key_Return);
     connect(action, SIGNAL(triggered()), this, SLOT(lineBreak()));
 
-    action  = new KAction(KIcon("insert-pagebreak"), i18n("Page Break"), this);
+    action  = new KAction(koIcon("insert-pagebreak"), i18n("Page Break"), this);
     addAction("insert_framebreak", action);
     action->setShortcut(KShortcut(Qt::CTRL + Qt::Key_Return));
     connect(action, SIGNAL(triggered()), this, SLOT(insertFrameBreak()));
@@ -361,103 +364,103 @@ void TextTool::createActions()
     connect(m_actionFormatFontSize, SIGNAL(fontSizeChanged(qreal)), this, SLOT(setFontSize(qreal)));
 
     m_actionFormatTextColor = new KoColorPopupAction(this);
-    m_actionFormatTextColor->setIcon(KIcon("format-text-color"));
+    m_actionFormatTextColor->setIcon(koIcon("format-text-color"));
     m_actionFormatTextColor->setToolTip(i18n("Text Color..."));
     m_actionFormatTextColor->setText(i18n("Text Color"));
     addAction("format_textcolor", m_actionFormatTextColor);
     connect(m_actionFormatTextColor, SIGNAL(colorChanged(const KoColor &)), this, SLOT(setTextColor(const KoColor &)));
 
     m_actionFormatBackgroundColor = new KoColorPopupAction(this);
-    m_actionFormatBackgroundColor->setIcon(KIcon("format-fill-color"));
+    m_actionFormatBackgroundColor->setIcon(koIcon("format-fill-color"));
     m_actionFormatBackgroundColor->setToolTip(i18n("Background Color..."));
     m_actionFormatBackgroundColor->setText(i18n("Background"));
     addAction("format_backgroundcolor", m_actionFormatBackgroundColor);
     connect(m_actionFormatBackgroundColor, SIGNAL(colorChanged(const KoColor &)), this, SLOT(setBackgroundColor(const KoColor &)));
 
-    m_growWidthAction = new KAction(KIcon("zoom-fit-best"), i18n("Grow To Fit Width"), this);
+    m_growWidthAction = new KAction(koIcon("zoom-fit-best"), i18n("Grow To Fit Width"), this);
     addAction("grow_to_fit_width", m_growWidthAction);
     m_growWidthAction->setCheckable(true);
     connect(m_growWidthAction, SIGNAL(triggered(bool)), this, SLOT(setGrowWidthToFit(bool)));
 
-    m_growHeightAction = new KAction(KIcon("zoom-fit-best"), i18n("Grow To Fit Height"), this);
+    m_growHeightAction = new KAction(koIcon("zoom-fit-best"), i18n("Grow To Fit Height"), this);
     addAction("grow_to_fit_height", m_growHeightAction);
     m_growHeightAction->setCheckable(true);
     connect(m_growHeightAction, SIGNAL(triggered(bool)), this, SLOT(setGrowHeightToFit(bool)));
 
-    m_shrinkToFitAction = new KAction(KIcon("zoom-fit-best"), i18n("Shrink To Fit"), this);
+    m_shrinkToFitAction = new KAction(koIcon("zoom-fit-best"), i18n("Shrink To Fit"), this);
     addAction("shrink_to_fit", m_shrinkToFitAction);
     m_shrinkToFitAction->setCheckable(true);
     connect(m_shrinkToFitAction, SIGNAL(triggered(bool)), this, SLOT(setShrinkToFit(bool)));
 
-    action = new KAction(KIcon("insert-table"), i18n("Insert Custom..."), this);
+    action = new KAction(koIcon("insert-table"), i18n("Insert Custom..."), this);
     addAction("insert_table", action);
     action->setToolTip(i18n("Insert a table into the document."));
     connect(action, SIGNAL(triggered()), this, SLOT(insertTable()));
 
-    action  = new KAction(KIcon("edit-table-insert-row-above"), i18n("Row Above"), this);
+    action  = new KAction(koIcon("edit-table-insert-row-above"), i18n("Row Above"), this);
     action->setToolTip(i18n("Insert Row Above"));
     addAction("insert_tablerow_above", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowAbove()));
 
-    action  = new KAction(KIcon("edit-table-insert-row-below"), i18n("Row Below"), this);
+    action  = new KAction(koIcon("edit-table-insert-row-below"), i18n("Row Below"), this);
     action->setToolTip(i18n("Insert Row Below"));
     addAction("insert_tablerow_below", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowBelow()));
 
-    action  = new KAction(KIcon("edit-table-insert-column-left"), i18n("Column Left"), this);
+    action  = new KAction(koIcon("edit-table-insert-column-left"), i18n("Column Left"), this);
     action->setToolTip(i18n("Insert Column Left"));
     addAction("insert_tablecolumn_left", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnLeft()));
 
-    action  = new KAction(KIcon("edit-table-insert-column-right"), i18n("Column Right"), this);
+    action  = new KAction(koIcon("edit-table-insert-column-right"), i18n("Column Right"), this);
     action->setToolTip(i18n("Insert Column Right"));
     addAction("insert_tablecolumn_right", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnRight()));
-    action  = new KAction(KIcon("edit-table-delete-column"), i18n("Column"), this);
+    action  = new KAction(koIcon("edit-table-delete-column"), i18n("Column"), this);
     action->setToolTip(i18n("Delete Column"));
     addAction("delete_tablecolumn", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableColumn()));
 
-    action  = new KAction(KIcon("edit-table-delete-row"), i18n("Row"), this);
+    action  = new KAction(koIcon("edit-table-delete-row"), i18n("Row"), this);
     action->setToolTip(i18n("Delete Row"));
     addAction("delete_tablerow", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableRow()));
 
-    action  = new KAction(KIcon("edit-table-insert-row-above"), i18n("Row Above"), this);
+    action  = new KAction(koIcon("edit-table-insert-row-above"), i18n("Row Above"), this);
     action->setToolTip(i18n("Insert Row Above"));
     addAction("insert_tablerow_above", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowAbove()));
 
-    action  = new KAction(KIcon("edit-table-insert-row-below"), i18n("Row Below"), this);
+    action  = new KAction(koIcon("edit-table-insert-row-below"), i18n("Row Below"), this);
     action->setToolTip(i18n("Insert Row Below"));
     addAction("insert_tablerow_below", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowBelow()));
 
-    action  = new KAction(KIcon("edit-table-insert-column-left"), i18n("Column Left"), this);
+    action  = new KAction(koIcon("edit-table-insert-column-left"), i18n("Column Left"), this);
     action->setToolTip(i18n("Insert Column Left"));
     addAction("insert_tablecolumn_left", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnLeft()));
 
-    action  = new KAction(KIcon("edit-table-insert-column-right"), i18n("Column Right"), this);
+    action  = new KAction(koIcon("edit-table-insert-column-right"), i18n("Column Right"), this);
     action->setToolTip(i18n("Insert Column Right"));
     addAction("insert_tablecolumn_right", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnRight()));
 
-    action  = new KAction(KIcon("edit-table-delete-column"), i18n("Column"), this);
+    action  = new KAction(koIcon("edit-table-delete-column"), i18n("Column"), this);
     action->setToolTip(i18n("Delete Column"));
     addAction("delete_tablecolumn", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableColumn()));
 
-    action  = new KAction(KIcon("edit-table-delete-row"), i18n("Row"), this);
+    action  = new KAction(koIcon("edit-table-delete-row"), i18n("Row"), this);
     action->setToolTip(i18n("Delete Row"));
     addAction("delete_tablerow", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableRow()));
 
-    action  = new KAction(KIcon("edit-table-cell-merge"), i18n("Merge Cells"), this);
+    action  = new KAction(koIcon("edit-table-cell-merge"), i18n("Merge Cells"), this);
     addAction("merge_tablecells", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(mergeTableCells()));
 
-    action  = new KAction(KIcon("edit-table-cell-split"), i18n("Split Cells"), this);
+    action  = new KAction(koIcon("edit-table-cell-split"), i18n("Split Cells"), this);
     addAction("split_tablecells", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(splitTableCells()));
 
@@ -479,7 +482,7 @@ void TextTool::createActions()
     addAction("edit_select_all", action);
 
     action = new KAction(i18n("Special Character..."), this);
-    action->setIcon(KIcon("character-set"));
+    action->setIcon(koIcon("character-set"));
     action->setShortcut(Qt::ALT + Qt::SHIFT + Qt::Key_C);
     addAction("insert_specialchar", action);
     action->setToolTip(i18n("Insert one or more symbols or characters not found on the keyboard"));
@@ -487,7 +490,7 @@ void TextTool::createActions()
     connect(action, SIGNAL(triggered()), this, SLOT(insertSpecialCharacter()));
 
     action = new KAction(i18n("Repaint"), this);
-    action->setIcon(KIcon("view-refresh"));
+    action->setIcon(koIcon("view-refresh"));
     addAction("repaint", action);
     connect(action, SIGNAL(triggered()), this, SLOT(relayoutContent()));
 

@@ -17,9 +17,10 @@
 
 #include "compositionmodel.h"
 
+#include <KoIcon.h>
+
 #include <QAction>
 #include <KLocale>
-#include <kicon.h>
 
 CompositionModel::CompositionModel(QObject* parent): QAbstractTableModel(parent)
 {
@@ -40,7 +41,7 @@ QVariant CompositionModel::data(const QModelIndex& index, int role) const
             }
             case Qt::DecorationRole:
             {
-                    return KIcon("tools-wizard");
+                    return koIcon("tools-wizard");
             }
         }
     }

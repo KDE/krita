@@ -24,8 +24,9 @@
 
 #include <KoText.h>
 #include <KoCharacterStyle.h>
+#include <KoIcon.h>
+
 #include <kfontdialog.h>
-#include "styles/KoCharacterStyle.h"
 #include <QFontDatabase>
 #include <QStringList>
 #include <QVBoxLayout>
@@ -75,8 +76,9 @@ CharacterHighlighting::CharacterHighlighting(bool uniqueFormat,QWidget* parent)
     connect(m_fontChooser, SIGNAL(fontSelected(const QFont &)), this, SIGNAL(fontChanged(const QFont &)));
     connect(m_fontChooser, SIGNAL(fontSelected(const QFont &)), this, SIGNAL(charStyleChanged()));
 
-    widget.resetTextColor->setIcon(KIcon("edit-clear"));
-    widget.resetBackground->setIcon(KIcon("edit-clear"));
+    const KIcon clearIcon(koIconName("edit-clear"));
+    widget.resetTextColor->setIcon(clearIcon);
+    widget.resetBackground->setIcon(clearIcon);
     connect(widget.textColor, SIGNAL(changed(const QColor&)), this, SLOT(textColorChanged()));
     connect(widget.backgroundColor, SIGNAL(changed(const QColor&)), this, SLOT(backgroundColorChanged()));
     connect(widget.resetTextColor, SIGNAL(clicked()), this, SLOT(clearTextColor()));

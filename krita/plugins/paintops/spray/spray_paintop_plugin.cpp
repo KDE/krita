@@ -18,7 +18,6 @@
 #include "spray_paintop_plugin.h"
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>

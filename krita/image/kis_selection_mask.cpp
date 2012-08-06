@@ -30,6 +30,7 @@
 #include "kis_processing_visitor.h"
 #include "kis_pixel_selection.h"
 #include "kis_undo_adapter.h"
+#include <KoIcon.h>
 
 struct KisSelectionMask::Private
 {
@@ -56,6 +57,10 @@ KisSelectionMask::KisSelectionMask(const KisSelectionMask& rhs)
 KisSelectionMask::~KisSelectionMask()
 {
     delete m_d;
+}
+
+QIcon KisSelectionMask::icon() const {
+    return koIcon("edit-paste");
 }
 
 bool KisSelectionMask::allowAsChild(KisNodeSP node) const
@@ -98,7 +103,7 @@ void KisSelectionMask::accept(KisProcessingVisitor &visitor, KisUndoAdapter *und
 KoDocumentSectionModel::PropertyList KisSelectionMask::sectionModelProperties() const
 {
     KoDocumentSectionModel::PropertyList l = KisBaseNode::sectionModelProperties();
-    l << KoDocumentSectionModel::Property(i18n("Active"), KIcon("local_selection_active"),KIcon("local_selection_inactive"),active());
+    l << KoDocumentSectionModel::Property(i18n("Active"), koIcon("local_selection_active"), koIcon("local_selection_inactive"), active());
     return l;
 }
 

@@ -19,9 +19,10 @@
 #include "FixedDateFormat.h"
 #include "DateVariable.h"
 
+#include <KoIcon.h>
+
 #include <QMenu>
 #include <QAction>
-#include <kicon.h>
 #include <kglobal.h>
 #include <klocale.h>
 
@@ -74,7 +75,7 @@ FixedDateFormat::FixedDateFormat(DateVariable *variable)
         widget.custom->setChecked(true);
     }
 
-    widget.formatButton->setIcon(KIcon("list-add"));
+    widget.formatButton->setIcon(koIcon("list-add"));
 
     connect(widget.custom, SIGNAL(stateChanged(int)), this, SLOT(customClicked(int)));
     connect(widget.formatList, SIGNAL(itemPressed(QListWidgetItem*)), this, SLOT(listClicked(QListWidgetItem*)));

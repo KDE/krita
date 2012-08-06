@@ -18,9 +18,10 @@
  */
 #include "KoAspectButton.h"
 
+#include <KIcon>
+
 #include <QPixmap>
 #include <QPainter>
-#include <KIcon>
 #include <QMouseEvent>
 
 namespace {
@@ -110,12 +111,12 @@ namespace {
 class KoAspectButton::Private {
 public:
     Private()
-        : chain(QIcon(_chain_24).pixmap(24,24)),
-        brokenChain(QIcon(_chain_broken_24).pixmap(24,24)),
+        : chain(_chain_24),
+        brokenChain(_chain_broken_24),
         keepAspect(true)
     {
     }
-    QPixmap chain, brokenChain;
+    const QPixmap chain, brokenChain;
     bool keepAspect;
 };
 

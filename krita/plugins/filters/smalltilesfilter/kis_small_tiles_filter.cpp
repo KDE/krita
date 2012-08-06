@@ -31,7 +31,6 @@
 #include <QVector>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kpluginfactory.h>
 
 #include <KoProgressUpdater.h>

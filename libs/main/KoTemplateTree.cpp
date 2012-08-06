@@ -31,7 +31,6 @@
 #include <kcomponentdata.h>
 #include <ksavefile.h>
 #include <kstandarddirs.h>
-#include <kiconloader.h>
 #include <kio/netaccess.h>
 #include <klocale.h>
 #include <kconfiggroup.h>

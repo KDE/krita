@@ -24,11 +24,11 @@
 #include "ui_KoConfigAuthorPage.h"
 
 #include <KoGlobal.h>
+#include <KoIcon.h>
 
 #include <klocale.h>
 #include <kglobal.h>
 #include <kuser.h>
-#include <kicon.h>
 
 #include <QLineEdit>
 #include <QStackedWidget>
@@ -58,11 +58,11 @@ KoConfigAuthorPage::KoConfigAuthorPage()
     d->combo = new QComboBox;
     layout->addWidget(d->combo, 0, 0);
     QToolButton *newUser = new QToolButton;
-    newUser->setIcon(KIcon("list-add-user"));
+    newUser->setIcon(koIcon("list-add-user"));
     newUser->setToolTip(i18n("Add new author profile (starts out as a copy of current)"));
     layout->addWidget(newUser, 0, 1);
     d->deleteUser = new QToolButton;
-    d->deleteUser->setIcon(KIcon("list-remove-user"));
+    d->deleteUser->setIcon(koIcon("list-remove-user"));
     d->deleteUser->setToolTip(i18n("Delete the author profile"));
     layout->addWidget(d->deleteUser, 0, 2);
     QFrame *f = new QFrame;

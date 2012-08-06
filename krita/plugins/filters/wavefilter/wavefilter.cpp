@@ -27,7 +27,6 @@
 #include <kcombobox.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <klocale.h>
 #include <kmessagebox.h>

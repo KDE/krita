@@ -25,6 +25,7 @@
 #include <kis_types.h>
 #include <kis_tool.h>
 #include <flake/kis_node_shape.h>
+#include <KoIcon.h>
 #include <QWidget>
 #include <QGroupBox>
 #include <QRadioButton>
@@ -90,7 +91,7 @@ public:
         setToolType(TOOL_TYPE_TRANSFORM);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setPriority(11);
-        setIcon("krita_tool_move");
+        setIconName(koIconNameCStr("krita_tool_move"));
         //setShortcut( QKeySequence( Qt::SHIFT + Qt::Key_V ) );
     }
 

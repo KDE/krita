@@ -23,6 +23,8 @@
 #ifndef KIS_TOOL_TRANSFORM_H_
 #define KIS_TOOL_TRANSFORM_H_
 
+#include <KoIcon.h>
+
 #include <complex>
 
 #include <QPoint>
@@ -32,7 +34,6 @@
 #include <QButtonGroup>
 
 #include <KStandardDirs>
-#include <KIcon>
 
 #include <KoInteractionTool.h>
 #include <KoToolFactoryBase.h>
@@ -56,15 +57,15 @@ class WdgToolTransform : public QWidget, public Ui::WdgToolTransform
 public:
     WdgToolTransform(QWidget *parent) : QWidget(parent) {
         setupUi(this);
-        showDecorationsBox->setIcon(KIcon("krita_tool_transform"));
-        label_shearX->setPixmap(KIcon("shear_horizontal").pixmap(16, 16));
-        label_shearY->setPixmap(KIcon("shear_vertical").pixmap(16, 16));
+        showDecorationsBox->setIcon(koIcon("krita_tool_transform"));
+        label_shearX->setPixmap(koIcon("shear_horizontal").pixmap(16, 16));
+        label_shearY->setPixmap(koIcon("shear_vertical").pixmap(16, 16));
 
-        label_width->setPixmap(KIcon("width_icon").pixmap(16, 16));
-        label_height->setPixmap(KIcon("height_icon").pixmap(16, 16));
+        label_width->setPixmap(koIcon("width_icon").pixmap(16, 16));
+        label_height->setPixmap(koIcon("height_icon").pixmap(16, 16));
 
-        label_offsetX->setPixmap(KIcon("offset_horizontal").pixmap(16, 16));
-        label_offsetY->setPixmap(KIcon("offset_vertical").pixmap(16, 16));
+        label_offsetX->setPixmap(koIcon("offset_horizontal").pixmap(16, 16));
+        label_offsetY->setPixmap(koIcon("offset_vertical").pixmap(16, 16));
     }
 };
 
@@ -437,7 +438,7 @@ public:
             : KoToolFactoryBase("KisToolTransform") {
         setToolTip(i18n("Transform a layer or a selection"));
         setToolType(TOOL_TYPE_TRANSFORM);
-        setIcon("krita_tool_transform");
+        setIconName(koIconNameCStr("krita_tool_transform"));
         setShortcut(KShortcut( QKeySequence(Qt::CTRL + Qt::Key_T) ));
         setPriority(11);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

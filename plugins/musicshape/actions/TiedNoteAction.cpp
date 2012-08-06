@@ -34,7 +34,8 @@
 
 #include "../commands/ToggleTiedNoteCommand.h"
 
-#include <kicon.h>
+#include <KoIcon.h>
+
 #include <klocale.h>
 
 #include <math.h>
@@ -42,7 +43,7 @@
 using namespace MusicCore;
 
 TiedNoteAction::TiedNoteAction(SimpleEntryTool* tool)
-    : AbstractNoteMusicAction(KIcon("music-tiednote"), i18n("Tied notes"), tool)
+    : AbstractNoteMusicAction(koIcon("music-tiednote"), i18n("Tied notes"), tool)
 {
 }
 

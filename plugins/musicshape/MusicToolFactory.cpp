@@ -16,19 +16,21 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include <klocale.h>
+
+#include "MusicToolFactory.h"
 
 #include "MusicShape.h"
 #include "MusicTool.h"
 
-#include "MusicToolFactory.h"
+#include <KoIcon.h>
+#include <klocale.h>
 
 
 MusicToolFactory::MusicToolFactory()
     : KoToolFactoryBase("MusicToolFactoryId")
 {
     setToolTip( i18n( "Music editing tool, parts" ) );
-    setIcon( "musicshape" );
+    setIconName(koIconNameCStr("musicshape"));
     setToolType( dynamicToolType() );
     setPriority( 2 );
     setActivationShapeId( MusicShapeId );

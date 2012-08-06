@@ -28,7 +28,8 @@
 #include "../SimpleEntryTool.h"
 #include "../MusicShape.h"
 
-#include <kicon.h>
+#include <KoIcon.h>
+
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -36,12 +37,13 @@ using namespace MusicCore;
 
 static KIcon getIcon(Clef::ClefShape shape)
 {
-    switch (shape) {
-        case Clef::GClef: return KIcon("music-clef-trebble");
-        case Clef::FClef: return KIcon("music-clef-bass");
-        case Clef::CClef: return KIcon("music-clef-alto");
-    }
-    return KIcon("music-clef");
+    const char *const id =
+        (shape == Clef::GClef) ? koIconNameCStr("music-clef-trebble") :
+        (shape == Clef::FClef) ? koIconNameCStr("music-clef-bass") :
+        (shape == Clef::CClef) ? koIconNameCStr("music-clef-alto") :
+        /* else */               koIconNameCStr("music-clef");
+
+    return KIcon(QLatin1String(id));
 }
 
 static QString getText(Clef::ClefShape shape, int line)

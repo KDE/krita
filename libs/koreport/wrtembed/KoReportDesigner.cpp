@@ -44,6 +44,7 @@
 #include <KGuiItem>
 #include <KStandardAction>
 
+#include <KoIcon.h>
 #include <koproperty/EditorView.h>
 #include <KoRuler.h>
 #include <KoZoomHandler.h>
@@ -1186,7 +1187,7 @@ QList<QAction*> KoReportDesigner::actions(QActionGroup* group)
     KoReportPluginManager* manager = KoReportPluginManager::self();
     QList<QAction*> actList = manager->actions();
     
-    KToggleAction *act = new KToggleAction(KIcon("line"), i18n("Line"), group);
+    KToggleAction *act = new KToggleAction(koIcon("line"), i18n("Line"), group);
     act->setObjectName("report:line");
     act->setData(9);
     actList << act;

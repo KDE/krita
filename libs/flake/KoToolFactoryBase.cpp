@@ -31,7 +31,7 @@ public:
     QString toolType;
     QString tooltip;
     QString activationId;
-    QString icon;
+    QString iconName;
     const QString id;
     KShortcut shortcut;
 };
@@ -67,9 +67,9 @@ QString KoToolFactoryBase::toolTip() const
     return d->tooltip;
 }
 
-QString KoToolFactoryBase::icon() const
+QString KoToolFactoryBase::iconName() const
 {
-    return d->icon;
+    return d->iconName;
 }
 
 QString KoToolFactoryBase::activationShapeId() const
@@ -97,9 +97,14 @@ void KoToolFactoryBase::setToolType(const QString & toolType)
     d->toolType = toolType;
 }
 
-void KoToolFactoryBase::setIcon(const QString & icon)
+void KoToolFactoryBase::setIconName(const char *iconName)
 {
-    d->icon = icon;
+    d->iconName = QLatin1String(iconName);
+}
+
+void KoToolFactoryBase::setIconName(const QString &iconName)
+{
+    d->iconName = iconName;
 }
 
 void KoToolFactoryBase::setPriority(int newPriority)

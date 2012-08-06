@@ -21,8 +21,9 @@
 #include "KoDockWidgetTitleBar.h"
 #include "KoDockWidgetTitleBarButton.h"
 
+#include <KoIcon.h>
+
 #include <kdebug.h>
-#include <kicon.h>
 
 #include <QAbstractButton>
 #include <QAction>
@@ -55,9 +56,9 @@ public:
             preCollapsedWidth(-1)
     {
         if (openIcon.isNull())
-            openIcon = KIcon("arrow-down");
+            openIcon = koIcon("arrow-down");
         if (closeIcon.isNull())
-            closeIcon = KIcon("arrow-right");
+            closeIcon = koIcon("arrow-right");
     }
     KoDockWidgetTitleBar* thePublic;
     KIcon openIcon, closeIcon;

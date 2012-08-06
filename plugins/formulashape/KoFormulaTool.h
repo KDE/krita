@@ -113,8 +113,8 @@ private:
     /// Creates all the actions provided by the tool
     void setupActions();
 
-    void addTemplateAction(const QString& caption, const QString& name, const QString& data, const QString& iconName);
-    
+    void addTemplateAction(const QString &caption, const QString &name, const QString &data, const char *iconName);
+
     /// The FormulaShape the tool is manipulating
     KoFormulaShape* m_formulaShape;
 

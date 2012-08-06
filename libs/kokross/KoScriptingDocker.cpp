@@ -22,12 +22,12 @@
 #include "KoScriptingDocker.h"
 #include "KoScriptingModule.h"
 #include "KoScriptManager.h"
+#include <KoIcon.h>
 
 #include <QToolBar>
 #include <QBoxLayout>
 
 #include <klocale.h>
-#include <kicon.h>
 #include <kactioncollection.h>
 #include <kdebug.h>
 
@@ -108,7 +108,7 @@ KoScriptingDocker::KoScriptingDocker(QWidget *parent)
         m_actions.insert("stop", a);
     }
 
-    tb->addAction(KIcon("configure"), i18n("Script Manager"), this, SLOT(slotShowScriptManager()));
+    tb->addAction(koIcon("configure"), i18n("Script Manager"), this, SLOT(slotShowScriptManager()));
 
     /*
     d->tb->addSeparator();

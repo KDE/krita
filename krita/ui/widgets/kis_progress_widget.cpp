@@ -24,7 +24,7 @@
 #include <QHBoxLayout>
 #include <QKeyEvent>
 
-#include <kiconloader.h>
+#include <KoIcon.h>
 
 #include <KoProgressUpdater.h>
 #include <KoProgressBar.h>
@@ -57,7 +57,7 @@ KisProgressWidget::KisProgressWidget(QWidget* parent)
 {
     QHBoxLayout* layout = new QHBoxLayout(this);
     m_cancelButton = new EscapeButton(this);
-    m_cancelButton->setIcon(SmallIcon("process-stop"));
+    m_cancelButton->setIcon(koIcon("process-stop"));
 
     QSizePolicy sizePolicy = m_cancelButton->sizePolicy();
     sizePolicy.setVerticalPolicy(QSizePolicy::Ignored);

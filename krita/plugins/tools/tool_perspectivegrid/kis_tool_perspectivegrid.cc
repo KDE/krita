@@ -30,6 +30,7 @@
 #include <kis_debug.h>
 #include <klocale.h>
 
+#include <KoIcon.h>
 #include <KoCanvasController.h>
 
 #include <kis_config.h>
@@ -373,9 +374,8 @@ void KisToolPerspectiveGrid::drawGrid(QPainter& gc)
             drawSmallRectangle(gc, (endPos + startPos) / 2.); // Draw left-middle handle
         }
         // Draw delete icon
-        KIcon iconDelete("edit-delete");
         QPointF iconDeletePos = pixelToView(grid->center());
-        gc.drawPixmap(iconDeletePos - QPointF(16, 16), iconDelete.pixmap(32, 32));
+        gc.drawPixmap(iconDeletePos - QPointF(16, 16), koIcon("edit-delete").pixmap(32, 32));
         // Draw Vanishing point
         QPointF tbVpf = grid->topBottomVanishingPoint();
         if (fabs(tbVpf.x()) < 30000000. && fabs(tbVpf.y()) < 30000000.) {

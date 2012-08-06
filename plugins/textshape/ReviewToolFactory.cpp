@@ -25,6 +25,7 @@
 #include <KoShapeController.h>
 #include <KoDocumentResourceManager.h>
 
+#include <KoIcon.h>
 #include <klocale.h>
 
 ReviewToolFactory::ReviewToolFactory()
@@ -32,7 +33,7 @@ ReviewToolFactory::ReviewToolFactory()
 {
     setToolTip(i18n("Review"));
     setToolType(dynamicToolType()+",calligrawords");
-    setIcon("tool-changetracking");
+    setIconName(koIconNameCStr("tool_review"));
     setPriority(30);
     setActivationShapeId(TextShape_SHAPEID);
 }

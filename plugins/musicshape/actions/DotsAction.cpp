@@ -34,7 +34,8 @@
 
 #include "../commands/AddDotCommand.h"
 
-#include <kicon.h>
+#include <KoIcon.h>
+
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -43,7 +44,7 @@
 using namespace MusicCore;
 
 DotsAction::DotsAction(SimpleEntryTool* tool)
-    : AbstractNoteMusicAction(KIcon("music-dottednote"), i18n("Dots"), tool)
+    : AbstractNoteMusicAction(koIcon("music-dottednote"), i18n("Dots"), tool)
 {
 }
 

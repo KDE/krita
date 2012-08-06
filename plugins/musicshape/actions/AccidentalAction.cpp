@@ -34,7 +34,8 @@
 
 #include "../commands/SetAccidentalsCommand.h"
 
-#include <kicon.h>
+#include <KoIcon.h>
+
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -44,13 +45,19 @@ using namespace MusicCore;
 
 static KIcon getIcon(int accidentals)
 {
-    switch (accidentals) {
-        case -2: return KIcon("music-doubleflat");
-        case -1: return KIcon("music-flat");
-        case 0:  return KIcon("music-natural");
-        case 1:  return KIcon("music-cross");
-        case 2:  return KIcon("music-doublecross");
+    static const char *const iconNames[5] =
+    {
+        koIconNameCStr("music-doubleflat"),
+        koIconNameCStr("music-flat"),
+        koIconNameCStr("music-natural"),
+        koIconNameCStr("music-cross"),
+        koIconNameCStr("music-doublecross")
+    };
+
+    if ((-2 <= accidentals) && (accidentals <= 2)) {
+        return KIcon(QLatin1String(iconNames[accidentals+2]));
     }
+
     return KIcon();
 }
 

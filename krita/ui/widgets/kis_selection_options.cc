@@ -24,6 +24,7 @@
 #include <QVBoxLayout>
 #include <QLayout>
 
+#include <KoIcon.h>
 #include "kis_types.h"
 #include "kis_layer.h"
 #include "kis_image.h"
@@ -53,13 +54,13 @@ KisSelectionOptions::KisSelectionOptions(KisCanvas2 * canvas)
     m_action->addButton(m_page->replace, SELECTION_REPLACE);
     m_action->addButton(m_page->intersect, SELECTION_INTERSECT);
 
-    m_page->pixel->setIcon(KIcon("select_pixel"));
-    m_page->shape->setIcon(KIcon("select_shape"));
+    m_page->pixel->setIcon(koIcon("select_pixel"));
+    m_page->shape->setIcon(koIcon("select_shape"));
 
-    m_page->add->setIcon(KIcon("selection_add"));
-    m_page->subtract->setIcon(KIcon("selection_subtract"));
-    m_page->replace->setIcon(KIcon("selection_replace"));
-    m_page->intersect->setIcon(KIcon("selection_intersect"));
+    m_page->add->setIcon(koIcon("selection_add"));
+    m_page->subtract->setIcon(koIcon("selection_subtract"));
+    m_page->replace->setIcon(koIcon("selection_replace"));
+    m_page->intersect->setIcon(koIcon("selection_intersect"));
 
     connect(m_mode, SIGNAL(buttonClicked(int)), this, SIGNAL(modeChanged(int)));
     connect(m_action, SIGNAL(buttonClicked(int)), this, SIGNAL(actionChanged(int)));

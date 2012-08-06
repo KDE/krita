@@ -23,6 +23,7 @@
 #include <KoPACanvas.h>
 
 #include "KoPABackgroundTool.h"
+#include <KoIcon.h>
 
 KoPABackgroundToolFactory::KoPABackgroundToolFactory()
     : KoToolFactoryBase("KoPABackgroundTool")
@@ -31,7 +32,7 @@ KoPABackgroundToolFactory::KoPABackgroundToolFactory()
     setToolTip(i18n("Document background"));
     setToolType( mainToolType() );
     setActivationShapeId("flake/always");
-    setIcon( "backgroundtool" );
+    setIconName(koIconNameCStr("backgroundtool"));
     setPriority( 3 );
 }
 

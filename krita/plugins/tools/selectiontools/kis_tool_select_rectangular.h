@@ -25,6 +25,7 @@
 #include "KoToolFactoryBase.h"
 #include "kis_tool_rectangle_base.h"
 #include "kis_selection_tool_config_widget_helper.h"
+#include <KoIcon.h>
 
 
 class KisToolSelectRectangular : public KisToolRectangleBase
@@ -53,7 +54,7 @@ public:
         setToolTip(i18n("Select a rectangular area"));
         setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
-        setIcon("tool_rect_selection");
+        setIconName(koIconNameCStr("tool_rect_selection"));
         setShortcut(KShortcut(Qt::CTRL + Qt::Key_R));
         setPriority(52);
     }

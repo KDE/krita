@@ -38,7 +38,6 @@
 #include <kstandarddirs.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kicon.h>
 
 #include <KoColorSet.h>
 #include <KoColorPatch.h>

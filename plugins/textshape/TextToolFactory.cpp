@@ -21,6 +21,7 @@
 #include "TextTool.h"
 #include "TextShape.h"
 
+#include <KoIcon.h>
 #include <klocale.h>
 
 TextToolFactory::TextToolFactory()
@@ -28,7 +29,7 @@ TextToolFactory::TextToolFactory()
 {
     setToolTip(i18n("Text editing"));
     setToolType(dynamicToolType()+",calligrawords");
-    setIcon("tool-text");
+    setIconName(koIconNameCStr("tool-text"));
     setPriority(1);
     setActivationShapeId(TextShape_SHAPEID);
 }

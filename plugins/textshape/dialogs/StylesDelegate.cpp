@@ -20,6 +20,7 @@
 
 #include "StylesDelegate.h"
 
+#include <KoIcon.h>
 
 #include <QAbstractItemView>
 #include <QColor>
@@ -33,7 +34,6 @@
 #include <QStyleOptionButton>
 #include <QStyleOptionViewItemV4>
 
-#include <KIcon>
 #include <KDebug>
 
 
@@ -79,7 +79,7 @@ void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
     if (!m_deleteButtonPressed) {
         optDel.state |= QStyle::State_Enabled;
     }
-    optDel.icon = KIcon("edit-delete");
+    optDel.icon = koIcon("edit-delete");
     optDel.features |= QStyleOptionButton::Flat;
     optDel.rect = option.rect.adjusted(dx1 - scrollBarWidth, dy1, dx2 - scrollBarWidth, dy2);
     view->style()->drawControl(QStyle::CE_PushButton, &optDel, painter, 0);
@@ -96,7 +96,7 @@ void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
     if (!m_editButtonPressed) {
         optEdit.state |= QStyle::State_Enabled;
     }
-    optEdit.icon = KIcon("document-properties");
+    optEdit.icon = koIcon("document-properties");
     optEdit.features |= QStyleOptionButton::Flat;
     optEdit.rect = option.rect.adjusted(dx1 - scrollBarWidth, dy1, dx2 - scrollBarWidth, dy2);
     view->style()->drawControl(QStyle::CE_PushButton, &optEdit, painter, 0);

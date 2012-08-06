@@ -20,19 +20,19 @@
 #include "SnapGuideConfigWidget.h"
 #include "KoSnapGuide.h"
 
-#include <KIcon>
+#include <KoIcon.h>
 
 SnapGuideConfigWidget::SnapGuideConfigWidget(KoSnapGuide * snapGuide, QWidget * parent)
         : QWidget(parent), m_snapGuide(snapGuide)
 {
     widget.setupUi(this);
 
-    widget.orthogonalSnapGuide->setIcon(KIcon(QLatin1String("snap-orto")));
-    widget.nodeSnapGuide->setIcon(KIcon(QLatin1String("snap-node")));
-    widget.extensionSnapGuide->setIcon(KIcon(QLatin1String("snap-extension")));
-    widget.intersectionSnapGuide->setIcon(KIcon(QLatin1String("snap-intersection")));
-    widget.boundingBoxSnapGuide->setIcon(KIcon(QLatin1String("snap-boundingbox")));
-    widget.lineGuideSnapGuide->setIcon(KIcon(QLatin1String("snap-guideline")));
+    widget.orthogonalSnapGuide->setIcon(koIcon("snap-orto"));
+    widget.nodeSnapGuide->setIcon(koIcon("snap-node"));
+    widget.extensionSnapGuide->setIcon(koIcon("snap-extension"));
+    widget.intersectionSnapGuide->setIcon(koIcon("snap-intersection"));
+    widget.boundingBoxSnapGuide->setIcon(koIcon("snap-boundingbox"));
+    widget.lineGuideSnapGuide->setIcon(koIcon("snap-guideline"));
 
     updateControls();
 

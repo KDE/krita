@@ -20,7 +20,7 @@
 #include "KoZoomToolWidget.h"
 #include <QPainter>
 #include <QMouseEvent>
-#include <kicon.h>
+#include <KoIcon.h>
 #include "KoZoomTool.h"
 
 KoZoomToolWidget::KoZoomToolWidget(KoZoomTool* tool, QWidget* parent)
@@ -31,8 +31,8 @@ KoZoomToolWidget::KoZoomToolWidget(KoZoomTool* tool, QWidget* parent)
     birdEyeLabel->installEventFilter(this);
     birdEyeLabel->hide(); //remove this when coding on the birdEyeLabel
 
-    zoomInButton->setIcon(KIcon("zoom-in"));
-    zoomOutButton->setIcon(KIcon("zoom-out"));
+    zoomInButton->setIcon(koIcon("zoom-in"));
+    zoomOutButton->setIcon(koIcon("zoom-out"));
 
     connect(zoomInButton, SIGNAL(toggled(bool)), this, SLOT(changeZoomMode()));
     connect(zoomOutButton, SIGNAL(toggled(bool)), this, SLOT(changeZoomMode()));

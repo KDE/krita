@@ -34,7 +34,6 @@
 #include <QMouseEvent>
 
 #include <kdebug.h>
-#include <kiconloader.h>
 #include <kstyle.h>
 
 #define BRANCHBOX_SIZE 9

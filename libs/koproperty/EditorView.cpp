@@ -23,6 +23,8 @@
 #include "Set.h"
 #include "Factory.h"
 
+#include <KoIcon.h>
+
 #include <QPointer>
 #include <QItemDelegate>
 #include <QStandardItemEditorCreator>
@@ -34,7 +36,6 @@
 #include <QHeaderView>
 
 #include <KLocale>
-#include <KIconLoader>
 #include <KIconEffect>
 #include <KDebug>
 
@@ -177,7 +178,7 @@ void ItemDelegate::paint(QPainter *painter,
         QBrush gradBrush(grad);
         painter->fillRect(x2 - iconSize * 2, y1, 
             iconSize * 2, y2 - y1 + 1, gradBrush);
-        QPixmap revertIcon( DesktopIcon("edit-undo", iconSize) );
+        QPixmap revertIcon(koIcon("edit-undo").pixmap(iconSize, iconSize));
 //        QPixmap alphaChannel(revertIcon.size());
 //        alphaChannel.fill(QColor(127, 127, 127));
 //        revertIcon.setAlphaChannel(alphaChannel);

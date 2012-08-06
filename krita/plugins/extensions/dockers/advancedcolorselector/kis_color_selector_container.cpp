@@ -24,7 +24,6 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPushButton>
-#include <KIcon>
 
 #include <KConfig>
 #include <KConfigGroup>

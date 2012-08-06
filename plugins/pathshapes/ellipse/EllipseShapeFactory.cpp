@@ -26,6 +26,7 @@
 #include <KoGradientBackground.h>
 #include <KoShapeLoadingContext.h>
 
+#include <KoIcon.h>
 #include <klocale.h>
 
 
@@ -33,7 +34,7 @@ EllipseShapeFactory::EllipseShapeFactory()
     : KoShapeFactoryBase(EllipseShapeId, i18n("Ellipse"))
 {
     setToolTip(i18n( "An ellipse"));
-    setIcon("ellipse-shape");
+    setIconName(koIconNameCStr("ellipse-shape"));
     setFamily("geometric");
     setLoadingPriority(1);
 

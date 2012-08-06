@@ -230,7 +230,6 @@
     </layout>
   </widget>
   <layoutdefault spacing="6" margin="11" />
-  <pixmapfunction>BarIcon</pixmapfunction>
   <customwidgets>
     <customwidget>
       <class>KToolBar</class>

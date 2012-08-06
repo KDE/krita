@@ -29,6 +29,8 @@
 #include <klocale.h>
 #include <KActionCollection>
 
+#include <KoIcon.h>
+
 #include <KoCanvasBase.h>
 #include <kis_view2.h>
 #include <kis_canvas2.h>
@@ -40,8 +42,8 @@ CompositionDockerDock::CompositionDockerDock( ) : QDockWidget(i18n("Compositions
     setupUi(widget);
     m_model = new CompositionModel(this);
     compositionView->setModel(m_model);
-    deleteButton->setIcon(KIcon("edit-delete"));
-    saveButton->setIcon(KIcon("document-save"));
+    deleteButton->setIcon(koIcon("edit-delete"));
+    saveButton->setIcon(koIcon("document-save"));
 
     setWidget(widget);
 

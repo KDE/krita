@@ -32,7 +32,8 @@
 #include "../core/Part.h"
 #include "../core/Staff.h"
 
-#include <kicon.h>
+#include <KoIcon.h>
+
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -41,7 +42,7 @@
 using namespace MusicCore;
 
 SelectionAction::SelectionAction(SimpleEntryTool* tool)
-    : AbstractMusicAction(KIcon("select"), i18n("Select"), tool)
+    : AbstractMusicAction(koIcon("select"), i18n("Select"), tool)
 {
     m_firstBar = -1;
 }

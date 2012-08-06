@@ -32,6 +32,7 @@
 #include <QtGui>
 #include "klocale.h"
 #include <kmenu.h>
+#include <KoIcon.h>
 #include <kis_paintop_settings_widget.h>
 
 #include <KoToolManager.h>
@@ -123,17 +124,17 @@ KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPain
     m_allPresetsView->setViewMode(mode);
     m_palettePresetsView->setViewMode(mode);
 
-    QAction* action = menu->addAction(KIcon("view-preview"), i18n("Thumbnails"), this, SLOT(slotThumbnailMode()));
+    QAction* action = menu->addAction(koIcon("view-preview"), i18n("Thumbnails"), this, SLOT(slotThumbnailMode()));
     action->setCheckable(true);
     action->setChecked(mode == KisPresetChooser::THUMBNAIL);
     action->setActionGroup(actionGroup);
 
-    action = menu->addAction(KIcon("view-list-details"), i18n("Details"), this, SLOT(slotDetailMode()));
+    action = menu->addAction(koIcon("view-list-details"), i18n("Details"), this, SLOT(slotDetailMode()));
     action->setCheckable(true);
     action->setChecked(mode == KisPresetChooser::DETAIL);
     action->setActionGroup(actionGroup);
 
-    viewButton->setIcon(KIcon("view-choose"));
+    viewButton->setIcon(koIcon("view-choose"));
     viewButton->setMenu(menu);
 
     /*MAIN LAYOUT*/

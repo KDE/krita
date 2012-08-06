@@ -43,6 +43,8 @@ NOT TODO:
 
 #include "Thesaurus.h"
 
+#include <KoIcon.h>
+
 #include <QToolButton>
 #include <QByteArray>
 #include <QTextCursor>
@@ -108,11 +110,11 @@ Thesaurus::Thesaurus()
     row1->addWidget(m_edit, 1);
     row1->addWidget(m_search, 0);
     m_back = new QToolButton(page);
-    m_back->setIcon(KIcon(QString::fromLatin1("go-previous")));
+    m_back->setIcon(koIcon("go-previous"));
     m_back->setToolTip(i18nc("@action:button Go back to the previous word in history", "Back"));
     row1->addWidget(m_back, 0);
     m_forward = new QToolButton(page);
-    m_forward->setIcon(KIcon(QString::fromLatin1("go-next")));
+    m_forward->setIcon(koIcon("go-next"));
     m_forward->setToolTip(i18nc("@action:button Go forward to the next word in history", "Forward"));
     row1->addWidget(m_forward, 0);
 

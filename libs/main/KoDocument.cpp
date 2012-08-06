@@ -56,7 +56,6 @@
 #include <kparts/partmanager.h>
 #include <ksavefile.h>
 #include <kxmlguifactory.h>
-#include <KIconLoader>
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kdesktopfile.h>
@@ -2085,7 +2084,6 @@ void KoDocument::initEmpty()
     setEmpty();
     setModified(false);
 }
-
 
 QList<KoVersionInfo> & KoDocument::versionList()
 {

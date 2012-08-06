@@ -26,7 +26,6 @@
 #include <QRect>
 #include <QDomElement>
 #include <QDomDocument>
-#include <QIcon>
 #include <QString>
 #include <QList>
 #include <QMap>
@@ -35,9 +34,9 @@
 #include <QMimeData>
 
 #include <ktemporaryfile.h>
-#include <kicon.h>
 #include <kdebug.h>
 
+#include <KoIcon.h>
 #include <KoElementReference.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
@@ -213,7 +212,7 @@ void KisShapeLayer::setImage(KisImageWSP _image)
 
 QIcon KisShapeLayer::icon() const
 {
-    return KIcon("bookmark-new");
+    return koIcon("bookmark-new");
 }
 
 KisPaintDeviceSP KisShapeLayer::original() const

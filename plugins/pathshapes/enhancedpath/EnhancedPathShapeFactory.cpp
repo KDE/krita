@@ -27,6 +27,8 @@
 #include <KoColorBackground.h>
 #include <KoShapeLoadingContext.h>
 
+#include <KoIcon.h>
+
 #include <klocale.h>
 
 #include <QString>
@@ -37,7 +39,7 @@ EnhancedPathShapeFactory::EnhancedPathShapeFactory()
     : KoShapeFactoryBase(EnhancedPathShapeId, i18n("An enhanced path shape"))
 {
     setToolTip(i18n("An enhanced path"));
-    setIcon("enhancedpath");
+    setIconName(koIconNameCStr("enhancedpath"));
     setXmlElementNames(KoXmlNS::draw, QStringList("custom-shape"));
     setLoadingPriority(1);
 
@@ -157,7 +159,7 @@ void EnhancedPathShapeFactory::addCross()
     t.name = i18n("Cross");
     t.family = "funny";
     t.toolTip = i18n("A cross");
-    t.icon = "cross-shape";
+    t.iconName = koIconName("cross-shape");
     t.properties = dataToProperties(modifiers, commands, handles, formulae);
 
     addTemplate(t);
@@ -192,7 +194,7 @@ void EnhancedPathShapeFactory::addArrow()
         t.name = i18n("Arrow");
         t.family = "arrow";
         t.toolTip = i18n("An arrow");
-        t.icon = "draw-arrow-forward";
+        t.iconName = koIconName("draw-arrow-forward");
         t.properties = dataToProperties(modifiers, commands, handles, formulae);
 
         addTemplate(t);
@@ -225,7 +227,7 @@ void EnhancedPathShapeFactory::addArrow()
         t.name = i18n("Arrow");
         t.family = "arrow";
         t.toolTip = i18n("An arrow");
-        t.icon = "draw-arrow-back";
+        t.iconName = koIconName("draw-arrow-back");
         t.properties = dataToProperties(modifiers, commands, handles, formulae);
 
         addTemplate(t);
@@ -258,7 +260,7 @@ void EnhancedPathShapeFactory::addArrow()
         t.name = i18n("Arrow");
         t.family = "arrow";
         t.toolTip = i18n("An arrow");
-        t.icon = "draw-arrow-up";
+        t.iconName = koIconName("draw-arrow-up");
         t.properties = dataToProperties(modifiers, commands, handles, formulae);
 
         addTemplate(t);
@@ -291,7 +293,7 @@ void EnhancedPathShapeFactory::addArrow()
         t.name = i18n("Arrow");
         t.family = "arrow";
         t.toolTip = i18n("An arrow");
-        t.icon = "draw-arrow-down";
+        t.iconName = koIconName("draw-arrow-down");
         t.properties = dataToProperties(modifiers, commands, handles, formulae);
 
         addTemplate(t);
@@ -370,7 +372,7 @@ void EnhancedPathShapeFactory::addCallout()
     t.name = i18n("Callout");
     t.family = "funny";
     t.toolTip = i18n("A callout");
-    t.icon = "callout-shape";
+    t.iconName = koIconName("callout-shape");
     t.properties = dataToProperties(modifiers, commands, handles, formulae);
     t.properties->setProperty(QLatin1String("viewBox"), QRect(0, 0, 21600, 21600));
 
@@ -415,7 +417,7 @@ void EnhancedPathShapeFactory::addSmiley()
     t.name = i18n("Smiley");
     t.family = "funny";
     t.toolTip = i18n("Smiley");
-    t.icon = "smiley-shape";
+    t.iconName = koIconName("smiley-shape");
     t.properties = dataToProperties(modifiers, commands, handles, formulae);
     t.properties->setProperty(QLatin1String("viewBox"), QRect(0, 0, 21600, 21600));
 
@@ -494,7 +496,7 @@ void EnhancedPathShapeFactory::addCircularArrow()
     t.name = i18n("Circular Arrow");
     t.family = "arrow";
     t.toolTip = i18n("A circular-arrow");
-    t.icon = "circular-arrow-shape";
+    t.iconName = koIconName("circular-arrow-shape");
     t.properties = dataToProperties(modifiers, commands, handles, formulae);
     t.properties->setProperty(QLatin1String("viewBox"), QRect(0, 0, 21600, 21600));
     addTemplate(t);
@@ -538,7 +540,7 @@ void EnhancedPathShapeFactory::addGearhead()
     t.name = i18n("Gearhead");
     t.family = "funny";
     t.toolTip = i18n("A gearhead");
-    t.icon = "gearhead-shape";
+    t.iconName = koIconName("gearhead-shape");
     t.properties = dataToProperties(QString(), commands, ListType(), ComplexType());
     t.properties->setProperty("background", QVariant::fromValue<QColor>(QColor(Qt::blue)));
     t.properties->setProperty(QLatin1String("viewBox"), QRect(0, 0, 40, 90));

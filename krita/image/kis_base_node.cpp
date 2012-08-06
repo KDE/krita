@@ -19,6 +19,7 @@
 #include "kis_base_node.h"
 #include <klocale.h>
 
+#include <KoIcon.h>
 #include <KoProperties.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
@@ -137,8 +138,8 @@ void KisBaseNode::setCompositeOp(const QString& compositeOp)
 KoDocumentSectionModel::PropertyList KisBaseNode::sectionModelProperties() const
 {
     KoDocumentSectionModel::PropertyList l;
-    l << KoDocumentSectionModel::Property(i18n("Visible"), KIcon("visible"), KIcon("novisible"), visible(), m_d->hack_visible.isInStasis, m_d->hack_visible.stateInStasis);
-    l << KoDocumentSectionModel::Property(i18n("Locked"), KIcon("locked"), KIcon("unlocked"), userLocked());
+    l << KoDocumentSectionModel::Property(i18n("Visible"), koIcon("visible"), koIcon("novisible"), visible(), m_d->hack_visible.isInStasis, m_d->hack_visible.stateInStasis);
+    l << KoDocumentSectionModel::Property(i18n("Locked"), koIcon("locked"), koIcon("unlocked"), userLocked());
     return l;
 }
 

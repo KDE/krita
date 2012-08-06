@@ -479,7 +479,7 @@ CALLIGRADB_EXPORT QString defaultFileBasedDriverMimeType();
 /*! \return icon name for default file-based driver
  (typically icon for something like "application/x-kexiproject-sqlite").
  @see KexiDB::defaultFileBasedDriverMimeType() */
-CALLIGRADB_EXPORT QString defaultFileBasedDriverIcon();
+CALLIGRADB_EXPORT QString defaultFileBasedDriverIconName();
 
 /*! \return default file-based driver name (currently, "sqlite3"). */
 CALLIGRADB_EXPORT QString defaultFileBasedDriverName();

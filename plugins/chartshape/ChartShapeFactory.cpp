@@ -30,6 +30,7 @@
 #include <klocale.h>
 
 // Calligra
+#include <KoIcon.h>
 #include <KoProperties.h>
 #include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
@@ -70,7 +71,7 @@ ChartShapeFactory::ChartShapeFactory()
     setToolTip(i18n("Business charts"));
 
     KIconLoader::global()->addAppDir("kchart");
-    setIcon("kchart");
+    setIconName(koIconNameCStr("kchart"));
 
     // Default 'app specific' config pages i.e. unless an app defines
     // other config pages, these are used.

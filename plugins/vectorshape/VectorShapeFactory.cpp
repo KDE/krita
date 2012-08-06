@@ -29,7 +29,7 @@
 #include <KoXmlNS.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
-
+#include <KoIcon.h>
 
 // KDE
 #include <klocale.h>
@@ -40,8 +40,7 @@ VectorShapeFactory::VectorShapeFactory()
     : KoShapeFactoryBase(VectorShape_SHAPEID, i18n("Vector image"))
 {
     setToolTip(i18n("A shape that shows a vector image (EMF/WMF/SVM)"));
-    // FIXME: x-shape-vectorimage
-    setIcon("application-x-wmf");
+    setIconName(koIconNameCStrNeededWithSubs("a generic vector image icon", "x-shape-vectorimage", "application-x-wmf"));
     setXmlElementNames(KoXmlNS::draw, QStringList("image"));
     setLoadingPriority(2);
 }

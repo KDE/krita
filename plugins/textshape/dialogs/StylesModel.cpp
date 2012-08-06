@@ -28,9 +28,7 @@
 #include <QImage>
 #include <QList>
 #include <QSignalMapper>
-#include <QSize>
 
-#include <KIcon>
 #include <KLocale>
 #include <KDebug>
 
@@ -55,8 +53,6 @@ StylesModel::StylesModel(KoStyleManager *manager, Type modelType, QObject *paren
         m_provideStyleNone = true;
     }
 
-    m_paragIcon = KIcon("kotext-paragraph");
-    m_charIcon = KIcon("kotext-character");
     connect(m_styleMapper, SIGNAL(mapped(int)), this, SLOT(updateName(int)));
 }
 

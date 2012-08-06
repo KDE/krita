@@ -21,6 +21,7 @@
 #include <kactioncollection.h>
 #include <kaction.h>
 
+#include <KoIcon.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoShape.h>
@@ -144,11 +145,11 @@ void KisNodeManager::setup(KActionCollection * actionCollection)
     m_d->layerManager->setup(actionCollection);
     m_d->maskManager->setup(actionCollection);
 
-    KAction * action  = new KAction(KIcon("object-flip-horizontal"), i18n("Mirror Horizontally"), this);
+    KAction * action  = new KAction(koIcon("object-flip-horizontal"), i18n("Mirror Horizontally"), this);
     actionCollection->addAction("mirrorX", action);
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorNodeX()));
 
-    action  = new KAction(KIcon("object-flip-vertical"), i18n("Mirror Vertically"), this);
+    action  = new KAction(koIcon("object-flip-vertical"), i18n("Mirror Vertically"), this);
     actionCollection->addAction("mirrorY", action);
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorNodeY()));
 }

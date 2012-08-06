@@ -37,7 +37,8 @@
 #include "../commands/AddNoteCommand.h"
 #include "../commands/MakeRestCommand.h"
 
-#include <kicon.h>
+#include <KoIcon.h>
+
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -47,19 +48,19 @@ using namespace MusicCore;
 
 static KIcon getIcon(Duration duration, bool isRest)
 {
-    QString base = isRest ? "music-rest-" : "music-note-";
-    switch (duration) {
-        case BreveNote:          return KIcon(base + "breve");
-        case WholeNote:          return KIcon(base + "whole");
-        case HalfNote:           return KIcon(base + "half");
-        case QuarterNote:        return KIcon(base + "quarter");
-        case EighthNote:         return KIcon(base + "eighth");
-        case SixteenthNote:      return KIcon(base + "16th");
-        case ThirtySecondNote:   return KIcon(base + "32nd");
-        case SixtyFourthNote:    return KIcon(base + "64th");
-        case HundredTwentyEighthNote: return KIcon(base + "128th");
-    }
-    return KIcon();
+    const char *const id =
+        (duration == BreveNote) ? (isRest?koIconNameCStr("music-rest-breve"):koIconNameCStr("music-note-breve")) :
+        (duration == WholeNote) ? (isRest?koIconNameCStr("music-rest-whole"):koIconNameCStr("music-note-whole")) :
+        (duration == HalfNote) ? (isRest?koIconNameCStr("music-rest-half"):koIconNameCStr("music-note-half")) :
+        (duration == QuarterNote) ? (isRest?koIconNameCStr("music-rest-quarter"):koIconNameCStr("music-note-quarter")) :
+        (duration == EighthNote) ? (isRest?koIconNameCStr("music-rest-eighth"):koIconNameCStr("music-note-eighth")) :
+        (duration == SixteenthNote) ? (isRest?koIconNameCStr("music-rest-16th"):koIconNameCStr("music-note-16th")) :
+        (duration == ThirtySecondNote) ? (isRest?koIconNameCStr("music-rest-32nd"):koIconNameCStr("music-note-32nd")) :
+        (duration == SixtyFourthNote) ? (isRest?koIconNameCStr("music-rest-64th"):koIconNameCStr("music-note-64th")) :
+        (duration == HundredTwentyEighthNote) ? (isRest?koIconNameCStr("music-rest-128th"):koIconNameCStr("music-note-128th")) :
+        0;
+
+    return KIcon(QLatin1String(id));
 }
 
 static QString getText(Duration duration, bool isRest)

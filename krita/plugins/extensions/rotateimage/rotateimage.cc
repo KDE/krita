@@ -29,14 +29,13 @@
 #include <QPoint>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <kactioncollection.h>
-#include <kicon.h>
+#include <KoIcon.h>
 #include <kis_config.h>
 #include <kis_image.h>
 #include <kis_layer.h>
@@ -66,7 +65,7 @@ RotateImage::RotateImage(QObject *parent, const QVariantList &)
         actionCollection()->addAction("rotateimage", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage()));
 
-        action  = new KAction(KIcon("object-rotate-right"), i18nc("rotate image 90 degrees to the right", "Rotate Image 90° to the Right"), this);
+        action  = new KAction(koIcon("object-rotate-right"), i18nc("rotate image 90 degrees to the right", "Rotate Image 90° to the Right"), this);
         actionCollection()->addAction("rotateImageCW90", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage90()));
 
@@ -74,7 +73,7 @@ RotateImage::RotateImage(QObject *parent, const QVariantList &)
         actionCollection()->addAction("rotateImage180", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage180()));
 
-        action  = new KAction(KIcon("object-rotate-left"), i18nc("rotate image 90 degrees to the left", "Rotate Image 90° to the Left"), this);
+        action  = new KAction(koIcon("object-rotate-left"), i18nc("rotate image 90 degrees to the left", "Rotate Image 90° to the Left"), this);
         actionCollection()->addAction("rotateImageCCW90", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage270()));
 
@@ -86,11 +85,11 @@ RotateImage::RotateImage(QObject *parent, const QVariantList &)
         actionCollection()->addAction("rotateLayer180", m_rotate90LayerAction);
         connect(m_rotate90LayerAction, SIGNAL(triggered()), m_view->nodeManager(), SLOT(rotate180()));
 
-        m_rotate180LayerAction  = new KAction(KIcon("object-rotate-right"), i18nc("rotate the layer 90 degrees to the right", "Rotate Layer 90° to the Right"), this);
+        m_rotate180LayerAction  = new KAction(koIcon("object-rotate-right"), i18nc("rotate the layer 90 degrees to the right", "Rotate Layer 90° to the Right"), this);
         actionCollection()->addAction("rotateLayerCW90", m_rotate180LayerAction);
         connect(m_rotate180LayerAction, SIGNAL(triggered()), m_view->nodeManager(), SLOT(rotateRight90()));
 
-        m_rotate270LayerAction  = new KAction(KIcon("object-rotate-left"), i18nc("rotate the layer 90 degrees to the left", "Rotate Layer 90° to the Left"), this);
+        m_rotate270LayerAction  = new KAction(koIcon("object-rotate-left"), i18nc("rotate the layer 90 degrees to the left", "Rotate Layer 90° to the Left"), this);
         actionCollection()->addAction("rotateLayerCCW90", m_rotate270LayerAction);
         connect(m_rotate270LayerAction, SIGNAL(triggered()), m_view->nodeManager(), SLOT(rotateLeft90()));
 

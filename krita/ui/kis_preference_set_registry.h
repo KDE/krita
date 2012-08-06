@@ -23,13 +23,13 @@
 #include <QWidget>
 #include <QString>
 
-#include "kicon.h"
-
 #include "KoGenericRegistry.h"
 
 #include "kis_types.h"
 
 #include <krita_export.h>
+
+class KIcon;
 
 /**
  * Implement this abstract class to provide a preferences pane for the preferences dialog.

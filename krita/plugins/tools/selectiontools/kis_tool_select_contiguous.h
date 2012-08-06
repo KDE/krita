@@ -24,6 +24,7 @@
 
 #include "KoToolFactoryBase.h"
 #include "krita/ui/tool/kis_tool_select_base.h"
+#include <KoIcon.h>
 
 
 /**
@@ -61,7 +62,7 @@ public:
             : KoToolFactoryBase("KisToolSelectContiguous") {
         setToolTip(i18n("Select a contiguous area of colors"));
         setToolType(TOOL_TYPE_SELECTED);
-        setIcon("tool_contiguous_selection");
+        setIconName(koIconNameCStr("tool_contiguous_selection"));
         setPriority(56);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }

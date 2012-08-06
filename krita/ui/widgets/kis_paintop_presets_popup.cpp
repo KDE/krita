@@ -33,11 +33,11 @@
 
 #include <kconfig.h>
 #include <kglobalsettings.h>
-#include <kicon.h>
 #include <klocale.h>
 
 #include <KoColorSpaceRegistry.h>
 
+#include <KoIcon.h>
 #include <kis_paintop_preset.h>
 #include <kis_paintop_settings_widget.h>
 #include <kis_canvas_resource_provider.h>
@@ -85,12 +85,12 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     m_d->uiWdgPaintOpPresetSettings.scratchPad->setupScratchPad(resourceProvider, Qt::white);
     m_d->uiWdgPaintOpPresetSettings.scratchPad->setCutoutOverlayRect(QRect(25, 25, 200, 200));
-    m_d->uiWdgPaintOpPresetSettings.fillLayer->setIcon(KIcon("newlayer"));
+    m_d->uiWdgPaintOpPresetSettings.fillLayer->setIcon(koIcon("newlayer"));
     m_d->uiWdgPaintOpPresetSettings.fillLayer->hide();
-    m_d->uiWdgPaintOpPresetSettings.fillGradient->setIcon(KIcon("krita_tool_gradient"));
-    m_d->uiWdgPaintOpPresetSettings.fillSolid->setIcon(KIcon("krita_tool_color_fill"));
-    m_d->uiWdgPaintOpPresetSettings.eraseScratchPad->setIcon(KIcon("edit-clear"));
-    m_d->uiWdgPaintOpPresetSettings.paintPresetIcon->setIcon(KIcon("krita_paintop_icon"));
+    m_d->uiWdgPaintOpPresetSettings.fillGradient->setIcon(koIcon("krita_tool_gradient"));
+    m_d->uiWdgPaintOpPresetSettings.fillSolid->setIcon(koIcon("krita_tool_color_fill"));
+    m_d->uiWdgPaintOpPresetSettings.eraseScratchPad->setIcon(koIcon("edit-clear"));
+    m_d->uiWdgPaintOpPresetSettings.paintPresetIcon->setIcon(koIcon("krita_paintop_icon"));
 
     connect(m_d->uiWdgPaintOpPresetSettings.eraseScratchPad, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.scratchPad, SLOT(fillDefault()));

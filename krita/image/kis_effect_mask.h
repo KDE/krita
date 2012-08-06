@@ -19,8 +19,6 @@
 #ifndef _KIS_EFFECT_MASK_
 #define _KIS_EFFECT_MASK_
 
-#include "kicon.h"
-
 #include "kis_types.h"
 #include "kis_mask.h"
 /**
@@ -46,13 +44,9 @@ public:
     virtual ~KisEffectMask();
     KisEffectMask(const KisEffectMask& rhs);
 
-    QIcon icon() const {
-        return KIcon("bookmarks");
-    }
+    QIcon icon() const;
 
     using KisMask::apply;
-
-
 };
 
 #endif //_KIS_EFFECT_MASK_

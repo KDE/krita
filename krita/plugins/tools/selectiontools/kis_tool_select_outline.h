@@ -26,6 +26,7 @@
 #include <QPoint>
 #include <KoToolFactoryBase.h>
 #include "krita/ui/tool/kis_tool_select_base.h"
+#include <KoIcon.h>
 
 class QPainterPath;
 
@@ -63,7 +64,7 @@ public:
             : KoToolFactoryBase("KisToolSelectOutline") {
         setToolTip(i18n("Select an area by its outline"));
         setToolType(TOOL_TYPE_SELECTED);
-        setIcon("tool_outline_selection");
+        setIconName(koIconNameCStr("tool_outline_selection"));
         setPriority(55);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }

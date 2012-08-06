@@ -23,6 +23,7 @@
 #include <KoTextLayoutCellHelper.h>
 #include <KoZoomHandler.h>
 #include <KoColorPopupAction.h>
+#include <KoIcon.h>
 
 #include <KAction>
 #include <KDebug>
@@ -46,7 +47,7 @@ SimpleTableWidget::SimpleTableWidget(TextTool *tool, QWidget *parent)
     widget.mergeCells->setDefaultAction(tool->action("merge_tablecells"));
     widget.splitCells->setDefaultAction(tool->action("split_tablecells"));
 
-     KAction *action = new KAction(KIcon("borderpainter"), "activate_borderpainter", this);
+     KAction *action = new KAction(koIcon("borderpainter"), "activate_borderpainter", this);
     action->setToolTip(i18n("Select a border style and paint that style onto a table"));
     connect(action, SIGNAL(activated()), this, SLOT(restartPainting()));
     widget.border->setDefaultAction(action);
@@ -56,7 +57,7 @@ SimpleTableWidget::SimpleTableWidget(TextTool *tool, QWidget *parent)
     fillBorderButton(QColor(0,0,0));
 
     KoColorPopupAction *actionBorderColor = new KoColorPopupAction(this);
-    actionBorderColor->setIcon(KIcon("format-fill-color"));
+    actionBorderColor->setIcon(koIcon("format-fill-color"));
     actionBorderColor->setText(i18n("Set Border Color..."));
     widget.border->addAction(actionBorderColor);
     connect(actionBorderColor, SIGNAL(colorChanged(const KoColor &)), this, SLOT(setBorderColor(const KoColor &)));

@@ -33,6 +33,7 @@
 #include <KoXmlNS.h>
 #include <KoStoreDevice.h>
 #include <KoUnit.h>
+#include <KoIcon.h>
 
 #include <kdebug.h>
 #include <kurl.h>
@@ -42,7 +43,7 @@
 VideoShape::VideoShape()
     : KoFrameShape(KoXmlNS::draw, "plugin")
     , m_videoEventAction(new VideoEventAction(this))
-    , m_icon("video-x-generic")
+    , m_icon(koIconName("video-x-generic"))
 {
     setKeepAspectRatio(true);
     addEventAction(m_videoEventAction);

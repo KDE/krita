@@ -37,7 +37,6 @@
 #include <KColorDialog>
 #include <KDebug>
 #include <klocale.h>
-#include <kicon.h>
 
 #include <KoColor.h>
 #include <KoColorSpaceRegistry.h>

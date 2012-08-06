@@ -30,7 +30,6 @@
 #include <QtCore/qmath.h>
 
 #include <kcursor.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 

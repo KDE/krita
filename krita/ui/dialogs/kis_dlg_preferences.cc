@@ -52,14 +52,14 @@
 #include <kcolorbutton.h>
 #include <kcombobox.h>
 #include <kfiledialog.h>
-#include <kiconloader.h>
 #include <klineedit.h>
 #include <klocale.h>
 #include <kurlrequester.h>
 #include <kpagewidgetmodel.h>
-#include <kicon.h>
 #include <kvbox.h>
 #include <kundo2stack.h>
+
+#include <KoIcon.h>
 #include <KoConfig.h>
 
 #ifdef NEPOMUK
@@ -365,7 +365,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 {
     KisConfig cfg;
 
-    labelWarning->setPixmap(KIcon("dialog-warning").pixmap(32, 32));
+    labelWarning->setPixmap(koIcon("dialog-warning").pixmap(32, 32));
 #ifdef HAVE_OPENGL
     if (!QGLFormat::hasOpenGL()) {
         cbUseOpenGL->setEnabled(false);
@@ -580,7 +580,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     KVBox *vbox = new KVBox();
     KPageWidgetItem *page = new KPageWidgetItem(vbox, i18n("General"));
     page->setHeader(i18n("General"));
-    page->setIcon(KIcon(BarIcon("configure", KIconLoader::SizeMedium)));
+    page->setIcon(koIcon("configure"));
     addPage(page);
     m_general = new GeneralTab(vbox);
 
@@ -588,7 +588,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Display"));
     page->setHeader(i18n("Display"));
-    page->setIcon(KIcon("preferences-desktop-display"));
+    page->setIcon(koIcon("preferences-desktop-display"));
     addPage(page);
     m_displaySettings = new DisplaySettingsTab(vbox);
 
@@ -596,7 +596,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Color Management"));
     page->setHeader(i18n("Color"));
-    page->setIcon(KIcon("preferences-desktop-color"));
+    page->setIcon(koIcon("preferences-desktop-color"));
     addPage(page);
     m_colorSettings = new ColorSettingsTab(vbox);
 
@@ -605,7 +605,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Performance"));
     page->setHeader(i18n("Performance"));
-    page->setIcon(KIcon("preferences-system-performance"));
+    page->setIcon(koIcon("preferences-system-performance"));
     addPage(page);
     m_performanceSettings = new PerformanceTab(vbox);
 #endif
@@ -614,7 +614,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Grid"));
     page->setHeader(i18n("Grid"));
-    page->setIcon(KIcon(BarIcon("grid", KIconLoader::SizeMedium)));
+    page->setIcon(koIcon("grid"));
     addPage(page);
     m_gridSettings = new GridSettingsTab(vbox);
 
@@ -622,7 +622,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Tablet settings"));
     page->setHeader(i18n("Tablet"));
-    page->setIcon(KIcon("input-tablet"));
+    page->setIcon(koIcon("input-tablet"));
     addPage(page);
     m_tabletSettings = new TabletSettingsTab(vbox);
 
@@ -631,7 +631,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Canvas-only settings"));
     page->setHeader(i18n("Canvas-only"));
-    page->setIcon(KIcon("preferences-system-performance"));
+    page->setIcon(koIcon("preferences-system-performance"));
     addPage(page);
     m_fullscreenSettings = new FullscreenSettingsTab(vbox);
 
@@ -641,7 +641,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     m_authorSettings = new KoConfigAuthorPage();
     page = addPage(m_authorSettings, i18nc("@title:tab Author page", "Author"));
     page->setHeader(i18n("Author"));
-    page->setIcon(KIcon("user-identity"));
+    page->setIcon(koIcon("user-identity"));
 
 
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();

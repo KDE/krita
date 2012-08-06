@@ -26,6 +26,7 @@
 #include "KoConnectionShapeConfigWidget.h"
 
 #include <KoXmlNS.h>
+#include <KoIcon.h>
 #include <klocale.h>
 #include <KoShapeStroke.h>
 #include <KoShapeLoadingContext.h>
@@ -34,7 +35,7 @@ KoConnectionShapeFactory::KoConnectionShapeFactory()
         : KoShapeFactoryBase(KOCONNECTIONSHAPEID, i18n("Tie"))
 {
     setToolTip(i18n("A connection between two other shapes"));
-    setIcon("x-shape-connection");
+    setIconName(koIconNameCStr("x-shape-connection"));
     setXmlElementNames(KoXmlNS::draw, QStringList("connector"));
     setLoadingPriority(1);
     setHidden(true); // Don't show this shape in collections. Only ConnectionTool should create

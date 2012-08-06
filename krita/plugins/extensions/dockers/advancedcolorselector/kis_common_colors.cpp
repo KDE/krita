@@ -29,6 +29,7 @@
 #include <KComponentData>
 #include <KGlobal>
 
+#include <KoIcon.h>
 #include "KoColor.h"
 #include "KoColorSpaceRegistry.h"
 #include "kis_canvas2.h"
@@ -42,9 +43,9 @@ KisCommonColors::KisCommonColors(QWidget *parent) :
     KisColorPatches("commonColors", parent)
 {
     m_reloadButton = new QPushButton();
-    m_reloadButton->setIcon(KIcon("view-refresh"));
+    m_reloadButton->setIcon(koIcon("view-refresh"));
     connect(m_reloadButton, SIGNAL(clicked()), this, SLOT(recalculate()));
-    
+
     QList<QWidget*> tmpList;
     tmpList.append(m_reloadButton);
     setAdditionalButtons(tmpList);

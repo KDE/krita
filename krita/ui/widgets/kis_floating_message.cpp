@@ -26,16 +26,15 @@
 
 #include <QApplication>
 #include <QDesktopWidget>
-#include <KIcon>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QTimer>
 #include <QRegExp>
 
 #include <kapplication.h>
-#include <kicon.h>
 #include <kwindowsystem.h>
 
+#include <KoIcon.h>
 #include <kis_debug.h>
 
 /* Code copied from kshadowengine.cpp
@@ -128,8 +127,7 @@ KisFloatingMessage::KisFloatingMessage(const QString &message, QWidget *parent, 
     , m_message(message)
     , m_showOverParent(showOverParent)
 {
-    KIcon icon("krita");
-    m_icon = icon.pixmap(256, 256).toImage();
+    m_icon = koIcon("krita").pixmap(256, 256).toImage();
 
     setWindowFlags(Qt::WindowStaysOnBottomHint | Qt::FramelessWindowHint | Qt::Tool);
     setFocusPolicy(Qt::NoFocus);

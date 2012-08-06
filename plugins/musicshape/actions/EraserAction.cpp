@@ -36,7 +36,8 @@
 #include "../commands/RemoveChordCommand.h"
 #include "../commands/RemoveStaffElementCommand.h"
 
-#include <kicon.h>
+#include <KoIcon.h>
+
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -45,7 +46,7 @@
 using namespace MusicCore;
 
 EraserAction::EraserAction(SimpleEntryTool* tool)
-    : AbstractNoteMusicAction(KIcon("draw-eraser"), i18n("Eraser"), tool)
+    : AbstractNoteMusicAction(koIcon("draw-eraser"), i18n("Eraser"), tool)
 {
 }
 

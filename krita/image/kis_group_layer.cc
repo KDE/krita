@@ -20,6 +20,7 @@
 
 #include "kis_group_layer.h"
 
+#include <KoIcon.h>
 #include <KoCompositeOp.h>
 #include <KoColorSpace.h>
 
@@ -123,7 +124,7 @@ const KoColorSpace * KisGroupLayer::colorSpace() const
 
 QIcon KisGroupLayer::icon() const
 {
-    return KIcon("folder");
+    return koIcon("folder");
 }
 
 void KisGroupLayer::setImage(KisImageWSP image)

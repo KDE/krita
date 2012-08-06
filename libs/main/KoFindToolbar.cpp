@@ -32,11 +32,12 @@
 #include <KDE/KLocalizedString>
 #include <KDE/KLineEdit>
 #include <KDE/KSqueezedTextLabel>
-#include <KDE/KIcon>
 #include <KDE/KHistoryComboBox>
 #include <KDE/KAction>
 #include <KDE/KActionCollection>
 #include <KDE/KColorScheme>
+
+#include <KoIcon.h>
 
 #include "KoFindBase.h"
 #include "KoFindOptionSet.h"
@@ -98,7 +99,7 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
 
     d->closeButton = new QToolButton(this);
     d->closeButton->setAutoRaise(true);
-    d->closeButton->setIcon(KIcon("dialog-close"));
+    d->closeButton->setIcon(koIcon("dialog-close"));
     d->closeButton->setShortcut(QKeySequence(Qt::Key_Escape));
     connect(d->closeButton, SIGNAL(clicked(bool)), this, SLOT(hide()));
     connect(d->closeButton, SIGNAL(clicked(bool)), d->finder, SLOT(finished()));
@@ -117,7 +118,7 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
     layout->addWidget(d->searchLine, 0, 2);
 
     d->nextButton = new QToolButton(this);
-    d->nextButton->setIcon(KIcon("go-down-search"));
+    d->nextButton->setIcon(koIcon("go-down-search"));
     d->nextButton->setText(i18nc("Next search result", "Next"));
     d->nextButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     d->nextButton->setEnabled(false);
@@ -127,7 +128,7 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
     layout->addWidget(d->nextButton, 0, 3);
 
     d->previousButton = new QToolButton(this);
-    d->previousButton->setIcon(KIcon("go-up-search"));
+    d->previousButton->setIcon(koIcon("go-up-search"));
     d->previousButton->setText(i18nc("Previous search result", "Previous"));
     d->previousButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     d->previousButton->setEnabled(false);

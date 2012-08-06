@@ -39,7 +39,6 @@
 #include <QButtonGroup>
 
 #include <klocale.h>
-#include <kiconloader.h>
 
 #include <KoToolManager.h>
 #include <KoCanvasBase.h>

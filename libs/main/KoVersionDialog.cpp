@@ -36,7 +36,6 @@
 #include <QTreeWidget>
 
 #include <kdebug.h>
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <ktemporaryfile.h>

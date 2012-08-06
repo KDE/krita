@@ -23,10 +23,10 @@
 
 //Calligra headers
 #include "KoContextBarButton.h"
+#include <KoIcon.h>
 
 //KDE headers
 #include <KGlobalSettings>
-#include <KIconLoader>
 #include <klocale.h>
 
 //Qt Headers
@@ -222,9 +222,11 @@ void KoViewItemContextBar::restoreCursor()
 
 void KoViewItemContextBar::updateToggleSelectionButton()
 {
-    m_ToggleSelectionButton->setIcon(SmallIcon(
-            m_view->selectionModel()->isSelected(m_IndexUnderCursor) ? "list-remove" : "list-add"));
-    m_ToggleSelectionButton->setToolTip( m_view->selectionModel()->isSelected(m_IndexUnderCursor) ? i18n("deselect item") : i18n("select item"));
+    const bool isHoveredIndexSelected = m_view->selectionModel()->isSelected(m_IndexUnderCursor);
+    const char *const iconName = (isHoveredIndexSelected ? koIconNameCStr("list-remove") : koIconNameCStr("list-add"));
+
+    m_ToggleSelectionButton->setIcon(KIcon(QLatin1String(iconName)));
+    m_ToggleSelectionButton->setToolTip(isHoveredIndexSelected ? i18n("deselect item") : i18n("select item"));
 }
 
 void KoViewItemContextBar::update()

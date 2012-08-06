@@ -37,6 +37,7 @@
 #include <KoBookmark.h>
 #include <KoInlineNote.h>
 #include <KoTextDocumentLayout.h>
+#include <KoIcon.h>
 
 #include <kdebug.h>
 
@@ -124,11 +125,11 @@ void ReferencesTool::createActions()
     addAction("insert_labeledendnote", action);
     connect(w, SIGNAL(triggered(QString)), this, SLOT(insertLabeledEndNote(QString)));
 
-    action = new KAction(KIcon("configure"), i18n("Settings..."), this);
+    action = new KAction(koIcon("configure"), i18n("Settings..."), this);
     addAction("format_footnotes",action);
     connect(action, SIGNAL(triggered()), this, SLOT(showFootnotesConfigureDialog()));
 
-    action = new KAction(KIcon("configure"), i18n("Settings..."), this);
+    action = new KAction(koIcon("configure"), i18n("Settings..."), this);
     addAction("format_endnotes",action);
     connect(action, SIGNAL(triggered()), this, SLOT(showEndnotesConfigureDialog()));
 

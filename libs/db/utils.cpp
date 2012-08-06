@@ -22,6 +22,7 @@
 #include "drivermanager.h"
 #include "lookupfieldschema.h"
 #include "calligradb_global.h"
+#include <KoIcon.h>
 
 #include <QMap>
 #include <QHash>
@@ -37,7 +38,6 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <klocale.h>
-#include <kiconloader.h>
 #include <KMimeType>
 
 #include <memory>
@@ -1056,7 +1056,7 @@ struct KexiDB_NotEmptyValueForTypeCache {
                 QByteArray ba;
                 QBuffer buffer(&ba);
                 buffer.open(QIODevice::WriteOnly);
-                QPixmap pm(SmallIcon("document-new"));
+                QPixmap pm(koSmallIcon("document-new"));
                 pm.save(&buffer, "PNG"/*! @todo default? */);
                 ADD(i, ba);
                 continue;
@@ -1283,7 +1283,7 @@ QString KexiDB::defaultFileBasedDriverMimeType()
     return QString::fromLatin1("application/x-kexiproject-sqlite3");
 }
 
-QString KexiDB::defaultFileBasedDriverIcon()
+QString KexiDB::defaultFileBasedDriverIconName()
 {
     KMimeType::Ptr mimeType(KMimeType::mimeType(
                                 KexiDB::defaultFileBasedDriverMimeType()));

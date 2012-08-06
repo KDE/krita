@@ -33,6 +33,8 @@
 
 #include "StylesComboPreview.h"
 
+#include <KoIcon.h>
+
 #include <QImage>
 #include <QLineEdit>
 #include <QModelIndex>
@@ -44,7 +46,6 @@
 #include <QPushButton>
 #include <QString>
 
-#include <KIcon>
 #include <KLocale>
 
 #include <KDebug>
@@ -73,7 +74,7 @@ void StylesComboPreview::init()
 
     m_addButton = new QPushButton(this);
     m_addButton->setCursor( Qt::ArrowCursor );
-    m_addButton->setIcon(KIcon("list-add"));
+    m_addButton->setIcon(koIcon("list-add"));
     m_addButton->setFlat(true);
     m_addButton->setMinimumSize(16,16);
     m_addButton->setMaximumSize(16, 16);

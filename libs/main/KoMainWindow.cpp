@@ -37,6 +37,7 @@
 #include "KoServiceProvider.h"
 #include "KoPart.h"
 #include <KoPageLayoutWidget.h>
+#include <KoIcon.h>
 
 #include <kdeversion.h>
 #if KDE_IS_VERSION(4,6,0)
@@ -256,7 +257,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     d->printActionPreview = actionCollection()->addAction(KStandardAction::PrintPreview,  "file_print_preview", this, SLOT(slotFilePrintPreview()));
 
     d->exportPdf  = new KAction(i18n("Export as PDF..."), this);
-    d->exportPdf->setIcon(KIcon("application-pdf"));
+    d->exportPdf->setIcon(koIcon("application-pdf"));
     actionCollection()->addAction("file_export_pdf", d->exportPdf);
     connect(d->exportPdf, SIGNAL(triggered()), this, SLOT(exportToPdf()));
 
@@ -273,17 +274,17 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     actionCollection()->addAction("file_versions_file", d->showFileVersions);
     connect(d->showFileVersions, SIGNAL(triggered(bool)), this, SLOT(slotVersionsFile()));
 
-    d->importFile  = new KAction(KIcon("document-import"), i18n("I&mport..."), this);
+    d->importFile  = new KAction(koIcon("document-import"), i18n("I&mport..."), this);
     actionCollection()->addAction("file_import_file", d->importFile);
     connect(d->importFile, SIGNAL(triggered(bool)), this, SLOT(slotImportFile()));
 
-    d->exportFile  = new KAction(KIcon("document-export"), i18n("E&xport..."), this);
+    d->exportFile  = new KAction(koIcon("document-export"), i18n("E&xport..."), this);
     actionCollection()->addAction("file_export_file", d->exportFile);
     connect(d->exportFile, SIGNAL(triggered(bool)), this, SLOT(slotExportFile()));
 
     /* The following entry opens the document information dialog.  Since the action is named so it
         intends to show data this entry should not have a trailing ellipses (...).  */
-    d->showDocumentInfo  = new KAction(KIcon("document-properties"), i18n("Document Information"), this);
+    d->showDocumentInfo  = new KAction(koIcon("document-properties"), i18n("Document Information"), this);
     actionCollection()->addAction("file_documentinfo", d->showDocumentInfo);
     connect(d->showDocumentInfo, SIGNAL(triggered(bool)), this, SLOT(slotDocumentInfo()));
 
@@ -304,7 +305,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     d->closeFile->setEnabled(false);
 
     // set up the action "list" for "Close all Views" (hacky :) (Werner)
-    KToggleAction *fullscreenAction  = new KToggleAction(KIcon("view-fullscreen"), i18n("Full Screen Mode"), this);
+    KToggleAction *fullscreenAction  = new KToggleAction(koIcon("view-fullscreen"), i18n("Full Screen Mode"), this);
     actionCollection()->addAction("view_fullscreen", fullscreenAction);
     fullscreenAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_F));
     connect(fullscreenAction, SIGNAL(toggled(bool)), this, SLOT(viewFullscreen(bool)));
@@ -1367,13 +1368,13 @@ public:
         connect(m_fileWidget, SIGNAL(accepted()), this, SLOT(accept()));
 
         KPageWidgetItem *fileItem = new KPageWidgetItem(m_fileWidget, i18n( "File" ));
-        fileItem->setIcon(KIcon("document-open"));
+        fileItem->setIcon(koIcon("document-open"));
         addPage(fileItem);
 
         m_pageLayoutWidget = new KoPageLayoutWidget(this, pageLayout);
         m_pageLayoutWidget->showUnitchooser(false);
         KPageWidgetItem *optionsItem = new KPageWidgetItem(m_pageLayoutWidget, i18n("Configure"));
-        optionsItem->setIcon(KIcon("configure"));
+        optionsItem->setIcon(koIcon("configure"));
         addPage(optionsItem);
 
         resize(QSize(800, 600).expandedTo(minimumSizeHint()));

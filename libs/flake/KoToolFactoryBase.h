@@ -102,7 +102,7 @@ public:
      * return the basename of the icon for this tool
      * @return the basename of the icon for this tool
      */
-    QString icon() const;
+    QString iconName() const;
 
     /**
      * Return the id of the shape we can process.
@@ -219,7 +219,8 @@ protected:
      * @param iconName the basename (without extension) of the icon
      * @see KIconLoader
      */
-    void setIcon(const QString &iconName);
+    void setIconName(const char *iconName);
+    void setIconName(const QString &iconName);
     /**
      * Set the priority of this tool, as it is shown in the toolBox; lower number means
      * it will be show more to the front of the list.

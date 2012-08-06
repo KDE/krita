@@ -43,9 +43,9 @@
 
 // KDE
 #include <klocale.h>
-#include <kiconloader.h>
 
 // Calligra
+#include <KoIcon.h>
 #include <KoUnit.h>
 #include <KoShapeStroke.h>
 #include <KoLineStyleSelector.h>
@@ -113,21 +113,21 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     QToolButton *button = 0;
 
     button = new QToolButton(this);
-    button->setIcon(SmallIcon("cap_butt"));
+    button->setIcon(koIcon("cap_butt"));
     button->setCheckable(true);
     button->setToolTip(i18n("Butt cap"));
     d->capGroup->addButton(button, Qt::FlatCap);
     mainLayout->addWidget(button, 2, 1);
 
     button = new QToolButton(this);
-    button->setIcon(SmallIcon("cap_round"));
+    button->setIcon(koIcon("cap_round"));
     button->setCheckable(true);
     button->setToolTip(i18n("Round cap"));
     d->capGroup->addButton(button, Qt::RoundCap);
     mainLayout->addWidget(button, 2, 2);
 
     button = new QToolButton(this);
-    button->setIcon(SmallIcon("cap_square"));
+    button->setIcon(koIcon("cap_square"));
     button->setCheckable(true);
     button->setToolTip(i18n("Square cap"));
     d->capGroup->addButton(button, Qt::SquareCap);
@@ -141,21 +141,21 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     d->joinGroup->setExclusive(true);
 
     button = new QToolButton(this);
-    button->setIcon(SmallIcon("join_miter"));
+    button->setIcon(koIcon("join_miter"));
     button->setCheckable(true);
     button->setToolTip(i18n("Miter join"));
     d->joinGroup->addButton(button, Qt::MiterJoin);
     mainLayout->addWidget(button, 3, 1);
 
     button = new QToolButton(this);
-    button->setIcon(SmallIcon("join_round"));
+    button->setIcon(koIcon("join_round"));
     button->setCheckable(true);
     button->setToolTip(i18n("Round join"));
     d->joinGroup->addButton(button, Qt::RoundJoin);
     mainLayout->addWidget(button, 3, 2);
 
     button = new QToolButton(this);
-    button->setIcon(SmallIcon("join_bevel"));
+    button->setIcon(koIcon("join_bevel"));
     button->setCheckable(true);
     button->setToolTip(i18n("Bevel join"));
     d->joinGroup->addButton(button, Qt::BevelJoin);

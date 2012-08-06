@@ -35,6 +35,7 @@
 #include <kacceleratormanager.h>
 #include <kseparator.h>
 
+#include <KoIcon.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 #include <KoResourceSelector.h>
@@ -94,12 +95,12 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     setWindowTitle(i18n("Painter's Toolchest"));
 
     m_settingsWidget = new KisPopupButton(this);
-    m_settingsWidget->setIcon(KIcon("paintop_settings_02"));
+    m_settingsWidget->setIcon(koIcon("paintop_settings_02"));
     m_settingsWidget->setToolTip(i18n("Edit brush settings"));
     m_settingsWidget->setFixedSize(32, 32);
 
     m_presetWidget = new KisPopupButton(this);
-    m_presetWidget->setIcon(KIcon("paintop_settings_01"));
+    m_presetWidget->setIcon(koIcon("paintop_settings_01"));
     m_presetWidget->setToolTip(i18n("Choose brush preset"));
     m_presetWidget->setFixedSize(32, 32);
 
@@ -107,7 +108,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_eraseModeButton->setFixedSize(32, 32);
     m_eraseModeButton->setCheckable(true);
     KAction* eraseAction = new KAction(i18n("Set eraser mode"), m_eraseModeButton);
-    eraseAction->setIcon(KIcon("draw-eraser"));
+    eraseAction->setIcon(koIcon("draw-eraser"));
     eraseAction->setShortcut(Qt::Key_E);
     eraseAction->setCheckable(true);
     m_eraseModeButton->setDefaultAction(eraseAction);
@@ -117,7 +118,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     hMirrorButton->setFixedSize(32, 32);
     hMirrorButton->setCheckable(true);
     KAction* hMirrorAction = new KAction(i18n("Set horizontal mirror mode"), hMirrorButton);
-    hMirrorAction->setIcon(KIcon("object-flip-horizontal"));
+    hMirrorAction->setIcon(koIcon("object-flip-horizontal"));
     hMirrorAction->setCheckable(true);
     hMirrorButton->setDefaultAction(hMirrorAction);
     m_view->actionCollection()->addAction("hmirror_action", hMirrorAction);
@@ -126,11 +127,11 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     vMirrorButton->setFixedSize(32, 32);
     vMirrorButton->setCheckable(true);
     KAction* vMirrorAction = new KAction(i18n("Set vertical mirror mode"), vMirrorButton);
-    vMirrorAction->setIcon(KIcon("object-flip-vertical"));
+    vMirrorAction->setIcon(koIcon("object-flip-vertical"));
     vMirrorAction->setCheckable(true);
     vMirrorButton->setDefaultAction(vMirrorAction);
     m_view->actionCollection()->addAction("vmirror_action", vMirrorAction);
-    
+
     for(int i=0; i<2; ++i) {
         m_sliderChooser[i] = new KisWidgetChooser();
         KisDoubleSliderSpinBox* slOpacity = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("opacity", i18n("Opacity:"));
@@ -167,7 +168,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_paletteButton->setFixedHeight(30);
 
     m_workspaceWidget = new KisPopupButton(view);
-    m_workspaceWidget->setIcon(KIcon("document-multiple"));
+    m_workspaceWidget->setIcon(koIcon("document-multiple"));
     m_workspaceWidget->setToolTip(i18n("Choose workspace"));
     m_workspaceWidget->setFixedSize(32, 32);
     m_workspaceWidget->setPopupWidget(new KisWorkspaceChooser(view));

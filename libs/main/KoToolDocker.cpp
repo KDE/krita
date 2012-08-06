@@ -23,6 +23,7 @@
 
 #include <KoDockWidgetTitleBarButton.h>
 #include <KoDockWidgetTitleBar.h>
+#include <KoIcon.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -47,9 +48,9 @@ public:
     Private(KoToolDocker *dock)
             : q(dock)
             , tabbed(false)
-   {
-        tabIcon = KIcon("tab-new");
-        unTabIcon = KIcon("tab-close");
+            , tabIcon(koIconName("tab-new"))
+            , unTabIcon(koIconName("tab-close"))
+    {
     }
 
     QList<QWidget *> currentWidgetList;

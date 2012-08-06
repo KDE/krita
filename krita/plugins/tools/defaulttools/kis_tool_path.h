@@ -24,6 +24,7 @@
 
 #include "flake/kis_node_shape.h"
 #include "kis_tool_shape.h"
+#include <KoIcon.h>
 
 class KisSelectionOptions;
 class KoCanvasBase;
@@ -75,7 +76,7 @@ public:
         setToolTip(i18n("Draw a path. Shift-mouseclick ends the path."));
         setToolType(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
-        setIcon("krita_draw_path");
+        setIconName(koIconNameCStr("krita_draw_path"));
         setPriority(7);
     }
 

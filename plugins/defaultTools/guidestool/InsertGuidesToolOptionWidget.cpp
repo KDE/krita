@@ -20,16 +20,15 @@
 
 #include "InsertGuidesToolOptionWidget.h"
 
-#include <KIcon>
+#include <KoIcon.h>
 
 InsertGuidesToolOptionWidget::InsertGuidesToolOptionWidget(QWidget *parent)
     : QWidget(parent)
 {
     m_widget.setupUi(this);
 
-    //FIXME give real icon names
-    m_widget.m_horizontalEdgesCheckBox->setIcon(KIcon("add-horizontal-edges"));
-    m_widget.m_verticalEdgesCheckBox->setIcon(KIcon("add-vertical-edges"));
+    m_widget.m_horizontalEdgesCheckBox->setIcon(koIconNeeded("add guides at top & bottom side of page","add-horizontal-edges"));
+    m_widget.m_verticalEdgesCheckBox->setIcon(koIconNeeded("add guides at left & right side of page","add-vertical-edges"));
 
     connect(m_widget.m_createButton, SIGNAL(clicked(bool)),
              this, SLOT(onCreateButtonClicked(bool)));

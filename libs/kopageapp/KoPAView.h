@@ -22,16 +22,19 @@
 #ifndef KOPAVIEW_H
 #define KOPAVIEW_H
 
-#include <QObject>
-
-#include <KoView.h>
-#include <KoPAViewBase.h>
-#include <KoZoomHandler.h>
+#include "KoPAViewBase.h"
 #include "KoPageApp.h"
 #include "kopageapp_export.h"
 
+#include <KoView.h>
+#include <KoZoomHandler.h>
+#include <KoPart.h>
+
+#include <QObject>
+
 class KoCanvasController;
 class KoFind;
+class KoPart;
 class KoPACanvasBase;
 class KoPADocument;
 class KoPAPageBase;
@@ -72,7 +75,8 @@ public:
      * @param document the document of this view
      * @param parent the parent widget
      */
-    explicit KoPAView( KoPADocument * document, QWidget * parent = 0 );
+    explicit KoPAView(KoPart *part, KoPADocument *document, QWidget *parent);
+
     virtual ~KoPAView();
 
     //  KoPAViewBase/KoView overrides

@@ -22,7 +22,8 @@
 
 #include "KoPADocument.h"
 
-#include <KoOdf.h>
+#include <KoOdf.h> 
+#include <QGraphicsItem>
 
 class KoView;
 

@@ -27,6 +27,7 @@ SET (chartshape_LIB_SRCS
     KDChartModel.cpp
     Surface.cpp
     ChartDocument.cpp
+    ChartPart.cpp
     ChartShape.cpp
     ChartTool.cpp
     ChartToolFactory.cpp

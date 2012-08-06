@@ -33,15 +33,16 @@
 
 class QString;
 
-class KoColorSpace;
 class KoColor;
+class KoColorSpace;
+class KoPart2;
+class KoShapeBasedDocumentBase;
 class KoShapeLayer;
 
-class KoShapeBasedDocumentBase;
-class KisView2;
 class KisChildDoc;
 class KisUndoStore;
 class KisPaintingAssistant;
+class KisView2;
 
 /**
  * The class that represents a Krita document containing content and
@@ -63,7 +64,7 @@ class KRITAUI_EXPORT KisDoc2 : public KoDocument
     Q_OBJECT
 
 public:
-    KisDoc2(QObject* parent = 0);
+    KisDoc2(KoPart* parent = 0);
     virtual ~KisDoc2();
 
 public:
@@ -79,14 +80,11 @@ public:
     virtual bool loadXML(const KoXmlDocument& doc, KoStore* store);
 
     virtual QByteArray mimeType() const;
-    virtual QList<KoDocument::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
 
     /**
      * Draw the image embedded in another Calligra document
      */
     virtual void paintContent(QPainter& painter, const QRect& rect);
-
-    void showStartUpWidget(KoMainWindow* parent, bool alwaysShow);
 
     /// Generate a scaled-down pixmap of the image projection that fits in size
     virtual QPixmap generatePreview(const QSize& size);
@@ -98,8 +96,6 @@ public slots:
      * @since 1.5
      */
     virtual void initEmpty();
-
-    void showErrorAndDie();
 
 public:
 
@@ -166,18 +162,10 @@ signals:
 
     void sigLoadingFinished();
 
-public:
-
-    // Overide KoDocument
-    virtual KoView* createViewInstance(QWidget *parent);
 
 protected slots:
 
     void slotLoadingFinished();
-
-    // Overide KoDocument
-    virtual void openExistingFile(const KUrl& url);
-    virtual void openTemplate(const KUrl& url);
 
 private slots:
 

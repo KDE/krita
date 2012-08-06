@@ -23,7 +23,7 @@
 
 #include <KoStore.h>
 #include <KoOdfWriteStore.h>
-#include <KoDocumentAdaptor.h>
+#include <KoPartAdaptor.h>
 #include <KoEmbeddedDocumentSaver.h>
 
 #include <KDebug>
@@ -425,7 +425,7 @@ QObject *KoScriptingOdfStore::document() const
 bool KoScriptingOdfStore::setDocument(QObject *document)
 {
     bool ok = true;
-    m_documentAdaptor = dynamic_cast<KoDocumentAdaptor*>(document);
+    m_documentAdaptor = dynamic_cast<KoPartAdaptor*>(document);
     if (m_documentAdaptor) {
         m_document = dynamic_cast<KoDocument*>(m_documentAdaptor->parent());
         Q_ASSERT(m_document);

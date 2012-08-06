@@ -25,6 +25,7 @@
 #include <KoDocument.h>
 #include <KoUnitDoubleSpinBox.h>
 #include <KoDocumentResourceManager.h>
+#include <KoPart.h>
 
 #include <kcomponentdata.h>
 #include <kcombobox.h>
@@ -66,7 +67,7 @@ KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, KoDocumentResourceManager *d
 {
     setObjectName(name);
 
-    d->config = d->doc->componentData().config();
+    d->config = d->doc->documentPart()->componentData().config();
 
     d->oldGrabSensitivity = d->docResources->grabSensitivity();
     d->oldHandleRadius = d->docResources->handleRadius();

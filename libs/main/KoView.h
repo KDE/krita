@@ -25,6 +25,7 @@
 #include <kparts/part.h>
 #include "komain_export.h"
 
+class KoPart;
 class KoDocument;
 class KoMainWindow;
 class KoPrintJob;
@@ -64,7 +65,7 @@ public:
      *                 must not be zero.
      * @param parent   parent widget for this view.
      */
-    explicit KoView(KoDocument *document, QWidget *parent = 0);
+    KoView(KoPart *part, KoDocument *document, QWidget *parent = 0);
 
     /**
      * Destroys the view and unregisters at the document.

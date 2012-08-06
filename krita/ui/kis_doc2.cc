@@ -67,6 +67,7 @@
 #include <KoDocumentInfo.h>
 #include <KoShape.h>
 #include <KoToolManager.h>
+#include <KoPart.h>
 
 // Krita Image
 #include <kis_config.h>
@@ -98,6 +99,7 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_resource_server_provider.h"
 #include "kis_node_manager.h"
+#include "kis_part2.h"
 
 static const char *CURRENT_DTD_VERSION = "2.0";
 
@@ -118,7 +120,6 @@ public:
             : nserver(0)
             , macroNestDepth(0)
             , kraLoader(0)
-            , dieOnError(false)
     {
     }
 
@@ -137,24 +138,21 @@ public:
     KisKraLoader* kraLoader;
     KisKraSaver* kraSaver;
 
-    QString error;
-    bool dieOnError;
-
     QList<KisPaintingAssistant*> assistants;
 
+    KisPart2 *part; // XXX: we shouldn't know about the part here!
 };
 
 
-KisDoc2::KisDoc2(QObject *parent)
+KisDoc2::KisDoc2(KoPart *parent)
     : KoDocument(parent, new UndoStack(this))
         , m_d(new KisDocPrivate())
 {
-    setComponentData(KisFactory2::componentData(), false);
+    m_d->part = qobject_cast<KisPart2*>(parent);
 
     // preload the krita resources
     KisResourceServerProvider::instance();
 
-    setTemplateType("krita_template");
     init();
     connect(this, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
     undoStack()->setUndoLimit(KisConfig().undoStackLimit());
@@ -186,20 +184,6 @@ void KisDoc2::slotLoadingFinished() {
         m_d->image->initialRefreshGraph();
     }
     setAutoSave(KisConfig().autoSaveInterval());
-}
-
-void KisDoc2::openExistingFile(const KUrl& url)
-{
-    qApp->setOverrideCursor(Qt::BusyCursor);
-    KoDocument::openExistingFile(url);
-    qApp->restoreOverrideCursor();
-}
-
-void KisDoc2::openTemplate(const KUrl& url)
-{
-    qApp->setOverrideCursor(Qt::BusyCursor);
-    KoDocument::openTemplate(url);
-    qApp->restoreOverrideCursor();
 }
 
 bool KisDoc2::init()
@@ -341,31 +325,6 @@ bool KisDoc2::completeLoading(KoStore *store)
     return true;
 }
 
-QList<KoDocument::CustomDocumentWidgetItem> KisDoc2::createCustomDocumentWidgets(QWidget *parent)
-{
-    KisConfig cfg;
-
-    int w = cfg.defImageWidth();
-    int h = cfg.defImageHeight();
-    bool clipAvailable = false;
-
-    QSize sz = KisClipboard::instance()->clipSize();
-    if (sz.isValid() && sz.width() != 0 && sz.height() != 0) {
-        w = sz.width();
-        h = sz.height();
-        clipAvailable = true;
-    }
-
-    QList<KoDocument::CustomDocumentWidgetItem> widgetList;
-    KoDocument::CustomDocumentWidgetItem item;
-    item.widget = new KisCustomImageWidget(parent, this, w, h, clipAvailable, cfg.defImageResolution(), cfg.defColorModel(), cfg.defColorDepth(), cfg.defColorProfile(), "unnamed");
-    widgetList << item;
-
-    return widgetList;
-}
-
-
-
 KisImageWSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace* colorspace)
 {
     KoColor backgroundColor(Qt::white, colorspace);
@@ -427,58 +386,6 @@ bool KisDoc2::newImage(const QString& name,
     return true;
 }
 
-KoView* KisDoc2::createViewInstance(QWidget* parent)
-{
-    qApp->setOverrideCursor(Qt::WaitCursor);
-    KisView2 *v = new KisView2(this, parent);
-    Q_CHECK_PTR(v);
-    m_d->shapeController->setInitialShapeForView(v);
-    KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
-
-    // XXX: this prevents a crash when opening a new document after opening a
-    // a document that has not been touched! I have no clue why, though.
-    // see: https://bugs.kde.org/show_bug.cgi?id=208239.
-    setModified(true);
-    setModified(false);
-    qApp->restoreOverrideCursor();
-    return v;
-}
-
-void KisDoc2::showStartUpWidget(KoMainWindow* parent, bool alwaysShow)
-{
-    // print error if the lcms engine is not available
-    if (!KoColorSpaceEngineRegistry::instance()->contains("icc")) {
-        // need to wait 1 event since exiting here would not work.
-        m_d->error = i18n("The Calligra LittleCMS color management plugin is not installed. Krita will quit now.");
-        m_d->dieOnError = true;
-        QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
-    }
-
-    KoDocument::showStartUpWidget(parent, alwaysShow);
-    KisConfig cfg;
-    if (cfg.firstRun()) {
-
-        QStringList qtversion = QString(qVersion()).split('.');
-        if (qtversion[0] == "4" && qtversion[1] <= "6" && qtversion[2].toInt() < 3) {
-            m_d->error = i18n("Krita needs at least Qt 4.6.3 to work correctly. Your Qt version is %1. If you have a graphics tablet it will not work correctly!", qVersion());
-            m_d->dieOnError = false;
-            QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
-        }
-
-        cfg.setFirstRun(false);
-    }
-}
-
-void KisDoc2::showErrorAndDie()
-{
-    KMessageBox::error(widget(),
-                       m_d->error,
-                       i18n("Installation error"));
-    if (m_d->dieOnError) {
-        exit(10);
-    }
-}
-
 void KisDoc2::paintContent(QPainter& painter, const QRect& rc)
 {
     if (!m_d->image) return;
@@ -500,7 +407,7 @@ QPixmap KisDoc2::generatePreview(const QSize& size)
     return QPixmap(size);
 }
 
-KoShapeBasedDocumentBase * KisDoc2::shapeController() const
+KoShapeBasedDocumentBase *KisDoc2::shapeController() const
 {
     return m_d->shapeController;
 }
@@ -513,7 +420,7 @@ KoShapeLayer* KisDoc2::shapeForNode(KisNodeSP layer) const
 vKisNodeSP KisDoc2::activeNodes() const
 {
     vKisNodeSP nodes;
-    foreach(KoView *v, views()) {
+    foreach(KoView *v, m_d->part->views()) {
         KisView2 *view = qobject_cast<KisView2*>(v);
         if (view) {
             KisNodeSP activeNode = view->activeNode();
@@ -531,7 +438,7 @@ vKisNodeSP KisDoc2::activeNodes() const
 QList<KisPaintingAssistant*> KisDoc2::assistants()
 {
     QList<KisPaintingAssistant*> assistants;
-    foreach(KoView *v, views()) {
+    foreach(KoView *v, m_d->part->views()) {
         KisView2 *view = qobject_cast<KisView2*>(v);
         if (view) {
             KisPaintingAssistantsManager* assistantsmanager = view->paintingAssistantManager();

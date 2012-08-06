@@ -67,6 +67,7 @@ set(kritaui_LIB_SRCS
     kis_custom_palette.cc
     kis_custom_pattern.cc
     kis_doc2.cc
+    kis_part2.cpp
     kis_exposure_visitor.cc
     kis_factory2.cc
     kis_filter_handler.cc
@@ -320,7 +321,6 @@ install( FILES
 #    kis_tool_dummy.h
 #    kis_tool_manager.h
 #    kis_tool_types.h
-#    kis_view2.h
 #    KoInputDevice.h
 #    canvas/kis_perspective_grid_manager.h
    DESTINATION ${INCLUDE_INSTALL_DIR})

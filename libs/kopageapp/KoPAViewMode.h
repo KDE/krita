@@ -125,6 +125,19 @@ public:
      */
     virtual KoViewConverter * viewConverter( KoPACanvasBase * canvas );
 
+
+    virtual const KoPageLayout &activePageLayout() const;
+
+    virtual void changePageLayout( const KoPageLayout &pageLayout, bool applyToDocument, KUndo2Command *parent = 0 );
+
+    QPointF origin();
+
+    void setOrigin(const QPointF &origin);
+    void setName(const QString &name);
+    QString name() const;
+
+public slots:
+
     /**
      * @brief Update the view when a new shape is added to the document
      *
@@ -145,18 +158,6 @@ public:
      */
     virtual void removeShape( KoShape *shape );
 
-    virtual const KoPageLayout &activePageLayout() const;
-
-    virtual void changePageLayout( const KoPageLayout &pageLayout, bool applyToDocument, KUndo2Command *parent = 0 );
-
-    QPointF origin();
-
-    void setOrigin(const QPointF &origin);
-    void setName(const QString &name);
-    QString name() const;
-
-public slots:
-
     /**
      * @brief Update the view based on the active page
      *
@@ -168,7 +169,7 @@ public slots:
      *
      * @param page the new page to be updated on the view mode
      */
-    virtual void updateActivePage( KoPAPageBase * page );
+    virtual void updateActivePage(KoPAPageBase * page);
 
 protected:
     KoPACanvasBase * m_canvas;

@@ -176,7 +176,7 @@ void KoPathShape::saveOdf(KoShapeSavingContext & context) const
     context.xmlWriter().endElement();
 }
 
-bool KoPathShape::loadContourOdf(const KoXmlElement & element, KoShapeLoadingContext &, const QSizeF &scaleFactor)
+bool KoPathShape::loadContourOdf(const KoXmlElement &element, KoShapeLoadingContext &, const QSizeF &scaleFactor)
 {
     Q_D(KoPathShape);
 

@@ -36,7 +36,7 @@ SpreadsheetMigrate::SpreadsheetMigrate(QObject *parent, const QVariantList &args
 SpreadsheetMigrate::~SpreadsheetMigrate()
 {
   if (m_KSDoc) {
-    m_KSDoc->closeUrl();
+    m_KSDoc->documentPart()->closeUrl();
     m_KSDoc->deleteLater();
   }
 }
@@ -59,7 +59,7 @@ bool SpreadsheetMigrate::drv_connect()
 bool SpreadsheetMigrate::drv_disconnect()
 {
   if (m_KSDoc) {
-    m_KSDoc->closeUrl();
+    m_KSDoc->documentPart()->closeUrl();
     delete m_KSDoc;
     m_KSDoc = 0;
   }

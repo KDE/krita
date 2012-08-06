@@ -24,6 +24,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <KoGridData.h>
 #include <KoUnitDoubleSpinBox.h>
 #include <KoAspectButton.h>
+#include <KoPart.h>
 
 #include <kcolorbutton.h>
 #include <kdialog.h>
@@ -57,7 +58,7 @@ KoConfigGridPage::KoConfigGridPage(KoDocument* doc, char* name)
 {
     setObjectName(name);
 
-    d->config = d->doc->componentData().config();
+    d->config = d->doc->documentPart()->componentData().config();
 
     KoUnit unit = d->doc->unit();
     KoGridData &gd = d->doc->gridData();

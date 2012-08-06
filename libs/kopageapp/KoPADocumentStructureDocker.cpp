@@ -205,19 +205,6 @@ void KoPADocumentStructureDocker::updateView()
     m_model->update();
 }
 
-void KoPADocumentStructureDocker::setPart(KParts::Part * part)
-{
-    m_doc = dynamic_cast<KoPADocument *>(part);
-    m_model->setDocument(m_doc); // this either contains the doc or is 0
-
-    m_buttonGroup->button(Button_Delete)->setEnabled(false);
-    if (m_doc) {
-        if (m_sectionView->selectionModel()->selectedIndexes().count() < m_doc->pages().count()) {
-            m_buttonGroup->button(Button_Delete)->setEnabled(true);
-        }
-    }
-}
-
 void KoPADocumentStructureDocker::slotButtonClicked(int buttonId)
 {
     switch (buttonId)

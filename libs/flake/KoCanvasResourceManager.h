@@ -97,6 +97,7 @@ public:
     explicit KoCanvasResourceManager(QObject *parent = 0);
     virtual ~KoCanvasResourceManager();
 
+public slots:
     /**
      * Set a resource of any type.
      * @param key the integer key
@@ -129,6 +130,7 @@ public:
      */
     void setResource(int key, const KoUnit &unit);
 
+public:
     /**
      * Returns a qvariant containing the specified resource or a standard one if the
      * specified resource does not exist.

@@ -42,7 +42,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 #endif
 
     int state;
-    KAboutData * aboutData = newKritaAboutData();
+    KAboutData *aboutData = newKritaAboutData();
 
     KCmdLineArgs::init(argc, argv, aboutData);
 

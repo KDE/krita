@@ -83,13 +83,6 @@ void OnlineDocument::slotOnlineDocument()
 
 void OnlineDocument::receivedOnlineDocument(QString  path)
 {
-//    QString mimetype = KMimeType::findByPath(path)->name();
-//    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(mimetype);
-//    QString error;
-//    KoDocument *doc = entry.createDoc(&error);
-//    KUrl url;
-//    url.setPath(path);
-//    doc->openUrl(url);
     KoView *view = dynamic_cast<KoView *>(parent());
     if (!view) {
         return;

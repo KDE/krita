@@ -27,21 +27,21 @@
 #include <QtDBus/qdbusabstractadaptor.h>
 #include <QList>
 #include "komain_export.h"
-class KoDocument;
+class KoPart;
 
 /**
  * DBUS interface for any Calligra document
  * Use KoApplicationIface to get hold of an existing document's interface,
  * or to create a document.
  */
-class KOMAIN_EXPORT KoDocumentAdaptor : public QDBusAbstractAdaptor
+class KOMAIN_EXPORT KoPartAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.document")
 public:
 
-    explicit KoDocumentAdaptor(KoDocument * doc);
-    ~KoDocumentAdaptor();
+    explicit KoPartAdaptor(KoPart* doc);
+    ~KoPartAdaptor();
 
 public slots: // METHODS
     /**
@@ -131,7 +131,7 @@ public slots: // METHODS
 public:
 
 protected:
-    KoDocument * m_pDoc;
+    KoPart* m_pDoc;
 };
 
 #endif

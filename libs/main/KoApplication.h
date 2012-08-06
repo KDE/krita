@@ -23,6 +23,8 @@
 #include <kapplication.h>
 #include "komain_export.h"
 
+class KoPart;
+
 class KoApplicationPrivate;
 class QSplashScreen;
 
@@ -80,10 +82,16 @@ public:
      */
     void setSplashScreen(QSplashScreen *splash);
 
-signals:
-    /// KoDocument needs to be able to emit document signals from here.
-    friend class KoDocument;
 
+    QList<KoPart*> partList() const;
+
+    void addPart(KoPart* part);
+
+signals:
+
+    /// KoDocument needs to be able to emit document signals from here.
+    friend class KoDocument; // remove this line when done
+    friend class KoPart;
     /**
      * emitted when a new document is opened.
      */

@@ -30,6 +30,7 @@
 #include "kis_selection_manager.h"
 #include "kis_node_manager.h"
 #include "kis_view2.h"
+#include "kis_part2.h"
 #include "KoMainWindow.h"
 
 
@@ -46,11 +47,13 @@ public:
 
         QVERIFY(checkLayers("initial"));
 
-        doc = new KisDoc2();
+        part = new KisPart2(0);
+        doc = new KisDoc2(part);
+        part->setDocument(doc);
         doc->setCurrentImage(image);
 
-        shell = new KoMainWindow(doc->componentData());
-        KisView2 *view = new KisView2(doc, shell);
+        shell = new KoMainWindow(part->componentData());
+        KisView2 *view = new KisView2(part, doc, shell);
 
         KisPattern *newPattern = new KisPattern(QString(FILES_DATA_DIR) + QDir::separator() + "HR_SketchPaper_01.pat");
         newPattern->load();
@@ -72,6 +75,7 @@ public:
     ~SelectionManagerTester() {
         delete shell;
         delete doc;
+        delete part;
     }
 
     void checkUndo() {
@@ -114,6 +118,7 @@ public:
 
 private:
     KisDoc2 *doc;
+    KisPart2 *part;
     KoMainWindow *shell;
 };
 

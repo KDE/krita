@@ -41,10 +41,13 @@
 #include <qgl.h>
 #endif
 
-#include <libs/main/KoDocument.h>
+#include <KoDocument.h>
 #include <KoColorProfile.h>
+#include <KoApplication.h>
 #include <KoConfigAuthorPage.h>
+#include <KoPart.h>
 
+#include <kapplication.h>
 #include <kmessagebox.h>
 #include <kcolorbutton.h>
 #include <kcombobox.h>
@@ -694,7 +697,9 @@ bool KisDlgPreferences::editPreferences()
 
         cfg.setAutoSaveInterval(dialog->m_general->autoSaveInterval());
         cfg.setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
-        foreach(KoDocument* doc, *KoDocument::documentList()) {
+        KoApplication *app = qobject_cast<KoApplication*>(qApp);
+        foreach(KoPart* part, app->partList()) {
+            KoDocument *doc = part->document();
             doc->setAutoSave(dialog->m_general->autoSaveInterval());
             doc->setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
             doc->undoStack()->setUndoLimit(dialog->m_general->undoStackSize());

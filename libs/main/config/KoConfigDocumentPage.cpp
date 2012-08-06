@@ -21,6 +21,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include "KoConfigDocumentPage.h"
 
 #include <KoDocument.h>
+#include <KoPart.h>
 
 #include <kdialog.h>
 #include <klocale.h>
@@ -53,7 +54,7 @@ KoConfigDocumentPage::KoConfigDocumentPage(KoDocument* doc, char* name)
 {
     setObjectName(name);
 
-    d->config = d->doc->componentData().config();
+    d->config = d->doc->documentPart()->componentData().config();
 
     QGroupBox* gbDocumentSettings = new QGroupBox(i18n("Document Settings"), this);
     QVBoxLayout *layout = new QVBoxLayout(gbDocumentSettings);

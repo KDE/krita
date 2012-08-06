@@ -45,6 +45,7 @@
 
 // KChart
 #include "ChartShape.h"
+#include "ChartPart.h"
 
 
 namespace KChart {
@@ -67,14 +68,13 @@ ChartDocument::Private::~Private()
 }
 
 ChartDocument::ChartDocument(ChartShape *parent)
-    : KoDocument(0)
+    : KoDocument(new ChartPart(0))
     , d (new Private)
 {
     d->parent = parent;
     // Needed by KoDocument::nativeOasisMimeType().
     // KoEmbeddedDocumentSaver uses that method to
     // get the mimetype of the embedded document.
-    setComponentData(KComponentData("kchart"));
 }
 
 ChartDocument::~ChartDocument()
@@ -159,12 +159,6 @@ bool ChartDocument::saveOdf(SavingContext &context)
     return true;
 }
 
-KoView *ChartDocument::createViewInstance(QWidget *parent)
-{
-    Q_UNUSED(parent);
-
-    return 0;
-}
 
 void ChartDocument::paintContent(QPainter &painter, const QRect &rect)
 {

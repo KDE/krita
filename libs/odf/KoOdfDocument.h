@@ -70,9 +70,9 @@ public:
     /**
      * @return the current URL
      */
-    virtual KUrl odfUrl() const = 0;
+    virtual KUrl url() const = 0;
 
-    virtual void setOdfUrl(const KUrl &url) = 0;
+    virtual void setUrl(const KUrl &url) = 0;
 
     /**
      * Returns the OASIS OpenDocument mimetype of the document, if supported

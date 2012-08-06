@@ -23,6 +23,7 @@ Boston, MA 02110-1301, USA.
 #include "KoDocumentEntry.h"
 #include "KoFilterEntry.h"
 #include "KoDocument.h"
+#include "KoPart.h"
 
 #include "PriorityQueue_p.h"
 #include "KoFilterGraph.h"
@@ -501,12 +502,12 @@ KoDocument* KoFilterChain::createDocument(const QByteArray& mimeType)
     }
 
     QString errorMsg;
-    KoDocument* doc = entry.createDoc(&errorMsg);   /*entries.first().createDoc();*/
-    if (!doc) {
+    KoPart *part = entry.createKoPart(&errorMsg);
+    if (!part) {
         kError(30500) << "Couldn't create the document: " << errorMsg << endl;
         return 0;
     }
-    return doc;
+    return part->document();
 }
 
 int KoFilterChain::weight() const

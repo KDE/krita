@@ -55,6 +55,7 @@
 #include "kis_convolution_kernel.h"
 #include "kis_debug.h"
 #include "kis_doc2.h"
+#include "kis_part2.h"
 #include "kis_fill_painter.h"
 #include "kis_group_layer.h"
 #include "kis_image.h"
@@ -465,8 +466,12 @@ void KisSelectionManager::pasteNew()
     const QByteArray mimetype = KoServiceProvider::readNativeFormatMimeType();
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(mimetype);
 
-    KisDoc2* doc = dynamic_cast<KisDoc2*>(entry.createDoc());
+    QString error;
+    KisPart2* part = dynamic_cast<KisPart2*>(entry.createKoPart(&error));
+    if (!part) return;
+    KisDoc2 *doc = new KisDoc2(part);
     if (!doc) return;
+    part->setDocument(doc);
 
     KisImageWSP image = new KisImage(doc->createUndoStore(),
                                      rect.width(),
@@ -485,7 +490,7 @@ void KisSelectionManager::pasteNew()
     image->addNode(layer.data(), image->rootLayer());
     doc->setCurrentImage(image);
 
-    KoMainWindow *win = new KoMainWindow(doc->componentData());
+    KoMainWindow *win = new KoMainWindow(part->componentData());
     win->show();
     win->setRootDocument(doc);
 }

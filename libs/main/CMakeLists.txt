@@ -18,7 +18,7 @@ set(komain_LIB_SRCS
     KoApplicationAdaptor.cpp
     KoApplication.cpp
     KoDockerManager.cpp
-    KoDocumentAdaptor.cpp
+    KoPartAdaptor.cpp
     KoDocument.cpp
     KoDocumentEntry.cpp
     KoDocumentInfo.cpp
@@ -91,6 +91,8 @@ set(komain_LIB_SRCS
     KoFindOption.cpp
     KoFindOptionSet.cpp
     KoFindStyle.cpp
+
+    KoPart.cpp
 )
 if( Soprano_FOUND )
     set(komain_LIB_SRCS ${komain_LIB_SRCS}
@@ -220,6 +222,7 @@ install( FILES
     KoMainWindow.h
     KoModeBoxFactory.h
     KoServiceProvider.h
+    KoPart.h
     KoPrintJob.h
     KoProgressUpdater.h
     KoProgressProxy.h

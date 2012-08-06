@@ -141,7 +141,7 @@ install(TARGETS krita ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(TARGETS kdeinit_krita ${INSTALL_TARGETS_DEFAULT_ARGS})
 install( PROGRAMS  krita.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES  kritapart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES  krita.rc krita_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/krita)
+install( FILES  krita.rc DESTINATION ${DATA_INSTALL_DIR}/krita)
 
 
 

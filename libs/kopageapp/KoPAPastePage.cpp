@@ -33,6 +33,7 @@
 #include "commands/KoPAPageInsertCommand.h"
 
 #include <kdebug.h>
+#include <kglobal.h>
 
 KoPAPastePage::KoPAPastePage( KoPADocument * doc, KoPAPageBase * activePage )
 : m_doc( doc )
@@ -42,7 +43,7 @@ KoPAPastePage::KoPAPastePage( KoPADocument * doc, KoPAPageBase * activePage )
 
 bool KoPAPastePage::process( const KoXmlElement & body, KoOdfReadStore & odfStore )
 {
-    KoOdfLoadingContext loadingContext( odfStore.styles(), odfStore.store(), m_doc->componentData() );
+    KoOdfLoadingContext loadingContext( odfStore.styles(), odfStore.store(), KGlobal::mainComponent() );
     KoPALoadingContext paContext(loadingContext, m_doc->resourceManager());
 
     QList<KoPAPageBase *> newMasterPages( m_doc->loadOdfMasterPages( odfStore.styles().masterPages(), paContext ) );

@@ -28,17 +28,6 @@
 
 class KoView;
 
-class MockPart : public KoPart
-{
-public:
-    MockPart()
-    : KoPart( 0 )
-    {}
-    KoView *createViewInstance( QWidget * /* parent */ ) { return 0; }
-protected:
-    virtual QGraphicsItem *createCanvasItem() { return 0; }
-};
-
 class MockDocument : public KoPADocument
 {
 public:

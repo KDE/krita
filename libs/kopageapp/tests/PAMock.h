@@ -22,22 +22,31 @@
 
 #include "KoPADocument.h"
 
+#include <KoPart.h>
 #include <KoOdf.h> 
 #include <QGraphicsItem>
 
 class KoView;
 
+class MockPart : public KoPart
+{
+public:
+    MockPart()
+    : KoPart( 0 )
+    {}
+    KoView *createViewInstance( QWidget * /* parent */ ) { return 0; }
+protected:
+    virtual QGraphicsItem *createCanvasItem() { return 0; }
+};
+
 class MockDocument : public KoPADocument
 {
 public:
     MockDocument()
-    : KoPADocument( 0 )
+    : KoPADocument( new MockPart )
     {}
-    KoView *createViewInstance( QWidget * /* parent */ ) { return 0; }
     const char *odfTagName( bool b ) { return KoOdf::bodyContentElement( KoOdf::Presentation, b ); }
     virtual KoOdf::DocumentType documentType() const { return KoOdf::Presentation; }
-protected:
-    virtual QGraphicsItem *createCanvasItem() { return 0; }
 };
 
 

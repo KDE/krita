@@ -29,7 +29,13 @@ class MeshAssistant : public KisPaintingAssistant
 {
 public:
     MeshAssistant();
-    void Initialize(KUrl file);
+    void initialize(char* file);
+    virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
+    virtual QPointF buttonPosition() const;
+    virtual int numHandles() const { return 3; }
+protected:
+    virtual QRect boundingRect() const;
+    virtual void drawCache(QPainter& gc, const KisCoordinatesConverter *converter);
 };
 
 class MeshAssistantFactory : public KisPaintingAssistantFactory

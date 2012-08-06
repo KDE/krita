@@ -28,15 +28,35 @@ MeshAssistant::MeshAssistant()
 {
 }
 
-void MeshAssistant::Initialize(KUrl file){
+void MeshAssistant::initialize(char* file){
     Assimp::Importer imp;
-        const aiScene* scene = imp.ReadFile( file.toString().toUtf8(), aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType );
+        const aiScene* scene = imp.ReadFile( file, aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType | aiProcess_FlipUVs );
         if(!scene)
         {
             return;
         }
         else
             qDebug() << "import complete";
+}
+
+QPointF MeshAssistant::adjustPosition(const QPointF& pt, const QPointF& /*strokeBegin*/)
+{
+    return QPointF();
+}
+
+void MeshAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter)
+{
+
+}
+
+QRect MeshAssistant::boundingRect() const
+{
+    return QRect();
+}
+
+QPointF MeshAssistant::buttonPosition() const
+{
+    return QPointF();
 }
 
 MeshAssistantFactory::MeshAssistantFactory()
@@ -59,5 +79,8 @@ QString MeshAssistantFactory::name() const
 
 KisPaintingAssistant* MeshAssistantFactory::createPaintingAssistant() const
 {
-    return new MeshAssistant;
+    KUrl file = KFileDialog::getOpenUrl(KUrl(), QString("*.blend"));
+    MeshAssistant* assistant = new MeshAssistant;
+    assistant->initialize(file.toLocalFile().toUtf8().data());
+    return assistant;
 }

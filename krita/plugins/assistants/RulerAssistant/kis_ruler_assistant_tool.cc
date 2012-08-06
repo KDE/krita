@@ -457,12 +457,7 @@ void KisRulerAssistantTool::removeAllAssistants()
 
 void KisRulerAssistantTool::loadAssistants()
 {
-    KUrl file = KFileDialog::getOpenUrl(KUrl(), QString("*.blend"));
-    if (m_options.comboBox->model()->index( m_options.comboBox->currentIndex(), 0 ).data(Qt::UserRole).toString()=="mesh"){
-        m_newAssistant = KisPaintingAssistantFactoryRegistry::instance()->get(key)->createPaintingAssistant();
-        m_newAssistant->Initialize(file);
-        m_newAssistant=0;
-    }
+    KUrl file = KFileDialog::getOpenUrl(KUrl(), QString("*.krassistants"));
     if (file.isEmpty()) return;
     KIO::StoredTransferJob* job = KIO::storedGet(file);
     connect(job, SIGNAL(result(KJob*)), SLOT(openFinish(KJob*)));

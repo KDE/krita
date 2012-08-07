@@ -923,7 +923,7 @@ void KoPathTool::deactivate()
     d->canvas->snapGuide()->reset();
 }
 
-void KoPathTool::resourceChanged(int key, const QVariant & res)
+void KoPathTool::documentResourceChanged(int key, const QVariant & res)
 {
     if (key == KoDocumentResourceManager::HandleRadius) {
         int oldHandleRadius = m_handleRadius;

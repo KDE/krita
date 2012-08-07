@@ -67,7 +67,7 @@ public slots:
     /// reimplemented
     virtual void deactivate();
     /// reimplemented
-    virtual void resourceChanged(int key, const QVariant & res);
+    virtual void documentResourceChanged(int key, const QVariant & res);
 
 protected:
     /**

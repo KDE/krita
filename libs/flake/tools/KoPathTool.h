@@ -76,6 +76,9 @@ public:
     /// repaints the specified rect
     void repaint(const QRectF &repaintRect);
 
+public slots:
+    void documentResourceChanged(int key, const QVariant & res);
+
 signals:
     void typeChanged(int types);
     void pathChanged(KoPathShape* path); // TODO this is unused, can we remove this one?
@@ -100,7 +103,6 @@ private slots:
     void mergePoints();
     void breakAtPoint();
     void breakAtSegment();
-    void resourceChanged(int key, const QVariant & res);
     void pointSelectionChanged();
     void updateActions();
     void pointToLine();

@@ -316,7 +316,7 @@ void KoCreatePathTool::deactivate()
     d->cleanUp();
 }
 
-void KoCreatePathTool::resourceChanged(int key, const QVariant & res)
+void KoCreatePathTool::documentResourceChanged(int key, const QVariant & res)
 {
     Q_D(KoCreatePathTool);
 

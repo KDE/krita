@@ -75,7 +75,7 @@ public:
             KoDocumentResourceManager *scrm = canvas->shapeController()->resourceManager();
             if (scrm) {
                 q->connect(scrm, SIGNAL(resourceChanged(int, const QVariant &)),
-                        SLOT(resourceChanged(int, const QVariant &)));
+                        SLOT(documentResourceChanged(int, const QVariant &)));
             }
         }
     }

@@ -107,7 +107,7 @@ void KisColorSmudgeOp::updateMask(const KisPaintInformation& info, double scale,
     
     // transforms the fixed paint device with the current brush
     // to alpha color space to use it as an alpha/transparency mask
-    m_maskDab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
+    m_maskDab->convertTo(KoColorSpaceRegistry::instance()->alpha8(), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
 }
 
 qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)

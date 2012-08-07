@@ -1472,7 +1472,7 @@ void TestKoCompositeOps::testCompositeCopy()
                     );
 
     // black rectangle on opaque background
-    QImage result = cs->convertToQImage(layer, w, h, 0,KoColorConversionTransformation::IntentPerceptual);
+    QImage result = cs->convertToQImage(layer, w, h, 0,KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
     QImage expectedResult(QString(FILES_DATA_DIR) + QDir::separator() + "CopyWithSelectionExpectedResult.png");
 
     bool testOk = (result == expectedResult);
@@ -1491,7 +1491,7 @@ void TestKoCompositeOps::testCompositeCopy()
                     QBitArray());
 
 
-    result = cs->convertToQImage(layer, w, h, 0,KoColorConversionTransformation::IntentPerceptual);
+    result = cs->convertToQImage(layer, w, h, 0,KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
     expectedResult = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "CopySingleWithSelectionExpectedResult.png");
 
     testOk = (result == expectedResult);

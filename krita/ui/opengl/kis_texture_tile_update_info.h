@@ -25,6 +25,8 @@
 #include "kis_image.h"
 #include "kis_paint_device.h"
 
+#include <KoColorConversionTransformation.h>
+
 
 class KisTextureTileUpdateInfo;
 typedef QVector<KisTextureTileUpdateInfo> KisTextureTileUpdateInfoList;
@@ -60,7 +62,9 @@ public:
                                        m_patchRect.width(), m_patchRect.height());
     }
 
-    void convertTo(const KoColorSpace* dstCS) {
+    void convertTo(const KoColorSpace* dstCS,
+                   KoColorConversionTransformation::Intent renderingIntent,
+                   KoColorConversionTransformation::ConversionFlags conversionFlags) {
         const qint32 numPixels = m_patchRect.width() * m_patchRect.height();
         /**
          * FIXME: is it possible to do an in-place conversion?
@@ -68,7 +72,7 @@ public:
         quint8* dstBuffer = dstCS->allocPixelBuffer(numPixels);
         // FIXME: rendering intent
         Q_ASSERT(dstBuffer && m_patchPixels);
-        m_patchColorSpace->convertPixelsTo(m_patchPixels, dstBuffer, dstCS, numPixels);
+        m_patchColorSpace->convertPixelsTo(m_patchPixels, dstBuffer, dstCS, numPixels, renderingIntent, conversionFlags);
         delete[] m_patchPixels;
         m_patchColorSpace = dstCS;
         m_patchPixels = dstBuffer;

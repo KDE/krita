@@ -66,8 +66,8 @@ public:
      * It is useful to know the accumulated memory size in pixels (not in bytes) for optimizations to avoid re-allocation.
      */
     int allocatedPixels() const;
-    
-    
+
+
     /**
      * @return the pixelSize associated with this fixed paint device.
      */
@@ -103,12 +103,13 @@ public:
      * and the device is not empty
      */
     void readBytes(quint8 * dstData, qint32 x, qint32 y, qint32 w, qint32 h) const;
-    
+
     /**
      *   Converts the paint device to a different colorspace
      */
-    void convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
-
+    void convertTo(const KoColorSpace * dstColorSpace = 0,
+                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
+                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::Empty);
     /**
      * Fill this paint device with the data from image
      *
@@ -127,7 +128,9 @@ public:
      * case it's up to the color strategy to choose a profile (most
      * like sRGB).
      */
-    virtual QImage convertToQImage(const KoColorProfile *  dstProfile, qint32 x, qint32 y, qint32 w, qint32 h);
+    virtual QImage convertToQImage(const KoColorProfile *dstProfile, qint32 x, qint32 y, qint32 w, qint32 h,
+                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
+                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::Empty);
 
     /**
      * Create an RGBA QImage from a rectangle in the paint device. The
@@ -137,7 +140,9 @@ public:
      * case it's up to the color strategy to choose a profile (most
      * like sRGB).
      */
-    virtual QImage convertToQImage(const KoColorProfile *  dstProfile = 0);
+    virtual QImage convertToQImage(const KoColorProfile *dstProfile,
+                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
+                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::Empty);
 
     /**
      * Clear the given rectangle to transparent black.
@@ -156,12 +161,12 @@ public:
      */
     void fill(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *fillPixel);
 
-    
+
     /**
      * Mirrors the device.
      */
     void mirror( bool horizontal = false, bool vertical = true );
-    
+
 private:
 
     KisFixedPaintDevice& operator=(const KisFixedPaintDevice& rhs);

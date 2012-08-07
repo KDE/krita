@@ -68,7 +68,7 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
     Q_ASSERT(m_node);
     if (mimetype == "application/x-qt-image") {
         KisConfig cfg;
-        return m_node->projection()->convertToQImage(cfg.displayProfile());
+        return m_node->projection()->convertToQImage(cfg.displayProfile(), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
     }
     else if (mimetype == "application/x-krita-node"
              || mimetype == "application/zip") {

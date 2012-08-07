@@ -125,13 +125,13 @@ qreal KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
     simple, ugly, hatched rectangle.*/
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
         maskDab = brush->paintDevice(device->colorSpace(), scale, 0.0, info, xFraction, yFraction);
-        maskDab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
+        maskDab->convertTo(KoColorSpaceRegistry::instance()->alpha8(), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
     } else {
         maskDab = cachedDab();
         KoColor color = painter()->paintColor();
         color.convertTo(maskDab->colorSpace());
         brush->mask(maskDab, color, scale, scale, 0.0, info, xFraction, yFraction);
-        maskDab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
+        maskDab->convertTo(KoColorSpaceRegistry::instance()->alpha8(), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
     }
 
     /*-----Convenient renaming for the limits of the maskDab, this will be used

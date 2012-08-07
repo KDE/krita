@@ -44,6 +44,7 @@ typedef KisSharedPtr<KisOpenGLImageTextures> KisOpenGLImageTexturesSP;
 
 class KoColorSpace;
 class KoColorProfile;
+class KisDisplayFilter;
 
 /**
  * A set of OpenGL textures that contains the projection of a KisImage.
@@ -58,7 +59,9 @@ public:
      * @param image The image
      * @param monitorProfile The profile of the display device
      */
-    static KisOpenGLImageTexturesSP getImageTextures(KisImageWSP image, KoColorProfile *monitorProfile);
+    static KisOpenGLImageTexturesSP getImageTextures(KisImageWSP image,
+                                                     KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent,
+                                                     KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     /**
      * Default constructor.
@@ -74,14 +77,14 @@ public:
      * Set the color profile of the display device.
      * @param profile The color profile of the display device
      */
-    void setMonitorProfile(KoColorProfile *profile);
+    void setMonitorProfile(const KoColorProfile *monitorProfile,
+                           KoColorConversionTransformation::Intent renderingIntent,
+                           KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     /**
-     * Set the exposure level used to display high dynamic range images. Typical values
-     * are between -10 and 10.
-     * @param exposure The exposure level
+     * set the (ocio) display filter.
      */
-    void setHDRExposure(float exposure);
+    void setDisplayFilter(KisDisplayFilter *displayFilter);
 
     /**
      * Generate a background texture from the given QImage. This is used for the checker
@@ -142,12 +145,13 @@ public slots:
     void slotImageSizeChanged(qint32 w, qint32 h);
 
 protected:
-    KisOpenGLImageTextures(KisImageWSP image, KoColorProfile *monitorProfile);
+    KisOpenGLImageTextures(KisImageWSP image, KoColorProfile *monitorProfile,
+                           KoColorConversionTransformation::Intent renderingIntent,
+                           KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     void createImageTextureTiles();
     void destroyImageTextureTiles();
 
-    static void createHDRExposureProgramIfCan();
     static bool imageCanUseHDRExposureProgram(KisImageWSP image);
     static bool imageCanShareTextures(KisImageWSP image);
 
@@ -159,9 +163,9 @@ private:
 private:
     KisImageWSP m_image;
     QRect m_storedImageBounds;
-    KoColorProfile *m_monitorProfile;
-    float m_exposure;
-
+    const KoColorProfile *m_monitorProfile;
+    KoColorConversionTransformation::Intent m_renderingIntent;
+    KoColorConversionTransformation::ConversionFlags m_conversionFlags;
     GLuint m_backgroundTexture;
 
     KisGLTexturesInfo m_texturesInfo;
@@ -170,8 +174,9 @@ private:
 
 #ifdef HAVE_GLEW
     bool m_usingHDRExposureProgram;
-    static KisOpenGLHDRExposureProgram *HDRExposureProgram;
 #endif
+
+    KisDisplayFilter *m_displayFilter;
 
 private:
     typedef QMap<KisImageWSP, KisOpenGLImageTextures*> ImageTexturesMap;

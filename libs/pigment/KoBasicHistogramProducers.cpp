@@ -465,7 +465,7 @@ void KoGenericLabHistogramProducer::addRegionToBin(const quint8 *pixels, const q
     qint32 dstPixelSize = m_colorSpace->pixelSize();
 
     quint8 *dstPixels = new quint8[nPixels * dstPixelSize];
-    cs->convertPixelsTo(pixels, dstPixels, m_colorSpace, nPixels);
+    cs->convertPixelsTo(pixels, dstPixels, m_colorSpace, nPixels, KoColorConversionTransformation::IntentAbsoluteColorimetric, KoColorConversionTransformation::Empty);
 
     qint32 pSize = cs->pixelSize();
 

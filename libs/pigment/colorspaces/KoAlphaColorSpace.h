@@ -100,7 +100,9 @@ public:
     }
 
     virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                                   const KoColorProfile *  dstProfile, KoColorConversionTransformation::Intent renderingIntent) const;
+                                   const KoColorProfile *  dstProfile,
+                                   KoColorConversionTransformation::Intent renderingIntent,
+                                   KoColorConversionTransformation::ConversionFlags conversionFlags) const;
 
     virtual void toLabA16(const quint8* src, quint8* dst, quint32 nPixels) const {
         quint16* lab = reinterpret_cast<quint16*>(dst);
@@ -173,7 +175,8 @@ public:
     virtual bool convertPixelsTo(const quint8 *src,
                                  quint8 *dst, const KoColorSpace * dstColorSpace,
                                  quint32 numPixels,
-                                 KoColorConversionTransformation::Intent  renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
+                                 KoColorConversionTransformation::Intent  renderingIntent,
+                                 KoColorConversionTransformation::ConversionFlags conversionFlags) const;
 private:
     KoColorProfile* m_profile;
     QList<KoCompositeOp*> m_compositeOps;

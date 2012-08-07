@@ -46,6 +46,9 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_global.h"
 
+#include "config-ocio.h"
+
+
 namespace
 {
 const double IMAGE_DEFAULT_RESOLUTION = 100.0; // dpi
@@ -177,8 +180,9 @@ QString KisConfig::monitorProfile() const
     return m_cfg.readEntry("monitorProfile", "");
 }
 
-void KisConfig::setMonitorProfile(const QString & monitorProfile)
+void KisConfig::setMonitorProfile(const QString & monitorProfile, bool override)
 {
+    m_cfg.writeEntry("monitorProfile/OverrideX11", override);
     m_cfg.writeEntry("monitorProfile", monitorProfile);
 }
 
@@ -225,9 +229,13 @@ const KoColorProfile *KisConfig::displayProfile(int screen)
 {
     // first try to get the screen profile set by the X11 _ICC_PROFILE atom (compatible with colord,
     // but colord can set the atom to none, in which case we cannot create a suitable profile)
+
+    // if the user plays with the settings, they can override the display profile, in which case
+    // we don't want the X11 atom setting.
+    bool override = m_cfg.readEntry("monitorProfile/OverrideX11", false);
     const KoColorProfile *profile = 0;
-    if (useSystemMonitorProfile()) {
-       profile = KisConfig::getScreenProfile(screen);
+    if (!override) {
+        profile = KisConfig::getScreenProfile(screen);
     }
 
     // if it fails. check the configuration
@@ -291,6 +299,16 @@ void KisConfig::setUseBlackPointCompensation(bool useBlackPointCompensation)
     m_cfg.writeEntry("useBlackPointCompensation", useBlackPointCompensation);
 }
 
+bool KisConfig::allowLCMSOptimization() const
+{
+    return m_cfg.readEntry("allowLCMSOptimization", true);
+}
+
+void KisConfig::setAllowLCMSOptimization(bool allowLCMSOptimization)
+{
+    m_cfg.writeEntry("allowLCMSOptimization", allowLCMSOptimization);
+}
+
 
 bool KisConfig::showRulers() const
 {
@@ -316,11 +334,16 @@ void KisConfig::setPasteBehaviour(qint32 renderIntent)
 
 qint32 KisConfig::renderIntent() const
 {
-    return m_cfg.readEntry("renderIntent", INTENT_PERCEPTUAL);
+    qint32 intent = m_cfg.readEntry("renderIntent", INTENT_PERCEPTUAL);
+    if (intent > 3) intent = 3;
+    if (intent < 0) intent = 0;
+    return intent;
 }
 
 void KisConfig::setRenderIntent(qint32 renderIntent)
 {
+    if (renderIntent > 3) renderIntent = 3;
+    if (renderIntent < 0) renderIntent = 0;
     m_cfg.writeEntry("renderIntent", renderIntent);
 }
 
@@ -839,6 +862,52 @@ void KisConfig::setExportConfiguration(const QString &filterId, const KisPropert
     QString exportConfig = properties.toXML();
     m_cfg.writeEntry("ExportConfiguration-" + filterId, exportConfig);
 
+}
+
+bool KisConfig::useOcio()
+{
+#ifdef HAVE_OCIO
+    return m_cfg.readEntry("Krita/Ocio/UseOcio", true);
+#else
+    return false;
+#endif
+}
+
+void KisConfig::setUseOcio(bool useOCIO)
+{
+    m_cfg.writeEntry("Krita/Ocio/UseOcio", useOCIO);
+}
+
+
+bool KisConfig::useOcioEnvironmentVariable()
+{
+    return m_cfg.readEntry("Krita/Ocio/UseEnvironment", true);
+}
+
+void KisConfig::setUseOcioEnvironmentVariable(bool useOCIO)
+{
+    m_cfg.writeEntry("Krita/Ocio/UseEnvironment", useOCIO);
+}
+
+QString KisConfig::ocioConfigurationPath()
+{
+    return m_cfg.readEntry("Krita/Ocio/OcioConfigPath", QString());
+}
+
+void KisConfig::setOcioConfigurationPath(const QString &path)
+{
+    m_cfg.writeEntry("Krita/Ocio/OcioConfigPath", path);
+}
+
+
+QString KisConfig::ocioLutPath()
+{
+    return m_cfg.readEntry("Krita/Ocio/OcioLutPath", QString());
+}
+
+void KisConfig::setOcioLutPath(const QString &path)
+{
+    m_cfg.writeEntry("Krita/Ocio/OcioLutPath", path);
 }
 
 QString KisConfig::defaultPalette()

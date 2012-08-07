@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Lut Docker
+Comment=Docker for selecting luts
+X-KDE-ServiceTypes=Krita/Dock
+Type=Service
+X-KDE-Library=kritalutdocker
+X-Krita-Version=5

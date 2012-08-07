@@ -252,12 +252,8 @@ void KisOpenGLCanvas2::drawImage()
     QRect wr = widgetRectInImagePixels.toAlignedRect() &
         m_d->openGLImageTextures->storedImageBounds();
 
-
-    if (image->colorSpace()->hasHighDynamicRange()) {
-        if (m_d->openGLImageTextures->usingHDRExposureProgram()) {
-            m_d->openGLImageTextures->activateHDRExposureProgram();
-        }
-        m_d->openGLImageTextures->setHDRExposure(canvas()->view()->resourceProvider()->HDRExposure());
+    if (image->colorSpace()->hasHighDynamicRange() && m_d->openGLImageTextures->usingHDRExposureProgram()) {
+        m_d->openGLImageTextures->activateHDRExposureProgram();
     }
 
     makeCurrent();

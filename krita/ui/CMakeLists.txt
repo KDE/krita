@@ -19,6 +19,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_canvas_widget_base.cpp
     canvas/kis_canvas2.cpp
     canvas/kis_canvas_controller.cpp
+    canvas/kis_display_filter.cpp
     canvas/kis_tool_proxy.cpp
     canvas/kis_canvas_decoration.cc
     canvas/kis_coordinates_converter.cpp
@@ -68,7 +69,6 @@ set(kritaui_LIB_SRCS
     kis_custom_pattern.cc
     kis_doc2.cc
     kis_part2.cpp
-    kis_exposure_visitor.cc
     kis_factory2.cc
     kis_filter_handler.cc
     kis_filter_manager.cc
@@ -209,7 +209,6 @@ if(HAVE_OPENGL)
             opengl/kis_opengl_fragment_shader.cpp
             opengl/kis_opengl_vertex_shader.cpp
             opengl/kis_opengl_program.cpp
-            opengl/kis_opengl_hdr_exposure_program.cpp
             opengl/kis_opengl_gradient_program.cpp
             )
     endif(HAVE_GLEW)

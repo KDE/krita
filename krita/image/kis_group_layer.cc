@@ -152,7 +152,7 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
         dev->setX(m_d->x);
         dev->setY(m_d->y);
         quint8* defaultPixel = colorSpace->allocPixelBuffer(1);
-        colorSpace->convertPixelsTo(m_d->paintDevice->defaultPixel(), defaultPixel, colorSpace, 1);
+        colorSpace->convertPixelsTo(m_d->paintDevice->defaultPixel(), defaultPixel, colorSpace, 1, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
         dev->setDefaultPixel(defaultPixel);
         delete[] defaultPixel;
         m_d->paintDevice = dev;
@@ -165,16 +165,14 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
 KisLayer* KisGroupLayer::onlyMeaningfulChild() const
 {
     KisNode *child = firstChild().data();
-
     KisLayer *onlyLayer = 0;
 
-    while(child) {
+    while (child) {
         KisLayer *layer = dynamic_cast<KisLayer*>(child);
-        if(layer) {
-            if(onlyLayer) return 0;
+        if (layer) {
+            if (onlyLayer) return 0;
             onlyLayer = layer;
         }
-
         child = child->nextSibling().data();
     }
 

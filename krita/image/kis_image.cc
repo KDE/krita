@@ -690,7 +690,9 @@ void KisImage::shear(double angleX, double angleY)
               angleX, angleY, QPointF());
 }
 
-void KisImage::convertImageColorSpace(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent)
+void KisImage::convertImageColorSpace(const KoColorSpace *dstColorSpace,
+                                      KoColorConversionTransformation::Intent renderingIntent,
+                                      KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
     if (*m_d->colorSpace == *dstColorSpace) return;
 
@@ -700,7 +702,7 @@ void KisImage::convertImageColorSpace(const KoColorSpace *dstColorSpace, KoColor
     undoAdapter()->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
     undoAdapter()->addCommand(new KisImageSetProjectionColorSpaceCommand(KisImageWSP(this), dstColorSpace));
 
-    KisColorSpaceConvertVisitor visitor(this, srcColorSpace, dstColorSpace, renderingIntent);
+    KisColorSpaceConvertVisitor visitor(this, srcColorSpace, dstColorSpace, renderingIntent, conversionFlags);
     m_d->rootLayer->accept(visitor);
 
     undoAdapter()->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
@@ -1062,7 +1064,7 @@ QImage KisImage::convertToQImage(qint32 x,
 {
     KisPaintDeviceSP dev = m_d->rootLayer->projection();
     if (!dev) return QImage();
-    QImage image = dev->convertToQImage(const_cast<KoColorProfile*>(profile), x, y, w, h);
+    QImage image = dev->convertToQImage(const_cast<KoColorProfile*>(profile), x, y, w, h, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
 
     if (m_d->backgroundPattern) {
         m_d->backgroundPattern->paintBackground(image, QRect(x, y, w, h));
@@ -1143,7 +1145,7 @@ QImage KisImage::convertToQImage(const QRect& scaledRect, const QSize& scaledIma
     }
     delete [] imageRow;
 
-    QImage image = colorSpace()->convertToQImage(scaledImageData, scaledRect.width(), scaledRect.height(), const_cast<KoColorProfile*>(profile), KoColorConversionTransformation::IntentPerceptual);
+    QImage image = colorSpace()->convertToQImage(scaledImageData, scaledRect.width(), scaledRect.height(), const_cast<KoColorProfile*>(profile), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
 
     if (m_d->backgroundPattern) {
         m_d->backgroundPattern->paintBackground(image, scaledRect, scaledImageSize, QSize(imageWidth, imageHeight));

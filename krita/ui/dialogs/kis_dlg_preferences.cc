@@ -85,6 +85,8 @@
 
 // for the performance update
 #include <kis_cubic_curve.h>
+#include <config-ocio.h>
+
 
 GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     : WdgGeneralSettings(_parent, _name)
@@ -221,7 +223,9 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
         m_page->cmbMonitorProfile->setCurrent(cfg.monitorProfile());
     if (m_page->cmbPrintProfile->contains(cfg.printerProfile()))
         m_page->cmbPrintProfile->setCurrentIndex(m_page->cmbPrintProfile->findText(cfg.printerProfile()));
+
     m_page->chkBlackpoint->setChecked(cfg.useBlackPointCompensation());
+    m_page->chkAllowLCMSOptimization->setChecked(cfg.allowLCMSOptimization());
 
     m_pasteBehaviourGroup.addButton(m_page->radioPasteWeb, PASTE_ASSUME_WEB);
     m_pasteBehaviourGroup.addButton(m_page->radioPasteMonitor, PASTE_ASSUME_MONITOR);
@@ -252,6 +256,17 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
     connect(m_page->cmbPrintingColorSpace, SIGNAL(activated(const KoID &)),
             this, SLOT(refillPrintProfiles(const KoID &)));
+
+#ifndef HAVE_OCIO
+    m_page->grpOcio->hide();
+#endif
+    m_page->grpOcio->setChecked(cfg.useOcio());
+    m_page->chkOcioUseEnvironment->setChecked(cfg.useOcioEnvironmentVariable());
+    enableOcioConfigPath(cfg.useOcioEnvironmentVariable());
+    m_page->txtOcioConfigPath->setText(cfg.ocioConfigurationPath());
+    connect(m_page->bnSelectOcioConfigPath, SIGNAL(clicked()), this, SLOT(selectOcioConfigPath()));
+    connect(m_page->chkOcioUseEnvironment, SIGNAL(toggled(bool)), this, SLOT(enableOcioConfigPath(bool)));
+
 }
 
 void ColorSettingsTab::setDefault()
@@ -264,7 +279,11 @@ void ColorSettingsTab::setDefault()
     refillMonitorProfiles(KoID("RGBA", ""));
 
     m_page->chkBlackpoint->setChecked(false);
+    m_page->chkAllowLCMSOptimization->setChecked(true);
     m_page->cmbMonitorIntent->setCurrentIndex(INTENT_PERCEPTUAL);
+
+    m_page->chkOcioUseEnvironment->setChecked(true);
+    m_page->txtOcioConfigPath->setText(QString());
 
     QAbstractButton *button = m_pasteBehaviourGroup.button(PASTE_ASK);
     Q_ASSERT(button);
@@ -311,6 +330,24 @@ void ColorSettingsTab::refillPrintProfiles(const KoID & s)
     }
 
     m_page->cmbPrintProfile->setCurrent(csf->defaultProfile());
+}
+
+void ColorSettingsTab::selectOcioConfigPath()
+{
+    QString filename = m_page->txtOcioConfigPath->text();
+
+    filename = KFileDialog::getOpenFileName(QDir::cleanPath(filename), "*.ocio|OpenColorIO configuration (*.ocio)", m_page);
+    QFile f(filename);
+    if (f.exists()) {
+        m_page->txtOcioConfigPath->setText(filename);
+    }
+}
+
+void ColorSettingsTab::enableOcioConfigPath(bool enable)
+{
+    m_page->lblOcioConfig->setEnabled(!enable);
+    m_page->txtOcioConfigPath->setEnabled(!enable);
+    m_page->bnSelectOcioConfigPath->setEnabled(!enable);
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -715,8 +752,13 @@ bool KisDlgPreferences::editPreferences()
         cfg.setPrinterProfile(dialog->m_colorSettings->m_page->cmbPrintProfile->itemHighlighted());
 
         cfg.setUseBlackPointCompensation(dialog->m_colorSettings->m_page->chkBlackpoint->isChecked());
+        cfg.setAllowLCMSOptimization(dialog->m_colorSettings->m_page->chkAllowLCMSOptimization->isChecked());
         cfg.setPasteBehaviour(dialog->m_colorSettings->m_pasteBehaviourGroup.checkedId());
         cfg.setRenderIntent(dialog->m_colorSettings->m_page->cmbMonitorIntent->currentIndex());
+
+        cfg.setUseOcio(dialog->m_colorSettings->m_page->grpOcio->isChecked());
+        cfg.setUseOcioEnvironmentVariable(dialog->m_colorSettings->m_page->chkOcioUseEnvironment->isChecked());
+        cfg.setOcioConfigurationPath(dialog->m_colorSettings->m_page->txtOcioConfigPath->text());
 
         // Tablet settings
         cfg.setPressureTabletCurve( dialog->m_tabletSettings->m_page->pressureCurve->curve().toString() );

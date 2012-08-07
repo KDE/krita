@@ -378,7 +378,7 @@ QImage KisAutoBrush::createBrushPreview()
     fdev->initialize();
 
     mask(fdev,KoColor(Qt::black, fdev->colorSpace()),1.0, 1.0, 0.0, info);
-    return fdev->convertToQImage();
+    return fdev->convertToQImage(0);
 }
 
 

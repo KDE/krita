@@ -171,7 +171,7 @@ void KisCustomPattern::createPattern()
         size.scale(1000, 1000, Qt::KeepAspectRatio);
     }
 
-    m_pattern = new KisPattern(dev->createThumbnail(size.width(), size.height(), 0, rc), name);
+    m_pattern = new KisPattern(dev->createThumbnail(size.width(), size.height(), rc, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation), name);
 
 }
 

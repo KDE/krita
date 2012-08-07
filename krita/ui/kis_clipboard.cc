@@ -145,7 +145,7 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
     QImage qimage;
     KisConfig cfg;
     const KoColorProfile *monitorProfile = cfg.displayProfile();
-    qimage = dev->convertToQImage(monitorProfile);
+    qimage = dev->convertToQImage(monitorProfile, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
     if (!qimage.isNull() && mimeData) {
         mimeData->setImageData(qimage);
     }

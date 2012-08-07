@@ -34,7 +34,7 @@ class KoSimpleColorConversionTransformation : public KoColorConversionTransforma
 {
 public:
     KoSimpleColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs)
-            : KoColorConversionTransformation(srcCs, dstCs) {
+            : KoColorConversionTransformation(srcCs, dstCs, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation) {
     }
 
     ~KoSimpleColorConversionTransformation() {
@@ -73,8 +73,12 @@ KoSimpleColorSpaceEngine::~KoSimpleColorSpaceEngine()
 {
 }
 
-KoColorConversionTransformation* KoSimpleColorSpaceEngine::createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent) const
+KoColorConversionTransformation* KoSimpleColorSpaceEngine::createColorTransformation(const KoColorSpace* srcColorSpace,
+                                                                                     const KoColorSpace* dstColorSpace,
+                                                                                     KoColorConversionTransformation::Intent renderingIntent,
+                                                                                     KoColorConversionTransformation::ConversionFlags conversionFlags) const
 {
     Q_UNUSED(renderingIntent);
+    Q_UNUSED(conversionFlags);
     return new KoSimpleColorConversionTransformation(srcColorSpace, dstColorSpace);
 }

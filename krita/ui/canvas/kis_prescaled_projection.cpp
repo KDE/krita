@@ -82,9 +82,8 @@ void copyQImage(qint32 deltaX, qint32 deltaY, QImage* dstImage, const QImage& sr
 
 struct KisPrescaledProjection::Private {
     Private()
-            : viewportSize(0, 0)
-            , monitorProfile(0)
-            , projectionBackend(0) {
+        : viewportSize(0, 0)
+        , projectionBackend(0) {
     }
 
     QImage prescaledQImage;
@@ -94,7 +93,6 @@ struct KisPrescaledProjection::Private {
     QSize viewportSize;
     KisImageWSP image;
     KisCoordinatesConverter *coordinatesConverter;
-    const KoColorProfile* monitorProfile;
     KisProjectionBackend* projectionBackend;
 };
 
@@ -103,13 +101,17 @@ KisPrescaledProjection::KisPrescaledProjection()
         , m_d(new Private())
 {
     updateSettings();
-    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(updateSettings()));
+
+    // we disable building the pyramid with setting its height to 1
+    // XXX: setting it higher than 1 is broken because it's not updated until you show/hide the layer
+    m_d->projectionBackend = new KisImagePyramid(1);
+
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(updateSettings()));
 }
 
 KisPrescaledProjection::~KisPrescaledProjection()
 {
     delete m_d->projectionBackend;
-
     delete m_d;
 }
 
@@ -131,27 +133,8 @@ void KisPrescaledProjection::setCoordinatesConverter(KisCoordinatesConverter *co
     m_d->coordinatesConverter = coordinatesConverter;
 }
 
-void KisPrescaledProjection::initBackend()
-{
-    delete m_d->projectionBackend;
-
-    // we disable building the pyramid with setting its height to 1
-    // XXX: setting it higher than 1 is broken because it's not updated until you show/hide the layer
-    m_d->projectionBackend = new KisImagePyramid(1);
-    m_d->projectionBackend->setImage(m_d->image);
-}
-
 void KisPrescaledProjection::updateSettings()
 {
-
-
-    if (m_d->projectionBackend == 0) {
-        initBackend();
-    }
-
-    KisConfig cfg;
-    setMonitorProfile(cfg.displayProfile());
-
     KisImageConfig imageConfig;
     m_d->updatePatchSize.setWidth(imageConfig.updatePatchWidth());
     m_d->updatePatchSize.setHeight(imageConfig.updatePatchHeight());
@@ -295,10 +278,14 @@ QRect KisPrescaledProjection::preScale(const QRect & rc)
     return QRect();
 }
 
-void KisPrescaledProjection::setMonitorProfile(const KoColorProfile * profile)
+void KisPrescaledProjection::setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
-    m_d->monitorProfile = profile;
-    m_d->projectionBackend->setMonitorProfile(profile);
+    m_d->projectionBackend->setMonitorProfile(monitorProfile, renderingIntent, conversionFlags);
+}
+
+void KisPrescaledProjection::setDisplayFilter(KisDisplayFilter *displayFilter)
+{
+    m_d->projectionBackend->setDisplayFilter(displayFilter);
 }
 
 

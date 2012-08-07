@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>399</width>
-    <height>172</height>
+    <height>183</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -113,6 +113,23 @@ colors (Pantone, TruMatch, logo colors, ...)</string>
        </widget>
       </item>
      </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="chkBlackpointCompensation">
+     <property name="text">
+      <string>Use Blackpoint &amp;Compensation</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="chkAllowLCMSOptimization">
+     <property name="text">
+      <string>Allow Little CMS optimizations (uncheck when using linear light RGB or XYZ)</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
     </widget>
    </item>
    <item>

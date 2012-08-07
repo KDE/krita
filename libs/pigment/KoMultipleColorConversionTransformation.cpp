@@ -29,7 +29,9 @@ struct KoMultipleColorConversionTransformation::Private {
 };
 
 
-KoMultipleColorConversionTransformation::KoMultipleColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs, Intent renderingIntent) : KoColorConversionTransformation(srcCs, dstCs, renderingIntent), d(new Private)
+KoMultipleColorConversionTransformation::KoMultipleColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs, Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
+    : KoColorConversionTransformation(srcCs, dstCs, renderingIntent, conversionFlags)
+    , d(new Private)
 {
     d->maxPixelSize = qMax(srcCs->pixelSize(), dstCs->pixelSize());
 }

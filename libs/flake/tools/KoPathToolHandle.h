@@ -27,6 +27,7 @@
 #include "KoInteractionStrategy.h"
 
 #include <QList>
+#include <QRect>
 
 class KoPathTool;
 class KoParameterShape;
@@ -64,6 +65,7 @@ public:
 private:
     KoPathPoint *m_activePoint;
     KoPathPoint::PointType m_activePointType;
+    mutable QRectF m_oldRepaintedRect;
 };
 
 class ParameterHandle : public KoPathToolHandle

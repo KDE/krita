@@ -413,8 +413,8 @@ void KoResourceItemChooser::updatePreview(KoResource *resource)
 
     QImage image = resource->image();
     if (d->tiledPreview) {
-        int width = qMax(d->previewScroller->width() * 4, image.width() * 4);
-        int height = qMax(d->previewScroller->height() * 4, image.height() * 4);
+        int width = d->previewScroller->width() * 4;
+        int height = d->previewScroller->height() * 4;
         QImage img(width, height, image.format());
         QPainter gc(&img);
         gc.fillRect(img.rect(), Qt::white);

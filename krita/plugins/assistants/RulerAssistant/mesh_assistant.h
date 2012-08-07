@@ -24,6 +24,36 @@
 #include <QPolygonF>
 #include <QLineF>
 #include <QTransform>
+#include <map>
+#include <vector>
+#include <klocale.h>
+#include <assert.h>
+
+#include <GL/glew.h>
+#include <assimp.hpp>      // C++ importer interface
+#include <aiScene.h>       // Output data structure
+#include <aiPostProcess.h> // Post processing flags
+#include <aiMesh.h>
+
+#include "util.h"
+#include "math_3d.h"
+
+struct Vertex
+{
+    Vector3f m_pos;
+    Vector2f m_tex;
+    Vector3f m_normal;
+
+    Vertex() {}
+
+    Vertex(const Vector3f& pos, const Vector2f& tex, const Vector3f& normal)
+    {
+        m_pos    = pos;
+        m_tex    = tex;
+        m_normal = normal;
+    }
+};
+
 
 class MeshAssistant : public KisPaintingAssistant
 {
@@ -32,10 +62,35 @@ public:
     void initialize(char* file);
     virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
     virtual QPointF buttonPosition() const;
-    virtual int numHandles() const { return 3; }
+    virtual int numHandles() const { return 4; }
 protected:
     virtual QRect boundingRect() const;
     virtual void drawCache(QPainter& gc, const KisCoordinatesConverter *converter);
+    void Render();
+
+private:
+    bool InitFromScene(const aiScene* pScene, const std::string& Filename);
+    void InitMesh(unsigned int Index, const aiMesh* paiMesh);
+    void Clear();
+
+#define INVALID_MATERIAL 0xFFFFFFFF
+    struct MeshEntry {
+        MeshEntry();
+
+        ~MeshEntry();
+
+        bool Init(const std::vector<Vertex>& Vertices,
+                  const std::vector<unsigned int>& Indices);
+
+        GLuint VB;
+        GLuint IB;
+        unsigned int NumIndices;
+        unsigned int MaterialIndex;
+    };
+
+    std::vector<MeshEntry> m_Entries;
+
+
 };
 
 class MeshAssistantFactory : public KisPaintingAssistantFactory
@@ -47,6 +102,8 @@ public:
     virtual QString name() const;
     virtual KisPaintingAssistant* createPaintingAssistant() const;
 };
+
+
 
 #endif
 

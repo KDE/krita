@@ -676,6 +676,7 @@ bool KisTransformWorker::run()
 
 QRect KisTransformWorker::mirrorX(KisPaintDeviceSP dev, qreal axis, const KisSelection* selection)
 {
+
     int pixelSize = dev->pixelSize();
     KisPaintDeviceSP dst = new KisPaintDevice(dev->colorSpace());
 
@@ -697,6 +698,9 @@ QRect KisTransformWorker::mirrorX(KisPaintDeviceSP dev, qreal axis, const KisSel
             r = newRect.adjusted(-1, 0, 2, 0);
         }
     }
+
+    if (r.width() <= 1) return r;
+
     {
         quint8 *dstPixels = new quint8[r.width() * pixelSize];
 

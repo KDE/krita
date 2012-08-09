@@ -26,6 +26,8 @@ class UpdateInformation;
 class KisImagePatch;
 class KisDisplayFilter;
 
+#include <KoColorConversionTransformation.h>
+
 /**
  * KisProjectionBackend is an abstract class representing
  * an object that can store a cache of KisImage projection.

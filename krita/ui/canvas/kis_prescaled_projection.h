@@ -24,7 +24,7 @@
 #include <kis_shared.h>
 
 #include "kis_update_info.h"
-
+#include "KoColorConversionTransformation.h"
 class QImage;
 class QPoint;
 class QRect;

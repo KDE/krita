@@ -21,8 +21,11 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <sys/types.h>
+#include <netinet/in.h> // htonl
 
 #include "kis_gbr_brush.h"
+
 #include "kis_brush.h"
 #include "kis_qimage_mask.h"
 
@@ -41,8 +44,6 @@
 #include "kis_paint_device.h"
 #include "kis_global.h"
 #include "kis_image.h"
-
-#include <netinet/in.h> // htonl
 
 struct GimpBrushV1Header {
     quint32 header_size;  /*  header_size = sizeof (BrushHeader) + brush name  */

@@ -95,6 +95,9 @@ KoShape *TextShapeFactory::createDefaultShape(KoDocumentResourceManager *documen
             document.setChangeTracker(changeTracker);
         }
 
+        //update the resources of the document
+        text->updateDocumentData();
+
         text->setImageCollection(documentResources->imageCollection());
     }
 

@@ -292,3 +292,13 @@ void KoOdfWorkaround::fixClipRectOffsetValuesString(QString &offsetValuesString)
         offsetValuesString = offsetValuesString.simplified().replace(QLatin1Char(' '), QLatin1Char(','));
     }
 }
+
+QString KoOdfWorkaround::fixTableTemplateName(const KoXmlElement &e)
+{
+    return e.attributeNS(KoXmlNS::text, "style-name", QString());
+}
+
+QString KoOdfWorkaround::fixTableTemplateCellStyleName(const KoXmlElement &e)
+{
+    return e.attributeNS(KoXmlNS::text, "style-name", QString());
+}

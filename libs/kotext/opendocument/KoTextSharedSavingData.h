@@ -73,6 +73,12 @@ public:
      */
     QString styleName(int styleId);
 
+    /**
+     * @brief styleNames List of all names of the styles that are saved
+     * @return All the names of styles that are saved in the style manager
+     */
+    QList<QString> styleNames();
+
 private:
 
     class Private;

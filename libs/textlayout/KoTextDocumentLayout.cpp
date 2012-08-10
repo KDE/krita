@@ -184,14 +184,29 @@ KoInlineTextObjectManager *KoTextDocumentLayout::inlineTextObjectManager() const
     return d->inlineTextObjectManager;
 }
 
+void KoTextDocumentLayout::setInlineTextObjectManager(KoInlineTextObjectManager *manager)
+{
+    d->inlineTextObjectManager = manager;
+}
+
 KoChangeTracker *KoTextDocumentLayout::changeTracker() const
 {
     return d->changeTracker;
 }
 
+void KoTextDocumentLayout::setChangeTracker(KoChangeTracker *tracker)
+{
+    d->changeTracker = tracker;
+}
+
 KoStyleManager *KoTextDocumentLayout::styleManager() const
 {
     return d->styleManager;
+}
+
+void KoTextDocumentLayout::setStyleManager(KoStyleManager *manager)
+{
+    d->styleManager = manager;
 }
 
 QRectF KoTextDocumentLayout::blockBoundingRect(const QTextBlock &block) const

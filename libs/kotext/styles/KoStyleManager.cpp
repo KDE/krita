@@ -34,6 +34,7 @@
 #include "ChangeFollower.h"
 #include "commands/ChangeStylesMacroCommand.h"
 #include "KoTextDocument.h"
+#include "KoTextTableTemplate.h"
 
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
@@ -74,6 +75,7 @@ public:
     QHash<int, KoTableCellStyle *> tableCellStyles;
     QHash<int, KoSectionStyle *> sectionStyles;
     QHash<int, KoParagraphStyle *> unusedParagraphStyles;
+    QHash<int, KoTextTableTemplate *> tableTemplates;
     QList<ChangeFollower*> documentUpdaterProxies;
 
 
@@ -279,7 +281,8 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
 
         KoGenStyle style(KoGenStyle::TableCellStyle, "table-cell");
         tableCellStyle->saveOdf(style, context);
-        context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
+        QString newName = context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
+        textSharedSavingData->setStyleName(tableCellStyle->styleId(), newName);
     }
 
     foreach(KoSectionStyle *sectionStyle, d->sectionStyles) {
@@ -322,6 +325,13 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
         KoGenStyle style(KoGenStyle::OutlineLevelStyle);
         d->outlineStyle->saveOdf(style, context);
         context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
+    }
+
+    foreach(KoTextTableTemplate *textTableTemplate, d->tableTemplates) {
+        QBuffer xmlBufferTableTemplate;
+        KoXmlWriter *xmlWriter = new KoXmlWriter(&xmlBufferTableTemplate);
+        textTableTemplate->saveOdf(xmlWriter, textSharedSavingData);
+        context.mainStyles().insertRawOdfStyles(KoGenStyles::DocumentStyles, xmlBufferTableTemplate.data());
     }
 }
 
@@ -420,6 +430,18 @@ void KoStyleManager::add(KoSectionStyle *style)
     style->setStyleId(d->s_stylesNumber);
     d->sectionStyles.insert(d->s_stylesNumber++, style);
     emit styleAdded(style);
+}
+
+void KoStyleManager::add(KoTextTableTemplate *tableTemplate)
+{
+    if (d->tableTemplates.key(tableTemplate, -1) != -1) {
+        return;
+    }
+
+    tableTemplate->setParent(this);
+    tableTemplate->setStyleId(d->s_stylesNumber);
+
+    d->tableTemplates.insert(d->s_stylesNumber++, tableTemplate);
 }
 
 void KoStyleManager::setNotesConfiguration(KoOdfNotesConfiguration *notesConfiguration)
@@ -1020,6 +1042,20 @@ void KoStyleManager::moveToUsedStyles(int id)
 KoParagraphStyle *KoStyleManager::unusedStyle(int id)
 {
     return d->unusedParagraphStyles.value(id);
+}
+
+KoTextTableTemplate *KoStyleManager::tableTemplate(const QString &name) const
+{
+    foreach(KoTextTableTemplate *tableTemplate, d->tableTemplates) {
+        if (tableTemplate->name() == name)
+            return tableTemplate;
+    }
+    return 0;
+}
+
+KoTextTableTemplate *KoStyleManager::tableTemplate(int id) const
+{
+    return d->tableTemplates.value(id, 0);
 }
 
 #include <KoStyleManager.moc>

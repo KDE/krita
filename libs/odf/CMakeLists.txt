@@ -120,5 +120,6 @@ install( FILES
     KoProperties.h
     KoUnit.h
     KoElementReference.h
+    KoTableTemplate.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 

@@ -60,7 +60,7 @@ static const struct {
     { KoGenStyle::GradientStyle,        "draw:gradient", "style:graphic-properties", true  },
     { KoGenStyle::MarkerStyle,          "draw:marker", "style:graphic-properties", true  },
     { KoGenStyle::PresentationPageLayoutStyle, "style:presentation-page-layout", 0, false  },
-    { KoGenStyle::OutlineLevelStyle, "text:outline-style", 0, false}
+    { KoGenStyle::OutlineLevelStyle,    "text:outline-style", 0, false }
 };
 
 static const unsigned int numStyleData = sizeof(styleData) / sizeof(*styleData);

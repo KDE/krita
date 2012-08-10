@@ -58,6 +58,7 @@ set(kotext_LIB_SRCS
     KoTableColumnAndRowStyleManager.cpp
     KoTextInlineRdf.cpp
     KoTextMeta.cpp
+    KoTextTableTemplate.cpp
 
     ToCBibGeneratorInfo.cpp
     KoTableOfContentsGeneratorInfo.cpp
@@ -177,6 +178,7 @@ install(
     KoTextSoftPageBreak.cpp
     KoSection.h
     KoTextCommandBase.h
+    KoTextTableTemplate.h
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel

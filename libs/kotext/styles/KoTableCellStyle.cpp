@@ -102,6 +102,30 @@ KoTableCellStyle::KoTableCellStyle(const QTextTableCellFormat &format, QObject *
     d->paragraphStyle = new KoParagraphStyle(this);
 }
 
+KoTableCellStyle::KoTableCellStyle(const KoTableCellStyle &other)
+    :QObject(other.parent())
+    , d_ptr(new KoTableCellStylePrivate)
+{
+    Q_D(KoTableCellStyle);
+
+    copyProperties(&other);
+    d->paragraphStyle = other.paragraphStyle()->clone(this);
+}
+
+KoTableCellStyle& KoTableCellStyle::operator=(const KoTableCellStyle &other)
+{
+    Q_D(KoTableCellStyle);
+
+    if (this == &other) {
+        return *this;
+    }
+
+    copyProperties(&other);
+    d->paragraphStyle = other.paragraphStyle()->clone(this);
+
+    return *this;
+}
+
 KoTableCellStyle::~KoTableCellStyle()
 {
 }
@@ -218,9 +242,9 @@ void KoTableCellStyle::setPadding(qreal padding)
     setLeftPadding(padding);
 }
 
-KoParagraphStyle *KoTableCellStyle::paragraphStyle()
+KoParagraphStyle *KoTableCellStyle::paragraphStyle() const
 {
-    Q_D(KoTableCellStyle);
+    Q_D(const KoTableCellStyle);
     return d->paragraphStyle;
 }
 

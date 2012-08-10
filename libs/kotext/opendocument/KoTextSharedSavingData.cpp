@@ -83,3 +83,8 @@ QString KoTextSharedSavingData::styleName(int styleId)
 {
     return d->styleIdToName.value(styleId);
 }
+
+QList<QString> KoTextSharedSavingData::styleNames()
+{
+    return d->styleIdToName.values();
+}

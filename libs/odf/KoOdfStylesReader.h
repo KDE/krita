@@ -22,6 +22,7 @@
 #define KOOASISSTYLES_H
 
 #include <QHash>
+#include <QList>
 
 #include <KoXmlReader.h>
 
@@ -112,6 +113,9 @@ public:
 
     /// @return all presentation page layouts ("presentation-page-layout" elements), hashed by name
     QHash<QString, KoXmlElement*> presentationPageLayouts() const;
+
+    /// @return all table templates("table-template" elements), template names may be duplicated
+    QList<KoXmlElement *> tableTemplates() const;
 
     /**
      * Get the draw styles for a specified type. 

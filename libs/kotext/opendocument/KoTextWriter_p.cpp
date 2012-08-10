@@ -1184,6 +1184,44 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
     {
         tableTagInformation.addAttribute("table:protected", "true");
     }
+
+    if (table->format().hasProperty(KoTableStyle::TableTemplate))
+    {
+        tableTagInformation.addAttribute("table:template-name",
+                                         sharedData->styleName(table->format().intProperty(KoTableStyle::TableTemplate)));
+    }
+
+    if (table->format().boolProperty(KoTableStyle::UseBandingColumnStyles))
+    {
+        tableTagInformation.addAttribute("table:use-banding-columns-styles", "true");
+    }
+
+    if (table->format().boolProperty(KoTableStyle::UseBandingRowStyles))
+    {
+        tableTagInformation.addAttribute("table:use-banding-rows-styles", "true");
+    }
+
+    if (table->format().boolProperty(KoTableStyle::UseFirstColumnStyles))
+    {
+        tableTagInformation.addAttribute("table:use-first-column-styles", "true");
+    }
+
+    if (table->format().boolProperty(KoTableStyle::UseFirstRowStyles))
+    {
+        tableTagInformation.addAttribute("table:use-first-row-styles", "true");
+    }
+
+    if (table->format().boolProperty(KoTableStyle::UseLastColumnStyles))
+    {
+        tableTagInformation.addAttribute("table:use-last-column-styles", "true");
+    }
+
+    if (table->format().boolProperty(KoTableStyle::UseLastRowStyles))
+    {
+        tableTagInformation.addAttribute("table:use-last-row-styles", "true");
+    }
+
+
     int changeId = openTagRegion(table->firstCursorPosition().position(), KoTextWriter::Private::Table, tableTagInformation);
 
     for (int c = 0 ; c < table->columns() ; c++) {

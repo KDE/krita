@@ -44,6 +44,7 @@ class KoShapeLoadingContext;
 class KoOdfNotesConfiguration;
 class KoOdfBibliographyConfiguration;
 class KoTextAnchor;
+class KoTextTableTemplate;
 
 #define KOTEXT_SHARED_LOADING_ID "KoTextSharedLoadingId"
 
@@ -251,6 +252,10 @@ private:
     void addNotesConfiguration(KoShapeLoadingContext &context);
 
     void addBibliographyConfiguration(KoShapeLoadingContext &context);
+
+    void addTableTemplate(KoShapeLoadingContext &context, KoStyleManager *styleManager);
+    QList<QPair<QString, KoTextTableTemplate *> > loadTableTemplates(KoShapeLoadingContext &context);
+
 
     class Private;
     Private * const d;

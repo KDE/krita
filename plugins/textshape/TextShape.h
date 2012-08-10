@@ -38,6 +38,7 @@ class KoPageProvider;
 class KoImageCollection;
 class KoTextDocument;
 class TextShape;
+class KoTextDocumentLayout;
 
 /**
  * A text shape.
@@ -96,6 +97,8 @@ public:
         return m_textShapeData;
     }
 
+    void updateDocumentData();
+
     virtual void update() const;
     virtual void update(const QRectF &shape) const;
 
@@ -123,6 +126,7 @@ private:
     QRegion m_paintRegion;
     KoParagraphStyle * m_paragraphStyle;
     bool m_clip;
+    KoTextDocumentLayout *m_layout;
 };
 
 #endif

@@ -78,12 +78,12 @@ TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager)
 
     KoTextDocument(m_textShapeData->document()).setInlineTextObjectManager(inlineTextObjectManager);
 
-    KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_textShapeData->document(), provider);
-    m_textShapeData->document()->setDocumentLayout(lay);
+    m_layout = new KoTextDocumentLayout(m_textShapeData->document(), provider);
+    m_textShapeData->document()->setDocumentLayout(m_layout);
 
     setCollisionDetection(true);
 
-    QObject::connect(lay, SIGNAL(layoutIsDirty()), lay, SLOT(scheduleLayout()));
+    QObject::connect(m_layout, SIGNAL(layoutIsDirty()), m_layout, SLOT(scheduleLayout()));
 }
 
 TextShape::~TextShape()
@@ -412,4 +412,14 @@ void TextShape::waitUntilReady(const KoViewConverter &, bool asynchronous) const
 KoImageCollection *TextShape::imageCollection()
 {
     return m_imageCollection;
+}
+
+void TextShape::updateDocumentData()
+{
+    if (m_layout) {
+        KoTextDocument document(m_textShapeData->document());
+        m_layout->setStyleManager(document.styleManager());
+        m_layout->setInlineTextObjectManager(document.inlineTextObjectManager());
+        m_layout->setChangeTracker(document.changeTracker());
+    }
 }

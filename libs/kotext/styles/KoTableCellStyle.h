@@ -108,6 +108,9 @@ public:
     KoTableCellStyle(QObject *parent = 0);
     /// Creates a KoTableCellStyle with the given table cell format, and \a parent
     KoTableCellStyle(const QTextTableCellFormat &tableCellFormat, QObject *parent = 0);
+    KoTableCellStyle(const KoTableCellStyle &other);
+    KoTableCellStyle& operator=(const KoTableCellStyle &other);
+
     /// Destructor
     ~KoTableCellStyle();
 
@@ -154,7 +157,7 @@ public:
      *
      * @return the paragraph style
      */
-    KoParagraphStyle *paragraphStyle();
+    KoParagraphStyle *paragraphStyle() const;
 
     bool shrinkToFit() const;
     void setShrinkToFit(bool state);

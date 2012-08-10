@@ -164,9 +164,7 @@ void SimpleParagraphWidget::fillListButtons()
     widget.bulletListButton->addSeparator();
 
     KAction *action = new KAction(i18n("Change List Level"),this);
-
-    //TODO: Uncomment the below line when the string freeze is over
-    //action->setToolTip(i18n("Change the level the list is at"));
+    action->setToolTip(i18n("Change the level the list is at"));
 
     QMenu *listLevelMenu = new QMenu();
     const int levelIndent = 13;

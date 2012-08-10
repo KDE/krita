@@ -117,9 +117,9 @@ class KisDoc2::KisDocPrivate
 public:
 
     KisDocPrivate()
-            : nserver(0)
-            , macroNestDepth(0)
-            , kraLoader(0)
+        : nserver(0)
+        , macroNestDepth(0)
+        , kraLoader(0)
     {
     }
 
@@ -146,7 +146,7 @@ public:
 
 KisDoc2::KisDoc2(KoPart *parent)
     : KoDocument(parent, new UndoStack(this))
-        , m_d(new KisDocPrivate())
+    , m_d(new KisDocPrivate())
 {
     m_d->part = qobject_cast<KisPart2*>(parent);
 
@@ -512,7 +512,7 @@ void KisDoc2::undoIndexChanged(int idx)
     if(!image) return;
 
     KisDocumentUndoStore *undoStore =
-        dynamic_cast<KisDocumentUndoStore*>(image->undoStore());
+            dynamic_cast<KisDocumentUndoStore*>(image->undoStore());
     Q_ASSERT(undoStore);
 
     undoStore->notifyCommandExecuted(command);

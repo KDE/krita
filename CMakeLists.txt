@@ -290,11 +290,13 @@ endif( MARBLE_FOUND )
 ## Test for lcms
 ##
 macro_optional_find_package(LCMS2)
-macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "2.0" "Will be used for color management and is necesary for Krita")
+macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "2.4" "Will be used for color management and is necesary for Krita")
 if(LCMS2_FOUND)
+    if(${LCMS2_VERSION} VERSION_GREATER 2.04 )
+        set(HAVE_LCMS24 TRUE)
+    endif(${LCMS2_VERSION} VERSION_GREATER 2.04 )
     set(HAVE_REQUIRED_LCMS_VERSION TRUE)
     set(HAVE_LCMS2 TRUE)
-    set(HAVE_LCMS TRUE)
 endif(LCMS2_FOUND)
 
 ##

@@ -31,9 +31,9 @@ if(KDCRAW_FOUND)
     add_subdirectory( raw )
 endif(KDCRAW_FOUND)
 
-if(JPEG_FOUND AND HAVE_LCMS)
+if(JPEG_FOUND AND HAVE_LCMS2)
 	add_subdirectory(jpeg)
-endif(JPEG_FOUND AND HAVE_LCMS)
+endif(JPEG_FOUND AND HAVE_LCMS2)
 
 if(TIFF_FOUND)
 	add_subdirectory(tiff)

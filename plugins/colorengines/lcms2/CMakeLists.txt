@@ -27,6 +27,12 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles
 )
 
+if (HAVE_LCMS24)
+include_directories( 
+    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/rgb_f16
+)
+endif (HAVE_LCMS24)
+
 set(FILE_OPENEXR_SOURCES)
 set(LINK_OPENEXR_LIB)
 if(OPENEXR_FOUND)
@@ -67,6 +73,15 @@ SET ( lcmsengine_SRCS
     LcmsColorSpace.cpp
     LcmsEnginePlugin.cpp
 )
+
+if (HAVE_LCMS24)
+    set ( lcmsengine_SRCS
+        ${lcmsengine_SRCS}
+        colorspaces/rgb_f16/RgbF16ColorSpace.cpp
+    )
+endif (HAVE_LCMS24)
+
+
 
 kde4_add_plugin(kolcmsengine ${lcmsengine_SRCS})
 

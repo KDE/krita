@@ -47,7 +47,7 @@ const QString COMPOSITE_MULT                  = "multiply";
 const QString COMPOSITE_DIVIDE                = "divide";
 const QString COMPOSITE_ARC_TANGENT           = "arc_tangent";
 const QString COMPOSITE_GEOMETRIC_MEAN        = "geometric_mean";
-const QString COMPOSITE_ADDITIVE_SUBTRACTIVE = "additive_subtractive";
+const QString COMPOSITE_ADDITIVE_SUBTRACTIVE  = "additive_subtractive";
 const QString COMPOSITE_INVERTED_DIVIDE       = "inverted_divide"; // XXX: not implemented anywhere yet
 
 const QString COMPOSITE_EQUIVALENCE   = "equivalence";
@@ -58,6 +58,7 @@ const QString COMPOSITE_GRAIN_EXTRACT = "grain_extract";
 const QString COMPOSITE_EXCLUSION     = "exclusion";
 const QString COMPOSITE_HARD_MIX      = "hard mix";
 const QString COMPOSITE_OVERLAY       = "overlay";
+const QString COMPOSITE_BEHIND        = "behind";
 
 const QString COMPOSITE_DARKEN      = "darken";
 const QString COMPOSITE_BURN        = "burn";

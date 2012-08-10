@@ -47,6 +47,8 @@
 #include "compositeops/KoCompositeOpSoftlight.h"
 #include "compositeops/KoCompositeOpHardlight.h"
 
+#include "compositeops/KoCompositeOpBehind.h"
+
 namespace _Private {
 
 template<class Traits, bool flag>
@@ -72,6 +74,7 @@ struct AddGeneralOps<Traits, true>
          cs->addCompositeOp(new KoCompositeOpAlphaDarken<Traits>(cs));
          cs->addCompositeOp(new KoCompositeOpCopy2<Traits>(cs));
          cs->addCompositeOp(new KoCompositeOpErase<Traits>(cs));
+         cs->addCompositeOp(new KoCompositeOpBehind<Traits>(cs));
 
          add<&cfOverlay<Arg>       >(cs, COMPOSITE_OVERLAY       , i18n("Overlay")       , KoCompositeOp::categoryMix());
          add<&cfGrainMerge<Arg>    >(cs, COMPOSITE_GRAIN_MERGE   , i18n("Grain Merge")   , KoCompositeOp::categoryMix());
@@ -107,7 +110,7 @@ struct AddGeneralOps<Traits, true>
          add<&cfDifference<Arg>           >(cs, COMPOSITE_DIFF                 , i18n("Difference")           , KoCompositeOp::categoryNegative());
          add<&cfExclusion<Arg>            >(cs, COMPOSITE_EXCLUSION            , i18n("Exclusion")            , KoCompositeOp::categoryNegative());
          add<&cfEquivalence<Arg>          >(cs, COMPOSITE_EQUIVALENCE          , i18n("Equivalence")          , KoCompositeOp::categoryNegative());
-         add<&cfAdditiveSubtractive<Arg> >(cs, COMPOSITE_ADDITIVE_SUBTRACTIVE, i18n("Additive-Subtractive"), KoCompositeOp::categoryNegative());
+         add<&cfAdditiveSubtractive<Arg>  >(cs, COMPOSITE_ADDITIVE_SUBTRACTIVE , i18n("Additive-Subtractive") , KoCompositeOp::categoryNegative());
 
          cs->addCompositeOp(new KoCompositeOpDissolve<Traits>(cs, KoCompositeOp::categoryMisc()));
      }

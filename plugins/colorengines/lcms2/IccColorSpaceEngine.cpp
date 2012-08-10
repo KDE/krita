@@ -44,6 +44,19 @@ public:
         Q_ASSERT(srcCs);
         Q_ASSERT(dstCs);
         Q_ASSERT(renderingIntent < 4);
+
+        if (srcCs->colorDepthId() == Integer8BitsColorDepthID
+                || srcCs->colorDepthId() == Integer16BitsColorDepthID) {
+
+            if (srcProfile->name().toLower().contains("linear") ||
+                    dstProfile->name().toLower().contains("linear") &&
+                    !conversionFlags.testFlag(KoColorConversionTransformation::NoOptimization) ) {
+                conversionFlags |= KoColorConversionTransformation::NoOptimization;
+            }
+        }
+
+
+
         m_transform = this->createTransform(srcColorSpaceType,
                                             srcProfile,
                                             dstColorSpaceType,
@@ -88,12 +101,6 @@ private:
                                   qint32 renderingIntent,
                                   KoColorConversionTransformation::ConversionFlags conversionFlags) const
     {
-
-        if (srcProfile->name().toLower().contains("linear") ||
-            dstProfile->name().toLower().contains("linear") &&
-            !conversionFlags.testFlag(KoColorConversionTransformation::NoOptimization) ) {
-            conversionFlags |= KoColorConversionTransformation::NoOptimization;
-        }
 
         cmsHTRANSFORM tf = cmsCreateTransform(srcProfile->lcmsProfile(),
                                               srcColorSpaceType,

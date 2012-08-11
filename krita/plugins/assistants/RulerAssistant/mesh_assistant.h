@@ -69,7 +69,7 @@ protected:
     void Render();
 
 private:
-    bool InitFromScene(const aiScene* pScene, const std::string& Filename);
+    bool InitFromScene(const aiScene* pScene);
     void InitMesh(unsigned int Index, const aiMesh* paiMesh);
     void Clear();
 
@@ -85,7 +85,6 @@ private:
         GLuint VB;
         GLuint IB;
         unsigned int NumIndices;
-        unsigned int MaterialIndex;
     };
 
     std::vector<MeshEntry> m_Entries;

@@ -25,13 +25,13 @@ MeshAssistant::MeshAssistant()
 
 void MeshAssistant::initialize(char* file){
     Assimp::Importer imp;
-    const aiScene* scene = imp.ReadFile( file, aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType | aiProcess_FlipUVs );
+    const aiScene* scene = imp.ReadFile( file, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals  );
     if(!scene)
     {
         return;
     }
-    InitFromScene(scene, file);
-
+    InitFromScene(scene);
+    Render();
 }
 
 QPointF MeshAssistant::adjustPosition(const QPointF& pt, const QPointF& /*strokeBegin*/)
@@ -86,7 +86,6 @@ MeshAssistant::MeshEntry::MeshEntry()
     VB = INVALID_OGL_VALUE;
     IB = INVALID_OGL_VALUE;
     NumIndices  = 0;
-    MaterialIndex = INVALID_MATERIAL;
 }
 
 MeshAssistant::MeshEntry::~MeshEntry()
@@ -118,7 +117,7 @@ bool MeshAssistant::MeshEntry::Init(const std::vector<Vertex>& Vertices,
 }
 
 
-bool MeshAssistant::InitFromScene(const aiScene* pScene, const std::string& Filename)
+bool MeshAssistant::InitFromScene(const aiScene* pScene)
 {
     m_Entries.resize(pScene->mNumMeshes);
 
@@ -133,13 +132,11 @@ bool MeshAssistant::InitFromScene(const aiScene* pScene, const std::string& File
 
 void MeshAssistant::InitMesh(unsigned int Index, const aiMesh* paiMesh)
 {
-    m_Entries[Index].MaterialIndex = paiMesh->mMaterialIndex;
-
     std::vector<Vertex> Vertices;
     std::vector<unsigned int> Indices;
-
+    qDebug() << "in initMesh";
     const aiVector3D Zero3D(0.0f, 0.0f, 0.0f);
-
+    qDebug() << "in initMesh: before loop for vertices";
     for (unsigned int i = 0 ; i < paiMesh->mNumVertices ; i++) {
         const aiVector3D* pPos      = &(paiMesh->mVertices[i]);
         const aiVector3D* pNormal   = &(paiMesh->mNormals[i]);
@@ -151,15 +148,18 @@ void MeshAssistant::InitMesh(unsigned int Index, const aiMesh* paiMesh)
 
         Vertices.push_back(v);
     }
-
+    qDebug() << "in initMesh: before loop for indices";
     for (unsigned int i = 0 ; i < paiMesh->mNumFaces ; i++) {
+        qDebug() << "in initMesh: before faces" << i;
         const aiFace& Face = paiMesh->mFaces[i];
-        assert(Face.mNumIndices == 3);
-        Indices.push_back(Face.mIndices[0]);
-        Indices.push_back(Face.mIndices[1]);
-        Indices.push_back(Face.mIndices[2]);
+        qDebug() << "in initMesh: faces" << i;
+        for( uint j = 0; j < Face.mNumIndices; ++j )
+        {
+            qDebug() << "in initMesh: indices" << i;
+            Indices.push_back(Face.mIndices[j]);
+        }
     }
-
+    qDebug() << "in initMesh: before init";
     m_Entries[Index].Init(Vertices, Indices);
 }
 
@@ -178,7 +178,6 @@ void MeshAssistant::Render()
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Entries[i].IB);
 
-        const unsigned int MaterialIndex = m_Entries[i].MaterialIndex;
 
         glDrawElements(GL_TRIANGLES, m_Entries[i].NumIndices, GL_UNSIGNED_INT, 0);
     }

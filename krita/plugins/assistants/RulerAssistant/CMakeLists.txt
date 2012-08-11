@@ -23,6 +23,8 @@ kde4_add_plugin(kritarulerassistanttool ${kritarulerassistanttool_PART_SRCS})
 
 target_link_libraries(kritarulerassistanttool kritaui flake ${KDE4_KPARTS_LIBS} ${KDE4_KDEUI_LIBS} )
 
+target_link_libraries(kritarulerassistanttool kritaui flake ${GLEW_LIBRARIES})
+
 if(ASSIMP_FOUND)
     target_link_libraries(kritarulerassistanttool kritaui ${ASSIMP_LIBRARY})
 

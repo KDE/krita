@@ -224,16 +224,16 @@ void decodeData4(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP 
 
             // XXX: For now unmultiply the alpha, though compositing will be faster if we
             // keep it premultiplied.
-            _T_ unmultipliedRed = rgba -> r;
-            _T_ unmultipliedGreen = rgba -> g;
-            _T_ unmultipliedBlue = rgba -> b;
+            _T_ unmultipliedRed = rgba->r;
+            _T_ unmultipliedGreen = rgba->g;
+            _T_ unmultipliedBlue = rgba->b;
 
             if (hasAlpha && rgba -> a >= HALF_EPSILON) {
                 unmultipliedRed /= rgba -> a;
                 unmultipliedGreen /= rgba -> a;
                 unmultipliedBlue /= rgba -> a;
             }
-            typename KoBgrTraits<_T_>::Pixel* dst = reinterpret_cast<typename KoBgrTraits<_T_>::Pixel*>(it->rawData());
+            typename KoRgbTraits<_T_>::Pixel* dst = reinterpret_cast<typename KoRgbTraits<_T_>::Pixel*>(it->rawData());
 
             dst->red = unmultipliedRed;
             dst->green = unmultipliedGreen;
@@ -399,23 +399,24 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
                 info.channelMap = newChannelMap;
             } else {
                 modelId = RGBAColorModelID.id();
-                QMap<QString, QString> newChannelMap;
-                QMap<QString, QString>::iterator it = info.channelMap.begin();
-                newChannelMap["R"] = it.value();
-                info.remappedChannels.push_back(ExrPaintLayerInfo::Remap(it.key(), "R"));
-                ++it;
-                newChannelMap["G"] = it.value();
-                info.remappedChannels.push_back(ExrPaintLayerInfo::Remap(it.key(), "G"));
-                ++it;
-                newChannelMap["B"] = it.value();
-                info.remappedChannels.push_back(ExrPaintLayerInfo::Remap(it.key(), "B"));
-                if (info.channelMap.size() == 4) {
-                    ++it;
-                    newChannelMap["A"] = it.value();
-                    info.remappedChannels.push_back(ExrPaintLayerInfo::Remap(it.key(), "A"));
-                }
+// Remapping is only needed to go from rgba to bgra, which isn't needed for the current floating point color spaces
+//                QMap<QString, QString> newChannelMap;
+//                QMap<QString, QString>::iterator it = info.channelMap.begin();
+//                newChannelMap["R"] = it.value();
+//                info.remappedChannels.push_back(ExrPaintLayerInfo::Remap(it.key(), "R"));
+//                ++it;
+//                newChannelMap["G"] = it.value();
+//                info.remappedChannels.push_back(ExrPaintLayerInfo::Remap(it.key(), "G"));
+//                ++it;
+//                newChannelMap["B"] = it.value();
+//                info.remappedChannels.push_back(ExrPaintLayerInfo::Remap(it.key(), "B"));
+//                if (info.channelMap.size() == 4) {
+//                    ++it;
+//                    newChannelMap["A"] = it.value();
+//                    info.remappedChannels.push_back(ExrPaintLayerInfo::Remap(it.key(), "A"));
+//                }
 
-                info.channelMap = newChannelMap;
+//                info.channelMap = newChannelMap;
             }
         }
         if (!modelId.isEmpty()) {

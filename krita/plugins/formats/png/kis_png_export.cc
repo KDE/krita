@@ -29,6 +29,7 @@
 #include <KoColorSpace.h>
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
+#include <KoColorProfile.h>
 
 #include <kis_paint_device.h>
 #include <kis_doc2.h>
@@ -106,6 +107,8 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
         }
     } while (it->nextPixel());
 
+    bool sRGB = cs->profile()->name().toLower().contains("srgb");
+
     KisWdgOptionsPNG* wdg = new KisWdgOptionsPNG(kdb);
 
     QString filterConfig = KisConfig().exportConfiguration("PNG");
@@ -127,6 +130,9 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
 
     wdg->bnTransparencyFillColor->setEnabled(!wdg->alpha->isChecked());
 
+    wdg->chkSRGB->setVisible(sRGB);
+    wdg->chkSRGB->setChecked(cfg.getBool("saveSRGBProfile", true));
+
     QStringList rgb = cfg.getString("transparencyFillcolor", "255,255,255").split(",");
     wdg->bnTransparencyFillColor->setDefaultColor(Qt::white);
     wdg->bnTransparencyFillColor->setColor(QColor(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt()));
@@ -147,13 +153,14 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     int compression = wdg->compressionLevel->value();
     bool tryToSaveAsIndexed = wdg->tryToSaveAsIndexed->isChecked();
     QColor c = wdg->bnTransparencyFillColor->color();
+    bool saveSRGB = wdg->chkSRGB->isChecked();
 
     cfg.setProperty("alpha", alpha);
     cfg.setProperty("indexed", tryToSaveAsIndexed);
     cfg.setProperty("compression", compression);
     cfg.setProperty("interlaced", interlace);
     cfg.setProperty("transparencyFillcolor", QString("%1,%2,%3").arg(c.red()).arg(c.green()).arg(c.blue()));
-
+    cfg.setProperty("saveSRGBProfile", saveSRGB);
     KisConfig().setExportConfiguration("PNG", cfg);
 
     delete kdb;
@@ -172,6 +179,8 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     options.compression = compression;
     options.tryToSaveAsIndexed = tryToSaveAsIndexed;
     options.transparencyFillColor = c;
+    options.saveSRGBProfile = saveSRGB;
+
     KisExifInfoVisitor eIV;
     eIV.visit(image->rootLayer().data());
     KisMetaData::Store* eI = 0;

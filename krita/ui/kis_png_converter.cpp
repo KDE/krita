@@ -518,7 +518,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     } else {
         dbgFile << "no embedded profile, will use the default profile";
     }
-    
+
     // Check that the profile is used by the color space
     if (profile && !KoColorSpaceRegistry::instance()->colorSpaceFactory(
         KoColorSpaceRegistry::instance()->colorSpaceId(
@@ -922,7 +922,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     // set sRGB only if the profile is sRGB  -- http://www.w3.org/TR/PNG/#11sRGB says sRGB and iCCP should not both be present
 
     bool sRGB = device->colorSpace()->profile()->name().toLower().contains("srgb");
-    if (sRGB) {
+    if (!options.saveSRGBProfile && sRGB) {
         png_set_sRGB(png_ptr, info_ptr, PNG_sRGB_INTENT_ABSOLUTE);
     }
     // set the palette
@@ -934,7 +934,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     while (it != annotationsEnd) {
         if (!(*it) || (*it)->type().isEmpty()) {
             dbgFile << "Warning: empty annotation";
-            
+
             continue;
         }
 
@@ -949,23 +949,23 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
         } else if ((*it)->type() == "kpp_version" || (*it)->type() == "kpp_preset" ) {
             dbgFile << "Saving preset information " << (*it)->description();
             png_textp      text = (png_textp) png_malloc(png_ptr, (png_uint_32) sizeof(png_text));
-            
+
             QByteArray keyData = (*it)->description().toLatin1();
             text[0].key = keyData.data();
             text[0].text = (*it)->annotation().data();
             text[0].text_length = (*it)->annotation().size();
             text[0].compression = -1;
-            
+
             png_set_text(png_ptr, info_ptr, text, 1);
             png_free(png_ptr, text);
         }
-        
+
     }
-    
+
     // Save the color profile
     const KoColorProfile* colorProfile = device->colorSpace()->profile();
     QByteArray colorProfileData = colorProfile->rawData();
-    if (!sRGB) {
+    if (!sRGB || options.saveSRGBProfile) {
 #if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 5
         png_set_iCCP(png_ptr, info_ptr, "icc", PNG_COMPRESSION_TYPE_BASE, (const png_bytep)colorProfileData.data(), colorProfileData . size());
 #else

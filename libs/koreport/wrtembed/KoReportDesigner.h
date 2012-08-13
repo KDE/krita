@@ -293,12 +293,6 @@ private:
     KoReportData *m_kordata;
 
     /**
-    @brief Return a list of supported page formats
-    @return A QStringList of page formats
-    */
-    QStringList pageFormats() const;
-
-    /**
     @brief Sets the detail section to the given section
     */
     void setDetail(ReportSectionDetail *rsd);

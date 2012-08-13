@@ -614,8 +614,10 @@ void KoReportDesigner::createProperties()
     m_title = new KoProperty::Property("Title", "Report", i18n("Title"), i18n("Report Title"));
 
     keys.clear();
-    keys = pageFormats();
-    m_pageSize = new KoProperty::Property("page-size", keys, keys, "A4", i18n("Page Size"));
+    keys =  KoPageFormat::pageFormatNames();
+    strings = KoPageFormat::localizedPageFormatNames();
+    QString defaultKey = KoPageFormat::formatString(KoPageFormat::defaultFormat());
+    m_pageSize = new KoProperty::Property("page-size", keys, strings, defaultKey, i18n("Page Size"));
 
     keys.clear(); strings.clear();
     keys << "portrait" << "landscape";
@@ -701,13 +703,6 @@ void KoReportDesigner::slotPageButton_Pressed()
         m_script->setListData(sl, sl);
         changeSet(m_set);
     }
-}
-
-QStringList KoReportDesigner::pageFormats() const
-{
-    QStringList lst;
-    lst << "A4" << "Letter" << "Legal" << "A3" << "A5";
-    return lst;
 }
 
 QSize KoReportDesigner::sizeHint() const

@@ -51,8 +51,8 @@ struct KisPNGOptions {
         , iptc(true)
         , xmp(true)
         , tryToSaveAsIndexed(true)
-        , transparencyFillColor(Qt::white)
         , saveSRGBProfile(false)
+        , transparencyFillColor(Qt::white)
     {}
 
     int compression;

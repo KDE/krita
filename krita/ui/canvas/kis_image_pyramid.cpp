@@ -183,7 +183,7 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
 
     KisConfig cfg;
 
-    if (m_displayFilter && cfg.useOcio() && projectionCs ->colorModelId() == RGBAColorModelID && projectionCs->hasHighDynamicRange()) {
+    if (m_displayFilter && cfg.useOcio() && projectionCs->colorModelId() == RGBAColorModelID) {
 #ifdef HAVE_OCIO
         if (projectionCs->colorDepthId() == Float16BitsColorDepthID) {
             projectionCs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), QString());

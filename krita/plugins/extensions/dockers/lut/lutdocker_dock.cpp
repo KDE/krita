@@ -173,7 +173,7 @@ void LutDockerDock::slotImageColorSpaceChanged()
 
 
     }
-    //updateDisplaySettings();
+    updateDisplaySettings();
     m_updateDisplay = true;
 }
 

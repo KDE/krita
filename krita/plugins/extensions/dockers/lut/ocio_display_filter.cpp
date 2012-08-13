@@ -249,7 +249,7 @@ void OcioDisplayFilter::updateProcessor()
         glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
         glTexImage3D(GL_TEXTURE_3D, 0, GL_RGB16F_ARB,
                      LUT3D_EDGE_SIZE, LUT3D_EDGE_SIZE, LUT3D_EDGE_SIZE,
-                     0, GL_RGB,GL_FLOAT, &m_lut3d.data()[0]);
+                     0, GL_RGB, GL_FLOAT, &m_lut3d.data()[0]);
     }
 
 
@@ -271,7 +271,7 @@ void OcioDisplayFilter::updateProcessor()
         glTexSubImage3D(GL_TEXTURE_3D, 0,
                         0, 0, 0,
                         LUT3D_EDGE_SIZE, LUT3D_EDGE_SIZE, LUT3D_EDGE_SIZE,
-                        GL_RGB,GL_FLOAT, &m_lut3d[0]);
+                        GL_RGB, GL_FLOAT, &m_lut3d[0]);
     }
 
     // Step 3: Compute the Shader

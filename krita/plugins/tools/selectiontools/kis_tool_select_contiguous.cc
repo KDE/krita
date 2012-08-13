@@ -59,7 +59,7 @@ KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas)
     setObjectName("tool_select_contiguous");
     m_fuzziness = 20;
     m_sizemod = 0;
-    m_feathering = 0;
+    m_feather = 0;
     m_limitToCurrentLayer = false;
 }
 
@@ -95,22 +95,9 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent *event)
 
         KisImageWSP image = currentImage();
         image->lock();
-        KisSelectionSP selection =
-            fillpainter.createFloodSelection(pos.x(), pos.y(), image->projection());
-            
-        if     (m_sizemod > 0) {
-            KisGrowSelectionFilter biggy(m_sizemod, m_sizemod);
-            biggy.process(selection->pixelSelection(), selection->selectedRect().adjusted(-m_sizemod, -m_sizemod, m_sizemod, m_sizemod));
-        }
-        else if (m_sizemod < 0) {
-            KisShrinkSelectionFilter tiny(-m_sizemod, -m_sizemod, false);
-            tiny.process(selection->pixelSelection(), selection->selectedRect());
-        }
-        
-        if (m_feathering > 0) {
-            KisFeatherSelectionFilter tiny(m_feathering);
-            tiny.process(selection->pixelSelection(), selection->selectedRect().adjusted(-m_feathering, -m_feathering, m_feathering, m_feathering));
-        }
+        fillpainter.setFeather(m_feather);
+        fillpainter.setSizemod(m_sizemod);
+        KisSelectionSP selection = fillpainter.createFloodSelection(pos.x(), pos.y(), image->projection());
         image->unlock();
 
         KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
@@ -144,9 +131,9 @@ void KisToolSelectContiguous::slotSetSizemod(int sizemod)
     m_sizemod = sizemod;
 }
 
-void KisToolSelectContiguous::slotSetFeathering(int feathering)
+void KisToolSelectContiguous::slotSetFeather(int feather)
 {
-    m_feathering = feathering;
+    m_feather = feather;
 }
 
 QWidget* KisToolSelectContiguous::createOptionWidget()
@@ -206,7 +193,7 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         
         connect (input  , SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int) ));
         connect (sizemod, SIGNAL(valueChanged(int)), this, SLOT(slotSetSizemod(int)   ));
-        connect (feather, SIGNAL(valueChanged(int)), this, SLOT(slotSetFeathering(int)));
+        connect (feather, SIGNAL(valueChanged(int)), this, SLOT(slotSetFeather(int)   ));
 
         QCheckBox* limitToCurrentLayer = new QCheckBox(i18n("Limit to current layer"), selectionWidget);
         l->insertWidget(4, limitToCurrentLayer);

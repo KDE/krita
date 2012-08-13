@@ -21,6 +21,9 @@
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define RINT(x) floor ((x) + 0.5)
 
+#include "kis_convolution_painter.h"
+#include "kis_convolution_kernel.h"
+
 class KisSelectionFilter
 {
 public:

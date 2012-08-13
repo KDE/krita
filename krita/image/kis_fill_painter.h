@@ -210,6 +210,28 @@ public:
     void setFuzzyFill(bool set) {
         m_fuzzy = set;
     }
+        
+    /** Sets the auto growth/shrinking radius */
+    void setSizemod(int sizemod) {
+        m_sizemod = sizemod;
+    }
+    
+    /** Sets how much to auto-grow or shrink (if @param sizemod is negative) the selection
+    flood before painting, this affects every fill operation except fillRect */
+    int sizemod() {
+        return m_sizemod;
+    }
+    
+    /** Sets feathering radius */
+    void setFeather(int feather) {
+        m_feather = feather;
+    }
+    
+    /** defines the feathering radius for selection flood operations, this affects every
+    fill operation except fillRect */
+    uint feather() {
+        return m_feather;
+    }
 
 private:
     // for floodfill
@@ -218,6 +240,8 @@ private:
 
     KisSelectionSP m_fillSelection;
 
+    int m_feather;
+    int m_sizemod;
     int m_threshold;
     int m_size;
     int m_width, m_height;

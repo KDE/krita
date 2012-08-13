@@ -56,18 +56,21 @@ public slots:
     virtual void slotSetUsePattern(bool);
     virtual void slotSetSampleMerged(bool);
     virtual void slotSetFillSelection(bool);
+    virtual void slotSetSizemod(int);
+    virtual void slotSetFeather(int);
 
 private:
-    QPoint m_startPos;
-    int m_threshold;
-    qint32 m_depth;
-    quint8* m_oldColor, *m_color;
+    int         m_feather;
+    int         m_sizemod;
+    QPoint      m_startPos;
+    int         m_threshold;
+    qint32      m_depth;
+    quint8*     m_oldColor, *m_color;
     KisPainter *m_painter;
 
     bool *m_map, m_unmerged, m_usePattern, m_fillOnlySelection;
     KisSelectionSP m_selection;
 
-    QLabel *m_lbThreshold;
     KisSliderSpinBox *m_slThreshold;
     QCheckBox *m_checkUsePattern;
     QCheckBox *m_checkSampleMerged;

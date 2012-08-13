@@ -28,7 +28,10 @@
 #include <vector>
 #include <klocale.h>
 #include <assert.h>
+#include <kis_tool.h>
+#include <kis_config.h>
 
+#include <opengl/kis_opengl.h>
 #include <GL/glew.h>
 #include <assimp.hpp>      // C++ importer interface
 #include <aiScene.h>       // Output data structure

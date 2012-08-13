@@ -41,7 +41,6 @@
 
 #include <kis_abstract_perspective_grid.h>
 #include <kis_painting_assistants_manager.h>
-#include <mesh_assistant.h>
 
 KisRulerAssistantTool::KisRulerAssistantTool(KoCanvasBase * canvas)
         : KisTool(canvas, KisCursor::arrowCursor()), m_canvas(dynamic_cast<KisCanvas2*>(canvas)),
@@ -258,15 +257,33 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
         }
 
         QString key = m_options.comboBox->model()->index( m_options.comboBox->currentIndex(), 0 ).data(Qt::UserRole).toString();
-        m_newAssistant = KisPaintingAssistantFactoryRegistry::instance()->get(key)->createPaintingAssistant();
-        m_internalMode = MODE_CREATION;
-        m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point));
-        if (m_newAssistant->numHandles() <= 1) {
-            addAssistant();
-        } else {
+        if(key == "mesh" && m_canvas->canvasIsOpenGL()){
+            beginOpenGL();
+            m_newAssistant = KisPaintingAssistantFactoryRegistry::instance()->get(key)->createPaintingAssistant();
+            m_internalMode = MODE_CREATION;
             m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point));
+            if (m_newAssistant->numHandles() <= 1) {
+                addAssistant();
+            } else {
+                m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point));
+            }
+            m_canvas->updateCanvas();
+            endOpenGL();
         }
-        m_canvas->updateCanvas();
+        else if(key == "mesh" && !m_canvas->canvasIsOpenGL()){
+            KisTool::mousePressEvent(event);
+        }
+        else{
+            m_newAssistant = KisPaintingAssistantFactoryRegistry::instance()->get(key)->createPaintingAssistant();
+            m_internalMode = MODE_CREATION;
+            m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point));
+            if (m_newAssistant->numHandles() <= 1) {
+                addAssistant();
+            } else {
+                m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point));
+            }
+            m_canvas->updateCanvas();
+        }
     } else {
         KisTool::mousePressEvent(event);
     }

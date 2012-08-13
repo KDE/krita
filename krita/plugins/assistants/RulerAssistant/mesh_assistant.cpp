@@ -32,6 +32,10 @@ void MeshAssistant::initialize(char* file){
     }
     InitFromScene(scene);
     Render();
+    glEnable(GL_DEPTH_TEST);
+    glClear(GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_LINE_SMOOTH);
+    glEnable(GL_COLOR_MATERIAL);
 }
 
 QPointF MeshAssistant::adjustPosition(const QPointF& pt, const QPointF& /*strokeBegin*/)

@@ -99,7 +99,7 @@ public:
     }
 
 private:
-    Q_DISABLE_COPY(KisTileDataWrapper);
+    Q_DISABLE_COPY(KisTileDataWrapper)
 
     KisTileSP m_tile;
     qint32 m_offset;

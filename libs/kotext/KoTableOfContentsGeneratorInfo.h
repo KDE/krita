@@ -68,6 +68,6 @@ private:
     int styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, QString styleName);
 };
 
-Q_DECLARE_METATYPE(KoTableOfContentsGeneratorInfo *);
+Q_DECLARE_METATYPE(KoTableOfContentsGeneratorInfo *)
 
 #endif

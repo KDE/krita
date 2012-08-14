@@ -87,8 +87,8 @@ protected:
     virtual QList<QWidget *> createOptionWidgets();
 
 private:
-    Q_DECLARE_PRIVATE(KoCreatePathTool);
-    Q_PRIVATE_SLOT(d_func(), void angleDeltaChanged(int));
+    Q_DECLARE_PRIVATE(KoCreatePathTool)
+    Q_PRIVATE_SLOT(d_func(), void angleDeltaChanged(int))
 };
 #endif
 

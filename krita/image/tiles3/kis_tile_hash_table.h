@@ -216,7 +216,7 @@ protected:
         return idx;
     }
 private:
-    Q_DISABLE_COPY(KisTileHashTableIteratorTraits<T>);
+    Q_DISABLE_COPY(KisTileHashTableIteratorTraits<T>)
 };
 
 

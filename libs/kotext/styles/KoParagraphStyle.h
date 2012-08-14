@@ -738,5 +738,5 @@ private:
     class Private;
     Private * const d;
 };
-Q_DECLARE_METATYPE(KoListStyle *);
+Q_DECLARE_METATYPE(KoListStyle *)
 #endif

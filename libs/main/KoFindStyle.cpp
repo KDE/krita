@@ -31,8 +31,8 @@
 #include <QTextCursor>
 #include <QAbstractTextDocumentLayout>
 
-Q_DECLARE_METATYPE(QTextDocument *);
-Q_DECLARE_METATYPE(QTextCursor);
+Q_DECLARE_METATYPE(QTextDocument *)
+Q_DECLARE_METATYPE(QTextCursor)
 
 class KoFindStyle::Private
 {

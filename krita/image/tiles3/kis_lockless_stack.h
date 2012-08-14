@@ -185,7 +185,7 @@ private:
 
 
 private:
-    Q_DISABLE_COPY(KisLocklessStack);
+    Q_DISABLE_COPY(KisLocklessStack)
 
     QAtomicPointer<Node> m_top;
     QAtomicPointer<Node> m_freeNodes;

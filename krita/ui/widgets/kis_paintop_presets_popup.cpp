@@ -90,7 +90,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->uiWdgPaintOpPresetSettings.fillGradient->setIcon(koIcon("krita_tool_gradient"));
     m_d->uiWdgPaintOpPresetSettings.fillSolid->setIcon(koIcon("krita_tool_color_fill"));
     m_d->uiWdgPaintOpPresetSettings.eraseScratchPad->setIcon(koIcon("edit-clear"));
-    m_d->uiWdgPaintOpPresetSettings.paintPresetIcon->setIcon(koIcon("krita_paintop_icon"));
+    m_d->uiWdgPaintOpPresetSettings.paintPresetIcon->setIcon(koIconNeededWithSubs("paint the preset icon","krita_paintop_icon","krita_tool_freehand"));
 
     connect(m_d->uiWdgPaintOpPresetSettings.eraseScratchPad, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.scratchPad, SLOT(fillDefault()));

@@ -219,4 +219,3 @@ double KisHatchingPaintOp::spinAngle(double spin)
 
     return 0;   // this should never be executed except if NAN
 }
-;

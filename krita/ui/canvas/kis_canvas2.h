@@ -236,7 +236,7 @@ public:
     bool handlePopupPaletteIsVisible();
 
 private:
-    Q_DISABLE_COPY(KisCanvas2);
+    Q_DISABLE_COPY(KisCanvas2)
 
     void pan(QPoint shift);
     void createCanvas(bool useOpenGL);

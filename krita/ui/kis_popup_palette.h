@@ -39,9 +39,9 @@ class KisTriangleColorSelector;
 class KisPopupPalette : public QWidget
 {
     Q_OBJECT
-    Q_PROPERTY (int hoveredPreset READ hoveredPreset WRITE setHoveredPreset);
-    Q_PROPERTY (int hoveredColor READ hoveredColor WRITE setHoveredColor);
-    Q_PROPERTY (int selectedColor READ selectedColor WRITE setSelectedColor);
+    Q_PROPERTY (int hoveredPreset READ hoveredPreset WRITE setHoveredPreset)
+    Q_PROPERTY (int hoveredColor READ hoveredColor WRITE setHoveredColor)
+    Q_PROPERTY (int selectedColor READ selectedColor WRITE setSelectedColor)
 
 public:
     KisPopupPalette(KoFavoriteResourceManager* , QWidget *parent=0);

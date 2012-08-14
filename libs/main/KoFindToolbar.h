@@ -63,15 +63,15 @@ private:
     class Private;
     Private * const d;
 
-    Q_PRIVATE_SLOT(d, void matchFound());
-    Q_PRIVATE_SLOT(d, void noMatchFound());
-    Q_PRIVATE_SLOT(d, void searchWrapped(bool direction));
-    Q_PRIVATE_SLOT(d, void addToHistory());
-    Q_PRIVATE_SLOT(d, void find(const QString &pattern));
-    Q_PRIVATE_SLOT(d, void optionChanged());
-    Q_PRIVATE_SLOT(d, void replace());
-    Q_PRIVATE_SLOT(d, void replaceAll());
-    Q_PRIVATE_SLOT(d, void inputTimeout());
+    Q_PRIVATE_SLOT(d, void matchFound())
+    Q_PRIVATE_SLOT(d, void noMatchFound())
+    Q_PRIVATE_SLOT(d, void searchWrapped(bool direction))
+    Q_PRIVATE_SLOT(d, void addToHistory())
+    Q_PRIVATE_SLOT(d, void find(const QString &pattern))
+    Q_PRIVATE_SLOT(d, void optionChanged())
+    Q_PRIVATE_SLOT(d, void replace())
+    Q_PRIVATE_SLOT(d, void replaceAll())
+    Q_PRIVATE_SLOT(d, void inputTimeout())
 };
 
 #endif // KOFINDTOOLBAR_H

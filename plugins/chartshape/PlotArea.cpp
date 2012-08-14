@@ -82,7 +82,7 @@ using namespace KChart;
 
 const int MAX_PIXMAP_SIZE = 1000;
 
-Q_DECLARE_METATYPE(QPointer<QAbstractItemModel>);
+Q_DECLARE_METATYPE(QPointer<QAbstractItemModel>)
 typedef QList<KDChart::AbstractCoordinatePlane*> CoordinatePlaneList;
 
 class PlotArea::Private

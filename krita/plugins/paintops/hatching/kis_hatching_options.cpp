@@ -113,4 +113,3 @@ void KisHatchingOptions::readOptionSetting(const KisPropertiesConfiguration* set
     
     m_options->separationIntervalSpinBox->setValue( setting->getInt("Hatching/separationintervals") );
 }
-;

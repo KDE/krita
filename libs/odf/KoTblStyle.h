@@ -103,7 +103,7 @@ public:
 
     enum KeepWithNext {
         AutoKeepWithNext,
-        AlwaysKeepWithNext,
+        AlwaysKeepWithNext
     };
     void setKeepWithNext(KeepWithNext keepWithNext);
     KeepWithNext keepWithNext() const;

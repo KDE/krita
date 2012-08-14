@@ -69,7 +69,7 @@ public:
         YDataRole,
         CustomDataRole,
         LabelDataRole,
-        CategoryDataRole,
+        CategoryDataRole
     };
 
     /**

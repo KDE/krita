@@ -53,7 +53,7 @@ public:
     enum FilterMode {
         NearestFilterMode,
         BilinearFilterMode,
-        TrilinearFilterMode,
+        TrilinearFilterMode
     };
 
     KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texturesInfo,
@@ -87,7 +87,7 @@ private:
 
     const KisGLTexturesInfo *m_texturesInfo;
 
-    Q_DISABLE_COPY(KisTextureTile);
+    Q_DISABLE_COPY(KisTextureTile)
 };
 
 

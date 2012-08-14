@@ -69,7 +69,7 @@ public:
     QString swapDir();
 
 private:
-    Q_DISABLE_COPY(KisImageConfig);
+    Q_DISABLE_COPY(KisImageConfig)
 
 private:
     KConfigGroup m_config;

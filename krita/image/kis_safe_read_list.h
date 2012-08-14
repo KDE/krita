@@ -85,7 +85,7 @@ public:
     using QList<T>::clear;
 
 private:
-    Q_DISABLE_COPY(KisSafeReadList);
+    Q_DISABLE_COPY(KisSafeReadList)
 };
 
 

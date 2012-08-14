@@ -69,7 +69,7 @@ public:
 
 private:
     KisPreferenceSetRegistry();
-    Q_DISABLE_COPY(KisPreferenceSetRegistry);
+    Q_DISABLE_COPY(KisPreferenceSetRegistry)
 };
 
 #endif // KIS_PREFERENCE_SETSPACE_REGISTRY_H_

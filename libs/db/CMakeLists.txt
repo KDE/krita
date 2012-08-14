@@ -91,3 +91,5 @@ if(FALSE) # TODO: install when we move to independent place
     RecordData.h utils.h
     calligradb_export.h calligradb_global.h DESTINATION ${INCLUDE_INSTALL_DIR}/calligradb COMPONENT Devel)
 endif(FALSE)
+
+add_subdirectory( tests )

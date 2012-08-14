@@ -548,7 +548,13 @@ bool Connection::createDatabase(const QString &dbName)
     }
     if (m_driver->isFileDriver()) {
         //update connection data if filename differs
-        d->conn_data->setFileName(dbName);
+        if (QFileInfo(dbName).isAbsolute()) {
+            d->conn_data->setFileName(dbName);
+        }
+        else {
+            d->conn_data->setFileName(
+                d->conn_data->dbPath() + QDir::separator() +  QFileInfo(dbName).fileName());
+        }
     }
 
     QString tmpdbName;

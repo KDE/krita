@@ -230,6 +230,7 @@ void LutDockerDock::updateDisplaySettings()
             m_displayFilter->updateProcessor();
             m_canvas->setDisplayFilter(m_displayFilter);
         }
+        m_canvas->updateCanvas();
     }
 }
 
@@ -256,7 +257,7 @@ void LutDockerDock::selectOcioConfiguration()
 
     filename = KFileDialog::getOpenFileName(QDir::cleanPath(filename), "*.ocio|OpenColorIO configuration (*.ocio)", this);
     QFile f(filename);
-    if (f.exists() && filename != m_txtConfigurationPath->text()) {
+    if (f.exists()) {
         m_txtConfigurationPath->setText(filename);
         resetOcioConfiguration();
     }
@@ -266,27 +267,25 @@ void LutDockerDock::selectOcioConfiguration()
 void LutDockerDock::resetOcioConfiguration()
 {
     KisConfig cfg;
-    if (cfg.useOcio()) {
-        try {
-            if (cfg.useOcioEnvironmentVariable()) {
-                dbgUI << "using OCIO from the environment";
-                m_ocioConfig = OCIO::Config::CreateFromEnv();
-            }
-            else {
-                QString configFile = cfg.ocioConfigurationPath();
-                dbgUI << "using OCIO config file" << configFile;
-                m_ocioConfig = OCIO::Config::CreateFromFile(configFile.toUtf8());
-            }
-            OCIO::SetCurrentConfig(m_ocioConfig );
-            m_updateDisplay = false;
-            refillComboboxes();
-            m_updateDisplay = true;
+    try {
+        if (cfg.useOcioEnvironmentVariable()) {
+            dbgUI << "using OCIO from the environment";
+            m_ocioConfig = OCIO::Config::CreateFromEnv();
         }
-        catch (OCIO::Exception &exception) {
-            kWarning() << "OpenColorIO Error:" << exception.what() << "Cannot create the LUT docker";
+        else {
+            QString configFile = cfg.ocioConfigurationPath();
+            dbgUI << "using OCIO config file" << configFile;
+            m_ocioConfig = OCIO::Config::CreateFromFile(configFile.toUtf8());
         }
+        OCIO::SetCurrentConfig(m_ocioConfig );
+        m_updateDisplay = false;
+        refillComboboxes();
+        m_updateDisplay = true;
     }
-
+    catch (OCIO::Exception &exception) {
+        kWarning() << "OpenColorIO Error:" << exception.what() << "Cannot create the LUT docker";
+    }
+    updateDisplaySettings();
 }
 
 void LutDockerDock::refillComboboxes()
@@ -351,6 +350,7 @@ void LutDockerDock::selectLut()
 void LutDockerDock::clearLut()
 {
     m_txtLut->clear();
+    updateDisplaySettings();
 }
 
 #include "lutdocker_dock.moc"

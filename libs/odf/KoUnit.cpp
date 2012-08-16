@@ -279,6 +279,58 @@ KoUnit KoUnit::fromSymbol(const QString &symbol, bool *ok)
     return KoUnit(result);
 }
 
+qreal KoUnit::convertFromUnitToUnit(const qreal value, const KoUnit &fromUnit, const KoUnit &toUnit, qreal factor)
+{
+    qreal pt;
+    switch (fromUnit.type()) {
+    case Millimeter:
+        pt = MM_TO_POINT(value);
+        break;
+    case Centimeter:
+        pt = CM_TO_POINT(value);
+        break;
+    case Decimeter:
+        pt = DM_TO_POINT(value);
+        break;
+    case Inch:
+        pt = INCH_TO_POINT(value);
+        break;
+    case Pica:
+        pt = PI_TO_POINT(value);
+        break;
+    case Cicero:
+        pt = CC_TO_POINT(value);
+        break;
+    case Pixel:
+        pt = value / factor;
+        break;
+    case Point:
+    default:
+        pt = value;
+    }
+
+    switch (toUnit.type()) {
+    case Millimeter:
+        return POINT_TO_MM(pt);
+    case Centimeter:
+        return POINT_TO_CM(pt);
+    case Decimeter:
+        return POINT_TO_DM(pt);
+    case Inch:
+        return POINT_TO_INCH(pt);
+    case Pica:
+        return POINT_TO_PI(pt);
+    case Cicero:
+        return POINT_TO_CC(pt);
+    case Pixel:
+        return pt * factor;
+    case Point:
+    default:
+        return pt;
+    }
+
+}
+
 QString KoUnit::symbol() const
 {
     return QLatin1String(unitNameList[m_type]);

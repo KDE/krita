@@ -867,7 +867,7 @@ void KisConfig::setExportConfiguration(const QString &filterId, const KisPropert
 bool KisConfig::useOcio()
 {
 #ifdef HAVE_OCIO
-    return m_cfg.readEntry("Krita/Ocio/UseOcio", true);
+    return m_cfg.readEntry("Krita/Ocio/UseOcio", false);
 #else
     return false;
 #endif
@@ -881,7 +881,7 @@ void KisConfig::setUseOcio(bool useOCIO)
 
 bool KisConfig::useOcioEnvironmentVariable()
 {
-    return m_cfg.readEntry("Krita/Ocio/UseEnvironment", true);
+    return m_cfg.readEntry("Krita/Ocio/UseEnvironment", false);
 }
 
 void KisConfig::setUseOcioEnvironmentVariable(bool useOCIO)

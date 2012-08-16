@@ -55,5 +55,6 @@
 
 /// Use these macros if the UI is okay without any icon, but would be better with one.
 #define koIconWanted(comment, wantedName) (KIcon())
+#define koIconNameWanted(comment, wantedName) (QString())
 
 #endif

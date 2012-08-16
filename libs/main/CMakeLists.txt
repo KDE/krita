@@ -1,5 +1,7 @@
 add_subdirectory( tests )
 
+add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+
 if (KdepimLibs_FOUND)
    include_directories(${KDEPIMLIBS_INCLUDE_DIR})
    add_definitions(-DKDEPIMLIBS_FOUND)

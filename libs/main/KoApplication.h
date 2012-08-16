@@ -87,6 +87,9 @@ public:
 
     void addPart(KoPart* part);
 
+    // Overridden to handle exceptions from event handlers.
+    bool notify(QObject *receiver, QEvent *event);
+
 signals:
 
     /// KoDocument needs to be able to emit document signals from here.

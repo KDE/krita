@@ -229,9 +229,9 @@ void decodeData4(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP 
             _T_ unmultipliedBlue = rgba->b;
 
             if (hasAlpha && rgba -> a >= HALF_EPSILON) {
-                unmultipliedRed /= rgba -> a;
-                unmultipliedGreen /= rgba -> a;
-                unmultipliedBlue /= rgba -> a;
+                unmultipliedRed /= rgba->a;
+                unmultipliedGreen /= rgba->a;
+                unmultipliedBlue /= rgba->a;
             }
             typename KoRgbTraits<_T_>::Pixel* dst = reinterpret_cast<typename KoRgbTraits<_T_>::Pixel*>(it->rawData());
 
@@ -368,6 +368,7 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
     for (int i = 0; i < informationObjects.size(); ++i) {
         ExrPaintLayerInfo& info = informationObjects[i];
         QString modelId;
+
         if (info.channelMap.size() == 1) {
             modelId = GrayColorModelID.id();
             QString key = info.channelMap.begin().key();
@@ -377,10 +378,13 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
                 info.channelMap.clear();
                 info.channelMap["G"] = channel;
             }
-        } else if (info.channelMap.size() == 3 || info.channelMap.size() == 4) {
+        }
+        else if (info.channelMap.size() == 3 || info.channelMap.size() == 4) {
+
             if (info.channelMap.contains("R") && info.channelMap.contains("G") && info.channelMap.contains("B")) {
                 modelId = RGBAColorModelID.id();
-            } else if (info.channelMap.contains("X") && info.channelMap.contains("Y") && info.channelMap.contains("Z")) {
+            }
+            else if (info.channelMap.contains("X") && info.channelMap.contains("Y") && info.channelMap.contains("Z")) {
                 modelId = XYZAColorModelID.id();
                 QMap<QString, QString> newChannelMap;
                 if (info.channelMap.contains("W")) {
@@ -397,32 +401,33 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
                 newChannelMap["G"] = info.channelMap["Y"];
                 newChannelMap["R"] = info.channelMap["Z"];
                 info.channelMap = newChannelMap;
-            } else {
+            }
+            else {
                 modelId = RGBAColorModelID.id();
-// Remapping is only needed to go from rgba to bgra, which isn't needed for the current floating point color spaces
-//                QMap<QString, QString> newChannelMap;
-//                QMap<QString, QString>::iterator it = info.channelMap.begin();
-//                newChannelMap["R"] = it.value();
-//                info.remappedChannels.push_back(ExrPaintLayerInfo::Remap(it.key(), "R"));
-//                ++it;
-//                newChannelMap["G"] = it.value();
-//                info.remappedChannels.push_back(ExrPaintLayerInfo::Remap(it.key(), "G"));
-//                ++it;
-//                newChannelMap["B"] = it.value();
-//                info.remappedChannels.push_back(ExrPaintLayerInfo::Remap(it.key(), "B"));
-//                if (info.channelMap.size() == 4) {
-//                    ++it;
-//                    newChannelMap["A"] = it.value();
-//                    info.remappedChannels.push_back(ExrPaintLayerInfo::Remap(it.key(), "A"));
-//                }
+                QMap<QString, QString> newChannelMap;
+                QMap<QString, QString>::iterator it = info.channelMap.begin();
+                newChannelMap["R"] = it.value();
+                info.remappedChannels.push_back(ExrPaintLayerInfo::Remap(it.key(), "R"));
+                ++it;
+                newChannelMap["G"] = it.value();
+                info.remappedChannels.push_back(ExrPaintLayerInfo::Remap(it.key(), "G"));
+                ++it;
+                newChannelMap["B"] = it.value();
+                info.remappedChannels.push_back(ExrPaintLayerInfo::Remap(it.key(), "B"));
+                if (info.channelMap.size() == 4) {
+                    ++it;
+                    newChannelMap["A"] = it.value();
+                    info.remappedChannels.push_back(ExrPaintLayerInfo::Remap(it.key(), "A"));
+                }
 
-//                info.channelMap = newChannelMap;
+                info.channelMap = newChannelMap;
             }
         }
         if (!modelId.isEmpty()) {
             info.colorSpace = kisTypeToColorSpace(modelId, info.imageType);
         }
     }
+
     // Get colorspace
     dbgFile << "Image type = " << imageType;
     const KoColorSpace* colorSpace = kisTypeToColorSpace(RGBAColorModelID.id(), imageType);

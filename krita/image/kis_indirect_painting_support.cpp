@@ -128,19 +128,7 @@ void KisIndirectPaintingSupport::setDirty(const QRect &rect)
 
 void KisIndirectPaintingSupport::addIndirectlyDirtyRect(const QRect &rect)
 {
-    QRect newRect = rect;
-    QList<QRect> rects;
-    QMutexLocker locker(&d->dirtyRegionMutex);
-    foreach(const QRect &rc, d->dirtyRegion) {
-        if (rc.intersects(newRect)) {
-            newRect = rc.intersected(newRect);
-            rects.append(newRect);
-        }
-        else {
-            rects.append(rc);
-        }
-    }
-    d->dirtyRegion = rects;
+    d->dirtyRegion << rect;
 }
 
 QList<QRect> KisIndirectPaintingSupport::indirectlyDirtyRegion()

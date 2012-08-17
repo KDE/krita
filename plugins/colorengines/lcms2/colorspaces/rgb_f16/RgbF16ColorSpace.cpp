@@ -30,10 +30,10 @@
 RgbF16ColorSpace::RgbF16ColorSpace(const QString &name, KoColorProfile *p) :
         LcmsColorSpace<KoRgbF16Traits>(colorSpaceId(), name, TYPE_RGBA_HALF_FLT, cmsSigRgbData, p)
 {
-    addChannel(new KoChannelInfo(i18n("Red")  , 0 * sizeof(float), 0, KoChannelInfo::COLOR, KoChannelInfo::FLOAT16, 2, QColor(255, 0, 0)));
-    addChannel(new KoChannelInfo(i18n("Green"), 1 * sizeof(float), 1, KoChannelInfo::COLOR, KoChannelInfo::FLOAT16, 2, QColor(0, 255, 0)));
-    addChannel(new KoChannelInfo(i18n("Blue") , 2 * sizeof(float), 2, KoChannelInfo::COLOR, KoChannelInfo::FLOAT16, 2, QColor(0, 0, 255)));
-    addChannel(new KoChannelInfo(i18n("Alpha"), 3 * sizeof(float), 3, KoChannelInfo::ALPHA, KoChannelInfo::FLOAT16, 2));
+    addChannel(new KoChannelInfo(i18n("Red")  , 0 * sizeof(half), 0, KoChannelInfo::COLOR, KoChannelInfo::FLOAT16, 2, QColor(255, 0, 0)));
+    addChannel(new KoChannelInfo(i18n("Green"), 1 * sizeof(half), 1, KoChannelInfo::COLOR, KoChannelInfo::FLOAT16, 2, QColor(0, 255, 0)));
+    addChannel(new KoChannelInfo(i18n("Blue") , 2 * sizeof(half), 2, KoChannelInfo::COLOR, KoChannelInfo::FLOAT16, 2, QColor(0, 0, 255)));
+    addChannel(new KoChannelInfo(i18n("Alpha"), 3 * sizeof(half), 3, KoChannelInfo::ALPHA, KoChannelInfo::FLOAT16, 2));
 
     init();
 

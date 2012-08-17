@@ -48,8 +48,7 @@ K_EXPORT_PLUGIN(LutDockerPluginFactory( "krita" ) )
 
 class LutDockerDockFactory : public KoDockFactoryBase {
 public:
-    LutDockerDockFactory(OCIO::ConstConfigRcPtr config)
-        : m_config(config)
+    LutDockerDockFactory()
     {
     }
 
@@ -65,7 +64,7 @@ public:
 
     virtual QDockWidget* createDockWidget()
     {
-        LutDockerDock * dockWidget = new LutDockerDock(m_config);
+        LutDockerDock * dockWidget = new LutDockerDock();
         dockWidget->setObjectName(id());
 
         return dockWidget;
@@ -84,25 +83,7 @@ private:
 LutDockerPlugin::LutDockerPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
-    KisConfig cfg;
-    try {
-        OCIO::ConstConfigRcPtr config;
-        if (cfg.useOcioEnvironmentVariable()) {
-            dbgUI << "using OCIO from the environment";
-            config = OCIO::Config::CreateFromEnv();
-        }
-        else {
-            QString configFile = cfg.ocioConfigurationPath();
-            dbgUI << "using OCIO config file" << configFile;
-            config = OCIO::Config::CreateFromFile(configFile.toUtf8());
-        }
-        OCIO::SetCurrentConfig(config);
-        KoDockRegistry::instance()->add(new LutDockerDockFactory(config));
-    }
-    catch (OCIO::Exception &exception) {
-        KoDockRegistry::instance()->add(new LutDockerDockFactory(OCIO::GetCurrentConfig()));
-    }
-
+    KoDockRegistry::instance()->add(new LutDockerDockFactory());
 }
 
 LutDockerPlugin::~LutDockerPlugin()

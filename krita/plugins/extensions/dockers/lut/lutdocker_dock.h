@@ -61,7 +61,7 @@ class LutDockerDock : public QDockWidget, public KoCanvasObserverBase, public Ui
 
 public:
 
-    LutDockerDock(OCIO::ConstConfigRcPtr config);
+    LutDockerDock();
     ~LutDockerDock();
 
     /// reimplemented from KoCanvasObserverBase
@@ -71,12 +71,15 @@ public:
 private slots:
 
     void slotImageColorSpaceChanged();
+
     void exposureValueChanged(double exposure);
     void exposureSliderPressed();
     void exposureSliderReleased();
+
     void gammaValueChanged(double exposure);
     void gammaSliderPressed();
     void gammaSliderReleased();
+
     void updateDisplaySettings();
 
     void updateWidgets();
@@ -94,9 +97,6 @@ private:
     OcioDisplayFilter *m_displayFilter;
 
     bool m_draggingSlider;
-    bool m_updateDisplay;
-
-
 };
 
 

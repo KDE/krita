@@ -229,7 +229,7 @@ void OcioDisplayFilter::updateProcessor()
     // work for everyone these days
     KisConfig cfg;
     if (!cfg.useOpenGLShaders()) return;
-
+    if (!cfg.useOpenGL()) return;
     //qDebug() << "going to update the shader program!";
 
     if (m_lut3d.size() == 0) {

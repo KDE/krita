@@ -49,8 +49,6 @@
 #include "kis_selection_tool_helper.h"
 #include "kis_slider_spin_box.h"
 
-#include "kis_selection_manager.cc"
-
 KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas)
         : KisToolSelectBase(canvas,
                             KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6),

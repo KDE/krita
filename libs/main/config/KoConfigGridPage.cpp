@@ -111,8 +111,6 @@ KoConfigGridPage::KoConfigGridPage(KoDocument* doc, char* name)
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
 
     QGridLayout* gl = new QGridLayout();
-    gl->setSpacing(KDialog::spacingHint());
-    gl->setMargin(KDialog::marginHint());
     gl->addWidget(generalGrp, 0, 0, 1, 2);
     gl->addItem(new QSpacerItem(0, 0), 1, 1);
     gl->addWidget(spacingGrp, 2, 0, 1, 2);

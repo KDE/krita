@@ -32,7 +32,6 @@ KoExistingDocumentPane::KoExistingDocumentPane(QWidget* parent, const QStringLis
         , m_seen(false)
 {
     QGridLayout* layout = new QGridLayout(this);
-    layout->setSpacing(KDialog::spacingHint());
     layout->setMargin(0);
 
     m_fileWidget = new KFileWidget(KUrl("kfiledialog:///OpenDialog"), this);

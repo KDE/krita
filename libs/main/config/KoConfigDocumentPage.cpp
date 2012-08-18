@@ -58,8 +58,6 @@ KoConfigDocumentPage::KoConfigDocumentPage(KoDocument* doc, char* name)
 
     QGroupBox* gbDocumentSettings = new QGroupBox(i18n("Document Settings"), this);
     QVBoxLayout *layout = new QVBoxLayout(gbDocumentSettings);
-    layout->setSpacing(KDialog::spacingHint());
-    layout->setMargin(KDialog::marginHint());
 
     d->oldAutoSave = doc->defaultAutoSave() / 60;
 

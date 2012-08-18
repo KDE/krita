@@ -198,7 +198,6 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     // are shown in the profile combos
 
     QGridLayout * l = new QGridLayout(this);
-    l->setSpacing(KDialog::spacingHint());
     l->setMargin(0);
     m_page = new WdgColorSettings(this);
     l->addWidget(m_page, 0, 0);
@@ -364,7 +363,6 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
     setObjectName(name);
 
     QGridLayout * l = new QGridLayout(this);
-    l->setSpacing(KDialog::spacingHint());
     l->setMargin(0);
     m_page = new WdgTabletSettings(this);
     l->addWidget(m_page, 0, 0);

@@ -79,8 +79,6 @@ KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, KoDocumentResourceManager *d
     QGroupBox* tmpQGroupBox = new QGroupBox(i18n("Misc"), this);
 
     QGridLayout* grid = new QGridLayout();
-    grid->setSpacing(KDialog::spacingHint());
-    grid->setMargin(KDialog::marginHint());
 
     //#################"laurent
     //don't load unitType from config file because unit is

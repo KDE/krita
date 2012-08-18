@@ -56,8 +56,6 @@ KoVersionDialog::KoVersionDialog(QWidget* parent, KoDocument *doc)
     setModal(true);
 
     QGridLayout* grid1 = new QGridLayout(page);
-    grid1->setMargin(KDialog::marginHint());
-    grid1->setSpacing(KDialog::spacingHint());
 
     list = new QTreeWidget(page);
     list->setColumnCount(3);
@@ -234,8 +232,6 @@ KoVersionModifyDialog::KoVersionModifyDialog(QWidget* parent, KoVersionInfo *inf
     setMainWidget(page);
 
     QVBoxLayout *grid1 = new QVBoxLayout(page);
-    grid1->setMargin(KDialog::marginHint());
-    grid1->setSpacing(KDialog::spacingHint());
 
     QLabel *l = new QLabel(page);
     if (info)

@@ -811,8 +811,10 @@ void KisLayerManager::mergeLayer()
     if (!layer) return;
 
     if (!layer->prevSibling()) return;
+    KisLayer *prevLayer = dynamic_cast<KisLayer*>(layer->prevSibling().data());
+    if (!prevLayer) return;
 
-    if (layer->metaData()->isEmpty() && layer->prevSibling() && dynamic_cast<KisLayer*>(layer->prevSibling().data())->metaData()->isEmpty()) {
+    if (layer->metaData()->isEmpty() && prevLayer->metaData()->isEmpty()) {
         image->mergeDown(layer, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
     }
     else {

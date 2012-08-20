@@ -62,7 +62,8 @@ void KoColorConversionFromAlphaTransformation::transform(const quint8 *src, quin
 
 //------ KoColorConversionFromAlphaTransformationFactory ------//
 
-KoColorConversionFromAlphaTransformationFactory::KoColorConversionFromAlphaTransformationFactory(const QString& _dstModelId, const QString& _dstDepthId, const QString& _dstProfileName) : KoColorConversionTransformationFactory(AlphaColorModelID.id(), Integer8BitsColorDepthID.id(), "", _dstModelId, _dstDepthId, _dstProfileName)
+KoColorConversionFromAlphaTransformationFactory::KoColorConversionFromAlphaTransformationFactory(const QString& _dstModelId, const QString& _dstDepthId, const QString& _dstProfileName)
+    : KoColorConversionTransformationFactory(AlphaColorModelID.id(), Integer8BitsColorDepthID.id(), "", _dstModelId, _dstDepthId, _dstProfileName)
 {
 }
 

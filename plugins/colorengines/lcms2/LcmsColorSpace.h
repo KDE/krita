@@ -140,9 +140,9 @@ protected:
                    cmsUInt32Number cmType,
                    cmsColorSpaceSignature colorSpaceSignature,
                    KoColorProfile *p)
-            : KoColorSpaceAbstract<_CSTraits>(id, name)
-            , KoLcmsInfo(cmType, colorSpaceSignature)
-            , d(new Private())
+        : KoColorSpaceAbstract<_CSTraits>(id, name)
+        , KoLcmsInfo(cmType, colorSpaceSignature)
+        , d(new Private())
     {
         Q_ASSERT(p); // No profile means the lcms color space can't work
         Q_ASSERT(profileIsCompatible(p));
@@ -176,11 +176,11 @@ protected:
         if (!d->defaultTransformations) {
             d->defaultTransformations = new KoLcmsDefaultTransformations;
             d->defaultTransformations->fromRGB = cmsCreateTransform(KoLcmsDefaultTransformations::s_RGBProfile,
-                                                 TYPE_BGR_8,
-                                                 d->profile->lcmsProfile(),
-                                                 this->colorSpaceType(),
-                                                 INTENT_PERCEPTUAL,
-                                                 0);
+                                                                    TYPE_BGR_8,
+                                                                    d->profile->lcmsProfile(),
+                                                                    this->colorSpaceType(),
+                                                                    INTENT_PERCEPTUAL,
+                                                                    0);
             Q_ASSERT(d->defaultTransformations->fromRGB);
             d->defaultTransformations->toRGB = cmsCreateTransform(d->profile->lcmsProfile(),
                                                                   this->colorSpaceType(),
@@ -361,12 +361,12 @@ public:
         cmsCIELab labF1, labF2;
 
         if (this->opacityU8(src1) == OPACITY_TRANSPARENT_U8
-            || this->opacityU8(src2) == OPACITY_TRANSPARENT_U8)
+                || this->opacityU8(src2) == OPACITY_TRANSPARENT_U8)
             return (this->opacityU8(src1) == this->opacityU8(src2) ? 0 : 255);
         Q_ASSERT(this->toLabA16Converter());
         this->toLabA16Converter()->transform(src1, lab1, 1),
-        this->toLabA16Converter()->transform(src2, lab2, 1),
-        cmsLabEncoded2Float(&labF1, (cmsUInt16Number *)lab1);
+                this->toLabA16Converter()->transform(src2, lab2, 1),
+                cmsLabEncoded2Float(&labF1, (cmsUInt16Number *)lab1);
         cmsLabEncoded2Float(&labF2, (cmsUInt16Number *)lab2);
         qreal diff = cmsDeltaE(&labF1, &labF2);
         if (diff > 255)

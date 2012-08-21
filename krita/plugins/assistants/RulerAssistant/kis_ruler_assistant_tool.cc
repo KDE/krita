@@ -257,8 +257,6 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
         }
 
         QString key = m_options.comboBox->model()->index( m_options.comboBox->currentIndex(), 0 ).data(Qt::UserRole).toString();
-        if(key == "mesh" && m_canvas->canvasIsOpenGL()){
-            beginOpenGL();
             m_newAssistant = KisPaintingAssistantFactoryRegistry::instance()->get(key)->createPaintingAssistant();
             m_internalMode = MODE_CREATION;
             m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point));
@@ -268,22 +266,6 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
                 m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point));
             }
             m_canvas->updateCanvas();
-            endOpenGL();
-        }
-        else if(key == "mesh" && !m_canvas->canvasIsOpenGL()){
-            KisTool::mousePressEvent(event);
-        }
-        else{
-            m_newAssistant = KisPaintingAssistantFactoryRegistry::instance()->get(key)->createPaintingAssistant();
-            m_internalMode = MODE_CREATION;
-            m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point));
-            if (m_newAssistant->numHandles() <= 1) {
-                addAssistant();
-            } else {
-                m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point));
-            }
-            m_canvas->updateCanvas();
-        }
     } else {
         KisTool::mousePressEvent(event);
     }
@@ -417,7 +399,7 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
     QColor handlesColor(0, 0, 0, 125);
 
     if (m_newAssistant) {
-        m_newAssistant->drawAssistant(_gc, QRectF(QPointF(0, 0), QSizeF(m_canvas->image()->size())), m_canvas->coordinatesConverter(), false);
+        m_newAssistant->drawAssistant(_gc, QRectF(QPointF(0, 0), QSizeF(m_canvas->image()->size())), m_canvas->coordinatesConverter(), false,m_canvas);
         foreach(const KisPaintingAssistantHandleSP handle, m_newAssistant->handles()) {
             QPainterPath path;
             path.addEllipse(QRectF(_converter.documentToView(*handle) -  QPointF(6, 6), QSizeF(12, 12)));

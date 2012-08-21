@@ -164,7 +164,7 @@ void KisSelectionDecoration::updateSimpleOutline()
     }
 }
 
-void KisSelectionDecoration::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter)
+void KisSelectionDecoration::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, KisCanvas2 *canvas)
 {
     Q_UNUSED(updateRect);
 

@@ -30,6 +30,7 @@
 #include <assert.h>
 #include <kis_tool.h>
 #include <kis_config.h>
+#include <kis_canvas2.h>
 
 #include <opengl/kis_opengl.h>
 #include <GL/glew.h>
@@ -62,19 +63,25 @@ class MeshAssistant : public KisPaintingAssistant
 {
 public:
     MeshAssistant();
-    void initialize(char* file);
+    void initialize();
     virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
     virtual QPointF buttonPosition() const;
     virtual int numHandles() const { return 4; }
+    virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached = true, KisCanvas2 *canvas=0);
+
 protected:
     virtual QRect boundingRect() const;
     virtual void drawCache(QPainter& gc, const KisCoordinatesConverter *converter);
-    void Render();
+    void beginOpenGL();
+    void endOpenGL();
 
 private:
     bool InitFromScene(const aiScene* pScene);
     void InitMesh(unsigned int Index, const aiMesh* paiMesh);
     void Clear();
+    char* m_filename;
+    uint m_initialized;
+    KisCanvas2* m_canvas;
 
 #define INVALID_MATERIAL 0xFFFFFFFF
     struct MeshEntry {

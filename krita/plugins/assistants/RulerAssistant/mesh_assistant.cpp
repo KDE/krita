@@ -16,26 +16,19 @@
  */
 
 #include "mesh_assistant.h"
-
+#include <kis_opengl_canvas2.h>
 
 MeshAssistant::MeshAssistant()
     : KisPaintingAssistant("mesh",i18n("Mesh assistant"))
 {
+    initialize();
 }
 
-void MeshAssistant::initialize(char* file){
-    Assimp::Importer imp;
-    const aiScene* scene = imp.ReadFile( file, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals  );
-    if(!scene)
-    {
-        return;
-    }
-    InitFromScene(scene);
-    Render();
-    glEnable(GL_DEPTH_TEST);
-    glClear(GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_LINE_SMOOTH);
-    glEnable(GL_COLOR_MATERIAL);
+void MeshAssistant::initialize(){
+    KUrl file = KFileDialog::getOpenUrl(KUrl(), QString("*.blend"));
+    m_filename = file.toLocalFile().toUtf8().data();
+    m_initialized = 1;
+
 }
 
 QPointF MeshAssistant::adjustPosition(const QPointF& pt, const QPointF& /*strokeBegin*/)
@@ -45,6 +38,45 @@ QPointF MeshAssistant::adjustPosition(const QPointF& pt, const QPointF& /*stroke
 
 void MeshAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter)
 {
+    if(m_initialized){
+        Assimp::Importer imp;
+        const aiScene* scene = imp.ReadFile( m_filename, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals  );
+        if(!scene)
+        {
+            return;
+        }
+        InitFromScene(scene);
+
+        glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(1);
+        glEnableVertexAttribArray(2);
+
+        for (unsigned int i = 0 ; i < m_Entries.size() ; i++) {
+            glBindBuffer(GL_ARRAY_BUFFER, m_Entries[i].VB);
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)12);
+            glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)20);
+
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Entries[i].IB);
+
+
+            glDrawElements(GL_TRIANGLES, m_Entries[i].NumIndices, GL_UNSIGNED_INT, 0);
+        }
+
+        glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
+        glDisableVertexAttribArray(2);
+
+        glEnable(GL_DEPTH_TEST);
+        glClear(GL_DEPTH_BUFFER_BIT);
+        glEnable(GL_LINE_SMOOTH);
+        glEnable(GL_COLOR_MATERIAL);
+
+    }
+    else {
+        initialize();
+        drawCache(gc,*converter);
+    }
 
 }
 
@@ -56,6 +88,45 @@ QRect MeshAssistant::boundingRect() const
 QPointF MeshAssistant::buttonPosition() const
 {
     return QPointF();
+}
+
+void MeshAssistant::drawAssistant(QPainter &gc, const QRectF &updateRect, const KisCoordinatesConverter *converter, bool cached,KisCanvas2* canvas)
+{
+    if(!m_canvas){
+        m_canvas = canvas;
+    }
+#if (HAVE_OPENGL)
+    if(m_canvas->canvasIsOpenGL()){
+        beginOpenGL();
+        drawCache(&gc,*converter);
+    }
+    endOpenGL();
+#endif
+}
+
+void MeshAssistant::beginOpenGL()
+{
+#if defined(HAVE_OPENGL)
+    KisOpenGLCanvas2 *canvasWidget = dynamic_cast<KisOpenGLCanvas2 *>(m_canvas->canvasWidget());
+    Q_ASSERT(canvasWidget);
+
+    if (canvasWidget) {
+        canvasWidget->beginOpenGL();
+        canvasWidget->setupFlakeToWidgetTransformation();
+    }
+#endif
+}
+
+void MeshAssistant::endOpenGL()
+{
+#if defined(HAVE_OPENGL)
+    KisOpenGLCanvas2 *canvasWidget = dynamic_cast<KisOpenGLCanvas2 *>(m_canvas->canvasWidget());
+    Q_ASSERT(canvasWidget);
+
+    if (canvasWidget) {
+        canvasWidget->endOpenGL();
+    }
+#endif
 }
 
 MeshAssistantFactory::MeshAssistantFactory()
@@ -76,11 +147,10 @@ QString MeshAssistantFactory::name() const
     return i18n("Mesh assistant");
 }
 
+
 KisPaintingAssistant* MeshAssistantFactory::createPaintingAssistant() const
 {
-    KUrl file = KFileDialog::getOpenUrl(KUrl(), QString("*.blend"));
-    MeshAssistant* assistant = new MeshAssistant;
-    assistant->initialize(file.toLocalFile().toUtf8().data());
+    MeshAssistant* assistant = new MeshAssistant();
     return assistant;
 }
 
@@ -124,7 +194,7 @@ bool MeshAssistant::MeshEntry::Init(const std::vector<Vertex>& Vertices,
 bool MeshAssistant::InitFromScene(const aiScene* pScene)
 {
     m_Entries.resize(pScene->mNumMeshes);
-
+    qDebug()<< pScene->mNumMeshes;
     // Initialize the meshes in the scene one by one
     for (unsigned int i = 0 ; i < m_Entries.size() ; i++) {
         const aiMesh* paiMesh = pScene->mMeshes[i];
@@ -152,41 +222,16 @@ void MeshAssistant::InitMesh(unsigned int Index, const aiMesh* paiMesh)
 
         Vertices.push_back(v);
     }
-    qDebug() << "in initMesh: before loop for indices";
+    qDebug() << "in initMesh: before loop for indices   " << paiMesh->mNumFaces;
     for (unsigned int i = 0 ; i < paiMesh->mNumFaces ; i++) {
         qDebug() << "in initMesh: before faces" << i;
         const aiFace& Face = paiMesh->mFaces[i];
         qDebug() << "in initMesh: faces" << i;
-        for( uint j = 0; j < Face.mNumIndices; ++j )
-        {
+        for( uint j = 0; j < Face.mNumIndices; ++j ) {
             qDebug() << "in initMesh: indices" << i;
             Indices.push_back(Face.mIndices[j]);
         }
     }
     qDebug() << "in initMesh: before init";
     m_Entries[Index].Init(Vertices, Indices);
-}
-
-
-void MeshAssistant::Render()
-{
-    glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
-    glEnableVertexAttribArray(2);
-
-    for (unsigned int i = 0 ; i < m_Entries.size() ; i++) {
-        glBindBuffer(GL_ARRAY_BUFFER, m_Entries[i].VB);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)12);
-        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)20);
-
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Entries[i].IB);
-
-
-        glDrawElements(GL_TRIANGLES, m_Entries[i].NumIndices, GL_UNSIGNED_INT, 0);
-    }
-
-    glDisableVertexAttribArray(0);
-    glDisableVertexAttribArray(1);
-    glDisableVertexAttribArray(2);
 }

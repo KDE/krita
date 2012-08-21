@@ -23,6 +23,7 @@
 #include "kis_painting_assistant.h"
 #include "kis_coordinates_converter.h"
 #include "kis_debug.h"
+#include <kis_canvas2.h>
 
 #include <kglobal.h>
 #include <QPen>
@@ -197,9 +198,10 @@ void KisPaintingAssistant::addSideHandle(KisPaintingAssistantHandleSP handle)
     handle->registerAssistant(this);
 }
 
-void KisPaintingAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool useCache)
+void KisPaintingAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool useCache,KisCanvas2* canvas)
 {
     Q_UNUSED(updateRect);
+    Q_UNUSED(canvas);
     findHandleLocation();
     if (!useCache) {
         gc.save();

@@ -839,6 +839,9 @@ bool KoDocument::saveOasisPreview(KoStore *store, KoXmlWriter *manifestWriter)
     const QPixmap pix = generatePreview(QSize(128, 128));
     QImage preview(pix.toImage().convertToFormat(QImage::Format_ARGB32, Qt::ColorOnly));
 
+    if (preview.isNull())
+        return true; //no thumbnail to save, but the process as a whole worked
+
     // ### TODO: freedesktop.org Thumbnail specification (date...)
     KoStoreDevice io(store);
     if (!io.open(QIODevice::WriteOnly))

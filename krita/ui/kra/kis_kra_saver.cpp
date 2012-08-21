@@ -163,11 +163,13 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
 
 void KisKraSaver::saveCompositions(QDomDocument& doc, QDomElement& element, KisImageWSP image)
 {
-    QDomElement e = doc.createElement("compositions");
-    foreach(KisLayerComposition* composition, image->compositions()) {
-        composition->save(doc, e);
+    if (!image->compositions().isEmpty()) {
+        QDomElement e = doc.createElement("compositions");
+        foreach(KisLayerComposition* composition, image->compositions()) {
+            composition->save(doc, e);
+        }
+        element.appendChild(e);
     }
-    element.appendChild(e);
 }
 
 bool KisKraSaver::saveAssistants(KoStore* store, QString uri, bool external)

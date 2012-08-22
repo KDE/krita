@@ -16,7 +16,7 @@
  */
 
 #include "mesh_assistant.h"
-#include <kis_opengl_canvas2.h>
+#include <opengl/kis_opengl_canvas2.h>
 
 MeshAssistant::MeshAssistant()
     : KisPaintingAssistant("mesh",i18n("Mesh assistant"))
@@ -75,7 +75,7 @@ void MeshAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *conve
     }
     else {
         initialize();
-        drawCache(gc,*converter);
+        drawCache(gc,converter);
     }
 
 }
@@ -96,9 +96,13 @@ void MeshAssistant::drawAssistant(QPainter &gc, const QRectF &updateRect, const 
         m_canvas = canvas;
     }
 #if (HAVE_OPENGL)
+    qDebug() << "opengl found\n";
     if(m_canvas->canvasIsOpenGL()){
+        qDebug() << "Canvas is Opengl\n";
         beginOpenGL();
-        drawCache(&gc,*converter);
+        qDebug() << "Opengl Begun\n";
+        drawCache(gc,converter);
+        qDebug() << "Cache Drawn\n";
     }
     endOpenGL();
 #endif

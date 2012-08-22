@@ -153,7 +153,6 @@ QColor KisColorSelectorSimple::selectColor(int x, int y)
 
     emit update();
 
-//    kDebug()<<"selectColor(x/y) y rel="<<yRel<<"  value="<<QColor::fromRgb(colorAt(x, y)).valueF();
     return colorAt(x, y);
 }
 

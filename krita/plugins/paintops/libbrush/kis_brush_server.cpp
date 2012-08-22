@@ -104,7 +104,6 @@ private:
         if(fileExtension == "abr") {
             KisAbrBrushCollection collection(filename);
             collection.load();
-            kDebug() << "abr brushes " << collection.brushes().count();
             foreach(KisAbrBrush* abrBrush, collection.brushes()) {
                 brushes.append(abrBrush);
             }

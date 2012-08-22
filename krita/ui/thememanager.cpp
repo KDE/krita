@@ -52,7 +52,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kglobalsettings.h>
-#include <kdebug.h>
 #include <kxmlguiwindow.h>
 #include <ktoolinvocation.h>
 
@@ -132,8 +131,6 @@ void ThemeManager::slotChangePalette()
     if (theme == defaultThemeName() || theme.isEmpty())
         theme = currentKDEdefaultTheme();
 
-    kDebug() << theme;
-
     QString filename        = d->themeMap.value(theme);
     KSharedConfigPtr config = KSharedConfig::openConfig(filename);
 
@@ -144,7 +141,6 @@ void ThemeManager::slotChangePalette()
 
     QPalette palette               = kapp->palette();
     QPalette::ColorGroup states[3] = { QPalette::Active, QPalette::Inactive, QPalette::Disabled };
-    kDebug() << filename;
     // TT thinks tooltips shouldn't use active, so we use our active colors for all states
     KColorScheme schemeTooltip(QPalette::Active, KColorScheme::Tooltip, config);
 

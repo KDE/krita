@@ -228,8 +228,6 @@ void KisColorSelectorBase::mouseReleaseEvent(QMouseEvent *e) {
 
 void KisColorSelectorBase::mouseMoveEvent(QMouseEvent* e)
 {
-//    kDebug()<<"mouse move event, e="<<e->pos()<<"  global="<<e->globalPos();
-
     if(!(e->buttons()&Qt::LeftButton || e->buttons()&Qt::RightButton)
        && (qMin(e->x(), e->y())<-m_hideDistance || e->x() > width()+m_hideDistance || e->y()>height()+m_hideDistance)) {
 
@@ -273,12 +271,10 @@ void KisColorSelectorBase::mouseMoveEvent(QMouseEvent* e)
         if(forbiddenRect.x()+forbiddenRect.width()/2 < availRect.width()/2) {
             //left edge of popup justified with left edge of popup
             x = forbiddenRect.x();
-//            kDebug()<<"1 forbiddenRect.x="<<forbiddenRect.x();
         }
         else {
             //the other way round
             x = forbiddenRect.x()+forbiddenRect.width()-m_popup->width();
-//            kDebug()<<"2 forbiddenRect.x="<<m_popup->width();
         }
 
         m_popup->move(x, y);
@@ -325,36 +321,26 @@ inline bool modify(QColor* estimate, const QColor& target, const QColor& result)
 
 QColor KisColorSelectorBase::findGeneratingColor(const KoColor& ref) const
 {
-//    kDebug() << "starting search for generating colour";
     KoColor converter(colorSpace());
     QColor currentEstimate;
     ref.toQColor(&currentEstimate);
-//    kDebug() << "currentEstimate: " << currentEstimate;
 
     QColor currentResult;
     converter.fromQColor(currentEstimate);
     converter.toQColor(&currentResult);
-//    kDebug() << "currentResult: " << currentResult;
-
 
     QColor target;
     ref.toQColor(&target);
-//    kDebug() << "target: " << target;
 
     bool estimateValid=true;
     int iterationCounter=0;
 
-//    kDebug() << "current distance = " << distance(target, currentResult);
     while(distance(target, currentResult)>0.001 && estimateValid && iterationCounter<100) {
         estimateValid = modify(&currentEstimate, target, currentResult);
         converter.fromQColor(currentEstimate);
         converter.toQColor(&currentResult);
-//        kDebug() << "current distance = " << distance(target, currentResult);
-
         iterationCounter++;
     }
-
-//    kDebug() << "end search for generating colour";
 
     return currentEstimate;
 }
@@ -452,7 +438,6 @@ void KisColorSelectorBase::commitColor(const KoColor& color, ColorRole role)
 
 void KisColorSelectorBase::updateColorPreview(const QColor& color)
 {
-//    kDebug() << "updating color preview " << color.red() << "," << color.green() << "," << color.blue();
     m_colorPreviewPopup->setColor(color);
 }
 

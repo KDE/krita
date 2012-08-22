@@ -214,7 +214,6 @@ qreal KisGridPaintOp::paintAt(const KisPaintInformation& info)
                 }
                 default:
                 {
-                            kDebug() << " implement or exclude from GUI ";
                             break;
                 }
             }

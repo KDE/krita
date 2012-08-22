@@ -94,7 +94,6 @@ void KisMinimalShadeSelector::updateSettings()
 
 void KisMinimalShadeSelector::mousePressEvent(QMouseEvent * e)
 {
-//    kDebug() << e->globalX() << "/" << e->globalY();
     foreach(KisShadeSelectorLine* line, m_shadingLines) {
         QMouseEvent newEvent(e->type(),
                                           line->mapFromGlobal(e->globalPos()),
@@ -109,7 +108,6 @@ void KisMinimalShadeSelector::mousePressEvent(QMouseEvent * e)
 
 void KisMinimalShadeSelector::mouseMoveEvent(QMouseEvent * e)
 {
-//    kDebug() << e->globalX() << "/" << e->globalY();
     foreach(KisShadeSelectorLine* line, m_shadingLines) {
         QMouseEvent newEvent(e->type(),
                                           line->mapFromGlobal(e->globalPos()),

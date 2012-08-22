@@ -176,8 +176,6 @@ bool KisPaintOpPreset::save()
     writer.setText("version", "2.2");
     writer.setText("preset", doc.toString());
 
-    kDebug() << "preset: " << doc.toString();
-
     QImage img;
 
     if(m_d->image.isNull())

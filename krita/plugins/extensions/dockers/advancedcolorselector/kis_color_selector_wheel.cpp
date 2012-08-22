@@ -82,8 +82,6 @@ QColor KisColorSelectorWheel::selectColor(int x, int y)
     angle+=M_PI;
     angle/=2*M_PI;
 
-//    kDebug()<<"angele="<<angle << "   radius="<<radius;
-
     switch (m_parameter) {
     case KisColorSelector::hsvSH:
         emit paramChanged(angle, radius, -1, -1, -1);

@@ -74,7 +74,6 @@ struct MaskProcessor
     }
 
     void process(QRect& rect){
-//         kDebug() << "rect " << rect;
         qreal random = 1.0;
         quint8* dabPointer = m_device->data() + rect.y() * rect.width() * m_pixelSize;
         quint8 alphaValue = OPACITY_TRANSPARENT_U8;

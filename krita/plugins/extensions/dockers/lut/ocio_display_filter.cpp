@@ -25,7 +25,6 @@
 #include <fstream>
 #include <sstream>
 
-#include <kdebug.h>
 #include <kis_config.h>
 
 #ifdef HAVE_OPENGL
@@ -47,7 +46,6 @@ GLuint compileShaderText(GLenum shaderType, const char *text)
         GLchar log[1000];
         GLsizei len;
         glGetShaderInfoLog(shader, 1000, &len, log);
-        kDebug() << "Error: problem compiling shader:" << log;
         return 0;
     }
 
@@ -73,7 +71,6 @@ GLuint linkShaders(GLuint fragShader)
             GLchar log[1000];
             GLsizei len;
             glGetProgramInfoLog(program, 1000, &len, log);
-            kDebug() << "Shader link error:" << log;
             return 0;
         }
     }

@@ -43,7 +43,6 @@ public:
         forEachElement(child, body) {
             KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, context);
             if (shape) {
-                kDebug() << "Adding " << shape << "with parent" << shape->parent() << "to container" << m_container;
                 KisShapeLayer* shapeLayer = dynamic_cast<KisShapeLayer*>(m_container);
                 if (shapeLayer) {
                     //don't update as the setDirty call would create shared pointer that would delete the layer

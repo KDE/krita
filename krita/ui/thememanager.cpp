@@ -103,7 +103,6 @@ QString ThemeManager::defaultThemeName() const
 QString ThemeManager::currentThemeName() const
 {
     if (!d->themeMenuAction || !d->themeMenuActionGroup) return defaultThemeName();
-    qDebug() << d->themeMenuActionGroup;
     QAction* action = d->themeMenuActionGroup->checkedAction();
     return !action ? defaultThemeName() : action->text().remove('&');
 }

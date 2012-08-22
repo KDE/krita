@@ -1,6 +1,11 @@
 /* This file is part of the KDE project
    Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
+   Contains code from KConfigGroupPrivate from kconfiggroup.cpp (kdelibs 4)
+   Copyright (c) 2006 Thomas Braxton <brax108@cox.net>
+   Copyright (c) 1999 Preston Brown <pbrown@kde.org>
+   Copyright (c) 1997-1999 Matthias Kalle Dalheimer <kalle@kde.org>
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -749,10 +754,6 @@ bool KexiDB::setFieldProperties(Field& field, const QHash<QByteArray, QVariant>&
         return false;
     if ((it = values.find("defaultValue")) != values.constEnd())
         field.setDefaultValue(*it);
-    if ((it = values.find("width")) != values.constEnd())
-        field.setWidth((*it).isNull() ? 0/*default*/ : (*it).toUInt(&ok));
-    if (!ok)
-        return false;
     if ((it = values.find("visibleDecimalPlaces")) != values.constEnd()
             && KexiDB::supportsVisibleDecimalPlacesProperty(field.type()))
         field.setVisibleDecimalPlaces((*it).isNull() ? -1/*default*/ : (*it).toInt(&ok));
@@ -888,8 +889,6 @@ bool KexiDB::setFieldProperty(Field& field, const QByteArray& propertyName, cons
             field.setDefaultValue(value);
             return true;
         }
-        if ("width" == propertyName)
-            GET_INT(setWidth);
 
         // last chance that never fails: custom field property
         field.setCustomProperty(propertyName, value);
@@ -1186,10 +1185,94 @@ QByteArray KexiDB::pgsqlByteaToByteArray(const char* data, int length)
     return array;
 }
 
+QList<int> KexiDB::stringListToIntList(const QStringList &list, bool *ok)
+{
+    QList<int> result;
+    foreach (const QString &item, list) {
+        int val = item.toInt(ok);
+        if (ok && !*ok) {
+            return QList<int>();
+        }
+        result.append(val);
+    }
+    if (ok) {
+        *ok = true;
+    }
+    return result;
+}
+
+// Based on KConfigGroupPrivate::serializeList() from kconfiggroup.cpp (kdelibs 4)
+QString KexiDB::serializeList(const QStringList &list)
+{
+    QString value = "";
+
+    if (!list.isEmpty()) {
+        QStringList::ConstIterator it = list.constBegin();
+        const QStringList::ConstIterator end = list.constEnd();
+
+        value = QString(*it).replace('\\', "\\\\").replace(',', "\\,");
+
+        while (++it != end) {
+            // In the loop, so it is not done when there is only one element.
+            // Doing it repeatedly is a pretty cheap operation.
+            value.reserve(4096);
+
+            value += ',';
+            value += QString(*it).replace('\\', "\\\\").replace(',', "\\,");
+        }
+
+        // To be able to distinguish an empty list from a list with one empty element.
+        if (value.isEmpty())
+            value = "\\0";
+    }
+
+    return value;
+}
+
+// Based on KConfigGroupPrivate::deserializeList() from kconfiggroup.cpp (kdelibs 4)
+QStringList KexiDB::deserializeList(const QString &data)
+{
+    if (data.isEmpty())
+        return QStringList();
+    if (data == QLatin1String("\\0"))
+        return QStringList(QString());
+    QStringList value;
+    QString val;
+    val.reserve(data.size());
+    bool quoted = false;
+    for (int p = 0; p < data.length(); p++) {
+        if (quoted) {
+            val += data[p];
+            quoted = false;
+        } else if (data[p].unicode() == '\\') {
+            quoted = true;
+        } else if (data[p].unicode() == ',') {
+            val.squeeze(); // release any unused memory
+            value.append(val);
+            val.clear();
+            val.reserve(data.size() - p);
+        } else {
+            val += data[p];
+        }
+    }
+    value.append(val);
+    return value;
+}
+
+QList<int> KexiDB::deserializeIntList(const QString &data, bool *ok)
+{
+    return KexiDB::stringListToIntList(
+        KexiDB::deserializeList(data), ok);
+}
+
 QString KexiDB::variantToString(const QVariant& v)
 {
-    if (v.type() == QVariant::ByteArray)
+    if (v.type() == QVariant::ByteArray) {
         return KexiDB::escapeBLOB(v.toByteArray(), KexiDB::BLOBEscapeHex);
+    }
+    else if (v.type() == QVariant::StringList) {
+        return serializeList(v.toStringList());
+    }
     return v.toString();
 }
 
@@ -1217,6 +1300,10 @@ QVariant KexiDB::stringToVariant(const QString& s, QVariant::Type type, bool &ok
         }
         ok = true;
         return ba;
+    }
+    if (type == QVariant::StringList) {
+        ok = true;
+        return deserializeList(s);
     }
     QVariant result(s);
     if (!result.convert(type)) {

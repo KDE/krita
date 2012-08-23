@@ -235,7 +235,7 @@ public:
 
 signals:
     void chartTypeChanged(ChartType);
-    void updateConfigWidget();
+    void updateConfigWidget() const;
 
 private:
     bool loadEmbeddedDocument(KoStore *store, const KoXmlElement &objectElement,

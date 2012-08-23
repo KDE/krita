@@ -44,6 +44,10 @@ SET (chartshape_LIB_SRCS
     dialogs/FontEditorDialog.cpp
     dialogs/FormatErrorBarDialog.cpp
     commands/ChartTypeCommand.cpp
+    commands/LegendCommand.cpp
+    commands/AxisCommand.cpp
+    commands/DatasetCommand.cpp
+    commands/ChartTextShapeCommand.cpp
 )
 
 kde4_add_ui_files(chartshape_LIB_SRCS

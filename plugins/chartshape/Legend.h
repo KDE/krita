@@ -85,6 +85,9 @@ public:
     using KoShape::update;
     void update() const;
 
+signals:
+    void updateConfigWidget();
+
 private slots:
     void slotChartTypeChanged(ChartType chartType );
     void slotKdLegendChanged();

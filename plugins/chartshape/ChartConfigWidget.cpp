@@ -1145,6 +1145,9 @@ void ChartConfigWidget::update()
     d->ui.showSubTitle->setChecked(d->shape->subTitle()->isVisible());
     d->ui.showFooter->setChecked(d->shape->footer()->isVisible());
 
+    // Update properties in "Data Sets" tab
+    ui_dataSetSelectionChanged(d->selectedDataSet);
+
     // Update "Bar Properties" in "Data Sets" tab
     d->ui.gapBetweenBars->setValue(d->shape->plotArea()->gapBetweenBars());
     d->ui.gapBetweenSets->setValue(d->shape->plotArea()->gapBetweenSets());
@@ -1240,8 +1243,22 @@ void ChartConfigWidget::update()
 
     if (d->shape->legend()) {
         d->ui.legendTitle->blockSignals(true);
+        d->ui.showLegend->setChecked(d->shape->legend()->isVisible());
+        d->ui.legendTitle->blockSignals(false);
+
+        d->ui.legendTitle->blockSignals(true);
         d->ui.legendTitle->setText(d->shape->legend()->title());
         d->ui.legendTitle->blockSignals(false);
+
+        d->ui.legendTitle->blockSignals(true);
+        d->ui.legendShowFrame->setChecked(d->shape->legend()->showFrame());
+        d->ui.legendTitle->blockSignals(false);
+
+        if (d->shape->legend()->expansion() == HighLegendExpansion) {
+            d->ui.legendOrientationIsVertical->setChecked(true);
+        } else {
+            d->ui.legendOrientationIsHorizontal->setChecked(true);
+        }
     }
 
     bool enableMarkers = !(d->type == BarChartType || d->type == StockChartType || d->type == CircleChartType
@@ -1763,15 +1780,15 @@ void ChartConfigWidget::ui_axisLabelsFontChanged()
 {
     QFont font = d->axisFontEditorDialog.fontChooser->font();
     Axis *axis = d->axes[d->ui.axes->currentIndex()];
-    axis->setFont(font);
-    axis->setFontSize(font.pointSizeF());
+
+    emit axisLabelsFontChanged(axis, font);
 }
 
 void ChartConfigWidget::ui_legendFontChanged()
 {
     QFont font = d->legendFontEditorDialog.fontChooser->font();
-    d->shape->legend()->setFont(font);
-    d->shape->legend()->setFontSize(font.pointSizeF());
+
+    emit legendFontChanged(font);
 }
 
 void ChartConfigWidget::ui_axisAdded()

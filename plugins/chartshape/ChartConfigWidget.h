@@ -168,6 +168,7 @@ signals:
     void axisSubStepWidthChanged(Axis *axis, qreal width);
     void axisUseAutomaticStepWidthChanged(Axis *axis, bool automatic);
     void axisUseAutomaticSubStepWidthChanged(Axis *axis, bool automatic);
+    void axisLabelsFontChanged(Axis *axis, const QFont& font);
 
     void legendTitleChanged(const QString&);
     void legendFontChanged(const QFont& font);

@@ -60,30 +60,6 @@ KoUnitDoubleSpinBox::~KoUnitDoubleSpinBox()
     delete d;
 }
 
-// deprecated;
-KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent,
-						    double lower, double upper,
-						    double step,
-						    double value,
-						    KoUnit unit,
-                            unsigned int precision)
-    : QDoubleSpinBox( parent ),
-    d( new Private(lower, upper, step))
-{
-    setMinimum(lower);
-    setMaximum(upper);
-    setSingleStep(step);
-    setValue(value);
-    setDecimals(precision);
-    d->unit = KoUnit(KoUnit::Point);
-    //setAcceptLocalizedNumbers( true );
-    setUnit( unit );
-    changeValue( value );
-    setLineStepPt( step );
-
-    connect(this, SIGNAL(valueChanged( double )), SLOT(privateValueChanged()));
-}
-
 QValidator::State KoUnitDoubleSpinBox::validate(QString &input, int &pos) const
 {
 #ifdef DEBUG_VALIDATOR

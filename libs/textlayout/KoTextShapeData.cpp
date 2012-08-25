@@ -360,6 +360,7 @@ void KoTextShapeData::loadStyle(const KoXmlElement &element, KoShapeLoadingConte
 
         d->paragraphStyle = new KoParagraphStyle(format, cformat);
         qDeleteAll(paragraphStyles);
+        delete defaultStyle;
     }
 }
 

@@ -70,7 +70,7 @@ public:
 
     /**
      * Unlock the temporary target
-     *
+     * 
      * \see lockTemporaryTarget()
      */
     void unlockTemporaryTarget() const;
@@ -90,7 +90,7 @@ private:
      * \see lockTemporaryTarget()
      */
     void addIndirectlyDirtyRect(const QRect &rect);
-    QList<QRect> indirectlyDirtyRegion();
+    QRegion indirectlyDirtyRegion();
 
     template<class UndoAdapter>
         void mergeToLayerImpl(KisLayerSP layer,

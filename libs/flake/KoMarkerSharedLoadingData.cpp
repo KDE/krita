@@ -31,6 +31,11 @@ KoMarkerSharedLoadingData::KoMarkerSharedLoadingData(const QHash<QString, KoMark
     d->lookupTable = lookupTable;
 }
 
+KoMarkerSharedLoadingData::~KoMarkerSharedLoadingData()
+{
+    delete d;
+}
+
 KoMarker *KoMarkerSharedLoadingData::marker(const QString &name) const
 {
     return d->lookupTable.value(name, 0);

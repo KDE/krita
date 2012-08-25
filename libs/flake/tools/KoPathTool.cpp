@@ -185,6 +185,9 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
 
 KoPathTool::~KoPathTool()
 {
+    delete m_activeHandle;
+    delete m_activeSegment;
+    delete m_currentStrategy;
 }
 
 QList<QWidget *>  KoPathTool::createOptionWidgets()

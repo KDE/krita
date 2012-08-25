@@ -33,6 +33,7 @@ class KoMarkerSharedLoadingData : public KoSharedLoadingData
 {
 public:
     KoMarkerSharedLoadingData(const QHash<QString, KoMarker *> &lookupTable);
+    virtual ~KoMarkerSharedLoadingData();
 
     KoMarker *marker(const QString &name) const;
 

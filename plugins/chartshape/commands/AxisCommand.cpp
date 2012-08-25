@@ -31,8 +31,8 @@ using namespace KDChart;
 
 
 AxisCommand::AxisCommand(Axis* axis, ChartShape* chart)
-    : m_axis(axis)
-    , m_chart(chart)
+    : m_chart(chart)
+    , m_axis(axis)
 {
     m_newShowTitle = m_axis->title()->isVisible();
     m_newTitleText = m_axis->titleText();

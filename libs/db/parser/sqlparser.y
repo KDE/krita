@@ -972,6 +972,10 @@ aExpr8 '+' aExpr7
 	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, '+', $3);
 	$$->debug();
 }
+| aExpr8 CONCATENATION aExpr7
+{
+    $$ = new BinaryExpr(KexiDBExpr_Arithm, $1, CONCATENATION, $3);
+}
 | aExpr8 '-' %prec UMINUS aExpr7
 {
 	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, '-', $3);

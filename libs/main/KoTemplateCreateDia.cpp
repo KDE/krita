@@ -121,7 +121,7 @@ KoTemplateCreateDia::KoTemplateCreateDia(const char *templateType, const KCompon
     QVBoxLayout* leftbox = new QVBoxLayout();
     mbox->addLayout( leftbox );
 
-    QLabel *label=new QLabel(i18n("Name:"), mainwidget);
+    QLabel *label=new QLabel(i18nc("Template name", "Name:"), mainwidget);
     QHBoxLayout *namefield=new QHBoxLayout();
     leftbox->addLayout( namefield );
     namefield->addWidget(label);

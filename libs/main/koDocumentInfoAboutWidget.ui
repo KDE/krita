@@ -37,7 +37,7 @@
    <item row="2" column="0" >
     <widget class="QLabel" name="lblTitleDesc" >
      <property name="text" >
-      <string>Title:</string>
+      <string comment="Document title">Title:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

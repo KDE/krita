@@ -30,13 +30,18 @@ KoDirectoryStore::KoDirectoryStore(const QString& path, Mode _mode)
         : m_basePath(path)
 {
     Q_D(KoStore);
-    const int pos = path.lastIndexOf('/');
-    if (pos != -1 && pos != m_basePath.length() - 1)
-        m_basePath = m_basePath.left(pos);
+    //kDebug(30002) << "path:" << path;
+
+    QDir dir(path);
+    if (!dir.exists())
+        dir.cdUp();
+    m_basePath = QDir::cleanPath(dir.path());
+
     if (!m_basePath.endsWith('/'))
         m_basePath += '/';
     m_currentPath = m_basePath;
-    kDebug(30002) << "KoDirectoryStore::KoDirectoryStore base path:" << m_basePath;
+    //kDebug(30002) << "base path:" << m_basePath;
+
     d->good = init(_mode);
 }
 

@@ -468,7 +468,7 @@ void KisToolPaint::stepAlpha(float step)
 {
     qreal alpha = canvas()->resourceManager()->resource(KisCanvasResourceProvider::Opacity).toDouble();
     alpha += step;
-    alpha = qBound(0.0, alpha, 1.0);
+    alpha = qBound<qreal>(0.0, alpha, 1.0);
     canvas()->resourceManager ()->setResource(KisCanvasResourceProvider::Opacity, alpha);
 }
 

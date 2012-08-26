@@ -1358,6 +1358,10 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     }
 
     // Spacing (padding)
+    const QString padding(styleStack.property(KoXmlNS::fo, "padding"));
+    if (!padding.isEmpty()) {
+        setPadding(KoUnit::parseValue(padding));
+    }
     const QString paddingLeft(styleStack.property(KoXmlNS::fo, "padding-left" ));
     if (!paddingLeft.isEmpty()) {
         setLeftPadding(KoUnit::parseValue(paddingLeft));
@@ -1374,12 +1378,12 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     if (!paddingBottom.isEmpty()) {
         setBottomPadding(KoUnit::parseValue(paddingBottom));
     }
-    const QString padding(styleStack.property(KoXmlNS::fo, "padding"));
-    if (!padding.isEmpty()) {
-        setPadding(KoUnit::parseValue(padding));
-    }
 
     // Indentation (margin)
+    const QString margin(styleStack.property(KoXmlNS::fo, "margin"));
+    if (!margin.isEmpty()) {
+        setMargin(KoText::parseLength(margin));
+    }
     const QString marginLeft(styleStack.property(KoXmlNS::fo, "margin-left" ));
     if (!marginLeft.isEmpty()) {
         setLeftMargin(KoText::parseLength(marginLeft));
@@ -1395,10 +1399,6 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     const QString marginBottom(styleStack.property(KoXmlNS::fo, "margin-bottom"));
     if (!marginBottom.isEmpty()) {
         setBottomMargin(KoText::parseLength(marginBottom));
-    }
-    const QString margin(styleStack.property(KoXmlNS::fo, "margin"));
-    if (!margin.isEmpty()) {
-        setMargin(KoText::parseLength(margin));
     }
 
     // Automatic Text indent

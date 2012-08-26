@@ -634,7 +634,7 @@ void CartesianAxis::paintCtx( PaintContext* context )
     // set up a map of integer positions,
 
     // - starting with the fourth
-    // - the the halfs
+    // - then the halfs
     // - then the tens
     // this will override all halfs and fourth that hit a higher-order ruler
     // MAKE SURE TO START AT (0, 0)!

@@ -390,7 +390,7 @@ namespace KDChart {
 
         /**
          * Margins that will be added to geometry() for internal layouting
-         * methods. For historical reasons the the default is (1, 1, -3, -3).
+         * methods. For historical reasons the default is (1, 1, -3, -3).
          *
          * Use this method if data points or lines are just slightly cut off
          * at the edge of the coordinate plane. This does not play nicely in

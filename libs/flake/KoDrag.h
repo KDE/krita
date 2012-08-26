@@ -58,7 +58,7 @@ public:
     void setData(const QString &mimeType, const QByteArray &data);
 
     /**
-     * Add the the mimeData to the clipboard
+     * Add the mimeData to the clipboard
      */
     void addToClipboard();
 

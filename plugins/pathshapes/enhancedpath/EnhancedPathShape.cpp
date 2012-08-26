@@ -99,7 +99,7 @@ void EnhancedPathShape::updatePath(const QSizeF & size)
         m_mirrorMatrix.translate(-m_viewBound.center().x(), -m_viewBound.center().y());
         QTransform matrix(1.0, 0.0, 0.0, 1.0, m_viewBoxOffset.x(), m_viewBoxOffset.y());
 
-        // if stretch points are set than stretch the the path manually
+        // if stretch points are set than stretch the path manually
         if (isStretched) {
             //if the path was stretched manually the stretch matrix is not more valid
             //and it has to be recalculated so that stretching in x and y direction is the same

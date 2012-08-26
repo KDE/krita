@@ -82,7 +82,7 @@ public:
      */
     void applySelection(KisPixelSelectionSP selection, SelectionAction action);
 
-    /// Tests if the the rect is totally outside the selection
+    /// Tests if the rect is totally outside the selection
     bool isTotallyUnselected(const QRect & r) const;
 
     /**

@@ -520,7 +520,7 @@ public:
     QList<int> tablePositions(const QString& tableName) const;
 
     /*! Provided for convenience.
-     \return true if a table at \a position (within FROM section of the the query)
+     \return true if a table at \a position (within FROM section of the query)
      has non empty alias defined.
      If there is no alias for this table,
      or if there is no such table in the query defined, false is returned. */
@@ -531,7 +531,7 @@ public:
     int columnPositionForAlias(const QByteArray& name) const;
 
     /*! Sets \a alias for a table at \a position (within FROM section
-     of the the query).
+     of the query).
      Passing empty sting to \a alias clears alias for a given table
      (only for specified \a position). */
     void setTableAlias(uint position, const QByteArray& alias);

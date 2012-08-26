@@ -73,7 +73,7 @@ public slots:
 
   /**
    * Sets the zoom. If zoom not yet on the list of zoom values, it will be inserted
-   * into the list at proper place so that the the values remain sorted.
+   * into the list at proper place so that the values remain sorted.
    * emits zoomChanged
    */
     void setZoom( qreal zoom );

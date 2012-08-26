@@ -43,7 +43,7 @@ public:
     virtual ~KisFixedPaintDevice();
 
     /**
-     * Deep copy the the fixed paint device, including the data.
+     * Deep copy the fixed paint device, including the data.
      */
     KisFixedPaintDevice(const KisFixedPaintDevice& rhs);
 

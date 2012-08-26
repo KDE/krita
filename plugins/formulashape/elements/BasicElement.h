@@ -181,7 +181,7 @@ public:
     const QRectF absoluteBoundingRect() const;
 
     /**
-     * place the cursor at the the given point
+     * place the cursor at the given point
      * the point should be placed a the position in the element 
      * (or it's child) that is closest to the point
      * in particular the point doesn't have to be within 

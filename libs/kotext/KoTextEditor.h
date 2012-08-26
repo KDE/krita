@@ -230,7 +230,7 @@ public slots:
     /**
      * Remove the KoTextAnchor objects from the document.
      *
-     * NOTE: Call this method only when the the shapes belonging to the anchors have been deleted.
+     * NOTE: Call this method only when the shapes belonging to the anchors have been deleted.
      */
     void removeAnchors(const QList<KoTextAnchor*> &anchors, KUndo2Command *parent);
 

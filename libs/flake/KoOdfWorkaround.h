@@ -136,7 +136,7 @@ namespace KoOdfWorkaround
 
     /**
      * LibreOffice used to write text:style-name attribute for table:table-template element,
-     * which is not a vaild attribute for the element.
+     * which is not a valid attribute for the element.
      */
     FLAKE_EXPORT QString fixTableTemplateName(const KoXmlElement &e);
 
@@ -144,7 +144,7 @@ namespace KoOdfWorkaround
      * LibreOffice used to write text:style-name attribute for
      * table:first-row, table:last-row, table:first-column,
      * table:last-column, table:odd-rows, table:odd-columns,
-     * table:body elements, which is not a vaild attribute for the element.
+     * table:body elements, which is not a valid attribute for the element.
      */
     FLAKE_EXPORT QString fixTableTemplateCellStyleName(const KoXmlElement &e);
 }

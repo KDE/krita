@@ -653,7 +653,7 @@ public:
            we are passed are identical to the edge pixels.
            If edge_lock is false, we assume that pixels outside the region are 0
         */
-        quint8  **buf;  // caches the the region's pixels
+        quint8  **buf;  // caches the region's pixels
         quint8  **max;  // caches the smallest values for each column
         qint32    last_max, last_index;
 

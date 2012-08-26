@@ -123,7 +123,7 @@ public:
      * @param startY the Y position where the floodfill starts
      * @param projection the projection that determines the area that
      * is floodfilled if sampleMerged is on (XXX: fix this API to
-     * always use the the projection param and deprecated the
+     * always use the projection param and deprecated the
      * sampleMerged setting)
      */
     void fillColor(int startX, int startY, KisPaintDeviceSP projection);
@@ -138,7 +138,7 @@ public:
      * @param startY the Y position where the floodfill starts
      * @param projection the projection that determines the area that
      * is floodfilled if sampleMerged is on (XXX: fix this API to
-     * always use the the projection param and deprecated the
+     * always use the projection param and deprecated the
      * sampleMerged setting)
      */
     void fillPattern(int startX, int startY, KisPaintDeviceSP projection);
@@ -150,7 +150,7 @@ public:
      * @param startY the Y position where the floodfill starts
      * @param projection the projection that determines the area that
      * is floodfilled if sampleMerged is on (XXX: fix this API to
-     * always use the the projection param and deprecated the
+     * always use the projection param and deprecated the
      * sampleMerged setting)
      */
     KisSelectionSP createFloodSelection(int startX, int startY, KisPaintDeviceSP projection);

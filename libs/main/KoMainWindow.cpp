@@ -274,7 +274,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     actionCollection()->addAction("file_versions_file", d->showFileVersions);
     connect(d->showFileVersions, SIGNAL(triggered(bool)), this, SLOT(slotVersionsFile()));
 
-    d->importFile  = new KAction(koIcon("document-import"), i18n("Open ex&Isting Document as Untitled Document..."), this);
+    d->importFile  = new KAction(koIcon("document-import"), i18n("Open ex&isting Document as Untitled Document..."), this);
     actionCollection()->addAction("file_import_file", d->importFile);
     connect(d->importFile, SIGNAL(triggered(bool)), this, SLOT(slotImportFile()));
 

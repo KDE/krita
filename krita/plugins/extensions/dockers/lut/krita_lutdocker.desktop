@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Lut Docker
+Name[nl]=Lut-vastzetter
+Name[pt]=Área Acoplável do LUT
+Name[pt_BR]=Acoplador do LUT
+Name[uk]=Бічна панель таблиці пошуку
+Name[x-test]=xxLut Dockerxx
 Comment=Docker for selecting luts
+Comment[nl]=Vastzetter voor selecteren luts
+Comment[pt]=Área de selecção de LUT's
+Comment[pt_BR]=Acoplador para seleção de LUT's
+Comment[uk]=Бічна панель для вибору таблиць пошуку
+Comment[x-test]=xxDocker for selecting lutsxx
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritalutdocker

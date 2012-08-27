@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Texture Templates
+Name[nl]=Textuur-sjablonen
+Name[pt]=Modelos de Texturas
+Name[pt_BR]=Modelos de textura
+Name[uk]=Шаблони текстур
+Name[x-test]=xxTexture Templatesxx
 X-KDE-DefaultTab=true
 
 [Dolphin]

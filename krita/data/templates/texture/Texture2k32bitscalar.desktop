@@ -1,6 +1,11 @@
 [Desktop Entry]
 Icon=template_texture
 Name=Texture 2k 32bit scalar
+Name[nl]=Textuur 2k 32bit scalar
+Name[pt]=Textura 2k 32-bits escalar
+Name[pt_BR]=Textura 2k 32bit escalar
+Name[uk]=Текстура 2k, 32-бітова, скалярна
+Name[x-test]=xxTexture 2k 32bit scalarxx
 Type=Link
 URL[$e]=.source/Texture2k32bitscalar.kra
 X-KDE-Hidden=false

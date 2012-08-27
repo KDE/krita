@@ -1,6 +1,11 @@
 [Desktop Entry]
 Icon=template_texture
 Name=Texture 2k 16bit float rgb
+Name[nl]=Textuur 2k 16bit float rgb
+Name[pt]=Textura 2k 16-bits vírgula flutuante RGB
+Name[pt_BR]=Textura 2k 16bit flutuante rgb
+Name[uk]=Текстура 2k, 16-бітова з рухомою комою, rgb
+Name[x-test]=xxTexture 2k 16bit float rgbxx
 Type=Link
 URL[$e]=.source/Texture2k16bitfloatrgb.kra
 X-KDE-Hidden=false

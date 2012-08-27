@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Film Templates
+Name[nl]=Film-sjablonen
+Name[pt]=Modelos de Filme
+Name[pt_BR]=Modelos de filme
+Name[uk]=Шаблони відеокадрів
+Name[x-test]=xxFilm Templatesxx
 X-KDE-DefaultTab=true
 
 [Dolphin]

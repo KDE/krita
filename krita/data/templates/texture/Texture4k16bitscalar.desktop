@@ -1,6 +1,11 @@
 [Desktop Entry]
 Icon=template_texture
 Name=Texture 4k 16bit scalar
+Name[nl]=Textuur 4k 16bit scalar
+Name[pt]=Textura 4k 16-bits escalar
+Name[pt_BR]=Textura 4k 16bit escalar
+Name[uk]=Текстура 4k, 16-бітова, скалярна
+Name[x-test]=xxTexture 4k 16bit scalarxx
 Type=Link
 URL[$e]=.source/Texture4k16bitscalar.kra
 X-KDE-Hidden=false

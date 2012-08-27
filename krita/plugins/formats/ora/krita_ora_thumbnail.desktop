@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=OpenRaster Archiving Images
+Name[nl]=OpenRaster afbeeldingen archiveren
+Name[pt]=Imagens do Arquivo OpenRaster
+Name[pt_BR]=Imagens do Arquivo OpenRaster
+Name[uk]=Зображення архівів OpenRaster (ORA)
+Name[x-test]=xxOpenRaster Archiving Imagesxx
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=image/openraster;

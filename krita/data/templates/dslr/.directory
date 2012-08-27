@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=DSLR Templates
+Name[nl]=DSLR-sjablonen
+Name[pt]=Modelos de DSLR
+Name[pt_BR]=Modelos DSLR
+Name[uk]=Шаблони DSLR
+Name[x-test]=xxDSLR Templatesxx
 X-KDE-DefaultTab=true
 
 [Dolphin]

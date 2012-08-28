@@ -26,13 +26,17 @@
 
 #include "KoApplication.h"
 
+#include "KoApplication.h"
+#include "KoPart.h"
 #include "KoDocument.h"
 #include "KoMainWindow.h"
 #include "KoDocumentEntry.h"
 #include "KoView.h"
+#include "KoPart.h"
 
-KoApplicationAdaptor::KoApplicationAdaptor(QObject *parent)
+KoApplicationAdaptor::KoApplicationAdaptor(KoApplication *parent)
         : QDBusAbstractAdaptor(parent)
+        , m_application(parent)
 {
     // constructor
     setAutoRelaySignals(true);
@@ -50,21 +54,22 @@ QString KoApplicationAdaptor::createDocument(const QString &nativeFormat)
         KMessageBox::questionYesNo(0, i18n("Unknown Calligra MimeType %1. Check your installation.", nativeFormat));
         return QString();
     }
-    KoDocument* doc = entry.createDoc(0);
-    if (doc)
-        return '/' + doc->objectName();
-    else
+    KoPart *part = entry.createKoPart(0);
+    if (part) {
+        m_application->addPart(part);
+        return '/' + part->document()->objectName();
+    }
+    else {
         return QString();
+    }
 }
 
 QStringList KoApplicationAdaptor::getDocuments()
 {
     QStringList lst;
-    QList<KoDocument*> *documents = KoDocument::documentList();
-    if (documents) {
-        foreach(KoDocument* document, *KoDocument::documentList()) {
-            lst.append('/' + document->objectName());
-        }
+    QList<KoPart*> parts = m_application->partList();
+    foreach(KoPart *part, parts) {
+        lst.append('/' + part->document()->objectName());
     }
     return lst;
 }
@@ -72,14 +77,13 @@ QStringList KoApplicationAdaptor::getDocuments()
 QStringList KoApplicationAdaptor::getViews()
 {
     QStringList lst;
-    QList<KoDocument*> *documents = KoDocument::documentList();
-    if (documents) {
-        foreach(KoDocument* document, *KoDocument::documentList()) {
-            foreach(KoView* view, document->views()) {
-                lst.append('/' + view->objectName());
-            }
+    QList<KoPart*> parts = m_application->partList();
+    foreach(KoPart *part, parts) {
+        foreach(KoView* view, part->views()) {
+            lst.append('/' + view->objectName());
         }
     }
+
     return lst;
 }
 
@@ -88,8 +92,9 @@ QStringList KoApplicationAdaptor::getWindows()
     QStringList lst;
     QList<KMainWindow*> mainWindows = KMainWindow::memberList();
     if (!mainWindows.isEmpty()) {
-        foreach(KMainWindow* mainWindow, mainWindows)
-        lst.append(static_cast<KoMainWindow*>(mainWindow)->objectName());
+        foreach(KMainWindow* mainWindow, mainWindows) {
+            lst.append(static_cast<KoMainWindow*>(mainWindow)->objectName());
+        }
     }
     return lst;
 }

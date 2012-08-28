@@ -46,7 +46,7 @@
 
 // KFormula
 #include "KoFormulaShape.h"
-
+#include "FormulaPart.h"
 
 class FormulaDocument::Private
 {
@@ -66,14 +66,10 @@ FormulaDocument::Private::~Private()
 }
 
 FormulaDocument::FormulaDocument( KoFormulaShape *parent )
-    : KoDocument( 0, 0 )
+    : KoDocument(new FormulaPart(0))
     , d ( new Private )
 {
     d->parent = parent;
-    // Needed by KoDocument::nativeOasisMimeType().
-    // KoEmbeddedDocumentSaver uses that method to
-    // get the mimetype of the embedded document.
-    setComponentData( KComponentData( "math" ) );
 }
 
 FormulaDocument::~FormulaDocument()
@@ -162,13 +158,6 @@ bool FormulaDocument::saveOdf( SavingContext &context )
     }
 
     return true;
-}
-
-KoView *FormulaDocument::createViewInstance( QWidget *parent )
-{
-    Q_UNUSED( parent );
-
-    return 0;
 }
 
 void FormulaDocument::paintContent( QPainter &painter, const QRect &rect )

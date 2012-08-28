@@ -356,6 +356,9 @@ void KoReportItemChart::setAxis(const QString& xa, const QString &ya)
 void KoReportItemChart::setBackgroundColor(const QColor&)
 {
     //Set the background color
+    if (!m_chartWidget) {
+        return;
+    }
     KDChart::Chart *cht = m_chartWidget->diagram()->coordinatePlane()->parent();
 
     KDChart::BackgroundAttributes ba;

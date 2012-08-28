@@ -45,6 +45,7 @@ TEXTLAYOUT_EXPORT QString intToRoman(int n);
 TEXTLAYOUT_EXPORT QString intToAlpha(int n, Capitalisation caps, bool letterSynchronization);
 TEXTLAYOUT_EXPORT QString intToScript(int n, KoListStyle::Style type);
 TEXTLAYOUT_EXPORT QString intToScriptList(int n, KoListStyle::Style type);
+TEXTLAYOUT_EXPORT QString intToNumberingStyle(int index, KoListStyle::Style listStyle, bool letterSynchronizations);
 
 /// return international list items (bullets/arabic/roman)
 TEXTLAYOUT_EXPORT QList<ListStyleItem> genericListStyleItems();

@@ -62,7 +62,7 @@ public:
      * Removes the node from the graph
      *
      * Removing the node from the graph removes both the node itself
-     * and all its children, because all this information is accesible
+     * and all its children, because all this information is accessible
      * to the shapes graph without referring to the node's hierarchy
      * information owned by the image.
      */

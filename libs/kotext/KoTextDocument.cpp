@@ -281,7 +281,7 @@ QVector< QAbstractTextDocumentLayout::Selection > KoTextDocument::selections() c
     QVariant resource = m_document->resource(KoTextDocument::Selections, SelectionsURL);
     QVariantList variants = resource.toList();
 
-    QVector<QAbstractTextDocumentLayout::Selection> selections(variants.size());
+    QVector<QAbstractTextDocumentLayout::Selection> selections;
     foreach(const QVariant &variant, variants) {
         selections.append(variant.value<QAbstractTextDocumentLayout::Selection>());
     }

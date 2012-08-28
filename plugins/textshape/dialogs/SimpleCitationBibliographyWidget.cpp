@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2010 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,8 +29,8 @@
 
 SimpleCitationBibliographyWidget::SimpleCitationBibliographyWidget(ReferencesTool *tool, QWidget *parent)
         : QWidget(parent),
-          m_referenceTool(tool),
           m_blockSignals(false),
+          m_referenceTool(tool),
           m_signalMapper(0)
 {
     widget.setupUi(this);

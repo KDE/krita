@@ -28,6 +28,13 @@ class OnlineDocument : public KParts::Plugin
 {
     Q_OBJECT
 public:
+    enum DocumentType {
+        WORDS,
+        STAGE,
+        SHEETS,
+        UNKNOWN
+    };
+
     OnlineDocument(QObject *parent, const QVariantList &);
     virtual ~OnlineDocument();
 
@@ -37,6 +44,7 @@ private slots:
 
 private:
     LoginWindow *m_login;
+    DocumentType m_type;
 };
 
 #endif

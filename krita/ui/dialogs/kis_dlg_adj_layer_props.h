@@ -27,6 +27,7 @@ class KisFilterConfiguration;
 class KisConfigWidget;
 class KisImage;
 class KisAdjustmentLayer;
+class KisNodeFilterInterface;
 
 #include "kis_types.h"
 
@@ -47,9 +48,11 @@ public:
      * @param parent the widget parent of this dialog
      * @param name the QObject name, if any
      */
-    KisDlgAdjLayerProps(KisPaintDeviceSP paintDevice,
+    KisDlgAdjLayerProps(KisNodeSP node,
+                        KisNodeFilterInterface *nfi,
+                        KisPaintDeviceSP paintDevice,
                         const KisImageWSP image,
-                        KisFilterConfiguration * configuration,
+                        KisFilterConfiguration *configuration,
                         const QString & layerName,
                         const QString & caption,
                         QWidget *parent = 0,
@@ -58,18 +61,21 @@ public:
     KisFilterConfiguration * filterConfiguration() const;
     QString layerName() const;
 
-protected slots:
+private slots:
 
     void slotNameChanged(const QString &);
+    void slotConfigChanged();
 
 private:
+    KisNodeSP m_node;
     KisPaintDeviceSP m_paintDevice;
-    KisImage * m_image;
-    KisConfigWidget * m_currentConfigWidget;
-    KisFilter* m_currentFilter;
-    KisFilterConfiguration * m_currentConfiguration;
-    KisAdjustmentLayer * m_layer;
-    KLineEdit * m_layerName;
+    KisImage *m_image;
+    KisConfigWidget *m_currentConfigWidget;
+    KisFilter *m_currentFilter;
+    KisFilterConfiguration *m_currentConfiguration;
+    KisAdjustmentLayer *m_layer;
+    KLineEdit *m_layerName;
+    KisNodeFilterInterface *m_nodeFilterInterface;
 };
 
 #endif // KIS_DLG_ADJ_LAYER_PROPS_H

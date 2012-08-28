@@ -16,12 +16,12 @@ The applications currently included in Calligra Suite (version 2.1) are:
 
 Office productivity:
 - Words      -  Word processor
-- Tables     -  Spreadsheet calculator
+- Sheets     -  Spreadsheet calculator
 - Stage      -  Presentation program
 
 Graphics:
 - Karbon     -  Vector graphics 
-- Krita      -  Advanced drawing and image manipulation
+- Krita      -  Digital painting for artists
 
 More information about Krita can be found at http://www.krita.org
 
@@ -57,48 +57,6 @@ also need some other dependencies.  For more details on how to build
 Calligra Suite from the sources, see
 
 http://community.kde.org/Calligra/Building/Building_Calligra
-
-
-The Calligra Suite source tree
------------------------
-
-Here follows a short overview of the source code.
-
-cmake/       files to help cmake do it's job configuring
-doc/         user documentation.  
-
-karbon/      source code of the different applications
-kexi/
-kplato/
-kpresenter/  
-krita/
-kspread/
-words/
-kivio/
-
-kounavail    a shape that is used when an application that handles a
-             certain embedded datatype is not available
-
-libs/        the common libraries
-plugins/     some plugins, both flake shapes and other types.
-
-filters/     import and export filters for foreign file formats
-
-tools/       tools used internally (e.g. for testing) and released
-             with Calligra Suite, such as the koconverter file format 
-             conversion tool.
-
-interfaces/  simplified external interfaces to some advanced data types
-             such as charts.
-
-servicetypes/ desktop files for some service types provided by Calligra Suite
-
-templates/   templates for new documents.
-             NOTE: Out of date since they use the old Calligra Suite file formats
-
-kdgantt/     and advanced gantt chart library provided by an external vendor.
-
-pics/        icons
 
 
 Contact info

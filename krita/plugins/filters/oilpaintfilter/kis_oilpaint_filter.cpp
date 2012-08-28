@@ -32,27 +32,26 @@
 #include <QSpinBox>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <knuminput.h>
 
+#include <KoProgressUpdater.h>
+#include <KoUpdater.h>
+
 #include <kis_doc2.h>
 #include <kis_image.h>
-#include <kis_iterators_pixel.h>
+#include "kis_iterator_ng.h"
 #include <kis_layer.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
 #include <kis_types.h>
-#include <KoProgressUpdater.h>
-#include <KoUpdater.h>
-
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 #include <kis_paint_device.h>
-
+#include <kis_iterator_ng.h>
 #include "widgets/kis_multi_integer_filter_widget.h"
 
 
@@ -107,27 +106,16 @@ void KisOilPaintFilter::OilPaint(const KisPaintDeviceSP src, KisPaintDeviceSP ds
 
     QRect bounds(srcTopLeft.x(), srcTopLeft.y(), w, h);
 
-    KisHLineConstIteratorPixel it = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), w);
-    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), w);
+    KisHLineConstIteratorSP it = src->createHLineConstIteratorNG(srcTopLeft.x(), srcTopLeft.y(), w);
+    KisHLineIteratorSP dstIt = dst->createHLineIteratorNG(dstTopLeft.x(), dstTopLeft.y(), w);
 
     int progress = 0;
     for (qint32 yOffset = 0; yOffset < h; yOffset++) {
-
-
-        while (!it.isDone()) {  //&& !cancelRequested()) {
-
-//             if (it.isSelected()) {
-
-//                 uint color =
-                MostFrequentColor(src, dstIt.rawData(), bounds, it.x(), it.y(), BrushSize, Smoothness);
-//                 dst->colorSpace()->fromQColor(QColor(qRed(color), qGreen(color), qBlue(color)), qAlpha(color), dstIt.rawData());
-//             }
-
-            ++it;
-            ++dstIt;
-        }
-        it.nextRow();
-        dstIt.nextRow();
+        do {  //&& !cancelRequested()) {
+                MostFrequentColor(src, dstIt->rawData(), bounds, it->x(), it->y(), BrushSize, Smoothness);
+        }  while (it->nextPixel() && dstIt->nextPixel());
+        it->nextRow();
+        dstIt->nextRow();
 
         if (progressUpdater) progressUpdater->setValue(progress += w);
     }
@@ -149,7 +137,7 @@ void KisOilPaintFilter::OilPaint(const KisPaintDeviceSP src, KisPaintDeviceSP ds
  *                     the center of this matrix and find the most frequenty color
  */
 
-void KisOilPaintFilter::MostFrequentColor(const KisPaintDeviceSP src, quint8* dst, const QRect& bounds, int X, int Y, int Radius, int Intensity) const
+void KisOilPaintFilter::MostFrequentColor(KisPaintDeviceSP src, quint8* dst, const QRect& bounds, int X, int Y, int Radius, int Intensity) const
 {
     uint I;
 
@@ -174,13 +162,12 @@ void KisOilPaintFilter::MostFrequentColor(const KisPaintDeviceSP src, quint8* ds
     int height = (2 * Radius) + 1;
     if ((starty + height) > bounds.bottom()) height = bounds.bottom() - starty + 1;
     Q_ASSERT((starty + height - 1) <= bounds.bottom());
-    KisRectConstIteratorPixel it = src->createRectConstIterator(startx, starty, width, height);
+    KisRectIteratorSP it = src->createRectIteratorNG(startx, starty, width, height);
+    do {
 
-    while (!it.isDone()) {
+        cs->normalisedChannelsValue(it->rawData(), channel);
 
-        cs->normalisedChannelsValue(it.rawData(), channel);
-
-        I = (uint)(cs->intensity8(it.rawData()) * Scale);
+        I = (uint)(cs->intensity8(it->rawData()) * Scale);
         IntensityCount[I]++;
 
         if (IntensityCount[I] == 1) {
@@ -190,9 +177,7 @@ void KisOilPaintFilter::MostFrequentColor(const KisPaintDeviceSP src, quint8* ds
                 AverageChannels[I][i] += channel[i];
             }
         }
-
-        ++it;
-    }
+    } while (it->nextPixel());
 
     I = 0;
     int MaxInstance = 0;

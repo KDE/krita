@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007, 2010 Thomas Zander <zander@kde.org>
- * Copyright (C) 2010-2011 KO Gmbh <casper.boemann@kogmbh.com>
+ * Copyright (C) 2010-2011 KO Gmbh <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -93,7 +93,7 @@ bool RunAroundHelper::fit(const bool resetHorizontalPosition, bool isRightToLeft
         // The line rect could be split into no further linerectpart, so we have
         // to move the lineRect down a bit and try again
         // No line rect part was enough big, to fit the line. Recreate line rect further down
-        // (and that is devided into new line parts). Line rect is at different position to
+        // (and that is divided into new line parts). Line rect is at different position to
         // obstructions, so new parts are completely different. if there are no obstructions, then we
         // have only one line part which is full line rect
 
@@ -148,7 +148,7 @@ void RunAroundHelper::createLineParts()
         QRectF rightLineRect = m_lineRect;
         bool lastRightRectValid = false;
         qSort(m_validObstructions.begin(), m_validObstructions.end(), KoTextLayoutObstruction::compareRectLeft);
-        // Devide rect to parts, part can be invalid when obstructions are not disjunct.
+        // Divide rect to parts, part can be invalid when obstructions are not disjunct.
         foreach (KoTextLayoutObstruction *validObstruction, m_validObstructions) {
             QRectF leftLineRect = validObstruction->getLeftLinePart(rightLineRect);
             lineParts.append(leftLineRect);

@@ -73,14 +73,21 @@ public:
     /// return if the shape is marked dirty and its text content needs to be relayout
     bool isDirty() const;
 
-    /// returns true if the selection of the cursor is visible in this shape
-    bool isCursorVisible(QTextCursor *cursor) const;
-
     /// Set the rootArea that is associated to the textshape
     void setRootArea(KoTextLayoutRootArea *rootArea);
 
     /// the rootArea that is associated to the textshape
     KoTextLayoutRootArea *rootArea();
+
+    void setLeftPadding(qreal padding);
+    qreal leftPadding() const;
+    void setTopPadding(qreal padding);
+    qreal topPadding() const;
+    void setRightPadding(qreal padding);
+    qreal rightPadding() const;
+    void setBottomPadding(qreal padding);
+    qreal bottomPadding() const;
+    void setPadding(qreal padding);
 
     /**
     * Load the TextShape from ODF.

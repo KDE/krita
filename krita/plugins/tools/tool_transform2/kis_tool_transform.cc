@@ -2,7 +2,7 @@
  *  kis_tool_transform.cc -- part of Krita
  *
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -646,10 +646,12 @@ void KisToolTransform::setFunctionalCursor()
             useCursor(m_scaleCursors[rotOctant]);
             break;
         case TOPRIGHTSCALE:
-        case TOPLEFTSCALE:
         case BOTTOMLEFTSCALE:
+            useCursor(KisCursor::sizeBDiagCursor());
+            break;
+        case TOPLEFTSCALE:
         case BOTTOMRIGHTSCALE:
-            useCursor(KisCursor::sizeAllCursor());
+            useCursor(KisCursor::sizeFDiagCursor());
             break;
         case MOVECENTER:
             useCursor(KisCursor::handCursor());
@@ -706,7 +708,7 @@ void KisToolTransform::setTransformFunction(QPointF mousePos, Qt::KeyboardModifi
         }
     }
     else {
-        if (modifiers & Qt::MetaModifier) {
+        if (modifiers & Qt::ControlModifier) {
             m_function = PERSPECTIVE;
             setFunctionalCursor();
             return;
@@ -828,8 +830,7 @@ void KisToolTransform::setTransformFunction(QPointF mousePos, Qt::KeyboardModifi
 
 void KisToolTransform::mousePressEvent(KoPointerEvent *event)
 {
-    if (!PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
-                       Qt::LeftButton, Qt::MetaModifier)) {
+    if (!PRESS_CONDITION_OM(event, KisTool::HOVER_MODE, Qt::LeftButton, Qt::ControlModifier)) {
 
         KisTool::mousePressEvent(event);
         return;
@@ -904,6 +905,10 @@ void KisToolTransform::keyPressEvent(QKeyEvent *event)
 void KisToolTransform::keyReleaseEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Return) {
+        if (!nodeEditable()) {
+            return;
+        }
+
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         applyTransform();
         initTransform(m_currentArgs.mode());
@@ -1986,7 +1991,12 @@ void KisToolTransform::initTransform(ToolTransformArgs::TransfMode mode)
 }
     else if (dev) {
         // we take all of the paintDevice
-        dev->exactBounds(x, y, w, h);
+	QRect rc;
+	rc = dev->exactBounds();
+	x = rc.x();
+	y = rc.y();
+	w = rc.width();
+	h = rc.height();
         m_origSelection = 0;
     }
     else {
@@ -2019,9 +2029,9 @@ void KisToolTransform::initTransform(ToolTransformArgs::TransfMode mode)
 
         const KisImage *kisimage = image();
         m_transform = QTransform();
-        m_origImg = dev->convertToQImage(0, x, y, w, h);
+        m_origImg = dev->convertToQImage(0, x, y, w, h, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
         if (selection) {
-            m_origSelectionImg = selection->projection()->convertToQImage(0, x, y, w, h);
+            m_origSelectionImg = selection->projection()->convertToQImage(0, x, y, w, h, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
         }
         else {
             m_origSelectionImg = QImage(w, h, QImage::Format_ARGB32_Premultiplied);
@@ -2137,6 +2147,10 @@ void KisToolTransform::applyTransform()
 {
     if (!image() || !currentNode()->paintDevice() || currentNode()->systemLocked())
         return;
+
+    if (!nodeEditable()) {
+        return;
+    }
 
     KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
     if (!canvas)
@@ -2753,6 +2767,10 @@ void KisToolTransform::slotButtonBoxClicked(QAbstractButton *button)
     QAbstractButton *resetButton = m_optWidget->buttonBox->button(QDialogButtonBox::Reset);
 
     if (button == applyButton) {
+        if (!nodeEditable()) {
+            return;
+        }
+
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         applyTransform();
         initTransform(m_currentArgs.mode());

@@ -24,19 +24,19 @@
 #ifndef __KIS_TOOL_RECTANGLE_H__
 #define __KIS_TOOL_RECTANGLE_H__
 
-#include <QRect>
-
 #include "kis_tool_shape.h"
 #include "kis_types.h"
 #include "KoToolFactoryBase.h"
 #include "flake/kis_node_shape.h"
 #include <kis_tool_rectangle_base.h>
+#include <KoIcon.h>
 
 
 class QPainter;
 class KisPainter;
 
 class QPoint;
+class QRect;
 
 class KoCanvasBase;
 
@@ -62,7 +62,7 @@ public:
 
         setToolType(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
-        setIcon("krita_tool_rectangle");
+        setIconName(koIconNameCStr("krita_tool_rectangle"));
         //setShortcut( Qt::Key_F6 );
         setPriority(2);
     }

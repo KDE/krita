@@ -40,6 +40,8 @@ public:
 
     virtual ~KoReportDesignerItemRectBase();
 
+    QRectF pointRect() const;
+
 protected:
     void init(KRPos*, KRSize*, KoProperty::Set*);
     int m_dpiX;
@@ -54,7 +56,6 @@ protected:
     void setSceneRect(const QRectF& rect, UpdatePropertyFlag update = UpdateProperty);
 
     void drawHandles(QPainter*);
-    QRectF pointRect();
     QRectF sceneRect();
     virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);

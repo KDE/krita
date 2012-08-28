@@ -48,7 +48,7 @@ public:
     virtual ~KisBufferStreamContigBase() {}
 protected:
     uint8* m_src;
-    uint8* m_srcit;
+    uint8* m_srcIt;
     uint8 m_posinc;
     uint32 m_lineSize;
 };

@@ -25,11 +25,11 @@
 #include <QToolButton>
 #include <QGridLayout>
 #include <KLocale>
-#include <KIconLoader>
 #include <KUrl>
 #include <KFileDialog>
 #include <KIO/Job>
 
+#include <KoIcon.h>
 #include <KoCanvasBase.h>
 #include <KoImageCollection.h>
 #include <KoSelection.h>
@@ -72,8 +72,8 @@ QWidget * VectorTool::createOptionWidget()
     QToolButton *button = 0;
 
     button = new QToolButton(optionWidget);
-    button->setIcon(SmallIcon("open"));
-    button->setToolTip(i18n( "Open EMF/WMF Shape"));
+    button->setIcon(koIcon("document-open"));
+    button->setToolTip(i18n("Open Vector Image (EMF/WMF/SVM)"));
     layout->addWidget(button, 0, 0);
     connect(button, SIGNAL(clicked(bool)), this, SLOT(changeUrlPressed()));
 
@@ -84,7 +84,7 @@ void VectorTool::changeUrlPressed()
 {
     if (m_shape == 0)
         return;
-    KUrl url = KFileDialog::getOpenUrl();
+    const KUrl url = KFileDialog::getOpenUrl(KUrl(), QLatin1String("image/x-emf image/x-wmf"));
     if (!url.isEmpty()) {
         // TODO move this to an action in the libs, with a nice dialog or something.
         KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);
@@ -110,8 +110,10 @@ void VectorTool::setImageData(KJob *job)
     KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob*>(job);
     Q_ASSERT(transferJob);
 
-    QByteArray newData = qCompress(transferJob->data());
-    ChangeVectorDataCommand *cmd = new ChangeVectorDataCommand(m_shape, newData);
+    const QByteArray newData = transferJob->data();
+    const VectorShape::VectorType vectorType = VectorShape::vectorType(newData);
+    ChangeVectorDataCommand *cmd = new ChangeVectorDataCommand(m_shape, qCompress(newData), vectorType);
+
     canvas()->addCommand(cmd);
 }
 

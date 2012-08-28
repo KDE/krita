@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Casper Boemann, KO GmbH <cbo@kogmbh.com>
- * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 C. Boemann, KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2011 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,6 +21,7 @@
 #include "KoPointedAt.h"
 
 #include <KoBookmark.h>
+#include <KoInlineNote.h>
 #include <KoInlineTextObjectManager.h>
 
 #include <KDebug>
@@ -30,6 +31,10 @@
 KoPointedAt::KoPointedAt()
     : position(-1)
     , bookmark(0)
+    , note(0)
+    , noteReference(-1)
+    , table(0)
+    , tableHit(None)
 {
 }
 
@@ -37,18 +42,25 @@ KoPointedAt::KoPointedAt(KoPointedAt *other)
 {
     position = other->position;
     bookmark = other->bookmark;
+    note = other->note;
+    noteReference = other->noteReference;
     externalHRef = other->externalHRef;
+    tableHit = other->tableHit;
+    tableRowDivider = other->tableRowDivider;
+    tableColumnDivider = other->tableColumnDivider;
+    tableLeadSize = other->tableLeadSize;
+    tableTrailSize = other->tableTrailSize;
+    table = other->table;
 }
 
-void KoPointedAt::fillInBookmark(QTextCursor cursor, KoInlineTextObjectManager *inlineManager)
+void KoPointedAt::fillInLinks(const QTextCursor &cursor, KoInlineTextObjectManager *inlineManager)
 {
     bookmark = 0;
     externalHRef.clear();
+    note = 0;
 
     if (!inlineManager)
         return;
-
-    cursor.setPosition(position);
 
     // Is there an href here ?
     if (cursor.charFormat().isAnchor()) {
@@ -66,5 +78,7 @@ void KoPointedAt::fillInBookmark(QTextCursor cursor, KoInlineTextObjectManager *
             // Nope, then it must be external;
             externalHRef = href;
         }
+    } else {
+        note = dynamic_cast<KoInlineNote*>(inlineManager->inlineTextObject(cursor));
     }
 }

@@ -79,33 +79,15 @@ protected:
     KisCoordinatesConverter* coordinatesConverter();
 
     /**
-     * Convert a mouse event widget coordinate to a document 
-     * coordinate, applying an offset to convert the integer 
-     * coordinate to floating point.
-     *
-     * @param mousePosition mouse event coordinate
-     */
-    QPointF mouseEventWidgetToDocument(const QPoint& mousePosition) const;
-
-    /**
      * Event handlers to be called by derived canvas event handlers.
-     * All common event processing is carried out by these 
+     * All common event processing is carried out by these
      * functions.
      */
-    void processKeyPressEvent(QKeyEvent *e);
-    void processKeyReleaseEvent(QKeyEvent *e);
-    void processMousePressEvent(QMouseEvent *e);
-    void processMouseMoveEvent(QMouseEvent *e);
-    void processMouseReleaseEvent(QMouseEvent *e);
-    void processMouseDoubleClickEvent(QMouseEvent *e);
-    void processContextMenuEvent(QContextMenuEvent *e);
-    void processTabletEvent(QTabletEvent *e);
-    void processWheelEvent(QWheelEvent *e);
     QVariant processInputMethodQuery(Qt::InputMethodQuery query) const;
     void processInputMethodEvent(QInputMethodEvent *event);
     void notifyConfigChanged();
 
-    /// To be implemented by the derived canvas 
+    /// To be implemented by the derived canvas
     virtual bool callFocusNextPrevChild(bool next) = 0;
 
 private:

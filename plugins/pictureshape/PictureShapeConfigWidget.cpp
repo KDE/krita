@@ -41,7 +41,10 @@ void LoadWaiter::setImageData(KJob *job)
         KoImageData *data = m_pictureShape->imageCollection()->createImageData(transferJob->data());
         if (data) {
             m_pictureShape->setUserData(data);
-            m_pictureShape->setSize(data->imageSize());
+            // check if the shape still size of the default shape and resize in that case
+            if (qFuzzyCompare(m_pictureShape->size().width(), 50.0)) {
+                m_pictureShape->setSize(data->imageSize());
+            }
         }
     }
     deleteLater();

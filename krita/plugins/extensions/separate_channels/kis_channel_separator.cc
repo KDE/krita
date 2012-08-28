@@ -28,7 +28,6 @@
 #include <vector>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
@@ -43,7 +42,6 @@
 #include <kis_doc2.h>
 #include <kis_image.h>
 
-#include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
@@ -51,6 +49,7 @@
 #include <kis_undo_adapter.h>
 #include <kis_global.h>
 #include <kis_types.h>
+#include "kis_iterator_ng.h"
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -127,70 +126,65 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
 
         layers.push_back(dev);
 
-        KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(rect.x(), rect.y(), rect.width());
-        KisHLineIteratorPixel dstIt = dev->createHLineIterator(rect.x(), rect.y(), rect.width());
+        KisHLineConstIteratorSP srcIt = src->createHLineConstIteratorNG(rect.x(), rect.y(), rect.width());
+        KisHLineIteratorSP dstIt = dev->createHLineIteratorNG(rect.x(), rect.y(), rect.width());
 
         for (qint32 row = 0; row < rect.height(); ++row) {
+            do {
+                if (toColor) {
+                    dstCs->singleChannelPixel(dstIt->rawData(), srcIt->oldRawData(), channelPos);
 
+                    if (alphaOps == COPY_ALPHA_TO_SEPARATIONS) {
+                        //dstCs->setAlpha(dstIt->rawData(), srcIt->oldRawData()[srcAlphaPos], 1);
+                        dstCs->setOpacity(dstIt->rawData(), srcCs->opacityU8(srcIt->oldRawData()), 1);
+                    } else {
+                        dstCs->setOpacity(dstIt->rawData(), OPACITY_OPAQUE_U8, 1);
+                    }
+                } else {
 
-            while (! srcIt.isDone()) {
-                if (srcIt.isSelected()) {
-                    if (toColor) {
-                        dstCs->singleChannelPixel(dstIt.rawData(), srcIt.rawData(), channelPos);
+                    // To grayscale
+
+                    // Decide whether we need downscaling
+                    if (channelSize == 1 && destSize == 1) {
+
+                        // Both 8-bit channels
+                        dstIt->rawData()[0] = srcIt->oldRawData()[channelPos];
 
                         if (alphaOps == COPY_ALPHA_TO_SEPARATIONS) {
-                            //dstCs->setAlpha(dstIt.rawData(), srcIt.rawData()[srcAlphaPos], 1);
-                            dstCs->setOpacity(dstIt.rawData(), srcCs->opacityU8(srcIt.rawData()), 1);
+                            dstCs->setOpacity(dstIt->rawData(), srcCs->opacityU8(srcIt->oldRawData()), 1);
                         } else {
-                            dstCs->setOpacity(dstIt.rawData(), OPACITY_OPAQUE_U8, 1);
+                            dstCs->setOpacity(dstIt->rawData(), OPACITY_OPAQUE_U8, 1);
                         }
-                    } else {
+                    } else if (channelSize == 2 && destSize == 2) {
 
-                        // To grayscale
+                        // Both 16-bit
+                        dstIt->rawData()[0] = srcIt->oldRawData()[channelPos];
+                        dstIt->rawData()[1] = srcIt->oldRawData()[channelPos + 1];
 
-                        // Decide whether we need downscaling
-                        if (channelSize == 1 && destSize == 1) {
-
-                            // Both 8-bit channels
-                            dstIt.rawData()[0] = srcIt.rawData()[channelPos];
-
-                            if (alphaOps == COPY_ALPHA_TO_SEPARATIONS) {
-                                dstCs->setOpacity(dstIt.rawData(), srcCs->opacityU8(srcIt.rawData()), 1);
-                            } else {
-                                dstCs->setOpacity(dstIt.rawData(), OPACITY_OPAQUE_U8, 1);
-                            }
-                        } else if (channelSize == 2 && destSize == 2) {
-
-                            // Both 16-bit
-                            dstIt.rawData()[0] = srcIt.rawData()[channelPos];
-                            dstIt.rawData()[1] = srcIt.rawData()[channelPos + 1];
-
-                            if (alphaOps == COPY_ALPHA_TO_SEPARATIONS) {
-                                dstCs->setOpacity(dstIt.rawData(), srcCs->opacityU8(srcIt.rawData()), 1);
-                            } else {
-                                dstCs->setOpacity(dstIt.rawData(), OPACITY_OPAQUE_U8, 1);
-                            }
-                        } else if (channelSize != 1 && destSize == 1) {
-                            // Downscale
-                            memset(dstIt.rawData(), srcCs->scaleToU8(srcIt.rawData(), channelPos), 1);
-
-                            // XXX: Do alpha
-                            dstCs->setOpacity(dstIt.rawData(), OPACITY_OPAQUE_U8, 1);
-                        } else if (channelSize != 2 && destSize == 2) {
-                            // Upscale
-                            dstIt.rawData()[0] = srcCs->scaleToU8(srcIt.rawData(), channelPos);
-
-                            // XXX: Do alpha
-                            dstCs->setOpacity(dstIt.rawData(), OPACITY_OPAQUE_U8, 1);
-
+                        if (alphaOps == COPY_ALPHA_TO_SEPARATIONS) {
+                            dstCs->setOpacity(dstIt->rawData(), srcCs->opacityU8(srcIt->oldRawData()), 1);
+                        } else {
+                            dstCs->setOpacity(dstIt->rawData(), OPACITY_OPAQUE_U8, 1);
                         }
+                    } else if (channelSize != 1 && destSize == 1) {
+                        // Downscale
+                        memset(dstIt->rawData(), srcCs->scaleToU8(srcIt->oldRawData(), channelPos), 1);
+
+                        // XXX: Do alpha
+                        dstCs->setOpacity(dstIt->rawData(), OPACITY_OPAQUE_U8, 1);
+                    } else if (channelSize != 2 && destSize == 2) {
+                        // Upscale
+                        dstIt->rawData()[0] = srcCs->scaleToU8(srcIt->oldRawData(), channelPos);
+
+                        // XXX: Do alpha
+                        dstCs->setOpacity(dstIt->rawData(), OPACITY_OPAQUE_U8, 1);
+
                     }
                 }
-                ++dstIt;
-                ++srcIt;
-            }
-            dstIt.nextRow();
-            srcIt.nextRow();
+
+            } while (dstIt->nextPixel() && srcIt->nextPixel());
+            dstIt->nextRow();
+            srcIt->nextRow();
         }
         ++i;
 

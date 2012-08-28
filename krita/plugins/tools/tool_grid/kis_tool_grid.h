@@ -20,6 +20,7 @@
 
 #include <kis_tool.h>
 #include <KoToolFactoryBase.h>
+#include <KoIcon.h>
 
 class KisCanvas2;
 
@@ -65,7 +66,7 @@ public:
             : KoToolFactoryBase("KisToolGrid") {
         setToolTip(i18n("Edit the grid"));
         setToolType(TOOL_TYPE_VIEW);
-        setIcon("krita_tool_grid");
+        setIconName(koIconNameCStr("krita_tool_grid"));
         setPriority(17);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID_ALWAYS_ACTIVE);
     };

@@ -21,6 +21,8 @@
 #include "PictureShape.h"
 #include "KoImageData.h"
 
+#include <KoClipPath.h>
+
 #include <QPainter>
 #include <QResizeEvent>
 
@@ -71,9 +73,10 @@ bool compareRects(const QRectF &a, const QRectF &b, qreal epsilon)
 // ---------------------------------------------------------------- //
 
 CropWidget::CropWidget(QWidget *parent):
-    QWidget(parent),
-    m_pictureShape(0),
-    m_isMousePressed(false)
+    QWidget(parent)
+    , m_pictureShape(0)
+    , m_isMousePressed(false)
+    , m_undoLast(false)
 {
     setMinimumSize(100, 100);
     setMouseTracking(true);
@@ -94,10 +97,19 @@ void CropWidget::paintEvent(QPaintEvent *event)
 
     painter.drawImage(QRectF(0, 0, 1, 1), image);
     painter.drawRect(m_selectionRect.getRect());
-    painter.setBrush(QBrush(Qt::yellow));
 
+    painter.setBrush(QBrush(Qt::yellow));
     for (int i=0; i<m_selectionRect.getNumHandles(); ++i)
         painter.drawRect(m_selectionRect.getHandleRect(m_selectionRect.getHandleFlags(i)));
+
+    KoClipPath *clipPath = m_pictureShape->clipPath();
+    if (clipPath) {
+        painter.scale(0.01, 0.01); // the path is defined in 100x100 equaling shapesize
+        painter.setBrush(Qt::NoBrush);
+        painter.setPen(Qt::red);
+        painter.drawPath(clipPath->path());
+    }
+
 }
 
 void CropWidget::mousePressEvent(QMouseEvent *event)
@@ -145,6 +157,7 @@ void CropWidget::mouseMoveEvent(QMouseEvent *event)
     if (m_isMousePressed) {
         m_selectionRect.doDragging(pos);
         update();
+        emitCropRegionChanged();
     }
 }
 
@@ -154,6 +167,7 @@ void CropWidget::mouseReleaseEvent(QMouseEvent *event)
     m_selectionRect.finishDragging();
     m_isMousePressed = false;
     emitCropRegionChanged();
+    m_undoLast = false; // we are done dragging
 }
 
 void CropWidget::resizeEvent(QResizeEvent* event)
@@ -171,7 +185,7 @@ void CropWidget::setPictureShape(PictureShape *shape)
     m_selectionRect.setRect(shape->cropRect());
     m_selectionRect.setConstrainingRect(QRectF(0, 0, 1, 1));
     m_selectionRect.setHandleSize(0.04);
-    emit sigCropRegionChnaged(shape->cropRect());
+    //emit sigCropRegionChanged(shape->cropRect());
     update();
 }
 
@@ -209,8 +223,10 @@ void CropWidget::emitCropRegionChanged()
 {
     if (!compareRects(m_oldSelectionRect, m_selectionRect.getRect(), 0.01)) {
         m_oldSelectionRect = m_selectionRect.getRect();
-        emit sigCropRegionChnaged(m_selectionRect.getRect());
+        emit sigCropRegionChanged(m_selectionRect.getRect(), m_undoLast);
         update();
+
+        m_undoLast = m_isMousePressed;
     }
 }
 

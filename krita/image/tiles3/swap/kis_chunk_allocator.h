@@ -157,7 +157,7 @@ private:
     KisChunkDataList m_list;
     KisChunkDataListIterator m_iterator;
     quint64 m_storeSize;
-    DECLARE_FAIL_COUNTER();
+    DECLARE_FAIL_COUNTER()
 };
 
 #endif /* __KIS_CHUNK_ALLOCATOR_H */

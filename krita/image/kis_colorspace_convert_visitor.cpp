@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,12 +33,14 @@
 KisColorSpaceConvertVisitor::KisColorSpaceConvertVisitor(KisImageWSP image,
                                                          const KoColorSpace *srcColorSpace,
                                                          const KoColorSpace *dstColorSpace,
-                                                         KoColorConversionTransformation::Intent renderingIntent)
+                                                         KoColorConversionTransformation::Intent renderingIntent,
+                                                         KoColorConversionTransformation::ConversionFlags conversionFlags)
     : KisNodeVisitor()
     , m_image(image)
     , m_srcColorSpace(srcColorSpace)
     , m_dstColorSpace(dstColorSpace)
     , m_renderingIntent(renderingIntent)
+    , m_conversionFlags(conversionFlags)
 {
 }
 
@@ -110,7 +112,7 @@ bool KisColorSpaceConvertVisitor::convertPaintDevice(KisLayer* layer)
     m_image->undoAdapter()->addCommand(propsCommand);
 
     if (layer->original()) {
-        KUndo2Command* cmd = layer->original()->convertTo(m_dstColorSpace, m_renderingIntent);
+        KUndo2Command* cmd = layer->original()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags);
         if (cmd)
             m_image->undoAdapter()->addCommand(cmd);
         else
@@ -118,7 +120,7 @@ bool KisColorSpaceConvertVisitor::convertPaintDevice(KisLayer* layer)
     }
 
     if (layer->paintDevice()) {
-        KUndo2Command* cmd = layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent);
+        KUndo2Command* cmd = layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags);
         if (cmd)
             m_image->undoAdapter()->addCommand(cmd);
         else
@@ -126,7 +128,7 @@ bool KisColorSpaceConvertVisitor::convertPaintDevice(KisLayer* layer)
     }
 
     if (layer->projection()) {
-        KUndo2Command* cmd = layer->projection()->convertTo(m_dstColorSpace, m_renderingIntent);
+        KUndo2Command* cmd = layer->projection()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags);
         if (cmd)
             m_image->undoAdapter()->addCommand(cmd);
         else

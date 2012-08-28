@@ -54,7 +54,20 @@ namespace KDChart {
                            MarkerRing    = 5,
                            MarkerCross   = 6,
                            MarkerFastCross = 7,
-                           NoMarker = 8 };
+                           NoMarker = 8,
+                           // Above is kept for backwards binary compatibility.
+                           // Below are added for compatibility with ODF
+                           MarkerArrowDown     =  9,
+                           MarkerArrowUp       = 10,
+                           MarkerArrowRight    = 11,
+                           MarkerArrowLeft     = 12,
+                           MarkerBowTie        = 13,
+                           MarkerHourGlass     = 14,
+                           MarkerStar          = 15,
+                           MarkerX             = 16,
+                           MarkerAsterisk      = 17,
+                           MarkerHorizontalBar = 18,
+                           MarkerVerticalBar   = 19 };
 
         enum MarkerSizeMode {
             /// the marker size is directly specified in pixels

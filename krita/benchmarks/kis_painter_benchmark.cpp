@@ -38,7 +38,6 @@ inline double drand48()
 
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
-#include "kis_iterators_pixel.h"
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>

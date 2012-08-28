@@ -23,26 +23,14 @@
 #include "KoToolBoxLayout_p.h"
 
 #include <KoCanvasController.h>
-#include <KoToolManager.h>
 #include <KoShapeLayer.h>
-#include <KoInteractionTool.h>
-
-#include <KDebug>
-#include <QLayout>
-#include <QMap>
 #include <QButtonGroup>
 #include <QToolButton>
-#include <QHash>
-#include <QPainter>
-#include <QRect>
-#include <QTimer>
-#include <QStyle>
 #include <QStyleOptionFrameV3>
+#include <QPainter>
+#include <QHash>
 #include <QApplication>
-
-#include "math.h"
-#include <KoDockWidgetTitleBar.h>
-
+#include <QTimer>
 
 class KoToolBox::Private
 {
@@ -223,14 +211,14 @@ void KoToolBox::paintEvent(QPaintEvent *)
         frameoption.lineWidth = 1;
         frameoption.midLineWidth = 0;
 
-        if (section->seperators() & Section::SeperatorTop) {
+        if (section->separators() & Section::SeparatorTop) {
             int y = section->y() - halfSpacing;
             frameoption.frameShape = QFrame::HLine;
             frameoption.rect = QRect(section->x(), y, section->width(), 2);
             style()->drawControl(QStyle::CE_ShapedFrame, &frameoption, &painter);
         }
 
-        if (section->seperators() & Section::SeperatorLeft) {
+        if (section->separators() & Section::SeparatorLeft) {
             int x = section->x() - halfSpacing;
             frameoption.frameShape = QFrame::VLine;
             frameoption.rect = QRect(x, section->y(), 2, section->height());

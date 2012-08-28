@@ -38,7 +38,7 @@ PluginShapeFactory::PluginShapeFactory()
     setToolTip(i18n("Plugin Placeholder, embedded or fullscreen"));
     //setIcon("video-x-generic");
     setXmlElementNames(KoXmlNS::draw, QStringList("plugin"));
-    setLoadingPriority(9);
+    setLoadingPriority(1);
     setHidden(true);
 }
 

@@ -67,7 +67,7 @@ public:
     virtual Soprano::Node linkingSubject() const;
     virtual void setupStylesheetReplacementMapping(QMap<QString, QString> &m);
     virtual void exportToMime(QMimeData *md) const;
-    virtual QList<KoSemanticStylesheet*> stylesheets() const;
+    virtual QList<hKoSemanticStylesheet> stylesheets() const;
     virtual QString className() const;
 
     /**

@@ -22,6 +22,8 @@
 #include <KoToolFactoryBase.h>
 #include "kis_painting_assistant.h"
 #include "ui_AssistantsToolOptions.h"
+#include <KoIcon.h>
+
 
 class RulerDecoration;
 class KisCanvas2;
@@ -81,7 +83,7 @@ public:
             : KoToolFactoryBase("KisRulerAssistantTool") {
         setToolTip(i18n("Ruler assistant editor tool"));
         setToolType(TOOL_TYPE_VIEW);
-        setIcon("krita_tool_ruler_assistant");
+        setIconName(koIconNameCStr("krita_tool_ruler_assistant"));
         setPriority(0);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     };

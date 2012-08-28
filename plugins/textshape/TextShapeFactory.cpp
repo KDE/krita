@@ -34,6 +34,8 @@
 #include <KoShapeLoadingContext.h>
 #include <KoInlineNote.h>
 
+#include <KoIcon.h>
+
 #include <klocale.h>
 #include <kundo2stack.h>
 #include <QTextCursor>
@@ -50,7 +52,7 @@ TextShapeFactory::TextShapeFactory()
 
     KoShapeTemplate t;
     t.name = i18n("Text");
-    t.icon = "x-shape-text";
+    t.iconName = koIconName("x-shape-text");
     t.toolTip = i18n("Text Shape");
     KoProperties *props = new KoProperties();
     t.properties = props;
@@ -73,12 +75,17 @@ KoShape *TextShapeFactory::createDefaultShape(KoDocumentResourceManager *documen
     TextShape *text = new TextShape(manager);
     if (documentResources) {
         KoTextDocument document(text->textShapeData()->document());
-        document.setUndoStack(documentResources->undoStack());
 
         if (documentResources->hasResource(KoText::StyleManager)) {
             KoStyleManager *styleManager = documentResources->resource(KoText::StyleManager).value<KoStyleManager*>();
             document.setStyleManager(styleManager);
         }
+
+        // this is needed so the shape can reinitialize itself with the stylemanager
+        text->textShapeData()->setDocument(text->textShapeData()->document(), true);
+
+        document.setUndoStack(documentResources->undoStack());
+
         if (documentResources->hasResource(KoText::PageProvider)) {
             KoPageProvider *pp = static_cast<KoPageProvider *>(documentResources->resource(KoText::PageProvider).value<void*>());
             text->setPageProvider(pp);
@@ -87,6 +94,9 @@ KoShape *TextShapeFactory::createDefaultShape(KoDocumentResourceManager *documen
             KoChangeTracker *changeTracker = documentResources->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
             document.setChangeTracker(changeTracker);
         }
+
+        //update the resources of the document
+        text->updateDocumentData();
 
         text->setImageCollection(documentResources->imageCollection());
     }

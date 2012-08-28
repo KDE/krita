@@ -192,7 +192,7 @@ IndexSourceStyle::IndexSourceStyle(const IndexSourceStyle& indexSourceStyle)
 
 void IndexSourceStyle::saveOdf(KoXmlWriter* writer) const
 {
-    writer->startElement("text:index-source-styles");
+    writer->startElement("text:index-source-style");
     if (!styleName.isNull()) {
         writer->addAttribute("text:style-name",styleName);
     }

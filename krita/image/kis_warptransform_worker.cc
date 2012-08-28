@@ -1302,7 +1302,7 @@ void KisWarpTransformWorker::quadInterpolation(KisPaintDeviceSP src, KisPaintDev
     int y;
     Side *PrevSide = NULL, *CurrSide = NULL, *NextSide = NULL;
     Side *Senti = NULL;
-    bool InsidePolygone = false, ChangeSideForNextPixel = false;
+    bool insidePolygon = false, ChangeSideForNextPixel = false;
     ExtendedSide *ExtSides = NULL, *CurrExtSide = NULL;
     QRect clipRect;
 
@@ -1351,7 +1351,7 @@ void KisWarpTransformWorker::quadInterpolation(KisPaintDeviceSP src, KisPaintDev
 
     y = boundRect.top();
 
-    KisRandomSubAccessorPixel srcAcc = src->createRandomSubAccessor();
+    KisRandomSubAccessorSP srcAcc = src->createRandomSubAccessor();
     while (TCA != NULL || y <= boundRect.bottom()) {
         KisHLineIteratorSP pixels = dst->createHLineIteratorNG(boundRect.left(), y, boundRect.width() + 2);
 
@@ -1392,17 +1392,17 @@ void KisWarpTransformWorker::quadInterpolation(KisPaintDeviceSP src, KisPaintDev
 
         //fill scanline
         CurrSide = TCA;
-        InsidePolygone = false;
+        insidePolygon = false;
         ChangeSideForNextPixel = false;
         for (int j = boundRect.left(); j <= boundRect.right() + 1; ++j) {
             if (ChangeSideForNextPixel) {
-                InsidePolygone = !InsidePolygone;
+                insidePolygon = !insidePolygon;
                 ChangeSideForNextPixel = false;
             }
 
             while (CurrSide != NULL && CurrSide->x_ymin <= j) {
                 if (CurrSide->invm.sign * CurrSide->e <= 0 || CurrSide->x_ymin == boundRect.right() + 1)
-                    InsidePolygone = !InsidePolygone;
+                    insidePolygon = !insidePolygon;
                 else
                     ChangeSideForNextPixel = !ChangeSideForNextPixel;
 
@@ -1424,19 +1424,19 @@ void KisWarpTransformWorker::quadInterpolation(KisPaintDeviceSP src, KisPaintDev
                 }
             }
 
-            if (InsidePolygone) {
+            if (insidePolygon) {
                 QPointF p(j, y);
                 p0_minus_p = QVector2D(p0 - p);
                 p1_minus_p = QVector2D(p1 - p);
                 int nbSol = inverseBilinInterp(p0_minus_p, p1_minus_p, p0_minus_p2, p1_minus_p3, sol1, sol2);
                 if (nbSol == 0) {
-                    srcAcc.moveTo(QPointF(q0));
+                    srcAcc->moveTo(QPointF(q0));
                 } else {
                     QPointF q;
                     bilinInterp(q0, q1, q2, q3, sol1, q);
-                    srcAcc.moveTo(q);
+                    srcAcc->moveTo(q);
                 }
-                srcAcc.sampledOldRawData(pixels->rawData());
+                srcAcc->sampledOldRawData(pixels->rawData());
             }
 
             pixels->nextPixel();
@@ -1515,7 +1515,7 @@ void KisWarpTransformWorker::run()
     x = srcBounds.left();
     k = 0;
     KisHLineConstIteratorSP srcPix = srcdev->createHLineConstIteratorNG(x, y, srcBounds.width());
-    KisRandomSubAccessorPixel dstAcc = m_dev->createRandomSubAccessor();
+    KisRandomSubAccessorSP dstAcc = m_dev->createRandomSubAccessor();
     lineDone = false;
     while (!lineDone) {
         while (j < srcBounds.width()) {

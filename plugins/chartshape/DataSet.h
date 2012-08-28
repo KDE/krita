@@ -45,7 +45,6 @@ namespace KChart {
 
 class KDChartModel;
 
-
 /**
  * @brief The DataSet class stores properties of a single data series.
  * 
@@ -53,14 +52,14 @@ class KDChartModel;
  * on a data series.
  * 
  * To change properties of a single data point inside a data series,
- * use section's like for example \a brush( int section ) where the
+ * use section's like for example \a brush(int section) where the
  * section refers to the data-point number.
  */
 
 class CHARTSHAPELIB_EXPORT DataSet
 {
 public:
-    DataSet( int dataSetNr );
+    DataSet(int dataSetNr);
     ~DataSet();
 
     // Getter methods
@@ -94,7 +93,7 @@ public:
      * \param section The data point to set this type for. -1 will set
      * a series-wide value
      */
-    void setValueLabelType( const ValueLabelType &type, int section = -1 );
+    void setValueLabelType(const ValueLabelType &type, int section = -1);
 
     /**
      * \return the value label type.
@@ -103,7 +102,7 @@ public:
      * \param section The data point to return the type for. -1 will return
      * the series-wide value
      */
-    ValueLabelType valueLabelType( int section = -1 ) const;
+    ValueLabelType valueLabelType(int section = -1) const;
     
     /**
      * Sets the marker attributes of the series
@@ -111,7 +110,7 @@ public:
      * \param section The data point to set this type for. -1 will set
      * a series-wide value
      */
-    void setMarkerAttributes( const KDChart::MarkerAttributes& attribs, int section = -1 );
+    void setMarkerAttributes(const KDChart::MarkerAttributes& attribs, int section = -1);
     
     /**
      * \return the MarkerAttributes.
@@ -120,16 +119,18 @@ public:
      * \param section The data point to return the MarkerAttributes for. -1 will return
      * the series-wide value
      */
-    KDChart::MarkerAttributes getMarkerAttributes( int section = -1, bool* success = NULL ) const;
+    KDChart::MarkerAttributes getMarkerAttributes(int section = -1, bool* success = NULL) const;
 
     // Graphics properties for the visualization of this dataset.
     QPen   pen() const;
     QBrush brush() const;
+    OdfMarkerStyle markerStyle() const;
+    QIcon markerIcon(OdfMarkerStyle markerStyle);
     KDChart::PieAttributes pieAttributes() const;
-    QPen   pen( int section ) const;
-    QBrush brush( int section ) const;
-    KDChart::PieAttributes pieAttributes( int section ) const;
-    KDChart::DataValueAttributes dataValueAttributes( int section = -1 ) const;
+    QPen   pen(int section) const;
+    QBrush brush(int section) const;
+    KDChart::PieAttributes pieAttributes(int section) const;
+    KDChart::DataValueAttributes dataValueAttributes(int section = -1) const;
     int    number() const;
 
     bool showMeanValue() const;
@@ -143,32 +144,35 @@ public:
     qreal errorMargin() const;
     qreal lowerErrorLimit() const;
     qreal upperErrorLimit() const;
+    bool markerAutoSet() const;
 
     // Setter methods
-    void setChartType( ChartType type );
-    void setChartSubType( ChartSubtype type );
-    void setAttachedAxis( Axis *axis );
+    void setChartType(ChartType type);
+    void setChartSubType(ChartSubtype type);
+    void setAttachedAxis(Axis *axis);
 
-    void setPen( const QPen &pen );
-    void setBrush( const QBrush &brush );
-    void setPen( int section, const QPen &pen );
-    void setBrush( int section, const QBrush &brush );
+    void setPen(const QPen &pen);
+    void setBrush(const QBrush &brush);
+    void setPen(int section, const QPen &pen);
+    void setBrush(int section, const QBrush &brush);
+    void setMarkerStyle(OdfMarkerStyle style);
+    void setAutoMarker(bool isAuto);
 
-    void setPieExplodeFactor( int factor );
-    void setPieExplodeFactor( int section, int factor );
+    void setPieExplodeFactor(int factor);
+    void setPieExplodeFactor(int section, int factor);
 
-    void setShowMeanValue( bool b );
-    void setMeanValuePen( const QPen &pen );
+    void setShowMeanValue(bool b);
+    void setMeanValuePen(const QPen &pen);
 
-    void setShowLowerErrorIndicator( bool b );
-    void setShowUpperErrorIndicator( bool b );
-    void setShowErrorIndicators( bool lower, bool upper );
-    void setErrorIndicatorPen( const QPen &pen );
-    void setErrorCategory( ErrorCategory category );
-    void setErrorPercentage( qreal percentage );
-    void setErrorMargin( qreal margin );
-    void setLowerErrorLimit( qreal limit );
-    void setUpperErrorLimit( qreal limit );
+    void setShowLowerErrorIndicator(bool b);
+    void setShowUpperErrorIndicator(bool b);
+    void setShowErrorIndicators(bool lower, bool upper);
+    void setErrorIndicatorPen(const QPen &pen);
+    void setErrorCategory(ErrorCategory category);
+    void setErrorPercentage(qreal percentage);
+    void setErrorMargin(qreal margin);
+    void setLowerErrorLimit(qreal limit);
+    void setUpperErrorLimit(qreal limit);
 
     /**
      * Returns the x-data.
@@ -180,7 +184,7 @@ public:
      * different from what is displayed) should be returned.
      * \return the x-data value.
      */
-    QVariant xData( int index, int role = Qt::EditRole ) const;
+    QVariant xData(int index, int role = Qt::EditRole) const;
 
     /**
      * Returns the y-data aka value-data.
@@ -192,15 +196,15 @@ public:
      * different from what is displayed) should be returned.
      * \return the y-data value.
      */
-    QVariant yData( int index, int role = Qt::EditRole ) const;
+    QVariant yData(int index, int role = Qt::EditRole) const;
 
     /**
      * Used for bubble width in bubble charts. May also be referred to as
      * 'z data' in some cases.
      */
-    QVariant customData( int index, int role = Qt::EditRole ) const;
+    QVariant customData(int index, int role = Qt::EditRole) const;
 
-    QVariant categoryData( int index, int role = Qt::EditRole ) const;
+    QVariant categoryData(int index, int role = Qt::EditRole) const;
 
     QVariant labelData() const;
     QString defaultLabelData() const;
@@ -212,33 +216,31 @@ public:
     CellRegion labelDataRegion() const;
     // TODO: Region for custom colors
 
-    void setXDataRegion( const CellRegion &region );
-    void setYDataRegion( const CellRegion &region );
-    void setCustomDataRegion( const CellRegion &region );
-    void setCategoryDataRegion( const CellRegion &region );
-    void setLabelDataRegion( const CellRegion &region );
+    void setXDataRegion(const CellRegion &region);
+    void setYDataRegion(const CellRegion &region);
+    void setCustomDataRegion(const CellRegion &region);
+    void setCategoryDataRegion(const CellRegion &region);
+    void setLabelDataRegion(const CellRegion &region);
 
     int size() const;
     int dimension() const;
 
     // Called by the proxy model
-    void yDataChanged( const QRect &region ) const;
-    void xDataChanged( const QRect &region ) const;
-    void customDataChanged( const QRect &region ) const;
-    void labelDataChanged( const QRect &region ) const;
-    void categoryDataChanged( const QRect &region ) const;
+    void yDataChanged(const QRect &region) const;
+    void xDataChanged(const QRect &region) const;
+    void customDataChanged(const QRect &region) const;
+    void labelDataChanged(const QRect &region) const;
+    void categoryDataChanged(const QRect &region) const;
 
-    void setKdChartModel( KDChartModel *model );
+    void setKdChartModel(KDChartModel *model);
     KDChartModel *kdChartModel() const;
 
-    bool loadOdf( const KoXmlElement &n,
-                  KoShapeLoadingContext &context );
-    bool loadSeriesIntoDataset( const KoXmlElement &n,
-                  KoShapeLoadingContext &context );
+    bool loadOdf(const KoXmlElement &n, KoShapeLoadingContext &context);
+    bool loadSeriesIntoDataset(const KoXmlElement &n, KoShapeLoadingContext &context);
     /**
      * Saves a series to ODF. Creates a new chart:series element.
      */
-    void saveOdf( KoShapeSavingContext &context ) const;
+    void saveOdf(KoShapeSavingContext &context) const;
 
 private:
     class Private;

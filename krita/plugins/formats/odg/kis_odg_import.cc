@@ -143,7 +143,7 @@ KoFilter::ConversionStatus KisODGImport::convert(const QByteArray& from, const Q
                                         i18n("Vector Layer"),
                                         OPACITY_OPAQUE_U8);
     if (!shapeLayer->loadOdf(layerElement, shapeContext)) {
-            kWarning() << "Could not load shape layer!";
+            kWarning() << "Could not load vector layer!";
             return KoFilter::CreationError;
         }
         image->addNode(shapeLayer, image->rootLayer(), 0);
@@ -151,7 +151,7 @@ KoFilter::ConversionStatus KisODGImport::convert(const QByteArray& from, const Q
 
     KoXmlElement child;
     forEachElement(child, page) {
-        KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, shapeContext);
+        /*KoShape * shape = */KoShapeRegistry::instance()->createShapeFromOdf(child, shapeContext);
     }
 
     return KoFilter::OK;

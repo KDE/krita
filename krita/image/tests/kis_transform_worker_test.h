@@ -44,6 +44,10 @@ private slots:
     void testMatrices();
     void testRotationSpecialCases();
     void testScaleUp5times();
+    void rotateNone();
+    void rotate90Left();
+    void rotate90Right();
+    void rotate180();
 
 };
 

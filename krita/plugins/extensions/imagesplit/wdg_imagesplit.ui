@@ -6,105 +6,99 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>200</width>
+    <width>236</width>
     <height>194</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Image Size</string>
   </property>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>12</x>
-     <y>12</y>
-     <width>169</width>
-     <height>180</height>
-    </rect>
-   </property>
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <layout class="QFormLayout" name="formLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="lblHorizontalSplitLines">
-        <property name="text">
-         <string>Horizontal Lines</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="KIntSpinBox" name="intHorizontalSplitLines"/>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="lblVerticalSplitLines">
-        <property name="text">
-         <string>Vertical Lines</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="KIntSpinBox" name="intVerticalSplitLines"/>
-      </item>
-     </layout>
-    </item>
-    <item row="1" column="0">
-     <widget class="QCheckBox" name="chkAutoSave">
-      <property name="font">
-       <font>
-        <pointsize>10</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>Autosave on Split</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <layout class="QFormLayout" name="formLayout_2">
-      <item row="0" column="0">
-       <widget class="QLabel" name="lblSuffix">
-        <property name="text">
-         <string>Suffix</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="lineEdit">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="lblFileType">
-        <property name="text">
-         <string>File Type</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QComboBox" name="cmbFileType"/>
-      </item>
-     </layout>
-    </item>
-    <item row="3" column="0">
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>38</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-   </layout>
-  </widget>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <layout class="QFormLayout" name="formLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="lblHorizontalSplitLines">
+         <property name="text">
+          <string>Horizontal Lines</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="KIntSpinBox" name="intHorizontalSplitLines"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="lblVerticalSplitLines">
+         <property name="text">
+          <string>Vertical Lines</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="KIntSpinBox" name="intVerticalSplitLines"/>
+       </item>
+      </layout>
+     </item>
+     <item row="1" column="0">
+      <widget class="QCheckBox" name="chkAutoSave">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Autosave on Split</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <layout class="QFormLayout" name="formLayout_2">
+       <item row="0" column="0">
+        <widget class="QLabel" name="lblSuffix">
+         <property name="text">
+          <string>Suffix</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="lineEdit">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="lblFileType">
+         <property name="text">
+          <string>File Type</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="cmbFileType"/>
+       </item>
+      </layout>
+     </item>
+     <item row="3" column="0">
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>38</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+  </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>

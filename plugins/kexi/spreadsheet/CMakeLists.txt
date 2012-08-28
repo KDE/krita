@@ -1,6 +1,6 @@
 
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/libs ${KDE4_INCLUDES} )
 
 
 ########### next target ###############
@@ -17,6 +17,7 @@ target_link_libraries(keximigrate_spreadsheet
     keximigrate
     kexidb
     kexiutils
+    ${CALLIGRADB_LIBS}
     calligrasheetscommon
 )
 

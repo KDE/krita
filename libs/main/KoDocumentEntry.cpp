@@ -20,6 +20,7 @@
 
 #include "KoDocumentEntry.h"
 
+#include "KoPart.h"
 #include "KoDocument.h"
 #include "KoFilter.h"
 
@@ -31,12 +32,6 @@
 #include <QFile>
 
 #include <limits.h> // UINT_MAX
-
-/**
- * Port from Calligra Trader to KTrader/KActivator (kded) by Simon Hausmann
- * (c) 1999 Simon Hausmann <hausmann@kde.org>
- * Port to KService and simplifications by David Faure <faure@kde.org>
- */
 
 KoDocumentEntry::KoDocumentEntry()
         : m_service(0)
@@ -52,19 +47,19 @@ KoDocumentEntry::~KoDocumentEntry()
 {
 }
 
-KoDocument* KoDocumentEntry::createDoc(QString* errorMsg, KoDocument* parent) const
+KoPart *KoDocumentEntry::createKoPart(QString* errorMsg) const
 {
     QString error;
-    KoDocument* doc = m_service->createInstance<KoDocument>(parent, QVariantList(), &error);
+    KoPart* part = m_service->createInstance<KoPart>(0, QVariantList(), &error);
 
-    if (!doc) {
+    if (!part) {
         kWarning(30003) << error;
         if (errorMsg)
             *errorMsg = error;
         return 0;
     }
 
-    return doc;
+    return part;
 }
 
 KoDocumentEntry KoDocumentEntry::queryByMimeType(const QString & mimetype)

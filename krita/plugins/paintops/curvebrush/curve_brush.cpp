@@ -21,7 +21,7 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 
-#include <kis_random_accessor.h>
+#include <kis_random_accessor_ng.h>
 
 #include <cmath>
 #include <ctime>
@@ -133,7 +133,7 @@ void CurveBrush::putPixel(QPointF pos, KoColor &color)
         }
 }
 
-void CurveBrush::strokePens(QPointF pi1, QPointF pi2, KisPainter &painter) {
+void CurveBrush::strokePens(QPointF pi1, QPointF pi2, KisPainter &/*painter*/) {
     if (m_pens.isEmpty()) {
         m_pens.append(Pen(pi1,0.0,1.0));
     }

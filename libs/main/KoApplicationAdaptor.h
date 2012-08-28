@@ -26,9 +26,10 @@
 #include "komain_export.h"
 template<class T> class QList;
 template<class Key, class Value> class QMap;
+
 class QString;
 class QStringList;
-
+class KoApplication;
 
 /**
  * D-BUS interface for any Calligra application (entry point)
@@ -38,7 +39,7 @@ class KOMAIN_EXPORT KoApplicationAdaptor : public QDBusAbstractAdaptor
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.application")
 public:
-    explicit KoApplicationAdaptor(QObject *parent);
+    explicit KoApplicationAdaptor(KoApplication *parent);
     virtual ~KoApplicationAdaptor();
 
 public slots: // METHODS
@@ -77,6 +78,9 @@ signals:
      * emitted when an old document is closed.
      */
     void documentClosed(const QString &ref);
+private:
+
+    KoApplication *m_application;
 };
 
 #endif

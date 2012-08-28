@@ -71,7 +71,13 @@ set(PIGMENT_INSTALL_FILES
         KoColorSpaceConstants.h
         KoColorSpaceMaths.h
         KoColorSpaceRegistry.h
+        KoCmykColorSpaceTraits.h
         KoColorSpaceTraits.h
+        KoGrayColorSpaceTraits.h
+        KoLabColorSpaceTraits.h
+        KoRgbColorSpaceTraits.h
+        KoXyzColorSpaceTraits.h
+        KoYcbcrColorSpaceTraits.h
         KoColorTransformation.h
         KoColorTransformationFactory.h
         KoColorTransformationFactoryRegistry.h

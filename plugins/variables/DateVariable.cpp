@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008,2010 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright 2012 Friedrich W. H. Kossebau <kossebau@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,17 +30,19 @@
 #include <KoShapeSavingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
+#include <KoOdfWorkaround.h>
 
 DateVariable::DateVariable(DateType type)
         : KoVariable()
         , m_type(type)
         , m_displayType(Date)
+        , m_valueType(DateTime)
         , m_daysOffset(0)
         , m_monthsOffset(0)
         , m_yearsOffset(0)
         , m_secsOffset(0)
 {
-    m_time = QDateTime::currentDateTime();
+    m_datetime = QDateTime::currentDateTime();
 }
 
 DateVariable::~DateVariable()
@@ -63,11 +66,17 @@ void DateVariable::saveOdf(KoShapeSavingContext & context)
 
     if (m_type == Fixed) {
         writer->addAttribute("text:fixed", "true");
+        // only write as much information as we read: just date/time or datetime
         if (m_displayType == Time) {
-            // if only the time is set QDateTime::toString returns an empty so add the data by hand
-            writer->addAttribute("text:time-value", "0-00-00T" + m_time.time().toString(Qt::ISODate));
+            const QString timeValue = (m_valueType == DateTime) ?
+                m_datetime.toString(Qt::ISODate) :
+                m_datetime.time().toString(Qt::ISODate);
+            writer->addAttribute("text:time-value", timeValue);
         } else {
-            writer->addAttribute("text:date-value", m_time.toString(Qt::ISODate));
+            const QString dateValue = (m_valueType == DateTime) ?
+                m_datetime.toString(Qt::ISODate) :
+                m_datetime.date().toString(Qt::ISODate);
+            writer->addAttribute("text:date-value", dateValue);
         }
     } else {
         writer->addAttribute("text:fixed", "false");
@@ -95,13 +104,34 @@ bool DateVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
         m_type = AutoUpdate;
     }
 
+    if (localName == "time") {
+        m_displayType = Time;
+    } else {
+        m_displayType = Date;
+    }
+
     //dateProperties.setProperty("time", element.attributeNS(KoXmlNS::text, localName + "-value"));
     QString value(element.attributeNS(KoXmlNS::text, localName + "-value", ""));
     if (!value.isEmpty()) {
-        if (value.startsWith("0-00-00T")) {
-            value.prepend("000");
+#ifndef NWORKAROUND_ODF_BUGS
+        KoOdfWorkaround::fixBadDateForTextTime(value);
+#endif
+        // hopefully this simple detection works in all cases
+        const bool isDateTime = (value.indexOf(QLatin1Char('T')) != -1);
+
+        if (isDateTime) {
+            m_datetime = QDateTime::fromString(value, Qt::ISODate);
+            m_valueType = DateTime;
+        } else {
+            if (m_displayType == Time) {
+                const QTime time = QTime::fromString(value, Qt::ISODate);
+                m_datetime = QDateTime(QDate::currentDate(), time);
+            } else {
+                const QDate date = QDate::fromString(value, Qt::ISODate);
+                m_datetime = QDateTime(date);
+            }
+            m_valueType = DateOrTime;
         }
-        m_time = QDateTime::fromString(value, Qt::ISODate);
     } else {
         // if value is not set current time is assumed  ODF 19.881 text:time-value
         m_type = AutoUpdate;
@@ -109,12 +139,6 @@ bool DateVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
 
     //dateProperties.setProperty("definition", dateFormat);
     m_definition = dateFormat;
-
-    if (localName == "time") {
-        m_displayType = Time;
-    } else {
-        m_displayType = Date;
-    }
 
     //dateProperties.setProperty("adjust", element.attributeNS(KoXmlNS::text, localName + "-adjust"));
     const QString adjust(element.attributeNS(KoXmlNS::text, localName + "-adjust", ""));
@@ -127,7 +151,7 @@ void DateVariable::readProperties(const KoProperties *props)
 {
     m_definition = props->stringProperty("definition");
     if (!props->stringProperty("time").isEmpty())
-        m_time = QDateTime::fromString(props->stringProperty("time"), Qt::ISODate);
+        m_datetime = QDateTime::fromString(props->stringProperty("time"), Qt::ISODate);
     if (props->intProperty("id") == Fixed)
         m_type = Fixed;
     else
@@ -139,6 +163,7 @@ void DateVariable::readProperties(const KoProperties *props)
     else {
         m_displayType = Date;
     }
+    m_valueType = DateTime;
     adjustTime(props->stringProperty("adjust"));
     update();
 }
@@ -188,7 +213,7 @@ void DateVariable::update()
     QDateTime target;
     switch (m_type) {
     case Fixed:
-        target = m_time;
+        target = m_datetime;
         break;
     case AutoUpdate:
         target = QDateTime::currentDateTime();

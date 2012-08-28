@@ -225,6 +225,7 @@ void KisHexColorInput::setValue()
     valueString.remove(QChar('#'));
 
     QList<KoChannelInfo*> channels = m_color->colorSpace()->channels();
+    channels = KoChannelInfo::displayOrderSorted(channels);
     foreach(KoChannelInfo* channel, channels) {
         if (channel->channelType() == KoChannelInfo::COLOR) {
             Q_ASSERT(channel->channelValueType() == KoChannelInfo::UINT8);
@@ -243,6 +244,7 @@ void KisHexColorInput::update()
     QString hexString("#");
 
     QList<KoChannelInfo*> channels = m_color->colorSpace()->channels();
+    channels = KoChannelInfo::displayOrderSorted(channels);
     foreach(KoChannelInfo* channel, channels) {
         if (channel->channelType() == KoChannelInfo::COLOR) {
             Q_ASSERT(channel->channelValueType() == KoChannelInfo::UINT8);
@@ -259,7 +261,6 @@ QWidget* KisHexColorInput::createInput()
 
     int digits = 2*m_color->colorSpace()->colorChannelCount();
     QString pattern = QString("#?[a-fA-F0-9]{%1,%2}").arg(digits).arg(digits);
-    kDebug() << pattern;
     m_hexInput->setValidator(new QRegExpValidator(QRegExp(pattern), this));
     connect(m_hexInput, SIGNAL(editingFinished()), this, SLOT(setValue()));
     return m_hexInput;

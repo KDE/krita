@@ -64,6 +64,6 @@ namespace KoOdfGraphicStyles
 
     /// Helper function to create a transformation attribute
     KOODF_EXPORT QString saveTransformation(const QTransform &transformation, bool appendTranslateUnit = true);
-};
+}
 
 #endif /* KOODFGRAPHICSTYLES_H */

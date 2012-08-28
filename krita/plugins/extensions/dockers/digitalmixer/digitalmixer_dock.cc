@@ -51,7 +51,7 @@ DigitalMixerDock::DigitalMixerDock( )
     // Current Color
     m_currentColorPatch = new KoColorPatch(this);
     m_currentColorPatch->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_currentColorPatch->setMinimumWidth(12);
+    m_currentColorPatch->setMinimumWidth(48);
     layout->addWidget(m_currentColorPatch, 0, 0,3,1);
 
     // Create the sliders
@@ -69,13 +69,17 @@ DigitalMixerDock::DigitalMixerDock( )
     {
         Mixer mixer;
         mixer.targetColor = new DigitalMixerPatch(this);
+        mixer.targetColor->setFixedSize(32, 22);
         layout->addWidget(mixer.targetColor, 0, i + 1);
         mixer.targetSlider = new KoColorSlider(Qt::Vertical, this);
+        mixer.targetSlider->setFixedWidth(22);
+        mixer.targetSlider->setMinimumHeight(66);
         layout->addWidget(mixer.targetSlider, 1, i + 1);
         QToolButton* colorSelector = new QToolButton( this );
         mixer.actionColor = new KoColorPopupAction(this);
         mixer.actionColor->setCurrentColor(initColors[i]);
         colorSelector->setDefaultAction(mixer.actionColor);
+        colorSelector->setFixedSize(colorSelector->sizeHint());
         layout->addWidget(colorSelector, 2, i + 1);
 
         m_mixers.push_back(mixer);

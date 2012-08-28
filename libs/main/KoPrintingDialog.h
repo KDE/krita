@@ -100,7 +100,7 @@ protected:
      * Reimplement this method to setup the shapeManager and painter and maybe the shapes for
      * printing the passed in page number.  The printing itself will not happen in this method.
      * This method will be called in a thread that is not the main-thread. So the processing can take
-     * a reasonably long time withing posing problems for user interaction.
+     * a reasonably long time within posing problems for user interaction.
      * @param pageNumber the number of the page to prepare.
      * @see isStopped() printPage()
      * @returns a cliprect. If the rect is valid then it will be set on the painter right after

@@ -26,7 +26,6 @@
 #include <KDebug>
 
 #include "KoShape.h"
-#include "KoLineBorder.h"
 
 void KoResourceManager::setResource(int key, const QVariant &value)
 {

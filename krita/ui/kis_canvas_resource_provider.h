@@ -28,6 +28,7 @@
 #include "kis_types.h"
 #include "krita_export.h"
 
+class KisWorkspaceResource;
 class KoColorProfile;
 class KoAbstractGradient;
 class KoResource;
@@ -62,7 +63,8 @@ public:
         MirrorHorizontal,
         MirrorVertical,
         MirrorAxisCenter,
-        Opacity
+        Opacity,
+        HdrGamma
     };
 
 
@@ -82,6 +84,9 @@ public:
 
     float HDRExposure() const;
     void setHDRExposure(float exposure);
+
+    float HDRGamma() const;
+    void setHDRGamma(float gamma);
 
     KisPattern *currentPattern() const;
 
@@ -116,6 +121,12 @@ public:
     qreal opacity();
 
     void setPaintOpPreset(const KisPaintOpPresetSP preset);
+
+    ///Notify that the workspace is saved and settings should be saved to it
+    void notifySavingWorkspace(KisWorkspaceResource* workspace);
+
+    ///Notify that the workspace is loaded and settings can be read
+    void notifyLoadingWorkspace(KisWorkspaceResource* workspace);
 
 public slots:
 
@@ -162,12 +173,14 @@ signals:
     void sigCompositeOpChanged(const QString &);
     void sigOnScreenResolutionChanged(qreal scaleX, qreal scaleY);
     void sigOpacityChanged(qreal);
+    void sigSavingWorkspace(KisWorkspaceResource* workspace);
+    void sigLoadingWorkspace(KisWorkspaceResource* workspace);
 
 private:
 
     KisView2 * m_view;
-    KoCanvasResourceManager * m_resourceManager;
-    const KoColorProfile * m_displayProfile;
+    KoCanvasResourceManager *m_resourceManager;
+    const KoColorProfile *m_displayProfile;
     bool m_fGChanged;
     QList<KisAbstractPerspectiveGrid*> m_perspectiveGrids;
 

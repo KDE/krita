@@ -59,8 +59,8 @@ set(kowidgets_LIB_SRCS
     KoMarkerSelector.cpp
     KoDockWidgetTitleBar.cpp
     KoDockWidgetTitleBarButton.cpp
-    KoSelectionManager.cpp
-    KoSelectionToggle.cpp
+    KoViewItemContextBar.cpp
+    KoContextBarButton.cpp
 )
 
 kde4_add_ui_files( kowidgets_LIB_SRCS

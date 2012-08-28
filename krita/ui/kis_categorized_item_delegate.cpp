@@ -20,7 +20,6 @@
 #include "kis_categorized_item_delegate.h"
 #include "kis_categorized_list_model.h"
 
-// #include <kicon.h>
 // #include <kstandardguiitem.h>
 
 #include <QPainter>

@@ -23,6 +23,8 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <QTransform>
+
 #include "kis_types.h"
 #include "kis_image.h"
 #include "kis_filter_strategy.h"
@@ -610,7 +612,7 @@ void KisTransformWorkerTest::testRotation()
     QRect rc = dev->exactBounds();
 
     QCOMPARE(rc.width(), 702);
-    QCOMPARE(rc.height(), 628);
+    QCOMPARE(rc.height(), 629);
 
 //    KisTransaction t2("test", dev);
 //    KisRandomAccessorSP ac = dev->createRandomAccessorNG(rc.x(), rc.y());
@@ -715,6 +717,138 @@ void KisTransformWorkerTest::testScaleUp5times()
 
     QCOMPARE(rc.width(), qRound(image.width() * SCALE));
     QCOMPARE(rc.height(), qRound(image.height() * SCALE));
+}
+
+void KisTransformWorkerTest::rotateNone()
+{
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "transform_rotate_test.png");
+    KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
+    dev2->convertFromQImage(image, 0);
+
+    KisPaintDeviceSP tmpdev1 = new KisPaintDevice(dev2->colorSpace());
+    tmpdev1->setDefaultPixel(dev2->defaultPixel());
+
+    int lastProgressReport = 0;
+    int progressTotalSteps = 0;
+    int progresStep = 0;
+    QRect boundRect = dev2->exactBounds();
+
+    KisTransaction t("mirror", dev2);
+    QRect rc = KisTransformWorker::rotateNone(dev2, tmpdev1, boundRect, 0, lastProgressReport, progressTotalSteps, progresStep);
+    t.end();
+
+    QImage result = tmpdev1->convertToQImage(0, rc.x(), rc.y(), image.width(), image.height());
+
+    QPoint errpoint;
+    if (!TestUtil::compareQImages(errpoint, image, result)) {
+        // They are the same, but should be mirrored
+        image.save("rotate_none_test_1_source.png");
+        result.save("rotate_none_1_result.png");
+        QFAIL(QString("Failed to rotate none the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+    }
+}
+
+
+void KisTransformWorkerTest::rotate90Left()
+{
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "transform_rotate_test.png");
+    KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
+    dev2->convertFromQImage(image, 0);
+
+    KisPaintDeviceSP tmpdev1 = new KisPaintDevice(dev2->colorSpace());
+    tmpdev1->setDefaultPixel(dev2->defaultPixel());
+
+    int lastProgressReport = 0;
+    int progressTotalSteps = 0;
+    int progresStep = 0;
+    QRect boundRect = dev2->exactBounds();
+
+    KisTransaction t("rotate left 90", dev2);
+    QRect rc = KisTransformWorker::rotateLeft90(dev2, tmpdev1, boundRect, 0, lastProgressReport, progressTotalSteps, progresStep);
+    t.end();
+
+    QImage result = tmpdev1->convertToQImage(0, rc.x(), rc.y(), image.width(), image.height());
+    QTransform tf;
+    QImage rotatedimage = image.transformed(tf.rotate(270));
+
+    QPoint errpoint;
+    if (!TestUtil::compareQImages(errpoint, rotatedimage, result)) {
+        // They are the same, but should be mirrored
+        image.save("rotate_90_left_test_1_source.png");
+        rotatedimage.save("rotate_90_left_test_1_rotated_source.png");
+        result.save("rotate_90_left_test_1_result.png");
+        QFAIL(QString("Failed to rotate 90 left the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+    }
+}
+
+void KisTransformWorkerTest::rotate90Right()
+{
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "transform_rotate_test.png");
+    KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
+    dev2->convertFromQImage(image, 0);
+
+    int lastProgressReport = 0;
+    int progressTotalSteps = 0;
+    int progresStep = 0;
+    QRect boundRect = dev2->exactBounds();
+
+    KisPaintDeviceSP tmpdev1 = new KisPaintDevice(dev2->colorSpace());
+    tmpdev1->setDefaultPixel(dev2->defaultPixel());
+
+    KisTransaction t("rotate right 90", dev2);
+    QRect rc = KisTransformWorker::rotateRight90(dev2, tmpdev1, boundRect, 0, lastProgressReport, progressTotalSteps, progresStep);
+    t.end();
+
+    QTransform tf;
+    QImage rotatedimage = image.transformed(tf.rotate(90));
+
+    QImage result = tmpdev1->convertToQImage(0, rc.x(), rc.y(), image.width(), image.height());
+
+    QPoint errpoint;
+    if (!TestUtil::compareQImages(errpoint, rotatedimage, result)) {
+        // They are the same, but should be mirrored
+        image.save("rotate_90_right_test_1_source.png");
+        rotatedimage.save("rotate_90_right_test_1_rotated_source.png");
+        result.save("rotate_90_right_1_result.png");
+        QFAIL(QString("Failed to rotate 90 right the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+    }
+}
+
+void KisTransformWorkerTest::rotate180()
+{
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "transform_rotate_test.png");
+    KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
+    dev2->convertFromQImage(image, 0);
+
+    int lastProgressReport = 0;
+    int progressTotalSteps = 0;
+    int progresStep = 0;
+    QRect boundRect = dev2->exactBounds();
+
+    KisPaintDeviceSP tmpdev1 = new KisPaintDevice(dev2->colorSpace());
+    tmpdev1->setDefaultPixel(dev2->defaultPixel());
+
+    KisTransaction t("rotate 180", dev2);
+    QRect rc = KisTransformWorker::rotate180(dev2, tmpdev1, boundRect, 0, lastProgressReport, progressTotalSteps, progresStep);
+    t.end();
+
+    QImage result = tmpdev1->convertToQImage(0, rc.x(), rc.y(), image.width(), image.height());
+
+    QTransform tf;
+    QImage rotatedimage = image.transformed(tf.rotate(180));
+
+    QPoint errpoint;
+    if (!TestUtil::compareQImages(errpoint, rotatedimage, result)) {
+        // They are the same, but should be mirrored
+        image.save("rotate_180_1_source.png");
+        rotatedimage.save("rotate_180_1_rotated_source.png");
+        result.save("rotate_180_1_result.png");
+        QFAIL(QString("Failed to rotate 180 the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+    }
 }
 
 

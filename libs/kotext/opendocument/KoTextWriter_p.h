@@ -268,6 +268,8 @@ private:
 
     QMap<KoList *, QString> listXmlIds;
 
+    QMap<KoList *, QString> numberedParagraphListIds;
+
     int splitEndBlockNumber;
     bool splitRegionOpened;
     int splitIdCounter;

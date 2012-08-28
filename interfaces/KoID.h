@@ -60,9 +60,22 @@ public:
             : m_id(id),
             m_localizedString(name) {}
 
+
+    KoID(const KoID &rhs)
+    {
+        m_id = rhs.m_id;
+        if (rhs.m_name.isEmpty()) {
+            m_name = rhs.m_localizedString.toString();
+        }
+        else {
+            m_name = rhs.m_name;
+        }
+    }
+
     QString id() const {
         return m_id;
     }
+
     QString name() const {
         if(m_name.isEmpty()) m_name = m_localizedString.toString();
         return m_name;

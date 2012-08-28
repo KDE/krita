@@ -30,6 +30,7 @@
 #include <kis_debug.h>
 #include <klocale.h>
 
+#include <KoIcon.h>
 #include <KoCanvasController.h>
 
 #include <kis_config.h>
@@ -138,12 +139,13 @@ void KisToolPerspectiveGrid::mousePressEvent(KoPointerEvent *event)
                 KisSubPerspectiveGrid* grid = *it;
                 QPointF gridCenter = grid->center();
                 dbgKrita << "click at " << event->point << " top left at " << *grid->topLeft();
-                if (m_selectedNode1 = nodeNearPoint(grid, mousep)) {
-                    m_internalMode = MODE_DRAGING_NODE;
+
+                if ((m_selectedNode1 = nodeNearPoint(grid, mousep))) {
+                    m_internalMode = MODE_DRAGGING_NODE;
                     break;
                 } else if (mouseNear(mousep, ((pixelToView(*grid->topLeft()) + pixelToView(*grid->bottomLeft()))*0.5))) {
                     dbgPlugins << " PRESS LEFT HANDLE";
-                    m_internalMode = MODE_DRAGING_TRANSLATING_TWONODES;
+                    m_internalMode = MODE_DRAGGING_TRANSLATING_TWONODES;
                     m_selectedNode1 = new KisPerspectiveGridNode(*grid->topLeft());
                     m_selectedNode2 = new KisPerspectiveGridNode(*grid->bottomLeft());
                     KisSubPerspectiveGrid* newsubgrid = new KisSubPerspectiveGrid(m_selectedNode1, grid->topLeft() , grid->bottomLeft(), m_selectedNode2);
@@ -153,7 +155,7 @@ void KisToolPerspectiveGrid::mousePressEvent(KoPointerEvent *event)
                     break;
                 } else if (mouseNear(mousep, ((pixelToView(*grid->topRight()) + pixelToView(*grid->bottomRight()))*0.5))) {
                     dbgPlugins << " PRESS RIGHT HANDLE";
-                    m_internalMode = MODE_DRAGING_TRANSLATING_TWONODES;
+                    m_internalMode = MODE_DRAGGING_TRANSLATING_TWONODES;
                     m_selectedNode1 = new KisPerspectiveGridNode(*grid->topRight());
                     m_selectedNode2 = new KisPerspectiveGridNode(*grid->bottomRight());
                     KisSubPerspectiveGrid* newsubgrid = new KisSubPerspectiveGrid(grid->topRight(), m_selectedNode1, m_selectedNode2, grid->bottomRight());
@@ -163,7 +165,7 @@ void KisToolPerspectiveGrid::mousePressEvent(KoPointerEvent *event)
                     break;
                 } else if (mouseNear(mousep, ((pixelToView(*grid->topLeft()) + pixelToView(*grid->topRight()))*0.5))) {
                     dbgPlugins << " PRESS TOP HANDLE";
-                    m_internalMode = MODE_DRAGING_TRANSLATING_TWONODES;
+                    m_internalMode = MODE_DRAGGING_TRANSLATING_TWONODES;
                     m_selectedNode1 = new KisPerspectiveGridNode(*grid->topLeft());
                     m_selectedNode2 = new KisPerspectiveGridNode(*grid->topRight());
                     KisSubPerspectiveGrid* newsubgrid = new KisSubPerspectiveGrid(m_selectedNode1, m_selectedNode2,  grid->topRight(), grid->topLeft());
@@ -173,7 +175,7 @@ void KisToolPerspectiveGrid::mousePressEvent(KoPointerEvent *event)
                     break;
                 } else if (mouseNear(mousep, ((pixelToView(*grid->bottomLeft()) + pixelToView(*grid->bottomRight()))*0.5))) {
                     dbgPlugins << " PRESS BOTTOM HANDLE";
-                    m_internalMode = MODE_DRAGING_TRANSLATING_TWONODES;
+                    m_internalMode = MODE_DRAGGING_TRANSLATING_TWONODES;
                     m_selectedNode1 = new KisPerspectiveGridNode(*grid->bottomLeft());
                     m_selectedNode2 = new KisPerspectiveGridNode(*grid->bottomRight());
                     KisSubPerspectiveGrid* newsubgrid = new KisSubPerspectiveGrid(grid->bottomLeft(), grid->bottomRight(), m_selectedNode2, m_selectedNode1);
@@ -214,13 +216,13 @@ void KisToolPerspectiveGrid::mouseMoveEvent(KoPointerEvent *event)
                 m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
             }
         } else {
-            if (m_internalMode == MODE_DRAGING_NODE) {
+            if (m_selectedNode1 && m_internalMode == MODE_DRAGGING_NODE) {
                 QPointF pos = convertToPixelCoord(event);
                 m_selectedNode1->setX(pos.x());
                 m_selectedNode1->setY(pos.y());
                 m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
             }
-            if (m_internalMode == MODE_DRAGING_TRANSLATING_TWONODES) {
+            if (m_selectedNode1 && m_selectedNode2 && m_internalMode == MODE_DRAGGING_TRANSLATING_TWONODES) {
                 QPointF translate = convertToPixelCoord(event->point) - m_dragEnd;
                 m_dragEnd = convertToPixelCoord(event->point);
                 *m_selectedNode1 += translate;;
@@ -233,7 +235,7 @@ void KisToolPerspectiveGrid::mouseMoveEvent(KoPointerEvent *event)
         KisPerspectiveGrid* pGrid = m_canvas->view()->resourceProvider()->currentImage()->perspectiveGrid();
         for (QList<KisSubPerspectiveGrid*>::const_iterator it = pGrid->begin(); it != pGrid->end(); ++it) {
             KisSubPerspectiveGrid* grid = *it;
-            if (m_higlightedNode = nodeNearPoint(grid, mousep)) {
+            if ((m_higlightedNode = nodeNearPoint(grid, mousep))) {
                 if (m_higlightedNode == m_selectedNode1 || m_higlightedNode == m_selectedNode2) {
                     m_higlightedNode = 0;
                 } else {
@@ -372,9 +374,8 @@ void KisToolPerspectiveGrid::drawGrid(QPainter& gc)
             drawSmallRectangle(gc, (endPos + startPos) / 2.); // Draw left-middle handle
         }
         // Draw delete icon
-        KIcon iconDelete("edit-delete");
         QPointF iconDeletePos = pixelToView(grid->center());
-        gc.drawPixmap(iconDeletePos - QPointF(16, 16), iconDelete.pixmap(32, 32));
+        gc.drawPixmap(iconDeletePos - QPointF(16, 16), koIcon("edit-delete").pixmap(32, 32));
         // Draw Vanishing point
         QPointF tbVpf = grid->topBottomVanishingPoint();
         if (fabs(tbVpf.x()) < 30000000. && fabs(tbVpf.y()) < 30000000.) {

@@ -24,6 +24,8 @@
 
 #include <klocale.h>
 #include <kstandarddirs.h>
+
+#include <KoIcon.h>
 #include <kis_debug.h>
 
 #include <kis_meta_data_store.h>
@@ -139,7 +141,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
     tableView->verticalHeader()->setVisible(false);
     tableView->resizeColumnsToContents();
     KPageWidgetItem *page = new KPageWidgetItem(tableView, i18n("List"));
-    page->setIcon(KIcon("format-list-unordered"));
+    page->setIcon(koIcon("format-list-unordered"));
     addPage(page);
 }
 

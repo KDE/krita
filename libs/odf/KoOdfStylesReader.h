@@ -22,6 +22,7 @@
 #define KOOASISSTYLES_H
 
 #include <QHash>
+#include <QList>
 
 #include <KoXmlReader.h>
 
@@ -113,6 +114,9 @@ public:
     /// @return all presentation page layouts ("presentation-page-layout" elements), hashed by name
     QHash<QString, KoXmlElement*> presentationPageLayouts() const;
 
+    /// @return all table templates("table-template" elements), template names may be duplicated
+    QList<KoXmlElement *> tableTemplates() const;
+
     /**
      * Get the draw styles for a specified type. 
      *
@@ -139,7 +143,7 @@ public:
     DataFormatsMap dataFormats() const;
 
     /**
-     * Return the notes configration for the given note class (footnote or endnote).
+     * Return the notes configuration for the given note class (footnote or endnote).
      *
      * Note that ODF supports different notes configurations for sections, but we don't
      * support that yet.

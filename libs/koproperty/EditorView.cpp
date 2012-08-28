@@ -23,6 +23,8 @@
 #include "Set.h"
 #include "Factory.h"
 
+#include <KoIcon.h>
+
 #include <QPointer>
 #include <QItemDelegate>
 #include <QStandardItemEditorCreator>
@@ -34,7 +36,6 @@
 #include <QHeaderView>
 
 #include <KLocale>
-#include <KIconLoader>
 #include <KIconEffect>
 #include <KDebug>
 
@@ -177,7 +178,7 @@ void ItemDelegate::paint(QPainter *painter,
         QBrush gradBrush(grad);
         painter->fillRect(x2 - iconSize * 2, y1, 
             iconSize * 2, y2 - y1 + 1, gradBrush);
-        QPixmap revertIcon( DesktopIcon("edit-undo", iconSize) );
+        QPixmap revertIcon(koIcon("edit-undo").pixmap(iconSize, iconSize));
 //        QPixmap alphaChannel(revertIcon.size());
 //        alphaChannel.fill(QColor(127, 127, 127));
 //        revertIcon.setAlphaChannel(alphaChannel);
@@ -395,7 +396,7 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
                 this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
         connect(d->set, SIGNAL(propertyReset(KoProperty::Set&, KoProperty::Property&)),
                 this, SLOT(slotPropertyReset(KoProperty::Set&, KoProperty::Property&)));
-//NEEDED?        connect(d->set, SIGNAL(aboutToBeCleared()), this, SLOT(slotSetWillBeCleared()));
+        connect(d->set, SIGNAL(aboutToBeCleared()), this, SLOT(slotSetWillBeCleared()));
         connect(d->set, SIGNAL(aboutToBeDeleted()), this, SLOT(slotSetWillBeDeleted()));
     }
 
@@ -433,6 +434,11 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
 //   ensureItemVisible(item);
         }
     }
+}
+
+void EditorView::slotSetWillBeCleared()
+{
+    changeSet(0, QByteArray());
 }
 
 void EditorView::slotSetWillBeDeleted()

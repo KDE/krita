@@ -20,6 +20,7 @@
 #define KOSECTION_H
 
 #include <QMetaType>
+#include <QString>
 
 class KoXmlElement;
 class KoShapeSavingContext;

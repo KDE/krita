@@ -30,14 +30,14 @@ class ChartTableView : public QTableView
     Q_OBJECT
 
 public:
-    ChartTableView( QWidget *parent = 0 );
+    ChartTableView(QWidget *parent = 0);
     ~ChartTableView();
 
 signals:
-    void currentIndexChanged( const QModelIndex &index );
+    void currentIndexChanged(const QModelIndex &index);
 
 protected slots:
-    void currentChanged( const QModelIndex &current, const QModelIndex &previous );
+    void currentChanged(const QModelIndex &current, const QModelIndex &previous);
 };
 
 }

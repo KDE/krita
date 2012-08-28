@@ -21,6 +21,7 @@
 #define KO_ITEM_TOOLTIP_H
 
 #include <QFrame>
+#include "kowidgets_export.h"
 
 class QStyleOptionViewItem;
 class QModelIndex;
@@ -33,58 +34,53 @@ class QTextDocument;
  * QTextDocument that is formatted to provide the complete tooltip.
  *
  * (KoItemToolTip is currently used in kopainter/KoResourceChooser)
- *
- * This class is used in two widget libraries; it is directly included
- * in them both and not exported.
  */
-class KoItemToolTip: public QFrame
+class KOWIDGETS_EXPORT KoItemToolTip : public QFrame
 {
     Q_OBJECT
+public:
+    KoItemToolTip();
+    virtual ~KoItemToolTip();
+    void showTip(QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option, const QModelIndex &index);
 
-    public:
-        KoItemToolTip();
-        virtual ~KoItemToolTip();
-        void showTip( QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option, const QModelIndex &index );
+protected:
 
-    protected:
+    /**
+     * Re-implement this to provide the actual tooltip contents.
+     * For instance:
+     * @code
+     *    QTextDocument *doc = new QTextDocument(this);
+     *
+     *     QImage thumb = index.data(KoResourceModel::LargeThumbnailRole).value<QImage>();
+     *     doc->addResource(QTextDocument::ImageResource, QUrl("data:thumbnail"), thumb);
+     *
+     *     QString name = index.data(Qt::DisplayRole).toString();
+     *
+     *     const QString image = QString("<img src=\"data:thumbnail\">");
+     *     const QString body = QString("<h3 align=\"center\">%1</h3>").arg(name) + image;
+     *     const QString html = QString("<html><body>%1</body></html>").arg(body);
+     *
+     *     doc->setHtml(html);
+     *     doc->setTextWidth(qMin(doc->size().width(), 500.0));
+     *
+     *     return doc;
+     * @endcode
+     */
+    virtual QTextDocument *createDocument(const QModelIndex &index) = 0;
 
-        /**
-         * Re-implement this to provide the actual tooltip contents.
-         * For instance:
-         * @code
-         *    QTextDocument *doc = new QTextDocument( this );
-         *
-         *     QImage thumb = index.data( KoResourceModel::LargeThumbnailRole ).value<QImage>();
-         *     doc->addResource( QTextDocument::ImageResource, QUrl( "data:thumbnail" ), thumb );
-         *
-         *     QString name = index.data( Qt::DisplayRole ).toString();
-         *
-         *     const QString image = QString( "<image src=\"data:thumbnail\">" );
-         *     const QString body = QString( "<h3 align=\"center\">%1</h3>" ).arg( name ) + image;
-         *     const QString html = QString( "<html><body>%1</body></html>" ).arg( body );
-         *
-         *     doc->setHtml( html );
-         *     doc->setTextWidth( qMin( doc->size().width(), 500.0 ) );
-         *
-         *     return doc;
-         * @endcode
-         */
-        virtual QTextDocument *createDocument( const QModelIndex &index ) = 0;
+private:
+    class Private;
+    Private* const d;
 
-    private:
-        typedef QFrame super;
-        class Private;
-        Private* const d;
+    void updatePosition(QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option);
 
-        void updatePosition( QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option );
+public:
+    virtual QSize sizeHint() const;
 
-    public:
-        virtual QSize sizeHint() const;
-
-    protected:
-        virtual void paintEvent( QPaintEvent *e );
-        virtual void timerEvent( QTimerEvent *e );
-        virtual bool eventFilter( QObject *object, QEvent *event );
+protected:
+    virtual void paintEvent(QPaintEvent *e);
+    virtual void timerEvent(QTimerEvent *e);
+    virtual bool eventFilter(QObject *object, QEvent *event);
 };
 
 #endif

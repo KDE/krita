@@ -34,35 +34,38 @@
 #include <kis_pixel_selection.h>
 #include "kis_selection_tool_helper.h"
 #include "kis_slider_spin_box.h"
-
+#include "kis_iterator_ng.h"
 
 void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const quint8 * c, int fuzziness)
 {
     // XXX: Multithread this!
     qint32 x, y, w, h;
-
-    dev->exactBounds(x, y, w, h);
+    QRect rc;
+    rc = dev->exactBounds();
+    x = rc.x();
+    y = rc.y();
+    w = rc.width();
+    h = rc.height();
 
     const KoColorSpace * cs = dev->colorSpace();
 
-    KisHLineConstIterator hiter = dev->createHLineConstIterator(x, y, w);
-    KisHLineIterator selIter = selection->createHLineIterator(x, y, w);
+    KisHLineConstIteratorSP hiter = dev->createHLineConstIteratorNG(x, y, w);
+    KisHLineIteratorSP selIter = selection->createHLineIteratorNG(x, y, w);
 
     for (int row = y; row < y + h; ++row) {
-        while (!hiter.isDone()) {
+        do {
             //if (dev->colorSpace()->hasAlpha())
-            //    opacity = dev->colorSpace()->alpha(hiter.rawData());
+            //    opacity = dev->colorSpace()->alpha(hiter->rawData());
 
-            quint8 match = cs->difference(c, hiter.rawData());
+            quint8 match = cs->difference(c, hiter->oldRawData());
 
             if (match <= fuzziness) {
-                *(selIter.rawData()) = MAX_SELECTED;
+                *(selIter->rawData()) = MAX_SELECTED;
             }
-            ++hiter;
-            ++selIter;
-        }
-        hiter.nextRow();
-        selIter.nextRow();
+        } while (hiter->nextPixel() && selIter->nextPixel());
+
+        hiter->nextRow();
+        selIter->nextRow();
     }
 
 }
@@ -88,6 +91,10 @@ void KisToolSelectSimilar::mousePressEvent(KoPointerEvent *event)
 
         if (!dev || !currentNode()->visible())
             return;
+
+        if (!selectionEditable()) {
+            return;
+        }
 
         QPointF pos = convertToPixelCoord(event);
 

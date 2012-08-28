@@ -65,7 +65,7 @@ public:
      * Loads the given OpenDocument-defined shadow
      * in this KoShadow object.
      * @param shadow the shadow to parse
-     * @return true when the parsing was successfull
+     * @return true when the parsing was successful
      */
     bool loadOdf(const QString &shadow);
 

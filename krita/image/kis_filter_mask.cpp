@@ -17,6 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <KoIcon.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoCompositeOp.h>
@@ -81,7 +82,7 @@ KisFilterConfiguration * KisFilterMask::filter() const
 
 QIcon KisFilterMask::icon() const
 {
-    return KIcon("view-filter");
+    return koIcon("view-filter");
 }
 
 void KisFilterMask::setFilter(KisFilterConfiguration * filterConfig)

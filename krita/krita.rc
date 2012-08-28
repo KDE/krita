@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="37">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="39">
 
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
@@ -94,6 +94,7 @@
   <Action name="resizelayertoowner"/>
   <Separator/>
   <Action name="save_layer_as_image"/>
+  <Action name="save_groups_as_images"/>
   <Action name="layer_to_image"/>
   <Separator/>
   <Action name="mirrorX"/>
@@ -147,13 +148,9 @@
   <!--Action name="view_fullscreen" group="settings_show"/-->
   <!--Action name="view_toggledockers" group="settings_show"/-->
   <!--Action name="showStatusBar" group="settings_show"/-->
+  <Action name="settings_active_author" group="settings_configure"/>
   <Action name="preferences" group="settings_configure"/>
-</Menu>
-
-
-<Menu name="help"><text>&amp;Help</text>
-  <Separator/>
-  <Action name="first_run"/>
+  <Action name="theme_menu" />
 </Menu>
 
 </MenuBar>

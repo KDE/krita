@@ -92,7 +92,7 @@ public:
         Direction,                  ///< The direction of the text in the cell. This is a CellTextDirection.
         RotationAlign,              ///< How the edge of the text is aligned after rotation. This is a RotationAlignment
         TextWritingMode,            ///< KoText::Direction, the direction for writing text in the cell
-        VerticalGlyphOrientation,   ///< bool, specify wether this feature is enabled or not
+        VerticalGlyphOrientation,   ///< bool, specify whether this feature is enabled or not
         CellBackgroundBrush,        ///< the cell background brush, as QTextFormat::BackgroundBrush is used by paragraphs
         VerticalAlignment,          ///< the vertical alignment oinside the cell
         MasterPageName,             ///< Optional name of the master-page
@@ -108,6 +108,9 @@ public:
     KoTableCellStyle(QObject *parent = 0);
     /// Creates a KoTableCellStyle with the given table cell format, and \a parent
     KoTableCellStyle(const QTextTableCellFormat &tableCellFormat, QObject *parent = 0);
+    KoTableCellStyle(const KoTableCellStyle &other);
+    KoTableCellStyle& operator=(const KoTableCellStyle &other);
+
     /// Destructor
     ~KoTableCellStyle();
 
@@ -154,7 +157,7 @@ public:
      *
      * @return the paragraph style
      */
-    KoParagraphStyle *paragraphStyle();
+    KoParagraphStyle *paragraphStyle() const;
 
     bool shrinkToFit() const;
     void setShrinkToFit(bool state);

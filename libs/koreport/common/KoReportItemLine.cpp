@@ -131,3 +131,14 @@ void KoReportItemLine::setUnit(const KoUnit &u)
     m_start.setUnit(u);
     m_end.setUnit(u);
 }
+
+KRPos KoReportItemLine::startPosition() const
+{
+    return m_start;
+}
+
+KRPos KoReportItemLine::endPosition() const
+{
+    return m_end;
+}
+

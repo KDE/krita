@@ -31,9 +31,9 @@ if(KDCRAW_FOUND)
     add_subdirectory( raw )
 endif(KDCRAW_FOUND)
 
-if(JPEG_FOUND AND HAVE_LCMS)
+if(JPEG_FOUND AND HAVE_LCMS2)
 	add_subdirectory(jpeg)
-endif(JPEG_FOUND AND HAVE_LCMS)
+endif(JPEG_FOUND AND HAVE_LCMS2)
 
 if(TIFF_FOUND)
 	add_subdirectory(tiff)
@@ -43,10 +43,9 @@ if(PNG_FOUND)
     add_subdirectory(png)
 endif(PNG_FOUND)
 
-# OpenCTL is needed for having a RGB16/32f color space
-if(OPENEXR_FOUND AND OPENCTL_FOUND)
+if(OPENEXR_FOUND)
     add_subdirectory(exr)
-endif(OPENEXR_FOUND AND OPENCTL_FOUND)
+endif(OPENEXR_FOUND)
 
 if(POPPLER_FOUND)
     add_subdirectory(pdf)
@@ -62,3 +61,7 @@ add_subdirectory(ppm)
 add_subdirectory(xcf)
 add_subdirectory(psd)
 add_subdirectory(odg)
+
+#if(OIIO_FOUND)
+#    add_subdirectory(oiio)
+#endif(OIIO_FOUND)

@@ -2,7 +2,7 @@
  *  This file is part of Calligra tests
  *
  *  Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
- *  Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
+ *  Copyright (C) 2011 C. Boemann <cbo@boemann.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

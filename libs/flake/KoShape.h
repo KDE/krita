@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2006, 2008 Casper Boemann <cbr@boemann.dk>
+   Copyright (C) 2006, 2008 C. Boemann <cbo@boemann.dk>
    Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
    Copyright (C) 2007-2009,2011 Jan Hambrecht <jaham@gmx.net>
 
@@ -45,7 +45,7 @@ class QRectF;
 class QPainterPath;
 
 class KoShapeContainer;
-class KoShapeBorderModel;
+class KoShapeStrokeModel;
 class KoShapeBackground;
 class KoShapeManager;
 class KoShapeUserData;
@@ -122,7 +122,7 @@ public:
         ParentChanged,   ///< used after a setParent()
         CollisionDetected, ///< used when another shape moved in our boundingrect
         Deleted, ///< the shape was deleted
-        BorderChanged, ///< the shapes border has changed
+        StrokeChanged, ///< the shapes stroke has changed
         BackgroundChanged, ///< the shapes background has changed
         ShadowChanged, ///< the shapes shadow has changed
         ParameterChanged, ///< the shapes parameter has changed (KoParameterShape only)
@@ -142,6 +142,13 @@ public:
         BothRunAroundSide,      ///< Run other text around both sides of the shape
         NoRunAround,            ///< The text will be completely avoiding the frame by keeping the horizontal space that this frame occupies blank.
         RunThrough              ///< The text will completely ignore the frame and layout as if it was not there
+    };
+
+    /// The behavior text should do when intersecting this shape.
+    enum TextRunAroundContour {
+        ContourBox,     /// Run other text around a bounding rect of the outline
+        ContourFull,   ///< Run other text around also on the inside
+        ContourOutside   ///< Run other text around only on the outside
     };
 
     /**
@@ -212,8 +219,18 @@ public:
      * This method can be used while saving the shape as Odf to add common child elements
      *
      * The office:event-listeners and draw:glue-point are saved.
+     * @param context the context for the current save.
      */
     void saveOdfCommonChildElements(KoShapeSavingContext &context) const;
+
+    /**
+     * This method can be used to save contour data from the clipPath()
+     *
+     * The draw:contour-polygon or draw:contour-path elements are saved.
+     * @param context the context for the current save.
+     * @param originalSize the original size of the unscaled image.
+     */
+    void saveOdfClipContour(KoShapeSavingContext &context, const QSizeF &originalSize) const;
 
     /**
      * @brief Scale the shape using the zero-point which is the top-left corner.
@@ -256,7 +273,7 @@ public:
      * scaling is a so called secondary operation which is comparable to zooming in
      * instead of changing the size of the basic shape.
      * Easiest example of this difference is that using this method will not distort the
-     * size of pattern-fills and borders.
+     * size of pattern-fills and strokes.
      */
     virtual void setSize(const QSizeF &size);
 
@@ -373,16 +390,52 @@ public:
     void setTextRunAroundSide(TextRunAroundSide side, RunThroughLevel runThrough = Background);
 
     /**
-     * The space between this shape's edge and text that runs around this shape.
+     * The space between this shape's left edge and text that runs around this shape.
      * @return the space around this shape to keep free from text
      */
-    qreal textRunAroundDistance() const;
+    qreal textRunAroundDistanceLeft() const;
 
     /**
-     * Set the space between this shape's edge and the text that run around this shape.
+     * Set the space between this shape's left edge and the text that run around this shape.
      * @param distance the space around this shape to keep free from text
      */
-    void setTextRunAroundDistance(qreal distance);
+    void setTextRunAroundDistanceLeft(qreal distance);
+
+    /**
+     * The space between this shape's top edge and text that runs around this shape.
+     * @return the space around this shape to keep free from text
+     */
+    qreal textRunAroundDistanceTop() const;
+
+    /**
+     * Set the space between this shape's top edge and the text that run around this shape.
+     * @param distance the space around this shape to keep free from text
+     */
+    void setTextRunAroundDistanceTop(qreal distance);
+
+    /**
+     * The space between this shape's right edge and text that runs around this shape.
+     * @return the space around this shape to keep free from text
+     */
+    qreal textRunAroundDistanceRight() const;
+
+    /**
+     * Set the space between this shape's right edge and the text that run around this shape.
+     * @param distance the space around this shape to keep free from text
+     */
+    void setTextRunAroundDistanceRight(qreal distance);
+
+    /**
+     * The space between this shape's bottom edge and text that runs around this shape.
+     * @return the space around this shape to keep free from text
+     */
+    qreal textRunAroundDistanceBottom() const;
+
+    /**
+     * Set the space between this shape's bottom edge and the text that run around this shape.
+     * @param distance the space around this shape to keep free from text
+     */
+    void setTextRunAroundDistanceBottom(qreal distance);
 
     /**
      * Return the threshold above which text should flow around this shape.
@@ -399,6 +452,18 @@ public:
      * @param threshold the new threshold
      */
     void setTextRunAroundThreshold(qreal threshold);
+
+    /**
+     * Return the how tight text run around is done around this shape.
+     * @return the contour
+     */
+    TextRunAroundContour textRunAroundContour() const;
+
+    /**
+     * Set how tight text run around is done around this shape.
+     * @param contour the new contour
+     */
+    void setTextRunAroundContour(TextRunAroundContour contour);
 
     /**
      * Set the background of the shape.
@@ -622,7 +687,7 @@ public:
     /**
      * returns the outline of the shape in the form of a path.
      * The outline returned will always be relative to the position() of the shape, so
-     * moving the shape will not alter the result.  The outline is used to draw the border
+     * moving the shape will not alter the result.  The outline is used to draw the stroke
      * on, for example.
      * @returns the outline of the shape in the form of a path.
      */
@@ -638,22 +703,34 @@ public:
     virtual QRectF outlineRect() const;
 
     /**
-     * Returns the currently set border, or 0 if there is no border.
-     * @return the currently set border, or 0 if there is no border.
+     * returns the outline of the shape in the form of a path for the use of painting a shadow.
+     *
+     * Normally this would be the same as outline() if there is a fill (background) set on the
+     * shape and empty if not.  However, a shape could reimplement this to return an outline
+     * even if no fill is defined. A typical example of this would be the picture shape
+     * which has a picture but almost never a background. 
+     *
+     * @returns the outline of the shape in the form of a path.
      */
-    KoShapeBorderModel *border() const;
+    virtual QPainterPath shadowOutline() const;
 
     /**
-     * Set a new border, removing the old one.
-     * @param border the new border, or 0 if there should be no border.
+     * Returns the currently set stroke, or 0 if there is no stroke.
+     * @return the currently set stroke, or 0 if there is no stroke.
      */
-    void setBorder(KoShapeBorderModel *border);
+    KoShapeStrokeModel *stroke() const;
 
     /**
-     * Return the insets of the border.
-     * Convenience method for KoShapeBorderModel::borderInsets()
+     * Set a new stroke, removing the old one.
+     * @param stroke the new stroke, or 0 if there should be no stroke.
      */
-    KoInsets borderInsets() const;
+    void setStroke(KoShapeStrokeModel *stroke);
+
+    /**
+     * Return the insets of the stroke.
+     * Convenience method for KoShapeStrokeModel::strokeInsets()
+     */
+    KoInsets strokeInsets() const;
 
     /// Sets the new shadow, removing the old one
     void setShadow(KoShapeShadow *shadow);
@@ -1053,7 +1130,7 @@ protected:
     /**
      * @brief Saves the style used for the shape
      *
-     * This method fills the given style object with the border and
+     * This method fills the given style object with the stroke and
      * background properties and then adds the style to the context.
      *
      * @param style the style object to fill
@@ -1072,13 +1149,16 @@ protected:
     virtual void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     /// Loads the stroke style
-    KoShapeBorderModel *loadOdfStroke(const KoXmlElement &element, KoShapeLoadingContext &context) const;
+    KoShapeStrokeModel *loadOdfStroke(const KoXmlElement &element, KoShapeLoadingContext &context) const;
 
     /// Loads the shadow style
     KoShapeBackground *loadOdfFill(KoShapeLoadingContext &context) const;
 
     /// Loads the connection points
     void loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingContext &context);
+
+    /// Loads the clip contour
+    void loadOdfClipContour(const KoXmlElement &element, KoShapeLoadingContext &context, const QSizeF &scaleFactor);
 
     /* ** end loading saving */
 

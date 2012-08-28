@@ -22,13 +22,13 @@
 
 #include "KoRdfSemanticItem.h"
 
-// #ifdef CAN_USE_MARBLE
-// #include <ui_KoRdfLocationEditWidgetMarble.h>
-// #include <ui_KoRdfLocationViewWidgetMarble.h>
-// #else
+/* #ifdef CAN_USE_MARBLE */
+/* #include <ui_KoRdfLocationEditWidgetMarble.h> */
+/* #include <ui_KoRdfLocationViewWidgetMarble.h> */
+/* #else */
 #include <ui_KoRdfLocationEditWidget.h>
 #include <ui_KoRdfLocationViewWidget.h>
-// #endif
+/* #endif */
 
 #include "komain_export.h"
 
@@ -64,7 +64,7 @@ public:
     virtual Soprano::Node linkingSubject() const;
     virtual void setupStylesheetReplacementMapping(QMap<QString, QString> &m);
     virtual void exportToMime(QMimeData *md) const;
-    virtual QList<KoSemanticStylesheet*> stylesheets() const;
+    virtual QList<hKoSemanticStylesheet> stylesheets() const;
     virtual QString className() const;
 
     /**

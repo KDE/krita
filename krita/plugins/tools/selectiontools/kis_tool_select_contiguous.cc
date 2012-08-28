@@ -4,6 +4,7 @@
  *  Copyright (c) 1999 Michael Koch <koch@kde.org>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2012 José Luis Vergara <pentalis@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,7 +44,6 @@
 #include "kis_layer.h"
 #include "kis_selection_options.h"
 #include "kis_paint_device.h"
-#include "kis_iterators_pixel.h"
 #include "kis_fill_painter.h"
 #include "kis_pixel_selection.h"
 #include "kis_selection_tool_helper.h"
@@ -56,6 +56,8 @@ KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas)
 {
     setObjectName("tool_select_contiguous");
     m_fuzziness = 20;
+    m_sizemod = 0;
+    m_feather = 0;
     m_limitToCurrentLayer = false;
 }
 
@@ -75,6 +77,10 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent *event)
         if (!dev || !currentNode()->visible())
             return;
 
+        if (!selectionEditable()) {
+            return;
+        }
+
         QApplication::setOverrideCursor(KisCursor::waitCursor());
 
         QPoint pos = convertToIntPixelCoord(event);
@@ -87,8 +93,9 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent *event)
 
         KisImageWSP image = currentImage();
         image->lock();
-        KisSelectionSP selection =
-            fillpainter.createFloodSelection(pos.x(), pos.y(), image->projection());
+        fillpainter.setFeather(m_feather);
+        fillpainter.setSizemod(m_sizemod);
+        KisSelectionSP selection = fillpainter.createFloodSelection(pos.x(), pos.y(), image->projection());
         image->unlock();
 
         KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
@@ -117,6 +124,16 @@ void KisToolSelectContiguous::slotSetFuzziness(int fuzziness)
     m_fuzziness = fuzziness;
 }
 
+void KisToolSelectContiguous::slotSetSizemod(int sizemod)
+{
+    m_sizemod = sizemod;
+}
+
+void KisToolSelectContiguous::slotSetFeather(int feather)
+{
+    m_feather = feather;
+}
+
 QWidget* KisToolSelectContiguous::createOptionWidget()
 {
     KisToolSelectBase::createOptionWidget();
@@ -142,13 +159,44 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         input->setSingleStep(10);
         input->setValue(20);
         hbox->addWidget(input);
-        connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));
+        
+        hbox = new QHBoxLayout();
+        Q_CHECK_PTR(hbox);
+        l->insertLayout(2, hbox);
+        
+        lbl = new QLabel(i18n("Grow/shrink selection: "), selectionWidget);
+        hbox->addWidget(lbl);
+        
+        KisSliderSpinBox *sizemod = new KisSliderSpinBox(selectionWidget);
+        Q_CHECK_PTR(sizemod);
+        sizemod->setObjectName("sizemod");
+        sizemod->setRange(-40, 40);
+        sizemod->setSingleStep(1);
+        sizemod->setValue(0);
+        hbox->addWidget(sizemod);
+        
+        hbox = new QHBoxLayout();
+        Q_CHECK_PTR(hbox);
+        l->insertLayout(3, hbox);
+        
+        hbox->addWidget(new QLabel(i18n("Feathering radius: "), selectionWidget));
+        
+        KisSliderSpinBox *feather = new KisSliderSpinBox(selectionWidget);
+        Q_CHECK_PTR(feather);
+        feather->setObjectName("feathering");
+        feather->setRange(0, 40);
+        feather->setSingleStep(1);
+        feather->setValue(0);
+        hbox->addWidget(feather);
+        
+        connect (input  , SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int) ));
+        connect (sizemod, SIGNAL(valueChanged(int)), this, SLOT(slotSetSizemod(int)   ));
+        connect (feather, SIGNAL(valueChanged(int)), this, SLOT(slotSetFeather(int)   ));
 
         QCheckBox* limitToCurrentLayer = new QCheckBox(i18n("Limit to current layer"), selectionWidget);
-        l->insertWidget(2, limitToCurrentLayer);
+        l->insertWidget(4, limitToCurrentLayer);
         limitToCurrentLayer->setChecked(m_limitToCurrentLayer);
-        connect(limitToCurrentLayer, SIGNAL(stateChanged(int)),
-                this, SLOT(slotLimitToCurrentLayer(int)));
+        connect (limitToCurrentLayer, SIGNAL(stateChanged(int)), this, SLOT(slotLimitToCurrentLayer(int)));
 
     }
     return selectionWidget;

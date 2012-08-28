@@ -41,7 +41,7 @@ class ChartShapePlugin : public QObject
     Q_OBJECT
 public:
 
-    ChartShapePlugin( QObject * parent,  const QVariantList & );
+    ChartShapePlugin(QObject *parent, const QVariantList&);
     ~ChartShapePlugin() {}
 };
 

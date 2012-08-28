@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -21,9 +21,7 @@
 #include "kis_layer.h"
 
 
-#include <kicon.h>
 #include <klocale.h>
-#include <QIcon>
 #include <QImage>
 #include <QBitArray>
 #include <QStack>
@@ -190,7 +188,7 @@ void KisLayer::disableAlphaChannel(bool disable)
 {
     if(m_d->channelFlags.isEmpty())
         m_d->channelFlags = colorSpace()->channelFlags(true, true);
-    
+
     if(disable)
         m_d->channelFlags &= colorSpace()->channelFlags(true, false);
     else
@@ -521,7 +519,7 @@ QImage KisLayer::createThumbnail(qint32 w, qint32 h)
     KisPaintDeviceSP originalDevice = original();
 
     return originalDevice ?
-           originalDevice->createThumbnail(w, h) : QImage();
+           originalDevice->createThumbnail(w, h, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation) : QImage();
 }
 
 qint32 KisLayer::x() const

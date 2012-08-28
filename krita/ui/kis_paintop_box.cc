@@ -35,6 +35,7 @@
 #include <kacceleratormanager.h>
 #include <kseparator.h>
 
+#include <KoIcon.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 #include <KoResourceSelector.h>
@@ -81,6 +82,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     , m_previousNode(0)
     , m_currTabletToolID(KoToolManager::instance()->currentInputDevice())
     , m_presetsEnabled(true)
+    , m_blockUpdate(false)
 {
     Q_ASSERT(view != 0);
 
@@ -93,12 +95,12 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     setWindowTitle(i18n("Painter's Toolchest"));
 
     m_settingsWidget = new KisPopupButton(this);
-    m_settingsWidget->setIcon(KIcon("paintop_settings_02"));
+    m_settingsWidget->setIcon(koIcon("paintop_settings_02"));
     m_settingsWidget->setToolTip(i18n("Edit brush settings"));
     m_settingsWidget->setFixedSize(32, 32);
 
     m_presetWidget = new KisPopupButton(this);
-    m_presetWidget->setIcon(KIcon("paintop_settings_01"));
+    m_presetWidget->setIcon(koIcon("paintop_settings_01"));
     m_presetWidget->setToolTip(i18n("Choose brush preset"));
     m_presetWidget->setFixedSize(32, 32);
 
@@ -106,7 +108,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_eraseModeButton->setFixedSize(32, 32);
     m_eraseModeButton->setCheckable(true);
     KAction* eraseAction = new KAction(i18n("Set eraser mode"), m_eraseModeButton);
-    eraseAction->setIcon(KIcon("draw-eraser"));
+    eraseAction->setIcon(koIcon("draw-eraser"));
     eraseAction->setShortcut(Qt::Key_E);
     eraseAction->setCheckable(true);
     m_eraseModeButton->setDefaultAction(eraseAction);
@@ -116,7 +118,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     hMirrorButton->setFixedSize(32, 32);
     hMirrorButton->setCheckable(true);
     KAction* hMirrorAction = new KAction(i18n("Set horizontal mirror mode"), hMirrorButton);
-    hMirrorAction->setIcon(KIcon("object-flip-horizontal"));
+    hMirrorAction->setIcon(koIcon("object-flip-horizontal"));
     hMirrorAction->setCheckable(true);
     hMirrorButton->setDefaultAction(hMirrorAction);
     m_view->actionCollection()->addAction("hmirror_action", hMirrorAction);
@@ -125,11 +127,11 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     vMirrorButton->setFixedSize(32, 32);
     vMirrorButton->setCheckable(true);
     KAction* vMirrorAction = new KAction(i18n("Set vertical mirror mode"), vMirrorButton);
-    vMirrorAction->setIcon(KIcon("object-flip-vertical"));
+    vMirrorAction->setIcon(koIcon("object-flip-vertical"));
     vMirrorAction->setCheckable(true);
     vMirrorButton->setDefaultAction(vMirrorAction);
     m_view->actionCollection()->addAction("vmirror_action", vMirrorAction);
-    
+
     for(int i=0; i<2; ++i) {
         m_sliderChooser[i] = new KisWidgetChooser();
         KisDoubleSliderSpinBox* slOpacity = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("opacity", i18n("Opacity:"));
@@ -149,6 +151,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
         slSize->setRange(0.0, 1000.0, 2);
         slSize->setValue(100.0);
         slSize->setSingleStep(0.05);
+        slSize->setExponentRatio(3.0);
         slSize->setMinimumWidth(120);
     }
     
@@ -157,10 +160,15 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
 
     QLabel* labelMode = new QLabel(i18n("Mode: "), this);
     labelMode->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
-    m_cmbCompositeOp  = new KisCompositeOpComboBox();
-    m_paletteButton   = new QPushButton(i18n("Save to Palette"));
+
+    m_cmbCompositeOp = new KisCompositeOpComboBox();
+    m_cmbCompositeOp->setFixedHeight(30);
+
+    m_paletteButton = new QPushButton(i18n("Save to Palette"));
+    m_paletteButton->setFixedHeight(30);
+
     m_workspaceWidget = new KisPopupButton(view);
-    m_workspaceWidget->setIcon(KIcon("document-multiple"));
+    m_workspaceWidget->setIcon(koIcon("document-multiple"));
     m_workspaceWidget->setToolTip(i18n("Choose workspace"));
     m_workspaceWidget->setFixedSize(32, 32);
     m_workspaceWidget->setPopupWidget(new KisWorkspaceChooser(view));
@@ -189,10 +197,12 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     action = new KAction(i18n("Brush option slider 1"), this);
     view->actionCollection()->addAction("brushslider1", action);
     action->setDefaultWidget(m_sliderChooser[0]);
+    connect(action, SIGNAL(triggered()), m_sliderChooser[0], SLOT(showPopupWidget()));
 
     action = new KAction(i18n("Brush option slider 2"), this);
     view->actionCollection()->addAction("brushslider2", action);
     action->setDefaultWidget(m_sliderChooser[1]);
+    connect(action, SIGNAL(triggered()), m_sliderChooser[1], SLOT(showPopupWidget()));
 
     QWidget* mirrorActions = new QWidget(this);
     QHBoxLayout* mirrorLayout = new QHBoxLayout(mirrorActions);
@@ -518,6 +528,8 @@ void KisPaintopBox::slotSaveActivePreset()
 
 void KisPaintopBox::slotUpdatePreset()
 {
+    // block updates of avoid some over updating of the option widget
+    m_blockUpdate = true;
     m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_activePreset->settings().data()));
     
     setSliderValue("size", m_activePreset->settings()->paintOpSize().width());
@@ -551,6 +563,7 @@ void KisPaintopBox::slotUpdatePreset()
         updateCompositeOp(KoCompositeOpRegistry::instance().getDefaultCompositeOp().id());
         setWidgetState(DISABLE_COMPOSITEOP);
     }
+    m_blockUpdate = false;
 }
 
 void KisPaintopBox::slotSetupDefaultPreset()
@@ -696,10 +709,21 @@ void KisPaintopBox::slotToolChanged(KoCanvasController* canvas, int toolId)
 
 void KisPaintopBox::slotOpacityChanged(qreal opacity)
 {
+    if (m_blockUpdate) {
+        return;
+    }
+    m_blockUpdate = true;
+
     for (int i = 0; i < 2; ++i) {
         KisDoubleSliderSpinBox *opacitySlider = m_sliderChooser[i]->getWidget<KisDoubleSliderSpinBox>("opacity");
         opacitySlider->blockSignals(true);
         opacitySlider->setValue(opacity);
         opacitySlider->blockSignals(false);
     }
+    if(m_presetsEnabled) {
+        if(m_activePreset->settings()->hasProperty("OpacityValue"))
+            m_activePreset->settings()->setProperty("OpacityValue", opacity);
+        m_optionWidget->setConfiguration(m_activePreset->settings().data());
+    }
+    m_blockUpdate = false;
 }

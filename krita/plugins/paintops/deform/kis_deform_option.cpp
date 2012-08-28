@@ -25,7 +25,7 @@ public:
             : QWidget(parent) {
         setupUi(this);
         
-        deformAmount->setRange(0.0,1.0,2);
+        deformAmount->setRange(0.0, 1.0, 2);
         deformAmount->setValue(0.20);
     }
 };

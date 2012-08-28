@@ -26,6 +26,7 @@
 
 const int MAX_CHANNELS = 56;
 
+typedef qint32  Fixed;                  /* Represents a fixed point implied decimal */
 
 /**
  * Image color/depth modes

@@ -36,6 +36,7 @@
 #include <KoImageCollection.h>
 #include <KoImageData.h>
 #include <KoProperties.h>
+#include <KoIcon.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -43,7 +44,7 @@ PictureShapeFactory::PictureShapeFactory()
     : KoShapeFactoryBase(PICTURESHAPEID, i18n("Image"))
 {
     setToolTip(i18n("Image shape that can display jpg, png etc."));
-    setIcon("x-shape-image");
+    setIconName(koIconNameCStr("x-shape-image"));
     setLoadingPriority(1);
 
     QList<QPair<QString, QStringList> > elementNamesList;

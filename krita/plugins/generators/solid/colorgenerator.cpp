@@ -23,7 +23,6 @@
 #include <QPoint>
 
 #include <kis_debug.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
@@ -37,7 +36,6 @@
 #include <kis_fill_painter.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>
-#include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <generator/kis_generator_registry.h>
 #include <kis_global.h>

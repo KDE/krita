@@ -634,7 +634,7 @@ void CartesianAxis::paintCtx( PaintContext* context )
     // set up a map of integer positions,
 
     // - starting with the fourth
-    // - the the halfs
+    // - then the halfs
     // - then the tens
     // this will override all halfs and fourth that hit a higher-order ruler
     // MAKE SURE TO START AT (0, 0)!
@@ -941,7 +941,7 @@ void CartesianAxis::paintCtx( PaintContext* context )
                     QPointF secondPos = diagramIsVertical ? QPointF( i + labelDiff, 0.0 ) : QPointF( 0.0, i + labelDiff );
                     secondPos = plane->translate( secondPos );
 
-                    if ( labelItem->intersects( *labelItem2, firstPos, secondPos ) )
+                    if ( labelItem->intersects( *labelItem2, firstPos, secondPos ) && !diagram()->allowOverlappingDataValueTexts() )
                     {
                         i = minValueX;
                         labelDiff += labelDiff;
@@ -999,7 +999,7 @@ void CartesianAxis::paintCtx( PaintContext* context )
 
                 bool painttick = true;
 
-                //Dont paint more ticks than we need
+                //Don't paint more ticks than we need
                 //when diagram type is Bar
                 if (  centerAbscissaTicks && i == maxValueX )
                     painttick = false;

@@ -32,6 +32,8 @@
 #include <QLabel>
 #include <QTabBar>
 
+#include <KoServiceProvider.h>
+#include <KoIcon.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeFactoryBase.h>
 #include <KoProperties.h>
@@ -79,18 +81,17 @@
 #include "dialogs/KoPAMasterPageDialog.h"
 #include "dialogs/KoPAPageLayoutDialog.h"
 #include "dialogs/KoPAConfigureDialog.h"
+#include "widgets/KoPageNavigator.h"
 
 #include <kfiledialog.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kicon.h>
 #include <ktoggleaction.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kstatusbar.h>
 #include <kmessagebox.h>
 #include <kparts/event.h>
-#include <kparts/partmanager.h>
 #include <kio/netaccess.h>
 #include <ktemporaryfile.h>
 
@@ -147,7 +148,7 @@ public:
     QWidget *insideWidget;
 
     // status bar
-    QLabel *pageNumbers;  ///< page numbers
+    KoPageNavigator *pageNavigator;
     QLabel *status;       ///< ordinary status
     QWidget *zoomActionWidget;
 
@@ -159,9 +160,9 @@ public:
 
 
 
-KoPAView::KoPAView( KoPADocument *document, QWidget *parent )
-: KoView( document, parent )
-, d( new Private( document ) )
+KoPAView::KoPAView(KoPart *part, KoPADocument *document, QWidget *parent)
+: KoView(part, document, parent)
+, d( new Private(document))
 {
     initGUI();
     initActions();
@@ -240,6 +241,15 @@ void KoPAView::initGUI()
 
     d->canvas = new KoPACanvas( this, d->doc, this );
     KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget( actionCollection(), this );
+
+    if (shell()) {
+        // this needs to be done before KoCanvasControllerWidget::setCanvas is called
+        KoPADocumentStructureDockerFactory structureDockerFactory(KoDocumentSectionView::ThumbnailMode, d->doc->pageType());
+        d->documentStructureDocker = qobject_cast<KoPADocumentStructureDocker*>(shell()->createDockWidget(&structureDockerFactory));
+        connect(d->documentStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), proxyObject, SLOT(updateActivePage(KoPAPageBase*)));
+        connect(d->documentStructureDocker, SIGNAL(dockerReset()), this, SLOT(reinitDocumentDocker()));
+    }
+
     d->canvasController = canvasController;
     d->canvasController->setCanvas( d->canvas );
     KoToolManager::instance()->addController( d->canvasController );
@@ -251,13 +261,9 @@ void KoPAView::initGUI()
 
     d->zoomAction = d->zoomController->zoomAction();
 
-    d->pageNumbers = new QLabel(QString(), this);
-    d->pageNumbers->setFixedWidth(QFontMetrics(d->pageNumbers->font()).width("999/999"));
-    d->pageNumbers->setAlignment(Qt::AlignCenter);
-    updatePageCount();
-    connect(d->doc, SIGNAL(pageAdded(KoPAPageBase*)), this, SLOT(updatePageCount()));
-    connect(d->doc, SIGNAL(pageRemoved(KoPAPageBase*)), this, SLOT(updatePageCount()));
-    addStatusBarItem(d->pageNumbers, 0);
+    // page/slide navigator
+    d->pageNavigator = new KoPageNavigator(this);
+    addStatusBarItem(d->pageNavigator, 0);
 
     // set up status bar message
     d->status = new QLabel(QString(), this);
@@ -290,11 +296,12 @@ void KoPAView::initGUI()
     d->tabBarLayout->addWidget(d->insideWidget, 1, 1);
     setTabBarPosition(Qt::Horizontal);
 
+    gridLayout->addWidget(d->horizontalRuler->tabChooser(), 0, 0);
     gridLayout->addWidget(d->horizontalRuler, 0, 1);
     gridLayout->addWidget(d->verticalRuler, 1, 0);
     gridLayout->addWidget(canvasController, 1, 1);
 
-    //tab bar is hidden by default a method is provided to acces to the tab bar
+    //tab bar is hidden by default a method is provided to access to the tab bar
     d->tabBar->hide();
 
     connect(d->canvasController->proxyObject, SIGNAL(canvasOffsetXChanged(int)),
@@ -308,7 +315,7 @@ void KoPAView::initGUI()
     d->verticalRuler->createGuideToolConnection(d->canvas);
     d->horizontalRuler->createGuideToolConnection(d->canvas);
 
-    KoToolBoxFactory toolBoxFactory(d->canvasController, i18n("Tools") );
+    KoToolBoxFactory toolBoxFactory(d->canvasController);
     if (shell())
     {
         shell()->createDockWidget( &toolBoxFactory );
@@ -317,18 +324,19 @@ void KoPAView::initGUI()
     }
 
     connect(shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
+    connect(shapeManager(), SIGNAL(contentChanged()), this, SLOT(updateCanvasSize()));
+    connect(d->doc, SIGNAL(shapeAdded(KoShape *)), this, SLOT(updateCanvasSize()));
+    connect(d->doc, SIGNAL(shapeRemoved(KoShape *)), this, SLOT(updateCanvasSize()));
     connect(d->canvas, SIGNAL(documentSize(const QSize&)), d->canvasController->proxyObject, SLOT(updateDocumentSize(const QSize&)));
     connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), d->canvas, SLOT(slotSetDocumentOffset(const QPoint&)));
+    connect(d->canvasController->proxyObject, SIGNAL(sizeChanged(const QSize &)), this, SLOT(updateCanvasSize()));
 
     if (shell()) {
-        KoPADocumentStructureDockerFactory structureDockerFactory( KoDocumentSectionView::ThumbnailMode, d->doc->pageType() );
-        d->documentStructureDocker = qobject_cast<KoPADocumentStructureDocker*>( shell()->createDockWidget( &structureDockerFactory ) );
-        connect( shell()->partManager(), SIGNAL( activePartChanged( KParts::Part * ) ),
-                d->documentStructureDocker, SLOT( setPart( KParts::Part * ) ) );
-        connect(d->documentStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), proxyObject, SLOT(updateActivePage(KoPAPageBase*)));
-        connect(d->documentStructureDocker, SIGNAL(dockerReset()), this, SLOT(reinitDocumentDocker()));
-
         KoToolManager::instance()->requestToolActivation( d->canvasController );
+    }
+    if (d->doc->inlineTextObjectManager()) {
+        connect(actionCollection()->action("settings_active_author"), SIGNAL(triggered(const QString &)),
+           d->doc->inlineTextObjectManager(), SLOT(activeAuthorUpdated(const QString &)));
     }
 }
 
@@ -345,7 +353,7 @@ void KoPAView::initActions()
     actionCollection()->addAction(KStandardAction::SelectAll,  "edit_select_all", this, SLOT(editSelectAll()));
     actionCollection()->addAction(KStandardAction::Deselect,  "edit_deselect_all", this, SLOT(editDeselectAll()));
 
-    d->deleteSelectionAction = new KAction(KIcon("edit-delete"), i18n("D&elete"), this);
+    d->deleteSelectionAction = new KAction(koIcon("edit-delete"), i18n("D&elete"), this);
     actionCollection()->addAction("edit_delete", d->deleteSelectionAction );
     d->deleteSelectionAction->setShortcut(QKeySequence("Del"));
     d->deleteSelectionAction->setEnabled(false);
@@ -376,7 +384,7 @@ void KoPAView::initActions()
     connect(d->viewRulers, SIGNAL(triggered(bool)), proxyObject, SLOT(setShowRulers(bool)));
     setShowRulers(d->doc->rulersVisible());
 
-    d->actionInsertPage = new KAction( KIcon("document-new"), i18n( "Insert Page" ), this );
+    d->actionInsertPage = new KAction(koIcon("document-new"), i18n("Insert Page"), this);
     actionCollection()->addAction( "page_insertpage", d->actionInsertPage );
     d->actionInsertPage->setToolTip( i18n( "Insert a new page after the current one" ) );
     d->actionInsertPage->setWhatsThis( i18n( "Insert a new page after the current one" ) );
@@ -407,6 +415,7 @@ void KoPAView::initActions()
     actionCollection()->addAction(KStandardAction::Next,  "page_next", this, SLOT(goToNextPage()));
     actionCollection()->addAction(KStandardAction::FirstPage,  "page_first", this, SLOT(goToFirstPage()));
     actionCollection()->addAction(KStandardAction::LastPage,  "page_last", this, SLOT(goToLastPage()));
+    d->pageNavigator->initActions();
 
     KActionMenu *actionMenu = new KActionMenu(i18n("Variable"), this);
     foreach(QAction *action, d->doc->inlineTextObjectManager()->createInsertVariableActions(d->canvas))
@@ -417,7 +426,7 @@ void KoPAView::initActions()
     actionCollection()->addAction("import_document", am);
     connect(am, SIGNAL(triggered()), this, SLOT(importDocument()));
 
-    d->actionConfigure = new KAction(KIcon("configure"), i18n("Configure..."), this);
+    d->actionConfigure = new KAction(koIcon("configure"), i18n("Configure..."), this);
     actionCollection()->addAction("configure", d->actionConfigure);
     connect(d->actionConfigure, SIGNAL(triggered()), this, SLOT(configure()));
 
@@ -497,8 +506,8 @@ void KoPAView::importDocument()
 #if 1
     mimeFilter << KoOdf::mimeType( d->doc->documentType() ) << KoOdf::templateMimeType( d->doc->documentType() );
 #else
-    mimeFilter = KoFilterManager::mimeFilter( KoDocument::readNativeFormatMimeType(d->doc->componentData()), KoFilterManager::Import,
-                                              KoDocument::readExtraNativeMimeTypes() );
+    mimeFilter = KoFilterManager::mimeFilter( KoServiceProvider::readNativeFormatMimeType(d->doc->componentData()), KoFilterManager::Import,
+                                              KoServiceProvider::readExtraNativeMimeTypes() );
 #endif
 
     dialog->setMimeFilter( mimeFilter );
@@ -646,12 +655,12 @@ void KoPAView::slotZoomChanged( KoZoomMode::Mode mode, qreal zoom )
     Q_UNUSED(zoom);
     if (d->activePage) {
         if (mode == KoZoomMode::ZOOM_PAGE) {
-            KoPageLayout &layout = d->activePage->pageLayout();
+            const KoPageLayout &layout = viewMode()->activePageLayout();
             QRectF pageRect( 0, 0, layout.width, layout.height );
             d->canvasController->ensureVisible(d->canvas->viewConverter()->documentToView(pageRect));
         } else if (mode == KoZoomMode::ZOOM_WIDTH) {
             // horizontally center the page
-            KoPageLayout &layout = d->activePage->pageLayout();
+            const KoPageLayout &layout = viewMode()->activePageLayout();
             QRectF pageRect( 0, 0, layout.width, layout.height );
             QRect viewRect = d->canvas->viewConverter()->documentToView(pageRect).toRect();
             viewRect.translate(d->canvas->documentOrigin());
@@ -659,7 +668,7 @@ void KoPAView::slotZoomChanged( KoZoomMode::Mode mode, qreal zoom )
             int horizontalMove = viewRect.center().x() - currentVisible.center().x();
             d->canvasController->pan(QPoint(horizontalMove, 0));
         }
-        d->canvas->update();
+        updateCanvasSize(true);
     }
 }
 
@@ -701,29 +710,61 @@ void KoPAView::reinitDocumentDocker()
     }
 }
 
-void KoPAView::doUpdateActivePage( KoPAPageBase * page )
+void KoPAView::updateCanvasSize(bool forceUpdate)
 {
-    // save the old offset into the page so we can use it also on the new page
+    const KoPageLayout &layout = viewMode()->activePageLayout();
     QPoint scrollValue(d->canvasController->scrollBarValue());
 
+    QSizeF pageSize(layout.width, layout.height);
+    QSizeF viewportSize = d->canvasController->viewportSize();
+
+    //calculate size of union page + viewport
+    QSizeF documentMinSize(qMax(zoomHandler()->unzoomItX(viewportSize.width()), layout.width),
+                        qMax(zoomHandler()->unzoomItY(viewportSize.height()), layout.height));
+
+    // create a rect out of it with origin in tp left of page
+    QRectF documentRect(QPointF((documentMinSize.width() - layout.width) * -0.5,
+                               (documentMinSize.height() - layout.height) * -0.5),
+                       documentMinSize);
+
+    // Now make a union with the bounding rect of all shapes
+    // Fetch boundingRect like this as a viewmode might have set other shapes than the page
+    foreach (KoShape *layer, d->canvas->shapeManager()->shapes()) {
+        if (! dynamic_cast<KoShapeLayer *>(layer)) {
+            documentRect = documentRect.united(layer->boundingRect());
+        }
+    }
+
+    QPointF offset = -documentRect.topLeft();
+    QPoint scrollChange = d->canvas->documentOrigin() - zoomHandler()->documentToView(offset).toPoint();
+
+    if (forceUpdate || scrollChange != QPoint(0, 0)
+                    || d->zoomController->documentSize() != documentRect.size()
+                    || d->zoomController->pageSize() != pageSize) {
+        d->horizontalRuler->setRulerLength(layout.width);
+        d->verticalRuler->setRulerLength(layout.height);
+        d->horizontalRuler->setActiveRange(layout.leftMargin, layout.width - layout.rightMargin);
+        d->verticalRuler->setActiveRange(layout.topMargin, layout.height - layout.bottomMargin);
+        QSizeF documentSize(documentRect.size());
+        d->canvas->setDocumentOrigin(offset);
+        d->zoomController->setDocumentSize(documentSize);
+
+        d->canvas->resourceManager()->setResource(KoCanvasResourceManager::PageSize, pageSize);
+
+        d->canvas->update();
+        QSize documentPxSize(zoomHandler()->zoomItX(documentRect.width()), zoomHandler()->zoomItY(documentRect.height()));
+        d->canvasController->proxyObject->updateDocumentSize(documentPxSize);
+        // this can trigger a change of the zoom level in "fit to mode" and therefore this needs to be at the end as it calls this function again
+        d->zoomController->setPageSize(pageSize);
+    }
+}
+
+void KoPAView::doUpdateActivePage( KoPAPageBase * page )
+{
     bool pageChanged = page != d->activePage;
     setActivePage( page );
 
-    d->canvas->updateSize();
-    KoPageLayout &layout = d->activePage->pageLayout();
-    d->horizontalRuler->setRulerLength(layout.width);
-    d->verticalRuler->setRulerLength(layout.height);
-    d->horizontalRuler->setActiveRange(layout.leftMargin, layout.width - layout.rightMargin);
-    d->verticalRuler->setActiveRange(layout.topMargin, layout.height - layout.bottomMargin);
-
-    QSizeF pageSize( layout.width, layout.height );
-    d->canvas->setDocumentOrigin(QPointF(layout.width, layout.height));
-    // the page is in the center of the canvas
-    d->zoomController->setDocumentSize(pageSize * 3);
-    d->zoomController->setPageSize(pageSize);
-    d->canvas->resourceManager()->setResource( KoCanvasResourceManager::PageSize, pageSize );
-
-    d->canvas->update();
+    updateCanvasSize(true);
 
     updatePageNavigationActions();
 
@@ -732,7 +773,6 @@ void KoPAView::doUpdateActivePage( KoPAPageBase * page )
     }
 
     pageOffsetChanged();
-    d->canvasController->setScrollBarValue(scrollValue);
 }
 
 void KoPAView::setActivePage( KoPAPageBase* page )
@@ -773,7 +813,6 @@ void KoPAView::setActivePage( KoPAPageBase* page )
     if ( shell() && pageChanged ) {
         d->documentStructureDocker->setActivePage(d->activePage);
         proxyObject->emitActivePageChanged();
-        updatePageCount();
     }
 
     // Set the current page number in the canvas resource provider
@@ -1236,16 +1275,6 @@ void KoPAView::updateUnit(const KoUnit &unit)
     d->horizontalRuler->setUnit(unit);
     d->verticalRuler->setUnit(unit);
     d->canvas->resourceManager()->setResource(KoCanvasResourceManager::Unit, unit);
-}
-
-void KoPAView::updatePageCount()
-{
-    int pageNumber = d->doc->pageIndex(d->activePage) + 1;
-    if (pageNumber > 0) {
-        int pageCount = d->doc->pages(dynamic_cast<KoPAPage*>(d->activePage) == 0).size(); 
-        // TODO POST2.4 add 
-        d->pageNumbers->setText(QString("%1/%2").arg(pageNumber).arg(pageCount));
-    }
 }
 
 #include <KoPAView.moc>

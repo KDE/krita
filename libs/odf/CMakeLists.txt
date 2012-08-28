@@ -31,9 +31,11 @@ set(koodf_LIB_SRCS
     KoOdfDocument.cpp
     KoEmbeddedDocumentSaver.cpp
     KoBorder.cpp
+    Ko3dScene.cpp
     KoShadowStyle.cpp
     KoPageLayout.cpp
     KoPageFormat.cpp
+    KoColumns.cpp
     KoStore.cpp
     KoTarStore.cpp
     KoDirectoryStore.cpp
@@ -105,6 +107,7 @@ install( FILES
     KoGenChanges.h
     KoEmbeddedDocumentSaver.h
     KoBorder.h
+    Ko3dScene.h
     KoShadowStyle.h
     KoPageLayout.h
     KoPageFormat.h
@@ -117,5 +120,6 @@ install( FILES
     KoProperties.h
     KoUnit.h
     KoElementReference.h
+    KoTableTemplate.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 

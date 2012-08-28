@@ -47,8 +47,8 @@ public:
      * and you need to ensure that it lives longer than this object
      * unless you reset the model to 0.
      */
-    void setRdfModel(const Soprano::Model *m);
-    const Soprano::Model *rdfModel() const;
+    void setRdfModel(QSharedPointer<Soprano::Model> m);
+    QSharedPointer<Soprano::Model> rdfModel() const;
 
 private:
     struct Private;

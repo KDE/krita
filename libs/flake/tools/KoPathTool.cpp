@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006,2008-2009 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2006-2012 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2006,2007 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2007, 2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
@@ -50,8 +50,9 @@
 #include "KoSnapGuide.h"
 #include "KoShapeController.h"
 
+#include <KoIcon.h>
+
 #include <KAction>
-#include <KIcon>
 #include <KDebug>
 #include <KLocale>
 #include <QPainter>
@@ -78,76 +79,92 @@ qreal squaredDistance(const QPointF& p1, const QPointF &p2)
     return dx*dx + dy*dy;
 }
 
+struct KoPathTool::PathSegment {
+    PathSegment()
+        : path(0), segmentStart(0), positionOnSegment(0)
+    {
+    }
+
+    bool isValid() {
+        return  path && segmentStart;
+    }
+
+    KoPathShape *path;
+    KoPathPoint *segmentStart;
+    qreal positionOnSegment;
+};
+
 KoPathTool::KoPathTool(KoCanvasBase *canvas)
         : KoToolBase(canvas)
         , m_activeHandle(0)
         , m_handleRadius(3)
         , m_pointSelection(this)
+        , m_activeSegment(0)
         , m_currentStrategy(0)
 {
     QActionGroup *points = new QActionGroup(this);
     // m_pointTypeGroup->setExclusive(true);
-    m_actionPathPointCorner = new KAction(KIcon("pathpoint-corner"), i18n("Corner point"), this);
+    m_actionPathPointCorner = new KAction(koIcon("pathpoint-corner"), i18n("Corner point"), this);
     addAction("pathpoint-corner", m_actionPathPointCorner);
     m_actionPathPointCorner->setData(KoPathPointTypeCommand::Corner);
     points->addAction(m_actionPathPointCorner);
 
-    m_actionPathPointSmooth = new KAction(KIcon("pathpoint-smooth"), i18n("Smooth point"), this);
+    m_actionPathPointSmooth = new KAction(koIcon("pathpoint-smooth"), i18n("Smooth point"), this);
     addAction("pathpoint-smooth", m_actionPathPointSmooth);
     m_actionPathPointSmooth->setData(KoPathPointTypeCommand::Smooth);
     points->addAction(m_actionPathPointSmooth);
 
-    m_actionPathPointSymmetric = new KAction(KIcon("pathpoint-symmetric"), i18n("Symmetric Point"), this);
+    m_actionPathPointSymmetric = new KAction(koIcon("pathpoint-symmetric"), i18n("Symmetric Point"), this);
     addAction("pathpoint-symmetric", m_actionPathPointSymmetric);
     m_actionPathPointSymmetric->setData(KoPathPointTypeCommand::Symmetric);
     points->addAction(m_actionPathPointSymmetric);
 
-    m_actionCurvePoint = new KAction(KIcon("pathpoint-curve"), i18n("Make curve point"), this);
+    m_actionCurvePoint = new KAction(koIcon("pathpoint-curve"), i18n("Make curve point"), this);
     addAction("pathpoint-curve", m_actionCurvePoint);
     connect(m_actionCurvePoint, SIGNAL(triggered()), this, SLOT(pointToCurve()));
 
-    m_actionLinePoint = new KAction(KIcon("pathpoint-line"), i18n("Make line point"), this);
+    m_actionLinePoint = new KAction(koIcon("pathpoint-line"), i18n("Make line point"), this);
     addAction("pathpoint-line", m_actionLinePoint);
     connect(m_actionLinePoint, SIGNAL(triggered()), this, SLOT(pointToLine()));
 
-    m_actionLineSegment = new KAction(KIcon("pathsegment-line"), i18n("Segment to Line"), this);
+    m_actionLineSegment = new KAction(koIcon("pathsegment-line"), i18n("Segment to Line"), this);
     m_actionLineSegment->setShortcut(Qt::Key_F);
     addAction("pathsegment-line", m_actionLineSegment);
     connect(m_actionLineSegment, SIGNAL(triggered()), this, SLOT(segmentToLine()));
 
-    m_actionCurveSegment = new KAction(KIcon("pathsegment-curve"), i18n("Segment to Curve"), this);
+    m_actionCurveSegment = new KAction(koIcon("pathsegment-curve"), i18n("Segment to Curve"), this);
     m_actionCurveSegment->setShortcut(Qt::Key_C);
     addAction("pathsegment-curve", m_actionCurveSegment);
     connect(m_actionCurveSegment, SIGNAL(triggered()), this, SLOT(segmentToCurve()));
 
-    m_actionAddPoint = new KAction(KIcon("pathpoint-insert"), i18n("Insert point"), this);
+    m_actionAddPoint = new KAction(koIcon("pathpoint-insert"), i18n("Insert point"), this);
     addAction("pathpoint-insert", m_actionAddPoint);
     m_actionAddPoint->setShortcut(Qt::Key_Insert);
     connect(m_actionAddPoint, SIGNAL(triggered()), this, SLOT(insertPoints()));
 
-    m_actionRemovePoint = new KAction(KIcon("pathpoint-remove"), i18n("Remove point"), this);
+    m_actionRemovePoint = new KAction(koIcon("pathpoint-remove"), i18n("Remove point"), this);
     m_actionRemovePoint->setShortcut(Qt::Key_Backspace);
     addAction("pathpoint-remove", m_actionRemovePoint);
     connect(m_actionRemovePoint, SIGNAL(triggered()), this, SLOT(removePoints()));
 
-    m_actionBreakPoint = new KAction(KIcon("path-break-point"), i18n("Break at point"), this);
+    m_actionBreakPoint = new KAction(koIcon("path-break-point"), i18n("Break at point"), this);
     addAction("path-break-point", m_actionBreakPoint);
     connect(m_actionBreakPoint, SIGNAL(triggered()), this, SLOT(breakAtPoint()));
 
-    m_actionBreakSegment = new KAction(KIcon("path-break-segment"), i18n("Break at segment"), this);
+    m_actionBreakSegment = new KAction(koIcon("path-break-segment"), i18n("Break at segment"), this);
     addAction("path-break-segment", m_actionBreakSegment);
     connect(m_actionBreakSegment, SIGNAL(triggered()), this, SLOT(breakAtSegment()));
 
-    m_actionJoinSegment = new KAction(KIcon("pathpoint-join"), i18n("Join with segment"), this);
+    m_actionJoinSegment = new KAction(koIcon("pathpoint-join"), i18n("Join with segment"), this);
     m_actionJoinSegment->setShortcut(Qt::Key_J);
     addAction("pathpoint-join", m_actionJoinSegment);
     connect(m_actionJoinSegment, SIGNAL(triggered()), this, SLOT(joinPoints()));
 
-    m_actionMergePoints = new KAction(KIcon("pathpoint-merge"), i18n("Merge points"), this);
+    m_actionMergePoints = new KAction(koIcon("pathpoint-merge"), i18n("Merge points"), this);
     addAction("pathpoint-merge", m_actionMergePoints);
     connect(m_actionMergePoints, SIGNAL(triggered()), this, SLOT(mergePoints()));
 
-    m_actionConvertToPath = new KAction(KIcon("convert-to-path"), i18n("To Path"), this);
+    m_actionConvertToPath = new KAction(koIcon("convert-to-path"), i18n("To Path"), this);
     m_actionConvertToPath->setShortcut(Qt::Key_P);
     addAction("convert-to-path", m_actionConvertToPath);
     connect(m_actionConvertToPath, SIGNAL(triggered()), this, SLOT(convertToPath()));
@@ -168,6 +185,9 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
 
 KoPathTool::~KoPathTool()
 {
+    delete m_activeHandle;
+    delete m_activeSegment;
+    delete m_currentStrategy;
 }
 
 QList<QWidget *>  KoPathTool::createOptionWidgets()
@@ -474,14 +494,13 @@ void KoPathTool::mousePressEvent(KoPointerEvent *event)
         if (event->button() & Qt::LeftButton) {
 
             // check if we hit a path segment
-            KoPathShape * clickedShape = 0;
-            KoPathPoint * clickedPoint = 0;
-            qreal clickedPointParam = 0.0;
-            if (segmentAtPoint(event->point, clickedShape, clickedPoint, clickedPointParam)) {
-                KoPathPointIndex index = clickedShape->pathPointIndex(clickedPoint);
-                KoPathPointData data(clickedShape, index);
-                m_currentStrategy = new KoPathSegmentChangeStrategy(this, event->point, data, clickedPointParam);
+            if (m_activeSegment && m_activeSegment->isValid()) {
+                KoPathPointIndex index = m_activeSegment->path->pathPointIndex(m_activeSegment->segmentStart);
+                KoPathPointData data(m_activeSegment->path, index);
+                m_currentStrategy = new KoPathSegmentChangeStrategy(this, event->point, data, m_activeSegment->positionOnSegment);
                 event->accept();
+                delete m_activeSegment;
+                m_activeSegment = 0;
             } else {
                 if ((event->modifiers() & Qt::ControlModifier) == 0) {
                     m_pointSelection.clear();
@@ -509,6 +528,9 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
             m_activeHandle->repaint();
         return;
     }
+
+    delete m_activeSegment;
+    m_activeSegment = 0;
 
     foreach(KoPathShape *shape, m_pointSelection.selectedShapes()) {
         QRectF roi = handleGrabRect(shape->documentToShape(event->point));
@@ -604,13 +626,21 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
         m_activeHandle->repaint();
     delete m_activeHandle;
     m_activeHandle = 0;
-    uint selectedPointCount = m_pointSelection.size();
-    if (selectedPointCount == 0)
-        emit statusTextChanged("");
-    else if (selectedPointCount == 1)
-        emit statusTextChanged(i18n("Press B to break path at selected point."));
-    else
-        emit statusTextChanged(i18n("Press B to break path at selected segments."));
+
+    PathSegment *hoveredSegment = segmentAtPoint(event->point);
+    if(hoveredSegment) {
+        useCursor(Qt::PointingHandCursor);
+        emit statusTextChanged(i18n("Drag to change curve directly. Double click to insert new path point."));
+        m_activeSegment = hoveredSegment;
+    } else {
+        uint selectedPointCount = m_pointSelection.size();
+        if (selectedPointCount == 0)
+            emit statusTextChanged("");
+        else if (selectedPointCount == 1)
+            emit statusTextChanged(i18n("Press B to break path at selected point."));
+        else
+            emit statusTextChanged(i18n("Press B to break path at selected segments."));
+    }
 }
 
 void KoPathTool::mouseReleaseEvent(KoPointerEvent *event)
@@ -723,59 +753,14 @@ void KoPathTool::mouseDoubleClickEvent(KoPointerEvent *event)
     if (m_currentStrategy)
         return;
 
-    /*
-    // TODO: use global click proximity once added to the canvas resource provider
-    const int clickProximity = 5;
-
-    // convert click proximity to point using the current zoom level
-    QPointF clickOffset = d->canvas->viewConverter()->viewToDocument(QPointF(clickProximity, clickProximity));
-    // the max allowed distance from a segment
-    const qreal maxSquaredDistance = clickOffset.x()*clickOffset.x();
-
-    KoPathShape * clickedShape = 0;
-    KoPathPoint * clickedSegmentStart = 0;
-    qreal clickedPointParam = 0.0;
-
-    foreach(KoPathShape *shape, m_pointSelection.selectedShapes()) {
-        if (dynamic_cast<KoParameterShape*>(shape))
-            continue;
-
-        // convert document point to shape coordinates
-        QPointF point = shape->documentToShape(event->point);
-        // our region of interest, i.e. a region around our mouse position
-        QRectF roi(point - clickOffset, point + clickOffset);
-
-        qreal minSqaredDistance = HUGE_VAL;
-        // check all segments of this shape which intersect the region of interest
-        QList<KoPathSegment> segments = shape->segmentsAt(roi);
-        foreach (const KoPathSegment &s, segments) {
-            qreal nearestPointParam = s.nearestPoint(point);
-            QPointF nearestPoint = s.pointAt(nearestPointParam);
-            QPointF diff = point - nearestPoint;
-            qreal squaredDistance = diff.x()*diff.x() + diff.y()*diff.y();
-            // are we within the allowed distance ?
-            if (squaredDistance > maxSquaredDistance)
-                continue;
-            // are we closer to the last closest point ?
-            if (squaredDistance < minSqaredDistance) {
-                clickedShape = shape;
-                clickedSegmentStart = s.first();
-                clickedPointParam = nearestPointParam;
-            }
-        }
-    }
-    */
-
-    KoPathShape * clickedShape = 0;
-    KoPathPoint * clickedSegmentStart = 0;
-    qreal clickedPointParam = 0.0;
-    if (! segmentAtPoint(event->point, clickedShape, clickedSegmentStart, clickedPointParam))
+    PathSegment *s = segmentAtPoint(event->point);
+    if (!s)
         return;
 
-    if (clickedShape && clickedSegmentStart) {
+    if (s->isValid()) {
         QList<KoPathPointData> segments;
-        segments.append(KoPathPointData(clickedShape, clickedShape->pathPointIndex(clickedSegmentStart)));
-        KoPathPointInsertCommand *cmd = new KoPathPointInsertCommand(segments, clickedPointParam);
+        segments.append(KoPathPointData(s->path, s->path->pathPointIndex(s->segmentStart)));
+        KoPathPointInsertCommand *cmd = new KoPathPointInsertCommand(segments, s->positionOnSegment);
         d->canvas->addCommand(cmd);
 
         foreach (KoPathPoint * p, cmd->insertedPoints()) {
@@ -784,9 +769,10 @@ void KoPathTool::mouseDoubleClickEvent(KoPointerEvent *event)
         updateActions();
         event->accept();
     }
+    delete s;
 }
 
-bool KoPathTool::segmentAtPoint(const QPointF &point, KoPathShape* &shape, KoPathPoint* &segmentStart, qreal &pointParam)
+KoPathTool::PathSegment* KoPathTool::segmentAtPoint(const QPointF &point)
 {
     Q_D(KoToolBase);
     // TODO: use global click proximity once added to the canvas resource provider
@@ -797,9 +783,7 @@ bool KoPathTool::segmentAtPoint(const QPointF &point, KoPathShape* &shape, KoPat
     // the max allowed distance from a segment
     const qreal maxSquaredDistance = clickOffset.x()*clickOffset.x();
 
-    KoPathShape * clickedShape = 0;
-    KoPathPoint * clickedSegmentStart = 0;
-    qreal clickedPointParam = 0.0;
+    PathSegment *segment = new PathSegment;
 
     foreach(KoPathShape *shape, m_pointSelection.selectedShapes()) {
         KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>(shape);
@@ -824,18 +808,19 @@ bool KoPathTool::segmentAtPoint(const QPointF &point, KoPathShape* &shape, KoPat
                 continue;
             // are we closer to the last closest point ?
             if (squaredDistance < minSqaredDistance) {
-                clickedShape = shape;
-                clickedSegmentStart = s.first();
-                clickedPointParam = nearestPointParam;
+                segment->path = shape;
+                segment->segmentStart = s.first();
+                segment->positionOnSegment = nearestPointParam;
             }
         }
     }
 
-    shape = clickedShape;
-    segmentStart = clickedSegmentStart;
-    pointParam = clickedPointParam;
+    if (!segment->isValid()) {
+        delete segment;
+        segment = 0;
+    }
 
-    return (shape && segmentStart);
+    return segment;
 }
 
 void KoPathTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
@@ -934,12 +919,14 @@ void KoPathTool::deactivate()
     m_pointSelection.setSelectedShapes(QList<KoPathShape*>());
     delete m_activeHandle;
     m_activeHandle = 0;
+    delete m_activeSegment;
+    m_activeSegment = 0;
     delete m_currentStrategy;
     m_currentStrategy = 0;
     d->canvas->snapGuide()->reset();
 }
 
-void KoPathTool::resourceChanged(int key, const QVariant & res)
+void KoPathTool::documentResourceChanged(int key, const QVariant & res)
 {
     if (key == KoDocumentResourceManager::HandleRadius) {
         int oldHandleRadius = m_handleRadius;

@@ -21,6 +21,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include "KoConfigDocumentPage.h"
 
 #include <KoDocument.h>
+#include <KoPart.h>
 
 #include <kdialog.h>
 #include <klocale.h>
@@ -28,7 +29,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <kcomponentdata.h>
 #include <kconfig.h>
 
-#include <QVBoxLayout>
+#include <QFormLayout>
 #include <QCheckBox>
 #include <QGroupBox>
 
@@ -53,12 +54,10 @@ KoConfigDocumentPage::KoConfigDocumentPage(KoDocument* doc, char* name)
 {
     setObjectName(name);
 
-    d->config = d->doc->componentData().config();
+    d->config = d->doc->documentPart()->componentData().config();
 
     QGroupBox* gbDocumentSettings = new QGroupBox(i18n("Document Settings"), this);
-    QVBoxLayout *layout = new QVBoxLayout(gbDocumentSettings);
-    layout->setSpacing(KDialog::spacingHint());
-    layout->setMargin(KDialog::marginHint());
+    QFormLayout *layout = new QFormLayout(gbDocumentSettings);
 
     d->oldAutoSave = doc->defaultAutoSave() / 60;
 
@@ -72,16 +71,13 @@ KoConfigDocumentPage::KoConfigDocumentPage(KoDocument* doc, char* name)
 
     d->autoSave = new KIntNumInput(d->oldAutoSave, gbDocumentSettings);
     d->autoSave->setRange(0, 60, 1);
-    d->autoSave->setLabel(i18n("Auto save (min):"));
-    d->autoSave->setSpecialValueText(i18n("No auto save"));
-    d->autoSave->setSuffix(i18n("min"));
-    layout->addWidget(d->autoSave);
+    d->autoSave->setSpecialValueText(i18n("No autosave"));
+    d->autoSave->setSuffix(i18nc("unit symbol for minutes, leading space as separator", " min"));
+    layout->addRow(i18n("Autosave interval:"), d->autoSave);
 
-    d->createBackupFile = new QCheckBox(i18n("Create backup file"), gbDocumentSettings);
+    d->createBackupFile = new QCheckBox(gbDocumentSettings);
     d->createBackupFile->setChecked(d->oldBackupFile);
-    layout->addWidget(d->createBackupFile);
-
-    layout->addStretch();
+    layout->addRow(i18n("Create backup file:"), d->createBackupFile);
 }
 
 KoConfigDocumentPage::~KoConfigDocumentPage()

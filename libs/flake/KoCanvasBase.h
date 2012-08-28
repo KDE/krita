@@ -137,6 +137,12 @@ public:
     virtual KoViewConverter *viewConverter() const = 0;
 
     /**
+     * Convert a coordinate in pixels to pt.
+     * @param viewPoint the point in the coordinate system of the widget, or window.
+     */
+    virtual QPointF viewToDocument(const QPointF &viewPoint) const;
+
+    /**
      * Return the widget that will be added to the scrollArea.
      */
     virtual QWidget *canvasWidget() = 0;

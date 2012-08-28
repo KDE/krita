@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -57,7 +57,10 @@ void SimpleRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool i
     QRectF updateRect = rootArea->associatedShape()->outlineRect();
     rootArea->associatedShape()->update(updateRect);
 
-    QSizeF newSize = rootArea->associatedShape()->size();
+    QSizeF newSize = rootArea->associatedShape()->size()
+                    - QSizeF(m_textShapeData->leftPadding() + m_textShapeData->rightPadding(),
+                             m_textShapeData->topPadding() + m_textShapeData->bottomPadding());
+
     if (m_textShapeData->verticalAlignment() & Qt::AlignBottom) {
     }
     if (m_textShapeData->verticalAlignment() & Qt::AlignVCenter) {
@@ -92,7 +95,8 @@ void SimpleRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool i
             sizeAnchor = KoFlake::CenteredPosition;
         }
     }
-
+    newSize += QSizeF(m_textShapeData->leftPadding() + m_textShapeData->rightPadding(),
+                      m_textShapeData->topPadding() + m_textShapeData->bottomPadding());
     if (newSize != rootArea->associatedShape()->size()) {
         // OO grows to both sides so when to small the initial layouting needs
         // to keep that into account.
@@ -117,6 +121,8 @@ void SimpleRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool i
 QSizeF SimpleRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
 {
     QSizeF size = m_textShape->size();
+    size.setWidth(qMax(size.width() - m_textShapeData->leftPadding() - m_textShapeData->rightPadding(), qreal(1.0)));
+
     // In simple cases we always set height way too high so that we have no breaking
     // If the shape grows afterwards or not is handled in doPostLayout()
     size.setHeight(1E6);

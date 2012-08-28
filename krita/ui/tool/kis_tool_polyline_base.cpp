@@ -26,23 +26,28 @@
 #include <KoCanvasController.h>
 #include <KoViewConverter.h>
 
-#include <kis_system_locker.h>
 #include "kis_tool_polyline_base.h"
 
 #define PREVIEW_LINE_WIDTH 1
 
-KisToolPolylineBase::KisToolPolylineBase(KoCanvasBase * canvas, const QCursor & cursor)
+KisToolPolylineBase::KisToolPolylineBase(KoCanvasBase * canvas,  KisToolPolylineBase::ToolType type, const QCursor & cursor)
     : KisToolShape(canvas, cursor),
-      m_dragging(false)
+      m_dragging(false),
+      m_type(type)
 {
 }
 
 void KisToolPolylineBase::mousePressEvent(KoPointerEvent *event)
 {
-    if (nodePaintAbility() == NONE) {
-        return;
+    if (m_type == PAINT) {
+        if (!nodeEditable() || nodePaintAbility() == NONE) {
+            return;
+        }
+    } else {
+        if (!selectionEditable()) {
+            return;
+        }
     }
-
     if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
                           Qt::LeftButton, Qt::ShiftModifier)) {
 
@@ -166,7 +171,6 @@ void KisToolPolylineBase::finish()
     if (!currentNode())
         return;
 
-    KisSystemLocker locker(currentNode());
     m_dragging = false;
     updateArea();
     if(m_points.count() > 1) {

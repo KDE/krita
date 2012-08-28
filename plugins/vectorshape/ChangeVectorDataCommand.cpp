@@ -26,13 +26,17 @@
 
 #include "VectorShape.h"
 
-ChangeVectorDataCommand::ChangeVectorDataCommand(VectorShape *shape, QByteArray &newImageData, KUndo2Command *parent)
+ChangeVectorDataCommand::ChangeVectorDataCommand(VectorShape *shape,
+                                                 const QByteArray &newImageData, VectorShape::VectorType newVectorType,
+                                                 KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_shape(shape)
 {
     Q_ASSERT( shape );
     m_oldImageData = m_shape->compressedContents();
+    m_oldVectorType = m_shape->vectorType();
     m_newImageData = newImageData;
+    m_newVectorType = newVectorType;
     setText(i18nc("(qtundo-format)", "Change Vector Data"));
 }
 
@@ -43,13 +47,13 @@ ChangeVectorDataCommand::~ChangeVectorDataCommand()
 void ChangeVectorDataCommand::redo()
 {
     m_shape->update();
-    m_shape->setCompressedContents(m_newImageData);
+    m_shape->setCompressedContents(m_newImageData, m_newVectorType);
     m_shape->update();
 }
 
 void ChangeVectorDataCommand::undo()
 {
     m_shape->update();
-    m_shape->setCompressedContents(m_oldImageData);
+    m_shape->setCompressedContents(m_oldImageData, m_oldVectorType);
     m_shape->update();
 }

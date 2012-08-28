@@ -26,6 +26,7 @@
 #include "KoToolFactoryBase.h"
 #include "kis_tool_polyline_base.h"
 #include "kis_selection_tool_config_widget_helper.h"
+#include <KoIcon.h>
 
 
 class KisToolSelectPolygonal : public KisToolPolylineBase
@@ -39,7 +40,6 @@ public:
 private:
     void keyPressEvent(QKeyEvent *event);
     void finishPolyline(const QVector<QPointF> &points);
-
 private:
     KisSelectionToolConfigWidgetHelper m_widgetHelper;
 };
@@ -53,7 +53,7 @@ public:
             : KoToolFactoryBase("KisToolSelectPolygonal") {
         setToolTip(i18n("Select a polygonal region"));
         setToolType(TOOL_TYPE_SELECTED);
-        setIcon("tool_polygonal_selection");
+        setIconName(koIconNameCStr("tool_polygonal_selection"));
         setPriority(54);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }

@@ -117,7 +117,7 @@ protected:
     private:
 
         const KisPaintDeviceSP m_source;
-        KisHLineConstIteratorPixel* m_iterator;
+        KisHLineConstIteratorSP m_iterator;
     };
 
 public:

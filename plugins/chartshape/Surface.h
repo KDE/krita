@@ -42,7 +42,7 @@ namespace KChart {
 class Surface
 {
 public:
-    Surface( PlotArea *parent );
+    Surface(PlotArea *parent);
     ~Surface();
 
     /**
@@ -56,14 +56,13 @@ public:
     QBrush brush() const;
     QPen framePen() const;
 
-    void setPosition( const QPointF &position );
-    void setWidth( int );
-    void setBrush( const QBrush &brush );
-    void setFramePen( const QPen &pen );
+    void setPosition(const QPointF &position);
+    void setWidth(int);
+    void setBrush(const QBrush &brush);
+    void setFramePen(const QPen &pen);
     
-    bool loadOdf( const KoXmlElement &surfaceElement, KoShapeLoadingContext &context );
-    void saveOdf( KoShapeSavingContext &context, 
-                  const char *elementName );
+    bool loadOdf(const KoXmlElement &surfaceElement, KoShapeLoadingContext &context);
+    void saveOdf(KoShapeSavingContext &context, const char *elementName);
 
 private:
     class Private;

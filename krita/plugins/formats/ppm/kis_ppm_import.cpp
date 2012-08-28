@@ -37,13 +37,13 @@
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>
-#include <kis_iterator.h>
 #include <KoColorSpaceTraits.h>
 #include <kis_paint_device.h>
 #include <kis_transaction.h>
 #include <KoColorSpace.h>
 #include <qendian.h>
 #include <KoColorModelStandardIds.h>
+#include "kis_iterator_ng.h"
 
 K_PLUGIN_FACTORY(PPMImportFactory, registerPlugin<KisPPMImport>();)
 K_EXPORT_PLUGIN(PPMImportFactory("krita"))
@@ -302,50 +302,45 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
     }
 
     for (int v = 0; v < height; ++v) {
-        KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, v, width);
+        KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, v, width);
         ppmFlow->nextRow();
         if (!ppmFlow->valid()) return KoFilter::CreationError;
         if (maxval <= 255) {
             if (channels == 3) {
-                while (!it.isDone()) {
-                    KoRgbTraits<quint8>::setRed(it.rawData(), ppmFlow->nextUint8());
-                    KoRgbTraits<quint8>::setGreen(it.rawData(), ppmFlow->nextUint8());
-                    KoRgbTraits<quint8>::setBlue(it.rawData(), ppmFlow->nextUint8());
-                    colorSpace->setOpacity(it.rawData(), OPACITY_OPAQUE_U8, 1);
-                    ++it;
-                }
+                do {
+                    KoBgrTraits<quint8>::setRed(it->rawData(), ppmFlow->nextUint8());
+                    KoBgrTraits<quint8>::setGreen(it->rawData(), ppmFlow->nextUint8());
+                    KoBgrTraits<quint8>::setBlue(it->rawData(), ppmFlow->nextUint8());
+                    colorSpace->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
+                } while (it->nextPixel());
             } else if (channels == 1) {
-                while (!it.isDone()) {
-                    *reinterpret_cast<quint8*>(it.rawData()) = ppmFlow->nextUint8();
-                    colorSpace->setOpacity(it.rawData(), OPACITY_OPAQUE_U8, 1);
-                    ++it;
-                }
+                do {
+                    *reinterpret_cast<quint8*>(it->rawData()) = ppmFlow->nextUint8();
+                    colorSpace->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
+                } while (it->nextPixel());
             } else if (channels == 0) {
-                while (!it.isDone()) {
+                do {
                     if (ppmFlow->nextUint1()) {
-                        *reinterpret_cast<quint8*>(it.rawData()) = 255;
+                        *reinterpret_cast<quint8*>(it->rawData()) = 255;
                     } else {
-                        *reinterpret_cast<quint8*>(it.rawData()) = 0;
+                        *reinterpret_cast<quint8*>(it->rawData()) = 0;
                     }
-                    colorSpace->setOpacity(it.rawData(), OPACITY_OPAQUE_U8, 1);
-                    ++it;
-                }
+                    colorSpace->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
+                } while (it->nextPixel());
             }
         } else {
             if (channels == 3) {
-                while (!it.isDone()) {
-                    KoRgbU16Traits::setRed(it.rawData(), ppmFlow->nextUint16());
-                    KoRgbU16Traits::setGreen(it.rawData(), ppmFlow->nextUint16());
-                    KoRgbU16Traits::setBlue(it.rawData(), ppmFlow->nextUint16());
-                    colorSpace->setOpacity(it.rawData(), OPACITY_OPAQUE_U8, 1);
-                    ++it;
-                }
+                do {
+                    KoBgrU16Traits::setRed(it->rawData(), ppmFlow->nextUint16());
+                    KoBgrU16Traits::setGreen(it->rawData(), ppmFlow->nextUint16());
+                    KoBgrU16Traits::setBlue(it->rawData(), ppmFlow->nextUint16());
+                    colorSpace->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
+                } while (it->nextPixel());
             } else if (channels == 1) {
-                while (!it.isDone()) {
-                    *reinterpret_cast<quint16*>(it.rawData()) = ppmFlow->nextUint16();
-                    colorSpace->setOpacity(it.rawData(), OPACITY_OPAQUE_U8, 1);
-                    ++it;
-                }
+                do {
+                    *reinterpret_cast<quint16*>(it->rawData()) = ppmFlow->nextUint16();
+                    colorSpace->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
+                } while (it->nextPixel());
             }
         }
     }

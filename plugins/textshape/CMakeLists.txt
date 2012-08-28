@@ -60,7 +60,6 @@ SET ( textshape_SRCS
     dialogs/StyleManager.cpp
     dialogs/StyleManagerDialog.cpp
     dialogs/ParagraphGeneral.cpp
-    dialogs/NewStyleWidget.cpp
     dialogs/CharacterGeneral.cpp
     dialogs/CharacterHighlighting.cpp
     dialogs/InsertCharacter.cpp
@@ -90,7 +89,6 @@ SET ( textshape_SRCS
     dialogs/ListLevelChooser.cpp
 
     commands/ChangeListLevelCommand.cpp
-    commands/TextCutCommand.cpp
     commands/ShowChangesCommand.cpp
     commands/AcceptChangeCommand.cpp
     commands/RejectChangeCommand.cpp
@@ -116,7 +114,6 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/ParagraphBulletsNumbers.ui
     dialogs/ParagraphDropCaps.ui   
     dialogs/StyleManager.ui
-    dialogs/NewStyleWidget.ui
     dialogs/CharacterGeneral.ui
     dialogs/CharacterHighlighting.ui
     dialogs/StyleManagerWelcome.ui

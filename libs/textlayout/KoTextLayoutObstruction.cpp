@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007, 2010 Thomas Zander <zander@kde.org>
- * Copyright (C) 2010 Ko Gmbh <casper.boemann@kogmbh.com>
+ * Copyright (C) 2010 Ko Gmbh <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,9 +20,10 @@
 
 #include "KoTextLayoutObstruction.h"
 #include <KoShapeContainer.h>
-#include <KoShapeBorderModel.h>
+#include <KoShapeStrokeModel.h>
 #include <KoShapeShadow.h>
 #include <KoShapeGroup.h>
+#include <KoClipPath.h>
 
 #include <qnumeric.h>
 
@@ -37,13 +38,16 @@ KoTextLayoutObstruction::KoTextLayoutObstruction(KoShape *shape, const QTransfor
     QPainterPath path = decoratedOutline(m_shape, borderHalfWidth);
 
     //TODO check if path is convex. otherwise do triangulation and create more convex obstructions
-    init(matrix, path, shape->textRunAroundDistance(), borderHalfWidth);
+    init(matrix, path, shape->textRunAroundDistanceLeft(), shape->textRunAroundDistanceTop(), shape->textRunAroundDistanceRight(), shape->textRunAroundDistanceBottom(), borderHalfWidth);
 
     if (shape->textRunAroundSide() == KoShape::NoRunAround) {
         // make the shape take the full width of the text area
         m_side = Empty;
     } else if (shape->textRunAroundSide() == KoShape::RunThrough) {
-        m_distance = 0;
+        m_distanceLeft = 0;
+        m_distanceTop = 0;
+        m_distanceRight = 0;
+        m_distanceBottom = 0;
         // We don't exist.
         return;
     } else if (shape->textRunAroundSide() == KoShape::LeftRunAroundSide) {
@@ -60,6 +64,27 @@ KoTextLayoutObstruction::KoTextLayoutObstruction(KoShape *shape, const QTransfor
     }
 }
 
+KoTextLayoutObstruction::KoTextLayoutObstruction(QRectF rect, bool rtl)
+    : m_side(None),
+    m_polygon(QPolygonF()),
+    m_line(QRectF()),
+    m_shape(0),
+    m_runAroundThreshold(0)
+{
+    qreal borderHalfWidth = 0;
+    qreal textRunAroundDistance = 1;
+
+    QPainterPath path;
+    path.addRect(rect);
+
+    init(QTransform(), path, textRunAroundDistance, 0.0, textRunAroundDistance, 0.0,  borderHalfWidth);
+    if (rtl) {
+        m_side = Right;
+    } else {
+        m_side = Left;
+    }
+}
+
 QPainterPath KoTextLayoutObstruction::decoratedOutline(const KoShape *shape, qreal &borderHalfWidth) const
 {
     const KoShapeGroup *shapeGroup = dynamic_cast<const KoShapeGroup *>(shape);
@@ -72,14 +97,24 @@ QPainterPath KoTextLayoutObstruction::decoratedOutline(const KoShape *shape, qre
         return groupPath;
     }
 
-    QPainterPath path = shape->outline();
+    QPainterPath path;
+    if (shape->textRunAroundContour() != KoShape::ContourBox) {
+        KoClipPath *clipPath = shape->clipPath();
+        if (clipPath) {
+            path = clipPath->pathForSize(shape->size());
+        } else {
+            path = shape->outline();
+        }
+    } else {
+        path.addRect(shape->outlineRect());
+    }
 
     QRectF bb = shape->outlineRect();
     borderHalfWidth = 0;
  
-    if (shape->border()) {
+    if (shape->stroke()) {
         KoInsets insets;
-        shape->border()->borderInsets(shape, insets);
+        shape->stroke()->strokeInsets(shape, insets);
         /*
         bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
         path = QPainterPath();
@@ -102,31 +137,48 @@ QPainterPath KoTextLayoutObstruction::decoratedOutline(const KoShape *shape, qre
     return path;
 }
 
-void KoTextLayoutObstruction::init(const QTransform &matrix, const QPainterPath &obstruction, qreal distance, qreal borderHalfWidth)
+void KoTextLayoutObstruction::init(const QTransform &matrix, const QPainterPath &obstruction, qreal distanceLeft, qreal distanceTop, qreal distanceRight, qreal distanceBottom, qreal borderHalfWidth)
 {
-    m_distance = distance;
+    m_distanceLeft = distanceLeft;
+    m_distanceTop = distanceTop;
+    m_distanceRight = distanceRight;
+    m_distanceBottom = distanceBottom;
     QPainterPath path =  matrix.map(obstruction);
-    m_bounds = path.boundingRect();
-    distance += borderHalfWidth;
-    if (distance >= 0.0) {
-        QTransform grow = matrix;
-        grow.translate(m_bounds.width() / 2.0, m_bounds.height() / 2.0);
-        qreal scaleX = 2 * distance;
-        if (m_bounds.width() > 0)
-            scaleX = (m_bounds.width() + 2 * distance) / m_bounds.width();
-        qreal scaleY = 2 * distance;
-        if (m_bounds.height() > 0)
-            scaleY = (m_bounds.height() + 2 * distance) / m_bounds.height();
-        Q_ASSERT(!qIsNaN(scaleY));
-        Q_ASSERT(!qIsNaN(scaleX));
-        grow.scale(scaleX, scaleY);
-        grow.translate(-m_bounds.width() / 2.0, -m_bounds.height() / 2.0);
+    distanceLeft += borderHalfWidth;
+    distanceTop += borderHalfWidth;
+    distanceRight += borderHalfWidth;
+    distanceBottom += borderHalfWidth;
 
-        path =  grow.map(obstruction);
-        // kDebug() <<"Grow" << distance <<", Before:" << m_bounds <<", after:" << path.boundingRect();
-        m_bounds = path.boundingRect();
+    qreal extraWidth = distanceLeft + distanceRight;
+    qreal extraHeight = distanceTop + distanceBottom;
+    if (extraWidth != 0.0 || extraHeight != 0.0) {
+        // Let's extend the outline with at least the border half width in all directions.
+        // However since the distance can be express in 4 directions and QPainterPathStroker only
+        // handles a penWidth we do some tricks to get it working.
+        //
+        // Explaination in one dimension only: we sum the distances top and below and use that as the
+        // penWidth. afterwards we translate the result so it is destributed correctly by top and bottom
+        // Now by doing that we would also implicitly set the left+right size of the pen which is no good,
+        // so in order to set that to a minimal value (we choose 1, as 0 would give division by 0) we do
+        // the following:. We scale the original path by sumX, stroke the path with penwidth=sumY, then
+        // scale it back. Effectively we have now stroked with a pen sized 1 x sumY.
+        //
+        // The math to do both x an y in one go becomes a little more complex, but only a little.
+        extraWidth = qMax(qreal(0.1), extraWidth);
+        extraHeight = qMax(qreal(0.1), extraHeight);
+
+        QPainterPathStroker stroker;
+        stroker.setWidth(extraWidth);
+        stroker.setJoinStyle(Qt::MiterJoin);
+        stroker.setCapStyle(Qt::SquareCap);
+        QPainterPath bigPath = stroker.createStroke(QTransform().scale(1.0, extraWidth / extraHeight).map(path));
+        bigPath = QTransform().scale(1.0, extraHeight / extraWidth). map(bigPath);
+        path += bigPath.translated(extraWidth / 2 - distanceLeft, extraHeight / 2 - distanceTop);
     }
 
+    m_bounds = path.boundingRect();
+
+    // Now we need to change the path into a polygon for easier handling later on
     m_polygon = path.toFillPolygon();
     QPointF prev = *(m_polygon.begin());
     foreach (const QPointF &vtx, m_polygon) { //initialized edges
@@ -156,7 +208,7 @@ void KoTextLayoutObstruction::changeMatrix(const QTransform &matrix)
     qreal borderHalfWidth;
     QPainterPath path = decoratedOutline(m_shape, borderHalfWidth);
 
-    init(matrix, path, m_distance, borderHalfWidth);
+    init(matrix, path, m_distanceLeft, m_distanceTop, m_distanceRight, m_distanceBottom, borderHalfWidth);
 }
 
 QRectF KoTextLayoutObstruction::cropToLine(const QRectF &lineRect)

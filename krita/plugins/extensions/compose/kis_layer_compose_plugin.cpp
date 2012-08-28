@@ -18,7 +18,6 @@
 
 #include "kis_layer_compose_plugin.h"
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -44,8 +43,6 @@ KisLayerComposePlugin::KisLayerComposePlugin(QObject *parent, const QVariantList
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {
-        setComponentData(KisLayerComposePluginFactory::componentData());
-
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/imageseparate.rc"), true);
         m_view = (KisView2*) parent;
         KAction *action  = new KAction(i18n("Compose Layer..."), this);

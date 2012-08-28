@@ -23,33 +23,39 @@
 #include <KoColorSpaceTraits.h>
 #include "KoColorModelStandardIds.h"
 
-class RgbU8ColorSpace : public LcmsColorSpace<KoRgbU8Traits>
+class RgbU8ColorSpace : public LcmsColorSpace<KoBgrU8Traits>
 {
 
 public:
 
-    RgbU8ColorSpace(KoColorProfile *p);
+    RgbU8ColorSpace(const QString &name, KoColorProfile *p);
+
     virtual bool willDegrade(ColorSpaceIndependence) const {
         return false;
     }
+
     virtual KoColorTransformation* createInvertTransformation() const;
+
     virtual KoID colorModelId() const {
         return RGBAColorModelID;
     }
+
     virtual KoID colorDepthId() const {
         return Integer8BitsColorDepthID;
     }
+
     virtual KoColorSpace* clone() const;
+
     virtual void colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
+
     virtual void colorFromXML(quint8* pixel, const QDomElement& elt) const;
+
     virtual quint8 intensity8(const quint8 * src) const;
 
-    /**
-     * The ID that identifies this colorspace. Pass this as the colorSpaceId parameter
-     * to the KoColorSpaceRegistry::colorSpace() functions to obtain this colorspace.
-     * This is the value that the member function id() returns.
-     */
-    static QString colorSpaceId();
+    static QString colorSpaceId()
+    {
+        return QString("RGBA");
+    }
 };
 
 class RgbU8ColorSpaceFactory : public LcmsColorSpaceFactory
@@ -58,27 +64,33 @@ class RgbU8ColorSpaceFactory : public LcmsColorSpaceFactory
 public:
 
     RgbU8ColorSpaceFactory() : LcmsColorSpaceFactory(TYPE_BGRA_8, cmsSigRgbData) {}
+
     virtual bool userVisible() const {
         return true;
     }
+
     virtual QString id() const {
         return RgbU8ColorSpace::colorSpaceId();
     }
+
     virtual QString name() const {
         return i18n("RGB (8-bit integer/channel)");
     }
+
     virtual KoID colorModelId() const {
         return RGBAColorModelID;
     }
+
     virtual KoID colorDepthId() const {
         return Integer8BitsColorDepthID;
     }
+
     virtual int referenceDepth() const {
         return 8;
     }
 
     virtual KoColorSpace *createColorSpace(const KoColorProfile * p) const {
-        return new RgbU8ColorSpace(p->clone());
+        return new RgbU8ColorSpace(name(), p->clone());
     }
 
     virtual QString defaultProfile() const {

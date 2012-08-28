@@ -69,6 +69,7 @@ set( formulashape_PART_SRCS
    KoFormulaToolFactory.cpp
    FormulaToolWidget.cpp
    FormulaDocument.cpp
+   FormulaPart.cpp
 )
 
 kde4_add_ui_files( formulashape_PART_SRCS

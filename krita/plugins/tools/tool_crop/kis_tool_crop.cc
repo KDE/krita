@@ -49,6 +49,8 @@
 #include <kis_canvas2.h>
 #include <kis_view2.h>
 #include <KoZoomController.h>
+#include <kis_floating_message.h>
+#include <kis_group_layer.h>
 
 KisToolCrop::KisToolCrop(KoCanvasBase * canvas)
         : KisTool(canvas, KisCursor::load("tool_crop_cursor.png", 6, 6))
@@ -81,7 +83,7 @@ void KisToolCrop::activate(ToolActivation toolActivation, const QSet<KoShape*> &
     if(currentNode() && currentNode()->paintDevice()) {
         m_optWidget->cmbType->setEnabled(true);
     }
-    //shape layer
+    //vector layer
     else {
         m_optWidget->cmbType->setEnabled(false);
     }
@@ -106,7 +108,7 @@ void KisToolCrop::resourceChanged(int key, const QVariant &res)
     if(currentNode() && currentNode()->paintDevice()) {
         m_optWidget->cmbType->setEnabled(true);
     }
-    //shape layer
+    //vector layer
     else {
         m_optWidget->cmbType->setCurrentIndex(1);
         m_optWidget->cmbType->setEnabled(false);
@@ -438,6 +440,13 @@ void KisToolCrop::paintOutlineWithHandles(QPainter& gc)
 
 void KisToolCrop::crop()
 {
+    if (m_optWidget->cmbType->currentIndex() == 0) {
+        //Cropping layer
+        if (!nodeEditable()) {
+            return;
+        }
+    }
+
     m_haveCropSelection = false;
     useCursor(cursor());
 

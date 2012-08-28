@@ -30,7 +30,6 @@
 #include <QColor>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
@@ -39,7 +38,6 @@
 
 #include <kis_doc2.h>
 #include <kis_image.h>
-#include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
@@ -60,6 +58,7 @@
 #include <commands/kis_node_commands.h>
 #include <kis_node_manager.h>
 #include <kis_node_commands_adapter.h>
+#include "kis_iterator_ng.h"
 
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
@@ -97,22 +96,18 @@ void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
     QRect rect = dev->exactBounds();
 
     {
-        KisHLineConstIteratorPixel srcIt = dev->createHLineConstIterator(rect.x(), rect.y(), rect.width());
-        KisHLineIteratorPixel dstIt = shadowDev->createHLineIterator(rect.x(), rect.y(), rect.width());
+        KisHLineConstIteratorSP srcIt = dev->createHLineConstIteratorNG(rect.x(), rect.y(), rect.width());
+        KisHLineIteratorSP dstIt = shadowDev->createHLineIteratorNG(rect.x(), rect.y(), rect.width());
 
         for (qint32 row = 0; row < rect.height(); ++row) {
-            while (! srcIt.isDone()) {
-                if (srcIt.isSelected()) {
-                    //set the shadow color
-                    quint8 alpha = dev->colorSpace()->opacityU8(srcIt.rawData());
-                    color.setAlpha(alpha);
-                    rgb8cs->fromQColor(color, dstIt.rawData());
-                }
-                ++srcIt;
-                ++dstIt;
-            }
-            srcIt.nextRow();
-            dstIt.nextRow();
+            do {
+                //set the shadow color
+                quint8 alpha = dev->colorSpace()->opacityU8(srcIt->oldRawData());
+                color.setAlpha(alpha);
+                rgb8cs->fromQColor(color, dstIt->rawData());
+            } while (srcIt->nextPixel() && dstIt->nextPixel());
+            srcIt->nextRow();
+            dstIt->nextRow();
             progressUpdater->setProgress((row * 100) / rect.height());
         }
     }

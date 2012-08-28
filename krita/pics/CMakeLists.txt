@@ -1,10 +1,11 @@
-
-
 install(FILES  
-    deletelayer.png  	
-    lowerlayer.png  	
+    hi128-app-krita.png
+    hi16-app-krita.png
+    hi22-app-krita.png
+    hi32-app-krita.png
+    hi48-app-krita.png
+    hi64-app-krita.png
     newlayer.png  	
-    raiselayer.png          
     visible.png  	
     novisible.png  	
     linked.png  	

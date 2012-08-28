@@ -55,7 +55,7 @@ bool KoReportODTRenderer::render(const KoReportRendererContext& context, ORODocu
             section->type() == KRSectionData::Detail){
             //Add this section to the document
 
-            //Resize the table to accomodate all the primitives in the section
+            //Resize the table to accommodate all the primitives in the section
             if (table->columns() < section->primitives()) {
                 table->appendColumns(section->primitives() - table->columns());
             }

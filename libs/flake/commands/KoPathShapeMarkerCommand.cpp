@@ -31,7 +31,7 @@ KoPathShapeMarkerCommand::KoPathShapeMarkerCommand(const QList<KoPathShape*> &sh
 , m_marker(marker)
 , m_position(position)
 {
-    setText(i18n("Set marker"));
+    setText(i18nc("(qtundo-format)", "Set marker"));
 
     // save old markers
     foreach(KoPathShape *shape, m_shapes) {

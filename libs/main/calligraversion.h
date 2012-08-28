@@ -33,7 +33,7 @@
 * it contains the version at compile time. See Calligra::versionString() if you need
 * the Calligra version used at runtime.
 */
-#define CALLIGRA_VERSION_STRING "2.5 Alpha 1"
+#define CALLIGRA_VERSION_STRING "2.6 Pre-Alpha"
 
 /**
  * @def CALLIGRA_VERSION_MAJOR
@@ -49,21 +49,28 @@
  * CALLIGRA_VERSION_MINOR is computed based on this value.
  * Unstable versions subtract 1 from this value, e.g. 2.5 Alpha has minor 4.
 */
-#define CALLIGRA_STABLE_VERSION_MINOR 5
+#define CALLIGRA_STABLE_VERSION_MINOR 6
+
+/**
+ * @def CALLIGRA_VERSION_RELEASE
+ * @ingroup CalligraMacros
+ * @brief Release version of Calligra, at compile time
+ */
+#define CALLIGRA_VERSION_RELEASE 89
 
 /**
  * @def CALLIGRA_ALPHA
  * @ingroup CalligraMacros
  * @brief If defined (1..9), indicates at compile time that Calligra is in alpha stage
  */
-#define CALLIGRA_ALPHA 1
+#define CALLIGRA_ALPHA 0
 
 /**
  * @def CALLIGRA_BETA
  * @ingroup CalligraMacros
  * @brief If defined (1..9), indicates at compile time that Calligra is in beta stage
  */
-// #define CALLIGRA_BETA 7
+// #define CALLIGRA_BETA 1
 
 /**
  * @def CALLIGRA_RC
@@ -90,23 +97,6 @@
 # define CALLIGRA_VERSION_MINOR CALLIGRA_STABLE_VERSION_MINOR
 #else // Unstable versions subtract 1 from this value, e.g. 2.5 Alpha has minor 4.
 # define CALLIGRA_VERSION_MINOR (CALLIGRA_STABLE_VERSION_MINOR - 1)
-#endif
-
-/**
- * @def CALLIGRA_VERSION_RELEASE
- * @ingroup CalligraMacros
- * @brief Release version of Calligra, at compile time
-*/
-#ifdef CALLIGRA_ALPHA
-# define CALLIGRA_VERSION_RELEASE (70 + CALLIGRA_ALPHA)
-#elif defined CALLIGRA_BETA
-# define CALLIGRA_VERSION_RELEASE (80 + CALLIGRA_BETA)
-#elif defined CALLIGRA_RC
-# define CALLIGRA_VERSION_RELEASE (90 + CALLIGRA_RC)
-#elif defined CALLIGRA_STABLE
-# define CALLIGRA_VERSION_RELEASE CALLIGRA_STABLE
-#else
-# error Define exactly one of these macros: CALLIGRA_ALPHA, CALLIGRA_BETA, CALLIGRA_RC, CALLIGRA_STABLE
 #endif
 
 /**

@@ -33,7 +33,6 @@
 #include <QSpinBox>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
@@ -43,7 +42,6 @@
 #include "KoIntegerMaths.h"
 #include <KoUpdater.h>
 
-#include <kis_iterators_pixel.h>
 #include <filter/kis_filter_registry.h>
 #include <filter/kis_filter.h>
 #include <kis_global.h>

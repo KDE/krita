@@ -36,7 +36,7 @@ class KoCanvasController;
 class KOMAIN_EXPORT KoToolBoxFactory : public KoDockFactoryBase
 {
 public:
-    explicit KoToolBoxFactory(KoCanvasController *canvas, const QString& appName);
+    explicit KoToolBoxFactory(KoCanvasController *canvas);
     ~KoToolBoxFactory();
 
     virtual QString id() const;

@@ -59,7 +59,7 @@ namespace KChart {
  * inserting the chart shape.
  *
  * In contrast to a QItemSelection, a CellRegion can include header
- * data. Therefore, CellRegion( QPoint( 1, 1 ) ) represents the
+ * data. Therefore, CellRegion(QPoint(1, 1)) represents the
  * top-left item of a QAbstractItemModel.
  *
  * An instance can represent either a simple, continuous region of
@@ -75,16 +75,16 @@ class CHARTSHAPELIB_EXPORT CellRegion
 {
 public:
     CellRegion();
-    CellRegion( const CellRegion& region );
-    CellRegion( TableSource *source, const QString& regions );
-    CellRegion( Table *table, const QPoint &point );
-    CellRegion( Table *table, const QRect &rect );
-    CellRegion( Table *table, const QVector<QRect> &rects );
-    CellRegion( Table *table );
+    CellRegion(const CellRegion& region);
+    CellRegion(TableSource *source, const QString& regions);
+    CellRegion(Table *table, const QPoint &point);
+    CellRegion(Table *table, const QRect &rect);
+    CellRegion(Table *table, const QVector<QRect> &rects);
+    CellRegion(Table *table);
     ~CellRegion();
     
-    CellRegion& operator = ( const CellRegion& region );    
-    bool operator == ( const CellRegion &other ) const;
+    CellRegion& operator = (const CellRegion& region);    
+    bool operator == (const CellRegion &other) const;
 
     Table *table() const;
     
@@ -96,32 +96,32 @@ public:
 
     QString toString() const;
     
-    bool contains( const QPoint &point, bool proper = false ) const;
-    bool contains( const QRect &rect, bool proper = false ) const;
+    bool contains(const QPoint &point, bool proper = false) const;
+    bool contains(const QRect &rect, bool proper = false) const;
     
-    bool intersects( const CellRegion &other ) const;
+    bool intersects(const CellRegion &other) const;
 
-    CellRegion intersected( const QRect &rect ) const;
+    CellRegion intersected(const QRect &rect) const;
     
     int cellCount() const;
     int rectCount() const;
     
     Qt::Orientation orientation() const;
     
-    void add( const CellRegion &other );
-    void add( const QPoint &point );
-    void add( const QRect &rect );
-    void add( const QVector<QRect> &rects );
+    void add(const CellRegion &other);
+    void add(const QPoint &point);
+    void add(const QRect &rect);
+    void add(const QVector<QRect> &rects);
     
     QRect boundingRect() const;
     
-    bool   hasPointAtIndex( int index ) const;    
-    QPoint pointAtIndex( int index ) const;
-    int    indexAtPoint( const QPoint &point ) const;
+    bool   hasPointAtIndex(int index) const;    
+    QPoint pointAtIndex(int index) const;
+    int    indexAtPoint(const QPoint &point) const;
     
-    static int rangeCharToInt( char c );
-    static int rangeStringToInt( const QString &string );
-    static QString rangeIntToString( int i );
+    static int rangeCharToInt(char c);
+    static int rangeStringToInt(const QString &string);
+    static QString rangeIntToString(int i);
 
 private:
     class Private;

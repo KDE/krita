@@ -1,7 +1,7 @@
 /*
  * This file is part of the KDE project
  *
- *  Copyright (c) 2004 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2004 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -30,6 +30,13 @@ KisRectIterator2::KisRectIterator2(KisTiledDataManager *dataManager,
         m_width(width),
         m_height(height)
 {
+    Q_ASSERT(width > 0); // for us, to warn us when abusing the iterators
+    if (width < 1) width = 1;  // for release mode, to make sure there's always at least one pixel read.
+
+    Q_ASSERT(height > 0); // for us, to warn us when abusing the iterators
+    if (height < 1) height = 1;  // for release mode, to make sure there's always at least one pixel read.
+
+
     left -= offsetX;
     top -= offsetY;
     m_left = left;

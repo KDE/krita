@@ -22,9 +22,9 @@
 
 namespace KChart {
 
-bool isPolar( ChartType type )
+bool isPolar(ChartType type)
 {
-    switch ( type )
+    switch (type)
     {
     case CircleChartType:
     case RingChartType:
@@ -37,16 +37,16 @@ bool isPolar( ChartType type )
     return false;
 }
 
-bool isCartesian( ChartType type )
+bool isCartesian(ChartType type)
 {
-    return !isPolar( type );
+    return !isPolar(type);
 }
 
-int numDimensions( ChartType type )
+int numDimensions(ChartType type)
 {
     int dimensions = 1;
 
-    switch ( type ) {
+    switch (type) {
     case BarChartType:
     case LineChartType:
     case AreaChartType:

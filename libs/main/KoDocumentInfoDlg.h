@@ -24,7 +24,7 @@
 #include <kpagedialog.h>
 
 class KoDocumentInfo;
-class KoDocumentRdf;
+class KoDocumentRdfBase;
 class KPageWidgetItem;
 
 /**
@@ -55,7 +55,7 @@ public:
      * @param parent a pointer to the parent widget
      * @param docInfo a pointer to the shown KoDocumentInfo
      */
-    KoDocumentInfoDlg(QWidget *parent, KoDocumentInfo* docInfo, KoDocumentRdf* docRdf = 0);
+    KoDocumentInfoDlg(QWidget *parent, KoDocumentInfo* docInfo, KoDocumentRdfBase* docRdf = 0);
 
     /** The destructor */
     virtual ~KoDocumentInfoDlg();
@@ -77,10 +77,6 @@ private slots:
     void slotResetMetaData();
     /** Connected with clicked() from pbEncrypt - Toggle the encryption of the document */
     void slotToggleEncryption();
-    /** Connected with clicked() from pbDelete - Delete all author metadata */
-    void slotDeleteAuthorInfo();
-    /** Connected with clicked() from pbLoadKABC - Load metadata from KABC */
-    void slotLoadFromKABC();
     /** Saves the document with changed encryption */
     void slotSaveEncryption();
 
@@ -91,8 +87,6 @@ private:
     void initAuthorTab();
     /** Saves the changed data back to the KoDocumentInfo class */
     void saveAboutData();
-    /** Saves the changed data back to the KoDocumentInfo class */
-    void saveAuthorData();
 
     void slotButtonClicked(int button);
 

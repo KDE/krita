@@ -13,6 +13,7 @@ include_directories(${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${WMF_INCLUDES} ${EMF_I
 SET ( VectorShape_SRCS
     VectorShapePlugin.cpp
     VectorShape.cpp
+    VectorShapeConfigWidget.cpp
     VectorShapeFactory.cpp
     #VectorCollection.cpp
     #VectorData.cpp
@@ -41,7 +42,7 @@ SET ( VectorShape_SRCS
 
 kde4_add_plugin(vectorshape ${VectorShape_SRCS})
 
-target_link_libraries(vectorshape flake libwmf)
+target_link_libraries(vectorshape flake libwmf ${KDE4_KFILE_LIBRARY})
 
 install(TARGETS vectorshape DESTINATION ${PLUGIN_INSTALL_DIR})
 

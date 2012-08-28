@@ -32,6 +32,7 @@
 #include "KoShapeLayer.h"
 #include "KoShapePaste.h"
 #include "KoShapePaintingContext.h"
+#include "KoToolProxy.h"
 
 #include <KoProperties.h>
 
@@ -165,22 +166,25 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
         KoShapePaste paste(m_parent->canvas(), sm->selection()->activeLayer());
         if (paste.paste(KoOdf::Text, data)) {
             QList<KoShape *> shapes = paste.pastedShapes();
-            Q_ASSERT(!shapes.isEmpty());
-            if (shapes.count() > 1) {
-                Q_ASSERT(0); // hmm hmm, when does this happen?
+            if (shapes.count() == 1) {
+                m_draggedShape = shapes.first();
+                m_draggedShape->setZIndex(KoShapePrivate::MaxZIndex);
+                event->setDropAction(Qt::CopyAction);
             }
-            m_draggedShape = shapes.first();
-            m_draggedShape->setZIndex(KoShapePrivate::MaxZIndex);
-            event->setDropAction(Qt::CopyAction);
             event->accept();
         }
+    } else {
+        event->ignore();
     }
 }
 
 void Viewport::handleDropEvent(QDropEvent *event)
 {
+    if (!m_draggedShape) {
+        m_parent->canvas()->toolProxy()->dropEvent(event, correctPosition(event->pos()));
+        return;
+    }
 
-    if (!m_draggedShape) return;
     repaint(m_draggedShape);
     m_parent->canvas()->shapeManager()->remove(m_draggedShape); // remove it to not interfere with z-index calc.
 
@@ -210,16 +214,17 @@ QPointF Viewport::correctPosition(const QPoint &point) const
     QWidget *canvasWidget = m_parent->canvas()->canvasWidget();
     Q_ASSERT(canvasWidget); // since we should not allow drag if there is not.
     QPoint correctedPos(point.x() - canvasWidget->x(), point.y() - canvasWidget->y());
-    correctedPos -= m_parent->canvas()->documentOrigin();
     correctedPos += m_documentOffset;
-
-    return m_parent->canvas()->viewConverter()->viewToDocument(correctedPos);
+    return m_parent->canvas()->viewToDocument(correctedPos);
 }
 
 void Viewport::handleDragMoveEvent(QDragMoveEvent *event)
 {
-    if (m_draggedShape == 0)
+    if (!m_draggedShape) {
+        m_parent->canvas()->toolProxy()->dragMoveEvent(event, correctPosition(event->pos()));
         return;
+    }
+
     m_draggedShape->update();
     repaint(m_draggedShape);
     m_draggedShape->setAbsolutePosition(correctPosition(event->pos()));
@@ -238,13 +243,15 @@ void Viewport::repaint(KoShape *shape)
     update(rect);
 }
 
-void Viewport::handleDragLeaveEvent(QDragLeaveEvent *)
+void Viewport::handleDragLeaveEvent(QDragLeaveEvent *event)
 {
     if (m_draggedShape) {
         repaint(m_draggedShape);
         m_parent->canvas()->shapeManager()->remove(m_draggedShape);
         delete m_draggedShape;
         m_draggedShape = 0;
+    } else {
+        m_parent->canvas()->toolProxy()->dragLeaveEvent(event);
     }
 }
 

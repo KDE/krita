@@ -64,7 +64,7 @@ public:
     /**
      * Get the underlying SemanticItem for this widget
      */
-    virtual KoRdfSemanticItem *semanticItem() const = 0;
+    virtual hKoRdfSemanticItem semanticItem() const = 0;
 
     virtual QList<KAction *> actions(QWidget *parent, KoCanvasBase *host = 0);
     virtual void insert(KoCanvasBase *host);

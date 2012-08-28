@@ -25,6 +25,7 @@
 
 #include <kis_tool_rectangle_base.h>
 #include "kis_text_tool_option_widget.h"
+#include <KoIcon.h>
 
 class KisToolText : public KisToolRectangleBase
 {
@@ -56,7 +57,7 @@ public:
 
         setToolType(mainToolType());
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
-        setIcon("draw-text");
+        setIconName(koIconNameCStr("draw-text"));
         setPriority(2);
     }
 

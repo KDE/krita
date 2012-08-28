@@ -26,7 +26,6 @@
 #include <QRect>
 #include <QDomElement>
 #include <QDomDocument>
-#include <QIcon>
 #include <QString>
 #include <QList>
 #include <QMap>
@@ -35,9 +34,9 @@
 #include <QMimeData>
 
 #include <ktemporaryfile.h>
-#include <kicon.h>
 #include <kdebug.h>
 
+#include <KoIcon.h>
 #include <KoElementReference.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
@@ -87,7 +86,9 @@
 class ShapeLayerContainerModel : public SimpleShapeContainerModel
 {
 public:
-    ShapeLayerContainerModel(KisShapeLayer *parent) : q(parent) {}
+    ShapeLayerContainerModel(KisShapeLayer *parent)
+        : q(parent)
+{}
 
     void add(KoShape *child) {
         SimpleShapeContainerModel::add(child);
@@ -107,7 +108,13 @@ private:
 struct KisShapeLayer::Private
 {
 public:
-    Private() : x(0), y(0) {}
+    Private()
+        : converter(0)
+        , canvas(0)
+        , controller(0)
+        , x(0)
+        , y(0)
+         {}
 
     KoViewConverter * converter;
     KisPaintDeviceSP paintDevice;
@@ -136,6 +143,9 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs)
         , KoShapeLayer(new ShapeLayerContainerModel(this)) //no _rhs here otherwise both layer have the same KoShapeContainerModel
         , m_d(new Private())
 {
+    // Make sure our new layer is visible otherwise the shapes cannot be painted.
+    setVisible(true);
+
     KoShapeContainer::setParent(_rhs.KoShapeContainer::parent());
     initShapeLayer(_rhs.m_d->controller);
 
@@ -158,7 +168,7 @@ KisShapeLayer::~KisShapeLayer()
      * Small hack alert: we set the image to null to disable
      * updates those will be emitted on shape deletion
      */
-    setImage(0);
+    KisLayer::setImage(0);
 
     foreach(KoShape *shape, shapes()) {
         shape->setParent(0);
@@ -179,6 +189,8 @@ void KisShapeLayer::initShapeLayer(KoShapeBasedDocumentBase* controller)
     m_d->canvas->setProjection(m_d->paintDevice);
     m_d->controller = controller;
 
+    m_d->canvas->shapeManager()->selection()->disconnect(this);
+
     connect(m_d->canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()));
     connect(m_d->canvas->shapeManager()->selection(), SIGNAL(currentLayerChanged(const KoShapeLayer*)), this, SIGNAL(currentLayerChanged(const KoShapeLayer*)));
 
@@ -190,9 +202,17 @@ bool KisShapeLayer::allowAsChild(KisNodeSP node) const
     return node->inherits("KisMask");
 }
 
+void KisShapeLayer::setImage(KisImageWSP _image)
+{
+    KisLayer::setImage(_image);
+    delete m_d->converter;
+    m_d->converter = new KisImageViewConverter(image());
+    m_d->paintDevice = new KisPaintDevice(image()->colorSpace());
+}
+
 QIcon KisShapeLayer::icon() const
 {
-    return KIcon("bookmark-new");
+    return koIcon("bookmark-new");
 }
 
 KisPaintDeviceSP KisShapeLayer::original() const
@@ -442,7 +462,7 @@ bool KisShapeLayer::loadLayer(KoStore* store)
         // FIXME: investigate what is this
         //        KoShapeLayer * l = new KoShapeLayer();
         if (!loadOdf(layerElement, shapeContext)) {
-            kWarning() << "Could not load shape layer!";
+            kWarning() << "Could not load vector layer!";
             return false;
         }
     }

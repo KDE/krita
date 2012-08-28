@@ -73,20 +73,20 @@ void TestListStyle::testListStyle()
     // getting a properties without setting it doesn't change the list.
     KoListLevelProperties l4 = ls.levelProperties(4);
     QCOMPARE(l4.level(), 4);
-    QCOMPARE(l4.displayLevel(), 0); // default
+    QCOMPARE(l4.displayLevel(), 1); // default
     l4.setDisplayLevel(3);
     QCOMPARE(l4.displayLevel(), 3);
     QCOMPARE(ls.hasLevelProperties(4), false);
 
     KoListLevelProperties anotherL4 = ls.levelProperties(4);
     QCOMPARE(anotherL4.level(), 4);
-    QCOMPARE(anotherL4.displayLevel(), 0); // default
+    QCOMPARE(anotherL4.displayLevel(), 1); // default
     QCOMPARE(ls.hasLevelProperties(4), false);
 
     QCOMPARE(ls.hasLevelProperties(5), false);
     // new levels are a copy of the existing level.
     KoListLevelProperties l5 = ls.levelProperties(5);
-    QCOMPARE(l5.displayLevel(), 0);
+    QCOMPARE(l5.displayLevel(), 1);
     QCOMPARE(l5.style(), KoListStyle::AlphaLowerItem);
     QCOMPARE(l5.indent(), 0.);
 }

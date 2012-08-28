@@ -3,7 +3,8 @@
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Roopesh Chander <roop@forwardbias.in>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
- * Copyright (C) 2009 KO GmbH <casper.boemann@kogmbh.com>
+ * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
+ * Copyright 2012 Friedrich W. H. Kossebau <kossebau@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -34,12 +35,15 @@
 #include <QTextCursor>
 #include <QBuffer>
 
+#include <KoColumns.h>
 #include <KoUnit.h>
 #include <KoStyleStack.h>
 #include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <KoBorder.h>
+
+Q_DECLARE_METATYPE(QList<KoColumns::ColumnDatum>)
 
 class KoSectionStyle::Private
 {
@@ -75,6 +79,12 @@ public:
         if (variant.isNull())
             return QColor();
         return variant.value<QColor>();
+    }
+    QList<KoColumns::ColumnDatum> propertyColumnData() const{
+        QVariant variant = stylesPrivate.value(ColumnData);
+        if (variant.isNull())
+            return QList<KoColumns::ColumnDatum>();
+        return variant.value<QList<KoColumns::ColumnDatum> >();
     }
 
     QString name;
@@ -189,6 +199,87 @@ qreal KoSectionStyle::rightMargin() const
     return d->propertyDouble(QTextFormat::BlockRightMargin);
 }
 
+void KoSectionStyle::setColumnCount(int columnCount)
+{
+    setProperty(ColumnCount, columnCount);
+}
+
+int KoSectionStyle::columnCount() const
+{
+    return d->propertyInt(ColumnCount);
+}
+
+void KoSectionStyle::setColumnGapWidth(qreal columnGapWidth)
+{
+    setProperty(ColumnGapWidth, columnGapWidth);
+}
+
+qreal KoSectionStyle::columnGapWidth() const
+{
+    return d->propertyDouble(ColumnGapWidth);
+}
+
+void KoSectionStyle::setColumnData(const QList<KoColumns::ColumnDatum> &columnData)
+{
+    setProperty(ColumnData, QVariant::fromValue<QList<KoColumns::ColumnDatum> >(columnData));
+}
+
+QList<KoColumns::ColumnDatum> KoSectionStyle::columnData() const
+{
+    return d->propertyColumnData();
+}
+
+void KoSectionStyle::setSeparatorStyle(KoColumns::SeparatorStyle separatorStyle)
+{
+    setProperty(SeparatorStyle, separatorStyle);
+}
+
+KoColumns::SeparatorStyle KoSectionStyle::separatorStyle() const
+{
+    return static_cast<KoColumns::SeparatorStyle>(d->propertyInt(SeparatorStyle));
+}
+
+void KoSectionStyle::setSeparatorColor(const QColor &separatorColor)
+{
+    setProperty(SeparatorColor, separatorColor);
+}
+
+QColor KoSectionStyle::separatorColor() const
+{
+    return d->propertyColor(SeparatorColor);
+}
+
+void KoSectionStyle::setSeparatorWidth(qreal separatorWidth)
+{
+    setProperty(SeparatorWidth, separatorWidth);
+}
+
+qreal KoSectionStyle::separatorWidth() const
+{
+    return d->propertyDouble(SeparatorWidth);
+}
+
+void KoSectionStyle::setSeparatorHeight( int separatorHeight)
+{
+    setProperty(SeparatorHeight, separatorHeight);
+}
+
+int KoSectionStyle::separatorHeight() const
+{
+    return d->propertyInt(SeparatorHeight);
+}
+
+void KoSectionStyle::setSeparatorVerticalAlignment(KoColumns::SeparatorVerticalAlignment separatorVerticalAlignment)
+{
+    setProperty(SeparatorVerticalAlignment, separatorVerticalAlignment);
+}
+
+KoColumns::SeparatorVerticalAlignment KoSectionStyle::separatorVerticalAlignment() const
+{
+    return static_cast<KoColumns::SeparatorVerticalAlignment>(d->propertyInt(SeparatorVerticalAlignment));
+}
+
+
 KoSectionStyle *KoSectionStyle::parentStyle() const
 {
     return d->parentStyle;
@@ -296,6 +387,60 @@ void KoSectionStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &c
         setBackground(brush);
     }
 
+    if (styleStack.hasChildNode(KoXmlNS::style, "columns")) {
+        KoXmlElement columns = styleStack.childNode(KoXmlNS::style, "columns");
+        int columnCount = columns.attributeNS(KoXmlNS::fo, "column-count").toInt();
+        if (columnCount < 1)
+            columnCount = 1;
+        setColumnCount(columnCount);
+
+        if (styleStack.hasProperty(KoXmlNS::fo, "column-gap")) {
+            setColumnGapWidth(KoUnit::parseValue(columns.attributeNS(KoXmlNS::fo, "column-gap")));
+        } else {
+            QList <KoColumns::ColumnDatum> columnData;
+
+            KoXmlElement columnElement;
+            forEachElement(columnElement, columns) {
+                if(columnElement.localName() != QLatin1String("column") ||
+                columnElement.namespaceURI() != KoXmlNS::style)
+                    continue;
+
+                KoColumns::ColumnDatum datum;
+                datum.leftMargin = KoUnit::parseValue(columnElement.attributeNS(KoXmlNS::fo, "start-indent"), 0.0);
+                datum.rightMargin = KoUnit::parseValue(columnElement.attributeNS(KoXmlNS::fo, "end-indent"), 0.0);
+                datum.topMargin = KoUnit::parseValue(columnElement.attributeNS(KoXmlNS::fo, "space-before"), 0.0);
+                datum.bottomMargin = KoUnit::parseValue(columnElement.attributeNS(KoXmlNS::fo, "space-after"), 0.0);
+                datum.relativeWidth = KoColumns::parseRelativeWidth(columnElement.attributeNS(KoXmlNS::style, "rel-width"));
+                // on a bad relativeWidth just drop all data
+                if (datum.relativeWidth <= 0) {
+                    columnData.clear();
+                    break;
+                }
+
+                columnData.append(datum);
+            }
+
+            if (! columnData.isEmpty()) {
+                setColumnData(columnData);
+            }
+        }
+
+        KoXmlElement columnSep = KoXml::namedItemNS(columns, KoXmlNS::style, "column-sep");
+        if (! columnSep.isNull()) {
+            if (columnSep.hasAttributeNS(KoXmlNS::style, "style"))
+                setSeparatorStyle(KoColumns::parseSeparatorStyle(columnSep.attributeNS(KoXmlNS::style, "style")));
+            if (columnSep.hasAttributeNS(KoXmlNS::style, "width"))
+                setSeparatorWidth(KoUnit::parseValue(columnSep.attributeNS(KoXmlNS::style, "width")));
+            if (columnSep.hasAttributeNS(KoXmlNS::style, "height"))
+                setSeparatorHeight(KoColumns::parseSeparatorHeight(columnSep.attributeNS(KoXmlNS::style, "height")));
+            if (columnSep.hasAttributeNS(KoXmlNS::style, "color"))
+                setSeparatorColor(KoColumns::parseSeparatorColor(columnSep.attributeNS(KoXmlNS::style, "color")));
+            if (columnSep.hasAttributeNS(KoXmlNS::style, "vertical-align"))
+                setSeparatorVerticalAlignment(
+                    KoColumns::parseSeparatorVerticalAlignment(columnSep.attributeNS(KoXmlNS::style, "vertical-align")));
+        }
+    }
+
     styleStack.restore();
 }
 
@@ -324,6 +469,7 @@ void KoSectionStyle::removeDuplicates(const KoSectionStyle &other)
     d->stylesPrivate.removeDuplicates(other.d->stylesPrivate);
 }
 
+
 void KoSectionStyle::saveOdf(KoGenStyle &style)
 {
     // only custom style have a displayname. automatic styles don't have a name set.
@@ -331,9 +477,12 @@ void KoSectionStyle::saveOdf(KoGenStyle &style)
         style.addAttribute("style:display-name", d->name);
     }
 
+    QList<int> columnsKeys;
+
     QList<int> keys = d->stylesPrivate.keys();
     foreach(int key, keys) {
-        if (key == KoSectionStyle::TextProgressionDirection) {
+        switch (key) {
+        case KoSectionStyle::TextProgressionDirection: {
             int directionValue = 0;
             bool ok = false;
             directionValue = d->stylesPrivate.value(key).toInt(&ok);
@@ -350,17 +499,78 @@ void KoSectionStyle::saveOdf(KoGenStyle &style)
                 if (!direction.isEmpty())
                     style.addProperty("style:writing-mode", direction, KoGenStyle::DefaultType);
             }
-        } else if (key == QTextFormat::BackgroundBrush) {
+            break;
+        }
+        case QTextFormat::BackgroundBrush: {
             QBrush backBrush = background();
             if (backBrush.style() != Qt::NoBrush)
                 style.addProperty("fo:background-color", backBrush.color().name(), KoGenStyle::ParagraphType);
             else
                 style.addProperty("fo:background-color", "transparent", KoGenStyle::DefaultType);
-        } else if (key == QTextFormat::BlockLeftMargin) {
+            break;
+        }
+        case QTextFormat::BlockLeftMargin:
             style.addPropertyPt("fo:margin-left", leftMargin(), KoGenStyle::DefaultType);
-        } else if (key == QTextFormat::BlockRightMargin) {
+            break;
+        case QTextFormat::BlockRightMargin:
             style.addPropertyPt("fo:margin-right", rightMargin(), KoGenStyle::DefaultType);
-      }
+            break;
+        case ColumnCount:
+        case ColumnGapWidth:
+        case SeparatorStyle:
+        case SeparatorColor:
+        case SeparatorVerticalAlignment:
+        case SeparatorWidth:
+        case SeparatorHeight:
+            columnsKeys.append(key);
+            break;
+        }
+    }
+
+    if (!columnsKeys.isEmpty()) {
+        QBuffer buffer;
+        buffer.open(QIODevice::WriteOnly);
+        KoXmlWriter elementWriter(&buffer);    // TODO pass indentation level
+
+        elementWriter.startElement("style:columns");
+        // seems these two are mandatory
+        elementWriter.addAttribute("fo:column-count", columnCount());
+        elementWriter.addAttributePt("fo:column-gap", columnGapWidth());
+        columnsKeys.removeOne(ColumnCount);
+        columnsKeys.removeOne(ColumnGapWidth);
+
+        if (!columnsKeys.isEmpty()) {
+            elementWriter.startElement("style:column-sep");
+            foreach(int key, columnsKeys) {
+                switch (key) {
+                case SeparatorStyle:
+                    elementWriter.addAttribute("style:style",
+                                               KoColumns::separatorStyleString(separatorStyle()));
+                    break;
+                case SeparatorColor:
+                    elementWriter.addAttribute("style:color",
+                                               separatorColor().name());
+                    break;
+                case SeparatorVerticalAlignment:
+                    elementWriter.addAttribute("style:vertical-align",
+                                               KoColumns::separatorVerticalAlignmentString(separatorVerticalAlignment()));
+                    break;
+                case SeparatorWidth:
+                    elementWriter.addAttributePt("style:width",
+                                                 separatorWidth());
+                    break;
+                case SeparatorHeight:
+                    elementWriter.addAttribute("style:height",
+                                               QString::fromLatin1("%1%").arg(separatorHeight()));
+                    break;
+                }
+            }
+            elementWriter.endElement(); // style:column-sep
+        }
+
+        elementWriter.endElement(); // style:columns
+        const QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+        style.addChildElement("style:columns", elementContents);
     }
 }
 

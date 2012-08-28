@@ -141,20 +141,20 @@ private slots:
 
 private:
     /**
-     * Permit to know if a slide is draging
+     * Permit to know if a slide is dragging
      *
      * @return boolean
      */
-    bool isDraging() const;
+    bool isDragging() const;
 
     /**
-     * Setter for the draging flag
+     * Setter for the dragging flag
      *
      * @param flag boolean
      */
-    void setDragingFlag(bool flag = true);
+    void setDraggingFlag(bool flag = true);
 
-    bool m_dragingFlag;
+    bool m_draggingFlag;
 
     QStyleOptionViewItem optionForIndex(const QModelIndex &index) const;
     typedef KoDocumentSectionModel Model;

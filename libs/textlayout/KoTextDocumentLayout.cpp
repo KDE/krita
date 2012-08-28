@@ -74,6 +74,7 @@ public:
        , anAnchorIsPlaced(false)
        , anchoringSoftBreak(INT_MAX)
        , allowPositionInlineObject(true)
+       , continuationObstruction(0)
        , referencedLayout(0)
        , defaultTabSizing(0)
        , y(0)
@@ -105,11 +106,13 @@ public:
     bool anAnchorIsPlaced;
     int anchoringSoftBreak;
     QRectF anchoringParagraphRect;
+    QRectF anchoringParagraphContentRect;
     QRectF anchoringLayoutEnvironmentRect;
     bool allowPositionInlineObject;
 
     QHash<KoShape*,KoTextLayoutObstruction*> anchoredObstructions; // all obstructions created in positionInlineObjects because KoTextAnchor from m_textAnchors is in text
     QList<KoTextLayoutObstruction*> freeObstructions; // obstructions affecting the current rootArea, and not anchored
+    KoTextLayoutObstruction *continuationObstruction;
 
     KoTextDocumentLayout *referencedLayout;
 
@@ -181,14 +184,29 @@ KoInlineTextObjectManager *KoTextDocumentLayout::inlineTextObjectManager() const
     return d->inlineTextObjectManager;
 }
 
+void KoTextDocumentLayout::setInlineTextObjectManager(KoInlineTextObjectManager *manager)
+{
+    d->inlineTextObjectManager = manager;
+}
+
 KoChangeTracker *KoTextDocumentLayout::changeTracker() const
 {
     return d->changeTracker;
 }
 
+void KoTextDocumentLayout::setChangeTracker(KoChangeTracker *tracker)
+{
+    d->changeTracker = tracker;
+}
+
 KoStyleManager *KoTextDocumentLayout::styleManager() const
 {
     return d->styleManager;
+}
+
+void KoTextDocumentLayout::setStyleManager(KoStyleManager *manager)
+{
+    d->styleManager = manager;
 }
 
 QRectF KoTextDocumentLayout::blockBoundingRect(const QTextBlock &block) const
@@ -346,6 +364,18 @@ KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPosition(int position) co
     return 0;
 }
 
+KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPoint(const QPointF &point) const
+{
+    foreach(KoTextLayoutRootArea *rootArea, d->rootAreaList) {
+        if (!rootArea->isDirty()) {
+            if (rootArea->boundingRect().contains(point)) {
+                return rootArea;
+            }
+        }
+    }
+    return 0;
+}
+
 void KoTextDocumentLayout::drawInlineObject(QPainter *painter, const QRectF &rect, QTextInlineObject object, int position, const QTextFormat &format)
 {
     Q_ASSERT(format.isCharFormat());
@@ -440,6 +470,11 @@ void KoTextDocumentLayout::setAnchoringParagraphRect(const QRectF &paragraphRect
     d->anchoringParagraphRect = paragraphRect;
 }
 
+void KoTextDocumentLayout::setAnchoringParagraphContentRect(const QRectF &paragraphContentRect)
+{
+    d->anchoringParagraphContentRect = paragraphContentRect;
+}
+
 void KoTextDocumentLayout::setAnchoringLayoutEnvironmentRect(const QRectF &layoutEnvironmentRect)
 {
     d->anchoringLayoutEnvironmentRect = layoutEnvironmentRect;
@@ -450,7 +485,7 @@ void KoTextDocumentLayout::allowPositionInlineObject(bool allow)
     d->allowPositionInlineObject = allow;
 }
 
-// This method is called by qt every time  QTextLine.setWidth()/setNumColums() is called
+// This method is called by qt every time  QTextLine.setWidth()/setNumColumns() is called
 void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int position, const QTextFormat &format)
 {
     // Note: "item" used to be what was positioned. We don't actually use qtextinlineobjects anymore
@@ -504,6 +539,7 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
             anchor->updatePosition(document(), position, cf);
         }
         static_cast<AnchorStrategy *>(anchor->anchorStrategy())->setParagraphRect(d->anchoringParagraphRect);
+        static_cast<AnchorStrategy *>(anchor->anchorStrategy())->setParagraphContentRect(d->anchoringParagraphContentRect);
         static_cast<AnchorStrategy *>(anchor->anchorStrategy())->setLayoutEnvironmentRect(d->anchoringLayoutEnvironmentRect);
     }
     else if (obj) {
@@ -588,11 +624,15 @@ bool KoTextDocumentLayout::doLayout()
     d->y = 0;
     d->layoutScheduled = false;
     d->restartLayout = false;
+    FrameIterator *transferedFootNoteCursor = 0;
+    KoInlineNote *transferedContinuedNote = 0;
+    int footNoteAutoCount = 0;
 
     foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
         if (d->restartLayout) {
             return false; // Abort layouting to restart from the beginning.
         }
+
         bool shouldLayout = false;
 
         if (rootArea->top() != d->y) {
@@ -617,6 +657,8 @@ bool KoTextDocumentLayout::doLayout()
             bool finished;
             FrameIterator *tmpPosition = 0;
             do {
+                rootArea->setFootNoteCountInDoc(footNoteAutoCount);
+                rootArea->setFootNoteFromPrevious(transferedFootNoteCursor, transferedContinuedNote);
                 d->foundAnchors.clear();
                 delete tmpPosition;
                 tmpPosition = new FrameIterator(d->layoutPosition);
@@ -627,12 +669,14 @@ bool KoTextDocumentLayout::doLayout()
                     ++d->anchoringIndex;
                 }
             } while (d->anchoringIndex < d->textAnchors.count());
-                foreach (KoTextAnchor *anchor, d->textAnchors) {
-                    if (!d->foundAnchors.contains(anchor)) {
-                        d->anchoredObstructions.remove(anchor->shape());
-                        d->anchoringSoftBreak = qMin(d->anchoringSoftBreak, anchor->positionInDocument());
-                    }
+
+            foreach (KoTextAnchor *anchor, d->textAnchors) {
+                if (!d->foundAnchors.contains(anchor)) {
+                    d->anchoredObstructions.remove(anchor->shape());
+                    d->anchoringSoftBreak = qMin(d->anchoringSoftBreak, anchor->positionInDocument());
                 }
+            }
+
             if (d->textAnchors.count() > 0) {
                 delete tmpPosition;
                 tmpPosition = new FrameIterator(d->layoutPosition);
@@ -645,7 +689,7 @@ bool KoTextDocumentLayout::doLayout()
             d->provider->doPostLayout(rootArea, false);
             updateProgress(rootArea->startTextFrameIterator());
 
-            if (finished) {
+            if (finished && !rootArea->footNoteCursorToNext()) {
                 d->provider->releaseAllAfter(rootArea);
                 // We must also delete them from our own list too
                 int newsize = d->rootAreaList.indexOf(rootArea) + 1;
@@ -661,7 +705,7 @@ bool KoTextDocumentLayout::doLayout()
         } else {
             delete d->layoutPosition;
             d->layoutPosition = new FrameIterator(rootArea->nextStartOfArea());
-            if (d->layoutPosition->it == document()->rootFrame()->end()) {
+            if (d->layoutPosition->it == document()->rootFrame()->end() && !rootArea->footNoteCursorToNext()) {
                 d->provider->releaseAllAfter(rootArea);
                 // We must also delete them from our own list too
                 int newsize = d->rootAreaList.indexOf(rootArea) + 1;
@@ -671,11 +715,15 @@ bool KoTextDocumentLayout::doLayout()
                 return true; // Finished layouting
             }
         }
+        transferedFootNoteCursor = rootArea->footNoteCursorToNext();
+        transferedContinuedNote = rootArea->continuedNoteToNext();
+        footNoteAutoCount += rootArea->footNoteAutoCount();
+
         d->y = rootArea->bottom() + qreal(50); // (post)Layout method(s) just set this
-                                               // 50 just to seperate pages
+                                               // 50 just to separate pages
     }
 
-    while (d->layoutPosition->it != document()->rootFrame()->end()) {
+    while (transferedFootNoteCursor || d->layoutPosition->it != document()->rootFrame()->end()) {
         if (d->restartLayout) {
             return false; // Abort layouting to restart from the beginning.
         }
@@ -695,6 +743,8 @@ bool KoTextDocumentLayout::doLayout()
             // Layout all that can fit into that root area
             FrameIterator *tmpPosition = 0;
             do {
+                rootArea->setFootNoteCountInDoc(footNoteAutoCount);
+                rootArea->setFootNoteFromPrevious(transferedFootNoteCursor, transferedContinuedNote);
                 d->foundAnchors.clear();
                 delete tmpPosition;
                 tmpPosition = new FrameIterator(d->layoutPosition);
@@ -705,12 +755,14 @@ bool KoTextDocumentLayout::doLayout()
                     ++d->anchoringIndex;
                 }
             } while (d->anchoringIndex < d->textAnchors.count());
-                foreach (KoTextAnchor *anchor, d->textAnchors) {
-                    if (!d->foundAnchors.contains(anchor)) {
-                        d->anchoredObstructions.remove(anchor->shape());
-                        d->anchoringSoftBreak = qMin(d->anchoringSoftBreak, anchor->positionInDocument());
-                    }
+
+            foreach (KoTextAnchor *anchor, d->textAnchors) {
+                if (!d->foundAnchors.contains(anchor)) {
+                    d->anchoredObstructions.remove(anchor->shape());
+                    d->anchoringSoftBreak = qMin(d->anchoringSoftBreak, anchor->positionInDocument());
                 }
+            }
+
             if (d->textAnchors.count() > 0) {
                 delete tmpPosition;
                 tmpPosition = new FrameIterator(d->layoutPosition);
@@ -731,8 +783,12 @@ bool KoTextDocumentLayout::doLayout()
         } else {
             break; // with no more space there is nothing else we can do
         }
+        transferedFootNoteCursor = rootArea->footNoteCursorToNext();
+        transferedContinuedNote = rootArea->continuedNoteToNext();
+        footNoteAutoCount += rootArea->footNoteAutoCount();
+
         d->y = rootArea->bottom() + qreal(50); // (post)Layout method(s) just set this
-                                               // 50 just to seperate pages
+                                               // 50 just to separate pages
     }
 
     return true; // Finished layouting
@@ -828,9 +884,22 @@ KoInlineObjectExtent KoTextDocumentLayout::inlineObjectExtent(const QTextFragmen
     return KoInlineObjectExtent();
 }
 
+void KoTextDocumentLayout::setContinuationObstruction(KoTextLayoutObstruction *continuationObstruction)
+{
+    if (d->continuationObstruction) {
+        delete d->continuationObstruction;
+    }
+    d->continuationObstruction = continuationObstruction;
+}
+
 QList<KoTextLayoutObstruction *> KoTextDocumentLayout::currentObstructions()
 {
-    return d->freeObstructions + d->anchoredObstructions.values();
+    if (d->continuationObstruction) {
+        // () is needed so we append to a local list and not anchoredObstructions
+        return (d->freeObstructions + d->anchoredObstructions.values()) << d->continuationObstruction;
+    } else {
+        return d->freeObstructions + d->anchoredObstructions.values();
+    }
 }
 
 QList<KoTextLayoutRootArea *> KoTextDocumentLayout::rootAreas() const

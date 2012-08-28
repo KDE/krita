@@ -65,7 +65,8 @@ bool SvgShapeFactory::supports(const KoXmlElement &element, KoShapeLoadingContex
         if (href.startsWith("./")) {
             href.remove(0,2);
         }
-        const QString mimetype = context.odfLoadingContext().mimeTypeForPath(href);
+
+        QString mimetype = context.odfLoadingContext().mimeTypeForPath(href, true);
         return (mimetype == "image/svg+xml");
     }
 

@@ -20,8 +20,8 @@
 #ifndef KOMARKERMODEL_H
 #define KOMARKERMODEL_H
 
-#include <QAbstractListModel>
 #include <KoMarkerData.h>
+#include <QAbstractListModel>
 
 class KoMarker;
 

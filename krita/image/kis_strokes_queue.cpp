@@ -40,6 +40,10 @@ KisStrokesQueue::KisStrokesQueue()
 
 KisStrokesQueue::~KisStrokesQueue()
 {
+    foreach(KisStrokeSP stroke, m_d->strokesQueue) {
+        stroke->cancelStroke();
+    }
+
     delete m_d;
 }
 
@@ -176,7 +180,8 @@ bool KisStrokesQueue::checkExclusiveProperty(qint32 numMergeJobs,
                                              qint32 numStrokeJobs)
 {
     if(!m_d->strokesQueue.head()->isExclusive()) return true;
-
+    Q_UNUSED(numMergeJobs);
+    Q_UNUSED(numStrokeJobs);
     Q_ASSERT(!(numMergeJobs && numStrokeJobs));
     return numMergeJobs == 0;
 }

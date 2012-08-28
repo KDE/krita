@@ -28,6 +28,7 @@
 #include "KoToolFactoryBase.h"
 #include "flake/kis_node_shape.h"
 #include <kis_tool_ellipse_base.h>
+#include <KoIcon.h>
 
 
 class QPainter;
@@ -55,7 +56,7 @@ public:
         setToolTip(i18n("Draw an ellipse"));
         setToolType(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
-        setIcon("krita_tool_ellipse");
+        setIconName(koIconNameCStr("krita_tool_ellipse"));
         setPriority(3);
     }
 

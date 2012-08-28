@@ -36,7 +36,7 @@
 
 
 KoRgbU16ColorSpace::KoRgbU16ColorSpace() :
-        KoSimpleColorSpace<KoRgbU16Traits>(colorSpaceId(),
+        KoSimpleColorSpace<KoBgrU16Traits>(colorSpaceId(),
                                            i18n("RGB (16-bit integer/channel, unmanaged)"),
                                            RGBAColorModelID,
                                            Integer16BitsColorDepthID)

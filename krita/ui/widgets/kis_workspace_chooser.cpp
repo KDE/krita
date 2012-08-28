@@ -37,6 +37,7 @@
 #include "kis_view2.h"
 #include <QGridLayout>
 #include <klineedit.h>
+#include <kis_canvas_resource_provider.h>
 
 class KisWorkspaceDelegate : public QAbstractItemDelegate
 {
@@ -108,6 +109,7 @@ void KisWorkspaceChooser::slotSave()
 
     KisWorkspaceResource* workspace = new KisWorkspaceResource("");
     workspace->setDockerState(m_view->shell()->saveState());
+    m_view->resourceProvider()->notifySavingWorkspace(workspace);
     workspace->setValid(true);
     QString saveLocation = rserver->saveLocation();
     QString name = m_nameEdit->text();
@@ -137,5 +139,7 @@ void KisWorkspaceChooser::resourceSelected(KoResource* resource)
     if(!m_view->shell()) {
         return;
     }
-    m_view->shell()->restoreState(static_cast<KisWorkspaceResource*>(resource)->dockerState());
+    KisWorkspaceResource* workspace = static_cast<KisWorkspaceResource*>(resource);
+    m_view->shell()->restoreState(workspace->dockerState());
+    m_view->resourceProvider()->notifyLoadingWorkspace(workspace);
 }

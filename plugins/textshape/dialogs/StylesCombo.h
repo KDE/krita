@@ -26,7 +26,7 @@ class QListView;
 class StylesModel;
 class StylesComboPreview;
 
-/** This combo is specifically designed to allow chosing a text style, be it a character style or a paragraph style.
+/** This combo is specifically designed to allow choosing a text style, be it a character style or a paragraph style.
   * The combo itself does not know what type of style it is dealing with. In that respect it follows pretty much the normal QComboBox paradigm.
   * This is achieved by setting a @class StylesModel to the combo.
   * The combo also creates and uses a @class StylesDelegate in order to paint the items as preview in the dropdown menu. This delegate also provide a button to call the style manager dialog directly.
@@ -53,6 +53,9 @@ public:
     void setStyleIsOriginal(bool original);
 
     bool eventFilter(QObject *, QEvent *);
+
+    /** When we don't want edit icon for our items in combo */
+    void showEditIcon(bool show);
 
 public slots:
     /** This slot needs to be called if the preview in the main area needs to be updated for some reason */

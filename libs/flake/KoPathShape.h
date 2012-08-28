@@ -87,7 +87,7 @@ public:
     virtual ~KoPathShape();
 
     /// reimplemented
-    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
     virtual void paintPoints(QPainter &painter, const KoViewConverter &converter, int handleRadius);
     /// reimplemented
     virtual QPainterPath outline() const;
@@ -116,6 +116,15 @@ public:
     virtual void saveOdf(KoShapeSavingContext &context) const;
     // reimplemented
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+
+    // basically the same as loadOdf but adapted to the contour cases
+    // tag needs to be either contour-polygon or contour-path from another shape
+    bool loadContourOdf(const KoXmlElement & element, KoShapeLoadingContext &context, const QSizeF &scaleFactor);
+
+    /** basically the equivalent saveOdf but adapted to the contour cases
+     * @param originalSize the original size of the unscaled image.
+     */
+    void saveContourOdf(KoShapeSavingContext &context, const QSizeF &originalSize) const;
 
     /// Removes all subpaths and their points from the path
     void clear();
@@ -440,7 +449,7 @@ public:
     static KoPathShape *createShapeFromPainterPath(const QPainterPath &path);
 
     /// Returns the viewbox from the given xml element.
-    static QRectF loadOdfViewbox(const KoXmlElement &element);
+    static QRect loadOdfViewbox(const KoXmlElement &element);
 
     /// Marker setter
     void setMarker(const KoMarkerData &markerData);

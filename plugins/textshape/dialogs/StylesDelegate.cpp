@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2011-2012 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -20,6 +20,7 @@
 
 #include "StylesDelegate.h"
 
+#include <KoIcon.h>
 
 #include <QAbstractItemView>
 #include <QColor>
@@ -33,14 +34,14 @@
 #include <QStyleOptionButton>
 #include <QStyleOptionViewItemV4>
 
-#include <KIcon>
 #include <KDebug>
 
 
 StylesDelegate::StylesDelegate()
     : QStyledItemDelegate(),
       m_editButtonPressed(false),
-      m_deleteButtonPressed(false)
+      m_deleteButtonPressed(false),
+      m_enableEditButton(true)
 {
     m_buttonSize = 16;
     m_buttonDistance = 2;
@@ -78,12 +79,15 @@ void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
     if (!m_deleteButtonPressed) {
         optDel.state |= QStyle::State_Enabled;
     }
-    optDel.icon = KIcon("edit-delete");
+    optDel.icon = koIcon("edit-delete");
     optDel.features |= QStyleOptionButton::Flat;
     optDel.rect = option.rect.adjusted(dx1 - scrollBarWidth, dy1, dx2 - scrollBarWidth, dy2);
     view->style()->drawControl(QStyle::CE_PushButton, &optDel, painter, 0);
 */
     // Open style manager dialog button.
+    if (!m_enableEditButton) {  // when we don't want edit icon
+        return;
+    }
     dx1 = option.rect.width() - qMin(option.rect.height()-2, m_buttonSize) -2;
     dy1 = 1 + (option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
     dx2 = -2;
@@ -92,7 +96,7 @@ void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
     if (!m_editButtonPressed) {
         optEdit.state |= QStyle::State_Enabled;
     }
-    optEdit.icon = KIcon("document-properties");
+    optEdit.icon = koIcon("document-properties");
     optEdit.features |= QStyleOptionButton::Flat;
     optEdit.rect = option.rect.adjusted(dx1 - scrollBarWidth, dy1, dx2 - scrollBarWidth, dy2);
     view->style()->drawControl(QStyle::CE_PushButton, &optEdit, painter, 0);
@@ -203,4 +207,9 @@ bool StylesDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const
         return false;
     }
     return false;
+}
+
+void StylesDelegate::setEditButtonEnable(bool enable)
+{
+    m_enableEditButton = enable;
 }

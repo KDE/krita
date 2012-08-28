@@ -63,14 +63,9 @@ public:
     /// reimplemented
     virtual void paintPage( QPainter & painter, KoZoomHandler & zoomHandler );
 
-    virtual QImage thumbImage(const QSize &size);
-
 protected:
     /// Reimplemented from KoPageBase
     virtual void loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext );
-
-    /// reimplemented
-    virtual QPixmap generateThumbnail( const QSize& size = QSize( 512, 512 ) );
 
     KoPageLayout m_pageLayout;
 };

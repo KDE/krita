@@ -9,28 +9,32 @@
     <height>114</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2" >
+  <layout class="QVBoxLayout">
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout" >
+    <layout class="QVBoxLayout">
+     <item>
+      <widget class="QCheckBox" name="useMasterBackground" >
+      </widget>
+     </item>
      <item>
       <widget class="QPushButton" name="backgroundImage" >
        <property name="text" >
-        <string>Set background image ...</string>
+        <string>Set image ...</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="useMasterBackground" >
+      <widget class="QLabel" name="useStrokeAndFillDockerLabel" >
        <property name="text" >
-        <string>Use master background</string>
+        <string>To change background color use Stroke and Fill docker.</string>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QCheckBox" name="displayMasterShapes" >
-       <property name="text" >
-        <string>Display shapes of master</string>
-       </property>
       </widget>
      </item>
      <item>

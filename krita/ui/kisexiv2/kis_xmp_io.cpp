@@ -113,7 +113,8 @@ bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType
                     tv.setXmpArrayType(Exiv2::XmpValue::xaAlt);
                     break;
                 default:
-                    qFatal("can't happen");
+                    // Cannot happen
+                    ;
                 }
                 xmpData_.add(key, &tv); // set the arrya type
                 const KisMetaData::TypeInfo* stuctureTypeInfo = typeInfo->embeddedPropertyType();
@@ -251,7 +252,7 @@ bool KisXMPIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
                 KisMetaData::Value::ValueType vt = KisMetaData::Value::Invalid;
                 switch (xav->xmpArrayType()) {
                 case Exiv2::XmpValue::xaNone:
-                    qFatal("Unsupported array.");
+                    warnKrita << "KisXMPIO: Unsupported array";
                     break;
                 case Exiv2::XmpValue::xaAlt:
                     vt = KisMetaData::Value::AlternativeArray;

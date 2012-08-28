@@ -30,9 +30,6 @@
    </item>
    <item row="1" column="0">
     <widget class="KLineEdit" name="saveNameEdit">
-     <property name="placeholderText">
-      <string>Insert Name</string>
-     </property>
     </widget>
    </item>
   </layout>

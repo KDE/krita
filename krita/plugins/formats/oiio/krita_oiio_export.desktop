@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=Krita Oiio OpenColorIO-based export Filter
+Name[nl]=Op Krita Oiio OpenColorIO gebaseerd exportfilter
+Name[pt]=Filtro de Exportação OIIO do OpenColorIO para o Krita
+Name[pt_BR]=Filtro de exportação baseado no OpenColorIO do Oiio para o Krita
+Name[uk]=Фільтр експортування Oiio на основі OpenColorIO для Krita
+Name[x-test]=xxKrita Oiio OpenColorIO-based export Filterxx
+X-KDE-Export=image/cineon,image/dpx,image/fits,image/field3d,image/vnd.radiance,image/exr
+X-KDE-ServiceTypes=CalligraFilter
+Type=Service
+X-KDE-Import=application/x-krita
+X-KDE-Weight=1
+X-KDE-Library=kritaoiioexport
+NoDisplay=true

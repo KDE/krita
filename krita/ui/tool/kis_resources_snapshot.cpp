@@ -180,6 +180,11 @@ KisNodeSP KisResourcesSnapshot::currentNode() const
     return m_d->currentNode;
 }
 
+KisImageWSP KisResourcesSnapshot::image() const
+{
+    return m_d->image;
+}
+
 bool KisResourcesSnapshot::needsIndirectPainting() const
 {
     return !m_d->currentPaintOpPreset->settings()->paintIncremental();

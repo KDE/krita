@@ -21,58 +21,131 @@
 #include "KoStyleManager.h"
 
 #include <KAction>
+#include <KLocale>
 
 #include <QWidget>
 #include <QDebug>
 
-NotesConfigurationDialog::NotesConfigurationDialog(QTextDocument *doc, QWidget *parent)
-        : QDialog(parent),
-          document(doc)
+NotesConfigurationDialog::NotesConfigurationDialog(QTextDocument *doc, bool footnoteMode, QWidget *parent)
+    : QDialog(parent)
+    , m_document(doc)
 {
     widget.setupUi(this);
-
-    connect(widget.footnote,SIGNAL(toggled(bool)),this,SLOT(footnoteSetup(bool)));
-    connect(widget.endnote,SIGNAL(toggled(bool)),this,SLOT(endnoteSetup(bool)));
+    if (footnoteMode) {
+        setWindowTitle(i18n("Footnote Settings"));
+        footnoteSetup();
+    } else {
+        setWindowTitle(i18n("Endnote Settings"));
+        endnoteSetup();
+    }
     connect(widget.buttonBox,SIGNAL(clicked(QAbstractButton*)),this,SLOT(apply(QAbstractButton*)));
 }
 
-KoOdfNotesConfiguration *NotesConfigurationDialog::notesConfiguration() const
-{
-    return notesConfig;
-}
 
 void NotesConfigurationDialog::setStyleManager(KoStyleManager *sm)
 {
     m_styleManager = sm;
 }
 
-void NotesConfigurationDialog::footnoteSetup(bool on)
+void NotesConfigurationDialog::footnoteSetup()
 {
-    if(on) {
+    m_notesConfig = KoTextDocument(m_document).styleManager()
+                                ->notesConfiguration(KoOdfNotesConfiguration::Footnote);
+    if (!m_notesConfig) {
+        m_notesConfig = new KoOdfNotesConfiguration();
+        m_notesConfig->setNoteClass(KoOdfNotesConfiguration::Footnote);
+    }
+    widget.prefixLineEdit->setText(m_notesConfig->numberFormat().prefix());
+    widget.suffixLineEdit->setText(m_notesConfig->numberFormat().suffix());
+    widget.startAtSpinBox->setValue(m_notesConfig->startValue());
+    widget.endlineEdit->setText(m_notesConfig->footnoteContinuationForward());
+    widget.startlineEdit->setText(m_notesConfig->footnoteContinuationBackward());
+
+    switch (m_notesConfig->numberFormat().formatSpecification()) {
+    default:
+    case KoOdfNumberDefinition::Numeric:
         widget.numStyleCombo->setCurrentIndex(0);
+        break;
+    case KoOdfNumberDefinition::AlphabeticLowerCase:
+        if (m_notesConfig->numberFormat().letterSynchronization()) {
+            widget.numStyleCombo->setCurrentIndex(3);
+        } else {
+            widget.numStyleCombo->setCurrentIndex(1);
+        }
+        break;
+    case KoOdfNumberDefinition::AlphabeticUpperCase:
+        if (m_notesConfig->numberFormat().letterSynchronization()) {
+            widget.numStyleCombo->setCurrentIndex(4);
+        } else {
+            widget.numStyleCombo->setCurrentIndex(2);
+        }
+        break;
+    case KoOdfNumberDefinition::RomanLowerCase:
+        widget.numStyleCombo->setCurrentIndex(5);
+        break;
+    case KoOdfNumberDefinition::RomanUpperCase:
+        widget.numStyleCombo->setCurrentIndex(6);
+        break;
+    }
+
+    switch (m_notesConfig->numberingScheme()) {
+    case KoOdfNotesConfiguration::BeginAtPage:
+        widget.beginAtCombo->setCurrentIndex(0);
+        break;
+    case KoOdfNotesConfiguration::BeginAtChapter:
+        widget.beginAtCombo->setCurrentIndex(1);
+        break;
+    case KoOdfNotesConfiguration::BeginAtDocument:
+        widget.beginAtCombo->setCurrentIndex(2);
+        break;
     }
 }
 
-void NotesConfigurationDialog::endnoteSetup(bool on)
+void NotesConfigurationDialog::endnoteSetup()
 {
-    widget.dockWidget_5->setHidden(on);
-    widget.beginAtCombo->setDisabled(on);
-    if(on) {
-        widget.numStyleCombo->setCurrentIndex(5);
+    widget.continuationBox->hide();
+    widget.beginAtCombo->hide();
+    m_notesConfig = KoTextDocument(m_document).styleManager()
+                                    ->notesConfiguration(KoOdfNotesConfiguration::Endnote);
+    if (!m_notesConfig) {
+        m_notesConfig = new KoOdfNotesConfiguration();
+        m_notesConfig->setNoteClass(KoOdfNotesConfiguration::Endnote);
     }
+    widget.prefixLineEdit->setText(m_notesConfig->numberFormat().prefix());
+    widget.suffixLineEdit->setText(m_notesConfig->numberFormat().suffix());
+    widget.startAtSpinBox->setValue(m_notesConfig->startValue());
 
+    switch(m_notesConfig->numberFormat().formatSpecification()) {
+    case KoOdfNumberDefinition::Numeric:
+        widget.numStyleCombo->setCurrentIndex(0);
+        break;
+    case KoOdfNumberDefinition::AlphabeticLowerCase:
+        if (m_notesConfig->numberFormat().letterSynchronization()) {
+            widget.numStyleCombo->setCurrentIndex(3);
+        } else {
+            widget.numStyleCombo->setCurrentIndex(1);
+        }
+        break;
+    case KoOdfNumberDefinition::AlphabeticUpperCase:
+        if (m_notesConfig->numberFormat().letterSynchronization()) {
+            widget.numStyleCombo->setCurrentIndex(4);
+        } else {
+            widget.numStyleCombo->setCurrentIndex(2);
+        }
+        break;
+    default:
+    case KoOdfNumberDefinition::RomanLowerCase:
+        widget.numStyleCombo->setCurrentIndex(5);
+        break;
+    case KoOdfNumberDefinition::RomanUpperCase:
+        widget.numStyleCombo->setCurrentIndex(6);
+        break;
+    }
 }
 
 void NotesConfigurationDialog::apply(QAbstractButton *button)
 {
     if (widget.buttonBox->standardButton(button) == widget.buttonBox->Apply) {
-        notesConfig = new KoOdfNotesConfiguration();
-        //set Note Class
-        if (widget.footnote->isChecked()) {
-            notesConfig->setNoteClass(KoOdfNotesConfiguration::Footnote);
-        } else {
-            notesConfig->setNoteClass(KoOdfNotesConfiguration::Endnote);
-        }
         //set Number Format
         KoOdfNumberDefinition *numFormat = new KoOdfNumberDefinition();
         //set prefix
@@ -83,70 +156,70 @@ void NotesConfigurationDialog::apply(QAbstractButton *button)
         switch(widget.numStyleCombo->currentIndex()) {
         case 0:
             numFormat->setFormatSpecification(KoOdfNumberDefinition::Numeric);
-            notesConfig->setNumberFormat(*numFormat);
+            m_notesConfig->setNumberFormat(*numFormat);
             break;
         case 1:
             numFormat->setFormatSpecification(KoOdfNumberDefinition::AlphabeticLowerCase);
             numFormat->setLetterSynchronization(false);
-            notesConfig->setNumberFormat(*numFormat);
+            m_notesConfig->setNumberFormat(*numFormat);
             break;
         case 2:
             numFormat->setFormatSpecification(KoOdfNumberDefinition::AlphabeticUpperCase);
             numFormat->setLetterSynchronization(false);
-            notesConfig->setNumberFormat(*numFormat);
+            m_notesConfig->setNumberFormat(*numFormat);
             break;
         case 3:
             numFormat->setFormatSpecification(KoOdfNumberDefinition::AlphabeticLowerCase);
             numFormat->setLetterSynchronization(true);
-            notesConfig->setNumberFormat(*numFormat);
+            m_notesConfig->setNumberFormat(*numFormat);
             break;
         case 4:
             numFormat->setFormatSpecification(KoOdfNumberDefinition::AlphabeticUpperCase);
             numFormat->setLetterSynchronization(true);
-            notesConfig->setNumberFormat(*numFormat);
+            m_notesConfig->setNumberFormat(*numFormat);
             break;
         case 5:
             numFormat->setFormatSpecification(KoOdfNumberDefinition::RomanLowerCase);
-            notesConfig->setNumberFormat(*numFormat);
+            m_notesConfig->setNumberFormat(*numFormat);
             break;
         case 6:
             numFormat->setFormatSpecification(KoOdfNumberDefinition::RomanUpperCase);
-            notesConfig->setNumberFormat(*numFormat);
+            m_notesConfig->setNumberFormat(*numFormat);
             break;
         };
         //set Foot notes Position
-        /*if(notesConfig->noteClass() == KoOdfNotesConfiguration::Footnote) {
+        /*if(m_notesConfig->noteClass() == KoOdfNotesConfiguration::Footnote) {
             switch(widget.location_footnote->currentIndex()) {
             case 0:
-                notesConfig->setFootnotesPosition(KoOdfNotesConfiguration::Page);
+                m_notesConfig->setFootnotesPosition(KoOdfNotesConfiguration::Page);
             case 1:
-                notesConfig->setFootnotesPosition(KoOdfNotesConfiguration::Text);
+                m_notesConfig->setFootnotesPosition(KoOdfNotesConfiguration::Text);
             case 2:
-                notesConfig->setFootnotesPosition(KoOdfNotesConfiguration::Section);
+                m_notesConfig->setFootnotesPosition(KoOdfNotesConfiguration::Section);
             case 3:
-                notesConfig->setFootnotesPosition(KoOdfNotesConfiguration::Document);
+                m_notesConfig->setFootnotesPosition(KoOdfNotesConfiguration::Document);
 
             }
         }*/
         //set start value
-        notesConfig->setStartValue(widget.startAtSpinBox->value());
+        m_notesConfig->setStartValue(widget.startAtSpinBox->value());
         //set Numbering Scheme
-        switch(widget.beginAtCombo->currentIndex()) {
+        switch (widget.beginAtCombo->currentIndex()) {
         case 0:
-            notesConfig->setNumberingScheme(KoOdfNotesConfiguration::BeginAtDocument);
+            m_notesConfig->setNumberingScheme(KoOdfNotesConfiguration::BeginAtPage);
             break;
         case 1:
-            notesConfig->setNumberingScheme(KoOdfNotesConfiguration::BeginAtPage);
+            m_notesConfig->setNumberingScheme(KoOdfNotesConfiguration::BeginAtChapter);
             break;
         case 2:
-            notesConfig->setNumberingScheme(KoOdfNotesConfiguration::BeginAtChapter);
+            m_notesConfig->setNumberingScheme(KoOdfNotesConfiguration::BeginAtDocument);
             break;
         }
 
         //set footnote continuation forward
-        notesConfig->setFootnoteContinuationForward(widget.endlineEdit->text());
+        m_notesConfig->setFootnoteContinuationForward(widget.endlineEdit->text());
         //set footnote continuation backward
-        notesConfig->setFootnoteContinuationBackward(widget.startlineEdit->text());
+        m_notesConfig->setFootnoteContinuationBackward(widget.startlineEdit->text());
 
         //TODO
         //set citation text style
@@ -157,8 +230,6 @@ void NotesConfigurationDialog::apply(QAbstractButton *button)
 
         //set note paragraph style
 
-        //KoTextDocument(document).setNotesConfiguration(notesConfig);
-        KoTextDocument(document).styleManager()->setNotesConfiguration(notesConfig);
         this->close();
     }
     else if (widget.buttonBox->standardButton(button) == widget.buttonBox->Discard) {

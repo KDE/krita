@@ -6,7 +6,7 @@ kde4_add_ui_files(kritabmpexport_PART_SRCS )
 
 kde4_add_plugin(kritabmpexport ${kritabmpexport_PART_SRCS})
 
-target_link_libraries(kritabmpexport kritaui ${bmp_LIBRARIES})
+target_link_libraries(kritabmpexport kritaui)
 
 install(TARGETS kritabmpexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -21,7 +21,7 @@ kde4_add_ui_files(kritabmpimport_PART_SRCS )
 
 kde4_add_plugin(kritabmpimport ${kritabmpimport_PART_SRCS})
 
-target_link_libraries(kritabmpimport kritaui ${bmp_LIBRARIES})
+target_link_libraries(kritabmpimport kritaui)
 
 install(TARGETS kritabmpimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

@@ -20,6 +20,8 @@
 #include "dlg_canvassize.h"
 #include "kcanvaspreview.h"
 
+#include <KoIcon.h>
+
 #include <klocalizedstring.h>
 
 #include <math.h>
@@ -273,15 +275,15 @@ void DlgCanvasSize::slotHeightUnitChanged(QString)
 
 void DlgCanvasSize::loadAnchorIcons()
 {
-    m_anchorIcons[NORTH_WEST] =  KIcon("arrow_north_west.png");
-    m_anchorIcons[NORTH] = KIcon("arrow_north.png");
-    m_anchorIcons[NORTH_EAST] = KIcon("arrow_north_east.png");
-    m_anchorIcons[EAST] = KIcon("arrow_east.png");
-    m_anchorIcons[CENTER] = KIcon("arrow_center.png");
-    m_anchorIcons[WEST] = KIcon("arrow_west.png");
-    m_anchorIcons[SOUTH_WEST] = KIcon("arrow_south_west.png");
-    m_anchorIcons[SOUTH] = KIcon("arrow_south.png");
-    m_anchorIcons[SOUTH_EAST] = KIcon("arrow_south_east.png");
+    m_anchorIcons[NORTH_WEST] =  koIcon("arrow_north_west");
+    m_anchorIcons[NORTH] = koIcon("arrow_north");
+    m_anchorIcons[NORTH_EAST] = koIcon("arrow_north_east");
+    m_anchorIcons[EAST] = koIcon("arrow_east");
+    m_anchorIcons[CENTER] = koIcon("arrow_center");
+    m_anchorIcons[WEST] = koIcon("arrow_west");
+    m_anchorIcons[SOUTH_WEST] = koIcon("arrow_south_west");
+    m_anchorIcons[SOUTH] = koIcon("arrow_south");
+    m_anchorIcons[SOUTH_EAST] = koIcon("arrow_south_east");
 }
 
 void DlgCanvasSize::updateAnchorIcons(anchor enumAnchor)

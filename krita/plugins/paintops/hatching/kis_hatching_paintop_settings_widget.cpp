@@ -125,4 +125,3 @@ KisPropertiesConfiguration*  KisHatchingPaintOpSettingsWidget::configuration() c
     writeConfiguration(config);
     return config;
 }
-;

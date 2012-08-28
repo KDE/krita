@@ -26,23 +26,25 @@
 #include "KoConnectionShapeConfigWidget.h"
 
 #include <KoXmlNS.h>
+#include <KoIcon.h>
 #include <klocale.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoShapeLoadingContext.h>
 
 KoConnectionShapeFactory::KoConnectionShapeFactory()
         : KoShapeFactoryBase(KOCONNECTIONSHAPEID, i18n("Tie"))
 {
     setToolTip(i18n("A connection between two other shapes"));
-    setIcon("x-shape-connection");
+    setIconName(koIconNameCStr("x-shape-connection"));
     setXmlElementNames(KoXmlNS::draw, QStringList("connector"));
     setLoadingPriority(1);
+    setHidden(true); // Don't show this shape in collections. Only ConnectionTool should create
 }
 
 KoShape* KoConnectionShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 {
     KoConnectionShape * shape = new KoConnectionShape();
-    shape->setBorder(new KoLineBorder());
+    shape->setStroke(new KoShapeStroke());
     shape->setShapeId(KoPathShapeId);
     return shape;
 }

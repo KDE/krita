@@ -21,7 +21,6 @@
 #include <KoColorModelStandardIds.h>
 
 #include <kis_paint_device.h>
-#include <kis_random_accessor.h>
 
 #include <GTLCore/PixelDescription.h>
 #include <GTLCore/Type.h>
@@ -67,10 +66,10 @@ GTLCore::PixelDescription csToPD(const KoColorSpace* cs)
     if(cs->colorModelId() == RGBAColorModelID )
     {
         std::vector< std::size_t > positions;
-        positions.push_back(KoRgbU16Traits::red_pos);
-        positions.push_back(KoRgbU16Traits::green_pos);
-        positions.push_back(KoRgbU16Traits::blue_pos);
-        positions.push_back(KoRgbU16Traits::alpha_pos);
+        positions.push_back(KoBgrU16Traits::red_pos);
+        positions.push_back(KoBgrU16Traits::green_pos);
+        positions.push_back(KoBgrU16Traits::blue_pos);
+        positions.push_back(KoBgrU16Traits::alpha_pos);
         pd.setChannelPositions(positions);
     }
     return pd;

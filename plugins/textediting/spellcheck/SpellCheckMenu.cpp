@@ -45,8 +45,14 @@ SpellCheckMenu::SpellCheckMenu(const Sonnet::Speller &speller, SpellCheck *spell
 
     m_addToDictionaryAction = new KAction(i18n("Add to Dictionary"), this);
     connect(m_addToDictionaryAction, SIGNAL(triggered()), this, SLOT(addWordToDictionary()));
-    m_ignoreWordAction = new KAction(i18n("Ignore Word"), this);
-    connect(m_ignoreWordAction, SIGNAL(triggered()), this, SLOT(ignoreWord()));
+
+    // disabling this as if it calls the speller it's only changed in a local copy
+    // see addWordToDictionary for how it should be done, except background checker
+    // doesn't have suche a method for ignoreWord
+    // Only option left is to personally ignore words
+
+    // m_ignoreWordAction = new KAction(i18n("Ignore Word"), this);
+    // connect(m_ignoreWordAction, SIGNAL(triggered()), this, SLOT(ignoreWord()));
 
     connect(m_suggestionsSignalMapper, SIGNAL(mapped(const QString&)), 
             this, SLOT(replaceWord(const QString&)));
@@ -104,7 +110,8 @@ void SpellCheckMenu::addWordToDictionary()
     if (m_currentMisspelled.isEmpty() || m_currentMisspelledPosition < 0)
         return;
 
-    m_speller.addToPersonal(m_currentMisspelled);
+    // see comment in ctor above why this will never work
+    m_spellCheck->addWordToPersonal(m_currentMisspelled);
 
     emit clearHighlightingForWord(m_currentMisspelledPosition);
 

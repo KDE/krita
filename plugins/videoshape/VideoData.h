@@ -72,8 +72,8 @@ public:
      */
     bool saveData(QIODevice &device);
 
-    QString tagForSaving(int &counter);
-    
+    QString tagForSaving(QUrl storeUrl, int &counter);
+
     VideoData &operator=(const VideoData &other);
 
     inline bool operator!=(const VideoData &other) const { return !operator==(other); }

@@ -216,7 +216,13 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
                 // Check whether we can load a shape to fit the current object.
                 KoXmlElement child;
                 KoShape *childShape = 0;
+                bool first = true;
                 forEachElement(child, e) {
+                    // no need to try to load the first element again as it was already tried before and we could not load it
+                    if (first) {
+                        first = false;
+                        continue;
+                    }
                     kDebug(30006) << "--------------------------------------------------------";
                     kDebug(30006) << "Attempting to check if we can fall back ability to the item"
                                   << child.nodeName();
@@ -318,6 +324,9 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
             }
             // Maybe a shape with a lower priority can load our
             // element, but this attempt has failed.
+        }
+        else {
+            kDebug(30006) << "No support for" << p << "by" << factory->id();
         }
     }
 

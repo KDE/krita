@@ -15,8 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_STRATEGY_COLORSPACE_GRAYSCALE_U16_H_
-#define KIS_STRATEGY_COLORSPACE_GRAYSCALE_U16_H_
+#ifndef KIS_COLORSPACE_GRAYSCALE_U16_H_
+#define KIS_COLORSPACE_GRAYSCALE_U16_H_
 
 #include <klocale.h>
 #include "LcmsColorSpace.h"
@@ -25,49 +25,69 @@
 
 typedef KoColorSpaceTrait<quint16, 2, 1> GrayAU16Traits;
 
-class KoGrayAU16ColorSpace : public LcmsColorSpace<GrayAU16Traits>
+class GrayAU16ColorSpace : public LcmsColorSpace<GrayAU16Traits>
 {
 public:
-    KoGrayAU16ColorSpace(KoColorProfile *p);
+    GrayAU16ColorSpace(const QString &name, KoColorProfile *p);
+
     virtual bool willDegrade(ColorSpaceIndependence) const {
         return false;
     }
+
     virtual KoID colorModelId() const {
         return GrayAColorModelID;
     }
+
     virtual KoID colorDepthId() const {
         return Integer16BitsColorDepthID;
     }
+
     virtual KoColorSpace* clone() const;
+
     virtual void colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
+
     virtual void colorFromXML(quint8* pixel, const QDomElement& elt) const;
+
+    static QString colorSpaceId()
+    {
+        return "GRAYAU16";
+    }
 };
 
-class KoGrayAU16ColorSpaceFactory : public LcmsColorSpaceFactory
+class GrayAU16ColorSpaceFactory : public LcmsColorSpaceFactory
 {
 public:
-    KoGrayAU16ColorSpaceFactory() : LcmsColorSpaceFactory(TYPE_GRAYA_16, cmsSigGrayData) {}
-    virtual QString id() const {
-        return "GRAYA16";
+    GrayAU16ColorSpaceFactory()
+        : LcmsColorSpaceFactory(TYPE_GRAYA_16, cmsSigGrayData)
+    {
     }
+
+    virtual QString id() const {
+        return GrayAU16ColorSpace::colorSpaceId();
+    }
+
     virtual QString name() const {
         return i18n("Grayscale (16-bit integer/channel)");
     }
+
     virtual KoID colorModelId() const {
         return GrayAColorModelID;
     }
+
     virtual KoID colorDepthId() const {
         return Integer16BitsColorDepthID;
     }
+
     virtual int referenceDepth() const {
         return 16;
     }
+
     virtual bool userVisible() const {
         return true;
     }
 
     virtual KoColorSpace *createColorSpace(const KoColorProfile *p) const {
-        return new KoGrayAU16ColorSpace(p->clone());
+        return new GrayAU16ColorSpace(name(), p->clone());
     }
 
     virtual QString defaultProfile() const {

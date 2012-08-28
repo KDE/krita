@@ -25,6 +25,8 @@
 #include <KoOasisSettings.h>
 #include <KoXmlWriter.h>
 
+#include <KoIcon.h>
+
 #include <KToggleAction>
 #include <KLocale>
 #include <QPainter>
@@ -218,7 +220,7 @@ void KoGridData::saveOdfSettings(KoXmlWriter &settingsWriter)
 KToggleAction *KoGridData::gridToggleAction(QWidget* canvas)
 {
     if (! d->toggleGridAction) {
-        d->toggleGridAction = new KToggleAction(KIcon("view-grid"), i18n("Show Grid"), 0);
+        d->toggleGridAction = new KToggleAction(koIcon("view-grid"), i18n("Show Grid"), 0);
         d->toggleGridAction->setToolTip(i18n("Shows or hides grid"));
         d->toggleGridAction->setChecked(d->showGrid);
     }

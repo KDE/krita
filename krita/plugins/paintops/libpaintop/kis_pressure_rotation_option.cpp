@@ -24,7 +24,8 @@
 #include <KoColorSpace.h>
 
 KisPressureRotationOption::KisPressureRotationOption()
-        : KisCurveOption(i18n("Rotation"), "Rotation", KisPaintOpOption::brushCategory(), false)
+        : KisCurveOption(i18n("Rotation"), "Rotation", KisPaintOpOption::brushCategory(), false),
+          m_defaultAngle(0.0)
 {
     setMinimumLabel(i18n("0°"));
     setMaximumLabel(i18n("360°"));
@@ -33,6 +34,12 @@ KisPressureRotationOption::KisPressureRotationOption()
 
 double KisPressureRotationOption::apply(const KisPaintInformation & info) const
 {
-    if (!isChecked()) return 0.0;
-    return (1.0 - computeValue(info)) * 2.0 * M_PI;
+    if (!isChecked()) return m_defaultAngle;
+    return fmod( (1.0 - computeValue(info)) * 2.0 * M_PI + m_defaultAngle, 2.0 * M_PI);
+}
+
+void KisPressureRotationOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+{
+    m_defaultAngle = setting->getDouble("runtimeCanvasRotation", 0.0) * M_PI / 180.0;
+    KisCurveOption::readOptionSetting(setting);
 }

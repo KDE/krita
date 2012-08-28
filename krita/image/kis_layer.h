@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
  *
@@ -165,7 +165,7 @@ public:
     /**
      * Set the image this layer belongs to.
      */
-    void setImage(KisImageWSP image);
+    virtual void setImage(KisImageWSP image);
 
     /**
      * Clones should be informed about updates of the original

@@ -45,6 +45,7 @@ public:
 
     void setImage(KisImageWSP image);
 
+    virtual bool hasDummyForNode(KisNodeSP node) const = 0;
     virtual KisNodeDummy* dummyForNode(KisNodeSP node) const = 0;
     virtual KisNodeDummy* rootDummy() const = 0;
     virtual int dummiesCount() const = 0;

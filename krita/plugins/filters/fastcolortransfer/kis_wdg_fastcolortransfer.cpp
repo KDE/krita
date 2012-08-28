@@ -30,7 +30,6 @@
 #include <filter/kis_filter_configuration.h>
 #include <kis_doc2.h>
 #include <kis_image.h>
-#include <kis_iterators_pixel.h>
 #include <kis_iterator_ng.h>
 #include <kis_paint_device.h>
 #include <kundo2command.h>
@@ -93,7 +92,7 @@ KisPropertiesConfiguration* KisWdgFastColorTransfer::configuration() const
     }
     
     dbgPlugins << "convert ref to lab";
-    KUndo2Command* cmd = ref->convertTo(labCS);
+    KUndo2Command* cmd = ref->convertTo(labCS, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
     delete cmd;
     
     // Compute the means and sigmas of ref

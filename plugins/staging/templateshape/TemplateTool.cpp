@@ -28,7 +28,6 @@
 
 // KDE
 #include <KLocale>
-#include <KIconLoader>
 #include <KUrl>
 #include <KFileDialog>
 #include <KIO/Job>
@@ -38,6 +37,7 @@
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
+#include <KoIcon.h>
 
 // This shape
 #include "TemplateShape.h"
@@ -87,7 +87,7 @@ QWidget * TemplateTool::createOptionWidget()
     QToolButton *button = 0;
 
     button = new QToolButton(optionWidget);
-    button->setIcon(SmallIcon("open"));
+    button->setIcon(koIcon("document-open"));
     button->setToolTip(i18n( "Open"));
     layout->addWidget(button, 0, 0);
     connect(button, SIGNAL(clicked(bool)), this, SLOT(openPressed()));

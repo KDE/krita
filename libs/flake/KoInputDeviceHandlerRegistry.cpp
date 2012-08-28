@@ -53,7 +53,9 @@ KoInputDeviceHandlerRegistry::~KoInputDeviceHandlerRegistry()
     foreach(QString id, keys()) {
         get(id)->deleteLater();
     }
-    qDeleteAll(doubleEntries());
+    // just leak on exit -- we get into trouble for explicitly
+    // deleting stuff from static objects, like registries
+    //qDeleteAll(doubleEntries());
 }
 
 KoInputDeviceHandlerRegistry* KoInputDeviceHandlerRegistry::instance()

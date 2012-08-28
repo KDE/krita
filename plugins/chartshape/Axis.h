@@ -53,13 +53,14 @@ class CHARTSHAPELIB_EXPORT Axis : public QObject
     Q_OBJECT
     
 public:
-    Axis( PlotArea *parent, AxisDimension dimension );
+    Axis(PlotArea *parent, AxisDimension dimension);
     ~Axis();
 	
     PlotArea *plotArea() const;
     KoShape *title() const;
     QString titleText() const;
     bool showLabels() const;
+    bool showOverlappingDataLabels() const;
     QString id() const;
     AxisDimension dimension() const;
     QList<DataSet*> dataSets() const;
@@ -77,22 +78,24 @@ public:
     bool showMinorGrid() const;
     Qt::Orientation orientation();
     QFont font() const;
+    qreal fontSize() const;
     bool isVisible() const;
 
-    void setTitleText( const QString &text );
-    void setShowLabels( bool show );
+    void setTitleText(const QString &text);
+    void setShowLabels(bool show);
+    void setShowOverlappingDataLabels(bool show);
 
     /**
      * Attaches a data set to this axis, adding it to a diagram
      * of its chart type, creating it if necessary
      */
-    bool attachDataSet( DataSet *dataSet );
+    bool attachDataSet(DataSet *dataSet);
 
     /**
      * Detaches a data set from this axis, removing it from the diagram of
      * its chart type, and deleting it if it was the last data set in this diagram.
      */
-    bool detachDataSet( DataSet *dataSet, bool silent = false );
+    bool detachDataSet(DataSet *dataSet, bool silent = false);
 
     /**
      * Detaches all data sets in this axis, deleting any diagram
@@ -100,50 +103,51 @@ public:
      */
     void clearDataSets();
 
-    void setMajorInterval( qreal interval );
-    void setMinorInterval( qreal interval );
-    void setMinorIntervalDivisor( int divisor );
-    void setUseAutomaticMajorInterval( bool automatic );
-    void setUseAutomaticMinorInterval( bool automatic );
-    void setShowInnerMinorTicks( bool showTicks );
-    void setShowOuterMinorTicks( bool showTicks );
-    void setShowInnerMajorTicks( bool showTicks );
-    void setShowOuterMajorTicks( bool showTicks );
-    void setScalingLogarithmic( bool logarithmicScaling );
-    void setShowMajorGrid( bool showGrid );
-    void setShowMinorGrid( bool showGrid );
-    void setThreeD( bool threeD );
-    void setFont( const QFont &font );
-    void setVisible( bool visible );
+    void setMajorInterval(qreal interval);
+    void setMinorInterval(qreal interval);
+    void setMinorIntervalDivisor(int divisor);
+    void setUseAutomaticMajorInterval(bool automatic);
+    void setUseAutomaticMinorInterval(bool automatic);
+    void setShowInnerMinorTicks(bool showTicks);
+    void setShowOuterMinorTicks(bool showTicks);
+    void setShowInnerMajorTicks(bool showTicks);
+    void setShowOuterMajorTicks(bool showTicks);
+    void setScalingLogarithmic(bool logarithmicScaling);
+    void setShowMajorGrid(bool showGrid);
+    void setShowMinorGrid(bool showGrid);
+    void setThreeD(bool threeD);
+    void setFont(const QFont &font);
+    void setFontSize(qreal size);
+    void setVisible(bool visible);
 
     KoOdfNumberStyles::NumericStyleFormat *numericStyleFormat() const;
     void SetNumericStyleFormat(KoOdfNumberStyles::NumericStyleFormat *numericStyleFormat) const;
 
-    bool loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &context);
-    bool loadOdfChartSubtypeProperties( const KoXmlElement &axisElement,
-                                        KoShapeLoadingContext &context );
-    void saveOdf( KoShapeSavingContext &context );
-    void saveOdfGrid( KoShapeSavingContext &context, OdfGridClass gridClass );
+    bool loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &context);
+    bool loadOdfChartSubtypeProperties(const KoXmlElement &axisElement,
+                                        KoShapeLoadingContext &context);
+    void saveOdf(KoShapeSavingContext &context);
+    void saveOdfGrid(KoShapeSavingContext &context, OdfGridClass gridClass);
 
     // KDChart stuff
     KDChart::CartesianAxis *kdAxis() const;
     KDChart::AbstractCoordinatePlane *kdPlane() const;
     
-    void plotAreaChartTypeChanged( ChartType chartType );
-    void plotAreaChartSubTypeChanged( ChartSubtype chartSubType );
+    void plotAreaChartTypeChanged(ChartType chartType);
+    void plotAreaChartSubTypeChanged(ChartSubtype chartSubType);
     void plotAreaIsVerticalChanged();
 
-    void registerKdAxis( KDChart::CartesianAxis *axis );
-    void deregisterKdAxis( KDChart::CartesianAxis *axis );
+    void registerKdAxis(KDChart::CartesianAxis *axis);
+    void deregisterKdAxis(KDChart::CartesianAxis *axis);
     
     void update() const;
     void requestRepaint() const;
     void layoutPlanes();
     
 public slots:
-    void setGapBetweenBars( int percent );
-    void setGapBetweenSets( int percent );
-    void setPieAngleOffset( qreal angle );
+    void setGapBetweenBars(int percent);
+    void setGapBetweenSets(int percent);
+    void setPieAngleOffset(qreal angle);
     
 private:
     class Private;

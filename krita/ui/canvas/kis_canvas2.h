@@ -25,6 +25,7 @@
 #include <QSize>
 #include <QString>
 
+#include <KoColorSpace.h>
 #include <KoCanvasBase.h>
 #include <krita_export.h>
 #include <kis_types.h>
@@ -40,6 +41,7 @@ class KisCanvasDecoration;
 class KisView2;
 class KisPaintopBox;
 class KoFavoriteResourceManager;
+class KisDisplayFilter;
 
 enum KisCanvasType {
     QPAINTER,
@@ -96,7 +98,7 @@ public: // KoCanvasBase implementation
 
     /**
      * Return the right shape manager for the current layer. That is
-     * to say, if the current layer is a shape layer, return the shape
+     * to say, if the current layer is a vector layer, return the shape
      * layer's canvas' shapemanager, else the shapemanager associated
      * with the global krita canvas.
      */
@@ -169,11 +171,25 @@ public slots:
     void startUpdateCanvasProjection(const QRect & rc);
     void updateCanvasProjection(KisUpdateInfoSP info);
 
+    void startUpdateInPatches(QRect imageRect);
+
+    void setMonitorProfile(KoColorProfile* monitorProfile,
+                           KoColorConversionTransformation::Intent renderingIntent,
+                           KoColorConversionTransformation::ConversionFlags conversionFlags);
+
+
+
+    void setDisplayFilter(KisDisplayFilter *displayFilter);
+
     void startResizingImage(qint32 w, qint32 h);
-    void finishResisingImage(qint32 w, qint32 h);
+    void finishResizingImage(qint32 w, qint32 h);
 
     /// adjust the origin of the document
     void adjustOrigin();
+
+    /// canvas rotation in degrees
+    qreal rotationAngle() const;
+    void setSmoothingEnabled(bool smooth);
 
 private slots:
 
@@ -212,7 +228,7 @@ public:
     bool handlePopupPaletteIsVisible();
 
 private:
-    Q_DISABLE_COPY(KisCanvas2);
+    Q_DISABLE_COPY(KisCanvas2)
 
     void pan(QPoint shift);
     void createCanvas(bool useOpenGL);

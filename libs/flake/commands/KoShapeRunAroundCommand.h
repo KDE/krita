@@ -29,7 +29,7 @@
 class FLAKE_EXPORT KoShapeRunAroundCommand : public KUndo2Command
 {
 public:
-    KoShapeRunAroundCommand(KoShape *shape, KoShape::TextRunAroundSide side, int runThrough, qreal distance, qreal threshold, KUndo2Command *parent = 0);
+    KoShapeRunAroundCommand(KoShape *shape, KoShape::TextRunAroundSide side, int runThrough, qreal distanceLeft, qreal distanceTop, qreal distanceRight, qreal distanceBottom, qreal threshold, KoShape::TextRunAroundContour contour, KUndo2Command *parent = 0);
     virtual ~KoShapeRunAroundCommand();
 
     /// redo the command

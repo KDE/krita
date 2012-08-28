@@ -23,10 +23,11 @@
 #include "Property.h"
 #include "EditorView.h"
 
+#include <KoIcon.h>
+
 #include <KLocale>
 #include <KDebug>
 #include <KCmdLineArgs>
-#include <KIconLoader>
 
 #include <QDate>
 #include <QDateTime>
@@ -44,7 +45,7 @@ TestWindow::TestWindow()
         , m_set(this, "test")
 {
     setObjectName("koproperty_test");
-    setWindowIcon(DesktopIcon("document-properties"));
+    setWindowIcon(koIcon("document-properties"));
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     const bool flat = args->isSet("flat");
@@ -140,7 +141,7 @@ TestWindow::TestWindow()
         m_set.addProperty(new Property("Color", palette().color(QPalette::Active, QPalette::Background), "Color"), group);
     }
     if (singleProperty.isEmpty() || singleProperty=="Pixmap") {
-        QPixmap pm(DesktopIcon("network-wired"));
+        QPixmap pm(koDesktopIcon("network-wired"));
         m_set.addProperty(p = new Property("Pixmap", pm, "Pixmap"), group);
         p->setIcon("kpaint");
     }

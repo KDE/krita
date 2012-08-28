@@ -35,7 +35,7 @@ public:
     }
 
     KisTextBrushesPipe(const KisTextBrushesPipe &rhs)
-        : KisBrushesPipe(rhs)
+        : KisBrushesPipe<KisGbrBrush>(rhs)
     {
         m_brushesMap.clear();
 

@@ -19,7 +19,7 @@ The actual adding/removing of areas is done by the abstract class KoTextLayoutRo
 
 In Words every KWTextFrameSet has an own KWRootAreaProvider. This way headers, footers and the main text have different providers. The provider can depend on each other to allow layouting in a defined order.
 
-In Calligra Tables it would also be a simple provider with a root area corresponding to a cell.
+In Calligra Sheets it would also be a simple provider with a root area corresponding to a cell.
 
 
 Trigging of (re)layout

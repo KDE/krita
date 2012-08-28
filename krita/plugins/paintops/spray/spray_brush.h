@@ -89,7 +89,7 @@ private:
     /// rotation in radians according the settings (gauss distribution, uniform distribution or fixed angle)
     qreal rotationAngle();
     /// Paints Wu Particle
-    void paintParticle(KisRandomAccessor &writeAccessor, const KoColor &color, qreal rx, qreal ry);
+    void paintParticle(KisRandomAccessorSP &writeAccessor, const KoColor &color, qreal rx, qreal ry);
     void paintCircle(KisPainter * painter, qreal x, qreal y, int radius, int steps);
     void paintEllipse(KisPainter * painter, qreal x, qreal y, int a, int b, qreal angle, int steps);
     void paintRectangle(KisPainter * painter, qreal x, qreal y, int width, int height, qreal angle, int steps);

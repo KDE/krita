@@ -67,7 +67,8 @@ void TestKoColor::testSerialization()
     testForModel(LABAColorModelID.id());
     testForModel(CMYKAColorModelID.id());
     testForModel(GrayAColorModelID.id());
-    testForModel(YCbCrAColorModelID.id());
+    // we cannot test ycbcr since we cannot ship profiles
+    //testForModel(YCbCrAColorModelID.id());
 }
 
 QTEST_KDEMAIN(TestKoColor, NoGUI)

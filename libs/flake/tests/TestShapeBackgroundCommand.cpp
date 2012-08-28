@@ -21,6 +21,8 @@
 #include <MockShapes.h>
 #include "KoShapeBackgroundCommand.h"
 #include "KoColorBackground.h"
+#include "KoShapePaintingContext.h"
+#include "KoViewConverter.h"
 
 void TestShapeBackgroundCommand::refCounting()
 {
@@ -58,7 +60,9 @@ void TestShapeBackgroundCommand::refCounting()
     QPainter p;
     QPainterPath path;
     path.addRect( QRectF(0,0,100,100) );
-    whiteFill->paint( p, path );
+    KoViewConverter converter;
+    KoShapePaintingContext context;
+    whiteFill->paint( p, converter, context, path );
 
     delete cmd2;
     delete shape1;

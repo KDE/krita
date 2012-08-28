@@ -34,8 +34,7 @@
 #include <kis_debug.h>
 
 #include "kis_basic_math_toolbox.h"
-#include "kis_iterators_pixel.h"
-
+#include "kis_iterator_ng.h"
 
 KisMathToolbox::KisMathToolbox(KoID id) : m_id(id)
 {
@@ -95,19 +94,18 @@ void KisMathToolbox::transformToFR(KisPaintDeviceSP src, KisFloatRepresentation*
     if (!getToDoubleChannelPtr(cis, f))
         return;
 
-    KisHLineConstIteratorPixel srcIt = src->createHLineIterator(rect.x(), rect.y(), rect.width());
+    KisHLineConstIteratorSP srcIt = src->createHLineIteratorNG(rect.x(), rect.y(), rect.width());
 
     for (int i = rect.y(); i < rect.height(); i++) {
         float *dstIt = fr->coeffs + (i - rect.y()) * fr->size * fr->depth;
-        while (! srcIt.isDone()) {
-            const quint8* v1 = srcIt.rawData();
+        do {
+            const quint8* v1 = srcIt->oldRawData();
             for (int k = 0; k < depth; k++) {
                 *dstIt = f[k](v1, cis[k]->pos());
                 ++dstIt;
             }
-            ++srcIt;
-        }
-        srcIt.nextRow();
+        } while (srcIt->nextPixel());
+        srcIt->nextRow();
     }
 }
 
@@ -160,18 +158,17 @@ void KisMathToolbox::transformFromFR(KisPaintDeviceSP dst, KisFloatRepresentatio
     if (!getFromDoubleChannelPtr(cis, f))
         return;
 
-    KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), rect.y(), rect.width());
+    KisHLineIteratorSP dstIt = dst->createHLineIteratorNG(rect.x(), rect.y(), rect.width());
     for (int i = rect.y(); i < rect.height(); i++) {
         float *srcIt = fr->coeffs + (i - rect.y()) * fr->size * fr->depth;
-        while (! dstIt.isDone()) {
-            quint8* v1 = dstIt.rawData();
+        do {
+            quint8* v1 = dstIt->rawData();
             for (int k = 0; k < depth; k++) {
                 f[k](v1, cis[k]->pos(), *srcIt);
                 ++srcIt;
             }
-            ++dstIt;
-        }
-        dstIt.nextRow();
+        } while(dstIt->nextPixel());
+        dstIt->nextRow();
     }
 }
 

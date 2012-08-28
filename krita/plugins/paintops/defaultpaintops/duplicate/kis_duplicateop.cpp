@@ -59,6 +59,7 @@
 #include <kis_perspective_grid.h>
 #include <kis_random_sub_accessor.h>
 #include <kis_fixed_paint_device.h>
+#include <kis_iterator_ng.h>
 
 #include "kis_duplicateop_settings.h"
 #include "kis_duplicateop_settings_widget.h"
@@ -197,17 +198,15 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
         QPointF positionStartPaintingT = KisPerspectiveMath::matProd(endM, QPointF(m_duplicateStart));
         QPointF duplicateStartPositionT = KisPerspectiveMath::matProd(endM, QPointF(m_duplicateStart) - QPointF(settings->offset()));
         QPointF translat = duplicateStartPositionT - positionStartPaintingT;
-        KisRectIteratorPixel dstIt = m_srcdev->createRectIterator(0, 0, sw, sh);
-        KisRandomSubAccessorPixel srcAcc = source()->createRandomSubAccessor();
+
+        KisRectIteratorSP dstIt = m_srcdev->createRectIteratorNG(0, 0, sw, sh);
+        KisRandomSubAccessorSP srcAcc = source()->createRandomSubAccessor();
         //Action
-        while (!dstIt.isDone()) {
-            if (dstIt.isSelected()) {
-                QPointF p =  KisPerspectiveMath::matProd(startM, KisPerspectiveMath::matProd(endM, QPointF(dstIt.x() + x, dstIt.y() + y)) + translat);
-                srcAcc.moveTo(p);
-                srcAcc.sampledOldRawData(dstIt.rawData());
-            }
-            ++dstIt;
-        }
+        do {
+            QPointF p =  KisPerspectiveMath::matProd(startM, KisPerspectiveMath::matProd(endM, QPointF(dstIt->x() + x, dstIt->y() + y)) + translat);
+            srcAcc->moveTo(p);
+            srcAcc->sampledOldRawData(dstIt->rawData());
+        } while (dstIt->nextPixel());
 
 
     } else {
@@ -218,17 +217,15 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
 //         copyPainter.bitBlt(0, 0, source(), srcPoint.x(), srcPoint.y(), sw, sh);
 //         copyPainter.end();
         // Do the copy manually to access old raw data
-        KisHLineIteratorPixel dstIt = m_srcdev->createHLineIterator(0, 0, sw);
-        KisHLineConstIteratorPixel srcIt = source()->createHLineConstIterator(srcPoint.x(), srcPoint.y(), sw);
+        KisHLineIteratorSP dstIt = m_srcdev->createHLineIteratorNG(0, 0, sw);
+        KisHLineConstIteratorSP srcIt = source()->createHLineConstIteratorNG(srcPoint.x(), srcPoint.y(), sw);
         int pixelSize = m_srcdev->pixelSize();
         for (int i = 0; i < sh; ++i) {
-            while (!dstIt.isDone()) {
-                memcpy(dstIt.rawData(), srcIt.oldRawData(), pixelSize);
-                ++dstIt;
-                ++srcIt;
-            }
-            dstIt.nextRow();
-            srcIt.nextRow();
+            do {
+                memcpy(dstIt->rawData(), srcIt->oldRawData(), pixelSize);
+            } while (dstIt->nextPixel() && srcIt->nextPixel());
+            dstIt->nextRow();
+            srcIt->nextRow();
         }
     }
 
@@ -240,23 +237,23 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
         qreal* matrix = new qreal[ 3 * sw * sh ];
         // First divide
         const KoColorSpace* deviceCs = source()->colorSpace();
-        KisHLineConstIteratorPixel deviceIt = source()->createHLineConstIterator(x, y, sw);
-        KisHLineIteratorPixel srcDevIt = m_srcdev->createHLineIterator(0, 0, sw);
+        KisHLineConstIteratorSP deviceIt = source()->createHLineConstIteratorNG(x, y, sw);
+        KisHLineIteratorSP srcDevIt = m_srcdev->createHLineIteratorNG(0, 0, sw);
         qreal* matrixIt = &matrix[0];
         for (int j = 0; j < sh; j++) {
-            for (int i = 0; !srcDevIt.isDone(); i++) {
-                deviceCs->toLabA16(deviceIt.rawData(), (quint8*)dataDevice, 1);
-                deviceCs->toLabA16(srcDevIt.rawData(), (quint8*)dataSrcDev, 1);
+            for (int i = 0; i < sw; i++) {
+                deviceCs->toLabA16(deviceIt->oldRawData(), (quint8*)dataDevice, 1);
+                deviceCs->toLabA16(srcDevIt->rawData(), (quint8*)dataSrcDev, 1);
                 // Division
                 for (int k = 0; k < 3; k++) {
                     matrixIt[k] = dataDevice[k] / (qreal)qMax((int)dataSrcDev [k], 1);
                 }
-                ++deviceIt;
-                ++srcDevIt;
+                deviceIt->nextPixel();
+                srcDevIt->nextPixel();
                 matrixIt += 3;
             }
-            deviceIt.nextRow();
-            srcDevIt.nextRow();
+            deviceIt->nextRow();
+            srcDevIt->nextRow();
         }
         // Minimize energy
         {
@@ -272,24 +269,24 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
         }
 
         // Finaly multiply
-        deviceIt = source()->createHLineIterator(x, y, sw);
-        srcDevIt = m_srcdev->createHLineIterator(0, 0, sw);
+        KisHLineIteratorSP deviceIt2 = source()->createHLineIteratorNG(x, y, sw);
+        KisHLineIteratorSP srcDevIt2 = m_srcdev->createHLineIteratorNG(0, 0, sw);
         matrixIt = &matrix[0];
         for (int j = 0; j < sh; j++) {
-            for (int i = 0; !srcDevIt.isDone(); i++) {
-                deviceCs->toLabA16(deviceIt.rawData(), (quint8*)dataDevice, 1);
-                deviceCs->toLabA16(srcDevIt.rawData(), (quint8*)dataSrcDev, 1);
+            for (int i = 0; i < sw; i++) {
+                deviceCs->toLabA16(deviceIt2->rawData(), (quint8*)dataDevice, 1);
+                deviceCs->toLabA16(srcDevIt2->rawData(), (quint8*)dataSrcDev, 1);
                 // Multiplication
                 for (int k = 0; k < 3; k++) {
                     dataSrcDev[k] = (int)CLAMP(matrixIt[k] * qMax((int) dataSrcDev[k], 1), 0, 65535);
                 }
-                deviceCs->fromLabA16((quint8*)dataSrcDev, srcDevIt.rawData(), 1);
-                ++deviceIt;
-                ++srcDevIt;
+                deviceCs->fromLabA16((quint8*)dataSrcDev, srcDevIt2->rawData(), 1);
+                deviceIt2->nextPixel();
+                srcDevIt2->nextPixel();
                 matrixIt += 3;
             }
-            deviceIt.nextRow();
-            srcDevIt.nextRow();
+            deviceIt2->nextRow();
+            srcDevIt2->nextRow();
         }
         delete [] matrix;
     }
@@ -297,13 +294,13 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
     KisFixedPaintDeviceSP dab = 0;
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
         dab = brush->paintDevice(m_srcdev->colorSpace(), scale, 0.0, info, xFraction, yFraction);
-        dab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
+        dab->convertTo(KoColorSpaceRegistry::instance()->alpha8(), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
     } else {
         dab = cachedDab();
         KoColor color = painter()->paintColor();
         color.convertTo(dab->colorSpace());
         brush->mask(dab, color, scale, scale, 0.0, info, xFraction, yFraction);
-        dab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
+        dab->convertTo(KoColorSpaceRegistry::instance()->alpha8(), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
     }
 
     QRect dstRect = QRect(x, y, dab->bounds().width(), dab->bounds().height());

@@ -76,6 +76,10 @@ void KisToolPath::mousePressEvent(KoPointerEvent *event)
 
         setMode(KisTool::PAINT_MODE);
 
+        if (!nodeEditable()) {
+            return;
+        }
+
         Q_ASSERT(m_localTool);
         m_localTool->mousePressEvent(event);
     }

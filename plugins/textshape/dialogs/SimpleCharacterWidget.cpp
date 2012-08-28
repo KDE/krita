@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007, 2008, 2010 Thomas Zander <zander@kde.org>
- * Copyright (C) 2009-2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2009-2010 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2011-2012 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -59,6 +59,7 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
     widget.superscript->setDefaultAction(tool->action("format_super"));
     widget.subscript->setDefaultAction(tool->action("format_sub"));
     widget.moreOptions->setText("...");
+    widget.moreOptions->setToolTip(i18n("Change font format"));
     connect(widget.moreOptions, SIGNAL(clicked(bool)), tool->action("format_font"), SLOT(trigger()));
 
     connect(widget.bold, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));

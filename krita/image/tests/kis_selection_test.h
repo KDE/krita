@@ -32,6 +32,7 @@ private slots:
     void testSelectionComponents();
     void testSelectionActions();
     void testInvertSelection();
+    void testInvertSelectionSemi();
     void testUpdatePixelSelection();
     void testUpdateSelectionProjection();
     void testCopy();

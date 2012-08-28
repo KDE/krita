@@ -46,6 +46,7 @@ class KoShapeSavingContext;
 class KoTextShapeData;
 class KUndo2Stack;
 class ChangeStylesMacroCommand;
+class KoTextTableTemplate;
 
 /**
  * Manages all character, paragraph, table and table cell styles for any number
@@ -142,6 +143,12 @@ public:
      * Add a new sewction style, automatically giving it a new styleId.
      */
     void add(KoSectionStyle *style);
+
+    /**
+     * Add a table template, automatically giving it a new styleId.
+     */
+    void add(KoTextTableTemplate *tableTemplate);
+
     /**
      * set the notes configuration of the document
      */
@@ -252,6 +259,15 @@ public:
     KoTableCellStyle *tableCellStyle(int id) const;
 
     /**
+     * Return a tableTemplate by its id.
+     * From documents you can retrieve the id out of each QTextTableFormat
+     * by requesting the KoTextTableTemplate::StyleId property.
+     * @param id the unique Id to search for.
+     * @see KoTextTableTemplate::styleId()
+     */
+    KoTextTableTemplate *tableTemplate(int id) const;
+
+    /**
      * Return a sectionStyle by its id.
      * From documents you can retrieve the id out of each QTextFrameFormat
      * by requesting the KoSectionStyle::StyleId property.
@@ -318,6 +334,15 @@ public:
      * @see tableCellStyle(id);
      */
     KoTableCellStyle *tableCellStyle(const QString &name) const;
+
+    /**
+     * Return the first tableTemplate with the param user-visible-name.
+     * Since the name does not have to be unique there can be multiple
+     * styles registered with that name, only the first is returned
+     * @param name the name of the style.
+     * @see tableTemplate(id);
+     */
+    KoTextTableTemplate *tableTemplate(const QString &name) const;
 
     /**
      * Return the first sectionStyle with the param user-visible-name.

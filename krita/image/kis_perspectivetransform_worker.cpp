@@ -25,12 +25,13 @@
 #include <QTransform>
 #include <QVector3D>
 
-#include "kis_iterators_pixel.h"
 #include "kis_paint_device.h"
 #include "kis_perspective_math.h"
+#include "kis_random_accessor_ng.h"
 #include "kis_random_sub_accessor.h"
 #include "kis_selection.h"
 #include "kis_datamanager.h"
+#include <kis_iterator_ng.h>
 
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
@@ -107,51 +108,51 @@ void KisPerspectiveTransformWorker::run()
         return;
     }
 
-    KisRectIteratorPixel dstIt = m_dev->createRectIterator(m_r.x(), m_r.y(), m_r.width(), m_r.height());
     KisPaintDeviceSP srcdev = new KisPaintDevice(*m_dev.data());
+    KisRandomSubAccessorSP srcAcc = srcdev->createRandomSubAccessor();
 
-    {
-        // Ensure that the random sub accessor is deleted first
-        KisRandomSubAccessorPixel srcAcc = srcdev->createRandomSubAccessor();
+    // Initialise progress
+    m_lastProgressReport = 0;
+    m_progressStep = 0;
+    m_progressTotalSteps = m_r.width() * m_r.height();
 
-        // Initialise progress
-        m_lastProgressReport = 0;
-        m_progressStep = 0;
-        m_progressTotalSteps = m_r.width() * m_r.height();
+    // Action
+    KisRandomAccessorSP accessor = m_dev->createRandomAccessorNG(m_r.x(), m_r.y());
 
-        // Action
-        while (!dstIt.isDone()) {
-            if (dstIt.isSelected()) {
-                QPointF p = m_transform.map(QPointF(dstIt.x() - m_xcenter, dstIt.y() - m_ycenter));
-                double dstX = dstIt.x() - m_xcenter;
-                double dstY = dstIt.y() - m_ycenter;
-                double sf = (dstX * m_matrix[2][0] + dstY * m_matrix[2][1] + m_matrix[2][2]);
-                if (sf != 0) {
-                    sf = 1. / sf;
-                    p.setX((dstX * m_matrix[0][0] + dstY * m_matrix[0][1] + m_matrix[0][2]) * sf + m_xcenter);
-                    p.setY((dstX * m_matrix[1][0] + dstY * m_matrix[1][1] + m_matrix[1][2]) * sf + m_ycenter);
+    for (int y = m_r.y(); y < m_r.height(); ++y) {
+        for (int x = m_r.x(); x < m_r.width(); ++x) {
+            QPointF p = m_transform.map(QPointF(x - m_xcenter, y - m_ycenter));
+            double dstX = x - m_xcenter;
+            double dstY = y - m_ycenter;
+            double sf = (dstX * m_matrix[2][0] + dstY * m_matrix[2][1] + m_matrix[2][2]);
+            if (sf != 0) {
+                sf = 1.0 / sf;
+                p.setX((dstX * m_matrix[0][0] + dstY * m_matrix[0][1] + m_matrix[0][2]) * sf + m_xcenter);
+                p.setY((dstX * m_matrix[1][0] + dstY * m_matrix[1][1] + m_matrix[1][2]) * sf + m_ycenter);
 
-                    srcAcc.moveTo(p);
-                    srcAcc.sampledOldRawData(dstIt.rawData());
-                }
-
-                // TODO: Should set alpha = alpha*(1-selectedness)
-//                 cs->setAlpha( dstIt.rawData(), 255, 1);
-            } else {
-//                 cs->setAlpha( dstIt.rawData(), 0, 1);
+                accessor->moveTo(x, y);
+                srcAcc->moveTo(p);
+                srcAcc->sampledOldRawData(accessor->rawData());
             }
+
+            // TODO: Should set alpha = alpha*(1-selectedness)
+            //                 cs->setAlpha( dstIt->rawData(), 255, 1);
+
             m_progressStep ++;
+
             if (m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps) {
                 m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
                 if (!m_progress.isNull()) {
                     m_progress->setProgress(m_lastProgressReport);
                 }
             }
+
             if (!m_progress.isNull() && m_progress->interrupted()) {
                 break;
             }
-            ++dstIt;
+
         }
     }
 }
+
 #include "kis_perspectivetransform_worker.moc"

@@ -91,6 +91,7 @@ public:
      */
     QList<KoShape*> topLevelShapes() const;
 
+public slots:
     /**
      * Add a KoShape to be displayed and managed by this manager.
      * This will trigger a repaint of the shape.
@@ -119,6 +120,7 @@ public:
      */
     void removeAdditional(KoShape *shape);
 
+public:
     /// return the selection shapes for this shapeManager
     KoSelection *selection() const;
 
@@ -201,6 +203,8 @@ signals:
     void selectionChanged();
     /// emitted when an object in the selection is changed (moved/rotated etc)
     void selectionContentChanged();
+    /// emitted when any object changed (moved/rotated etc)
+    void contentChanged();
 
 private:
 

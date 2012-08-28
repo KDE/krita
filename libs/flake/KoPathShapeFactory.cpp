@@ -19,11 +19,12 @@
  */
 #include "KoPathShapeFactory.h"
 #include "KoPathShape.h"
-#include "KoLineBorder.h"
+#include "KoShapeStroke.h"
 #include "KoImageCollection.h"
 #include "KoMarkerCollection.h"
 #include "KoDocumentResourceManager.h"
 #include "KoShapeLoadingContext.h"
+#include <KoIcon.h>
 
 #include <klocale.h>
 
@@ -34,7 +35,7 @@ KoPathShapeFactory::KoPathShapeFactory(const QStringList&)
         : KoShapeFactoryBase(KoPathShapeId, i18n("Simple path shape"))
 {
     setToolTip(i18n("A simple path shape"));
-    setIcon("pathshape");
+    setIconName(koIconNameCStr("pathshape"));
     QStringList elementNames;
     elementNames << "path" << "line" << "polyline" << "polygon";
     setXmlElementNames(KoXmlNS::draw, elementNames);
@@ -48,7 +49,7 @@ KoShape *KoPathShapeFactory::createDefaultShape(KoDocumentResourceManager *) con
     path->curveTo(QPointF(0, 120), QPointF(50, 120), QPointF(50, 50));
     path->curveTo(QPointF(50, -20), QPointF(100, -20), QPointF(100, 50));
     path->normalize();
-    path->setBorder(new KoLineBorder(1.0));
+    path->setStroke(new KoShapeStroke(1.0));
     return path;
 }
 

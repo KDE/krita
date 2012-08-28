@@ -173,7 +173,8 @@ bool KoPattern::init(QByteArray& bytes)
         return false;
     }
 
-    setName(QString::fromAscii(name, size));
+    // size -1 so we don't add the end 0 to the QString...
+    setName(QString::fromAscii(name, size -1));
     delete[] name;
 
     if (bh.width == 0 || bh.height == 0) {

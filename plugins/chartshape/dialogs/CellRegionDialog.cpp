@@ -24,10 +24,10 @@
 using namespace KChart;
 
 
-CellRegionDialog::CellRegionDialog( QWidget *parent )
-    : QDialog( parent )
+CellRegionDialog::CellRegionDialog(QWidget *parent)
+    : QDialog(parent)
 {
-    setupUi( this );
+    setupUi(this);
 }
 
 CellRegionDialog::~CellRegionDialog()

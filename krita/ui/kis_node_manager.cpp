@@ -21,6 +21,7 @@
 #include <kactioncollection.h>
 #include <kaction.h>
 
+#include <KoIcon.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoShape.h>
@@ -44,6 +45,7 @@
 #include "kis_layer_manager.h"
 #include "kis_selection_manager.h"
 #include "kis_node_commands_adapter.h"
+#include "kis_mirror_visitor.h"
 
 struct KisNodeManager::Private {
 
@@ -94,8 +96,8 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
         KoShapeLayer * shapeLayer = dynamic_cast<KoShapeLayer*>(shape);
 
         Q_ASSERT(shapeLayer);
-        shapeLayer->setGeometryProtected(node->userLocked());
-        shapeLayer->setVisible(node->visible());
+//         shapeLayer->setGeometryProtected(node->userLocked());
+//         shapeLayer->setVisible(node->visible());
         selection->setActiveLayer(shapeLayer);
 
 
@@ -143,11 +145,11 @@ void KisNodeManager::setup(KActionCollection * actionCollection)
     m_d->layerManager->setup(actionCollection);
     m_d->maskManager->setup(actionCollection);
 
-    KAction * action  = new KAction(KIcon("object-flip-horizontal"), i18n("Mirror Horizontally"), this);
+    KAction * action  = new KAction(koIcon("object-flip-horizontal"), i18n("Mirror Horizontally"), this);
     actionCollection->addAction("mirrorX", action);
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorNodeX()));
 
-    action  = new KAction(KIcon("object-flip-vertical"), i18n("Mirror Vertically"), this);
+    action  = new KAction(koIcon("object-flip-vertical"), i18n("Mirror Vertically"), this);
     actionCollection->addAction("mirrorY", action);
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorNodeY()));
 }
@@ -478,21 +480,27 @@ void KisNodeManager::removeNode(KisNodeSP node)
 void KisNodeManager::mirrorNodeX()
 {
     KisNodeSP node = activeNode();
+
+    QString commandName;
     if (node->inherits("KisLayer")) {
-        m_d->layerManager->mirrorLayerX();
+        commandName = i18n("Mirror Layer X");
     } else if (node->inherits("KisMask")) {
-        m_d->maskManager->mirrorMaskX();
+        commandName = i18n("Mirror Mask X");
     }
+    mirrorNode(node, commandName, Qt::Horizontal);
 }
 
 void KisNodeManager::mirrorNodeY()
 {
     KisNodeSP node = activeNode();
+
+    QString commandName;
     if (node->inherits("KisLayer")) {
-        m_d->layerManager->mirrorLayerY();
+        commandName = i18n("Mirror Layer Y");
     } else if (node->inherits("KisMask")) {
-        m_d->maskManager->mirrorMaskY();
+        commandName = i18n("Mirror Mask Y");
     }
+    mirrorNode(node, commandName, Qt::Vertical);
 }
 
 void KisNodeManager::mergeLayerDown()
@@ -533,6 +541,24 @@ void KisNodeManager::scale(double sx, double sy, KisFilterStrategy *filterStrate
 {
     // XXX: implement scale for masks as well
     m_d->layerManager->scaleLayer(sx, sy, filterStrategy);
+}
+
+void KisNodeManager::mirrorNode(KisNodeSP node, const QString& commandName, Qt::Orientation orientation)
+{
+    m_d->view->image()->undoAdapter()->beginMacro(commandName);
+
+    KisMirrorVisitor visitor(m_d->view->image(), orientation);
+    node->accept(visitor);
+
+    m_d->view->image()->undoAdapter()->endMacro();
+    m_d->doc->setModified(true);
+
+    if (node->inherits("KisLayer")) {
+        m_d->layerManager->layersUpdated();
+    } else if (node->inherits("KisMask")) {
+        m_d->maskManager->masksUpdated();
+    }
+    m_d->view->canvas()->update();
 }
 
 #include "kis_node_manager.moc"

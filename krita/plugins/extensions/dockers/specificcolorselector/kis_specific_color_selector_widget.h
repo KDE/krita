@@ -27,6 +27,7 @@ class QVBoxLayout;
 class KisColorInput;
 class KisColorSpaceSelector;
 class QTimer;
+class QCheckBox;
 
 class KisSpecificColorSelectorWidget : public QWidget
 {
@@ -34,6 +35,8 @@ class KisSpecificColorSelectorWidget : public QWidget
 public:
     KisSpecificColorSelectorWidget(QWidget* parent);
     ~KisSpecificColorSelectorWidget();
+
+    bool customColorSpaceUsed();
 public slots:
     void setColorSpace(const KoColorSpace*);
     void setColor(const KoColor&);
@@ -53,6 +56,7 @@ private:
     QTimer* m_delayTimer;
     KisColorSpaceSelector *m_colorspaceSelector;
     bool m_customColorSpaceSelected;
+    QCheckBox *m_chkShowColorSpaceSelector;
 };
 
 #endif

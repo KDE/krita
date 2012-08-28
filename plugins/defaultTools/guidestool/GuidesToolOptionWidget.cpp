@@ -19,6 +19,7 @@
 
 #include "GuidesToolOptionWidget.h"
 #include <KoSnapGuide.h>
+#include <KoIcon.h>
 
 #include <KLocale>
 
@@ -30,8 +31,8 @@ GuidesToolOptionWidget::GuidesToolOptionWidget(QWidget *parent)
     widget.orientation->addItem(i18n("Horizontal"));
     widget.orientation->addItem(i18n("Vertical"));
     widget.orientation->setCurrentIndex(0);
-    widget.addButton->setIcon(KIcon("list-add"));
-    widget.removeButton->setIcon(KIcon("list-remove"));
+    widget.addButton->setIcon(koIcon("list-add"));
+    widget.removeButton->setIcon(koIcon("list-remove"));
 
     widget.position->setUnit(m_unit);
 

@@ -49,6 +49,7 @@ public:
     void setFillStyle(KisPainter::FillStyle fillStyle);
 
     KisNodeSP currentNode() const;
+    KisImageWSP image() const;
     bool needsIndirectPainting() const;
 
     bool needsAirbrushing() const;

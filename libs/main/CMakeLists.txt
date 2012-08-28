@@ -1,5 +1,7 @@
 add_subdirectory( tests )
 
+add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+
 if (KdepimLibs_FOUND)
    include_directories(${KDEPIMLIBS_INCLUDE_DIR})
    add_definitions(-DKDEPIMLIBS_FOUND)
@@ -14,10 +16,11 @@ if( QCA2_FOUND )
 endif( QCA2_FOUND )
 
 set(komain_LIB_SRCS
+    KoAutoSaveRecoveryDialog.cpp
     KoApplicationAdaptor.cpp
     KoApplication.cpp
     KoDockerManager.cpp
-    KoDocumentAdaptor.cpp
+    KoPartAdaptor.cpp
     KoDocument.cpp
     KoDocumentEntry.cpp
     KoDocumentInfo.cpp
@@ -46,7 +49,6 @@ set(komain_LIB_SRCS
     KoFilterManager.cpp
     KoFilterChain.cpp
     KoFilter.cpp
-    KoEmbeddingFilter.cpp
     KoFilterEntry.cpp
     KoFilterManager_p.cpp
     KoFilterVertex.cpp
@@ -54,16 +56,17 @@ set(komain_LIB_SRCS
     KoFilterEdge.cpp
     KoFilterChainLink.cpp
     KoFilterChainLinkList.cpp
+    KoServiceProvider.cpp
     KoStandardAction.cpp
     KoUndoStackAction.cpp
     config/KoConfigDocumentPage.cpp
     config/KoConfigGridPage.cpp
     config/KoConfigMiscPage.cpp
+    config/KoConfigAuthorPage.cpp
 
     KoDocumentSectionDelegate.cpp
     KoDocumentSectionToolTip.cpp
     KoDocumentSectionView.cpp
-    KoItemToolTip.cpp
 
     KoProgressBar.cpp
     KoProgressUpdater.cpp
@@ -89,6 +92,9 @@ set(komain_LIB_SRCS
     KoFindToolbar.cpp
     KoFindOption.cpp
     KoFindOptionSet.cpp
+    KoFindStyle.cpp
+
+    KoPart.cpp
 )
 if( Soprano_FOUND )
     set(komain_LIB_SRCS ${komain_LIB_SRCS}
@@ -122,6 +128,7 @@ endif( Soprano_FOUND )
 kde4_add_ui_files( komain_LIB_SRCS
    koDocumentInfoAboutWidget.ui
    koDocumentInfoAuthorWidget.ui
+   config/KoConfigAuthorPage.ui
    KoOpenPaneBase.ui
    KoDetailsPaneBase.ui
 )
@@ -163,11 +170,11 @@ if( Soprano_FOUND )
     target_link_libraries(komain ${SOPRANO_LIBRARIES})
     target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${SOPRANO_LIBRARIES})
 endif( Soprano_FOUND )
-#if( MARBLE_FOUND )
-#    include_directories(${MARBLE_INCLUDE_DIR})
-#    target_link_libraries(komain ${MARBLE_LIBRARIES})
-#    target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${MARBLE_LIBRARIES})
-#endif( MARBLE_FOUND )
+if( MARBLE_FOUND )
+    include_directories(${MARBLE_INCLUDE_DIR})
+    target_link_libraries(komain ${MARBLE_LIBRARIES})
+    target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${MARBLE_LIBRARIES})
+endif( MARBLE_FOUND )
 
 target_link_libraries(komain LINK_INTERFACE_LIBRARIES kotext kowidgets ${KDE4_KPARTS_LIBS})
 
@@ -198,7 +205,6 @@ install( FILES
     KoDocumentEntry.h
     KoDocumentInfo.h
     KoDocumentSectionModel.h
-    KoEmbeddingFilter.h
     KoFactory.h
     KoFilter.h
     KoFilterChain.h
@@ -217,6 +223,8 @@ install( FILES
     KoGridData.h
     KoMainWindow.h
     KoModeBoxFactory.h
+    KoServiceProvider.h
+    KoPart.h
     KoPrintJob.h
     KoProgressUpdater.h
     KoProgressProxy.h

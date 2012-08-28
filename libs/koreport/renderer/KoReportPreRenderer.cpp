@@ -695,4 +695,9 @@ void KoReportPreRenderer::registerScriptObject(QObject* obj, const QString& name
     m_scriptObjects[name] = obj;
 }
 
+const KoReportReportData* KoReportPreRenderer::reportData() const
+{
+    return d->m_reportData;
+}
+
 #include "KoReportPreRenderer.moc"

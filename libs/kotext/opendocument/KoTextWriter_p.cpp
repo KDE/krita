@@ -193,6 +193,8 @@ QHash<QTextList *, QString> KoTextWriter::Private::saveListStyles(QTextBlock blo
             }
             bool automatic = listStyle->styleId() == 0;
             KoGenStyle style(automatic ? KoGenStyle::ListAutoStyle : KoGenStyle::ListStyle);
+            if (automatic && context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
+                style.setAutoStyleInStylesDotXml(true);
             listStyle->saveOdf(style, context);
             QString generatedName = context.mainStyles().insert(style, listStyle->name(), listStyle->isNumberingStyle() ? KoGenStyles::AllowDuplicates : KoGenStyles::DontAddNumberToName);
             listStyles[textList] = generatedName;
@@ -202,6 +204,8 @@ QHash<QTextList *, QString> KoTextWriter::Private::saveListStyles(QTextBlock blo
                 continue;
             KoListLevelProperties llp = KoListLevelProperties::fromTextList(textList);
             KoGenStyle style(KoGenStyle::ListAutoStyle);
+            if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
+                style.setAutoStyleInStylesDotXml(true);
             KoListStyle listStyle;
             listStyle.setLevelProperties(llp);
             if (listStyle.isOulineStyle()) {
@@ -747,13 +751,13 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                 // Open a text:a
                 previousFragmentLink = charFormat.anchorHref();
                 TagInformation linkTagInformation;
-                if (previousFragmentLink.startsWith(QChar('#', 0))) {
+
+                if (charFormat.intProperty(KoCharacterStyle::AnchorType) == KoCharacterStyle::Bookmark) {
                     linkTagInformation.setTagName("text:bookmark-ref");
                     QString href = previousFragmentLink.right(previousFragmentLink.size()-1);
                     linkTagInformation.addAttribute("text:ref-name", href);
                     //linkTagInformation.addAttribute("text:ref-format", add the style of the ref here);
-                }
-                else {
+                } else {
                     linkTagInformation.setTagName("text:a");
                     linkTagInformation.addAttribute("xlink:type", "simple");
                     linkTagInformation.addAttribute("xlink:href", charFormat.anchorHref());
@@ -1180,6 +1184,44 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
     {
         tableTagInformation.addAttribute("table:protected", "true");
     }
+
+    if (table->format().hasProperty(KoTableStyle::TableTemplate))
+    {
+        tableTagInformation.addAttribute("table:template-name",
+                                         sharedData->styleName(table->format().intProperty(KoTableStyle::TableTemplate)));
+    }
+
+    if (table->format().boolProperty(KoTableStyle::UseBandingColumnStyles))
+    {
+        tableTagInformation.addAttribute("table:use-banding-columns-styles", "true");
+    }
+
+    if (table->format().boolProperty(KoTableStyle::UseBandingRowStyles))
+    {
+        tableTagInformation.addAttribute("table:use-banding-rows-styles", "true");
+    }
+
+    if (table->format().boolProperty(KoTableStyle::UseFirstColumnStyles))
+    {
+        tableTagInformation.addAttribute("table:use-first-column-styles", "true");
+    }
+
+    if (table->format().boolProperty(KoTableStyle::UseFirstRowStyles))
+    {
+        tableTagInformation.addAttribute("table:use-first-row-styles", "true");
+    }
+
+    if (table->format().boolProperty(KoTableStyle::UseLastColumnStyles))
+    {
+        tableTagInformation.addAttribute("table:use-last-column-styles", "true");
+    }
+
+    if (table->format().boolProperty(KoTableStyle::UseLastRowStyles))
+    {
+        tableTagInformation.addAttribute("table:use-last-row-styles", "true");
+    }
+
+
     int changeId = openTagRegion(table->firstCursorPosition().position(), KoTextWriter::Private::Table, tableTagInformation);
 
     for (int c = 0 ; c < table->columns() ; c++) {
@@ -1291,6 +1333,7 @@ void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, QHash<Q
     localBlock.movePosition(QTextCursor::NextBlock);
     int endTitle = localBlock.position();
     writer->startElement("text:index-title");
+    writer->addAttribute("text:name", QString("%1_Head").arg(info->m_name));
     writeBlocks(tocDocument, 0, endTitle, listStyles);
     writer->endElement(); // text:index-title
 
@@ -1406,6 +1449,10 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                 paraTagInformation.addAttribute("text:level", numberedParagraphLevel);
                 paraTagInformation.addAttribute("text:style-name", listStyles.value(textList));
 
+                QString listId = numberedParagraphListIds.value(list, QString("list-%1").arg(createXmlId()));
+                numberedParagraphListIds.insert(list, listId);
+                paraTagInformation.addAttribute("text:list-id", listId);
+
                 int changeId = openTagRegion(block.position(), KoTextWriter::Private::NumberedParagraph, paraTagInformation);
                 writeBlocks(textDocument.document(), block.position(), block.position() + block.length() - 1, listStyles, currentTable, textList);
                 closeTagRegion(changeId);
@@ -1454,8 +1501,12 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                     }
                 } else {
                     //This is a sub-list
-                    while (KoList::level(block) >= (level + 1)) {
+                    while (KoList::level(block) >= (level + 1) && !(headingLevel || numberedParagraphLevel)) {
                         block = saveList(block, listStyles, level + 1, currentTable);
+
+                        blockFormat = block.blockFormat();
+                        headingLevel = blockFormat.intProperty(KoParagraphStyle::OutlineLevel);
+                        numberedParagraphLevel = blockFormat.intProperty(KoParagraphStyle::ListLevel);
                     }
                     //saveList will return a block one-past the last block of the list.
                     //Since we are doing a block.next() below, we need to go one back.

@@ -24,6 +24,7 @@
 #include "kis_pixel_selection.h"
 
 #include "kis_default_bounds.h"
+#include "kis_iterator_ng.h"
 
 struct KisSelection::Private {
     Private()
@@ -353,9 +354,9 @@ void KisSelection::flatten()
 
 quint8 KisSelection::selected(qint32 x, qint32 y) const
 {
-    KisHLineConstIteratorPixel iter = m_d->getProjection()->createHLineConstIterator(x, y, 1);
+    KisHLineConstIteratorSP iter = m_d->getProjection()->createHLineConstIteratorNG(x, y, 1);
 
-    const quint8 *pix = iter.rawData();
+    const quint8 *pix = iter->oldRawData();
 
     return *pix;
 }

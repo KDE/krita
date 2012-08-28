@@ -71,6 +71,14 @@ public:
     /// HParagraphStartMargin, HParagraphEndMargin, VParagraph)
     void setParagraphRect(const QRectF &paragraphRect);
 
+    /// get paragraph rectangle coordinates to which this text anchor is anchored (needed for
+    /// HParagraphContent, HParagraphStartMargin, HParagraphEndMargin)
+    QRectF paragraphContentRect();
+
+    /// set paragraph rectangle to which this text anchor is anchored (needed for HParagraphContent,
+    /// HParagraphStartMargin, HParagraphEndMargin)
+    void setParagraphContentRect(const QRectF &paragraphContentRect);
+
     /// get layout environment rectangle @see odf attribute style:flow-with-text
     QRectF layoutEnvironmentRect();
 
@@ -94,6 +102,7 @@ private:
     QRectF m_pageRect;
     QRectF m_pageContentRect;
     QRectF m_paragraphRect;
+    QRectF m_paragraphContentRect;
     QRectF m_layoutEnvironmentRect;
     int m_pageNumber;
 };

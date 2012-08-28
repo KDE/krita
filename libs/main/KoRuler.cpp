@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2006 Peter Simonsson <peter.simonsson@gmail.com>
-   Copyright (C) 2007 Casper Boemann <cbr@boemann.dk>
+   Copyright (C) 2007 C. Boemann <cbo@boemann.dk>
    Copyright (C) 2007-2008 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2007 Thomas Zander <zander@kde.org>
 
@@ -39,10 +39,20 @@
 #include <KoViewConverter.h>
 
 // the distance in pixels of a mouse position considered outside the rule
-const int OutsideRulerThreshold = 20;
+static const int OutsideRulerThreshold = 20;
+//
+static const int fullStepMarkerLength = 6;
+static const int halfStepMarkerLength = 6;
+static const int quarterStepMarkerLength = 3;
+static const int measurementTextAboveBelowMargin = 1;
+
 
 void RulerTabChooser::mousePressEvent(QMouseEvent *)
 {
+    if (! m_showTabs) {
+        return;
+    }
+
     switch(m_type) {
     case QTextOption::LeftTab:
         m_type = QTextOption::RightTab;
@@ -62,6 +72,10 @@ void RulerTabChooser::mousePressEvent(QMouseEvent *)
 
 void RulerTabChooser::paintEvent(QPaintEvent *)
 {
+    if (! m_showTabs) {
+        return;
+    }
+
     QPainter painter(this);
     QPolygonF polygon;
 
@@ -112,9 +126,10 @@ QRectF HorizontalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPain
     lengthInPixel = d->viewConverter->documentToViewX(d->rulerLength);
     QRectF rectangle;
     rectangle.setX(qMax(0, d->offset));
-    rectangle.setY(2);
-    rectangle.setWidth(qMin(qreal(d->ruler->width() - 1.0 - rectangle.x()), (d->offset >= 0 ) ? lengthInPixel : lengthInPixel + d->offset ));
-    rectangle.setHeight( d->ruler->height() - 6.0);
+    rectangle.setY(0);
+    rectangle.setWidth(qMin(qreal(d->ruler->width() - 1.0 - rectangle.x()),
+                            (d->offset >= 0) ? lengthInPixel : lengthInPixel + d->offset));
+    rectangle.setHeight(d->ruler->height() - 1);
     QRectF activeRangeRectangle;
     activeRangeRectangle.setX(qMax(rectangle.x() + 1,
           d->viewConverter->documentToViewX(d->effectiveActiveRangeStart()) + d->offset));
@@ -151,7 +166,9 @@ void HorizontalPaintingStrategy::drawTabs(const KoRulerPrivate *d, QPainter &pai
         return;
     QPolygonF polygon;
 
-    painter.setBrush(d->ruler->palette().color(QPalette::Text));
+    const QColor tabColor = d->ruler->palette().color(QPalette::Text);
+    painter.setPen(tabColor);
+    painter.setBrush(tabColor);
     painter.setRenderHint( QPainter::Antialiasing );
 
     qreal position = -10000;
@@ -170,29 +187,29 @@ void HorizontalPaintingStrategy::drawTabs(const KoRulerPrivate *d, QPainter &pai
         polygon.clear();
         switch (t.type) {
         case QTextOption::LeftTab:
-            polygon << QPointF(x+0.5, d->ruler->height() - 8.5)
-                << QPointF(x+6.5, d->ruler->height() - 2.5)
-                << QPointF(x+0.5, d->ruler->height() - 2.5);
+            polygon << QPointF(x+0.5, d->ruler->height() - 6.5)
+                << QPointF(x+6.5, d->ruler->height() - 0.5)
+                << QPointF(x+0.5, d->ruler->height() - 0.5);
             painter.drawPolygon(polygon);
             break;
         case QTextOption::RightTab:
-            polygon << QPointF(x+0.5, d->ruler->height() - 8.5)
-                << QPointF(x-5.5, d->ruler->height() - 2.5)
-                << QPointF(x+0.5, d->ruler->height() - 2.5);
+            polygon << QPointF(x+0.5, d->ruler->height() - 6.5)
+                << QPointF(x-5.5, d->ruler->height() - 0.5)
+                << QPointF(x+0.5, d->ruler->height() - 0.5);
             painter.drawPolygon(polygon);
             break;
         case QTextOption::CenterTab:
-            polygon << QPointF(x+0.5, d->ruler->height() - 8.5)
-                << QPointF(x-5.5, d->ruler->height() - 2.5)
-                << QPointF(x+6.5, d->ruler->height() - 2.5);
+            polygon << QPointF(x+0.5, d->ruler->height() - 6.5)
+                << QPointF(x-5.5, d->ruler->height() - 0.5)
+                << QPointF(x+6.5, d->ruler->height() - 0.5);
             painter.drawPolygon(polygon);
             break;
         case QTextOption::DelimiterTab:
-            polygon << QPointF(x-5.5, d->ruler->height() - 2.5)
-                << QPointF(x+6.5, d->ruler->height() - 2.5);
+            polygon << QPointF(x-5.5, d->ruler->height() - 0.5)
+                << QPointF(x+6.5, d->ruler->height() - 0.5);
             painter.drawPolyline(polygon);
-            polygon << QPointF(x+0.5, d->ruler->height() - 2.5)
-                << QPointF(x+0.5, d->ruler->height() - 8.5);
+            polygon << QPointF(x+0.5, d->ruler->height() - 0.5)
+                << QPointF(x+0.5, d->ruler->height() - 6.5);
             painter.drawPolyline(polygon);
             break;
         default:
@@ -221,9 +238,9 @@ void HorizontalPaintingStrategy::drawTabs(const KoRulerPrivate *d, QPainter &pai
             }
 
             polygon.clear();
-            polygon << QPointF(x+0.5, d->ruler->height() - 5.5)
-                << QPointF(x+4.5, d->ruler->height() - 2.5)
-                << QPointF(x+0.5, d->ruler->height() - 2.5);
+            polygon << QPointF(x+0.5, d->ruler->height() - 3.5)
+                << QPointF(x+4.5, d->ruler->height() - 0.5)
+                << QPointF(x+0.5, d->ruler->height() - 0.5);
             painter.drawPolygon(polygon);
 
             position += d->tabDistance;
@@ -236,8 +253,11 @@ void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPain
     qreal numberStep = d->numberStepForUnit(); // number step in unit
     QRectF activeRangeRectangle;
     int numberStepPixel = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(numberStep)));
-    const bool adjustMillimeters = d->unit.indexInList() == KoUnit::Millimeter;
-    QFontMetrics fontMetrics(KGlobalSettings::toolBarFont());
+    const bool adjustMillimeters = (d->unit.type() == KoUnit::Millimeter);
+
+    const QFont font = KGlobalSettings::smallestReadableFont();
+    const QFontMetrics fontMetrics(font);
+    painter.setFont(font);
 
     if (numberStepPixel == 0 || numberStep == 0)
         return;
@@ -246,8 +266,7 @@ void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPain
     int textLength = 0;
     for(int i = 0; i < lengthInPixel; i += numberStepPixel) {
         int number = qRound((i / numberStepPixel) * numberStep);
-        if (adjustMillimeters)
-            number /= 10;
+
         textLength = qMax(textLength, fontMetrics.width(QString::number(number)));
     }
     textLength += 4;  // Add some padding
@@ -276,7 +295,9 @@ void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPain
     int quarterStepCount = (start / qRound(numberStepPixel * 0.25)) + 1;
 
     int pos = 0;
-    painter.setPen(d->ruler->palette().color(QPalette::Text));
+    const QPen numberPen(d->ruler->palette().color(QPalette::Text));
+    const QPen markerPen(d->ruler->palette().color(QPalette::Inactive, QPalette::Text));
+    painter.setPen(markerPen);
 
     if(d->offset > 0)
         painter.translate(d->offset, 0);
@@ -294,17 +315,21 @@ void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPain
 
         if(i == nextStep) {
             if(pos != 0)
-                painter.drawLine(QPointF(pos, rectangle.bottom()-1), QPointF(pos, rectangle.bottom() -6));
+                painter.drawLine(QPointF(pos, rectangle.bottom()-1),
+                                 QPointF(pos, rectangle.bottom() - fullStepMarkerLength));
 
             int number = qRound(stepCount * numberStep);
-            if (adjustMillimeters)
-                number /= 10;
+
             QString numberText = QString::number(number);
             int x = pos;
             if (d->rightToLeft) { // this is done in a hacky way with the fine tuning done above
                 numberText = QString::number(hackyLength - stepCount * numberStep);
             }
-            painter.drawText(QPointF(x-fontMetrics.width(numberText)/2, rectangle.bottom() -6), numberText);
+            painter.setPen(numberPen);
+            painter.drawText(QPointF(x-fontMetrics.width(numberText)/2.0,
+                                     rectangle.bottom() -fullStepMarkerLength -measurementTextAboveBelowMargin),
+                             numberText);
+            painter.setPen(markerPen);
 
             ++stepCount;
             nextStep = qRound(d->viewConverter->documentToViewX(
@@ -318,7 +343,8 @@ void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPain
         }
         else if(i == nextHalfStep) {
             if(pos != 0)
-                painter.drawLine(QPointF(pos, rectangle.bottom()-1), QPointF(pos, rectangle.bottom() - 4));
+                painter.drawLine(QPointF(pos, rectangle.bottom()-1),
+                                 QPointF(pos, rectangle.bottom() - halfStepMarkerLength));
 
             ++halfStepCount;
             nextHalfStep = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(
@@ -329,7 +355,8 @@ void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPain
         }
         else if(i == nextQuarterStep) {
             if(pos != 0)
-                painter.drawLine(QPointF(pos, rectangle.bottom()-1), QPointF(pos, rectangle.bottom() - 2));
+                painter.drawLine(QPointF(pos, rectangle.bottom()-1),
+                                 QPointF(pos, rectangle.bottom() - quarterStepMarkerLength));
 
             ++quarterStepCount;
             nextQuarterStep = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(
@@ -401,15 +428,12 @@ void HorizontalPaintingStrategy::drawIndents(const KoRulerPrivate *d, QPainter &
 
 QSize HorizontalPaintingStrategy::sizeHint()
 {
-    QSize size;
-    QFont font = KGlobalSettings::toolBarFont();
-    QFontMetrics fm(font);
+    // assumes that digits for the number only use glyphs which do not go below the baseline
+    const QFontMetrics fm(KGlobalSettings::smallestReadableFont());
+    const int digitsHeight = fm.ascent() + 1; // +1 for baseline
+    const int minimum = digitsHeight + fullStepMarkerLength + 2*measurementTextAboveBelowMargin;
 
-    int minimum = fm.height() + 6;
-
-    size.setWidth( minimum );
-    size.setHeight( minimum );
-    return size;
+    return QSize(minimum, minimum);
 }
 
 QRectF VerticalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPainter &painter)
@@ -419,7 +443,8 @@ QRectF VerticalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPainte
     rectangle.setX(0);
     rectangle.setY(qMax(0, d->offset));
     rectangle.setWidth(d->ruler->width() - 1.0);
-    rectangle.setHeight(qMin(qreal(d->ruler->height() - 1.0 - rectangle.y()), (d->offset >= 0 ) ? lengthInPixel : lengthInPixel + d->offset ));
+    rectangle.setHeight(qMin(qreal(d->ruler->height() - 1.0 - rectangle.y()),
+                             (d->offset >= 0) ? lengthInPixel : lengthInPixel + d->offset));
 
     QRectF activeRangeRectangle;
     activeRangeRectangle.setX(rectangle.x() + 1);
@@ -434,7 +459,7 @@ QRectF VerticalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPainte
 
     if(d->effectiveActiveRangeStart() != d->effectiveActiveRangeEnd())
         painter.fillRect(activeRangeRectangle, d->ruler->palette().brush(QPalette::Base));
-    
+
     if(d->showSelectionBorders) {
         // Draw first selection border
         if(d->firstSelectionBorder > 0) {
@@ -458,14 +483,15 @@ void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainte
     if (numberStepPixel <= 0)
         return;
 
-    QFontMetrics fontMetrics(KGlobalSettings::toolBarFont());
+    const QFont font = KGlobalSettings::smallestReadableFont();
+    const QFontMetrics fontMetrics(font);
+    painter.setFont(font);
+
     // Calc the longest text length
     int textLength = 0;
-    const bool adjustMillimeters = d->unit.indexInList() == KoUnit::Millimeter;
+
     for(int i = 0; i < lengthInPixel; i += numberStepPixel) {
         int number = qRound((i / numberStepPixel) * numberStep);
-        if (adjustMillimeters)
-            number /= 10;
         textLength = qMax(textLength, fontMetrics.width(QString::number(number)));
     }
     textLength += 4;  // Add some padding
@@ -486,7 +512,9 @@ void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainte
     int halfStepCount = (start / qRound(numberStepPixel * 0.5)) + 1;
     int quarterStepCount = (start / qRound(numberStepPixel * 0.25)) + 1;
 
-    painter.setPen(d->ruler->palette().color(QPalette::Text));
+    const QPen numberPen(d->ruler->palette().color(QPalette::Text));
+    const QPen markerPen(d->ruler->palette().color(QPalette::Inactive, QPalette::Text));
+    painter.setPen(markerPen);
 
     if(d->offset > 0)
         painter.translate(0, d->offset);
@@ -505,16 +533,15 @@ void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainte
 
         if(i == nextStep) {
             painter.save();
-            painter.translate(rectangle.right()-10, pos);
+            painter.translate(rectangle.right()-fullStepMarkerLength, pos);
             if(pos != 0)
-                painter.drawLine(QPointF(0, 0), QPointF(9, 0));
+                painter.drawLine(QPointF(0, 0), QPointF(fullStepMarkerLength-1, 0));
 
             painter.rotate(-90);
             int number = qRound(stepCount * numberStep);
-            if (adjustMillimeters)
-                number /= 10;
             QString numberText = QString::number(number);
-            painter.drawText(QPointF(-fontMetrics.width(numberText) / 2.0, 1), numberText);
+            painter.setPen(numberPen);
+            painter.drawText(QPointF(-fontMetrics.width(numberText) / 2.0, -measurementTextAboveBelowMargin), numberText);
             painter.restore();
 
             ++stepCount;
@@ -528,7 +555,8 @@ void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainte
                 numberStep * 0.25 * quarterStepCount)));
         } else if(i == nextHalfStep) {
             if(pos != 0)
-                painter.drawLine(QPointF(rectangle.right() - 6, pos), QPointF(rectangle.right() - 1, pos));
+                painter.drawLine(QPointF(rectangle.right() - halfStepMarkerLength, pos),
+                                 QPointF(rectangle.right() - 1, pos));
 
             ++halfStepCount;
             nextHalfStep = qRound(d->viewConverter->documentToViewY(d->unit.fromUserValue(
@@ -538,7 +566,8 @@ void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainte
                 numberStep * 0.25 * quarterStepCount)));
         } else if(i == nextQuarterStep) {
             if(pos != 0)
-                painter.drawLine(QPointF(rectangle.right() - 4, pos), QPointF(rectangle.right() - 1, pos));
+                painter.drawLine(QPointF(rectangle.right() - quarterStepMarkerLength, pos),
+                                 QPointF(rectangle.right() - 1, pos));
 
             ++quarterStepCount;
             nextQuarterStep = qRound(d->viewConverter->documentToViewY(d->unit.fromUserValue(
@@ -562,15 +591,12 @@ void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainte
 
 QSize VerticalPaintingStrategy::sizeHint()
 {
-    QSize size;
-    QFont font = KGlobalSettings::toolBarFont();
-    QFontMetrics fm(font);
+    // assumes that digits for the number only use glyphs which do not go below the baseline
+    const QFontMetrics fm(KGlobalSettings::smallestReadableFont());
+    const int digitsHeight = fm.ascent() + 1; // +1 for baseline
+    const int minimum = digitsHeight + fullStepMarkerLength + 2*measurementTextAboveBelowMargin;
 
-    int minimum = fm.height() + 6;
-
-    size.setWidth( minimum );
-    size.setHeight( minimum );
-    return size;
+    return QSize(minimum, minimum);
 }
 
 
@@ -591,11 +617,10 @@ void HorizontalDistancesPaintingStrategy::drawDistanceLine(const KoRulerPrivate 
     QPointF midPoint = line.pointAt(0.5);
 
     // Draw the label text
-    QFont font = KGlobalSettings::smallestReadableFont();
-    font.setPointSize(6);
-    QFontMetrics fontMetrics(font);
+    const QFont font = KGlobalSettings::smallestReadableFont();
+    const QFontMetrics fontMetrics(font);
     QString label = d->unit.toUserStringValue(
-            d->viewConverter->viewToDocumentX(line.length())) + ' ' + KoUnit::unitName(d->unit);
+            d->viewConverter->viewToDocumentX(line.length())) + ' ' + d->unit.symbol();
     QPointF labelPosition = QPointF(midPoint.x() - fontMetrics.width(label)/2,
             midPoint.y() + fontMetrics.ascent()/2);
     painter.setFont(font);
@@ -675,8 +700,6 @@ KoRulerPrivate::KoRulerPrivate(KoRuler *parent, const KoViewConverter *vc, Qt::O
     paintingStrategy(normalPaintingStrategy),
     ruler(parent)
 {
-    if(orientation == Qt::Horizontal)
-        tabChooser = new RulerTabChooser(parent);
 }
 
 KoRulerPrivate::~KoRulerPrivate()
@@ -687,12 +710,12 @@ KoRulerPrivate::~KoRulerPrivate()
 
 qreal KoRulerPrivate::numberStepForUnit() const
 {
-    switch(unit.indexInList()) {
+    switch(unit.type()) {
         case KoUnit::Inch:
         case KoUnit::Centimeter:
         case KoUnit::Decimeter:
-            return 1.0;
         case KoUnit::Millimeter:
+            return 1.0;
         case KoUnit::Pica:
         case KoUnit::Cicero:
             return 10.0;
@@ -917,19 +940,25 @@ void KoRuler::setShowIndents(bool show)
 void KoRuler::setFirstLineIndent(qreal indent)
 {
     d->firstLineIndent = indent;
-    update();
+    if (d->showIndents) {
+        update();
+    }
 }
 
 void KoRuler::setParagraphIndent(qreal indent)
 {
     d->paragraphIndent = indent;
-    update();
+    if (d->showIndents) {
+        update();
+    }
 }
 
 void KoRuler::setEndIndent(qreal indent)
 {
     d->endIndent = indent;
-    update();
+    if (d->showIndents) {
+        update();
+    }
 }
 
 qreal KoRuler::firstLineIndent() const
@@ -949,6 +978,11 @@ qreal KoRuler::endIndent() const
 
 QWidget *KoRuler::tabChooser()
 {
+    if ((d->tabChooser == 0) && (d->orientation == Qt::Horizontal)) {
+        d->tabChooser = new RulerTabChooser(parentWidget());
+        d->tabChooser->setShowTabs(d->showTabs);
+    }
+
     return d->tabChooser;
 }
 
@@ -969,18 +1003,32 @@ void KoRuler::updateSelectionBorders(qreal first, qreal second)
 
 void KoRuler::setShowTabs(bool show)
 {
+    if (d->showTabs == show) {
+        return;
+    }
+
     d->showTabs = show;
+    if (d->tabChooser) {
+        d->tabChooser->setShowTabs(show);
+    }
+    update();
 }
 
 void KoRuler::setRelativeTabs(bool relative)
 {
     d->relativeTabs = relative;
+    if (d->showTabs) {
+        update();
+    }
 }
 
 void KoRuler::updateTabs(const QList<KoRuler::Tab> &tabs, qreal tabDistance)
 {
     d->tabs = tabs;
     d->tabDistance = tabDistance;
+    if (d->showTabs) {
+        update();
+    }
 }
 
 QList<KoRuler::Tab> KoRuler::tabs() const
@@ -1056,7 +1104,9 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
             tabpos = d->viewConverter->viewToDocumentX(pos.x() - d->offset)
                     - d->effectiveActiveRangeStart() - (d->relativeTabs ? d->paragraphIndent : 0);
         }
-        Tab t = {tabpos, d->tabChooser->type()};
+        Tab t = {tabpos, d->tabChooser ?  d->tabChooser->type() :
+                         d->rightToLeft ? QTextOption::RightTab :
+                                          QTextOption::LeftTab};
         d->tabs.append(t);
         d->selectOffset = 0;
         d->selected = KoRulerPrivate::Tab;

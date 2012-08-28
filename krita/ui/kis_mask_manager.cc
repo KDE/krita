@@ -49,7 +49,7 @@
 #include <KoColor.h>
 #include "kis_node_commands_adapter.h"
 #include "commands/kis_selection_commands.h"
-
+#include "kis_iterator_ng.h"
 
 KisMaskManager::KisMaskManager(KisView2 * view)
         : m_view(view)
@@ -228,14 +228,17 @@ void KisMaskManager::maskToLayer()
     QRect rc = selection->selectedExactRect();
     KoColor color(Qt::black, cs);
     int pixelsize = cs->pixelSize();
-    KisHLineIteratorPixel dstiter = layer->paintDevice()->createHLineIterator(rc.x(), rc.y(), rc.width(), selection);
+
+    KisHLineIteratorSP dstIter = layer->paintDevice()->createHLineIteratorNG(rc.x(), rc.y(), rc.width());
+    KisHLineConstIteratorSP selIter = selection->projection()->createHLineConstIteratorNG(rc.x(), rc.y(), rc.width());
+
     for (int row = 0; row < rc.height(); ++row) {
-        while (!dstiter.isDone()) {
-            cs->setOpacity(color.data(), dstiter.selectedness(), 1);
-            memcpy(dstiter.rawData(), color.data(), pixelsize);
-            ++dstiter;
-        }
-        dstiter.nextRow();
+        do {
+            cs->setOpacity(color.data(), *selIter->oldRawData(), 1);
+            memcpy(dstIter->rawData(), color.data(), pixelsize);
+        } while (dstIter->nextPixel() && selIter->nextPixel());
+        dstIter->nextRow();
+        selIter->nextRow();
     }
 
     m_commandsAdapter->beginMacro(i18n("Layer from Mask"));
@@ -275,66 +278,24 @@ void KisMaskManager::removeMask()
     masksUpdated();
 }
 
-void KisMaskManager::mirrorMaskX()
-{
-    // XXX_NODE: This is a load of copy-past from KisLayerManager -- how can I fix that?
-    // XXX_NODE: we should also mirror the shape-based part of the selection!
-    if (!m_activeMask) return;
-
-    KisPaintDeviceSP dev = m_activeMask->selection()->getOrCreatePixelSelection();
-    if (!dev) return;
-
-    KisTransaction transaction(i18n("Mirror Mask X"), dev);
-
-    QRect dirty = KisTransformWorker::mirrorX(dev, m_view->selection());
-    m_activeMask->setDirty(dirty);
-
-    transaction.commit(m_view->image()->undoAdapter());
-
-    m_view->document()->setModified(true);
-    m_activeMask->selection()->updateProjection();
-    masksUpdated();
-    m_view->canvas()->update();
-}
-
-void KisMaskManager::mirrorMaskY()
-{
-    // XXX_NODE: This is a load of copy-past from KisLayerManager -- how can I fix that?
-    // XXX_NODE: we should also mirror the shape-based part of the selection!
-    if (!m_activeMask) return;
-
-    KisPaintDeviceSP dev = m_activeMask->selection()->getOrCreatePixelSelection();
-    if (!dev) return;
-
-    KisTransaction transaction(i18n("Mirror Layer Y"), dev);
-
-    QRect dirty = KisTransformWorker::mirrorY(dev, m_view->selection());
-    m_activeMask->setDirty(dirty);
-
-    transaction.commit(m_view->image()->undoAdapter());
-
-    m_view->document()->setModified(true);
-    m_activeMask->selection()->updateProjection();
-    masksUpdated();
-    m_view->canvas()->update();
-}
-
 void KisMaskManager::maskProperties()
 {
     if (!m_activeMask) return;
 
     if (m_activeMask->inherits("KisFilterMask")) {
-        KisFilterMask * mask = static_cast<KisFilterMask*>(m_activeMask.data());
+        KisFilterMask *mask = static_cast<KisFilterMask*>(m_activeMask.data());
 
         KisLayerSP layer = dynamic_cast<KisLayer*>(mask->parent().data());
         if (! layer)
             return;
 
         KisPaintDeviceSP dev = layer->paintDevice();
-        KisDlgAdjLayerProps dlg(dev, layer->image(), mask->filter(), mask->name(), i18n("Effect Mask Properties"), m_view, "dlgeffectmaskprops");
+        KisDlgAdjLayerProps dlg(layer, mask, dev, layer->image(), mask->filter(), mask->name(), i18n("Effect Mask Properties"), m_view, "dlgeffectmaskprops");
+        KisFilterConfiguration* config = dlg.filterConfiguration();
         QString before;
-        if (dlg.filterConfiguration())
-            before = dlg.filterConfiguration()->toXML();
+        if (config) {
+            before = config->toXML();
+        }
         if (dlg.exec() == QDialog::Accepted) {
             QString after;
             if (dlg.filterConfiguration())
@@ -350,6 +311,16 @@ void KisMaskManager::maskProperties()
             m_view->document()->setModified(true);
             mask->setDirty();
         }
+        else {
+            if (dlg.filterConfiguration() && config) {
+                QString after = dlg.filterConfiguration()->toXML();
+                if (after != before) {
+                    mask->setFilter(config);
+                    mask->setDirty();
+                }
+            }
+        }
+
     } else {
         // Not much to show for transparency or selection masks?
     }

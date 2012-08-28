@@ -247,9 +247,9 @@ static const char* const buttonwinding[]={
 
 
 #include "StyleButtonBox.h"
+#include <KoIcon.h>
 
 #include <klocale.h>
-#include <kicon.h>
 
 #include <QPixmap>
 #include <QToolButton>
@@ -284,7 +284,7 @@ StyleButtonBox::StyleButtonBox(QWidget* parent, int rows, int columns)
     // The button for no fill
     QToolButton* button = new QToolButton(this);
     //button->setIcon(QPixmap((const char **) buttonnone));
-    button->setIcon(KIcon("edit-delete"));
+    button->setIcon(koIcon("edit-delete"));
     button->setToolTip(i18nc("No stroke or fill", "None"));
     d->group->addButton(button, None);
 

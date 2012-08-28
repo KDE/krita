@@ -7,7 +7,7 @@
  * Copyright (C) 2005 Inge Wallin <inge@lysator.liu.se>
  * Copyright (C) 2005, 2011 Thomas Zander <zander@kde.org>
  * Copyright (C) 2005-2008 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2006 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2011 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
  * Copyright (C) 2011 Thorsten Zachmann <zachmann@kde.com>
  *
@@ -35,7 +35,7 @@
 #include <QWidget>
 
 class KoUnit;
-class KoLineBorder;
+class KoShapeStroke;
 class KoMarker;
 
 /// A widget for configuring the stroke of a shape
@@ -54,7 +54,7 @@ public:
     KoMarker *startMarker() const;
     KoMarker *endMarker() const;
 
-    void updateControls(KoLineBorder &border, KoMarker *startMarker, KoMarker *endMarker);
+    void updateControls(KoShapeStroke &stroke, KoMarker *startMarker, KoMarker *endMarker);
 
     void locationChanged(Qt::DockWidgetArea area);
 

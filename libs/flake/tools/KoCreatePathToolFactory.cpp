@@ -21,6 +21,7 @@
 #include "KoCreatePathToolFactory.h"
 #include "KoCreatePathTool.h"
 
+#include <KoIcon.h>
 #include <klocale.h>
 
 #include <QColor>
@@ -33,7 +34,7 @@ KoCreatePathToolFactory::KoCreatePathToolFactory()
     setToolTip(i18n("Create Path"));
     setToolType(mainToolType());
     setPriority(2);
-    setIcon("createpath");
+    setIconName(koIconNameCStr("createpath"));
     setActivationShapeId("flake/edit");
 }
 

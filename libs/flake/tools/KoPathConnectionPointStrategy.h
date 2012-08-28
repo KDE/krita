@@ -43,7 +43,7 @@ public:
     virtual KUndo2Command* createCommand();
 
 private:
-    Q_DECLARE_PRIVATE(KoPathConnectionPointStrategy);
+    Q_DECLARE_PRIVATE(KoPathConnectionPointStrategy)
 };
 
 

@@ -63,6 +63,7 @@
 #include "KoTextSoftPageBreak.h"
 #include "KoDocumentRdfBase.h"
 #include "KoElementReference.h"
+#include "KoTextTableTemplate.h"
 
 #include "changetracker/KoChangeTracker.h"
 #include "changetracker/KoChangeTrackerElement.h"
@@ -163,6 +164,9 @@ public:
 
     QMap<QString, KoList *> xmlIdToListMap;
     QVector<KoList *> m_previousList;
+
+    QMap<QString, KoList *> numberedParagraphListId;
+
     QStringList rdfIdList;
 
     /// level is between 1 and 10
@@ -496,13 +500,18 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
 
     static int rootCallChecker = 0;
     if (rootCallChecker == 0) {
-        //This is the first call of loadBody.
-        //Store the default block and char formats
-        //Will be used whenever a new block is inserted
-        d->defaultBlockFormat = cursor.blockFormat();
-        d->defaultCharFormat = cursor.charFormat();
-        KoTextDocument(document).setFrameCharFormat(cursor.blockCharFormat());
-        KoTextDocument(document).setFrameBlockFormat(cursor.blockFormat());
+        if (document->resource(KoTextDocument::FrameCharFormat, KoTextDocument::FrameCharFormatUrl).isValid()) {
+            d->defaultBlockFormat = KoTextDocument(document).frameBlockFormat();
+            d->defaultCharFormat = KoTextDocument(document).frameCharFormat();
+        } else {
+            // This is the first call of loadBody on the document.
+            // Store the default block and char formats
+            // Will be used whenever a new block is inserted
+            d->defaultCharFormat = cursor.charFormat();
+            KoTextDocument(document).setFrameCharFormat(cursor.blockCharFormat());
+            d->defaultBlockFormat = cursor.blockFormat();
+            KoTextDocument(document).setFrameBlockFormat(cursor.blockFormat());
+        }
     }
     rootCallChecker++;
 
@@ -1136,12 +1145,6 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
 
     QString styleName = element.attributeNS(KoXmlNS::text, "style-name", QString());
 
-    QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
-
-    bool stripLeadingSpace = true;
-    loadSpan(element, cursor, &stripLeadingSpace);
-    cursor.setCharFormat(cf);   // restore the cursor char format
-
     QTextBlock block = cursor.block();
     // Set the paragraph-style on the block
     KoParagraphStyle *paragraphStyle = d->textSharedData->paragraphStyle(styleName, d->stylesDotXml);
@@ -1153,6 +1156,12 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
         paragraphStyle->applyStyle(block, (d->currentListLevel > 1) &&
                                    d->currentLists[d->currentListLevel - 2] && !d->currentListStyle);
     }
+
+    QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
+
+    bool stripLeadingSpace = true;
+    loadSpan(element, cursor, &stripLeadingSpace);
+    cursor.setCharFormat(cf);   // restore the cursor char format
 
     if ((block.blockFormat().hasProperty(KoParagraphStyle::OutlineLevel)) && (level == -1)) {
         level = block.blockFormat().property(KoParagraphStyle::OutlineLevel).toInt();
@@ -1275,8 +1284,21 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
 
     // TODO: get level from the style, if it has a style:list-level attribute (new in ODF-1.2)
     if (numberedParagraph) {
+        if (element.hasAttributeNS(KoXmlNS::text, "list-id")) {
+            QString listId = element.attributeNS(KoXmlNS::text, "list-id");
+            if (d->numberedParagraphListId.contains(listId)) {
+                d->currentLists.fill(d->numberedParagraphListId.value(listId));
+            } else {
+                KoList *currentList = d->list(cursor.block().document(), listStyle, false);
+                d->currentLists.fill(currentList);
+                d->numberedParagraphListId.insert(listId, currentList);
+            }
+        } else {
+            d->currentLists.fill(d->list(cursor.block().document(), listStyle, true));
+        }
+
         level = element.attributeNS(KoXmlNS::text, "level", "1").toInt();
-        d->currentLists[d->currentListLevel - 1] = d->list(cursor.block().document(), listStyle, true);
+
         d->currentListStyle = listStyle;
     } else {
         if (!listStyle)
@@ -1824,6 +1846,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             }
             QTextCharFormat newCharFormat = cursor.charFormat();
             newCharFormat.setAnchor(true);
+            newCharFormat.setProperty(KoCharacterStyle::AnchorType, KoCharacterStyle::Anchor);
             newCharFormat.setAnchorHref(target);
             cursor.setCharFormat(newCharFormat);
 
@@ -1899,6 +1922,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             if (!bookmarkName.isEmpty()) {
                 QTextCharFormat linkCf(cf); // and copy it to alter it
                 linkCf.setAnchor(true);
+                linkCf.setProperty(KoCharacterStyle::AnchorType, KoCharacterStyle::Bookmark);
                 QStringList anchorName;
                 anchorName << bookmarkName;
                 linkCf.setAnchorHref('#'+ bookmarkName);
@@ -2160,6 +2184,37 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
         KoTableStyle *tblStyle = d->textSharedData->tableStyle(tableStyleName, d->stylesDotXml);
         if (tblStyle)
             tblStyle->applyStyle(tableFormat);
+    }
+
+    QString tableTemplateName = tableElem.attributeNS(KoXmlNS::table, "template-name", "");
+    if (! tableTemplateName.isEmpty()) {
+        if(KoTextTableTemplate *tableTemplate = d->styleManager->tableTemplate(tableTemplateName)) {
+            tableFormat.setProperty(KoTableStyle::TableTemplate, tableTemplate->styleId());
+        }
+    }
+
+    if (tableElem.attributeNS(KoXmlNS::table, "use-banding-columns-styles", "false") == "true") {
+        tableFormat.setProperty(KoTableStyle::UseBandingColumnStyles, true);
+    }
+
+    if (tableElem.attributeNS(KoXmlNS::table, "use-banding-rows-styles", "false") == "true") {
+        tableFormat.setProperty(KoTableStyle::UseBandingRowStyles, true);
+    }
+
+    if (tableElem.attributeNS(KoXmlNS::table, "use-first-column-styles", "false") == "true") {
+        tableFormat.setProperty(KoTableStyle::UseFirstColumnStyles, true);
+    }
+
+    if (tableElem.attributeNS(KoXmlNS::table, "use-first-row-styles", "false") == "true") {
+        tableFormat.setProperty(KoTableStyle::UseFirstRowStyles, true);
+    }
+
+    if (tableElem.attributeNS(KoXmlNS::table, "use-last-column-styles", "false") == "true") {
+        tableFormat.setProperty(KoTableStyle::UseLastColumnStyles, true);
+    }
+
+    if (tableElem.attributeNS(KoXmlNS::table, "use-last-row-styles", "false") == "true") {
+        tableFormat.setProperty(KoTableStyle::UseLastRowStyles, true);
     }
 
     // Let's try to figure out when to hide the current block

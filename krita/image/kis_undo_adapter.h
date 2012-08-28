@@ -59,7 +59,7 @@ protected:
     }
 
 private:
-    Q_DISABLE_COPY(KisUndoAdapter);
+    Q_DISABLE_COPY(KisUndoAdapter)
     KisUndoStore *m_undoStore;
 };
 

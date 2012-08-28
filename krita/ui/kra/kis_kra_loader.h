@@ -27,6 +27,7 @@ class KoStore;
 class KisDoc2;
 class KisNode;
 class KoColorSpace;
+class KisPaintingAssistant;
 
 #include <kis_types.h>
 
@@ -52,32 +53,41 @@ public:
 
     void loadBinaryData(KoStore* store, KisImageWSP image, const QString & uri, bool external);
 
+    vKisNodeSP selectedNodes() const;
+
+    // it's neater to follow the same design as with selectedNodes, so let's have a getter here
+    QList<KisPaintingAssistant*> assistants() const;
+
 private:
 
-    KisNode* loadNodes(const KoXmlElement& element, KisImageWSP image, KisNode* parent);
+    // this needs to be private, for neatness sake
+    void loadAssistants(KoStore* store, const QString & uri, bool external);
 
-    KisNode* loadNode(const KoXmlElement& elem, KisImageWSP image);
+    KisNodeSP loadNodes(const KoXmlElement& element, KisImageWSP image, KisNodeSP parent);
 
-    KisNode* loadPaintLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
+    KisNodeSP loadNode(const KoXmlElement& elem, KisImageWSP image);
 
-    KisNode* loadGroupLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
+    KisNodeSP loadPaintLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
 
-    KisNode* loadAdjustmentLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
+    KisNodeSP loadGroupLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
 
-    KisNode* loadShapeLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
+    KisNodeSP loadAdjustmentLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
 
-    KisNode* loadGeneratorLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
+    KisNodeSP loadShapeLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
 
-    KisNode* loadCloneLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
+    KisNodeSP loadGeneratorLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
 
-    KisNode* loadFilterMask(const KoXmlElement& elem);
+    KisNodeSP loadCloneLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
 
-    KisNode* loadTransparencyMask(const KoXmlElement& elem);
+    KisNodeSP loadFilterMask(const KoXmlElement& elem);
 
-    KisNode* loadSelectionMask(KisImageWSP image, const KoXmlElement& elem);
+    KisNodeSP loadTransparencyMask(const KoXmlElement& elem);
+
+    KisNodeSP loadSelectionMask(KisImageWSP image, const KoXmlElement& elem);
 
     void loadCompositions(const KoXmlElement& elem, KisImageWSP image);
 
+    void loadAssistantsList(const KoXmlElement& elem);
 private:
 
     struct Private;

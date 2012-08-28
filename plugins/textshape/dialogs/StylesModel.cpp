@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Thomas Zander <zander@kde.org>
- * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2011-2012 Pierre Stirnweiss <pstirnweiss@googlemail.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -28,11 +28,8 @@
 #include <QImage>
 #include <QList>
 #include <QSignalMapper>
-#include <QSize>
 
-#include <KIcon>
 #include <KLocale>
-
 #include <KDebug>
 
 StylesModel::StylesModel(KoStyleManager *manager, Type modelType, QObject *parent)
@@ -56,8 +53,6 @@ StylesModel::StylesModel(KoStyleManager *manager, Type modelType, QObject *paren
         m_provideStyleNone = true;
     }
 
-    m_paragIcon = KIcon("kotext-paragraph");
-    m_charIcon = KIcon("kotext-character");
     connect(m_styleMapper, SIGNAL(mapped(int)), this, SLOT(updateName(int)));
 }
 
@@ -107,6 +102,9 @@ QVariant StylesModel::data(const QModelIndex &index, int role) const
             if (paragStyle) {
                 return m_styleThumbnailer->thumbnail(paragStyle);
             }
+            if (!paragStyle && m_draftParStyleList.contains(id)) {
+                return m_styleThumbnailer->thumbnail(m_draftParStyleList[id]);
+            }
         }
         else {
             KoCharacterStyle *usedStyle = 0;
@@ -125,6 +123,9 @@ QVariant StylesModel::data(const QModelIndex &index, int role) const
                 usedStyle = m_styleManager->characterStyle(id);
                 if (usedStyle) {
                     return m_styleThumbnailer->thumbnail(usedStyle, m_currentParagraphStyle);
+                }
+                if (!usedStyle && m_draftCharStyleList.contains(id)) {
+                    return m_styleThumbnailer->thumbnail(m_draftCharStyleList[id]);
                 }
             }
         }
@@ -166,6 +167,8 @@ void StylesModel::setProvideStyleNone(bool provide)
 
 KoParagraphStyle *StylesModel::paragraphStyleForIndex(const QModelIndex &index) const
 {
+    if (m_draftParStyleList.contains(index.internalId()))
+        return m_draftParStyleList[index.internalId()];
     return m_styleManager->paragraphStyle(index.internalId());
 }
 
@@ -182,6 +185,8 @@ QModelIndex StylesModel::indexForParagraphStyle(const KoParagraphStyle &style) c
 
 KoCharacterStyle *StylesModel::characterStyleForIndex(const QModelIndex &index) const
 {
+    if (m_draftCharStyleList.contains(index.internalId()))
+        return m_draftCharStyleList[index.internalId()];
     return m_styleManager->characterStyle(index.internalId());
 }
 
@@ -206,6 +211,9 @@ QImage StylesModel::stylePreview(int row, QSize size)
         if (usedStyle) {
             return m_styleThumbnailer->thumbnail(usedStyle, size);
         }
+        if (!usedStyle && m_draftParStyleList.contains(index(row).internalId())) {
+            return m_styleThumbnailer->thumbnail(m_draftParStyleList[index(row).internalId()], size);
+        }
     }
     else {
         KoCharacterStyle *usedStyle = 0;
@@ -224,6 +232,9 @@ QImage StylesModel::stylePreview(int row, QSize size)
             usedStyle = m_styleManager->characterStyle(index(row).internalId());
             if (usedStyle) {
                 return m_styleThumbnailer->thumbnail(usedStyle, m_currentParagraphStyle, size);
+            }
+            if (!usedStyle && m_draftCharStyleList.contains(index(row).internalId())) {
+                return m_styleThumbnailer->thumbnail(m_draftCharStyleList[index(row).internalId()],m_currentParagraphStyle, size);
             }
         }
     }
@@ -268,7 +279,9 @@ void StylesModel::addParagraphStyle(KoParagraphStyle *style)
     QList<int>::iterator begin = m_styleList.begin();
     int index = 0;
     for ( ; begin != m_styleList.end(); ++begin) {
-        KoParagraphStyle *s = m_styleManager->paragraphStyle(*begin);
+        KoParagraphStyle *s = m_styleManager->paragraphStyle(*begin);;
+        if (!s && m_draftParStyleList.contains(*begin))
+            s = m_draftParStyleList[*begin];
         // s should be found as the manager and the m_styleList should be in sync
         Q_ASSERT(s);
         if (QString::localeAwareCompare(style->name(), s->name()) < 0) {
@@ -322,7 +335,9 @@ void StylesModel::addCharacterStyle(KoCharacterStyle *style)
         ++index;
     }
     for ( ; begin != m_styleList.end(); ++begin) {
-        KoCharacterStyle *s = m_styleManager->characterStyle(*begin);
+        KoCharacterStyle *s = m_styleManager->characterStyle(*begin);;
+        if (!s && m_draftCharStyleList.contains(*begin))
+            s = m_draftCharStyleList[*begin];
         // s should be found as the manager and the m_styleList should be in sync
         Q_ASSERT(s);
         if (QString::localeAwareCompare(style->name(), s->name()) < 0) {
@@ -397,6 +412,8 @@ void StylesModel::updateName(int styleId)
         int newIndex = 0;
         if (m_modelType == StylesModel::ParagraphStyle) {
             KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(styleId);
+            if (!paragStyle && m_draftParStyleList.contains(styleId))
+                paragStyle = m_draftParStyleList.value(styleId);
             if (paragStyle) {
                 m_styleThumbnailer->removeFromCache(paragStyle);
 
@@ -407,6 +424,8 @@ void StylesModel::updateName(int styleId)
                         continue;
                     }
                     KoParagraphStyle *s = m_styleManager->paragraphStyle(*begin);
+                    if (!s && m_draftParStyleList.contains(*begin))
+                        s = m_draftParStyleList[*begin];
                     // s should be found as the manager and the m_styleList should be in sync
                     Q_ASSERT(s);
                     if (QString::localeAwareCompare(paragStyle->name(), s->name()) < 0) {
@@ -426,6 +445,8 @@ void StylesModel::updateName(int styleId)
         }
         else {
             KoCharacterStyle *characterStyle = m_styleManager->characterStyle(styleId);
+            if (!characterStyle && m_draftCharStyleList.contains(styleId))
+                characterStyle = m_draftCharStyleList[styleId];
             if (characterStyle) {
                 m_styleThumbnailer->removeFromCache(characterStyle);
 
@@ -440,6 +461,8 @@ void StylesModel::updateName(int styleId)
                         continue;
                     }
                     KoCharacterStyle *s = m_styleManager->characterStyle(*begin);
+                    if (!s && m_draftCharStyleList.contains(*begin))
+                        s = m_draftCharStyleList[*begin];
                     // s should be found as the manager and the m_styleList should be in sync
                     Q_ASSERT(s);
                     if (QString::localeAwareCompare(characterStyle->name(), s->name()) < 0) {
@@ -458,4 +481,53 @@ void StylesModel::updateName(int styleId)
             }
         }
     }
+}
+
+QModelIndex StylesModel::firstStyleIndex()
+{
+    return createIndex(m_styleList.indexOf(m_styleList.at(0)), 0, m_styleList.at(0));
+}
+
+QList<int> StylesModel::StyleList()
+{
+    return m_styleList;
+}
+
+QHash<int, KoParagraphStyle *> StylesModel::draftParStyleList()
+{
+    return m_draftParStyleList;
+}
+
+QHash<int, KoCharacterStyle *> StylesModel::draftCharStyleList()
+{
+    return m_draftCharStyleList;
+}
+
+void StylesModel::addDraftParagraphStyle(KoParagraphStyle *style)
+{
+    style->setStyleId(-(m_draftParStyleList.count()+1));
+    m_draftParStyleList.insert(style->styleId(), style);
+    addParagraphStyle(style);
+}
+
+void StylesModel::addDraftCharacterStyle(KoCharacterStyle *style)
+{
+    if (m_draftCharStyleList.count() == 0) // we have a character style "m_defaultCharacterStyle" with style id -1 in style model.
+        style->setStyleId(-(m_draftCharStyleList.count()+2));
+    else
+        style->setStyleId(-(m_draftCharStyleList.count()+1));
+    m_draftCharStyleList.insert(style->styleId(), style);
+    addCharacterStyle(style);
+}
+
+void StylesModel::clearDraftStyles()
+{
+    foreach(KoParagraphStyle *style, m_draftParStyleList.values()) {
+        removeParagraphStyle(style);
+    }
+    m_draftParStyleList.clear();
+    foreach(KoCharacterStyle *style, m_draftCharStyleList.values()) {
+        removeCharacterStyle(style);
+    }
+    m_draftCharStyleList.clear();
 }

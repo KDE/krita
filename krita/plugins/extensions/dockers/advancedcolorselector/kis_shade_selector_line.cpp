@@ -197,7 +197,6 @@ void KisShadeSelectorLine::mousePressEvent(QMouseEvent* e)
 
 void KisShadeSelectorLine::mouseMoveEvent(QMouseEvent *e)
 {
-//    kDebug() << e->globalX() << "/" << e->globalY();
     KisMinimalShadeSelector* parent = dynamic_cast<KisMinimalShadeSelector*>(parentWidget());
     QColor color(m_pixelCache.pixel(e->pos()));
 

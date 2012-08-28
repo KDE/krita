@@ -93,7 +93,7 @@ public:
     IndexEntry *clone();
     virtual void addAttributes(KoXmlWriter* writer) const;
     // for saving let's save the original unit,
-    // for KoText::Tab we need to covert to PostScript points
+    // for KoText::Tab we need to convert to PostScript points
     void setPosition(const QString &position);
 
     KoText::Tab tab;
@@ -185,8 +185,6 @@ public:
     QString bibliographyType;
 };
 
-Q_DECLARE_METATYPE(KoBibliographyInfo *);
-Q_DECLARE_METATYPE(KoTableOfContentsGeneratorInfo *);
-Q_DECLARE_METATYPE(QTextDocument *);
-Q_DECLARE_METATYPE(IndexEntry::IndexEntryName);
+Q_DECLARE_METATYPE(QTextDocument *)
+Q_DECLARE_METATYPE(IndexEntry::IndexEntryName)
 #endif // TOCBIBGENERATORINFO_H

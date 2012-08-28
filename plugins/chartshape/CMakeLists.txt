@@ -26,9 +26,8 @@ SET (chartshape_LIB_SRCS
     ChartProxyModel.cpp
     KDChartModel.cpp
     Surface.cpp
-    ThreeDScene.cpp
-    ThreeDTransformation.cpp
     ChartDocument.cpp
+    ChartPart.cpp
     ChartShape.cpp
     ChartTool.cpp
     ChartToolFactory.cpp
@@ -42,7 +41,13 @@ SET (chartshape_LIB_SRCS
     dialogs/NewAxisDialog.cpp
     dialogs/AxisScalingDialog.cpp
     dialogs/CellRegionDialog.cpp
+    dialogs/FontEditorDialog.cpp
+    dialogs/FormatErrorBarDialog.cpp
     commands/ChartTypeCommand.cpp
+    commands/LegendCommand.cpp
+    commands/AxisCommand.cpp
+    commands/DatasetCommand.cpp
+    commands/ChartTextShapeCommand.cpp
 )
 
 kde4_add_ui_files(chartshape_LIB_SRCS
@@ -51,6 +56,7 @@ kde4_add_ui_files(chartshape_LIB_SRCS
     dialogs/NewAxisDialog.ui
     dialogs/AxisScalingDialog.ui
     dialogs/CellRegionDialog.ui
+    dialogs/FormatErrorBarDialog.ui
 )
 
 kde4_add_library(chartshapelib SHARED ${chartshape_LIB_SRCS})

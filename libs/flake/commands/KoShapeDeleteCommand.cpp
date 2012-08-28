@@ -66,13 +66,7 @@ KoShapeDeleteCommand::KoShapeDeleteCommand(KoShapeBasedDocumentBase *controller,
         d->oldParents.append(shape->parent());
     }
 
-    // TODO 2.5 use i18ncp
-    if (shapes.count() == 1) {
-        setText(i18nc("(qtundo-format)", "Delete shape"));
-    }
-    else {
-        setText(i18nc("(qtundo-format)", "Delete shapes"));
-    }
+    setText(i18ncp("(qtundo-format)", "Delete shape", "Delete shapes", shapes.count()));
 }
 
 KoShapeDeleteCommand::~KoShapeDeleteCommand()

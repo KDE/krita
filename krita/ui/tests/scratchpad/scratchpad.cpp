@@ -67,7 +67,7 @@ int main(int argc, char** argv)
         }
     }
 
-    const KoColorProfile* profile = KoColorSpaceRegistry::instance()->rgb8()->profile();
+//    const KoColorProfile* profile = KoColorSpaceRegistry::instance()->rgb8()->profile();
 //    scratchpad->setColorSpace(KoColorSpaceRegistry::instance()->rgb16());
 //    scratchpad->setDisplayProfile(profile);
 //    scratchpad->setCanvasColor(Qt::white);

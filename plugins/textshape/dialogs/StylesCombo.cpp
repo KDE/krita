@@ -36,6 +36,18 @@ StylesCombo::StylesCombo(QWidget *parent)
       m_selectedItem(-1),
       m_originalStyle(true)
 {
+    // Force "Base" background to white, so the background is consistent with the one
+    // of the preview area in the style manager. Also the usual document text colors
+    // are dark, because made for a white paper background, so with a dark UI
+    // color scheme they are hardly seen.
+    // Force palette entry "Text" to black as contrast, as the pop-up button
+    // symbol is often drawn with this palette entry
+    // TODO: update to background color of currently selected/focused shape/page
+    QPalette palette = this->palette();
+    palette.setColor(QPalette::Base, QColor(Qt::white));
+    palette.setColor(QPalette::Text, QColor(Qt::black));
+    setPalette(palette);
+
     setMinimumSize(50,32);
 
     m_view->setMinimumWidth(250);
@@ -177,6 +189,12 @@ void StylesCombo::slotShowDia(QModelIndex index)
 void StylesCombo::slotDeleteStyle(QModelIndex index)
 {
     emit deleteStyle(index.row());
+}
+
+void StylesCombo::showEditIcon(bool show){
+    StylesDelegate *delegate = new StylesDelegate();
+    delegate->setEditButtonEnable(show);
+    setItemDelegate(delegate);
 }
 
 #include <StylesCombo.moc>

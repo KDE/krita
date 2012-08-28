@@ -31,6 +31,7 @@
 #include <psd_image_data.h>
 #include "psd_utils.h"
 #include "compression.h"
+#include "kis_iterator_ng.h"
 
 PSDImageData::PSDImageData(PSDHeader *header)
 {
@@ -219,23 +220,18 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
 
     for (int row = 0; row < m_header->height; row++) {
 
-        KisHLineIterator it = dev->createHLineIterator(0, row, m_header->width);
+        KisHLineIteratorSP it = dev->createHLineIteratorNG(0, row, m_header->width);
         QVector<QByteArray> channelBytes;
 
         for (int channel = 0; channel < m_header->nChannels; channel++) {
 
-
             switch (m_compression) {
-
             case Compression::Uncompressed:
-
             {
                 io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffsets[0]);
                 channelBytes.append(io->read(m_header->width*m_channelSize));
-
             }
                 break;
-
             case Compression::RLE:
             {
                 io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffsets[channel]);
@@ -247,10 +243,8 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
 
             }
                 break;
-
             case Compression::ZIP:
                 break;
-
             case Compression::ZIPWithPrediction:
                 break;
 
@@ -269,26 +263,26 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
             if (m_channelSize == 1) {
 
                 quint8 red = channelBytes[0].constData()[col];
-                KoRgbU8Traits::setRed(it.rawData(), red);
+                KoBgrU8Traits::setRed(it->rawData(), red);
 
                 quint8 green = channelBytes[1].constData()[col];
-                KoRgbU8Traits::setGreen(it.rawData(), green);
+                KoBgrU8Traits::setGreen(it->rawData(), green);
 
                 quint8 blue = channelBytes[2].constData()[col];
-                KoRgbU8Traits::setBlue(it.rawData(), blue);
+                KoBgrU8Traits::setBlue(it->rawData(), blue);
 
             }
 
             else if (m_channelSize == 2) {
 
                 quint16 red = ntohs(reinterpret_cast<const quint16 *>(channelBytes[0].constData())[col]);
-                KoRgbU16Traits::setRed(it.rawData(), red);
+                KoBgrU16Traits::setRed(it->rawData(), red);
 
                 quint16 green = ntohs(reinterpret_cast<const quint16 *>(channelBytes[1].constData())[col]);
-                KoRgbU16Traits::setGreen(it.rawData(), green);
+                KoBgrU16Traits::setGreen(it->rawData(), green);
 
                 quint16 blue = ntohs(reinterpret_cast<const quint16 *>(channelBytes[2].constData())[col]);
-                KoRgbU16Traits::setBlue(it.rawData(), blue);
+                KoBgrU16Traits::setBlue(it->rawData(), blue);
 
             }
 
@@ -296,18 +290,18 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
             else if (m_channelSize == 4) {
 
                 quint16 red = ntohs(reinterpret_cast<const quint16 *>(channelBytes.constData())[col]);
-                KoRgbU16Traits::setRed(it.rawData(), red);
+                KoBgrU16Traits::setRed(it->rawData(), red);
 
                 quint16 green = ntohs(reinterpret_cast<const quint16 *>(channelBytes.constData())[col]);
-                KoRgbU16Traits::setGreen(it.rawData(), green);
+                KoBgrU16Traits::setGreen(it->rawData(), green);
 
                 quint16 blue = ntohs(reinterpret_cast<const quint16 *>(channelBytes.constData())[col]);
-                KoRgbU16Traits::setBlue(it.rawData(), blue);
+                KoBgrU16Traits::setBlue(it->rawData(), blue);
 
             }
 
-            dev->colorSpace()->setOpacity(it.rawData(), OPACITY_OPAQUE_U8, 1);
-            ++it;
+            dev->colorSpace()->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
+            it->nextPixel();
         }
 
     }
@@ -321,7 +315,7 @@ bool PSDImageData::doCMYK(KisPaintDeviceSP dev, QIODevice *io) {
 
     for (int row = 0; row < m_header->height; row++) {
 
-        KisHLineIterator it = dev->createHLineIterator(0, row, m_header->width);
+        KisHLineIteratorSP it = dev->createHLineIteratorNG(0, row, m_header->width);
         QVector<QByteArray> channelBytes;
 
         for (int channel = 0; channel < m_header->nChannels; channel++) {
@@ -378,43 +372,43 @@ bool PSDImageData::doCMYK(KisPaintDeviceSP dev, QIODevice *io) {
                 memset(pixel + 2, 255 - channelBytes[2].constData()[col], 1);
                 memset(pixel + 3, 255 - channelBytes[3].constData()[col], 1);
                 qDebug() << "C" << pixel[0] << "M" << pixel[1] << "Y" << pixel[2] << "K" << pixel[3] << "A" << pixel[4];
-                memcpy(it.rawData(), pixel, 5);
+                memcpy(it->rawData(), pixel, 5);
 
 
             }
             else if (m_channelSize == 2) {
 
                 quint16 C = ntohs(reinterpret_cast<const quint16 *>(channelBytes[0].constData())[col]);
-                KoCmykTraits<quint16>::setC(it.rawData(),C);
+                KoCmykTraits<quint16>::setC(it->rawData(),C);
 
                 quint16 M = ntohs(reinterpret_cast<const quint16 *>(channelBytes[1].constData())[col]);
-                KoCmykTraits<quint16>::setM(it.rawData(),M);
+                KoCmykTraits<quint16>::setM(it->rawData(),M);
 
                 quint16 Y = ntohs(reinterpret_cast<const quint16 *>(channelBytes[2].constData())[col]);
-                KoCmykTraits<quint16>::setY(it.rawData(),Y);
+                KoCmykTraits<quint16>::setY(it->rawData(),Y);
 
                 quint16 K = ntohs(reinterpret_cast<const quint16 *>(channelBytes[3].constData())[col]);
-               KoCmykTraits<quint16>::setK(it.rawData(),K);
+               KoCmykTraits<quint16>::setK(it->rawData(),K);
 
             }
             else if (m_channelSize == 4) {
 
                 quint32 C = ntohs(reinterpret_cast<const quint32 *>(channelBytes[0].constData())[col]);
-                KoCmykTraits<quint32>::setC(it.rawData(),C);
+                KoCmykTraits<quint32>::setC(it->rawData(),C);
 
                 quint32 M = ntohs(reinterpret_cast<const quint32 *>(channelBytes[1].constData())[col]);
-                KoCmykTraits<quint32>::setM(it.rawData(),M);
+                KoCmykTraits<quint32>::setM(it->rawData(),M);
 
                 quint32 Y = ntohs(reinterpret_cast<const quint32 *>(channelBytes[2].constData())[col]);
-                KoCmykTraits<quint32>::setY(it.rawData(),Y);
+                KoCmykTraits<quint32>::setY(it->rawData(),Y);
 
                 quint32 K = ntohs(reinterpret_cast<const quint32 *>(channelBytes[3].constData())[col]);
-                KoCmykTraits<quint32>::setK(it.rawData(),K);
+                KoCmykTraits<quint32>::setK(it->rawData(),K);
 
             }
 
-            dev->colorSpace()->setOpacity(it.rawData(), OPACITY_OPAQUE_U8, 1);
-            ++it;
+            dev->colorSpace()->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
+            it->nextPixel();;
         }
 
     }
@@ -429,7 +423,7 @@ bool PSDImageData::doLAB(KisPaintDeviceSP dev, QIODevice *io) {
 
     for (int row = 0; row < m_header->height; row++) {
 
-        KisHLineIterator it = dev->createHLineIterator(0, row, m_header->width);
+        KisHLineIteratorSP it = dev->createHLineIteratorNG(0, row, m_header->width);
         QVector<QByteArray> channelBytes;
 
         for (int channel = 0; channel < m_header->nChannels; channel++) {
@@ -478,44 +472,44 @@ bool PSDImageData::doLAB(KisPaintDeviceSP dev, QIODevice *io) {
             if (m_channelSize == 1) {
 
                 quint8 L = ntohs(reinterpret_cast<const quint8 *>(channelBytes[0].constData())[col]);
-                KoLabTraits<quint16>::setL(it.rawData(),KoColorSpaceMaths<quint8, quint16 >::scaleToA(L));
+                KoLabTraits<quint16>::setL(it->rawData(),KoColorSpaceMaths<quint8, quint16 >::scaleToA(L));
 
                 quint8 A = ntohs(reinterpret_cast<const quint8 *>(channelBytes[1].constData())[col]);
-                KoLabTraits<quint16>::setA(it.rawData(),KoColorSpaceMaths<quint8, quint16 >::scaleToA(A));
+                KoLabTraits<quint16>::setA(it->rawData(),KoColorSpaceMaths<quint8, quint16 >::scaleToA(A));
 
                 quint8 B = ntohs(reinterpret_cast<const quint8 *>(channelBytes[2].constData())[col]);
-                KoLabTraits<quint16>::setB(it.rawData(),KoColorSpaceMaths<quint8, quint16 >::scaleToA(B));
+                KoLabTraits<quint16>::setB(it->rawData(),KoColorSpaceMaths<quint8, quint16 >::scaleToA(B));
 
             }
 
             else if (m_channelSize == 2) {
 
                 quint16 L = ntohs(reinterpret_cast<const quint16 *>(channelBytes[0].constData())[col]);
-                KoLabU16Traits::setL(it.rawData(),L);
+                KoLabU16Traits::setL(it->rawData(),L);
 
                 quint16 A = ntohs(reinterpret_cast<const quint16 *>(channelBytes[1].constData())[col]);
-                KoLabU16Traits::setA(it.rawData(),A);
+                KoLabU16Traits::setA(it->rawData(),A);
 
                 quint16 B = ntohs(reinterpret_cast<const quint16 *>(channelBytes[2].constData())[col]);
-                KoLabU16Traits::setB(it.rawData(),B);
+                KoLabU16Traits::setB(it->rawData(),B);
 
             }
 
             else if (m_channelSize == 4) {
 
                 quint32 L = ntohs(reinterpret_cast<const quint32 *>(channelBytes[0].constData())[col]);
-                KoLabTraits<quint32>::setL(it.rawData(),L);
+                KoLabTraits<quint32>::setL(it->rawData(),L);
 
                 quint32 A = ntohs(reinterpret_cast<const quint32 *>(channelBytes[1].constData())[col]);
-                KoLabTraits<quint32>::setA(it.rawData(),A);
+                KoLabTraits<quint32>::setA(it->rawData(),A);
 
                 quint32 B = ntohs(reinterpret_cast<const quint32 *>(channelBytes[2].constData())[col]);
-                KoLabTraits<quint32>::setB(it.rawData(),B);
+                KoLabTraits<quint32>::setB(it->rawData(),B);
 
             }
 
-            dev->colorSpace()->setOpacity(it.rawData(), OPACITY_OPAQUE_U8, 1);
-            ++it;
+            dev->colorSpace()->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
+            it->nextPixel();;
         }
 
     }

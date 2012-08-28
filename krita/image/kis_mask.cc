@@ -293,7 +293,7 @@ QImage KisMask::createThumbnail(qint32 w, qint32 h)
         selection() ? selection()->projection() : 0;
 
     return originalDevice ?
-           originalDevice->createThumbnail(w, h) : QImage();
+           originalDevice->createThumbnail(w, h, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation) : QImage();
 }
 
 #include "kis_mask.moc"

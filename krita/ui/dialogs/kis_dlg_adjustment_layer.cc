@@ -39,35 +39,30 @@
 #include <kis_config.h>
 
 KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
-        KisNodeFilterInterface* nfi,
-        KisPaintDeviceSP paintDevice,
-        KisImageWSP image,
-        const QString & layerName,
-        const QString & caption,
-        QWidget *parent,
-        const char *name)
-        : KDialog(parent)
-        , m_node(node)
-        , m_nodeFilterInterface(nfi)
-        , m_currentFilter(0)
-        , m_freezeName(false)
+                                             KisNodeFilterInterface* nfi,
+                                             KisPaintDeviceSP paintDevice,
+                                             KisImageWSP image,
+                                             const QString &layerName,
+                                             const QString &caption,
+                                             QWidget *parent,
+                                             const char */*name*/)
+    : KDialog(parent)
+    , m_node(node)
+    , m_nodeFilterInterface(nfi)
+    , m_currentFilter(0)
+    , m_freezeName(false)
 {
     setCaption(caption);
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
-    setObjectName(name);
-    m_timer = new QTimer(this);
-    m_timer->setSingleShot(true);
-    Q_ASSERT(m_node);
-    Q_ASSERT(m_nodeFilterInterface);
 
     QWidget * page = new QWidget(this);
     wdgFilterNodeCreation.setupUi(page);
     setMainWidget(page);
     wdgFilterNodeCreation.filterSelector->showFilterGallery(KisConfig().showFilterGalleryLayerMaskDialog());
 
-    connect(wdgFilterNodeCreation.filterSelector, SIGNAL(configurationChanged()), SLOT(kickTimer()));
-    connect(m_timer, SIGNAL(timeout()), SLOT(slotConfigChanged()));
+    connect(wdgFilterNodeCreation.filterSelector, SIGNAL(configurationChanged()), SLOT(slotConfigChanged()));
+
     wdgFilterNodeCreation.filterSelector->setPaintDevice(paintDevice);
     wdgFilterNodeCreation.filterSelector->setImage(image);
     wdgFilterNodeCreation.layerName->setText(layerName);
@@ -101,17 +96,12 @@ QString KisDlgAdjustmentLayer::layerName() const
 
 void KisDlgAdjustmentLayer::slotConfigChanged()
 {
-    enableButtonOk(1);
+    enableButtonOk(true);
     KisFilterConfiguration * config = filterConfiguration();
     if (config) {
         m_nodeFilterInterface->setFilter(config);
     }
     m_node->setDirty();
-}
-
-void KisDlgAdjustmentLayer::kickTimer()
-{
-    m_timer->start(50);
 }
 
 #include "kis_dlg_adjustment_layer.moc"

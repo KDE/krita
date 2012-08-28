@@ -135,7 +135,7 @@ QString SplineAssistantFactory::name() const
     return i18n("Spline");
 }
 
-KisPaintingAssistant* SplineAssistantFactory::paintingAssistant(const QRectF& /*imageArea*/) const
+KisPaintingAssistant* SplineAssistantFactory::createPaintingAssistant() const
 {
     return new SplineAssistant;
 }

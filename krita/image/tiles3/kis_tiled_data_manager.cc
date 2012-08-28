@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2004 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2004 C. Boemann <cbo@boemann.dk>
  *            (c) 2009 Dmitry  Kazakov <dimula73@gmail.com>
  *            (c) 2010 Cyrille Berger <cberger@cberger.net>
  *
@@ -138,7 +138,7 @@ bool KisTiledDataManager::write(KoStore *store)
     KisAbstractTileCompressorSP compressor =
         KisTileCompressorFactory::create(CURRENT_VERSION);
 
-    while (tile = iter.tile()) {
+    while ((tile = iter.tile())) {
         compressor->writeTile(tile, store);
         ++iter;
     }
@@ -287,7 +287,7 @@ void KisTiledDataManager::purge(const QRect& area)
         KisTileHashTableIterator iter(m_hashTable);
         KisTileSP tile;
 
-        while (tile = iter.tile()) {
+        while ((tile = iter.tile())) {
             if (tile->extent().intersects(area)) {
                 tile->lockForRead();
                 if(memcmp(defaultData, tile->data(), tileDataSize) == 0) {
@@ -703,7 +703,7 @@ void KisTiledDataManager::readBytes(quint8 *data,
                                     qint32 width, qint32 height) const
 {
     QReadLocker locker(&m_lock);
-    // Actial bytes reading/writing is done in private header
+    // Actual bytes reading/writing is done in private header
     readBytesBody(data, x, y, width, height);
 }
 

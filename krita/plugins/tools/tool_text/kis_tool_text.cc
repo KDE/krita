@@ -35,7 +35,7 @@
 
 
 KisToolText::KisToolText(KoCanvasBase * canvas)
-        : KisToolRectangleBase(canvas, KisCursor::load("tool_rectangle_cursor.png", 6, 6))
+        : KisToolRectangleBase(canvas, KisToolRectangleBase::PAINT, KisCursor::load("tool_rectangle_cursor.png", 6, 6))
 {
     setObjectName("tool_text");
 }
@@ -55,7 +55,9 @@ void KisToolText::finishRect(const QRectF &rect)
     if (textFactory) {
         KoShape* shape = textFactory->createDefaultShape(canvas()->shapeController()->resourceManager());
         shape->setSize(r.size());
-        shape->setPosition(r.topLeft());
+        qreal x = r.x() + r.width() / 2;
+        qreal y = r.y() + r.height() / 2;
+        shape->setPosition(QPointF(x,y));
         addShape(shape);
 
         KisCanvas2* kiscanvas = dynamic_cast<KisCanvas2 *>(canvas());

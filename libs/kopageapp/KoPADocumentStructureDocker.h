@@ -32,14 +32,10 @@ class KoShapeLayer;
 class KoPADocument;
 class KoPADocumentModel;
 class KoPAPageBase;
+class KoViewItemContextBar;
 class QModelIndex;
 class QAction;
 class QButtonGroup;
-
-namespace KParts
-{
-    class Part;
-}
 
 class KoPADocumentStructureDockerFactory : public KoDockFactoryBase
 {
@@ -84,9 +80,6 @@ signals:
 
 public slots:
     void updateView();
-    /// Set the KPart::Part or the document for this docker, this will reset the document model for this docker
-    /// and eventually dockerReset() signal will be emitted
-    void setPart(KParts::Part * part);
 
     void selectPages(int start, int count);
 
@@ -122,6 +115,7 @@ private:
     QList<KoShape *> m_selectedShapes;
     QButtonGroup *m_buttonGroup;
     QAction* m_addLayerAction;
+    KoViewItemContextBar *m_itemsContextBar;
 };
 
 #endif // KOPADOCUMENTSTRUCTUREDOCKER_H

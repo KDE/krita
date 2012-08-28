@@ -90,12 +90,17 @@ QByteArray  VectorShape::compressedContents() const
     return m_contents;
 }
 
-void VectorShape::setCompressedContents( const QByteArray &newContents )
+VectorShape::VectorType VectorShape::vectorType() const
+{
+    return m_type;
+}
+
+void VectorShape::setCompressedContents(const QByteArray &newContents, VectorType vectorType)
 {
     QMutexLocker locker(&m_mutex);
 
     m_contents = newContents;
-    m_type = VectorTypeUndetermined;
+    m_type = vectorType;
     m_cache.clear();
     update();
 }
@@ -103,8 +108,11 @@ void VectorShape::setCompressedContents( const QByteArray &newContents )
 // ----------------------------------------------------------------
 //                             Painting
 
-RenderThread::RenderThread(const VectorShape* const shape, const QSizeF &size, const QSize &boundingSize, qreal zoomX, qreal zoomY)
-    : QObject(), QRunnable(), m_shape(shape), m_size(size), m_boundingSize(boundingSize), m_zoomX(zoomX), m_zoomY(zoomY)
+RenderThread::RenderThread(const QByteArray &contents, VectorShape::VectorType type,
+                           const QSizeF &size, const QSize &boundingSize, qreal zoomX, qreal zoomY)
+    : QObject(), QRunnable(),
+      m_contents(contents), m_type(type),
+      m_size(size), m_boundingSize(boundingSize), m_zoomX(zoomX), m_zoomY(zoomY)
 {
     setAutoDelete(true);
 }
@@ -115,7 +123,6 @@ RenderThread::~RenderThread()
 
 void RenderThread::run()
 {
-    QMutexLocker locker(&m_shape->m_mutex);
     QImage *image = new QImage(m_boundingSize, QImage::Format_ARGB32);
     image->fill(0);
     QPainter painter;
@@ -134,38 +141,13 @@ void RenderThread::run()
 void RenderThread::draw(QPainter &painter)
 {
     // If the data is uninitialized, e.g. because loading failed, draw the null shape.
-    if (m_shape->m_contents.count() == 0) {
+    if (m_contents.isEmpty()) {
         drawNull(painter);
         return;
     }
 
-    m_shape->m_contents = qUncompress(m_shape->m_contents);
-
-    // Check if the type is undetermined.  It could be that if we got
-    // the contents via setCompressedContents().
-    //
-    // FIXME: make setCompressedContents() return a bool and check the
-    //        contents there already.
-    if (m_shape->m_type == VectorShape::VectorTypeUndetermined) {
-        // FIXME: Break out into its own function.
-        if (VectorShape::isWmf(m_shape->m_contents)) {
-            m_shape->m_type = VectorShape::VectorTypeWmf;
-        }
-        else if (VectorShape::isEmf(m_shape->m_contents)) {
-            m_shape->m_type = VectorShape::VectorTypeEmf;
-        }
-        else if (VectorShape::isSvm(m_shape->m_contents)) {
-            m_shape->m_type = VectorShape::VectorTypeSvm;
-        }
-        else
-            m_shape->m_type = VectorShape::VectorTypeNone;
-    }
-
     // Actually draw the contents
-    switch (m_shape->m_type) {
-    case VectorShape::VectorTypeNone:
-        drawNull(painter);
-        break;
+    switch (m_type) {
     case VectorShape::VectorTypeWmf:
         drawWmf(painter);
         break;
@@ -175,10 +157,10 @@ void RenderThread::draw(QPainter &painter)
     case VectorShape::VectorTypeSvm:
         drawSvm(painter);
         break;
+    case VectorShape::VectorTypeNone:
     default:
         drawNull(painter);
     }
-    m_shape->m_contents = qCompress(m_shape->m_contents);
 }
 
 void RenderThread::drawNull(QPainter &painter) const
@@ -198,7 +180,7 @@ void RenderThread::drawNull(QPainter &painter) const
 void RenderThread::drawWmf(QPainter &painter) const
 {
     Libwmf::WmfPainterBackend  wmfPainter(&painter, m_size);
-    if (!wmfPainter.load(m_shape->m_contents)) {
+    if (!wmfPainter.load(m_contents)) {
         drawNull(painter);
         return;
     }
@@ -227,7 +209,7 @@ void RenderThread::drawEmf(QPainter &painter) const
     Libemf::OutputDebugStrategy  emfDebugOutput;
     emfParser.setOutput( &emfDebugOutput );
 #endif
-    emfParser.load(m_shape->m_contents);
+    emfParser.load(m_contents);
 }
 
 void RenderThread::drawSvm(QPainter &painter) const
@@ -239,7 +221,7 @@ void RenderThread::drawSvm(QPainter &painter) const
     // Create a new painter backend.
     Libsvm::SvmPainterBackend  svmPaintOutput(&painter, shapeSizeInt);
     svmParser.setBackend(&svmPaintOutput);
-    svmParser.parse(m_shape->m_contents);
+    svmParser.parse(m_contents);
 }
 
 void VectorShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
@@ -294,10 +276,10 @@ void VectorShape::saveOdf(KoShapeSavingContext & context) const
 
     switch (m_type) {
     case VectorTypeWmf:
-        mimeType = "application/x-wmf";
+        mimeType = "image/x-wmf";
         break;
     case VectorTypeEmf:
-        mimeType = "application/x-emf";
+        mimeType = "image/x-emf";
         break;
     case VectorTypeSvm:
         mimeType = "application/x-svm";// FIXME: Check if this is true
@@ -310,9 +292,7 @@ void VectorShape::saveOdf(KoShapeSavingContext & context) const
 
     xmlWriter.startElement("draw:frame");
     saveOdfAttributes(context, OdfAllAttributes);
-    QByteArray  uncompressedContents = qUncompress(m_contents);
-    fileSaver.embedFile(xmlWriter, "draw:image", fileName, mimeType.constData(),
-                        uncompressedContents);
+    fileSaver.embedFile(xmlWriter, "draw:image", fileName, mimeType, qUncompress(m_contents));
     xmlWriter.endElement(); // draw:frame
 }
 
@@ -370,18 +350,7 @@ bool VectorShape::loadOdfFrameElement(const KoXmlElement & element,
 
     // Try to recognize the type.  We should do this before the
     // compression below, because that's a semi-expensive operation.
-    m_type = VectorTypeUndetermined;
-    if (isWmf(m_contents)) {
-        m_type = VectorTypeWmf;
-    }
-    else if (isEmf(m_contents)) {
-        m_type = VectorTypeEmf;
-    }
-    else if (isSvm(m_contents)) {
-        m_type = VectorTypeSvm;
-    }
-    else
-        m_type = VectorTypeNone;
+    m_type = vectorType(m_contents);
 
     // Return false if we didn't manage to identify the type.
     if (m_type == VectorTypeNone)
@@ -410,7 +379,10 @@ QImage* VectorShape::render(const KoViewConverter &converter, bool asynchronous,
             m_isRendering = true;
             qreal zoomX, zoomY;
             converter.zoom(&zoomX, &zoomY);
-            RenderThread *t = new RenderThread(this, size(), rect.size().toSize(), zoomX, zoomY);
+            QMutexLocker locker(&m_mutex);
+            const QByteArray uncompressedContents =
+                m_type != VectorShape::VectorTypeNone ? qUncompress(m_contents) : QByteArray();
+            RenderThread *t = new RenderThread(uncompressedContents, m_type, size(), rect.size().toSize(), zoomX, zoomY);
             connect(t, SIGNAL(finished(QSize,QImage*)), this, SLOT(renderFinished(QSize,QImage*)));
             if (asynchronous) { // render and paint the image threaded
                 QThreadPool::globalInstance()->start(t);
@@ -422,6 +394,23 @@ QImage* VectorShape::render(const KoViewConverter &converter, bool asynchronous,
     }
 
     return cache;
+}
+
+VectorShape::VectorType VectorShape::vectorType(const QByteArray &newContents)
+{
+    VectorType vectorType;
+
+    if (isWmf(newContents)) {
+        vectorType = VectorShape::VectorTypeWmf;
+    } else if (isEmf(newContents)) {
+        vectorType = VectorShape::VectorTypeEmf;
+    } else if (isSvm(newContents)) {
+        vectorType = VectorShape::VectorTypeSvm;
+    } else {
+        vectorType = VectorShape::VectorTypeNone;
+    }
+
+    return vectorType;
 }
 
 bool VectorShape::isWmf(const QByteArray &bytes)

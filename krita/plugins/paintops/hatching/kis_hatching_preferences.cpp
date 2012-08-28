@@ -75,4 +75,3 @@ void KisHatchingPreferences::readOptionSetting(const KisPropertiesConfiguration*
     m_options->opaqueBackgroundCheckBox->setChecked( setting->getBool("Hatching/bool_opaquebackground") );
     m_options->subpixelPrecisionCheckBox->setChecked( setting->getBool("Hatching/bool_subpixelprecision") );
 }
-;

@@ -21,10 +21,14 @@
 
 #include <QCheckBox>
 #include <QSlider>
+#include <QColor>
+#include <QString>
+#include <QStringList>
 
 #include <kapplication.h>
 #include <kdialog.h>
 #include <kpluginfactory.h>
+#include <kcolorbutton.h>
 
 #include <KoFilterManager.h>
 #include <KoFilterChain.h>
@@ -94,6 +98,10 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     wdgUi.iptc->setChecked(cfg.getBool("iptc", true));
     wdgUi.xmp->setChecked(cfg.getBool("xmp", true));
 
+    QStringList rgb = cfg.getString("transparencyFillcolor", "255,255,255").split(",");
+    wdgUi.bnTransparencyFillColor->setDefaultColor(Qt::white);
+    wdgUi.bnTransparencyFillColor->setColor(QColor(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt()));
+
     frm.setEnabledFilters(cfg.getString("filters").split(","));
 
     kdb->setMainWidget(wdg);
@@ -133,6 +141,10 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
 
     options.xmp = wdgUi.xmp->isChecked();
     cfg.setProperty("xmp", options.xmp);
+
+    QColor c = wdgUi.bnTransparencyFillColor->color();
+    options.transparencyFillColor = c;
+    cfg.setProperty("transparencyFillcolor", QString("%1,%2,%3").arg(c.red()).arg(c.green()).arg(c.blue()));
 
     options.filters = frm.enabledFilters();
     QString enabledFilters;

@@ -22,6 +22,8 @@
 
 #include "KoMainWindow.h"
 #include "KoDocumentEntry.h"
+#include "KoServiceProvider.h"
+#include "KoPart.h"
 
 #include <QFile>
 #include <QGridLayout>
@@ -34,7 +36,6 @@
 #include <QTreeWidget>
 
 #include <kdebug.h>
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <ktemporaryfile.h>
@@ -55,8 +56,6 @@ KoVersionDialog::KoVersionDialog(QWidget* parent, KoDocument *doc)
     setModal(true);
 
     QGridLayout* grid1 = new QGridLayout(page);
-    grid1->setMargin(KDialog::marginHint());
-    grid1->setSpacing(KDialog::spacingHint());
 
     list = new QTreeWidget(page);
     list->setColumnCount(3);
@@ -201,20 +200,21 @@ void KoVersionDialog::slotOpen()
     tmp.setPermissions(QFile::ReadUser);
     tmp.flush();
 
-    if (!m_doc->shells().isEmpty()) { //open the version in a new window if possible
-        KoDocumentEntry entry = KoDocumentEntry(KoDocument::readNativeService());
+    if (!m_doc->documentPart()->shells().isEmpty()) { //open the version in a new window if possible
+        KoDocumentEntry entry = KoDocumentEntry(KoServiceProvider::readNativeService());
         QString errorMsg;
-        KoDocument* doc = entry.createDoc(&errorMsg);
-        if (!doc) {
+        KoPart *part= entry.createKoPart(&errorMsg);
+        if (!part) {
             if (!errorMsg.isEmpty())
                 KMessageBox::error(0, errorMsg);
             return;
         }
-        KoMainWindow *shell = new KoMainWindow(doc->componentData());
+        KoMainWindow *shell = new KoMainWindow(part->componentData());
         shell->openDocument(tmp.fileName());
         shell->show();
-    } else
+    } else {
         m_doc->openUrl(tmp.fileName());
+    }
 
     tmp.setAutoRemove(true);
     slotButtonClicked(Close);
@@ -232,8 +232,6 @@ KoVersionModifyDialog::KoVersionModifyDialog(QWidget* parent, KoVersionInfo *inf
     setMainWidget(page);
 
     QVBoxLayout *grid1 = new QVBoxLayout(page);
-    grid1->setMargin(KDialog::marginHint());
-    grid1->setSpacing(KDialog::spacingHint());
 
     QLabel *l = new QLabel(page);
     if (info)

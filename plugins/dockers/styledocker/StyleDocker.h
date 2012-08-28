@@ -27,8 +27,8 @@
 
 class StylePreview;
 class StyleButtonBox;
-class KoShapeBorderModel;
-class KoShapeBorderCommand;
+class KoShapeStrokeModel;
+class KoShapeStrokeCommand;
 class KoShapeBackground;
 class KoShapeBackgroundCommand;
 class KoColorBackground;
@@ -72,9 +72,9 @@ private slots:
 
 private:
     void updateColor(const QColor &c, const QList<KoShape*> & selectedShapes);
-    /// Sets the shape border and fill to display
+    /// Sets the shape stroke and fill to display
     void updateStyle();
-    void updateStyle(KoShapeBorderModel * stroke, KoShapeBackground * fill);
+    void updateStyle(KoShapeStrokeModel * stroke, KoShapeBackground * fill);
 
     /// Resets color related commands which are used to combine multiple color changes
     void resetColorCommands();
@@ -99,9 +99,9 @@ private:
     
     QTime m_lastColorChange;
     KoShapeBackgroundCommand * m_lastFillCommand;
-    KoShapeBorderCommand * m_lastStrokeCommand;
-    KoColorBackground * m_lastColorFill;
-    QList<KoShapeBorderModel*> m_lastColorStrokes;
+    KoShapeStrokeCommand     * m_lastStrokeCommand;
+    KoColorBackground        * m_lastColorFill;
+    QList<KoShapeStrokeModel*> m_lastColorStrokes;
 };
 
 #endif // STYLEDOCKER_H

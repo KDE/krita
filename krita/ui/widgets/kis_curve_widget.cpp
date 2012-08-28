@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -269,11 +269,11 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
         p.setRenderHint(QPainter::Antialiasing);
 
     // Draw curve.
-    double prevY = wHeight - d->m_curve.value(0.) * wHeight;
-    double prevX = 0.;
     double curY;
     double normalizedX;
     int x;
+
+    QPolygonF poly;
 
     p.setPen(QPen(Qt::black, 1, Qt::SolidLine));
     for (x = 0 ; x < wWidth ; x++) {
@@ -285,13 +285,10 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
          * to ints mathematically, not just rounds down
          * like in C
          */
-        p.drawLine(QLineF(prevX, prevY,
-                          x, curY));
-        prevX = x;
-        prevY = curY;
+        poly.append(QPointF(x, curY));
     }
-    p.drawLine(QLineF(prevX, prevY ,
-                      x, wHeight - d->m_curve.value(1.0) * wHeight));
+    poly.append(QPointF(x, wHeight - d->m_curve.value(1.0) * wHeight));
+    p.drawPolyline(poly);
 
     // Drawing curve handles.
     double curveX;
@@ -371,7 +368,7 @@ void KisCurveWidget::mouseMoveEvent(QMouseEvent * e)
     double x = e->pos().x() / (double)(width() - 1);
     double y = 1.0 - e->pos().y() / (double)(height() - 1);
 
-    if (d->state() == ST_NORMAL) { // If no point is selected set the the cursor shape if on top
+    if (d->state() == ST_NORMAL) { // If no point is selected set the cursor shape if on top
         int nearestPointIndex = d->nearestPointInRange(QPointF(x, y), width(), height());
 
         if (nearestPointIndex < 0)

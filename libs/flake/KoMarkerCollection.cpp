@@ -31,6 +31,11 @@
 class KoMarkerCollection::Private
 {
 public:
+    ~Private()
+    {
+        qDeleteAll(markers);
+    }
+
     QList<KoMarker *> markers;
 };
 

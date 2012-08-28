@@ -35,8 +35,7 @@ KisBrushSP KisAbrBrushFactory::getOrCreateBrush(const QDomElement& brushDefiniti
     QString brushName = brushDefinition.attribute("name", "test_1");
     
     KisBrushSP brush = rServer->getResourceByName(brushName);
-    if(!brush){
-        kDebug() << "brush with name " << brushName << " not found!";
+    if (!brush){
         return 0;
     }
     

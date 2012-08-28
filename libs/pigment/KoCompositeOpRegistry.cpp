@@ -40,10 +40,10 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
         << KoID("hsv"       , i18n("HSV"));
 
     m_map.insert(m_categories[0], KoID(COMPOSITE_ADD             , i18n("Addition")));
-    m_map.insert(m_categories[0], KoID(COMPOSITE_SUBTRACT        , i18n("Substract")));
+    m_map.insert(m_categories[0], KoID(COMPOSITE_SUBTRACT        , i18n("Subtract")));
     m_map.insert(m_categories[0], KoID(COMPOSITE_MULT            , i18n("Multiply")));
     m_map.insert(m_categories[0], KoID(COMPOSITE_DIVIDE          , i18n("Divide")));
-    m_map.insert(m_categories[0], KoID(COMPOSITE_INVERSE_SUBTRACT, i18n("Inverse Substract")));
+    m_map.insert(m_categories[0], KoID(COMPOSITE_INVERSE_SUBTRACT, i18n("Inverse Subtract")));
 
     m_map.insert(m_categories[1], KoID(COMPOSITE_BURN       , i18n("Burn")));
     m_map.insert(m_categories[1], KoID(COMPOSITE_LINEAR_BURN, i18n("Linear Burn")));
@@ -63,11 +63,12 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
 
     m_map.insert(m_categories[3], KoID(COMPOSITE_DIFF                 , i18n("Difference")));
     m_map.insert(m_categories[3], KoID(COMPOSITE_EQUIVALENCE          , i18n("Equivalence")));
-    m_map.insert(m_categories[3], KoID(COMPOSITE_ADDITIVE_SUBSTRACTIVE, i18n("Additive Substractive")));
+    m_map.insert(m_categories[3], KoID(COMPOSITE_ADDITIVE_SUBTRACTIVE, i18n("Additive Subtractive")));
     m_map.insert(m_categories[3], KoID(COMPOSITE_EXCLUSION            , i18n("Exclusion")));
     m_map.insert(m_categories[3], KoID(COMPOSITE_ARC_TANGENT          , i18n("Arcus Tangent")));
 
     m_map.insert(m_categories[4], KoID(COMPOSITE_OVER          , i18n("Normal")));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_BEHIND        , i18n("Behind")));
     m_map.insert(m_categories[4], KoID(COMPOSITE_OVERLAY       , i18n("Overlay")));
     m_map.insert(m_categories[4], KoID(COMPOSITE_ERASE         , i18n("Erase")));
     m_map.insert(m_categories[4], KoID(COMPOSITE_ALPHA_DARKEN  , i18n("Alpha Darken")));

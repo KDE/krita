@@ -24,6 +24,7 @@
 #include "KoToolFactoryBase.h"
 
 #include <flake/kis_node_shape.h>
+#include <KoIcon.h>
 
 class QCheckBox;
 class QComboBox;
@@ -66,7 +67,7 @@ public:
 
         // Temporarily
         setToolType(TOOL_TYPE_SHAPE);
-        setIcon("krita_tool_freehand");
+        setIconName(koIconNameCStr("krita_tool_freehand"));
         setShortcut(KShortcut(Qt::Key_B));
         setPriority(0);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

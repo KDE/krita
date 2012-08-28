@@ -27,7 +27,12 @@ class KRITAUI_EXPORT KisToolRectangleBase : public KisToolShape
 {
 Q_OBJECT
 public:
-    explicit KisToolRectangleBase(KoCanvasBase * canvas, const QCursor & cursor=KisCursor::load("tool_rectangle_cursor.png", 6, 6));
+    enum ToolType {
+        PAINT,
+        SELECT
+    };
+
+    explicit KisToolRectangleBase(KoCanvasBase * canvas, KisToolRectangleBase::ToolType type, const QCursor & cursor=KisCursor::load("tool_rectangle_cursor.png", 6, 6));
 
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseMoveEvent(KoPointerEvent *event);
@@ -47,6 +52,7 @@ private:
     QPointF m_dragStart;
     QPointF m_dragEnd;
     QRect m_final_lines;
+    ToolType m_type;
 };
 
 #endif // KIS_TOOL_RECTANGLE_BASE_H

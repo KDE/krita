@@ -29,7 +29,6 @@
 #include <QPoint>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -58,9 +57,6 @@ Histogram::Histogram(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {
-
-        setComponentData(HistogramFactory::componentData());
-
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/histogram.rc"),
                    true);
 

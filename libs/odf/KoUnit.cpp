@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 David Faure <faure@kde.org>
    Copyright (C) 2004, Nicolas GOUTTE <goutte@kde.org>
+   Copyright 2012 Friedrich W. H. Kossebau <kossebau@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,28 +28,22 @@
 
 #include <QRegExp>
 
-QStringList KoUnit::listOfUnitName(bool hidePixel)
+// ensure the same order as in KoUnit::Unit
+static const char* const unitNameList[KoUnit::TypeCount] =
 {
-    QStringList lst;
-    for (int i = KoUnit::Millimeter; i <= KoUnit::Pixel; ++i) {
-        Unit unit = static_cast<Unit>(i);
-        if ((i != Pixel) || (hidePixel == false))
-            lst.append(KoUnit::unitDescription(KoUnit(unit)));
-    }
-    return lst;
-}
+    "mm",
+    "pt",
+    "in",
+    "cm",
+    "dm",
+    "pi",
+    "cc",
+    "px"
+};
 
-int KoUnit::indexInList(PixelVisibility visibility) const
+QString unitDescription(KoUnit::Type type)
 {
-    if (visibility == HidePixel && m_unit > Pixel)
-        return m_unit -1;
-    else
-        return m_unit;
-}
-
-QString KoUnit::unitDescription(KoUnit _unit)
-{
-    switch (_unit.m_unit) {
+    switch (type) {
     case KoUnit::Millimeter:
         return i18n("Millimeters (mm)");
     case KoUnit::Centimeter:
@@ -70,9 +65,77 @@ QString KoUnit::unitDescription(KoUnit _unit)
     }
 }
 
+// grouped by units which are similar
+static const KoUnit::Type typesInUi[KoUnit::TypeCount] =
+{
+    KoUnit::Millimeter,
+    KoUnit::Centimeter,
+    KoUnit::Decimeter,
+    KoUnit::Inch,
+    KoUnit::Pica,
+    KoUnit::Cicero,
+    KoUnit::Point,
+    KoUnit::Pixel,
+};
+
+QStringList KoUnit::listOfUnitNameForUi(ListOptions listOptions)
+{
+    QStringList lst;
+    for (int i = 0; i < KoUnit::TypeCount; ++i) {
+        const Type type = typesInUi[i];
+        if ((type != Pixel) || ((listOptions & HideMask) == ListAll))
+            lst.append(unitDescription(type));
+    }
+    return lst;
+}
+
+KoUnit KoUnit::fromListForUi(int index, ListOptions listOptions, qreal factor)
+{
+    KoUnit::Type type = KoUnit::Point;
+
+    if ((0 <= index) && (index < KoUnit::TypeCount)) {
+        // iterate through all enums and skip the Pixel enum if needed
+        for (int i = 0; i < KoUnit::TypeCount; ++i) {
+            if ((listOptions&HidePixel) && (typesInUi[i] == Pixel)) {
+                ++index;
+                continue;
+            }
+            if (i == index) {
+                type = typesInUi[i];
+                break;
+            }
+        }
+    }
+
+    return KoUnit(type, factor);
+}
+
+int KoUnit::indexInListForUi(ListOptions listOptions) const
+{
+    if ((listOptions&HidePixel) && (m_type == Pixel)) {
+        return -1;
+    }
+
+    int result = -1;
+
+    int skipped = 0;
+    for (int i = 0; i < KoUnit::TypeCount; ++i) {
+        if ((listOptions&HidePixel) && (typesInUi[i] == Pixel)) {
+            ++skipped;
+            continue;
+        }
+        if (typesInUi[i] == m_type) {
+            result = i - skipped;
+            break;
+        }
+    }
+
+    return result;
+}
+
 qreal KoUnit::toUserValue(qreal ptValue) const
 {
-    switch (m_unit) {
+    switch (m_type) {
     case Millimeter:
         return toMillimeter(ptValue);
     case Centimeter:
@@ -95,7 +158,7 @@ qreal KoUnit::toUserValue(qreal ptValue) const
 
 qreal KoUnit::ptToUnit(const qreal ptValue, const KoUnit &unit)
 {
-    switch (unit.m_unit) {
+    switch (unit.m_type) {
     case Millimeter:
         return POINT_TO_MM(ptValue);
     case Centimeter:
@@ -123,7 +186,7 @@ QString KoUnit::toUserStringValue(qreal ptValue) const
 
 qreal KoUnit::fromUserValue(qreal value) const
 {
-    switch (m_unit) {
+    switch (m_type) {
     case Millimeter:
         return MM_TO_POINT(value);
     case Centimeter:
@@ -155,12 +218,12 @@ qreal KoUnit::parseValue(const QString& _value, qreal defaultVal)
         return defaultVal;
 
     QString value(_value.simplified());
-    value.remove(' ');
+    value.remove(QLatin1Char(' '));
 
     int firstLetter = -1;
     for (int i = 0; i < value.length(); ++i) {
         if (value.at(i).isLetter()) {
-            if (value.at(i) == 'e')
+            if (value.at(i) == QLatin1Char('e'))
                 continue;
             firstLetter = i;
             break;
@@ -170,56 +233,107 @@ qreal KoUnit::parseValue(const QString& _value, qreal defaultVal)
     if (firstLetter == -1)
         return value.toDouble();
 
-    const QString unit = value.mid(firstLetter);
+    const QString symbol = value.mid(firstLetter);
     value.truncate(firstLetter);
     const qreal val = value.toDouble();
 
-    if (unit == "pt")
+    if (symbol == QLatin1String("pt"))
         return val;
 
     bool ok;
-    KoUnit u = KoUnit::unit(unit, &ok);
+    KoUnit u = KoUnit::fromSymbol(symbol, &ok);
     if (ok)
         return u.fromUserValue(val);
 
-    if (unit == "m")
+    if (symbol == QLatin1String("m"))
         return DM_TO_POINT(val * 10.0);
-    else if (unit == "km")
+    else if (symbol == QLatin1String("km"))
         return DM_TO_POINT(val * 10000.0);
-    kWarning() << "KoUnit::parseValue: Unit " << unit << " is not supported, please report.";
+    kWarning() << "KoUnit::parseValue: Unit " << symbol << " is not supported, please report.";
 
     // TODO : add support for mi/ft ?
     return defaultVal;
 }
 
-KoUnit KoUnit::unit(const QString &_unitName, bool* ok)
+KoUnit KoUnit::fromSymbol(const QString &symbol, bool *ok)
 {
-    if (ok)
-        *ok = true;
-    if (_unitName == QString::fromLatin1("mm")) return KoUnit(Millimeter);
-    if (_unitName == QString::fromLatin1("cm")) return KoUnit(Centimeter);
-    if (_unitName == QString::fromLatin1("dm")) return KoUnit(Decimeter);
-    if (_unitName == QString::fromLatin1("in")
-            || _unitName == QString::fromLatin1("inch") /*compat*/) return KoUnit(Inch);
-    if (_unitName == QString::fromLatin1("pi")) return KoUnit(Pica);
-    if (_unitName == QString::fromLatin1("cc")) return KoUnit(Cicero);
-    if (_unitName == QString::fromLatin1("pt")) return KoUnit(Point);
-    if (_unitName == QString::fromLatin1("px")) return KoUnit(Pixel);
-    if (ok)
-        *ok = false;
-    return KoUnit(Point);
+    Type result = Point;
+
+    if (symbol == QLatin1String("inch") /*compat*/) {
+        result = Inch;
+        if (ok)
+            *ok = true;
+    } else {
+        if (ok)
+            *ok = false;
+
+        for (int i = 0; i < TypeCount; ++i) {
+            if (symbol == QLatin1String(unitNameList[i])) {
+                result = static_cast<Type>(i);
+                if (ok)
+                    *ok = true;
+            }
+        }
+    }
+
+    return KoUnit(result);
 }
 
-QString KoUnit::unitName(KoUnit _unit)
+qreal KoUnit::convertFromUnitToUnit(const qreal value, const KoUnit &fromUnit, const KoUnit &toUnit, qreal factor)
 {
-    if (_unit.m_unit == Millimeter) return QString::fromLatin1("mm");
-    if (_unit.m_unit == Centimeter) return QString::fromLatin1("cm");
-    if (_unit.m_unit == Decimeter) return QString::fromLatin1("dm");
-    if (_unit.m_unit == Inch) return QString::fromLatin1("in");
-    if (_unit.m_unit == Pica) return QString::fromLatin1("pi");
-    if (_unit.m_unit == Cicero) return QString::fromLatin1("cc");
-    if (_unit.m_unit == Pixel) return QString::fromLatin1("px");
-    return QString::fromLatin1("pt");
+    qreal pt;
+    switch (fromUnit.type()) {
+    case Millimeter:
+        pt = MM_TO_POINT(value);
+        break;
+    case Centimeter:
+        pt = CM_TO_POINT(value);
+        break;
+    case Decimeter:
+        pt = DM_TO_POINT(value);
+        break;
+    case Inch:
+        pt = INCH_TO_POINT(value);
+        break;
+    case Pica:
+        pt = PI_TO_POINT(value);
+        break;
+    case Cicero:
+        pt = CC_TO_POINT(value);
+        break;
+    case Pixel:
+        pt = value / factor;
+        break;
+    case Point:
+    default:
+        pt = value;
+    }
+
+    switch (toUnit.type()) {
+    case Millimeter:
+        return POINT_TO_MM(pt);
+    case Centimeter:
+        return POINT_TO_CM(pt);
+    case Decimeter:
+        return POINT_TO_DM(pt);
+    case Inch:
+        return POINT_TO_INCH(pt);
+    case Pica:
+        return POINT_TO_PI(pt);
+    case Cicero:
+        return POINT_TO_CC(pt);
+    case Pixel:
+        return pt * factor;
+    case Point:
+    default:
+        return pt;
+    }
+
+}
+
+QString KoUnit::symbol() const
+{
+    return QLatin1String(unitNameList[m_type]);
 }
 
 qreal KoUnit::parseAngle(const QString& _value, qreal defaultVal)
@@ -228,12 +342,12 @@ qreal KoUnit::parseAngle(const QString& _value, qreal defaultVal)
         return defaultVal;
 
     QString value(_value.simplified());
-    value.remove(' ');
+    value.remove(QLatin1Char(' '));
 
     int firstLetter = -1;
     for (int i = 0; i < value.length(); ++i) {
         if (value.at(i).isLetter()) {
-            if (value.at(i) == 'e')
+            if (value.at(i) == QLatin1Char('e'))
                 continue;
             firstLetter = i;
             break;
@@ -243,17 +357,17 @@ qreal KoUnit::parseAngle(const QString& _value, qreal defaultVal)
     if (firstLetter == -1)
         return value.toDouble();
 
-    QString unit = value.mid(firstLetter);
+    const QString type = value.mid(firstLetter);
     value.truncate(firstLetter);
     const qreal val = value.toDouble();
-    
-    if (unit == "deg")
+
+    if (type == QLatin1String("deg"))
         return val;
-    else if (unit == "rad")
+    else if (type == QLatin1String("rad"))
         return val * 180 / M_PI;
-    else if (unit == "grad")
+    else if (type == QLatin1String("grad"))
         return val * 0.9;
-    
+
     return defaultVal;
 }
 
@@ -261,7 +375,7 @@ qreal KoUnit::parseAngle(const QString& _value, qreal defaultVal)
 QDebug operator<<(QDebug debug, const KoUnit &unit)
 {
 #ifndef NDEBUG
-    debug.nospace() << KoUnit::unitName(unit);
+    debug.nospace() << unit.symbol();
 #else
     Q_UNUSED(unit);
 #endif

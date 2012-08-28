@@ -32,6 +32,8 @@ public:
     KisWdgOptionsPNG(QWidget *parent) : QWidget(parent) {
         setupUi(this);
     }
+private slots:
+    void on_alpha_toggled(bool checked);
 };
 
 class KisPNGExport : public KoFilter

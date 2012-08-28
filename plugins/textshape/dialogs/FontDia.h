@@ -37,6 +37,8 @@ public:
     explicit FontDia(KoTextEditor *cursor, QWidget* parent = 0);
 
 protected slots:
+    void styleChanged(bool state = true);
+
     void slotReset();
     void slotApply();
     void slotOk();
@@ -50,6 +52,7 @@ private:
     QTextCharFormat m_initialFormat;
 
     bool m_uniqueFormat;
+    bool m_styleChanged;
 };
 
 #endif

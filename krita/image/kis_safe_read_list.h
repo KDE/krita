@@ -43,7 +43,7 @@ public:
     using typename QList<T>::const_iterator;
 
     /**
-     * All the methods of this class are splitted into two groups:
+     * All the methods of this class are split into two groups:
      * treadsafe and non-threadsafe. The methods from the first group
      * can be called concurrently with each other. The ones form
      * the other group can't be called concurrently (even with the
@@ -85,7 +85,7 @@ public:
     using QList<T>::clear;
 
 private:
-    Q_DISABLE_COPY(KisSafeReadList);
+    Q_DISABLE_COPY(KisSafeReadList)
 };
 
 

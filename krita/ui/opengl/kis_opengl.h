@@ -21,9 +21,11 @@
 /** @file */
 
 #include <KoConfig.h>
-#include <config-glew.h>
 
 #ifdef HAVE_OPENGL
+
+#include <config-glew.h>
+
 
 #if defined(_WIN32) || defined(_WIN64)
 #include <windows.h>

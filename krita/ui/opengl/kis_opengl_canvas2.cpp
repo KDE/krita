@@ -252,12 +252,8 @@ void KisOpenGLCanvas2::drawImage()
     QRect wr = widgetRectInImagePixels.toAlignedRect() &
         m_d->openGLImageTextures->storedImageBounds();
 
-
-    if (image->colorSpace()->hasHighDynamicRange()) {
-        if (m_d->openGLImageTextures->usingHDRExposureProgram()) {
-            m_d->openGLImageTextures->activateHDRExposureProgram();
-        }
-        m_d->openGLImageTextures->setHDRExposure(canvas()->view()->resourceProvider()->HDRExposure());
+    if (image->colorSpace()->hasHighDynamicRange() && m_d->openGLImageTextures->usingHDRExposureProgram()) {
+        m_d->openGLImageTextures->activateHDRExposureProgram();
     }
 
     makeCurrent();
@@ -275,15 +271,10 @@ void KisOpenGLCanvas2::drawImage()
 
             glBindTexture(GL_TEXTURE_2D, tile->textureId());
 
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-            if (scaleX > 2.0) {
-                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            if(scaleX > 2.0) {
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             } else {
-                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             }
 
             tile->drawPoints();
@@ -401,58 +392,9 @@ bool KisOpenGLCanvas2::event(QEvent *e)
     return QWidget::event(e);
 }
 
-void KisOpenGLCanvas2::enterEvent(QEvent* e)
-{
-    if(!hasFocus()) {
-        setFocus();
-    }
-    QWidget::enterEvent(e);
-}
-
-void KisOpenGLCanvas2::leaveEvent(QEvent* e)
-{
-    update();
-    QWidget::leaveEvent(e);
-}
-
 void KisOpenGLCanvas2::slotConfigChanged()
 {
     notifyConfigChanged();
-}
-
-void KisOpenGLCanvas2::mouseMoveEvent(QMouseEvent *e)
-{
-    processMouseMoveEvent(e);
-}
-
-void KisOpenGLCanvas2::contextMenuEvent(QContextMenuEvent *e)
-{
-    processContextMenuEvent(e);
-}
-
-void KisOpenGLCanvas2::mousePressEvent(QMouseEvent *e)
-{
-    processMousePressEvent(e);
-}
-
-void KisOpenGLCanvas2::mouseReleaseEvent(QMouseEvent *e)
-{
-    processMouseReleaseEvent(e);
-}
-
-void KisOpenGLCanvas2::mouseDoubleClickEvent(QMouseEvent *e)
-{
-    processMouseDoubleClickEvent(e);
-}
-
-void KisOpenGLCanvas2::keyPressEvent(QKeyEvent *e)
-{
-    processKeyPressEvent(e);
-}
-
-void KisOpenGLCanvas2::keyReleaseEvent(QKeyEvent *e)
-{
-    processKeyReleaseEvent(e);
 }
 
 QVariant KisOpenGLCanvas2::inputMethodQuery(Qt::InputMethodQuery query) const
@@ -463,16 +405,6 @@ QVariant KisOpenGLCanvas2::inputMethodQuery(Qt::InputMethodQuery query) const
 void KisOpenGLCanvas2::inputMethodEvent(QInputMethodEvent *event)
 {
     processInputMethodEvent(event);
-}
-
-void KisOpenGLCanvas2::tabletEvent(QTabletEvent *e)
-{
-    processTabletEvent(e);
-}
-
-void KisOpenGLCanvas2::wheelEvent(QWheelEvent *e)
-{
-    processWheelEvent(e);
 }
 
 bool KisOpenGLCanvas2::callFocusNextPrevChild(bool next)

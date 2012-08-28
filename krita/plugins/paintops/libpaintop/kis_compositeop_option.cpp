@@ -18,7 +18,7 @@
 #include "kis_compositeop_option.h"
 
 #include <klocale.h>
-#include <kicon.h>
+#include <KoIcon.h>
 
 #include <kis_cmb_composite.h>
 #include <KoCompositeOp.h>
@@ -27,20 +27,20 @@
 #include <ui_wdgCompositeOpOption.h>
 #include <kis_composite_ops_model.h>
 
-KisCompositeOpOption::KisCompositeOpOption(bool creatConfigWidget):
+KisCompositeOpOption::KisCompositeOpOption(bool createConfigWidget):
     KisPaintOpOption(i18n("Blending Mode"), KisPaintOpOption::brushCategory(), true),
-    m_createConfigWidget(creatConfigWidget)
+    m_createConfigWidget(createConfigWidget)
 {
     m_checkable         = false;
     m_prevCompositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
     m_currCompositeOpID = m_prevCompositeOpID;
     
-    if(creatConfigWidget) {
+    if(createConfigWidget) {
         QWidget* widget = new QWidget();
         
         Ui_wdgCompositeOpOption ui;
         ui.setupUi(widget);
-        ui.bnEraser->setIcon(KIcon("draw-eraser"));
+        ui.bnEraser->setIcon(koIcon("draw-eraser"));
         
         m_label    = ui.lbChoosenMode;
         m_list     = ui.list;

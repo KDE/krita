@@ -31,7 +31,6 @@ private slots:
     void testSetSelected();
     void testSelect();
     void testInvert();
-    void testInvertWithImage();
     void testClear();
     void testExtent();
     void testAddSelection();
@@ -41,6 +40,7 @@ private slots:
     void testUpdateProjection();
     void testExactRectWithImage();
     void testUndo();
+    void testInvertWithImage();
 };
 
 #endif

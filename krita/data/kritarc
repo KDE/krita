@@ -1,3 +1,6 @@
+[krita]
+WantExportConfirmation=false
+
 favoriteCompositeOps=normal,erase,multiply
 
 [TemplateChooserDialog]
@@ -151,11 +154,11 @@ QuickShapes=ArtisticText,TextShapeID,DivineProportionShapeID,EllipseShape,Rectan
 
 [calligra]
 FlakePluginsDisabled=formulashape,divineproportionshape,kexirelationdesignshape,vectorshape
-ShapePluginsDisabled=musicshape,pictureshape,videoshape,chartshape,spreadsheetshape,pluginshape,treeshape
+ShapePluginsDisabled=musicshape,pictureshape,videoshape,chartshape,spreadsheetshape,pluginshape,treeshape,commentshape,stateshape,webshape
 TextEditingPluginsDisabled=thesaurustool,changecase,autocorrect,spellcheck
 TextInlinePluginsDisabled=textvariables,kprvariables
 ToolPluginsDisabled=paragraphtool,kopabackgroundtool,calligrastagetoolanimation
-ToolsBlacklist=CreatePathTool,ConnectionTool,KarbonFilterEffectsTool
+ToolsBlacklist=CreatePathTool,ConnectionTool,KarbonFilterEffectsTool,PanTool,KoZoomToolId
 
 [favoriteList]
 favoriteBrushes=paintbrush,deformbrush,hairybrush,hatchingbrush,sketchbrush,smudge,spraybrush,

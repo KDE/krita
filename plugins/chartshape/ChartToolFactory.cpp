@@ -21,12 +21,16 @@
 // Own
 #include "ChartToolFactory.h"
 
-// KDE
-#include <KLocale>
-
 // KChart
 #include "ChartTool.h"
 #include "ChartShape.h"
+
+// Calligra
+#include <KoIcon.h>
+
+// KDE
+#include <KLocale>
+
 
 
 using namespace KChart;
@@ -35,20 +39,20 @@ using namespace KChart;
 ChartToolFactory::ChartToolFactory()
     : KoToolFactoryBase("ChartToolFactory_ID")
 {
-    setToolTip ( i18n( "Chart Editing Tool" ) );
-    setToolType ( dynamicToolType() );
-    setIcon ( "kchart" );
-    setPriority ( 1 );
-    setActivationShapeId ( ChartShapeId );
+    setToolTip (i18n("Chart Editing Tool"));
+    setToolType (dynamicToolType());
+    setIconName(koIconNameCStr("kchart"));
+    setPriority (1);
+    setActivationShapeId (ChartShapeId);
 }
 
 ChartToolFactory::~ChartToolFactory()
 {
 }
 
-KoToolBase *ChartToolFactory::createTool( KoCanvasBase *canvas )
+KoToolBase *ChartToolFactory::createTool(KoCanvasBase *canvas)
 {
-    return new ChartTool( canvas );
+    return new ChartTool(canvas);
 }
 
 

@@ -62,4 +62,6 @@ private:
     BibliographyGeneratorInterface *m_generator;
 };
 
+Q_DECLARE_METATYPE(KoBibliographyInfo *)
+
 #endif // KOBIBLIOGRAPHYINFO_H

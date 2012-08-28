@@ -37,7 +37,7 @@ class KoOdfGradientBackgroundPrivate : public KoShapeBackgroundPrivate
 {
 public:
     KoOdfGradientBackgroundPrivate()
-    : style(), cx(0), cy(0), startColor(), endColor(), angle(0), border(0) {};
+        : style(), cx(0), cy(0), startColor(), endColor(), angle(0), border(0), opacity(1.0) {};
     ~KoOdfGradientBackgroundPrivate(){};
     //data
     QString style;
@@ -47,6 +47,7 @@ public:
     QColor endColor;
     qreal angle;
     qreal border;
+    qreal opacity;
 
     mutable QImage buffer;
 };
@@ -114,9 +115,12 @@ void KoOdfGradientBackground::saveOdf(KoGenStyle& styleFill, KoGenStyles& mainSt
 
     styleFill.addProperty("draw:fill", "gradient", propertyType);
     styleFill.addProperty("draw:fill-gradient-name", gradientStyleName, propertyType);
+    if (d->opacity <= 1.0) {
+        styleFill.addProperty("draw:opacity", QString("%1%").arg(d->opacity * 100.0), propertyType);
+    }
 }
 
-void KoOdfGradientBackground::paint(QPainter& painter, const QPainterPath& fillPath) const
+void KoOdfGradientBackground::paint(QPainter& painter, const KoViewConverter &/*converter*/, KoShapePaintingContext &/*context*/, const QPainterPath& fillPath) const
 {
     Q_D(const KoOdfGradientBackground);
     QRectF targetRect = fillPath.boundingRect();
@@ -132,6 +136,8 @@ void KoOdfGradientBackground::paint(QPainter& painter, const QPainterPath& fillP
     }
 
     painter.setClipPath(fillPath);
+
+    painter.setOpacity(d->opacity);
     painter.drawImage(targetRect, d->buffer, QRectF(QPointF(0,0), d->buffer.size()));
 }
 
@@ -143,6 +149,8 @@ void KoOdfGradientBackground::fillStyle(KoGenStyle& style, KoShapeSavingContext&
 bool KoOdfGradientBackground::loadStyle(KoOdfLoadingContext& context, const QSizeF& shapeSize)
 {
     Q_UNUSED(shapeSize);
+    Q_D(KoOdfGradientBackground);
+
     KoStyleStack &styleStack = context.styleStack();
     if (!styleStack.hasProperty(KoXmlNS::draw, "fill")) {
         return false;
@@ -150,6 +158,14 @@ bool KoOdfGradientBackground::loadStyle(KoOdfLoadingContext& context, const QSiz
 
     QString fillStyle = styleStack.property(KoXmlNS::draw, "fill");
     if (fillStyle == "gradient") {
+
+        if (styleStack.hasProperty(KoXmlNS::draw, "opacity")) {
+            QString opacity = styleStack.property(KoXmlNS::draw, "opacity");
+            if (! opacity.isEmpty() && opacity.right(1) == "%") {
+                d->opacity = qMin(opacity.left(opacity.length() - 1).toDouble(), 100.0) / 100;
+            }
+        }
+
         QString styleName = styleStack.property(KoXmlNS::draw, "fill-gradient-name");
         KoXmlElement * e = context.stylesReader().drawStyles("gradient")[styleName];
         return loadOdf(*e);

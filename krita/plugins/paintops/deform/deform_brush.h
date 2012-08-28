@@ -202,7 +202,7 @@ private:
 
 
 private:
-    KisRandomSubAccessorPixel * m_srcAcc;
+    KisRandomSubAccessorSP m_srcAcc;
     bool m_firstPaint;
     qreal m_prevX, m_prevY;
     int m_counter;

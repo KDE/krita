@@ -27,13 +27,10 @@
 
 #include "kis_image.h"
 #include "kis_config.h"
+#include "kis_display_filter.h"
 
 #ifdef HAVE_OPENEXR
 #include <half.h>
-#endif
-
-#ifdef HAVE_GLEW
-#include "opengl/kis_opengl_hdr_exposure_program.h"
 #endif
 
 #ifndef GL_CLAMP_TO_EDGE
@@ -47,22 +44,30 @@
 
 KisOpenGLImageTextures::ImageTexturesMap KisOpenGLImageTextures::imageTexturesMap;
 
-#ifdef HAVE_GLEW
-KisOpenGLHDRExposureProgram *KisOpenGLImageTextures::HDRExposureProgram = 0;
-#endif
-
 KisOpenGLImageTextures::KisOpenGLImageTextures()
+    : m_displayFilter(0)
 {
     m_image = 0;
     m_monitorProfile = 0;
-    m_exposure = 0;
+    KisConfig cfg;
+    m_renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();
+
+    m_conversionFlags = KoColorConversionTransformation::HighQuality;
+    if (cfg.useBlackPointCompensation()) m_conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
+    if (!cfg.allowLCMSOptimization()) m_conversionFlags |= KoColorConversionTransformation::NoOptimization;
 }
 
-KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image, KoColorProfile *monitorProfile)
+KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
+                                               KoColorProfile *monitorProfile,
+                                               KoColorConversionTransformation::Intent renderingIntent,
+                                               KoColorConversionTransformation::ConversionFlags conversionFlags)
+    : m_displayFilter(0)
 {
     m_image = image;
     m_monitorProfile = monitorProfile;
-    m_exposure = 0;
+    m_renderingIntent = renderingIntent;
+    Q_ASSERT(renderingIntent < 4);
+    m_conversionFlags = conversionFlags;
 
     KisOpenGL::makeContextCurrent();
 
@@ -92,32 +97,33 @@ KisOpenGLImageTextures::~KisOpenGLImageTextures()
 
 bool KisOpenGLImageTextures::imageCanShareTextures(KisImageWSP image)
 {
-    return !image->colorSpace()->hasHighDynamicRange() ||
-        imageCanUseHDRExposureProgram(image);
+    return !image->colorSpace()->hasHighDynamicRange() || imageCanUseHDRExposureProgram(image);
 }
 
-KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP image, KoColorProfile *monitorProfile)
+KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP image,
+                                                                  KoColorProfile *monitorProfile,
+                                                                  KoColorConversionTransformation::Intent renderingIntent,
+                                                                  KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
     KisOpenGL::makeContextCurrent();
-    createHDRExposureProgramIfCan();
 
     if (imageCanShareTextures(image)) {
         ImageTexturesMap::iterator it = imageTexturesMap.find(image);
 
         if (it != imageTexturesMap.end()) {
             KisOpenGLImageTexturesSP textures = it.value();
-            textures->setMonitorProfile(monitorProfile);
+            textures->setMonitorProfile(monitorProfile, renderingIntent, conversionFlags);
 
             return textures;
         } else {
-            KisOpenGLImageTextures *imageTextures = new KisOpenGLImageTextures(image, monitorProfile);
+            KisOpenGLImageTextures *imageTextures = new KisOpenGLImageTextures(image, monitorProfile, renderingIntent, conversionFlags);
             imageTexturesMap[image] = imageTextures;
             dbgUI << "Added shareable textures to map";
 
             return imageTextures;
         }
     } else {
-        return new KisOpenGLImageTextures(image, monitorProfile);
+        return new KisOpenGLImageTextures(image, monitorProfile, renderingIntent, conversionFlags);
     }
 }
 
@@ -146,13 +152,17 @@ void KisOpenGLImageTextures::createImageTextureTiles()
     const int pixelSize = 4;
     QByteArray emptyTileData((m_texturesInfo.width) * (m_texturesInfo.height) * pixelSize, 0);
 
+    KisConfig config;
+    KisTextureTile::FilterMode mode = config.useOpenGLTrilinearFiltering() ? KisTextureTile::TrilinearFilterMode : KisTextureTile::BilinearFilterMode;
+
     for (int row = 0; row <= lastRow; row++) {
         for (int col = 0; col <= lastCol; col++) {
             QRect tileRect = calculateTileRect(col, row);
 
             KisTextureTile *tile = new KisTextureTile(tileRect,
                                                       &m_texturesInfo,
-                                                      emptyTileData.constData());
+                                                      emptyTileData.constData(),
+                                                      mode);
             m_textureTiles.append(tile);
         }
     }
@@ -239,17 +249,17 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
             dstCS = KoColorSpaceRegistry::instance()->rgb16(m_monitorProfile);
             break;
         case GL_HALF_FLOAT_ARB:
-            dstCS = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F16", m_monitorProfile);
+            dstCS = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F16", 0);
             break;
         case GL_FLOAT:
-            dstCS = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F32", m_monitorProfile);
+            dstCS = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F32", 0);
             break;
 #endif
         default:
             qFatal("Unknown m_imageTextureType");
         }
 
-        tileInfo.convertTo(dstCS);
+        tileInfo.convertTo(dstCS, m_renderingIntent, m_conversionFlags);
         KisTextureTile *tile = getTextureTileCR(tileInfo.tileCol(), tileInfo.tileRow());
         tile->update(tileInfo);
         tileInfo.destroy();
@@ -288,60 +298,29 @@ void KisOpenGLImageTextures::slotImageSizeChanged(qint32 /*w*/, qint32 /*h*/)
     createImageTextureTiles();
 }
 
-void KisOpenGLImageTextures::setMonitorProfile(KoColorProfile *monitorProfile)
+void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
-    if (monitorProfile != m_monitorProfile) {
+    Q_ASSERT(renderingIntent < 4);
+    if (monitorProfile != m_monitorProfile ||
+        renderingIntent != m_renderingIntent ||
+        conversionFlags != m_conversionFlags) {
+
         m_monitorProfile = monitorProfile;
-        KisOpenGLUpdateInfoSP info = updateCache(m_image->bounds());
-        recalculateCache(info);
+        m_renderingIntent = renderingIntent;
+        m_conversionFlags = conversionFlags;
     }
 }
 
-void KisOpenGLImageTextures::setHDRExposure(float exposure)
+void KisOpenGLImageTextures::setDisplayFilter(KisDisplayFilter *displayFilter)
 {
-    if (exposure != m_exposure) {
-        m_exposure = exposure;
-
-        if (m_image->colorSpace()->hasHighDynamicRange()) {
-#ifdef HAVE_GLEW
-            if (m_usingHDRExposureProgram) {
-                HDRExposureProgram->setExposure(exposure);
-            } else {
-#endif
-
-#ifdef __GNUC__
-#warning "FIXME: Move this setOverrideCursor to a higher level"
-#else
-#pragma WARNING( "FIXME: Move this setOverrideCursor to a higher level") { )
-#endif
-                QApplication::setOverrideCursor(Qt::WaitCursor);
-                KisOpenGLUpdateInfoSP info = updateCache(m_image->bounds());
-                recalculateCache(info);
-                QApplication::restoreOverrideCursor();
-#ifdef HAVE_GLEW
-            }
-#endif
-        }
-    }
-}
-
-void KisOpenGLImageTextures::createHDRExposureProgramIfCan()
-{
-    KisConfig cfg;
-    if (!cfg.useOpenGLShaders()) return;
-
-#ifdef HAVE_GLEW
-    if (!HDRExposureProgram && KisOpenGL::hasShadingLanguage()) {
-        dbgUI << "Creating shared HDR exposure program";
-        HDRExposureProgram = new KisOpenGLHDRExposureProgram();
-        Q_CHECK_PTR(HDRExposureProgram);
-    }
-#endif
+//    qDebug() << "setting display filter with exposure" << displayFilter->exposure << "and program" << displayFilter->program();
+    m_displayFilter = displayFilter;
 }
 
 bool KisOpenGLImageTextures::usingHDRExposureProgram() const
 {
 #ifdef HAVE_GLEW
+//    qDebug() << "usingHDRExposureProgram()" << m_usingHDRExposureProgram;
     return m_usingHDRExposureProgram;
 #else
     return false;
@@ -351,8 +330,9 @@ bool KisOpenGLImageTextures::usingHDRExposureProgram() const
 void KisOpenGLImageTextures::activateHDRExposureProgram()
 {
 #ifdef HAVE_GLEW
-    if (m_usingHDRExposureProgram) {
-        HDRExposureProgram->activate();
+//    qDebug() << "activateHDRExposureProgram();" << m_usingHDRExposureProgram << m_displayFilter << m_displayFilter->program();
+    if (m_usingHDRExposureProgram && m_displayFilter && m_displayFilter->program()) {
+        glUseProgram(m_displayFilter->program());
     }
 #endif
 }
@@ -360,8 +340,9 @@ void KisOpenGLImageTextures::activateHDRExposureProgram()
 void KisOpenGLImageTextures::deactivateHDRExposureProgram()
 {
 #ifdef HAVE_GLEW
+//     qDebug() << "deactivateHDRExposureProgram();" << m_usingHDRExposureProgram;
     if (m_usingHDRExposureProgram) {
-        KisOpenGLProgram::deactivate();
+        glUseProgram(0);
     }
 #endif
 }
@@ -402,13 +383,12 @@ void KisOpenGLImageTextures::updateTextureFormat()
             if (GLEW_ARB_texture_float) {
                 m_texturesInfo.format = GL_RGBA16F_ARB;
                 dbgUI << "Using ARB half";
-            } else {
-                Q_ASSERT(GLEW_ATI_texture_float);
+            }
+            else if (GLEW_ATI_texture_float){
                 m_texturesInfo.format = GL_RGBA_FLOAT16_ATI;
                 dbgUI << "Using ATI half";
             }
-
-            if (GLEW_ARB_half_float_pixel) {
+            else if (GLEW_ARB_half_float_pixel) {
                 dbgUI << "Pixel type half";
                 m_texturesInfo.type = GL_HALF_FLOAT_ARB;
             } else {
@@ -424,16 +404,17 @@ void KisOpenGLImageTextures::updateTextureFormat()
             if (GLEW_ARB_texture_float) {
                 m_texturesInfo.format = GL_RGBA32F_ARB;
                 dbgUI << "Using ARB float";
-            } else {
-                Q_ASSERT(GLEW_ATI_texture_float);
+                m_texturesInfo.type = GL_FLOAT;
+                m_usingHDRExposureProgram = true;
+            }
+            else if (GLEW_ATI_texture_float) {
                 m_texturesInfo.format = GL_RGBA_FLOAT32_ATI;
                 dbgUI << "Using ATI float";
+                m_texturesInfo.type = GL_FLOAT;
+                m_usingHDRExposureProgram = true;
             }
-
-            m_texturesInfo.type = GL_FLOAT;
-            m_usingHDRExposureProgram = true;
         }
-        else if (colorDepthId != Integer8BitsColorDepthID) {
+        else if (colorDepthId == Integer16BitsColorDepthID) {
             dbgUI << "Using 16 bits rgba";
             m_texturesInfo.format = GL_RGBA16;
             m_texturesInfo.type = GL_UNSIGNED_SHORT;
@@ -457,10 +438,7 @@ bool KisOpenGLImageTextures::imageCanUseHDRExposureProgram(KisImageWSP image)
     KisConfig cfg;
 
     if (!image->colorSpace()->hasHighDynamicRange() ||
-        !cfg.useOpenGLShaders() ||
-        !HDRExposureProgram ||
-        !HDRExposureProgram->isValid()) {
-
+        !cfg.useOpenGLShaders()) {
         return false;
     }
 
@@ -470,9 +448,11 @@ bool KisOpenGLImageTextures::imageCanUseHDRExposureProgram(KisImageWSP image)
 
     if (!(    colorModelId == RGBAColorModelID
               && (colorDepthId == Float16BitsColorDepthID || colorDepthId == Float32BitsColorDepthID)
-              && (GLEW_ARB_texture_float || GLEW_ATI_texture_float))) {
+              && (GLEW_ARB_texture_float || GLEW_ATI_texture_float || GLEW_ARB_half_float_pixel))) {
         return false;
     }
+
+//    qDebug() << "imageCanUseHDRExposureProgram()!";
     return true;
 #else
     Q_UNUSED(image);

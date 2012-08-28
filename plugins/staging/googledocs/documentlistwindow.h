@@ -36,13 +36,15 @@ public:
     ~DocumentListWindow();
     QString currentDocument();
 
+public slots:
+    void hideDialog();
+
 private slots:
     void getClickedDocument(const QModelIndex & index);
     void fetchDocument();
 
 private:
     Ui_ListDialog *m_docListDialog;
-    QList <GoogleDocument *> m_documentList;
     GoogleDocumentService *m_gService;
 };
 

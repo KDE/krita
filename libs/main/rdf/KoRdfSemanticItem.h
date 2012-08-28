@@ -24,6 +24,7 @@
 
 #include <QObject>
 #include <QSharedData>
+#include <QExplicitlySharedDataPointer>
 #include <QMimeData>
 #include <kdatetime.h>
 #include <Soprano/Soprano>
@@ -51,7 +52,7 @@ class QTreeWidgetItem;
  * @see KoDocumentRdf
  *
  */
-class KOMAIN_EXPORT KoRdfSemanticItem : public QObject
+class KOMAIN_EXPORT KoRdfSemanticItem : public QObject, public QSharedData
 {
     Q_OBJECT
 
@@ -254,37 +255,37 @@ public:
      * classNames(). Useful for menus and other places that want to
      * allow the user to create new SemanticItem Objects.
      */
-    static KoRdfSemanticItem* createSemanticItem(QObject *parent, const KoDocumentRdf *rdf, const QString &semanticClass);
+    static QExplicitlySharedDataPointer<KoRdfSemanticItem> createSemanticItem(QObject *parent, const KoDocumentRdf *rdf, const QString &semanticClass);
 
     /**
      * Get the system semantic stylesheets that are supported for this
      * particular semantic item subclass.
      */
-    virtual QList<KoSemanticStylesheet*> stylesheets() const = 0;
+    virtual QList<hKoSemanticStylesheet> stylesheets() const = 0;
     /**
      * Get the user created/editable semantic stylesheets that are
      * supported for this particular semantic item subclass.
      */
-    QList<KoSemanticStylesheet*> userStylesheets() const;
+    QList<hKoSemanticStylesheet> userStylesheets() const;
 
     /**
      * Unambiguiously find a stylesheet by its UUID. The sheet can
      * be either user or system as long as it has the uuid you want.
      */
-    KoSemanticStylesheet *findStylesheetByUuid(const QString &uuid) const;
+    hKoSemanticStylesheet findStylesheetByUuid(const QString &uuid) const;
 
     /**
      * Find a user/system stylesheet by name.
      * sheetType is one of TYPE_SYSTEM/TYPE_USER.
      * n is the name of the stylesheet you want.
      */
-    KoSemanticStylesheet *findStylesheetByName(const QString &sheetType, const QString &n) const;
+    hKoSemanticStylesheet findStylesheetByName(const QString &sheetType, const QString &n) const;
     /**
      * Find a user/system stylesheet by name.
      * ssl is either stylesheets() or userStylesheets()
      * n is the name of the stylesheet you want.
      */
-    KoSemanticStylesheet *findStylesheetByName(const QList<KoSemanticStylesheet*> &ssl, const QString &n) const;
+    hKoSemanticStylesheet findStylesheetByName(const QList<hKoSemanticStylesheet> &ssl, const QString &n) const;
 
     /**
      * Get the default stylesheet for this subclass of Semantic Item.
@@ -295,7 +296,7 @@ public:
      * @see KoRdfSemanticItemViewSite
      * @see KoRdfSemanticItemViewSite::stylesheet()
      */
-    KoSemanticStylesheet *defaultStylesheet() const;
+    hKoSemanticStylesheet defaultStylesheet() const;
     /**
      * Set the default stylesheet for this subclass of Semantic Item.
      *
@@ -303,17 +304,17 @@ public:
      * semantic item, use KoRdfSemanticItemViewSite::applyStylesheet().
      * @see KoRdfSemanticItemViewSite::applyStylesheet()
      */
-    void defaultStylesheet(KoSemanticStylesheet *ss);
+    void defaultStylesheet(hKoSemanticStylesheet ss);
 
     /**
      * Create a new user stylesheet
      */
-    KoSemanticStylesheet *createUserStylesheet(const QString &name, const QString &templateString = QString());
+    hKoSemanticStylesheet createUserStylesheet(const QString &name, const QString &templateString = QString());
 
     /**
      * Destroy a user stylesheet
      */
-    void destroyUserStylesheet(KoSemanticStylesheet *ss);
+    void destroyUserStylesheet(hKoSemanticStylesheet ss);
 
     /**
      * Load the user stylesheets from the given Rdf model. They are
@@ -321,7 +322,7 @@ public:
      *
      * @see saveUserStylesheets()
      */
-    void loadUserStylesheets(Soprano::Model *model);
+    void loadUserStylesheets(QSharedPointer<Soprano::Model> model);
     /**
      * Save the user stylesheets to the Rdf model given.
      *
@@ -338,7 +339,7 @@ public:
      * @see loadUserStylesheets()
      * @see classNames()
      */
-    void saveUserStylesheets(Soprano::Model *model, const Soprano::Node &context) const;
+    void saveUserStylesheets(QSharedPointer<Soprano::Model> model, const Soprano::Node &context) const;
 
 
 protected slots:
@@ -346,7 +347,7 @@ protected slots:
      * In case the stylesheets move to using a QMap<String,sheet> or
      * we want to know when a stylesheet has been renamed.
      */
-    void onUserStylesheetRenamed(KoSemanticStylesheet *ss, const QString &oldName, const QString &newName);
+    void onUserStylesheetRenamed(hKoSemanticStylesheet ss, const QString &oldName, const QString &newName);
 
 private:
     /**

@@ -127,7 +127,7 @@ private slots:
 
 private:
 
-    KoSemanticStylesheet *stylesheetFromComboBox(QComboBox *w) const;
+    hKoSemanticStylesheet stylesheetFromComboBox(QComboBox *w) const;
 
     class KoDocumentRdfEditWidgetPrivate;
     KoDocumentRdfEditWidgetPrivate *const d;

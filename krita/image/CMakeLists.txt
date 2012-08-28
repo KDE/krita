@@ -19,14 +19,9 @@ set(libkritatile_SRCS
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tile_data_pooler.cc
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiled_data_manager.cc
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_memento_manager.cc
-    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tilediterator.cc
-    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiledrectiterator.cc
-    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiledvlineiterator.cc
-    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiledhlineiterator.cc
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_hline_iterator.cpp
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_vline_iterator.cpp
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_rect_iterator.cpp
-    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiled_random_accessor.cc
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_random_accessor.cc
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/swap/kis_abstract_compression.cpp
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/swap/kis_lzf_compression.cpp
@@ -148,7 +143,6 @@ set(kritaimage_LIB_SRCS
    kis_image.cc
    kis_image_signal_router.cpp
    kis_image_config.cpp
-   kis_iterator.cc
    kis_layer.cc
    kis_indirect_painting_support.cpp
    kis_mask.cc
@@ -176,7 +170,6 @@ set(kritaimage_LIB_SRCS
    kis_pixel_selection.cpp
    kis_processing_information.cpp
    kis_properties_configuration.cc
-   kis_random_accessor.cpp
    kis_random_accessor_ng.cpp
    kis_random_generator.cc
    kis_random_sub_accessor.cpp
@@ -287,9 +280,6 @@ install( FILES
     kis_generic_colorspace.h
     kis_global.h
     kis_image.h
-    kis_iterator.h
-    kis_iterators_pixel.h
-    kis_iterator_pixel_trait.h
     kis_mask.h
     kis_node.h
     kis_node_facade.h
@@ -298,8 +288,6 @@ install( FILES
     kis_paint_device.h
     kis_properties_configuration.h
     kis_processing_information.h
-    kis_random_accessor.h
-    kis_iterators_pixel.h
     kis_transform_worker.h
     kis_perspectivetransform_worker.h
     kis_warptransform_worker.h

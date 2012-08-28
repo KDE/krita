@@ -94,9 +94,7 @@ void KoTextEditor::Private::documentCommandAdded()
             QTextDocument *doc = m_document.data();
             if (doc == 0)
                 return;
-            KoTextDocument(doc).textEditor()->cursor()->beginEditBlock(); //These are needed to get around a Qt bug in 4.8. A change through a QTextCursor outside an editBlock will crash (cursor position calculation on non layed out doc).
             doc->undo(KoTextDocument(doc).textEditor()->cursor());
-            KoTextDocument(doc).textEditor()->cursor()->endEditBlock();
             m_p->emitTextFormatChanged();
         }
 
@@ -104,9 +102,7 @@ void KoTextEditor::Private::documentCommandAdded()
             QTextDocument *doc = m_document.data();
             if (doc == 0)
                 return;
-            KoTextDocument(doc).textEditor()->cursor()->beginEditBlock(); //Same as above
             doc->redo(KoTextDocument(doc).textEditor()->cursor());
-            KoTextDocument(doc).textEditor()->cursor()->endEditBlock();
             m_p->emitTextFormatChanged();
         }
 
@@ -281,7 +277,7 @@ KUndo2Command *KoTextEditor::beginEditBlock(QString title)
     kDebug(32500) << "commandStack count: " << d->commandStack.count();
     kDebug(32500) << "customCommandCount counter: " << d->customCommandCount;
     if (!d->customCommandCount) {
-        // We are not in a custom macro command. So we first need to update the KoTextEditor's state to Custom. Additionnaly, if the commandStack is empty, we need to create a master headCommand for our macro and push it on the stack.
+        // We are not in a custom macro command. So we first need to update the KoTextEditor's state to Custom. Additionally, if the commandStack is empty, we need to create a master headCommand for our macro and push it on the stack.
         kDebug(32500) << "we are not in a custom command. will update state to custom";
         d->updateState(KoTextEditor::Private::Custom, title);
         kDebug(32500) << "commandStack count: " << d->commandStack.count();

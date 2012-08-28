@@ -43,6 +43,7 @@
 #include <kis_paint_device.h>
 #include <kis_paint_layer.h>
 #include <kis_transaction.h>
+#include "kis_iterator_ng.h"
 
 #include <metadata/kis_meta_data_entry.h>
 #include <metadata/kis_meta_data_schema.h>
@@ -166,20 +167,20 @@ void decodeData1(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP 
         file.setFrameBuffer(frameBuffer);
         file.readPixels(ystart + y);
         _T_ *rgba = pixels.data();
-        KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, y, width);
-        while (!it.isDone()) {
+        KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, y, width);
+        do {
 
             // XXX: For now unmultiply the alpha, though compositing will be faster if we
             // keep it premultiplied.
             _T_ unmultipliedRed = *rgba;
 
-            _T_* dst = reinterpret_cast<_T_*>(it.rawData());
+            _T_* dst = reinterpret_cast<_T_*>(it->rawData());
 
             *dst = unmultipliedRed;
 
-            ++it;
+
             ++rgba;
-        }
+        } while (it->nextPixel());
     }
 
 }
@@ -218,21 +219,21 @@ void decodeData4(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP 
         file.setFrameBuffer(frameBuffer);
         file.readPixels(ystart + y);
         Rgba *rgba = pixels.data();
-        KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, y, width);
-        while (!it.isDone()) {
+        KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, y, width);
+        do {
 
             // XXX: For now unmultiply the alpha, though compositing will be faster if we
             // keep it premultiplied.
-            _T_ unmultipliedRed = rgba -> r;
-            _T_ unmultipliedGreen = rgba -> g;
-            _T_ unmultipliedBlue = rgba -> b;
+            _T_ unmultipliedRed = rgba->r;
+            _T_ unmultipliedGreen = rgba->g;
+            _T_ unmultipliedBlue = rgba->b;
 
             if (hasAlpha && rgba -> a >= HALF_EPSILON) {
-                unmultipliedRed /= rgba -> a;
-                unmultipliedGreen /= rgba -> a;
-                unmultipliedBlue /= rgba -> a;
+                unmultipliedRed /= rgba->a;
+                unmultipliedGreen /= rgba->a;
+                unmultipliedBlue /= rgba->a;
             }
-            typename KoRgbTraits<_T_>::Pixel* dst = reinterpret_cast<typename KoRgbTraits<_T_>::Pixel*>(it.rawData());
+            typename KoRgbTraits<_T_>::Pixel* dst = reinterpret_cast<typename KoRgbTraits<_T_>::Pixel*>(it->rawData());
 
             dst->red = unmultipliedRed;
             dst->green = unmultipliedGreen;
@@ -243,9 +244,9 @@ void decodeData4(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP 
                 dst->alpha = 1.0;
             }
 
-            ++it;
+
             ++rgba;
-        }
+        } while (it->nextPixel());
     }
 
 }
@@ -367,6 +368,7 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
     for (int i = 0; i < informationObjects.size(); ++i) {
         ExrPaintLayerInfo& info = informationObjects[i];
         QString modelId;
+
         if (info.channelMap.size() == 1) {
             modelId = GrayColorModelID.id();
             QString key = info.channelMap.begin().key();
@@ -376,10 +378,13 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
                 info.channelMap.clear();
                 info.channelMap["G"] = channel;
             }
-        } else if (info.channelMap.size() == 3 || info.channelMap.size() == 4) {
+        }
+        else if (info.channelMap.size() == 3 || info.channelMap.size() == 4) {
+
             if (info.channelMap.contains("R") && info.channelMap.contains("G") && info.channelMap.contains("B")) {
                 modelId = RGBAColorModelID.id();
-            } else if (info.channelMap.contains("X") && info.channelMap.contains("Y") && info.channelMap.contains("Z")) {
+            }
+            else if (info.channelMap.contains("X") && info.channelMap.contains("Y") && info.channelMap.contains("Z")) {
                 modelId = XYZAColorModelID.id();
                 QMap<QString, QString> newChannelMap;
                 if (info.channelMap.contains("W")) {
@@ -396,7 +401,8 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
                 newChannelMap["G"] = info.channelMap["Y"];
                 newChannelMap["R"] = info.channelMap["Z"];
                 info.channelMap = newChannelMap;
-            } else {
+            }
+            else {
                 modelId = RGBAColorModelID.id();
                 QMap<QString, QString> newChannelMap;
                 QMap<QString, QString>::iterator it = info.channelMap.begin();
@@ -413,6 +419,7 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
                     newChannelMap["A"] = it.value();
                     info.remappedChannels.push_back(ExrPaintLayerInfo::Remap(it.key(), "A"));
                 }
+
                 info.channelMap = newChannelMap;
             }
         }
@@ -420,6 +427,7 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
             info.colorSpace = kisTypeToColorSpace(modelId, info.imageType);
         }
     }
+
     // Get colorspace
     dbgFile << "Image type = " << imageType;
     const KoColorSpace* colorSpace = kisTypeToColorSpace(RGBAColorModelID.id(), imageType);
@@ -601,10 +609,9 @@ template<typename _T_, int size, int alphaPos>
 void EncoderImpl<_T_, size, alphaPos>::encodeData(int line)
 {
     ExrPixel *rgba = pixels.data();
-    KisHLineIterator it = info->layer->paintDevice()->createHLineIterator(0, line, m_width);
-    while (!it.isDone()) {
-
-        const _T_* dst = reinterpret_cast < const _T_* >(it.oldRawData());
+    KisHLineIteratorSP it = info->layer->paintDevice()->createHLineIteratorNG(0, line, m_width);
+    do {
+        const _T_* dst = reinterpret_cast < const _T_* >(it->oldRawData());
 
         if (alphaPos == -1) {
             for (int i = 0; i < size; ++i) {
@@ -619,10 +626,8 @@ void EncoderImpl<_T_, size, alphaPos>::encodeData(int line)
             }
             rgba->data[alphaPos] = alpha;
         }
-
-        ++it;
         ++rgba;
-    }
+    } while (it->nextPixel());
 }
 
 Encoder* encoder(Imf::OutputFile& file, const ExrPaintLayerSaveInfo& info, int width)

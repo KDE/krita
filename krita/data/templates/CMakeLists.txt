@@ -1,4 +1,5 @@
-add_subdirectory( rgb_u8 )
-add_subdirectory( cmyk_u8 )
-add_subdirectory( gray_u8 )
 add_subdirectory( comics )
+add_subdirectory( design )
+add_subdirectory( dslr )
+add_subdirectory( film )
+add_subdirectory( texture )

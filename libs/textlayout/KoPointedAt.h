@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Casper Boemann, KO GmbH <cbo@kogmbh.com>
- * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 C. Boemann, KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2011 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,10 +24,13 @@
 
 #include <QString>
 #include <QTextCursor>
+#include <QPointF>
 
 class KoBookmark;
 class QTextDocument;
+class QTexttable;
 class KoInlineTextObjectManager;
+class KoInlineNote;
 
 class TEXTLAYOUT_EXPORT KoPointedAt
 {
@@ -35,11 +38,26 @@ public:
     KoPointedAt();
     KoPointedAt(KoPointedAt *other);
 
-    void fillInBookmark(QTextCursor cursor, KoInlineTextObjectManager *inlineManager);
+    void fillInLinks(const QTextCursor &cursor, KoInlineTextObjectManager *inlineManager);
 
+    enum TableHit {
+          None
+        , ColumnDivider
+        , RowDivider
+    };
     int position;
     KoBookmark *bookmark;
     QString externalHRef;
+    KoInlineNote *note;
+    int noteReference;
+    QTextTable *table;
+    TableHit tableHit;
+    int tableRowDivider;
+    int tableColumnDivider;
+    qreal tableLeadSize;
+    qreal tableTrailSize;
+    QPointF tableDividerPos;
+
 };
 
 #endif

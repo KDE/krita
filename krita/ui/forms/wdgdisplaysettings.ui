@@ -10,6 +10,12 @@
     <height>435</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="windowTitle">
    <string>Display</string>
   </property>
@@ -239,6 +245,19 @@ then you can try to enable this.</string>
         </property>
         <property name="text">
          <string>Use workaround for tool outlines</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QCheckBox" name="cbUseOpenGLTrilinearFiltering">
+        <property name="toolTip">
+         <string>Use trilinear filtering when zooming. Disabling this may improve painting performance.</string>
+        </property>
+        <property name="text">
+         <string>Use trilinear texture filtering</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>

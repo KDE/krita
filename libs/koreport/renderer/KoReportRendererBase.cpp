@@ -25,6 +25,7 @@
 #include "KoReportHTMLTableRenderer.h"
 #include "KoReportHTMLCSSRenderer.h"
 #include "KoReportODTRenderer.h"
+#include "KoOdtFrameReportRenderer.h"
 
 KoReportRendererContext::KoReportRendererContext()
  : painter(0), printer(0)
@@ -60,8 +61,11 @@ KoReportRendererBase* KoReportRendererFactory::createInstance(const QString& key
     if (key.toLower() == QLatin1String("htmlcss")) {
         return new KoReportHTMLCSSRenderer();
     }
-    if (key.toLower() == QLatin1String("odt")) {
+    if (key.toLower() == QLatin1String("odttable") || key.toLower() == QLatin1String("odt")) {
         return new KoReportODTRenderer();
     }
-    return 0;
+    if (key.toLower() == QLatin1String("odtframes")) {
+        return new KoOdtFrameReportRenderer();
+}
+return 0;
 }

@@ -41,6 +41,7 @@
 #include <KoText.h>
 #include <KoImageCollection.h>
 #include <KoImageData.h>
+#include <KoImageData_p.h>
 #include <KoOdfNumberDefinition.h>
 #include <KoGenStyle.h>
 #include <KoTextSharedSavingData.h>
@@ -64,6 +65,7 @@ KoListLevelProperties::KoListLevelProperties()
 
     setRelativeBulletSize(100);
     setAlignmentMode(false);
+    setDisplayLevel(1);
     connect(this,SIGNAL(styleChanged(int)),SLOT(onStyleChanged(int)));
 }
 
@@ -149,6 +151,16 @@ QColor KoListLevelProperties::propertyColor(int key) const
     if (variant.isNull())
         return QColor(Qt::black);
     return qvariant_cast<QColor>(variant);
+}
+
+QVariant KoListLevelProperties::property(int key) const
+{
+    QVariant variant = d->stylesPrivate.value(key);
+    if (!variant.isNull()) {
+        return variant;
+    } else {
+        return QVariant();
+    }
 }
 
 void KoListLevelProperties::applyStyle(QTextListFormat &format) const
@@ -250,7 +262,7 @@ QSharedPointer<KoCharacterStyle> KoListLevelProperties::characterProperties() co
 {
     const QVariant v = d->stylesPrivate.value(KoListStyle::CharacterProperties);
     if (v.isNull()) {
-        return static_cast< QSharedPointer<KoCharacterStyle> >(0);
+        return QSharedPointer<KoCharacterStyle>(0);
     }
     return v.value< QSharedPointer<KoCharacterStyle> >();
 }
@@ -318,6 +330,11 @@ qreal KoListLevelProperties::height() const
 void KoListLevelProperties::setBulletImage(KoImageData *imageData)
 {
     setProperty(KoListStyle::BulletImage, QVariant::fromValue(imageData));
+}
+
+KoImageData *KoListLevelProperties::bulletImage() const
+{
+    return property(KoListStyle::BulletImage).value< KoImageData * >();
 }
 
 KoListLevelProperties & KoListLevelProperties::operator=(const KoListLevelProperties & other)
@@ -566,7 +583,7 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
         if (style.localName() == "outline-level-style") {
             setOutlineList(true);
         }
-        setRelativeBulletSize(100); //arbitary value for numbered list
+        setRelativeBulletSize(100); //arbitrary value for numbered list
 
         KoOdfNumberDefinition numberDefinition;
         numberDefinition.loadOdf(style);
@@ -768,14 +785,6 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
     }
 }
 
-static QString toPoint(qreal number)
-{
-    QString str;
-    str.setNum(number, 'f', DBL_DIG);
-    str += "pt";
-    return str;
-}
-
 void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &context) const
 {
     bool isNumber = KoListStyle::isNumberingStyle(d->stylesPrivate.value(QTextListFormat::ListStyle).toInt());
@@ -817,12 +826,14 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
     }
     else if (style() == KoListStyle::ImageItem) {
         KoImageData *imageData = d->stylesPrivate.value(KoListStyle::BulletImage).value<KoImageData *>();
-        if (imageData) {
+        Q_ASSERT(imageData->priv()->collection);
+        if (imageData && imageData->priv()->collection) {
             writer->startElement("text:list-level-style-image");
             writer->addAttribute("xlink:show", "embed");
             writer->addAttribute("xlink:actuate", "onLoad");
             writer->addAttribute("xlink:type", "simple");
             writer->addAttribute("xlink:href", context.imageHref(imageData));
+            context.addDataCenter(imageData->priv()->collection);
         }
     }
     else {
@@ -857,21 +868,28 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
 
     writer->startElement("style:list-level-properties", false);
 
+    if (d->stylesPrivate.contains(KoListStyle::Width)) {
+        writer->addAttributePt("fo:width", width());
+    }
+    if (d->stylesPrivate.contains(KoListStyle::Height)) {
+        writer->addAttributePt("fo:height", height());
+    }
+
     if(d->stylesPrivate.contains(KoListStyle::AlignmentMode) && alignmentMode()==false) {
 
         writer->addAttribute("text:list-level-position-and-space-mode","label-width-and-position");
 
         if (d->stylesPrivate.contains(KoListStyle::Indent))
-            writer->addAttribute("text:space-before", toPoint(indent()));
+            writer->addAttributePt("text:space-before", indent());
 
         if (d->stylesPrivate.contains(KoListStyle::MinimumWidth))
-            writer->addAttribute("text:min-label-width", toPoint(minimumWidth()));
+            writer->addAttributePt("text:min-label-width", minimumWidth());
 
         if (d->stylesPrivate.contains(KoListStyle::Alignment))
             writer->addAttribute("fo:text-align", KoText::alignmentToString(alignment()));
 
         if (d->stylesPrivate.contains(KoListStyle::MinimumDistance))
-            writer->addAttribute("text:min-label-distance", toPoint(minimumDistance()));
+            writer->addAttributePt("text:min-label-distance", minimumDistance());
     } else {
         writer->addAttribute("text:list-level-position-and-space-mode","label-alignment");
 
@@ -880,27 +898,19 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
 
         writer->startElement("style:list-level-label-alignment");
 
-        KoUnit unit(KoUnit::Centimeter);
         if(labelFollowedBy()==KoListStyle::ListTab) {
             writer->addAttribute("text:label-followed-by","listtab");
-            writer->addAttribute("text:list-tab-stop-position",unit.toUserStringValue(tabStopPosition())+"cm");
+            writer->addAttributePt("text:list-tab-stop-position", tabStopPosition());
         } else if (labelFollowedBy()==KoListStyle::Nothing){
             writer->addAttribute("text:label-followed-by","nothing");
         }else{
             writer->addAttribute("text:label-followed-by","space");
         }
 
-        writer->addAttribute("fo:text-indent",unit.toUserStringValue(textIndent())+"cm");
-        writer->addAttribute("fo:margin-left",unit.toUserStringValue(margin())+"cm");
+        writer->addAttributePt("fo:text-indent", textIndent());
+        writer->addAttributePt("fo:margin-left", margin());
 
         writer->endElement();
-    }
-
-    if (d->stylesPrivate.contains(KoListStyle::Width)) {
-        writer->addAttribute("fo:width", toPoint(width()));
-    }
-    if (d->stylesPrivate.contains(KoListStyle::Height)) {
-        writer->addAttribute("fo:height", toPoint(height()));
     }
 
     writer->endElement(); // list-level-properties

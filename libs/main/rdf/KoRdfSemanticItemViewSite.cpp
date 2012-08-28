@@ -32,8 +32,8 @@ class KoRdfSemanticItemViewSitePrivate
 {
 public:
     QString m_xmlid;
-    KoRdfSemanticItem *m_semItem;
-    KoRdfSemanticItemViewSitePrivate(KoRdfSemanticItem *si, const QString &xmlid)
+    hKoRdfSemanticItem m_semItem;
+    KoRdfSemanticItemViewSitePrivate(hKoRdfSemanticItem si, const QString &xmlid)
         : m_xmlid(xmlid)
         , m_semItem(si)
         {
@@ -41,7 +41,7 @@ public:
 };
 
 
-KoRdfSemanticItemViewSite::KoRdfSemanticItemViewSite(KoRdfSemanticItem *si, const QString &xmlid)
+KoRdfSemanticItemViewSite::KoRdfSemanticItemViewSite(hKoRdfSemanticItem si, const QString &xmlid)
     :
     d (new KoRdfSemanticItemViewSitePrivate(si,xmlid))
 {
@@ -55,7 +55,7 @@ KoRdfSemanticItemViewSite::~KoRdfSemanticItemViewSite()
 Soprano::Node KoRdfSemanticItemViewSite::linkingSubject() const
 {
     const KoDocumentRdf *documentRdf = d->m_semItem->documentRdf();
-    Soprano::Model *m = const_cast<Soprano::Model*>(documentRdf->model());
+    QSharedPointer<Soprano::Model> m = documentRdf->model();
     Node pred(QUrl("http://calligra.org/rdf/site/package/common#idref"));
     Node obj = Node::createLiteralNode(d->m_xmlid);
     Node context = documentRdf->manifestRdfNode();
@@ -75,7 +75,7 @@ QString KoRdfSemanticItemViewSite::getProperty(const QString &prop, const QStrin
     Soprano::Node ls = linkingSubject();
     QString fqprop = "http://calligra.org/rdf/site#" + prop;
     const KoDocumentRdf *rdf = d->m_semItem->documentRdf();
-    const Soprano::Model *m = rdf->model();
+    QSharedPointer<Soprano::Model> m = rdf->model();
     StatementIterator it = m->listStatements(ls, Node::createResourceNode(QUrl(fqprop)),
                                Node(), rdf->manifestRdfNode());
     QList<Statement> allStatements = it.allElements();
@@ -89,21 +89,21 @@ void KoRdfSemanticItemViewSite::setProperty(const QString &prop, const QString &
 {
     QString fqprop = "http://calligra.org/rdf/site#" + prop;
     const KoDocumentRdf *documentRdf = d->m_semItem->documentRdf();
-    Soprano::Model *m = const_cast<Soprano::Model*>(documentRdf->model());
+    QSharedPointer<Soprano::Model> m = documentRdf->model();
     Soprano::Node ls = linkingSubject();
     Soprano::Node pred = Node::createResourceNode(QUrl(fqprop));
     m->removeAllStatements(Statement(ls, pred, Node()));
     m->addStatement(ls, pred,Node::createLiteralNode(v), documentRdf->manifestRdfNode());
 }
 
-KoSemanticStylesheet *KoRdfSemanticItemViewSite::stylesheet() const
+hKoSemanticStylesheet KoRdfSemanticItemViewSite::stylesheet() const
 {
     QString name = getProperty("stylesheet", "name");
     QString type = getProperty("stylesheet-type", KoSemanticStylesheet::stylesheetTypeSystem());
     QString uuid = getProperty("stylesheet-uuid", "");
     kDebug(30015) << "stylesheet at site, format(), xmlid:" << d->m_xmlid;
     kDebug(30015) << " sheet:" << name << " type:" << type;
-    KoSemanticStylesheet *ret(0);
+    hKoSemanticStylesheet ret(0);
     if (!uuid.isEmpty()) {
         ret = d->m_semItem->findStylesheetByUuid(uuid);
     }
@@ -118,7 +118,7 @@ KoSemanticStylesheet *KoRdfSemanticItemViewSite::stylesheet() const
     return ret;
 }
 
-void KoRdfSemanticItemViewSite::applyStylesheet(KoTextEditor *editor, KoSemanticStylesheet *ss)
+void KoRdfSemanticItemViewSite::applyStylesheet(KoTextEditor *editor, hKoSemanticStylesheet ss)
 {
     // Save the stylesheet property and cause a reflow.
     kDebug(30015) << "apply stylesheet at site. format(), xmlid:" << d->m_xmlid << " sheet:" << ss->name();
@@ -134,7 +134,7 @@ void KoRdfSemanticItemViewSite::disassociateStylesheet()
     setProperty("stylesheet-uuid", "");
 }
 
-void KoRdfSemanticItemViewSite::setStylesheetWithoutReflow(KoSemanticStylesheet *ss)
+void KoRdfSemanticItemViewSite::setStylesheetWithoutReflow(hKoSemanticStylesheet ss)
 {
     // Save the stylesheet property
     kDebug(30015) << "apply stylesheet at site. format(), xmlid:" << d->m_xmlid << " sheet:" << ss->name();
@@ -145,7 +145,7 @@ void KoRdfSemanticItemViewSite::setStylesheetWithoutReflow(KoSemanticStylesheet 
 
 void KoRdfSemanticItemViewSite::reflowUsingCurrentStylesheet(KoTextEditor *editor)
 {
-    KoSemanticStylesheet *ss = stylesheet();
+    hKoSemanticStylesheet ss = stylesheet();
     if (ss) {
         ss->format(d->m_semItem, editor, d->m_xmlid);
     }

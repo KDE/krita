@@ -101,6 +101,9 @@ public:
     bool haveShapesSelected();
     bool haveShapesInClipboard();
 
+    /// Checks if the current selection is editabl and has some pixels selected in the pixel selection
+    bool haveEditablePixelSelectionWithPixels();
+
     void grow(qint32 xradius, qint32 yradius);
     void shrink(qint32 xradius, qint32 yradius, bool edge_lock);
     void border(qint32 xradius, qint32 yradius);

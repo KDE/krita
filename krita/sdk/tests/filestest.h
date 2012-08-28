@@ -34,6 +34,7 @@
 #include <KoFilterManager.h>
 
 #include <kis_doc2.h>
+#include <KoPart.h>
 #include <kis_image.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -79,7 +80,9 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
             QString id = doc.image()->colorSpace()->id();
             if (id != "GRAYA" && id != "GRAYA16" && id != "RGBA" && id != "RGBA16") {
                 dbgKrita << "Images need conversion";
-                doc.image()->convertImageColorSpace(KoColorSpaceRegistry::instance()->rgb8());
+                doc.image()->convertImageColorSpace(KoColorSpaceRegistry::instance()->rgb8(),
+                                                    KoColorConversionTransformation::IntentPerceptual,
+                                                    KoColorConversionTransformation::Empty);
             }
 
             KTemporaryFile tmpFile;
@@ -87,7 +90,7 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
             tmpFile.open();
             doc.setBackupFile(false);
             doc.setOutputMimeType("image/png");
-            doc.saveAs("file://" + tmpFile.fileName());
+            doc.documentPart()->saveAs("file://" + tmpFile.fileName());
 
             QImage resultImage(resultFileInfo.absoluteFilePath());
             resultImage = resultImage.convertToFormat(QImage::Format_ARGB32);

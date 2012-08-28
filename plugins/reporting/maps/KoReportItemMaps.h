@@ -29,7 +29,7 @@
 #include <kdebug.h>
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
-#include <MarbleWidget.h>
+#include <marble/MarbleWidget.h>
 #include <RdfForward.h>
 #include <QMap>
 

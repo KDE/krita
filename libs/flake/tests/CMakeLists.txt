@@ -117,9 +117,9 @@ target_link_libraries(TestShapeBackgroundCommand  ${KDE4_KDECORE_LIBS} flake ${Q
 
 ########### end ###############
 
-set(TestShapeBorderCommand_test_SRCS TestShapeBorderCommand.cpp )
-kde4_add_unit_test(TestShapeBorderCommand TESTNAME libs-flake-TestShapeBorderCommand  ${TestShapeBorderCommand_test_SRCS})
-target_link_libraries(TestShapeBorderCommand ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
+set(TestShapeStrokeCommand_test_SRCS TestShapeStrokeCommand.cpp )
+kde4_add_unit_test(TestShapeStrokeCommand TESTNAME libs-flake-TestShapeStrokeCommand  ${TestShapeStrokeCommand_test_SRCS})
+target_link_libraries(TestShapeStrokeCommand ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
 
 ########### end ###############
 

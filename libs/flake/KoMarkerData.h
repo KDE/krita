@@ -74,7 +74,7 @@ public:
     void setWidth(qreal width, qreal penWidth);
 
     /**
-     * Get the positon of the marker
+     * Get the position of the marker
      *
      * @return Position of the marker
      */

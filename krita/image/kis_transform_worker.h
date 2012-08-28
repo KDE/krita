@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -37,7 +37,7 @@ class QTransform;
 class KRITAIMAGE_EXPORT KisTransformWorker
 {
 
-/*What are xshearOrigin, yshearOrigin :
+    /*What are xshearOrigin, yshearOrigin :
 * let's keep it simple and say we only have horizontal shearing (it's similar with vertical shearing)
 * that means we will apply the transformation :
 * x' = x + xshear * y and y' = y, where x,y are the old coordinates of the pixels, and x' y' the new coordinates
@@ -61,13 +61,19 @@ public:
 
     /**
      * Mirror the specified device along the X axis
+     * @param dev device to be mirrored
+     * @param axis the axis around which the device will be mirrored, only used if greater zero
+     * @param selection optional selection that will be used for the mirror
      */
-    static QRect mirrorX(KisPaintDeviceSP dev, const KisSelection* selection = 0);
+    static QRect mirrorX(KisPaintDeviceSP dev, qreal axis = -1.0f, const KisSelection* selection = 0);
 
     /**
      * Mirror the specified device along the Y axis
+     * @param dev device to be mirrored
+     * @param axis the axis around which the device will be mirrored, only used if greater zero
+     * @param selection optional selection that will be used for the mirror
      */
-    static QRect mirrorY(KisPaintDeviceSP dev, const KisSelection* selection = 0);
+    static QRect mirrorY(KisPaintDeviceSP dev, qreal axis = -1.0f, const KisSelection* selection = 0);
 
 
 public:
@@ -106,10 +112,35 @@ private:
                                           qint32 dx,
                                           KisFilterStrategy *filterStrategy, bool fixBorderAlpha);
 
-    void rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst);
-    void rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP dst);
-    void rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst);
-    void rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst);
+    friend class KisTransformWorkerTest;
+
+    static QRect rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst,
+                            QRect boundRect,
+                            KoUpdaterPtr progressUpdater,
+                            int &lastProgressReport,
+                            int &progressTotalSteps,
+                            int &progressStep);
+
+    static QRect rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP dst,
+                               QRect boundRect,
+                               KoUpdaterPtr progressUpdater,
+                               int &lastProgressReport,
+                               int &progressTotalSteps,
+                               int &progressStep);
+
+    static QRect rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst,
+                              QRect boundRect,
+                              KoUpdaterPtr progressUpdater,
+                              int &lastProgressReport,
+                              int &progressTotalSteps,
+                              int &progressStep);
+
+    static QRect rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst,
+                           QRect boundRect,
+                           KoUpdaterPtr progressUpdater,
+                           int &lastProgressReport,
+                           int &progressTotalSteps,
+                           int &progressStep);
 
 private:
     KisPaintDeviceSP m_dev;

@@ -42,7 +42,7 @@ public:
 };
 
 CellRegionStringValidator::Private::Private()
-    : intermediatelyCorrectRegion( "[a-zA-Z0-9$.:;]*")
+    : intermediatelyCorrectRegion("[a-zA-Z0-9$.:;]*")
 {
 }
 
@@ -50,9 +50,9 @@ CellRegionStringValidator::Private::~Private()
 {
 }
 
-CellRegionStringValidator::CellRegionStringValidator( KoChart::ChartModel *model )
-    : QValidator( 0 ),
-      d( new Private )
+CellRegionStringValidator::CellRegionStringValidator(KoChart::ChartModel *model)
+    : QValidator(0),
+      d(new Private)
 {
     d->model = model;
 }
@@ -62,15 +62,14 @@ CellRegionStringValidator::~CellRegionStringValidator()
     delete d;
 }
 
-QValidator::State CellRegionStringValidator::validate( QString &string, 
-                                                       int &pos ) const
+QValidator::State CellRegionStringValidator::validate(QString &string, int &pos) const
 {
-    Q_UNUSED( pos );
+    Q_UNUSED(pos);
 
-    if ( !d->intermediatelyCorrectRegion.exactMatch( string ) )
+    if (!d->intermediatelyCorrectRegion.exactMatch(string))
         return QValidator::Invalid;
 
-    if ( d->model->isCellRegionValid(string) )
+    if (d->model->isCellRegionValid(string))
        return QValidator::Acceptable;
 
     return QValidator::Intermediate;

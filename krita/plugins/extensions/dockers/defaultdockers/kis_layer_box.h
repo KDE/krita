@@ -107,6 +107,9 @@ private slots:
     void slotOpacityChanged();
     void slotOpacitySliderMoved(qreal opacity);
 
+    void slotCollapsed(const QModelIndex &index);
+    void slotExpanded(const QModelIndex &index);
+
 private:
 
     KisCanvas2* m_canvas;

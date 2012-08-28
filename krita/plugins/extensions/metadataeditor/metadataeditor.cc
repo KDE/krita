@@ -56,8 +56,6 @@ metadataeditorPlugin::metadataeditorPlugin(QObject *parent, const QVariantList &
     if (parent->inherits("KisView2")) {
         m_view = (KisView2*) parent;
 
-        setComponentData(metadataeditorPluginFactory::componentData());
-
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/metadataeditor.rc"), true);
 
         KAction *action  = new KAction(i18n("&Edit metadata..."), this);

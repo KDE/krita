@@ -36,9 +36,10 @@ public:
     QTreeWidgetItem *m_peopleItem;
     QTreeWidgetItem *m_eventsItem;
     QTreeWidgetItem *m_locationsItem;
-    QList<KoRdfFoaF*> m_foafs;
-    QList<KoRdfCalendarEvent*> m_cals;
-    QList<KoRdfLocation*> m_locations;
+    QList<hKoRdfFoaF> m_foafs;
+    QList<hKoRdfCalendarEvent> m_cals;
+    QList<hKoRdfLocation> m_locations;
+    QList<hKoRdfLocation> m_tmp;
 
     KoRdfSemanticTreePrivate(QTreeWidget *tree)
         {
@@ -56,7 +57,7 @@ public:
                 tree->expandItem(m_locationsItem);
             }
         }
-    void update(KoDocumentRdf *rdf, Soprano::Model *model);
+    void update(KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> model);
     /**
      * Add the name of each selected child of parent to the 'ret' set.
      */
@@ -112,11 +113,12 @@ void KoRdfSemanticTreePrivate::buildSelectedSet(QTreeWidgetItem *parent, QSet<QS
     }
 }
 
-void KoRdfSemanticTreePrivate::update(KoDocumentRdf *rdf, Soprano::Model *model)
+void KoRdfSemanticTreePrivate::update(KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> model)
 {
     QSet<QString> selectedPeople;
     QSet<QString> selectedEvents;
     QSet<QString> selectedLocations;
+
     buildSelectedSet(m_peopleItem, selectedPeople);
     buildSelectedSet(m_eventsItem, selectedEvents);
     buildSelectedSet(m_locationsItem, selectedLocations);
@@ -129,24 +131,28 @@ void KoRdfSemanticTreePrivate::update(KoDocumentRdf *rdf, Soprano::Model *model)
     m_foafs.clear();
     m_cals.clear();
     m_locations.clear();
+
     // people
     m_foafs = rdf->foaf(model);
-    foreach (KoRdfFoaF *foaf, m_foafs) {
+    foreach (hKoRdfFoaF foaf, m_foafs) {
         KoRdfSemanticTreeWidgetItem *item = foaf->createQTreeWidgetItem(m_peopleItem);
         if (selectedPeople.contains(item->semanticItem()->name())) {
             item->setSelected(true);
         }
     }
     m_tree->expandItem(m_peopleItem);
+
     // events
     m_cals = rdf->calendarEvents(model);
-    foreach (KoRdfCalendarEvent *e, m_cals) {
+    foreach (hKoRdfCalendarEvent e, m_cals) {
         KoRdfSemanticTreeWidgetItem *item = e->createQTreeWidgetItem(m_eventsItem);
         if (selectedEvents.contains(item->semanticItem()->name())) {
             item->setSelected(true);
         }
     }
     m_tree->expandItem(m_eventsItem);
+
+   
     // locations
     if (model) {
         //
@@ -163,7 +169,7 @@ void KoRdfSemanticTreePrivate::update(KoDocumentRdf *rdf, Soprano::Model *model)
         //kDebug(30015) << "expanding lists... new.sz:" << model->statementCount();
     }
     m_locations = rdf->locations(model);
-    foreach (KoRdfLocation *e, m_locations) {
+    foreach (hKoRdfLocation e, m_locations) {
         KoRdfSemanticTreeWidgetItem *item = e->createQTreeWidgetItem(m_locationsItem);
         if (selectedLocations.contains(item->semanticItem()->name())) {
             item->setSelected(true);
@@ -172,7 +178,7 @@ void KoRdfSemanticTreePrivate::update(KoDocumentRdf *rdf, Soprano::Model *model)
     m_tree->expandItem(m_locationsItem);
 }
 
-void KoRdfSemanticTree::update(KoDocumentRdf *rdf, Soprano::Model *model)
+void KoRdfSemanticTree::update(KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> model)
 {
     d->update (rdf,model);
 }

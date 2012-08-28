@@ -25,11 +25,13 @@
 #include <kparts/part.h>
 #include "komain_export.h"
 
+class KoPart;
 class KoDocument;
 class KoMainWindow;
 class KoPrintJob;
 class KoViewPrivate;
 class KoZoomController;
+class KoPageLayout;
 
 // KDE classes
 class KStatusBar;
@@ -40,7 +42,7 @@ class KAction;
 class QToolBar;
 class QDragEnterEvent;
 class QDropEvent;
-
+class QPrintDialog;
 
 /**
  * This class is used to display a @ref KoDocument.
@@ -63,7 +65,7 @@ public:
      *                 must not be zero.
      * @param parent   parent widget for this view.
      */
-    explicit KoView(KoDocument *document, QWidget *parent = 0);
+    KoView(KoPart *part, KoDocument *document, QWidget *parent = 0);
 
     /**
      * Destroys the view and unregisters at the document.
@@ -213,11 +215,6 @@ public:
     void disableAutoScroll();
 
     /**
-     * calls KoDocument::paintEverything()
-     */
-    virtual void paintEverything(QPainter &painter, const QRect &rect);
-
-    /**
      * In order to print the document represented by this view a new print job should
      * be constructed that is capable of doing the printing.
      * The default implementation returns 0, which silently cancels printing.
@@ -230,6 +227,18 @@ public:
      * The default implementation call createPrintJob.
      */
     virtual KoPrintJob * createPdfPrintJob();
+
+    /**
+     * @return the page layout to be used for printing.
+     * Default is the documents layout.
+     * Reimplement if your application needs to use a different layout.
+     */
+    virtual KoPageLayout pageLayout() const;
+
+    /**
+     * Create a QPrintDialog based on the @p printJob
+     */
+    virtual QPrintDialog *createPrintDialog(KoPrintJob *printJob, QWidget *parent);
 
     /**
      * @return the KoMainWindow in which this view is currently.
@@ -365,6 +374,7 @@ signals:
 
 protected slots:
     virtual void slotAutoScroll();
+    virtual void changeAuthorProfile(const QString &profileName);
 
 private:
     virtual void setupGlobalActions(void);

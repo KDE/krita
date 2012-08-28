@@ -102,6 +102,30 @@ KoTableCellStyle::KoTableCellStyle(const QTextTableCellFormat &format, QObject *
     d->paragraphStyle = new KoParagraphStyle(this);
 }
 
+KoTableCellStyle::KoTableCellStyle(const KoTableCellStyle &other)
+    :QObject(other.parent())
+    , d_ptr(new KoTableCellStylePrivate)
+{
+    Q_D(KoTableCellStyle);
+
+    copyProperties(&other);
+    d->paragraphStyle = other.paragraphStyle()->clone(this);
+}
+
+KoTableCellStyle& KoTableCellStyle::operator=(const KoTableCellStyle &other)
+{
+    Q_D(KoTableCellStyle);
+
+    if (this == &other) {
+        return *this;
+    }
+
+    copyProperties(&other);
+    d->paragraphStyle = other.paragraphStyle()->clone(this);
+
+    return *this;
+}
+
 KoTableCellStyle::~KoTableCellStyle()
 {
 }
@@ -218,9 +242,9 @@ void KoTableCellStyle::setPadding(qreal padding)
     setLeftPadding(padding);
 }
 
-KoParagraphStyle *KoTableCellStyle::paragraphStyle()
+KoParagraphStyle *KoTableCellStyle::paragraphStyle() const
 {
-    Q_D(KoTableCellStyle);
+    Q_D(const KoTableCellStyle);
     return d->paragraphStyle;
 }
 
@@ -734,18 +758,6 @@ void KoTableCellStyle::loadOdfProperties(KoShapeLoadingContext &context, KoStyle
         }
     }
 
-    if (styleStack.hasProperty(KoXmlNS::draw, "opacity")) {
-        const QString opacity = styleStack.property(KoXmlNS::draw, "opacity");
-        if (!opacity.isEmpty() && opacity.right(1) == "%") {
-            float percent = opacity.left(opacity.length() - 1).toFloat();
-            QBrush brush = background();
-            QColor color = brush.color();
-            color.setAlphaF(percent / 100.0);
-            brush.setColor(color);
-            setBackground(brush);
-        }
-    }
-
     QString fillStyle = styleStack.property(KoXmlNS::draw, "fill");
     if (fillStyle == "solid" || fillStyle == "hatch") {
         styleStack.save();
@@ -886,9 +898,6 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
                 style.addProperty("fo:background-color", backBrush.color().name(), KoGenStyle::TableCellType);
             else
                 style.addProperty("fo:background-color", "transparent", KoGenStyle::TableCellType);
-            if (!backBrush.isOpaque()) {
-                style.addProperty("draw:opacity", QString("%1%").arg(backBrush.color().alphaF() * 100.0), KoGenStyle::GraphicType);
-            }
         } else if (key == VerticalAlignment) {
             if (propertyInt(VerticalAlignment) == 0)
                 style.addProperty("style:vertical-align", "automatic", KoGenStyle::TableCellType);
@@ -965,24 +974,26 @@ void KoTableCellStyle::setEdge(KoBorder::Side side, KoBorder::BorderStyle style,
     qreal innerWidth = 0;
     qreal middleWidth = 0;
     qreal space = 0;
+    QVector<qreal> dashes;
     switch (style) {
     case KoBorder::BorderNone:
         width = 0.0;
         break;
     case KoBorder::BorderDouble:
-        innerWidth = space = width/4; //some nice default look
+        innerWidth = space = width/3; //some nice default look
         width -= (space + innerWidth);
         edge.outerPen.setStyle(Qt::SolidLine);
         break;
     case KoBorder::BorderDotted:
-        edge.outerPen.setStyle(Qt::DotLine);
+        dashes << 1 << 1;
+        edge.outerPen.setDashPattern(dashes);
         break;
     case KoBorder::BorderDashed:
-        edge.outerPen.setStyle(Qt::DashLine);
+        dashes << 4 << 1;
+        edge.outerPen.setDashPattern(dashes);
         break;
     case KoBorder::BorderDashedLong: {
-        QVector<qreal> dashes;
-        dashes << 6 << 6;
+        dashes << 4 << 4;
         edge.outerPen.setDashPattern(dashes);
         break;
     }
@@ -992,10 +1003,12 @@ void KoTableCellStyle::setEdge(KoBorder::Side side, KoBorder::BorderStyle style,
         edge.outerPen.setStyle(Qt::SolidLine);
         break;
     case KoBorder::BorderDashDot:
-        edge.outerPen.setStyle(Qt::DashDotLine);
+        dashes << 3 << 3<< 7 << 3;
+        edge.outerPen.setDashPattern(dashes);
         break;
     case KoBorder::BorderDashDotDot:
-        edge.outerPen.setStyle(Qt::DashDotDotLine);
+        dashes << 2 << 2<< 6 << 2 << 2 << 2;
+        edge.outerPen.setDashPattern(dashes);
         break;
     case KoBorder::BorderWave:
         edge.outerPen.setStyle(Qt::SolidLine);
@@ -1004,7 +1017,7 @@ void KoTableCellStyle::setEdge(KoBorder::Side side, KoBorder::BorderStyle style,
         edge.outerPen.setStyle(Qt::SolidLine);
         break;
     case KoBorder::BorderDoubleWave:
-        innerWidth = space = width/4; //some nice default look
+        innerWidth = space = width/3; //some nice default look
         width -= (space + innerWidth);
         edge.outerPen.setStyle(Qt::SolidLine);
         break;

@@ -7,20 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>432</width>
-    <height>129</height>
+    <height>189</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>PNG Options</string>
   </property>
-  <layout class="QVBoxLayout">
-   <property name="spacing">
-    <number>0</number>
-   </property>
-   <property name="margin">
-    <number>9</number>
-   </property>
-   <item>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
     <layout class="QGridLayout">
      <property name="margin">
       <number>0</number>
@@ -123,7 +117,7 @@
      </item>
     </layout>
    </item>
-   <item>
+   <item row="1" column="0">
     <widget class="QCheckBox" name="interlacing">
      <property name="toolTip">
       <string>Use interlacing when publishing on the Internet.</string>
@@ -137,7 +131,7 @@ Enabling interlacing will cause the image to be displayed by the browser even wh
      </property>
     </widget>
    </item>
-   <item>
+   <item row="2" column="0">
     <widget class="QCheckBox" name="alpha">
      <property name="toolTip">
       <string>Disable to get smaller files if your image has no transparency</string>
@@ -154,7 +148,7 @@ You can uncheck the box if you are not using transparency and you want to make t
      </property>
     </widget>
    </item>
-   <item>
+   <item row="4" column="0">
     <widget class="QCheckBox" name="tryToSaveAsIndexed">
      <property name="toolTip">
       <string>Indexed PNG images are smaller. If you enabled this option, your image will be analyzed to see whether it is possible to save as an indexed PNG.</string>
@@ -167,7 +161,25 @@ You can uncheck the box if you are not using transparency and you want to make t
      </property>
     </widget>
    </item>
-   <item>
+   <item row="5" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Transparent pixel fill color:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KColorButton" name="bnTransparencyFillColor">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Background color to replace transparent pixels with.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="6" column="0">
     <spacer>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -183,9 +195,26 @@ You can uncheck the box if you are not using transparency and you want to make t
      </property>
     </spacer>
    </item>
+   <item row="3" column="0">
+    <widget class="QCheckBox" name="chkSRGB">
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;PNG&lt;/span&gt; files have &lt;span style=&quot; font-style:italic;&quot;&gt;two&lt;/span&gt; options to save &lt;span style=&quot; font-weight:600;&quot;&gt;sRGB&lt;/span&gt; information: as a tag or as an explicit profile. For use with in websites, &lt;span style=&quot; font-style:italic;&quot;&gt;disable&lt;/span&gt; this option. For interchange with other applications, &lt;span style=&quot; font-style:italic;&quot;&gt;enable&lt;/span&gt; this option.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>save sRGB profile</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>KColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kcolorbutton.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

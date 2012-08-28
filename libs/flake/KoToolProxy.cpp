@@ -461,6 +461,24 @@ bool KoToolProxy::paste()
     return false;
 }
 
+void KoToolProxy::dragMoveEvent(QDragMoveEvent *event, const QPointF &point)
+{
+    if (d->activeTool)
+        d->activeTool->dragMoveEvent(event, point);
+}
+
+void KoToolProxy::dragLeaveEvent(QDragLeaveEvent *event)
+{
+    if (d->activeTool)
+        d->activeTool->dragLeaveEvent(event);
+}
+
+void KoToolProxy::dropEvent(QDropEvent *event, const QPointF &point)
+{
+    if (d->activeTool)
+        d->activeTool->dropEvent(event, point);
+}
+
 QStringList KoToolProxy::supportedPasteMimeTypes() const
 {
     if (d->activeTool)

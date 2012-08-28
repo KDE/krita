@@ -24,8 +24,8 @@
 #include <QColor>
 
 PSDColorModeBlock::PSDColorModeBlock(PSDColorMode colormode)
-        : blocksize(0)
-        , colormode(colormode)
+    : blocksize(0)
+    , colormode(colormode)
 {
 }
 
@@ -52,14 +52,11 @@ bool PSDColorModeBlock::read(QIODevice* io)
     if ((quint32)data.size() != blocksize) return false;
 
     if (colormode == Indexed) {
-
-        for (int i=0; i<=767;)
-        {
-          colormap.append(qRgb(data[i],data[i++],data[i++]));
-          //qDebug()<<colormap<<i;
+        int i = 0;
+        while (i <= 767) {
+            colormap.append(qRgb(data[i],data[i + 1],data[i + 2]));
+            i += 2;
         }
-
-
     }
     return valid();
 }
@@ -89,7 +86,7 @@ bool PSDColorModeBlock::valid()
         return false;
     }
     if (colormode == DuoTone && blocksize == 0) {
-        error == QString("DuoTone mode, but data block is empty");
+        error = QString("DuoTone mode, but data block is empty");
         return false;
     }
     if ((quint32)data.size() != blocksize) {

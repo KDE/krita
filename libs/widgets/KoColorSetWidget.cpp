@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (c) 2007 Casper Boemann <cbr@boemann.dk>
+   Copyright (c) 2007, 2012 C. Boemann <cbo@boemann.dk>
    Copyright (c) 2007-2008 Fredy Yanardi <fyanardi@gmail.com>
 
    This library is free software; you can redistribute it and/or
@@ -31,13 +31,13 @@
 #include <QMenu>
 #include <QWidgetAction>
 #include <QDir>
+#include <QPointer>
 #include <QScrollArea>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kicon.h>
 
 #include <KoColorSet.h>
 #include <KoColorPatch.h>
@@ -49,11 +49,10 @@
 class KoColorSetWidget::KoColorSetWidgetPrivate {
 public:
     KoColorSetWidget *thePublic;
-    KoColorSet *colorSet;
+    QPointer<KoColorSet> colorSet;
     QTimer m_timer;
     QVBoxLayout *mainLayout;
     bool firstShowOfContainer;
-    QCheckBox *filterCheckBox;
     QWidget *colorSetContainer;
     QScrollArea *scrollArea;
     QGridLayout *colorSetLayout;
@@ -65,19 +64,17 @@ public:
     void colorTriggered(KoColorPatch *patch);
     void addRecent(const KoColor &);
     void activateRecent(int i);
-    void filter(int state);
+    void fillColors();
     void addRemoveColors();
 };
 
-void KoColorSetWidget::KoColorSetWidgetPrivate::filter(int state)
+void KoColorSetWidget::KoColorSetWidgetPrivate::fillColors()
 {
-    bool hide = (state == Qt::Checked);
-
     delete colorSetContainer;
     colorSetContainer = new QWidget();
     colorSetLayout = new QGridLayout();
     colorSetLayout->setMargin(3);
-    colorSetLayout->setSpacing(1);
+    colorSetLayout->setSpacing(0); // otherwise the use can click where there is none
     colorSetContainer->setBackgroundRole(QPalette::Dark);
     for(int i = 0; i<16; i++) {
         colorSetLayout->setColumnMinimumWidth(i, 12);
@@ -86,14 +83,13 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::filter(int state)
 
     if (colorSet) {
         for( int i = 0, p= 0; i < colorSet->nColors(); i++) {
-            if(!hide || (i % 3 != 0 && i % 16 != 5)) {
-                KoColorPatch *patch = new KoColorPatch(colorSetContainer);
-                patch->setFrameStyle(QFrame::NoFrame);
-                patch->setColor(colorSet->getColor(i).color);
-                connect(patch, SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(colorTriggered(KoColorPatch *)));
-                colorSetLayout->addWidget(patch, p/16, p%16);
-                ++p;
-            }
+            KoColorPatch *patch = new KoColorPatch(colorSetContainer);
+            patch->setFrameStyle(QFrame::Plain | QFrame::Box);
+            patch->setLineWidth(1);
+            patch->setColor(colorSet->getColor(i).color);
+            connect(patch, SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(colorTriggered(KoColorPatch *)));
+            colorSetLayout->addWidget(patch, p/16, p%16);
+            ++p;
         }
     }
 
@@ -185,7 +181,6 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     d->recentsLayout = new QHBoxLayout();
     d->mainLayout->addLayout(d->recentsLayout);
     d->recentsLayout->setMargin(0);
-    d->recentsLayout->setSpacing(KDialog::spacingHint());
     d->recentsLayout->addWidget(new QLabel(i18n("Recent:")));
     d->recentsLayout->addStretch(1);
 
@@ -193,15 +188,10 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     color.fromQColor(QColor(128,0,0));
     d->addRecent(color);
 
-    d->filterCheckBox = new QCheckBox(i18n("Hide colors with bad contrast"));
-    d->filterCheckBox->setChecked(true);
-    d->mainLayout->addWidget(d->filterCheckBox);
-    connect(d->filterCheckBox, SIGNAL(stateChanged(int)), SLOT(filter(int)));
-
     d->scrollArea = new QScrollArea();
     d->scrollArea->setBackgroundRole(QPalette::Dark);
     d->mainLayout->addWidget(d->scrollArea);
-    d->filter(Qt::Checked);
+    d->fillColors();
 
     d->addRemoveButton = new QToolButton(this);
     d->addRemoveButton->setText(i18n("Add / Remove Colors..."));
@@ -252,7 +242,12 @@ void KoColorSetWidget::setColorSet(KoColorSet *colorSet)
     }
 
     d->colorSet = colorSet;
-    d->filter(d->filterCheckBox->checkState());
+    d->fillColors();
+}
+
+KoColorSet* KoColorSetWidget::colorSet()
+{
+    return d->colorSet;
 }
 
 void KoColorSetWidget::resizeEvent(QResizeEvent *event)

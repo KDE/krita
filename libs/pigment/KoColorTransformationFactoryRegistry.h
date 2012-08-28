@@ -42,7 +42,6 @@ public:
      */
     static void addColorTransformationFactory(KoColorTransformationFactory* factory);
     static void removeColorTransformationFactory(KoColorTransformationFactory* factory);
-    static bool containsColorTransformationFactory(const QString& id);
 private:
     static KoColorTransformationFactoryRegistry* instance();
 private:

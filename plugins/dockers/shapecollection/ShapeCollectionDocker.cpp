@@ -32,15 +32,15 @@
 #include <KoZoomHandler.h>
 #include <KoShapePaintingContext.h>
 
+#include <KoIcon.h>
+
 #include <klocale.h>
 #include <kcombobox.h>
 #include <kdebug.h>
-#include <kiconloader.h>
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
 #include <kdesktopfile.h>
 #include <kconfiggroup.h>
-#include <kicon.h>
 #include <kmessagebox.h>
 
 #include <QGridLayout>
@@ -158,7 +158,7 @@ ShapeCollectionDocker::ShapeCollectionDocker(QWidget* parent)
     m_moreShapes->setText(i18n("More"));
     m_moreShapes->setToolButtonStyle(Qt::ToolButtonIconOnly);
     m_moreShapes->setIconSize(QSize(32, 32));
-    m_moreShapes->setIcon(KIcon("shape-choose"));
+    m_moreShapes->setIcon(koIcon("shape-choose"));
     m_moreShapes->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_layout->addWidget(m_moreShapes, 0, 1);
 
@@ -183,7 +183,7 @@ ShapeCollectionDocker::ShapeCollectionDocker(QWidget* parent)
 
     m_addCollectionButton = new QToolButton (m_moreShapesContainer);
     containerLayout->addWidget(m_addCollectionButton, 1, 0);
-    m_addCollectionButton->setIcon(SmallIcon("list-add"));
+    m_addCollectionButton->setIcon(koIcon("list-add"));
     m_addCollectionButton->setIconSize(QSize(16, 16));
     m_addCollectionButton->setToolTip(i18n("Open Shape Collection"));
     m_addCollectionButton->setPopupMode(QToolButton::InstantPopup);
@@ -191,7 +191,7 @@ ShapeCollectionDocker::ShapeCollectionDocker(QWidget* parent)
 
     m_closeCollectionButton = new QToolButton (m_moreShapesContainer);
     containerLayout->addWidget(m_closeCollectionButton, 1, 1);
-    m_closeCollectionButton->setIcon(SmallIcon("list-remove"));
+    m_closeCollectionButton->setIcon(koIcon("list-remove"));
     m_closeCollectionButton->setIconSize(QSize(16, 16));
     m_closeCollectionButton->setToolTip(i18n("Remove Shape Collection"));
     m_closeCollectionButton->setVisible(false);
@@ -231,7 +231,7 @@ void ShapeCollectionDocker::loadDefaultShapes()
     int quickCount=0;
 
     QStringList quickShapes;
-    quickShapes << "TextShapeID" << "PictureShape" << "KoConnectionShape" << "ChartShape" << "ArtisticText";
+    quickShapes << "TextShapeID" << "PictureShape" << "ChartShape" << "ArtisticText";
     KConfigGroup cfg = KGlobal::config()->group("KoShapeCollection");
     quickShapes = cfg.readEntry("QuickShapes", quickShapes);
 
@@ -249,7 +249,7 @@ void ShapeCollectionDocker::loadDefaultShapes()
             temp.id = shapeTemplate.id;
             temp.name = shapeTemplate.name;
             temp.toolTip = shapeTemplate.toolTip;
-            temp.icon = KIcon(shapeTemplate.icon);
+            temp.icon = KIcon(shapeTemplate.iconName);
             temp.properties = shapeTemplate.properties;
             if(shapeTemplate.family == "funny")
                 funnyList.append(temp);
@@ -276,7 +276,7 @@ void ShapeCollectionDocker::loadDefaultShapes()
             temp.id = factory->id();
             temp.name = factory->name();
             temp.toolTip = factory->toolTip();
-            temp.icon = KIcon(factory->icon());
+            temp.icon = KIcon(factory->iconName());
             temp.properties = 0;
             if(factory->family() == "funny")
                 funnyList.append(temp);
@@ -356,7 +356,7 @@ void ShapeCollectionDocker::activateShapeCreationTool(const QModelIndex& index)
         KoCreateShapesTool* tool = KoToolManager::instance()->shapeCreatorTool(canvasController->canvas());
         QString id = m_collectionView->model()->data(index, Qt::UserRole).toString();
         KoProperties* properties = static_cast<CollectionItemModel*>(m_collectionView->model())->properties(index);
-        
+
         tool->setShapeId(id);
         tool->setShapeProperties(properties);
         KoToolManager::instance()->switchToolRequested(KoCreateShapesTool_ID);
@@ -384,7 +384,7 @@ bool ShapeCollectionDocker::addCollection(const QString& id, const QString& titl
         return false;
 
     m_modelMap.insert(id, model);
-    QListWidgetItem *collectionChooserItem = new QListWidgetItem(KIcon("shape-choose"),title);
+    QListWidgetItem *collectionChooserItem = new QListWidgetItem(koIcon("shape-choose"),title);
     collectionChooserItem->setData(Qt::UserRole, id);
     m_collectionChooser->addItem(collectionChooserItem);
     return true;

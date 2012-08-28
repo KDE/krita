@@ -29,6 +29,9 @@
 // KDE
 #include <kdebug.h>
 
+// Calligra
+#include <KoIcon.h>
+
 // KChart
 #include "ChartProxyModel.h"
 #include "ChartTableView.h"
@@ -56,10 +59,10 @@ void TableEditorDialog::init()
 {
     tableViewContainer->addWidget( m_tableView );
 
-    KIcon insertRowIcon = KIcon( "insert_table_row" );
-    KIcon deleteRowIcon = KIcon( "delete_table_row" );
-    KIcon insertColIcon = KIcon( "insert_table_col" );
-    KIcon deleteColIcon = KIcon( "delete_table_col" );
+    const KIcon insertRowIcon(koIconName("edit-table-insert-row-above"));
+    const KIcon deleteRowIcon(koIconName("edit-table-delete-row"));
+    const KIcon insertColIcon(koIconName("edit-table-insert-column-left"));
+    const KIcon deleteColIcon(koIconName("edit-table-delete-column"));
 
     // Create actions.
     m_insertRowsAction    = new QAction( insertRowIcon, i18n( "Insert Rows" ), m_tableView );

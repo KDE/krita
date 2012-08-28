@@ -10,10 +10,12 @@
 #  OPENJPEG_LIBRARY, where to find the OpenJPEG library.
 
 FIND_PATH(OPENJPEG_INCLUDE_DIR openjpeg.h
-/usr/local/include/openjpeg
-/usr/local/include
-/usr/include/openjpeg
-/usr/include
+PATHS
+    /usr/local/include/openjpeg
+    /usr/local/include
+    /usr/include/openjpeg
+    /usr/include
+PATH_SUFFIXES openjpeg
 )
 
 SET(OPENJPEG_NAMES ${OPENJPEG_NAMES} openjpeg)

@@ -32,8 +32,8 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <klineedit.h>
-#include <kicon.h>
 
+#include <KoIcon.h>
 #include <KoResourceItemChooser.h>
 #include <KoResourceModel.h>
 #include <KoResourceServerAdapter.h>
@@ -100,7 +100,7 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     }
 
     if (!preset->settings() || !preset->settings()->isValid()) {
-        KIcon icon("edit-delete");
+        const KIcon icon(koIconName("edit-delete"));
         icon.paint(painter, QRect(paintRect.x() + paintRect.height() - 25, paintRect.y() + paintRect.height() - 25, 25, 25));
     }
 }

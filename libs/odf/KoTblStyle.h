@@ -103,20 +103,20 @@ public:
 
     enum KeepWithNext {
         AutoKeepWithNext,
-        AlwaysKeepWithNext,
+        AlwaysKeepWithNext
     };
     void setKeepWithNext(KeepWithNext keepWithNext);
     KeepWithNext keepWithNext() const;
 
     enum WritingMode {
-        LrTbWrittingMode,
-        RlTbWrittingMode,
-        TbRlWrittingMode,
-        TbLrWrittingMode,
-        LrWrittingMode,
-        RlWrittingMode,
-        TbWrittingMode,
-        PageWrittingMode
+        LrTbWritingMode,
+        RlTbWritingMode,
+        TbRlWritingMode,
+        TbLrWritingMode,
+        LrWritingMode,
+        RlWritingMode,
+        TbWritingMode,
+        PageWritingMode
     };
     void setWritingMode(WritingMode writingMode);
     WritingMode writingMode() const;

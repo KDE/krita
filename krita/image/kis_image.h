@@ -227,7 +227,9 @@ public:
     /**
      * Convert the image and all its layers to the dstColorSpace
      */
-    void convertImageColorSpace(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
+    void convertImageColorSpace(const KoColorSpace *dstColorSpace,
+                                KoColorConversionTransformation::Intent renderingIntent,
+                                KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     /**
      * Set the color space of  the projection (and the root layer)
@@ -569,7 +571,7 @@ signals:
     /**
      * Emitted when the root node of the image has changed.
      * It happens, e.g. when we flatten the image. When
-     * this happens the reciever should reload information
+     * this happens the receiver should reload information
      * about the image
      */
     void sigLayersChangedAsync();

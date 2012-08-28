@@ -22,16 +22,19 @@
 #ifndef KOPAVIEW_H
 #define KOPAVIEW_H
 
-#include <QObject>
-
-#include <KoView.h>
-#include <KoPAViewBase.h>
-#include <KoZoomHandler.h>
+#include "KoPAViewBase.h"
 #include "KoPageApp.h"
 #include "kopageapp_export.h"
 
+#include <KoView.h>
+#include <KoZoomHandler.h>
+#include <KoPart.h>
+
+#include <QObject>
+
 class KoCanvasController;
 class KoFind;
+class KoPart;
 class KoPACanvasBase;
 class KoPADocument;
 class KoPAPageBase;
@@ -72,7 +75,8 @@ public:
      * @param document the document of this view
      * @param parent the parent widget
      */
-    explicit KoPAView( KoPADocument * document, QWidget * parent = 0 );
+    explicit KoPAView(KoPart *part, KoPADocument *document, QWidget *parent);
+
     virtual ~KoPAView();
 
     //  KoPAViewBase/KoView overrides
@@ -181,9 +185,9 @@ public:
     void restoreCentralWidget();
 
 signals:
-    /// emited when select All action is triggered and the view is not visible
+    /// emitted when select All action is triggered and the view is not visible
     void selectAllRequested();
-    /// emited when deselect All action is triggered and the view is not visible
+    /// emitted when deselect All action is triggered and the view is not visible
     void deselectAllRequested();
 
 protected:
@@ -212,7 +216,8 @@ public slots:
     /// Delete the current page
     void deletePage();
 
-    void updatePageCount();
+    /// Make sure the canvas size matches the content
+    void updateCanvasSize(bool forceUpdate = false);
 
 protected slots:
 

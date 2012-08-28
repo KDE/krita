@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007, 2008, 2010 Thomas Zander <zander@kde.org>
- * Copyright (C) 2009-2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2009-2010 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2011 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
  * Copyright (C) 2011-2012 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  *
@@ -51,14 +51,14 @@
 #include <KDebug>
 
 SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
-        : QWidget(parent),
-          m_styleManager(0),
-          m_blockSignals(false),
-          m_tool(tool),
-          m_directionButtonState(Auto),
-          m_thumbnailer(new KoStyleThumbnailer()),
-          m_stylesModel(new StylesModel(0, StylesModel::ParagraphStyle)),
-          m_mapper(new QSignalMapper(this))
+        : QWidget(parent)
+        , m_styleManager(0)
+        , m_blockSignals(false)
+        , m_tool(tool)
+        , m_directionButtonState(Auto)
+        , m_thumbnailer(new KoStyleThumbnailer())
+        , m_mapper(new QSignalMapper(this))
+        , m_stylesModel(new StylesModel(0, StylesModel::ParagraphStyle))
 {
     widget.setupUi(this);
     widget.alignCenter->setDefaultAction(tool->action("format_aligncenter"));
@@ -78,6 +78,7 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
     widget.changeTextDirection->setDefaultAction(tool->action("change_text_direction"));
 
     widget.moreOptions->setText("...");
+    widget.moreOptions->setToolTip(i18n("Change paragraph format"));
     connect(widget.moreOptions, SIGNAL(clicked(bool)), tool->action("format_paragraph"), SLOT(trigger()));
 
     connect(widget.changeTextDirection, SIGNAL(clicked()), this, SIGNAL(doneWithFocus()));
@@ -163,9 +164,7 @@ void SimpleParagraphWidget::fillListButtons()
     widget.bulletListButton->addSeparator();
 
     KAction *action = new KAction(i18n("Change List Level"),this);
-
-    //TODO: Uncomment the below line when the string freeze is over
-    //action->setToolTip(i18n("Change the level the list is at"));
+    action->setToolTip(i18n("Change the level the list is at"));
 
     QMenu *listLevelMenu = new QMenu();
     const int levelIndent = 13;
@@ -295,7 +294,7 @@ void SimpleParagraphWidget::listStyleChanged(int id)
     if (m_blockSignals) return;
     KoListLevelProperties llp;
     llp.setStyle(static_cast<KoListStyle::Style>(id));
-    llp.setLevel(0);
+    llp.setLevel(1);
     m_tool->textEditor()->setListProperties(llp);
 }
 

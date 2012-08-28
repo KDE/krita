@@ -32,6 +32,7 @@
 #include <kstandardaction.h>
 #include <kactioncollection.h>
 
+#include <KoServiceProvider.h>
 #include "KoCanvasController.h"
 #include "KoChannelInfo.h"
 #include "KoIntegerMaths.h"
@@ -41,7 +42,7 @@
 #include <KoViewConverter.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 #include <KoToolProxy.h>
@@ -54,11 +55,10 @@
 #include "kis_convolution_kernel.h"
 #include "kis_debug.h"
 #include "kis_doc2.h"
+#include "kis_part2.h"
 #include "kis_fill_painter.h"
 #include "kis_group_layer.h"
 #include "kis_image.h"
-#include "kis_iterator_pixel_trait.h"
-#include "kis_iterators_pixel.h"
 #include "kis_layer.h"
 #include "kis_statusbar.h"
 #include "kis_paint_device.h"
@@ -80,7 +80,6 @@
 #include "kis_iterator_ng.h"
 #include "kis_clipboard.h"
 #include "kis_view2.h"
-
 #include "kis_selection_manager_p.h"
 
 
@@ -235,16 +234,8 @@ void KisSelectionManager::addSelectionAction(QAction * action)
 
 bool KisSelectionManager::havePixelsSelected()
 {
-    KisLayerSP activeLayer = m_view->activeLayer();
-    KisSelectionSP activeSelection;
-    if (activeLayer && !activeLayer->userLocked()
-       && activeLayer->visible()) {
-
-        activeSelection = activeLayer->selection();
-        return activeSelection &&
-            !activeSelection->selectedRect().isEmpty();
-    }
-    return false;
+    KisSelectionSP activeSelection = m_view->selection();
+    return activeSelection && !activeSelection->selectedRect().isEmpty();
 }
 
 bool KisSelectionManager::havePixelsInClipboard()
@@ -276,6 +267,18 @@ bool KisSelectionManager::haveShapesInClipboard()
     return false;
 }
 
+bool KisSelectionManager::haveEditablePixelSelectionWithPixels()
+{
+    if (!m_view->selectionEditable()) {
+        return false;
+    }
+    KisSelectionSP selection = m_view->selection();
+    if (selection && selection->hasPixelSelection()) {
+        return !selection->pixelSelection()->selectedRect().isEmpty();
+    }
+    return false;
+}
+
 void KisSelectionManager::updateGUI()
 {
     Q_ASSERT(m_view);
@@ -286,17 +289,13 @@ void KisSelectionManager::updateGUI()
     bool havePixelsInClipboard = this->havePixelsInClipboard();
     bool haveShapesSelected = this->haveShapesSelected();
     bool haveShapesInClipboard = this->haveShapesInClipboard();
+    bool haveEditablePixelSelectionWithPixels = this->haveEditablePixelSelectionWithPixels();
     bool haveDevice = m_view->activeDevice();
 
     KisLayerSP activeLayer = m_view->activeLayer();
     KisImageWSP image = activeLayer ? activeLayer->image() : 0;
-    bool canReselect =
-        activeLayer && activeLayer->isEditable() &&
-        image && image->canReselectGlobalSelection();
-
-    bool canDeselect = activeLayer && activeLayer->isEditable() &&
-        image && image->globalSelection();
-
+    bool canReselect = image && image->canReselectGlobalSelection();
+    bool canDeselect =  image && image->globalSelection();
 
     m_clear->setEnabled(haveDevice || havePixelsSelected || haveShapesSelected);
     m_cut->setEnabled(havePixelsSelected || haveShapesSelected);
@@ -309,8 +308,8 @@ void KisSelectionManager::updateGUI()
     m_copyMerged->setEnabled(havePixelsSelected);
     m_cutToNewLayer->setEnabled(havePixelsSelected);
     m_copyToNewLayer->setEnabled(havePixelsSelected);
-    m_invert->setEnabled(havePixelsSelected);
-    m_smooth->setEnabled(havePixelsSelected);
+    m_invert->setEnabled(haveEditablePixelSelectionWithPixels);
+    m_smooth->setEnabled(haveEditablePixelSelectionWithPixels);
     m_imageResizeToSelection->setEnabled(havePixelsSelected);
 
     m_fillForegroundColor->setEnabled(haveDevice);
@@ -353,6 +352,7 @@ void KisSelectionManager::cut()
 {
     KisLayerSP layer = m_view->activeLayer();
     if (!layer) return;
+    if (!layer->isEditable()) return;
 
     if (haveShapesSelected()) {
         m_view->canvasBase()->toolProxy()->cut();
@@ -463,11 +463,15 @@ void KisSelectionManager::pasteNew()
     QRect rect = clip->exactBounds();
     if (rect.isEmpty()) return;
 
-    const QByteArray mimetype = KoDocument::readNativeFormatMimeType();
+    const QByteArray mimetype = KoServiceProvider::readNativeFormatMimeType();
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(mimetype);
 
-    KisDoc2* doc = dynamic_cast<KisDoc2*>(entry.createDoc());
+    QString error;
+    KisPart2* part = dynamic_cast<KisPart2*>(entry.createKoPart(&error));
+    if (!part) return;
+    KisDoc2 *doc = new KisDoc2(part);
     if (!doc) return;
+    part->setDocument(doc);
 
     KisImageWSP image = new KisImage(doc->createUndoStore(),
                                      rect.width(),
@@ -486,7 +490,7 @@ void KisSelectionManager::pasteNew()
     image->addNode(layer.data(), image->rootLayer());
     doc->setCurrentImage(image);
 
-    KoMainWindow *win = new KoMainWindow(doc->componentData());
+    KoMainWindow *win = new KoMainWindow(part->componentData());
     win->show();
     win->setRootDocument(doc);
 }
@@ -542,6 +546,9 @@ void KisSelectionManager::reselect()
 
 void KisSelectionManager::clear()
 {
+    KisNodeSP node = m_view->activeNode();
+    if (!node || !node->isEditable()) return;
+
     m_view->canvasBase()->toolProxy()->deleteSelection();
     updateGUI();
 }
@@ -550,6 +557,9 @@ void KisSelectionManager::fill(const KoColor& color, bool fillWithPattern, const
 {
     KisPaintDeviceSP device = m_view->activeDevice();
     if (!device) return;
+
+    KisNodeSP node = m_view->activeNode();
+    if (!node || !node->isEditable()) return;
 
     KisSelectionSP selection = m_view->selection();
     QRect selectedRect = selection ?
@@ -693,13 +703,13 @@ void KisSelectionManager::shapeSelectionChanged()
     KoSelection * selection = shapeManager->selection();
     QList<KoShape*> selectedShapes = selection->selectedShapes();
 
-    KoLineBorder* border = new KoLineBorder(0, Qt::lightGray);
+    KoShapeStroke* border = new KoShapeStroke(0, Qt::lightGray);
     foreach(KoShape* shape, shapeManager->shapes()) {
         if (dynamic_cast<KisShapeSelection*>(shape->parent())) {
             if (selectedShapes.contains(shape))
-                shape->setBorder(border);
+                shape->setStroke(border);
             else
-                shape->setBorder(0);
+                shape->setStroke(0);
         }
     }
     updateGUI();
@@ -742,19 +752,19 @@ void KisSelectionManager::copyFromDevice(KisPaintDeviceSP device)
         // Apply selection mask.
         KisPaintDeviceSP selectionProjection = selection->projection();
         KisHLineIteratorSP layerIt = clip->createHLineIteratorNG(0, 0, r.width());
-        KisHLineConstIteratorPixel selectionIt = selectionProjection->createHLineIterator(r.x(), r.y(), r.width());
+        KisHLineConstIteratorSP selectionIt = selectionProjection->createHLineIteratorNG(r.x(), r.y(), r.width());
 
         for (qint32 y = 0; y < r.height(); y++) {
 
             for (qint32 x = 0; x < r.width(); x++) {
 
-                cs->applyAlphaU8Mask(layerIt->rawData(), selectionIt.oldRawData(), 1);
+                cs->applyAlphaU8Mask(layerIt->rawData(), selectionIt->oldRawData(), 1);
 
                 layerIt->nextPixel();
-                ++selectionIt;
+                selectionIt->nextPixel();
             }
             layerIt->nextRow();
-            selectionIt.nextRow();
+            selectionIt->nextRow();
         }
     }
 

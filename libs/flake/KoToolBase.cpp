@@ -52,14 +52,14 @@ KoToolBase::~KoToolBase()
     delete d_ptr;
 }
 
-/// Ultimately only called from Tables
+/// Ultimately only called from Calligra Sheets
 void KoToolBase::updateShapeController(KoShapeBasedDocumentBase *shapeController)
 {
     if (shapeController) {
         KoDocumentResourceManager *scrm = shapeController->resourceManager();
         if (scrm) {
             connect(scrm, SIGNAL(resourceChanged(int, const QVariant &)),
-                    this, SLOT(resourceChanged(int, const QVariant &)));
+                    this, SLOT(documentResourceChanged(int, const QVariant &)));
         }
     }
 }
@@ -69,6 +69,12 @@ void KoToolBase::deactivate()
 }
 
 void KoToolBase::resourceChanged(int key, const QVariant & res)
+{
+    Q_UNUSED(key);
+    Q_UNUSED(res);
+}
+
+void KoToolBase::documentResourceChanged(int key, const QVariant &res)
 {
     Q_UNUSED(key);
     Q_UNUSED(res);
@@ -249,13 +255,23 @@ void KoToolBase::setStatusText(const QString &statusText)
 uint KoToolBase::handleRadius() const
 {
     Q_D(const KoToolBase);
-    return d->canvas->shapeController()->resourceManager()->handleRadius();
+    if(d->canvas->shapeController()->resourceManager())
+    {
+        return d->canvas->shapeController()->resourceManager()->handleRadius();
+    } else {
+        return 3;
+    }
 }
 
 uint KoToolBase::grabSensitivity() const
 {
     Q_D(const KoToolBase);
-    return d->canvas->shapeController()->resourceManager()->grabSensitivity();
+    if(d->canvas->shapeController()->resourceManager())
+    {
+        return d->canvas->shapeController()->resourceManager()->grabSensitivity();
+    } else {
+        return 3;
+    }
 }
 
 QRectF KoToolBase::handleGrabRect(const QPointF &position) const
@@ -296,6 +312,23 @@ bool KoToolBase::paste()
 
 void KoToolBase::copy() const
 {
+}
+
+void KoToolBase::dragMoveEvent(QDragMoveEvent *event, const QPointF &point)
+{
+    Q_UNUSED(event);
+    Q_UNUSED(point);
+}
+
+void KoToolBase::dragLeaveEvent(QDragLeaveEvent *event)
+{
+    Q_UNUSED(event);
+}
+
+void KoToolBase::dropEvent(QDropEvent *event, const QPointF &point)
+{
+    Q_UNUSED(event);
+    Q_UNUSED(point);
 }
 
 bool KoToolBase::hasSelection()

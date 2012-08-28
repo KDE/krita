@@ -42,7 +42,7 @@
 #include <KoColorSpaceRegistry.h>
 
 KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter *painter, KisImageWSP image)
-        : KisBrushBasedPaintOp(settings, painter), m_hsvTransfo(0)
+        : KisBrushBasedPaintOp(settings, painter), m_hsvTransformation(0)
 {
     Q_UNUSED(image);
     Q_ASSERT(settings);
@@ -59,9 +59,9 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     {
         option->readOptionSetting(settings);
         option->sensor()->reset();
-        if(option->isChecked() && !m_hsvTransfo)
+        if(option->isChecked() && !m_hsvTransformation)
         {
-            m_hsvTransfo = painter->backgroundColor().colorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
+            m_hsvTransformation = painter->backgroundColor().colorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
         }
     }
 
@@ -75,6 +75,8 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     m_rotationOption.readOptionSetting(settings);
     m_mixOption.readOptionSetting(settings);
     m_scatterOption.readOptionSetting(settings);
+    m_mirrorOption.readOptionSetting(settings);
+    m_textureProperties.fillProperties(settings);
 
     m_opacityOption.sensor()->reset();
     m_sizeOption.sensor()->reset();
@@ -90,7 +92,7 @@ KisBrushOp::~KisBrushOp()
 {
     qDeleteAll(m_hsvOptions);
     delete m_colorSource;
-    delete m_hsvTransfo;
+    delete m_hsvTransformation;
 }
 
 qreal KisBrushOp::paintAt(const KisPaintInformation& info)
@@ -132,33 +134,34 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
 
     quint8 origOpacity = painter()->opacity();
     quint8 origFlow    = painter()->flow();
-    
+
     m_opacityOption.apply(painter(), info);
     m_colorSource->selectColor(m_mixOption.apply(info));
     m_darkenOption.apply(m_colorSource, info);
 
-    if(m_hsvTransfo)
-    {
-        foreach(KisPressureHSVOption* option, m_hsvOptions)
-        {
-            option->apply(m_hsvTransfo, info);
+    if (m_hsvTransformation) {
+        foreach(KisPressureHSVOption* option, m_hsvOptions) {
+            option->apply(m_hsvTransformation, info);
         }
-        m_colorSource->applyColorTransformation(m_hsvTransfo);
+        m_colorSource->applyColorTransformation(m_hsvTransformation);
     }
 
     KisFixedPaintDeviceSP dab = cachedDab(device->colorSpace());
+
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
         dab = brush->paintDevice(device->colorSpace(), scale, rotation, info, xFraction, yFraction);
-    } else {
-        if(m_colorSource->isUniformColor())
-        {
+    }
+    else {
+        if (m_colorSource->isUniformColor()) {
             KoColor color = m_colorSource->uniformColor();
             color.convertTo(dab->colorSpace());
             brush->mask(dab, color, scale, scale, rotation, info, xFraction, yFraction, m_softnessOption.apply(info));
-        } else {
+        }
+        else {
             if (!m_colorSourceDevice) {
                 m_colorSourceDevice = new KisPaintDevice(dab->colorSpace());
-            } else {
+            }
+            else {
                 m_colorSourceDevice->clear();
             }
             m_colorSource->colorize(m_colorSourceDevice, QRect(0, 0, brush->maskWidth(scale, rotation), brush->maskHeight(scale, rotation)), info.pos().toPoint() );
@@ -171,14 +174,17 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
 
     m_sharpnessOption.applyTreshold( dab );
 
+    // after everything, apply the texturing
+    m_textureProperties.apply(dab, info.pos().toPoint());
+
     painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
     painter()->renderMirrorMask(QRect(QPoint(x,y), QSize(dab->bounds().width(),dab->bounds().height())),dab);
     painter()->setOpacity(origOpacity);
     painter()->setFlow(origFlow);
 
-    if(m_spacingOption.isChecked())
+    if (m_spacingOption.isChecked())
         return spacing(m_spacingOption.apply(info));
-    
+
     return spacing(scale);
 }
 

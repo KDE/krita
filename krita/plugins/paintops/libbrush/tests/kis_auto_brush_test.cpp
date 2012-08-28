@@ -53,7 +53,7 @@ void KisAutoBrushTest::testMaskGeneration()
 
     QPoint errpoint;
     QImage result(QString(FILES_DATA_DIR) + QDir::separator() + "result_autobrush_1.png");
-    QImage image = fdev->convertToQImage();
+    QImage image = fdev->convertToQImage(0);
 
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("kis_autobrush_test_1.png");
@@ -65,7 +65,7 @@ void KisAutoBrushTest::testMaskGeneration()
     a->mask(fdev, KoColor(Qt::black, cs), 1.0, 1.0, 0.0, info);
 
     result = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "result_autobrush_3.png");
-    image = fdev->convertToQImage();
+    image = fdev->convertToQImage(0);
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("kis_autobrush_test_3.png");
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
@@ -81,7 +81,7 @@ void KisAutoBrushTest::testMaskGeneration()
     a->mask(fdev, dev, 1.0, 1.0, 0.0, info);
 
     result = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "result_autobrush_4.png");
-    image = fdev->convertToQImage();
+    image = fdev->convertToQImage(0);
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("kis_autobrush_test_4.png");
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());

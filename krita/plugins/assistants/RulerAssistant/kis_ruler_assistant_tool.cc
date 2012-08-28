@@ -30,6 +30,8 @@
 #include <kio/netaccess.h>
 #include <kio/jobuidelegate.h>
 
+#include <KoIcon.h>
+
 #include <KoViewConverter.h>
 #include <KoPointerEvent.h>
 
@@ -142,9 +144,8 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
 
         // create new assistant
         QString key = m_options.comboBox->model()->index( m_options.comboBox->currentIndex(), 0 ).data(Qt::UserRole).toString();
-        QRectF imageArea = QRectF(pixelToView(QPoint(0, 0)),
-                                  m_canvas->image()->pixelToDocument(QPoint(m_canvas->image()->width(), m_canvas->image()->height())));
-        m_newAssistant = KisPaintingAssistantFactoryRegistry::instance()->get(key)->paintingAssistant(imageArea);
+
+        m_newAssistant = KisPaintingAssistantFactoryRegistry::instance()->get(key)->createPaintingAssistant();
         m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point));
         if (m_newAssistant->numHandles() <= 1) {
             addAssistant();
@@ -274,8 +275,8 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
         KisPaintingAssistant::drawPath(_gc, path);        
     }
     
-    QPixmap iconDelete = KIcon("edit-delete").pixmap(16, 16);
-    QPixmap iconMove = KIcon("transform-move").pixmap(32, 32);
+    QPixmap iconDelete = koIcon("edit-delete").pixmap(16, 16);
+    QPixmap iconMove = koIcon("transform-move").pixmap(32, 32);
     foreach(const KisPaintingAssistant* assistant, m_canvas->view()->paintingAssistantManager()->assistants()) {
         QPointF iconDeletePos = _converter.documentToView(assistant->buttonPosition());
         _gc.drawPixmap(iconDeletePos - QPointF(32, 32), iconDelete);
@@ -383,16 +384,13 @@ void KisRulerAssistantTool::openFinish(KJob* job)
                     }
                 }
             } else if (xml.name() == "assistant") {
-                QRectF imageArea = QRectF(pixelToView(QPoint(0, 0)),
-                                          m_canvas->image()->pixelToDocument(QPoint(m_canvas->image()->width(),
-                                                                                    m_canvas->image()->height())));
                 const KisPaintingAssistantFactory* factory = KisPaintingAssistantFactoryRegistry::instance()->get(xml.attributes().value("type").toString());
                 if (factory) {
                     if (assistant) {
                         errors = true;
                         delete assistant;
                     }
-                    assistant = factory->paintingAssistant(imageArea);
+                    assistant = factory->createPaintingAssistant();
                 } else {
                     errors = true;
                 }
@@ -446,9 +444,9 @@ QWidget *KisRulerAssistantTool::createOptionWidget()
     if (!m_optionsWidget) {
         m_optionsWidget = new QWidget;
         m_options.setupUi(m_optionsWidget);
-        m_options.loadButton->setIcon(KIcon("document-open"));
-        m_options.saveButton->setIcon(KIcon("document-save"));
-        m_options.deleteButton->setIcon(KIcon("edit-delete"));
+        m_options.loadButton->setIcon(koIcon("document-open"));
+        m_options.saveButton->setIcon(koIcon("document-save"));
+        m_options.deleteButton->setIcon(koIcon("edit-delete"));
         foreach(const QString& key, KisPaintingAssistantFactoryRegistry::instance()->keys()) {
             QString name = KisPaintingAssistantFactoryRegistry::instance()->get(key)->name();
             m_options.comboBox->addItem(name, key);

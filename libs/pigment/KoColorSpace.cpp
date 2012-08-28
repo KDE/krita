@@ -177,7 +177,7 @@ void KoColorSpace::addCompositeOp(const KoCompositeOp * op)
 const KoColorConversionTransformation* KoColorSpace::toLabA16Converter() const
 {
     if (!d->transfoToLABA16) {
-        d->transfoToLABA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(this, KoColorSpaceRegistry::instance()->lab16("")) ;
+        d->transfoToLABA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(this, KoColorSpaceRegistry::instance()->lab16(""), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation) ;
     }
     return d->transfoToLABA16;
 }
@@ -185,21 +185,21 @@ const KoColorConversionTransformation* KoColorSpace::toLabA16Converter() const
 const KoColorConversionTransformation* KoColorSpace::fromLabA16Converter() const
 {
     if (!d->transfoFromLABA16) {
-        d->transfoFromLABA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(KoColorSpaceRegistry::instance()->lab16("") , this) ;
+        d->transfoFromLABA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(KoColorSpaceRegistry::instance()->lab16(""), this, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation) ;
     }
     return d->transfoFromLABA16;
 }
 const KoColorConversionTransformation* KoColorSpace::toRgbA16Converter() const
 {
     if (!d->transfoToRGBA16) {
-        d->transfoToRGBA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(this, KoColorSpaceRegistry::instance()->rgb16("")) ;
+        d->transfoToRGBA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(this, KoColorSpaceRegistry::instance()->rgb16(""), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation) ;
     }
     return d->transfoToRGBA16;
 }
 const KoColorConversionTransformation* KoColorSpace::fromRgbA16Converter() const
 {
     if (!d->transfoFromRGBA16) {
-        d->transfoFromRGBA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(KoColorSpaceRegistry::instance()->rgb16("") , this) ;
+        d->transfoFromRGBA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(KoColorSpaceRegistry::instance()->rgb16("") , this, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation) ;
     }
     return d->transfoFromRGBA16;
 }
@@ -224,12 +224,12 @@ void KoColorSpace::fromRgbA16(const quint8 * src, quint8 * dst, quint32 nPixels)
     fromRgbA16Converter()->transform(src, dst, nPixels);
 }
 
-KoColorConversionTransformation* KoColorSpace::createColorConverter(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent) const
+KoColorConversionTransformation* KoColorSpace::createColorConverter(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) const
 {
     if (*this == *dstColorSpace) {
         return new KoCopyColorConversionTransformation(this);
     } else {
-        return KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(this, dstColorSpace, renderingIntent);
+        return KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(this, dstColorSpace, renderingIntent, conversionFlags);
     }
 }
 
@@ -237,103 +237,39 @@ bool KoColorSpace::convertPixelsTo(const quint8 * src,
                                    quint8 * dst,
                                    const KoColorSpace * dstColorSpace,
                                    quint32 numPixels,
-                                   KoColorConversionTransformation::Intent renderingIntent) const
+                                   KoColorConversionTransformation::Intent renderingIntent,
+                                   KoColorConversionTransformation::ConversionFlags conversionFlags) const
 {
     if (*this == *dstColorSpace) {
         memcpy(dst, src, numPixels * sizeof(quint8) * pixelSize());
     } else {
-        KoCachedColorConversionTransformation cct = KoColorSpaceRegistry::instance()->colorConversionCache()->cachedConverter(this, dstColorSpace, renderingIntent);
+        KoCachedColorConversionTransformation cct = KoColorSpaceRegistry::instance()->colorConversionCache()->cachedConverter(this, dstColorSpace, renderingIntent, conversionFlags);
         cct.transformation()->transform(src, dst, numPixels);
     }
     return true;
 }
 
 
-void KoColorSpace::bitBlt(quint8* dst,
-                          qint32 dststride,
-                          const KoColorSpace* srcSpace,
-                          const quint8* src,
-                          qint32 srcRowStride,
-                          const quint8* srcAlphaMask,
-                          qint32 maskRowStride,
-                          quint8 opacity,
-                          qint32 rows,
-                          qint32 cols,
-                          const QString& op,
-                          const QBitArray& channelFlags) const
-{
-    if (d->compositeOps.contains(op)) {
-        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, rows, cols, d->compositeOps.value(op), channelFlags);
-    } else {
-        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, rows, cols, d->compositeOps.value(COMPOSITE_OVER), channelFlags);
-    }
-
-}
-
-void KoColorSpace::bitBlt(quint8* dst,
-                          qint32 dstRowStride,
-                          const KoColorSpace* srcSpace,
-                          const quint8* src,
-                          qint32 srcRowStride,
-                          const quint8 *srcAlphaMask,
-                          qint32 maskRowStride,
-                          quint8 opacity,
-                          qint32 rows,
-                          qint32 cols,
-                          const KoCompositeOp* op,
-                          const QBitArray& channelFlags) const
+void KoColorSpace::bitBlt(const KoColorSpace* srcSpace, const KoCompositeOp::ParameterInfo& params, const KoCompositeOp* op,
+                          KoColorConversionTransformation::Intent renderingIntent,
+                          KoColorConversionTransformation::ConversionFlags conversionFlags) const
 {
     Q_ASSERT_X(*op->colorSpace() == *this, "KoColorSpace::bitBlt", QString("Composite op is for color space %1 (%2) while this is %3 (%4)").arg(op->colorSpace()->id()).arg(op->colorSpace()->profile()->name()).arg(id()).arg(profile()->name()).toLatin1());
 
-    if (rows <= 0 || cols <= 0)
-        return;
-
-    if (!(*this == *srcSpace)) {
-
-        quint32 conversionBufferStride = cols * pixelSize();
-        QVector<quint8> * conversionCache =
-            threadLocalConversionCache(rows * conversionBufferStride);
-
-        quint8* conversionData = conversionCache->data();
-
-        for (qint32 row = 0; row < rows; row++) {
-            srcSpace->convertPixelsTo(src + row * srcRowStride,
-                                      conversionData + row * conversionBufferStride,
-                                      this, cols);
-        }
-
-        op->composite(dst, dstRowStride,
-                      conversionData, conversionBufferStride,
-                      srcAlphaMask, maskRowStride,
-                      rows,  cols,
-                      opacity, channelFlags);
-    } else {
-        op->composite(dst, dstRowStride,
-                      src, srcRowStride,
-                      srcAlphaMask, maskRowStride,
-                      rows,  cols,
-                      opacity, channelFlags);
-    }
-
-}
-
-void KoColorSpace::bitBlt(const KoColorSpace* srcSpace, const KoCompositeOp::ParameterInfo& params, const KoCompositeOp* op) const
-{
-    Q_ASSERT_X(*op->colorSpace() == *this, "KoColorSpace::bitBlt", QString("Composite op is for color space %1 (%2) while this is %3 (%4)").arg(op->colorSpace()->id()).arg(op->colorSpace()->profile()->name()).arg(id()).arg(profile()->name()).toLatin1());
-    
     if(params.rows <= 0 || params.cols <= 0)
         return;
-    
+
     if(!(*this == *srcSpace)) {
         quint32           conversionBufferStride = params.cols * pixelSize();
         QVector<quint8> * conversionCache        = threadLocalConversionCache(params.rows * conversionBufferStride);
         quint8*           conversionData         = conversionCache->data();
-        
+
         for(qint32 row=0; row<params.rows; row++) {
-            srcSpace->convertPixelsTo(params.srcRowStart + row*params.srcRowStride    ,
-                                      conversionData     + row*conversionBufferStride, this, params.cols);
+            srcSpace->convertPixelsTo(params.srcRowStart + row*params.srcRowStride,
+                                      conversionData     + row*conversionBufferStride, this, params.cols,
+                                      renderingIntent, conversionFlags);
         }
-        
+
         KoCompositeOp::ParameterInfo paramInfo(params);
         paramInfo.srcRowStart  = conversionData;
         paramInfo.srcRowStride = conversionBufferStride;
@@ -380,7 +316,8 @@ KoColorTransformation* KoColorSpace::createColorTransformation(const QString & i
 
 QImage KoColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 height,
                                      const KoColorProfile *dstProfile,
-                                     KoColorConversionTransformation::Intent renderingIntent) const
+                                     KoColorConversionTransformation::Intent renderingIntent,
+                                     KoColorConversionTransformation::ConversionFlags conversionFlags) const
 
 {
     QImage img = QImage(width, height, QImage::Format_ARGB32);
@@ -388,7 +325,7 @@ QImage KoColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 he
     const KoColorSpace * dstCS = KoColorSpaceRegistry::instance()->rgb8(dstProfile);
 
     if (data)
-        this->convertPixelsTo(const_cast<quint8 *>(data), img.bits(), dstCS, width * height, renderingIntent);
+        this->convertPixelsTo(const_cast<quint8 *>(data), img.bits(), dstCS, width * height, renderingIntent, conversionFlags);
 
     return img;
 }

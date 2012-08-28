@@ -18,27 +18,18 @@
  */
 
 #include "KoToolBoxFactory.h"
-#include <klocale.h>
-#include <KoToolManager.h>
 #include "KoToolBox_p.h"
 #include "KoToolBoxDocker_p.h"
 
 class KoToolBoxFactory::Private {
 public:
     KoCanvasController *canvas;
-    QString appName;
 };
 
 
-KoToolBoxFactory::KoToolBoxFactory(KoCanvasController *canvas, const QString& title)
+KoToolBoxFactory::KoToolBoxFactory(KoCanvasController *canvas)
     : d( new Private())
 {
-    if (title.isEmpty()) {
-        d->appName = i18n("Tools");
-    }
-    else {
-        d->appName = title;
-    }
     d->canvas = canvas;
 }
 
@@ -48,7 +39,7 @@ KoToolBoxFactory::~KoToolBoxFactory() {
 
 QString KoToolBoxFactory::id() const
 {
-    return QString("ToolBox");
+    return QLatin1String("ToolBox");
 }
 
 KoDockFactoryBase::DockPosition KoToolBoxFactory::defaultDockPosition() const
@@ -60,8 +51,7 @@ QDockWidget* KoToolBoxFactory::createDockWidget()
 {
     KoToolBox *box = new KoToolBox(d->canvas);
     KoToolBoxDocker *docker = new KoToolBoxDocker(box);
-    docker->setWindowTitle(d->appName);
-    docker->setObjectName("ToolBox_"+ d->appName);
+    docker->setObjectName(QLatin1String("ToolBox"));
 
     return docker;
 }

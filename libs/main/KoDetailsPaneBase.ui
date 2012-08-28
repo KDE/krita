@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>DetailsPaneBase</string>
+   <string comment="KDE::DoNotExtract">DetailsPaneBase</string>
   </property>
   <layout class="QGridLayout">
    <property name="margin">

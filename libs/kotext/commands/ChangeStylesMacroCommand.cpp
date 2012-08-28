@@ -50,6 +50,16 @@ ChangeStylesMacroCommand::~ChangeStylesMacroCommand()
 //     finally the new styles are applied to the documents through super::redo()
 void ChangeStylesMacroCommand::redo()
 {
+    QList<ChangeStylesCommand *> commands;
+    if (m_first) {
+        // IMPORTANT: the sub commands needs to be created now so the can collect
+        // info before we change the styles
+        foreach(ChangeFollower *cf, m_changeFollowers) {
+            commands.append(new ChangeStylesCommand(cf, m_origCharacterStyles, m_origParagraphStyles, m_changedStyles, this));
+        }
+    }
+
+    // Okay so now it's safe to change the styles and this should always be done
     foreach(KoCharacterStyle *newStyle, m_changedCharacterStyles) {
         int id = newStyle->styleId();
         m_styleManager->characterStyle(id)->copyProperties(newStyle);
@@ -65,11 +75,11 @@ void ChangeStylesMacroCommand::redo()
     }
 
     if (m_first) {
+        int i = 0;
         foreach(ChangeFollower *cf, m_changeFollowers) {
-            ChangeStylesCommand *cmd = new ChangeStylesCommand(cf, m_origCharacterStyles, m_origParagraphStyles, m_changedStyles, this);
-
             //add and execute it's redo
-            KoTextDocument(cf->document()).textEditor()->addCommand(cmd);
+            KoTextDocument(cf->document()).textEditor()->addCommand(commands[i]);
+            i++;
         }
         m_first = false;
     } else {

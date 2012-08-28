@@ -21,6 +21,7 @@
 #define __KIS_TOOL_MULTIHAND_H
 
 #include "kis_tool_brush.h"
+#include <KoIcon.h>
 
 class QPushButton;
 class QCheckBox;
@@ -91,7 +92,7 @@ public:
 
         // Temporarily
         setToolType(TOOL_TYPE_SHAPE);
-        setIcon("krita_tool_multihand");
+        setIconName(koIconNameCStr("krita_tool_multihand"));
         setShortcut(KShortcut(Qt::Key_Q));
         setPriority(11);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

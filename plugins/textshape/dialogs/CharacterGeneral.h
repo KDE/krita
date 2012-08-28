@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,9 +26,12 @@
 #include <QWidget>
 
 class KoCharacterStyle;
+class KoStyleManager;
+class KoStyleThumbnailer;
 class FontDecorations;
 class CharacterHighlighting;
 class LanguageTab;
+class StylesModel;
 
 class CharacterGeneral : public QWidget
 {
@@ -37,6 +41,12 @@ public:
 
     void setStyle(KoCharacterStyle *style);
     void hideStyleName(bool hide);
+    bool isStyleChanged();
+    QString styleName() const;
+    void selectName();
+    void setStyleManager(KoStyleManager *sm); // set style manager for m_paragraph style model
+    void updateNextStyleCombo(KoParagraphStyle *style); // set current style in next style combo
+    int nextStyleId(); //return the current style id in next style combo
 
 public slots:
     void save(KoCharacterStyle *style = 0);
@@ -45,22 +55,16 @@ public slots:
 
 signals:
     void nameChanged(const QString &name);
-    void styleAltered(const KoCharacterStyle *style);
+    void styleAltered(const KoCharacterStyle *style); // when saving
+    void styleChanged(); /// when user modifying
 
 private slots:
-    void setName(const QString &name);
-    void slotFontSelected(const QFont &);
-    void slotBackgroundColorChanged(QColor);
-    void slotTextColorChanged(QColor);
-    void slotUnderlineChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor);
-    void slotStrikethroughChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor);
-    void slotCapitalizationChanged(QFont::Capitalization capitalisation);
+    void setPreviewCharacterStyle();
 
 protected:
     Ui::CharacterGeneral widget;
 
 private:
-    bool m_blockSignals;
     bool m_nameHidden;
 
     FontDecorations *m_characterDecorations;
@@ -68,6 +72,10 @@ private:
     LanguageTab *m_languageTab;
 
     KoCharacterStyle *m_style;
+    KoStyleManager *m_styleManager;
+    KoStyleThumbnailer *m_thumbnail;
+    StylesModel *m_paragraphStyleModel;
+    StylesModel *m_characterInheritedStyleModel;
 };
 
 #endif

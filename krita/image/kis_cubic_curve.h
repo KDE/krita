@@ -65,6 +65,6 @@ private:
     Private* const d;
 };
 
-Q_DECLARE_METATYPE(KisCubicCurve);
+Q_DECLARE_METATYPE(KisCubicCurve)
 
 #endif

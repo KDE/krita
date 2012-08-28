@@ -25,6 +25,7 @@
 
 #include "kis_tool_ellipse.h"
 #include <KoCanvasBase.h>
+#include <KoShapeStroke.h>
 
 #include <kis_shape_tool_helper.h>
 #include "kis_figure_painting_tool_helper.h"
@@ -37,7 +38,7 @@
 
 
 KisToolEllipse::KisToolEllipse(KoCanvasBase * canvas)
-        : KisToolEllipseBase(canvas, KisCursor::load("tool_ellipse_cursor.png", 6, 6))
+        : KisToolEllipseBase(canvas, KisToolEllipseBase::PAINT, KisCursor::load("tool_ellipse_cursor.png", 6, 6))
 {
     setObjectName("tool_ellipse");
 }
@@ -58,6 +59,7 @@ void KisToolEllipse::finishEllipse(const QRectF& rect)
     }
 
     if (!currentNode()->inherits("KisShapeLayer")) {
+        KisSystemLocker locker(currentNode());
         KisFigurePaintingToolHelper helper(i18n("Ellipse"),
                                            image(),
                                            canvas()->resourceManager(),
@@ -67,6 +69,8 @@ void KisToolEllipse::finishEllipse(const QRectF& rect)
     } else {
         QRectF r = convertToPt(rect);
         KoShape* shape = KisShapeToolHelper::createEllipseShape(r);
+        KoShapeStroke* border = new KoShapeStroke(1.0, currentFgColor().toQColor());
+        shape->setStroke(border);
         addShape(shape);
     }
     notifyModified();

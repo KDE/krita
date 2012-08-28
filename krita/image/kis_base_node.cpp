@@ -19,6 +19,7 @@
 #include "kis_base_node.h"
 #include <klocale.h>
 
+#include <KoIcon.h>
 #include <KoProperties.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
@@ -34,6 +35,7 @@ public:
     bool systemLocked;
     KoDocumentSectionModel::Property hack_visible; //HACK
     QUuid id;
+    bool collapsed;
 };
 
 KisBaseNode::KisBaseNode()
@@ -50,6 +52,7 @@ KisBaseNode::KisBaseNode()
      */
     setVisible(true);
     setUserLocked(false);
+    setCollapsed(false);
 
     setSystemLocked(false);
     m_d->linkedTo = 0;
@@ -135,8 +138,8 @@ void KisBaseNode::setCompositeOp(const QString& compositeOp)
 KoDocumentSectionModel::PropertyList KisBaseNode::sectionModelProperties() const
 {
     KoDocumentSectionModel::PropertyList l;
-    l << KoDocumentSectionModel::Property(i18n("Visible"), KIcon("visible"), KIcon("novisible"), visible(), m_d->hack_visible.isInStasis, m_d->hack_visible.stateInStasis);
-    l << KoDocumentSectionModel::Property(i18n("Locked"), KIcon("locked"), KIcon("unlocked"), userLocked());
+    l << KoDocumentSectionModel::Property(i18n("Visible"), koIcon("visible"), koIcon("novisible"), visible(), m_d->hack_visible.isInStasis, m_d->hack_visible.stateInStasis);
+    l << KoDocumentSectionModel::Property(i18n("Locked"), koIcon("locked"), koIcon("unlocked"), userLocked());
     return l;
 }
 
@@ -232,7 +235,25 @@ void KisBaseNode::setSystemLocked(bool locked, bool update)
 
 bool KisBaseNode::isEditable() const
 {
-    return (visible(true) && !userLocked() && !systemLocked());
+    bool editable = (m_d->properties.boolProperty("visible", true) && !userLocked() && !systemLocked());
+
+    if (editable) {
+        KisBaseNodeSP parentNode = parentCallback();
+        if (parentNode && parentNode != this) {
+            editable = parentNode->isEditable();
+        }
+    }
+    return editable;
+}
+
+void KisBaseNode::setCollapsed(bool collapsed)
+{
+    m_d->collapsed = collapsed;
+}
+
+bool KisBaseNode::collapsed() const
+{
+    return m_d->collapsed;
 }
 
 QUuid KisBaseNode::uuid() const

@@ -33,7 +33,7 @@ class KisDoubleSliderSpinBox;
 class KRITAUI_EXPORT KisMultipliersDoubleSliderSpinBox : public QWidget {
     Q_OBJECT
 public:
-    KisMultipliersDoubleSliderSpinBox(QWidget* _parent);
+    KisMultipliersDoubleSliderSpinBox(QWidget* _parent = 0);
     ~KisMultipliersDoubleSliderSpinBox();
     
     void addMultiplier(double v);
@@ -52,7 +52,7 @@ signals:
     void valueChanged(qreal value);
     
 private:
-    Q_PRIVATE_SLOT(d, void updateRange());
+    Q_PRIVATE_SLOT(d, void updateRange())
     struct Private;
     Private* const d;
 };

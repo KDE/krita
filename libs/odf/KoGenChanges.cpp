@@ -103,7 +103,7 @@ void KoGenChanges::saveOdfChanges(KoXmlWriter* xmlWriter, bool trackChanges) con
         xmlWriter->startElement("delta:tracked-changes");
     } else {
         xmlWriter->startElement("text:tracked-changes");
-        xmlWriter->addAttribute("track-changes", trackChanges);
+        xmlWriter->addAttribute("text:track-changes", trackChanges);
    }
 
     for (; it != d->changeMap.constEnd() ; ++it) {

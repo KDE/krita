@@ -39,13 +39,14 @@ public:
     enum {
         Type = KoRdfCalendarEventTreeWidgetItem::Type + 1
     };
-    KoRdfLocationTreeWidgetItem(QTreeWidgetItem *parent, KoRdfLocation *semObj);
-
+    KoRdfLocationTreeWidgetItem(QTreeWidgetItem *parent, hKoRdfLocation semObj);
+    virtual ~KoRdfLocationTreeWidgetItem();
+    
     /****************************************/
     /****************************************/
     /**** inherited and reimplemented... **/
 
-    KoRdfLocation *semanticObject() const;
+    hKoRdfLocation semanticObject() const;
     virtual QList<KAction *> actions(QWidget *parent, KoCanvasBase *host = 0);
     virtual void insert(KoCanvasBase *host);
 
@@ -54,10 +55,10 @@ public slots:
     void exportToFile();
 
 protected:
-    virtual KoRdfSemanticItem* semanticItem() const;
+    virtual hKoRdfSemanticItem semanticItem() const;
     virtual QString uIObjectName() const;
 
 private:
-    KoRdfLocation* m_semanticObject;
+    hKoRdfLocation m_semanticObject;
 };
 #endif

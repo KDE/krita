@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2009 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2009 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,16 +18,17 @@
  */
 #include "multilock_button.h"
 
+#include <KoIcon.h>
+
 #include <QPixmap>
 #include <QPainter>
-#include <KIcon>
 #include <QMouseEvent>
 
 class MultiLockButton::Private {
 public:
     Private()
-        : lockedPixmap(KIcon("object-locked").pixmap(24,24)),
-        unlockedPixmap(KIcon("object-unlocked").pixmap(24,24)),
+        : lockedPixmap(koIcon("object-locked").pixmap(24,24)),
+        unlockedPixmap(koIcon("object-unlocked").pixmap(24,24)),
         locked(true)
     {
     }

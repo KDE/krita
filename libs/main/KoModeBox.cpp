@@ -159,6 +159,7 @@ void KoModeBox::addItem(const KoToolButton button)
     }
     widget = new QWidget();
     widget->setLayout(layout);
+    layout->setContentsMargins(0,0,0,0);
     d->addedWidgets[button.buttonGroupId] = widget;
 
     QToolBox::addItem(widget, button.button->icon(), button.button->toolTip());
@@ -218,6 +219,13 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
 void KoModeBox::setOptionWidgets(const QList<QWidget *> &optionWidgetList)
 {
     if (! d->addedWidgets.contains(d->activeId)) return;
+
+    // For some reason we need to set some attr on our placeholder widget here
+    // eventhough these settings should be default
+    // Otherwise Sheets' celltool's optionwidget looks ugly
+    d->addedWidgets[d->activeId]->setAutoFillBackground(false);
+    d->addedWidgets[d->activeId]->setBackgroundRole(QPalette::NoRole);
+
     qDeleteAll(d->currentAuxWidgets);
     d->currentAuxWidgets.clear();
 
@@ -225,7 +233,7 @@ void KoModeBox::setOptionWidgets(const QList<QWidget *> &optionWidgetList)
     QGridLayout *layout = (QGridLayout *)d->addedWidgets[d->activeId]->layout();
     // need to unstretch row that have previously been stretched
     layout->setRowStretch(layout->rowCount()-1, 0);
-    layout->setColumnMinimumWidth(0, 16);
+    layout->setColumnMinimumWidth(0, 0); // used to be indent
     layout->setColumnStretch(1, 1);
     layout->setColumnStretch(2, 2);
     layout->setColumnStretch(3, 1);
@@ -256,7 +264,7 @@ void KoModeBox::setOptionWidgets(const QList<QWidget *> &optionWidgetList)
         if (widget != optionWidgetList.last()) {
             QFrame *s;
             layout->addWidget(s = new QFrame(), cnt++, 2, 1, 1);
-            s->setFrameShape(QFrame::HLine);
+            s->setFrameStyle(QFrame::HLine | QFrame::Sunken);
             d->currentAuxWidgets.insert(s);
         }
     }

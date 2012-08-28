@@ -89,12 +89,12 @@ KisMetaData::Value exivValueToKMDValue(const Exiv2::Value::AutoPtr value, bool f
     case Exiv2::langAlt:
     default: {
         dbgFile << "Unknown type id :" << value->typeId() << " value =" << value->toString().c_str();
-        Q_ASSERT(false); // This point must never be reached !
+        //Q_ASSERT(false); // This point must never be reached !
         return KisMetaData::Value();
     }
     }
     dbgFile << "Unknown type id :" << value->typeId() << " value =" << value->toString().c_str();
-    Q_ASSERT(false); // This point must never be reached !
+    //Q_ASSERT(false); // This point must never be reached !
     return KisMetaData::Value();
 }
 
@@ -136,7 +136,7 @@ Exiv2::Value* variantToExivValue(const QVariant& variant, Exiv2::TypeId type)
         return new Exiv2::CommentValue(qPrintable(variant.toString()));
     default:
         dbgFile << "Unhandled type:" << type;
-        Q_ASSERT(false);
+        //Q_ASSERT(false);
         return 0;
     }
 }
@@ -161,7 +161,7 @@ Exiv2::Value* kmdValueToExivValue(const KisMetaData::Value& value, Exiv2::TypeId
         return variantToExivValue(value.asVariant(), type);
     }
     case KisMetaData::Value::Rational:
-        Q_ASSERT(type == Exiv2::signedRational || type == Exiv2::unsignedRational);
+        //Q_ASSERT(type == Exiv2::signedRational || type == Exiv2::unsignedRational);
         if (type == Exiv2::signedRational) {
             return new Exiv2::ValueType<Exiv2::Rational>(Exiv2::Rational(value.asRational().numerator, value.asRational().denominator));
         } else {
@@ -191,19 +191,19 @@ Exiv2::Value* kmdValueToExivValue(const KisMetaData::Value& value, Exiv2::TypeId
         }
         default:
             dbgFile << type << " " << value;
-            Q_ASSERT(false);
+            //Q_ASSERT(false);
         }
     }
     default:
         dbgFile << type << " " << value;
-        Q_ASSERT(false);
+        //Q_ASSERT(false);
     }
     return 0;
 }
 
 Exiv2::Value* kmdValueToExivXmpValue(const KisMetaData::Value& value)
 {
-    Q_ASSERT(value.type() != KisMetaData::Value::Structure);
+    //Q_ASSERT(value.type() != KisMetaData::Value::Structure);
     switch (value.type()) {
     case KisMetaData::Value::Invalid:
         return new Exiv2::DataValue(Exiv2::invalidTypeId);
@@ -216,7 +216,7 @@ Exiv2::Value* kmdValueToExivXmpValue(const KisMetaData::Value& value)
                 return new Exiv2::XmpTextValue("False");
             }
         } else {
-            Q_ASSERT(var.canConvert(QVariant::String));
+            //Q_ASSERT(var.canConvert(QVariant::String));
             return new Exiv2::XmpTextValue(var.toString().toAscii().data());
         }
     }
@@ -241,7 +241,8 @@ Exiv2::Value* kmdValueToExivXmpValue(const KisMetaData::Value& value)
             arrV->setXmpArrayType(Exiv2::XmpValue::xaAlt);
             break;
         default:
-            qFatal("can't happen");
+            // Cannot happen
+            ;
         }
         foreach(const KisMetaData::Value& v, value.asArray()) {
             Exiv2::Value* ev = kmdValueToExivXmpValue(v);
@@ -259,9 +260,9 @@ Exiv2::Value* kmdValueToExivXmpValue(const KisMetaData::Value& value)
             if (it.key() != "x-default") {
                 exivVal = "lang=" + it.key() + ' ';
             }
-            Q_ASSERT(it.value().type() == KisMetaData::Value::Variant);
+            //Q_ASSERT(it.value().type() == KisMetaData::Value::Variant);
             QVariant var = it.value().asVariant();
-            Q_ASSERT(var.type() == QVariant::String);
+            //Q_ASSERT(var.type() == QVariant::String);
             exivVal += var.toString();
             arrV->read(exivVal.toAscii().data());
         }
@@ -269,12 +270,12 @@ Exiv2::Value* kmdValueToExivXmpValue(const KisMetaData::Value& value)
     }
     case KisMetaData::Value::Structure:
     default: {
-        qFatal("Unhandled value type");
+        warnKrita << "KisExiv2: Unhandled value type";
         return 0;
     }
 
     }
-    qFatal("Unhandled value type");
+    warnKrita << "KisExiv2: Unhandled value type";
     return 0;
 }
 

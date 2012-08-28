@@ -184,6 +184,7 @@ private:
     PaintOpPresetMap m_paintOpPresetMap;
     TabletToolID     m_currTabletToolID;
     bool             m_presetsEnabled;
+    bool             m_blockUpdate;
 };
 
 #endif //KIS_PAINTOP_BOX_H_

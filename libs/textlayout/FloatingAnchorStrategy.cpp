@@ -167,11 +167,8 @@ bool FloatingAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRec
         break;
 
     case KoTextAnchor::HParagraphContent:
-        //FIXME proper map style:horizontal-rel=paragraph-content to use the paragraph
-        //content. Currently we do the same MSWord2010 does and map it (as in to
-        //the same style:horizontal-rel=paragraph would do.
-        anchorBoundingRect.setX(paragraphRect().x() + containerBoundingRect.x());
-        anchorBoundingRect.setWidth(paragraphRect().width());
+        anchorBoundingRect.setX(paragraphContentRect().x() + containerBoundingRect.x());
+        anchorBoundingRect.setWidth(paragraphContentRect().width());
         break;
 
     case KoTextAnchor::HChar: {
@@ -321,12 +318,8 @@ bool FloatingAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, QRectF
         break;
 
     case KoTextAnchor::VParagraphContent: {
-        qreal top = layout->lineAt(0).y();
-        QTextLine tl = layout->lineAt(layout->lineCount() - 1);
-        if (!tl.isValid())
-            return false; // lets go for a second round.
-        anchorBoundingRect.setY(top + containerBoundingRect.y()  - data->documentOffset());
-        anchorBoundingRect.setHeight(tl.y() + tl.height() - top);
+        anchorBoundingRect.setY(paragraphContentRect().y() + containerBoundingRect.y()  - data->documentOffset());
+        anchorBoundingRect.setHeight(paragraphContentRect().height());
     }
     break;
 

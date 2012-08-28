@@ -24,6 +24,7 @@
 #include <KoTextDocument.h>
 #include <QTextCursor>
 #include <KoParagraphStyle.h>
+#include <KoImageCollection.h>
 
 #include <KLocale>
 #include <KDebug>
@@ -65,10 +66,15 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, const KoListLeve
         else if (style == KoListStyle::CustomCharItem) {
             llp.setRelativeBulletSize(100); //we take the default value for numbering bullets as 100
             llp.setBulletCharacter(levelProperties.bulletCharacter());
+        } else if (style == KoListStyle::ImageItem) {
+            llp.setBulletImage(levelProperties.bulletImage());
+            llp.setWidth(levelProperties.width());
+            llp.setHeight(levelProperties.height());
         }
 
         llp.setAlignmentMode(true); // when creating a new list we create it in this mode
         llp.setLabelFollowedBy(KoListStyle::ListTab);
+        llp.setDisplayLevel(levelProperties.displayLevel());
 
         llp.setTabStopPosition(MARGIN_DEFAULT*(lev+2));
         llp.setMargin(MARGIN_DEFAULT*(lev+2));

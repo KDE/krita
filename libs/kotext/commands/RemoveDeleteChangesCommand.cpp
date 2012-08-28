@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 Casper Boemann <cbo@boemann.dk>
+ *  Copyright (c) 2011 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public

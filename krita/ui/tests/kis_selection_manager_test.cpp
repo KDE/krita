@@ -30,6 +30,7 @@
 #include "kis_selection_manager.h"
 #include "kis_node_manager.h"
 #include "kis_view2.h"
+#include "kis_part2.h"
 #include "KoMainWindow.h"
 
 
@@ -46,16 +47,17 @@ public:
 
         QVERIFY(checkLayers("initial"));
 
-        doc = new KisDoc2();
+        part = new KisPart2(0);
+        doc = new KisDoc2(part);
+        part->setDocument(doc);
         doc->setCurrentImage(image);
 
-        shell = new KoMainWindow(doc->componentData());
-        KisView2 *view = new KisView2(doc, shell);
+        shell = new KoMainWindow(part->componentData());
+        KisView2 *view = new KisView2(part, doc, shell);
 
-        QString name = "HR SketchPaper 01";
-        name[17] = '\0';
-        KisPattern *newPattern = KisResourceServerProvider::instance()->patternServer()->getResourceByName(name);
-        Q_ASSERT(newPattern);
+        KisPattern *newPattern = new KisPattern(QString(FILES_DATA_DIR) + QDir::separator() + "HR_SketchPaper_01.pat");
+        newPattern->load();
+        Q_ASSERT(newPattern->valid());
         view->resourceProvider()->slotPatternActivated(newPattern);
 
         KoColor fgColor(Qt::black, image->colorSpace());
@@ -73,6 +75,7 @@ public:
     ~SelectionManagerTester() {
         delete shell;
         delete doc;
+        delete part;
     }
 
     void checkUndo() {
@@ -115,6 +118,7 @@ public:
 
 private:
     KisDoc2 *doc;
+    KisPart2 *part;
     KoMainWindow *shell;
 };
 

@@ -28,7 +28,7 @@
 #include "KoShape_p.h"
 #include "KoCanvasBase.h"
 #include "KoShapeContainer.h"
-#include "KoShapeBorderModel.h"
+#include "KoShapeStrokeModel.h"
 #include "KoShapeGroup.h"
 #include "KoToolProxy.h"
 #include "KoShapeManagerPaintingStrategy.h"
@@ -124,10 +124,12 @@ void KoShapeManager::Private::updateTree()
     // for detecting collisions between shapes.
     DetectCollision detector;
     bool selectionModified = false;
+    bool anyModified = false;
     foreach(KoShape *shape, aggregate4update) {
         if (shapeIndexesBeforeUpdate.contains(shape))
             detector.detect(tree, shape, shapeIndexesBeforeUpdate[shape]);
         selectionModified = selectionModified || selection->isSelected(shape);
+        anyModified = true;
     }
 
     foreach (KoShape *shape, aggregate4update) {
@@ -147,6 +149,9 @@ void KoShapeManager::Private::updateTree()
     if (selectionModified) {
         selection->updateSizeAndPosition();
         emit q->selectionContentChanged();
+    }
+    if (anyModified) {
+        emit q->contentChanged();
     }
 }
 
@@ -372,9 +377,9 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
         painter.save();
         shape->paint(painter, converter, paintContext);
         painter.restore();
-        if (shape->border()) {
+        if (shape->stroke()) {
             painter.save();
-            shape->border()->paint(shape, painter, converter);
+            shape->stroke()->paint(shape, painter, converter);
             painter.restore();
         }
     } else {
@@ -414,9 +419,9 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
                 imagePainter.save();
                 shape->paint(imagePainter, converter, paintContext);
                 imagePainter.restore();
-                if (shape->border()) {
+                if (shape->stroke()) {
                     imagePainter.save();
-                    shape->border()->paint(shape, imagePainter, converter);
+                    shape->stroke()->paint(shape, imagePainter, converter);
                     imagePainter.restore();
                 }
                 imagePainter.end();
@@ -434,7 +439,7 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
                 QPainter fillPainter(&fillPaint);
                 QPainterPath fillPath;
                 fillPath.addRect(fillPaint.rect().adjusted(-1,-1,1,1));
-                shape->background()->paint(fillPainter, fillPath);
+                shape->background()->paint(fillPainter, converter, paintContext, fillPath);
             } else {
                 fillPaint.fill(qRgba(0,0,0,0));
             }

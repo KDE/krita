@@ -32,7 +32,7 @@
 #include <QImage>
 #include <QTransform>
 
-#include <kis_random_accessor.h>
+#include <kis_random_accessor_ng.h>
 #include <kis_random_sub_accessor.h>
 
 #include <kis_paint_device.h>
@@ -110,8 +110,8 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
 
     qreal x = info.pos().x();
     qreal y = info.pos().y();
-    KisRandomAccessor accessor = dab->createRandomAccessor(qRound(x), qRound(y));
-    KisRandomSubAccessorPixel subAcc = source->createRandomSubAccessor();
+    KisRandomAccessorSP accessor = dab->createRandomAccessorNG(qRound(x), qRound(y));
+    KisRandomSubAccessorSP subAcc = source->createRandomSubAccessor();
 
     m_inkColor = color;
 
@@ -199,8 +199,8 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
         
         if (shouldColor){
             if (m_colorProperties->sampleInputColor){
-                subAcc.moveTo(nx+x, ny+y);
-                subAcc.sampledRawData( m_inkColor.data() );
+                subAcc->moveTo(nx+x, ny+y);
+                subAcc->sampledOldRawData( m_inkColor.data() );
             }else{
                  //revert the color
                  memcpy(m_inkColor.data(),color.data(), m_pixelSize);
@@ -277,8 +277,8 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
             {
                 ix = qRound(nx + x);
                 iy = qRound(ny + y);
-                accessor.moveTo(ix, iy);
-                memcpy(accessor.rawData(), m_inkColor.data(), m_pixelSize);
+                accessor->moveTo(ix, iy);
+                memcpy(accessor->rawData(), m_inkColor.data(), m_pixelSize);
                 break;
             }
             case 4:
@@ -294,15 +294,15 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
                     }
                     m_transformed = m_brushQImage.transformed(m, Qt::SmoothTransformation);
                     m_imageDevice->convertFromQImage(m_transformed, 0);
-                    KisRandomAccessor ac = m_imageDevice->createRandomAccessor(0,0);
+                    KisRandomAccessorSP ac = m_imageDevice->createRandomAccessorNG(0,0);
                     QRect rc = m_transformed.rect();
 
                     if (m_colorProperties->useRandomHSV && m_transfo){
 
                         for (int y = rc.y(); y< rc.y()+rc.height(); y++){
                             for (int x = rc.x(); x < rc.x()+rc.width();x++){
-                                ac.moveTo(x,y);
-                                m_transfo->transform(ac.rawData(), ac.rawData() , 1);
+                                ac->moveTo(x,y);
+                                m_transfo->transform(ac->rawData(), ac->rawData() , 1);
                             }
                         }
                     }
@@ -353,7 +353,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
 
 
 
-void SprayBrush::paintParticle(KisRandomAccessor &writeAccessor, const KoColor &color, qreal rx, qreal ry)
+void SprayBrush::paintParticle(KisRandomAccessorSP &writeAccessor, const KoColor &color, qreal rx, qreal ry)
 {
     // opacity top left, right, bottom left, right
     KoColor pcolor(color);
@@ -374,20 +374,20 @@ void SprayBrush::paintParticle(KisRandomAccessor &writeAccessor, const KoColor &
     // Maybe some kind of compositing using here would be cool
 
     pcolor.setOpacity(btl);
-    writeAccessor.moveTo(ipx  , ipy);
-    memcpy(writeAccessor.rawData(), pcolor.data(), m_pixelSize);
+    writeAccessor->moveTo(ipx  , ipy);
+    memcpy(writeAccessor->rawData(), pcolor.data(), m_pixelSize);
 
     pcolor.setOpacity(btr);
-    writeAccessor.moveTo(ipx + 1, ipy);
-    memcpy(writeAccessor.rawData(), pcolor.data(), m_pixelSize);
+    writeAccessor->moveTo(ipx + 1, ipy);
+    memcpy(writeAccessor->rawData(), pcolor.data(), m_pixelSize);
 
     pcolor.setOpacity(bbl);
-    writeAccessor.moveTo(ipx, ipy + 1);
-    memcpy(writeAccessor.rawData(), pcolor.data(), m_pixelSize);
+    writeAccessor->moveTo(ipx, ipy + 1);
+    memcpy(writeAccessor->rawData(), pcolor.data(), m_pixelSize);
 
     pcolor.setOpacity(bbr);
-    writeAccessor.moveTo(ipx + 1, ipy + 1);
-    memcpy(writeAccessor.rawData(), pcolor.data(), m_pixelSize);
+    writeAccessor->moveTo(ipx + 1, ipy + 1);
+    memcpy(writeAccessor->rawData(), pcolor.data(), m_pixelSize);
 }
 
 void SprayBrush::paintCircle(KisPainter * painter, qreal x, qreal y, int radius, int steps)
@@ -473,66 +473,66 @@ void SprayBrush::paintRectangle(KisPainter* painter, qreal x, qreal y, int width
 void SprayBrush::paintOutline(KisPaintDeviceSP dev , const KoColor &outlineColor, qreal posX, qreal posY, qreal radius)
 {
     QList<QPointF> antiPixels;
-    KisRandomAccessor accessor = dev->createRandomAccessor(qRound(posX), qRound(posY));
+    KisRandomAccessorSP accessor = dev->createRandomAccessorNG(qRound(posX), qRound(posY));
 
     for (int y = -radius + posY; y <= radius + posY; y++) {
         for (int x = -radius + posX; x <= radius + posX; x++) {
-            accessor.moveTo(x, y);
-            qreal alpha = dev->colorSpace()->opacityU8(accessor.rawData());
+            accessor->moveTo(x, y);
+            qreal alpha = dev->colorSpace()->opacityU8(accessor->rawData());
 
             if (alpha != 0) {
                 // top left
-                accessor.moveTo(x - 1, y - 1);
-                if (dev->colorSpace()->opacityU8(accessor.rawData()) == 0) {
+                accessor->moveTo(x - 1, y - 1);
+                if (dev->colorSpace()->opacityU8(accessor->rawData()) == 0) {
                     antiPixels.append(QPointF(x - 1, y - 1));
                     //continue;
                 }
 
                 // top
-                accessor.moveTo(x, y - 1);
-                if (dev->colorSpace()->opacityU8(accessor.rawData()) == 0) {
+                accessor->moveTo(x, y - 1);
+                if (dev->colorSpace()->opacityU8(accessor->rawData()) == 0) {
                     antiPixels.append(QPointF(x, y - 1));
                     //continue;
                 }
 
                 // top right
-                accessor.moveTo(x + 1, y - 1);
-                if (dev->colorSpace()->opacityU8(accessor.rawData()) == 0) {
+                accessor->moveTo(x + 1, y - 1);
+                if (dev->colorSpace()->opacityU8(accessor->rawData()) == 0) {
                     antiPixels.append(QPointF(x + 1, y - 1));
                     //continue;
                 }
 
                 //left
-                accessor.moveTo(x - 1, y);
-                if (dev->colorSpace()->opacityU8(accessor.rawData()) == 0) {
+                accessor->moveTo(x - 1, y);
+                if (dev->colorSpace()->opacityU8(accessor->rawData()) == 0) {
                     antiPixels.append(QPointF(x - 1, y));
                     //continue;
                 }
 
                 //right
-                accessor.moveTo(x + 1, y);
-                if (dev->colorSpace()->opacityU8(accessor.rawData()) == 0) {
+                accessor->moveTo(x + 1, y);
+                if (dev->colorSpace()->opacityU8(accessor->rawData()) == 0) {
                     antiPixels.append(QPointF(x + 1, y));
                     //continue;
                 }
 
                 // bottom left
-                accessor.moveTo(x - 1, y + 1);
-                if (dev->colorSpace()->opacityU8(accessor.rawData()) == 0) {
+                accessor->moveTo(x - 1, y + 1);
+                if (dev->colorSpace()->opacityU8(accessor->rawData()) == 0) {
                     antiPixels.append(QPointF(x - 1, y + 1));
                     //continue;
                 }
 
                 // bottom
-                accessor.moveTo(x, y + 1);
-                if (dev->colorSpace()->opacityU8(accessor.rawData()) == 0) {
+                accessor->moveTo(x, y + 1);
+                if (dev->colorSpace()->opacityU8(accessor->rawData()) == 0) {
                     antiPixels.append(QPointF(x, y + 1));
                     //continue;
                 }
 
                 // bottom right
-                accessor.moveTo(x + 1, y + 1);
-                if (dev->colorSpace()->opacityU8(accessor.rawData()) == 0) {
+                accessor->moveTo(x + 1, y + 1);
+                if (dev->colorSpace()->opacityU8(accessor->rawData()) == 0) {
                     antiPixels.append(QPointF(x + 1, y + 1));
                     //continue;
                 }
@@ -544,7 +544,7 @@ void SprayBrush::paintOutline(KisPaintDeviceSP dev , const KoColor &outlineColor
     // anti-alias it
     int size = antiPixels.size();
     for (int i = 0; i < size; i++) {
-        accessor.moveTo(antiPixels[i].x(), antiPixels[i].y());
-        memcpy(accessor.rawData(), outlineColor.data(), dev->colorSpace()->pixelSize());
+        accessor->moveTo(antiPixels[i].x(), antiPixels[i].y());
+        memcpy(accessor->rawData(), outlineColor.data(), dev->colorSpace()->pixelSize());
     }
 }

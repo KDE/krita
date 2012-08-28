@@ -22,7 +22,7 @@
 #include <QAbstractItemModel>
 #include <QDebug>
 
-ModelObserver::ModelObserver( QAbstractItemModel *source )
+ModelObserver::ModelObserver(QAbstractItemModel *source)
     : QObject()
 {
     m_source = source;
@@ -31,54 +31,54 @@ ModelObserver::ModelObserver( QAbstractItemModel *source )
     m_lastDataChange.valid = false;
     m_lastHeaderDataChange.valid = false;
 
-    connect( source, SIGNAL( rowsInserted( const QModelIndex&, int, int ) ),
-             this  , SLOT( slotRowsInserted( const QModelIndex&, int, int ) ) );
-    connect( source, SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
-             this,   SLOT( slotColumnsInserted( const QModelIndex&, int, int ) ) );
-    connect( source, SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ),
-             this,   SLOT( slotRowsRemoved( const QModelIndex&, int, int ) ) );
-    connect( source, SIGNAL( columnsRemoved( const QModelIndex&, int, int ) ),
-             this,   SLOT( slotColumnsRemoved( const QModelIndex&, int, int ) ) );
-    connect( source, SIGNAL( headerDataChanged( Qt::Orientation, int, int ) ),
-             this,   SLOT( slotHeaderDataChanged( Qt::Orientation, int, int ) ) );
-    connect( source, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ),
-             this,   SLOT( slotDataChanged( const QModelIndex&, const QModelIndex& ) ) );
-    connect( source, SIGNAL( modelReset() ),
-             this,   SLOT( slotModelReset() ) );
+    connect(source, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
+            this  , SLOT(slotRowsInserted(const QModelIndex&, int, int)));
+    connect(source, SIGNAL(columnsInserted(const QModelIndex&, int, int)),
+            this,   SLOT(slotColumnsInserted(const QModelIndex&, int, int)));
+    connect(source, SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
+            this,   SLOT(slotRowsRemoved(const QModelIndex&, int, int)));
+    connect(source, SIGNAL(columnsRemoved(const QModelIndex&, int, int)),
+            this,   SLOT(slotColumnsRemoved(const QModelIndex&, int, int)));
+    connect(source, SIGNAL(headerDataChanged(Qt::Orientation, int, int)),
+            this,   SLOT(slotHeaderDataChanged(Qt::Orientation, int, int)));
+    connect(source, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
+            this,   SLOT(slotDataChanged(const QModelIndex&, const QModelIndex&)));
+    connect(source, SIGNAL(modelReset()),
+            this,   SLOT(slotModelReset()));
 }
 
-void ModelObserver::slotRowsInserted( const QModelIndex & /*parent*/, int start, int end )
+void ModelObserver::slotRowsInserted(const QModelIndex & /*parent*/, int start, int end)
 {
-    Q_ASSERT( start <= end );
+    Q_ASSERT(start <= end);
 
     m_numRows += end - start + 1;
 
     qDebug() << "m_numRows: " << m_numRows;
 }
 
-void ModelObserver::slotColumnsInserted( const QModelIndex & /*parent*/, int start, int end )
+void ModelObserver::slotColumnsInserted(const QModelIndex & /*parent*/, int start, int end)
 {
-    Q_ASSERT( start <= end );
+    Q_ASSERT(start <= end);
 
     m_numCols += end - start + 1;
 
     qDebug() << "m_numCols: " << m_numCols;
 }
 
-void ModelObserver::slotRowsRemoved( const QModelIndex & /*parent*/, int start, int end )
+void ModelObserver::slotRowsRemoved(const QModelIndex & /*parent*/, int start, int end)
 {
-    Q_ASSERT( start <= end );
-    Q_ASSERT( end < m_numRows );
+    Q_ASSERT(start <= end);
+    Q_ASSERT(end < m_numRows);
 
     m_numRows -= end - start + 1;
 
     qDebug() << "m_numRows: " << m_numRows;
 }
 
-void ModelObserver::slotColumnsRemoved( const QModelIndex & /*parent*/, int start, int end )
+void ModelObserver::slotColumnsRemoved(const QModelIndex & /*parent*/, int start, int end)
 {
-    Q_ASSERT( start <= end );
-    Q_ASSERT( end < m_numCols );
+    Q_ASSERT(start <= end);
+    Q_ASSERT(end < m_numCols);
 
     m_numCols -= end - start + 1;
 
@@ -92,7 +92,7 @@ void ModelObserver::slotModelReset()
     m_numCols = m_source->columnCount();
 }
 
-void ModelObserver::slotHeaderDataChanged( Qt::Orientation orientation, int first, int last )
+void ModelObserver::slotHeaderDataChanged(Qt::Orientation orientation, int first, int last)
 {
     m_lastHeaderDataChange.orientation = orientation;
     m_lastHeaderDataChange.first = first;
@@ -100,7 +100,7 @@ void ModelObserver::slotHeaderDataChanged( Qt::Orientation orientation, int firs
     m_lastHeaderDataChange.valid = true;
 }
 
-void ModelObserver::slotDataChanged( const QModelIndex & topLeft, const QModelIndex & bottomRight )
+void ModelObserver::slotDataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight)
 {
     m_lastDataChange.topLeft = topLeft;
     m_lastDataChange.bottomRight = bottomRight;

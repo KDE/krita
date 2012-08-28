@@ -21,6 +21,8 @@
 #include <kis_debug.h>
 #include <klocale.h>
 
+#include <KoIcon.h>
+
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 
@@ -240,7 +242,7 @@ void KisCloneLayer::setCopyFromInfo(KisCloneInfo info)
 
 QIcon KisCloneLayer::icon() const
 {
-    return KIcon("edit-copy");
+    return koIcon("edit-copy");
 }
 
 KoDocumentSectionModel::PropertyList KisCloneLayer::sectionModelProperties() const

@@ -26,6 +26,12 @@
 
 class KoRdfLocationEditWidgetPrivate;
 
+namespace Marble
+{
+    class MarbleWidget;
+    class LatLonEdit;
+};
+
 /**
  * This class allows the map to adjust the LatLonEdit widgets as the
  * user drags the map
@@ -39,9 +45,9 @@ public:
     KoRdfLocationEditWidget(QWidget *parent, Ui::KoRdfLocationEditWidget *ew);
     ~KoRdfLocationEditWidget();
 
-// #ifdef CAN_USE_MARBLE
-//     void setupMap(Marble::MarbleWidget* map, Marble::LatLonEdit* xlat, Marble::LatLonEdit* xlong);
-// #endif
+//#ifdef CAN_USE_MARBLE
+//    void setupMap(Marble::MarbleWidget* map, Marble::LatLonEdit* xlat, Marble::LatLonEdit* xlong);
+//#endif
     
 public slots:
     void mouseMoveGeoPosition(QString);

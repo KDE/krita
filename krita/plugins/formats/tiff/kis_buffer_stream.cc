@@ -26,13 +26,13 @@ KisBufferStreamContigBase::KisBufferStreamContigBase(uint8* src, uint16 depth, u
 
 void KisBufferStreamContigBase::restart()
 {
-    m_srcit = m_src;
+    m_srcIt = m_src;
     m_posinc = 8;
 }
 
 void KisBufferStreamContigBase::moveToLine(uint32 lineNumber)
 {
-    m_srcit = m_src + lineNumber * m_lineSize;
+    m_srcIt = m_src + lineNumber * m_lineSize;
     m_posinc = 8;
 }
 
@@ -48,9 +48,9 @@ uint32 KisBufferStreamContigBelow16::nextValue()
         if (toread > m_posinc) toread = m_posinc;
         remain -= toread;
         m_posinc -= toread;
-        value = (value << toread) | (((*m_srcit) >> (m_posinc)) & ((1 << toread) - 1));
+        value = (value << toread) | (((*m_srcIt) >> (m_posinc)) & ((1 << toread) - 1));
         if (m_posinc == 0) {
-            m_srcit++;
+            m_srcIt++;
             m_posinc = 8;
         }
     }
@@ -69,9 +69,9 @@ uint32 KisBufferStreamContigBelow32::nextValue()
         if (toread > m_posinc) toread = m_posinc;
         remain -= toread;
         m_posinc -= toread;
-        value = (value) | ((((*m_srcit) >> (m_posinc)) & ((1 << toread) - 1)) << (m_depth - 8 - remain));
+        value = (value) | ((((*m_srcIt) >> (m_posinc)) & ((1 << toread) - 1)) << (m_depth - 8 - remain));
         if (m_posinc == 0) {
-            m_srcit++;
+            m_srcIt++;
             m_posinc = 8;
         }
     }
@@ -91,10 +91,10 @@ uint32 KisBufferStreamContigAbove32::nextValue()
         remain -= toread;
         m_posinc -= toread;
         if (remain < 32) {
-            value = (value) | ((((*m_srcit) >> (m_posinc)) & ((1 << toread) - 1)) << (24 - remain));
+            value = (value) | ((((*m_srcIt) >> (m_posinc)) & ((1 << toread) - 1)) << (24 - remain));
         }
         if (m_posinc == 0) {
-            m_srcit++;
+            m_srcIt++;
             m_posinc = 8;
         }
     }

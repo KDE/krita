@@ -26,7 +26,10 @@
 #include <QMouseEvent>
 #include <QResizeEvent>
 #include <QTransform>
+#include <QList>
 #include <cmath>
+
+#include <kis_config.h>
 
 #include "kis_color_selector.h"
 
@@ -353,14 +356,14 @@ void KisColorSelector::createRing(ColorRing& ring, quint8 numPieces, qreal inner
 void KisColorSelector::setSelectedColor(const KisColor& color, bool selectAsFgColor, bool emitSignal)
 {
     if (selectAsFgColor) { m_fgColor = color; }
-    else                { m_bgColor = color; }
+    else                 { m_bgColor = color; }
     
     m_selectedColor          = color;
     m_selectedColorIsFgColor = selectAsFgColor;
     
     if (emitSignal) {
         if (selectAsFgColor) { emit sigFgColorChanged(m_selectedColor); }
-        else                { emit sigBgColorChanged(m_selectedColor); }
+        else                 { emit sigBgColorChanged(m_selectedColor); }
     }
 }
 
@@ -539,7 +542,7 @@ void KisColorSelector::drawLightStrip(QPainter& painter, const QRect& rect)
     }
 }
 
-void KisColorSelector::paintEvent(QPaintEvent* event)
+void KisColorSelector::paintEvent(QPaintEvent* /*event*/)
 {
     // 0 red    -> (1,0,0)
     // 1 yellow -> (1,1,0)
@@ -653,7 +656,7 @@ void KisColorSelector::mouseMoveEvent(QMouseEvent* event)
     update();
 }
 
-void KisColorSelector::mouseReleaseEvent(QMouseEvent* event)
+void KisColorSelector::mouseReleaseEvent(QMouseEvent* /*event*/)
 {
     if (!m_mouseMoved && m_clickedRing >= 0) {
         Radian angle = std::atan2(m_clickPos.x(), m_clickPos.y()) - RAD_90;
@@ -678,7 +681,64 @@ void KisColorSelector::mouseReleaseEvent(QMouseEvent* event)
     update();
 }
 
-void KisColorSelector::resizeEvent(QResizeEvent* event)
+void KisColorSelector::resizeEvent(QResizeEvent* /*event*/)
 {
     recalculateAreas(quint8(getNumLightPieces()));
+}
+
+void KisColorSelector::saveSettings()
+{
+    KisConfig cfg;
+    cfg.writeEntry("ArtColorSel.ColorSpace" , qint32(m_colorSpace));
+    cfg.writeEntry("ArtColorSel.NumRings"   , m_colorRings.size());
+    cfg.writeEntry("ArtColorSel.RingPieces" , qint32(m_numPieces));
+    cfg.writeEntry("ArtColorSel.LightPieces", qint32(m_numLightPieces));
+    
+    cfg.writeEntry("ArtColorSel.InversedSaturation", m_inverseSaturation);
+    cfg.writeEntry("ArtColorSel.RelativeLight"     , m_relativeLight);
+    cfg.writeEntry("ArtColorSel.Light"             , m_light);
+    
+    cfg.writeEntry("ArtColorSel.SelColorH", m_selectedColor.getH());
+    cfg.writeEntry("ArtColorSel.SelColorS", m_selectedColor.getS());
+    cfg.writeEntry("ArtColorSel.SelColorX", m_selectedColor.getX());
+    cfg.writeEntry("ArtColorSel.SelColorA", m_selectedColor.getA());
+    
+    QList<float> angles;
+    
+    for(int i=0; i<m_colorRings.size(); ++i)
+        angles.push_back(m_colorRings[i].angle.value());
+    
+    cfg.writeList("ArtColorSel.RingAngles", angles);
+}
+
+void KisColorSelector::loadSettings()
+{
+    KisConfig cfg;
+    setColorSpace(KisColor::Type(cfg.readEntry<qint32>("ArtColorSel.ColorSpace" , KisColor::HSY)));
+    
+    setNumLightPieces(cfg.readEntry("ArtColorSel.LightPieces", 19));
+    
+    m_selectedColor.setH(cfg.readEntry<float>("ArtColorSel.SelColorH", 0.0f));
+    m_selectedColor.setS(cfg.readEntry<float>("ArtColorSel.SelColorS", 0.0f));
+    m_selectedColor.setX(cfg.readEntry<float>("ArtColorSel.SelColorX", 0.0f));
+    m_selectedColor.setA(1.0f);
+    
+    setInverseSaturation(cfg.readEntry<bool>("ArtColorSel.InversedSaturation", false));
+    setLight(cfg.readEntry<float>("ArtColorSel.Light", 0.5f), cfg.readEntry<bool>("ArtColorSel.RelativeLight", false));
+    
+    recalculateRings(
+                cfg.readEntry("ArtColorSel.NumRings"  , 11),
+                cfg.readEntry("ArtColorSel.RingPieces", 12)
+                );
+    
+    QList<float> angles = cfg.readList<float>("ArtColorSel.RingAngles");
+
+    for (int i = 0; i < m_colorRings.size(); ++i) {
+        if (i < angles.size() && i < m_colorRings.size()) {
+            m_colorRings[i].angle = angles[i];
+        }
+    }
+    
+    selectColor(m_selectedColor);
+    update();
 }

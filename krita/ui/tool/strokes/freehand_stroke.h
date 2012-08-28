@@ -105,17 +105,15 @@ public:
     };
 
 public:
-    // TODO: add i18n after 2.4
     FreehandStrokeStrategy(bool needsIndirectPainting,
                            KisResourcesSnapshotSP resources,
                            PainterInfo *painterInfo,
-                           const QString &name = "Freehand Stroke");
+                           const QString &name);
 
-    // TODO: add i18n after 2.4
     FreehandStrokeStrategy(bool needsIndirectPainting,
                            KisResourcesSnapshotSP resources,
                            QVector<PainterInfo*> painterInfos,
-                           const QString &name = "Freehand Stroke");
+                           const QString &name);
 
     void doStrokeCallback(KisStrokeJobData *data);
 

@@ -44,7 +44,10 @@ public:
      * @param src source color space
      * @param dst destination color space
      */
-    KoCachedColorConversionTransformation cachedConverter(const KoColorSpace* src, const KoColorSpace* dst, KoColorConversionTransformation::Intent _renderingIntent = KoColorConversionTransformation::IntentPerceptual);
+    KoCachedColorConversionTransformation cachedConverter(const KoColorSpace* src,
+                                                          const KoColorSpace* dst,
+                                                          KoColorConversionTransformation::Intent _renderingIntent,
+                                                          KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     /**
      * This function is called by the destructor of the color space to
@@ -69,7 +72,8 @@ class KoCachedColorConversionTransformation
 {
     friend class KoColorConversionCache;
 private:
-    KoCachedColorConversionTransformation(KoColorConversionCache* cache, KoColorConversionCache::CachedTransformation* transfo);
+    KoCachedColorConversionTransformation(KoColorConversionCache* cache,
+                                          KoColorConversionCache::CachedTransformation* transfo);
 public:
     KoCachedColorConversionTransformation(const KoCachedColorConversionTransformation&);
     ~KoCachedColorConversionTransformation();

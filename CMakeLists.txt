@@ -1,6 +1,7 @@
 project(calligra)
 
-cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
+cmake_minimum_required(VERSION 2.8.0 FATAL_ERROR)
+cmake_policy(SET CMP0002 OLD)
 
  ############
 #############
@@ -16,8 +17,8 @@ cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
 
 # define the generic version of the Calligra libraries here
 # this makes it easy to advance it when the next Calligra release comes
-set(GENERIC_CALLIGRA_LIB_VERSION "9.0.0")
-set(GENERIC_CALLIGRA_LIB_SOVERSION "9")
+set(GENERIC_CALLIGRA_LIB_VERSION "11.0.0")
+set(GENERIC_CALLIGRA_LIB_SOVERSION "11")
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
@@ -28,8 +29,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 #
 #eg:
 #option(BUILD_kexi "Build directory kexi" OFF) # kexi isn't buildable at the moment
-option(BUILD_koabstraction "Build directory koabstraction" ON) # koabstraction isn't buildable at the moment
-option(BUILD_mobile "Build directory mobile" ON) # mobile depends on koabstraction it builds but does not run
 
 option(GHNS "support Get Hot New Stuff" ON)
 option(NEPOMUK "support NEPOMUK Tagging" ON)
@@ -47,9 +46,7 @@ IF (TINY)
     set(SHOULD_BUILD_FLOW FALSE)
     set(SHOULD_BUILD_PLAN FALSE)
     set(SHOULD_BUILD_KDGANTT FALSE)
-    set(SHOULD_BUILD_KOUNAVAIL FALSE)
     set(SHOULD_BUILD_SCRIPTING FALSE)
-    set(SHOULD_BUILD_MOBILE TRUE)
     set(SHOULD_BUILD_KOREPORT FALSE)
     set(SHOULD_BUILD_BRAINDUMP FALSE)
     set(SHOULD_BUILD_CALLIGRA FALSE)
@@ -66,9 +63,7 @@ ELSEIF (CREATIVEONLY)
     set(SHOULD_BUILD_FLOW FALSE)
     set(SHOULD_BUILD_PLAN FALSE)
     set(SHOULD_BUILD_KDGANTT FALSE)
-    set(SHOULD_BUILD_KOUNAVAIL FALSE)
-    set(SHOULD_BUILD_SCRIPTING TRUE)
-    set(SHOULD_BUILD_MOBILE FALSE)
+    set(SHOULD_BUILD_SCRIPTING FALSE)
     set(SHOULD_BUILD_KOREPORT FALSE)
     set(SHOULD_BUILD_BRAINDUMP FALSE)
     set(SHOULD_BUILD_CALLIGRA FALSE)
@@ -85,9 +80,7 @@ ELSE()
     set(SHOULD_BUILD_FLOW TRUE)
     set(SHOULD_BUILD_PLAN TRUE)
     set(SHOULD_BUILD_KDGANTT TRUE)
-    set(SHOULD_BUILD_KOUNAVAIL TRUE)
     set(SHOULD_BUILD_SCRIPTING TRUE)
-    set(SHOULD_BUILD_MOBILE TRUE)
     set(SHOULD_BUILD_KOREPORT TRUE)
     set(SHOULD_BUILD_BRAINDUMP TRUE)
     set(SHOULD_BUILD_CALLIGRA TRUE)
@@ -115,10 +108,20 @@ else (QT3SUPPORT)
     find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus QtOpenGL)
 endif (QT3SUPPORT)
 
-include(KDE4Defaults)
-include(MacroLibrary)
+include (KDE4Defaults)
+include (MacroLibrary)
 include (MacroAdditionalCleanFiles)
 include (MacroAddFileDependencies)
+
+set(SHOULD_BUILD_TEXTSHAPE TRUE)
+if ((${QTVERSION} VERSION_EQUAL 4.8.0) OR (${QTVERSION} VERSION_EQUAL 4.8.1))
+    if (NOT IHAVEPATCHEDQT)
+        set(SHOULD_BUILD_WORDS FALSE)
+        set(SHOULD_BUILD_STAGE FALSE)
+        set(SHOULD_BUILD_TEXTSHAPE FALSE)
+        MESSAGE(STATUS "WARNING: You are using a version of Qt that causes crashes. As a result Words and Stage will not be built. Please upgrade to 4.8.2. You can also patch Qt and when building Calligra set IHAVEPATCHEDQT. Patch against Qt can be found in qt48setx.patch")
+    endif (NOT IHAVEPATCHEDQT)
+endif ((${QTVERSION} VERSION_EQUAL 4.8.0) OR (${QTVERSION} VERSION_EQUAL 4.8.1))
 
 if(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
     set(GHNS FALSE)
@@ -146,6 +149,10 @@ macro_ensure_out_of_source_build("Compiling Calligra inside the source directory
 find_package(Perl REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(PNG REQUIRED)
+if (APPLE)
+    # this is not added correctly on OSX -- see http://forum.kde.org/viewtopic.php?f=139&t=101867&p=221242#p221242
+    include_directories(${PNG_INCLUDE_DIR})
+endif(APPLE)
 find_package(Boost REQUIRED) # for pigment and stage
 if (NOT Boost_FOUND)
     MESSAGE(FATAL_ERROR "Did not find Boost. Boost is required for the core libraries, stage, sheets and krita.")
@@ -155,17 +162,6 @@ if (APPLE)
    find_package(Carbon REQUIRED)
 endif (APPLE)
 
- ################################
-#################################
-## Check for OpenEXR           ##
-#################################
-################################
-
-
-macro_optional_find_package(OpenEXR)
-macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
-
-
  ###########################
 ############################
 ## Optional dependencies  ##
@@ -173,11 +169,39 @@ macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
 ###########################
 
 ##
-## Look for OpenGL
+## Test for sqlite
+##
+set(SQLITE_MIN_VERSION 3.6.16)
+set(SQLITE_RECOMMENDED_VERSION 3.7.12)
+set(SQLITE_LOAD_EXTENSION_REQUIRED ON)
+macro_optional_find_package(CalligraSqlite 3.6.16)
+macro_bool_to_01(SQLITE_FOUND HAVE_SQLITE)
+macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine with enabled extensions loading"
+                    "http://www.sqlite.org" FALSE "${SQLITE_MIN_VERSION}"
+		    "Required by Calligra's default database handler for Kexi and Words.")
+
+##
+## Test for ICU
+##
+macro_optional_find_package(ICU)
+macro_bool_to_01(ICU_FOUND HAVE_ICU)
+macro_log_feature(ICU_FOUND "ICU" "International Components for Unicode (ICU) Library"
+                    "http://icu-project.org" FALSE ""
+		    "Required by Calligra's default database handler for Kexi and Words.")
+
+##
+## Check for OpenEXR 
 ##
 
-macro_optional_find_package(OpenGL)
+macro_optional_find_package(OpenEXR)
+macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
+
+##
+## Look for OpenGL
+##
 set(HAVE_OPENGL 0)
+if (NOT WIN32)
+macro_optional_find_package(OpenGL)
 
 if(OPENGL_FOUND)
     message(STATUS "Found OpenGL: ${OPENGL_LIBRARIES}")
@@ -192,6 +216,7 @@ else(OPENGL_FOUND)
 endif(OPENGL_FOUND)
 
 macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by parts of Krita and optionally by flake")
+endif (NOT WIN32)
 
 ##
 ## Test for kdepimlibs
@@ -204,7 +229,7 @@ macro_log_feature(KDEPIMLIBS_FOUND "KDE PIMLibs" "KDE Personal Information Manag
 ## Test for eigen2
 ##
 macro_optional_find_package(Eigen2)
-macro_log_feature(EIGEN2_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "2.0" "Required by Tables and Krita")
+macro_log_feature(EIGEN2_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "2.0" "Required by Calligra Sheets and Krita")
 
 ##
 ## Test for QCA2
@@ -254,35 +279,25 @@ if( MARBLE_FOUND )
     ##
     find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR})
     if( MARBLECONTROLBOX_H )
-	file(READ ${MARBLECONTROLBOX_H} MARBLECONTROLBOX_H_CONTENT)
-	string(REGEX MATCH "setMarbleWidget" SETMARBLEWIDGET ${MARBLECONTROLBOX_H_CONTENT})
+    file(READ ${MARBLECONTROLBOX_H} MARBLECONTROLBOX_H_CONTENT)
+    string(REGEX MATCH "setMarbleWidget" SETMARBLEWIDGET ${MARBLECONTROLBOX_H_CONTENT})
         if( SETMARBLEWIDGET )
             add_definitions(-DHAVE_SETMARBLEWIDGET)
         endif( SETMARBLEWIDGET)
     endif( MARBLECONTROLBOX_H )
 endif( MARBLE_FOUND )
 
-
-
 ##
 ## Test for lcms
 ##
-macro_optional_find_package(LCMS)
-set(REQUIRED_LCMS_VERSION 118)
-if(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
-    set(HAVE_REQUIRED_LCMS_VERSION TRUE)
-    set(HAVE_LCMS TRUE)
-else(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
-    set(HAVE_REQUIRED_LCMS_VERSION FALSE)
-    set(HAVE_LCMS FALSE)
-endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
-
 macro_optional_find_package(LCMS2)
-macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "2.0" "Optional replacement for LittleCMS 1.18. Can be used for color management and Krita")
+macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "2.4" "Will be used for color management and is necesary for Krita")
 if(LCMS2_FOUND)
+    if(NOT ${LCMS2_VERSION} VERSION_LESS 2040 )
+        set(HAVE_LCMS24 TRUE)
+    endif(NOT ${LCMS2_VERSION} VERSION_LESS 2040 )
     set(HAVE_REQUIRED_LCMS_VERSION TRUE)
     set(HAVE_LCMS2 TRUE)
-    set(HAVE_LCMS TRUE)
 endif(LCMS2_FOUND)
 
 ##
@@ -296,9 +311,6 @@ if(NEPOMUK)
     add_definitions(-DDISABLE_NEPOMUK_LEGACY)
     macro_log_feature(NEPOMUK_FOUND "Nepomuk" "Handles metadata of resources" FALSE  "Required to handle metadata of resources")
 endif(NEPOMUK)
-
-
-macro_log_feature(HAVE_REQUIRED_LCMS_VERSION "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "1.18" "Required for color management and Krita")
 
 #Set the build of TextShape changetraker
 
@@ -326,20 +338,26 @@ endif(WIN32)
 ##
 ## Test for Fontconfig
 ##
-macro_optional_find_package(Fontconfig)
-macro_log_feature(FONTCONFIG_FOUND "Fontconfig" "Library for configuring and customizing font access" "http://fontconfig.org" FALSE "" "Required to handle exact font size")
+## Only test if on non-Windows system
+if(!WIN32)
+    macro_optional_find_package(Fontconfig)
+    macro_log_feature(FONTCONFIG_FOUND "Fontconfig" "Library for configuring and customizing font access" "http://fontconfig.org" FALSE "" "Required to handle exact font size")
+endif(!WIN32)
 
 ##
 ## Test for Freetype
 ##
-macro_optional_find_package(Freetype)
-macro_log_feature(FREETYPE_FOUND "Freetype" "A Free, High-Quality, and Portable Font Engine" "http://www.freetype.org/" FALSE "" "Required to handle exact font size")
+## Only test if on non-Windows system
+if(!WIN32)
+    macro_optional_find_package(Freetype)
+    macro_log_feature(FREETYPE_FOUND "Freetype" "A Free, High-Quality, and Portable Font Engine" "http://www.freetype.org/" FALSE "" "Required to handle exact font size")
+endif(!WIN32)
 
 if(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND) 
     set(FONTCONFIG_INCLUDE_DIR "")
     set(FREETYPE_INCLUDE_DIRS "")
 else(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
-	add_definitions( -DSHOULD_BUILD_FONT_CONVERSION )
+    add_definitions( -DSHOULD_BUILD_FONT_CONVERSION )
 endif(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
   
 ##
@@ -460,6 +478,10 @@ set(KOPROPERTY_INCLUDES ${KOODF_INCLUDES}
                         ${CMAKE_SOURCE_DIR}/libs
                         ${CMAKE_SOURCE_DIR}/libs/widgets)
 
+# calligradb
+SET(CALLIGRADB_LIBS calligradb)                    # TODO remove when Predicate lib arrives
+set(CALLIGRADB_INCLUDES ${CMAKE_SOURCE_DIR}/libs)  # TODO remove when Predicate lib arrives
+
  #############################################
 ##############################################
 ## Detect which applications can be compile ##
@@ -473,7 +495,7 @@ set(KOPROPERTY_INCLUDES ${KOODF_INCLUDES}
 #
 
 
-### Tables: eigen2, boost
+### Calligra Sheets: eigen2, boost
 if(NOT EIGEN2_FOUND)
     set(SHOULD_BUILD_SHEETS FALSE)
 endif(NOT EIGEN2_FOUND)
@@ -517,32 +539,7 @@ option(BUILD_koreport "Build directory libs/koreport" ON)
 ### HACK ###
 
 if(BUILD_kexi AND SHOULD_BUILD_KEXI)
-    ##
-    ## Test for sqlite
-    ##
-    set(SQLITE_MIN_VERSION 3.6.16)
-    set(SQLITE_RECOMMENDED_VERSION 3.7.10)
-    set(SQLITE_LOAD_EXTENSION_REQUIRED ON)
-    find_package(CalligraSqlite 3.6.16)
-    macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine with enabled extensions loading"
-                      "http://www.sqlite.org" FALSE "${SQLITE_MIN_VERSION}"
-                      "Required by Kexi for its default database driver.")
-    if(NOT SQLITE_FOUND)
-        set(SHOULD_BUILD_KEXI FALSE)
-        message(STATUS "WARNING: Because of that, Kexi will not be built.")
-    endif(NOT SQLITE_FOUND)
-
-    ##
-    ## Test for ICU
-    ##
-    find_package(ICU)
-    macro_log_feature(ICU_FOUND "ICU" "International Components for Unicode (ICU) Library"
-                      "http://icu-project.org" FALSE "" "Required by Kexi")
-
-    if(NOT ICU_FOUND)
-        set(SHOULD_BUILD_KEXI FALSE)
-        message(STATUS "WARNING: Because of that, Kexi will not be built.")
-    endif(NOT ICU_FOUND)
+###
 endif(BUILD_kexi AND SHOULD_BUILD_KEXI)
 
  ###################
@@ -558,10 +555,6 @@ endif(SHOULD_BUILD_WORDS)
 if (SHOULD_BUILD_FLOW)
     macro_optional_add_subdirectory(flow)
 endif (SHOULD_BUILD_FLOW)
-
-if (SHOULD_BUILD_KOUNAVAIL)
-    macro_optional_add_subdirectory(kounavail)
-endif (SHOULD_BUILD_KOUNAVAIL)
 
 if (SHOULD_BUILD_PLAN)
     macro_optional_add_subdirectory(kdgantt)
@@ -610,18 +603,6 @@ endif(   NOT SHOULD_BUILD_SHEETS OR NOT BUILD_sheets
       OR NOT SHOULD_BUILD_STAGE OR NOT BUILD_stage
      )
 
-if(SHOULD_BUILD_KOABSTRACTION)
-    # koabstraction depends on kotext & flake
-    set(KOABSTRACTION_INCLUDES ${KDE4_INCLUDES}
-                        ${KOTEXT_INCLUDES}
-                        ${FLAKE_INCLUDES}
-                        ${KOPAGEAPP_INCLUDES}
-                        ${KOMAIN_INCLUDES}
-                        ${CMAKE_SOURCE_DIR}/tools/koabstraction)
-else(SHOULD_BUILD_KOABSTRACTION)
-    set(SHOULD_BUILD_MOBILE FALSE)
-endif(SHOULD_BUILD_KOABSTRACTION)
-
 if(SHOULD_BUILD_SHEETS AND SHOULD_BUILD_WORDS)
     # build cstester
 else(SHOULD_BUILD_SHEETS AND SHOULD_BUILD_WORDS)
@@ -660,7 +641,6 @@ macro_display_application_enabled(plan ${SHOULD_BUILD_PLAN})
 macro_display_application_enabled(krita ${SHOULD_BUILD_KRITA})
 macro_display_application_enabled(karbon ${SHOULD_BUILD_KARBON})
 macro_display_application_enabled(braindump ${SHOULD_BUILD_BRAINDUMP})
-macro_display_application_enabled(mobile ${SHOULD_BUILD_MOBILE})
 macro_display_application_enabled(calligra ${SHOULD_BUILD_CALLIGRA})
 macro_display_application_enabled(cstester ${SHOULD_BUILD_CSTESTER})
 macro_display_application_enabled(active ${SHOULD_BUILD_ACTIVE})

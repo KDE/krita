@@ -58,7 +58,7 @@ KoPathCombineCommand::KoPathCombineCommand(KoShapeBasedDocumentBase *controller,
     setText(i18nc("(qtundo-format)", "Combine paths"));
 
     d->combinedPath = new KoPathShape();
-    d->combinedPath->setBorder(d->paths.first()->border());
+    d->combinedPath->setStroke(d->paths.first()->stroke());
     d->combinedPath->setShapeId(d->paths.first()->shapeId());
     // combine the paths
     foreach(KoPathShape* path, d->paths) {

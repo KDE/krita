@@ -63,6 +63,8 @@ DlgColorSpaceConversion::DlgColorSpaceConversion(QWidget *  parent,
 
 }
 
+
+
 DlgColorSpaceConversion::~DlgColorSpaceConversion()
 {
     delete m_page;

@@ -24,7 +24,7 @@
 #include <QPoint>
 #include <QPainterPath>
 
-#include <KIcon>
+#include <KoIcon.h>
 
 #include <KoToolFactoryBase.h>
 #include "kis_tool.h"
@@ -41,11 +41,11 @@ class WdgToolCrop : public QWidget, public Ui::WdgToolCrop
 public:
     WdgToolCrop(QWidget *parent) : QWidget(parent) {
         setupUi(this);
-        boolHeight->setIcon(KIcon("height_icon"));
-        boolWidth->setIcon(KIcon("width_icon"));
-        boolRatio->setIcon(KIcon("ratio_icon"));
-        label_horizPos->setPixmap(KIcon("offset_horizontal").pixmap(16, 16));
-        label_vertiPos->setPixmap(KIcon("offset_vertical").pixmap(16, 16));
+        boolHeight->setIcon(koIcon("height_icon"));
+        boolWidth->setIcon(koIcon("width_icon"));
+        boolRatio->setIcon(koIcon("ratio_icon"));
+        label_horizPos->setPixmap(koIcon("offset_horizontal").pixmap(16, 16));
+        label_vertiPos->setPixmap(koIcon("offset_vertical").pixmap(16, 16));
     }
 };
 
@@ -104,7 +104,6 @@ private:
     QRectF rightHandleRect(QRectF cropBorderRect);
     QRectF upperHandleRect(QRectF cropBorderRect);
     QRectF leftHandleRect(QRectF cropBorderRect);
-
 private slots:
 
     void crop();
@@ -148,7 +147,7 @@ public:
         setToolType(TOOL_TYPE_TRANSFORM);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setPriority(10);
-        setIcon("tool_crop");
+        setIconName(koIconNameCStr("tool_crop"));
     }
 
     virtual ~KisToolCropFactory() {}

@@ -21,7 +21,7 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 
-#include <kis_random_accessor.h>
+#include <kis_random_accessor_ng.h>
 #include <kis_painter.h>
 
 #include <cmath>

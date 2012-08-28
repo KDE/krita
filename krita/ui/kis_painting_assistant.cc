@@ -17,6 +17,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <QXmlStreamReader>
+#include <QXmlStreamWriter>
+
 #include "kis_painting_assistant.h"
 #include "kis_coordinates_converter.h"
 #include "kis_debug.h"
@@ -233,6 +236,92 @@ QRect KisPaintingAssistant::boundingRect() const
         r = r.united(QRectF(*h, QSizeF(1,1)));
     }
     return r.adjusted(-2, -2, 2, 2).toAlignedRect();
+}
+
+QByteArray KisPaintingAssistant::saveXml(QMap<KisPaintingAssistantHandleSP, int> &handleMap)
+{
+        QByteArray data;
+        QXmlStreamWriter xml(&data);
+            xml.writeStartDocument();
+            xml.writeStartElement("assistant");
+            xml.writeAttribute("type",d->id);
+            xml.writeStartElement("handles");
+            foreach(const KisPaintingAssistantHandleSP handle, d->handles) {
+                int id = handleMap.size();
+                if (!handleMap.contains(handle)){
+                    handleMap.insert(handle, id);
+                }
+                id = handleMap.value(handle);
+                xml.writeStartElement("handle");
+                xml.writeAttribute("id", QString::number(id));
+                xml.writeAttribute("x", QString::number(double(handle->x()), 'f', 3));
+                xml.writeAttribute("y", QString::number(double(handle->y()), 'f', 3));
+                xml.writeEndElement();
+            }
+            xml.writeEndElement();
+            xml.writeEndElement();
+            xml.writeEndDocument();
+            return data;
+}
+
+void KisPaintingAssistant::loadXml(KoStore* store, QMap<int, KisPaintingAssistantHandleSP> &handleMap, QString path)
+{
+    int id;
+    double x,y ;
+    store->open(path);
+    QByteArray data = store->read(store->size());
+    QXmlStreamReader xml(data);
+    while (!xml.atEnd()) {
+        switch (xml.readNext()) {
+        case QXmlStreamReader::StartElement:
+            if (xml.name() == "handle") {
+                QString strId = xml.attributes().value("id").toString(),
+                strX = xml.attributes().value("x").toString(),
+                strY = xml.attributes().value("y").toString();
+                if (!strId.isEmpty() && !strX.isEmpty() && !strY.isEmpty()) {
+                    id = strId.toInt();
+                    x = strX.toDouble();
+                    y = strY.toDouble();
+                    if (!handleMap.contains(id)) {
+                        handleMap.insert(id, new KisPaintingAssistantHandle(x, y));
+                    }
+                }
+                addHandle(handleMap.value(id));
+            }
+            break;
+        default:
+            break;
+        }
+    }
+    store->close();
+}
+
+void KisPaintingAssistant::saveXmlList(QDomDocument& doc, QDomElement& assistantsElement,int count)
+{
+    if (d->id == "ellipse"){
+        QDomElement assistantElement = doc.createElement("assistant");
+        assistantElement.setAttribute("type", "ellipse");
+        assistantElement.setAttribute("filename", QString("ellipse%1.assistant").arg(count));
+        assistantsElement.appendChild(assistantElement);
+    }
+    else if (d->id == "spline"){
+        QDomElement assistantElement = doc.createElement("assistant");
+        assistantElement.setAttribute("type", "spline");
+        assistantElement.setAttribute("filename", QString("spline%1.assistant").arg(count));
+        assistantsElement.appendChild(assistantElement);
+    }
+    else if (d->id == "perspective"){
+        QDomElement assistantElement = doc.createElement("assistant");
+        assistantElement.setAttribute("type", "perspective");
+        assistantElement.setAttribute("filename", QString("perspective%1.assistant").arg(count));
+        assistantsElement.appendChild(assistantElement);
+    }
+    else if (d->id == "ruler"){
+        QDomElement assistantElement = doc.createElement("assistant");
+        assistantElement.setAttribute("type", "ruler");
+        assistantElement.setAttribute("filename", QString("ruler%1.assistant").arg(count));
+        assistantsElement.appendChild(assistantElement);
+    }
 }
 
 const QList<KisPaintingAssistantHandleSP>& KisPaintingAssistant::handles() const

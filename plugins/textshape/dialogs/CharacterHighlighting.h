@@ -50,6 +50,7 @@ signals:
     void fontChanged(const QFont &font);
     void textColorChanged(QColor);
     void backgroundColorChanged(QColor);
+    void charStyleChanged();
 
 
 private slots:

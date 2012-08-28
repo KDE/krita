@@ -22,7 +22,6 @@
 #include "imagesplit.h"
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
@@ -55,7 +54,6 @@ Imagesplit::Imagesplit(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {
-        setComponentData(ImagesplitFactory::componentData());
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/imagesplit.rc"), true);
         KAction *action  = new KAction(i18n("Image Split "), this);
         actionCollection()->addAction("imagesplit", action);

@@ -34,6 +34,7 @@
 
 // KChart
 #include "ChartShape.h"
+#include "Legend.h"
 
 using namespace KChart;
 using namespace KDChart;
@@ -41,10 +42,10 @@ using namespace KDChart;
 
 ChartTypeCommand::ChartTypeCommand(ChartShape* chart)
     : m_chart(chart)
-    , m_oldType( BarChartType )
-    , m_newType( BarChartType )
-    , m_oldSubtype( NormalChartSubtype )
-    , m_newSubtype( NormalChartSubtype )
+    , m_oldType(BarChartType)
+    , m_newType(BarChartType)
+    , m_oldSubtype(NormalChartSubtype)
+    , m_newSubtype(NormalChartSubtype)
 {
 }
 
@@ -54,27 +55,29 @@ ChartTypeCommand::~ChartTypeCommand()
 
 void ChartTypeCommand::redo()
 {
-    //kDebug(35001) << m_newType;
- 
-   // save the old type
+    // save the old type
     m_oldType    = m_chart->chartType();
     m_oldSubtype = m_chart->chartSubType();
-    if ( m_oldType == m_newType && m_oldSubtype == m_newSubtype )
+    if (m_oldType == m_newType && m_oldSubtype == m_newSubtype)
         return;
 
+
     // Actually do the work
-    m_chart->setChartType( m_newType );
-    m_chart->setChartSubType( m_newSubtype );
+    m_chart->setChartType(m_newType);
+    m_chart->setChartSubType(m_newSubtype);
+    m_chart->update();
+    m_chart->legend()->update();
 }
 
 void ChartTypeCommand::undo()
 {
-    if ( m_oldType == m_newType && m_oldSubtype == m_newSubtype )
+    if (m_oldType == m_newType && m_oldSubtype == m_newSubtype)
         return;
 
-    //kDebug(35001) << m_oldType;
-    m_chart->setChartType( m_oldType );
-    m_chart->setChartSubType( m_oldSubtype );
+    m_chart->setChartType(m_oldType);
+    m_chart->setChartSubType(m_oldSubtype);
+    m_chart->update();
+    m_chart->legend()->update();
 }
 
 
@@ -83,15 +86,51 @@ void ChartTypeCommand::setChartType(ChartType type, ChartSubtype subtype)
     m_newType    = type;
     m_newSubtype = subtype;
 
-    switch (type) {
+    switch(type) {
     case BarChartType:
-        setText(i18nc("(qtundo-format)", "Bar Chart"));
+        switch(subtype) {
+        case NormalChartSubtype:
+            setText(i18nc("(qtundo-format)", "Normal Bar Chart"));
+            break;
+        case StackedChartSubtype:
+            setText(i18nc("(qtundo-format)", "Stacked Bar Chart"));
+            break;
+        case PercentChartSubtype:
+            setText(i18nc("(qtundo-format)", "Percent Bar Chart"));
+            break;
+        default:
+            Q_ASSERT("Invalid bar chart subtype!");
+        }
         break;
     case LineChartType:
-        setText(i18nc("(qtundo-format)", "Line Chart"));
+        switch(subtype) {
+        case NormalChartSubtype:
+            setText(i18nc("(qtundo-format)", "Normal Line Chart"));
+            break;
+        case StackedChartSubtype:
+            setText(i18nc("(qtundo-format)", "Stacked Line Chart"));
+            break;
+        case PercentChartSubtype:
+            setText(i18nc("(qtundo-format)", "Percent Line Chart"));
+            break;
+        default:
+            Q_ASSERT("Invalid line chart subtype!");
+        }
         break;
     case AreaChartType:
-        setText(i18nc("(qtundo-format)", "Area Chart"));
+        switch(subtype) {
+        case NormalChartSubtype:
+            setText(i18nc("(qtundo-format)", "Normal Area Chart"));
+            break;
+        case StackedChartSubtype:
+            setText(i18nc("(qtundo-format)", "Stacked Area Chart"));
+            break;
+        case PercentChartSubtype:
+            setText(i18nc("(qtundo-format)", "Percent Area Chart"));
+            break;
+        default:
+            Q_ASSERT("Invalid area chart subtype!");
+        }
         break;
     case CircleChartType:
         setText(i18nc("(qtundo-format)", "Circle Chart"));

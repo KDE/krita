@@ -10,12 +10,9 @@
     <height>46</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Ellipse Shape</string>
-  </property>
-  <layout class="QGridLayout">
+  <layout class="QFormLayout">
    <item row="0" column="0">
-    <widget class="QLabel" name="label_3">
+    <widget class="QLabel">
      <property name="text">
       <string>Type:</string>
      </property>

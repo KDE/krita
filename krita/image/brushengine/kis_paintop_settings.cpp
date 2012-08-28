@@ -170,3 +170,14 @@ QPainterPath KisPaintOpSettings::ellipseOutline(qreal width, qreal height, qreal
     path = m.map(path);
     return path;
 }
+
+void KisPaintOpSettings::setCanvasRotation(qreal angle)
+{
+    setProperty("runtimeCanvasRotation", angle);
+    setPropertyNotSaved("runtimeCanvasRotation");
+}
+
+qreal KisPaintOpSettings::canvasRotation() const
+{
+    return getDouble("runtimeCanvasRotation");
+}

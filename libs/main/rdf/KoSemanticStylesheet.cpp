@@ -92,7 +92,7 @@ bool KoSemanticStylesheet::isMutable() const
 void KoSemanticStylesheet::name(const QString &v)
 {
     if (d->m_isMutable) {
-        emit nameChanging(this, d->m_name, v);
+        emit nameChanging(hKoSemanticStylesheet(this), d->m_name, v);
         d->m_name = v;
     }
 }
@@ -105,7 +105,7 @@ void KoSemanticStylesheet::templateString(const QString &v)
 }
 
 
-void KoSemanticStylesheet::format(KoRdfSemanticItem *obj, KoTextEditor *editor, const QString &xmlid)
+void KoSemanticStylesheet::format(hKoRdfSemanticItem obj, KoTextEditor *editor, const QString &xmlid)
 {
     Q_ASSERT(obj);
     Q_ASSERT(editor);

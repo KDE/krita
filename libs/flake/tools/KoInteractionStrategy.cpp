@@ -48,8 +48,7 @@ KoInteractionStrategy::KoInteractionStrategy(KoInteractionStrategyPrivate &dd)
 
 KoInteractionStrategy::~KoInteractionStrategy()
 {
-    Q_D(KoInteractionStrategy);
-    delete d;
+    delete d_ptr;
 }
 
 void KoInteractionStrategy::handleCustomEvent(KoPointerEvent *event)

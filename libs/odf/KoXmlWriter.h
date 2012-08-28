@@ -252,6 +252,14 @@ private:
         Tag(const char* t = 0, bool ind = true)
                 : tagName(t), hasChildren(false), lastChildIsText(false),
                 openingTagClosed(false), indentInside(ind) {}
+        Tag(const Tag &original)
+        {
+            tagName = original.tagName;
+            hasChildren = original.hasChildren;
+            lastChildIsText = original.lastChildIsText;
+            openingTagClosed = original.openingTagClosed;
+            indentInside = original.indentInside;
+        }
         const char* tagName;
         bool hasChildren : 1; ///< element or text children
         bool lastChildIsText : 1; ///< last child is a text node

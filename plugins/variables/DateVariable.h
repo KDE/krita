@@ -44,6 +44,11 @@ public:
         Time
     };
 
+    enum ValueType {
+        DateOrTime,
+        DateTime
+    };
+
     /**
      * Constructor.
      */
@@ -60,7 +65,7 @@ public:
 
     QWidget *createOptionsWidget();
 
-    QString definition() const {
+    const QString & definition() const {
         return m_definition;
     }
     void setDefinition(const QString &definition);
@@ -91,8 +96,9 @@ private:
 
     DateType m_type;
     DisplayType m_displayType;
+    ValueType m_valueType;
     QString m_definition;
-    QDateTime m_time;
+    QDateTime m_datetime;
     int m_daysOffset;
     int m_monthsOffset;
     int m_yearsOffset;

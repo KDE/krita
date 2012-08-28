@@ -18,11 +18,13 @@
 #ifndef KIS_OPEN_RASTER_STACK_SAVE_VISITOR_H_
 #define KIS_OPEN_RASTER_STACK_SAVE_VISITOR_H_
 
+#include <QSet>
+
 #include "kis_global.h"
 #include "kis_types.h"
 
 #include "kis_node_visitor.h"
-
+#include "kis_layer.h"
 #include <krita_export.h>
 
 class KisOpenRasterSaveContext;
@@ -37,7 +39,7 @@ class QDomElement;
 class KRITAUI_EXPORT KisOpenRasterStackSaveVisitor : public KisNodeVisitor
 {
 public:
-    KisOpenRasterStackSaveVisitor(KisOpenRasterSaveContext*);
+    KisOpenRasterStackSaveVisitor(KisOpenRasterSaveContext*, vKisNodeSP activeNodes);
     virtual ~KisOpenRasterStackSaveVisitor();
 
     using KisNodeVisitor::visit;
@@ -51,9 +53,9 @@ public:
     bool visit(KisNode*) {
         return true;
     }
-    bool visit(KisCloneLayer*) {
-        return true;
-    }
+
+    bool visit(KisCloneLayer*);
+
     bool visit(KisFilterMask*) {
         return true;
     }
@@ -63,11 +65,11 @@ public:
     bool visit(KisSelectionMask*) {
         return true;
     }
-    bool visit(KisExternalLayer*) {
-        return true;
-    }
+
+    bool visit(KisExternalLayer*);
 
 private:
+    bool saveLayer(KisLayer *layer);
     void saveLayerInfo(QDomElement& elt, KisLayer* layer);
     struct Private;
     Private* const d;

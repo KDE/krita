@@ -37,6 +37,7 @@ const QString SEPARATOR = "/";
 const QString SHAPE_LAYER_PATH = "/shapelayers/";
 const QString EXIF_PATH = "/annotations/exif";
 const QString ICC_PATH = "/annotations/icc";
+const QString ASSISTANTS_PATH = "/assistants/";
 const QString LAYER_PATH = "/layers/";
 
 const QString ADJUSTMENT_LAYER = "adjustmentlayer";
@@ -77,6 +78,7 @@ const QString MASKS = "masks";
 const QString MIME = "mime";
 const QString NAME = "name";
 const QString OPACITY = "opacity";
+const QString COLLAPSED = "collapsed";
 const QString PAINT_LAYER = "paintlayer";
 const QString PROFILE = "profile";
 const QString ROTATION = "rotation";
@@ -96,6 +98,7 @@ const QString Y_RESOLUTION = "y-res";
 const QString Y_SCALE = "y_scale";
 const QString Y_SHEAR = "y_shear";
 const QString Y_TRANSLATION = "y_translation";
+const QString ACTIVE = "active";
 }
 
 

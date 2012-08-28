@@ -592,7 +592,7 @@ namespace KDChart {
          */
         bool percentMode() const;
 
-        virtual void paintMarker( QPainter* painter,
+        static void paintMarker( QPainter* painter,
                                   const MarkerAttributes& markerAttributes,
                                   const QBrush& brush, const QPen&,
                                   const QPointF& point, const QSizeF& size );

@@ -1,0 +1,218 @@
+diff --git a/plugins/chartshape/kdchart/src/KDChartAbstractDiagram.cpp b/plugins/chartshape/kdchart/src/KDChartAbstractDiagram.cpp
+index d37c744..66d304c 100644
+--- a/plugins/chartshape/kdchart/src/KDChartAbstractDiagram.cpp
++++ b/plugins/chartshape/kdchart/src/KDChartAbstractDiagram.cpp
+@@ -31,6 +31,8 @@
+ #include <QStandardItemModel>
+ #include <QSizeF>
+ #include <QTextDocument>
++#include <QPainterPath>
++#include <QPainterPathStroker>
+ 
+ #include "KDChartAbstractCoordinatePlane.h"
+ #include "KDChartChart.h"
+@@ -740,6 +742,178 @@ void AbstractDiagram::paintMarker( QPainter* painter,
+                 }
+             case MarkerAttributes::NoMarker:
+                 break;
++            case MarkerAttributes::MarkerArrowDown:
++                {
++                    QVector <QPointF > arrowPoints;
++                    QPointF topLeft, topRight, bottom;
++                    topLeft  = QPointF( 0 - maSize.width()/2, 0 - maSize.height()/2 );
++                    topRight = QPointF( maSize.width()/2, 0 - maSize.height()/2 );
++                    bottom   = QPointF( 0, maSize.height()/2 );
++                    arrowPoints << topLeft << bottom << topRight;
++                    painter->drawPolygon( arrowPoints );
++                    break;
++                }
++            case MarkerAttributes::MarkerArrowUp:
++                {
++                    QVector <QPointF > arrowPoints;
++                    QPointF top, bottomLeft, bottomRight;
++                    top         = QPointF( 0, 0 - maSize.height()/2 );
++                    bottomLeft  = QPointF( 0 - maSize.width()/2, maSize.height()/2 );
++                    bottomRight = QPointF( maSize.width()/2, maSize.height()/2 );
++                    arrowPoints << top << bottomLeft << bottomRight;
++                    painter->drawPolygon( arrowPoints );
++                    break;
++                }
++            case MarkerAttributes::MarkerArrowRight:
++                {
++                    QVector <QPointF > arrowPoints;
++                    QPointF right, topLeft, bottomLeft;
++                    right      = QPointF( maSize.width()/2, 0 );
++                    topLeft    = QPointF( 0 - maSize.width()/2, 0 - maSize.height()/2 );
++                    bottomLeft = QPointF( 0 - maSize.width()/2, maSize.height()/2 );
++                    arrowPoints << topLeft << bottomLeft << right;
++                    painter->drawPolygon( arrowPoints );
++                    break;
++                }
++            case MarkerAttributes::MarkerArrowLeft:
++                {
++                    QVector <QPointF > arrowPoints;
++                    QPointF left, topRight, bottomRight;
++                    left        = QPointF( 0 - maSize.width()/2, 0 );
++                    topRight    = QPointF( maSize.width()/2, 0 - maSize.height()/2 );
++                    bottomRight = QPointF( maSize.width()/2, maSize.height()/2 );
++                    arrowPoints << left << bottomRight << topRight;
++                    painter->drawPolygon( arrowPoints );
++                    break;
++                }
++            case MarkerAttributes::MarkerBowTie:
++            case MarkerAttributes::MarkerHourGlass:
++                {
++                    QVector <QPointF > points;
++                    QPointF topLeft, topRight, bottomLeft, bottomRight;
++                    topLeft     = QPointF( 0 - maSize.width()/2, 0 - maSize.height()/2);
++                    topRight    = QPointF( maSize.width()/2, 0 - maSize.height()/2 );
++                    bottomLeft  = QPointF( 0 - maSize.width()/2, maSize.height()/2 );
++                    bottomRight = QPointF( maSize.width()/2, maSize.height()/2 );
++                    if ( markerAttributes.markerStyle() == MarkerAttributes::MarkerBowTie)
++                        points << topLeft << bottomLeft << topRight << bottomRight;
++                    else
++                        points << topLeft << bottomRight << bottomLeft << topRight;
++                    painter->drawPolygon( points );
++                    break;
++                }
++            case MarkerAttributes::MarkerStar:
++                {
++                    const qreal w01 = maSize.width() * 0.1;
++                    const qreal w05 = maSize.width() * 0.5;
++                    const qreal h01 = maSize.height() * 0.1;
++                    const qreal h05 = maSize.height() * 0.5;
++                    QVector <QPointF > points;
++                    QPointF p1 = QPointF(    0, -h05 );
++                    QPointF p2 = QPointF( -w01, -h01 );
++                    QPointF p3 = QPointF( -w05,    0 );
++                    QPointF p4 = QPointF( -w01,  h01 );
++                    QPointF p5 = QPointF(    0,  h05 );
++                    QPointF p6 = QPointF(  w01,  h01 );
++                    QPointF p7 = QPointF( w05,    0 );
++                    QPointF p8 = QPointF( w01, -h01 );
++                    points << p1 << p2 << p3 << p4 << p5 << p6 << p7 << p8;
++                    painter->drawPolygon( points );
++                    break;
++                }
++            case MarkerAttributes::MarkerX:
++                {
++                    const qreal w01 = maSize.width() * 0.1;
++                    const qreal w04 = maSize.width() * 0.4;
++                    const qreal w05 = maSize.width() * 0.5;
++                    const qreal h01 = maSize.height() * 0.1;
++                    const qreal h04 = maSize.height() * 0.4;
++                    const qreal h05 = maSize.height() * 0.5;
++                    QVector <QPointF > crossPoints;
++                    QPointF p1 = QPointF( -w04, -h05 );
++                    QPointF p2 = QPointF( -w05, -h04 );
++                    QPointF p3 = QPointF( -w01,  0 );
++                    QPointF p4 = QPointF( -w05,  h04 );
++                    QPointF p5 = QPointF( -w04,  h05 );
++                    QPointF p6 = QPointF(  0,    h01 );
++                    QPointF p7 = QPointF(  w04,  h05 );
++                    QPointF p8 = QPointF(  w05,  h04 );
++                    QPointF p9 = QPointF(  w01,  0 );
++                    QPointF p10 = QPointF( w05, -h04 );
++                    QPointF p11 = QPointF( w04, -h05 );
++                    QPointF p12 = QPointF( 0,   -h01 );
++                    crossPoints << p1 << p2 << p3 << p4 << p5 << p6
++                                << p7 << p8 << p9 << p10 << p11 << p12;
++                    painter->drawPolygon( crossPoints );
++                    break;
++                }
++            case MarkerAttributes::MarkerAsterisk:
++                {
++                    // Note: Markers can have outline,
++                    //       so just drawing three lines is NOT the solution here!
++                    // The idea that we use is to draw 3 lines anyway, but convert their
++                    // outlines to QPainterPaths which are then united and filled.
++                    const qreal w04 = maSize.width() * 0.4;
++                    const qreal h02 = maSize.height() * 0.2;
++                    const qreal h05 = maSize.height() * 0.5;
++                    //QVector <QPointF > crossPoints;
++                    QPointF p1 = QPointF(    0, -h05 );
++                    QPointF p2 = QPointF( -w04, -h02 );
++                    QPointF p3 = QPointF( -w04,  h02 );
++                    QPointF p4 = QPointF(    0,  h05 );
++                    QPointF p5 = QPointF(  w04,  h02 );
++                    QPointF p6 = QPointF(  w04, -h02 );
++                    QPen pen = painter->pen();
++                    QPainterPathStroker stroker;
++                    stroker.setWidth( pen.widthF() );
++                    stroker.setCapStyle( pen.capStyle() );
++
++                    QPainterPath path;
++                    QPainterPath dummyPath;
++                    dummyPath.moveTo( p1 );
++                    dummyPath.lineTo( p4 );
++                    path = stroker.createStroke( dummyPath );
++
++                    dummyPath = QPainterPath();
++                    dummyPath.moveTo( p2 );
++                    dummyPath.lineTo( p5 );
++                    path = path.united( stroker.createStroke( dummyPath ) );
++
++                    dummyPath = QPainterPath();
++                    dummyPath.moveTo( p3 );
++                    dummyPath.lineTo( p6 );
++                    path = path.united( stroker.createStroke( dummyPath ) );
++
++                    painter->drawPath( path );
++                    break;
++                }
++            case MarkerAttributes::MarkerHorizontalBar:
++                {
++                    const qreal w05 = maSize.width() * 0.5;
++                    const qreal h02 = maSize.height()* 0.2;
++                    QVector <QPointF > points;
++                    QPointF p1 = QPointF( -w05, -h02 );
++                    QPointF p2 = QPointF( -w05,  h02 );
++                    QPointF p3 = QPointF(  w05,  h02 );
++                    QPointF p4 = QPointF(  w05, -h02 );
++                    points << p1 << p2 << p3 << p4;
++                    painter->drawPolygon( points );
++                    break;
++                }
++            case MarkerAttributes::MarkerVerticalBar:
++                {
++                    const qreal w02 = maSize.width() * 0.2;
++                    const qreal h05 = maSize.height()* 0.5;
++                    QVector <QPointF > points;
++                    QPointF p1 = QPointF( -w02, -h05 );
++                    QPointF p2 = QPointF( -w02,  h05 );
++                    QPointF p3 = QPointF(  w02,  h05 );
++                    QPointF p4 = QPointF(  w02, -h05 );
++                    points << p1 << p2 << p3 << p4;
++                    painter->drawPolygon( points );
++                    break;
++                }
++
+             default:
+                 Q_ASSERT_X ( false, "paintMarkers()",
+                             "Type item does not match a defined Marker Type." );
+diff --git a/plugins/chartshape/kdchart/src/KDChartMarkerAttributes.h b/plugins/chartshape/kdchart/src/KDChartMarkerAttributes.h
+index 890ece9..f8b7646 100644
+--- a/plugins/chartshape/kdchart/src/KDChartMarkerAttributes.h
++++ b/plugins/chartshape/kdchart/src/KDChartMarkerAttributes.h
+@@ -54,7 +54,20 @@ namespace KDChart {
+                            MarkerRing    = 5,
+                            MarkerCross   = 6,
+                            MarkerFastCross = 7,
+-                           NoMarker = 8 };
++                           NoMarker = 8,
++                           // Above is kept for backwards binary compatibility.
++                           // Below are added for compatibility with ODF
++                           MarkerArrowDown     =  9,
++                           MarkerArrowUp       = 10,
++                           MarkerArrowRight    = 11,
++                           MarkerArrowLeft     = 12,
++                           MarkerBowTie        = 13,
++                           MarkerHourGlass     = 14,
++                           MarkerStar          = 15,
++                           MarkerX             = 16,
++                           MarkerAsterisk      = 17,
++                           MarkerHorizontalBar = 18,
++                           MarkerVerticalBar   = 19 };
+ 
+         enum MarkerSizeMode {
+             /// the marker size is directly specified in pixels

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2010 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,8 +20,8 @@
 
 #include "QuickTableButton.h"
 
+#include <KoIcon.h>
 #include <klocale.h>
-#include <kicon.h>
 #include <kdebug.h>
 #include <KAction>
 
@@ -159,7 +159,7 @@ QuickTableButton::QuickTableButton(QWidget *parent)
 {
     setToolTip(i18n("Insert a table"));
     setToolButtonStyle(Qt::ToolButtonIconOnly);
-    setIcon(KIcon("insert-table"));
+    setIcon(koIcon("insert-table"));
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     m_menu = new QMenu(this);

@@ -90,6 +90,11 @@ public:
                  KoParagraphStyle::Property space, KoParagraphStyle::Property innerWidth);
 
     /**
+     * Set if this border should possibly be merged with the next.
+     */
+    void setMergeWithNext(bool merge);
+
+    /**
      * @return true if there has been at least one border set.
      */
     bool hasBorders() const;

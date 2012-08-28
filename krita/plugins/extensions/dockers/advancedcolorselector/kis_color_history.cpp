@@ -20,6 +20,8 @@
 #include "kis_view2.h"
 #include "kis_canvas_resource_provider.h"
 
+#include <KoCompositeOpRegistry.h>
+
 #include <QColor>
 
 KisColorHistory::KisColorHistory(QWidget *parent)
@@ -61,6 +63,9 @@ KisColorSelectorBase* KisColorHistory::createPopup() const
 
 void KisColorHistory::commitColor(const KoColor& color)
 {
+    // don't add color in erase mode. See https://bugs.kde.org/show_bug.cgi?id=298940
+    if (m_resourceProvider->currentCompositeOp() == COMPOSITE_ERASE) return;
+
     m_colorHistory.removeAll(color);
     m_colorHistory.prepend(color);
 

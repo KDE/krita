@@ -54,5 +54,5 @@ void TestLoading::testLegend()
     // Your code goes here
 }
 
-QTEST_KDEMAIN( TestLoading, GUI )
+QTEST_KDEMAIN(TestLoading, GUI)
 

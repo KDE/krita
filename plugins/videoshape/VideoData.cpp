@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2008 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -60,10 +60,14 @@ VideoData::~VideoData()
     delete temporaryFile;
 }
 
-QString VideoData::tagForSaving(int &counter)
+QString VideoData::tagForSaving(QUrl storeUrl, int &counter)
 {
     if (!saveName.isEmpty())
         return saveName;
+
+    if (!videoLocation.isEmpty()) {
+        return videoLocation.toString();
+    }
 
     if (suffix.isEmpty()) {
         return saveName = QString("Videos/video%1").arg(++counter);
@@ -72,12 +76,12 @@ QString VideoData::tagForSaving(int &counter)
     }
 }
 
-void VideoData::setExternalVideo(const QUrl &location, VideoCollection *col)
+void VideoData::setExternalVideo(const QUrl &location, VideoCollection *collection)
 {
     if (collection) {
         // let the collection first check if it already has one. If it doesn't it'll call this method
         // again and we'll go to the other clause
-        VideoData *other = col->createExternalVideoData(location);
+        VideoData *other = collection->createExternalVideoData(location);
         this->operator=(*other);
         delete other;
     } else {
@@ -172,7 +176,8 @@ bool VideoData::saveData(QIODevice &device)
         }
         return true;
     } else if (!videoLocation.isEmpty()) {
-        if (true) { //later on this should check if the user wants us to do this
+        bool putExtrenalIntoZip = false;
+        if (putExtrenalIntoZip) { //later on this should check if the user wants us to do this
             // An external video have been specified
             QFile file(videoLocation.toLocalFile());
 

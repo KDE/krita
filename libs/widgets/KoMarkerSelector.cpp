@@ -24,11 +24,8 @@
 #include "KoMarkerItemDelegate.h"
 #include "KoPathShape.h"
 
-#include <QList>
-#include <QComboBox>
 #include <QPainter>
 #include <QPainterPath>
-#include <QTransform>
 
 class KoMarkerSelector::Private
 {
@@ -45,7 +42,7 @@ KoMarkerSelector::KoMarkerSelector(KoMarkerData::MarkerPosition position, QWidge
 , d(new Private(position, this))
 {
     setModel(d->model);
-    setItemDelegate(new KoMarkerItemDelegate(this));
+    setItemDelegate(new KoMarkerItemDelegate(position, this));
 }
 
 KoMarkerSelector::~KoMarkerSelector()
@@ -60,9 +57,9 @@ void KoMarkerSelector::paintEvent(QPaintEvent *pe)
     QStyleOptionComboBox option;
     option.initFrom(this);
     option.frame = hasFrame();
-    QRect r = style()->subControlRect(QStyle::CC_ComboBox, &option, QStyle::SC_ComboBoxEditField, this);
+    QRect rect = style()->subControlRect(QStyle::CC_ComboBox, &option, QStyle::SC_ComboBoxEditField, this);
     if (!option.frame) { // frameless combo boxes have smaller margins but styles do not take this into account
-        r.adjust(-14, 0, 14, 1);
+        rect.adjust(-14, 0, 14, 1);
     }
 
     QPainter painter(this);
@@ -71,15 +68,19 @@ void KoMarkerSelector::paintEvent(QPaintEvent *pe)
         painter.setRenderHint(QPainter::Antialiasing, true);
     }
 
-    KoPathShape *pathShape = itemData(currentIndex(), Qt::DisplayRole).value<KoPathShape*>();
-    if (pathShape != 0) {
-        // paint marker
-        QPen pen(option.palette.text(), 2);
-        painter.setPen(pen);
-        QPainterPath path = pathShape->pathStroke(pen);
-        painter.fillPath(path, pen.brush());
-        delete pathShape;
+    KoPathShape pathShape;
+    pathShape.moveTo(QPointF(rect.left(), rect.center().y()));
+    pathShape.lineTo(QPointF(rect.right(), rect.center().y()));
+
+    KoMarker *marker = itemData(currentIndex(), Qt::DecorationRole).value<KoMarker*>();
+    if (marker != 0) {
+        pathShape.setMarker(marker, d->model->position());
     }
+
+    // paint marker
+    QPen pen(option.palette.text(), 2);
+    QPainterPath path = pathShape.pathStroke(pen);
+    painter.fillPath(path, pen.brush());
 
     if (!antialiasing) {
         painter.setRenderHint(QPainter::Antialiasing, false);
@@ -109,13 +110,5 @@ void KoMarkerSelector::updateMarkers(const QList<KoMarker*> markers)
 
 QVariant KoMarkerSelector::itemData(int index, int role) const
 {
-    if (role == Qt::DisplayRole) {
-        KoMarker *marker = d->model->marker(index, Qt::DecorationRole).value<KoMarker*>();
-        KoPathShape *pathShape = new KoPathShape();
-        pathShape->moveTo(QPointF(10, 15));
-        pathShape->lineTo(QPointF(70, 15));
-        pathShape->setMarker(marker, d->model->position());
-        return QVariant::fromValue<KoPathShape*>(pathShape);
-    }
     return d->model->marker(index, role);
 }

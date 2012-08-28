@@ -2,7 +2,7 @@
  * Copyright (C) 2006-2007, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2009 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2009 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -33,14 +33,17 @@
 #include <KoXmlNS.h>
 #include <KoStoreDevice.h>
 #include <KoUnit.h>
+#include <KoIcon.h>
 
-#include <QPainter>
 #include <kdebug.h>
 #include <kurl.h>
+
+#include <QPainter>
 
 VideoShape::VideoShape()
     : KoFrameShape(KoXmlNS::draw, "plugin")
     , m_videoEventAction(new VideoEventAction(this))
+    , m_icon(koIconName("video-x-generic"))
 {
     setKeepAspectRatio(true);
     addEventAction(m_videoEventAction);
@@ -53,14 +56,12 @@ VideoShape::~VideoShape()
 void VideoShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
     QRectF pixelsF = converter.documentToView(QRectF(QPointF(0,0), size()));
-    VideoData *videoData = qobject_cast<VideoData*>(userData());
-    if (videoData == 0) {
-        painter.fillRect(pixelsF, QColor(Qt::gray));
-        return;
-    }
 
+    painter.fillRect(pixelsF, QColor(Qt::gray));
+    painter.setPen(QPen());
+    painter.drawRect(pixelsF);
 
-    painter.fillRect(pixelsF, QColor(Qt::green));
+    m_icon.paint(&painter, pixelsF.toRect());
 }
 
 void VideoShape::saveOdf(KoShapeSavingContext &context) const
@@ -76,15 +77,13 @@ void VideoShape::saveOdf(KoShapeSavingContext &context) const
     saveOdfAttributes(context, OdfAllAttributes);
     writer.startElement("draw:plugin");
     // In the spec, only the xlink:href attribute is marked as mandatory, cool :)
-    QString name = videoData->tagForSaving(m_videoCollection->saveCounter);
-    //QUrl storePath = context.odfSavingContext().store()->urlOfStore();
-    //qDebug() << "saving " << storePath << " " << name;
-    //QString relHRef = KUrl::relativeUrl(storePath, name);
-    //qDebug() << "combined " << relHRef;
+    QUrl storeUrl;//= context.odfSavingContext().store()->urlOfStore();
+    QString name = videoData->tagForSaving(storeUrl, m_videoCollection->saveCounter);
     writer.addAttribute("xlink:type", "simple");
     writer.addAttribute("xlink:show", "embed");
     writer.addAttribute("xlink:actuate", "onLoad");
     writer.addAttribute("xlink:href", name);
+    writer.addAttribute("draw:mime-type", "application/vnd.sun.star.media");
     writer.endElement(); // draw:plugin
     saveOdfCommonChildElements(context);
     writer.endElement(); // draw:frame
@@ -112,6 +111,7 @@ bool VideoShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoading
         if (!href.isEmpty()) {
             QUrl url(href);
             VideoData *data=0;
+
             if(href.startsWith("../")) {
                 // file is outside store
                 KUrl storePath = context.odfLoadingContext().store()->urlOfStore();

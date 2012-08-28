@@ -53,7 +53,7 @@ void KoPAChangePageLayoutCommand::redo()
     QMap<KoPAMasterPage *, KoPageLayout>::const_iterator it = m_oldLayouts.constBegin();
     while ( it != m_oldLayouts.constEnd() ) {
         it.key()->setPageLayout( m_newPageLayout );
-        m_document->updateViews( it.key() );
+        m_document->emitUpdate(it.key());
         ++it;
     }
 }
@@ -63,7 +63,7 @@ void KoPAChangePageLayoutCommand::undo()
     QMap<KoPAMasterPage *, KoPageLayout>::const_iterator it = m_oldLayouts.constBegin();
     while ( it != m_oldLayouts.constEnd() ) {
         it.key()->setPageLayout( it.value() );
-        m_document->updateViews( it.key() );
+        m_document->emitUpdate(it.key());
         ++it;
     }
 }

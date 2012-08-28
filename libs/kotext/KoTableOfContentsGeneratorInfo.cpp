@@ -74,7 +74,7 @@ KoTableOfContentsGeneratorInfo::KoTableOfContentsGeneratorInfo(bool generateEntr
             // index-entry-chapter
             // use null String if the style name is not present, it means that we inherit it from the parent
             IndexEntryChapter *entryChapter = new IndexEntryChapter(QString());
-            entryChapter->display = "number-and-name";
+            entryChapter->display = "number";
             entryChapter->outlineLevel = level;
             tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryChapter));
 
@@ -248,7 +248,7 @@ KoTableOfContentsGeneratorInfo *KoTableOfContentsGeneratorInfo::clone()
     KoTableOfContentsGeneratorInfo *newToCInfo=new KoTableOfContentsGeneratorInfo(false);
     newToCInfo->m_entryTemplate.clear();
     newToCInfo->m_name = QString(m_name);
-    newToCInfo->m_styleName = QString(m_name);
+    newToCInfo->m_styleName = QString(m_styleName);
     newToCInfo->m_indexScope = QString(m_indexScope);
     newToCInfo->m_outlineLevel = m_outlineLevel;
     newToCInfo->m_relativeTabStopPosition = m_relativeTabStopPosition;

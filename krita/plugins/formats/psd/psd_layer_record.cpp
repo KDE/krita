@@ -33,6 +33,7 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceMaths.h>
 #include <KoColorSpaceTraits.h>
+#include "kis_iterator_ng.h"
 
 // Just for pretty debug messages
 QString channelIdToChannelType(int channelId, PSDColorMode colormode)
@@ -280,7 +281,7 @@ bool PSDLayerRecord::read(QIODevice* io)
 
     dbgFile << "\ttransparency protected" << transparencyProtected;
 
-    visible = flags & 2 ? true : false;
+    visible = flags & 2 ? false : true;
 
     dbgFile << "\tvisible" << visible;
 
@@ -521,7 +522,7 @@ bool PSDLayerRecord::readChannels(QIODevice *io, KisPaintDeviceSP device)
     return false;
 }
 
-bool PSDLayerRecord::doGrayscale(KisPaintDeviceSP dev, QIODevice *io)
+bool PSDLayerRecord::doGrayscale(KisPaintDeviceSP /*dev*/, QIODevice */*io*/)
 {
     return false;
 }
@@ -530,7 +531,7 @@ bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io)
 {
     quint64 oldPosition = io->pos();
 
-    int width = right - left;
+    quint64 width = right - left;
     int channelSize = m_header.channelDepth / 8;
     int uncompressedLength = width * channelSize;
 
@@ -541,10 +542,9 @@ bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io)
         return false;
     }
 
-
+    KisHLineIteratorSP it = dev->createHLineIteratorNG(left, top, width);
     for (int row = top ; row < bottom; row++)
     {
-        KisHLineIterator it = dev->createHLineIterator(left, row, width);
         QMap<quint16, QByteArray> channelBytes;
 
         foreach(ChannelInfo *channelInfo, channelInfoRecords) {
@@ -572,16 +572,16 @@ bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io)
                 if (channelBytes.contains(-1)) {
                     opacity = channelBytes[-1].constData()[col];
                 }
-                KoRgbU8Traits::setOpacity(it.rawData(), opacity, 1);
+                KoBgrU8Traits::setOpacity(it->rawData(), opacity, 1);
 
                 quint8 red = channelBytes[0].constData()[col];
-                KoRgbU8Traits::setRed(it.rawData(), red);
+                KoBgrU8Traits::setRed(it->rawData(), red);
 
                 quint8 green = channelBytes[1].constData()[col];
-                KoRgbU8Traits::setGreen(it.rawData(), green);
+                KoBgrU8Traits::setGreen(it->rawData(), green);
 
                 quint8 blue = channelBytes[2].constData()[col];
-                KoRgbU8Traits::setBlue(it.rawData(), blue);
+                KoBgrU8Traits::setBlue(it->rawData(), blue);
 
             }
 
@@ -592,16 +592,16 @@ bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io)
                     opacity = channelBytes[-1].constData()[col];
                 }
                 // We don't have a convenient setOpacity function :-(
-                memcpy(it.rawData() + KoRgbU16Traits::alpha_pos, &opacity, sizeof(quint16));
+                memcpy(it->rawData() + KoBgrU16Traits::alpha_pos, &opacity, sizeof(quint16));
 
                 quint16 red = ntohs(reinterpret_cast<const quint16 *>(channelBytes[0].constData())[col]);
-                KoRgbU16Traits::setRed(it.rawData(), red);
+                KoBgrU16Traits::setRed(it->rawData(), red);
 
                 quint16 green = ntohs(reinterpret_cast<const quint16 *>(channelBytes[1].constData())[col]);
-                KoRgbU16Traits::setGreen(it.rawData(), green);
+                KoBgrU16Traits::setGreen(it->rawData(), green);
 
                 quint16 blue = ntohs(reinterpret_cast<const quint16 *>(channelBytes[2].constData())[col]);
-                KoRgbU16Traits::setBlue(it.rawData(), blue);
+                KoBgrU16Traits::setBlue(it->rawData(), blue);
 
             }
             else {
@@ -613,17 +613,18 @@ bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io)
             else if (channelSize == 4) {
 
                 quint16 red = ntohs(reinterpret_cast<const quint16 *>(channelBytes.constData())[col]);
-                KoRgbU16Traits::setRed(it.rawData(), red);
+                KoBgrU16Traits::setRed(it->rawData(), red);
 
                 quint16 green = ntohs(reinterpret_cast<const quint16 *>(channelBytes.constData())[col]);
-                KoRgbU16Traits::setGreen(it.rawData(), green);
+                KoBgrU16Traits::setGreen(it->rawData(), green);
 
                 quint16 blue = ntohs(reinterpret_cast<const quint16 *>(channelBytes.constData())[col]);
-                KoRgbU16Traits::setBlue(it.rawData(), blue);
+                KoBgrU16Traits::setBlue(it->rawData(), blue);
             }
 */
-            ++it;
+            it->nextPixel();
         }
+        it->nextRow();
     }
     // go back to the old position, because we've been seeking all over the place
     io->seek(oldPosition);
@@ -636,7 +637,7 @@ bool PSDLayerRecord::doCMYK(KisPaintDeviceSP dev, QIODevice *io)
     qDebug() << "top" << top << "bottom" << bottom << "left" << left << "right" << right;
     quint64 oldPosition = io->pos();
 
-    int width = right - left;
+    quint64 width = right - left;
     int channelSize = m_header.channelDepth / 8;
     int uncompressedLength = width * channelSize;
 
@@ -648,10 +649,10 @@ bool PSDLayerRecord::doCMYK(KisPaintDeviceSP dev, QIODevice *io)
         return false;
     }
 
-
+    KisHLineIteratorSP it = dev->createHLineIteratorNG(left, top, width);
     for (int row = top ; row < bottom; row++)
     {
-        KisHLineIterator it = dev->createHLineIterator(left, row, width);
+
         QMap<quint16, QByteArray> channelBytes;
 
         foreach(ChannelInfo *channelInfo, channelInfoRecords) {
@@ -690,7 +691,7 @@ bool PSDLayerRecord::doCMYK(KisPaintDeviceSP dev, QIODevice *io)
                 memset(pixel + 2, 255 - channelBytes[2].constData()[col], 1);
                 memset(pixel + 3, 255 - channelBytes[3].constData()[col], 1);
                 //qDebug() << "C" << pixel[0] << "M" << pixel[1] << "Y" << pixel[2] << "K" << pixel[3] << "A" << pixel[4];
-                memcpy(it.rawData(), pixel, 5);
+                memcpy(it->rawData(), pixel, 5);
             }
 
             else if (channelSize == 2) {
@@ -701,19 +702,19 @@ bool PSDLayerRecord::doCMYK(KisPaintDeviceSP dev, QIODevice *io)
                 }
 
                 // We don't have a convenient setOpacity function :-(
-                memcpy(it.rawData() + KoCmykTraits<quint16>::alpha_pos, &opacity, sizeof(quint16));
+                memcpy(it->rawData() + KoCmykTraits<quint16>::alpha_pos, &opacity, sizeof(quint16));
 
                 quint16 C = ntohs(reinterpret_cast<const quint16 *>(channelBytes[0].constData())[col]);
-                KoCmykTraits<quint16>::setC(it.rawData(),C);
+                KoCmykTraits<quint16>::setC(it->rawData(),C);
 
                 quint16 M = ntohs(reinterpret_cast<const quint16 *>(channelBytes[1].constData())[col]);
-                KoCmykTraits<quint16>::setM(it.rawData(),M);
+                KoCmykTraits<quint16>::setM(it->rawData(),M);
 
                 quint16 Y = ntohs(reinterpret_cast<const quint16 *>(channelBytes[2].constData())[col]);
-                KoCmykTraits<quint16>::setY(it.rawData(),Y);
+                KoCmykTraits<quint16>::setY(it->rawData(),Y);
 
                 quint16 K = ntohs(reinterpret_cast<const quint16 *>(channelBytes[3].constData())[col]);
-                KoCmykTraits<quint16>::setK(it.rawData(),K);
+                KoCmykTraits<quint16>::setK(it->rawData(),K);
 
             }
 
@@ -722,24 +723,25 @@ bool PSDLayerRecord::doCMYK(KisPaintDeviceSP dev, QIODevice *io)
             else if (channelSize == 4) {
 
                 quint32 C = ntohs(reinterpret_cast<const quint32 *>(channelBytes[0].constData())[col]);
-                KoCmykTraits<quint32>::setC(it.rawData(),C);
+                KoCmykTraits<quint32>::setC(it->rawData(),C);
 
                 quint32 M = ntohs(reinterpret_cast<const quint32 *>(channelBytes[1].constData())[col]);
-                KoCmykTraits<quint32>::setM(it.rawData(),M);
+                KoCmykTraits<quint32>::setM(it->rawData(),M);
 
                 quint32 Y = ntohs(reinterpret_cast<const quint32 *>(channelBytes[2].constData())[col]);
-                KoCmykTraits<quint32>::setY(it.rawData(),Y);
+                KoCmykTraits<quint32>::setY(it->rawData(),Y);
 
                 quint32 K = ntohs(reinterpret_cast<const quint32 *>(channelBytes[3].constData())[col]);
-                KoCmykTraits<quint32>::setK(it.rawData(),K);
+                KoCmykTraits<quint32>::setK(it->rawData(),K);
             }
 
             else {
                 // Unsupported channel sizes for now
                 return false;
             }
-            ++it;
+            it->nextPixel();
         }
+        it->nextRow();
     }
     // go back to the old position, because we've been seeking all over the place
     io->seek(oldPosition);
@@ -749,7 +751,7 @@ bool PSDLayerRecord::doCMYK(KisPaintDeviceSP dev, QIODevice *io)
 bool PSDLayerRecord::doLAB(KisPaintDeviceSP dev, QIODevice *io)
 {    quint64 oldPosition = io->pos();
 
-     int width = right - left;
+     quint64 width = right - left;
      int channelSize = m_header.channelDepth / 8;
      int uncompressedLength = width * channelSize;
 
@@ -760,10 +762,10 @@ bool PSDLayerRecord::doLAB(KisPaintDeviceSP dev, QIODevice *io)
          return false;
      }
 
-
+     KisHLineIteratorSP it = dev->createHLineIteratorNG(left, top, width);
      for (int row = top ; row < bottom; row++)
      {
-         KisHLineIterator it = dev->createHLineIterator(left, row, width);
+
          QMap<quint16, QByteArray> channelBytes;
 
          foreach(ChannelInfo *channelInfo, channelInfoRecords) {
@@ -791,16 +793,16 @@ bool PSDLayerRecord::doLAB(KisPaintDeviceSP dev, QIODevice *io)
                  if (channelBytes.contains(-1)) {
                      opacity = channelBytes[-1].constData()[col];
                  }
-                 KoLabTraits<quint8>::setOpacity(it.rawData(), opacity, 1);
+                 KoLabTraits<quint8>::setOpacity(it->rawData(), opacity, 1);
 
                  quint8 L = ntohs(reinterpret_cast<const quint8 *>(channelBytes[0].constData())[col]);
-                 KoLabTraits<quint8>::setL(it.rawData(),L);
+                 KoLabTraits<quint8>::setL(it->rawData(),L);
 
                  quint8 A = ntohs(reinterpret_cast<const quint8 *>(channelBytes[1].constData())[col]);
-                 KoLabTraits<quint8>::setA(it.rawData(),A);
+                 KoLabTraits<quint8>::setA(it->rawData(),A);
 
                  quint8 B = ntohs(reinterpret_cast<const quint8 *>(channelBytes[2].constData())[col]);
-                 KoLabTraits<quint8>::setB(it.rawData(),B);
+                 KoLabTraits<quint8>::setB(it->rawData(),B);
 
 
              }
@@ -812,25 +814,26 @@ bool PSDLayerRecord::doLAB(KisPaintDeviceSP dev, QIODevice *io)
                      opacity = channelBytes[-1].constData()[col];
                  }
                  // We don't have a convenient setOpacity function :-(
-                 memcpy(it.rawData() + KoLabU16Traits::alpha_pos, &opacity, sizeof(quint16));
-                // KoLabTraits<quint16>::setOpacity(it.rawData(), opacity, 1);
+                 memcpy(it->rawData() + KoLabU16Traits::alpha_pos, &opacity, sizeof(quint16));
+                // KoLabTraits<quint16>::setOpacity(it->rawData(), opacity, 1);
 
                  quint16 L = ntohs(reinterpret_cast<const quint16 *>(channelBytes[0].constData())[col]);
-                 KoLabTraits<quint16>::setL(it.rawData(),L);
+                 KoLabTraits<quint16>::setL(it->rawData(),L);
 
                  quint16 A = ntohs(reinterpret_cast<const quint16 *>(channelBytes[1].constData())[col]);
-                 KoLabTraits<quint16>::setA(it.rawData(),A);
+                 KoLabTraits<quint16>::setA(it->rawData(),A);
 
                  quint16 B = ntohs(reinterpret_cast<const quint16 *>(channelBytes[2].constData())[col]);
-                 KoLabTraits<quint16>::setB(it.rawData(),B);
+                 KoLabTraits<quint16>::setB(it->rawData(),B);
              }
              else {
                  // Unsupported channel sizes for now
                  return false;
              }
 
-             ++it;
+             it->nextPixel();
          }
+         it->nextRow();
      }
      // go back to the old position, because we've been seeking all over the place
      io->seek(oldPosition);

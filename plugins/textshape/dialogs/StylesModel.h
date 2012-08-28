@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Thomas Zander <zander@kde.org>
- * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2011-2012 Pierre Stirnweiss <pstirnweiss@googlemail.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@
 #define MODEL_H
 
 #include <QAbstractListModel>
-#include <KIcon>
+#include <QSize>
 
 class KoStyleThumbnailer;
 
@@ -32,11 +32,10 @@ class KoCharacterStyle;
 
 class QImage;
 class QSignalMapper;
-class QSize;
 
 /** This class is used to provide widgets (like the @class StylesCombo) the styles available to the document being worked on. The @class StylesModel can be of two types: character styles or paragraph styles type. This allows the widget to ignore the type of style it is handling.
   * Character styles in ODF can be specified in two ways. First, a named character style, specifying character formatting properties. It is meant to be used on a couple of individual characters. Secondely, a paragraph style also specifies character formatting properties, which are to be considered the default for that particular paragraph.
-  * For this reason, the @class Stylesmodel, when of the type @value characterStyle, do not list the paragraph style names. Only the specific named chracter styles are listed. Additionnaly, as the first item, a virtual style "As paragraph" is provided. Selecting this "style" will set the character properties as specified by the paragraph style currently applied to the selection.
+  * For this reason, the @class Stylesmodel, when of the type @value characterStyle, do not list the paragraph style names. Only the specific named chracter styles are listed. Additionally, as the first item, a virtual style "As paragraph" is provided. Selecting this "style" will set the character properties as specified by the paragraph style currently applied to the selection.
   * This class requires that a @class KoStyleManager and a @class KoStyleThumbnailer be set. See below methods.
 */
 
@@ -97,6 +96,25 @@ public:
     /** Specifies which paragraph style is currently the active one (on the current paragraph). This is used in order to properly preview the "As paragraph" virtual character style. */
     void setCurrentParagraphStyle(int styleId);
 
+    /** Return the first index at list. */
+    QModelIndex firstStyleIndex();
+
+    /** Return style id list. */
+    QList<int> StyleList();
+
+    /** Return new styles and their ids. */
+    QHash<int, KoParagraphStyle *> draftParStyleList();
+    QHash<int, KoCharacterStyle *> draftCharStyleList();
+
+    /** Add a paragraph style to pargraph style list but this style is not applied. */
+    void addDraftParagraphStyle(KoParagraphStyle *style);
+
+    /** Add a character style to character style list but this style is not applied. */
+    void addDraftCharacterStyle(KoCharacterStyle *style);
+
+    /** we call this when we apply our unapplied styles and we clear our list. */
+    void clearDraftStyles();
+
 private slots:
     void addParagraphStyle(KoParagraphStyle*);
     void addCharacterStyle(KoCharacterStyle*);
@@ -110,6 +128,8 @@ private:
 
 protected:
     QList<int> m_styleList; // list of style IDs
+    QHash<int, KoParagraphStyle *> m_draftParStyleList; // list of new styles that are not applied
+    QHash<int, KoCharacterStyle *> m_draftCharStyleList;
 
 private:
     KoStyleManager *m_styleManager;
@@ -118,8 +138,6 @@ private:
     KoParagraphStyle *m_currentParagraphStyle;
     KoCharacterStyle *m_defaultCharacterStyle;
     Type m_modelType;
-
-    KIcon m_paragIcon, m_charIcon;
 
     QSignalMapper *m_styleMapper;
 

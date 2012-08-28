@@ -57,12 +57,12 @@
 
 #include "kis_pixel_selection.h"
 
-#include "kis_random_accessor.h"
+#include "kis_random_accessor_ng.h"
 
-#include "kis_iterator.h"
 #include "KoColor.h"
 #include "kis_selection.h"
-#include "kis_random_accessor_ng.h"
+
+#include "kis_selection_manager_p.h"
 
 KisFillPainter::KisFillPainter()
         : KisPainter()
@@ -88,6 +88,8 @@ void KisFillPainter::initFillPainter()
     m_sampleMerged = false;
     m_careForSelection = false;
     m_fuzzy = false;
+    m_sizemod = 0;
+    m_feather = 0;
 }
 
 // 'regular' filling
@@ -518,6 +520,19 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
     delete[] map;
     delete[] source;
 
+    if (m_sizemod > 0) {
+        KisGrowSelectionFilter biggy(m_sizemod, m_sizemod);
+        biggy.process(selection->pixelSelection(), selection->selectedRect().adjusted(-m_sizemod, -m_sizemod, m_sizemod, m_sizemod));
+    }
+    else if (m_sizemod < 0) {
+        KisShrinkSelectionFilter tiny(-m_sizemod, -m_sizemod, false);
+        tiny.process(selection->pixelSelection(), selection->selectedRect());
+    }
+    if (m_feather > 0) {
+        KisFeatherSelectionFilter feathery(m_feather);
+        feathery.process(selection->pixelSelection(), selection->selectedRect().adjusted(-m_feather, -m_feather, m_feather, m_feather));
+    }
+    
     selection->updateProjection();
 
     return selection;

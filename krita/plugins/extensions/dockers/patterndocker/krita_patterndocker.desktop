@@ -1,8 +1,18 @@
 [Desktop Entry]
 Name=Pattern Docker
+Name[da]=Mønsterdokker
+Name[el]=Εργαλείο προσάρτησης μοτίβων
+Name[es]=Acoplable de patrón
+Name[et]=Mustridokk
+Name[fr]=Panneaux de motifs
+Name[gl]=Doca de patróns.
+Name[it]=Area di aggancio modelli
+Name[kk]=Өрнек докері
 Name[nl]=Vastzetter van patroon
+Name[pl]=Dokowanie wzorów
 Name[pt]=Área de Padrões
 Name[pt_BR]=Área de padrões
+Name[sk]=Paletový docker
 Name[sv]=Mönsterdockningsfönster
 Name[uk]=Панель візерунків
 Name[x-test]=xxPattern Dockerxx

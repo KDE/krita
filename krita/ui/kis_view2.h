@@ -37,21 +37,22 @@ class KisPaintOpPreset;
 class KoCanvasController;
 
 class KisCanvas2;
+class KisCanvasResourceProvider;
 class KisDoc2;
 class KisFilterManager;
+class KisGridManager;
 class KisImage;
-class KisCanvasResourceProvider;
+class KisImageManager;
+class KisNodeManager;
+class KisPaintingAssistantsManager;
+class KisPaintopBox;
+class KisPart2;
+class KisPerspectiveGridManager;
 class KisSelectionManager;
 class KisStatusBar;
 class KisUndoAdapter;
 class KisZoomManager;
-class KisImageManager;
-class KisNodeManager;
-class KisPerspectiveGridManager;
-class KisPaintingAssistantsManager;
-class KisGridManager;
 class KoFavoriteResourceManager;
-class KisPaintopBox;
 
 /**
  * Krita view class
@@ -70,7 +71,7 @@ public:
      * @param document   the document we show.
      * @param parent   a parent widget we show ourselves in.
      */
-    KisView2(KisDoc2 * document, QWidget * parent);
+    KisView2(KisPart2 *part, KisDoc2 *document, QWidget *parent);
     virtual ~KisView2();
 
 public:
@@ -149,6 +150,9 @@ public:  // Krita specific interfaces
     /// the global selection.
     KisSelectionSP selection();
 
+    /// Checks if the current global or local selection is editable
+    bool selectionEditable();
+
     /// The undo adapter is used to add commands to the undo stack
     KisUndoAdapter * undoAdapter();
 
@@ -176,6 +180,9 @@ public:  // Krita specific interfaces
     void enableControls();
     void disableControls();
 
+    /// shows a floating message in the top right corner of the canvas
+    void showFloatingMessage(const QString message, const QIcon& icon);
+
 signals:
 
     void sigLoadingFinished();
@@ -186,12 +193,12 @@ private slots:
     void slotPreferences();
     void slotEditPalette();
     void slotImageSizeChanged();
+    void slotNodeChanged();
     void slotTotalRefresh();
     void slotCreateTemplate();
     void slotDocumentSaved();
     void slotSaveIncremental();
     void slotSaveIncrementalBackup();
-    void slotFirstRun();
     void showStatusBar(bool toggled);
     void showJustTheCanvas(bool toggled);
 

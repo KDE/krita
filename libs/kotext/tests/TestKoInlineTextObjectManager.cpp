@@ -132,17 +132,10 @@ void TestKoInlineTextObjectManager::testRemoveInlineObject()
 
     int id = obj->id();
 
-    QTextCursor cursor = doc.find(QString(QChar::ObjectReplacementCharacter), 0);
-    Q_ASSERT(cursor.position() == 1);
-
-    manager.removeInlineObject(cursor);
+    manager.removeInlineObject(obj);
 
     KoInlineObject *obj2 = manager.inlineTextObject(id);
     Q_ASSERT(obj2 == 0);
-
-    // we cannot find the inline char anymore
-    cursor = doc.find(QString(QChar::ObjectReplacementCharacter), 0);
-    Q_ASSERT(cursor.position() == -1);
 
     // this should not crash, even though we were a listener
     manager.setProperty(KoInlineObject::UserGet, "bla");
@@ -156,7 +149,6 @@ void TestKoInlineTextObjectManager::testRemoveInlineObject()
     manager.removeInlineObject(bm);
     Q_ASSERT(!manager.bookmarkManager()->bookmarkNameList().contains("single!"));
     Q_ASSERT(!manager.bookmarkManager()->retrieveBookmark("single!"));
-
 }
 
 void TestKoInlineTextObjectManager::testListenToProperties()

@@ -21,14 +21,11 @@
 #define KO_LCMS_ENGINE_PLUGIN_H
 
 #include <kparts/plugin.h>
-class KUrl;
+
 class LcmsEnginePlugin : public QObject
 {
-
     Q_OBJECT
-
 public:
-
     LcmsEnginePlugin(QObject *parent, const QVariantList &);
 
 };

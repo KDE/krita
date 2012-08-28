@@ -34,7 +34,7 @@ ParagraphDecorations::ParagraphDecorations(QWidget* parent)
 void ParagraphDecorations::slotBackgroundColorChanged()
 {
     m_backgroundColorReset = false; m_backgroundColorChanged = true;
-    emit backgroundColorChanged(widget.backgroundColor->color());
+    emit parStyleChanged();
 }
 
 void ParagraphDecorations::setDisplay(KoParagraphStyle *style)
@@ -63,7 +63,7 @@ void ParagraphDecorations::clearBackgroundColor()
 {
     widget.backgroundColor->setColor(widget.backgroundColor->defaultColor());
     m_backgroundColorReset = true;
-    emit backgroundColorChanged(QColor(Qt::transparent));
+    emit parStyleChanged();
 }
 
 #include <ParagraphDecorations.moc>

@@ -73,7 +73,9 @@ class BaseLut {
       init();
     }
     inline ~BaseLut() {
-      delete[] m_table;
+      // just leak on exit -- we get into trouble for explicitly
+      // deleting stuff from static objects, like registries
+      //delete[] m_table;
     }
   public:
     /**

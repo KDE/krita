@@ -32,7 +32,6 @@
 #include <QSpinBox>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
@@ -43,8 +42,7 @@
 #include "KoProgressUpdater.h"
 #include <KoUpdater.h>
 
-#include <kis_iterators_pixel.h>
-#include <kis_random_accessor.h>
+#include <kis_random_accessor_ng.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
 #include <kis_selection.h>

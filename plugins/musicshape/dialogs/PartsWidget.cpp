@@ -29,7 +29,7 @@
 #include "../commands/RemovePartCommand.h"
 #include "../commands/AddPartCommand.h"
 
-#include <KIcon>
+#include <KoIcon.h>
 
 using namespace MusicCore;
 
@@ -39,9 +39,9 @@ PartsWidget::PartsWidget(MusicTool *tool, QWidget *parent)
 {
     widget.setupUi(this);
 
-    widget.addPart->setIcon(KIcon("list-add"));
-    widget.removePart->setIcon(KIcon("list-remove"));
-    widget.editPart->setIcon(KIcon("document-properties"));
+    widget.addPart->setIcon(koIcon("list-add"));
+    widget.removePart->setIcon(koIcon("list-remove"));
+    widget.editPart->setIcon(koIcon("document-properties"));
 
     connect(widget.partsList, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(partDoubleClicked(const QModelIndex&)));
     //connect(widget.partsList, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)), this, SLOT(selectionChanged(QListWidgetItem*,QListWidgetItem*)));

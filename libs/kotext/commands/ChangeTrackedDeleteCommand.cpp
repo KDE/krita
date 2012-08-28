@@ -188,7 +188,7 @@ void ChangeTrackedDeleteCommand::handleListItemDelete(KoTextEditor *editor)
     QTextDocumentFragment fragment = editor->selection();
     drag.setData("text/html", fragment.toHtml("utf-8").toUtf8());
     drag.setData("text/plain", fragment.toPlainText().toUtf8());
-    drag.addToClipboard();
+    QApplication::clipboard()->setMimeData(drag.mimeData());
 
     // Delete the marked section
     editor->setPosition(editor->anchor() -1);

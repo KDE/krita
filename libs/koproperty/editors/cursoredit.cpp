@@ -50,7 +50,6 @@
 #include <KLocale>
 #include <KDebug>
 #include <KGlobal>
-#include <KIconLoader>
 
 using namespace KoProperty;
 

@@ -45,8 +45,9 @@ public:
     void loadAdjustmentLayer(const QDomElement& elem, KisAdjustmentLayerSP pL);
     void loadGroupLayer(const QDomElement& elem, KisGroupLayerSP gL);
     KisImageWSP image();
+    vKisNodeSP activeNodes();
 private:
-    void loadLayerInfo(const QDomElement& elem, KisLayer* layer);
+    void loadLayerInfo(const QDomElement& elem, KisLayerSP layer);
     struct Private;
     Private* const d;
 };

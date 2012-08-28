@@ -54,141 +54,146 @@ TestLoadingBase::TestLoadingBase()
     : QObject()
 {
     // No message boxes please.
-    ChartShape::setEnableUserInteraction( false );
-    m_chart = new ChartShape( 0 );
+    ChartShape::setEnableUserInteraction(false);
+    m_chart = new ChartShape(0);
 }
 
 void TestLoadingBase::initTestCase()
 {
-    ChartDocument document( m_chart );
-    QString srcdirname( KDESRCDIR );
-    QVERIFY( !srcdirname.isEmpty() );
+    ChartDocument document(m_chart);
+
+    QString srcdirname(KDESRCDIR);
+    QVERIFY(!srcdirname.isEmpty());
+
     QDir srcdir(srcdirname);
-    QVERIFY( srcdir.exists() );
+    QVERIFY(srcdir.exists());
+
     bool hasDocDirInSrcDir = srcdir.cd("doc");
-    QVERIFY( hasDocDirInSrcDir );
-    KoStore *store = KoStore::createStore( srcdir.absolutePath(), KoStore::Read );
-    QVERIFY( store->enterDirectory( "doc" ) );
+    QVERIFY(hasDocDirInSrcDir);
+
+    KoStore *store = KoStore::createStore(srcdir.absolutePath(), KoStore::Read);
+    QVERIFY(store->enterDirectory("doc"));
+
     QString errorMsg;
-    KoOdfReadStore odfReadStore( store );
-    bool success = odfReadStore.loadAndParse( errorMsg );
-    if ( !success )
+    KoOdfReadStore odfReadStore(store);
+    bool success = odfReadStore.loadAndParse(errorMsg);
+    if (!success)
         qDebug() << "Error in odfReadStore.loadAndParse(): " << errorMsg;
-    QVERIFY( success );
-    QVERIFY( document.loadOdf( odfReadStore ) );
+    QVERIFY(success);
+    QVERIFY(document.loadOdf(odfReadStore));
 }
 
-void TestLoadingBase::testElementIsVisible( KoShape *element, bool shouldBeVisible )
+void TestLoadingBase::testElementIsVisible(KoShape *element, bool shouldBeVisible)
 {
-    QVERIFY( element );
-    QCOMPARE( element->isVisible(), shouldBeVisible );
+    QVERIFY(element);
+    QCOMPARE(element->isVisible(), shouldBeVisible);
 }
 
-void TestLoadingBase::testLegendElements( QStringList labels )
+void TestLoadingBase::testLegendElements(QStringList labels)
 {
-    QVERIFY( m_chart->legend() );
-    QVERIFY( m_chart->legend()->kdLegend() );
-    QCOMPARE( m_chart->legend()->kdLegend()->datasetCount(),
-              (unsigned int)labels.count() );
+    QVERIFY(m_chart->legend());
+    QVERIFY(m_chart->legend()->kdLegend());
+    QCOMPARE(m_chart->legend()->kdLegend()->datasetCount(),
+              (unsigned int)labels.count());
 
     QList<KDChart::AbstractDiagram*> diagrams = m_chart->legend()->kdLegend()->diagrams();
-    foreach( KDChart::AbstractDiagram *diagram, diagrams ) {
-        QVERIFY( diagram );
+    foreach(KDChart::AbstractDiagram *diagram, diagrams) {
+        QVERIFY(diagram);
         QStringList diagramLabels = diagram->datasetLabels();
-        foreach( QString diagramLabel, diagramLabels ) {
-            QVERIFY( !labels.isEmpty() );
-            QCOMPARE( diagramLabel, labels.takeFirst() );
+        foreach(QString diagramLabel, diagramLabels) {
+            QVERIFY(!labels.isEmpty());
+            QCOMPARE(diagramLabel, labels.takeFirst());
         }
     }
-    QVERIFY( labels.isEmpty() );
+    QVERIFY(labels.isEmpty());
 }
 
-void TestLoadingBase::testDataSetCellRegions( int dataSetNr,
-                                              CellRegion yDataRegion,
-                                              CellRegion labelDataRegion,
-                                              CellRegion categoryDataRegion,
-                                              CellRegion xDataRegion,
-                                              CellRegion customDataRegion )
+void TestLoadingBase::testDataSetCellRegions(int dataSetNr,
+                                             CellRegion yDataRegion,
+                                             CellRegion labelDataRegion,
+                                             CellRegion categoryDataRegion,
+                                             CellRegion xDataRegion,
+                                             CellRegion customDataRegion)
 {
-    QVERIFY( m_chart->proxyModel() );
+    QVERIFY(m_chart->proxyModel());
     QList<DataSet*> dataSets = m_chart->proxyModel()->dataSets();
-    QVERIFY( dataSetNr >= 0 );
-    QVERIFY( dataSets.count() > dataSetNr );
+    QVERIFY(dataSetNr >= 0);
+    QVERIFY(dataSets.count() > dataSetNr);
     DataSet *dataSet = dataSets[dataSetNr];
-    QVERIFY( dataSet );
+    QVERIFY(dataSet);
 
     int dataSetSize = 0;
-    dataSetSize = qMax( dataSetSize, yDataRegion.cellCount() );
-    dataSetSize = qMax( dataSetSize, categoryDataRegion.cellCount() );
-    dataSetSize = qMax( dataSetSize, xDataRegion.cellCount() );
-    dataSetSize = qMax( dataSetSize, customDataRegion.cellCount() );
-    QCOMPARE( dataSet->size(), dataSetSize );
+    dataSetSize = qMax(dataSetSize, yDataRegion.cellCount());
+    dataSetSize = qMax(dataSetSize, categoryDataRegion.cellCount());
+    dataSetSize = qMax(dataSetSize, xDataRegion.cellCount());
+    dataSetSize = qMax(dataSetSize, customDataRegion.cellCount());
+    QCOMPARE(dataSet->size(), dataSetSize);
 
-    QCOMPARE( dataSet->xDataRegion(),        xDataRegion );
-    QCOMPARE( dataSet->yDataRegion(),        yDataRegion );
-    QCOMPARE( dataSet->labelDataRegion(),    labelDataRegion );
-    QCOMPARE( dataSet->categoryDataRegion(), categoryDataRegion );
-    QCOMPARE( dataSet->customDataRegion(),   customDataRegion );
+    QCOMPARE(dataSet->xDataRegion(),        xDataRegion);
+    QCOMPARE(dataSet->yDataRegion(),        yDataRegion);
+    QCOMPARE(dataSet->labelDataRegion(),    labelDataRegion);
+    QCOMPARE(dataSet->categoryDataRegion(), categoryDataRegion);
+    QCOMPARE(dataSet->customDataRegion(),   customDataRegion);
 }
 
 void TestLoadingBase::testHasOnlyInternalTable()
 {
-    QVERIFY( m_chart->usesInternalModelOnly() );
-    QVERIFY( internalTable() );
+    QVERIFY(m_chart->usesInternalModelOnly());
+    QVERIFY(internalTable());
 }
 
-void TestLoadingBase::testInternalTableSize( int rowCount, int colCount )
+void TestLoadingBase::testInternalTableSize(int rowCount, int colCount)
 {
     QAbstractItemModel *model = m_chart->internalModel();
-    QVERIFY( model );
-    QVERIFY( m_chart->tableSource()->get( model ) );
-    QCOMPARE( model->rowCount(), rowCount );
-    QCOMPARE( model->columnCount(), colCount );
+    QVERIFY(model);
+    QVERIFY(m_chart->tableSource()->get(model));
+    QCOMPARE(model->rowCount(), rowCount);
+    QCOMPARE(model->columnCount(), colCount);
 }
 
-void TestLoadingBase::testTitleText( const QString &text )
+void TestLoadingBase::testTitleText(const QString &text)
 {
-    QVERIFY( m_chart->title() );
-    KoTextShapeDataBase *data = dynamic_cast<KoTextShapeDataBase*>( m_chart->title()->userData() );
-    QVERIFY( data );
-    QVERIFY( data->document() );
-    QCOMPARE( data->document()->toPlainText(), text );
+    QVERIFY(m_chart->title());
+    KoTextShapeDataBase *data = dynamic_cast<KoTextShapeDataBase*>(m_chart->title()->userData());
+    QVERIFY(data);
+    QVERIFY(data->document());
+    QCOMPARE(data->document()->toPlainText(), text);
 }
 
-void TestLoadingBase::testSubTitleText( const QString &text )
+void TestLoadingBase::testSubTitleText(const QString &text)
 {
-    QVERIFY( m_chart->subTitle() );
-    KoTextShapeDataBase *data = dynamic_cast<KoTextShapeDataBase*>( m_chart->subTitle()->userData() );
-    QVERIFY( data );
-    QVERIFY( data->document() );
-    QCOMPARE( data->document()->toPlainText(), text );
+    QVERIFY(m_chart->subTitle());
+    KoTextShapeDataBase *data = dynamic_cast<KoTextShapeDataBase*>(m_chart->subTitle()->userData());
+    QVERIFY(data);
+    QVERIFY(data->document());
+    QCOMPARE(data->document()->toPlainText(), text);
 }
 
-void TestLoadingBase::testFooterText( const QString &text )
+void TestLoadingBase::testFooterText(const QString &text)
 {
-    QVERIFY( m_chart->footer() );
-    KoTextShapeDataBase *data = dynamic_cast<KoTextShapeDataBase*>( m_chart->footer()->userData() );
-    QVERIFY( data );
-    QVERIFY( data->document() );
-    QCOMPARE( data->document()->toPlainText(), text );
+    QVERIFY(m_chart->footer());
+    KoTextShapeDataBase *data = dynamic_cast<KoTextShapeDataBase*>(m_chart->footer()->userData());
+    QVERIFY(data);
+    QVERIFY(data->document());
+    QCOMPARE(data->document()->toPlainText(), text);
 }
 
-void TestLoadingBase::testAxisTitle( Axis *axis, const QString &text )
+void TestLoadingBase::testAxisTitle(Axis *axis, const QString &text)
 {
-    QVERIFY( axis );
-    QVERIFY( axis->title() );
-    KoTextShapeDataBase *data = dynamic_cast<KoTextShapeDataBase*>( axis->title()->userData() );
-    QVERIFY( data );
-    QVERIFY( data->document() );
-    QCOMPARE( data->document()->toPlainText(), text );
+    QVERIFY(axis);
+    QVERIFY(axis->title());
+    KoTextShapeDataBase *data = dynamic_cast<KoTextShapeDataBase*>(axis->title()->userData());
+    QVERIFY(data);
+    QVERIFY(data->document());
+    QCOMPARE(data->document()->toPlainText(), text);
 }
 
 Table *TestLoadingBase::internalTable()
 {
     QAbstractItemModel *internalModel = m_chart->internalModel();
-    if ( !internalModel )
+    if (!internalModel)
         return 0;
-    return m_chart->tableSource()->get( internalModel );
+    return m_chart->tableSource()->get(internalModel);
 }
 
 TableSource *TestLoadingBase::tableSource()
@@ -198,7 +203,7 @@ TableSource *TestLoadingBase::tableSource()
 
 namespace QTest {
     template<>
-    char *toString( const KChart::CellRegion &region ) {
-        return qstrdup( region.toString().toAscii().data() );
+    char *toString(const KChart::CellRegion &region) {
+        return qstrdup(region.toString().toAscii().data());
     }
 }

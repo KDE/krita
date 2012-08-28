@@ -145,12 +145,13 @@ bool KisToolFill::flood(int startX, int startY)
         KisFillPainter fillPainter(device, currentSelection());
 
         KisResourcesSnapshotSP resources =
-            new KisResourcesSnapshot(image(), 0,
-                                     this->canvas()->resourceManager());
+            new KisResourcesSnapshot(image(), 0, this->canvas()->resourceManager());
         resources->setupPainter(&fillPainter);
 
         fillPainter.beginTransaction("");
 
+        fillPainter.setSizemod(m_sizemod);
+        fillPainter.setFeather(m_feather);
         fillPainter.setProgress(updater->startSubtask());
         fillPainter.setOpacity(m_opacity);
         fillPainter.setFillThreshold(m_threshold);
@@ -181,6 +182,10 @@ void KisToolFill::mousePressEvent(KoPointerEvent *event)
 {
     if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
                        Qt::LeftButton, Qt::NoModifier)) {
+
+        if (!nodeEditable()) {
+            return;
+        }
 
         setMode(KisTool::PAINT_MODE);
 
@@ -213,33 +218,53 @@ void KisToolFill::mouseReleaseEvent(KoPointerEvent *event)
 
 QWidget* KisToolFill::createOptionWidget()
 {
-    //QWidget *widget = KisToolPaint::createOptionWidget(parent);
     QWidget *widget = KisToolPaint::createOptionWidget();
     widget->setObjectName(toolId() + " option widget");
-    m_lbThreshold = new QLabel(i18n("Threshold: "), widget);
+
+    QLabel *lbl_threshold = new QLabel(i18n("Threshold: "), widget);
     m_slThreshold = new KisSliderSpinBox(widget);
     m_slThreshold->setObjectName("int_widget");
     m_slThreshold->setRange(1, 100);
     m_slThreshold->setPageStep(3);
     m_slThreshold->setValue(m_threshold);
-    connect(m_slThreshold, SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
 
+    QLabel *lbl_sizemod = new QLabel(i18n("Grow/shrink selection: "), widget);
+    KisSliderSpinBox *sizemod = new KisSliderSpinBox(widget);
+    sizemod->setObjectName("sizemod");
+    sizemod->setRange(-40, 40);
+    sizemod->setSingleStep(1);
+    sizemod->setValue(0);
+    sizemod->setSuffix("px");
+
+    QLabel *lbl_feather = new QLabel(i18n("Feathering radius: "), widget);
+    KisSliderSpinBox *feather = new KisSliderSpinBox(widget);
+    feather->setObjectName("feather");
+    feather->setRange(0, 40);
+    feather->setSingleStep(1);
+    feather->setValue(0);
+    feather->setSuffix("px");
+    
     m_checkUsePattern = new QCheckBox(i18n("Use pattern"), widget);
     m_checkUsePattern->setToolTip(i18n("When checked do not use the foreground color, but the gradient selected to fill with"));
     m_checkUsePattern->setChecked(m_usePattern);
-    connect(m_checkUsePattern, SIGNAL(toggled(bool)), this, SLOT(slotSetUsePattern(bool)));
-
+    
     m_checkSampleMerged = new QCheckBox(i18n("Limit to current layer"), widget);
     m_checkSampleMerged->setChecked(m_unmerged);
-    connect(m_checkSampleMerged, SIGNAL(toggled(bool)), this, SLOT(slotSetSampleMerged(bool)));
-
+    
     m_checkFillSelection = new QCheckBox(i18n("Fill entire selection"), widget);
     m_checkFillSelection->setToolTip(i18n("When checked do not look at the current layer colors, but just fill all of the selected area"));
     m_checkFillSelection->setChecked(m_fillOnlySelection);
-    connect(m_checkFillSelection, SIGNAL(toggled(bool)), this, SLOT(slotSetFillSelection(bool)));
 
-    addOptionWidgetOption(m_slThreshold, m_lbThreshold);
+    connect (m_slThreshold       , SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
+    connect (sizemod             , SIGNAL(valueChanged(int)), this, SLOT(slotSetSizemod(int)));
+    connect (feather             , SIGNAL(valueChanged(int)), this, SLOT(slotSetFeather(int)));
+    connect (m_checkUsePattern   , SIGNAL(toggled(bool))    , this, SLOT(slotSetUsePattern(bool)));
+    connect (m_checkSampleMerged , SIGNAL(toggled(bool))    , this, SLOT(slotSetSampleMerged(bool)));
+    connect (m_checkFillSelection, SIGNAL(toggled(bool))    , this, SLOT(slotSetFillSelection(bool)));
 
+    addOptionWidgetOption(m_slThreshold, lbl_threshold);
+    addOptionWidgetOption(sizemod      , lbl_sizemod);
+    addOptionWidgetOption(feather      , lbl_feather);
     addOptionWidgetOption(m_checkFillSelection);
     addOptionWidgetOption(m_checkSampleMerged);
     addOptionWidgetOption(m_checkUsePattern);
@@ -271,4 +296,13 @@ void KisToolFill::slotSetFillSelection(bool state)
     m_checkSampleMerged->setEnabled(!state);
 }
 
+void KisToolFill::slotSetSizemod(int sizemod)
+{
+    m_sizemod = sizemod;
+}
+
+void KisToolFill::slotSetFeather(int feather)
+{
+    m_feather = feather;
+}
 #include "kis_tool_fill.moc"

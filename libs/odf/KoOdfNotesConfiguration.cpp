@@ -118,7 +118,7 @@ void KoOdfNotesConfiguration::loadOdf(const KoXmlElement &element)
         d->numberingScheme = BeginAtPage;
     }
 
-    QString footnotesPosition  = element.attributeNS(KoXmlNS::text, "footnotes-position", "document");
+    QString footnotesPosition  = element.attributeNS(KoXmlNS::text, "footnotes-position", "page");
     if (footnotesPosition == "text") {
         d->footnotesPosition = Text;
     }
@@ -132,20 +132,13 @@ void KoOdfNotesConfiguration::loadOdf(const KoXmlElement &element)
         d->footnotesPosition = Document;
     }
 
-    KoXmlElement child;
-    forEachElement(child, element) {
+    for (KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling()) {
+        KoXmlElement child = node.toElement();
         if (child.namespaceURI() == KoXmlNS::text) {
             if (child.localName() == "note-continuation-notice-forward") {
-                KoXmlNode node = element.firstChild();
-                if (!node.isNull() && node.isText()) {
-                    d->footnotesContinuationForward = node.toText().data();
-                }
-            }
-            else if (child.localName() == "note-continuation-notice-backward") {
-                KoXmlNode node = element.firstChild();
-                if (!node.isNull() && node.isText()) {
-                    d->footnotesContinuationBackward = node.toText().data();
-                }
+                d->footnotesContinuationForward = child.text();
+            } else if (child.localName() == "note-continuation-notice-backward") {
+                d->footnotesContinuationBackward = child.text();
             }
         }
     }

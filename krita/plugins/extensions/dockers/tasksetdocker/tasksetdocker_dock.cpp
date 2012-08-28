@@ -29,6 +29,8 @@
 #include <klocale.h>
 #include <KActionCollection>
 
+#include <KoIcon.h>
+
 #include <KoCanvasBase.h>
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
@@ -85,13 +87,13 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
     m_model = new TasksetModel(this);
     tasksetView->setModel(m_model);
     tasksetView->setItemDelegate(new KisTasksetDelegate(this));
-    recordButton->setIcon(KIcon("media-record"));
+    recordButton->setIcon(koIcon("media-record"));
     recordButton->setCheckable(true);
-    clearButton->setIcon(KIcon("edit-delete"));
-    saveButton->setIcon(KIcon("document-save"));
+    clearButton->setIcon(koIcon("edit-delete"));
+    saveButton->setIcon(koIcon("document-save"));
     saveButton->setEnabled(false);
 
-    chooserButton->setIcon(KIcon("document-multiple"));
+    chooserButton->setIcon(koIcon("document-multiple"));
 
     KGlobal::mainComponent().dirs()->addResourceType("kis_taskset", "data", "krita/taskset/");
     m_rserver = new KoResourceServer<TasksetResource>("kis_taskset", "*.kts");

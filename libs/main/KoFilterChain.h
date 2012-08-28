@@ -25,7 +25,6 @@ Boston, MA 02110-1301, USA.
 #include <QStringList>
 
 #include "KoFilter.h"
-#include "KoEmbeddingFilter.h"
 #include "KoFilterEntry.h"
 #include <KoStoreDevice.h>
 #include "komain_export.h"
@@ -143,16 +142,6 @@ private:
     void appendChainLink(KoFilterEntry::Ptr filterEntry, const QByteArray& from, const QByteArray& to);
     void prependChainLink(KoFilterEntry::Ptr filterEntry, const QByteArray& from, const QByteArray& to);
 
-    // ### API for KoEmbeddingFilter
-    // This is needed as the embedding filter might have to influence
-    // the way we change directories (e.g. in the olefilter case)
-    // The ugly friend methods are needed, but I'd welcome and suggestions for
-    // better design :}
-    friend void KoEmbeddingFilter::filterChainEnterDirectory(const QString& directory) const;
-    void enterDirectory(const QString& directory);
-    friend void KoEmbeddingFilter::filterChainLeaveDirectory() const;
-    void leaveDirectory();
-
     // These methods are friends of KoFilterManager and provide access
     // to a private part of its API. As I don't want to include
     // koFilterManager.h in this header the direction is "int" here.
@@ -177,7 +166,6 @@ private:
     KoStoreDevice* storageHelper(const QString& file, const QString& streamName,
                                  KoStore::Mode mode, KoStore** storage, KoStoreDevice** device);
     void storageInit(const QString& file, KoStore::Mode mode, KoStore** storage);
-    KoStoreDevice* storageInitEmbedding(const QString& name);
     KoStoreDevice* storageCreateFirstStream(const QString& streamName, KoStore** storage, KoStoreDevice** device);
     KoStoreDevice* storageCleanupHelper(KoStore** storage);
 
@@ -217,13 +205,6 @@ private:
     // filter (=user) asked for
     enum IOState { Nil, File, Storage, Document };
     IOState m_inputQueried, m_outputQueried;
-
-    // This stack keeps track of directories we have to enter and
-    // leave due to internal embedding a la OLE filters. This serves
-    // as a kind of "memory" even if we didn't initialize the store yet.
-    // I know that it's ugly, and I'll try to clean up that hack
-    // sooner or later (Werner)
-    QStringList m_internalEmbeddingDirectories;
 
     class Private;
     Private * const d;

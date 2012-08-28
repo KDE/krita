@@ -21,6 +21,7 @@
 #include "DefaultToolFactory.h"
 #include "DefaultTool.h"
 
+#include <KoIcon.h>
 #include <klocale.h>
 
 DefaultToolFactory::DefaultToolFactory()
@@ -29,7 +30,7 @@ DefaultToolFactory::DefaultToolFactory()
     setToolTip(i18n("Basic shape manipulation"));
     setToolType(mainToolType());
     setPriority(0);
-    setIcon("select");
+    setIconName(koIconNameCStr("select"));
     setActivationShapeId("flake/always");
 }
 

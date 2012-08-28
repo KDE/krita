@@ -115,6 +115,11 @@ void KisShapeController::removeNodeImpl(KisNodeSP node)
     m_d->shapesGraph.removeNode(node);
 }
 
+bool KisShapeController::hasDummyForNode(KisNodeSP node) const
+{
+    return m_d->shapesGraph.containsNode(node);
+}
+
 KisNodeDummy* KisShapeController::dummyForNode(KisNodeSP node) const
 {
     return m_d->shapesGraph.nodeToDummy(node);

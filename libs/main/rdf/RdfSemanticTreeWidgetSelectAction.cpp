@@ -26,7 +26,7 @@
 #include <kdebug.h>
 
 RdfSemanticTreeWidgetSelectAction::RdfSemanticTreeWidgetSelectAction(QWidget *parent,
-        KoCanvasBase *canvas, KoRdfSemanticItem* si, QString name)
+        KoCanvasBase *canvas, hKoRdfSemanticItem si, QString name)
     : RdfSemanticTreeWidgetAction(parent, canvas, name)
     , si(si)
 {

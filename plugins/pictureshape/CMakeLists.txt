@@ -10,6 +10,7 @@ SET (pictureshape_LIB_SRCS
     Plugin.cpp
     PictureShapeConfigWidget.cpp
     ChangeImageCommand.cpp
+    ClipCommand.cpp
     CropWidget.cpp
     SelectionRect.cpp
     ClippingRect.cpp

@@ -20,6 +20,8 @@
 
 #include <QTimer>
 
+#include <KLocale>
+
 #include <KoPointerEvent.h>
 #include <KoCanvasResourceManager.h>
 
@@ -122,7 +124,7 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
 
     KisStrokeStrategy *stroke =
         new FreehandStrokeStrategy(indirectPainting,
-                                   m_d->resources, m_d->painterInfos);
+                                   m_d->resources, m_d->painterInfos, i18n("Freehand Stroke"));
 
     m_d->strokeId = m_d->strokesFacade->startStroke(stroke);
 

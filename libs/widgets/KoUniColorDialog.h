@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2006 Casper Boemann (cbr@boemann.dk)
+ * Copyright (c) 2006 C. Boemann (cbo@boemann.dk)
  * Copyright (c) 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or

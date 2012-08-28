@@ -29,12 +29,17 @@
 #include <kdebug.h>
 #include <kfiledialog.h>
 
+// Don't use this until we become a plugin.
+#ifdef CAN_USE_MARBLE
+#undef CAN_USE_MARBLE
+#endif
+
 // marble for geolocation
-// #ifdef CAN_USE_MARBLE
-// #include <LatLonEdit.h>
-// #include <MarbleWidget.h>
-// #include <MarbleWidgetInputHandler.h>
-// #endif
+#ifdef CAN_USE_MARBLE
+#include <marble/LatLonEdit.h>
+#include <marble/MarbleWidget.h>
+#include <marble/MarbleWidgetInputHandler.h>
+#endif
 
 using namespace Soprano;
 
@@ -57,6 +62,7 @@ KoRdfLocation::KoRdfLocation(QObject *parent, const KoDocumentRdf *m_rdf, Sopran
 
 KoRdfLocation::~KoRdfLocation()
 {
+    kDebug(30015) << "~KoRdfLocation() this:" << this << " name:" << name();
 }
 
 void KoRdfLocation::showInViewer()
@@ -64,20 +70,20 @@ void KoRdfLocation::showInViewer()
     // open marble showing lat/long
     kDebug(30015) << "KoRdfLocation::showInViewer() long:" << dlong() << " lat:" << dlat();
 
-// #ifdef CAN_USE_MARBLE
-//     kDebug(30015) << "RDFLocation::showInViewer() opening a marble widget...";
-// 
-//     QWidget* parent = 0;
-//     QWidget* ret = new QWidget(parent);
-//     viewWidget.setupUi(ret);
-//     viewWidget.name->setText(m_name);
-//     viewWidget.map->setMapThemeId("earth/srtm/srtm.dgml");
-// //    viewWidget.map->setMapThemeId("earth/openstreetmap/openstreetmap.dgml");
-//     viewWidget.map->zoomViewBy(100);
-//     viewWidget.map->zoomView(1500);
-//     viewWidget.map->centerOn(dlong(), dlat());
-//     ret->show();
-// #endif
+#ifdef CAN_USE_MARBLE
+    kDebug(30015) << "RDFLocation::showInViewer() opening a marble widget...";
+
+    QWidget* parent = 0;
+    QWidget* ret = new QWidget(parent);
+    viewWidget.setupUi(ret);
+    viewWidget.name->setText(m_name);
+    viewWidget.map->setMapThemeId("earth/srtm/srtm.dgml");
+//    viewWidget.map->setMapThemeId("earth/openstreetmap/openstreetmap.dgml");
+    viewWidget.map->zoomViewBy(100);
+    viewWidget.map->zoomView(1500);
+    viewWidget.map->centerOn(dlong(), dlat());
+    ret->show();
+#endif
     
 }
 
@@ -120,7 +126,7 @@ void KoRdfLocation::exportToFile(const QString &fileNameConst) const
 QWidget *KoRdfLocation::createEditor(QWidget *parent)
 {
     kDebug(30015) << "KoRdfLocation::createEditor()";
-// #ifndef CAN_USE_MARBLE
+#ifndef CAN_USE_MARBLE
     {
         KoRdfLocationEditWidget* ret = new KoRdfLocationEditWidget(parent, &editWidget);
 
@@ -128,100 +134,99 @@ QWidget *KoRdfLocation::createEditor(QWidget *parent)
         editWidget.name->setText(m_name);
         
         return ret;
-        
     }
-// #else
-//     KoRdfLocationEditWidget* ret = new KoRdfLocationEditWidget(parent, &editWidget);
-// 
-//     editWidget.setupUi(ret);
-//     editWidget.name->setText(m_name);
-// 
-//     editWidget.wlat->setDimension(Marble::Latitude);
-//     editWidget.wlong->setDimension(Marble::Longitude);
-//     editWidget.wlat->setValue(m_dlat);
-//     editWidget.wlong->setValue(m_dlong);
-// 
-//     editWidget.map->setMapThemeId("earth/srtm/srtm.dgml");
-// //    editWidget.map->setMapThemeId("earth/openstreetmap/openstreetmap.dgml");
-//     editWidget.map->zoomViewBy(100);
-//     editWidget.map->zoomView(1500);
-//     editWidget.map->centerOn(dlong(), dlat());
-// 
-//     ret->setupMap(editWidget.map, editWidget.wlat, editWidget.wlong);
-//     return ret;
-// #endif
+#else
+    KoRdfLocationEditWidget* ret = new KoRdfLocationEditWidget(parent, &editWidget);
+
+    editWidget.setupUi(ret);
+    editWidget.name->setText(m_name);
+
+    editWidget.wlat->setDimension(Marble::Latitude);
+    editWidget.wlong->setDimension(Marble::Longitude);
+    editWidget.wlat->setValue(m_dlat);
+    editWidget.wlong->setValue(m_dlong);
+
+    editWidget.map->setMapThemeId("earth/srtm/srtm.dgml");
+//    editWidget.map->setMapThemeId("earth/openstreetmap/openstreetmap.dgml");
+    editWidget.map->zoomViewBy(100);
+    editWidget.map->zoomView(1500);
+    editWidget.map->centerOn(dlong(), dlat());
+
+    ret->setupMap(editWidget.map, editWidget.wlat, editWidget.wlong);
+    return ret;
+#endif
 }
 
 void KoRdfLocation::updateFromEditorData()
 {
-// #ifndef CAN_USE_MARBLE
-//     return;
-// #else
-// 
-//     QString rdfBase  = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
-//     QString predBase = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
-//     
-//     if (!m_linkSubject.isValid()) {
-//         m_linkSubject = createNewUUIDNode();
-//     }
-//     if (!m_isGeo84) {
-//         if (!m_joiner.isValid()) {
-//             QString tmp = "";
-//             Node newV = createNewUUIDNode();
-// 
-//             Soprano::Model* m = const_cast<Soprano::Model*>(m_rdf->model());
-//             Node pred = Node::createResourceNode(QUrl(rdfBase + "rest"));
-// 
-//             m->addStatement(linkingSubject(), pred, newV,
-//                             m_rdf->manifestRdfNode());
-//             m_joiner = newV;
-//         }
-//     }
-// 
-//     double newLat  = editWidget.map->centerLatitude();
-//     double newLong = editWidget.map->centerLongitude();
-// 
-//     kDebug(30015) << "RDFLocation::updateFromEditorData()";
-//     kDebug(30015) << "old lat:" << m_dlat;
-//     kDebug(30015) << "new lat:" << newLat;
-//     kDebug(30015) << "old long:" << m_dlong;
-//     kDebug(30015) << "new long:" << newLong;
-//     kDebug(30015) << "m_isGeo84:" << m_isGeo84;
-// 
-//     QString foafBase = "http://xmlns.com/foaf/0.1/";
-//     QString dcBase = "http://purl.org/dc/elements/1.1/";
-// 
-//     if (m_isGeo84) {
-//         //
-//         // http://www.w3.org/2003/01/geo/wgs84_pos ontology
-//         //
-//         QString wgs84Base = "http://www.w3.org/2003/01/geo/wgs84_pos#";
-// 
-//         setRdfType("uri:geo84");
-//         updateTriple(m_name,     editWidget.name->text(),   dcBase + "title");
-//         updateTriple(m_dlat,     newLat,  wgs84Base + "lat",  linkingSubject());
-//         updateTriple(m_dlong,    newLong, wgs84Base + "long", linkingSubject());
-//     } else {
-//         //
-//         // RDF ical has support for pointing to a linked list of lat, long, NIL
-//         //
-//         setRdfType("uri:rdfcal-geolocation");
-//         updateTriple(m_name,     editWidget.name->text(),   dcBase + "title");
-//         updateTriple(m_dlat,     newLat,  rdfBase + "first", linkingSubject());
-//         updateTriple(m_dlong,    newLong, rdfBase + "first", m_joiner);
-//     }
-// 
-// #endif
+#ifndef CAN_USE_MARBLE
+    return;
+#else
+
+    QString rdfBase  = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
+    QString predBase = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
+    
+    if (!m_linkSubject.isValid()) {
+        m_linkSubject = createNewUUIDNode();
+    }
+    if (!m_isGeo84) {
+        if (!m_joiner.isValid()) {
+            QString tmp = "";
+            Node newV = createNewUUIDNode();
+
+            QSharedPointer<Soprano::Model> m = m_rdf->model();
+            Node pred = Node::createResourceNode(QUrl(rdfBase + "rest"));
+
+            m->addStatement(linkingSubject(), pred, newV,
+                            m_rdf->manifestRdfNode());
+            m_joiner = newV;
+        }
+    }
+
+    double newLat  = editWidget.map->centerLatitude();
+    double newLong = editWidget.map->centerLongitude();
+
+    kDebug(30015) << "RDFLocation::updateFromEditorData()";
+    kDebug(30015) << "old lat:" << m_dlat;
+    kDebug(30015) << "new lat:" << newLat;
+    kDebug(30015) << "old long:" << m_dlong;
+    kDebug(30015) << "new long:" << newLong;
+    kDebug(30015) << "m_isGeo84:" << m_isGeo84;
+
+    QString foafBase = "http://xmlns.com/foaf/0.1/";
+    QString dcBase = "http://purl.org/dc/elements/1.1/";
+
+    if (m_isGeo84) {
+        //
+        // http://www.w3.org/2003/01/geo/wgs84_pos ontology
+        //
+        QString wgs84Base = "http://www.w3.org/2003/01/geo/wgs84_pos#";
+
+        setRdfType("uri:geo84");
+        updateTriple(m_name,     editWidget.name->text(),   dcBase + "title");
+        updateTriple(m_dlat,     newLat,  wgs84Base + "lat",  linkingSubject());
+        updateTriple(m_dlong,    newLong, wgs84Base + "long", linkingSubject());
+    } else {
+        //
+        // RDF ical has support for pointing to a linked list of lat, long, NIL
+        //
+        setRdfType("uri:rdfcal-geolocation");
+        updateTriple(m_name,     editWidget.name->text(),   dcBase + "title");
+        updateTriple(m_dlat,     newLat,  rdfBase + "first", linkingSubject());
+        updateTriple(m_dlong,    newLong, rdfBase + "first", m_joiner);
+    }
+
+#endif
 
     if (documentRdf()) {
-        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(this);
+        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(hKoRdfSemanticItem(this));
     }
 }
 
 KoRdfSemanticTreeWidgetItem *KoRdfLocation::createQTreeWidgetItem(QTreeWidgetItem *parent)
 {
     KoRdfLocationTreeWidgetItem *item =
-        new KoRdfLocationTreeWidgetItem(parent, this);
+        new KoRdfLocationTreeWidgetItem(parent, hKoRdfSemanticItem(this));
     return item;
 }
 
@@ -255,15 +260,17 @@ void KoRdfLocation::exportToMime(QMimeData *md) const
     md->setText(data);
 }
 
-QList<KoSemanticStylesheet*> KoRdfLocation::stylesheets() const
+QList<hKoSemanticStylesheet> KoRdfLocation::stylesheets() const
 {
-    QList<KoSemanticStylesheet*> stylesheets;
+    QList<hKoSemanticStylesheet> stylesheets;
     stylesheets.append(
-        new KoSemanticStylesheet("33314909-7439-4aa1-9a55-116bb67365f0", "name", "%NAME%"));
+        hKoSemanticStylesheet(
+            new KoSemanticStylesheet("33314909-7439-4aa1-9a55-116bb67365f0", "name", "%NAME%")));
     stylesheets.append(
-        new KoSemanticStylesheet("34584133-52b0-449f-8b7b-7f1ef5097b9a",
-                                 "name, digital latitude, digital longitude",
-                                 "%NAME%, %DLAT%, %DLONG%"));
+        hKoSemanticStylesheet(
+            new KoSemanticStylesheet("34584133-52b0-449f-8b7b-7f1ef5097b9a",
+                                     "name, digital latitude, digital longitude",
+                                     "%NAME%, %DLAT%, %DLONG%")));
     return stylesheets;
 }
 
@@ -310,7 +317,7 @@ void KoRdfLocation::setName(const QString &name)
             QString tmp = "";
             Node newV = createNewUUIDNode();
 
-            Soprano::Model* m = const_cast<Soprano::Model*>(m_rdf->model());
+            QSharedPointer<Soprano::Model> m = m_rdf->model();
             Node pred = Node::createResourceNode(QUrl(rdfBase + "rest"));
 
             m->addStatement(linkingSubject(), pred, newV,
@@ -334,7 +341,7 @@ void KoRdfLocation::setName(const QString &name)
         updateTriple(m_name, name, dcBase + "title");
     }
     if (documentRdf()) {
-        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(this);
+        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(hKoRdfSemanticItem(this));
     }
 
 }
@@ -351,7 +358,7 @@ void KoRdfLocation::setDlat(double dlat)
             QString tmp = "";
             Node newV = createNewUUIDNode();
 
-            Soprano::Model* m = const_cast<Soprano::Model*>(m_rdf->model());
+            QSharedPointer<Soprano::Model> m = m_rdf->model();
             Node pred = Node::createResourceNode(QUrl(rdfBase + "rest"));
 
             m->addStatement(linkingSubject(), pred, newV,
@@ -375,7 +382,7 @@ void KoRdfLocation::setDlat(double dlat)
     }
 
     if (documentRdf()) {
-        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(this);
+        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(hKoRdfSemanticItem(this));
     }
 
 }
@@ -391,7 +398,7 @@ void KoRdfLocation::setDlong(double dlong)
         if (!m_joiner.isValid()) {
             Node newV = createNewUUIDNode();
 
-            Soprano::Model* m = const_cast<Soprano::Model*>(m_rdf->model());
+            QSharedPointer<Soprano::Model> m = m_rdf->model();
             Node pred = Node::createResourceNode(QUrl(rdfBase + "rest"));
 
             m->addStatement(linkingSubject(), pred, newV, m_rdf->manifestRdfNode());
@@ -414,7 +421,7 @@ void KoRdfLocation::setDlong(double dlong)
     }
 
     if (documentRdf()) {
-        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(this);
+        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(hKoRdfSemanticItem(this));
     }
 
 }

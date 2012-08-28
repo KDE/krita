@@ -1,0 +1,75 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Kexi/DBDriver
+Comment=Kexi SQL-Driver plugin
+Comment[br]=Lugent SQL-Driver evit Kexi
+Comment[ca]=Connector del controlador SQL del Kexi
+Comment[ca@valencia]=Connector del controlador SQL del Kexi
+Comment[cs]=Modul ovladače SQL pro Kexi
+Comment[cy]=Ategyn Gyrrydd-SQL Kexi
+Comment[da]=Kexi SQL-driver-plugin
+Comment[de]=Kexi-SQL-Treibermodul
+Comment[el]=Πρόσθετο οδηγού SQL του Kexi
+Comment[en_GB]=Kexi SQL-Driver plugin
+Comment[eo]=Kexi SQL-pelila kromaĵo
+Comment[es]=Complemento de controlador de SQL para Kexi
+Comment[et]=Kexi SQL-draiveri plugin
+Comment[eu]=Kexi-en SQL-kontrolatzailearen plugina
+Comment[fa]=وصله گرداننده Kexi SQL
+Comment[fi]=Kexi SQL-laajennus
+Comment[fr]=Module de pilotage SQL de Kexi
+Comment[fy]=Kexi SQL-stjoerprogramma plugin
+Comment[ga]=Breiseán Tiománaí-SQL Kexi
+Comment[gl]=Complemento de Kexi para controladores SQL.
+Comment[he]=תוסף מנהל התקן SQL ל־Kexi
+Comment[hi]=केएक्जाई एसक्यूएल ड्राइवर प्लगइन
+Comment[hne]=केएक्जाई एसक्यूएल ड्राइवर प्लगइन
+Comment[hr]=Dodatak za Kexi SQL upravljački program
+Comment[hu]=Kexi SQL-elérési bővítőmodul
+Comment[is]=Kexi SQL-rekil íforrit
+Comment[it]=Driver SQL per Kexi
+Comment[ja]=Kexi SQL ドライバ プラグイン
+Comment[kk]=Kexi SQL-драйвер плагині
+Comment[lt]=Kexi SQL-Driver įskiepis
+Comment[lv]=Kexi SQL draivera spraudnis
+Comment[ms]=Plugin Pemacu SQL Kexi
+Comment[nb]=SQL-drivermodul for Kexi
+Comment[nds]=SQL-Drievermoduul för Kexi
+Comment[ne]=केक्सी SQL-ड्राइभर प्लगइन
+Comment[nl]=Kexi SQL-stuurprogramma-plug-in
+Comment[pl]=Wtyczka sterownika SQL dla programu Kexi
+Comment[pt]='Plugin' do Controlador de SQL do Kexi
+Comment[pt_BR]=Plugin do controlador SQL do Kexi
+Comment[ru]=Модуль драйвера SQL Kexi
+Comment[se]=Kexi SQL-stivrran lassemoduvla
+Comment[sk]=Modul ovládača SQL pre Kexi
+Comment[sl]=Vstavek Kexi SQL-Driver
+Comment[sv]=Kexi SQL-insticksdrivrutin
+Comment[ta]=கெக்ஸி எஸ்கியூஎல் இயக்கி சொருகு
+Comment[tr]=Kexi SQl-Sürücüsü eki
+Comment[ug]=Kexi SQL - قوزغاتقۇ قىستۇرمىسى
+Comment[uk]=Додаток драйвера SQL Kexi
+Comment[uz]=Kexi SQL-drayver plagini
+Comment[uz@cyrillic]=Kexi SQL-драйвер плагини
+Comment[wa]=Tchôke-divins mineu di SQL di Kexi
+Comment[x-test]=xxKexi SQL-Driver pluginxx
+Comment[zh_CN]=Kexi SQL 驱动插件
+Comment[zh_TW]=Kexi SQL-驅動外掛程式
+
+[PropertyDef::X-Kexi-FileDBDriverMime]
+Type=QString
+
+[PropertyDef::X-Kexi-FileDBDriverMimeList]
+Type=QStringList
+
+[PropertyDef::X-Kexi-DriverName]
+Type=QString
+
+[PropertyDef::X-Kexi-DriverType]
+Type=QString
+
+[PropertyDef::X-Kexi-KexiDBVersion]
+Type=QString
+
+[PropertyDef::X-Kexi-DoNotAllowProjectImportingTo]
+Type=bool

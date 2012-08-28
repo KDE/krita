@@ -40,7 +40,7 @@ bool MonoFilterEffect::load(const KoXmlElement& /*element*/, const KoFilterEffec
 
 QImage MonoFilterEffect::processImage(const QImage& image, const KoFilterEffectRenderContext& context) const
 {
-    QImage result = image;
+    QImage result = image.convertToFormat(QImage::Format_ARGB32);
     QRgb* pixel = reinterpret_cast<QRgb*>( result.bits() );
     const int right = context.filterRegion().right();
     const int bottom = context.filterRegion().bottom();
@@ -51,8 +51,9 @@ QImage MonoFilterEffect::processImage(const QImage& image, const KoFilterEffectR
             const int red = qRed(currentPixel);
             const int green = qGreen(currentPixel);
             const int blue = qBlue(currentPixel);
+            const int alpha = qAlpha(currentPixel);
             const int monoValue = ( (red * 11 + green * 16 + blue * 5) / 32 ) / 127 * 255;
-            pixel[row * width + col] = qRgb(monoValue, monoValue, monoValue);
+            pixel[row * width + col] = qRgba(monoValue, monoValue, monoValue, alpha);
         }
     }
     return result;

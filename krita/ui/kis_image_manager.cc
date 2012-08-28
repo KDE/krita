@@ -27,6 +27,7 @@
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
 
+#include <KoIcon.h>
 #include <KoFilterManager.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
@@ -56,7 +57,7 @@ void KisImageManager::setup(KActionCollection * actionCollection)
     actionCollection->addAction("insert_image_as_layer", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotInsertImageAsLayer()));
 
-    action  = new KAction(KIcon("document-properties"), i18n("Properties..."), this);
+    action  = new KAction(koIcon("document-properties"), i18n("Properties..."), this);
     actionCollection->addAction("image_properties", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageProperties()));
 }

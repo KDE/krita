@@ -94,10 +94,10 @@ void KoTableColumnAndRowStyleManager::setColumnStyle(int column, const KoTableCo
         return;
     }
 
-    while (column > d->tableColumnStyles.size())
+    while (column >= d->tableColumnStyles.size())
         d->tableColumnStyles.append(KoTableColumnStyle());
 
-    d->tableColumnStyles.insert(column, columnStyle);
+    d->tableColumnStyles.replace(column, columnStyle);
 }
 
 void KoTableColumnAndRowStyleManager::insertColumns(int column, int numberColumns, const KoTableColumnStyle &columnStyle)
@@ -153,10 +153,10 @@ void KoTableColumnAndRowStyleManager::setRowStyle(int row, const KoTableRowStyle
         return;
     }
 
-    while (row > d->tableRowStyles.size())
+    while (row >= d->tableRowStyles.size())
         d->tableRowStyles.append(KoTableRowStyle());
 
-    d->tableRowStyles.insert(row, rowStyle);
+    d->tableRowStyles.replace(row, rowStyle);
 }
 
 void KoTableColumnAndRowStyleManager::insertRows(int row, int numberRows, const KoTableRowStyle &rowStyle)

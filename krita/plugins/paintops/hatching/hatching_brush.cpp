@@ -26,7 +26,7 @@
 #include <QVariant>
 #include <QHash>
 
-#include "kis_random_accessor.h"
+#include "kis_random_accessor_ng.h"
 #include <cmath>
 #include <time.h>
 
@@ -303,4 +303,3 @@ double HatchingBrush::separationAsFunctionOfParameter(double parameter, double s
     qDebug() << "Fix your function" << parameter << ">" << upperlimit ;
     return separation;
 }
-;

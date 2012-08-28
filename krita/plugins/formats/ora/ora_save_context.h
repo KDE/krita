@@ -19,6 +19,7 @@
 #define _ORA_SAVE_CONTEXT_H_
 
 class KoStore;
+#include <kis_meta_data_entry.h>
 
 #include "kis_open_raster_save_context.h"
 
@@ -26,7 +27,7 @@ class OraSaveContext : public KisOpenRasterSaveContext
 {
 public:
     OraSaveContext(KoStore* _store);
-    virtual QString saveDeviceData(KisPaintLayerSP layer);
+    virtual QString saveDeviceData(KisPaintDeviceSP dev, KisMetaData::Store *metaData, KisImageWSP image);
     virtual void saveStack(const QDomDocument& doc);
 private:
     int m_id;

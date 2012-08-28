@@ -20,9 +20,10 @@
 #include "SpiralShapeFactory.h"
 #include "SpiralShape.h"
 #include "SpiralShapeConfigWidget.h"
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoShapeLoadingContext.h>
 
+#include <KoIcon.h>
 #include <klocale.h>
 
 
@@ -30,7 +31,7 @@ SpiralShapeFactory::SpiralShapeFactory()
 : KoShapeFactoryBase(SpiralShapeId, i18n("Spiral"))
 {
     setToolTip(i18n("A spiral shape"));
-    setIcon("spiral-shape");
+    setIconName(koIconNameCStr("spiral-shape"));
     setFamily("geometric");
     setLoadingPriority(1);
 }
@@ -39,7 +40,7 @@ KoShape *SpiralShapeFactory::createDefaultShape(KoDocumentResourceManager *) con
 {
     SpiralShape *spiral = new SpiralShape();
 
-    spiral->setBorder(new KoLineBorder(1.0));
+    spiral->setStroke(new KoShapeStroke(1.0));
     spiral->setShapeId(KoPathShapeId);
 
     return spiral;

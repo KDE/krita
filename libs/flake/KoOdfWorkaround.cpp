@@ -2,6 +2,7 @@
    Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2009 Johannes Simon <johannes.simon@gmail.com>
    Copyright (C) 2010,2011 Jan Hambrecht <jaham@gmx.net>
+   Copyright 2012 Friedrich W. H. Kossebau <kossebau@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -255,4 +256,49 @@ bool KoOdfWorkaround::fixAutoGrow(KoTextShapeDataBase::ResizeMethod method, KoSh
         }
     }
     return fix;
+}
+
+bool KoOdfWorkaround::fixEllipse(const QString &kind, KoShapeLoadingContext &context)
+{
+    bool radiusGiven = false;
+    if (context.odfLoadingContext().generatorType() == KoOdfLoadingContext::OpenOffice) {
+        if (kind == "section" || kind == "arc") {
+            radiusGiven = true;
+        }
+    }
+    return radiusGiven;
+}
+
+void KoOdfWorkaround::fixBadFormulaHiddenForStyleCellProtect(QString& value)
+{
+    if (value.endsWith(QLatin1String("Formula.hidden"))) {
+        const int length = value.length();
+        value[length-14] = QLatin1Char('f');
+        value[length-7] = QLatin1Char('-');
+    }
+}
+
+void KoOdfWorkaround::fixBadDateForTextTime(QString &value)
+{
+    if (value.startsWith(QLatin1String("0-00-00T"))) {
+        value.remove(0, 8);
+    }
+}
+
+void KoOdfWorkaround::fixClipRectOffsetValuesString(QString &offsetValuesString)
+{
+    if (! offsetValuesString.contains(QLatin1Char(','))) {
+        // assumes no spaces existing between values and units
+        offsetValuesString = offsetValuesString.simplified().replace(QLatin1Char(' '), QLatin1Char(','));
+    }
+}
+
+QString KoOdfWorkaround::fixTableTemplateName(const KoXmlElement &e)
+{
+    return e.attributeNS(KoXmlNS::text, "style-name", QString());
+}
+
+QString KoOdfWorkaround::fixTableTemplateCellStyleName(const KoXmlElement &e)
+{
+    return e.attributeNS(KoXmlNS::text, "style-name", QString());
 }

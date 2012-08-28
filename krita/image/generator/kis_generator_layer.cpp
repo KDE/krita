@@ -21,6 +21,7 @@
 #include <klocale.h>
 #include "kis_debug.h"
 
+#include <KoIcon.h>
 #include "kis_selection.h"
 #include "filter/kis_filter_configuration.h"
 #include "kis_processing_information.h"
@@ -109,7 +110,7 @@ void KisGeneratorLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *un
 
 QIcon KisGeneratorLayer::icon() const
 {
-    return KIcon("view-filter");
+    return koIcon("view-filter");
 }
 
 KoDocumentSectionModel::PropertyList KisGeneratorLayer::sectionModelProperties() const

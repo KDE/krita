@@ -10,9 +10,6 @@
     <height>318</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Form</string>
-  </property>
   <layout class="QGridLayout" name="gridLayout_3">
    <item row="2" column="0">
     <spacer name="verticalSpacer">

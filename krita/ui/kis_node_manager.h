@@ -191,6 +191,8 @@ private:
     void getNewNodeLocation(const QString & nodeType, KisNodeSP &parent, KisNodeSP &above, KisNodeSP active);
     void getNewNodeLocation(KisNodeSP node, KisNodeSP &parent, KisNodeSP &above, KisNodeSP _activeNode);
 
+    void mirrorNode(KisNodeSP node, const QString & commandName, Qt::Orientation orientation);
+
     /**
      * Scales opacity from the range 0...1
      * to the integer range 0...255

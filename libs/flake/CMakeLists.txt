@@ -76,11 +76,8 @@ set(flake_SRCS
     KoLoadingShapeUpdater.cpp
     KoPathShapeLoader.cpp
     ShapeDeleter_p.cpp
-    KoShapeBorderModel.cpp
-    KoShapeBorderFactoryBase.cpp
-    KoShapeBorderRegistry.cpp
-    KoLineBorder.cpp
-    KoLineBorderFactory.cpp
+    KoShapeStrokeModel.cpp
+    KoShapeStroke.cpp
     KoShapeBackground.cpp
     KoColorBackground.cpp
     KoGradientBackground.cpp
@@ -129,7 +126,6 @@ set(flake_SRCS
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
     commands/KoShapeBackgroundCommand.cpp
-    commands/KoShapeBorderCommand.cpp
     commands/KoShapeCreateCommand.cpp
     commands/KoShapeDeleteCommand.cpp
     commands/KoShapeDistributeCommand.cpp
@@ -137,6 +133,7 @@ set(flake_SRCS
     commands/KoShapeMoveCommand.cpp
     commands/KoShapeShearCommand.cpp
     commands/KoShapeSizeCommand.cpp
+    commands/KoShapeStrokeCommand.cpp
     commands/KoShapeUngroupCommand.cpp
     commands/KoShapeReorderCommand.cpp
     commands/KoShapeKeepAspectRatioCommand.cpp
@@ -150,7 +147,6 @@ set(flake_SRCS
     commands/KoPathBreakAtPointCommand.cpp
     commands/KoPathSegmentTypeCommand.cpp
     commands/KoPathCombineCommand.cpp
-    commands/KoPathSeparateCommand.cpp
     commands/KoSubpathRemoveCommand.cpp
     commands/KoSubpathJoinCommand.cpp
     commands/KoParameterHandleMoveCommand.cpp
@@ -279,7 +275,7 @@ install(
     KoRTree.h
     KoSelection.h
     KoShape.h
-    KoShapeBorderModel.h
+    KoShapeStrokeModel.h
     KoToolSelection.h
     KoShapeContainer.h
     KoShapeContainerModel.h
@@ -327,10 +323,9 @@ install(
     commands/KoPathPointTypeCommand.h
     commands/KoPathReverseCommand.h
     commands/KoPathSegmentTypeCommand.h
-    commands/KoPathSeparateCommand.h
     commands/KoShapeAlignCommand.h
     commands/KoShapeBackgroundCommand.h
-    commands/KoShapeBorderCommand.h
+    commands/KoShapeStrokeCommand.h
     commands/KoShapeCreateCommand.h
     commands/KoShapeDeleteCommand.h
     commands/KoShapeDistributeCommand.h

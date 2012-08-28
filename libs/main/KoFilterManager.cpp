@@ -227,7 +227,7 @@ KoFilter::ConversionStatus KoFilterManager::exportDocument(const QString& url, Q
 
     if (!m_graph.isValid()) {
         kError(30500) << "Couldn't create a valid graph for this source mimetype.";
-        if (!userCancelled) KMessageBox::error(0, i18n("Could not export file."), i18n("Missing Export Filter"));
+        if (!d->batch && !userCancelled) KMessageBox::error(0, i18n("Could not export file."), i18n("Missing Export Filter"));
         return KoFilter::BadConversionGraph;
     }
 
@@ -236,7 +236,7 @@ KoFilter::ConversionStatus KoFilterManager::exportDocument(const QString& url, Q
 
     if (!chain) {
         kError(30500) << "Couldn't create a valid filter chain to " << mimeType << " !" << endl;
-        KMessageBox::error(0, i18n("Could not export file."), i18n("Missing Export Filter"));
+        if (!d->batch) KMessageBox::error(0, i18n("Could not export file."), i18n("Missing Export Filter"));
         return KoFilter::BadConversionGraph;
     }
 

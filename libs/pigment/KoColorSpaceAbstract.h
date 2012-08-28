@@ -151,15 +151,23 @@ public:
     virtual bool convertPixelsTo(const quint8 *src,
                                  quint8 *dst, const KoColorSpace *dstColorSpace,
                                  quint32 numPixels,
-                                 KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const {
+                                 KoColorConversionTransformation::Intent renderingIntent,
+                                 KoColorConversionTransformation::ConversionFlags conversionFlags) const
+    {
         
         // check whether we have the same profile and color model, but only a different bit
         // depth; in that case we don't convert as such, but scale
-        bool scaleOnly = dstColorSpace->colorModelId().id() == colorModelId().id() &&
+        bool scaleOnly = false;
+
+        // Note: getting the id() is really, really expensive, so only do that if
+        // we are sure there is a difference between the colorspaces
+        if (!(*this == *dstColorSpace)) {
+            scaleOnly = dstColorSpace->colorModelId().id() == colorModelId().id() &&
                          dstColorSpace->colorDepthId().id() != colorDepthId().id() &&
                          dstColorSpace->profile()->name()   == profile()->name();
+        }
         
-        if(scaleOnly && dynamic_cast<const KoColorSpaceAbstract*>(dstColorSpace)) {
+        if (scaleOnly && dynamic_cast<const KoColorSpaceAbstract*>(dstColorSpace)) {
             typedef typename _CSTrait::channels_type channels_type;
             
             switch(dstColorSpace->channels()[0]->channelValueType())
@@ -184,7 +192,7 @@ public:
             }
         }
         
-        return KoColorSpace::convertPixelsTo(src, dst, dstColorSpace, numPixels, renderingIntent);
+        return KoColorSpace::convertPixelsTo(src, dst, dstColorSpace, numPixels, renderingIntent, conversionFlags);
     }
     
 private:

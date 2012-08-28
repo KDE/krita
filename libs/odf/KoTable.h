@@ -40,7 +40,7 @@ class KoGenStyles;
 * needed to read written tables.
 * 
 * All the pointers returned by this class are guaranteed to be not-null.
-* Do note, however, that there's no way to clear a cell, row or colum.
+* Do note, however, that there's no way to clear a cell, row or column.
 * 
 * The \class KoTable owns all the pointer objects returned by
 * its methods.

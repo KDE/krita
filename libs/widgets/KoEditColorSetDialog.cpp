@@ -19,11 +19,12 @@
 
 #include "KoEditColorSetDialog.h"
 
+#include <KoIcon.h>
+
 #include <QScrollArea>
 #include <QHBoxLayout>
 #include <QFileInfo>
 
-#include <KIcon>
 #include <KLocale>
 #include <KColorDialog>
 #include <KInputDialog>
@@ -79,10 +80,10 @@ KoEditColorSetWidget::KoEditColorSetWidget(const QList<KoColorSet *> &palettes, 
     layout->addWidget(m_scrollArea);
     widget.patchesFrame->setLayout(layout);
 
-    widget.add->setIcon(KIcon("list-add"));
-    widget.remove->setIcon(KIcon("list-remove"));
-    widget.open->setIcon(KIcon("document-open"));
-    widget.save->setIcon(KIcon("document-save"));
+    widget.add->setIcon(koIcon("list-add"));
+    widget.remove->setIcon(koIcon("list-remove"));
+    widget.open->setIcon(koIcon("document-open"));
+    widget.save->setIcon(koIcon("document-save"));
 
     setEnabled(m_activeColorSet != 0);
     setActiveColorSet(index);

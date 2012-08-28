@@ -31,9 +31,10 @@
 #include <KoDocumentResourceManager.h>
 
 #include "KoPABackgroundTool.h"
-#include "KoPageApp.h"
-#include "KoPAPage.h"
-#include "KoPAView.h"
+#include <KoPageApp.h>
+#include <KoPAPage.h>
+#include <KoPAView.h>
+#include <KoPADocument.h>
 #include "commands/KoPADisplayMasterBackgroundCommand.h"
 #include "commands/KoPADisplayMasterShapesCommand.h"
 
@@ -43,11 +44,21 @@ KoPABackgroundToolWidget::KoPABackgroundToolWidget( KoPABackgroundTool *tool, QW
 {
     setObjectName( "KoPABackgroundToolWidget" );
     widget.setupUi( this );
-    connect( widget.backgroundImage, SIGNAL( clicked( bool ) ), this, SLOT( setBackgroundImage() ) );
-    connect( widget.useMasterBackground, SIGNAL( stateChanged( int ) ), this, SLOT( useMasterBackground( int ) ) );
-    connect( widget.displayMasterShapes, SIGNAL( stateChanged( int ) ), this, SLOT( displayMasterShapes( int ) ) );
 
-    connect( m_tool->view()->proxyObject, SIGNAL( activePageChanged() ), this, SLOT( slotActivePageChanged() ) );
+    // adapt texts to type of pages
+    const bool isSlideType = (m_tool->view()->kopaDocument()->pageType() == KoPageApp::Slide);
+    const QString useMasterBackgroundText =
+        isSlideType ? i18n("Use background of master slide") : i18n("Use background of master page");
+    widget.useMasterBackground->setText(useMasterBackgroundText);
+    const QString displayMasterShapesText =
+        isSlideType ? i18n("Display shapes of master slide") : i18n("Display shapes of master page");
+    widget.displayMasterShapes->setText(displayMasterShapesText);
+
+    connect(widget.useMasterBackground, SIGNAL(clicked(bool)), SLOT(useMasterBackground(bool)));
+    connect(widget.backgroundImage, SIGNAL(clicked(bool)), SLOT(setBackgroundImage()));
+    connect(widget.displayMasterShapes, SIGNAL(clicked(bool)), SLOT(displayMasterShapes(bool)));
+
+    connect(m_tool->view()->proxyObject, SIGNAL(activePageChanged()), SLOT(slotActivePageChanged()));
 
     slotActivePageChanged();
 }
@@ -67,10 +78,17 @@ void KoPABackgroundToolWidget::slotActivePageChanged()
     if ( normalPage ) {
         widget.useMasterBackground->setChecked( normalPage->displayMasterBackground() );
         widget.displayMasterShapes->setChecked( normalPage->displayMasterShapes() );
+
+        const bool enableBackgroundEditing = (! normalPage->displayMasterBackground());
+        widget.backgroundImage->setEnabled(enableBackgroundEditing);
+        widget.useStrokeAndFillDockerLabel->setEnabled(enableBackgroundEditing);
     }
     else {
         widget.useMasterBackground->setChecked( false );
         widget.displayMasterShapes->setChecked( false );
+
+        widget.backgroundImage->setEnabled(true);
+        widget.useStrokeAndFillDockerLabel->setEnabled(true);
     }
 }
 
@@ -91,7 +109,11 @@ void KoPABackgroundToolWidget::setBackgroundImage()
         if ( KIO::NetAccess::download(  url, tmpFile, 0 ) ) {
             QImage image( tmpFile );
             if ( !image.isNull() ) {
-                KUndo2Command * cmd = new KUndo2Command( i18nc( "(qtundo-format)", "Change background image" ) );
+                const bool isSlideType = (m_tool->view()->kopaDocument()->pageType() == KoPageApp::Slide);
+                const QString commandTitle = isSlideType ?
+                    i18nc( "(qtundo-format)", "Change slide background image") :
+                    i18nc( "(qtundo-format)", "Change page background image");
+                KUndo2Command * cmd = new KUndo2Command(commandTitle);
                 KoPatternBackground * bg = new KoPatternBackground( collection );
                 bg->setPattern( image );
                 QSizeF imageSize = bg->patternOriginalSize();
@@ -120,20 +142,24 @@ void KoPABackgroundToolWidget::setBackgroundImage()
     }
 }
 
-void KoPABackgroundToolWidget::useMasterBackground( int state )
+void KoPABackgroundToolWidget::useMasterBackground(bool doUse)
 {
     KoPAPage * page = dynamic_cast<KoPAPage *>( m_tool->canvas()->resourceManager()->koShapeResource( KoPageApp::CurrentPage ) );
     if ( page ) {
-        KoPADisplayMasterBackgroundCommand * cmd = new KoPADisplayMasterBackgroundCommand( page, state == Qt::Checked );
+        KoPADisplayMasterBackgroundCommand * cmd = new KoPADisplayMasterBackgroundCommand(page, doUse);
         m_tool->canvas()->addCommand( cmd );
     }
+
+    const bool enableBackgroundEditing = (! doUse);
+    widget.backgroundImage->setEnabled(enableBackgroundEditing);
+    widget.useStrokeAndFillDockerLabel->setEnabled(enableBackgroundEditing);
 }
 
-void KoPABackgroundToolWidget::displayMasterShapes( int state )
+void KoPABackgroundToolWidget::displayMasterShapes(bool doDisplay)
 {
     KoPAPage * page = dynamic_cast<KoPAPage *>( m_tool->canvas()->resourceManager()->koShapeResource( KoPageApp::CurrentPage ) );
     if ( page ) {
-        KoPADisplayMasterShapesCommand * cmd = new KoPADisplayMasterShapesCommand( page, state == Qt::Checked );
+        KoPADisplayMasterShapesCommand * cmd = new KoPADisplayMasterShapesCommand(page, doDisplay);
         m_tool->canvas()->addCommand( cmd );
     }
 }

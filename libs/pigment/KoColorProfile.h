@@ -30,7 +30,7 @@
  */
 class PIGMENTCMS_EXPORT KoColorProfile
 {
-    struct Private;
+
 public:
 
     /**
@@ -56,6 +56,7 @@ public:
      * must be duplicated while cloning.
      */
     virtual KoColorProfile* clone() const = 0;
+
     /**
      * Load the profile in memory.
      * @return true if the profile has been successfully loaded
@@ -109,16 +110,6 @@ public:
     virtual bool operator==(const KoColorProfile&) const = 0;
 
     /**
-     * @return the profile property given in argument
-     */
-    virtual QVariant property(const QString& _name) const;
-    /**
-     * Set a new value of a profile property.
-     *
-     */
-    virtual void setProperty(const QString& _name, const QVariant& _variant);
-
-    /**
      * @return an array with the raw data of the profile
      */
     virtual QByteArray rawData() const {
@@ -134,7 +125,9 @@ protected:
      * Allows to set the information string of that profile.
      */
     void setInfo(const QString &info);
+
 private:
+    struct Private;
     Private* const d;
 };
 

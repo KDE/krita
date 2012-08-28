@@ -112,6 +112,9 @@ public:
     qreal height() const;
     /// set the bullet image key (as from the KoImageData)
     void setBulletImage(KoImageData *imageData);
+    /// return the bullet image that is used in the list(as KoImageData)
+    KoImageData *bulletImage() const;
+
     /// set the listId used by all list-styles that together make 1 user defined list in an ODF file.
     void setListId(KoListStyle::ListIdType listId);
     /// return the listId used by all list-styles that together make 1 user defined list in an ODF file.
@@ -144,7 +147,7 @@ public:
     /// returns the margin of the list
     qreal margin() const;
 
-    /// sets the text indent of the the list item
+    /// sets the text indent of the list item
     void setTextIndent(qreal value);
     /// returns the text indent of the list item
     qreal textIndent() const;
@@ -207,6 +210,7 @@ private:
     qreal propertyDouble(int key) const;
     QString propertyString(int key) const;
     QColor propertyColor(int key) const;
+    QVariant property(int key) const;
 
     class Private;
     Private * const d;

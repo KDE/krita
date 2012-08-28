@@ -19,7 +19,6 @@
 #include "kis_hline_iterator_benchmark.h"
 #include "kis_benchmark_values.h"
 
-#include "kis_iterators_pixel.h"
 #include "kis_paint_device.h"
 
 #include <KoColorSpace.h>
@@ -50,36 +49,34 @@ void KisHLineIteratorBenchmark::cleanupTestCase()
 void KisHLineIteratorBenchmark::benchmarkCreation()
 {
     QBENCHMARK{
-        KisHLineIteratorPixel it = m_device->createHLineIterator(0, 0, TEST_IMAGE_WIDTH);
+        KisHLineIteratorSP it = m_device->createHLineIteratorNG(0, 0, TEST_IMAGE_WIDTH);
     }
 }
 
 void KisHLineIteratorBenchmark::benchmarkWriteBytes()
 {
-    KisHLineIteratorPixel it = m_device->createHLineIterator(0, 0, TEST_IMAGE_WIDTH);
+    KisHLineIteratorSP it = m_device->createHLineIteratorNG(0, 0, TEST_IMAGE_WIDTH);
 
     QBENCHMARK{
         for (int j = 0; j < TEST_IMAGE_HEIGHT; j++) {
-            while (!it.isDone()) {
-                memcpy(it.rawData(), m_color->data(), m_colorSpace->pixelSize());
-                ++it;
-            }
-            it.nextRow();
+            do {
+                memcpy(it->rawData(), m_color->data(), m_colorSpace->pixelSize());
+            } while (it->nextPixel());
+            it->nextRow();
         }
     }
 }
 
 void KisHLineIteratorBenchmark::benchmarkReadBytes()
 {
-    KisHLineIteratorPixel it = m_device->createHLineIterator(0, 0, TEST_IMAGE_WIDTH);
+    KisHLineIteratorSP it = m_device->createHLineIteratorNG(0, 0, TEST_IMAGE_WIDTH);
 
     QBENCHMARK{
         for (int j = 0; j < TEST_IMAGE_HEIGHT; j++) {
-            while (!it.isDone()) {
-                memcpy(m_color->data(), it.rawData(), m_colorSpace->pixelSize());
-                ++it;
-            }
-            it.nextRow();
+            do {
+                memcpy(m_color->data(), it->rawData(), m_colorSpace->pixelSize());
+            } while (it->nextPixel());
+            it->nextRow();
         }
     }
 }
@@ -87,15 +84,14 @@ void KisHLineIteratorBenchmark::benchmarkReadBytes()
 
 void KisHLineIteratorBenchmark::benchmarkConstReadBytes()
 {
-    KisHLineConstIteratorPixel cit = m_device->createHLineConstIterator(0, 0, TEST_IMAGE_WIDTH);
+    KisHLineConstIteratorSP cit = m_device->createHLineConstIteratorNG(0, 0, TEST_IMAGE_WIDTH);
 
     QBENCHMARK{
         for (int j = 0; j < TEST_IMAGE_HEIGHT; j++) {
-            while (!cit.isDone()) {
-                memcpy(m_color->data(), cit.rawData(), m_colorSpace->pixelSize());
-                ++cit;
-            }
-            cit.nextRow();
+            do {
+                memcpy(m_color->data(), cit->oldRawData(), m_colorSpace->pixelSize());
+            } while (cit->nextPixel());
+            cit->nextRow();
         }
     }
 }
@@ -106,18 +102,16 @@ void KisHLineIteratorBenchmark::benchmarkReadWriteBytes(){
     KisPaintDevice dab(m_colorSpace);
     dab.fill(0,0,TEST_IMAGE_WIDTH,TEST_IMAGE_HEIGHT, c.data());
     
-    KisHLineIteratorPixel writeIterator = m_device->createHLineIterator(0, 0, TEST_IMAGE_WIDTH);
-    KisHLineConstIteratorPixel constReadIterator = dab.createHLineConstIterator(0, 0, TEST_IMAGE_WIDTH);
+    KisHLineIteratorSP writeIterator = m_device->createHLineIteratorNG(0, 0, TEST_IMAGE_WIDTH);
+    KisHLineConstIteratorSP constReadIterator = dab.createHLineConstIteratorNG(0, 0, TEST_IMAGE_WIDTH);
 
     QBENCHMARK{
         for (int j = 0; j < TEST_IMAGE_HEIGHT; j++) {
-            while (!constReadIterator.isDone()) {
-                memcpy(writeIterator.rawData(), constReadIterator.rawData(), m_colorSpace->pixelSize());
-                ++constReadIterator;
-                ++writeIterator;
-            }
-            constReadIterator.nextRow();
-            writeIterator.nextRow();
+            do {
+                memcpy(writeIterator->rawData(), constReadIterator->oldRawData(), m_colorSpace->pixelSize());
+            } while (constReadIterator->nextPixel() && writeIterator->nextPixel());
+            constReadIterator->nextRow();
+            writeIterator->nextRow();
         }
     }
 }
@@ -153,14 +147,12 @@ void KisHLineIteratorBenchmark::benchmarkReadWriteBytes2()
 
 void KisHLineIteratorBenchmark::benchmarkNoMemCpy()
 {
-    KisHLineIteratorPixel it = m_device->createHLineIterator(0, 0, TEST_IMAGE_WIDTH);
+    KisHLineIteratorSP it = m_device->createHLineIteratorNG(0, 0, TEST_IMAGE_WIDTH);
 
     QBENCHMARK{
         for (int j = 0; j < TEST_IMAGE_HEIGHT; j++) {
-            while (!it.isDone()) {
-                ++it;
-            }
-            it.nextRow();
+            do {} while (it->nextPixel());
+            it->nextRow();
         }
     }
 }
@@ -168,14 +160,12 @@ void KisHLineIteratorBenchmark::benchmarkNoMemCpy()
 
 void KisHLineIteratorBenchmark::benchmarkConstNoMemCpy()
 {
-    KisHLineConstIteratorPixel cit = m_device->createHLineConstIterator(0, 0, TEST_IMAGE_WIDTH);
+    KisHLineConstIteratorSP cit = m_device->createHLineConstIteratorNG(0, 0, TEST_IMAGE_WIDTH);
 
     QBENCHMARK{
         for (int j = 0; j < TEST_IMAGE_HEIGHT; j++) {
-            while (!cit.isDone()) {
-                ++cit;
-            }
-            cit.nextRow();
+            do {} while (cit->nextPixel());
+            cit->nextRow();
         }
     }
 }
@@ -186,17 +176,14 @@ void KisHLineIteratorBenchmark::benchmarkTwoIteratorsNoMemCpy(){
     KisPaintDevice dab(m_colorSpace);
     dab.fill(0,0,TEST_IMAGE_WIDTH,TEST_IMAGE_HEIGHT, c.data());
     
-    KisHLineIteratorPixel writeIterator = m_device->createHLineIterator(0, 0, TEST_IMAGE_WIDTH);
-    KisHLineConstIteratorPixel constReadIterator = dab.createHLineConstIterator(0, 0, TEST_IMAGE_WIDTH);
+    KisHLineIteratorSP writeIterator = m_device->createHLineIteratorNG(0, 0, TEST_IMAGE_WIDTH);
+    KisHLineConstIteratorSP constReadIterator = dab.createHLineConstIteratorNG(0, 0, TEST_IMAGE_WIDTH);
 
     QBENCHMARK{
         for (int j = 0; j < TEST_IMAGE_HEIGHT; j++) {
-            while (!constReadIterator.isDone()) {
-                ++constReadIterator;
-                ++writeIterator;
-            }
-            constReadIterator.nextRow();
-            writeIterator.nextRow();
+            do {} while (writeIterator->nextPixel() && constReadIterator->nextPixel());
+            constReadIterator->nextRow();
+            writeIterator->nextRow();
         }
     }
     

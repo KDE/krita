@@ -36,7 +36,7 @@ public:
     virtual QRect dirtyViewportRect();
 };
 
-Q_DECLARE_METATYPE(KisUpdateInfoSP);
+Q_DECLARE_METATYPE(KisUpdateInfoSP)
 
 #ifdef HAVE_OPENGL
 #include "opengl/kis_texture_tile_update_info.h"

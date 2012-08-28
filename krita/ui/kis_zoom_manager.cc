@@ -26,7 +26,6 @@
 #include <kactioncollection.h>
 #include <kstandardaction.h>
 #include <ktoggleaction.h>
-#include <kicon.h>
 #include <kstatusbar.h>
 #include <kis_debug.h>
 
@@ -39,6 +38,7 @@
 #include <KoGlobal.h>
 #include <KoRulerController.h>
 
+#include "kis_doc2.h"
 #include "kis_view2.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_coordinates_converter.h"
@@ -88,8 +88,8 @@ KisZoomManager::~KisZoomManager()
 
 void KisZoomManager::setup(KActionCollection * actionCollection)
 {
-    KoZoomMode::setMinimumZoom(0.00391);
-    KoZoomMode::setMaximumZoom(256.0);
+    KoZoomMode::setMinimumZoom(0.125);
+    KoZoomMode::setMaximumZoom(64.0);
 
     KisCoordinatesConverter *converter =
         dynamic_cast<KisCoordinatesConverter*>(m_zoomHandler);
@@ -139,6 +139,12 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
     m_verticalRuler->setVisible(show);
     m_showRulersAction->setChecked(show);
 
+    QList<QAction*> unitActions = m_view->createChangeUnitActions();
+    m_horizontalRuler->setPopupActionList(unitActions);
+    m_verticalRuler->setPopupActionList(unitActions);
+
+    connect(m_view->document(), SIGNAL(unitChanged(const KoUnit&)), m_horizontalRuler, SLOT(setUnit(const KoUnit&)));
+    connect(m_view->document(), SIGNAL(unitChanged(const KoUnit&)), m_verticalRuler, SLOT(setUnit(const KoUnit&)));
 
 
     layout->addWidget(m_horizontalRuler, 0, 1);
@@ -222,7 +228,7 @@ void KisZoomManager::pageOffsetChanged()
 
 void KisZoomManager::zoomTo100()
 {
-    m_zoomHandler->setZoom(1.0);
+    m_zoomController->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
     m_view->canvasBase()->notifyZoomChanged();
 }
 

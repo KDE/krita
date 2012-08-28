@@ -1,0 +1,11 @@
+[Desktop Entry]
+Icon=template_texture
+Name=Texture 1k 8bit srgb
+Name[nl]=Textuur 1k 8bit srgb
+Name[pt]=Textura 1k 8-bits sRGB
+Name[pt_BR]=Textura 1k 8bit srgb
+Name[uk]=Текстура 1k, 8-бітова, srgb
+Name[x-test]=xxTexture 1k 8bit srgbxx
+Type=Link
+URL[$e]=.source/Texture1k8bitsrgb.kra
+X-KDE-Hidden=false

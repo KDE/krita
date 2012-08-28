@@ -1,7 +1,7 @@
 /*  This file is part of the KDE libraries
     Copyright (C) 2004 Ariya Hidayat <ariya@kde.org>
     Copyright (C) 2006 Peter Simonsson <peter.simonsson@gmail.com>
-    Copyright (C) 2006-2007 Casper Boemann <cbr@boemann.dk>
+    Copyright (C) 2006-2007 C. Boemann <cbo@boemann.dk>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -21,6 +21,8 @@
 #include "KoZoomMode.h"
 #include "KoZoomInput.h"
 
+#include <KoIcon.h>
+
 #include <QString>
 #include <QLocale>
 #include <QStringList>
@@ -38,7 +40,6 @@
 #include <QComboBox>
 
 #include <klocale.h>
-#include <kicon.h>
 #include <knuminput.h>
 #include <kstandardaction.h>
 #include <kactioncollection.h>
@@ -68,7 +69,7 @@ KoZoomAction::KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, QO
     d->slider = 0;
     d->input = 0;
     d->specialButtons = 0;
-    setIcon(KIcon("zoom-original"));
+    setIcon(koIcon("zoom-original"));
     setEditable( true );
     setMaxComboViewCount( 15 );
 
@@ -264,7 +265,8 @@ QWidget * KoZoomAction::createWidget(QWidget *parent)
 
     if (d->specialButtons & AspectMode) {
         d->aspectButton = new QToolButton(group);
-        d->aspectButton->setIcon(KIcon("zoom-pixels").pixmap(22));
+        d->aspectButton->setIcon(koIcon("zoom-pixels"));
+        d->aspectButton->setIconSize(QSize(22,22));
         d->aspectButton->setCheckable(true);
         d->aspectButton->setChecked(true);
         d->aspectButton->setAutoRaise(true);
@@ -274,7 +276,8 @@ QWidget * KoZoomAction::createWidget(QWidget *parent)
     }
     if (d->specialButtons & ZoomToSelection) {
         QToolButton * zoomToSelectionButton = new QToolButton(group);
-        zoomToSelectionButton->setIcon(KIcon("zoom-select").pixmap(22));
+        zoomToSelectionButton->setIcon(koIcon("zoom-select"));
+        zoomToSelectionButton->setIconSize(QSize(22,22));
         zoomToSelectionButton->setAutoRaise(true);
         zoomToSelectionButton->setToolTip(i18n("Zoom to Selection"));
         connect(zoomToSelectionButton, SIGNAL(clicked(bool)), this, SIGNAL(zoomedToSelection()));
@@ -282,7 +285,8 @@ QWidget * KoZoomAction::createWidget(QWidget *parent)
     }
     if (d->specialButtons & ZoomToAll) {
         QToolButton * zoomToAllButton = new QToolButton(group);
-        zoomToAllButton->setIcon(KIcon("zoom-draw").pixmap(22));
+        zoomToAllButton->setIcon(koIcon("zoom-draw"));
+        zoomToAllButton->setIconSize(QSize(22,22));
         zoomToAllButton->setAutoRaise(true);
         zoomToAllButton->setToolTip(i18n("Zoom to All"));
         connect(zoomToAllButton, SIGNAL(clicked(bool)), this, SIGNAL(zoomedToAll()));

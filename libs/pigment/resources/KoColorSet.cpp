@@ -29,30 +29,6 @@
 
 #include "KoColorSpaceRegistry.h"
 
-/*
-KoColorSet::KoColorSet(const KisGradient * gradient, qint32 nColors, const QString & name)
-    : KoResource(QString("")),
-      m_name(name)
-{
-    Q_ASSERT(nColors > 0);
-    Q_ASSERT(gradient != 0);
-
-    qreal dx, cur_x;
-    qint32 i;
-    dx = 1.0 / (nColors - 1);
-
-    KoColorSetEntry e;
-    KoColor c;
-    for (i = 0, cur_x = 0; i < nColors; i++, cur_x += dx) {
-        gradient->colorAt(c,cur_x);
-        e.color = c;
-        e.name = "Untitled";
-        add(e);
-    }
-
-    m_columns = 0; // Set the default value that the GIMP uses...
-}
-*/
 KoColorSet::KoColorSet(const QString& filename)
         : KoResource(filename)
 {
@@ -68,7 +44,8 @@ KoColorSet::KoColorSet()
 
 /// Create an copied palette
 KoColorSet::KoColorSet(const KoColorSet& rhs)
-        : KoResource("")
+        : QObject(0)
+        , KoResource("")
 {
     setFilename(rhs.filename());
     m_ownData = false;
@@ -126,6 +103,7 @@ qint32 KoColorSet::nColors()
 
 bool KoColorSet::init()
 {
+    m_colors.clear(); // just in case this is a reload (eg by KoEditColorSetDialog),
 
     QString s = QString::fromUtf8(m_data.data(), m_data.count());
 

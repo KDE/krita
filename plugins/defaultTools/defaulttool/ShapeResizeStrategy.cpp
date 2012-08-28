@@ -97,7 +97,9 @@ ShapeResizeStrategy::ShapeResizeStrategy(KoToolBase *tool,
 
 void ShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers)
 {
+    tool()->canvas()->updateCanvas(tool()->canvas()->snapGuide()->boundingRect());
     QPointF newPos = tool()->canvas()->snapGuide()->snap( point, modifiers );
+    tool()->canvas()->updateCanvas(tool()->canvas()->snapGuide()->boundingRect());
 
     bool keepAspect = modifiers & Qt::ShiftModifier;
     foreach(KoShape *shape, m_selectedShapes)
@@ -236,6 +238,7 @@ void ShapeResizeStrategy::resizeBy( const QPointF &center, qreal zoomX, qreal zo
 
 KUndo2Command* ShapeResizeStrategy::createCommand()
 {
+    tool()->canvas()->snapGuide()->reset();
     QList<QSizeF> newSizes;
     QList<QTransform> transformations;
     const int shapeCount = m_selectedShapes.count();
@@ -248,6 +251,12 @@ KUndo2Command* ShapeResizeStrategy::createCommand()
     new KoShapeSizeCommand(m_selectedShapes, m_startSizes, newSizes, cmd );
     new KoShapeTransformCommand( m_selectedShapes, m_oldTransforms, transformations, cmd );
     return cmd;
+}
+
+void ShapeResizeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
+{
+    Q_UNUSED(modifiers);
+    tool()->canvas()->updateCanvas(tool()->canvas()->snapGuide()->boundingRect());
 }
 
 void ShapeResizeStrategy::paint( QPainter &painter, const KoViewConverter &converter)

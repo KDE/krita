@@ -39,7 +39,7 @@ public:
     
     /**
      * Remove the sensor corrseponnding to the id from the list of sensors.
-     * And return it. It becomes the responsability of the caller to delete
+     * And return it. It becomes the responsibility of the caller to delete
      * the sensor.
      */
     KisDynamicSensor* takeSensor(const QString& id);

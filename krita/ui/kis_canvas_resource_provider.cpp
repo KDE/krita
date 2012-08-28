@@ -39,7 +39,6 @@
 #include <kis_paintop_settings.h>
 #include "ko_favorite_resource_manager.h"
 
-#include "kis_exposure_visitor.h"
 #include "kis_config.h"
 #include "kis_view2.h"
 #include "canvas/kis_canvas2.h"
@@ -78,6 +77,9 @@ void KisCanvasResourceProvider::setResourceManager(KoCanvasResourceManager *reso
     setMirrorHorizontal(false);
     setMirrorVertical(false);
 
+    m_resourceManager->setResource(HdrExposure, 0.0);
+    m_resourceManager->setResource(HdrGamma, 1.0);
+
     connect(m_resourceManager, SIGNAL(resourceChanged(int, const QVariant &)),
             this, SLOT(slotResourceChanged(int, const QVariant&)));
 }
@@ -106,11 +108,16 @@ float KisCanvasResourceProvider::HDRExposure() const
 void KisCanvasResourceProvider::setHDRExposure(float exposure)
 {
     m_resourceManager->setResource(HdrExposure, static_cast<double>(exposure));
-    KisExposureVisitor eV(exposure);
-    m_view->image()->projection()->colorSpace()->profile()->setProperty("exposure", exposure);
-    m_view->image()->rootLayer()->accept(eV);
-    m_view->canvasBase()->updateCanvas();
-    m_view->canvasBase()->startUpdateCanvasProjection(m_view->image()->bounds());
+}
+
+float KisCanvasResourceProvider::HDRGamma() const
+{
+    return static_cast<float>(m_resourceManager->resource(HdrGamma).toDouble());
+}
+
+void KisCanvasResourceProvider::setHDRGamma(float gamma)
+{
+    m_resourceManager->setResource(HdrGamma, static_cast<double>(gamma));
 }
 
 
@@ -316,6 +323,7 @@ void KisCanvasResourceProvider::slotResourceChanged(int key, const QVariant & re
         break;
     case(CurrentCompositeOp) :
         emit sigCompositeOpChanged(currentCompositeOp());
+        break;
     case (Opacity):
     {
         emit sigOpacityChanged(res.toDouble());
@@ -400,6 +408,16 @@ void KisCanvasResourceProvider::setOpacity(qreal opacity)
 qreal KisCanvasResourceProvider::opacity()
 {
     return m_resourceManager->resource(Opacity).toDouble();
+}
+
+void KisCanvasResourceProvider::notifyLoadingWorkspace(KisWorkspaceResource* workspace)
+{
+    emit sigLoadingWorkspace(workspace);
+}
+
+void KisCanvasResourceProvider::notifySavingWorkspace(KisWorkspaceResource* workspace)
+{
+    emit sigSavingWorkspace(workspace);
 }
 
 #include "kis_canvas_resource_provider.moc"

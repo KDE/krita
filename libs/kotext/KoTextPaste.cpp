@@ -38,7 +38,7 @@
 class KoTextPaste::Private
 {
 public:
-    Private(KoTextEditor *editor, KoShapeController *shapeController, const Soprano::Model *_rdfModel)
+    Private(KoTextEditor *editor, KoShapeController *shapeController, QSharedPointer<Soprano::Model> _rdfModel)
         : editor(editor)
         , resourceManager(shapeController->resourceManager())
         , rdfModel(_rdfModel)
@@ -47,10 +47,10 @@ public:
 
     KoTextEditor *editor;
     KoDocumentResourceManager *resourceManager;
-    const Soprano::Model *rdfModel;
+    QSharedPointer<Soprano::Model> rdfModel;
 };
 
-KoTextPaste::KoTextPaste(KoTextEditor *editor, KoShapeController *shapeController, const Soprano::Model *rdfModel)
+KoTextPaste::KoTextPaste(KoTextEditor *editor, KoShapeController *shapeController, QSharedPointer<Soprano::Model> rdfModel)
         : d(new Private(editor, shapeController, rdfModel))
 {
 }
@@ -77,19 +77,17 @@ bool KoTextPaste::process(const KoXmlElement &body, KoOdfReadStore &odfStore)
     // RDF: Grab RDF metadata from ODF file if present & load it into rdfModel
     if (d->rdfModel)
     {
-        Soprano::Model *tmpmodel(Soprano::createModel());
+        QSharedPointer<Soprano::Model> tmpmodel(Soprano::createModel());
         ok = KoTextRdfCore::loadManifest(odfStore.store(), tmpmodel);
         kDebug(30015) << "ok:" << ok << " tmpmodel.sz:" << tmpmodel->statementCount();
         kDebug(30015) << "existing rdf model.sz:" << d->rdfModel->statementCount();
 #ifndef NDEBUG
         KoTextRdfCore::dumpModel("RDF from C+P", tmpmodel);
 #endif
-        const_cast<Soprano::Model*>(d->rdfModel)->addStatements(tmpmodel->listStatements().allElements());
-        delete tmpmodel;
-
+        d->rdfModel->addStatements(tmpmodel->listStatements().allElements());
         kDebug(30015) << "done... existing rdf model.sz:" << d->rdfModel->statementCount();
 #ifndef NDEBUG
-        KoTextRdfCore::dumpModel("Imported RDF after C+P", const_cast<Soprano::Model*>(d->rdfModel));
+        KoTextRdfCore::dumpModel("Imported RDF after C+P", d->rdfModel);
 #endif
     }
 #endif

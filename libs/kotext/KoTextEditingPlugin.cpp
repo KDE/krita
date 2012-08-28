@@ -43,7 +43,6 @@ KoTextEditingPlugin::~KoTextEditingPlugin()
 
 void KoTextEditingPlugin::selectWord(QTextCursor &cursor, int cursorPosition) const
 {
-    cursor.beginEditBlock(); //needed to work around qt4.8 bug
     cursor.setPosition(cursorPosition);
     QTextBlock block = cursor.block();
     cursor.setPosition(block.position());
@@ -65,7 +64,6 @@ void KoTextEditingPlugin::selectWord(QTextCursor &cursor, int cursorPosition) co
         iter++;
     }
     cursor.setPosition(pos + block.position(), QTextCursor::KeepAnchor);
-    cursor.endEditBlock(); //needed to work around qt4.8 bug (see above)
 }
 
 QString KoTextEditingPlugin::paragraph(QTextDocument *document, int cursorPosition) const
@@ -112,7 +110,7 @@ QHash<QString, KAction*> KoTextEditingPlugin::actions() const
     return d->actionCollection;
 }
 
-void KoTextEditingPlugin::setCurrentCursorPosition(const QTextDocument *document, int cursorPosition)
+void KoTextEditingPlugin::setCurrentCursorPosition(QTextDocument *document, int cursorPosition)
 {
     Q_UNUSED(cursorPosition);
     Q_UNUSED(document);

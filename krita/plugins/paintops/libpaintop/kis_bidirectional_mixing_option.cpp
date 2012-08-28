@@ -32,7 +32,7 @@
 #include <kis_paint_device.h>
 #include <kis_properties_configuration.h>
 #include "kis_bidirectional_mixing_option_widget.h"
-
+#include <kis_iterator_ng.h>
 
 KisBidirectionalMixingOption::KisBidirectionalMixingOption()
     : m_mixingEnabled(false)
@@ -55,24 +55,27 @@ void KisBidirectionalMixingOption::apply(KisPaintDeviceSP dab, KisPaintDeviceSP 
     p.bitBlt(sx, sy, device, dstRect.x(), dstRect.y(), sw, sh);
 
     int count = cs->channelCount();
-    KisRectIterator cit = canvas->createRectIterator(sx, sy, sw, sh);
-    KisRectIterator dit = dab->createRectIterator(sx, sy, sw, sh);
+    KisRectIteratorSP cit = canvas->createRectIteratorNG(sx, sy, sw, sh);
+    KisRectIteratorSP dit = dab->createRectIteratorNG(sx, sy, sw, sh);
     QVector<float> cc(count), dc(count);
-    while (!cit.isDone()) {
-        if (cs->opacityU8(dit.rawData()) > 10 && cs->opacityU8(cit.rawData()) > 10) {
-            cs->normalisedChannelsValue(cit.rawData(), cc);
-            cs->normalisedChannelsValue(dit.rawData(), dc);
+    do {
+        if (cs->opacityU8(dit->rawData()) > 10 && cs->opacityU8(cit->rawData()) > 10) {
+
+            cs->normalisedChannelsValue(cit->rawData(), cc);
+            cs->normalisedChannelsValue(dit->rawData(), dc);
+
             for (int i = 0; i < count; i++) {
                 dc[i] = (1.0 - 0.4 * pressure) * cc[i] + 0.4 * pressure * dc[i];
             }
-            cs->fromNormalisedChannelsValue(dit.rawData(), dc);
-            if (dit.x() == (int)(sw / 2) && dit.y() == (int)(sh / 2)) {
-                painter->setPaintColor(KoColor(dit.rawData(), cs));
+
+            cs->fromNormalisedChannelsValue(dit->rawData(), dc);
+
+            if (dit->x() == (int)(sw / 2) && dit->y() == (int)(sh / 2)) {
+                painter->setPaintColor(KoColor(dit->rawData(), cs));
             }
         }
-        ++cit;
-        ++dit;
-    }
+        dit->nextPixel();
+    } while(cit->nextPixel());
 }
 
 void KisBidirectionalMixingOption::applyFixed(KisFixedPaintDeviceSP dab, KisPaintDeviceSP device, KisPainter* painter, qint32 sx, qint32 sy, qint32 sw, qint32 sh, quint8 pressure, const QRect& dstRect)

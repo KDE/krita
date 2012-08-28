@@ -214,7 +214,8 @@ QPair<int, int>  KoTextInlineRdf::findExtent()
     if (d->bookmark && d->document) {
         KoBookmark *e = d->bookmark.data()->endBookmark();
         if (e) {
-          return QPair<int, int>(d->bookmark.data()->position(), e->position());
+            // kDebug(30015) << "(Semantic)bmark... start:" << d->bookmark.data()->position() << " end:" << e->position();
+            return QPair<int, int>(d->bookmark.data()->position(), e->position());
         }
     }
     if (d->kotextmeta && d->document) {
@@ -222,6 +223,7 @@ QPair<int, int>  KoTextInlineRdf::findExtent()
         if (!e) {
             return QPair<int, int>(0, 0);
         }
+        // kDebug(30015) << "(Semantic)meta... start:" << d->kotextmeta.data()->position() << " end:" << e->position();
         return QPair<int, int>(d->kotextmeta.data()->position(), e->position());
     }
     if (d->cell.isValid() && d->document) {

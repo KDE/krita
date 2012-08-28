@@ -60,7 +60,8 @@ namespace KoOdfNumberStyles
         NumericStyleFormat() : type(Text), precision(-1), thousandsSep(false) {}
     };
 
-    KOODF_EXPORT QString format(const QString &value, NumericStyleFormat format);
+    KOODF_EXPORT QString format(const QString &value, const NumericStyleFormat &format);
+
     KOODF_EXPORT QString formatNumber(qreal value, const QString &format, int precision = -1);
     KOODF_EXPORT QString formatBoolean(const QString &value, const QString &format);
     KOODF_EXPORT QString formatDate(int value, const QString &format);
@@ -71,7 +72,7 @@ namespace KoOdfNumberStyles
     KOODF_EXPORT QString formatPercent(const QString &value, const QString &format, int precision = -1);
 
     KOODF_EXPORT QPair<QString, NumericStyleFormat> loadOdfNumberStyle(const KoXmlElement &parent);
-    KOODF_EXPORT QString saveOdfNumberStyle(KoGenStyles &mainStyles, NumericStyleFormat format);
+    KOODF_EXPORT QString saveOdfNumberStyle(KoGenStyles &mainStyles, const NumericStyleFormat &format);
 
     KOODF_EXPORT QString saveOdfDateStyle(KoGenStyles &mainStyles, const QString &format, bool klocaleFormat, const QString &prefix = QString(), const QString &suffix = QString());
     KOODF_EXPORT QString saveOdfTimeStyle(KoGenStyles &mainStyles, const QString &format, bool klocaleFormat, const QString &prefix = QString(), const QString &suffix = QString());

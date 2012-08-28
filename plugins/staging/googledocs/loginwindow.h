@@ -19,18 +19,24 @@
 #ifndef LOGINWINDOW_H
 #define LOGINWINDOW_H
 
+#include <onlinedocument.h>
+
 #include <QDialog>
 
 #include "ui_authenticationdialog.h"
 
 class GoogleDocumentService;
 
+namespace KWallet {
+    class Wallet;
+}
+
 class LoginWindow : public QDialog
 {
     Q_OBJECT
 
 public:
-    LoginWindow(QWidget *parent = 0);
+    LoginWindow(OnlineDocument::DocumentType docType, QWidget *parent = 0);
     ~LoginWindow();
     GoogleDocumentService * googleService() {  return gdoc; }
     void showProgressIndicator(bool visible);
@@ -40,10 +46,16 @@ private slots:
     void serviceSelected(int index);
     void authenticated(bool success, QString errorString);
     void updateProgress(QString msg);
+    void closeWallet();
 
 private:
+    OnlineDocument::DocumentType m_type;
     Ui_Dialog *m_authDialog;
     GoogleDocumentService *gdoc;
+    KWallet::Wallet *m_wallet;
+
+    void saveUserDetails();
+    KWallet::Wallet *wallet();
 };
 
 #endif // LOGINWINDOW_H

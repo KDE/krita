@@ -101,6 +101,7 @@ public:
         AdditionalFontSize, //font-size-rel can specify an addition to the parent value
         UseWindowFontColor, //boolean, same as odf
         Blink,
+        AnchorType, //valid only if QTextCharFormat::isAnchor() is true
         InlineInstanceId = 577297549, // Internal: Reserved for KoInlineTextObjectManager
         ChangeTrackerId = 577297550, // Internal: Reserved for ChangeTracker
         FontYStretch = 577297551 // Internal: Ratio between Linux font pt size and Windows font height
@@ -177,6 +178,11 @@ public:
         LineHeight
     };
 
+    enum AnchorTypes {
+        Bookmark,
+        Anchor // corresponds to text:a ODF element
+    };
+
     /**
      * Constructor. Initializes with standard size/font properties.
      * @param parent the parent object for memory management purposes.
@@ -249,7 +255,7 @@ public:
     QFont::Capitalization fontCapitalization() const;
     /// Set font Y stretch
     void setFontYStretch(qreal stretch);
-    /// Return font Y stretch (value relevant for MS compatability)
+    /// Return font Y stretch (value relevant for MS compatibility)
     qreal fontYStretch() const;
 
 
@@ -411,6 +417,11 @@ public:
 
     void setAdditionalFontSize(qreal percent);
     qreal additionalFontSize() const;
+
+    /// set the anchor type, valid only if QTextCharFormat::isAnchor() is true
+    void setAnchorType(AnchorTypes anchorType);
+    /// returns the anchor type, valid only if QTextCharFormat::isAnchor() is true
+    AnchorTypes anchorType() const;
  
     void copyProperties(const KoCharacterStyle *style);
     void copyProperties(const QTextCharFormat &format);

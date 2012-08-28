@@ -63,7 +63,7 @@ public:
      * given model. if the model is not passed in then any Rdf in the
      * KoDocumentRdf is used to populate the tree.
      */
-    void update(KoDocumentRdf *rdf, Soprano::Model *model = 0);
+    void update(KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> model = QSharedPointer<Soprano::Model>(0));
 
 private:
     QExplicitlySharedDataPointer<KoRdfSemanticTreePrivate> d;

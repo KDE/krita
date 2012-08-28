@@ -47,6 +47,7 @@ public:
     KisShapeController(KisDoc2 * doc, KisNameServer *nameServer);
     ~KisShapeController();
 
+    bool hasDummyForNode(KisNodeSP node) const;
     KisNodeDummy* dummyForNode(KisNodeSP layer) const;
     KisNodeDummy* rootDummy() const;
     int dummiesCount() const;

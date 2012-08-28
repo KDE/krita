@@ -32,7 +32,10 @@ class KoColorConversionFromAlphaTransformationFactory : public KoColorConversion
 {
 public:
     KoColorConversionFromAlphaTransformationFactory(const QString& _dstModelId, const QString& _dstDepthId, const QString& _dstProfileName);
-    virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
+    virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace,
+                                                                       const KoColorSpace* dstColorSpace,
+                                                                       KoColorConversionTransformation::Intent renderingIntent,
+                                                                       KoColorConversionTransformation::ConversionFlags conversionFlags) const;
     virtual bool conserveColorInformation() const;
     virtual bool conserveDynamicRange() const;
 };
@@ -46,7 +49,10 @@ class KoColorConversionToAlphaTransformationFactory : public KoColorConversionTr
 {
 public:
     KoColorConversionToAlphaTransformationFactory(const QString& _dstModelId, const QString& _dstDepthId, const QString& _srcProfileName);
-    virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
+    virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace,
+                                                                       const KoColorSpace* dstColorSpace,
+                                                                       KoColorConversionTransformation::Intent renderingIntent,
+                                                                       KoColorConversionTransformation::ConversionFlags conversionFlags) const;
     virtual bool conserveColorInformation() const;
     virtual bool conserveDynamicRange() const;
 };

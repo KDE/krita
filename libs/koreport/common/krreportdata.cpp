@@ -69,20 +69,19 @@ KoReportReportData::KoReportReportData(const QDomElement & elemSource, QObject *
             if (pagetype == "predefined") {
                 page.setPageSize(elemThis.attribute("report:page-size", "A4"));
             } else if (pagetype == "custom") {
-                page.setCustomWidth(elemThis.attribute("report:custom-page-width", "").toDouble());
-                page.setCustomHeight(elemThis.attribute("report:custom-page-height", "").toDouble());
+                page.setCustomWidth(POINT_TO_INCH(KoUnit::parseValue(elemThis.attribute("report:custom-page-width", ""))) * KoDpi::dpiX());
+                page.setCustomHeight(POINT_TO_INCH(KoUnit::parseValue(elemThis.attribute("report:custom-page-height", ""))) * KoDpi::dpiY());
                 page.setPageSize("Custom");
             } else if (pagetype == "label") {
                 page.setLabelType(elemThis.firstChild().nodeValue());
             }
-
-            page.setMarginBottom(POINT_TO_INCH(elemThis.attribute("report:margin-bottom", "28.346").toDouble()) * KoDpi::dpiY());
-            page.setMarginTop(POINT_TO_INCH(elemThis.attribute("report:margin-top", "28.346").toDouble()) * KoDpi::dpiY());
-            page.setMarginLeft(POINT_TO_INCH(elemThis.attribute("report:margin-left", "28.346").toDouble()) * KoDpi::dpiY());
-            page.setMarginRight(POINT_TO_INCH(elemThis.attribute("report:margin-right", "28.346").toDouble()) * KoDpi::dpiY());
+            //@todo add config for default margins or add within templates support
+            page.setMarginBottom(POINT_TO_INCH(KoUnit::parseValue(elemThis.attribute("fo:margin-bottom", "1.0cm"))) * KoDpi::dpiY());
+            page.setMarginTop(POINT_TO_INCH(KoUnit::parseValue(elemThis.attribute("fo:margin-top", "1.0cm"))) * KoDpi::dpiY());
+            page.setMarginLeft(POINT_TO_INCH(KoUnit::parseValue(elemThis.attribute("fo:margin-left", "1.0cm"))) * KoDpi::dpiX());
+            page.setMarginRight(POINT_TO_INCH(KoUnit::parseValue(elemThis.attribute("fo:margin-right", "1.0cm"))) * KoDpi::dpiX());
 
             page.setPortrait(elemThis.attribute("report:print-orientation", "portrait") == "portrait");
-
 
         } else if (elemThis.tagName() == "report:body") {
             QDomNodeList sectionlist = elemThis.childNodes();
@@ -297,4 +296,9 @@ KRSectionData* KoReportReportData::section(KRSectionData::Section s) const
         sec = 0;
     }
     return sec;
+}
+
+ReportPageOptions KoReportReportData::pageOptions() const
+{
+    return page;
 }

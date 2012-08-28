@@ -251,9 +251,8 @@ public:
         Reserved1, ///< @internal for binary compatible extensions
         /// For elements that are children of the style itself, not any of the properties
         StyleChildElement,
-        ChildElement, ///< @internal
         /// @internal @note always update when adding values to this enum
-        LastPropertyType = ChildElement
+        LastPropertyType = StyleChildElement
     };
 
     /// Add a property to the style. Passing DefaultType as property type uses a style-type specific property type.
@@ -354,11 +353,22 @@ public:
     void addAttributePt(const QString &attrName, qreal attrValue);
 
     /**
+     * Add an attribute that represents a percentage value as defined in ODF
+     */
+    void addAttributePercent(const QString &attrName, qreal value);
+
+    /**
+     * Add an attribute that represents a percentage value as defined in ODF
+     */
+    void addAttributePercent(const QString &attrName, int value);
+
+    /**
      *  Remove an attribute from the style.
      */
     void removeAttribute(const QString &attrName) {
         m_attributes.remove(attrName);
     }
+
 
     /**
      * @brief Add a child element to the style properties.
@@ -379,16 +389,22 @@ public:
      *
      * The value of @p elementName is only used to set the order on how the child elements are written out.
      */
-    void addChildElement(const QString &elementName, const QString& elementContents) {
-        m_properties[ChildElement].insertMulti(elementName, elementContents);
+    void addChildElement(const QString &elementName, const QString& elementContents, PropertyType type = DefaultType) {
+        if (type == DefaultType) {
+            type = m_propertyType;
+        }
+        m_childProperties[type].insert(elementName, elementContents);
     }
 
     /**
      * Same like \a addChildElement above but with QByteArray to explicit convert from QByteArray
      * to QString using utf8 to prevent a dirty pitfall.
      */
-    void addChildElement(const QString &elementName, const QByteArray& elementContents) {
-        m_properties[ChildElement].insertMulti(elementName, QString::fromUtf8(elementContents));
+    void addChildElement(const QString &elementName, const QByteArray& elementContents, PropertyType type = DefaultType) {
+        if (type == DefaultType) {
+            type = m_propertyType;
+        }
+        m_childProperties[type].insert(elementName, QString::fromUtf8(elementContents));
     }
 
     /**
@@ -473,6 +489,21 @@ public:
         return QString();
     }
 
+    /**
+     * Returns a property of this style. In prinicpal this class is meant to be write-only, but
+     * some exceptional cases having read-support as well is very useful.  Passing DefaultType
+     * as property type uses a style-type specific property type.
+     */
+    QString childProperty(const QString &propName, PropertyType type = DefaultType) const {
+        if (type == DefaultType) {
+            type = m_propertyType;
+        }
+        const QMap<QString, QString>::const_iterator it = m_childProperties[type].constFind(propName);
+        if (it != m_childProperties[type].constEnd())
+            return it.value();
+        return QString();
+    }
+
     /// Returns an attribute of this style. In prinicpal this class is meant to be write-only, but some exceptional cases having read-support as well is very useful.
     QString attribute(const QString &propName) const {
         const QMap<QString, QString>::const_iterator it = m_attributes.constFind(propName);
@@ -504,6 +535,7 @@ private:
     /// We use QMaps since they provide automatic sorting on the key (important for unicity!)
     typedef QMap<QString, QString> StyleMap;
     StyleMap m_properties[LastPropertyType+1];
+    StyleMap m_childProperties[LastPropertyType+1];
     StyleMap m_attributes;
     QList<StyleMap> m_maps; // we can't really sort the maps between themselves...
 

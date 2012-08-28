@@ -1,6 +1,6 @@
 /* This file is part of the Calligra project
  * Copyright (C) 2005 Thomas Zander <zander@kde.org>
- * Copyright (C) 2005 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2005 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -39,6 +39,7 @@
 
 #include <kis_debug.h>
 
+#include <KoIcon.h>
 #include <KoCompositeOp.h>
 #include <KoUnitDoubleSpinBox.h>
 #include <KoColorSpaceRegistry.h>
@@ -74,15 +75,15 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
     doubleWidth->setValue(defWidth);
     doubleWidth->setDecimals(0);
     m_width = m_widthUnit.fromUserValue(defWidth);
-    cmbWidthUnit->addItems(KoUnit::listOfUnitName(false));
-    cmbWidthUnit->setCurrentIndex(KoUnit::Pixel);
+    cmbWidthUnit->addItems(KoUnit::listOfUnitNameForUi(KoUnit::ListAll));
+    cmbWidthUnit->setCurrentIndex(m_widthUnit.indexInListForUi(KoUnit::ListAll));
 
     m_heightUnit = KoUnit(KoUnit::Pixel, resolution);
     doubleHeight->setValue(defHeight);
     doubleHeight->setDecimals(0);
     m_height = m_heightUnit.fromUserValue(defHeight);
-    cmbHeightUnit->addItems(KoUnit::listOfUnitName(false));
-    cmbHeightUnit->setCurrentIndex(KoUnit::Pixel);
+    cmbHeightUnit->addItems(KoUnit::listOfUnitNameForUi(KoUnit::ListAll));
+    cmbHeightUnit->setCurrentIndex(m_heightUnit.indexInListForUi(KoUnit::ListAll));
 
     doubleResolution->setValue(72.0 * resolution);
     doubleResolution->setDecimals(0);
@@ -101,9 +102,9 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
     connect(createButton, SIGNAL(clicked()), this, SLOT(createImage()));
     createButton->setDefault(true);
 
-    bnPortrait->setIcon(KIcon("portrait"));
+    bnPortrait->setIcon(koIcon("portrait"));
     connect(bnPortrait, SIGNAL(toggled(bool)), SLOT(switchWidthHeight()));
-    bnLandscape->setIcon(KIcon("landscape"));
+    bnLandscape->setIcon(koIcon("landscape"));
 
     connect(bnSaveAsPredefined, SIGNAL(clicked()), this, SLOT(saveAsPredefined()));
 
@@ -132,13 +133,13 @@ KisCustomImageWidget::~KisCustomImageWidget()
 
 void KisCustomImageWidget::resolutionChanged(double res)
 {
-    if (m_widthUnit.indexInList(KoUnit::ShowAll) == KoUnit::Pixel) {
-        m_widthUnit = KoUnit(KoUnit::Pixel, res / 72.0);
+    if (m_widthUnit.type() == KoUnit::Pixel) {
+        m_widthUnit.setFactor(res / 72.0);
         m_width = m_widthUnit.fromUserValue(doubleWidth->value());
     }
 
-    if (m_heightUnit.indexInList(KoUnit::ShowAll) == KoUnit::Pixel) {
-        m_heightUnit = KoUnit(KoUnit::Pixel, res / 72.0);
+    if (m_heightUnit.type() == KoUnit::Pixel) {
+        m_heightUnit.setFactor(res / 72.0);
         m_height = m_heightUnit.fromUserValue(doubleHeight->value());
     }
 }
@@ -148,12 +149,12 @@ void KisCustomImageWidget::widthUnitChanged(int index)
 {
     doubleWidth->blockSignals(true);
 
-    if (index == KoUnit::Pixel) {
+    m_widthUnit = KoUnit::fromListForUi(index, KoUnit::ListAll);
+    if (m_widthUnit.type() == KoUnit::Pixel) {
         doubleWidth->setDecimals(0);
-        m_widthUnit = KoUnit(KoUnit::Pixel, doubleResolution->value() / 72.0);
+        m_widthUnit.setFactor(doubleResolution->value() / 72.0);
     } else {
         doubleWidth->setDecimals(2);
-        m_widthUnit = KoUnit((KoUnit::Unit)cmbWidthUnit->currentIndex());
     }
 
     doubleWidth->setValue(KoUnit::ptToUnit(m_width, m_widthUnit));
@@ -170,12 +171,12 @@ void KisCustomImageWidget::heightUnitChanged(int index)
 {
     doubleHeight->blockSignals(true);
 
-    if (index == KoUnit::Pixel) {
+    m_heightUnit = KoUnit::fromListForUi(index, KoUnit::ListAll);
+    if (m_heightUnit.type() == KoUnit::Pixel) {
         doubleHeight->setDecimals(0);
-        m_heightUnit = KoUnit(KoUnit::Pixel, doubleResolution->value() / 72.0);
+        m_heightUnit.setFactor(doubleResolution->value() / 72.0);
     } else {
         doubleHeight->setDecimals(2);
-        m_heightUnit = KoUnit((KoUnit::Unit)cmbHeightUnit->currentIndex());
     }
 
     doubleHeight->setValue(KoUnit::ptToUnit(m_height, m_heightUnit));
@@ -273,8 +274,10 @@ void KisCustomImageWidget::clipboardDataChanged()
 void KisCustomImageWidget::screenSizeClicked()
 {
     QSize sz = QApplication::desktop()->screenGeometry(this).size();
-    cmbWidthUnit->setCurrentIndex(KoUnit::Pixel);
-    cmbHeightUnit->setCurrentIndex(KoUnit::Pixel);
+
+    const int index = KoUnit(KoUnit::Pixel).indexInListForUi(KoUnit::ListAll);
+    cmbWidthUnit->setCurrentIndex(index);
+    cmbHeightUnit->setCurrentIndex(index);
     widthUnitChanged(cmbWidthUnit->currentIndex());
     heightUnitChanged(cmbHeightUnit->currentIndex());
 

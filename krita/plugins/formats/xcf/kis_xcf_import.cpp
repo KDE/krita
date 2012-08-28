@@ -40,12 +40,12 @@
 #include <kis_doc2.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
-#include <kis_iterator.h>
 #include <kis_paint_device.h>
 #include <kis_transaction.h>
 #include <kis_paint_layer.h>
 #include <kis_transparency_mask.h>
-
+#include "kis_iterator_ng.h"
+#include "kis_types.h"
 #include <KoColorModelStandardIds.h>
 extern "C" {
 
@@ -228,7 +228,7 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
         }
 
         // Create the layer
-        KisPaintLayerSP layer = new KisPaintLayer(image, xcflayer.name, xcflayer.opacity, colorSpace);
+        KisPaintLayerSP layer = new KisPaintLayer(image, QString::fromUtf8(xcflayer.name), xcflayer.opacity, colorSpace);
         KisTransaction("", layer -> paintDevice());
 
         // Set some properties
@@ -253,29 +253,27 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
                 want.b = want.t + TILE_HEIGHT;
                 want.r = want.l + TILE_WIDTH;
                 Tile* tile = getMaskOrLayerTile(&xcflayer.dim, &xcflayer.pixels, want);
-                KisHLineIteratorPixel it = layer->paintDevice()->createHLineIterator(x, y, TILE_WIDTH);
+                KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(x, y, TILE_WIDTH);
                 rgba* data = tile->pixels;
                 for (int v = 0; v < TILE_HEIGHT; ++v) {
                     if (isRgbA) {
                         // RGB image
-                        while (!it.isDone()) {
-                            KoRgbTraits<quint8>::setRed(it.rawData(), GET_RED(*data));
-                            KoRgbTraits<quint8>::setGreen(it.rawData(), GET_GREEN(*data));
-                            KoRgbTraits<quint8>::setBlue(it.rawData(), GET_BLUE(*data));
-                            KoRgbTraits<quint8>::setOpacity(it.rawData(), quint8(GET_ALPHA(*data)), 1);
+                        do {
+                            KoBgrTraits<quint8>::setRed(it->rawData(), GET_RED(*data));
+                            KoBgrTraits<quint8>::setGreen(it->rawData(), GET_GREEN(*data));
+                            KoBgrTraits<quint8>::setBlue(it->rawData(), GET_BLUE(*data));
+                            KoBgrTraits<quint8>::setOpacity(it->rawData(), quint8(GET_ALPHA(*data)), 1);
                             ++data;
-                            ++it;
-                        }
+                        } while (it->nextPixel());
                     } else {
                         // Grayscale image
-                        while (!it.isDone()) {
-                            it.rawData()[0] = GET_RED(*data);
-                            it.rawData()[1] = GET_ALPHA(*data);
+                        do {
+                            it->rawData()[0] = GET_RED(*data);
+                            it->rawData()[1] = GET_ALPHA(*data);
                             ++data;
-                            ++it;
-                        }
+                        } while (it->nextPixel());
                     }
-                    it.nextRow();
+                    it->nextRow();
                 }
             }
         }
@@ -295,15 +293,14 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
                     want.b = want.t + TILE_HEIGHT;
                     want.r = want.l + TILE_WIDTH;
                     Tile* tile = getMaskOrLayerTile(&xcflayer.dim, &xcflayer.mask, want);
-                    KisHLineIteratorPixel it = mask->paintDevice()->createHLineIterator(x, y, TILE_WIDTH);
+                    KisHLineIteratorSP it = mask->paintDevice()->createHLineIteratorNG(x, y, TILE_WIDTH);
                     rgba* data = tile->pixels;
                     for (int v = 0; v < TILE_HEIGHT; ++v) {
-                        while (!it.isDone()) {
-                            it.rawData()[0] = GET_ALPHA(*data);
+                        do {
+                            it->rawData()[0] = GET_ALPHA(*data);
                             ++data;
-                            ++it;
-                        }
-                        it.nextRow();
+                        } while (it->nextPixel());
+                        it->nextRow();
                     }
 
                 }

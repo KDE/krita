@@ -25,6 +25,7 @@
 
 #include "komain_export.h"
 
+class KoUnit;
 class KoDocument;
 class KoGridData;
 
@@ -40,7 +41,7 @@ public:
 
 public slots:
     void slotDefault();
-    void slotUnitChanged(int);
+    void slotUnitChanged(const KoUnit &unit);
     void spinBoxHSpacingChanged(qreal);
     void spinBoxVSpacingChanged(qreal);
 

@@ -58,6 +58,7 @@ set(kotext_LIB_SRCS
     KoTableColumnAndRowStyleManager.cpp
     KoTextInlineRdf.cpp
     KoTextMeta.cpp
+    KoTextTableTemplate.cpp
 
     ToCBibGeneratorInfo.cpp
     KoTableOfContentsGeneratorInfo.cpp
@@ -101,8 +102,10 @@ set(kotext_LIB_SRCS
     commands/DeleteTableColumnCommand.cpp
     commands/DeleteTableRowCommand.cpp
     commands/InsertDeleteChangesCommand.cpp
+    commands/InsertNoteCommand.cpp
     commands/InsertTableColumnCommand.cpp
     commands/InsertTableRowCommand.cpp
+    commands/ResizeTableCommand.cpp
     commands/InsertInlineObjectCommand.cpp
     commands/ListItemNumberingCommand.cpp
     commands/RemoveDeleteChangesCommand.cpp
@@ -175,6 +178,7 @@ install(
     KoTextSoftPageBreak.cpp
     KoSection.h
     KoTextCommandBase.h
+    KoTextTableTemplate.h
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel

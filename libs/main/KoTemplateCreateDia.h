@@ -25,13 +25,10 @@
 #include <kdialog.h>
 #include "komain_export.h"
 
-#include <QPixmap>
-#include <QByteArray>
-
 class QString;
 class QPixmap;
-class QWidget;
 class KComponentData;
+class KoDocument;
 class KoTemplateCreateDiaPrivate;
 
 /****************************************************************************
@@ -44,18 +41,19 @@ class KOMAIN_EXPORT KoTemplateCreateDia : public KDialog
 {
     Q_OBJECT
 
-public:
-    KoTemplateCreateDia( const QByteArray &templateType, const KComponentData &instance,
-                         const QString &file, const QPixmap &pix, QWidget *parent=0 );
+private:
+    KoTemplateCreateDia( const char *templateType, const KComponentData &instance,
+                         const QString &filePath, const QPixmap &thumbnail, QWidget *parent=0 );
     ~KoTemplateCreateDia();
 
-    static void createTemplate( const QByteArray &templateType, const KComponentData &instance,
-                                const QString &file, const QPixmap &pix, QWidget *parent=0 );
-
-protected slots:
-    void slotOk();
+public:
+    static void createTemplate(const char *templateType, const char *suffix,
+                               const KComponentData &componentData,
+                               KoDocument *document, QWidget *parent = 0);
 
 private slots:
+    void slotOk();
+
     void slotDefault();
     void slotCustom();
     void slotSelect();
@@ -68,8 +66,7 @@ private:
     void updatePixmap();
     void fillGroupTree();
 
-    QString m_file;
-    QPixmap m_pixmap;
+private:
     KoTemplateCreateDiaPrivate * const d;
 };
 

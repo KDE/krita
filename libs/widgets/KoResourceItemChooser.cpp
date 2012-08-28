@@ -36,7 +36,6 @@
 #include <QSplitter>
 
 #include <kfiledialog.h>
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <klineedit.h>
@@ -47,6 +46,8 @@
 #include <knewstuff3/downloaddialog.h>
 #include <knewstuff3/uploaddialog.h>
 #endif
+
+#include <KoIcon.h>
 
 #include "KoResourceServerAdapter.h"
 #include "KoResourceItemView.h"
@@ -62,6 +63,7 @@ public:
         , view(0)
         , buttonGroup(0)
         , tiledPreview(false)
+        , grayscalePreview(false)
     {}
     KoResourceModel* model;
     KoResourceItemView* view;
@@ -73,6 +75,7 @@ public:
     QLabel *previewLabel;
     QSplitter *splitter;
     bool tiledPreview;
+    bool grayscalePreview;
 };
 
 KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * resourceAdapter, QWidget *parent )
@@ -99,6 +102,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
 
     d->splitter->addWidget(d->view);
     d->splitter->addWidget(d->previewScroller);
+    connect(d->splitter, SIGNAL(splitterMoved(int,int)), SIGNAL(splitterMoved()));
 
     d->buttonGroup = new QButtonGroup( this );
     d->buttonGroup->setExclusive( false );
@@ -119,21 +123,21 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     QGridLayout* buttonLayout = new QGridLayout;
 
     QPushButton *button = new QPushButton( this );
-    button->setIcon( SmallIcon("document-open") );
+    button->setIcon(koIcon("document-open"));
     button->setToolTip( i18n("Import Resource") );
     button->setEnabled( true );
     d->buttonGroup->addButton( button, Button_Import );
     buttonLayout->addWidget( button, 0, 0 );
 
     button = new QPushButton( this );
-    button->setIcon( SmallIcon("trash-empty") );
+    button->setIcon(koIcon("trash-empty"));
     button->setToolTip( i18n("Delete Resource") );
     button->setEnabled( false );
     d->buttonGroup->addButton( button, Button_Remove );
     buttonLayout->addWidget( button, 0, 1 );
 
     button = new QPushButton( this );
-    button->setIcon( SmallIcon("download") );
+    button->setIcon(koIcon("download"));
     button->setToolTip( i18n("Download Resource") );
     button->setEnabled( true );
     button->hide();
@@ -141,7 +145,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     buttonLayout->addWidget( button, 0, 3 );
 
     button = new QPushButton( this );
-    button->setIcon( SmallIcon("go-up") );
+    button->setIcon(koIcon("go-up"));
     button->setToolTip( i18n("Share Resource") );
     button->setEnabled( false );
     button->hide();
@@ -332,10 +336,6 @@ void KoResourceItemChooser::setCurrentResource(KoResource* resource)
 void KoResourceItemChooser::showPreview(bool show)
 {
     d->previewScroller->setVisible(show);
-    if (show) {
-        d->view->setMinimumSize(200, 200);
-        d->previewScroller->setMinimumSize(200, 200);
-    }
 }
 
 void KoResourceItemChooser::setPreviewOrientation(Qt::Orientation orientation)
@@ -346,6 +346,11 @@ void KoResourceItemChooser::setPreviewOrientation(Qt::Orientation orientation)
 void KoResourceItemChooser::setPreviewTiled(bool tiled)
 {
     d->tiledPreview = tiled;
+}
+
+void KoResourceItemChooser::setGrayscalePreview(bool grayscale)
+{
+    d->grayscalePreview = grayscale;
 }
 
 void KoResourceItemChooser::setCurrentItem(int row, int column)
@@ -408,8 +413,8 @@ void KoResourceItemChooser::updatePreview(KoResource *resource)
 
     QImage image = resource->image();
     if (d->tiledPreview) {
-        int width = qMax(d->previewScroller->width() * 4, image.width() * 4);
-        int height = qMax(d->previewScroller->height() * 4, image.height() * 4);
+        int width = d->previewScroller->width() * 4;
+        int height = d->previewScroller->height() * 4;
         QImage img(width, height, image.format());
         QPainter gc(&img);
         gc.fillRect(img.rect(), Qt::white);
@@ -417,6 +422,20 @@ void KoResourceItemChooser::updatePreview(KoResource *resource)
         gc.setBrush(QBrush(image));
         gc.drawRect(img.rect());
         image = img;
+    }
+
+    if (d->grayscalePreview) {
+        QRgb* pixel = reinterpret_cast<QRgb*>( image.bits() );
+        for (int row = 0; row < image.height(); ++row ) {
+            for (int col = 0; col < image.width(); ++col ){
+                const QRgb currentPixel = pixel[row * image.width() + col];
+                const int red = qRed(currentPixel);
+                const int green = qGreen(currentPixel);
+                const int blue = qBlue(currentPixel);
+                const int grayValue = (red * 11 + green * 16 + blue * 5) / 32;
+                pixel[row * image.width() + col] = qRgb(grayValue, grayValue, grayValue);
+            }
+        }
     }
     d->previewLabel->setPixmap(QPixmap::fromImage(image));
 

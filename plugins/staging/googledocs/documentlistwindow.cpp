@@ -33,11 +33,13 @@ DocumentListWindow::DocumentListWindow(GoogleDocumentService *service, GoogleDoc
     m_docListDialog->setupUi(this);
     connect(m_docListDialog->listView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(getClickedDocument(const QModelIndex &)));
     connect(m_docListDialog->okButton, SIGNAL(clicked()), this, SLOT(fetchDocument()));
-    connect(m_docListDialog->closeButton, SIGNAL(clicked()), this, SLOT(close()));
+    connect(m_docListDialog->closeButton, SIGNAL(clicked()), this, SLOT(hideDialog()));
 
-    m_documentList = gList->entries();
     m_docListDialog->listView->setModel(gList->documentModel());
+    m_docListDialog->listView->hideColumn(1);
+    m_docListDialog->listView->setItemsExpandable(false);
     show();
+    m_docListDialog->listView->setColumnWidth(0, m_docListDialog->listView->rect().width() * 0.75);
 }
 
 DocumentListWindow::~DocumentListWindow()
@@ -77,3 +79,8 @@ QString DocumentListWindow::currentDocument()
     return (name + ext);
 }
 
+void DocumentListWindow::hideDialog()
+{
+    m_docListDialog->okButton->setEnabled(true);
+    hide();
+}

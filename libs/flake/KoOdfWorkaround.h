@@ -106,6 +106,47 @@ namespace KoOdfWorkaround
      * This methods returns true if we need to adjust the layout. The adjusting is handled at a different place.
      */
     FLAKE_EXPORT bool fixAutoGrow(KoTextShapeDataBase::ResizeMethod method, KoShapeLoadingContext &context);
+
+    /**
+     * OpenOffice and LibreOffice do not set the svg:width, svg:height, svg:x and svg:y correctly when saving
+     * parts of draw:ellipses or draw:circle
+     * This method returns true when the width, height, x and y is given for the full circle
+     */
+    FLAKE_EXPORT bool fixEllipse(const QString &kind, KoShapeLoadingContext &context);
+
+    /**
+     * Calligra did use the bad strings "Formula.hidden" and "protected Formula.hidden" as values
+     * for style:cell-protect, instead of "formula-hidden" and "protected formula-hidden".
+     * This method fixes the bad strings to the correct ones.
+     */
+    FLAKE_EXPORT void fixBadFormulaHiddenForStyleCellProtect(QString &value);
+
+    /**
+     * Calligra used to store text:time-value with a "0-00-00T" prefix
+     * This method removes that prefix.
+     */
+    FLAKE_EXPORT void fixBadDateForTextTime(QString &value);
+
+    /**
+     * OpenOffice.org used to write the "rect(...)" value for fo:clip without
+     * separating the 4 offset values by commas.
+     * This method changes the string with the offset values to have commas as separators.
+     */
+    FLAKE_EXPORT void fixClipRectOffsetValuesString(QString &offsetValuesString);
+
+    /**
+     * LibreOffice used to write text:style-name attribute for table:table-template element,
+     * which is not a valid attribute for the element.
+     */
+    FLAKE_EXPORT QString fixTableTemplateName(const KoXmlElement &e);
+
+    /**
+     * LibreOffice used to write text:style-name attribute for
+     * table:first-row, table:last-row, table:first-column,
+     * table:last-column, table:odd-rows, table:odd-columns,
+     * table:body elements, which is not a valid attribute for the element.
+     */
+    FLAKE_EXPORT QString fixTableTemplateCellStyleName(const KoXmlElement &e);
 }
 
 #endif /* KOODFWORKAROUND_H */

@@ -31,7 +31,7 @@
 
 void KisProjectionBenchmark::initTestCase()
 {
-    
+
 }
 
 void KisProjectionBenchmark::cleanupTestCase()
@@ -42,7 +42,10 @@ void KisProjectionBenchmark::cleanupTestCase()
 void KisProjectionBenchmark::benchmarkProjection()
 {
     QBENCHMARK{
-        KisDoc2 doc;
+        KisPart2 *p = new KisPart2();
+        KisDoc2 doc(p);
+        p->setDocument(&doc);
+
         doc.loadNativeFormat(QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra");
         doc.image()->refreshGraph();
         doc.saveNativeFormat(QString(FILES_OUTPUT_DIR) + QDir::separator() + "save_test.kra");
@@ -52,7 +55,9 @@ void KisProjectionBenchmark::benchmarkProjection()
 void KisProjectionBenchmark::benchmarkLoading()
 {
     QBENCHMARK{
-        KisDoc2 doc;
+        KisPart2 *p = new KisPart2();
+        KisDoc2 doc(p);
+        p->setDocument(&doc);
         doc.loadNativeFormat(QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra");
     }
 }

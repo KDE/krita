@@ -82,15 +82,6 @@ public:
     const QBitArray& temporaryChannelFlags() const;
 
 private:
-    /**
-     * Adds a dirty rect to the list of rects those should be
-     * merged to the layer after the indirect painting is finished
-     * WARNING: should be called with the lock held
-     *
-     * \see lockTemporaryTarget()
-     */
-    void addIndirectlyDirtyRect(const QRect &rect);
-    QRegion indirectlyDirtyRegion();
 
     template<class UndoAdapter>
         void mergeToLayerImpl(KisLayerSP layer,

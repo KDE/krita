@@ -21,7 +21,6 @@
 
 #include <QApplication>
 #include <QPainter>
-#include <QRegion>
 #include <QWidget>
 #include <QLayout>
 

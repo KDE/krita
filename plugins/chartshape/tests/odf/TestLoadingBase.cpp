@@ -70,6 +70,9 @@ void TestLoadingBase::initTestCase()
 
     bool hasDocDirInSrcDir = srcdir.cd("doc");
     QVERIFY(hasDocDirInSrcDir);
+    // Go back up, we only used the cd as a test.
+    if (hasDocDirInSrcDir)
+        srcdir.cd("..");
 
     KoStore *store = KoStore::createStore(srcdir.absolutePath(), KoStore::Read);
     QVERIFY(store->enterDirectory("doc"));

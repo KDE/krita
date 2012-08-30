@@ -37,8 +37,6 @@ struct KisIndirectPaintingSupport::Private {
     quint8 compositeOpacity;
     QBitArray channelFlags;
     QReadWriteLock lock;
-    QMutex dirtyRegionMutex;
-    QRect dirtyRegion;
 };
 
 
@@ -55,7 +53,6 @@ KisIndirectPaintingSupport::~KisIndirectPaintingSupport()
 
 void KisIndirectPaintingSupport::setTemporaryTarget(KisPaintDeviceSP t)
 {
-    d->dirtyRegion = QRect();
     d->temporaryTarget = t;
 }
 
@@ -114,17 +111,6 @@ bool KisIndirectPaintingSupport::hasTemporaryTarget() const
     return d->temporaryTarget;
 }
 
-void KisIndirectPaintingSupport::setDirty(const QRect &rect)
-{
-    lockTemporaryTarget();
-    if (hasTemporaryTarget()) {
-        QMutexLocker locker(&d->dirtyRegionMutex);
-        d->dirtyRegion |= rect;
-    }
-    unlockTemporaryTarget();
-}
-
-
 void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, KisUndoAdapter *undoAdapter, const QString &transactionText)
 {
     mergeToLayerImpl(layer, undoAdapter, transactionText);
@@ -157,9 +143,8 @@ void KisIndirectPaintingSupport::mergeToLayerImpl(KisLayerSP layer,
     if(undoAdapter) {
         gc.beginTransaction(transactionText);
     }
-    {
-        QMutexLocker locker(&d->dirtyRegionMutex);
-        gc.bitBlt(d->dirtyRegion.topLeft(), d->temporaryTarget, d->dirtyRegion);
+    foreach (const QRect &rc, d->temporaryTarget->region().rects()) {
+        gc.bitBlt(rc.topLeft(), d->temporaryTarget, rc);
     }
     d->temporaryTarget = 0;
 

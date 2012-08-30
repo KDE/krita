@@ -50,8 +50,6 @@ public:
     void setTemporaryOpacity(quint8 o);
     void setTemporaryChannelFlags(const QBitArray& channelFlags);
 
-    void setDirty(const QRect &rect);
-
     /**
      * Writes the temporary target into the paint device of the layer.
      * This action will lock the temporary target itself.

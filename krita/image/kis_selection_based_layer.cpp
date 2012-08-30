@@ -233,7 +233,6 @@ void KisSelectionBasedLayer::setY(qint32 y)
 
 void KisSelectionBasedLayer::setDirty(const QRect & rect)
 {
-    KisIndirectPaintingSupport::setDirty(rect);
     KisLayer::setDirty(rect);
 }
 

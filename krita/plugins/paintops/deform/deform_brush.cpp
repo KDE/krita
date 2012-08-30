@@ -58,11 +58,12 @@ inline void DeformBrush::movePixel(qreal newX, qreal newY, quint8 *dst)
         newY = qRound(newY);
     }
     m_srcAcc->moveTo(newX, newY);
-    // here there was a switch to select between new and old sampled data, but the
-    // sub accessor always used a const accessor, which means that there was no
-    // difference.
-    m_srcAcc->sampledOldRawData(dst);
 
+    if (m_properties->useOldData) {
+        m_srcAcc->sampledOldRawData(dst);
+    } else {
+        m_srcAcc->sampledRawData(dst);
+    }
 }
 
 void DeformBrush::oldDeform(KisPaintDeviceSP dab,KisPaintDeviceSP layer,QPointF pos)
@@ -110,7 +111,7 @@ void DeformBrush::oldDeform(KisPaintDeviceSP dab,KisPaintDeviceSP layer,QPointF 
 void DeformBrush::initDeformAction()
 {
     DeformModes mode = DeformModes(m_properties->action-1);
-    
+
     switch(mode){
         case GROW:
         case SHRINK:
@@ -217,10 +218,10 @@ bool DeformBrush::setupAction(DeformModes mode,const QPointF& pos)
     return true;
 }
 
-KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab, 
-                                             KisPaintDeviceSP layer, 
-                                             qreal scale, 
-                                             qreal rotation, 
+KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
+                                             KisPaintDeviceSP layer,
+                                             qreal scale,
+                                             qreal rotation,
                                              QPointF pos, qreal subPixelX, qreal subPixelY, int dabX, int dabY)
 {
     KisFixedPaintDeviceSP mask = new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
@@ -271,13 +272,13 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
     qreal bcosa = cos(rotation);
     qreal bsina = sin(rotation);
 
-    
+
     mask->setRect(dab->bounds());
     mask->initialize();
     quint8* maskPointer = mask->data();
     qint8 maskPixelSize = mask->pixelSize();
     KoColor pixel(dab->colorSpace());
-    
+
     for (int y = 0; y <  dstHeight; y++){
         for (int x = 0; x < dstWidth; x++){
             maskX = x - m_centerX;
@@ -317,10 +318,10 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
 
             movePixel(maskX, maskY, dabPointer);
             dabPointer += m_pixelSize;
-            
+
             *maskPointer = OPACITY_OPAQUE_U8;
             maskPointer += maskPixelSize;
-            
+
         }
     }
     m_counter++;

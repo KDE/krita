@@ -1,6 +1,6 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(  ${KOMAIN_INCLUDES} ${KOGUIUTILS_INCLUDES} )
-add_definitions(-DFILES_DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/data/\\"")
+add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
 
 ########### next target ###############
 set(kis_tiled_data_manager_test_SRCS kis_tiled_data_manager_test.cpp )

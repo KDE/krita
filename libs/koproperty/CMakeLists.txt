@@ -74,7 +74,7 @@ install(TARGETS ${KOPROPERTY_TARGETNAME} ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-add_definitions(-DKOPROPERTY_APP_DIR="\\"${KOPROPERTY_TARGETNAME}\\"") # for KIconLoader::global()->addAppDir();
+add_definitions(-DKOPROPERTY_APP_DIR="${KOPROPERTY_TARGETNAME}") # for KIconLoader::global()->addAppDir();
                                                                        # TODO remove when we move to independent place
 kde4_install_icons( ${DATA_INSTALL_DIR}/${KOPROPERTY_TARGETNAME}/icons )
 

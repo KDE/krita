@@ -97,6 +97,8 @@ public slots:
      */
     virtual void initEmpty();
 
+    void setImageModified();
+
 public:
 
     /**

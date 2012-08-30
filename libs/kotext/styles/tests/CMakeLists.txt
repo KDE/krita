@@ -3,7 +3,7 @@ include_directories(
     ${KOTEXT_INCLUDES}
     ${QT_INCLUDES})
 
-add_definitions(-DSPECS_DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/specs/\\"")
+add_definitions(-DSPECS_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/specs/")
 
 ########### next target ###############
 

@@ -318,7 +318,7 @@ bool KisDoc2::completeLoading(KoStore *store)
     setModified(false);
     m_d->shapeController->setImage(m_d->image);
 
-    connect(m_d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setModified(bool)));
+    connect(m_d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
 
     emit sigLoadingFinished();
 
@@ -361,7 +361,7 @@ bool KisDoc2::newImage(const QString& name,
     image = new KisImage(createUndoStore(), width, height, cs, name);
     Q_CHECK_PTR(image);
 
-    connect(image.data(), SIGNAL(sigImageModified()), this, SLOT(setModified(bool)));
+    connect(image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
     image->setResolution(imageResolution, imageResolution);
 
     image->assignImageProfile(cs->profile());
@@ -486,7 +486,7 @@ void KisDoc2::setCurrentImage(KisImageWSP image)
 
     setModified(false);
 
-    connect(m_d->image, SIGNAL(sigImageModified()), this, SLOT(setModified(bool)));
+    connect(m_d->image, SIGNAL(sigImageModified()), this, SLOT(setsetImageModified()));
 
     emit sigLoadingFinished();
 }
@@ -496,6 +496,11 @@ void KisDoc2::initEmpty()
     KisConfig cfg;
     const KoColorSpace * rgb = KoColorSpaceRegistry::instance()->rgb8();
     newImage("", cfg.defImageWidth(), cfg.defImageHeight(), rgb);
+}
+
+void KisDoc2::setImageModified()
+{
+    setModified(true);
 }
 
 

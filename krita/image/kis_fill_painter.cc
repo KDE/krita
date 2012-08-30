@@ -28,7 +28,6 @@
 #include <QFontInfo>
 #include <QFontMetrics>
 #include <QPen>
-#include <QRegion>
 #include <QMatrix>
 #include <QImage>
 #include <QMap>

@@ -486,7 +486,7 @@ void KisDoc2::setCurrentImage(KisImageWSP image)
 
     setModified(false);
 
-    connect(m_d->image, SIGNAL(sigImageModified()), this, SLOT(setsetImageModified()));
+    connect(m_d->image, SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
 
     emit sigLoadingFinished();
 }

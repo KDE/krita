@@ -47,6 +47,7 @@
 #include "kis_fill_painter.h"
 #include "kis_shape_selection.h"
 #include "util.h"
+#include "kis_part2.h"
 
 void KisKraSaverTest::testRoundTrip()
 {
@@ -58,7 +59,11 @@ void KisKraSaverTest::testRoundTrip()
 
     delete doc;
 
-    KisDoc2 doc2;
+
+    KisPart2 *p = new KisPart2();
+    KisDoc2 doc2(p);
+    p->setDocument(&doc2);
+
     doc2.loadNativeFormat("roundtriptest.kra");
 
     KisCountVisitor cv2(list, KoProperties());

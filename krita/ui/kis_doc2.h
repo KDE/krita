@@ -27,7 +27,7 @@
 #include <KoDocument.h>
 
 #include "kis_types.h"
-
+#include "kis_part2.h"
 #include <krita_export.h>
 #include <kis_painting_assistant.h>
 
@@ -64,7 +64,7 @@ class KRITAUI_EXPORT KisDoc2 : public KoDocument
     Q_OBJECT
 
 public:
-    KisDoc2(KoPart* parent = 0);
+    KisDoc2(KoPart* parent);
     virtual ~KisDoc2();
 
 public:

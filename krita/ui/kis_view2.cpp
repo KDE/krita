@@ -462,7 +462,10 @@ void KisView2::dropEvent(QDropEvent *event)
 
             QByteArray ba = event->mimeData()->data("application/x-krita-node");
 
-            KisDoc2 tempDoc;
+            KisPart2 *p = new KisPart2();
+            KisDoc2 tempDoc(p);
+            p->setDocument(&tempDoc);
+
             tempDoc.loadNativeFormatFromStore(ba);
 
             KisImageWSP tempImage = tempDoc.image();

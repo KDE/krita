@@ -69,6 +69,7 @@
 #include <metadata/kis_meta_data_store.h>
 #include <metadata/kis_meta_data_merge_strategy_registry.h>
 
+#include "kis_part2.h"
 #include "kis_config.h"
 #include "kis_cursor.h"
 #include "dialogs/kis_dlg_adj_layer_props.h"
@@ -174,9 +175,12 @@ public:
 
         }
         else if (layer->visible() || m_saveInvisible) {
+
             QRect r = m_image->bounds();
 
-            KisDoc2 d;
+            KisPart2 *p = new KisPart2();
+            KisDoc2 d(p);
+            p->setDocument(&d);
             d.prepareForImport();
 
             KisImageWSP dst = new KisImage(d.createUndoStore(), r.width(), r.height(), m_image->colorSpace(), layer->name());
@@ -909,7 +913,10 @@ void KisLayerManager::saveLayerAsImage()
 
     QRect r = image->bounds();
 
-    KisDoc2 d;
+    KisPart2 *p = new KisPart2();
+    KisDoc2 d(p);
+    p->setDocument(&d);
+
     d.prepareForImport();
 
     KisImageWSP dst = new KisImage(d.createUndoStore(), r.width(), r.height(), image->colorSpace(), l->name());

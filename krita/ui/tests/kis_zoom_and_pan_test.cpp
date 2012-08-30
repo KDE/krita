@@ -50,7 +50,7 @@ public:
 
         m_part = new KisPart2(0);
 
-        m_doc = new KisDoc2();
+        m_doc = new KisDoc2(m_part);
         m_doc->setCurrentImage(m_image);
 
         m_part->setDocument(m_doc);

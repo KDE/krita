@@ -117,4 +117,6 @@ void KisCircleMaskGenerator::setSoftness(qreal softness)
     }else{
         KisMaskGenerator::setSoftness(1.0 / softness);
     }
+    d->transformedFadeX = d->xfadecoef * this->softness();
+    d->transformedFadeY = d->yfadecoef * this->softness();
 }

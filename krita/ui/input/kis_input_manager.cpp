@@ -419,11 +419,21 @@ void KisInputManager::Private::setupActions()
     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MidButton);
 #endif
 
-    shortcut = createShortcut(action, KisZoomAction::ZoomInShortcut);
-    shortcut->setWheel(KisShortcut::WheelUp);
-
-    shortcut = createShortcut(action, KisZoomAction::ZoomOutShortcut);
-    shortcut->setWheel(KisShortcut::WheelDown);
+    /**
+     * FIXME: Zooming with Wheel is implemented on a level of
+     * KoCanvasControllerWidget and is done in a bit different way than
+     * usual zoom-in/out actions, because it tries to zoom around
+     * the mouse pointer. If you want to implement it in
+     * KisInputManager, please implement additional action that
+     * takes mouse position into account.
+     *
+     * Don't forget to disable wheel-zooming in KoCanvasControllerWidget
+     * before activation of this shortcut.
+     */
+    // shortcut = createShortcut(action, KisZoomAction::ZoomInShortcut);
+    // shortcut->setWheel(KisShortcut::WheelUp);
+    // shortcut = createShortcut(action, KisZoomAction::ZoomOutShortcut);
+    // shortcut->setWheel(KisShortcut::WheelDown);
 
     shortcut = createShortcut(action, KisZoomAction::ZoomInShortcut);
     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Plus);

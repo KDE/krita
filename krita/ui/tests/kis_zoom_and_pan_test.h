@@ -51,7 +51,8 @@ private:
                          const QPoint &newOffset,
                          const QPointF &newPreferredCenter,
                          qreal newZoom,
-                         QPointF newTopLeft);
+                         const QPointF &newTopLeft,
+                         const QSize &oldDocumentSize);
 
     bool checkZoomWithAction(ZoomAndPanTester &t, qreal newZoom);
     bool checkZoomWithWheel(ZoomAndPanTester &t, const QPoint &widgetPoint, qreal zoomCoeff);

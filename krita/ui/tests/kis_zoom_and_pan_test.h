@@ -29,6 +29,7 @@ class KisZoomAndPanTest : public QObject
     Q_OBJECT
 private slots:
     void testZoom100ChangingWidgetSize();
+    void testZoomOnBorderZoomLevels();
 
     void testSequentialActionZoomAndPan();
     void testSequentialActionZoomAndPanFullscreen();
@@ -54,8 +55,8 @@ private:
                          const QPointF &newTopLeft,
                          const QSize &oldDocumentSize);
 
-    bool checkZoomWithAction(ZoomAndPanTester &t, qreal newZoom);
-    bool checkZoomWithWheel(ZoomAndPanTester &t, const QPoint &widgetPoint, qreal zoomCoeff);
+    bool checkZoomWithAction(ZoomAndPanTester &t, qreal newZoom, bool limitedZoom = false);
+    bool checkZoomWithWheel(ZoomAndPanTester &t, const QPoint &widgetPoint, qreal zoomCoeff, bool limitedZoom = false);
     bool checkPan(ZoomAndPanTester &t, QPoint shift);
 
     void initializeViewport(ZoomAndPanTester &t, bool fullscreenMode, bool rotate, bool mirror);

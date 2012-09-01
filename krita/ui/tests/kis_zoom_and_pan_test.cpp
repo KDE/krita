@@ -265,7 +265,7 @@ bool KisZoomAndPanTest::checkInvariants(const QPointF &baseFlakePoint,
     return offsetAsExpected && preferredCenterAsExpected && topLeftAsExpected;
 }
 
-bool KisZoomAndPanTest::checkZoomWithAction(ZoomAndPanTester &t, qreal newZoom)
+bool KisZoomAndPanTest::checkZoomWithAction(ZoomAndPanTester &t, qreal newZoom, bool limitedZoom)
 {
     QPoint oldOffset = t.coordinatesConverter()->documentOffset();
     QPointF oldPrefCenter = t.canvasController()->preferredCenter();
@@ -282,12 +282,12 @@ bool KisZoomAndPanTest::checkZoomWithAction(ZoomAndPanTester &t, qreal newZoom)
                            oldZoom,
                            t.coordinatesConverter()->documentOffset(),
                            t.canvasController()->preferredCenter(),
-                           newZoom,
+                           limitedZoom ? oldZoom : newZoom,
                            newTopLeft,
                            oldDocumentSize);
 }
 
-bool KisZoomAndPanTest::checkZoomWithWheel(ZoomAndPanTester &t, const QPoint &widgetPoint, qreal zoomCoeff)
+bool KisZoomAndPanTest::checkZoomWithWheel(ZoomAndPanTester &t, const QPoint &widgetPoint, qreal zoomCoeff, bool limitedZoom)
 {
     QPoint oldOffset = t.coordinatesConverter()->documentOffset();
     QPointF oldPrefCenter = t.canvasController()->preferredCenter();
@@ -304,7 +304,7 @@ bool KisZoomAndPanTest::checkZoomWithWheel(ZoomAndPanTester &t, const QPoint &wi
                            oldZoom,
                            t.coordinatesConverter()->documentOffset(),
                            t.canvasController()->preferredCenter(),
-                           zoomCoeff * oldZoom,
+                           limitedZoom ? oldZoom : zoomCoeff * oldZoom,
                            newTopLeft,
                            oldDocumentSize);
 }
@@ -507,6 +507,23 @@ void KisZoomAndPanTest::testSequentialWheelZoomAndPanMirror()
     testSequentialWheelZoomAndPan(false, false, true);
 }
 
+void KisZoomAndPanTest::testZoomOnBorderZoomLevels()
+{
+    ZoomAndPanTester t;
+    initializeViewport(t, false, false, false);
+
+    QPoint widgetPoint(100,100);
+
+    // test min zoom level
+    t.zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, KoZoomMode::minimumZoom());
+    QVERIFY(checkZoomWithWheel(t, QPoint(100,100), 0.5, true));
+    QVERIFY(checkZoomWithAction(t, KoZoomMode::minimumZoom() * 0.5, true));
+
+    // test max zoom level
+    t.zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, KoZoomMode::maximumZoom());
+    QVERIFY(checkZoomWithWheel(t, QPoint(100,100), 2.0, true));
+    QVERIFY(checkZoomWithAction(t, KoZoomMode::maximumZoom() * 2.0, true));
+}
 
 
 QTEST_KDEMAIN(KisZoomAndPanTest, GUI)

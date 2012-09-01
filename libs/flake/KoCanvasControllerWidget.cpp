@@ -485,10 +485,8 @@ void KoCanvasControllerWidget::zoomBy(const QPoint &center, qreal zoom)
 
     const bool oldIgnoreScrollSignals = d->ignoreScrollSignals;
     d->ignoreScrollSignals = true;
-    proxyObject->emitZoomBy(zoom);
+    proxyObject->emitZoomRelative(zoom, preferredCenter());
     d->ignoreScrollSignals = oldIgnoreScrollSignals;
-    recenterPreferred();
-    d->canvas->canvasWidget()->update();
 }
 
 void KoCanvasControllerWidget::zoomTo(const QRect &viewRect)
@@ -598,15 +596,10 @@ void KoCanvasControllerWidget::keyPressEvent(QKeyEvent *event)
 void KoCanvasControllerWidget::wheelEvent(QWheelEvent *event)
 {
     if (d->zoomWithWheel != ((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier)) {
-        const bool oldIgnoreScrollSignals = d->ignoreScrollSignals;
-        d->ignoreScrollSignals = true;
-
         const qreal zoomCoeff = event->delta() > 0 ? sqrt(2.0) : sqrt(0.5);
         zoomRelativeToPoint(event->pos(), zoomCoeff);
 
         event->accept();
-
-        d->ignoreScrollSignals = oldIgnoreScrollSignals;
     } else
         QAbstractScrollArea::wheelEvent(event);
 }
@@ -616,10 +609,10 @@ void KoCanvasControllerWidget::zoomRelativeToPoint(const QPoint &widgetPoint, qr
     const QPoint offset = scrollBarValue();
     const QPoint mousePos(widgetPoint + offset);
 
-    QPointF oldCenter = preferredCenter();
-    const QPointF newCenter = mousePos - (1.0 / zoomCoeff) * (mousePos - oldCenter);
-
-    zoomBy(newCenter.toPoint(), zoomCoeff);
+    const bool oldIgnoreScrollSignals = d->ignoreScrollSignals;
+    d->ignoreScrollSignals = true;
+    proxyObject->emitZoomRelative(zoomCoeff, mousePos);
+    d->ignoreScrollSignals = oldIgnoreScrollSignals;
 }
 
 bool KoCanvasControllerWidget::focusNextPrevChild(bool)

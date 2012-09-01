@@ -83,10 +83,26 @@ public:
     void setZoomMode(KoZoomMode::Mode mode);
 
     /**
-     * Set the zoom and the zoom mode for this zoom Controller.  Typically for use just after construction
-     * to restore the persistent data.
+     * Set the zoom and the zoom mode for this zoom Controller.
+     * Typically for use just after construction to restore the
+     * persistent data.
+     *
+     * @param mode new zoom mode for the canvas
+     * @param zoom (for ZOOM_CONSTANT zoom mode only) new zoom value for
+     *             the canvas
+     * @param stillPoint (for ZOOM_CONSTANT zoom mode only) the point
+     *                   which will not change its position in widget
+     *                   during the zooming. It is measured in view
+     *                   coordinate system *before* zoom.
+     */
+    void setZoom(KoZoomMode::Mode mode, qreal zoom, const QPointF &stillPoint);
+
+    /**
+     * Convenience function with @p center always set to the current
+     * center point of the canvas
      */
     void setZoom(KoZoomMode::Mode mode, qreal zoom);
+
 
   /**
    * Set Aspect Mode button status and begin a chain of signals
@@ -153,7 +169,7 @@ protected:
 
 private:
     Q_PRIVATE_SLOT(d, void setAvailableSize())
-    Q_PRIVATE_SLOT(d, void requestZoomBy(const qreal))
+    Q_PRIVATE_SLOT(d, void requestZoomRelative(const qreal, const QPointF&))
     Q_PRIVATE_SLOT(d, void setZoom(KoZoomMode::Mode, qreal))
     Q_DISABLE_COPY( KoZoomController )
 

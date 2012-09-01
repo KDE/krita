@@ -343,7 +343,7 @@ public:
     void emitDocumentMousePositionChanged(const QPointF &position) { emit documentMousePositionChanged(position); }
     void emitSizeChanged(const QSize &size) { emit sizeChanged(size); }
     void emitMoveDocumentOffset(const QPoint &point) { emit moveDocumentOffset(point); }
-    void emitZoomBy(const qreal factor) { emit zoomBy(factor); }
+    void emitZoomRelative(const qreal factor, const QPointF &stillPoint) { emit zoomRelative(factor, stillPoint); }
 
     // Convenience method to retrieve the canvas controller for who needs to use QPointer
     KoCanvasController *canvasController() const { return m_canvasController; }
@@ -403,13 +403,17 @@ signals:
     void moveDocumentOffset(const QPoint &point);
 
     /**
-     * Emitted when zoomTo have calculated a factor by which the zoom should change,
-     * or if someone calls requestZoomBy
+     * Emitted when zoomRelativeToPoint have calculated a factor by which
+     * the zoom should change and the point which should stand still
+     * on screen.
      * Someone needs to connect to this and take action
      *
      * @param factor by how much the zoom needs to change.
+     * @param stillPoint the point which will not change its position
+     *                   in widget during the zooming. It is measured in
+     *                   view coordinate system *before* zoom.
      */
-    void zoomBy(const qreal factor);
+    void zoomRelative(const qreal factor, const QPointF &stillPoint);
 
 public slots:
     /**

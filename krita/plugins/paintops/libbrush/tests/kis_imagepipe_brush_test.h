@@ -31,6 +31,7 @@ private slots:
     void testChangingBrushes();
     void testSimpleDabApplication();
     void testColoredDab();
+    void testColoredDabWash();
     void testTextBrushNoPipes();
     void testTextBrushPiped();
 

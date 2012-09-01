@@ -134,14 +134,28 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
             colorspacename = "RGBA";
         }
 
+        profileProductName = element.attribute(PROFILE);
+
         // A hack for an old colorspacename
-        if (colorspacename  == "Grayscale + Alpha")
+        if (colorspacename  == "Grayscale + Alpha") {
             colorspacename  = "GRAYA";
+            profileProductName = QString();
+        }
+        if (colorspacename == "RgbAF32") {
+            colorspacename = "RGBAF32";
+            colorspacename  = "GRAYA";
+            profileProductName = QString();
+        }
+        if (colorspacename == "RgbAF16") {
+            colorspacename = "RGBAF32";
+            colorspacename  = "GRAYA";
+            profileProductName = QString();
+        }
 
         QString colorspaceModel = KoColorSpaceRegistry::instance()->colorSpaceColorModelId(colorspacename).id();
         QString colorspaceDepth = KoColorSpaceRegistry::instance()->colorSpaceColorDepthId(colorspacename).id();
 
-        if ((profileProductName = element.attribute(PROFILE)).isNull()) {
+        if (profileProductName.isNull()) {
             // no mention of profile so get default profile
             cs = KoColorSpaceRegistry::instance()->colorSpace(colorspaceModel, colorspaceDepth, "");
         } else {

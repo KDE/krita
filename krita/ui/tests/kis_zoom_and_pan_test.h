@@ -43,6 +43,12 @@ private slots:
     void testSequentialWheelZoomAndPanRotateFullscreen();
     void testSequentialWheelZoomAndPanMirror();
 
+    void testRotation_VastScrolling_1_0();
+    void testRotation_VastScrolling_0_5();
+
+    void testRotation_NoVastScrolling_1_0();
+    void testRotation_NoVastScrolling_0_5();
+
 private:
 
     bool checkInvariants(const QPointF &baseFlakePoint,
@@ -58,10 +64,12 @@ private:
     bool checkZoomWithAction(ZoomAndPanTester &t, qreal newZoom, bool limitedZoom = false);
     bool checkZoomWithWheel(ZoomAndPanTester &t, const QPoint &widgetPoint, qreal zoomCoeff, bool limitedZoom = false);
     bool checkPan(ZoomAndPanTester &t, QPoint shift);
+    bool checkRotation(ZoomAndPanTester &t, qreal angle);
 
     void initializeViewport(ZoomAndPanTester &t, bool fullscreenMode, bool rotate, bool mirror);
     void testSequentialActionZoomAndPan(bool fullscreenMode, bool rotate, bool mirror);
     void testSequentialWheelZoomAndPan(bool fullscreenMode, bool rotate, bool mirror);
+    void testRotation(qreal vastScrolling, qreal zoom);
 };
 
 #endif /* __KIS_ZOOM_AND_PAN_TEST_H */

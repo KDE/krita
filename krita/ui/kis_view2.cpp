@@ -389,8 +389,6 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
         slotLoadingFinished();
     }
 
-    // canvas sends signal that origin is changed
-    connect(m_d->canvas, SIGNAL(documentOriginChanged()), m_d->zoomManager, SLOT(pageOffsetChanged()));
     connect(m_d->canvasController, SIGNAL(documentSizeChanged()), m_d->zoomManager, SLOT(slotScrollAreaSizeChanged()));
 
     setAcceptDrops(true);
@@ -452,7 +450,7 @@ void KisView2::dropEvent(QDropEvent *event)
 {
     KisImageSP kisimage = image();
 
-    QPointF pos = kisimage->documentToIntPixel(m_d->viewConverter->viewToDocument(event->pos() + m_d->canvas->documentOffset() - m_d->canvas->documentOrigin()));
+    QPointF pos = canvasBase()->coordinatesConverter()->widgetToImage(event->pos());
 
     if (event->mimeData()->hasFormat("application/x-krita-node") || event->mimeData()->hasImage())
     {

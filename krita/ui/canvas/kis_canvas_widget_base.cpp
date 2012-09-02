@@ -219,10 +219,8 @@ KoToolProxy *KisCanvasWidgetBase::toolProxy()
 QVariant KisCanvasWidgetBase::processInputMethodQuery(Qt::InputMethodQuery query) const
 {
     if (query == Qt::ImMicroFocus) {
-        QRectF rect = (m_d->toolProxy->inputMethodQuery(query, *m_d->viewConverter).toRectF()).toRect();
-        QPointF scroll(m_d->canvas->view()->canvasController()->scrollBarValue());
-        rect.translate(m_d->canvas->documentOrigin() - scroll);
-        return rect.toRect();
+        QRectF rect = m_d->toolProxy->inputMethodQuery(query, *m_d->viewConverter).toRectF();
+        return m_d->coordinatesConverter->flakeToWidget(rect);
     }
     return m_d->toolProxy->inputMethodQuery(query, *m_d->viewConverter);
 }

@@ -160,8 +160,6 @@ KisCanvas2::~KisCanvas2()
 
 void KisCanvas2::setCanvasWidget(QWidget * widget)
 {
-    connect(widget, SIGNAL(needAdjustOrigin()), this, SLOT(adjustOrigin()), Qt::DirectConnection);
-
     KisAbstractCanvasWidget *tmp = dynamic_cast<KisAbstractCanvasWidget*>(widget);
     Q_ASSERT_X(tmp, "setCanvasWidget", "Cannot cast the widget to a KisAbstractCanvasWidget");
     emit canvasDestroyed(widget);
@@ -596,8 +594,6 @@ void KisCanvas2::disconnectCanvasObserver(QObject *object)
 
 void KisCanvas2::notifyZoomChanged()
 {
-    adjustOrigin();
-
     if (!m_d->currentCanvasIsOpenGL) {
         Q_ASSERT(m_d->prescaledProjection);
         m_d->prescaledProjection->notifyZoomChanged();
@@ -702,30 +698,8 @@ KisCanvasDecoration* KisCanvas2::decoration(const QString& id)
 
 QPoint KisCanvas2::documentOrigin() const
 {
-    return m_d->coordinatesConverter->documentOrigin();
-}
-
-
-void KisCanvas2::adjustOrigin()
-{
-    QPoint newOrigin;
-
-    QSize documentSize = m_d->coordinatesConverter->imageRectInWidgetPixels().toAlignedRect().size();
-    QSize widgetSize = m_d->canvasWidget->widget()->size();
-
-    if(!m_d->vastScrolling) {
-        int widthDiff = widgetSize.width() - documentSize.width();
-        int heightDiff = widgetSize.height() - documentSize.height();
-
-        if (widthDiff > 0)
-            newOrigin.rx() = qRound(0.5 * widthDiff);
-        if (heightDiff > 0)
-            newOrigin.ry() = qRound(0.5 * heightDiff);
-    }
-
-    m_d->coordinatesConverter->setDocumentOrigin(newOrigin);
-
-    emit documentOriginChanged();
+    qWarning() << "Krita does not use documentOrigin() anymore. Please fix the code.";
+    return QPoint();
 }
 
 QPoint KisCanvas2::documentOffset() const

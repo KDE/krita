@@ -149,9 +149,6 @@ public: // KisCanvas2 methods
     KisCanvasDecoration* decoration(const QString& id);
 
 signals:
-
-    void documentOriginChanged();
-
     void imageChanged(KisImageWSP image);
 
     void canvasDestroyed(QWidget *);
@@ -183,9 +180,6 @@ public slots:
 
     void startResizingImage(qint32 w, qint32 h);
     void finishResizingImage(qint32 w, qint32 h);
-
-    /// adjust the origin of the document
-    void adjustOrigin();
 
     /// canvas rotation in degrees
     qreal rotationAngle() const;

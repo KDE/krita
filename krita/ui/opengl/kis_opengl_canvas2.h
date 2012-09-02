@@ -99,9 +99,6 @@ public: // QWidget
 private slots:
     void slotConfigChanged();
 
-signals:
-    void needAdjustOrigin();
-
 protected:
 
     void resizeGL(int width, int height);

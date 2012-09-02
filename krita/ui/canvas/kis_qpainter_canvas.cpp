@@ -200,7 +200,6 @@ void KisQPainterCanvas::resizeEvent(QResizeEvent *e)
 
     coordinatesConverter()->setCanvasWidgetSize(size);
     m_d->prescaledProjection->notifyCanvasSizeChanged(size);
-    emit needAdjustOrigin();
 }
 
 void KisQPainterCanvas::slotConfigChanged()

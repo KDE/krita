@@ -117,7 +117,6 @@ void KisOpenGLCanvas2::resizeGL(int width, int height)
 {
     glViewport(0, 0, (GLint)width, (GLint)height);
     coordinatesConverter()->setCanvasWidgetSize(QSize(width, height));
-    emit needAdjustOrigin();
 }
 
 void KisOpenGLCanvas2::paintEvent(QPaintEvent *)

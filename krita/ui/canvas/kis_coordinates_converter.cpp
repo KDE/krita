@@ -39,13 +39,47 @@ struct KisCoordinatesConverter::Private {
     qreal rotationAngle;
     QSizeF canvasWidgetSize;
     QPointF documentOffset;
-    QPointF documentOrigin;
     
     QTransform flakeToWidget;
     QTransform imageToDocument;
     QTransform documentToFlake;
     QTransform widgetToViewport;
 };
+
+/**
+ * When vastScrolling value is less than 0.5 it is possible
+ * that the whole scrolling area (viewport) will be smaller than
+ * the size of the widget. In such cases the image should be
+ * centered in the widget. Previously we used a special parameter
+ * documentOrigin for this purpose, now the value for this
+ * centering is calculated dynamically, helping the offset to
+ * center the image inside the widget
+ *
+ * Note that the correction is null when the size of the document
+ * plus vast scrolling reserve is larger than the widget. This
+ * is always true for vastScrolling parameter > 0.5.
+ */
+
+QPointF KisCoordinatesConverter::centeringCorrection() const
+{
+    KisConfig cfg;
+
+    QSize documentSize = imageRectInWidgetPixels().toAlignedRect().size();
+    QPointF dPoint(documentSize.width(), documentSize.height());
+    QPointF wPoint(m_d->canvasWidgetSize.width(), m_d->canvasWidgetSize.height());
+
+    QPointF minOffset = -cfg.vastScrolling() * wPoint;
+    QPointF maxOffset = dPoint - wPoint + cfg.vastScrolling() * wPoint;
+
+    QPointF range = maxOffset - minOffset;
+
+    range.rx() = qMin(range.x(), 0.0);
+    range.ry() = qMin(range.y(), 0.0);
+
+    range /= 2;
+
+    return -range;
+}
 
 /**
  * The document offset and the position of the top left corner of the
@@ -65,13 +99,15 @@ struct KisCoordinatesConverter::Private {
 
 void KisCoordinatesConverter::correctOffsetToTransformation()
 {
-    m_d->documentOffset = -imageRectInWidgetPixels().topLeft().toPoint();
+    m_d->documentOffset = -(imageRectInWidgetPixels().topLeft() -
+          centeringCorrection()).toPoint();
 }
 
 void KisCoordinatesConverter::correctTransformationToOffset()
 {
     QPointF topLeft = imageRectInWidgetPixels().topLeft();
     QPointF diff = (-topLeft) - m_d->documentOffset;
+    diff += centeringCorrection();
     m_d->flakeToWidget *= QTransform::fromTranslate(diff.x(), diff.y());
 }
 
@@ -120,15 +156,6 @@ void KisCoordinatesConverter::setImage(KisImageWSP image)
     recalculateTransformations();
 }
 
-void KisCoordinatesConverter::setDocumentOrigin(const QPoint& origin)
-{
-    QPointF diff = origin - m_d->documentOrigin;
-    
-    m_d->documentOrigin = origin;
-    m_d->flakeToWidget *= QTransform::fromTranslate(diff.x(), diff.y());
-    recalculateTransformations();
-}
-
 void KisCoordinatesConverter::setDocumentOffset(const QPoint& offset)
 {
     QPointF diff = m_d->documentOffset - offset;
@@ -136,11 +163,6 @@ void KisCoordinatesConverter::setDocumentOffset(const QPoint& offset)
     m_d->documentOffset = offset;
     m_d->flakeToWidget *= QTransform::fromTranslate(diff.x(), diff.y());
     recalculateTransformations();
-}
-
-QPoint KisCoordinatesConverter::documentOrigin() const
-{
-    return QPoint(int(m_d->documentOrigin.x()), int(m_d->documentOrigin.y()));
 }
 
 QPoint KisCoordinatesConverter::documentOffset() const
@@ -163,7 +185,7 @@ QPoint KisCoordinatesConverter::rotate(QPointF center, qreal angle)
 {
     QTransform rot;
     rot.rotate(angle);
-    
+
     m_d->flakeToWidget *= QTransform::fromTranslate(-center.x(),-center.y());
     m_d->flakeToWidget *= rot;
     m_d->flakeToWidget *= QTransform::fromTranslate(center.x(), center.y());

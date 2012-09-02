@@ -163,6 +163,16 @@ protected:
     friend class KisZoomAndPanTest;
 
     /**
+     * Used by KisCanvasController to correct the scrollbars position
+     * after the rotation.
+     *
+     * The difference from the usual setScrollBarValue() is that it
+     * blocks the updates of preferredCenterFraction, in the slot
+     * of the scroll bars.
+     */
+    void setScrollBarValueSilent(const QPoint &value);
+
+    /**
      * Zoom document keeping point \p widgetPoint unchanged
      * \param widgetPoint sticky point in widget pixels
      */

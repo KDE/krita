@@ -54,10 +54,8 @@ public:
 
     void setCanvasWidgetSize(QSize size);
     void setImage(KisImageWSP image);
-    void setDocumentOrigin(const QPoint &origin);
     void setDocumentOffset(const QPoint &offset);
 
-    QPoint documentOrigin() const;
     QPoint documentOffset() const;
     qreal rotationAngle() const;
     
@@ -125,6 +123,9 @@ public:
     void imageScale(qreal *scaleX, qreal *scaleY) const;
 
 private:
+    friend class KisZoomAndPanTest;
+
+    QPointF centeringCorrection() const;
     void correctOffsetToTransformation();
     void correctTransformationToOffset();
     void recalculateTransformations();

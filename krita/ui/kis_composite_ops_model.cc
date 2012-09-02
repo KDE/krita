@@ -18,6 +18,9 @@
  */
 
 #include <KoCompositeOp.h>
+
+#include <KoIcon.h>
+
 #include "kis_composite_ops_model.h"
 #include "kis_debug.h"
 #include "kis_config.h"
@@ -80,7 +83,7 @@ QVariant KisCompositeOpListModel::data(const QModelIndex& idx, int role) const
         BaseClass::Index index = BaseClass::getIndex(idx.row());
         
         if(!BaseClass::isHeader(index) && BaseClass::m_categories[index.first].entries[index.second].disabled)
-            return QIcon::fromTheme("dialog-warning");
+            return koIcon("dialog-warning");
     }
     
     return BaseClass::data(idx, role);

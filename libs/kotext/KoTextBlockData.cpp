@@ -23,16 +23,16 @@
 #include "KoTextBlockBorderData.h"
 #include "KoTextBlockPaintStrategyBase.h"
 
-class KoTextBlockData::Private
+class KoTextBlockData::Private : public QTextBlockUserData
 {
 public:
     Private()
-        : counterWidth(0),
-          counterSpacing(0),
-          counterIsImage(false),
-          counterIndex(1),
-          border(0),
-          paintStrategy(0)
+        : counterWidth(-1.0)
+        , counterSpacing(0)
+        , counterIsImage(false)
+        , counterIndex(1)
+        , border(0)
+        , paintStrategy(0)
     {
     }
 
@@ -55,15 +55,19 @@ public:
     KoTextBlockPaintStrategyBase *paintStrategy;
 };
 
-KoTextBlockData::KoTextBlockData()
-    : d(new Private())
+KoTextBlockData::KoTextBlockData(QTextBlock &block)
+ : d(block.userData() ? dynamic_cast<KoTextBlockData::Private *>(block.userData()) : new Private())
 {
-    d->counterWidth = -1.0;
+    block.setUserData(d);
+}
+
+KoTextBlockData::KoTextBlockData(QTextBlockUserData *userData)
+ : d(dynamic_cast<KoTextBlockData::Private *>(userData))
+{
 }
 
 KoTextBlockData::~KoTextBlockData()
 {
-    delete d;
 }
 
 bool KoTextBlockData::hasCounterData() const

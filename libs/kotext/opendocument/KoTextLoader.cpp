@@ -1091,12 +1091,8 @@ void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &curso
 
     if (id.isValid() && d->shape) {
         QTextBlock block = cursor.block();
-        KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
-        if (!data) {
-            data = new KoTextBlockData();
-            block.setUserData(data);
-        }
-        d->context.addShapeSubItemId(d->shape, QVariant::fromValue(data), id.toString());
+        KoTextBlockData data(block); // this sets the user data, so don't remove
+        d->context.addShapeSubItemId(d->shape, QVariant::fromValue(block.userData()), id.toString());
     }
 
     // attach Rdf to cursor.block()

@@ -177,12 +177,9 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
         ++blockIndex;
 
         if (!painter->hasClipping() || clipRegion.intersects(br.toRect())) {
-            KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*>(block.userData());
-            KoTextBlockPaintStrategyBase *paintStrategy = 0;
-            if (blockData) {
-                border = blockData->border();
-                paintStrategy = blockData->paintStrategy();
-            }
+            KoTextBlockData blockData(block);
+            border = blockData.border();
+            KoTextBlockPaintStrategyBase *paintStrategy = blockData.paintStrategy();
 
             KoTextBlockPaintStrategyBase dummyPaintStrategy;
             if (paintStrategy == 0) {
@@ -395,29 +392,27 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
     painter->restore();
 }
 
-void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block)
+void KoTextLayoutArea::drawListItem(QPainter *painter, QTextBlock &block)
 {
-    KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
-    if (data == 0)
-        return;
+    KoTextBlockData blockData(block);
 
     QTextList *list = block.textList();
 
-    if (list && data->hasCounterData()) {
+    if (list && blockData.hasCounterData()) {
         QTextListFormat listFormat = list->format();
-        if (! data->counterText().isEmpty()) {
-            QFont font(data->labelFormat().font(), d->documentLayout->paintDevice());
+        if (! blockData.counterText().isEmpty()) {
+            QFont font(blockData.labelFormat().font(), d->documentLayout->paintDevice());
 
             KoListStyle::Style listStyle = static_cast<KoListStyle::Style>(listFormat.style());
-            QString result = data->counterText();
+            QString result = blockData.counterText();
 
             QTextLayout layout(result, font, d->documentLayout->paintDevice());
 
             QList<QTextLayout::FormatRange> layouts;
             QTextLayout::FormatRange format;
             format.start = 0;
-            format.length = data->counterText().length();
-            format.format = data->labelFormat();
+            format.length = blockData.counterText().length();
+            format.format = blockData.labelFormat();
 
             layouts.append(format);
             layout.setAdditionalFormats(layouts);
@@ -439,7 +434,7 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block)
             QTextOption option(alignment);
             option.setTextDirection(block.layout()->textOption().textDirection());
 /*
-            if (option.textDirection() == Qt::RightToLeft || data->counterText().isRightToLeft()) {
+            if (option.textDirection() == Qt::RightToLeft || blockData.counterText().isRightToLeft()) {
                 option.setAlignment(Qt::AlignRight);
             }
 */
@@ -448,10 +443,10 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block)
             layout.beginLayout();
 
             QTextLine line = layout.createLine();
-            line.setLineWidth(data->counterWidth());
+            line.setLineWidth(blockData.counterWidth());
             layout.endLayout();
 
-            QPointF counterPosition = data->counterPosition();
+            QPointF counterPosition = blockData.counterPosition();
 
             if (block.layout()->lineCount() > 0) {
                 // if there is text, then baseline align the counter.
@@ -469,18 +464,18 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block)
             //decorate the list label iff it is a numbered list
             if (KoListStyle::isNumberingStyle(listStyle)) {
                 painter->save();
-                decorateListLabel(painter, data, layout.lineAt(0), block);
+                decorateListLabel(painter, blockData, layout.lineAt(0), block);
                 painter->restore();
             }
         }
 
         KoListStyle::Style listStyle = static_cast<KoListStyle::Style>(listFormat.style());
         if (listStyle == KoListStyle::ImageItem) {
-            QFontMetricsF fm(data->labelFormat().font(), d->documentLayout->paintDevice());
-            qreal x = qMax(qreal(1), data->counterPosition().x());
+            QFontMetricsF fm(blockData.labelFormat().font(), d->documentLayout->paintDevice());
+            qreal x = qMax(qreal(1), blockData.counterPosition().x());
             qreal width = qMax(listFormat.doubleProperty(KoListStyle::Width), (qreal)1.0);
             qreal height = qMax(listFormat.doubleProperty(KoListStyle::Height), (qreal)1.0);
-            qreal y = data->counterPosition().y() + fm.ascent() - fm.xHeight()/2 - height/2; // centered
+            qreal y = blockData.counterPosition().y() + fm.ascent() - fm.xHeight()/2 - height/2; // centered
             KoImageData *idata = listFormat.property(KoListStyle::BulletImage).value<KoImageData *>();
             if (idata) {
                 painter->drawPixmap(x, y, width, height, idata->pixmap());
@@ -489,9 +484,9 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block)
     }
 }
 
-void KoTextLayoutArea::decorateListLabel(QPainter *painter, const KoTextBlockData *blockData, const QTextLine &listLabelLine, const QTextBlock &listItem)
+void KoTextLayoutArea::decorateListLabel(QPainter *painter, const KoTextBlockData &blockData, const QTextLine &listLabelLine, const QTextBlock &listItem)
 {
-    const QTextCharFormat listLabelCharFormat = blockData->labelFormat();
+    const QTextCharFormat listLabelCharFormat = blockData.labelFormat();
     painter->setFont(listLabelCharFormat.font());
 
     int startOfFragmentInBlock = 0;
@@ -502,13 +497,13 @@ void KoTextLayoutArea::decorateListLabel(QPainter *painter, const KoTextBlockDat
 
     int fragmentToLineOffset = 0;
 
-    qreal x1 = blockData->counterPosition().x();
+    qreal x1 = blockData.counterPosition().x();
     qreal x2 = listItem.layout()->lineAt(0).x();
 
     if (x2 != x1) {
-        drawStrikeOuts(painter, listLabelCharFormat, blockData->counterText(), listItem.layout()->lineAt(0), x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
-        drawOverlines(painter, listLabelCharFormat, blockData->counterText(), listItem.layout()->lineAt(0), x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
-        drawUnderlines(painter, listLabelCharFormat, blockData->counterText(), listItem.layout()->lineAt(0), x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
+        drawStrikeOuts(painter, listLabelCharFormat, blockData.counterText(), listItem.layout()->lineAt(0), x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
+        drawOverlines(painter, listLabelCharFormat, blockData.counterText(), listItem.layout()->lineAt(0), x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
+        drawUnderlines(painter, listLabelCharFormat, blockData.counterText(), listItem.layout()->lineAt(0), x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
     }
 }
 
@@ -752,6 +747,7 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, const QTextBlock &bl
         qreal x = line.cursorToX(block.length()-1);
         painter->drawText(QPointF(x, y), QChar((ushort)0x00B6));
     }
+
 
     painter->setFont(oldFont);
 }

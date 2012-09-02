@@ -22,8 +22,11 @@
 // Own
 #include "TemplateToolFactory.h"
 
-// KDEp
+// KDE
 #include <klocale.h>
+
+// Calligra
+#include <KoIcon.h>
 
 // This Shape
 #include "TemplateShape.h"
@@ -34,7 +37,7 @@ TemplateToolFactory::TemplateToolFactory()
     : KoToolFactoryBase("TemplateToolFactoryId")
 {
     setToolTip( i18n( "Template shape editing tool" ) );
-    setIcon( "x-template" );
+    setIconName(koIconNameCStr("x-template"));
     setToolType(dynamicToolType());
     setPriority(1);
     setActivationShapeId(TEMPLATESHAPEID);

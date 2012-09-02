@@ -34,6 +34,7 @@
 #include <KoOdfLoadingContext.h>
 #include <KoDocumentResourceManager.h>
 #include <KoProperties.h>
+#include <KoIcon.h>
 
 // This shape
 #include "TemplateShape.h"
@@ -44,7 +45,7 @@ TemplateShapeFactory::TemplateShapeFactory()
     : KoShapeFactoryBase(TEMPLATESHAPEID, i18n("Template shape")) // Template: Change to your own description
 {
     setToolTip(i18n("Simple shape that is used as a template for developing other shapes."));
-    setIcon("x-shape-template");
+    setIconName(koIconNameCStr("x-shape-template"));
     setLoadingPriority(1);
 
     // Tell the shape loader which tag we can store

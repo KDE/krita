@@ -506,6 +506,10 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *rootPart)
             dockWidget->setVisible(d->dockWidgetVisibilityMap.value(dockWidget));
         }
     }
+
+    if (!d->rootDocument) {
+        statusBar()->setVisible(false);
+    }
 }
 
 void KoMainWindow::updateReloadFileAction(KoDocument *doc)

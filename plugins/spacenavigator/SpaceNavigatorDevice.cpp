@@ -89,7 +89,7 @@ void SpaceNavigatorDevice::slotMoveEvent( int x, int y, int z, int rx, int ry, i
         if( qAbs(z) > qAbs(x) && qAbs(z) > qAbs(y) )
         {
             // zoom
-            controller->zoomBy( controller->preferredCenter(), pow(1.01,-z/10) );
+            controller->zoomBy( controller->preferredCenter().toPoint(), pow(1.01,-z/10) );
         }
         else
         {

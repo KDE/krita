@@ -631,7 +631,7 @@ public:
     virtual QString debugString() const;
 
     /*! Shows debug information about this field. */
-    void debug();
+    void debug() const;
 
     /*! \return KexiDB::BaseExpr object if the field value is an
      expression.  Unless the expression is set with setExpression(), it is null.

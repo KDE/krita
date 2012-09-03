@@ -1464,4 +1464,36 @@ QString KexiDB::string2FileName(const QString &s)
     return fn;
 }
 
+//--------------------------------------------------------------------------------
+
+#ifdef CALLIGRADB_DEBUG_GUI
+
+static DebugGUIHandler s_debugGUIHandler = 0;
+
+void KexiDB::setDebugGUIHandler(DebugGUIHandler handler)
+{
+    s_debugGUIHandler = handler;
+}
+
+void KexiDB::debugGUI(const QString& text)
+{
+    if (s_debugGUIHandler)
+        s_debugGUIHandler(text);
+}
+
+static AlterTableActionDebugGUIHandler s_alterTableActionDebugHandler = 0;
+
+void KexiDB::setAlterTableActionDebugHandler(AlterTableActionDebugGUIHandler handler)
+{
+    s_alterTableActionDebugHandler = handler;
+}
+
+void KexiDB::alterTableActionDebugGUI(const QString& text, int nestingLevel)
+{
+    if (s_alterTableActionDebugHandler)
+        s_alterTableActionDebugHandler(text, nestingLevel);
+}
+
+#endif // CALLIGRADB_DEBUG_GUI
+
 #include "utils_p.moc"

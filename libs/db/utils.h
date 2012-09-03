@@ -26,6 +26,7 @@
 
 #include "connection.h"
 #include "driver.h"
+#include "calligradb_global.h"
 
 class QDomNode;
 class QDomElement;
@@ -549,6 +550,16 @@ inline CALLIGRADB_EXPORT QDateTime stringToHackedQTime(const QString& s)
     //  kDebug() << QDateTime( QDate(0,1,2), QTime::fromString( s, Qt::ISODate ) ).toString(Qt::ISODate);
     return QDateTime(QDate(0, 1, 2), QTime::fromString(s, Qt::ISODate));
 }
+
+#ifdef CALLIGRADB_DEBUG_GUI
+typedef void(*DebugGUIHandler)(const QString&);
+CALLIGRADB_EXPORT void setDebugGUIHandler(DebugGUIHandler handler);
+CALLIGRADB_EXPORT void debugGUI(const QString& text);
+
+typedef void(*AlterTableActionDebugGUIHandler)(const QString&, int);
+CALLIGRADB_EXPORT void setAlterTableActionDebugHandler(AlterTableActionDebugGUIHandler handler);
+CALLIGRADB_EXPORT void alterTableActionDebugGUI(const QString& text, int nestingLevel = 0);
+#endif
 
 }
 

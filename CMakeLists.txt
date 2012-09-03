@@ -480,7 +480,8 @@ set(KOPROPERTY_INCLUDES ${KOODF_INCLUDES}
 
 # calligradb
 SET(CALLIGRADB_LIBS calligradb)                    # TODO remove when Predicate lib arrives
-set(CALLIGRADB_INCLUDES ${CMAKE_SOURCE_DIR}/libs)  # TODO remove when Predicate lib arrives
+set(CALLIGRADB_INCLUDES ${CMAKE_SOURCE_DIR}/libs   # TODO remove when Predicate lib arrives
+                        ${CMAKE_BINARY_DIR}/libs/db)
 
  #############################################
 ##############################################

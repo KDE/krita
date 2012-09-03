@@ -668,7 +668,7 @@ QString Field::debugString() const
     return dbg;
 }
 
-void Field::debug()
+void Field::debug() const
 {
     KexiDBDbg << debugString();
 }

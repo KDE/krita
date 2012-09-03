@@ -1,6 +1,15 @@
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44000)
 
-include_directories(${CMAKE_SOURCE_DIR}/libs ${CMAKE_CURRENT_SOURCE_DIR}/parser ${KDE4_INCLUDES})
+option(CALLIGRADB_DEBUG_GUI "Debugging GUI for CalligraDB" OFF)
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-calligradb.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-calligradb.h )
+
+include_directories(
+    ${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_SOURCE_DIR}/libs
+    ${CMAKE_CURRENT_SOURCE_DIR}/parser
+    ${KDE4_INCLUDES}
+)
 
 add_subdirectory( drivers )
 

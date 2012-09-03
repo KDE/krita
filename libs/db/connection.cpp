@@ -30,6 +30,7 @@
 #include "transaction.h"
 #include "cursor.h"
 #include "global.h"
+#include "calligradb_global.h"
 #include "roweditbuffer.h"
 #include "utils.h"
 #include "dbproperties.h"
@@ -2760,14 +2761,14 @@ bool Connection::storeExtendedTableSchemaData(TableSchema& tableSchema)
 
     // Store extended schema information (see ExtendedTableSchemaInformation in Kexi Wiki)
     if (extendedTableSchemaStringIsEmpty) {
-#ifdef KEXI_DEBUG_GUI
-        KexiDB::addAlterTableActionDebug(QString("** Extended table schema REMOVED."));
+#ifdef CALLIGRADB_DEBUG_GUI
+        KexiDB::alterTableActionDebugGUI(QString("** Extended table schema REMOVED."));
 #endif
         if (!removeDataBlock(tableSchema.id(), "extended_schema"))
             return false;
     } else {
-#ifdef KEXI_DEBUG_GUI
-        KexiDB::addAlterTableActionDebug(QString("** Extended table schema set to:\n") + doc.toString(4));
+#ifdef CALLIGRADB_DEBUG_GUI
+        KexiDB::alterTableActionDebugGUI(QString("** Extended table schema set to:\n") + doc.toString(4));
 #endif
         if (!storeDataBlock(tableSchema.id(), doc.toString(1), "extended_schema"))
             return false;

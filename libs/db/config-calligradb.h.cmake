@@ -1,0 +1,1 @@
+#cmakedefine CALLIGRADB_DEBUG_GUI

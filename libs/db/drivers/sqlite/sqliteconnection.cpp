@@ -27,6 +27,8 @@
 #include <db/driver.h>
 #include <db/cursor.h>
 #include <db/error.h>
+#include <db/utils.h>
+#include <db/calligradb_global.h>
 
 #include <QFile>
 #include <QDir>
@@ -335,8 +337,8 @@ bool SQLiteConnection::drv_executeSQL(const QString& statement)
     d->temp_st = statement.toLocal8Bit(); //latin1 only
 #endif
 
-#ifdef KEXI_DEBUG_GUI
-    KexiDB::addKexiDBDebug(QString("ExecuteSQL (SQLite): ") + statement);
+#ifdef CALLIGRADB_DEBUG_GUI
+    KexiDB::debugGUI(QString("ExecuteSQL (SQLite): ") + statement);
 #endif
 
     d->res = sqlite3_exec(
@@ -346,8 +348,8 @@ bool SQLiteConnection::drv_executeSQL(const QString& statement)
                  0,
                  &d->errmsg_p);
     d->storeResult();
-#ifdef KEXI_DEBUG_GUI
-    KexiDB::addKexiDBDebug(d->res == SQLITE_OK ? "  Success" : "  Failure");
+#ifdef CALLIGRADB_DEBUG_GUI
+    KexiDB::debugGUI(d->res == SQLITE_OK ? "  Success" : "  Failure");
 #endif
     return d->res == SQLITE_OK;
 }

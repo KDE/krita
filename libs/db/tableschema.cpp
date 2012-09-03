@@ -219,12 +219,16 @@ FieldList& TableSchema::insertField(uint index, Field *field)
     return *this;
 }
 
-void TableSchema::removeField(KexiDB::Field *field)
+bool TableSchema::removeField(KexiDB::Field *field)
 {
+    LookupFieldSchema* lookup = d->lookupFields.take(field);
+    if (!FieldList::removeField(field)) {
+        return false;
+    }
     if (d->anyNonPKField && field == d->anyNonPKField) //d->anyNonPKField will be removed!
         d->anyNonPKField = 0;
-    delete d->lookupFields.take(field);
-    FieldList::removeField(field);
+    delete lookup;
+    return true;
 }
 
 #if 0 //original  

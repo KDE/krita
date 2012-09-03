@@ -799,18 +799,23 @@ KexiDB::FieldList& QuerySchema::addField(KexiDB::Field* field, int bindToTable,
     return insertField(m_fields.count(), field, bindToTable, visible);
 }
 
-void QuerySchema::removeField(KexiDB::Field *field)
+bool QuerySchema::removeField(KexiDB::Field *field)
 {
-    if (!field)
-        return;
-    d->clearCachedData();
+    int indexOfAsterisk = -1;
     if (field->isQueryAsterisk()) {
+        indexOfAsterisk = d->asterisks.indexOf(field);
+    }
+    if (!FieldList::removeField(field)) {
+        return false;
+    }
+    d->clearCachedData();
+    if (indexOfAsterisk >= 0) {
         //kDebug() << "d->asterisks.removeAt:" << field;
         //field->debug();
-        d->asterisks.removeAt(d->asterisks.indexOf(field));   //this will destroy this asterisk
+        d->asterisks.removeAt(indexOfAsterisk); //this will destroy this asterisk
     }
-//TODO: should we also remove table for this field or asterisk?
-    FieldList::removeField(field);
+//! @todo should we also remove table for this field or asterisk?
+    return true;
 }
 
 FieldList& QuerySchema::addExpression(BaseExpr* expr, bool visible)

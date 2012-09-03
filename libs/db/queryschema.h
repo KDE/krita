@@ -353,7 +353,7 @@ public:
                         bool visible = true);
 
     /*! Removes field from the columns list. Use with care. */
-    virtual void removeField(Field *field);
+    virtual bool removeField(Field *field);
 
     /*! Adds a field built on top of \a expr expression.
      This creates a new Field object and adds it to the query schema using addField(). */

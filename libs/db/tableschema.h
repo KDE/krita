@@ -68,7 +68,7 @@ public:
     virtual FieldList& insertField(uint index, Field *field);
 
     /*! Reimplemented for internal reasons. */
-    virtual void removeField(KexiDB::Field *field);
+    virtual bool removeField(KexiDB::Field *field);
 
     /*! \return list of fields that are primary key of this table.
      This method never returns 0 value,

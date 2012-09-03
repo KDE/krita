@@ -1,9 +1,12 @@
 [Desktop Entry]
 Name=DSLR Templates
+Name[el]=Πρότυπα DSLR
+Name[fr]=Modèles DSLR
 Name[it]=Modelli DSLR
 Name[nl]=DSLR-sjablonen
 Name[pt]=Modelos de DSLR
 Name[pt_BR]=Modelos DSLR
+Name[sv]=Mallar för digitala spegelreflexkameror
 Name[uk]=Шаблони DSLR
 Name[x-test]=xxDSLR Templatesxx
 X-KDE-DefaultTab=true

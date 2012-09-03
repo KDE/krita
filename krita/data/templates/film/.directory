@@ -1,9 +1,12 @@
 [Desktop Entry]
 Name=Film Templates
+Name[el]=Πρότυπα φίλμ
+Name[fr]=Modèles pour film
 Name[it]=Modelli di filmati
 Name[nl]=Film-sjablonen
 Name[pt]=Modelos de Filme
 Name[pt_BR]=Modelos de filme
+Name[sv]=Filmmallar
 Name[uk]=Шаблони відеокадрів
 Name[x-test]=xxFilm Templatesxx
 X-KDE-DefaultTab=true

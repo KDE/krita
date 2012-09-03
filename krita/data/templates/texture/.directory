@@ -1,9 +1,12 @@
 [Desktop Entry]
 Name=Texture Templates
+Name[el]=Πρότυπαi υφής
+Name[fr]=Modèles de textures
 Name[it]=Modelli di trama
 Name[nl]=Textuur-sjablonen
 Name[pt]=Modelos de Texturas
 Name[pt_BR]=Modelos de textura
+Name[sv]=Strukturmallar
 Name[uk]=Шаблони текстур
 Name[x-test]=xxTexture Templatesxx
 X-KDE-DefaultTab=true

@@ -1,10 +1,13 @@
 [Desktop Entry]
 Icon=template_texture
 Name=Texture 1k 16bit scalar
+Name[el]=Texture 1k 16bit βαθμωτό
+Name[fr]=Texture 1k 16bit scalaire
 Name[it]=Trama 1k 16bit scalare
 Name[nl]=Textuur 1k 16bit scalar
 Name[pt]=Textura 1k 16-bits escalar
 Name[pt_BR]=Textura 1k 16bit escalar
+Name[sv]=Struktur 1k 16-bitar skalär
 Name[uk]=Текстура 1k, 16-бітова, скалярна
 Name[x-test]=xxTexture 1k 16bit scalarxx
 Type=Link

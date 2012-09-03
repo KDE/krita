@@ -1,10 +1,13 @@
 [Desktop Entry]
 Icon=template_film
 Name=HD_720p_1280x720
+Name[el]=HD_720p_1280x720
+Name[fr]=HD_720p_1280x720
 Name[it]=HD_720p_1280x720
 Name[nl]=HD_720p_1280x720
 Name[pt]=HD_720p_1280x720
 Name[pt_BR]=HD_720p_1280x720
+Name[sv]=HD_720p_1280x720
 Name[uk]=HD 720p 1280⨯720
 Name[x-test]=xxHD_720p_1280x720xx
 Type=Link

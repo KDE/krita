@@ -106,7 +106,7 @@ private slots:
 private:
     KUndo2QStack *m_stack;
     QItemSelectionModel *m_sel_model;
-    QString m_emty_label;
+    QString m_empty_label;
     QIcon m_clean_icon;
     KisCanvas2* m_canvas;
     QMap<const KUndo2Command*, QImage> imageMap;

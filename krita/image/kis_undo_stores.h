@@ -74,7 +74,10 @@ private:
     KUndo2Stack *m_undoStack;
 };
 
-
+/**
+ * @brief The KisDumbUndoStore class doesn't actually save commands,
+ * so you cannot undo or redo!
+ */
 class KRITAIMAGE_EXPORT KisDumbUndoStore : public KisUndoStore
 {
 public:

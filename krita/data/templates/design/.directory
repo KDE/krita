@@ -1,8 +1,11 @@
 [Desktop Entry]
 Name=Design Templates
+Name[el]=Πρότυπα σχεδίασης
+Name[fr]=Modèles design
 Name[nl]=Design-sjablonen
 Name[pt]=Modelos de Desenho
 Name[pt_BR]=Modelos de design
+Name[sv]=Designmallar
 Name[uk]=Шаблони компонування
 Name[x-test]=xxDesign Templatesxx
 X-KDE-DefaultTab=true

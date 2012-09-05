@@ -19,6 +19,7 @@
 #include "kis_imagepipe_brush_test.h"
 
 #include <qtest_kde.h>
+#include <QPainter>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -26,6 +27,8 @@
 
 #include "kis_imagepipe_brush.h"
 #include "kis_qimage_mask.h"
+#include <kis_paint_device.h>
+#include <kis_painter.h>
 
 #define COMPARE_ALL(brush, method)                                      \
     foreach(KisGbrBrush *child, brush->testingGetBrushes()) {           \
@@ -189,6 +192,50 @@ void KisImagePipeBrushTest::testColoredDab()
     checkConsistency(brush);
     delete brush;
 }
+
+void KisImagePipeBrushTest::testColoredDabWash()
+{
+    KisImagePipeBrush *brush = new KisImagePipeBrush(QString(FILES_DATA_DIR) + QDir::separator() + "G_Sparks.gih");
+    brush->load();
+    QVERIFY(brush->valid());
+
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+
+    KisVector2D movement = KisVector2D::Zero();
+    qreal rotation = 0;
+    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, movement, rotation, 0);
+
+    KisPaintDeviceSP layer = new KisPaintDevice(cs);
+    KisPainter painter(layer);
+    painter.setCompositeOp(COMPOSITE_ALPHA_DARKEN);
+
+    const QVector<KisGbrBrush*> gbrs = brush->testingGetBrushes();
+
+    KisFixedPaintDeviceSP dab = gbrs.at(0)->paintDevice(cs, 2.0, 0.0, info);
+    painter.bltFixed(0,0, dab, 0,0,dab->bounds().width(), dab->bounds().height());
+    painter.bltFixed(80,60, dab, 0,0,dab->bounds().width(), dab->bounds().height());
+
+    painter.end();
+
+    QRect rc = layer->exactBounds();
+
+    QImage result = layer->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
+
+
+#if 0
+    // if you want to see the result on white background, set #if 1
+    QImage bg(result.size(), result.format());
+    bg.fill(Qt::white);
+    QPainter qPainter(&bg);
+    qPainter.drawImage(0, 0, result);
+    result = bg;
+#endif
+    result.save("z_spark_alpha_darken.png");
+
+    delete brush;
+}
+
+
 
 #include "kis_text_brush.h"
 

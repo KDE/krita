@@ -35,12 +35,17 @@
 class  KRITAIMAGE_EXPORT KisRandomSubAccessor : public KisShared
 {
 public:
-    KisRandomSubAccessor(const KisPaintDeviceSP device);
+    KisRandomSubAccessor(KisPaintDeviceSP device);
     ~KisRandomSubAccessor();
     /**
      * Copy the sampled old value to destination
      */
     void sampledOldRawData(quint8* dst);
+
+    /**
+     * Copy the sampled value to destination
+     */
+    void sampledRawData(quint8* dst);
 
     inline void moveTo(double x, double y) {
         m_currentPoint.setX(x); m_currentPoint.setY(y);
@@ -52,7 +57,7 @@ private:
     KisPaintDeviceSP m_device;
     int m_position, m_end;
     QPointF m_currentPoint;
-    KisRandomConstAccessorSP m_randomAccessor;
+    KisRandomAccessorSP m_randomAccessor;
 };
 
 #endif

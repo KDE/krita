@@ -1,14 +1,20 @@
 [Desktop Entry]
 Name=Lut Docker
+Name[el]=Εργαλείο προσάρτησης lut
+Name[fr]=Panneau lut
 Name[nl]=Lut-vastzetter
 Name[pt]=Área Acoplável do LUT
 Name[pt_BR]=Acoplador do LUT
+Name[sv]=Dockningsfönster för uppslagningstabell
 Name[uk]=Бічна панель таблиці пошуку
 Name[x-test]=xxLut Dockerxx
 Comment=Docker for selecting luts
+Comment[el]=Εργαλείο προσάρτησης για επιλογή lut
+Comment[fr]=Panneau de sélection des luts
 Comment[nl]=Vastzetter voor selecteren luts
 Comment[pt]=Área de selecção de LUT's
 Comment[pt_BR]=Acoplador para seleção de LUT's
+Comment[sv]=Dockningsfönster för valda uppslagningstabeller
 Comment[uk]=Бічна панель для вибору таблиць пошуку
 Comment[x-test]=xxDocker for selecting lutsxx
 X-KDE-ServiceTypes=Krita/Dock

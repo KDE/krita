@@ -82,6 +82,7 @@ set(flake_SRCS
     KoColorBackground.cpp
     KoGradientBackground.cpp
     KoOdfGradientBackground.cpp
+    KoHatchBackground.cpp
     KoPatternBackground.cpp
     KoShapeConfigWidgetBase.cpp
     KoShapeConfigFactoryBase.cpp

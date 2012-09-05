@@ -740,7 +740,7 @@ public:
      and puts it to \a dataString. The can be block indexed with optional \a dataID.
      \return true on success, false on failure and cancelled when there is no such data block
      \sa storeDataBlock(). */
-    tristate loadDataBlock(int objectID, QString &dataString, const QString& dataID);
+    tristate loadDataBlock(int objectID, QString &dataString, const QString& dataID = QString());
 
     /*! Stores (potentially large) data block \a dataString (e.g. xml form's representation),
      referenced by objectID. Block will be stored in "kexi__objectdata" table and

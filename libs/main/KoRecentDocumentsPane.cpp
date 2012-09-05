@@ -27,7 +27,8 @@
 #include <kcomponentdata.h>
 #include <kfileitem.h>
 #include <kio/previewjob.h>
-#include <kicon.h>
+
+#include <KoIcon.h>
 
 
 enum KoRecentDocumentRoles {
@@ -78,7 +79,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentDa
         , d(new KoRecentDocumentsPanePrivate)
 {
     setFocusProxy(m_documentList);
-    KGuiItem openGItem(i18n("Open This Document"), "document-open");
+    KGuiItem openGItem(i18n("Open This Document"), koIconName("document-open"));
     m_openButton->setGuiItem(openGItem);
     m_alwaysUseCheckBox->hide();
 

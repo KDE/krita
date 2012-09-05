@@ -137,7 +137,7 @@ KisUndoView::KisUndoView(KUndo2QStack *stack, QWidget *parent) : QListView(paren
 /*!
     Constructs a new view with parent \a parent and sets the observed group to \a group.
 
-    The view will update itself autmiatically whenever the active stack of the group changes.
+    The view will update itself automatically whenever the active stack of the group changes.
 */
 
 KisUndoView::KisUndoView(KUndo2Group *group, QWidget *parent) : QListView(parent), d(new KisUndoViewPrivate)

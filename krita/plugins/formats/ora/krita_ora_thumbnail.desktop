@@ -1,10 +1,13 @@
 [Desktop Entry]
 Type=Service
 Name=OpenRaster Archiving Images
+Name[el]=Εικόνες αρχειοθέτησης OpenRaster
+Name[fr]=Images OpenRaster
 Name[it]=Immagini archiviazione OpenRaster
 Name[nl]=OpenRaster afbeeldingen archiveren
 Name[pt]=Imagens do Arquivo OpenRaster
 Name[pt_BR]=Imagens do Arquivo OpenRaster
+Name[sv]=OpenRaster-arkivbilder
 Name[uk]=Зображення архівів OpenRaster (ORA)
 Name[x-test]=xxOpenRaster Archiving Imagesxx
 

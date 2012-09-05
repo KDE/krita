@@ -28,6 +28,7 @@
 struct KisCircleMaskGenerator::Private {
     double xcoef, ycoef;
     double xfadecoef, yfadecoef;
+    double transformedFadeX, transformedFadeY;
 };
 
 KisCircleMaskGenerator::KisCircleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes)
@@ -37,6 +38,8 @@ KisCircleMaskGenerator::KisCircleMaskGenerator(qreal diameter, qreal ratio, qrea
     d->ycoef = 2.0 / (KisMaskGenerator::d->ratio * width());
     d->xfadecoef = (KisMaskGenerator::d->fh == 0) ? 1 : (1.0 / (KisMaskGenerator::d->fh * width()));
     d->yfadecoef = (KisMaskGenerator::d->fv == 0) ? 1 : (1.0 / (KisMaskGenerator::d->fv * KisMaskGenerator::d->ratio * width()));
+    d->transformedFadeX = d->xfadecoef * softness();
+    d->transformedFadeY = d->yfadecoef * softness();
 }
 
 KisCircleMaskGenerator::~KisCircleMaskGenerator()
@@ -74,10 +77,7 @@ quint8 KisCircleMaskGenerator::valueAt(qreal x, qreal y) const
     if (n > 1) {
         return 255;
     } else {
-        qreal transformedFadeX = d->xfadecoef * softness();
-        qreal transformedFadeY = d->yfadecoef * softness();
-        
-        double normeFade = norme(xr * transformedFadeX, yr * transformedFadeY);
+        double normeFade = norme(xr * d->transformedFadeX, yr * d->transformedFadeY);
         if (normeFade > 1) {
             // xle stands for x-coordinate limit exterior
             // yle stands for y-coordinate limit exterior
@@ -117,4 +117,6 @@ void KisCircleMaskGenerator::setSoftness(qreal softness)
     }else{
         KisMaskGenerator::setSoftness(1.0 / softness);
     }
+    d->transformedFadeX = d->xfadecoef * this->softness();
+    d->transformedFadeY = d->yfadecoef * this->softness();
 }

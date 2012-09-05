@@ -246,7 +246,7 @@ void Thesaurus::checkSection(QTextDocument *document, int startPosition, int end
             m_word = document->toPlainText();
         m_dialog->showButton(KDialog::Ok, false);
         m_dialog->setButtonGuiItem(KDialog::Cancel,
-                KGuiItem(i18nc("@action:button Close thesaurus dialog", "&Close"), QString::fromLatin1("dialog-cancel")));
+                KGuiItem(i18nc("@action:button Close thesaurus dialog", "&Close"), koIconName("dialog-cancel")));
         m_replaceLineEdit->setEnabled(false);
         m_replaceLabel->setEnabled(false);
     }
@@ -258,7 +258,7 @@ void Thesaurus::checkSection(QTextDocument *document, int startPosition, int end
         m_document = document;
         m_startPosition = startPosition;
         m_dialog->setButtonGuiItem(KDialog::Ok,
-                KGuiItem(i18n("&Replace"), QString::fromLatin1("dialog-ok")));
+                KGuiItem(i18n("&Replace"), koIconName("dialog-ok")));
         slotFindTerm(m_word.trimmed());
         m_replaceLineEdit->setText(m_word.trimmed());
     }

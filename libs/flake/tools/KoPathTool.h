@@ -109,12 +109,15 @@ private slots:
     void pointToCurve();
     void activate();
 
+protected:
+    KoPathToolSelection m_pointSelection; ///< the point selection
+    QCursor m_selectCursor;
+
 private:
 
     KoPathToolHandle * m_activeHandle;       ///< the currently active handle
     int m_handleRadius;    ///< the radius of the control point handles
     uint m_grabSensitivity; ///< the grab sensitivity
-    KoPathToolSelection m_pointSelection; ///< the point selection
     QPointF m_lastPoint; ///< needed for interaction strategy
     PathSegment *m_activeSegment;
 
@@ -139,7 +142,6 @@ private:
     KAction *m_actionJoinSegment;
     KAction *m_actionMergePoints;
     KAction *m_actionConvertToPath;
-    QCursor m_selectCursor;
     QCursor m_moveCursor;
 
     Q_DECLARE_PRIVATE(KoToolBase)

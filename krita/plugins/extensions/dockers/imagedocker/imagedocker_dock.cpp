@@ -23,6 +23,7 @@
 #include <KoCanvasResourceManager.h>
 #include <KoCanvasBase.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoIcon.h>
 
 #include <QFileSystemModel>
 #include <QImageReader>
@@ -32,7 +33,6 @@
 #include <QDir>
 #include <QLineEdit>
 #include <QLabel>
-#include <QIcon>
 #include <QAbstractListModel>
 #include <QButtonGroup>
 
@@ -172,16 +172,16 @@ ImageDockerDock::ImageDockerDock():
     m_proxyModel->setSourceModel(m_model);
     m_proxyModel->setDynamicSortFilter(true);
 
-    m_ui->bnBack->setIcon(QIcon::fromTheme("go-previous"));
-    m_ui->bnUp->setIcon(QIcon::fromTheme("go-up"));
-    m_ui->bnHome->setIcon(QIcon::fromTheme("go-home"));
-    m_ui->bnImgPrev->setIcon(QIcon::fromTheme("go-previous"));
-    m_ui->bnImgNext->setIcon(QIcon::fromTheme("go-next"));
-    m_ui->bnImgClose->setIcon(QIcon::fromTheme("window-close"));
+    m_ui->bnBack->setIcon(koIcon("go-previous"));
+    m_ui->bnUp->setIcon(koIcon("go-up"));
+    m_ui->bnHome->setIcon(koIcon("go-home"));
+    m_ui->bnImgPrev->setIcon(koIcon("go-previous"));
+    m_ui->bnImgNext->setIcon(koIcon("go-next"));
+    m_ui->bnImgClose->setIcon(koIcon("window-close"));
     m_ui->thumbView->setScene(m_thumbModel);
     m_ui->treeView->setModel(m_proxyModel);
     m_ui->cmbImg->setModel(m_imgListModel);
-    m_ui->bnPopup->setIcon(QIcon::fromTheme("zoom-original"));
+    m_ui->bnPopup->setIcon(koIcon("zoom-original"));
     m_ui->bnPopup->setPopupWidget(m_popupUi);
 
     m_popupUi->zoomSlider->setRange(5, 500);

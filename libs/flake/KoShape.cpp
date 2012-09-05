@@ -32,6 +32,7 @@
 #include "KoShapeStrokeModel.h"
 #include "KoShapeBackground.h"
 #include "KoColorBackground.h"
+#include "KoHatchBackground.h"
 #include "KoGradientBackground.h"
 #include "KoPatternBackground.h"
 #include "KoShapeManager.h"
@@ -1559,9 +1560,13 @@ KoShapeBackground *KoShape::loadOdfFill(KoShapeLoadingContext &context) const
 {
     QString fill = KoShapePrivate::getStyleProperty("fill", context);
     KoShapeBackground *bg = 0;
-    if (fill == "solid" || fill == "hatch") {
+    if (fill == "solid") {
         bg = new KoColorBackground();
-    } else if (fill == "gradient") {
+    }
+    else if (fill == "hatch") {
+        bg = new KoHatchBackground();
+    }
+    else if (fill == "gradient") {
         QString styleName = KoShapePrivate::getStyleProperty("fill-gradient-name", context);
         KoXmlElement *e = context.odfLoadingContext().stylesReader().drawStyles("gradient")[styleName];
         QString style;

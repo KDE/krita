@@ -1,10 +1,13 @@
 [Desktop Entry]
 Icon=template_texture
 Name=Texture 8k 32bit scalar
+Name[el]=Texture 8k 32bit βαθμωτό
+Name[fr]=Texture 8k 32bit scalaire
 Name[it]=Trama 8k 32bit scalare
 Name[nl]=Textuur 8k 32bit scalar
 Name[pt]=Textura 8k 32-bits escalar
 Name[pt_BR]=Textura 8k 32bit escalar
+Name[sv]=Struktur 8k 32-bitar skalär
 Name[uk]=Текстура 8k, 32-бітова, скалярна
 Name[x-test]=xxTexture 8k 32bit scalarxx
 Type=Link

@@ -24,7 +24,6 @@
 class KoDocument;
 class KUndo2Stack;
 
-
 class KRITAIMAGE_EXPORT KisDocumentUndoStore : public KisUndoStore
 {
 public:
@@ -48,6 +47,11 @@ private:
 };
 
 
+/**
+ * KisSurrogateUndoAdapter -- saves commands directly to the
+ * internal stack. Used for wrapping around legacy code into
+ * a single command.
+ */
 class KRITAIMAGE_EXPORT KisSurrogateUndoStore : public KisUndoStore
 {
 public:
@@ -70,7 +74,10 @@ private:
     KUndo2Stack *m_undoStack;
 };
 
-
+/**
+ * @brief The KisDumbUndoStore class doesn't actually save commands,
+ * so you cannot undo or redo!
+ */
 class KRITAIMAGE_EXPORT KisDumbUndoStore : public KisUndoStore
 {
 public:

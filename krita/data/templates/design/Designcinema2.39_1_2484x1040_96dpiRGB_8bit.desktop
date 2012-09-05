@@ -1,9 +1,12 @@
 [Desktop Entry]
 Icon=template_ratio_2391
 Name=Design cinema 2.39:1 [ 2484x1040 , 96dpi RGB , 8bit ]
+Name[el]=Design cinema 2.39:1 [ 2484x1040 , 96dpi RGB , 8bit ]
+Name[fr]=style cinéma 2.39:1 [ 2484x1040, 96dpi RGB, 8bit ]
 Name[nl]=Design cinema 2.39:1 [ 2484x1040 , 96dpi RGB , 8bit ]
 Name[pt]=Desenho de cinema 2,39:1 [ 2484x1040 , 96ppp RGB , 8-bits ]
 Name[pt_BR]=Design de cinema 2.39:1 [ 2484x1040 , 96dpi RGB , 8bit ]
+Name[sv]=Design film 2,39:1 [ 2484x1040, 96 punkter/tum RGB, 8 bitar ]
 Name[uk]=Компонування кіноекрана 2,39:1 [2484⨯1040, 96 т./д., RGB, 8 бітів]
 Name[x-test]=xxDesign cinema 2.39:1 [ 2484x1040 , 96dpi RGB , 8bit ]xx
 Type=Link

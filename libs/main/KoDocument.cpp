@@ -1002,9 +1002,8 @@ bool KoDocument::openUrl(const KUrl & _url)
         QFile::remove(url.toLocalFile()); // and remove the autosave file
     }
     else {
-        if (d->parentPart) {
-            d->parentPart->addRecentURLToAllShells(_url);
-        }
+        d->parentPart->addRecentURLToAllShells(_url);
+
         if (ret) {
             // Detect readonly local-files; remote files are assumed to be writable, unless we add a KIO::stat here (async).
             KFileItem file(url, mimeType(), KFileItem::Unknown);

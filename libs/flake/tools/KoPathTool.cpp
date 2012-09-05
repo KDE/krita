@@ -96,9 +96,9 @@ struct KoPathTool::PathSegment {
 
 KoPathTool::KoPathTool(KoCanvasBase *canvas)
         : KoToolBase(canvas)
+        , m_pointSelection(this)
         , m_activeHandle(0)
         , m_handleRadius(3)
-        , m_pointSelection(this)
         , m_activeSegment(0)
         , m_currentStrategy(0)
 {

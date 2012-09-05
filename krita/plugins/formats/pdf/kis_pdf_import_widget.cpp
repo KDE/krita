@@ -21,7 +21,7 @@
 
 #define UNSTABLE_POPPLER_QT4
 // poppler's headers
-#include <poppler-qt4.h>
+#include <poppler/qt4/poppler-qt4.h>
 
 // Qt's headers
 #include <QRadioButton>
@@ -53,6 +53,7 @@ KisPDFImportWidget::KisPDFImportWidget(Poppler::Document* pdfDoc, QWidget * pare
     connect(boolFirstPage, SIGNAL(toggled(bool)), this, SLOT(selectFirstPage(bool)));
     connect(boolSelectionPage, SIGNAL(toggled(bool)), this, SLOT(selectSelectionOfPages(bool)));
     connect(listPages, SIGNAL(itemSelectionChanged()), this, SLOT(updateSelectionOfPages()));
+
 }
 
 
@@ -63,6 +64,10 @@ KisPDFImportWidget::~KisPDFImportWidget()
 void KisPDFImportWidget::selectAllPages(bool v)
 {
     if (v) {
+        if (listPages->selectedItems().count() != 0){
+            listPages->clearSelection();
+            boolAllPages->toggle();
+        }
         m_pages.clear();
         for (int i = 0; i < m_pdfDoc->numPages(); i++) {
             m_pages.push_back(i);
@@ -73,8 +78,13 @@ void KisPDFImportWidget::selectAllPages(bool v)
 void KisPDFImportWidget::selectFirstPage(bool v)
 {
     if (v) {
+        if (listPages->selectedItems().count() != 0){
+            listPages->clearSelection();
+            boolFirstPage->toggle();
+        }
         m_pages.clear();
         m_pages.push_back(0); // The first page is selected
+        updateMaxCanvasSize();
     }
 }
 void KisPDFImportWidget::selectSelectionOfPages(bool v)

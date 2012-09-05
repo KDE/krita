@@ -1,9 +1,12 @@
 [Desktop Entry]
 Name=Krita OpenColorIO-based Import Filter
+Name[el]=Φίλτρο εισαγωγής OpenColorIO-based του Krita
+Name[fr]=Filtre d'importation OpenColorIO de Krita
 Name[it]=Filtro di importazione per Krita basato su OpenColorIO
 Name[nl]=Op Krita OpenColorIO gebaseerd importfilter
 Name[pt]=Filtro de Importação Baseado no OpenColorIO para o Krita
 Name[pt_BR]=Filtro de importação baseado no OpenColorIO para o Krita
+Name[sv]=Krita OpenColorIO-baserat importfilter
 Name[uk]=Фільтр імпортування на основі OpenColorIO для Krita
 Name[x-test]=xxKrita OpenColorIO-based Import Filterxx
 X-KDE-Export=application/x-krita

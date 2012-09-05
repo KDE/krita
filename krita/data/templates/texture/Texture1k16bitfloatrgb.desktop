@@ -1,10 +1,13 @@
 [Desktop Entry]
 Icon=template_texture
 Name=Texture 1k 16bit float rgb
+Name[el]=Texture 1k 16bit float rgb
+Name[fr]=Texture 1k 16bit float rgb
 Name[it]=Trama 1k 16bit float rgb
 Name[nl]=Textuur 1k 16bit float rgb
 Name[pt]=Textura 1k 16-bits vírgula flutuante RGB
 Name[pt_BR]=Textura 1k 16bit flutuante rgb
+Name[sv]=Struktur 1k 16-bitar flyttal RGB
 Name[uk]=Текстура 1k, 16-бітова з рухомою комою, rgb
 Name[x-test]=xxTexture 1k 16bit float rgbxx
 Type=Link

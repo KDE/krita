@@ -422,7 +422,7 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
              }
         }//endfor y
 
-        MaskProcessor s(dst, cs, d->randomness, d->density, centerX, centerY, invScaleX, invScaleY, angle, d->shape);
+        SIMDMaskProcessor s(dst, cs, d->randomness, d->density, centerX, centerY, invScaleX, invScaleY, angle, d->shape);
         int jobs = d->idealThreadCountCached;
         if(dstHeight > 100 && jobs >= 4) {
             int splitter = dstHeight/jobs;

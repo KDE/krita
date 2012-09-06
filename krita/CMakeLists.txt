@@ -12,6 +12,8 @@ if(MSVC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
 endif(MSVC)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse2")
+
 include(CheckFunctionExists)
 
 if (NOT WIN32)
@@ -42,6 +44,7 @@ macro_log_feature(OIIO_FOUND "OIIO" "The OpenImageIO Lbirary" "https://sites.goo
 macro_bool_to_01(OIIO_FOUND HAVE_OIIO)
 configure_file(config-oiio.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-oiio.h )
 
+find_package(Vc REQUIRED)
 
 if(UNIX)
     set(CMAKE_REQUIRED_LIBRARIES "${CMAKE_REQUIRED_LIBRARIES};m")

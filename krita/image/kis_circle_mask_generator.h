@@ -37,6 +37,10 @@ public:
     virtual ~KisCircleMaskGenerator();
     
     virtual quint8 valueAt(qreal x, qreal y) const;
+
+    virtual void processRowFast(float* buffer, int width, float y, float cosa, float sina,
+                             float centerX, float centerY, float invScaleX, float invScaleY);
+
     virtual bool shouldSupersample() const;
 
     virtual void toXML(QDomDocument& , QDomElement&) const;

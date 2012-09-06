@@ -44,6 +44,9 @@ inline double drand48() {
 #include "kis_mask_generator.h"
 #include "kis_boundary.h"
 
+#include <Vc/Vc>
+#include <Vc/IO>
+
 // 3x3 supersampling
 #define SUPERSAMPLING 3
 
@@ -133,7 +136,94 @@ struct MaskProcessor
     KisMaskGenerator* m_shape;
 };
 
+struct SIMDMaskProcessor
+{
+    SIMDMaskProcessor(KisFixedPaintDeviceSP device, const KoColorSpace* cs, qreal randomness, qreal density,
+           double centerX, double centerY, double invScaleX, double invScaleY, double angle,
+           KisMaskGenerator* shape)
+    : m_device(device)
+    , m_cs(cs)
+    , m_randomness(randomness)
+    , m_density(density)
+    , m_pixelSize(cs->pixelSize())
+    , m_centerX(centerX)
+    , m_centerY(centerY)
+    , m_invScaleX(invScaleX)
+    , m_invScaleY(invScaleY)
+    , m_shape(shape)
+    {
 
+        m_cosa = cos(angle);
+        m_sina = sin(angle);
+    }
+
+    void operator()(QRect& rect)
+    {
+        process(rect);
+    }
+
+    void process(QRect& rect){
+        qreal random = 1.0;
+        quint8* dabPointer = m_device->data() + rect.y() * rect.width() * m_pixelSize;
+        quint8 alphaValue = OPACITY_TRANSPARENT_U8;
+        // this offset is needed when brush size is smaller then fixed device size
+        int offset = (m_device->bounds().width() - rect.width()) * m_pixelSize;
+
+        int width = rect.width();
+
+        float *buffer = Vc::malloc<float, Vc::AlignOnVector>(width);
+
+        for (int y = rect.y(); y < rect.y() + rect.height(); y++) {
+
+            m_shape->processRowFast(buffer, width, y, m_cosa, m_sina, m_centerX, m_centerY, m_invScaleX, m_invScaleY);
+
+            if (m_randomness != 0.0 || m_density != 1.0) {
+                for (int x = 0; x < width; x++) {
+
+                    if (m_randomness!= 0.0){
+                        random = (1.0 - m_randomness) + m_randomness * float(rand()) / RAND_MAX;
+                    }
+
+                    alphaValue = quint8( (OPACITY_OPAQUE_U8 - buffer[x]) * random);
+
+                    // avoid computation of random numbers if density is full
+                    if (m_density != 1.0){
+                        // compute density only for visible pixels of the mask
+                        if (alphaValue != OPACITY_TRANSPARENT_U8){
+                            if ( !(m_density >= drand48()) ){
+                                alphaValue = OPACITY_TRANSPARENT_U8;
+                            }
+                        }
+                    }
+
+                    m_cs->applyAlphaU8Mask(dabPointer, &alphaValue, 1);
+                    dabPointer += m_pixelSize;
+                }
+            } else {
+                for (int x = 0; x < width; x++) {
+                    alphaValue = quint8( (OPACITY_OPAQUE_U8 - buffer[x]));
+                    m_cs->applyAlphaU8Mask(dabPointer, &alphaValue, 1);
+                    dabPointer += m_pixelSize;
+                }
+            }//endfor x
+            dabPointer += offset;
+        }//endfor y
+        Vc::free(buffer);
+    }
+
+    KisFixedPaintDeviceSP m_device;
+    const KoColorSpace* m_cs;
+    qreal m_randomness;
+    qreal m_density;
+    quint32 m_pixelSize;
+    double m_centerX;
+    double m_centerY;
+    double m_invScaleX;
+    double m_invScaleY;
+    double m_cosa;
+    double m_sina;
+    KisMaskGenerator* m_shape;
+};
 
 struct KisAutoBrush::Private {
     KisMaskGenerator* shape;

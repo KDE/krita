@@ -47,4 +47,4 @@ target_link_libraries(KisStrokeBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTE
 target_link_libraries(KisFastMathBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 target_link_libraries(KisFloodfillBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 target_link_libraries(KisGradientBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-target_link_libraries(KisMaskGeneratorBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+target_link_libraries(KisMaskGeneratorBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY}  ${Vc_LIBRARIES})

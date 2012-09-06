@@ -143,12 +143,10 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
         }
         if (colorspacename == "RgbAF32") {
             colorspacename = "RGBAF32";
-            colorspacename  = "GRAYA";
             profileProductName = QString();
         }
         if (colorspacename == "RgbAF16") {
             colorspacename = "RGBAF32";
-            colorspacename  = "GRAYA";
             profileProductName = QString();
         }
 

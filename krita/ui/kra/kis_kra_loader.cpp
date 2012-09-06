@@ -200,6 +200,11 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
         if (profile->valid()) {
             image->assignImageProfile(profile);
         }
+        else {
+            profile = KoColorSpaceRegistry::instance()->profileByName(KoColorSpaceRegistry::instance()->colorSpaceFactory(image->colorSpace()->id())->defaultProfile());
+            Q_ASSERT(profile && profile->valid());
+            image->assignImageProfile(profile);
+        }
     }
 
     // Load the layers data: if there is a profile associated with a layer it will be set now.

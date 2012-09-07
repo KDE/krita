@@ -333,8 +333,6 @@ QImage KoPADocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSiz
     QSize size(thumbSize.width(), thumbSize.height());
     KoShapePainter shapePainter;
 
-    QList<KoShape*> shapes;
-
     KoPAPageBase *page = dynamic_cast<KoPAPageBase*>(shape);
     if (page) { // We create a thumbnail with actual width / height ratio for page
         KoZoomHandler zoomHandler;
@@ -350,10 +348,11 @@ QImage KoPADocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSiz
         return pixmap.toImage();
     }
 
-    shapes.append( shape );
-    KoShapeContainer * container = dynamic_cast<KoShapeContainer*>( shape );
-    if( container )
+    QList<KoShape*> shapes;
+    KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
+    if (container)
         shapes = container->shapes();
+    shapes.append(shape);
 
     shapePainter.setShapes( shapes );
 

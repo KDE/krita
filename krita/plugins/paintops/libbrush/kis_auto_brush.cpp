@@ -171,11 +171,18 @@ struct SIMDMaskProcessor
 
         int width = rect.width();
 
-        float *buffer = Vc::malloc<float, Vc::AlignOnVector>(width);
+        // We need to calculate with a multiple of the width of the simd register
+        int alignOffset = 0;
+        if (width % Vc::float_v::Size != 0) {
+            alignOffset = Vc::float_v::Size - (width % Vc::float_v::Size);
+        }
+        int simdWidth = width + alignOffset;
+
+        float *buffer = Vc::malloc<float, Vc::AlignOnVector>(simdWidth);
 
         for (int y = rect.y(); y < rect.y() + rect.height(); y++) {
 
-            m_shape->processRowFast(buffer, width, y, m_cosa, m_sina, m_centerX, m_centerY, m_invScaleX, m_invScaleY);
+            m_shape->processRowFast(buffer, simdWidth, y, m_cosa, m_sina, m_centerX, m_centerY, m_invScaleX, m_invScaleY);
 
             if (m_randomness != 0.0 || m_density != 1.0) {
                 for (int x = 0; x < width; x++) {

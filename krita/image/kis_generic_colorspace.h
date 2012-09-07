@@ -206,6 +206,10 @@ public:
 
     virtual void applyInverseAlphaU8Mask(quint8 * /*pixels*/, const quint8 * /*alpha*/, qint32 /*nPixels*/) const { }
 
+    virtual void applyAlphaNormedFloatMask(quint8 * /*pixels*/, const float * /*alpha*/, qint32 /*nPixels*/) const { }
+
+    virtual void applyInverseNormedFloatMask(quint8 * /*pixels*/, const float * /*alpha*/, qint32 /*nPixels*/) const { }
+
     virtual quint8 difference(const quint8* /*src1*/, const quint8* /*src2*/) const {
         return 255;
     }

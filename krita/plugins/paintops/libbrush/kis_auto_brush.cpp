@@ -184,7 +184,7 @@ struct SIMDMaskProcessor
                         random = (1.0 - m_randomness) + m_randomness * float(rand()) / RAND_MAX;
                     }
 
-                    alphaValue = quint8( (OPACITY_OPAQUE_U8 - buffer[x]) * random);
+                    alphaValue = quint8( (OPACITY_OPAQUE_U8 - buffer[x]*255) * random);
 
                     // avoid computation of random numbers if density is full
                     if (m_density != 1.0){
@@ -200,11 +200,8 @@ struct SIMDMaskProcessor
                     dabPointer += m_pixelSize;
                 }
             } else {
-                for (int x = 0; x < width; x++) {
-                    alphaValue = quint8( (OPACITY_OPAQUE_U8 - buffer[x]));
-                    m_cs->applyAlphaU8Mask(dabPointer, &alphaValue, 1);
-                    dabPointer += m_pixelSize;
-                }
+                m_cs->applyInverseNormedFloatMask(dabPointer, buffer, width);
+                dabPointer += width*m_pixelSize;
             }//endfor x
             dabPointer += offset;
         }//endfor y

@@ -142,7 +142,6 @@ void KisCircleMaskGenerator::processRowFast(float* buffer, int width, float y, f
     Vc::float_v vTransformedFadeY(d->transformedFadeY);
 
     Vc::float_v vOne(1.0f);
-    Vc::float_v v255(255.0f);
 
     for (int i=0; i < width; i+= Vc::float_v::Size){
 
@@ -156,11 +155,11 @@ void KisCircleMaskGenerator::processRowFast(float* buffer, int width, float y, f
         Vc::float_v vNormFade = normeSIMD(xr * vTransformedFadeX, yr * vTransformedFadeY);
 
         //255 * n * (normeFade - 1) / (normeFade - n)
-        Vc::float_v vFade = v255 * n * (vNormFade - vOne) / (vNormFade - n);
+        Vc::float_v vFade = n * (vNormFade - vOne) / (vNormFade - n);
         // Mask out the inner circe of the mask
         Vc::float_m mask = vNormFade < vOne;
         vFade.setZero(mask);
-        vFade = Vc::min(vFade, v255);
+        vFade = Vc::min(vFade, vOne);
 
         vFade.store(bufferPointer);
         currentIndices = currentIndices + increment;

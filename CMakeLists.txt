@@ -2,7 +2,7 @@ project(calligra)
 
 cmake_minimum_required(VERSION 2.8.0 FATAL_ERROR)
 cmake_policy(SET CMP0002 OLD)
-cmake_policy(SET CMP0017 OLD)
+cmake_policy(SET CMP0017 NEW)
 
  ############
 #############

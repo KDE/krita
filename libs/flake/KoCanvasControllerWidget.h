@@ -126,6 +126,10 @@ public:
 
     virtual QPoint scrollBarValue() const;
 
+    /**
+     * Used by KisCanvasController to correct the scrollbars position
+     * after the rotation.
+     */
     virtual void setScrollBarValue(const QPoint &value);
 
     virtual void updateDocumentSize(const QSize &sz, bool recalculateCenter = true);
@@ -161,16 +165,6 @@ private slots:
 
 protected:
     friend class KisZoomAndPanTest;
-
-    /**
-     * Used by KisCanvasController to correct the scrollbars position
-     * after the rotation.
-     *
-     * The difference from the usual setScrollBarValue() is that it
-     * blocks the updates of preferredCenterFraction, in the slot
-     * of the scroll bars.
-     */
-    void setScrollBarValueSilent(const QPoint &value);
 
     /**
      * Zoom document keeping point \p widgetPoint unchanged

@@ -636,16 +636,6 @@ QPoint KoCanvasControllerWidget::scrollBarValue() const
     return QPoint(hBar->value(), vBar->value());
 }
 
-void KoCanvasControllerWidget::setScrollBarValueSilent(const QPoint &value)
-{
-    const bool oldIgnoreScrollSignals = d->ignoreScrollSignals;
-    d->ignoreScrollSignals = true;
-
-    setScrollBarValue(value);
-
-    d->ignoreScrollSignals = oldIgnoreScrollSignals;
-}
-
 void KoCanvasControllerWidget::setScrollBarValue(const QPoint &value)
 {
     QScrollBar * hBar = horizontalScrollBar();

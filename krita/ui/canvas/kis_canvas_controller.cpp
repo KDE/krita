@@ -117,14 +117,14 @@ void KisCanvasController::mirrorCanvas(bool enable)
 {
     QPoint newOffset = m_d->coordinatesConverter->mirror(m_d->coordinatesConverter->widgetCenterPoint(), false, enable);
     m_d->updateDocumentSizeAfterTransform();
-    setScrollBarValueSilent(newOffset);
+    setScrollBarValue(newOffset);
 }
 
 void KisCanvasController::rotateCanvas(qreal angle)
 {
     QPoint newOffset = m_d->coordinatesConverter->rotate(m_d->coordinatesConverter->widgetCenterPoint(), angle);
     m_d->updateDocumentSizeAfterTransform();
-    setScrollBarValueSilent(newOffset);
+    setScrollBarValue(newOffset);
 }
 
 void KisCanvasController::rotateCanvasRight15()
@@ -141,5 +141,5 @@ void KisCanvasController::resetCanvasTransformations()
 {
     QPoint newOffset = m_d->coordinatesConverter->resetRotation(m_d->coordinatesConverter->widgetCenterPoint());
     m_d->updateDocumentSizeAfterTransform();
-    setScrollBarValueSilent(newOffset);
+    setScrollBarValue(newOffset);
 }

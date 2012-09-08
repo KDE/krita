@@ -234,7 +234,6 @@ struct KisAutoBrush::Private {
     qreal randomness;
     qreal density;
     int idealThreadCountCached;
-    mutable QVector<quint8> precomputedQuarter;
 };
 
 KisAutoBrush::KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness, qreal density)
@@ -321,126 +320,40 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
     double centerX = dstWidth  * 0.5 - 0.5 + subPixelX;
     double centerY = dstHeight * 0.5 - 0.5 + subPixelY;
 
-    // the results differ, sometimes this code is faster, sometimes it is not
-    // more investigation is probably needed
-    // valueAt is costly similary to interpolation is some cases
-    if (false && isBrushSymmetric(angle) && (dynamic_cast<PlainColoringInformation*>(coloringInformation))){
-        // round eg. 14.3 to 15 so that we can interpolate
-        // we have to add one pixel because of subpixel precision (see the centerX, centerY computation)
-        // and add one pixel because of interpolation
-        int halfWidth = qRound((dstWidth - centerX) ) + 2;
-        int halfHeight = qRound((dstHeight - centerY) ) + 2;
+    d->shape->setSoftness( softnessFactor );
 
-        int size = halfWidth * halfHeight;
-        if (d->precomputedQuarter.size() != size)
-        {
-            d->precomputedQuarter.resize(size);
-        }
+    for (int y = 0; y < dstHeight; y++) {
+        for (int x = 0; x < dstWidth; x++) {
 
-        // precompute the table for interpolation
-        int pos = 0;
-        d->shape->setSoftness(softnessFactor);
-        int supersample = d->shape->shouldSupersample() ? SUPERSAMPLING : 1;
-        double invss = 1.0 / supersample;
-        int samplearea = supersample * supersample;
-        for (int y = 0; y < halfHeight; y++){
-            for (int x = 0; x < halfWidth; x++, pos++){
-                int value = 0;
-                for (int sy = 0; sy < supersample; sy++) {
-                    for (int sx = 0; sx < supersample; sx++) {
-                        double maskX = (x + sx * invss) * invScaleX;
-                        double maskY = (y + sy * invss) * invScaleY;
-                        value += d->shape->valueAt(maskX, maskY);
-                    }
+            if (coloringInformation) {
+                if (color) {
+                    memcpy(dabPointer, color, pixelSize);
+                } else {
+                    memcpy(dabPointer, coloringInformation->color(), pixelSize);
+                    coloringInformation->nextColumn();
                 }
-                if (supersample != 1) value /= samplearea;
-                d->precomputedQuarter[pos] = value;
             }
-        }
-
-        qreal random = 1.0;
-        quint8 alphaValue = OPACITY_TRANSPARENT_U8;
-        for (int y = 0; y < dstHeight; y++) {
-            for (int x = 0; x < dstWidth; x++) {
-
-                double maskX = (x - centerX);
-                double maskY = (y - centerY);
-
-                if (coloringInformation) {
-                    if (color) {
-                        memcpy(dabPointer, color, pixelSize);
-                    } else {
-                        memcpy(dabPointer, coloringInformation->color(), pixelSize);
-                        coloringInformation->nextColumn();
-                    }
-                }
-                if (d->randomness != 0.0){
-                    random = (1.0 - d->randomness) + d->randomness * qreal(rand()) / RAND_MAX;
-                }
-
-                alphaValue = quint8( ( OPACITY_OPAQUE_U8 - interpolatedValueAt(maskX, maskY,d->precomputedQuarter,halfWidth) ) * random);
-                if (d->density != 1.0){
-                    // compute density only for visible pixels of the mask
-                    if (alphaValue != OPACITY_TRANSPARENT_U8){
-                        if ( !(d->density >= drand48()) ){
-                            alphaValue = OPACITY_TRANSPARENT_U8;
-                        }
-                    }
-                }
-
-                cs->setOpacity(dabPointer, alphaValue, 1);
-                dabPointer += pixelSize;
-
+            dabPointer += pixelSize;
             }//endfor x
-            //printf("\n");
-
             if (!color && coloringInformation) {
-                coloringInformation->nextRow();
+            coloringInformation->nextRow();
             }
-            //TODO: this never happens probably?
-            if (dstWidth < rowWidth) {
-                dabPointer += (pixelSize * (rowWidth - dstWidth));
-            }
+    }//endfor y
 
-        }//endfor y
-
-    } else
-    {
-        d->shape->setSoftness( softnessFactor );
-
-        for (int y = 0; y < dstHeight; y++) {
-            for (int x = 0; x < dstWidth; x++) {
-
-                if (coloringInformation) {
-                    if (color) {
-                        memcpy(dabPointer, color, pixelSize);
-                    } else {
-                        memcpy(dabPointer, coloringInformation->color(), pixelSize);
-                        coloringInformation->nextColumn();
-                    }
-                }
-                dabPointer += pixelSize;
-             }//endfor x
-             if (!color && coloringInformation) {
-                coloringInformation->nextRow();
-             }
-        }//endfor y
-
-        SIMDMaskProcessor s(dst, cs, d->randomness, d->density, centerX, centerY, invScaleX, invScaleY, angle, d->shape);
-        int jobs = d->idealThreadCountCached;
-        if(dstHeight > 100 && jobs >= 4) {
-            int splitter = dstHeight/jobs;
-            QVector<QRect> rects;
-            for(int i = 0; i < jobs - 1; i++) {
-                rects << QRect(0, i*splitter, dstWidth, splitter);
-            }
-            rects << QRect(0, (jobs - 1)*splitter, dstWidth, dstHeight - (jobs - 1)*splitter);
-            QtConcurrent::blockingMap(rects, s);
-        } else {
-            QRect rect(0, 0, dstWidth, dstHeight);
-            s.process(rect);
+    SIMDMaskProcessor s(dst, cs, d->randomness, d->density, centerX, centerY, invScaleX, invScaleY, angle, d->shape);
+    int jobs = d->idealThreadCountCached;
+    if(dstHeight > 100 && jobs >= 4) {
+        int splitter = dstHeight/jobs;
+        QVector<QRect> rects;
+        for(int i = 0; i < jobs - 1; i++) {
+            rects << QRect(0, i*splitter, dstWidth, splitter);
         }
-    }//else
+        rects << QRect(0, (jobs - 1)*splitter, dstWidth, dstHeight - (jobs - 1)*splitter);
+        QtConcurrent::blockingMap(rects, s);
+    } else {
+        QRect rect(0, 0, dstWidth, dstHeight);
+        s.process(rect);
+    }
 }
 
 
@@ -489,40 +402,6 @@ qreal KisAutoBrush::randomness() const
 {
     return d->randomness;
 }
-
-
-bool KisAutoBrush::isBrushSymmetric(double angle) const
-{
-    // small brushes compute directly
-    if (d->shape->height() < 3 ) return false;
-    // even spikes are symmetric
-    if ((d->shape->spikes() % 2) != 0) return false;
-    // main condition, if not rotated or use optimization for rotated circles - rotated circle is circle again
-    if ( angle == 0.0 || ( ( d->shape->type() == KisMaskGenerator::CIRCLE ) && ( d->shape->width() == d->shape->height() ) ) ) return true;
-    // in other case return false
-    return false;
-}
-
-
-quint8 KisAutoBrush::interpolatedValueAt(double x, double y,const QVector<quint8> &precomputedQuarter,int width) const
-{
-    x = qAbs(x);
-    y = qAbs(y);
-
-    double x_i = floor(x);
-    double x_f = x - x_i;
-    double x_f_r = 1.0 - x_f;
-
-    double y_i = floor(y);
-    double y_f = fabs(y - y_i);
-    double y_f_r = 1.0 - y_f;
-
-    return (x_f_r * y_f_r * valueAt(x_i , y_i, precomputedQuarter, width) +
-            x_f   * y_f_r * valueAt(x_i + 1, y_i, precomputedQuarter, width) +
-            x_f_r * y_f   * valueAt(x_i,  y_i + 1, precomputedQuarter, width) +
-            x_f   * y_f   * valueAt(x_i + 1,  y_i + 1, precomputedQuarter, width));
-}
-
 
 void KisAutoBrush::setImage(const QImage& image)
 {

@@ -869,7 +869,8 @@ QStringList Connection::objectNames(int objType, bool* ok)
     for (c->moveFirst(); !c->eof(); c->moveNext()) {
         QString name = c->value(0).toString();
         if (KexiDB::isIdentifier(name)) {
-            list.append(name);
+            list.append(name.toLower()); /* .toLower() fixes support for objects renamed
+                                            to not-all-lowercase in Kexi <= 2.5.2 (bug 306523) */
         }
     }
 
@@ -2399,7 +2400,8 @@ bool Connection::setupObjectSchemaData(const RecordData &data, SchemaData &sdata
     if (!ok) {
         return false;
     }
-    sdata.m_name = data[2].toString();
+    sdata.m_name = data[2].toString().toLower(); /* .toLower() fixes support for objects renamed
+                                                    to not-all-lowercase in Kexi <= 2.5.2 (bug 306523) */
     if (!KexiDB::isIdentifier(sdata.m_name)) {
         setError(ERR_INVALID_IDENTIFIER, i18n("Invalid object name \"%1\"", sdata.m_name));
         return false;

@@ -43,6 +43,8 @@ public:
 
     virtual bool shouldSupersample() const;
 
+    virtual bool shouldVectorize() const;
+
     virtual void toXML(QDomDocument& , QDomElement&) const;
     
     virtual void setSoftness(qreal softness);

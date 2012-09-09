@@ -77,6 +77,14 @@ struct MaskProcessor
     }
 
     void process(QRect& rect){
+        if (m_shape->shouldVectorize()) {
+            processParallel(rect);
+        } else {
+            processScalar(rect);
+        }
+    }
+
+    void processScalar(QRect& rect){
         qreal random = 1.0;
         quint8* dabPointer = m_device->data() + rect.y() * rect.width() * m_pixelSize;
         quint8 alphaValue = OPACITY_TRANSPARENT_U8;
@@ -122,47 +130,7 @@ struct MaskProcessor
         }//endfor y
     }
 
-    KisFixedPaintDeviceSP m_device;
-    const KoColorSpace* m_cs;
-    qreal m_randomness;
-    qreal m_density;
-    quint32 m_pixelSize;
-    double m_centerX;
-    double m_centerY;
-    double m_invScaleX;
-    double m_invScaleY;
-    double m_cosa;
-    double m_sina;
-    KisMaskGenerator* m_shape;
-};
-
-struct SIMDMaskProcessor
-{
-    SIMDMaskProcessor(KisFixedPaintDeviceSP device, const KoColorSpace* cs, qreal randomness, qreal density,
-           double centerX, double centerY, double invScaleX, double invScaleY, double angle,
-           KisMaskGenerator* shape)
-    : m_device(device)
-    , m_cs(cs)
-    , m_randomness(randomness)
-    , m_density(density)
-    , m_pixelSize(cs->pixelSize())
-    , m_centerX(centerX)
-    , m_centerY(centerY)
-    , m_invScaleX(invScaleX)
-    , m_invScaleY(invScaleY)
-    , m_shape(shape)
-    {
-
-        m_cosa = cos(angle);
-        m_sina = sin(angle);
-    }
-
-    void operator()(QRect& rect)
-    {
-        process(rect);
-    }
-
-    void process(QRect& rect){
+    void processParallel(QRect& rect){
         qreal random = 1.0;
         quint8* dabPointer = m_device->data() + rect.y() * rect.width() * m_pixelSize;
         quint8 alphaValue = OPACITY_TRANSPARENT_U8;
@@ -340,7 +308,7 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
             }
     }//endfor y
 
-    SIMDMaskProcessor s(dst, cs, d->randomness, d->density, centerX, centerY, invScaleX, invScaleY, angle, d->shape);
+    MaskProcessor s(dst, cs, d->randomness, d->density, centerX, centerY, invScaleX, invScaleY, angle, d->shape);
     int jobs = d->idealThreadCountCached;
     if(dstHeight > 100 && jobs >= 4) {
         int splitter = dstHeight/jobs;

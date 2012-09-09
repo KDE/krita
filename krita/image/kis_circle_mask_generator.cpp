@@ -58,6 +58,12 @@ bool KisCircleMaskGenerator::shouldSupersample() const
     return width() < 10 || KisMaskGenerator::d->ratio * width() < 10;
 }
 
+bool KisCircleMaskGenerator::shouldVectorize() const
+{
+    return !shouldSupersample();
+}
+
+
 quint8 KisCircleMaskGenerator::valueAt(qreal x, qreal y) const
 {
     if (KisMaskGenerator::d->empty) return 255;

@@ -12,8 +12,18 @@ if(MSVC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
 endif(MSVC)
 
-include (OptimizeForArchitecture)
-OptimizeForArchitecture()
+macro_optional_find_package(Vc)
+macro_bool_to_01(Vc_FOUND HAVE_VC)
+configure_file(config-vc.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-vc.h )
+
+if(HAVE_VC)
+    message(STATUS "Vc found!")
+
+    SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${Vc_CMAKE_MODULES_DIR}")
+    include (OptimizeForArchitecture)
+    OptimizeForArchitecture()
+endif(HAVE_VC)
+
 
 include(CheckFunctionExists)
 
@@ -44,8 +54,6 @@ macro_optional_find_package(OIIO)
 macro_log_feature(OIIO_FOUND "OIIO" "The OpenImageIO Lbirary" "https://sites.google.com/site/openimageio/" FALSE "" "Required by the OIIO file import/export filter")
 macro_bool_to_01(OIIO_FOUND HAVE_OIIO)
 configure_file(config-oiio.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-oiio.h )
-
-find_package(Vc REQUIRED)
 
 if(UNIX)
     set(CMAKE_REQUIRED_LIBRARIES "${CMAKE_REQUIRED_LIBRARIES};m")

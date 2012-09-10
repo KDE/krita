@@ -26,7 +26,12 @@ set(kritalibbrush_LIB_SRCS
 
 kde4_add_library(kritalibbrush SHARED ${kritalibbrush_LIB_SRCS} )
 
-target_link_libraries(kritalibbrush kritaui ${Vc_LIBRARIES})
+target_link_libraries(kritalibbrush kritaui)
+
+if(HAVE_VC)
+  target_link_libraries(kritalibbrush  ${Vc_LIBRARIES})
+endif(HAVE_VC)
+
 target_link_libraries(kritalibbrush LINK_INTERFACE_LIBRARIES kritaui)
 
 set_target_properties(kritalibbrush PROPERTIES

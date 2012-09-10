@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2004,2007-2009 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2012 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -44,8 +45,11 @@ inline double drand48() {
 #include "kis_mask_generator.h"
 #include "kis_boundary.h"
 
+#include "config-vc.h"
+#ifdef HAVE_VC
 #include <Vc/Vc>
 #include <Vc/IO>
+#endif
 
 // 3x3 supersampling
 #define SUPERSAMPLING 3
@@ -77,11 +81,16 @@ struct MaskProcessor
     }
 
     void process(QRect& rect){
+#ifdef HAVE_VC
         if (m_shape->shouldVectorize()) {
             processParallel(rect);
         } else {
             processScalar(rect);
         }
+
+#else
+        processScalar(rect);
+#endif
     }
 
     void processScalar(QRect& rect){
@@ -130,6 +139,7 @@ struct MaskProcessor
         }//endfor y
     }
 
+#ifdef HAVE_VC
     void processParallel(QRect& rect){
         qreal random = 1.0;
         quint8* dabPointer = m_device->data() + rect.y() * rect.width() * m_pixelSize;
@@ -182,6 +192,7 @@ struct MaskProcessor
         }//endfor y
         Vc::free(buffer);
     }
+#endif
 
     KisFixedPaintDeviceSP m_device;
     const KoColorSpace* m_cs;

@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2004,2007-2009 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2012 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,8 +19,12 @@
  */
 
 #include <cmath>
+
+#include "config-vc.h"
+#ifdef HAVE_VC
 #include <Vc/Vc>
 #include <Vc/IO>
+#endif
 
 #include <QDomDocument>
 
@@ -27,9 +32,11 @@
 #include "kis_circle_mask_generator.h"
 #include "kis_base_mask_generator.h"
 
+#ifdef HAVE_VC
     inline Vc::float_v normeSIMD(Vc::float_v a, Vc::float_v b) {
         return a*a + b*b;
     }
+#endif
 
 struct KisCircleMaskGenerator::Private {
     double xcoef, ycoef;
@@ -119,6 +126,7 @@ quint8 KisCircleMaskGenerator::valueAt(qreal x, qreal y) const
 void KisCircleMaskGenerator::processRowFast(float* buffer, int width, float y, float cosa, float sina,
                                             float centerX, float centerY, float invScaleX, float invScaleY)
 {
+#ifdef HAVE_VC
     float y_ = (y - centerY) * invScaleY;
     float sinay_ = sina * y_;
     float cosay_ = cosa * y_;
@@ -172,6 +180,7 @@ void KisCircleMaskGenerator::processRowFast(float* buffer, int width, float y, f
 
         bufferPointer += Vc::float_v::Size;
     }
+#endif
 }
 
 

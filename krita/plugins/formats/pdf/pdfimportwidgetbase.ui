@@ -114,15 +114,19 @@
           <property name="spacing">
            <number>6</number>
           </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="textLabel5">
+            <property name="text">
+             <string comment="horizontal resolution">Horizontal:</string>
+            </property>
+           </widget>
+          </item>
           <item row="1" column="0">
            <widget class="QLabel" name="intVerticalqsdf">
             <property name="text">
              <string comment="vertical resolution">Vertical:</string>
             </property>
            </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="KComboBox" name="kComboBox1"/>
           </item>
           <item row="0" column="1">
            <widget class="QSpinBox" name="intHorizontal">
@@ -149,16 +153,6 @@
              <number>100</number>
             </property>
            </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="textLabel5">
-            <property name="text">
-             <string comment="horizontal resolution">Horizontal:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="KComboBox" name="kComboBox2"/>
           </item>
          </layout>
         </item>
@@ -286,22 +280,13 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <customwidgets>
-  <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-  </customwidget>
- </customwidgets>
  <tabstops>
   <tabstop>boolAllPages</tabstop>
   <tabstop>boolFirstPage</tabstop>
   <tabstop>boolSelectionPage</tabstop>
   <tabstop>listPages</tabstop>
   <tabstop>intHorizontal</tabstop>
-  <tabstop>kComboBox1</tabstop>
   <tabstop>intVertical</tabstop>
-  <tabstop>kComboBox2</tabstop>
   <tabstop>intWidth</tabstop>
   <tabstop>intHeight</tabstop>
  </tabstops>

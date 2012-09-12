@@ -3679,9 +3679,10 @@ tristate Connection::closeAllTableSchemaChangeListeners(TableSchema& tableSchema
 //Qt4??? QSet<Connection::TableSchemaChangeListenerInterface*>::ConstIterator tmpListeners(*listeners); //safer copy
     tristate res = true;
     //try to close every window
-    for (QSet<Connection::TableSchemaChangeListenerInterface*>::ConstIterator it(listeners->constBegin());
-            it != listeners->constEnd() && res == true; ++it) {
-        res = (*it)->closeListener();
+    QList<Connection::TableSchemaChangeListenerInterface*> list(listeners->toList());
+    KexiDBDbg << list.count();
+    foreach (Connection::TableSchemaChangeListenerInterface* listener, list) {
+        res = listener->closeListener();
     }
     return res;
 }

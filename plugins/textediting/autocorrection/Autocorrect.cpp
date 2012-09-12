@@ -146,6 +146,7 @@ void Autocorrect::configureAutocorrect()
     if (cfgDlg->exec()) {
         // TODO
     }
+    delete cfgDlg;
 }
 
 // ******************** individual features;

@@ -115,6 +115,7 @@ private:
     void readConfig();
     void writeConfig();
     void readAutocorrectXmlEntry();
+    void writeAutocorrectXmlEntry();
 
 private:
     bool m_uppercaseFirstCharOfSentence; // convert first letter of a sentence automaticall to uppercase

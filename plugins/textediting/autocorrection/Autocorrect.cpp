@@ -674,6 +674,7 @@ void Autocorrect::writeConfig()
     interface.writeEntry("ReplaceSingleQuotes", m_replaceSingleQuotes);
 
     interface.writeEntry("formatLanguage", m_autocorrectLang);
+    writeAutocorrectXmlEntry();
 }
 
 void Autocorrect::readAutocorrectXmlEntry()
@@ -791,3 +792,70 @@ void Autocorrect::readAutocorrectXmlEntry()
 
 }
 
+
+void Autocorrect::writeAutocorrectXmlEntry()
+{
+    const QString fname = KGlobal::dirs()->locateLocal("data", QLatin1String("calligra/autocorrect/autocorrect.xml"));
+    QFile file(fname);
+    if( !file.open( QIODevice::WriteOnly | QIODevice::Text ) ) {
+        qDebug()<<"We can't save in file :"<<fname;
+        return;
+    }
+    QDomDocument root(QLatin1String("autocorrection"));
+
+    QDomElement word = root.createElement(QLatin1String( "Word" ));
+    root.appendChild(word);
+    QDomElement items = root.createElement(QLatin1String( "items" ));
+
+    QHashIterator<QString, QString> i(m_autocorrectEntries);
+    while (i.hasNext()) {
+        i.next();
+        QDomElement item = root.createElement(QLatin1String( "item" ));
+        item.setAttribute(QLatin1String("find"),i.key());
+        item.setAttribute(QLatin1String("replace"),i.value());
+        items.appendChild(item);
+    }
+    word.appendChild(items);
+
+
+    QDomElement upperCaseExceptions = root.createElement(QLatin1String( "UpperCaseExceptions" ));
+    QSet<QString>::const_iterator upper = m_upperCaseExceptions.constBegin();
+    while (upper != m_upperCaseExceptions.constEnd()) {
+        QDomElement item = root.createElement(QLatin1String( "word" ));
+        item.setAttribute(QLatin1String("exception"),*upper);
+        upperCaseExceptions.appendChild(item);
+        ++upper;
+    }
+    word.appendChild(upperCaseExceptions);
+
+    QDomElement twoUpperLetterExceptions = root.createElement(QLatin1String( "TwoUpperLetterExceptions" ));
+    QSet<QString>::const_iterator twoUpper = m_twoUpperLetterExceptions.constBegin();
+    while (twoUpper != m_twoUpperLetterExceptions.constEnd()) {
+        QDomElement item = root.createElement(QLatin1String( "word" ));
+        item.setAttribute(QLatin1String("exception"),*twoUpper);
+        upperCaseExceptions.appendChild(item);
+        ++twoUpper;
+    }
+    word.appendChild(twoUpperLetterExceptions);
+
+
+    QDomElement doubleQuote = root.createElement(QLatin1String( "DoubleQuote" ));
+    QDomElement item = root.createElement(QLatin1String( "doublequote" ));
+    item.setAttribute(QLatin1String("begin"),m_typographicDoubleQuotes.begin);
+    item.setAttribute(QLatin1String("end"),m_typographicDoubleQuotes.end);
+    doubleQuote.appendChild(item);
+    word.appendChild(doubleQuote);
+
+    QDomElement singleQuote = root.createElement(QLatin1String( "SimpleQuote" ));
+    item = root.createElement(QLatin1String( "simplequote" ));
+    item.setAttribute(QLatin1String("begin"),m_typographicSingleQuotes.begin);
+    item.setAttribute(QLatin1String("end"),m_typographicSingleQuotes.end);
+    singleQuote.appendChild(item);
+    word.appendChild(singleQuote);
+
+
+    QTextStream ts( &file );
+    ts << root.toString();
+    file.close();
+
+}

@@ -342,7 +342,8 @@ void AutocorrectConfig::removeAbbreviationEntry()
 {
     int currentRow = widget.abbreviationList->currentRow();
     QListWidgetItem *item = widget.abbreviationList->takeItem(currentRow);
-    Q_ASSERT(item);
+    if(!item)
+        return;
     m_upperCaseExceptions.remove(item->text());
     delete item;
 }
@@ -361,7 +362,8 @@ void AutocorrectConfig::removeTwoUpperLetterEntry()
 {
     int currentRow = widget.twoUpperLetterList->currentRow();
     QListWidgetItem *item = widget.twoUpperLetterList->takeItem(currentRow);
-    Q_ASSERT(item);
+    if(!item)
+        return;
     m_twoUpperLetterExceptions.remove(item->text());
     delete item;
 }

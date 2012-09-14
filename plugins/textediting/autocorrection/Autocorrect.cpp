@@ -120,7 +120,7 @@ void Autocorrect::setUpperCaseExceptions(QSet<QString> exceptions) { m_upperCase
 void Autocorrect::setTwoUpperLetterExceptions(QSet<QString> exceptions) { m_twoUpperLetterExceptions = exceptions; }
 void Autocorrect::setAutocorrectEntries(QHash<QString, QString> entries) { m_autocorrectEntries = entries; }
 
-Autocorrect::TypographicQuotes Autocorrect::getTypographicDefaultSingleQuotes()
+Autocorrect::TypographicQuotes Autocorrect::getTypographicDefaultSingleQuotes() const
 {
     Autocorrect::TypographicQuotes quote;
     quote.begin = QChar(0x2018);
@@ -128,7 +128,7 @@ Autocorrect::TypographicQuotes Autocorrect::getTypographicDefaultSingleQuotes()
     return quote;
 }
 
-Autocorrect::TypographicQuotes Autocorrect::getTypographicDefaultDoubleQuotes()
+Autocorrect::TypographicQuotes Autocorrect::getTypographicDefaultDoubleQuotes() const
 {
     Autocorrect::TypographicQuotes quote;
     quote.begin = QChar(0x201c);
@@ -136,9 +136,9 @@ Autocorrect::TypographicQuotes Autocorrect::getTypographicDefaultDoubleQuotes()
     return quote;
 }
 
-QSet<QString> Autocorrect::getUpperCaseExceptions() { return m_upperCaseExceptions; }
-QSet<QString> Autocorrect::getTwoUpperLetterExceptions() { return m_twoUpperLetterExceptions; }
-QHash<QString, QString> Autocorrect::getAutocorrectEntries() { return m_autocorrectEntries; }
+QSet<QString> Autocorrect::getUpperCaseExceptions() const { return m_upperCaseExceptions; }
+QSet<QString> Autocorrect::getTwoUpperLetterExceptions() const { return m_twoUpperLetterExceptions; }
+QHash<QString, QString> Autocorrect::getAutocorrectEntries() const { return m_autocorrectEntries; }
 
 void Autocorrect::configureAutocorrect()
 {

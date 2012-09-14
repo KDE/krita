@@ -66,27 +66,27 @@ public:
     void setTwoUpperLetterExceptions(QSet<QString> exceptions);
     void setAutocorrectEntries(QHash<QString, QString> entries);
 
-    bool getUppercaseFirstCharOfSentence() { return m_uppercaseFirstCharOfSentence; }
-    bool getFixTwoUppercaseChars() { return m_fixTwoUppercaseChars; }
-    bool getAutoFormatURLs() { return m_autoFormatURLs; }
-    bool getSingleSpaces() { return m_singleSpaces; }
-    bool getTrimParagraphs() { return m_trimParagraphs; }
-    bool getAutoBoldUnderline() { return m_autoBoldUnderline; }
-    bool getAutoFractions() { return m_autoFractions; }
-    bool getAutoNumbering() { return m_autoNumbering; }
-    bool getSuperscriptAppendix() { return m_superscriptAppendix; }
-    bool getCapitalizeWeekDays() { return m_capitalizeWeekDays; }
-    bool getAutoFormatBulletList() { return m_autoFormatBulletList; }
-    bool getReplaceDoubleQuotes() { return m_replaceDoubleQuotes; }
-    bool getReplaceSingleQuotes() { return m_replaceSingleQuotes; }
-    bool getAdvancedAutocorrect() { return m_advancedAutocorrect; }
-    TypographicQuotes getTypographicSingleQuotes() { return m_typographicSingleQuotes; }
-    TypographicQuotes getTypographicDoubleQuotes() { return m_typographicDoubleQuotes; }
-    TypographicQuotes getTypographicDefaultSingleQuotes();
-    TypographicQuotes getTypographicDefaultDoubleQuotes();
-    QSet<QString> getUpperCaseExceptions();
-    QSet<QString> getTwoUpperLetterExceptions();
-    QHash<QString, QString> getAutocorrectEntries();
+    bool getUppercaseFirstCharOfSentence() const { return m_uppercaseFirstCharOfSentence; }
+    bool getFixTwoUppercaseChars()const  { return m_fixTwoUppercaseChars; }
+    bool getAutoFormatURLs() const { return m_autoFormatURLs; }
+    bool getSingleSpaces() const { return m_singleSpaces; }
+    bool getTrimParagraphs() const { return m_trimParagraphs; }
+    bool getAutoBoldUnderline() const { return m_autoBoldUnderline; }
+    bool getAutoFractions() const { return m_autoFractions; }
+    bool getAutoNumbering() const { return m_autoNumbering; }
+    bool getSuperscriptAppendix() const { return m_superscriptAppendix; }
+    bool getCapitalizeWeekDays() const { return m_capitalizeWeekDays; }
+    bool getAutoFormatBulletList() const { return m_autoFormatBulletList; }
+    bool getReplaceDoubleQuotes() const { return m_replaceDoubleQuotes; }
+    bool getReplaceSingleQuotes() const { return m_replaceSingleQuotes; }
+    bool getAdvancedAutocorrect() const { return m_advancedAutocorrect; }
+    TypographicQuotes getTypographicSingleQuotes() const { return m_typographicSingleQuotes; }
+    TypographicQuotes getTypographicDoubleQuotes() const { return m_typographicDoubleQuotes; }
+    TypographicQuotes getTypographicDefaultSingleQuotes() const;
+    TypographicQuotes getTypographicDefaultDoubleQuotes() const;
+    QSet<QString> getUpperCaseExceptions() const;
+    QSet<QString> getTwoUpperLetterExceptions() const;
+    QHash<QString, QString> getAutocorrectEntries() const;
 
 private slots:
     void configureAutocorrect();

@@ -769,5 +769,25 @@ void Autocorrect::readAutocorrectXmlEntry()
             m_autocorrectEntries.insert(find, replace);
         }
     }
+    QDomElement doubleQuote = de.namedItem(QLatin1String("DoubleQuote")).toElement();
+    if(doubleQuote.isNull()) {
+      QDomNodeList nl = doubleQuote.childNodes();
+      if(nl.count()==1) {
+        QDomElement element = nl.item(0).toElement();
+        m_typographicDoubleQuotes.begin = element.attribute(QLatin1String("begin")).at(0);
+        m_typographicDoubleQuotes.end = element.attribute(QLatin1String("end")).at(0);
+      }
+    }
+
+    QDomElement singleQuote = de.namedItem(QLatin1String("SimpleQuote")).toElement();
+    if(singleQuote.isNull()) {
+      QDomNodeList nl = singleQuote.childNodes();
+      if(nl.count()==1) {
+        QDomElement element = nl.item(0).toElement();
+        m_typographicSingleQuotes.begin = element.attribute(QLatin1String("begin")).at(0);
+        m_typographicSingleQuotes.end = element.attribute(QLatin1String("end")).at(0);
+      }
+    }
+
 }
 

@@ -60,11 +60,11 @@ public:
     void setReplaceDoubleQuotes(bool b) { m_replaceDoubleQuotes = b; }
     void setReplaceSingleQuotes(bool b) { m_replaceSingleQuotes = b; }
     void setAdvancedAutocorrect(bool b) { m_advancedAutocorrect = b; }
-    void setTypographicSingleQuotes(TypographicQuotes singleQuote) { m_typographicSingleQuotes = singleQuote; }
-    void setTypographicDoubleQuotes(TypographicQuotes doubleQuote) { m_typographicDoubleQuotes = doubleQuote; }
-    void setUpperCaseExceptions(QSet<QString> exceptions);
-    void setTwoUpperLetterExceptions(QSet<QString> exceptions);
-    void setAutocorrectEntries(QHash<QString, QString> entries);
+    void setTypographicSingleQuotes(const TypographicQuotes& singleQuote) { m_typographicSingleQuotes = singleQuote; }
+    void setTypographicDoubleQuotes(const TypographicQuotes& doubleQuote) { m_typographicDoubleQuotes = doubleQuote; }
+    void setUpperCaseExceptions(const QSet<QString>& exceptions);
+    void setTwoUpperLetterExceptions(const QSet<QString>& exceptions);
+    void setAutocorrectEntries(const QHash<QString, QString>& entries);
 
     bool getUppercaseFirstCharOfSentence() const { return m_uppercaseFirstCharOfSentence; }
     bool getFixTwoUppercaseChars()const  { return m_fixTwoUppercaseChars; }

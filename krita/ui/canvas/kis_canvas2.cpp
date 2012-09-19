@@ -696,7 +696,12 @@ KisCanvasDecoration* KisCanvas2::decoration(const QString& id)
 
 QPoint KisCanvas2::documentOrigin() const
 {
-    qWarning() << "Krita does not use documentOrigin() anymore. Please fix the code." << kdBacktrace();
+    /**
+     * In Krita we don't use document origin anymore.
+     * All the centering when needed (vastScrolling < 0.5) is done
+     * automatically by the KisCoordinatesConverter.
+     */
+
     return QPoint();
 }
 

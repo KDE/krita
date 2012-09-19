@@ -657,7 +657,6 @@ bool KisCanvas2::usingHDRExposureProgram()
 
 void KisCanvas2::slotConfigChanged()
 {
-    qDebug() << "slotConfigChanged";
     KisConfig cfg;
     m_d->vastScrolling = cfg.vastScrolling();
 
@@ -674,7 +673,6 @@ void KisCanvas2::slotConfigChanged()
 
 void KisCanvas2::slotSetDisplayProfile(const KoColorProfile * profile)
 {
-    qDebug() << "slotSetDisplayProfile";
     KisConfig cfg;
     KoColorConversionTransformation::Intent renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();
     KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::HighQuality;
@@ -698,7 +696,7 @@ KisCanvasDecoration* KisCanvas2::decoration(const QString& id)
 
 QPoint KisCanvas2::documentOrigin() const
 {
-    qWarning() << "Krita does not use documentOrigin() anymore. Please fix the code.";
+    qWarning() << "Krita does not use documentOrigin() anymore. Please fix the code." << kdBacktrace();
     return QPoint();
 }
 

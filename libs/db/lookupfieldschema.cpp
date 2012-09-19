@@ -470,7 +470,10 @@ bool LookupFieldSchema::setProperty(
     } else if ("showColumnHeaders" == propertyName) {
         lookup.setColumnHeadersVisible(value.toBool());
     } else if ("listRows" == propertyName) {
-        lookup.setMaximumListRows(value.toBool());
+        const uint ival = value.toUInt(&ok);
+        if (!ok)
+            return false;
+        lookup.setMaximumListRows(ival);
     } else if ("limitToList" == propertyName) {
         lookup.setLimitToList(value.toBool());
     } else if ("displayWidget" == propertyName) {

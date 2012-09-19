@@ -139,6 +139,9 @@ private:
     friend class KisTiledDataManagerTest;
     void testingSuspendPooler();
     void testingResumePooler();
+
+    friend class KisLowMemoryBenchmark;
+    void testingRereadConfig();
 private:
     KisTileDataPooler m_pooler;
     KisTileDataSwapper m_swapper;

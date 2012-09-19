@@ -86,12 +86,6 @@ KisTileDataStore::~KisTileDataStore()
                     << "some tiles have leaked from the Krita control!";
         qCritical() << "CRITICAL: Tiles in memory:" << numTilesInMemory()
                     << "Total tiles:" << numTiles();
-
-#ifdef HAVE_MEMORY_LEAK_TRACKER
-        Q_ASSERT_X(0, "KisTileDataStore::~KisTileDataStore",
-                   "Let's crash to be on the safe side! ;)");
-#endif /* HAVE_MEMORY_LEAK_TRACKER */
-
     }
 }
 
@@ -322,6 +316,12 @@ void KisTileDataStore::debugClear()
 
     m_numTiles = 0;
     m_memoryMetric = 0;
+}
+
+void KisTileDataStore::testingRereadConfig() {
+    m_pooler.testingRereadConfig();
+    m_swapper.testingRereadConfig();
+    kickPooler();
 }
 
 void KisTileDataStore::testingSuspendPooler()

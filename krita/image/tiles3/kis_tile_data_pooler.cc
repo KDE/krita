@@ -350,3 +350,9 @@ void KisTileDataPooler::debugTileStatistics()
 
     qDebug() << "Tiles statistics:\t total:" << m_store->numTiles() << "\t preallocated:"<< preallocatedTiles;
 }
+
+void KisTileDataPooler::testingRereadConfig()
+{
+    KisImageConfig config;
+    m_memoryLimit = MiB_TO_METRIC(config.poolLimit());
+}

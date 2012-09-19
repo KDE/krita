@@ -327,8 +327,6 @@ void KisStrokeBenchmark::colorsmudgeRL()
     benchmarkStroke(presetFileName);
 }
 
-
-
 /*
 void KisStrokeBenchmark::predefinedBrush()
 {

@@ -38,8 +38,9 @@ public:
 
     void kick();
     void terminateSwapper();
-
     void checkFreeMemory();
+
+    void testingRereadConfig();
 
 private:
     void waitForWork();

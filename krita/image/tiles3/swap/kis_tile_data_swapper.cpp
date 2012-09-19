@@ -235,3 +235,8 @@ qint64 KisTileDataSwapper::pass(qint64 needToFreeMetric)
 
     return freedMetric;
 }
+
+void KisTileDataSwapper::testingRereadConfig()
+{
+    m_d->limits = KisStoreLimits();
+}

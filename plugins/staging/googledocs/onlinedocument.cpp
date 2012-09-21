@@ -51,16 +51,17 @@ OnlineDocument::OnlineDocument(QObject *parent, const QVariantList &)
     connect(action, SIGNAL(triggered(bool)), SLOT(slotOnlineDocument()));
 
     const KAboutData *about = KCmdLineArgs::aboutData();
-    QString name = about->appName();
+    m_type = OnlineDocument::UNKNOWN; // default
+    if (about) {
+        QString name = about->appName();
 
-    if (name.contains("words")) {
-        m_type = OnlineDocument::WORDS;
-    } else if (name.contains("stage")) {
-        m_type = OnlineDocument::STAGE;
-    } else if (name.contains("sheets")) {
-        m_type = OnlineDocument::SHEETS;
-    } else {
-        m_type = OnlineDocument::UNKNOWN;
+        if (name.contains("words")) {
+            m_type = OnlineDocument::WORDS;
+        } else if (name.contains("stage")) {
+            m_type = OnlineDocument::STAGE;
+        } else if (name.contains("sheets")) {
+            m_type = OnlineDocument::SHEETS;
+        }
     }
 }
 

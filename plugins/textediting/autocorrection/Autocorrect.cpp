@@ -684,18 +684,26 @@ void Autocorrect::readAutocorrectXmlEntry()
     QString kdelang = locale->languageList().first();
     kdelang.remove(QRegExp("@.*"));
 
+    QStringList folders;
+    folders<<QLatin1String("/")<<QLatin1String("calligra/");
     QString fname;
-    if (!m_autocorrectLang.isEmpty())
-        fname = KGlobal::dirs()->findResource("data", "calligra/autocorrect/" + m_autocorrectLang + ".xml");
-    if (m_autocorrectLang != "all_languages") {
-        if (fname.isEmpty() && !kdelang.isEmpty())
-            fname = KGlobal::dirs()->findResource("data", "calligra/autocorrect/" + kdelang + ".xml");
-        if (fname.isEmpty() && kdelang.contains("_")) {
-            kdelang.remove( QRegExp( "_.*" ) );
-            fname = KGlobal::dirs()->findResource("data", "calligra/autocorrect/" + kdelang + ".xml");
+    Q_FOREACH(const QString& path, folders)
+    {
+        if (!m_autocorrectLang.isEmpty())
+            fname = KGlobal::dirs()->findResource("data", path + "autocorrect/" + m_autocorrectLang + ".xml");
+        if (m_autocorrectLang != "all_languages") {
+            if (fname.isEmpty() && !kdelang.isEmpty())
+                fname = KGlobal::dirs()->findResource("data", path + "autocorrect/" + kdelang + ".xml");
+            if (fname.isEmpty() && kdelang.contains("_")) {
+                kdelang.remove( QRegExp( "_.*" ) );
+                fname = KGlobal::dirs()->findResource("data", path + "autocorrect/" + kdelang + ".xml");
+            }
+            if (fname.isEmpty())
+                fname = KGlobal::dirs()->findResource("data", path + "autocorrect/autocorrect.xml");
         }
-        if (fname.isEmpty())
-            fname = KGlobal::dirs()->findResource("data", "calligra/autocorrect/autocorrect.xml");
+        if(!fname.isEmpty()) {
+            break;
+        }
     }
     if (m_autocorrectLang.isEmpty())
         m_autocorrectLang = kdelang;
@@ -795,7 +803,7 @@ void Autocorrect::readAutocorrectXmlEntry()
 
 void Autocorrect::writeAutocorrectXmlEntry()
 {
-    const QString fname = KGlobal::dirs()->locateLocal("data", QLatin1String("calligra/autocorrect/autocorrect.xml"));
+    const QString fname = KGlobal::dirs()->locateLocal("data", QLatin1String("autocorrect/autocorrect.xml"));
     QFile file(fname);
     if( !file.open( QIODevice::WriteOnly | QIODevice::Text ) ) {
         qDebug()<<"We can't save in file :"<<fname;

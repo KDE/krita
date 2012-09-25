@@ -48,8 +48,8 @@ public:
         if (srcCs->colorDepthId() == Integer8BitsColorDepthID
                 || srcCs->colorDepthId() == Integer16BitsColorDepthID) {
 
-            if (srcProfile->name().toLower().contains("linear") ||
-                    dstProfile->name().toLower().contains("linear") &&
+            if ((srcProfile->name().toLower().contains("linear") ||
+                    dstProfile->name().toLower().contains("linear")) &&
                     !conversionFlags.testFlag(KoColorConversionTransformation::NoOptimization) ) {
                 conversionFlags |= KoColorConversionTransformation::NoOptimization;
             }

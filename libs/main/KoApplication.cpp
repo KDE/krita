@@ -503,10 +503,10 @@ bool KoApplication::notify(QObject *receiver, QEvent *event)
     try {
         return QApplication::notify(receiver, event);
     } catch (std::exception &e) {
-        qWarning("Error %s sending event %s to object %i",
+        qWarning("Error %s sending event %i to object %s",
                  e.what(), event->type(), qPrintable(receiver->objectName()));
     } catch (...) {
-        qWarning("Error <unknown> sending event %s to object %i",
+        qWarning("Error <unknown> sending event %i to object %s",
                  event->type(), qPrintable(receiver->objectName()));
     }
     return false;

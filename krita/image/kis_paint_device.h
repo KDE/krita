@@ -525,12 +525,7 @@ public:
     /**
      * @return the colorspace of the pixels in this paint device
      */
-    KoColorSpace * colorSpace();
-
-    /**
-     * @return the colorspace of the pixels in this paint device
-     */
-    const KoColorSpace * colorSpace() const;
+    const KoColorSpace *colorSpace() const;
 
     /**
      * @return the internal datamanager that keeps the pixels.

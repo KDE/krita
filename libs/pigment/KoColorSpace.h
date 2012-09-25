@@ -257,16 +257,13 @@ public:
     virtual bool hasHighDynamicRange() const = 0;
 
 
-    //========== Display profiles =============================================//
+//========== Display profiles =============================================//
 
     /**
      * Return the profile of this color space.
      */
     virtual const KoColorProfile * profile() const = 0;
-    /**
-     * Return the profile of this color space.
-     */
-    virtual KoColorProfile * profile() = 0;
+
 
 //================= Conversion functions ==================================//
 

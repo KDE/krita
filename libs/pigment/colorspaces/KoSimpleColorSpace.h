@@ -87,10 +87,6 @@ public:
         return m_profile;
     }
 
-    virtual KoColorProfile* profile() {
-        return m_profile;
-    }
-
     virtual KoColorTransformation* createBrightnessContrastAdjustment(const quint16*) const {
         warnPigment << i18n("Undefined operation in the %1 color space", m_name);
         return 0;

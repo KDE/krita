@@ -93,7 +93,7 @@ private:
     /// paint wu particle using composite operation 
     void paintParticle(QPointF pos, const KoColor& color);
     /// similar to sample input color in spray
-    void colorifyBristles(KisRandomConstAccessorSP acc, KoColorSpace *cs, QPointF point);
+    void colorifyBristles(KisRandomConstAccessorSP acc, const KoColorSpace *cs, QPointF point);
     
     void repositionBristles(double angle, double slope);
     /// compute mouse pressure according distance

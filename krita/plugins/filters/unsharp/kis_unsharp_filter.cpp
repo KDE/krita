@@ -93,7 +93,7 @@ void KisUnsharpFilter::process(KisPaintDeviceSP device,
     KisConvolutionKernelSP kernel = KisConvolutionKernel::fromMaskGenerator(kas);
 
     KisPaintDeviceSP interm = new KisPaintDevice(*device);
-    KoColorSpace * cs = interm->colorSpace();
+    const KoColorSpace * cs = interm->colorSpace();
     KoConvolutionOp * convolutionOp = cs->convolutionOp();
 
     KisConvolutionPainter painter(interm);   // TODO no need for a full copy and then a transaction

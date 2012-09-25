@@ -95,10 +95,6 @@ public:
         return m_profile;
     }
 
-    virtual KoColorProfile* profile() {
-        return m_profile;
-    }
-
     virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
                                    const KoColorProfile *  dstProfile,
                                    KoColorConversionTransformation::Intent renderingIntent,

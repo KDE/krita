@@ -1823,9 +1823,9 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
         selectionAccessor = d->selection->projection()->createRandomConstAccessorNG(start.x(), start.y());
     }
 
-    int           pixelSize    = d->device->pixelSize();
-    quint8        pixelOpacity = quint8(d->paramInfo.opacity*255.0f);
-    KoColorSpace* cs           = d->device->colorSpace();
+    int pixelSize = d->device->pixelSize();
+    quint8 pixelOpacity = quint8(d->paramInfo.opacity*255.0f);
+    const KoColorSpace *cs = d->device->colorSpace();
 
     KoColor c1(d->paintColor);
     KoColor c2(d->paintColor);

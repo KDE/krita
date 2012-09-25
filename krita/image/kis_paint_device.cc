@@ -168,7 +168,7 @@ public:
     PaintDeviceCache cache;
     qint32 x;
     qint32 y;
-    KoColorSpace* colorSpace;
+    const KoColorSpace* colorSpace;
 
 };
 
@@ -209,7 +209,7 @@ void KisPaintDevice::init(KisDataManagerSP explicitDataManager,
         defaultBounds = new KisDefaultBounds();
     }
 
-    m_d->colorSpace = KoColorSpaceRegistry::instance()->grabColorSpace(colorSpace);
+    m_d->colorSpace = colorSpace;
     Q_ASSERT(m_d->colorSpace);
 
     if(explicitDataManager) {
@@ -238,7 +238,7 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs)
     , m_d(new Private(this))
 {
     if (this != &rhs) {
-        m_d->colorSpace = KoColorSpaceRegistry::instance()->grabColorSpace(rhs.m_d->colorSpace);
+        m_d->colorSpace = rhs.m_d->colorSpace;
         Q_ASSERT(m_d->colorSpace);
 
         m_d->x = rhs.m_d->x;
@@ -256,7 +256,6 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs)
 
 KisPaintDevice::~KisPaintDevice()
 {
-    KoColorSpaceRegistry::instance()->releaseColorSpace(m_d->colorSpace);
     delete m_d;
 }
 
@@ -276,8 +275,7 @@ void KisPaintDevice::prepareClone(KisPaintDeviceSP src)
             setDefaultPixel(src->defaultPixel());
         }
 
-        KoColorSpaceRegistry::instance()->releaseColorSpace(m_d->colorSpace);
-        m_d->colorSpace = KoColorSpaceRegistry::instance()->grabColorSpace(src->colorSpace());
+        m_d->colorSpace = src->colorSpace();
     }
     setDefaultBounds(src->defaultBounds());
     setParentNode(0);
@@ -607,7 +605,7 @@ KUndo2Command* KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoC
     }
 
     KisDataManagerSP oldData = m_datamanager;
-    KoColorSpace *oldColorSpace = m_d->colorSpace;
+    const KoColorSpace *oldColorSpace = m_d->colorSpace;
 
     KisPaintDeviceConvertTypeCommand* cmd = new KisPaintDeviceConvertTypeCommand(this,
                                                                                  oldData,
@@ -627,8 +625,7 @@ void KisPaintDevice::setProfile(const KoColorProfile * profile)
     const KoColorSpace * dstSpace =
             KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->colorModelId().id(), colorSpace()->colorDepthId().id(), profile);
     if (dstSpace) {
-        KoColorSpaceRegistry::instance()->releaseColorSpace(m_d->colorSpace);
-        m_d->colorSpace = KoColorSpaceRegistry::instance()->grabColorSpace(dstSpace);
+        m_d->colorSpace = dstSpace;
     }
     emit profileChanged(profile);
 }
@@ -639,8 +636,7 @@ void KisPaintDevice::setDataManager(KisDataManagerSP data, const KoColorSpace * 
     m_d->cache.setupCache();
 
     if(colorSpace) {
-        KoColorSpaceRegistry::instance()->releaseColorSpace(m_d->colorSpace);
-        m_d->colorSpace = KoColorSpaceRegistry::instance()->grabColorSpace(colorSpace);
+        m_d->colorSpace = colorSpace;
         emit colorSpaceChanged(colorSpace);
     }
 }
@@ -1053,13 +1049,7 @@ quint32 KisPaintDevice::channelCount() const
     return _channelCount;
 }
 
-KoColorSpace * KisPaintDevice::colorSpace()
-{
-    Q_ASSERT(m_d->colorSpace != 0);
-    return m_d->colorSpace;
-}
-
-const KoColorSpace * KisPaintDevice::colorSpace() const
+const KoColorSpace *KisPaintDevice::colorSpace() const
 {
     Q_ASSERT(m_d->colorSpace != 0);
     return m_d->colorSpace;

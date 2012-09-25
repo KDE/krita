@@ -91,7 +91,7 @@ QRect KisTransformWorker::rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst,
 {
     qint32 pixelSize = src->pixelSize();
     QRect r(boundRect);
-    KoColorSpace *cs = src->colorSpace();
+    const KoColorSpace *cs = src->colorSpace();
     Q_UNUSED(cs);
 
     KisHLineIteratorSP hit = src->createHLineIteratorNG(r.x(), r.top(), r.width());
@@ -128,7 +128,7 @@ QRect rotateWithTf(int rotation, KisPaintDeviceSP src, KisPaintDeviceSP dst,
 {
     qint32 pixelSize = src->pixelSize();
     QRect r(boundRect);
-    KoColorSpace *cs = src->colorSpace();
+    const KoColorSpace *cs = src->colorSpace();
     Q_UNUSED(cs);
 
     KisRandomAccessorSP srcAcc = src->createRandomAccessorNG(0, 0);
@@ -296,7 +296,7 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
     qint32 lineNum, srcStart, firstLine, srcLen, numLines;
     qint32 center, begin, end;    /* filter calculation variables */
     quint8 pixelSize = src->pixelSize();
-    KoColorSpace * cs = src->colorSpace();
+    const KoColorSpace * cs = src->colorSpace();
     KoMixColorsOp * mixOp = cs->mixColorsOp();
     qint32 scale;
     qint32 shearFracOffset;

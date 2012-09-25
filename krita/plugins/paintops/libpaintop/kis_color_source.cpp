@@ -114,7 +114,7 @@ void KisPlainColorSource::selectColor(double mix)
     colors[0] = m_cachedBackGroundColor->data();
     colors[1] = m_foreGroundColor.data();
     int weight = (int)(mix * 255);
-    const qint16 weights[2] = { 255 - weight, weight };
+    const qint16 weights[2] = { (qint16)255 - weight, (qint16)weight };
 
     m_color->colorSpace()->mixColorsOp()->mixColors(colors, weights, 2, m_color->data());
 

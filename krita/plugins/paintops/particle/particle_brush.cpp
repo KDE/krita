@@ -51,7 +51,7 @@ void ParticleBrush::setInitialPosition(QPointF pos) {
 }
 
 
-void ParticleBrush::paintParticle(KisRandomAccessorSP accWrite,KoColorSpace * cs, QPointF pos, const KoColor& color,qreal weight, bool respectOpacity)
+void ParticleBrush::paintParticle(KisRandomAccessorSP accWrite, const KoColorSpace * cs, QPointF pos, const KoColor& color,qreal weight, bool respectOpacity)
 {
     // opacity top left, right, bottom left, right
     KoColor myColor(color);
@@ -89,7 +89,7 @@ void ParticleBrush::paintParticle(KisRandomAccessorSP accWrite,KoColorSpace * cs
 
 void ParticleBrush::draw(KisPaintDeviceSP dab,const KoColor& color,QPointF pos) {
     KisRandomAccessorSP accessor = dab->createRandomAccessorNG( qRound(pos.x()), qRound(pos.y()) );
-    KoColorSpace * cs = dab->colorSpace();
+    const KoColorSpace * cs = dab->colorSpace();
 
     for (int i = 0; i < m_properties->iterations; i++) {
         for (int j = 0; j < m_properties->particleCount; j++) {
@@ -119,7 +119,7 @@ void ParticleBrush::draw(KisPaintDeviceSP dab,const KoColor& color,QPointF pos) 
             m_particleNextPos[j] *= m_properties->gravity;
             m_particlePos[j] = m_particlePos[j] + (m_particleNextPos[j] * TIME);
 
-            paintParticle(accessor, cs ,m_particlePos[j],color,m_properties->weight, true);
+            paintParticle(accessor, cs, m_particlePos[j], color, m_properties->weight, true);
 
         }//for j
     }//for i

@@ -193,9 +193,9 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
         m_tempPainter->bitBlt(0, 0, painter()->device(), x, y, m_maskBounds.width(), m_maskBounds.height());
     }
     else {
-        KoColorSpace* cs    = painter()->device()->colorSpace();
-        qint32        px    = x + m_maskBounds.width()  / 2;
-        qint32        py    = y + m_maskBounds.height() / 2;
+        const KoColorSpace* cs = painter()->device()->colorSpace();
+        qint32 px = x + m_maskBounds.width()  / 2;
+        qint32 py = y + m_maskBounds.height() / 2;
         // get the pixel on the canvas that lies beneath the center
         // of the dab and fill  the temporary paint device with that color
         m_smudgeAccessor->moveTo(px, py);

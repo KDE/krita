@@ -48,7 +48,7 @@ void KisBidirectionalMixingOption::apply(KisPaintDeviceSP dab, KisPaintDeviceSP 
 {
     if (!m_mixingEnabled) return;
 
-    KoColorSpace *cs = dab->colorSpace();
+    const KoColorSpace *cs = dab->colorSpace();
     KisPaintDeviceSP canvas = new KisPaintDevice(cs);
     KisPainter p(canvas);
     p.setCompositeOp(COMPOSITE_COPY);

@@ -325,8 +325,8 @@ bool KisAsyncMerger::compositeWithProjection(KisLayerSP layer, const QRect &rect
     // because the channel flags from the source layer doesn't match with the colorspace of the projection device
     // this leads to the situation that the wrong channels will be enabled/disabled
     if(!channelFlags.isEmpty() && m_currentProjection->colorSpace() != device->colorSpace()) {
-        KoColorSpace* src = device->colorSpace();
-        KoColorSpace* dst = m_currentProjection->colorSpace();
+        const KoColorSpace* src = device->colorSpace();
+        const KoColorSpace* dst = m_currentProjection->colorSpace();
 
         bool alphaFlagIsSet        = (src->channelFlags(false,true) & channelFlags) == src->channelFlags(false,true);
         bool allColorFlagsAreSet   = (src->channelFlags(true,false) & channelFlags) == src->channelFlags(true,false);

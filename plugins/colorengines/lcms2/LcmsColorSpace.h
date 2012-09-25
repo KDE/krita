@@ -203,10 +203,6 @@ public:
         return d->colorProfile;
     }
 
-    virtual KoColorProfile * profile() {
-        return d->colorProfile;
-    }
-
     virtual bool profileIsCompatible(const KoColorProfile* profile) const {
         const IccColorProfile* p = dynamic_cast<const IccColorProfile*>(profile);
         return (p && p->asLcms()->colorSpaceSignature() == colorSpaceSignature());

@@ -67,6 +67,7 @@ public:
     double thicknesssensorvalue;
     
     void initializeTwin(KisHatchingPaintOpSettings* convenienttwin) const;
+    using KisPropertiesConfiguration::fromXML;
     virtual void fromXML(const QDomElement&);
         
 };

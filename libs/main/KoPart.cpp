@@ -52,6 +52,11 @@
 #include <QGraphicsScene>
 #include <QGraphicsProxyWidget>
 
+#ifndef QT_NO_DBUS
+#include <QDBusConnection>
+#include "KoPartAdaptor.h"
+#endif
+
 namespace {
 
 class DocumentProgressProxy : public KoProgressProxy {
@@ -115,6 +120,10 @@ KoPart::KoPart(QObject *parent)
     // we're not a part in a part, so we cannot be selected, we're always top-level
     setSelectable(false);
 
+#ifndef QT_NO_DBUS
+    new KoPartAdaptor(this);
+    QDBusConnection::sessionBus().registerObject('/' + objectName(), this);
+#endif
 
     connect(this, SIGNAL(started(KIO::Job*)), SLOT(slotStarted(KIO::Job*)));
 }

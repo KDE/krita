@@ -209,7 +209,7 @@ void KoCharacterStyle::ensureMinimalProperties(QTextCharFormat &format) const
     }
 }
 
-qreal KoCharacterStyle::Private::calculateFontYStretch(QString fontFamily)
+qreal KoCharacterStyle::Private::calculateFontYStretch(QString /*fontFamily*/)
 {
     qreal stretch = 1;
 #ifdef SHOULD_BUILD_FONT_CONVERSION

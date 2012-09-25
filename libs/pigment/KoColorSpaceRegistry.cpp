@@ -135,7 +135,6 @@ KoColorSpaceRegistry::~KoColorSpaceRegistry()
 
 //    foreach(const KoColorSpace * cs, d->csMap) {
 //        cs->d->deletability = OwnedByRegistryRegistryDeletes;
-//        releaseColorSpace(const_cast<KoColorSpace*>(cs));
 //    }
 //    d->csMap.clear();
 
@@ -168,11 +167,6 @@ void KoColorSpaceRegistry::remove(KoColorSpaceFactory* item)
         if (cs->id() == item->id()) {
             toremove.push_back(idsToCacheName(cs->id(), cs->profile()->name()));
             cs->d->deletability = OwnedByRegistryRegistryDeletes;
-            QReadLocker l(&d->registrylock);
-            if (d->colorSpaceFactoryRegistry.contains(cs->id())) {
-                d->colorSpaceFactoryRegistry.value(cs->id())->releaseColorSpace(const_cast<KoColorSpace*>(cs));
-            }
-
         }
     }
     d->registrylock.unlock();

@@ -82,12 +82,12 @@ void KoFindStyle::clearMatches()
     d->updateSelections();
 }
 
-void KoFindStyle::replaceImplementation(const KoFindMatch& match, const QVariant& value)
+void KoFindStyle::replaceImplementation(const KoFindMatch& /*match*/, const QVariant& /*value*/)
 {
 
 }
 
-void KoFindStyle::findImplementation(const QString& pattern, KoFindBase::KoFindMatchList& matchList)
+void KoFindStyle::findImplementation(const QString& /*pattern*/, KoFindBase::KoFindMatchList& matchList)
 {
     int charStyle = options()->option("characterStyle")->value().toInt();
     int parStyle = options()->option("paragraphStyle")->value().toInt();

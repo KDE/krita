@@ -251,9 +251,9 @@ void HorizontalPaintingStrategy::drawTabs(const KoRulerPrivate *d, QPainter &pai
 void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainter &painter, const QRectF &rectangle)
 {
     qreal numberStep = d->numberStepForUnit(); // number step in unit
-    QRectF activeRangeRectangle;
+//    QRectF activeRangeRectangle;
     int numberStepPixel = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(numberStep)));
-    const bool adjustMillimeters = (d->unit.type() == KoUnit::Millimeter);
+//    const bool adjustMillimeters = (d->unit.type() == KoUnit::Millimeter);
 
     const QFont font = KGlobalSettings::smallestReadableFont();
     const QFontMetrics fontMetrics(font);

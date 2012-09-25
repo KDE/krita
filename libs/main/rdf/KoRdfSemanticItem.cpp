@@ -242,7 +242,7 @@ void KoRdfSemanticItem::insert(KoCanvasBase *host)
     KoChangeTrackerDisabledRAII disableChangeTracker(ktd.changeTracker());
     Q_UNUSED(disableChangeTracker);
 
-    int originalpos = editor->position();
+//    int originalpos = editor->position();
     KoTextMeta *startmark = new KoTextMeta(editor->document());
     editor->insertInlineObject(startmark);
     KoTextInlineRdf *inlineRdf(new KoTextInlineRdf((QTextDocument*)editor->document(), startmark));

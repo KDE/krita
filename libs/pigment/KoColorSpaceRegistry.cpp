@@ -168,7 +168,11 @@ void KoColorSpaceRegistry::remove(KoColorSpaceFactory* item)
         if (cs->id() == item->id()) {
             toremove.push_back(idsToCacheName(cs->id(), cs->profile()->name()));
             cs->d->deletability = OwnedByRegistryRegistryDeletes;
-            releaseColorSpace(const_cast<KoColorSpace*>(cs));
+            QReadLocker l(&d->registrylock);
+            if (d->colorSpaceFactoryRegistry.contains(cs->id())) {
+                d->colorSpaceFactoryRegistry.value(cs->id())->releaseColorSpace(const_cast<KoColorSpace*>(cs));
+            }
+
         }
     }
     d->registrylock.unlock();
@@ -289,29 +293,6 @@ bool KoColorSpaceRegistry::isCached(const QString & csId, const QString & profil
 QString KoColorSpaceRegistry::idsToCacheName(const QString & csId, const QString & profileName) const
 {
     return csId + "<comb>" + profileName;
-}
-
-KoColorSpace* KoColorSpaceRegistry::grabColorSpace(const KoColorSpace* colorSpace)
-{
-    QReadLocker l(&d->registrylock);
-    if(d->colorSpaceFactoryRegistry.contains(colorSpace->id()))
-    {
-        KoColorSpace* cs = d->colorSpaceFactoryRegistry.value(colorSpace->id())->grabColorSpace(colorSpace->profile());
-        return cs;
-    }
-    if (colorSpace->id() != "ALPHA") {
-        warnPigment << "Unknown factory " << colorSpace->id() << " returning the colorspace itself";
-    }
-    return const_cast<KoColorSpace*>(colorSpace);
-}
-
-void KoColorSpaceRegistry::releaseColorSpace(KoColorSpace* colorSpace)
-{
-    QReadLocker l(&d->registrylock);
-    if(d->colorSpaceFactoryRegistry.contains(colorSpace->id()))
-    {
-        d->colorSpaceFactoryRegistry.value(colorSpace->id())->releaseColorSpace(colorSpace);
-    }
 }
 
 const KoColorSpaceFactory* KoColorSpaceRegistry::colorSpaceFactory(const QString &colorSpaceId) const

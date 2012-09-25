@@ -216,6 +216,8 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
         channelorder[2] = 2;
         break;
     }
+    default:
+        ;
     }
     if (!colorSpace) {
         dbgFile << "No colors space found for that image";

@@ -226,7 +226,7 @@ void KoTextTableTemplate::loadOdf(const KoXmlElement *element, KoShapeLoadingCon
         KoXmlElement styleElem;
         forEachElement(styleElem, (*element)) {
             if (styleElem.namespaceURI() == KoXmlNS::table) {
-                for (int index = 0; index < numTemplateStyles; ++index) {
+                for (uint index = 0; index < numTemplateStyles; ++index) {
                     if (templateStyles[index].m_element == styleElem.localName()) {
                         QString styleName = styleElem.attributeNS(KoXmlNS::table, "style-name", QString());
 #ifndef NWORKAROUND_ODF_BUGS
@@ -272,7 +272,7 @@ void KoTextTableTemplate::saveOdf(KoXmlWriter *writer, KoTextSharedSavingData *s
 
     writer->addAttribute("table:name", name());
 
-    for (int index = 0; index < numTemplateStyles; ++index) {
+    for (uint index = 0; index < numTemplateStyles; ++index) {
         if (d->stylesPrivate.contains(templateStyles[index].m_property)) {
             writer->startElement(QString("table:%1").arg(templateStyles[index].m_element).toLatin1());
             QString savedStyleName = savingData->styleName(d->stylesPrivate.value(templateStyles[index].m_property).toInt());

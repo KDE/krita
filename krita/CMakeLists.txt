@@ -12,6 +12,9 @@ if(MSVC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
 endif(MSVC)
 
+set(OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} )
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
+
 macro_optional_find_package(Vc)
 macro_bool_to_01(Vc_FOUND HAVE_VC)
 configure_file(config-vc.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-vc.h )
@@ -23,6 +26,8 @@ if(HAVE_VC)
     include (OptimizeForArchitecture)
     OptimizeForArchitecture()
 endif(HAVE_VC)
+
+set(CMAKE_MODULE_PATH ${OLD_CMAKE_MODULE_PATH} )
 
 
 include(CheckFunctionExists)

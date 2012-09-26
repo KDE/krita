@@ -67,7 +67,7 @@ bool KisCircleMaskGenerator::shouldSupersample() const
 
 bool KisCircleMaskGenerator::shouldVectorize() const
 {
-    return !shouldSupersample();
+    return !shouldSupersample() && spikes() == 2;
 }
 
 

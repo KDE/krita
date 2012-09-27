@@ -62,9 +62,12 @@ KisToolFill::KisToolFill(KoCanvasBase * canvas)
         : KisToolPaint(canvas, KisCursor::load("tool_fill_cursor.png", 6, 6))
 {
     setObjectName("tool_fill");
+    m_feather = 0;
+    m_sizemod = 0;
     m_painter = 0;
     m_oldColor = 0;
     m_threshold = 80;
+    m_depth = 0;
     m_usePattern = false;
     m_unmerged = false;
     m_fillOnlySelection = false;

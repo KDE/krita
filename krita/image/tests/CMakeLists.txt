@@ -1,6 +1,10 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(  ${KOMAIN_INCLUDES}  ${CMAKE_SOURCE_DIR}/krita/image/metadata ${CMAKE_SOURCE_DIR}/krita/sdk/tests )
 
+if(HAVE_VC)
+  include_directories(${Vc_INCLUDE_DIR})
+endif(HAVE_VC)
+
 SET(KisRandomGeneratorDemoSources kis_random_generator_demo.cpp kimageframe.cpp)
 kde4_add_ui_files(KisRandomGeneratorDemoSources kis_random_generator_demo.ui)
 kde4_add_executable(KisRandomGeneratorDemo ${KisRandomGeneratorDemoSources})

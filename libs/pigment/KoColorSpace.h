@@ -421,6 +421,18 @@ public:
     virtual void applyInverseAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const = 0;
 
     /**
+     * Applies the specified float alpha mask to the pixels. We assume that there are just
+     * as many alpha values as pixels but we do not check this; alpha values have to be between 0.0 and 1.0
+     */
+    virtual void applyAlphaNormedFloatMask(quint8 * pixels, const float * alpha, qint32 nPixels) const = 0;
+
+    /**
+     * Applies the inverted specified float alpha mask to the pixels. We assume that there are just
+     * as many alpha values as pixels but we do not check this; alpha values have to be between 0.0 and 1.0
+     */
+    virtual void applyInverseNormedFloatMask(quint8 * pixels, const float * alpha, qint32 nPixels) const = 0;
+
+    /**
      * Create an adjustment object for adjusting the brightness and contrast
      * transferValues is a 256 bins array with values from 0 to 0xFFFF
      * This function is thread-safe, but you need to create one KoColorTransformation per thread.

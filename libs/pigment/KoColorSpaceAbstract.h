@@ -130,6 +130,14 @@ public:
         _CSTrait::applyInverseAlphaU8Mask(pixels, alpha, nPixels);
     }
 
+    virtual void applyAlphaNormedFloatMask(quint8 * pixels, const float * alpha, qint32 nPixels) const {
+        _CSTrait::applyAlphaNormedFloatMask(pixels, alpha, nPixels);
+    }
+
+    virtual void applyInverseNormedFloatMask(quint8 * pixels, const float * alpha, qint32 nPixels) const {
+        _CSTrait::applyInverseAlphaNormedFloatMask(pixels, alpha, nPixels);
+    }
+
     virtual quint8 intensity8(const quint8 * src) const {
         QColor c;
         const_cast<KoColorSpaceAbstract<_CSTrait> *>(this)->toQColor(src, &c);

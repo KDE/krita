@@ -62,6 +62,11 @@ bool KisMaskGenerator::shouldSupersample() const
     return false;
 }
 
+bool KisMaskGenerator::shouldVectorize() const
+{
+    return false;
+}
+
 void KisMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
 {
     Q_UNUSED(doc);

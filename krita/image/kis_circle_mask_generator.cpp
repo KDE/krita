@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2004,2007-2009 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2012 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,11 +20,23 @@
 
 #include <cmath>
 
+#include "config-vc.h"
+#ifdef HAVE_VC
+#include <Vc/Vc>
+#include <Vc/IO>
+#endif
+
 #include <QDomDocument>
 
 #include "kis_fast_math.h"
 #include "kis_circle_mask_generator.h"
 #include "kis_base_mask_generator.h"
+
+#ifdef HAVE_VC
+    inline Vc::float_v normeSIMD(Vc::float_v a, Vc::float_v b) {
+        return a*a + b*b;
+    }
+#endif
 
 struct KisCircleMaskGenerator::Private {
     double xcoef, ycoef;
@@ -51,6 +64,12 @@ bool KisCircleMaskGenerator::shouldSupersample() const
 {
     return width() < 10 || KisMaskGenerator::d->ratio * width() < 10;
 }
+
+bool KisCircleMaskGenerator::shouldVectorize() const
+{
+    return !shouldSupersample() && spikes() == 2;
+}
+
 
 quint8 KisCircleMaskGenerator::valueAt(qreal x, qreal y) const
 {
@@ -103,6 +122,67 @@ quint8 KisCircleMaskGenerator::valueAt(qreal x, qreal y) const
         }
     }
 }
+
+void KisCircleMaskGenerator::processRowFast(float* buffer, int width, float y, float cosa, float sina,
+                                            float centerX, float centerY, float invScaleX, float invScaleY)
+{
+#ifdef HAVE_VC
+    float y_ = (y - centerY) * invScaleY;
+    float sinay_ = sina * y_;
+    float cosay_ = cosa * y_;
+
+    float *initValues = Vc::malloc<float, Vc::AlignOnVector>(Vc::float_v::Size);
+    for(int i = 0; i < Vc::float_v::Size; i++) {
+        initValues[i] = (float)i;
+    }
+
+    float* bufferPointer = buffer;
+
+    Vc::float_v currentIndices(initValues);
+
+    Vc::float_v increment((float)Vc::float_v::Size);
+    Vc::float_v vCenterX(centerX);
+    Vc::float_v vInvScaleX(invScaleX);
+
+    Vc::float_v vCosa(cosa);
+    Vc::float_v vSina(sina);
+    Vc::float_v vCosaY_(cosay_);
+    Vc::float_v vSinaY_(sinay_);
+
+    Vc::float_v vXCoeff(d->xcoef);
+    Vc::float_v vYCoeff(d->ycoef);
+
+    Vc::float_v vTransformedFadeX(d->transformedFadeX);
+    Vc::float_v vTransformedFadeY(d->transformedFadeY);
+
+    Vc::float_v vOne(1.0f);
+
+    for (int i=0; i < width; i+= Vc::float_v::Size){
+
+        Vc::float_v x_ = (currentIndices - vCenterX) * vInvScaleX;
+
+        Vc::float_v xr = x_ * vCosa - vSinaY_;
+        Vc::float_v yr = x_ * vSina + vCosaY_;
+
+        Vc::float_v n = normeSIMD(xr * vXCoeff, yr * vYCoeff);
+
+        Vc::float_v vNormFade = normeSIMD(xr * vTransformedFadeX, yr * vTransformedFadeY);
+
+        //255 * n * (normeFade - 1) / (normeFade - n)
+        Vc::float_v vFade = n * (vNormFade - vOne) / (vNormFade - n);
+        // Mask out the inner circe of the mask
+        Vc::float_m mask = vNormFade < vOne;
+        vFade.setZero(mask);
+        vFade = Vc::min(vFade, vOne);
+
+        vFade.store(bufferPointer);
+        currentIndices = currentIndices + increment;
+
+        bufferPointer += Vc::float_v::Size;
+    }
+#endif
+}
+
 
 void KisCircleMaskGenerator::toXML(QDomDocument& d, QDomElement& e) const
 {

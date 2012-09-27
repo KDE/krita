@@ -1,6 +1,10 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(  ${KOMAIN_INCLUDES}  ${CMAKE_SOURCE_DIR}/krita/image/tiles3 )
 
+if(HAVE_VC)
+  include_directories(${Vc_INCLUDE_DIR})
+endif(HAVE_VC)
+
 add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
 add_definitions(-DFILES_OUTPUT_DIR="${CMAKE_CURRENT_BINARY_DIR}")
 
@@ -49,5 +53,9 @@ target_link_libraries(KisStrokeBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTE
 target_link_libraries(KisFastMathBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 target_link_libraries(KisFloodfillBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 target_link_libraries(KisGradientBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-target_link_libraries(KisMaskGeneratorBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 target_link_libraries(KisLowMemoryBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+target_link_libraries(KisMaskGeneratorBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+if(HAVE_VC)
+    target_link_libraries(KisMaskGeneratorBenchmark ${Vc_LIBRARIES})
+endif(HAVE_VC)

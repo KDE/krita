@@ -642,28 +642,6 @@ void KisLayerManager::addGeneratorLayer(KisNodeSP parent, KisNodeSP above, const
     m_commandsAdapter->addNode(l.data(), parent, above.data());
 }
 
-
-void KisLayerManager::layerRemove()
-{
-    KisImageWSP image = m_view->image();
-
-    if (image) {
-        KisLayerSP layer = activeLayer();
-        if (layer) {
-            QRect extent = layer->extent();
-            KisNodeSP parent = layer->parent();
-
-            m_commandsAdapter->removeNode(layer);
-
-            if (parent)
-                parent->setDirty(extent);
-
-            m_view->canvas()->update();
-            m_view->updateGUI();
-        }
-    }
-}
-
 void KisLayerManager::layerDuplicate()
 {
     KisImageWSP image = m_view->image();

@@ -89,7 +89,6 @@ private slots:
     void actLayerVisChanged(int show);
     void layerProperties();
 
-    void layerRemove();
     void layerDuplicate();
     void layerRaise();
     void layerLower();

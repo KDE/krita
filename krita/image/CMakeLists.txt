@@ -50,6 +50,10 @@ include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
                      ${KOMAIN_INCLUDES}
 )
 
+if(HAVE_VC)
+  include_directories(${Vc_INCLUDE_DIR})
+endif(HAVE_VC)
+
 set(kritaimage_LIB_SRCS
    ${libkritatile_SRCS}
    kis_painter.cc

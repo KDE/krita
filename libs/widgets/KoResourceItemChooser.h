@@ -107,6 +107,8 @@ public:
     /// Gets the tag Names from tag Object for setting the Completer Object
     QStringList getTagNamesList(QString lineEditText);
 
+    KoResourceItemView *itemView();
+
 signals:
     /// Emitted when a resource was selected
     void resourceSelected( KoResource * resource );

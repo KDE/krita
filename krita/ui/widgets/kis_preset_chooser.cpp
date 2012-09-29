@@ -333,5 +333,10 @@ void KisPresetChooser::showTaggingBar( bool showSearchBar, bool showOpBar )
     m_chooser->showTaggingBar(showSearchBar,showOpBar);
 }
 
+KoResourceItemChooser *KisPresetChooser::itemChooser()
+{
+    return m_chooser;
+}
+
 #include "kis_preset_chooser.moc"
 

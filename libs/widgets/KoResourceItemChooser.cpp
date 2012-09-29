@@ -563,6 +563,11 @@ QStringList KoResourceItemChooser::getTagNamesList(QString lineEditText)
     return tagNamesList;
 }
 
+KoResourceItemView *KoResourceItemChooser::itemView()
+{
+    return d->view;
+}
+
 QStringList KoResourceItemChooser::getTaggedResourceFileNames(QString lineEditText)
 {
     return d->model->resourceServerAdapter()->searchTag(lineEditText);

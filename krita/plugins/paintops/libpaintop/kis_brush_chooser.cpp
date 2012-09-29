@@ -43,6 +43,7 @@
 
 #include "kis_global.h"
 #include "kis_gbr_brush.h"
+#include "kis_debug.h"
 
 /// The resource item delegate for rendering the resource preview
 class KisBrushDelegate : public QAbstractItemDelegate
@@ -87,7 +88,7 @@ void KisBrushDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
 
 
 KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
-        : QWidget(parent)
+    : QWidget(parent)
 {
     setObjectName(name);
 
@@ -248,21 +249,28 @@ void KisBrushChooser::slotActivatedBrush(KoResource * resource)
 
 void KisBrushChooser::setBrushSize(qreal xPixels, qreal yPixels)
 {
-        Q_UNUSED(yPixels);
-        qreal oldWidth = m_brush->width() * m_brush->scale(); // or maybe m_slScale->value()
-        qreal newWidth = oldWidth + xPixels;
-        if (newWidth <= 0.0) {
-            return;
-        }
+    Q_UNUSED(yPixels);
+    qreal oldWidth = m_brush->width() * m_brush->scale();
+    qreal newWidth = oldWidth + xPixels;
+    if (newWidth <= 0.1) {
+        newWidth = 0.1;
+    }
 
-        qreal newScale = newWidth / m_brush->width();
+    qreal newScale = floor((newWidth / m_brush->width()) * 100) / 100;
 
-        // If the size is increased, use at least the minimum that the slider doesn't interpret as zero
-        if (xPixels > 0 && newScale < 0.05) {
-            newScale  = 0.05;
-        }
-        // signal valueChanged will care about call to slotSetItemScale
-        m_slScale->setValue(newScale);
+    // If the size is increased, use at least the minimum that the slider doesn't interpret as zero
+    if (xPixels > 0 && newScale < 0.05) {
+        newScale  = 0.05;
+    }
+
+    // check whether we are trying to increase the size, but fail because we only handle two decimals
+    // for the scale
+    if (xPixels > 0 && qFuzzyCompare(newScale, m_brush->scale())) {
+        newScale += 0.02;
+    }
+
+    // signal valueChanged will care about call to slotSetItemScale
+    m_slScale->setValue(newScale);
 }
 
 QSizeF KisBrushChooser::brushSize() const

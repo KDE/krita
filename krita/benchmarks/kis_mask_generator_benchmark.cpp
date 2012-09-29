@@ -18,8 +18,13 @@
 
 #include <qtest_kde.h>
 
+#include "config-vc.h"
+#ifdef HAVE_VC
 #include <Vc/Vc>
 #include <Vc/IO>
+#endif
+
+
 #include "kis_mask_generator_benchmark.h"
 
 #include "kis_circle_mask_generator.h"
@@ -41,6 +46,7 @@ void KisMaskGeneratorBenchmark::benchmarkCircle()
 
 void KisMaskGeneratorBenchmark::benchmarkSIMD()
 {
+#ifdef HAVE_VC
     int width = 1000;
     float *buffer = Vc::malloc<float, Vc::AlignOnVector>(width);
 
@@ -52,6 +58,7 @@ void KisMaskGeneratorBenchmark::benchmarkSIMD()
         }
     }
     Vc::free(buffer);
+#endif
 }
 
 void KisMaskGeneratorBenchmark::benchmarkSquare()

@@ -26,10 +26,13 @@
 
 class QEvent;
 class KoResourceModel;
+class QModelIndex;
 
 /// The resource view
 class KoResourceItemView : public QTableView
 {
+    Q_OBJECT
+
 public:
     enum ViewMode{
         FIXED_COLUMS,  /// The number of columns is fixed
@@ -50,6 +53,14 @@ public:
     
     void setViewMode(ViewMode mode);
     
+signals:
+
+    void currentResourceChanged(const QModelIndex &);
+
+protected:
+
+    void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+
 private:
     KoIconToolTip m_tip;
     ViewMode m_viewMode;

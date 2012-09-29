@@ -28,6 +28,7 @@
 KoResourceItemView::KoResourceItemView( QWidget * parent )
     : QTableView(parent)
 {
+    setSelectionMode(QAbstractItemView::SingleSelection);
     verticalHeader()->hide();
     horizontalHeader()->hide();
     verticalHeader()->setDefaultSectionSize( 20 );
@@ -80,3 +81,10 @@ void KoResourceItemView::setViewMode(KoResourceItemView::ViewMode mode)
 {
     m_viewMode = mode;
 }
+
+void KoResourceItemView::selectionChanged(const QItemSelection &selected, const QItemSelection &/*deselected*/)
+{
+    emit currentResourceChanged(selected.indexes().first());
+}
+
+#include "KoResourceItemView.moc"

@@ -164,10 +164,12 @@ void KisNodeManager::setup(KActionCollection * actionCollection)
     connect(action, SIGNAL(triggered()), this, SLOT(removeNode()));
 
     action = new KAction(i18n("Activate next layer"), this);
+    action->setShortcut(KShortcut(Qt::Key_PageUp));
     actionCollection->addAction("activateNextLayer", action);
     connect(action, SIGNAL(triggered()), this, SLOT(activateNextNode()));
 
     action = new KAction(i18n("Activate previous layer"), this);
+    action->setShortcut(KShortcut(Qt::Key_PageDown));
     actionCollection->addAction("activatePreviousLayer", action);
     connect(action, SIGNAL(triggered()), this, SLOT(activatePreviousNode()));
 

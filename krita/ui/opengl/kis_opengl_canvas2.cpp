@@ -237,8 +237,6 @@ void KisOpenGLCanvas2::drawImage()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-
-    KisImageWSP image = canvas()->image();
     KisCoordinatesConverter *converter = coordinatesConverter();
 
     QRectF widgetRect(0,0, width(), height());
@@ -251,9 +249,7 @@ void KisOpenGLCanvas2::drawImage()
     QRect wr = widgetRectInImagePixels.toAlignedRect() &
         m_d->openGLImageTextures->storedImageBounds();
 
-    if (image->colorSpace()->hasHighDynamicRange() && m_d->openGLImageTextures->usingHDRExposureProgram()) {
-        m_d->openGLImageTextures->activateHDRExposureProgram();
-    }
+    m_d->openGLImageTextures->activateHDRExposureProgram();
 
     makeCurrent();
 
@@ -280,11 +276,7 @@ void KisOpenGLCanvas2::drawImage()
         }
     }
 
-    if (image->colorSpace()->hasHighDynamicRange()) {
-        if (m_d->openGLImageTextures->usingHDRExposureProgram()) {
-            m_d->openGLImageTextures->deactivateHDRExposureProgram();
-        }
-    }
+    m_d->openGLImageTextures->deactivateHDRExposureProgram();
 
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_BLEND);

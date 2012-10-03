@@ -111,12 +111,6 @@ public:
      */
     void deactivateHDRExposureProgram();
 
-    /**
-     * Returns true if the textures are to be rendered using the high dynamic
-     * range image program.
-     */
-    bool usingHDRExposureProgram() const;
-
 public:
     inline QRect storedImageBounds() {
         return m_storedImageBounds;
@@ -152,8 +146,7 @@ protected:
     void createImageTextureTiles();
     void destroyImageTextureTiles();
 
-    static bool imageCanUseHDRExposureProgram(KisImageWSP image);
-    static bool imageCanShareTextures(KisImageWSP image);
+    static bool imageCanShareTextures();
 
 private:
     QRect calculateTileRect(int col, int row) const;
@@ -171,10 +164,6 @@ private:
     KisGLTexturesInfo m_texturesInfo;
     int m_numCols;
     QVector<KisTextureTile*> m_textureTiles;
-
-#ifdef HAVE_GLEW
-    bool m_usingHDRExposureProgram;
-#endif
 
     KisDisplayFilter *m_displayFilter;
 

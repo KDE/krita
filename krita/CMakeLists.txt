@@ -5,7 +5,7 @@ project(krita)
 # The reason for this mode is that the Debug mode disable inlining
 #
 if(CMAKE_COMPILER_IS_GNUCXX)
-    set(CMAKE_CXX_FLAGS_KRITADEVS "-O2 -g" CACHE STRING "" FORCE)
+    set(CMAKE_CXX_FLAGS_KRITADEVS "-O3 -g" CACHE STRING "" FORCE)
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 if(MSVC)

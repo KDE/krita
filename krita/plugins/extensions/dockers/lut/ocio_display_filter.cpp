@@ -41,11 +41,11 @@ GLuint compileShaderText(GLenum shaderType, const char *text)
     glCompileShader(shader);
     glGetShaderiv(shader, GL_COMPILE_STATUS, &stat);
 
-    if (!stat)
-    {
+    if (!stat) {
         GLchar log[1000];
         GLsizei len;
         glGetShaderInfoLog(shader, 1000, &len, log);
+        qWarning() << "Failed to compile shader:" << log;
         return 0;
     }
 
@@ -85,7 +85,7 @@ const char * m_fragShaderText = ""
         "\n"
         "void main()\n"
         "{\n"
-        "    vec3 col = texture2D(tex1, gl_TexCoord[0].st);\n"
+        "    vec4 col = texture2D(tex1, gl_TexCoord[0].st);\n"
         "    gl_FragColor = OCIODisplay(col, tex2);\n"
         "}\n";
 
@@ -109,7 +109,6 @@ void OcioDisplayFilter::filter(quint8 *src, quint8 */*dst*/, quint32 numPixels)
 {
     // processes that data _in_ place
     if (m_processor) {
-
         OCIO::PackedImageDesc img(reinterpret_cast<float*>(src), numPixels, 1, 4);
         m_processor->apply(img);
     }
@@ -227,7 +226,6 @@ void OcioDisplayFilter::updateProcessor()
     KisConfig cfg;
     if (!cfg.useOpenGLShaders()) return;
     if (!cfg.useOpenGL()) return;
-    //qDebug() << "going to update the shader program!";
 
     if (m_lut3d.size() == 0) {
         //qDebug() << "generating lut";
@@ -273,8 +271,7 @@ void OcioDisplayFilter::updateProcessor()
 
     // Step 3: Compute the Shader
     QString shaderCacheID = QString::fromAscii(m_processor->getGpuShaderTextCacheID(shaderDesc));
-    if (m_program == 0 || shaderCacheID != m_shadercacheid)
-    {
+    if (m_program == 0 || shaderCacheID != m_shadercacheid) {
         //qDebug() << "Computing Shader " << m_shadercacheid;
 
         m_shadercacheid = shaderCacheID;

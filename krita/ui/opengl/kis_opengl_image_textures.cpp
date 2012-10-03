@@ -95,9 +95,10 @@ KisOpenGLImageTextures::~KisOpenGLImageTextures()
     glDeleteTextures(1, &m_backgroundTexture);
 }
 
-bool KisOpenGLImageTextures::imageCanShareTextures(KisImageWSP image)
+bool KisOpenGLImageTextures::imageCanShareTextures()
 {
-    return !image->colorSpace()->hasHighDynamicRange() || imageCanUseHDRExposureProgram(image);
+    KisConfig cfg;
+    return !cfg.useOcio();
 }
 
 KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP image,
@@ -107,7 +108,7 @@ KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP im
 {
     KisOpenGL::makeContextCurrent();
 
-    if (imageCanShareTextures(image)) {
+    if (imageCanShareTextures()) {
         ImageTexturesMap::iterator it = imageTexturesMap.find(image);
 
         if (it != imageTexturesMap.end()) {
@@ -313,25 +314,13 @@ void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProf
 
 void KisOpenGLImageTextures::setDisplayFilter(KisDisplayFilter *displayFilter)
 {
-//    qDebug() << "setting display filter with exposure" << displayFilter->exposure << "and program" << displayFilter->program();
     m_displayFilter = displayFilter;
-}
-
-bool KisOpenGLImageTextures::usingHDRExposureProgram() const
-{
-#ifdef HAVE_GLEW
-//    qDebug() << "usingHDRExposureProgram()" << m_usingHDRExposureProgram;
-    return m_usingHDRExposureProgram;
-#else
-    return false;
-#endif
 }
 
 void KisOpenGLImageTextures::activateHDRExposureProgram()
 {
 #ifdef HAVE_GLEW
-//    qDebug() << "activateHDRExposureProgram();" << m_usingHDRExposureProgram << m_displayFilter << m_displayFilter->program();
-    if (m_usingHDRExposureProgram && m_displayFilter && m_displayFilter->program()) {
+    if (m_displayFilter && m_displayFilter->program()) {
         glUseProgram(m_displayFilter->program());
     }
 #endif
@@ -340,10 +329,7 @@ void KisOpenGLImageTextures::activateHDRExposureProgram()
 void KisOpenGLImageTextures::deactivateHDRExposureProgram()
 {
 #ifdef HAVE_GLEW
-//     qDebug() << "deactivateHDRExposureProgram();" << m_usingHDRExposureProgram;
-    if (m_usingHDRExposureProgram) {
-        glUseProgram(0);
-    }
+    glUseProgram(0);
 #endif
 }
 
@@ -370,7 +356,6 @@ void KisOpenGLImageTextures::updateTextureFormat()
     m_texturesInfo.type = GL_UNSIGNED_BYTE;
 
     #ifdef HAVE_GLEW
-    m_usingHDRExposureProgram = imageCanUseHDRExposureProgram(m_image);
 
     KoID colorModelId = m_image->colorSpace()->colorModelId();
     KoID colorDepthId = m_image->colorSpace()->colorDepthId();
@@ -378,7 +363,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
     dbgUI << "Choosing texture format:";
 
     if (colorModelId == RGBAColorModelID) {
-        if (colorDepthId == Float16BitsColorDepthID && imageCanUseHDRExposureProgram(m_image)) {
+        if (colorDepthId == Float16BitsColorDepthID) {
 
             if (GLEW_ARB_texture_float) {
                 m_texturesInfo.format = GL_RGBA16F_ARB;
@@ -395,23 +380,18 @@ void KisOpenGLImageTextures::updateTextureFormat()
                 dbgUI << "Pixel type float";
                 m_texturesInfo.type = GL_FLOAT;
             }
-
-            m_usingHDRExposureProgram = true;
-
         }
-        else if (colorDepthId == Float32BitsColorDepthID && imageCanUseHDRExposureProgram(m_image)) {
+        else if (colorDepthId == Float32BitsColorDepthID) {
 
             if (GLEW_ARB_texture_float) {
                 m_texturesInfo.format = GL_RGBA32F_ARB;
                 dbgUI << "Using ARB float";
                 m_texturesInfo.type = GL_FLOAT;
-                m_usingHDRExposureProgram = true;
             }
             else if (GLEW_ATI_texture_float) {
                 m_texturesInfo.format = GL_RGBA_FLOAT32_ATI;
                 dbgUI << "Using ATI float";
                 m_texturesInfo.type = GL_FLOAT;
-                m_usingHDRExposureProgram = true;
             }
         }
         else if (colorDepthId == Integer16BitsColorDepthID) {
@@ -431,34 +411,6 @@ void KisOpenGLImageTextures::updateTextureFormat()
 #endif
 }
 
-bool KisOpenGLImageTextures::imageCanUseHDRExposureProgram(KisImageWSP image)
-{
-#ifdef HAVE_GLEW
-
-    KisConfig cfg;
-
-    if (!image->colorSpace()->hasHighDynamicRange() ||
-        !cfg.useOpenGLShaders()) {
-        return false;
-    }
-
-    KisOpenGL::makeContextCurrent();
-    KoID colorModelId = image->colorSpace()->colorModelId();
-    KoID colorDepthId = image->colorSpace()->colorDepthId();
-
-    if (!(    colorModelId == RGBAColorModelID
-              && (colorDepthId == Float16BitsColorDepthID || colorDepthId == Float32BitsColorDepthID)
-              && (GLEW_ARB_texture_float || GLEW_ATI_texture_float || GLEW_ARB_half_float_pixel))) {
-        return false;
-    }
-
-//    qDebug() << "imageCanUseHDRExposureProgram()!";
-    return true;
-#else
-    Q_UNUSED(image);
-    return false;
-#endif
-}
 
 #include "kis_opengl_image_textures.moc"
 

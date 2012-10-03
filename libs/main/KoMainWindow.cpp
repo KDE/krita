@@ -38,6 +38,7 @@
 #include "KoPart.h"
 #include <KoPageLayoutWidget.h>
 #include <KoIcon.h>
+#include <KoConfig.h>
 
 #include <kdeversion.h>
 #if KDE_IS_VERSION(4,6,0)
@@ -69,6 +70,10 @@
 #include <kurlcombobox.h>
 #include <kdiroperator.h>
 #include <kmenubar.h>
+
+#ifdef HAVE_KACTIVITIES
+#include <KActivities/ResourceInstance>
+#endif
 
 //   // qt includes
 #include <QDockWidget>
@@ -136,6 +141,9 @@ public:
         dockWidgetMenu = 0;
         dockerManager = 0;
         deferredClosingEvent = 0;
+#ifdef HAVE_KACTIVITIES
+        activityResource = 0;
+#endif
     }
     ~KoMainWindowPrivate() {
         qDeleteAll(toolbarList);
@@ -216,6 +224,10 @@ public:
     QByteArray m_dockerStateBeforeHiding;
 
     QCloseEvent *deferredClosingEvent;
+
+#ifdef HAVE_KACTIVITIES
+    KActivities::ResourceInstance *activityResource;
+#endif
 
 };
 
@@ -557,6 +569,13 @@ void KoMainWindow::addRecentURL(const KUrl& url)
             d->recent->addUrl(url);
         }
         saveRecentFiles();
+
+#ifdef HAVE_KACTIVITIES
+        if (!d->activityResource) {
+            d->activityResource = new KActivities::ResourceInstance(winId(), this);
+        }
+        d->activityResource->setUri(url);
+#endif
     }
 }
 

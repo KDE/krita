@@ -36,6 +36,9 @@
 /* Defines if we use lcms2.4 */
 #cmakedefine HAVE_LCMS24 1
 
+/* Defines if we use KActivities */
+#cmakedefine HAVE_KACTIVITIES 1
+
 /* This file contains all the paths that change when changing the installation prefix */
 #define CALLIGRAPREFIX "${CMAKE_INSTALL_PREFIX}"
 

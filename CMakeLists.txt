@@ -196,7 +196,7 @@ macro_log_feature(ICU_FOUND "ICU" "International Components for Unicode (ICU) Li
 		    "Required by Calligra's default database handler for Kexi and Words.")
 
 ##
-## Check for OpenEXR 
+## Check for OpenEXR
 ##
 
 macro_optional_find_package(OpenEXR)
@@ -318,6 +318,15 @@ if(NEPOMUK)
     macro_log_feature(NEPOMUK_FOUND "Nepomuk" "Handles metadata of resources" FALSE  "Required to handle metadata of resources")
 endif(NEPOMUK)
 
+##
+## Test for KActivities
+##
+macro_optional_find_package(KActivities)
+macro_log_feature(KActivities_FOUND "KActivities" "Activities interface library" "https://projects.kde.org/projects/kde/kdelibs/kactivities" FALSE "" "Required for Activities integration.")
+if(KActivities_FOUND)
+    set(HAVE_KACTIVITIES TRUE)
+endif(KActivities_FOUND)
+
 #Set the build of TextShape changetraker
 
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
@@ -359,13 +368,13 @@ if(!WIN32)
     macro_log_feature(FREETYPE_FOUND "Freetype" "A Free, High-Quality, and Portable Font Engine" "http://www.freetype.org/" FALSE "" "Required to handle exact font size")
 endif(!WIN32)
 
-if(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND) 
+if(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
     set(FONTCONFIG_INCLUDE_DIR "")
     set(FREETYPE_INCLUDE_DIRS "")
 else(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
     add_definitions( -DSHOULD_BUILD_FONT_CONVERSION )
 endif(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
-  
+
 ##
 ## Test for Qt Webkit
 ##
@@ -526,7 +535,7 @@ if (NOT SHOULD_BUILD_SHEETS OR NOT SHOULD_BUILD_STAGE OR NOT SHOULD_BUILD_WORDS)
 endif (NOT SHOULD_BUILD_SHEETS OR NOT SHOULD_BUILD_STAGE OR NOT SHOULD_BUILD_WORDS)
 
 
-### Active: only build with Qt 4.7.0 or better 
+### Active: only build with Qt 4.7.0 or better
 if (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
     set(SHOULD_BUILD_ACTIVE FALSE)
 endif (NOT ${QTVERSION} VERSION_GREATER 4.7.0)

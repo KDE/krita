@@ -175,6 +175,11 @@ if( MARBLE_FOUND )
     target_link_libraries(komain ${MARBLE_LIBRARIES})
     target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${MARBLE_LIBRARIES})
 endif( MARBLE_FOUND )
+if( KActivities_FOUND )
+    include_directories(${KACTIVITIES_INCLUDES})
+    target_link_libraries(komain ${KACTIVITIES_LIBRARY})
+    target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${KACTIVITIES_LIBRARY})
+endif( KActivities_FOUND )
 
 target_link_libraries(komain LINK_INTERFACE_LIBRARIES kotext kowidgets ${KDE4_KPARTS_LIBS})
 

@@ -510,9 +510,7 @@ void KisLayerBox::slotNewSelectionMask()
 void KisLayerBox::slotRmClicked()
 {
     if(!m_canvas) return;
-
-    KisNodeSP node = m_nodeManager->activeNode();
-    m_nodeManager->removeNode(node);
+    m_nodeManager->removeNode();
 }
 
 void KisLayerBox::slotRaiseClicked()

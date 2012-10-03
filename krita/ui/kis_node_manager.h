@@ -143,9 +143,11 @@ public slots:
     void nodeOpacityChanged(qreal opacity, bool finalChange);
     void nodeCompositeOpChanged(const KoCompositeOp* op);
     void duplicateActiveNode();
-    void removeNode(KisNodeSP node);
+    void removeNode();
     void mirrorNodeX();
     void mirrorNodeY();
+    void activateNextNode();
+    void activatePreviousNode();
 
     /**
      * move the active node up the nodestack.

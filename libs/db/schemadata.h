@@ -46,10 +46,6 @@ public:
     QString name() const {
         return m_name;
     }
-    /*! The same as name(). Added to avoid conflict with QObject::name() */
-    QString objectName() const {
-        return m_name;
-    }
     void setName(const QString& n) {
         m_name = n;
     }

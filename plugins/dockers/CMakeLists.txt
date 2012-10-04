@@ -22,10 +22,11 @@ set(calligradockers_SRCS
     shadowdocker/ShadowDocker.cpp
     shadowdocker/ShadowDockerFactory.cpp
 
-    styledocker/StyleButtonBox.cpp
-    styledocker/StylePreview.cpp
-    styledocker/StyleDocker.cpp
     styledocker/StyleDockerFactory.cpp
+    styledocker/StyleDocker.cpp
+    styledocker/StrokeFillWidget.cpp
+    styledocker/StylePreview.cpp
+    styledocker/StyleButtonBox.cpp
 
     Plugin.cpp
 )

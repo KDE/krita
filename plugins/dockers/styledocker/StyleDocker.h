@@ -21,28 +21,28 @@
 #ifndef STYLEDOCKER_H
 #define STYLEDOCKER_H
 
-#include <KoCanvasObserverBase.h>
+// Base classes
 #include <QDockWidget>
-#include <QTime>
+#include <KoCanvasObserverBase.h>
 
-class StylePreview;
-class StyleButtonBox;
+// Qt
+#include <QTime>
+#include <QList>
+
+
+class StrokeFillWidget;
 class KoShapeStrokeModel;
 class KoShapeStrokeCommand;
 class KoShapeBackground;
 class KoShapeBackgroundCommand;
 class KoColorBackground;
+
 class KoCanvasBase;
 class KoResource;
 class KoShape;
 class KoColor;
-class QToolButton;
-class QStackedWidget;
-class KoColorPopupAction;
 class KoPathShape;
-class QSpacerItem;
-class QGridLayout;
-class KoSliderCombo;
+
 
 class StyleDocker : public QDockWidget, public KoCanvasObserverBase
 {
@@ -53,28 +53,31 @@ public:
 
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_canvas = 0;}
+    virtual void unsetCanvas();
     
 private slots:
-    void fillSelected();
-    void strokeSelected();
+    // Slots connected to the canvas
     void selectionChanged();
     void selectionContentChanged();
     void resourceChanged(int key, const QVariant&);
-    void styleButtonPressed(int buttonId);
+
+    // Slots connected from the widget.
+    void aspectSelected(int aspect);
+    void noColorSelected();
     void updateColor(const KoColor &c);
-    void updateGradient(KoResource * item);
-    void updatePattern(KoResource * item);
+    void updateGradient(KoResource *item);
+    void updatePattern(KoResource *item);
     void updateFillRule(Qt::FillRule fillRule);
     void updateOpacity(qreal opacity);
+
     /// Called when the docker changes area
     void locationChanged(Qt::DockWidgetArea area);
 
-private:
+ private:
     void updateColor(const QColor &c, const QList<KoShape*> & selectedShapes);
     /// Sets the shape stroke and fill to display
-    void updateStyle();
-    void updateStyle(KoShapeStrokeModel * stroke, KoShapeBackground * fill);
+    void updateWidget();
+    void updateWidget(KoShapeStrokeModel * stroke, KoShapeBackground * fill, int opacity);
 
     /// Resets color related commands which are used to combine multiple color changes
     void resetColorCommands();
@@ -85,22 +88,15 @@ private:
     /// Returns list of selected path shapes
     QList<KoPathShape*> selectedPathShapes();
 
-    void updateStyleButtons(int activeStyle);
+    // ----------------------------------------------------------------
 
-    StylePreview * m_preview;
-    StyleButtonBox * m_buttons;
-    QStackedWidget * m_stack;
-    KoCanvasBase * m_canvas;
-    QToolButton * m_colorSelector;
-    KoColorPopupAction *m_actionColor;
-    QSpacerItem *m_spacer;
-    QGridLayout *m_layout;
-    KoSliderCombo *m_opacity;
+    KoCanvasBase     *m_canvas;
+    StrokeFillWidget *m_mainWidget;
     
-    QTime m_lastColorChange;
-    KoShapeBackgroundCommand * m_lastFillCommand;
-    KoShapeStrokeCommand     * m_lastStrokeCommand;
-    KoColorBackground        * m_lastColorFill;
+    QTime                      m_lastColorChange;
+    KoShapeBackgroundCommand  *m_lastFillCommand;
+    KoShapeStrokeCommand      *m_lastStrokeCommand;
+    KoColorBackground         *m_lastColorFill;
     QList<KoShapeStrokeModel*> m_lastColorStrokes;
 };
 

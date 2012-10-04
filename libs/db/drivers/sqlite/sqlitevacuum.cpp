@@ -179,10 +179,33 @@ void SQLiteVacuum::readFromStdErr()
 void SQLiteVacuum::dumpProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     KexiDBDrvDbg << exitCode << exitStatus;
+    if (exitCode != 0 || exitStatus != QProcess::NormalExit) {
+        cancelClicked();
+        m_result = false;
+    }
+
     if (m_dlg) {
         m_dlg->close();
         delete m_dlg;
         m_dlg = 0;
+    }
+
+    if (true != m_result) {
+        return;
+    }
+
+    QFileInfo fi(m_filePath);
+    const uint origSize = fi.size();
+
+    if (0 != KDE::rename(m_tmpFilePath, fi.absoluteFilePath())) {
+        kWarning() << "Rename" << m_tmpFilePath << "to" << fi.absoluteFilePath() << "failed.";
+        m_result = false;
+    }
+
+    if (m_result == true) {
+        const uint newSize = fi.size();
+        const uint decrease = 100 - 100 * newSize / origSize;
+        KMessageBox::information(0, i18n("The database has been compacted. Current size decreased by %1% to %2.", decrease, KIO::convertSize(newSize)));
     }
 }
 
@@ -190,17 +213,9 @@ void SQLiteVacuum::sqliteProcessFinished(int exitCode, QProcess::ExitStatus exit
 {
     KexiDBDrvDbg << exitCode << exitStatus;
 
-    const uint origSize = QFileInfo(m_filePath).size();
-
-    if (0 != KDE::rename(m_tmpFilePath, m_filePath)) {
-        kWarning() << "Rename" << m_tmpFilePath << "to" << m_filePath << "failed.";
+    if (exitCode != 0 || exitStatus != QProcess::NormalExit) {
         m_result = false;
-    }
-
-    if (m_result == true) {
-        const uint newSize = QFileInfo(m_filePath).size();
-        const uint decrease = 100 - 100 * newSize / origSize;
-        KMessageBox::information(0, i18n("The database has been compacted. Current size decreased by %1% to %2.", decrease, KIO::convertSize(newSize)));
+        return;
     }
 }
 

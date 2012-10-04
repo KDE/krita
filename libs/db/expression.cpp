@@ -751,7 +751,7 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
     }
 
     //table.fieldname or tableAlias.fieldname
-    tableName = tableName.toLower();
+    tableName = tableName;
     TableSchema *ts = parseInfo.querySchema->table(tableName);
     if (ts) {//table.fieldname
         //check if "table" is covered by an alias

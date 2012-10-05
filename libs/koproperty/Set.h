@@ -342,7 +342,7 @@ private:
 };
 
 //! @return property values for set @a set
-KOPROPERTY_EXPORT QHash<QByteArray, QVariant> propertyValues(const Set& set);
+KOPROPERTY_EXPORT QMap<QByteArray, QVariant> propertyValues(const Set& set);
 
 }
 

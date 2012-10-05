@@ -55,7 +55,7 @@ class BaseExpr;
  - defaultValue
  - caption (user readable name that can be e.g. translated)
  - description (user readable name additional text, can be useful for developers)
- - width (a hint for displaying in tabular mode or as text box)
+ - defaultWidth (a hint for displaying in tabular mode or as text box)
 
  Field can also have assigned expression (see KexiDB::BaseExpr class,
  and expression() method).

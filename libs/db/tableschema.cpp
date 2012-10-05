@@ -332,12 +332,12 @@ unsigned int TableSchema::fieldCount() const
   return m_fields.count();
 }*/
 
-QString TableSchema::debugString()
+QString TableSchema::debugString() const
 {
     return debugString(true);
 }
 
-QString TableSchema::debugString(bool includeTableName)
+QString TableSchema::debugString(bool includeTableName) const
 {
     QString s;
     if (includeTableName)

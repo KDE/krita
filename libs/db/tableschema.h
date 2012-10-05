@@ -105,10 +105,10 @@ public:
     /*! \return String for debugging purposes, if \a includeTableName is true,
      table name, caption, etc. is prepended, else only debug string for
      the fields are returned. */
-    QString debugString(bool includeTableName);
+    QString debugString(bool includeTableName) const;
 
     /*! \return String for debugging purposes. Equal to debugString(true). */
-    virtual QString debugString();
+    virtual QString debugString() const;
 
     /*! \return connection object if table was created/retrieved using a connection,
       otherwise 0. */

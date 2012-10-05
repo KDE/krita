@@ -377,7 +377,7 @@ public:
     virtual void clear();
 
     /*! \return string for debugging purposes. */
-    virtual QString debugString();
+    virtual QString debugString() const;
 
     /*! If query was created using a connection,
       returns this connection object, otherwise NULL. */

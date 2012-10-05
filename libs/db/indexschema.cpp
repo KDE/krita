@@ -148,7 +148,7 @@ void IndexSchema::setForeignKey(bool set)
     }
 }
 
-QString IndexSchema::debugString()
+QString IndexSchema::debugString() const
 {
     return QString("INDEX ") + schemaDataDebugString() + "\n"
            + (m_isForeignKey ? "FOREIGN KEY " : "")

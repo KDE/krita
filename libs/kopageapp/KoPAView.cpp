@@ -842,11 +842,8 @@ void KoPAView::pageOffsetChanged()
 
 void KoPAView::updateMousePosition(const QPoint& position)
 {
-    QPoint canvasOffset( d->canvasController->canvasOffsetX(), d->canvasController->canvasOffsetY() );
-    // the offset is positive it the canvas is shown fully visible
-    canvasOffset.setX(canvasOffset.x() < 0 ? canvasOffset.x(): 0);
-    canvasOffset.setY(canvasOffset.y() < 0 ? canvasOffset.y(): 0);
-    QPoint viewPos = position - canvasOffset;
+    const QPoint canvasOffset( d->canvasController->canvasOffsetX(), d->canvasController->canvasOffsetY() );
+    const QPoint viewPos = position - d->canvas->documentOrigin() - canvasOffset;
 
     d->horizontalRuler->updateMouseCoordinate(viewPos.x());
     d->verticalRuler->updateMouseCoordinate(viewPos.y());

@@ -51,6 +51,7 @@ DriverManagerInternal::DriverManagerInternal() /* protected */
 {
     setObjectName("KexiDB::DriverManager");
     m_serverResultNum = 0;
+    qsrand(QTime::currentTime().msec()); // needed e.g. to create random table names
 }
 
 DriverManagerInternal::~DriverManagerInternal()

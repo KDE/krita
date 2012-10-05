@@ -38,12 +38,17 @@
 #include <QMutex>
 #include <QSet>
 #include <QProgressBar>
+#include <QProcess>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <KMimeType>
+#include <KStandardDirs>
 
 #include <memory>
 
@@ -1597,6 +1602,68 @@ QString KexiDB::string2FileName(const QString &s)
     fn.replace('\\', "-"); fn.replace('/', "-");
     fn.replace(':', "-"); fn.replace('*', "-");
     return fn;
+}
+
+QString KexiDB::temporaryTableName(Connection *conn, const QString &baseName)
+{
+    while (true) {
+        QString name = QLatin1String("tmp__") + baseName;
+        for (int i = 0; i < 10; ++i) {
+            name += QString::number(qrand() % 0x10, 16);
+        }
+        if (!conn->drv_containsTable(name)) {
+            return name;
+        }
+    }
+}
+
+QString KexiDB::sqlite3ProgramPath()
+{
+    QString path = KStandardDirs::findExe("sqlite3");
+    if (path.isEmpty()) {
+        KexiDBWarn << "Could not find program \"sqlite3\"";
+    }
+    return path;
+}
+
+bool KexiDB::importSqliteFile(const QString &inputFileName, const QString &outputFileName)
+{
+    const QString sqlite_app = KexiDB::sqlite3ProgramPath();
+    if (sqlite_app.isEmpty()) {
+        return false;
+    }
+
+    QFileInfo fi(inputFileName);
+    if (!fi.isReadable()) {
+        KexiDBWarn << "No readable input file" << fi.absoluteFilePath();
+        return false;
+    }
+    QFileInfo fo(outputFileName);
+    if (QFile(fo.absoluteFilePath()).exists()) {
+        if (!QFile::remove(fo.absoluteFilePath())) {
+            KexiDBWarn << "Cannot remove output file" << fo.absoluteFilePath();
+            return false;
+        }
+    }
+    kDebug() << inputFileName << fi.absoluteDir().path() << fo.absoluteFilePath();
+
+    QProcess p;
+    p.start(sqlite_app, QStringList() << fo.absoluteFilePath());
+    if (!p.waitForStarted()) {
+        KexiDBWarn << "Failed to start program" << sqlite_app;
+        return false;
+    }
+    QByteArray line(".read " + QFile::encodeName(fi.absoluteFilePath()));
+    if (p.write(line) != line.length() || !p.waitForBytesWritten()) {
+        KexiDBWarn << "Failed to send \".read\" command to program" << sqlite_app;
+        return false;
+    }
+    p.closeWriteChannel();
+    if (!p.waitForFinished()) {
+        KexiDBWarn << "Failed to finish program" << sqlite_app;
+        return false;
+    }
+    return true;
 }
 
 //--------------------------------------------------------------------------------

@@ -561,6 +561,24 @@ inline CALLIGRADB_EXPORT QDateTime stringToHackedQTime(const QString& s)
     return QDateTime(QDate(0, 1, 2), QTime::fromString(s, Qt::ISODate));
 }
 
+/*! @return new temporary name suitable for creating new table.
+ The name has mask tmp__{baseName}{rand} where baseName is passed as argument
+ and {rand} is 10 digits long hexadecimal number. @a baseName can be empty.
+ It is not 100% guaranteed that the name will but it is very likely.
+ The function checks for existence of table in connection @a conn.
+ It is adviced to use the returned name as quickly as possible for creating new physical table. */
+CALLIGRADB_EXPORT QString temporaryTableName(Connection *conn, const QString &baseName);
+
+/*! @return absolute path to "sqlite3" program.
+ Empty string is returned if the program was not found. */
+CALLIGRADB_EXPORT QString sqlite3ProgramPath();
+
+/*! Imports SQL file from @a inputFileName into @a outputFileName.
+ Works for any SQLite 3 file. Requires access to "sqlite3" command.
+ @a outputFileName will be silently overwritten.
+ @return true on success. */
+CALLIGRADB_EXPORT bool importSqliteFile(const QString &inputFileName, const QString &outputFileName);
+
 #ifdef CALLIGRADB_DEBUG_GUI
 typedef void(*DebugGUIHandler)(const QString&);
 CALLIGRADB_EXPORT void setDebugGUIHandler(DebugGUIHandler handler);

@@ -100,7 +100,7 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     }
 
     if (!preset->settings() || !preset->settings()->isValid()) {
-        const KIcon icon(koIconName("edit-delete"));
+        const KIcon icon(koIconName("broken-preset"));
         icon.paint(painter, QRect(paintRect.x() + paintRect.height() - 25, paintRect.y() + paintRect.height() - 25, 25, 25));
     }
 }

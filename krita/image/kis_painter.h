@@ -364,6 +364,17 @@ public:
     void renderMirrorMask(QRect rc, KisPaintDeviceSP dab, int sx, int sy, KisFixedPaintDeviceSP mask);
 
     /**
+     * Convinience method for renderMirrorMask(), allows to choose whether
+     * we need to preserve out dab or do the transformations in-place.
+     *
+     * @param rc rectangle area covered by dab
+     * @param dab the device to render
+     * @param preserveDab states whether a temporary device should be
+     *                    created to do the transformations
+     */
+    void renderMirrorMaskSafe(QRect rc, KisFixedPaintDeviceSP dab, bool preserveDab);
+
+    /**
      * Special method for some paintop that needs to know which areas where covered by the dab
      * E.g. experimental (shape) paintop needs to know it to be able to copy appriate regions from
      * internal device to the layer device

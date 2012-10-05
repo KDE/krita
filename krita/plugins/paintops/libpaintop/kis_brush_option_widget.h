@@ -50,8 +50,9 @@ public:
 
     void setImage(KisImageWSP image);
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
+    void setPrecisionEnabled(bool value);
 
+    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
     void setBrushSize(qreal dxPixels, qreal dyPixels);

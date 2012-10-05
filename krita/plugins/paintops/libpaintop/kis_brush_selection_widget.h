@@ -20,6 +20,7 @@
 
 #include <QWidget>
 #include "kis_brush.h"
+#include "kis_precision_option.h"
 #include "ui_wdgbrushchooser.h"
 
 class QTabWidget;
@@ -58,12 +59,19 @@ public:
     QSizeF brushSize() const;
     bool presetIsValid() { return m_presetIsValid; }
 
+    void writeOptionSetting(KisPropertiesConfiguration* settings) const;
+    void readOptionSetting(const KisPropertiesConfiguration* setting);
+
+    void setPrecisionEnabled(bool value);
+
 signals:
 
     void sigBrushChanged();
+    void sigPrecisionChanged();
 
 private slots:
     void buttonClicked(int id);
+    void precisionChanged(int value);
 
 private:
     void setCurrentWidget(QWidget * widget);
@@ -91,6 +99,7 @@ private:
     KisTextBrushChooser * m_textBrushWidget;
     KisCustomBrushWidget * m_customBrushWidget;
 
+    KisPrecisionOption m_precisionOption;
 };
 
 #endif

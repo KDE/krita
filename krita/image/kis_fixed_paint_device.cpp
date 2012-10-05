@@ -42,6 +42,14 @@ KisFixedPaintDevice::KisFixedPaintDevice(const KisFixedPaintDevice& rhs)
     m_data = rhs.m_data;
 }
 
+KisFixedPaintDevice& KisFixedPaintDevice::operator=(const KisFixedPaintDevice& rhs)
+{
+    m_bounds = rhs.m_bounds;
+    m_colorSpace = rhs.m_colorSpace;
+    m_data = rhs.m_data;
+    return *this;
+}
+
 void KisFixedPaintDevice::setRect(const QRect& rc)
 {
     m_bounds = rc;

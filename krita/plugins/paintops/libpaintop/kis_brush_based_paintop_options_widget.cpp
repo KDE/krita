@@ -31,6 +31,11 @@ KisBrushBasedPaintopOptionWidget::~KisBrushBasedPaintopOptionWidget()
 {
 }
 
+void KisBrushBasedPaintopOptionWidget::setPrecisionEnabled(bool value)
+{
+    m_brushOption->setPrecisionEnabled(value);
+}
+
 KisBrushSP KisBrushBasedPaintopOptionWidget::brush()
 {
     return m_brushOption->brush();

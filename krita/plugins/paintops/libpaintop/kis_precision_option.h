@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Sven Langkamp <sven.langkamp@gmail.com>
+ *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,33 +16,27 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_BRUSH_BASED_PAINTOP_OPTIONS_WIDGET_H
-#define KIS_BRUSH_BASED_PAINTOP_OPTIONS_WIDGET_H
+#ifndef __KIS_PRECISION_OPTION_H
+#define __KIS_PRECISION_OPTION_H
 
-#include "kis_paintop_options_widget.h"
-#include "kis_types.h"
-#include "kis_brush.h"
+#include <QString>
 #include <krita_export.h>
+class KisPropertiesConfiguration;
 
-class KisBrushOptionWidget;
+const QString PRECISION_LEVEL = "KisPresisionOption/precisionLevel";
 
-class PAINTOP_EXPORT KisBrushBasedPaintopOptionWidget : public KisPaintOpOptionsWidget
+
+class PAINTOP_EXPORT KisPrecisionOption
 {
 public:
-    KisBrushBasedPaintopOptionWidget(QWidget* parent = 0);
-    virtual ~KisBrushBasedPaintopOptionWidget();
+    void writeOptionSetting(KisPropertiesConfiguration* settings) const;
+    void readOptionSetting(const KisPropertiesConfiguration* settings);
 
-    void setPrecisionEnabled(bool value);
-
-    KisBrushSP brush();
-
-    void changePaintOpSize(qreal x, qreal y);
-    virtual QSizeF paintOpSize() const;
-    virtual bool presetIsValid();
-
+    int precisionLevel() const;
+    void setPrecisionLevel(int precisionLevel);
 
 private:
-    KisBrushOptionWidget * m_brushOption;
+    int m_precisionLevel;
 };
 
-#endif // KIS_BRUSH_BASED_PAINTOP_OPTIONS_WIDGET_H
+#endif /* __KIS_PRECISION_OPTION_H */

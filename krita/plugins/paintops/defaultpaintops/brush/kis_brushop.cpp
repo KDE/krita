@@ -41,8 +41,10 @@
 #include <kis_pressure_sharpness_option.h>
 #include <KoColorSpaceRegistry.h>
 
+#include "kis_dab_cache.h"
+
 KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter *painter, KisImageWSP image)
-        : KisBrushBasedPaintOp(settings, painter), m_hsvTransformation(0)
+    : KisBrushBasedPaintOp(settings, painter), m_hsvTransformation(0), m_dabCache(new KisDabCache(m_brush))
 {
     Q_UNUSED(image);
     Q_ASSERT(settings);
@@ -77,6 +79,7 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     m_scatterOption.readOptionSetting(settings);
     m_mirrorOption.readOptionSetting(settings);
     m_textureProperties.fillProperties(settings);
+    m_precisionOption.readOptionSetting(settings);
 
     m_opacityOption.sensor()->reset();
     m_sizeOption.sensor()->reset();
@@ -86,6 +89,11 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     m_darkenOption.sensor()->reset();
     m_rotationOption.sensor()->reset();
     m_scatterOption.sensor()->reset();
+
+    m_dabCache->setMirrorPostprocessing(&m_mirrorOption);
+    m_dabCache->setSharpnessPostprocessing(&m_sharpnessOption);
+    m_dabCache->setTexturePostprocessing(&m_textureProperties);
+    m_dabCache->setPrecisionOption(&m_precisionOption);
 }
 
 KisBrushOp::~KisBrushOp()
@@ -93,6 +101,7 @@ KisBrushOp::~KisBrushOp()
     qDeleteAll(m_hsvOptions);
     delete m_colorSource;
     delete m_hsvTransformation;
+    delete m_dabCache;
 }
 
 qreal KisBrushOp::paintAt(const KisPaintInformation& info)
@@ -146,39 +155,19 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
         m_colorSource->applyColorTransformation(m_hsvTransformation);
     }
 
-    KisFixedPaintDeviceSP dab = cachedDab(device->colorSpace());
-
-    if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
-        dab = brush->paintDevice(device->colorSpace(), scale, rotation, info, xFraction, yFraction);
-    }
-    else {
-        if (m_colorSource->isUniformColor()) {
-            KoColor color = m_colorSource->uniformColor();
-            color.convertTo(dab->colorSpace());
-            brush->mask(dab, color, scale, scale, rotation, info, xFraction, yFraction, m_softnessOption.apply(info));
-        }
-        else {
-            if (!m_colorSourceDevice) {
-                m_colorSourceDevice = new KisPaintDevice(dab->colorSpace());
-            }
-            else {
-                m_colorSourceDevice->clear();
-            }
-            m_colorSource->colorize(m_colorSourceDevice, QRect(0, 0, brush->maskWidth(scale, rotation), brush->maskHeight(scale, rotation)), info.pos().toPoint() );
-            brush->mask(dab, m_colorSourceDevice, scale, scale, rotation, info, xFraction, yFraction, m_softnessOption.apply(info));
-        }
-    }
-
-    MirrorProperties mirrors = m_mirrorOption.apply(info);
-    dab->mirror(mirrors.horizontalMirror, mirrors.verticalMirror);
-
-    m_sharpnessOption.applyTreshold( dab );
-
-    // after everything, apply the texturing
-    m_textureProperties.apply(dab, info.pos().toPoint());
+    KisFixedPaintDeviceSP dab = m_dabCache->fetchDab(device->colorSpace(),
+                                                    m_colorSource,
+                                                    scale, scale,
+                                                    rotation,
+                                                    info,
+                                                    xFraction, yFraction,
+                                                    m_softnessOption.apply(info));
 
     painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
-    painter()->renderMirrorMask(QRect(QPoint(x,y), QSize(dab->bounds().width(),dab->bounds().height())),dab);
+
+    painter()->renderMirrorMaskSafe(QRect(QPoint(x,y), QSize(dab->bounds().width(),dab->bounds().height())),
+                                    dab,
+                                    !m_dabCache->needSeparateOriginal());
     painter()->setOpacity(origOpacity);
     painter()->setFlow(origFlow);
 

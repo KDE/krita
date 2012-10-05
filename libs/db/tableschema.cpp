@@ -154,6 +154,15 @@ void TableSchema::init(const TableSchema& ts, bool copyId)
         }
         m_indices.append(idx);
     }
+
+    Field::ListIterator tsIter(ts.fieldsIterator());
+    Field::ListIterator iter(fieldsIterator());
+    for (; iter != fieldsIteratorConstEnd(); ++tsIter, ++iter) {
+        const LookupFieldSchema *lookup = ts.lookupFieldSchema(**tsIter);
+        if (lookup) {
+            d->lookupFields.insert(*iter, new LookupFieldSchema(*lookup));
+        }
+    }
 }
 
 void TableSchema::setPrimaryKey(IndexSchema *pkey)

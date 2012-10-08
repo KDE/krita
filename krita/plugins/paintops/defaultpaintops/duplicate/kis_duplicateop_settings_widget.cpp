@@ -37,6 +37,7 @@ KisDuplicateOpSettingsWidget::KisDuplicateOpSettingsWidget(QWidget* parent)
         : KisBrushBasedPaintopOptionWidget(parent)
 {
     setObjectName("brush option widget");
+    setPrecisionEnabled(true);
 
     m_duplicateOption = new KisDuplicateOpOption;
     addPaintOpOption(new KisCompositeOpOption(true));

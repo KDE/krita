@@ -37,6 +37,7 @@
 #include <kis_paint_information.h>
 
 #include <kis_pressure_opacity_option.h>
+#include <kis_dab_cache.h>
 
 /*
 * Based on Harmony project http://github.com/mrdoob/harmony/
@@ -57,7 +58,7 @@
 // shaded: probabity : paint always - 0.0 density
 
 KisSketchPaintOp::KisSketchPaintOp(const KisSketchPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
-        : KisPaintOp(painter)
+    : KisPaintOp(painter)
 {
     Q_UNUSED(image);
     m_opacityOption.readOptionSetting(settings);
@@ -70,6 +71,7 @@ KisSketchPaintOp::KisSketchPaintOp(const KisSketchPaintOpSettings *settings, Kis
     m_offsetScaleOption.readOptionSetting(settings);
 
     m_brush = m_brushOption.brush();
+    m_dabCache = new KisDabCache(m_brush);
 
     m_opacityOption.sensor()->reset();
     m_sizeOption.sensor()->reset();
@@ -82,6 +84,7 @@ KisSketchPaintOp::KisSketchPaintOp(const KisSketchPaintOpSettings *settings, Kis
 KisSketchPaintOp::~KisSketchPaintOp()
 {
     delete m_painter;
+    delete m_dabCache;
 }
 
 void KisSketchPaintOp::drawConnection(const QPointF& start, const QPointF& end, double lineWidth)
@@ -94,15 +97,8 @@ void KisSketchPaintOp::drawConnection(const QPointF& start, const QPointF& end, 
 }
 
 void KisSketchPaintOp::updateBrushMask(const KisPaintInformation& info, qreal scale, qreal rotation){
-    m_maskDab = cachedDab(m_dab->colorSpace());
-
-    if (m_brush->brushType() == IMAGE || m_brush->brushType() == PIPE_IMAGE) {
-        m_maskDab = m_brush->paintDevice(m_dab->colorSpace(), scale, rotation, info, 0.0, 0.0);
-    } else {
-        KoColor color = painter()->paintColor();
-        color.convertTo(m_maskDab->colorSpace());
-        m_brush->mask(m_maskDab, color, scale, scale, rotation, info, 0.0, 0.0);
-    }
+    m_maskDab = m_dabCache->fetchDab(m_dab->colorSpace(), painter()->paintColor(), scale, scale,
+                                     rotation, info, 0.0, 0.0, 0.0);
 
     // update bounding box
     m_brushBoundingBox = m_maskDab->bounds();

@@ -88,7 +88,7 @@ qreal KisFilterOp::paintAt(const KisPaintInformation& info)
 
     setCurrentScale(scale);
 
-    QPointF hotSpot = brush->hotSpot(scale, scale);
+    QPointF hotSpot = brush->hotSpot(scale, scale, 0, info);
     QPointF pt = info.pos() - hotSpot;
 
 
@@ -103,8 +103,8 @@ qreal KisFilterOp::paintAt(const KisPaintInformation& info)
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
 
-    qint32 maskWidth = brush->maskWidth(scale, 0.0);
-    qint32 maskHeight = brush->maskHeight(scale, 0.0);
+    qint32 maskWidth = brush->maskWidth(scale, 0.0, info);
+    qint32 maskHeight = brush->maskHeight(scale, 0.0, info);
 
     // Filter the paint device
     QRect rect = QRect(0, 0, maskWidth, maskHeight);

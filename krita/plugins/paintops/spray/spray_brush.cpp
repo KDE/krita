@@ -317,7 +317,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
         }
         // Auto-brush
         }else{
-            QPointF hotSpot = m_brush->hotSpot(particleScale, particleScale, -rotationZ);
+            QPointF hotSpot = m_brush->hotSpot(particleScale, particleScale, -rotationZ, info);
             QPointF pos(nx + x, ny + y);
             QPointF pt = pos - hotSpot;
 

@@ -37,6 +37,8 @@ public:
     KisTextBrush(const KisTextBrush &rhs);
     virtual ~KisTextBrush();
 
+    void notifyCachedDabPainted();
+
     void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
             double scaleX, double scaleY, double angle,
             const KisPaintInformation& info,
@@ -59,8 +61,9 @@ public:
     void updateBrush();
     void toXML(QDomDocument& , QDomElement&) const;
 
-    qint32 maskWidth(double scale, double angle) const;
-    qint32 maskHeight(double scale, double angle) const;
+    quint32 brushIndex(const KisPaintInformation& info) const;
+    qint32 maskWidth(double scale, double angle, const KisPaintInformation& info) const;
+    qint32 maskHeight(double scale, double angle, const KisPaintInformation& info) const;
     void setAngle(qreal _angle);
     void setScale(qreal _scale);
     void setSpacing(double _spacing);

@@ -106,7 +106,7 @@ void KisSketchPaintOp::updateBrushMask(const KisPaintInformation& info, qreal sc
 
     // update bounding box
     m_brushBoundingBox = m_maskDab->bounds();
-    m_hotSpot = m_brush->hotSpot(scale,scale,rotation);
+    m_hotSpot = m_brush->hotSpot(scale,scale,rotation,info);
     m_brushBoundingBox.translate(info.pos() - m_hotSpot);
 }
 

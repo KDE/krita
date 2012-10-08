@@ -126,7 +126,7 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
     setCurrentScale(scale);
     setCurrentRotation(rotation);
 
-    QPointF hotSpot = brush->hotSpot(scale, scale, rotation);
+    QPointF hotSpot = brush->hotSpot(scale, scale, rotation, info);
     // return info.pos() if sensor is not enabled
     QPointF pos = m_scatterOption.apply(info, qMax(brush->width(), brush->height()) * scale);
     QPointF pt = pos - hotSpot;

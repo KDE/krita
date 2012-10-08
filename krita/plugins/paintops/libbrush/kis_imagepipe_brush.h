@@ -32,7 +32,7 @@
 class QImage;
 
 /**
- * Velocity won't be supported, atm Angular and Tilt aren't either,
+ * Velocity won't be supported, atm Tilt isn't either,
  * but have chances of implementation
  */
 namespace KisParasite
@@ -96,16 +96,16 @@ public:
     void setScale(qreal _scale);
     void setSpacing(double _spacing);
 
-    qint32 maskWidth(double scale, double angle) const;
-    qint32 maskHeight(double scale, double angle) const;
+    quint32 brushIndex(const KisPaintInformation& info) const;
+    qint32 maskWidth(double scale, double angle, const KisPaintInformation& info) const;
+    qint32 maskHeight(double scale, double angle, const KisPaintInformation& info) const;
 
-    /**
-     *  @return the next mask in the pipe.
-     */
-    virtual void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
-            double scaleX, double scaleY, double angle,
-            const KisPaintInformation& info,
-            double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
+    void notifyCachedDabPainted();
+
+    void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
+                                             double scaleX, double scaleY, double angle,
+                                             const KisPaintInformation& info,
+                                             double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
             
 
@@ -118,7 +118,7 @@ protected:
 private:
     friend class KisImagePipeBrushTest;
 
-    KisGbrBrush* testingGetCurrentBrush() const;
+    KisGbrBrush* testingGetCurrentBrush(const KisPaintInformation& info) const;
     QVector<KisGbrBrush*> testingGetBrushes() const;
     void testingSelectNextBrush(const KisPaintInformation& info) const;
 

@@ -130,7 +130,7 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
     qreal scale = m_sizeOption.apply(info);
     if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return spacing(info.pressure());
 
-    QPointF hotSpot = brush->hotSpot(scale, scale);
+    QPointF hotSpot = brush->hotSpot(scale, scale, 0, info);
     QPointF pt = info.pos() - hotSpot;
 
     setCurrentScale(scale);
@@ -158,8 +158,8 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
                           static_cast<qint32>(settings->position().y() - hotSpot.y()));
     }
 
-    qint32 sw = brush->maskWidth(scale, 0.0);
-    qint32 sh = brush->maskHeight(scale, 0.0);
+    qint32 sw = brush->maskWidth(scale, 0.0, info);
+    qint32 sh = brush->maskHeight(scale, 0.0, info);
 
     if (srcPoint.x() < 0)
         srcPoint.setX(0);

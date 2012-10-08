@@ -85,8 +85,8 @@ void KisColorSmudgeOp::updateMask(const KisPaintInformation& info, double scale,
         const static qint32 MAX_SIZE_DIFF = 1;
         const static double MAX_ROT_DIFF  = 5.0 * M_PI/180.0;
         
-        qint32  width           = m_brush->maskWidth(scale, rotation);
-        qint32  height          = m_brush->maskHeight(scale, rotation);
+        qint32  width           = m_brush->maskWidth(scale, rotation, info);
+        qint32  height          = m_brush->maskHeight(scale, rotation, info);
         quint32 index           = m_brush->brushIndex(info);
         double  angle           = m_brush->maskAngle(rotation);
         bool    rotationChanged = qAbs(angle-m_angle) > MAX_ROT_DIFF;
@@ -131,7 +131,7 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     setCurrentRotation(rotation);
     
     QPointF scatteredPos = m_scatterOption.apply(info, diagonal*scale);
-    QPointF point        = scatteredPos - brush->hotSpot(scale, scale, rotation);
+    QPointF point        = scatteredPos - brush->hotSpot(scale, scale, rotation, info);
     
     qint32 x, y;
     qreal xFraction, yFraction; // will not be used

@@ -53,6 +53,7 @@ struct KisDabCache::SavedDabParameters {
     qreal subPixelX;
     qreal subPixelY;
     qreal softnessFactor;
+    int index;
 
     bool compare(const SavedDabParameters &rhs, int precisionLevel) {
         PrecisionValues &prec = precisionLevels[precisionLevel];
@@ -63,7 +64,8 @@ struct KisDabCache::SavedDabParameters {
             qAbs(height - rhs.height) <= (int)(prec.sizeFrac * height) &&
             qAbs(subPixelX - rhs.subPixelX) <= prec.subPixel &&
             qAbs(subPixelY - rhs.subPixelY) <= prec.subPixel &&
-            qAbs(softnessFactor - rhs.softnessFactor) <= prec.softnessFactor;
+            qAbs(softnessFactor - rhs.softnessFactor) <= prec.softnessFactor &&
+            index == rhs.index;
     }
 };
 
@@ -112,17 +114,16 @@ KisDabCache::getDabParameters(const KoColor& color,
                               double subPixelX, double subPixelY,
                               qreal softnessFactor)
 {
-    Q_UNUSED(info);
-
     SavedDabParameters params;
 
     params.color = color;
     params.angle = angle;
-    params.width = m_brush->maskWidth(scaleX, angle);
-    params.height = m_brush->maskHeight(scaleY, angle);
+    params.width = m_brush->maskWidth(scaleX, angle, info);
+    params.height = m_brush->maskHeight(scaleY, angle, info);
     params.subPixelX = subPixelX;
     params.subPixelY = subPixelY;
     params.softnessFactor = softnessFactor;
+    params.index = m_brush->brushIndex(info);
 
     return params;
 }
@@ -196,6 +197,7 @@ KisFixedPaintDeviceSP KisDabCache::tryFetchFromCache(const KisColorSource *color
         COUNT_HIT();
     }
 
+    m_brush->notifyCachedDabPainted();
     return m_dab;
 }
 
@@ -225,20 +227,19 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
     else {
         if (!colorSource) {
             Q_ASSERT(*color.colorSpace() == *cs);
-            m_brush->mask(m_dab, color, scaleX, scaleY, angle,
-                          info, subPixelX, subPixelY, softnessFactor);
 
             *m_cachedDabParameters = getDabParameters(color,
                                                       scaleX, scaleY,
                                                       angle, info,
                                                       subPixelX, subPixelY,
                                                       softnessFactor);
+
+            m_brush->mask(m_dab, color, scaleX, scaleY, angle,
+                          info, subPixelX, subPixelY, softnessFactor);
 
         } else if (colorSource->isUniformColor()) {
             Q_ASSERT(*colorSource->colorSpace() == *cs);
             KoColor color = colorSource->uniformColor();
-            m_brush->mask(m_dab, color, scaleX, scaleY, angle,
-                          info, subPixelX, subPixelY, softnessFactor);
 
             *m_cachedDabParameters = getDabParameters(color,
                                                       scaleX, scaleY,
@@ -246,6 +247,8 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
                                                       subPixelX, subPixelY,
                                                       softnessFactor);
 
+            m_brush->mask(m_dab, color, scaleX, scaleY, angle,
+                          info, subPixelX, subPixelY, softnessFactor);
         } else {
             if (!m_colorSourceDevice || !(*cs == *m_colorSourceDevice->colorSpace())) {
                 m_colorSourceDevice = new KisPaintDevice(cs);
@@ -253,7 +256,7 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
                 m_colorSourceDevice->clear();
             }
 
-            QRect maskRect(0, 0, m_brush->maskWidth(scaleX, angle), m_brush->maskHeight(scaleY, angle));
+            QRect maskRect(0, 0, m_brush->maskWidth(scaleX, angle, info), m_brush->maskHeight(scaleY, angle, info));
             colorSource->colorize(m_colorSourceDevice, maskRect, info.pos().toPoint());
 
             m_brush->mask(m_dab, m_colorSourceDevice, scaleX, scaleY, angle,

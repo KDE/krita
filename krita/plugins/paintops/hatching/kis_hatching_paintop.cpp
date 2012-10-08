@@ -100,7 +100,7 @@ qreal KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
     quint8 origOpacity = m_opacityOption.apply(painter(), info);
 
     //-----------POSITIONING code----------
-    QPointF hotSpot = brush->hotSpot(scale, scale);
+    QPointF hotSpot = brush->hotSpot(scale, scale, 0, info);
     QPointF pt = info.pos() - hotSpot;
 
     qint32 x, y;

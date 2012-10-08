@@ -24,42 +24,80 @@
 class KisImageBrushesPipe : public KisBrushesPipe<KisGbrBrush>
 {
 protected:
-    void selectNextBrush(const KisPaintInformation& info) {
+    static int selectPre(KisParasite::SelectionMode mode,
+                         int index, int rank,
+                         const KisPaintInformation& info) {
+
+        qreal angle;
+
+        switch (mode) {
+        case KisParasite::Constant:
+        case KisParasite::Incremental:
+        case KisParasite::Random:
+            break;
+        case KisParasite::Pressure:
+            index = static_cast<int>(info.pressure() * (rank - 1) + 0.5);
+            break;
+        case KisParasite::Angular:
+            // + m_d->PI_2 to be compatible with the gimp
+            angle = info.angle() + M_PI_2;
+            // We need to be in the [0..2*Pi[ interval so that we can more nicely select it
+            if (angle < 0)
+                angle += 2.0 * M_PI;
+            else if (angle > 2.0 * M_PI)
+                angle -= 2.0 * M_PI;
+            index = static_cast<int>(angle / (2.0 * M_PI) * rank);
+            break;
+        default:
+            warnImage << "Parasite" << mode << "is not implemented";
+            index = 0;
+        }
+
+        return index;
+    }
+
+    static int selectPost(KisParasite::SelectionMode mode,
+                      int index, int rank) {
+
+        switch (mode) {
+        case KisParasite::Constant: break;
+        case KisParasite::Incremental:
+            index = (index + 1) % rank;
+            break;
+        case KisParasite::Random:
+            index = int(float(rank) * KRandom::random() / RAND_MAX);
+            break;
+        case KisParasite::Pressure:
+        case KisParasite::Angular:
+            break;
+        default:
+            warnImage << "Parasite" << mode << "is not implemented";
+            index = 0;
+        }
+
+        return index;
+    }
+
+    int chooseNextBrush(const KisPaintInformation& info) const {
         quint32 brushIndex = 0;
 
-        double angle;
         for (int i = 0; i < m_parasite.dim; i++) {
-            int index = m_parasite.index[i];
-            switch (m_parasite.selection[i]) {
-            case KisParasite::Constant: break;
-            case KisParasite::Incremental:
-                index = (index + 1) % m_parasite.rank[i]; break;
-            case KisParasite::Random:
-                index = int(float(m_parasite.rank[i]) * KRandom::random() / RAND_MAX); break;
-            case KisParasite::Pressure:
-                index = static_cast<int>(info.pressure() * (m_parasite.rank[i] - 1) + 0.5); break;
-            case KisParasite::Angular:
-                // + m_d->PI_2 to be compatible with the gimp
-                angle = info.angle() + M_PI_2;
-                // We need to be in the [0..2*Pi[ interval so that we can more nicely select it
-                if (angle < 0)
-                    angle += 2.0 * M_PI;
-                else if (angle > 2.0 * M_PI)
-                    angle -= 2.0 * M_PI;
-                index = static_cast<int>(angle / (2.0 * M_PI) * m_parasite.rank[i]);
-                break;
-            default:
-                warnImage << "This parasite KisParasite::SelectionMode has not been implemented. Reselecting"
-                          << " to Constant";
-                m_parasite.selection[i] = KisParasite::Constant; // Not incremental, since that assumes rank > 0
-                index = 0;
-            }
-            m_parasite.index[i] = index;
+            int index = selectPre(m_parasite.selection[i],
+                                  m_parasite.index[i],
+                                  m_parasite.rank[i], info);
+
             brushIndex += m_parasite.brushesCount[i] * index;
         }
         brushIndex %= m_brushes.size();
+        return brushIndex;
+    }
 
-        m_currentBrushIndex = brushIndex;
+    void updateBrushIndexes() {
+        for (int i = 0; i < m_parasite.dim; i++) {
+            m_parasite.index[i] = selectPost(m_parasite.selection[i],
+                                             m_parasite.index[i],
+                                             m_parasite.rank[i]);
+        }
     }
 
 public:
@@ -265,6 +303,11 @@ bool KisImagePipeBrush::saveToDevice(QIODevice* dev) const
     return m_d->brushesPipe.saveToDevice(dev);
 }
 
+void KisImagePipeBrush::notifyCachedDabPainted()
+{
+    m_d->brushesPipe.notifyCachedDabPainted();
+}
+
 void KisImagePipeBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
                                                             double scaleX, double scaleY, double angle, const KisPaintInformation& info,
                                                             double subPixelX , double subPixelY,
@@ -327,14 +370,19 @@ QString KisImagePipeBrush::defaultFileExtension() const
     return QString(".gih");
 }
 
-qint32 KisImagePipeBrush::maskWidth(double scale, double angle) const
+quint32 KisImagePipeBrush::brushIndex(const KisPaintInformation& info) const
 {
-    return m_d->brushesPipe.maskWidth(scale, angle);
+    return m_d->brushesPipe.brushIndex(info);
 }
 
-qint32 KisImagePipeBrush::maskHeight(double scale, double angle) const
+qint32 KisImagePipeBrush::maskWidth(double scale, double angle, const KisPaintInformation& info) const
 {
-    return m_d->brushesPipe.maskHeight(scale, angle);
+    return m_d->brushesPipe.maskWidth(scale, angle, info);
+}
+
+qint32 KisImagePipeBrush::maskHeight(double scale, double angle, const KisPaintInformation& info) const
+{
+    return m_d->brushesPipe.maskHeight(scale, angle, info);
 }
 
 void KisImagePipeBrush::setAngle(qreal _angle)
@@ -369,9 +417,9 @@ void KisImagePipeBrush::setHasColor(bool hasColor)
     // hasColor() is a function of the underlying brushes
 }
 
-KisGbrBrush* KisImagePipeBrush::testingGetCurrentBrush() const
+KisGbrBrush* KisImagePipeBrush::testingGetCurrentBrush(const KisPaintInformation& info) const
 {
-    return m_d->brushesPipe.currentBrush();
+    return m_d->brushesPipe.currentBrush(info);
 }
 
 QVector<KisGbrBrush*> KisImagePipeBrush::testingGetBrushes() const

@@ -68,19 +68,25 @@ inline void KisImagePipeBrushTest::checkConsistency(KisImagePipeBrush *brush)
      * Check mask size values, they depend on current brush
      */
 
-    QVERIFY(brush->testingGetCurrentBrush());
+    KisPaintInformation info;
+
+    KisBrush *oldBrush = brush->testingGetCurrentBrush(info);
+    QVERIFY(oldBrush);
 
     qreal realScale = 1;
     qreal realAngle = 0;
     qreal subPixelX = 0;
     qreal subPixelY = 0;
 
-    int maskWidth = brush->maskWidth(realScale, realAngle);
-    int maskHeight = brush->maskHeight(realScale, realAngle);
-    KisQImagemaskSP outputMask = brush->testingGetCurrentBrush()->createMask(realScale, subPixelX, subPixelY);
+    int maskWidth = brush->maskWidth(realScale, realAngle, info);
+    int maskHeight = brush->maskHeight(realScale, realAngle, info);
+    KisQImagemaskSP outputMask = brush->testingGetCurrentBrush(info)->createMask(realScale, subPixelX, subPixelY);
 
     QCOMPARE(maskWidth, outputMask->width());
     QCOMPARE(maskHeight, outputMask->height());
+
+    KisBrush *newBrush = brush->testingGetCurrentBrush(info);
+    QCOMPARE(oldBrush, newBrush);
 }
 
 
@@ -128,8 +134,8 @@ void checkIncrementalPainting(KisBrush *brush, const QString &prefix)
     KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, movement, rotation, 0);
 
     for (int i = 0; i < 20; i++) {
-        int maskWidth = brush->maskWidth(realScale, realAngle);
-        int maskHeight = brush->maskHeight(realScale, realAngle);
+        int maskWidth = brush->maskWidth(realScale, realAngle, info);
+        int maskHeight = brush->maskHeight(realScale, realAngle, info);
         QRect fillRect(0, 0, maskWidth, maskHeight);
 
         fixedDab->setRect(fillRect);

@@ -252,8 +252,8 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
     quint32 pixelSize = cs->pixelSize();
 
     // mask dimension methods already includes KisBrush::angle()
-    int dstWidth = maskWidth(scaleX, angle);
-    int dstHeight = maskHeight(scaleY, angle);
+    int dstWidth = maskWidth(scaleX, angle, info);
+    int dstHeight = maskHeight(scaleY, angle, info);
 
     angle += KisBrush::angle();
 
@@ -290,8 +290,6 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
             color = const_cast<quint8*>(coloringInformation->color());
         }
     }
-
-    int rowWidth = dst->bounds().width();
 
     double invScaleX = 1.0 / scaleX;
     double invScaleY = 1.0 / scaleY;
@@ -353,8 +351,8 @@ QImage KisAutoBrush::createBrushPreview()
 {
     srand(0);
     srand48(0);
-    int width = maskWidth(1.0, 0.0);
-    int height = maskHeight(1.0, 0.0);
+    int width = maskWidth(1.0, 0.0, KisPaintInformation());
+    int height = maskHeight(1.0, 0.0, KisPaintInformation());
 
     KisPaintInformation info(QPointF(width * 0.5, height * 0.5), 0.5, 0, 0, KisVector2D::Zero(), 0, 0);
 

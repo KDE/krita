@@ -41,10 +41,9 @@
 #include <kis_pressure_sharpness_option.h>
 #include <KoColorSpaceRegistry.h>
 
-#include "kis_dab_cache.h"
 
 KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter *painter, KisImageWSP image)
-    : KisBrushBasedPaintOp(settings, painter), m_hsvTransformation(0), m_dabCache(new KisDabCache(m_brush))
+    : KisBrushBasedPaintOp(settings, painter), m_hsvTransformation(0)
 {
     Q_UNUSED(image);
     Q_ASSERT(settings);
@@ -79,7 +78,6 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     m_scatterOption.readOptionSetting(settings);
     m_mirrorOption.readOptionSetting(settings);
     m_textureProperties.fillProperties(settings);
-    m_precisionOption.readOptionSetting(settings);
 
     m_opacityOption.sensor()->reset();
     m_sizeOption.sensor()->reset();
@@ -93,7 +91,6 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     m_dabCache->setMirrorPostprocessing(&m_mirrorOption);
     m_dabCache->setSharpnessPostprocessing(&m_sharpnessOption);
     m_dabCache->setTexturePostprocessing(&m_textureProperties);
-    m_dabCache->setPrecisionOption(&m_precisionOption);
 }
 
 KisBrushOp::~KisBrushOp()
@@ -101,7 +98,6 @@ KisBrushOp::~KisBrushOp()
     qDeleteAll(m_hsvOptions);
     delete m_colorSource;
     delete m_hsvTransformation;
-    delete m_dabCache;
 }
 
 qreal KisBrushOp::paintAt(const KisPaintInformation& info)

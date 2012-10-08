@@ -37,7 +37,6 @@
 #include <kis_color_source_option.h>
 #include <kis_pressure_spacing_option.h>
 #include <kis_texture_option.h>
-#include <kis_precision_option.h>
 
 class KisBrushBasedPaintOpSettings;
 
@@ -45,7 +44,6 @@ class QWidget;
 class QPointF;
 class KisPainter;
 class KisColorSource;
-class KisDabCache;
 
 
 class KisBrushOp : public KisBrushBasedPaintOp
@@ -73,12 +71,10 @@ private:
     KisPressureScatterOption m_scatterOption;
     QList<KisPressureHSVOption*> m_hsvOptions;
     KisTextureProperties m_textureProperties;
-    KisPrecisionOption m_precisionOption;
 
     KoColorTransformation *m_hsvTransformation;
     KisPaintDeviceSP m_dab;
     KisPaintDeviceSP m_colorSourceDevice;
-    KisDabCache *m_dabCache;
 };
 
 #endif // KIS_BRUSHOP_H_

@@ -21,6 +21,9 @@
 #include "krita_export.h"
 #include "kis_paintop.h"
 #include "kis_brush.h"
+#include "kis_precision_option.h"
+#include "kis_dab_cache.h"
+
 
 class KisPropertiesConfiguration;
 
@@ -35,6 +38,7 @@ class PAINTOP_EXPORT KisBrushBasedPaintOp : public KisPaintOp
 public:
 
     KisBrushBasedPaintOp(const KisPropertiesConfiguration* settings, KisPainter* painter);
+    ~KisBrushBasedPaintOp();
     double spacing(double scale) const;
 
     ///Reimplemented, false if brush is 0
@@ -43,6 +47,8 @@ public:
 protected: // XXX: make private!
 
     KisBrushSP m_brush;
+    KisPrecisionOption m_precisionOption;
+    KisDabCache *m_dabCache;
 };
 
 #endif

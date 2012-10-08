@@ -39,7 +39,8 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
     KisBrushBasedPaintopOptionWidget(parent)
 {
     setObjectName("brush option widget");
-    
+    setPrecisionEnabled(true);
+
 //     KisSmudgeOptionWidget* opt = 
 
     addPaintOpOption(new KisCompositeOpOption(true));

@@ -154,10 +154,11 @@ KisFixedPaintDeviceSP KisDabCache::fetchDab(const KoColorSpace *cs,
 
 bool KisDabCache::needSeparateOriginal()
 {
-    return (m_mirrorOption->isChecked() &&
+    return (m_mirrorOption &&
+            m_mirrorOption->isChecked() &&
             (m_mirrorOption->isHorizontalMirrorEnabled() ||
              m_mirrorOption->isVerticalMirrorEnabled())) ||
-        m_textureOption->enabled;
+        (m_mirrorOption && m_textureOption->enabled);
 }
 
 inline
@@ -215,7 +216,7 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
         m_dab = new KisFixedPaintDevice(cs);
     } else {
         KisFixedPaintDeviceSP cachedDab =
-            tryFetchFromCache(colorSource, KoColor(), scaleX, scaleY, angle,
+            tryFetchFromCache(colorSource, color, scaleX, scaleY, angle,
                               info, subPixelX, subPixelY, softnessFactor);
         if (cachedDab) return cachedDab;
     }

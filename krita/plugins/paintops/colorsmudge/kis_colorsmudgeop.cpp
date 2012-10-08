@@ -34,6 +34,7 @@
 #include <kis_selection.h>
 #include <kis_brush_based_paintop_settings.h>
 
+
 KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings, KisPainter* painter, KisImageWSP image):
     KisBrushBasedPaintOp(settings, painter),
     m_firstRun(true), m_tempDev(0), m_image(image),
@@ -53,7 +54,7 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings,
     m_rotationOption.readOptionSetting(settings);
     m_scatterOption.readOptionSetting(settings);
     m_gradientOption.readOptionSetting(settings);
-    
+
     m_sizeOption.sensor()->reset();
     m_opacityOption.sensor()->reset();
     m_spacingOption.sensor()->reset();
@@ -62,7 +63,7 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings,
     m_rotationOption.sensor()->reset();
     m_scatterOption.sensor()->reset();
     m_gradientOption.sensor()->reset();
-    
+
     m_gradient    = painter->gradient();
     m_tempDev     = new KisPaintDevice(painter->device()->colorSpace());
     m_tempPainter = new KisPainter(m_tempDev);
@@ -75,39 +76,18 @@ KisColorSmudgeOp::~KisColorSmudgeOp()
 
 void KisColorSmudgeOp::updateMask(const KisPaintInformation& info, double scale, double rotation)
 {
-    // Extract the brush mask (m_maskDab) from brush with the correct scaled size
-    if(m_brush->brushType() == IMAGE || m_brush->brushType() == PIPE_IMAGE) {
-        // This is for bitmap brushes
-        m_maskDab    = m_brush->paintDevice(painter()->device()->colorSpace(), scale, rotation, info, 0.0, 0.0);
-        m_maskBounds = m_maskDab->bounds();
-    } else {
-        // This is for parametric brushes, those created in the Autobrush popup config dialogue
-        const static qint32 MAX_SIZE_DIFF = 1;
-        const static double MAX_ROT_DIFF  = 5.0 * M_PI/180.0;
-        
-        qint32  width           = m_brush->maskWidth(scale, rotation, info);
-        qint32  height          = m_brush->maskHeight(scale, rotation, info);
-        quint32 index           = m_brush->brushIndex(info);
-        double  angle           = m_brush->maskAngle(rotation);
-        bool    rotationChanged = qAbs(angle-m_angle) > MAX_ROT_DIFF;
-        bool    sizeChanged     = qAbs(width-m_maskBounds.width()) > MAX_SIZE_DIFF || qAbs(height-m_maskBounds.height()) > MAX_SIZE_DIFF;
-        bool    indexChanged    = index != m_brushIndex;
-        
-        if(rotationChanged || m_maskDab.isNull())
-            m_angle = angle;
-        
-        // calculate a new brush mask only if the size or rotation of the brush changed significantly
-        if(sizeChanged || rotationChanged || m_maskDab.isNull() || indexChanged) {
-            m_maskDab = cachedDab();
-            m_brush->mask(m_maskDab, painter()->paintColor(), scale, scale, rotation, info, 0.0, 0.0);
-            m_maskBounds = m_maskDab->bounds();
-            m_brushIndex = index;
-        }
-    }
-    
-    // transforms the fixed paint device with the current brush
-    // to alpha color space to use it as an alpha/transparency mask
-    m_maskDab->convertTo(KoColorSpaceRegistry::instance()->alpha8(), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+    static const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
+    static KoColor color(Qt::black, cs);
+
+    m_maskDab = m_dabCache->fetchDab(cs,
+                                     color,
+                                     scale, scale,
+                                     rotation,
+                                     info,
+                                     0.0, 0.0,
+                                     0.0);
+
+    m_maskBounds = m_maskDab->bounds();
 }
 
 qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)

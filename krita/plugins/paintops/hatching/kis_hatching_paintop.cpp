@@ -116,23 +116,12 @@ qreal KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
     //--------END POSITIONING CODE-----------
 
     //DECLARING EMPTY pixel-only paint device, note that it is a smart pointer
-    KisFixedPaintDeviceSP maskDab = 0;
+    static const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
+    static KoColor color(Qt::black, cs);
 
-    /*--------copypasted from SmudgeOp-------
-    ---This IF-ELSE block is used to turn the mask created in the BrushTip dialogue
-    into a beautiful SELECTION MASK (it's an opacity multiplier), intended to give
-    the brush a "brush feel" (soft borders, round shape) despite it comes from a
-    simple, ugly, hatched rectangle.*/
-    if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
-        maskDab = brush->paintDevice(device->colorSpace(), scale, 0.0, info, xFraction, yFraction);
-        maskDab->convertTo(KoColorSpaceRegistry::instance()->alpha8(), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
-    } else {
-        maskDab = cachedDab();
-        KoColor color = painter()->paintColor();
-        color.convertTo(maskDab->colorSpace());
-        brush->mask(maskDab, color, scale, scale, 0.0, info, xFraction, yFraction);
-        maskDab->convertTo(KoColorSpaceRegistry::instance()->alpha8(), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
-    }
+    KisFixedPaintDeviceSP maskDab =
+        m_dabCache->fetchDab(cs, color, scale, scale,
+                             0.0, info, xFraction, yFraction, 0.0);;
 
     /*-----Convenient renaming for the limits of the maskDab, this will be used
     to hatch a dab of just the right size------*/
@@ -194,7 +183,8 @@ qreal KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
 
     // The most important line, the one that paints to the screen.
     painter()->bitBltWithFixedSelection(x, y, m_hatchedDab, maskDab, sw, sh);
-    painter()->renderMirrorMask(QRect(QPoint(x,y),QSize(sw,sh)), m_hatchedDab,0,0, maskDab);
+    painter()->renderMirrorMaskSafe(QRect(QPoint(x,y),QSize(sw,sh)), m_hatchedDab, 0, 0, maskDab,
+                                    !m_dabCache->needSeparateOriginal());
     painter()->setOpacity(origOpacity);
 
     /*-----It took me very long to realize the importance of this line, this is

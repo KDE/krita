@@ -49,6 +49,9 @@ protected:
     virtual void undoNoUpdate();
 
 private:
+    void startUpdates();
+
+private:
     struct Private;
     Private * const m_d;
 };

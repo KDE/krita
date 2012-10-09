@@ -120,6 +120,51 @@ void KisTransactionTest::testRedo()
     QVERIFY(c2 == Qt::white);
 }
 
+void KisTransactionTest::testDeviceMove()
+{
+    KisSurrogateUndoAdapter undoAdapter;
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+
+    QCOMPARE(dev->x(), 0);
+    QCOMPARE(dev->y(), 0);
+
+    KisTransaction t1("move1", dev, 0);
+    dev->move(10,20);
+    t1.commit(&undoAdapter);
+
+    QCOMPARE(dev->x(), 10);
+    QCOMPARE(dev->y(), 20);
+
+    KisTransaction t2("move2", dev, 0);
+    dev->move(7,11);
+    t2.commit(&undoAdapter);
+
+    QCOMPARE(dev->x(),  7);
+    QCOMPARE(dev->y(), 11);
+
+    undoAdapter.undo();
+
+    QCOMPARE(dev->x(), 10);
+    QCOMPARE(dev->y(), 20);
+
+    undoAdapter.undo();
+
+    QCOMPARE(dev->x(), 0);
+    QCOMPARE(dev->y(), 0);
+
+    undoAdapter.redo();
+
+    QCOMPARE(dev->x(), 10);
+    QCOMPARE(dev->y(), 20);
+
+    undoAdapter.redo();
+
+    QCOMPARE(dev->x(),  7);
+    QCOMPARE(dev->y(), 11);
+}
+
 QTEST_KDEMAIN(KisTransactionTest, GUI)
 #include "kis_transaction_test.moc"
 

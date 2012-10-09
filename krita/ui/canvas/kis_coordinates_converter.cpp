@@ -73,8 +73,8 @@ QPointF KisCoordinatesConverter::centeringCorrection() const
 
     QPointF range = maxOffset - minOffset;
 
-    range.rx() = qMin(range.x(), 0.0);
-    range.ry() = qMin(range.y(), 0.0);
+    range.rx() = qMin(range.x(), (qreal)0.0);
+    range.ry() = qMin(range.y(), (qreal)0.0);
 
     range /= 2;
 

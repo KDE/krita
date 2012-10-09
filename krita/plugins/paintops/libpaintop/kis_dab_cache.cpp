@@ -227,28 +227,29 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
     }
     else {
         if (!colorSource) {
-            Q_ASSERT(*color.colorSpace() == *cs);
+            KoColor paintColor = color;
+            paintColor.convertTo(cs);
 
-            *m_cachedDabParameters = getDabParameters(color,
+            *m_cachedDabParameters = getDabParameters(paintColor,
                                                       scaleX, scaleY,
                                                       angle, info,
                                                       subPixelX, subPixelY,
                                                       softnessFactor);
 
-            m_brush->mask(m_dab, color, scaleX, scaleY, angle,
+            m_brush->mask(m_dab, paintColor, scaleX, scaleY, angle,
                           info, subPixelX, subPixelY, softnessFactor);
 
         } else if (colorSource->isUniformColor()) {
-            Q_ASSERT(*colorSource->colorSpace() == *cs);
-            KoColor color = colorSource->uniformColor();
+            KoColor paintColor = colorSource->uniformColor();
+            paintColor.convertTo(cs);
 
-            *m_cachedDabParameters = getDabParameters(color,
+            *m_cachedDabParameters = getDabParameters(paintColor,
                                                       scaleX, scaleY,
                                                       angle, info,
                                                       subPixelX, subPixelY,
                                                       softnessFactor);
 
-            m_brush->mask(m_dab, color, scaleX, scaleY, angle,
+            m_brush->mask(m_dab, paintColor, scaleX, scaleY, angle,
                           info, subPixelX, subPixelY, softnessFactor);
         } else {
             if (!m_colorSourceDevice || !(*cs == *m_colorSourceDevice->colorSpace())) {
@@ -259,6 +260,7 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
 
             QRect maskRect(0, 0, m_brush->maskWidth(scaleX, angle, info), m_brush->maskHeight(scaleY, angle, info));
             colorSource->colorize(m_colorSourceDevice, maskRect, info.pos().toPoint());
+            delete m_colorSourceDevice->convertTo(cs);
 
             m_brush->mask(m_dab, m_colorSourceDevice, scaleX, scaleY, angle,
                           info, subPixelX, subPixelY, softnessFactor);

@@ -157,7 +157,8 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         if (d->currentAction) { //If we are currently performing an action, we only update the state of that action and shortcut.
             d->currentShortcut->match(event);
 
-            if (d->currentShortcut->matchLevel() == KisShortcut::NoMatch && !d->fixedAction) {
+            if ((d->currentShortcut->matchLevel() == KisShortcut::PartialMatch || d->currentShortcut->matchLevel() == KisShortcut::NoMatch)
+                && !d->fixedAction) {
                 d->clearState();
                 break;
             }

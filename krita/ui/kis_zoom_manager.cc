@@ -37,6 +37,9 @@
 #include <KoCanvasControllerWidget.h>
 #include <KoGlobal.h>
 #include <KoRulerController.h>
+#include <KoUnit.h>
+#include <KoDpi.h>
+
 
 #include "kis_doc2.h"
 #include "kis_view2.h"
@@ -210,12 +213,13 @@ void KisZoomManager::changeAspectMode(bool aspectMode)
 {
     KisImageWSP image = m_view->image();
 
-    if (aspectMode)
-        m_zoomHandler->setResolution(image->xRes(), image->yRes());
-    else
-        m_zoomHandler->setResolutionToStandard();
+    KoZoomMode::Mode newMode = KoZoomMode::ZOOM_CONSTANT;
+    qreal newZoom = m_zoomHandler->zoom();
 
-    m_zoomController->setZoom(m_zoomHandler->zoomMode(), m_zoomHandler->zoom());
+    qreal resolutionX = aspectMode ? image->xRes() : POINT_TO_INCH(static_cast<qreal>(KoDpi::dpiX()));
+    qreal resolutionY = aspectMode ? image->yRes() : POINT_TO_INCH(static_cast<qreal>(KoDpi::dpiY()));
+
+    m_zoomController->setZoom(newMode, newZoom, resolutionX, resolutionY);
     m_view->canvasBase()->notifyZoomChanged();
 }
 

@@ -149,13 +149,31 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom)
 
 void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom, const QPointF &stillPoint)
 {
-    if (d->zoomHandler->zoomMode() == mode && qFuzzyCompare(d->zoomHandler->zoom(), zoom)) {
+    setZoom(mode, zoom, d->zoomHandler->resolutionX(), d->zoomHandler->resolutionY(), stillPoint);
+}
+
+void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY)
+{
+    setZoom(mode, zoom, resolutionX, resolutionY, d->canvasController->preferredCenter());
+}
+
+void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY, const QPointF &stillPoint)
+{
+    if (d->zoomHandler->zoomMode() == mode &&
+        qFuzzyCompare(d->zoomHandler->zoom(), zoom) &&
+        qFuzzyCompare(d->zoomHandler->resolutionX(), resolutionX) &&
+        qFuzzyCompare(d->zoomHandler->resolutionY(), resolutionY)) {
         return; // no change
     }
 
     qreal oldEffectiveZoom = d->action->effectiveZoom();
-
     QSize oldPageViewportSize = documentToViewport(d->pageSize);
+
+    if(!qFuzzyCompare(d->zoomHandler->resolutionX(), resolutionX) ||
+       !qFuzzyCompare(d->zoomHandler->resolutionY(), resolutionY)) {
+
+        d->zoomHandler->setResolution(resolutionX, resolutionY);
+    }
 
     if(mode == KoZoomMode::ZOOM_CONSTANT) {
         if(zoom == 0.0) return;
@@ -172,6 +190,7 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom, const QPointF 
                      / (oldPageViewportSize.width() / d->zoomHandler->zoom());
         zoom = qMin(zoom, (d->canvasController->viewportSize().height() - 2 * d->fitMargin)
                      / (oldPageViewportSize.height() / d->zoomHandler->zoom()));
+
         d->action->setSelectedZoomMode(mode);
         d->action->setEffectiveZoom(zoom);
     }

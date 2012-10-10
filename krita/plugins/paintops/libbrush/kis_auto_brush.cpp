@@ -237,7 +237,86 @@ KisAutoBrush::~KisAutoBrush()
     delete d;
 }
 
+inline void fillPixelOptimized_4bytes(quint8 *color, quint8 *buf, int size)
+{
+    /**
+     * This version of filling uses low granularity of data transfers
+     * (32-bit chunks) and internal processor's parallelism. It reaches
+     * 25% better performance in KisStrokeBenchmark in comparison to
+     * per-pixel memcpy version (tested on Sandy Bridge).
+     */
 
+    int block1 = size / 8;
+    int block2 = size % 8;
+
+    quint32 *src = reinterpret_cast<quint32*>(color);
+    quint32 *dst = reinterpret_cast<quint32*>(buf);
+
+    // check whether all buffers are 4 bytes aligned
+    // (uncomment if experience some problems)
+    // Q_ASSERT(((qint64)src & 3) == 0);
+    // Q_ASSERT(((qint64)dst & 3) == 0);
+
+    for (int i = 0; i < block1; i++) {
+        *dst = *src;
+        *(dst+1) = *src;
+        *(dst+2) = *src;
+        *(dst+3) = *src;
+        *(dst+4) = *src;
+        *(dst+5) = *src;
+        *(dst+6) = *src;
+        *(dst+7) = *src;
+
+        dst += 8;
+    }
+
+    for (int i = 0; i < block2; i++) {
+        *dst = *src;
+        dst++;
+    }
+}
+
+inline void fillPixelOptimized_general(quint8 *color, quint8 *buf, int size, int pixelSize)
+{
+    /**
+     * This version uses internal processor's parallelism and gives
+     * 20% better performance in KisStrokeBenchmark in comparison to
+     * per-pixel memcpy version (tested on Sandy Bridge (+20%) and
+     * on Merom (+10%)).
+     */
+
+    int block1 = size / 8;
+    int block2 = size % 8;
+
+    for (int i = 0; i < block1; i++) {
+        quint8 *d1 = buf;
+        quint8 *d2 = buf + pixelSize;
+        quint8 *d3 = buf + 2 * pixelSize;
+        quint8 *d4 = buf + 3 * pixelSize;
+        quint8 *d5 = buf + 4 * pixelSize;
+        quint8 *d6 = buf + 5 * pixelSize;
+        quint8 *d7 = buf + 6 * pixelSize;
+        quint8 *d8 = buf + 7 * pixelSize;
+
+        for (int j = 0; j < pixelSize; j++) {
+            *(d1 + j) = color[j];
+            *(d2 + j) = color[j];
+            *(d3 + j) = color[j];
+            *(d4 + j) = color[j];
+            *(d5 + j) = color[j];
+            *(d6 + j) = color[j];
+            *(d7 + j) = color[j];
+            *(d8 + j) = color[j];
+        }
+
+        buf += 8 * pixelSize;
+    }
+
+    for (int i = 0; i < block2; i++) {
+        memcpy(buf, color, pixelSize);
+        buf += pixelSize;
+    }
+}
 
 void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
         KisBrush::ColoringInformation* coloringInformation,
@@ -299,23 +378,21 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
 
     d->shape->setSoftness( softnessFactor );
 
-    for (int y = 0; y < dstHeight; y++) {
-        for (int x = 0; x < dstWidth; x++) {
-
-            if (coloringInformation) {
-                if (color) {
-                    memcpy(dabPointer, color, pixelSize);
-                } else {
+    if (coloringInformation) {
+        if (color && pixelSize == 4) {
+            fillPixelOptimized_4bytes(color, dabPointer, dstWidth * dstHeight);
+        } else if (color) {
+            fillPixelOptimized_general(color, dabPointer, dstWidth * dstHeight, pixelSize);
+        } else {
+            for (int y = 0; y < dstHeight; y++) {
+                for (int x = 0; x < dstWidth; x++) {
                     memcpy(dabPointer, coloringInformation->color(), pixelSize);
                     coloringInformation->nextColumn();
                 }
+                coloringInformation->nextRow();
             }
-            dabPointer += pixelSize;
-            }//endfor x
-            if (!color && coloringInformation) {
-            coloringInformation->nextRow();
-            }
-    }//endfor y
+        }
+    }
 
     MaskProcessor s(dst, cs, d->randomness, d->density, centerX, centerY, invScaleX, invScaleY, angle, d->shape);
     int jobs = d->idealThreadCountCached;

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Lut Docker
 Name[el]=Εργαλείο προσάρτησης lut
+Name[et]=Otsingutabeli dokk
 Name[fr]=Panneau lut
 Name[it]=Panello lut
 Name[nl]=Lut-vastzetter
@@ -12,6 +13,7 @@ Name[uk]=Бічна панель таблиці пошуку
 Name[x-test]=xxLut Dockerxx
 Comment=Docker for selecting luts
 Comment[el]=Εργαλείο προσάρτησης για επιλογή lut
+Comment[et]=Otsingutabeli valimise dokk
 Comment[fr]=Panneau de sélection des luts
 Comment[it]=Pannello di selezione lut
 Comment[nl]=Vastzetter voor selecteren luts

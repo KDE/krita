@@ -1,4 +1,3 @@
-
 /* This file is part of the KDE project
  * Copyright (C) 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
  *
@@ -83,6 +82,205 @@ public:
     bool setMirrorMode;
     bool fixedAction;
 };
+
+void KisInputManager::Private::match(QEvent* event)
+{
+    if (fixedAction) {
+        return;
+    }
+    //Go through all possible shortcuts and update their state.
+    foreach (KisShortcut* shortcut, potentialShortcuts) {
+        shortcut->match(event);
+        if(shortcut->matchLevel() == KisShortcut::NoMatch) {
+            //There is no chance of this shortcut matching anything with the current input,
+            //so remove it from the list of shortcuts to search through.
+            potentialShortcuts.removeOne(shortcut);
+        }
+    }
+
+    if (potentialShortcuts.count() == 0) {
+        //With the current input, there is simply no shortcut that matches,
+        //so restart the matching.
+        potentialShortcuts = shortcuts;
+        return;
+    }
+
+    if (potentialShortcuts.count() == 1 || event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonDblClick) {
+        //Either we have only one possible match or we reached the queue threshold.
+        KisShortcut* completedShortcut = 0;
+        foreach (KisShortcut* shortcut, potentialShortcuts) {
+            if (shortcut->matchLevel() == KisShortcut::CompleteMatch) {
+                //Set the matched shortcut to the one with the highest priority.std::
+                if (!completedShortcut || completedShortcut->priority() < shortcut->priority()) {
+                    completedShortcut = shortcut;
+                }
+            } else {
+                shortcut->clear();
+            }
+        }
+
+        //We really do have a matched action, so lets activate it.
+        if (completedShortcut) {
+            currentShortcut = completedShortcut;
+            currentAction = completedShortcut->action();
+            currentAction->begin(completedShortcut->shortcutIndex());
+        }
+    }
+}
+
+void KisInputManager::Private::setupActions()
+{
+    //Create all the actions.
+    KisAbstractInputAction* action = new KisToolInvocationAction(q);
+    actions.append(action);
+
+    KisShortcut* shortcut = createShortcut(action, KisToolInvocationAction::ActivateShortcut);
+    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::LeftButton);
+
+    shortcut = createShortcut(action, KisToolInvocationAction::ConfirmShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Return);
+
+    action = new KisAlternateInvocationAction(q);
+    actions.append(action);
+
+    shortcut = createShortcut(action, 0);
+    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::LeftButton);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Control);
+
+    action = new KisChangePrimarySettingAction(q);
+    actions.append(action);
+
+    shortcut = createShortcut(action, 0);
+    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::LeftButton);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Shift);
+
+    action = new KisPanAction(q);
+    actions.append(action);
+
+    shortcut = createShortcut(action, KisPanAction::PanToggleShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Space);
+
+    shortcut = createShortcut(action, KisPanAction::PanToggleShortcut);
+#if QT_VERSION >= 0x040700
+    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MiddleButton);
+#else
+    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MidButton);
+#endif
+
+    shortcut = createShortcut(action, KisPanAction::PanLeftShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Left);
+    shortcut = createShortcut(action, KisPanAction::PanRightShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Right);
+    shortcut = createShortcut(action, KisPanAction::PanUpShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Up);
+    shortcut = createShortcut(action, KisPanAction::PanDownShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Down);
+
+    action = new KisRotateCanvasAction(q);
+    actions.append(action);
+
+    shortcut = createShortcut(action, KisRotateCanvasAction::RotateToggleShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Shift << Qt::Key_Space);
+
+    shortcut = createShortcut(action, KisRotateCanvasAction::RotateToggleShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Shift);
+#if QT_VERSION >= 0x040700
+    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MiddleButton);
+#else
+    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MidButton);
+#endif
+
+    shortcut = createShortcut(action, KisRotateCanvasAction::RotateLeftShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_4);
+
+    shortcut = createShortcut(action, KisRotateCanvasAction::RotateRightShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_6);
+
+    shortcut = createShortcut(action, KisRotateCanvasAction::RotateResetShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_5);
+
+    action = new KisZoomAction(q);
+    actions.append(action);
+
+    shortcut = createShortcut(action, KisZoomAction::ZoomToggleShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Control << Qt::Key_Space);
+
+    shortcut = createShortcut(action, KisZoomAction::ZoomToggleShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Control);
+#if QT_VERSION >= 0x040700
+    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MiddleButton);
+#else
+    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MidButton);
+#endif
+
+    /**
+     * FIXME: Zooming with Wheel is implemented on a level of
+     * KoCanvasControllerWidget and is done in a bit different way than
+     * usual zoom-in/out actions, because it tries to zoom around
+     * the mouse pointer. If you want to implement it in
+     * KisInputManager, please implement additional action that
+     * takes mouse position into account.
+     *
+     * Don't forget to disable wheel-zooming in KoCanvasControllerWidget
+     * before activation of this shortcut.
+     */
+    // shortcut = createShortcut(action, KisZoomAction::ZoomInShortcut);
+    // shortcut->setWheel(KisShortcut::WheelUp);
+    // shortcut = createShortcut(action, KisZoomAction::ZoomOutShortcut);
+    // shortcut->setWheel(KisShortcut::WheelDown);
+
+    shortcut = createShortcut(action, KisZoomAction::ZoomInShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Plus);
+    shortcut = createShortcut(action, KisZoomAction::ZoomOutShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Minus);
+
+    shortcut = createShortcut(action, KisZoomAction::ZoomResetShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_1);
+    shortcut = createShortcut(action, KisZoomAction::ZoomToPageShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_2);
+    shortcut = createShortcut(action, KisZoomAction::ZoomToWidthShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_3);
+
+    action = new KisShowPaletteAction(q);
+    actions.append(action);
+
+    shortcut = createShortcut(action, 0);
+    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::RightButton);
+
+    shortcut = createShortcut(action, 0);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_F);
+}
+
+KisShortcut* KisInputManager::Private::createShortcut(KisAbstractInputAction* action, int index)
+{
+    KisShortcut* shortcut = new KisShortcut;
+    shortcut->setAction(action);
+    shortcut->setShortcutIndex(index);
+    shortcuts.append(shortcut);
+
+    return shortcut;
+}
+
+void KisInputManager::Private::clearState()
+{
+    if (fixedAction) {
+        return;
+    }
+
+    if (currentShortcut) {
+        currentAction->end();
+        currentAction = 0;
+        currentShortcut = 0;
+        potentialShortcuts = shortcuts;
+
+        delete tabletPressEvent;
+        tabletPressEvent = 0;
+    }
+
+    foreach (KisShortcut* shortcut, shortcuts) {
+        shortcut->clear();
+    }
+}
 
 KisInputManager::KisInputManager(KisCanvas2 *canvas, KoToolProxy *proxy)
     : QObject(canvas), d(new Private(this))
@@ -290,201 +488,3 @@ QPointF KisInputManager::widgetToPixel(const QPointF& position)
     return d->canvas->coordinatesConverter()->widgetToDocument(pixel);
 }
 
-void KisInputManager::Private::match(QEvent* event)
-{
-    if (fixedAction) {
-        return;
-    }
-    //Go through all possible shortcuts and update their state.
-    foreach (KisShortcut* shortcut, potentialShortcuts) {
-        shortcut->match(event);
-        if(shortcut->matchLevel() == KisShortcut::NoMatch) {
-            //There is no chance of this shortcut matching anything with the current input,
-            //so remove it from the list of shortcuts to search through.
-            potentialShortcuts.removeOne(shortcut);
-        }
-    }
-
-    if (potentialShortcuts.count() == 0) {
-        //With the current input, there is simply no shortcut that matches,
-        //so restart the matching.
-        potentialShortcuts = shortcuts;
-        return;
-    }
-
-    if (potentialShortcuts.count() == 1 || event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonDblClick) {
-        //Either we have only one possible match or we reached the queue threshold.
-        KisShortcut* completedShortcut = 0;
-        foreach (KisShortcut* shortcut, potentialShortcuts) {
-            if (shortcut->matchLevel() == KisShortcut::CompleteMatch) {
-                //Set the matched shortcut to the one with the highest priority.std::
-                if (!completedShortcut || completedShortcut->priority() < shortcut->priority()) {
-                    completedShortcut = shortcut;
-                }
-            } else {
-                shortcut->clear();
-            }
-        }
-
-        //We really do have a matched action, so lets activate it.
-        if (completedShortcut) {
-            currentShortcut = completedShortcut;
-            currentAction = completedShortcut->action();
-            currentAction->begin(completedShortcut->shortcutIndex());
-        }
-    }
-}
-
-void KisInputManager::Private::setupActions()
-{
-    //Create all the actions.
-    KisAbstractInputAction* action = new KisToolInvocationAction(q);
-    actions.append(action);
-
-    KisShortcut* shortcut = createShortcut(action, KisToolInvocationAction::ActivateShortcut);
-    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::LeftButton);
-
-    shortcut = createShortcut(action, KisToolInvocationAction::ConfirmShortcut);
-    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Return);
-
-    action = new KisAlternateInvocationAction(q);
-    actions.append(action);
-
-    shortcut = createShortcut(action, 0);
-    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::LeftButton);
-    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Control);
-
-    action = new KisChangePrimarySettingAction(q);
-    actions.append(action);
-
-    shortcut = createShortcut(action, 0);
-    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::LeftButton);
-    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Shift);
-
-    action = new KisPanAction(q);
-    actions.append(action);
-
-    shortcut = createShortcut(action, KisPanAction::PanToggleShortcut);
-    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Space);
-
-    shortcut = createShortcut(action, KisPanAction::PanToggleShortcut);
-#if QT_VERSION >= 0x040700
-    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MiddleButton);
-#else
-    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MidButton);
-#endif
-
-    shortcut = createShortcut(action, KisPanAction::PanLeftShortcut);
-    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Left);
-    shortcut = createShortcut(action, KisPanAction::PanRightShortcut);
-    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Right);
-    shortcut = createShortcut(action, KisPanAction::PanUpShortcut);
-    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Up);
-    shortcut = createShortcut(action, KisPanAction::PanDownShortcut);
-    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Down);
-
-    action = new KisRotateCanvasAction(q);
-    actions.append(action);
-
-    shortcut = createShortcut(action, KisRotateCanvasAction::RotateToggleShortcut);
-    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Shift << Qt::Key_Space);
-
-    shortcut = createShortcut(action, KisRotateCanvasAction::RotateToggleShortcut);
-    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Shift);
-#if QT_VERSION >= 0x040700
-    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MiddleButton);
-#else
-    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MidButton);
-#endif
-
-    shortcut = createShortcut(action, KisRotateCanvasAction::RotateLeftShortcut);
-    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_4);
-
-    shortcut = createShortcut(action, KisRotateCanvasAction::RotateRightShortcut);
-    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_6);
-
-    shortcut = createShortcut(action, KisRotateCanvasAction::RotateResetShortcut);
-    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_5);
-
-    action = new KisZoomAction(q);
-    actions.append(action);
-
-    shortcut = createShortcut(action, KisZoomAction::ZoomToggleShortcut);
-    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Control << Qt::Key_Space);
-
-    shortcut = createShortcut(action, KisZoomAction::ZoomToggleShortcut);
-    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Control);
-#if QT_VERSION >= 0x040700
-    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MiddleButton);
-#else
-    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MidButton);
-#endif
-
-    /**
-     * FIXME: Zooming with Wheel is implemented on a level of
-     * KoCanvasControllerWidget and is done in a bit different way than
-     * usual zoom-in/out actions, because it tries to zoom around
-     * the mouse pointer. If you want to implement it in
-     * KisInputManager, please implement additional action that
-     * takes mouse position into account.
-     *
-     * Don't forget to disable wheel-zooming in KoCanvasControllerWidget
-     * before activation of this shortcut.
-     */
-    // shortcut = createShortcut(action, KisZoomAction::ZoomInShortcut);
-    // shortcut->setWheel(KisShortcut::WheelUp);
-    // shortcut = createShortcut(action, KisZoomAction::ZoomOutShortcut);
-    // shortcut->setWheel(KisShortcut::WheelDown);
-
-    shortcut = createShortcut(action, KisZoomAction::ZoomInShortcut);
-    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Plus);
-    shortcut = createShortcut(action, KisZoomAction::ZoomOutShortcut);
-    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Minus);
-
-    shortcut = createShortcut(action, KisZoomAction::ZoomResetShortcut);
-    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_1);
-    shortcut = createShortcut(action, KisZoomAction::ZoomToPageShortcut);
-    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_2);
-    shortcut = createShortcut(action, KisZoomAction::ZoomToWidthShortcut);
-    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_3);
-
-    action = new KisShowPaletteAction(q);
-    actions.append(action);
-
-    shortcut = createShortcut(action, 0);
-    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::RightButton);
-
-    shortcut = createShortcut(action, 0);
-    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_F);
-}
-
-KisShortcut* KisInputManager::Private::createShortcut(KisAbstractInputAction* action, int index)
-{
-    KisShortcut* shortcut = new KisShortcut;
-    shortcut->setAction(action);
-    shortcut->setShortcutIndex(index);
-    shortcuts.append(shortcut);
-
-    return shortcut;
-}
-
-void KisInputManager::Private::clearState()
-{
-    if (fixedAction) {
-        return;
-    }
-
-    if (currentShortcut) {
-        currentAction->end();
-        currentAction = 0;
-        currentShortcut = 0;
-        potentialShortcuts = shortcuts;
-
-        delete tabletPressEvent;
-        tabletPressEvent = 0;
-    }
-
-    foreach (KisShortcut* shortcut, shortcuts) {
-        shortcut->clear();
-    }
-}

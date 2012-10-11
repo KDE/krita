@@ -33,7 +33,7 @@
 #include <kis_image.h>
 #include <kis_selection.h>
 #include <kis_brush_based_paintop_settings.h>
-
+#include <kis_fixed_paint_device.h>
 
 KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings, KisPainter* painter, KisImageWSP image):
     KisBrushBasedPaintOp(settings, painter),
@@ -44,7 +44,7 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings,
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
-    
+
     m_sizeOption.readOptionSetting(settings);
     m_opacityOption.readOptionSetting(settings);
     m_spacingOption.readOptionSetting(settings);
@@ -93,36 +93,36 @@ void KisColorSmudgeOp::updateMask(const KisPaintInformation& info, double scale,
 qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
 {
     KisBrushSP brush = m_brush;
-    
+
     // Simple error catching
     if(!painter()->device() || !brush || !brush->canPaintFor(info))
         return 1.0;
-    
+
     // get the scaling factor calculated by the size option
     qreal scale    = m_sizeOption.apply(info);
     qreal rotation = m_rotationOption.apply(info);
     qreal diagonal = std::sqrt((qreal)brush->width()*brush->width() + brush->height()*brush->height());
-    
+
     // don't paint anything if the brush is too samll
     if((scale*brush->width()) <= 0.01 || (scale*brush->height()) <= 0.01)
         return 1.0;
-    
+
     setCurrentScale(scale);
     setCurrentRotation(rotation);
-    
+
     QPointF scatteredPos = m_scatterOption.apply(info, diagonal*scale);
     QPointF point        = scatteredPos - brush->hotSpot(scale, scale, rotation, info);
-    
+
     qint32 x, y;
     qreal xFraction, yFraction; // will not be used
     splitCoordinate(point.x(), &x, &xFraction);
     splitCoordinate(point.y(), &y, &yFraction);
-    
+
     // save the old opacity value and composite mode
     quint8               oldOpacity = painter()->opacity();
     const KoCompositeOp* oldMode    = painter()->compositeOp();
     qreal                fpOpacity  = (qreal(oldOpacity) / 255.0) * m_opacityOption.getOpacityf(info);
-    
+
     if(!m_firstRun) {
         // if color is disabled (only smudge) and "overlay mode is enabled
         // then first blit the region under the brush from the image projection
@@ -135,17 +135,17 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
             painter()->bitBlt(x, y, m_image->projection(), x, y, m_maskBounds.width(), m_maskBounds.height());
             m_image->unblockUpdates();
         }
-        
+
         // set opacity calculated by the rate option
         m_smudgeRateOption.apply(*painter(), info, 0.0, 1.0, fpOpacity);
-        
+
         // then blit the temporary painting device on the canvas at the current brush position
         // the alpha mask (maskDab) will be used here to only blit the pixels that are in the area (shape) of the brush
         painter()->setCompositeOp(COMPOSITE_COPY);
         painter()->bitBltWithFixedSelection(x, y, m_tempDev, m_maskDab, m_maskBounds.width(), m_maskBounds.height());
     }
     else m_firstRun = false;
-    
+
     // update the brush mask if needed. the mask is then stored in m_maskDab
     // and the extends of the mask is stored in m_maskBounds
     updateMask(info, scale, rotation);
@@ -162,11 +162,11 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
         //            it will only clear the extents of the brush
         m_tempDev->clear(m_maskBounds);
     }
-    
+
     // reset composite mode and opacity
     m_tempPainter->setCompositeOp(COMPOSITE_OVER);
     m_tempPainter->setOpacity(OPACITY_OPAQUE_U8);
-    
+
     if(m_smudgeRateOption.getMode() == KisSmudgeOption::SMEARING_MODE) {
         // cut out the area from the canvas under the brush
         // and blit it to the temporary painting device
@@ -181,7 +181,7 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
         m_smudgeAccessor->moveTo(px, py);
         m_tempPainter->fill(0, 0, m_maskBounds.width(), m_maskBounds.height(), KoColor(m_smudgeAccessor->rawData(), cs));
     }
-    
+
     // if the user selected the color smudge option
     // we will mix some color into the temporary painting device (m_tempDev)
     if(m_colorRateOption.isChecked()) {
@@ -189,7 +189,7 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
         // (but fit the rate inbetween the range 0.0 to (1.0-SmudgeRate))
         qreal maxColorRate = qMax<qreal>(1.0-m_smudgeRateOption.getRate(), 0.2);
         m_colorRateOption.apply(*m_tempPainter, info, 0.0, maxColorRate, fpOpacity);
-        
+
         // paint a rectangle with the current color (foreground color)
         // or a gradient color (if enabled)
         // into the temporary painting device and use the user selected
@@ -199,13 +199,13 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
         m_tempPainter->setCompositeOp(oldMode);
         m_tempPainter->fill(0, 0, m_maskBounds.width(), m_maskBounds.height(), color);
     }
-    
+
     // restore orginal opacy and composite mode values
     painter()->setOpacity(oldOpacity);
     painter()->setCompositeOp(oldMode);
-    
+
     if(m_spacingOption.isChecked())
         return spacing(m_spacingOption.apply(info));
-    
+
     return spacing(scale);
 }

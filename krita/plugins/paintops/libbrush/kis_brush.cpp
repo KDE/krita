@@ -42,6 +42,9 @@
 #include "kis_qimage_mask.h"
 #include "kis_iterator_ng.h"
 #include "kis_brush_registry.h"
+#include <kis_paint_information.h>
+#include <kis_fixed_paint_device.h>
+
 
 const static int MAXIMUM_MIPMAP_SCALE = 10;
 const static int MAXIMUM_MIPMAP_SIZE  = 400;
@@ -102,7 +105,7 @@ struct KisBrush::Private {
         , angle(0)
         , scale(1.0)
         , hasColor(false)
-	, brushType(INVALID)
+    , brushType(INVALID)
     {}
 
     ~Private() {

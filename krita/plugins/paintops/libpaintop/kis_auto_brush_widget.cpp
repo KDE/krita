@@ -17,7 +17,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+
 #include "kis_auto_brush_widget.h"
+
+#include <math.h>
 #include <kis_debug.h>
 #include <QSpinBox>
 #include <QToolButton>
@@ -27,8 +30,9 @@
 #include <QPixmap>
 #include <QResizeEvent>
 
-#include "kis_mask_generator.h"
-#include "kis_slider_spin_box.h"
+#include <kis_fixed_paint_device.h>
+#include <kis_mask_generator.h>
+#include <kis_slider_spin_box.h>
 
 #define showSlider(input, step) input->setRange(input->minimum(), input->maximum(), step)
 #include <kis_cubic_curve.h>

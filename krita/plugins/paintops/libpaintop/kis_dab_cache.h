@@ -28,31 +28,6 @@ class KisTextureProperties;
 class KisPressureMirrorOption;
 class KisPrecisionOption;
 
-//#define DEBUG_HIT_RATE
-
-#ifdef DEBUG_HIT_RATE
-#define DECLARE_HIT_RATE_VARS() int m_hitRate; int m_halfHitRate; int m_missRate
-#define INIT_HIT_RATE_VARS() m_hitRate = 0; m_halfHitRate = 0; m_missRate = 0
-#define COUNT_HIT() m_hitRate++
-#define COUNT_HALF_HIT() m_halfHitRate++
-#define COUNT_MISS() m_missRate++
-#define PRINT_HIT_RATE() if(m_hitRate + m_halfHitRate + m_missRate > 0) { \
-    qDebug() << "Hits:" << m_hitRate                                    \
-             << "HalfHits:" << m_halfHitRate                            \
-             << "Misses:" << m_missRate                                 \
-             << "HitRate:" << qreal(m_hitRate) / (m_hitRate + m_halfHitRate + m_missRate) \
-             << "HalfHitRate:" << qreal(m_halfHitRate) / (m_hitRate + m_halfHitRate + m_missRate); \
-    }
-#else
-#define DECLARE_HIT_RATE_VARS()
-#define INIT_HIT_RATE_VARS()
-#define COUNT_HIT()
-#define COUNT_HALF_HIT()
-#define COUNT_MISS()
-#define PRINT_HIT_RATE()
-#endif
-
-
 class PAINTOP_EXPORT KisDabCache
 {
 public:
@@ -113,20 +88,10 @@ private:
     void postProcessDab(KisFixedPaintDeviceSP dab, const KisPaintInformation& info);
 
 private:
-    KisFixedPaintDeviceSP m_dab;
-    KisFixedPaintDeviceSP m_dabOriginal;
 
-    KisBrushSP m_brush;
-    KisPaintDeviceSP m_colorSourceDevice;
+    struct Private;
+    Private * const m_d;
 
-    KisPressureMirrorOption *m_mirrorOption;
-    KisPressureSharpnessOption *m_sharpnessOption;
-    KisTextureProperties *m_textureOption;
-    KisPrecisionOption *m_precisionOption;
-
-    SavedDabParameters *m_cachedDabParameters;
-
-    DECLARE_HIT_RATE_VARS();
 };
 
 #endif /* __KIS_DAB_CACHE_H */

@@ -35,6 +35,7 @@
 #include <kis_types.h>
 #include <kis_paintop.h>
 #include <kis_paint_information.h>
+#include <kis_fixed_paint_device.h>
 
 #include <kis_pressure_opacity_option.h>
 #include <kis_dab_cache.h>
@@ -109,7 +110,7 @@ void KisSketchPaintOp::updateBrushMask(const KisPaintInformation& info, qreal sc
 KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist)
 {
     Q_UNUSED(savedDist);
-    
+
     if (!m_brush || !painter())
         return KisDistanceInformation();
 

@@ -31,7 +31,7 @@
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
-
+#include <kis_fixed_paint_device.h>
 #include <kis_brush_option.h>
 #include <kis_sprayop_option.h>
 #include <kis_spray_shape_option.h>

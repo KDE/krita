@@ -31,6 +31,7 @@
 
 #include <widgets/kis_preset_chooser.h>
 #include <kis_image.h>
+#include <kis_fixed_paint_device.h>
 
 #include "kis_brush.h"
 #include "kis_auto_brush.h"

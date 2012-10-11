@@ -41,7 +41,8 @@
 #include <kis_pressure_size_option.h>
 #include <kis_filter_option.h>
 #include <kis_filterop_settings.h>
-#include "kis_iterator_ng.h"
+#include <kis_iterator_ng.h>
+#include <kis_fixed_paint_device.h>
 
 KisFilterOp::KisFilterOp(const KisFilterOpSettings *settings, KisPainter *painter, KisImageWSP image)
         : KisBrushBasedPaintOp(settings, painter)

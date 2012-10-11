@@ -19,6 +19,8 @@
 #ifndef __KIS_BRUSHES_PIPE_H
 #define __KIS_BRUSHES_PIPE_H
 
+#include <kis_fixed_paint_device.h>
+
 template<class BrushType>
 class KisBrushesPipe
 {

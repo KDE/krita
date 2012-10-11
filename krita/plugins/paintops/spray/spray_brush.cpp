@@ -39,6 +39,7 @@
 
 #include <kis_painter.h>
 #include <kis_paint_information.h>
+#include <kis_fixed_paint_device.h>
 
 #include "kis_spray_paintop_settings.h"
 
@@ -99,7 +100,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
         if (m_colorProperties->useRandomHSV){
             m_transfo = dab->colorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
         }
-        
+
         m_brushQImage = m_shapeProperties->image;
         if (!m_brushQImage.isNull()){
             m_brushQImage = m_brushQImage.scaled(m_shapeProperties->width, m_shapeProperties->height);
@@ -153,7 +154,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
     m.reset();
     m.rotateRadians(-rotation + deg2rad(m_properties->brushRotation) );
     m.scale( m_properties->scale, m_properties->scale);
-    
+
     for (quint32 i = 0; i < m_particlesCount; i++){
         // generate random angle
         angle = drand48() * M_PI * 2;
@@ -170,13 +171,13 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
             rotationZ = rotationAngle();
 
             if (m_shapeDynamicsProperties->followCursor){
-                
+
                 rotationZ = linearInterpolation( rotationZ,angle,m_shapeDynamicsProperties->followCursorWeigth );
             }
 
-            
+
             if (m_shapeDynamicsProperties->followDrawingAngle){
-                
+
                 rotationZ = linearInterpolation( rotationZ,info.angle(),m_shapeDynamicsProperties->followDrawingAngleWeight );
             }
 
@@ -196,7 +197,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
         m.map(nx,ny, &nx,&ny);
 
         // color transformation
-        
+
         if (shouldColor){
             if (m_colorProperties->sampleInputColor){
                 subAcc->moveTo(nx+x, ny+y);
@@ -330,8 +331,8 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
             KisPaintOp::splitCoordinate(pt.y(), &iy, &yFraction);
 
             //KisFixedPaintDeviceSP dab;
-            if (m_brush->brushType() == IMAGE || 
-                m_brush->brushType() == PIPE_IMAGE) 
+            if (m_brush->brushType() == IMAGE ||
+                m_brush->brushType() == PIPE_IMAGE)
             {
                 m_fixedDab = m_brush->paintDevice(m_fixedDab->colorSpace(), particleScale, -rotationZ, info, xFraction, yFraction);
 
@@ -340,7 +341,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
                     int pixelCount = m_fixedDab->bounds().width() * m_fixedDab->bounds().height();
                     m_transfo->transform(dabPointer, dabPointer, pixelCount);
                 }
-                
+
             } else {
                 m_brush->mask(m_fixedDab, m_inkColor, particleScale, particleScale, -rotationZ, info, xFraction, yFraction);
             }

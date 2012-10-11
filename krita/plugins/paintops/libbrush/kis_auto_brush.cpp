@@ -40,8 +40,9 @@ inline double drand48() {
 #include <KoColorSpaceRegistry.h>
 
 #include "kis_datamanager.h"
+#include "kis_fixed_paint_device.h"
 #include "kis_paint_device.h"
-
+#include "kis_paint_information.h"
 #include "kis_mask_generator.h"
 #include "kis_boundary.h"
 

@@ -40,7 +40,7 @@
 #include <kis_color_source.h>
 #include <kis_pressure_sharpness_option.h>
 #include <KoColorSpaceRegistry.h>
-
+#include <kis_fixed_paint_device.h>
 
 KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter *painter, KisImageWSP image)
     : KisBrushBasedPaintOp(settings, painter), m_hsvTransformation(0)

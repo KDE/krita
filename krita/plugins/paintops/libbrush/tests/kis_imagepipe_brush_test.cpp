@@ -24,6 +24,8 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <kis_fixed_paint_device.h>
+#include <kis_paint_information.h>
 
 #include "kis_imagepipe_brush.h"
 #include "kis_qimage_mask.h"

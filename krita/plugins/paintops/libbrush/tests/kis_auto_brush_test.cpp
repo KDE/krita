@@ -29,6 +29,8 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoCompositeOp.h>
+#include <kis_fixed_paint_device.h>
+#include <kis_paint_information.h>
 
 void KisAutoBrushTest::testCreation()
 {

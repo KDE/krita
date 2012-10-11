@@ -30,6 +30,7 @@
 #include "kis_paint_device.h"
 #include "kis_paint_information.h"
 #include "kis_vec.h"
+#include <kis_fixed_paint_device.h>
 
 void KisBrushTest::testCreation()
 {

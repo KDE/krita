@@ -18,10 +18,11 @@ endif (NOT CREATIVEONLY)
 
 if(NOT TINY)
     add_subdirectory( koproperty ) # TODO move to independent place like kdesupport
-    if (HAVE_ICU AND HAVE_SQLITE)
-        add_subdirectory( db ) # used by Kexi and Word's Biblio; TODO: remove when Predicate lib arrives
-    endif ()
 endif(NOT TINY)
+
+if (SHOULD_BUILD_CALLIGRADB)
+    add_subdirectory( db ) # used by Kexi and Word's Biblio; TODO: remove when Predicate lib arrives
+endif (SHOULD_BUILD_CALLIGRADB)
 
 # only build koreport if possible
 if (SHOULD_BUILD_KOREPORT)

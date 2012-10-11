@@ -28,6 +28,7 @@
 #include <kis_shared.h>
 #include <kis_paint_information.h>
 #include <kis_fixed_paint_device.h>
+#include <kis_paint_device.h>
 #include <krita_export.h>
 
 class KisQImagemask;

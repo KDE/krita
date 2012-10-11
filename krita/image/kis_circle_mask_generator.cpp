@@ -32,12 +32,6 @@
 #include "kis_circle_mask_generator.h"
 #include "kis_base_mask_generator.h"
 
-#ifdef HAVE_VC
-    inline Vc::float_v normeSIMD(Vc::float_v a, Vc::float_v b) {
-        return a*a + b*b;
-    }
-#endif
-
 struct KisCircleMaskGenerator::Private {
     double xcoef, ycoef;
     double xfadecoef, yfadecoef;
@@ -164,9 +158,9 @@ void KisCircleMaskGenerator::processRowFast(float* buffer, int width, float y, f
         Vc::float_v xr = x_ * vCosa - vSinaY_;
         Vc::float_v yr = x_ * vSina + vCosaY_;
 
-        Vc::float_v n = normeSIMD(xr * vXCoeff, yr * vYCoeff);
+        Vc::float_v n = ((xr * vXCoeff) * (xr * vXCoeff)) + ((yr * vYCoeff) * (yr * vYCoeff));
 
-        Vc::float_v vNormFade = normeSIMD(xr * vTransformedFadeX, yr * vTransformedFadeY);
+        Vc::float_v vNormFade =((xr * vTransformedFadeX) * (xr * vTransformedFadeX)) + ((yr * vTransformedFadeY) * (yr * vTransformedFadeY));
 
         //255 * n * (normeFade - 1) / (normeFade - n)
         Vc::float_v vFade = n * (vNormFade - vOne) / (vNormFade - n);

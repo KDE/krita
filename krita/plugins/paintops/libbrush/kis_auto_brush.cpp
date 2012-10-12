@@ -389,6 +389,7 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
                 for (int x = 0; x < dstWidth; x++) {
                     memcpy(dabPointer, coloringInformation->color(), pixelSize);
                     coloringInformation->nextColumn();
+                    dabPointer += pixelSize;
                 }
                 coloringInformation->nextRow();
             }

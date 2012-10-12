@@ -27,7 +27,7 @@ void KisPrecisionOption::writeOptionSetting(KisPropertiesConfiguration* settings
 
 void KisPrecisionOption::readOptionSetting(const KisPropertiesConfiguration* settings)
 {
-    m_precisionLevel = settings->getInt(PRECISION_LEVEL, 4);
+    m_precisionLevel = settings->getInt(PRECISION_LEVEL, 5);
 }
 
 int KisPrecisionOption::precisionLevel() const

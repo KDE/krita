@@ -34,8 +34,8 @@
 void KisNodeModelTest::init()
 {
     KisPart2 *p = new KisPart2();
-    KisDoc2 *doc = new KisDoc2(p);
-    p->setDocument(doc);
+    KisDoc2 *m_doc = new KisDoc2(p);
+    p->setDocument(m_doc);
 
     m_nameServer = new KisNameServer();
     m_shapeController = new KisShapeController(m_doc, m_nameServer);

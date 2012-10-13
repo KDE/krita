@@ -728,7 +728,7 @@ public:
 
     /*! Added for convenience.
      \sa setupObjectSchemaData( const KexiDB::RecordData &data, SchemaData &sdata ).
-     \return true on success, false on failure and cancelled when such object couldn't */
+     \return true on success, false on failure and cancelled when such object couldn't be found. */
     tristate loadObjectSchemaData(int objectID, SchemaData &sdata);
 
     /*! Finds object schema data for object of type \a objectType and name \a objectName.

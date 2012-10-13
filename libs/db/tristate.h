@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004, 2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,29 +21,32 @@
 #define _TRISTATE_TYPE_H_
 
 #include <QString>
+#include <QtDebug>
 
-/**
- * \e cancelled value, in most cases usable if there is a need for returning
- * \e cancelled value explicitly. Example use:
- * \code
- * tristate myFunctionThatCanBeCancelled() {
- *   doSomething();
- *   if (userCancelledOperation())
- *     return cancelled; //neither success or failure is returned here
- *   return operationSucceeded(); //return success or failure
- * }
- * \endcode
- * Even though ~ operator of tristate class can be used, it is also possible to test:
- * \code
- * if (cancelled == myFunctionThatCanBeCancelled()) { .... }
- * \endcode
- */
-static const char cancelled = 2;
+enum tristate_cancelled_t {
+    /**
+     * \e cancelled value, in most cases usable if there is a need for returning
+     * \e cancelled value explicitly. Example use:
+     * \code
+     * tristate myFunctionThatCanBeCancelled() {
+     *   doSomething();
+     *   if (userCancelledOperation())
+     *     return cancelled; //neither success or failure is returned here
+     *   return operationSucceeded(); //return success or failure
+     * }
+     * \endcode
+     * Even though ~ operator of tristate class can be used, it is also possible to test:
+     * \code
+     * if (cancelled == myFunctionThatCanBeCancelled()) { .... }
+     * \endcode
+     */
+    cancelled,
 
-/**
- * Convenience name, the same as cancelled value.
- */
-static const char dontKnow = cancelled;
+    /**
+     * Convenience name, the same as cancelled value.
+     */
+    dontKnow = cancelled
+};
 
 /**
  * 3-state logical type with three values: \e true, \e false and \e cancelled and convenient operators.
@@ -102,14 +105,14 @@ public:
     /**
      * Default constructor, object has \e cancelled value set.
      */
-    tristate()
+    inline tristate()
             : m_value(Cancelled) {
     }
 
     /**
      * Constructor accepting a boolean value.
      */
-    tristate(bool boolValue)
+    inline tristate(bool boolValue)
             : m_value(boolValue ? True : False) {
     }
 
@@ -120,25 +123,15 @@ public:
      * - 1 -> true
      * - other -> false
      */
-    tristate(char c)
-            : m_value(c == cancelled ? tristate::Cancelled : (c == 1 ? True : False)) {
-    }
-
-    /** Constructor accepting an integer value.
-     * It is converted in the following way:
-     * - 2 -> cancelled
-     * - 1 -> true
-     * - other -> false
-     */
-    tristate(int intValue)
-            : m_value(intValue == (int)cancelled ? tristate::Cancelled : (intValue == 1 ? True : False)) {
+    inline tristate(tristate_cancelled_t)
+            : m_value(tristate::Cancelled) {
     }
 
     /**
      * Casting to bool type with negation: true is only returned
      * if the original tristate value is equal to false.
      */
-    bool operator!() const {
+    inline bool operator!() const {
         return m_value == False;
     }
 
@@ -146,13 +139,15 @@ public:
      * Special casting to bool type: true is only returned
      * if the original tristate value is equal to \e cancelled.
      */
-    bool operator~() const {
+    inline bool operator~() const {
         return m_value == Cancelled;
     }
 
-    tristate& operator=(const tristate& tsValue) {
-        m_value = tsValue.m_value; return *this;
-    }
+    inline tristate& operator=(const tristate& tsValue);
+
+    inline tristate& operator=(bool boolValue);
+
+    inline tristate& operator=(tristate_cancelled_t);
 
     friend inline bool operator==(bool boolValue, tristate tsValue);
 
@@ -161,6 +156,24 @@ public:
     friend inline bool operator!=(bool boolValue, tristate tsValue);
 
     friend inline bool operator!=(tristate tsValue, bool boolValue);
+
+    friend inline bool operator==(tristate_cancelled_t, tristate tsValue);
+
+    friend inline bool operator==(tristate tsValue, tristate_cancelled_t);
+
+    friend inline bool operator!=(tristate_cancelled_t, tristate tsValue);
+
+    friend inline bool operator!=(tristate tsValue, tristate_cancelled_t);
+
+    friend inline bool operator==(tristate_cancelled_t, bool boolValue);
+
+    friend inline bool operator==(bool boolValue, tristate_cancelled_t);
+
+    friend inline bool operator!=(tristate_cancelled_t, bool boolValue);
+
+    friend inline bool operator!=(bool boolValue, tristate_cancelled_t);
+
+    friend inline QDebug operator<<(QDebug dbg, tristate tsValue);
 
     /**
      * \return text representation of the value: "true", "false" or "cancelled".
@@ -188,6 +201,24 @@ private:
     Value m_value;
 };
 
+tristate& tristate::operator=(const tristate& tsValue)
+{
+    m_value = tsValue.m_value;
+    return *this;
+}
+
+tristate& tristate::operator=(bool boolValue)
+{
+    m_value = boolValue ? True : False;
+    return *this;
+}
+
+tristate& tristate::operator=(tristate_cancelled_t)
+{
+    m_value = Cancelled;
+    return *this;
+}
+
 /**
  * Inequality operator comparing a bool value @p boolValue and a tristate value @p tsValue.
  *
@@ -213,7 +244,7 @@ inline bool operator!=(tristate tsValue, bool boolValue)
 
 /**
   * Equality operator comparing a tristate value @p tsValue and a bool value @p boolValue.
-  * \return true if both
+  * \return true if
   * - both @p tsValue value and @p boolValue are true, or
   * - both @p tsValue value and @p boolValue are false
   * If the tristate value has value of cancelled, false is returned.
@@ -235,6 +266,105 @@ inline bool operator==(bool boolValue, tristate tsValue)
 {
     return (tsValue.m_value == tristate::True && boolValue)
            || (tsValue.m_value == tristate::False && !boolValue);
+}
+
+/**
+  * Equality operator comparing a cancelled and a tristate value @p tsValue.
+  * @return true if @p tsValue is equal to cancelled value.
+  */
+inline bool operator==(tristate_cancelled_t, tristate tsValue)
+{
+    return tsValue.m_value == tristate::Cancelled;
+}
+
+/**
+  * Equality operator comparing a cancelled and a tristate value @p tsValue.
+  * @return true if @p tsValue is equal to cancelled value.
+  */
+inline bool operator==(tristate tsValue, tristate_cancelled_t)
+{
+    return tsValue.m_value == tristate::Cancelled;
+}
+
+/**
+  * Equality operator comparing a cancelled and a bool value.
+  * @return false.
+  */
+inline bool operator==(tristate_cancelled_t, bool)
+{
+    return false;
+}
+
+/**
+  * Equality operator comparing a cancelled and a bool value.
+  * @return false.
+  */
+inline bool operator==(bool, tristate_cancelled_t)
+{
+    return false;
+}
+
+/**
+  * Inequality operator comparing a cancelled and a tristate value @p tsValue.
+  * @return true if @p tsValue is not equal to cancelled value.
+  */
+inline bool operator!=(tristate_cancelled_t, tristate tsValue)
+{
+    return tsValue.m_value != tristate::Cancelled;
+}
+
+/**
+  * Equality operator comparing a cancelled and a tristate value @p tsValue.
+  * @return true if @p tsValue is not equal to cancelled value.
+  */
+inline bool operator!=(tristate tsValue, tristate_cancelled_t)
+{
+    return tsValue.m_value != tristate::Cancelled;
+}
+
+/**
+  * Equality operator comparing a cancelled and a bool value.
+  * @return true.
+  */
+inline bool operator!=(tristate_cancelled_t, bool)
+{
+    return true;
+}
+
+/**
+  * Equality operator comparing a cancelled and a bool value.
+  * @return true.
+  */
+inline bool operator!=(bool, tristate_cancelled_t)
+{
+    return true;
+}
+
+//! qDebug() stream operator. Writes tristate value to the debug output in a nicely formatted way.
+inline QDebug operator<<(QDebug dbg, tristate tsValue)
+{
+    switch (tsValue.m_value) {
+    case tristate::True: dbg.nospace() << "true"; break;
+    case tristate::False: dbg.nospace() << "false"; break;
+    case tristate::Cancelled: dbg.nospace() << "cancelled"; break;
+    }
+    return dbg.space();
+}
+
+inline QDebug operator<<(QDebug dbg, tristate_cancelled_t)
+{
+    dbg.nospace() << "cancelled";
+    return dbg.space();
+}
+
+inline bool operator~(tristate_cancelled_t)
+{
+    return true;
+}
+
+inline bool operator!(tristate_cancelled_t)
+{
+    return false;
 }
 
 #endif

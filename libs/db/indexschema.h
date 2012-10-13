@@ -157,7 +157,7 @@ public:
     void setUnique(bool set);
 
     /*! \return String for debugging purposes. */
-    virtual QString debugString();
+    virtual QString debugString() const;
 protected:
 
     /*! Internal constructor for convenience.

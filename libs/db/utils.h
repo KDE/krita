@@ -232,10 +232,10 @@ public:
     Connection* connection() const;
 
     /*! \return String for debugging purposes. */
-    QString debugString();
+    QString debugString() const;
 
     /*! Shows debug information about table or query. */
-    void debug();
+    void debug() const;
 
 protected:
     QByteArray m_name; //!< the name is kept here because m_table and m_table can be 0
@@ -334,27 +334,37 @@ CALLIGRADB_EXPORT bool isBuiltinTableFieldProperty(const QByteArray& propertyNam
 //! \return true if \a propertyName is an extended field property.
 CALLIGRADB_EXPORT bool isExtendedTableFieldProperty(const QByteArray& propertyName);
 
+//! \return true if \a propertyName is belongs to lookup field's schema.
+CALLIGRADB_EXPORT bool isLookupFieldSchemaProperty(const QByteArray& propertyName);
+
 /*! \return type of field for integer value \a type.
  If \a type cannot be casted to KexiDB::Field::Type, KexiDB::Field::InvalidType is returned.
  This can be used when type information is deserialized from a string or QVariant. */
 CALLIGRADB_EXPORT Field::Type intToFieldType(int type);
 
+/*! Gets property values for \a field.
+ Properties from extended schema are included. \a values is cleared before filling.
+ The same number of properties in the same order is returned.
+ This function is used e.g. for altering table design.
+ */
+CALLIGRADB_EXPORT void getFieldProperties(const Field &field, QMap<QByteArray, QVariant> *values);
+
 /*! Sets property values for \a field. \return true if all the values are valid and allowed.
  On failure contents of \a field is undefined.
- Properties coming from extended schema are also supported.
+ Properties from extended schema are also supported.
  This function is used e.g. by AlterTableHandler when property information comes in form of text.
  */
-CALLIGRADB_EXPORT bool setFieldProperties(Field& field, const QHash<QByteArray, QVariant>& values);
+CALLIGRADB_EXPORT bool setFieldProperties(Field& field, const QMap<QByteArray, QVariant>& values);
 
 /*! Sets property value for \a field. \return true if the property has been found and
  the value is valid for this property. On failure contents of \a field is undefined.
- Properties coming from extended schema are also supported as well as
+ Properties from extended schema are also supported as well as
    QVariant customProperty(const QString& propertyName) const;
 
  This function is used e.g. by AlterTableHandler when property information comes in form of text.
  */
 CALLIGRADB_EXPORT bool setFieldProperty(Field& field, const QByteArray& propertyName,
-                                     const QVariant& value);
+                                        const QVariant& value);
 
 /*! @return property value loaded from a DOM \a node, written in a QtDesigner-like
  notation: &lt;number&gt;int&lt;/number&gt; or &lt;bool&gt;bool&lt;/bool&gt;, etc. Supported types are
@@ -551,6 +561,24 @@ inline CALLIGRADB_EXPORT QDateTime stringToHackedQTime(const QString& s)
     return QDateTime(QDate(0, 1, 2), QTime::fromString(s, Qt::ISODate));
 }
 
+/*! @return new temporary name suitable for creating new table.
+ The name has mask tmp__{baseName}{rand} where baseName is passed as argument
+ and {rand} is 10 digits long hexadecimal number. @a baseName can be empty.
+ It is not 100% guaranteed that the name will but it is very likely.
+ The function checks for existence of table in connection @a conn.
+ It is adviced to use the returned name as quickly as possible for creating new physical table. */
+CALLIGRADB_EXPORT QString temporaryTableName(Connection *conn, const QString &baseName);
+
+/*! @return absolute path to "sqlite3" program.
+ Empty string is returned if the program was not found. */
+CALLIGRADB_EXPORT QString sqlite3ProgramPath();
+
+/*! Imports SQL file from @a inputFileName into @a outputFileName.
+ Works for any SQLite 3 file. Requires access to "sqlite3" command.
+ @a outputFileName will be silently overwritten.
+ @return true on success. */
+CALLIGRADB_EXPORT bool importSqliteFile(const QString &inputFileName, const QString &outputFileName);
+
 #ifdef CALLIGRADB_DEBUG_GUI
 typedef void(*DebugGUIHandler)(const QString&);
 CALLIGRADB_EXPORT void setDebugGUIHandler(DebugGUIHandler handler);
@@ -561,6 +589,6 @@ CALLIGRADB_EXPORT void setAlterTableActionDebugHandler(AlterTableActionDebugGUIH
 CALLIGRADB_EXPORT void alterTableActionDebugGUI(const QString& text, int nestingLevel = 0);
 #endif
 
-}
+} // namespace KexiDB
 
 #endif

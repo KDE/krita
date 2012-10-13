@@ -148,7 +148,7 @@ Field* FieldList::field(const QString& name)
     return m_fields_by_name.value(name.toLower());
 }
 
-QString FieldList::debugString()
+QString FieldList::debugString() const
 {
     if (m_fields.isEmpty())
         return "<NO FIELDS>";

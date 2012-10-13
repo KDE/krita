@@ -86,6 +86,11 @@ public:
         return m_fields.value(id);
     }
 
+    /*! \return field id or NULL if there is no such a field. */
+    inline const Field* field(uint id) const {
+        return m_fields.value(id);
+    }
+
     /*! \return field with name \a name or NULL if there is no such a field. */
     virtual Field* field(const QString& name);
 
@@ -126,7 +131,7 @@ public:
     virtual void clear();
 
     /*! \return String for debugging purposes. */
-    virtual QString debugString();
+    virtual QString debugString() const;
 
     /*! Shows debug information about all fields in the list. */
     void debug();

@@ -850,7 +850,7 @@ Connection* QuerySchema::connection() const
     return mt ? mt->connection() : 0;
 }
 
-QString QuerySchema::debugString()
+QString QuerySchema::debugString() const
 {
     QString dbg;
     dbg.reserve(1024);
@@ -865,7 +865,7 @@ QString QuerySchema::debugString()
     QString dbg1;
     uint fieldsExpandedCount = 0;
     if (fieldCount() > 0) {
-        QueryColumnInfo::Vector fe(fieldsExpanded());
+        QueryColumnInfo::Vector fe(const_cast<QuerySchema*>(this)->fieldsExpanded());
         fieldsExpandedCount = fe.size();
         for (uint i = 0; i < fieldsExpandedCount; i++) {
             QueryColumnInfo *ci = fe[i];

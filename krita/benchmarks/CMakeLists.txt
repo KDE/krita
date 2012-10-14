@@ -1,5 +1,5 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-include_directories(  ${KOMAIN_INCLUDES}  ${CMAKE_SOURCE_DIR}/krita/image/tiles3 )
+include_directories(  ${KOMAIN_INCLUDES}  ${CMAKE_SOURCE_DIR}/krita/image/tiles3 ${CMAKE_SOURCE_DIR}/krita/sdk/tests)
 
 if(HAVE_VC)
   include_directories(${Vc_INCLUDE_DIR})
@@ -25,6 +25,7 @@ set(kis_floodfill_benchmark_SRCS kis_floodfill_benchmark.cpp)
 set(kis_gradient_benchmark_SRCS kis_gradient_benchmark.cpp)
 set(kis_mask_generator_benchmark_SRCS kis_mask_generator_benchmark.cpp)
 set(kis_low_memory_benchmark_SRCS kis_low_memory_benchmark.cpp)
+set(kis_filter_selections_benchmark_SRCS kis_filter_selections_benchmark.cpp)
 
 calligra_add_benchmark(KisDatamanagerBenchmark TESTNAME krita-benchmarks-KisDataManager ${kis_datamanager_benchmark_SRCS})
 calligra_add_benchmark(KisHLineIteratorBenchmark TESTNAME krita-benchmarks-KisHLineIterator ${kis_hiterator_benchmark_SRCS})
@@ -40,6 +41,7 @@ calligra_add_benchmark(KisFloodfillBenchmark TESTNAME krita-benchmarks-KisFloodF
 calligra_add_benchmark(KisGradientBenchmark TESTNAME krita-benchmarks-KisGradientFill ${kis_gradient_benchmark_SRCS})
 calligra_add_benchmark(KisMaskGeneratorBenchmark TESTNAME krita-benchmarks-KisMaskGenerator ${kis_mask_generator_benchmark_SRCS})
 calligra_add_benchmark(KisLowMemoryBenchmark TESTNAME krita-benchmarks-KisLowMemory ${kis_low_memory_benchmark_SRCS})
+calligra_add_benchmark(KisFilterSelectionsBenchmark TESTNAME krita-image-KisFilterSelectionsBenchmark ${kis_filter_selections_benchmark_SRCS})
 
 target_link_libraries(KisDatamanagerBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 target_link_libraries(KisHLineIteratorBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
@@ -54,6 +56,7 @@ target_link_libraries(KisFastMathBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QT
 target_link_libraries(KisFloodfillBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 target_link_libraries(KisGradientBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 target_link_libraries(KisLowMemoryBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+target_link_libraries(KisFilterSelectionsBenchmark  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 target_link_libraries(KisMaskGeneratorBenchmark ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 if(HAVE_VC)

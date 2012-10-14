@@ -191,8 +191,8 @@ int KexiDB::idForObjectName(Connection &conn, const QString& objName, int objTyp
 {
     RecordData data;
     if (true != conn.querySingleRecord(
-                QString::fromLatin1("select o_id from kexi__objects where lower(o_name)='%1' and o_type=%2")
-                .arg(objName.toLower()).arg(objType), data))
+                QString::fromLatin1("select o_id from kexi__objects where o_name='%1' and o_type=%2")
+                .arg(objName).arg(objType), data))
         return 0;
     bool ok;
     int id = data[0].toInt(&ok);

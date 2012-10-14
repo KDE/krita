@@ -147,7 +147,7 @@ bool SQLiteConnection::drv_containsTable(const QString &tableName)
 bool SQLiteConnection::drv_getTablesList(QStringList &list)
 {
     KexiDB::Cursor *cursor;
-    m_sql = "select lower(name) from sqlite_master where type='table'";
+    m_sql = "select name from sqlite_master where type='table'";
     if (!(cursor = executeQuery(m_sql))) {
         KexiDBWarn << "Connection::drv_getTablesList(): !executeQuery()";
         return false;

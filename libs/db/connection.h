@@ -869,7 +869,7 @@ protected:
     /*! @internal drops table \a tableSchema physically, but destroys
      \a tableSchema object only if \a alsoRemoveSchema is true.
      Used (alsoRemoveSchema==false) on table altering:
-     if recreating table can failed we're giving up and keeping
+     if recreating table can fail we're giving up and keeping
      the original table schema (even if it is no longer points to any real data). */
     tristate dropTable(KexiDB::TableSchema* tableSchema, bool alsoRemoveSchema);
 

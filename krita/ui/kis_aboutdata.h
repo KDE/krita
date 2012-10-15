@@ -74,7 +74,7 @@ KAboutData * newKritaAboutData()
     aboutData->addAuthor(ki18n("Samy Lange"), KLocalizedString(), "enkithan@free.fr");
     aboutData->addAuthor(ki18n("Silvio Heinrich"), KLocalizedString(), "plassy@web.de");
     aboutData->addAuthor(ki18n("Sven Langkamp"), KLocalizedString(), "sven.langkamp@gmail.com");
-    aboutData->addAuthor(ki18n("Timothée Giet"), ki18n("BD Artist and template developer"), "Animtim", "http://www.timotheegiet.com/blog");
+    aboutData->addAuthor(ki18n("Timothée Giet"), ki18n("BD Artist, brush presets and templates"), "animtim@gmail.com", "http://www.timotheegiet.com/blog");
     aboutData->addAuthor(ki18n("Toshitaka Fujioka"), KLocalizedString(), "fujioka@kde.org");
     aboutData->addAuthor(ki18n("Thomas Zander"), KLocalizedString(), "zander@kde.org");
     aboutData->addAuthor(ki18n("Tom Burdick"), KLocalizedString(), "tburdi1@uic.edu");

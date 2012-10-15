@@ -16,7 +16,6 @@ Basic_mix_over.kpp
 Basic_mix_over_dull.kpp
 Basic_mix_over_wet.kpp
 Basic_mix_over_wet_dull.kpp
-Basic_mix_small.kpp
 Basic_mix_soft.kpp
 Basic_paint_05.kpp
 Basic_paint_25.kpp

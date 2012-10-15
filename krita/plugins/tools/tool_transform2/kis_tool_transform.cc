@@ -566,6 +566,12 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
             gc.drawImage(QPointF(warptranslate), m_currImg, QRectF(m_currImg.rect()));
         }
 
+
+        gc.setBrush(Qt::NoBrush);
+        gc.setOpacity(1.0);
+        QPointF warptranslate = converter.documentToView(QPointF(m_currentArgs.previewPos().x() / kisimage->xRes(), m_currentArgs.previewPos().y() / kisimage->yRes()));
+        gc.drawImage(QPointF(warptranslate), m_currImg, QRectF(m_currImg.rect()));
+
         for (int j = 1; j >= 0; --j) {
             gc.setPen(pen[j]);
             for (int i = 0; i < m_viewTransfPoints.size(); ++i) {
@@ -591,12 +597,6 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
         for (int i = 0; i < m_viewOrigPoints.size(); ++i) {
             gc.drawLine(m_viewTransfPoints[i], m_viewOrigPoints[i]);
         }
-
-        gc.setBrush(Qt::NoBrush);
-        gc.setOpacity(1.0);
-        QPointF warptranslate = converter.documentToView(QPointF(m_currentArgs.previewPos().x() / kisimage->xRes(), m_currentArgs.previewPos().y() / kisimage->yRes()));
-        gc.drawImage(QPointF(warptranslate), m_currImg, QRectF(m_currImg.rect()));
-
     }
 
     gc.setPen(oldPen);

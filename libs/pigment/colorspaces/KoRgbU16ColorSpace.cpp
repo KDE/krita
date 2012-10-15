@@ -30,9 +30,6 @@
 #include "KoChannelInfo.h"
 #include "KoID.h"
 #include "KoIntegerMaths.h"
-#include "KoCompositeOpOver.h"
-#include "KoCompositeOpErase.h"
-#include "KoCompositeOpAlphaDarken.h"
 
 
 KoRgbU16ColorSpace::KoRgbU16ColorSpace() :

@@ -24,8 +24,6 @@ inline double drand48() {
 }
 #endif
 
-#include <KoCompositeOps.h>
-
 #include "hairy_brush.h"
 #include "trajectory.h"
 

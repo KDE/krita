@@ -10,6 +10,13 @@ if(OPENEXR_FOUND)
     add_definitions(${OPENEXR_DEFINITIONS})
 endif(OPENEXR_FOUND)
 
+set(LINK_VC_LIB)
+if(HAVE_VC)
+  include_directories(${Vc_INCLUDE_DIR})
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
+  set(LINK_VC_LIB ${Vc_LIBRARIES})
+endif(HAVE_VC)
+
 add_subdirectory(tests)
 add_subdirectory(benchmarks)
 
@@ -44,6 +51,7 @@ set(pigmentcms_SRCS
     colorspaces/KoRgbU16ColorSpace.cpp
     colorspaces/KoRgbU8ColorSpace.cpp
     colorspaces/KoSimpleColorSpaceEngine.cpp
+    compositeops/KoOptimizedCompositeOpFactory.cpp
     colorprofiles/KoDummyColorProfile.cpp
     resources/KoAbstractGradient.cpp
     resources/KoColorSet.cpp
@@ -91,7 +99,7 @@ set(PIGMENT_INSTALL_FILES
         KoHistogramProducer.h
 )
 
-set (EXTRA_LIBRARIES ${LINK_OPENEXR_LIB})
+set (EXTRA_LIBRARIES ${LINK_OPENEXR_LIB} ${LINK_VC_LIB})
 
 if(MSVC)
   # avoid "cannot open file 'LIBC.lib'" error

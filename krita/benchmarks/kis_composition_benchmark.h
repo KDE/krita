@@ -25,6 +25,9 @@ class KisCompositionBenchmark : public QObject
 {
     Q_OBJECT
 private slots:
+    void compareAlphaDarkenOps();
+    void compareOverOps();
+
     void testRgb8CompositeAlphaDarkenLegacy_Aligned();
 
     void testRgb8CompositeAlphaDarkenOptimized_Aligned();
@@ -35,7 +38,15 @@ private slots:
     void testRgb8CompositeAlphaDarkenLegacy_Aligned_NoMask();
     void testRgb8CompositeAlphaDarkenOptimized_Aligned_NoMask();
 
+    void testRgb8CompositeOverLegacy_Aligned();
+    void testRgb8CompositeOverOptimized_Aligned();
+    void testRgb8CompositeOverOptimized_Unaligned();
+
+    void testRgb8CompositeOverLegacy_Aligned_NoMask();
+    void testRgb8CompositeOverOptimized_Aligned_NoMask();
+
     void testRgb8CompositeAlphaDarkenReal_Aligned();
+    void testRgb8CompositeOverReal_Aligned();
 };
 
 #endif /* __KIS_COMPOSITION_BENCHMARK_H */

@@ -83,24 +83,41 @@ struct AlphaDarkenCompositor32 {
 
         KoStreamedMath::fetch_colors_32<src_aligned>(src, src_c1, src_c2, src_c3);
         Vc::float_v dst_blend = src_alpha * uint8MaxRec1;
-        KoStreamedMath::fetch_colors_32<true>(dst, dst_c1, dst_c2, dst_c3);
 
         Vc::float_v alpha1 = src_alpha + dst_alpha -
             dst_blend * dst_alpha;
 
 
-        // TODO: if (dstAlpha == 0) dstC = srcC;
-        dst_c1 = dst_blend * (src_c1 - dst_c1) + dst_c1;
-        dst_c2 = dst_blend * (src_c2 - dst_c2) + dst_c2;
-        dst_c3 = dst_blend * (src_c3 - dst_c3) + dst_c3;
+        Vc::float_m empty_pixels_mask = dst_alpha == Vc::float_v(Vc::Zero);
+
+        if (empty_pixels_mask.isFull()) {
+            dst_c1 = src_c1;
+            dst_c2 = src_c2;
+            dst_c3 = src_c3;
+        } else if (empty_pixels_mask.isEmpty()) {
+            KoStreamedMath::fetch_colors_32<true>(dst, dst_c1, dst_c2, dst_c3);
+            dst_c1 = dst_blend * (src_c1 - dst_c1) + dst_c1;
+            dst_c2 = dst_blend * (src_c2 - dst_c2) + dst_c2;
+            dst_c3 = dst_blend * (src_c3 - dst_c3) + dst_c3;
+        } else {
+            KoStreamedMath::fetch_colors_32<true>(dst, dst_c1, dst_c2, dst_c3);
+            dst_c1(empty_pixels_mask) = src_c1;
+            dst_c2(empty_pixels_mask) = src_c2;
+            dst_c3(empty_pixels_mask) = src_c3;
+
+            Vc::float_m not_empty_pixels_mask = !empty_pixels_mask;
+
+            dst_c1(not_empty_pixels_mask) = dst_blend * (src_c1 - dst_c1) + dst_c1;
+            dst_c2(not_empty_pixels_mask) = dst_blend * (src_c2 - dst_c2) + dst_c2;
+            dst_c3(not_empty_pixels_mask) = dst_blend * (src_c3 - dst_c3) + dst_c3;
+        }
 
 
-        Vc::float_m alpha2_mask = opacity > dst_alpha;
+        Vc::float_m alpha2_mask = opacity_vec > dst_alpha;
         Vc::float_v opt1 = (opacity_vec - dst_alpha) * msk_norm_alpha + dst_alpha;
         Vc::float_v alpha2;
         alpha2(!alpha2_mask) = dst_alpha;
         alpha2(alpha2_mask) = opt1;
-
         dst_alpha = (alpha2 - alpha1) * flow_norm_vec + alpha1;
 
         KoStreamedMath::write_channels_32(dst, dst_alpha, dst_c1, dst_c2, dst_c3);
@@ -112,8 +129,10 @@ struct AlphaDarkenCompositor32 {
      * Composes one pixel of the source into the destination
      */
     template <bool haveMask>
-    static ALWAYS_INLINE void compositeOnePixel(const channels_type *src, channels_type *dst, const quint8 *mask, channels_type opacity, channels_type flow)
+    static ALWAYS_INLINE void compositeOnePixel(const channels_type *src, channels_type *dst, const quint8 *mask, channels_type opacity, channels_type flow, const QBitArray &channelFlags)
     {
+        Q_UNUSED(channelFlags);
+
         using namespace Arithmetic;
         const qint32 alpha_pos = 3;
 

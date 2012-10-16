@@ -41,6 +41,58 @@
 
 namespace KoStreamedMath {
 
+/**
+ * Composes src into dst without using vector instructions
+ */
+template<bool useMask, bool useFlow, class Compositor>
+    void genericComposite32_novector(const KoCompositeOp::ParameterInfo& params)
+{
+    using namespace Arithmetic;
+
+    quint8 flow;
+    quint8 opacity;
+
+    if (useFlow) {
+        flow = scale<quint8>(params.flow);
+        opacity = mul(flow, scale<quint8>(params.opacity));
+    } else {
+        flow = 255;
+        opacity = scale<quint8>(params.opacity);
+    }
+
+    const qint32 linearInc = 4;
+    qint32 srcLinearInc = params.srcRowStride ? 4 : 0;
+
+    quint8*       dstRowStart  = params.dstRowStart;
+    const quint8* maskRowStart = params.maskRowStart;
+    const quint8* srcRowStart  = params.srcRowStart;
+
+    for(quint32 r=params.rows; r>0; --r) {
+        const quint8 *mask = maskRowStart;
+        const quint8 *src  = srcRowStart;
+        quint8       *dst  = dstRowStart;
+
+        int blockRest = params.cols;
+
+        for(int i = 0; i < blockRest; i++) {
+            Compositor::template compositeOnePixel<useMask>(src, dst, mask, opacity, flow, params.channelFlags);
+            src += srcLinearInc;
+            dst += linearInc;
+
+            if (useMask) {
+                mask++;
+            }
+        }
+
+        srcRowStart  += params.srcRowStride;
+        dstRowStart  += params.dstRowStride;
+
+        if (useMask) {
+            maskRowStart += params.maskRowStride;
+        }
+    }
+}
+
 #if defined HAVE_VC
 
 /**
@@ -174,7 +226,6 @@ template<bool useMask, bool useFlow, class Compositor>
         srcVectorInc = 0;
     }
 
-
     for(quint32 r=params.rows; r>0; --r) {
         // Hint: Mask is allowed to be unaligned
         const quint8 *mask = maskRowStart;
@@ -182,15 +233,15 @@ template<bool useMask, bool useFlow, class Compositor>
         const quint8 *src  = srcRowStart;
         quint8       *dst  = dstRowStart;
 
-        // Uncomment if facing problems with alignment:
-        // Q_ASSERT_X(!(dstAlignment & 3), "Compositioning",
-        //            "Pixel data must be aligned on pixels borders!");
-
         const int pixelsAlignmentMask = vectorInc - 1;
         uintptr_t srcPtrValue = reinterpret_cast<uintptr_t>(src);
         uintptr_t dstPtrValue = reinterpret_cast<uintptr_t>(dst);
         uintptr_t srcAlignment = srcPtrValue & pixelsAlignmentMask;
         uintptr_t dstAlignment = dstPtrValue & pixelsAlignmentMask;
+
+        // Uncomment if facing problems with alignment:
+        // Q_ASSERT_X(!(dstAlignment & 3), "Compositioning",
+        //            "Pixel data must be aligned on pixels borders!");
 
         int blockAlign = params.cols;
         int blockAlignedVector = 0;
@@ -205,7 +256,7 @@ template<bool useMask, bool useFlow, class Compositor>
             blockAlign = 0;
             *vectorBlock = params.cols / vectorSize;
             blockRest = params.cols % vectorSize;
-        } else {
+        } else if (params.cols > 2 * vectorSize) {
             blockAlign = (vectorInc - dstAlignment) / 4;
             const int restCols = params.cols - blockAlign;
             *vectorBlock = restCols / vectorSize;
@@ -213,7 +264,7 @@ template<bool useMask, bool useFlow, class Compositor>
         }
 
         for(int i = 0; i < blockAlign; i++) {
-            Compositor::template compositeOnePixel<useMask>(src, dst, mask, opacity, flow);
+            Compositor::template compositeOnePixel<useMask>(src, dst, mask, opacity, flow, params.channelFlags);
             src += srcLinearInc;
             dst += linearInc;
 
@@ -244,7 +295,7 @@ template<bool useMask, bool useFlow, class Compositor>
 
 
         for(int i = 0; i < blockRest; i++) {
-            Compositor::template compositeOnePixel<useMask>(src, dst, mask, opacity, flow);
+            Compositor::template compositeOnePixel<useMask>(src, dst, mask, opacity, flow, params.channelFlags);
             src += srcLinearInc;
             dst += linearInc;
 
@@ -271,50 +322,7 @@ template<bool useMask, bool useFlow, class Compositor>
 template<bool useMask, bool useFlow, class Compositor>
     void genericComposite32(const KoCompositeOp::ParameterInfo& params)
 {
-    using namespace Arithmetic;
-
-    quint8 flow;
-    quint8 opacity;
-
-    if (useFlow) {
-        flow = scale<quint8>(params.flow);
-        opacity = mul(flow, scale<quint8>(params.opacity));
-    } else {
-        flow = 255;
-        opacity = scale<quint8>(params.opacity);
-    }
-
-    const qint32 linearInc = 4;
-    qint32 srcLinearInc = params.srcRowStride ? 4 : 0;
-
-    quint8*       dstRowStart  = params.dstRowStart;
-    const quint8* maskRowStart = params.maskRowStart;
-    const quint8* srcRowStart  = params.srcRowStart;
-
-    for(quint32 r=params.rows; r>0; --r) {
-        const quint8 *mask = maskRowStart;
-        const quint8 *src  = srcRowStart;
-        quint8       *dst  = dstRowStart;
-
-        int blockRest = params.cols;
-
-        for(int i = 0; i < blockRest; i++) {
-            Compositor::template compositeOnePixel<useMask>(src, dst, mask, opacity, flow);
-            src += srcLinearInc;
-            dst += linearInc;
-
-            if (useMask) {
-                mask++;
-            }
-        }
-
-        srcRowStart  += params.srcRowStride;
-        dstRowStart  += params.dstRowStride;
-
-        if (useMask) {
-            maskRowStart += params.maskRowStride;
-        }
-    }
+    genericComposite32_novector<useMask, useFlow, Compositor>(params);
 }
 
 #endif /* HAVE_VC */

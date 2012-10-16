@@ -19,9 +19,15 @@
 #include "KoOptimizedCompositeOpFactory.h"
 
 #include "KoOptimizedCompositeOpAlphaDarken32.h"
+#include "KoOptimizedCompositeOpOver32.h"
 
 
 KoCompositeOp* KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(const KoColorSpace *cs)
 {
     return new KoOptimizedCompositeOpAlphaDarken32(cs);
+}
+
+KoCompositeOp* KoOptimizedCompositeOpFactory::createOverOp32(const KoColorSpace *cs)
+{
+    return new KoOptimizedCompositeOpOver32(cs);
 }

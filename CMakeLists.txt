@@ -119,6 +119,8 @@ include (MacroLibrary)
 include (MacroAdditionalCleanFiles)
 include (MacroAddFileDependencies)
 
+set(IHAVEPATCHEDQT TRUE)
+
 set(SHOULD_BUILD_TEXTSHAPE TRUE)
 if ((${QTVERSION} VERSION_EQUAL 4.8.0) OR (${QTVERSION} VERSION_EQUAL 4.8.1))
     if (NOT IHAVEPATCHEDQT)

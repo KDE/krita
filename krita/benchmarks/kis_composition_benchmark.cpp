@@ -29,6 +29,10 @@
 #include <KoCompositeOpOver.h>
 #include "KoOptimizedCompositeOpFactory.h"
 
+#include <KoOptimizedCompositeOpOver32.h>
+#include <KoOptimizedCompositeOpAlphaDarken32.h>
+
+
 // for calculation of the needed alignment
 #include "config-vc.h"
 #ifdef HAVE_VC
@@ -67,10 +71,10 @@ void generateDataLine(uint seed, int numPixels, quint8 *srcPixels, quint8 *dstPi
 
     for (int i = 0; i < numPixels; i++) {
         for (int j = 0; j < 4; j++) {
-            *(srcPixels++) = 1 + qrand() % 254;
-            *(dstPixels++) = 1 + qrand() % 254;
+            *(srcPixels++) = 0 + qrand() % 255;
+            *(dstPixels++) = 0 + qrand() % 255;
         }
-        *(mask++) = 1 + qrand() % 254;
+        *(mask++) = 0 + qrand() % 255;
     }
 }
 
@@ -143,6 +147,15 @@ inline bool fuzzyCompare(quint8 a, quint8 b, quint8 prec) {
     return qAbs(a - b) <= prec;
 }
 
+inline bool comparePixels(quint8 *p1, quint8*p2, quint8 prec) {
+    return (p1[3] == p2[3] && p1[3] == 0) ||
+        (fuzzyCompare(p1[0], p2[0], prec) &&
+         fuzzyCompare(p1[1], p2[1], prec) &&
+         fuzzyCompare(p1[2], p2[2], prec) &&
+         fuzzyCompare(p1[3], p2[3], prec));
+
+}
+
 bool compareTwoOps(bool haveMask, const KoCompositeOp *op1, const KoCompositeOp *op2)
 {
     QVector<Tile> tiles = generateTiles(2, 16, 16);
@@ -170,10 +183,7 @@ bool compareTwoOps(bool haveMask, const KoCompositeOp *op1, const KoCompositeOp 
     quint8 *dst1 = tiles[0].dst;
     quint8 *dst2 = tiles[1].dst;
     for (int i = 0; i < numPixels; i++) {
-        if (!fuzzyCompare(dst1[0], dst2[0], 2) ||
-            !fuzzyCompare(dst1[1], dst2[1], 2) ||
-            !fuzzyCompare(dst1[2], dst2[2], 2) ||
-            !fuzzyCompare(dst1[3], dst2[3], 2)) {
+        if (!comparePixels(dst1, dst2, 7)) {
 
             qDebug() << "Wrong result:" << i;
             qDebug() << "Act: " << dst1[0] << dst1[1] << dst1[2] << dst1[3];
@@ -237,13 +247,80 @@ void benchmarkCompositeOp(const KoCompositeOp *op,
     freeTiles(tiles, srcAlignmentShift, dstAlignmentShift);
 }
 
+
+#ifdef HAVE_VC
+
+template<class Compositor>
+void checkRounding()
+{
+    QVector<Tile> tiles =
+        generateTiles(2, 0, 0);
+
+    const int vecSize = Vc::float_v::Size;
+
+    const int numBlocks = numPixels / vecSize;
+
+    quint8 *src1 = tiles[0].src;
+    quint8 *dst1 = tiles[0].dst;
+    quint8 *msk1 = tiles[0].mask;
+
+    quint8 *src2 = tiles[1].src;
+    quint8 *dst2 = tiles[1].dst;
+    quint8 *msk2 = tiles[1].mask;
+
+    for (int i = 0; i < numBlocks; i++) {
+        Compositor::template compositeVector<true,true>(src1, dst1, msk1, 0.5, 0.3);
+        for (int j = 0; j < vecSize; j++) {
+
+            Compositor::template compositeOnePixelFloat<true>(src2, dst2, msk2, 0.5, 0.3, QBitArray());
+
+            if(!comparePixels(dst1, dst2, 0)) {
+                qDebug() << "Wrong rounding in pixel:" << 8 * i + j;
+                qDebug() << "Vector version: " << dst1[0] << dst1[1] << dst1[2] << dst1[3];
+                qDebug() << "Scalar version: " << dst2[0] << dst2[1] << dst2[2] << dst2[3];
+
+                qDebug() << "src:" << src1[0] << src1[1] << src1[2] << src1[3];
+                qDebug() << "msk:" << msk1[0];
+
+                QFAIL("Wrong rounding");
+            }
+
+            src1 += 4;
+            dst1 += 4;
+            src2 += 4;
+            dst2 += 4;
+            msk1++;
+            msk2++;
+        }
+    }
+
+    freeTiles(tiles, 0, 0);
+}
+
+#endif
+
+
+void KisCompositionBenchmark::checkRoundingAlphaDarken()
+{
+#ifdef HAVE_VC
+    checkRounding<AlphaDarkenCompositor32<quint8, quint32> >();
+#endif
+}
+
+void KisCompositionBenchmark::checkRoundingOver()
+{
+#ifdef HAVE_VC
+    checkRounding<OverCompositor32<quint8, quint32, false, true> >();
+#endif
+}
+
 void KisCompositionBenchmark::compareAlphaDarkenOps()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KoCompositeOp *opAct = KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(cs);
     KoCompositeOp *opExp = new KoCompositeOpAlphaDarken<KoBgrU8Traits>(cs);
 
-    QVERIFY(compareTwoOps(false, opAct, opExp));
+    QVERIFY(compareTwoOps(true, opAct, opExp));
 
     delete opExp;
     delete opAct;
@@ -370,5 +447,5 @@ void KisCompositionBenchmark::testRgb8CompositeOverReal_Aligned()
     benchmarkCompositeOp(op, true, 0, 0);
 }
 
-
 QTEST_KDEMAIN(KisCompositionBenchmark, GUI)
+

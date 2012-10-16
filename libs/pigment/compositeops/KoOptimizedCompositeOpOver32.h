@@ -36,6 +36,8 @@ struct OverCompositor32 {
     template<bool haveMask, bool src_aligned>
     static ALWAYS_INLINE void compositeVector(const quint8 *src, quint8 *dst, const quint8 *mask, float opacity, float flow)
     {
+        Q_UNUSED(flow);
+
         Vc::float_v src_alpha;
         Vc::float_v dst_alpha;
 
@@ -68,18 +70,96 @@ struct OverCompositor32 {
 
         KoStreamedMath::fetch_colors_32<src_aligned>(src, src_c1, src_c2, src_c3);
 
-        Vc::float_v src_blend = src_alpha / new_alpha;
 
-        KoStreamedMath::fetch_colors_32<true>(dst, dst_c1, dst_c2, dst_c3);
+        Vc::float_m empty_pixels_mask = new_alpha == Vc::float_v(Vc::Zero);
 
-        dst_c1 = src_blend * (src_c1 - dst_c1) + dst_c1;
-        dst_c2 = src_blend * (src_c2 - dst_c2) + dst_c2;
-        dst_c3 = src_blend * (src_c3 - dst_c3) + dst_c3;
+        if (!empty_pixels_mask.isFull()) {
+            /**
+             * If new alpha is zero, then dst_alpha is already zero,
+             * and writing to these pixels will not change anything,
+             * so let's write there if it does any change to the image
+             */
 
-        KoStreamedMath::write_channels_32(dst, new_alpha, dst_c1, dst_c2, dst_c3);
+            /**
+             * Division by zero here generates NaNs that
+             * results in zeros in all the channels, which
+             * is quite what we need.
+             */
+            Vc::float_v src_blend = src_alpha / new_alpha;
+
+            KoStreamedMath::fetch_colors_32<true>(dst, dst_c1, dst_c2, dst_c3);
+
+            dst_c1 = src_blend * (src_c1 - dst_c1) + dst_c1;
+            dst_c2 = src_blend * (src_c2 - dst_c2) + dst_c2;
+            dst_c3 = src_blend * (src_c3 - dst_c3) + dst_c3;
+
+            KoStreamedMath::write_channels_32(dst, new_alpha, dst_c1, dst_c2, dst_c3);
+        }
     }
 
 #endif /* HAVE_VC */
+
+    template <bool haveMask>
+    static ALWAYS_INLINE void compositeOnePixelFloat(const channels_type *src, channels_type *dst, const quint8 *mask, float opacity, float flow, const QBitArray &channelFlags)
+    {
+        using namespace Arithmetic;
+        const qint32 alpha_pos = 3;
+
+        const float uint8Rec1 = 1.0 / 255.0;
+        const float uint8Max = 255.0;
+
+        float srcAlpha = src[alpha_pos];
+        srcAlpha *= opacity;
+
+        if (haveMask) {
+            srcAlpha *= float(*mask) * uint8Rec1;
+        }
+
+        if (srcAlpha != 0.0) {
+
+            float dstAlpha = dst[alpha_pos];
+            float srcBlendNorm;
+
+            if (dstAlpha == uint8Max) {
+                srcBlendNorm = srcAlpha * uint8Rec1;
+            } else {
+                dstAlpha += (uint8Max - dstAlpha) * srcAlpha * uint8Rec1;
+
+                if (dstAlpha != 0.0) {
+                    srcBlendNorm = srcAlpha / dstAlpha;
+                } else {
+                    srcBlendNorm = 0.0;
+                }
+            }
+
+            if(allChannelsFlag) {
+                if (srcBlendNorm == 1.0) {
+                    const pixel_type *s = reinterpret_cast<const pixel_type*>(src);
+                    pixel_type *d = reinterpret_cast<pixel_type*>(dst);
+                    *d = *s;
+                } else if (srcBlendNorm != 0.0){
+                    dst[0] = KoStreamedMath::lerp_mixed_u8_float(dst[0], src[0], srcBlendNorm);
+                    dst[1] = KoStreamedMath::lerp_mixed_u8_float(dst[1], src[1], srcBlendNorm);
+                    dst[2] = KoStreamedMath::lerp_mixed_u8_float(dst[2], src[2], srcBlendNorm);
+                }
+            } else {
+                if (srcBlendNorm == 1.0) {
+                    if(channelFlags.at(0)) dst[0] = src[0];
+                    if(channelFlags.at(1)) dst[1] = src[1];
+                    if(channelFlags.at(2)) dst[2] = src[2];
+                } else if (srcBlendNorm != 0.0) {
+                    if(channelFlags.at(0)) dst[0] = KoStreamedMath::lerp_mixed_u8_float(dst[0], src[0], srcBlendNorm);
+                    if(channelFlags.at(1)) dst[1] = KoStreamedMath::lerp_mixed_u8_float(dst[1], src[1], srcBlendNorm);
+                    if(channelFlags.at(2)) dst[2] = KoStreamedMath::lerp_mixed_u8_float(dst[2], src[2], srcBlendNorm);
+                }
+            }
+
+            if (!alphaLocked) {
+                dst[alpha_pos] = quint8(dstAlpha);
+            }
+        }
+
+    }
 
     template <bool haveMask>
     static ALWAYS_INLINE void compositeOnePixel(const channels_type *src, channels_type *dst, const quint8 *mask, channels_type opacity, channels_type flow, const QBitArray &channelFlags)
@@ -108,29 +188,30 @@ struct OverCompositor32 {
                 if (dstAlpha != zeroValue<channels_type>()) {
                     srcBlend = div<channels_type>(srcAlpha, dstAlpha);
                 } else {
-                    srcBlend = srcAlpha;
+                    srcBlend = zeroValue<channels_type>();
                 }
             }
 
             if(allChannelsFlag) {
-                if (srcBlend != zeroValue<channels_type>()) {
-                    dst[0] = lerp(dst[0], src[0], srcBlend);
-                    dst[1] = lerp(dst[1], src[1], srcBlend);
-                    dst[2] = lerp(dst[2], src[2], srcBlend);
-                } else {
+                if (srcBlend == unitValue<channels_type>()) {
                     const pixel_type *s = reinterpret_cast<const pixel_type*>(src);
                     pixel_type *d = reinterpret_cast<pixel_type*>(dst);
                     *d = *s;
+                } else if (srcBlend != zeroValue<channels_type>()) {
+                    dst[0] = lerp(dst[0], src[0], srcBlend);
+                    dst[1] = lerp(dst[1], src[1], srcBlend);
+                    dst[2] = lerp(dst[2], src[2], srcBlend);
+
                 }
             } else {
-                if (srcBlend != zeroValue<channels_type>()) {
-                    if(channelFlags.at(0)) dst[0] = lerp(dst[0], src[0], srcBlend);
-                    if(channelFlags.at(1)) dst[1] = lerp(dst[1], src[1], srcBlend);
-                    if(channelFlags.at(2)) dst[2] = lerp(dst[2], src[2], srcBlend);
-                } else {
+                if (srcBlend == unitValue<channels_type>()) {
                     if(channelFlags.at(0)) dst[0] = src[0];
                     if(channelFlags.at(1)) dst[1] = src[1];
                     if(channelFlags.at(2)) dst[2] = src[2];
+                } else if (srcBlend != zeroValue<channels_type>()) {
+                    if(channelFlags.at(0)) dst[0] = lerp(dst[0], src[0], srcBlend);
+                    if(channelFlags.at(1)) dst[1] = lerp(dst[1], src[1], srcBlend);
+                    if(channelFlags.at(2)) dst[2] = lerp(dst[2], src[2], srcBlend);
                 }
             }
 

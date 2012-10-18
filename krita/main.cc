@@ -23,6 +23,9 @@
 #include <QString>
 #include <QPixmap>
 #include <QDebug>
+#include <QProcess>
+#include <QProcessEnvironment>
+#include <QDir>
 
 #include <kglobal.h>
 #include <kcmdlineargs.h>
@@ -71,6 +74,14 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     state = app.exec();
 
     delete aboutData;
+
+#ifdef Q_OS_WIN
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    QDir appdir(app.applicationDirPath());
+    //const QString path = KStandardDirs::findExe( QLatin1String("kdeinit4" ) );
+    Q_ASSERT(QFile(appdir.canonicalPath() + "kdeinit4.exe").exists());
+    QProcess::startDetached(appdir.canonicalPath() + "kdeinit4 --terminate");
+#endif
 
     return state;
 }

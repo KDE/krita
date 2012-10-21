@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -31,6 +32,10 @@
 
 class VideoCollection;
 class VideoEventAction;
+class VideoData;
+class VideoThumbnailer;
+
+class QImage;
 
 class VideoShape : public KoShape, public KoFrameShape
 {
@@ -54,13 +59,27 @@ public:
      */
     void setVideoCollection(VideoCollection *collection);
 
+    /**
+     * return the video data used in this shape. Returns 0 if not set
+     */
+    VideoData *videoData() const;
+
 protected:
     virtual bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context);
+
+private slots:
+    void updateThumbnail();
+
+signals:
+    void createThumbnail(VideoData *videoData, const QSize &size);
 
 private:
     VideoCollection *m_videoCollection;
     VideoEventAction *m_videoEventAction;
+    VideoThumbnailer *m_thumbnailer;
+    VideoData *m_oldVideoData;
     KIcon m_icon;
+    QRectF m_playIconArea;
 };
 
 #endif

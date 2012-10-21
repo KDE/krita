@@ -2,6 +2,7 @@
  * Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,7 +30,6 @@ class QIODevice;
 class VideoCollection;
 class VideoDataPrivate;
 class KoStore;
-class KTemporaryFile;
 
 /**
  * This class is meant to represent the video data so it can be shared between video shapes.
@@ -61,8 +61,9 @@ public:
     /// destructor
     virtual ~VideoData();
 
-    void setExternalVideo(const QUrl &location, VideoCollection *collection = 0);
+    void setExternalVideo(const QUrl &location, bool saveInternal, VideoCollection *collection = 0);
     void setVideo(const QString &location, KoStore *store, VideoCollection *collection = 0);
+    //void setVideo(const QUrl &location);
 
     /**
      * Save the video data to the param device.
@@ -79,27 +80,26 @@ public:
     inline bool operator!=(const VideoData &other) const { return !operator==(other); }
     bool operator==(const VideoData &other) const;
 
-    /**
-     * a unique key of the video data
-     */
-    qint64 key;
-
-    QString suffix; // the suffix of the picture e.g. png  TODO use a QByteArray ?
-
     /// returns if this is a valid imageData with actual video data present on it.
     bool isValid() const;
 
-    ErrorCode errorCode;
-
     QUrl playableUrl() const;
 
-    QString saveName;
+    QString saveName() const;
 
+    void setSaveName(const QString &saveName);
+
+    VideoCollection *collection();
+    void setCollection(VideoCollection *collection);
+
+    qint64 key();
+
+    enum DataStoreState {
+        StateEmpty,     ///< No video data, possible an external video
+        StateSpooled, ///< Video data is spooled
+    };
 protected:
     friend class VideoCollection;
-
-    /// store the suffix based on the full filename.
-    void setSuffix(const QString &fileName);
 
     /// take the data from \a device and store it in the temporaryFile
     void copyToTemporary(QIODevice &device);
@@ -108,18 +108,8 @@ protected:
 
     static qint64 generateKey(const QByteArray &bytes);
 
-    enum DataStoreState {
-        StateEmpty,     ///< No video data, possible an external video
-        StateSpooled, ///< Video data is spooled
-    };
-
-    QUrl videoLocation;
-    VideoCollection *collection;
-
-    // video data store.
-    DataStoreState dataStoreState;
-
-    KTemporaryFile *temporaryFile;
+private:
+    VideoDataPrivate *d;
 };
 
 #endif

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,36 +17,31 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef SELECTVIDEOWIDGET_H
+#define SELECTVIDEOWIDGET_H
 
-#ifndef VIDEOSHAPECONFIGWIDGET_H
-#define VIDEOSHAPECONFIGWIDGET_H
+#include <KUrl>
 
-#include <KoShapeConfigWidgetBase.h>
-#include <kurl.h>
 #include <QWidget>
 
-class VideoShape;
-class SelectVideoWidget;
+class KFileWidget;
+class QCheckBox;
 
-class VideoShapeConfigWidget : public KoShapeConfigWidgetBase
+class SelectVideoWidget : public QWidget
 {
-    Q_OBJECT
 public:
-    VideoShapeConfigWidget();
-    ~VideoShapeConfigWidget();
+    explicit SelectVideoWidget(QWidget *parent = 0);
+    ~SelectVideoWidget();
 
-    /// reimplemented from KoShapeConfigWidgetBase
-    virtual void open(KoShape *shape);
-    /// reimplemented from KoShapeConfigWidgetBase
-    virtual void save();
-    /// reimplemented from KoShapeConfigWidgetBase
-    virtual bool showOnShapeCreate();
-    /// reimplemented from KoShapeConfigWidgetBase
-    virtual bool showOnShapeSelect();
+    KUrl selectedUrl() const;
+    bool saveEmbedded();
 
+    void accept();
+    void cancel();
 private:
-    VideoShape *m_shape;
-    SelectVideoWidget *m_fileSelectionWidget;
+
+    KFileWidget *m_fileWidget;
+    QCheckBox *m_saveEmbedded;
 };
 
-#endif //VIDEOSHAPECONFIGWIDGET_H
+#endif //SELECTVIDEOWIDGET_H

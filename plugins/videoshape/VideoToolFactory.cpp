@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,25 +16,31 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "Plugin.h"
-#include "VideoShapeFactory.h"
+
 #include "VideoToolFactory.h"
 
-#include <KoShapeRegistry.h>
-#include <KoToolRegistry.h>
+#include "VideoShape.h"
+#include "VideoTool.h"
 
-#include <kpluginfactory.h>
+#include <KoIcon.h>
+#include <klocale.h>
 
-
-K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
-K_EXPORT_PLUGIN(PluginFactory("VideoShape"))
-
-Plugin::Plugin(QObject *parent, const QVariantList &)
-    : QObject(parent)
+VideoToolFactory::VideoToolFactory()
+    :KoToolFactoryBase("VideoToolFactoryId")
 {
-    KoShapeRegistry::instance()->add( new VideoShapeFactory() );
-    KoToolRegistry::instance()->add(new VideoToolFactory());
+    setToolTip(i18n("Video tool"));
+    setIconName(koIconNameCStr("video-x-generic"));
+    setToolType(dynamicToolType());
+    setPriority(1);
+    setActivationShapeId(VIDEOSHAPEID);
 }
 
-#include <Plugin.moc>
+VideoToolFactory::~VideoToolFactory()
+{
 
+}
+
+KoToolBase* VideoToolFactory::createTool(KoCanvasBase* canvas)
+{
+    return new VideoTool(canvas);
+}

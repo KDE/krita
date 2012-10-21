@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,35 +17,30 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef VIDEOSHAPECONFIGWIDGET_H
-#define VIDEOSHAPECONFIGWIDGET_H
+#ifndef CHANGEVIDEOCOMMAND_H
+#define CHANGEVIDEOCOMMAND_H
 
-#include <KoShapeConfigWidgetBase.h>
-#include <kurl.h>
-#include <QWidget>
+#include <kundo2command.h>
 
+class VideoData;
 class VideoShape;
-class SelectVideoWidget;
 
-class VideoShapeConfigWidget : public KoShapeConfigWidgetBase
+class ChangeVideoCommand : public KUndo2Command
 {
-    Q_OBJECT
 public:
-    VideoShapeConfigWidget();
-    ~VideoShapeConfigWidget();
+    ChangeVideoCommand(VideoShape *videoShape, VideoData *newVideoData, KUndo2Command *parent = 0);
+    ~ChangeVideoCommand();
 
-    /// reimplemented from KoShapeConfigWidgetBase
-    virtual void open(KoShape *shape);
-    /// reimplemented from KoShapeConfigWidgetBase
-    virtual void save();
-    /// reimplemented from KoShapeConfigWidgetBase
-    virtual bool showOnShapeCreate();
-    /// reimplemented from KoShapeConfigWidgetBase
-    virtual bool showOnShapeSelect();
+    /// redo the command
+    virtual void redo();
+    /// revert the actions done in redo
+    virtual void undo();
 
 private:
+    bool m_first;
+    VideoData *m_oldVideoData;
+    VideoData *m_newVideoData;
     VideoShape *m_shape;
-    SelectVideoWidget *m_fileSelectionWidget;
 };
 
-#endif //VIDEOSHAPECONFIGWIDGET_H
+#endif //CHANGEVIDEOCOMMAND_H

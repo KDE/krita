@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,35 +17,40 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef VIDEOSHAPECONFIGWIDGET_H
-#define VIDEOSHAPECONFIGWIDGET_H
+#ifndef VIDEOTOOL_H
+#define VIDEOTOOL_H
 
-#include <KoShapeConfigWidgetBase.h>
-#include <kurl.h>
-#include <QWidget>
+#include <KoToolBase.h>
 
+class VideoToolUI;
 class VideoShape;
-class SelectVideoWidget;
+class KoCanvasBase;
 
-class VideoShapeConfigWidget : public KoShapeConfigWidgetBase
+class VideoTool : public KoToolBase
 {
     Q_OBJECT
-public:
-    VideoShapeConfigWidget();
-    ~VideoShapeConfigWidget();
 
-    /// reimplemented from KoShapeConfigWidgetBase
-    virtual void open(KoShape *shape);
-    /// reimplemented from KoShapeConfigWidgetBase
-    virtual void save();
-    /// reimplemented from KoShapeConfigWidgetBase
-    virtual bool showOnShapeCreate();
-    /// reimplemented from KoShapeConfigWidgetBase
-    virtual bool showOnShapeSelect();
+   public:
+    explicit VideoTool(KoCanvasBase *canvas);
+    ~VideoTool();
+
+    virtual void paint( QPainter& painter, const KoViewConverter& converter );
+    virtual void mousePressEvent( KoPointerEvent* event ) ;
+    virtual void mouseMoveEvent( KoPointerEvent* event );
+    virtual void mouseReleaseEvent( KoPointerEvent* event );
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+
+protected:
+    QWidget *createOptionWidget();
+
+private slots:
+    void changeUrlPressed();
+    void play();
 
 private:
-    VideoShape *m_shape;
-    SelectVideoWidget *m_fileSelectionWidget;
+    VideoToolUI *m_videoToolUI;
+    VideoShape *m_videoShape;
 };
 
-#endif //VIDEOSHAPECONFIGWIDGET_H
+
+#endif //VIDEOTOOL_H

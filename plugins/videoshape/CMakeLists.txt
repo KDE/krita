@@ -11,11 +11,17 @@ SET (videoshape_LIB_SRCS
     Plugin.cpp
     VideoShapeConfigWidget.cpp
     FullScreenPlayer.cpp
+    VideoTool.cpp
+    VideoToolFactory.cpp
+    ChangeVideoCommand.cpp
+    SelectVideoWidget.cpp
+    VideoThumbnailer.cpp
 )
 
+kde4_add_ui_files(videoshape_LIB_SRCS forms/VideoToolWidget.ui)
 kde4_add_plugin(videoshape ${videoshape_LIB_SRCS})
 
-target_link_libraries(videoshape komain
+target_link_libraries(videoshape komain phononexperimental
     ${KDE4_KFILE_LIBRARY}
     ${KDE4_PHONON_LIBRARY}
 )

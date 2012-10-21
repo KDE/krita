@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2009 C. Boemann <cbo@boemann.dk>
+ * Copyright (C) 2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,15 +21,20 @@
 #define FULLSCREENPLAYER_H
 
 #include <QWidget>
+#include <Phonon/Global>
 
 namespace Phonon
 {
     class MediaObject;
     class VideoWidget;
     class AudioOutput;
-};
+    class SeekSlider;
+    class VolumeSlider;
+}
 
 class QUrl;
+class QLabel;
+class QToolButton;
 
 /**
  * This class represents the click event action that starts the playing of the video.
@@ -43,14 +49,32 @@ public:
     virtual ~FullScreenPlayer();
 
 protected slots:
+    void play();
+    void pause();
     void stop();
+    void mute();
+    void unmute();
+    void playStateChanged(Phonon::State newState, Phonon::State oldState);
+    void muteStateChanged(bool muted);
+    void updatePlaybackTime(qint64 currentTime);
 
 protected:
     virtual void keyPressEvent(QKeyEvent *event); ///reimplemented
     virtual void mousePressEvent(QMouseEvent *event); ///reimplemented
+
+
     Phonon::MediaObject *m_mediaObject;
     Phonon::VideoWidget *m_videoWidget;
     Phonon::AudioOutput *m_audioOutput;
+    Phonon::SeekSlider *m_seekSlider;
+    Phonon::VolumeSlider *m_volumeSlider;
+
+    QToolButton *m_volumeIconMuted;
+    QToolButton *m_volumeIconUnmuted;
+    QLabel *m_playbackTime;
+    QToolButton *m_play;
+    QToolButton *m_pause;
+    QToolButton *m_stop;
 };
 
 #endif

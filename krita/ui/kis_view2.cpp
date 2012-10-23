@@ -128,7 +128,6 @@
 #include "ko_favorite_resource_manager.h"
 #include "kis_paintop_box.h"
 
-#include "thememanager.h"
 
 class BlockingUserInputEventFilter : public QObject
 {
@@ -168,7 +167,6 @@ public:
         , gridManager(0)
         , perspectiveGridManager(0)
         , paintingAssistantManager(0)
-        , themeManager(0)
     {
     }
 
@@ -216,7 +214,6 @@ public:
     KisPaintingAssistantsManager* paintingAssistantManager;
     KoFavoriteResourceManager* favoriteResourceManager;
     BlockingUserInputEventFilter blockingEventFilter;
-    Digikam::ThemeManager *themeManager;
 };
 
 
@@ -226,9 +223,6 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
 {
     setComponentData(KisFactory2::componentData());
     setXMLFile("krita.rc");
-
-    // populate theme menu
-    m_d->themeManager = new Digikam::ThemeManager(this);
 
     setFocusPolicy(Qt::NoFocus);
 
@@ -417,10 +411,6 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
 
 KisView2::~KisView2()
 {
-    {
-        KConfigGroup group(KGlobal::config(), "theme");
-        group.writeEntry("Theme", m_d->themeManager->currentThemeName());
-    }
     {
         KConfigGroup group(KGlobal::config(), "krita/shortcuts");
         foreach(KActionCollection *collection, KActionCollection::allCollections()) {
@@ -778,13 +768,6 @@ void KisView2::createActions()
     KAction* action = new KAction(i18n("Edit Palette..."), this);
     actionCollection()->addAction("edit_palette", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotEditPalette()));
-
-    KConfigGroup group(KGlobal::config(), "theme");
-    m_d->themeManager->setThemeMenuAction(new KActionMenu(i18n("&Themes"), this));
-    m_d->themeManager->registerThemeActions(actionCollection());
-    m_d->themeManager->setCurrentTheme(group.readEntry("Theme",
-                                                       m_d->themeManager->defaultThemeName()));
-
 }
 
 

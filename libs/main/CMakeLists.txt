@@ -95,6 +95,8 @@ set(komain_LIB_SRCS
     KoFindStyle.cpp
 
     KoPart.cpp
+
+    thememanager.cpp
 )
 if( Soprano_FOUND )
     set(komain_LIB_SRCS ${komain_LIB_SRCS}

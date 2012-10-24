@@ -47,12 +47,20 @@ struct OverCompositor32 {
 
         Vc::float_v uint8Max((float)255.0);
         Vc::float_v uint8MaxRec1((float)1.0 / 255.0);
+        Vc::float_v zeroValue(Vc::Zero);
+        Vc::float_v oneValue(Vc::One);
 
         src_alpha *= opacity_norm_vec;
 
         if (haveMask) {
             Vc::float_v mask_vec = KoStreamedMath::fetch_mask_8(mask);
             src_alpha *= mask_vec * uint8MaxRec1;
+        }
+
+        // The source cannot change the colors in the destination,
+        // since its fully transparent
+        if ((src_alpha == zeroValue).isFull()) {
+            return;
         }
 
         dst_alpha = KoStreamedMath::fetch_alpha_32<true>(dst);
@@ -65,28 +73,29 @@ struct OverCompositor32 {
         Vc::float_v dst_c2;
         Vc::float_v dst_c3;
 
-        Vc::float_v new_alpha =
-            dst_alpha + (uint8Max - dst_alpha) * src_alpha * uint8MaxRec1;
 
         KoStreamedMath::fetch_colors_32<src_aligned>(src, src_c1, src_c2, src_c3);
+        Vc::float_v src_blend;
+        Vc::float_v new_alpha;
 
-
-        Vc::float_m empty_pixels_mask = new_alpha == Vc::float_v(Vc::Zero);
-
-        if (!empty_pixels_mask.isFull()) {
+        if ((dst_alpha == uint8Max).isFull()) {
+            new_alpha = dst_alpha;
+            src_blend = src_alpha * uint8MaxRec1;
+        } else if ((dst_alpha == zeroValue).isFull()) {
+            // new_alpha = /* don't bother */;
+            src_blend = oneValue;
+        } else {
             /**
-             * If new alpha is zero, then dst_alpha is already zero,
-             * and writing to these pixels will not change anything,
-             * so let's write there if it does any change to the image
+             * The value of new_alpha can have *some* zero values,
+             * which will result in NaN values while division. But
+             * when converted to integers these NaN values will
+             * be converted to zeroes, which is exactly what we need
              */
+            new_alpha = dst_alpha + (uint8Max - dst_alpha) * src_alpha * uint8MaxRec1;
+            src_blend = src_alpha / new_alpha;
+        }
 
-            /**
-             * Division by zero here generates NaNs that
-             * results in zeros in all the channels, which
-             * is quite what we need.
-             */
-            Vc::float_v src_blend = src_alpha / new_alpha;
-
+        if (!(src_blend == oneValue).isFull()) {
             KoStreamedMath::fetch_colors_32<true>(dst, dst_c1, dst_c2, dst_c3);
 
             dst_c1 = src_blend * (src_c1 - dst_c1) + dst_c1;
@@ -94,7 +103,10 @@ struct OverCompositor32 {
             dst_c3 = src_blend * (src_c3 - dst_c3) + dst_c3;
 
             KoStreamedMath::write_channels_32(dst, new_alpha, dst_c1, dst_c2, dst_c3);
+        } else {
+            memcpy(dst, src, 4 * Vc::float_v::Size);
         }
+
     }
 
 #endif /* HAVE_VC */

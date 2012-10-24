@@ -45,7 +45,30 @@
 
 const int alpha_pos = 3;
 
-void generateDataLine(uint seed, int numPixels, quint8 *srcPixels, quint8 *dstPixels, quint8 *mask)
+enum AlphaRange {
+    ALPHA_ZERO,
+    ALPHA_UNIT,
+    ALPHA_RANDOM
+};
+
+inline quint8 generateAlphaValue(AlphaRange range) {
+    quint8 value = 0;
+
+    switch (range) {
+    case ALPHA_ZERO:
+        break;
+    case ALPHA_UNIT:
+        value = 255;
+        break;
+    case ALPHA_RANDOM:
+        value = qrand() % 255;
+        break;
+    }
+
+    return value;
+}
+
+void generateDataLine(uint seed, int numPixels, quint8 *srcPixels, quint8 *dstPixels, quint8 *mask, AlphaRange srcAlphaRange, AlphaRange dstAlphaRange)
 {
     Q_ASSERT(numPixels >= 4);
 
@@ -70,11 +93,15 @@ void generateDataLine(uint seed, int numPixels, quint8 *srcPixels, quint8 *dstPi
     mask += 4;
 
     for (int i = 0; i < numPixels; i++) {
-        for (int j = 0; j < 4; j++) {
-            *(srcPixels++) = 0 + qrand() % 255;
-            *(dstPixels++) = 0 + qrand() % 255;
+        for (int j = 0; j < 3; j++) {
+            *(srcPixels++) = qrand() % 255;
+            *(dstPixels++) = qrand() % 255;
         }
-        *(mask++) = 0 + qrand() % 255;
+
+        *(srcPixels++) = generateAlphaValue(srcAlphaRange);
+        *(dstPixels++) = generateAlphaValue(dstAlphaRange);
+
+        *(mask++) = qrand() % 255;
     }
 }
 
@@ -111,7 +138,9 @@ struct Tile {
 #include <stdint.h>
 QVector<Tile> generateTiles(int size,
                             const int srcAlignmentShift,
-                            const int dstAlignmentShift)
+                            const int dstAlignmentShift,
+                            AlphaRange srcAlphaRange,
+                            AlphaRange dstAlphaRange)
 {
     QVector<Tile> tiles(size);
 
@@ -126,7 +155,7 @@ QVector<Tile> generateTiles(int size,
         tiles[i].dst = (quint8*)memalign(vecSize * 4, numPixels * 4 + dstAlignmentShift) + dstAlignmentShift;
         tiles[i].mask = (quint8*)memalign(vecSize, numPixels);
 
-        generateDataLine(1, numPixels, tiles[i].src, tiles[i].dst, tiles[i].mask);
+        generateDataLine(1, numPixels, tiles[i].src, tiles[i].dst, tiles[i].mask, srcAlphaRange, dstAlphaRange);
     }
 
     return tiles;
@@ -158,7 +187,7 @@ inline bool comparePixels(quint8 *p1, quint8*p2, quint8 prec) {
 
 bool compareTwoOps(bool haveMask, const KoCompositeOp *op1, const KoCompositeOp *op2)
 {
-    QVector<Tile> tiles = generateTiles(2, 16, 16);
+    QVector<Tile> tiles = generateTiles(2, 16, 16, ALPHA_RANDOM, ALPHA_RANDOM);
 
     KoCompositeOp::ParameterInfo params;
     params.dstRowStride  = 4 * rowStride;
@@ -209,13 +238,48 @@ bool compareTwoOps(bool haveMask, const KoCompositeOp *op1, const KoCompositeOp 
     return true;
 }
 
+QString getTestName(bool haveMask,
+                    const int srcAlignmentShift,
+                    const int dstAlignmentShift,
+                    AlphaRange srcAlphaRange,
+                    AlphaRange dstAlphaRange)
+{
+
+    QString testName;
+    testName +=
+        !srcAlignmentShift && !dstAlignmentShift ? "Aligned   " :
+        !srcAlignmentShift &&  dstAlignmentShift ? "SrcUnalig " :
+         srcAlignmentShift && !dstAlignmentShift ? "DstUnalig " :
+         srcAlignmentShift &&  dstAlignmentShift ? "Unaligned " : "###";
+
+    testName += haveMask ? "Mask   " : "NoMask ";
+
+    testName +=
+        srcAlphaRange == ALPHA_RANDOM ? "SrcRand " :
+        srcAlphaRange == ALPHA_ZERO   ? "SrcZero " :
+        srcAlphaRange == ALPHA_UNIT   ? "SrcUnit " : "###";
+
+    testName +=
+        dstAlphaRange == ALPHA_RANDOM ? "DstRand" :
+        dstAlphaRange == ALPHA_ZERO   ? "DstZero" :
+        dstAlphaRange == ALPHA_UNIT   ? "DstUnit" : "###";
+
+    return testName;
+}
+
 void benchmarkCompositeOp(const KoCompositeOp *op,
                           bool haveMask,
+                          qreal opacity,
+                          qreal flow,
                           const int srcAlignmentShift,
-                          const int dstAlignmentShift)
+                          const int dstAlignmentShift,
+                          AlphaRange srcAlphaRange,
+                          AlphaRange dstAlphaRange)
 {
+    QString testName = getTestName(haveMask, srcAlignmentShift, dstAlignmentShift, srcAlphaRange, dstAlphaRange);
+
     QVector<Tile> tiles =
-        generateTiles(numTiles, srcAlignmentShift, dstAlignmentShift);
+        generateTiles(numTiles, srcAlignmentShift, dstAlignmentShift, srcAlphaRange, dstAlphaRange);
 
 //    qDebug() << "Initial values:";
 //    printData(8, tiles[0].src, tiles[0].dst, tiles[0].mask);
@@ -228,18 +292,21 @@ void benchmarkCompositeOp(const KoCompositeOp *op,
     params.maskRowStride = rowStride;
     params.rows          = processRect.height();
     params.cols          = processRect.width();
-    params.opacity       = 0.5*1.0f;
-    params.flow          = 0.3*1.0f;
+    params.opacity       = opacity;
+    params.flow          = flow;
     params.channelFlags  = QBitArray();
 
-    QBENCHMARK_ONCE {
-        foreach (const Tile &tile, tiles) {
-            params.dstRowStart   = tile.dst + tileOffset;
-            params.srcRowStart   = tile.src + tileOffset;
-            params.maskRowStart  = haveMask ? tile.mask : 0;
-            op->composite(params);
-        }
+    QTime timer;
+    timer.start();
+
+    foreach (const Tile &tile, tiles) {
+        params.dstRowStart   = tile.dst + tileOffset;
+        params.srcRowStart   = tile.src + tileOffset;
+        params.maskRowStart  = haveMask ? tile.mask : 0;
+        op->composite(params);
     }
+
+    qDebug() << testName << "RESULT:" << timer.elapsed() << "msec";
 
 //    qDebug() << "Final values:";
 //    printData(8, tiles[0].src, tiles[0].dst, tiles[0].mask);
@@ -247,6 +314,33 @@ void benchmarkCompositeOp(const KoCompositeOp *op,
     freeTiles(tiles, srcAlignmentShift, dstAlignmentShift);
 }
 
+void benchmarkCompositeOp(const KoCompositeOp *op, const QString &postfix)
+{
+    qDebug() << "Testing Composite Op:" << op->id() << "(" << postfix << ")";
+
+    benchmarkCompositeOp(op, true, 0.5, 0.3, 0, 0, ALPHA_RANDOM, ALPHA_RANDOM);
+    benchmarkCompositeOp(op, true, 0.5, 0.3, 8, 0, ALPHA_RANDOM, ALPHA_RANDOM);
+    benchmarkCompositeOp(op, true, 0.5, 0.3, 0, 8, ALPHA_RANDOM, ALPHA_RANDOM);
+    benchmarkCompositeOp(op, true, 0.5, 0.3, 4, 8, ALPHA_RANDOM, ALPHA_RANDOM);
+
+/// --- Vary the content of the source and destination
+
+    benchmarkCompositeOp(op, false, 1.0, 1.0, 0, 0, ALPHA_RANDOM, ALPHA_RANDOM);
+    benchmarkCompositeOp(op, false, 1.0, 1.0, 0, 0, ALPHA_ZERO, ALPHA_RANDOM);
+    benchmarkCompositeOp(op, false, 1.0, 1.0, 0, 0, ALPHA_UNIT, ALPHA_RANDOM);
+
+/// ---
+
+    benchmarkCompositeOp(op, false, 1.0, 1.0, 0, 0, ALPHA_RANDOM, ALPHA_ZERO);
+    benchmarkCompositeOp(op, false, 1.0, 1.0, 0, 0, ALPHA_ZERO, ALPHA_ZERO);
+    benchmarkCompositeOp(op, false, 1.0, 1.0, 0, 0, ALPHA_UNIT, ALPHA_ZERO);
+
+/// ---
+
+    benchmarkCompositeOp(op, false, 1.0, 1.0, 0, 0, ALPHA_RANDOM, ALPHA_UNIT);
+    benchmarkCompositeOp(op, false, 1.0, 1.0, 0, 0, ALPHA_ZERO, ALPHA_UNIT);
+    benchmarkCompositeOp(op, false, 1.0, 1.0, 0, 0, ALPHA_UNIT, ALPHA_UNIT);
+}
 
 #ifdef HAVE_VC
 
@@ -254,7 +348,7 @@ template<class Compositor>
 void checkRounding()
 {
     QVector<Tile> tiles =
-        generateTiles(2, 0, 0);
+        generateTiles(2, 0, 0, ALPHA_RANDOM, ALPHA_RANDOM);
 
     const int vecSize = Vc::float_v::Size;
 
@@ -338,98 +432,35 @@ void KisCompositionBenchmark::compareOverOps()
     delete opAct;
 }
 
-void KisCompositionBenchmark::testRgb8CompositeAlphaDarkenLegacy_Aligned()
+void KisCompositionBenchmark::testRgb8CompositeAlphaDarkenLegacy()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KoCompositeOp *op = new KoCompositeOpAlphaDarken<KoBgrU8Traits>(cs);
-    benchmarkCompositeOp(op, true, 0, 0);
-    delete op;
-}
-// Unaligned versions of the Legacy version give the same results
-
-void KisCompositionBenchmark::testRgb8CompositeAlphaDarkenOptimized_Aligned()
-{
-    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-    KoCompositeOp *op = KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(cs);
-    benchmarkCompositeOp(op, true, 0, 0);
-    delete op;
-}
-void KisCompositionBenchmark::testRgb8CompositeAlphaDarkenOptimized_SrcUnaligned()
-{
-    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-    KoCompositeOp *op = KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(cs);
-    benchmarkCompositeOp(op, true, 8, 0);
-    delete op;
-}
-void KisCompositionBenchmark::testRgb8CompositeAlphaDarkenOptimized_DstUnaligned()
-{
-    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-    KoCompositeOp *op = KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(cs);
-    benchmarkCompositeOp(op, true, 0, 8);
-    delete op;
-}
-void KisCompositionBenchmark::testRgb8CompositeAlphaDarkenOptimized_Unaligned()
-{
-    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-    KoCompositeOp *op = KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(cs);
-    benchmarkCompositeOp(op, true, 4, 8);
+    benchmarkCompositeOp(op, "Legacy");
     delete op;
 }
 
-
-void KisCompositionBenchmark::testRgb8CompositeAlphaDarkenLegacy_Aligned_NoMask()
-{
-    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-    KoCompositeOp *op = new KoCompositeOpAlphaDarken<KoBgrU8Traits>(cs);
-    benchmarkCompositeOp(op, false, 0, 0);
-    delete op;
-}
-void KisCompositionBenchmark::testRgb8CompositeAlphaDarkenOptimized_Aligned_NoMask()
+void KisCompositionBenchmark::testRgb8CompositeAlphaDarkenOptimized()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KoCompositeOp *op = KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(cs);
-    benchmarkCompositeOp(op, false, 0, 0);
+    benchmarkCompositeOp(op, "Optimized");
     delete op;
 }
 
-
-void KisCompositionBenchmark::testRgb8CompositeOverLegacy_Aligned()
+void KisCompositionBenchmark::testRgb8CompositeOverLegacy()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KoCompositeOp *op = new KoCompositeOpOver<KoBgrU8Traits>(cs);
-    benchmarkCompositeOp(op, true, 0, 0);
+    benchmarkCompositeOp(op, "Legacy");
     delete op;
 }
 
-void KisCompositionBenchmark::testRgb8CompositeOverOptimized_Aligned()
+void KisCompositionBenchmark::testRgb8CompositeOverOptimized()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KoCompositeOp *op = KoOptimizedCompositeOpFactory::createOverOp32(cs);
-    benchmarkCompositeOp(op, true, 0, 0);
-    delete op;
-}
-
-void KisCompositionBenchmark::testRgb8CompositeOverOptimized_Unaligned()
-{
-    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-    KoCompositeOp *op = KoOptimizedCompositeOpFactory::createOverOp32(cs);
-    benchmarkCompositeOp(op, true, 4, 8);
-    delete op;
-}
-
-void KisCompositionBenchmark::testRgb8CompositeOverLegacy_Aligned_NoMask()
-{
-    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-    KoCompositeOp *op = new KoCompositeOpOver<KoBgrU8Traits>(cs);
-    benchmarkCompositeOp(op, false, 0, 0);
-    delete op;
-}
-
-void KisCompositionBenchmark::testRgb8CompositeOverOptimized_Aligned_NoMask()
-{
-    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-    KoCompositeOp *op = KoOptimizedCompositeOpFactory::createOverOp32(cs);
-    benchmarkCompositeOp(op, false, 0, 0);
+    benchmarkCompositeOp(op, "Optimized");
     delete op;
 }
 
@@ -437,14 +468,28 @@ void KisCompositionBenchmark::testRgb8CompositeAlphaDarkenReal_Aligned()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     const KoCompositeOp *op = cs->compositeOp(COMPOSITE_ALPHA_DARKEN);
-    benchmarkCompositeOp(op, true, 0, 0);
+    benchmarkCompositeOp(op, true, 0.5, 0.3, 0, 0, ALPHA_RANDOM, ALPHA_RANDOM);
 }
 
 void KisCompositionBenchmark::testRgb8CompositeOverReal_Aligned()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     const KoCompositeOp *op = cs->compositeOp(COMPOSITE_OVER);
-    benchmarkCompositeOp(op, true, 0, 0);
+    benchmarkCompositeOp(op, true, 0.5, 0.3, 0, 0, ALPHA_RANDOM, ALPHA_RANDOM);
+}
+
+void KisCompositionBenchmark::benchmarkMemcpy()
+{
+    QVector<Tile> tiles =
+        generateTiles(numTiles, 0, 0, ALPHA_UNIT, ALPHA_UNIT);
+
+    QBENCHMARK_ONCE {
+        foreach (const Tile &tile, tiles) {
+            memcpy(tile.dst, tile.src, 4 * numPixels);
+        }
+    }
+
+    freeTiles(tiles, 0, 0);
 }
 
 QTEST_KDEMAIN(KisCompositionBenchmark, GUI)

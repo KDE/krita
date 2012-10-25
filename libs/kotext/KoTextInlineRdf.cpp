@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 KO GmbH <ben.martin@kogmbh.com>
+ * Copyright (C) 2012 C. Boemann <cbo@boemann.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -212,11 +213,7 @@ QString KoTextInlineRdf::predicate()
 QPair<int, int>  KoTextInlineRdf::findExtent()
 {
     if (d->bookmark && d->document) {
-        KoBookmark *e = d->bookmark.data()->endBookmark();
-        if (e) {
-            // kDebug(30015) << "(Semantic)bmark... start:" << d->bookmark.data()->position() << " end:" << e->position();
-            return QPair<int, int>(d->bookmark.data()->position(), e->position());
-        }
+        return QPair<int, int>(d->bookmark.data()->rangeStart(), d->bookmark.data()->rangeEnd());
     }
     if (d->kotextmeta && d->document) {
         KoTextMeta *e = d->kotextmeta.data()->endBookmark();
@@ -241,15 +238,9 @@ QString KoTextInlineRdf::object()
     }
 
     KoTextDocument textDocument(d->document.data());
-    KoTextEditor *editor = textDocument.textEditor();
 
     if (d->bookmark && d->document) {
-        KoBookmark *e = d->bookmark.data()->endBookmark();
-
-        editor->setPosition(d->bookmark.data()->position(), QTextCursor::MoveAnchor);
-        editor->setPosition(e->position(), QTextCursor::KeepAnchor);
-
-        QString ret = editor->selectedText();
+        QString ret  = d->bookmark.data()->text();
         return ret.remove(QChar::ObjectReplacementCharacter);
     }
     else if (d->kotextmeta && d->document) {
@@ -258,6 +249,7 @@ QString KoTextInlineRdf::object()
             kDebug(30015) << "Broken KoTextMeta, no end tag found!";
             return QString();
         } else {
+            KoTextEditor *editor = textDocument.textEditor();
             editor->setPosition(d->kotextmeta.data()->position(), QTextCursor::MoveAnchor);
             editor->setPosition(e->position(), QTextCursor::KeepAnchor);
             QString ret = editor->selectedText();
@@ -266,10 +258,8 @@ QString KoTextInlineRdf::object()
     }
     else if (d->cell.isValid() && d->document) {
         QTextCursor b = d->cell.firstCursorPosition();
-        QTextCursor e = d->cell.lastCursorPosition();
-        editor->setPosition(b.position(), QTextCursor::MoveAnchor);
-        editor->setPosition(e.position(),  QTextCursor::KeepAnchor);
-        QString ret = editor->selectedText();
+        b.setPosition(d->cell.lastCursorPosition().position(), QTextCursor::KeepAnchor);
+        QString ret = b.selectedText();
         return ret.remove(QChar::ObjectReplacementCharacter);
     }
 

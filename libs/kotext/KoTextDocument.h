@@ -39,6 +39,7 @@
 
 class KoStyleManager;
 class KoInlineTextObjectManager;
+class KoTextRangeManager;
 class KUndo2Stack;
 class KoTextEditor;
 class KoOdfLineNumberingConfiguration;
@@ -143,6 +144,12 @@ public:
     /// Set the KoInlineTextObjectManager
     void setInlineTextObjectManager(KoInlineTextObjectManager *manager);
 
+    /// Returns the KoTextRangeManager
+    KoTextRangeManager *textRangeManager() const;
+
+    /// Set the KoTextRangeManager
+    void setTextRangeManager(KoTextRangeManager *manager);
+
     /// Set the KoDocument's shapeController. This controller exists as long as KoDocument exists. It should only be used for deleting shapes.
     void setShapeController(KoShapeController *controller);
 
@@ -212,6 +219,7 @@ public:
     enum ResourceType {
         StyleManager = QTextDocument::UserResource,
         Lists,
+        TextRangeManager,
         InlineTextManager,
         ChangeTrackerResource,
         UndoStack,
@@ -231,6 +239,7 @@ public:
 
     static const QUrl StyleManagerURL;
     static const QUrl ListsURL;
+    static const QUrl TextRangeManagerURL;
     static const QUrl InlineObjectTextManagerURL;
     static const QUrl ChangeTrackerURL;
     static const QUrl UndoStackURL;

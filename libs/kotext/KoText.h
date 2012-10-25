@@ -79,6 +79,7 @@ struct KOTEXT_EXPORT Tab {
 enum DocumentResource {
     ChangeTracker = KoDocumentResourceManager::KoTextStart + 1, ///< KoChangeTracker
     InlineTextObjectManager, ///< The KoText inline-text-object manager. KoInlineTextObjectManager
+    TextRangeManager, ///< The KoText inline-text-object manager. KoInlineTextObjectManager
     StyleManager,           ///< The KoStyleManager
     PageProvider,            ///< The KoPageProvider
     /** The KoDocumentRdf for the document,

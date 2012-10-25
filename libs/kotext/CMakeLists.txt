@@ -25,6 +25,7 @@ set(kotext_LIB_SRCS
     KoTextEditingFactory.cpp
     KoTextEditingPlugin.cpp
 
+    KoTextRangeManager.cpp
     KoInlineTextObjectManager.cpp
     KoInlineObjectFactoryBase.cpp
     KoInlineObjectRegistry.cpp
@@ -34,6 +35,7 @@ set(kotext_LIB_SRCS
     InsertTextReferenceAction.cpp
     InsertTextLocator.cpp
     KoInlineObject.cpp
+    KoTextRange.cpp
     KoVariable.cpp
     KoVariableManager.cpp
     KoNamedVariable.cpp

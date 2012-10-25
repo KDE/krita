@@ -34,6 +34,7 @@
 #define TextShape_SHAPEID "TextShapeID"
 
 class KoInlineTextObjectManager;
+class KoTextRangeManager;
 class KoPageProvider;
 class KoImageCollection;
 class KoTextDocument;
@@ -48,7 +49,7 @@ class KoTextDocumentLayout;
 class TextShape : public KoShapeContainer, public KoFrameShape
 {
 public:
-    TextShape(KoInlineTextObjectManager *inlineTextObjectManager);
+    TextShape(KoInlineTextObjectManager *inlineTextObjectManager, KoTextRangeManager *textRangeManager);
     virtual ~TextShape();
 
     /// reimplemented

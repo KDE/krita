@@ -67,6 +67,7 @@ public:
        : styleManager(0)
        , changeTracker(0)
        , inlineTextObjectManager(0)
+       , textRangeManager(0)
        , provider(0)
        , layoutPosition(0)
        , anchoringRootArea(0)
@@ -92,6 +93,7 @@ public:
     KoChangeTracker *changeTracker;
 
     KoInlineTextObjectManager *inlineTextObjectManager;
+    KoTextRangeManager *textRangeManager;
     KoTextLayoutRootAreaProvider *provider;
     KoPostscriptPaintDevice *paintDevice;
     QList<KoTextLayoutRootArea *> rootAreaList;
@@ -187,6 +189,16 @@ KoInlineTextObjectManager *KoTextDocumentLayout::inlineTextObjectManager() const
 void KoTextDocumentLayout::setInlineTextObjectManager(KoInlineTextObjectManager *manager)
 {
     d->inlineTextObjectManager = manager;
+}
+
+KoTextRangeManager *KoTextDocumentLayout::textRangeManager() const
+{
+    return d->textRangeManager;
+}
+
+void KoTextDocumentLayout::setTextRangeManager(KoTextRangeManager *manager)
+{
+    d->textRangeManager = manager;
 }
 
 KoChangeTracker *KoTextDocumentLayout::changeTracker() const

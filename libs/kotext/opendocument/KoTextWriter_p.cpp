@@ -21,6 +21,7 @@
 
 
 #include <KoElementReference.h>
+#include <KoTextRangeManager.h>
 
 // A convenience function to get a listId from a list-format
 static KoListStyle::ListIdType ListId(const QTextListFormat &format)
@@ -849,13 +850,13 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                         if (z->type() == KoTextMeta::EndBookmark
                                 && !currentPairedInlineObjectsStack->isEmpty())
                             currentPairedInlineObjectsStack->pop();
-                    } else if (KoBookmark* z = dynamic_cast<KoBookmark*>(inlineObject)) {
+                    }/* else if (KoBookmark* z = dynamic_cast<KoBookmark*>(inlineObject)) {
                         if (z->type() == KoBookmark::StartBookmark)
                             currentPairedInlineObjectsStack->push(z->endBookmark());
                         if (z->type() == KoBookmark::EndBookmark
                                 && !currentPairedInlineObjectsStack->isEmpty())
                             currentPairedInlineObjectsStack->pop();
-                    }
+                    }*/
                 }
             } else {
                 // Normal block, easier to handle
@@ -870,10 +871,36 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                 int changeId = openTagRegion(currentFragment.position(), KoTextWriter::Private::Span, fragmentTagInformation);
 
                 QString text = currentFragment.text();
-                int spanFrom = fragmentStart >= from ? 0 : from;
+                int spanFrom = fragmentStart >= from ? fragmentStart : from;
                 int spanTo = to == -1 ? fragmentEnd : (fragmentEnd > to ? to : fragmentEnd);
-                if (spanFrom != fragmentStart || spanTo != fragmentEnd) { // avoid mid, if possible
-                    writer->addTextSpan(text.mid(spanFrom - fragmentStart, spanTo - spanFrom));
+                KoTextRangeManager *mgr = KoTextDocument(block.document()).textRangeManager();
+                QHash<int, KoTextRange *> textRanges = mgr->textRangesChangingWithin(spanFrom, spanTo, from, to);
+                // avoid mid, if possible
+                if (spanFrom != fragmentStart || spanTo != fragmentEnd || !textRanges.isEmpty()) {
+                    if (textRanges.isEmpty()) {
+                        writer->addTextSpan(text.mid(spanFrom - fragmentStart, spanTo - spanFrom));
+                    } else {
+                        // this is a more complicated case where there are text ranges too
+                        QList<int> dividers = textRanges.uniqueKeys();
+                        qSort(dividers);
+                        int subSpanFrom = spanFrom;
+                        // Find next divider
+                        foreach (int subSpanTo, dividers) {
+                            if (subSpanTo > subSpanFrom) {
+                                writer->addTextSpan(text.mid(subSpanFrom - fragmentStart, subSpanTo - subSpanFrom));
+                            }
+                            //Now write all ranges that happen here
+                            QList<KoTextRange *> relevants = textRanges.values(subSpanTo);
+                            foreach (const KoTextRange *range, relevants) {
+                                // the range will only actually save itself if matching the position
+                                range->saveOdf(context, subSpanTo);
+                            }
+                            subSpanFrom = subSpanTo;
+                        }
+                        if (spanTo > subSpanFrom) {
+                            writer->addTextSpan(text.mid(subSpanFrom - fragmentStart, spanTo - subSpanFrom));
+                        }
+                    }
                 } else {
                     writer->addTextSpan(text);
                 }

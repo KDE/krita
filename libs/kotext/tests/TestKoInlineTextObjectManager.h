@@ -36,7 +36,6 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoTextEditor.h>
 #include <KoTextDocument.h>
-#include <KoBookmark.h>
 
 class DummyInlineObject : public KoInlineObject
 {

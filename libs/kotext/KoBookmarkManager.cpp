@@ -45,10 +45,6 @@ KoBookmarkManager::~KoBookmarkManager()
 
 void KoBookmarkManager::insert(const QString &name, KoBookmark *bookmark)
 {
-    // we don't manage end bookmarks here. And that breaks when renaming
-    if (bookmark->type() == KoBookmark::EndBookmark) {
-        return;
-    }
     bookmark->setName(name);
     d->bookmarkHash[name] = bookmark;
     d->bookmarkNameList.append(name);
@@ -68,10 +64,6 @@ void KoBookmarkManager::rename(const QString &oldName, const QString &newName)
         if (i.key() == oldName) {
             KoBookmark *bookmark = d->bookmarkHash.take(i.key());
             bookmark->setName(newName);
-            // endbookmarks must have the same name as the corresponding startbookmark.
-            if (bookmark->endBookmark()) {
-                bookmark->endBookmark()->setName(newName);
-            }
             d->bookmarkHash.insert(newName, bookmark);
             int listPos = d->bookmarkNameList.indexOf(oldName);
             d->bookmarkNameList.replace(listPos, newName);
@@ -81,13 +73,13 @@ void KoBookmarkManager::rename(const QString &oldName, const QString &newName)
     }
 }
 
-KoBookmark *KoBookmarkManager::retrieveBookmark(const QString &name)
+KoBookmark *KoBookmarkManager::bookmark(const QString &name) const
 {
     KoBookmark *bookmark = d->bookmarkHash.value(name);
     return bookmark;
 }
 
-QList<QString> KoBookmarkManager::bookmarkNameList()
+QList<QString> KoBookmarkManager::bookmarkNameList() const
 {
     return d->bookmarkNameList;
 }

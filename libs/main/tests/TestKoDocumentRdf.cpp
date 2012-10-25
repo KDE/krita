@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  *
  * Copyright (c) 2011 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (c) 2012 C. Boemann <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -56,10 +57,9 @@ void TestKoDocumentRdf::testRememberNewInlineRdfObject()
     KoDocumentRdf rdfDoc;
     QTextDocument doc;
 
-    KoBookmark bm(&doc);
-    bm.setType(KoBookmark::SinglePosition);
+    QTextCursor cur(&doc);
+    KoBookmark bm(cur);
     bm.setName("test");
-    bm.setId(1);
 
     KoTextInlineRdf inlineRdf(&doc, &bm);
     inlineRdf.setXmlId(inlineRdf.createXmlId());

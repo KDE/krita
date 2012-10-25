@@ -36,7 +36,7 @@ void TestKoBookmarkManager::testCreation()
     KoBookmarkManager *manager = new KoBookmarkManager();
     Q_ASSERT(manager);
 
-    KoBookmark* bm = manager->retrieveBookmark("bla");
+    KoBookmark* bm = manager->bookmark("bla");
     Q_ASSERT(bm == 0);
 
     QList<QString> bmlist = manager->bookmarkNameList();
@@ -46,89 +46,20 @@ void TestKoBookmarkManager::testCreation()
 }
 
 
-void TestKoBookmarkManager::testRetrieve()
+void TestKoBookmarkManager::testInsertAndRetrieve()
 {
     KoBookmarkManager manager;
     QTextDocument doc;
 
     // Insert a startmark
-    KoBookmark *startmark = new KoBookmark(&doc);
-    startmark->setType(KoBookmark::StartBookmark);
-    manager.insert("start!", startmark);
-    manager.insert("another1", new KoBookmark(&doc));
-    manager.insert("another2", new KoBookmark(&doc));
+    QTextCursor cursor(doc.firstBlock());
+    KoBookmark *mark = new KoBookmark(cursor);
+    manager.insert("start!", mark);
+    manager.insert("another1", new KoBookmark(cursor));
+    manager.insert("another2", new KoBookmark(cursor));
 
-    KoBookmark *bm = manager.retrieveBookmark("start!");
-    Q_ASSERT(bm == startmark);
-}
-
-void TestKoBookmarkManager::testRetrieveByEndmark()
-{
-    QObject parent;
-
-    // create a document
-    QTextDocument doc;
-
-    KoInlineTextObjectManager inlineObjectManager(&parent);
-    KoTextDocument textDoc(&doc);
-    textDoc.setInlineTextObjectManager(&inlineObjectManager);
-
-    KoTextEditor editor(&doc);
-    textDoc.setTextEditor(&editor);
-
-    // enter some lorem ipsum
-    editor.insertText("bla bla bla");
-
-    KoBookmark *startmark = new KoBookmark(editor.document());
-    startmark->setType(KoBookmark::StartBookmark);
-    startmark->setName("start!");
-    editor.insertInlineObject(startmark);
-
-    editor.insertText("bla bla bla");
-
-    KoBookmark *endmark = new KoBookmark(editor.document());
-    endmark->setType(KoBookmark::EndBookmark);
-    startmark->setEndBookmark(endmark);
-    Q_ASSERT(endmark->name() == startmark->name());
-    editor.insertInlineObject(endmark);
-    Q_ASSERT(endmark->name() == startmark->name());
-
-    editor.insertText("bla bla bla");
-
-    KoBookmark *mark= inlineObjectManager.bookmarkManager()->retrieveBookmark(endmark->name());
-    Q_ASSERT(mark);
-    Q_ASSERT(mark == startmark);
-    Q_ASSERT(mark != endmark);
-}
-
-void TestKoBookmarkManager::testInsert()
-{
-    KoBookmarkManager manager;
-    QTextDocument doc;
-
-    // Insert a startmark
-    KoBookmark *startmark = new KoBookmark(&doc);
-    startmark->setType(KoBookmark::StartBookmark);
-    manager.insert("start!", startmark);
-    Q_ASSERT(startmark->name() == "start!");
-    Q_ASSERT(manager.bookmarkNameList().length() == 1);
-    Q_ASSERT(manager.bookmarkNameList().contains("start!"));
-
-    // Insert a single mark
-    KoBookmark *singleMark = new KoBookmark(&doc);
-    singleMark->setType(KoBookmark::SinglePosition);
-    manager.insert("single!", singleMark);
-    Q_ASSERT(singleMark->name() == "single!");
-    Q_ASSERT(manager.bookmarkNameList().length() == 2);
-    Q_ASSERT(manager.bookmarkNameList().contains("single!"));
-
-    // Insert an endmark -- this shouldn't actually do anything
-    KoBookmark *endmark = new KoBookmark(&doc);
-    endmark->setType(KoBookmark::EndBookmark);
-    manager.insert("endmark!", endmark);
-    Q_ASSERT(endmark->name() != "endmark!");
-    Q_ASSERT(manager.bookmarkNameList().length() == 2);
-    Q_ASSERT(!manager.bookmarkNameList().contains("endmark!"));
+    KoBookmark *bm = manager.bookmark("start!");
+    Q_ASSERT(bm == mark);
 }
 
 void TestKoBookmarkManager::testRemove()
@@ -136,16 +67,16 @@ void TestKoBookmarkManager::testRemove()
     KoBookmarkManager manager;
     QTextDocument doc;
 
-    // Insert a startmark
-    KoBookmark *startmark = new KoBookmark(&doc);
-    startmark->setType(KoBookmark::StartBookmark);
-    manager.insert("start!", startmark);
-    manager.insert("another1", new KoBookmark(&doc));
-    manager.insert("another2", new KoBookmark(&doc));
+    // Insert a mark
+    QTextCursor cursor(doc.firstBlock());
+    KoBookmark *mark = new KoBookmark(cursor);
+    manager.insert("start!", mark);
+    manager.insert("another1", new KoBookmark(cursor));
+    manager.insert("another2", new KoBookmark(cursor));
 
     manager.remove("start!");
 
-    Q_ASSERT(manager.retrieveBookmark("start!") == 0);
+    Q_ASSERT(manager.bookmark("start!") == 0);
     Q_ASSERT(manager.bookmarkNameList().length() == 2);
     Q_ASSERT(!manager.bookmarkNameList().contains("start!"));
 }
@@ -155,29 +86,20 @@ void TestKoBookmarkManager::testRename()
     KoBookmarkManager manager;
     QTextDocument doc;
 
-    // Insert a startmark
-    KoBookmark *startmark = new KoBookmark(&doc);
-    startmark->setType(KoBookmark::StartBookmark);
-    manager.insert("start!", startmark);
-    Q_ASSERT(startmark->name() == "start!");
+    // Insert a mark
+    QTextCursor cursor(doc.firstBlock());
+    KoBookmark *mark = new KoBookmark(cursor);
+    manager.insert("start!", mark);
+    Q_ASSERT(mark->name() == "start!");
     Q_ASSERT(manager.bookmarkNameList().length() == 1);
     Q_ASSERT(manager.bookmarkNameList().contains("start!"));
 
-    // Insert an endmark -- this shouldn't actually do anything
-    KoBookmark *endmark = new KoBookmark(&doc);
-    endmark->setType(KoBookmark::EndBookmark);
-    startmark->setEndBookmark(endmark);
-    Q_ASSERT(endmark->name() == "start!");
-    Q_ASSERT(manager.bookmarkNameList().length() == 1);
-
-    KoBookmark *another = new KoBookmark(&doc);
-    another->setType(KoBookmark::StartBookmark);
+    KoBookmark *another = new KoBookmark(cursor);
     manager.insert("another", another);
 
     manager.rename("start!", "renamed!");
 
-    Q_ASSERT(startmark->name() == "renamed!");
-    Q_ASSERT(endmark->name() == "renamed!");
+    Q_ASSERT(mark->name() == "renamed!");
     Q_ASSERT(another->name() == "another");
 }
 

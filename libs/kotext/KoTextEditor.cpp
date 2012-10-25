@@ -25,6 +25,7 @@
 
 #include "KoDocumentRdfBase.h"
 #include "KoBookmark.h"
+#include "KoTextRangeManager.h"
 #include "KoInlineTextObjectManager.h"
 #include "KoInlineNote.h"
 #include "KoInlineCite.h"
@@ -444,39 +445,11 @@ void KoTextEditor::addBookmark(const QString &name)
     }
 
     d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Insert Bookmark"));
-    KoBookmark *bookmark = new KoBookmark(d->document);
+    KoBookmark *bookmark = new KoBookmark(d->caret);
     bookmark->setName(name);
-    int startPos = -1, endPos = -1, caretPos = -1;
 
-    if (d->caret.hasSelection()) {
-        startPos = d->caret.selectionStart();
-        endPos = d->caret.selectionEnd();
-        caretPos = d->caret.position();
-
-        d->caret.setPosition(endPos);
-        KoBookmark *endBookmark = new KoBookmark(d->document);
-        endBookmark->setName(name);
-        bookmark->setType(KoBookmark::StartBookmark);
-        endBookmark->setType(KoBookmark::EndBookmark);
-        KoTextDocument(d->document).inlineTextObjectManager()->insertInlineObject(d->caret, endBookmark);
-        bookmark->setEndBookmark(endBookmark);
-        d->caret.setPosition(startPos);
-    } else {
-        bookmark->setType(KoBookmark::SinglePosition);
-    }
     // TODO the macro & undo things
-    KoTextDocument(d->document).inlineTextObjectManager()->insertInlineObject(d->caret, bookmark);
-    if (startPos != -1) {
-        // TODO repaint selection properly
-        if (caretPos == startPos) {
-            startPos = endPos + 1;
-            endPos = caretPos;
-        } else {
-            endPos += 2;
-        }
-        d->caret.setPosition(startPos);
-        d->caret.setPosition(endPos, QTextCursor::KeepAnchor);
-    }
+    KoTextDocument(d->document).textRangeManager()->insert(bookmark);
     d->updateState(KoTextEditor::Private::NoOp);
 }
 
@@ -918,7 +891,7 @@ void KoTextEditor::deletePreviousChar()
     emit cursorPositionChanged();
 }
 
-const QTextDocument *KoTextEditor::document() const
+QTextDocument *KoTextEditor::document() const
 {
     return d->caret.document();
 }

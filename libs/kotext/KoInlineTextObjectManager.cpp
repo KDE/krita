@@ -24,7 +24,6 @@
 #include "InsertTextLocator_p.h"
 #include "KoInlineObjectRegistry.h"
 #include "KoTextLocator.h"
-#include "KoBookmark.h"
 #include "KoInlineNote.h"
 #include "KoOdfNotesConfiguration.h"
 #include "KoTextDocument.h"
@@ -104,12 +103,6 @@ void KoInlineTextObjectManager::insertObject(KoInlineObject *object)
             object->propertyChanged((KoInlineObject::Property)(i.key()), i.value());
     }
 
-    KoBookmark *bookmark = dynamic_cast<KoBookmark *>(object);
-    if (bookmark
-            && (bookmark->type() == KoBookmark::StartBookmark
-                || bookmark->type() == KoBookmark::SinglePosition)) {
-        m_bookmarkManager.insert(bookmark->name(), bookmark);
-    }
     // reset to use old format so that the InlineInstanceId is no longer set.
 }
 
@@ -141,11 +134,6 @@ void KoInlineTextObjectManager::removeInlineObject(KoInlineObject *object)
     m_objects.remove(id);
     m_deletedObjects[id] = object;
     m_listeners.removeAll(object);
-
-    KoBookmark *bookmark = dynamic_cast<KoBookmark *>(object);
-    if (bookmark) {
-        m_bookmarkManager.remove(bookmark->name());
-    }
 }
 
 void KoInlineTextObjectManager::setProperty(KoInlineObject::Property key, const QVariant &value)
@@ -194,11 +182,6 @@ const KoVariableManager *KoInlineTextObjectManager::variableManager() const
 KoVariableManager *KoInlineTextObjectManager::variableManager()
 {
     return &m_variableManager;
-}
-
-KoBookmarkManager *KoInlineTextObjectManager::bookmarkManager()
-{
-    return &m_bookmarkManager;
 }
 
 void KoInlineTextObjectManager::removeProperty(KoInlineObject::Property key)

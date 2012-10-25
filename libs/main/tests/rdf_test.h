@@ -45,9 +45,8 @@ private slots:
 private:
 
     // @return the xml id for the inserted item
-    QString insertSemItem(KoTextEditor &editor,
+    QString insertTableWithSemItem(KoTextEditor &editor,
                           KoDocumentRdf &rdfDoc,
-                          QObject &parent,
                           const QString name);
 };
 

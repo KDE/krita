@@ -30,6 +30,7 @@ class KoBookmark;
 class QTextDocument;
 class QTexttable;
 class KoInlineTextObjectManager;
+class KoTextRangeManager;
 class KoInlineNote;
 
 class TEXTLAYOUT_EXPORT KoPointedAt
@@ -38,7 +39,7 @@ public:
     KoPointedAt();
     KoPointedAt(KoPointedAt *other);
 
-    void fillInLinks(const QTextCursor &cursor, KoInlineTextObjectManager *inlineManager);
+    void fillInLinks(const QTextCursor &cursor, KoInlineTextObjectManager *inlineManager, KoTextRangeManager *rangeManager);
 
     enum TableHit {
           None

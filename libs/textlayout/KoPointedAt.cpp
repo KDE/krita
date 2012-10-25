@@ -23,6 +23,7 @@
 #include <KoBookmark.h>
 #include <KoInlineNote.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoTextRangeManager.h>
 
 #include <KDebug>
 
@@ -53,7 +54,7 @@ KoPointedAt::KoPointedAt(KoPointedAt *other)
     table = other->table;
 }
 
-void KoPointedAt::fillInLinks(const QTextCursor &cursor, KoInlineTextObjectManager *inlineManager)
+void KoPointedAt::fillInLinks(const QTextCursor &cursor, KoInlineTextObjectManager *inlineManager, KoTextRangeManager *rangeManager)
 {
     bookmark = 0;
     externalHRef.clear();
@@ -71,7 +72,7 @@ void KoPointedAt::fillInLinks(const QTextCursor &cursor, KoInlineTextObjectManag
             href = href.right(href.size() - 1);
 
             if (!href.isEmpty()) {
-                bookmark = inlineManager->bookmarkManager()->retrieveBookmark(href);
+                bookmark = rangeManager->bookmarkManager()->bookmark(href);
             }
             return;
         } else {

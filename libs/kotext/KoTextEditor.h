@@ -316,7 +316,7 @@ public slots:
 
     void deletePreviousChar();
 
-    const QTextDocument *document() const;
+    QTextDocument *document() const;
 
     /// Same as Qt, only to be used inside KUndo2Commands
     KUndo2Command *beginEditBlock(QString title = QString());

@@ -29,10 +29,10 @@
 #include <KoStyleManager.h>
 #include <KoDocumentResourceManager.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoTextRangeManager.h>
 #include <changetracker/KoChangeTracker.h>
 #include <KoImageCollection.h>
 #include <KoShapeLoadingContext.h>
-#include <KoInlineNote.h>
 
 #include <KoIcon.h>
 
@@ -63,16 +63,24 @@ TextShapeFactory::TextShapeFactory()
 KoShape *TextShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
     KoInlineTextObjectManager *manager = 0;
+    KoTextRangeManager *locationManager = 0;
     if (documentResources && documentResources->hasResource(KoText::InlineTextObjectManager)) {
         QVariant variant = documentResources->resource(KoText::InlineTextObjectManager);
         if (variant.isValid()) {
-            manager = variant.value<KoInlineTextObjectManager*>();
+            manager = variant.value<KoInlineTextObjectManager *>();
+        }
+        variant = documentResources->resource(KoText::TextRangeManager);
+        if (variant.isValid()) {
+            locationManager = variant.value<KoTextRangeManager *>();
         }
     }
     if (!manager) {
         manager = new KoInlineTextObjectManager();
     }
-    TextShape *text = new TextShape(manager);
+    if (!locationManager) {
+        locationManager = new KoTextRangeManager();
+    }
+    TextShape *text = new TextShape(manager, locationManager);
     if (documentResources) {
         KoTextDocument document(text->textShapeData()->document());
 
@@ -134,6 +142,9 @@ void TextShapeFactory::newDocumentResourceManager(KoDocumentResourceManager *man
     QVariant variant;
     variant.setValue<KoInlineTextObjectManager*>(new KoInlineTextObjectManager(manager));
     manager->setResource(KoText::InlineTextObjectManager, variant);
+
+    variant.setValue<KoTextRangeManager *>(new KoTextRangeManager());
+    manager->setResource(KoText::TextRangeManager, variant);
 
     if (!manager->hasResource(KoDocumentResourceManager::UndoStack)) {
 //        kWarning(32500) << "No KUndo2Stack found in the document resource manager, creating a new one";

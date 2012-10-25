@@ -52,6 +52,7 @@
 #include <KoTextEditingPlugin.h>
 #include <KoTextEditingRegistry.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoTextRangeManager.h>
 #include <KoStyleManager.h>
 #include <KoTextOdfSaveHelper.h>
 #include <KoTextDrag.h>
@@ -537,6 +538,9 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
 
     KoInlineTextObjectManager *inlineManager = new KoInlineTextObjectManager();
     KoTextDocument(document).setInlineTextObjectManager(inlineManager);
+
+    KoTextRangeManager *locationManager = new KoTextRangeManager();
+    KoTextDocument(document).setTextRangeManager(locationManager);
 
     m_textEditor = new KoTextEditor(document);
     KoTextDocument(document).setTextEditor(m_textEditor.data());
@@ -1504,7 +1508,7 @@ void TextTool::mouseReleaseEvent(KoPointerEvent *event)
     // Is there an anchor here ?
     if ((event->modifiers() & Qt::ControlModifier) && !m_textEditor.data()->hasSelection()) {
         if (pointedAt.bookmark) {
-            m_textEditor.data()->setPosition(pointedAt.bookmark->position());
+            m_textEditor.data()->setPosition(pointedAt.bookmark->rangeStart());
             ensureCursorVisible();
             event->accept();
             return;

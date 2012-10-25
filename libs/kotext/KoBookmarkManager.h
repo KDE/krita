@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
+ * Copyright (C) 2012 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -45,10 +46,10 @@ public:
     ~KoBookmarkManager();
 
     /// @return a bookmark with the specified name, or 0 if there is none
-    KoBookmark *retrieveBookmark(const QString &name);
+    KoBookmark *bookmark(const QString &name) const;
 
     /// @return a list of QString containing all bookmark names
-    QList<QString> bookmarkNameList();
+    QList<QString> bookmarkNameList() const;
 
 public slots:
     /**

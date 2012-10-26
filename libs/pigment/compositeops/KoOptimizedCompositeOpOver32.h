@@ -43,6 +43,7 @@ struct OverCompositor32 {
 
         src_alpha = KoStreamedMath::fetch_alpha_32<src_aligned>(src);
 
+        bool haveOpacity = opacity != 1.0;
         Vc::float_v opacity_norm_vec(opacity);
 
         Vc::float_v uint8Max((float)255.0);
@@ -82,7 +83,7 @@ struct OverCompositor32 {
             new_alpha = dst_alpha;
             src_blend = src_alpha * uint8MaxRec1;
         } else if ((dst_alpha == zeroValue).isFull()) {
-            // new_alpha = /* don't bother */;
+            new_alpha = src_alpha;
             src_blend = oneValue;
         } else {
             /**
@@ -102,11 +103,20 @@ struct OverCompositor32 {
             dst_c2 = src_blend * (src_c2 - dst_c2) + dst_c2;
             dst_c3 = src_blend * (src_c3 - dst_c3) + dst_c3;
 
-            KoStreamedMath::write_channels_32(dst, new_alpha, dst_c1, dst_c2, dst_c3);
         } else {
-            memcpy(dst, src, 4 * Vc::float_v::Size);
+            if (!haveMask && !haveOpacity) {
+                memcpy(dst, src, 4 * Vc::float_v::Size);
+                return;
+            } else {
+                // opacity has changed the alpha of the source,
+                // so we can't just memcpy the bytes
+                dst_c1 = src_c1;
+                dst_c2 = src_c2;
+                dst_c3 = src_c3;
+            }
         }
 
+        KoStreamedMath::write_channels_32(dst, new_alpha, dst_c1, dst_c2, dst_c3);
     }
 
 #endif /* HAVE_VC */

@@ -15,4 +15,6 @@ Name[x-test]=xxDesign Templatesxx
 X-KDE-DefaultTab=true
 
 [Dolphin]
-Timestamp=2012,7,7,14,50,38
+Timestamp=2012,10,26,9,29,30
+Version=3
+ViewMode=1

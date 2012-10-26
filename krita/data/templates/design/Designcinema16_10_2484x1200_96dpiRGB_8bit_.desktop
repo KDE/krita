@@ -13,5 +13,5 @@ Name[sv]=Design film 16:10 [ 2484x1200, 96 punkter/tum RGB, 8 bitar ]
 Name[uk]=Компонування кіноекрана 16:10 [2484⨯1200, 96 т./д., RGB, 8 бітів]
 Name[x-test]=xxDesign cinema 16:10 [ 2484x1200 , 96dpi RGB , 8bit ]xx
 Type=Link
-URL[$e]=.source/Designcinema16_10[2484x1200_96dpiRGB_8bit].kra
+URL[$e]=.source/Designcinema16_10_2484x1200_96dpiRGB_8bit_.kra
 X-KDE-Hidden=false

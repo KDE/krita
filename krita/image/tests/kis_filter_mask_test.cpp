@@ -21,6 +21,7 @@
 
 #include <KoColorSpaceRegistry.h>
 
+#include "kis_selection.h"
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_configuration.h"
 #include "kis_filter_mask.h"
@@ -72,6 +73,7 @@ void KisFilterMaskTest::testProjectionNotSelected()
     initImage(image, layer, projection, mask);
 
     projection->convertFromQImage(qimage, 0, 0, 0);
+    mask->initSelection(0, layer);
     mask->createNodeProgressProxy();
     mask->select(qimage.rect(), MIN_SELECTED);
     mask->apply(projection, QRect(0, 0, qimage.width(), qimage.height()));
@@ -106,6 +108,7 @@ void KisFilterMaskTest::testProjectionSelected()
     initImage(image, layer, projection, mask);
     projection->convertFromQImage(qimage, 0, 0, 0);
 
+    mask->initSelection(0, layer);
     mask->select(qimage.rect(), MAX_SELECTED);
     mask->apply(projection, QRect(0, 0, qimage.width(), qimage.height()));
     QCOMPARE(mask->exactBounds(), QRect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT));

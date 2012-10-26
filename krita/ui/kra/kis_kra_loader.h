@@ -65,7 +65,7 @@ private:
 
     KisNodeSP loadNodes(const KoXmlElement& element, KisImageWSP image, KisNodeSP parent);
 
-    KisNodeSP loadNode(const KoXmlElement& elem, KisImageWSP image);
+    KisNodeSP loadNode(const KoXmlElement& elem, KisImageWSP image, KisNodeSP parent);
 
     KisNodeSP loadPaintLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
 
@@ -79,11 +79,11 @@ private:
 
     KisNodeSP loadCloneLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
 
-    KisNodeSP loadFilterMask(const KoXmlElement& elem);
+    KisNodeSP loadFilterMask(const KoXmlElement& elem, KisNodeSP parent);
 
-    KisNodeSP loadTransparencyMask(const KoXmlElement& elem);
+    KisNodeSP loadTransparencyMask(const KoXmlElement& elem, KisNodeSP parent);
 
-    KisNodeSP loadSelectionMask(KisImageWSP image, const KoXmlElement& elem);
+    KisNodeSP loadSelectionMask(KisImageWSP image, const KoXmlElement& elem, KisNodeSP parent);
 
     void loadCompositions(const KoXmlElement& elem, KisImageWSP image);
 

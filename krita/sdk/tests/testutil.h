@@ -305,4 +305,28 @@ public:
 
 }
 
+#include <kis_paint_layer.h>
+#include <kis_image.h>
+#include "kis_undo_stores.h"
+
+namespace TestUtil {
+
+struct MaskParent
+{
+    MaskParent()
+        : imageRect(0,0,512,512) {
+        const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+        image = new KisImage(new KisSurrogateUndoStore(), imageRect.width(), imageRect.height(), cs, "test image");
+        layer = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
+        image->addNode(layer);
+    }
+
+
+    const QRect imageRect;
+    KisImageSP image;
+    KisPaintLayerSP layer;
+};
+
+}
+
 #endif

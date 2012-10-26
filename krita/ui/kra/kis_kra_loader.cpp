@@ -280,7 +280,7 @@ KisNodeSP KisKraLoader::loadNodes(const KoXmlElement& element, KisImageWSP image
 
             if (node.nodeName().toUpper() == LAYERS.toUpper() || node.nodeName().toUpper() == MASKS.toUpper()) {
                 for (child = node.lastChild(); !child.isNull(); child = child.previousSibling()) {
-                    KisNodeSP node = loadNode(child.toElement(), image);
+                    KisNodeSP node = loadNode(child.toElement(), image, parent);
                     if (!node) {
 #ifdef __GNUC__
 #warning "KisKraLoader::loadNodes: report node load failures back to the user!"
@@ -301,7 +301,7 @@ KisNodeSP KisKraLoader::loadNodes(const KoXmlElement& element, KisImageWSP image
     return parent;
 }
 
-KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image)
+KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image, KisNodeSP parent)
 {
     // Nota bene: If you add new properties to layers, you should
     // ALWAYS define a default value in case the property is not
@@ -368,11 +368,11 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image)
     else if (nodeType == CLONE_LAYER)
         node = loadCloneLayer(element, image, name, colorSpace, opacity);
     else if (nodeType == FILTER_MASK)
-        node = loadFilterMask(element);
+        node = loadFilterMask(element, parent);
     else if (nodeType == TRANSPARENCY_MASK)
-        node = loadTransparencyMask(element);
+        node = loadTransparencyMask(element, parent);
     else if (nodeType == SELECTION_MASK)
-        node = loadSelectionMask(image, element);
+        node = loadSelectionMask(image, element, parent);
     else
         warnKrita << "Trying to load layer of unsupported type " << nodeType;
 
@@ -577,7 +577,7 @@ KisNodeSP KisKraLoader::loadCloneLayer(const KoXmlElement& element, KisImageWSP 
 }
 
 
-KisNodeSP KisKraLoader::loadFilterMask(const KoXmlElement& element)
+KisNodeSP KisKraLoader::loadFilterMask(const KoXmlElement& element, KisNodeSP parent)
 {
     QString attr;
     KisFilterMask* mask;
@@ -601,25 +601,28 @@ KisNodeSP KisKraLoader::loadFilterMask(const KoXmlElement& element)
 
     // We'll load the configuration and the selection later.
     mask = new KisFilterMask();
+    mask->initSelection(0, dynamic_cast<KisLayer*>(parent.data()));
     mask->setFilter(kfc);
     Q_CHECK_PTR(mask);
 
     return mask;
 }
 
-KisNodeSP KisKraLoader::loadTransparencyMask(const KoXmlElement& element)
+KisNodeSP KisKraLoader::loadTransparencyMask(const KoXmlElement& element, KisNodeSP parent)
 {
     Q_UNUSED(element);
     KisTransparencyMask* mask = new KisTransparencyMask();
+    mask->initSelection(0, dynamic_cast<KisLayer*>(parent.data()));
     Q_CHECK_PTR(mask);
 
     return mask;
 }
 
-KisNodeSP KisKraLoader::loadSelectionMask(KisImageWSP image, const KoXmlElement& element)
+KisNodeSP KisKraLoader::loadSelectionMask(KisImageWSP image, const KoXmlElement& element, KisNodeSP parent)
 {
     Q_UNUSED(element);
     KisSelectionMaskSP mask = new KisSelectionMask(image);
+    mask->initSelection(0, dynamic_cast<KisLayer*>(parent.data()));
     bool active = element.attribute(ACTIVE, "1") == "0" ? false : true;
     mask->setActive(active);
     Q_CHECK_PTR(mask);

@@ -156,7 +156,8 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
         loadPaintDevice(pixelSelection, getLocation(layer, ".selection"));
         layer->setSelection(selection);
     } else if (m_syntaxVersion == 2) {
-        layer->setSelection(loadSelection(getLocation(layer)));
+        loadSelection(getLocation(layer), layer->selection());
+
     } else {
         // We use the default, empty selection
     }
@@ -185,7 +186,8 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
         return false;
     }
 
-    layer->setSelection(loadSelection(getLocation(layer)));
+
+    loadSelection(getLocation(layer), layer->selection());
 
     loadFilterConfiguration(layer->generator(), getLocation(layer, DOT_FILTERCONFIG));
 
@@ -214,20 +216,20 @@ bool KisKraLoadVisitor::visit(KisCloneLayer *layer)
 
 bool KisKraLoadVisitor::visit(KisFilterMask *mask)
 {
-    mask->setSelection(loadSelection(getLocation(mask)));
+    loadSelection(getLocation(mask), mask->selection());
     loadFilterConfiguration(mask->filter(), getLocation(mask, DOT_FILTERCONFIG));
     return true;
 }
 
 bool KisKraLoadVisitor::visit(KisTransparencyMask *mask)
 {
-    mask->setSelection(loadSelection(getLocation(mask)));
+    loadSelection(getLocation(mask), mask->selection());
     return true;
 }
 
 bool KisKraLoadVisitor::visit(KisSelectionMask *mask)
 {
-    mask->setSelection(loadSelection(getLocation(mask)));
+    loadSelection(getLocation(mask), mask->selection());
     return true;
 }
 
@@ -338,14 +340,12 @@ bool KisKraLoadVisitor::loadMetaData(KisNode* node)
     return result;
 }
 
-KisSelectionSP KisKraLoadVisitor::loadSelection(const QString& location)
+void KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP dstSelection)
 {
-    KisSelectionSP selection = new KisSelection();
-
     // Pixel selection
     QString pixelSelectionLocation = location + DOT_PIXEL_SELECTION;
     if (m_store->hasFile(pixelSelectionLocation)) {
-        KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
+        KisPixelSelectionSP pixelSelection = dstSelection->getOrCreatePixelSelection();
         loadPaintDevice(pixelSelection, pixelSelectionLocation);
     }
 
@@ -355,14 +355,11 @@ KisSelectionSP KisKraLoadVisitor::loadSelection(const QString& location)
         m_store->pushDirectory();
         m_store->enterDirectory(shapeSelectionLocation) ;
 
-        KisShapeSelection* shapeSelection = new KisShapeSelection(m_image, selection);
-        selection->setShapeSelection(shapeSelection);
+        KisShapeSelection* shapeSelection = new KisShapeSelection(m_image, dstSelection);
+        dstSelection->setShapeSelection(shapeSelection);
         shapeSelection->loadSelection(m_store);
         m_store->popDirectory();
     }
-
-    return selection;
-
 }
 
 QString KisKraLoadVisitor::getLocation(KisNode* node, const QString& suffix)

@@ -450,9 +450,9 @@ void KisView2::dropEvent(QDropEvent *event)
 
             QByteArray ba = event->mimeData()->data("application/x-krita-node");
 
-            KisPart2 *p = new KisPart2();
-            KisDoc2 tempDoc(p);
-            p->setDocument(&tempDoc);
+            KisPart2 part;
+            KisDoc2 tempDoc(&part);
+            part.setDocument(&tempDoc);
 
             tempDoc.loadNativeFormatFromStore(ba);
 

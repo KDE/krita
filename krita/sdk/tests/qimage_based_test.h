@@ -86,8 +86,7 @@ protected:
 
         KisTransparencyMaskSP transparencyMask1 = new KisTransparencyMask();
         transparencyMask1->setName("tmask1");
-        transparencyMask1->selection()->clear();
-        transparencyMask1->selection()->getOrCreatePixelSelection()->select(transpRect);
+        transparencyMask1->testingInitSelection(transpRect);
 
         KisCloneLayerSP cloneLayer1 =
             new KisCloneLayer(paintLayer1, image, "clone1", OPACITY_OPAQUE_U8);

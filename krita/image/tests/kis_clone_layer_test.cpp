@@ -200,7 +200,10 @@ void KisCloneLayerTest::testUndoingRemovingSource()
     QCOMPARE(image->root()->firstChild()->name(), QString("paint1"));
 
     KUndo2Command *cmd1 = new KisImageLayerRemoveCommand(image, paintLayer1);
+
+    image->barrierLock();
     cmd1->redo();
+    image->unlock();
 
     QCOMPARE(image->root()->lastChild()->name(), QString("clone_of_p1"));
     QVERIFY(image->root()->lastChild() != KisNodeSP(cloneLayer1));
@@ -208,12 +211,22 @@ void KisCloneLayerTest::testUndoingRemovingSource()
     KisNodeSP reincarnatedLayer = image->root()->lastChild();
 
     KUndo2Command *cmd2 = new KisImageLayerRemoveCommand(image, reincarnatedLayer);
+
+    image->barrierLock();
     cmd2->redo();
+    image->unlock();
 
+    image->barrierLock();
     cmd2->undo();
-    cmd1->undo();
+    image->unlock();
 
+    image->barrierLock();
+    cmd1->undo();
+    image->unlock();
+
+    image->barrierLock();
     cmd1->redo();
+    image->unlock();
 
     QCOMPARE(image->root()->lastChild()->name(), QString("clone_of_p1"));
     QCOMPARE(image->root()->lastChild(), reincarnatedLayer);

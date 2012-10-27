@@ -178,9 +178,10 @@ public:
 
             QRect r = m_image->bounds();
 
-            KisPart2 *p = new KisPart2();
-            KisDoc2 d(p);
-            p->setDocument(&d);
+            KisPart2 part;
+            KisDoc2 d(&part);
+            part.setDocument(&d);
+
             d.prepareForImport();
 
             KisImageWSP dst = new KisImage(d.createUndoStore(), r.width(), r.height(), m_image->colorSpace(), layer->name());
@@ -885,9 +886,9 @@ void KisLayerManager::saveLayerAsImage()
 
     QRect r = image->bounds();
 
-    KisPart2 *p = new KisPart2();
-    KisDoc2 d(p);
-    p->setDocument(&d);
+    KisPart2 part;
+    KisDoc2 d(&part);
+    part.setDocument(&d);
 
     d.prepareForImport();
 

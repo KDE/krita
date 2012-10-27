@@ -59,10 +59,9 @@ void KisKraSaverTest::testRoundTrip()
 
     delete doc;
 
-
-    KisPart2 *p = new KisPart2();
-    KisDoc2 doc2(p);
-    p->setDocument(&doc2);
+    KisPart2 part;
+    KisDoc2 doc2(&part);
+    part.setDocument(&doc2);
 
     doc2.loadNativeFormat("roundtriptest.kra");
 

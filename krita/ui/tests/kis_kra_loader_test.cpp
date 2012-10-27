@@ -31,9 +31,9 @@
 
 void KisKraLoaderTest::testLoading()
 {
-    KisPart2 *p = new KisPart2();
-    KisDoc2 doc(p);
-    p->setDocument(&doc);
+    KisPart2 part;
+    KisDoc2 doc(&part);
+    part.setDocument(&doc);
 
     doc.loadNativeFormat(QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra");
     KisImageWSP image = doc.image();

@@ -33,9 +33,10 @@ KisShapeControllerTest::~KisShapeControllerTest()
 KisDummiesFacadeBase* KisShapeControllerTest::dummiesFacadeFactory()
 {
 
-    KisPart2 *p = new KisPart2();
-    KisDoc2 *doc = new KisDoc2(p);
-    p->setDocument(doc);
+    m_part = new KisPart2();
+    m_doc = new KisDoc2(m_part);
+    m_part->setDocument(m_doc);
+
     m_nameServer = new KisNameServer();
     return new KisShapeController(m_doc, m_nameServer);
 }
@@ -45,6 +46,7 @@ void KisShapeControllerTest::destroyDummiesFacade(KisDummiesFacadeBase *dummiesF
     delete dummiesFacade;
     delete m_nameServer;
     delete m_doc;
+    delete m_part;
 }
 
 QTEST_KDEMAIN(KisShapeControllerTest, GUI)

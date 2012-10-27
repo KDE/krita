@@ -65,9 +65,9 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
                 continue;
             }
 
-            KisPart2 *p = new KisPart2();
-            KisDoc2 doc(p);
-            p->setDocument(&doc);
+            KisPart2 part;
+            KisDoc2 doc(&part);
+            part.setDocument(&doc);
 
             KoFilterManager manager(&doc);
             manager.setBatchMode(true);

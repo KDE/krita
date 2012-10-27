@@ -82,9 +82,9 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
         Q_ASSERT(!store->bad());
         store->disallowNameExpansion();
 
-        KisPart2 *p = new KisPart2();
-        KisDoc2 doc(p);
-        p->setDocument(&doc);
+        KisPart2 part;
+        KisDoc2 doc(&part);
+        part.setDocument(&doc);
 
         QRect rc = node->exactBounds();
 

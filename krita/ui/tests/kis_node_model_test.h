@@ -24,6 +24,7 @@
 #include "empty_nodes_test.h"
 
 class KisDoc2;
+class KisPart2;
 class KisNameServer;
 class KisShapeController;
 class KisNodeDummy;
@@ -46,6 +47,7 @@ private slots:
 
 private:
     KisDoc2 *m_doc;
+    KisPart2 *m_part;
     KisNameServer *m_nameServer;
     KisShapeController *m_shapeController;
     KisNodeModel *m_nodeModel;

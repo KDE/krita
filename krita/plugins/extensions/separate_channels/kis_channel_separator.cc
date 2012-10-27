@@ -253,9 +253,10 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
                 KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), ch->name(), OPACITY_OPAQUE_U8, *deviceIt));
                 QRect r = l->exactBounds();
 
-                KisPart2 *p = new KisPart2();
-                KisDoc2 d(p);
-                p->setDocument(&d);
+                KisPart2 part;
+                KisDoc2 d(&part);
+                part.setDocument(&d);
+
                 d.prepareForImport();
 
                 KisImageWSP dst = KisImageWSP(new KisImage(d.createUndoStore(), r.width(), r.height(), (*deviceIt)->colorSpace(), l->name()));

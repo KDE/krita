@@ -86,6 +86,7 @@ KisDoc2* createCompleteDocument()
 {
     KisImageWSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test for roundtrip", false);
 
+    // FIXME: p will leak here
     KisPart2 *p = new KisPart2();
     KisDoc2 *doc = new KisDoc2(p);
     p->setDocument(doc);
@@ -184,6 +185,7 @@ KisDoc2* createCompleteDocument()
 
     KisSelectionMaskSP selectionMask2 = new KisSelectionMask(image);
     selectionMask2->setName("selectionMask2");
+    selectionMask2->setSelection(createPixelSelection(paintLayer2->paintDevice()));
     image->addNode(selectionMask2, paintLayer2);
 
     return doc;

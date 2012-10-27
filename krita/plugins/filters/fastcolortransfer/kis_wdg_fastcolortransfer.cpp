@@ -70,9 +70,10 @@ KisPropertiesConfiguration* KisWdgFastColorTransfer::configuration() const
     KisPaintDeviceSP ref;
 
     dbgPlugins << "Use as reference file : " << fileName;
-    KisPart2 *p = new KisPart2();
-    KisDoc2 d(p);
-    p->setDocument(&d);
+
+    KisPart2 part;
+    KisDoc2 d(&part);
+    part.setDocument(&d);
 
     KoFilterManager manager(&d);
     KoFilter::ConversionStatus status;

@@ -52,6 +52,7 @@ void KisPaintLayerTest::testProjection()
     QVERIFY(layer->paintDevice().data() == layer->projection().data());
 
     KisTransparencyMaskSP transparencyMask = new KisTransparencyMask();
+    transparencyMask->initSelection(0, layer);
     transparencyMask->selection()->getOrCreatePixelSelection()->invert();
     image->addNode(transparencyMask.data(), layer.data());
 
@@ -80,10 +81,10 @@ void KisPaintLayerTest::testProjection()
     // The selection is initially empty, so after an update, all pixels are still visible
     layer->updateProjection(qimage.rect());
 
-    // By default a new transparency mask blanks out the entire layer (photoshop mode "hide all")
+    // We've inverted the mask, so now nothing is seen
     KisRectConstIteratorSP it = layer->projection()->createRectConstIteratorNG(0, 0, qimage.width(), qimage.height());
     do {
-        QVERIFY(cs->opacityU8(it->oldRawData()) == OPACITY_OPAQUE_U8);
+        QVERIFY(cs->opacityU8(it->oldRawData()) == OPACITY_TRANSPARENT_U8);
     } while (it->nextPixel());
 
     // Now fill the layer with some opaque pixels

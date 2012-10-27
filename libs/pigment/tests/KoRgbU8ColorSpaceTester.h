@@ -29,6 +29,7 @@ private slots:
     void testBasics();
     void testMixColors();
     void testCompositeOps();
+    void testCompositeOpsWithChannelFlags();
 };
 
 #endif

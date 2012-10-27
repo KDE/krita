@@ -47,6 +47,7 @@ class KoCompositeOpBase : public KoCompositeOp
     typedef typename _CSTraits::channels_type channels_type;
     static const qint32 channels_nb = _CSTraits::channels_nb;
     static const qint32 alpha_pos   = _CSTraits::alpha_pos;
+    static const qint32 pixel_size   = _CSTraits::pixelSize;
 
 public:
     KoCompositeOpBase(const KoColorSpace* cs, const QString& id, const QString& description, const QString& category)
@@ -104,6 +105,10 @@ private:
                 channels_type srcAlpha = (alpha_pos == -1) ? unitValue<channels_type>() : src[alpha_pos];
                 channels_type dstAlpha = (alpha_pos == -1) ? unitValue<channels_type>() : dst[alpha_pos];
                 channels_type mskAlpha = useMask ? scale<channels_type>(*mask) : unitValue<channels_type>();
+
+                if (!allChannelFlags && dstAlpha == zeroValue<channels_type>()) {
+                    memset(dst, 0, pixel_size);
+                }
 
                 channels_type newDstAlpha = _compositeOp::template composeColorChannels<alphaLocked,allChannelFlags>(
                     src, srcAlpha, dst, dstAlpha, mskAlpha, opacity, channelFlags

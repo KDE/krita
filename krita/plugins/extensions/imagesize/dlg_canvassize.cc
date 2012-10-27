@@ -279,7 +279,7 @@ void DlgCanvasSize::loadAnchorIcons()
     m_anchorIcons[NORTH] = koIcon("arrow_north");
     m_anchorIcons[NORTH_EAST] = koIcon("arrow_north_east");
     m_anchorIcons[EAST] = koIcon("arrow_east");
-    m_anchorIcons[CENTER] = koIcon("arrow_center");
+    m_anchorIcons[CENTER] = koIconWanted("though currently m_anchorIcons[CENTER] is not used","arrow_center");
     m_anchorIcons[WEST] = koIcon("arrow_west");
     m_anchorIcons[SOUTH_WEST] = koIcon("arrow_south_west");
     m_anchorIcons[SOUTH] = koIcon("arrow_south");

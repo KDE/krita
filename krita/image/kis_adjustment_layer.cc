@@ -46,6 +46,10 @@ KisAdjustmentLayer::KisAdjustmentLayer(KisImageWSP image,
         : KisSelectionBasedLayer(image.data(), name, selection),
         m_d(new Private())
 {
+    // by default Adjustmen Layers have a copy composition,
+    // which is more natural for users
+    setCompositeOp(COMPOSITE_COPY);
+
     if(kfc)
         m_d->filterConfig = KisFilterRegistry::instance()->cloneConfiguration(kfc);
 }

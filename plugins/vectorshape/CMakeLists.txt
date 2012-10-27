@@ -51,6 +51,10 @@ install(TARGETS vectorshape DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES vectorshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 #kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )
 
+if (SHARED_MIME_INFO_FOUND)
+    install(FILES calligra_svm.xml DESTINATION ${XDG_MIME_INSTALL_DIR})
+    update_xdg_mimetypes(${XDG_MIME_INSTALL_DIR})
+endif (SHARED_MIME_INFO_FOUND)
 
 ########### subdirectories ###############
 

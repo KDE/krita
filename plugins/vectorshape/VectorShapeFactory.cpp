@@ -66,15 +66,13 @@ bool VectorShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext 
             const QString mimetype = context.odfLoadingContext().mimeTypeForPath(href, true);
 
             return
-                mimetype == QLatin1String("application/x-svm") ||
+                mimetype == QLatin1String("image/x-svm") ||
                 mimetype == QLatin1String("image/x-emf") ||
                 mimetype == QLatin1String("image/x-wmf") ||
-                // next two for backward compatibility with Calligra
+                // next three for backward compatibility with Calligra
+                mimetype == QLatin1String("application/x-svm") ||
                 mimetype == QLatin1String("application/x-emf") ||
                 mimetype == QLatin1String("application/x-wmf") ||
-                // guessing of svm files returns application/octet-stream so also test on that
-                // see sundaram.fedorapeople.org%2Fpresentations%2Ffedora-fail-learn.odp
-                mimetype == QLatin1String("application/octet-stream") ||
                 // seems like MSO does not always write a mimetype
                 // see jeffcoweb.jeffco.k12.co.us%2Fhigh%2Fchatfield%2Fdepartments%2Fbusiness%2Fbanking_finance%2Funit_Plan_Budget.odp
                 mimetype.isEmpty() ||

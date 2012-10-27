@@ -404,6 +404,13 @@ include (TestBigEndian)
 TEST_BIG_ENDIAN(CMAKE_WORDS_BIGENDIAN)
 
 ##
+## Test SharedMimeInfo
+##
+macro_optional_find_package(SharedMimeInfo)
+macro_log_feature(SHARED_MIME_INFO_FOUND "SharedMimeInfo" "Shared Mime Info" "http://freedesktop.org/wiki/Software/shared-mime-info" FALSE "" "Required to determine file types OpenRaster (Krita default format), SVM or all of MSOOXML.")
+
+
+##
 ## Generate a file for prefix information
 ##
 
@@ -531,10 +538,10 @@ if(NOT EIGEN2_FOUND)
     set(SHOULD_BUILD_SHEETS FALSE)
 endif(NOT EIGEN2_FOUND)
 
-### Krita: pigment, eigen2, exiv2
-if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)
+### Krita: pigment, eigen2, exiv2, sharedmimeinfo
+if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
    set(SHOULD_BUILD_KRITA FALSE)
-endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)
+endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
 
 ### Active needs sheets, stage and words
 if (NOT SHOULD_BUILD_SHEETS OR NOT SHOULD_BUILD_STAGE OR NOT SHOULD_BUILD_WORDS)

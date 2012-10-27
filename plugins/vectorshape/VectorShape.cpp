@@ -282,7 +282,7 @@ void VectorShape::saveOdf(KoShapeSavingContext & context) const
         mimeType = "image/x-emf";
         break;
     case VectorTypeSvm:
-        mimeType = "application/x-svm";// FIXME: Check if this is true
+        mimeType = "image/x-svm"; // mimetype as used inside LO/AOO
         break;
     default:
         // FIXME: What here?

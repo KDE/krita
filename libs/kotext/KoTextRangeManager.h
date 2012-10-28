@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+ * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (c) 2012 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
@@ -21,6 +22,7 @@
 
 #include "KoTextRange.h"
 #include "KoBookmarkManager.h"
+#include "KoAnnotationManager.h"
 #include "kotext_export.h"
 
 // Qt + kde
@@ -60,6 +62,11 @@ public:
     const KoBookmarkManager *bookmarkManager() const;
 
     /**
+     * Return the annotation manager.
+     */
+    const KoAnnotationManager *annotationManager() const;
+
+    /**
      * Return a multi hash of KoTextRange that have start or end points between first and last
      * If the text range is a selection then the opposite end has to be within matchFirst and
      * matchLast.
@@ -72,6 +79,7 @@ private:
     QSet<KoTextRange *> m_deletedTextRanges; // kept around for undo purposes
 
     KoBookmarkManager m_bookmarkManager;
+    KoAnnotationManager m_annotationManager;
 };
 
 Q_DECLARE_METATYPE(KoTextRangeManager *)

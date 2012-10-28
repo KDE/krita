@@ -44,6 +44,8 @@ set(kotext_LIB_SRCS
     KoTextReference.cpp
     KoTextAnchor.cpp
     KoTextShapeSavingContext.cpp
+    KoAnnotation.cpp
+    KoAnnotationManager.cpp
     KoBookmark.cpp
     KoBookmarkManager.cpp
     KoInlineNote.cpp

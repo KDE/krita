@@ -28,6 +28,7 @@
 #include <KoElementReference.h>
 
 #include "KoBookmark.h"
+#include "KoAnnotation.h"
 #include "KoTextMeta.h"
 #include "KoTextEditor.h"
 #include "KoTextDocument.h"
@@ -77,6 +78,14 @@ public:
         sopranoObjectType = LiteralNode;
     }
 
+    Private(const QTextDocument *doc, KoAnnotation *b)
+            : document(doc),
+            annotation(b)
+    {
+        isObjectAttributeUsed = false;
+        sopranoObjectType = LiteralNode;
+    }
+
     Private(const QTextDocument *doc, KoTextMeta *b)
             : document(doc),
             kotextmeta(b)
@@ -98,9 +107,10 @@ public:
     // where we might get the object value from
     QTextBlock block;
 
-    // or document and one of bookmark, kotextmeta, ...
+    // or document and one of bookmark, annotation, kotextmeta, ...
     QWeakPointer<const QTextDocument> document;
     QWeakPointer<KoBookmark> bookmark;
+    QWeakPointer<KoAnnotation> annotation;
     QWeakPointer<KoTextMeta> kotextmeta;
     QTextTableCell cell;
 
@@ -122,6 +132,12 @@ KoTextInlineRdf::KoTextInlineRdf(const QTextDocument *doc, const QTextBlock &b)
 }
 
 KoTextInlineRdf::KoTextInlineRdf(const QTextDocument *doc, KoBookmark *b)
+        : QObject(const_cast<QTextDocument*>(doc))
+        , d(new Private(doc, b))
+{
+}
+
+KoTextInlineRdf::KoTextInlineRdf(const QTextDocument *doc, KoAnnotation *b)
         : QObject(const_cast<QTextDocument*>(doc))
         , d(new Private(doc, b))
 {
@@ -215,6 +231,11 @@ QPair<int, int>  KoTextInlineRdf::findExtent()
     if (d->bookmark && d->document) {
         return QPair<int, int>(d->bookmark.data()->rangeStart(), d->bookmark.data()->rangeEnd());
     }
+    if (d->annotation && d->document) {
+        return QPair<int, int>(d->annotation.data()->rangeStart(), d->annotation.data()->rangeEnd());
+    }
+    // FIXME: We probably have to do something with endAnnotation()
+    //        too, but I don't know exactly what...
     if (d->kotextmeta && d->document) {
         KoTextMeta *e = d->kotextmeta.data()->endBookmark();
         if (!e) {
@@ -244,6 +265,7 @@ QString KoTextInlineRdf::object()
         return ret.remove(QChar::ObjectReplacementCharacter);
     }
     else if (d->kotextmeta && d->document) {
+        // FIXME: Need to do something with endAnnotation?
         KoTextMeta *e = d->kotextmeta.data()->endBookmark();
         if (!e) {
             kDebug(30015) << "Broken KoTextMeta, no end tag found!";

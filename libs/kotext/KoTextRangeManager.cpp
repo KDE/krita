@@ -1,6 +1,9 @@
 /* This file is part of the KDE project
  * Copyright (c) 2012 Boudewijn Rempt <boud@kogmbh.com>
+<<<<<<< HEAD
+=======
  * Copyright (c) 2012 C. Boemann <cbo@boemann.dk>
+>>>>>>> master
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,11 +24,13 @@
 #include "KoTextDocument.h"
 #include "KoBookmark.h"
 #include "KoBookmarkManager.h"
+#include "KoAnnotation.h"
+#include "KoAnnotationManager.h"
 
 #include <QTextCursor>
 
 KoTextRangeManager::KoTextRangeManager(QObject *parent)
-        : QObject(parent)
+    : QObject(parent)
 {
 }
 
@@ -54,6 +59,12 @@ void KoTextRangeManager::insert(KoTextRange *textRange)
     if (bookmark) {
         m_bookmarkManager.insert(bookmark->name(), bookmark);
     }
+    else {
+        KoAnnotation *annotation = dynamic_cast<KoAnnotation *>(textRange);
+        if (annotation) {
+            m_annotationManager.insert(annotation->name(), annotation);
+        }
+    }
     m_textRanges.insert(textRange);
 }
 
@@ -67,6 +78,12 @@ void KoTextRangeManager::remove(KoTextRange *textRange)
     if (bookmark) {
         m_bookmarkManager.remove(bookmark->name());
     }
+    else {
+        KoAnnotation *annotation = dynamic_cast<KoAnnotation *>(textRange);
+        if (annotation) {
+            m_annotationManager.remove(annotation->name());
+        }
+    }
 
     m_textRanges.remove(textRange);
     m_deletedTextRanges.insert(textRange);
@@ -75,6 +92,11 @@ void KoTextRangeManager::remove(KoTextRange *textRange)
 const KoBookmarkManager *KoTextRangeManager::bookmarkManager() const
 {
     return &m_bookmarkManager;
+}
+
+const KoAnnotationManager *KoTextRangeManager::annotationManager() const
+{
+    return &m_annotationManager;
 }
 
 QList<KoTextRange *> KoTextRangeManager::textRanges() const

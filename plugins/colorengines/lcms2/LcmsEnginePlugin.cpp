@@ -227,7 +227,9 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
 
     registry->add(new XyzU8ColorSpaceFactory());
     registry->add(new XyzU16ColorSpaceFactory());
+#ifdef HAVE_LCMS24
     registry->add(new XyzF16ColorSpaceFactory());
+#endif
     registry->add(new XyzF32ColorSpaceFactory());
 
     KoHistogramProducerFactoryRegistry::instance()->add(

@@ -170,6 +170,8 @@ install(
     KoTextBlockData.h
     KoTextDocument.h
     KoText.h
+    KoTextRange.h
+    KoTextRangeManager.h
     KoList.h
     KoTextLocator.h
     KoTextPage.h

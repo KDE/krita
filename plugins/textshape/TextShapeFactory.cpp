@@ -69,7 +69,9 @@ KoShape *TextShapeFactory::createDefaultShape(KoDocumentResourceManager *documen
         if (variant.isValid()) {
             manager = variant.value<KoInlineTextObjectManager *>();
         }
-        variant = documentResources->resource(KoText::TextRangeManager);
+    }
+    if (documentResources && documentResources->hasResource(KoText::TextRangeManager)) {
+        QVariant variant = documentResources->resource(KoText::TextRangeManager);
         if (variant.isValid()) {
             locationManager = variant.value<KoTextRangeManager *>();
         }

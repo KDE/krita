@@ -142,6 +142,7 @@ KoTextDocumentLayout::KoTextDocumentLayout(QTextDocument *doc, KoTextLayoutRootA
     d->styleManager = KoTextDocument(document()).styleManager();
     d->changeTracker = KoTextDocument(document()).changeTracker();
     d->inlineTextObjectManager = KoTextDocument(document()).inlineTextObjectManager();
+    d->textRangeManager = KoTextDocument(document()).textRangeManager();
 
     setTabSpacing(MM_TO_POINT(23)); // use same default as open office
 

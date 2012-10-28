@@ -33,7 +33,7 @@
 * it contains the version at compile time. See Calligra::versionString() if you need
 * the Calligra version used at runtime.
 */
-#define CALLIGRA_VERSION_STRING "2.6 Alpha"
+#define CALLIGRA_VERSION_STRING "2.7 Pre-Alpha"
 
 /**
  * @def CALLIGRA_VERSION_MAJOR
@@ -49,14 +49,14 @@
  * CALLIGRA_VERSION_MINOR is computed based on this value.
  * Unstable versions subtract 1 from this value, e.g. 2.5 Alpha has minor 4.
 */
-#define CALLIGRA_STABLE_VERSION_MINOR 6
+#define CALLIGRA_STABLE_VERSION_MINOR 7
 
 /**
  * @def CALLIGRA_VERSION_RELEASE
  * @ingroup CalligraMacros
  * @brief Release version of Calligra, at compile time
  */
-#define CALLIGRA_VERSION_RELEASE 90
+#define CALLIGRA_VERSION_RELEASE 89
 
 /**
  * @def CALLIGRA_ALPHA

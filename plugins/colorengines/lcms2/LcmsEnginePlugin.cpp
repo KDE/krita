@@ -56,6 +56,9 @@
 
 #include "colorspaces/xyz_u8/XyzU8ColorSpace.h"
 #include "colorspaces/xyz_u16/XyzU16ColorSpace.h"
+#ifdef HAVE_LCMS24
+#include "colorspaces/xyz_f16/XyzF16ColorSpace.h"
+#endif
 #include "colorspaces/xyz_f32/XyzF32ColorSpace.h"
 
 #include "colorspaces/rgb_u8/RgbU8ColorSpace.h"
@@ -166,7 +169,7 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
 #ifdef HAVE_LCMS24
     KoHistogramProducerFactoryRegistry::instance()->add(
                 new KoBasicHistogramProducerFactory<KoBasicF16HalfHistogramProducer>
-                (KoID("RGBF16HISTO", i18n("RGBF16 Histogram")), RGBAColorModelID.id(), Integer16BitsColorDepthID.id()));
+                (KoID("RGBF16HISTO", i18n("RGBF16 Histogram")), RGBAColorModelID.id(), Float16BitsColorDepthID.id()));
 #endif
 
     KoHistogramProducerFactoryRegistry::instance()->add(
@@ -224,6 +227,7 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
 
     registry->add(new XyzU8ColorSpaceFactory());
     registry->add(new XyzU16ColorSpaceFactory());
+    registry->add(new XyzF16ColorSpaceFactory());
     registry->add(new XyzF32ColorSpaceFactory());
 
     KoHistogramProducerFactoryRegistry::instance()->add(
@@ -233,6 +237,12 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
     KoHistogramProducerFactoryRegistry::instance()->add(
                 new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
                 (KoID("XYZ16HISTO", i18n("XYZ16 Histogram")), XYZAColorModelID.id(), Integer16BitsColorDepthID.id()));
+
+#ifdef HAVE_LCMS24
+    KoHistogramProducerFactoryRegistry::instance()->add(
+                new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
+                (KoID("XYZF16HISTO", i18n("XYZF16 Histogram")), XYZAColorModelID.id(), Float16BitsColorDepthID.id()));
+#endif
 
     KoHistogramProducerFactoryRegistry::instance()->add(
                 new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>

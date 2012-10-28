@@ -23,6 +23,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/xyz_f32
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/ycbcr_u8
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/ycbcr_u16
+    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/ycbcr_f16
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/ycbcr_f32
     ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles
 )
@@ -57,6 +58,7 @@ SET ( lcmsengine_SRCS
 
     colorspaces/xyz_u8/XyzU8ColorSpace.cpp
     colorspaces/xyz_u16/XyzU16ColorSpace.cpp
+    colorspaces/xyz_f16/XyzF16ColorSpace.cpp
     colorspaces/xyz_f32/XyzF32ColorSpace.cpp
 
     colorspaces/rgb_u8/RgbU8ColorSpace.cpp

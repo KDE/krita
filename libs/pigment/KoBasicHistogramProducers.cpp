@@ -41,11 +41,11 @@ const qint32 qint32_MIN = (-2147483647 - 1);
 static const KoColorSpace* m_labCs = 0;
 
 
-KoBasicHistogramProducer::KoBasicHistogramProducer(const KoID& id, int channels, int nrOfBins, const KoColorSpace *cs)
-        : m_channels(channels),
-        m_nrOfBins(nrOfBins),
-        m_colorSpace(cs),
-        m_id(id)
+KoBasicHistogramProducer::KoBasicHistogramProducer(const KoID& id, int channelCount, int nrOfBins)
+    : m_channels(channelCount)
+    , m_nrOfBins(nrOfBins)
+    , m_colorSpace(0)
+    , m_id(id)
 {
     m_bins.resize(m_channels);
     for (int i = 0; i < m_channels; i++)
@@ -56,6 +56,25 @@ KoBasicHistogramProducer::KoBasicHistogramProducer(const KoID& id, int channels,
     m_from = 0.0;
     m_width = 1.0;
 }
+
+KoBasicHistogramProducer::KoBasicHistogramProducer(const KoID& id, int nrOfBins, const KoColorSpace *cs)
+    : m_nrOfBins(nrOfBins),
+      m_colorSpace(cs),
+      m_id(id)
+{
+    Q_ASSERT(cs);
+    m_channels = cs->channelCount();
+
+    m_bins.resize(m_channels);
+    for (int i = 0; i < m_channels; i++)
+        m_bins[i].resize(m_nrOfBins);
+    m_outLeft.resize(m_channels);
+    m_outRight.resize(m_channels);
+    m_count = 0;
+    m_from = 0.0;
+    m_width = 1.0;
+}
+
 
 void KoBasicHistogramProducer::clear()
 {
@@ -92,7 +111,7 @@ void KoBasicHistogramProducer::makeExternalToInternal()
 // ------------ U8 ---------------------
 
 KoBasicU8HistogramProducer::KoBasicU8HistogramProducer(const KoID& id, const KoColorSpace *cs)
-        : KoBasicHistogramProducer(id, cs->channelCount(), 256, cs)
+    : KoBasicHistogramProducer(id, 256, cs)
 {
 }
 
@@ -140,7 +159,7 @@ void KoBasicU8HistogramProducer::addRegionToBin(const quint8 * pixels, const qui
 // ------------ U16 ---------------------
 
 KoBasicU16HistogramProducer::KoBasicU16HistogramProducer(const KoID& id, const KoColorSpace *cs)
-        : KoBasicHistogramProducer(id, cs->channelCount(), 256, cs)
+    : KoBasicHistogramProducer(id, 256, cs)
 {
 }
 
@@ -208,7 +227,7 @@ void KoBasicU16HistogramProducer::addRegionToBin(const quint8 * pixels, const qu
 
 // ------------ Float32 ---------------------
 KoBasicF32HistogramProducer::KoBasicF32HistogramProducer(const KoID& id, const KoColorSpace *cs)
-        : KoBasicHistogramProducer(id, cs->channelCount(), 256, cs)
+    : KoBasicHistogramProducer(id, 256, cs)
 {
 }
 
@@ -282,8 +301,8 @@ void KoBasicF32HistogramProducer::addRegionToBin(const quint8 * pixels, const qu
 #ifdef HAVE_OPENEXR
 // ------------ Float16 Half ---------------------
 KoBasicF16HalfHistogramProducer::KoBasicF16HalfHistogramProducer(const KoID& id,
-        const KoColorSpace *cs)
-        : KoBasicHistogramProducer(id, cs->channelCount(), 256, cs)
+                                                                 const KoColorSpace *cs)
+    : KoBasicHistogramProducer(id, 256, cs)
 {
 }
 
@@ -350,8 +369,7 @@ void KoBasicF16HalfHistogramProducer::addRegionToBin(const quint8 * pixels, cons
 
 // ------------ Generic RGB ---------------------
 KoGenericRGBHistogramProducer::KoGenericRGBHistogramProducer()
-        : KoBasicHistogramProducer(KoID("GENRGBHISTO", i18n("Generic RGB Histogram")),
-                                   3, 256, 0)
+    : KoBasicHistogramProducer(KoID("GENRGBHISTO", i18n("Generic RGB Histogram")), 3, 256)
 {
     /* we set 0 as colorspece, because we are not based on a specific colorspace. This
        is no problem for the superclass since we override channels() */
@@ -419,7 +437,7 @@ void KoGenericRGBHistogramProducer::addRegionToBin(const quint8 * pixels, const 
 
 // ------------ Generic L*a*b* ---------------------
 KoGenericLabHistogramProducer::KoGenericLabHistogramProducer()
-        : KoBasicHistogramProducer(KoID("GENLABHISTO", i18n("L*a*b* Histogram")), 3, 256, 0)
+    : KoBasicHistogramProducer(KoID("GENLABHISTO", i18n("L*a*b* Histogram")), 3, 256)
 {
     /* we set 0 as colorspace, because we are not based on a specific colorspace. This
        is no problem for the superclass since we override channels() */

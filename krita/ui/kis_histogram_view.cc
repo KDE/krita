@@ -242,7 +242,10 @@ void KisHistogramView::setChannels()
         addProducerChannels(f.generate());
     } else {
         foreach (const QString &id, list) {
-            addProducerChannels(KoHistogramProducerFactoryRegistry::instance()->value(id)->generate());
+            KoHistogramProducerSP producer = KoHistogramProducerFactoryRegistry::instance()->value(id)->generate();
+            if (producer) {
+                addProducerChannels(producer);
+            }
         }
     }
 
@@ -255,6 +258,8 @@ void KisHistogramView::setChannels()
 
 void KisHistogramView::addProducerChannels(KoHistogramProducerSP producer)
 {
+    if (!producer) return;
+
     ComboboxInfo info;
     info.isProducer = true;
     info.producer = producer;

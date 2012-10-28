@@ -1,1 +1,2 @@
 add_subdirectory(googledocs)
+add_subdirectory(threedshape)

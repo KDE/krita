@@ -46,6 +46,7 @@ class KoCanvasBase;
 class KoTableOfContentsGeneratorInfo;
 class KoShapeController;
 class KoTextAnchor;
+class KoBookmark;
 
 class QTextBlock;
 class QTextCharFormat;
@@ -242,7 +243,7 @@ public slots:
     KoInlineObject *insertIndexMarker();
 
     /// add a bookmark on current cursor location or current selection
-    void addBookmark(const QString &name);
+    KoBookmark *addBookmark(const QString &name);
 
     /**
      * Insert a frame break at the cursor position, moving the rest of the text to the next frame.

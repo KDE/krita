@@ -438,10 +438,10 @@ void KoTextEditor::recursivelyVisitSelection(QTextFrame::iterator it, KoTextVisi
     } while (!it.atEnd());
 }
 
-void KoTextEditor::addBookmark(const QString &name)
+KoBookmark *KoTextEditor::addBookmark(const QString &name)
 {//TODO changeTracking
     if (isEditProtected()) {
-        return;
+        return 0;
     }
 
     d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Insert Bookmark"));
@@ -451,6 +451,7 @@ void KoTextEditor::addBookmark(const QString &name)
     // TODO the macro & undo things
     KoTextDocument(d->document).textRangeManager()->insert(bookmark);
     d->updateState(KoTextEditor::Private::NoOp);
+    return bookmark;
 }
 
 KoInlineObject *KoTextEditor::insertIndexMarker()

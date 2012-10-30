@@ -31,4 +31,4 @@ void KoBalloon::paintEvent(QPaintEvent *event)
     QBrush brush(Qt::green);
     painter.setBackgroundMode(Qt::OpaqueMode);
     painter.setBackground(brush);
-} 
+}

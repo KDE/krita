@@ -51,7 +51,7 @@ int KoTableOfContentsGeneratorInfo::styleNameToStyleId(KoTextSharedLoadingData *
 
 
 KoTableOfContentsGeneratorInfo::KoTableOfContentsGeneratorInfo(bool generateEntryTemplate)
-  : 
+  :
    m_indexScope("document")
   , m_outlineLevel(10)
   , m_relativeTabStopPosition(true)

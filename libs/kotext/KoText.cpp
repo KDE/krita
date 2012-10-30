@@ -157,7 +157,7 @@ QString KoText::directionToString(KoText::Direction direction)
         return "tb-lr";
     if (direction == KoText::InheritDirection)
         return "page";
-    
+
     return "auto";
 }
 

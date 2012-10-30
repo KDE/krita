@@ -62,4 +62,4 @@ private:
 
 };
 
-#endif // KOANNOTATIONSIDEBAR_H 
+#endif // KOANNOTATIONSIDEBAR_H

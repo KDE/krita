@@ -107,7 +107,6 @@ public:
     void setCounterSuffix(const QString &text);
     QString counterSuffix() const;
 
-   
     /// Set if the counter is a image or not
     void setCounterIsImage(bool isImage);
 

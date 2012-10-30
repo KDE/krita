@@ -37,4 +37,4 @@ protected:
 
 };
 
-#endif // KOBALLOON_H 
+#endif // KOBALLOON_H

@@ -156,4 +156,4 @@ void KoAnnotationSideBar::repositionRemove(int index)
 
 
     }
-} */ 
+} */

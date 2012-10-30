@@ -71,17 +71,6 @@ KoAnnotation::~KoAnnotation()
     delete d;
 }
 
-void KoAnnotation::updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &format)
-{
-    Q_UNUSED(format);
-    d->document = document;
-    d->posInDocument = posInDocument;
-}
-
-void KoAnnotation::paint(QPainter &, QPaintDevice *, const QTextDocument *, const QRectF &)
-{
-    // nothing to paint.
-}
 
 void KoAnnotation::setName(const QString &name)
 {

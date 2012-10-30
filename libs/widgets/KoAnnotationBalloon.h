@@ -50,4 +50,4 @@ private:
     QMenu *m_options;
 };
 
-#endif // KOANNOTATIONBALLOON_H 
+#endif // KOANNOTATIONBALLOON_H

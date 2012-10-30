@@ -41,7 +41,7 @@ IF (NOT CREATIVEONLY)
     macro_optional_add_subdirectory( variables )
     macro_optional_add_subdirectory( chartshape )
     macro_optional_add_subdirectory( pictureshape )
-    macro_optional_add_subdirectory( videoshape )
+    #macro_optional_add_subdirectory( videoshape )
 ENDIF (NOT CREATIVEONLY)
 
 if (SHOULD_BUILD_TEXTSHAPE)

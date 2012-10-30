@@ -1,5 +1,5 @@
 include_directories(${KOTEXT_INCLUDES}
-                    ${FONTCONFIG_INCLUDE_DIR}/fontconfig 
+                    ${FONTCONFIG_INCLUDE_DIR}/fontconfig
                     ${FREETYPE_INCLUDE_DIRS})
 
 add_subdirectory( tests )

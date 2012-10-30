@@ -35,6 +35,7 @@
 #include <KoImageCollection.h>
 #include <KoImageData.h>
 #include <KoShapeLoadingContext.h>
+#include <KoShapePaintingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>

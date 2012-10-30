@@ -22,6 +22,7 @@
 #include "Objects.h"
 
 // Qt
+#include <QPainter>
 #include <QString>
 
 // KDE
@@ -36,6 +37,8 @@
 #include <KoShapeSavingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
+#include <KoShapePaintingContext.h>
+#include <KoViewConverter.h>
 
 // Shape
 #include "utils.h"

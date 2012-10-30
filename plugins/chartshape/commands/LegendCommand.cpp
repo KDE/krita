@@ -30,7 +30,7 @@ using namespace KChart;
 using namespace KDChart;
 
 
-LegendCommand::LegendCommand(Legend* legend)
+LegendCommand::LegendCommand(KChart::Legend* legend)
     : m_legend(legend)
 {
     m_newFont = legend->font();

@@ -85,7 +85,7 @@ KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractS
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     
     //dummy needed to fix a bug in the polyester theme
-    d->dummySpinBox = new QSpinBox();
+    d->dummySpinBox = new QSpinBox(this);
     d->dummySpinBox->hide();
 }
 

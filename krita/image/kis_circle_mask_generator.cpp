@@ -174,6 +174,8 @@ void KisCircleMaskGenerator::processRowFast(float* buffer, int width, float y, f
 
         bufferPointer += Vc::float_v::Size;
     }
+
+    Vc::free<float>(initValues);
 #endif
 }
 

@@ -242,14 +242,15 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
 
 bool KisKraSaveVisitor::saveFilterConfiguration(KisNode* node)
 {
-    KisFilterConfiguration* filter = 0;
-    if (node->inherits("KisFilterMask")) {
-        filter = static_cast<KisFilterMask*>(node)->filter();
-    } else if (node->inherits("KisAdjustmentLayer")) {
-        filter = static_cast<KisAdjustmentLayer*>(node)->filter();
-    } else if (node->inherits("KisGeneratorLayer")) {
-        filter = static_cast<KisGeneratorLayer*>(node)->filter();
+    KisNodeFilterInterface *filterInterface =
+        dynamic_cast<KisNodeFilterInterface*>(node);
+
+    KisSafeFilterConfigurationSP filter;
+
+    if (filterInterface) {
+        filter = filterInterface->filter();
     }
+
     if (filter) {
         QString location = getLocation(node, DOT_FILTERCONFIG);
         if (m_store->open(location)) {

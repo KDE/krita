@@ -83,7 +83,7 @@ public:
             return true;
         }
 
-        KisFilterConfiguration *filterConfig = layer->filter();
+        KisSafeFilterConfigurationSP filterConfig = layer->filter();
         if (!filterConfig) return true;
 
         KisFilterSP filter = KisFilterRegistry::instance()->value(filterConfig->name());
@@ -105,7 +105,7 @@ public:
         QPointer<KoUpdater> updaterPtr = updater.startSubtask();
 
         // We do not create a transaction here, as srcDevice != dstDevice
-        filter->process(m_projection, originalDevice, 0, applyRect, filterConfig, updaterPtr);
+        filter->process(m_projection, originalDevice, 0, applyRect, filterConfig.data(), updaterPtr);
 
         updaterPtr->setProgress(100);
 

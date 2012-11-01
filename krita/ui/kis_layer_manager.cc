@@ -375,41 +375,45 @@ void KisLayerManager::layerProperties()
         KisLayerSP prev = dynamic_cast<KisLayer*>(alayer->prevSibling().data());
         if (prev) dev = prev->projection();
 
-        KisDlgAdjLayerProps dlg(alayer, alayer.data(), dev, alayer->image(), alayer->filter(), alayer->name(), i18n("Filter Layer Properties"), m_view, "dlgadjlayerprops");
+        KisDlgAdjLayerProps dlg(alayer, alayer.data(), dev, alayer->image(), alayer->filter().data(), alayer->name(), i18n("Filter Layer Properties"), m_view, "dlgadjlayerprops");
         dlg.resize(dlg.minimumSizeHint());
-        KisFilterConfiguration* config = dlg.filterConfiguration();
-        QString before;
 
-        if (config) {
-            before = config->toXML();
-        }
+
+        KisSafeFilterConfigurationSP configBefore(alayer->filter());
+        Q_ASSERT(configBefore);
+        QString xmlBefore = configBefore->toXML();
+
 
         if (dlg.exec() == QDialog::Accepted) {
 
-            QString after;
             alayer->setName(dlg.layerName());
 
-            if (dlg.filterConfiguration()) {
-                after = dlg.filterConfiguration()->toXML();
-            }
-            if (after != before) {
-                KisChangeFilterCmd<KisAdjustmentLayerSP> * cmd
-                        = new KisChangeFilterCmd<KisAdjustmentLayerSP>(alayer,
-                                                                       dlg.filterConfiguration(),
-                                                                       before,
-                                                                       after);
+            KisSafeFilterConfigurationSP configAfter(dlg.filterConfiguration());
+            Q_ASSERT(configAfter);
+            QString xmlAfter = configAfter->toXML();
+
+            if(xmlBefore != xmlAfter) {
+                KisChangeFilterCmd *cmd
+                    = new KisChangeFilterCmd(alayer,
+                                             configBefore->name(),
+                                             xmlBefore,
+                                             configAfter->name(),
+                                             xmlAfter,
+                                             false);
+                // FIXME: check whether is needed
                 cmd->redo();
                 m_view->undoAdapter()->addCommand(cmd);
                 m_doc->setModified(true);
             }
         }
         else {
-            if (dlg.filterConfiguration() && config) {
-                QString after = dlg.filterConfiguration()->toXML();
-                if (after != before) {
-                    alayer->setFilter(config);
-                    alayer->setDirty();
-                }
+            KisSafeFilterConfigurationSP configAfter(dlg.filterConfiguration());
+            Q_ASSERT(configAfter);
+            QString xmlAfter = configAfter->toXML();
+
+            if(xmlBefore != xmlAfter) {
+                alayer->setFilter(KisFilterRegistry::instance()->cloneConfiguration(configBefore.data()));
+                alayer->setDirty();
             }
         }
     }
@@ -418,21 +422,28 @@ void KisLayerManager::layerProperties()
         KisDlgGeneratorLayer dlg(alayer->name(), m_view);
         dlg.setCaption(i18n("Generator Layer Properties"));
 
-        QString before = alayer->generator()->toXML();
-        dlg.setConfiguration(alayer->generator());
+        KisSafeFilterConfigurationSP configBefore(alayer->filter());
+        Q_ASSERT(configBefore);
+        QString xmlBefore = configBefore->toXML();
+
+        dlg.setConfiguration(configBefore.data());
         dlg.resize(dlg.minimumSizeHint());
 
         if (dlg.exec() == QDialog::Accepted) {
 
-            QString after = dlg.configuration()->toXML();
-            if (after != before) {
-                KisChangeGeneratorCmd<KisGeneratorLayerSP> * cmd
-                        = new KisChangeGeneratorCmd<KisGeneratorLayerSP>(alayer,
-                                                                         dlg.configuration(),
-                                                                         before,
-                                                                         after
-                                                                         );
+            KisSafeFilterConfigurationSP configAfter(dlg.configuration());
+            Q_ASSERT(configAfter);
+            QString xmlAfter = configAfter->toXML();
 
+            if(xmlBefore != xmlAfter) {
+                KisChangeFilterCmd *cmd
+                    = new KisChangeFilterCmd(alayer,
+                                             configBefore->name(),
+                                             xmlBefore,
+                                             configAfter->name(),
+                                             xmlAfter,
+                                             true);
+                // FIXME: check whether is needed
                 cmd->redo();
                 m_view->undoAdapter()->addCommand(cmd);
                 m_doc->setModified(true);

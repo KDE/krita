@@ -19,23 +19,43 @@
 #ifndef _KIS_NODE_FILTER_INTERFACE_H_
 #define _KIS_NODE_FILTER_INTERFACE_H_
 
+#include <krita_export.h>
+
+#include <QSharedPointer>
 class KisFilterConfiguration;
+typedef QSharedPointer<KisFilterConfiguration> KisSafeFilterConfigurationSP;
 
 /**
  * Define an interface for nodes that are associated with a filter.
  */
-class KisNodeFilterInterface
+class KRITAIMAGE_EXPORT KisNodeFilterInterface
 {
 public:
-    virtual ~KisNodeFilterInterface() {}
+    KisNodeFilterInterface(KisFilterConfiguration *filterConfig, bool useGeneratorRegistry);
+    KisNodeFilterInterface(const KisNodeFilterInterface &rhs);
+    virtual ~KisNodeFilterInterface();
+
     /**
-     * @return the filter configuration associated with this node
+     * @return safe shared pointer to the filter configuration
+     *         associated with this node
      */
-    virtual KisFilterConfiguration * filter() const = 0;
+    virtual KisSafeFilterConfigurationSP filter() const;
+
     /**
-     * Set the new filter configuration (this can be a different filter).
+     * Sets the filter configuration for this node. The filter might
+     * differ from the filter that is currently set up on this node.
+     *
+     * WARNING: the filterConfig becomes *owned* by the node right
+     * after you've set it. Don't try to access the configuration
+     * after you've associated it with the node.
      */
-    virtual void setFilter(KisFilterConfiguration * filterConfig) = 0;
+    virtual void setFilter(KisFilterConfiguration *filterConfig);
+
+// the child classes should access the filter with the filter() method
+private:
+
+    KisSafeFilterConfigurationSP m_filter;
+    bool m_useGeneratorRegistry;
 };
 
 #endif

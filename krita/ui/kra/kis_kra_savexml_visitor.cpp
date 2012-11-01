@@ -140,8 +140,8 @@ bool KisSaveXmlVisitor::visit(KisGeneratorLayer *layer)
 {
     QDomElement layerElement = m_doc.createElement(LAYER);
     saveLayer(layerElement, GENERATOR_LAYER, layer);
-    layerElement.setAttribute(GENERATOR_NAME, layer->generator()->name());
-    layerElement.setAttribute(GENERATOR_VERSION, layer->generator()->version());
+    layerElement.setAttribute(GENERATOR_NAME, layer->filter()->name());
+    layerElement.setAttribute(GENERATOR_VERSION, layer->filter()->version());
     m_elem.appendChild(layerElement);
 
     m_count++;

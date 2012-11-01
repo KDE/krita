@@ -290,34 +290,43 @@ void KisMaskManager::maskProperties()
             return;
 
         KisPaintDeviceSP dev = layer->paintDevice();
-        KisDlgAdjLayerProps dlg(layer, mask, dev, layer->image(), mask->filter(), mask->name(), i18n("Effect Mask Properties"), m_view, "dlgeffectmaskprops");
-        KisFilterConfiguration* config = dlg.filterConfiguration();
-        QString before;
-        if (config) {
-            before = config->toXML();
-        }
-        if (dlg.exec() == QDialog::Accepted) {
-            QString after;
-            if (dlg.filterConfiguration())
-                after = dlg.filterConfiguration()->toXML();
-            KisChangeFilterCmd<KisFilterMaskSP> * cmd = new KisChangeFilterCmd<KisFilterMaskSP>(mask,
-                    dlg.filterConfiguration(),
-                    before,
-                    after);
+        KisDlgAdjLayerProps dlg(layer, mask, dev, layer->image(), mask->filter().data(), mask->name(), i18n("Effect Mask Properties"), m_view, "dlgeffectmaskprops");
 
-            // FIXME: Check why don't we use m_commandsAdapter instead
-            cmd->redo();
-            m_view->undoAdapter()->addCommand(cmd);
-            m_view->document()->setModified(true);
-            mask->setDirty();
+        KisSafeFilterConfigurationSP configBefore(mask->filter());
+        Q_ASSERT(configBefore);
+        QString xmlBefore = configBefore->toXML();
+
+
+        if (dlg.exec() == QDialog::Accepted) {
+
+            KisSafeFilterConfigurationSP configAfter(dlg.filterConfiguration());
+            Q_ASSERT(configAfter);
+            QString xmlAfter = configAfter->toXML();
+
+
+            if(xmlBefore != xmlAfter) {
+                KisChangeFilterCmd *cmd
+                    = new KisChangeFilterCmd(mask,
+                                             configBefore->name(),
+                                             xmlBefore,
+                                             configAfter->name(),
+                                             xmlAfter,
+                                             false);
+
+                // FIXME: check whether is needed
+                cmd->redo();
+                m_view->undoAdapter()->addCommand(cmd);
+                m_view->document()->setModified(true);
+            }
         }
         else {
-            if (dlg.filterConfiguration() && config) {
-                QString after = dlg.filterConfiguration()->toXML();
-                if (after != before) {
-                    mask->setFilter(config);
-                    mask->setDirty();
-                }
+            KisSafeFilterConfigurationSP configAfter(dlg.filterConfiguration());
+            Q_ASSERT(configAfter);
+            QString xmlAfter = configAfter->toXML();
+
+            if(xmlBefore != xmlAfter) {
+                mask->setFilter(KisFilterRegistry::instance()->cloneConfiguration(configBefore.data()));
+                mask->setDirty();
             }
         }
 

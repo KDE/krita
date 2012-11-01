@@ -33,61 +33,42 @@
 #include "kis_processing_visitor.h"
 
 
-struct KisAdjustmentLayer::Private
-{
-public:
-    KisFilterConfiguration *filterConfig;
-};
-
 KisAdjustmentLayer::KisAdjustmentLayer(KisImageWSP image,
                                        const QString &name,
-                                       KisFilterConfiguration * kfc,
+                                       KisFilterConfiguration *kfc,
                                        KisSelectionSP selection)
-        : KisSelectionBasedLayer(image.data(), name, selection),
-        m_d(new Private())
+    : KisSelectionBasedLayer(image.data(), name, selection, kfc)
 {
     // by default Adjustmen Layers have a copy composition,
     // which is more natural for users
     setCompositeOp(COMPOSITE_COPY);
-
-    if(kfc)
-        m_d->filterConfig = KisFilterRegistry::instance()->cloneConfiguration(kfc);
 }
 
 KisAdjustmentLayer::KisAdjustmentLayer(const KisAdjustmentLayer& rhs)
-        : KisSelectionBasedLayer(rhs),
-        m_d(new Private())
+        : KisSelectionBasedLayer(rhs)
 {
-    m_d->filterConfig = KisFilterRegistry::instance()->cloneConfiguration(rhs.m_d->filterConfig);
 }
 
 
 KisAdjustmentLayer::~KisAdjustmentLayer()
 {
-    delete m_d->filterConfig;
-    delete m_d;
 }
 
-KisFilterConfiguration * KisAdjustmentLayer::filter() const
+void KisAdjustmentLayer::setFilter(KisFilterConfiguration *filterConfig)
 {
-    return m_d->filterConfig;
-}
-
-
-void KisAdjustmentLayer::setFilter(KisFilterConfiguration * filterConfig)
-{
-    delete m_d->filterConfig;
-    m_d->filterConfig = KisFilterRegistry::instance()->cloneConfiguration(filterConfig);
-    m_d->filterConfig->setChannelFlags(channelFlags());
+    filterConfig->setChannelFlags(channelFlags());
+    KisSelectionBasedLayer::setFilter(filterConfig);
 }
 
 QRect KisAdjustmentLayer::changeRect(const QRect &rect, PositionToFilthy pos) const
 {
+    KisSafeFilterConfigurationSP filterConfig = filter();
+
     QRect filteredRect = rect;
 
-    if (m_d->filterConfig) {
-        KisFilterSP filter = KisFilterRegistry::instance()->value(m_d->filterConfig->name());
-        filteredRect = filter->changedRect(rect, m_d->filterConfig);
+    if (filterConfig) {
+        KisFilterSP filter = KisFilterRegistry::instance()->value(filterConfig->name());
+        filteredRect = filter->changedRect(rect, filterConfig.data());
     }
 
     /**
@@ -103,8 +84,10 @@ QRect KisAdjustmentLayer::changeRect(const QRect &rect, PositionToFilthy pos) co
 QRect KisAdjustmentLayer::needRect(const QRect& rect, PositionToFilthy pos) const
 {
     Q_UNUSED(pos);
-    if (!m_d->filterConfig) return rect;
-    KisFilterSP filter = KisFilterRegistry::instance()->value(m_d->filterConfig->name());
+
+    KisSafeFilterConfigurationSP filterConfig = filter();
+    if (!filterConfig) return rect;
+    KisFilterSP filter = KisFilterRegistry::instance()->value(filterConfig->name());
 
     /**
      * If we need some additional pixels even outside of a selection
@@ -114,7 +97,7 @@ QRect KisAdjustmentLayer::needRect(const QRect& rect, PositionToFilthy pos) cons
      * That's why simply we do not call
      * KisSelectionBasedLayer::needRect here :)
      */
-    return filter->neededRect(rect, m_d->filterConfig);
+    return filter->neededRect(rect, filterConfig.data());
 }
 
 bool KisAdjustmentLayer::accept(KisNodeVisitor & v)
@@ -134,16 +117,19 @@ QIcon KisAdjustmentLayer::icon() const
 
 KoDocumentSectionModel::PropertyList KisAdjustmentLayer::sectionModelProperties() const
 {
+    KisSafeFilterConfigurationSP filterConfig = filter();
     KoDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
-    if (filter())
-        l << KoDocumentSectionModel::Property(i18n("Filter"), KisFilterRegistry::instance()->value(filter()->name())->name());
+    if (filterConfig)
+        l << KoDocumentSectionModel::Property(i18n("Filter"), KisFilterRegistry::instance()->value(filterConfig->name())->name());
     return l;
 }
 
 void KisAdjustmentLayer::setChannelFlags(const QBitArray & channelFlags)
 {
-    if (m_d->filterConfig) {
-        m_d->filterConfig->setChannelFlags(channelFlags);
+    KisSafeFilterConfigurationSP filterConfig = filter();
+
+    if (filterConfig) {
+        filterConfig->setChannelFlags(channelFlags);
     }
     KisLayer::setChannelFlags(channelFlags);
 }

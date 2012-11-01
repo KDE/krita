@@ -166,7 +166,7 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
         return false;
     }
 
-    loadFilterConfiguration(layer->filter(), getLocation(layer, DOT_FILTERCONFIG));
+    loadFilterConfiguration(layer->filter().data(), getLocation(layer, DOT_FILTERCONFIG));
 
     bool result = visitAll(layer);
     return result;
@@ -189,7 +189,7 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
 
     loadSelection(getLocation(layer), layer->selection());
 
-    loadFilterConfiguration(layer->generator(), getLocation(layer, DOT_FILTERCONFIG));
+    loadFilterConfiguration(layer->filter().data(), getLocation(layer, DOT_FILTERCONFIG));
 
     layer->update();
 
@@ -217,7 +217,7 @@ bool KisKraLoadVisitor::visit(KisCloneLayer *layer)
 bool KisKraLoadVisitor::visit(KisFilterMask *mask)
 {
     loadSelection(getLocation(mask), mask->selection());
-    loadFilterConfiguration(mask->filter(), getLocation(mask, DOT_FILTERCONFIG));
+    loadFilterConfiguration(mask->filter().data(), getLocation(mask, DOT_FILTERCONFIG));
     return true;
 }
 

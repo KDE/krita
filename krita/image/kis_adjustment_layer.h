@@ -96,15 +96,7 @@ public:
 public:
 
     /**
-     * gets a pointer to the AdjustmentLayer's filter configuration.
-     * @return a pointer to the AdjustmentLayer's filter configuration
-     */
-    KisFilterConfiguration *filter() const;
-
-    /**
-     * sets the AdjustmentLayer's filter configuration
-     * @param filterConfig a pointer to the filter configuration to set
-     * @return void
+     * \see KisNodeFilterInterface::setFilter()
      */
     void setFilter(KisFilterConfiguration *filterConfig);
 
@@ -122,10 +114,6 @@ public slots:
     KisLayer* layer() {
         return this;
     }
-
-private:
-    struct Private;
-    Private * const m_d;
 };
 
 #endif // KIS_ADJUSTMENT_LAYER_H_

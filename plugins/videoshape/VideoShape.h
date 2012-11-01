@@ -33,7 +33,9 @@
 class VideoCollection;
 class VideoEventAction;
 class VideoData;
+#ifdef SHOULD_BUILD_THUMBNAIL
 class VideoThumbnailer;
+#endif
 
 class QImage;
 
@@ -76,7 +78,9 @@ signals:
 private:
     VideoCollection *m_videoCollection;
     VideoEventAction *m_videoEventAction;
+#ifdef SHOULD_BUILD_THUMBNAIL
     VideoThumbnailer *m_thumbnailer;
+#endif
     VideoData *m_oldVideoData;
     KIcon m_icon;
     QRectF m_playIconArea;

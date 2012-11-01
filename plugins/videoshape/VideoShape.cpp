@@ -27,7 +27,9 @@
 #include <VideoEventAction.h>
 #include <VideoCollection.h>
 #include <VideoData.h>
+#ifdef SHOULD_BUILD_THUMBNAIL
 #include <VideoThumbnailer.h>
+#endif
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeSavingContext.h>
@@ -47,7 +49,9 @@ VideoShape::VideoShape()
     , m_videoEventAction(new VideoEventAction(this))
     , m_icon(koIconName("video-x-generic"))
     , m_oldVideoData(0)
+#ifdef SHOULD_BUILD_THUMBNAIL
     , m_thumbnailer(new VideoThumbnailer())
+#endif
 {
     setKeepAspectRatio(true);
     addEventAction(m_videoEventAction);
@@ -55,7 +59,9 @@ VideoShape::VideoShape()
 
 VideoShape::~VideoShape()
 {
+#ifdef SHOULD_BUILD_THUMBNAIL
     delete m_thumbnailer;
+#endif
 }
 
 void VideoShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
@@ -63,7 +69,7 @@ void VideoShape::paint(QPainter &painter, const KoViewConverter &converter, KoSh
     QRectF pixelsF = converter.documentToView(QRectF(QPointF(0,0), size()));
 
     VideoData *currentVideoData = videoData();
-
+#ifdef SHOULD_BUILD_THUMBNAIL
     if (currentVideoData && currentVideoData != m_oldVideoData) {
         //generate thumbnails
         m_oldVideoData = currentVideoData;
@@ -79,6 +85,13 @@ void VideoShape::paint(QPainter &painter, const KoViewConverter &converter, KoSh
     } else {
         painter.drawImage(pixelsF, thumnailImage);
     }
+#else
+    painter.fillRect(pixelsF, QColor(Qt::gray));
+    painter.setPen(QPen());
+    painter.drawRect(pixelsF);
+
+    m_icon.paint(&painter, pixelsF.toRect());
+#endif
 }
 
 void VideoShape::saveOdf(KoShapeSavingContext &context) const

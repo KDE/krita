@@ -966,6 +966,7 @@ QPair<int, int> KoDocumentRdf::findExtent(KoTextEditor *handler) const
 QString KoDocumentRdf::findXmlId(KoTextEditor *handler) const
 {
     int startPosition = handler->position();
+    Q_UNUSED(startPosition);
 
     KoTextInlineRdf *inlineRdf = 0;
 

@@ -827,7 +827,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
     cursor.endEditBlock();
 
     KoTextRangeManager *textRangeManager = KoTextDocument(cursor.block().document()).textRangeManager();
-    Q_UNUSED(textRangeManager)''
+    Q_UNUSED(textRangeManager);
     //kDebug(32500) << "text ranges::";
     //foreach(KoTextRange *range, textRangeManager->textRanges()) {
         //kDebug(32500) << range->id();

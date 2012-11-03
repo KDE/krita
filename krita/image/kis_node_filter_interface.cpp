@@ -19,8 +19,8 @@
 
 #include "kis_node_filter_interface.h"
 
-#include "kis_filter_registry.h"
-#include "kis_generator_registry.h"
+#include "filter/kis_filter_registry.h"
+#include "generator/kis_generator_registry.h"
 
 KisNodeFilterInterface::KisNodeFilterInterface(KisFilterConfiguration *filterConfig, bool useGeneratorRegistry)
     : m_filter(filterConfig),

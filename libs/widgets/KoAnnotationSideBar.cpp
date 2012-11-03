@@ -61,7 +61,7 @@ KoAnnotationSideBar::KoAnnotationSideBar(const KoAnnotationManager *manager, QWi
     this->repaint();
 }*/
 
-void KoAnnotationSideBar::removeAnnotation(int id)
+void KoAnnotationSideBar::removeAnnotation(int /*id*/)
 {
 
 }

@@ -148,7 +148,7 @@ void KoAnnotationSideBar::repositionRemove(int index)
     {
         curr = annotations->at(i);
        newY = curr->pos().y();
-        /* if(lower collision)
+         if(lower collision)
                newY = collision->pos().y() - curr->height();
            if(newY < 0) newY = 0;
            if(upper collision)

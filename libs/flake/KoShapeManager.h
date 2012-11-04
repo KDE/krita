@@ -98,7 +98,7 @@ public slots:
      * @param shape the shape to add
      * @param repaint if true it will trigger a repaint of the shape
      */
-    void addShape(KoShape *shape, Repaint repaint = PaintShapeOnAdd);
+    void addShape(KoShape *shape, KoShapeManager::Repaint repaint = PaintShapeOnAdd);
 
     /**
      * Add an additional shape to the manager.

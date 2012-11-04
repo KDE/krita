@@ -39,8 +39,17 @@
        <property name="text">
         <string>...</string>
        </property>
+       <property name="iconSize">
+        <size>
+         <width>16</width>
+         <height>16</height>
+        </size>
+       </property>
        <property name="popupMode">
         <enum>QToolButton::InstantPopup</enum>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -62,8 +71,17 @@
        <property name="text">
         <string>...</string>
        </property>
+       <property name="iconSize">
+        <size>
+         <width>16</width>
+         <height>16</height>
+        </size>
+       </property>
        <property name="popupMode">
         <enum>QToolButton::InstantPopup</enum>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -72,12 +90,30 @@
        <property name="text">
         <string>...</string>
        </property>
+       <property name="iconSize">
+        <size>
+         <width>16</width>
+         <height>16</height>
+        </size>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item row="1" column="3">
       <widget class="QToolButton" name="insertPageBreak">
        <property name="text">
         <string>...</string>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>16</width>
+         <height>16</height>
+        </size>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
        </property>
       </widget>
      </item>

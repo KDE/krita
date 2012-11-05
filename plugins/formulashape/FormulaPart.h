@@ -26,7 +26,7 @@
 
 class KoView;
 
-class KOFORMULA_EXPORT FormulaPart : public KoPart
+class FormulaPart : public KoPart
 {
     Q_OBJECT
 

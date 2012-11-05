@@ -40,9 +40,11 @@ option(HAVE_MEMORY_LEAK_TRACKER "Enable memory leak tracker (always disabled in 
 option(HAVE_BACKTRACE_SUPPORT "Enable recording of backtrace in memory leak tracker" OFF)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-memory-leak-tracker.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-memory-leak-tracker.h) ### WRONG PLACE???
 
-macro_optional_find_package(FFTW3)
-macro_log_feature(FFTW3_FOUND "FFTW3" "A fast, free C FFT library" "http://www.fftw.org/" FALSE "" "Required by the Krita for fast convolution operators")
-macro_bool_to_01(FFTW3_FOUND HAVE_FFTW3)
+if(!WIN32)
+    macro_optional_find_package(FFTW3)
+    macro_log_feature(FFTW3_FOUND "FFTW3" "A fast, free C FFT library" "http://www.fftw.org/" FALSE "" "Required by the Krita for fast convolution operators")
+    macro_bool_to_01(FFTW3_FOUND HAVE_FFTW3)
+endif(!WIN32)
 configure_file(config_convolution.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_convolution.h)
 
 include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/

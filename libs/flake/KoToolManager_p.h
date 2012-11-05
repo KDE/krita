@@ -51,9 +51,14 @@ public:
     ~Private();
 
     void setup();
+
+    void connectActiveTool();
+    void disconnectActiveTool();
     void switchTool(KoToolBase *tool, bool temporary);
     void switchTool(const QString &id, bool temporary);
     void postSwitchTool(bool temporary);
+    void switchCanvasData(CanvasData *cd);
+
     bool eventFilter(QObject *object, QEvent *event);
     void toolActivated(ToolHelper *tool);
 

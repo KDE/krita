@@ -206,31 +206,27 @@ void KoToolManager::Private::setup()
     KoInputDeviceHandlerRegistry::instance();
 }
 
-void KoToolManager::Private::switchTool(KoToolBase *tool, bool temporary)
+void KoToolManager::Private::connectActiveTool()
 {
-    Q_UNUSED(temporary);
-    Q_ASSERT(tool);
-    if (canvasData == 0)
-        return;
-
-    if (canvasData->activeTool == tool && tool->toolId() != KoInteractionTool_ID)
-        return;
-
-    bool newActiveTool = canvasData->activeTool != 0;
-
-    if (newActiveTool) {
-        canvasData->activeTool->repaintDecorations();
-        QList<CanvasData*> items = canvasses[canvasData->canvas];
-        foreach(CanvasData *cd, items) {
-            if (cd == canvasData) continue;
-            if (cd->activeTool == canvasData->activeTool) {
-                newActiveTool = false;
-                break;
-            }
-        }
+    if (canvasData->activeTool) {
+        connect(canvasData->activeTool, SIGNAL(cursorChanged(const QCursor &)),
+                q, SLOT(updateCursor(const QCursor &)));
+        connect(canvasData->activeTool, SIGNAL(activateTool(const QString &)),
+                q, SLOT(switchToolRequested(const QString &)));
+        connect(canvasData->activeTool, SIGNAL(activateTemporary(const QString &)),
+                q, SLOT(switchToolTemporaryRequested(const QString &)));
+        connect(canvasData->activeTool, SIGNAL(done()), q, SLOT(switchBackRequested()));
+        connect(canvasData->activeTool, SIGNAL(statusTextChanged(const QString &)),
+                q, SIGNAL(changedStatusText(const QString &)));
     }
 
-    if (newActiveTool) {
+    // we expect the tool to emit a cursor on activation.
+    updateCursor(Qt::ForbiddenCursor);
+}
+
+void KoToolManager::Private::disconnectActiveTool()
+{
+    if (canvasData->activeTool) {
         canvasData->deactivateToolActions();
         // repaint the decorations before we deactivate the tool as it might deleted
         // data needed for the repaint
@@ -246,24 +242,23 @@ void KoToolManager::Private::switchTool(KoToolBase *tool, bool temporary)
                    q, SIGNAL(changedStatusText(const QString &)));
     }
 
-    canvasData->activeTool = tool;
-
-    connect(canvasData->activeTool, SIGNAL(cursorChanged(const QCursor &)),
-            q, SLOT(updateCursor(const QCursor &)));
-    connect(canvasData->activeTool, SIGNAL(activateTool(const QString &)),
-            q, SLOT(switchToolRequested(const QString &)));
-    connect(canvasData->activeTool, SIGNAL(activateTemporary(const QString &)),
-            q, SLOT(switchToolTemporaryRequested(const QString &)));
-    connect(canvasData->activeTool, SIGNAL(done()), q, SLOT(switchBackRequested()));
-    connect(canvasData->activeTool, SIGNAL(statusTextChanged(const QString &)),
-            q, SIGNAL(changedStatusText(const QString &)));
-
     // emit a empty status text to clear status text from last active tool
     emit q->changedStatusText(QString());
+}
 
-    // we expect the tool to emit a cursor on activation.
-    updateCursor(Qt::ForbiddenCursor);
+void KoToolManager::Private::switchTool(KoToolBase *tool, bool temporary)
+{
+    Q_UNUSED(temporary);
+    Q_ASSERT(tool);
+    if (canvasData == 0)
+        return;
 
+    if (canvasData->activeTool == tool && tool->toolId() != KoInteractionTool_ID)
+        return;
+
+    disconnectActiveTool();
+    canvasData->activeTool = tool;
+    connectActiveTool();
     postSwitchTool(temporary);
 }
 
@@ -378,6 +373,50 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
     }
 }
 
+
+void KoToolManager::Private::switchCanvasData(CanvasData *cd)
+{
+    Q_ASSERT(cd);
+
+    KoCanvasBase *oldCanvas = 0;
+    KoInputDevice oldInputDevice;
+
+    if (canvasData) {
+        oldCanvas = canvasData->canvas->canvas();
+        oldInputDevice = canvasData->inputDevice;
+
+        if (canvasData->activeTool) {
+            disconnectActiveTool();
+        }
+
+        KoToolProxy *proxy = proxies.value(oldCanvas);
+        Q_ASSERT(proxy);
+        proxy->setActiveTool(0);
+    }
+
+    canvasData = cd;
+    inputDevice = canvasData->inputDevice;
+
+    if (canvasData->activeTool) {
+        connectActiveTool();
+        postSwitchTool(false);
+    }
+
+    if (oldInputDevice != canvasData->inputDevice) {
+        emit q->inputDeviceChanged(canvasData->inputDevice);
+    }
+
+    if (oldCanvas != canvasData->canvas->canvas()) {
+        emit q->changedCanvas(canvasData->canvas->canvas());
+    }
+
+    KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
+    if (canvasControllerWidget) {
+        canvasControllerWidget->activate();
+    }
+}
+
+
 void KoToolManager::Private::toolActivated(ToolHelper *tool)
 {
     Q_ASSERT(tool);
@@ -408,14 +447,7 @@ void KoToolManager::Private::detachCanvas(KoCanvasController *controller)
             }
         }
         if (newCanvas) {
-            // activate the found canvas controller
-            canvasData = canvasses.value(newCanvas).first();
-            inputDevice = canvasData->inputDevice;
-            KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
-            if (canvasControllerWidget) {
-                canvasControllerWidget->activate();
-            }
-            postSwitchTool(false);
+            switchCanvasData(canvasses.value(newCanvas).first());
         } else {
             KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
             if (canvasControllerWidget) {
@@ -533,34 +565,12 @@ void KoToolManager::Private::movedFocus(QWidget *from, QWidget *to)
         return;
     foreach(CanvasData *data, canvasses.value(newCanvas)) {
         if (data->inputDevice == inputDevice) {
-            if (canvasData) { // deactivate the old one.
-                updateCursor(Qt::ArrowCursor);
-                if (canvasData->activeTool) {
-                    canvasData->activeTool->deactivate();
-                    KoToolProxy *proxy = proxies.value(canvasData->canvas->canvas());
-                    Q_ASSERT(proxy);
-                    proxy->setActiveTool(0);
-                }
-            }
-
-            canvasData = data;
-            updateCursor(canvasData->activeTool->cursor());
-            KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
-            if (canvasControllerWidget) {
-                canvasControllerWidget->activate();
-            }
-            postSwitchTool(false);
-            emit q->changedCanvas(canvasData ? canvasData->canvas->canvas() : 0);
+            switchCanvasData(data);
             return;
         }
     }
     // no such inputDevice for this canvas...
-    canvasData = canvasses.value(newCanvas).first();
-    inputDevice = canvasData->inputDevice;
-    if (canvasControllerWidget) {
-        canvasControllerWidget->activate();
-    }
-    emit q->changedCanvas(canvasData ? canvasData->canvas->canvas() : 0);
+    switchCanvasData(canvasses.value(newCanvas).first());
 }
 
 void KoToolManager::Private::updateCursor(const QCursor &cursor)
@@ -645,7 +655,7 @@ void KoToolManager::Private::switchInputDevice(const KoInputDevice &device)
         // We do continue to switch between tablet devices, thought.
         return;
     }
-    inputDevice = device;
+
     QList<CanvasData*> items = canvasses[canvasData->canvas];
 
     // disable all actions for all tools in the all canvasdata objects for this canvas.
@@ -660,19 +670,12 @@ void KoToolManager::Private::switchInputDevice(const KoInputDevice &device)
     // search for a canvasdata object for the current input device
     foreach(CanvasData *cd, items) {
         if (cd->inputDevice == device) {
-            canvasData = cd;
-            if (cd->activeTool == 0)
+            switchCanvasData(cd);
+
+            if (!canvasData->activeTool) {
                 switchTool(KoInteractionTool_ID, false);
-            else {
-                postSwitchTool(false);
-                updateCursor(canvasData->activeTool->cursor());
             }
-            KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
-            if (canvasControllerWidget) {
-                canvasControllerWidget->activate();
-            }
-            emit q->inputDeviceChanged(device);
-            emit q->changedCanvas(canvasData ? canvasData->canvas->canvas() : 0);
+
             return;
         }
     }
@@ -682,17 +685,12 @@ void KoToolManager::Private::switchInputDevice(const KoInputDevice &device)
     // switch to new canvas as the active one.
     QString oldTool = canvasData->activeToolId;
 
-    canvasData = cd;
     items.append(cd);
-    canvasses[canvasData->canvas] = items;
+    canvasses[cd->canvas] = items;
+
+    switchCanvasData(cd);
 
     q->switchToolRequested(oldTool);
-    emit q->inputDeviceChanged(device);
-    KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
-    if (canvasControllerWidget) {
-        canvasControllerWidget->activate();
-    }
-    emit q->changedCanvas(canvasData ? canvasData->canvas->canvas() : 0);
 }
 
 void KoToolManager::Private::registerToolProxy(KoToolProxy *proxy, KoCanvasBase *canvas)

@@ -837,10 +837,13 @@ bool KoDocument::saveToStore(KoStore *_store, const QString & _path)
 bool KoDocument::saveOasisPreview(KoStore *store, KoXmlWriter *manifestWriter)
 {
     const QPixmap pix = generatePreview(QSize(128, 128));
+    if (pix.isNull())
+        return true; //no thumbnail to save, but the process succeeded
+
     QImage preview(pix.toImage().convertToFormat(QImage::Format_ARGB32, Qt::ColorOnly));
 
     if (preview.isNull())
-        return true; //no thumbnail to save, but the process as a whole worked
+        return false; //thumbnail to save, but the process failed
 
     // ### TODO: freedesktop.org Thumbnail specification (date...)
     KoStoreDevice io(store);
@@ -850,7 +853,7 @@ bool KoDocument::saveOasisPreview(KoStore *store, KoXmlWriter *manifestWriter)
         return false;
     io.close();
     manifestWriter->addManifestEntry("Thumbnails/", "");
-    manifestWriter->addManifestEntry("Thumbnails/thumbnail.png", "");
+    manifestWriter->addManifestEntry("Thumbnails/thumbnail.png", "image/png");
     return true;
 }
 

@@ -235,6 +235,12 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         xres = cinfo.X_density * 2.54;
         yres = cinfo.Y_density * 2.54;
     }
+    if (xres < 72) {
+        xres = 72;
+    }
+    if (yres < 72) {
+        yres = 72;
+    }
     m_image->setResolution(POINT_TO_INCH(xres), POINT_TO_INCH(yres));   // It is the "invert" macro because we convert from pointer-per-inchs to points
 
     // Create layer

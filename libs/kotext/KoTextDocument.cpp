@@ -55,7 +55,6 @@ const QUrl KoTextDocument::UndoStackURL = QUrl("kotext://undoStack");
 const QUrl KoTextDocument::ChangeTrackerURL = QUrl("kotext://changetracker");
 const QUrl KoTextDocument::TextEditorURL = QUrl("kotext://textEditor");
 const QUrl KoTextDocument::LineNumberingConfigurationURL = QUrl("kotext://linenumberingconfiguration");
-const QUrl KoTextDocument::AuxillaryFrameURL = QUrl("kotext://auxillaryframe");
 const QUrl KoTextDocument::RelativeTabsURL = QUrl("kotext://relativetabs");
 const QUrl KoTextDocument::HeadingListURL = QUrl("kotext://headingList");
 const QUrl KoTextDocument::SelectionsURL = QUrl("kotext://selections");
@@ -325,20 +324,17 @@ KoTextRangeManager *KoTextDocument::textRangeManager() const
 
 QTextFrame *KoTextDocument::auxillaryFrame()
 {
-    QVariant resource = m_document->resource(KoTextDocument::AuxillaryFrame,
-            AuxillaryFrameURL);
+    QTextCursor cursor(m_document->rootFrame()->lastCursorPosition());
+    cursor.movePosition(QTextCursor::PreviousCharacter);
+    QTextFrame *frame = cursor.currentFrame();
 
-    QTextFrame *frame = resource.value<QTextFrame *>();
+    if (frame->format().intProperty(KoText::SubFrameType) != KoText::AuxillaryFrameType) {
+        cursor = m_document->rootFrame()->lastCursorPosition();
 
-    if (frame == 0) {
-        QTextCursor cursor(m_document->rootFrame()->lastCursorPosition());
         QTextFrameFormat format;
         format.setProperty(KoText::SubFrameType, KoText::AuxillaryFrameType);
 
         frame = cursor.insertFrame(format);
-
-        resource.setValue(frame);
-        m_document->addResource(KoTextDocument::AuxillaryFrame, AuxillaryFrameURL, resource);
     }
     return frame;
 }

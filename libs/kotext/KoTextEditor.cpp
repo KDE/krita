@@ -788,10 +788,12 @@ bool KoTextEditor::atBlockStart() const
 
 bool KoTextEditor::atEnd() const
 {
-    QVariant resource = d->caret.document()->resource(KoTextDocument::AuxillaryFrame,
-    KoTextDocument::AuxillaryFrameURL);
-    QTextFrame *auxFrame = resource.value<QTextFrame *>();
-    if (auxFrame) {
+    QTextCursor cursor(d->caret.document()->rootFrame()->lastCursorPosition());
+    cursor.movePosition(QTextCursor::PreviousCharacter);
+    QTextFrame *auxFrame = cursor.currentFrame();
+
+    if (auxFrame->format().intProperty(KoText::SubFrameType) == KoText::AuxillaryFrameType) {
+        //auxFrame really is the auxillary frame
         if (d->caret.position() == auxFrame->firstPosition() - 1) {
             return true;
         }
@@ -1543,10 +1545,11 @@ bool KoTextEditor::movePosition(QTextCursor::MoveOperation operation, QTextCurso
 
     if (beforeFrame == afterFrame) {
         if (after.selectionEnd() == after.document()->characterCount() -1) {
-            QVariant resource = after.document()->resource(KoTextDocument::AuxillaryFrame,
-            KoTextDocument::AuxillaryFrameURL);
-            QTextFrame *auxFrame = resource.value<QTextFrame *>();
-            if (auxFrame) {
+            QTextCursor cursor(d->caret.document()->rootFrame()->lastCursorPosition());
+            cursor.movePosition(QTextCursor::PreviousCharacter);
+            QTextFrame *auxFrame = cursor.currentFrame();
+
+            if (auxFrame->format().intProperty(KoText::SubFrameType) == KoText::AuxillaryFrameType) {
                 if (operation == QTextCursor::End) {
                     d->caret.setPosition(auxFrame->firstPosition() - 1, mode);
                     emit cursorPositionChanged();
@@ -1665,9 +1668,11 @@ void KoTextEditor::setPosition(int pos, QTextCursor::MoveMode mode)
     d->editProtectionCached = false;
 
     if (pos == d->caret.document()->characterCount() -1) {
-        QVariant resource = d->caret.document()->resource(KoTextDocument::AuxillaryFrame,
-        KoTextDocument::AuxillaryFrameURL);
-        if (resource.isValid()) {
+        QTextCursor cursor(d->caret.document()->rootFrame()->lastCursorPosition());
+        cursor.movePosition(QTextCursor::PreviousCharacter);
+        QTextFrame *auxFrame = cursor.currentFrame();
+
+        if (auxFrame->format().intProperty(KoText::SubFrameType) == KoText::AuxillaryFrameType) {
             return;
         }
     }

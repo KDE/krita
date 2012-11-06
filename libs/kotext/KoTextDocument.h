@@ -225,7 +225,6 @@ public:
         UndoStack,
         TextEditor,
         LineNumberingConfiguration,
-        AuxillaryFrame,
         RelativeTabs,
         HeadingList,
         Selections,
@@ -246,7 +245,6 @@ public:
     static const QUrl TextEditorURL;
     static const QUrl LineNumberingConfigurationURL;
     static const QUrl BibliographyConfigurationURL;
-    static const QUrl AuxillaryFrameURL;
     static const QUrl RelativeTabsURL;
     static const QUrl HeadingListURL;
     static const QUrl SelectionsURL;

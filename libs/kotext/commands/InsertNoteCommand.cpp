@@ -58,6 +58,7 @@ void InsertNoteCommand::redo()
         QTextCursor cursor(m_document.data());
         cursor.setPosition(m_framePosition);
         m_inlineNote->setTextFrame(cursor.currentFrame());
+        m_inlineNote->setMotherFrame(KoTextDocument(m_document).auxillaryFrame());
     } else {
         m_first = false;
         if (m_document) {

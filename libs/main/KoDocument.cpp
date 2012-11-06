@@ -345,6 +345,7 @@ bool KoDocument::saveFile()
     }
 
     if (ret) {
+        d->undoStack->setClean();
         removeAutoSaveFiles();
         // Restart the autosave timer
         // (we don't want to autosave again 2 seconds after a real save)

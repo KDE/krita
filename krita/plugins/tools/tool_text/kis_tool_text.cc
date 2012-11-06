@@ -54,10 +54,8 @@ void KisToolText::finishRect(const QRectF &rect)
     KoShapeFactoryBase* textFactory = KoShapeRegistry::instance()->value(shapeString);
     if (textFactory) {
         KoShape* shape = textFactory->createDefaultShape(canvas()->shapeController()->resourceManager());
+        shape->setPosition(rect.topLeft());
         shape->setSize(r.size());
-        qreal x = r.x() + r.width() / 2;
-        qreal y = r.y() + r.height() / 2;
-        shape->setPosition(QPointF(x,y));
         addShape(shape);
 
         KisCanvas2* kiscanvas = dynamic_cast<KisCanvas2 *>(canvas());

@@ -25,6 +25,7 @@ Boston, MA 02110-1301, USA.
 
 #include <QVBoxLayout>
 #include <QListWidget>
+#include <QListWidgetItem>
 
 #include <KLocale>
 #include <KSqueezedTextLabel>
@@ -59,10 +60,13 @@ KoFilterChooser::KoFilterChooser(QWidget *parent, const QStringList &mimeTypes, 
     for (QStringList::ConstIterator it = m_mimeTypes.constBegin();
             it != m_mimeTypes.constEnd();
             it++) {
+
         KMimeType::Ptr mime = KMimeType::mimeType(*it);
         const QString name = mime ? mime->comment() : *it;
-        if (! name.isEmpty())
-            m_filterList->addItem(name);
+        if (! name.isEmpty()) {
+            QListWidgetItem *item = new QListWidgetItem(name, m_filterList);
+            item->setData(32, *it);
+        }
     }
 
     m_filterList->sortItems();
@@ -82,12 +86,8 @@ KoFilterChooser::~KoFilterChooser()
 
 QString KoFilterChooser::filterSelected()
 {
-    const int item = m_filterList->currentRow();
-
-    if (item > -1)
-        return m_mimeTypes [item];
-    else
-        return QString();
+    QListWidgetItem *item = m_filterList->currentItem();
+    return item->data(32).toString();
 }
 
 #include <KoFilterManager_p.moc>

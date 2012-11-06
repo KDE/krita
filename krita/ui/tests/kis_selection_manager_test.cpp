@@ -112,6 +112,11 @@ public:
         return checkOneLayer(image, mask, name);
     }
 
+    bool checkNoSelection() {
+        KisNodeSP mask = findNode(image->root(), "selection");
+        return !mask && !image->globalSelection();
+    }
+
     KisImageSP image;
     KisSelectionManager *selectionManager;
     KisSurrogateUndoStore *undoStore;
@@ -227,15 +232,14 @@ void KisSelectionManagerTest::testDeselectReselect()
 
     t.selectionManager->deselect();
     t.image->waitForDone();
-    QVERIFY(t.checkSelectionOnly("select_all"));
+    QVERIFY(t.checkNoSelection());
 
     t.checkUndo();
     t.startConcurrentTask();
 
     t.selectionManager->deselect();
     t.image->waitForDone();
-    QVERIFY(t.checkSelectionOnly("select_all"));
-
+    QVERIFY(t.checkNoSelection());
 
     t.selectionManager->reselect();
     t.image->waitForDone();
@@ -243,7 +247,7 @@ void KisSelectionManagerTest::testDeselectReselect()
 
     t.undoStore->undo();
     t.image->waitForDone();
-    QVERIFY(t.checkSelectionOnly("select_all"));
+    QVERIFY(t.checkNoSelection());
 
     t.startConcurrentTask();
 

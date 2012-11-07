@@ -198,6 +198,9 @@ set(kritaui_LIB_SRCS
     input/kis_zoom_action.cpp
     input/kis_show_palette_action.cpp
     input/kis_change_primary_setting_action.cpp
+    kis_ui_action_factory.cpp
+    kis_ui_action_factory_registry.cpp
+    actions/kis_selection_action_factories.cpp
 )
 
 if(HAVE_OPENGL)

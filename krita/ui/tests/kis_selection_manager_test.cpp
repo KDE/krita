@@ -73,6 +73,15 @@ public:
     }
 
     ~SelectionManagerTester() {
+        /**
+         * Here is a weird way of precessing pending events.
+         * This is needed for the dummies facade could process
+         * all the queued events telling it some nodes were
+         * added/deleted
+         */
+        QApplication::processEvents();
+        QTest::qSleep(500);
+        QApplication::processEvents();
         delete shell;
         delete doc;
         delete part;

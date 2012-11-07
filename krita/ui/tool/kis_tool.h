@@ -224,6 +224,20 @@ protected slots:
      */
     virtual void resetCursorStyle();
 
+    /**
+     * Called when the user requested the cancellation of the current
+     * stroke. If you tool supports cancelling, override this method
+     * and do the needed work there
+     */
+    virtual void requestStrokeCancellation();
+
+    /**
+     * Called when the image decided that the stroke should better be
+     * ended. If you tool supports long strokes, override this method
+     * and do the needed work there
+     */
+    virtual void requestStrokeEnd();
+
 private slots:
     void slotToggleFgBg();
     void slotResetFgBg();

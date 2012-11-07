@@ -576,6 +576,31 @@ signals:
      */
     void sigLayersChangedAsync();
 
+    /**
+     * Emitted when the UI has requested the cancellation of
+     * the stroke. The point is, we cannot cancel the stroke
+     * without its creator knowing about it (which most probably
+     * cause a crash), so we just forward this request from the UI
+     * to the creator of the stroke.
+     *
+     * If your tool supports cancelling of its work in the middle
+     * of operation, just listen to this signal and cancel
+     * the stroke when it comes
+     */
+    void sigStrokeCancellationRequested();
+
+    /**
+     * Emitted when the image decides that the stroke should better
+     * be ended. The point is, we cannot just end the stroke
+     * without its creator knowing about it (which most probably
+     * cause a crash), so we just forward this request from the UI
+     * to the creator of the stroke.
+     *
+     * If your tool supports long  strokes that may involve multiple
+     * mouse actions in one stroke, just listen to this signal and
+     * end the stroke when it comes.
+     */
+    void sigStrokeEndRequested();
 
 public slots:
     KisCompositeProgressProxy* compositeProgressProxy();
@@ -606,7 +631,25 @@ public slots:
     void refreshGraph(KisNodeSP root, const QRect& rc, const QRect &cropRect);
     void initialRefreshGraph();
 
+    /**
+     * This method is be called by the UI (*not* by the creator
+     * of the stroke) when it thinks current stroke should be
+     * cancelled. If the creator of the stroke supports cancelling
+     * of the stroke, it will be notified about the request and
+     * the stroke will be cancelled
+     */
+    void requestStrokeCancellation();
+
 private:
+    /**
+     * This method is called when image decides that the sroke
+     * should be ended. If the creator of the stroke supports it,
+     * it will be notified and the stroke will be cancelled
+     */
+    void requestStrokeEnd();
+
+private:
+
     KisImage(const KisImage& rhs);
     KisImage& operator=(const KisImage& rhs);
     void init(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace);

@@ -32,6 +32,7 @@ public:
 
     void setIndex(int idx) {
         KisImageWSP image = this->image();
+        image->requestStrokeCancellation();
         if(image->tryBarrierLock()) {
             KUndo2Stack::setIndex(idx);
             image->unlock();
@@ -40,6 +41,7 @@ public:
 
     void undo() {
         KisImageWSP image = this->image();
+        image->requestStrokeCancellation();
         if(image->tryBarrierLock()) {
             KUndo2Stack::undo();
             image->unlock();

@@ -841,10 +841,21 @@ void Autocorrect::writeAutocorrectXmlEntry()
     while (twoUpper != m_twoUpperLetterExceptions.constEnd()) {
         QDomElement item = root.createElement(QLatin1String( "word" ));
         item.setAttribute(QLatin1String("exception"),*twoUpper);
-        upperCaseExceptions.appendChild(item);
+        twoUpperLetterExceptions.appendChild(item);
         ++twoUpper;
     }
     word.appendChild(twoUpperLetterExceptions);
+
+    QDomElement supperscript = root.createElement(QLatin1String( "SuperScript" ));
+    QHashIterator<QString, QString> j(m_superScriptEntries);
+    while (j.hasNext()) {
+        j.next();
+        QDomElement item = root.createElement(QLatin1String( "superscript" ));
+        item.setAttribute(QLatin1String("super"), j.key());
+	item.setAttribute(QLatin1String("find"), j.value());
+        item.appendChild(item);
+    }
+    word.appendChild(supperscript);
 
 
     QDomElement doubleQuote = root.createElement(QLatin1String( "DoubleQuote" ));

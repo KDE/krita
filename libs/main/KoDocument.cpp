@@ -852,7 +852,6 @@ bool KoDocument::saveOasisPreview(KoStore *store, KoXmlWriter *manifestWriter)
     if (! preview.save(&io, "PNG", 0))
         return false;
     io.close();
-    manifestWriter->addManifestEntry("Thumbnails/", "");
     manifestWriter->addManifestEntry("Thumbnails/thumbnail.png", "image/png");
     return true;
 }

@@ -851,8 +851,8 @@ void Autocorrect::writeAutocorrectXmlEntry()
     while (j.hasNext()) {
         j.next();
         QDomElement item = root.createElement(QLatin1String( "superscript" ));
-        item.setAttribute(QLatin1String("super"), j.key());
-	item.setAttribute(QLatin1String("find"), j.value());
+        item.setAttribute(QLatin1String("find"), j.key());
+	item.setAttribute(QLatin1String("super"), j.value());
         item.appendChild(item);
     }
     word.appendChild(supperscript);

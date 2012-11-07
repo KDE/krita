@@ -90,7 +90,6 @@ void Autocorrect::finishedWord(QTextDocument *document, int cursorPosition)
     if (m_word.isEmpty()) return;
 
     emit startMacro(i18n("Autocorrection"));
-
     bool done = autoFormatURLs();
     if (!done) done = singleSpaces();
     if (!done) done = autoBoldUnderline();
@@ -650,7 +649,7 @@ void Autocorrect::readConfig()
 
     m_autocorrectLang = interface.readEntry("formatLanguage", m_autocorrectLang);
 
-    readAutocorrectXmlEntry();
+    readAutocorrectXmlEntries();
 }
 
 void Autocorrect::writeConfig()
@@ -677,15 +676,19 @@ void Autocorrect::writeConfig()
     writeAutocorrectXmlEntry();
 }
 
-void Autocorrect::readAutocorrectXmlEntry()
+void Autocorrect::readAutocorrectXmlEntries()
 {
-    // Taken from Calligra 1.x KoAutoFormat.cpp
+    // The idea here is to load the kde shared (and localized) xml files first
+    // If such a file doesn't exist we load the calligra installed files instead
+    //
+    // in any case we load the custom-* files on top, just in case the user has edited them
+    // These costum files is only the kde shared one, as that is where we save too
     KLocale *locale = KGlobal::locale();
     QString kdelang = locale->languageList().first();
     kdelang.remove(QRegExp("@.*"));
 
     QStringList folders;
-    folders<<QLatin1String("/")<<QLatin1String("calligra/");
+    folders << QLatin1String("") << QLatin1String("calligra/");
     QString fname;
     Q_FOREACH(const QString& path, folders)
     {
@@ -698,19 +701,25 @@ void Autocorrect::readAutocorrectXmlEntry()
                 kdelang.remove( QRegExp( "_.*" ) );
                 fname = KGlobal::dirs()->findResource("data", path + "autocorrect/" + kdelang + ".xml");
             }
-            if (fname.isEmpty())
-                fname = KGlobal::dirs()->findResource("data", path + "autocorrect/autocorrect.xml");
         }
+
         if(!fname.isEmpty()) {
+            readAutocorrectXmlEntry(fname, false);
             break;
         }
     }
+
     if (m_autocorrectLang.isEmpty())
         m_autocorrectLang = kdelang;
 
-    if (fname.isEmpty())
-        return;
+    fname = KGlobal::dirs()->findResource("data", "autocorrect/custom-" + m_autocorrectLang + ".xml");
+    if(!fname.isEmpty()) {
+        readAutocorrectXmlEntry(fname, true);
+    }
+}
 
+void Autocorrect::readAutocorrectXmlEntry(const QString &fname, bool onlyCustomization)
+{
     QFile xmlFile(fname);
     if (!xmlFile.open(QIODevice::ReadOnly))
         return;
@@ -726,6 +735,9 @@ void Autocorrect::readAutocorrectXmlEntry()
 
     QDomElement upper = de.namedItem("UpperCaseExceptions").toElement();
     if (!upper.isNull()) {
+        if (onlyCustomization) {
+            m_upperCaseExceptions.clear();
+        }
         QDomNodeList nl = upper.childNodes();
         for (int i = 0; i < nl.count(); i++)
             m_upperCaseExceptions += nl.item(i).toElement().attribute("exception");
@@ -733,22 +745,21 @@ void Autocorrect::readAutocorrectXmlEntry()
 
     QDomElement twoUpper = de.namedItem("TwoUpperLetterExceptions").toElement();
     if (!twoUpper.isNull()) {
+        if (onlyCustomization) {
+            m_twoUpperLetterExceptions.clear();
+        }
         QDomNodeList nl = twoUpper.childNodes();
         for(int i = 0; i < nl.count(); i++)
             m_twoUpperLetterExceptions += nl.item(i).toElement().attribute("exception");
-    }
-
-    QDomElement superScript = de.namedItem("SuperScript").toElement();
-    if (!superScript.isNull()) {
-        QDomNodeList nl = superScript.childNodes();
-        for(int i = 0; i < nl.count() ; i++)
-            m_superScriptEntries.insert(nl.item(i).toElement().attribute("find"), nl.item(i).toElement().attribute("super"));
     }
 
     /* Load advanced autocorrect entry, including the format */
     QDomElement item = de.namedItem("items").toElement();
     if (!item.isNull())
     {
+        if (onlyCustomization) {
+            m_autocorrectEntries.clear();
+        }
         QDomNodeList nl = item.childNodes();
         for (int i = 0; i < nl.count(); i++) {
             QDomElement element = nl.item(i).toElement();
@@ -778,6 +789,7 @@ void Autocorrect::readAutocorrectXmlEntry()
             m_autocorrectEntries.insert(find, replace);
         }
     }
+
     QDomElement doubleQuote = de.namedItem(QLatin1String("DoubleQuote")).toElement();
     if(doubleQuote.isNull()) {
       QDomNodeList nl = doubleQuote.childNodes();
@@ -798,12 +810,24 @@ void Autocorrect::readAutocorrectXmlEntry()
       }
     }
 
+    if (onlyCustomization) {
+        return;
+    }
+
+    QDomElement superScript = de.namedItem("SuperScript").toElement();
+    if (!superScript.isNull()) {
+        QDomNodeList nl = superScript.childNodes();
+        for(int i = 0; i < nl.count() ; i++) {
+            m_superScriptEntries.insert(nl.item(i).toElement().attribute("find"), nl.item(i).toElement().attribute("super"));
+        }
+    }
+
 }
 
 
 void Autocorrect::writeAutocorrectXmlEntry()
 {
-    const QString fname = KGlobal::dirs()->locateLocal("data", QLatin1String("autocorrect/autocorrect.xml"));
+    const QString fname = KGlobal::dirs()->locateLocal("data", "autocorrect/custom-" + m_autocorrectLang + ".xml");
     QFile file(fname);
     if( !file.open( QIODevice::WriteOnly | QIODevice::Text ) ) {
         qDebug()<<"We can't save in file :"<<fname;
@@ -846,18 +870,6 @@ void Autocorrect::writeAutocorrectXmlEntry()
     }
     word.appendChild(twoUpperLetterExceptions);
 
-    QDomElement supperscript = root.createElement(QLatin1String( "SuperScript" ));
-    QHashIterator<QString, QString> j(m_superScriptEntries);
-    while (j.hasNext()) {
-        j.next();
-        QDomElement item = root.createElement(QLatin1String( "superscript" ));
-        item.setAttribute(QLatin1String("find"), j.key());
-	item.setAttribute(QLatin1String("super"), j.value());
-        supperscript.appendChild(item);
-    }
-    word.appendChild(supperscript);
-
-
     QDomElement doubleQuote = root.createElement(QLatin1String( "DoubleQuote" ));
     QDomElement item = root.createElement(QLatin1String( "doublequote" ));
     item.setAttribute(QLatin1String("begin"),m_typographicDoubleQuotes.begin);
@@ -872,9 +884,7 @@ void Autocorrect::writeAutocorrectXmlEntry()
     singleQuote.appendChild(item);
     word.appendChild(singleQuote);
 
-
     QTextStream ts( &file );
     ts << root.toString();
     file.close();
-
 }

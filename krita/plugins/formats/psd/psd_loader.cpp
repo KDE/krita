@@ -27,6 +27,7 @@
 #include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>
 #include <KoCompositeOp.h>
+#include <KoUnit.h>
 
 #include <kis_annotation.h>
 #include <kis_types.h>
@@ -142,7 +143,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
     // set the correct resolution
     RESN_INFO_1005 *resInfo = dynamic_cast<RESN_INFO_1005*>(resourceSection.resources[PSDResourceSection::RESN_INFO]->resource);
     if (resInfo) {
-        m_image->setResolution(resInfo->hRes, resInfo->vRes);
+        m_image->setResolution(POINT_TO_INCH(resInfo->hRes), POINT_TO_INCH(resInfo->vRes));
         // let's skip the unit for now; we can only set that on the KoDocument, and krita doesn't use it.
     }
 

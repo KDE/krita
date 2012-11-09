@@ -1,6 +1,10 @@
 project( lcmsengine )
 
-add_subdirectory(tests)
+if(!WIN32)
+## Only test if on non-Windows system
+	add_subdirectory(tests)
+endif(!WIN32)
+
 add_subdirectory(colorprofiles)
 
 include_directories( ${PIGMENT_INCLUDES} ${LCMS2_INCLUDE_DIR} )

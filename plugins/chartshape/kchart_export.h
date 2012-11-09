@@ -23,16 +23,6 @@
 /* needed for KDE_EXPORT and KDE_IMPORT macros */
 #include <kdemacros.h>
 
-#ifndef KCHARTCOMMON_EXPORT
-# if defined(MAKE_KCHARTCOMMON_LIB)
-   /* We are building this library */ 
-#  define KCHARTCOMMON_EXPORT KDE_EXPORT
-# else
-   /* We are using this library */ 
-#  define KCHARTCOMMON_EXPORT KDE_IMPORT
-# endif
-#endif
-
 #ifndef CHARTSHAPELIB_EXPORT
 # if defined(MAKE_CHARTSHAPELIB_LIB)
    /* We are building this library */ 

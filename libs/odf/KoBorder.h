@@ -212,6 +212,7 @@ public:
     // FIXME: These places should be made to use KoBorder instead.
     static BorderStyle odfBorderStyle(const QString &borderstyle, bool *converted = 0);
     static QString odfBorderStyleString(BorderStyle borderstyle);
+    static QString msoBorderStyleString(BorderStyle borderstyle);
 
 private:
     QSharedDataPointer<KoBorderPrivate> d;

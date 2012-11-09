@@ -43,6 +43,9 @@
 #include "kis_node_commands_adapter.h"
 #include "kis_group_layer.h"
 #include "kis_part2.h"
+#include "kis_statusbar.h"
+#include "kis_progress_widget.h"
+
 #include <QMessageBox>
 
 struct KisImportCatcher::Private
@@ -61,17 +64,20 @@ KisImportCatcher::KisImportCatcher(const KUrl & url, KisView2 * view)
     m_d->doc = new KisDoc2(part);
     part->setDocument(m_d->doc);
 
+    KoProgressProxy *progressProxy = view->statusBar()->progress()->progressProxy();
+    m_d->doc->setProgressProxy(progressProxy);
     m_d->view = view;
     m_d->url = url;
     KoFilterManager manager(m_d->doc);
+    m_d->doc->openUrl(url);
 
-    if (KMimeType::findByUrl(url)->name() == "application/x-krita") {
-        m_d->doc->loadNativeFormat(url.toLocalFile());
-    }
-    else {
-        KoFilter::ConversionStatus status;
-        manager.importDocument(url.pathOrUrl(), QString(), status);
-    }
+//    if (KMimeType::findByUrl(url)->name() == "application/x-krita") {
+//        m_d->doc->loadNativeFormat(url.toLocalFile());
+//    }
+//    else {
+//        KoFilter::ConversionStatus status;
+//        manager.importDocument(url.pathOrUrl(), QString(), status);
+//    }
     KisImageWSP importedImage = m_d->doc->image();
 
     if (importedImage) {

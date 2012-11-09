@@ -26,7 +26,7 @@
 
 class KoView;
 
-class KCHART_EXPORT ChartPart : public KoPart
+class CHARTSHAPELIB_EXPORT ChartPart : public KoPart
 {
     Q_OBJECT
 

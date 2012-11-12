@@ -239,7 +239,7 @@
          <item>
           <widget class="QRadioButton" name="shadeSelectorTypeHidden">
            <property name="text">
-            <string>don't show</string>
+            <string>do not show</string>
            </property>
           </widget>
          </item>

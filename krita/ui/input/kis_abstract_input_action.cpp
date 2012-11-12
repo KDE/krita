@@ -19,6 +19,7 @@
 #include "kis_abstract_input_action.h"
 
 #include <QPointF>
+#include <QMouseEvent>
 #include <KLocalizedString>
 
 class KisAbstractInputAction::Private
@@ -30,7 +31,7 @@ public:
     QString description;
     QHash<QString, int> indexes;
 
-    QPointF mousePosition;
+    QPointF lastMousePosition;
 };
 
 KisAbstractInputAction::KisAbstractInputAction(KisInputManager* manager) : d(new Private)
@@ -44,9 +45,44 @@ KisAbstractInputAction::~KisAbstractInputAction()
     delete d;
 }
 
-bool KisAbstractInputAction::handleTablet() const
+void KisAbstractInputAction::activate()
 {
-    return false;
+}
+
+void KisAbstractInputAction::deactivate()
+{
+}
+
+void KisAbstractInputAction::begin(int shortcut, QEvent *event)
+{
+    Q_UNUSED(shortcut);
+
+    QMouseEvent *mouseEvent;
+    if (event && (mouseEvent = dynamic_cast<QMouseEvent*>(event))) {
+        d->lastMousePosition = mouseEvent->posF();
+    }
+}
+
+void KisAbstractInputAction::inputEvent(QEvent* event)
+{
+    QMouseEvent *mouseEvent;
+    if (event && (mouseEvent = dynamic_cast<QMouseEvent*>(event))) {
+        if (mouseEvent->type() == QEvent::MouseMove) {
+            mouseMoved(d->lastMousePosition, mouseEvent->posF());
+        }
+        d->lastMousePosition = mouseEvent->posF();
+    }
+}
+
+void KisAbstractInputAction::end(QEvent *event)
+{
+    Q_UNUSED(event);
+}
+
+void KisAbstractInputAction::mouseMoved(const QPointF &lastPos, const QPointF &pos)
+{
+    Q_UNUSED(lastPos);
+    Q_UNUSED(pos);
 }
 
 KisInputManager* KisAbstractInputAction::inputManager() const
@@ -82,19 +118,4 @@ void KisAbstractInputAction::setDescription(const QString& description)
 void KisAbstractInputAction::setShortcutIndexes(const QHash< QString, int >& indexes)
 {
     d->indexes = indexes;
-}
-
-bool KisAbstractInputAction::isBlockingAutoRepeat() const
-{
-    return false;
-}
-
-QPointF KisAbstractInputAction::mousePosition() const
-{
-    return d->mousePosition;
-}
-
-void KisAbstractInputAction::setMousePosition(const QPointF &position)
-{
-    d->mousePosition = position;
 }

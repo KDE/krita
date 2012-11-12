@@ -43,15 +43,11 @@ public:
     explicit KisZoomAction(KisInputManager* manager);
     virtual ~KisZoomAction();
 
-    virtual void begin(int shortcut);
-    virtual void end();
-    virtual void inputEvent(QEvent* event);
+    void activate();
+    void deactivate();
 
-    virtual bool isBlockingAutoRepeat() const;
-
-private:
-    class Private;
-    Private * const d;
+    void begin(int shortcut, QEvent *event = 0);
+    void mouseMoved(const QPointF &lastPos, const QPointF &pos);
 };
 
 #endif // KIS_ZOOM_ACTION_H

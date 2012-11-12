@@ -43,15 +43,10 @@ public:
     explicit KisRotateCanvasAction(KisInputManager* manager);
     virtual ~KisRotateCanvasAction();
 
-    virtual void begin(int shortcut);
-    virtual void end();
-    virtual void inputEvent(QEvent* event);
-
-    virtual bool isBlockingAutoRepeat() const;
-
-private:
-    class Private;
-    Private * const d;
+    void activate();
+    void deactivate();
+    void begin(int shortcut, QEvent *event);
+    void mouseMoved(const QPointF &lastPos, const QPointF &pos);
 };
 
 #endif // KIS_ROTATE_CANVAS_ACTION_H

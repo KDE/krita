@@ -28,16 +28,9 @@
 #include <KoCanvasController.h>
 #include <KoZoomController.h>
 
-class KisZoomAction::Private
-{
-public:
-    Private() : active(false) { }
-
-    bool active;
-};
 
 KisZoomAction::KisZoomAction(KisInputManager* manager)
-    : KisAbstractInputAction(manager), d(new Private)
+    : KisAbstractInputAction(manager)
 {
     setName(i18n("Zoom Canvas"));
 
@@ -53,17 +46,24 @@ KisZoomAction::KisZoomAction(KisInputManager* manager)
 
 KisZoomAction::~KisZoomAction()
 {
-    delete d;
 }
 
-void KisZoomAction::begin(int shortcut)
+void KisZoomAction::activate()
 {
-    switch(shortcut)
-    {
+    QApplication::setOverrideCursor(Qt::OpenHandCursor);
+}
+
+void KisZoomAction::deactivate()
+{
+    QApplication::restoreOverrideCursor();
+}
+
+void KisZoomAction::begin(int shortcut, QEvent *event)
+{
+    KisAbstractInputAction::begin(shortcut, event);
+
+    switch(shortcut) {
         case ZoomToggleShortcut:
-            setMousePosition(inputManager()->canvas()->coordinatesConverter()->documentToWidget(inputManager()->mousePosition()));
-            QApplication::setOverrideCursor(Qt::OpenHandCursor);
-            d->active = true;
             break;
         case ZoomInShortcut: {
             float zoom = inputManager()->canvas()->view()->zoomController()->zoomAction()->effectiveZoom();
@@ -105,38 +105,10 @@ void KisZoomAction::begin(int shortcut)
     }
 }
 
-void KisZoomAction::end()
+void KisZoomAction::mouseMoved(const QPointF &lastPos, const QPointF &pos)
 {
-    d->active = false;
-    QApplication::restoreOverrideCursor();
-}
+    QPointF relMovement = -(pos - lastPos);
 
-void KisZoomAction::inputEvent(QEvent* event)
-{
-    switch (event->type()) {
-        case QEvent::MouseButtonPress:
-            setMousePosition(static_cast<QMouseEvent*>(event)->posF());
-            break;
-        case QEvent::MouseMove: {
-            QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
-            if(mevent->buttons()) {
-                QPointF relMovement = -(mevent->posF() - mousePosition());
-
-                float zoom = inputManager()->canvas()->view()->zoomController()->zoomAction()->effectiveZoom() + relMovement.y() / 100;
-                inputManager()->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, zoom);
-
-                setMousePosition(mevent->posF());
-                QApplication::changeOverrideCursor(Qt::ClosedHandCursor);
-            } else {
-                QApplication::changeOverrideCursor(Qt::OpenHandCursor);
-            }
-        }
-        default:
-            break;
-    }
-}
-
-bool KisZoomAction::isBlockingAutoRepeat() const
-{
-    return d->active;
+    float zoom = inputManager()->canvas()->view()->zoomController()->zoomAction()->effectiveZoom() + relMovement.y() / 100;
+    inputManager()->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, zoom);
 }

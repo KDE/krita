@@ -1,5 +1,5 @@
-/* This file is part of the KDE project
- * Copyright (C) 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
+/*
+ *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,28 +16,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_show_palette_action.h"
+#ifndef __KIS_INPUT_MANAGER_TEST_H
+#define __KIS_INPUT_MANAGER_TEST_H
 
-#include <KLocalizedString>
+#include <QtTest/QtTest>
 
-#include <ko_favorite_resource_manager.h>
-#include <kis_canvas2.h>
-
-#include "kis_input_manager.h"
-
-KisShowPaletteAction::KisShowPaletteAction(KisInputManager* manager)
-    : KisAbstractInputAction(manager)
+class KisInputManagerTest : public QObject
 {
-    setName(i18n("Show Popup Palette"));
-}
+    Q_OBJECT
+private slots:
+    void testKeyShortcut();
+    void testStrokeShortcut();
+    void testKeyEvents();
+    void testReleaseUnnecessaryModifiers();
+    void testMouseMoves();
+};
 
-KisShowPaletteAction::~KisShowPaletteAction()
-{
-
-}
-
-void KisShowPaletteAction::begin(int, QEvent *event)
-{
-    QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
-    inputManager()->canvas()->favoriteResourceManager()->slotShowPopupPalette(mouseEvent->pos());
-}
+#endif /* __KIS_INPUT_MANAGER_TEST_H */

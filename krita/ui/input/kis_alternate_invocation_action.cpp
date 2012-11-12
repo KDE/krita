@@ -37,28 +37,28 @@ KisAlternateInvocationAction::~KisAlternateInvocationAction()
 {
 }
 
-void KisAlternateInvocationAction::begin(int /*shortcut*/)
+void KisAlternateInvocationAction::begin(int shortcut, QEvent *event)
 {
-    QMouseEvent mevent(QEvent::MouseButtonPress, inputManager()->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
-    inputManager()->toolProxy()->mousePressEvent(&mevent, inputManager()->mousePosition());
+    KisAbstractInputAction::begin(shortcut, event);
+
+    QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
+    QMouseEvent targetEvent(QEvent::MouseButtonPress, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
+    inputManager()->toolProxy()->mousePressEvent(&targetEvent, inputManager()->widgetToPixel(mouseEvent->posF()));
 }
 
-void KisAlternateInvocationAction::end()
+void KisAlternateInvocationAction::end(QEvent *event)
 {
-    QMouseEvent mevent(QEvent::MouseButtonRelease, mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
-    inputManager()->toolProxy()->mouseReleaseEvent(&mevent, mousePosition());
+    QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
+    QMouseEvent targetEvent(QEvent::MouseButtonRelease, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
+    inputManager()->toolProxy()->mouseReleaseEvent(&targetEvent, inputManager()->widgetToPixel(mouseEvent->posF()));
+
+    KisAbstractInputAction::end(event);
 }
 
-void KisAlternateInvocationAction::inputEvent(QEvent* event)
+void KisAlternateInvocationAction::mouseMoved(const QPointF &lastPos, const QPointF &pos)
 {
-    if(event->type() == QEvent::MouseMove) {
-        QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
-        setMousePosition(inputManager()->widgetToPixel(mevent->posF()));
-        inputManager()->toolProxy()->mouseMoveEvent(mevent, mousePosition());
-    }
-}
+    Q_UNUSED(lastPos);
 
-bool KisAlternateInvocationAction::isBlockingAutoRepeat() const
-{
-    return true;
+    QMouseEvent targetEvent(QEvent::MouseButtonRelease, pos.toPoint(), Qt::NoButton, Qt::LeftButton, Qt::ControlModifier);
+    inputManager()->toolProxy()->mouseMoveEvent(&targetEvent, inputManager()->widgetToPixel(pos));
 }

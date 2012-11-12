@@ -91,7 +91,7 @@ KisZoomManager::~KisZoomManager()
 
 void KisZoomManager::setup(KActionCollection * actionCollection)
 {
-    KoZoomMode::setMinimumZoom(0.125);
+    KoZoomMode::setMinimumZoom(0.06);
     KoZoomMode::setMaximumZoom(64.0);
 
     KisCoordinatesConverter *converter =

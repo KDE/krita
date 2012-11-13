@@ -54,6 +54,9 @@ public:
     KisToolMove(KoCanvasBase * canvas);
     virtual ~KisToolMove();
 
+    void deactivate();
+    void requestStrokeEnd();
+    void requestStrokeCancellation();
 
 public:
 
@@ -67,7 +70,8 @@ public:
 
 private:
     void drag(const QPoint& newPos);
-
+    void endStroke();
+    void cancelStroke();
     QPoint applyModifiers(Qt::KeyboardModifiers modifiers, QPoint pos);
 
 private:

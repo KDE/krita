@@ -102,6 +102,14 @@ KisFilterHandler::~KisFilterHandler()
 
 void KisFilterHandler::showDialog()
 {
+    /**
+     * HACK ALERT:
+     * Until filters are ported to strokes, there should be a barrier
+     * to finish all the running strokes in the system
+     */
+    m_d->view->image()->barrierLock();
+    m_d->view->image()->unlock();
+
     KisPaintDeviceSP dev = m_d->view->activeDevice();
     if (dev->colorSpace()->willDegrade(m_d->filter->colorSpaceIndependence())) {
         // Warning bells!

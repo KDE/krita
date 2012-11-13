@@ -125,6 +125,11 @@ public:
     void endTransaction(KisPostExecutionUndoAdapter *undoAdapter);
 
     /**
+     * Finishes a transaction and returns a pointer to its undo command
+     */
+    KUndo2Command* endAndTakeTransaction();
+
+    /**
      * Finish the transaction and delete it's undo information.
      * NOTE: Be careful, because all the previous transactions
      * will become non-undoable after execution of this method.

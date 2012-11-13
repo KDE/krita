@@ -97,6 +97,14 @@ void KisStrokeStrategyUndoCommandBased::doStrokeCallback(KisStrokeJobData *data)
     notifyCommandDone(d->command, d->sequentiality(), d->exclusivity());
 }
 
+void KisStrokeStrategyUndoCommandBased::runAndSaveCommand(KUndo2CommandSP command,
+                                                          KisStrokeJobData::Sequentiality sequentiality,
+                                                          KisStrokeJobData::Exclusivity exclusivity)
+{
+    command->redo();
+    notifyCommandDone(command, sequentiality, exclusivity);
+}
+
 void KisStrokeStrategyUndoCommandBased::notifyCommandDone(KUndo2CommandSP command,
                                                           KisStrokeJobData::Sequentiality sequentiality,
                                                           KisStrokeJobData::Exclusivity exclusivity)

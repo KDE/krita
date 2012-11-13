@@ -157,7 +157,9 @@ KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
         applyCommand(new DisableUIUpdatesCommand(m_image, false), KisStrokeJobData::BARRIER);
     }
 
-    applyCommand(new UpdateCommand(m_image, m_node, m_flags, false));
+    if (m_node) {
+        applyCommand(new UpdateCommand(m_image, m_node, m_flags, false));
+    }
 }
 
 KisProcessingApplicator::~KisProcessingApplicator()
@@ -209,7 +211,9 @@ void KisProcessingApplicator::applyCommand(KUndo2Command *command,
 
 void KisProcessingApplicator::end()
 {
-    applyCommand(new UpdateCommand(m_image, m_node, m_flags, true));
+    if (m_node) {
+        applyCommand(new UpdateCommand(m_image, m_node, m_flags, true));
+    }
 
     if(m_flags.testFlag(NO_UI_UPDATES)) {
         applyCommand(new DisableUIUpdatesCommand(m_image, true), KisStrokeJobData::BARRIER);

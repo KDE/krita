@@ -161,12 +161,24 @@ void KisTool::activate(ToolActivation, const QSet<KoShape*> &)
 
     connect(actions().value("toggle_fg_bg"), SIGNAL(triggered()), SLOT(slotToggleFgBg()), Qt::UniqueConnection);
     connect(actions().value("reset_fg_bg"), SIGNAL(triggered()), SLOT(slotResetFgBg()), Qt::UniqueConnection);
+    connect(image(), SIGNAL(sigStrokeCancellationRequested()), SLOT(requestStrokeCancellation()));
+    connect(image(), SIGNAL(sigStrokeEndRequested()), SLOT(requestStrokeEnd()));
 }
 
 void KisTool::deactivate()
 {
+    disconnect(image().data(), SIGNAL(sigStrokeCancellationRequested()));
+    disconnect(image().data(), SIGNAL(sigStrokeEndRequested()));
     disconnect(actions().value("toggle_fg_bg"), 0, this, 0);
     disconnect(actions().value("reset_fg_bg"), 0, this, 0);
+}
+
+void KisTool::requestStrokeCancellation()
+{
+}
+
+void KisTool::requestStrokeEnd()
+{
 }
 
 void KisTool::resourceChanged(int key, const QVariant & v)
@@ -519,6 +531,7 @@ void KisTool::deleteSelection()
     KisPaintDeviceSP device;
 
     if(node && (device = node->paintDevice())) {
+        image()->barrierLock();
         KisTransaction transaction(i18n("Clear"), device);
 
         QRect dirtyRect;
@@ -533,6 +546,7 @@ void KisTool::deleteSelection()
 
         transaction.commit(image()->undoAdapter());
         device->setDirty(dirtyRect);
+        image()->unlock();
     }
     else {
         KoToolBase::deleteSelection();

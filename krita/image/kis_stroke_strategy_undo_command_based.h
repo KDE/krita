@@ -79,10 +79,15 @@ public:
     void doStrokeCallback(KisStrokeJobData *data);
 
 protected:
-    void executeCommand(KUndo2CommandSP command, bool undo);
+    void runAndSaveCommand(KUndo2CommandSP command,
+                           KisStrokeJobData::Sequentiality sequentiality,
+                           KisStrokeJobData::Exclusivity exclusivity);
     void notifyCommandDone(KUndo2CommandSP command,
                            KisStrokeJobData::Sequentiality sequentiality,
                            KisStrokeJobData::Exclusivity exclusivity);
+
+private:
+    void executeCommand(KUndo2CommandSP command, bool undo);
 
 private:
     bool m_undo;

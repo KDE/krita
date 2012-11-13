@@ -391,7 +391,7 @@ QRect KisPaintDevice::extent() const
 
 QRegion KisPaintDevice::region() const
 {
-    return m_d->cache.region();
+    return m_d->cache.region().translated(m_d->x, m_d->y);
 }
 
 QRect KisPaintDevice::exactBounds() const

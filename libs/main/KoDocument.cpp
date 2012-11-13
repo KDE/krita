@@ -224,7 +224,7 @@ KoDocument::KoDocument(KoPart *parent, KUndo2Stack *undoStack)
     KConfigGroup cfgGrp(d->parentPart->componentData().config(), "Undo");
     d->undoStack->setUndoLimit(cfgGrp.readEntry("UndoLimit", 1000));
 
-    connect(d->undoStack, SIGNAL(cleanChanged(bool)), this, SLOT(setDocumentClean(bool)));
+    connect(d->undoStack, SIGNAL(indexChanged(int)), this, SLOT(slotUndoStackIndexChanged(int)));
 
 }
 
@@ -345,6 +345,7 @@ bool KoDocument::saveFile()
     }
 
     if (ret) {
+        d->undoStack->setClean();
         removeAutoSaveFiles();
         // Restart the autosave timer
         // (we don't want to autosave again 2 seconds after a real save)
@@ -836,10 +837,13 @@ bool KoDocument::saveToStore(KoStore *_store, const QString & _path)
 bool KoDocument::saveOasisPreview(KoStore *store, KoXmlWriter *manifestWriter)
 {
     const QPixmap pix = generatePreview(QSize(128, 128));
+    if (pix.isNull())
+        return true; //no thumbnail to save, but the process succeeded
+
     QImage preview(pix.toImage().convertToFormat(QImage::Format_ARGB32, Qt::ColorOnly));
 
     if (preview.isNull())
-        return true; //no thumbnail to save, but the process as a whole worked
+        return false; //thumbnail to save, but the process failed
 
     // ### TODO: freedesktop.org Thumbnail specification (date...)
     KoStoreDevice io(store);
@@ -848,8 +852,7 @@ bool KoDocument::saveOasisPreview(KoStore *store, KoXmlWriter *manifestWriter)
     if (! preview.save(&io, "PNG", 0))
         return false;
     io.close();
-    manifestWriter->addManifestEntry("Thumbnails/", "");
-    manifestWriter->addManifestEntry("Thumbnails/thumbnail.png", "");
+    manifestWriter->addManifestEntry("Thumbnails/thumbnail.png", "image/png");
     return true;
 }
 
@@ -2112,10 +2115,10 @@ void KoDocument::endMacro()
     d->undoStack->endMacro();
 }
 
-
-void KoDocument::setDocumentClean(bool clean)
+void KoDocument::slotUndoStackIndexChanged(int idx)
 {
-    setModified(!clean);
+    // even if the document was allready modified, call setModified to re-start autosave timer
+    setModified(idx != d->undoStack->cleanIndex());
 }
 
 void KoDocument::setProfileStream(QTextStream *profilestream)

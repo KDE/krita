@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>268</width>
-    <height>90</height>
+    <width>358</width>
+    <height>163</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -36,74 +36,109 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,0,0,0,0,0">
+       <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,0,0,0,0,0,0,0,0">
         <property name="spacing">
          <number>2</number>
         </property>
-        <item row="1" column="0" colspan="8">
-         <widget class="StylesCombo" name="paragraphStyleCombo"/>
-        </item>
-        <item row="2" column="6">
-         <spacer name="horizontalSpacer_2">
+        <item row="2" column="5" colspan="2">
+         <spacer name="horizontalSpacer_3">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
           <property name="sizeHint" stdset="0">
            <size>
-            <width>100</width>
+            <width>20</width>
             <height>20</height>
            </size>
           </property>
          </spacer>
+        </item>
+        <item row="1" column="0" colspan="11">
+         <widget class="StylesCombo" name="paragraphStyleCombo"/>
         </item>
         <item row="2" column="0" colspan="2">
          <widget class="FormattingButton" name="bulletListButton">
           <property name="text">
            <string>...</string>
           </property>
-         </widget>
-        </item>
-        <item row="3" column="7">
-         <widget class="QToolButton" name="moreOptions">
-          <property name="text">
-           <string>...</string>
+          <property name="iconSize">
+           <size>
+            <width>16</width>
+            <height>16</height>
+           </size>
           </property>
-         </widget>
-        </item>
-        <item row="2" column="2">
-         <widget class="QToolButton" name="decreaseIndent">
           <property name="autoRaise">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
          </widget>
         </item>
-        <item row="3" column="0" colspan="5">
+        <item row="2" column="3">
+         <widget class="QToolButton" name="increaseIndent">
+          <property name="iconSize">
+           <size>
+            <width>16</width>
+            <height>16</height>
+           </size>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="7">
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
            <widget class="QToolButton" name="alignLeft">
+            <property name="iconSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
+            </property>
             <property name="autoRaise">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QToolButton" name="alignCenter">
+            <property name="iconSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
+            </property>
             <property name="autoRaise">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QToolButton" name="alignRight">
+            <property name="iconSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
+            </property>
             <property name="autoRaise">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QToolButton" name="alignBlock">
+            <property name="iconSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
+            </property>
             <property name="autoRaise">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -122,15 +157,51 @@
           </item>
          </layout>
         </item>
-        <item row="2" column="3">
-         <widget class="QToolButton" name="increaseIndent">
+        <item row="2" column="4">
+         <widget class="QToolButton" name="changeTextDirection">
+          <property name="iconSize">
+           <size>
+            <width>16</width>
+            <height>16</height>
+           </size>
+          </property>
           <property name="autoRaise">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
          </widget>
         </item>
-        <item row="2" column="4">
-         <widget class="QToolButton" name="changeTextDirection"/>
+        <item row="2" column="2">
+         <widget class="QToolButton" name="decreaseIndent">
+          <property name="iconSize">
+           <size>
+            <width>16</width>
+            <height>16</height>
+           </size>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="9">
+         <widget class="QToolButton" name="moreOptions">
+          <property name="text">
+           <string>...</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="8">
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>100</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </item>

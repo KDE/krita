@@ -114,7 +114,8 @@ private:
 
     void readConfig();
     void writeConfig();
-    void readAutocorrectXmlEntry();
+    void readAutocorrectXmlEntries();
+    void readAutocorrectXmlEntry(const QString &fname, bool onlyCustomization);
     void writeAutocorrectXmlEntry();
 
 private:

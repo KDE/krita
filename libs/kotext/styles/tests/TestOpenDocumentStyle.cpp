@@ -317,8 +317,12 @@ bool Attribute::compare(const QString& initialValue, const QString& outputValue)
             return qAbs(KoUnit::parseAngle(initialValue) - KoUnit::parseAngle(outputValue)) < 0.0001;
         } else if (reference == "shadowType") {
             KoShadowStyle initial, output;
-            Q_ASSERT(initial.loadOdf(initialValue));
-            Q_ASSERT(output.loadOdf(outputValue));
+            const bool initialLoaded = initial.loadOdf(initialValue);
+            Q_ASSERT(initialLoaded);
+            Q_UNUSED(initialLoaded);
+            const bool outputLoaded = output.loadOdf(outputValue);
+            Q_ASSERT(outputLoaded);
+            Q_UNUSED(outputLoaded);
             return (initial == output);
         } else if (reference == "borderWidths") {
             QStringList initials, outputs;

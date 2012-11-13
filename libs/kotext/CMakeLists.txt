@@ -164,6 +164,7 @@ install(
     KoInlineObjectFactoryBase.h
     KoBookmark.h
     KoBookmarkManager.h
+    KoAnnotationManager.h
     KoInlineTextObjectManager.h
     KoTextAnchor.h
     KoTextBlockBorderData.h

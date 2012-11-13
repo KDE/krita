@@ -113,6 +113,7 @@ int KoTextRange::rangeEnd() const
 void KoTextRange::setRangeEnd(int position)
 {
     Q_D(KoTextRange);
+    d->positionOnlyMode = false;
     d->cursor.setPosition(d->cursor.selectionStart());
     d->cursor.setPosition(position, QTextCursor::KeepAnchor);
 }

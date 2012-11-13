@@ -215,6 +215,24 @@ QString KoBorder::odfBorderStyleString(BorderStyle borderstyle)
     }
 }
 
+QString KoBorder::msoBorderStyleString(BorderStyle borderstyle)
+{
+    switch (borderstyle) {
+    case KoBorder::BorderDashedLong:
+        return QString("dash-largegap");
+    case KoBorder::BorderSlash:
+        return QString("slash"); // not officially odf, but we suppport it anyway
+    case KoBorder::BorderWave:
+        return QString("wave"); // not officially odf, but we suppport it anyway
+    case KoBorder::BorderDoubleWave:
+        return QString("double-wave"); // not officially odf, but we suppport it anyway
+
+    default:
+        // Handle remaining styles as odf type style.
+        return odfBorderStyleString(borderstyle);
+    }
+}
+
 
 // ----------------------------------------------------------------
 #define setBorderSideProperty( side,property,value ) \
@@ -411,6 +429,9 @@ bool KoBorder::loadOdf(const KoXmlElement &style)
             setRightBorderColor(allBordersColor);
             setBottomBorderColor(allBordersColor);
         }
+        if (style.hasAttributeNS(KoXmlNS::calligra, "specialborder")) {
+            allBordersStyle = KoBorder::odfBorderStyle(style.attributeNS(KoXmlNS::calligra, "specialborder"), &foundStyle);
+        }
         if (foundStyle) {
             setLeftBorderStyle(allBordersStyle);
             setTopBorderStyle(allBordersStyle);
@@ -437,6 +458,9 @@ bool KoBorder::loadOdf(const KoXmlElement &style)
             if (borderColor.isValid()) {
                 setLeftBorderColor(borderColor);
             }
+            if (style.hasAttributeNS(KoXmlNS::calligra, "specialborder-left")) {
+                borderStyle = KoBorder::odfBorderStyle(style.attributeNS(KoXmlNS::calligra, "specialborder-left"), &foundStyle);
+            }
             if (foundStyle) {
                 setLeftBorderStyle(borderStyle);
             }
@@ -454,6 +478,9 @@ bool KoBorder::loadOdf(const KoXmlElement &style)
             parseOdfBorder(border, &borderColor, &borderStyle, &foundStyle, &borderWidth, &foundWidth);
             if (borderColor.isValid()) {
                 setTopBorderColor(borderColor);
+            }
+            if (style.hasAttributeNS(KoXmlNS::calligra, "specialborder-top")) {
+                borderStyle = KoBorder::odfBorderStyle(style.attributeNS(KoXmlNS::calligra, "specialborder-top"), &foundStyle);
             }
             if (foundStyle) {
                 setTopBorderStyle(borderStyle);
@@ -473,6 +500,9 @@ bool KoBorder::loadOdf(const KoXmlElement &style)
             if (borderColor.isValid()) {
                 setRightBorderColor(borderColor);
             }
+            if (style.hasAttributeNS(KoXmlNS::calligra, "specialborder-right")) {
+                borderStyle = KoBorder::odfBorderStyle(style.attributeNS(KoXmlNS::calligra, "specialborder-right"), &foundStyle);
+            }
             if (foundStyle) {
                 setRightBorderStyle(borderStyle);
             }
@@ -490,6 +520,9 @@ bool KoBorder::loadOdf(const KoXmlElement &style)
             parseOdfBorder(border, &borderColor, &borderStyle, &foundStyle, &borderWidth, &foundWidth);
             if (borderColor.isValid()) {
                 setBottomBorderColor(borderColor);
+            }
+            if (style.hasAttributeNS(KoXmlNS::calligra, "specialborder-bottom")) {
+                borderStyle = KoBorder::odfBorderStyle(style.attributeNS(KoXmlNS::calligra, "specialborder-bottom"), &foundStyle);
             }
             if (foundStyle) {
                 setBottomBorderStyle(borderStyle);
@@ -511,6 +544,9 @@ bool KoBorder::loadOdf(const KoXmlElement &style)
         if (borderColor.isValid()) {
             setTlbrBorderColor(borderColor);
         }
+        if (style.hasAttributeNS(KoXmlNS::calligra, "specialborder-tl-br")) {
+            borderStyle = KoBorder::odfBorderStyle(style.attributeNS(KoXmlNS::calligra, "specialborder-tl-br"), &foundStyle);
+        }
         if (foundStyle) {
             setTlbrBorderStyle(borderStyle);
         }
@@ -528,6 +564,9 @@ bool KoBorder::loadOdf(const KoXmlElement &style)
         parseOdfBorder(border, &borderColor, &borderStyle, &foundStyle, &borderWidth, &foundWidth);
         if (borderColor.isValid()) {
             setTrblBorderColor(borderColor);
+        }
+        if (style.hasAttributeNS(KoXmlNS::calligra, "specialborder-bl-tr")) {
+            borderStyle = KoBorder::odfBorderStyle(style.attributeNS(KoXmlNS::calligra, "specialborder-bl-tr"), &foundStyle);
         }
         if (foundStyle) {
             setTrblBorderStyle(borderStyle);
@@ -655,6 +694,14 @@ void KoBorder::saveOdf(KoGenStyle &style, KoGenStyle::PropertyType type) const
                                         odfBorderStyleString(trblBorderStyle()),
                                         trblBorderColor().name());
 
+    // Get the strings that describe respective special borders (for special mso support).
+    QString leftBorderSpecialString = msoBorderStyleString(leftBorderStyle());
+    QString rightBorderSpecialString = msoBorderStyleString(rightBorderStyle());
+    QString topBorderSpecialString = msoBorderStyleString(topBorderStyle());
+    QString bottomBorderSpecialString = msoBorderStyleString(bottomBorderStyle());
+    QString tlbrBorderSpecialString = msoBorderStyleString(tlbrBorderStyle());
+    QString trblBorderSpecialString = msoBorderStyleString(trblBorderStyle());
+
     // Check if we can save all borders in one fo:border attribute, or
     // if we have to use several different ones like fo:border-left, etc.
     if (leftBorderString == rightBorderString
@@ -663,16 +710,24 @@ void KoBorder::saveOdf(KoGenStyle &style, KoGenStyle::PropertyType type) const
 
         // Yes, they were all the same, so use only fo:border
         style.addProperty("fo:border", leftBorderString, type);
+        style.addProperty("calligra:specialborder-left", leftBorderSpecialString, type);
+        style.addProperty("calligra:specialborder-right", rightBorderSpecialString, type);
+        style.addProperty("calligra:specialborder-top", topBorderSpecialString, type);
+        style.addProperty("calligra:specialborder-bottom", bottomBorderSpecialString, type);
     } else {
         // No, they were different, so use the individual borders.
         //if (leftBorderStyle() != BorderNone)
             style.addProperty("fo:border-left", leftBorderString, type);
+            style.addProperty("calligra:specialborder-left", leftBorderSpecialString, type);
         //if (rightBorderStyle() != BorderNone)
             style.addProperty("fo:border-right", rightBorderString, type);
+            style.addProperty("calligra:specialborder-right", rightBorderSpecialString, type);
         //if (topBorderStyle() != BorderNone)
             style.addProperty("fo:border-top", topBorderString, type);
+            style.addProperty("calligra:specialborder-top", topBorderSpecialString, type);
         //if (bottomBorderStyle() != BorderNone)
             style.addProperty("fo:border-bottom", bottomBorderString, type);
+            style.addProperty("calligra:specialborder-bottom", bottomBorderSpecialString, type);
     }
 
     if (style.type() != KoGenStyle::PageLayoutStyle) {
@@ -714,27 +769,27 @@ void KoBorder::saveOdf(KoGenStyle &style, KoGenStyle::PropertyType type) const
     if (leftBorderLineWidth == rightBorderLineWidth
         && leftBorderLineWidth == topBorderLineWidth
         && leftBorderLineWidth == bottomBorderLineWidth
-        && leftBorderStyle() == BorderDouble
-        && rightBorderStyle() == BorderDouble
-        && topBorderStyle() == BorderDouble
-        && bottomBorderStyle() == BorderDouble) {
+        && leftBorderStyle() == rightBorderStyle()
+        && topBorderStyle() == bottomBorderStyle()
+        && topBorderStyle() == leftBorderStyle()
+        && (leftBorderStyle() == BorderDouble || leftBorderStyle() == BorderDoubleWave)) {
         style.addProperty("style:border-line-width", leftBorderLineWidth, type);
     } else {
-        if (leftBorderStyle() == BorderDouble)
+        if (leftBorderStyle() == BorderDouble || leftBorderStyle() == BorderDoubleWave)
             style.addProperty("style:border-line-width-left", leftBorderLineWidth, type);
-        if (rightBorderStyle() == BorderDouble)
+        if (rightBorderStyle() == BorderDouble || rightBorderStyle() == BorderDoubleWave)
             style.addProperty("style:border-line-width-right", rightBorderLineWidth, type);
-        if (topBorderStyle() == BorderDouble)
+        if (topBorderStyle() == BorderDouble || topBorderStyle() == BorderDoubleWave)
             style.addProperty("style:border-line-width-top", topBorderLineWidth, type);
-        if (bottomBorderStyle() == BorderDouble)
+        if (bottomBorderStyle() == BorderDouble || bottomBorderStyle() == BorderDoubleWave)
             style.addProperty("style:border-line-width-bottom", bottomBorderLineWidth, type);
     }
 
     if (style.type() != KoGenStyle::PageLayoutStyle) {
-        if (tlbrBorderStyle() == BorderDouble) {
+        if (tlbrBorderStyle() == BorderDouble || tlbrBorderStyle() == BorderDoubleWave) {
             style.addProperty("style:diagonal-tl-br-widths", tlbrBorderLineWidth, type);
         }
-        if (trblBorderStyle() == BorderDouble) {
+        if (trblBorderStyle() == BorderDouble || trblBorderStyle() == BorderDoubleWave) {
             style.addProperty("style:diagonal-bl-tr-widths", trblBorderLineWidth, type);
         }
     }

@@ -108,7 +108,7 @@ QString KoFilterManager::importDocument(const QString& url,
                     m_document->extraNativeMimeTypes(KoDocument::ForImport)), nativeFormat, u);
             if (chooser.exec()) {
                 QByteArray f = chooser.filterSelected().toLatin1();
-
+                qDebug() << "User choose format" << f;
                 if (f == nativeFormat) {
                     status = KoFilter::OK;
                     QApplication::restoreOverrideCursor();

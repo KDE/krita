@@ -170,7 +170,12 @@ void StrokeFillWidget::updateWidget(KoShapeStrokeModel *stroke, KoShapeBackgroun
 {
     m_preview->update(stroke, fill);
     updateStyleButtons(activeStyle);
+
+    // We don't want the opacity slider to send any signals when it's only initialized.
+    // Otherwise an undo record is created.
+    m_opacity->blockSignals (true);
     m_opacity->setValue(opacity);
+    m_opacity->blockSignals (false);
 
     m_actionColor->setCurrentColor(currentColor);
 }

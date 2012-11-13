@@ -21,6 +21,7 @@
 #include <QApplication>
 #include <KLocalizedString>
 
+#include "kis_cursor.h"
 #include "kis_canvas_controller.h"
 #include <kis_canvas2.h>
 #include "kis_input_manager.h"
@@ -55,7 +56,7 @@ KisRotateCanvasAction::~KisRotateCanvasAction()
 
 void KisRotateCanvasAction::activate()
 {
-    QApplication::setOverrideCursor(Qt::OpenHandCursor);
+    QApplication::setOverrideCursor(KisCursor::rotateCursor());
 }
 
 void KisRotateCanvasAction::deactivate()

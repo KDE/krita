@@ -22,6 +22,7 @@
 
 #include <kis_canvas2.h>
 
+#include "kis_cursor.h"
 #include <KoCanvasControllerWidget.h>
 #include <KoZoomController.h>
 #include <kis_view2.h>
@@ -98,7 +99,7 @@ KisZoomAction::~KisZoomAction()
 
 void KisZoomAction::activate()
 {
-    QApplication::setOverrideCursor(Qt::OpenHandCursor);
+    QApplication::setOverrideCursor(KisCursor::zoomCursor());
 }
 
 void KisZoomAction::deactivate()

@@ -31,8 +31,10 @@
 class KisZoomAction::Private
 {
 public:
-    Private(KisZoomAction *qq) : q(qq) {}
+    Private(KisZoomAction *qq) : q(qq), distance(0) {}
     KisZoomAction *q;
+    int distance;
+    Shortcuts mode;
 
     void zoomTo(bool zoomIn, QEvent *event);
 };
@@ -80,6 +82,7 @@ KisZoomAction::KisZoomAction(KisInputManager* manager)
 
     QHash< QString, int > shortcuts;
     shortcuts.insert(i18n("Toggle Zoom Mode"), ZoomToggleShortcut);
+    shortcuts.insert(i18n("Toggle Discrete Zoom Mode"), DiscreteZoomToggleShortcut);
     shortcuts.insert(i18n("Zoom In"), ZoomInShortcut);
     shortcuts.insert(i18n("Zoom Out"), ZoomOutShortcut);
     shortcuts.insert(i18n("Reset Zoom to 100%"), ZoomResetShortcut);
@@ -109,6 +112,11 @@ void KisZoomAction::begin(int shortcut, QEvent *event)
 
     switch(shortcut) {
         case ZoomToggleShortcut:
+            d->mode = (Shortcuts)shortcut;
+            break;
+        case DiscreteZoomToggleShortcut:
+            d->mode = (Shortcuts)shortcut;
+            d->distance = 0;
             break;
         case ZoomInShortcut:
             d->zoomTo(true, event);
@@ -130,8 +138,21 @@ void KisZoomAction::begin(int shortcut, QEvent *event)
 
 void KisZoomAction::mouseMoved(const QPointF &lastPos, const QPointF &pos)
 {
-    QPointF relMovement = -(pos - lastPos);
+    QPointF diff = -(pos - lastPos);
 
-    float zoom = inputManager()->canvas()->view()->zoomController()->zoomAction()->effectiveZoom() + relMovement.y() / 100;
-    inputManager()->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, zoom);
+    const int stepCont = 100;
+    const int stepDisc = 20;
+
+    if (d->mode == ZoomToggleShortcut) {
+        float coeff = 1.0 + qreal(diff.y()) / stepCont;
+        float zoom = coeff * inputManager()->canvas()->view()->zoomController()->zoomAction()->effectiveZoom();
+        inputManager()->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, zoom);
+    } else if (d->mode == DiscreteZoomToggleShortcut) {
+        d->distance += diff.y();
+        bool zoomIn = d->distance > 0;
+        while (qAbs(d->distance) > stepDisc) {
+            d->zoomTo(zoomIn, 0);
+            d->distance += zoomIn ? -stepDisc : stepDisc;
+        }
+    }
 }

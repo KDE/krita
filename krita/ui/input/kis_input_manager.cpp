@@ -97,12 +97,16 @@ static inline QList<Qt::Key> KEYS(Qt::Key key) {
 static inline QList<Qt::Key> KEYS(Qt::Key key1, Qt::Key key2) {
     return QList<Qt::Key>() << key1 << key2;
 }
+static inline QList<Qt::Key> KEYS(Qt::Key key1, Qt::Key key2, Qt::Key key3) {
+    return QList<Qt::Key>() << key1 << key2 << key3;
+}
 static inline QList<Qt::MouseButton> BUTTONS(Qt::MouseButton button) {
     return QList<Qt::MouseButton>() << button;
 }
 static inline QList<Qt::MouseButton> BUTTONS(Qt::MouseButton button1, Qt::MouseButton button2) {
     return QList<Qt::MouseButton>() << button1 << button2;
 }
+
 
 void KisInputManager::Private::addStrokeShortcut(KisAbstractInputAction* action, int index,
                                                  const QList<Qt::Key> &modifiers,
@@ -173,8 +177,9 @@ void KisInputManager::Private::setupActions()
     action = new KisRotateCanvasAction(q);
     matcher.addAction(action);
 
-    addStrokeShortcut(action, KisPanAction::PanToggleShortcut, KEYS(Qt::Key_Shift, Qt::Key_Space), BUTTONS(Qt::LeftButton));
-    addStrokeShortcut(action, KisPanAction::PanToggleShortcut, KEYS(Qt::Key_Shift), BUTTONS(middleButton));
+    addStrokeShortcut(action, KisRotateCanvasAction::RotateToggleShortcut, KEYS(Qt::Key_Shift, Qt::Key_Space), BUTTONS(Qt::LeftButton));
+    addStrokeShortcut(action, KisRotateCanvasAction::DiscreteRotateToggleShortcut, KEYS(Qt::Key_Shift, Qt::Key_Alt, Qt::Key_Space), BUTTONS(Qt::LeftButton));
+    addStrokeShortcut(action, KisRotateCanvasAction::RotateToggleShortcut, KEYS(Qt::Key_Shift), BUTTONS(middleButton));
 
     addKeyShortcut(action, KisRotateCanvasAction::RotateLeftShortcut, KEYS(), Qt::Key_4);
     addKeyShortcut(action, KisRotateCanvasAction::RotateResetShortcut, KEYS(), Qt::Key_5);
@@ -184,8 +189,10 @@ void KisInputManager::Private::setupActions()
     action = new KisZoomAction(q);
     matcher.addAction(action);
 
-    addStrokeShortcut(action, KisZoomAction::ZoomToggleShortcut, KEYS(Qt::Key_Control, Qt::Key_Space), BUTTONS(Qt::LeftButton));
     addStrokeShortcut(action, KisZoomAction::ZoomToggleShortcut, KEYS(Qt::Key_Control), BUTTONS(middleButton));
+
+    addStrokeShortcut(action, KisZoomAction::ZoomToggleShortcut, KEYS(Qt::Key_Control, Qt::Key_Space), BUTTONS(Qt::LeftButton));
+    addStrokeShortcut(action, KisZoomAction::DiscreteZoomToggleShortcut, KEYS(Qt::Key_Control, Qt::Key_Alt, Qt::Key_Space), BUTTONS(Qt::LeftButton));
 
     addWheelShortcut(action, KisZoomAction::ZoomInShortcut, KEYS(), KisKeyShortcut::WheelUp);
     addWheelShortcut(action, KisZoomAction::ZoomOutShortcut, KEYS(), KisKeyShortcut::WheelDown);

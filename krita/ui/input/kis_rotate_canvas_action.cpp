@@ -25,13 +25,23 @@
 #include <kis_canvas2.h>
 #include "kis_input_manager.h"
 
+class KisRotateCanvasAction::Private
+{
+public:
+    Private() : angleDrift(0) {}
+
+    Shortcut mode;
+    qreal angleDrift;
+};
+
 
 KisRotateCanvasAction::KisRotateCanvasAction(KisInputManager* manager)
-    : KisAbstractInputAction(manager)
+    : KisAbstractInputAction(manager), d(new Private())
 {
     setName(i18n("Rotate Canvas"));
     QHash<QString, int> shortcuts;
     shortcuts.insert(i18n("Toggle Rotate Mode"), RotateToggleShortcut);
+    shortcuts.insert(i18n("Toggle Discrete Rotate Mode"), DiscreteRotateToggleShortcut);
     shortcuts.insert(i18n("Rotate Left"), RotateLeftShortcut);
     shortcuts.insert(i18n("Rotate Right"), RotateRightShortcut);
     shortcuts.insert(i18n("Reset Rotation"), RotateResetShortcut);
@@ -40,6 +50,7 @@ KisRotateCanvasAction::KisRotateCanvasAction(KisInputManager* manager)
 
 KisRotateCanvasAction::~KisRotateCanvasAction()
 {
+    delete d;
 }
 
 void KisRotateCanvasAction::activate()
@@ -61,6 +72,11 @@ void KisRotateCanvasAction::begin(int shortcut, QEvent *event)
 
     switch(shortcut) {
         case RotateToggleShortcut:
+            d->mode = (Shortcut)shortcut;
+            break;
+        case DiscreteRotateToggleShortcut:
+            d->mode = (Shortcut)shortcut;
+            d->angleDrift = 0;
             break;
         case RotateLeftShortcut:
             canvasController->rotateCanvasLeft15();
@@ -84,7 +100,15 @@ void KisRotateCanvasAction::mouseMoved(const QPointF &lastPos, const QPointF &po
     qreal oldAngle = atan2(oldPoint.y(), oldPoint.x());
     qreal newAngle = atan2(newPoint.y(), newPoint.x());
 
-    float angle = (180 / M_PI) * (newAngle - oldAngle);
+    qreal angle = (180 / M_PI) * (newAngle - oldAngle);
+
+    if (d->mode == DiscreteRotateToggleShortcut) {
+        const qreal angleStep = 15;
+        qreal initialAngle = inputManager()->canvas()->rotationAngle();
+        qreal roundedAngle = qRound((initialAngle + angle + d->angleDrift) / angleStep) * angleStep - initialAngle;
+        d->angleDrift += angle - roundedAngle;
+        angle = roundedAngle;
+    }
 
     KisCanvasController *canvasController =
         dynamic_cast<KisCanvasController*>(inputManager()->canvas()->canvasController());

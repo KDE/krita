@@ -36,6 +36,7 @@ public:
      */
     enum Shortcut {
         RotateToggleShortcut, ///< Toggle Rotate mode.
+        DiscreteRotateToggleShortcut, ///< Toggle Discrete Rotate mode.
         RotateLeftShortcut, ///< Rotate left by a fixed amount.
         RotateRightShortcut, ///< Rotate right by a fixed amount.
         RotateResetShortcut ///< Reset the rotation to 0.
@@ -47,6 +48,10 @@ public:
     void deactivate();
     void begin(int shortcut, QEvent *event);
     void mouseMoved(const QPointF &lastPos, const QPointF &pos);
+
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif // KIS_ROTATE_CANVAS_ACTION_H

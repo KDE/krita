@@ -22,15 +22,59 @@
 
 #include <kis_canvas2.h>
 
-#include "kis_input_manager.h"
-#include <kis_view2.h>
-#include <kis_zoom_manager.h>
-#include <KoCanvasController.h>
+#include <KoCanvasControllerWidget.h>
 #include <KoZoomController.h>
+#include <kis_view2.h>
+#include "kis_input_manager.h"
 
+
+class KisZoomAction::Private
+{
+public:
+    Private(KisZoomAction *qq) : q(qq) {}
+    KisZoomAction *q;
+
+    void zoomTo(bool zoomIn, QEvent *event);
+};
+
+void KisZoomAction::Private::zoomTo(bool zoomIn, QEvent *event)
+{
+    KoZoomAction *zoomAction = q->inputManager()->canvas()->view()->zoomController()->zoomAction();
+
+    if (event) {
+        QPoint pos;
+        QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
+        if (mouseEvent) {
+            pos = mouseEvent->pos();
+        } else {
+            QWheelEvent *wheelEvent = dynamic_cast<QWheelEvent*>(event);
+            if (wheelEvent) {
+                pos = wheelEvent->pos();
+            } else {
+                qWarning() << "Unhandled type of event";
+            }
+        }
+
+        float oldZoom = zoomAction->effectiveZoom();
+        float newZoom = zoomIn ?
+            zoomAction->nextZoomLevel() : zoomAction->prevZoomLevel();
+
+        KoCanvasControllerWidget *controller =
+            dynamic_cast<KoCanvasControllerWidget*>(
+                q->inputManager()->canvas()->canvasController());
+
+        controller->zoomRelativeToPoint(pos, newZoom / oldZoom);
+    } else {
+        if (zoomIn) {
+            zoomAction->zoomIn();
+        } else {
+            zoomAction->zoomOut();
+        }
+    }
+}
 
 KisZoomAction::KisZoomAction(KisInputManager* manager)
-    : KisAbstractInputAction(manager)
+    : KisAbstractInputAction(manager), d(new Private(this))
 {
     setName(i18n("Zoom Canvas"));
 
@@ -46,6 +90,7 @@ KisZoomAction::KisZoomAction(KisInputManager* manager)
 
 KisZoomAction::~KisZoomAction()
 {
+    delete d;
 }
 
 void KisZoomAction::activate()
@@ -65,34 +110,12 @@ void KisZoomAction::begin(int shortcut, QEvent *event)
     switch(shortcut) {
         case ZoomToggleShortcut:
             break;
-        case ZoomInShortcut: {
-            float zoom = inputManager()->canvas()->view()->zoomController()->zoomAction()->effectiveZoom();
-            if( zoom >= 10 ) {
-                zoom += 1.0;
-            } else if (zoom >= 5) {
-                zoom += 0.5;
-            } else if (zoom >= 2) {
-                zoom += 0.2;
-            } else {
-                zoom += 0.1;
-            }
-            inputManager()->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, zoom);
+        case ZoomInShortcut:
+            d->zoomTo(true, event);
             break;
-        }
-        case ZoomOutShortcut: {
-            float zoom = inputManager()->canvas()->view()->zoomController()->zoomAction()->effectiveZoom();
-            if( zoom >= 10 ) {
-                zoom -= 1.0;
-            } else if (zoom >= 5) {
-                zoom -= 0.5;
-            } else if (zoom >= 2) {
-                zoom -= 0.2;
-            } else {
-                zoom -= 0.1;
-            }
-            inputManager()->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, zoom);
+        case ZoomOutShortcut:
+            d->zoomTo(false, event);
             break;
-        }
         case ZoomResetShortcut:
             inputManager()->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
             break;

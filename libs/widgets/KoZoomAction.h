@@ -114,6 +114,26 @@ public slots:
    */
     void setAspectMode(bool status);
 
+    /**
+     * Returns next preferred zoom level that should be used for
+     * zoom in operations.
+     *
+     * This can be used by the caller, when he needs some special
+     * mode of zooming (e.g. relative to point) and needs
+     * KoCanvasControllerWidget to accomplish this.
+     */
+    qreal nextZoomLevel() const;
+
+    /**
+     * Returns previous preferred zoom level that should be used for
+     * zoom out operations.
+     *
+     * This can be used by the caller, when he needs some special
+     * mode of zooming (e.g. relative to point) and needs
+     * KoCanvasControllerWidget to accomplish this.
+     */
+    qreal prevZoomLevel() const;
+
 protected slots:
 
     void triggered( const QString& text );
@@ -149,7 +169,6 @@ signals:
     void zoomedToAll();
 
 protected:
-
     /// Regenerates the action's items
     void regenerateItems( const qreal zoom, bool asCurrent = false );
 

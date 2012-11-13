@@ -68,6 +68,9 @@ public:
     void addKeyShortcut(KisAbstractInputAction* action, int index,
                         const QList<Qt::Key> &modifiers,
                         Qt::Key key);
+    void addWheelShortcut(KisAbstractInputAction* action, int index,
+                          const QList<Qt::Key> &modifiers,
+                          KisKeyShortcut::WheelAction wheelAction);
     bool processUnhandledEvent(QEvent *event);
     void setupActions();
 
@@ -118,6 +121,16 @@ void KisInputManager::Private::addKeyShortcut(KisAbstractInputAction* action, in
     KisKeyShortcut *keyShortcut =
         new KisKeyShortcut(action, index);
     keyShortcut->setKey(modifiers, key);
+    matcher.addShortcut(keyShortcut);
+}
+
+void KisInputManager::Private::addWheelShortcut(KisAbstractInputAction* action, int index,
+                                                const QList<Qt::Key> &modifiers,
+                                                KisKeyShortcut::WheelAction wheelAction)
+{
+    KisKeyShortcut *keyShortcut =
+        new KisKeyShortcut(action, index);
+    keyShortcut->setWheel(modifiers, wheelAction);
     matcher.addShortcut(keyShortcut);
 }
 
@@ -174,21 +187,8 @@ void KisInputManager::Private::setupActions()
     addStrokeShortcut(action, KisZoomAction::ZoomToggleShortcut, KEYS(Qt::Key_Control, Qt::Key_Space), BUTTONS(Qt::LeftButton));
     addStrokeShortcut(action, KisZoomAction::ZoomToggleShortcut, KEYS(Qt::Key_Control), BUTTONS(middleButton));
 
-    /**
-     * FIXME: Zooming with Wheel is implemented on a level of
-     * KoCanvasControllerWidget and is done in a bit different way than
-     * usual zoom-in/out actions, because it tries to zoom around
-     * the mouse pointer. If you want to implement it in
-     * KisInputManager, please implement additional action that
-     * takes mouse position into account.
-     *
-     * Don't forget to disable wheel-zooming in KoCanvasControllerWidget
-     * before activation of this shortcut.
-     */
-    // shortcut = createShortcut(action, KisZoomAction::ZoomInShortcut);
-    // shortcut->setWheel(KisShortcut::WheelUp);
-    // shortcut = createShortcut(action, KisZoomAction::ZoomOutShortcut);
-    // shortcut->setWheel(KisShortcut::WheelDown);
+    addWheelShortcut(action, KisZoomAction::ZoomInShortcut, KEYS(), KisKeyShortcut::WheelUp);
+    addWheelShortcut(action, KisZoomAction::ZoomOutShortcut, KEYS(), KisKeyShortcut::WheelDown);
 
     addKeyShortcut(action, KisZoomAction::ZoomInShortcut, KEYS(), Qt::Key_Plus);
     addKeyShortcut(action, KisZoomAction::ZoomOutShortcut, KEYS(), Qt::Key_Minus);
@@ -363,7 +363,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
             wheelEvent->delta() > 0 ?
             KisKeyShortcut::WheelUp : KisKeyShortcut::WheelDown;
 
-        retval = d->matcher.wheelEvent(action);
+        retval = d->matcher.wheelEvent(action, wheelEvent);
         break;
     }
     case QEvent::Enter:

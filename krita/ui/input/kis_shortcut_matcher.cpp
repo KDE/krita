@@ -19,7 +19,6 @@
 #include "kis_shortcut_matcher.h"
 
 #include <QMouseEvent>
-#include <QTabletEvent>
 
 #include "kis_abstract_input_action.h"
 #include "kis_stroke_shortcut.h"
@@ -80,7 +79,7 @@ bool KisShortcutMatcher::keyPressed(Qt::Key key)
     if (m_d->keys.contains(key)) reset();
 
     if (!m_d->runningShortcut) {
-        retval = tryRunKeyShortcut(key);
+        retval = tryRunKeyShortcut(key, 0);
     }
 
     m_d->keys.append(key);
@@ -145,11 +144,11 @@ bool KisShortcutMatcher::buttonReleased(Qt::MouseButton button, QMouseEvent *eve
     return retval;
 }
 
-bool KisShortcutMatcher::wheelEvent(KisKeyShortcut::WheelAction wheelAction)
+bool KisShortcutMatcher::wheelEvent(KisKeyShortcut::WheelAction wheelAction, QWheelEvent *event)
 {
     if (m_d->runningShortcut) return false;
 
-    return tryRunWheelShortcut(wheelAction);
+    return tryRunWheelShortcut(wheelAction, event);
 }
 
 bool KisShortcutMatcher::mouseMoved(QMouseEvent *event)
@@ -171,18 +170,18 @@ void KisShortcutMatcher::suppressAllActions(bool value)
     m_d->suppressAllActions = value;
 }
 
-bool KisShortcutMatcher::tryRunWheelShortcut(KisKeyShortcut::WheelAction wheelAction)
+bool KisShortcutMatcher::tryRunWheelShortcut(KisKeyShortcut::WheelAction wheelAction, QWheelEvent *event)
 {
-    return tryRunKeyShortcutImpl(wheelAction);
+    return tryRunKeyShortcutImpl(wheelAction, event);
 }
 
-bool KisShortcutMatcher::tryRunKeyShortcut(Qt::Key key)
+bool KisShortcutMatcher::tryRunKeyShortcut(Qt::Key key, QKeyEvent *event)
 {
-    return tryRunKeyShortcutImpl(key);
+    return tryRunKeyShortcutImpl(key, event);
 }
 
-template<typename T>
-bool KisShortcutMatcher::tryRunKeyShortcutImpl(T param)
+template<typename T, typename U>
+bool KisShortcutMatcher::tryRunKeyShortcutImpl(T param, U *event)
 {
     if (m_d->suppressAllActions) return false;
 
@@ -197,7 +196,7 @@ bool KisShortcutMatcher::tryRunKeyShortcutImpl(T param)
     }
 
     if (goodCandidate) {
-        goodCandidate->action()->begin(goodCandidate->shortcutIndex(), 0);
+        goodCandidate->action()->begin(goodCandidate->shortcutIndex(), event);
         goodCandidate->action()->end(0);
     }
 

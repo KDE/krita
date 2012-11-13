@@ -91,8 +91,12 @@ KisZoomManager::~KisZoomManager()
 
 void KisZoomManager::setup(KActionCollection * actionCollection)
 {
-    KoZoomMode::setMinimumZoom(0.06);
-    KoZoomMode::setMaximumZoom(64.0);
+    QSize imageSize = m_view->image()->size();
+    qreal minDimension = qMin(imageSize.width(), imageSize.height());
+    qreal minZoom = qMin(100.0 / minDimension, 0.1);
+
+    KoZoomMode::setMinimumZoom(minZoom);
+    KoZoomMode::setMaximumZoom(90.0);
 
     KisCoordinatesConverter *converter =
         dynamic_cast<KisCoordinatesConverter*>(m_zoomHandler);

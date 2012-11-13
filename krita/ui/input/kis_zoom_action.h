@@ -48,6 +48,10 @@ public:
 
     void begin(int shortcut, QEvent *event = 0);
     void mouseMoved(const QPointF &lastPos, const QPointF &pos);
+
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif // KIS_ZOOM_ACTION_H

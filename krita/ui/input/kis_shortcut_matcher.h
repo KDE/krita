@@ -25,7 +25,8 @@
 #include "kis_key_shortcut.h"
 
 class QMouseEvent;
-class QTabletEvent;
+class QKeyEvent;
+class QWheelEvent;
 
 class KisStrokeShortcut;
 class KisAbstractInputAction;
@@ -93,7 +94,7 @@ public:
      * \return whether the event has been handled successfully and
      * should be eaten by the events filter
      */
-    bool wheelEvent(KisKeyShortcut::WheelAction wheelAction);
+    bool wheelEvent(KisKeyShortcut::WheelAction wheelAction, QWheelEvent *event);
 
     /**
      * Handles the mouse move event
@@ -125,9 +126,9 @@ public:
 private:
     friend class KisInputManagerTest;
 
-    bool tryRunKeyShortcut(Qt::Key key);
-    bool tryRunWheelShortcut(KisKeyShortcut::WheelAction wheelAction);
-    template<typename T> bool tryRunKeyShortcutImpl(T param);
+    bool tryRunKeyShortcut(Qt::Key key, QKeyEvent *event);
+    bool tryRunWheelShortcut(KisKeyShortcut::WheelAction wheelAction, QWheelEvent *event);
+    template<typename T, typename U> bool tryRunKeyShortcutImpl(T param, U *event);
 
     void prepareReadyShortcuts();
 

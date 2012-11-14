@@ -19,7 +19,7 @@
 #ifndef ENHMETAFILE_H
 #define ENHMETAFILE_H
 
-#include "emf_export.h"
+#include "vectorimage_export.h""
 
 #include "EmfOutput.h"
 
@@ -41,7 +41,7 @@ namespace Libemf
 /**
     %Parser for an EMF format file
  */
-class EMF_EXPORT Parser
+class VECTORIMAGE_EXPORT Parser
 {
 public:
     Parser();

@@ -18,7 +18,7 @@
 #ifndef SVMABSTRACTBACKEND_H
 #define SVMABSTRACTBACKEND_H
 
-#include "svm_export.h"
+#include "vectorimage_export.h"
 
 #include "SvmEnums.h"
 #include "SvmStructs.h"
@@ -46,7 +46,7 @@ namespace Libsvm
 /**
     Abstract output strategy for SVM Parser
 */
-class SVM_EXPORT SvmAbstractBackend
+class VECTORIMAGE_EXPORT SvmAbstractBackend
 {
 public:
     SvmAbstractBackend() {};

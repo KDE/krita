@@ -2,7 +2,7 @@
 
 include_directories( ${KOMAIN_INCLUDES} )
 
-add_subdirectory(demo)
+## add_subdirectory(demo)
 
 
 ########### library target ###############

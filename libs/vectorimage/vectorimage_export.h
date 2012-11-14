@@ -19,22 +19,27 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#ifndef EMF_EXPORT_H
-#define EMF_EXPORT_H
+#ifndef VECTORIMAGE_EXPORT_H
+#define VECTORIMAGE_EXPORT_H
 
 #include <kdemacros.h>
 
-#ifndef EMF_EXPORT
+/* We use _WIN32/_WIN64 instead of Q_OS_WIN so that this header can be used from C files too */
+#if defined _WIN32 || defined _WIN64
 
-#if defined(MAKE_VECTORSHAPE_LIB)
+# ifndef VECTORIMAGE_EXPORT
+#  if defined(KDELIBS_STATIC_LIBS)
+   /* No export/import for static libraries */
+#   define VECTORIMAGE_EXPORT
+#  elif defined(MAKE_VECTORIMAGE_LIB)
+#   define VECTORIMAGE_EXPORT KDE_EXPORT
+#  else
+#   define VECTORIMAGE_EXPORT KDE_IMPORT
+#  endif
+# endif
+#else /* UNIX */
 
-#define EMF_EXPORT KDE_EXPORT
-
-#else
-
-#define EMF_EXPORT KDE_IMPORT
-
-#endif
+#define VECTORIMAGE_EXPORT KDE_EXPORT
 
 #endif
 

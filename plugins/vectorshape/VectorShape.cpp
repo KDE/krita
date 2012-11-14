@@ -53,11 +53,11 @@
 #include "WmfPainterBackend.h"
 
 // Vector shape
-#include "libemf/EmfParser.h"
-#include "libemf/EmfOutputPainterStrategy.h"
-#include "libemf/EmfOutputDebugStrategy.h"
-#include "libsvm/SvmParser.h"
-#include "libsvm/SvmPainterBackend.h"
+#include "EmfParser.h"
+#include "EmfOutputPainterStrategy.h"
+#include "EmfOutputDebugStrategy.h"
+#include "SvmParser.h"
+#include "SvmPainterBackend.h"
 
 // Comment out to get uncached painting, which is good for debugging
 //#define VECTORSHAPE_PAINT_UNCACHED

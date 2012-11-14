@@ -7,6 +7,7 @@ add_subdirectory( flake )
 add_subdirectory( pigment )
 add_subdirectory( main )
 add_subdirectory( kundo2 )
+add_subdirectory( vectorimage )
 
 if (SHOULD_BUILD_SCRIPTING AND NOT CREATIVEONLY)
     add_subdirectory( kokross )

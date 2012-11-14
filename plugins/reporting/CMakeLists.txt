@@ -1,5 +1,7 @@
 add_subdirectory(barcode)
-add_subdirectory(chart)
+if(NOT WIN32)
+	add_subdirectory(chart)
+endif(NOT WIN32)
 
 if(MARBLE_FOUND)
   macro_optional_add_subdirectory(maps)

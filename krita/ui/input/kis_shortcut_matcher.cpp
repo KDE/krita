@@ -112,6 +112,7 @@ bool KisShortcutMatcher::buttonPressed(Qt::MouseButton button, QMouseEvent *even
     if (m_d->buttons.contains(button)) reset();
 
     if (!m_d->runningShortcut) {
+        prepareReadyShortcuts();
         retval = tryRunReadyShortcut(button, event);
     }
 

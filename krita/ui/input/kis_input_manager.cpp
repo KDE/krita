@@ -72,6 +72,7 @@ public:
                           const QList<Qt::Key> &modifiers,
                           KisKeyShortcut::WheelAction wheelAction);
     bool processUnhandledEvent(QEvent *event);
+    Qt::Key workaroundShiftAltMetaHell(const QKeyEvent *keyEvent);
     void setupActions();
 
     KisInputManager *q;
@@ -226,6 +227,19 @@ bool KisInputManager::Private::processUnhandledEvent(QEvent *event)
     return retval && !forwardAllEventsToTool;
 }
 
+Qt::Key KisInputManager::Private::workaroundShiftAltMetaHell(const QKeyEvent *keyEvent)
+{
+    Qt::Key key = (Qt::Key)keyEvent->key();
+
+    if (keyEvent->key() == Qt::Key_Meta &&
+        keyEvent->modifiers().testFlag(Qt::ShiftModifier)) {
+
+        key = Qt::Key_Alt;
+    }
+
+    return key;
+}
+
 bool KisInputManager::Private::tryHidePopupPalette()
 {
     if (canvas->favoriteResourceManager()->isPopupPaletteVisible()) {
@@ -333,7 +347,8 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     case QEvent::KeyPress: {
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
         if (!keyEvent->isAutoRepeat()) {
-            retval = d->matcher.keyPressed((Qt::Key)keyEvent->key());
+            Qt::Key key = d->workaroundShiftAltMetaHell(keyEvent);
+            retval = d->matcher.keyPressed(key);
         }
 
         /**
@@ -350,7 +365,8 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     case QEvent::KeyRelease: {
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
         if (!keyEvent->isAutoRepeat()) {
-            retval = d->matcher.keyReleased((Qt::Key)keyEvent->key());
+            Qt::Key key = d->workaroundShiftAltMetaHell(keyEvent);
+            retval = d->matcher.keyReleased(key);
         }
         break;
     }
@@ -377,7 +393,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         //Ensure we have focus so we get key events.
         d->canvas->canvasWidget()->setFocus();
         break;
-    case QEvent::Leave:
+    case QEvent::FocusIn:
         //Clear all state so we don't have half-matched shortcuts dangling around.
         d->matcher.reset();
         break;

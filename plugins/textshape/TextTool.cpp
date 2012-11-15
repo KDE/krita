@@ -810,19 +810,18 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
                 QRectF drawRect(shapeMatrix.map(rect.topLeft()), shapeMatrix.map(rect.bottomLeft()));
                 drawRect.setWidth(2);
                 painter.setCompositionMode(QPainter::RasterOp_SourceXorDestination);
-                painter.fillRect(drawRect, QColor(128, 255, 128));
                 if (m_textEditor.data()->isEditProtected(true)) {
                     QRectF circleRect(shapeMatrix.map(baselinePoint),QSizeF(14, 14));
-                    circleRect.translate(-7.5, -7.5);
-                    QPen pen(Qt::red);
+                    circleRect.translate(-6.5, -6.5);
+                    QPen pen(QColor(16, 255, 255));
                     pen.setWidthF(2.0);
-                    painter.setPen(Qt::NoPen);
                     painter.setPen(pen);
-                    painter.setBrush(QBrush(QColor(255, 255, 255, 192)));
                     painter.setRenderHint(QPainter::Antialiasing, true);
                     painter.drawEllipse(circleRect);
-                    painter.drawLine(circleRect.topLeft() + QPointF(2,2),
-                                    circleRect.bottomRight() - QPointF(2,2));
+                    painter.drawLine(circleRect.topLeft() + QPointF(4.5,4.5),
+                                    circleRect.bottomRight() - QPointF(4.5,4.5));
+                } else {
+                    painter.fillRect(drawRect, QColor(128, 255, 128));
                 }
             }
         }
@@ -1998,12 +1997,11 @@ void TextTool::repaintCaret()
         repaintRect = m_textShape->absoluteTransformation(0).mapRect(repaintRect);
 
         // Make sure there is enough space to show an icon
-        QRectF iconSize = canvas()->viewConverter()->viewToDocument(QRect(0,0,16, 16));
+        QRectF iconSize = canvas()->viewConverter()->viewToDocument(QRect(0, 0, 18, 18));
         repaintRect.setX(repaintRect.x() - iconSize.width() / 2);
-        repaintRect.setWidth(iconSize.width());
-        repaintRect.moveTop(repaintRect.y() - iconSize.height() / 2);
-        repaintRect.moveBottom(repaintRect.bottom() + iconSize.height() / 2);
-
+        repaintRect.setRight(repaintRect.right() + iconSize.width() / 2);
+        repaintRect.setTop(repaintRect.y() - iconSize.height() / 2);
+        repaintRect.setBottom(repaintRect.bottom() + iconSize.height() / 2);
         canvas()->updateCanvas(repaintRect);
     }
 }

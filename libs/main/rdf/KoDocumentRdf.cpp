@@ -914,7 +914,7 @@ QPair<int, int> KoDocumentRdf::findExtent(const QString &xmlid) const
         RDEBUG << "(Semantic) have inline obj, extent:" << ret;
         return ret;
     }
-    return QPair<int, int>(0, 0);
+    return QPair<int, int>(-1, 0);
 }
 
 QPair<int, int> KoDocumentRdf::findExtent(KoTextEditor *handler) const
@@ -960,7 +960,7 @@ QPair<int, int> KoDocumentRdf::findExtent(KoTextEditor *handler) const
                                 QTextDocument::FindBackward);
     }
     */
-    return QPair<int, int>(0, 0);
+    return QPair<int, int>(-1, 0);
 }
 
 QString KoDocumentRdf::findXmlId(KoTextEditor *handler) const

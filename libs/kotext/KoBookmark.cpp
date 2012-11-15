@@ -114,7 +114,10 @@ void KoBookmark::saveOdf(KoShapeSavingContext &context, int position) const
     if (!hasRange()) {
         writer->startElement("text:bookmark", false);
         writer->addAttribute("text:name", d->name.toUtf8());
-        writer->endElement();
+        if (inlineRdf()) {
+            inlineRdf()->saveOdf(context, writer);
+        }
+         writer->endElement();
     } else if (position == rangeStart()) {
         writer->startElement("text:bookmark-start", false);
         writer->addAttribute("text:name", d->name.toUtf8());

@@ -81,12 +81,8 @@ public:
 
     /**
      *  This function will query KDED to find all available filters.
-     *
-     *  @param _constr is a constraint expression as used by KDEDs trader interface.
-     *                 You can use it to set additional restrictions on the available
-     *                 components.
      */
-    static QList<KoFilterEntry::Ptr> query(const QString& _constr = QString());
+    static QList<KoFilterEntry::Ptr> query();
 
     KService::Ptr service() const {
         return m_service;

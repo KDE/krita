@@ -915,7 +915,7 @@ QString KoDocument::autoSaveFile(const QString & path) const
     // Using the extension allows to avoid relying on the mime magic when opening
     KMimeType::Ptr mime = KMimeType::mimeType(nativeFormatMimeType());
     if (! mime) {
-        qFatal("It seems your installation is broken/incomplete cause we failed to load the native mimetype \"%s\".", nativeFormatMimeType().constData());
+        qFatal("It seems your installation is broken/incomplete because we failed to load the native mimetype \"%s\".", nativeFormatMimeType().constData());
     }
     QString extension = mime->property("X-KDE-NativeExtension").toString();
     if (extension.isEmpty()) extension = mime->mainExtension();
@@ -1286,8 +1286,14 @@ bool KoDocument::openFile()
             }
 
             if (d->autoErrorHandlingEnabled && !msg.isEmpty()) {
+#ifndef Q_OS_WIN
                 QString errorMsg(i18n("Could not open\n%2.\nReason: %1", msg, prettyPathOrUrl()));
                 KMessageBox::error(0, errorMsg);
+#else
+                QString errorMsg(i18n("Could not open\n%1.\nThe filter plugins have not been properly registered. Please reboot Windows. Krita Sketch will now close.", prettyPathOrUrl()));
+                KMessageBox::error(0, errorMsg);
+#endif
+
             }
 
             d->isLoading = false;

@@ -30,8 +30,6 @@
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <klocale.h>
-#include <kservice.h>
-#include <kservicetypetrader.h>
 #include <kglobal.h>
 
 #include "KoPluginLoader.h"

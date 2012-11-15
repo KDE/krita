@@ -28,7 +28,6 @@
 #include <klocale.h>
 #include <kparts/plugin.h>
 #include <kservice.h>
-#include <kservicetypetrader.h>
 #include <kparts/componentfactory.h>
 
 #include <KoPluginLoader.h>

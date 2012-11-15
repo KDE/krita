@@ -123,7 +123,7 @@ private slots:
     /**
      * The user edited a semantic item, update the view.
      */
-    void semanticObjectUpdated(KoRdfSemanticItem *item);
+    void semanticObjectUpdated(hKoRdfSemanticItem item);
 
 private:
 

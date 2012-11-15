@@ -256,8 +256,8 @@ KoDocumentRdfEditWidget::KoDocumentRdfEditWidget(QWidget *parent, KoDocumentRdf 
     connect(d->m_ui->m_defaultEventsSheetButton, SIGNAL(clicked()), this, SLOT(defaultEventsSheetButton()));
     connect(d->m_ui->m_defaultLocationsSheetButton, SIGNAL(clicked()), this, SLOT(defaultLocationsSheetButton()));
     connect(d->m_ui->m_setAllStylesheetsButton, SIGNAL(clicked()), this, SLOT(defaultAllSheetButton()));
-    connect(docRdf, SIGNAL(semanticObjectUpdated(KoRdfSemanticItem*)),
-            this, SLOT(semanticObjectUpdated(KoRdfSemanticItem*)));
+    connect(docRdf, SIGNAL(semanticObjectUpdated(hKoRdfSemanticItem)),
+            this, SLOT(semanticObjectUpdated(hKoRdfSemanticItem)));
 }
 
 KoDocumentRdfEditWidget::~KoDocumentRdfEditWidget()
@@ -322,7 +322,7 @@ void KoDocumentRdfEditWidget::apply()
     }
 }
 
-void KoDocumentRdfEditWidget::semanticObjectUpdated(KoRdfSemanticItem *item)
+void KoDocumentRdfEditWidget::semanticObjectUpdated(hKoRdfSemanticItem item)
 {
     Q_UNUSED(item);
     kDebug(30015) << "updating the sem item list view";

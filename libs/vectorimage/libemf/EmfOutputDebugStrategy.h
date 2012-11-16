@@ -19,7 +19,7 @@
 #ifndef EMFOUTPUTDEBUGSTRATEGY_H
 #define EMFOUTPUTDEBUGSTRATEGY_H
 
-#include "vectorimage_export.h""
+#include "vectorimage_export.h"
 
 #include <QList>
 #include <QPainter>

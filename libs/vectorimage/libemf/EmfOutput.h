@@ -19,7 +19,7 @@
 #ifndef EMFOUTPUT_H
 #define EMFOUTPUT_H
 
-#include "vectorimage_export.h""
+#include "vectorimage_export.h"
 
 #include <QList>
 #include <QPainter>

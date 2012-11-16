@@ -19,7 +19,7 @@
 #ifndef ENHMETAFILE_H
 #define ENHMETAFILE_H
 
-#include "vectorimage_export.h""
+#include "vectorimage_export.h"
 
 #include "EmfOutput.h"
 

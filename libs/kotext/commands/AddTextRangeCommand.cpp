@@ -24,6 +24,7 @@
 
 #include <klocale.h>
 #include <kundo2command.h>
+#include <kdebug.h>
 
 #include <KoTextRangeManager.h>
 #include <KoTextRange.h>
@@ -37,11 +38,13 @@ AddTextRangeCommand::AddTextRangeCommand(KoTextRange * range, KUndo2Command *par
 
 void AddTextRangeCommand::undo()
 {
+    KUndo2Command::undo();
     m_range->manager()->remove(m_range);
 }
 
 void AddTextRangeCommand::redo()
 {
+    KUndo2Command::redo();
     m_range->manager()->insert(m_range);
 }
 

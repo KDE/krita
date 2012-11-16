@@ -447,7 +447,7 @@ KoBookmark *KoTextEditor::addBookmark(const QString &name)
     bookmark->setName(name);
     bookmark->setManager(KoTextDocument(d->document).textRangeManager());
 
-    new AddTextRangeCommand(bookmark, topCommand);
+    addCommand(new AddTextRangeCommand(bookmark, topCommand));
 
     endEditBlock();
 

@@ -797,10 +797,10 @@ void KoMainWindow::slotSaveCanceled(const QString &errMsg)
 void KoMainWindow::slotSaveCompleted()
 {
     kDebug(30003) << "KoMainWindow::slotSaveCompleted";
-    KoDocument* pDoc = (KoDocument *)(sender());
-    disconnect(pDoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
-    disconnect(pDoc, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
-    disconnect(pDoc, SIGNAL(canceled(const QString &)),
+    KoPart* pPart = (KoPart *)(sender());
+    disconnect(pPart->document(), SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
+    disconnect(pPart, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
+    disconnect(pPart, SIGNAL(canceled(const QString &)),
                this, SLOT(slotSaveCanceled(const QString &)));
 
     if (d->deferredClosingEvent) {

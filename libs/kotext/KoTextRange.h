@@ -110,6 +110,9 @@ public:
      */
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) =  0;
 
+    void snapshot();
+    void restore();
+
 protected:
     KoTextRangePrivate *d_ptr;
 

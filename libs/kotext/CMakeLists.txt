@@ -114,6 +114,7 @@ set(kotext_LIB_SRCS
     commands/ListItemNumberingCommand.cpp
     commands/RemoveDeleteChangesCommand.cpp
     commands/TextPasteCommand.cpp
+    commands/AddTextRangeCommand.cpp
 
     KoTextDrag.cpp
     KoTextCommandBase.cpp

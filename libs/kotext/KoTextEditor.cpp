@@ -66,6 +66,7 @@
 #include "commands/DeleteCommand.h"
 #include "commands/DeleteAnchorsCommand.h"
 #include "commands/InsertNoteCommand.h"
+#include "commands/AddTextRangeCommand.h"
 
 #include <KoShapeCreateCommand.h>
 
@@ -440,17 +441,16 @@ void KoTextEditor::recursivelyVisitSelection(QTextFrame::iterator it, KoTextVisi
 
 KoBookmark *KoTextEditor::addBookmark(const QString &name)
 {//TODO changeTracking
-    if (isEditProtected()) {
-        return 0;
-    }
+    KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Add Bookmark"));
 
-    d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Insert Bookmark"));
     KoBookmark *bookmark = new KoBookmark(d->caret);
     bookmark->setName(name);
+    bookmark->setManager(KoTextDocument(d->document).textRangeManager());
 
-    // TODO the macro & undo things
-    KoTextDocument(d->document).textRangeManager()->insert(bookmark);
-    d->updateState(KoTextEditor::Private::NoOp);
+    new AddTextRangeCommand(bookmark, topCommand);
+
+    endEditBlock();
+
     return bookmark;
 }
 

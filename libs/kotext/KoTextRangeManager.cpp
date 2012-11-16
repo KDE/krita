@@ -48,6 +48,7 @@ void KoTextRangeManager::insert(KoTextRange *textRange)
 
     if (m_deletedTextRanges.contains(textRange)) {
         m_deletedTextRanges.remove(textRange);
+        textRange->restore();
     } else {
         textRange->setManager(this);
     }
@@ -84,6 +85,7 @@ void KoTextRangeManager::remove(KoTextRange *textRange)
 
     m_textRanges.remove(textRange);
     m_deletedTextRanges.insert(textRange);
+    textRange->snapshot();
 }
 
 const KoBookmarkManager *KoTextRangeManager::bookmarkManager() const

@@ -502,8 +502,16 @@ public:
 
     /**
      * Fills the area enclosed by the given QPainterPath
+     * Convenience method for fillPainterPath(path, rect)
      */
     void fillPainterPath(const QPainterPath& path);
+
+    /**
+     * Fills the portion of an area enclosed by the given QPainterPath
+     *
+     * \param rect the portion of the path to fill
+     */
+    void fillPainterPath(const QPainterPath& path, const QRect &requestedRect);
 
     /**
      * Draw the path using the Pen

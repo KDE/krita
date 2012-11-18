@@ -1117,6 +1117,11 @@ void KisPainter::paintPainterPath(const QPainterPath& path)
 
 void KisPainter::fillPainterPath(const QPainterPath& path)
 {
+    fillPainterPath(path, QRect());
+}
+
+void KisPainter::fillPainterPath(const QPainterPath& path, const QRect &requestedRect)
+{
     FillStyle fillStyle = d->fillStyle;
 
     if (fillStyle == FillStyleNone) {
@@ -1136,15 +1141,14 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
     Q_CHECK_PTR(d->polygon);
 
     QRectF boundingRect = path.boundingRect();
-    QRect fillRect;
-
-    fillRect.setLeft((qint32)floor(boundingRect.left()));
-    fillRect.setRight((qint32)ceil(boundingRect.right()));
-    fillRect.setTop((qint32)floor(boundingRect.top()));
-    fillRect.setBottom((qint32)ceil(boundingRect.bottom()));
+    QRect fillRect = boundingRect.toAlignedRect();
 
     // Expand the rectangle to allow for anti-aliasing.
     fillRect.adjust(-1, -1, 1, 1);
+
+    if (requestedRect.isValid()) {
+        fillRect &= requestedRect;
+    }
 
     // Clip to the image bounds.
     if (d->bounds.isValid()) {
@@ -1214,11 +1218,9 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
         }
     }
 
-    QRect r = d->polygon->extent();
-
     // The strokes for the outline may have already added updated the dirtyrect, but it can't hurt,
     // and if we're painting without outlines, then there will be no dirty rect. Let's do it ourselves...
-    bitBlt(r.x(), r.y(), d->polygon, r.x(), r.y(), r.width(), r.height());
+    bitBlt(fillRect.x(), fillRect.y(), d->polygon, fillRect.x(), fillRect.y(), fillRect.width(), fillRect.height());
 }
 
 void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& pen)

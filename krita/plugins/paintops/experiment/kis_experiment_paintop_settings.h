@@ -20,17 +20,12 @@
 #define KIS_EXPERIMENT_PAINTOP_SETTINGS_H_
 
 #include <kis_paintop_settings.h>
-#include <kis_types.h>
 
-class QWidget;
-class QDomElement;
-class QDomDocument;
 
 class KisExperimentPaintOpSettings : public KisPaintOpSettings
 {
 public:
     bool paintIncremental();
-
 };
 
 #endif

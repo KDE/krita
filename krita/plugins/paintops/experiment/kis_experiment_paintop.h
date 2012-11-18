@@ -22,9 +22,6 @@
 #include <klocale.h>
 #include <kis_paintop.h>
 #include <kis_types.h>
-#include <kis_pressure_rotation_option.h>
-#include <kis_pressure_opacity_option.h>
-#include <kis_pressure_size_option.h>
 
 #include "kis_experiment_paintop_settings.h"
 #include "kis_experimentop_option.h"
@@ -45,43 +42,30 @@ public:
     virtual qreal paintAt(const KisPaintInformation& info);
 
 private:
-    const KisExperimentPaintOpSettings* m_settings;
+    void paintTriangles();
+    QPointF speedCorrectedPosition(const KisPaintInformation& pi1,
+                                   const KisPaintInformation& pi2);
 
-    KisPaintDeviceSP m_currentLayerDevice;
+    bool m_speedEnabled;
+    int m_speedMultiplier;
+    qreal m_savedSpeedCoeff;
+    QPointF m_savedSpeedPoint;
 
-    QVector<QRect> m_previousDabs;
-    bool m_isFirst;
+
+    bool m_smoothingEnabled;
+    int m_smoothingThreshold;
+    QPointF m_savedSmoothingPoint;
+    int m_savedSmoothingDistance;
+
+    int m_savedUpdateDistance;
+    QVector<QPointF> m_savedPoints;
+    int m_lastPaintTime;
+
+    bool m_firstRun;
+    QPointF m_center;
 
     QPainterPath m_path;
-    QImage m_polygonMaskImage;
-    KisFixedPaintDeviceSP m_polygonDevice;
-
-    KisPressureRotationOption m_rotationOption;
-    KisPressureSizeOption m_sizeOption;
-    KisPressureOpacityOption m_opacityOption;
     ExperimentOption m_experimentOption;
-
-    int m_displacement; // 7
-    int m_multiplier;
-    bool m_smoothing;
-
-    QPainterPath applyDisplace(const QPainterPath& path, int speed);
-    QPointF getAngle(const QPointF &p1,const QPointF &p2, double distance);
-    int getCursorSpeed(const QPointF &p1,const QPointF &p2){
-        int diffX = qAbs(p1.x() - p2.x());
-        int diffY = qAbs(p1.y() - p2.y());
-        return diffX + diffY;
-    }
-
-    KisPainter * m_copyPainter;
-    KisFixedPainter * m_fixedPainter;
-
-    QVector<QRect> m_previousRects;
-    QRect m_previousRect;
-
-    void curveTo(QPainterPath &path, QPointF pt);
-    void addPosition(const QPointF &pos);
-
 };
 
 #endif // KIS_EXPERIMENT_PAINTOP_H_

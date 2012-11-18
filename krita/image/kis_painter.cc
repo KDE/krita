@@ -2445,6 +2445,10 @@ void KisPainter::copyMirrorInformation(KisPainter* painter)
     painter->setMirrorInformation(d->axisCenter, d->mirrorHorizontaly, d->mirrorVerticaly);
 }
 
+bool KisPainter::hasMirroring() const
+{
+    return d->mirrorHorizontaly || d->mirrorVerticaly;
+}
 
 void KisPainter::setMaskImageSize(qint32 width, qint32 height)
 {
@@ -2538,41 +2542,6 @@ void KisPainter::renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab)
 
 }
 
-QVector<QRect> KisPainter::regionsRenderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab)
-{
-    QVector<QRect> region;
-    int x = rc.topLeft().x();
-    int y = rc.topLeft().y();
-
-    int mirrorX = -((x+rc.width()) - d->axisCenter.x()) + d->axisCenter.x();
-    int mirrorY = -((y+rc.height()) - d->axisCenter.y()) + d->axisCenter.y();
-
-    if (d->mirrorHorizontaly && d->mirrorVerticaly){
-        dab->mirror(true, false);
-        bltFixed(mirrorX, y, dab, 0,0,rc.width(),rc.height());
-        region.append( QRect(QPoint(mirrorX,y),rc.size()) );
-
-        dab->mirror(false,true);
-        bltFixed(mirrorX, mirrorY, dab, 0,0,rc.width(),rc.height());
-        region.append( QRect(QPoint(mirrorX,mirrorY),rc.size()) );
-
-        dab->mirror(true, false);
-        bltFixed(x, mirrorY, dab, 0,0,rc.width(),rc.height());
-        region.append( QRect(QPoint(x,mirrorY),rc.size()) );
-
-    }else if (d->mirrorHorizontaly){
-        dab->mirror(true, false);
-        bltFixed(mirrorX, y, dab, 0,0,rc.width(),rc.height());
-        region.append( QRect(QPoint(mirrorX,y),rc.size()) );
-    }else if (d->mirrorVerticaly){
-        dab->mirror(false, true);
-        bltFixed(x, mirrorY, dab, 0,0,rc.width(),rc.height());
-        region.append( QRect(QPoint(x,mirrorY),rc.size()) );
-    }
-    return region;
-}
-
-
 void KisPainter::renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab, KisFixedPaintDeviceSP mask)
 {
     int x = rc.topLeft().x();
@@ -2630,6 +2599,58 @@ void KisPainter::renderMirrorMask(QRect rc, KisPaintDeviceSP dab, int sx, int sy
         mirrorDab->initialize();
         dab->readBytes(mirrorDab->data(),QRect(QPoint(sx,sy),rc.size()));
         renderMirrorMask(rc, mirrorDab, mask);
+    }
+}
+
+void KisPainter::renderDabWithMirroringNonIncremental(QRect rc, KisPaintDeviceSP dab)
+{
+    QVector<QRect> rects;
+
+    int x = rc.topLeft().x();
+    int y = rc.topLeft().y();
+    int mirrorX = -((x+rc.width()) - d->axisCenter.x()) + d->axisCenter.x();
+    int mirrorY = -((y+rc.height()) - d->axisCenter.y()) + d->axisCenter.y();
+
+    rects << rc;
+
+    if (d->mirrorHorizontaly && d->mirrorVerticaly){
+        rects << QRect(mirrorX, y, rc.width(), rc.height());
+        rects << QRect(mirrorX, mirrorY, rc.width(), rc.height());
+        rects << QRect(x, mirrorY, rc.width(), rc.height());
+    } else if (d->mirrorHorizontaly) {
+        rects << QRect(mirrorX, y, rc.width(), rc.height());
+    } else if (d->mirrorVerticaly) {
+        rects << QRect(x, mirrorY, rc.width(), rc.height());
+    }
+
+    foreach(const QRect &rc, rects) {
+        d->device->clear(rc);
+    }
+
+    QRect resultRect = dab->extent() | rc;
+    bool intersects = false;
+
+    for (int i = 1; i < rects.size(); i++) {
+        if (rects[i].intersects(resultRect)) {
+            intersects = true;
+            break;
+        }
+    }
+
+    /**
+     * If there are no cross-intersections, we can use a fast path
+     * and do no cycling recompositioning
+     */
+    if (!intersects) {
+        rects.resize(1);
+    }
+
+    foreach(const QRect &rc, rects) {
+        bitBlt(rc.topLeft(), dab, rc);
+    }
+
+    foreach(const QRect &rc, rects) {
+        renderMirrorMask(rc, dab);
     }
 }
 

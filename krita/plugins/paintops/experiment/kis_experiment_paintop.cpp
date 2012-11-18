@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2010-2011 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -45,10 +46,23 @@ KisExperimentPaintOp::KisExperimentPaintOp(const KisExperimentPaintOpSettings *s
     m_speedMultiplier = (m_experimentOption.speed * 0.01 * 35); // 0..35 [15 default according alchemy]
     m_smoothingEnabled = m_experimentOption.isSmoothingEnabled;
     m_smoothingThreshold = m_experimentOption.smoothing;
+
+    m_useMirroring = painter->hasMirroring();
+
+    if (m_useMirroring) {
+        m_originalDevice = new KisPaintDevice(painter->device()->colorSpace());
+        m_originalPainter = new KisPainter(m_originalDevice);
+        m_originalPainter->setCompositeOp(COMPOSITE_COPY);
+        m_originalPainter->setPaintColor(painter->paintColor());
+        m_originalPainter->setFillStyle(KisPainter::FillStyleForegroundColor);
+    } else {
+        m_originalPainter = 0;
+    }
 }
 
 KisExperimentPaintOp::~KisExperimentPaintOp()
 {
+    delete m_originalPainter;
 }
 
 bool checkInTriangle(const QRectF &rect,
@@ -110,11 +124,18 @@ void KisExperimentPaintOp::paintTriangles()
 
     QRegion changedRegion = splitTriangles(m_center, m_savedPoints);
 
-    painter()->setFillStyle(KisPainter::FillStyleForegroundColor);
-    painter()->setCompositeOp(COMPOSITE_COPY);
+    if (m_useMirroring) {
+        foreach(const QRect &rect, changedRegion.rects()) {
+            m_originalPainter->fillPainterPath(m_path, rect);
+            painter()->renderDabWithMirroringNonIncremental(rect, m_originalDevice);
+        }
+    } else {
+        painter()->setFillStyle(KisPainter::FillStyleForegroundColor);
+        painter()->setCompositeOp(COMPOSITE_COPY);
 
-    foreach(const QRect &rect, changedRegion.rects()) {
-        painter()->fillPainterPath(m_path, rect);
+        foreach(const QRect &rect, changedRegion.rects()) {
+            painter()->fillPainterPath(m_path, rect);
+        }
     }
 }
 

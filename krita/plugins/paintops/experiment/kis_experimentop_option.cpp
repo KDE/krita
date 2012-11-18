@@ -62,7 +62,7 @@ KisExperimentOpOption::KisExperimentOpOption()
     connect(m_options->smoothCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_options->smoothThreshold, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
 
-    connect(m_options->displaceStrength, SIGNAL(valueChanged(qreal)), SLOT(enableDisplace(qreal)));
+    connect(m_options->displaceStrength, SIGNAL(valueChanged(qreal)), SLOT(enableDisplacement(qreal)));
     connect(m_options->speed, SIGNAL(valueChanged(qreal)), SLOT(enableSpeed(qreal)));
     connect(m_options->smoothThreshold, SIGNAL(valueChanged(qreal)), SLOT(enableSmooth(qreal)));
 

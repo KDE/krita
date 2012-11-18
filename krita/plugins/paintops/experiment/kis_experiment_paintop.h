@@ -51,7 +51,6 @@ private:
     qreal m_savedSpeedCoeff;
     QPointF m_savedSpeedPoint;
 
-
     bool m_smoothingEnabled;
     int m_smoothingThreshold;
     QPointF m_savedSmoothingPoint;
@@ -66,6 +65,10 @@ private:
 
     QPainterPath m_path;
     ExperimentOption m_experimentOption;
+
+    bool m_useMirroring;
+    KisPainter *m_originalPainter;
+    KisPaintDeviceSP m_originalDevice;
 };
 
 #endif // KIS_EXPERIMENT_PAINTOP_H_

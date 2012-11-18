@@ -5,7 +5,6 @@ set(kritaexperimentpaintop_PART_SRCS
     kis_experiment_shape_option.cpp
     kis_experiment_paintop_settings.cpp
     kis_experiment_paintop_settings_widget.cpp
-    kis_fixed_painter.cpp
     )
 
 kde4_add_ui_files(kritaexperimentpaintop_PART_SRCS wdgexperimentoptions.ui wdgshapeoptions.ui )

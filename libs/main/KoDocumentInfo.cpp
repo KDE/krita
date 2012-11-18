@@ -382,7 +382,7 @@ void KoDocumentInfo::saveParameters()
     QString profile = appAuthorGroup.readEntry("active-profile", "");
 
     if (profiles.contains(profile)) {
-        KConfigGroup cgs(&authorGroup, "Author" + profile);
+        KConfigGroup cgs(&authorGroup, "Author-" + profile);
         setAuthorInfo("creator", cgs.readEntry("creator"));
         setAuthorInfo("initial", cgs.readEntry("initial"));
         setAuthorInfo("author-title", cgs.readEntry("author-title"));

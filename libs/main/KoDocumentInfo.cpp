@@ -36,6 +36,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kuser.h>
+#include <kemailsettings.h>
 
 
 KoDocumentInfo::KoDocumentInfo(QObject *parent) : QObject(parent)
@@ -398,16 +399,20 @@ void KoDocumentInfo::saveParameters()
         setAuthorInfo("company", cgs.readEntry("company"));
     } else {
         if (profile == "anonymous") {
-            setAuthorInfo("creator", "");
+            setAuthorInfo("creator", QString());
+            setAuthorInfo("telephone", QString());
+            setAuthorInfo("telephone-work", QString());
+            setAuthorInfo("email", QString());
         } else {
             KUser user(KUser::UseRealUserID);
             setAuthorInfo("creator", user.property(KUser::FullName).toString());
+            setAuthorInfo("telephone-work", user.property(KUser::WorkPhone).toString());
+            setAuthorInfo("telephone", user.property(KUser::HomePhone).toString());
+            KEMailSettings eMailSettings;
+            setAuthorInfo("email", eMailSettings.getSetting(KEMailSettings::EmailAddress));
         }
         setAuthorInfo("initial", "");
         setAuthorInfo("author-title", "");
-        setAuthorInfo("email", "");
-        setAuthorInfo("telephone", "");
-        setAuthorInfo("telephone-work", "");
         setAuthorInfo("fax", "");
         setAuthorInfo("country", "");
         setAuthorInfo("postal-code", "");

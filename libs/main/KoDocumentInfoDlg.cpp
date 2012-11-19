@@ -26,6 +26,7 @@
 #include "KoDocumentInfo.h"
 #include "KoDocument.h"
 #include "KoMainWindow.h"
+#include "KoGlobal.h"
 
 #include "rdf/KoDocumentRdfEditWidgetBase.h"
 #ifdef SHOULD_BUILD_RDF
@@ -103,6 +104,9 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo, K
         d->m_aboutUi->pbEncrypt->setVisible(false);
         d->m_aboutUi->lblEncryptedPic->setVisible(false);
     }
+    d->m_aboutUi->cbLanguage->addItems(KoGlobal::listOfLanguages());
+    d->m_aboutUi->cbLanguage->setCurrentIndex(-1);
+
     KPageWidgetItem *page = new KPageWidgetItem(infodlg, i18n("General"));
     page->setHeader(i18n("General"));
 
@@ -193,6 +197,8 @@ void KoDocumentInfoDlg::initAboutTab()
 
     d->m_aboutUi->leTitle->setText(d->m_info->aboutInfo("title"));
     d->m_aboutUi->leSubject->setText(d->m_info->aboutInfo("subject"));
+    QString language = KoGlobal::languageFromTag(d->m_info->aboutInfo("language"));
+    d->m_aboutUi->cbLanguage->setCurrentIndex(d->m_aboutUi->cbLanguage->findText(language));
 
     d->m_aboutUi->leKeywords->setToolTip(i18n("Use ';' (Example: Office;KDE;Calligra)"));
     if (!d->m_info->aboutInfo("keyword").isEmpty())
@@ -283,6 +289,7 @@ void KoDocumentInfoDlg::saveAboutData()
     d->m_info->setAboutInfo("title", d->m_aboutUi->leTitle->text());
     d->m_info->setAboutInfo("subject", d->m_aboutUi->leSubject->text());
     d->m_info->setAboutInfo("description", d->m_aboutUi->meComments->toPlainText());
+    d->m_info->setAboutInfo("language", KoGlobal::tagOfLanguage(d->m_aboutUi->cbLanguage->currentText()));
     d->m_applyToggleEncryption = d->m_toggleEncryption;
 }
 

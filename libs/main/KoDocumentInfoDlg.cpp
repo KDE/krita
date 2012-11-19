@@ -113,6 +113,13 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo, K
         if (! mime)
             mime = KMimeType::defaultMimeTypePtr();
         page->setIcon(KIcon(mime->iconName()));
+    } else {
+        // hide all entries not used in pages for KoDocumentInfoPropsPage
+        d->m_aboutUi->filePathInfoLabel->setVisible(false);
+        d->m_aboutUi->filePathLabel->setVisible(false);
+        d->m_aboutUi->filePathSeparatorLine->setVisible(false);
+        d->m_aboutUi->lblTypeDesc->setVisible(false);
+        d->m_aboutUi->lblType->setVisible(false);
     }
     addPage(page);
     d->m_pages.append(page);
@@ -179,10 +186,10 @@ bool KoDocumentInfoDlg::isDocumentSaved()
 void KoDocumentInfoDlg::initAboutTab()
 {
     KoDocument* doc = dynamic_cast< KoDocument* >(d->m_info->parent());
-    if (!doc)
-        return;
 
-    d->m_aboutUi->filePathLabel->setText(doc->localFilePath());
+    if (doc) {
+        d->m_aboutUi->filePathLabel->setText(doc->localFilePath());
+    }
 
     d->m_aboutUi->leTitle->setText(d->m_info->aboutInfo("title"));
     d->m_aboutUi->leSubject->setText(d->m_info->aboutInfo("subject"));
@@ -192,7 +199,7 @@ void KoDocumentInfoDlg::initAboutTab()
         d->m_aboutUi->leKeywords->setText(d->m_info->aboutInfo("keyword"));
 
     d->m_aboutUi->meComments->setPlainText(d->m_info->aboutInfo("description"));
-    if (!doc->mimeType().isEmpty()) {
+    if (doc && !doc->mimeType().isEmpty()) {
         KMimeType::Ptr docmime = KMimeType::mimeType(doc->mimeType());
         if (docmime)
             d->m_aboutUi->lblType->setText(docmime->comment());
@@ -213,7 +220,7 @@ void KoDocumentInfoDlg::initAboutTab()
 
     d->m_aboutUi->lblRevision->setText(d->m_info->aboutInfo("editing-cycles"));
 
-    if ( doc->supportedSpecialFormats() & KoDocument::SaveEncrypted ) {
+    if (doc && (doc->supportedSpecialFormats() & KoDocument::SaveEncrypted)) {
         if (doc->specialOutputFlag() == KoDocument::SaveEncrypted) {
             if (d->m_toggleEncryption) {
                 d->m_aboutUi->lblEncrypted->setText(i18n("This document will be decrypted"));

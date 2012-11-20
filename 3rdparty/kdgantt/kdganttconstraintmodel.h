@@ -69,7 +69,7 @@ namespace KDGantt {
 #ifndef QT_NO_DEBUG_STREAM
 #include <QDebug>
 
-QDebug operator<<( QDebug dbg, const KDGantt::ConstraintModel& model );
+KDGANTT_EXPORT QDebug operator<<( QDebug dbg, const KDGantt::ConstraintModel& model );
 inline QDebug operator<<( QDebug dbg, KDGantt::ConstraintModel* model ) 
 {
     return operator<<(dbg,*model);

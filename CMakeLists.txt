@@ -613,12 +613,17 @@ else (NOT TINY AND NOT CREATIVEONLY AND HAVE_ICU AND HAVE_SQLITE)
    set(SHOULD_BUILD_KEXI FALSE)
 endif (NOT TINY AND NOT CREATIVEONLY AND HAVE_ICU AND HAVE_SQLITE)
 
-################################
+#############################################
+####          3rd party libraries        ####
+#############################################
 
-# 3rdparty
-# FIXME: Add KDGANTT_INCLUDES
-set(KDCHART_INCLUDES ${CMAKE_SOURCE_DIR}/3rdparty/kdchart/include)
+set(KDGANTT_INCLUDES
+    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt
+)
 
+#set(KDCHART_INCLUDES
+#    ${CMAKE_SOURCE_DIR}/3rdparty/kdchart
+#)
 
  #############################################
 ##############################################

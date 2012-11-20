@@ -4,7 +4,6 @@ include_directories(${KOTEXT_INCLUDES}
 
 add_subdirectory( tests )
 add_subdirectory( styles/tests )
-add_subdirectory( opendocument/tests )
 
 ########### next target ###############
 set(kotext_LIB_SRCS

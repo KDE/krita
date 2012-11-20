@@ -52,7 +52,11 @@ KoTextRange::KoTextRange(const QTextCursor &cursor)
     : d_ptr(new KoTextRangePrivate)
 {
     d_ptr->cursor = cursor;
+    d_ptr->cursor.setPosition(cursor.selectionStart());
     d_ptr->cursor.setKeepPositionOnInsert(true);
+    if (cursor.hasSelection()) {
+        setRangeEnd(cursor.selectionEnd());
+    }
 }
 
 KoTextRangePrivate::~KoTextRangePrivate()

@@ -79,11 +79,8 @@ bool KoBookmark::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
         // For cut and paste, make sure that the name is unique.
         d->name = createUniqueBookmarkName(manager()->bookmarkManager(), bookmarkName, false);
 
-        if (localName == "bookmark") {
-            setPositionOnlyMode(true);
-        }
-        else if (localName == "bookmark-start") {
-            setPositionOnlyMode(false);
+        if (localName == "bookmark" || localName == "bookmark-start") {
+            setPositionOnlyMode(localName == "bookmark");
 
             // Add inline Rdf to the bookmark.
             if (element.hasAttributeNS(KoXmlNS::xhtml, "property") || element.hasAttribute("id")) {

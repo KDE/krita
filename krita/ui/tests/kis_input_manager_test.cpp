@@ -210,6 +210,14 @@ void KisInputManagerTest::testKeyEvents()
     QCOMPARE(a->m_endNonNull, false);
     a->reset();
 
+    // Check autorepeat
+    QVERIFY(m.autoRepeatedKeyPressed(Qt::Key_Enter));
+    QCOMPARE(a->m_beginIndex, 11);
+    QCOMPARE(a->m_ended, true);
+    QCOMPARE(a->m_beginNonNull, false);
+    QCOMPARE(a->m_endNonNull, false);
+    a->reset();
+
     QVERIFY(!m.keyReleased(Qt::Key_Enter));
     QCOMPARE(a->m_beginIndex, -1);
 

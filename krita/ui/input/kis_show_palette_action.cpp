@@ -38,6 +38,14 @@ KisShowPaletteAction::~KisShowPaletteAction()
 
 void KisShowPaletteAction::begin(int, QEvent *event)
 {
+    QPoint pos;
+
     QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
-    inputManager()->canvas()->favoriteResourceManager()->slotShowPopupPalette(mouseEvent->pos());
+    if (mouseEvent) {
+        pos = mouseEvent->pos();
+    } else {
+        pos = inputManager()->canvas()->coordinatesConverter()->widgetCenterPoint().toPoint();
+    }
+
+    inputManager()->canvas()->favoriteResourceManager()->slotShowPopupPalette(pos);
 }

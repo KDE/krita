@@ -347,9 +347,12 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     }
     case QEvent::KeyPress: {
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+        Qt::Key key = d->workaroundShiftAltMetaHell(keyEvent);
+
         if (!keyEvent->isAutoRepeat()) {
-            Qt::Key key = d->workaroundShiftAltMetaHell(keyEvent);
             retval = d->matcher.keyPressed(key);
+        } else {
+            retval = d->matcher.autoRepeatedKeyPressed(key);
         }
 
         /**

@@ -28,7 +28,7 @@ struct KisShortcutMatcher::Private
 {
     Private() : suppressAllActions(false) {}
 
-    QList<KisSingleActionShortcut*> keyShortcuts;
+    QList<KisSingleActionShortcut*> singleActionShortcuts;
     QList<KisStrokeShortcut*> strokeShortcuts;
     QList<KisAbstractInputAction*> actions;
 
@@ -51,7 +51,7 @@ KisShortcutMatcher::KisShortcutMatcher()
 
 KisShortcutMatcher::~KisShortcutMatcher()
 {
-    qDeleteAll(m_d->keyShortcuts);
+    qDeleteAll(m_d->singleActionShortcuts);
     qDeleteAll(m_d->strokeShortcuts);
     qDeleteAll(m_d->actions);
     delete m_d;
@@ -59,7 +59,7 @@ KisShortcutMatcher::~KisShortcutMatcher()
 
 void KisShortcutMatcher::addShortcut(KisSingleActionShortcut *shortcut)
 {
-    m_d->keyShortcuts.append(shortcut);
+    m_d->singleActionShortcuts.append(shortcut);
 }
 
 void KisShortcutMatcher::addShortcut(KisStrokeShortcut *shortcut)
@@ -79,7 +79,7 @@ bool KisShortcutMatcher::keyPressed(Qt::Key key)
     if (m_d->keys.contains(key)) reset();
 
     if (!m_d->runningShortcut) {
-        retval = tryRunSingleActionShortcut(key, 0);
+        retval = tryRunKeyShortcut(key, 0);
     }
 
     m_d->keys.append(key);
@@ -87,6 +87,19 @@ bool KisShortcutMatcher::keyPressed(Qt::Key key)
     if (!m_d->runningShortcut) {
         prepareReadyShortcuts();
         tryActivateReadyShortcut();
+    }
+
+    return retval;
+}
+
+bool KisShortcutMatcher::autoRepeatedKeyPressed(Qt::Key key)
+{
+    bool retval = false;
+
+    if (!m_d->keys.contains(key)) reset();
+
+    if (!m_d->runningShortcut) {
+        retval = tryRunKeyShortcut(key, 0);
     }
 
     return retval;
@@ -173,23 +186,30 @@ void KisShortcutMatcher::suppressAllActions(bool value)
 
 bool KisShortcutMatcher::tryRunWheelShortcut(KisSingleActionShortcut::WheelAction wheelAction, QWheelEvent *event)
 {
-    return tryRunSingleActionShortcutImpl(wheelAction, event);
+    return tryRunSingleActionShortcutImpl(wheelAction, event, m_d->keys);
 }
 
-bool KisShortcutMatcher::tryRunSingleActionShortcut(Qt::Key key, QKeyEvent *event)
+bool KisShortcutMatcher::tryRunKeyShortcut(Qt::Key key, QKeyEvent *event)
 {
-    return tryRunSingleActionShortcutImpl(key, event);
+    /**
+     * Handle the case of autorepeated keys.
+     * The autorepeated key should not be present in modifiers.
+     */
+    QList<Qt::Key> filteredKeys = m_d->keys;
+    filteredKeys.removeOne(key);
+
+    return tryRunSingleActionShortcutImpl(key, event, filteredKeys);
 }
 
 template<typename T, typename U>
-bool KisShortcutMatcher::tryRunSingleActionShortcutImpl(T param, U *event)
+bool KisShortcutMatcher::tryRunSingleActionShortcutImpl(T param, U *event, const QList<Qt::Key> &keysState)
 {
     if (m_d->suppressAllActions) return false;
 
     KisSingleActionShortcut *goodCandidate = 0;
 
-    foreach(KisSingleActionShortcut *s, m_d->keyShortcuts) {
-        if(s->match(m_d->keys, param) &&
+    foreach(KisSingleActionShortcut *s, m_d->singleActionShortcuts) {
+        if(s->match(keysState, param) &&
            (!goodCandidate || s->priority() > goodCandidate->priority())) {
 
             goodCandidate = s;

@@ -247,6 +247,8 @@ public:
     KoStyleManager *styleManager;
     KoChangeTracker *changeTracker;
     QTextDocument *document;
+    int globalFrom; // to and from positions, relevant for finding matching bookmarks etc
+    int globalTo;
 
 private:
 

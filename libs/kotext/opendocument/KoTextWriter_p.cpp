@@ -724,6 +724,8 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
         inlineRdf->saveOdf(context, writer, xmlid);
     }
 
+    KoTextRangeManager *mgr = KoTextDocument(block.document()).textRangeManager();
+
     QString previousFragmentLink;
     int linkTagChangeId = -1;
     for (it = block.begin(); !(it.atEnd()); ++it) {
@@ -873,8 +875,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                 QString text = currentFragment.text();
                 int spanFrom = fragmentStart >= from ? fragmentStart : from;
                 int spanTo = to == -1 ? fragmentEnd : (fragmentEnd > to ? to : fragmentEnd);
-                KoTextRangeManager *mgr = KoTextDocument(block.document()).textRangeManager();
-                QHash<int, KoTextRange *> textRanges = mgr->textRangesChangingWithin(spanFrom, spanTo, from, to);
+                QHash<int, KoTextRange *> textRanges = mgr->textRangesChangingWithin(spanFrom, spanTo, globalFrom, globalTo);
                 // avoid mid, if possible
                 if (spanFrom != fragmentStart || spanTo != fragmentEnd || !textRanges.isEmpty()) {
                     if (textRanges.isEmpty()) {
@@ -913,6 +914,13 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
     }
     if (!previousFragmentLink.isEmpty()) {
         writer->endElement();
+    }
+
+    QHash<int, KoTextRange *> textRanges = mgr->textRangesChangingWithin(block.position(), block.position(), globalFrom, globalTo);
+                            QList<KoTextRange *> relevants = textRanges.values(block.position());
+    foreach (const KoTextRange *range, relevants) {
+        // the range will only actually save itself if matching the position
+        range->saveOdf(context, block.position());
     }
 
     QString text = block.text();

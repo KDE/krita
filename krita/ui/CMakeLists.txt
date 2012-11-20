@@ -198,7 +198,7 @@ set(kritaui_LIB_SRCS
     input/kis_show_palette_action.cpp
     input/kis_change_primary_setting_action.cpp
     input/kis_abstract_shortcut.cpp
-    input/kis_key_shortcut.cpp
+    input/kis_single_action_shortcut.cpp
     input/kis_stroke_shortcut.cpp
     input/kis_shortcut_matcher.cpp
     kis_ui_action_factory.cpp

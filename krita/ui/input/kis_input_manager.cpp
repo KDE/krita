@@ -45,7 +45,7 @@
 
 #include "kis_shortcut_matcher.h"
 #include "kis_stroke_shortcut.h"
-#include "kis_key_shortcut.h"
+#include "kis_single_action_shortcut.h"
 
 class KisInputManager::Private
 {
@@ -70,7 +70,7 @@ public:
                         Qt::Key key);
     void addWheelShortcut(KisAbstractInputAction* action, int index,
                           const QList<Qt::Key> &modifiers,
-                          KisKeyShortcut::WheelAction wheelAction);
+                          KisSingleActionShortcut::WheelAction wheelAction);
     bool processUnhandledEvent(QEvent *event);
     Qt::Key workaroundShiftAltMetaHell(const QKeyEvent *keyEvent);
     void setupActions();
@@ -123,18 +123,18 @@ void KisInputManager::Private::addKeyShortcut(KisAbstractInputAction* action, in
                                               const QList<Qt::Key> &modifiers,
                                               Qt::Key key)
 {
-    KisKeyShortcut *keyShortcut =
-        new KisKeyShortcut(action, index);
+    KisSingleActionShortcut *keyShortcut =
+        new KisSingleActionShortcut(action, index);
     keyShortcut->setKey(modifiers, key);
     matcher.addShortcut(keyShortcut);
 }
 
 void KisInputManager::Private::addWheelShortcut(KisAbstractInputAction* action, int index,
                                                 const QList<Qt::Key> &modifiers,
-                                                KisKeyShortcut::WheelAction wheelAction)
+                                                KisSingleActionShortcut::WheelAction wheelAction)
 {
-    KisKeyShortcut *keyShortcut =
-        new KisKeyShortcut(action, index);
+    KisSingleActionShortcut *keyShortcut =
+        new KisSingleActionShortcut(action, index);
     keyShortcut->setWheel(modifiers, wheelAction);
     matcher.addShortcut(keyShortcut);
 }
@@ -196,8 +196,8 @@ void KisInputManager::Private::setupActions()
     addStrokeShortcut(action, KisZoomAction::ZoomToggleShortcut, KEYS(Qt::Key_Control, Qt::Key_Space), BUTTONS(Qt::LeftButton));
     addStrokeShortcut(action, KisZoomAction::DiscreteZoomToggleShortcut, KEYS(Qt::Key_Control, Qt::Key_Alt, Qt::Key_Space), BUTTONS(Qt::LeftButton));
 
-    addWheelShortcut(action, KisZoomAction::ZoomInShortcut, KEYS(), KisKeyShortcut::WheelUp);
-    addWheelShortcut(action, KisZoomAction::ZoomOutShortcut, KEYS(), KisKeyShortcut::WheelDown);
+    addWheelShortcut(action, KisZoomAction::ZoomInShortcut, KEYS(), KisSingleActionShortcut::WheelUp);
+    addWheelShortcut(action, KisZoomAction::ZoomOutShortcut, KEYS(), KisSingleActionShortcut::WheelDown);
 
     addKeyShortcut(action, KisZoomAction::ZoomInShortcut, KEYS(), Qt::Key_Plus);
     addKeyShortcut(action, KisZoomAction::ZoomOutShortcut, KEYS(), Qt::Key_Minus);
@@ -383,9 +383,9 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     }
     case QEvent::Wheel: {
         QWheelEvent *wheelEvent = static_cast<QWheelEvent*>(event);
-        KisKeyShortcut::WheelAction action =
+        KisSingleActionShortcut::WheelAction action =
             wheelEvent->delta() > 0 ?
-            KisKeyShortcut::WheelUp : KisKeyShortcut::WheelDown;
+            KisSingleActionShortcut::WheelUp : KisSingleActionShortcut::WheelDown;
 
         retval = d->matcher.wheelEvent(action, wheelEvent);
         break;

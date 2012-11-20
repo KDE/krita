@@ -16,9 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_key_shortcut.h"
+#include "kis_single_action_shortcut.h"
 
-struct KisKeyShortcut::Private
+struct KisSingleActionShortcut::Private
 {
     QList<Qt::Key> modifiers;
     Qt::Key key;
@@ -27,43 +27,43 @@ struct KisKeyShortcut::Private
 };
 
 
-KisKeyShortcut::KisKeyShortcut(KisAbstractInputAction *action, int index)
+KisSingleActionShortcut::KisSingleActionShortcut(KisAbstractInputAction *action, int index)
     : KisAbstractShortcut(action, index),
       m_d(new Private)
 {
 }
 
-KisKeyShortcut::~KisKeyShortcut()
+KisSingleActionShortcut::~KisSingleActionShortcut()
 {
     delete m_d;
 }
 
-int KisKeyShortcut::priority() const
+int KisSingleActionShortcut::priority() const
 {
     return m_d->modifiers.size() * 2 + 1;
 }
 
-void KisKeyShortcut::setKey(const QList<Qt::Key> &modifiers, Qt::Key key)
+void KisSingleActionShortcut::setKey(const QList<Qt::Key> &modifiers, Qt::Key key)
 {
     m_d->modifiers = modifiers;
     m_d->key = key;
     m_d->useWheel = false;
 }
 
-void KisKeyShortcut::setWheel(const QList<Qt::Key> &modifiers, WheelAction wheelAction)
+void KisSingleActionShortcut::setWheel(const QList<Qt::Key> &modifiers, WheelAction wheelAction)
 {
     m_d->modifiers = modifiers;
     m_d->wheelAction = wheelAction;
     m_d->useWheel = true;
 }
 
-bool KisKeyShortcut::matchKey(const QList<Qt::Key> &modifiers, Qt::Key key)
+bool KisSingleActionShortcut::match(const QList<Qt::Key> &modifiers, Qt::Key key)
 {
     return !m_d->useWheel && key == m_d->key &&
         compareKeys(modifiers, m_d->modifiers);
 }
 
-bool KisKeyShortcut::matchKey(const QList<Qt::Key> &modifiers, WheelAction wheelAction)
+bool KisSingleActionShortcut::match(const QList<Qt::Key> &modifiers, WheelAction wheelAction)
 {
     return m_d->useWheel && wheelAction == m_d->wheelAction &&
         compareKeys(modifiers, m_d->modifiers);

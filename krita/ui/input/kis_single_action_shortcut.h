@@ -16,18 +16,18 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_KEY_SHORTCUT_H
-#define __KIS_KEY_SHORTCUT_H
+#ifndef __KIS_SINGLE_ACTION_SHORTCUT_H
+#define __KIS_SINGLE_ACTION_SHORTCUT_H
 
 #include "kis_abstract_shortcut.h"
 
 /**
- * This class represents a shortcut that is started with simple
- * key presses only, that is a simple keyboard hotkey or a mouse
- * wheel rotation by one delta.
+ * This class represents a shortcut that executes a simple atomic
+ * action. It can be initiated either by a keyboard hotkey or by
+ * a mouse wheel rotation.
  */
 
-class KRITAUI_EXPORT KisKeyShortcut : public KisAbstractShortcut
+class KRITAUI_EXPORT KisSingleActionShortcut : public KisAbstractShortcut
 {
 public:
     enum WheelAction {
@@ -35,20 +35,20 @@ public:
         WheelDown ///< Mouse wheel moves down.
     };
 
-    KisKeyShortcut(KisAbstractInputAction *action, int index);
-    ~KisKeyShortcut();
+    KisSingleActionShortcut(KisAbstractInputAction *action, int index);
+    ~KisSingleActionShortcut();
 
     int priority() const;
 
     void setKey(const QList<Qt::Key> &modifiers, Qt::Key key);
     void setWheel(const QList<Qt::Key> &modifiers, WheelAction wheelAction);
 
-    bool matchKey(const QList<Qt::Key> &modifiers, Qt::Key key);
-    bool matchKey(const QList<Qt::Key> &modifiers, WheelAction wheelAction);
+    bool match(const QList<Qt::Key> &modifiers, Qt::Key key);
+    bool match(const QList<Qt::Key> &modifiers, WheelAction wheelAction);
 
 private:
     class Private;
     Private * const m_d;
 };
 
-#endif /* __KIS_KEY_SHORTCUT_H */
+#endif /* __KIS_SINGLE_ACTION_SHORTCUT_H */

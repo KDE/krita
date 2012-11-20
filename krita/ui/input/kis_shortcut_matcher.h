@@ -22,7 +22,7 @@
 #include "kis_abstract_shortcut.h"
 
 #include <QList>
-#include "kis_key_shortcut.h"
+#include "kis_single_action_shortcut.h"
 
 class QMouseEvent;
 class QKeyEvent;
@@ -38,7 +38,7 @@ class KisAbstractInputAction;
  * actions basing on the data, represented by the shortcuts.
  *
  * \see KisStrokeShortcut
- * \see KisKeyShortcut
+ * \see KisSingleActionShortcut
  */
 class KRITAUI_EXPORT KisShortcutMatcher
 {
@@ -46,7 +46,7 @@ public:
     KisShortcutMatcher();
     ~KisShortcutMatcher();
 
-    void addShortcut(KisKeyShortcut *shortcut);
+    void addShortcut(KisSingleActionShortcut *shortcut);
     void addShortcut(KisStrokeShortcut *shortcut);
     void addAction(KisAbstractInputAction *action);
 
@@ -94,7 +94,7 @@ public:
      * \return whether the event has been handled successfully and
      * should be eaten by the events filter
      */
-    bool wheelEvent(KisKeyShortcut::WheelAction wheelAction, QWheelEvent *event);
+    bool wheelEvent(KisSingleActionShortcut::WheelAction wheelAction, QWheelEvent *event);
 
     /**
      * Handles the mouse move event
@@ -126,9 +126,9 @@ public:
 private:
     friend class KisInputManagerTest;
 
-    bool tryRunKeyShortcut(Qt::Key key, QKeyEvent *event);
-    bool tryRunWheelShortcut(KisKeyShortcut::WheelAction wheelAction, QWheelEvent *event);
-    template<typename T, typename U> bool tryRunKeyShortcutImpl(T param, U *event);
+    bool tryRunSingleActionShortcut(Qt::Key key, QKeyEvent *event);
+    bool tryRunWheelShortcut(KisSingleActionShortcut::WheelAction wheelAction, QWheelEvent *event);
+    template<typename T, typename U> bool tryRunSingleActionShortcutImpl(T param, U *event);
 
     void prepareReadyShortcuts();
 

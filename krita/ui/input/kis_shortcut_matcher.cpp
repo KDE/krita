@@ -28,7 +28,7 @@ struct KisShortcutMatcher::Private
 {
     Private() : suppressAllActions(false) {}
 
-    QList<KisKeyShortcut*> keyShortcuts;
+    QList<KisSingleActionShortcut*> keyShortcuts;
     QList<KisStrokeShortcut*> strokeShortcuts;
     QList<KisAbstractInputAction*> actions;
 
@@ -57,7 +57,7 @@ KisShortcutMatcher::~KisShortcutMatcher()
     delete m_d;
 }
 
-void KisShortcutMatcher::addShortcut(KisKeyShortcut *shortcut)
+void KisShortcutMatcher::addShortcut(KisSingleActionShortcut *shortcut)
 {
     m_d->keyShortcuts.append(shortcut);
 }
@@ -79,7 +79,7 @@ bool KisShortcutMatcher::keyPressed(Qt::Key key)
     if (m_d->keys.contains(key)) reset();
 
     if (!m_d->runningShortcut) {
-        retval = tryRunKeyShortcut(key, 0);
+        retval = tryRunSingleActionShortcut(key, 0);
     }
 
     m_d->keys.append(key);
@@ -145,7 +145,7 @@ bool KisShortcutMatcher::buttonReleased(Qt::MouseButton button, QMouseEvent *eve
     return retval;
 }
 
-bool KisShortcutMatcher::wheelEvent(KisKeyShortcut::WheelAction wheelAction, QWheelEvent *event)
+bool KisShortcutMatcher::wheelEvent(KisSingleActionShortcut::WheelAction wheelAction, QWheelEvent *event)
 {
     if (m_d->runningShortcut) return false;
 
@@ -171,25 +171,25 @@ void KisShortcutMatcher::suppressAllActions(bool value)
     m_d->suppressAllActions = value;
 }
 
-bool KisShortcutMatcher::tryRunWheelShortcut(KisKeyShortcut::WheelAction wheelAction, QWheelEvent *event)
+bool KisShortcutMatcher::tryRunWheelShortcut(KisSingleActionShortcut::WheelAction wheelAction, QWheelEvent *event)
 {
-    return tryRunKeyShortcutImpl(wheelAction, event);
+    return tryRunSingleActionShortcutImpl(wheelAction, event);
 }
 
-bool KisShortcutMatcher::tryRunKeyShortcut(Qt::Key key, QKeyEvent *event)
+bool KisShortcutMatcher::tryRunSingleActionShortcut(Qt::Key key, QKeyEvent *event)
 {
-    return tryRunKeyShortcutImpl(key, event);
+    return tryRunSingleActionShortcutImpl(key, event);
 }
 
 template<typename T, typename U>
-bool KisShortcutMatcher::tryRunKeyShortcutImpl(T param, U *event)
+bool KisShortcutMatcher::tryRunSingleActionShortcutImpl(T param, U *event)
 {
     if (m_d->suppressAllActions) return false;
 
-    KisKeyShortcut *goodCandidate = 0;
+    KisSingleActionShortcut *goodCandidate = 0;
 
-    foreach(KisKeyShortcut *s, m_d->keyShortcuts) {
-        if(s->matchKey(m_d->keys, param) &&
+    foreach(KisSingleActionShortcut *s, m_d->keyShortcuts) {
+        if(s->match(m_d->keys, param) &&
            (!goodCandidate || s->priority() > goodCandidate->priority())) {
 
             goodCandidate = s;

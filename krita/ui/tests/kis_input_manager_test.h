@@ -25,7 +25,7 @@ class KisInputManagerTest : public QObject
 {
     Q_OBJECT
 private slots:
-    void testKeyShortcut();
+    void testSingleActionShortcut();
     void testStrokeShortcut();
     void testKeyEvents();
     void testReleaseUnnecessaryModifiers();

@@ -139,6 +139,7 @@ public:
         KoTextEditor *editor = new KoTextEditor(m_document);
 
         textDoc.setInlineTextObjectManager(&m_inlineObjectManager);
+        textDoc.setTextRangeManager(&m_rangeManager);
         textDoc.setStyleManager(new KoStyleManager(0));
         textDoc.setTextEditor(editor);
 
@@ -168,6 +169,7 @@ public:
 
     QTextDocument *m_document;
     KoInlineTextObjectManager m_inlineObjectManager;
+    KoTextRangeManager m_rangeManager;
     KoDocumentRdfBase m_rdfBase;
 };
 

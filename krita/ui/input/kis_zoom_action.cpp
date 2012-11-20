@@ -22,27 +22,68 @@
 
 #include <kis_canvas2.h>
 
-#include "kis_input_manager.h"
-#include <kis_view2.h>
-#include <kis_zoom_manager.h>
-#include <KoCanvasController.h>
+#include "kis_cursor.h"
+#include <KoCanvasControllerWidget.h>
 #include <KoZoomController.h>
+#include <kis_view2.h>
+#include "kis_input_manager.h"
+
 
 class KisZoomAction::Private
 {
 public:
-    Private() : active(false) { }
+    Private(KisZoomAction *qq) : q(qq), distance(0) {}
+    KisZoomAction *q;
+    int distance;
+    Shortcuts mode;
 
-    bool active;
+    void zoomTo(bool zoomIn, QEvent *event);
 };
 
+void KisZoomAction::Private::zoomTo(bool zoomIn, QEvent *event)
+{
+    KoZoomAction *zoomAction = q->inputManager()->canvas()->view()->zoomController()->zoomAction();
+
+    if (event) {
+        QPoint pos;
+        QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
+        if (mouseEvent) {
+            pos = mouseEvent->pos();
+        } else {
+            QWheelEvent *wheelEvent = dynamic_cast<QWheelEvent*>(event);
+            if (wheelEvent) {
+                pos = wheelEvent->pos();
+            } else {
+                qWarning() << "Unhandled type of event";
+            }
+        }
+
+        float oldZoom = zoomAction->effectiveZoom();
+        float newZoom = zoomIn ?
+            zoomAction->nextZoomLevel() : zoomAction->prevZoomLevel();
+
+        KoCanvasControllerWidget *controller =
+            dynamic_cast<KoCanvasControllerWidget*>(
+                q->inputManager()->canvas()->canvasController());
+
+        controller->zoomRelativeToPoint(pos, newZoom / oldZoom);
+    } else {
+        if (zoomIn) {
+            zoomAction->zoomIn();
+        } else {
+            zoomAction->zoomOut();
+        }
+    }
+}
+
 KisZoomAction::KisZoomAction(KisInputManager* manager)
-    : KisAbstractInputAction(manager), d(new Private)
+    : KisAbstractInputAction(manager), d(new Private(this))
 {
     setName(i18n("Zoom Canvas"));
 
     QHash< QString, int > shortcuts;
     shortcuts.insert(i18n("Toggle Zoom Mode"), ZoomToggleShortcut);
+    shortcuts.insert(i18n("Toggle Discrete Zoom Mode"), DiscreteZoomToggleShortcut);
     shortcuts.insert(i18n("Zoom In"), ZoomInShortcut);
     shortcuts.insert(i18n("Zoom Out"), ZoomOutShortcut);
     shortcuts.insert(i18n("Reset Zoom to 100%"), ZoomResetShortcut);
@@ -56,43 +97,34 @@ KisZoomAction::~KisZoomAction()
     delete d;
 }
 
-void KisZoomAction::begin(int shortcut)
+void KisZoomAction::activate()
 {
-    switch(shortcut)
-    {
+    QApplication::setOverrideCursor(KisCursor::zoomCursor());
+}
+
+void KisZoomAction::deactivate()
+{
+    QApplication::restoreOverrideCursor();
+}
+
+void KisZoomAction::begin(int shortcut, QEvent *event)
+{
+    KisAbstractInputAction::begin(shortcut, event);
+
+    switch(shortcut) {
         case ZoomToggleShortcut:
-            setMousePosition(inputManager()->canvas()->coordinatesConverter()->documentToWidget(inputManager()->mousePosition()));
-            QApplication::setOverrideCursor(Qt::OpenHandCursor);
-            d->active = true;
+            d->mode = (Shortcuts)shortcut;
             break;
-        case ZoomInShortcut: {
-            float zoom = inputManager()->canvas()->view()->zoomController()->zoomAction()->effectiveZoom();
-            if( zoom >= 10 ) {
-                zoom += 1.0;
-            } else if (zoom >= 5) {
-                zoom += 0.5;
-            } else if (zoom >= 2) {
-                zoom += 0.2;
-            } else {
-                zoom += 0.1;
-            }
-            inputManager()->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, zoom);
+        case DiscreteZoomToggleShortcut:
+            d->mode = (Shortcuts)shortcut;
+            d->distance = 0;
             break;
-        }
-        case ZoomOutShortcut: {
-            float zoom = inputManager()->canvas()->view()->zoomController()->zoomAction()->effectiveZoom();
-            if( zoom >= 10 ) {
-                zoom -= 1.0;
-            } else if (zoom >= 5) {
-                zoom -= 0.5;
-            } else if (zoom >= 2) {
-                zoom -= 0.2;
-            } else {
-                zoom -= 0.1;
-            }
-            inputManager()->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, zoom);
+        case ZoomInShortcut:
+            d->zoomTo(true, event);
             break;
-        }
+        case ZoomOutShortcut:
+            d->zoomTo(false, event);
+            break;
         case ZoomResetShortcut:
             inputManager()->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
             break;
@@ -105,38 +137,23 @@ void KisZoomAction::begin(int shortcut)
     }
 }
 
-void KisZoomAction::end()
+void KisZoomAction::mouseMoved(const QPointF &lastPos, const QPointF &pos)
 {
-    d->active = false;
-    QApplication::restoreOverrideCursor();
-}
+    QPointF diff = -(pos - lastPos);
 
-void KisZoomAction::inputEvent(QEvent* event)
-{
-    switch (event->type()) {
-        case QEvent::MouseButtonPress:
-            setMousePosition(static_cast<QMouseEvent*>(event)->posF());
-            break;
-        case QEvent::MouseMove: {
-            QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
-            if(mevent->buttons()) {
-                QPointF relMovement = -(mevent->posF() - mousePosition());
+    const int stepCont = 100;
+    const int stepDisc = 20;
 
-                float zoom = inputManager()->canvas()->view()->zoomController()->zoomAction()->effectiveZoom() + relMovement.y() / 100;
-                inputManager()->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, zoom);
-
-                setMousePosition(mevent->posF());
-                QApplication::changeOverrideCursor(Qt::ClosedHandCursor);
-            } else {
-                QApplication::changeOverrideCursor(Qt::OpenHandCursor);
-            }
+    if (d->mode == ZoomToggleShortcut) {
+        float coeff = 1.0 + qreal(diff.y()) / stepCont;
+        float zoom = coeff * inputManager()->canvas()->view()->zoomController()->zoomAction()->effectiveZoom();
+        inputManager()->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, zoom);
+    } else if (d->mode == DiscreteZoomToggleShortcut) {
+        d->distance += diff.y();
+        bool zoomIn = d->distance > 0;
+        while (qAbs(d->distance) > stepDisc) {
+            d->zoomTo(zoomIn, 0);
+            d->distance += zoomIn ? -stepDisc : stepDisc;
         }
-        default:
-            break;
     }
-}
-
-bool KisZoomAction::isBlockingAutoRepeat() const
-{
-    return d->active;
 }

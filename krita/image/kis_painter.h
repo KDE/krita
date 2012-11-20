@@ -390,17 +390,16 @@ public:
      */
     void renderMirrorMaskSafe(QRect rc, KisPaintDeviceSP dab, int sx, int sy, KisFixedPaintDeviceSP mask, bool preserveMask);
 
-
     /**
-     * Special method for some paintop that needs to know which areas where covered by the dab
-     * E.g. experimental (shape) paintop needs to know it to be able to copy appriate regions from
-     * internal device to the layer device
+     * A complex method that re-renders a dab on an \p rc area.
+     * The \p rc  area and all the dedicated mirroring areas are cleared
+     * before the painting, so this method should be used by paintops
+     * which do not update the canvas incrementally, but instead
+     * regenerate some internal cache \p dab with the COMPOSITE_COPY op.
      *
-     * @param rc rectangle area covered by dab
-     * @param dab this device will be mirrored in-place, it means that it will be changed
-     * @return vector of rectangular dirty regions of the painter's device
+     * \see KisExperimentPaintOp
      */
-    QVector<QRect> regionsRenderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab);
+    void renderDabWithMirroringNonIncremental(QRect rc, KisPaintDeviceSP dab);
 
     /**
       * The methods in this class do not tell the paintdevice to update, but they calculate the
@@ -502,8 +501,16 @@ public:
 
     /**
      * Fills the area enclosed by the given QPainterPath
+     * Convenience method for fillPainterPath(path, rect)
      */
     void fillPainterPath(const QPainterPath& path);
+
+    /**
+     * Fills the portion of an area enclosed by the given QPainterPath
+     *
+     * \param rect the portion of the path to fill
+     */
+    void fillPainterPath(const QPainterPath& path, const QRect &requestedRect);
 
     /**
      * Draw the path using the Pen
@@ -593,6 +600,12 @@ public:
      * copy the mirror information to other painter
      */
     void copyMirrorInformation(KisPainter * painter);
+
+    /**
+     * Returns whether the mirroring methods will do any
+     * work when called
+     */
+    bool hasMirroring() const;
 
     /// Set the current pattern
     void setPattern(const KisPattern * pattern);

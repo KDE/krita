@@ -32,9 +32,7 @@ public:
     explicit KisShowPaletteAction(KisInputManager* manager);
     virtual ~KisShowPaletteAction();
 
-    virtual void begin(int /*shortcut*/);
-    virtual void end();
-    virtual void inputEvent(QEvent* event);
+    virtual void begin(int, QEvent *);
 };
 
 #endif // KIS_SHOW_PALETTE_ACTION_H

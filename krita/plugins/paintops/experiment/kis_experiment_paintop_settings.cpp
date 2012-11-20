@@ -16,20 +16,13 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <kis_paint_action_type_option.h>
-
-#include <QPainter>
-
 #include "kis_experiment_paintop_settings.h"
-#include "kis_experimentop_option.h"
-#include "kis_experiment_shape_option.h"
-#include "kis_image.h"
-#include <kis_paintop_settings_widget.h>
 
 bool KisExperimentPaintOpSettings::paintIncremental()
 {
-    return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
+    /**
+     * The experiment brush supports working in the
+     * WASH mode only!
+     */
+    return false;
 }
-
-
-

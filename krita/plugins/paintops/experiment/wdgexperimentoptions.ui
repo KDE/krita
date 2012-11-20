@@ -22,30 +22,26 @@
     <height>290</height>
    </size>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2">
-   <item row="0" column="0">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Shape creation</string>
+      <string>Shape creation:</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
-    <spacer name="horizontalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+   <item>
+    <layout class="QFormLayout" name="formLayout">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetMaximumSize</enum>
      </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>280</width>
-       <height>53</height>
-      </size>
+     <property name="fieldGrowthPolicy">
+      <enum>QFormLayout::ExpandingFieldsGrow</enum>
      </property>
-    </spacer>
-   </item>
-   <item row="1" column="0" colspan="2">
-    <layout class="QHBoxLayout" name="speedLayout" stretch="0,1">
-     <item>
+     <property name="labelAlignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+     <item row="0" column="0">
       <widget class="QCheckBox" name="speedCHBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -58,26 +54,43 @@
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="KisDoubleSliderSpinBox" name="speed" native="true"/>
+     <item row="0" column="1">
+      <widget class="KisDoubleSliderSpinBox" name="speed" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QCheckBox" name="smoothCHBox">
+       <property name="text">
+        <string>Smooth</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="KisDoubleSliderSpinBox" name="smoothThreshold" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
-   <item row="2" column="0">
-    <widget class="QCheckBox" name="smoothCHBox">
-     <property name="text">
-      <string>Smooth shapes</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0" colspan="2">
-    <widget class="QLabel" name="label_3">
+   <item>
+    <widget class="QLabel" name="lblPostprocessing">
      <property name="text">
       <string>Post-processing</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="0" colspan="2">
+   <item>
     <layout class="QHBoxLayout" name="displaceLayout" stretch="0,1">
      <item>
       <widget class="QCheckBox" name="displaceCHBox">
@@ -90,6 +103,19 @@
       <widget class="KisDoubleSliderSpinBox" name="displaceStrength" native="true"/>
      </item>
     </layout>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>

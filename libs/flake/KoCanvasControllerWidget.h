@@ -113,6 +113,12 @@ public:
 
     virtual void zoomTo(const QRect &rect);
 
+    /**
+     * Zoom document keeping point \p widgetPoint unchanged
+     * \param widgetPoint sticky point in widget pixels
+     */
+    virtual void zoomRelativeToPoint(const QPoint &widgetPoint, qreal zoomCoeff);
+
     virtual void recenterPreferred();
 
     virtual void setPreferredCenter(const QPointF &viewPoint);
@@ -165,12 +171,6 @@ private slots:
 
 protected:
     friend class KisZoomAndPanTest;
-
-    /**
-     * Zoom document keeping point \p widgetPoint unchanged
-     * \param widgetPoint sticky point in widget pixels
-     */
-    virtual void zoomRelativeToPoint(const QPoint &widgetPoint, qreal zoomCoeff);
 
     /// reimplemented from QWidget
     virtual void paintEvent(QPaintEvent *event);

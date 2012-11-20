@@ -36,6 +36,7 @@ public:
      */
     enum Shortcut {
         RotateToggleShortcut, ///< Toggle Rotate mode.
+        DiscreteRotateToggleShortcut, ///< Toggle Discrete Rotate mode.
         RotateLeftShortcut, ///< Rotate left by a fixed amount.
         RotateRightShortcut, ///< Rotate right by a fixed amount.
         RotateResetShortcut ///< Reset the rotation to 0.
@@ -43,11 +44,10 @@ public:
     explicit KisRotateCanvasAction(KisInputManager* manager);
     virtual ~KisRotateCanvasAction();
 
-    virtual void begin(int shortcut);
-    virtual void end();
-    virtual void inputEvent(QEvent* event);
-
-    virtual bool isBlockingAutoRepeat() const;
+    void activate();
+    void deactivate();
+    void begin(int shortcut, QEvent *event);
+    void mouseMoved(const QPointF &lastPos, const QPointF &pos);
 
 private:
     class Private;

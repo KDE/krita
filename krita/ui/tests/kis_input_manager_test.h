@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,33 +16,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_FIXED_PAINTER_
-#define _KIS_FIXED_PAINTER_
+#ifndef __KIS_INPUT_MANAGER_TEST_H
+#define __KIS_INPUT_MANAGER_TEST_H
 
-#include <kis_types.h>
+#include <QtTest/QtTest>
 
-class QRect;
-class QPainterPath;
-class KoColor;
-
-class KisFixedPainter {
-
-public:
-    KisFixedPainter();
-    KisFixedPainter(KisFixedPaintDeviceSP device);
-    ~KisFixedPainter();
-    void setPaintColor(const KoColor& color);
-
-    /// returns the area where the caller can bitblit the desired path
-    QRect fillPainterPath(const QPainterPath &path);
-
-private:
-    void init();
-
-private:
-    struct Private;
-    Private* const d;
-
+class KisInputManagerTest : public QObject
+{
+    Q_OBJECT
+private slots:
+    void testSingleActionShortcut();
+    void testStrokeShortcut();
+    void testKeyEvents();
+    void testReleaseUnnecessaryModifiers();
+    void testMouseMoves();
 };
 
-#endif
+#endif /* __KIS_INPUT_MANAGER_TEST_H */

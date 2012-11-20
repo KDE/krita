@@ -19,30 +19,30 @@
 #include "kis_rotate_canvas_action.h"
 
 #include <QApplication>
-
 #include <KLocalizedString>
 
+#include "kis_cursor.h"
 #include "kis_canvas_controller.h"
-
 #include <kis_canvas2.h>
-#include <kis_image.h>
-
 #include "kis_input_manager.h"
 
 class KisRotateCanvasAction::Private
 {
 public:
-    Private() : active(false) { }
+    Private() : angleDrift(0) {}
 
-    bool active;
+    Shortcut mode;
+    qreal angleDrift;
 };
 
+
 KisRotateCanvasAction::KisRotateCanvasAction(KisInputManager* manager)
-    : KisAbstractInputAction(manager), d(new Private)
+    : KisAbstractInputAction(manager), d(new Private())
 {
     setName(i18n("Rotate Canvas"));
     QHash<QString, int> shortcuts;
     shortcuts.insert(i18n("Toggle Rotate Mode"), RotateToggleShortcut);
+    shortcuts.insert(i18n("Toggle Discrete Rotate Mode"), DiscreteRotateToggleShortcut);
     shortcuts.insert(i18n("Rotate Left"), RotateLeftShortcut);
     shortcuts.insert(i18n("Rotate Right"), RotateRightShortcut);
     shortcuts.insert(i18n("Reset Rotation"), RotateResetShortcut);
@@ -54,16 +54,30 @@ KisRotateCanvasAction::~KisRotateCanvasAction()
     delete d;
 }
 
-void KisRotateCanvasAction::begin(int shortcut)
+void KisRotateCanvasAction::activate()
 {
+    QApplication::setOverrideCursor(KisCursor::rotateCursor());
+}
+
+void KisRotateCanvasAction::deactivate()
+{
+    QApplication::restoreOverrideCursor();
+}
+
+void KisRotateCanvasAction::begin(int shortcut, QEvent *event)
+{
+    KisAbstractInputAction::begin(shortcut, event);
+
     KisCanvasController *canvasController =
         dynamic_cast<KisCanvasController*>(inputManager()->canvas()->canvasController());
 
     switch(shortcut) {
         case RotateToggleShortcut:
-            setMousePosition(inputManager()->canvas()->coordinatesConverter()->documentToWidget(inputManager()->mousePosition()));
-            QApplication::setOverrideCursor(Qt::OpenHandCursor);
-            d->active = true;
+            d->mode = (Shortcut)shortcut;
+            break;
+        case DiscreteRotateToggleShortcut:
+            d->mode = (Shortcut)shortcut;
+            d->angleDrift = 0;
             break;
         case RotateLeftShortcut:
             canvasController->rotateCanvasLeft15();
@@ -77,48 +91,27 @@ void KisRotateCanvasAction::begin(int shortcut)
     }
 }
 
-void KisRotateCanvasAction::end()
+void KisRotateCanvasAction::mouseMoved(const QPointF &lastPos, const QPointF &pos)
 {
-    d->active = false;
-    QApplication::restoreOverrideCursor();
-}
+    const KisCoordinatesConverter *converter = inputManager()->canvas()->coordinatesConverter();
+    QPointF centerPoint = converter->flakeToWidget(converter->flakeCenterPoint());
+    QPointF oldPoint = lastPos - centerPoint;
+    QPointF newPoint = pos - centerPoint;
 
-void KisRotateCanvasAction::inputEvent(QEvent* event)
-{
-    switch (event->type()) {
-        case QEvent::MouseButtonPress: {
-            setMousePosition(static_cast<QMouseEvent*>(event)->posF());
-            break;
-        }
-        case QEvent::MouseMove: {
-            QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
-            if (mevent->buttons()) {
-                const KisCoordinatesConverter *converter = inputManager()->canvas()->coordinatesConverter();
-                QPointF centerPoint = converter->flakeToWidget(converter->flakeCenterPoint());
-                QPointF oldPoint = mousePosition() - centerPoint;
-                QPointF newPoint = mevent->posF() - centerPoint;
+    qreal oldAngle = atan2(oldPoint.y(), oldPoint.x());
+    qreal newAngle = atan2(newPoint.y(), newPoint.x());
 
-                qreal oldAngle = atan2(oldPoint.y(), oldPoint.x());
-                qreal newAngle = atan2(newPoint.y(), newPoint.x());
+    qreal angle = (180 / M_PI) * (newAngle - oldAngle);
 
-                float angle = (180 / M_PI) * (newAngle - oldAngle);
-
-                KisCanvasController *canvasController =
-                    dynamic_cast<KisCanvasController*>(inputManager()->canvas()->canvasController());
-                canvasController->rotateCanvas(angle);
-
-                setMousePosition(mevent->posF());
-                QApplication::changeOverrideCursor(Qt::ClosedHandCursor);
-            } else {
-                QApplication::changeOverrideCursor(Qt::OpenHandCursor);
-            }
-        }
-        default:
-            break;
+    if (d->mode == DiscreteRotateToggleShortcut) {
+        const qreal angleStep = 15;
+        qreal initialAngle = inputManager()->canvas()->rotationAngle();
+        qreal roundedAngle = qRound((initialAngle + angle + d->angleDrift) / angleStep) * angleStep - initialAngle;
+        d->angleDrift += angle - roundedAngle;
+        angle = roundedAngle;
     }
-}
 
-bool KisRotateCanvasAction::isBlockingAutoRepeat() const
-{
-    return d->active;
+    KisCanvasController *canvasController =
+        dynamic_cast<KisCanvasController*>(inputManager()->canvas()->canvasController());
+    canvasController->rotateCanvas(angle);
 }

@@ -24,7 +24,6 @@
 #include <kis_paintop_options_widget.h>
 #include <kis_paint_action_type_option.h>
 
-#include <kis_pressure_rotation_option.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
 #include <kis_curve_option_widget.h>
@@ -33,16 +32,9 @@
 KisExperimentPaintOpSettingsWidget:: KisExperimentPaintOpSettingsWidget(QWidget* parent)
         : KisPaintOpOptionsWidget(parent)
 {
-    m_experimentOption =  new KisExperimentOpOption();
-    m_ColorOption = new KisColorOption();
-    
-    addPaintOpOption(m_experimentOption);
-    addPaintOpOption(m_ColorOption);
+    addPaintOpOption(new KisExperimentOpOption());
     addPaintOpOption(new KisCompositeOpOption(true));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
-    addPaintOpOption(new KisPaintActionTypeOption());
 }
 
 KisExperimentPaintOpSettingsWidget::~ KisExperimentPaintOpSettingsWidget()

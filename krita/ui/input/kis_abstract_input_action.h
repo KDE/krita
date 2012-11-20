@@ -20,6 +20,7 @@
 #define KIS_ABSTRACT_INPUT_ACTION_H
 
 #include <QHash>
+#include "krita_export.h"
 
 class QPointF;
 class QEvent;
@@ -30,15 +31,27 @@ class KisInputManager;
  *
  * Input actions represent actions to be performed when interacting
  * with the canvas. They are managed by KisInputManager and activated
- * when KisShortcut detects it matches a certain set of inputs.
+ * when KisKeyShortcut or KisStrokeShortcut detects it matches a certain
+ * set of inputs.
  *
  * The begin() method uses an index for the type of behaviour to activate.
  * This index can be used to trigger behaviour when different events occur.
- * For example, in the Pan action, this is used to have a single toggle
- * behaviour and four additional options to pan a fixed amount in a certain
- * direction. Each action will always have at least one behaviour.
+ *
+ * The events can be of two types:
+ * 1) Key events. The input manager calls begin() and end() sequentially
+ *    with an \p index parameter to begin() representing the type of
+ *    action that should be performed. The \p event parameter of both
+ *    calls in null.
+ * 2) Stroke events. The input manager calls begin() and end() on the
+ *    corresponding mouse down and up events. The \p event parameter
+ *    will be of QMouseEvent type, representing the event happened.
+ *    All the mouse move events between begin() and end() will be
+ *    redirected to the inputEvent() method.
+ *
+ *    You can fetch the QTabletEvent data for the current mouse event
+ *    with inputManager()->lastTabletEvent().
  */
-class KisAbstractInputAction
+class KRITAUI_EXPORT KisAbstractInputAction
 {
 public:
     /**
@@ -53,26 +66,47 @@ public:
     virtual ~KisAbstractInputAction();
 
     /**
+     * The method is called when the action is yet to be started,
+     * that is, e.g. the user has pressed all the modifiers for the
+     * action but hasn't started painting yet. This method is a right
+     * place to show the user what he is going to do, e.g. change the
+     * cursor.
+     */
+    virtual void activate();
+
+    /**
+     * The method is called when the action is not a candidate for
+     * the starting anymore. The action should revert everything that
+     * was done in activate() method.
+     *
+     * \see activate()
+     */
+    virtual void deactivate();
+
+    /**
      * Begin the action.
      *
      * \param shortcut The index of the behaviour to trigger.
+     * \param event The mouse event that has triggered this action.
+     *              Is null for keyboard-activated actions.
      */
-    virtual void begin(int shortcut) = 0;
+    virtual void begin(int shortcut, QEvent *event);
     /**
      * End the action.
+     * \param event The mouse event that has finished this action.
+     *              Is null for keyboard-activated actions.
      */
-    virtual void end() = 0;
+    virtual void end(QEvent *event);
     /**
      * Process an input event.
      *
+     * By default handles MouseMove events and passes the data to
+     * a convenience mouseMoved() method
+     *
      * \param event An event to process.
      */
-    virtual void inputEvent(QEvent* event) = 0;
+    virtual void inputEvent(QEvent* event);
 
-    /**
-     * Does this action handle tablet events in a special way?
-     */
-    virtual bool handleTablet() const;
     /**
      * The indexes of shortcut behaviours available.
      */
@@ -85,11 +119,6 @@ public:
      * A short description of this action.
      */
     virtual QString description() const;
-
-    /**
-     * Does this action block auto repeat events?
-     */
-    virtual bool isBlockingAutoRepeat() const;
 
 protected:
     /**
@@ -114,14 +143,12 @@ protected:
      * \param indexes The new indexes.
      */
     void setShortcutIndexes(const QHash<QString, int> &indexes);
+
     /**
-     * Return the locally cached mouse position.
+     * Convenience method for handling the mouse moves. It is
+     * called by the default implementation of inputEvent
      */
-    QPointF mousePosition() const;
-    /**
-     * Set a mouse position to cache locally.
-     */
-    void setMousePosition(const QPointF &position);
+    virtual void mouseMoved(const QPointF &lastPos, const QPointF &pos);
 
 private:
     class Private;

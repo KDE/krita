@@ -43,11 +43,11 @@ public:
     explicit KisPanAction(KisInputManager *manager);
     virtual ~KisPanAction();
 
-    virtual void begin(int shortcut);
-    virtual void end();
-    virtual void inputEvent(QEvent* event);
+    void activate();
+    void deactivate();
 
-    virtual bool isBlockingAutoRepeat() const;
+    void begin(int shortcut, QEvent *event);
+    void mouseMoved(const QPointF &lastPos, const QPointF &pos);
 
 private:
     class Private;

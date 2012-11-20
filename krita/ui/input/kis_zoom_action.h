@@ -34,6 +34,7 @@ public:
      */
     enum Shortcuts {
         ZoomToggleShortcut, ///< Toggle zoom mode.
+        DiscreteZoomToggleShortcut, ///< Toggle discrete zoom mode
         ZoomInShortcut, ///< Zoom in by a fixed amount.
         ZoomOutShortcut, ///< Zoom out by a fixed amount.
         ZoomResetShortcut, ///< Reset zoom to 100%.
@@ -43,11 +44,11 @@ public:
     explicit KisZoomAction(KisInputManager* manager);
     virtual ~KisZoomAction();
 
-    virtual void begin(int shortcut);
-    virtual void end();
-    virtual void inputEvent(QEvent* event);
+    void activate();
+    void deactivate();
 
-    virtual bool isBlockingAutoRepeat() const;
+    void begin(int shortcut, QEvent *event = 0);
+    void mouseMoved(const QPointF &lastPos, const QPointF &pos);
 
 private:
     class Private;

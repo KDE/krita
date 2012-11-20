@@ -855,9 +855,8 @@ void TestBlockLayout::testParagraphBorders()
 
     // borders are positioned outside the padding, lets check that to be the case.
     block = m_doc->begin();
-    KoTextBlockData *data  = dynamic_cast<KoTextBlockData*>(block.userData());
-    QVERIFY(data);
-    KoTextBlockBorderData *border = data->border();
+    KoTextBlockData data(block);
+    KoTextBlockBorderData *border = data.border();
     QVERIFY(border);
     QCOMPARE(border->hasBorders(), true);
     /*
@@ -931,15 +930,14 @@ void TestBlockLayout::testBorderData()
     m_layout->layout();
 
     block = m_doc->begin().next();
-    KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
-    QVERIFY(data);
-    KoTextBlockBorderData *border = data->border();
+    KoTextBlockData data(block);
+    KoTextBlockBorderData *border = data.border();
     QVERIFY(border);
-    QCOMPARE(data->counterPosition(), QPointF(3, 24.4));
+    QCOMPARE(data.counterPosition(), QPointF(3, 24.4));
 
     block = block.next();
-    data = dynamic_cast<KoTextBlockData*>(block.userData());
-    QCOMPARE(data->counterPosition(), QPointF(3, 48.8));
+    KoTextBlockData data2(block);
+    QCOMPARE(data2.counterPosition(), QPointF(3, 48.8));
 
 
     style.setBottomMargin(QTextLength(QTextLength::FixedLength, 5)); //bottom spacing
@@ -951,15 +949,15 @@ void TestBlockLayout::testBorderData()
     m_layout->layout();
 
     block = m_doc->begin().next();
-    border = data->border();
+    border = data2.border();
     QVERIFY(border);
 
-    data = dynamic_cast<KoTextBlockData*>(block.userData());
-    QCOMPARE(data->counterPosition(), QPointF(3, 24.4));
+    KoTextBlockData data3(block);
+    QCOMPARE(data3.counterPosition(), QPointF(3, 24.4));
 
     block = block.next();
-    data = dynamic_cast<KoTextBlockData*>(block.userData());
-    QCOMPARE(data->counterPosition(), QPointF(3, 48.8)); // same y as before as we take max spacing
+    KoTextBlockData data4(block);
+    QCOMPARE(data4.counterPosition(), QPointF(3, 48.8)); // same y as before as we take max spacing
 }
 
 void TestBlockLayout::testEmptyParag()

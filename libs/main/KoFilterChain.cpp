@@ -349,6 +349,26 @@ bool KoFilterChain::createTempFile(KTemporaryFile** tempFile, bool autoDelete)
     return (*tempFile)->open();
 }
 
+/*  Note about Windows & usage of KTemporaryFile
+
+    The KTemporaryFile objects m_inputTempFile and m_outputTempFile are just used
+    to reserve a temporary file with a unique name which then can be used to store
+    an intermediate format. The filters themselves do not get access to these objects,
+    but can query KoFilterChain only for the filename and then have to open the files
+    themselves with their own file handlers (TODO: change this).
+    On Windows this seems to be a problem and results in content not sync'ed to disk etc.
+
+    So unless someone finds out which flags might be needed on opening the files on
+    Windows to prevent this behaviour (unless these details are hidden away by the
+    Qt abstraction and cannot be influenced), a workaround is to destruct the
+    KTemporaryFile objects right after creation again and just take the name,
+    to avoid having two file handlers on the same file.
+
+    A better fix might be to use the KTemporaryFile objects also by the filters,
+    instead of having them open the same file on their own again, but that needs more work
+    and is left for... you :)
+*/
+
 void KoFilterChain::inputFileHelper(KoDocument* document, const QString& alternativeFile)
 {
     if (document) {
@@ -358,14 +378,21 @@ void KoFilterChain::inputFileHelper(KoDocument* document, const QString& alterna
             m_inputFile.clear();
             return;
         }
+        m_inputFile = m_inputTempFile->fileName();
+        // See "Note about Windows & usage of KTemporaryFile" above
+#ifdef Q_OS_WIN
+        m_inputTempFile->close();
+        m_inputTempFile->setAutoRemove(true);
+        delete m_inputTempFile;
+        m_inputTempFile = 0;
+#endif
         document->setOutputMimeType(m_chainLinks.current()->from());
-        if (!document->saveNativeFormat(m_inputTempFile->fileName())) {
+        if (!document->saveNativeFormat(m_inputFile)) {
             delete m_inputTempFile;
             m_inputTempFile = 0;
             m_inputFile.clear();
             return;
         }
-        m_inputFile = m_inputTempFile->fileName();
     } else
         m_inputFile = alternativeFile;
 }
@@ -376,18 +403,17 @@ void KoFilterChain::outputFileHelper(bool autoDelete)
         delete m_outputTempFile;
         m_outputTempFile = 0;
         m_outputFile.clear();
-    } else
+    } else {
         m_outputFile = m_outputTempFile->fileName();
 
-    // We will recreate this file, not re-use it later on,
-    // so on windows it cannot exist, we just need the temporary
-    // name.
+        // See "Note about Windows & usage of KTemporaryFile" above
 #ifdef Q_OS_WIN
-    m_outputTempFile->close();
-    m_outputTempFile->setAutoRemove(true);
-    delete m_outputTempFile;
-    m_outputTempFile = 0;
+        m_outputTempFile->close();
+        m_outputTempFile->setAutoRemove(true);
+        delete m_outputTempFile;
+        m_outputTempFile = 0;
 #endif
+    }
 }
 
 KoStoreDevice* KoFilterChain::storageNewStreamHelper(KoStore** storage, KoStoreDevice** device,

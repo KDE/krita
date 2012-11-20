@@ -42,7 +42,6 @@ void KisPaintLayerTest::testProjection()
     QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, qimage.width(), qimage.height(), cs, "merge test");
-    image->lock(); // We'll call for recomposition ourselves
 
     KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8);
     layer->paintDevice()->convertFromQImage(qimage, 0, 0, 0);

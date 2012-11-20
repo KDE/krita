@@ -1069,18 +1069,20 @@ void KisWalkersTest::testRectsChecksum()
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
-    KisFilterConfiguration *configuration = filter->defaultConfiguration(0);
+    KisFilterConfiguration *configuration;
 
     KisMergeWalker walker(imageRect);
     walker.collectRects(adjustmentLayer, dirtyRect);
     QCOMPARE(walker.checksumValid(), true);
 
+    configuration = filter->defaultConfiguration(0);
     adjustmentLayer->setFilter(configuration);
     QCOMPARE(walker.checksumValid(), false);
 
     walker.recalculate(dirtyRect);
     QCOMPARE(walker.checksumValid(), true);
 
+    configuration = filter->defaultConfiguration(0);
     configuration->setProperty("halfWidth", 20);
     configuration->setProperty("halfHeight", 20);
     adjustmentLayer->setFilter(configuration);
@@ -1089,6 +1091,7 @@ void KisWalkersTest::testRectsChecksum()
     walker.recalculate(dirtyRect);
     QCOMPARE(walker.checksumValid(), true);
 
+    configuration = filter->defaultConfiguration(0);
     configuration->setProperty("halfWidth", 21);
     configuration->setProperty("halfHeight", 21);
     adjustmentLayer->setFilter(configuration);

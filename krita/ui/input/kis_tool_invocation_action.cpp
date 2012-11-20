@@ -27,6 +27,7 @@
 #include <kis_coordinates_converter.h>
 
 #include "kis_input_manager.h"
+#include "kis_image.h"
 
 class KisToolInvocationAction::Private
 {
@@ -80,6 +81,14 @@ void KisToolInvocationAction::begin(int shortcut)
         inputManager()->toolProxy()->keyPressEvent(&pressEvent);
         QKeyEvent releaseEvent(QEvent::KeyRelease, Qt::Key_Return, 0);
         inputManager()->toolProxy()->keyReleaseEvent(&releaseEvent);
+
+        /**
+         * All the tools now have a KisTool::requestStrokeEnd() method,
+         * so they should use this instead of direct filtering Enter key
+         * press. Until all the tools support it, we just duplicate the
+         * key event and the method call
+         */
+        inputManager()->canvas()->image()->requestStrokeEnd();
     }
 }
 

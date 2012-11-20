@@ -364,6 +364,9 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
     connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
             m_d->controlFrame->paintopBox(), SLOT(slotCurrentNodeChanged(KisNodeSP)));
 
+    connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
+            m_d->doc->image(), SLOT(requestStrokeEnd()));
+
     connect(KoToolManager::instance(), SIGNAL(inputDeviceChanged(const KoInputDevice &)),
             m_d->controlFrame->paintopBox(), SLOT(slotInputDeviceChanged(const KoInputDevice &)));
 

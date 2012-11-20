@@ -41,7 +41,14 @@ class MoveToolOptionsWidget : public QWidget, public Ui::WdgMoveTool
 public:
     MoveToolOptionsWidget(QWidget *parent) : QWidget(parent) {
         setupUi(this);
+        connectSignals();
     }
+
+signals:
+    void sigConfigurationChanged();
+
+private:
+    void connectSignals();
 };
 
 
@@ -70,9 +77,11 @@ public:
 
 private:
     void drag(const QPoint& newPos);
-    void endStroke();
     void cancelStroke();
     QPoint applyModifiers(Qt::KeyboardModifiers modifiers, QPoint pos);
+
+private slots:
+    void endStroke();
 
 private:
 

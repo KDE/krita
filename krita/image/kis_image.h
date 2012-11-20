@@ -640,11 +640,11 @@ public slots:
      */
     void requestStrokeCancellation();
 
-private:
     /**
-     * This method is called when image decides that the sroke
-     * should be ended. If the creator of the stroke supports it,
-     * it will be notified and the stroke will be cancelled
+     * This method is called when image or some other part of Krita
+     * (*not* the creator of the stroke) decides that the stroke
+     * should be ended. If the creator of the stroke supports it, it
+     * will be notified and the stroke will be cancelled
      */
     void requestStrokeEnd();
 

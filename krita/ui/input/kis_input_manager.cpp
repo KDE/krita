@@ -140,6 +140,9 @@ void KisInputManager::Private::setupActions()
     shortcut = createShortcut(action, KisToolInvocationAction::ConfirmShortcut);
     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Return);
 
+    shortcut = createShortcut(action, KisToolInvocationAction::ConfirmShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Enter);
+
     action = new KisAlternateInvocationAction(q);
     actions.append(action);
 

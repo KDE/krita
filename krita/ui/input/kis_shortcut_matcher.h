@@ -37,8 +37,45 @@ class KisAbstractInputAction;
  * It processes input events and generates state transitions for the
  * actions basing on the data, represented by the shortcuts.
  *
- * \see KisStrokeShortcut
+ * The class works with two types of actions: long running
+ * (represented by KisStrokeShortcuts) and "atomic"
+ * (KisSingleActionShortcut). The former one invole some long
+ * interaction with the user by means of a mouse cursor or a tablet,
+ * the latter one simple action like "Zoom 100%" or "Reset Rotation".
+ *
+ * The single action shortcuts are handled quite easily. The matcher
+ * listens to the events coming, manages two lists of the pressed keys
+ * and buttons and when their content corresponds to some single
+ * action shortcut it just runs this shortcut once.
+ *
+ * The strategy for handling the stroke shortcuts is a bit more
+ * complex.  Each such action may be in one of the three states:
+ *
+ * Idle <-> Ready <-> Running
+ *
+ * In "Idle" state the action is completely inactive and has no access
+ * to the user
+ *
+ * When the action is in "Ready" state, it means that all the
+ * modifiers for the action are already pressed and we are only
+ * waiting for a user to press the mouse button and start a stroke. In
+ * this state the action can show the user its Cursor to notify him
+ * what is going to happen next.
+ *
+ * In the "Running" state, the action has full access to the user
+ * input and is considered to perform all the work it was created for.
+ *
+ * To implement such state transitions for the actions,
+ * KisShortcutMatcher first forms a list of the actions which can be
+ * moved to a ready state (m_d->readyShortcuts), then chooses the one
+ * with the highest priority to be the only shortcut in the "Ready"
+ * state and activates it (m_d->readyShortcut).  Then when the user
+ * presses the mouse button, the matcher looks through the list of
+ * ready shortcuts, chooses which will be running now, deactivates (if
+ * needed) currently activated action and starts the chosen one.
+ *
  * \see KisSingleActionShortcut
+ * \see KisStrokeShortcut
  */
 class KRITAUI_EXPORT KisShortcutMatcher
 {

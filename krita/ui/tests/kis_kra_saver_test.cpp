@@ -57,7 +57,7 @@ void KisKraSaverTest::testRoundTrip()
     KisCountVisitor cv1(list, KoProperties());
     doc->image()->rootLayer()->accept(cv1);
 
-    delete doc;
+    //delete doc;
 
     KisPart2 part;
     KisDoc2 doc2(&part);

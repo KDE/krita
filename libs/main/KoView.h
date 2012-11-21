@@ -31,7 +31,7 @@ class KoMainWindow;
 class KoPrintJob;
 class KoViewPrivate;
 class KoZoomController;
-class KoPageLayout;
+struct KoPageLayout;
 
 // KDE classes
 class KStatusBar;

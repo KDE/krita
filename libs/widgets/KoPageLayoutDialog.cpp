@@ -30,7 +30,7 @@
 #include <QHBoxLayout>
 #include <QTimer>
 
-class KoPageLayoutDialog::Private
+struct KoPageLayoutDialog::Private
 {
 public:
     Private() : pageLayoutWidget(0), documentCheckBox(0) {}

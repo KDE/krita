@@ -73,14 +73,17 @@ const quint8 PIXEL_ALPHA = 3;
 
 int getColorTypeforColorSpace(const KoColorSpace * cs , bool alpha)
 {
-    if (KoID(cs->id()) == KoID("GRAYA") || KoID(cs->id()) == KoID("GRAYA16")) {
+
+    QString id = cs->id();
+
+    if (id == "GRAYA" || id == "GRAYAU16" || id == "GRAYA16") {
         return alpha ? PNG_COLOR_TYPE_GRAY_ALPHA : PNG_COLOR_TYPE_GRAY;
     }
-    if (KoID(cs->id()) == KoID("RGBA") || KoID(cs->id()) == KoID("RGBA16")) {
+    if (id == "RGBA" || id == "RGBA16") {
         return alpha ? PNG_COLOR_TYPE_RGB_ALPHA : PNG_COLOR_TYPE_RGB;
     }
 
-    KMessageBox::error(0, i18n("Cannot export images in %1.\n", cs->name())) ;
+//    KMessageBox::error(0, i18n("Cannot export images in %1.\n", cs->name())) ;
     return -1;
 
 }

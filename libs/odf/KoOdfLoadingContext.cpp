@@ -95,7 +95,7 @@ KoOdfLoadingContext::KoOdfLoadingContext(KoOdfStylesReader &stylesReader, KoStor
     }
 
     if (!parseManifest(d->manifestDoc)) {
-        kWarning(30010) << "could not parse manifest document";
+        kDebug(30010) << "could not parse manifest document";
     }
 }
 
@@ -109,7 +109,7 @@ void KoOdfLoadingContext::setManifestFile(const QString& fileName) {
     QString dummy;
     (void)oasisStore.loadAndParse(fileName, d->manifestDoc, dummy);
     if (!parseManifest(d->manifestDoc)) {
-        kWarning(30010) << "could not parse manifest document";
+        kDebug(30010) << "could not parse manifest document";
     }
 }
 

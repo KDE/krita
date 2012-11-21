@@ -28,10 +28,10 @@
 XyzF16ColorSpace::XyzF16ColorSpace(const QString &name, KoColorProfile *p) :
     LcmsColorSpace<KoXyzF16Traits>(colorSpaceId(), name, TYPE_XYZA_HALF_FLT, cmsSigXYZData, p)
 {
-    addChannel(new KoChannelInfo(i18n("X"),     KoXyzF16Traits::x_pos     * sizeof(float), KoXyzF16Traits::x_pos,     KoChannelInfo::COLOR, KoChannelInfo::FLOAT16, 2, Qt::cyan));
-    addChannel(new KoChannelInfo(i18n("Y"),     KoXyzF16Traits::y_pos     * sizeof(float), KoXyzF16Traits::y_pos,     KoChannelInfo::COLOR, KoChannelInfo::FLOAT16, 2, Qt::magenta));
-    addChannel(new KoChannelInfo(i18n("Z"),     KoXyzF16Traits::z_pos     * sizeof(float), KoXyzF16Traits::z_pos,     KoChannelInfo::COLOR, KoChannelInfo::FLOAT16, 2, Qt::yellow));
-    addChannel(new KoChannelInfo(i18n("Alpha"), KoXyzF16Traits::alpha_pos * sizeof(float), KoXyzF16Traits::alpha_pos, KoChannelInfo::ALPHA, KoChannelInfo::FLOAT16, 2));
+    addChannel(new KoChannelInfo(i18n("X"),     KoXyzF16Traits::x_pos     * sizeof(half), KoXyzF16Traits::x_pos,     KoChannelInfo::COLOR, KoChannelInfo::FLOAT16, 2, Qt::cyan));
+    addChannel(new KoChannelInfo(i18n("Y"),     KoXyzF16Traits::y_pos     * sizeof(half), KoXyzF16Traits::y_pos,     KoChannelInfo::COLOR, KoChannelInfo::FLOAT16, 2, Qt::magenta));
+    addChannel(new KoChannelInfo(i18n("Z"),     KoXyzF16Traits::z_pos     * sizeof(half), KoXyzF16Traits::z_pos,     KoChannelInfo::COLOR, KoChannelInfo::FLOAT16, 2, Qt::yellow));
+    addChannel(new KoChannelInfo(i18n("Alpha"), KoXyzF16Traits::alpha_pos * sizeof(half), KoXyzF16Traits::alpha_pos, KoChannelInfo::ALPHA, KoChannelInfo::FLOAT16, 2));
 
     init();
 

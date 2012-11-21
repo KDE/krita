@@ -30,7 +30,7 @@ class KoResourceTagging_test : public QObject
 private slots:
 
     // tests
-    void testIntialization();    
+    void testIntialization();
     void testAddingDeletingTag();
     void testSearchingTag();
     void testReadWriteXML();

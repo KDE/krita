@@ -23,13 +23,13 @@
 
 #include <kactioncollection.h>
 #include <kcomponentdata.h>
-#include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 
 #include <KoDockFactoryBase.h>
 
+#include <kis_debug.h>
 #include "kis_config.h"
 #include "kis_cursor.h"
 #include "kis_global.h"

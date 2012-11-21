@@ -85,8 +85,8 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
             if (id != "GRAYA" && id != "GRAYA16" && id != "RGBA" && id != "RGBA16") {
                 dbgKrita << "Images need conversion";
                 doc.image()->convertImageColorSpace(KoColorSpaceRegistry::instance()->rgb8(),
-                                                    KoColorConversionTransformation::IntentPerceptual,
-                                                    KoColorConversionTransformation::Empty);
+                                                    KoColorConversionTransformation::IntentAbsoluteColorimetric,
+                                                    KoColorConversionTransformation::NoOptimization);
             }
 
             KTemporaryFile tmpFile;

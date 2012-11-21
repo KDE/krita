@@ -214,6 +214,7 @@ void KoRgbColorSpaceTester::testCompositeOpsWithChannelFlags()
          * flags into account, so just skip it
          */
         if (op->id() == COMPOSITE_ALPHA_DARKEN) continue;
+        if (op->id() == COMPOSITE_DISSOLVE) continue;
 
         quint8 src[] = {128,128,128,129};
         quint8 goodDst[] = {10,10,10,11};

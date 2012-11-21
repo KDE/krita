@@ -42,17 +42,25 @@ void KisTiffTest::testFiles()
     KisExiv2::initialize();
 
     QStringList excludes;
-    if (!KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::AllColorSpaces).contains(YCbCrAColorModelID)) {
-        excludes << "ycbcr-cat.tif";
-    }
+
 #ifndef CPU_32_BITS
     excludes << "flower-minisblack-06.tif";
 #endif
     
 #ifdef HAVE_LCMS2
-    excludes << "flower-separated-contig-08.tif" << "flower-separated-contig-16.tif" << "flower-separated-planar-08.tif" << "flower-separated-planar-16.tif";
+    excludes << "flower-separated-contig-08.tif"
+             << "flower-separated-contig-16.tif"
+             << "flower-separated-planar-08.tif"
+             << "flower-separated-planar-16.tif"
+             << "flower-minisblack-10.tif"
+             << "flower-minisblack-12.tif"
+             << "flower-minisblack-14.tif"
+             << "flower-minisblack-16.tif"
+             << "flower-minisblack-24.tif"
+             << "flower-minisblack-32.tif"
+             << "strike.tif";
 #endif
-    excludes << "text.tif";
+    excludes << "text.tif" << "ycbcr-cat.tif";
 
     TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", excludes);
 }

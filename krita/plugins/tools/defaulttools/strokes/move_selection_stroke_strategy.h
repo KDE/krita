@@ -42,7 +42,7 @@ public:
 private:
     KisPaintLayerSP m_paintLayer;
     KisSelectionSP m_selection;
-    KisUpdatesFacade *m_updatesFacade,;
+    KisUpdatesFacade *m_updatesFacade;
     KisPostExecutionUndoAdapter *m_undoAdapter;
 };
 

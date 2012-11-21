@@ -95,7 +95,7 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
             n->init(csf);
         }
         else {
-            warnPigment << "Cannot add node for " << csf->name() << ", since there are no profiles available";
+            dbgPigment << "Cannot add node for " << csf->name() << ", since there are no profiles available";
         }
     } else {
         // Initialise the nodes

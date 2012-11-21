@@ -221,7 +221,6 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
     : KoView(part, doc, parent),
       m_d(new KisView2Private())
 {
-    setComponentData(KisFactory2::componentData());
     setXMLFile("krita.rc");
 
     setFocusPolicy(Qt::NoFocus);

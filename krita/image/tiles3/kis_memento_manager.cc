@@ -170,7 +170,7 @@ void KisMementoManager::commit()
 {
     if (m_index.isEmpty()) {
         if(namedTransactionInProgress()) {
-            warnTiles << "Named Transaction is empty";
+            //warnTiles << "Named Transaction is empty";
             /**
              * We still need to continue commit, because
              * a named transaction may be reverted by the user

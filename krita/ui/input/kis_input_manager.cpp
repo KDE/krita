@@ -155,9 +155,6 @@ void KisInputManager::Private::setupActions()
     addKeyShortcut(action, KisToolInvocationAction::ConfirmShortcut, KEYS(), Qt::Key_Enter);
     defaultInputAction = action;
 
-    shortcut = createShortcut(action, KisToolInvocationAction::ConfirmShortcut);
-    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Enter);
-
     action = new KisAlternateInvocationAction(q);
     matcher.addAction(action);
     addStrokeShortcut(action, 0, KEYS(Qt::Key_Control), BUTTONS(Qt::LeftButton));

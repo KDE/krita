@@ -136,8 +136,10 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas)
     setupActions();
 
     QPixmap rotatePixmap, shearPixmap;
-    rotatePixmap.load(KStandardDirs::locate("data", "calligra/icons/rotate.png"));
-    shearPixmap.load(KStandardDirs::locate("data", "calligra/icons/shear.png"));
+    rotatePixmap.load(KStandardDirs::locate("data", "calligra/icons/cursor_rotate.png"));
+    Q_ASSERT(!rotatePixmap.isNull());
+    shearPixmap.load(KStandardDirs::locate("data", "calligra/icons/cursor_shear.png"));
+    Q_ASSERT(!shearPixmap.isNull());
 
     m_rotateCursors[0] = QCursor(rotatePixmap.transformed(QTransform().rotate(45)));
     m_rotateCursors[1] = QCursor(rotatePixmap.transformed(QTransform().rotate(90)));

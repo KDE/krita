@@ -93,6 +93,10 @@ template<bool useMask, bool useFlow, class Compositor>
     }
 }
 
+static inline quint8 lerp_mixed_u8_float(quint8 a, quint8 b, float alpha) {
+    return quint8(qint16(b - a) * alpha + a);
+}
+
 #if defined HAVE_VC
 
 /**
@@ -315,10 +319,6 @@ template<bool useMask, bool useFlow, class Compositor>
     if (!params.srcRowStride) {
         Vc::free<float>(reinterpret_cast<float*>(const_cast<quint8*>(srcRowStart)));
     }
-}
-
-static inline quint8 lerp_mixed_u8_float(quint8 a, quint8 b, float alpha) {
-    return quint8(qint16(b - a) * alpha + a);
 }
 
 #else /* if ! defined HAVE_VC */

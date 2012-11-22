@@ -124,6 +124,8 @@ struct OverCompositor32 {
     template <bool haveMask>
     static ALWAYS_INLINE void compositeOnePixelFloat(const channels_type *src, channels_type *dst, const quint8 *mask, float opacity, float flow, const QBitArray &channelFlags)
     {
+        Q_UNUSED(flow);
+
         using namespace Arithmetic;
         const qint32 alpha_pos = 3;
 
@@ -186,6 +188,8 @@ struct OverCompositor32 {
     template <bool haveMask>
     static ALWAYS_INLINE void compositeOnePixel(const channels_type *src, channels_type *dst, const quint8 *mask, channels_type opacity, channels_type flow, const QBitArray &channelFlags)
     {
+        Q_UNUSED(flow);
+
         using namespace Arithmetic;
         const qint32 alpha_pos = 3;
 

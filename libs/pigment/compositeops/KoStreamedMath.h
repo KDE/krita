@@ -201,17 +201,6 @@ template<bool useMask, bool useFlow, class Compositor>
 {
     using namespace Arithmetic;
 
-    quint8 flow;
-    quint8 opacity;
-
-    if (useFlow) {
-        flow = scale<quint8>(params.flow);
-        opacity = mul(flow, scale<quint8>(params.opacity));
-    } else {
-        flow = 255;
-        opacity = scale<quint8>(params.opacity);
-    }
-
     const int vectorSize = Vc::float_v::Size;
     const qint32 vectorInc = 4 * vectorSize;
     const qint32 linearInc = 4;

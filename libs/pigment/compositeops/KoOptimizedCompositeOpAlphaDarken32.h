@@ -160,6 +160,10 @@ struct AlphaDarkenCompositor32 {
         float srcAlphaNorm;
         float mskAlphaNorm;
 
+        /**
+         * FIXME: precalculate this value on a higher level for
+         * not doing it on every cycle
+         */
         opacity *= flow;
 
         if (haveMask) {
@@ -167,7 +171,7 @@ struct AlphaDarkenCompositor32 {
             srcAlphaNorm = mskAlphaNorm * opacity;
         } else {
             mskAlphaNorm = src[alpha_pos] * uint8Rec1;
-            srcAlphaNorm *= opacity;
+            srcAlphaNorm = mskAlphaNorm * opacity;
         }
 
         if (dstAlphaNorm != 0.0) {

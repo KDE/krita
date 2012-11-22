@@ -29,7 +29,9 @@ private slots:
     void checkRoundingOver();
 
     void compareAlphaDarkenOps();
+    void compareAlphaDarkenOpsNoMask();
     void compareOverOps();
+    void compareOverOpsNoMask();
 
     void testRgb8CompositeAlphaDarkenLegacy();
     void testRgb8CompositeAlphaDarkenOptimized();

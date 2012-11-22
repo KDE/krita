@@ -420,6 +420,18 @@ void KisCompositionBenchmark::compareAlphaDarkenOps()
     delete opAct;
 }
 
+void KisCompositionBenchmark::compareAlphaDarkenOpsNoMask()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KoCompositeOp *opAct = KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(cs);
+    KoCompositeOp *opExp = new KoCompositeOpAlphaDarken<KoBgrU8Traits>(cs);
+
+    QVERIFY(compareTwoOps(false, opAct, opExp));
+
+    delete opExp;
+    delete opAct;
+}
+
 void KisCompositionBenchmark::compareOverOps()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
@@ -427,6 +439,18 @@ void KisCompositionBenchmark::compareOverOps()
     KoCompositeOp *opExp = new KoCompositeOpOver<KoBgrU8Traits>(cs);
 
     QVERIFY(compareTwoOps(true, opAct, opExp));
+
+    delete opExp;
+    delete opAct;
+}
+
+void KisCompositionBenchmark::compareOverOpsNoMask()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KoCompositeOp *opAct = KoOptimizedCompositeOpFactory::createOverOp32(cs);
+    KoCompositeOp *opExp = new KoCompositeOpOver<KoBgrU8Traits>(cs);
+
+    QVERIFY(compareTwoOps(false, opAct, opExp));
 
     delete opExp;
     delete opAct;

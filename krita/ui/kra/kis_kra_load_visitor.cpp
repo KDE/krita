@@ -186,7 +186,6 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
         return false;
     }
 
-
     loadSelection(getLocation(layer), layer->selection());
 
     loadFilterConfiguration(layer->filter().data(), getLocation(layer, DOT_FILTERCONFIG));

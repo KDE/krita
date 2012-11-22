@@ -54,6 +54,7 @@ include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
 
 if(HAVE_VC)
   include_directories(${Vc_INCLUDE_DIR})
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
 endif(HAVE_VC)
 
 set(kritaimage_LIB_SRCS

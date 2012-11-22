@@ -24,6 +24,7 @@
 
 #include "KoCompositeOp.h"
 #include "KoColorSpace.h"
+#include "KoColorSpaceMaths.h"
 
 QString KoCompositeOp::categoryColor()
 {
@@ -94,11 +95,13 @@ void KoCompositeOp::composite(quint8 *dstRowStart, qint32 dstRowStride,
 
 void KoCompositeOp::composite(const KoCompositeOp::ParameterInfo& params) const
 {
+    using namespace Arithmetic;
+
     composite(params.dstRowStart           , params.dstRowStride ,
               params.srcRowStart           , params.srcRowStride ,
               params.maskRowStart          , params.maskRowStride,
               params.rows                  , params.cols         ,
-              quint8(params.opacity*255.0f), params.channelFlags );
+              scale<quint8>(params.opacity), params.channelFlags );
 }
 
 

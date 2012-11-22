@@ -307,6 +307,26 @@ if(LCMS2_FOUND)
 endif(LCMS2_FOUND)
 
 ##
+## Test for Vc
+##
+
+set(OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} )
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
+macro_optional_find_package(Vc)
+macro_log_feature(Vc_FOUND "Vc" "Portable, zero-overhead SIMD library for C++" "http://code.compeng.uni-frankfurt.de/projects/vc" FALSE "" "Required by the Krita for vectorization")
+macro_bool_to_01(Vc_FOUND HAVE_VC)
+configure_file(config-vc.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-vc.h )
+
+if(HAVE_VC)
+    message(STATUS "Vc found!")
+
+    SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${Vc_CMAKE_MODULES_DIR}")
+    include (OptimizeForArchitecture)
+    OptimizeForArchitecture()
+endif(HAVE_VC)
+set(CMAKE_MODULE_PATH ${OLD_CMAKE_MODULE_PATH} )
+
+##
 ## Test for Nepomuk
 ##
 if(NEPOMUK)

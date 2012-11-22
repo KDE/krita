@@ -49,12 +49,58 @@
 
 #include "compositeops/KoCompositeOpBehind.h"
 
+#include "KoOptimizedCompositeOpFactory.h"
+
 namespace _Private {
 
 template<class Traits, bool flag>
 struct AddGeneralOps
 {
     static void add(KoColorSpace* cs) { Q_UNUSED(cs); }
+};
+
+template<class Traits>
+struct OptimizedOpsSelector
+{
+    static KoCompositeOp* createAlphaDarkenOp(const KoColorSpace *cs) {
+        return new KoCompositeOpAlphaDarken<Traits>(cs);
+    }
+    static KoCompositeOp* createOverOp(const KoColorSpace *cs) {
+        return new KoCompositeOpOver<Traits>(cs);
+    }
+};
+
+template<>
+struct OptimizedOpsSelector<KoRgbU8Traits>
+{
+    static KoCompositeOp* createAlphaDarkenOp(const KoColorSpace *cs) {
+        return KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(cs);
+    }
+    static KoCompositeOp* createOverOp(const KoColorSpace *cs) {
+        return KoOptimizedCompositeOpFactory::createOverOp32(cs);
+    }
+};
+
+template<>
+struct OptimizedOpsSelector<KoBgrU8Traits>
+{
+    static KoCompositeOp* createAlphaDarkenOp(const KoColorSpace *cs) {
+        return KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(cs);
+    }
+    static KoCompositeOp* createOverOp(const KoColorSpace *cs) {
+        return KoOptimizedCompositeOpFactory::createOverOp32(cs);
+    }
+};
+
+template<>
+struct OptimizedOpsSelector<KoLabU8Traits>
+{
+    static KoCompositeOp* createAlphaDarkenOp(const KoColorSpace *cs) {
+        return KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(cs);
+    }
+    static KoCompositeOp* createOverOp(const KoColorSpace *cs) {
+        return KoOptimizedCompositeOpFactory::createOverOp32(cs);
+    }
 };
 
 template<class Traits>
@@ -70,8 +116,8 @@ struct AddGeneralOps<Traits, true>
      }
 
      static void add(KoColorSpace* cs) {
-         cs->addCompositeOp(new KoCompositeOpOver<Traits>(cs));
-         cs->addCompositeOp(new KoCompositeOpAlphaDarken<Traits>(cs));
+         cs->addCompositeOp(OptimizedOpsSelector<Traits>::createOverOp(cs));
+         cs->addCompositeOp(OptimizedOpsSelector<Traits>::createAlphaDarkenOp(cs));
          cs->addCompositeOp(new KoCompositeOpCopy2<Traits>(cs));
          cs->addCompositeOp(new KoCompositeOpErase<Traits>(cs));
          cs->addCompositeOp(new KoCompositeOpBehind<Traits>(cs));

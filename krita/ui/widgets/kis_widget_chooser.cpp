@@ -31,8 +31,11 @@
 #include <QStylePainter>
 #include <QStyleOption>
 
-KisWidgetChooser::KisWidgetChooser(QWidget* parent):
-    QFrame(parent)
+#include "kis_config.h"
+
+KisWidgetChooser::KisWidgetChooser(int id, QWidget* parent)
+    : QFrame(parent)
+    , m_chooserid(id)
 {
 //     QFrame::setFrameStyle(QFrame::StyledPanel|QFrame::Raised);
     
@@ -188,6 +191,9 @@ QWidget* KisWidgetChooser::chooseWidget(const QString& id)
     delete QWidget::layout();
     QWidget::setLayout(createLayout());
     
+    KisConfig cfg;
+    cfg.setToolbarSlider(m_chooserid, id);
+
     return choosenWidget;
 }
 

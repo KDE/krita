@@ -920,6 +920,24 @@ void KisConfig::setDefaultPalette(const QString& name)
     m_cfg.writeEntry("defaultPalette", name);
 }
 
+QString KisConfig::toolbarSlider(int sliderNumber)
+{
+    QString def = "flow";
+    if (sliderNumber == 1) {
+        def = "opacity";
+    }
+    if (sliderNumber == 2) {
+        def = "size";
+    }
+    return m_cfg.readEntry(QString("toolbarslider_%1").arg(sliderNumber), def);
+}
+
+void KisConfig::setToolbarSlider(int sliderNumber, const QString &slider)
+{
+    m_cfg.writeEntry(QString("toolbarslider_%1").arg(sliderNumber), slider);
+}
+
+
 bool KisConfig::useSystemMonitorProfile() const
 {
     return m_cfg.readEntry("ColorManagement/UseSystemMonitorProfile", false);

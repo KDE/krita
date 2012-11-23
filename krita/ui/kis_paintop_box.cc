@@ -59,6 +59,7 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_resource_server_provider.h"
 #include "ko_favorite_resource_manager.h"
+#include "kis_config.h"
 
 #include "widgets/kis_popup_button.h"
 #include "widgets/kis_paintop_presets_popup.h"
@@ -132,8 +133,9 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     vMirrorButton->setDefaultAction(vMirrorAction);
     m_view->actionCollection()->addAction("vmirror_action", vMirrorAction);
 
+    KisConfig cfg;
     for(int i=0; i<2; ++i) {
-        m_sliderChooser[i] = new KisWidgetChooser();
+        m_sliderChooser[i] = new KisWidgetChooser(i + 1);
         KisDoubleSliderSpinBox* slOpacity = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("opacity", i18n("Opacity:"));
         KisDoubleSliderSpinBox* slFlow    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("flow"   , i18n("Flow:"));
         KisDoubleSliderSpinBox* slSize    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("size"   , i18n("Size:"));
@@ -153,10 +155,10 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
         slSize->setSingleStep(0.05);
         slSize->setExponentRatio(3.0);
         slSize->setMinimumWidth(120);
+
+        m_sliderChooser[i]->chooseWidget(cfg.toolbarSlider(i + 1));
     }
-    
-    m_sliderChooser[0]->chooseWidget("opacity");
-    m_sliderChooser[1]->chooseWidget("flow");
+
 
     QLabel* labelMode = new QLabel(i18n("Mode: "), this);
     labelMode->setAlignment(Qt::AlignVCenter | Qt::AlignRight);

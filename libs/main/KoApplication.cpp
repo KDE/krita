@@ -498,6 +498,17 @@ void KoApplication::addPart(KoPart* part)
     d->partList << part;
 }
 
+int KoApplication::documents()
+{
+   QList <QString>nameList;
+   QList<KoPart*> parts = d->partList;
+   foreach(KoPart* part, parts) {
+      nameList.append(part->document()->objectName());
+   }
+   QSet<QString> finalSet = nameList.toSet();
+   return finalSet.size();
+}
+
 bool KoApplication::notify(QObject *receiver, QEvent *event)
 {
     try {

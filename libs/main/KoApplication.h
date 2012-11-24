@@ -87,6 +87,12 @@ public:
 
     void addPart(KoPart* part);
 
+    /**
+     *  Get the number of currently open documents.
+     */
+    int documents();
+
+
     // Overridden to handle exceptions from event handlers.
     bool notify(QObject *receiver, QEvent *event);
 

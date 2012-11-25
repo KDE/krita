@@ -147,7 +147,7 @@ void OcioDisplayFilter::updateProcessor()
     // fstop exposure control -- not sure how that translates to our exposure
     {
         float gain = powf(2.0f, exposure);
-        const float slope4f[] = { gain, gain, gain, gain };
+        const float slope4f[] = { gain, gain, gain, 1.0f };
         float m44[16];
         float offset4[4];
         OCIO::MatrixTransform::Scale(m44, offset4, slope4f);

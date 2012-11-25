@@ -39,8 +39,8 @@ KisExperimentPaintOp::KisExperimentPaintOp(const KisExperimentPaintOpSettings *s
 
     m_experimentOption.readOptionSetting(settings);
 
-    // not implemented
-    // m_displacement = (m_experimentOption.displacement * 0.01 * 14) + 1; // 1..15 [7 default according alchemy]
+    m_displaceEnabled = m_experimentOption.isDisplacementEnabled;
+    m_displaceCoeff = (m_experimentOption.displacement * 0.01 * 14) + 1; // 1..15 [7 default according alchemy]
 
     m_speedEnabled = m_experimentOption.isSpeedEnabled;
     m_speedMultiplier = (m_experimentOption.speed * 0.01 * 35); // 0..35 [15 default according alchemy]
@@ -75,6 +75,9 @@ bool checkInTriangle(const QRectF &rect,
 QRegion splitTriangles(const QPointF &center,
                        QVector<QPointF> points)
 {
+    Q_ASSERT(points.size());
+    Q_ASSERT(!(points.size() & 1));
+
     QVector<QPolygonF> triangles;
     QRect totalRect;
 
@@ -117,13 +120,40 @@ QRegion splitTriangles(const QPointF &center,
     return dirtyRegion;
 }
 
-void KisExperimentPaintOp::paintTriangles()
+QRegion splitPath(QPainterPath path)
 {
-    Q_ASSERT(m_savedPoints.size());
-    Q_ASSERT(!(m_savedPoints.size() & 1));
+    QRect totalRect = path.boundingRect().toAlignedRect();
+    totalRect.adjusted(-1,-1,1,1);
 
-    QRegion changedRegion = splitTriangles(m_center, m_savedPoints);
+    const int step = 64;
+    const int right = totalRect.x() + totalRect.width();
+    const int bottom = totalRect.y() + totalRect.height();
 
+    QRegion dirtyRegion;
+
+
+    for (int y = totalRect.y(); y < bottom;) {
+        int nextY = qMin((y + step) & ~(step-1), bottom);
+
+        for (int x = totalRect.x(); x < right;) {
+            int nextX = qMin((x + step) & ~(step-1), right);
+
+            QRect rect(x, y, nextX - x, nextY - y);
+
+            if(path.intersects(rect)) {
+                dirtyRegion |= rect;
+            }
+
+            x = nextX;
+        }
+        y = nextY;
+    }
+
+    return dirtyRegion;
+}
+
+void KisExperimentPaintOp::paintRegion(const QRegion &changedRegion)
+{
     if (m_useMirroring) {
         foreach(const QRect &rect, changedRegion.rects()) {
             m_originalPainter->fillPainterPath(m_path, rect);
@@ -214,6 +244,19 @@ KisDistanceInformation KisExperimentPaintOp::paintLine(const KisPaintInformation
             m_savedPoints << pos2;
         }
 
+        if (m_displaceEnabled) {
+            if (m_path.elementCount() % 16 == 0) {
+                QRectF bounds = m_path.boundingRect();
+                m_path = applyDisplace(m_path, m_displaceCoeff - length);
+                bounds |= m_path.boundingRect();
+
+                qreal threshold = simplifyThreshold(bounds);
+                m_path = trySimplifyPath(m_path, threshold);
+            }
+            else {
+                m_path = applyDisplace(m_path, m_displaceCoeff - length);
+            }
+        }
 
         /**
          * Refresh rate at least 25fps
@@ -222,19 +265,50 @@ KisDistanceInformation KisExperimentPaintOp::paintLine(const KisPaintInformation
         const int elapsedTime = pi2.currentTime() - m_lastPaintTime;
 
         QRect pathBounds = m_path.boundingRect().toRect();
-        int distanceThreshold = qMax(pathBounds.width(), pathBounds.height());
+        int distanceMetric = qMax(pathBounds.width(), pathBounds.height());
 
-        if(!m_savedPoints.isEmpty() &&
-           (m_savedUpdateDistance > distanceThreshold / 8 ||
-            elapsedTime > timeThreshold)) {
+        if(elapsedTime > timeThreshold ||
+           (!m_displaceEnabled &&
+            m_savedUpdateDistance > distanceMetric / 8)) {
 
-            paintTriangles();
+            if (m_displaceEnabled) {
+                /**
+                 * Rendering the path with diff'ed rects is up to two
+                 * times more efficient for really huge shapes (tested
+                 * on 2000+ px shapes), however for smaller ones doing
+                 * paths arithmetics eats too much time. That's why we
+                 * choose the method on the base of the size of the
+                 * shape.
+                 */
+                const int pathSizeThreshold = 128;
+
+                QRegion changedRegion;
+                if (distanceMetric < pathSizeThreshold) {
+
+                    QRectF changedRect = m_path.boundingRect().toRect() |
+                        m_lastPaintedPath.boundingRect().toRect();
+                    changedRect.adjust(-1,-1,1,1);
+
+                    changedRegion = changedRect.toRect();
+                } else {
+                    QPainterPath diff1 = m_path - m_lastPaintedPath;
+                    QPainterPath diff2 = m_lastPaintedPath - m_path;
+
+                    changedRegion = splitPath(diff1 | diff2);
+                }
+
+                paintRegion(changedRegion);
+                m_lastPaintedPath = m_path;
+            } else if (!m_savedPoints.isEmpty()) {
+                QRegion changedRegion = splitTriangles(m_center, m_savedPoints);
+                paintRegion(changedRegion);
+            }
+
             m_savedPoints.clear();
             m_savedUpdateDistance = 0;
             m_lastPaintTime = pi2.currentTime();
         }
     }
-
 
     return kdi;
 }
@@ -246,9 +320,92 @@ qreal KisExperimentPaintOp::paintAt(const KisPaintInformation& info)
     return 1.0;
 }
 
-#if 0
-// the displacement is not implemented yet
-// this implementation takes too much time to be user-ready
+bool tryMergePoints(QPainterPath &path,
+                    const QPointF &startPoint,
+                    const QPointF &endPoint,
+                    qreal &distance,
+                    qreal distanceThreshold,
+                    bool lastSegment)
+{
+    qreal length = (endPoint - startPoint).manhattanLength();
+
+    if (lastSegment || length > distanceThreshold) {
+        if (distance != 0) {
+            path.lineTo(startPoint);
+        }
+        distance = 0;
+        return false;
+    }
+
+    distance += length;
+
+    if (distance > distanceThreshold) {
+        path.lineTo(endPoint);
+        distance = 0;
+    }
+
+    return true;
+}
+
+qreal KisExperimentPaintOp::simplifyThreshold(const QRectF &bounds)
+{
+    qreal maxDimension = qMax(bounds.width(), bounds.height());
+    return qMax(0.01 * maxDimension, 1.0);
+}
+
+QPainterPath KisExperimentPaintOp::trySimplifyPath(const QPainterPath &path, qreal lengthThreshold)
+{
+    QPainterPath newPath;
+    QPointF startPoint;
+    qreal distance = 0;
+
+    int count = path.elementCount();
+    for (int i = 0; i < count; i++){
+        QPainterPath::Element e = path.elementAt(i);
+        QPointF endPoint = QPointF(e.x, e.y);
+
+        switch(e.type){
+        case QPainterPath::MoveToElement:
+            newPath.moveTo(endPoint);
+            break;
+        case QPainterPath::LineToElement:
+            if (!tryMergePoints(newPath, startPoint, endPoint,
+                                distance, lengthThreshold, i == count - 1)) {
+
+                newPath.lineTo(endPoint);
+            }
+            break;
+        case QPainterPath::CurveToElement:{
+            Q_ASSERT(i + 2 < count);
+
+            if (!tryMergePoints(newPath, startPoint, endPoint,
+                                distance, lengthThreshold, i == count - 1)) {
+
+                e = path.elementAt(i + 1);
+                Q_ASSERT(e.type == QPainterPath::CurveToDataElement);
+                QPointF ctrl1 = QPointF(e.x, e.y);
+                e = path.elementAt(i + 2);
+                Q_ASSERT(e.type == QPainterPath::CurveToDataElement);
+                QPointF ctrl2 = QPointF(e.x, e.y);
+                newPath.cubicTo(ctrl1, ctrl2, endPoint);
+            }
+
+            i += 2;
+        }
+        }
+        startPoint = endPoint;
+    }
+
+    return newPath;
+}
+
+QPointF KisExperimentPaintOp::getAngle(const QPointF& p1, const QPointF& p2, qreal distance)
+{
+    QPointF diff = p1 - p2;
+    qreal realLength = sqrt(diff.x() * diff.x() + diff.y() * diff.y());
+    return realLength > 0.5 ? p1 + diff * distance / realLength : p1;
+}
+
 QPainterPath KisExperimentPaintOp::applyDisplace(const QPainterPath& path, int speed)
 {
     QPointF lastPoint = path.currentPosition();
@@ -279,10 +436,10 @@ QPainterPath KisExperimentPaintOp::applyDisplace(const QPainterPath& path, int s
                 curveElementCounter++;
 
                 if (curveElementCounter == 1){
-                    ctrl1 = QPointF(e.x,e.y);
+                    ctrl1 = getAngle(QPointF(e.x,e.y),lastPoint,speed);
                 }
                 else if (curveElementCounter == 2){
-                    ctrl2 = QPointF(e.x,e.y);
+                    ctrl2 = getAngle(QPointF(e.x,e.y),lastPoint,speed);
                     newPath.cubicTo(ctrl1,ctrl2,endPoint);
                 }
                 break;
@@ -293,5 +450,4 @@ QPainterPath KisExperimentPaintOp::applyDisplace(const QPainterPath& path, int s
 
     return newPath;
 }
-#endif
 

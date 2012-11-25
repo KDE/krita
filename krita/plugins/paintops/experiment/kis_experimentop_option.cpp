@@ -41,11 +41,6 @@ public:
         displaceStrength->setSuffix(QChar(Qt::Key_Percent));
         displaceStrength->setValue(42.0);
         displaceStrength->setSingleStep(1.0);
-
-        // HINT: Displace capabilities are not implemented yet
-        lblPostprocessing->hide();
-        displaceCHBox->hide();
-        displaceStrength->hide();
     }
 };
 

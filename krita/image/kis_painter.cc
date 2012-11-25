@@ -1218,9 +1218,8 @@ void KisPainter::fillPainterPath(const QPainterPath& path, const QRect &requeste
         }
     }
 
-    // The strokes for the outline may have already added updated the dirtyrect, but it can't hurt,
-    // and if we're painting without outlines, then there will be no dirty rect. Let's do it ourselves...
-    bitBlt(fillRect.x(), fillRect.y(), d->polygon, fillRect.x(), fillRect.y(), fillRect.width(), fillRect.height());
+    QRect bltRect = !requestedRect.isEmpty() ? requestedRect : fillRect;
+    bitBlt(bltRect.x(), bltRect.y(), d->polygon, bltRect.x(), bltRect.y(), bltRect.width(), bltRect.height());
 }
 
 void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& pen)

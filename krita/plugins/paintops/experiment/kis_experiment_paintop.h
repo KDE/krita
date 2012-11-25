@@ -42,9 +42,20 @@ public:
     virtual qreal paintAt(const KisPaintInformation& info);
 
 private:
-    void paintTriangles();
+    void paintRegion(const QRegion &changedRegion);
     QPointF speedCorrectedPosition(const KisPaintInformation& pi1,
                                    const KisPaintInformation& pi2);
+
+
+    static qreal simplifyThreshold(const QRectF &bounds);
+    static QPainterPath trySimplifyPath(const QPainterPath &path, qreal lengthThreshold);
+    static QPointF getAngle(const QPointF& p1, const QPointF& p2, qreal distance);
+    static QPainterPath applyDisplace(const QPainterPath& path, int speed);
+
+
+    bool m_displaceEnabled;
+    int m_displaceCoeff;
+    QPainterPath m_lastPaintedPath;
 
     bool m_speedEnabled;
     int m_speedMultiplier;

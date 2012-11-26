@@ -299,7 +299,7 @@ void KisPerspectiveGridManager::drawDecoration(QPainter& gc, const QRectF& updat
             SubdivisionLinesInfo info;
             info = getSubdivisionsInfo(lineTop, lineBottom, vertIntersection,
                                        grid->subdivisions());
-            drawSubdivisions(gc, info);
+             drawSubdivisions(gc, info);
 
             info = getSubdivisionsInfo(lineLeft, lineRight, horizIntersection,
                                        grid->subdivisions());

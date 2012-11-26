@@ -22,6 +22,7 @@ MeshAssistant::MeshAssistant()
     : KisPaintingAssistant("mesh",i18n("Mesh assistant"))
 {
     initialize();
+    m_canvas = 0;
 }
 
 void MeshAssistant::initialize(){
@@ -92,19 +93,22 @@ QPointF MeshAssistant::buttonPosition() const
 
 void MeshAssistant::drawAssistant(QPainter &gc, const QRectF &updateRect, const KisCoordinatesConverter *converter, bool cached,KisCanvas2* canvas)
 {
-    if(!m_canvas){
-        m_canvas = canvas;
-    }
+
+    m_canvas = canvas;
 #if (HAVE_OPENGL)
-    qDebug() << "opengl found\n";
+    qDebug() << "opengl found:"<<m_canvas<<"\n";
     if(m_canvas->canvasIsOpenGL()){
-        qDebug() << "Canvas is Opengl\n";
+        qDebug() << "Canvas is Opengl";
         beginOpenGL();
         qDebug() << "Opengl Begun\n";
         drawCache(gc,converter);
         qDebug() << "Cache Drawn\n";
     }
+    else {
+        qDebug()<<"canvas not opengl";
+    }
     endOpenGL();
+    qDebug()<<"opengl closed";
 #endif
 }
 
@@ -227,13 +231,15 @@ void MeshAssistant::InitMesh(unsigned int Index, const aiMesh* paiMesh)
         Vertices.push_back(v);
     }
     qDebug() << "in initMesh: before loop for indices   " << paiMesh->mNumFaces;
-    for (unsigned int i = 0 ; i < paiMesh->mNumFaces ; i++) {
-        qDebug() << "in initMesh: before faces" << i;
-        const aiFace& Face = paiMesh->mFaces[i];
-        qDebug() << "in initMesh: faces" << i;
-        for( uint j = 0; j < Face.mNumIndices; ++j ) {
-            qDebug() << "in initMesh: indices" << i;
-            Indices.push_back(Face.mIndices[j]);
+    if(paiMesh->HasFaces()) {
+        for (int i = 0 ; i < paiMesh->mNumFaces ; i++) {
+            qDebug() << "in initMesh: before faces" << paiMesh->mNumFaces;
+            aiFace Face = paiMesh->mFaces[i];
+            qDebug() << "in initMesh: faces" << paiMesh->mNumFaces;
+            for( uint j = 0; j < Face.mNumIndices; ++j ) {
+                qDebug() << "in initMesh: indices" << i;
+                Indices.push_back(Face.mIndices[j]);
+            }
         }
     }
     qDebug() << "in initMesh: before init";

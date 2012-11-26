@@ -297,15 +297,20 @@ void KisRulerAssistantTool::removeAssistant(KisPaintingAssistant* assistant)
 
 void KisRulerAssistantTool::mouseMoveEvent(KoPointerEvent *event)
 {
+    qDebug()<<"moving mouse";
     if (m_newAssistant && m_internalMode == MODE_CREATION) {
         *m_newAssistant->handles().back() = event->point;
+        qDebug()<<"creation movement";
         m_canvas->updateCanvas();
+        qDebug()<<"create done";
     } else if (m_newAssistant && m_internalMode == MODE_DRAGGING_TRANSLATING_TWONODES) {
         QPointF translate = event->point - m_dragEnd;
         m_dragEnd = event->point;
         m_selectedNode1.data()->operator =(QPointF(m_selectedNode1.data()->x(),m_selectedNode1.data()->y()) + translate);
         m_selectedNode2.data()->operator = (QPointF(m_selectedNode2.data()->x(),m_selectedNode2.data()->y()) + translate);
+        qDebug()<<"two node movement";
         m_canvas->updateCanvas();
+        qDebug()<<"two node done";
     } else if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
         if (m_handleDrag) {
             *m_handleDrag = event->point;
@@ -324,15 +329,18 @@ void KisRulerAssistantTool::mouseMoveEvent(KoPointerEvent *event)
                     }
                 }
             }
-
+            qDebug()<<"move handle";
             m_canvas->updateCanvas();
+            qDebug()<<"handle moved";
         } else if (m_assistantDrag) {
             QPointF adjust = event->point - m_mousePosition;
             foreach(KisPaintingAssistantHandleSP handle, m_assistantDrag->handles()) {
                 *handle += adjust;
             }
             m_mousePosition = event->point;
+            qDebug()<<"assistant move";
             m_canvas->updateCanvas();
+            qDebug()<<"assistant moved";
 
         } else {
             event->ignore();
@@ -347,7 +355,9 @@ void KisRulerAssistantTool::mouseMoveEvent(KoPointerEvent *event)
                     if (m_higlightedNode == m_selectedNode1 || m_higlightedNode == m_selectedNode2) {
                         m_higlightedNode = 0;
                     } else {
+                        qDebug()<<"creating assistant";
                         m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
+                        qDebug()<<"assistant here";
                         break;
                     }
                 }
@@ -355,7 +365,9 @@ void KisRulerAssistantTool::mouseMoveEvent(KoPointerEvent *event)
 
         }
         if (wasHiglightedNode && !m_higlightedNode) {
+            qDebug()<<"highlight";
             m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
+            qDebug()<<"highlighted";
         }
     }
     else {
@@ -399,6 +411,7 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
     QColor handlesColor(0, 0, 0, 125);
 
     if (m_newAssistant) {
+        qDebug() << " Canvas: " << m_canvas;
         m_newAssistant->drawAssistant(_gc, QRectF(QPointF(0, 0), QSizeF(m_canvas->image()->size())), m_canvas->coordinatesConverter(), false,m_canvas);
         foreach(const KisPaintingAssistantHandleSP handle, m_newAssistant->handles()) {
             QPainterPath path;

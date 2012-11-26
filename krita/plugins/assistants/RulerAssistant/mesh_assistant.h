@@ -67,7 +67,7 @@ public:
     virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
     virtual QPointF buttonPosition() const;
     virtual int numHandles() const { return 4; }
-    virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached = true, KisCanvas2 *canvas=0);
+    virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached = true, KisCanvas2* canvas=0);
 
 protected:
     virtual QRect boundingRect() const;

@@ -113,7 +113,7 @@ public:
         typename _IteratorFactory_::HLineIterator hitInitSrc = _IteratorFactory_::createHLineIterator(src, col - m_khalfWidth, row - m_khalfHeight, m_kw, dataRect);
         for (quint32 krow = 0; krow < m_kh; ++krow) {
             do {
-                const quint8* data = hitInitSrc->rawData();
+                const quint8* data = hitInitSrc->oldRawData();
                 for (quint32 k = 0; k < m_convolveChannelsNo; ++k) {
                     const quint32 channelPos = m_convChannelList[k]->pos();
                     m_pixelPtrCacheCopy[i][k] = m_toDoubleFuncPtr[k](data, channelPos);
@@ -149,7 +149,7 @@ public:
                 typename _IteratorFactory_::VLineIterator kitSrc = _IteratorFactory_::createVLineIterator(src, col + m_khalfWidth, row - m_khalfHeight, m_kh, dataRect);
                 for (int pcol = 0; pcol < areaSize.width(); ++pcol) {
                     // write original channel values
-                    memcpy(hitDst->rawData(), hitSrc->rawData(), m_pixelSize);
+                    memcpy(hitDst->rawData(), hitSrc->oldRawData(), m_pixelSize);
                     convolveCache(hitDst->rawData());
 
                     ++col;
@@ -193,7 +193,7 @@ public:
                 typename _IteratorFactory_::HLineIterator khitSrc = _IteratorFactory_::createHLineIterator(src, col - m_khalfWidth, row + m_khalfHeight, m_kw, dataRect);
                 for (int prow = 0; prow < areaSize.height(); prow++) {
                     // write original channel values
-                    memcpy(vitDst->rawData(), vitSrc->rawData(), m_pixelSize);
+                    memcpy(vitDst->rawData(), vitSrc->oldRawData(), m_pixelSize);
                     convolveCache(vitDst->rawData());
 
                     ++row;
@@ -260,7 +260,7 @@ public:
         do {
             for (quint32 k = 0; k < m_convolveChannelsNo; ++k) {
                 const quint32 channelPos = m_convChannelList[k]->pos();
-                pixelPtrCache[i][k] = m_toDoubleFuncPtr[k](kitSrc->rawData(), channelPos);
+                pixelPtrCache[i][k] = m_toDoubleFuncPtr[k](kitSrc->oldRawData(), channelPos);
             }
             i += m_kw;
         } while (kitSrc->nextPixel());
@@ -277,7 +277,7 @@ public:
         do {
             for (quint32 k = 0; k < m_convolveChannelsNo; ++k) {
                 const quint32 channelPos = m_convChannelList[k]->pos();
-                pixelPtrCache[i][k] = m_toDoubleFuncPtr[k](kitSrc->rawData(), channelPos);
+                pixelPtrCache[i][k] = m_toDoubleFuncPtr[k](kitSrc->oldRawData(), channelPos);
             }
             i++;
         } while (kitSrc->nextPixel());

@@ -642,11 +642,53 @@ void KisPaintDeviceTest::testOpacity()
     QImage checkResult(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa_transparent_result.png");
     QPoint errpoint;
 
-    if (!TestUtil::compareQImages(errpoint, checkResult, result)) {
+    if (!TestUtil::compareQImages(errpoint, checkResult, result, 1)) {
         checkResult.save("kis_paint_device_test_test_blt_fixed_opactiy_expected.png");
         result.save("kis_paint_device_test_test_blt_fixed_opacity_result.png");
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
     }
+}
+
+void KisPaintDeviceTest::testExactBoundsWeirdNullAlphaCase()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+
+    QVERIFY(dev->exactBounds().isEmpty());
+
+    dev->fill(QRect(10,10,10,10), KoColor(Qt::white, cs));
+
+    QCOMPARE(dev->exactBounds(), QRect(10,10,10,10));
+
+    const quint8 weirdPixelData[4] = {0,10,0,0};
+    KoColor weirdColor(weirdPixelData, cs);
+    dev->setPixel(6,6,weirdColor);
+
+    // such weird pixels should not change our opinion about
+    // device's size
+    QCOMPARE(dev->exactBounds(), QRect(10,10,10,10));
+}
+
+void KisPaintDeviceTest::benchmarkExactBoundsNullDefaultPixel()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+
+    QVERIFY(dev->exactBounds().isEmpty());
+
+    QRect fillRect(60,60, 1930, 1930);
+
+    dev->fill(fillRect, KoColor(Qt::white, cs));
+
+    QRect measuredRect;
+
+    QBENCHMARK {
+        // invalidate the cache
+        dev->setDirty();
+        measuredRect = dev->exactBounds();
+    }
+
+    QCOMPARE(measuredRect, fillRect);
 }
 
 

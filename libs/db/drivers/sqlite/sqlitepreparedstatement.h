@@ -38,7 +38,6 @@ public:
     virtual bool execute();
 
     sqlite3_stmt *prepared_st_handle;
-    bool m_resetRequired : 1;
 };
 
 }

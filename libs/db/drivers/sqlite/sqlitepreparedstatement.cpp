@@ -29,7 +29,6 @@ SQLitePreparedStatement::SQLitePreparedStatement(StatementType type, ConnectionI
         : KexiDB::PreparedStatement(type, conn, fields)
         , SQLiteConnectionInternal(conn.connection)
         , prepared_st_handle(0)
-        , m_resetRequired(false)
 {
     data_owned = false;
     data = dynamic_cast<KexiDB::SQLiteConnectionInternal&>(conn).data; //copy
@@ -59,14 +58,6 @@ bool SQLitePreparedStatement::execute()
 {
     if (!prepared_st_handle)
         return false;
-    if (m_resetRequired) {
-        res = sqlite3_reset(prepared_st_handle);
-        if (SQLITE_OK != res) {
-            //! @todo msg?
-            return false;
-        }
-        m_resetRequired = false;
-    }
 
     //for INSERT, we're iterating over inserting values
     //for SELECT, we're iterating over WHERE conditions
@@ -212,7 +203,7 @@ bool SQLitePreparedStatement::execute()
 
     //real execution
     res = sqlite3_step(prepared_st_handle);
-    m_resetRequired = true;
+    sqlite3_reset(prepared_st_handle);
     if (m_type == InsertStatement && res == SQLITE_DONE) {
         return true;
     }

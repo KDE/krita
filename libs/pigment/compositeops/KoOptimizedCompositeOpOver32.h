@@ -122,7 +122,7 @@ struct OverCompositor32 {
 #endif /* HAVE_VC */
 
     template <bool haveMask>
-    static ALWAYS_INLINE void compositeOnePixelFloat(const channels_type *src, channels_type *dst, const quint8 *mask, float opacity, float flow, const QBitArray &channelFlags)
+    static ALWAYS_INLINE void compositeOnePixelScalar(const channels_type *src, channels_type *dst, const quint8 *mask, float opacity, float flow, const QBitArray &channelFlags)
     {
         Q_UNUSED(flow);
 
@@ -146,14 +146,17 @@ struct OverCompositor32 {
 
             if (dstAlpha == uint8Max) {
                 srcBlendNorm = srcAlpha * uint8Rec1;
+            } else if (dstAlpha == 0.0) {
+                dstAlpha = srcAlpha;
+                srcBlendNorm = 1.0;
+
+                if (!allChannelsFlag) {
+                    pixel_type *d = reinterpret_cast<pixel_type*>(dst);
+                    *d = 0; // dstAlpha is already null
+                }
             } else {
                 dstAlpha += (uint8Max - dstAlpha) * srcAlpha * uint8Rec1;
-
-                if (dstAlpha != 0.0) {
-                    srcBlendNorm = srcAlpha / dstAlpha;
-                } else {
-                    srcBlendNorm = 0.0;
-                }
+                srcBlendNorm = srcAlpha / dstAlpha;
             }
 
             if(allChannelsFlag) {
@@ -182,70 +185,6 @@ struct OverCompositor32 {
                 dst[alpha_pos] = quint8(dstAlpha);
             }
         }
-
-    }
-
-    template <bool haveMask>
-    static ALWAYS_INLINE void compositeOnePixel(const channels_type *src, channels_type *dst, const quint8 *mask, channels_type opacity, channels_type flow, const QBitArray &channelFlags)
-    {
-        Q_UNUSED(flow);
-
-        using namespace Arithmetic;
-        const qint32 alpha_pos = 3;
-
-        channels_type srcAlpha = src[alpha_pos];
-
-        if (haveMask) {
-            srcAlpha = mul(scale<channels_type>(*mask), srcAlpha, opacity);
-        } else if (opacity != unitValue<channels_type>()) {
-            srcAlpha = mul(srcAlpha, opacity);
-        }
-
-        if (srcAlpha != zeroValue<channels_type>()) {
-
-            channels_type dstAlpha = dst[alpha_pos];
-            channels_type srcBlend;
-
-            if (dstAlpha == unitValue<channels_type>()) {
-                srcBlend = srcAlpha;
-            } else {
-                dstAlpha += mul(channels_type(unitValue<channels_type>() - dstAlpha), srcAlpha);
-
-                if (dstAlpha != zeroValue<channels_type>()) {
-                    srcBlend = div<channels_type>(srcAlpha, dstAlpha);
-                } else {
-                    srcBlend = zeroValue<channels_type>();
-                }
-            }
-
-            if(allChannelsFlag) {
-                if (srcBlend == unitValue<channels_type>()) {
-                    const pixel_type *s = reinterpret_cast<const pixel_type*>(src);
-                    pixel_type *d = reinterpret_cast<pixel_type*>(dst);
-                    *d = *s;
-                } else if (srcBlend != zeroValue<channels_type>()) {
-                    dst[0] = lerp(dst[0], src[0], srcBlend);
-                    dst[1] = lerp(dst[1], src[1], srcBlend);
-                    dst[2] = lerp(dst[2], src[2], srcBlend);
-
-                }
-            } else {
-                if (srcBlend == unitValue<channels_type>()) {
-                    if(channelFlags.at(0)) dst[0] = src[0];
-                    if(channelFlags.at(1)) dst[1] = src[1];
-                    if(channelFlags.at(2)) dst[2] = src[2];
-                } else if (srcBlend != zeroValue<channels_type>()) {
-                    if(channelFlags.at(0)) dst[0] = lerp(dst[0], src[0], srcBlend);
-                    if(channelFlags.at(1)) dst[1] = lerp(dst[1], src[1], srcBlend);
-                    if(channelFlags.at(2)) dst[2] = lerp(dst[2], src[2], srcBlend);
-                }
-            }
-
-            if (!alphaLocked) {
-                dst[alpha_pos] = dstAlpha;
-            }
-        }
-
     }
 };
 
@@ -289,7 +228,7 @@ public:
             if (allChannelsFlag && alphaLocked) {
                 KoStreamedMath::genericComposite32_novector<haveMask, false, OverCompositor32<quint8, quint32, true, true> >(params);
             } else if (!allChannelsFlag && !alphaLocked) {
-                KoStreamedMath::genericComposite32_novector<haveMask, false, OverCompositor32<quint8, quint32, false, true> >(params);
+                KoStreamedMath::genericComposite32_novector<haveMask, false, OverCompositor32<quint8, quint32, false, false> >(params);
             } else /*if (!allChannelsFlag && alphaLocked) */{
                 KoStreamedMath::genericComposite32_novector<haveMask, false, OverCompositor32<quint8, quint32, true, false> >(params);
             }

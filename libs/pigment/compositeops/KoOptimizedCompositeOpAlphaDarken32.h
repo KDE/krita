@@ -29,7 +29,7 @@
 template<typename channels_type, typename pixel_type>
 struct AlphaDarkenCompositor32 {
     /**
-     * This is a vector equivalent of compositeOnePixel(). It is considered
+     * This is a vector equivalent of compositeOnePixelScalar(). It is considered
      * to process Vc::float_v::Size pixels in a single pass.
      *
      * o the \p haveMask parameter points whether the real (non-null) mask
@@ -145,7 +145,7 @@ struct AlphaDarkenCompositor32 {
      * Composes one pixel of the source into the destination
      */
     template <bool haveMask>
-    static ALWAYS_INLINE void compositeOnePixelFloat(const channels_type *src, channels_type *dst, const quint8 *mask, float opacity, float flow, const QBitArray &channelFlags)
+    static ALWAYS_INLINE void compositeOnePixelScalar(const channels_type *src, channels_type *dst, const quint8 *mask, float opacity, float flow, const QBitArray &channelFlags)
     {
         Q_UNUSED(channelFlags);
 
@@ -156,7 +156,8 @@ struct AlphaDarkenCompositor32 {
         const float uint8Rec2 = 1.0 / (255.0 * 255.0);
         const float uint8Max = 255.0;
 
-        float dstAlphaNorm = dst[alpha_pos] * uint8Rec1;
+        quint8 dstAlphaInt = dst[alpha_pos];
+        float dstAlphaNorm = dstAlphaInt ? dstAlphaInt * uint8Rec1 : 0.0;
         float srcAlphaNorm;
         float mskAlphaNorm;
 
@@ -174,12 +175,11 @@ struct AlphaDarkenCompositor32 {
             srcAlphaNorm = mskAlphaNorm * opacity;
         }
 
-        if (dstAlphaNorm != 0.0) {
+        if (dstAlphaInt != 0) {
             dst[0] = KoStreamedMath::lerp_mixed_u8_float(dst[0], src[0], srcAlphaNorm);
             dst[1] = KoStreamedMath::lerp_mixed_u8_float(dst[1], src[1], srcAlphaNorm);
             dst[2] = KoStreamedMath::lerp_mixed_u8_float(dst[2], src[2], srcAlphaNorm);
-        }
-        else {
+        } else {
             const pixel_type *s = reinterpret_cast<const pixel_type*>(src);
             pixel_type *d = reinterpret_cast<pixel_type*>(dst);
             *d = *s;
@@ -188,40 +188,6 @@ struct AlphaDarkenCompositor32 {
         float alpha1 = unionShapeOpacity(srcAlphaNorm, dstAlphaNorm);                               // alpha with 0% flow
         float alpha2 = (opacity > dstAlphaNorm) ? lerp(dstAlphaNorm, opacity, mskAlphaNorm) : dstAlphaNorm; // alpha with 100% flow
         dst[alpha_pos] = quint8(lerp(alpha1, alpha2, flow) * uint8Max);
-    }
-
-    /**
-     * Composes one pixel of the source into the destination
-     */
-    template <bool haveMask>
-    static ALWAYS_INLINE void compositeOnePixel(const channels_type *src, channels_type *dst, const quint8 *mask, channels_type opacity, channels_type flow, const QBitArray &channelFlags)
-    {
-        Q_UNUSED(channelFlags);
-
-        using namespace Arithmetic;
-        const qint32 alpha_pos = 3;
-
-        channels_type srcAlpha = src[alpha_pos];
-        channels_type dstAlpha = dst[alpha_pos];
-        channels_type mskAlpha = haveMask ? mul(scale<channels_type>(*mask), srcAlpha) : srcAlpha;
-
-        opacity = mul(opacity, flow);
-        srcAlpha = mul(mskAlpha, opacity);
-
-        if(dstAlpha != zeroValue<channels_type>()) {
-            dst[0] = lerp(dst[0], src[0], srcAlpha);
-            dst[1] = lerp(dst[1], src[1], srcAlpha);
-            dst[2] = lerp(dst[2], src[2], srcAlpha);
-        }
-        else {
-            const pixel_type *s = reinterpret_cast<const pixel_type*>(src);
-            pixel_type *d = reinterpret_cast<pixel_type*>(dst);
-            *d = *s;
-        }
-
-        channels_type alpha1 = unionShapeOpacity(srcAlpha, dstAlpha);                               // alpha with 0% flow
-        channels_type alpha2 = (opacity > dstAlpha) ? lerp(dstAlpha, opacity, mskAlpha) : dstAlpha; // alpha with 100% flow
-        dst[alpha_pos] = lerp(alpha1, alpha2, flow);
     }
 };
 

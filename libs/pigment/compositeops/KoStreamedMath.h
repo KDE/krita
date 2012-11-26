@@ -49,17 +49,6 @@ template<bool useMask, bool useFlow, class Compositor>
 {
     using namespace Arithmetic;
 
-    quint8 flow;
-    quint8 opacity;
-
-    if (useFlow) {
-        flow = scale<quint8>(params.flow);
-        opacity = mul(flow, scale<quint8>(params.opacity));
-    } else {
-        flow = 255;
-        opacity = scale<quint8>(params.opacity);
-    }
-
     const qint32 linearInc = 4;
     qint32 srcLinearInc = params.srcRowStride ? 4 : 0;
 
@@ -75,7 +64,7 @@ template<bool useMask, bool useFlow, class Compositor>
         int blockRest = params.cols;
 
         for(int i = 0; i < blockRest; i++) {
-            Compositor::template compositeOnePixel<useMask>(src, dst, mask, opacity, flow, params.channelFlags);
+            Compositor::template compositeOnePixelScalar<useMask>(src, dst, mask, params.opacity, params.flow, params.channelFlags);
             src += srcLinearInc;
             dst += linearInc;
 
@@ -257,7 +246,7 @@ template<bool useMask, bool useFlow, class Compositor>
         }
 
         for(int i = 0; i < blockAlign; i++) {
-            Compositor::template compositeOnePixelFloat<useMask>(src, dst, mask, params.opacity, params.flow, params.channelFlags);
+            Compositor::template compositeOnePixelScalar<useMask>(src, dst, mask, params.opacity, params.flow, params.channelFlags);
             src += srcLinearInc;
             dst += linearInc;
 
@@ -288,7 +277,7 @@ template<bool useMask, bool useFlow, class Compositor>
 
 
         for(int i = 0; i < blockRest; i++) {
-            Compositor::template compositeOnePixelFloat<useMask>(src, dst, mask, params.opacity, params.flow, params.channelFlags);
+            Compositor::template compositeOnePixelScalar<useMask>(src, dst, mask, params.opacity, params.flow, params.channelFlags);
             src += srcLinearInc;
             dst += linearInc;
 
@@ -311,6 +300,14 @@ template<bool useMask, bool useFlow, class Compositor>
 }
 
 #else /* if ! defined HAVE_VC */
+
+/**
+ * Fall back to the scalar version of the composition.
+ *
+ * Don't use this method! The scalar floating point version of the
+ * algorithm is up to 2 times slower then the basic integer
+ * implementation! Use another composite op instead!
+ */
 
 template<bool useMask, bool useFlow, class Compositor>
     void genericComposite32(const KoCompositeOp::ParameterInfo& params)

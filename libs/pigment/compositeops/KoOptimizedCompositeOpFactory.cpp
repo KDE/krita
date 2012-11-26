@@ -18,16 +18,37 @@
 
 #include "KoOptimizedCompositeOpFactory.h"
 
+/**
+ * We include these headers even when no vectorization
+ * is available on the system to ensure they build correctly
+ */
 #include "KoOptimizedCompositeOpAlphaDarken32.h"
 #include "KoOptimizedCompositeOpOver32.h"
 
 
+#include "config-vc.h"
+
+#if ! defined HAVE_VC
+#include "KoColorSpaceTraits.h"
+#include "KoCompositeOpAlphaDarken.h"
+#include "KoCompositeOpOver.h"
+#endif
+
+
 KoCompositeOp* KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(const KoColorSpace *cs)
 {
+#if defined HAVE_VC
     return new KoOptimizedCompositeOpAlphaDarken32(cs);
+#else
+    return new KoCompositeOpAlphaDarken<KoBgrU8Traits>(cs);
+#endif
 }
 
 KoCompositeOp* KoOptimizedCompositeOpFactory::createOverOp32(const KoColorSpace *cs)
 {
+#if defined HAVE_VC
     return new KoOptimizedCompositeOpOver32(cs);
+#else
+    return new KoCompositeOpOver<KoBgrU8Traits>(cs);
+#endif
 }

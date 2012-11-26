@@ -129,7 +129,7 @@ void KisFixedPaintDeviceTest::testBltFixed()
 
     QPoint errpoint;
 
-    if (!TestUtil::compareQImages(errpoint, image, result)) {
+    if (!TestUtil::compareQImages(errpoint, image, result, 1)) {
         fdev->convertToQImage(0).save("kis_fixed_paint_device_test_test_blt_fixed_expected.png");
         result.save("kis_fixed_paint_device_test_test_blt_fixed_result.png");
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
@@ -155,7 +155,7 @@ void KisFixedPaintDeviceTest::testBltFixedOpacity()
     QImage checkResult(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa_transparent_result.png");
     QPoint errpoint;
 
-    if (!TestUtil::compareQImages(errpoint, checkResult, result)) {
+    if (!TestUtil::compareQImages(errpoint, checkResult, result, 1)) {
         checkResult.save("kis_fixed_paint_device_test_test_blt_fixed_opactiy_expected.png");
         result.save("kis_fixed_paint_device_test_test_blt_fixed_opacity_result.png");
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());

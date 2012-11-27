@@ -28,27 +28,33 @@
 
 #include "config-vc.h"
 
-#if ! defined HAVE_VC
+#ifdef HAVE_VC
+#include <Vc/global.h>
+#include <Vc/common/support.h>
+#endif
+
 #include "KoColorSpaceTraits.h"
 #include "KoCompositeOpAlphaDarken.h"
 #include "KoCompositeOpOver.h"
-#endif
 
 
 KoCompositeOp* KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(const KoColorSpace *cs)
 {
 #if defined HAVE_VC
-    return new KoOptimizedCompositeOpAlphaDarken32(cs);
-#else
-    return new KoCompositeOpAlphaDarken<KoBgrU8Traits>(cs);
+    if (Vc::currentImplementationSupported()) {
+        return new KoOptimizedCompositeOpAlphaDarken32(cs);
+    }
 #endif
+    return new KoCompositeOpAlphaDarken<KoBgrU8Traits>(cs);
 }
 
 KoCompositeOp* KoOptimizedCompositeOpFactory::createOverOp32(const KoColorSpace *cs)
 {
 #if defined HAVE_VC
-    return new KoOptimizedCompositeOpOver32(cs);
-#else
-    return new KoCompositeOpOver<KoBgrU8Traits>(cs);
+    if (Vc::currentImplementationSupported()) {
+        return new KoOptimizedCompositeOpOver32(cs);
+    }
 #endif
+    return new KoCompositeOpOver<KoBgrU8Traits>(cs);
+
 }

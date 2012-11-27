@@ -50,6 +50,7 @@ inline double drand48() {
 #ifdef HAVE_VC
 #include <Vc/Vc>
 #include <Vc/IO>
+#include <Vc/common/support.h>
 #endif
 
 // 3x3 supersampling
@@ -74,6 +75,13 @@ struct MaskProcessor
 
         m_cosa = cos(angle);
         m_sina = sin(angle);
+
+#ifdef HAVE_VC
+        m_canVectorize = Vc::currentImplementationSupported();
+#else
+        m_canVectorize = false;
+#endif
+
     }
 
     void operator()(QRect& rect)
@@ -83,7 +91,7 @@ struct MaskProcessor
 
     void process(QRect& rect){
 #ifdef HAVE_VC
-        if (m_shape->shouldVectorize()) {
+        if (m_canVectorize && m_shape->shouldVectorize()) {
             processParallel(rect);
         } else {
             processScalar(rect);
@@ -207,6 +215,7 @@ struct MaskProcessor
     double m_cosa;
     double m_sina;
     KisMaskGenerator* m_shape;
+    bool m_canVectorize;
 };
 
 struct KisAutoBrush::Private {

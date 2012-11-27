@@ -118,7 +118,7 @@ void KisAsyncMergerTest::testMerger()
     QImage resultProjection = rootLayer->projection()->convertToQImage(0);
     resultProjection.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + "actual_merge_result.png");
     QPoint pt;
-    QVERIFY(TestUtil::compareQImages(pt, resultProjection, referenceProjection));
+    QVERIFY(TestUtil::compareQImages(pt, resultProjection, referenceProjection, 1));
 }
 
 

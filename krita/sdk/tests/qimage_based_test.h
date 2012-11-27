@@ -116,7 +116,7 @@ protected:
      * Checks the content of image's layers against the set of
      * QImages stored in @p prefix subfolder
      */
-    bool checkLayers(KisImageWSP image, const QString &prefix) {
+    bool checkLayers(KisImageWSP image, const QString &prefix, int baseFuzzyness = 0) {
         QVector<QImage> images;
         QVector<QString> names;
 
@@ -126,7 +126,7 @@ protected:
 
         const int stackSize = images.size();
         for(int i = 0; i < stackSize; i++) {
-            if(!checkOneQImage(images[i], prefix, names[i])) {
+            if(!checkOneQImage(images[i], prefix, names[i], baseFuzzyness)) {
                 valid = false;
             }
         }
@@ -138,22 +138,23 @@ protected:
      * Checks the content of one image's layer against the QImage
      * stored in @p prefix subfolder
      */
-    bool checkOneLayer(KisImageWSP image, KisNodeSP node,  const QString &prefix) {
+    bool checkOneLayer(KisImageWSP image, KisNodeSP node,  const QString &prefix, int baseFuzzyness = 0) {
         QVector<QImage> images;
         QVector<QString> names;
 
         fillNamesImages(node, image->bounds(), images, names);
 
-        return checkOneQImage(images.first(), prefix, names.first());
+        return checkOneQImage(images.first(), prefix, names.first(), baseFuzzyness);
     }
 
     // add default bounds param
     bool checkOneDevice(KisPaintDeviceSP device,
                         const QString &prefix,
-                        const QString &name)
+                        const QString &name,
+                        int baseFuzzyness = 0)
     {
         QImage image = device->convertToQImage(0);
-        return checkOneQImage(image, prefix, name);
+        return checkOneQImage(image, prefix, name, baseFuzzyness);
     }
 
     KisNodeSP findNode(KisNodeSP root, const QString &name) {
@@ -171,7 +172,8 @@ protected:
 private:
     bool checkOneQImage(const QImage &image,
                         const QString &prefix,
-                        const QString &name)
+                        const QString &name,
+                        int baseFuzzyness)
     {
         QString realName = prefix + "_" + name + ".png";
         QString expectedName = prefix + "_" + name + "_expected.png";
@@ -183,7 +185,7 @@ private:
                    prefix + QDir::separator() + realName);
 
         QPoint temp;
-        int fuzzy = 0;
+        int fuzzy = baseFuzzyness;
 
         {
             QStringList terms = name.split('_');
@@ -194,6 +196,7 @@ private:
 
         if(ref != image &&
            !TestUtil::compareQImages(temp, ref, image, fuzzy)) {
+
 
             qDebug() << "--- Wrong image:" << realName;
             valid = false;

@@ -167,6 +167,11 @@ inline void write_channels_32(quint8 *data,
                               Vc::float_v c2,
                               Vc::float_v c3) {
 
+    /**
+     * FIXME: make conversion float->int
+     * use methematical rounding
+     */
+
     const quint32 lowByteMask = 0xFF;
     Vc::uint_v mask(lowByteMask);
 

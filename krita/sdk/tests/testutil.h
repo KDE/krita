@@ -92,7 +92,7 @@ private:
 };
 
 
-inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2, int fuzzy = 0)
+inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2, int fuzzy = 0, int fuzzyAlpha = 0)
 {
     //     QTime t;
     //     t.start();
@@ -121,7 +121,7 @@ inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & im
                 const bool same = qAbs(qRed(a) - qRed(b)) <= fuzzy
                                   && qAbs(qGreen(a) - qGreen(b)) <= fuzzy
                                   && qAbs(qBlue(a) - qBlue(b)) <= fuzzy;
-                const bool sameAlpha = qAlpha(a) == qAlpha(b);
+                const bool sameAlpha = qAlpha(a) - qAlpha(b) <= fuzzyAlpha;
                 const bool bothTransparent = sameAlpha && qAlpha(a)==0;
 
                 if (!bothTransparent && (!same || !sameAlpha)) {

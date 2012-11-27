@@ -82,9 +82,18 @@ public:
         QApplication::processEvents();
         QTest::qSleep(500);
         QApplication::processEvents();
+
         delete shell;
         delete doc;
         delete part;
+
+        /**
+         * The event queue may have up to 200k events
+         * by the time all the tests are finished. Removing
+         * all of them may last forever, so clear them after
+         * every single test is finished
+         */
+        QApplication::removePostedEvents(0);
     }
 
     void checkUndo() {
@@ -114,6 +123,10 @@ public:
 
     bool checkLayers(const QString &name) {
         return checkLayers(image, name);
+    }
+
+    bool checkLayersFuzzy(const QString &name) {
+        return checkLayers(image, name, 1);
     }
 
     bool checkSelectionOnly(const QString &name) {
@@ -297,7 +310,7 @@ void KisSelectionManagerTest::testCopyPasteMerged()
     t.selectionManager->copyMerged();
     t.selectionManager->paste();
     t.image->waitForDone();
-    QVERIFY(t.checkLayers("copy_paste_merged"));
+    QVERIFY(t.checkLayersFuzzy("copy_paste_merged"));
 
     t.checkUndo();
     t.startConcurrentTask();
@@ -305,7 +318,7 @@ void KisSelectionManagerTest::testCopyPasteMerged()
     t.selectionManager->copyMerged();
     t.selectionManager->paste();
     t.image->waitForDone();
-    QVERIFY(t.checkLayers("copy_paste_merged"));
+    QVERIFY(t.checkLayersFuzzy("copy_paste_merged"));
 }
 
 void KisSelectionManagerTest::testCutPaste()

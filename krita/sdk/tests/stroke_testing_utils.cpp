@@ -32,6 +32,8 @@
 #include "kis_paint_device.h"
 #include "kis_paint_layer.h"
 
+#include "testutil.h"
+
 
 KisImageSP utils::createImage(KisUndoStore *undoStore, const QSize &imageSize) {
     QRect imageRect(0,0,imageSize.width(),imageSize.height());
@@ -178,11 +180,13 @@ void utils::StrokeTester::testOneStroke(bool cancelled,
     QImage refImage;
     refImage.load(referenceFile(testName));
 
-    if(resultImage != refImage) {
+    QPoint temp;
+    if(!TestUtil::compareQImages(temp, refImage, resultImage, 1, 1)) {
+        refImage.save(dumpReferenceFile(testName));
         resultImage.save(resultFile(testName));
-    }
 
-    QCOMPARE(resultImage, refImage);
+        QFAIL("Images do not coincide");
+    }
 }
 
 QString utils::StrokeTester::formatTestName(const QString &baseName,
@@ -205,6 +209,15 @@ QString utils::StrokeTester::referenceFile(const QString &testName)
         m_name + QDir::separator();
 
     path += testName;
+    path += ".png";
+    return path;
+}
+
+QString utils::StrokeTester::dumpReferenceFile(const QString &testName)
+{
+    QString path = QString(FILES_OUTPUT_DIR) + QDir::separator();
+    path += testName;
+    path += "_expected";
     path += ".png";
     return path;
 }

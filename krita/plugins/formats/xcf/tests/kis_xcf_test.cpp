@@ -32,7 +32,7 @@
 
 void KisXCFTest::testFiles()
 {
-    TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList());
+    TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList(), QString(), 1);
 }
 QTEST_KDEMAIN(KisXCFTest, GUI)
 

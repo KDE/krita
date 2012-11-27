@@ -168,7 +168,7 @@ class ToolAction : public KAction
 {
     Q_OBJECT
 public:
-    ToolAction(KoToolManager* toolManager, QString id, QString name);
+    ToolAction(KoToolManager* toolManager, QString id, QString name, QObject *parent);
     virtual ~ToolAction();
 
 private slots:

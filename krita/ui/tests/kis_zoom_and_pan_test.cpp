@@ -68,10 +68,19 @@ public:
 
     ~ZoomAndPanTester() {
         m_image->waitForDone();
+        QApplication::processEvents();
 
         delete m_shell;
         delete m_part;
         delete m_doc;
+
+        /**
+         * The event queue may have up to 200k events
+         * by the time all the tests are finished. Removing
+         * all of them may last forever, so clear them after
+         * every single test is finished
+         */
+        QApplication::removePostedEvents(0);
     }
 
     KisView2* view() {

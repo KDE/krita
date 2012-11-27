@@ -792,7 +792,7 @@ void KoToolManager::registerTools(KActionCollection *ac, KoCanvasController *con
         }
     }
     foreach(ToolHelper * th, d->tools) {
-        ToolAction* action = new ToolAction(this, th->id(), th->toolTip());
+        ToolAction* action = new ToolAction(this, th->id(), th->toolTip(), ac);
         action->setShortcut(th->shortcut());
         ac->addAction(th->id(), action);
     }

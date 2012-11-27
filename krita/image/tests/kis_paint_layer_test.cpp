@@ -89,7 +89,7 @@ void KisPaintLayerTest::testProjection()
     // Now fill the layer with some opaque pixels
     transparencyMask->select(qimage.rect());
     transparencyMask->setDirty(qimage.rect());
-    layer->updateProjection(qimage.rect());
+    image->waitForDone();
 
     layer->projection()->convertToQImage(0, 0, 0, qimage.width(), qimage.height()).save("aaa.png");
     // Nothing is transparent anymore, so the projection and the paint device should be identical again

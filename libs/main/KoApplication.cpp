@@ -500,13 +500,12 @@ void KoApplication::addPart(KoPart* part)
 
 int KoApplication::documents()
 {
-   QList <QString>nameList;
+   QSet<QString> nameList;
    QList<KoPart*> parts = d->partList;
    foreach(KoPart* part, parts) {
-      nameList.append(part->document()->objectName());
+      nameList.insert(part->document()->objectName());
    }
-   QSet<QString> finalSet = nameList.toSet();
-   return finalSet.size();
+   return nameList.size();
 }
 
 bool KoApplication::notify(QObject *receiver, QEvent *event)

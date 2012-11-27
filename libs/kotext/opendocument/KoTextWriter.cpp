@@ -125,8 +125,10 @@ QString KoTextWriter::saveParagraphStyle(const QTextBlockFormat &blockFormat, co
         KoGenStyle style(KoGenStyle::ParagraphAutoStyle, "paragraph", internalName);
         if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
             style.setAutoStyleInStylesDotXml(true);
-        if (originalParagraphStyle)
+        if (originalParagraphStyle) {
             paragStyle.removeDuplicates(*originalParagraphStyle);
+            paragStyle.setParentStyle(originalParagraphStyle);
+        }
         paragStyle.saveOdf(style, context);
         generatedName = context.mainStyles().insert(style, "P");
     }

@@ -108,6 +108,11 @@ public:
     void saveOdf(KoShapeSavingContext &context);
 
     /**
+     * Save document styles that are being referred to but not yet saved
+     */
+    void saveReferredStylesToOdf(KoShapeSavingContext &context);
+
+    /**
      * Save the default-style styles
      */
     void saveOdfDefaultStyles(KoShapeSavingContext &context);

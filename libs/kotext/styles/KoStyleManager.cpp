@@ -181,6 +181,71 @@ void KoStyleManager::saveOdfDefaultStyles(KoShapeSavingContext &context)
 
 }
 
+void KoStyleManager::saveReferredStylesToOdf(KoShapeSavingContext &context)
+{
+    KoTextSharedSavingData *textSharedSavingData = 0;
+    // we need KoTextSharedSavingData, so create it if not already there
+    if (!(textSharedSavingData = dynamic_cast<KoTextSharedSavingData *>(context.sharedData(KOTEXT_SHARED_SAVING_ID)))) {
+        textSharedSavingData = new KoTextSharedSavingData;
+        context.addSharedData(KOTEXT_SHARED_SAVING_ID, textSharedSavingData);
+    }
+
+    QSet<KoParagraphStyle *> savedParaStyles;
+    QList<KoGenStyles::NamedStyle>  namedStyles = context.mainStyles().styles(KoGenStyle::ParagraphAutoStyle);
+    namedStyles += context.mainStyles().styles(KoGenStyle::ParagraphStyle);
+   foreach(const KoGenStyles::NamedStyle &namedStyle, namedStyles) {
+        KoParagraphStyle *paraStyle = 0;
+        // first find the parent style
+        foreach(KoParagraphStyle *p, d->paragStyles) {
+            QString name(QString(QUrl::toPercentEncoding(p->name(), "", " ")).replace('%', '_'));
+
+            if (name == namedStyle.style->parentName()) {
+                paraStyle = p;
+                break;
+            }
+        }
+        // next save it and also parents to the parent
+        while (paraStyle && !savedParaStyles.contains(paraStyle)) {
+            QString name(QString(QUrl::toPercentEncoding(paraStyle->name(), "", " ")).replace('%', '_'));
+            KoGenStyle style(KoGenStyle::ParagraphStyle, "paragraph");
+            paraStyle->saveOdf(style, context);
+            QString newName = context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
+            textSharedSavingData->setStyleName(paraStyle->styleId(), newName);
+
+            savedParaStyles.insert(paraStyle);
+            paraStyle = paraStyle->parentStyle();
+        }
+    }
+
+    QSet<KoCharacterStyle *> savedCharStyles;
+    namedStyles = context.mainStyles().styles(KoGenStyle::TextAutoStyle);
+    namedStyles += context.mainStyles().styles(KoGenStyle::TextStyle);
+
+    foreach(const KoGenStyles::NamedStyle &namedStyle, namedStyles) {
+        KoCharacterStyle *charStyle = 0;
+        // first find the parent style
+        foreach(KoCharacterStyle *c, d->charStyles) {
+            QString name(QString(QUrl::toPercentEncoding(c->name(), "", " ")).replace('%', '_'));
+
+            if (name == namedStyle.style->parentName()) {
+                charStyle = c;
+                break;
+            }
+        }
+        // next save it and also parents to the parent
+        while (charStyle && !savedCharStyles.contains(charStyle)) {
+           QString name(QString(QUrl::toPercentEncoding(charStyle->name(), "", " ")).replace('%', '_'));
+            KoGenStyle style(KoGenStyle::TextStyle, "text");
+            charStyle->saveOdf(style);
+            QString newName = context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
+            textSharedSavingData->setStyleName(charStyle->styleId(), newName);
+
+            savedCharStyles.insert(charStyle);
+            charStyle = charStyle->parentStyle();
+        }
+    }
+}
+
 void KoStyleManager::saveOdf(KoShapeSavingContext &context)
 {
     KoTextSharedSavingData *textSharedSavingData = 0;
@@ -340,8 +405,12 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
 
 void KoStyleManager::add(KoCharacterStyle *style)
 {
-    if (d->charStyles.key(style, -1) != -1)
+    if (d->charStyles.key(style, -1) != -1) {
         return;
+    }
+    if (characterStyle(style->name())) {
+        return;
+    }
     style->setParent(this);
     style->setStyleId(d->s_stylesNumber);
     if (style->isApplied() && !d->m_usedCharacterStyles.contains(d->s_stylesNumber)) {
@@ -355,8 +424,12 @@ void KoStyleManager::add(KoCharacterStyle *style)
 
 void KoStyleManager::add(KoParagraphStyle *style)
 {
-    if (d->paragStyles.key(style, -1) != -1)
+    if (d->paragStyles.key(style, -1) != -1) {
         return;
+    }
+    if (paragraphStyle(style->name())) {
+        return;
+    }
     style->setParent(this);
     style->setStyleId(d->s_stylesNumber);
     if (style->isApplied() && !d->m_usedParagraphStyles.contains(d->s_stylesNumber)) {

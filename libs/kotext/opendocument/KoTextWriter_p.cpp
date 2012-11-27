@@ -520,12 +520,12 @@ QString KoTextWriter::Private::saveCharacterStyle(const QTextCharFormat &charFor
 
     if (autoStyle->isEmpty()) { // This is the real, unmodified character style.
         if (originalCharStyle != defaultCharStyle) {
-            KoGenStyle style(KoGenStyle::ParagraphStyle, "text");
+            KoGenStyle style(KoGenStyle::TextStyle, "text");
             originalCharStyle->saveOdf(style);
             generatedName = context.mainStyles().insert(style, internalName, KoGenStyles::DontAddNumberToName);
         }
     } else { // There are manual changes... We'll have to store them then
-        KoGenStyle style(KoGenStyle::ParagraphAutoStyle, "text", originalCharStyle != defaultCharStyle ? internalName : "" /*parent*/);
+        KoGenStyle style(KoGenStyle::TextAutoStyle, "text", originalCharStyle != defaultCharStyle ? internalName : "" /*parent*/);
         if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
             style.setAutoStyleInStylesDotXml(true);
 

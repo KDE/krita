@@ -25,6 +25,7 @@
 #include "KoTextWriter.h"
 #include <KoGenChanges.h>
 #include <KoShapeSavingContext.h>
+#include <KoTextDocument.h>
 
 #include <opendocument/KoTextSharedSavingData.h>
 #include "KoTextSopranoRdfModel_p.h"
@@ -97,3 +98,7 @@ QSharedPointer<Soprano::Model> KoTextOdfSaveHelper::rdfModel() const
     return d->rdfModel;
 }
 
+KoStyleManager *KoTextOdfSaveHelper::styleManager() const
+{
+    return KoTextDocument(d->document).styleManager();
+}

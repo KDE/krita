@@ -36,6 +36,7 @@
 #include <KoOdfDocument.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include "KoShapeSavingContext.h"
+#include "KoStyleManager.h"
 #include <opendocument/KoTextSharedSavingData.h>
 
 #include "KoTextOdfSaveHelper.h"
@@ -108,6 +109,10 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
 
     if (!helper.writeBody()) {
         return false;
+    }
+    // Save the named styles that was referred to by the copied text
+    if (KoStyleManager *styleManager = helper.styleManager()) {
+        styleManager->saveReferredStylesToOdf(*context);
     }
 
     mainStyles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);

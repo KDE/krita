@@ -26,6 +26,8 @@
 
 class QTextDocument;
 class KoXmlWriter;
+class KoStyleManager;
+
 namespace Soprano
 {
     class Model;
@@ -50,6 +52,7 @@ public:
     void setRdfModel(QSharedPointer<Soprano::Model> m);
     QSharedPointer<Soprano::Model> rdfModel() const;
 
+    KoStyleManager *styleManager() const;
 private:
     struct Private;
     Private * const d;

@@ -21,7 +21,10 @@
 #ifndef MODEL_H
 #define MODEL_H
 
+#include "AbstractStylesModel.h"
+
 #include <QAbstractListModel>
+
 #include <QSize>
 
 class KoStyleThumbnailer;
@@ -37,19 +40,20 @@ class QSignalMapper;
   * Character styles in ODF can be specified in two ways. First, a named character style, specifying character formatting properties. It is meant to be used on a couple of individual characters. Secondely, a paragraph style also specifies character formatting properties, which are to be considered the default for that particular paragraph.
   * For this reason, the @class Stylesmodel, when of the type @value characterStyle, do not list the paragraph style names. Only the specific named chracter styles are listed. Additionally, as the first item, a virtual style "As paragraph" is provided. Selecting this "style" will set the character properties as specified by the paragraph style currently applied to the selection.
   * This class requires that a @class KoStyleManager and a @class KoStyleThumbnailer be set. See below methods.
+  *
+  * The StylesModel re-implement the AbstractStylesModel interface. Several components assume the following properties:
+  * - the StylesModel is a flat list of items (this also means that "parent" QModelIndexes are always invalid)
+  * - the StylesModel has only one column
+  * - there is no header in the model
+  * - only the following methods are used when updating the underlying model's data: resetModel, insertRows, moveRows, removeRows
 */
 
-class StylesModel : public QAbstractListModel
+class StylesModel : public AbstractStylesModel
 {
     Q_OBJECT
 
 public:
-    enum Type {
-        CharacterStyle,
-        ParagraphStyle
-    };
-
-    explicit StylesModel(KoStyleManager *styleManager, Type modelType, QObject *parent = 0);
+    explicit StylesModel(KoStyleManager *styleManager, AbstractStylesModel::Type modelType, QObject *parent = 0);
     ~StylesModel();
 
     /** Re-implemented from QAbstractItemModel. */
@@ -62,22 +66,40 @@ public:
 
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 
+    virtual QModelIndex parent(const QModelIndex &child) const;
+
+    virtual int columnCount(const QModelIndex &parent) const;
+
+    /** *********************************** */
     /** Specific methods of the StylesModel */
+
+    /** ************************* */
+    /** Initialising of the model */
 
     /** Specify if the combo should provide the virtual style None. This style is a virtual style which equates to no style. It is only relevant for character styles.
         In case the "None" character style is selected, the character formatting properties of the paragraph style are used.
         A @class StylesModel of the @enum Type ParagraphStyle always has this property set to false.
         On the other hand, the default for a @class StylesModel of the @enum Type CharacterStyle is true.
+
+        It is important to set this before setting the stylemanager on the model. The flag is used when populating the styles from the KoStyleManager.
     */
     void setProvideStyleNone(bool provide);
 
-    /** Returns the @class KoParagraphStyle corresponding to the specified @param index. */
-    KoParagraphStyle *paragraphStyleForIndex(const QModelIndex &index) const;
+    /** Sets the @class KoStyleManager of the model. Setting this will populate the styles. It is required that a @param manager is set before using the model.
+      * CAUTION: Populating the style will select the first inserted item. If this model is already set on a view, this might cause the view to emit an item selection changed signal.
+    */
+    void setStyleManager(KoStyleManager *manager);
+
+    /** Sets the @class KoStyleThumbnailer of the model. It is required that a @param thumbnailer is set before using the model. */
+    void setStyleThumbnailer(KoStyleThumbnailer *thumbnailer);
+
+
+    /** *************** */
+    /** Using the model */
+
     /** Return a @class QModelIndex for the specified @param style. */
     QModelIndex indexForParagraphStyle(const KoParagraphStyle &style) const;
 
-    /** Returns the @class KoCharacterhStyle corresponding to the specified @param index. */
-    KoCharacterStyle *characterStyleForIndex(const QModelIndex &index) const;
     /** Return a @class QModelIndex for the specified @param style. */
     QModelIndex indexForCharacterStyle(const KoCharacterStyle &style) const;
 
@@ -85,13 +107,6 @@ public:
       * If size isn't specified, the default size of the given @class KoStyleThumbnailer is used.
     */
     QImage stylePreview(int row, QSize size = QSize());
-
-    /** Sets the @class KoStyleManager of the model. Setting this will populate the styles. It is required that a @param manager is set before using the model.
-      * CAUTION: Populating the style will select the first inserted item. If this model is already set on a view, this might cause the view to emit an item selection changed signal.
-    */
-    void setStyleManager(KoStyleManager *manager);
-    /** Sets the @class KoStyleThumbnailer of the model. It is required that a @param thumbnailer is set before using the model. */
-    void setStyleThumbnailer(KoStyleThumbnailer *thumbnailer);
 
     /** Specifies which paragraph style is currently the active one (on the current paragraph). This is used in order to properly preview the "As paragraph" virtual character style. */
     void setCurrentParagraphStyle(int styleId);
@@ -115,12 +130,21 @@ public:
     /** we call this when we apply our unapplied styles and we clear our list. */
     void clearDraftStyles();
 
+    /** We call this when we want a clear style model. */
+    void clearStyleModel();
+
+    /** Returns the type of styles in the model */
+    AbstractStylesModel::Type stylesType() const;
+
 private slots:
-    void addParagraphStyle(KoParagraphStyle*);
-    void addCharacterStyle(KoCharacterStyle*);
     void removeParagraphStyle(KoParagraphStyle*);
     void removeCharacterStyle(KoCharacterStyle*);
     void updateName(int styleId);
+
+public slots:
+    void addParagraphStyle(KoParagraphStyle*);
+    void addCharacterStyle(KoCharacterStyle*);
+
 
 private:
     void updateParagraphStyles();
@@ -133,11 +157,9 @@ protected:
 
 private:
     KoStyleManager *m_styleManager;
-    KoStyleThumbnailer *m_styleThumbnailer;
 
     KoParagraphStyle *m_currentParagraphStyle;
     KoCharacterStyle *m_defaultCharacterStyle;
-    Type m_modelType;
 
     QSignalMapper *m_styleMapper;
 

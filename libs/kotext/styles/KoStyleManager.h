@@ -30,6 +30,7 @@
 
 #include <QObject>
 #include <QMetaType>
+#include <QVector>
 
 class QTextDocument;
 class KoCharacterStyle;
@@ -447,6 +448,9 @@ public:
 
     KoParagraphStyle *unusedStyle(int id);
 
+    QVector<int> usedCharacterStyles() const;
+    QVector<int> usedParagraphStyles() const;
+
 signals:
     void styleAdded(KoParagraphStyle*);
     void styleAdded(KoCharacterStyle*);
@@ -466,6 +470,8 @@ signals:
     void styleRemoved(KoSectionStyle*);
     void styleAltered(KoParagraphStyle*);
     void styleAltered(KoCharacterStyle*);
+    void styleApplied(const KoCharacterStyle*);
+    void styleApplied(const KoParagraphStyle*);
 
 public slots:
     /**
@@ -522,6 +528,9 @@ public slots:
      * Note that successive calls are aggregated.
      */
     void alteredStyle(const KoSectionStyle *style);
+
+    void slotAppliedStyle(const KoCharacterStyle*);
+    void slotAppliedStyle(const KoParagraphStyle*);
 
 private:
     friend class ChangeFollower;

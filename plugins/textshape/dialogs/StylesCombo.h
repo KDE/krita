@@ -23,7 +23,7 @@
 
 class QListView;
 
-class StylesModel;
+class AbstractStylesModel;
 class StylesComboPreview;
 
 /** This combo is specifically designed to allow choosing a text style, be it a character style or a paragraph style.
@@ -42,7 +42,7 @@ public:
     ~StylesCombo();
 
     /** Use this method to set the @param model of the combo. */
-    void setStylesModel(StylesModel *model);
+    void setStylesModel(AbstractStylesModel *model);
 
     /** This method is an override of QComboBox setLineEdit. We need to make it public since its Qt counterpart is public. However, this method is not supposed to be used (unless you know what you are doing). The StylesCombo relies on its own internal QLineEdit subclass for quite a lot of its functionnality. There is no guarantee that the whole thing will work in case the line edit is replaced */
     void setLineEdit(QLineEdit *lineEdit);
@@ -94,7 +94,7 @@ private slots:
     void slotPreviewClicked();
 
 private:
-    StylesModel *m_stylesModel;
+    AbstractStylesModel *m_stylesModel;
     StylesComboPreview *m_preview;
     QListView *m_view;
     int m_selectedItem;

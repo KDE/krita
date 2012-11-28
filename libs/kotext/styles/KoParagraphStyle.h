@@ -192,6 +192,8 @@ public:
     /// Destructor
     ~KoParagraphStyle();
 
+    virtual KoCharacterStyle::Type styleType() const;
+
     /// Creates a KoParagraphStyle that represents the formatting of \a block.
     static KoParagraphStyle *fromBlock(const QTextBlock &block, QObject *parent = 0);
 
@@ -473,7 +475,7 @@ public:
     KoBorder::BorderStyle bottomBorderStyle() const;
     void setBottomBorderColor(const QColor &color);
     QColor bottomBorderColor() const;
- 
+
     bool joinBorder() const;
     void setJoinBorder(bool value);
 
@@ -720,8 +722,14 @@ public:
 
     void applyParagraphListStyle(QTextBlock &block, const QTextBlockFormat &blockFormat) const;
 
+    /** Returns true if the style is in use.
+     */
+    bool isApplied() const;
+
+
 signals:
     void nameChanged(const QString &newName);
+    void styleApplied(const KoParagraphStyle*) const;
 
 private:
     /**
@@ -739,4 +747,5 @@ private:
     Private * const d;
 };
 Q_DECLARE_METATYPE(KoListStyle *)
+Q_DECLARE_METATYPE(QSharedPointer<KoParagraphStyle>)
 #endif

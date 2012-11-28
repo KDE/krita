@@ -445,6 +445,7 @@ void KoTextEditor::setStyle(KoCharacterStyle *style)
     recursivelyVisitSelection(d->document->rootFrame()->begin(), visitor);
     d->updateState(KoTextEditor::Private::NoOp);
     emit textFormatChanged();
+    emit characterStyleApplied(style);
 }
 
 
@@ -486,6 +487,7 @@ void KoTextEditor::setStyle(KoParagraphStyle *style)
     recursivelyVisitSelection(d->document->rootFrame()->begin(), visitor);
 
     d->updateState(KoTextEditor::Private::NoOp);
+    emit paragraphStyleApplied(style);
     emit textFormatChanged();
 }
 

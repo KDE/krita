@@ -30,7 +30,10 @@
 class TextTool;
 class KoStyleManager;
 class KoCharacterStyle;
+class KoParagraphStyle;
 class KoStyleThumbnailer;
+class DockerStylesComboModel;
+class StylesDelegate;
 class StylesModel;
 
 class SimpleCharacterWidget : public QWidget
@@ -40,10 +43,13 @@ public:
     explicit SimpleCharacterWidget(TextTool *tool, QWidget *parent = 0);
     virtual ~SimpleCharacterWidget();
 
+    void setInitialUsedStyles(QVector<int> list);
+
 public slots:
     void setStyleManager(KoStyleManager *sm);
     void setCurrentFormat(const QTextCharFormat& format, const QTextCharFormat& refBlockCharFormat);
     void setCurrentBlockFormat(const QTextBlockFormat &format);
+    void slotCharacterStyleApplied(const KoCharacterStyle *style);
 
 private slots:
     void fontFamilyActivated(int index);
@@ -71,6 +77,8 @@ private:
     QTextBlockFormat m_currentBlockFormat;
     KoStyleThumbnailer *m_thumbnailer;
     StylesModel *m_stylesModel;
+    DockerStylesComboModel *m_sortedStylesModel;
+    StylesDelegate *m_stylesDelegate;
 };
 
 #endif

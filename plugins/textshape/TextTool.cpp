@@ -497,7 +497,7 @@ void TextTool::createActions()
 
 #ifndef NDEBUG
     action = new KAction("Paragraph Debug", this); // do NOT add i18n!
-    action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_P);
+    action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_P);
     addAction("detailed_debug_paragraphs", action);
     connect(action, SIGNAL(triggered()), this, SLOT(debugTextDocument()));
     action = new KAction("Styles Debug", this); // do NOT add i18n!
@@ -908,7 +908,8 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
             m_clickWithinSelection = true;
             m_draggingOrigin = event->pos(); //we store the pixel pos
         } else if (! (event->button() == Qt::RightButton && m_textEditor.data()->hasSelection())) {
-            m_textEditor.data()->setPosition(pointedAt.position, shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);                useCursor(Qt::IBeamCursor);
+            m_textEditor.data()->setPosition(pointedAt.position, shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
+            useCursor(Qt::IBeamCursor);
         }
         m_tableDragInfo.tableHit = KoPointedAt::None;
         if (m_caretTimer.isActive()) { // make the caret not blink, (blinks again after first draw)
@@ -2077,6 +2078,8 @@ QList<QWidget *> TextTool::createOptionWidgets()
     SimpleCharacterWidget *scw = new SimpleCharacterWidget(this, 0);
     SimpleParagraphWidget *spw = new SimpleParagraphWidget(this, 0);
     if (m_textEditor.data()) {
+//        connect(m_textEditor.data(), SIGNAL(paragraphStyleApplied(KoParagraphStyle*)), spw, SLOT(slotParagraphStyleApplied(KoParagraphStyle*)));
+//        connect(m_textEditor.data(), SIGNAL(characterStyleApplied(KoCharacterStyle*)), scw, SLOT(slotCharacterStyleApplied(KoCharacterStyle*)));
         //initialise the char- and par- widgets with the current block and formats.
         scw->setCurrentBlockFormat(m_textEditor.data()->blockFormat());
         scw->setCurrentFormat(m_textEditor.data()->charFormat(), m_textEditor.data()-> blockCharFormat());
@@ -2086,6 +2089,12 @@ QList<QWidget *> TextTool::createOptionWidgets()
     SimpleTableWidget *stw = new SimpleTableWidget(this, 0);
     SimpleInsertWidget *siw = new SimpleInsertWidget(this, 0);
 
+/* We do not use these for now. Let's see if they become usefull at a certain point in time. If not, we can remove the whole chain (SimpleCharWidget, SimpleParWidget, DockerStyleComboModel)
+    if (m_textShapeData && KoTextDocument(m_textShapeData->document()).styleManager()) {
+        scw->setInitialUsedStyles(KoTextDocument(m_textShapeData->document()).styleManager()->usedCharacterStyles());
+        spw->setInitialUsedStyles(KoTextDocument(m_textShapeData->document()).styleManager()->usedParagraphStyles());
+    }
+*/
     // Connect to/with simple character widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), scw, SLOT(setStyleManager(KoStyleManager *)));
     connect(this, SIGNAL(charFormatChanged(QTextCharFormat, QTextCharFormat)), scw, SLOT(setCurrentFormat(QTextCharFormat, QTextCharFormat)));

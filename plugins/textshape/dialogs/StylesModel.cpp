@@ -27,21 +27,21 @@
 
 #include <QImage>
 #include <QList>
+#include <QSharedPointer>
 #include <QSignalMapper>
 
 #include <KLocale>
 #include <KDebug>
 
-StylesModel::StylesModel(KoStyleManager *manager, Type modelType, QObject *parent)
-    : QAbstractListModel(parent),
+StylesModel::StylesModel(KoStyleManager *manager, AbstractStylesModel::Type modelType, QObject *parent)
+    : AbstractStylesModel(parent),
       m_styleManager(0),
-      m_styleThumbnailer(0),
       m_currentParagraphStyle(0),
       m_defaultCharacterStyle(0),
-      m_modelType(modelType),
       m_styleMapper(new QSignalMapper(this)),
       m_provideStyleNone(false)
 {
+    m_modelType = modelType;
     setStyleManager(manager);
     //Create a default characterStyle for the preview of "None" character style
     if (m_modelType == StylesModel::CharacterStyle) {
@@ -75,12 +75,21 @@ QModelIndex StylesModel::index(int row, int column, const QModelIndex &parent) c
     return QModelIndex();
 }
 
+QModelIndex StylesModel::parent(const QModelIndex &child) const
+{
+    return QModelIndex();
+}
 
 int StylesModel::rowCount(const QModelIndex &parent) const
 {
     if (!parent.isValid())
         return m_styleList.count();
     return 0;
+}
+
+int StylesModel::columnCount(const QModelIndex &parent) const
+{
+    return 1;
 }
 
 QVariant StylesModel::data(const QModelIndex &index, int role) const
@@ -165,13 +174,6 @@ void StylesModel::setProvideStyleNone(bool provide)
     }
 }
 
-KoParagraphStyle *StylesModel::paragraphStyleForIndex(const QModelIndex &index) const
-{
-    if (m_draftParStyleList.contains(index.internalId()))
-        return m_draftParStyleList[index.internalId()];
-    return m_styleManager->paragraphStyle(index.internalId());
-}
-
 QModelIndex StylesModel::indexForParagraphStyle(const KoParagraphStyle &style) const
 {
     if (&style) {
@@ -181,13 +183,6 @@ QModelIndex StylesModel::indexForParagraphStyle(const KoParagraphStyle &style) c
     else {
         return QModelIndex();
     }
-}
-
-KoCharacterStyle *StylesModel::characterStyleForIndex(const QModelIndex &index) const
-{
-    if (m_draftCharStyleList.contains(index.internalId()))
-        return m_draftCharStyleList[index.internalId()];
-    return m_styleManager->characterStyle(index.internalId());
 }
 
 QModelIndex StylesModel::indexForCharacterStyle(const KoCharacterStyle &style) const
@@ -374,9 +369,11 @@ void StylesModel::updateCharacterStyles()
     qSort(styles.begin(), styles.end(), sortCharacterStyleByName);
 
     foreach(KoCharacterStyle *style, styles) {
-        m_styleList.append(style->styleId());
-        m_styleMapper->setMapping(style, style->styleId());
-        connect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
+        if (style != m_styleManager->defaultCharacterStyle()) { //The default character style is not user selectable. It only provides individual property defaults and is not a style per say.
+            m_styleList.append(style->styleId());
+            m_styleMapper->setMapping(style, style->styleId());
+            connect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
+        }
     }
 
     endResetModel();
@@ -435,7 +432,7 @@ void StylesModel::updateName(int styleId)
                 }
                 if (oldIndex != newIndex) {
                     // beginMoveRows needs the index where it would be placed when it is still in the old position
-                    // so add one when newIndex > oldIndex 
+                    // so add one when newIndex > oldIndex
                     beginMoveRows(QModelIndex(), oldIndex, oldIndex, QModelIndex(), newIndex > oldIndex ? newIndex + 1 : newIndex);
                     m_styleList.removeAt(oldIndex);
                     m_styleList.insert(newIndex, styleId);
@@ -472,7 +469,7 @@ void StylesModel::updateName(int styleId)
                 }
                 if (oldIndex != newIndex) {
                     // beginMoveRows needs the index where it would be placed when it is still in the old position
-                    // so add one when newIndex > oldIndex 
+                    // so add one when newIndex > oldIndex
                     beginMoveRows(QModelIndex(), oldIndex, oldIndex, QModelIndex(), newIndex > oldIndex ? newIndex + 1 : newIndex);
                     m_styleList.removeAt(oldIndex);
                     m_styleList.insert(newIndex, styleId);
@@ -485,6 +482,9 @@ void StylesModel::updateName(int styleId)
 
 QModelIndex StylesModel::firstStyleIndex()
 {
+    if (!m_styleList.count()) {
+        return QModelIndex();
+    }
     return createIndex(m_styleList.indexOf(m_styleList.at(0)), 0, m_styleList.at(0));
 }
 
@@ -530,4 +530,9 @@ void StylesModel::clearDraftStyles()
         removeCharacterStyle(style);
     }
     m_draftCharStyleList.clear();
+}
+
+StylesModel::Type StylesModel::stylesType() const
+{
+    return m_modelType;
 }

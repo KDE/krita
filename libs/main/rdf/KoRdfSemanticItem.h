@@ -341,6 +341,11 @@ public:
      */
     void saveUserStylesheets(QSharedPointer<Soprano::Model> model, const Soprano::Node &context) const;
 
+protected:
+    /**
+     * Create a new system stylesheet
+     */
+    hKoSemanticStylesheet createSystemStylesheet(const QString &uuid, const QString &name, const QString &templateString) const;
 
 protected slots:
     /**

@@ -52,9 +52,6 @@ protected:
 
     // Restrict who can make us
     friend class KoRdfSemanticItem;
-    friend class KoRdfCalendarEvent;
-    friend class KoRdfFoaF;
-    friend class KoRdfLocation;
     friend class KoRdfSemanticItemViewSite;
 
     KoSemanticStylesheet(const QString &uuid, const QString &name, const QString &templateString,

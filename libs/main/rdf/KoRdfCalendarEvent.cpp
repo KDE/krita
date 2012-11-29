@@ -284,25 +284,20 @@ QList<hKoSemanticStylesheet> KoRdfCalendarEvent::stylesheets() const
     // TODO we probably want a namespace for these (like KoXmlNS).
     QList<hKoSemanticStylesheet> stylesheets;
     stylesheets.append(
-        hKoSemanticStylesheet(
-            new KoSemanticStylesheet("92f5d6c5-2c3a-4988-9646-2f29f3731f89",
-                                     "name", "%NAME%")));
+        createSystemStylesheet("92f5d6c5-2c3a-4988-9646-2f29f3731f89",
+                               "name", "%NAME%"));
     stylesheets.append(
-        hKoSemanticStylesheet(
-            new KoSemanticStylesheet("b4817ce4-d2c3-4ed3-bc5a-601010b33363",
-                                     "summary", "%SUMMARY%")));
+        createSystemStylesheet("b4817ce4-d2c3-4ed3-bc5a-601010b33363",
+                               "summary", "%SUMMARY%"));
     stylesheets.append(
-        hKoSemanticStylesheet(
-            new KoSemanticStylesheet("853242eb-031c-4a36-abb2-7ef1881c777e",
-                                     "summary, location", "%SUMMARY%, %LOCATION%")));
+        createSystemStylesheet("853242eb-031c-4a36-abb2-7ef1881c777e",
+                               "summary, location", "%SUMMARY%, %LOCATION%"));
     stylesheets.append(
-        hKoSemanticStylesheet(
-            new KoSemanticStylesheet("2d6b87a8-23be-4b61-a881-876177812ad4",
-                                     "summary, location, start date/time", "%SUMMARY%, %LOCATION%, %START%")));
+        createSystemStylesheet("2d6b87a8-23be-4b61-a881-876177812ad4",
+                               "summary, location, start date/time", "%SUMMARY%, %LOCATION%, %START%"));
     stylesheets.append(
-        hKoSemanticStylesheet(
-            new KoSemanticStylesheet("115e3ceb-6bc8-445c-a932-baee09686895",
-                                     "summary, start date/time", "%SUMMARY%, %START%")));
+        createSystemStylesheet("115e3ceb-6bc8-445c-a932-baee09686895",
+                               "summary, start date/time", "%SUMMARY%, %START%"));
     return stylesheets;
 }
 

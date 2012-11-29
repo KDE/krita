@@ -130,15 +130,20 @@ QList<hKoSemanticStylesheet> KoRdfFoaF::stylesheets() const
 {
     QList<hKoSemanticStylesheet> stylesheets;
     stylesheets.append(
-        hKoSemanticStylesheet(new KoSemanticStylesheet("143c1ba3-d7bb-440b-8528-7f07d2eff5f2", "name", "%NAME%")));
+        createSystemStylesheet("143c1ba3-d7bb-440b-8528-7f07d2eff5f2",
+                               "name", "%NAME%"));
     stylesheets.append(
-        hKoSemanticStylesheet(new KoSemanticStylesheet("2fad34d1-42a0-4b10-b17e-a87db5208f6d", "nick", "%NICK%")));
+        createSystemStylesheet("2fad34d1-42a0-4b10-b17e-a87db5208f6d",
+                               "nick", "%NICK%"));
     stylesheets.append(
-        hKoSemanticStylesheet(new KoSemanticStylesheet("0dd5878d-95c5-47e5-a777-63ec36da3b9a", "name, phone", "%NAME%, %PHONE%")));
+        createSystemStylesheet("0dd5878d-95c5-47e5-a777-63ec36da3b9a",
+                               "name, phone", "%NAME%, %PHONE%"));
     stylesheets.append(
-        hKoSemanticStylesheet(new KoSemanticStylesheet("9cbeb4a6-34c5-49b2-b3ef-b94277db0c59", "nick, phone", "%NICK%, %PHONE%")));
+        createSystemStylesheet("9cbeb4a6-34c5-49b2-b3ef-b94277db0c59",
+                               "nick, phone", "%NICK%, %PHONE%"));
     stylesheets.append(
-        hKoSemanticStylesheet(new KoSemanticStylesheet("47025a4a-5da5-4a32-8d89-14c03658631d", "name, (homepage), phone", "%NAME%, (%HOMEPAGE%), %PHONE%")));
+        createSystemStylesheet("47025a4a-5da5-4a32-8d89-14c03658631d",
+                               "name, (homepage), phone", "%NAME%, (%HOMEPAGE%), %PHONE%"));
     return stylesheets;
 }
 

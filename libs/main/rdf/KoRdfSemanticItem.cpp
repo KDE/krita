@@ -450,6 +450,14 @@ hKoSemanticStylesheet KoRdfSemanticItem::createUserStylesheet(const QString &nam
     return ss;
 }
 
+hKoSemanticStylesheet KoRdfSemanticItem::createSystemStylesheet(const QString &uuid, const QString &name, const QString &templateString) const
+{
+    const bool isNotMutable = false;
+    hKoSemanticStylesheet ss =
+        hKoSemanticStylesheet(new KoSemanticStylesheet(uuid, name, templateString, KoSemanticStylesheet::stylesheetTypeSystem(), isNotMutable));
+    return ss;
+}
+
 void KoRdfSemanticItem::onUserStylesheetRenamed(hKoSemanticStylesheet ss, const QString &oldName, const QString &newName)
 {
     Q_UNUSED(ss);

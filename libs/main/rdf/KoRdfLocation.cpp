@@ -264,13 +264,12 @@ QList<hKoSemanticStylesheet> KoRdfLocation::stylesheets() const
 {
     QList<hKoSemanticStylesheet> stylesheets;
     stylesheets.append(
-        hKoSemanticStylesheet(
-            new KoSemanticStylesheet("33314909-7439-4aa1-9a55-116bb67365f0", "name", "%NAME%")));
+        createSystemStylesheet("33314909-7439-4aa1-9a55-116bb67365f0",
+                               "name", "%NAME%"));
     stylesheets.append(
-        hKoSemanticStylesheet(
-            new KoSemanticStylesheet("34584133-52b0-449f-8b7b-7f1ef5097b9a",
-                                     "name, digital latitude, digital longitude",
-                                     "%NAME%, %DLAT%, %DLONG%")));
+        createSystemStylesheet("34584133-52b0-449f-8b7b-7f1ef5097b9a",
+                               "name, digital latitude, digital longitude",
+                               "%NAME%, %DLAT%, %DLONG%"));
     return stylesheets;
 }
 

@@ -1195,11 +1195,8 @@ void KoDocumentRdf::emitSemanticObjectUpdated(hKoRdfSemanticItem item)
         // reflow the formatting for each view of the semanticItem, in reverse document order
         //
         QMap<int, reflowItem> col;
-        QStringList xmlidlist = item->xmlIdList();
-        foreach (const QString &xmlid, xmlidlist) {
-            RDEBUG << "xmlid:" << xmlid << " reflow item:" << item->name();
-            insertReflow(col, item);
-        }
+        RDEBUG << "xmlids:" << item->xmlIdList() << " reflow item:" << item->name();
+        insertReflow(col, item);
         applyReflow(col);
     }
     emit semanticObjectUpdated(item);
@@ -1267,10 +1264,10 @@ void KoDocumentRdf::applyReflow(const QMap<int, reflowItem> &col)
     QMapIterator< int, reflowItem > i(col);
     i.toBack();
     while (i.hasPrevious()) {
-        reflowItem item = i.previous().value();
+        const reflowItem &item = i.previous().value();
         RDEBUG << "format(), extent:" << item.m_extent;
         RDEBUG << "xmlid:" << item.m_xmlid;
-        RDEBUG << "format(), semitem:" << item.m_si;
+        RDEBUG << "format(), semitem:" << item.m_si.constData();
         RDEBUG << "format(), semitem.name:" << item.m_si->name();
         if (item.m_ss) {
             KoRdfSemanticItemViewSite vs(item.m_si, item.m_xmlid);

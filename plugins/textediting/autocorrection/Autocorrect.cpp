@@ -791,7 +791,7 @@ void Autocorrect::readAutocorrectXmlEntry(const QString &fname, bool onlyCustomi
     }
 
     QDomElement doubleQuote = de.namedItem(QLatin1String("DoubleQuote")).toElement();
-    if(doubleQuote.isNull()) {
+    if(!doubleQuote.isNull()) {
       QDomNodeList nl = doubleQuote.childNodes();
       if(nl.count()==1) {
         QDomElement element = nl.item(0).toElement();
@@ -801,7 +801,7 @@ void Autocorrect::readAutocorrectXmlEntry(const QString &fname, bool onlyCustomi
     }
 
     QDomElement singleQuote = de.namedItem(QLatin1String("SimpleQuote")).toElement();
-    if(singleQuote.isNull()) {
+    if(!singleQuote.isNull()) {
       QDomNodeList nl = singleQuote.childNodes();
       if(nl.count()==1) {
         QDomElement element = nl.item(0).toElement();

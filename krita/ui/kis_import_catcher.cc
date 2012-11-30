@@ -68,16 +68,8 @@ KisImportCatcher::KisImportCatcher(const KUrl & url, KisView2 * view)
     m_d->doc->setProgressProxy(progressProxy);
     m_d->view = view;
     m_d->url = url;
-    KoFilterManager manager(m_d->doc);
     m_d->doc->openUrl(url);
 
-//    if (KMimeType::findByUrl(url)->name() == "application/x-krita") {
-//        m_d->doc->loadNativeFormat(url.toLocalFile());
-//    }
-//    else {
-//        KoFilter::ConversionStatus status;
-//        manager.importDocument(url.pathOrUrl(), QString(), status);
-//    }
     KisImageWSP importedImage = m_d->doc->image();
 
     if (importedImage) {

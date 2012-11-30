@@ -34,7 +34,7 @@ include_directories(
 if (HAVE_LCMS24 AND OPENEXR_FOUND)
 include_directories( 
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/rgb_f16
-    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/ycbcr_f16
+    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/xyz_f16
 )
 endif (HAVE_LCMS24 AND OPENEXR_FOUND)
 

@@ -131,7 +131,7 @@ using namespace KoProperty;
 Factory::Factory()
     : d( new Private )
 {
-    KIconLoader::global()->addAppDir(KOPROPERTY_APP_DIR);
+    KIconLoader::global()->addAppDir("koproperty");
 }
 
 Factory::~Factory()

@@ -38,9 +38,7 @@
 #include "editors/sizepolicyedit.h"
 #include "editors/spinbox.h"
 /*#include "stringlistedit.h"*/
-#ifdef KOPROPERTY_USE_KOLIBS
-# include "editors/linestyleedit.h"
-#endif
+#include "editors/linestyleedit.h"
 #include "editors/stringedit.h"
 /*#include "symbolcombo.h"
 #include "timeedit.h"
@@ -60,9 +58,7 @@ DefaultFactory::DefaultFactory()
     addEditor( KoProperty::Double, new DoubleSpinBoxDelegate );
     addEditor( KoProperty::Font, new FontDelegate );
     addEditor( KoProperty::Int, new IntSpinBoxDelegate );
-#ifdef KOPROPERTY_USE_KOLIBS
     addEditor( KoProperty::LineStyle, new LineStyleComboDelegate );
-#endif
 //! @todo addEditor( KoProperty::LongLong, new LongLongSpinBoxDelegate );
     addEditor( KoProperty::Pixmap, new PixmapDelegate );
     addEditor( KoProperty::Point, new PointDelegate );

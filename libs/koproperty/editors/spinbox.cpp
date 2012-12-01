@@ -37,9 +37,7 @@
 #include <QEvent>
 #include <QLineEdit>
 
-#ifdef KOPROPERTY_USE_KOLIBS
-# include <KoUnit.h>
-#endif
+#include <KoUnit.h>
 
 using namespace KoProperty;
 
@@ -317,22 +315,18 @@ void DoubleSpinBox::resizeEvent( QResizeEvent * event )
 
 void DoubleSpinBox::setValue(double v)
 {
-#ifdef KOPROPERTY_USE_KOLIBS
     if (!m_unit.isEmpty()) {
         KDoubleNumInput::setValue(KoUnit::fromSymbol(m_unit).toUserValue(v));
         return;
     }
-#endif
     KDoubleNumInput::setValue(v);
 }
 
 double DoubleSpinBox::value() const
 {
-#ifdef KOPROPERTY_USE_KOLIBS
     if (!m_unit.isEmpty()) {
         return KoUnit::fromSymbol(m_unit).fromUserValue(KDoubleNumInput::value());
     }
-#endif
     return KDoubleNumInput::value();
 }
 
@@ -543,12 +537,10 @@ QString DoubleSpinBoxDelegate::displayTextForProperty( const Property* prop ) co
 //! @todo precision?
 //! @todo rounding using KLocale::formatNumber(const QString &numStr, bool round = true,int precision = 2)?
     QString display;
-#ifdef KOPROPERTY_USE_KOLIBS
     if (!unit.isEmpty()) {
         return KGlobal::locale()->formatNumber(KoUnit::fromSymbol(unit).toUserValue(prop->value().toDouble())) +
                QLatin1Char(' ') + unit;
     }
-#endif
     return KGlobal::locale()->formatNumber(prop->value().toDouble());
 }
 

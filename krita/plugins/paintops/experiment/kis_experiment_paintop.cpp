@@ -29,6 +29,7 @@
 
 #include <kis_paint_device.h>
 #include <kis_painter.h>
+#include <kis_image.h>
 
 
 KisExperimentPaintOp::KisExperimentPaintOp(const KisExperimentPaintOpSettings *settings, KisPainter * painter, KisImageSP image)

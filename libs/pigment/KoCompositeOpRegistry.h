@@ -29,6 +29,7 @@
 #include "pigment_export.h"
 
 class KoColorSpace;
+#include <KoID.h>
 
 const QString COMPOSITE_OVER         = "normal";
 const QString COMPOSITE_ERASE        = "erase";
@@ -126,9 +127,6 @@ const QString COMPOSITE_NO           = "nocomposition";
 const QString COMPOSITE_PASS_THROUGH = "pass through"; // XXX: not implemented anywhere yet
 const QString COMPOSITE_UNDEF        = "undefined";
 
-
-class KoID;
-class KoColorSpace;
 
 class PIGMENTCMS_EXPORT KoCompositeOpRegistry
 {

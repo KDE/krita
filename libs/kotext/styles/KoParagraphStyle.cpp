@@ -370,7 +370,6 @@ void KoParagraphStyle::unapplyStyle(QTextBlock &block) const
     if (d->list && block.textList()) { // TODO check its the same one?
         KoList::remove(block);
     }
-
 }
 
 void KoParagraphStyle::setLineHeightPercent(qreal lineHeight)

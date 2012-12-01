@@ -18,6 +18,7 @@
 */
 
 #include "KoColorTransformation.h"
+#include <QDebug>
 
 KoColorTransformation::~KoColorTransformation()
 {

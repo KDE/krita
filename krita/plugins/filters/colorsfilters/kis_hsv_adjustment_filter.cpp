@@ -48,6 +48,7 @@ KoColorTransformation* KisHSVAdjustmentFilter::createTransformation(const KoColo
         params["h"] = config->getInt("h", 0) / 180.0;
         params["s"] = config->getInt("s", 0) * 0.01;
         params["v"] = config->getInt("v", 0) * 0.01;
+        params["type"] = config->getInt("type", 1);
     }
     return cs->createColorTransformation("hsv_adjustment", params);
 }
@@ -58,6 +59,7 @@ KisFilterConfiguration* KisHSVAdjustmentFilter::factoryConfiguration(const KisPa
     config->setProperty("h", 0);
     config->setProperty("s", 0);
     config->setProperty("v", 0);
+    config->setProperty("type", 1);
     return config;
 }
 
@@ -65,6 +67,8 @@ KisHSVConfigWidget::KisHSVConfigWidget(QWidget * parent, Qt::WFlags f) : KisConf
 {
     m_page = new Ui_WdgHSVAdjustment();
     m_page->setupUi(this);
+
+    connect(m_page->cmbType, SIGNAL(activated(int)), SLOT(switchType(int)));
     connect(m_page->hue, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_page->value, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_page->saturation, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
@@ -81,12 +85,30 @@ KisPropertiesConfiguration * KisHSVConfigWidget::configuration() const
     c->setProperty("h", m_page->hue->value());
     c->setProperty("s", m_page->saturation->value());
     c->setProperty("v", m_page->value->value());
+    c->setProperty("type", m_page->cmbType->currentIndex());
     return c;
 }
 
 void KisHSVConfigWidget::setConfiguration(const KisPropertiesConfiguration * config)
 {
+    m_page->cmbType->setCurrentIndex(config->getInt("type", 1));
     m_page->hue->setValue(config->getInt("h", 0));
     m_page->saturation->setValue(config->getInt("s", 0));
     m_page->value->setValue(config->getInt("v", 0));
+
+    switchType(m_page->cmbType->currentIndex());
+}
+
+void KisHSVConfigWidget::switchType(int index)
+{
+    emit sigConfigurationItemChanged();
+    switch(index) {
+    case 0:
+        m_page->label_3->setText(i18n("Value"));
+        return;
+    case 1:
+    default:
+        m_page->label_3->setText(i18n("Lightness"));
+    }
+
 }

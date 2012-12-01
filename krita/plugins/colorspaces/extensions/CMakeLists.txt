@@ -1,4 +1,7 @@
-set( extensions_plugin_PART_SRCS extensions_plugin.cc kis_hsv_adjustment.cc )
+set( extensions_plugin_PART_SRCS 
+extensions_plugin.cc 
+kis_hsv_adjustment.cc 
+)
 
 kde4_add_plugin( krita_colorspaces_extensions ${extensions_plugin_PART_SRCS} )
 

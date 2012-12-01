@@ -118,6 +118,7 @@ bool KisPaintOpPreset::load()
 {
     dbgImage << "Load preset " << filename();
     setValid(false);
+
     if (filename().isEmpty()) {
         return false;
     }

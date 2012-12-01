@@ -75,28 +75,60 @@ void clamp<float>(float* r, float* g, float* b)
     Q_UNUSED(b);
 }
 
+
 template<typename _channel_type_>
 class KisHSVAdjustment : public KoColorTransformation
 {
     typedef KoBgrTraits<_channel_type_> RGBTrait;
     typedef typename RGBTrait::Pixel RGBPixel;
+
 public:
-    KisHSVAdjustment() {
+    KisHSVAdjustment()
+    {
     }
 
 public:
-    void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const {
+
+    void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
+    {
+
         const RGBPixel* src = reinterpret_cast<const RGBPixel*>(srcU8);
         RGBPixel* dst = reinterpret_cast<RGBPixel*>(dstU8);
         float h, s, v, r, g, b;
         while (nPixels > 0) {
-            RGBToHSV(SCALE_TO_FLOAT(src->red), SCALE_TO_FLOAT(src->green), SCALE_TO_FLOAT(src->blue), &h, &s, &v);
-            h += m_adj_h;
-            if (h > 360) h -= 360;
-            if (h < 0) h += 360;
-            s += m_adj_s;
-            v += m_adj_v;
-            HSVToRGB(h, s, v, &r, &g, &b);
+
+            if (m_type == 0) {
+                RGBToHSV(SCALE_TO_FLOAT(src->red), SCALE_TO_FLOAT(src->green), SCALE_TO_FLOAT(src->blue), &h, &s, &v);
+                h += m_adj_h;
+                if (h > 360) h -= 360;
+                if (h < 0) h += 360;
+                s += m_adj_s;
+                v += m_adj_v;
+                HSVToRGB(h, s, v, &r, &g, &b);
+            }
+            else {
+
+                RGBToHSL(SCALE_TO_FLOAT(src->red), SCALE_TO_FLOAT(src->green), SCALE_TO_FLOAT(src->blue), &h, &s, &v);
+
+                h += m_adj_h;
+                if (h < 0)
+                    h += 1.0;
+                else if (h > 1.0)
+                    h -= 1.0;
+
+                s *= (m_adj_s + 1.0);
+                if (s < 0.0) s = 0.0;
+                if (s > 1.0) s = 1.0;
+
+                if (m_adj_v < 0)
+                    v *= (m_adj_v + 1.0);
+                else
+                    v += (m_adj_v * (1.0 - v));
+
+
+                HSLToRGB(h, s, v, &r, &g, &b);
+            }
+
             clamp< _channel_type_ >(&r, &g, &b);
             dst->red = SCALE_FROM_FLOAT(r);
             dst->green = SCALE_FROM_FLOAT(g);
@@ -108,10 +140,11 @@ public:
             ++dst;
         }
     }
+
     virtual QList<QString> parameters() const
     {
       QList<QString> list;
-      list << "h" << "s" << "v";
+      list << "h" << "s" << "v" << "type";
       return list;
     }
 
@@ -123,6 +156,8 @@ public:
             return 1;
         } else if (name == "v") {
             return 2;
+        } else if (name == "type") {
+            return 3;
         }
         return -1;
     }
@@ -133,7 +168,8 @@ public:
     * (s)aturation in range <-1.0, 1.0> ( for user, show -100, 100)
     * (v)alue in range <-1.0, 1.0> (for user, show -100, 100)
     */
-    virtual void setParameter(int id, const QVariant& parameter) {
+    virtual void setParameter(int id, const QVariant& parameter)
+    {
         switch(id)
         {
         case 0:
@@ -145,19 +181,24 @@ public:
         case 2:
             m_adj_v = parameter.toDouble();
             break;
+        case 3:
+            m_type = parameter.toDouble();
+            break;
         default:
             qFatal("Unknown parameter id %i", id);
         }
     }
 
 private:
+
     double m_adj_h, m_adj_s, m_adj_v;
+    int m_type;
 };
 
 
-KisHSVAdjustmentFactory::KisHSVAdjustmentFactory() : KoColorTransformationFactory("hsv_adjustment", i18n("HSV Adjustment"))
+KisHSVAdjustmentFactory::KisHSVAdjustmentFactory()
+    : KoColorTransformationFactory("hsv_adjustment", i18n("HSV Adjustment"))
 {
-
 }
 
 QList< QPair< KoID, KoID > > KisHSVAdjustmentFactory::supportedModels() const

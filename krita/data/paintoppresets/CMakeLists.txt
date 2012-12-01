@@ -72,7 +72,7 @@ Rake_paint_dry_bristle.kpp
 Rake_paint_texture.kpp
 Rake_smudge.kpp
 Rake_smudge_2.kpp
-Shape_basic_fill.kpp
+Shape_fill.kpp
 Shape_smooth.kpp
 Sketch_2.kpp
 Sketch_chrome.kpp

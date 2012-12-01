@@ -17,6 +17,7 @@
  */
 
 #include "KoOptimizedCompositeOpFactory.h"
+#include "KoOptimizedCompositeOpFactory_p.h"
 
 /**
  * We include these headers even when no vectorization
@@ -33,10 +34,6 @@
 #include <Vc/common/support.h>
 #endif
 
-#include "KoColorSpaceTraits.h"
-#include "KoCompositeOpAlphaDarken.h"
-#include "KoCompositeOpOver.h"
-
 
 KoCompositeOp* KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(const KoColorSpace *cs)
 {
@@ -45,7 +42,7 @@ KoCompositeOp* KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(const KoColo
         return new KoOptimizedCompositeOpAlphaDarken32(cs);
     }
 #endif
-    return new KoCompositeOpAlphaDarken<KoBgrU8Traits>(cs);
+    return KoOptimizedCompositeOpFactoryPrivate::createLegacyAlphaDarkenOp32(cs);
 }
 
 KoCompositeOp* KoOptimizedCompositeOpFactory::createOverOp32(const KoColorSpace *cs)
@@ -55,6 +52,6 @@ KoCompositeOp* KoOptimizedCompositeOpFactory::createOverOp32(const KoColorSpace 
         return new KoOptimizedCompositeOpOver32(cs);
     }
 #endif
-    return new KoCompositeOpOver<KoBgrU8Traits>(cs);
+    return KoOptimizedCompositeOpFactoryPrivate::createLegacyOverOp32(cs);
 
 }

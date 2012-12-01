@@ -52,6 +52,7 @@ set(pigmentcms_SRCS
     colorspaces/KoRgbU8ColorSpace.cpp
     colorspaces/KoSimpleColorSpaceEngine.cpp
     compositeops/KoOptimizedCompositeOpFactory.cpp
+    compositeops/KoOptimizedCompositeOpFactory_p.cpp
     colorprofiles/KoDummyColorProfile.cpp
     resources/KoAbstractGradient.cpp
     resources/KoColorSet.cpp

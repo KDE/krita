@@ -22,7 +22,7 @@
 
 #include "config-vc.h"
 
-#ifdef HAVE_VC
+#ifdef HAVE_SANE_VC
 #include <Vc/Vc>
 #include <Vc/IO>
 #endif
@@ -86,7 +86,7 @@ static inline quint8 lerp_mixed_u8_float(quint8 a, quint8 b, float alpha) {
     return quint8(qint16(b - a) * alpha + a);
 }
 
-#if defined HAVE_VC
+#if defined HAVE_SANE_VC
 
 /**
  * Get a vector containing first Vc::float_v::Size values of mask.
@@ -304,7 +304,7 @@ template<bool useMask, bool useFlow, class Compositor>
     }
 }
 
-#else /* if ! defined HAVE_VC */
+#else /* if ! defined HAVE_SANE_VC */
 
 /**
  * Fall back to the scalar version of the composition.
@@ -320,7 +320,7 @@ template<bool useMask, bool useFlow, class Compositor>
     genericComposite32_novector<useMask, useFlow, Compositor>(params);
 }
 
-#endif /* HAVE_VC */
+#endif /* HAVE_SANE_VC */
 
 }
 

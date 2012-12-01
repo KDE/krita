@@ -31,7 +31,7 @@ template<typename channels_type, typename pixel_type, bool alphaLocked, bool all
 struct OverCompositor32 {
     // \see docs in AlphaDarkenCompositor32
 
-#ifdef HAVE_VC
+#ifdef HAVE_SANE_VC
 
     template<bool haveMask, bool src_aligned>
     static ALWAYS_INLINE void compositeVector(const quint8 *src, quint8 *dst, const quint8 *mask, float opacity, float flow)
@@ -119,7 +119,7 @@ struct OverCompositor32 {
         KoStreamedMath::write_channels_32(dst, new_alpha, dst_c1, dst_c2, dst_c3);
     }
 
-#endif /* HAVE_VC */
+#endif /* HAVE_SANE_VC */
 
     template <bool haveMask>
     static ALWAYS_INLINE void compositeOnePixelScalar(const channels_type *src, channels_type *dst, const quint8 *mask, float opacity, float flow, const QBitArray &channelFlags)

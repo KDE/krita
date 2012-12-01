@@ -39,10 +39,10 @@ struct AlphaDarkenCompositor32 {
      *   \p src_aligned.
      * o the \p dst pointer must always(!) be aligned to the boundary
      *   of a streaming vector. Unaligned writes are really expensive.
-     * o This function is *never* used if HAVE_VC is not present
+     * o This function is *never* used if HAVE_SANE_VC is not present
      */
 
-#ifdef HAVE_VC
+#ifdef HAVE_SANE_VC
 
     template<bool haveMask, bool src_aligned>
     static ALWAYS_INLINE void compositeVector(const quint8 *src, quint8 *dst, const quint8 *mask, float opacity, float flow)
@@ -139,7 +139,7 @@ struct AlphaDarkenCompositor32 {
         KoStreamedMath::write_channels_32(dst, dst_alpha, dst_c1, dst_c2, dst_c3);
     }
 
-#endif /* HAVE_VC */
+#endif /* HAVE_SANE_VC */
 
     /**
      * Composes one pixel of the source into the destination

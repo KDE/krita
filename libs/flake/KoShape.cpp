@@ -1034,8 +1034,9 @@ void KoShape::setRunThrough(short int runThrough)
 void KoShape::setVisible(bool on)
 {
     Q_D(KoShape);
-    if (d->visible == on) return;
-    d->visible = on;
+    int _on = (on ? 1 : 0);
+    if (d->visible == _on) return;
+    d->visible = _on;
 }
 
 bool KoShape::isVisible(bool recursive) const

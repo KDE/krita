@@ -2,8 +2,6 @@
 
 /* Define if you have Vc, the vectorization library */
 #cmakedefine HAVE_VC 1
-#ifndef Q_CC_MSVC
 #cmakedefine HAVE_SANE_VC 1
-#endif
 
 

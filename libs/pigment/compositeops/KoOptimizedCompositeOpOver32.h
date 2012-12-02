@@ -161,9 +161,15 @@ struct OverCompositor32 {
 
             if(allChannelsFlag) {
                 if (srcBlendNorm == 1.0) {
-                    const pixel_type *s = reinterpret_cast<const pixel_type*>(src);
-                    pixel_type *d = reinterpret_cast<pixel_type*>(dst);
-                    *d = *s;
+                    if (!alphaLocked) {
+                        const pixel_type *s = reinterpret_cast<const pixel_type*>(src);
+                        pixel_type *d = reinterpret_cast<pixel_type*>(dst);
+                        *d = *s;
+                    } else {
+                        dst[0] = src[0];
+                        dst[1] = src[1];
+                        dst[2] = src[2];
+                    }
                 } else if (srcBlendNorm != 0.0){
                     dst[0] = KoStreamedMath::lerp_mixed_u8_float(dst[0], src[0], srcBlendNorm);
                     dst[1] = KoStreamedMath::lerp_mixed_u8_float(dst[1], src[1], srcBlendNorm);

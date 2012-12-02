@@ -21,7 +21,6 @@
 #ifndef KOOPTIMIZEDCOMPOSITEOPALPHADARKEN32_H_
 #define KOOPTIMIZEDCOMPOSITEOPALPHADARKEN32_H_
 
-#include "KoCompositeOpFunctions.h"
 #include "KoCompositeOpBase.h"
 
 #include "KoStreamedMath.h"
@@ -42,9 +41,7 @@ struct AlphaDarkenCompositor32 {
      * o This function is *never* used if HAVE_SANE_VC is not present
      */
 
-#ifdef HAVE_SANE_VC
-
-    template<bool haveMask, bool src_aligned>
+    template<bool haveMask, bool src_aligned, Vc::Implementation _impl>
     static ALWAYS_INLINE void compositeVector(const quint8 *src, quint8 *dst, const quint8 *mask, float opacity, float flow)
     {
         Vc::float_v src_alpha;
@@ -61,16 +58,16 @@ struct AlphaDarkenCompositor32 {
 
 
         Vc::float_v msk_norm_alpha;
-        src_alpha = KoStreamedMath::fetch_alpha_32<src_aligned>(src);
+        src_alpha = KoStreamedMath<_impl>::template fetch_alpha_32<src_aligned>(src);
 
         if (haveMask) {
-            Vc::float_v mask_vec = KoStreamedMath::fetch_mask_8(mask);
+            Vc::float_v mask_vec = KoStreamedMath<_impl>::fetch_mask_8(mask);
             msk_norm_alpha = src_alpha * mask_vec * uint8MaxRec2;
         } else {
             msk_norm_alpha = src_alpha * uint8MaxRec1;
         }
 
-        dst_alpha = KoStreamedMath::fetch_alpha_32<true>(dst);
+        dst_alpha = KoStreamedMath<_impl>::template fetch_alpha_32<true>(dst);
         src_alpha = msk_norm_alpha * opacity_vec;
 
         Vc::float_m empty_dst_pixels_mask = dst_alpha == zeroValue;
@@ -83,7 +80,7 @@ struct AlphaDarkenCompositor32 {
         Vc::float_v dst_c2;
         Vc::float_v dst_c3;
 
-        KoStreamedMath::fetch_colors_32<src_aligned>(src, src_c1, src_c2, src_c3);
+        KoStreamedMath<_impl>::template fetch_colors_32<src_aligned>(src, src_c1, src_c2, src_c3);
 
         bool srcAlphaIsZero = (src_alpha == zeroValue).isFull();
         if (srcAlphaIsZero) return;
@@ -109,12 +106,12 @@ struct AlphaDarkenCompositor32 {
                 dst_c3 = src_c3;
             }
         } else if (empty_dst_pixels_mask.isEmpty()) {
-            KoStreamedMath::fetch_colors_32<true>(dst, dst_c1, dst_c2, dst_c3);
+            KoStreamedMath<_impl>::template fetch_colors_32<true>(dst, dst_c1, dst_c2, dst_c3);
             dst_c1 = dst_blend * (src_c1 - dst_c1) + dst_c1;
             dst_c2 = dst_blend * (src_c2 - dst_c2) + dst_c2;
             dst_c3 = dst_blend * (src_c3 - dst_c3) + dst_c3;
         } else {
-            KoStreamedMath::fetch_colors_32<true>(dst, dst_c1, dst_c2, dst_c3);
+            KoStreamedMath<_impl>::template fetch_colors_32<true>(dst, dst_c1, dst_c2, dst_c3);
             dst_c1(empty_dst_pixels_mask) = src_c1;
             dst_c2(empty_dst_pixels_mask) = src_c2;
             dst_c3(empty_dst_pixels_mask) = src_c3;
@@ -136,15 +133,13 @@ struct AlphaDarkenCompositor32 {
         alpha2(alpha2_mask) = opt1;
         dst_alpha = (alpha2 - alpha1) * flow_norm_vec + alpha1;
 
-        KoStreamedMath::write_channels_32(dst, dst_alpha, dst_c1, dst_c2, dst_c3);
+        KoStreamedMath<_impl>::write_channels_32(dst, dst_alpha, dst_c1, dst_c2, dst_c3);
     }
-
-#endif /* HAVE_SANE_VC */
 
     /**
      * Composes one pixel of the source into the destination
      */
-    template <bool haveMask>
+    template <bool haveMask, Vc::Implementation _impl>
     static ALWAYS_INLINE void compositeOnePixelScalar(const channels_type *src, channels_type *dst, const quint8 *mask, float opacity, float flow, const QBitArray &channelFlags)
     {
         Q_UNUSED(channelFlags);
@@ -176,9 +171,9 @@ struct AlphaDarkenCompositor32 {
         }
 
         if (dstAlphaInt != 0) {
-            dst[0] = KoStreamedMath::lerp_mixed_u8_float(dst[0], src[0], srcAlphaNorm);
-            dst[1] = KoStreamedMath::lerp_mixed_u8_float(dst[1], src[1], srcAlphaNorm);
-            dst[2] = KoStreamedMath::lerp_mixed_u8_float(dst[2], src[2], srcAlphaNorm);
+            dst[0] = KoStreamedMath<_impl>::lerp_mixed_u8_float(dst[0], src[0], srcAlphaNorm);
+            dst[1] = KoStreamedMath<_impl>::lerp_mixed_u8_float(dst[1], src[1], srcAlphaNorm);
+            dst[2] = KoStreamedMath<_impl>::lerp_mixed_u8_float(dst[2], src[2], srcAlphaNorm);
         } else {
             const pixel_type *s = reinterpret_cast<const pixel_type*>(src);
             pixel_type *d = reinterpret_cast<pixel_type*>(dst);
@@ -196,6 +191,7 @@ struct AlphaDarkenCompositor32 {
  * colorspaces with alpha channel placed at the last byte of
  * the pixel: C1_C2_C3_A.
  */
+template<Vc::Implementation _impl>
 class KoOptimizedCompositeOpAlphaDarken32 : public KoCompositeOp
 {
 public:
@@ -207,9 +203,9 @@ public:
     virtual void composite(const KoCompositeOp::ParameterInfo& params) const
     {
         if(params.maskRowStart) {
-            KoStreamedMath::genericComposite32<true, true, AlphaDarkenCompositor32<quint8, quint32> >(params);
+            KoStreamedMath<_impl>::template genericComposite32<true, true, AlphaDarkenCompositor32<quint8, quint32> >(params);
         } else {
-            KoStreamedMath::genericComposite32<false, true, AlphaDarkenCompositor32<quint8, quint32> >(params);
+            KoStreamedMath<_impl>::template genericComposite32<false, true, AlphaDarkenCompositor32<quint8, quint32> >(params);
         }
     }
 };

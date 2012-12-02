@@ -21,7 +21,6 @@
 #ifndef KOOPTIMIZEDCOMPOSITEOPOVER32_H_
 #define KOOPTIMIZEDCOMPOSITEOPOVER32_H_
 
-#include "KoCompositeOpFunctions.h"
 #include "KoCompositeOpBase.h"
 
 #include "KoStreamedMath.h"
@@ -31,9 +30,7 @@ template<typename channels_type, typename pixel_type, bool alphaLocked, bool all
 struct OverCompositor32 {
     // \see docs in AlphaDarkenCompositor32
 
-#ifdef HAVE_SANE_VC
-
-    template<bool haveMask, bool src_aligned>
+    template<bool haveMask, bool src_aligned, Vc::Implementation _impl>
     static ALWAYS_INLINE void compositeVector(const quint8 *src, quint8 *dst, const quint8 *mask, float opacity, float flow)
     {
         Q_UNUSED(flow);
@@ -41,7 +38,7 @@ struct OverCompositor32 {
         Vc::float_v src_alpha;
         Vc::float_v dst_alpha;
 
-        src_alpha = KoStreamedMath::fetch_alpha_32<src_aligned>(src);
+        src_alpha = KoStreamedMath<_impl>::template fetch_alpha_32<src_aligned>(src);
 
         bool haveOpacity = opacity != 1.0;
         Vc::float_v opacity_norm_vec(opacity);
@@ -54,7 +51,7 @@ struct OverCompositor32 {
         src_alpha *= opacity_norm_vec;
 
         if (haveMask) {
-            Vc::float_v mask_vec = KoStreamedMath::fetch_mask_8(mask);
+            Vc::float_v mask_vec = KoStreamedMath<_impl>::fetch_mask_8(mask);
             src_alpha *= mask_vec * uint8MaxRec1;
         }
 
@@ -64,7 +61,7 @@ struct OverCompositor32 {
             return;
         }
 
-        dst_alpha = KoStreamedMath::fetch_alpha_32<true>(dst);
+        dst_alpha = KoStreamedMath<_impl>::template fetch_alpha_32<true>(dst);
 
         Vc::float_v src_c1;
         Vc::float_v src_c2;
@@ -75,7 +72,7 @@ struct OverCompositor32 {
         Vc::float_v dst_c3;
 
 
-        KoStreamedMath::fetch_colors_32<src_aligned>(src, src_c1, src_c2, src_c3);
+        KoStreamedMath<_impl>::template fetch_colors_32<src_aligned>(src, src_c1, src_c2, src_c3);
         Vc::float_v src_blend;
         Vc::float_v new_alpha;
 
@@ -97,7 +94,7 @@ struct OverCompositor32 {
         }
 
         if (!(src_blend == oneValue).isFull()) {
-            KoStreamedMath::fetch_colors_32<true>(dst, dst_c1, dst_c2, dst_c3);
+            KoStreamedMath<_impl>::template fetch_colors_32<true>(dst, dst_c1, dst_c2, dst_c3);
 
             dst_c1 = src_blend * (src_c1 - dst_c1) + dst_c1;
             dst_c2 = src_blend * (src_c2 - dst_c2) + dst_c2;
@@ -116,12 +113,10 @@ struct OverCompositor32 {
             }
         }
 
-        KoStreamedMath::write_channels_32(dst, new_alpha, dst_c1, dst_c2, dst_c3);
+        KoStreamedMath<_impl>::write_channels_32(dst, new_alpha, dst_c1, dst_c2, dst_c3);
     }
 
-#endif /* HAVE_SANE_VC */
-
-    template <bool haveMask>
+    template <bool haveMask, Vc::Implementation _impl>
     static ALWAYS_INLINE void compositeOnePixelScalar(const channels_type *src, channels_type *dst, const quint8 *mask, float opacity, float flow, const QBitArray &channelFlags)
     {
         Q_UNUSED(flow);
@@ -165,9 +160,9 @@ struct OverCompositor32 {
                     pixel_type *d = reinterpret_cast<pixel_type*>(dst);
                     *d = *s;
                 } else if (srcBlendNorm != 0.0){
-                    dst[0] = KoStreamedMath::lerp_mixed_u8_float(dst[0], src[0], srcBlendNorm);
-                    dst[1] = KoStreamedMath::lerp_mixed_u8_float(dst[1], src[1], srcBlendNorm);
-                    dst[2] = KoStreamedMath::lerp_mixed_u8_float(dst[2], src[2], srcBlendNorm);
+                    dst[0] = KoStreamedMath<_impl>::lerp_mixed_u8_float(dst[0], src[0], srcBlendNorm);
+                    dst[1] = KoStreamedMath<_impl>::lerp_mixed_u8_float(dst[1], src[1], srcBlendNorm);
+                    dst[2] = KoStreamedMath<_impl>::lerp_mixed_u8_float(dst[2], src[2], srcBlendNorm);
                 }
             } else {
                 if (srcBlendNorm == 1.0) {
@@ -175,9 +170,9 @@ struct OverCompositor32 {
                     if(channelFlags.at(1)) dst[1] = src[1];
                     if(channelFlags.at(2)) dst[2] = src[2];
                 } else if (srcBlendNorm != 0.0) {
-                    if(channelFlags.at(0)) dst[0] = KoStreamedMath::lerp_mixed_u8_float(dst[0], src[0], srcBlendNorm);
-                    if(channelFlags.at(1)) dst[1] = KoStreamedMath::lerp_mixed_u8_float(dst[1], src[1], srcBlendNorm);
-                    if(channelFlags.at(2)) dst[2] = KoStreamedMath::lerp_mixed_u8_float(dst[2], src[2], srcBlendNorm);
+                    if(channelFlags.at(0)) dst[0] = KoStreamedMath<_impl>::lerp_mixed_u8_float(dst[0], src[0], srcBlendNorm);
+                    if(channelFlags.at(1)) dst[1] = KoStreamedMath<_impl>::lerp_mixed_u8_float(dst[1], src[1], srcBlendNorm);
+                    if(channelFlags.at(2)) dst[2] = KoStreamedMath<_impl>::lerp_mixed_u8_float(dst[2], src[2], srcBlendNorm);
                 }
             }
 
@@ -193,6 +188,7 @@ struct OverCompositor32 {
  * colorspaces with alpha channel placed at the last byte of
  * the pixel: C1_C2_C3_A.
  */
+template<Vc::Implementation _impl>
 class KoOptimizedCompositeOpOver32 : public KoCompositeOp
 {
 public:
@@ -215,7 +211,7 @@ public:
         if (params.channelFlags.isEmpty() ||
             params.channelFlags == QBitArray(4, true)) {
 
-            KoStreamedMath::genericComposite32<haveMask, false, OverCompositor32<quint8, quint32, false, true> >(params);
+            KoStreamedMath<_impl>::template genericComposite32<haveMask, false, OverCompositor32<quint8, quint32, false, true> >(params);
         } else {
             const bool allChannelsFlag =
                 params.channelFlags.at(0) &&
@@ -226,11 +222,11 @@ public:
                 !params.channelFlags.at(3);
 
             if (allChannelsFlag && alphaLocked) {
-                KoStreamedMath::genericComposite32_novector<haveMask, false, OverCompositor32<quint8, quint32, true, true> >(params);
+                KoStreamedMath<_impl>::template genericComposite32_novector<haveMask, false, OverCompositor32<quint8, quint32, true, true> >(params);
             } else if (!allChannelsFlag && !alphaLocked) {
-                KoStreamedMath::genericComposite32_novector<haveMask, false, OverCompositor32<quint8, quint32, false, false> >(params);
+                KoStreamedMath<_impl>::template genericComposite32_novector<haveMask, false, OverCompositor32<quint8, quint32, false, false> >(params);
             } else /*if (!allChannelsFlag && alphaLocked) */{
-                KoStreamedMath::genericComposite32_novector<haveMask, false, OverCompositor32<quint8, quint32, true, false> >(params);
+                KoStreamedMath<_impl>::template genericComposite32_novector<haveMask, false, OverCompositor32<quint8, quint32, true, false> >(params);
             }
         }
     }

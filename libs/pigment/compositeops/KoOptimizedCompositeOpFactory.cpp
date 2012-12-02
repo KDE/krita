@@ -19,39 +19,53 @@
 #include "KoOptimizedCompositeOpFactory.h"
 #include "KoOptimizedCompositeOpFactory_p.h"
 
-/**
- * We include these headers even when no vectorization
- * is available on the system to ensure they build correctly
- */
-#include "KoOptimizedCompositeOpAlphaDarken32.h"
-#include "KoOptimizedCompositeOpOver32.h"
-
-
 #include "config-vc.h"
-
 #ifdef HAVE_SANE_VC
 #include <Vc/global.h>
 #include <Vc/common/support.h>
-#endif
+#include "KoOptimizedCompositeOpFactoryPerArch.h"
 
+
+static struct ArchReporter {
+    ArchReporter() {
+        KoOptimizedCompositeOpFactoryPerArchBase *factory =
+            createOptimizedCompositeOpFactory();
+        if (factory) {
+            factory->printArchInfo();
+            delete factory;
+        }
+    }
+} StaticReporter;
+
+
+#endif
 
 KoCompositeOp* KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(const KoColorSpace *cs)
 {
 #if defined HAVE_SANE_VC
-    if (Vc::currentImplementationSupported()) {
-        return new KoOptimizedCompositeOpAlphaDarken32(cs);
+    KoOptimizedCompositeOpFactoryPerArchBase *factory =
+        createOptimizedCompositeOpFactory();
+    if (factory) {
+        KoCompositeOp *op = factory->createAlphaDarkenOp32(cs);
+        delete factory;
+        return op;
     }
 #endif
+
     return KoOptimizedCompositeOpFactoryPrivate::createLegacyAlphaDarkenOp32(cs);
 }
 
 KoCompositeOp* KoOptimizedCompositeOpFactory::createOverOp32(const KoColorSpace *cs)
 {
 #if defined HAVE_SANE_VC
-    if (Vc::currentImplementationSupported()) {
-        return new KoOptimizedCompositeOpOver32(cs);
+    KoOptimizedCompositeOpFactoryPerArchBase *factory =
+        createOptimizedCompositeOpFactory();
+    if (factory) {
+        KoCompositeOp *op = factory->createOverOp32(cs);
+        delete factory;
+        return op;
     }
 #endif
-    return KoOptimizedCompositeOpFactoryPrivate::createLegacyOverOp32(cs);
 
+    return KoOptimizedCompositeOpFactoryPrivate::createLegacyOverOp32(cs);
 }

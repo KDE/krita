@@ -324,8 +324,8 @@ if(HAVE_VC)
     message(STATUS "Vc found!")
 
     SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${Vc_CMAKE_MODULES_DIR}")
-    include (OptimizeForArchitecture)
-    OptimizeForArchitecture()
+#    include (OptimizeForArchitecture)
+#    OptimizeForArchitecture()
 endif(HAVE_VC)
 set(CMAKE_MODULE_PATH ${OLD_CMAKE_MODULE_PATH} )
 

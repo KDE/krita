@@ -363,10 +363,10 @@ void checkRounding()
     quint8 *msk2 = tiles[1].mask;
 
     for (int i = 0; i < numBlocks; i++) {
-        Compositor::template compositeVector<true,true>(src1, dst1, msk1, 0.5, 0.3);
+        Compositor::template compositeVector<true,true, VC_IMPL>(src1, dst1, msk1, 0.5, 0.3);
         for (int j = 0; j < vecSize; j++) {
 
-            Compositor::template compositeOnePixelScalar<true>(src2, dst2, msk2, 0.5, 0.3, QBitArray());
+            Compositor::template compositeOnePixelScalar<true, VC_IMPL>(src2, dst2, msk2, 0.5, 0.3, QBitArray());
 
             if(!comparePixels(dst1, dst2, 0)) {
                 qDebug() << "Wrong rounding in pixel:" << 8 * i + j;

@@ -94,7 +94,7 @@ static inline quint8 lerp_mixed_u8_float(quint8 a, quint8 b, float alpha) {
  */
 inline Vc::float_v fetch_mask_8(const quint8 *data) {
     Vc::uint_v data_i(data);
-    return Vc::float_v(data_i);
+    return Vc::float_v(Vc::int_v(data_i));
 }
 
 /**
@@ -118,7 +118,7 @@ inline Vc::float_v fetch_alpha_32(const quint8 *data) {
         data_i.load((const quint32*)data, Vc::Unaligned);
     }
 
-    return Vc::float_v(data_i >> 24);
+    return Vc::float_v(Vc::int_v(data_i >> 24));
 }
 
 /**
@@ -148,9 +148,9 @@ inline void fetch_colors_32(const quint8 *data,
     const quint32 lowByteMask = 0xFF;
     Vc::uint_v mask(lowByteMask);
 
-    c1 = Vc::float_v((data_i >> 16) & mask);
-    c2 = Vc::float_v((data_i >> 8)  & mask);
-    c3 = Vc::float_v( data_i        & mask);
+    c1 = Vc::float_v(Vc::int_v((data_i >> 16) & mask));
+    c2 = Vc::float_v(Vc::int_v((data_i >> 8)  & mask));
+    c3 = Vc::float_v(Vc::int_v( data_i        & mask));
 }
 
 /**
@@ -175,11 +175,11 @@ inline void write_channels_32(quint8 *data,
     const quint32 lowByteMask = 0xFF;
     Vc::uint_v mask(lowByteMask);
 
-    Vc::uint_v v1 = Vc::uint_v(alpha) << 24;
-    Vc::uint_v v2 = (Vc::uint_v(c1) & mask) << 16;
-    Vc::uint_v v3 = (Vc::uint_v(c2) & mask) <<  8;
+    Vc::uint_v v1 = Vc::uint_v(Vc::int_v(alpha)) << 24;
+    Vc::uint_v v2 = (Vc::uint_v(Vc::int_v(c1)) & mask) << 16;
+    Vc::uint_v v3 = (Vc::uint_v(Vc::int_v(c2)) & mask) <<  8;
     v1 = v1 | v2;
-    Vc::uint_v v4 = Vc::uint_v(c3) & mask;
+    Vc::uint_v v4 = Vc::uint_v(Vc::int_v(c3)) & mask;
     v3 = v3 | v4;
 
     *((Vc::uint_v*)data) = v1 | v3;

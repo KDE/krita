@@ -43,6 +43,11 @@ private slots:
     void testRgb8CompositeOverReal_Aligned();
 
     void benchmarkMemcpy();
+
+    void benchmarkUintFloat();
+    void benchmarkUintIntFloat();
+    void benchmarkFloatUint();
+    void benchmarkFloatIntUint();
 };
 
 #endif /* __KIS_COMPOSITION_BENCHMARK_H */

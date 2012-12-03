@@ -5,7 +5,7 @@ include_directories(  ${KOMAIN_INCLUDES}  ${CMAKE_SOURCE_DIR}/krita/image/tiles3
 set(LINK_VC_LIB)
 if(HAVE_VC)
   include_directories(${Vc_INCLUDE_DIR})
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
+#  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
   set(LINK_VC_LIB ${Vc_LIBRARIES})
 endif(HAVE_VC)
 

@@ -74,6 +74,7 @@ public:
 private slots:
 
     void switchType(int index);
+    void switchColorize(bool toggle);
 };
 
 #endif

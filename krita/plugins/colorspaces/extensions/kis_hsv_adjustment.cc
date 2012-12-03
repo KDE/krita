@@ -97,36 +97,59 @@ public:
         float h, s, v, r, g, b;
         while (nPixels > 0) {
 
-            if (m_type == 0) {
-                RGBToHSV(SCALE_TO_FLOAT(src->red), SCALE_TO_FLOAT(src->green), SCALE_TO_FLOAT(src->blue), &h, &s, &v);
-                h += m_adj_h;
-                if (h > 360) h -= 360;
-                if (h < 0) h += 360;
-                s += m_adj_s;
-                v += m_adj_v;
-                HSVToRGB(h, s, v, &r, &g, &b);
+            if (m_colorize) {
+                h = m_adj_h;
+                s = m_adj_s;
+
+                r = SCALE_TO_FLOAT(src->red);
+                g = SCALE_TO_FLOAT(src->green);
+                b = SCALE_TO_FLOAT(src->blue);
+
+                float luminance = r * 0.2126 + g * 0.7152 + b * 0.0722;
+
+                if (m_adj_v > 0) {
+                    luminance *= (1.0 - m_adj_v);
+                    luminance += 1.0 - (1.0 - m_adj_v);
+                }
+                else if (m_adj_v < 0 ){
+                    luminance *= (m_adj_v + 1.0);
+                }
+                v = luminance;
+                HSLToRGB(h, s, v, &r, &g, &b);
+
             }
             else {
 
-                RGBToHSL(SCALE_TO_FLOAT(src->red), SCALE_TO_FLOAT(src->green), SCALE_TO_FLOAT(src->blue), &h, &s, &v);
+                if (m_type == 0) {
+                    RGBToHSV(SCALE_TO_FLOAT(src->red), SCALE_TO_FLOAT(src->green), SCALE_TO_FLOAT(src->blue), &h, &s, &v);
+                    h += m_adj_h;
+                    if (h > 360) h -= 360;
+                    if (h < 0) h += 360;
+                    s += m_adj_s;
+                    v += m_adj_v;
+                    HSVToRGB(h, s, v, &r, &g, &b);
+                }
+                else {
 
-                h += m_adj_h;
-                if (h < 0)
-                    h += 1.0;
-                else if (h > 1.0)
-                    h -= 1.0;
+                    RGBToHSL(SCALE_TO_FLOAT(src->red), SCALE_TO_FLOAT(src->green), SCALE_TO_FLOAT(src->blue), &h, &s, &v);
 
-                s *= (m_adj_s + 1.0);
-                if (s < 0.0) s = 0.0;
-                if (s > 1.0) s = 1.0;
+                    h += m_adj_h;
+                    if (h > 360) h -= 360;
+                    if (h < 0) h += 360;
 
-                if (m_adj_v < 0)
-                    v *= (m_adj_v + 1.0);
-                else
-                    v += (m_adj_v * (1.0 - v));
+                    s *= (m_adj_s + 1.0);
+                    if (s < 0.0) s = 0.0;
+                    if (s > 1.0) s = 1.0;
+
+                    if (m_adj_v < 0)
+                        v *= (m_adj_v + 1.0);
+                    else
+                        v += (m_adj_v * (1.0 - v));
 
 
-                HSLToRGB(h, s, v, &r, &g, &b);
+                    HSLToRGB(h, s, v, &r, &g, &b);
+                }
+
             }
 
             clamp< _channel_type_ >(&r, &g, &b);
@@ -144,7 +167,7 @@ public:
     virtual QList<QString> parameters() const
     {
       QList<QString> list;
-      list << "h" << "s" << "v" << "type";
+      list << "h" << "s" << "v" << "type" << "colorize";
       return list;
     }
 
@@ -158,6 +181,8 @@ public:
             return 2;
         } else if (name == "type") {
             return 3;
+        } else if (name == "colorize") {
+            return 4;
         }
         return -1;
     }
@@ -184,8 +209,11 @@ public:
         case 3:
             m_type = parameter.toDouble();
             break;
+        case 4:
+            m_colorize = parameter.toBool();
+            break;
         default:
-            qFatal("Unknown parameter id %i", id);
+            ;
         }
     }
 
@@ -193,11 +221,12 @@ private:
 
     double m_adj_h, m_adj_s, m_adj_v;
     int m_type;
+    bool m_colorize;
 };
 
 
 KisHSVAdjustmentFactory::KisHSVAdjustmentFactory()
-    : KoColorTransformationFactory("hsv_adjustment", i18n("HSV Adjustment"))
+    : KoColorTransformationFactory("hsv_adjustment", i18n("HSV/HSL Adjustment"))
 {
 }
 

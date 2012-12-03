@@ -45,10 +45,18 @@ KoColorTransformation* KisHSVAdjustmentFilter::createTransformation(const KoColo
 {
     QHash<QString, QVariant> params;
     if (config) {
-        params["h"] = config->getInt("h", 0) / 180.0;
+        if (config->getBool("colorize")) {
+               params["h"] = config->getInt("h", 0.5) / 360.0;
+        }
+        else {
+            params["h"] = config->getInt("h", 0) / 180.0;
+
+        }
         params["s"] = config->getInt("s", 0) * 0.01;
         params["v"] = config->getInt("v", 0) * 0.01;
+
         params["type"] = config->getInt("type", 1);
+        params["colorize"] = config->getBool("colorize", false);
     }
     return cs->createColorTransformation("hsv_adjustment", params);
 }
@@ -60,6 +68,7 @@ KisFilterConfiguration* KisHSVAdjustmentFilter::factoryConfiguration(const KisPa
     config->setProperty("s", 0);
     config->setProperty("v", 0);
     config->setProperty("type", 1);
+    config->setProperty("colorize", false);
     return config;
 }
 
@@ -72,6 +81,7 @@ KisHSVConfigWidget::KisHSVConfigWidget(QWidget * parent, Qt::WFlags f) : KisConf
     connect(m_page->hue, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_page->value, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_page->saturation, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->chkColorize, SIGNAL(toggled(bool)), SLOT(switchColorize(bool)));
 }
 
 KisHSVConfigWidget::~KisHSVConfigWidget()
@@ -86,6 +96,7 @@ KisPropertiesConfiguration * KisHSVConfigWidget::configuration() const
     c->setProperty("s", m_page->saturation->value());
     c->setProperty("v", m_page->value->value());
     c->setProperty("type", m_page->cmbType->currentIndex());
+    c->setProperty("colorize", m_page->chkColorize->isChecked());
     return c;
 }
 
@@ -95,6 +106,7 @@ void KisHSVConfigWidget::setConfiguration(const KisPropertiesConfiguration * con
     m_page->hue->setValue(config->getInt("h", 0));
     m_page->saturation->setValue(config->getInt("s", 0));
     m_page->value->setValue(config->getInt("v", 0));
+    m_page->chkColorize->setChecked(config->getBool("colorize", false));
 
     switchType(m_page->cmbType->currentIndex());
 }
@@ -111,4 +123,23 @@ void KisHSVConfigWidget::switchType(int index)
         m_page->label_3->setText(i18n("Lightness"));
     }
 
+}
+
+void KisHSVConfigWidget::switchColorize(bool toggle)
+{
+    if (toggle) {
+        m_page->hue->setMinimum(0);
+        m_page->hue->setMaximum(360);
+        m_page->saturation->setMinimum(0);
+        m_page->saturation->setMaximum(100);
+        switchType(1);
+    }
+    else {
+        m_page->hue->setMinimum(-180);
+        m_page->hue->setMaximum(180);
+        m_page->saturation->setMinimum(-100);
+        m_page->saturation->setMaximum(100);
+
+    }
+    emit sigConfigurationItemChanged();
 }

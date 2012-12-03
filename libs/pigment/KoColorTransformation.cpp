@@ -38,9 +38,9 @@ int KoColorTransformation::parameterId(const QString& name) const
 
 void KoColorTransformation::setParameter(int id, const QVariant& parameter)
 {
-  Q_UNUSED(id);
-  Q_UNUSED(parameter);
-  qFatal("No parameter for this transformation");
+    Q_UNUSED(id);
+    Q_UNUSED(parameter);
+    qFatal("No parameter for this transformation");
 }
 
 void KoColorTransformation::setParameters(const QHash<QString, QVariant> & parameters)

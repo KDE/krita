@@ -29,8 +29,6 @@
 #include <KoCompositeOpOver.h>
 #include "KoOptimizedCompositeOpFactory.h"
 
-#include <KoOptimizedCompositeOpOver32.h>
-#include <KoOptimizedCompositeOpAlphaDarken32.h>
 
 
 // for calculation of the needed alignment
@@ -38,6 +36,9 @@
 #ifdef HAVE_VC
 #include <Vc/Vc>
 #include <Vc/IO>
+
+#include <KoOptimizedCompositeOpOver32.h>
+#include <KoOptimizedCompositeOpAlphaDarken32.h>
 #endif
 
 // for memalign()

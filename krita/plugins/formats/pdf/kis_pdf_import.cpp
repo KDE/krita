@@ -127,7 +127,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
     if (!doc) {
         delete pdoc;
         delete kdb;
-        return KoFilter::CreationError;
+        return KoFilter::NoDocumentCreated;
     }
 
     doc -> prepareForImport();

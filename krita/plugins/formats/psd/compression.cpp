@@ -21,6 +21,72 @@
 #include <QBuffer>
 #include "psd_utils.h"
 #include "kis_debug.h"
+#include <netinet/in.h> // htonl
+
+// from gimp's psd-save.c
+static quint32 pack_pb_line (const QByteArray &src,
+                             QByteArray &dst)
+{
+    quint32 length = src.size();
+    quint32 remaining = length;
+    quint8  i, j;
+    quint32 dest_ptr = 0;
+    const char *start = src.constData();
+
+    length = 0;
+    while (remaining > 0)
+    {
+        /* Look for characters matching the first */
+        i = 0;
+        while ((i < 128) &&
+               (remaining - i > 0) &&
+               (start[0] == start[i]) )
+            i++;
+
+        if (i > 1)              /* Match found */
+        {
+
+            dst[dest_ptr++] = -(i - 1);
+            dst[dest_ptr++] = *start;
+
+            start += i;
+            remaining -= i;
+            length += 2;
+        }
+        else       /* Look for characters different from the previous */
+        {
+            i = 0;
+            while ((i < 128)             &&
+                   (remaining - (i + 1) > 0) &&
+                   (start[i] != start[(i + 1)] ||
+                    remaining - (i + 2) <= 0  || start[i] != start[(i+2)]))
+                i++;
+
+            /* If there's only 1 remaining, the previous WHILE stmt doesn't
+             catch it */
+
+            if (remaining == 1)
+            {
+                i = 1;
+            }
+
+            if (i > 0)               /* Some distinct ones found */
+            {
+                dst[dest_ptr++] = i - 1;
+                for (j = 0; j < i; j++)
+                {
+                    dst[dest_ptr++] = start[j];
+                }
+                start += i;
+                remaining -= i;
+                length += i + 1;
+            }
+
+        }
+    }
+    return length;
+}
+
 
 // from gimp's psd-util.c
 quint32 decode_packbits(const char *src, char* dst, quint16 packed_len, quint32 unpacked_len)
@@ -127,45 +193,45 @@ quint32 decode_packbits(const char *src, char* dst, quint16 packed_len, quint32 
     }
 
     if (error_code)
-       dbgFile << "Error code" <<  error_code;
+        dbgFile << "Error code" <<  error_code;
 
     return return_val;
 }
 
-
-QByteArray unRLE(int nBytes, QByteArray bytes)
+QByteArray Compression::uncompress(quint32 unpacked_len, QByteArray bytes, Compression::CompressionType compressionType)
 {
-    char *dst = new char[nBytes];
-    decode_packbits(bytes.constData(), dst, bytes.length(), nBytes);
-    return QByteArray(dst, nBytes);
-}
-
-QByteArray unzip(quint32 nBytes, QByteArray bytes)
-{
-    // prepend the expected length of the pixels in big-endian
-    // format to the byte array as qUncompress expects...
-    QByteArray b;
-    QBuffer buf(&b);
-    psdwrite(&buf, nBytes);
-    b.append(bytes);
-
-    // and let's hope that this is sufficient...
-    return qUncompress(bytes);
-}
+    if (unpacked_len > 30000) return QByteArray();
+    if (bytes.size() < 1) return QByteArray();
 
 
-QByteArray Compression::uncompress(quint32 nBytes, QByteArray bytes, Compression::CompressionType compressionType)
-{
     switch(compressionType) {
     case Uncompressed:
         return bytes;
     case RLE:
-        return unRLE(nBytes, bytes);
+    {
+        char *dst = new char[unpacked_len];
+        decode_packbits(bytes.constData(), dst, bytes.length(), unpacked_len);
+        QByteArray ba(dst, unpacked_len);
+        delete[] dst;
+        return ba;
+     }
     case ZIP:
     case ZIPWithPrediction:
-        return unzip(nBytes, bytes);
+    {
+        // prepend the expected length of the pixels in big-endian
+        // format to the byte array as qUncompress expects...
+
+        QByteArray b;
+        QBuffer buf(&b);
+        quint32 val = ntohl(unpacked_len);
+        buf.write((char*)&val, 4);
+        b.append(bytes);
+
+        // and let's hope that this is sufficient...
+        return qUncompress(bytes);
+    }
     default:
-        qFatal("Cannot uncompress layer data");
+        qFatal("Cannot uncompress layer data: invalid compression type");
     }
 
 
@@ -174,8 +240,24 @@ QByteArray Compression::uncompress(quint32 nBytes, QByteArray bytes, Compression
 
 QByteArray Compression::compress(QByteArray bytes, Compression::CompressionType compressionType)
 {
-    Q_UNUSED(bytes);
-    Q_UNUSED(compressionType);
+    if (bytes.size() < 1) return QByteArray();
+
+    switch(compressionType) {
+    case Uncompressed:
+        return bytes;
+    case RLE:
+    {
+        QByteArray dst;
+        int packed_len = pack_pb_line(bytes, dst);
+        Q_ASSERT(packed_len == dst.size());
+        return dst;
+    }
+    case ZIP:
+    case ZIPWithPrediction:
+        return qCompress(bytes);
+    default:
+        qFatal("Cannot compress layer data: invalid compression type");
+    }
 
     return QByteArray();
 }

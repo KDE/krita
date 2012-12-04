@@ -84,7 +84,7 @@ KoFilter::ConversionStatus KisXCFImport::convert(const QByteArray& from, const Q
     KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain -> outputDocument());
 
     if (!doc)
-        return KoFilter::CreationError;
+        return KoFilter::NoDocumentCreated;
 
     QString filename = m_chain -> inputFile();
 
@@ -123,7 +123,7 @@ KoFilter::ConversionStatus KisXCFImport::convert(const QByteArray& from, const Q
         return result;
     }
     dbgFile << "Download failed";
-    return KoFilter::CreationError;
+    return KoFilter::DownloadFailed;
 }
 
 QString layerModeG2K(GimpLayerModeEffects mode)

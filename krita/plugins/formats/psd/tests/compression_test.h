@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (C) 2009 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,36 +15,21 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef PSD_COLORMODE_BLOCK_H
-#define PSD_COLORMODE_BLOCK_H
 
-#include "psd.h"
-#include "psd_header.h"
+#ifndef _COMPRESSION_TEST_H_
+#define _COMPRESSION_TEST_H_
 
-#include <QByteArray>
-#include <QColor>
+#include <QObject>
 
-class PSDColorModeBlock
+class CompressionTest : public QObject
 {
-public:
+    Q_OBJECT
+private slots:
 
-    PSDColorModeBlock(PSDColorMode colormode);
-
-    bool read(QIODevice* io);
-    bool write(QIODevice* io);
-    bool valid();
-
-    quint32 blocksize;
-    PSDColorMode colormode;
-    QByteArray data;
-
-    QString error;
-
-    /* to store rgb colormap values of indexed image
-    */
-    QList<QColor> colormap;
-    QByteArray duotoneSpecification; // Krita should save this in an annotation and write it back, if present
+    void testCompressionRLE();
+    void testCompressionZIP();
+    void testCompressionUncompressed();
 
 };
 
-#endif // PSD_COLORMODE_BLOCK_H
+#endif

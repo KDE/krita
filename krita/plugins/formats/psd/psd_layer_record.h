@@ -23,9 +23,11 @@
 #include <QByteArray>
 #include <QBitArray>
 
+#include <KoColorSpace.h>
+
 #include <kis_types.h>
 #include <kis_paint_device.h>
-
+#include <kis_node.h>
 
 #include "psd.h"
 #include "psd_header.h"
@@ -34,13 +36,24 @@
 
 class QIODevice;
 
-struct ChannelInfo {
+struct  ChannelInfo {
+
+    ChannelInfo()
+        : channelId(-1)
+        , compressionType(Compression::Unknown)
+        , channelDataStart(0)
+        , channelDataLength(0)
+        , channelOffset(0)
+        , channelInfoPosition(0)
+    {}
+
     qint16 channelId; // 0 red, 1 green, 2 blue, -1 transparency, -2 user-supplied layer mask
     Compression::CompressionType compressionType;
     quint64 channelDataStart;
     quint64 channelDataLength;
     QVector<quint32> rleRowLengths;
-    int channelOffset;
+    int channelOffset; // where the channel data starts
+    int channelInfoPosition; // where the channelinfo record is saved in the file
 };
 
 class PSDLayerRecord
@@ -55,7 +68,11 @@ public:
     }
 
     bool read(QIODevice* io);
-    bool write(QIODevice* io);
+    bool readPixelData(QIODevice* io, KisPaintDeviceSP device);
+
+    bool write(QIODevice* io, KisNodeSP node);
+    bool writePixelData(QIODevice* io);
+
     bool valid();
 
     QString error;
@@ -110,8 +127,6 @@ public:
 
     QMap<QString, LayerInfoBlock*> infoBlocks;
 
-    bool readChannels(QIODevice* io, KisPaintDeviceSP device);
-
 private:
 
     bool doRGB(KisPaintDeviceSP dev ,QIODevice *io);
@@ -119,8 +134,8 @@ private:
     bool doLAB(KisPaintDeviceSP dev ,QIODevice *io);
     bool doGrayscale(KisPaintDeviceSP dev ,QIODevice *io);
 
+    KisNodeSP m_node;
     const PSDHeader m_header;
-
 };
 
 QDebug operator<<(QDebug dbg, const PSDLayerRecord& layer);

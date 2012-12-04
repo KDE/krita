@@ -23,7 +23,9 @@
 #include <kapplication.h>
 #include <kdialog.h>
 #include <kpluginfactory.h>
+#include <kmessagebox.h>
 
+#include <KoFilterManager.h>
 #include <KoFilterChain.h>
 #include <KoColorSpaceConstants.h>
 
@@ -55,29 +57,31 @@ KoFilter::ConversionStatus psdExport::convert(const QByteArray& from, const QByt
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
 
-    KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
+    KisDoc2 *input = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
 
-    if (!output)
-        return KoFilter::CreationError;
+    if (!input)
+        return KoFilter::NoDocumentCreated;
 
+
+    if (input->image()->width() > 30000 || input->image()->height() > 30000) {
+        if (!m_chain->manager()->getBatchMode()) {
+            KMessageBox::error(0, i18n("Unable to save to the Photoshop format.\n"
+                                       "The Photoshop format only supports images that are smaller than 30000x3000 pixels."),
+                               "Photoshop Export Error");
+        }
+        return KoFilter::InvalidFormat;
+    }
 
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 
     KUrl url;
     url.setPath(filename);
 
-    KisImageWSP image = output->image();
-    Q_CHECK_PTR(image);
-
-    PSDSaver kpc(output);
-
-    KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
-    KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
-
+    PSDSaver kpc(input);
     KisImageBuilder_Result res;
 
-    if ( (res = kpc.buildFile(url, l)) == KisImageBuilder_RESULT_OK) {
+    if ((res = kpc.buildFile(url)) == KisImageBuilder_RESULT_OK) {
         dbgFile <<"success !";
         return KoFilter::OK;
     }

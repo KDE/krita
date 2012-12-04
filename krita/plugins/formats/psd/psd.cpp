@@ -90,6 +90,37 @@ QString psd_blendmode_to_composite_op(const QString& blendmode)
     if (blendmode == "hMix") return COMPOSITE_HARD_MIX; //hard mix
     if (blendmode == "pass") return COMPOSITE_PASS_THROUGH; //pass through
 
-    return COMPOSITE_UNDEF;
+    return COMPOSITE_OVER;
 }
 
+QString composite_op_to_psd_blendmode(const QString& compositeop)
+{
+
+    if (compositeop == COMPOSITE_OVER) return "norm";    // normal
+    if (compositeop == COMPOSITE_DISSOLVE) return "diss"; //dissolve
+    if (compositeop == COMPOSITE_DARKEN) return "dark";  // darken
+    if (compositeop == COMPOSITE_LIGHTEN) return "lite"; // lighten
+    if (compositeop == COMPOSITE_HUE) return "hue " ;     // hue
+    if (compositeop == COMPOSITE_SATURATION) return "sat "; // saturation
+    if (compositeop == COMPOSITE_COLOR) return "colr"; //color
+    if (compositeop == COMPOSITE_LUMINIZE) return "lum "; //luminosity
+    if (compositeop == COMPOSITE_MULT) return "mul "; //multiply
+    if (compositeop == COMPOSITE_SCREEN) return "scrn"; //screen
+    if (compositeop == COMPOSITE_OVERLAY) return "over"; //overlay
+    if (compositeop == COMPOSITE_HARD_LIGHT) return "hLit"; //hard light
+    if (compositeop == COMPOSITE_SOFT_LIGHT) return "sLit"; //soft light
+    if (compositeop == COMPOSITE_DIFF) return "diff"; //difference
+    if (compositeop == COMPOSITE_EXCLUSION) return "smud"; //exclusion
+    if (compositeop == COMPOSITE_DIVIDE) return "div "; // color dodge
+    if (compositeop == COMPOSITE_INVERTED_DIVIDE ) return "idiv"; //color burn
+    if (compositeop == COMPOSITE_BURN) return "lbrn"; //linear burn
+    if (compositeop == COMPOSITE_DODGE ) return "lddg"; //linear dodge
+    if (compositeop == COMPOSITE_VIVID_LIGHT) return "vLit"; //vivid light
+    if (compositeop == COMPOSITE_LINEAR_LIGHT) return "lLit"; //linear light
+    if (compositeop == COMPOSITE_PIN_LIGHT) return "pLit"; //  pin light
+    if (compositeop == COMPOSITE_HARD_MIX) return "hMix"; //hard mix
+    if (compositeop == COMPOSITE_PASS_THROUGH) return "pass"; //pass through
+
+    return "norm";
+
+}

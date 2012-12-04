@@ -68,14 +68,14 @@ namespace CalligraFilter {
     {
         if (!m_filterEntry) {
             kError(30500) << "This filter entry is null. Strange stuff going on." << endl;
-            return KoFilter::CreationError;
+            return KoFilter::FilterEntryNull;
         }
 
         m_filter = m_filterEntry->createFilter(m_chain);
 
         if (!m_filter) {
             kError(30500) << "Couldn't create the filter." << endl;
-            return KoFilter::CreationError;
+            return KoFilter::FilterCreationError;
         }
 
         if (m_updater) {

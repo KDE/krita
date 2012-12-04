@@ -43,7 +43,7 @@ void PSDColorModeBlockTest::testCreation()
 
 void PSDColorModeBlockTest::testLoadingRGB()
 {
-    QString filename = QString(FILES_DATA_DIR) + "/sources/1.psd";
+    QString filename = QString(FILES_DATA_DIR) + "/sources/2.psd";
     QFile f(filename);
     f.open(QIODevice::ReadOnly);
     PSDHeader header;
@@ -60,7 +60,7 @@ void PSDColorModeBlockTest::testLoadingRGB()
 
 void PSDColorModeBlockTest::testLoadingIndexed()
 {
-    QString filename = QString(FILES_DATA_DIR) + "/sources/indexed.psd";
+    QString filename = QString(FILES_DATA_DIR) + "/sources/100x100indexed.psd";
     QFile f(filename);
     f.open(QIODevice::ReadOnly);
     PSDHeader header;

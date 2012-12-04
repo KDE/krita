@@ -241,7 +241,9 @@ bool KoColorSpace::convertPixelsTo(const quint8 * src,
                                    KoColorConversionTransformation::ConversionFlags conversionFlags) const
 {
     if (*this == *dstColorSpace) {
-        memcpy(dst, src, numPixels * sizeof(quint8) * pixelSize());
+        if (src != dst) {
+            memcpy(dst, src, numPixels * sizeof(quint8) * pixelSize());
+        }
     } else {
         KoCachedColorConversionTransformation cct = KoColorSpaceRegistry::instance()->colorConversionCache()->cachedConverter(this, dstColorSpace, renderingIntent, conversionFlags);
         cct.transformation()->transform(src, dst, numPixels);

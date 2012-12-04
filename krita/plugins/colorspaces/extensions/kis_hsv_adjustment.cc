@@ -99,6 +99,8 @@ public:
 
             if (m_colorize) {
                 h = m_adj_h * 360;
+                if (h >= 360.0) h = 0;
+
                 s = m_adj_s;
 
                 r = SCALE_TO_FLOAT(src->red);

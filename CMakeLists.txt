@@ -41,6 +41,7 @@ option(NEPOMUK "support NEPOMUK Tagging" ON)
 option(TINY "compile a tiny Calligra" OFF)
 option(CREATIVEONLY "compile only Karbon and Krita" OFF)
 option(QT3SUPPORT "Build the parts of Calligra that still depend on Qt3" ON)
+option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binary. Should be used by packagers only." OFF)
 
 IF (TINY)
     set(SHOULD_BUILD_WORDS TRUE)
@@ -315,6 +316,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 macro_optional_find_package(Vc)
 macro_log_feature(Vc_FOUND "Vc" "Portable, zero-overhead SIMD library for C++" "http://code.compeng.uni-frankfurt.de/projects/vc" FALSE "" "Required by the Krita for vectorization")
 macro_bool_to_01(Vc_FOUND HAVE_VC)
+macro_bool_to_01(PACKAGERS_BUILD DO_PACKAGERS_BUILD)
+
 if(NOT MSVC)
 macro_bool_to_01(Vc_FOUND HAVE_SANE_VC)
 endif(NOT MSVC)
@@ -324,8 +327,11 @@ if(HAVE_VC)
     message(STATUS "Vc found!")
 
     SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${Vc_CMAKE_MODULES_DIR}")
-#    include (OptimizeForArchitecture)
-#    OptimizeForArchitecture()
+
+    if (NOT PACKAGERS_BUILD)
+      # Optimize the whole Calligra for current architecture
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
+    endif (NOT PACKAGERS_BUILD)
 endif(HAVE_VC)
 set(CMAKE_MODULE_PATH ${OLD_CMAKE_MODULE_PATH} )
 

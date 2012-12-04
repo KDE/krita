@@ -22,6 +22,8 @@
 #include <Vc/Vc>
 #include <Vc/common/support.h>
 
+#ifdef DO_PACKAGERS_BUILD
+
 template<template<Vc::Implementation _impl> class FactoryType, class ReturnType>
     ReturnType* createOptimizedFactoryNoScalar()
 {
@@ -70,5 +72,32 @@ template<template<Vc::Implementation _impl> class FactoryType, class ReturnType>
 #define DECLARE_FOR_ALL_ARCHS(_DECL)             \
     DECLARE_FOR_ALL_ARCHS_NO_SCALAR(_DECL);      \
     _DECL(Vc::ScalarImpl);
+
+#else /* DO_PACKAGERS_BUILD */
+
+/**
+ * When doing not a packager's build we have one architecture only,
+ * so the factory methods are simplified
+ */
+
+template<template<Vc::Implementation _impl> class FactoryType, class ReturnType>
+    ReturnType* createOptimizedFactoryNoScalar()
+{
+    return new FactoryType<VC_IMPL>();
+}
+
+template<template<Vc::Implementation _impl> class FactoryType, class ReturnType>
+    ReturnType* createOptimizedFactory()
+{
+    return createOptimizedFactoryNoScalar<FactoryType, ReturnType>();
+}
+
+#define DECLARE_FOR_ALL_ARCHS_NO_SCALAR(_DECL)   \
+    _DECL(VC_IMPL);
+
+#define DECLARE_FOR_ALL_ARCHS(_DECL)             \
+    DECLARE_FOR_ALL_ARCHS_NO_SCALAR(_DECL);
+
+#endif /* DO_PACKAGERS_BUILD */
 
 #endif /* __KOVCMULTIARCHBUILDSUPPORT_H */

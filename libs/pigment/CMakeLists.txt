@@ -18,6 +18,8 @@ if(HAVE_SANE_VC)
     SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${Vc_CMAKE_MODULES_DIR}")
     include (VcMacros)
 
+if(PACKAGERS_BUILD)
+
 # This is a copy-paste from VcMacros.cmake
 # we need a version *without* Scalar implementation
 macro(ca_compile_for_all_implementations _objs _src)
@@ -59,9 +61,15 @@ macro(ca_compile_for_all_implementations _objs _src)
    endif()
 endmacro()
 
-    ca_compile_for_all_implementations(__per_arch_factory_objs compositeops/KoOptimizedCompositeOpFactoryPerArch.cpp "-fPIC")
+  ca_compile_for_all_implementations(__per_arch_factory_objs compositeops/KoOptimizedCompositeOpFactoryPerArch.cpp "-fPIC")
+
+else(PACKAGERS_BUILD)
+  set(__per_arch_factory_objs compositeops/KoOptimizedCompositeOpFactoryPerArch.cpp)
+endif(PACKAGERS_BUILD)
+
     message("Following objects are generated from the per-arch lib")
     message(${__per_arch_factory_objs})
+
 
     set(CMAKE_MODULE_PATH ${OLD_CMAKE_MODULE_PATH} )
 

@@ -551,32 +551,29 @@ bool PSDLayerRecord::write(QIODevice* io, KisNodeSP node)
     // layer name: Pascal string, padded to a multiple of 4 bytes.
     psdwrite_pascalstring(io, layerName, 4);
 
-    //    // write luni data block
-    //    {
-    //        quint32 len = layerName.length();
-    //        quint32 blocksize = 0;
-    //        io->write("8BIM", 4);
-    //        io->write("luni", 4);
+    // write luni data block
+    {
+        quint32 len = qMin(layerName.length(), 255);
+        quint32 xdBlockSize = len;
 
-    //        // pad to even number of chars
-    //        if (len % 2) {
-    //            blocksize = len + 1;
-    //        }
-    //        else {
-    //            blocksize = len;
-    //        }
-    //        // 2 bytes per character + 4 bytes for pascal string length
-    //        blocksize = (blocksize * 2)  + 4;
-    //        psdwrite(io, blocksize);
-    //        const ushort *chars = layerName.utf16();
-    //        for (uint i = 0; i < len; i++) {
-    //            psdwrite(io, (quint16)chars[i]);
-    //        }
+        if (len % 2) {
+            xdBlockSize = len + 1;
+        }
+        xdBlockSize = (xdBlockSize * 2) + 4;
 
-    //        if (len % 2) {
-    //            psdwrite(io, (quint16)0);
-    //        }
-    //    }
+        io->write("8BIMluni", 8);
+        psdwrite(io, xdBlockSize);
+        psdwrite(io, len);
+
+        const ushort *chars = layerName.utf16();
+        for (uint i = 0; i < len; i++) {
+            psdwrite(io, (quint16)chars[i]);
+        }
+
+        if (len % 2) {
+            psdwrite(io, (quint16)0); // padding
+        }
+    }
     // write real length for extra data
 
     quint64 eofPos = io->pos();
@@ -759,7 +756,6 @@ bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io)
         return false;
     }
 
-    qDebug() << ">>>>>>>>>>>> "<< right << left << "right - left" << right - left << top << width;
     KisHLineIteratorSP it = dev->createHLineIteratorNG(left, top, width);
     for (int row = top ; row < bottom; row++)
     {

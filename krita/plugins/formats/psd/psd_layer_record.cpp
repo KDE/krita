@@ -461,6 +461,7 @@ bool PSDLayerRecord::read(QIODevice* io)
                 error = "Could not read key for additional layer info block";
                 return false;
             }
+            dbgFile << "found info block with key" << key;
 
             if (infoBlocks.contains(key)) {
                 error = QString("Duplicate layer info block with key %1").arg(key);
@@ -484,7 +485,33 @@ bool PSDLayerRecord::read(QIODevice* io)
                 return false;
             }
 
-            dbgFile << "\tRead layer info block" << infoBlock->data.size();
+            dbgFile << "\tRead layer info block" << key << "for size" << infoBlock->data.size();
+
+            // get the unicode layer name
+            if (key == "luni") {
+                QBuffer buf(&infoBlock->data);
+                buf.open(QBuffer::ReadOnly);
+
+                quint32 stringlen;
+                if (!psdread(&buf, &stringlen)) {
+                    error = "Could not read string length for luni block";
+                    return false;
+                }
+                QString unicodeLayerName;
+
+                for (uint i = 0; i < stringlen; ++i) {
+                    quint16 ch;
+                    psdread(&buf, &ch);
+                    QChar uch(ch);
+                    unicodeLayerName.append(uch);
+                }
+
+                dbgFile << "unicodeLayerName" << unicodeLayerName;
+                if (!unicodeLayerName.isEmpty()) {
+                    layerName = unicodeLayerName;
+                }
+            }
+
 
             infoBlocks[key] = infoBlock;
         }

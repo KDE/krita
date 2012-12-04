@@ -291,7 +291,7 @@ bool PSDLayerSection::write(QIODevice* io, KisNodeSP rootLayer)
         PSDLayerRecord *layerRecord = new PSDLayerRecord(m_header);
         layers.append(layerRecord);
 
-        QRect rc = node->projection()->exactBounds();
+        QRect rc = node->projection()->extent();
         rc = rc.normalized();
         Q_ASSERT(rc.top() <= rc.bottom());
         Q_ASSERT(rc.left() <= rc.right());

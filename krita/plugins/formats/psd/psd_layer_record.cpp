@@ -599,10 +599,17 @@ bool PSDLayerRecord::writePixelData(QIODevice *io)
     KisPaintDeviceSP dev = m_node->projection();
 
     // now write all the channels in display order
-    QRect rc = dev->exactBounds();
+    QRect rc = dev->extent();
 
     // yeah... we read the entire layer into a vector of quint8 arrays
-    QVector<quint8* > tmp = dev->readPlanarBytes(rc.x(), rc.y(), rc.width(), rc.height());
+    dbgFile << "layer" << layerName;
+    dbgFile << "\tnode x" << m_node->x() << "paint device x" << dev->x() << "extent x" << rc.x();
+    dbgFile << "\tnode y" << m_node->y() << "paint device x" << dev->y() << "extent y" << rc.y();
+    QVector<quint8* > tmp = dev->readPlanarBytes(rc.x() - m_node->x(), rc.y() -m_node->y(), rc.width(), rc.height());
+
+    KisPaintDeviceSP dev2 = new KisPaintDevice(dev->colorSpace());
+    dev2->writePlanarBytes(tmp, 0, 0, rc.width(), rc.height());
+    dev2->convertToQImage(0).save(layerName + ".png");
 
     // then reorder the planes to fit the psd model -- alpha first, then display order
     QVector<quint8* > planes;

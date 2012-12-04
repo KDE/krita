@@ -17,55 +17,40 @@
  */
 
 #include "KoOptimizedCompositeOpFactory.h"
-#include "KoOptimizedCompositeOpFactory_p.h"
 
 #include "config-vc.h"
 #ifdef HAVE_SANE_VC
 #include <Vc/global.h>
 #include <Vc/common/support.h>
-#include "KoOptimizedCompositeOpFactoryPerArch.h"
+#endif
 
+#include "KoOptimizedCompositeOpFactoryPerArch.h"
 
 static struct ArchReporter {
     ArchReporter() {
         KoOptimizedCompositeOpFactoryPerArchBase *factory =
             createOptimizedCompositeOpFactory();
-        if (factory) {
-            factory->printArchInfo();
-            delete factory;
-        }
+        factory->printArchInfo();
+        delete factory;
     }
 } StaticReporter;
 
 
-#endif
-
 KoCompositeOp* KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(const KoColorSpace *cs)
 {
-#if defined HAVE_SANE_VC
     KoOptimizedCompositeOpFactoryPerArchBase *factory =
         createOptimizedCompositeOpFactory();
-    if (factory) {
-        KoCompositeOp *op = factory->createAlphaDarkenOp32(cs);
-        delete factory;
-        return op;
-    }
-#endif
 
-    return KoOptimizedCompositeOpFactoryPrivate::createLegacyAlphaDarkenOp32(cs);
+    KoCompositeOp *op = factory->createAlphaDarkenOp32(cs);
+    delete factory;
+    return op;
 }
 
 KoCompositeOp* KoOptimizedCompositeOpFactory::createOverOp32(const KoColorSpace *cs)
 {
-#if defined HAVE_SANE_VC
     KoOptimizedCompositeOpFactoryPerArchBase *factory =
         createOptimizedCompositeOpFactory();
-    if (factory) {
-        KoCompositeOp *op = factory->createOverOp32(cs);
-        delete factory;
-        return op;
-    }
-#endif
-
-    return KoOptimizedCompositeOpFactoryPrivate::createLegacyOverOp32(cs);
+    KoCompositeOp *op = factory->createOverOp32(cs);
+    delete factory;
+    return op;
 }

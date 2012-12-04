@@ -19,10 +19,6 @@
 #ifndef KOOPTIMIZEDCOMPOSITEOPFACTORYPERARCH_H
 #define KOOPTIMIZEDCOMPOSITEOPFACTORYPERARCH_H
 
-#include "config-vc.h"
-#ifndef HAVE_SANE_VC
-#error "BUG: There is no reason in including this file when Vc is not present"
-#endif
 
 #include "KoVcMultiArchBuildSupport.h"
 
@@ -51,8 +47,8 @@ struct KoOptimizedCompositeOpFactoryPerArch : public KoOptimizedCompositeOpFacto
     template<> KoCompositeOp* KoOptimizedCompositeOpFactoryPerArch<__arch>::createOverOp32(const KoColorSpace *cs); \
     template<> void KoOptimizedCompositeOpFactoryPerArch<__arch>::printArchInfo();
 
-DECLARE_FOR_ALL_ARCHS_NO_SCALAR(DECLARE_FOR_ARCH);
-#define createOptimizedCompositeOpFactory createOptimizedFactoryNoScalar<KoOptimizedCompositeOpFactoryPerArch, KoOptimizedCompositeOpFactoryPerArchBase>
+DECLARE_FOR_ALL_ARCHS(DECLARE_FOR_ARCH);
+#define createOptimizedCompositeOpFactory createOptimizedFactory<KoOptimizedCompositeOpFactoryPerArch, KoOptimizedCompositeOpFactoryPerArchBase>
 
 
 #endif /* KOOPTIMIZEDCOMPOSITEOPFACTORYPERARCH_H */

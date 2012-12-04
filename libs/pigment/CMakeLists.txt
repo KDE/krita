@@ -13,67 +13,11 @@ endif(OPENEXR_FOUND)
 set(LINK_VC_LIB)
 if(HAVE_SANE_VC)
     include_directories(${Vc_INCLUDE_DIR})
-
-    set(OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} )
-    SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${Vc_CMAKE_MODULES_DIR}")
-    include (VcMacros)
-
-if(PACKAGERS_BUILD)
-
-# This is a copy-paste from VcMacros.cmake
-# we need a version *without* Scalar implementation
-macro(ca_compile_for_all_implementations _objs _src)
-   set(${_objs})
-
-   # remove all -march, -msse, etc. flags from the flags we want to pass
-   string(REPLACE "${Vc_ARCHITECTURE_FLAGS}" "" _flags "${Vc_DEFINITIONS}")
-   string(REPLACE "-DVC_IMPL=[^ ]*" "" _flags "${_flags}")
-
-   # capture the -march= switch as -mtune; if there is none skip it
-   if(Vc_ARCHITECTURE_FLAGS MATCHES "-march=")
-      string(REGEX REPLACE "^.*-march=([^ ]*).*$" "-mtune=\\1" _tmp "${Vc_ARCHITECTURE_FLAGS}")
-      set(_flags "${_flags} ${_tmp}")
-   endif()
-
-   # make a semicolon separated list of all flags
-   string(TOUPPER "${CMAKE_BUILD_TYPE}" _tmp)
-   set(_tmp "CMAKE_CXX_FLAGS_${_tmp}")
-   string(REPLACE " " ";" _flags "${CMAKE_CXX_FLAGS} ${${_tmp}} ${_flags} ${ARGN}")
-   get_directory_property(_inc INCLUDE_DIRECTORIES)
-   foreach(_i ${_inc})
-      list(APPEND _flags "-I${_i}")
-   endforeach()
-
-   set(_vc_compile_src "${_src}")
-
-# commented out intentionally
-#   _vc_compile_one_implementation(${_objs} Scalar NO_FLAG)
-   if(NOT Vc_SSE_INTRINSICS_BROKEN)
-      _vc_compile_one_implementation(${_objs} SSE2   "-msse2"   "-xSSE2"   "/arch:SSE2")
-      _vc_compile_one_implementation(${_objs} SSE3   "-msse3"   "-xSSE3"   "/arch:SSE2")
-      _vc_compile_one_implementation(${_objs} SSSE3  "-mssse3"  "-xSSSE3"  "/arch:SSE2")
-      _vc_compile_one_implementation(${_objs} SSE4_1 "-msse4.1" "-xSSE4.1" "/arch:SSE2")
-      _vc_compile_one_implementation(${_objs} SSE4_2 "-msse4.2" "-xSSE4.2" "/arch:SSE2")
-      _vc_compile_one_implementation(${_objs} SSE4a  "-msse4a"  "-xSSSE3"  "/arch:SSE2")
-   endif()
-   if(NOT Vc_AVX_INTRINSICS_BROKEN)
-      _vc_compile_one_implementation(${_objs} AVX      "-mavx"    "-xAVX"    "/arch:AVX")
-   endif()
-endmacro()
-
-  ca_compile_for_all_implementations(__per_arch_factory_objs compositeops/KoOptimizedCompositeOpFactoryPerArch.cpp "-fPIC")
-
-else(PACKAGERS_BUILD)
-  set(__per_arch_factory_objs compositeops/KoOptimizedCompositeOpFactoryPerArch.cpp)
-endif(PACKAGERS_BUILD)
+    set(LINK_VC_LIB ${Vc_LIBRARIES})
+    ko_compile_for_all_implementations_no_scalar(__per_arch_factory_objs compositeops/KoOptimizedCompositeOpFactoryPerArch.cpp "-fPIC")
 
     message("Following objects are generated from the per-arch lib")
     message(${__per_arch_factory_objs})
-
-
-    set(CMAKE_MODULE_PATH ${OLD_CMAKE_MODULE_PATH} )
-
-    set(LINK_VC_LIB ${Vc_LIBRARIES})
 endif(HAVE_SANE_VC)
 
 add_subdirectory(tests)
@@ -111,7 +55,7 @@ set(pigmentcms_SRCS
     colorspaces/KoRgbU8ColorSpace.cpp
     colorspaces/KoSimpleColorSpaceEngine.cpp
     compositeops/KoOptimizedCompositeOpFactory.cpp
-    compositeops/KoOptimizedCompositeOpFactory_p.cpp
+    compositeops/KoOptimizedCompositeOpFactoryPerArch_Scalar.cpp
     ${__per_arch_factory_objs}
     colorprofiles/KoDummyColorProfile.cpp
     resources/KoAbstractGradient.cpp

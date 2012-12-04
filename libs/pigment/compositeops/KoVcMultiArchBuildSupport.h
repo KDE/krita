@@ -19,13 +19,33 @@
 #ifndef __KOVCMULTIARCHBUILDSUPPORT_H
 #define __KOVCMULTIARCHBUILDSUPPORT_H
 
+#include "config-vc.h"
+
+#ifdef HAVE_SANE_VC
+
 #include <Vc/Vc>
 #include <Vc/common/support.h>
+
+#else /* HAVE_SANE_VC */
+
+namespace Vc {
+    typedef enum {ScalarImpl} Implementation;
+}
+
+#define VC_IMPL ::Vc::ScalarImpl
+
+#ifdef DO_PACKAGERS_BUILD
+#warning "Packagers build is not available without the presence of Vc library. Disabling."
+#undef DO_PACKAGERS_BUILD
+#endif
+
+#endif /* HAVE_SANE_VC */
+
 
 #ifdef DO_PACKAGERS_BUILD
 
 template<template<Vc::Implementation _impl> class FactoryType, class ReturnType>
-    ReturnType* createOptimizedFactoryNoScalar()
+    ReturnType* createOptimizedFactory()
 {
     /*if (Vc::isImplementationSupported(Vc::Fma4Impl)) {
         return new FactoryType<Vc::Fma4Impl>();
@@ -46,19 +66,13 @@ template<template<Vc::Implementation _impl> class FactoryType, class ReturnType>
         return new FactoryType<Vc::SSE3Impl>();
     } else if (Vc::isImplementationSupported(Vc::SSE2Impl)) {
         return new FactoryType<Vc::SSE2Impl>();
+    } else {
+        return new FactoryType<Vc::ScalarImpl>();
     }
-
-    return 0;
 }
 
-template<template<Vc::Implementation _impl> class FactoryType, class ReturnType>
-    ReturnType* createOptimizedFactory()
-{
-    ReturnType *f = createOptimizedFactoryNoScalar<FactoryType, ReturnType>();
-    return f ? f : new FactoryType<Vc::ScalarImpl>();
-}
-
-#define DECLARE_FOR_ALL_ARCHS_NO_SCALAR(_DECL)   \
+#define DECLARE_FOR_ALL_ARCHS(_DECL)             \
+    _DECL(Vc::ScalarImpl);                       \
     _DECL(Vc::SSE2Impl);                         \
     _DECL(Vc::SSE3Impl);                         \
     _DECL(Vc::SSSE3Impl);                        \
@@ -69,10 +83,6 @@ template<template<Vc::Implementation _impl> class FactoryType, class ReturnType>
     _DECL(Vc::XopImpl);                          \
     _DECL(Vc::Fma4Impl);*/
 
-#define DECLARE_FOR_ALL_ARCHS(_DECL)             \
-    DECLARE_FOR_ALL_ARCHS_NO_SCALAR(_DECL);      \
-    _DECL(Vc::ScalarImpl);
-
 #else /* DO_PACKAGERS_BUILD */
 
 /**
@@ -81,22 +91,14 @@ template<template<Vc::Implementation _impl> class FactoryType, class ReturnType>
  */
 
 template<template<Vc::Implementation _impl> class FactoryType, class ReturnType>
-    ReturnType* createOptimizedFactoryNoScalar()
+    ReturnType* createOptimizedFactory()
 {
     return new FactoryType<VC_IMPL>();
 }
 
-template<template<Vc::Implementation _impl> class FactoryType, class ReturnType>
-    ReturnType* createOptimizedFactory()
-{
-    return createOptimizedFactoryNoScalar<FactoryType, ReturnType>();
-}
-
-#define DECLARE_FOR_ALL_ARCHS_NO_SCALAR(_DECL)   \
-    _DECL(VC_IMPL);
-
 #define DECLARE_FOR_ALL_ARCHS(_DECL)             \
-    DECLARE_FOR_ALL_ARCHS_NO_SCALAR(_DECL);
+    _DECL(Vc::ScalarImpl);                       \
+    _DECL(VC_IMPL);
 
 #endif /* DO_PACKAGERS_BUILD */
 

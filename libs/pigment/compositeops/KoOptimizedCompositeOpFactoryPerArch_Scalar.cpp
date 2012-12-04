@@ -16,26 +16,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOOPTIMIZEDCOMPOSITEOPFACTORY_P_H
-#define KOOPTIMIZEDCOMPOSITEOPFACTORY_P_H
+#include "KoOptimizedCompositeOpFactoryPerArch.h"
 
-#include "pigment_export.h"
+#include "KoColorSpaceTraits.h"
+#include "KoCompositeOpAlphaDarken.h"
+#include "KoCompositeOpOver.h"
 
-class KoCompositeOp;
-class KoColorSpace;
 
-/**
- * The creation of the legacy composite ops is moved to a separate
- * object file. Putting all the implementations together makes the
- * system run 1.4 times slower. I do not know the reason of it,
- * looks like some layout/code locality problem (DK)
- */
-
-class PIGMENTCMS_EXPORT KoOptimizedCompositeOpFactoryPrivate
+template<>
+KoCompositeOp* KoOptimizedCompositeOpFactoryPerArch<Vc::ScalarImpl>::createAlphaDarkenOp32(const KoColorSpace *cs)
 {
-public:
-    static KoCompositeOp* createLegacyAlphaDarkenOp32(const KoColorSpace *cs);
-    static KoCompositeOp* createLegacyOverOp32(const KoColorSpace *cs);
-};
+    return new KoCompositeOpAlphaDarken<KoBgrU8Traits>(cs);
+}
 
-#endif /* KOOPTIMIZEDCOMPOSITEOPFACTORY_P_H */
+template<>
+KoCompositeOp* KoOptimizedCompositeOpFactoryPerArch<Vc::ScalarImpl>::createOverOp32(const KoColorSpace *cs)
+{
+    return new KoCompositeOpOver<KoBgrU8Traits>(cs);
+}
+
+template<>
+void KoOptimizedCompositeOpFactoryPerArch<Vc::ScalarImpl>::printArchInfo()
+{
+    qDebug() << "Legacy integer arithmetics implementation";
+
+}

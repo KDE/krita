@@ -656,7 +656,7 @@ bool PSDLayerRecord::writePixelData(QIODevice *io)
         // if the bitdepth > 8, place the bytes in the right order
         // if cmyk, invert the pixel value
         if (m_header.channelDepth == 8) {
-            if (channelInfoRecords[channelInfoIndex]->channelId >= 0 && m_header.colormode == CMYK || m_header.colormode == CMYK64) {
+            if (channelInfoRecords[channelInfoIndex]->channelId >= 0 && (m_header.colormode == CMYK || m_header.colormode == CMYK64)) {
                 for (int i = 0; i < rc.width() * rc.height(); ++i) {
                     planes[channelInfoIndex][i] = 255 - planes[channelInfoIndex][i];
                 }
@@ -667,7 +667,7 @@ bool PSDLayerRecord::writePixelData(QIODevice *io)
             for (int i = 0; i < rc.width() * rc.height(); ++i) {
                 val = reinterpret_cast<quint16*>(planes[channelInfoIndex])[i];
                 val = ntohs(val);
-                if (m_header.colormode == CMYK || m_header.colormode == CMYK64) {
+                if (channelInfoRecords[channelInfoIndex]->channelId >= 0 && (m_header.colormode == CMYK || m_header.colormode == CMYK64)) {
                      val = quint16_MAX - val;
                 }
                 reinterpret_cast<quint16*>(planes[channelInfoIndex])[i] = val;

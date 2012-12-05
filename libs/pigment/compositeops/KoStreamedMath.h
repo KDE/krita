@@ -162,10 +162,10 @@ inline void fetch_colors_32(const quint8 *data,
  * NOTE: \p data must be aligned pointer!
  */
 inline void write_channels_32(quint8 *data,
-                              Vc::float_v alpha,
-                              Vc::float_v c1,
-                              Vc::float_v c2,
-                              Vc::float_v c3) {
+                              Vc::float_v::AsArg alpha,
+                              Vc::float_v::AsArg c1,
+                              Vc::float_v::AsArg c2,
+                              Vc::float_v::AsArg c3) {
 
     /**
      * FIXME: make conversion float->int

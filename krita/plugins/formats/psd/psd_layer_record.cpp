@@ -37,6 +37,7 @@
 #include <KoColorSpaceMaths.h>
 #include <KoColorSpaceTraits.h>
 
+#include <netinet/in.h> // htonl
 
 // Just for pretty debug messages
 QString channelIdToChannelType(int channelId, PSDColorMode colormode)
@@ -646,12 +647,35 @@ bool PSDLayerRecord::writePixelData(QIODevice *io)
         }
     }
 
+
     // here's where we save the total size of the channel data
     for (int channelInfoIndex = 0; channelInfoIndex  < nChannels; ++channelInfoIndex) {
 
+        dbgFile << "\tWriting channel" << channelInfoIndex << "psd channel id" << channelInfoRecords[channelInfoIndex]->channelId;
+
+        // if the bitdepth > 8, place the bytes in the right order
+        // if cmyk, invert the pixel value
+        if (m_header.channelDepth == 8) {
+            if (channelInfoRecords[channelInfoIndex]->channelId >= 0 && m_header.colormode == CMYK || m_header.colormode == CMYK64) {
+                for (int i = 0; i < rc.width() * rc.height(); ++i) {
+                    planes[channelInfoIndex][i] = 255 - planes[channelInfoIndex][i];
+                }
+            }
+        }
+        else if (m_header.channelDepth == 16) {
+            quint16 val;
+            for (int i = 0; i < rc.width() * rc.height(); ++i) {
+                val = reinterpret_cast<quint16*>(planes[channelInfoIndex])[i];
+                val = ntohs(val);
+                if (m_header.colormode == CMYK || m_header.colormode == CMYK64) {
+                     val = quint16_MAX - val;
+                }
+                reinterpret_cast<quint16*>(planes[channelInfoIndex])[i] = val;
+            }
+        }
         quint32 len = 0;
 
-        dbgFile << "\tWriting channel" << channelInfoIndex << "psd channel id" << channelInfoRecords[channelInfoIndex]->channelId;
+
 
         // where this block starts, for the total size calculation
         quint64 startChannelBlockPos = io->pos();

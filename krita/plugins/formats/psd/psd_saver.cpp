@@ -133,7 +133,7 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
     QPair<PSDColorMode, quint16> colordef = colormodelid_to_psd_colormode(m_image->colorSpace()->colorModelId().id(),
                                                                           m_image->colorSpace()->colorDepthId().id());
 
-    if (colordef.first == UNKNOWN || colordef.second == 0) {
+    if (colordef.first == UNKNOWN || colordef.second == 0 || colordef.second == 32) {
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
     header.colormode = colordef.first;

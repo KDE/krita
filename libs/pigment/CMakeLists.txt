@@ -11,11 +11,11 @@ if(OPENEXR_FOUND)
 endif(OPENEXR_FOUND)
 
 set(LINK_VC_LIB)
-if(HAVE_SANE_VC)
+if(HAVE_VC)
   include_directories(${Vc_INCLUDE_DIR})
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
   set(LINK_VC_LIB ${Vc_LIBRARIES})
-endif(HAVE_SANE_VC)
+endif(HAVE_VC)
 
 add_subdirectory(tests)
 add_subdirectory(benchmarks)

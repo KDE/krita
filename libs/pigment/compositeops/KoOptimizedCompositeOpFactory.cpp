@@ -29,7 +29,7 @@
 
 #include "config-vc.h"
 
-#ifdef HAVE_SANE_VC
+#ifdef HAVE_VC
 #include <Vc/global.h>
 #include <Vc/common/support.h>
 #endif
@@ -37,7 +37,7 @@
 
 KoCompositeOp* KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(const KoColorSpace *cs)
 {
-#if defined HAVE_SANE_VC
+#if defined HAVE_VC
     if (Vc::currentImplementationSupported()) {
         return new KoOptimizedCompositeOpAlphaDarken32(cs);
     }
@@ -47,7 +47,7 @@ KoCompositeOp* KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(const KoColo
 
 KoCompositeOp* KoOptimizedCompositeOpFactory::createOverOp32(const KoColorSpace *cs)
 {
-#if defined HAVE_SANE_VC
+#if defined HAVE_VC
     if (Vc::currentImplementationSupported()) {
         return new KoOptimizedCompositeOpOver32(cs);
     }

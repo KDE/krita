@@ -38,8 +38,13 @@
 #include "kis_mask_generator.h"
 #include "kis_boundary.h"
 
-
-
+#if defined(_WIN32) || defined(_WIN64)
+#include <stdlib.h>
+#define srand48 srand
+inline double drand48() {
+    return double(rand()) / RAND_MAX;
+}
+#endif
 
 struct KisAutoBrush::Private {
     KisMaskGenerator* shape;

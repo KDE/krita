@@ -53,6 +53,8 @@ protected:
     MaskGenerator *m_maskGenerator;
 };
 
+#if defined HAVE_VC
+
 template<class MaskGenerator, Vc::Implementation _impl>
 struct KisBrushMaskVectorApplicator : public KisBrushMaskScalarApplicator<MaskGenerator, _impl>
 {
@@ -148,6 +150,8 @@ void KisBrushMaskVectorApplicator<MaskGenerator, _impl>::processVector(const QRe
     }//endfor y
     Vc::free(buffer);
 }
+
+#endif /* defined HAVE_VC */
 
 template<class MaskGenerator, Vc::Implementation _impl>
 void KisBrushMaskScalarApplicator<MaskGenerator, _impl>::processScalar(const QRect &rect)

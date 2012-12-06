@@ -44,44 +44,33 @@ namespace Vc {
 
 #ifdef DO_PACKAGERS_BUILD
 
-template<template<Vc::Implementation _impl> class FactoryType, class ReturnType>
-    ReturnType* createOptimizedFactory()
+template<class FactoryType>
+typename FactoryType::ReturnType
+createOptimizedClass(typename FactoryType::ParamType param)
 {
     /*if (Vc::isImplementationSupported(Vc::Fma4Impl)) {
-        return new FactoryType<Vc::Fma4Impl>();
+        return FactoryType::template create<Vc::Fma4Impl>(param);
     } else if (Vc::isImplementationSupported(Vc::XopImpl)) {
-        return new FactoryType<Vc::XopImpl>();
+        return FactoryType::template create<Vc::XopImpl>(param);
         } else*/
     if (Vc::isImplementationSupported(Vc::AVXImpl)) {
-        return new FactoryType<Vc::AVXImpl>();
+        return FactoryType::template create<Vc::AVXImpl>(param);
     } else if (Vc::isImplementationSupported(Vc::SSE42Impl)) {
-        return new FactoryType<Vc::SSE42Impl>();
+        return FactoryType::template create<Vc::SSE42Impl>(param);
     } else if (Vc::isImplementationSupported(Vc::SSE41Impl)) {
-        return new FactoryType<Vc::SSE41Impl>();
+        return FactoryType::template create<Vc::SSE41Impl>(param);
     } else if (Vc::isImplementationSupported(Vc::SSE4aImpl)) {
-        return new FactoryType<Vc::SSE4aImpl>();
+        return FactoryType::template create<Vc::SSE4aImpl>(param);
     } else if (Vc::isImplementationSupported(Vc::SSSE3Impl)) {
-        return new FactoryType<Vc::SSSE3Impl>();
+        return FactoryType::template create<Vc::SSSE3Impl>(param);
     } else if (Vc::isImplementationSupported(Vc::SSE3Impl)) {
-        return new FactoryType<Vc::SSE3Impl>();
+        return FactoryType::template create<Vc::SSE3Impl>(param);
     } else if (Vc::isImplementationSupported(Vc::SSE2Impl)) {
-        return new FactoryType<Vc::SSE2Impl>();
+        return FactoryType::template create<Vc::SSE2Impl>(param);
     } else {
-        return new FactoryType<Vc::ScalarImpl>();
+        return FactoryType::template create<Vc::ScalarImpl>(param);
     }
 }
-
-#define DECLARE_FOR_ALL_ARCHS(_DECL)             \
-    _DECL(Vc::ScalarImpl);                       \
-    _DECL(Vc::SSE2Impl);                         \
-    _DECL(Vc::SSE3Impl);                         \
-    _DECL(Vc::SSSE3Impl);                        \
-    _DECL(Vc::SSE41Impl);                        \
-    _DECL(Vc::SSE42Impl);                        \
-    _DECL(Vc::SSE4aImpl);                        \
-    _DECL(Vc::AVXImpl);/*                        \
-    _DECL(Vc::XopImpl);                          \
-    _DECL(Vc::Fma4Impl);*/
 
 #else /* DO_PACKAGERS_BUILD */
 
@@ -90,15 +79,12 @@ template<template<Vc::Implementation _impl> class FactoryType, class ReturnType>
  * so the factory methods are simplified
  */
 
-template<template<Vc::Implementation _impl> class FactoryType, class ReturnType>
-    ReturnType* createOptimizedFactory()
+template<class FactoryType>
+typename FactoryType::ReturnType
+createOptimizedClass(typename FactoryType::ParamType param)
 {
-    return new FactoryType<VC_IMPL>();
+    return FactoryType::template create<VC_IMPL>(param);
 }
-
-#define DECLARE_FOR_ALL_ARCHS(_DECL)             \
-    _DECL(Vc::ScalarImpl);                       \
-    _DECL(VC_IMPL);
 
 #endif /* DO_PACKAGERS_BUILD */
 

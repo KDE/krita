@@ -26,29 +26,30 @@
 class KoCompositeOp;
 class KoColorSpace;
 
-struct KoOptimizedCompositeOpFactoryPerArchBase
-{
-    virtual ~KoOptimizedCompositeOpFactoryPerArchBase() {}
-    virtual KoCompositeOp* createAlphaDarkenOp32(const KoColorSpace *cs) = 0;
-    virtual KoCompositeOp* createOverOp32(const KoColorSpace *cs) = 0;
-    virtual void printArchInfo() = 0;
-};
 
 template<Vc::Implementation _impl>
-struct KoOptimizedCompositeOpFactoryPerArch : public KoOptimizedCompositeOpFactoryPerArchBase
+class KoOptimizedCompositeOpAlphaDarken32;
+
+template<Vc::Implementation _impl>
+class KoOptimizedCompositeOpOver32;
+
+template<template<Vc::Implementation I> class CompositeOp>
+struct KoOptimizedCompositeOpFactoryPerArch
 {
-    KoCompositeOp* createAlphaDarkenOp32(const KoColorSpace *cs);
-    KoCompositeOp* createOverOp32(const KoColorSpace *cs);
-    void printArchInfo();
+    typedef const KoColorSpace* ParamType;
+    typedef KoCompositeOp* ReturnType;
+
+    template<Vc::Implementation _impl>
+    static ReturnType create(ParamType param);
 };
 
-#define DECLARE_FOR_ARCH(__arch)                                        \
-    template<> KoCompositeOp* KoOptimizedCompositeOpFactoryPerArch<__arch>::createAlphaDarkenOp32(const KoColorSpace *cs); \
-    template<> KoCompositeOp* KoOptimizedCompositeOpFactoryPerArch<__arch>::createOverOp32(const KoColorSpace *cs); \
-    template<> void KoOptimizedCompositeOpFactoryPerArch<__arch>::printArchInfo();
+struct KoReportCurrentArch
+{
+    typedef void* ParamType;
+    typedef void ReturnType;
 
-DECLARE_FOR_ALL_ARCHS(DECLARE_FOR_ARCH);
-#define createOptimizedCompositeOpFactory createOptimizedFactory<KoOptimizedCompositeOpFactoryPerArch, KoOptimizedCompositeOpFactoryPerArchBase>
-
+    template<Vc::Implementation _impl>
+    static ReturnType create(ParamType);
+};
 
 #endif /* KOOPTIMIZEDCOMPOSITEOPFACTORYPERARCH_H */

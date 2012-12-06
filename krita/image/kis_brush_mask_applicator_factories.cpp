@@ -31,9 +31,20 @@ template<>
 MaskApplicatorFactory<KisMaskGenerator, KisBrushMaskScalarApplicator>::ReturnType
 MaskApplicatorFactory<KisMaskGenerator, KisBrushMaskScalarApplicator>::create<VC_IMPL>(ParamType maskGenerator)
 {
-    qDebug() << "Creating scalar applicator" << b(VC_IMPL);
+    // qDebug() << "Creating scalar applicator" << b(VC_IMPL);
     return new KisBrushMaskScalarApplicator<KisMaskGenerator,VC_IMPL>(maskGenerator);
 }
+
+template<>
+template<>
+MaskApplicatorFactory<KisCircleMaskGenerator, KisBrushMaskVectorApplicator>::ReturnType
+MaskApplicatorFactory<KisCircleMaskGenerator, KisBrushMaskVectorApplicator>::create<VC_IMPL>(ParamType maskGenerator)
+{
+    // qDebug() << "Creating vector applicator" << b(VC_IMPL);
+    return new KisBrushMaskVectorApplicator<KisCircleMaskGenerator,VC_IMPL>(maskGenerator);
+}
+
+#if defined HAVE_VC
 
 struct KisCircleMaskGenerator::FastRowProcessor
 {
@@ -46,15 +57,6 @@ struct KisCircleMaskGenerator::FastRowProcessor
 
     KisCircleMaskGenerator::Private *d;
 };
-
-template<>
-template<>
-MaskApplicatorFactory<KisCircleMaskGenerator, KisBrushMaskVectorApplicator>::ReturnType
-MaskApplicatorFactory<KisCircleMaskGenerator, KisBrushMaskVectorApplicator>::create<VC_IMPL>(ParamType maskGenerator)
-{
-    qDebug() << "Creating vector applicator" << b(VC_IMPL);
-    return new KisBrushMaskVectorApplicator<KisCircleMaskGenerator,VC_IMPL>(maskGenerator);
-}
 
 template<> void KisCircleMaskGenerator::
 FastRowProcessor::process<VC_IMPL>(float* buffer, int width, float y, float cosa, float sina,
@@ -116,3 +118,5 @@ FastRowProcessor::process<VC_IMPL>(float* buffer, int width, float y, float cosa
 
     Vc::free<float>(initValues);
 }
+
+#endif /* defined HAVE_VC */

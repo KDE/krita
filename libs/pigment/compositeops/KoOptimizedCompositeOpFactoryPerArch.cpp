@@ -24,16 +24,21 @@
 #include "KoOptimizedCompositeOpOver32.h"
 
 template<>
-KoCompositeOp* KoOptimizedCompositeOpFactoryPerArch<VC_IMPL>::createAlphaDarkenOp32(const KoColorSpace *cs)
+template<>
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarken32>::ReturnType
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarken32>::create<VC_IMPL>(ParamType param)
 {
-    return new KoOptimizedCompositeOpAlphaDarken32<VC_IMPL>(cs);
+    return new KoOptimizedCompositeOpAlphaDarken32<VC_IMPL>(param);
 }
 
 template<>
-KoCompositeOp* KoOptimizedCompositeOpFactoryPerArch<VC_IMPL>::createOverOp32(const KoColorSpace *cs)
+template<>
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver32>::ReturnType
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver32>::create<VC_IMPL>(ParamType param)
 {
-    return new KoOptimizedCompositeOpOver32<VC_IMPL>(cs);
+    return new KoOptimizedCompositeOpOver32<VC_IMPL>(param);
 }
+
 
 #define __stringify(_s) #_s
 #define stringify(_s) __stringify(_s)
@@ -87,7 +92,8 @@ inline void printFeatureSupported(const QString &feature,
 }
 
 template<>
-void KoOptimizedCompositeOpFactoryPerArch<VC_IMPL>::printArchInfo()
+KoReportCurrentArch::ReturnType
+KoReportCurrentArch::create<VC_IMPL>(ParamType)
 {
     qDebug() << "Compiled for arch:" << stringify(VC_IMPL);
     qDebug() << "Features supported:";

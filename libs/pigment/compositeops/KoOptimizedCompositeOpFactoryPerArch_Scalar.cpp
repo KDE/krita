@@ -24,20 +24,24 @@
 
 
 template<>
-KoCompositeOp* KoOptimizedCompositeOpFactoryPerArch<Vc::ScalarImpl>::createAlphaDarkenOp32(const KoColorSpace *cs)
+template<>
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarken32>::ReturnType
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarken32>::create<Vc::ScalarImpl>(ParamType param)
 {
-    return new KoCompositeOpAlphaDarken<KoBgrU8Traits>(cs);
+    return new KoCompositeOpAlphaDarken<KoBgrU8Traits>(param);
 }
 
 template<>
-KoCompositeOp* KoOptimizedCompositeOpFactoryPerArch<Vc::ScalarImpl>::createOverOp32(const KoColorSpace *cs)
+template<>
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver32>::ReturnType
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver32>::create<Vc::ScalarImpl>(ParamType param)
 {
-    return new KoCompositeOpOver<KoBgrU8Traits>(cs);
+    return new KoCompositeOpOver<KoBgrU8Traits>(param);
 }
 
 template<>
-void KoOptimizedCompositeOpFactoryPerArch<Vc::ScalarImpl>::printArchInfo()
+KoReportCurrentArch::ReturnType
+KoReportCurrentArch::create<Vc::ScalarImpl>(ParamType)
 {
     qDebug() << "Legacy integer arithmetics implementation";
-
 }

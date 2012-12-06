@@ -28,29 +28,17 @@
 
 static struct ArchReporter {
     ArchReporter() {
-        KoOptimizedCompositeOpFactoryPerArchBase *factory =
-            createOptimizedCompositeOpFactory();
-        factory->printArchInfo();
-        delete factory;
+        createOptimizedClass<KoReportCurrentArch>(0);
     }
 } StaticReporter;
 
 
 KoCompositeOp* KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(const KoColorSpace *cs)
 {
-    KoOptimizedCompositeOpFactoryPerArchBase *factory =
-        createOptimizedCompositeOpFactory();
-
-    KoCompositeOp *op = factory->createAlphaDarkenOp32(cs);
-    delete factory;
-    return op;
+    return createOptimizedClass<KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarken32> >(cs);
 }
 
 KoCompositeOp* KoOptimizedCompositeOpFactory::createOverOp32(const KoColorSpace *cs)
 {
-    KoOptimizedCompositeOpFactoryPerArchBase *factory =
-        createOptimizedCompositeOpFactory();
-    KoCompositeOp *op = factory->createOverOp32(cs);
-    delete factory;
-    return op;
+    return createOptimizedClass<KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver32> >(cs);
 }

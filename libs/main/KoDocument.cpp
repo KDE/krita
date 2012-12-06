@@ -1237,8 +1237,11 @@ bool KoDocument::openFile()
             switch (status) {
             case KoFilter::OK: break;
 
+            case KoFilter::FilterCreationError:
+                msg = i18n("Could not create the filter plugin"); break;
+
             case KoFilter::CreationError:
-                msg = i18n("Creation error"); break;
+                msg = i18n("Could not create the output document"); break;
 
             case KoFilter::FileNotFound:
                 msg = i18n("File not found"); break;
@@ -1276,6 +1279,15 @@ bool KoDocument::openFile()
 
             case KoFilter::OutOfMemory:
                 msg = i18n("Out of memory"); break;
+
+            case KoFilter::FilterEntryNull:
+                msg = i18n("Empty Filter Plugin"); break;
+
+            case KoFilter::NoDocumentCreated:
+                msg = i18n("Trying to load into the wrong kind of document"); break;
+
+            case KoFilter::DownloadFailed:
+                msg = i18n("Failed to download remote file"); break;
 
             case KoFilter::UserCancelled:
             case KoFilter::BadConversionGraph:

@@ -21,12 +21,12 @@
 
 #include "config-vc.h"
 
-#ifdef HAVE_SANE_VC
+#ifdef HAVE_VC
 
 #include <Vc/Vc>
 #include <Vc/common/support.h>
 
-#else /* HAVE_SANE_VC */
+#else /* HAVE_VC */
 
 namespace Vc {
     typedef enum {ScalarImpl} Implementation;
@@ -39,7 +39,7 @@ namespace Vc {
 #undef DO_PACKAGERS_BUILD
 #endif
 
-#endif /* HAVE_SANE_VC */
+#endif /* HAVE_VC */
 
 
 #ifdef DO_PACKAGERS_BUILD

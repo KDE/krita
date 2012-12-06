@@ -43,6 +43,7 @@ public:
     /* to store rgb colormap values of indexed image
     */
     QList<QColor> colormap;
+    QByteArray duotoneSpecification; // Krita should save this in an annotation and write it back, if present
 
 };
 

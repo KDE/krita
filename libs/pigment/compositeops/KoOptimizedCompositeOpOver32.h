@@ -30,6 +30,7 @@ template<typename channels_type, typename pixel_type, bool alphaLocked, bool all
 struct OverCompositor32 {
     // \see docs in AlphaDarkenCompositor32
 
+
     template<bool haveMask, bool src_aligned, Vc::Implementation _impl>
     static ALWAYS_INLINE void compositeVector(const quint8 *src, quint8 *dst, const quint8 *mask, float opacity, float flow)
     {

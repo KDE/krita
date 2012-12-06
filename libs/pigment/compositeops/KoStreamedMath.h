@@ -19,12 +19,6 @@
 #ifndef __VECTOR_MATH_H
 #define __VECTOR_MATH_H
 
-
-#include "config-vc.h"
-#ifndef HAVE_SANE_VC
-#error "BUG: There is no reason in including this file when Vc is not present"
-#endif
-
 #include <Vc/Vc>
 #include <Vc/IO>
 
@@ -162,11 +156,10 @@ static inline void fetch_colors_32(const quint8 *data,
  * NOTE: \p data must be aligned pointer!
  */
 static inline void write_channels_32(quint8 *data,
-                              Vc::float_v alpha,
-                              Vc::float_v c1,
-                              Vc::float_v c2,
-                              Vc::float_v c3) {
-
+                                     Vc::float_v::AsArg alpha,
+                                     Vc::float_v::AsArg c1,
+                                     Vc::float_v::AsArg c2,
+                                     Vc::float_v::AsArg c3) {
     /**
      * FIXME: make conversion float->int
      * use methematical rounding
@@ -303,7 +296,6 @@ template<bool useMask, bool useFlow, class Compositor>
         Vc::free<float>(reinterpret_cast<float*>(const_cast<quint8*>(srcRowStart)));
     }
 }
-
 };
 
 #endif /* __VECTOR_MATH_H */

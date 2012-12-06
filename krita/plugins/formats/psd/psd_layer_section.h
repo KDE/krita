@@ -22,6 +22,8 @@
 
 class QIODevice;
 
+#include <kis_types.h>
+
 #include "psd_header.h"
 #include "psd_layer_record.h"
 
@@ -34,7 +36,7 @@ public:
     ~PSDLayerSection();
 
     bool read(QIODevice* io);
-    bool write(QIODevice* io);
+    bool write(QIODevice* io, KisNodeSP rootLayer);
     bool valid();
 
     QString error;

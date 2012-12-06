@@ -23,7 +23,7 @@
 #include <QByteArray>
 #include <QBuffer>
 
-
+#include <KoChannelInfo.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceMaths.h>
 #include <KoColorSpaceTraits.h>
@@ -31,7 +31,9 @@
 #include <psd_image_data.h>
 #include "psd_utils.h"
 #include "compression.h"
+
 #include "kis_iterator_ng.h"
+#include "kis_paint_device.h"
 
 PSDImageData::PSDImageData(PSDHeader *header)
 {
@@ -42,7 +44,7 @@ PSDImageData::~PSDImageData() {
 
 }
 
-bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
+bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
 
     psdread(io, &m_compression);
     quint64 start = io->pos();
@@ -73,17 +75,17 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
         case Indexed:
             break;
         case RGB:
-            doRGB(dev, io);
+            readRGB(io, dev);
             break;
         case CMYK:
-            doCMYK(dev,io);
+            readCMYK(io, dev);
             break;
         case MultiChannel:
             break;
         case DuoTone:
             break;
         case Lab:
-            doLAB(dev, io);
+            readLAB(io, dev);
             break;
         case UNKNOWN:
             break;
@@ -113,7 +115,7 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
             channelInfo.channelId = channel;
             channelInfo.channelDataStart = start;
             channelInfo.compressionType = Compression::RLE;
-            for (int row = 0; row < m_header->height; row++ ) {
+            for (quint32 row = 0; row < m_header->height; row++ ) {
                 if (m_header->version == 1) {
                     psdread(io,(quint16*)&rlelength);
                 }
@@ -136,17 +138,17 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
         case Indexed:
             break;
         case RGB:
-            doRGB(dev,io);
+            readRGB(io, dev);
             break;
         case CMYK:
-            doCMYK(dev,io);
+            readCMYK(io, dev);
             break;
         case MultiChannel:
             break;
         case DuoTone:
             break;
         case Lab:
-            doLAB(dev, io);
+            readLAB(io, dev);
             break;
         case UNKNOWN:
             break;
@@ -214,11 +216,57 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
     return true;
 }
 
-bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
+bool PSDImageData::write(QIODevice *io, KisPaintDeviceSP dev)
+{
+    // XXX: make the compression settting configurable. For now, always use RLE.
+    psdwrite(io, (quint16)Compression::RLE);
+
+    // now write all the channels in display order
+    // fill in the channel chooser, in the display order, but store the pixel index as well.
+    QRect rc = dev->exactBounds();
+    QVector<quint8* > planes = dev->readPlanarBytes(rc.x(), rc.y(), rc.width(), rc.height());
+
+    quint64 channelLengthPos = io->pos();
+    // write zero's for the channel lengths section
+    for (uint i = 0; i < dev->colorSpace()->channelCount() * rc.height(); ++i) {
+        psdwrite(io, (quint16)0);
+    }
+    // here the actual channel data starts
+    quint64 channelStartPos = io->pos();
+
+    foreach (KoChannelInfo *channelInfo, KoChannelInfo::displayOrderSorted(dev->colorSpace()->channels())) {
+
+        dbgFile << "Writing channel" << channelInfo->name() << "to image section, Display position" << channelInfo->displayPosition() << "channel index" << KoChannelInfo::displayPositionToChannelIndex(channelInfo->displayPosition(), dev->colorSpace()->channels());
+
+        quint8 *plane = planes[KoChannelInfo::displayPositionToChannelIndex(channelInfo->displayPosition(), dev->colorSpace()->channels())];
+        quint32 stride = channelInfo->size() * rc.width();
+        for (qint32 row = 0; row < rc.height(); ++row) {
+
+            QByteArray uncompressed = QByteArray::fromRawData((const char*)plane + row * stride, stride);
+            QByteArray compressed = Compression::compress(uncompressed, Compression::RLE);
+
+            io->seek(channelLengthPos);
+            psdwrite(io, (quint16)compressed.size());
+            channelLengthPos +=2;
+            io->seek(channelStartPos);
+
+            if (!io->write(compressed) == compressed.size()) {
+                error = "Could not write image data";
+                return false;
+            }
+
+            channelStartPos += compressed.size();
+        }
+    }
+
+    return true;
+}
+
+bool PSDImageData::readRGB(QIODevice *io, KisPaintDeviceSP dev) {
 
     int channelid = 0;
 
-    for (int row = 0; row < m_header->height; row++) {
+    for (quint32 row = 0; row < m_header->height; row++) {
 
         KisHLineIteratorSP it = dev->createHLineIteratorNG(0, row, m_header->width);
         QVector<QByteArray> channelBytes;
@@ -258,7 +306,7 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
             m_channelOffsets[channelid] += (m_header->width * m_channelSize);
         }
 
-        for (int col = 0; col < m_header->width; col++) {
+        for (quint32 col = 0; col < m_header->width; col++) {
 
             if (m_channelSize == 1) {
 
@@ -310,10 +358,11 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
 }
 
 
-bool PSDImageData::doCMYK(KisPaintDeviceSP dev, QIODevice *io) {
+bool PSDImageData::readCMYK(QIODevice *io, KisPaintDeviceSP dev) {
+
     int channelid = 0;
 
-    for (int row = 0; row < m_header->height; row++) {
+    for (quint32 row = 0; row < m_header->height; row++) {
 
         KisHLineIteratorSP it = dev->createHLineIteratorNG(0, row, m_header->width);
         QVector<QByteArray> channelBytes;
@@ -359,7 +408,7 @@ bool PSDImageData::doCMYK(KisPaintDeviceSP dev, QIODevice *io) {
             m_channelOffsets[channelid] += (m_header->width * m_channelSize);
         }
 
-        for (int col = 0; col < m_header->width; col++) {
+        for (quint32 col = 0; col < m_header->width; col++) {
 
             if (m_channelSize == 1) {
 
@@ -371,7 +420,7 @@ bool PSDImageData::doCMYK(KisPaintDeviceSP dev, QIODevice *io) {
                 memset(pixel + 1, 255 - channelBytes[1].constData()[col], 1);
                 memset(pixel + 2, 255 - channelBytes[2].constData()[col], 1);
                 memset(pixel + 3, 255 - channelBytes[3].constData()[col], 1);
-                qDebug() << "C" << pixel[0] << "M" << pixel[1] << "Y" << pixel[2] << "K" << pixel[3] << "A" << pixel[4];
+                dbgFile << "C" << pixel[0] << "M" << pixel[1] << "Y" << pixel[2] << "K" << pixel[3] << "A" << pixel[4];
                 memcpy(it->rawData(), pixel, 5);
 
 
@@ -417,11 +466,11 @@ bool PSDImageData::doCMYK(KisPaintDeviceSP dev, QIODevice *io) {
 
 }
 
-bool PSDImageData::doLAB(KisPaintDeviceSP dev, QIODevice *io) {
+bool PSDImageData::readLAB(QIODevice *io, KisPaintDeviceSP dev) {
 
     int channelid = 0;
 
-    for (int row = 0; row < m_header->height; row++) {
+    for (quint32 row = 0; row < m_header->height; row++) {
 
         KisHLineIteratorSP it = dev->createHLineIteratorNG(0, row, m_header->width);
         QVector<QByteArray> channelBytes;
@@ -467,7 +516,7 @@ bool PSDImageData::doLAB(KisPaintDeviceSP dev, QIODevice *io) {
             m_channelOffsets[channelid] += (m_header->width * m_channelSize);
         }
 
-        for (int col = 0; col < m_header->width; col++) {
+        for (quint32 col = 0; col < m_header->width; col++) {
 
             if (m_channelSize == 1) {
 

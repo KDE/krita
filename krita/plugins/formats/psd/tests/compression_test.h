@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
+ * Copyright (C) 2009 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,23 +16,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "KoOptimizedCompositeOpFactory.h"
+#ifndef _COMPRESSION_TEST_H_
+#define _COMPRESSION_TEST_H_
 
-#include "KoOptimizedCompositeOpFactoryPerArch.h"
+#include <QObject>
 
-static struct ArchReporter {
-    ArchReporter() {
-        createOptimizedClass<KoReportCurrentArch>(0);
-    }
-} StaticReporter;
-
-
-KoCompositeOp* KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(const KoColorSpace *cs)
+class CompressionTest : public QObject
 {
-    return createOptimizedClass<KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarken32> >(cs);
-}
+    Q_OBJECT
+private slots:
 
-KoCompositeOp* KoOptimizedCompositeOpFactory::createOverOp32(const KoColorSpace *cs)
-{
-    return createOptimizedClass<KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver32> >(cs);
-}
+    void testCompressionRLE();
+    void testCompressionZIP();
+    void testCompressionUncompressed();
+
+};
+
+#endif

@@ -57,7 +57,7 @@ void KoOdtFramesReportDocument::setPageOptions(const ReportPageOptions &pageOpti
 
 void KoOdtFramesReportDocument::startTable(OROSection* section)
 {
-
+    Q_UNUSED(section);
 }
 
 void KoOdtFramesReportDocument::addPrimitive(KoOdtFrameReportPrimitive *data)

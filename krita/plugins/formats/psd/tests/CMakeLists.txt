@@ -22,8 +22,12 @@ kde4_add_unit_test(psd_colormode_block_test TESTNAME krita-psd-psd_colormode_blo
 target_link_libraries(psd_colormode_block_test ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
-set(kis_psd_test_SRCS kis_psd_test.cpp )
 
-kde4_add_unit_test(kis_psd_test TESTNAME krita-plugins-formats-psd_test ${kis_psd_test_SRCS})
+set(compression_test_SRCS compression_test.cpp ../compression.cpp)
+kde4_add_unit_test(compression_test TESTNAME krita-psd-compression_test  ${compression_test_SRCS})
+target_link_libraries(compression_test ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
 
-target_link_libraries(kis_psd_test  ${KDE4_KDEUI_LIBS} kritaui ${QT_QTTEST_LIBRARY})
+########### next target ###############
+#set(kis_psd_test_SRCS kis_psd_test.cpp )
+#kde4_add_unit_test(kis_psd_test TESTNAME krita-plugins-formats-psd_test ${kis_psd_test_SRCS})
+#target_link_libraries(kis_psd_test  ${KDE4_KDEUI_LIBS} kritaui ${QT_QTTEST_LIBRARY})

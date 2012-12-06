@@ -35,7 +35,7 @@ void PSDHeaderTest::testCreation()
 
 void PSDHeaderTest::testLoading()
 {
-    QString filename = QString(FILES_DATA_DIR) + "/sources/1.psd";
+    QString filename = QString(FILES_DATA_DIR) + "/sources/2.psd";
     QFile f(filename);
     f.open(QIODevice::ReadOnly);
     PSDHeader header;
@@ -46,7 +46,7 @@ void PSDHeaderTest::testLoading()
     QVERIFY(header.nChannels == 3);
     QVERIFY(header.width == 100 );
     QVERIFY(header.height == 100);
-    QVERIFY(header.channelDepth == 16);
+    QVERIFY(header.channelDepth == 8);
     QVERIFY(header.colormode == RGB);
 
 }

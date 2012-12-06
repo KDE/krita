@@ -882,7 +882,7 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
 
     bool hasAntialiasing = painter->testRenderHint(QPainter::Antialiasing);
 
-    // Draw header row cell backgrounds and contents AND borders.
+    // Draw header row cell backgrounds and contents.
     for (int row = 0; row < d->headerRows; ++row) {
         for (int column = 0; column < d->table->columns(); ++column) {
             QTextTableCell tableCell = d->table->cellAt(row, column);
@@ -895,7 +895,16 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
                     cellContext.background = bgBrush.color();
                 }
                 paintCell(painter, cellContext, tableCell);
+            }
+        }
+    }
+    // Draw header row cell borders.(need to be second step so nabour cells don't overwrite)
+    for (int row = 0; row < d->headerRows; ++row) {
+        for (int column = 0; column < d->table->columns(); ++column) {
+            QTextTableCell tableCell = d->table->cellAt(row, column);
 
+            int testRow = row == firstRow ? tableCell.row() : row;
+            if (d->cellAreas[testRow][column]) {
                 painter->setRenderHint(QPainter::Antialiasing, true);
                 paintCellBorders(painter, context, tableCell, false, &accuBlankBorders);
                 painter->setRenderHint(QPainter::Antialiasing, hasAntialiasing);

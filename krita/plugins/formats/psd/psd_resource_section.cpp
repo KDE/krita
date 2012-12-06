@@ -72,10 +72,34 @@ bool PSDResourceSection::read(QIODevice* io)
 bool PSDResourceSection::write(QIODevice* io)
 {
     Q_UNUSED(io);
-    Q_ASSERT(valid());
-    if (!valid()) return false;
-    qFatal("TODO: implement writing the resource section");
-    return false;
+
+    if (!valid()) {
+        error = "Resource Section is Invalid";
+        return false;
+    }
+    // First write all the sections
+    QByteArray ba;
+    QBuffer buf;
+    buf.setBuffer(&ba);
+    buf.open(QBuffer::WriteOnly);
+
+    foreach(PSDResourceBlock* block, resources) {
+        if (!block->write(&buf)) {
+            error = block->error;
+            return false;
+        }
+    }
+
+    buf.close();
+
+    // Then get the size
+    quint32 resourceBlockLength = ba.size();
+    dbgFile << "resource section has size" << resourceBlockLength;
+    psdwrite(io, resourceBlockLength);
+
+    // and write the whole buffer;
+    return (io->write(ba.constData(), ba.size()) == resourceBlockLength);
+
 }
 
 bool PSDResourceSection::valid()

@@ -318,9 +318,6 @@ macro_log_feature(Vc_FOUND "Vc" "Portable, zero-overhead SIMD library for C++" "
 macro_bool_to_01(Vc_FOUND HAVE_VC)
 macro_bool_to_01(PACKAGERS_BUILD DO_PACKAGERS_BUILD)
 
-if(NOT MSVC)
-macro_bool_to_01(Vc_FOUND HAVE_SANE_VC)
-endif(NOT MSVC)
 configure_file(config-vc.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-vc.h )
 
 if(HAVE_VC)

@@ -98,7 +98,9 @@ public:
         while (nPixels > 0) {
 
             if (m_colorize) {
-                h = m_adj_h;
+                h = m_adj_h * 360;
+                if (h >= 360.0) h = 0;
+
                 s = m_adj_s;
 
                 r = SCALE_TO_FLOAT(src->red);
@@ -122,7 +124,7 @@ public:
 
                 if (m_type == 0) {
                     RGBToHSV(SCALE_TO_FLOAT(src->red), SCALE_TO_FLOAT(src->green), SCALE_TO_FLOAT(src->blue), &h, &s, &v);
-                    h += m_adj_h;
+                    h += m_adj_h * 180;
                     if (h > 360) h -= 360;
                     if (h < 0) h += 360;
                     s += m_adj_s;
@@ -133,7 +135,7 @@ public:
 
                     RGBToHSL(SCALE_TO_FLOAT(src->red), SCALE_TO_FLOAT(src->green), SCALE_TO_FLOAT(src->blue), &h, &s, &v);
 
-                    h += m_adj_h;
+                    h += m_adj_h * 180;
                     if (h > 360) h -= 360;
                     if (h < 0) h += 360;
 
@@ -189,8 +191,8 @@ public:
     
     /**
     * name - "h", "s" or "v"
-    * (h)ue in range <-1.0, 1.0> ( for user, show as -180, 180)
-    * (s)aturation in range <-1.0, 1.0> ( for user, show -100, 100)
+    * (h)ue in range <-1.0, 1.0> ( for user, show as -180, 180 or 0, 360 for colorize)
+    * (s)aturation in range <-1.0, 1.0> ( for user, show -100, 100, or 0, 100 for colorize)
     * (v)alue in range <-1.0, 1.0> (for user, show -100, 100)
     */
     virtual void setParameter(int id, const QVariant& parameter)
@@ -198,7 +200,7 @@ public:
         switch(id)
         {
         case 0:
-            m_adj_h = parameter.toDouble() * 180;
+            m_adj_h = parameter.toDouble();
             break;
         case 1:
             m_adj_s = parameter.toDouble();

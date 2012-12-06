@@ -38,8 +38,9 @@ struct AlphaDarkenCompositor32 {
      *   \p src_aligned.
      * o the \p dst pointer must always(!) be aligned to the boundary
      *   of a streaming vector. Unaligned writes are really expensive.
-     * o This function is *never* used if HAVE_SANE_VC is not present
+     * o This function is *never* used if HAVE_VC is not present
      */
+
 
     template<bool haveMask, bool src_aligned, Vc::Implementation _impl>
     static ALWAYS_INLINE void compositeVector(const quint8 *src, quint8 *dst, const quint8 *mask, float opacity, float flow)

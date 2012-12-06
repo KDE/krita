@@ -132,6 +132,7 @@ void KisHSVConfigWidget::switchColorize(bool toggle)
         m_page->hue->setMaximum(360);
         m_page->saturation->setMinimum(0);
         m_page->saturation->setMaximum(100);
+        m_page->saturation->setValue(50);
         switchType(1);
     }
     else {

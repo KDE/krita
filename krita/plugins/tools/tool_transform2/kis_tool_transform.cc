@@ -97,7 +97,7 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     m_scaleCursors[6] = KisCursor::sizeVerCursor();
     m_scaleCursors[7] = KisCursor::sizeFDiagCursor();
     QPixmap shearPixmap;
-    shearPixmap.load(KStandardDirs::locate("data", "calligra/icons/shear.png"));
+    shearPixmap.load(KStandardDirs::locate("data", "calligra/icons/cursor_shear.png"));
     m_shearCursors[7] = QCursor(shearPixmap.transformed(QTransform().rotate(45)));
     m_shearCursors[6] = QCursor(shearPixmap.transformed(QTransform().rotate(90)));
     m_shearCursors[5] = QCursor(shearPixmap.transformed(QTransform().rotate(135)));

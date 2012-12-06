@@ -303,6 +303,7 @@ void KisColorSelector::init()
 {
     setAcceptDrops(true);
 
+    m_lastColorRole = Foreground;
     m_ring = new KisColorSelectorRing(this);
     m_triangle = new KisColorSelectorTriangle(this);
     m_slider = new KisColorSelectorSimple(this);

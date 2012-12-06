@@ -179,9 +179,9 @@ void PSDUtilsTest::test_psdread_pascalstring()
     QVERIFY(psdwrite_pascalstring(&buf, s));
     buf.close();
     buf.open(QBuffer::ReadOnly);
-    psdread_pascalstring(&buf, r);
+    psdread_pascalstring(&buf, r, 2);
     QCOMPARE(r, s);
-    QCOMPARE(buf.bytesAvailable(), 0);
+    QVERIFY(buf.bytesAvailable() == 0);
 
     // test even string
     buf.close();
@@ -192,9 +192,9 @@ void PSDUtilsTest::test_psdread_pascalstring()
     QVERIFY(psdwrite_pascalstring(&buf, s));
     buf.close();
     buf.open(QBuffer::ReadOnly);
-    psdread_pascalstring(&buf, r);
+    psdread_pascalstring(&buf, r, 1);
     QCOMPARE(r, s);
-    QCOMPARE(buf.bytesAvailable(), 0);
+    QVERIFY(buf.bytesAvailable() == 0);
 
     // test uneven string
     buf.close();
@@ -202,12 +202,13 @@ void PSDUtilsTest::test_psdread_pascalstring()
     r.clear();
     buf.open(QBuffer::ReadWrite);
     s = QString("bla");
-    QVERIFY(psdwrite_pascalstring(&buf, s));
+    QVERIFY(psdwrite_pascalstring(&buf, s, 2));
     buf.close();
     buf.open(QBuffer::ReadOnly);
-    psdread_pascalstring(&buf, r);
+    psdread_pascalstring(&buf, r, 2);
     QCOMPARE(r, s);
-    QCOMPARE(buf.bytesAvailable(), 0);
+    qDebug() << buf.bytesAvailable();
+    QVERIFY(buf.bytesAvailable() == 0);
 }
 
 QTEST_KDEMAIN(PSDUtilsTest, GUI)

@@ -54,7 +54,9 @@ include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
 
 if(HAVE_VC)
   include_directories(${Vc_INCLUDE_DIR})
-#  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
+  ko_compile_for_all_implementations(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp "-fPIC")
+else(HAVE_VC)
+  set(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp)
 endif(HAVE_VC)
 
 set(kritaimage_LIB_SRCS
@@ -158,6 +160,7 @@ set(kritaimage_LIB_SRCS
    kis_circle_mask_generator.cpp
    kis_gauss_circle_mask_generator.cpp
    kis_gauss_rect_mask_generator.cpp
+   ${__per_arch_circle_mask_generator_objs}
    kis_gtl_lock.cpp
    kis_curve_circle_mask_generator.cpp
    kis_curve_rect_mask_generator.cpp

@@ -18,14 +18,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#if defined(_WIN32) || defined(_WIN64)
-#include <stdlib.h>
-#define srand48 srand
-inline double drand48() {
-    return double(rand()) / RAND_MAX;
-}
-#endif
-
 #include "kis_auto_brush.h"
 
 #include <kis_debug.h>
@@ -46,177 +38,8 @@ inline double drand48() {
 #include "kis_mask_generator.h"
 #include "kis_boundary.h"
 
-#include "config-vc.h"
-#ifdef HAVE_VC
-#include <Vc/Vc>
-#include <Vc/IO>
-#include <Vc/common/support.h>
-#endif
 
-// 3x3 supersampling
-#define SUPERSAMPLING 3
 
-struct MaskProcessor
-{
-    MaskProcessor(KisFixedPaintDeviceSP device, const KoColorSpace* cs, qreal randomness, qreal density,
-           double centerX, double centerY, double invScaleX, double invScaleY, double angle,
-           KisMaskGenerator* shape)
-    : m_device(device)
-    , m_cs(cs)
-    , m_randomness(randomness)
-    , m_density(density)
-    , m_pixelSize(cs->pixelSize())
-    , m_centerX(centerX)
-    , m_centerY(centerY)
-    , m_invScaleX(invScaleX)
-    , m_invScaleY(invScaleY)
-    , m_shape(shape)
-    {
-
-        m_cosa = cos(angle);
-        m_sina = sin(angle);
-
-#ifdef HAVE_VC
-        m_canVectorize = Vc::currentImplementationSupported();
-#else
-        m_canVectorize = false;
-#endif
-
-    }
-
-    void operator()(QRect& rect)
-    {
-        process(rect);
-    }
-
-    void process(QRect& rect){
-#ifdef HAVE_VC
-        if (m_canVectorize && m_shape->shouldVectorize()) {
-            processParallel(rect);
-        } else {
-            processScalar(rect);
-        }
-
-#else
-        processScalar(rect);
-#endif
-    }
-
-    void processScalar(QRect& rect){
-        qreal random = 1.0;
-        quint8* dabPointer = m_device->data() + rect.y() * rect.width() * m_pixelSize;
-        quint8 alphaValue = OPACITY_TRANSPARENT_U8;
-        // this offset is needed when brush size is smaller then fixed device size
-        int offset = (m_device->bounds().width() - rect.width()) * m_pixelSize;
-        int supersample = (m_shape->shouldSupersample() ? SUPERSAMPLING : 1);
-        double invss = 1.0 / supersample;
-        int samplearea = supersample * supersample;
-        for (int y = rect.y(); y < rect.y() + rect.height(); y++) {
-            for (int x = rect.x(); x < rect.x() + rect.width(); x++) {
-                int value = 0;
-                for (int sy = 0; sy < supersample; sy++) {
-                    for (int sx = 0; sx < supersample; sx++) {
-                        double x_ = (x + sx * invss - m_centerX) * m_invScaleX;
-                        double y_ = (y + sy * invss - m_centerY) * m_invScaleY;
-                        double maskX = m_cosa * x_ - m_sina * y_;
-                        double maskY = m_sina * x_ + m_cosa * y_;
-                        value += m_shape->valueAt(maskX, maskY);
-                    }
-                }
-                if (supersample != 1) value /= samplearea;
-
-                if (m_randomness!= 0.0){
-                    random = (1.0 - m_randomness) + m_randomness * float(rand()) / RAND_MAX;
-                }
-
-                alphaValue = quint8( (OPACITY_OPAQUE_U8 - value) * random);
-
-                // avoid computation of random numbers if density is full
-                if (m_density != 1.0){
-                    // compute density only for visible pixels of the mask
-                    if (alphaValue != OPACITY_TRANSPARENT_U8){
-                        if ( !(m_density >= drand48()) ){
-                            alphaValue = OPACITY_TRANSPARENT_U8;
-                        }
-                    }
-                }
-
-                m_cs->applyAlphaU8Mask(dabPointer, &alphaValue, 1);
-                dabPointer += m_pixelSize;
-            }//endfor x
-            dabPointer += offset;
-        }//endfor y
-    }
-
-#ifdef HAVE_VC
-    void processParallel(QRect& rect){
-        qreal random = 1.0;
-        quint8* dabPointer = m_device->data() + rect.y() * rect.width() * m_pixelSize;
-        quint8 alphaValue = OPACITY_TRANSPARENT_U8;
-        // this offset is needed when brush size is smaller then fixed device size
-        int offset = (m_device->bounds().width() - rect.width()) * m_pixelSize;
-
-        int width = rect.width();
-
-        // We need to calculate with a multiple of the width of the simd register
-        int alignOffset = 0;
-        if (width % Vc::float_v::Size != 0) {
-            alignOffset = Vc::float_v::Size - (width % Vc::float_v::Size);
-        }
-        int simdWidth = width + alignOffset;
-
-        float *buffer = Vc::malloc<float, Vc::AlignOnVector>(simdWidth);
-
-        for (int y = rect.y(); y < rect.y() + rect.height(); y++) {
-
-            m_shape->processRowFast(buffer, simdWidth, y, m_cosa, m_sina, m_centerX, m_centerY, m_invScaleX, m_invScaleY);
-
-            if (m_randomness != 0.0 || m_density != 1.0) {
-                for (int x = 0; x < width; x++) {
-
-                    if (m_randomness!= 0.0){
-                        random = (1.0 - m_randomness) + m_randomness * float(rand()) / RAND_MAX;
-                    }
-
-                    alphaValue = quint8( (OPACITY_OPAQUE_U8 - buffer[x]*255) * random);
-
-                    // avoid computation of random numbers if density is full
-                    if (m_density != 1.0){
-                        // compute density only for visible pixels of the mask
-                        if (alphaValue != OPACITY_TRANSPARENT_U8){
-                            if ( !(m_density >= drand48()) ){
-                                alphaValue = OPACITY_TRANSPARENT_U8;
-                            }
-                        }
-                    }
-
-                    m_cs->applyAlphaU8Mask(dabPointer, &alphaValue, 1);
-                    dabPointer += m_pixelSize;
-                }
-            } else {
-                m_cs->applyInverseNormedFloatMask(dabPointer, buffer, width);
-                dabPointer += width*m_pixelSize;
-            }//endfor x
-            dabPointer += offset;
-        }//endfor y
-        Vc::free(buffer);
-    }
-#endif
-
-    KisFixedPaintDeviceSP m_device;
-    const KoColorSpace* m_cs;
-    qreal m_randomness;
-    qreal m_density;
-    quint32 m_pixelSize;
-    double m_centerX;
-    double m_centerY;
-    double m_invScaleX;
-    double m_invScaleY;
-    double m_cosa;
-    double m_sina;
-    KisMaskGenerator* m_shape;
-    bool m_canVectorize;
-};
 
 struct KisAutoBrush::Private {
     KisMaskGenerator* shape;
@@ -405,7 +228,14 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
         }
     }
 
-    MaskProcessor s(dst, cs, d->randomness, d->density, centerX, centerY, invScaleX, invScaleY, angle, d->shape);
+    MaskProcessingData data(dst, cs, d->randomness, d->density,
+                            centerX, centerY,
+                            invScaleX, invScaleY,
+                            angle);
+
+    KisBrushMaskApplicatorBase *applicator = d->shape->applicator();
+    applicator->initializeData(&data);
+
     int jobs = d->idealThreadCountCached;
     if(dstHeight > 100 && jobs >= 4) {
         int splitter = dstHeight/jobs;
@@ -414,10 +244,11 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
             rects << QRect(0, i*splitter, dstWidth, splitter);
         }
         rects << QRect(0, (jobs - 1)*splitter, dstWidth, dstHeight - (jobs - 1)*splitter);
-        QtConcurrent::blockingMap(rects, s);
+        OperatorWrapper wrapper(applicator);
+        QtConcurrent::blockingMap(rects, wrapper);
     } else {
         QRect rect(0, 0, dstWidth, dstHeight);
-        s.process(rect);
+        applicator->process(rect);
     }
 }
 

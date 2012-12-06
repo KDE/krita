@@ -24,6 +24,7 @@
 #include <klocale.h>
 
 #include "krita_export.h"
+#include "kis_brush_mask_applicator_base.h"
 
 class QDomElement;
 class QDomDocument;
@@ -68,12 +69,11 @@ public:
      */
     virtual quint8 valueAt(qreal x, qreal y) const = 0;
 
-    virtual void processRowFast(float* /*buffer*/, int /*width*/, float /*y*/, float /*cosa*/, float /*sina*/,
-                                float /*centerX*/, float /*centerY*/, float /*invScaleX*/, float /*invScaleY*/) {}
-
     virtual bool shouldSupersample() const;
 
     virtual bool shouldVectorize() const;
+
+    virtual KisBrushMaskApplicatorBase* applicator();
 
     virtual void toXML(QDomDocument& , QDomElement&) const;
 
@@ -115,6 +115,7 @@ protected:
         bool empty;
         Type type;
         QString curveString;
+        KisBrushMaskApplicatorBase *defaultMaskProcessor;
     };
 
     Private* const d;

@@ -379,6 +379,14 @@ if(HAVE_VC)
       endif(PACKAGERS_BUILD)
     endmacro()
 
+    macro(ko_compile_for_all_implementations _objs _src _opts)
+      if(PACKAGERS_BUILD)
+        vc_compile_for_all_implementations(${_objs} ${_src} ${_opts})
+      else(PACKAGERS_BUILD)
+        set(${_objs} ${_src})
+      endif(PACKAGERS_BUILD)
+    endmacro()
+
     if (NOT PACKAGERS_BUILD)
       # Optimize the whole Calligra for current architecture
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")

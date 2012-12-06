@@ -54,7 +54,7 @@ void KisMaskGeneratorBenchmark::benchmarkSIMD()
     QBENCHMARK{
         for(int y = 0; y < 1000; ++y)
         {
-            gen.processRowFast(buffer, width, y, 0.0f, 1.0f, 500.0f, 500.0f, 0.5f, 0.5f);
+//            gen.processRowFast(buffer, width, y, 0.0f, 1.0f, 500.0f, 500.0f, 0.5f, 0.5f);
         }
     }
     Vc::free(buffer);

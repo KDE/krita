@@ -158,11 +158,11 @@ bool KoAnnotation::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
     return false;
 }
 
-void KoAnnotation::saveOdf(KoShapeSavingContext &context, int position) const
+void KoAnnotation::saveOdf(KoShapeSavingContext &context, int position, TagType tagType) const
 {
     KoXmlWriter *writer = &context.xmlWriter();
 
-    if (position == rangeStart()) {
+    if ((tagType == StartTag) && (position == rangeStart())) {
         writer->startElement("office:annotation", false);
         writer->addAttribute("text:name", d->name.toUtf8());
         if (inlineRdf()) {
@@ -180,7 +180,7 @@ void KoAnnotation::saveOdf(KoShapeSavingContext &context, int position) const
         textWriter.write(d->document, d->textFrame->firstPosition(),d->textFrame->lastPosition());
 
         writer->endElement(); //office:annotation
-    } else if (position == rangeEnd()) {
+    } else if ((tagType == EndTag) && (position == rangeEnd())) {
         writer->startElement("text:annotation-end", false);
         writer->addAttribute("text:name", d->name.toUtf8());
         writer->endElement();

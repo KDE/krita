@@ -61,7 +61,7 @@ public:
     virtual ~KoAnnotation();
 
     /// reimplemented from super
-    void saveOdf(KoShapeSavingContext &context, int position) const;
+    virtual void saveOdf(KoShapeSavingContext &context, int position, TagType tagType) const;
 
     /**
      * Set the new name for this annotation

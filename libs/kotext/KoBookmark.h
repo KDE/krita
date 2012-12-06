@@ -56,7 +56,7 @@ public:
     virtual ~KoBookmark();
 
     /// reimplemented from super
-    void saveOdf(KoShapeSavingContext &context, int position) const;
+    void saveOdf(KoShapeSavingContext &context, int position, TagType tagType) const;
 
     /**
      * Set the new name for this bookmark

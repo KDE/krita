@@ -49,6 +49,7 @@ class KOTEXT_EXPORT KoTextRange : public QObject
 {
     Q_OBJECT
 public:
+    enum TagType {StartTag = 0, EndTag = 1};
 
     /**
      * constructor
@@ -73,8 +74,9 @@ public:
      * This may save a beginning tag, ending tag, or nothing at all
      * @param context the context for saving.
      * @param position a position in the qtextdocument we are currently saving for.
+     * @param tagType the type of tag we are interested in
      */
-    virtual void saveOdf(KoShapeSavingContext &context, int position) const = 0;
+    virtual void saveOdf(KoShapeSavingContext &context, int position, TagType tagType) const = 0;
 
     bool positionOnlyMode() const;
     void setPositionOnlyMode(bool m);

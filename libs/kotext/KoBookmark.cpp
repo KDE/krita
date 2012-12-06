@@ -104,25 +104,27 @@ bool KoBookmark::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
     return false;
 }
 
-void KoBookmark::saveOdf(KoShapeSavingContext &context, int position) const
+void KoBookmark::saveOdf(KoShapeSavingContext &context, int position, TagType tagType) const
 {
     KoXmlWriter *writer = &context.xmlWriter();
 
     if (!hasRange()) {
-        writer->startElement("text:bookmark", false);
-        writer->addAttribute("text:name", d->name.toUtf8());
-        if (inlineRdf()) {
-            inlineRdf()->saveOdf(context, writer);
+        if (tagType == StartTag) {
+            writer->startElement("text:bookmark", false);
+            writer->addAttribute("text:name", d->name.toUtf8());
+            if (inlineRdf()) {
+                inlineRdf()->saveOdf(context, writer);
+            }
+            writer->endElement();
         }
-         writer->endElement();
-    } else if (position == rangeStart()) {
+    } else if ((tagType == StartTag) && (position == rangeStart())) {
         writer->startElement("text:bookmark-start", false);
         writer->addAttribute("text:name", d->name.toUtf8());
         if (inlineRdf()) {
             inlineRdf()->saveOdf(context, writer);
         }
         writer->endElement();
-    } else if (position == rangeEnd()) {
+    } else if ((tagType == EndTag) && (position == rangeEnd())) {
         writer->startElement("text:bookmark-end", false);
         writer->addAttribute("text:name", d->name.toUtf8());
         writer->endElement();

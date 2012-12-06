@@ -639,6 +639,32 @@ void KoTextWriter::Private::saveInlineRdf(KoTextInlineRdf* rdf, TagInformation* 
     delete(rdfXmlWriter);
 }
 
+/*
+Note on saving textranges:
+Start and end tags of textranges can appear on cursor positions in a text block.
+in front of the first text element, between the elements, or behind the last.
+A textblock is composed of no, one or many text fragments.
+If there is no fragment at all, the only possible cursor position is 0 (relative to the
+begin of the block).
+Example:  ([] marks a block, {} a fragment)
+Three blocks, first with text fragments {AB} {C}, second empty, last with {DEF}.
+Possible positions are: [|{A|B}|{C}|]  [|]  [|{D|E|F}|]
+
+Start tags are ideally written in front of the content they are tagging,
+not behind the previous content. That way tags which are at the very begin
+of the complete document do not need special handling.
+End tags are ideally written directly behind the content, and not in front of
+the next content. That way end tags which are at the end of the complete document
+do not need special handling.
+Next there is the case of start tags which are at the final position of a text block:
+the content they belong to includes the block end/border, so they need to be
+written at the place of the last position.
+Then there is the case of end tags at the first position of a text block:
+the content they belong to includes the block start/border, so they need to be
+written at the place of the first position.
+Example:   (< marks a start tag, > marks an end tag)
+[|>{<A><B>}|{<C>}|<]  [|><]  [|>{<D>|<E>|<F>}|<]
+*/
 void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int to)
 {
     QTextCursor cursor(block);
@@ -724,10 +750,19 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
         inlineRdf->saveOdf(context, writer, xmlid);
     }
 
-    KoTextRangeManager *mgr = KoTextDocument(block.document()).textRangeManager();
+    const KoTextRangeManager *mgr = KoTextDocument(block.document()).textRangeManager();
+
+    // write tags for ranges which end at the first position of the block
+    const QHash<int, KoTextRange *> endingTextRangesAtStart =
+        mgr->textRangesChangingWithin(block.position(), block.position(), globalFrom, globalTo);
+    foreach (const KoTextRange *range, endingTextRangesAtStart) {
+        range->saveOdf(context, block.position(), KoTextRange::EndTag);
+    }
 
     QString previousFragmentLink;
     int linkTagChangeId = -1;
+    // stores the end position of the last fragment, is position of the block without any fragment at all
+    int lastEndPosition = block.position();
     for (it = block.begin(); !(it.atEnd()); ++it) {
         QTextFragment currentFragment = it.fragment();
         const int fragmentStart = currentFragment.position();
@@ -800,6 +835,18 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                         }
                     }
 
+                   // get all text ranges which start before this inline object
+                   // or end directly after it (+1 to last position for that)
+                   const QHash<int, KoTextRange *> textRanges =
+                       mgr->textRangesChangingWithin(currentFragment.position(), currentFragment.position()+1,
+                                                     globalFrom, (globalTo==-1)?-1:globalTo+1);
+                    // get all text ranges which start before this
+                    const QList<KoTextRange *> textRangesBefore = textRanges.values(currentFragment.position());
+                    // write tags for ranges which start before this content or at positioned at it
+                    foreach (const KoTextRange *range, textRangesBefore) {
+                        range->saveOdf(context, currentFragment.position(), KoTextRange::StartTag);
+                    }
+
                     bool saveSpan = dynamic_cast<KoVariable*>(inlineObject) != 0;
 
                     if (saveSpan) {
@@ -841,6 +888,13 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     if (saveSpan) {
                         writer->endElement();
                     }
+
+                    // write tags for ranges which end after this inline object
+                    const QList<KoTextRange *> textRangesAfter = textRanges.values(currentFragment.position()+1);
+                    foreach (const KoTextRange *range, textRangesAfter) {
+                        range->saveOdf(context, currentFragment.position()+1, KoTextRange::EndTag);
+                    }
+
                     //
                     // Track the end marker for matched pairs so we produce valid
                     // ODF
@@ -875,31 +929,44 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                 QString text = currentFragment.text();
                 int spanFrom = fragmentStart >= from ? fragmentStart : from;
                 int spanTo = to == -1 ? fragmentEnd : (fragmentEnd > to ? to : fragmentEnd);
-                QHash<int, KoTextRange *> textRanges = mgr->textRangesChangingWithin(spanFrom, spanTo, globalFrom, globalTo);
+                // get all text ranges which change within this span
+                // or end directly after it (+1 to last position to include those)
+                const QHash<int, KoTextRange *> textRanges = mgr->textRangesChangingWithin(spanFrom, spanTo, globalFrom, (globalTo==-1)?-1:globalTo+1);
                 // avoid mid, if possible
                 if (spanFrom != fragmentStart || spanTo != fragmentEnd || !textRanges.isEmpty()) {
                     if (textRanges.isEmpty()) {
                         writer->addTextSpan(text.mid(spanFrom - fragmentStart, spanTo - spanFrom));
                     } else {
-                        // this is a more complicated case where there are text ranges too
-                        QList<int> dividers = textRanges.uniqueKeys();
-                        qSort(dividers);
-                        int subSpanFrom = spanFrom;
-                        // Find next divider
-                        foreach (int subSpanTo, dividers) {
-                            if (subSpanTo > subSpanFrom) {
-                                writer->addTextSpan(text.mid(subSpanFrom - fragmentStart, subSpanTo - subSpanFrom));
-                            }
-                            //Now write all ranges that happen here
-                            QList<KoTextRange *> relevants = textRanges.values(subSpanTo);
-                            foreach (const KoTextRange *range, relevants) {
-                                // the range will only actually save itself if matching the position
-                                range->saveOdf(context, subSpanTo);
-                            }
-                            subSpanFrom = subSpanTo;
+                        // split the fragment into subspans at the points of range starts/ends
+                        QList<int> subSpanTos = textRanges.uniqueKeys();
+                        qSort(subSpanTos);
+                        // ensure last subSpanTo to be at the end
+                        if (subSpanTos.last() != spanTo) {
+                            subSpanTos.append(spanTo);
                         }
-                        if (spanTo > subSpanFrom) {
-                            writer->addTextSpan(text.mid(subSpanFrom - fragmentStart, spanTo - subSpanFrom));
+                        // spanFrom should not need to be included
+                        if (subSpanTos.first() == spanFrom) {
+                            subSpanTos.removeOne(spanFrom);
+                        }
+                        int subSpanFrom = spanFrom;
+                        // for all subspans
+                        foreach (int subSpanTo, subSpanTos) {
+                            // write tags for text ranges which start before this subspan or are positioned at it
+                            const QList<KoTextRange *> textRangesStartingBefore = textRanges.values(subSpanFrom);
+                            foreach (const KoTextRange *range, textRangesStartingBefore) {
+                                range->saveOdf(context, subSpanFrom, KoTextRange::StartTag);
+                            }
+
+                            // write subspan content
+                            writer->addTextSpan(text.mid(subSpanFrom - fragmentStart, subSpanTo - subSpanFrom));
+
+                            // write tags for text ranges which end behind this subspan
+                            const QList<KoTextRange *> textRangesEndingBehind = textRanges.values(subSpanTo);
+                            foreach (const KoTextRange *range, textRangesEndingBehind) {
+                                range->saveOdf(context, subSpanTo, KoTextRange::EndTag);
+                            }
+
+                            subSpanFrom = subSpanTo;
                         }
                     }
                 } else {
@@ -910,17 +977,22 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
             } // if (inlineObject)
 
             previousCharFormat = charFormat;
+            lastEndPosition = fragmentEnd;
         }
     }
+
     if (!previousFragmentLink.isEmpty()) {
         writer->endElement();
     }
 
-    QHash<int, KoTextRange *> textRanges = mgr->textRangesChangingWithin(block.position(), block.position(), globalFrom, globalTo);
-                            QList<KoTextRange *> relevants = textRanges.values(block.position());
-    foreach (const KoTextRange *range, relevants) {
-        // the range will only actually save itself if matching the position
-        range->saveOdf(context, block.position());
+    if (it.atEnd() && ((to == -1) || (lastEndPosition <= to))) {
+        // write tags for ranges which start at the last position of the block,
+        // i.e. at the position after the last (text) fragment
+        const QHash<int, KoTextRange *> startingTextRangesAtEnd =
+            mgr->textRangesChangingWithin(lastEndPosition, lastEndPosition, globalFrom, globalTo);
+        foreach (const KoTextRange *range, startingTextRangesAtEnd) {
+            range->saveOdf(context, lastEndPosition, KoTextRange::StartTag);
+        }
     }
 
     QString text = block.text();

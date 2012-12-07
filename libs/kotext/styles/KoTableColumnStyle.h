@@ -48,9 +48,7 @@ class KoOdfLoadingContext;
  *
  * The style has a property 'StyleId' with an integer as value. The integer value
  * corresponds to the styleId() output of a specific KoTableColumnStyle.
- *
- * TODO: Make this class implicitly shared.
- *
+ * *
  * @see KoStyleManager, KoTableRowAndColumnStyleManager
  */
 class KOTEXT_EXPORT KoTableColumnStyle
@@ -198,7 +196,7 @@ private:
     QColor propertyColor(int key) const;
 
     class Private;
-    QExplicitlySharedDataPointer<Private> d;
+    QSharedDataPointer<Private> d;
 };
 
 #endif

@@ -51,7 +51,7 @@ protected:
 					   //const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
 
 private:
-    // set the positions of the balloons relative to eachother and the boundries
+    // set the positions of the balloons relative to each other and the boundaries
     //void setPositions();
     void repositionInsert(int index);
     // reposition balloons around index, item removed before this call

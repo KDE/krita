@@ -2135,7 +2135,7 @@ void KoDocument::endMacro()
 
 void KoDocument::slotUndoStackIndexChanged(int idx)
 {
-    // even if the document was allready modified, call setModified to re-start autosave timer
+    // even if the document was already modified, call setModified to re-start autosave timer
     setModified(idx != d->undoStack->cleanIndex());
 }
 

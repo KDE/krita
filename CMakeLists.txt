@@ -615,7 +615,7 @@ endif (NOT TINY AND NOT CREATIVEONLY AND HAVE_ICU AND HAVE_SQLITE)
 #############################################
 
 #
-# WARNING: when adding a dependency if there is allready a line
+# WARNING: when adding a dependency if there is already a line
 # containing SHOULD_BUILD_app, don't add a new one, just add
 # the test to the if construct
 #

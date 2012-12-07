@@ -61,7 +61,7 @@ namelc = name.downcase
 nameuc = name.upcase
 
 if(File.exist?(namelc))
-  puts "There is allready a directory/file named #{namelc}, remove it before calling this script."
+  puts "There is already a directory/file named #{namelc}, remove it before calling this script."
   exit
 end
 

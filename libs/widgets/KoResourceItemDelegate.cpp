@@ -72,6 +72,7 @@ void KoResourceItemDelegate::paint( QPainter * painter, const QStyleOptionViewIt
             int thumbH = static_cast<int>( imageSize.height() * scale );
             thumbnail = thumbnail.scaled( thumbW, thumbH, Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
         }
+        painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
         painter->fillRect( innerRect, QBrush(thumbnail) );
     }
     painter->restore();

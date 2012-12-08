@@ -68,6 +68,9 @@ private:
 
 void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
 {
+    painter->save();
+    painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
+
     if (! index.isValid())
         return;
 
@@ -90,11 +93,11 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     QRect paintRect = option.rect.adjusted(2, 2, -2, -2);
     if (!m_showText) {
         painter->drawImage(paintRect.x(), paintRect.y(),
-                           preview.scaled(paintRect.size(), Qt::IgnoreAspectRatio));
+                           preview.scaled(paintRect.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
     } else {
         QSize pixSize(paintRect.height(), paintRect.height());
         painter->drawImage(paintRect.x(), paintRect.y(),
-                           preview.scaled(pixSize, Qt::KeepAspectRatio));
+                           preview.scaled(pixSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
         painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, preset->name());
     }
@@ -103,6 +106,7 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
         const KIcon icon(koIconName("broken-preset"));
         icon.paint(painter, QRect(paintRect.x() + paintRect.height() - 25, paintRect.y() + paintRect.height() - 25, 25, 25));
     }
+    painter->restore();
 }
 
 class KisPresetProxyAdapter : public KoResourceServerAdapter<KisPaintOpPreset>

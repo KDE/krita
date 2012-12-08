@@ -94,12 +94,6 @@ void KisToolSelectOutline::mouseMoveEvent(KoPointerEvent *event)
 {
     if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
         QPointF point = convertToPixelCoord(event);
-        //don't add the point, if the distance is very small
-        if (!m_points.isEmpty()) {
-            QPointF diff = point - m_points.last();
-            if(fabs(diff.x())<3 && fabs(diff.y())<3)
-                return;
-        }
         m_paintPath->lineTo(pixelToView(point));
         m_points.append(point);
         updateFeedback();

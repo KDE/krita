@@ -290,7 +290,7 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
     actionCollection()->addAction("createTemplate", m_d->createTemplate);
     connect(m_d->createTemplate, SIGNAL(triggered()), this, SLOT(slotCreateTemplate()));
 
-    m_d->mirrorCanvas = new KToggleAction(i18n("Mirror Image"), this);
+    m_d->mirrorCanvas = new KToggleAction(i18n("Mirror View"), this);
     m_d->mirrorCanvas->setChecked(false);
     actionCollection()->addAction("mirror_canvas", m_d->mirrorCanvas);
     m_d->mirrorCanvas->setShortcut(QKeySequence(Qt::Key_M));

@@ -85,6 +85,7 @@ public:
     int rangeStart() const;
     int rangeEnd() const;
 
+    void setRangeStart(int position);
     void setRangeEnd(int position);
 
     QString text() const;

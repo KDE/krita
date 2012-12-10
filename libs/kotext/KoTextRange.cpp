@@ -116,6 +116,13 @@ int KoTextRange::rangeEnd() const
     return d->positionOnlyMode ? d->cursor.position() : d->cursor.selectionEnd();
 }
 
+void KoTextRange::setRangeStart(int position)
+{
+    Q_D(KoTextRange);
+    d->positionOnlyMode = true;
+    d->cursor.setPosition(position);
+}
+
 void KoTextRange::setRangeEnd(int position)
 {
     Q_D(KoTextRange);

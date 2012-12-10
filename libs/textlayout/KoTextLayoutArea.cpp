@@ -112,11 +112,11 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
 
     QTextFrame::iterator it = d->startOfArea->it;
     QTextFrame::iterator stop = d->endOfArea->it;
-    if(!stop.currentBlock().isValid() || d->endOfArea->lineTextStart >= 0) {
-        // Last thing we contain is a frame (table) or first part of a paragraph split in two
-        // The stop point should be the object after that
-        // However if stop is already atEnd we shouldn't increment further
-        if (!stop.atEnd()) {
+    if (!stop.atEnd()) {
+        if(!stop.currentBlock().isValid() || d->endOfArea->lineTextStart >= 0) {
+            // Last thing we contain is a frame (table) or first part of a paragraph split in two
+            // The stop point should be the object after that
+            // However if stop is already atEnd we shouldn't increment further
             ++stop;
         }
     }
@@ -245,11 +245,11 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
 
     QTextFrame::iterator it = d->startOfArea->it;
     QTextFrame::iterator stop = d->endOfArea->it;
-    if(!stop.currentBlock().isValid() || d->endOfArea->lineTextStart >= 0) {
-        // Last thing we show is a frame (table) or first part of a paragraph split in two
-        // The stop point should be the object after that
-        // However if stop is already atEnd we shouldn't increment further
-        if (!stop.atEnd()) {
+    if (!stop.atEnd()) {
+        if(!stop.currentBlock().isValid() || d->endOfArea->lineTextStart >= 0) {
+            // Last thing we show is a frame (table) or first part of a paragraph split in two
+            // The stop point should be the object after that
+            // However if stop is already atEnd we shouldn't increment further
             ++stop;
         }
     }

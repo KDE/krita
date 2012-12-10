@@ -53,7 +53,7 @@ namespace
             sample_type = SAMPLEFORMAT_IEEEFP;
             return true;
         }
-        if (cs->id() == "CMYK" || cs->id() == "CMYKA16") {
+        if (cs->id() == "CMYK" || cs->id() == "CMYKAU16") {
             color_type = PHOTOMETRIC_SEPARATED;
             TIFFSetField(image, TIFFTAG_INKSET, INKSET_CMYK);
             return true;

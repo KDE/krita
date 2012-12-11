@@ -39,6 +39,7 @@ FrameIterator::FrameIterator(QTextFrame *frame)
 
 FrameIterator::FrameIterator(const QTextTableCell &cell)
 {
+    Q_ASSERT(cell.isValid());
     it = cell.begin();
     currentTableIterator = 0;
     currentSubFrameIterator = 0;

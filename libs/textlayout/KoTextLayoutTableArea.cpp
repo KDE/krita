@@ -871,7 +871,7 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
                 if (bgBrush != Qt::NoBrush) {
                     cellContext.background = bgBrush.color();
                 }
-                paintCell(painter, cellContext, tableCell);
+                paintCell(painter, cellContext, tableCell, d->cellAreas[testRow][column]);
             }
         }
     }
@@ -894,7 +894,7 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
                 if (bgBrush != Qt::NoBrush) {
                     cellContext.background = bgBrush.color();
                 }
-                paintCell(painter, cellContext, tableCell);
+                paintCell(painter, cellContext, tableCell, d->cellAreas[testRow][column]);
             }
         }
     }
@@ -942,7 +942,7 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
     }
 }
 
-void KoTextLayoutTableArea::paintCell(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, QTextTableCell tableCell)
+void KoTextLayoutTableArea::paintCell(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, QTextTableCell tableCell, KoTextLayoutArea *frameArea)
 {
     int row = tableCell.row();
     int column = tableCell.column();
@@ -986,7 +986,7 @@ void KoTextLayoutTableArea::paintCell(QPainter *painter, const KoTextDocumentLay
     }
 
     // Paint the content of the cellArea
-    d->cellAreas[row][column]->paint(painter, context);
+    frameArea->paint(painter, context);
 
     painter->restore();
 }

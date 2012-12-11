@@ -240,6 +240,9 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
         : KParts::MainWindow()
         , d(new KoMainWindowPrivate(this))
 {
+#ifdef __APPLE__
+    setUnifiedTitleAndToolBarOnMac(true);
+#endif
     setStandardToolBarMenuEnabled(true);
     Q_ASSERT(componentData.isValid());
 

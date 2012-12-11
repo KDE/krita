@@ -119,6 +119,28 @@ void KoTextEditor::Private::emitTextFormatChanged()
 
 void KoTextEditor::Private::newLine(KUndo2Command *parent)
 {
+    // Handle if this is the special block before a table
+    bool hiddenTableHandling = caret.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable);
+    if (hiddenTableHandling) {
+        // Easy solution is to go back the the end of previous block and do the insertion from there.
+        // However if there is no block before we have a problem. This may be the case if there is
+        // a table before or we are at the beginning of a cell or a document.
+        // So here is a better approach
+        // 1) create block
+        // 2) select the previous block so it get's deleted and replaced
+        // 3) remove HiddenByTable from both new and previous block
+        // 4) actually make new line replacing the block we just inserted
+        // 5) set HiddenByTable on the block just before the table again
+        caret.insertText("oops you should never see this");
+        caret.insertBlock();
+        caret.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+        caret.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
+        QTextBlockFormat bf = caret.blockFormat();
+        bf.clearProperty(KoParagraphStyle::HiddenByTable);
+        caret.setBlockFormat(bf);
+   }
+
+
     if (caret.hasSelection()) {
         q->deleteChar(false, parent);
     }
@@ -152,7 +174,7 @@ void KoTextEditor::Private::newLine(KUndo2Command *parent)
     bf.clearProperty(KoParagraphStyle::IsListHeader);
     bf.clearProperty(KoParagraphStyle::MasterPageName);
     bf.clearProperty(KoParagraphStyle::OutlineLevel);
-
+    bf.clearProperty(KoParagraphStyle::HiddenByTable);
     // Build the block char format which is just a copy
     QTextCharFormat bcf = caret.blockCharFormat();
 
@@ -182,6 +204,14 @@ void KoTextEditor::Private::newLine(KUndo2Command *parent)
     }
 
     caret.setCharFormat(format);
+
+    if (hiddenTableHandling) {
+        // see code and comment above
+        QTextBlockFormat bf = caret.blockFormat();
+        bf.setProperty(KoParagraphStyle::HiddenByTable, true);
+        caret.setBlockFormat(bf);
+        caret.movePosition(QTextCursor::PreviousCharacter);
+    }
 }
 
 /*KoTextEditor*/
@@ -462,21 +492,8 @@ KoInlineObject *KoTextEditor::insertIndexMarker()
 
     d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Insert Index"));
 
-    int startPosition = d->caret.position();
-
     if (d->caret.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
-        d->caret.movePosition(QTextCursor::PreviousCharacter);
-        if (startPosition == d->caret.position()) {
-            d->newLine(0);
-            d->caret.movePosition(QTextCursor::PreviousCharacter);
-        } else {
-            d->newLine(0);
-        }
-        QTextBlockFormat bf = d->caret.blockFormat();
-        bf.clearProperty(KoParagraphStyle::HiddenByTable);
-        d->caret.setBlockFormat(bf);
-
-        startPosition = d->caret.position();
+        d->newLine(0);
     }
 
     QTextBlock block = d->caret.block();
@@ -502,17 +519,7 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner, KUndo2Command *cm
     int startPosition = d->caret.position();
 
     if (d->caret.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
-        d->caret.movePosition(QTextCursor::PreviousCharacter);
-        if (startPosition == d->caret.position()) {
-            d->newLine(0);
-            d->caret.movePosition(QTextCursor::PreviousCharacter);
-        } else {
-            d->newLine(0);
-        }
-        QTextBlockFormat bf = d->caret.blockFormat();
-        bf.clearProperty(KoParagraphStyle::HiddenByTable);
-        d->caret.setBlockFormat(bf);
-
+        d->newLine(0);
         startPosition = d->caret.position();
     }
 
@@ -580,7 +587,9 @@ void KoTextEditor::insertFrameBreak()
             block.textList()->remove(block);
     } else {
         QTextBlockFormat bf = d->caret.blockFormat();
-        newLine();
+        if (!d->caret.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
+            newLine();
+        }
         bf = d->caret.blockFormat();
         bf.setProperty(KoParagraphStyle::BreakBefore, KoText::PageBreak);
         d->caret.setBlockFormat(bf);
@@ -695,16 +704,20 @@ void KoTextEditor::deleteChar(bool previous, KUndo2Command *parent)
     if (previous) {
         if (d->caret.block().blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
             movePosition(QTextCursor::PreviousCharacter);
-            return; // it becomes just a cursor movement;
+            if (d->caret.block().length() <= 1) {
+                movePosition(QTextCursor::NextCharacter);
+            } else
+                return; // it becomes just a cursor movement;
         }
     } else {
-        QTextCursor tmpCursor = d->caret;
-        tmpCursor.movePosition(QTextCursor::NextCharacter);
-        if (tmpCursor.block().blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
-            movePosition(QTextCursor::NextCharacter);
-            return; // it becomes just a cursor movement;
+        if (d->caret.block().length() > 1) {
+            QTextCursor tmpCursor = d->caret;
+            tmpCursor.movePosition(QTextCursor::NextCharacter);
+            if (tmpCursor.block().blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
+                movePosition(QTextCursor::NextCharacter);
+                return; // it becomes just a cursor movement;
+            }
         }
-
     }
 
     if (trackChanges) {
@@ -1447,17 +1460,7 @@ void KoTextEditor::insertText(const QString &text)
     int startPosition = d->caret.position();
 
     if (d->caret.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
-        d->caret.movePosition(QTextCursor::PreviousCharacter);
-        if (startPosition == d->caret.position()) {
-            d->newLine(0);
-            d->caret.movePosition(QTextCursor::PreviousCharacter);
-        } else {
-            d->newLine(0);
-        }
-        QTextBlockFormat bf = d->caret.blockFormat();
-        bf.clearProperty(KoParagraphStyle::HiddenByTable);
-        d->caret.setBlockFormat(bf);
-
+        d->newLine(0);
         startPosition = d->caret.position();
     }
 
@@ -1577,21 +1580,14 @@ void KoTextEditor::newLine()
     } else {
         KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "New Paragraph"));
         deleteChar(false, topCommand);
-        d->caret.beginEditBlock();
     }
-
-
-    // Handle if this is the special block before a table
-    if (d->caret.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
-        //FIXME
-        d->caret.movePosition(QTextCursor::PreviousCharacter);
-    }
+    d->caret.beginEditBlock();
 
     d->newLine(0);
 
+    d->caret.endEditBlock();
 
     if (hasSelection) {
-        d->caret.endEditBlock();
         endEditBlock();
     } else {
         d->updateState(KoTextEditor::Private::NoOp);

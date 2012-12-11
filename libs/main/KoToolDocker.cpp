@@ -90,6 +90,7 @@ public:
         if (tabbed && currentWidgetList.size() > 1) {
             QTabWidget *t;
             housekeeperLayout->addWidget(t = new QTabWidget(), 0, 0);
+	    t->setDocumentMode(true);
             currentAuxWidgets.insert(t);
             foreach(QWidget *widget, currentWidgetList) {
                 if (widget->objectName().isEmpty()) {

@@ -44,7 +44,7 @@ SpreadsheetMigrate::~SpreadsheetMigrate()
 bool SpreadsheetMigrate::drv_connect()
 {
   drv_disconnect();
-  m_FileName = m_migrateData->source->dbPath() + '/' + m_migrateData->source->dbFileName();
+  m_FileName = data()->source->dbPath() + '/' + data()->source->dbFileName();
   
   if (!QFile::exists(m_FileName)) 
     return false;

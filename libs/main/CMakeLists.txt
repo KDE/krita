@@ -34,7 +34,6 @@ set(komain_LIB_SRCS
     KoFileDialog.cpp
     KoGlobal.cpp
     KoGridData.cpp
-    MacSupport.mm
     KoMainWindow.cpp
     KoPrintingDialog.cpp
     KoPrintJob.cpp
@@ -131,6 +130,12 @@ if( Soprano_FOUND )
         rdf/InsertSemanticObjectReferenceAction.cpp
     )
 endif( Soprano_FOUND )
+
+if (APPLE)
+    set(komain_LIB_SRCS ${komain_LIB_SRCS}
+        MacSupport.mm
+    )
+endif (APPLE)
 
 kde4_add_ui_files( komain_LIB_SRCS
    koDocumentInfoAboutWidget.ui

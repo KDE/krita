@@ -1302,6 +1302,9 @@ void KoTextEditor::insertTableOfContents(KoTableOfContentsGeneratorInfo *info)
     tocFormat.setProperty(KoParagraphStyle::TableOfContentsData, QVariant::fromValue<KoTableOfContentsGeneratorInfo *>(newToCInfo) );
     tocFormat.setProperty(KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(tocDocument));
 
+    //make sure we set up the textrangemanager on the subdocument as well
+    KoTextDocument(tocDocument).setTextRangeManager(KoTextDocument(new KoTextRangeManager);
+
     KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
     if (changeTracker && changeTracker->recordChanges()) {
         QTextCharFormat charFormat = d->caret.charFormat();

@@ -2619,6 +2619,7 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
     // to store the contents we use an extrafor "meta-information" about the TOC we use this class
     QTextDocument *tocDocument = new QTextDocument();
     KoTextDocument(tocDocument).setStyleManager(d->styleManager);
+    KoTextDocument(tocDocument).setTextRangeManager(new KoTextRangeManager);
 
     info->m_name = element.attribute("name");
     info->m_styleName = element.attribute("style-name");

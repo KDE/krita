@@ -2443,8 +2443,7 @@ void TextTool::selectAll()
     if (!textEditor || !m_textShapeData)
         return;
     const int selectionLength = qAbs(textEditor->position() - textEditor->anchor());
-    QTextBlock lastBlock = m_textShapeData->document()->lastBlock();
-    textEditor->setPosition(lastBlock.position() + lastBlock.length() - 1);
+    textEditor->movePosition(QTextCursor::End);
     textEditor->setPosition(0, QTextCursor::KeepAnchor);
     repaintSelection();
     if (selectionLength != qAbs(textEditor->position() - textEditor->anchor())) // it actually changed

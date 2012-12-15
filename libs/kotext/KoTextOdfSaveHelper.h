@@ -21,17 +21,14 @@
 #define KOTEXTODFSAVEHELPER_H
 
 #include <KoDragOdfSaveHelper.h>
-
+#ifdef SHOULD_BUILD_RDF
+#include <Soprano/Soprano>
+#endif
 #include "kotext_export.h"
 
 class QTextDocument;
 class KoXmlWriter;
 class KoStyleManager;
-
-namespace Soprano
-{
-    class Model;
-}
 
 class KOTEXT_EXPORT KoTextOdfSaveHelper : public KoDragOdfSaveHelper
 {
@@ -44,6 +41,7 @@ public:
 
     virtual KoShapeSavingContext *context(KoXmlWriter *bodyWriter, KoGenStyles &mainStyles, KoEmbeddedDocumentSaver &embeddedSaver);
 
+#ifdef SHOULD_BUILD_RDF
     /**
      * The Rdf Model ownership is not taken, you must still delete it,
      * and you need to ensure that it lives longer than this object
@@ -51,6 +49,7 @@ public:
      */
     void setRdfModel(QSharedPointer<Soprano::Model> m);
     QSharedPointer<Soprano::Model> rdfModel() const;
+#endif
 
     KoStyleManager *styleManager() const;
 private:

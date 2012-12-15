@@ -29,8 +29,6 @@
 #include <QDataStream>
 #include <QApplication>
 #include <QBuffer>
-//Added by qt3to4:
-//#include <Q3CString>
 #include <QPolygon>
 
 #include <kdebug.h>

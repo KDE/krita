@@ -1,15 +1,14 @@
-add_subdirectory( kdchart )
 add_subdirectory( tests )
 
 include_directories( ${CMAKE_SOURCE_DIR}/plugins/chartshape
-                     ${CMAKE_SOURCE_DIR}/plugins/chartshape/kdchart/include
                      ${CMAKE_SOURCE_DIR}/plugins/chartshape/dialogs
                      ${CMAKE_SOURCE_DIR}/interfaces
+                     ${KDCHART_INCLUDES}
                      ${KOMAIN_INCLUDES}
                      ${TEXTLAYOUT_INCLUDES}
 )
 
-########### Flake Plugin library ###############
+########### Chart shape Plugin library ###############
 
 SET (chartshape_LIB_SRCS
     kchart_global.cpp
@@ -62,7 +61,10 @@ kde4_add_ui_files(chartshape_LIB_SRCS
 kde4_add_library(chartshapelib SHARED ${chartshape_LIB_SRCS})
 target_link_libraries(chartshapelib kdchart komain textlayout)
 target_link_libraries(chartshapelib LINK_INTERFACE_LIBRARIES kdchart)
-set_target_properties(chartshapelib PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+set_target_properties(chartshapelib PROPERTIES
+    VERSION   ${GENERIC_CALLIGRA_LIB_VERSION}
+    SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+)
 
 install(TARGETS chartshapelib ${INSTALL_TARGETS_DEFAULT_ARGS})
 

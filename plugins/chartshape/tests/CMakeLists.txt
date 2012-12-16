@@ -1,9 +1,9 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_DIRECTORY} )
 
 include_directories( ${CMAKE_SOURCE_DIR}/plugins/chartshape
-                     ${CMAKE_SOURCE_DIR}/plugins/chartshape/kdchart/include
                      #${CMAKE_SOURCE_DIR}/interfaces
                      #${CMAKE_SOURCE_DIR}/kchart/shape/dialogs
+                     ${KDCHART_INCLUDES}
                      ${KOMAIN_INCLUDES} )
 
 ########### next target ###############

@@ -1,11 +1,12 @@
-include_directories( ${KOMAIN_INCLUDES}
-${KOODF_INCLUDES}
-${CMAKE_SOURCE_DIR}/libs/
-${CMAKE_SOURCE_DIR}/libs/koreport
-${CMAKE_SOURCE_DIR}/libs/koreport/common
-${CMAKE_SOURCE_DIR}/libs/koreport/renderer
-${CMAKE_SOURCE_DIR}/libs/koreport/wrtembed
-${CMAKE_SOURCE_DIR}/plugins/chartshape/kdchart/include
+include_directories(
+    ${KOMAIN_INCLUDES}
+    ${KOODF_INCLUDES}
+    ${CMAKE_SOURCE_DIR}/libs/
+    ${CMAKE_SOURCE_DIR}/libs/koreport
+    ${CMAKE_SOURCE_DIR}/libs/koreport/common
+    ${CMAKE_SOURCE_DIR}/libs/koreport/renderer
+    ${CMAKE_SOURCE_DIR}/libs/koreport/wrtembed
+    ${KDCHART_INCLUDES}
 )
 
 #build a shared library

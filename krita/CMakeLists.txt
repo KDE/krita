@@ -109,7 +109,7 @@ target_link_libraries(kritapart kritaui)
 install(TARGETS kritapart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(krita_KDEINIT_SRCS main.cc)
-kde4_add_app_icon(krita_KDEINIT_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/krita.png")
+kde4_add_app_icon(krita_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/hi*-app-krita.png")
 kde4_add_kdeinit_executable(krita ${krita_KDEINIT_SRCS})
 
 if (Q_WS_MAC)

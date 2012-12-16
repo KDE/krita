@@ -61,7 +61,10 @@ void saveStructure(Exiv2::XmpData& xmpData_, const QString& name, const std::str
         QString key = QString("%1/%2:%3").arg(name).arg(structPrefix.c_str()).arg(it.key());
         Exiv2::XmpKey ekey(prefix, key.toAscii().data());
         dbgFile << ppVar(key) << ppVar(ekey.key().c_str());
-        xmpData_.add(ekey, kmdValueToExivXmpValue(it.value()));
+        Exiv2::Value *v = kmdValueToExivXmpValue(it.value());
+        if (v) {
+            xmpData_.add(ekey, v);
+        }
     }
 }
 }
@@ -133,7 +136,10 @@ bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType
                 }
             } else {
                 dbgFile << ppVar(key.key().c_str());
-                xmpData_.add(key, kmdValueToExivXmpValue(value));
+                Exiv2::Value *v = kmdValueToExivXmpValue(value);
+                if (v) {
+                    xmpData_.add(key, v);
+                }
             }
         }
         // TODO property qualifier

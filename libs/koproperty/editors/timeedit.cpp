@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2012  Friedrich W. H. Kossebau <kossebau@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,73 +21,71 @@
 
 #include "timeedit.h"
 
-#include <q3datetimeedit.h>
-#include <q3rangecontrol.h>
-#include <QObject>
-#include <QPainter>
-#include <QLayout>
-#include <QVariant>
-#include <QDateTime>
-#include <QHBoxLayout>
-
-#include <klocale.h>
-#include <kglobal.h>
+#include <koproperty/EditorDataModel.h>
+// KDE
+#include <KLocale>
+#include <KGlobal>
 
 using namespace KoProperty;
 
-TimeEdit::TimeEdit(Property *property, QWidget *parent)
-        : Widget(property, parent)
+
+TimeEdit::TimeEdit(const Property* prop, QWidget* parent)
+  : QTimeEdit(parent)
 {
-    QHBoxLayout *l = new QHBoxLayout(this);
-    l->setMargin(0);
-    l->setSpacing(0);
+    setFrame(false);
 
-    m_edit = new Q3TimeEdit(this);
-    m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_edit->setMinimumHeight(5);
-    l->addWidget(m_edit);
+    const QTime minTime = prop->option("min").toTime();
+    if (minTime.isValid()) {
+        setMinimumTime(minTime);
+    }
+    const QTime maxTime = prop->option("max").toTime();
+    if (maxTime.isValid()) {
+        setMaximumTime(maxTime);
+    }
 
-    setLeavesTheSpaceForRevertButton(true);
-    connect(m_edit, SIGNAL(valueChanged(const QTime&)), this, SLOT(slotValueChanged(const QTime&)));
+    connect(this, SIGNAL(timeChanged(QTime)), this, SLOT(onTimeChanged()));
 }
 
 TimeEdit::~TimeEdit()
-{}
-
-QVariant
-TimeEdit::value() const
 {
-    return m_edit->time();
 }
 
-void
-TimeEdit::setValue(const QVariant &value, bool emitChange)
+QVariant TimeEdit::value() const
 {
-    m_edit->blockSignals(true);
-    m_edit->setTime(value.toTime());
-    m_edit->blockSignals(false);
-    if (emitChange)
-        emit valueChanged(this);
+    return QVariant(time());
 }
 
-void
-TimeEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
+void TimeEdit::setValue(const QVariant& value)
 {
-// p->eraseRect(r);
-    Widget::drawViewer(p, cg, r, value.toDate().toString(Qt::LocalDate));
-// p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, value.toDate().toString(Qt::LocalDate));
+    blockSignals(true);
+    setTime(value.toTime());
+    blockSignals(false);
 }
 
-void
-TimeEdit::slotValueChanged(const QTime&)
+void TimeEdit::onTimeChanged()
 {
-    emit valueChanged(this);
+    emit commitData(this);
 }
 
-void
-TimeEdit::setReadOnlyInternal(bool readOnly)
+
+TimeDelegate::TimeDelegate()
 {
-    setVisibleFlag(!readOnly);
 }
 
-#include "timeedit.moc"
+QString TimeDelegate::displayTextForProperty(const Property* prop) const
+{
+    return KGlobal::locale()->formatLocaleTime(prop->value().toTime());
+}
+
+QWidget* TimeDelegate::createEditor(int type, QWidget* parent,
+    const QStyleOptionViewItem& option, const QModelIndex& index) const
+{
+    Q_UNUSED(type);
+    Q_UNUSED(option);
+
+    const EditorDataModel* editorModel
+        = dynamic_cast<const EditorDataModel*>(index.model());
+    Property* prop = editorModel->propertyForItem(index);
+
+    return new TimeEdit(prop, parent);
+}

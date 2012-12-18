@@ -25,9 +25,9 @@
 #include "editors/combobox.h"
 #include "editors/coloredit.h"
 #include "editors/cursoredit.h"
-/*#include "editors/dateedit.h"
+#include "editors/dateedit.h"
 #include "editors/datetimeedit.h"
-#include "editors/dummywidget.h"*/
+// #include "editors/dummywidget.h"
 #include "editors/pixmapedit.h"
 #include "editors/pointedit.h"
 #include "editors/pointfedit.h"
@@ -40,10 +40,9 @@
 /*#include "stringlistedit.h"*/
 #include "editors/linestyleedit.h"
 #include "editors/stringedit.h"
-/*#include "symbolcombo.h"
-#include "timeedit.h"
-#include "urledit.h"
-*/
+// #include "symbolcombo.h"
+#include "editors/timeedit.h"
+// #include "urledit.h"
 #include <kdebug.h>
 #include <kglobal.h>
 
@@ -55,6 +54,8 @@ DefaultFactory::DefaultFactory()
     addEditor( KoProperty::Bool, new BoolDelegate );
     addEditor( KoProperty::Cursor, new CursorDelegate );
     addEditor( KoProperty::Color, new ColorComboDelegate );
+    addEditor( KoProperty::Date, new DateDelegate );
+    addEditor( KoProperty::DateTime, new DateTimeDelegate );
     addEditor( KoProperty::Double, new DoubleSpinBoxDelegate );
     addEditor( KoProperty::Font, new FontDelegate );
     addEditor( KoProperty::Int, new IntSpinBoxDelegate );
@@ -68,6 +69,7 @@ DefaultFactory::DefaultFactory()
     addEditor( KoProperty::SizeF, new SizeFDelegate );
     addEditor( KoProperty::SizePolicy, new SizePolicyDelegate );
     addEditor( KoProperty::String, new StringDelegate );
+    addEditor( KoProperty::Time, new TimeDelegate );
     addEditor( KoProperty::UInt, new IntSpinBoxDelegate );
 //! @todo addEditor( KoProperty::ULongLong, new LongLongSpinBoxDelegate );
     addEditor( KoProperty::ValueFromList, new ComboBoxDelegate );

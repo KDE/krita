@@ -8,8 +8,8 @@ set(libkopropertyeditors_SRCS
   editors/coloredit.cpp
   editors/combobox.cpp
   editors/cursoredit.cpp
-#  editors/dateedit.cpp
-#  editors/datetimeedit.cpp
+  editors/dateedit.cpp
+  editors/datetimeedit.cpp
 #  editors/dummywidget.cpp
   editors/fontedit.cpp
   editors/pixmapedit.cpp
@@ -24,7 +24,7 @@ set(libkopropertyeditors_SRCS
   editors/linestyleedit.cpp
 #  editors/stringlistedit.cpp
 #  editors/symbolcombo.cpp
-#  editors/timeedit.cpp
+  editors/timeedit.cpp
 #  editors/urledit.cpp
 )
 

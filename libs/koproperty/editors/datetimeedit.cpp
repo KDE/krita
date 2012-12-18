@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2012  Friedrich W. H. Kossebau <kossebau@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,74 +21,66 @@
 
 #include "datetimeedit.h"
 
-#include <q3datetimeedit.h>
-#include <q3rangecontrol.h>
-#include <QObject>
-#include <QLayout>
-#include <QPainter>
-#include <QVariant>
-#include <QHBoxLayout>
-
-#include <klocale.h>
-#include <kglobal.h>
+#include <koproperty/EditorDataModel.h>
+// KDE
+#include <KLocale>
+#include <KGlobal>
 
 using namespace KoProperty;
 
-DateTimeEdit::DateTimeEdit(Property *property, QWidget *parent)
-        : Widget(property, parent)
+
+DateTimeEdit::DateTimeEdit(const Property* prop, QWidget* parent)
+  : QDateTimeEdit(parent)
 {
-    QHBoxLayout *l = new QHBoxLayout(this);
-    l->setMargin(0);
-    l->setSpacing(0);
+    Q_UNUSED(prop);
 
-    m_edit = new Q3DateTimeEdit(this);
-    m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_edit->setMinimumHeight(5);
-    l->addWidget(m_edit);
+    setFrame(false);
+    setCalendarPopup(true);
 
-    setLeavesTheSpaceForRevertButton(true);
-    setFocusWidget(m_edit);
-    connect(m_edit, SIGNAL(valueChanged(const QDateTime&)), this, SLOT(slotValueChanged(const QDateTime&)));
+    connect(this, SIGNAL(dateTimeChanged(QDateTime)), this, SLOT(onDateTimeChanged()));
 }
 
 DateTimeEdit::~DateTimeEdit()
-{}
-
-QVariant
-DateTimeEdit::value() const
 {
-    return m_edit->dateTime();
 }
 
-void
-DateTimeEdit::setValue(const QVariant &value, bool emitChange)
+QVariant DateTimeEdit::value() const
 {
-    m_edit->blockSignals(true);
-    m_edit->setDateTime(value.toDateTime());
-    m_edit->blockSignals(false);
-    if (emitChange)
-        emit valueChanged(this);
+    return QVariant(dateTime());
 }
 
-void
-DateTimeEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
+void DateTimeEdit::setValue(const QVariant& value)
 {
-    p->eraseRect(r);
-    Widget::drawViewer(p, cg, r, KGlobal::locale()->formatDateTime(value.toDateTime(), KLocale::ShortDate, false /*no sec */));
-// p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine,
-//  KGlobal::locale()->formatDateTime(value.toDateTime(), KLocale::ShortDate, false /*no sec */ ));
+    blockSignals(true);
+    setDateTime(value.toDateTime());
+    blockSignals(false);
 }
 
-void
-DateTimeEdit::slotValueChanged(const QDateTime&)
+void DateTimeEdit::onDateTimeChanged()
 {
-    emit valueChanged(this);
+    emit commitData(this);
 }
 
-void
-DateTimeEdit::setReadOnlyInternal(bool readOnly)
+
+DateTimeDelegate::DateTimeDelegate()
 {
-    setVisibleFlag(!readOnly);
 }
 
-#include "datetimeedit.moc"
+QString DateTimeDelegate::displayTextForProperty(const Property* prop) const
+{
+    // TODO: use KDateTime?
+    return KGlobal::locale()->formatDateTime(prop->value().toDateTime(), KLocale::ShortDate, false /*no sec */);
+}
+
+QWidget* DateTimeDelegate::createEditor(int type, QWidget* parent,
+    const QStyleOptionViewItem& option, const QModelIndex& index) const
+{
+    Q_UNUSED(type);
+    Q_UNUSED(option);
+
+    const EditorDataModel *editorModel
+        = dynamic_cast<const EditorDataModel*>(index.model());
+    Property *prop = editorModel->propertyForItem(index);
+
+    return new DateTimeEdit(prop, parent);
+}

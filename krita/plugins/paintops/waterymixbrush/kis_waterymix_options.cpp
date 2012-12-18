@@ -54,4 +54,3 @@ void KisWateryMixOptions::readOptionSetting(const KisPropertiesConfiguration* se
 {
 //    m_options->separationIntervalSpinBox->setValue( setting->getInt("WateryMix/separationintervals") );
 }
-;

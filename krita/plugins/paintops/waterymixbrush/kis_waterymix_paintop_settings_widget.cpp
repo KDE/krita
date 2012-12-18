@@ -55,4 +55,3 @@ KisPropertiesConfiguration*  KisWateryMixPaintOpSettingsWidget::configuration() 
     writeConfiguration(config);
     return config;
 }
-;

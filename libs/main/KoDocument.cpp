@@ -785,7 +785,6 @@ QString KoDocument::checkImageMimeTypes(const QString &mimeType, const KUrl &url
                    << "image/png"
                    << "image/bmp" << "image/x-xpixmap" << "image/gif" << "image/x-xbitmap"
                    << "image/tiff"
-                   << "image/openraster"
                    << "image/jp2";
 
     if (!imageMimeTypes.contains(mimeType)) return mimeType;

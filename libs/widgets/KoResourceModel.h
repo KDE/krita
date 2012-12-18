@@ -43,8 +43,6 @@ public:
     virtual QModelIndex index ( int row, int column = 0, const QModelIndex & parent = QModelIndex() ) const;
     /// Sets the number of columns to display
     void setColumnCount( int columnCount );
-    /// @returns the resource server adapter the model is connnected to
-    KoAbstractResourceServerAdapter * resourceServerAdapter();
 
     /// Extensions to Qt::ItemDataRole.
     enum ItemDataRole
@@ -54,6 +52,21 @@ public:
     };
     
     QModelIndex indexFromResource(KoResource* resource);
+
+    /// facade for KoAbstractResourceServerAdapter
+    QString extensions();
+    void importResourceFile(const QString &filename);
+    void importResourceFile(const QString &filename, bool fileCreation);
+    bool removeResource(KoResource* resource);
+    void removeResourceFile(const QString & filename);
+    QStringList getAssignedTagsList(KoResource *resource);
+    void addTag(KoResource* resource, const QString& tag);
+    void deleteTag( KoResource* resource, const QString& tag);
+    QStringList getTagNamesList();
+    QStringList searchTag(const QString& lineEditText);
+    void setTagSearch(bool tagSearch);
+    void setTaggedResourceFileNames(const QStringList& resourceFileNames);
+    void updateServer();
 
 private slots:
     void resourceAdded(KoResource *resource);

@@ -120,11 +120,6 @@ void KoResourceModel::setColumnCount( int columnCount )
     }
 }
 
-KoAbstractResourceServerAdapter * KoResourceModel::resourceServerAdapter()
-{
-    return m_resourceAdapter;
-}
-
 void KoResourceModel::resourceAdded(KoResource *resource)
 {
     int newIndex = m_resourceAdapter->resources().indexOf(resource);
@@ -160,5 +155,71 @@ QModelIndex KoResourceModel::indexFromResource(KoResource* resource)
     int column = resourceIndex % columnCount();
     return index(row, column);    
 }
+
+QString KoResourceModel::extensions()
+{
+    return m_resourceAdapter->extensions();
+}
+
+void KoResourceModel::importResourceFile(const QString &filename)
+{
+    m_resourceAdapter->importResourceFile(filename);
+}
+
+void KoResourceModel::importResourceFile(const QString & filename, bool fileCreation)
+{
+    m_resourceAdapter->importResourceFile(filename, fileCreation);
+}
+
+bool KoResourceModel::removeResource(KoResource* resource)
+{
+    return m_resourceAdapter->removeResource(resource);
+}
+
+void KoResourceModel::removeResourceFile(const QString &filename)
+{
+    m_resourceAdapter->removeResourceFile(filename);
+}
+
+QStringList KoResourceModel::getAssignedTagsList(KoResource *resource)
+{
+    return m_resourceAdapter->getAssignedTagsList(resource);
+}
+
+void KoResourceModel::addTag(KoResource* resource,const QString& tag)
+{
+    m_resourceAdapter->addTag(resource, tag);
+}
+
+void KoResourceModel::deleteTag(KoResource *resource, const QString &tag)
+{
+    m_resourceAdapter->deleteTag(resource, tag);
+}
+
+QStringList KoResourceModel::getTagNamesList()
+{
+    return m_resourceAdapter->getTagNamesList();
+}
+
+QStringList KoResourceModel::searchTag(const QString& lineEditText)
+{
+    return m_resourceAdapter->searchTag(lineEditText);
+}
+
+void KoResourceModel::setTagSearch(bool tagSearch)
+{
+    m_resourceAdapter->setTagSearch(tagSearch);
+}
+
+void KoResourceModel::setTaggedResourceFileNames(const QStringList& resourceFileNames)
+{
+    m_resourceAdapter->setTaggedResourceFileNames(resourceFileNames);
+}
+
+void KoResourceModel::updateServer()
+{
+    m_resourceAdapter->updateServer();
+}
+
 
 #include <KoResourceModel.moc>

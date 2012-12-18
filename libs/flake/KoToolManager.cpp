@@ -990,7 +990,7 @@ QPair<QString, KoToolBase*> KoToolManager::createTools(KoCanvasController *contr
 
     if (!tool->canCreateTool(controller->canvas())) {
         kDebug(30006) << "Skipping the creation of tool" << tool->id();
-        return  QPair<QString, KoToolBase*>(QString::null, 0);
+        return  QPair<QString, KoToolBase*>(QString(), 0);
     }
 
     kDebug(30006) << "Creating tool" << tool->id() << ". Activated on:" << tool->activationShapeId() << ", prio:" << tool->priority();

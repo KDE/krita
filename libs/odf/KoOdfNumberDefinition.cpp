@@ -121,8 +121,8 @@ void KoOdfNumberDefinition::loadOdf(const KoXmlElement &element)
     }
 
     //The style:num-prefix and style:num-suffix attributes specify what to display before and after the number.
-    d->prefix = element.attributeNS(KoXmlNS::style, "num-prefix", QString::null);
-    d->suffix = element.attributeNS(KoXmlNS::style, "num-suffix", QString::null);
+    d->prefix = element.attributeNS(KoXmlNS::style, "num-prefix", QString());
+    d->suffix = element.attributeNS(KoXmlNS::style, "num-suffix", QString());
 
     d->letterSynchronization = (element.attributeNS(KoXmlNS::style, "num-letter-sync", "false") == "true");
 }

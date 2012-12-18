@@ -76,7 +76,6 @@ public:
     ReportWriterSectionData() {
         selected_items_rw = 0;
         mouseAction = ReportWriterSectionData::MA_None;
-        insertItem = QString();
     }
     virtual ~ReportWriterSectionData() {
         selected_items_rw = 0;
@@ -882,7 +881,7 @@ void KoReportDesigner::sectionMouseReleaseEvent(ReportSceneView * v, QMouseEvent
             }
                 
             m_sectionData->mouseAction = ReportWriterSectionData::MA_None;
-            m_sectionData->insertItem = QString();
+            m_sectionData->insertItem.clear();
             unsetSectionCursor();
         }
     }

@@ -85,5 +85,5 @@ void KisAbrBrush::toXML(QDomDocument& d, QDomElement& e) const
 
 QString KisAbrBrush::defaultFileExtension() const
 {
-    return QString::null;
+    return QString();
 }

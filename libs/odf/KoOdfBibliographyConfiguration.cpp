@@ -90,20 +90,20 @@ KoOdfBibliographyConfiguration &KoOdfBibliographyConfiguration::operator=(const 
 
 void KoOdfBibliographyConfiguration::loadOdf(const KoXmlElement &element)
 {
-    d->prefix = element.attributeNS(KoXmlNS::text, "prefix", QString::null);
-    d->suffix = element.attributeNS(KoXmlNS::text, "suffix", QString::null);
+    d->prefix = element.attributeNS(KoXmlNS::text, "prefix", QString());
+    d->suffix = element.attributeNS(KoXmlNS::text, "suffix", QString());
     d->numberedEntries = (element.attributeNS(KoXmlNS::text, "numbered-entries", QString("false")) == "true")
                          ? true : false;
     d->sortByPosition = (element.attributeNS(KoXmlNS::text, "sort-by-position", QString("true")) == "true")
                         ? true : false;
-    d->sortAlgorithm = element.attributeNS(KoXmlNS::text, "sort-algorithm", QString::null);
+    d->sortAlgorithm = element.attributeNS(KoXmlNS::text, "sort-algorithm", QString());
 
     for (KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling())
     {
         KoXmlElement child = node.toElement();
 
         if (child.namespaceURI() == KoXmlNS::text && child.localName() == "sort-key") {
-            QString key = child.attributeNS(KoXmlNS::text, "key", QString::null);
+            QString key = child.attributeNS(KoXmlNS::text, "key", QString());
             Qt::SortOrder order = (child.attributeNS(KoXmlNS::text, "sort-ascending", "true") == "true")
                     ? (Qt::AscendingOrder): (Qt::DescendingOrder);
             if(!key.isNull() && KoOdfBibliographyConfiguration::bibDataFields.contains(key)) {

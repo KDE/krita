@@ -99,10 +99,10 @@ void KoOdfNotesConfiguration::loadOdf(const KoXmlElement &element)
         d->noteClass = Endnote;
     }
 
-    d->citationTextStyle = element.attributeNS(KoXmlNS::text, "citation-style-name", QString::null);
-    d->citationBodyTextStyle = element.attributeNS(KoXmlNS::text, "citation-body-style-name", QString::null);
-    d->defaultNoteParagraphStyle = element.attributeNS(KoXmlNS::text, "default-style-name", QString::null);
-    d->masterPageName = element.attributeNS(KoXmlNS::text, "master-page-name", QString::null);
+    d->citationTextStyle = element.attributeNS(KoXmlNS::text, "citation-style-name", QString());
+    d->citationBodyTextStyle = element.attributeNS(KoXmlNS::text, "citation-body-style-name", QString());
+    d->defaultNoteParagraphStyle = element.attributeNS(KoXmlNS::text, "default-style-name", QString());
+    d->masterPageName = element.attributeNS(KoXmlNS::text, "master-page-name", QString());
     d->startValue = qMax(1, element.attributeNS(KoXmlNS::text, "start-value").toInt());
 
     d->numberFormat.loadOdf(element);

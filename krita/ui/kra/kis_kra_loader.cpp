@@ -109,33 +109,33 @@ public:
 void convertColorSpaceNames(QString &colorspacename, QString &profileProductName) {
     if (colorspacename  == "Grayscale + Alpha") {
         colorspacename  = "GRAYA";
-        profileProductName = QString::null;
+        profileProductName.clear();
     }
     else if (colorspacename == "RgbAF32") {
         colorspacename = "RGBAF32";
-        profileProductName = QString::null;
+        profileProductName.clear();
     }
     else if (colorspacename == "RgbAF16") {
         colorspacename = "RGBAF32";
-        profileProductName = QString::null;
+        profileProductName.clear();
     }
     else if (colorspacename == "CMYKA16") {
         colorspacename = "CMYKAU16";
     }
     else if (colorspacename == "GrayF32") {
         colorspacename =  "GRAYAF32";
-        profileProductName = QString::null;
+        profileProductName.clear();
     }
     else if (colorspacename == "GRAYA16") {
         colorspacename  = "GRAYAU16";
     }
     else if (colorspacename == "XyzAF16") {
         colorspacename  = "XYZAF16";
-        profileProductName = QString::null;
+        profileProductName.clear();
     }
     else if (colorspacename == "XyzAF32") {
         colorspacename  = "XYZAF32";
-        profileProductName = QString::null;
+        profileProductName.clear();
     }
     else if (colorspacename == "YCbCrA") {
         colorspacename  = "YCBCRA8";

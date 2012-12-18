@@ -1034,7 +1034,7 @@ QString KoDocumentRdf::findXmlId(KoTextEditor *handler) const
         return inlineRdf->xmlId();
     }
 
-    return QString::null;
+    return QString();
 }
 
 

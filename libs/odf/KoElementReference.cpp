@@ -91,7 +91,7 @@ QString KoElementReference::toString() const
 
 KoElementReference KoElementReference::loadOdf(const KoXmlElement &element)
 {
-    QString xmlid = QString::null;
+    QString xmlid;
 
     if (element.hasAttributeNS(KoXmlNS::xml, "id")) {
         xmlid = element.attributeNS(KoXmlNS::xml, "id");

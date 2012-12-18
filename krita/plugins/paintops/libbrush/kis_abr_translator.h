@@ -111,7 +111,7 @@ public:
     AbrTipDynamicsProperties();
     void toXML(QDomDocument& , QDomElement&) const;
     void setupProperty(const QString &attributeName,const QString &type,const  QString &value);
-    void reset(){ m_groupType = QString::null; }
+    void reset(){ m_groupType.clear(); }
 private:
     bool m_useTipDynamics;
     bool m_flipX;

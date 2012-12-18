@@ -42,7 +42,7 @@ void KisPaintDeviceTest::testCreation()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    QVERIFY(dev->objectName() == QString());
+    QVERIFY(dev->objectName().isEmpty());
 
     dev = new KisPaintDevice(cs);
     QVERIFY(*dev->colorSpace() == *cs);

@@ -29,8 +29,7 @@
 #include "compression.h"
 
 PSDLayerSection::PSDLayerSection(const PSDHeader& header)
-    : error(QString::null)
-    , m_header(header)
+    : m_header(header)
 {
     hasTransparency = false;
     layerMaskBlockSize = 0;

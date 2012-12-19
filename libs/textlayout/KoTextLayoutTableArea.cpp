@@ -264,6 +264,7 @@ KoPointedAt KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccu
         pointedAt.table = d->table;
         pointedAt.tableRowDivider = row;
         pointedAt.tableColumnDivider = column;
+        pointedAt.tableDividerPos = QPointF(d->columnPositions[column],d->rowPositions[row]);
         return pointedAt;
     }
 

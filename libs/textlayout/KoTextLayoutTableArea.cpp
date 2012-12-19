@@ -253,6 +253,14 @@ KoPointedAt KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccu
             QTextTableCell cell = d->table->cellAt(row, column);
             pointedAt = d->cellAreas[cell.row()][cell.column()]->hitTest(headerPoint, accuracy);
         }
+        if (pointedAt.tableHit == KoPointedAt::ColumnDivider) {
+            if (column > 0) {
+                pointedAt.tableLeadSize = d->columnPositions[column] - d->columnPositions[column-1];
+            }
+            if (column < d->table->columns()) {
+                pointedAt.tableTrailSize = d->columnPositions[column+1] - d->columnPositions[column];
+            }
+        }
         pointedAt.table = d->table;
         pointedAt.tableRowDivider = row;
         pointedAt.tableColumnDivider = column;

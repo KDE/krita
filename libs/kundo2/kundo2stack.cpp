@@ -131,7 +131,8 @@ KUndo2Command::KUndo2Command(const QString &text, KUndo2Command *parent):
     \sa ~KUndo2Command()
 */
 
-KUndo2Command::KUndo2Command(KUndo2Command *parent)
+KUndo2Command::KUndo2Command(KUndo2Command *parent):
+    m_hasParent(parent != 0)
 {
     d = new KUndo2CommandPrivate;
     if (parent != 0)

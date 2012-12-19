@@ -70,7 +70,7 @@ void ResizeTableCommand::undo()
         carsManager.rowStyle(m_band).copyProperties(m_oldRowStyle);
     }
     KUndo2Command::undo();
-    m_document->markContentsDirty(m_tablePosition, 0);
+    m_document->markContentsDirty(m_tablePosition, table->lastPosition()-table->firstPosition());
 }
 
 void ResizeTableCommand::redo()
@@ -113,5 +113,5 @@ void ResizeTableCommand::redo()
             m_newRowStyle = carsManager.rowStyle(m_band).clone();
         }
     }
-    m_document->markContentsDirty(m_tablePosition, 0);
+    m_document->markContentsDirty(m_tablePosition, table->lastPosition()-table->firstPosition());
 }

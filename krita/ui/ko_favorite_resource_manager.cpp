@@ -48,8 +48,6 @@ KoFavoriteResourceManager::KoFavoriteResourceManager(KisPaintopBox *paintopBox, 
         ,m_blockUpdates(false)
 {
 
-    //connect(paintopBox, SIGNAL(signalPaintopChanged(KisPaintOpPresetSP)), this, SLOT(slotChangePaintopLabel(KisPaintOpPresetSP)));
-
     //take favorite brushes from a file then append to QList
     KConfigGroup group(KGlobal::config(), "favoriteList");
     m_favoritePresetsList = (group.readEntry("favoritePresets")).split(',', QString::SkipEmptyParts);

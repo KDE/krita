@@ -216,6 +216,11 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     action->setShortcut(KShortcut(Qt::Key_Left));
     connect(action, SIGNAL(triggered()), this, SLOT(slotPreviousFavoritePreset()));
 
+    action = new KAction(i18n("Switch to Previous Preset"), this);
+    view->actionCollection()->addAction("previous_preset", action);
+    action->setShortcut(KShortcut(Qt::Key_Slash));
+    connect(action, SIGNAL(triggered()), this, SLOT(slotSwitchToPreviousPreset()));
+
     QWidget* mirrorActions = new QWidget(this);
     QHBoxLayout* mirrorLayout = new QHBoxLayout(mirrorActions);
     mirrorLayout->addWidget(hMirrorButton);
@@ -334,8 +339,11 @@ KoID KisPaintopBox::currentPaintop()
 
 void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP preset)
 {
-    if(m_activePreset) {
-        if(m_optionWidget) {
+    if (m_activePreset) {
+
+        m_previousPreset = m_activePreset->clone();
+
+        if (m_optionWidget) {
             m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_activePreset->settings().data()));
             m_optionWidget->disconnect(this);
             m_optionWidget->hide();
@@ -380,7 +388,6 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
     }
 
     m_activePreset = preset;
-    emit signalPaintopChanged(preset);
 }
 
 KoID KisPaintopBox::defaultPaintOp()
@@ -780,5 +787,12 @@ void KisPaintopBox::slotNextFavoritePreset()
             return;
         }
         i++;
+    }
+}
+
+void KisPaintopBox::slotSwitchToPreviousPreset()
+{
+    if (m_previousPreset) {
+        setCurrentPaintop(m_previousPreset->paintOp(), m_previousPreset);
     }
 }

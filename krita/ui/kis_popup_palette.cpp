@@ -370,7 +370,7 @@ void KisPopupPalette::mouseMoveEvent (QMouseEvent* event)
 
     if (pathBrush.contains(point))
     { //in favorite brushes area
-        int pos = calculatePresetIndex(point, m_resourceManager->favoritePresetsTotal());
+        int pos = calculatePresetIndex(point, m_resourceManager->numFavoritePresets());
 
         if (pos >= 0)
         {
@@ -400,8 +400,8 @@ void KisPopupPalette::mousePressEvent(QMouseEvent* event)
 
         if (pathBrush.contains(point))
         { //in favorite brushes area
-            int pos = calculateIndex(point, m_resourceManager->favoritePresetsTotal());
-            if (pos >= 0 && pos < m_resourceManager->favoritePresetsTotal()
+            int pos = calculateIndex(point, m_resourceManager->numFavoritePresets());
+            if (pos >= 0 && pos < m_resourceManager->numFavoritePresets()
                     && isPointInPixmap(point, pos))
             {
                 //setSelectedBrush(pos);

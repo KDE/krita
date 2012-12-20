@@ -126,6 +126,8 @@ private slots:
     void slotSlider2Changed();
     void slotToolChanged(KoCanvasController* canvas, int toolId);
     void slotOpacityChanged(qreal);
+    void slotPreviousFavoritePreset();
+    void slotNextFavoritePreset();
     
 private:
     KisCanvasResourceProvider*           m_resourceProvider;

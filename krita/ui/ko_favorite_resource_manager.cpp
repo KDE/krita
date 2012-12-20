@@ -114,8 +114,7 @@ void KoFavoriteResourceManager::slotChangeActivePaintop(int pos)
     KoResource* resource = rServer->getResourceByName(m_favoritePresetsList.at(pos));
     m_paintopBox->resourceSelected(resource);
 
-    if (m_popupPalette)
-    {
+    if (m_popupPalette) {
         m_popupPalette->showPopupPalette(false); //automatically close the palette after a button is clicked.
     }
 }
@@ -193,7 +192,7 @@ bool KoFavoriteResourceManager::isFavoritePresetsFull()
     return m_favoritePresetsList.size() == KoFavoriteResourceManager::MAX_FAVORITE_PRESETS;
 }
 
-int KoFavoriteResourceManager::favoritePresetsTotal()
+int KoFavoriteResourceManager::numFavoritePresets()
 {
     return m_favoritePresetsList.size();
 }

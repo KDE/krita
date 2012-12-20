@@ -212,7 +212,6 @@ public:
     KisGridManager * gridManager;
     KisPerspectiveGridManager * perspectiveGridManager;
     KisPaintingAssistantsManager* paintingAssistantManager;
-    KoFavoriteResourceManager* favoriteResourceManager;
     BlockingUserInputEventFilter blockingEventFilter;
 };
 

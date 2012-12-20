@@ -52,7 +52,6 @@ class KisSelectionManager;
 class KisStatusBar;
 class KisUndoAdapter;
 class KisZoomManager;
-class KoFavoriteResourceManager;
 
 /**
  * Krita view class

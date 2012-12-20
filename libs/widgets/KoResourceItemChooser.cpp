@@ -89,8 +89,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     d->view->setModel(d->model);
     d->view->setItemDelegate( new KoResourceItemDelegate( this ) );
     d->view->setSelectionMode( QAbstractItemView::SingleSelection );
-    connect(d->view, SIGNAL(clicked( const QModelIndex & ) ),
-             this, SLOT(activated ( const QModelIndex & ) ) );
+
     connect(d->view, SIGNAL(currentResourceChanged( const QModelIndex &)),
             this, SLOT(activated(const QModelIndex &)));
 

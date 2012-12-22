@@ -937,7 +937,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     while (it != annotationsEnd) {
         if (!(*it) || (*it)->type().isEmpty()) {
             dbgFile << "Warning: empty annotation";
-
+            it++;
             continue;
         }
 
@@ -962,7 +962,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
             png_set_text(png_ptr, info_ptr, text, 1);
             png_free(png_ptr, text);
         }
-
+        it++;
     }
 
     // Save the color profile

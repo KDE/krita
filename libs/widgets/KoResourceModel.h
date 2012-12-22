@@ -67,6 +67,7 @@ public:
     void setTagSearch(bool tagSearch);
     void setTaggedResourceFileNames(const QStringList& resourceFileNames);
     void updateServer();
+    int resourcesCount() const;
 
 private slots:
     void resourceAdded(KoResource *resource);

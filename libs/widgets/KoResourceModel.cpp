@@ -222,4 +222,9 @@ void KoResourceModel::updateServer()
 }
 
 
+int KoResourceModel::resourcesCount() const
+{
+    return m_resourceAdapter->resources().count();
+}
+
 #include <KoResourceModel.moc>

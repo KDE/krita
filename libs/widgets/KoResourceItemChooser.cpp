@@ -281,7 +281,7 @@ void KoResourceItemChooser::showTaggingBar(bool showSearchBar, bool showOpBar)
 
 void KoResourceItemChooser::setRowCount( int rowCount )
 {
-    int resourceCount = d->model->rowCount();
+    int resourceCount = d->model->resourcesCount();
     d->model->setColumnCount( static_cast<qreal>(resourceCount) / rowCount );
     //Force an update to get the right row height (in theory)
     QRect geometry = d->view->geometry();

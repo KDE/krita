@@ -90,6 +90,7 @@
 #include "canvas/kis_grid_manager.h"
 #include "canvas/kis_perspective_grid_manager.h"
 #include "dialogs/kis_dlg_preferences.h"
+#include "dialogs/kis_dlg_blacklist_cleanup.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"
@@ -769,6 +770,10 @@ void KisView2::createActions()
     KAction* action = new KAction(i18n("Edit Palette..."), this);
     actionCollection()->addAction("edit_palette", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotEditPalette()));
+
+    action = new KAction(i18n("Cleanup removed files..."), this);
+    actionCollection()->addAction("edit_blacklist_cleanup", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotBlacklistCleanup()));
 }
 
 
@@ -903,6 +908,13 @@ void KisView2::slotEditPalette()
     base->setMainWidget(cp);
     base->show();
 }
+
+void KisView2::slotBlacklistCleanup()
+{
+    KisDlgBlacklistCleanup dialog;
+    dialog.exec();
+}
+
 
 void KisView2::slotImageSizeChanged()
 {

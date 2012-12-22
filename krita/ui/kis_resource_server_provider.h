@@ -50,6 +50,10 @@ public:
     KoResourceServer<KisPaintOpPreset>* paintOpPresetServer();
     KoResourceServer<KisWorkspaceResource>* workspaceServer();
 
+    void brushBlacklistCleanup();
+signals:
+    void notifyBrushBlacklistCleanup();
+    
 private:
 
     KisResourceServerProvider();

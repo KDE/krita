@@ -99,5 +99,10 @@ KoResourceServer< KisWorkspaceResource >* KisResourceServerProvider::workspaceSe
     return m_workspaceServer;
 }
 
+void KisResourceServerProvider::brushBlacklistCleanup()
+{
+    emit notifyBrushBlacklistCleanup();
+}
+
 
 #include "kis_resource_server_provider.moc"

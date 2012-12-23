@@ -53,9 +53,10 @@ bool psdwrite(QIODevice* io, quint32 v)
 
 bool psdpad(QIODevice* io, quint32 padding)
 {
-    char* pad = new char(padding);
+    char* pad = new char[padding];
     memset(pad, 0, padding);
     quint32 written = io->write(pad, padding);
+    delete [] pad;
     return written == padding;
 }
 

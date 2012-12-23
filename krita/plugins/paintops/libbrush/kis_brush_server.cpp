@@ -35,6 +35,7 @@
 #include "kis_imagepipe_brush.h"
 #include "kis_png_brush.h"
 #include "kis_svg_brush.h"
+#include <kis_resource_server_provider.h>
 
 class BrushResourceServer : public KoResourceServer<KisBrush>, public KoResourceServerObserver<KisBrush>
 {
@@ -144,6 +145,9 @@ KisBrushServer::KisBrushServer()
     m_brushServer = new BrushResourceServer();
     m_brushThread = new KoResourceLoaderThread(m_brushServer);
     m_brushThread->start();
+
+    connect(KisResourceServerProvider::instance(), SIGNAL(notifyBrushBlacklistCleanup()),
+            this, SLOT(slotRemoveBlacklistedResources()));
 }
 
 KisBrushServer::~KisBrushServer()
@@ -164,6 +168,11 @@ KoResourceServer<KisBrush>* KisBrushServer::brushServer()
 {
     m_brushThread->barrier();
     return m_brushServer;
+}
+
+void KisBrushServer::slotRemoveBlacklistedResources()
+{
+    m_brushServer->removeBlackListedFiles();
 }
 
 #include "kis_brush_server.moc"

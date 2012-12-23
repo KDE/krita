@@ -39,6 +39,7 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_image_properties.cc
     dialogs/kis_dlg_layer_properties.cc
     dialogs/kis_dlg_preferences.cc
+    dialogs/kis_dlg_blacklist_cleanup.cpp
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp
     flake/kis_dummies_facade.cpp
@@ -261,6 +262,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgmultipliersdoublesliderspinbox.ui
     forms/wdgnodequerypatheditor.ui
     forms/wdgpresetselectorstrip.ui
+    forms/wdgdlgblacklistcleanup.ui
 )
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )

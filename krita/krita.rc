@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="39">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="40">
 
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
@@ -28,6 +28,7 @@
   <Menu name="Resources"><text>&amp;Resources</text>
    <Action name="add_palette"/>
    <Action name="edit_palette"/>
+   <Action name="edit_blacklist_cleanup"/>
   </Menu>
  </Menu>
 

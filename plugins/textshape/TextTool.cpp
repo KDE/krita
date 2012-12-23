@@ -125,27 +125,28 @@ static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut s
 }
 
 TextTool::TextTool(KoCanvasBase *canvas)
-        : KoToolBase(canvas),
-        m_textShape(0),
-        m_textShapeData(0),
-        m_changeTracker(0),
-        m_allowActions(true),
-        m_allowAddUndoCommand(true),
-        m_allowResourceManagerUpdates(true),
-        m_prevCursorPosition(-1),
-        m_caretTimer(this),
-        m_caretTimerState(true),
-        m_currentCommand(0),
-        m_currentCommandHasChildren(false),
-        m_specialCharacterDocker(0),
-        m_textTyping(false),
-        m_textDeleting(false)
-        , m_editTipTimer(this),
-        m_delayedEnsureVisible(false),
-        m_toolSelection(0)
+        : KoToolBase(canvas)
+        , m_textShape(0)
+        , m_textShapeData(0)
+        , m_changeTracker(0)
+        , m_allowActions(true)
+        , m_allowAddUndoCommand(true)
+        , m_allowResourceManagerUpdates(true)
+        , m_prevCursorPosition(-1)
+        , m_caretTimer(this)
+        , m_caretTimerState(true)
+        , m_currentCommand(0)
+        , m_currentCommandHasChildren(false)
+        , m_specialCharacterDocker(0)
+        , m_textTyping(false)
+        , m_textDeleting(false)
+        , m_editTipTimer(this)
+        , m_delayedEnsureVisible(false)
+        , m_toolSelection(0)
         , m_tableDraggedOnce(false)
         , m_tablePenMode(false)
-        ,m_lastImMicroFocus(QRectF(0,0,0,0))
+        , m_lastImMicroFocus(QRectF(0,0,0,0))
+        , m_drag(0)
 {
     setTextMode(true);
 

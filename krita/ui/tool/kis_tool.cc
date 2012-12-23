@@ -481,6 +481,9 @@ void KisTool::keyPressEvent(QKeyEvent *event)
 void KisTool::keyReleaseEvent(QKeyEvent* event)
 {
     if (mode() == GESTURE_MODE) {
+        if (event->key() == Qt::Key_Shift) {
+            endGesture();
+        }
         event->accept();
     } else {
         event->ignore();

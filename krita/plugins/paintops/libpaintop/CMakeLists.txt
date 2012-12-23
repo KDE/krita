@@ -81,7 +81,7 @@ kde4_add_ui_files(kritalibpaintop_LIB_SRCS
 
 kde4_add_library(kritalibpaintop SHARED ${kritalibpaintop_LIB_SRCS} )
 
-target_link_libraries(kritalibpaintop kritaui kritalibbrush)
+target_link_libraries(kritalibpaintop kritaui kritalibbrush kowidgetutils)
 target_link_libraries(kritalibpaintop LINK_INTERFACE_LIBRARIES kritaui kritalibbrush)
 
 set_target_properties(kritalibpaintop PROPERTIES

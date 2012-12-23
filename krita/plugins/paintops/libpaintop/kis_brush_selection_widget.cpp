@@ -55,19 +55,19 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
 
     m_autoBrushWidget = new KisAutoBrushWidget(this, "autobrush");
     connect(m_autoBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
-    addChooser(i18n("Autobrush"), m_autoBrushWidget, AUTOBRUSH);
+    addChooser(i18n("Autobrush"), m_autoBrushWidget, AUTOBRUSH, KoGroupButton::GroupLeft);
 
     m_brushChooser = new KisBrushChooser(this);
     connect(m_brushChooser, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
-    addChooser(i18n("Predefined Brushes"), m_brushChooser, PREDEFINEDBRUSH);
+    addChooser(i18n("Predefined Brushes"), m_brushChooser, PREDEFINEDBRUSH, KoGroupButton::GroupCenter);
 
     m_customBrushWidget = new KisCustomBrushWidget(0, i18n("Custom Brush"), 0);
     connect(m_customBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
-    addChooser(i18n("Custom Brush"), m_customBrushWidget, CUSTOMBRUSH);
+    addChooser(i18n("Custom Brush"), m_customBrushWidget, CUSTOMBRUSH, KoGroupButton::GroupCenter);
 
     m_textBrushWidget = new KisTextBrushChooser(this, "textbrush", i18n("Text Brush"));
     connect(m_textBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
-    addChooser(i18n("Text Brush"), m_textBrushWidget, TEXTBRUSH);
+    addChooser(i18n("Text Brush"), m_textBrushWidget, TEXTBRUSH, KoGroupButton::GroupRight);
 
     connect(m_buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(buttonClicked(int)));
 
@@ -287,9 +287,10 @@ void KisBrushSelectionWidget::setCurrentWidget(QWidget* widget)
     m_presetIsValid = (m_buttonGroup->checkedId() != CUSTOMBRUSH);
 }
 
-void KisBrushSelectionWidget::addChooser(const QString& text, QWidget* widget, int id)
+void KisBrushSelectionWidget::addChooser(const QString& text, QWidget* widget, int id, KoGroupButton::GroupPosition pos)
 {
-    QToolButton * button = new QToolButton(this);
+    KoGroupButton * button = new KoGroupButton(this);
+    button->setGroupPosition(pos);
     button->setText(text);
     button->setAutoRaise(true);
     button->setCheckable(true);

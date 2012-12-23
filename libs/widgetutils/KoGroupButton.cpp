@@ -32,17 +32,23 @@
 class KoGroupButton::Private
 {
 public:
-    Private(const GroupPosition position) : groupPosition(position)
-    {}
+    Private(KoGroupButton *qq, const GroupPosition position) : groupPosition(position)
+    {
+        // Make the policy closer to QPushButton's default but horizontal shouldn't be Fixed,
+        // otherwise spacing gets broken
+        qq->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+    }
     GroupPosition groupPosition;
 };
 
 KoGroupButton::KoGroupButton(GroupPosition position, QWidget* parent)
- : QToolButton(parent), d(new Private(position))
+ : QToolButton(parent), d(new Private(this, position))
 {
-    // Make the policy closer to QPushButton's default but horizontal shouldn't be Fixed,
-    // otherwise spacing gets broken
-    setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+}
+
+KoGroupButton::KoGroupButton(QWidget* parent)
+ : QToolButton(parent), d(new Private(this, NoGroup))
+{
 }
 
 KoGroupButton::~KoGroupButton()

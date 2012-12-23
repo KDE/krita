@@ -54,9 +54,15 @@ KisSelectionOptions::KisSelectionOptions(KisCanvas2 * canvas)
     m_action->addButton(m_page->replace, SELECTION_REPLACE);
     m_action->addButton(m_page->intersect, SELECTION_INTERSECT);
 
+    m_page->pixel->setGroupPosition(KoGroupButton::GroupLeft);
+    m_page->shape->setGroupPosition(KoGroupButton::GroupRight);
     m_page->pixel->setIcon(koIcon("select_pixel"));
     m_page->shape->setIcon(koIcon("select_shape"));
 
+    m_page->add->setGroupPosition(KoGroupButton::GroupCenter);
+    m_page->subtract->setGroupPosition(KoGroupButton::GroupRight);
+    m_page->replace->setGroupPosition(KoGroupButton::GroupLeft);
+    m_page->intersect->setGroupPosition(KoGroupButton::GroupCenter);
     m_page->add->setIcon(koIcon("selection_add"));
     m_page->subtract->setIcon(koIcon("selection_subtract"));
     m_page->replace->setIcon(koIcon("selection_replace"));

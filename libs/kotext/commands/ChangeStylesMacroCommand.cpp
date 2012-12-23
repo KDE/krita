@@ -78,7 +78,10 @@ void ChangeStylesMacroCommand::redo()
         int i = 0;
         foreach(ChangeFollower *cf, m_changeFollowers) {
             //add and execute it's redo
-            KoTextDocument(cf->document()).textEditor()->addCommand(commands[i]);
+            // ToC documents doesn't have a texteditor so make sure we ignore that
+            if (KoTextDocument(cf->document()).textEditor()) {
+                KoTextDocument(cf->document()).textEditor()->addCommand(commands[i]);
+            }
             i++;
         }
         m_first = false;

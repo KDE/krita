@@ -101,7 +101,7 @@ public:
     QColor  backgroundColor;    // Background text color
     QPoint  currentPosition;    // Drawing position (Current point)
     QColor  foregroundTextColor; // Foreground text color
-    ;    //Output Surface**  (what is this good for?  Mixing colors?)
+        //Output Surface**  (what is this good for?  Mixing colors?)
     QSize  viewportExt;         // Viewport extent
     QPoint viewportOrg;         // Viewport origin
     QSize  windowExt;           // Window extent

@@ -8,7 +8,6 @@ include_directories(
     ${TEXTLAYOUT_INCLUDES}
     ${FLAKE_INCLUDES}
     ${KOMAIN_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets/
     ${KDE4_INCLUDE_DIR}/threadweaver/)
 
 ########### Flake Plugin library ###############

@@ -1,6 +1,6 @@
 
 
-include_directories( ${CMAKE_SOURCE_DIR}/kchart/ ${KOMAIN_INCLUDES} )
+include_directories( ${KOMAIN_INCLUDES} )
 
 
 ########### next target ###############

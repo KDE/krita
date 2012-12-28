@@ -34,8 +34,6 @@ class KoPluginLoader::Private
 {
 public:
     QStringList loadedServiceTypes;
-
-    static KoPluginLoader *singleton;
 };
 
 KoPluginLoader::KoPluginLoader()

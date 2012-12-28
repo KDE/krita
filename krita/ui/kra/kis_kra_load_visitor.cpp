@@ -363,7 +363,7 @@ void KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP ds
 
 QString KisKraLoadVisitor::getLocation(KisNode* node, const QString& suffix)
 {
-    QString location = m_external ? QString::null : m_uri;
+    QString location = m_external ? QString() : m_uri;
     location += m_name + LAYER_PATH + m_layerFilenames[node] + suffix;
     return location;
 }

@@ -175,7 +175,7 @@ static QString p_enum(QDataStream &buf){
 //         return QString::number(size);
 //     }else{
 //         qDebug() << "Plug-in failed to parse brush file. File a bug and attach this ABR file to it, so we could improve this plug-in\n";
-//         return QString::null;
+//         return QString();
 //     }
 // }
 

@@ -55,7 +55,7 @@ public:
      * Do NOT use this method for style:style styles.
      *
      * @param name the style name
-     * @return the dom element representing the style, or QString::null if it wasn't found.
+     * @return the dom element representing the style, or an empty QString if it wasn't found.
      */
     const KoXmlElement* findStyle(const QString &name) const;
 
@@ -64,7 +64,7 @@ public:
      * Searches in the list of custom styles first and then in the lists of automatic styles.
      * @param name the style name
      * @param family the style family (for a style:style, use 0 otherwise)
-     * @return the dom element representing the style, or QString::null if it wasn't found.
+     * @return the dom element representing the style, or an empty QString if it wasn't found.
      */
     const KoXmlElement* findStyle(const QString &name, const QString &family) const;
 
@@ -77,7 +77,7 @@ public:
      * @param family the style family (for a style:style, use 0 otherwise)
      * @param stylesDotXml if true search the styles.xml auto-styles otherwise the content.xml ones
      *
-     * @return the dom element representing the style, or QString::null if it wasn't found.
+     * @return the dom element representing the style, or an empty QString if it wasn't found.
      */
     const KoXmlElement* findStyle(const QString &name, const QString &family, bool stylesDotXml) const;
 

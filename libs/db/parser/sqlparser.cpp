@@ -2835,7 +2835,7 @@ YYACCEPT;
 	(yyval.expr) = new ConstExpr( SQL_NULL, QVariant() );
 	KexiDBDbg << "  + NULL";
 //	$$ = new Field();
-	//$$->setName(QString::null);
+	//$$->setName(QString());
 }
     break;
 

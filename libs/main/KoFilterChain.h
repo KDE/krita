@@ -81,7 +81,7 @@ public:
     /**
      * Tells the @ref KoFilterManager the output file of the
      * filter chain in case of an import operation. If it's
-     * QString::null we directly manipulated the document.
+     * an empty QString we directly manipulated the document.
      */
     QString chainOutput() const;
 

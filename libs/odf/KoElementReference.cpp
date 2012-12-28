@@ -110,5 +110,5 @@ KoElementReference KoElementReference::loadOdf(const KoXmlElement &element)
 
 void KoElementReference::invalidate()
 {
-    d->xmlid = QString::null;
+    d->xmlid.clear();
 }

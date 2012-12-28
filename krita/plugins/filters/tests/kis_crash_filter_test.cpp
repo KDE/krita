@@ -92,7 +92,7 @@ void KisCrashFilterTest::testCrashFilters()
     }
     qDebug() << "Success: " << successes;
     if (failures.size() > 0) {
-        QFAIL(QString("Failed filters:\n\t %1").arg(failures.join("\n\t")).toAscii());
+        QFAIL(QString("Failed filters:\n\t %1").arg(failures.join("\n\t")).toLatin1());
     }
 }
 

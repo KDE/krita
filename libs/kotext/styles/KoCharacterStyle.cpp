@@ -224,7 +224,7 @@ qreal KoCharacterStyle::Private::calculateFontYStretch(QString /*fontFamily*/)
     FT_Face face;
     int id = 0;
     int error = 0;
-    QByteArray fontName = fontFamily.toAscii();
+    QByteArray fontName = fontFamily.toLatin1();
 
     //TODO http://freedesktop.org/software/fontconfig/fontconfig-devel/x19.html
     // we should specify slant and weight too

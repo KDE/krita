@@ -33,8 +33,8 @@ void TestKoColorSpaceRegistry::testRgbU8()
     cmsHPROFILE lcmsProfile = cmsCreate_sRGBProfile();
     QString testProfileName = "TestRGBU8ProfileName";
 
-    cmsWriteTag(lcmsProfile, cmsSigProfileDescriptionTag, testProfileName.toLatin1().data());
-    cmsWriteTag(lcmsProfile, cmsSigDeviceModelDescTag, testProfileName.toLatin1().data());
+    cmsWriteTag(lcmsProfile, cmsSigProfileDescriptionTag, testProfileName.toLatin1().constData());
+    cmsWriteTag(lcmsProfile, cmsSigDeviceModelDescTag, testProfileName.toLatin1().constData());
     cmsWriteTag(lcmsProfile, cmsSigDeviceMfgDescTag, "");
 
 }
@@ -57,8 +57,8 @@ void TestKoColorSpaceRegistry::testRgbU16()
     cmsHPROFILE lcmsProfile = cmsCreate_sRGBProfile();
     QString testProfileName = "TestRGBU16ProfileName";
 
-    cmsWriteTag(lcmsProfile, cmsSigProfileDescriptionTag, testProfileName.toLatin1().data());
-    cmsWriteTag(lcmsProfile, cmsSigDeviceModelDescTag, testProfileName.toLatin1().data());
+    cmsWriteTag(lcmsProfile, cmsSigProfileDescriptionTag, testProfileName.toLatin1().constData());
+    cmsWriteTag(lcmsProfile, cmsSigDeviceModelDescTag, testProfileName.toLatin1().constData());
     cmsWriteTag(lcmsProfile, cmsSigDeviceMfgDescTag, "");
 
 }
@@ -86,8 +86,8 @@ void TestKoColorSpaceRegistry::testLab()
     cmsHPROFILE lcmsProfile = cmsCreateLab2Profile(&whitepoint);
     QString testProfileName = "TestLabProfileName";
 
-    cmsWriteTag(lcmsProfile, cmsSigProfileDescriptionTag, testProfileName.toLatin1().data());
-    cmsWriteTag(lcmsProfile, cmsSigDeviceModelDescTag, testProfileName.toLatin1().data());
+    cmsWriteTag(lcmsProfile, cmsSigProfileDescriptionTag, testProfileName.toLatin1().constData());
+    cmsWriteTag(lcmsProfile, cmsSigDeviceModelDescTag, testProfileName.toLatin1().constData());
     cmsWriteTag(lcmsProfile, cmsSigDeviceMfgDescTag, "");
 
 }

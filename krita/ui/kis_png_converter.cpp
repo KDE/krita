@@ -117,7 +117,7 @@ void fillText(png_text* p_text, const char* key, QString& text)
     p_text->compression = PNG_TEXT_COMPRESSION_zTXt;
     p_text->key = const_cast<char *>(key);
     char* textc = new char[text.length()+1];
-    strcpy(textc, text.toAscii());
+    strcpy(textc, text.toLatin1());
     p_text->text = textc;
     p_text->text_length = text.length() + 1;
 }
@@ -169,7 +169,7 @@ void writeRawProfile(png_struct *ping, png_info *ping_info, QString profile_type
     png_charp dp = text[0].text;
     *dp++ = '\n';
 
-    memcpy(dp, (const char *) profile_type.toLatin1().data(), profile_type.length());
+    memcpy(dp, profile_type.toLatin1().constData(), profile_type.length());
 
     dp += description_length;
     *dp++ = '\n';

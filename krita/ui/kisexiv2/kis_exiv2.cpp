@@ -104,7 +104,7 @@ Exiv2::Value* variantToExivValue(const QVariant& variant, Exiv2::TypeId type)
 {
     switch (type) {
     case Exiv2::undefined: {
-        QByteArray arr = QByteArray::fromBase64(variant.toString().toAscii());
+        QByteArray arr = QByteArray::fromBase64(variant.toString().toLatin1());
         return new Exiv2::DataValue((Exiv2::byte*)arr.data(), arr.size());
     }
     case Exiv2::unsignedByte:
@@ -184,7 +184,7 @@ Exiv2::Value* kmdValueToExivValue(const KisMetaData::Value& value, Exiv2::TypeId
         case Exiv2::string: {
             Exiv2::StringValue* ev = new Exiv2::StringValue();
             for (int i = 0; i < value.asArray().size(); ++i) {
-                ev->value_ += qVariantValue<QString>(value.asArray()[i].asVariant()).toAscii().data();
+                ev->value_ += qVariantValue<QString>(value.asArray()[i].asVariant()).toLatin1().constData();
                 if (i != value.asArray().size() - 1) ev->value_ += ',';
             }
             return ev;
@@ -217,14 +217,14 @@ Exiv2::Value* kmdValueToExivXmpValue(const KisMetaData::Value& value)
             }
         } else {
             //Q_ASSERT(var.canConvert(QVariant::String));
-            return new Exiv2::XmpTextValue(var.toString().toAscii().data());
+            return new Exiv2::XmpTextValue(var.toString().toLatin1().constData());
         }
     }
     case KisMetaData::Value::Rational: {
         QString rat = "%1 / %2";
         rat = rat.arg(value.asRational().numerator);
         rat = rat.arg(value.asRational().denominator);
-        return new Exiv2::XmpTextValue(rat.toAscii().data());
+        return new Exiv2::XmpTextValue(rat.toLatin1().constData());
     }
     case KisMetaData::Value::AlternativeArray:
     case KisMetaData::Value::OrderedArray:
@@ -266,7 +266,7 @@ Exiv2::Value* kmdValueToExivXmpValue(const KisMetaData::Value& value)
             QVariant var = it.value().asVariant();
             //Q_ASSERT(var.type() == QVariant::String);
             exivVal += var.toString();
-            arrV->read(exivVal.toAscii().data());
+            arrV->read(exivVal.toLatin1().constData());
         }
         return arrV;
     }

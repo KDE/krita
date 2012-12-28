@@ -459,7 +459,7 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
         const QVector<QPair<QString, QString> > &attributeList = tagInformation.attributes();
         QPair<QString, QString> attribute;
         foreach(attribute, attributeList) {
-            writer->addAttribute(attribute.first.toAscii(), attribute.second.toAscii());
+            writer->addAttribute(attribute.first.toLatin1(), attribute.second.toLatin1());
         }
     }
 

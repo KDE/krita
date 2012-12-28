@@ -111,7 +111,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
                     }
                     QString key = schema->generateQualifiedName(entryName);
                     KisEntryEditor* ee = new KisEntryEditor(obj, d->store, key, propertyName, structureField, arrayIndex);
-                    connect(obj, editorSignal.toAscii(), ee, SLOT(valueEdited()));
+                    connect(obj, editorSignal.toLatin1(), ee, SLOT(valueEdited()));
                     QList<KisEntryEditor*> otherEditors = d->entryEditors.values(key);
                     foreach(KisEntryEditor* oe, otherEditors) {
                         connect(ee, SIGNAL(valueHasBeenEdited()), oe, SLOT(valueChanged()));

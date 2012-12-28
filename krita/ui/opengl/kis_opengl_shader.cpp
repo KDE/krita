@@ -115,7 +115,7 @@ void KisOpenGLShader::loadSourceCodeFromFile(const QString & sourceCodeFilename)
 
 void KisOpenGLShader::loadSourceCodeFromQString(QString sourceCodeString)
 {
-    QByteArray string = sourceCodeString.toAscii();
+    QByteArray string = sourceCodeString.toLatin1();
 
     if (string.length() == 0) {
         dbgUI << "Shader source code vector is empty";

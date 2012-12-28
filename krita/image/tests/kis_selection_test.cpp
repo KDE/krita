@@ -194,7 +194,7 @@ void KisSelectionTest::testCopy()
         QFAIL(QString("Failed to copy selection, first different pixel: %1,%2 ")
               .arg(errpoint.x())
               .arg(errpoint.y())
-              .toAscii());
+              .toLatin1());
     }
 }
 

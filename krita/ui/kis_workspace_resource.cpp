@@ -85,7 +85,7 @@ bool KisWorkspaceResource::load()
     QDomElement state = element.firstChildElement("state");
     
     if(!state.isNull()) {
-        m_dockerState = QByteArray::fromBase64(state.text().toAscii());
+        m_dockerState = QByteArray::fromBase64(state.text().toLatin1());
     }
 
     QDomElement settings = element.firstChildElement("settings");

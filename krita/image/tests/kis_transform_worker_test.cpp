@@ -67,7 +67,7 @@ void KisTransformWorkerTest::testMirrorX()
         // They are the same, but should be mirrored
         image.save("mirror_test_1_source.png");
         result.save("mirror_test_1_result.png");
-        QFAIL(QString("Failed to mirror the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to mirror the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 
 }
@@ -90,7 +90,7 @@ void KisTransformWorkerTest::testMirrorY()
         // They are the same, but should be mirrored
         image.save("mirror_test_2_source.png");
         result.save("mirror_test_2_result.png");
-        QFAIL(QString("Failed to mirror the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to mirror the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 
 }
@@ -115,7 +115,7 @@ void KisTransformWorkerTest::testMirrorTransactionX()
         // They are the same, but should be mirrored
         image.save("mirror_test_3_source.png");
         result.save("mirror_test_3_result.png");
-        QFAIL(QString("Failed to mirror the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to mirror the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
 
     }
 }
@@ -139,7 +139,7 @@ void KisTransformWorkerTest::testMirrorTransactionY()
         // They are the same, but should be mirrored
         image.save("mirror_test_4_source.png");
         result.save("mirror_test_4_result.png");
-        QFAIL(QString("Failed to mirror the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to mirror the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 
@@ -175,7 +175,7 @@ void KisTransformWorkerTest::testScaleUp()
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("test_scaleup_source.png");
         result.save("test_scaleup_result.png");
-        QFAIL(QString("Failed to scale the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to scale the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 
@@ -212,7 +212,7 @@ void KisTransformWorkerTest::testXScaleUp()
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("test_x_scaleup_source.png");
         result.save("test_x_scaleup_result.png");
-        QFAIL(QString("Failed to scale up the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to scale up the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 
@@ -249,7 +249,7 @@ void KisTransformWorkerTest::testYScaleUp()
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("test_y_scaleup_source.png");
         result.save("test_y_scaleup_result.png");
-        QFAIL(QString("Failed to scale up the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to scale up the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 
@@ -284,7 +284,7 @@ void KisTransformWorkerTest::testIdentity()
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("test_identity_source.png");
         result.save("test_identity_result.png");
-        QFAIL(QString("Failed to apply identity transformation to image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to apply identity transformation to image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 
@@ -330,7 +330,7 @@ void KisTransformWorkerTest::testScaleDown()
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("test_scaledown_source.png");
         result.save("test_scaledown_result.png");
-        QFAIL(QString("Failed to scale down the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to scale down the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 
@@ -383,7 +383,7 @@ void KisTransformWorkerTest::testXScaleDown()
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("scaledownx_source.png");
         result.save("scaledownx_result.png");
-        QFAIL(QString("Failed to scale down the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to scale down the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 
@@ -429,7 +429,7 @@ void KisTransformWorkerTest::testYScaleDown()
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("scaledowny_source.png");
         result.save("scaledowny_result.png");
-        QFAIL(QString("Failed to scale down the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to scale down the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 
@@ -476,7 +476,7 @@ void KisTransformWorkerTest::testXShear()
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("shearx_source.png");
         result.save("shearx_result.png");
-        QFAIL(QString("Failed to shear the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to shear the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 
@@ -524,7 +524,7 @@ void KisTransformWorkerTest::testYShear()
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("sheary_source.png");
         result.save("sheary_result.png");
-        QFAIL(QString("Failed to shear the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to shear the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 
 }
@@ -630,7 +630,7 @@ void KisTransformWorkerTest::testRotation()
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("rotate_source.png");
         result.save("rotate_result.png");
-        QFAIL(QString("Failed to rotate the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to rotate the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 
@@ -745,7 +745,7 @@ void KisTransformWorkerTest::rotateNone()
         // They are the same, but should be mirrored
         image.save("rotate_none_test_1_source.png");
         result.save("rotate_none_1_result.png");
-        QFAIL(QString("Failed to rotate none the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to rotate none the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 
@@ -779,7 +779,7 @@ void KisTransformWorkerTest::rotate90Left()
         image.save("rotate_90_left_test_1_source.png");
         rotatedimage.save("rotate_90_left_test_1_rotated_source.png");
         result.save("rotate_90_left_test_1_result.png");
-        QFAIL(QString("Failed to rotate 90 left the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to rotate 90 left the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 
@@ -813,7 +813,7 @@ void KisTransformWorkerTest::rotate90Right()
         image.save("rotate_90_right_test_1_source.png");
         rotatedimage.save("rotate_90_right_test_1_rotated_source.png");
         result.save("rotate_90_right_1_result.png");
-        QFAIL(QString("Failed to rotate 90 right the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to rotate 90 right the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 
@@ -847,7 +847,7 @@ void KisTransformWorkerTest::rotate180()
         image.save("rotate_180_1_source.png");
         rotatedimage.save("rotate_180_1_rotated_source.png");
         result.save("rotate_180_1_result.png");
-        QFAIL(QString("Failed to rotate 180 the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to rotate 180 the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 

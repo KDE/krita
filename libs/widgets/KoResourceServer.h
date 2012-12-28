@@ -260,7 +260,7 @@ public:
 
     /// Returns path where to save user defined and imported resources to
     virtual QString saveLocation() {
-        return KGlobal::mainComponent().dirs()->saveLocation(type().toAscii());
+        return KGlobal::mainComponent().dirs()->saveLocation(type().toLatin1());
     }
 
     /**

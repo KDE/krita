@@ -53,7 +53,7 @@ MyPaintFactory::MyPaintFactory()
     QStringList fileNames;
 
     foreach (const QString &extension, extensionList) {
-        fileNames += KGlobal::mainComponent().dirs()->findAllResources(m_d->brushServer->type().toAscii(), extension,
+        fileNames += KGlobal::mainComponent().dirs()->findAllResources(m_d->brushServer->type().toLatin1(), extension,
                                                                        KStandardDirs::Recursive | KStandardDirs::NoDuplicates);;
     }
 

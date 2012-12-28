@@ -62,7 +62,7 @@ void KisActionRecorderTest::testFiles()
             qDebug() << "handling " << sourceFileInfo.fileName();
             QFileInfo resultFileInfo(QString(FILES_DATA_DIR) + "/actionrecorder/results/" + sourceFileInfo.fileName() + ".png");
             QVERIFY2(resultFileInfo.exists(),
-                     QString("Result file %1 not found").arg(resultFileInfo.fileName()).toAscii().data());
+                     QString("Result file %1 not found").arg(resultFileInfo.fileName()).toLatin1());
             // Replay
             // Create an image and the document
             QDomDocument domDoc;

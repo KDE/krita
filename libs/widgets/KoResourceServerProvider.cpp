@@ -146,7 +146,7 @@ QStringList KoResourceLoaderThread::getFileNames( const QString & extensions)
     QStringList fileNames;
 
     foreach (const QString &extension, extensionList) {
-        fileNames += KGlobal::mainComponent().dirs()->findAllResources(m_server->type().toAscii(), extension, KStandardDirs::Recursive | KStandardDirs::NoDuplicates);
+        fileNames += KGlobal::mainComponent().dirs()->findAllResources(m_server->type().toLatin1(), extension, KStandardDirs::Recursive | KStandardDirs::NoDuplicates);
 
     }
     return fileNames;

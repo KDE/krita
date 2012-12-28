@@ -174,10 +174,11 @@ static const struct code128 _128codes[] = {
 
 int code128IndexP(QChar code, int set)
 {
+    const char latin1Code = code.toLatin1();
     for (int idx = 0; _128codes[idx]._null == false; idx++) {
-        if (set == SETA && _128codes[idx].codea == code.toAscii()) return idx;
-        if (set == SETB && _128codes[idx].codeb == code.toAscii()) return idx;
-        if (set == SETC && _128codes[idx].codec == code.toAscii()) return idx;
+        if (set == SETA && _128codes[idx].codea == latin1Code) return idx;
+        if (set == SETB && _128codes[idx].codeb == latin1Code) return idx;
+        if (set == SETC && _128codes[idx].codec == latin1Code) return idx;
     }
     return -1;  // couldn't find it
 }
@@ -218,10 +219,10 @@ void renderCode128(const QRect & r, const QString & _str, int align, QPainter * 
             for (i = i; i < _str.length(); i += 2) {
                 char a, b;
                 c = _str.at(i);
-                a = c.toAscii();
+                a = c.toLatin1();
                 a -= 48;
                 c = _str.at(i + 1);
-                b = c.toAscii();
+                b = c.toLatin1();
                 b -= 48;
                 str.push_back(int((a * 10) + b));
             }

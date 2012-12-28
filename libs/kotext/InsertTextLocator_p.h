@@ -35,9 +35,6 @@ public:
 
 private:
     virtual KoInlineObject *createInlineObject();
-
-private slots:
-    void activated();
 };
 
 #endif

@@ -28,7 +28,11 @@
 #include "KoDockRegistry.h"
 #include "KoDocument.h"
 #include "KoMainWindow.h"
+
+#ifndef QT_NO_DBUS
 #include "KoViewAdaptor.h"
+#endif
+
 #include "KoDockFactoryBase.h"
 #include "KoUndoStackAction.h"
 #include "KoGlobal.h"
@@ -168,8 +172,10 @@ KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
 
     setObjectName(newObjectName());
 
+#ifndef QT_NO_DBUS
     new KoViewAdaptor(this);
     QDBusConnection::sessionBus().registerObject('/' + objectName(), this);
+#endif
 
     //kDebug(30003) <<"KoView::KoView" << this;
     d->document = document;

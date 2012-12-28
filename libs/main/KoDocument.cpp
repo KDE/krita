@@ -69,7 +69,9 @@
 #include <QFileInfo>
 #include <QPainter>
 #include <QTimer>
+#ifndef QT_NO_DBUS
 #include <QtDBus/QDBusConnection>
+#endif
 #include <QApplication>
 
 // Define the protocol used here for embedded documents' URL

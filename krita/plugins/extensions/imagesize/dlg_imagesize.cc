@@ -61,7 +61,7 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
 
     m_page->cmbFilterType->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
     m_page->cmbFilterType->setCurrent("Bicubic");
-
+    slotUpdateInterpolationGuidance(KoID("Bicubic"));
     m_page->cmbWidthUnit->addItems(KoUnit::listOfUnitNameForUi(KoUnit::HidePixel));
     m_page->cmbHeightUnit->addItems(KoUnit::listOfUnitNameForUi(KoUnit::HidePixel));
 
@@ -133,6 +133,8 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
 
     connect(m_page->doubleResolution, SIGNAL(valueChanged(double)),
             this, SLOT(slotResolutionChanged(double)));
+
+    connect(m_page->cmbFilterType, SIGNAL(activated(KoID)), SLOT(slotUpdateInterpolationGuidance(KoID)));
 
     slotProtectChanged();
 
@@ -395,6 +397,26 @@ void DlgImageSize::slotResolutionChanged(double r)
     }
 
     unblockAll();
+}
+
+void DlgImageSize::slotUpdateInterpolationGuidance(const KoID &id)
+{
+    if (id.id() == "Mitchell") {
+        m_page->lblInterpolationGuidance->setText(i18n("Mitchell: No guidance available"));
+    } else if (id.id() == "Lanczos3") {
+        m_page->lblInterpolationGuidance->setText(i18n("Lanczos: No guidance available"));
+    } else if (id.id() == "BSpline") {
+        m_page->lblInterpolationGuidance->setText(i18n("BSpline: No guidance available"));
+    } else if (id.id() == "Bell") {
+        m_page->lblInterpolationGuidance->setText(i18n("Bell: No guidance available"));
+    } else if (id.id() == "Box") {
+        m_page->lblInterpolationGuidance->setText(i18n("Box: replicate pixels exactly. Only useful for upscaling when doubling the size."));
+    } else if (id.id() == "Bicubic") {
+        m_page->lblInterpolationGuidance->setText(i18n("Bicubic: slow and slightly fuzzy. Best for natural images."));
+    } else if (id.id() == "Bilinear") {
+        m_page->lblInterpolationGuidance->setText(i18n("Bilinear: good for up and downscaling, but only between 50% to 200%."));
+    }
+
 }
 
 void DlgImageSize::slotProtectChanged()

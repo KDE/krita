@@ -74,7 +74,7 @@ private slots:
     void slotProtectChanged();
     void slotAspectChanged(bool keep);
     void slotResolutionChanged(double r);
-
+    void slotUpdateInterpolationGuidance(const KoID &id);
 private:
 
     void blockAll();

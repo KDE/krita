@@ -570,6 +570,11 @@ set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
 set(TEXTLAYOUT_INCLUDES ${KOTEXT_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/textlayout)
 
+# BasicFlakes depends on flake, widgets
+set(BASICFLAKES_INCLUDES ${KOWIDGETS_INCLUDES} ${FLAKE_INCLUDES}
+                   ${CMAKE_SOURCE_DIR}/libs/basicflakes
+                   ${CMAKE_SOURCE_DIR}/libs/basicflakes/tools)
+
 # komain depends on kotext & flake
 set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
                     ${TEXTLAYOUT_INCLUDES}

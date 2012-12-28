@@ -23,7 +23,7 @@ kde4_add_plugin(kritaselectiontools ${kritaselectiontools_PART_SRCS})
 
 
 
-target_link_libraries(kritaselectiontools kritaui)
+target_link_libraries(kritaselectiontools kritaui basicflakes)
 
 install(TARGETS kritaselectiontools  DESTINATION ${PLUGIN_INSTALL_DIR})
 

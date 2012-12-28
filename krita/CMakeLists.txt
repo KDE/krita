@@ -77,6 +77,7 @@ set(KRITA_INCLUDES
     ${PIGMENT_INCLUDES}
     ${KOTEXT_INCLUDES}
     ${KOMAIN_INCLUDES}
+    ${BASICFLAKES_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/widgets/resources
     ${CMAKE_SOURCE_DIR}/libs/widgetutils
 

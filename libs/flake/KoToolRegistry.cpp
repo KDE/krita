@@ -23,7 +23,6 @@
 #include <KDebug>
 #include <kconfiggroup.h>
 
-#include "tools/KoCreatePathToolFactory.h"
 #include "tools/KoCreateShapesToolFactory.h"
 #include "tools/KoCreateShapesTool.h"
 #include "tools/KoPathToolFactory.h"
@@ -55,7 +54,6 @@ void KoToolRegistry::init()
                                      config);
 
     // register generic tools
-    add(new KoCreatePathToolFactory());
     add(new KoCreateShapesToolFactory());
     add(new KoPathToolFactory());
     add(new KoZoomToolFactory());

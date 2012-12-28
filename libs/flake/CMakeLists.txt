@@ -167,8 +167,6 @@ set(flake_SRCS
     commands/KoShapeUnclipCommand.cpp
     commands/KoPathShapeMarkerCommand.cpp
     commands/KoShapeConnectionChangeCommand.cpp
-    tools/KoCreatePathTool.cpp
-    tools/KoCreatePathToolFactory.cpp
     tools/KoCreateShapeStrategy.cpp
     tools/KoPathToolFactory.cpp
     tools/KoPathTool.cpp

@@ -245,7 +245,7 @@ void KoView::dropEvent(QDropEvent *event)
     }
     else if (event->mimeData()->hasUrls()) {
         QList<QUrl> urls = event->mimeData()->urls();
-        foreach (const QUrl url, urls) {
+        foreach (const QUrl &url, urls) {
             QImage image;
             KUrl kurl(url);
             // make sure we download the files before inserting them

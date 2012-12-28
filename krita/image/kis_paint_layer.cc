@@ -162,7 +162,7 @@ KoDocumentSectionModel::PropertyList KisPaintLayer::sectionModelProperties() con
 
 void KisPaintLayer::setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties)
 {
-    foreach (KoDocumentSectionModel::Property property, properties) {
+    foreach (const KoDocumentSectionModel::Property &property, properties) {
         if (property.name == i18n("Alpha Channel Locked")) {
             setAlphaLocked(property.state.toBool());
         }

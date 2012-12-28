@@ -132,7 +132,7 @@ void KoOdfBibliographyConfiguration::saveOdf(KoXmlWriter *writer) const
     writer->addAttribute("text:numbered-entries", d->numberedEntries ? "true" : "false");
     writer->addAttribute("text:sort-by-position", d->sortByPosition ? "true" : "false");
 
-    foreach (SortKeyPair key, d->sortKeys) {
+    foreach (const SortKeyPair &key, d->sortKeys) {
             writer->startElement("text:sort-key");
             writer->addAttribute("text:key", key.first);
             writer->addAttribute("text:sort-ascending",key.second);

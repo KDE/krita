@@ -229,7 +229,7 @@ void KoProgressUpdater::Private::logEvents(QTextStream& out,
     // initial implementation: write out the names of all events
     foreach (QPointer<KoUpdaterPrivate> p, updater->subtasks) {
         if (!p) continue;
-        foreach (KoUpdaterPrivate::TimePoint tp, p->getPoints()) {
+        foreach (const KoUpdaterPrivate::TimePoint &tp, p->getPoints()) {
             out << prefix+p->objectName() << '\t'
                     << startTime.msecsTo(tp.time) << '\t' << tp.value << endl;
         }

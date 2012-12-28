@@ -547,7 +547,7 @@ void KisView2::dropEvent(QDropEvent *event)
             QAction *action = popup.exec(QCursor::pos());
 
             if (action != 0 && action != cancel) {
-                foreach(QUrl url, urls) {
+                foreach(const QUrl &url, urls) {
 
                     if (action == insertAsNewLayer || action == insertAsNewLayers) {
                         m_d->imageManager->importImage(KUrl(url));

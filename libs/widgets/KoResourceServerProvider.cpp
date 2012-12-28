@@ -115,7 +115,7 @@ KoResourceLoaderThread::KoResourceLoaderThread(KoResourceServerBase * server)
     QStringList fileNames = m_server->blackListedFiles();
 
     if (!fileNames.isEmpty()) {
-        foreach (QString s, fileNames) {
+        foreach (const QString &s, fileNames) {
             if (m_fileNames.contains(s)) {
                m_fileNames.removeAll(s);
             }

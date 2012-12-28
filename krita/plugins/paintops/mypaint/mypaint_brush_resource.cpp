@@ -270,7 +270,7 @@ public:
                                     input->index,
                                     points.size());
         int i = 0;
-        foreach(const QPointF point, points) {
+        foreach(const QPointF &point, points) {
             parent_brush->set_mapping_point(brush_setting_definition->index,
                                             input->index,
                                             i,
@@ -288,7 +288,7 @@ public:
             Q_ASSERT(pointsPerInput.size() < input->index);
             vPoints points = pointsPerInput[input->index];
             s += " | " + input->name + ", ";
-            foreach(QPointF point, points) {
+            foreach(const QPointF &point, points) {
                 s += QString("(%1 %2)").arg(point.x(), point.y());
             }
         }

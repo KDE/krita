@@ -103,7 +103,7 @@ void TestLoadingBase::testLegendElements(QStringList labels)
     foreach(KDChart::AbstractDiagram *diagram, diagrams) {
         QVERIFY(diagram);
         QStringList diagramLabels = diagram->datasetLabels();
-        foreach(QString diagramLabel, diagramLabels) {
+        foreach(const QString &diagramLabel, diagramLabels) {
             QVERIFY(!labels.isEmpty());
             QCOMPARE(diagramLabel, labels.takeFirst());
         }

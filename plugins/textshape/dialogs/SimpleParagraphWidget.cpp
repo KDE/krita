@@ -130,7 +130,7 @@ void SimpleParagraphWidget::fillListButtons()
     TextShape textShape(&itom, &tlm);
     textShape.setSize(QSizeF(300, 100));
     QTextCursor cursor (textShape.textShapeData()->document());
-    foreach(Lists::ListStyleItem item, Lists::genericListStyleItems()) {
+    foreach(const Lists::ListStyleItem &item, Lists::genericListStyleItems()) {
         QPixmap pm(48,48);
 
         pm.fill(Qt::transparent);

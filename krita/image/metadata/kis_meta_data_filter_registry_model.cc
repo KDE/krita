@@ -84,7 +84,7 @@ void FilterRegistryModel::setEnabledFilters(const QStringList &enabledFilters)
 {
     d->enabled.clear();
     QList<QString> keys = FilterRegistry::instance()->keys();
-    foreach (QString key, keys) {
+    foreach (const QString &key, keys) {
         d->enabled.append(enabledFilters.contains(key));
     }
 

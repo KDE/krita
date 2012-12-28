@@ -174,7 +174,7 @@ void KoFindText::replaceImplementation(const KoFindMatch &match, const QVariant 
     //Search for the selection matching this match.
     QVector<QAbstractTextDocumentLayout::Selection> selections = d->selections.value(match.container().value<QTextDocument*>());
     int index = 0;
-    foreach(QAbstractTextDocumentLayout::Selection sel, selections) {
+    foreach(const QAbstractTextDocumentLayout::Selection &sel, selections) {
         if(sel.cursor == cursor) {
             break;
         }

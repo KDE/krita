@@ -96,14 +96,14 @@ qint32 KisBoxFilterStrategy::intValueAt(qint32 t) const
     return 0;
 }
 
-qreal KisTriangleFilterStrategy::valueAt(qreal t) const
+qreal KisBilinearFilterStrategy::valueAt(qreal t) const
 {
     if (t < 0.0) t = -t;
     if (t < 1.0) return(1.0 - t);
     return(0.0);
 }
 
-qint32 KisTriangleFilterStrategy::intValueAt(qint32 t) const
+qint32 KisBilinearFilterStrategy::intValueAt(qint32 t) const
 {
     /* f(t) = |t|, -1 <= t <= 1 */
     if (t < 0) t = -t;
@@ -194,7 +194,7 @@ KisFilterStrategyRegistry* KisFilterStrategyRegistry::instance()
         // s_instance->add(new KisHermiteFilterStrategy);
         s_instance->add(new KisBicubicFilterStrategy);
         s_instance->add(new KisBoxFilterStrategy);
-        s_instance->add(new KisTriangleFilterStrategy);
+        s_instance->add(new KisBilinearFilterStrategy);
         // s_instance->add(new KisBellFilterStrategy);
         // s_instance->add(new KisBSplineFilterStrategy);
         // s_instance->add(new KisLanczos3FilterStrategy);

@@ -19,7 +19,7 @@
 #ifndef TESTKOELEMENTREFERENCE_H
 #define TESTKOELEMENTREFERENCE_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class TestKoElementReference : public QObject
 {

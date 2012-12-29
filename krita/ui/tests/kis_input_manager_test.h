@@ -19,7 +19,7 @@
 #ifndef __KIS_INPUT_MANAGER_TEST_H
 #define __KIS_INPUT_MANAGER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisInputManagerTest : public QObject
 {

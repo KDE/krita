@@ -19,7 +19,7 @@
 #ifndef __KIS_IMAGEPIPE_BRUSH_TEST_H
 #define __KIS_IMAGEPIPE_BRUSH_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisImagePipeBrush;
 

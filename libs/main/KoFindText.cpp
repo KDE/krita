@@ -30,8 +30,8 @@
 #include <QApplication>
 #include <QAbstractTextDocumentLayout>
 
-#include <KDE/KDebug>
-#include <KDE/KLocalizedString>
+#include <KDebug>
+#include <KLocalizedString>
 
 #include <KoText.h>
 #include <KoTextDocument.h>

@@ -47,7 +47,7 @@
 #include <KoConfig.h>
 
 #ifdef HAVE_OPENGL
-#include <QtOpenGL/QGLWidget>
+#include <QGLWidget>
 #endif
 
 

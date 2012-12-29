@@ -70,7 +70,7 @@
 #include <QPainter>
 #include <QTimer>
 #ifndef QT_NO_DBUS
-#include <QtDBus/QDBusConnection>
+#include <QDBusConnection>
 #endif
 #include <QApplication>
 

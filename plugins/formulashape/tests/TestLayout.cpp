@@ -20,7 +20,7 @@
 #include "TestLayout.h"
 #include <qtest_kde.h>
 
-#include <QtTest/QtTest>
+#include <QtTest>
 #include <QFont>
 #include <QFontMetrics>
 

@@ -21,6 +21,7 @@
 #include <KoPathShape.h>
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
+#include <KoShapeStroke.h>
 
 #include <kis_cursor.h>
 

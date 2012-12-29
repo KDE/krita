@@ -21,19 +21,8 @@
 #include <KoPathShape.h>
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
-#include <KoShapeStroke.h>
 
-#include <kis_canvas_resource_provider.h>
-#include <kis_paintop_registry.h>
 #include <kis_cursor.h>
-#include <kis_system_locker.h>
-
-#include <recorder/kis_action_recorder.h>
-#include <recorder/kis_recorded_path_paint_action.h>
-#include <recorder/kis_node_query_path.h>
-
-#include "kis_figure_painting_tool_helper.h"
-
 
 KisToolPencil::KisToolPencil(KoCanvasBase * canvas)
         : KisToolShape(canvas, Qt::ArrowCursor), m_localTool(new LocalTool(canvas, this))

@@ -18,33 +18,10 @@
  */
 
 #include "kis_tool_path.h"
-//#include <klocale.h>
 #include <KoPathShape.h>
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
-//#include <KoColorSpace.h>
-//#include <KoCompositeOp.h>
-//#include <KoShapeController.h>
-
-//#include <kis_paint_layer.h>
-//#include <kis_image.h>
-//#include <kis_painter.h>
-//#include <kis_paint_information.h>
-//#include <kis_layer.h>
-//#include <canvas/kis_canvas2.h>
-//#include <kis_view2.h>
-#include <kis_canvas_resource_provider.h>
-#include <kis_paintop_registry.h>
-//#include <kis_selection.h>
 #include <kis_cursor.h>
-#include <kis_system_locker.h>
-
-#include <recorder/kis_action_recorder.h>
-#include <recorder/kis_recorded_path_paint_action.h>
-#include <recorder/kis_node_query_path.h>
-
-#include "kis_figure_painting_tool_helper.h"
-
 
 KisToolPath::KisToolPath(KoCanvasBase * canvas)
         : KisToolShape(canvas, Qt::ArrowCursor), m_localTool(new LocalTool(canvas, this))

@@ -162,15 +162,12 @@ void KisToolShape::addShape(KoShape* shape)
 
 void KisToolShape::addPathShape(KoPathShape* pathShape, const QString& name)
 {
-    KisNodeSP currentNode =
-        canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
-    if (!currentNode || currentNode->systemLocked()) {
+    KisNodeSP node = currentNode();
+    if (!node || node->systemLocked()) {
         return;
     }
     // Get painting options
-    KisPaintOpPresetSP preset = canvas()->resourceManager()->
-                                resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
-    KoColor paintColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
+    KisPaintOpPresetSP preset = currentPaintOpPreset();
 
     // Compute the outline
     KisImageWSP image = this->image();
@@ -181,9 +178,9 @@ void KisToolShape::addPathShape(KoPathShape* pathShape, const QString& name)
 
     // Recorde the paint action
     KisRecordedPathPaintAction bezierCurvePaintAction(
-            KisNodeQueryPath::absolutePath(currentNode),
+            KisNodeQueryPath::absolutePath(node),
             preset );
-    bezierCurvePaintAction.setPaintColor(paintColor);
+    bezierCurvePaintAction.setPaintColor(currentFgColor());
     QPointF lastPoint, nextPoint;
     int elementCount = mapedOutline.elementCount();
     for (int i = 0; i < elementCount; i++) {
@@ -216,8 +213,8 @@ void KisToolShape::addPathShape(KoPathShape* pathShape, const QString& name)
     }
     image->actionRecorder()->addAction(bezierCurvePaintAction);
 
-    if (!currentNode->inherits("KisShapeLayer")) {
-        KisSystemLocker locker(currentNode);
+    if (!node->inherits("KisShapeLayer")) {
+        KisSystemLocker locker(node);
 
         KisFigurePaintingToolHelper helper(name,
                                            image,

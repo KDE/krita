@@ -957,7 +957,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
             bOk = true;
             if (dialog->exec() == QDialog::Accepted) {
                 newURL = dialog->selectedUrl();
-                QString outputFormatString = dialog->currentMimeFilter().toLatin1();
+                QString outputFormatString = dialog->currentMimeFilter();
                 if (outputFormatString.isNull()) {
                     KMimeType::Ptr mime = KMimeType::findByUrl(newURL);
                     outputFormatString = mime->name();

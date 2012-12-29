@@ -554,7 +554,7 @@ void KoUnavailShape::Private::storeXmlRecursive(const KoXmlElement &el, KoXmlWri
 {
     // Start the element;
     // keep the name in a QByteArray so that it stays valid until end element is called.
-    const QByteArray name(el.nodeName().toAscii());
+    const QByteArray name(el.nodeName().toLatin1());
     writer.startElement(name.constData());
 
     // Copy all the attributes, including namespaces.
@@ -562,12 +562,12 @@ void KoUnavailShape::Private::storeXmlRecursive(const KoXmlElement &el, KoXmlWri
     for (int i = 0; i < attributeNames.size(); ++i) {
         QPair<QString, QString> attrPair(attributeNames.value(i));
         if (attrPair.first.isEmpty()) {
-            writer.addAttribute(attrPair.second.toAscii(), el.attribute(attrPair.second));
+            writer.addAttribute(attrPair.second.toLatin1(), el.attribute(attrPair.second));
         }
         else {
             // This somewhat convoluted code is because we need the
             // namespace, not the namespace URI.
-            QString nsShort = KoXmlNS::nsURI2NS(attrPair.first.toAscii());
+            QString nsShort = KoXmlNS::nsURI2NS(attrPair.first.toLatin1());
             // in case we don't find the namespace in our list create a own one and use that
             // so the document created on saving is valid.
             if (nsShort.isEmpty()) {
@@ -576,10 +576,10 @@ void KoUnavailShape::Private::storeXmlRecursive(const KoXmlElement &el, KoXmlWri
                     nsShort = QString("ns%1").arg(unknownNamespaces.size() + 1);
                     unknownNamespaces.insert(attrPair.first, nsShort);
                 }
-                writer.addAttribute("xmlns:" + nsShort.toAscii(), attrPair.first);
+                writer.addAttribute("xmlns:" + nsShort.toLatin1(), attrPair.first);
             }
             QString attr(nsShort + ':' + attrPair.second);
-            writer.addAttribute(attr.toAscii(), el.attributeNS(attrPair.first,
+            writer.addAttribute(attr.toLatin1(), el.attributeNS(attrPair.first,
                                                                attrPair.second));
         }
     }

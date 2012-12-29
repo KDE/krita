@@ -24,6 +24,7 @@
 #include "kis_doc2.h"
 #include "kis_doc2_p.h"
 
+#include <QDesktopServices>
 #include <QApplication>
 #include <QDomDocument>
 #include <QDomElement>
@@ -366,6 +367,9 @@ bool KisDoc2::newImage(const QString& name,
 
     image->assignImageProfile(cs->profile());
     documentInfo()->setAboutInfo("title", name);
+    if (name != i18n("unnamed") && !name.isEmpty()) {
+        setUrl(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) + "/" + name + ".kra");
+    }
     documentInfo()->setAboutInfo("comments", description);
 
     layer = new KisPaintLayer(image.data(), image->nextLayerName(), bgColor.opacityU8(), cs);

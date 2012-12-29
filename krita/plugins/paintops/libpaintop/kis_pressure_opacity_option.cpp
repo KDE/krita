@@ -44,7 +44,7 @@ void KisPressureOpacityOption::readOptionSetting(const KisPropertiesConfiguratio
     if (setting->getString("OpacityVersion", "1") == "1") {
         QList<QPointF> points = sensor()->curve().points();
         QList<QPointF> points_new;
-        foreach(QPointF p, points)
+        foreach(const QPointF &p, points)
         {
             points_new.push_back( QPointF(p.x() * 0.5, p.y()));
         }

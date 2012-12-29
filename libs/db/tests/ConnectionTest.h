@@ -20,7 +20,7 @@
 #ifndef CALLIGRADB_CONNECTIONTEST_H
 #define CALLIGRADB_CONNECTIONTEST_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class ConnectionTest : public QObject
 {

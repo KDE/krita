@@ -1464,7 +1464,7 @@ QString KexiDB::selectStatement(const KexiDB::Driver *driver,
         } else
             s_where += QLatin1String(" AND ");
         QString s_where_sub;
-        foreach(Field::Pair pair, *rel->fieldPairs()) {
+        foreach(const Field::Pair &pair, *rel->fieldPairs()) {
             if (!s_where_sub.isEmpty())
                 s_where_sub += QLatin1String(" AND ");
             s_where_sub += (

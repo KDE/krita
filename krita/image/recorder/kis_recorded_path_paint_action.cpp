@@ -122,7 +122,7 @@ void KisRecordedPathPaintAction::playPaint(const KisPlayInfo&, KisPainter* paint
     if (d->curveSlices.size() <= 0) return;
     KisDistanceInformation savedDist;
     
-    foreach (Private::BezierCurveSlice slice, d->curveSlices)
+    foreach (const Private::BezierCurveSlice &slice, d->curveSlices)
     {
         switch(slice.type)
         {

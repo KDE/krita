@@ -548,7 +548,7 @@ bool PSDLayerRecord::write(QIODevice* io, KisNodeSP node)
     // blend mode
     io->write("8BIM", 4);
     dbgFile << "blendModeKey" << blendModeKey << "pos" << io->pos();
-    io->write(blendModeKey.toAscii());
+    io->write(blendModeKey.toLatin1());
 
     // opacity
     psdwrite(io, opacity);

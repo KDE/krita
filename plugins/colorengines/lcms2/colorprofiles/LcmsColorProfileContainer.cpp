@@ -124,9 +124,9 @@ QByteArray LcmsColorProfileContainer::createFromChromacities(const KoRGBChromati
 
     // icSigProfileDescriptionTag is the compulsory tag and is the profile name
     // displayed by other applications.
-    cmsWriteTag(profile, cmsSigProfileDescriptionTag, name.toLatin1().data());
+    cmsWriteTag(profile, cmsSigProfileDescriptionTag, name.toLatin1().constData());
 
-    cmsWriteTag(profile, cmsSigDeviceModelDescTag, name.toLatin1().data());
+    cmsWriteTag(profile, cmsSigDeviceModelDescTag, name.toLatin1().constData());
 
     // Clear the default manufacturer's tag that is set to "(lcms internal)"
     QByteArray ba("");

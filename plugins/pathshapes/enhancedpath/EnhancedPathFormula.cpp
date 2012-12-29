@@ -686,8 +686,8 @@ FormulaToken::Operator matchOperator(const QString &text)
     if (text.length() != 1)
         return FormulaToken::OperatorInvalid;
 
-    QChar c(text[0]);
-    switch(c.toAscii()) {
+    const char c = text[0].toLatin1();
+    switch(c) {
     case '+': return FormulaToken::OperatorAdd; break;
     case '-': return FormulaToken::OperatorSub; break;
     case '*': return FormulaToken::OperatorMul; break;

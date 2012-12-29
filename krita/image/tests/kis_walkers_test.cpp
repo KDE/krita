@@ -201,7 +201,7 @@ void KisWalkersTest::verifyResult(KisBaseRectsWalker &walker, QStringList refere
         qDebug() << "*** We are going to crash soon... just wait...";
     }
 
-    foreach(KisMergeWalker::JobItem item, list) {
+    foreach(const KisMergeWalker::JobItem &item, list) {
 #ifdef DEBUG_VISITORS
         qDebug() << item.m_node->name() << '\t'
                  << item.m_applyRect << '\t'

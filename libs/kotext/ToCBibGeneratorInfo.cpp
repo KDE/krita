@@ -207,7 +207,7 @@ IndexSourceStyles::IndexSourceStyles(const IndexSourceStyles &indexSourceStyles)
 {
     outlineLevel = indexSourceStyles.outlineLevel;
 
-    foreach (IndexSourceStyle style, indexSourceStyles.styles) {
+    foreach (const IndexSourceStyle &style, indexSourceStyles.styles) {
         styles.append(style);
     }
 }

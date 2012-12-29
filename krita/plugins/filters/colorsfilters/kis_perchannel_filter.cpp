@@ -359,7 +359,7 @@ void KisPerChannelFilterConfiguration::toXML(QDomDocument& doc, QDomElement& roo
     QString paramName;
 
     for (int i = 0; i < m_curves.size(); ++i) {
-        paramName = QString::fromAscii("curve") + QString::number(i);
+        paramName = QLatin1String("curve") + QString::number(i);
         t = doc.createElement("param");
         t.setAttribute("name", paramName);
 

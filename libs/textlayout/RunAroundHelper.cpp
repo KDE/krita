@@ -197,7 +197,7 @@ void RunAroundHelper::createLineParts()
             }
         }
         // Filter invalid parts.
-        foreach (QRectF rect, lineParts) {
+        foreach (const QRectF &rect, lineParts) {
             if (rect.isValid()) {
                 m_lineParts.append(rect);
             }
@@ -234,7 +234,7 @@ void RunAroundHelper::updateLineParts(const QRectF &lineRect)
 QRectF RunAroundHelper::getLineRectPart()
 {
     QRectF retVal;
-    foreach (QRectF lineRectPart, m_lineParts) {
+    foreach (const QRectF &lineRectPart, m_lineParts) {
         if (m_horizontalPosition <= lineRectPart.left() && m_textWidth <= lineRectPart.width()) {
             retVal = lineRectPart;
             break;

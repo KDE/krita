@@ -48,7 +48,7 @@ void KisTileCompressor2::writeTile(KisTileSP tile, KoStore *store)
     tile->unlock();
 
     QString header = getHeader(tile, bytesWritten);
-    store->write(header.toAscii());
+    store->write(header.toLatin1());
     store->write(m_streamingBuffer.data(), bytesWritten);
 }
 

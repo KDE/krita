@@ -46,7 +46,7 @@ ShivaPlugin::ShivaPlugin(QObject *parent, const QVariantList &)
     dbgPlugins << kernelModulesDirs;
     foreach(const QString & dir, kernelModulesDirs) {
         dbgPlugins << "Append : " << dir << " to the list of CTL modules";
-        m_sourceCollection->addDirectory(dir.toAscii().data());
+        m_sourceCollection->addDirectory(dir.toLatin1().constData());
     }
     {
         KisFilterRegistry * manager = KisFilterRegistry::instance();

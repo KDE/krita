@@ -70,7 +70,7 @@ void KisPresetSelectorStrip::showEvent(QShowEvent* event)
 
 void KisPresetSelectorStrip::currentPaintopChanged(QString paintOpID)
 {
-    foreach (KoID paintOp, KisPaintOpRegistry::instance()->listKeys()) {
+    foreach (const KoID &paintOp, KisPaintOpRegistry::instance()->listKeys()) {
         if (paintOp.id() == paintOpID) {
             smallPresetChooser->setPresetFilter(paintOp);
             break;

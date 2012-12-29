@@ -730,8 +730,8 @@ static int rangeStringToInt(const QString &string)
     int result = 0;
     const int size = string.size();
     for (int i = 0; i < size; i++) {
-        //kDebug(350001) << "---" << float(rangeCharToInt(string[i].toAscii()) * pow(10.0, (size - i - 1)));
-        result += rangeCharToInt(string[i].toAscii()) * pow(10.0, (size - i - 1));
+        //kDebug(350001) << "---" << float(rangeCharToInt(string[i].toLatin1()) * pow(10.0, (size - i - 1)));
+        result += rangeCharToInt(string[i].toLatin1()) * pow(10.0, (size - i - 1));
     }
     //kDebug(350001) << "+++++ result=" << result;
     return result;
@@ -741,7 +741,7 @@ static QString rangeIntToString(int i)
 {
     QString tmp = QString::number(i);
     for (int j = 0; j < tmp.size(); j++) {
-        tmp[j] = 'A' + tmp[j].toAscii() - '1';
+        tmp[j] = 'A' + tmp[j].toLatin1() - '1';
     }
 
     //kDebug(350001) << "tmp=" << tmp;
@@ -759,7 +759,7 @@ int CellRegion::rangeStringToInt(const QString &string)
     int result = 0;
     const int size = string.size();
     for (int i = 0; i < size; i++) {
-        result += rangeCharToInt(string[i].toAscii()) * pow(10.0, (size - i - 1));
+        result += rangeCharToInt(string[i].toLatin1()) * pow(10.0, (size - i - 1));
     }
 
     return result;
@@ -769,7 +769,7 @@ QString CellRegion::rangeIntToString(int i)
 {
     QString tmp = QString::number(i);
     for (int j = 0; j < tmp.size(); j++) {
-        tmp[j] = 'A' + tmp[j].toAscii() - '1';
+        tmp[j] = 'A' + tmp[j].toLatin1() - '1';
     }
 
     return tmp;

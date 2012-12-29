@@ -591,15 +591,15 @@ KisImageBuilder_Result KisTIFFConverter::buildFile(const KUrl& uri, KisImageWSP 
     KoDocumentInfo * info = m_doc->documentInfo();
     QString title = info->aboutInfo("title");
     if (!title.isEmpty()) {
-        TIFFSetField(image, TIFFTAG_DOCUMENTNAME, title.toAscii().data());
+        TIFFSetField(image, TIFFTAG_DOCUMENTNAME, title.toLatin1().constData());
     }
     QString abstract = info->aboutInfo("description");
     if (!abstract.isEmpty()) {
-        TIFFSetField(image, TIFFTAG_IMAGEDESCRIPTION, abstract.toAscii().data());
+        TIFFSetField(image, TIFFTAG_IMAGEDESCRIPTION, abstract.toLatin1().constData());
     }
     QString author = info->authorInfo("creator");
     if (!author.isEmpty()) {
-        TIFFSetField(image, TIFFTAG_ARTIST, author.toAscii().data());
+        TIFFSetField(image, TIFFTAG_ARTIST, author.toLatin1().constData());
     }
 
     dbgFile << "xres: " << INCH_TO_POINT(kisimage->xRes()) << " yres: " << INCH_TO_POINT(kisimage->yRes());

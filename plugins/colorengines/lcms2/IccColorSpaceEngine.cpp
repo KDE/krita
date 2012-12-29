@@ -121,7 +121,7 @@ void IccColorSpaceEngine::addProfile(const QString &filename)
     // and then lcms can read the profile from file itself without problems,
     // quite often, and we can initialize it
     if (!profile->valid()) {
-        cmsHPROFILE cmsp = cmsOpenProfileFromFile(filename.toAscii(), "r");
+        cmsHPROFILE cmsp = cmsOpenProfileFromFile(filename.toLatin1(), "r");
         profile = LcmsColorProfileContainer::createFromLcmsProfile(cmsp);
     }
 

@@ -456,7 +456,7 @@ void ReviewTool::readConfig()
             bgColor = interface.readEntry("formatChangeBgColor", defaultColor);
             m_changeTracker->setFormatChangeBgColor(bgColor);
             changeAuthor = interface.readEntry("changeAuthor", changeAuthor);
-            if (changeAuthor == "") {
+            if (changeAuthor.isEmpty()) {
                 KUser user(KUser::UseRealUserID);
                 m_changeTracker->setAuthorName(user.property(KUser::FullName).toString());
             } else {

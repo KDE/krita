@@ -36,7 +36,7 @@ static KoListStyle::ListIdType ListId(const QTextListFormat &format)
     return listId;
 }
 
-
+typedef QPair<QString, QString> Attribute;
 
 
 KoTextWriter::Private::Private(KoShapeSavingContext &context)
@@ -82,7 +82,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
             QVariant v = format.property(KoParagraphStyle::SectionStartings);
             QList<QVariant> sectionStarts = v.value<QList<QVariant> >();
 
-            foreach (QVariant sv, sectionStarts) {
+            foreach (const QVariant &sv, sectionStarts) {
                 KoSection* section = (KoSection*)(sv.value<void*>());
                 if (section) {
                     ++sectionLevel;
@@ -310,8 +310,7 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
         //kDebug(30015) << "tag:" << tagInformation.name() << openedTagStack.size();
         if (tagInformation.name()) {
             writer->startElement(tagInformation.name(), elementType != ParagraphOrHeader);
-            QPair<QString, QString> attribute;
-            foreach (attribute, tagInformation.attributes()) {
+            foreach (const Attribute &attribute, tagInformation.attributes()) {
                 writer->addAttribute(attribute.first.toLocal8Bit(), attribute.second);
             }
         }
@@ -457,9 +456,8 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
     if (tagInformation.name()) {
         writer->startElement(tagInformation.name(), false);
         const QVector<QPair<QString, QString> > &attributeList = tagInformation.attributes();
-        QPair<QString, QString> attribute;
-        foreach(attribute, attributeList) {
-            writer->addAttribute(attribute.first.toAscii(), attribute.second.toAscii());
+        foreach(const Attribute &attribute, attributeList) {
+            writer->addAttribute(attribute.first.toLatin1(), attribute.second.toLatin1());
         }
     }
 
@@ -628,8 +626,7 @@ void KoTextWriter::Private::saveInlineRdf(KoTextInlineRdf* rdf, TagInformation* 
     KoXmlDocument *xmlReader = new KoXmlDocument;
     xmlReader->setContent(rdfXmlData.data(), true);
     KoXmlElement mainElement = xmlReader->documentElement();
-    QPair<QString, QString> attributeNameNS;
-    foreach (attributeNameNS, mainElement.attributeFullNames()) {
+    foreach (const Attribute &attributeNameNS, mainElement.attributeFullNames()) {
         QString attributeName = QString("%1:%2").arg(KoXmlNS::nsURI2NS(attributeNameNS.first))
                                                 .arg(attributeNameNS.second);
         if (attributeName.startsWith(':'))
@@ -2452,8 +2449,7 @@ void KoTextWriter::Private::writeAttributes(QTextStream &outputXmlStream, KoXmlE
 {
     QList<QPair<QString, QString> > attributes = element.attributeFullNames();
 
-    QPair<QString, QString> attributeNamePair;
-    foreach (attributeNamePair, attributes) {
+    foreach (const Attribute &attributeNamePair, attributes) {
         if (attributeNamePair.first == KoXmlNS::text) {
             outputXmlStream << " text:" << attributeNamePair.second << "=";
             outputXmlStream << "\"" << element.attributeNS(KoXmlNS::text, attributeNamePair.second) << "\"";

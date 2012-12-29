@@ -183,7 +183,7 @@ void KisColorSpaceSelector::installProfile()
 
     QString saveLocation = KGlobal::mainComponent().dirs()->saveLocation("icc_profiles");
 
-    foreach (QString profileName, profileNames) {
+    foreach (const QString &profileName, profileNames) {
         KUrl file(profileName);
         if (!QFile::copy(profileName, saveLocation + file.fileName())) {
             kWarning() << "Could not install profile!";

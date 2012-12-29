@@ -143,9 +143,9 @@ QStringList KoResourceTagging::searchTag(const QString& lineEditText)
     if(tagsList.count() >= 1) {
         QStringList resultKeysList;
         bool tagPresence;
-        foreach(QString key, keysList) {
+        foreach(const QString &key, keysList) {
             tagPresence=true;
-            foreach(QString tag, tagsList) {
+            foreach(const QString &tag, tagsList) {
                 if(!m_tagRepo.contains(key,tag)) {
                     tagPresence=false;
                     break;
@@ -216,7 +216,7 @@ void KoResourceTagging::writeXMLFile(bool serverIdentity)
                            resourceNodesList.at(i).removeChild(tagNodesList.at(j--));
                        }
                    }
-                   foreach(QString tag, tags) {
+                   foreach(const QString &tag, tags) {
                        QDomElement newTagEl = doc.createElement("tag");
                        QDomText tagNameText = doc.createTextNode(tag);
                        newTagEl.appendChild(tagNameText);
@@ -238,7 +238,7 @@ void KoResourceTagging::writeXMLFile(bool serverIdentity)
        resourceEl.setAttribute("identifier",resourceName);
 
        QStringList tags = m_tagRepo.values(resourceName.replace(QString("~"),QDir::homePath()));
-       foreach (QString tag, tags) {
+       foreach (const QString &tag, tags) {
            QDomElement tagEl = doc.createElement("tag");
            QDomText tagNameText = doc.createTextNode(tag);
            tagEl.appendChild(tagNameText);
@@ -320,7 +320,7 @@ QString KoResourceTagging::getAdjustedFileName(QString fileName)
 
 QStringList KoResourceTagging::removeAdjustedFileNames(QStringList fileNamesList)
 {
-    foreach(QString fileName, fileNamesList) {
+    foreach(const QString &fileName, fileNamesList) {
         if(fileName.contains("-krita")) {
             fileNamesList.append(fileName.split("-krita").takeFirst());
             fileNamesList.removeAll(fileName);
@@ -353,7 +353,7 @@ void KoResourceTagging::writeNepomukRepo(bool serverIdentity)
 
             QList<Nepomuk::Tag> tagListOld = resource.tags();
 
-            foreach(Nepomuk::Tag tag, tagListOld) {
+            foreach(const Nepomuk::Tag &tag, tagListOld) {
                 QString tagName =  tag.genericLabel();
 
                  if(tagNameListNew.contains(tagName)) {
@@ -363,7 +363,7 @@ void KoResourceTagging::writeNepomukRepo(bool serverIdentity)
                      delNepomukTag(resource.genericLabel(),tagName);
                  }
             }
-            foreach(QString tagName, tagNameListNew) {
+            foreach(const QString &tagName, tagNameListNew) {
                 addNepomukTag(resourceFileOld,tagName);
             }
         }
@@ -374,11 +374,11 @@ void KoResourceTagging::writeNepomukRepo(bool serverIdentity)
         }
     }
 
-    foreach(QString resourceFileName, resourceFileNames) {
+    foreach(const QString &resourceFileName, resourceFileNames) {
 
         QStringList tagNameListNew = m_tagRepo.values(resourceFileName);
 
-        foreach(QString tagName, tagNameListNew) {
+        foreach(const QString &tagName, tagNameListNew) {
             addNepomukTag(resourceFileName,tagName);
         }
     }
@@ -405,13 +405,13 @@ QList<Nepomuk::Resource> KoResourceTagging::readNepomukRepo()
 void KoResourceTagging::updateTagRepoFromNepomuk(bool serverIdentity)
 {
     QList<Nepomuk::Resource> resourceList = readNepomukRepo();
-    foreach(Nepomuk::Resource resource, resourceList) {
+    foreach(const Nepomuk::Resource &resource, resourceList) {
 
         QString resourceFileName = correctedNepomukFileName(resource.toFile().url().path());
 
         if(isServerResource(resourceFileName) || !serverIdentity) {
             QList<Nepomuk::Tag> tagList = resource.tags();
-            foreach(Nepomuk::Tag tagName, tagList) {
+            foreach(const Nepomuk::Tag &tagName, tagList) {
                  addTag(resourceFileName, tagName.genericLabel());
             }
         }

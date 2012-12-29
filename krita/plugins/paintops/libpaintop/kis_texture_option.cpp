@@ -176,7 +176,7 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfiguration* setting) c
 
 void KisTextureOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    QByteArray ba = QByteArray::fromBase64(setting->getString("Texture/Pattern/Pattern").toAscii());
+    QByteArray ba = QByteArray::fromBase64(setting->getString("Texture/Pattern/Pattern").toLatin1());
     QImage img;
     img.loadFromData(ba, "PNG");
     QString name = setting->getString("Texture/Pattern/Name");
@@ -289,7 +289,7 @@ void KisTextureProperties::recalculateMask()
 void KisTextureProperties::fillProperties(const KisPropertiesConfiguration *setting)
 {
 
-    QByteArray ba = QByteArray::fromBase64(setting->getString("Texture/Pattern/Pattern").toAscii());
+    QByteArray ba = QByteArray::fromBase64(setting->getString("Texture/Pattern/Pattern").toLatin1());
     QImage img;
     img.loadFromData(ba, "PNG");
     QString name = setting->getString("Texture/Pattern/Name");

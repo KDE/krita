@@ -40,7 +40,7 @@
 ****************************************************************************/
 
 #include <QDebug>
-#include <KDE/KLocale>
+#include <KLocale>
 #include <kstandardaction.h>
 #include <kactioncollection.h>
 #include "kundo2stack.h"

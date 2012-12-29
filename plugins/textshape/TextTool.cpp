@@ -2821,7 +2821,7 @@ void TextTool::debugTextDocument()
         else if (block.length() == 1) { // no actual tet
             kDebug(32500) << "\\n";
         }
-        foreach (QTextCharFormat cf, inlineCharacters) {
+        foreach (const QTextCharFormat &cf, inlineCharacters) {
             KoInlineObject *object= inlineManager->inlineTextObject(cf);
             kDebug(32500) << "At pos:" << cf.intProperty(CHARPOSITION) << object;
             // kDebug(32500) << "-> id:" << cf.intProperty(577297549);

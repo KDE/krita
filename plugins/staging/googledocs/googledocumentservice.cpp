@@ -206,7 +206,7 @@ void GoogleDocumentService::downloadDocument(const QString & _url, const QString
     requestHeader.setRawHeader("Authorization", authToken.toUtf8());
 
     QList<QByteArray> headerlist = requestHeader.rawHeaderList();
-    foreach (QByteArray element, headerlist)
+    foreach (const QByteArray &element, headerlist)
         qDebug() << element << requestHeader.rawHeader(element);
 
     networkManager.get(requestHeader);

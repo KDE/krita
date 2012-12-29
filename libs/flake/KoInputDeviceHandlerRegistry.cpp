@@ -50,7 +50,7 @@ KoInputDeviceHandlerRegistry::~KoInputDeviceHandlerRegistry()
             d->stop();
         }
     }
-    foreach(QString id, keys()) {
+    foreach(const QString &id, keys()) {
         get(id)->deleteLater();
     }
     // just leak on exit -- we get into trouble for explicitly

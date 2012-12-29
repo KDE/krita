@@ -87,7 +87,7 @@ void InsertBibliographyDialog::updateFields()
     }
     QSet<QString> availableFields = QSet<QString>::fromList(KoOdfBibliographyConfiguration::bibDataFields) - addedFields;
 
-    foreach (QString field, availableFields) {
+    foreach (const QString &field, availableFields) {
         new QListWidgetItem(field, dialog.availableFields);
     }
     dialog.availableFields->sortItems();

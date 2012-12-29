@@ -24,7 +24,7 @@
 #include <QMap>
 
 #include <QObject>
-#include <QtDBus/qdbusabstractadaptor.h>
+#include <QDBusAbstractAdaptor>
 #include <QList>
 #include "komain_export.h"
 class KoPart;

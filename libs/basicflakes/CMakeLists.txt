@@ -24,6 +24,7 @@ install(TARGETS basicflakes  ${INSTALL_TARGETS_DEFAULT_ARGS})
 install( FILES
     tools/KoCreatePathTool.h
     tools/KoPencilTool.h
+    basicflakes_export.h
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR}

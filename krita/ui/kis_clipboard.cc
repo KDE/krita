@@ -100,18 +100,18 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
 
     // Coordinates
     if (store->open("topLeft")) {
-        store->write(QString("%1 %2").arg(topLeft.x()).arg(topLeft.y()).toAscii());
+        store->write(QString("%1 %2").arg(topLeft.x()).arg(topLeft.y()).toLatin1());
         store->close();
     }
     // ColorSpace id of layer data
     if (store->open("colormodel")) {
         QString csName = dev->colorSpace()->colorModelId().id();
-        store->write(csName.toAscii(), strlen(csName.toAscii()));
+        store->write(csName.toLatin1());
         store->close();
     }
     if (store->open("colordepth")) {
         QString csName = dev->colorSpace()->colorDepthId().id();
-        store->write(csName.toAscii(), strlen(csName.toAscii()));
+        store->write(csName.toLatin1());
         store->close();
     }
 

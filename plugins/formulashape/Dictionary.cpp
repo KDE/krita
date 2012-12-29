@@ -54,7 +54,7 @@ bool Dictionary::stretchy() const
 QChar Dictionary::mapEntity( const QString& entity )
 {
     if( entity.isEmpty() ) return QChar();
-    switch( entity[0].toLower().toAscii() ) {
+    switch( entity[0].toLower().toLatin1() ) {
         case 'a':
             if( entity == "Aacute" ) return QChar( 0x000C1 );
             if( entity == "aacute" ) return QChar( 0x000E1 );

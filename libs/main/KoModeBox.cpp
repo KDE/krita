@@ -132,7 +132,7 @@ void KoModeBox::setActiveTool(KoCanvasController *canvas, int id)
         d->activeId = id;
         blockSignals(true);
         int i = 0;
-        foreach (const KoToolButton button, d->addedButtons) {
+        foreach (const KoToolButton &button, d->addedButtons) {
             if (button.buttonGroupId == d->activeId) {
                 setCurrentIndex(i);
                 break;

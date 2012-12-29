@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2012 C. Boemann <cbo@boemann.dk>
+ * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,23 +16,32 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "Plugin.h"
 
-#include <KoCreatePathToolFactory.h>
-#include <KoPencilToolFactory.h>
-#include <KoShapeRegistry.h>
+#include "KoPencilToolFactory.h"
+#include "KoPencilTool.h"
+
 #include <KoToolRegistry.h>
 
-#include <kpluginfactory.h>
+#include <KoIcon.h>
+#include <klocale.h>
+#include <kdebug.h>
 
-K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
-K_EXPORT_PLUGIN(PluginFactory("calligra-basicflakes"))
-
-Plugin::Plugin(QObject * parent, const QVariantList &)
-    : QObject(parent)
+KoPencilToolFactory::KoPencilToolFactory()
+        : KoToolFactoryBase("KoPencilTool")
 {
-    KoToolRegistry::instance()->add(new KoCreatePathToolFactory());
-    KoToolRegistry::instance()->add(new KoPencilToolFactory());
+    setToolTip(i18n("Freehand Path Drawing Tool"));
+    setToolType("karbon, krita");
+    setIconName(koIconNameCStr("draw-freehand"));
+    setPriority(3);
+    setActivationShapeId("flake/edit");
 }
 
-#include <Plugin.moc>
+KoPencilToolFactory::~KoPencilToolFactory()
+{
+}
+
+KoToolBase * KoPencilToolFactory::createTool(KoCanvasBase *canvas)
+{
+    return new KoPencilTool(canvas);
+}
+

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+ *  Copyright (c) 2012 Sven Langkamp <sven.langkamp@gmail.com>
  *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,25 +17,14 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_tool_path.h"
-//#include <klocale.h>
+#include "kis_tool_pencil.h"
 #include <KoPathShape.h>
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
-//#include <KoColorSpace.h>
-//#include <KoCompositeOp.h>
-//#include <KoShapeController.h>
+#include <KoShapeStroke.h>
 
-//#include <kis_paint_layer.h>
-//#include <kis_image.h>
-//#include <kis_painter.h>
-//#include <kis_paint_information.h>
-//#include <kis_layer.h>
-//#include <canvas/kis_canvas2.h>
-//#include <kis_view2.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_paintop_registry.h>
-//#include <kis_selection.h>
 #include <kis_cursor.h>
 #include <kis_system_locker.h>
 
@@ -46,29 +35,29 @@
 #include "kis_figure_painting_tool_helper.h"
 
 
-KisToolPath::KisToolPath(KoCanvasBase * canvas)
+KisToolPencil::KisToolPencil(KoCanvasBase * canvas)
         : KisToolShape(canvas, Qt::ArrowCursor), m_localTool(new LocalTool(canvas, this))
 {
 }
 
-KisToolPath::~KisToolPath()
+KisToolPencil::~KisToolPencil()
 {
     delete m_localTool;
 }
 
-void KisToolPath::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisToolPencil::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     KisToolShape::activate(toolActivation, shapes);
     m_localTool->activate(toolActivation, shapes);
 }
 
-void KisToolPath::deactivate()
+void KisToolPencil::deactivate()
 {
     KisToolShape::deactivate();
     m_localTool->deactivate();
 }
 
-void KisToolPath::mousePressEvent(KoPointerEvent *event)
+void KisToolPencil::mousePressEvent(KoPointerEvent *event)
 {
     if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
                           Qt::LeftButton, Qt::ShiftModifier |
@@ -88,7 +77,7 @@ void KisToolPath::mousePressEvent(KoPointerEvent *event)
     }
 }
 
-void KisToolPath::mouseDoubleClickEvent(KoPointerEvent *event)
+void KisToolPencil::mouseDoubleClickEvent(KoPointerEvent *event)
 {
     if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
                           Qt::LeftButton, Qt::ShiftModifier |
@@ -102,7 +91,7 @@ void KisToolPath::mouseDoubleClickEvent(KoPointerEvent *event)
     }
 }
 
-void KisToolPath::mouseMoveEvent(KoPointerEvent *event)
+void KisToolPencil::mouseMoveEvent(KoPointerEvent *event)
 {
     Q_ASSERT(m_localTool);
     m_localTool->mouseMoveEvent(event);
@@ -110,7 +99,7 @@ void KisToolPath::mouseMoveEvent(KoPointerEvent *event)
     KisToolShape::mouseMoveEvent(event);
 }
 
-void KisToolPath::mouseReleaseEvent(KoPointerEvent *event)
+void KisToolPencil::mouseReleaseEvent(KoPointerEvent *event)
 {
     if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
         setMode(KisTool::HOVER_MODE);
@@ -123,23 +112,25 @@ void KisToolPath::mouseReleaseEvent(KoPointerEvent *event)
     }
 }
 
-void KisToolPath::paint(QPainter &painter, const KoViewConverter &converter)
+void KisToolPencil::paint(QPainter &painter, const KoViewConverter &converter)
 {
     Q_ASSERT(m_localTool);
     m_localTool->paint(painter, converter);
 }
 
-QList<QWidget *> KisToolPath::createOptionWidgets()
+QList<QWidget *> KisToolPencil::createOptionWidgets()
 {
     QList<QWidget *> list = KisToolShape::createOptionWidgets();
     list.append(m_localTool->createOptionWidgets());
     return list;
 }
 
-KisToolPath::LocalTool::LocalTool(KoCanvasBase * canvas, KisToolPath* selectingTool)
-        : KoCreatePathTool(canvas), m_parentTool(selectingTool) {}
+KisToolPencil::LocalTool::LocalTool(KoCanvasBase * canvas, KisToolPencil* selectingTool)
+        : KoPencilTool(canvas), m_parentTool(selectingTool) {
+            setToolId("pencilToolDummy");
+        }
 
-void KisToolPath::LocalTool::paintPath(KoPathShape &pathShape, QPainter &painter, const KoViewConverter &converter)
+void KisToolPencil::LocalTool::paintPath(KoPathShape &pathShape, QPainter &painter, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
 
@@ -149,9 +140,14 @@ void KisToolPath::LocalTool::paintPath(KoPathShape &pathShape, QPainter &painter
     m_parentTool->paintToolOutline(&painter, m_parentTool->pixelToView(matrix.map(pathShape.outline())));
 }
 
-void KisToolPath::LocalTool::addPathShape(KoPathShape* pathShape)
+void KisToolPencil::LocalTool::addPathShape(KoPathShape* pathShape, bool closePath)
 {
-    m_parentTool->addPathShape(pathShape, i18n("Path"));
+    pathShape->setShapeId(KoPathShapeId);
+    pathShape->setStroke(currentStroke());
+    if (closePath) {
+        pathShape->close();
+    }
+    m_parentTool->addPathShape(pathShape, i18n("Freehand path"));
 }
 
-#include "kis_tool_path.moc"
+#include "kis_tool_pencil.moc"

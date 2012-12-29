@@ -4,6 +4,7 @@ include_directories(${KOTEXT_INCLUDES} ${KOODF_INCLUDES} ${PIGMENT_INCLUDES} ${K
 
 set(basicflakes_LIB_SRCS
     tools/KoCreatePathTool.cpp
+    tools/KoPencilTool.cpp
 )
 
 kde4_add_ui_files( basicflakes_LIB_SRCS
@@ -22,6 +23,7 @@ install(TARGETS basicflakes  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES
     tools/KoCreatePathTool.h
+    tools/KoPencilTool.h
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR}

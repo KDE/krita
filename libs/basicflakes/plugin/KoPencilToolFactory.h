@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2012 C. Boemann <cbo@boemann.dk>
+ * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,23 +16,19 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "Plugin.h"
 
-#include <KoCreatePathToolFactory.h>
-#include <KoPencilToolFactory.h>
-#include <KoShapeRegistry.h>
-#include <KoToolRegistry.h>
+#ifndef _KOPENCILTOOLFACTORY_H_
+#define _KOPENCILTOOLFACTORY_H_
 
-#include <kpluginfactory.h>
+#include <KoToolFactoryBase.h>
 
-K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
-K_EXPORT_PLUGIN(PluginFactory("calligra-basicflakes"))
-
-Plugin::Plugin(QObject * parent, const QVariantList &)
-    : QObject(parent)
+class KoPencilToolFactory : public KoToolFactoryBase
 {
-    KoToolRegistry::instance()->add(new KoCreatePathToolFactory());
-    KoToolRegistry::instance()->add(new KoPencilToolFactory());
-}
+public:
+    KoPencilToolFactory();
+    ~KoPencilToolFactory();
 
-#include <Plugin.moc>
+    KoToolBase * createTool(KoCanvasBase *canvas);
+};
+
+#endif // _KOPENCILTOOLFACTORY_H_

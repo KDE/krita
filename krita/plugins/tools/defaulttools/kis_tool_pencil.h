@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+ *  Copyright (c) 2012 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,10 +16,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_TOOL_PATH_H_
-#define KIS_TOOL_PATH_H_
+#ifndef KIS_TOOL_PENCIL_H_
+#define KIS_TOOL_PENCIL_H_
 
-#include <KoCreatePathTool.h>
+#include <KoPencilTool.h>
 #include <KoToolFactoryBase.h>
 
 #include "flake/kis_node_shape.h"
@@ -29,14 +29,14 @@
 class KisSelectionOptions;
 class KoCanvasBase;
 
-class KisToolPath : public KisToolShape
+class KisToolPencil : public KisToolShape
 {
 
     Q_OBJECT
 
 public:
-    KisToolPath(KoCanvasBase * canvas);
-    virtual ~KisToolPath();
+    KisToolPencil(KoCanvasBase * canvas);
+    virtual ~KisToolPencil();
 
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
     void mousePressEvent(KoPointerEvent *event);
@@ -52,40 +52,40 @@ private:
     /// reimplemented
     virtual QList<QWidget *> createOptionWidgets();
 
-    class LocalTool : public KoCreatePathTool {
-        friend class KisToolPath;
+    class LocalTool : public KoPencilTool {
+        friend class KisToolPencil;
     public:
-        LocalTool(KoCanvasBase * canvas, KisToolPath* selectingTool);
+        LocalTool(KoCanvasBase * canvas, KisToolPencil* selectingTool);
         virtual void paintPath(KoPathShape &path, QPainter &painter, const KoViewConverter &converter);
-        virtual void addPathShape(KoPathShape* pathShape);
+        virtual void addPathShape(KoPathShape* pathShape, bool closePath);
     private:
-        KisToolPath* const m_parentTool;
+        KisToolPencil* const m_parentTool;
     };
     LocalTool* const m_localTool;
 
 };
 
-class KisToolPathFactory : public KoToolFactoryBase
+class KisToolPencilFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolPathFactory(const QStringList&)
-            : KoToolFactoryBase("KisToolPath") {
-        setToolTip(i18n("Draw a path. Shift-mouseclick ends the path."));
+    KisToolPencilFactory(const QStringList&)
+            : KoToolFactoryBase("KisToolPencil") {
+        setToolTip(i18n("Draw a freehand path."));
         setToolType(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
-        setIconName(koIconNameCStr("krita_draw_path"));
-        setPriority(7);
+        setIconName(koIconNameCStr("krita_tool_freehand"));
+        setPriority(9);
     }
 
-    virtual ~KisToolPathFactory() {}
+    virtual ~KisToolPencilFactory() {}
 
     virtual KoToolBase * createTool(KoCanvasBase *canvas) {
-        return new KisToolPath(canvas);
+        return new KisToolPencil(canvas);
     }
 };
 
 
 
-#endif // KIS_TOOL_PATH_H_
+#endif // KIS_TOOL_PENCIL_H_
 

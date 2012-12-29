@@ -81,6 +81,7 @@
 #include "kis_clipboard.h"
 #include "kis_view2.h"
 #include "kis_selection_manager_p.h"
+#include "kis_figure_painting_tool_helper.h"
 
 #include "actions/kis_selection_action_factories.h"
 
@@ -187,6 +188,10 @@ void KisSelectionManager::setup(KActionCollection * collection)
     m_fillPattern  = new KAction(i18n("Fill with Pattern"), this);
     collection->addAction("fill_selection_pattern", m_fillPattern);
     connect(m_fillPattern, SIGNAL(triggered()), this, SLOT(fillPattern()));
+
+    m_strokeShapes  = new KAction(i18n("Stroke selected shapes"), this);
+    collection->addAction("stroke_shapes", m_strokeShapes);
+    connect(m_strokeShapes, SIGNAL(triggered()), this, SLOT(paintSelectedShapes()));
 
     m_toggleDisplaySelection  = new KToggleAction(i18n("Display Selection"), this);
     collection->addAction("toggle_display_selection", m_toggleDisplaySelection);
@@ -317,6 +322,7 @@ void KisSelectionManager::updateGUI()
     m_fillForegroundColor->setEnabled(haveDevice);
     m_fillBackgroundColor->setEnabled(haveDevice);
     m_fillPattern->setEnabled(haveDevice);
+    m_strokeShapes->setEnabled(haveShapesSelected);
 
     m_selectAll->setEnabled(true);
     m_deselect->setEnabled(canDeselect);
@@ -547,5 +553,37 @@ void KisSelectionManager::imageResizeToSelection()
     KisImageResizeToSelectionActionFactory factory;
     factory.run(m_view);
 }
+
+void KisSelectionManager::paintSelectedShapes()
+{
+    KisImageWSP image = m_view->image();
+    if (!image) return;
+
+    KisLayerSP layer = m_view->activeLayer();
+    if (!layer) return;
+
+    QList<KoShape*> shapes = m_view->canvasBase()->shapeManager()->selection()->selectedShapes();
+
+    KisPaintLayerSP paintLayer = new KisPaintLayer(image, i18n("Stroked Shapes"), OPACITY_OPAQUE_U8);
+
+    m_adapter->beginMacro(i18n("Stroke Shapes"));
+    m_adapter->addNode(paintLayer.data(), layer->parent().data(), layer.data());
+
+    KisFigurePaintingToolHelper helper(i18n("Stroke Shapes"),
+                                        image,
+                                        m_view->canvasBase()->resourceManager(),
+                                        KisPainter::StrokeStyleBrush,
+                                        KisPainter::FillStyleNone);
+
+    foreach(KoShape* shape, shapes) {    
+        QTransform matrix;
+        matrix.scale(image->xRes(), image->yRes());
+        matrix.translate(shape->position().x(), shape->position().y());
+        QPainterPath mapedOutline = matrix.map(shape->outline());
+        helper.paintPainterPath(mapedOutline);
+    }
+    m_adapter->endMacro();
+}
+
 
 #include "kis_selection_manager.moc"

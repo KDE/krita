@@ -13,5 +13,5 @@ Name[sv]=Design skärm 4:3 [ 2250x1680, 96 punkter/tum RGB, 8 bitar ]
 Name[uk]=Компонування екрана 4:3 [2250⨯1680, 96 т./д., RGB, 8 бітів]
 Name[x-test]=xxDesign screen 4:3 [ 2250x1680 , 96dpi RGB , 8bit ]xx
 Type=Link
-URL[$e]=.source/Designscreen4_3[2250x1680_96dpiRGB_8bit].kra
+URL[$e]=.source/Designscreen4_3_2250x1680_96dpiRGB_8bit_.kra
 X-KDE-Hidden=false

@@ -118,6 +118,7 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
     KisImageBuilder_Result res;
     if ((res = ktc.buildFile(url, image, options)) == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
+        image->unlock();
         return KoFilter::OK;
     }
     image->unlock();

@@ -59,6 +59,17 @@ install(TARGETS kformulalib ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### FormulaShape Plugin ###############
 
+find_package(Cauchy)
+
+macro_optional_find_package(Cauchy)
+macro_log_feature(M2MML_FOUND "Cauchy's M2MML" "Matlab/Octave to MathML compiler" "https://bitbucket.org/cyrille/cauchy" FALSE "" "Required for the matlab/octave formula tool")
+
+if(M2MML_FOUND)
+    set(M2MML_TOOL_LIBRARIES ${M2MML_LIBRARY})
+    include_directories(${CAUCHY_INCLUDE_DIR})
+    add_definitions(-DHAVE_M2MML)
+endif()
+
 set( formulashape_PART_SRCS
    KoFormulaShapePlugin.cpp
    KoFormulaShape.cpp
@@ -70,6 +81,10 @@ set( formulashape_PART_SRCS
    FormulaToolWidget.cpp
    FormulaDocument.cpp
    FormulaPart.cpp
+   KoM2MMLForumulaTool.cpp
+   # itexToMML files
+   itexToMML/lex.yy.c
+   itexToMML/y.tab.c
 )
 
 kde4_add_ui_files( formulashape_PART_SRCS
@@ -78,7 +93,7 @@ kde4_add_ui_files( formulashape_PART_SRCS
 
 kde4_add_plugin(formulashape ${formulashape_PART_SRCS})
 
-target_link_libraries(formulashape kformulalib)
+target_link_libraries(formulashape kformulalib ${M2MML_TOOL_LIBRARIES})
 
 
 #set_target_properties(kformulalib PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

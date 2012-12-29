@@ -35,8 +35,16 @@ public:
     /// The standard constructor
     AnnotationElement( BasicElement* parent = 0 );
 
+    void setContent(const QString& content);
+    QString content() const;
+    
     /// @return The element's ElementType
     ElementType elementType() const;
+    
+    virtual bool readMathMLContent(const KoXmlElement& element);
+    virtual void writeMathMLContent(KoXmlWriter* writer, const QString& ns) const;
+private:
+    QString m_content;
 };
 
 #endif // ANNOTATIONELEMENT_H

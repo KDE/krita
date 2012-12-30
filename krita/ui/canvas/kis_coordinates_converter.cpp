@@ -256,6 +256,10 @@ QTransform KisCoordinatesConverter::imageToDocumentTransform() const {
     return m_d->imageToDocument;
 }
 
+QTransform KisCoordinatesConverter::documentToFlakeTransform() const {
+    return m_d->documentToFlake;
+}
+
 QTransform KisCoordinatesConverter::flakeToWidgetTransform() const {
     return m_d->flakeToWidget;
 }

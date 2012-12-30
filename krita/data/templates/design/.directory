@@ -13,8 +13,3 @@ Name[sv]=Designmallar
 Name[uk]=Шаблони компонування
 Name[x-test]=xxDesign Templatesxx
 X-KDE-DefaultTab=true
-
-[Dolphin]
-PreviewsShown=true
-Timestamp=2012,12,29,15,57,13
-Version=3

@@ -23,6 +23,9 @@
 #include <KoParagraphStyle.h>
 #include <KoStyleManager.h>
 
+#include <KLocale>
+#include <KStringHandler>
+
 #include <KDebug>
 
 DockerStylesComboModel::DockerStylesComboModel(QObject *parent) :
@@ -62,7 +65,7 @@ void DockerStylesComboModel::setStyleManager(KoStyleManager *sm)
                 for ( ; begin != m_usedStyles.end(); ++begin) {
                     if (m_sourceModel->index(*begin, 0, QModelIndex()).internalId() != -1) { //styleNone (internalId=-1) is a virtual style provided only for the UI. it does not exist in KoStyleManager
                         KoCharacterStyle *s = m_styleManager->characterStyle(m_sourceModel->index(*begin, 0, QModelIndex()).internalId());
-                        if (QString::localeAwareCompare(compareStyle->name(), s->name()) < 0) {
+                        if (KStringHandler::naturalCompare(compareStyle->name(), s->name()) < 0) {
                             break;
                         }
                     }
@@ -81,7 +84,7 @@ void DockerStylesComboModel::setStyleManager(KoStyleManager *sm)
                 for ( ; begin != m_usedStyles.end(); ++begin) {
                     if (m_sourceModel->index(*begin, 0, QModelIndex()).internalId() != -1) { //styleNone (internalId=-1) is a virtual style provided only for the UI. it does not exist in KoStyleManager
                         KoParagraphStyle *s = m_styleManager->paragraphStyle(m_sourceModel->index(*begin, 0, QModelIndex()).internalId());
-                        if (QString::localeAwareCompare(compareStyle->name(), s->name()) < 0) {
+                        if (KStringHandler::naturalCompare(compareStyle->name(), s->name()) < 0) {
                             break;
                         }
                     }
@@ -103,7 +106,7 @@ void DockerStylesComboModel::styleApplied(const KoCharacterStyle *style)
             for ( ; begin != m_usedStyles.end(); ++begin) {
                 if (m_sourceModel->index(*begin, 0, QModelIndex()).internalId() != -1) { //styleNone (internalId=-1) is a virtual style provided only for the UI. it does not exist in KoStyleManager
                     KoCharacterStyle *s = m_styleManager->characterStyle(m_sourceModel->index(*begin, 0, QModelIndex()).internalId());
-                    if (QString::localeAwareCompare(style->name(), s->name()) < 0) {
+                    if (KStringHandler::naturalCompare(style->name(), s->name()) < 0) {
                         break;
                     }
                 }
@@ -114,7 +117,7 @@ void DockerStylesComboModel::styleApplied(const KoCharacterStyle *style)
             QVector<int>::iterator begin = m_usedStyles.begin();
             for ( ; begin != m_usedStyles.end(); ++begin) {
                 KoParagraphStyle *s = m_styleManager->paragraphStyle(m_sourceModel->index(*begin, 0, QModelIndex()).internalId());
-                if (QString::localeAwareCompare(style->name(), s->name()) < 0) {
+                if (KStringHandler::naturalCompare(style->name(), s->name()) < 0) {
                     break;
                 }
             }
@@ -157,7 +160,7 @@ void DockerStylesComboModel::createMapping()
                         QVector<int>::iterator begin = m_unusedStyles.begin();
                         for ( ; begin != m_unusedStyles.end(); ++begin) {
                             KoParagraphStyle *style = m_styleManager->paragraphStyle(m_sourceModel->index(*begin, 0, QModelIndex()).internalId());
-                            if (QString::localeAwareCompare(paragStyle->name(), style->name()) < 0) {
+                            if (KStringHandler::naturalCompare(paragStyle->name(), style->name()) < 0) {
                                 break;
                             }
                         }
@@ -175,7 +178,7 @@ void DockerStylesComboModel::createMapping()
                         QVector<int>::iterator begin = m_unusedStyles.begin();
                         for ( ; begin != m_unusedStyles.end(); ++begin) {
                             KoCharacterStyle *style = m_styleManager->characterStyle(m_sourceModel->index(*begin, 0, QModelIndex()).internalId());
-                            if (QString::localeAwareCompare(charStyle->name(), style->name()) < 0) {
+                            if (KStringHandler::naturalCompare(charStyle->name(), style->name()) < 0) {
                                 break;
                             }
                         }

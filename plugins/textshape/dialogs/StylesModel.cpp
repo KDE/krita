@@ -30,6 +30,7 @@
 #include <QSharedPointer>
 #include <QSignalMapper>
 
+#include <KStringHandler>
 #include <KLocale>
 #include <KDebug>
 
@@ -279,7 +280,7 @@ void StylesModel::addParagraphStyle(KoParagraphStyle *style)
             s = m_draftParStyleList[*begin];
         // s should be found as the manager and the m_styleList should be in sync
         Q_ASSERT(s);
-        if (QString::localeAwareCompare(style->name(), s->name()) < 0) {
+        if (KStringHandler::naturalCompare(style->name(),s->name()) < 0) {
             break;
         }
         ++index;
@@ -295,7 +296,7 @@ bool sortParagraphStyleByName(KoParagraphStyle *style1, KoParagraphStyle *style2
 {
     Q_ASSERT(style1);
     Q_ASSERT(style2);
-    return QString::localeAwareCompare(style1->name(), style2->name()) < 0;
+    return KStringHandler::naturalCompare(style1->name(), style2->name()) < 0;
 }
 
 void StylesModel::updateParagraphStyles()
@@ -335,7 +336,7 @@ void StylesModel::addCharacterStyle(KoCharacterStyle *style)
             s = m_draftCharStyleList[*begin];
         // s should be found as the manager and the m_styleList should be in sync
         Q_ASSERT(s);
-        if (QString::localeAwareCompare(style->name(), s->name()) < 0) {
+        if (KStringHandler::naturalCompare(style->name(),s->name()) < 0) {
             break;
         }
         ++index;
@@ -351,7 +352,7 @@ bool sortCharacterStyleByName(KoCharacterStyle *style1, KoCharacterStyle *style2
 {
     Q_ASSERT(style1);
     Q_ASSERT(style2);
-    return QString::localeAwareCompare(style1->name(), style2->name()) < 0;
+    return KStringHandler::naturalCompare(style1->name(), style2->name()) < 0;
 }
 
 void StylesModel::updateCharacterStyles()
@@ -425,7 +426,7 @@ void StylesModel::updateName(int styleId)
                         s = m_draftParStyleList[*begin];
                     // s should be found as the manager and the m_styleList should be in sync
                     Q_ASSERT(s);
-                    if (QString::localeAwareCompare(paragStyle->name(), s->name()) < 0) {
+                    if (KStringHandler::naturalCompare(paragStyle->name(), s->name()) < 0) {
                         break;
                     }
                     ++newIndex;
@@ -462,7 +463,7 @@ void StylesModel::updateName(int styleId)
                         s = m_draftCharStyleList[*begin];
                     // s should be found as the manager and the m_styleList should be in sync
                     Q_ASSERT(s);
-                    if (QString::localeAwareCompare(characterStyle->name(), s->name()) < 0) {
+                    if (KStringHandler::naturalCompare(characterStyle->name(), s->name()) < 0) {
                         break;
                     }
                     ++newIndex;

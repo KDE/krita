@@ -238,6 +238,12 @@ void Thesaurus::finishedParagraph(QTextDocument *document, int cursorPosition)
     Q_UNUSED(cursorPosition);
 }
 
+void Thesaurus::startingSimpleEdit(QTextDocument *document, int cursorPosition)
+{
+    Q_UNUSED(document);
+    Q_UNUSED(cursorPosition);
+}
+
 void Thesaurus::checkSection(QTextDocument *document, int startPosition, int endPosition)
 {
     if (endPosition == -1 && startPosition == -1) { // standalone

@@ -51,6 +51,9 @@ public:
     void finishedParagraph(QTextDocument *document, int cursorPosition);
 
     /// reimplemented from superclass
+    void startingSimpleEdit(QTextDocument *document, int cursorPosition);
+
+    /// reimplemented from superclass
     void checkSection(QTextDocument *document, int startPosition, int endPosition);
 
     ///reimplemented from superclass
@@ -84,7 +87,6 @@ private slots:
     void runQueue();
     void setBackgroundSpellChecking(bool b);
     void documentChanged(int from, int min, int plus);
-    void clearHighlightMisspelled(int startPosition);
 
 private:
     Sonnet::Speller m_speller;
@@ -104,25 +106,12 @@ private:
     };
     QQueue<SpellSections> m_documentsQueue;
     bool m_enableSpellCheck;
-    bool m_allowSignals;
     bool m_documentIsLoading;
     bool m_isChecking;
     QTextStream stream;
-    int position;
-    QTextCharFormat m_defaultMisspelledFormat;
     SpellCheckMenu *m_spellCheckMenu;
-
-    /**
-     For a whole text run we accumulate all misspellings and apply them to
-     the doc at once when done.
-     */
-    struct BlockLayout {
-        int start;
-        int length;
-        int checkStart; // in case we partially check this block
-        QList<QTextLayout::FormatRange> ranges;
-    };
-    QList<BlockLayout> m_misspellings;
+    SpellSections m_activeSection; // the section we are currently doing a run on;
+    bool m_simpleEdit; //set when user is doing a simple edit, meaning we should ignore documentCanged
 };
 
 #endif

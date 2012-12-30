@@ -5,7 +5,7 @@
  * Copyright (C) 2008 Roopesh Chander <roop@forwardbias.in>
  * Copyright (C) 2007-2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  * Copyright (C) 2009-2011 KO GmbH <cbo@kogmbh.com>
- * Copyright (C) 2009-2011 C. Boemann <cbo@boemann.dk>
+ * Copyright (C) 2009-2012 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2010 Nandita Suri <suri.nandita@gmail.com>
  * Copyright (C) 2010 Ajay Pundhir <ajay.pratap@iiitb.net>
  * Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
@@ -642,7 +642,7 @@ static qreal computeWidth(KoCharacterStyle::LineWeight weight, qreal width, cons
     return 0;
 }
 
-void KoTextLayoutArea::decorateParagraph(QPainter *painter, const QTextBlock &block, bool showFormattingCharacters)
+void KoTextLayoutArea::decorateParagraph(QPainter *painter, QTextBlock &block, bool showFormattingCharacters)
 {
     QTextLayout *layout = block.layout();
 
@@ -712,7 +712,7 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, const QTextBlock &bl
                         if (!line.isValid())
                             continue;
 
-                        // end position: not that x2 can be smaller than x1 when we are handling RTL
+                        // end position: note that x2 can be smaller than x1 when we are handling RTL
                         int p2 = startOfFragmentInBlock + currentFragment.length();
                         int lineEnd = line.textStart() + line.textLength();
                         while (lineEnd > line.textStart() && block.text().at(lineEnd - 1) == ' ') {
@@ -749,6 +749,64 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, const QTextBlock &bl
     }
 
 
+    // Finally let's paint our own spelling markings
+    // TODO Should we make this optional at this point (right on/off handled by the plugin)
+    // also we might want to provide alternative ways of drawing it
+    KoTextBlockData blockData(block);
+    QPen penBackup = painter->pen();
+    QPen pen;
+    pen.setColor(QColor(Qt::red));
+    pen.setWidthF(1.5);
+    QVector<qreal> pattern;
+    pattern << 1 << 2;
+    pen.setDashPattern(pattern);
+    painter->setPen(pen);
+
+    QList<KoTextBlockData::MarkupRange>::Iterator markIt = blockData.markupsBegin(KoTextBlockData::Misspell);
+    QList<KoTextBlockData::MarkupRange>::Iterator markEnd = blockData.markupsEnd(KoTextBlockData::Misspell);
+    for (int i = 0 ; i <= layout->lineCount(); ++i) {
+        if (markIt == markEnd) {
+            break;
+        }
+        QTextLine line = layout->lineAt(i);
+        // the y position is placed half way between baseline and descent of the line
+        // this is fast and sufficient
+        qreal y = line.position().y() + line.ascent() + 0.5 * line.descent();
+
+        // first handle all those marking ranges that end on this line
+        while (markIt != markEnd && markIt->lastChar < line.textStart() + line.textLength()
+            && line.textStart() + line.textLength() <= block.length()) {
+            if (!blockData.isMarkupsLayoutValid(KoTextBlockData::Misspell)) {
+                if (markIt->firstChar > line.textStart()) {
+                    markIt->startX = line.cursorToX(markIt->firstChar);
+                }
+                markIt->endX = line.cursorToX(qMin(markIt->lastChar, block.length()));
+            }
+            qreal x1 = (markIt->firstChar > line.textStart()) ? markIt->startX : line.position().x();
+
+            painter->drawLine(QPointF(x1, y), QPointF(markIt->endX, y));
+
+            ++markIt;
+        }
+
+        // there may be a markup range on this line that extends to the next line
+        if (markIt != markEnd && markIt->firstChar < line.textStart() + line.textLength()
+            && line.textStart() + line.textLength()<=block.length()) {
+            if (!blockData.isMarkupsLayoutValid(KoTextBlockData::Misspell)) {
+                if (markIt->firstChar > line.textStart()) {
+                    markIt->startX = line.cursorToX(markIt->firstChar);
+                }
+            }
+            qreal x1 = (markIt->firstChar > line.textStart()) ? markIt->startX : line.position().x();
+
+            painter->drawLine(QPointF(x1, y), QPointF(line.position().x() + line.naturalTextWidth(), y));
+
+            // since it extends to next line we don't increment the iterator
+        }
+    }
+    blockData.setMarkupsLayoutValidity(KoTextBlockData::Misspell, true);
+
+    painter->setPen(penBackup);
     painter->setFont(oldFont);
 }
 

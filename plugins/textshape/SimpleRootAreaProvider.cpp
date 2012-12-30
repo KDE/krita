@@ -118,6 +118,13 @@ void SimpleRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool i
     rootArea->associatedShape()->update(rootArea->associatedShape()->outlineRect());
 }
 
+void SimpleRootAreaProvider::updateAll()
+{
+    if (m_area && m_area->associatedShape()) {
+        m_area->associatedShape()->update();
+    }
+}
+
 QSizeF SimpleRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
 {
     QSizeF size = m_textShape->size();

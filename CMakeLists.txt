@@ -621,9 +621,9 @@ set(KDGANTT_INCLUDES
     ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt
 )
 
-#set(KDCHART_INCLUDES
-#    ${CMAKE_SOURCE_DIR}/3rdparty/kdchart
-#)
+set(KDCHART_INCLUDES
+    ${CMAKE_SOURCE_DIR}/3rdparty/kdchart/include
+)
 
  #############################################
 ##############################################

@@ -30,7 +30,7 @@ static bool checkForAsymmetricZeros = false;
         Q_ASSERT(scaledIter <= endDst);                 \
                                                         \
         if (j == centerIndex) {                         \
-            Q_ASSERT(scaledIter == centerDst);          \
+            Q_ASSERT(scaledIter == centerSrc);          \
         }                                               \
     } while(0)
 
@@ -44,7 +44,7 @@ static bool checkForAsymmetricZeros = false;
                     (!m_filterWeights[i].weight[j] && m_filterWeights[i].weight[idx2])) { \
                                                                         \
                     qDebug() << "*******";                              \
-                    qDebug() << "Non-symmetric zero found:" << centerDst; \
+                    qDebug() << "Non-symmetric zero found:" << centerSrc; \
                     qDebug() << "Weight" << j << ":" << m_filterWeights[i].weight[j]; \
                     qDebug() << "Weight" << idx2 << ":" << m_filterWeights[i].weight[idx2]; \
                     qFatal("Non-symmetric zero -> fail");               \
@@ -68,7 +68,7 @@ static bool checkForAsymmetricZeros = false;
 #define DEBUG_ALL()                                                     \
     do {                                                                \
         qDebug() << "************** i =" << i;                          \
-        qDebug() << ppVar(centerDst);                                   \
+        qDebug() << ppVar(centerSrc);                                   \
         qDebug() << ppVar(centerIndex);                                 \
         qDebug() << ppVar(beginSrc) << ppVar(endSrc);                   \
         qDebug() << ppVar(beginDst) << ppVar(endDst);                   \
@@ -86,6 +86,37 @@ static bool checkForAsymmetricZeros = false;
 #define DEBUG_SAMPLE()
 #endif
 
+
+
+/**
+ * Simple case with scale == 1.0
+ *
+ *                       +----+----+----+-- scaledIter (samples, measured in dst pixels,
+ *                       |    |    |    |               correspond to integers in src)
+ *
+ *                              +---------+-- supportDst == filterStrategy->intSupport()
+ *                              |         |
+ *                    +-- beginDst        +-- endDst
+ *                    |         |         |
+ *                    |         +-- centerDst (always zero)
+ *                    |         |         |
+ *
+ * dst: ----|----|----|----|----*----|----|----|----|----|-->
+ *         -4   -3   -2   -1    0    1    2    3    4    5
+ *
+ * src: --|----|----|----|----|----|----|----|----|----|---->
+ *       -4   -3   -2   -1    0    1    2    3    4    5
+ *
+ *                    ^         ^         ^
+ *                    |         |         |
+ *                    |         +-- centerSrc
+ *                    |         |         |
+ *                    +-- beginSrc        +endSrc
+ *                    |         |         |
+ *                    |         +---------+-- supportSrc ~= supportDst / realScale
+ *                    |                   |
+ *                    +-------------------+-- span (number of integers in the region)
+ */
 
 class KisFilterWeightsBuffer
 {
@@ -120,14 +151,14 @@ public:
         }
 
         for (int i = 0; i < 256; i++) {
-            KisFixedPoint centerDst;
-            centerDst.from256Frac(i);
+            KisFixedPoint centerSrc;
+            centerSrc.from256Frac(i);
 
             KisFixedPoint beginDst = -supportDst;
             KisFixedPoint endDst = supportDst;
 
-            KisFixedPoint beginSrc = -supportSrc - centerDst / transformScale;
-            KisFixedPoint endSrc = supportSrc - centerDst / transformScale;
+            KisFixedPoint beginSrc = -supportSrc - centerSrc / transformScale;
+            KisFixedPoint endSrc = supportSrc - centerSrc / transformScale;
 
             int span = (2 * supportSrc).toInt() +
                 (beginSrc.isInteger() && endSrc.isInteger());
@@ -140,7 +171,7 @@ public:
             m_maxSpan = qMax(m_maxSpan, span);
 
             // in dst coordinate system:
-            KisFixedPoint scaledIter = centerDst + beginSrc.toInt() * transformScale;
+            KisFixedPoint scaledIter = centerSrc + beginSrc.toInt() * transformScale;
             KisFixedPoint scaledInc = transformScale;
 
             DEBUG_ALL();

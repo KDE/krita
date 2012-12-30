@@ -5,31 +5,28 @@ include_directories(
 
 add_definitions(-DKDAB_NO_UNIT_TESTS -DKDGANTT_SHAREDLIB -DKDGANTT_BUILD_KDGANTT_LIB)
 
-#FIXME: We should be able to remove
-#       "${CMAKE_SOURCE_DIR}/3rdparty/kdgantt/" once the library is used
-#        everywhere.
 set( kdgantt_LIB_SRCS
-    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt/kdganttglobal.cpp
-    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt/kdganttview.cpp
-    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt/kdganttstyleoptionganttitem.cpp
-    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt/kdganttgraphicsview.cpp
-    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt/kdganttabstractrowcontroller.cpp
-    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt/kdgantttreeviewrowcontroller.cpp
-    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt/kdganttlistviewrowcontroller.cpp
-    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt/kdganttgraphicsscene.cpp
-    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt/kdganttgraphicsitem.cpp
-    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt/kdganttconstraint.cpp
-    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt/kdganttconstraintproxy.cpp
-    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt/kdganttconstraintgraphicsitem.cpp
-    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt/kdganttitemdelegate.cpp
-    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt/kdganttforwardingproxymodel.cpp
-    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt/kdganttsummaryhandlingproxymodel.cpp
-    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt/kdganttproxymodel.cpp
-    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt/kdganttconstraintmodel.cpp
-    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt/kdganttabstractgrid.cpp
-    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt/kdganttdatetimegrid.cpp
-    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt/kdganttlegend.cpp
-    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt/kdgantttimescalezoomdialog.cpp
+    kdganttglobal.cpp
+    kdganttview.cpp
+    kdganttstyleoptionganttitem.cpp
+    kdganttgraphicsview.cpp
+    kdganttabstractrowcontroller.cpp
+    kdgantttreeviewrowcontroller.cpp
+    kdganttlistviewrowcontroller.cpp
+    kdganttgraphicsscene.cpp
+    kdganttgraphicsitem.cpp
+    kdganttconstraint.cpp
+    kdganttconstraintproxy.cpp
+    kdganttconstraintgraphicsitem.cpp
+    kdganttitemdelegate.cpp
+    kdganttforwardingproxymodel.cpp
+    kdganttsummaryhandlingproxymodel.cpp
+    kdganttproxymodel.cpp
+    kdganttconstraintmodel.cpp
+    kdganttabstractgrid.cpp
+    kdganttdatetimegrid.cpp
+    kdganttlegend.cpp
+    kdgantttimescalezoomdialog.cpp
 )
 
 kde4_add_library(kdgantt SHARED ${kdgantt_LIB_SRCS})

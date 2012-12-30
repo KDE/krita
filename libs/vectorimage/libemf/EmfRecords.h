@@ -101,7 +101,7 @@ public:
 private:
     // No copying for now, because we will get into trouble with the pointers.
     // The remedy is to write a real operator=() and BitBltRecord(BitBltRecord&).
-    BitBltRecord(BitBltRecord&);
+    explicit BitBltRecord(BitBltRecord&);
     BitBltRecord &operator=(BitBltRecord&);
 
 private:
@@ -228,7 +228,7 @@ public:
 private:
     // No copying for now, because we will get into trouble with the pointers.
     // The remedy is to write a real operator=() and StretchDiBitsRecord(StretchDiBitsRecord&).
-    StretchDiBitsRecord(StretchDiBitsRecord&);
+    explicit StretchDiBitsRecord(StretchDiBitsRecord&);
     StretchDiBitsRecord &operator=(StretchDiBitsRecord&);
 
 private:

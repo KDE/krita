@@ -18,11 +18,16 @@
  * Boston, MA 02110-1301, USA.
 */
 
+// Own
+#include "WmfStack.h"
+
+// KDE
 #include <kdebug.h>
 
-#include "WmfStack.h"
+// Local
 #include "WmfAbstractBackend.h"
 #include "WmfDeviceContext.h"
+
 
 /**
    Namespace for Windows Metafile (WMF) classes

@@ -16,8 +16,8 @@
   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ENHMETAFILE_H
-#define ENHMETAFILE_H
+#ifndef EMFPARSER_H
+#define EMFPARSER_H
 
 #include "vectorimage_export.h"
 

@@ -16,8 +16,8 @@
   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ENHENUMS_H
-#define ENHENUMS_H
+#ifndef EMFENUMS_H
+#define EMFENUMS_H
 
 #include <QDataStream>
 #include <QRect> // also provides QSize

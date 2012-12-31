@@ -415,10 +415,13 @@ void KoStyleManager::add(KoCharacterStyle *style)
     style->setStyleId(d->s_stylesNumber);
     d->charStyles.insert(d->s_stylesNumber++, style);
 
-    if (style->isApplied() && !d->m_usedCharacterStyles.contains(d->s_stylesNumber) && !(style == defaultCharacterStyle())) { //defaultStyle should not be user visible
-        d->m_usedCharacterStyles.append(d->s_stylesNumber);
+    if (style != defaultCharacterStyle()) { //defaultStyle should not be user visible
+        if (style->isApplied() && !d->m_usedCharacterStyles.contains(d->s_stylesNumber)) {
+            d->m_usedCharacterStyles.append(d->s_stylesNumber);
+        }
         connect(style, SIGNAL(styleApplied(const KoCharacterStyle*)), this, SLOT(slotAppliedStyle(const KoCharacterStyle*)));
     }
+
     emit styleAdded(style);
 }
 
@@ -443,8 +446,10 @@ void KoStyleManager::add(KoParagraphStyle *style)
             add(root);
     }
 
-    if (style->isApplied() && !d->m_usedParagraphStyles.contains(d->s_stylesNumber) && !(style == defaultParagraphStyle())) { //defaultStyle should not be user visible
-        d->m_usedParagraphStyles.append(d->s_stylesNumber);
+    if (style != defaultParagraphStyle()) { //defaultStyle should not be user visible
+        if (style->isApplied() && !d->m_usedParagraphStyles.contains(d->s_stylesNumber)) {
+            d->m_usedParagraphStyles.append(d->s_stylesNumber);
+        }
         connect(style, SIGNAL(styleApplied(const KoParagraphStyle*)), this, SLOT(slotAppliedStyle(const KoParagraphStyle*)));
     }
     emit styleAdded(style);

@@ -35,21 +35,23 @@ class KisStrokesFacade;
 class KisPostExecutionUndoAdapter;
 class KisPaintOp;
 class KisPainter;
-
+class KisSmoothingOptions;
 
 class KRITAUI_EXPORT KisToolFreehandHelper : public QObject
 {
     Q_OBJECT
 
 protected:
+
     typedef FreehandStrokeStrategy::PainterInfo PainterInfo;
 
 public:
+
     KisToolFreehandHelper(KisPaintingInformationBuilder *infoBuilder,
                           KisRecordingAdapter *recordingAdapter = 0);
     ~KisToolFreehandHelper();
 
-    void setSmoothness(bool smooth, qreal smoothness);
+    void setSmoothness(const KisSmoothingOptions &smoothingOptions);
 
     void initPaint(KoPointerEvent *event,
                    KoCanvasResourceManager *resourceManager,
@@ -63,6 +65,7 @@ public:
     const KisPaintOp* currentPaintOp() const;
 
 protected:
+
     virtual void createPainters(QVector<PainterInfo*> &painterInfos);
 
     virtual void paintAt(const QVector<PainterInfo*> &painterInfos,
@@ -78,7 +81,7 @@ protected:
                                   const QPointF &control2,
                                   const KisPaintInformation &pi2);
 
-protected:
+
     void paintAt(PainterInfo *painterInfo, const KisPaintInformation &pi);
 
     void paintLine(PainterInfo *painterInfo,
@@ -92,6 +95,7 @@ protected:
                           const KisPaintInformation &pi2);
 
 private slots:
+
     void finishStroke();
     void doAirbrushing();
 

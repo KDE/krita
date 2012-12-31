@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2012 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,34 +15,11 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "kis_smoothing_options.h"
 
-#ifndef _KIS_DISTANCE_INFORMATION_H_
-#define _KIS_DISTANCE_INFORMATION_H_
-
-/**
- * This function is used as return of paintLine to contains information that need
- * to be passed for the next call.
- */
-struct KisDistanceInformation {
-
-    KisDistanceInformation()
-        : distance(0)
-        , spacing(0)
-    {}
-
-    KisDistanceInformation(double _distance, double _spacing)
-        : distance(_distance)
-        , spacing(_spacing)
-    {}
-
-    void clear()
-    {
-        distance = 0;
-        spacing = 0;
-    }
-
-    double distance;
-    double spacing;
-};
-
-#endif
+KisSmoothingOptions::KisSmoothingOptions()
+    : smoothingType(WEIGHTED_SMOOTHING)
+    , smoothnessFactor(50.0)
+    , smoothnessQuality(20)
+{
+}

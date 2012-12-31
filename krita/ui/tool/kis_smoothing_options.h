@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2012 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,34 +15,26 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef KIS_SMOOTHING_OPTIONS_H
+#define KIS_SMOOTHING_OPTIONS_H
 
-#ifndef _KIS_DISTANCE_INFORMATION_H_
-#define _KIS_DISTANCE_INFORMATION_H_
+#include <qglobal.h>
 
-/**
- * This function is used as return of paintLine to contains information that need
- * to be passed for the next call.
- */
-struct KisDistanceInformation {
+struct KisSmoothingOptions
+{
 
-    KisDistanceInformation()
-        : distance(0)
-        , spacing(0)
-    {}
+    enum SmoothingType {
+        NO_SMOOTHING = 0,
+        SIMPLE_SMOOTHING,
+        WEIGHTED_SMOOTHING
+    };
 
-    KisDistanceInformation(double _distance, double _spacing)
-        : distance(_distance)
-        , spacing(_spacing)
-    {}
+    KisSmoothingOptions();
 
-    void clear()
-    {
-        distance = 0;
-        spacing = 0;
-    }
+    SmoothingType smoothingType;
+    qreal smoothnessFactor;
+    int smoothnessQuality;
 
-    double distance;
-    double spacing;
 };
 
-#endif
+#endif // KIS_SMOOTHING_OPTIONS_H

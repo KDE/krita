@@ -25,6 +25,7 @@
 #include "kis_resources_snapshot.h"
 #include "kis_paintop_settings.h"
 #include "kis_distance_information.h"
+#include "kis_smoothing_options.h"
 
 #include "krita_export.h"
 
@@ -83,7 +84,6 @@ protected:
 
 protected slots:
 
-    void setSmooth(bool smooth);
     void setAssistant(bool assistant);
 
 private:
@@ -114,8 +114,8 @@ private slots:
     void hideOutline();
 
 protected:
-    bool m_smooth;
-    double m_smoothness;
+
+    KisSmoothingOptions m_smoothingOptions;
     bool m_assistant;
     double m_magnetism;
 

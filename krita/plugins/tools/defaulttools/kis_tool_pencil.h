@@ -74,7 +74,7 @@ public:
         setToolTip(i18n("Draw a freehand path."));
         setToolType(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
-        setIconName(koIconNameCStr("krita_tool_freehand"));
+        setIconName(koIconNameCStr("krita_tool_freehandvector"));
         setPriority(9);
     }
 

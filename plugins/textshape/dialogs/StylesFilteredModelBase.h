@@ -71,6 +71,7 @@ public:
       * If size isn't specified, the default size of the given @class KoStyleThumbnailer is used.
     */
     virtual QImage stylePreview(int row, QSize size = QSize());
+//    virtual QImage stylePreview(QModelIndex &index, QSize size = QSize());
 
     virtual AbstractStylesModel::Type stylesType() const;
 

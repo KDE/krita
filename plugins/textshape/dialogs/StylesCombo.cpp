@@ -135,7 +135,7 @@ void StylesCombo::slotSelectionChanged(int index)
     m_selectedItem = index;
     m_preview->setPreview(m_stylesModel->stylePreview(index, m_preview->availableSize()));
     update();
-    emit selectionChanged(index);
+//    emit selectionChanged(index);
 }
 
 void StylesCombo::slotItemClicked(QModelIndex index)
@@ -143,8 +143,11 @@ void StylesCombo::slotItemClicked(QModelIndex index)
     //this slot allows us to emit a selected signal. There is a bit of redundancy if the item clicked was indeed a new selection, where we also emit the selectionChanged signal from the slot above.
     m_selectedItem = index.row();
     m_preview->setPreview(m_stylesModel->stylePreview(m_selectedItem, m_preview->availableSize()));
+    m_currentIndex = index;
     update();
     emit selected(m_selectedItem);
+    emit selected(index);
+    hidePopup(); //the editor event has accepted the mouseReleased event. Call hidePopup ourselves then.
 }
 
 void StylesCombo::slotUpdatePreview()
@@ -192,6 +195,11 @@ void StylesCombo::slotShowDia(QModelIndex index)
 void StylesCombo::slotDeleteStyle(QModelIndex index)
 {
     emit deleteStyle(index.row());
+}
+
+void StylesCombo::slotModelReset()
+{
+    m_view->reset();
 }
 
 void StylesCombo::showEditIcon(bool show){

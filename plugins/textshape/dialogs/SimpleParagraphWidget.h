@@ -63,6 +63,7 @@ signals:
 private slots:
     void listStyleChanged(int id);
     void styleSelected(int index);
+    void styleSelected(QModelIndex &index);
     void changeListLevel(int level);
 
 private:

@@ -78,6 +78,7 @@ QModelIndex StylesModel::index(int row, int column, const QModelIndex &parent) c
 
 QModelIndex StylesModel::parent(const QModelIndex &child) const
 {
+    Q_UNUSED(child);
     return QModelIndex();
 }
 
@@ -90,6 +91,7 @@ int StylesModel::rowCount(const QModelIndex &parent) const
 
 int StylesModel::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     return 1;
 }
 
@@ -236,7 +238,48 @@ QImage StylesModel::stylePreview(int row, QSize size)
     }
     return QImage();
 }
-
+/*
+QImage StylesModel::stylePreview(QModelIndex &index, QSize size)
+{
+    if (!m_styleManager || !m_styleThumbnailer) {
+        return QImage();
+    }
+    if (m_modelType == StylesModel::ParagraphStyle) {
+        KoParagraphStyle *usedStyle = 0;
+        usedStyle = m_styleManager->paragraphStyle(index.internalId());
+        if (usedStyle) {
+            return m_styleThumbnailer->thumbnail(usedStyle, size);
+        }
+        if (!usedStyle && m_draftParStyleList.contains(index.internalId())) {
+            return m_styleThumbnailer->thumbnail(m_draftParStyleList[index.internalId()], size);
+        }
+    }
+    else {
+        KoCharacterStyle *usedStyle = 0;
+        if (index.internalId() == -1) {
+            usedStyle = static_cast<KoCharacterStyle*>(m_currentParagraphStyle);
+            if (!usedStyle) {
+                usedStyle = m_defaultCharacterStyle;
+            }
+            usedStyle->setName(i18n("None"));
+            if (usedStyle->styleId() >= 0) {
+                usedStyle->setStyleId(-usedStyle->styleId()); //this style is not managed by the styleManager but its styleId will be used in the thumbnail cache as part of the key.
+            }
+            return m_styleThumbnailer->thumbnail(usedStyle, m_currentParagraphStyle, size);
+        }
+        else {
+            usedStyle = m_styleManager->characterStyle(index.internalId());
+            if (usedStyle) {
+                return m_styleThumbnailer->thumbnail(usedStyle, m_currentParagraphStyle, size);
+            }
+            if (!usedStyle && m_draftCharStyleList.contains(index.internalId())) {
+                return m_styleThumbnailer->thumbnail(m_draftCharStyleList[index.internalId()],m_currentParagraphStyle, size);
+            }
+        }
+    }
+    return QImage();
+}
+*/
 void StylesModel::setStyleManager(KoStyleManager *sm)
 {
     if (sm == m_styleManager)

@@ -34,6 +34,60 @@ DockerStylesComboModel::DockerStylesComboModel(QObject *parent) :
 {
 }
 
+Qt::ItemFlags DockerStylesComboModel::flags(const QModelIndex &index) const
+{
+    if (index.internalId() == UsedStyleId || index.internalId() == UnusedStyleId) {
+        return (Qt::NoItemFlags);
+    }
+    return (Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+}
+
+QModelIndex DockerStylesComboModel::index(int row, int column, const QModelIndex &parent) const
+{
+    if (row < 0 || column != 0)
+        return QModelIndex();
+
+    if (!parent.isValid()) {
+        if (row >= m_proxyToSource.count()) {
+            return QModelIndex();
+        }
+        return createIndex(row, column, (m_proxyToSource.at(row) >= 0)?int(m_sourceModel->index(m_proxyToSource.at(row), 0, QModelIndex()).internalId()):m_proxyToSource.at(row));
+    }
+    return QModelIndex();
+}
+
+QVariant DockerStylesComboModel::data(const QModelIndex &index, int role) const
+{
+    if (!index.isValid())
+        return QVariant();
+
+    switch (role){
+    case AbstractStylesModel::isTitleRole: {
+        if (index.internalId() == UsedStyleId || index.internalId() == UnusedStyleId) {
+            return true;
+        }
+    }
+    case Qt::DisplayRole: {
+        if (index.internalId() == UsedStyleId) {
+            return i18n("Used Styles");
+        }
+        if (index.internalId() == UnusedStyleId) {
+            return i18n("Unused Styles");
+        }
+        return QVariant();
+    }
+    case Qt::DecorationRole: {
+        return m_sourceModel->data(m_sourceModel->index(m_proxyToSource.at(index.row()), 0, QModelIndex()), role);
+        break;
+    }
+    case Qt::SizeHintRole: {
+        return QVariant(QSize(250, 48));
+    }
+    default: break;
+    };
+    return QVariant();
+}
+
 void DockerStylesComboModel::setInitialUsedStyles(QVector<int> usedStyles)
 {
     Q_UNUSED(usedStyles);
@@ -123,8 +177,9 @@ void DockerStylesComboModel::styleApplied(const KoCharacterStyle *style)
             }
             m_usedStyles.insert(begin, m_sourceModel->indexForCharacterStyle(*(style)).row());   // We use the ForCharacterStyle variant also for parag styles because the signal exist only in charStyle variant. TODO merge these functions in StylesModel. they use the styleId anyway.
         }
-        //we do not reset the model here, as it will mess up the view's visibility. perhaps this is very wrong. to be considered in case we have bugs.
+        beginResetModel();
         createMapping();
+        endResetModel();
     }
 }
 
@@ -191,9 +246,16 @@ void DockerStylesComboModel::createMapping()
             }
         }
     }
-    m_proxyToSource << m_usedStyles << m_unusedStyles;
+    if (!m_usedStyles.isEmpty()) {
+        m_proxyToSource << UsedStyleId << m_usedStyles;
+    }
+    if (!m_unusedStyles.isEmpty()) {
+        m_proxyToSource << UnusedStyleId << m_unusedStyles; //UsedStyleId and UnusedStyleId will be detected as title (in index method) and will be treated accordingly
+    }
     m_sourceToProxy.fill(-1, m_sourceModel->rowCount((QModelIndex())));
     for (int i = 0; i < m_proxyToSource.count(); ++i) {
-        m_sourceToProxy[m_proxyToSource.at(i)] = i;
+        if (m_proxyToSource.at(i) >= 0) { //we do not need to map to the titles
+            m_sourceToProxy[m_proxyToSource.at(i)] = i;
+        }
     }
 }

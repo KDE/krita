@@ -782,7 +782,7 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, QTextBlock &block, b
                 }
                 markIt->endX = line.cursorToX(qMin(markIt->lastChar, block.length()));
             }
-            qreal x1 = (markIt->firstChar > line.textStart()) ? markIt->startX : line.position().x();
+            qreal x1 = (markIt->firstChar > line.textStart()) ? markIt->startX : line.cursorToX(0);
 
             painter->drawLine(QPointF(x1, y), QPointF(markIt->endX, y));
 
@@ -797,7 +797,7 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, QTextBlock &block, b
                     markIt->startX = line.cursorToX(markIt->firstChar);
                 }
             }
-            qreal x1 = (markIt->firstChar > line.textStart()) ? markIt->startX : line.position().x();
+            qreal x1 = (markIt->firstChar > line.textStart()) ? markIt->startX : line.cursorToX(0);
 
             painter->drawLine(QPointF(x1, y), QPointF(line.position().x() + line.naturalTextWidth(), y));
 

@@ -1,7 +1,7 @@
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 
-add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data")
-add_definitions(-DFILES_OUTPUT_DIR="${CMAKE_CURRENT_BINARY_DIR}")
+add_definitions(-DFILES_DATA_DIR=${CMAKE_CURRENT_SOURCE_DIR}/data)
+add_definitions(-DFILES_OUTPUT_DIR=${CMAKE_CURRENT_BINARY_DIR})
 
 macro(build_test __test_name)
     set(_test_name Test${__test_name})

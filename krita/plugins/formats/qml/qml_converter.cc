@@ -82,6 +82,7 @@ KisImageBuilder_Result QMLConverter::buildFile(const KUrl& uri, KisImageWSP imag
         writeInt(out, 2, "width", rect.width());
         writeInt(out, 2, "height", rect.height());
         writeString(out, 2, "source", "\"" + imageDir + '/' + fileName + "\"" );
+        writeString(out, 2, "opacity", QString().setNum(node->opacity()/255.0));
         out << SPACE << "}\n";
         node = node->nextSibling();
     }

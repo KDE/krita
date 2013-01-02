@@ -286,7 +286,7 @@ void KoInlineTextObjectManager::activeAuthorUpdated(const QString &profile)
     QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
 
     if (profiles.contains(profile)) {
-        KConfigGroup cgs(&authorGroup, "Author" + profile);
+        KConfigGroup cgs(&authorGroup, "Author-" + profile);
         setProperty(KoInlineObject::AuthorName, cgs.readEntry("creator"));
         setProperty(KoInlineObject::AuthorInitials, cgs.readEntry("initial"));
         setProperty(KoInlineObject::SenderTitle, cgs.readEntry("author-title"));

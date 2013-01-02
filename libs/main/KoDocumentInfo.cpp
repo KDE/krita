@@ -90,7 +90,7 @@ bool KoDocumentInfo::loadOasis(const KoXmlDocument &metaDoc)
 
 QDomDocument KoDocumentInfo::save()
 {
-    saveParameters();
+    updateParameters();
 
     QDomDocument doc = KoDocument::createDomDocument("document-info"
                        /*DTD name*/, "document-info" /*tag name*/, "1.1");
@@ -112,7 +112,7 @@ QDomDocument KoDocumentInfo::save()
 
 bool KoDocumentInfo::saveOasis(KoStore *store)
 {
-    saveParameters();
+    updateParameters();
 
     KoStoreDevice dev(store);
     KoXmlWriter* xmlWriter = KoOdfWriteStore::createOasisXmlWriter(&dev,
@@ -371,16 +371,18 @@ QDomElement KoDocumentInfo::saveAboutInfo(QDomDocument &doc)
     return e;
 }
 
-void KoDocumentInfo::saveParameters()
+void KoDocumentInfo::updateParameters(bool asPartOfSave)
 {
     KoDocument *doc = dynamic_cast< KoDocument *>(parent());
     if (doc && doc->isAutosaving()) {
         return;
     }
 
-    setAboutInfo("editing-cycles", QString::number(aboutInfo("editing-cycles").toInt() + 1));
+    if (asPartOfSave) {
+        setAboutInfo("editing-cycles", QString::number(aboutInfo("editing-cycles").toInt() + 1));
+        setAboutInfo("date", QDateTime::currentDateTime().toString(Qt::ISODate));
+    }
 
-    setAboutInfo("date", QDateTime::currentDateTime().toString(Qt::ISODate));
 
     KConfig *config = KoGlobal::calligraConfig();
     config->reparseConfiguration();

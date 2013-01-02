@@ -137,6 +137,9 @@ public:
     /** Resets part of the meta data */
     void resetMetaData();
 
+    /** Takes care of updating the per-editing-cycle data correctly */
+    void updateParameters(bool asPartOfSave = true);
+
 private:
     /**
      * Set information about the author
@@ -203,9 +206,6 @@ private:
      * @return true if success
      */
     bool saveOasisAuthorInfo(KoXmlWriter &xmlWriter);
-
-    /** Takes care of saving the per-editing-cycle data correctly */
-    void saveParameters();
 
     /** A QStringList containing all tags for the document information */
     QStringList m_aboutTags;

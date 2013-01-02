@@ -576,6 +576,8 @@ set(kis_processings_test_SRCS kis_processings_test.cpp )
 kde4_add_unit_test(KisProcessingsTest TESTNAME krita-image-KisProcessingsTest ${kis_processings_test_SRCS})
 target_link_libraries(KisProcessingsTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
+endif(LCMS2_FOUND)
+
 ########### next target ###############
 
 set(kis_fixed_point_maths_test_SRCS kis_fixed_point_maths_test.cpp )
@@ -588,5 +590,8 @@ set(kis_filter_weights_buffer_test_SRCS kis_filter_weights_buffer_test.cpp )
 kde4_add_unit_test(KisFilterWeightsBufferTest TESTNAME krita-image-KisFilterWeightsBufferTest ${kis_filter_weights_buffer_test_SRCS})
 target_link_libraries(KisFilterWeightsBufferTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
-endif(LCMS2_FOUND)
+########### next target ###############
 
+set(kis_filter_weights_applicator_test_SRCS kis_filter_weights_applicator_test.cpp )
+kde4_add_unit_test(KisFilterWeightsApplicatorTest TESTNAME krita-image-KisFilterWeightsApplicatorTest ${kis_filter_weights_applicator_test_SRCS})
+target_link_libraries(KisFilterWeightsApplicatorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

@@ -39,15 +39,19 @@ public:
     }
 
     qint32 toInt() const {
-        return d > 0 ? d >> 8 : -((-d) >> 8);
+        return d >= 0 ? d >> 8 : -((-d) >> 8);
     }
 
     qint32 toIntRound() const {
-        return d > 0 ? (d + (1 << 7)) >> 8 : -((-d + (1 << 7)) >> 8);
+        return d >= 0 ? (d + (1 << 7)) >> 8 : -((-d + (1 << 7)) >> 8);
     }
 
     qint32 toIntCeil() const {
-        return d > 0 ? (d + ((1 << 8) - 1)) >> 8 : -((-d + ((1 << 8) - 1)) >> 8);
+        return d >= 0 ? (d + ((1 << 8) - 1)) >> 8 : -((-d) >> 8);
+    }
+
+    qint32 toIntFloor() const {
+        return d >= 0 ? d >> 8 : -((-d + ((1 << 8) - 1)) >> 8);
     }
 
     qreal toFloat() const {

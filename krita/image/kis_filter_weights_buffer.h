@@ -20,6 +20,7 @@
 #define __KIS_FILTER_WEIGHTS_BUFFER_H
 
 #include "kis_fixed_point_maths.h"
+#include "kis_filter_strategy.h"
 
 #ifdef SANITY_CHECKS_ENABLED
 static bool checkForAsymmetricZeros = false;
@@ -82,7 +83,7 @@ static bool checkForAsymmetricZeros = false;
         qDebug() << ppVar(scaledIter) << ppVar(t);                      \
     } while (0)
 #else
-#define DEBUG_ALL()
+#define DEBUG_ALL() Q_UNUSED(beginDst); Q_UNUSED(endDst)
 #define DEBUG_SAMPLE()
 #endif
 
@@ -133,10 +134,11 @@ public:
 
 public:
     KisFilterWeightsBuffer(KisFilterStrategy *filterStrategy, qreal realScale) {
+        Q_ASSERT(realScale > 0);
+
         m_filterWeights = new FilterWeights[256];
         m_maxSpan = 0;
-
-        KisFixedPoint transformScale(1);
+        m_weightsPositionScale = 1;
 
         KisFixedPoint supportSrc;
         KisFixedPoint supportDst;
@@ -144,7 +146,7 @@ public:
         if (realScale < 1.0) {
             supportSrc.from256Frac(filterStrategy->intSupport() / realScale);
             supportDst.from256Frac(filterStrategy->intSupport());
-            transformScale = KisFixedPoint(realScale);
+            m_weightsPositionScale = KisFixedPoint(realScale);
         } else {
             supportSrc.from256Frac(filterStrategy->intSupport());
             supportDst.from256Frac(filterStrategy->intSupport());
@@ -157,8 +159,8 @@ public:
             KisFixedPoint beginDst = -supportDst;
             KisFixedPoint endDst = supportDst;
 
-            KisFixedPoint beginSrc = -supportSrc - centerSrc / transformScale;
-            KisFixedPoint endSrc = supportSrc - centerSrc / transformScale;
+            KisFixedPoint beginSrc = -supportSrc - centerSrc / m_weightsPositionScale;
+            KisFixedPoint endSrc = supportSrc - centerSrc / m_weightsPositionScale;
 
             int span = (2 * supportSrc).toInt() +
                 (beginSrc.isInteger() && endSrc.isInteger());
@@ -171,8 +173,8 @@ public:
             m_maxSpan = qMax(m_maxSpan, span);
 
             // in dst coordinate system:
-            KisFixedPoint scaledIter = centerSrc + beginSrc.toInt() * transformScale;
-            KisFixedPoint scaledInc = transformScale;
+            KisFixedPoint scaledIter = centerSrc + beginSrc.toInt() * m_weightsPositionScale;
+            KisFixedPoint scaledInc = m_weightsPositionScale;
 
             DEBUG_ALL();
 
@@ -217,8 +219,16 @@ public:
         delete[] m_filterWeights;
     }
 
-    FilterWeights* weights(KisFixedPoint pos) {
+    FilterWeights* weights(KisFixedPoint pos) const {
         return m_filterWeights + pos.to256Frac();
+    }
+
+    int maxSpan() const {
+        return m_maxSpan;
+    }
+
+    KisFixedPoint weightsPositionScale() const {
+        return m_weightsPositionScale;
     }
 
 private:
@@ -239,6 +249,7 @@ private:
 private:
     FilterWeights *m_filterWeights;
     int m_maxSpan;
+    KisFixedPoint m_weightsPositionScale;
 };
 
 #endif /* __KIS_FILTER_WEIGHTS_BUFFER_H */

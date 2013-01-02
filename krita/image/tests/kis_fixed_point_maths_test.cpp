@@ -72,16 +72,19 @@ void KisFixedPointMathsTest::testConversions()
 
     QCOMPARE(fp1.toInt(), 2);
     QCOMPARE(fp1.toIntRound(), 3);
+    QCOMPARE(fp1.toIntFloor(), 2);
     QCOMPARE(fp1.toIntCeil(), 3);
     QCOMPARE(fp1.toFloat(), 2.5);
 
     QCOMPARE(fp2.toInt(), 2);
     QCOMPARE(fp2.toIntRound(), 3);
+    QCOMPARE(fp2.toIntFloor(), 2);
     QCOMPARE(fp2.toIntCeil(), 3);
     QCOMPARE(fp2.toFloat(), 698.0/256.0);
 
     QCOMPARE(fp3.toInt(), 2);
     QCOMPARE(fp3.toIntRound(), 2);
+    QCOMPARE(fp3.toIntFloor(), 2);
     QCOMPARE(fp3.toIntCeil(), 3);
     QCOMPARE(fp3.toFloat(), 599.0/256.0);
 }
@@ -94,15 +97,18 @@ void KisFixedPointMathsTest::testConversionsNegative()
 
     QCOMPARE(fp1.toInt(), -2);
     QCOMPARE(fp1.toIntRound(), -3);
-    QCOMPARE(fp1.toIntCeil(), -3);
+    QCOMPARE(fp1.toIntFloor(), -3);
+    QCOMPARE(fp1.toIntCeil(), -2);
 
     QCOMPARE(fp2.toInt(), -2);
     QCOMPARE(fp2.toIntRound(), -3);
-    QCOMPARE(fp2.toIntCeil(), -3);
+    QCOMPARE(fp2.toIntFloor(), -3);
+    QCOMPARE(fp2.toIntCeil(), -2);
 
     QCOMPARE(fp3.toInt(), -2);
     QCOMPARE(fp3.toIntRound(), -2);
-    QCOMPARE(fp3.toIntCeil(), -3);
+    QCOMPARE(fp3.toIntFloor(), -3);
+    QCOMPARE(fp3.toIntCeil(), -2);
 }
 
 QTEST_KDEMAIN(KisFixedPointMathsTest, GUI)

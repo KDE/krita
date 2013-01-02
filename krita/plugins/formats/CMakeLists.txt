@@ -61,6 +61,7 @@ add_subdirectory(ppm)
 add_subdirectory(xcf)
 add_subdirectory(psd)
 add_subdirectory(odg)
+add_subdirectory(qml)
 
 #if(OIIO_FOUND)
 #    add_subdirectory(oiio)

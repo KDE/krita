@@ -68,6 +68,7 @@ KoTextBlockData::KoTextBlockData(QTextBlock &block)
 KoTextBlockData::KoTextBlockData(QTextBlockUserData *userData)
  : d(dynamic_cast<KoTextBlockData::Private *>(userData))
 {
+    Q_ASSERT(d);
 }
 
 KoTextBlockData::~KoTextBlockData()

@@ -153,10 +153,18 @@ void SimpleParagraphWidget::fillListButtons()
             textCharFormat.setFontWeight(QFont::Normal);
             cursor.setCharFormat(textCharFormat);
 
+            QTextBlock cursorBlock = cursor.block();
+            KoTextBlockData data(cursorBlock);
             cursor.insertText("----");
             listStyle.applyStyle(cursor.block(),1);
+            cursorBlock = cursor.block();
+            KoTextBlockData data1(cursorBlock);
             cursor.insertText("\n----");
+            cursorBlock = cursor.block();
+            KoTextBlockData data2(cursorBlock);
             cursor.insertText("\n----");
+            cursorBlock = cursor.block();
+            KoTextBlockData data3(cursorBlock);
 
             KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(textShape.textShapeData()->document()->documentLayout());
             if(lay)

@@ -54,7 +54,7 @@ public:
     ~Private() {}
 
     void documentCommandAdded();
-    void updateState(State newState, QString title = QString());
+    void updateState(State newState, const QString &title = QString());
 
     void newLine(KUndo2Command *parent);
     void clearCharFormatProperty(int propertyId);
@@ -89,12 +89,12 @@ public:
     // called whenever a visit was prevented by editprotection
     virtual void nonVisit() {}
 
-    virtual void visitFragmentSelection(QTextCursor )
+    virtual void visitFragmentSelection(QTextCursor &)
     {
     }
 
     // The default implementation calls visitFragmentSelection on each fragment.intersect.selection
-    virtual void visitBlock(QTextBlock block, const QTextCursor &caret)
+    virtual void visitBlock(QTextBlock &block, const QTextCursor &caret)
     {
         for (QTextBlock::iterator it = block.begin(); it != block.end(); ++it) {
             QTextCursor fragmentSelection(caret);
@@ -125,7 +125,7 @@ public:
 
     virtual void visit(QTextBlock &block) const = 0;
 
-    static void visitSelection(KoTextEditor *editor, const BlockFormatVisitor &visitor, QString title = i18n("Format"), bool resetProperties = false, bool registerChange = true) {
+    static void visitSelection(KoTextEditor *editor, const BlockFormatVisitor &visitor, const QString &title = i18n("Format"), bool resetProperties = false, bool registerChange = true) {
         int start = qMin(editor->position(), editor->anchor());
         int end = qMax(editor->position(), editor->anchor());
 
@@ -161,7 +161,7 @@ public:
 
     virtual void visit(QTextCharFormat &format) const = 0;
 
-    static void visitSelection(KoTextEditor *editor, const CharFormatVisitor &visitor, QString title = i18n("Format"), bool registerChange = true) {
+    static void visitSelection(KoTextEditor *editor, const CharFormatVisitor &visitor, const QString &title = i18n("Format"), bool registerChange = true) {
         int start = qMin(editor->position(), editor->anchor());
         int end = qMax(editor->position(), editor->anchor());
         if (start == end) { // just set a new one.

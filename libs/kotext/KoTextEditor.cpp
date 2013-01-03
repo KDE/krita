@@ -254,7 +254,7 @@ QTextCursor* KoTextEditor::cursor()
     return &(d->caret);
 }
 
-void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, QString title, QTextFormat& format, QTextFormat& prevFormat, bool applyToWholeBlock)
+void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, const QString &title, QTextFormat& format, QTextFormat& prevFormat, bool applyToWholeBlock)
 {
     if (!KoTextDocument(d->document).changeTracker() || !KoTextDocument(d->document).changeTracker()->recordChanges()) {
         // clear the ChangeTrackerId from the passed in selection, without recursively registring
@@ -932,7 +932,7 @@ public:
     }
 
     // override super's implementation to not waste cpu cycles
-    virtual void visitBlock(QTextBlock , const QTextCursor &)
+    virtual void visitBlock(QTextBlock&, const QTextCursor &)
     {
     }
 
@@ -1340,7 +1340,7 @@ void KoTextEditor::insertTableOfContents(KoTableOfContentsGeneratorInfo *info)
     emit cursorPositionChanged();
 }
 
-void KoTextEditor::setTableOfContentsConfig(KoTableOfContentsGeneratorInfo *info, QTextBlock block)
+void KoTextEditor::setTableOfContentsConfig(KoTableOfContentsGeneratorInfo *info, const QTextBlock &block)
 {
     if (isEditProtected()) {
         return;
@@ -1609,7 +1609,7 @@ public:
     {
     }
 
-    virtual void visitBlock(QTextBlock block, const QTextCursor &caret)
+    virtual void visitBlock(QTextBlock &block, const QTextCursor &caret)
     {
         if (m_position >= qMax(block.position(), caret.selectionStart())
                     && m_position <= qMin(block.position() + block.length(), caret.selectionEnd())) {

@@ -175,7 +175,7 @@ public slots:
     /// caller, or the caller can choose to quickly undo and then delete the \ref command.
     void instantlyExecuteCommand(KUndo2Command *command);
 
-    void registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, QString title, QTextFormat &format, QTextFormat &prevFormat, bool applyToWholeBlock = false);
+    void registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, const QString &title, QTextFormat &format, QTextFormat &prevFormat, bool applyToWholeBlock = false);
 
     void bold(bool bold);
 
@@ -209,9 +209,9 @@ public slots:
 
     void setStyle(KoCharacterStyle *style);
 
-    void mergeAutoStyle(QTextCharFormat deltaCharFormat);
+    void mergeAutoStyle(const QTextCharFormat &deltaCharFormat);
 
-    void mergeAutoStyle(QTextCharFormat deltaCharFormat, QTextBlockFormat deltaBlockFormat);
+    void mergeAutoStyle(const QTextCharFormat &deltaCharFormat, const QTextBlockFormat &deltaBlockFormat);
 
     /**
      * Insert an inlineObject (such as a variable) at the current cursor position. Possibly replacing the selection.
@@ -320,7 +320,7 @@ public slots:
     QTextDocument *document() const;
 
     /// Same as Qt, only to be used inside KUndo2Commands
-    KUndo2Command *beginEditBlock(QString title = QString());
+    KUndo2Command *beginEditBlock(const QString &title = QString());
     void endEditBlock();
 
     /**
@@ -432,7 +432,7 @@ public slots:
     /**
      * Configures various values of a ToC to the one passed in info
      */
-    void setTableOfContentsConfig(KoTableOfContentsGeneratorInfo *info, QTextBlock block);
+    void setTableOfContentsConfig(KoTableOfContentsGeneratorInfo *info, const QTextBlock &block);
 
     void insertBibliography(KoBibliographyInfo *info);
 

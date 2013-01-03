@@ -97,7 +97,7 @@ public:
     {
     }
 
-    virtual void visitFragmentSelection(QTextCursor fragmentSelection)
+    virtual void visitFragmentSelection(QTextCursor &fragmentSelection)
     {
         if (m_first) {
             m_firstFormat = fragmentSelection.charFormat();

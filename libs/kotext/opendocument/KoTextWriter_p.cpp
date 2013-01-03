@@ -710,11 +710,11 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
     KoElementReference xmlid;
     xmlid.invalidate();
 
-    if (const KoTextBlockData *blockData = dynamic_cast<const KoTextBlockData *>(block.userData())) {
-        if (blockData->saveXmlID()) {
-            xmlid = context.xmlid(blockData);
-            xmlid.saveOdf(writer, KoElementReference::TextId);
-        }
+    QTextBlock currentBlock = block;
+    KoTextBlockData blockData(currentBlock);
+    if (blockData.saveXmlID()) {
+        xmlid = context.xmlid(&blockData);
+        xmlid.saveOdf(writer, KoElementReference::TextId);
     }
 
     if (changeTracker && changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
@@ -1586,11 +1586,10 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                 }
 
                 if (KoListStyle::isNumberingStyle(textList->format().style())) {
-                    if (KoTextBlockData *blockData = dynamic_cast<KoTextBlockData *>(block.userData())) {
-                        writer->startElement("text:number", false);
-                        writer->addTextSpan(blockData->counterText());
-                        writer->endElement();
-                    }
+                    KoTextBlockData blockData(block);
+                    writer->startElement("text:number", false);
+                    writer->addTextSpan(blockData.counterText());
+                    writer->endElement();
                 }
 
                 if (topListLevel == level && textList == topLevelTextList) {

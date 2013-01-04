@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Krita Flipbook Import Filter
+X-KDE-Export=application/x-krita
+X-KDE-ServiceTypes=CalligraFilter
+Type=Service
+X-KDE-Import=application/x-krita-flipbook
+X-KDE-Weight=1
+X-KDE-Library=kritaflipbookimport
+NoDisplay=true

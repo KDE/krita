@@ -31,3 +31,8 @@ install( FILES
     kritagradients.knsrc
     kritaiccprofiles.knsrc
     DESTINATION ${CONFIG_INSTALL_DIR} )
+
+install( FILES
+    krita.xml
+    DESTINATION ${DATA_INSTALL_DIR}/mime/packages
+)

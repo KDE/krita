@@ -776,6 +776,8 @@ QString KoDocument::checkImageMimeTypes(const QString &mimeType, const KUrl &url
 {
     if (!url.isLocalFile()) return mimeType;
 
+    if (url.toLocalFile().endsWith(".flipbook")) return "application/x-krita-flipbook";
+
     QStringList imageMimeTypes;
     imageMimeTypes << "image/jpeg"
                    << "image/x-psd" << "image/photoshop" << "image/x-photoshop" << "image/x-vnd.adobe.photoshop" << "image/vnd.adobe.photoshop"

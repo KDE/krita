@@ -9,41 +9,31 @@ add_definitions(-DFILES_OUTPUT_DIR="${CMAKE_CURRENT_BINARY_DIR}")
 ########### next target ###############
 
 set(kis_node_model_test_SRCS kis_node_model_test.cpp modeltest.cpp )
-
 kde4_add_unit_test(kis_node_model_test TESTNAME krita-ui-kis_node_model_test  ${kis_node_model_test_SRCS})
-
 target_link_libraries(kis_node_model_test  ${KDE4_KDEUI_LIBS}  komain kritaui ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(kis_image_view_converter_test_SRCS kis_image_view_converter_test.cpp )
-
 kde4_add_unit_test(KisImageViewConverterTest TESTNAME krita-ui-KisImageViewConverterTest  ${kis_image_view_converter_test_SRCS})
-
 target_link_libraries(KisImageViewConverterTest  ${KDE4_KDEUI_LIBS}  komain kritaui ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(kis_shape_controller_test_SRCS kis_shape_controller_test.cpp kis_dummies_facade_base_test.cpp)
-
 kde4_add_unit_test(kis_shape_controller_test TESTNAME krita-ui-kis_shape_controller_test  ${kis_shape_controller_test_SRCS})
-
 target_link_libraries(kis_shape_controller_test  ${KDE4_KDEUI_LIBS}  komain kritaimage kritaui ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(squeezedcombobox_test_SRCS squeezedcombobox_test.cpp )
-
 kde4_add_unit_test(squeezedcombobox_test TESTNAME krita-ui-squeezedcombobox_test  ${squeezedcombobox_test_SRCS})
-
 target_link_libraries(squeezedcombobox_test  ${KDE4_KDEUI_LIBS} kritaui ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(kis_prescaled_projection_test_SRCS kis_prescaled_projection_test.cpp )
-
 kde4_add_unit_test(KisPrescaledProjectionTest TESTNAME krita-ui-kis_prescaled_projection_test ${kis_prescaled_projection_test_SRCS})
-
 target_link_libraries(KisPrescaledProjectionTest  ${KDE4_KDEUI_LIBS} kritaui ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
@@ -156,3 +146,9 @@ target_link_libraries(KisZoomAndPanTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage 
 set(kis_input_manager_test_SRCS kis_input_manager_test.cpp ../../sdk/tests/testutil.cpp)
 kde4_add_unit_test(KisInputManagerTest TESTNAME krita-ui-KisInputManagerTest  ${kis_input_manager_test_SRCS})
 target_link_libraries(KisInputManagerTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_flipbook_test_SRCS kis_flipbook_test.cpp )
+kde4_add_unit_test(KisFlipbookTest TESTNAME krita-ui-KisFlipbookTest  ${kis_flipbook_test_SRCS})
+target_link_libraries(KisFlipbookTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})

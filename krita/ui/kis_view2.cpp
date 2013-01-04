@@ -195,25 +195,26 @@ public:
     KisCanvas2 *canvas;
     KisDoc2 *doc;
     KisPart2 *part;
-    KisCoordinatesConverter * viewConverter;
-    KisCanvasController * canvasController;
-    KisCanvasResourceProvider * resourceProvider;
-    KisFilterManager * filterManager;
-    KisStatusBar * statusBar;
-    KAction * totalRefresh;
-    KAction* mirrorCanvas;
-    KAction* createTemplate;
+    KisCoordinatesConverter *viewConverter;
+    KisCanvasController *canvasController;
+    KisCanvasResourceProvider *resourceProvider;
+    KisFilterManager *filterManager;
+    KisStatusBar *statusBar;
+    KAction *totalRefresh;
+    KAction *mirrorCanvas;
+    KAction *createTemplate;
     KAction *saveIncremental;
     KAction *saveIncrementalBackup;
     KisSelectionManager *selectionManager;
-    KisControlFrame * controlFrame;
-    KisNodeManager * nodeManager;
-    KisZoomManager * zoomManager;
-    KisImageManager * imageManager;
-    KisGridManager * gridManager;
+    KisControlFrame *controlFrame;
+    KisNodeManager *nodeManager;
+    KisZoomManager *zoomManager;
+    KisImageManager *imageManager;
+    KisGridManager *gridManager;
     KisPerspectiveGridManager * perspectiveGridManager;
-    KisPaintingAssistantsManager* paintingAssistantManager;
+    KisPaintingAssistantsManager *paintingAssistantManager;
     BlockingUserInputEventFilter blockingEventFilter;
+    KisFlipbook *flipbook;
 };
 
 
@@ -226,6 +227,7 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
     setFocusPolicy(Qt::NoFocus);
 
     if (mainWindow()) {
+        mainWindow()->setDockNestingEnabled(true);
         actionCollection()->addAction(KStandardAction::KeyBindings, "keybindings", mainWindow()->guiFactory(), SLOT(configureShortcuts()));
     }
 

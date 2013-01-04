@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+  <mime-type type="application/x-krita-flipbook">
+         <comment xml:lang="en">Krita Flipbook</comment>
+         <magic priority="50">
+                <match type="string" value="!DOCTYPE krita-flipbook" offset="1"/>
+         </magic>
+         <glob pattern="*.flipbook"/>
+  </mime-type>
+</mime-info>

@@ -36,8 +36,10 @@ KisFlipbookItem::KisFlipbookItem(const QString &filename)
         if (m_icon.isNull()) {
             // This is an image that Qt cannot load quickly, so we load it ourselves
             KisDoc2 *doc = document();
-            doc->image()->refreshGraph();
-            m_icon = doc->image()->convertToQImage(doc->image()->bounds(), 0);
+            if (doc) {
+                doc->image()->refreshGraph();
+                m_icon = doc->image()->convertToQImage(doc->image()->bounds(), 0);
+            }
         }
 
         m_imageSize = m_icon.size();

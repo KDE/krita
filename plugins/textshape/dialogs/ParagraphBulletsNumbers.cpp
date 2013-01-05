@@ -181,7 +181,6 @@ void ParagraphBulletsNumbers::save(KoParagraphStyle *savingStyle)
     KoUnit unit(KoUnit::Centimeter);
 
     const int currentRow = widget.listTypes->currentRow();
-    qDebug()<<"currrrrrrrrrrrrrrrent row "<<currentRow;
     KoListStyle::Style style = m_mapping[currentRow];
     if (style == KoListStyle::None) {
         savingStyle->setListStyle(0);

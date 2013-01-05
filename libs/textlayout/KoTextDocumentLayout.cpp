@@ -298,9 +298,8 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
         if (! block.isValid())
             break;
         if (from == block.position() && block.textList()) {
-            KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
-            if (data)
-                data->setCounterWidth(-1); // invalidate whole list.
+            KoTextBlockData data(block);
+            data.setCounterWidth(-1);
         }
 
         from = block.position() + block.length();

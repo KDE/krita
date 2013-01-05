@@ -229,7 +229,7 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
             QTextBlock tocEntryTextBlock = cursor.block();
             tocTemplateStyle->applyStyle( tocEntryTextBlock );
 
-            KoTextBlockData *bd = dynamic_cast<KoTextBlockData *>(block.userData());
+            KoTextBlockData bd(block);
 
             // save the current style due to hyperlinks
             QTextCharFormat savedCharFormat = cursor.charFormat();
@@ -271,9 +271,7 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
                     }
                     case IndexEntry::CHAPTER: {
                         //IndexEntryChapter *chapter = static_cast<IndexEntryChapter*>(entry);
-                        if (bd) {
-                            cursor.insertText(bd->counterText());
-                        }
+                        cursor.insertText(bd.counterText());
                         break;
                     }
                     case IndexEntry::SPAN: {

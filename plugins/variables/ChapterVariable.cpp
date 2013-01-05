@@ -104,22 +104,22 @@ void ChapterVariable::resize(const QTextDocument *_document, QTextInlineObject o
         if (block.blockFormat().hasProperty(KoParagraphStyle::OutlineLevel)) {
             int level = block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel);
             if (level == m_level) {
-                KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
+                KoTextBlockData data(block);
                 switch(m_format) {
                 case ChapterName:
                     setValue(block.text());
                     break;
                 case ChapterNumber:
-                    setValue(data ? data->counterText() : QString());
+                    setValue(data ? data.counterText() : QString());
                     break;
                 case ChapterNumberName:
-                    setValue(data ? QString("%1 %2").arg(data->counterText()).arg(block.text()) : block.text());
+                    setValue(data ? QString("%1 %2").arg(data.counterText()).arg(block.text()) : block.text());
                     break;
                 case ChapterPlainNumber:
-                    setValue(data ? data->counterPlainText() : QString());
+                    setValue(data ? data.counterPlainText() : QString());
                     break;
                 case ChapterPlainNumberName:
-                    setValue(data ? QString("%1 %2").arg(data->counterPlainText()).arg(block.text()) : QString());
+                    setValue(data ? QString("%1 %2").arg(data.counterPlainText()).arg(block.text()) : QString());
                     break;
                 default:
                     break;

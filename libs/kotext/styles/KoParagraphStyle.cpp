@@ -327,9 +327,8 @@ void KoParagraphStyle::applyParagraphListStyle(QTextBlock &block, const QTextBlo
         } else {
             if (block.textList())
                 block.textList()->remove(block);
-            KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
-            if (data)
-                data->setCounterWidth(-1);
+            KoTextBlockData data(block);
+            data.setCounterWidth(-1);
         }
     }
 }

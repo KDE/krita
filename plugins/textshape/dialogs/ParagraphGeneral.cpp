@@ -157,7 +157,9 @@ void ParagraphGeneral::setUnit(const KoUnit &unit)
 void ParagraphGeneral::save(KoParagraphStyle *style)
 {
     KoParagraphStyle *savingStyle;
+    qDebug()<<" style "<<style;
     if (style == 0) {
+        qDebug()<<"m_style "<<m_style;
         if (m_style == 0)
             return;
         else
@@ -165,6 +167,8 @@ void ParagraphGeneral::save(KoParagraphStyle *style)
     }
     else
         savingStyle = style;
+
+    qDebug()<<"savingStyle "<<savingStyle;
 
     CharacterGeneral::save(style);
 

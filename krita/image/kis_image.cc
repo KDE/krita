@@ -597,7 +597,7 @@ void KisImage::rotateImpl(const QString &actionName,
                                        KisProcessingApplicator::RECURSIVE | signalFlags,
                                        emitSignals, actionName);
 
-    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value("Bilinear");
+    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value("Bicubic");
 
     KisProcessingVisitorSP visitor =
             new KisTransformProcessingVisitor(1.0, 1.0, 0.0, 0.0,

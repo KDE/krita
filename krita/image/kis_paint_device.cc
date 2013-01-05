@@ -355,7 +355,6 @@ void KisPaintDevice::move(qint32 x, qint32 y)
     dirtyRegion |= extent();
 
     setDirty(dirtyRegion);
-
 }
 
 void KisPaintDevice::move(const QPoint& pt)
@@ -798,6 +797,7 @@ KisRectIteratorSP KisPaintDevice::createRectIteratorNG(qint32 x, qint32 y, qint3
 
 KisRectIteratorSP KisPaintDevice::createRectIteratorNG(const QRect& r)
 {
+    m_d->cache.invalidate();
     return createRectIteratorNG(r.x(), r.y(), r.width(), r.height());
 }
 
@@ -841,6 +841,7 @@ KisRandomConstAccessorSP KisPaintDevice::createRandomConstAccessorNG(qint32 x, q
 
 KisRandomSubAccessorSP KisPaintDevice::createRandomSubAccessor() const
 {
+    m_d->cache.invalidate();
     KisPaintDevice* pd = const_cast<KisPaintDevice*>(this);
     return new KisRandomSubAccessor(pd);
 }

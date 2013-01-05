@@ -89,7 +89,7 @@ QWidget * KisToolBrush::createOptionWidget()
     // Line smoothing configuration
     m_cmbSmoothingType = new QComboBox(optionWidget);
     m_cmbSmoothingType->addItems(QStringList() << i18n("No Smoothing") << i18n("Basic Smoothing") << i18n("Weighted Smoothing"));
-    m_cmbSmoothingType->setCurrentIndex(2);
+    m_cmbSmoothingType->setCurrentIndex(1);
     connect(m_cmbSmoothingType, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSetSmoothingType(int)));
     addOptionWidgetOption(m_cmbSmoothingType);
 

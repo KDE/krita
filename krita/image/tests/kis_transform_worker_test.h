@@ -50,6 +50,7 @@ private slots:
 
     void benchmarkScale();
     void benchmarkRotate();
+    void benchmarkRotate1Q();
     void benchmarkShear();
     void benchmarkScaleRotateShear();
 

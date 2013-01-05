@@ -115,17 +115,17 @@ private:
 
     friend class KisTransformWorkerTest;
 
-    static QRect rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP dst,
+    static QRect rotateRight90(KisPaintDeviceSP dev,
                                QRect boundRect,
                                KoUpdaterPtr progressUpdater,
                                int portion);
 
-    static QRect rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst,
+    static QRect rotateLeft90(KisPaintDeviceSP dev,
                               QRect boundRect,
                               KoUpdaterPtr progressUpdater,
                               int portion);
 
-    static QRect rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst,
+    static QRect rotate180(KisPaintDeviceSP dev,
                            QRect boundRect,
                            KoUpdaterPtr progressUpdater,
                            int portion);

@@ -704,16 +704,13 @@ void KisTransformWorkerTest::rotate90Left()
     KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
     dev2->convertFromQImage(image, 0);
 
-    KisPaintDeviceSP tmpdev1 = new KisPaintDevice(dev2->colorSpace());
-    tmpdev1->setDefaultPixel(dev2->defaultPixel());
-
     QRect boundRect = dev2->exactBounds();
 
     KisTransaction t("rotate left 90", dev2);
-    QRect rc = KisTransformWorker::rotateLeft90(dev2, tmpdev1, boundRect, 0, 0);
+    QRect rc = KisTransformWorker::rotateLeft90(dev2, boundRect, 0, 0);
     t.end();
 
-    QImage result = tmpdev1->convertToQImage(0, rc.x(), rc.y(), image.width(), image.height());
+    QImage result = dev2->convertToQImage(0, rc.x(), rc.y(), image.width(), image.height());
     QTransform tf;
     QImage rotatedimage = image.transformed(tf.rotate(270));
 
@@ -736,17 +733,14 @@ void KisTransformWorkerTest::rotate90Right()
 
     QRect boundRect = dev2->exactBounds();
 
-    KisPaintDeviceSP tmpdev1 = new KisPaintDevice(dev2->colorSpace());
-    tmpdev1->setDefaultPixel(dev2->defaultPixel());
-
     KisTransaction t("rotate right 90", dev2);
-    QRect rc = KisTransformWorker::rotateRight90(dev2, tmpdev1, boundRect, 0, 0);
+    QRect rc = KisTransformWorker::rotateRight90(dev2, boundRect, 0, 0);
     t.end();
 
     QTransform tf;
     QImage rotatedimage = image.transformed(tf.rotate(90));
 
-    QImage result = tmpdev1->convertToQImage(0, rc.x(), rc.y(), image.width(), image.height());
+    QImage result = dev2->convertToQImage(0, rc.x(), rc.y(), image.width(), image.height());
 
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, rotatedimage, result)) {
@@ -767,14 +761,11 @@ void KisTransformWorkerTest::rotate180()
 
     QRect boundRect = dev2->exactBounds();
 
-    KisPaintDeviceSP tmpdev1 = new KisPaintDevice(dev2->colorSpace());
-    tmpdev1->setDefaultPixel(dev2->defaultPixel());
-
     KisTransaction t("rotate 180", dev2);
-    QRect rc = KisTransformWorker::rotate180(dev2, tmpdev1, boundRect, 0, 0);
+    QRect rc = KisTransformWorker::rotate180(dev2, boundRect, 0, 0);
     t.end();
 
-    QImage result = tmpdev1->convertToQImage(0, rc.x(), rc.y(), image.width(), image.height());
+    QImage result = dev2->convertToQImage(0, rc.x(), rc.y(), image.width(), image.height());
 
     QTransform tf;
     QImage rotatedimage = image.transformed(tf.rotate(180));
@@ -833,6 +824,13 @@ void KisTransformWorkerTest::benchmarkRotate()
 {
     QBENCHMARK {
         generateTestImage("hakonepa.png", 1.0,M_PI/6.0,0.0,new KisBicubicFilterStrategy(), false);
+    }
+}
+
+void KisTransformWorkerTest::benchmarkRotate1Q()
+{
+    QBENCHMARK {
+        generateTestImage("hakonepa.png", 1.0,2 * M_PI/3.0,0.0,new KisBicubicFilterStrategy(), false);
     }
 }
 

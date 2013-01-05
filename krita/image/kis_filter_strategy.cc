@@ -197,7 +197,7 @@ KisFilterStrategyRegistry* KisFilterStrategyRegistry::instance()
         s_instance->add(new KisBilinearFilterStrategy);
         // s_instance->add(new KisBellFilterStrategy);
         // s_instance->add(new KisBSplineFilterStrategy);
-        // s_instance->add(new KisLanczos3FilterStrategy);
+        s_instance->add(new KisLanczos3FilterStrategy);
         // s_instance->add(new KisMitchellFilterStrategy);
 
     }

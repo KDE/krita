@@ -447,10 +447,18 @@ void KoTextEditor::setStyle(KoCharacterStyle *style)
 
     recursivelyVisitSelection(d->document->rootFrame()->begin(), visitor);
 
-    if (!isEditProtected() && caretAnchor == caretPosition) {
+    if (!isEditProtected() && caretAnchor == caretPosition) { //if there is no selection, it can happen that the caret does not get the proper style applied (begining of a block). We need to force it.
+         //applying a style is absolute, so first initialise the caret with the frame's style, then apply the paragraph's. Finally apply the character style
+        QTextCharFormat charFormat = KoTextDocument(d->document).frameCharFormat();
+        KoStyleManager *styleManager = KoTextDocument(d->document).styleManager();
+        KoParagraphStyle *paragraphStyle = styleManager->paragraphStyle(d->caret.charFormat().intProperty(KoParagraphStyle::StyleId));
+        if (paragraphStyle) {
+            paragraphStyle->KoCharacterStyle::applyStyle(charFormat);
+        }
+        d->caret.setCharFormat(charFormat);
         style->applyStyle(&(d->caret));
     }
-    else {
+    else { //if the caret has a selection, the visitor has already applied the style, reset the caret's position so it picks the proper style.
         d->caret.setPosition(caretAnchor);
         d->caret.setPosition(caretPosition, QTextCursor::KeepAnchor);
     }
@@ -500,7 +508,10 @@ void KoTextEditor::setStyle(KoParagraphStyle *style)
 
     recursivelyVisitSelection(d->document->rootFrame()->begin(), visitor);
 
-    if (!isEditProtected() && caretAnchor == caretPosition) {
+    if (!isEditProtected() && caretAnchor == caretPosition) { //if there is no selection, it can happen that the caret does not get the proper style applied (begining of a block). We need to force it.
+        //applying a style is absolute, so first initialise the caret with the frame's style, then apply the paragraph style
+        QTextCharFormat charFormat = KoTextDocument(d->document).frameCharFormat();
+        d->caret.setCharFormat(charFormat);
         style->KoCharacterStyle::applyStyle(&(d->caret));
     }
     else {

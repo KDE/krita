@@ -247,8 +247,6 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
         paintLine(m_d->painterInfos, m_d->previousPaintInformation, info);
     }
 
-
-
     m_d->previousPaintInformation = info;
 
     if(m_d->airbrushingTimer.isActive()) {
@@ -292,7 +290,7 @@ const KisPaintOp* KisToolFreehandHelper::currentPaintOp() const
 
 void KisToolFreehandHelper::finishStroke()
 {
-    if(m_d->haveTangent) {
+    if (m_d->haveTangent) {
         m_d->haveTangent = false;
 
         QPointF newTangent = (m_d->previousPaintInformation.pos() - m_d->olderPaintInformation.pos()) / 3.0;

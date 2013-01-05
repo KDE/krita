@@ -279,7 +279,12 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
 {
     if (mode() == KisTool::PAINT_MODE &&
             e->button() == Qt::LeftButton) {
-
+        if (m_smoothingOptions.smoothingType == KisSmoothingOptions::WEIGHTED_SMOOTHING) {
+            m_smoothingOptions.smoothingType = KisSmoothingOptions::SIMPLE_SMOOTHING;
+            m_helper->setSmoothness(m_smoothingOptions);
+            doStroke(e);
+            m_smoothingOptions.smoothingType =  KisSmoothingOptions::WEIGHTED_SMOOTHING;
+        }
         endStroke();
 
         if (m_assistant) {

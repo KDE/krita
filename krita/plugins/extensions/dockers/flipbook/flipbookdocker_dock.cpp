@@ -36,6 +36,7 @@
 #include <KoServiceProvider.h>
 #include <KoMainWindow.h>
 #include <KoView.h>
+#include <KoToolManager.h>
 
 #include <kis_image.h>
 #include <kis_view2.h>
@@ -173,6 +174,13 @@ void FlipbookDockerDock::newFlipbook()
     if (!m_canvas->view()->document()) return;
     if (!m_canvas->view()->document()->documentPart()) return;
 
+    KisImageSP oldImage = m_canvas->view()->image();
+    if (m_canvas->view()->document()->isModified()) {
+        m_canvas->view()->document()->documentPart()->save();
+        m_canvas->view()->document()->setModified(false);
+    }
+
+
     const QStringList mimeFilter = KoFilterManager::mimeFilter(KoServiceProvider::readNativeFormatMimeType(),
                                    KoFilterManager::Import,
                                    KoServiceProvider::readExtraNativeMimeTypes());
@@ -191,20 +199,29 @@ void FlipbookDockerDock::newFlipbook()
     }
 
     txtName->setText("");
+    KisFlipbook *old = m_flipbook;
 
     static_cast<KisPart2*>(m_canvas->view()->document()->documentPart())->setFlipbook(flipbook);
 
-    KisFlipbook *old = m_flipbook;
     m_flipbook = flipbook;
 
     listFlipbook->setModel(m_flipbook);
-    selectImage(m_flipbook->index(0, 0));
-    delete old;
+    goFirst();
 
+    delete old;
+    Q_UNUSED(oldImage); // We keep a shared reference until the whole gui is rebuilt around the new image, otherwise it gets deleted
 }
 
 void FlipbookDockerDock::openFlipbook()
 {
+    if (!m_canvas) return;
+    if (!m_canvas->view()) return;
+    if (!m_canvas->view()->document()) return;
+    if (!m_canvas->view()->document()->documentPart()) return;
+
+    KisImageSP oldImage = m_canvas->view()->image();
+
+
     QString filename = KFileDialog::getOpenFileName(KUrl("kfiledialog:///OpenDialog"), "*.flipbook", this, i18n("Load flipbook"));
     if (!QFile::exists(filename)) return;
 
@@ -212,15 +229,20 @@ void FlipbookDockerDock::openFlipbook()
     flipbook->load(filename);
     txtName->setText(flipbook->name());
 
+    KisFlipbook *old = m_flipbook;
+
     static_cast<KisPart2*>(m_canvas->view()->document()->documentPart())->setFlipbook(flipbook);
 
-    KisFlipbook *old = m_flipbook;
     m_flipbook = flipbook;
 
     listFlipbook->setModel(m_flipbook);
     selectImage(m_flipbook->index(0, 0));
     delete old;
+
+    Q_UNUSED(oldImage); // We keep a shared reference until the whole gui is rebuilt around the new image, otherwise it gets deleted
 }
+
+
 
 void FlipbookDockerDock::addImage()
 {
@@ -306,16 +328,25 @@ void FlipbookDockerDock::selectImage(const QModelIndex &index)
 
     KisFlipbookItem *item = dynamic_cast<KisFlipbookItem*>(m_flipbook->itemFromIndex(index));
 
-
     if (item && item->document() && item->document()->image()) {
         if (m_canvas->view()->document()->isModified()) {
             m_canvas->view()->document()->documentPart()->save();
             m_canvas->view()->document()->setModified(false);
         }
-        m_canvas->view()->document()->setCurrentImage(item->document()->image());
         m_canvas->view()->document()->setUrl(item->filename());
         m_canvas->view()->shell()->updateCaption();
+        m_canvas->view()->document()->setCurrentImage(item->document()->image());
         m_canvas->view()->zoomController()->setZoomMode(KoZoomMode::ZOOM_PAGE);
+
+        // Update all dockers, except us
+        QList<KoCanvasObserverBase*> canvasObservers = m_canvas->view()->shell()->canvasObservers();
+        foreach (KoCanvasObserverBase *canvasObserver, canvasObservers) {
+            if (canvasObserver != this) {
+                canvasObserver->unsetCanvas();
+                canvasObserver->setCanvas(m_canvas);
+            }
+        }
+
     }
     QApplication::restoreOverrideCursor();
 }

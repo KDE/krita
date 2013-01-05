@@ -308,7 +308,7 @@ QModelIndex KisNodeModel::parent(const QModelIndex &index) const
 
 QVariant KisNodeModel::data(const QModelIndex &index, int role) const
 {
-    if(!m_d->dummiesFacade || !index.isValid()) return QVariant();
+    if (!m_d->dummiesFacade || !index.isValid() || !m_d->image.isValid()) return QVariant();
 
     KisNodeSP node = nodeFromIndex(index);
 

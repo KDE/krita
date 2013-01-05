@@ -51,14 +51,13 @@ public:
     KisFilterWeightsApplicator(KisPaintDeviceSP src,
                                KisPaintDeviceSP dst,
                                qreal realScale, qreal shear,
-                               qreal dx, int srcStart,
+                               qreal dx,
                                bool clampToEdge)
         : m_src(src),
           m_dst(dst),
           m_realScale(realScale),
           m_shear(shear),
           m_dx(dx),
-          m_srcStart(srcStart),
           m_clampToEdge(clampToEdge)
     {
     }
@@ -94,8 +93,52 @@ public:
         return span;
     }
 
+    class LinePos {
+    public:
+        LinePos()
+            : m_start(0), m_size(0)
+        {
+        }
+
+        LinePos(int start, int size)
+            : m_start(start), m_size(size)
+        {
+        }
+
+        inline int start() const {
+            return m_start;
+        }
+
+        /**
+         * WARNING: be careful! This is not the same as
+         * QRect::right()!  This is an equivalent of (QRect::right() +
+         * QRect::width()) or QRectF::right(), that is it points to
+         * the pixel after(!) the actual last pixel.  See Qt docs for
+         * more info about this historical difference.
+         */
+        inline int end() const {
+            return m_start + m_size;
+        }
+
+        inline int size() const {
+            return m_size;
+        }
+
+        inline void unite(const LinePos &rhs) {
+            int newStart = qMin(start(), rhs.start());
+            int newEnd = qMax(end(), rhs.end());
+
+            m_start = newStart;
+            m_size = newEnd - newStart;
+        }
+
+    private:
+        int m_start;
+        int m_size;
+    };
+
     template <class T>
-    void processLine(int srcStart, int srcLen, int line, KisFilterWeightsBuffer *buffer, qreal filterSupport) {
+    LinePos processLine(LinePos srcLine, int line, KisFilterWeightsBuffer *buffer, qreal filterSupport) {
         int dstStart;
         int dstEnd;
 
@@ -103,14 +146,14 @@ public:
         int rightSrcBorder;
 
         if (m_realScale >= 0) {
-            dstStart = findAntialiasedDstStart(srcStart, filterSupport, line);
-            dstEnd = findAntialiasedDstEnd(srcStart + srcLen, filterSupport, line);
+            dstStart = findAntialiasedDstStart(srcLine.start(), filterSupport, line);
+            dstEnd = findAntialiasedDstEnd(srcLine.end(), filterSupport, line);
 
             leftSrcBorder = getLeftSrcNeedBorder(dstStart, line, buffer);
             rightSrcBorder = getRightSrcNeedBorder(dstEnd - 1, line, buffer);
         } else {
-            dstStart = findAntialiasedDstStart(srcStart + srcLen, filterSupport, line);
-            dstEnd = findAntialiasedDstEnd(srcStart, filterSupport, line);
+            dstStart = findAntialiasedDstStart(srcLine.end(), filterSupport, line);
+            dstEnd = findAntialiasedDstEnd(srcLine.start(), filterSupport, line);
 
             leftSrcBorder = getLeftSrcNeedBorder(dstEnd - 1, line, buffer);
             rightSrcBorder = getRightSrcNeedBorder(dstStart, line, buffer);
@@ -118,8 +161,8 @@ public:
 
         Q_ASSERT(dstStart < dstEnd);
         Q_ASSERT(leftSrcBorder < rightSrcBorder);
-        Q_ASSERT(leftSrcBorder < srcStart);
-        Q_ASSERT(srcStart + srcLen < rightSrcBorder);
+        Q_ASSERT(leftSrcBorder <= srcLine.start());
+        Q_ASSERT(srcLine.end() <= rightSrcBorder);
 
         int pixelSize = m_src->pixelSize();
         KoMixColorsOp *mixOp = m_src->colorSpace()->mixColorsOp();
@@ -130,17 +173,17 @@ public:
         int i = leftSrcBorder;
         quint8 *bufPtr = srcLineBuf;
 
-        T srcIt = tmp::createIterator<T>(m_src, srcStart, line, srcLen);
+        T srcIt = tmp::createIterator<T>(m_src, srcLine.start(), line, srcLine.size());
 
         if (m_clampToEdge) {
             borderPixel = srcIt->rawData();
         }
 
-        for (; i < srcStart; i++, bufPtr+=pixelSize) {
+        for (; i < srcLine.start(); i++, bufPtr+=pixelSize) {
             memcpy(bufPtr, borderPixel, pixelSize);
         }
 
-        for (; i < srcStart + srcLen; i++, bufPtr+=pixelSize) {
+        for (; i < srcLine.end(); i++, bufPtr+=pixelSize) {
             quint8 *data = srcIt->rawData();
             memcpy(bufPtr, data, pixelSize);
             memcpy(data, defaultPixel, pixelSize);
@@ -175,6 +218,8 @@ public:
 
         delete[] colors;
         delete[] srcLineBuf;
+
+        return LinePos(dstStart, dstEnd - dstStart);
     }
 
 private:
@@ -222,7 +267,6 @@ private:
     qreal m_realScale;
     qreal m_shear;
     qreal m_dx;
-    int m_srcStart;
     bool m_clampToEdge;
 };
 

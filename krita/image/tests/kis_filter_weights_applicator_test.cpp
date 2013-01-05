@@ -47,7 +47,7 @@ void testSpan(qreal scale, qreal dx, int dst_l,
     KisFilterStrategy *filter = new KisTriangleFilterStrategy();
 
     KisFilterWeightsBuffer buf(filter, qAbs(scale));
-    KisFilterWeightsApplicator applicator(0, 0, scale, 0.0, dx, 0.0, false);
+    KisFilterWeightsApplicator applicator(0, 0, scale, 0.0, dx, false);
     KisFilterWeightsApplicator::BlendSpan span;
     span = applicator.calculateBlendSpan(dst_l, 0, &buf);
 
@@ -163,20 +163,28 @@ void KisFilterWeightsApplicatorTest::testSpan_Scale_0_5_Shift_0_125_Mirrored()
     testSpan(-0.5, 0.125, -2, 1, 0.125, 0.5);
 }
 
-void printPixels(KisPaintDeviceSP dev, int x0, int len)
+void printPixels(KisPaintDeviceSP dev, int x0, int len, bool horizontal)
 {
     for (int i = x0; i < x0 + len; i++) {
         QColor c;
-        dev->pixel(i, 0, &c);
-        qDebug() << "px" << i << "|" << c.red() << c.green() << c.blue() << c.alpha();
+
+        int x = horizontal ? i : 0;
+        int y = horizontal ? 0 : i;
+
+        dev->pixel(x, y, &c);
+        qDebug() << "px" << x << y << "|" << c.red() << c.green() << c.blue() << c.alpha();
     }
 }
 
-void checkRA(KisPaintDeviceSP dev, int x0, int len, quint8 r[], quint8 a[])
+void checkRA(KisPaintDeviceSP dev, int x0, int len, quint8 r[], quint8 a[], bool horizontal)
 {
     for (int i = 0; i < len; i++) {
         QColor c;
-        dev->pixel(x0 + i, 0, &c);
+
+        int x = horizontal ? x0 + i : 0;
+        int y = horizontal ? 0 : x0 + i;
+
+        dev->pixel(x, y, &c);
 
         if (c.red() != r[i] ||
             c.alpha() != a[i]) {
@@ -189,30 +197,54 @@ void checkRA(KisPaintDeviceSP dev, int x0, int len, quint8 r[], quint8 a[])
     }
 }
 
-void testLine(qreal scale, qreal dx, quint8 expR[], quint8 expA[], int x0, int len, bool clampToEdge = false)
+void testLineImpl(qreal scale, qreal dx, quint8 expR[], quint8 expA[], int x0, int len, bool clampToEdge, bool horizontal)
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     KisFilterStrategy *filter = new KisTriangleFilterStrategy();
 
     KisFilterWeightsBuffer buf(filter, qAbs(scale));
-    KisFilterWeightsApplicator applicator(dev, dev, scale, 0.0, dx, 0.0, clampToEdge);
+    KisFilterWeightsApplicator applicator(dev, dev, scale, 0.0, dx, clampToEdge);
 
-    dev->setPixel(0,0,QColor(10,20,40));
-    dev->setPixel(1,0,QColor(20,30,50));
-    dev->setPixel(2,0,QColor(30,40,60));
-    dev->setPixel(3,0,QColor(40,50,70));
+    for (int i = 0; i < 4; i++) {
+        int x = horizontal ? i : 0;
+        int y = horizontal ? 0 : i;
+        dev->setPixel(x,y,QColor(10 + i * 10, 20 + i * 10, 40 + i * 10));
+    }
 
     {
         quint8 r[] = {  0, 10, 20, 30, 40,  0,  0};
         quint8 a[] = {  0,255,255,255,255,  0,  0};
-        checkRA(dev, -1, 6, r, a);
+        checkRA(dev, -1, 6, r, a, horizontal);
     }
 
-    applicator.processLine<KisHLineIteratorSP>(0,4,0,&buf, filter->support());
+    KisFilterWeightsApplicator::LinePos srcPos(0,4);
+    KisFilterWeightsApplicator::LinePos dstPos;
 
-    //printPixels(dev, x0, len);
-    checkRA(dev, x0, len, expR, expA);
+    if (horizontal) {
+        dstPos = applicator.processLine<KisHLineIteratorSP>(srcPos,0,&buf, filter->support());
+    } else {
+        dstPos = applicator.processLine<KisVLineIteratorSP>(srcPos,0,&buf, filter->support());
+    }
+
+    QRect rc = dev->exactBounds();
+
+    if (horizontal) {
+        QVERIFY(rc.left() >= dstPos.start());
+        QVERIFY(rc.left() + rc.width() <= dstPos.end());
+    } else {
+        QVERIFY(rc.top() >= dstPos.start());
+        QVERIFY(rc.top() + rc.height() <= dstPos.end());
+    }
+
+    //printPixels(dev, x0, len, horizontal);
+    checkRA(dev, x0, len, expR, expA, horizontal);
+}
+
+void testLine(qreal scale, qreal dx, quint8 expR[], quint8 expA[], int x0, int len, bool clampToEdge = false)
+{
+    testLineImpl(scale, dx, expR, expA, x0, len, clampToEdge, true);
+    testLineImpl(scale, dx, expR, expA, x0, len, clampToEdge, false);
 }
 
 void KisFilterWeightsApplicatorTest::testProcessLine_Scale_1_0_Aligned()
@@ -412,14 +444,16 @@ void KisFilterWeightsApplicatorTest::benchmarkProcesssLine()
     const qreal dx = 0.0387;
 
     KisFilterWeightsBuffer buf(filter, qAbs(scale));
-    KisFilterWeightsApplicator applicator(dev, dev, scale, 0.0, dx, 0.0, false);
+    KisFilterWeightsApplicator applicator(dev, dev, scale, 0.0, dx, false);
 
     for (int i = 0; i < 32767; i++) {
         dev->setPixel(i,0,QColor(10 + i%240,20,40));
     }
 
+    KisFilterWeightsApplicator::LinePos linePos(0,32767);
+
     QBENCHMARK {
-        applicator.processLine<KisHLineIteratorSP>(0,32767,0,&buf, filter->support());
+        applicator.processLine<KisHLineIteratorSP>(linePos,0,&buf, filter->support());
     }
 }
 

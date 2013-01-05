@@ -24,10 +24,6 @@ class FlipbookView : public QListView
     Q_OBJECT
 public:
     explicit FlipbookView(QWidget *parent = 0);
-    
-    void goPrevious();
-    void goNext();
-
 
 signals:
     void currentItemChanged(const QModelIndex &);

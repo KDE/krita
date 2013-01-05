@@ -125,6 +125,7 @@ void FlipbookDockerDock::setCanvas(KoCanvasBase * canvas)
         else {
             listFlipbook->setModel(m_flipbook);
             txtName->setText(m_flipbook->name());
+            goFirst();
         }
     }
 }
@@ -257,16 +258,37 @@ void FlipbookDockerDock::goFirst()
 {
     listFlipbook->scrollToTop();
     listFlipbook->setCurrentIndex(m_flipbook->index(0, 0));
+
 }
 
 void FlipbookDockerDock::goPrevious()
 {
-    listFlipbook->goPrevious();
+    KisFlipbookItem *item = dynamic_cast<KisFlipbookItem*>(m_flipbook->itemFromIndex(listFlipbook->currentIndex()));
+    if (!item) return;
+    int currentRow = item->row();
+
+    if (currentRow > 0) {
+        listFlipbook->setCurrentIndex(m_flipbook->index(currentRow - 1, 0));
+        listFlipbook->scrollTo(listFlipbook->currentIndex());
+    }
+    else {
+        goLast();
+    }
 }
 
 void FlipbookDockerDock::goNext()
 {
-    listFlipbook->goNext();
+    KisFlipbookItem *item = dynamic_cast<KisFlipbookItem*>(m_flipbook->itemFromIndex(listFlipbook->currentIndex()));
+    if (!item) return;
+    int currentRow = item->row();
+
+    if (currentRow < listFlipbook->model()->rowCount() -1) {
+        listFlipbook->setCurrentIndex(m_flipbook->index(currentRow + 1, 0));
+        listFlipbook->scrollTo(listFlipbook->currentIndex());
+    }
+    else {
+        goFirst();
+    }
 }
 
 void FlipbookDockerDock::goLast()
@@ -284,6 +306,7 @@ void FlipbookDockerDock::selectImage(const QModelIndex &index)
 
     KisFlipbookItem *item = dynamic_cast<KisFlipbookItem*>(m_flipbook->itemFromIndex(index));
 
+
     if (item && item->document() && item->document()->image()) {
         if (m_canvas->view()->document()->isModified()) {
             m_canvas->view()->document()->documentPart()->save();
@@ -291,6 +314,7 @@ void FlipbookDockerDock::selectImage(const QModelIndex &index)
         }
         m_canvas->view()->document()->setCurrentImage(item->document()->image());
         m_canvas->view()->document()->setUrl(item->filename());
+        m_canvas->view()->shell()->updateCaption();
         m_canvas->view()->zoomController()->setZoomMode(KoZoomMode::ZOOM_PAGE);
     }
     QApplication::restoreOverrideCursor();

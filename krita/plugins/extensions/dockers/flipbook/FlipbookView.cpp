@@ -15,6 +15,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "FlipbookView.h"
+#include <QDebug>
 
 FlipbookView::FlipbookView(QWidget *parent)
     : QListView(parent)
@@ -22,19 +23,9 @@ FlipbookView::FlipbookView(QWidget *parent)
     setViewMode(QListView::IconMode);
     setIconSize(QSize(128,128));
     setTextElideMode(Qt::ElideMiddle);
+    setSelectionMode(QAbstractItemView::SingleSelection);
 
 }
-
-void FlipbookView::goPrevious()
-{
-    setCurrentIndex(moveCursor(QAbstractItemView::MoveUp, Qt::NoModifier));
-}
-
-void FlipbookView::goNext()
-{
-    setCurrentIndex(moveCursor(QAbstractItemView::MoveDown, Qt::NoModifier));
-}
-
 
 void FlipbookView::selectionChanged(const QItemSelection &selected, const QItemSelection &/*deselected*/)
 {

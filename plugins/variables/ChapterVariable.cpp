@@ -110,16 +110,16 @@ void ChapterVariable::resize(const QTextDocument *_document, QTextInlineObject o
                     setValue(block.text());
                     break;
                 case ChapterNumber:
-                    setValue(data ? data.counterText() : QString());
+                    setValue(data.counterText());
                     break;
                 case ChapterNumberName:
-                    setValue(data ? QString("%1 %2").arg(data.counterText()).arg(block.text()) : block.text());
+                    setValue(QString("%1 %2").arg(data.counterText()).arg(block.text()));
                     break;
                 case ChapterPlainNumber:
-                    setValue(data ? data.counterPlainText() : QString());
+                    setValue(data.counterPlainText());
                     break;
                 case ChapterPlainNumberName:
-                    setValue(data ? QString("%1 %2").arg(data.counterPlainText()).arg(block.text()) : QString());
+                    setValue(QString("%1 %2").arg(data.counterPlainText()).arg(block.text()));
                     break;
                 default:
                     break;

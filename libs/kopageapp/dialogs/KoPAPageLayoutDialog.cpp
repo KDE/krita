@@ -31,6 +31,7 @@ KoPAPageLayoutDialog::KoPAPageLayoutDialog( KoPADocument *document, const KoPage
 {
     setPageSpread( false );
     showPageSpread( false );
+    setUnit(document->unit());
 }
 
 KoPAPageLayoutDialog::~KoPAPageLayoutDialog()

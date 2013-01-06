@@ -138,6 +138,7 @@ void DeleteCommand::doDelete()
     Q_ASSERT(textEditor);
     QTextCursor *caret = textEditor->cursor();
     QTextCharFormat charFormat = caret->charFormat();
+    bool caretAtBeginOfBlock = (caret->position() == caret->block().position());
 
     if (!textEditor->hasSelection()) {
         if (m_mode == PreviousChar) {
@@ -176,7 +177,9 @@ void DeleteCommand::doDelete()
 
     caret->deleteChar();
 
-    caret->setCharFormat(charFormat);
+    if (m_mode != PreviousChar || !caretAtBeginOfBlock) {
+        caret->setCharFormat(charFormat);
+    }
 }
 
 void DeleteCommand::deleteTextAnchor(KoInlineObject *object)

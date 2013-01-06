@@ -45,6 +45,65 @@ namespace tmp {
     }
 }
 
+/**
+ * \class KisFilterWeightsApplicator
+ *
+ * This is a main class for transforming a line of pixel data.  It
+ * transforms lines from \p src into \p dst using \p scale, \p shear
+ * and offset (\p dx) parameters.
+ *
+ * Notation:
+ * <pixel_name>_l -- leftmost border of the pixel
+ * <pixel_name>_c -- center of the pixel
+ *
+ *
+ * Example calculation of an offset (see calculateBlendSpan()):
+ * scale = 0.5;
+ * offset = <very small value>
+ *
+ *                    +------ dst_l
+ *                    |
+ *                    |   +-- dst_c
+ *                    |   |
+ *
+ * dst:       |   *   |   *   |   *   |
+ *
+ * src:      | * | * | * | * | * | * | * | * |
+ *
+ *                       |||
+ *                       ||+--- next_c_in_src
+ *                       |||
+ *                       |+---- dst_c_in_src
+ *                       |||
+ *                       |++--- offset (near zero, measured in dst coordinates)
+ *                       |
+ *                       +-- _l position of the pixel, which is considered
+ *                           cetral in the weights buffer
+ *
+ * Another example calculation of an offset (see calculateBlendSpan()):
+ * scale = 0.5;
+ * offset = <high value near 0.5>
+ *
+ *                      +------ dst_l
+ *                      |
+ *                      |   +-- dst_c
+ *                      |   |
+ *
+ * dst:         |   *   |   *   |   *   |
+ *
+ * src:      | * | * | * | * | * | * | * | * |
+ *
+ *                          || |
+ *                          || +--- next_c_in_src
+ *                          || |
+ *                          +------ dst_c_in_src
+ *                          || |
+ *                          +|-+--- offset (near 0.5, measured in dst coordinates)
+ *                           |
+ *                           +-- _l position of the pixel, which is considered
+ *                               cetral in the weights buffer
+ */
+
 class KisFilterWeightsApplicator
 {
 public:
@@ -61,12 +120,6 @@ public:
           m_clampToEdge(clampToEdge)
     {
     }
-
-    /**
-     * Notation:
-     * <pixel_name>_l -- leftmost border of the pixel
-     * <pixel_name>_c -- center of the pixel
-     */
 
     struct BlendSpan {
         KisFilterWeightsBuffer::FilterWeights *weights;

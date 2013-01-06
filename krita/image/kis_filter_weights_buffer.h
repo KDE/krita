@@ -90,7 +90,29 @@ static bool checkForAsymmetricZeros = false;
 
 
 /**
- * Simple case with scale == 1.0
+ * \class KisFilterWeightsBuffer
+ *
+ * Stores the cached values for the weights of neighbouring pixels
+ * that would form the pixel in a result of resampling. The object of
+ * this class is created before a pass of the transformation basing on
+ * the desired scale factor and the filter strategy used for resampling.
+ *
+ * Here is an exmple of a calculation of the span for a pixel with
+ * scale equal to 1.0. The result of the blending will be written into
+ * the dst(0) pixel, which is marked with '*' sign. Note that all the
+ * coordinates here are related to the center of the pixel, not to its
+ * leftmost border as it is common in other systems. The centerSrc
+ * coordinate represents the offset between the source and the
+ * destination buffers.
+ *
+ * dst-coordinates: the coordinates in the resulting image. The values
+ *                  of the filter strategy are calculated in these
+ *                  coordinates.
+ *
+ * src-coordinates: the coordinates in the source image/buffer. We
+ *                  pick integer values from there and calculate their
+ *                  dst-position to know their weights.
+ *
  *
  *                       +----+----+----+-- scaledIter (samples, measured in dst pixels,
  *                       |    |    |    |               correspond to integers in src)
@@ -219,14 +241,28 @@ public:
         delete[] m_filterWeights;
     }
 
+    /**
+     * Return a weights buffer for a particular value of offset
+     */
     FilterWeights* weights(KisFixedPoint pos) const {
         return m_filterWeights + pos.to256Frac();
     }
 
+    /**
+     * The maximum width of the buffer that would be needed for
+     * calculation of a pixel value. In other words, the maximum
+     * number of support pixels that are needed for calculation of a
+     * single result pixel
+     */
     int maxSpan() const {
         return m_maxSpan;
     }
 
+    /**
+     * The scale of the support buffer. Note that it is not always
+     * equal to the real scale of the transformation due to
+     * interpolation/blending difference.
+     */
     KisFixedPoint weightsPositionScale() const {
         return m_weightsPositionScale;
     }

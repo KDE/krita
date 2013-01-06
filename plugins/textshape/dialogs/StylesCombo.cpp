@@ -203,9 +203,17 @@ void StylesCombo::slotModelReset()
 }
 
 void StylesCombo::showEditIcon(bool show){
-    StylesDelegate *delegate = new StylesDelegate();
+    StylesDelegate *delegate = dynamic_cast<StylesDelegate*>(itemDelegate());
+    Q_ASSERT(delegate);
+    if (!delegate) { //the following should never get called as we are creating a StylesDelegate on the constructor;
+        StylesDelegate *delegate = new StylesDelegate();
+        connect(delegate, SIGNAL(needsUpdate(QModelIndex)), m_view, SLOT(update(QModelIndex)));
+        connect(delegate, SIGNAL(styleManagerButtonClicked(QModelIndex)), this, SLOT(slotShowDia(QModelIndex)));
+        connect(delegate, SIGNAL(deleteStyleButtonClicked(QModelIndex)), this, SLOT(slotDeleteStyle(QModelIndex)));
+        connect(delegate, SIGNAL(clickedInItem(QModelIndex)), this, SLOT(slotItemClicked(QModelIndex)));
+        setItemDelegate(delegate);
+    }
     delegate->setEditButtonEnable(show);
-    setItemDelegate(delegate);
 }
 
 #include <StylesCombo.moc>

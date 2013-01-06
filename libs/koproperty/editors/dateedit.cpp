@@ -22,9 +22,8 @@
 #include "dateedit.h"
 
 #include <koproperty/EditorDataModel.h>
-// KDE
-#include <KLocale>
-#include <KGlobal>
+// Qt
+#include <QLocale>
 
 using namespace KoProperty;
 
@@ -63,19 +62,29 @@ void DateEdit::setValue(const QVariant& value)
     blockSignals(false);
 }
 
+void DateEdit::paintEvent(QPaintEvent* event)
+{
+    QDateEdit::paintEvent(event);
+    Factory::paintTopGridLine(this);
+}
+
+
 void DateEdit::onDateChanged()
 {
     emit commitData(this);
 }
 
 
+//! @todo Port to KLocale, be inspired by KexiDateTableEdit (with Kexi*Formatter)
 DateDelegate::DateDelegate()
 {
 }
 
 QString DateDelegate::displayTextForProperty(const Property* prop) const
 {
-    return KGlobal::locale()->formatDate(prop->value().toDate(), KLocale::ShortDate);
+    const QLocale locale;
+    const QString defaultDateFormat = locale.dateFormat(QLocale::ShortFormat);
+    return prop->value().toDate().toString(defaultDateFormat);
 }
 
 QWidget* DateDelegate::createEditor(int type, QWidget* parent,

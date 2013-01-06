@@ -499,13 +499,14 @@ macro_log_feature(SHARED_MIME_INFO_FOUND "SharedMimeInfo" "Shared Mime Info" "ht
 ## Generate a file for prefix information
 ##
 
- #############################
-##############################
-## Add the benchmark target ##
-##############################
-#############################
+ ###############################
+################################
+## Add Calligra helper macros ##
+################################
+###############################
 
 include(MacroCalligraAddBenchmark)
+include(MacroCalligraBuildTest)
 
  ####################
 #####################

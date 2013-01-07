@@ -25,6 +25,7 @@
 #include <QDebug>
 #include <QProcess>
 #include <QProcessEnvironment>
+#include <QDesktopServices>
 #include <QDir>
 
 #include <kglobal.h>

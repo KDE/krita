@@ -48,12 +48,7 @@
 
 #include <math.h>
 
-qreal squareDistance(const QPointF &p1, const QPointF &p2)
-{
-    qreal dx = p1.x() - p2.x();
-    qreal dy = p1.y() - p2.y();
-    return dx*dx + dy*dy;
-}
+#include "KoCreatePathTool_p.h"
 
 KoPencilTool::KoPencilTool(KoCanvasBase *canvas)
         : KoToolBase(canvas),  m_mode(ModeCurve), m_optimizeRaw(false)

@@ -631,13 +631,13 @@ bool KoTextEditor::paste(KoTextEditor *editor,
     int to = editor->anchor();
     KoTextOdfSaveHelper saveHelper(editor->document(), from, to);
     KoTextDrag drag;
-
+#ifdef SHOULD_BUILD_RDF
     KoDocumentRdfBase *rdf = 0;
     if (shapeController->resourceManager()->hasResource(KoText::DocumentRdf)) {
         rdf = qobject_cast<KoDocumentRdfBase*>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<QObject*>());
         saveHelper.setRdfModel(rdf->model());
     }
-
+#endif
     drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
 
     beginEditBlock();
@@ -659,8 +659,8 @@ bool KoTextEditor::paste(KoTextEditor *editor,
         if (pasteAsText) {
             insertText(data->text());
         } else {
-            QSharedPointer<Soprano::Model> rdfModel = QSharedPointer<Soprano::Model>(0);
 #ifdef SHOULD_BUILD_RDF
+            QSharedPointer<Soprano::Model> rdfModel = QSharedPointer<Soprano::Model>(0);
             if(!rdf) {
                 rdfModel = QSharedPointer<Soprano::Model>(Soprano::createModel());
             } else {

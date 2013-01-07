@@ -104,9 +104,10 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
             Q_ASSERT(false);
         }
     }
+#if SHOULD_BUILD_RDF    
     kDebug(30015) << "helper.model:" << helper.rdfModel();
     textSharedData->setRdfModel(helper.rdfModel());
-
+#endif
     if (!helper.writeBody()) {
         return false;
     }

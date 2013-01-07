@@ -27,7 +27,9 @@ class KoPathShape;
 class KoShapeStroke;
 class KoPathPoint;
 
-class FLAKE_EXPORT KoPencilTool : public KoToolBase
+#include "basicflakes_export.h"
+
+class BASICFLAKES_EXPORT KoPencilTool : public KoToolBase
 {
     Q_OBJECT
 public:

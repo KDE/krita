@@ -40,6 +40,8 @@ private slots:
     void slotRotateImage90();
     void slotRotateImage180();
     void slotRotateImage270();
+    void slotMirrorImageVertical();
+    void slotMirrorImageHorizontal();
     void slotRotateLayer();
     void slotNodeChanged(const KisNodeSP);
 

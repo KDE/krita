@@ -46,6 +46,7 @@
 #include <kis_image_manager.h>
 #include <kis_node_manager.h>
 #include <kis_canvas_resource_provider.h>
+#include <kis_group_layer.h>
 
 #include "dlg_rotateimage.h"
 
@@ -76,6 +77,15 @@ RotateImage::RotateImage(QObject *parent, const QVariantList &)
         action  = new KAction(koIcon("object-rotate-left"), i18nc("rotate image 90 degrees to the left", "Rotate Image 90° to the Left"), this);
         actionCollection()->addAction("rotateImageCCW90", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage270()));
+
+        action  = new KAction(koIcon("object-flip-horizontal"), i18n("Mirror Horizontally"), this);
+        actionCollection()->addAction("mirrorHorizontal", action);
+        connect(action, SIGNAL(triggered()), this, SLOT(slotMirrorImageHorizontal()));
+
+        action  = new KAction(koIcon("object-flip-vertical"), i18n("Mirror Vertically"), this);
+        actionCollection()->addAction("mirrorVertical", action);
+        connect(action, SIGNAL(triggered()), this, SLOT(slotMirrorImageVertical()));
+
 
         m_rotateLayerAction  = new KAction(i18n("&Rotate Layer..."), this);
         actionCollection()->addAction("rotatelayer", m_rotateLayerAction);
@@ -134,6 +144,20 @@ void RotateImage::slotRotateImage180()
 void RotateImage::slotRotateImage270()
 {
     m_view->imageManager()->rotateCurrentImage(- M_PI / 2 + M_PI*2);
+}
+
+void RotateImage::slotMirrorImageVertical()
+{
+    KisImageWSP image = m_view->image();
+    if (!image) return;
+    m_view->nodeManager()->mirrorNode(image->rootLayer(), i18n("Mirror Vertically"), Qt::Vertical);
+}
+
+void RotateImage::slotMirrorImageHorizontal()
+{
+    KisImageWSP image = m_view->image();
+    if (!image) return;
+    m_view->nodeManager()->mirrorNode(image->rootLayer(), i18n("Mirror Horizontally"), Qt::Horizontal);
 }
 
 void RotateImage::slotRotateLayer()

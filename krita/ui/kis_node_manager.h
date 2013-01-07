@@ -146,6 +146,7 @@ public slots:
     void removeNode();
     void mirrorNodeX();
     void mirrorNodeY();
+    void mirrorNode(KisNodeSP node, const QString & commandName, Qt::Orientation orientation);
     void activateNextNode();
     void activatePreviousNode();
 
@@ -193,7 +194,6 @@ private:
     void getNewNodeLocation(const QString & nodeType, KisNodeSP &parent, KisNodeSP &above, KisNodeSP active);
     void getNewNodeLocation(KisNodeSP node, KisNodeSP &parent, KisNodeSP &above, KisNodeSP _activeNode);
 
-    void mirrorNode(KisNodeSP node, const QString & commandName, Qt::Orientation orientation);
 
     /**
      * Scales opacity from the range 0...1

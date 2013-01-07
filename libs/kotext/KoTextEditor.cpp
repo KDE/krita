@@ -659,8 +659,8 @@ bool KoTextEditor::paste(KoTextEditor *editor,
         if (pasteAsText) {
             insertText(data->text());
         } else {
-#ifdef SHOULD_BUILD_RDF
             QSharedPointer<Soprano::Model> rdfModel = QSharedPointer<Soprano::Model>(0);
+#ifdef SHOULD_BUILD_RDF
             if(!rdf) {
                 rdfModel = QSharedPointer<Soprano::Model>(Soprano::createModel());
             } else {

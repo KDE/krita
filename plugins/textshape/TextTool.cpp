@@ -1065,13 +1065,14 @@ QMimeData *TextTool::generateMimeData() const
     if (canvas()->shapeController()) {
         rm = canvas()->shapeController()->resourceManager();
     }
+#if SHOULD_BUILD_RDF
     if (rm && rm->hasResource(KoText::DocumentRdf)) {
         KoDocumentRdfBase *rdf = qobject_cast<KoDocumentRdfBase*>(rm->resource(KoText::DocumentRdf).value<QObject*>());
         if (rdf) {
             saveHelper.setRdfModel(rdf->model());
         }
     }
-
+#endif
     drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
     QTextDocumentFragment fragment = m_textEditor.data()->selection();
     drag.setData("text/html", fragment.toHtml("utf-8").toUtf8());

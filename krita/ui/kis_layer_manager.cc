@@ -92,7 +92,6 @@
 #include "kis_progress_widget.h"
 #include "kis_node_commands_adapter.h"
 #include "kis_node_manager.h"
-#include "kis_mirror_visitor.h"
 
 
 class KisSaveGroupVisitor : public KisNodeVisitor

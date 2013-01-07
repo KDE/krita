@@ -326,7 +326,7 @@ void SimpleParagraphWidget::listStyleChanged(int id)
     KoListLevelProperties llp;
     llp.setStyle(static_cast<KoListStyle::Style>(id));
     llp.setLevel(1);
-    KoTextEditor::ChangeListFlags flags(KoTextEditor::AutoListStyle | KoTextEditor::DontUnsetIfSame);
+    KoTextEditor::ChangeListFlags flags(KoTextEditor::AutoListStyle);
     m_tool->textEditor()->setListProperties(llp, flags);
 }
 

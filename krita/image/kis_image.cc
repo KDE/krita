@@ -991,19 +991,37 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
     KisNodeSP parent = layer->parent(); // parent is set to null when the layer is removed from the node
     dbgImage << ppVar(parent);
 
-    // XXX: merge the masks!
-    // AAA: do you really think you need it? ;) -- yes, we don't want to lose the masks
-
     // FIXME: "Merge Down"?
     undoAdapter()->beginMacro(i18n("Merge with Layer Below"));
 
     undoAdapter()->addCommand(new KisImageLayerAddCommand(this, mergedLayer, parent, layer));
-    undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, prevLayer));
-    undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, layer));
+    safeRemoveTwoNodes(layer, prevLayer);
 
     undoAdapter()->endMacro();
 
     return mergedLayer;
+}
+
+/**
+ * The removal of two nodes in one go may be a bit tricky, because one
+ * of them may be the clone of another. If we remove the source of a
+ * clone layer, it will reincarnate into a paint layer. In this case
+ * the pointer to the second layer will be lost.
+ *
+ * That's why we need to care about the order of the nodes removal:
+ * the clone --- first, the source --- last.
+ */
+void KisImage::safeRemoveTwoNodes(KisNodeSP node1, KisNodeSP node2)
+{
+    KisCloneLayer *clone1 = dynamic_cast<KisCloneLayer*>(node1.data());
+
+    if (clone1 && KisNodeSP(clone1->copyFrom()) == node2) {
+        undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, node1));
+        undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, node2));
+    } else {
+        undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, node2));
+        undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, node1));
+    }
 }
 
 KisLayerSP KisImage::flattenLayer(KisLayerSP layer)

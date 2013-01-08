@@ -691,6 +691,8 @@ private:
                    bool resizeImage, double angleX, double angleY,
                    const QPointF &origin);
 
+    void safeRemoveTwoNodes(KisNodeSP node1, KisNodeSP node2);
+
     void refreshHiddenArea(KisNodeSP rootNode, const QRect &preparedArea);
     static QRect realNodeExtent(KisNodeSP rootNode, QRect currentRect = QRect());
 

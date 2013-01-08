@@ -47,6 +47,9 @@ public:
     virtual void disableUIUpdates() = 0;
     virtual void enableUIUpdates() = 0;
 
+    virtual void disableDirtyRequests() = 0;
+    virtual void enableDirtyRequests() = 0;
+
     virtual void refreshGraphAsync(KisNodeSP root = 0) = 0;
     virtual void refreshGraphAsync(KisNodeSP root, const QRect &rc) = 0;
     virtual void refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect) = 0;

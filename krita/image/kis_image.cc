@@ -125,6 +125,7 @@ public:
     vKisAnnotationSP annotations;
 
     QAtomicInt disableUIUpdateSignals;
+    QAtomicInt disableDirtyRequests;
     KisImageSignalRouter *signalRouter;
     KisUpdateScheduler *scheduler;
 
@@ -1434,6 +1435,16 @@ void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &c
     }
 }
 
+void KisImage::disableDirtyRequests()
+{
+    m_d->disableDirtyRequests.ref();
+}
+
+void KisImage::enableDirtyRequests()
+{
+    m_d->disableDirtyRequests.deref();
+}
+
 void KisImage::disableUIUpdates()
 {
     m_d->disableUIUpdateSignals.ref();
@@ -1453,6 +1464,8 @@ void KisImage::notifyProjectionUpdated(const QRect &rc)
 
 void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
 {
+    if (m_d->disableDirtyRequests) return;
+
     KisNodeGraphListener::requestProjectionUpdate(node, rect);
 
     if (m_d->scheduler) {

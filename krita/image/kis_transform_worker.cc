@@ -446,7 +446,7 @@ QRect KisTransformWorker::mirrorX(KisPaintDeviceSP dev, qreal axis, const KisSel
             // Extend rect so it has the same width on both sides of the axis
             qreal distanceFromAxis = qMax(fabs((qreal)r.left() - axis), fabs((qreal)r.right() - axis));
             QRect newRect(floor(axis - distanceFromAxis), r.y(), ceil(2*distanceFromAxis), r.height());
-            r = newRect.adjusted(-1, 0, 2, 0);
+            r = newRect;
         }
     }
 
@@ -516,7 +516,7 @@ QRect KisTransformWorker::mirrorY(KisPaintDeviceSP dev, qreal axis, const KisSel
             // Extend rect so it has the same height on both sides of the axis
             qreal distanceFromAxis = qMax(fabs((qreal)r.top() - axis), fabs((qreal)r.bottom() - axis));
             QRect newRect(r.x(), floor(axis - distanceFromAxis), r.width(), ceil(2*distanceFromAxis));
-            r = newRect.adjusted(0, -1, 0, 2);
+            r = newRect;
         }
     }
     {

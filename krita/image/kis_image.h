@@ -617,8 +617,37 @@ public slots:
     void blockUpdates();
     void unblockUpdates();
 
+    /**
+     * Disables notification of the UI about the changes in the image.
+     * This feature is used by KisProcessingApplicator. It is needed
+     * when we change the size of the image. In this case, the whole
+     * image will be reloaded into UI by sigSizeChanged(), so there is
+     * no need to inform the UI about individual dirty rects.
+     */
     void disableUIUpdates();
+
+    /**
+     * \see disableUIUpdates
+     */
     void enableUIUpdates();
+
+    /**
+     * Disables the processing of all the setDirty() requests that
+     * come to the image. The incoming requests are effectively
+     * *dropped*.
+     *
+     * This feature is used by KisProcessingApplicator. For many cases
+     * it provides its own updates interface, which recalculates the
+     * whole subtree of nodes. But while we change any particular
+     * node, it can ask for an update itself. This method is a way of
+     * blocking such intermediate (and excessive) requests.
+     */
+    void disableDirtyRequests();
+
+    /**
+     * \see disableDirtyRequests()
+     */
+    void enableDirtyRequests();
 
     void refreshGraphAsync(KisNodeSP root = 0);
     void refreshGraphAsync(KisNodeSP root, const QRect &rc);

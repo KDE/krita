@@ -284,6 +284,7 @@ void KisMask::testingInitSelection(const QRect &rect)
     m_d->selection = new KisSelection();
     m_d->selection->getOrCreatePixelSelection()->select(rect, OPACITY_OPAQUE_U8);
     m_d->selection->updateProjection(rect);
+    m_d->selection->setParentNode(this);
 }
 
 #include "kis_mask.moc"

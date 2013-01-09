@@ -166,11 +166,13 @@ struct AddRGBOps<Traits, true>
     static const qint32 blue_pos  = Traits::blue_pos;
     
     template<void compositeFunc(Arg, Arg, Arg, Arg&, Arg&, Arg&)>
+
     static void add(KoColorSpace* cs, const QString& id, const QString& description, const QString& category) {
         cs->addCompositeOp(new KoCompositeOpGenericHSL<Traits, compositeFunc>(cs, id, description, category));
     }
     
     static void add(KoColorSpace* cs) {
+
         cs->addCompositeOp(new KoCompositeOpCopyChannel<Traits,red_pos  >(cs, COMPOSITE_COPY_RED  , i18n("Copy Red")  , KoCompositeOp::categoryMisc()));
         cs->addCompositeOp(new KoCompositeOpCopyChannel<Traits,green_pos>(cs, COMPOSITE_COPY_GREEN, i18n("Copy Green"), KoCompositeOp::categoryMisc()));
         cs->addCompositeOp(new KoCompositeOpCopyChannel<Traits,blue_pos >(cs, COMPOSITE_COPY_BLUE , i18n("Copy Blue") , KoCompositeOp::categoryMisc()));
@@ -225,7 +227,8 @@ void addStandardCompositeOps(KoColorSpace* cs)
     typedef typename _Traits_::channels_type channels_type;
     
     static const bool useGeneralOps = true;
-    static const bool useRGBOps     = boost::is_base_of<KoBgrTraits<channels_type>, _Traits_>::value;
+    static const bool useRGBOps = (boost::is_base_of<KoBgrTraits<channels_type>, _Traits_>::value
+                                || boost::is_base_of<KoRgbTraits<channels_type>, _Traits_>::value);
     
     _Private::AddGeneralOps<_Traits_, useGeneralOps>::add(cs);
     _Private::AddRGBOps    <_Traits_, useRGBOps    >::add(cs);

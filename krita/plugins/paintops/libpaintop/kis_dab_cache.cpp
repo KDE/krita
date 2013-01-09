@@ -28,6 +28,8 @@
 #include <kis_precision_option.h>
 #include <kis_fixed_paint_device.h>
 
+#include <kundo2command.h>
+
 struct PrecisionValues {
     qreal angle;
     qreal sizeFrac;

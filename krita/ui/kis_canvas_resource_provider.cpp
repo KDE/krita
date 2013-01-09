@@ -82,6 +82,8 @@ void KisCanvasResourceProvider::setResourceManager(KoCanvasResourceManager *reso
 
     connect(m_resourceManager, SIGNAL(resourceChanged(int, const QVariant &)),
             this, SLOT(slotResourceChanged(int, const QVariant&)));
+
+    m_resourceManager->setResource(KoCanvasResourceManager::ApplicationSpeciality, KoCanvasResourceManager::NoAdvancedText);
 }
 
 

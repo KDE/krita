@@ -79,6 +79,7 @@ public:
         ShowTextShapeOutlines,     ///< Paint of text shape outlines ?
         ShowFormattingCharacters,  ///< Paint of formatting characters ?
         ShowTableBorders,  ///< Paint of table borders (when not really there) ?
+        ApplicationSpeciality, ///< Special features and limitations of the application
         KarbonStart = 1000,      ///< Base number for Karbon specific values.
         KexiStart = 2000,        ///< Base number for Kexi specific values.
         FlowStart = 3000,        ///< Base number for Flow specific values.
@@ -88,6 +89,11 @@ public:
         SheetsStart = 7000,      ///< Base number for Sheets specific values.
         WordsStart = 8000,       ///< Base number for Words specific values.
         KoPageAppStart = 9000    ///< Base number for KoPageApp specific values.
+    };
+
+    enum ApplicationSpecial {
+        NoSpecial = 0,
+        NoAdvancedText = 1
     };
 
     /**

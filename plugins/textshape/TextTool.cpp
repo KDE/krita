@@ -203,6 +203,9 @@ TextTool::TextTool(KoCanvasBase *canvas)
 
 void TextTool::createActions()
 {
+    bool useAdvancedText = !(canvas()->resourceManager()->intResource(KoCanvasResourceManager::ApplicationSpeciality)
+                             & KoCanvasResourceManager::NoAdvancedText);
+
     m_actionPasteAsText  = new KAction(koIcon("edit-paste"), i18n("Paste As Text"), this);
     addAction("edit_paste_text", m_actionPasteAsText);
     m_actionPasteAsText->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_V);
@@ -341,18 +344,19 @@ void TextTool::createActions()
     //action->setShortcut(Qt::CTRL + Qt::Key_Minus); // TODO this one is also used for the kde-global zoom-out :(
     connect(action, SIGNAL(triggered()), this, SLOT(softHyphen()));
 
-    action  = new KAction(i18n("Line Break"), this);
-    addAction("line_break", action);
-    action->setShortcut(Qt::SHIFT + Qt::Key_Return);
-    connect(action, SIGNAL(triggered()), this, SLOT(lineBreak()));
+    if (useAdvancedText) {
+        action  = new KAction(i18n("Line Break"), this);
+        addAction("line_break", action);
+        action->setShortcut(Qt::SHIFT + Qt::Key_Return);
+        connect(action, SIGNAL(triggered()), this, SLOT(lineBreak()));
 
-    action  = new KAction(koIcon("insert-pagebreak"), i18n("Page Break"), this);
-    addAction("insert_framebreak", action);
-    action->setShortcut(KShortcut(Qt::CTRL + Qt::Key_Return));
-    connect(action, SIGNAL(triggered()), this, SLOT(insertFrameBreak()));
-    action->setToolTip(i18n("Insert a page break"));
-    action->setWhatsThis(i18n("All text after this point will be moved into the next page."));
-
+        action  = new KAction(koIcon("insert-pagebreak"), i18n("Page Break"), this);
+        addAction("insert_framebreak", action);
+        action->setShortcut(KShortcut(Qt::CTRL + Qt::Key_Return));
+        connect(action, SIGNAL(triggered()), this, SLOT(insertFrameBreak()));
+        action->setToolTip(i18n("Insert a page break"));
+        action->setWhatsThis(i18n("All text after this point will be moved into the next page."));
+    }
 
     action  = new KAction(i18n("Font..."), this);
     addAction("format_font", action);
@@ -394,77 +398,79 @@ void TextTool::createActions()
     m_shrinkToFitAction->setCheckable(true);
     connect(m_shrinkToFitAction, SIGNAL(triggered(bool)), this, SLOT(setShrinkToFit(bool)));
 
-    action = new KAction(koIcon("insert-table"), i18n("Insert Custom..."), this);
-    addAction("insert_table", action);
-    action->setToolTip(i18n("Insert a table into the document."));
-    connect(action, SIGNAL(triggered()), this, SLOT(insertTable()));
+    if (useAdvancedText) {
+        action = new KAction(koIcon("insert-table"), i18n("Insert Custom..."), this);
+        addAction("insert_table", action);
+        action->setToolTip(i18n("Insert a table into the document."));
+        connect(action, SIGNAL(triggered()), this, SLOT(insertTable()));
 
-    action  = new KAction(koIcon("edit-table-insert-row-above"), i18n("Row Above"), this);
-    action->setToolTip(i18n("Insert Row Above"));
-    addAction("insert_tablerow_above", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowAbove()));
+        action  = new KAction(koIcon("edit-table-insert-row-above"), i18n("Row Above"), this);
+        action->setToolTip(i18n("Insert Row Above"));
+        addAction("insert_tablerow_above", action);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowAbove()));
 
-    action  = new KAction(koIcon("edit-table-insert-row-below"), i18n("Row Below"), this);
-    action->setToolTip(i18n("Insert Row Below"));
-    addAction("insert_tablerow_below", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowBelow()));
+        action  = new KAction(koIcon("edit-table-insert-row-below"), i18n("Row Below"), this);
+        action->setToolTip(i18n("Insert Row Below"));
+        addAction("insert_tablerow_below", action);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowBelow()));
 
-    action  = new KAction(koIcon("edit-table-insert-column-left"), i18n("Column Left"), this);
-    action->setToolTip(i18n("Insert Column Left"));
-    addAction("insert_tablecolumn_left", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnLeft()));
+        action  = new KAction(koIcon("edit-table-insert-column-left"), i18n("Column Left"), this);
+        action->setToolTip(i18n("Insert Column Left"));
+        addAction("insert_tablecolumn_left", action);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnLeft()));
 
-    action  = new KAction(koIcon("edit-table-insert-column-right"), i18n("Column Right"), this);
-    action->setToolTip(i18n("Insert Column Right"));
-    addAction("insert_tablecolumn_right", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnRight()));
-    action  = new KAction(koIcon("edit-table-delete-column"), i18n("Column"), this);
-    action->setToolTip(i18n("Delete Column"));
-    addAction("delete_tablecolumn", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableColumn()));
+        action  = new KAction(koIcon("edit-table-insert-column-right"), i18n("Column Right"), this);
+        action->setToolTip(i18n("Insert Column Right"));
+        addAction("insert_tablecolumn_right", action);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnRight()));
+        action  = new KAction(koIcon("edit-table-delete-column"), i18n("Column"), this);
+        action->setToolTip(i18n("Delete Column"));
+        addAction("delete_tablecolumn", action);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableColumn()));
 
-    action  = new KAction(koIcon("edit-table-delete-row"), i18n("Row"), this);
-    action->setToolTip(i18n("Delete Row"));
-    addAction("delete_tablerow", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableRow()));
+        action  = new KAction(koIcon("edit-table-delete-row"), i18n("Row"), this);
+        action->setToolTip(i18n("Delete Row"));
+        addAction("delete_tablerow", action);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableRow()));
 
-    action  = new KAction(koIcon("edit-table-insert-row-above"), i18n("Row Above"), this);
-    action->setToolTip(i18n("Insert Row Above"));
-    addAction("insert_tablerow_above", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowAbove()));
+        action  = new KAction(koIcon("edit-table-insert-row-above"), i18n("Row Above"), this);
+        action->setToolTip(i18n("Insert Row Above"));
+        addAction("insert_tablerow_above", action);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowAbove()));
 
-    action  = new KAction(koIcon("edit-table-insert-row-below"), i18n("Row Below"), this);
-    action->setToolTip(i18n("Insert Row Below"));
-    addAction("insert_tablerow_below", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowBelow()));
+        action  = new KAction(koIcon("edit-table-insert-row-below"), i18n("Row Below"), this);
+        action->setToolTip(i18n("Insert Row Below"));
+        addAction("insert_tablerow_below", action);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowBelow()));
 
-    action  = new KAction(koIcon("edit-table-insert-column-left"), i18n("Column Left"), this);
-    action->setToolTip(i18n("Insert Column Left"));
-    addAction("insert_tablecolumn_left", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnLeft()));
+        action  = new KAction(koIcon("edit-table-insert-column-left"), i18n("Column Left"), this);
+        action->setToolTip(i18n("Insert Column Left"));
+        addAction("insert_tablecolumn_left", action);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnLeft()));
 
-    action  = new KAction(koIcon("edit-table-insert-column-right"), i18n("Column Right"), this);
-    action->setToolTip(i18n("Insert Column Right"));
-    addAction("insert_tablecolumn_right", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnRight()));
+        action  = new KAction(koIcon("edit-table-insert-column-right"), i18n("Column Right"), this);
+        action->setToolTip(i18n("Insert Column Right"));
+        addAction("insert_tablecolumn_right", action);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnRight()));
 
-    action  = new KAction(koIcon("edit-table-delete-column"), i18n("Column"), this);
-    action->setToolTip(i18n("Delete Column"));
-    addAction("delete_tablecolumn", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableColumn()));
+        action  = new KAction(koIcon("edit-table-delete-column"), i18n("Column"), this);
+        action->setToolTip(i18n("Delete Column"));
+        addAction("delete_tablecolumn", action);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableColumn()));
 
-    action  = new KAction(koIcon("edit-table-delete-row"), i18n("Row"), this);
-    action->setToolTip(i18n("Delete Row"));
-    addAction("delete_tablerow", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableRow()));
+        action  = new KAction(koIcon("edit-table-delete-row"), i18n("Row"), this);
+        action->setToolTip(i18n("Delete Row"));
+        addAction("delete_tablerow", action);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableRow()));
 
-    action  = new KAction(koIcon("edit-table-cell-merge"), i18n("Merge Cells"), this);
-    addAction("merge_tablecells", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(mergeTableCells()));
+        action  = new KAction(koIcon("edit-table-cell-merge"), i18n("Merge Cells"), this);
+        addAction("merge_tablecells", action);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(mergeTableCells()));
 
-    action  = new KAction(koIcon("edit-table-cell-split"), i18n("Split Cells"), this);
-    addAction("split_tablecells", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(splitTableCells()));
+        action  = new KAction(koIcon("edit-table-cell-split"), i18n("Split Cells"), this);
+        addAction("split_tablecells", action);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(splitTableCells()));
+    }
 
     action = new KAction(i18n("Paragraph..."), this);
     addAction("format_paragraph", action);
@@ -1885,16 +1891,20 @@ void TextTool::updateActions()
 
     m_allowActions = true;
 
-    const QTextTable *table = textEditor->currentTable();
+    bool useAdvancedText = !(canvas()->resourceManager()->intResource(KoCanvasResourceManager::ApplicationSpeciality)
+                            & KoCanvasResourceManager::NoAdvancedText);
+    if (useAdvancedText) {
+        const QTextTable *table = textEditor->currentTable();
 
-    action("insert_tablerow_above")->setEnabled(table);
-    action("insert_tablerow_below")->setEnabled(table);
-    action("insert_tablecolumn_left")->setEnabled(table);
-    action("insert_tablecolumn_right")->setEnabled(table);
-    action("delete_tablerow")->setEnabled(table);
-    action("delete_tablecolumn")->setEnabled(table);
-    action("merge_tablecells")->setEnabled(table);
-    action("split_tablecells")->setEnabled(table);
+        action("insert_tablerow_above")->setEnabled(table);
+        action("insert_tablerow_below")->setEnabled(table);
+        action("insert_tablecolumn_left")->setEnabled(table);
+        action("insert_tablecolumn_right")->setEnabled(table);
+        action("delete_tablerow")->setEnabled(table);
+        action("delete_tablecolumn")->setEnabled(table);
+        action("merge_tablecells")->setEnabled(table);
+        action("split_tablecells")->setEnabled(table);
+    }
 
     ///TODO if selection contains several different format
     emit blockChanged(textEditor->block());
@@ -2133,10 +2143,15 @@ QList<QWidget *> TextTool::createOptionWidgets()
     widgets.append(scw);
     spw->setWindowTitle(i18n("Paragraph"));
     widgets.append(spw);
-    stw->setWindowTitle(i18n("Table"));
-    widgets.append(stw);
-    siw->setWindowTitle(i18n("Insert"));
-    widgets.append(siw);
+
+    bool useAdvancedText = !(canvas()->resourceManager()->intResource(KoCanvasResourceManager::ApplicationSpeciality)
+                             & KoCanvasResourceManager::NoAdvancedText);
+    if (useAdvancedText) {
+        stw->setWindowTitle(i18n("Table"));
+        widgets.append(stw);
+        siw->setWindowTitle(i18n("Insert"));
+        widgets.append(siw);
+    }
     return widgets;
 }
 

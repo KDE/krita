@@ -256,7 +256,8 @@ QTextCursor* KoTextEditor::cursor()
 
 void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, const QString &title, QTextFormat& format, QTextFormat& prevFormat, bool applyToWholeBlock)
 {
-    if (!KoTextDocument(d->document).changeTracker() || !KoTextDocument(d->document).changeTracker()->recordChanges()) {
+    KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
+    if (!changeTracker || !changeTracker->recordChanges()) {
         // clear the ChangeTrackerId from the passed in selection, without recursively registring
         // change tracking again  ;)
         int start = qMin(selection.position(), selection.anchor());
@@ -307,7 +308,6 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
             int selectionEnd = qMax(checker.anchor(), checker.position());
 
             checker.setPosition(selectionBegin);
-            KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
             if (!checker.atBlockStart()) {
                 int changeId = checker.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
                 if (changeId && changeTracker->elementById(changeId)->getChangeType() == changeType)
@@ -328,18 +328,18 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
             checker.setPosition(selectionEnd);
             if (!checker.atEnd()) {
                 checker.movePosition(QTextCursor::NextCharacter);
-                idAfter = KoTextDocument(d->document).changeTracker()->mergeableId(changeType, title, checker.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
+                idAfter = changeTracker->mergeableId(changeType, title, checker.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
             }
             changeId = (idBefore)?idBefore:idAfter;
 
             switch (changeType) {//TODO: this whole thing actually needs to be done like a visitor. If the selection contains several change regions, the parenting needs to be individualised.
             case KoGenChange::InsertChange:
                 if (!changeId)
-                    changeId = KoTextDocument(d->document).changeTracker()->getInsertChangeId(title, 0);
+                    changeId = changeTracker->getInsertChangeId(title, 0);
                 break;
             case KoGenChange::FormatChange:
                 if (!changeId)
-                    changeId = KoTextDocument(d->document).changeTracker()->getFormatChangeId(title, format, prevFormat, 0);
+                    changeId = changeTracker->getFormatChangeId(title, format, prevFormat, 0);
                 break;
             case KoGenChange::DeleteChange:
                 //this should never be the case
@@ -695,9 +695,9 @@ void KoTextEditor::deleteChar(bool previous, KUndo2Command *parent)
     KoShapeController *shapeController = KoTextDocument(d->document).shapeController();
 
     // Find out if we should track changes or not
-    KoChangeTracker *ct = KoTextDocument(d->document).changeTracker();
+    KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
     bool trackChanges = false;
-    if (ct && ct->recordChanges()) {
+    if (changeTracker && changeTracker->recordChanges()) {
         trackChanges = true;
     }
 
@@ -994,7 +994,7 @@ void KoTextEditor::insertTable(int rows, int columns)
         }
 
         if (!changeId) {
-            changeId = KoTextDocument(d->document).changeTracker()->getInsertChangeId(title, 0);
+            changeId = changeTracker->getInsertChangeId(title, 0);
         }
 
         tableFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
@@ -1319,7 +1319,7 @@ void KoTextEditor::insertTableOfContents(KoTableOfContentsGeneratorInfo *info)
         }
 
         if (!changeId) {
-            changeId = KoTextDocument(d->document).changeTracker()->getInsertChangeId(title, 0);
+            changeId = changeTracker->getInsertChangeId(title, 0);
         }
 
         tocFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
@@ -1393,7 +1393,7 @@ void KoTextEditor::insertBibliography(KoBibliographyInfo *info)
         }
 
         if (!changeId) {
-            changeId = KoTextDocument(d->document).changeTracker()->getInsertChangeId(title, 0);
+            changeId = changeTracker->getInsertChangeId(title, 0);
         }
 
         bibFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);

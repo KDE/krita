@@ -34,19 +34,6 @@
 #include "compositeops/KoCompositeOpErase.h"
 #include "compositeops/KoCompositeOpCopy2.h"
 #include "compositeops/KoCompositeOpDissolve.h"
-
-#include "compositeops/KoCompositeOpAdd.h"
-#include "compositeops/KoCompositeOpBurn.h"
-#include "compositeops/KoCompositeOpDivide.h"
-#include "compositeops/KoCompositeOpDodge.h"
-#include "compositeops/KoCompositeOpMultiply.h"
-#include "compositeops/KoCompositeOpOverlay.h"
-#include "compositeops/KoCompositeOpScreen.h"
-#include "compositeops/KoCompositeOpSubtract.h"
-#include "compositeops/KoCompositeOpInversedSubtract.h"
-#include "compositeops/KoCompositeOpSoftlight.h"
-#include "compositeops/KoCompositeOpHardlight.h"
-
 #include "compositeops/KoCompositeOpBehind.h"
 
 #include "KoOptimizedCompositeOpFactory.h"
@@ -135,7 +122,8 @@ struct AddGeneralOps<Traits, true>
          add<&cfAddition<Arg>    >(cs, COMPOSITE_LINEAR_DODGE, i18n("Linear Dodge"), KoCompositeOp::categoryLight());
          add<&cfLightenOnly<Arg> >(cs, COMPOSITE_LIGHTEN     , i18n("Lighten")     , KoCompositeOp::categoryLight());
          add<&cfHardLight<Arg>   >(cs, COMPOSITE_HARD_LIGHT  , i18n("Hard Light")  , KoCompositeOp::categoryLight());
-         add<&cfSoftLight<Arg>   >(cs, COMPOSITE_SOFT_LIGHT  , i18n("Soft Light")  , KoCompositeOp::categoryLight());
+         add<&cfSoftLightSvg<Arg>   >(cs, COMPOSITE_SOFT_LIGHT_SVG, i18n("Soft Light (SVG)")  , KoCompositeOp::categoryLight());
+         add<&cfSoftLight<Arg>   >(cs, COMPOSITE_SOFT_LIGHT_PHOTOSHOP, i18n("Soft Light (Photoshop)")  , KoCompositeOp::categoryLight());
          add<&cfGammaLight<Arg>  >(cs, COMPOSITE_GAMMA_LIGHT , i18n("Gamma Light") , KoCompositeOp::categoryLight());
          add<&cfVividLight<Arg>  >(cs, COMPOSITE_VIVID_LIGHT , i18n("Vivid Light") , KoCompositeOp::categoryLight());
          add<&cfPinLight<Arg>    >(cs, COMPOSITE_PIN_LIGHT   , i18n("Pin Light")   , KoCompositeOp::categoryLight());
@@ -241,25 +229,6 @@ void addStandardCompositeOps(KoColorSpace* cs)
     
     _Private::AddGeneralOps<_Traits_, useGeneralOps>::add(cs);
     _Private::AddRGBOps    <_Traits_, useRGBOps    >::add(cs);
-}
-
-template<class _Traits_>
-void addOldCompositeOps(KoColorSpace* cs)
-{
-    cs->addCompositeOp(new KoCompositeOpAdd<_Traits_>(cs));
-    cs->addCompositeOp(new KoCompositeOpAlphaDarken<_Traits_>(cs));
-    cs->addCompositeOp(new KoCompositeOpBurn<_Traits_>(cs));
-    cs->addCompositeOp(new KoCompositeOpCopy2<_Traits_>(cs));
-    cs->addCompositeOp(new KoCompositeOpDivide<_Traits_>(cs));
-    cs->addCompositeOp(new KoCompositeOpDodge<_Traits_>(cs));
-    cs->addCompositeOp(new KoCompositeOpErase<_Traits_>(cs));
-    cs->addCompositeOp(new KoCompositeOpMultiply<_Traits_>(cs));
-    cs->addCompositeOp(new KoCompositeOpOver<_Traits_>(cs));
-    cs->addCompositeOp(new KoCompositeOpOverlay<_Traits_>(cs));
-    cs->addCompositeOp(new KoCompositeOpScreen<_Traits_>(cs));
-    cs->addCompositeOp(new KoCompositeOpSubtract<_Traits_>(cs));
-    cs->addCompositeOp(new KoCompositeOpSoftlight<_Traits_>(cs));
-    cs->addCompositeOp(new KoCompositeOpHardlight<_Traits_>(cs));
 }
 
 #endif

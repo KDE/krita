@@ -77,7 +77,7 @@ QString psd_blendmode_to_composite_op(const QString& blendmode)
     if (blendmode == "scrn") return COMPOSITE_SCREEN; //screen
     if (blendmode == "over") return COMPOSITE_OVERLAY; //overlay
     if (blendmode == "hLit") return COMPOSITE_HARD_LIGHT; //hard light
-    if (blendmode == "sLit") return COMPOSITE_SOFT_LIGHT; //soft light
+    if (blendmode == "sLit") return COMPOSITE_SOFT_LIGHT_PHOTOSHOP; //soft light
     if (blendmode == "diff") return COMPOSITE_DIFF; //difference
     if (blendmode == "smud") return COMPOSITE_EXCLUSION; //exclusion
     if (blendmode == "div ") return COMPOSITE_DIVIDE; // color dodge
@@ -108,7 +108,8 @@ QString composite_op_to_psd_blendmode(const QString& compositeop)
     if (compositeop == COMPOSITE_SCREEN) return "scrn"; //screen
     if (compositeop == COMPOSITE_OVERLAY) return "over"; //overlay
     if (compositeop == COMPOSITE_HARD_LIGHT) return "hLit"; //hard light
-    if (compositeop == COMPOSITE_SOFT_LIGHT) return "sLit"; //soft light
+    if (compositeop == COMPOSITE_SOFT_LIGHT_PHOTOSHOP) return "sLit"; //soft light
+    if (compositeop == COMPOSITE_SOFT_LIGHT_SVG) return "sLit"; //soft light
     if (compositeop == COMPOSITE_DIFF) return "diff"; //difference
     if (compositeop == COMPOSITE_EXCLUSION) return "smud"; //exclusion
     if (compositeop == COMPOSITE_DIVIDE) return "div "; // color dodge

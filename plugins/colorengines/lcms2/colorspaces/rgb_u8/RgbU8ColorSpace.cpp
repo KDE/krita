@@ -27,9 +27,6 @@
 #include <KoIntegerMaths.h>
 #include <KoColorSpaceRegistry.h>
 #include "compositeops/KoCompositeOps.h"
-#include "compositeops/KoCompositeOpAdd.h"
-#include "compositeops/KoCompositeOpSubtract.h"
-
 #include "compositeops/RgbCompositeOps.h"
 
 #define downscale(quantum)  (quantum) //((unsigned char) ((quantum)/257UL))

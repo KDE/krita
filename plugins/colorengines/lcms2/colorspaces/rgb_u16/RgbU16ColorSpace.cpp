@@ -24,7 +24,6 @@
 #include <klocale.h>
 
 #include "compositeops/KoCompositeOps.h"
-#include "compositeops/KoCompositeOpAdd.h"
 #include "compositeops/RgbCompositeOps.h"
 
 RgbU16ColorSpace::RgbU16ColorSpace(const QString &name, KoColorProfile *p) :

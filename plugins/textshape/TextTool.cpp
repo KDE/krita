@@ -423,35 +423,6 @@ void TextTool::createActions()
         action->setToolTip(i18n("Insert Column Right"));
         addAction("insert_tablecolumn_right", action);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnRight()));
-        action  = new KAction(koIcon("edit-table-delete-column"), i18n("Column"), this);
-        action->setToolTip(i18n("Delete Column"));
-        addAction("delete_tablecolumn", action);
-        connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableColumn()));
-
-        action  = new KAction(koIcon("edit-table-delete-row"), i18n("Row"), this);
-        action->setToolTip(i18n("Delete Row"));
-        addAction("delete_tablerow", action);
-        connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableRow()));
-
-        action  = new KAction(koIcon("edit-table-insert-row-above"), i18n("Row Above"), this);
-        action->setToolTip(i18n("Insert Row Above"));
-        addAction("insert_tablerow_above", action);
-        connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowAbove()));
-
-        action  = new KAction(koIcon("edit-table-insert-row-below"), i18n("Row Below"), this);
-        action->setToolTip(i18n("Insert Row Below"));
-        addAction("insert_tablerow_below", action);
-        connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowBelow()));
-
-        action  = new KAction(koIcon("edit-table-insert-column-left"), i18n("Column Left"), this);
-        action->setToolTip(i18n("Insert Column Left"));
-        addAction("insert_tablecolumn_left", action);
-        connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnLeft()));
-
-        action  = new KAction(koIcon("edit-table-insert-column-right"), i18n("Column Right"), this);
-        action->setToolTip(i18n("Insert Column Right"));
-        addAction("insert_tablecolumn_right", action);
-        connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnRight()));
 
         action  = new KAction(koIcon("edit-table-delete-column"), i18n("Column"), this);
         action->setToolTip(i18n("Delete Column"));

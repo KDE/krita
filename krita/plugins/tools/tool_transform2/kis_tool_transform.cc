@@ -2219,7 +2219,6 @@ void KisToolTransform::applyTransform()
         gc.bitBlt(selectRect.topLeft(), currentNode()->paintDevice(), selectRect);
         gc.end();
 
-        QRect tmpRc3 = boundRect(m_topLeftProj, m_topRightProj, m_bottomRightProj, m_bottomLeftProj).toRect();
         if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
             KisWarpTransformWorker worker(m_currentArgs.warpType(), tmpDevice, m_currentArgs.origPoints(), m_currentArgs.transfPoints(), m_currentArgs.alpha(), transformPixels);
             worker.run();
@@ -2227,13 +2226,13 @@ void KisToolTransform::applyTransform()
         else {
             KisTransformWorker worker(tmpDevice, m_currentArgs.scaleX(), m_currentArgs.scaleY(), m_currentArgs.shearX(), m_currentArgs.shearY(), m_originalCenter.x(), m_originalCenter.y(), m_currentArgs.aZ(), int(t.x()), int(t.y()), transformPixels, m_filter);
             worker.run();
-            KisPerspectiveTransformWorker perspectiveWorker(tmpDevice, tmpRc3.united(tmpDevice->extent()), m_currentArgs.translate(), m_currentArgs.aX(), m_currentArgs.aY(), m_cameraPos.z(), perspectiveTransfPixels);
+            KisPerspectiveTransformWorker perspectiveWorker(tmpDevice, m_currentArgs.translate(), m_currentArgs.aX(), m_currentArgs.aY(), m_cameraPos.z(), perspectiveTransfPixels);
             perspectiveWorker.run();
         }
 
         currentNode()->paintDevice()->clearSelection(currentSelection());
 
-        QRect tmpRc = tmpDevice->exactBounds();
+        QRect tmpRc = tmpDevice->extent();
         KisPainter painter(currentNode()->paintDevice());
         painter.setProgress(copyBackPixels);
         painter.bitBlt(tmpRc.topLeft(), tmpDevice, tmpRc);
@@ -2259,7 +2258,7 @@ void KisToolTransform::applyTransform()
         else {
             KisTransformWorker selectionWorker(tmpDevice2, m_currentArgs.scaleX(), m_currentArgs.scaleY(), m_currentArgs.shearX(), m_currentArgs.shearY(), m_originalCenter.x(), m_originalCenter.y(), m_currentArgs.aZ(), (int)(t.x()), (int)(t.y()), transformPixSelection, m_filter);
             selectionWorker.run();
-            KisPerspectiveTransformWorker perspectiveSelectionWorker(tmpDevice2, tmpRc3.united(tmpDevice2->extent()), m_currentArgs.translate(), m_currentArgs.aX(), m_currentArgs.aY(), m_cameraPos.z(), perspectiveTransfPixSelection);
+            KisPerspectiveTransformWorker perspectiveSelectionWorker(tmpDevice2, m_currentArgs.translate(), m_currentArgs.aX(), m_currentArgs.aY(), m_cameraPos.z(), perspectiveTransfPixSelection);
             perspectiveSelectionWorker.run();
         }
 
@@ -2284,8 +2283,7 @@ void KisToolTransform::applyTransform()
             KoUpdaterPtr perspectiveTransfPixels = updater->startSubtask(40);
             KisTransformWorker worker(currentNode()->paintDevice(), m_currentArgs.scaleX(), m_currentArgs.scaleY(), m_currentArgs.shearX(), m_currentArgs.shearY(), m_originalCenter.x(), m_originalCenter.y(), m_currentArgs.aZ(), int(t.x()), int(t.y()), transformPixels, m_filter);
             worker.run();
-            QRect tmpRc3 = boundRect(m_topLeftProj, m_topRightProj, m_bottomRightProj, m_bottomLeftProj).toRect();
-            KisPerspectiveTransformWorker perspectiveWorker(currentNode()->paintDevice(), tmpRc3.united(currentNode()->paintDevice()->extent()), m_currentArgs.translate(), m_currentArgs.aX(), m_currentArgs.aY(), m_cameraPos.z(), perspectiveTransfPixels);
+            KisPerspectiveTransformWorker perspectiveWorker(currentNode()->paintDevice(), m_currentArgs.translate(), m_currentArgs.aX(), m_currentArgs.aY(), m_cameraPos.z(), perspectiveTransfPixels);
             perspectiveWorker.run();
         }
 

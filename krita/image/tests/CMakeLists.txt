@@ -497,6 +497,12 @@ target_link_libraries(KisTransformWorkerTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT
 
 ########### next target ###############
 
+set(kis_perspective_transform_worker_test_SRCS kis_perspective_transform_worker_test.cpp )
+kde4_add_unit_test(KisPerspectiveTransformWorkerTest TESTNAME krita-image-KisPerspectiveTransformWorkerTest ${kis_perspective_transform_worker_test_SRCS})
+target_link_libraries(KisPerspectiveTransformWorkerTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
 set(kis_transparency_mask_test_SRCS kis_transparency_mask_test.cpp )
 kde4_add_unit_test(KisTransparencyMaskTest TESTNAME krita-image-KisTransparencyMaskTest ${kis_transparency_mask_test_SRCS})
 target_link_libraries(KisTransparencyMaskTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

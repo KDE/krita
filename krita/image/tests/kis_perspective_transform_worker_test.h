@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,23 +16,16 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KRITA_UTILS_H
-#define __KRITA_UTILS_H
+#ifndef __KIS_PERSPECTIVE_TRANSFORM_WORKER_TEST_H
+#define __KIS_PERSPECTIVE_TRANSFORM_WORKER_TEST_H
 
-class QRect;
-class QSize;
-class QPointF;
-class QPainterPath;
-#include <QVector>
-#include "krita_export.h"
+#include <QtTest/QtTest>
 
-namespace KritaUtils
+class KisPerspectiveTransformWorkerTest : public QObject
 {
-    QVector<QRect> KRITAIMAGE_EXPORT splitRectIntoPatches(const QRect &rc, const QSize &patchSize);
+    Q_OBJECT
+private slots:
+    void testSimpleTransform();
+};
 
-    QRegion KRITAIMAGE_EXPORT splitTriangles(const QPointF &center,
-                                             const QVector<QPointF> &points);
-    QRegion KRITAIMAGE_EXPORT splitPath(const QPainterPath &path);
-}
-
-#endif /* __KRITA_UTILS_H */
+#endif /* __KIS_PERSPECTIVE_TRANSFORM_WORKER_TEST_H */

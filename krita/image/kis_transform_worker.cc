@@ -39,6 +39,7 @@
 #include "kis_filter_strategy.h"
 #include "kis_painter.h"
 #include "kis_filter_weights_applicator.h"
+#include "kis_progress_update_helper.h"
 
 
 KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev,
@@ -79,43 +80,6 @@ QTransform KisTransformWorker::transform() const
     return TS.inverted() * S * TS * SC * R * T;
 }
 
-class ProgressUpdateHelper {
-public:
-    ProgressUpdateHelper(KoUpdaterPtr progressUpdater, int portion, int numSteps)
-        : m_progressUpdater(progressUpdater),
-          m_portion(portion),
-          m_currentStep(0),
-          m_numSteps(numSteps)
-
-    {
-        if (m_progressUpdater) {
-            m_baseProgress = m_progressUpdater->progress();
-        }
-    }
-
-    ~ProgressUpdateHelper() {
-        if (m_progressUpdater) {
-            m_progressUpdater->setProgress(m_baseProgress + m_portion);
-        }
-    }
-
-    void step() {
-        int localProgress = m_portion * (++m_currentStep) / m_numSteps;
-        if (m_progressUpdater) {
-            m_progressUpdater->setProgress(m_baseProgress + localProgress);
-        }
-        // TODO: handle interrupted processing (connect to other layers, i.e. undo)
-    }
-
-private:
-    KoUpdaterPtr m_progressUpdater;
-    int m_baseProgress;
-    int m_portion;
-    int m_currentStep;
-    int m_numSteps;
-};
-
-
 QRect rotateWithTf(int rotation, KisPaintDeviceSP dev,
                    QRect boundRect,
                    KoUpdaterPtr progressUpdater,
@@ -129,7 +93,7 @@ QRect rotateWithTf(int rotation, KisPaintDeviceSP dev,
 
     KisRandomAccessorSP devAcc = dev->createRandomAccessorNG(0, 0);
     KisRandomAccessorSP tmpAcc = tmp->createRandomAccessorNG(0, 0);
-    ProgressUpdateHelper progressHelper(progressUpdater, portion, r.height());
+    KisProgressUpdateHelper progressHelper(progressUpdater, portion, r.height());
 
     QTransform tf;
     tf = tf.rotate(rotation);
@@ -234,7 +198,7 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
     qint32 srcStart, srcLen, firstLine, numLines;
     calcDimensions<T>(m_boundRect, srcStart, srcLen, firstLine, numLines);
 
-    ProgressUpdateHelper progressHelper(m_progressUpdater, portion, numLines);
+    KisProgressUpdateHelper progressHelper(m_progressUpdater, portion, numLines);
     KisFilterWeightsBuffer buf(filterStrategy, qAbs(floatscale));
     KisFilterWeightsApplicator applicator(src, dst, floatscale, shear, dx, clampToEdge);
 

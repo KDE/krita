@@ -137,10 +137,14 @@ public:
     /** Resets part of the meta data */
     void resetMetaData();
 
-    /** Takes care of updating the per-editing-cycle data correctly */
-    void updateParameters(bool asPartOfSave = true);
+public slots:
+    /** Takes care of updating the document info from configuration correctly */
+    void updateParameters();
 
 private:
+    /// Bumps the editing cycles count and save date, and then calls updateParameters
+    void updateParametersAndBumpNumCycles();
+
     /**
      * Set information about the author
      * This sets what is actualy saved to file. The public method setAuthorInfo() can be used to set

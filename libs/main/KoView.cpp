@@ -38,6 +38,7 @@
 #include "KoGlobal.h"
 #include "KoPageLayout.h"
 #include "KoPrintJob.h"
+#include "KoDocumentInfo.h"
 
 #include <KoIcon.h>
 
@@ -581,6 +582,7 @@ void KoView::changeAuthorProfile(const QString &profileName)
         appAuthorGroup.writeEntry("active-profile", profileName);
     }
     appAuthorGroup.sync();
+    d->document->documentInfo()->updateParameters();
 }
 
 KoMainWindow * KoView::shell() const

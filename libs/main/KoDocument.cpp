@@ -1800,7 +1800,7 @@ void KoDocument::setModified(bool mod)
 
     if (mod) {
         d->isEmpty = false;
-        documentInfo()->updateParameters(false);
+        documentInfo()->updateParameters();
     }
 
     // This influences the title

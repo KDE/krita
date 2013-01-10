@@ -81,11 +81,17 @@ set( formulashape_PART_SRCS
    FormulaToolWidget.cpp
    FormulaDocument.cpp
    FormulaPart.cpp
+)
+
+if (NOT MSVC)
+set (formulashape_PART_SRCS
+   ${formulashape_PART_SRCS}
    KoM2MMLForumulaTool.cpp
    # itexToMML files
    itexToMML/lex.yy.c
    itexToMML/y.tab.c
 )
+endif (NOT MSVC)
 
 kde4_add_ui_files( formulashape_PART_SRCS
     FormulaToolWidget.ui

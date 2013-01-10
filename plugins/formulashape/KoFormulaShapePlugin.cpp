@@ -25,7 +25,9 @@
 
 #include <kpluginfactory.h>
 
+#ifndef _MSC_VER
 #include "KoM2MMLForumulaTool.h"
+#endif
 
 K_PLUGIN_FACTORY(KoFormulaShapePluginFactory, registerPlugin<KoFormulaShapePlugin>();)
 K_EXPORT_PLUGIN(KoFormulaShapePluginFactory("FormulaShape"))
@@ -34,7 +36,9 @@ KoFormulaShapePlugin::KoFormulaShapePlugin( QObject* parent, const QVariantList&
                     : QObject( parent )
 {
     KoToolRegistry::instance()->add( new KoFormulaToolFactory() );
+#ifndef _MSC_VER
     KoToolRegistry::instance()->add( new KoM2MMLFormulaToolFactory());
+#endif
     KoShapeRegistry::instance()->add( new KoFormulaShapeFactory() );
 }
 

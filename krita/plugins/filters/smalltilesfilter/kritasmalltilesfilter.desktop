@@ -43,4 +43,4 @@ Name[zh_TW]=小塊拼貼過濾器
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritasmalltilesfilter
-X-Krita-Version=5
+X-Krita-Version=27

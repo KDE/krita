@@ -46,4 +46,4 @@ Name[zh_TW]=分離色頻外掛程式
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaseparatechannels
-X-Krita-Version=5
+X-Krita-Version=27

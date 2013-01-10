@@ -32,5 +32,5 @@ Name[zh_TW]=Spacenavigator 裝置
 X-KDE-ServiceTypes=Calligra/Device
 Type=Service
 X-KDE-Library=spacenavigator
-X-Flake-MinVersion=4
-X-Flake-PluginVersion=4
+X-Flake-MinVersion=27
+X-Flake-PluginVersion=27

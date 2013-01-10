@@ -68,4 +68,4 @@ Comment[zh_TW]=指定顏色選擇器
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritaspecificcolorselector
-X-Krita-Version=5
+X-Krita-Version=27

@@ -40,5 +40,5 @@ Name[zh_TW]=改變大小寫外掛程式
 X-KDE-ServiceTypes=Calligra/Text-EditingPlugin
 Type=Service
 X-KDE-Library=changecase
-X-KoText-MinVersion=4
-X-Flake-PluginVersion=4
+X-KoText-MinVersion=27
+X-Flake-PluginVersion=27

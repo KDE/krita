@@ -100,13 +100,13 @@ void KoEventActionRegistry::init()
     config.blacklist = "PresentationEventActionPluginsDisabled";
     config.group = "calligra";
     KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/PresentationEventAction"),
-                                     QString::fromLatin1("[X-PresentationEventAction-MinVersion] <= 4"),
+                                     QString::fromLatin1("[X-PresentationEventAction-PluginVersion] == 27"),
                                      config);
 
     config.whiteList = "ScriptEventActionPlugins";
     config.blacklist = "ScriptEventActionPluginsDisabled";
     KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/ScriptEventAction"),
-                                     QString::fromLatin1("[X-ScriptEventAction-MinVersion] <= 4"),
+                                     QString::fromLatin1("[X-ScriptEventAction-PluginVersion] == 27"),
                                      config);
 }
 

@@ -77,4 +77,4 @@ Name[zh_TW]=隨機挑選過濾器
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritarandompickfilter
-X-Krita-Version=5
+X-Krita-Version=27

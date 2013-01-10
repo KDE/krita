@@ -4,4 +4,4 @@ Name[x-test]=xxFlipbook Dockerxx
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritaflipbookdocker
-X-Krita-Version=5
+X-Krita-Version=27

@@ -94,4 +94,4 @@ Comment[zh_TW]=雨滴過濾器
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaraindropsfilter
-X-Krita-Version=5
+X-Krita-Version=27

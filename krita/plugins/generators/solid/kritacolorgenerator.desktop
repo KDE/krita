@@ -68,4 +68,4 @@ Comment[zh_TW]=產生一實心顏色
 X-KDE-ServiceTypes=Krita/Generator
 Type=Service
 X-KDE-Library=kritacolorgenerator
-X-Krita-Version=5
+X-Krita-Version=27

@@ -46,4 +46,4 @@ Name[zh_TW]=格線
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritagridpaintop
-X-Krita-Version=5
+X-Krita-Version=27

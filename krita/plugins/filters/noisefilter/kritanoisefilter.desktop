@@ -91,4 +91,4 @@ Comment[zh_TW]=在圖片中增加雜訊
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritanoisefilter
-X-Krita-Version=5
+X-Krita-Version=27

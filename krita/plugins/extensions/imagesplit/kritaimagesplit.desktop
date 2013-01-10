@@ -24,4 +24,4 @@ Name[zh_TW]=影像分割器
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaimagesplit
-X-Krita-Version=5
+X-Krita-Version=27

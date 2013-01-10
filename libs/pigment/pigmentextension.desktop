@@ -34,5 +34,5 @@ Comment[x-test]=xxA module implementing an extension to a colorspace of the Pigm
 Comment[zh_TW]=實作完整色彩空間以使用 Pigment 色彩處理系統的模組
 [PropertyDef::X-Pigment-MinVersion]
 Type=int
-[PropertyDef::X-Flake-PluginVersion]
+[PropertyDef::X-Pigment-PluginVersion]
 Type=int

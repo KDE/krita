@@ -89,5 +89,5 @@ Comment[zh_TW]=8-bit 灰階圖片的色彩模型
 X-KDE-ServiceTypes=Calligra/ColorSpace
 Type=Service
 X-KDE-Library=calligragrayau8plugin
-X-Pigment-MinVersion=4
-X-Flake-PluginVersion=4
+X-Pigment-MinVersion=27
+X-Flake-PluginVersion=27

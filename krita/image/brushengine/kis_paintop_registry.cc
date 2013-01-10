@@ -59,7 +59,7 @@ KisPaintOpRegistry* KisPaintOpRegistry::instance()
 {
     K_GLOBAL_STATIC(KisPaintOpRegistry, s_instance);
     if (!s_instance.exists()) {
-        KoPluginLoader::instance()->load("Krita/Paintop", "(Type == 'Service') and ([X-Krita-Version] == 5)");
+        KoPluginLoader::instance()->load("Krita/Paintop", "(Type == 'Service') and ([X-Krita-Version] == 27)");
 
 
         KisImageSP img = new KisImage(0, 0, 0, 0, 0, KoColorSpaceRegistry::instance()->alpha8());

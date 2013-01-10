@@ -60,5 +60,5 @@ Comment[wa]=Definixha d' on efet d' passete di ploumion
 Comment[x-test]=xxDefinition of a flake filter effectxx
 Comment[zh_CN]=Flake 滤镜效果定义
 Comment[zh_TW]=Flake 過濾器效果定義
-[PropertyDef::X-Flake-Version]
+[PropertyDef::X-Flake-PluginVersion]
 Type=int

@@ -49,4 +49,4 @@ Name[zh_TW]=變形工具
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatooltransform
-X-Krita-Version=5
+X-Krita-Version=27

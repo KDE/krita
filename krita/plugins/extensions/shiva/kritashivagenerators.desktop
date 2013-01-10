@@ -58,4 +58,4 @@ Comment[zh_TW]=產生器使用之 Shiva 核心語言支援
 X-KDE-ServiceTypes=Krita/Generator
 Type=Service
 X-KDE-Library=kritashivagenerators
-X-Krita-Version=5
+X-Krita-Version=27

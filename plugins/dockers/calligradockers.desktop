@@ -31,5 +31,5 @@ Name[zh_TW]=Calligra 嵌入外掛程式
 X-KDE-ServiceTypes=Calligra/Dock
 Type=Service
 X-KDE-Library=calligradockers
-X-Flake-MinVersion=4
-X-Flake-PluginVersion=4
+X-Flake-MinVersion=27
+X-Flake-PluginVersion=27

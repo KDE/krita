@@ -22,4 +22,4 @@ Name[x-test]=xxPattern Dockerxx
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritapatterndocker
-X-Krita-Version=5
+X-Krita-Version=27

@@ -34,5 +34,5 @@ Name[zh_TW]=註解元件
 X-KDE-ServiceTypes=Calligra/Shape
 Type=Service
 X-KDE-Library=commentshape
-X-Flake-MinVersion=4
-X-Flake-PluginVersion=4
+X-Flake-MinVersion=27
+X-Flake-PluginVersion=27

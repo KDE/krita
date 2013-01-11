@@ -240,10 +240,17 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
 
     comboBoxMaskType->setCurrentIndex( comboBoxMaskType->findText( aBrush->maskGenerator()->name() ) );
 
+
     inputRadius->setValue(aBrush->maskGenerator()->diameter());
     inputRatio->setValue(aBrush->maskGenerator()->ratio());
+
+    inputVFade->blockSignals(true);
+    inputHFade->blockSignals(true);
     inputHFade->setValue(aBrush->maskGenerator()->horizontalFade());
     inputVFade->setValue(aBrush->maskGenerator()->verticalFade());
+    inputVFade->blockSignals(false);
+    inputHFade->blockSignals(false);
+
     inputAngle->setValue(aBrush->angle() * 180 / M_PI);
     inputSpikes->setValue(aBrush->maskGenerator()->spikes());
     inputSpacing->setValue(aBrush->spacing());

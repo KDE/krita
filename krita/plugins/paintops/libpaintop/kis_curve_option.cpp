@@ -20,7 +20,8 @@
 #include "kis_curve_option.h"
 
 KisCurveOption::KisCurveOption(const QString & label, const QString& name, const QString & category,
-                               bool checked, qreal value, qreal min, qreal max, bool useCurve, bool separateCurveValue
+                               bool checked, qreal value, qreal min, qreal max, bool useCurve,
+                               bool separateCurveValue
 )
         : m_label(label)
         , m_category(category)

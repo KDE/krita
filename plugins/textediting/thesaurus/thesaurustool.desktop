@@ -118,5 +118,5 @@ Comment[x-test]=xxShow Related Wordsxx
 Comment[zh_CN]=显示相关单词
 Comment[zh_TW]=顯示相關單字
 X-KoText-MinVersion=27
-X-Flake-PluginVersion=27
+X-KoText-PluginVersion=27
 X-KDE-ServiceTypes=Calligra/Text-EditingPlugin

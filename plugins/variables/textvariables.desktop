@@ -46,4 +46,4 @@ X-KDE-ServiceTypes=Calligra/Text-InlineObject
 Type=Service
 X-KDE-Library=textvariables
 X-KoText-MinVersion=27
-X-Flake-PluginVersion=27
+X-KoText-PluginVersion=27

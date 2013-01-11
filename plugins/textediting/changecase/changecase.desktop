@@ -41,4 +41,4 @@ X-KDE-ServiceTypes=Calligra/Text-EditingPlugin
 Type=Service
 X-KDE-Library=changecase
 X-KoText-MinVersion=27
-X-Flake-PluginVersion=27
+X-KoText-PluginVersion=27

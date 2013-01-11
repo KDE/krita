@@ -74,5 +74,5 @@ Comment[zh_CN]=文本对象的定义
 Comment[zh_TW]=定義文字物件
 [PropertyDef::X-KoText-MinVersion]
 Type=int
-[PropertyDef::X-Flake-PluginVersion]
+[PropertyDef::X-KoText-PluginVersion]
 Type=int

@@ -40,13 +40,8 @@
 KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
         : KisWdgAutobrush(parent, name)
         , m_autoBrush(0)
+        , m_linkFade(false)
 {
-
-    m_linkSize = true;
-    m_linkFade = true;
-
-//     linkFadeToggled(m_linkSize);
-//     linkSizeToggled(m_linkFade);
 
     connect(aspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(linkFadeToggled(bool)));
     aspectButton->setKeepAspectRatio(m_linkFade);

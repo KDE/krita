@@ -540,6 +540,11 @@ bool KoTextAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
         d->anchorType = AnchorParagraph;
     } else if (anchorType == "page") {
         d->anchorType = AnchorPage;
+        // it has different defaults at least LO thinks so - ODF doesn't define defaults for this
+        d->horizontalPos = HFromLeft;
+        d->verticalPos = VFromTop;
+        d->horizontalRel = HPage;
+        d->verticalRel = VPage;
     }
 
     if (anchorType == "page" && shape()->hasAdditionalAttribute("text:anchor-page-number")) {
@@ -548,8 +553,12 @@ bool KoTextAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
             // invalid if the page-number is invalid (OO.org does the same)
             // see http://bugs.kde.org/show_bug.cgi?id=281869
             d->pageNumber = -1;
-            shape()->setVisible(false);
         }
+        // always make it invisible or it will create empty rects on the first page
+        // during initial layout. This is because only when we layout it's final page is
+        // the shape moved away from page 1
+        // in KWRootAreaProvider of textlayout it's set back to visible
+        shape()->setVisible(false);
     } else {
         d->pageNumber = -1;
     }

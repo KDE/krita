@@ -37,23 +37,23 @@
 class ApplyTransformCmdData : public KisSelectedTransactionData
 {
 public:
-    ApplyTransformCmdData(KisToolTransform *tool, ToolTransformArgs::TransfMode mode, KisNodeSP node);
+    ApplyTransformCmdData(KisToolTransform *tool, ToolTransformArgs::TransformMode mode, KisNodeSP node);
     virtual ~ApplyTransformCmdData();
 
 public:
     virtual void redo();
     virtual void undo();
-    ToolTransformArgs::TransfMode mode() const;
+    ToolTransformArgs::TransformMode mode() const;
 private:
     KisToolTransform *m_tool;
-    ToolTransformArgs::TransfMode m_mode;
+    ToolTransformArgs::TransformMode m_mode;
 };
 
 
 class ApplyTransformCmd : public KisTransaction
 {
 public:
-    ApplyTransformCmd(KisToolTransform *tool, ToolTransformArgs::TransfMode mode, KisNodeSP node);
+    ApplyTransformCmd(KisToolTransform *tool, ToolTransformArgs::TransformMode mode, KisNodeSP node);
 };
 
 class TransformCmd : public KUndo2Command

@@ -81,7 +81,7 @@ ToolTransformArgs& ToolTransformArgs::operator=(const ToolTransformArgs& args)
     return *this;
 }
 
-ToolTransformArgs::ToolTransformArgs(TransfMode mode,
+ToolTransformArgs::ToolTransformArgs(TransformMode mode,
                                      QPointF translate, QPointF rotationCenterOffset, double aX, double aY, double aZ, double scaleX, double scaleY, double shearX, double shearY,
                                      KisWarpTransformWorker::WarpType warpType, double alpha, QPointF previewPos, bool defaultPoints)
 {

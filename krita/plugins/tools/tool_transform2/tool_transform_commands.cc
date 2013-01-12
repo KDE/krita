@@ -21,7 +21,7 @@
 #include "tool_transform_commands.h"
 #include <kis_image.h>
 
-ApplyTransformCmdData::ApplyTransformCmdData(KisToolTransform *tool, ToolTransformArgs::TransfMode mode, KisNodeSP node)
+ApplyTransformCmdData::ApplyTransformCmdData(KisToolTransform *tool, ToolTransformArgs::TransformMode mode, KisNodeSP node)
         : KisSelectedTransactionData(i18n("Apply transformation"), node)
         , m_tool(tool)
 {
@@ -32,7 +32,7 @@ ApplyTransformCmdData::~ApplyTransformCmdData()
 {
 }
 
-ToolTransformArgs::TransfMode ApplyTransformCmdData::mode() const
+ToolTransformArgs::TransformMode ApplyTransformCmdData::mode() const
 {
     return m_mode;
 }
@@ -47,7 +47,7 @@ void ApplyTransformCmdData::undo()
     KisSelectedTransactionData::undo();
 }
 
-ApplyTransformCmd::ApplyTransformCmd(KisToolTransform *tool, ToolTransformArgs::TransfMode mode, KisNodeSP node)
+ApplyTransformCmd::ApplyTransformCmd(KisToolTransform *tool, ToolTransformArgs::TransformMode mode, KisNodeSP node)
 {
     m_transactionData = new ApplyTransformCmdData(tool, mode, node);
 }

@@ -1972,7 +1972,7 @@ void KisToolTransform::initWarpTransform()
     m_refSize = QSizeF(0, 0);
 }
 
-void KisToolTransform::initTransform(ToolTransformArgs::TransfMode mode)
+void KisToolTransform::initTransform(ToolTransformArgs::TransformMode mode)
 {
     int x, y, w, h;
 

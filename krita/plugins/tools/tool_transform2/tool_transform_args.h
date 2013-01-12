@@ -34,7 +34,7 @@
 class ToolTransformArgs
 {
 public:
-    typedef enum TransfMode_ {FREE_TRANSFORM = 0, WARP} TransfMode;
+    typedef enum TransformMode_ {FREE_TRANSFORM = 0, WARP} TransformMode;
 
     /**
      * Initializes the parameters for an identity transformation,
@@ -51,16 +51,16 @@ public:
      * If mode is warp, original and transformed vector points will be of size 0.
      * Use setPoints method to set those vectors.
      */
-    ToolTransformArgs(TransfMode mode,
+    ToolTransformArgs(TransformMode mode,
                       QPointF translate, QPointF rotationCenterOffset, double aX, double aY, double aZ, double scaleX, double scaleY, double shearX, double shearY,
                       KisWarpTransformWorker::WarpType warpType, double alpha, QPointF previewPos, bool defaultPoints);
     ~ToolTransformArgs();
     ToolTransformArgs& operator=(const ToolTransformArgs& args);
 
-    inline TransfMode mode() const {
+    inline TransformMode mode() const {
         return m_mode;
     }
-    inline void setMode(TransfMode mode) {
+    inline void setMode(TransformMode mode) {
         m_mode = mode;
     }
 
@@ -175,7 +175,7 @@ public:
 private:
     void clear();
     void init(const ToolTransformArgs& args);
-    TransfMode m_mode;
+    TransformMode m_mode;
 
     // warp-related arguments
     // these are basically the arguments taken by the warp transform worker

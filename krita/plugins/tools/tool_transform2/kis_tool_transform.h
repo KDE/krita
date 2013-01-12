@@ -282,7 +282,7 @@ private:
     void setDefaultWarpPoints(int pointsPerLine = -1);
 	void initWarpTransform();
     // Saves the original selection, paintDevice, image previews, and initializes the transformation depending on the mode given in argument
-    void initTransform(ToolTransformArgs::TransfMode mode);
+    void initTransform(ToolTransformArgs::TransformMode mode);
     // Only commits the changes made on the preview to the undo stack
     void transform();
     // Applies the current transformation to the original paint device and commits it to the undo stack

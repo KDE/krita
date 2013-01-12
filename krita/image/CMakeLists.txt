@@ -54,7 +54,7 @@ include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
 
 if(HAVE_VC)
   include_directories(${Vc_INCLUDE_DIR})
-  ko_compile_for_all_implementations(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp "-fPIC")
+  ko_compile_for_all_implementations(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp)
 else(HAVE_VC)
   set(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp)
 endif(HAVE_VC)

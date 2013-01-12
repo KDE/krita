@@ -400,7 +400,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     }
 
     // Now ask kde to restore the size of the window; this could probably be replaced by
-    // QWidget::saveGeometry asnd QWidget::restoreGeometry, but let's stay with the KDE
+    // QWidget::saveGeometry and QWidget::restoreGeometry, but let's stay with the KDE
     // way of doing things.
     KConfigGroup config(KGlobal::config(), "MainWindow");
     restoreWindowSize( config );

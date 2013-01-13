@@ -254,7 +254,7 @@ public:
     /**
      * Prepares the device for fastBitBlt opreration. It clears
      * the device, switches x,y shifts and colorspace if needed.
-     * After this call fastBitBlt will return true.
+     * After this call fastBitBltPossible will return true.
      * May be used for initialization of temporary devices.
      */
     void prepareClone(KisPaintDeviceSP src);

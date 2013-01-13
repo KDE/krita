@@ -280,7 +280,6 @@ private:
 
     function m_function; // current transformation function
 
-    QPointF m_handleDir[9];
     QCursor m_scaleCursors[8]; // cursors for the 8 directions
     QCursor m_shearCursors[8];
 
@@ -310,7 +309,6 @@ private:
     KisSelectionSP m_origSelection;
     //KisShapeSelection *m_previousShapeSelection;
     KisCanvas2 *m_canvas;
-    QButtonGroup *m_rotCenterButtons;
 
     // center used for rotation (calculated from rotationCenterOffset (in m_currentArgs))
     QVector3D m_rotationCenter;
@@ -385,9 +383,9 @@ private:
     void activateCustomWarpPoints(bool enabled);
 
 private slots:
+    void slotUiChangedConfig(const ToolTransformArgs &config);
 
     void slotSetFilter(const KoID &);
-    void setRotCenter(int id);
     void setScaleX(double scaleX);
     void setScaleY(double scaleY);
     void setShearX(double shearX);

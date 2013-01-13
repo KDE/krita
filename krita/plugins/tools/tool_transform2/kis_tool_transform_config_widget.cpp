@@ -58,7 +58,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(const TransformTransa
     cmbWarpType->insertItem(KisWarpTransformWorker::RIGID_TRANSFORM,i18n("Rigid"));
     cmbWarpType->setCurrentIndex(KisWarpTransformWorker::RIGID_TRANSFORM);
     connect(cmbWarpType, SIGNAL(currentIndexChanged(int)), this, SLOT(slotWarpTypeChanged(int)));
-
+*/
     // Init Rotation Center buttons
     m_handleDir[0] = QPointF(1, 0);
     m_handleDir[1] = QPointF(1, -1);
@@ -89,7 +89,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(const TransformTransa
     m_rotationCenterButtons->addButton(nothingSelected, 9);
 
     connect(m_rotationCenterButtons, SIGNAL(buttonPressed(int)), this, SLOT(slotRotationCenterChanged(int)));
-
+/*
     // Init Free Transform Values
     connect(scaleXBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetScaleX(qreal)));
     connect(scaleYBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetScaleY(qreal)));
@@ -171,6 +171,19 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         aXBox->setValue(radianToDegree(config.aX()));
         aYBox->setValue(radianToDegree(config.aY()));
         aZBox->setValue(radianToDegree(config.aZ()));
+
+        QPointF pt = m_transaction->currentConfig()->rotationCenterOffset();
+        pt.rx() /= m_transaction->originalHalfWidth();
+        pt.ry() /= m_transaction->originalHalfHeight();
+
+        for (int i = 0; i < 9; i++) {
+            if (qFuzzyCompare(m_handleDir[i].x(), pt.x()) &&
+                qFuzzyCompare(m_handleDir[i].y(), pt.y())) {
+
+                m_rotationCenterButtons->button(i)->setChecked(true);
+                break;
+            }
+        }
     } else {
         stackedWidget->setCurrentIndex(1);
         freeTransformButton->setChecked(false);
@@ -180,7 +193,6 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         if (config.defaultPoints()) {
             densityBox->setValue(config.pointsPerLine());
         }
-
 
         cmbWarpType->setCurrentIndex((int)config.warpType());
         defaultRadioButton->setChecked(config.defaultPoints());
@@ -206,6 +218,31 @@ void KisToolTransformConfigWidget::setApplyResetDisabled(bool disabled)
 
     applyButton->setDisabled(disabled);
     resetButton->setDisabled(disabled);
+}
+
+void KisToolTransformConfigWidget::resetRotationCenterButtons()
+{
+    int checkedId = m_rotationCenterButtons->checkedId();
+
+    if (checkedId >= 0 && checkedId <= 8) {
+        // uncheck the current checked button
+        m_rotationCenterButtons->button(9)->setChecked(true);
+    }
+}
+
+void KisToolTransformConfigWidget::slotRotationCenterChanged(int index)
+{
+    if (index >= 0 && index <= 8) {
+        ToolTransformArgs newConfig = *m_transaction->currentConfig();
+
+        double i = m_handleDir[index].x();
+        double j = m_handleDir[index].y();
+
+        newConfig.setRotationCenterOffset(QPointF(i * m_transaction->originalHalfWidth(),
+                                                  j * m_transaction->originalHalfHeight()));
+
+        emit sigConfigChanged(newConfig);
+    }
 }
 
 /*void KisToolTransformConfigWidget::slotEditingFinished()

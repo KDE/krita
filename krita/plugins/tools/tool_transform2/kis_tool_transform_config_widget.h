@@ -34,6 +34,7 @@ public:
     KisToolTransformConfigWidget(const TransformTransactionProperties *transaction, KisCanvas2 *canvas, QWidget *parent);
 
     void setApplyResetDisabled(bool disabled);
+    void resetRotationCenterButtons();
 
 public slots:
     void updateConfig(const ToolTransformArgs &config);
@@ -44,8 +45,10 @@ signals:
 private slots:
 /*    void slotFilterChanged(const KoID &filter);
     void slotWarpTypeChanged(int index);
-    void slotRotationCenterChanged(int index);
 
+*/
+    void slotRotationCenterChanged(int index);
+/*
     void slotSetScaleX(qreal value);
     void slotSetScaleY(qreal value);
 
@@ -88,6 +91,8 @@ private:
      * changed by means of signals
      */
     const TransformTransactionProperties *m_transaction;
+    QPointF m_handleDir[9];
+    QButtonGroup *m_rotationCenterButtons;
 //    bool m_configChanged;
 //    ToolTransformArgs m_currentConfig;
 };

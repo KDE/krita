@@ -107,15 +107,6 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     m_shearCursors[2] = QCursor(shearPixmap.transformed(QTransform().rotate(270)));
     m_shearCursors[1] = QCursor(shearPixmap.transformed(QTransform().rotate(315)));
     m_shearCursors[0] = QCursor(shearPixmap);
-    m_handleDir[0] = QPointF(1, 0);
-    m_handleDir[1] = QPointF(1, -1);
-    m_handleDir[2] = QPointF(0, -1);
-    m_handleDir[3] = QPointF(-1, -1);
-    m_handleDir[4] = QPointF(-1, 0);
-    m_handleDir[5] = QPointF(-1, 1);
-    m_handleDir[6] = QPointF(0, 1);
-    m_handleDir[7] = QPointF(1, 1);
-    m_handleDir[8] = QPointF(0, 0); // also add the center
     m_defaultPointsPerLine = 3;
     m_imageTooBig = false;
     m_origDevice = 0;
@@ -1475,8 +1466,8 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
             }
 
             m_currentArgs.setTranslate(m_clickArgs.translate() + t.toPointF());
-            m_optWidget->translateXBox->setValue(m_currentArgs.translate().x());
-            m_optWidget->translateYBox->setValue(m_currentArgs.translate().y());
+
+            updateOptionWidget();
             break;
         case ROTATE:
         {
@@ -1850,8 +1841,7 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
 
             m_currentArgs.setRotationCenterOffset(t.toPointF());
 
-            if (m_rotCenterButtons->checkedId() >= 0 && m_rotCenterButtons->checkedId() < 9)
-                m_rotCenterButtons->button(9)->setChecked(true); // uncheck the current checked button
+            m_optWidget->resetRotationCenterButtons();
             break;
         case TOPSHEAR:
             signX = -1;
@@ -2023,7 +2013,7 @@ void KisToolTransform::initTransform(ToolTransformArgs::TransformMode mode)
         h = 0;
     }
 
-    m_transaction = TransformTransactionProperties(QRectF(x,y,w,h));
+    m_transaction = TransformTransactionProperties(QRectF(x,y,w,h), &m_currentArgs);
 
     if (mode == ToolTransformArgs::WARP)
         initWarpTransform();
@@ -2102,7 +2092,7 @@ void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShap
 
                 QPoint p1, p2;
                 m_origSelection = presentCmd2->origSelection(p1, p2);
-                m_transaction = TransformTransactionProperties(QRect(p1, p2));
+                m_transaction = TransformTransactionProperties(QRect(p1, p2), &m_currentArgs);
 
                 m_origImg = presentCmd2->originalImage();
                 m_origSelectionImg = presentCmd2->originalSelectionImage();
@@ -2354,7 +2344,7 @@ void KisToolTransform::notifyCommandExecuted(const KUndo2Command * command)
 
                 QPoint p1, p2;
                 m_origSelection = presentCmd2->origSelection(p1, p2);
-                m_transaction = TransformTransactionProperties(QRect(p1, p2));
+                m_transaction = TransformTransactionProperties(QRect(p1, p2), &m_currentArgs);
 
                 m_origImg = presentCmd2->originalImage();
                 m_origSelectionImg = presentCmd2->originalSelectionImage();
@@ -2380,6 +2370,9 @@ QWidget* KisToolTransform::createOptionWidget() {
     Q_CHECK_PTR(m_optWidget);
     m_optWidget->setObjectName(toolId() + " option widget");
 
+    connect(m_optWidget, SIGNAL(sigConfigChanged(const ToolTransformArgs&)),
+            this, SLOT(slotUiChangedConfig(const ToolTransformArgs&)));
+
     m_optWidget->cmbFilter->clear();
     m_optWidget->cmbFilter->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
     m_optWidget->cmbFilter->setCurrent("Bicubic");
@@ -2404,25 +2397,6 @@ QWidget* KisToolTransform::createOptionWidget() {
     KoID filterID = m_optWidget->cmbFilter->currentItem();
     m_filter = KisFilterStrategyRegistry::instance()->value(filterID.id());
 
-    m_rotCenterButtons = new QButtonGroup(0);
-    // we set the ids to match m_handleDir
-    m_rotCenterButtons->addButton(m_optWidget->middleRightButton, 0);
-    m_rotCenterButtons->addButton(m_optWidget->topRightButton, 1);
-    m_rotCenterButtons->addButton(m_optWidget->middleTopButton, 2);
-    m_rotCenterButtons->addButton(m_optWidget->topLeftButton, 3);
-    m_rotCenterButtons->addButton(m_optWidget->middleLeftButton, 4);
-    m_rotCenterButtons->addButton(m_optWidget->bottomLeftButton, 5);
-    m_rotCenterButtons->addButton(m_optWidget->middleBottomButton, 6);
-    m_rotCenterButtons->addButton(m_optWidget->bottomRightButton, 7);
-    m_rotCenterButtons->addButton(m_optWidget->centerButton, 8);
-
-    QToolButton *auxButton = new QToolButton(0);
-    auxButton->setCheckable(true);
-    auxButton->setAutoExclusive(true);
-    auxButton->hide(); // a convenient button for when no button is checked in the group
-    m_rotCenterButtons->addButton(auxButton, 9);
-
-    connect(m_rotCenterButtons, SIGNAL(buttonPressed(int)), this, SLOT(setRotCenter(int)));
     connect(m_optWidget->scaleXBox, SIGNAL(valueChanged(double)), this, SLOT(setScaleX(double)));
     connect(m_optWidget->scaleYBox, SIGNAL(valueChanged(double)), this, SLOT(setScaleY(double)));
     connect(m_optWidget->shearXBox, SIGNAL(valueChanged(double)), this, SLOT(setShearX(double)));
@@ -2485,24 +2459,17 @@ void KisToolTransform::updateApplyResetAvailability()
     }
 }
 
+void KisToolTransform::slotUiChangedConfig(const ToolTransformArgs &config)
+{
+    if (mode() == KisTool::PAINT_MODE) return;
+
+    m_currentArgs = config;
+    outlineChanged();
+}
+
 void KisToolTransform::slotSetFilter(const KoID &filterID)
 {
     m_filter = KisFilterStrategyRegistry::instance()->value(filterID.id());
-}
-
-void KisToolTransform::setRotCenter(int id)
-{
-    if (mode() != KisTool::PAINT_MODE) {
-        if (id < 9) {
-            double i = m_handleDir[id].x();
-            double j = m_handleDir[id].y();
-
-            m_currentArgs.setRotationCenterOffset(QPointF(i * m_transaction.originalHalfWidth(), j * m_transaction.originalHalfHeight()));
-            outlineChanged();
-
-            m_boxValueChanged = true;
-        }
-    }
 }
 
 void KisToolTransform::setScaleX(double scaleX)

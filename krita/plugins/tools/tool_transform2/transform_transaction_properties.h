@@ -22,6 +22,8 @@
 #include <QRectF>
 #include <QPointF>
 
+class ToolTransformArgs;
+
 
 class TransformTransactionProperties
 {
@@ -31,8 +33,9 @@ public:
     {
     }
 
-    TransformTransactionProperties(const QRectF &originalRect)
+    TransformTransactionProperties(const QRectF &originalRect, ToolTransformArgs *currentConfig)
         : m_originalRect(originalRect),
+          m_currentConfig(currentConfig),
           m_editWarpPoints(false)
     {
     }
@@ -101,12 +104,17 @@ public:
         m_editWarpPoints = value;
     }
 
+    const ToolTransformArgs* currentConfig() const {
+        return m_currentConfig;
+    }
+
 private:
     /**
      * Information about the original selected rect
      * (before any transformations)
      */
     QRectF m_originalRect;
+    ToolTransformArgs *m_currentConfig;
     bool m_editWarpPoints;
 };
 

@@ -89,7 +89,7 @@ QRect rotateWithTf(int rotation, KisPaintDeviceSP dev,
     QRect r(boundRect);
 
     KisPaintDeviceSP tmp = new KisPaintDevice(dev->colorSpace());
-    tmp->setDefaultPixel(dev->defaultPixel());
+    tmp->prepareClone(dev);
 
     KisRandomAccessorSP devAcc = dev->createRandomAccessorNG(0, 0);
     KisRandomAccessorSP tmpAcc = tmp->createRandomAccessorNG(0, 0);

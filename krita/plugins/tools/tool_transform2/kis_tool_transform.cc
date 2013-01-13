@@ -79,12 +79,13 @@
 
 KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
         : KisTool(canvas, KisCursor::rotateCursor())
-         , m_canvas(canvas), m_isActive(false)
+        , m_isActive(false)
 {
+    m_canvas = dynamic_cast<KisCanvas2*>(canvas);
+    Q_ASSERT(m_canvas);
+
     setObjectName("tool_transform");
     useCursor(KisCursor::selectCursor());
-    m_originalTopLeft = QPoint(0, 0);
-    m_originalBottomRight = QPoint(0, 0);
     m_eyePos = QVector3D(0, 0, -1024);
     m_cameraPos = QVector3D(0, 0, 1024);
     m_optWidget = 0;
@@ -166,19 +167,6 @@ QPointF KisToolTransform::minMaxZ(QVector3D P0, QVector3D P1, QVector3D P2, QVec
     return res;
 }
 
-double KisToolTransform::radianToDegree(double rad)
-{
-    double piX2 = 2 * M_PI;
-
-    if (rad < 0 || rad >= piX2) {
-        rad = fmod(rad, piX2);
-        if (rad < 0)
-            rad += piX2;
-    }
-
-    return (rad * 360. / piX2);
-}
-
 double KisToolTransform::degreeToRadian(double degree)
 {
     if (degree < 0. || degree >= 360.) {
@@ -232,10 +220,10 @@ QRectF KisToolTransform::calcWarpBoundRect()
     QRectF res;
 
     if (nbPoints == 0) {
-        res = QRectF(m_originalTopLeft, m_originalBottomRight);
+        res = m_transaction.originalRect();
     }
     else if (nbPoints == 1) {
-        res = QRectF(m_originalTopLeft, m_originalBottomRight);
+        res = m_transaction.originalRect();
         res.translate(m_currentArgs.transfPoints()[0] - m_currentArgs.origPoints()[0]);
         res |= QRectF(m_currentArgs.origPoints()[0], QSizeF(1, 1));
     }
@@ -263,10 +251,12 @@ QRectF KisToolTransform::calcWarpBoundRect()
         }
 
         if (!m_currentArgs.defaultPoints()) {
-            QPointF topLeft = KisWarpTransformWorker::transformMath(m_currentArgs.warpType(), m_originalTopLeft, m_currentArgs.origPoints(), m_currentArgs.transfPoints(), m_currentArgs.alpha());
-            QPointF topRight = KisWarpTransformWorker::transformMath(m_currentArgs.warpType(), QPointF(m_originalBottomRight.x(), m_originalTopLeft.y()), m_currentArgs.origPoints(), m_currentArgs.transfPoints(), m_currentArgs.alpha());
-            QPointF bottomRight = KisWarpTransformWorker::transformMath(m_currentArgs.warpType(), m_originalBottomRight, m_currentArgs.origPoints(), m_currentArgs.transfPoints(), m_currentArgs.alpha());
-            QPointF bottomLeft = KisWarpTransformWorker::transformMath(m_currentArgs.warpType(), QPointF(m_originalTopLeft.x(), m_originalBottomRight.y()), m_currentArgs.origPoints(), m_currentArgs.transfPoints(), m_currentArgs.alpha());
+            QRectF r = m_transaction.originalRect();
+
+            QPointF topLeft = KisWarpTransformWorker::transformMath(m_currentArgs.warpType(), r.topLeft(), m_currentArgs.origPoints(), m_currentArgs.transfPoints(), m_currentArgs.alpha());
+            QPointF topRight = KisWarpTransformWorker::transformMath(m_currentArgs.warpType(), r.topRight(), m_currentArgs.origPoints(), m_currentArgs.transfPoints(), m_currentArgs.alpha());
+            QPointF bottomRight = KisWarpTransformWorker::transformMath(m_currentArgs.warpType(), r.bottomRight(), m_currentArgs.origPoints(), m_currentArgs.transfPoints(), m_currentArgs.alpha());
+            QPointF bottomLeft = KisWarpTransformWorker::transformMath(m_currentArgs.warpType(), r.bottomLeft(), m_currentArgs.origPoints(), m_currentArgs.transfPoints(), m_currentArgs.alpha());
             res |= boundRect(topLeft, topRight, bottomRight, bottomLeft);
         }
     }
@@ -276,35 +266,36 @@ QRectF KisToolTransform::calcWarpBoundRect()
 
 void KisToolTransform::recalcOutline()
 {
+    QRectF scaleRect(0.0, 0.0, 1.0, 1.0);
+    scaleRect = imageToFlake(scaleRect);
+
+
     if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
-        KisImageSP kisimage = image();
-        QSizeF s(1 / kisimage->xRes(), 1 / kisimage->yRes());
-        s = m_canvas->viewConverter()->documentToView(s);
+        QTransform scaleTransform;
+        scaleTransform.scale(scaleRect.width(), scaleRect.height());
 
         for (int i = 0; i < m_viewTransfPoints.size(); ++i) {
-            m_viewTransfPoints[i] = m_canvas->viewConverter()->documentToView(QPointF(m_currentArgs.transfPoints()[i].x() / kisimage->xRes(), m_currentArgs.transfPoints()[i].y() / kisimage->yRes()));
-            m_viewOrigPoints[i] = m_canvas->viewConverter()->documentToView(QPointF(m_currentArgs.origPoints()[i].x() / kisimage->xRes(), m_currentArgs.origPoints()[i].y() / kisimage->yRes()));
+            m_viewTransfPoints[i] = imageToFlake(m_currentArgs.transfPoints()[i]);
+            m_viewOrigPoints[i] = imageToFlake(m_currentArgs.origPoints()[i]);
         }
-
-        QTransform scaleTransform;
-        scaleTransform.scale(s.width(), s.height());
 
         if (m_origImg.isNull()) {
-            m_currentArgs.setPreviewPos(m_originalTopLeft);
+            m_currentArgs.setPreviewPos(m_transaction.originalTopLeft());
         }
         else {
-
             m_currImg = m_origImg.transformed(scaleTransform);
 
-            if (!m_editWarpPoints) {
-                QPointF origtopleft = m_canvas->viewConverter()->documentToView(QPointF(m_originalTopLeft.x() / kisimage->xRes(), m_originalTopLeft.y() / kisimage->yRes()));
+            if (!m_transaction.editWarpPoints()) {
+                QPointF origTLInFlake =
+                    imageToFlake(m_transaction.originalTopLeft());
+
                 QPointF warptranslate;
-                m_currImg = KisWarpTransformWorker::transformation(m_currentArgs.warpType(), &m_currImg, m_viewOrigPoints, m_viewTransfPoints, m_currentArgs.alpha(), origtopleft, &warptranslate);
-                warptranslate = m_canvas->viewConverter()->viewToDocument(warptranslate);
-                m_currentArgs.setPreviewPos(QPointF(warptranslate.x() * kisimage->xRes(), warptranslate.y() * kisimage->yRes()));
+                m_currImg = KisWarpTransformWorker::transformation(m_currentArgs.warpType(), &m_currImg, m_viewOrigPoints, m_viewTransfPoints, m_currentArgs.alpha(), origTLInFlake, &warptranslate);
+
+                m_currentArgs.setPreviewPos(flakeToImage(warptranslate));
             }
             else {
-                m_currentArgs.setPreviewPos(m_originalTopLeft);
+                m_currentArgs.setPreviewPos(m_transaction.originalTopLeft());
             }
 
             QRectF r(calcWarpBoundRect());
@@ -327,55 +318,52 @@ void KisToolTransform::recalcOutline()
         m_cosaZ = cos(m_currentArgs.aZ());
 
         QPointF prev_topLeft, prev_topRight, prev_bottomRight, prev_bottomLeft;
-        KisImageSP kisimage = image();
-        QSizeF s(1 / kisimage->xRes(), 1 / kisimage->yRes());
-        s = m_canvas->viewConverter()->documentToView(s);
 
-        v = QVector3D(m_originalTopLeft - m_originalCenter);
+        v = QVector3D(m_transaction.originalTopLeft() - m_transaction.originalCenter());
         t = transformVector(v);
         m_topLeft = t + translate3D;
         m_topLeftProj = perspective(t.x(), t.y(), t.z()) + m_currentArgs.translate();
         t = QVector3D(perspective(t.x(), t.y(), t.z()));
-        t = transformVector_preview(v, s.width(), s.height());
+        t = transformVector_preview(v, scaleRect.width(), scaleRect.height());
         prev_topLeft = perspective(t.x(), t.y(), t.z()) + m_currentArgs.translate();
 
-        v = QVector3D(m_originalBottomRight.x() - m_originalCenter.x(), m_originalTopLeft.y() - m_originalCenter.y(), 0);
+        v = QVector3D(m_transaction.originalTopRight() - m_transaction.originalCenter());
         t = transformVector(v);
         m_topRight = t + translate3D;
         m_topRightProj = perspective(t.x(), t.y(), t.z()) + m_currentArgs.translate();
-        t = transformVector_preview(v, s.width(), s.height());
+        t = transformVector_preview(v, scaleRect.width(), scaleRect.height());
         prev_topRight = perspective(t.x(), t.y(), t.z()) + m_currentArgs.translate();
 
-        v = QVector3D(m_originalTopLeft.x() - m_originalCenter.x(), m_originalBottomRight.y() - m_originalCenter.y(), 0);
+        v = QVector3D(m_transaction.originalBottomLeft() - m_transaction.originalCenter());
         t = transformVector(v);
         m_bottomLeft = t + translate3D;
         m_bottomLeftProj = perspective(t.x(), t.y(), t.z()) + m_currentArgs.translate();
-        t = transformVector_preview(v, s.width(), s.height());
+        t = transformVector_preview(v, scaleRect.width(), scaleRect.height());
         prev_bottomLeft = perspective(t.x(), t.y(), t.z()) + m_currentArgs.translate();
 
-        v = QVector3D(m_originalBottomRight - m_originalCenter);
+        v = QVector3D(m_transaction.originalBottomRight() - m_transaction.originalCenter());
         t = transformVector(v);
         m_bottomRight = t + translate3D;
         m_bottomRightProj = perspective(t.x(), t.y(), t.z()) + m_currentArgs.translate();
-        t = transformVector_preview(v, s.width(), s.height());
+        t = transformVector_preview(v, scaleRect.width(), scaleRect.height());
         prev_bottomRight = perspective(t.x(), t.y(), t.z()) + m_currentArgs.translate();
 
-        v = QVector3D(m_originalTopLeft.x() - m_originalCenter.x(), (m_originalTopLeft.y() + m_originalBottomRight.y()) / 2.0 - m_originalCenter.y(), 0);
+        v = QVector3D(m_transaction.originalMiddleLeft() - m_transaction.originalCenter());
         t = transformVector(v);
         m_middleLeft = t + translate3D;
         m_middleLeftProj = perspective(t.x(), t.y(), t.z()) + m_currentArgs.translate();
 
-        v = QVector3D(m_originalBottomRight.x() - m_originalCenter.x(), (m_originalTopLeft.y() + m_originalBottomRight.y()) / 2.0 - m_originalCenter.y(), 0);
+        v = QVector3D(m_transaction.originalMiddleRight() - m_transaction.originalCenter());
         t = transformVector(v);
         m_middleRight = t + translate3D;
         m_middleRightProj = perspective(t.x(), t.y(), t.z()) + m_currentArgs.translate();
 
-        v = QVector3D((m_originalTopLeft.x() + m_originalBottomRight.x()) / 2.0 - m_originalCenter.x(), m_originalTopLeft.y() - m_originalCenter.y(), 0);
+        v = QVector3D(m_transaction.originalMiddleTop() - m_transaction.originalCenter());
         t = transformVector(v);
         m_middleTop = t + translate3D;
         m_middleTopProj = perspective(t.x(), t.y(), t.z()) + m_currentArgs.translate();
 
-        v = QVector3D((m_originalTopLeft.x() + m_originalBottomRight.x()) / 2.0 - m_originalCenter.x(), m_originalBottomRight.y() - m_originalCenter.y(), 0);
+        v = QVector3D(m_transaction.originalMiddleBottom() - m_transaction.originalCenter());
         t = transformVector(v);
         m_middleBottom = t + translate3D;
         m_middleBottomProj = perspective(t.x(), t.y(), t.z()) + m_currentArgs.translate();
@@ -406,7 +394,7 @@ void KisToolTransform::recalcOutline()
 
         QMatrix4x4 m;
 
-        m.scale(s.width(), s.height());
+        m.scale(scaleRect.width(), scaleRect.height());
         m.rotate(180. * m_currentArgs.aX() / M_PI, QVector3D(1, 0, 0));
         m.rotate(180. * m_currentArgs.aY() / M_PI, QVector3D(0, 1, 0));
         m.rotate(180. * m_currentArgs.aZ() / M_PI, QVector3D(0, 0, 1));
@@ -416,7 +404,7 @@ void KisToolTransform::recalcOutline()
         QMatrix4x4 tmp_matrix = QMatrix4x4(m_transform);
         tmp_matrix.optimize();
         m *= tmp_matrix;
-        m.translate(- m_originalWidth2 * m_currentArgs.scaleX(), - m_originalHeight2 * m_currentArgs.scaleY(), 0);
+        m.translate(- m_transaction.originalHalfWidth() * m_currentArgs.scaleX(), - m_transaction.originalHalfHeight() * m_currentArgs.scaleY(), 0);
         m.scale(m_currentArgs.scaleX(), m_currentArgs.scaleY());
         m_transform = m.toTransform(m_cameraPos.z());
         if (!m_origImg.isNull())
@@ -424,14 +412,35 @@ void KisToolTransform::recalcOutline()
     }
 }
 
+QPointF KisToolTransform::imageToFlake(const QPointF &pt)
+{
+    const KisCoordinatesConverter *converter = m_canvas->coordinatesConverter();
+    return converter->imageToDocument(converter->documentToFlake(pt));
+}
+
+QPointF KisToolTransform::flakeToImage(const QPointF &pt)
+{
+    const KisCoordinatesConverter *converter = m_canvas->coordinatesConverter();
+    return converter->flakeToDocument(converter->documentToImage(pt));
+}
+
+QRectF KisToolTransform::imageToFlake(const QRectF &rc)
+{
+    const KisCoordinatesConverter *converter = m_canvas->coordinatesConverter();
+    return converter->imageToDocument(converter->documentToFlake(rc));
+}
+
+QRectF KisToolTransform::flakeToImage(const QRectF &rc)
+{
+    const KisCoordinatesConverter *converter = m_canvas->coordinatesConverter();
+    return converter->flakeToDocument(converter->documentToImage(rc));
+}
+
 void KisToolTransform::outlineChanged()
 {
     if (m_imageTooBig) {
         recalcOutline();
-        KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
-        if (!canvas)
-            return;
-        canvas->updateCanvas();
+        m_canvas->updateCanvas();
         return;
     }
 
@@ -465,19 +474,21 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
     QPen pen[2];
     pen[1].setColor(Qt::lightGray);
 
+    QSizeF newRefSize = imageToFlake(QRectF(0.0, 0.0, 1.0, 1.0)).size();
+    QPointF origtopleft = imageToFlake(m_transaction.originalRect().topLeft());
+
     if (m_currentArgs.mode() == ToolTransformArgs::FREE_TRANSFORM) {
         pen[0].setWidth(1);
         pen[1].setWidth(2);
-        QSizeF newRefSize = converter.documentToView(QSizeF(1 / kisimage->xRes(), 1 / kisimage->yRes()));
-        QPointF topleft = converter.documentToView(QPointF(m_topLeftProj.x() / kisimage->xRes(), m_topLeftProj.y() / kisimage->yRes()));
-        QPointF topright = converter.documentToView(QPointF(m_topRightProj.x() / kisimage->xRes(), m_topRightProj.y() / kisimage->yRes()));
-        QPointF bottomleft = converter.documentToView(QPointF(m_bottomLeftProj.x() / kisimage->xRes(), m_bottomLeftProj.y() / kisimage->yRes()));
-        QPointF bottomright = converter.documentToView(QPointF(m_bottomRightProj.x() / kisimage->xRes(), m_bottomRightProj.y() / kisimage->yRes()));
-        QPointF middleleft = converter.documentToView(QPointF(m_middleLeftProj.x() / kisimage->xRes(), m_middleLeftProj.y() / kisimage->yRes()));
-        QPointF middleright = converter.documentToView(QPointF(m_middleRightProj.x() / kisimage->xRes(), m_middleRightProj.y() / kisimage->yRes()));
-        QPointF middletop = converter.documentToView(QPointF(m_middleTopProj.x() / kisimage->xRes(), m_middleTopProj.y() / kisimage->yRes()));
-        QPointF middlebottom = converter.documentToView(QPointF(m_middleBottomProj.x() / kisimage->xRes(), m_middleBottomProj.y() / kisimage->yRes()));
-        QPointF origtopleft = converter.documentToView(QPointF(m_originalTopLeft.x() / kisimage->xRes(), m_originalTopLeft.y() / kisimage->yRes()));
+
+        QPointF topleft = imageToFlake(m_topLeftProj);
+        QPointF topright = imageToFlake(m_topRightProj);
+        QPointF bottomleft = imageToFlake(m_bottomLeftProj);
+        QPointF bottomright = imageToFlake(m_bottomRightProj);
+        QPointF middleleft = imageToFlake(m_middleLeftProj);
+        QPointF middleright = imageToFlake(m_middleRightProj);
+        QPointF middletop = imageToFlake(m_middleTopProj);
+        QPointF middlebottom = imageToFlake(m_middleBottomProj);
 
         QRectF handleRect(- m_handleRadius / 2., - m_handleRadius / 2., m_handleRadius, m_handleRadius);
 
@@ -543,9 +554,6 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
     else if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
         pen[0].setWidth(2);
         pen[1].setWidth(3);
-
-        QSizeF newRefSize = converter.documentToView(QSizeF(1 / kisimage->xRes(), 1 / kisimage->yRes()));
-        QPointF origtopleft = converter.documentToView(QPointF(m_originalTopLeft.x() / kisimage->xRes(), m_originalTopLeft.y() / kisimage->yRes()));
 
         QRectF handleRect(- m_handleRadius / 2., - m_handleRadius / 2., m_handleRadius, m_handleRadius);
         QRectF smallHandleRect(- m_handleRadius / 4., - m_handleRadius / 4., m_handleRadius / 2., m_handleRadius / 2.);
@@ -804,22 +812,24 @@ void KisToolTransform::setTransformFunction(QPointF mousePos, Qt::KeyboardModifi
             m_function = MOVECENTER;
 
         if (m_function == ROTATE || m_function == MOVE) {
+            QRectF originalRect = m_transaction.originalRect();
+
             // we check for shearing only if we aren't near a handle (for scaling) or the rotation center
             QVector3D v = QVector3D(mousePos - m_currentArgs.translate());
             v = invperspective(v.x(), v.y(), m_currentPlane);
             QPointF t = invTransformVector(v).toPointF();
-            t += m_originalCenter;
+            t += originalRect.center();
 
-            if (t.x() >= m_originalTopLeft.x() && t.x() <= m_originalBottomRight.x()) {
-                if (fabs(t.y() - m_originalTopLeft.y()) <= handleRadius)
+            if (t.x() >= originalRect.left() && t.x() <= originalRect.right()) {
+                if (fabs(t.y() - originalRect.top()) <= handleRadius)
                     m_function = TOPSHEAR;
-                if (fabs(t.y() - m_originalBottomRight.y()) <= handleRadius)
+                if (fabs(t.y() - originalRect.bottom()) <= handleRadius)
                     m_function = BOTTOMSHEAR;
             }
-            if (t.y() >= m_originalTopLeft.y() && t.y() <= m_originalBottomRight.y()) {
-                if (fabs(t.x() - m_originalTopLeft.x()) <= handleRadius)
+            if (t.y() >= originalRect.top() && t.y() <= originalRect.bottom()) {
+                if (fabs(t.x() - originalRect.left()) <= handleRadius)
                     m_function = LEFTSHEAR;
-                if (fabs(t.x() - m_originalBottomRight.x()) <= handleRadius)
+                if (fabs(t.x() - originalRect.right()) <= handleRadius)
                     m_function = RIGHTSHEAR;
             }
         }
@@ -846,7 +856,7 @@ void KisToolTransform::mousePressEvent(KoPointerEvent *event)
         QPointF mousePos = QPointF(event->point.x() * kisimage->xRes(), event->point.y() * kisimage->yRes());
         if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
             if (!m_cursorOverPoint) {
-                if (m_editWarpPoints) {
+                if (m_transaction.editWarpPoints()) {
                     QVector<QPointF> origPoints = m_currentArgs.origPoints();
                     QVector<QPointF> transfPoints = m_currentArgs.transfPoints();
                     origPoints.append(mousePos);
@@ -933,7 +943,7 @@ void KisToolTransform::keyReleaseEvent(QKeyEvent *event)
         }
     }
 
-    setButtonBoxDisabled(m_currentArgs.isIdentity(m_originalCenter));
+    updateApplyResetAvailability();
     KisTool::keyReleaseEvent(event);
 }
 
@@ -1397,10 +1407,6 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
         return;
     }
 
-    KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
-    if (!canvas)
-        return;
-
     double dx, dy;
 
     m_actuallyMoveWhileSelected = true;
@@ -1408,11 +1414,10 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
     if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
         QPointF *currPoint;
         QPointF *viewCurrPoint;
-        if (m_editWarpPoints) {
+        if (m_transaction.editWarpPoints()) {
             currPoint = &m_currentArgs.origPoint(m_pointUnderCursor);
             viewCurrPoint = &m_viewOrigPoints[m_pointUnderCursor];
-            QRectF clipRect(m_originalTopLeft, m_originalBottomRight);
-            *currPoint = clipInRect(mousePos, clipRect);
+            *currPoint = clipInRect(mousePos, m_transaction.originalRect());
             m_currentArgs.transfPoint(m_pointUnderCursor) = *currPoint;
         }
         else {
@@ -1420,7 +1425,7 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
             viewCurrPoint = &m_viewTransfPoints[m_pointUnderCursor];
             *currPoint = mousePos;
         }
-        *viewCurrPoint = m_canvas->viewConverter()->documentToView(QPointF(currPoint->x() / kisimage->xRes(), currPoint->y() / kisimage->yRes()));
+        *viewCurrPoint = imageToFlake(*currPoint);
 
         if (currPoint->x() < m_clickTopLeftProj.x()) {
             m_topLeft.setX(currPoint->x());
@@ -1496,15 +1501,13 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
 
             m_currentArgs.setTranslate(m_clickArgs.translate() + t.toPointF());
 
-            m_optWidget->translateXBox->setValue(m_currentArgs.translate().x());
-            m_optWidget->translateYBox->setValue(m_currentArgs.translate().y());
-            m_optWidget->aZBox->setValue(radianToDegree(m_currentArgs.aZ()));
+            updateOptionWidget();
         }
         break;
         case PERSPECTIVE:
         {
             t = QVector3D(mousePos.x() - m_clickPoint.x(), mousePos.y() - m_clickPoint.y(), 0);
-            double thetaX = - t.y() * M_PI / m_originalHeight2 / 2 / fabs(m_currentArgs.scaleY());
+            double thetaX = - t.y() * M_PI / m_transaction.originalHalfHeight() / 2 / fabs(m_currentArgs.scaleY());
 
             if (event->modifiers() & Qt::ShiftModifier) {
                 int quotient = thetaX * 12 / M_PI;
@@ -1515,7 +1518,7 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
             m_cosaX = cos(m_currentArgs.aX()); // update the cos/sin for transformation
             m_sinaX = sin(m_currentArgs.aX());
             t = invrotX(t.x(), t.y(), t.z());
-            double thetaY = t.x() * M_PI / m_originalWidth2 / 2 / fabs(m_currentArgs.scaleX());
+            double thetaY = t.x() * M_PI / m_transaction.originalHalfWidth() / 2 / fabs(m_currentArgs.scaleX());
 
             if (event->modifiers() & Qt::ShiftModifier) {
                 int quotient = thetaY * 12 / M_PI;
@@ -1535,10 +1538,7 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
 
             m_currentArgs.setTranslate(m_clickArgs.translate() + t.toPointF());
 
-            m_optWidget->translateXBox->setValue(m_currentArgs.translate().x());
-            m_optWidget->translateYBox->setValue(m_currentArgs.translate().y());
-            m_optWidget->aXBox->setValue(radianToDegree(m_currentArgs.aX()));
-            m_optWidget->aYBox->setValue(radianToDegree(m_currentArgs.aY()));
+            updateOptionWidget();
         }
         break;
         case TOPSCALE:
@@ -1546,15 +1546,17 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
             if (m_function == TOPSCALE) {
                 signY = -1;
                 // we want the result of v transformed to be equal to v1Proj (i.e. here we want the projection of the middle bottom point to be unchanged)
-                v1 = QVector3D((double)(m_originalTopLeft.x() + m_originalBottomRight.x()) / 2.0, m_originalBottomRight.y(), 0) - QVector3D(m_originalCenter);
-                v2 = QVector3D((double)(m_originalTopLeft.x() + m_originalBottomRight.x()) / 2.0, m_originalTopLeft.y(), 0) - QVector3D(m_originalCenter);
+                v1 = QVector3D(m_transaction.originalMiddleBottom()) - QVector3D(m_transaction.originalCenter());
+                v2 = QVector3D(m_transaction.originalMiddleTop()) - QVector3D(m_transaction.originalCenter());
                 // we save the projection, and we'll adjust the translation at the end
                 v1Proj = QVector3D(m_clickMiddleBottomProj);
             }
             else {
                 signY = 1;
-                v1 = QVector3D((double)(m_originalTopLeft.x() + m_originalBottomRight.x()) / 2.0, m_originalTopLeft.y(), 0) - QVector3D(m_originalCenter);
-                v2 = QVector3D((double)(m_originalTopLeft.x() + m_originalBottomRight.x()) / 2.0, m_originalBottomRight.y(), 0) - QVector3D(m_originalCenter);
+
+                v1 = QVector3D(m_transaction.originalMiddleTop()) - QVector3D(m_transaction.originalCenter());
+                v2 = QVector3D(m_transaction.originalMiddleBottom()) - QVector3D(m_transaction.originalCenter());
+
                 v1Proj = QVector3D(m_clickMiddleTopProj);
             }
 
@@ -1580,9 +1582,9 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
 
                 double b;
                 if (signY * t.y() < 0)
-                    b = - fabs(t.y() / m_originalHeight2 / 2.);
+                    b = - fabs(t.y() / m_transaction.originalHalfHeight() / 2.);
                 else
-                    b = fabs(t.y() / m_originalHeight2 / 2.);
+                    b = fabs(t.y() / m_transaction.originalHalfHeight() / 2.);
 
                 // we keep the vertical component only
                 t = QVector3D(0, t.y(), 0);
@@ -1609,7 +1611,7 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
 
                 t *= signY;
 
-                m_scaleY_wOutModifier = t.y() / m_originalHeight2 / 2.;
+                m_scaleY_wOutModifier = t.y() / m_transaction.originalHalfHeight() / 2.;
             }
 
             // applies the shift modifier
@@ -1636,14 +1638,18 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
         case RIGHTSCALE:
             if (m_function == LEFTSCALE) {
                 signX = -1;
-                v1 = QVector3D(m_originalBottomRight.x(), (double)(m_originalTopLeft.y() + m_originalBottomRight.y()) / 2.0, 0) - QVector3D(m_originalCenter);
-                v2 = QVector3D(m_originalTopLeft.x(), (double)(m_originalTopLeft.y() + m_originalBottomRight.y()) / 2.0, 0) - QVector3D(m_originalCenter);
+
+                v1 = QVector3D(m_transaction.originalMiddleRight()) - QVector3D(m_transaction.originalCenter());
+                v2 = QVector3D(m_transaction.originalMiddleLeft()) - QVector3D(m_transaction.originalCenter());
+
                 v1Proj = QVector3D(m_clickMiddleRightProj);
             }
             else {
                 signX = 1;
-                v1 = QVector3D(m_originalTopLeft.x(), (double)(m_originalTopLeft.y() + m_originalBottomRight.y()) / 2.0, 0) - QVector3D(m_originalCenter);
-                v2 = QVector3D(m_originalBottomRight.x(), (double)(m_originalTopLeft.y() + m_originalBottomRight.y()) / 2.0, 0) - QVector3D(m_originalCenter);
+
+                v1 = QVector3D(m_transaction.originalMiddleLeft()) - QVector3D(m_transaction.originalCenter());
+                v2 = QVector3D(m_transaction.originalMiddleRight()) - QVector3D(m_transaction.originalCenter());
+
                 v1Proj = QVector3D(m_clickMiddleLeftProj);
             }
 
@@ -1660,9 +1666,9 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
 
                 double b;
                 if (signX * t.x() < 0)
-                    b = - fabs(t.x() / m_originalWidth2 / 2.);
+                    b = - fabs(t.x() / m_transaction.originalHalfWidth() / 2.);
                 else
-                    b = fabs(t.x() / m_originalWidth2 / 2.);
+                    b = fabs(t.x() / m_transaction.originalHalfWidth() / 2.);
 
                 t = QVector3D(t.x(), 0, 0);
 
@@ -1686,7 +1692,7 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
 
                 t *= signX;
 
-                m_scaleX_wOutModifier = t.x() / m_originalWidth2 / 2.;
+                m_scaleX_wOutModifier = t.x() / m_transaction.originalHalfWidth() / 2.;
             }
 
             // applies the shift modifier
@@ -1716,26 +1722,34 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
             switch(m_function) {
             case TOPRIGHTSCALE:
                 signY = -1;
-                v1 = QVector3D(m_originalTopLeft.x(), m_originalBottomRight.y(), 0) - QVector3D(m_originalCenter);
-                v2 = QVector3D(m_originalBottomRight.x(), m_originalTopLeft.y(),0) - QVector3D(m_originalCenter);
+
+                v1 = QVector3D(m_transaction.originalBottomLeft()) - QVector3D(m_transaction.originalCenter());
+                v2 = QVector3D(m_transaction.originalTopRight()) - QVector3D(m_transaction.originalCenter());
+
                 v1Proj = QVector3D(m_clickBottomLeftProj);
                 break;
             case BOTTOMRIGHTSCALE:
-                v1 = QVector3D(m_originalTopLeft - m_originalCenter);
-                v2 = QVector3D(m_originalBottomRight - m_originalCenter);
+
+                v1 = QVector3D(m_transaction.originalTopLeft()) - QVector3D(m_transaction.originalCenter());
+                v2 = QVector3D(m_transaction.originalBottomRight()) - QVector3D(m_transaction.originalCenter());
+
                 v1Proj = QVector3D(m_clickTopLeftProj);
                 break;
             case TOPLEFTSCALE:
                 signX = -1;
                 signY = -1;
-                v1 = QVector3D(m_originalBottomRight - m_originalCenter);
-                v2 = QVector3D(m_originalTopLeft - m_originalCenter);
+
+                v1 = QVector3D(m_transaction.originalBottomRight()) - QVector3D(m_transaction.originalCenter());
+                v2 = QVector3D(m_transaction.originalTopLeft()) - QVector3D(m_transaction.originalCenter());
+
                 v1Proj = QVector3D(m_clickBottomRightProj);
                 break;
             case BOTTOMLEFTSCALE:
                 signX = -1;
-                v1 = QVector3D(m_originalBottomRight.x(), m_originalTopLeft.y(), 0) - QVector3D(m_originalCenter);
-                v2 = QVector3D(m_originalTopLeft.x(), m_originalBottomRight.y(), 0) - QVector3D(m_originalCenter);
+
+                v1 = QVector3D(m_transaction.originalTopRight()) - QVector3D(m_transaction.originalCenter());
+                v2 = QVector3D(m_transaction.originalBottomLeft()) - QVector3D(m_transaction.originalCenter());
+
                 v1Proj = QVector3D(m_clickTopRightProj);
                 break;
             default:
@@ -1754,8 +1768,8 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
                 t = invrotZ(t.x(), t.y(), t.z());
                 t = invshear(t.x(), t.y(), t.z());
 
-                double initScaleX = signX * t.x() / m_originalWidth2 / 2.;
-                double initScaleY = signY * t.y() / m_originalHeight2 / 2.;
+                double initScaleX = signX * t.x() / m_transaction.originalHalfWidth() / 2.;
+                double initScaleY = signY * t.y() / m_transaction.originalHalfHeight() / 2.;
 
                 if (!gradientDescent(v1, v2, desired, initScaleX, initScaleY, 0.05, 1, 1000, 100, 0.001, &m_scaleX_wOutModifier, &m_scaleY_wOutModifier)) {
                     m_scaleX_wOutModifier = initScaleX;
@@ -1770,8 +1784,8 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
                 t = invrotZ(t.x(), t.y(), t.z());
                 t = invshear(t.x(), t.y(), t.z());
 
-                m_scaleX_wOutModifier = signX * t.x() / m_originalWidth2 / 2.;
-                m_scaleY_wOutModifier = signY * t.y() / m_originalHeight2 / 2.;
+                m_scaleX_wOutModifier = signX * t.x() / m_transaction.originalHalfWidth() / 2.;
+                m_scaleY_wOutModifier = signY * t.y() / m_transaction.originalHalfHeight() / 2.;
             }
 
             // applies the shift modifier
@@ -1832,7 +1846,7 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
             }
 
             // now we need to clip t in the rectangle of the tool
-            t = QVector3D(clipInRect(t.toPointF(), QRectF(QPointF(- m_originalWidth2, - m_originalHeight2), QPointF(m_originalWidth2, m_originalHeight2))));
+            t = QVector3D(clipInRect(t.toPointF(), m_transaction.originalRect().translated(-m_transaction.originalCenter())));
 
             m_currentArgs.setRotationCenterOffset(t.toPointF());
 
@@ -1852,9 +1866,9 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
             t.setY(t.y() - t.x() * m_clickArgs.shearY());
             t.setX(t.x() - t.y() * m_clickArgs.shearX());
 
-            dx = signX * m_clickArgs.shearX() * m_currentArgs.scaleY() * m_originalHeight2; // get the dx pixels corresponding to the current shearX factor
+            dx = signX * m_clickArgs.shearX() * m_currentArgs.scaleY() * m_transaction.originalHalfHeight(); // get the dx pixels corresponding to the current shearX factor
             dx += t.x(); // add the horizontal movement
-            m_currentArgs.setShearX(signX * dx / m_currentArgs.scaleY() / m_originalHeight2); // calculate the new shearX factor
+            m_currentArgs.setShearX(signX * dx / m_currentArgs.scaleY() / m_transaction.originalHalfHeight()); // calculate the new shearX factor
 
             m_optWidget->shearXBox->setValue(m_currentArgs.shearX());
             break;
@@ -1869,9 +1883,9 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
             t.setY(t.y() - t.x() * m_clickArgs.shearY());
             t.setX(t.x() - t.y() * m_clickArgs.shearX());
 
-            dy = signY *  m_clickArgs.shearY() * m_currentArgs.scaleX() * m_originalWidth2; // get the dx pixels corresponding to the current shearX factor
+            dy = signY *  m_clickArgs.shearY() * m_currentArgs.scaleX() * m_transaction.originalHalfWidth(); // get the dx pixels corresponding to the current shearX factor
             dy += t.y(); // add the horizontal movement
-            m_currentArgs.setShearY(signY * dy / m_currentArgs.scaleX() / m_originalWidth2); // calculate the new shearX factor
+            m_currentArgs.setShearY(signY * dy / m_currentArgs.scaleX() / m_transaction.originalHalfWidth()); // calculate the new shearX factor
 
             m_optWidget->shearYBox->setValue(m_currentArgs.shearY());
             break;
@@ -1893,7 +1907,7 @@ void KisToolTransform::mouseReleaseEvent(KoPointerEvent *event)
 
     if (m_actuallyMoveWhileSelected) {
         if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
-            if (m_currentArgs.defaultPoints() || !m_editWarpPoints)
+            if (m_currentArgs.defaultPoints() || !m_transaction.editWarpPoints())
                 transform();
             recalcOutline();
         }
@@ -1909,12 +1923,13 @@ void KisToolTransform::mouseReleaseEvent(KoPointerEvent *event)
             m_scaleY_wOutModifier = m_currentArgs.scaleY();
         }
     }
-    setButtonBoxDisabled(m_currentArgs.isIdentity(m_originalCenter));
+    updateApplyResetAvailability();
 }
 
 void KisToolTransform::initFreeTransform()
 {
-    m_currentArgs = ToolTransformArgs(ToolTransformArgs::FREE_TRANSFORM, m_originalCenter, QPointF(0, 0), 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, KisWarpTransformWorker::RIGID_TRANSFORM, 1.0, m_originalTopLeft, true);
+    // FIXME: probably, topleft should be aligned?
+    m_currentArgs = ToolTransformArgs(ToolTransformArgs::FREE_TRANSFORM, m_transaction.originalCenter(), QPointF(0, 0), 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, KisWarpTransformWorker::RIGID_TRANSFORM, 1.0, m_transaction.originalTopLeft(), true);
     m_scaleX_wOutModifier = m_currentArgs.scaleX();
     m_scaleY_wOutModifier = m_currentArgs.scaleY();
 
@@ -1934,17 +1949,17 @@ void KisToolTransform::setDefaultWarpPoints(int pointsPerLine)
     if (nbPoints != 0) {
         if (nbPoints == 1) {
             //there is actually no grid
-            m_gridSpaceX = m_originalWidth2;
-            m_gridSpaceY = m_originalHeight2;
-            origPoints[0] = QPointF(m_originalCenter);
-            transfPoints[0] = QPointF(m_originalCenter);
+            m_gridSpaceX = m_transaction.originalHalfWidth();
+            m_gridSpaceY = m_transaction.originalHalfHeight();
+            origPoints[0] = m_transaction.originalCenter();
+            transfPoints[0] = m_transaction.originalCenter();
         }
         else {
-            m_gridSpaceX = (double)m_originalWidth2 * 2. / (pointsPerLine - 1);
-            m_gridSpaceY = (double)m_originalHeight2 * 2. / (pointsPerLine - 1);
-            double y = - m_originalHeight2 + m_originalCenter.y();
+            m_gridSpaceX = m_transaction.originalRect().width() / (pointsPerLine - 1);
+            m_gridSpaceY = m_transaction.originalRect().height() / (pointsPerLine - 1);
+            double y = m_transaction.originalRect().top();
             for (int i = 0; i < pointsPerLine; ++i) {
-                double x = - m_originalWidth2 + m_originalCenter.x();
+                double x = m_transaction.originalRect().left();
                 for (int j = 0 ; j < pointsPerLine; ++j) {
                     origPoints[i * pointsPerLine + j] = QPointF(x, y);
                     transfPoints[i * pointsPerLine + j] = QPointF(x, y);
@@ -1966,7 +1981,8 @@ void KisToolTransform::setDefaultWarpPoints(int pointsPerLine)
 
 void KisToolTransform::initWarpTransform()
 {
-    m_currentArgs = ToolTransformArgs(ToolTransformArgs::WARP, m_originalCenter, QPointF(0, 0), 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, KisWarpTransformWorker::RIGID_TRANSFORM, 1.0, m_originalTopLeft, true);
+    // FIXME: probably, topleft should be aligned?
+    m_currentArgs = ToolTransformArgs(ToolTransformArgs::WARP, m_transaction.originalCenter(), QPointF(0, 0), 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, KisWarpTransformWorker::RIGID_TRANSFORM, 1.0, m_transaction.originalTopLeft(), true);
 
     setDefaultWarpPoints();
     m_refSize = QSizeF(0, 0);
@@ -2006,12 +2022,8 @@ void KisToolTransform::initTransform(ToolTransformArgs::TransformMode mode)
         w = 0;
         h = 0;
     }
-    m_originalTopLeft = QPoint(x, y);
-    m_originalBottomRight = QPoint(x + w - 1, y + h - 1);
-    m_originalCenter = QPointF(m_originalTopLeft + m_originalBottomRight) / 2.0;
-    m_originalHeight2 = m_originalCenter.y() - m_originalTopLeft.y();
-    m_originalWidth2 = m_originalCenter.x() - m_originalTopLeft.x();
-    m_editWarpPoints = false;
+
+    m_transaction = TransformTransactionProperties(QRectF(x,y,w,h));
 
     if (mode == ToolTransformArgs::WARP)
         initWarpTransform();
@@ -2052,7 +2064,7 @@ void KisToolTransform::initTransform(ToolTransformArgs::TransformMode mode)
 
     outlineChanged();
     updateOptionWidget();
-    setButtonBoxDisabled(m_currentArgs.isIdentity(m_originalCenter));
+    updateApplyResetAvailability();
 }
 
 void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
@@ -2088,23 +2100,23 @@ void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShap
                 m_viewOrigPoints.resize(nbPoints);
                 m_viewTransfPoints.resize(nbPoints);
 
-                m_origSelection = presentCmd2->origSelection(m_originalTopLeft, m_originalBottomRight);
+                QPoint p1, p2;
+                m_origSelection = presentCmd2->origSelection(p1, p2);
+                m_transaction = TransformTransactionProperties(QRect(p1, p2));
 
                 m_origImg = presentCmd2->originalImage();
                 m_origSelectionImg = presentCmd2->originalSelectionImage();
 
-                m_editWarpPoints = false;
                 updateOptionWidget();
-                setButtonBoxDisabled(m_currentArgs.isIdentity(m_originalCenter));
+                updateApplyResetAvailability();
             }
 
-            m_originalCenter = (m_originalTopLeft + m_originalBottomRight) / 2;
             m_scaleX_wOutModifier = m_currentArgs.scaleX();
             m_scaleY_wOutModifier = m_currentArgs.scaleY();
             m_refSize = QSizeF(0, 0); //will force the recalc of image in recalcOutline
 
             outlineChanged();
-            m_canvas->updateCanvas(QRect(m_originalTopLeft, m_originalBottomRight));
+            m_canvas->updateCanvas();
         }
     }
     else {
@@ -2118,13 +2130,7 @@ void KisToolTransform::deactivate()
     KisImageWSP kisimage = image();
 
     if (kisimage) {
-        QRectF rc = boundRect(m_topLeftProj, m_topRightProj, m_bottomRightProj, m_bottomLeftProj);
-        rc = QRect(QPoint(rc.left() / kisimage->xRes(), rc.top() / kisimage->yRes()), QPoint(rc.right() / kisimage->xRes(), rc.bottom() / kisimage->yRes()));
-        double maxRadiusX = m_canvas->viewConverter()->viewToDocumentX(m_maxRadius);
-        double maxRadiusY = m_canvas->viewConverter()->viewToDocumentY(m_maxRadius);
-        rc |= QRect(m_originalTopLeft, m_originalBottomRight);
-        m_canvas->updateCanvas(rc.adjusted(-maxRadiusX, -maxRadiusY, maxRadiusX, maxRadiusY));
-
+        m_canvas->updateCanvas();
         kisimage->undoAdapter()->removeCommandHistoryListener(this);
     }
 
@@ -2137,7 +2143,7 @@ void KisToolTransform::transform()
     if (!image())
         return;
 
-    TransformCmd *transaction = new TransformCmd(this, m_currentArgs, m_origSelection, m_originalTopLeft, m_originalBottomRight, m_origImg, m_origSelectionImg);
+    TransformCmd *transaction = new TransformCmd(this, m_currentArgs, m_origSelection, m_transaction.originalTopLeftAligned(), m_transaction.originalBottomRightAligned(), m_origImg, m_origSelectionImg);
 
     if (image()->undoAdapter() != NULL)
         image()->undoAdapter()->addCommand(transaction);
@@ -2152,17 +2158,13 @@ void KisToolTransform::applyTransform()
         return;
     }
 
-    KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
-    if (!canvas)
-        return;
-
     KisSystemLocker locker(currentNode());
 
-    QVector3D tmpCenter(m_originalCenter.x(), m_originalCenter.y(), 0);
+    QVector3D tmpCenter(m_transaction.originalCenter());
     tmpCenter = scale(tmpCenter.x(), tmpCenter.y(), tmpCenter.z());
     tmpCenter = rotZ(tmpCenter.x(), tmpCenter.y(), tmpCenter.z());
     QPointF t = m_currentArgs.translate() - tmpCenter.toPointF();
-    KoProgressUpdater* updater = canvas->view()->createProgressUpdater(KoProgressUpdater::Unthreaded);
+    KoProgressUpdater* updater = m_canvas->view()->createProgressUpdater(KoProgressUpdater::Unthreaded);
     updater->start(100, i18n("Apply Transformation"));
 
     KisUndoAdapter *undoAdapter = image()->undoAdapter();
@@ -2224,7 +2226,7 @@ void KisToolTransform::applyTransform()
             worker.run();
         }
         else {
-            KisTransformWorker worker(tmpDevice, m_currentArgs.scaleX(), m_currentArgs.scaleY(), m_currentArgs.shearX(), m_currentArgs.shearY(), m_originalCenter.x(), m_originalCenter.y(), m_currentArgs.aZ(), int(t.x()), int(t.y()), transformPixels, m_filter);
+            KisTransformWorker worker(tmpDevice, m_currentArgs.scaleX(), m_currentArgs.scaleY(), m_currentArgs.shearX(), m_currentArgs.shearY(), m_transaction.originalCenter().x(), m_transaction.originalCenter().y(), m_currentArgs.aZ(), int(t.x()), int(t.y()), transformPixels, m_filter);
             worker.run();
             KisPerspectiveTransformWorker perspectiveWorker(tmpDevice, m_currentArgs.translate(), m_currentArgs.aX(), m_currentArgs.aY(), m_cameraPos.z(), perspectiveTransfPixels);
             perspectiveWorker.run();
@@ -2256,7 +2258,7 @@ void KisToolTransform::applyTransform()
             selectionWorker.run();
         }
         else {
-            KisTransformWorker selectionWorker(tmpDevice2, m_currentArgs.scaleX(), m_currentArgs.scaleY(), m_currentArgs.shearX(), m_currentArgs.shearY(), m_originalCenter.x(), m_originalCenter.y(), m_currentArgs.aZ(), (int)(t.x()), (int)(t.y()), transformPixSelection, m_filter);
+            KisTransformWorker selectionWorker(tmpDevice2, m_currentArgs.scaleX(), m_currentArgs.scaleY(), m_currentArgs.shearX(), m_currentArgs.shearY(), m_transaction.originalCenter().x(), m_transaction.originalCenter().y(), m_currentArgs.aZ(), (int)(t.x()), (int)(t.y()), transformPixSelection, m_filter);
             selectionWorker.run();
             KisPerspectiveTransformWorker perspectiveSelectionWorker(tmpDevice2, m_currentArgs.translate(), m_currentArgs.aX(), m_currentArgs.aY(), m_cameraPos.z(), perspectiveTransfPixSelection);
             perspectiveSelectionWorker.run();
@@ -2281,7 +2283,7 @@ void KisToolTransform::applyTransform()
         else {
             KoUpdaterPtr transformPixels = updater->startSubtask(40);
             KoUpdaterPtr perspectiveTransfPixels = updater->startSubtask(40);
-            KisTransformWorker worker(currentNode()->paintDevice(), m_currentArgs.scaleX(), m_currentArgs.scaleY(), m_currentArgs.shearX(), m_currentArgs.shearY(), m_originalCenter.x(), m_originalCenter.y(), m_currentArgs.aZ(), int(t.x()), int(t.y()), transformPixels, m_filter);
+            KisTransformWorker worker(currentNode()->paintDevice(), m_currentArgs.scaleX(), m_currentArgs.scaleY(), m_currentArgs.shearX(), m_currentArgs.shearY(), m_transaction.originalCenter().x(), m_transaction.originalCenter().y(), m_currentArgs.aZ(), int(t.x()), int(t.y()), transformPixels, m_filter);
             worker.run();
             KisPerspectiveTransformWorker perspectiveWorker(currentNode()->paintDevice(), m_currentArgs.translate(), m_currentArgs.aX(), m_currentArgs.aY(), m_cameraPos.z(), perspectiveTransfPixels);
             perspectiveWorker.run();
@@ -2295,10 +2297,10 @@ void KisToolTransform::applyTransform()
     updater->deleteLater();
     currentNode()->setDirty();
 
-    canvas->view()->selectionManager()->selectionChanged();
+    m_canvas->view()->selectionManager()->selectionChanged();
 
     if (currentSelection() && currentSelection()->hasShapeSelection())
-        canvas->view()->selectionManager()->shapeSelectionChanged();
+        m_canvas->view()->selectionManager()->shapeSelectionChanged();
 }
 
 void KisToolTransform::notifyCommandAdded(const KUndo2Command * command)
@@ -2350,21 +2352,19 @@ void KisToolTransform::notifyCommandExecuted(const KUndo2Command * command)
                 m_viewOrigPoints.resize(nbPoints);
                 m_viewTransfPoints.resize(nbPoints);
 
-                m_origSelection = presentCmd2->origSelection(m_originalTopLeft, m_originalBottomRight);
+                QPoint p1, p2;
+                m_origSelection = presentCmd2->origSelection(p1, p2);
+                m_transaction = TransformTransactionProperties(QRect(p1, p2));
 
                 m_origImg = presentCmd2->originalImage();
                 m_origSelectionImg = presentCmd2->originalSelectionImage();
 
-                m_originalCenter = (m_originalTopLeft + m_originalBottomRight) / 2;
-                m_originalHeight2 = m_originalCenter.y() - m_originalTopLeft.y();
-                m_originalWidth2 = m_originalCenter.x() - m_originalTopLeft.x();
                 m_scaleX_wOutModifier = m_currentArgs.scaleX();
                 m_scaleY_wOutModifier = m_currentArgs.scaleY();
                 m_refSize = QSizeF(0, 0); // will force the recalc of current QImages in recalcOutline
 
-                m_editWarpPoints = false;
                 updateOptionWidget();
-                setButtonBoxDisabled(m_currentArgs.isIdentity(m_originalCenter));
+                updateApplyResetAvailability();
             }
 
             outlineChanged();
@@ -2376,7 +2376,7 @@ void KisToolTransform::notifyCommandExecuted(const KUndo2Command * command)
 }
 
 QWidget* KisToolTransform::createOptionWidget() {
-    m_optWidget = new WdgToolTransform(0);
+    m_optWidget = new KisToolTransformConfigWidget(&m_transaction, m_canvas, 0);
     Q_CHECK_PTR(m_optWidget);
     m_optWidget->setObjectName(toolId() + " option widget");
 
@@ -2441,10 +2441,7 @@ QWidget* KisToolTransform::createOptionWidget() {
     connect(m_optWidget->resetPointsButton, SIGNAL(clicked()), this, SLOT(slotResetPointsButtonClicked()));
 
     connect(m_optWidget->buttonBox, SIGNAL(clicked(QAbstractButton *)), this, SLOT(slotButtonBoxClicked(QAbstractButton *)));
-    KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
-    if (canvas)
-        connect(m_optWidget->showDecorationsBox, SIGNAL(toggled(bool)), canvas, SLOT(updateCanvas()));
-    setButtonBoxDisabled(true);
+    connect(m_optWidget->showDecorationsBox, SIGNAL(toggled(bool)), m_canvas, SLOT(updateCanvas()));
 
     connect(m_optWidget->scaleXBox, SIGNAL(editingFinished()), this, SLOT(slotEditingFinished()));
     connect(m_optWidget->scaleYBox, SIGNAL(editingFinished()), this, SLOT(slotEditingFinished()));
@@ -2469,8 +2466,7 @@ QWidget* KisToolTransform::createOptionWidget() {
 
 void KisToolTransform::updateOptionWidget()
 {
-    if (m_optWidget == 0)
-        return;
+    if (!m_optWidget) return;
 
     if (!currentNode()) {
         m_optWidget->setEnabled(false);
@@ -2478,107 +2474,14 @@ void KisToolTransform::updateOptionWidget()
     }
     else {
         m_optWidget->setEnabled(true);
-
-        if (m_currentArgs.mode() == ToolTransformArgs::FREE_TRANSFORM) {
-            if (m_optWidget->stackedWidget)
-                m_optWidget->stackedWidget->setCurrentIndex(0);
-            if (m_optWidget->freeTransformButton)
-                m_optWidget->freeTransformButton->setChecked(true);
-            if (m_optWidget->warpButton)
-                m_optWidget->warpButton->setChecked(false);
-            if (m_optWidget->scaleXBox)
-                m_optWidget->scaleXBox->setValue(m_currentArgs.scaleX() * 100.);
-            if (m_optWidget->scaleYBox)
-                m_optWidget->scaleYBox->setValue(m_currentArgs.scaleY() * 100.);
-            if (m_optWidget->shearXBox)
-                m_optWidget->shearXBox->setValue(m_currentArgs.shearX());
-            if (m_optWidget->shearYBox)
-                m_optWidget->shearYBox->setValue(m_currentArgs.shearY());
-            if (m_optWidget->translateXBox)
-                m_optWidget->translateXBox->setValue(m_currentArgs.translate().x());
-            if (m_optWidget->translateYBox)
-                m_optWidget->translateYBox->setValue(m_currentArgs.translate().y());
-            if (m_optWidget->aXBox)
-                m_optWidget->aXBox->setValue(radianToDegree(m_currentArgs.aX()));
-            if (m_optWidget->aYBox)
-                m_optWidget->aYBox->setValue(radianToDegree(m_currentArgs.aY()));
-            if (m_optWidget->aZBox)
-                m_optWidget->aZBox->setValue(radianToDegree(m_currentArgs.aZ()));
-        }
-        else {
-            if (m_optWidget->stackedWidget)
-                m_optWidget->stackedWidget->setCurrentIndex(1);
-            if (m_optWidget->freeTransformButton)
-                m_optWidget->freeTransformButton->setChecked(false);
-            if (m_optWidget->warpButton)
-                m_optWidget->warpButton->setChecked(true);
-            if (m_optWidget->alphaBox)
-                m_optWidget->alphaBox->setValue(m_currentArgs.alpha());
-            if (m_currentArgs.defaultPoints()) {
-                if (m_optWidget->densityBox)
-                    m_optWidget->densityBox->setValue(m_currentArgs.pointsPerLine());
-            }
-            if (m_optWidget->cmbWarpType)
-                m_optWidget->cmbWarpType->setCurrentIndex((int)m_currentArgs.warpType());
-            if (m_optWidget->defaultRadioButton)
-                m_optWidget->defaultRadioButton->setChecked(m_currentArgs.defaultPoints());
-            if (m_optWidget->customRadioButton)
-                m_optWidget->customRadioButton->setChecked(!m_currentArgs.defaultPoints());
-            if (m_optWidget->defaultWarpWidget)
-                m_optWidget->defaultWarpWidget->setEnabled(m_currentArgs.defaultPoints());
-            if (m_optWidget->customWarpWidget)
-                m_optWidget->customWarpWidget->setEnabled(!m_currentArgs.defaultPoints());
-            if (m_optWidget->lockUnlockPointsButton) {
-                if (m_editWarpPoints)
-                    m_optWidget->lockUnlockPointsButton->setText(i18n("Lock Points"));
-                else
-                    m_optWidget->lockUnlockPointsButton->setText(i18n("Unlock Points"));
-            }
-        }
+        m_optWidget->updateConfig(m_currentArgs);
     }
 }
 
-void KisToolTransform::setButtonBoxDisabled(bool disabled)
-{
-    if (m_optWidget && m_optWidget->buttonBox) {
-        QAbstractButton *applyButton = m_optWidget->buttonBox->button(QDialogButtonBox::Apply);
-        QAbstractButton *resetButton = m_optWidget->buttonBox->button(QDialogButtonBox::Reset);
-
-        if (applyButton)
-            applyButton->setDisabled(disabled);
-        if (resetButton)
-            resetButton->setDisabled(disabled);
-    }
-}
-
-void KisToolTransform::setFreeTransformBoxesDisabled(bool disabled)
+void KisToolTransform::updateApplyResetAvailability()
 {
     if (m_optWidget) {
-        if (m_optWidget->translateXBox)
-            m_optWidget->translateXBox->setDisabled(disabled);
-        if (m_optWidget->translateYBox)
-            m_optWidget->translateYBox->setDisabled(disabled);
-        if (m_optWidget->scaleXBox)
-            m_optWidget->scaleXBox->setDisabled(disabled);
-        if (m_optWidget->scaleYBox)
-            m_optWidget->scaleYBox->setDisabled(disabled);
-        if (m_optWidget->shearXBox)
-            m_optWidget->shearXBox->setDisabled(disabled);
-        if (m_optWidget->shearYBox)
-            m_optWidget->shearYBox->setDisabled(disabled);
-        if (m_optWidget->aXBox)
-            m_optWidget->aXBox->setDisabled(disabled);
-        if (m_optWidget->aYBox)
-            m_optWidget->aYBox->setDisabled(disabled);
-        if (m_optWidget->aZBox)
-            m_optWidget->aZBox->setDisabled(disabled);
-        if (m_optWidget->cmbFilter)
-            m_optWidget->cmbFilter->setDisabled(disabled);
-        if (m_rotCenterButtons) {
-            for (int i = 0; i < 9; ++i)
-                if (m_rotCenterButtons->button(i))
-                    m_rotCenterButtons->button(i)->setDisabled(disabled);
-        }
+        m_optWidget->setApplyResetDisabled(m_currentArgs.isIdentity(m_transaction.originalCenter()));
     }
 }
 
@@ -2594,7 +2497,7 @@ void KisToolTransform::setRotCenter(int id)
             double i = m_handleDir[id].x();
             double j = m_handleDir[id].y();
 
-            m_currentArgs.setRotationCenterOffset(QPointF(i * m_originalWidth2, j * m_originalHeight2));
+            m_currentArgs.setRotationCenterOffset(QPointF(i * m_transaction.originalHalfWidth(), j * m_transaction.originalHalfHeight()));
             outlineChanged();
 
             m_boxValueChanged = true;
@@ -2620,7 +2523,7 @@ void KisToolTransform::setScaleX(double scaleX)
         outlineChanged();
 
         m_boxValueChanged = true;
-        setButtonBoxDisabled(m_currentArgs.isIdentity(m_originalCenter));
+        updateApplyResetAvailability();
     }
     else {
         // the scale factor has been modified by mouse movement : we set the aspect ratio button manually
@@ -2649,7 +2552,7 @@ void KisToolTransform::setScaleY(double scaleY)
         outlineChanged();
 
         m_boxValueChanged = true;
-        setButtonBoxDisabled(m_currentArgs.isIdentity(m_originalCenter));
+        updateApplyResetAvailability();
     }
     else {
         // the scale factor has been modified by mouse movement : we set the aspect ratio button manually
@@ -2667,7 +2570,7 @@ void KisToolTransform::setShearX(double shearX)
         outlineChanged();
 
         m_boxValueChanged = true;
-        setButtonBoxDisabled(m_currentArgs.isIdentity(m_originalCenter));
+        updateApplyResetAvailability();
     }
 }
 
@@ -2678,7 +2581,7 @@ void KisToolTransform::setShearY(double shearY)
         outlineChanged();
 
         m_boxValueChanged = true;
-        setButtonBoxDisabled(m_currentArgs.isIdentity(m_originalCenter));
+        updateApplyResetAvailability();
     }
 }
 
@@ -2689,7 +2592,7 @@ void KisToolTransform::setAX(double aX)
         outlineChanged();
 
         m_boxValueChanged = true;
-        setButtonBoxDisabled(m_currentArgs.isIdentity(m_originalCenter));
+        updateApplyResetAvailability();
     }
 }
 
@@ -2700,7 +2603,7 @@ void KisToolTransform::setAY(double aY)
         outlineChanged();
 
         m_boxValueChanged = true;
-        setButtonBoxDisabled(m_currentArgs.isIdentity(m_originalCenter));
+        updateApplyResetAvailability();
     }
 }
 
@@ -2711,7 +2614,7 @@ void KisToolTransform::setAZ(double aZ)
         outlineChanged();
 
         m_boxValueChanged = true;
-        setButtonBoxDisabled(m_currentArgs.isIdentity(m_originalCenter));
+        updateApplyResetAvailability();
     }
 }
 
@@ -2730,7 +2633,7 @@ void KisToolTransform::setDensity(int density)
     if (mode() != KisTool::PAINT_MODE) {
         setDefaultWarpPoints(density);
         outlineChanged();
-        setButtonBoxDisabled(m_currentArgs.isIdentity(m_originalCenter));
+        updateApplyResetAvailability();
     }
 }
 
@@ -2741,7 +2644,7 @@ void KisToolTransform::setTranslateX(double translateX)
         outlineChanged();
 
         m_boxValueChanged = true;
-        setButtonBoxDisabled(m_currentArgs.isIdentity(m_originalCenter));
+        updateApplyResetAvailability();
     }
 }
 
@@ -2752,7 +2655,7 @@ void KisToolTransform::setTranslateY(double translateY)
         outlineChanged();
 
         m_boxValueChanged = true;
-        setButtonBoxDisabled(m_currentArgs.isIdentity(m_originalCenter));
+        updateApplyResetAvailability();
     }
 }
 
@@ -2789,7 +2692,7 @@ void KisToolTransform::slotButtonBoxClicked(QAbstractButton *button)
         outlineChanged();
 
         updateOptionWidget();
-        setButtonBoxDisabled(m_currentArgs.isIdentity(m_originalCenter));
+        updateApplyResetAvailability();
     }
 }
 
@@ -2826,7 +2729,7 @@ void KisToolTransform::slotEditingFinished()
         m_boxValueChanged = false;
     }
 
-    setButtonBoxDisabled(m_currentArgs.isIdentity(m_originalCenter));
+    updateApplyResetAvailability();
 }
 
 void KisToolTransform::slotWarpButtonClicked(bool checked)
@@ -2865,79 +2768,61 @@ void KisToolTransform::slotWarpTypeChanged(int index)
     outlineChanged();
 }
 
-void KisToolTransform::slotWarpDefaultButtonClicked(bool checked)
+void KisToolTransform::activateCustomWarpPoints(bool enabled)
 {
-    m_currentArgs.setDefaultPoints(checked);
+    m_currentArgs.setDefaultPoints(!enabled);
 
     if (m_optWidget) {
         if (m_optWidget->defaultWarpWidget)
-            m_optWidget->defaultWarpWidget->setEnabled(checked);
+            m_optWidget->defaultWarpWidget->setEnabled(!enabled);
         if (m_optWidget->customWarpWidget)
-            m_optWidget->customWarpWidget->setEnabled(!checked);
+            m_optWidget->customWarpWidget->setEnabled(enabled);
 
-        if (checked) {
-            if (m_optWidget->densityBox)
+        if (!enabled) {
+            if (m_optWidget->densityBox) {
                 setDefaultWarpPoints(m_optWidget->densityBox->value());
-            else
+            } else {
                 setDefaultWarpPoints();
-            m_editWarpPoints = false;
+            }
+            m_transaction.setEditWarpPoints(false);
         }
         else {
             m_currentArgs.setDefaultPoints(false);
             m_currentArgs.setPoints(QVector<QPointF>(), QVector<QPointF>());
             m_viewOrigPoints.resize(0);
             m_viewTransfPoints.resize(0);
-            m_editWarpPoints = true;
+            m_transaction.setEditWarpPoints(true);
         }
     }
 
     outlineChanged();
     updateOptionWidget();
-    setButtonBoxDisabled(m_currentArgs.isIdentity(m_originalCenter));
+    updateApplyResetAvailability();
+}
+
+void KisToolTransform::slotWarpDefaultButtonClicked(bool checked)
+{
+    activateCustomWarpPoints(!checked);
 }
 
 void KisToolTransform::slotWarpCustomButtonClicked(bool checked)
 {
-    m_currentArgs.setDefaultPoints(checked);
-
-    if (m_optWidget) {
-        if (m_optWidget->defaultWarpWidget)
-            m_optWidget->defaultWarpWidget->setEnabled(!checked);
-        if (m_optWidget->customWarpWidget)
-            m_optWidget->customWarpWidget->setEnabled(checked);
-
-        if (!checked) {
-            if (m_optWidget->densityBox)
-                setDefaultWarpPoints(m_optWidget->densityBox->value());
-            else
-                setDefaultWarpPoints();
-            m_editWarpPoints = false;
-        }
-        else {
-            m_currentArgs.setDefaultPoints(false);
-            m_currentArgs.setPoints(QVector<QPointF>(), QVector<QPointF>());
-            m_viewOrigPoints.resize(0);
-            m_viewTransfPoints.resize(0);
-            m_editWarpPoints = true;
-        }
-    }
-
-    outlineChanged();
-    updateOptionWidget();
-    setButtonBoxDisabled(m_currentArgs.isIdentity(m_originalCenter));
+    activateCustomWarpPoints(checked);
 }
 
 void KisToolTransform::slotLockUnlockPointsButtonClicked()
 {
-    if (m_editWarpPoints) {
-        if (m_optWidget && m_optWidget->lockUnlockPointsButton)
+    if (m_transaction.editWarpPoints()) {
+        if (m_optWidget && m_optWidget->lockUnlockPointsButton) {
             m_optWidget->lockUnlockPointsButton->setText(i18n("Unlock Points"));
-        m_editWarpPoints = false;
+        }
+        m_transaction.setEditWarpPoints(false);
     }
     else {
-        if (m_optWidget && m_optWidget->lockUnlockPointsButton)
+        if (m_optWidget && m_optWidget->lockUnlockPointsButton) {
             m_optWidget->lockUnlockPointsButton->setText(i18n("Lock Points"));
-        m_editWarpPoints = true;
+        }
+        m_transaction.setEditWarpPoints(true);
 
         // reinit the transf points to their original value
         int nbPoints = m_currentArgs.origPoints().size();
@@ -2946,19 +2831,19 @@ void KisToolTransform::slotLockUnlockPointsButtonClicked()
     }
 
     outlineChanged();
-    setButtonBoxDisabled(m_currentArgs.isIdentity(m_originalCenter));
+    updateApplyResetAvailability();
 }
 
 void KisToolTransform::slotResetPointsButtonClicked()
 {
-    m_editWarpPoints = true;
+    m_transaction.setEditWarpPoints(true);
     m_currentArgs.setPoints(QVector<QPointF>(), QVector<QPointF>());
     m_viewOrigPoints.resize(0);
     m_viewTransfPoints.resize(0);
 
     outlineChanged();
     updateOptionWidget();
-    setButtonBoxDisabled(m_currentArgs.isIdentity(m_originalCenter));
+    updateApplyResetAvailability();
 }
 
 #include "kis_tool_transform.moc"

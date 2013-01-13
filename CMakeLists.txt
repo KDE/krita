@@ -96,11 +96,6 @@ ELSE()
     set(SHOULD_BUILD_ACTIVE FALSE)
 ENDIF()
 
-if(KDE4_BUILD_TESTS)
-    # only with this definition will the FOO_TEST_EXPORT macro do something
-    add_definitions(-DCOMPILING_TESTS)
-endif(KDE4_BUILD_TESTS)
-
  ########################
 #########################
 ## Look for KDE and Qt ##
@@ -146,6 +141,11 @@ if(NOT ${KDE_VERSION} VERSION_GREATER 4.6.4)
 endif(NOT ${KDE_VERSION} VERSION_GREATER 4.6.4)
 
 macro_ensure_out_of_source_build("Compiling Calligra inside the source directory is not possible. Please refer to the build instruction http://community.kde.org/Calligra/Building/Building_Calligra")
+
+if(KDE4_BUILD_TESTS)
+    # only with this definition will the FOO_TEST_EXPORT macro do something
+    add_definitions(-DCOMPILING_TESTS)
+endif(KDE4_BUILD_TESTS)
 
  ###########################
 ############################

@@ -104,7 +104,7 @@ public:
         m_editWarpPoints = value;
     }
 
-    const ToolTransformArgs* currentConfig() const {
+    ToolTransformArgs* currentConfig() const {
         return m_currentConfig;
     }
 

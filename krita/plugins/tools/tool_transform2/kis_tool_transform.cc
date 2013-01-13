@@ -158,17 +158,6 @@ QPointF KisToolTransform::minMaxZ(QVector3D P0, QVector3D P1, QVector3D P2, QVec
     return res;
 }
 
-double KisToolTransform::degreeToRadian(double degree)
-{
-    if (degree < 0. || degree >= 360.) {
-        degree = fmod(degree, 360.);
-        if (degree < 0)
-            degree += 360.;
-    }
-
-    return (degree * M_PI / 180.);
-}
-
 int KisToolTransform::det(const QPointF & v, const QPointF & w)
 {
     return int(v.x()*w.y() - v.y()*w.x());
@@ -1620,10 +1609,7 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
             t= v1Proj - newV1Proj;
             m_currentArgs.setTranslate(m_clickArgs.translate() + t.toPointF());
 
-            m_optWidget->translateXBox->setValue(m_currentArgs.translate().x());
-            m_optWidget->translateYBox->setValue(m_currentArgs.translate().y());
-            m_optWidget->scaleXBox->setValue(m_currentArgs.scaleX() * 100.);
-            m_optWidget->scaleYBox->setValue(m_currentArgs.scaleY() * 100.);
+            updateOptionWidget();
             break;
         case LEFTSCALE:
         case RIGHTSCALE:
@@ -1701,10 +1687,7 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
             t= v1Proj - newV1Proj;
             m_currentArgs.setTranslate(m_clickArgs.translate() + t.toPointF());
 
-            m_optWidget->translateXBox->setValue(m_currentArgs.translate().x());
-            m_optWidget->translateYBox->setValue(m_currentArgs.translate().y());
-            m_optWidget->scaleXBox->setValue(m_currentArgs.scaleX() * 100.);
-            m_optWidget->scaleYBox->setValue(m_currentArgs.scaleY() * 100.);
+            updateOptionWidget();
             break;
         case TOPRIGHTSCALE:
         case BOTTOMRIGHTSCALE:
@@ -1803,10 +1786,7 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
             t= v1Proj - newV1Proj;
             m_currentArgs.setTranslate(m_clickArgs.translate() + t.toPointF());
 
-            m_optWidget->translateXBox->setValue(m_currentArgs.translate().x());
-            m_optWidget->translateYBox->setValue(m_currentArgs.translate().y());
-            m_optWidget->scaleXBox->setValue(m_currentArgs.scaleX() * 100.);
-            m_optWidget->scaleYBox->setValue(m_currentArgs.scaleY() * 100.);
+            updateOptionWidget();
             break;
         case MOVECENTER:
             t = QVector3D(mousePos - m_currentArgs.translate());
@@ -2370,8 +2350,8 @@ QWidget* KisToolTransform::createOptionWidget() {
     Q_CHECK_PTR(m_optWidget);
     m_optWidget->setObjectName(toolId() + " option widget");
 
-    connect(m_optWidget, SIGNAL(sigConfigChanged(const ToolTransformArgs&)),
-            this, SLOT(slotUiChangedConfig(const ToolTransformArgs&)));
+    connect(m_optWidget, SIGNAL(sigConfigChanged()),
+            this, SLOT(slotUiChangedConfig()));
 
     m_optWidget->cmbFilter->clear();
     m_optWidget->cmbFilter->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
@@ -2397,18 +2377,7 @@ QWidget* KisToolTransform::createOptionWidget() {
     KoID filterID = m_optWidget->cmbFilter->currentItem();
     m_filter = KisFilterStrategyRegistry::instance()->value(filterID.id());
 
-    connect(m_optWidget->scaleXBox, SIGNAL(valueChanged(double)), this, SLOT(setScaleX(double)));
-    connect(m_optWidget->scaleYBox, SIGNAL(valueChanged(double)), this, SLOT(setScaleY(double)));
-    connect(m_optWidget->shearXBox, SIGNAL(valueChanged(double)), this, SLOT(setShearX(double)));
-    connect(m_optWidget->shearYBox, SIGNAL(valueChanged(double)), this, SLOT(setShearY(double)));
-    connect(m_optWidget->translateXBox, SIGNAL(valueChanged(double)), this, SLOT(setTranslateX(double)));
-    connect(m_optWidget->translateYBox, SIGNAL(valueChanged(double)), this, SLOT(setTranslateY(double)));
-    connect(m_optWidget->aXBox, SIGNAL(valueChanged(double)), this, SLOT(setAX(double)));
-    connect(m_optWidget->aYBox, SIGNAL(valueChanged(double)), this, SLOT(setAY(double)));
-    connect(m_optWidget->aZBox, SIGNAL(valueChanged(double)), this, SLOT(setAZ(double)));
-    connect(m_optWidget->alphaBox, SIGNAL(valueChanged(double)), this, SLOT(setAlpha(double)));
     connect(m_optWidget->densityBox, SIGNAL(valueChanged(int)), this, SLOT(setDensity(int)));
-    connect(m_optWidget->aspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(slotKeepAspectRatioChanged(bool)));
     connect(m_optWidget->defaultRadioButton, SIGNAL(clicked(bool)), this, SLOT(slotWarpDefaultButtonClicked(bool)));
     connect(m_optWidget->customRadioButton, SIGNAL(clicked(bool)), this, SLOT(slotWarpCustomButtonClicked(bool)));
     connect(m_optWidget->lockUnlockPointsButton, SIGNAL(clicked()), this, SLOT(slotLockUnlockPointsButtonClicked()));
@@ -2459,12 +2428,12 @@ void KisToolTransform::updateApplyResetAvailability()
     }
 }
 
-void KisToolTransform::slotUiChangedConfig(const ToolTransformArgs &config)
+void KisToolTransform::slotUiChangedConfig()
 {
     if (mode() == KisTool::PAINT_MODE) return;
 
-    m_currentArgs = config;
     outlineChanged();
+    updateApplyResetAvailability();
 }
 
 void KisToolTransform::slotSetFilter(const KoID &filterID)
@@ -2472,156 +2441,12 @@ void KisToolTransform::slotSetFilter(const KoID &filterID)
     m_filter = KisFilterStrategyRegistry::instance()->value(filterID.id());
 }
 
-void KisToolTransform::setScaleX(double scaleX)
-{
-    if (mode() != KisTool::PAINT_MODE) {
-        // the spinbox has been modified directly
-        m_currentArgs.setScaleX(scaleX / 100.);
-
-        if (m_optWidget->aspectButton->keepAspectRatio() && fabs(m_optWidget->scaleXBox->value()) != fabs(m_optWidget->scaleYBox->value())) {
-            if (m_optWidget->scaleYBox->value() >= 0) {
-                m_optWidget->scaleYBox->setValue(fabs(m_optWidget->scaleXBox->value()));
-            }
-            else {
-                m_optWidget->scaleYBox->setValue(- fabs(m_optWidget->scaleXBox->value()));
-            }
-        }
-
-        outlineChanged();
-
-        m_boxValueChanged = true;
-        updateApplyResetAvailability();
-    }
-    else {
-        // the scale factor has been modified by mouse movement : we set the aspect ratio button manually
-        if (fabs(m_currentArgs.scaleX()) == fabs(m_currentArgs.scaleY()))
-            m_optWidget->aspectButton->setKeepAspectRatio(true);
-        else
-            m_optWidget->aspectButton->setKeepAspectRatio(false);
-    }
-}
-
-void KisToolTransform::setScaleY(double scaleY)
-{
-    if (mode() != KisTool::PAINT_MODE) {
-        // the spinbox has been modified directly
-        m_currentArgs.setScaleY(scaleY / 100.);
-
-        if (m_optWidget->aspectButton->keepAspectRatio() && fabs(m_optWidget->scaleXBox->value()) != fabs(m_optWidget->scaleYBox->value())) {
-            if (m_optWidget->scaleXBox->value() >= 0) {
-                m_optWidget->scaleXBox->setValue(fabs(m_optWidget->scaleYBox->value()));
-            }
-            else {
-                m_optWidget->scaleXBox->setValue(- fabs(m_optWidget->scaleYBox->value()));
-            }
-        }
-
-        outlineChanged();
-
-        m_boxValueChanged = true;
-        updateApplyResetAvailability();
-    }
-    else {
-        // the scale factor has been modified by mouse movement : we set the aspect ratio button manually
-        if (fabs(m_currentArgs.scaleX()) == fabs(m_currentArgs.scaleY()))
-            m_optWidget->aspectButton->setKeepAspectRatio(true);
-        else
-            m_optWidget->aspectButton->setKeepAspectRatio(false);
-    }
-}
-
-void KisToolTransform::setShearX(double shearX)
-{
-    if (mode() != KisTool::PAINT_MODE) {
-        m_currentArgs.setShearX(shearX);
-        outlineChanged();
-
-        m_boxValueChanged = true;
-        updateApplyResetAvailability();
-    }
-}
-
-void KisToolTransform::setShearY(double shearY)
-{
-    if (mode() != KisTool::PAINT_MODE) {
-        m_currentArgs.setShearY(shearY);
-        outlineChanged();
-
-        m_boxValueChanged = true;
-        updateApplyResetAvailability();
-    }
-}
-
-void KisToolTransform::setAX(double aX)
-{
-    if (mode() != KisTool::PAINT_MODE) {
-        m_currentArgs.setAX(degreeToRadian(aX));
-        outlineChanged();
-
-        m_boxValueChanged = true;
-        updateApplyResetAvailability();
-    }
-}
-
-void KisToolTransform::setAY(double aY)
-{
-    if (mode() != KisTool::PAINT_MODE) {
-        m_currentArgs.setAY(degreeToRadian(aY));
-        outlineChanged();
-
-        m_boxValueChanged = true;
-        updateApplyResetAvailability();
-    }
-}
-
-void KisToolTransform::setAZ(double aZ)
-{
-    if (mode() != KisTool::PAINT_MODE) {
-        m_currentArgs.setAZ(degreeToRadian(aZ));
-        outlineChanged();
-
-        m_boxValueChanged = true;
-        updateApplyResetAvailability();
-    }
-}
-
-void KisToolTransform::setAlpha(double alpha)
-{
-    if (mode() != KisTool::PAINT_MODE) {
-        m_currentArgs.setAlpha(alpha);
-        outlineChanged();
-
-        m_boxValueChanged = true;
-    }
-}
 
 void KisToolTransform::setDensity(int density)
 {
     if (mode() != KisTool::PAINT_MODE) {
         setDefaultWarpPoints(density);
         outlineChanged();
-        updateApplyResetAvailability();
-    }
-}
-
-void KisToolTransform::setTranslateX(double translateX)
-{
-    if (mode() != KisTool::PAINT_MODE) {
-        m_currentArgs.setTranslate(QPointF(translateX, m_currentArgs.translate().y()));
-        outlineChanged();
-
-        m_boxValueChanged = true;
-        updateApplyResetAvailability();
-    }
-}
-
-void KisToolTransform::setTranslateY(double translateY)
-{
-    if (mode() != KisTool::PAINT_MODE) {
-        m_currentArgs.setTranslate(QPointF(m_currentArgs.translate().x(), translateY));
-        outlineChanged();
-
-        m_boxValueChanged = true;
         updateApplyResetAvailability();
     }
 }
@@ -2660,28 +2485,6 @@ void KisToolTransform::slotButtonBoxClicked(QAbstractButton *button)
 
         updateOptionWidget();
         updateApplyResetAvailability();
-    }
-}
-
-void KisToolTransform::slotKeepAspectRatioChanged(bool keep)
-{
-    if (keep) {
-        if (fabs(m_optWidget->scaleXBox->value()) > fabs(m_optWidget->scaleYBox->value())) {
-            if (m_optWidget->scaleYBox->value() >= 0) {
-                m_optWidget->scaleYBox->setValue(fabs(m_optWidget->scaleXBox->value()));
-            }
-            else {
-                m_optWidget->scaleYBox->setValue(- fabs(m_optWidget->scaleXBox->value()));
-            }
-        }
-        else if (m_optWidget->scaleYBox->value() > m_optWidget->scaleXBox->value()) {
-            if (m_optWidget->scaleXBox->value() >= 0) {
-                m_optWidget->scaleXBox->setValue(fabs(m_optWidget->scaleYBox->value()));
-            }
-            else {
-                m_optWidget->scaleXBox->setValue(- fabs(m_optWidget->scaleYBox->value()));
-            }
-        }
     }
 }
 

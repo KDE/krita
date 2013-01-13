@@ -222,8 +222,6 @@ private:
     QRectF boundRect(QPointF P0, QPointF P1, QPointF P2, QPointF P3);
     // Returns the minimum and the maximum of the Z component of the 4 given vectors (x being the min, and y the max in the returned point)
     QPointF minMaxZ(QVector3D P0, QVector3D P1, QVector3D P2, QVector3D P3);
-    // degree being in |R, the returned value is in [0; 2*M_PI[
-    double degreeToRadian(double degree);
     // Determinant math function
     int det(const QPointF & v, const QPointF & w);
     // Square of the euclidian distance
@@ -383,22 +381,11 @@ private:
     void activateCustomWarpPoints(bool enabled);
 
 private slots:
-    void slotUiChangedConfig(const ToolTransformArgs &config);
+    void slotUiChangedConfig();
 
     void slotSetFilter(const KoID &);
-    void setScaleX(double scaleX);
-    void setScaleY(double scaleY);
-    void setShearX(double shearX);
-    void setShearY(double shearY);
-    void setAX(double aX);
-    void setAY(double aY);
-    void setAZ(double aZ);
-    void setAlpha(double alpha);
     void setDensity(int density);
-    void setTranslateX(double translateX);
-    void setTranslateY(double translateY);
     void slotButtonBoxClicked(QAbstractButton *button);
-    void slotKeepAspectRatioChanged(bool keep);
     void slotEditingFinished();
 	void slotWarpButtonClicked(bool checked);
 	void slotFreeTransformButtonClicked(bool checked);

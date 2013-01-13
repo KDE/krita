@@ -38,6 +38,7 @@ ToolTransformArgs::ToolTransformArgs()
     m_warpType = KisWarpTransformWorker::AFFINE_TRANSFORM;
     m_alpha = 1.0;
     m_previewPos = QPointF(0, 0);
+    m_keepAspectRatio = true;
 }
 
 void ToolTransformArgs::init(const ToolTransformArgs& args)
@@ -59,6 +60,7 @@ void ToolTransformArgs::init(const ToolTransformArgs& args)
     m_alpha = args.alpha();
     m_previewPos = args.previewPos();
     m_defaultPoints = args.defaultPoints();
+    m_keepAspectRatio = args.keepAspectRatio();
 }
 
 void ToolTransformArgs::clear()
@@ -103,6 +105,7 @@ ToolTransformArgs::ToolTransformArgs(TransformMode mode,
     m_alpha = alpha;
     m_previewPos = previewPos;
     m_defaultPoints = defaultPoints;
+    m_keepAspectRatio = true;
 }
 
 

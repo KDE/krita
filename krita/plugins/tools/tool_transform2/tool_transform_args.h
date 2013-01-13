@@ -135,6 +135,9 @@ public:
     inline double scaleY() const {
         return m_scaleY;
     }
+    inline bool keepAspectRatio() const {
+        return m_keepAspectRatio;
+    }
     inline double shearX() const {
         return m_shearX;
     }
@@ -162,6 +165,9 @@ public:
     }
     inline void setScaleY(double scaleY) {
         m_scaleY = scaleY;
+    }
+    inline void setKeepAspectRatio(bool value) {
+        m_keepAspectRatio = value;
     }
     inline void setShearX(double shearX) {
         m_shearX = shearX;
@@ -201,6 +207,7 @@ private:
     double m_scaleY;
     double m_shearX;
     double m_shearY;
+    bool m_keepAspectRatio;
 };
 
 #endif // TOOL_TRANSFORM_ARGS_H_

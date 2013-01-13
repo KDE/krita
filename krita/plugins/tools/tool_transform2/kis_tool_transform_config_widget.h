@@ -40,7 +40,7 @@ public slots:
     void updateConfig(const ToolTransformArgs &config);
 
 signals:
-    void sigConfigChanged(const ToolTransformArgs &config);
+    void sigConfigChanged();
 
 private slots:
 /*    void slotFilterChanged(const KoID &filter);
@@ -48,25 +48,25 @@ private slots:
 
 */
     void slotRotationCenterChanged(int index);
-/*
-    void slotSetScaleX(qreal value);
-    void slotSetScaleY(qreal value);
 
-    void slotSetShearX(qreal value);
-    void slotSetShearY(qreal value);
+    void slotSetScaleX(double value);
+    void slotSetScaleY(double value);
 
-    void slotSetTranslateX(qreal value);
-    void slotSetTranslateY(qreal value);
+    void slotSetShearX(double value);
+    void slotSetShearY(double value);
 
-    void slotSetAX(qreal value);
-    void slotSetAY(qreal value);
-    void slotSetAZ(qreal value);
+    void slotSetTranslateX(double value);
+    void slotSetTranslateY(double value);
 
-    void slotSetWrapAlpha(qreal value);
+    void slotSetAX(double value);
+    void slotSetAY(double value);
+    void slotSetAZ(double value);
+
+    void slotSetWrapAlpha(double value);
     void slotSetWrapDensity(int value);
 
     void slotSetKeepAspectRatio(bool value);
-
+/*
     void slotWarpDefaultPointsButtonClicked(bool value);
     void slotWarpCustomPointsButtonClicked(bool value);
     void slotWarpLockPointsButtonClicked();
@@ -83,6 +83,15 @@ private slots:
 private:
     // rad being in |R, the returned value is in [0; 360]
     double radianToDegree(double rad);
+    // degree being in |R, the returned value is in [0; 2*M_PI]
+    double degreeToRadian(double degree);
+
+    void blockNotifications();
+    void unblockNotifications();
+    void notifyConfigChanged();
+
+    void blockUiSlots();
+    void unblockUiSlots();
 
 private:
     /**
@@ -93,6 +102,8 @@ private:
     const TransformTransactionProperties *m_transaction;
     QPointF m_handleDir[9];
     QButtonGroup *m_rotationCenterButtons;
+    int m_notificationsBlocked;
+    int m_uiSlotsBlocked;
 //    bool m_configChanged;
 //    ToolTransformArgs m_currentConfig;
 };

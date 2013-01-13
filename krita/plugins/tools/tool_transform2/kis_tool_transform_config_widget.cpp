@@ -22,9 +22,15 @@
 #include "kis_canvas2.h"
 
 
+template<typename T> inline T sign(T x) {
+    return x > 0 ? 1 : x == (T)0 ? 0 : -1;
+}
+
 KisToolTransformConfigWidget::KisToolTransformConfigWidget(const TransformTransactionProperties *transaction, KisCanvas2 *canvas, QWidget *parent)
     : QWidget(parent),
-      m_transaction(transaction)
+      m_transaction(transaction),
+      m_notificationsBlocked(0),
+      m_uiSlotsBlocked(0)
 {
     setupUi(this);
     showDecorationsBox->setIcon(koIcon("krita_tool_transform"));
@@ -89,22 +95,22 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(const TransformTransa
     m_rotationCenterButtons->addButton(nothingSelected, 9);
 
     connect(m_rotationCenterButtons, SIGNAL(buttonPressed(int)), this, SLOT(slotRotationCenterChanged(int)));
-/*
+
     // Init Free Transform Values
-    connect(scaleXBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetScaleX(qreal)));
-    connect(scaleYBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetScaleY(qreal)));
-    connect(shearXBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetShearX(qreal)));
-    connect(shearYBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetShearY(qreal)));
-    connect(translateXBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetTranslateX(qreal)));
-    connect(translateYBox, SIGNAL(valueChanged(qreal)), this, SLOT(setTranslateY(qreal)));
-    connect(aXBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetAX(qreal)));
-    connect(aYBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetAY(qreal)));
-    connect(aZBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetAZ(qreal)));
+    connect(scaleXBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetScaleX(double)));
+    connect(scaleYBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetScaleY(double)));
+    connect(shearXBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetShearX(double)));
+    connect(shearYBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetShearY(double)));
+    connect(translateXBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetTranslateX(double)));
+    connect(translateYBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetTranslateY(double)));
+    connect(aXBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetAX(double)));
+    connect(aYBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetAY(double)));
+    connect(aZBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetAZ(double)));
     connect(aspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(slotSetKeepAspectRatio(bool)));
 
     // Init Wrap Transform Values
-    connect(alphaBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetWrapAlpha(qreal)));
-    connect(densityBox, SIGNAL(valueChanged(int)), this, SLOT(slotSetWrapDensity(int)));
+    connect(alphaBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetWrapAlpha(double)));
+/*    connect(densityBox, SIGNAL(valueChanged(int)), this, SLOT(slotSetWrapDensity(int)));
 
     connect(defaultRadioButton, SIGNAL(clicked(bool)), this, SLOT(slotWarpDefaultPointsButtonClicked(bool)));
     connect(customRadioButton, SIGNAL(clicked(bool)), this, SLOT(slotWarpCustomPointsButtonClicked(bool)));
@@ -156,8 +162,21 @@ double KisToolTransformConfigWidget::radianToDegree(double rad)
     return (rad * 360. / piX2);
 }
 
+double KisToolTransformConfigWidget::degreeToRadian(double degree)
+{
+    if (degree < 0. || degree >= 360.) {
+        degree = fmod(degree, 360.);
+        if (degree < 0)
+            degree += 360.;
+    }
+
+    return (degree * M_PI / 180.);
+}
+
 void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
 {
+    blockUiSlots();
+
     if (config.mode() == ToolTransformArgs::FREE_TRANSFORM) {
         stackedWidget->setCurrentIndex(0);
         freeTransformButton->setChecked(true);
@@ -171,6 +190,7 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         aXBox->setValue(radianToDegree(config.aX()));
         aYBox->setValue(radianToDegree(config.aY()));
         aZBox->setValue(radianToDegree(config.aZ()));
+        aspectButton->setKeepAspectRatio(config.keepAspectRatio());
 
         QPointF pt = m_transaction->currentConfig()->rotationCenterOffset();
         pt.rx() /= m_transaction->originalHalfWidth();
@@ -206,6 +226,8 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
             lockUnlockPointsButton->setText(i18n("Unlock Points"));
         }
     }
+
+    unblockUiSlots();
 }
 
 void KisToolTransformConfigWidget::setApplyResetDisabled(bool disabled)
@@ -230,19 +252,183 @@ void KisToolTransformConfigWidget::resetRotationCenterButtons()
     }
 }
 
+void KisToolTransformConfigWidget::blockNotifications()
+{
+    m_notificationsBlocked++;
+}
+
+void KisToolTransformConfigWidget::unblockNotifications()
+{
+    m_notificationsBlocked--;
+}
+
+void KisToolTransformConfigWidget::notifyConfigChanged()
+{
+    if (!m_notificationsBlocked) {
+        emit sigConfigChanged();
+    }
+}
+
+void KisToolTransformConfigWidget::blockUiSlots()
+{
+    m_uiSlotsBlocked++;
+}
+
+void KisToolTransformConfigWidget::unblockUiSlots()
+{
+    m_uiSlotsBlocked--;
+}
+
 void KisToolTransformConfigWidget::slotRotationCenterChanged(int index)
 {
+    if (m_uiSlotsBlocked) return;
+
     if (index >= 0 && index <= 8) {
-        ToolTransformArgs newConfig = *m_transaction->currentConfig();
+        ToolTransformArgs *config = m_transaction->currentConfig();
 
         double i = m_handleDir[index].x();
         double j = m_handleDir[index].y();
 
-        newConfig.setRotationCenterOffset(QPointF(i * m_transaction->originalHalfWidth(),
-                                                  j * m_transaction->originalHalfHeight()));
+        config->setRotationCenterOffset(QPointF(i * m_transaction->originalHalfWidth(),
+                                                j * m_transaction->originalHalfHeight()));
 
-        emit sigConfigChanged(newConfig);
+        notifyConfigChanged();
     }
+}
+
+void KisToolTransformConfigWidget::slotSetScaleX(double value)
+{
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setScaleX(value / 100.);
+
+    if (config->keepAspectRatio() &&
+        !qFuzzyCompare(config->scaleX(), config->scaleY())) {
+
+        blockNotifications();
+        scaleYBox->setValue(sign(scaleYBox->value()) * value);
+        unblockNotifications();
+    }
+
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::slotSetScaleY(double value)
+{
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setScaleY(value / 100.);
+
+    if (config->keepAspectRatio() &&
+        !qFuzzyCompare(config->scaleX(), config->scaleY())) {
+
+        blockNotifications();
+        scaleXBox->setValue(sign(scaleXBox->value()) * value);
+        unblockNotifications();
+    }
+
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::slotSetShearX(double value)
+{
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setShearX(value);
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::slotSetShearY(double value)
+{
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setShearY(value);
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::slotSetTranslateX(double value)
+{
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setTranslate(QPointF(value, config->translate().y()));
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::slotSetTranslateY(double value)
+{
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setTranslate(QPointF(config->translate().x(), value));
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::slotSetAX(double value)
+{
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setAX(degreeToRadian(value));
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::slotSetAY(double value)
+{
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setAY(degreeToRadian(value));
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::slotSetAZ(double value)
+{
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setAZ(degreeToRadian(value));
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::slotSetWrapAlpha(double value)
+{
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setAlpha(value);
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::slotSetWrapDensity(int value)
+{
+    if (m_uiSlotsBlocked) return;
+}
+
+void KisToolTransformConfigWidget::slotSetKeepAspectRatio(bool value)
+{
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setKeepAspectRatio(value);
+
+    if (value) {
+        if (qAbs(scaleXBox->value()) > qAbs(scaleYBox->value())) {
+            blockNotifications();
+            scaleYBox->setValue(sign(scaleYBox->value()) * scaleXBox->value());
+            unblockNotifications();
+        } else {
+            blockNotifications();
+            scaleXBox->setValue(sign(scaleXBox->value()) * scaleYBox->value());
+            unblockNotifications();
+        }
+    }
+
+    notifyConfigChanged();
 }
 
 /*void KisToolTransformConfigWidget::slotEditingFinished()

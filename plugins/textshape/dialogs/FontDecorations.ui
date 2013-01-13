@@ -17,12 +17,6 @@
       <string>Colors</string>
      </property>
      <layout class="QGridLayout">
-      <property name="margin">
-       <number>9</number>
-      </property>
-      <property name="spacing">
-       <number>6</number>
-      </property>
       <item row="0" column="4" rowspan="2">
        <spacer>
         <property name="orientation">
@@ -101,12 +95,6 @@
       <string>Text Shadow</string>
      </property>
      <layout class="QGridLayout">
-      <property name="margin">
-       <number>9</number>
-      </property>
-      <property name="spacing">
-       <number>6</number>
-      </property>
       <item row="0" column="3" rowspan="3">
        <layout class="QGridLayout">
         <property name="margin">

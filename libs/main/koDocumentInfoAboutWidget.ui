@@ -26,9 +26,6 @@
    </item>
    <item row="14" column="1">
     <layout class="QHBoxLayout">
-     <property name="spacing">
-      <number>6</number>
-     </property>
      <property name="margin">
       <number>0</number>
      </property>
@@ -303,7 +300,6 @@
    </item>
   </layout>
  </widget>
- <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
  <resources/>
  <connections/>
 </ui>

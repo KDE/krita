@@ -54,9 +54,6 @@ Boston, MA 02110-1301, USA.
       <layout class="QVBoxLayout">
        <item>
         <layout class="QHBoxLayout">
-         <property name="spacing">
-          <number>6</number>
-         </property>
          <property name="margin">
           <number>0</number>
          </property>

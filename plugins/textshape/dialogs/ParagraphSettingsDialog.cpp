@@ -89,6 +89,9 @@ void ParagraphSettingsDialog::slotApply()
     chosenStyle.applyStyle(format);
 
     m_editor->mergeAutoStyle(cformat, format);
+
+    m_editor->endEditBlock();
+
     if (chosenStyle.listStyle()) {
         KoTextEditor::ChangeListFlags flags(KoTextEditor::AutoListStyle | KoTextEditor::DontUnsetIfSame);
         m_tool->textEditor()->setListProperties(chosenStyle.listStyle()->levelProperties(chosenStyle.listStyle()->listLevels().first()),
@@ -99,7 +102,7 @@ void ParagraphSettingsDialog::slotApply()
             list->remove(m_editor->block());
         }
     }
-    m_editor->endEditBlock();
+
     m_styleChanged = false;
 }
 

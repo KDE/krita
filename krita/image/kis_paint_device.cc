@@ -430,7 +430,7 @@ QRect KisPaintDevice::calculateExactBounds() const
         for (qint32 y2 = y; y2 < y + h ; ++y2) {
             for (qint32 x2 = x; x2 < x + w || found; ++ x2) {
                 accessor->moveTo(x2, y2);
-                if (m_d->colorSpace->opacityU8(accessor->oldRawData()) != OPACITY_TRANSPARENT_U8) {
+                if (m_d->colorSpace->opacityU8(accessor->rawDataConst()) != OPACITY_TRANSPARENT_U8) {
                     boundY2 = y2;
                     found = true;
                     break;
@@ -445,7 +445,7 @@ QRect KisPaintDevice::calculateExactBounds() const
     for (qint32 y2 = y + h - 1; y2 >= y ; --y2) {
         for (qint32 x2 = x + w - 1; x2 >= x || found; --x2) {
             accessor->moveTo(x2, y2);
-            if (m_d->colorSpace->opacityU8(accessor->oldRawData()) != OPACITY_TRANSPARENT_U8) {
+            if (m_d->colorSpace->opacityU8(accessor->rawDataConst()) != OPACITY_TRANSPARENT_U8) {
                 boundH2 = y2 - boundY2 + 1;
                 found = true;
                 break;
@@ -459,7 +459,7 @@ QRect KisPaintDevice::calculateExactBounds() const
         for (qint32 x2 = x; x2 < x + w ; ++x2) {
             for (qint32 y2 = y; y2 < y + h || found; ++y2) {
                 accessor->moveTo(x2, y2);
-                if (m_d->colorSpace->opacityU8(accessor->oldRawData()) != OPACITY_TRANSPARENT_U8) {
+                if (m_d->colorSpace->opacityU8(accessor->rawDataConst()) != OPACITY_TRANSPARENT_U8) {
                     boundX2 = x2;
                     found = true;
                     break;
@@ -477,7 +477,7 @@ QRect KisPaintDevice::calculateExactBounds() const
         for (qint32 x2 = x + w - 1; x2 >= x; --x2) {
             for (qint32 y2 = y + h -1; y2 >= y || found; --y2) {
                 accessor->moveTo(x2, y2);
-                if (m_d->colorSpace->opacityU8(accessor->oldRawData()) != OPACITY_TRANSPARENT_U8) {
+                if (m_d->colorSpace->opacityU8(accessor->rawDataConst()) != OPACITY_TRANSPARENT_U8) {
                     boundW2 = x2 - boundX2 + 1;
                     found = true;
                     break;
@@ -589,7 +589,7 @@ KUndo2Command* KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoC
             KisHLineConstIteratorSP srcIt = createHLineConstIteratorNG(column, row, columns);
             KisHLineIteratorSP dstIt = dst.createHLineIteratorNG(column, row, columns);
 
-            const quint8 *srcData = srcIt->oldRawData();
+            const quint8 *srcData = srcIt->rawDataConst();
             quint8 *dstData = dstIt->rawData();
 
             m_d->colorSpace->convertPixelsTo(srcData, dstData, dstColorSpace, columns, renderingIntent, conversionFlags);
@@ -746,7 +746,7 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h, QRect
             qint32 iX = srcX0 + (x * srcWidth) / w;
             iter->moveTo(iX, iY);
             dstIter->moveTo(x,  y);
-            memcpy(dstIter->rawData(), iter->oldRawData(), pixelSize);
+            memcpy(dstIter->rawData(), iter->rawDataConst(), pixelSize);
         }
     }
     return thumbnail;
@@ -861,7 +861,7 @@ void KisPaintDevice::clearSelection(KisSelectionSP selection)
 
             do {
                 // XXX: Optimize by using stretches
-                m_d->colorSpace->applyInverseAlphaU8Mask(devIt->rawData(), selectionIt->oldRawData(), 1);
+                m_d->colorSpace->applyInverseAlphaU8Mask(devIt->rawData(), selectionIt->rawDataConst(), 1);
                 if (transparentDefault && m_d->colorSpace->opacityU8(devIt->rawData()) == OPACITY_TRANSPARENT_U8) {
                     memcpy(devIt->rawData(), defaultPixel_, m_d->colorSpace->pixelSize());
                 }
@@ -878,7 +878,7 @@ bool KisPaintDevice::pixel(qint32 x, qint32 y, QColor *c) const
 {
     KisHLineConstIteratorSP iter = createHLineConstIteratorNG(x, y, 1);
 
-    const quint8 *pix = iter->oldRawData();
+    const quint8 *pix = iter->rawDataConst();
 
     if (!pix) return false;
 
@@ -892,7 +892,7 @@ bool KisPaintDevice::pixel(qint32 x, qint32 y, KoColor * kc) const
 {
     KisHLineConstIteratorSP iter = createHLineConstIteratorNG(x, y, 1);
 
-    const quint8 *pix = iter->oldRawData();
+    const quint8 *pix = iter->rawDataConst();
 
     if (!pix) return false;
 

@@ -144,15 +144,20 @@ KisVLineIterator2::~KisVLineIterator2()
 }
 
 
-quint8 * KisVLineIterator2::rawData()
+quint8* KisVLineIterator2::rawData()
 {
     return m_data;
 }
 
 
-const quint8 * KisVLineIterator2::oldRawData() const
+const quint8* KisVLineIterator2::oldRawData() const
 {
     return m_oldData;
+}
+
+const quint8* KisVLineIterator2::rawDataConst() const
+{
+    return m_data;
 }
 
 void KisVLineIterator2::switchToTile(qint32 yInTile)

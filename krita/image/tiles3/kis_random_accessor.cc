@@ -89,18 +89,23 @@ void KisRandomAccessor2::moveTo(qint32 x, qint32 y)
 }
 
 
-quint8 * KisRandomAccessor2::rawData()
+quint8* KisRandomAccessor2::rawData()
 {
     return m_data;
 }
 
 
-const quint8 * KisRandomAccessor2::oldRawData() const
+const quint8* KisRandomAccessor2::oldRawData() const
 {
 #ifdef DEBUG
     kWarning(!m_ktm->hasCurrentMemento(), 41004) << "Accessing oldRawData() when no transaction is in progress.";
 #endif
     return m_oldData;
+}
+
+const quint8* KisRandomAccessor2::rawDataConst() const
+{
+    return m_data;
 }
 
 KisRandomAccessor2::KisTileInfo* KisRandomAccessor2::fetchTileData(qint32 col, qint32 row)

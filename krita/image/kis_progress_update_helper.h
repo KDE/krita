@@ -41,7 +41,9 @@ public:
     }
 
     void step() {
-        int localProgress = m_portion * (++m_currentStep) / m_numSteps;
+        int localProgress = m_numSteps ?
+            m_portion * (++m_currentStep) / m_numSteps : m_portion;
+
         if (m_progressUpdater) {
             m_progressUpdater->setProgress(m_baseProgress + localProgress);
         }

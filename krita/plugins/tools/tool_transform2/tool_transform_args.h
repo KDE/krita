@@ -23,6 +23,7 @@
 
 #include <QPointF>
 #include <kis_warptransform_worker.h>
+#include <kis_filter_strategy.h>
 
 /**
  * Class used to store the parameters of a transformation.
@@ -176,6 +177,18 @@ public:
         m_shearY = shearY;
     }
 
+    inline QString filterId() const {
+        return m_filter->id();
+    }
+
+    inline void setFilterId(const QString &id) {
+        m_filter = KisFilterStrategyRegistry::instance()->value(id);
+    }
+
+    inline KisFilterStrategy* filter() const {
+        return m_filter;
+    }
+
     bool isIdentity(QPointF originalTranslate) const;
 
 private:
@@ -208,6 +221,8 @@ private:
     double m_shearX;
     double m_shearY;
     bool m_keepAspectRatio;
+
+    KisFilterStrategy *m_filter;
 };
 
 #endif // TOOL_TRANSFORM_ARGS_H_

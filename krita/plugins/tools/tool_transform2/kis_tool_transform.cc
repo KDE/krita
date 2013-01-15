@@ -22,7 +22,7 @@
 
 #include "kis_tool_transform.h"
 #include "tool_transform_commands.h"
-#include "rotation_icons.h"
+
 
 #include <math.h>
 #include <limits>
@@ -113,7 +113,6 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     m_origSelection = 0;
     m_handleRadius = 12;
     m_rotationCenterRadius = 12;
-    m_boxValueChanged = false;
     m_maxRadius = (m_handleRadius > m_rotationCenterRadius) ? m_handleRadius : m_rotationCenterRadius;
 }
 
@@ -253,6 +252,11 @@ void KisToolTransform::recalcOutline()
     if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
         QTransform scaleTransform;
         scaleTransform.scale(scaleRect.width(), scaleRect.height());
+
+        if (m_viewOrigPoints.size() != m_currentArgs.origPoints().size()) {
+            m_viewOrigPoints.resize(m_currentArgs.origPoints().size());
+            m_viewTransfPoints.resize(m_currentArgs.transfPoints().size());
+        }
 
         for (int i = 0; i < m_viewTransfPoints.size(); ++i) {
             m_viewTransfPoints[i] = imageToFlake(m_currentArgs.transfPoints()[i]);
@@ -1906,42 +1910,35 @@ void KisToolTransform::initFreeTransform()
     m_refSize = QSizeF(0, 0);
 }
 
+//FIXME: remove this duplicated function
 void KisToolTransform::setDefaultWarpPoints(int pointsPerLine)
 {
     if (pointsPerLine < 0)
         pointsPerLine = m_defaultPointsPerLine;
 
     int nbPoints = pointsPerLine * pointsPerLine;
-    m_viewOrigPoints.resize(nbPoints);
-    m_viewTransfPoints.resize(nbPoints);
     QVector<QPointF> origPoints(nbPoints);
     QVector<QPointF> transfPoints(nbPoints);
-    if (nbPoints != 0) {
-        if (nbPoints == 1) {
-            //there is actually no grid
-            m_gridSpaceX = m_transaction.originalHalfWidth();
-            m_gridSpaceY = m_transaction.originalHalfHeight();
-            origPoints[0] = m_transaction.originalCenter();
-            transfPoints[0] = m_transaction.originalCenter();
-        }
-        else {
-            m_gridSpaceX = m_transaction.originalRect().width() / (pointsPerLine - 1);
-            m_gridSpaceY = m_transaction.originalRect().height() / (pointsPerLine - 1);
-            double y = m_transaction.originalRect().top();
-            for (int i = 0; i < pointsPerLine; ++i) {
-                double x = m_transaction.originalRect().left();
-                for (int j = 0 ; j < pointsPerLine; ++j) {
-                    origPoints[i * pointsPerLine + j] = QPointF(x, y);
-                    transfPoints[i * pointsPerLine + j] = QPointF(x, y);
-                    x += m_gridSpaceX;
-                }
-                y += m_gridSpaceY;
-            }
-        }
+    qreal gridSpaceX, gridSpaceY;
+
+    if (nbPoints == 1) {
+        //there is actually no grid
+        origPoints[0] = m_transaction.originalCenter();
+        transfPoints[0] = m_transaction.originalCenter();
     }
-    else {
-        m_gridSpaceX = 0;
-        m_gridSpaceY = 0;
+    else if (nbPoints > 1) {
+        gridSpaceX = m_transaction.originalRect().width() / (pointsPerLine - 1);
+        gridSpaceY = m_transaction.originalRect().height() / (pointsPerLine - 1);
+        double y = m_transaction.originalRect().top();
+        for (int i = 0; i < pointsPerLine; ++i) {
+            double x = m_transaction.originalRect().left();
+            for (int j = 0 ; j < pointsPerLine; ++j) {
+                origPoints[i * pointsPerLine + j] = QPointF(x, y);
+                transfPoints[i * pointsPerLine + j] = QPointF(x, y);
+                x += gridSpaceX;
+            }
+            y += gridSpaceY;
+        }
     }
 
     m_currentArgs.setDefaultPoints(true);
@@ -2196,7 +2193,7 @@ void KisToolTransform::applyTransform()
             worker.run();
         }
         else {
-            KisTransformWorker worker(tmpDevice, m_currentArgs.scaleX(), m_currentArgs.scaleY(), m_currentArgs.shearX(), m_currentArgs.shearY(), m_transaction.originalCenter().x(), m_transaction.originalCenter().y(), m_currentArgs.aZ(), int(t.x()), int(t.y()), transformPixels, m_filter);
+            KisTransformWorker worker(tmpDevice, m_currentArgs.scaleX(), m_currentArgs.scaleY(), m_currentArgs.shearX(), m_currentArgs.shearY(), m_transaction.originalCenter().x(), m_transaction.originalCenter().y(), m_currentArgs.aZ(), int(t.x()), int(t.y()), transformPixels, m_currentArgs.filter());
             worker.run();
             KisPerspectiveTransformWorker perspectiveWorker(tmpDevice, m_currentArgs.translate(), m_currentArgs.aX(), m_currentArgs.aY(), m_cameraPos.z(), perspectiveTransfPixels);
             perspectiveWorker.run();
@@ -2228,7 +2225,7 @@ void KisToolTransform::applyTransform()
             selectionWorker.run();
         }
         else {
-            KisTransformWorker selectionWorker(tmpDevice2, m_currentArgs.scaleX(), m_currentArgs.scaleY(), m_currentArgs.shearX(), m_currentArgs.shearY(), m_transaction.originalCenter().x(), m_transaction.originalCenter().y(), m_currentArgs.aZ(), (int)(t.x()), (int)(t.y()), transformPixSelection, m_filter);
+            KisTransformWorker selectionWorker(tmpDevice2, m_currentArgs.scaleX(), m_currentArgs.scaleY(), m_currentArgs.shearX(), m_currentArgs.shearY(), m_transaction.originalCenter().x(), m_transaction.originalCenter().y(), m_currentArgs.aZ(), (int)(t.x()), (int)(t.y()), transformPixSelection, m_currentArgs.filter());
             selectionWorker.run();
             KisPerspectiveTransformWorker perspectiveSelectionWorker(tmpDevice2, m_currentArgs.translate(), m_currentArgs.aX(), m_currentArgs.aY(), m_cameraPos.z(), perspectiveTransfPixSelection);
             perspectiveSelectionWorker.run();
@@ -2253,7 +2250,7 @@ void KisToolTransform::applyTransform()
         else {
             KoUpdaterPtr transformPixels = updater->startSubtask(40);
             KoUpdaterPtr perspectiveTransfPixels = updater->startSubtask(40);
-            KisTransformWorker worker(currentNode()->paintDevice(), m_currentArgs.scaleX(), m_currentArgs.scaleY(), m_currentArgs.shearX(), m_currentArgs.shearY(), m_transaction.originalCenter().x(), m_transaction.originalCenter().y(), m_currentArgs.aZ(), int(t.x()), int(t.y()), transformPixels, m_filter);
+            KisTransformWorker worker(currentNode()->paintDevice(), m_currentArgs.scaleX(), m_currentArgs.scaleY(), m_currentArgs.shearX(), m_currentArgs.shearY(), m_transaction.originalCenter().x(), m_transaction.originalCenter().y(), m_currentArgs.aZ(), int(t.x()), int(t.y()), transformPixels, m_currentArgs.filter());
             worker.run();
             KisPerspectiveTransformWorker perspectiveWorker(currentNode()->paintDevice(), m_currentArgs.translate(), m_currentArgs.aX(), m_currentArgs.aY(), m_cameraPos.z(), perspectiveTransfPixels);
             perspectiveWorker.run();
@@ -2353,56 +2350,16 @@ QWidget* KisToolTransform::createOptionWidget() {
     connect(m_optWidget, SIGNAL(sigConfigChanged()),
             this, SLOT(slotUiChangedConfig()));
 
-    m_optWidget->cmbFilter->clear();
-    m_optWidget->cmbFilter->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
-    m_optWidget->cmbFilter->setCurrent("Bicubic");
-    connect(m_optWidget->cmbFilter, SIGNAL(activated(const KoID &)),
-            this, SLOT(slotSetFilter(const KoID &)));
+    connect(m_optWidget, SIGNAL(sigApplyTransform()),
+            this, SLOT(slotApplyTransform()));
 
-    m_optWidget->cmbWarpType->clear();
-    m_optWidget->cmbWarpType->insertItem(KisWarpTransformWorker::AFFINE_TRANSFORM,i18n("Affine"));
-    m_optWidget->cmbWarpType->insertItem(KisWarpTransformWorker::SIMILITUDE_TRANSFORM,i18n("Similitude"));
-    m_optWidget->cmbWarpType->insertItem(KisWarpTransformWorker::RIGID_TRANSFORM,i18n("Rigid"));
-    m_optWidget->cmbWarpType->setCurrentIndex(KisWarpTransformWorker::RIGID_TRANSFORM);
-    connect(m_optWidget->cmbWarpType, SIGNAL(currentIndexChanged(int)), this, SLOT(slotWarpTypeChanged(int)));
+    connect(m_optWidget, SIGNAL(sigResetTransform()),
+            this, SLOT(slotResetTransform()));
 
-    QPixmap rotateX_Pixmap, rotateY_Pixmap, rotateZ_Pixmap;
-    rotateX_Pixmap.loadFromData(rotateX_PNG, rotateX_PNG_len, "png");
-    rotateY_Pixmap.loadFromData(rotateY_PNG, rotateY_PNG_len, "png");
-    rotateZ_Pixmap.loadFromData(rotateZ_PNG, rotateZ_PNG_len, "png");
-    m_optWidget->label_rotateX->setPixmap(rotateX_Pixmap);
-    m_optWidget->label_rotateY->setPixmap(rotateY_Pixmap);
-    m_optWidget->label_rotateZ->setPixmap(rotateZ_Pixmap);
-
-    KoID filterID = m_optWidget->cmbFilter->currentItem();
-    m_filter = KisFilterStrategyRegistry::instance()->value(filterID.id());
-
-    connect(m_optWidget->densityBox, SIGNAL(valueChanged(int)), this, SLOT(setDensity(int)));
-    connect(m_optWidget->defaultRadioButton, SIGNAL(clicked(bool)), this, SLOT(slotWarpDefaultButtonClicked(bool)));
-    connect(m_optWidget->customRadioButton, SIGNAL(clicked(bool)), this, SLOT(slotWarpCustomButtonClicked(bool)));
-    connect(m_optWidget->lockUnlockPointsButton, SIGNAL(clicked()), this, SLOT(slotLockUnlockPointsButtonClicked()));
-    connect(m_optWidget->resetPointsButton, SIGNAL(clicked()), this, SLOT(slotResetPointsButtonClicked()));
-
-    connect(m_optWidget->buttonBox, SIGNAL(clicked(QAbstractButton *)), this, SLOT(slotButtonBoxClicked(QAbstractButton *)));
-    connect(m_optWidget->showDecorationsBox, SIGNAL(toggled(bool)), m_canvas, SLOT(updateCanvas()));
-
-    connect(m_optWidget->scaleXBox, SIGNAL(editingFinished()), this, SLOT(slotEditingFinished()));
-    connect(m_optWidget->scaleYBox, SIGNAL(editingFinished()), this, SLOT(slotEditingFinished()));
-    connect(m_optWidget->shearXBox, SIGNAL(editingFinished()), this, SLOT(slotEditingFinished()));
-    connect(m_optWidget->shearYBox, SIGNAL(editingFinished()), this, SLOT(slotEditingFinished()));
-    connect(m_optWidget->translateXBox, SIGNAL(editingFinished()), this, SLOT(slotEditingFinished()));
-    connect(m_optWidget->translateYBox, SIGNAL(editingFinished()), this, SLOT(slotEditingFinished()));
-    connect(m_optWidget->aXBox, SIGNAL(editingFinished()), this, SLOT(slotEditingFinished()));
-    connect(m_optWidget->aYBox, SIGNAL(editingFinished()), this, SLOT(slotEditingFinished()));
-    connect(m_optWidget->aZBox, SIGNAL(editingFinished()), this, SLOT(slotEditingFinished()));
-    connect(m_optWidget->alphaBox, SIGNAL(editingFinished()), this, SLOT(slotEditingFinished()));
-
-    connect(m_optWidget->warpButton, SIGNAL(clicked(bool)), this, SLOT(slotWarpButtonClicked(bool)));
-    connect(m_optWidget->freeTransformButton, SIGNAL(clicked(bool)), this, SLOT(slotFreeTransformButtonClicked(bool)));
+    connect(m_optWidget, SIGNAL(sigEditingFinished()),
+            this, SLOT(slotEditingFinished()));
 
     updateOptionWidget();
-
-    m_optWidget->tooBigLabelWidget->hide();
 
     return m_optWidget;
 }
@@ -2436,184 +2393,29 @@ void KisToolTransform::slotUiChangedConfig()
     updateApplyResetAvailability();
 }
 
-void KisToolTransform::slotSetFilter(const KoID &filterID)
+void KisToolTransform::slotApplyTransform()
 {
-    m_filter = KisFilterStrategyRegistry::instance()->value(filterID.id());
+    if (!nodeEditable()) return;
+
+    QApplication::setOverrideCursor(KisCursor::waitCursor());
+    applyTransform();
+    initTransform(m_currentArgs.mode());
+    QApplication::restoreOverrideCursor();
 }
 
-
-void KisToolTransform::setDensity(int density)
+void KisToolTransform::slotResetTransform()
 {
-    if (mode() != KisTool::PAINT_MODE) {
-        setDefaultWarpPoints(density);
-        outlineChanged();
-        updateApplyResetAvailability();
-    }
-}
-
-void KisToolTransform::slotButtonBoxClicked(QAbstractButton *button)
-{
-    if (m_optWidget == 0 || m_optWidget->buttonBox == 0)
-        return;
-
-    QAbstractButton *applyButton = m_optWidget->buttonBox->button(QDialogButtonBox::Apply);
-    QAbstractButton *resetButton = m_optWidget->buttonBox->button(QDialogButtonBox::Reset);
-
-    if (button == applyButton) {
-        if (!nodeEditable()) {
-            return;
-        }
-
-        QApplication::setOverrideCursor(KisCursor::waitCursor());
-        applyTransform();
-        initTransform(m_currentArgs.mode());
-        QApplication::restoreOverrideCursor();
-
-        // setButtonBoxDisabled(true);
-    }
-    else if (button == resetButton) {
-        if (m_currentArgs.mode() == ToolTransformArgs::FREE_TRANSFORM) {
-            initFreeTransform();
-        }
-        else {
-            for (int i = 0; i < m_currentArgs.origPoints().size(); ++i)
-                m_currentArgs.transfPoint(i) = m_currentArgs.origPoint(i);
-        }
-
-        transform(); // commit the reset to the undo stack
-        outlineChanged();
-
-        updateOptionWidget();
-        updateApplyResetAvailability();
-    }
+    initTransform(m_currentArgs.mode());
+    slotEditingFinished();
 }
 
 void KisToolTransform::slotEditingFinished()
 {
-    if (m_boxValueChanged) {
-        transform();
+    transform();
 
-        m_scaleX_wOutModifier = m_currentArgs.scaleX();
-        m_scaleY_wOutModifier = m_currentArgs.scaleY();
-
-        m_boxValueChanged = false;
-    }
-
-    updateApplyResetAvailability();
+    m_scaleX_wOutModifier = m_currentArgs.scaleX();
+    m_scaleY_wOutModifier = m_currentArgs.scaleY();
 }
 
-void KisToolTransform::slotWarpButtonClicked(bool checked)
-{
-        if (checked)
-                initTransform(ToolTransformArgs::WARP);
-        else
-                initTransform(ToolTransformArgs::FREE_TRANSFORM);
-
-    outlineChanged();
-}
-
-void KisToolTransform::slotFreeTransformButtonClicked(bool checked)
-{
-        if (!checked)
-                initTransform(ToolTransformArgs::WARP);
-        else
-                initTransform(ToolTransformArgs::FREE_TRANSFORM);
-
-    outlineChanged();
-}
-
-void KisToolTransform::slotWarpTypeChanged(int index)
-{
-    switch (index) {
-    case KisWarpTransformWorker::AFFINE_TRANSFORM:
-    case KisWarpTransformWorker::SIMILITUDE_TRANSFORM:
-    case KisWarpTransformWorker::RIGID_TRANSFORM:
-        m_currentArgs.setWarpType((KisWarpTransformWorker::WarpType)index);
-        break;
-    default:
-        m_currentArgs.setWarpType(KisWarpTransformWorker::RIGID_TRANSFORM);
-        break;
-    }
-
-    outlineChanged();
-}
-
-void KisToolTransform::activateCustomWarpPoints(bool enabled)
-{
-    m_currentArgs.setDefaultPoints(!enabled);
-
-    if (m_optWidget) {
-        if (m_optWidget->defaultWarpWidget)
-            m_optWidget->defaultWarpWidget->setEnabled(!enabled);
-        if (m_optWidget->customWarpWidget)
-            m_optWidget->customWarpWidget->setEnabled(enabled);
-
-        if (!enabled) {
-            if (m_optWidget->densityBox) {
-                setDefaultWarpPoints(m_optWidget->densityBox->value());
-            } else {
-                setDefaultWarpPoints();
-            }
-            m_transaction.setEditWarpPoints(false);
-        }
-        else {
-            m_currentArgs.setDefaultPoints(false);
-            m_currentArgs.setPoints(QVector<QPointF>(), QVector<QPointF>());
-            m_viewOrigPoints.resize(0);
-            m_viewTransfPoints.resize(0);
-            m_transaction.setEditWarpPoints(true);
-        }
-    }
-
-    outlineChanged();
-    updateOptionWidget();
-    updateApplyResetAvailability();
-}
-
-void KisToolTransform::slotWarpDefaultButtonClicked(bool checked)
-{
-    activateCustomWarpPoints(!checked);
-}
-
-void KisToolTransform::slotWarpCustomButtonClicked(bool checked)
-{
-    activateCustomWarpPoints(checked);
-}
-
-void KisToolTransform::slotLockUnlockPointsButtonClicked()
-{
-    if (m_transaction.editWarpPoints()) {
-        if (m_optWidget && m_optWidget->lockUnlockPointsButton) {
-            m_optWidget->lockUnlockPointsButton->setText(i18n("Unlock Points"));
-        }
-        m_transaction.setEditWarpPoints(false);
-    }
-    else {
-        if (m_optWidget && m_optWidget->lockUnlockPointsButton) {
-            m_optWidget->lockUnlockPointsButton->setText(i18n("Lock Points"));
-        }
-        m_transaction.setEditWarpPoints(true);
-
-        // reinit the transf points to their original value
-        int nbPoints = m_currentArgs.origPoints().size();
-        for (int i = 0; i < nbPoints; ++i)
-            m_currentArgs.transfPoint(i) = m_currentArgs.origPoint(i);
-    }
-
-    outlineChanged();
-    updateApplyResetAvailability();
-}
-
-void KisToolTransform::slotResetPointsButtonClicked()
-{
-    m_transaction.setEditWarpPoints(true);
-    m_currentArgs.setPoints(QVector<QPointF>(), QVector<QPointF>());
-    m_viewOrigPoints.resize(0);
-    m_viewTransfPoints.resize(0);
-
-    outlineChanged();
-    updateOptionWidget();
-    updateApplyResetAvailability();
-}
 
 #include "kis_tool_transform.moc"

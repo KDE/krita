@@ -39,6 +39,8 @@ ToolTransformArgs::ToolTransformArgs()
     m_alpha = 1.0;
     m_previewPos = QPointF(0, 0);
     m_keepAspectRatio = true;
+
+    setFilterId("Bicubic");
 }
 
 void ToolTransformArgs::init(const ToolTransformArgs& args)
@@ -61,6 +63,7 @@ void ToolTransformArgs::init(const ToolTransformArgs& args)
     m_previewPos = args.previewPos();
     m_defaultPoints = args.defaultPoints();
     m_keepAspectRatio = args.keepAspectRatio();
+    m_filter = args.m_filter;
 }
 
 void ToolTransformArgs::clear()
@@ -106,6 +109,7 @@ ToolTransformArgs::ToolTransformArgs(TransformMode mode,
     m_previewPos = previewPos;
     m_defaultPoints = defaultPoints;
     m_keepAspectRatio = true;
+    setFilterId("Bicubic");
 }
 
 

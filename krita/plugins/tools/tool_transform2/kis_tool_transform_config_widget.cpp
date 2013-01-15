@@ -19,6 +19,7 @@
 #include "kis_tool_transform_config_widget.h"
 
 #include <KoIcon.h>
+#include "rotation_icons.h"
 #include "kis_canvas2.h"
 
 
@@ -26,11 +27,15 @@ template<typename T> inline T sign(T x) {
     return x > 0 ? 1 : x == (T)0 ? 0 : -1;
 }
 
-KisToolTransformConfigWidget::KisToolTransformConfigWidget(const TransformTransactionProperties *transaction, KisCanvas2 *canvas, QWidget *parent)
+const int KisToolTransformConfigWidget::DEFAULT_POINTS_PER_LINE = 3;
+
+
+KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionProperties *transaction, KisCanvas2 *canvas, QWidget *parent)
     : QWidget(parent),
       m_transaction(transaction),
       m_notificationsBlocked(0),
-      m_uiSlotsBlocked(0)
+      m_uiSlotsBlocked(0),
+      m_configChanged(false)
 {
     setupUi(this);
     showDecorationsBox->setIcon(koIcon("krita_tool_transform"));
@@ -42,15 +47,15 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(const TransformTransa
 
     label_offsetX->setPixmap(koIcon("offset_horizontal").pixmap(16, 16));
     label_offsetY->setPixmap(koIcon("offset_vertical").pixmap(16, 16));
-/*
+
     // Init labels
     QPixmap rotateX_Pixmap, rotateY_Pixmap, rotateZ_Pixmap;
     rotateX_Pixmap.loadFromData(rotateX_PNG, rotateX_PNG_len, "png");
     rotateY_Pixmap.loadFromData(rotateY_PNG, rotateY_PNG_len, "png");
     rotateZ_Pixmap.loadFromData(rotateZ_PNG, rotateZ_PNG_len, "png");
-    m_optWidget->label_rotateX->setPixmap(rotateX_Pixmap);
-    m_optWidget->label_rotateY->setPixmap(rotateY_Pixmap);
-    m_optWidget->label_rotateZ->setPixmap(rotateZ_Pixmap);
+    label_rotateX->setPixmap(rotateX_Pixmap);
+    label_rotateY->setPixmap(rotateY_Pixmap);
+    label_rotateZ->setPixmap(rotateZ_Pixmap);
 
     // Init Filter  combo
     cmbFilter->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
@@ -64,7 +69,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(const TransformTransa
     cmbWarpType->insertItem(KisWarpTransformWorker::RIGID_TRANSFORM,i18n("Rigid"));
     cmbWarpType->setCurrentIndex(KisWarpTransformWorker::RIGID_TRANSFORM);
     connect(cmbWarpType, SIGNAL(currentIndexChanged(int)), this, SLOT(slotWarpTypeChanged(int)));
-*/
+
     // Init Rotation Center buttons
     m_handleDir[0] = QPointF(1, 0);
     m_handleDir[1] = QPointF(1, -1);
@@ -110,42 +115,51 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(const TransformTransa
 
     // Init Wrap Transform Values
     connect(alphaBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetWrapAlpha(double)));
-/*    connect(densityBox, SIGNAL(valueChanged(int)), this, SLOT(slotSetWrapDensity(int)));
+    connect(densityBox, SIGNAL(valueChanged(int)), this, SLOT(slotSetWrapDensity(int)));
 
     connect(defaultRadioButton, SIGNAL(clicked(bool)), this, SLOT(slotWarpDefaultPointsButtonClicked(bool)));
     connect(customRadioButton, SIGNAL(clicked(bool)), this, SLOT(slotWarpCustomPointsButtonClicked(bool)));
     connect(lockUnlockPointsButton, SIGNAL(clicked()), this, SLOT(slotWarpLockPointsButtonClicked()));
     connect(resetPointsButton, SIGNAL(clicked()), this, SLOT(slotWarpResetPointsButtonClicked()));
 
+
+    // Connect all edit boxes to the Editing Finished signal
+    connect(scaleXBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
+    connect(scaleYBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
+    connect(shearXBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
+    connect(shearYBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
+    connect(translateXBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
+    connect(translateYBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
+    connect(aXBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
+    connect(aYBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
+    connect(aZBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
+    connect(alphaBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
+    connect(densityBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
+
+    // Connect other widget (not having editingFinished signal) to
+    // the same slot. From Qt 4.6 onwards the sequence of the signal
+    // delivery is definite.
+    connect(cmbFilter, SIGNAL(activated(const KoID &)), this, SLOT(notifyEditingFinished()));
+    connect(cmbWarpType, SIGNAL(currentIndexChanged(int)), this, SLOT(notifyEditingFinished()));
+    connect(m_rotationCenterButtons, SIGNAL(buttonPressed(int)), this, SLOT(notifyEditingFinished()));
+    connect(aspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(notifyEditingFinished()));
+    connect(defaultRadioButton, SIGNAL(clicked(bool)), this, SLOT(notifyEditingFinished()));
+    connect(customRadioButton, SIGNAL(clicked(bool)), this, SLOT(notifyEditingFinished()));
+    connect(lockUnlockPointsButton, SIGNAL(clicked()), this, SLOT(notifyEditingFinished()));
+    connect(resetPointsButton, SIGNAL(clicked()), this, SLOT(notifyEditingFinished()));
+
+
+    // Connect Apply/Reset buttons
+    connect(buttonBox, SIGNAL(clicked(QAbstractButton *)), this, SLOT(slotButtonBoxClicked(QAbstractButton *)));
+
     // Mode switch buttons
     connect(freeTransformButton, SIGNAL(clicked(bool)), this, SLOT(slotSetFreeTransformModeButtonClicked(bool)));
     connect(warpButton, SIGNAL(clicked(bool)), this, SLOT(slotSetWrapModeButtonClicked(bool)));
 
-    // Connect all edit boxes to the Editing Finished signal
-    connect(scaleXBox, SIGNAL(editingFinished()), this, SLOT(slotEditingFinished()));
-    connect(scaleYBox, SIGNAL(editingFinished()), this, SLOT(slotEditingFinished()));
-    connect(shearXBox, SIGNAL(editingFinished()), this, SLOT(slotEditingFinished()));
-    connect(shearYBox, SIGNAL(editingFinished()), this, SLOT(slotEditingFinished()));
-    connect(translateXBox, SIGNAL(editingFinished()), this, SLOT(slotEditingFinished()));
-    connect(translateYBox, SIGNAL(editingFinished()), this, SLOT(slotEditingFinished()));
-    connect(aXBox, SIGNAL(editingFinished()), this, SLOT(slotEditingFinished()));
-    connect(aYBox, SIGNAL(editingFinished()), this, SLOT(slotEditingFinished()));
-    connect(aZBox, SIGNAL(editingFinished()), this, SLOT(slotEditingFinished()));
-
-    connect(alphaBox, SIGNAL(editingFinished()), this, SLOT(slotEditingFinished()));
-    connect(densityBox, SIGNAL(editingFinished()), this, SLOT(slotEditingFinished()));
-
-    // Connect Apply/Reset buttons
-    connect(buttonBox, SIGNAL(clicked(QAbstractButton *)), this, SLOT(slotButtonBoxClicked(QAbstractButton *)));
-    setApplyResetDisabled(true);
-
     // Connect Decorations switcher
-    Q_ASSERT(canvas);
     connect(showDecorationsBox, SIGNAL(toggled(bool)), canvas, SLOT(updateCanvas()));
 
     tooBigLabelWidget->hide();
-
-    m_valuesChanged = false;*/
 }
 
 double KisToolTransformConfigWidget::radianToDegree(double rad)
@@ -191,6 +205,7 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         aYBox->setValue(radianToDegree(config.aY()));
         aZBox->setValue(radianToDegree(config.aZ()));
         aspectButton->setKeepAspectRatio(config.keepAspectRatio());
+        cmbFilter->setCurrent(config.filterId());
 
         QPointF pt = m_transaction->currentConfig()->rotationCenterOffset();
         pt.rx() /= m_transaction->originalHalfWidth();
@@ -220,14 +235,19 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         defaultWarpWidget->setEnabled(config.defaultPoints());
         customWarpWidget->setEnabled(!config.defaultPoints());
 
-        if (m_transaction->editWarpPoints()) {
-            lockUnlockPointsButton->setText(i18n("Lock Points"));
-        } else {
-            lockUnlockPointsButton->setText(i18n("Unlock Points"));
-        }
+        updateLockPointsButtonCaption();
     }
 
     unblockUiSlots();
+}
+
+void KisToolTransformConfigWidget::updateLockPointsButtonCaption()
+{
+    if (m_transaction->editWarpPoints()) {
+        lockUnlockPointsButton->setText(i18n("Lock Points"));
+    } else {
+        lockUnlockPointsButton->setText(i18n("Unlock Points"));
+    }
 }
 
 void KisToolTransformConfigWidget::setApplyResetDisabled(bool disabled)
@@ -267,6 +287,7 @@ void KisToolTransformConfigWidget::notifyConfigChanged()
     if (!m_notificationsBlocked) {
         emit sigConfigChanged();
     }
+    m_configChanged = true;
 }
 
 void KisToolTransformConfigWidget::blockUiSlots()
@@ -277,6 +298,48 @@ void KisToolTransformConfigWidget::blockUiSlots()
 void KisToolTransformConfigWidget::unblockUiSlots()
 {
     m_uiSlotsBlocked--;
+}
+
+void KisToolTransformConfigWidget::notifyEditingFinished()
+{
+    if (m_uiSlotsBlocked || m_notificationsBlocked || !m_configChanged) return;
+
+    emit sigEditingFinished();
+    m_configChanged = false;
+}
+
+void KisToolTransformConfigWidget::slotButtonBoxClicked(QAbstractButton *button)
+{
+    QAbstractButton *applyButton = buttonBox->button(QDialogButtonBox::Apply);
+    QAbstractButton *resetButton = buttonBox->button(QDialogButtonBox::Reset);
+
+    if (button == applyButton) {
+        emit sigApplyTransform();
+    }
+    else if (button == resetButton) {
+        emit sigResetTransform();
+    }
+}
+
+void KisToolTransformConfigWidget::slotSetFreeTransformModeButtonClicked(bool)
+{
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setMode(ToolTransformArgs::FREE_TRANSFORM);
+    emit sigResetTransform();
+}
+
+void KisToolTransformConfigWidget::slotSetWrapModeButtonClicked(bool)
+{
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setMode(ToolTransformArgs::WARP);
+    emit sigResetTransform();
+}
+
+void KisToolTransformConfigWidget::slotFilterChanged(const KoID &filterId)
+{
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setFilterId(filterId.id());
+    notifyConfigChanged();
 }
 
 void KisToolTransformConfigWidget::slotRotationCenterChanged(int index)
@@ -395,20 +458,6 @@ void KisToolTransformConfigWidget::slotSetAZ(double value)
     notifyConfigChanged();
 }
 
-void KisToolTransformConfigWidget::slotSetWrapAlpha(double value)
-{
-    if (m_uiSlotsBlocked) return;
-
-    ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setAlpha(value);
-    notifyConfigChanged();
-}
-
-void KisToolTransformConfigWidget::slotSetWrapDensity(int value)
-{
-    if (m_uiSlotsBlocked) return;
-}
-
 void KisToolTransformConfigWidget::slotSetKeepAspectRatio(bool value)
 {
     if (m_uiSlotsBlocked) return;
@@ -431,12 +480,133 @@ void KisToolTransformConfigWidget::slotSetKeepAspectRatio(bool value)
     notifyConfigChanged();
 }
 
-/*void KisToolTransformConfigWidget::slotEditingFinished()
+void KisToolTransformConfigWidget::slotSetWrapAlpha(double value)
 {
-    if (m_configChanged) {
-        m_configChanged = false;
-        emit sigConfigChanged(m_currentConfig);
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setAlpha(value);
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::slotSetWrapDensity(int value)
+{
+    if (m_uiSlotsBlocked) return;
+    setDefaultWarpPoints(value);
+}
+
+void KisToolTransformConfigWidget::setDefaultWarpPoints(int pointsPerLine)
+{
+    if (pointsPerLine < 0) {
+        pointsPerLine = DEFAULT_POINTS_PER_LINE;
     }
 
-    setApplyResetDisabled(m_currentConfig.isIdentity(m_originalCenter));
-}*/
+    int nbPoints = pointsPerLine * pointsPerLine;
+    QVector<QPointF> origPoints(nbPoints);
+    QVector<QPointF> transfPoints(nbPoints);
+    qreal gridSpaceX, gridSpaceY;
+
+    if (nbPoints == 1) {
+        //there is actually no grid
+        origPoints[0] = m_transaction->originalCenter();
+        transfPoints[0] = m_transaction->originalCenter();
+    }
+    else if (nbPoints > 1) {
+        gridSpaceX = m_transaction->originalRect().width() / (pointsPerLine - 1);
+        gridSpaceY = m_transaction->originalRect().height() / (pointsPerLine - 1);
+        double y = m_transaction->originalRect().top();
+        for (int i = 0; i < pointsPerLine; ++i) {
+            double x = m_transaction->originalRect().left();
+            for (int j = 0 ; j < pointsPerLine; ++j) {
+                origPoints[i * pointsPerLine + j] = QPointF(x, y);
+                transfPoints[i * pointsPerLine + j] = QPointF(x, y);
+                x += gridSpaceX;
+            }
+            y += gridSpaceY;
+        }
+    }
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+
+    config->setDefaultPoints(true);
+    config->setPoints(origPoints, transfPoints);
+    config->setPointsPerLine(pointsPerLine);
+
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::activateCustomWarpPoints(bool enabled)
+{
+    defaultWarpWidget->setEnabled(!enabled);
+    customWarpWidget->setEnabled(enabled);
+
+    if (!enabled) {
+        m_transaction->setEditWarpPoints(false);
+        setDefaultWarpPoints(densityBox->value());
+    } else {
+        m_transaction->setEditWarpPoints(true);
+        setDefaultWarpPoints(0);
+    }
+
+    updateLockPointsButtonCaption();
+}
+
+void KisToolTransformConfigWidget::slotWarpDefaultPointsButtonClicked(bool value)
+{
+    if (m_uiSlotsBlocked) return;
+
+    activateCustomWarpPoints(!value);
+}
+
+void KisToolTransformConfigWidget::slotWarpCustomPointsButtonClicked(bool value)
+{
+    if (m_uiSlotsBlocked) return;
+
+    activateCustomWarpPoints(value);
+}
+
+void KisToolTransformConfigWidget::slotWarpResetPointsButtonClicked()
+{
+    if (m_uiSlotsBlocked) return;
+
+    activateCustomWarpPoints(true);
+}
+
+void KisToolTransformConfigWidget::slotWarpLockPointsButtonClicked()
+{
+    if (m_uiSlotsBlocked) return;
+
+    m_transaction->setEditWarpPoints(!m_transaction->editWarpPoints());
+
+    if (m_transaction->editWarpPoints()) {
+        // reinit the transf points to their original value
+        ToolTransformArgs *config = m_transaction->currentConfig();
+        int nbPoints = config->origPoints().size();
+        for (int i = 0; i < nbPoints; ++i) {
+            config->transfPoint(i) = config->origPoint(i);
+        }
+    }
+
+    updateLockPointsButtonCaption();
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::slotWarpTypeChanged(int index)
+{
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+
+    switch (index) {
+    case KisWarpTransformWorker::AFFINE_TRANSFORM:
+    case KisWarpTransformWorker::SIMILITUDE_TRANSFORM:
+    case KisWarpTransformWorker::RIGID_TRANSFORM:
+        config->setWarpType((KisWarpTransformWorker::WarpType)index);
+        break;
+    default:
+        config->setWarpType(KisWarpTransformWorker::RIGID_TRANSFORM);
+        break;
+    }
+
+    notifyConfigChanged();
+}

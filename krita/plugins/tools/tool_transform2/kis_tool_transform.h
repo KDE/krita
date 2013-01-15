@@ -289,7 +289,6 @@ private:
 
     bool m_actuallyMoveWhileSelected; // true <=> selection has been moved while clicked
     bool m_imageTooBig;
-    bool m_boxValueChanged; // true if a boxValue has been changed directly by the user (not by click + move mouse)
 
     QImage m_origImg; // image of the pixels in selection bound rect
     QTransform m_transform; // transformation to apply on origImg
@@ -298,7 +297,6 @@ private:
     QImage m_scaledOrigSelectionImg; // original selection to be drawn, scaled to the view
     QSizeF m_refSize; // used in paint() to check if the view has changed (need to update m_currSelectionImg)
 
-    KisFilterStrategy *m_filter;
     KisToolTransformConfigWidget *m_optWidget;
     KisPaintDeviceSP m_target;
     // we don't need this origDevice for now
@@ -361,7 +359,6 @@ private:
 
 	// Warp-related :
     int m_defaultPointsPerLine;
-	double m_gridSpaceX, m_gridSpaceY;
     QVector<QPointF> m_viewTransfPoints;
     QVector<QPointF> m_viewOrigPoints;
 	bool m_cursorOverPoint;
@@ -378,23 +375,11 @@ private:
     QRectF imageToFlake(const QRectF &pt);
     QRectF flakeToImage(const QRectF &pt);
 
-    void activateCustomWarpPoints(bool enabled);
-
 private slots:
     void slotUiChangedConfig();
-
-    void slotSetFilter(const KoID &);
-    void setDensity(int density);
-    void slotButtonBoxClicked(QAbstractButton *button);
+    void slotApplyTransform();
+    void slotResetTransform();
     void slotEditingFinished();
-	void slotWarpButtonClicked(bool checked);
-	void slotFreeTransformButtonClicked(bool checked);
-    void slotWarpTypeChanged(int index);
-    void slotWarpDefaultButtonClicked(bool checked);
-    void slotWarpCustomButtonClicked(bool checked);
-    void slotLockUnlockPointsButtonClicked();
-    void slotResetPointsButtonClicked();
-
 };
 
 class KisToolTransformFactory : public KoToolFactoryBase

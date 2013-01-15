@@ -31,7 +31,7 @@ class KisToolTransformConfigWidget : public QWidget, public Ui::WdgToolTransform
     Q_OBJECT
 
 public:
-    KisToolTransformConfigWidget(const TransformTransactionProperties *transaction, KisCanvas2 *canvas, QWidget *parent);
+    KisToolTransformConfigWidget(TransformTransactionProperties *transaction, KisCanvas2 *canvas, QWidget *parent);
 
     void setApplyResetDisabled(bool disabled);
     void resetRotationCenterButtons();
@@ -41,12 +41,13 @@ public slots:
 
 signals:
     void sigConfigChanged();
+    void sigApplyTransform();
+    void sigResetTransform();
+    void sigEditingFinished();
 
 private slots:
-/*    void slotFilterChanged(const KoID &filter);
+    void slotFilterChanged(const KoID &filter);
     void slotWarpTypeChanged(int index);
-
-*/
     void slotRotationCenterChanged(int index);
 
     void slotSetScaleX(double value);
@@ -66,19 +67,17 @@ private slots:
     void slotSetWrapDensity(int value);
 
     void slotSetKeepAspectRatio(bool value);
-/*
+
     void slotWarpDefaultPointsButtonClicked(bool value);
     void slotWarpCustomPointsButtonClicked(bool value);
     void slotWarpLockPointsButtonClicked();
-    void slotWarpResetPointsButtonClicked(bool value);
+    void slotWarpResetPointsButtonClicked();
 
     void slotSetFreeTransformModeButtonClicked(bool);
     void slotSetWrapModeButtonClicked(bool);
+    void slotButtonBoxClicked(QAbstractButton *button);
 
-    void slotEditingFinished();
-
-    void slotButtonBoxClicked();
-*/
+    void notifyEditingFinished();
 
 private:
     // rad being in |R, the returned value is in [0; 360]
@@ -93,19 +92,21 @@ private:
     void blockUiSlots();
     void unblockUiSlots();
 
+    void setDefaultWarpPoints(int pointsPerLine);
+    void activateCustomWarpPoints(bool enabled);
+
+    void updateLockPointsButtonCaption();
+
 private:
-    /**
-     * This is a link to some additional data about transformation.
-     * The constness is added intentively. The values inside should be
-     * changed by means of signals
-     */
-    const TransformTransactionProperties *m_transaction;
+    static const int DEFAULT_POINTS_PER_LINE;
+
+private:
+    TransformTransactionProperties *m_transaction;
     QPointF m_handleDir[9];
     QButtonGroup *m_rotationCenterButtons;
     int m_notificationsBlocked;
     int m_uiSlotsBlocked;
-//    bool m_configChanged;
-//    ToolTransformArgs m_currentConfig;
+    bool m_configChanged;
 };
 
 #endif /* __KIS_TOOL_TRANSFORM_CONFIG_WIDGET_H */

@@ -55,6 +55,12 @@
 #include <QSplashScreen>
 #include <QSysInfo>
 
+#include <QDesktopServices>
+#include <QProcessEnvironment>
+#include <QDir>
+
+#include <stdlib.h>
+
 bool KoApplication::m_starting = true;
 
 namespace {
@@ -147,6 +153,32 @@ public:
 
 bool KoApplication::start()
 {
+#ifdef Q_OS_WIN
+    QDir appdir(applicationDirPath());
+    appdir.cdUp();
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    // If there's no kdehome, set it and restart the process.
+    if (!env.contains("KDEHOME")) {
+        qputenv("KDEHOME", QFile::encodeName(QDesktopServices::storageLocation(QDesktopServices::DataLocation)));
+    }
+    if (!env.contains("KDESYCOCA")) {
+        qputenv("KDESYCOCA", QFile::encodeName(appdir.absolutePath() + "/sycoca"));
+    }
+    if (!env.contains("XDG_DATA_DIRS")) {
+        qputenv("XDG_DATA_DIRS", QFile::encodeName(appdir.absolutePath() + "/share"));
+    }
+    if (!env.contains("KDEDIR")) {
+        qputenv("KDEDIR", QFile::encodeName(appdir.absolutePath()));
+    }
+    if (!env.contains("KDEDIRS")) {
+        qputenv("KDEDIRS", QFile::encodeName(appdir.absolutePath()));
+    }
+    qputenv("PATH", QFile::encodeName(appdir.absolutePath() + "/bin" + ";"
+              + appdir.absolutePath() + "/lib" + ";"
+              + appdir.absolutePath() + "/lib"  +  "/kde4" + ";"
+              + appdir.absolutePath()));
+#endif
+
     if (d->splashScreen) {
         d->splashScreen->show();
         d->splashScreen->showMessage(".");

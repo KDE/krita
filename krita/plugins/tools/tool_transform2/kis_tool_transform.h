@@ -35,6 +35,7 @@
 
 #include <KoInteractionTool.h>
 #include <KoToolFactoryBase.h>
+#include <KoUpdater.h>
 
 #include <kis_shape_selection.h>
 #include <kis_undo_adapter.h>
@@ -268,6 +269,10 @@ private:
     void updateOptionWidget();
 
     void updateApplyResetAvailability();
+    void transformDevice(KisPaintDeviceSP device,
+                         KoUpdaterPtr warpUpdater,
+                         KoUpdaterPtr affineUpdater,
+                         KoUpdaterPtr perspectiveUpdater);
 
 private:
     enum function {ROTATE = 0, MOVE, RIGHTSCALE, TOPRIGHTSCALE, TOPSCALE, TOPLEFTSCALE,

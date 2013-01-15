@@ -25,9 +25,7 @@
 #include "krita_export.h"
 
 #include <QRect>
-
 #include <KoUpdater.h>
-typedef QPointer<KoUpdater> KoUpdaterPtr;
 
 class KisPaintDevice;
 class KisFilterStrategy;

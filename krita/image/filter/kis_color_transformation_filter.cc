@@ -32,7 +32,6 @@
 #endif
 #include <kis_iterator_ng.h>
 
-typedef QPointer<KoUpdater> KoUpdaterPtr;
 
 KisColorTransformationFilter::KisColorTransformationFilter(const KoID& id, const KoID & category, const QString & entry) : KisFilter(id, category, entry)
 {

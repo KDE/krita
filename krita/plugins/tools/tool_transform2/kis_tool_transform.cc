@@ -50,7 +50,7 @@
 #include <KoCompositeOp.h>
 #include <KoShapeManager.h>
 #include <KoProgressUpdater.h>
-#include <KoUpdater.h>
+
 
 #include <kis_global.h>
 #include <canvas/kis_canvas2.h>
@@ -2116,6 +2116,49 @@ void KisToolTransform::transform()
         image()->undoAdapter()->addCommand(transaction);
 }
 
+void KisToolTransform::transformDevice(KisPaintDeviceSP device,
+                                       KoUpdaterPtr warpUpdater,
+                                       KoUpdaterPtr affineUpdater,
+                                       KoUpdaterPtr perspectiveUpdater)
+{
+    if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
+        KisWarpTransformWorker selectionWorker(m_currentArgs.warpType(),
+                                               device,
+                                               m_currentArgs.origPoints(),
+                                               m_currentArgs.transfPoints(),
+                                               m_currentArgs.alpha(),
+                                               warpUpdater);
+        selectionWorker.run();
+    } else {
+        QVector3D transformedCenter(m_transaction.originalCenter());
+        transformedCenter = scale(transformedCenter.x(), transformedCenter.y(), transformedCenter.z());
+        transformedCenter = rotZ(transformedCenter.x(), transformedCenter.y(), transformedCenter.z());
+        QPointF translation = m_currentArgs.translate() - transformedCenter.toPointF();
+
+        KisTransformWorker selectionWorker(device,
+                                           m_currentArgs.scaleX(),
+                                           m_currentArgs.scaleY(),
+                                           m_currentArgs.shearX(),
+                                           m_currentArgs.shearY(),
+                                           m_transaction.originalCenter().x(),
+                                           m_transaction.originalCenter().y(),
+                                           m_currentArgs.aZ(),
+                                           (int)(translation.x()),
+                                           (int)(translation.y()),
+                                           affineUpdater,
+                                           m_currentArgs.filter());
+        selectionWorker.run();
+
+        KisPerspectiveTransformWorker perspectiveSelectionWorker(device,
+                                                                 m_currentArgs.translate(),
+                                                                 m_currentArgs.aX(),
+                                                                 m_currentArgs.aY(),
+                                                                 m_cameraPos.z(),
+                                                                 perspectiveUpdater);
+        perspectiveSelectionWorker.run();
+    }
+}
+
 void KisToolTransform::applyTransform()
 {
     if (!image() || !currentNode()->paintDevice() || currentNode()->systemLocked())
@@ -2127,10 +2170,6 @@ void KisToolTransform::applyTransform()
 
     KisSystemLocker locker(currentNode());
 
-    QVector3D tmpCenter(m_transaction.originalCenter());
-    tmpCenter = scale(tmpCenter.x(), tmpCenter.y(), tmpCenter.z());
-    tmpCenter = rotZ(tmpCenter.x(), tmpCenter.y(), tmpCenter.z());
-    QPointF t = m_currentArgs.translate() - tmpCenter.toPointF();
     KoProgressUpdater* updater = m_canvas->view()->createProgressUpdater(KoProgressUpdater::Unthreaded);
     updater->start(100, i18n("Apply Transformation"));
 
@@ -2188,16 +2227,7 @@ void KisToolTransform::applyTransform()
         gc.bitBlt(selectRect.topLeft(), currentNode()->paintDevice(), selectRect);
         gc.end();
 
-        if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
-            KisWarpTransformWorker worker(m_currentArgs.warpType(), tmpDevice, m_currentArgs.origPoints(), m_currentArgs.transfPoints(), m_currentArgs.alpha(), transformPixels);
-            worker.run();
-        }
-        else {
-            KisTransformWorker worker(tmpDevice, m_currentArgs.scaleX(), m_currentArgs.scaleY(), m_currentArgs.shearX(), m_currentArgs.shearY(), m_transaction.originalCenter().x(), m_transaction.originalCenter().y(), m_currentArgs.aZ(), int(t.x()), int(t.y()), transformPixels, m_currentArgs.filter());
-            worker.run();
-            KisPerspectiveTransformWorker perspectiveWorker(tmpDevice, m_currentArgs.translate(), m_currentArgs.aX(), m_currentArgs.aY(), m_cameraPos.z(), perspectiveTransfPixels);
-            perspectiveWorker.run();
-        }
+        transformDevice(tmpDevice, transformPixels, transformPixels, perspectiveTransfPixels);
 
         currentNode()->paintDevice()->clearSelection(currentSelection());
 
@@ -2220,16 +2250,7 @@ void KisToolTransform::applyTransform()
         gc2.bitBlt(pixelSelectRect.topLeft(), pixelSelection, pixelSelectRect);
         gc2.end();
 
-        if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
-            KisWarpTransformWorker selectionWorker(m_currentArgs.warpType(), tmpDevice2, m_currentArgs.origPoints(), m_currentArgs.transfPoints(), m_currentArgs.alpha(), transformPixSelection);
-            selectionWorker.run();
-        }
-        else {
-            KisTransformWorker selectionWorker(tmpDevice2, m_currentArgs.scaleX(), m_currentArgs.scaleY(), m_currentArgs.shearX(), m_currentArgs.shearY(), m_transaction.originalCenter().x(), m_transaction.originalCenter().y(), m_currentArgs.aZ(), (int)(t.x()), (int)(t.y()), transformPixSelection, m_currentArgs.filter());
-            selectionWorker.run();
-            KisPerspectiveTransformWorker perspectiveSelectionWorker(tmpDevice2, m_currentArgs.translate(), m_currentArgs.aX(), m_currentArgs.aY(), m_cameraPos.z(), perspectiveTransfPixSelection);
-            perspectiveSelectionWorker.run();
-        }
+        transformDevice(tmpDevice2, transformPixSelection, transformPixSelection, perspectiveTransfPixSelection);
 
         pixelSelection->clear();
 
@@ -2241,21 +2262,7 @@ void KisToolTransform::applyTransform()
 
     }
     else {
-
-        if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
-            KoUpdaterPtr transformPixels = updater->startSubtask(40);
-            KisWarpTransformWorker worker(m_currentArgs.warpType(), currentNode()->paintDevice(), m_currentArgs.origPoints(), m_currentArgs.transfPoints(), m_currentArgs.alpha(), transformPixels);
-            worker.run();
-        }
-        else {
-            KoUpdaterPtr transformPixels = updater->startSubtask(40);
-            KoUpdaterPtr perspectiveTransfPixels = updater->startSubtask(40);
-            KisTransformWorker worker(currentNode()->paintDevice(), m_currentArgs.scaleX(), m_currentArgs.scaleY(), m_currentArgs.shearX(), m_currentArgs.shearY(), m_transaction.originalCenter().x(), m_transaction.originalCenter().y(), m_currentArgs.aZ(), int(t.x()), int(t.y()), transformPixels, m_currentArgs.filter());
-            worker.run();
-            KisPerspectiveTransformWorker perspectiveWorker(currentNode()->paintDevice(), m_currentArgs.translate(), m_currentArgs.aX(), m_currentArgs.aY(), m_cameraPos.z(), perspectiveTransfPixels);
-            perspectiveWorker.run();
-        }
-
+        transformDevice(currentNode()->paintDevice(), updater->startSubtask(40), updater->startSubtask(40), updater->startSubtask(40));
     }
 
     transaction.commit(undoAdapter);

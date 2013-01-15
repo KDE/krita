@@ -29,7 +29,6 @@
 #include <QMap>
 #include <QHash>
 #include <QDockWidget>
-#include <QToolBox>
 
 #include <KoToolManager.h>
 
@@ -51,7 +50,7 @@ class KoShapeLayer;
  *
  * @see KoToolManager
  */
-class KoModeBox : public QToolBox {
+class KoModeBox : public QWidget {
     Q_OBJECT
 public:
     /// constructor
@@ -111,6 +110,7 @@ public:
     static QString applicationName;
 
 private:
+    QIcon createRotatedIcon(const KoToolButton button);
     void addItem(const KoToolButton button);
 
 private:

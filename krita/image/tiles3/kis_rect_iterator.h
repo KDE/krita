@@ -42,8 +42,9 @@ public:
 
     /// Advances one pixel. Going to the beginning of the next line when it reaches the end of a line
     bool nextPixel();
-    const quint8 * oldRawData() const;
-    quint8 * rawData();
+    const quint8* rawDataConst() const;
+    const quint8* oldRawData() const;
+    quint8* rawData();
     qint32 x() const;
     qint32 y() const;
 

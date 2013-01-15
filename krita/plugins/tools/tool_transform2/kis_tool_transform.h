@@ -25,8 +25,6 @@
 
 #include <KoIcon.h>
 
-#include <complex>
-
 #include <QPoint>
 #include <QPointF>
 #include <QVector2D>
@@ -44,30 +42,13 @@
 #include <flake/kis_node_shape.h>
 #include <kis_tool.h>
 
-#include "ui_wdg_tool_transform.h"
 #include "tool_transform_args.h"
+#include "kis_tool_transform_config_widget.h"
+#include "transform_transaction_properties.h"
 
 class KoID;
 class KisFilterStrategy;
-
-class WdgToolTransform : public QWidget, public Ui::WdgToolTransform
-{
-    Q_OBJECT
-
-public:
-    WdgToolTransform(QWidget *parent) : QWidget(parent) {
-        setupUi(this);
-        showDecorationsBox->setIcon(koIcon("krita_tool_transform"));
-        label_shearX->setPixmap(koIcon("shear_horizontal").pixmap(16, 16));
-        label_shearY->setPixmap(koIcon("shear_vertical").pixmap(16, 16));
-
-        label_width->setPixmap(koIcon("width_icon").pixmap(16, 16));
-        label_height->setPixmap(koIcon("height_icon").pixmap(16, 16));
-
-        label_offsetX->setPixmap(koIcon("offset_horizontal").pixmap(16, 16));
-        label_offsetY->setPixmap(koIcon("offset_vertical").pixmap(16, 16));
-    }
-};
+class KisCanvas2;
 
 /**
  * Transform tool
@@ -241,10 +222,6 @@ private:
     QRectF boundRect(QPointF P0, QPointF P1, QPointF P2, QPointF P3);
     // Returns the minimum and the maximum of the Z component of the 4 given vectors (x being the min, and y the max in the returned point)
     QPointF minMaxZ(QVector3D P0, QVector3D P1, QVector3D P2, QVector3D P3);
-    // rad being in |R, the returned value is in [0; 360[
-    double radianToDegree(double rad);
-    // degree being in |R, the returned value is in [0; 2*M_PI[
-    double degreeToRadian(double degree);
     // Determinant math function
     int det(const QPointF & v, const QPointF & w);
     // Square of the euclidian distance
@@ -282,16 +259,15 @@ private:
     void setDefaultWarpPoints(int pointsPerLine = -1);
 	void initWarpTransform();
     // Saves the original selection, paintDevice, image previews, and initializes the transformation depending on the mode given in argument
-    void initTransform(ToolTransformArgs::TransfMode mode);
+    void initTransform(ToolTransformArgs::TransformMode mode);
     // Only commits the changes made on the preview to the undo stack
     void transform();
     // Applies the current transformation to the original paint device and commits it to the undo stack
     void applyTransform();
     // Updated the widget according to m_currentArgs
     void updateOptionWidget();
-    // Disable/Enable Apply-Reset button
-    void setButtonBoxDisabled(bool disabled);
-    void setFreeTransformBoxesDisabled(bool disabled);
+
+    void updateApplyResetAvailability();
 
 private:
     enum function {ROTATE = 0, MOVE, RIGHTSCALE, TOPRIGHTSCALE, TOPSCALE, TOPLEFTSCALE,
@@ -302,7 +278,6 @@ private:
 
     function m_function; // current transformation function
 
-    QPointF m_handleDir[9];
     QCursor m_scaleCursors[8]; // cursors for the 8 directions
     QCursor m_shearCursors[8];
 
@@ -314,8 +289,6 @@ private:
 
     bool m_actuallyMoveWhileSelected; // true <=> selection has been moved while clicked
     bool m_imageTooBig;
-    bool m_boxValueChanged; // true if a boxValue has been changed directly by the user (not by click + move mouse)
-    bool m_editWarpPoints;
 
     QImage m_origImg; // image of the pixels in selection bound rect
     QTransform m_transform; // transformation to apply on origImg
@@ -324,22 +297,14 @@ private:
     QImage m_scaledOrigSelectionImg; // original selection to be drawn, scaled to the view
     QSizeF m_refSize; // used in paint() to check if the view has changed (need to update m_currSelectionImg)
 
-    KisFilterStrategy *m_filter;
-    WdgToolTransform *m_optWidget;
+    KisToolTransformConfigWidget *m_optWidget;
     KisPaintDeviceSP m_target;
     // we don't need this origDevice for now
     // but I keep it here because I might use it when adding one of enkithan's suggestion (cut the seleted pixels instead of keeping them darkened)
     KisPaintDeviceSP m_origDevice;
     KisSelectionSP m_origSelection;
     //KisShapeSelection *m_previousShapeSelection;
-    KoCanvasBase *m_canvas;
-    QButtonGroup *m_rotCenterButtons;
-
-    // information on the original selection (before any transformation)
-    double m_originalWidth2, m_originalHeight2; // '2' meaning half
-    QPoint m_originalTopLeft;  // in image coords
-    QPoint m_originalBottomRight;
-    QPointF m_originalCenter; // original center of the selection
+    KisCanvas2 *m_canvas;
 
     // center used for rotation (calculated from rotationCenterOffset (in m_currentArgs))
     QVector3D m_rotationCenter;
@@ -394,7 +359,6 @@ private:
 
 	// Warp-related :
     int m_defaultPointsPerLine;
-	double m_gridSpaceX, m_gridSpaceY;
     QVector<QPointF> m_viewTransfPoints;
     QVector<QPointF> m_viewOrigPoints;
 	bool m_cursorOverPoint;
@@ -402,32 +366,20 @@ private:
 
     bool m_isActive;
 
+    TransformTransactionProperties m_transaction;
+
+private:
+    QPointF imageToFlake(const QPointF &pt);
+    QPointF flakeToImage(const QPointF &pt);
+
+    QRectF imageToFlake(const QRectF &pt);
+    QRectF flakeToImage(const QRectF &pt);
+
 private slots:
-
-    void slotSetFilter(const KoID &);
-    void setRotCenter(int id);
-    void setScaleX(double scaleX);
-    void setScaleY(double scaleY);
-    void setShearX(double shearX);
-    void setShearY(double shearY);
-    void setAX(double aX);
-    void setAY(double aY);
-    void setAZ(double aZ);
-    void setAlpha(double alpha);
-    void setDensity(int density);
-    void setTranslateX(double translateX);
-    void setTranslateY(double translateY);
-    void slotButtonBoxClicked(QAbstractButton *button);
-    void slotKeepAspectRatioChanged(bool keep);
+    void slotUiChangedConfig();
+    void slotApplyTransform();
+    void slotResetTransform();
     void slotEditingFinished();
-	void slotWarpButtonClicked(bool checked);
-	void slotFreeTransformButtonClicked(bool checked);
-    void slotWarpTypeChanged(int index);
-    void slotWarpDefaultButtonClicked(bool checked);
-    void slotWarpCustomButtonClicked(bool checked);
-    void slotLockUnlockPointsButtonClicked();
-    void slotResetPointsButtonClicked();
-
 };
 
 class KisToolTransformFactory : public KoToolFactoryBase

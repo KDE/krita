@@ -50,6 +50,7 @@ private:
     QRegion m_dstRegion;
     QRectF m_srcRect;
     QTransform m_newTransform;
+    bool m_isIdentity;
 };
 
 #endif

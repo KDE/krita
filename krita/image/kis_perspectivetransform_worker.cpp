@@ -81,7 +81,9 @@ KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP de
     QPolygon bounds(dev->exactBounds());
     QPolygon newBounds = forwardTransform.map(bounds);
 
-    if (forwardTransform.isInvertible()) {
+    m_isIdentity = forwardTransform.isIdentity();
+
+    if (!m_isIdentity && forwardTransform.isInvertible()) {
         m_newTransform = forwardTransform.inverted();
         m_srcRect = dev->exactBounds();
 
@@ -97,6 +99,10 @@ KisPerspectiveTransformWorker::~KisPerspectiveTransformWorker()
 
 void KisPerspectiveTransformWorker::run()
 {
+    KisProgressUpdateHelper progressHelper(m_progressUpdater, 100, m_dstRegion.rectCount());
+    if (m_isIdentity) return;
+
+
     KisPaintDeviceSP cloneDevice = new KisPaintDevice(*m_dev.data());
 
     // Clear the destination device, since all the tiles are already
@@ -105,8 +111,6 @@ void KisPerspectiveTransformWorker::run()
 
     KisRandomSubAccessorSP srcAcc = cloneDevice->createRandomSubAccessor();
     KisRandomAccessorSP accessor = m_dev->createRandomAccessorNG(0, 0);
-
-    KisProgressUpdateHelper progressHelper(m_progressUpdater, 100, m_dstRegion.rectCount());
 
     foreach(const QRect &rect, m_dstRegion.rects()) {
         for (int y = rect.y(); y < rect.y() + rect.height(); ++y) {
@@ -121,9 +125,10 @@ void KisPerspectiveTransformWorker::run()
                     srcAcc->sampledOldRawData(accessor->rawData());
                 }
 
-                progressHelper.step();
+
             }
         }
+        progressHelper.step();
     }
 }
 

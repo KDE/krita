@@ -29,6 +29,8 @@
 #include <KoInteractionTool.h>
 
 #include <KDebug>
+#include <KGlobalSettings>
+
 #include <QMap>
 #include <QList>
 #include <QToolButton>
@@ -39,7 +41,10 @@
 #include <QFrame>
 #include <QGridLayout>
 #include <QApplication>
-
+#include <QTabBar>
+#include <QStackedWidget>
+#include <QPainter>
+#include <QTextLayout>
 
 class KoModeBox::Private
 {
@@ -48,6 +53,8 @@ public:
         : canvas(c->canvas())
         , canvasReset(false)
         , activeId(-1)
+        , iconTextFitted(true)
+        , fittingIterations(0)
     {
     }
 
@@ -58,6 +65,10 @@ public:
     QMap<int, QWidget *> addedWidgets;
     QSet<QWidget *> currentAuxWidgets;
     int activeId;
+    QTabBar *tabBar;
+    QStackedWidget *stack;
+    bool iconTextFitted;
+    int fittingIterations;
 };
 
 QString KoModeBox::applicationName;
@@ -84,13 +95,26 @@ static bool compareButton(const KoToolButton &b1, const KoToolButton &b2)
 
 
 KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
-    : QToolBox()
+    : QWidget()
     , d(new Private(canvas))
 {
     applicationName = appName;
 
-    foreach(const KoToolButton & button,
-            KoToolManager::instance()->createToolList(canvas->canvas())) {
+    QGridLayout *layout = new QGridLayout();
+    d->tabBar = new QTabBar();
+    d->tabBar->setShape(QTabBar::RoundedWest);
+    d->tabBar->setExpanding(false);
+    d->tabBar->setIconSize(QSize(48,64));
+    d->tabBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    layout->addWidget(d->tabBar, 0, 0);
+
+    d->stack = new QStackedWidget();
+    layout->addWidget(d->stack, 0, 1);
+
+    layout->setContentsMargins(0,0,0,0);
+    setLayout(layout);
+
+    foreach(const KoToolButton &button, KoToolManager::instance()->createToolList(canvas->canvas())) {
         addButton(button);
     }
 
@@ -99,14 +123,15 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
     // Update visibility of buttons
     updateShownTools(canvas, QList<QString>());
 
-    connect(this, SIGNAL(currentChanged(int)), this, SLOT(toolSelected(int)));
+    connect(d->tabBar, SIGNAL(currentChanged(int)), this, SLOT(toolSelected(int)));
+    connect(d->tabBar, SIGNAL(currentChanged(int)), d->stack, SLOT(setCurrentIndex(int)));
 
-    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*, int)),
-            this, SLOT(setActiveTool(KoCanvasController*, int)));
-    connect(KoToolManager::instance(), SIGNAL(currentLayerChanged(const KoCanvasController*,const KoShapeLayer*)),
-            this, SLOT(setCurrentLayer(const KoCanvasController*,const KoShapeLayer*)));
+    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController *, int)),
+            this, SLOT(setActiveTool(KoCanvasController *, int)));
+    connect(KoToolManager::instance(), SIGNAL(currentLayerChanged(const KoCanvasController *,const KoShapeLayer*)),
+            this, SLOT(setCurrentLayer(const KoCanvasController *,const KoShapeLayer *)));
     connect(KoToolManager::instance(), SIGNAL(toolCodesSelected(const KoCanvasController*, QList<QString>)),
-            this, SLOT(updateShownTools(const KoCanvasController*, QList<QString>)));
+            this, SLOT(updateShownTools(const KoCanvasController *, QList<QString>)));
     connect(KoToolManager::instance(),
             SIGNAL(addedTool(const KoToolButton, KoCanvasController*)),
             this, SLOT(toolAdded(const KoToolButton, KoCanvasController*)));
@@ -134,7 +159,8 @@ void KoModeBox::setActiveTool(KoCanvasController *canvas, int id)
         int i = 0;
         foreach (const KoToolButton &button, d->addedButtons) {
             if (button.buttonGroupId == d->activeId) {
-                setCurrentIndex(i);
+                d->tabBar->setCurrentIndex(i);
+                d->stack->setCurrentIndex(i);
                 break;
             }
             ++i;
@@ -142,6 +168,49 @@ void KoModeBox::setActiveTool(KoCanvasController *canvas, int id)
         blockSignals(false);
         return;
     }
+}
+
+QIcon KoModeBox::createRotatedIcon(const KoToolButton button)
+{
+    QSize iconSize = d->tabBar->iconSize();
+    QFont smallFont  = KGlobalSettings::generalFont();
+    qreal pointSize = KGlobalSettings::smallestReadableFont().pointSizeF();
+    smallFont.setPointSizeF(pointSize);
+    // This must be a QImage, as drawing to a QPixmap outside the
+    // UI thread will cause sporadic crashes.
+    QImage pm(iconSize, QImage::Format_ARGB32_Premultiplied);
+    pm.fill(Qt::transparent);
+    QPainter p(&pm);
+    p.rotate(90);
+    p.translate(0,-iconSize.width());
+
+    button.button->icon().paint(&p, 0, 0, iconSize.height(), 22);
+
+    QTextLayout textLayout(button.button->toolTip(), smallFont);
+    QTextOption option(Qt::AlignTop | Qt::AlignHCenter);
+    option.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+    textLayout.setTextOption(option);
+    textLayout.beginLayout();
+    qreal height = 0;
+    while (1) {
+     QTextLine line = textLayout.createLine();
+     if (!line.isValid())
+         break;
+
+        line.setLineWidth(iconSize.height());
+        line.setPosition(QPointF(0, height));
+        height += line.height();
+    }
+    textLayout.endLayout();
+
+    if (textLayout.lineCount() > 2)
+        d->iconTextFitted = false;
+
+    p.setFont(smallFont);
+    textLayout.draw(&p, QPoint(0, 22));
+    p.end();
+
+    return QIcon(QPixmap::fromImage(pm));
 }
 
 void KoModeBox::addItem(const KoToolButton button)
@@ -162,7 +231,11 @@ void KoModeBox::addItem(const KoToolButton button)
     layout->setContentsMargins(0,0,0,0);
     d->addedWidgets[button.buttonGroupId] = widget;
 
-    QToolBox::addItem(widget, button.button->icon(), button.button->toolTip());
+    // Create a rotated icon with text
+    d->tabBar->blockSignals(true);
+    d->tabBar->addTab(createRotatedIcon(button), QString());
+    d->tabBar->blockSignals(false);
+    d->stack->addWidget(widget);
     d->addedButtons.append(button);
 }
 
@@ -172,10 +245,20 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
         return;
     }
 
+    if (!d->iconTextFitted) {
+        QSize size = d->tabBar->iconSize();
+        size.setHeight(size.height() + 8);
+        d->tabBar->setIconSize(size);
+    } else {
+        d->fittingIterations = 0;
+    }
+    d->iconTextFitted = true;
+
     blockSignals(true);
 
-    while (count()) {
-        removeItem(0);
+    while (d->tabBar->count()) {
+        d->tabBar->removeTab(0);
+        d->stack->removeWidget(d->stack->widget(0));
     }
 
     d->addedButtons.clear();
@@ -211,9 +294,14 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
         }
     }
     if (newIndex != -1) {
-        setCurrentIndex(newIndex);
+        d->tabBar->setCurrentIndex(newIndex);
     }
     blockSignals(false);
+
+    if (!d->iconTextFitted &&  d->fittingIterations++ < 4) {
+        updateShownTools(canvas, codes);
+    }
+    d->iconTextFitted = true;
 }
 
 void KoModeBox::setOptionWidgets(const QList<QWidget *> &optionWidgetList)
@@ -263,7 +351,8 @@ void KoModeBox::setOptionWidgets(const QList<QWidget *> &optionWidgetList)
         widget->show();
         if (widget != optionWidgetList.last()) {
             QFrame *s;
-            layout->addWidget(s = new QFrame(), cnt++, 2, 1, 1);
+            layout->addWidget(s = new QFrame(), cnt, 2, 1, 1);
+            layout->setRowMinimumHeight(cnt++, 16);
             s->setFrameStyle(QFrame::HLine | QFrame::Sunken);
             d->currentAuxWidgets.insert(s);
         }

@@ -64,7 +64,7 @@ private slots:
     void slotSetAZ(double value);
 
     void slotSetWrapAlpha(double value);
-    void slotSetWrapDensity(int value);
+    void slotSetWarpDensity(int value);
 
     void slotSetKeepAspectRatio(bool value);
 

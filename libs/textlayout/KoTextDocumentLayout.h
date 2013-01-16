@@ -138,6 +138,9 @@ public:
     /// are the tabs relative to indent or not
     bool relativeTabs(QTextBlock block) const;
 
+    /// visualize inline objects during paint
+    void showInlineObjectVisualization(bool show);
+
     /// Calc a bounding box rect of the selection
     QRectF selectionBoundingBox(QTextCursor &cursor) const;
 

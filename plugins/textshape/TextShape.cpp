@@ -116,6 +116,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     Q_ASSERT(doc);
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(doc->documentLayout());
     Q_ASSERT(lay);
+    lay->showInlineObjectVisualization(paintContext.showInlineObjectVisualization);
 
     applyConversion(painter, converter);
 

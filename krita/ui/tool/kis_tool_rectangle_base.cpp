@@ -113,7 +113,9 @@ void KisToolRectangleBase::mouseReleaseEvent(KoPointerEvent *event)
         setMode(KisTool::HOVER_MODE);
 
         updateArea();
-        finishRect(QRectF(m_dragStart, m_dragEnd));
+        if (currentNode()->isEditable()) {
+            finishRect(QRectF(m_dragStart, m_dragEnd));
+        }
     }
     else {
         KisToolShape::mouseReleaseEvent(event);

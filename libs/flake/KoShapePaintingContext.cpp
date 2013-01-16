@@ -28,6 +28,7 @@ KoShapePaintingContext::KoShapePaintingContext()
     , showTableBorders(true)
     , showSpellChecking(false)
     , showSelections(true)
+    , showInlineObjectVisualization(false)
 {
 }
 
@@ -40,8 +41,10 @@ KoShapePaintingContext::KoShapePaintingContext(KoCanvasBase *canvas, bool forPri
         showTextShapeOutlines = false;
         showFormattingCharacters = false;
         showTableBorders = false;
+        showInlineObjectVisualization = false;
     } else {
         showTextShapeOutlines = rm->boolResource(KoCanvasResourceManager::ShowTextShapeOutlines);
+        showInlineObjectVisualization = rm->boolResource(KoCanvasResourceManager::ShowInlineObjectVisualization);
         if (rm->hasResource(KoCanvasResourceManager::ShowTableBorders)) {
             showTableBorders = rm->boolResource(KoCanvasResourceManager::ShowTableBorders);
         } else {

@@ -86,6 +86,7 @@ public:
        , changesBlocked(false)
        , restartLayout(false)
        , wordprocessingMode(false)
+       , showInlineObjectVisualization(false)
     {
     }
     KoStyleManager *styleManager;
@@ -127,6 +128,7 @@ public:
     bool changesBlocked;
     bool restartLayout;
     bool wordprocessingMode;
+    bool showInlineObjectVisualization;
 };
 
 
@@ -388,12 +390,20 @@ KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPoint(const QPointF &poin
     return 0;
 }
 
+void KoTextDocumentLayout::showInlineObjectVisualization(bool show)
+{
+    d->showInlineObjectVisualization = show;
+}
+
 void KoTextDocumentLayout::drawInlineObject(QPainter *painter, const QRectF &rect, QTextInlineObject object, int position, const QTextFormat &format)
 {
     Q_ASSERT(format.isCharFormat());
     if (d->inlineTextObjectManager == 0)
         return;
     QTextCharFormat cf = format.toCharFormat();
+    if (d->showInlineObjectVisualization) {
+        cf.setBackground(QBrush(Qt::gray));
+    }
     KoInlineObject *obj = d->inlineTextObjectManager->inlineTextObject(cf);
     if (obj)
         obj->paint(*painter, paintDevice(), document(), rect, object, position, cf);

@@ -79,6 +79,7 @@ public:
         ShowTextShapeOutlines,     ///< Paint of text shape outlines ?
         ShowFormattingCharacters,  ///< Paint of formatting characters ?
         ShowTableBorders,  ///< Paint of table borders (when not really there) ?
+        ShowInlineObjectVisualization, ///< paint a different  background for inline objects
         ApplicationSpeciality, ///< Special features and limitations of the application
         KarbonStart = 1000,      ///< Base number for Karbon specific values.
         KexiStart = 2000,        ///< Base number for Kexi specific values.

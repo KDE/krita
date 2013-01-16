@@ -37,7 +37,6 @@ ToolTransformArgs::ToolTransformArgs()
     m_transfPoints = QVector<QPointF>();
     m_warpType = KisWarpTransformWorker::AFFINE_TRANSFORM;
     m_alpha = 1.0;
-    m_previewPos = QPointF(0, 0);
     m_keepAspectRatio = true;
 
     setFilterId("Bicubic");
@@ -60,7 +59,6 @@ void ToolTransformArgs::init(const ToolTransformArgs& args)
     m_transfPoints = args.transfPoints();
     m_warpType = args.warpType();
     m_alpha = args.alpha();
-    m_previewPos = args.previewPos();
     m_defaultPoints = args.defaultPoints();
     m_keepAspectRatio = args.keepAspectRatio();
     m_filter = args.m_filter;
@@ -88,7 +86,7 @@ ToolTransformArgs& ToolTransformArgs::operator=(const ToolTransformArgs& args)
 
 ToolTransformArgs::ToolTransformArgs(TransformMode mode,
                                      QPointF translate, QPointF rotationCenterOffset, double aX, double aY, double aZ, double scaleX, double scaleY, double shearX, double shearY,
-                                     KisWarpTransformWorker::WarpType warpType, double alpha, QPointF previewPos, bool defaultPoints)
+                                     KisWarpTransformWorker::WarpType warpType, double alpha, bool defaultPoints)
 {
     m_mode = mode;
     m_translate = translate;
@@ -106,7 +104,6 @@ ToolTransformArgs::ToolTransformArgs(TransformMode mode,
 
     m_warpType = warpType;
     m_alpha = alpha;
-    m_previewPos = previewPos;
     m_defaultPoints = defaultPoints;
     m_keepAspectRatio = true;
     setFilterId("Bicubic");

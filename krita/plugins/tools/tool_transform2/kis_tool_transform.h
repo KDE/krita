@@ -298,6 +298,11 @@ private:
 
     QImage m_origImg; // image of the pixels in selection bound rect
     QTransform m_transform; // transformation to apply on origImg
+    QTransform m_thumbToImageTransform;
+
+    QTransform m_paintingTransform;
+    QPointF m_paintingOffset;
+
     QImage m_currImg; // origImg transformed using m_transform
 
     QPainterPath m_selectionPath; // original (unscaled) selection outline, used for painting decorations
@@ -381,6 +386,8 @@ private:
 
     QRectF imageToFlake(const QRectF &pt);
     QRectF flakeToImage(const QRectF &pt);
+
+    QPointF imageToThumb(const QPointF &pt);
 
 private slots:
     void slotUiChangedConfig();

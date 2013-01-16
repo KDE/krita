@@ -115,7 +115,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
 
     // Init Wrap Transform Values
     connect(alphaBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetWrapAlpha(double)));
-    connect(densityBox, SIGNAL(valueChanged(int)), this, SLOT(slotSetWrapDensity(int)));
+    connect(densityBox, SIGNAL(valueChanged(int)), this, SLOT(slotSetWarpDensity(int)));
 
     connect(defaultRadioButton, SIGNAL(clicked(bool)), this, SLOT(slotWarpDefaultPointsButtonClicked(bool)));
     connect(customRadioButton, SIGNAL(clicked(bool)), this, SLOT(slotWarpCustomPointsButtonClicked(bool)));
@@ -489,7 +489,7 @@ void KisToolTransformConfigWidget::slotSetWrapAlpha(double value)
     notifyConfigChanged();
 }
 
-void KisToolTransformConfigWidget::slotSetWrapDensity(int value)
+void KisToolTransformConfigWidget::slotSetWarpDensity(int value)
 {
     if (m_uiSlotsBlocked) return;
     setDefaultWarpPoints(value);

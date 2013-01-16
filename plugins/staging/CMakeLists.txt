@@ -1,2 +1,5 @@
 add_subdirectory(googledocs)
 add_subdirectory(threedshape)
+if(SHOULD_BUILD_SHEETS)
+  macro_optional_add_subdirectory(pivottables)
+endif(SHOULD_BUILD_SHEETS)

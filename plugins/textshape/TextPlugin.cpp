@@ -20,9 +20,13 @@
 #include "TextToolFactory.h"
 #include "ReferencesToolFactory.h"
 #include "ReviewToolFactory.h"
+#ifdef CREATE_TEXTDOCUMENT_INSPECTOR
+#include "TextDocumentInspectionDockerFactory.h"
+#endif
 #include "TextShapeFactory.h"
 
 #include <KoShapeRegistry.h>
+#include <KoDockRegistry.h>
 #include <KoToolRegistry.h>
 
 #include <kpluginfactory.h>
@@ -36,6 +40,9 @@ TextPlugin::TextPlugin(QObject * parent, const QVariantList &)
     KoToolRegistry::instance()->add(new TextToolFactory());
     KoToolRegistry::instance()->add(new ReviewToolFactory());
     KoToolRegistry::instance()->add(new ReferencesToolFactory());
+#ifdef CREATE_TEXTDOCUMENT_INSPECTOR
+    KoDockRegistry::instance()->add(new TextDocumentInspectionDockerFactory());
+#endif
     KoShapeRegistry::instance()->add(new TextShapeFactory());
 }
 

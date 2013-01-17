@@ -268,6 +268,8 @@ private:
     // Updated the widget according to m_currentArgs
     void updateOptionWidget();
 
+    void initThumbnailImage();
+    void updateSelectionPath();
     void updateApplyResetAvailability();
     void transformDevice(KisPaintDeviceSP device,
                          KoUpdaterPtr warpUpdater,
@@ -297,9 +299,15 @@ private:
 
     QImage m_origImg; // image of the pixels in selection bound rect
     QTransform m_transform; // transformation to apply on origImg
+    QTransform m_thumbToImageTransform;
+
+    QTransform m_paintingTransform;
+    QPointF m_paintingOffset;
+
     QImage m_currImg; // origImg transformed using m_transform
-    QImage m_origSelectionImg; // original selection with white used as alpha channel
-    QImage m_scaledOrigSelectionImg; // original selection to be drawn, scaled to the view
+
+    QPainterPath m_selectionPath; // original (unscaled) selection outline, used for painting decorations
+
     QSizeF m_refSize; // used in paint() to check if the view has changed (need to update m_currSelectionImg)
 
     KisToolTransformConfigWidget *m_optWidget;
@@ -379,6 +387,8 @@ private:
 
     QRectF imageToFlake(const QRectF &pt);
     QRectF flakeToImage(const QRectF &pt);
+
+    QPointF imageToThumb(const QPointF &pt, bool useFlakeOptimization);
 
 private slots:
     void slotUiChangedConfig();

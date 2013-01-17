@@ -243,6 +243,11 @@ QRectF KisToolTransform::calcWarpBoundRect()
     return res;
 }
 
+inline QPointF KisToolTransform::imageToThumb(const QPointF &pt, bool useFlakeOptimization)
+{
+    return useFlakeOptimization ? imageToFlake(pt) : m_thumbToImageTransform.inverted().map(pt);
+}
+
 void KisToolTransform::recalcOutline()
 {
     QRectF scaleRect(0.0, 0.0, 1.0, 1.0);
@@ -258,36 +263,51 @@ void KisToolTransform::recalcOutline()
             m_viewTransfPoints.resize(m_currentArgs.transfPoints().size());
         }
 
+
+        QTransform resultTransform = m_thumbToImageTransform * scaleTransform;
+        qreal scaleX = resultTransform.m11();
+        qreal scaleY = resultTransform.m22();
+        bool useFlakeOptimization = scaleX < 1.0 && scaleY < 1.0;
+
+
+        QVector<QPointF> thumbOrigPoints(m_viewOrigPoints.size());
+        QVector<QPointF> thumbTransfPoints(m_viewOrigPoints.size());
+
         for (int i = 0; i < m_viewTransfPoints.size(); ++i) {
             m_viewTransfPoints[i] = imageToFlake(m_currentArgs.transfPoints()[i]);
             m_viewOrigPoints[i] = imageToFlake(m_currentArgs.origPoints()[i]);
+
+            thumbOrigPoints[i] = imageToThumb(m_currentArgs.origPoints()[i], useFlakeOptimization);
+            thumbTransfPoints[i] = imageToThumb(m_currentArgs.transfPoints()[i], useFlakeOptimization);
         }
 
-        if (m_origImg.isNull()) {
-            m_currentArgs.setPreviewPos(m_transaction.originalTopLeft());
-        }
-        else {
-            m_currImg = m_origImg.transformed(scaleTransform);
+        m_paintingOffset = m_transaction.originalTopLeft();
 
-            if (!m_transaction.editWarpPoints()) {
-                QPointF origTLInFlake =
-                    imageToFlake(m_transaction.originalTopLeft());
+        if (!m_origImg.isNull() && !m_transaction.editWarpPoints()) {
+            QPointF origTLInFlake = imageToThumb(m_transaction.originalTopLeft(), useFlakeOptimization);
 
-                QPointF warptranslate;
-                m_currImg = KisWarpTransformWorker::transformation(m_currentArgs.warpType(), &m_currImg, m_viewOrigPoints, m_viewTransfPoints, m_currentArgs.alpha(), origTLInFlake, &warptranslate);
+            if (useFlakeOptimization) {
+                m_currImg = m_origImg.transformed(m_thumbToImageTransform * scaleTransform);
+                m_paintingTransform = QTransform();
+            } else {
+                m_currImg = m_origImg;
+                m_paintingTransform = m_thumbToImageTransform * scaleTransform;
 
-                m_currentArgs.setPreviewPos(flakeToImage(warptranslate));
-            }
-            else {
-                m_currentArgs.setPreviewPos(m_transaction.originalTopLeft());
             }
 
-            QRectF r(calcWarpBoundRect());
-            m_topLeftProj = r.topLeft();
-            m_topRightProj = r.topRight();
-            m_bottomRightProj = r.bottomRight();
-            m_bottomLeftProj = r.bottomLeft();
+            m_currImg = KisWarpTransformWorker::transformation(m_currentArgs.warpType(), &m_currImg, thumbOrigPoints, thumbTransfPoints, m_currentArgs.alpha(), origTLInFlake, &m_paintingOffset);
+        } else {
+            m_currImg = m_origImg;
+            m_paintingOffset = m_transaction.originalTopLeft();
+            m_paintingTransform = m_thumbToImageTransform * scaleTransform;
         }
+
+
+        QRectF r(calcWarpBoundRect());
+        m_topLeftProj = r.topLeft();
+        m_topRightProj = r.topRight();
+        m_bottomRightProj = r.bottomRight();
+        m_bottomLeftProj = r.bottomLeft();
     }
     else {
         QVector3D t, v;
@@ -376,23 +396,28 @@ void KisToolTransform::recalcOutline()
                 m_optWidget->tooBigLabelWidget->hide();
         }
 
-        QMatrix4x4 m;
 
-        m.scale(scaleRect.width(), scaleRect.height());
+        QTransform TS = QTransform::fromTranslate(m_transaction.originalCenter().x(), m_transaction.originalCenter().y());
+        QTransform S; S.shear(0, m_currentArgs.shearY()); S.shear(m_currentArgs.shearX(), 0);
+        QTransform SC = QTransform::fromScale(m_currentArgs.scaleX(), m_currentArgs.scaleY());
+        QTransform base = TS.inverted() * S * TS * SC;
+
+        QPointF intermCenter = base.map(m_transaction.originalCenter());
+        QTransform TR = QTransform::fromTranslate(intermCenter.x(), intermCenter.y());
+
+        QMatrix4x4 m;
         m.rotate(180. * m_currentArgs.aX() / M_PI, QVector3D(1, 0, 0));
         m.rotate(180. * m_currentArgs.aY() / M_PI, QVector3D(0, 1, 0));
         m.rotate(180. * m_currentArgs.aZ() / M_PI, QVector3D(0, 0, 1));
-        m_transform = QTransform();
-        m_transform.shear(0, m_currentArgs.shearY());
-        m_transform.shear(m_currentArgs.shearX(), 0);
-        QMatrix4x4 tmp_matrix = QMatrix4x4(m_transform);
-        tmp_matrix.optimize();
-        m *= tmp_matrix;
-        m.translate(- m_transaction.originalHalfWidth() * m_currentArgs.scaleX(), - m_transaction.originalHalfHeight() * m_currentArgs.scaleY(), 0);
-        m.scale(m_currentArgs.scaleX(), m_currentArgs.scaleY());
-        m_transform = m.toTransform(m_cameraPos.z());
-        if (!m_origImg.isNull())
-            m_currImg = m_origImg.transformed(m_transform);
+        QTransform result = base * TR.inverted() * m.toTransform(m_cameraPos.z()) * TR;
+
+        QPointF translation = m_currentArgs.translate() - result.map(m_transaction.originalCenter());
+        QTransform T = QTransform::fromTranslate(translation.x(), translation.y());
+        m_transform = result * T * QTransform::fromScale(scaleRect.width(), scaleRect.height());
+
+        QTransform tl = QTransform::fromTranslate(m_transaction.originalTopLeft().x(), m_transaction.originalTopLeft().y());
+        m_paintingTransform = tl.inverted() * m_thumbToImageTransform * tl * m_transform;
+        m_paintingOffset = m_transaction.originalTopLeft();
     }
 }
 
@@ -459,7 +484,12 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
     pen[1].setColor(Qt::lightGray);
 
     QSizeF newRefSize = imageToFlake(QRectF(0.0, 0.0, 1.0, 1.0)).size();
-    QPointF origtopleft = imageToFlake(m_transaction.originalRect().topLeft());
+
+    if (newRefSize != m_refSize) {
+        // need to update m_currentImg
+        m_refSize = newRefSize;
+        recalcOutline();
+    }
 
     if (m_currentArgs.mode() == ToolTransformArgs::FREE_TRANSFORM) {
         pen[0].setWidth(1);
@@ -476,35 +506,18 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
 
         QRectF handleRect(- m_handleRadius / 2., - m_handleRadius / 2., m_handleRadius, m_handleRadius);
 
-        if (newRefSize != m_refSize) {
-            // need to update m_scaledOrigSelectionImg and m_currentImg
-            m_refSize = newRefSize;
-            recalcOutline();
-            if (!m_origSelectionImg.isNull()) {
-                m_scaledOrigSelectionImg = m_origSelectionImg.scaled(m_refSize.width() * m_origSelectionImg.width(), m_refSize.height() * m_origSelectionImg.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-            }
-        }
-        if (m_optWidget && m_optWidget->showDecorationsBox && !m_optWidget->showDecorationsBox->isChecked()) {
-            if (m_imageTooBig)
-                return;
+        gc.save();
 
-            gc.setOpacity(0.6);
-            QRectF bRect = boundRect(topleft, topright, bottomleft, bottomright);
-            QPointF pos = bRect.center() - QPointF(m_currImg.width(), m_currImg.height()) / 2;
-            gc.drawImage(pos.toPoint(), m_currImg, QRectF(m_currImg.rect()));
+        if (m_optWidget && m_optWidget->showDecorationsBox->isChecked()) {
+            gc.setOpacity(0.3);
+            gc.fillPath(m_selectionPath, Qt::black);
         }
-        else {
-            gc.setOpacity(0.6);
-            gc.drawImage(origtopleft, m_scaledOrigSelectionImg, QRectF(m_scaledOrigSelectionImg.rect()));
 
-            if (m_imageTooBig)
-                return;
+        gc.setOpacity(0.9);
+        gc.setTransform(m_paintingTransform, true);
+        gc.drawImage(m_paintingOffset, m_origImg);
 
-            QRectF bRect = boundRect(topleft, topright, bottomleft, bottomright);
-            QPointF pos = bRect.center() - QPointF(m_currImg.width(), m_currImg.height()) / 2;
-            gc.drawImage(pos.toPoint(), m_currImg, QRectF(m_currImg.rect()));
-            gc.setOpacity(1.0);
-        }
+        gc.restore();
 
         for (int i = 1; i >= 0; --i) {
             gc.setPen(pen[i]);
@@ -542,27 +555,19 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
         QRectF handleRect(- m_handleRadius / 2., - m_handleRadius / 2., m_handleRadius, m_handleRadius);
         QRectF smallHandleRect(- m_handleRadius / 4., - m_handleRadius / 4., m_handleRadius / 2., m_handleRadius / 2.);
 
-        if (newRefSize != m_refSize) {
-            m_refSize = newRefSize;
-            recalcOutline();
-            if (!m_origSelectionImg.isNull())
-                m_scaledOrigSelectionImg = m_origSelectionImg.scaled(m_refSize.width() * m_origSelectionImg.width(), m_refSize.height() * m_origSelectionImg.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        gc.save();
+
+        if (m_optWidget && m_optWidget->showDecorationsBox->isChecked()) {
+            gc.setOpacity(0.3);
+            gc.fillPath(m_selectionPath, Qt::black);
         }
 
-        if (m_optWidget && m_optWidget->showDecorationsBox && m_optWidget->showDecorationsBox->isChecked()) {
-            gc.setOpacity(0.6);
-            gc.drawImage(origtopleft, m_scaledOrigSelectionImg, QRectF(m_scaledOrigSelectionImg.rect()));
-
-            gc.setOpacity(1.0);
-            QPointF warptranslate = converter.documentToView(QPointF(m_currentArgs.previewPos().x() / kisimage->xRes(), m_currentArgs.previewPos().y() / kisimage->yRes()));
-            gc.drawImage(QPointF(warptranslate), m_currImg, QRectF(m_currImg.rect()));
-        }
-
-
-        gc.setBrush(Qt::NoBrush);
         gc.setOpacity(1.0);
-        QPointF warptranslate = converter.documentToView(QPointF(m_currentArgs.previewPos().x() / kisimage->xRes(), m_currentArgs.previewPos().y() / kisimage->yRes()));
-        gc.drawImage(QPointF(warptranslate), m_currImg, QRectF(m_currImg.rect()));
+
+        gc.setTransform(m_paintingTransform, true);
+        gc.drawImage(m_paintingOffset, m_currImg);
+
+        gc.restore();
 
         for (int j = 1; j >= 0; --j) {
             gc.setPen(pen[j]);
@@ -1903,7 +1908,7 @@ void KisToolTransform::mouseReleaseEvent(KoPointerEvent *event)
 void KisToolTransform::initFreeTransform()
 {
     // FIXME: probably, topleft should be aligned?
-    m_currentArgs = ToolTransformArgs(ToolTransformArgs::FREE_TRANSFORM, m_transaction.originalCenter(), QPointF(0, 0), 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, KisWarpTransformWorker::RIGID_TRANSFORM, 1.0, m_transaction.originalTopLeft(), true);
+    m_currentArgs = ToolTransformArgs(ToolTransformArgs::FREE_TRANSFORM, m_transaction.originalCenter(), QPointF(),0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, KisWarpTransformWorker::RIGID_TRANSFORM, 1.0, true);
     m_scaleX_wOutModifier = m_currentArgs.scaleX();
     m_scaleY_wOutModifier = m_currentArgs.scaleY();
 
@@ -1948,11 +1953,34 @@ void KisToolTransform::setDefaultWarpPoints(int pointsPerLine)
 
 void KisToolTransform::initWarpTransform()
 {
-    // FIXME: probably, topleft should be aligned?
-    m_currentArgs = ToolTransformArgs(ToolTransformArgs::WARP, m_transaction.originalCenter(), QPointF(0, 0), 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, KisWarpTransformWorker::RIGID_TRANSFORM, 1.0, m_transaction.originalTopLeft(), true);
+    m_currentArgs = ToolTransformArgs(ToolTransformArgs::WARP, m_transaction.originalCenter(), QPointF(0, 0), 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, KisWarpTransformWorker::RIGID_TRANSFORM, 1.0, true);
 
     setDefaultWarpPoints();
     m_refSize = QSizeF(0, 0);
+}
+
+void KisToolTransform::updateSelectionPath()
+{
+    m_selectionPath = QPainterPath();
+
+    QVector<QPolygon> selectionOutline;
+    KisSelectionSP selection = currentSelection();
+
+    if (selection) {
+        selectionOutline = selection->outline();
+    } else {
+        KisPaintDeviceSP dev = currentNode()->paintDevice();
+        selectionOutline << dev->exactBounds();
+    }
+
+    const KisCoordinatesConverter *converter = m_canvas->coordinatesConverter();
+    QTransform i2f = converter->imageToDocumentTransform() * converter->documentToFlakeTransform();
+
+    foreach(const QPolygon &polygon, selectionOutline) {
+        QPolygon p = i2f.map(polygon);
+
+        m_selectionPath.addPolygon(p);
+    }
 }
 
 void KisToolTransform::initTransform(ToolTransformArgs::TransformMode mode)
@@ -1997,41 +2025,61 @@ void KisToolTransform::initTransform(ToolTransformArgs::TransformMode mode)
     else
         initFreeTransform();
 
-    if (!dev) {
-        m_origImg = QImage();
-        m_origSelectionImg = QImage();
-    }
-    else {
-#ifdef __GNUC__
-#warning "QIMAGE: This code potentially creates enormous QImages! See https://bugs.kde.org/show_bug.cgi?id=263170"
-#endif
-
-        const KisImage *kisimage = image();
-        m_transform = QTransform();
-        m_origImg = dev->convertToQImage(0, x, y, w, h, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
-        if (selection) {
-            m_origSelectionImg = selection->projection()->convertToQImage(0, x, y, w, h, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
-        }
-        else {
-            m_origSelectionImg = QImage(w, h, QImage::Format_ARGB32_Premultiplied);
-            m_origSelectionImg.fill(0xFFFFFFFF);
-        }
-        QImage alphaMask = m_origSelectionImg;
-
-        m_origImg.setAlphaChannel(alphaMask);
-        m_currImg = m_origImg; // create a shallow copy
-        m_origSelectionImg.invertPixels();
-        m_origSelectionImg.setAlphaChannel(alphaMask);
-        if (m_canvas && m_canvas->viewConverter() && kisimage)
-            m_refSize = m_canvas->viewConverter()->documentToView(QSizeF(1 / kisimage->xRes(), 1 / kisimage->yRes()));
-        else
-            m_refSize = QSizeF(1, 1);
-        m_scaledOrigSelectionImg = m_origSelectionImg.scaled(m_refSize.width() * m_origSelectionImg.width(), m_refSize.height() * m_origSelectionImg.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    }
+    initThumbnailImage();
+    updateSelectionPath();
 
     outlineChanged();
     updateOptionWidget();
     updateApplyResetAvailability();
+}
+
+void KisToolTransform::initThumbnailImage()
+{
+    m_transform = QTransform();
+    m_origImg = QImage();
+    m_currImg = QImage();
+
+    KisPaintDeviceSP dev;
+    KisSelectionSP selection = currentSelection();
+
+    if (!currentNode() || !(dev = currentNode()->paintDevice())) {
+        return;
+    }
+
+    KisPaintDeviceSP tmp = dev;
+
+    QRect srcRect(m_transaction.originalRect().toAlignedRect());
+
+    if (selection) {
+        tmp = new KisPaintDevice(dev->colorSpace());
+        KisPainter gc(tmp);
+        gc.setSelection(selection);
+        gc.bitBlt(srcRect.topLeft(), dev, srcRect);
+    }
+
+    const int maxSize = 2000;
+
+    int x, y, w, h;
+    srcRect.getRect(&x, &y, &w, &h);
+
+    if (w > maxSize || h > maxSize) {
+        qreal scale = qreal(maxSize) / (w > h ? w : h);
+        QTransform scaleTransform = QTransform::fromScale(scale, scale);
+
+        QRect thumbRect = scaleTransform.mapRect(m_transaction.originalRect()).toAlignedRect();
+
+        m_origImg = tmp->createThumbnail(thumbRect.width(),
+                                         thumbRect.height(),
+                                         srcRect,
+                                         KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+        m_thumbToImageTransform = scaleTransform.inverted();
+
+    } else {
+        m_origImg = tmp->convertToQImage(0, x, y, w, h, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+        m_thumbToImageTransform = QTransform();
+    }
+
+    m_currImg = m_origImg; // create a shallow copy
 }
 
 void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
@@ -2071,8 +2119,8 @@ void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShap
                 m_origSelection = presentCmd2->origSelection(p1, p2);
                 m_transaction = TransformTransactionProperties(QRect(p1, p2), &m_currentArgs);
 
-                m_origImg = presentCmd2->originalImage();
-                m_origSelectionImg = presentCmd2->originalSelectionImage();
+                initThumbnailImage();
+                updateSelectionPath();
 
                 updateOptionWidget();
                 updateApplyResetAvailability();
@@ -2110,7 +2158,7 @@ void KisToolTransform::transform()
     if (!image())
         return;
 
-    TransformCmd *transaction = new TransformCmd(this, m_currentArgs, m_origSelection, m_transaction.originalTopLeftAligned(), m_transaction.originalBottomRightAligned(), m_origImg, m_origSelectionImg);
+    TransformCmd *transaction = new TransformCmd(this, m_currentArgs, m_origSelection, m_transaction.originalTopLeftAligned(), m_transaction.originalBottomRightAligned());
 
     if (image()->undoAdapter() != NULL)
         image()->undoAdapter()->addCommand(transaction);
@@ -2330,8 +2378,8 @@ void KisToolTransform::notifyCommandExecuted(const KUndo2Command * command)
                 m_origSelection = presentCmd2->origSelection(p1, p2);
                 m_transaction = TransformTransactionProperties(QRect(p1, p2), &m_currentArgs);
 
-                m_origImg = presentCmd2->originalImage();
-                m_origSelectionImg = presentCmd2->originalSelectionImage();
+                initThumbnailImage();
+                updateSelectionPath();
 
                 m_scaleX_wOutModifier = m_currentArgs.scaleX();
                 m_scaleY_wOutModifier = m_currentArgs.scaleY();

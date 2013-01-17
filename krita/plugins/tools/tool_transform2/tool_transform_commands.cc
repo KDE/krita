@@ -52,7 +52,7 @@ ApplyTransformCmd::ApplyTransformCmd(KisToolTransform *tool, ToolTransformArgs::
     m_transactionData = new ApplyTransformCmdData(tool, mode, node);
 }
 
-TransformCmd::TransformCmd(KisToolTransform *tool, const ToolTransformArgs &args, KisSelectionSP origSel, QPoint startPos, QPoint endPos, const QImage &origImg, const QImage &origSelectionImg)
+TransformCmd::TransformCmd(KisToolTransform *tool, const ToolTransformArgs &args, KisSelectionSP origSel, QPoint startPos, QPoint endPos)
         : KUndo2Command(i18nc("(qtundo-format)", "Transform"))
 {
     m_args = args;
@@ -60,8 +60,6 @@ TransformCmd::TransformCmd(KisToolTransform *tool, const ToolTransformArgs &args
     m_origSelection = origSel;
     m_originalTopLeft = startPos;
     m_originalBottomRight = endPos;
-    m_origImg = origImg;
-    m_origSelectionImg = origSelectionImg;
 }
 
 TransformCmd::~TransformCmd()
@@ -78,16 +76,6 @@ KisSelectionSP TransformCmd::origSelection(QPoint &originalTopLeft, QPoint &orig
     originalTopLeft = m_originalTopLeft;
     originalBottomRight = m_originalBottomRight;
     return m_origSelection;
-}
-
-const QImage &TransformCmd::originalImage() const
-{
-    return m_origImg;
-}
-
-const QImage &TransformCmd::originalSelectionImage() const
-{
-    return m_origSelectionImg;
 }
 
 void TransformCmd::redo()

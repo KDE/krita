@@ -54,7 +54,7 @@ public:
      */
     ToolTransformArgs(TransformMode mode,
                       QPointF translate, QPointF rotationCenterOffset, double aX, double aY, double aZ, double scaleX, double scaleY, double shearX, double shearY,
-                      KisWarpTransformWorker::WarpType warpType, double alpha, QPointF previewPos, bool defaultPoints);
+                      KisWarpTransformWorker::WarpType warpType, double alpha, bool defaultPoints);
     ~ToolTransformArgs();
     ToolTransformArgs& operator=(const ToolTransformArgs& args);
 
@@ -87,9 +87,6 @@ public:
     inline double alpha() const {
         return m_alpha;
     }
-    inline QPointF previewPos() const {
-        return m_previewPos;
-    }
     inline bool defaultPoints() const {
         return m_defaultPoints;
     }
@@ -106,9 +103,6 @@ public:
     }
     inline void setAlpha(double alpha) {
         m_alpha = alpha;
-    }
-    inline void setPreviewPos(QPointF previewPos) {
-        m_previewPos = previewPos;
     }
     inline void setDefaultPoints(bool defaultPoints) {
         m_defaultPoints = defaultPoints;
@@ -205,7 +199,6 @@ private:
     QVector<QPointF> m_transfPoints;
     KisWarpTransformWorker::WarpType m_warpType;
     double m_alpha;
-    QPointF m_previewPos;
 
     //'free transform'-related
     // basically the arguments taken by the transform worker

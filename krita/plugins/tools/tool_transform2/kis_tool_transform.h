@@ -268,6 +268,7 @@ private:
     // Updated the widget according to m_currentArgs
     void updateOptionWidget();
 
+    void initThumbnailImage();
     void updateSelectionPath();
     void updateApplyResetAvailability();
     void transformDevice(KisPaintDeviceSP device,
@@ -387,7 +388,7 @@ private:
     QRectF imageToFlake(const QRectF &pt);
     QRectF flakeToImage(const QRectF &pt);
 
-    QPointF imageToThumb(const QPointF &pt);
+    QPointF imageToThumb(const QPointF &pt, bool useFlakeOptimization);
 
 private slots:
     void slotUiChangedConfig();

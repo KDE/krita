@@ -243,9 +243,9 @@ QRectF KisToolTransform::calcWarpBoundRect()
     return res;
 }
 
-inline QPointF KisToolTransform::imageToThumb(const QPointF &pt)
+inline QPointF KisToolTransform::imageToThumb(const QPointF &pt, bool useFlakeOptimization)
 {
-    return m_thumbToImageTransform.inverted().map(pt);
+    return useFlakeOptimization ? imageToFlake(pt) : m_thumbToImageTransform.inverted().map(pt);
 }
 
 void KisToolTransform::recalcOutline()
@@ -263,6 +263,13 @@ void KisToolTransform::recalcOutline()
             m_viewTransfPoints.resize(m_currentArgs.transfPoints().size());
         }
 
+
+        QTransform resultTransform = m_thumbToImageTransform * scaleTransform;
+        qreal scaleX = resultTransform.m11();
+        qreal scaleY = resultTransform.m22();
+        bool useFlakeOptimization = scaleX < 1.0 && scaleY < 1.0;
+
+
         QVector<QPointF> thumbOrigPoints(m_viewOrigPoints.size());
         QVector<QPointF> thumbTransfPoints(m_viewOrigPoints.size());
 
@@ -270,18 +277,23 @@ void KisToolTransform::recalcOutline()
             m_viewTransfPoints[i] = imageToFlake(m_currentArgs.transfPoints()[i]);
             m_viewOrigPoints[i] = imageToFlake(m_currentArgs.origPoints()[i]);
 
-            thumbOrigPoints[i] = imageToThumb(m_currentArgs.origPoints()[i]);
-            thumbTransfPoints[i] = imageToThumb(m_currentArgs.transfPoints()[i]);
+            thumbOrigPoints[i] = imageToThumb(m_currentArgs.origPoints()[i], useFlakeOptimization);
+            thumbTransfPoints[i] = imageToThumb(m_currentArgs.transfPoints()[i], useFlakeOptimization);
         }
 
         m_paintingOffset = m_transaction.originalTopLeft();
 
         if (!m_origImg.isNull() && !m_transaction.editWarpPoints()) {
-            m_currImg = m_origImg;
-            m_paintingTransform = m_thumbToImageTransform * scaleTransform;
+            QPointF origTLInFlake = imageToThumb(m_transaction.originalTopLeft(), useFlakeOptimization);
 
-            QPointF origTLInFlake =
-                imageToThumb(m_transaction.originalTopLeft());
+            if (useFlakeOptimization) {
+                m_currImg = m_origImg.transformed(m_thumbToImageTransform * scaleTransform);
+                m_paintingTransform = QTransform();
+            } else {
+                m_currImg = m_origImg;
+                m_paintingTransform = m_thumbToImageTransform * scaleTransform;
+
+            }
 
             m_currImg = KisWarpTransformWorker::transformation(m_currentArgs.warpType(), &m_currImg, thumbOrigPoints, thumbTransfPoints, m_currentArgs.alpha(), origTLInFlake, &m_paintingOffset);
         } else {
@@ -2013,53 +2025,61 @@ void KisToolTransform::initTransform(ToolTransformArgs::TransformMode mode)
     else
         initFreeTransform();
 
-    if (!dev) {
-        m_origImg = QImage();
-    }
-    else {
-#ifdef __GNUC__
-#warning "QIMAGE: This code potentially creates enormous QImages! See https://bugs.kde.org/show_bug.cgi?id=263170"
-#endif
-
-        m_transform = QTransform();
-
-        KisPaintDeviceSP tmp = dev;
-
-        if (selection) {
-            tmp = new KisPaintDevice(dev->colorSpace());
-            KisPainter gc(tmp);
-            gc.setSelection(selection);
-            gc.bitBlt(x, y, dev, x, y, w, h);
-        }
-
-        const int maxSize = 2000;
-
-        if (w > maxSize || h > maxSize) {
-            qreal scale = qreal(maxSize) / (w > h ? w : h);
-            QTransform scaleTransform = QTransform::fromScale(scale, scale);
-
-            QRect srcRect(x, y, w, h);
-            QRect thumbRect = scaleTransform.mapRect(QRectF(srcRect)).toAlignedRect();
-
-            m_origImg = tmp->createThumbnail(thumbRect.width(),
-                                             thumbRect.height(),
-                                             srcRect,
-                                             KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
-            m_thumbToImageTransform = scaleTransform.inverted();
-
-        } else {
-            m_origImg = tmp->convertToQImage(0, x, y, w, h, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
-            m_thumbToImageTransform = QTransform();
-        }
-
-        m_currImg = m_origImg; // create a shallow copy
-
-        updateSelectionPath();
-    }
+    initThumbnailImage();
+    updateSelectionPath();
 
     outlineChanged();
     updateOptionWidget();
     updateApplyResetAvailability();
+}
+
+void KisToolTransform::initThumbnailImage()
+{
+    m_transform = QTransform();
+    m_origImg = QImage();
+    m_currImg = QImage();
+
+    KisPaintDeviceSP dev;
+    KisSelectionSP selection = currentSelection();
+
+    if (!currentNode() || !(dev = currentNode()->paintDevice())) {
+        return;
+    }
+
+    KisPaintDeviceSP tmp = dev;
+
+    QRect srcRect(m_transaction.originalRect().toAlignedRect());
+
+    if (selection) {
+        tmp = new KisPaintDevice(dev->colorSpace());
+        KisPainter gc(tmp);
+        gc.setSelection(selection);
+        gc.bitBlt(srcRect.topLeft(), dev, srcRect);
+    }
+
+    const int maxSize = 2000;
+
+    int x, y, w, h;
+    srcRect.getRect(&x, &y, &w, &h);
+
+    if (w > maxSize || h > maxSize) {
+        qreal scale = qreal(maxSize) / (w > h ? w : h);
+        QTransform scaleTransform = QTransform::fromScale(scale, scale);
+
+        QRect thumbRect = scaleTransform.mapRect(m_transaction.originalRect()).toAlignedRect();
+
+        m_origImg = tmp->createThumbnail(thumbRect.width(),
+                                         thumbRect.height(),
+                                         srcRect,
+                                         KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+        m_thumbToImageTransform = scaleTransform.inverted();
+
+    } else {
+        m_origImg = tmp->convertToQImage(0, x, y, w, h, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+        m_thumbToImageTransform = QTransform();
+    }
+
+    m_currImg = m_origImg; // create a shallow copy
 }
 
 void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
@@ -2099,7 +2119,7 @@ void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShap
                 m_origSelection = presentCmd2->origSelection(p1, p2);
                 m_transaction = TransformTransactionProperties(QRect(p1, p2), &m_currentArgs);
 
-                m_origImg = presentCmd2->originalImage();
+                initThumbnailImage();
                 updateSelectionPath();
 
                 updateOptionWidget();
@@ -2138,7 +2158,7 @@ void KisToolTransform::transform()
     if (!image())
         return;
 
-    TransformCmd *transaction = new TransformCmd(this, m_currentArgs, m_origSelection, m_transaction.originalTopLeftAligned(), m_transaction.originalBottomRightAligned(), m_origImg);
+    TransformCmd *transaction = new TransformCmd(this, m_currentArgs, m_origSelection, m_transaction.originalTopLeftAligned(), m_transaction.originalBottomRightAligned());
 
     if (image()->undoAdapter() != NULL)
         image()->undoAdapter()->addCommand(transaction);
@@ -2358,7 +2378,7 @@ void KisToolTransform::notifyCommandExecuted(const KUndo2Command * command)
                 m_origSelection = presentCmd2->origSelection(p1, p2);
                 m_transaction = TransformTransactionProperties(QRect(p1, p2), &m_currentArgs);
 
-                m_origImg = presentCmd2->originalImage();
+                initThumbnailImage();
                 updateSelectionPath();
 
                 m_scaleX_wOutModifier = m_currentArgs.scaleX();

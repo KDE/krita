@@ -17,6 +17,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#ifndef KODRAGODFSAVEHELPER_P_H
+#define KODRAGODFSAVEHELPER_P_H
+
 class KoDragOdfSaveHelperPrivate
 {
 public:
@@ -28,3 +31,5 @@ public:
 
     KoShapeSavingContext *context;
 };
+
+#endif

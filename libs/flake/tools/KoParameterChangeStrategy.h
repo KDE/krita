@@ -17,8 +17,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#ifndef KOPATHPARAMETERCHANGESTRATEGY_H
-#define KOPATHPARAMETERCHANGESTRATEGY_H
+#ifndef KOPARAMETERCHANGESTRATEGY_H
+#define KOPARAMETERCHANGESTRATEGY_H
 
 #include "flake_export.h"
 #include "KoInteractionStrategy.h"
@@ -52,4 +52,4 @@ private:
     Q_DECLARE_PRIVATE(KoParameterChangeStrategy)
 };
 
-#endif /* KOPATHPARAMETERCHANGESTRATEGY_H */
+#endif /* KOPARAMETERCHANGESTRATEGY_H */

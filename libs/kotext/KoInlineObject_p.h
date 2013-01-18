@@ -17,6 +17,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#ifndef KOINLINEOBJECT_P_H
+#define KOINLINEOBJECT_P_H
+
 #include <QDebug>
 class KoTextInlineRdf;
 
@@ -38,3 +41,5 @@ public:
 
     virtual QDebug printDebug(QDebug dbg) const;
 };
+
+#endif

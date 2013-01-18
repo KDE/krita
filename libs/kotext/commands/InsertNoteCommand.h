@@ -18,8 +18,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.*/
 
-#ifndef INSERTNODECOMMAND_H
-#define INSERTNODECOMMAND_H
+#ifndef INSERTNOTECOMMAND_H
+#define INSERTNOTECOMMAND_H
 
 #include "KoInlineNote.h"
 

@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIDB_DRIVER_MNGR_H
-#define KEXIDB_DRIVER_MNGR_H
+#ifndef KEXIDB_DRIVER_MANAGER_H
+#define KEXIDB_DRIVER_MANAGER_H
 
 //#include <klibloader.h>
 #include <kservice.h>

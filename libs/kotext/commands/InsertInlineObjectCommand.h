@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef INSERTTEXTANCHORCOMMAND_H
-#define INSERTTEXTANCHORCOMMAND_H
+#ifndef INSERTINLINEOBJECTCOMMAND_H
+#define INSERTINLINEOBJECTCOMMAND_H
 
 #include <kundo2command.h>
 
@@ -44,4 +44,4 @@ private:
     int m_position;
 };
 
-#endif // INSERTTEXTANCHORCOMMAND_H
+#endif // INSERTINLINEOBJECTCOMMAND_H

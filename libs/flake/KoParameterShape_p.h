@@ -18,6 +18,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#ifndef KOPARAMETERSHAPE_P_H
+#define KOPARAMETERSHAPE_P_H
+
 #include "KoPathShape_p.h"
 
 #include <QList>
@@ -38,4 +41,4 @@ public:
     QList<QPointF> handles;
 };
 
-
+#endif

@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KODEVICEEVENT_H
-#define KODEVICEEVENT_H
+#ifndef KOINPUTDEVICEHANDLEREVENT_H
+#define KOINPUTDEVICEHANDLEREVENT_H
 
 #include "flake_export.h"
 
@@ -64,4 +64,4 @@ private:
     Private * const d;
 };
 
-#endif // KODEVICEEVENT_H
+#endif // KOINPUTDEVICEHANDLEREVENT_H

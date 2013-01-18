@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KO_RGB_TO_RGB_COLOR_CONVERSION_TRANSFORMATION_H_
-#define _KO_RGB_TO_RGB_COLOR_CONVERSION_TRANSFORMATION_H_
+#ifndef _KO_SCALE_COLOR_CONVERSION_TRANSFORMATION_H_
+#define _KO_SCALE_COLOR_CONVERSION_TRANSFORMATION_H_
 
 #include <KoColorConversionTransformation.h>
 #include <KoColorConversionTransformationFactory.h>

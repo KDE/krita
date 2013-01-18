@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOCOLORSETACTION_H
-#define KOCOLORSETACTION_H
+#ifndef KOCOLORPOPUPACTION_H
+#define KOCOLORPOPUPACTION_H
 
 #include <KAction>
 

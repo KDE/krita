@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIDB_TABLE_H
-#define KEXIDB_TABLE_H
+#ifndef KEXIDB_TABLESCHEMA_H
+#define KEXIDB_TABLESCHEMA_H
 
 #include <QList>
 #include <QString>

@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIDB_QUERY_H
-#define KEXIDB_QUERY_H
+#ifndef KEXIDB_QUERYSCHEMA_H
+#define KEXIDB_QUERYSCHEMA_H
 
 #include <QVector>
 #include <QString>

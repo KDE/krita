@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KO_COMPOSITE_COPY_OP_ABSTRACT_H
-#define KO_COMPOSITE_COPY_OP_ABSTRACT_H
+#ifndef KO_COMPOSITE_OP_COPY_H
+#define KO_COMPOSITE_OP_COPY_H
 
 /**
  * Generic implementation of the COPY composite op.

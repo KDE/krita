@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_XMLREADER
-#define CALLIGRA_XMLREADER
+#ifndef KO_XMLREADER_H
+#define KO_XMLREADER_H
 
 // KOXML_USE_QDOM is defined there
 #include "KoXmlReaderForward.h"
@@ -463,4 +463,4 @@ KOODF_EXPORT bool setDocument(KoXmlDocument& doc, QIODevice* device,
         if ( ( elem = _node.toElement() ).isNull() ) {} else
 
 
-#endif // CALLIGRA_XMLREADER
+#endif // KO_XMLREADER_H

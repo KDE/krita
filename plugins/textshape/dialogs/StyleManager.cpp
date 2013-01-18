@@ -408,7 +408,7 @@ bool StyleManager::checkUniqueStyleName()
                 temp = m_draftParagraphStyles[*iterPar];
             if (widget.paragraphStylePage->styleName() == temp->name()) {
                 if (temp != m_selectedParagStyle) {
-                    QMessageBox::critical(this, i18n("Warning"), i18n("Another style named '%1' already exist. Please choose another name.").arg(temp->name()));
+                    QMessageBox::critical(this, i18n("Warning"), i18n("Another style named '%1' already exist. Please choose another name.", temp->name()));
                     return false;
                 }
             }
@@ -425,7 +425,7 @@ bool StyleManager::checkUniqueStyleName()
 
             if (widget.characterStylePage->styleName() == temp->name()) {
                 if (temp != m_selectedCharStyle) {
-                    QMessageBox::critical(this, i18n("Warning"), i18n("Another style named '%1' already exist. Please choose another name.").arg(temp->name()));
+                    QMessageBox::critical(this, i18n("Warning"), i18n("Another style named '%1' already exist. Please choose another name.", temp->name()));
                     widget.characterStylesListView->setCurrentIndex(m_characterStylesModel->indexForCharacterStyle(*m_selectedCharStyle));
                     return false;
                 }

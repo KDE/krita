@@ -87,8 +87,8 @@ bool PictureShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext 
         QString href = e.attribute("href");
         if (!href.isEmpty()) {
             // check the mimetype
-            if (href.startsWith("./")) {
-                href.remove(0,2);
+            if (href.startsWith(QLatin1String("./"))) {
+                href.remove(0, 2);
             }
             QString mimetype = context.odfLoadingContext().mimeTypeForPath(href);
             if (!mimetype.isEmpty()) {

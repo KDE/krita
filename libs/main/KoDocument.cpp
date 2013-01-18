@@ -1194,7 +1194,7 @@ bool KoDocument::openFile()
             if (!ext.isEmpty() && ext[0] == '*') {
                 ext.remove(0, 1);
                 if (path.endsWith(ext)) {
-                    path.truncate(path.length() - ext.length());
+                    path.chop(ext.length());
                     break;
                 }
             }

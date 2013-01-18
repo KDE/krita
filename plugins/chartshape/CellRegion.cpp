@@ -308,9 +308,8 @@ static QString formatTableName(QString name)
  */
 static QString unformatTableName(QString name)
 {
-    if (name.startsWith('\'') && name.endsWith('\'')) {
-        name.remove(0, 1);
-        name.remove(name.length() - 1, 1);
+    if (name.startsWith(QLatin1Char('\'')) && name.endsWith(QLatin1Char('\''))) {
+        name.remove(0, 1).chop(1);
     }
 
     return name;

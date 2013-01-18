@@ -142,10 +142,10 @@ public:
                 m_type = Equals;
             }
             m_value = pattern.mid(equalPos+1);
-            if (m_value.startsWith('\"'))
+            if (m_value.startsWith(QLatin1Char('"')))
                 m_value.remove(0,1);
-            if (m_value.endsWith('\"'))
-                m_value.remove(m_value.length()-1,1);
+            if (m_value.endsWith(QLatin1Char('"')))
+                m_value.chop(1);
         }
     }
 

@@ -166,7 +166,7 @@ public:
                 QString extension = mime->property("X-KDE-NativeExtension").toString();
 
                 if (title.endsWith(extension))
-                    title.truncate(title.length() - extension.length());
+                    title.chop(extension.length());
             }
         }
 

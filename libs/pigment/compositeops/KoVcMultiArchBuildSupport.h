@@ -35,7 +35,9 @@ namespace Vc {
 #define VC_IMPL ::Vc::ScalarImpl
 
 #ifdef DO_PACKAGERS_BUILD
+#ifdef __GNUC__
 #warning "Packagers build is not available without the presence of Vc library. Disabling."
+#endif
 #undef DO_PACKAGERS_BUILD
 #endif
 

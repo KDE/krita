@@ -31,7 +31,7 @@
 #include <QXmlStreamReader>
 
 #include "KoInlineObject.h"
-#include "KoTextAnchor.h"
+#include "KoAnchorInlineObject.h"
 #include "KoShape.h"
 #include "KoVariable.h"
 #include "KoInlineTextObjectManager.h"

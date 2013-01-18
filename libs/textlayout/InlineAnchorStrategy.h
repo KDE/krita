@@ -26,11 +26,12 @@ class KoTextLayoutRootArea;
 class KoTextShapeData;
 class QTextBlock;
 class QTextLayout;
+class KoAnchorInlineObject;
 
 class InlineAnchorStrategy  : public AnchorStrategy
 {
 public:
-    InlineAnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootArea);
+    InlineAnchorStrategy(KoAnchorInlineObject *anchor, KoTextLayoutRootArea *rootArea);
     virtual ~InlineAnchorStrategy();
 
     virtual bool moveSubject();
@@ -42,6 +43,7 @@ private:
 
     //check the border of the parent shape an move the shape back to have it inside the parent shape
     inline void checkParentBorder(QPointF &newPosition);
+    KoAnchorInlineObject *m_anchorObject;
 };
 
 #endif /* INLINEANCHORSTRATEGY_H_ */

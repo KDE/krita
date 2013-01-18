@@ -31,7 +31,8 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoTextRangeManager.h>
 #include "KoBookmark.h"
-#include <KoTextAnchor.h>
+#include <KoAnchorInlineObject.h>
+#include <KoAnchorTextRange.h>
 #include <KoCanvasBase.h>
 #include <KoShapeController.h>
 
@@ -153,7 +154,7 @@ void DeleteCommand::doDelete()
     m_mergePossible = visitor.m_mergePossible;
 
     foreach (KoInlineObject *object, m_invalidInlineObjects) {
-        deleteTextAnchor(object);
+        deleteAnchorInlineObject(object);
     }
 
     KoTextRangeManager *rangeManager = KoTextDocument(m_document).textRangeManager();
@@ -161,7 +162,16 @@ void DeleteCommand::doDelete()
     m_rangesToRemove = rangeManager->textRangesChangingWithin(textEditor->selectionStart(), textEditor->selectionEnd(), textEditor->selectionStart(), textEditor->selectionEnd());
 
     foreach (KoTextRange *range, m_rangesToRemove) {
-        rangeManager->remove(range);
+        KoAnchorTextRange *anchorRange = dynamic_cast<KoAnchorTextRange *>(range);
+        if (anchorRange) {
+            KoShape *shape = anchorRange->anchor()->shape();
+            KUndo2Command *shapeDeleteCommand = m_shapeController->removeShape(shape, this);
+            shapeDeleteCommand->redo();
+            // via m_shapeController->removeShape a DeleteAnchorsCommand should be created that
+            // also calls rangeManager->remove(range), so we shouldn't do that here aswell
+        } else {
+            rangeManager->remove(range);
+        }
     }
 
     if (textEditor->hasComplexSelection()) {
@@ -182,12 +192,12 @@ void DeleteCommand::doDelete()
     }
 }
 
-void DeleteCommand::deleteTextAnchor(KoInlineObject *object)
+void DeleteCommand::deleteAnchorInlineObject(KoInlineObject *object)
 {
     if (object) {
-        KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(object);
-        if (anchor) {
-            KoShape *shape = anchor->shape();
+        KoAnchorInlineObject *anchorObject = dynamic_cast<KoAnchorInlineObject *>(object);
+        if (anchorObject) {
+            KoShape *shape = anchorObject->anchor()->shape();
             KUndo2Command *shapeDeleteCommand = m_shapeController->removeShape(shape, this);
             shapeDeleteCommand->redo();
         }

@@ -648,7 +648,7 @@ KoOdfBibliographyConfiguration KoTextSharedLoadingData::bibliographyConfiguratio
     return d->bibliographyConfiguration;
 }
 
-void KoTextSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &/*context*/, KoTextAnchor *anchor)
+void KoTextSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &/*context*/, KoShapeAnchor *anchor)
 {
     Q_UNUSED(shape);
     Q_UNUSED(element);

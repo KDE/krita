@@ -1212,6 +1212,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         documentLayout()->setAnchoringParagraphRect(anchoringRect);
         documentLayout()->setAnchoringLayoutEnvironmentRect(layoutEnvironmentRect());
         runAroundHelper.fit( /* resetHorizontalPosition */ false, /* rightToLeft */ d->isRtl, QPointF(x(), d->y));
+
+        documentLayout()->positionAnchorTextRanges(block.position()+line.textStart(), line.textLength());
         qreal bottomOfText = line.y() + line.height();
 
         bool softBreak = false;

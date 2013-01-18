@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2011 Matus Hanzes <matus.hanzes@ixonos.com>
+ * Copyright (C) 2013 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,33 +18,21 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KOTEXTANCHOR_H
-#define KOTEXTANCHOR_H
-
-#include "KoInlineObject.h"
+#ifndef KOSHAPEANCHOR_H
+#define KOSHAPEANCHOR_H
 
 #include "kotext_export.h"
 
 #include <QPointF>
 
 class KoShape;
-class KoTextAnchorPrivate;
 class KoXmlElement;
 class KoShapeLoadingContext;
+class KoShapeSavingContext;
 class KoShapeContainer;
+class KoShapeAnchorPrivate;
+class QTextDocument;
 
-/**
- * This class is an interface that positions the shape linked to text anchor
- */
-class KOTEXT_EXPORT KoAnchorStrategy {
-public:
-    KoAnchorStrategy(){};
-    virtual ~KoAnchorStrategy(){};
-
-    virtual void detachFromModel() = 0;
-
-    virtual void updatePosition(KoShape *shape, const QTextDocument *document, int position) = 0;
-};
 
 /**
  * This class is the object that explains how a shape is anchored to something.
@@ -51,37 +40,55 @@ public:
  * The anchored shape will be positioned (in supporting applications) based on the properties
  * defined in this class.
  *
- * This class can be used in two different ways:
+ * This class can be used in three different ways:
  *  -page anchor
- *  -as-char, char, paragraph anchor
+ *  -as-char
+ *  -char, paragraph anchor
  *
  * If it's a page anchor it just provide the info about how the shape relates to a page number.
  *
- * For the other types of anchoring it has to be inlined in the QTextDocument in which case the
- * anchor is the connection between the text and the so called 'anchored-shape', where the anchored
- * shape can be any kind of shape.  This textanchor then connects the anchored-shape to the text
- * flow so the anchored shape can be repositioned on the canvas if new text is inserted or removed
- * before the anchor character.
+ * For the other types of anchoring it has to have a TextLocation in a QTextDocument. This TextLocation
+ * can either be an inline character (type as-char) or a position (type char or paragraph) The
+ * KoShapeAnchor and TextLocation connects the anchored-shape to the text flow so the anchored shape
+ * can be repositioned on the canvas if new text is inserted or removed before the anchor character.
  *
- * The KoTextAnchor object is inserted in text, and is represented to the user as one invisible
- * character in the text flow. Since this is a real character it will be positioned by the text
- * -layout engine and * anything that will change the position of the text will thus also change
- * the KoTextAnchor character.
- * In such a case where the KoTextAnchor character is repositioned the position of the anchored-shape
- * should also be reconsidered.
+ * For as-char, char and paragraph use cases:
+ * @see KoAnchorInlineObject
+ * @see KoAnchorTextRange
+ * which are both implemented as subclasses of TextLocation
  *
- * Steps to use a KoTextAnchor are; <ol>
- * <li> Create a new instance with e.g. new KoTextAnchor(myshape);
- * <li> Use loadOdf() to load additional attributes like the "text:anchor-type"
- * <li> Position the anchor with updatePosition() what will attach the KoTextAnchor-instance to
- *    the TextShape's \a KoTextShapeContainerModel . </ol>
  * The position of the shape relative to the anchor is called the offset. It's loaded by loadOdf().
- * @see AnchorStrategy for more information about the layout of anchors/shapes in Words.
+ * @see PlacementStrategy for more information about the layout of anchors/shapes in Words.
  */
-class KOTEXT_EXPORT KoTextAnchor : public KoInlineObject
+class KOTEXT_EXPORT KoShapeAnchor
 {
-    Q_OBJECT
 public:
+    /**
+    * This class is an interface that positions the shape linked to text anchor
+    */
+    class PlacementStrategy {
+    public:
+        PlacementStrategy(){};
+        virtual ~PlacementStrategy(){};
+
+        virtual void detachFromModel() = 0;
+        /**
+         * Reparent the anchored shape under an appropriate shape container (and model)
+         *
+         * If needed, it changes the parent KoShapeContainerModel and KoShapeContainer of the anchored
+         * shape.
+         */
+        virtual void updateContainerModel() = 0;
+    };
+
+    class TextLocation {
+    public:
+        TextLocation(){};
+        virtual ~TextLocation(){};
+        virtual const QTextDocument *document() const = 0;
+        virtual int position() const = 0;
+    };
+
     enum HorizontalPos {
         HCenter,
         HFromInside,
@@ -140,8 +147,8 @@ public:
      * Constructor for an in-place anchor.
      * @param shape the anchored shape that this anchor links to.
      */
-    explicit KoTextAnchor(KoShape *shape);
-    virtual ~KoTextAnchor();
+    explicit KoShapeAnchor(KoShape *shape);
+    virtual ~KoShapeAnchor();
 
     /**
      * Return the shape that is linked to from the text anchor.
@@ -164,6 +171,7 @@ public:
      * - frame
      *   The parent text box that the current drawing shape element is
      *   contained in.
+     *  FIXME we dont support type frame
      * - page
      *   The page that has the same physical page number as the value of the
      *   text:anchor-page-number attribute that is attached to the drawing
@@ -176,7 +184,7 @@ public:
     /**
      * Set how the anchor behaves
      */
-    void setAnchorType(KoTextAnchor::AnchorType type);
+    void setAnchorType(AnchorType type);
 
     /// set the current vertical-pos
     void setHorizontalPos(HorizontalPos);
@@ -217,41 +225,32 @@ public:
     /// set the new offset of the shape. Causes a new layout soon.
     void setOffset(const QPointF &offset);
 
-    /// returns the cursor position in the document where this anchor is positioned.
-    int positionInDocument() const;
-
-    /// returns the document that this anchor is associated with.
-    const QTextDocument *document() const;
-
-    /// reimplemented from KoInlineObject
-    virtual void updatePosition(const QTextDocument *document,
-                                int posInDocument, const QTextCharFormat &format);
-    /// reimplemented from KoInlineObject
-    virtual void resize(const QTextDocument *document, QTextInlineObject object,
-                        int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
-    /// reimplemented from KoInlineObject
-    virtual void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
-                       const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
-
     /// Load the additional attributes.
+    /// This will also make the shape invisible so it doesn't mess up any layout
+    /// before it's ready to be placed where it belongs
+    /// The textlayout should make it visible again
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+
     /// Save the additional attributes.
-    void saveOdf(KoShapeSavingContext &context);
+    void saveOdf(KoShapeSavingContext &context) const;
 
-    /// \internal make sure that the anchor has no KoTextShapeContainerModel references anymore.
-    void detachFromModel();
+    /// Get extra data structure that is what is actually inside a text document
+    TextLocation *textLocation() const;
 
-    // get anchor strategy which is used to position shape linked to text anchor
-    KoAnchorStrategy * anchorStrategy();
+    /// Set extra data structure that is what is actually inside a text document
+    /// We do NOT take ownership (may change in the future)
+    void setTextLocation(TextLocation *textLocation);
 
-    // set anchor strategy which is used to position shape linked to text anchor
-    void setAnchorStrategy(KoAnchorStrategy * anchorStrategy);
+    /// Get placement strategy which is used to position shape linked to text anchor
+    PlacementStrategy *placementStrategy() const;
 
-    qreal inlineObjectAscent();
+    /// Set placement strategy which is used to position shape linked to text anchor
+    /// We take owner ship and will make sure the strategy is deleted
+    void setPlacementStrategy(PlacementStrategy *placementStrategy);
 
-    qreal inlineObjectDescent();
 private:
-    Q_DECLARE_PRIVATE(KoTextAnchor)
+    class Private;
+    Private *d;
 };
 
 #endif

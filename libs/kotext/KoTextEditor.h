@@ -45,7 +45,7 @@ class KoBibliographyInfo;
 class KoCanvasBase;
 class KoTableOfContentsGeneratorInfo;
 class KoShapeController;
-class KoTextAnchor;
+class KoShapeAnchor;
 class KoBookmark;
 
 class QTextBlock;
@@ -230,11 +230,11 @@ public slots:
     void updateInlineObjectPosition(int start = 0, int end = -1);
 
     /**
-     * Remove the KoTextAnchor objects from the document.
+     * Remove the KoShapeAnchor objects from the document.
      *
      * NOTE: Call this method only when the shapes belonging to the anchors have been deleted.
      */
-    void removeAnchors(const QList<KoTextAnchor*> &anchors, KUndo2Command *parent);
+    void removeAnchors(const QList<KoShapeAnchor*> &anchors, KUndo2Command *parent);
 
     /**
     * At the current cursor position, insert a marker that marks the next word as being part of the index.

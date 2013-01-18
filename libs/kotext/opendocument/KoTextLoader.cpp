@@ -50,7 +50,8 @@
 #include <KoShapeLoadingContext.h>
 #include <KoShapeRegistry.h>
 #include <KoTableColumnAndRowStyleManager.h>
-#include <KoTextAnchor.h>
+#include <KoAnchorInlineObject.h>
+#include <KoAnchorTextRange.h>
 #include <KoTextBlockData.h>
 #include "KoTextDebug.h"
 #include "KoTextDocument.h"
@@ -2570,38 +2571,27 @@ KoShape *KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &curso
         return 0;
     }
 
-    KoTextAnchor *anchor = new KoTextAnchor(shape);
+    KoShapeAnchor *anchor = new KoShapeAnchor(shape);
     anchor->loadOdf(element, d->context);
     d->textSharedData->shapeInserted(shape, element, d->context, anchor);
 
     // page anchored shapes are handled differently
-    if (anchor->anchorType() == KoTextAnchor::AnchorPage && shape->hasAdditionalAttribute("text:anchor-page-number")) {
+    if (anchor->anchorType() == KoShapeAnchor::AnchorPage && shape->hasAdditionalAttribute("text:anchor-page-number")) {
         // nothing else to do
-    } else {
-        shape->setVisible(false); // make it invisible until layouting
+    } else if (anchor->anchorType() == KoShapeAnchor::AnchorAsCharacter) {
+        KoAnchorInlineObject *anchorObject = new KoAnchorInlineObject(anchor);
 
         KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
         if (textObjectManager) {
-            if (!element.attributeNS(KoXmlNS::delta, "insertion-type").isEmpty())
-                d->openChangeRegion(element);
-
-            if (d->changeTracker && d->changeStack.count()) {
-                QTextCharFormat format;
-                format.setProperty(KoCharacterStyle::ChangeTrackerId, d->changeStack.top());
-                cursor.mergeCharFormat(format);
-            } else {
-                QTextCharFormat format = cursor.charFormat();
-                if (format.hasProperty(KoCharacterStyle::ChangeTrackerId)) {
-                    format.clearProperty(KoCharacterStyle::ChangeTrackerId);
-                    cursor.setCharFormat(format);
-                }
-            }
-
-            textObjectManager->insertInlineObject(cursor, anchor);
-
-            if (!element.attributeNS(KoXmlNS::delta, "insertion-type").isEmpty())
-                d->closeChangeRegion(element);
+            textObjectManager->insertInlineObject(cursor, anchorObject);
         }
+    } else { // KoShapeAnchor::AnchorToCharacter or KoShapeAnchor::AnchorParagraph
+        KoAnchorTextRange *anchorRange = new KoAnchorTextRange(anchor, cursor);
+
+        KoTextRangeManager *textRangeManager = KoTextDocument(cursor.block().document()).textRangeManager();
+
+        anchorRange->setManager(textRangeManager);
+        textRangeManager->insert(anchorRange);
     }
     return shape;
 }

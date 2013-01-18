@@ -41,7 +41,9 @@ set(kotext_LIB_SRCS
     KoSection.cpp
     KoTextLocator.cpp
     KoTextReference.cpp
-    KoTextAnchor.cpp
+    KoShapeAnchor.cpp
+    KoAnchorInlineObject.cpp
+    KoAnchorTextRange.cpp
     KoTextShapeSavingContext.cpp
     KoAnnotation.cpp
     KoAnnotationManager.cpp
@@ -167,7 +169,9 @@ install(
     KoBookmarkManager.h
     KoAnnotationManager.h
     KoInlineTextObjectManager.h
-    KoTextAnchor.h
+    KoAnchorInlineObject.h
+    KoAnchorTextRange.h
+    KoShapeAnchor.h
     KoTextBlockBorderData.h
     KoTextBlockData.h
     KoTextDocument.h

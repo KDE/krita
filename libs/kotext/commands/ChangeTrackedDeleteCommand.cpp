@@ -29,7 +29,6 @@
 #include <KoChangeTrackerElement.h>
 #include <KoTextDocument.h>
 #include <KoInlineTextObjectManager.h>
-#include <KoTextAnchor.h>
 #include <KoCanvasBase.h>
 #include <KoShapeController.h>
 #include <KoList.h>
@@ -259,9 +258,11 @@ void ChangeTrackedDeleteCommand::deleteSelection(KoTextEditor *editor)
                 KoTextDocument(m_document).changeTracker()->elementById(testMarker->changeId())->setValid(false);
                 m_removedElements.push_back(testMarker->changeId());
            } else {
+/* This has changed but since this entire command is going away - let's not bother
                 KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(inlineTextObjectManager->inlineTextObject(checker));
                 if (anchor)
                     shapesInSelection.push_back(anchor->shape());
+*/
            }
         }
         checker.setPosition(checker.position());

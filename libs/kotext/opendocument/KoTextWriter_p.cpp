@@ -858,28 +858,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     }
 
                     if (saveInlineObject) {
-                        int changeId = charFormat.intProperty(KoCharacterStyle::ChangeTrackerId);
-                        KoTextAnchor *textAnchor = dynamic_cast<KoTextAnchor *>(inlineObject);
-                        if (changeTracker && changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
-                            if (textAnchor && changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
-                                textAnchor->shape()->setAdditionalAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
-                                textAnchor->shape()->setAdditionalAttribute("delta:insertion-type", "insert-with-content");
-                            } else if (textAnchor && changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::DeleteChange) {
-                                writer->startElement("delta:removed-content", false);
-                                writer->addAttribute("delta:removal-change-idref", changeTransTable.value(changeId));
-                            }
-                        }
-
                         inlineObject->saveOdf(context);
-
-                        if (changeTracker && changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
-                            if (textAnchor && changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
-                                textAnchor->shape()->removeAdditionalAttribute("delta:insertion-change-idref");
-                                textAnchor->shape()->removeAdditionalAttribute("delta:insertion-type");
-                            } else if (textAnchor && changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::DeleteChange) {
-                                writer->endElement();
-                            }
-                        }
                     }
 
                     if (saveSpan) {

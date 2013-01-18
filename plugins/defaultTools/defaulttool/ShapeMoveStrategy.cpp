@@ -106,8 +106,6 @@ void ShapeMoveStrategy::moveSelection()
         QPointF delta = m_previousPositions.at(i) + m_diff - shape->position();
         if (shape->parent()) {
             shape->parent()->model()->proposeMove(shape, delta);
-        } else {
-            m_canvas->clipToDocument(shape, delta);
         }
         tool()->canvas()->clipToDocument(shape, delta);
         QPointF newPos (shape->position() + delta);

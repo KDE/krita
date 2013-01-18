@@ -107,7 +107,6 @@ void IndexEntryBibliography::addAttributes(KoXmlWriter* writer) const
 
 IndexEntrySpan::IndexEntrySpan(const QString &_styleName): IndexEntry(_styleName, IndexEntry::SPAN)
 {
-    text = QString();
 }
 
 IndexEntry *IndexEntrySpan::clone()

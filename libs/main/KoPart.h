@@ -60,7 +60,7 @@ public:
      * @param parent may be another KoDocument, or anything else.
      *        Usually passed by KPluginFactory::create.
      */
-    KoPart(QObject *parent);
+    explicit KoPart(QObject *parent);
 
     /**
      *  Destructor.

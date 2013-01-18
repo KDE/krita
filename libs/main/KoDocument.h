@@ -85,8 +85,8 @@ public:
      *        The stack objects will become owned by the document. This is used by Krita's KisDoc2. The default value for this
      *        parameter is a usual Qt's stack.
      */
-    KoDocument(KoPart *parent,
-               KUndo2Stack *undoStack = new KUndo2Stack());
+    explicit KoDocument(KoPart *parent,
+                        KUndo2Stack *undoStack = new KUndo2Stack());
 
     /**
      *  Destructor.

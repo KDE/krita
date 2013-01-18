@@ -81,9 +81,9 @@ public:
     };
 
     /// Constructor
-    KoTableStyle(QObject *parent = 0);
+    explicit KoTableStyle(QObject *parent = 0);
     /// Creates a KoTableStyle with the given table format, and \a parent
-    KoTableStyle(const QTextTableFormat &blockFormat, QObject *parent = 0);
+    explicit KoTableStyle(const QTextTableFormat &blockFormat, QObject *parent = 0);
     /// Destructor
     ~KoTableStyle();
 

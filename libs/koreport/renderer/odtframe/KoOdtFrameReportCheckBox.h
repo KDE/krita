@@ -34,7 +34,7 @@ class OROPrimitive;
 class KoOdtFrameReportCheckBox : public KoOdtFrameReportPrimitive
 {
 public:
-    KoOdtFrameReportCheckBox(OROCheck *primitive);
+    explicit KoOdtFrameReportCheckBox(OROCheck *primitive);
     virtual ~KoOdtFrameReportCheckBox();
 
     virtual void createStyle(KoGenStyles &coll);

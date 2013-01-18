@@ -33,7 +33,7 @@ class Viewport : public QWidget
 
 public:
 
-    Viewport(KoCanvasControllerWidget *parent);
+    explicit Viewport(KoCanvasControllerWidget *parent);
     ~Viewport() {}
 
     void setCanvas(QWidget *canvas);

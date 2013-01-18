@@ -31,9 +31,9 @@ class KoTextLayoutTableArea;
 class FrameIterator
 {
 public:
-    FrameIterator(QTextFrame *frame);
-    FrameIterator(const QTextTableCell &frame);
-    FrameIterator(FrameIterator *other);
+    explicit FrameIterator(QTextFrame *frame);
+    explicit FrameIterator(const QTextTableCell &frame);
+    explicit FrameIterator(FrameIterator *other);
     ~FrameIterator();
 
     bool operator ==(const FrameIterator &other) const;

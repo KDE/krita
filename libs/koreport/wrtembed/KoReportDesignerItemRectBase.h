@@ -36,7 +36,7 @@ class KRSize;
 class KOREPORT_EXPORT KoReportDesignerItemRectBase : public QGraphicsRectItem, public KoReportDesignerItemBase
 {
 public:
-    KoReportDesignerItemRectBase(KoReportDesigner*);
+    explicit KoReportDesignerItemRectBase(KoReportDesigner*);
 
     virtual ~KoReportDesignerItemRectBase();
 

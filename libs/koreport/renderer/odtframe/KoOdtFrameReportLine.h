@@ -37,7 +37,7 @@ class OROPrimitive;
 class KoOdtFrameReportLine : public KoOdtFrameReportPrimitive
 {
 public:
-    KoOdtFrameReportLine(OROLine *primitive);
+    explicit KoOdtFrameReportLine(OROLine *primitive);
     virtual ~KoOdtFrameReportLine();
 
     virtual void createStyle(KoGenStyles &coll);

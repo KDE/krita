@@ -38,10 +38,10 @@ class FLAKE_EXPORT KoClipData : public QSharedData
 {
 public:
     /// Creates clip path data from a single path shape, takes ownership of the path shape
-    KoClipData(KoPathShape *clipPathShape);
+    explicit KoClipData(KoPathShape *clipPathShape);
 
     /// Creates clip path data from multiple path shapes, takes ownership of the path shapes
-    KoClipData(const QList<KoPathShape*> &clipPathShapes);
+    explicit KoClipData(const QList<KoPathShape*> &clipPathShapes);
 
     /// Destroys the clip path data
     ~KoClipData();

@@ -32,7 +32,7 @@ class PIGMENTCMS_EXPORT KoAbstractGradient : public KoResource
 {
 
 public:
-    KoAbstractGradient(const QString& filename);
+    explicit KoAbstractGradient(const QString &filename);
     virtual ~KoAbstractGradient();
 
     virtual bool load() {

@@ -51,7 +51,7 @@ public:
      *
      * @param document the text document where this bookmark is located
      */
-    KoBookmark(const QTextCursor &);
+    explicit KoBookmark(const QTextCursor &);
 
     virtual ~KoBookmark();
 

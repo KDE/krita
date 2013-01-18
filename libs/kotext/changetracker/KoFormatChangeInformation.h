@@ -33,7 +33,7 @@ class KoFormatChangeInformation {
     KoFormatChangeInformation::FormatChangeType formatType();
 
     protected:
-        KoFormatChangeInformation(KoFormatChangeInformation::FormatChangeType formatChangeType);
+        explicit KoFormatChangeInformation(KoFormatChangeInformation::FormatChangeType formatChangeType);
 
     private:
         KoFormatChangeInformation::FormatChangeType formatChangeType;
@@ -41,7 +41,7 @@ class KoFormatChangeInformation {
 
 class KoTextStyleChangeInformation:public KoFormatChangeInformation {
     public:
-        KoTextStyleChangeInformation(KoFormatChangeInformation::FormatChangeType formatChangeType = KoFormatChangeInformation::eTextStyleChange);
+        explicit KoTextStyleChangeInformation(KoFormatChangeInformation::FormatChangeType formatChangeType = KoFormatChangeInformation::eTextStyleChange);
         void setPreviousCharFormat(QTextCharFormat &oldFormat);
         QTextCharFormat& previousCharFormat();
     private:
@@ -63,7 +63,7 @@ class KoListItemNumChangeInformation:public KoFormatChangeInformation {
             eNumberingRestarted = 0,
             eRestartRemoved
         }ListItemNumChangeType;
-        KoListItemNumChangeInformation(KoListItemNumChangeInformation::ListItemNumChangeType eSubType);
+        explicit KoListItemNumChangeInformation(KoListItemNumChangeInformation::ListItemNumChangeType eSubType);
         void setPreviousStartNumber(int oldRestartNumber);
         KoListItemNumChangeInformation::ListItemNumChangeType listItemNumChangeType();
         int previousStartNumber();

@@ -30,7 +30,7 @@ class QWidget;
 class KoFindStrategy : public KoFindStrategyBase
 {
 public:
-    KoFindStrategy(QWidget *parent);
+    explicit KoFindStrategy(QWidget *parent);
     virtual ~KoFindStrategy();
 
     /// reimplemented

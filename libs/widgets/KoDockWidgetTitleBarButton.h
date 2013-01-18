@@ -36,7 +36,7 @@ class KOWIDGETS_EXPORT KoDockWidgetTitleBarButton : public QAbstractButton
     Q_OBJECT
 
 public:
-    KoDockWidgetTitleBarButton(QWidget *parent = 0);
+    explicit KoDockWidgetTitleBarButton(QWidget *parent = 0);
     ~KoDockWidgetTitleBarButton();
 
     QSize sizeHint() const; ///< reimplemented from QWidget

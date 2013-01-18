@@ -58,7 +58,7 @@ class KOMAIN_EXPORT KoRdfSemanticItem : public QObject, public QSharedData
 
 public:
 
-    KoRdfSemanticItem(QObject *parent);
+    explicit KoRdfSemanticItem(QObject *parent);
     KoRdfSemanticItem(const KoDocumentRdf *rdf, QObject *parent);
     KoRdfSemanticItem(const KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it, QObject *parent);
     virtual ~KoRdfSemanticItem();

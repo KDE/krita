@@ -46,8 +46,8 @@ public:
     typedef QList<TableSchema*> List; //!< Type of tables list
     typedef QList<TableSchema>::ConstIterator ListIterator; //!< Iterator for tables list
 
-    TableSchema(const QString & name);
-    TableSchema(const SchemaData& sdata);
+    explicit TableSchema(const QString &name);
+    explicit TableSchema(const SchemaData &sdata);
     TableSchema();
 
     /*! Copy constructor.
@@ -210,8 +210,8 @@ private:
 class CALLIGRADB_EXPORT InternalTableSchema : public TableSchema
 {
 public:
-    InternalTableSchema(const QString& name);
-    InternalTableSchema(const TableSchema& ts);
+    explicit InternalTableSchema(const QString& name);
+    InternalTableSchema(const TableSchema& ts); // krazy:exclude=explicit
     virtual ~InternalTableSchema();
 };
 

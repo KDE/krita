@@ -30,7 +30,7 @@ class KRScriptDraw : public QObject
 {
     Q_OBJECT
 public:
-    KRScriptDraw(QObject *parent = 0);
+    explicit KRScriptDraw(QObject *parent = 0);
 
     ~KRScriptDraw();
     void setPage(OROPage*);

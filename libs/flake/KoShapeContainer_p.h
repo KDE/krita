@@ -30,7 +30,7 @@ class KoShapeContainerModel;
 class FLAKE_EXPORT KoShapeContainerPrivate : public KoShapePrivate
 {
 public:
-    KoShapeContainerPrivate(KoShapeContainer *q);
+    explicit KoShapeContainerPrivate(KoShapeContainer *q);
     virtual ~KoShapeContainerPrivate();
 
     KoShapeContainerModel *model;

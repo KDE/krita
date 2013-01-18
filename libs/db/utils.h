@@ -182,7 +182,7 @@ public:
      class TableSchema or QuerySchema.
      You should check whether a query or table has been found by testing
      (query() || table()) expression. */
-    TableOrQuerySchema(FieldList &tableOrQuery);
+    explicit TableOrQuerySchema(FieldList &tableOrQuery);
 
     /*! Creates a new TableOrQuerySchema variant object, retrieving table or query schema
      using \a conn connection and \a id.
@@ -192,11 +192,11 @@ public:
 
     /*! Creates a new TableOrQuerySchema variant object, keeping a pointer so \a table
      object. */
-    TableOrQuerySchema(TableSchema* table);
+    explicit TableOrQuerySchema(TableSchema* table);
 
     /*! Creates a new TableOrQuerySchema variant object, keeping a pointer so \a query
      object. */
-    TableOrQuerySchema(QuerySchema* query);
+    explicit TableOrQuerySchema(QuerySchema* query);
 
     //! \return a pointer to the query if it's provided
     QuerySchema* query() const {
@@ -535,7 +535,7 @@ class CALLIGRADB_EXPORT StaticSetOfStrings
 {
 public:
     StaticSetOfStrings();
-    StaticSetOfStrings(const char* array[]);
+    explicit StaticSetOfStrings(const char* array[]);
     ~StaticSetOfStrings();
     void setStrings(const char* array[]);
     bool isEmpty() const;

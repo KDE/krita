@@ -69,7 +69,7 @@ class KOPROPERTY_EXPORT EditorView : public QTreeView
     Q_OBJECT
 public:
     /*! Creates an empty property editor with @a parent as parent widget. */
-    EditorView(QWidget *parent = 0);
+    explicit EditorView(QWidget *parent = 0);
 
     ~EditorView();
 

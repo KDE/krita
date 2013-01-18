@@ -40,14 +40,14 @@ public:
      *
      * @param table table to use.
      */
-    TableIterator(QTextTable *table);
+    explicit TableIterator(QTextTable *table);
 
     /**
      * Constructs a new iterator initialized from another.
      *
      * @param other iterator to initialize the iterator from.
      */
-    TableIterator(TableIterator *other);
+    explicit TableIterator(TableIterator *other);
 
     /// Destructor.
     ~TableIterator();

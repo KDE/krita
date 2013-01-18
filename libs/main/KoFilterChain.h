@@ -137,7 +137,7 @@ private:
 
     friend class CalligraFilter::Graph;
 
-    KoFilterChain(const KoFilterManager* manager);
+    explicit KoFilterChain(const KoFilterManager* manager);
 
     void appendChainLink(KoFilterEntry::Ptr filterEntry, const QByteArray& from, const QByteArray& to);
     void prependChainLink(KoFilterEntry::Ptr filterEntry, const QByteArray& from, const QByteArray& to);

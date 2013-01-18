@@ -77,7 +77,7 @@ public:
     };
     Q_DECLARE_FLAGS(ChangeListFlags, ChangeListFlag)
 
-    KoTextEditor(QTextDocument *document);
+    explicit KoTextEditor(QTextDocument *document);
 
     virtual ~KoTextEditor();
 

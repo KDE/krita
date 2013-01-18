@@ -57,7 +57,7 @@ class KOTEXT_EXPORT KoTextCommandBase : public KUndo2Command
 public:
 
     /// constructor
-    KoTextCommandBase(KUndo2Command *parent);
+    explicit KoTextCommandBase(KUndo2Command *parent);
     virtual ~KoTextCommandBase();
 
     /// method called by the tool.

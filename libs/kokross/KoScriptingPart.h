@@ -51,7 +51,7 @@ public:
     * \param parent The parent QObject.
     * \param args the optional list of arguments.
     */
-    KoScriptingPart(KoScriptingModule *const module, const QStringList& args = QStringList());
+    explicit KoScriptingPart(KoScriptingModule *const module, const QStringList& args = QStringList());
 
     /**
     * Destructor.

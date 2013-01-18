@@ -222,6 +222,7 @@ public:
      If \a caption contains newline characters, caption() will return \a caption with substituted
      these with spaces. captionForDisplaying() is used to get original caption text usable
      (with newline, if any) for displaying within a property editor. */
+    explicit
     Property(const QByteArray &name, const QVariant &value = QVariant(),
              const QString &caption = QString(), const QString &description = QString(),
              int type = Auto, Property* parent = 0);

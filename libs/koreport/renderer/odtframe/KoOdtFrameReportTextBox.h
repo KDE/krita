@@ -33,7 +33,7 @@ class OROPrimitive;
 class KoOdtFrameReportTextBox : public KoOdtFrameReportPrimitive
 {
 public:
-    KoOdtFrameReportTextBox(OROTextBox *primitive);
+    explicit KoOdtFrameReportTextBox(OROTextBox *primitive);
     virtual ~KoOdtFrameReportTextBox();
 
     virtual void createStyle(KoGenStyles &coll);

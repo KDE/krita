@@ -48,7 +48,7 @@ public:
     /**
      * Constructor.
      */
-    KoCsvImportDialog(QWidget* parent);
+    explicit KoCsvImportDialog(QWidget *parent);
 
     /**
      * Destructor.

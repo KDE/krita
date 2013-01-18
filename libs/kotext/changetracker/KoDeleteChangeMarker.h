@@ -50,7 +50,7 @@ public:
     static const QString RDFDeleteChangeContext;
     /****************************************************************************************************************/
 
-    KoDeleteChangeMarker(KoChangeTracker *changeTracker);
+    explicit KoDeleteChangeMarker(KoChangeTracker *changeTracker);
 
     virtual ~KoDeleteChangeMarker();
 

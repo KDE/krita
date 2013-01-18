@@ -59,7 +59,7 @@ public:
 class ParseInfo
 {
 public:
-    ParseInfo(QuerySchema *query);
+    explicit ParseInfo(QuerySchema *query);
     ~ParseInfo();
 
     //! collects positions of tables/aliases with the same names

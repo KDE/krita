@@ -31,7 +31,7 @@ class KReplaceDialog;
 class KoReplaceStrategy : public KoFindStrategyBase
 {
 public:
-    KoReplaceStrategy(QWidget *parent);
+    explicit KoReplaceStrategy(QWidget *parent);
     virtual ~KoReplaceStrategy();
 
     /// reimplmented

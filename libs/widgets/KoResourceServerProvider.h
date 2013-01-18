@@ -44,7 +44,7 @@ public:
      * Constructs a KoResourceLoaderThread for a server
      * @param server the server the resources will be loaded for
      */
-    KoResourceLoaderThread(KoResourceServerBase * server);
+    explicit KoResourceLoaderThread(KoResourceServerBase *server);
     ~KoResourceLoaderThread();
 
     /**

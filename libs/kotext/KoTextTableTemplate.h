@@ -76,7 +76,7 @@ public:
     void setOddRows(int styleId);
 
     /// Constructor
-    KoTextTableTemplate(QObject *parent = 0);
+    explicit KoTextTableTemplate(QObject *parent = 0);
 
     /// Destructor
     ~KoTextTableTemplate();

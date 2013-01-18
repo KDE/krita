@@ -38,7 +38,7 @@ class FLAKE_EXPORT KoImageCollection : public QObject, public KoDataCenterBase
     Q_OBJECT
 public:
     /// constructor
-    KoImageCollection(QObject *parent = 0);
+    explicit KoImageCollection(QObject *parent = 0);
     virtual ~KoImageCollection();
 
     /// reimplemented

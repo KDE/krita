@@ -111,7 +111,7 @@ inline qreal squareDistance( const QPointF &p1, const QPointF &p2)
 class AngleSnapStrategy : public KoSnapStrategy
 {
 public:
-    AngleSnapStrategy( qreal angleStep )
+    explicit AngleSnapStrategy( qreal angleStep )
     : KoSnapStrategy(KoSnapGuide::CustomSnapping), m_angleStep(angleStep), m_active(false)
     {
     }

@@ -133,7 +133,7 @@ public:
      * constructs an empty object of the parser
      * \param connection is used for things like wildcard resolution. If 0 parser works in "pure mode"
      */
-    Parser(Connection *connection);
+    explicit Parser(Connection *connection);
     ~Parser();
 
     /**

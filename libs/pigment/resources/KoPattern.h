@@ -33,7 +33,7 @@ public:
      *
      * @param filename the file name to save and load from.
      */
-    KoPattern(const QString& filename);
+    explicit KoPattern(const QString &filename);
     virtual ~KoPattern();
 
 public:

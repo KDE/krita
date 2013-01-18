@@ -38,7 +38,7 @@ class KOPAGEAPP_EXPORT KoPAPrintJob : public KoPrintJob
 {
     Q_OBJECT
 public:
-    KoPAPrintJob(KoPAView * view);
+    explicit KoPAPrintJob(KoPAView * view);
     virtual ~KoPAPrintJob();
 
     virtual QPrinter & printer();

@@ -42,7 +42,7 @@ public:
       *
       * @param parent The parent for this action.
       */
-    KoColorPopupAction(QObject *parent = 0);
+    explicit KoColorPopupAction(QObject *parent = 0);
 
     /**
      * Destructor

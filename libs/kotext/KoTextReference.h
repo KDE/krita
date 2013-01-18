@@ -39,7 +39,7 @@ public:
      * to create one.
      * @param indexId the index of the inline object that is the locator.  See KoInlineObject::id()
      */
-    KoTextReference(int indexId);
+    explicit KoTextReference(int indexId);
     ~KoTextReference();
 
     virtual void variableMoved(const QTextDocument *document, int posInDocument);

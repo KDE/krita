@@ -29,7 +29,7 @@ class KoPABackgroundTool : public KoToolBase
 {
     Q_OBJECT
 public:
-    KoPABackgroundTool( KoCanvasBase* base );
+    explicit KoPABackgroundTool(KoCanvasBase *base);
     virtual ~KoPABackgroundTool();
 
     ///Reimplemented from KoToolBase

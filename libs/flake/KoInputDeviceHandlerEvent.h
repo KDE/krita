@@ -39,7 +39,7 @@ public:
     };
 
     /// Constructs a new device event of the given type
-    KoInputDeviceHandlerEvent(Type type);
+    explicit KoInputDeviceHandlerEvent(Type type);
 
     virtual ~KoInputDeviceHandlerEvent();
 

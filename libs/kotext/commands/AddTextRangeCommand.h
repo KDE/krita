@@ -27,7 +27,7 @@ class KoTextRange;
 class AddTextRangeCommand : public KUndo2Command
 {
 public:
-    AddTextRangeCommand(KoTextRange *range, KUndo2Command* parent = 0);
+    explicit AddTextRangeCommand(KoTextRange *range, KUndo2Command *parent = 0);
     virtual ~AddTextRangeCommand();
 
     virtual void undo();

@@ -54,7 +54,7 @@ public:
      but by its table. Do not forget to add these fields to table,
      because adding these to IndexSchema is not enough.
      */
-    IndexSchema(TableSchema *tableSchema);
+    explicit IndexSchema(TableSchema *tableSchema);
 
     /*! Copy constructor. Copies all attributes from index \a idx, and
      fields assigned with it but the fields are taken (by name) from

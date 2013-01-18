@@ -44,7 +44,7 @@ public:
     KoReportItemImage() {
         createProperties();
     }
-    KoReportItemImage(QDomNode & element);
+    explicit KoReportItemImage(QDomNode & element);
     virtual ~KoReportItemImage();
 
     virtual QString typeName() const;

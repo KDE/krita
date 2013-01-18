@@ -40,7 +40,7 @@ public:
     KoReportItemLine() {
         createProperties();
     }
-    KoReportItemLine(QDomNode & element);
+    explicit KoReportItemLine(QDomNode & element);
     ~KoReportItemLine() {};
 
     virtual QString typeName() const;

@@ -39,8 +39,8 @@ class KOPROPERTY_EXPORT EditorDataModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
-    EditorDataModel(Set &propertySet, QObject *parent = 0,
-                    Set::Order order = Set::InsertionOrder);
+    explicit EditorDataModel(Set &propertySet, QObject *parent = 0,
+                             Set::Order order = Set::InsertionOrder);
     ~EditorDataModel();
 
     enum Role {

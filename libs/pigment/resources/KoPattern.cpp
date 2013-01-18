@@ -114,8 +114,8 @@ bool KoPattern::save()
 
     int k = 0;
     bytes.resize(width() * height() * 4);
-    for (qint32 y = 0; y < height(); y++) {
-        for (qint32 x = 0; x < width(); x++) {
+    for (qint32 y = 0; y < height(); ++y) {
+        for (qint32 x = 0; x < width(); ++x) {
             // RGBA only
             QRgb pixel = m_image.pixel(x, y);
             bytes[k++] = static_cast<char>(qRed(pixel));
@@ -199,9 +199,9 @@ bool KoPattern::init(QByteArray& bytes)
     if (bh.bytes == 1) {
         // Grayscale
         qint32 val;
-        for (quint32 y = 0; y < bh.height; y++) {
+        for (quint32 y = 0; y < bh.height; ++y) {
             QRgb* pixels = reinterpret_cast<QRgb*>( m_image.scanLine(y) );
-            for (quint32 x = 0; x < bh.width; x++, k++) {
+            for (quint32 x = 0; x < bh.width; ++x, ++k) {
 
 
                 if (k > dataSize) {
@@ -217,9 +217,9 @@ bool KoPattern::init(QByteArray& bytes)
         // Grayscale + A
         qint32 val;
         qint32 alpha;
-        for (quint32 y = 0; y < bh.height; y++) {
+        for (quint32 y = 0; y < bh.height; ++y) {
             QRgb* pixels = reinterpret_cast<QRgb*>( m_image.scanLine(y) );
-            for (quint32 x = 0; x < bh.width; x++, k++) {
+            for (quint32 x = 0; x < bh.width; ++x, ++k) {
                 if (k + 2 > dataSize) {
                     kWarning(30009) << "failed in grayA";
                     return false;
@@ -232,9 +232,9 @@ bool KoPattern::init(QByteArray& bytes)
         }
     } else if (bh.bytes == 3) {
         // RGB without alpha
-        for (quint32 y = 0; y < bh.height; y++) {
+        for (quint32 y = 0; y < bh.height; ++y) {
             QRgb* pixels = reinterpret_cast<QRgb*>( m_image.scanLine(y) );
-            for (quint32 x = 0; x < bh.width; x++) {
+            for (quint32 x = 0; x < bh.width; ++x) {
                 if (k + 3 > dataSize) {
                     kWarning(30009) << "failed in RGB";
                     return false;
@@ -247,9 +247,9 @@ bool KoPattern::init(QByteArray& bytes)
         }
     } else if (bh.bytes == 4) {
         // Has alpha
-        for (quint32 y = 0; y < bh.height; y++) {
+        for (quint32 y = 0; y < bh.height; ++y) {
             QRgb* pixels = reinterpret_cast<QRgb*>( m_image.scanLine(y) );
-            for (quint32 x = 0; x < bh.width; x++) {
+            for (quint32 x = 0; x < bh.width; ++x) {
                 if (k + 4 > dataSize) {
                     kWarning(30009) << "failed in RGBA";
                     return false;

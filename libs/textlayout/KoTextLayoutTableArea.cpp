@@ -191,7 +191,7 @@ KoPointedAt KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccu
         int row = qLowerBound(start, end, point.y()) - d->rowPositions.constBegin() - 1;
         int column = qLowerBound(d->columnPositions, point.x()) - d->columnPositions.constBegin() - 1;
         if (point.y() < d->rowPositions[firstRow]) {
-            row++;
+            ++row;
         }
         column = qBound(0, column, d->table->columns() - 1);
         KoPointedAt pointedAt;
@@ -569,7 +569,7 @@ void KoTextLayoutTableArea::collectBorderThicknesss(int row, qreal &topBorderWid
 
 void KoTextLayoutTableArea::nukeRow(TableIterator *cursor)
 {
-    for (int column = 0; column < d->table->columns(); column++) {
+    for (int column = 0; column < d->table->columns(); ++column) {
         delete d->cellAreas[cursor->row][column];
         d->cellAreas[cursor->row][column] = 0;
         delete cursor->frameIterators[column];
@@ -716,7 +716,7 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
     }
 
     if (allCellsFullyDone) {
-        for (col = 0; col < d->table->columns(); col++) {
+        for (col = 0; col < d->table->columns(); ++col) {
             QTextTableCell cell = d->table->cellAt(row, col);
 
             if (row == cell.row() + cell.rowSpan() - 1) {

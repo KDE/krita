@@ -68,7 +68,7 @@
 
 #include "input/kis_input_manager.h"
 
-struct KisCanvas2::KisCanvas2Private
+class KisCanvas2::KisCanvas2Private
 {
 
 public:

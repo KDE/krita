@@ -24,8 +24,9 @@
 #include "kis_stroke_shortcut.h"
 
 
-struct KisShortcutMatcher::Private
+class KisShortcutMatcher::Private
 {
+public:
     Private() : suppressAllActions(false) {}
 
     QList<KisSingleActionShortcut*> singleActionShortcuts;

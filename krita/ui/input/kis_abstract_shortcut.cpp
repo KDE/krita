@@ -18,8 +18,9 @@
 
 #include "kis_abstract_shortcut.h"
 
-struct KisAbstractShortcut::Private
+class KisAbstractShortcut::Private
 {
+public:
     KisAbstractInputAction *action;
     int shortcutIndex;
 };

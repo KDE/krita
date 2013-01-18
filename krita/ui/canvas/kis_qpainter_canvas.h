@@ -89,7 +89,7 @@ private slots:
 private:
     QImage m_buffer;
 
-    struct Private;
+    class Private;
     Private * const m_d;
 };
 

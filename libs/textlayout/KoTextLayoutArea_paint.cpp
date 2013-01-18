@@ -51,7 +51,6 @@
 #include <KoChangeTrackerElement.h>
 #include <KoImageData.h>
 #include <KoInlineNote.h>
-#include <KoInlineNote.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTableOfContentsGeneratorInfo.h>
 

@@ -57,7 +57,6 @@
 #include <KoImageData.h>
 #include <KoImageCollection.h>
 #include <KoInlineNote.h>
-#include <KoInlineNote.h>
 #include <KoTextSoftPageBreak.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTableOfContentsGeneratorInfo.h>

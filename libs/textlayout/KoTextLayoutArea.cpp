@@ -892,7 +892,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                     QRectF rect = fm.tightBoundingRect(dropCapsText);
                     const qreal diff = dropCapsHeight - rect.height();
                     dropCapsPositionAdjust = rect.top() + fm.ascent();
-                    if (qAbs(diff < 0.5)) // good enough
+                    if (qAbs(diff) < 0.5) // good enough
                         break;
 
                     const qreal adjustment = diff * (f.pointSizeF() / rect.height());

@@ -65,6 +65,7 @@ void TextDocumentInspectionDocker::setCanvas(KoCanvasBase *canvas)
 
     m_canvas = canvas;
     if (! m_canvas) {
+        m_textDocumentStructureModel->setTextDocument(0);
         return;
     }
 
@@ -76,10 +77,7 @@ void TextDocumentInspectionDocker::setCanvas(KoCanvasBase *canvas)
 
 void TextDocumentInspectionDocker::unsetCanvas()
 {
-    if (m_canvas) {
-        m_canvas->disconnectCanvasObserver(this);
-    }
-
+    m_textDocumentStructureModel->setTextDocument(0);
     m_canvas = 0;
 }
 

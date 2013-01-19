@@ -1114,6 +1114,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
     if (!ret && reset_url)
         d->rootDocument->resetURL(); //clean the suggested filename as the save dialog was rejected
 
+    updateReloadFileAction(d->rootDocument);
     updateCaption();
 
     return ret;

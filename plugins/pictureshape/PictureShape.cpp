@@ -145,7 +145,7 @@ QPainterPath _Private::generateOutline(const QImage &imageIn, int treshold)
         return path;
     }
 
-    for (int y = 100-1; y >= first; y--) {
+    for (int y = 100-1; y >= 0; --y) {
         if (leftArray[y] != -1) {
             path.lineTo(leftArray[y] / 99.0, y / 99.0);
         }

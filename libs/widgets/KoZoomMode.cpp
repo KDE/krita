@@ -27,7 +27,11 @@ const char* KoZoomMode::modes[] =
     I18N_NOOP("Fit Page Width"),
     I18N_NOOP("Fit Page"),
     0,
-    I18N_NOOP("Actual Pixels")
+    I18N_NOOP("Actual Pixels"),
+    0,
+    0,
+    0,
+    I18N_NOOP("Fit Text Width")
 };
 
 qreal KoZoomMode::minimumZoomValue = 0.2;
@@ -48,6 +52,9 @@ KoZoomMode::Mode KoZoomMode::toMode(const QString& mode)
     else
      if(mode == i18n(modes[ZOOM_PIXELS]))
         return ZOOM_PIXELS;
+    else
+     if(mode == i18n(modes[ZOOM_TEXT]))
+        return ZOOM_TEXT;
     else
        return ZOOM_CONSTANT;
     // we return ZOOM_CONSTANT else because then we can pass '10%' or '15%'

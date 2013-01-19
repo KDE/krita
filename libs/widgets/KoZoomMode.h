@@ -36,7 +36,8 @@ public:
         ZOOM_CONSTANT = 0,  ///< zoom x %
         ZOOM_WIDTH    = 1,  ///< zoom pagewidth
         ZOOM_PAGE     = 2,  ///< zoom to pagesize
-        ZOOM_PIXELS   = 4   ///< zoom to actual pixels
+        ZOOM_PIXELS   = 4,   ///< zoom to actual pixels
+        ZOOM_TEXT   = 8   ///< zoom to actual pixels
     };
 
     Q_DECLARE_FLAGS(Modes, Mode)

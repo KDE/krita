@@ -235,6 +235,11 @@ void StrokeDocker::setUnit(KoUnit unit)
 
 void StrokeDocker::selectionChanged()
 {
+    // TODO: why use canvasController->canvas() and not d->canvas?
+    // Hides at least the problem that shapeManager of a canvas still emits signals after unsetCanvas()
+    // was called on us. And at least by the current API dox there is no way in unsetCanvas()
+    // to get the shapeManager anymore, as "it's dead".
+    // Cmp. TextDocumentInspectionDocker::onShapeSelectionChanged()
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
     KoShape * shape = selection->firstSelectedShape();

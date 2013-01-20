@@ -85,11 +85,19 @@ void TextDocumentInspectionDocker::onShapeSelectionChanged()
 {
     QTextDocument* textDocument = 0;
 
-    KoShape *shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
-    if (shape) {
-        TextShape *textShape = dynamic_cast<TextShape*>(shape);
-        if (textShape) {
-            textDocument = textShape->textShapeData()->document();
+    // TODO: big fail: shapeManager of a canvas still emits signals after unsetCanvas()
+    // was called on us. And at least by the current API dox there is no way in unsetCanvas()
+    // to get the shapeManager anymore, as "it's dead".
+    // So we need to guard us here, this can be called when we officially are not
+    // connected to any canvas.
+    // Cmp. StrokeDocker::selectionChanged()
+    if (m_canvas) {
+        KoShape *shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
+        if (shape) {
+            TextShape *textShape = dynamic_cast<TextShape*>(shape);
+            if (textShape) {
+                textDocument = textShape->textShapeData()->document();
+            }
         }
     }
 

@@ -18,7 +18,6 @@
 
 #include "opengl/kis_opengl_canvas2.h"
 
-
 #ifdef HAVE_OPENGL
 
 #include <QMenu>
@@ -55,6 +54,8 @@
 #include "kis_selection_manager.h"
 #include "kis_group_layer.h"
 
+#include "opengl/kis_opengl_canvas2_p.h"
+
 #define NEAR_VAL -1000.0
 #define FAR_VAL 1000.0
 
@@ -82,7 +83,7 @@ public:
 };
 
 KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 * canvas, KisCoordinatesConverter *coordinatesConverter, QWidget * parent, KisOpenGLImageTexturesSP imageTextures)
-        : QGLWidget(QGLFormat(QGL::SampleBuffers), parent, KisOpenGL::sharedContextWidget())
+    : QGLWidget(QGLFormat(QGL::SampleBuffers | QGL::SingleBuffer), parent, KisOpenGL::sharedContextWidget())
         , KisCanvasWidgetBase(canvas, coordinatesConverter)
         , m_d(new Private())
 {
@@ -111,6 +112,13 @@ KisOpenGLCanvas2::~KisOpenGLCanvas2()
 
 void KisOpenGLCanvas2::initializeGL()
 {
+    if (format().doubleBuffer()) {
+        qWarning() << "WARNING: Your system/Qt/video adapter doesn't support single buffered contexts. Trying to workaround it by disabling VSync.";
+        bool result = VSyncWorkaround::tryDisableVSync(this);
+        if (!result) {
+            qWarning() << "WARNING: Failed to disable VSync. Be careful! The lines might be \"bended\" while painting! Try disabling OpenGL in Krita to avoid that!";
+        }
+    }
 }
 
 void KisOpenGLCanvas2::resizeGL(int width, int height)

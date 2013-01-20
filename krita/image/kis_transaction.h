@@ -127,9 +127,9 @@ public:
 class KisSelectionTransaction : public KisTransaction
 {
 public:
-    KisSelectionTransaction(const QString& name, KisImageWSP image, KisSelectionSP selection, KUndo2Command* parent = 0)
+    KisSelectionTransaction(const QString& name, KisUndoAdapter *undoAdapter, KisSelectionSP selection, KUndo2Command* parent = 0)
     {
-        m_transactionData = new KisSelectionTransactionData(name, image, selection, parent);
+        m_transactionData = new KisSelectionTransactionData(name, undoAdapter, selection, parent);
     }
 };
 

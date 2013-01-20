@@ -199,8 +199,8 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         scaleYBox->setValue(config.scaleY() * 100.);
         shearXBox->setValue(config.shearX());
         shearYBox->setValue(config.shearY());
-        translateXBox->setValue(config.translate().x());
-        translateYBox->setValue(config.translate().y());
+        translateXBox->setValue(config.transformedCenter().x());
+        translateYBox->setValue(config.transformedCenter().y());
         aXBox->setValue(radianToDegree(config.aX()));
         aYBox->setValue(radianToDegree(config.aY()));
         aZBox->setValue(radianToDegree(config.aZ()));
@@ -418,7 +418,7 @@ void KisToolTransformConfigWidget::slotSetTranslateX(double value)
     if (m_uiSlotsBlocked) return;
 
     ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setTranslate(QPointF(value, config->translate().y()));
+    config->setTransformedCenter(QPointF(value, config->transformedCenter().y()));
     notifyConfigChanged();
 }
 
@@ -427,7 +427,7 @@ void KisToolTransformConfigWidget::slotSetTranslateY(double value)
     if (m_uiSlotsBlocked) return;
 
     ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setTranslate(QPointF(config->translate().x(), value));
+    config->setTransformedCenter(QPointF(config->transformedCenter().x(), value));
     notifyConfigChanged();
 }
 

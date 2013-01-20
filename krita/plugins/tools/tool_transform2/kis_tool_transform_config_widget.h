@@ -35,6 +35,7 @@ public:
 
     void setApplyResetDisabled(bool disabled);
     void resetRotationCenterButtons();
+    void setDefaultWarpPoints(int pointsPerLine = -1);
 
 public slots:
     void updateConfig(const ToolTransformArgs &config);
@@ -92,7 +93,6 @@ private:
     void blockUiSlots();
     void unblockUiSlots();
 
-    void setDefaultWarpPoints(int pointsPerLine);
     void activateCustomWarpPoints(bool enabled);
 
     void updateLockPointsButtonCaption();

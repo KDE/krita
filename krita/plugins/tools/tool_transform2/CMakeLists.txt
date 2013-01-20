@@ -6,6 +6,7 @@ set(kritatooltransform_PART_SRCS
     tool_transform_commands.cc
     kis_tool_transform.cc
     kis_tool_transform_config_widget.cpp
+    strokes/transform_stroke_strategy.cpp
     )
 
 

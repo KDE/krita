@@ -63,7 +63,7 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
         undoAdapter->addCommand(new KisSetEmptyGlobalSelectionCommand(m_image));
     }
 
-    KisSelectionTransaction transaction(m_name, m_image, m_layer->selection());
+    KisSelectionTransaction transaction(m_name, m_image->undoAdapter(), m_layer->selection());
 
     KisPixelSelectionSP pixelSelection = m_layer->selection()->getOrCreatePixelSelection();
 
@@ -103,7 +103,7 @@ void KisSelectionToolHelper::addSelectionShape(KoShape* shape)
     }
 
     KisSelectionSP selection = m_layer->selection();
-    KisSelectionTransaction transaction(m_name, m_image, selection);
+    KisSelectionTransaction transaction(m_name, m_image->undoAdapter(), selection);
 
     transaction.commit(undoAdapter);
 

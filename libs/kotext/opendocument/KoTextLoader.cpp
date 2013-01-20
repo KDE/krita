@@ -2687,7 +2687,7 @@ void KoTextLoader::loadBibliography(const KoXmlElement &element, QTextCursor &cu
 
     QTextDocument *bibDocument = new QTextDocument();
     KoTextDocument(bibDocument).setStyleManager(d->styleManager);
-    KoTextDocument(tocDocument).setTextRangeManager(new KoTextRangeManager);
+    KoTextDocument(bibDocument).setTextRangeManager(new KoTextRangeManager);
 
     info->m_name = element.attribute("name");
     info->m_styleName = element.attribute("style-name");

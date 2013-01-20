@@ -91,7 +91,7 @@ KisNode::KisNode(const KisNode & rhs)
 
 KisNode::~KisNode()
 {
-    delete m_d->nodeProgressProxy;
+    m_d->nodeProgressProxy->deleteLater();
     m_d->nodes.clear();
     delete m_d;
 }

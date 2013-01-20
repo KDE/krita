@@ -32,13 +32,14 @@
  * This file is effectively a bit of copy-paste from qgl_x11.cpp
  */
 
-#include <GL/glx.h>
-#if defined Q_OS_LINUX && defined GLX_SWAP_INTERVAL_EXT
+
+#if defined Q_OS_LINUX
 
 #include <QByteArray>
 #include <QVector>
 #include <QLibrary>
 #include <QX11Info>
+#include <GL/glx.h>
 
 #ifndef GL_NUM_EXTENSIONS
 #define GL_NUM_EXTENSIONS 0x821D
@@ -177,22 +178,48 @@ namespace VSyncWorkaround {
             if (glXSwapIntervalEXT) {
                 glXSwapIntervalEXT(dpy, wid, 0);
 
-                unsigned int swap;
+                unsigned int swap = 1;
+
+#ifdef GLX_SWAP_INTERVAL_EXT
                 glXQueryDrawable(dpy, wid, GLX_SWAP_INTERVAL_EXT, &swap);
+#endif
 
                 result = !swap;
             } else {
                 qDebug() << "Couldn't load glXSwapIntervalEXT extension function";
             }
-        } else {
-            qDebug() << "There is no GLX_EXT_swap_control extension supported";
+        }
+        if (extensions.match("GLX_MESA_swap_control")) {
+            typedef int (*kis_glXSwapIntervalMESA)(unsigned int);
+            typedef int (*kis_glXGetSwapIntervalMESA)(void);
+
+            kis_glXSwapIntervalMESA glXSwapIntervalMESA = (kis_glXSwapIntervalMESA)qglx_getProcAddress("glXSwapIntervalMESA");
+            kis_glXGetSwapIntervalMESA glXGetSwapIntervalMESA = (kis_glXGetSwapIntervalMESA)qglx_getProcAddress("glXGetSwapIntervalMESA");
+
+            if (glXSwapIntervalMESA) {
+                int retval = glXSwapIntervalMESA(0);
+                int swap = 1;
+
+                if (glXGetSwapIntervalMESA) {
+                    swap = glXGetSwapIntervalMESA();
+                } else {
+                    qDebug() << "Couldn't load glXGetSwapIntervalMESA extension function";
+                }
+
+                result = !retval && !swap;
+            } else {
+                qDebug() << "Couldn't load glXSwapIntervalMESA extension function";
+            }
+        }
+        else {
+            qDebug() << "There is neither GLX_EXT_swap_control or GLX_MESA_swap_control extension supported";
         }
 
         return result;
     }
 }
 
-#else  // defined Q_OS_LINUX && defined GLX_SWAP_INTERVAL_EXT
+#else  // defined Q_OS_LINUX
 
 namespace VSyncWorkaround {
     bool tryDisableVSync(QWidget *) {
@@ -200,7 +227,7 @@ namespace VSyncWorkaround {
     }
 }
 
-#endif // defined Q_OS_LINUX && defined GLX_SWAP_INTERVAL_EXT
+#endif // defined Q_OS_LINUX
 
 #endif // HAVE_OPENGL
 #endif // KIS_OPENGL_CANVAS_2_P_H

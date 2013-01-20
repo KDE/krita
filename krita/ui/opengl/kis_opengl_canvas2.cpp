@@ -116,7 +116,8 @@ void KisOpenGLCanvas2::initializeGL()
         qWarning() << "WARNING: Your system/Qt/video adapter doesn't support single buffered contexts. Trying to workaround it by disabling VSync.";
         bool result = VSyncWorkaround::tryDisableVSync(this);
         if (!result) {
-            qWarning() << "WARNING: Failed to disable VSync. Be careful! The lines might be \"bended\" while painting! Try disabling OpenGL in Krita to avoid that!";
+            qWarning() << "WARNING: Failed to disable VSync. Lines may look \"bended\"";
+            qWarning() << "         Your graphics card or driver does not fully support Krita's OpenGL canvas. For an optimal experience, please disable OpenGL";
         }
     }
 }

@@ -853,7 +853,7 @@ void KisPaintDevice::clearSelection(KisSelectionSP selection)
     if (r.isValid()) {
 
         KisHLineIteratorSP devIt = createHLineIteratorNG(r.x(), r.y(), r.width());
-        KisHLineConstIteratorSP selectionIt = selection->projection()->createHLineIteratorNG(r.x(), r.y(), r.width());
+        KisHLineConstIteratorSP selectionIt = selection->projection()->createHLineConstIteratorNG(r.x(), r.y(), r.width());
 
         const quint8* defaultPixel_ = defaultPixel();
         bool transparentDefault = (m_d->colorSpace->opacityU8(defaultPixel_) == OPACITY_TRANSPARENT_U8);

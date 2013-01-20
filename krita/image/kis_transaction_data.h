@@ -52,7 +52,7 @@ private:
     void startUpdates();
 
 private:
-    struct Private;
+    class Private;
     Private * const m_d;
 };
 

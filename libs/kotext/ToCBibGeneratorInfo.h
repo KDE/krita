@@ -36,7 +36,7 @@ class KOTEXT_EXPORT IndexEntry
 public:
     enum IndexEntryName {UNKNOWN, LINK_START, CHAPTER, SPAN, TEXT, TAB_STOP, PAGE_NUMBER, LINK_END, BIBLIOGRAPHY};
 
-    IndexEntry(QString _styleName, IndexEntryName _name = IndexEntry::UNKNOWN);
+    explicit IndexEntry(const QString &_styleName, IndexEntryName _name = IndexEntry::UNKNOWN);
     virtual IndexEntry *clone();
     virtual ~IndexEntry();
     virtual void addAttributes(KoXmlWriter * writer) const;
@@ -50,7 +50,7 @@ public:
 class IndexEntryLinkStart : public IndexEntry
 {
 public:
-    IndexEntryLinkStart(QString _styleName);
+    explicit IndexEntryLinkStart(const QString &_styleName);
     IndexEntry *clone();
 };
 
@@ -58,7 +58,7 @@ public:
 class IndexEntryChapter : public IndexEntry
 {
 public:
-    IndexEntryChapter(QString _styleName);
+    explicit IndexEntryChapter(const QString &_styleName);
     IndexEntry *clone();
     virtual void addAttributes(KoXmlWriter* writer) const;
 
@@ -70,7 +70,7 @@ public:
 class  KOTEXT_EXPORT IndexEntrySpan : public IndexEntry
 {
 public:
-    IndexEntrySpan(QString _styleName);
+    explicit IndexEntrySpan(const QString &_styleName);
     IndexEntry *clone();
     virtual void addAttributes(KoXmlWriter* writer) const;
 
@@ -81,7 +81,7 @@ public:
 class IndexEntryText : public IndexEntry
 {
 public:
-    IndexEntryText(QString _styleName);
+    explicit IndexEntryText(const QString &_styleName);
     IndexEntry *clone();
 };
 
@@ -89,7 +89,7 @@ public:
 class KOTEXT_EXPORT IndexEntryTabStop : public IndexEntry
 {
 public:
-    IndexEntryTabStop(QString _styleName);
+    explicit IndexEntryTabStop(const QString &_styleName);
     IndexEntry *clone();
     virtual void addAttributes(KoXmlWriter* writer) const;
     // for saving let's save the original unit,
@@ -104,7 +104,7 @@ public:
 class IndexEntryPageNumber : public IndexEntry
 {
 public:
-    IndexEntryPageNumber(QString _styleName);
+    explicit IndexEntryPageNumber(const QString &_styleName);
     IndexEntry *clone();
 };
 
@@ -112,7 +112,7 @@ public:
 class IndexEntryLinkEnd : public IndexEntry
 {
 public:
-    IndexEntryLinkEnd(QString _styleName);
+    explicit IndexEntryLinkEnd(const QString &_styleName);
     IndexEntry *clone();
 };
 
@@ -167,7 +167,7 @@ public:
 class KOTEXT_EXPORT IndexEntryBibliography : public IndexEntry
 {
 public:
-    IndexEntryBibliography(QString _styleName);
+    explicit IndexEntryBibliography(const QString &_styleName);
     IndexEntry *clone();
     virtual void addAttributes(KoXmlWriter* writer) const;
 

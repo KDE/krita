@@ -1,5 +1,13 @@
 project( textPlugin)
 
+# only build the textdocument inspector in debug builds
+set(BUILD_TEXTDOCUMENT_INSPECTOR (CMAKE_BUILD_TYPE STREQUAL "Debug"))
+
+if(BUILD_TEXTDOCUMENT_INSPECTOR)
+    add_definitions(-DCREATE_TEXTDOCUMENT_INSPECTOR)
+endif(BUILD_TEXTDOCUMENT_INSPECTOR)
+
+
 add_subdirectory( pics )
 #add_subdirectory( tests )
 
@@ -97,6 +105,16 @@ SET ( textshape_SRCS
     commands/RejectChangeCommand.cpp
     commands/AutoResizeCommand.cpp
 )
+
+if(BUILD_TEXTDOCUMENT_INSPECTOR)
+    SET ( textshape_SRCS
+        ${textshape_SRCS}
+        TextDocumentStructureModel.cpp
+        TextDocumentInspectionDocker.cpp
+        TextDocumentInspectionDockerFactory.cpp
+    )
+endif(BUILD_TEXTDOCUMENT_INSPECTOR)
+
 
 kde4_add_ui_files(textshape_SRCS
     dialogs/SimpleCharacterWidget.ui

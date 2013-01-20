@@ -31,7 +31,7 @@ class Section : public QObject
 {
     Q_OBJECT
 public:
-    Section(KRSectionData*);
+    explicit Section(KRSectionData*);
 
     ~Section();
 

@@ -39,7 +39,7 @@ public:
     };
 
     KoMarkerData(KoMarker *marker, qreal width, MarkerPosition position, bool center);
-    KoMarkerData(MarkerPosition position);
+    explicit KoMarkerData(MarkerPosition position);
     KoMarkerData(const KoMarkerData &other);
     ~KoMarkerData();
 

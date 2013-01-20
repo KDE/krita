@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KO_PROGRESS_UPDATER__P_H
-#define KO_PROGRESS_UPDATER__P_H
+#ifndef KO_UPDATERPRIVATE__P_H
+#define KO_UPDATERPRIVATE__P_H
 
 #include "KoProgressUpdater.h"
 #include "KoProgressProxy.h"

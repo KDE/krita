@@ -45,7 +45,7 @@ public:
     * Constructs a KoResourceTagging object
     *
     */
-    KoResourceTagging(const QString& extensions);
+    explicit KoResourceTagging(const QString &extensions);
     ~KoResourceTagging();
 
     QStringList getAssignedTagsList(KoResource* resource);

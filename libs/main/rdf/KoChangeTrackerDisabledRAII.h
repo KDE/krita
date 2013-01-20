@@ -41,7 +41,7 @@ class KoChangeTracker;
 class KOMAIN_EXPORT KoChangeTrackerDisabledRAII
 {
 public:
-    KoChangeTrackerDisabledRAII(KoChangeTracker *changeTracker);
+    explicit KoChangeTrackerDisabledRAII(KoChangeTracker *changeTracker);
     ~KoChangeTrackerDisabledRAII();
 
 private:

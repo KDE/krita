@@ -67,7 +67,7 @@ public:
      * Create a new dialog.
      * @param parent the widget this dialog will use as a child.
      */
-    KoPrintingDialog(QWidget *parent);
+    explicit KoPrintingDialog(QWidget *parent);
     virtual ~KoPrintingDialog();
 
     /**

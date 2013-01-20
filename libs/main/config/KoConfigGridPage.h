@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOGRIDCONFIGPAGE_H
-#define KOGRIDCONFIGPAGE_H
+#ifndef KOCONFIGGRIDPAGE_H
+#define KOCONFIGGRIDPAGE_H
 
 #include <QWidget>
 
@@ -52,4 +52,4 @@ private:
     Private * const d;
 };
 
-#endif // KOGRIDCONFIGPAGE_H
+#endif // KOCONFIGGRIDPAGE_H

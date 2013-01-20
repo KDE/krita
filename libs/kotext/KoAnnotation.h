@@ -56,7 +56,7 @@ public:
      *
      * @param document the text document where this annotation is located
      */
-    KoAnnotation(const QTextCursor &);
+    explicit KoAnnotation(const QTextCursor &);
 
     virtual ~KoAnnotation();
 

@@ -531,8 +531,8 @@ void KoUnavailShape::Private::storeObjects(const KoXmlElement &element)
         // Save the normalized filename, i.e. without a starting "./".
         // An empty string is saved if no name is found.
         QString  name = el.attributeNS(KoXmlNS::xlink, "href", QString());
-        if (name.startsWith("./"))
-            name = name.mid(2);
+        if (name.startsWith(QLatin1String("./")))
+            name.remove(0, 2);
         object->objectName = name;
 
         // 2. Copy the XML code.
@@ -625,8 +625,8 @@ void KoUnavailShape::Private::storeFile(const QString &fileName, KoShapeLoadingC
     // Actually store the file in the list.
         FileEntry *entry = new FileEntry;
         entry->path = fileName;
-        if (entry->path.startsWith("./"))
-                    entry->path = entry->path.mid(2);
+        if (entry->path.startsWith(QLatin1String("./")))
+            entry->path.remove(0, 2);
         entry->mimeType = context.odfLoadingContext().mimeTypeForPath(entry->path);
         entry->isDir = false;
         entry->contents = fileContent;

@@ -36,7 +36,7 @@ class QGradient;
 class FLAKE_EXPORT SvgStyleParser
 {
 public:
-    SvgStyleParser(SvgLoadingContext &context);
+    explicit SvgStyleParser(SvgLoadingContext &context);
 
     /// Parses specified style attributes
     void parseStyle(const SvgStyles &styles);

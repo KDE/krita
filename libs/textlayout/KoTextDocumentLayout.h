@@ -50,7 +50,7 @@ class KoTextLayoutObstruction;
 class TEXTLAYOUT_EXPORT KoInlineObjectExtent
 {
 public:
-    KoInlineObjectExtent(qreal ascent = 0, qreal descent = 0);
+    explicit KoInlineObjectExtent(qreal ascent = 0, qreal descent = 0);
     qreal m_ascent;
     qreal m_descent;
 };

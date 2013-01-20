@@ -57,7 +57,6 @@
 #include <KoImageData.h>
 #include <KoImageCollection.h>
 #include <KoInlineNote.h>
-#include <KoInlineNote.h>
 #include <KoTextSoftPageBreak.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTableOfContentsGeneratorInfo.h>
@@ -893,7 +892,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                     QRectF rect = fm.tightBoundingRect(dropCapsText);
                     const qreal diff = dropCapsHeight - rect.height();
                     dropCapsPositionAdjust = rect.top() + fm.ascent();
-                    if (qAbs(diff < 0.5)) // good enough
+                    if (qAbs(diff) < 0.5) // good enough
                         break;
 
                     const qreal adjustment = diff * (f.pointSizeF() / rect.height());

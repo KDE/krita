@@ -510,26 +510,26 @@ bool KisAbrBrushCollection::load()
     if (!file.open(QIODevice::ReadOnly))
     {
         warnKrita << "Can't open file " << filename();
-        return -1;
+        return false;
     }
     QDataStream abr(&file);
 
     if (!abr_read_content (abr, &abr_hdr))
     {
         warnKrita << "Error: cannot parse ABR file: " << filename();
-        return -1;
+        return false;
     }
 
     if (!abr_supported_content (&abr_hdr))
     {
         warnKrita << "ERROR: unable to decode abr format version " << abr_hdr.version << "(subver " << abr_hdr.subversion << ")";
-        return -1;
+        return false;
     }
 
     if (abr_hdr.count == 0)
     {
         errKrita << "ERROR: no sample brush found in " << filename();
-        return -1;
+        return false;
     }
 
     image_ID = 123456;

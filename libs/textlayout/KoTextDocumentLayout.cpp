@@ -402,7 +402,12 @@ void KoTextDocumentLayout::drawInlineObject(QPainter *painter, const QRectF &rec
         return;
     QTextCharFormat cf = format.toCharFormat();
     if (d->showInlineObjectVisualization) {
-        cf.setBackground(QBrush(Qt::gray));
+        QColor color = cf.foreground().color();
+        // initial idea was to use Qt::gray (#A0A0A4)
+        // for non-black text on non-white background it was derived to use
+        // the text color with a transparency of 0x5F, so white-gray (0xFF-0xA0)
+        color.setAlpha(0x5F);
+        cf.setBackground(QBrush(color));
     }
     KoInlineObject *obj = d->inlineTextObjectManager->inlineTextObject(cf);
     if (obj)

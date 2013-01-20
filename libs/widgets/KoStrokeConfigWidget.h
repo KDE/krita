@@ -43,7 +43,7 @@ class KOWIDGETS_EXPORT KoStrokeConfigWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KoStrokeConfigWidget(QWidget * parent);
+    explicit KoStrokeConfigWidget(QWidget *parent);
     ~KoStrokeConfigWidget();
 
     // Getters

@@ -104,7 +104,7 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
     d->tabBar = new QTabBar();
     d->tabBar->setShape(QTabBar::RoundedWest);
     d->tabBar->setExpanding(false);
-    d->tabBar->setIconSize(QSize(48,64));
+    d->tabBar->setIconSize(QSize(32,64));
     d->tabBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     layout->addWidget(d->tabBar, 0, 0);
 
@@ -112,6 +112,7 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
     layout->addWidget(d->stack, 0, 1);
 
     layout->setContentsMargins(0,0,0,0);
+    layout->setColumnStretch(1, 100);
     setLayout(layout);
 
     foreach(const KoToolButton &button, KoToolManager::instance()->createToolList(canvas->canvas())) {
@@ -186,16 +187,16 @@ QIcon KoModeBox::createRotatedIcon(const KoToolButton button)
 
     button.button->icon().paint(&p, 0, 0, iconSize.height(), 22);
 
-    QTextLayout textLayout(button.button->toolTip(), smallFont);
+    QTextLayout textLayout(button.button->toolTip(), smallFont, p.device());
     QTextOption option(Qt::AlignTop | Qt::AlignHCenter);
     option.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
     textLayout.setTextOption(option);
     textLayout.beginLayout();
     qreal height = 0;
     while (1) {
-     QTextLine line = textLayout.createLine();
-     if (!line.isValid())
-         break;
+        QTextLine line = textLayout.createLine();
+        if (!line.isValid())
+            break;
 
         line.setLineWidth(iconSize.height());
         line.setPosition(QPointF(0, height));
@@ -203,8 +204,15 @@ QIcon KoModeBox::createRotatedIcon(const KoToolButton button)
     }
     textLayout.endLayout();
 
-    if (textLayout.lineCount() > 2)
+    if (textLayout.lineCount() > 2) {
+        iconSize.setHeight(iconSize.height() + 8);
+        d->tabBar->setIconSize(iconSize);
         d->iconTextFitted = false;
+    } else if (height > iconSize.width() - 22) {
+        iconSize.setWidth(22 + height);
+        d->tabBar->setIconSize(iconSize);
+        d->iconTextFitted = false;
+    }
 
     p.setFont(smallFont);
     textLayout.draw(&p, QPoint(0, 22));
@@ -245,11 +253,7 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
         return;
     }
 
-    if (!d->iconTextFitted) {
-        QSize size = d->tabBar->iconSize();
-        size.setHeight(size.height() + 8);
-        d->tabBar->setIconSize(size);
-    } else {
+    if (d->iconTextFitted) {
         d->fittingIterations = 0;
     }
     d->iconTextFitted = true;
@@ -298,7 +302,7 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
     }
     blockSignals(false);
 
-    if (!d->iconTextFitted &&  d->fittingIterations++ < 4) {
+    if (!d->iconTextFitted &&  d->fittingIterations++ < 8) {
         updateShownTools(canvas, codes);
     }
     d->iconTextFitted = true;

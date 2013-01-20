@@ -152,7 +152,7 @@ public:
      * The constructor
      * @param parent a pointer to the parent object
      */
-    KoDocumentRdf(QObject *parent = 0);
+    explicit KoDocumentRdf(QObject *parent = 0);
 
     /** The destructor */
     ~KoDocumentRdf();

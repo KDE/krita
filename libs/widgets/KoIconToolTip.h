@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KORESOURCECHOOSER_H
-#define KORESOURCECHOOSER_H
+#ifndef KOICONTOOLTIP_H
+#define KOICONTOOLTIP_H
 
 #include "KoItemToolTip.h"
 
@@ -37,4 +37,4 @@ class KoIconToolTip: public KoItemToolTip
         typedef KoItemToolTip super;
 };
 
-#endif // KORESOURCECHOOSER_H
+#endif // KOICONTOOLTIP_H

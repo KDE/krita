@@ -53,7 +53,7 @@ class KoSopranoTableModel : public QAbstractTableModel
 
 public:
 
-    KoSopranoTableModel(KoDocumentRdf* rdf);
+    explicit KoSopranoTableModel(KoDocumentRdf *rdf);
 
     /**
      * Get the RDF model we this class is showing.

@@ -25,7 +25,7 @@
 class KoInteractionStrategyPrivate
 {
 public:
-    KoInteractionStrategyPrivate(KoToolBase *t)
+    explicit KoInteractionStrategyPrivate(KoToolBase *t)
         : tool(t)
     {
     }

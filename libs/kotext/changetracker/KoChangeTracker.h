@@ -50,7 +50,7 @@ public:
         UNKNOWN = 9999
     };
 
-    KoChangeTracker(QObject *parent = 0);
+    explicit KoChangeTracker(QObject *parent = 0);
     ~KoChangeTracker();
 
     void setRecordChanges(bool enabled);

@@ -81,8 +81,8 @@ bool KoFormulaShapeFactory::supports(const KoXmlElement& e, KoShapeLoadingContex
         QString href = e.attribute("href");
         if (!href.isEmpty()) {
             // check the mimetype
-            if (href.startsWith("./")) {
-                href.remove(0,2);
+            if (href.startsWith(QLatin1String("./"))) {
+                href.remove(0, 2);
             }
 
             const QString mimetype = context.odfLoadingContext().mimeTypeForPath(href);

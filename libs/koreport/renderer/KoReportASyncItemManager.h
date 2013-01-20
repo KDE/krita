@@ -40,7 +40,7 @@ class KoReportASyncItemManager : public QObject
     Q_OBJECT
     
 public:
-    KoReportASyncItemManager(QObject *parent);
+    explicit KoReportASyncItemManager(QObject *parent);
     virtual ~KoReportASyncItemManager();
     
     void addItem(KoReportASyncItemBase *item, OROPage *page, OROSection *section, QPointF offset, QVariant data, KRScriptHandler *script);

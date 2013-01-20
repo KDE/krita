@@ -50,7 +50,7 @@ public:
      *
      * @param parent parent QWidget
      */
-    KoSliderCombo(QWidget *parent=0);
+    explicit KoSliderCombo(QWidget *parent=0);
 
     /**
      * Destructor

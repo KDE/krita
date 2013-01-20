@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOOASISSTYLES_H
-#define KOOASISSTYLES_H
+#ifndef KOODFSTYLESREADER_H
+#define KOODFSTYLESREADER_H
 
 #include <QHash>
 #include <QList>
@@ -179,4 +179,4 @@ private:
     Private * const d;
 };
 
-#endif /* KOOASISSTYLES_H */
+#endif /* KOODFSTYLESREADER_H */

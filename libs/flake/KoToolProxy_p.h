@@ -32,7 +32,7 @@ class KoToolProxy;
 class KoToolProxyPrivate
 {
 public:
-    KoToolProxyPrivate(KoToolProxy *p);
+    explicit KoToolProxyPrivate(KoToolProxy *p);
 
     void timeout(); // Auto scroll the canvas
 

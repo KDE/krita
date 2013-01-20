@@ -62,7 +62,7 @@ bool SvgShapeFactory::supports(const KoXmlElement &element, KoShapeLoadingContex
             return false;
 
         // check the mimetype
-        if (href.startsWith("./")) {
+        if (href.startsWith(QLatin1String("./"))) {
             href.remove(0,2);
         }
 
@@ -88,7 +88,7 @@ KoShape *SvgShapeFactory::createShapeFromOdf(const KoXmlElement &element, KoShap
             return 0;
 
         // check the mimetype
-        if (href.startsWith("./")) {
+        if (href.startsWith(QLatin1String("./"))) {
             href.remove(0,2);
         }
         QString mimetype = context.odfLoadingContext().mimeTypeForPath(href);

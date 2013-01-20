@@ -58,7 +58,7 @@ public:
      * @param id a string that will be used internally for referencing the tool, for
      *   example for use by the KoToolBase::activateTemporary.
      */
-    KoToolFactoryBase(const QString &id);
+    explicit KoToolFactoryBase(const QString &id);
     virtual ~KoToolFactoryBase();
 
     /**

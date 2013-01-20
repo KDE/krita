@@ -166,7 +166,7 @@ public:
                 QString extension = mime->property("X-KDE-NativeExtension").toString();
 
                 if (title.endsWith(extension))
-                    title.truncate(title.length() - extension.length());
+                    title.chop(extension.length());
             }
         }
 
@@ -1114,6 +1114,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
     if (!ret && reset_url)
         d->rootDocument->resetURL(); //clean the suggested filename as the save dialog was rejected
 
+    updateReloadFileAction(d->rootDocument);
     updateCaption();
 
     return ret;

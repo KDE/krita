@@ -262,7 +262,7 @@ class PIGMENTCMS_EXPORT KoSegmentGradient : public KoAbstractGradient
 {
 
 public:
-    KoSegmentGradient(const QString& file);
+    explicit KoSegmentGradient(const QString &file);
     virtual ~KoSegmentGradient();
 
     /// reimplemented

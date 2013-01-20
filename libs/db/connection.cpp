@@ -1790,6 +1790,52 @@ bool Connection::createTable(KexiDB::TableSchema* tableSchema, bool replaceExist
     return res;
 }
 
+TableSchema *Connection::copyTable(const TableSchema &tableSchema, const KexiDB::SchemaData &newData)
+{
+    clearError();
+    if (this->tableSchema(tableSchema.name()) != &tableSchema) {
+        setError(ERR_OBJECT_NOT_FOUND, i18n("Table \"%1\" does not exist in the database.",
+                                            tableSchema.name()));
+        return 0;
+    }
+    TableSchema *copiedTable = new TableSchema(tableSchema, false /* !copyId*/);
+    // copy name, caption, description
+    copiedTable->setName(newData.name());
+    copiedTable->setCaption(newData.caption());
+    copiedTable->setDescription(newData.description());
+    // copy the structure and data
+    if (!createTable(copiedTable, false /* !replaceExisting */)) {
+        delete copiedTable;
+        return 0;
+    }
+    if (!drv_copyTableData(tableSchema, *copiedTable)) {
+        dropTable(copiedTable);
+        delete copiedTable;
+        return 0;
+    }
+    return copiedTable;
+}
+
+TableSchema *Connection::copyTable(const QString& table, const KexiDB::SchemaData &newData)
+{
+    clearError();
+    TableSchema* ts = tableSchema(table);
+    if (!ts) {
+        setError(ERR_OBJECT_NOT_FOUND, i18n("Table \"%1\" does not exist.",
+                                            table));
+        return 0;
+    }
+    return copyTable(*ts, newData);
+}
+
+bool Connection::drv_copyTableData(const TableSchema &tableSchema, TableSchema &destinationTableSchema)
+{
+    QString sql(QString::fromLatin1("INSERT INTO %1 SELECT * FROM %2")
+                .arg(escapeIdentifier(destinationTableSchema.name()))
+                .arg(escapeIdentifier(tableSchema.name())));
+    return executeSQL(sql);
+}
+
 bool Connection::removeObject(uint objId)
 {
     clearError();
@@ -3070,6 +3116,24 @@ bool Connection::storeDataBlock(int objectID, const QString &dataString, const Q
                QString::fromLatin1("INSERT INTO kexi__objectdata (o_id, o_data, o_sub_id) VALUES (")
                + QString::number(objectID) + "," + m_driver->valueToSQL(KexiDB::Field::LongText, dataString)
                + "," + m_driver->valueToSQL(KexiDB::Field::Text, dataID) + ")");
+}
+
+bool Connection::copyDataBlock(int sourceObjectID, int destObjectID, const QString& dataID)
+{
+    if (sourceObjectID <= 0 || destObjectID <= 0)
+        return false;
+    if (sourceObjectID == destObjectID)
+        return true;
+    if (!removeDataBlock(destObjectID, dataID)) // remove before copying
+        return false;
+    QString sql(QString::fromLatin1(
+         "INSERT INTO kexi__objectdata SELECT %1, t.o_data, t.o_sub_id "
+         "FROM kexi__objectdata AS t WHERE o_id=%2")
+         .arg(destObjectID).arg(sourceObjectID));
+    if (!dataID.isEmpty()) {
+        sql += " AND " + KexiDB::sqlWhere(m_driver, KexiDB::Field::Text, "o_sub_id", dataID);
+    }
+    return executeSQL(sql);
 }
 
 bool Connection::removeDataBlock(int objectID, const QString& dataID)

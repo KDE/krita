@@ -28,7 +28,7 @@ public:
     const KoDocumentRdf *m_rdf;    //< For access to the Rdf model during CRUD operations
     Soprano::Node m_context; //< This determines the Rdf/XML file the Rdf is stored in (see context())
 
-    KoRdfSemanticItemPrivate (const KoDocumentRdf *rdf);
+    explicit KoRdfSemanticItemPrivate (const KoDocumentRdf *rdf);
     KoRdfSemanticItemPrivate (const KoDocumentRdf *rdf,Soprano::QueryResultIterator &it);
 };
 

@@ -66,7 +66,7 @@ class KUndo2Model : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    KUndo2Model(QObject *parent = 0);
+    explicit KUndo2Model(QObject *parent = 0);
 
     KUndo2QStack *stack() const;
 

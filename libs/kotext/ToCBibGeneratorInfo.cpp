@@ -20,7 +20,7 @@
 
 #include "ToCBibGeneratorInfo.h"
 
-IndexEntry::IndexEntry(QString _styleName, IndexEntry::IndexEntryName _name)
+IndexEntry::IndexEntry(const QString &_styleName, IndexEntry::IndexEntryName _name)
         :   styleName(_styleName),
             name(_name)
 {
@@ -83,7 +83,7 @@ void IndexEntry::saveOdf(KoXmlWriter* writer) const
     writer->endElement();
 }
 
-IndexEntryBibliography::IndexEntryBibliography(QString _styleName)
+IndexEntryBibliography::IndexEntryBibliography(const QString &_styleName)
     : IndexEntry(_styleName, IndexEntry::BIBLIOGRAPHY)
     , dataField(QString())
 {
@@ -105,9 +105,8 @@ void IndexEntryBibliography::addAttributes(KoXmlWriter* writer) const
 }
 
 
-IndexEntrySpan::IndexEntrySpan(QString _styleName): IndexEntry(_styleName, IndexEntry::SPAN)
+IndexEntrySpan::IndexEntrySpan(const QString &_styleName): IndexEntry(_styleName, IndexEntry::SPAN)
 {
-    text = QString();
 }
 
 IndexEntry *IndexEntrySpan::clone()
@@ -124,7 +123,7 @@ void IndexEntrySpan::addAttributes(KoXmlWriter* writer) const
     }
 }
 
-IndexEntryTabStop::IndexEntryTabStop(QString _styleName): IndexEntry(_styleName, IndexEntry::TAB_STOP)
+IndexEntryTabStop::IndexEntryTabStop(const QString &_styleName): IndexEntry(_styleName, IndexEntry::TAB_STOP)
 {
 
 }
@@ -222,7 +221,7 @@ void IndexSourceStyles::saveOdf(KoXmlWriter* writer) const
     writer->endElement();
 }
 
-IndexEntryPageNumber::IndexEntryPageNumber(QString _styleName): IndexEntry(_styleName, IndexEntry::PAGE_NUMBER)
+IndexEntryPageNumber::IndexEntryPageNumber(const QString &_styleName): IndexEntry(_styleName, IndexEntry::PAGE_NUMBER)
 {
 
 }
@@ -233,7 +232,7 @@ IndexEntry *IndexEntryPageNumber::clone()
     return newIndexEntry;
 }
 
-IndexEntryLinkEnd::IndexEntryLinkEnd(QString _styleName): IndexEntry(_styleName, IndexEntry::LINK_END)
+IndexEntryLinkEnd::IndexEntryLinkEnd(const QString &_styleName): IndexEntry(_styleName, IndexEntry::LINK_END)
 {
 
 }
@@ -272,7 +271,7 @@ void TocEntryTemplate::saveOdf(KoXmlWriter* writer) const
     writer->endElement();
 }
 
-IndexEntryText::IndexEntryText(QString _styleName): IndexEntry(_styleName,IndexEntry::TEXT)
+IndexEntryText::IndexEntryText(const QString &_styleName): IndexEntry(_styleName,IndexEntry::TEXT)
 {
 
 }
@@ -283,7 +282,7 @@ IndexEntry *IndexEntryText::clone()
     return newIndexEntry;
 }
 
-IndexEntryLinkStart::IndexEntryLinkStart(QString _styleName)
+IndexEntryLinkStart::IndexEntryLinkStart(const QString &_styleName)
     : IndexEntry(_styleName, IndexEntry::LINK_START)
 {
 
@@ -295,7 +294,7 @@ IndexEntry *IndexEntryLinkStart::clone()
 }
 
 
-IndexEntryChapter::IndexEntryChapter(QString _styleName)
+IndexEntryChapter::IndexEntryChapter(const QString &_styleName)
     : IndexEntry(_styleName, IndexEntry::CHAPTER)
     , display(QString())
     , outlineLevel(INVALID_OUTLINE_LEVEL)

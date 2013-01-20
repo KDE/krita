@@ -43,7 +43,7 @@ class FLAKE_EXPORT KoDeferredShapeFactoryBase : public QObject
     Q_OBJECT
 public:
 
-    KoDeferredShapeFactoryBase(QObject *parent);
+    explicit KoDeferredShapeFactoryBase(QObject *parent);
 
     virtual ~KoDeferredShapeFactoryBase();
 

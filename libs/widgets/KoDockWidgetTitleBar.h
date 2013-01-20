@@ -33,7 +33,7 @@ class KOWIDGETS_EXPORT KoDockWidgetTitleBar : public QWidget
 {
     Q_OBJECT
 public:
-    KoDockWidgetTitleBar(QDockWidget* dockWidget);
+    explicit KoDockWidgetTitleBar(QDockWidget *dockWidget);
     virtual ~KoDockWidgetTitleBar();
 
     virtual QSize minimumSizeHint() const; ///< reimplemented from QWidget

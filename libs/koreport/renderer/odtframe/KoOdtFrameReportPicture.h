@@ -33,7 +33,7 @@ class OROPrimitive;
 class KoOdtFrameReportPicture : public KoOdtFrameReportPrimitive
 {
 public:
-    KoOdtFrameReportPicture(OROPrimitive *primitive);
+    explicit KoOdtFrameReportPicture(OROPrimitive *primitive);
     virtual ~KoOdtFrameReportPicture();
 
     virtual void createBody(KoXmlWriter *bodyWriter) const;

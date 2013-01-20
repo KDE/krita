@@ -79,7 +79,7 @@ public:
 class KoTextVisitor
 {
 public:
-    KoTextVisitor(KoTextEditor *editor)
+    explicit KoTextVisitor(KoTextEditor *editor)
         : m_abortVisiting(false)
         , m_editor(editor)
     {

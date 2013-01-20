@@ -34,7 +34,7 @@ namespace KexiDB
 class CALLIGRADB_EXPORT SchemaData
 {
 public:
-    SchemaData(int obj_type = KexiDB::UnknownObjectType);
+    explicit SchemaData(int obj_type = KexiDB::UnknownObjectType);
     virtual ~SchemaData();
 
     int type() const {

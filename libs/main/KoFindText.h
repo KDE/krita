@@ -68,7 +68,7 @@ public:
     /**
      * Constructor.
      */
-    KoFindText(QObject *parent = 0);
+    explicit KoFindText(QObject *parent = 0);
     virtual ~KoFindText();
 
     /**

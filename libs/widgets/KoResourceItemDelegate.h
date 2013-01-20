@@ -27,7 +27,7 @@
 class KoResourceItemDelegate : public QAbstractItemDelegate
 {
 public:
-    KoResourceItemDelegate( QObject * parent = 0 );
+    explicit KoResourceItemDelegate(QObject *parent = 0);
     virtual ~KoResourceItemDelegate() {}
     /// reimplemented
     virtual void paint( QPainter *, const QStyleOptionViewItem &, const QModelIndex & ) const;

@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOCOMPOSITEO_BASE_H_
-#define KOCOMPOSITEO_BASE_H_
+#ifndef KOCOMPOSITEOP_BASE_H_
+#define KOCOMPOSITEOP_BASE_H_
 
 #include <KoCompositeOp.h>
 #include "KoCompositeOpFunctions.h"
@@ -131,4 +131,4 @@ private:
     }
 };
 
-#endif // KOCOMPOSITEO_BASE_H_
+#endif // KOCOMPOSITEOP_BASE_H_

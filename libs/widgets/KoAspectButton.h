@@ -31,7 +31,7 @@ class KOWIDGETS_EXPORT KoAspectButton : public QAbstractButton {
     Q_OBJECT
 public:
     /// constructor
-    KoAspectButton(QWidget *parent);
+    explicit KoAspectButton(QWidget *parent);
     virtual ~KoAspectButton();
 
     /// Returns of keeping aspect ratio is on or off

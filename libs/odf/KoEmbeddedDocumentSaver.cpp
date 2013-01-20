@@ -217,8 +217,8 @@ bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments(KoOdfDocument::SavingContext
                 path += '/';
             }
             path += doc->url().path();
-            if (path.startsWith('/')) {
-                path = path.mid(1);   // remove leading '/', no wanted in manifest
+            if (path.startsWith(QLatin1Char('/'))) {
+                path.remove(0, 1);   // remove leading '/', no wanted in manifest
             }
         }
 
@@ -253,8 +253,8 @@ bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments(KoOdfDocument::SavingContext
         store->popDirectory();
 
         // Create the manifest entry.
-        if (path.startsWith("./")) {
-            path = path.mid(2);   // remove leading './', not wanted in manifest
+        if (path.startsWith(QLatin1String("./"))) {
+            path.remove(0, 2);   // remove leading './', not wanted in manifest
         }
         documentContext.odfStore.manifestWriter()->addManifestEntry(path, entry->mimeType);
     }

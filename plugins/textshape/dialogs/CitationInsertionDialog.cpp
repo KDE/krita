@@ -63,9 +63,9 @@ void CitationInsertionDialog::insert()
     }
     KoInlineCite *cite = m_editor->insertCitation();
     if (dialog.shortName->text().isEmpty()) {
-        dialog.shortName->setText(QString(i18n("Short name%1")).arg(
-                                      QString::number(KoTextDocument(m_editor->document())
-                                                      .inlineTextObjectManager()->citations().count())));
+        const int number =
+            KoTextDocument(m_editor->document()).inlineTextObjectManager()->citations().count();
+        dialog.shortName->setText(i18n("Short name%1", number));
 
         dialog.shortName->setSelection(dialog.shortName->text().length(),0);
     }
@@ -81,9 +81,9 @@ void CitationInsertionDialog::selectionChangedFromExistingCites()
     } else if (dialog.existingCites->currentIndex() == 0) {
         KoInlineCite *blankCite = new KoInlineCite(KoInlineCite::Citation);
         blankCite->setBibliographyType("Article");      //default bibliography type
-        blankCite->setIdentifier(QString(i18n("Short name%1")).arg(
-                                      QString::number(KoTextDocument(m_editor->document())
-                                                      .inlineTextObjectManager()->citations().count()+1)));
+        const int number =
+            KoTextDocument(m_editor->document()).inlineTextObjectManager()->citations().count() + 1;
+        blankCite->setIdentifier(i18n("Short name%1", number));
         fillValuesFrom(blankCite);
     }
 }

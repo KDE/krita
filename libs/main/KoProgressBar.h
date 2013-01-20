@@ -34,7 +34,7 @@ class KOMAIN_EXPORT KoProgressBar : public QProgressBar, public KoProgressProxy
     Q_OBJECT
 public:
 
-    KoProgressBar(QWidget *parent = 0);
+    explicit KoProgressBar(QWidget *parent = 0);
 
     ~KoProgressBar();
 

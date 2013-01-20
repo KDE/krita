@@ -39,7 +39,7 @@ class KoColor;
 class KoColorSpace;
 
 class KisAbrBrush;
-class AbrInfo;
+struct AbrInfo;
 
 /**
  * load a collection of brushes from an abr file

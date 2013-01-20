@@ -36,7 +36,7 @@ public:
     /**
      * @param fileName file name to load or save that profile
      */
-    KoColorProfile(const QString &fileName = "");
+    explicit KoColorProfile(const QString &fileName = QString());
     KoColorProfile(const KoColorProfile& profile);
     virtual ~KoColorProfile();
 

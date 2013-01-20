@@ -72,7 +72,7 @@ public:
         Grammar
     };
 
-    KoTextBlockData(QTextBlock &block);
+    explicit KoTextBlockData(QTextBlock &block);
     explicit KoTextBlockData(QTextBlockUserData *userData);
     virtual ~KoTextBlockData();
 

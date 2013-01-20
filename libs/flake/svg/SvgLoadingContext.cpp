@@ -143,7 +143,7 @@ QString SvgLoadingContext::absoluteFilePath(const QString &href)
 
     QString relFile = href;
     while (relFile.startsWith(QLatin1String("../"))) {
-        relFile = relFile.mid(3);
+        relFile.remove(0, 3);
         pathInfo.setFile(pathInfo.dir(), QString());
     }
 

@@ -27,7 +27,7 @@
 class KoReportImagePlugin : public KoReportPluginInterface
 {
     public:
-    KoReportImagePlugin(QObject *parent, const QVariantList &args = QVariantList());
+    explicit KoReportImagePlugin(QObject *parent, const QVariantList &args = QVariantList());
     virtual ~KoReportImagePlugin();
 
     virtual QObject* createRendererInstance(QDomNode& element);

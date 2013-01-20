@@ -26,7 +26,7 @@ class KoShapeGroup;
 class KoSelectionPrivate : public KoShapePrivate
 {
 public:
-    KoSelectionPrivate(KoSelection *parent)
+    explicit KoSelectionPrivate(KoSelection *parent)
         : KoShapePrivate(parent), eventTriggered(false), activeLayer(0), q(parent) {}
     QList<KoShape*> selectedShapes;
     bool eventTriggered;

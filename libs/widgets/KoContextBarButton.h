@@ -34,7 +34,7 @@ class QTimeLine;
 class KoContextBarButton : public QToolButton {
     Q_OBJECT
 public:
-    KoContextBarButton(const QString &iconName, QWidget* parent=0);
+    explicit KoContextBarButton(const QString &iconName, QWidget *parent = 0);
     ~KoContextBarButton();
 
 public slots:

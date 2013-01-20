@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KODEVICEREGISTRY_H
-#define KODEVICEREGISTRY_H
+#ifndef KOINPUTDEVICEHANDLERREGISTRY_H
+#define KOINPUTDEVICEHANDLERREGISTRY_H
 
 #include <QObject>
 
@@ -53,4 +53,4 @@ private:
     Private *d;
 };
 
-#endif // KODEVICEREGISTRY_H
+#endif // KOINPUTDEVICEHANDLERREGISTRY_H

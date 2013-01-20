@@ -29,7 +29,7 @@ namespace Scripting
     {
         Q_OBJECT
         public:
-            Check(KoReportItemCheck *);
+            explicit Check(KoReportItemCheck *);
 
             ~Check();
 

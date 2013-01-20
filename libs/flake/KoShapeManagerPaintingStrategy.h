@@ -41,7 +41,7 @@ class QRectF;
 class FLAKE_EXPORT KoShapeManagerPaintingStrategy
 {
 public:
-    KoShapeManagerPaintingStrategy(KoShapeManager *shapeManager);
+    explicit KoShapeManagerPaintingStrategy(KoShapeManager *shapeManager);
     virtual ~KoShapeManagerPaintingStrategy();
 
     /**

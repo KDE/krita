@@ -26,7 +26,7 @@
 class KOWIDGETS_EXPORT KoTriangleColorSelector : public QWidget {
     Q_OBJECT
     public:
-        KoTriangleColorSelector(QWidget* parent);
+        explicit KoTriangleColorSelector(QWidget *parent);
         ~KoTriangleColorSelector();
     protected: // events
         void paintEvent( QPaintEvent * event );

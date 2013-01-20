@@ -23,7 +23,7 @@
 #include "kis_resources_snapshot.h"
 
 class KisPainter;
-class KisDistanceInformation;
+struct KisDistanceInformation;
 class KisTransaction;
 
 

@@ -29,7 +29,7 @@
 class KoShapePrivate
 {
 public:
-    KoShapePrivate(KoShape *shape);
+    explicit KoShapePrivate(KoShape *shape);
     virtual ~KoShapePrivate();
     /**
      * Notify the shape that a change was done. To be used by inheriting shapes.

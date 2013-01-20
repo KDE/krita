@@ -58,7 +58,7 @@ public:
      * The constructor
      * @param parent a pointer to the parent object
      */
-    KoDocumentInfo(QObject* parent = 0);
+    explicit KoDocumentInfo(QObject *parent = 0);
 
     /** The destructor */
     ~KoDocumentInfo();

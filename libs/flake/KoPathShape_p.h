@@ -25,7 +25,7 @@
 class KoPathShapePrivate : public KoTosContainerPrivate
 {
 public:
-    KoPathShapePrivate(KoPathShape *q);
+    explicit KoPathShapePrivate(KoPathShape *q);
 
     QRectF handleRect(const QPointF &p, qreal radius) const;
     /// Applies the viewbox transformation defined in the given element

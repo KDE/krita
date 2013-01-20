@@ -1379,6 +1379,9 @@ void KoTextEditor::insertBibliography(KoBibliographyInfo *info)
     bibFormat.setProperty( KoParagraphStyle::BibliographyData, QVariant::fromValue<KoBibliographyInfo*>(newBibInfo));
     bibFormat.setProperty( KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(bibDocument));
 
+    //make sure we set up the textrangemanager on the subdocument as well
+    KoTextDocument(bibDocument).setTextRangeManager(new KoTextRangeManager);
+
     KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
     if (changeTracker && changeTracker->recordChanges()) {
         QTextCharFormat charFormat = d->caret.charFormat();

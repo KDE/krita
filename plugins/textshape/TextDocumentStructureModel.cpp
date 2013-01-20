@@ -48,7 +48,6 @@ NodeData NodeData::fromFrame(QTextFrame* frame)
 
 TextDocumentStructureModel::TextDocumentStructureModel(QObject *parent)
   : QAbstractItemModel(parent)
-  , m_textDocument(0)
 {
     connect(this, SIGNAL(modelReset()), SLOT(onModelReset()));
 }

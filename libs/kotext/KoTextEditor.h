@@ -133,6 +133,7 @@ private:
     friend class DeleteCommand;
     friend class InsertInlineObjectCommand;
     friend class InsertNoteCommand;
+    friend class ParagraphFormattingCommand;
 
     // for unittests
     friend class TestKoInlineTextObjectManager;
@@ -211,7 +212,7 @@ public slots:
 
     void mergeAutoStyle(const QTextCharFormat &deltaCharFormat);
 
-    void mergeAutoStyle(const QTextCharFormat &deltaCharFormat, const QTextBlockFormat &deltaBlockFormat);
+    void applyDirectFormatting(const QTextCharFormat &deltaCharFormat, const QTextBlockFormat &deltaBlockFormat, const KoListLevelProperties &llp);
 
     /**
      * Insert an inlineObject (such as a variable) at the current cursor position. Possibly replacing the selection.
@@ -283,7 +284,7 @@ public slots:
      * change the current block's list properties
      */
     void setListProperties(const KoListLevelProperties &llp,
-                           ChangeListFlags flags = ChangeListFlags(ModifyExistingList | MergeWithAdjacentList));
+                           ChangeListFlags flags = ChangeListFlags(ModifyExistingList | MergeWithAdjacentList), KUndo2Command *parent = 0);
 
     // -------------------------------------------------------------
     // Wrapped QTextCursor methods

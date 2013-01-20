@@ -234,7 +234,11 @@ void ChangeListCommand::redo()
 {
     if (!m_first) {
         for (int i = 0; i < m_blocks.size(); ++i) { // We invalidate the lists before calling redo on the QTextDocument
-            if (m_actions.value(i) == ChangeListCommand::RemoveList)
+            if (m_actions.value(i) == ChangeListCommand::RemoveList) {
+                //if the block is not part of a list continue
+                if (!m_blocks.at(i).textList()) {
+                    continue;
+                }
                 for (int j = 0; j < m_blocks.at(i).textList()->count(); j++) {
                     if (m_blocks.at(i).textList()->item(j) != m_blocks.at(i)) {
                         QTextBlock currentBlock = m_blocks.at(i).textList()->item(j);
@@ -243,6 +247,7 @@ void ChangeListCommand::redo()
                         break;
                     }
                 }
+            }
         }
         KoTextCommandBase::redo();
         UndoRedoFinalizer finalizer(this);
@@ -269,6 +274,10 @@ void ChangeListCommand::redo()
     else {
         for (int i = 0; i < m_blocks.size(); ++i) {
             if (m_actions.value(i) == ChangeListCommand::RemoveList) {
+                //if the block is not part of a list continue
+                if (!m_blocks.at(i).textList()) {
+                    continue;
+                }
                 KoList::remove(m_blocks.at(i));
             }
             else if (m_actions.value(i) == ChangeListCommand::ModifyExisting) {
@@ -301,6 +310,10 @@ void ChangeListCommand::undo()
     for (int i = 0; i < m_blocks.size(); ++i) {
         // command to undo:
         if (m_actions.value(i) == ChangeListCommand::RemoveList) {
+            //if the block is not part of a list continue
+            if (!m_blocks.at(i).textList()) {
+                continue;
+            }
             m_oldList.value(i)->updateStoredList(m_blocks.at(i));
             if ((m_flags & KoTextEditor::ModifyExistingList) && (m_formerProperties.value(i).style() != KoListStyle::None)) {
                 KoListStyle *listStyle = m_oldList.value(i)->style();

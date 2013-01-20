@@ -755,7 +755,7 @@ void KoTextEditor::toggleListNumbering(bool numberingEnabled)
 }
 
 void KoTextEditor::setListProperties(const KoListLevelProperties &llp,
-                                     ChangeListFlags flags)
+                                     ChangeListFlags flags, KUndo2Command *parent)
 {
     if (isEditProtected()) {
         return;
@@ -779,7 +779,7 @@ void KoTextEditor::setListProperties(const KoListLevelProperties &llp,
         }
     }
 
-    addCommand(new ChangeListCommand(d->caret, llp, flags));
+    addCommand(new ChangeListCommand(d->caret, llp, flags, parent));
     emit textFormatChanged();
 }
 

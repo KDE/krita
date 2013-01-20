@@ -204,8 +204,6 @@ QIcon KoModeBox::createRotatedIcon(const KoToolButton button)
     }
     textLayout.endLayout();
 
-
-    qDebug()<<button.button->toolTip()<<textLayout.lineCount();
     if (textLayout.lineCount() > 2) {
         iconSize.setHeight(iconSize.height() + 8);
         d->tabBar->setIconSize(iconSize);

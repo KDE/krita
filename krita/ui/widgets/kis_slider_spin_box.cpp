@@ -423,7 +423,11 @@ void KisAbstractSliderSpinBox::contextMenuEvent(QContextMenuEvent* event)
 
 void KisAbstractSliderSpinBox::editLostFocus()
 {
-    hideEdit();
+    // only hide on focus lost, if editing is finished that will be handled in eventFilter
+    Q_D(KisAbstractSliderSpinBox);
+    if (!d->edit->hasFocus()) {
+        hideEdit();
+    }
 }
 
 class KisSliderSpinBoxPrivate : public KisAbstractSliderSpinBoxPrivate {

@@ -129,7 +129,7 @@ void GoogleDocumentService::handleNetworkData(QNetworkReply *networkReply)
         }
         else if (waitingForDoc) {
             QByteArray data = networkReply->readAll();
-            QFile file(QDir::tempPath() + "/" + documentList->currentDocument());
+            QFile file(QDir::tempPath() + QLatin1Char('/') + documentList->currentDocument());
             file.open(QIODevice::ReadWrite);
             file.write(data);
             file.close();

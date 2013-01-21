@@ -94,7 +94,7 @@ KoInlineCite *CitationInsertionDialog::toCite()
     cite->setAddress(dialog.address->text());
     cite->setAnnotation(dialog.annotation->text());
     cite->setAuthor(dialog.author->text());
-    cite->setBibliographyType(dialog.sourceType->currentText().remove(" ").toLower());      //removing spaces and lowering case for exact tag attribute of bibliography-type
+    cite->setBibliographyType(dialog.sourceType->currentText().remove(QLatin1Char(' ')).toLower());      //removing spaces and lowering case for exact tag attribute of bibliography-type
     cite->setBookTitle(dialog.booktitle->text());
     cite->setChapter(dialog.chapter->text());
     cite->setCustom1(dialog.ud1->text());

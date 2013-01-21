@@ -851,11 +851,11 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */
     }
     if (type.category) {
         QString s = categoryData(section, Qt::DisplayRole).toString().trimmed();
-        if (!s.isEmpty()) dataLabel += s + " ";
+        if (!s.isEmpty()) dataLabel += s + QLatin1Char(' ');
     }
     if (type.number) {
         QString s = d->formatData(d->yDataRegion, section, Qt::DisplayRole);
-        if (!s.isEmpty()) dataLabel += s + " ";
+        if (!s.isEmpty()) dataLabel += s + QLatin1Char(' ');
     }
     if (type.percentage) {
         bool ok;
@@ -1139,7 +1139,7 @@ QVariant DataSet::labelData() const
             QString s = d->data(d->labelDataRegion, i, Qt::EditRole).toString();
             if (!s.isEmpty()) {
                 if (!label.isEmpty())
-                    label += " ";
+                    label += QLatin1Char(' ');
                 label += s;
             }
         }
@@ -1751,7 +1751,7 @@ void DataSet::saveOdf(KoShapeSavingContext &context) const
             case 7: symbolName = "hourglass"; break;
             case 8: symbolName = "circle"; break;
             case 9: symbolName = "star"; break;
-            case 10: symbolName = "x"; break;
+            case 10: symbolName = 'x'; break;
             case 11: symbolName = "plus"; break;
             case 12: symbolName = "asterisk"; break;
             case 13: symbolName = "horizontal-bar"; break;

@@ -227,7 +227,7 @@ void BasicElement::writeMathML( KoXmlWriter* writer, const QString& ns ) const
         }
     } else {
         const QByteArray name = ns.isEmpty() ? ElementFactory::elementName( elementType() ).toLatin1()
-            : ns.toLatin1() + ":" + ElementFactory::elementName( elementType() ).toLatin1();
+            : ns.toLatin1() + ':' + ElementFactory::elementName( elementType() ).toLatin1();
         writer->startElement( name );
         writeMathMLAttributes( writer );
         if ( elementType() == Formula ) {

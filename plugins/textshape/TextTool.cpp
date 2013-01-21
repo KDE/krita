@@ -562,8 +562,8 @@ void TextTool::showEditTip()
 
             QString date = element->getDate();
             //Remove the T which separates the Data and Time.
-            date[10] = ' ';
-            date = element->getCreator() + " " + date;
+            date[10] = QLatin1Char(' ');
+            date = element->getCreator() + QLatin1Char(' ') + date;
             text += date + "</p>";
 
             toolTipWidth = QFontMetrics(QToolTip::font()).boundingRect(date).width();

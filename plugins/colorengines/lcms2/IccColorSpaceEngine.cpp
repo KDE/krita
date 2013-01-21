@@ -198,10 +198,10 @@ quint32 IccColorSpaceEngine::computeColorSpaceType(const KoColorSpace* cs) const
         quint32 modelType = 0;
 
         if (modelId == RGBAColorModelID.id()) {
-            if (depthId.startsWith("U")) {
+            if (depthId.startsWith(QLatin1Char('U'))) {
                 modelType = (COLORSPACE_SH(PT_RGB) | EXTRA_SH(1) | CHANNELS_SH(3) | DOSWAP_SH(1) | SWAPFIRST_SH(1));
             }
-            else if (depthId.startsWith("F")) {
+            else if (depthId.startsWith(QLatin1Char('F'))) {
                 modelType = (COLORSPACE_SH(PT_RGB) | EXTRA_SH(1) | CHANNELS_SH(3) );
             }
         } else if (modelId == XYZAColorModelID.id()) {

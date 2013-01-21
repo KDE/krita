@@ -170,7 +170,7 @@ void KoM2MMLFormulaTool::textEdited()
     } else {
 #endif
         std::string source = QStringtoStdString(m_lineEdit->text());
-        source = "$" + source + "$";
+        source = '$' + source + '$';
         char * mathml = itex2MML_parse (source.c_str(), source.size());
         
         if(mathml)

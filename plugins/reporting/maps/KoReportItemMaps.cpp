@@ -188,7 +188,7 @@ int KoReportItemMaps::render(OROPage* page,
     
     myDebug() << this << "data:" << data;
     QString dataKey = data.toString();
-    QStringList dataList = dataKey.split(";");
+    QStringList dataList = dataKey.split(QLatin1Char(';'));
     //myDebug() << "splited:" << dataList;
     Marble::MarbleWidget* marble;
     

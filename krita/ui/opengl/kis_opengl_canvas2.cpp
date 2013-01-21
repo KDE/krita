@@ -83,7 +83,7 @@ public:
 };
 
 KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 * canvas, KisCoordinatesConverter *coordinatesConverter, QWidget * parent, KisOpenGLImageTexturesSP imageTextures)
-    : QGLWidget(QGLFormat(QGL::SampleBuffers | QGL::SingleBuffer), parent, KisOpenGL::sharedContextWidget())
+    : QGLWidget(QGLFormat(QGL::SampleBuffers), parent, KisOpenGL::sharedContextWidget())
         , KisCanvasWidgetBase(canvas, coordinatesConverter)
         , m_d(new Private())
 {
@@ -112,12 +112,27 @@ KisOpenGLCanvas2::~KisOpenGLCanvas2()
 
 void KisOpenGLCanvas2::initializeGL()
 {
-    if (format().doubleBuffer()) {
-        qWarning() << "WARNING: Your system/Qt/video adapter doesn't support single buffered contexts. Trying to workaround it by disabling VSync.";
-        bool result = VSyncWorkaround::tryDisableVSync(this);
-        if (!result) {
-            qWarning() << "WARNING: Failed to disable VSync. Lines may look \"bended\"";
-            qWarning() << "         Your graphics card or driver does not fully support Krita's OpenGL canvas. For an optimal experience, please disable OpenGL";
+    if (!VSyncWorkaround::tryDisableVSync(this)) {
+        qWarning();
+        qWarning() << "WARNING: We didn't manage to switch off VSync on your graphics adapter.";
+        qWarning() << "WARNING: It means either your hardware or driver doesn't support it,";
+        qWarning() << "WARNING: or we just don't know about this hardware. Please report us a bug";
+        qWarning() << "WARNING: with the output of \'glxinfo\' for your card.";
+        qWarning();
+        qWarning() << "WARNING: Trying to workaround it by disabling Double Buffering.";
+        qWarning() << "WARNING: You may see some flickering when painting with some tools. It doesn't";
+        qWarning() << "WARNING: affect the quality of the final image, though.";
+        qWarning();
+
+        QGLFormat format = this->format();
+        format.setDoubleBuffer(false);
+        setFormat(format);
+
+        if (doubleBuffer()) {
+            qCritical() << "CRITICAL: Failed to disable Double Buffering. Lines may look \"bended\" on your image.";
+            qCritical() << "CRITICAL: Your graphics card or driver does not fully support Krita's OpenGL canvas.";
+            qCritical() << "CRITICAL: For an optimal experience, please disable OpenGL";
+            qCritical();
         }
     }
 }

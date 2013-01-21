@@ -188,8 +188,7 @@ namespace VSyncWorkaround {
             } else {
                 qDebug() << "Couldn't load glXSwapIntervalEXT extension function";
             }
-        }
-        if (extensions.match("GLX_MESA_swap_control")) {
+        } else if (extensions.match("GLX_MESA_swap_control")) {
             typedef int (*kis_glXSwapIntervalMESA)(unsigned int);
             typedef int (*kis_glXGetSwapIntervalMESA)(void);
 
@@ -210,8 +209,7 @@ namespace VSyncWorkaround {
             } else {
                 qDebug() << "Couldn't load glXSwapIntervalMESA extension function";
             }
-        }
-        else {
+        } else {
             qDebug() << "There is neither GLX_EXT_swap_control or GLX_MESA_swap_control extension supported";
         }
 

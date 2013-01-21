@@ -149,8 +149,6 @@ namespace VSyncWorkaround {
                 void *handle = dlopen(NULL, RTLD_LAZY);
                 if (handle) {
                     glXGetProcAddressARB = (qt_glXGetProcAddressARB) dlsym(handle, "glXGetProcAddressARB");
-                    qDebug() << "tried fetch glXGetProcAddressARB dlsyms" << glXGetProcAddressARB;
-
                     dlclose(handle);
                 }
                 if (!glXGetProcAddressARB)
@@ -159,7 +157,6 @@ namespace VSyncWorkaround {
                     QLibrary lib(::qt_gl_library_name());
                     //lib.setLoadHints(QLibrary::ImprovedSearchHeuristics);
                     glXGetProcAddressARB = (qt_glXGetProcAddressARB) lib.resolve("glXGetProcAddressARB");
-                    qDebug() << "tried fetch glXGetProcAddressARB QLibrary" << glXGetProcAddressARB;
                 }
             }
         }
@@ -167,7 +164,6 @@ namespace VSyncWorkaround {
         void *procAddress = 0;
         if (glXGetProcAddressARB) {
             procAddress = glXGetProcAddressARB(procName);
-            qDebug() << "tried fetch" << procName << procAddress;
         } else {
             qDebug() << "Couldn't fetch glXGetProcAddressARB";
         }
@@ -178,9 +174,6 @@ namespace VSyncWorkaround {
             void *handle = dlopen(NULL, RTLD_LAZY);
             if (handle) {
                 procAddress = dlsym(handle, procName);
-
-                qDebug() << "tried fetch" << procName << "with dlsyms" << procAddress;
-
                 dlclose(handle);
             }
         }
@@ -190,7 +183,6 @@ namespace VSyncWorkaround {
             QLibrary lib(::qt_gl_library_name());
             //lib.setLoadHints(QLibrary::ImprovedSearchHeuristics);
             procAddress = lib.resolve(procName);
-                qDebug() << "tried fetch" << procName << "with QLibrary" << procAddress;
         }
 
         return procAddress;
@@ -206,12 +198,9 @@ namespace VSyncWorkaround {
 
         if (extensions.match("GLX_EXT_swap_control")) {
             typedef void (*kis_glXSwapIntervalEXT)(Display*, WId, int);
-            qDebug() << "GLX_EXT_swap_control matched";
-
             kis_glXSwapIntervalEXT glXSwapIntervalEXT = (kis_glXSwapIntervalEXT)qglx_getProcAddress("glXSwapIntervalEXT");
 
             if (glXSwapIntervalEXT) {
-                qDebug() << "Disabling VSync EXT";
                 glXSwapIntervalEXT(dpy, wid, 0);
 
                 unsigned int swap = 1;
@@ -219,8 +208,6 @@ namespace VSyncWorkaround {
 #ifdef GLX_SWAP_INTERVAL_EXT
                 glXQueryDrawable(dpy, wid, GLX_SWAP_INTERVAL_EXT, &swap);
 #endif
-
-                qDebug() << ppVar(swap);
 
                 result = !swap;
             } else {
@@ -230,19 +217,15 @@ namespace VSyncWorkaround {
             typedef int (*kis_glXSwapIntervalMESA)(unsigned int);
             typedef int (*kis_glXGetSwapIntervalMESA)(void);
 
-            qDebug() << "GLX_MESA_swap_control matched";
-
             kis_glXSwapIntervalMESA glXSwapIntervalMESA = (kis_glXSwapIntervalMESA)qglx_getProcAddress("glXSwapIntervalMESA");
             kis_glXGetSwapIntervalMESA glXGetSwapIntervalMESA = (kis_glXGetSwapIntervalMESA)qglx_getProcAddress("glXGetSwapIntervalMESA");
 
             if (glXSwapIntervalMESA) {
-                qDebug() << "Disabling VSync MESA";
                 int retval = glXSwapIntervalMESA(0);
                 int swap = 1;
 
                 if (glXGetSwapIntervalMESA) {
                     swap = glXGetSwapIntervalMESA();
-                    qDebug() << ppVar(swap);
                 } else {
                     qDebug() << "Couldn't load glXGetSwapIntervalMESA extension function";
                 }

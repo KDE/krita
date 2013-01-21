@@ -101,10 +101,11 @@ void KisFilterManager::insertFilter(const QString & name)
     KisFilterHandler* handler = new KisFilterHandler(this, f, d->view);
 
     KAction * a = new KAction(f->menuEntry(), this);
+    a->setShortcut(f->shortcut(), KAction::DefaultShortcut);
     d->actionCollection->addAction(QString("krita_filter_%1").arg(name), a);
     d->filters2Action[f.data()] = a;
     connect(a, SIGNAL(triggered()), handler, SLOT(showDialog()));
-    actionMenu->addAction(a);
+    actionMenu->addAction(a); 
 }
 
 void KisFilterManager::updateGUI()

@@ -46,6 +46,7 @@
 KisLevelFilter::KisLevelFilter()
         : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Levels..."))
 {
+    setShortcut(KShortcut(QKeySequence(Qt::CTRL + Qt::Key_L)));
     setSupportsPainting(false);
     setSupportsIncrementalPainting(false);
     setColorSpaceIndependence(TO_LAB16);

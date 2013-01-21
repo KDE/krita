@@ -30,6 +30,7 @@
 KisHSVAdjustmentFilter::KisHSVAdjustmentFilter()
         : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&HSV Adjustment..."))
 {
+    setShortcut(KShortcut(QKeySequence(Qt::CTRL + Qt::Key_U)));
     setSupportsPainting(true);
     setSupportsIncrementalPainting(false);
 }

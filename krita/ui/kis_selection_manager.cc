@@ -195,7 +195,7 @@ void KisSelectionManager::setup(KActionCollection * collection)
 
     m_toggleDisplaySelection  = new KToggleAction(i18n("Display Selection"), this);
     collection->addAction("toggle_display_selection", m_toggleDisplaySelection);
-    m_toggleDisplaySelection->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_H));
+    m_toggleDisplaySelection->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_H));
     connect(m_toggleDisplaySelection, SIGNAL(triggered()), this, SLOT(toggleDisplaySelection()));
 
     m_toggleDisplaySelection->setChecked(true);

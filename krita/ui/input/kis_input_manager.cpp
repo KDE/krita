@@ -157,7 +157,8 @@ void KisInputManager::Private::setupActions()
 
     action = new KisAlternateInvocationAction(q);
     matcher.addAction(action);
-    addStrokeShortcut(action, 0, KEYS(Qt::Key_Control), BUTTONS(Qt::LeftButton));
+    addStrokeShortcut(action, KisAlternateInvocationAction::PrimaryAlternateToggleShortcut, KEYS(Qt::Key_Control), BUTTONS(Qt::LeftButton));
+    addStrokeShortcut(action, KisAlternateInvocationAction::SecondaryAlternateToggleShortcut, KEYS(Qt::Key_Control, Qt::Key_Alt), BUTTONS(Qt::LeftButton));
 
     action = new KisChangePrimarySettingAction(q);
     matcher.addAction(action);

@@ -52,7 +52,7 @@ public:
     /**
      * Constructor.
      */
-    ChartTypeCommand(ChartShape* chart);
+    explicit ChartTypeCommand(ChartShape *chart);
 
     /**
      * Destructor.

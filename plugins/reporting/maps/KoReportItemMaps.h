@@ -52,7 +52,7 @@ public:
     KoReportItemMaps() {
         createProperties();
     }
-    KoReportItemMaps(QDomNode & element);
+    explicit KoReportItemMaps(QDomNode &element);
     virtual ~KoReportItemMaps();
 
     virtual QString typeName() const;

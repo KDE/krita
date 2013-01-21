@@ -30,7 +30,7 @@ class ChartTableView : public QTableView
     Q_OBJECT
 
 public:
-    ChartTableView(QWidget *parent = 0);
+    explicit ChartTableView(QWidget *parent = 0);
     ~ChartTableView();
 
 signals:

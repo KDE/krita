@@ -32,7 +32,7 @@ class KoM2MMLFormulaTool : public KoToolBase
 {
     Q_OBJECT
 public:
-    KoM2MMLFormulaTool(KoCanvasBase *canvas);
+    explicit KoM2MMLFormulaTool(KoCanvasBase *canvas);
     
     virtual void activate(ToolActivation toolActivation, const QSet< KoShape* >& shapes);
     

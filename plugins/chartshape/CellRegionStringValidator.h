@@ -32,7 +32,7 @@ namespace KChart {
 class CellRegionStringValidator : public QValidator
 {
  public:
-    CellRegionStringValidator(KoChart::ChartModel *model);
+    explicit CellRegionStringValidator(KoChart::ChartModel *model);
     ~CellRegionStringValidator();
 	
     State validate(QString &string, int & pos) const;

@@ -28,7 +28,7 @@ class KoStyleManager;
 class TableOfContentsTemplate
 {
 public:
-    TableOfContentsTemplate(KoStyleManager *manager);
+    explicit TableOfContentsTemplate(KoStyleManager *manager);
 
     QList<KoTableOfContentsGeneratorInfo *> templates();
 

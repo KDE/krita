@@ -29,7 +29,7 @@ class TableDialog : public KDialog
 {
     Q_OBJECT
 public:
-    TableDialog(QWidget *parent);
+    explicit TableDialog(QWidget *parent);
 
     int columns();
     int rows();

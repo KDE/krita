@@ -27,7 +27,7 @@
 class KoReportBarcodePlugin : public KoReportPluginInterface
 {
     public:
-    KoReportBarcodePlugin(QObject *parent, const QVariantList &args = QVariantList());
+    explicit KoReportBarcodePlugin(QObject *parent, const QVariantList &args = QVariantList());
     virtual ~KoReportBarcodePlugin();
     
     virtual QObject* createRendererInstance(QDomNode& element);

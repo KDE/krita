@@ -38,7 +38,7 @@ public:
         ResourceId = 345681743
     };
 
-    TextEditingPluginContainer(QObject *parent = 0);
+    explicit TextEditingPluginContainer(QObject *parent = 0);
     ~TextEditingPluginContainer();
 
     KoTextEditingPlugin *spellcheck() const;

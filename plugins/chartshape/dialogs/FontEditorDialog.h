@@ -30,7 +30,7 @@ namespace KChart {
 class FontEditorDialog : public KDialog
 {
 public:
-    FontEditorDialog(QWidget *parent = 0);
+    explicit FontEditorDialog(QWidget *parent = 0);
     ~FontEditorDialog();
     KFontChooser *fontChooser;
 };

@@ -31,7 +31,7 @@ class CHARTSHAPELIB_EXPORT ChartPart : public KoPart
     Q_OBJECT
 
 public:
-    ChartPart(QObject *parent);
+    explicit ChartPart(QObject *parent);
 
     virtual ~ChartPart();
 

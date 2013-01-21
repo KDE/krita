@@ -28,7 +28,7 @@ class KoStyleManager;
 class BibliographyTemplate
 {
 public:
-    BibliographyTemplate(KoStyleManager *manager);
+    explicit BibliographyTemplate(KoStyleManager *manager);
 
     QList<KoBibliographyInfo *> templates();
 

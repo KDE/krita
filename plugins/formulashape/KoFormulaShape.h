@@ -48,7 +48,7 @@ class FormulaDocument;
 class KoFormulaShape : public KoShape, public KoFrameShape {
 public:
     /// The basic constructor
-    KoFormulaShape(KoDocumentResourceManager *documentResourceManager);
+    explicit KoFormulaShape(KoDocumentResourceManager *documentResourceManager);
     //KoFormulaShape();
 
     /// The basic destructor

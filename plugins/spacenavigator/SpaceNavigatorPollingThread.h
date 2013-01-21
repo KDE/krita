@@ -27,7 +27,7 @@ class SpaceNavigatorPollingThread : public QThread
 {
     Q_OBJECT
 public:
-    SpaceNavigatorPollingThread( QObject * parent );
+    explicit SpaceNavigatorPollingThread(QObject *parent);
     ~SpaceNavigatorPollingThread();
 
     /// Stops the thread

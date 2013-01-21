@@ -39,7 +39,7 @@ class FormulaCursor;
 class KOFORMULA_EXPORT UnknownElement : public BasicElement {
 public:
     /// The standard constructor
-    UnknownElement( BasicElement* parent = 0 );
+    explicit UnknownElement(BasicElement *parent = 0);
 
     /// The standard destructor
     ~UnknownElement();

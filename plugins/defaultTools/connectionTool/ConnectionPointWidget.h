@@ -30,7 +30,7 @@ class ConnectionPointWidget : public QWidget
 {
     Q_OBJECT
 public:
-    ConnectionPointWidget(ConnectionTool *tool, QWidget * parent = 0);
+    explicit ConnectionPointWidget(ConnectionTool *tool, QWidget *parent = 0);
 
 private slots:
     void toggleEditModeCheckbox(bool checked);

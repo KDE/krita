@@ -47,7 +47,7 @@ class ReviewTool : public KoToolBase
 {
     Q_OBJECT
 public:
-    ReviewTool(KoCanvasBase *canvas);
+    explicit ReviewTool(KoCanvasBase *canvas);
 
     ~ReviewTool();
 

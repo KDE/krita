@@ -28,7 +28,7 @@ class ListsSpinBox : public QSpinBox
 {
     Q_OBJECT
 public:
-    ListsSpinBox(QWidget *parent = 0);
+    explicit ListsSpinBox(QWidget *parent = 0);
 
     void setCounterType(KoListStyle::Style type);
     virtual QString textFromValue(int value) const;

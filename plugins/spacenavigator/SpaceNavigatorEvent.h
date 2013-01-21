@@ -27,7 +27,7 @@ class KoPointerEvent;
 class SpaceNavigatorEvent : public KoInputDeviceHandlerEvent
 {
 public:
-    SpaceNavigatorEvent( KoInputDeviceHandlerEvent::Type type );
+    explicit SpaceNavigatorEvent(KoInputDeviceHandlerEvent::Type type);
     virtual ~SpaceNavigatorEvent();
 
     void setPosition( int x, int y, int z );

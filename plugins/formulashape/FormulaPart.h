@@ -31,7 +31,7 @@ class FormulaPart : public KoPart
     Q_OBJECT
 
 public:
-    FormulaPart(QObject *parent);
+    explicit FormulaPart(QObject *parent);
 
     virtual ~FormulaPart();
 

@@ -46,7 +46,7 @@ class FormulaCursor;
 class KOFORMULA_EXPORT TokenElement : public BasicElement {
 public:
     /// The standart constructor
-    TokenElement( BasicElement* parent = 0 );
+    explicit TokenElement(BasicElement *parent = 0);
 
     /**
      * Obtain a list of all child elements of this element

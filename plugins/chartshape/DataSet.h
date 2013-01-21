@@ -59,7 +59,7 @@ class KDChartModel;
 class CHARTSHAPELIB_EXPORT DataSet
 {
 public:
-    DataSet(int dataSetNr);
+    explicit DataSet(int dataSetNr);
     ~DataSet();
 
     // Getter methods

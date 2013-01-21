@@ -35,7 +35,7 @@ class FormattingButton : public QToolButton
 {
     Q_OBJECT
 public:
-    FormattingButton(QWidget *parent = 0 );
+    explicit FormattingButton(QWidget *parent = 0);
 
     void setNumColumns(int columns);
     void setItemsBackground(const QColor &color);

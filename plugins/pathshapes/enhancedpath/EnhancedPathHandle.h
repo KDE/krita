@@ -41,7 +41,7 @@ public:
      * Note that an empty handle is not valid, as long as there are no
      * positional parameters set with setPosition.
     */
-    EnhancedPathHandle(EnhancedPathShape *parent);
+    explicit EnhancedPathHandle(EnhancedPathShape *parent);
 
     /// Destroys the handle
     ~EnhancedPathHandle();

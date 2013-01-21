@@ -27,7 +27,7 @@
 class KoReportChartPlugin : public KoReportPluginInterface
 {
     public:
-        KoReportChartPlugin(QObject *parent, const QVariantList &args = QVariantList());
+        explicit KoReportChartPlugin(QObject *parent, const QVariantList &args = QVariantList());
         virtual ~KoReportChartPlugin();
 
         virtual QObject* createRendererInstance(QDomNode& element);

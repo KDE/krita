@@ -43,7 +43,7 @@ class FullScreenPlayer : public QWidget
 {
     Q_OBJECT
 public:
-    FullScreenPlayer(const QUrl &);
+    explicit FullScreenPlayer(const QUrl &);
 
     /// destructor
     virtual ~FullScreenPlayer();

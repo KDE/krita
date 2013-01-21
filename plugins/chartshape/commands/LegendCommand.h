@@ -48,7 +48,7 @@ public:
     /**
      * Constructor.
      */
-    LegendCommand(Legend* legend);
+    explicit LegendCommand(Legend *legend);
 
     /**
      * Destructor.

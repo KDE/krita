@@ -33,7 +33,7 @@
 class KOFORMULA_EXPORT AnnotationElement : public BasicElement {
 public:
     /// The standard constructor
-    AnnotationElement( BasicElement* parent = 0 );
+    explicit AnnotationElement(BasicElement *parent = 0);
 
     void setContent(const QString& content);
     QString content() const;

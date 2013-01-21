@@ -40,7 +40,7 @@ class ChartShape;
 class ChartDocument : public KoDocument
 {
 public:
-    ChartDocument(ChartShape *parent);
+    explicit ChartDocument(ChartShape *parent);
     ~ChartDocument();
     
     bool loadOdf(KoOdfReadStore &odfStore);

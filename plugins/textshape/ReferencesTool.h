@@ -37,7 +37,7 @@ class ReferencesTool : public TextTool
 {
     Q_OBJECT
 public:
-    ReferencesTool(KoCanvasBase *canvas);
+    explicit ReferencesTool(KoCanvasBase *canvas);
 
     virtual ~ReferencesTool();
 

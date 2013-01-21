@@ -38,7 +38,7 @@ public:
     KoReportItemBarcode() {
         createProperties();
     }
-    KoReportItemBarcode(QDomNode & element);
+    explicit KoReportItemBarcode(QDomNode &element);
     ~KoReportItemBarcode();
 
     virtual QString typeName() const;

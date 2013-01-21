@@ -50,7 +50,7 @@ class CHARTSHAPELIB_EXPORT ChartTableModel : public QStandardItemModel, public K
     Q_INTERFACES(KoChart::ChartModel)
 
 public:
-    ChartTableModel(QObject *parent = 0);
+    explicit ChartTableModel(QObject *parent = 0);
     ~ChartTableModel();
 
     // KoChart::ChartModel interface

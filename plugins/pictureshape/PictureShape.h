@@ -53,7 +53,7 @@ namespace _Private
     {
         Q_OBJECT
     public:
-        PictureShapeProxy(PictureShape *p):
+        explicit PictureShapeProxy(PictureShape *p):
             m_pictureShape(p) { }
 
     public slots:

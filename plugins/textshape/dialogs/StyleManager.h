@@ -36,7 +36,7 @@ class StyleManager : public QWidget
 {
     Q_OBJECT
 public:
-    StyleManager(QWidget *parent = 0);
+    explicit StyleManager(QWidget *parent = 0);
     ~StyleManager();
 
     void setStyleManager(KoStyleManager *sm);

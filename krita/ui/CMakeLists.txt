@@ -282,6 +282,8 @@ endif (GHNS)
 
 if(HAVE_OPENGL)
     target_link_libraries(kritaui ${OPENGL_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${OPENEXR_LIBRARIES})
+    target_link_libraries(kritaui -ldl)
+
     set (GL_INTERFACE_LIBRARIES ";${OPENGL_LIBRARIES};${QT_QTOPENGL_LIBRARY}")
     if(HAVE_GLEW)
         target_link_libraries(kritaui ${GLEW_LIBRARIES})

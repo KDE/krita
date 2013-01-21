@@ -40,7 +40,6 @@
 #include <QLibrary>
 #include <QX11Info>
 #include <GL/glx.h>
-#include <dlfcn.h>
 
 #ifndef GL_NUM_EXTENSIONS
 #define GL_NUM_EXTENSIONS 0x821D
@@ -145,41 +144,17 @@ namespace VSyncWorkaround {
             triedResolvingGlxGetProcAddress = true;
             QGLExtensionMatcher extensions(glXGetClientString(QX11Info::display(), GLX_EXTENSIONS));
             if (extensions.match("GLX_ARB_get_proc_address")) {
-#if defined(Q_OS_LINUX) || defined(Q_OS_BSD4)
-                void *handle = dlopen(NULL, RTLD_LAZY);
-                if (handle) {
-                    glXGetProcAddressARB = (qt_glXGetProcAddressARB) dlsym(handle, "glXGetProcAddressARB");
-                    dlclose(handle);
-                }
-                if (!glXGetProcAddressARB)
-#endif
-                {
-                    QLibrary lib(::qt_gl_library_name());
-                    //lib.setLoadHints(QLibrary::ImprovedSearchHeuristics);
-                    glXGetProcAddressARB = (qt_glXGetProcAddressARB) lib.resolve("glXGetProcAddressARB");
-                }
+                QLibrary lib(::qt_gl_library_name());
+                //lib.setLoadHints(QLibrary::ImprovedSearchHeuristics);
+                glXGetProcAddressARB = (qt_glXGetProcAddressARB) lib.resolve("glXGetProcAddressARB");
             }
         }
 
         void *procAddress = 0;
-        if (glXGetProcAddressARB) {
+        if (glXGetProcAddressARB)
             procAddress = glXGetProcAddressARB(procName);
-        } else {
-            qDebug() << "Couldn't fetch glXGetProcAddressARB";
-        }
 
-        // If glXGetProcAddress didn't work, try looking the symbol up in the GL library
-#if defined(Q_OS_LINUX) || defined(Q_OS_BSD4)
         if (!procAddress) {
-            void *handle = dlopen(NULL, RTLD_LAZY);
-            if (handle) {
-                procAddress = dlsym(handle, procName);
-                dlclose(handle);
-            }
-        }
-#endif
-        if (!procAddress) {
-
             QLibrary lib(::qt_gl_library_name());
             //lib.setLoadHints(QLibrary::ImprovedSearchHeuristics);
             procAddress = lib.resolve(procName);

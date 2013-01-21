@@ -47,7 +47,7 @@ namespace VSyncWorkaround {
 
 #ifdef GLX_EXT_swap_control
 
-        if (glewIsSupported("GLX_EXT_swap_control")) {
+        if (GLXEW_EXT_swap_control) {
             glXSwapIntervalEXT(dpy, wid, 0);
 
             unsigned int swap = 0;
@@ -60,7 +60,7 @@ namespace VSyncWorkaround {
 #endif /* GLX_EXT_swap_control */
 
 #ifdef GLX_MESA_swap_control
-        else if (glewIsSupported("GLX_EXT_swap_control")) {
+        else if (GLXEW_MESA_swap_control) {
                 int retval = glXSwapIntervalMESA(0);
                 int swap = glXGetSwapIntervalMESA();
 

@@ -10,7 +10,7 @@ install( FILES  cmex10.ttf Arev.ttf ArevIt.ttf ArevBd.ttf ArevBI.ttf  DESTINATIO
 #fontdir = $(prefix)/share/apps/kformula/fonts
 #font_DATA = cmbx10.ttf cmex10.ttf cmmi10.ttf cmr10.ttf cmsy10.ttf msam10.ttf msbm10.ttf
 #
-#EXTRA_DIST = $(font_DATA) LICENCE
+#EXTRA_DIST = $(font_DATA) LICENSE
 #
 ## This uses -hook instead of -local so that it is run after fonts are installed
 #install-data-hook:

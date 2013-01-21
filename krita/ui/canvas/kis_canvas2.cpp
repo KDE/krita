@@ -99,6 +99,9 @@ public:
     KoColorConversionTransformation::Intent renderingIntent;
     KoColorConversionTransformation::ConversionFlags conversionFlags;
     bool currentCanvasIsOpenGL;
+#ifdef HAVE_OPENGL
+    bool useTrilinearFiltering;
+#endif
     KoToolProxy *toolProxy;
     KoFavoriteResourceManager *favoriteResourceManager;
 #ifdef HAVE_OPENGL
@@ -302,6 +305,8 @@ void KisCanvas2::createQPainterCanvas()
 void KisCanvas2::createOpenGLCanvas()
 {
 #ifdef HAVE_OPENGL
+    KisConfig cfg;
+    m_d->useTrilinearFiltering = cfg.useOpenGLTrilinearFiltering();
     m_d->currentCanvasIsOpenGL = true;
 
     // XXX: The image isn't done loading here!
@@ -404,8 +409,11 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
     }
 #ifdef HAVE_OPENGL
     KisConfig cfg;
+    bool needReset = (m_d->currentCanvasIsOpenGL != useOpenGL) ||
+        (m_d->currentCanvasIsOpenGL &&
+         m_d->useTrilinearFiltering != cfg.useOpenGLTrilinearFiltering());
 
-    if (useOpenGL != m_d->currentCanvasIsOpenGL) {
+    if (needReset) {
         disconnectCurrentImage();
         createCanvas(useOpenGL);
         connectCurrentImage();

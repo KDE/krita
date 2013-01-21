@@ -114,6 +114,7 @@ set(kotext_LIB_SRCS
     commands/RemoveDeleteChangesCommand.cpp
     commands/TextPasteCommand.cpp
     commands/AddTextRangeCommand.cpp
+    commands/ParagraphFormattingCommand.cpp
 
     KoTextDrag.cpp
     KoTextCommandBase.cpp

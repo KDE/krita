@@ -627,23 +627,15 @@ void TestBlockLayout::testTextIndent()
     QCOMPARE(block2Layout->lineAt(1).width(), 185.0);
 }
 
-void TestBlockLayout::testTabs()
+void TestBlockLayout::testTabs_data()
 {
-    setupTest("x\tx\tx\tx\tx\tx\tx\tx\tx\tx\tx\tx\tx\tx\tx\te");
-    QTextCursor cursor(m_doc);
-    QTextBlockFormat bf = cursor.blockFormat();
-    cursor.setBlockFormat(bf);
-
-    m_layout->layout();
-    QTextLayout *blockLayout = m_block.layout();
-
-    struct {
+    static const struct TestCaseData {
         bool relativeTabs;
         qreal leftMargin;
         qreal textIndent;
         qreal rightMargin;
         qreal expected; // expected value of pos=2 of each line
-    } testcases[] = {
+    } testcaseDataList[] = {
         { true, 0, 0, 0, 50},
         { true, 0, 0, 5, 50},
         { true, 0, 10, 0, 50},
@@ -682,33 +674,70 @@ void TestBlockLayout::testTabs()
         { false, -20, -10, 0+70, 0}, //+70 to avoid extra tab fitting in
         { false, -20, -10, 5+70, 0}, //+70 to avoid extra tab fitting in
     };
+    static const int testcasesCount = sizeof(testcaseDataList)/sizeof(testcaseDataList[0]);
 
-    m_layout->setTabSpacing(50.0);
+    QTest::addColumn<bool>("relativeTabs");
+    QTest::addColumn<qreal>("leftMargin");
+    QTest::addColumn<qreal>("textIndent");
+    QTest::addColumn<qreal>("rightMargin");
+    QTest::addColumn<qreal>("expected");
 
-    for (int i=0; i<36; i++) {
-        KoTextDocument(m_doc).setRelativeTabs(testcases[i].relativeTabs);
-        bf.setLeftMargin(testcases[i].leftMargin);
-        bf.setTextIndent(testcases[i].textIndent);
-        bf.setRightMargin(testcases[i].rightMargin);
-        cursor.setBlockFormat(bf);
-        m_layout->layout();
-        for (int pos=0; pos<4; pos++) {
-            if (pos==0)
-                QCOMPARE(blockLayout->lineAt(0).cursorToX(pos*2), testcases[i].leftMargin + testcases[i].textIndent);
-            else
-                QVERIFY(qAbs(blockLayout->lineAt(0).cursorToX(pos*2) - (testcases[i].expected+(pos-1)*50.0)) < 1.0);
+    for (int i = 0; i < testcasesCount; ++i) {
+        const TestCaseData &testcaseData = testcaseDataList[i];
+
+        QTest::newRow(QString::number(i).toLatin1())
+            << testcaseData.relativeTabs
+            << testcaseData.leftMargin
+            << testcaseData.textIndent
+            << testcaseData.rightMargin
+            << testcaseData.expected;
+    }
+}
+
+void TestBlockLayout::testTabs()
+{
+    QFETCH(bool, relativeTabs);
+    QFETCH(qreal, leftMargin);
+    QFETCH(qreal, textIndent);
+    QFETCH(qreal, rightMargin);
+    QFETCH(qreal, expected); // expected value of pos=2 of each line
+
+    setupTest("x\tx\tx\tx\tx\tx\tx\tx\tx\tx\tx\tx\tx\tx\tx\te");
+    QTextCursor cursor(m_doc);
+    QTextBlockFormat bf = cursor.blockFormat();
+    cursor.setBlockFormat(bf);
+
+    m_layout->layout();
+    QTextLayout *blockLayout = m_block.layout();
+
+    const qreal tabSpacing = 50.0; // in pt
+    m_layout->setTabSpacing(tabSpacing);
+
+    KoTextDocument(m_doc).setRelativeTabs(relativeTabs);
+    bf.setLeftMargin(leftMargin);
+    bf.setTextIndent(textIndent);
+    bf.setRightMargin(rightMargin);
+    cursor.setBlockFormat(bf);
+    m_layout->layout();
+
+    for (int pos=0; pos<4; pos++) {
+        if (pos==0)
+            QCOMPARE(blockLayout->lineAt(0).cursorToX(pos*2), leftMargin + textIndent);
+        else {
+            kDebug() << blockLayout->lineAt(0).cursorToX(pos*2) << expected+(pos-1)*tabSpacing;
+            QVERIFY(qAbs(blockLayout->lineAt(0).cursorToX(pos*2) - (expected+(pos-1)*tabSpacing)) < 1.0);
         }
-        if (testcases[i].textIndent == 0.0) { // excluding known fails
-            for (int pos=0; pos<4; pos++) {
-                // pos==0 is known to fail see https://bugs.kde.org/show_bug.cgi?id=239819
-                if (pos!=0)
-                    QVERIFY(qAbs(blockLayout->lineAt(1).cursorToX(pos*2+8)- (testcases[i].expected+(pos-1)*50.0)) < 1.0);
-            }
-            for (int pos=0; pos<4; pos++) {
-                // pos==0 is known to fail see https://bugs.kde.org/show_bug.cgi?id=239819
-                if (pos!=0)
-                    QVERIFY(qAbs(blockLayout->lineAt(2).cursorToX(pos*2+16)- (testcases[i].expected+(pos-1)*50.0)) < 1.0);
-            }
+    }
+    if (textIndent == 0.0) { // excluding known fails
+        for (int pos=0; pos<4; pos++) {
+            // pos==0 is known to fail see https://bugs.kde.org/show_bug.cgi?id=239819
+            if (pos!=0)
+                QVERIFY(qAbs(blockLayout->lineAt(1).cursorToX(pos*2+8)- (expected+(pos-1)*tabSpacing)) < 1.0);
+        }
+        for (int pos=0; pos<4; pos++) {
+            // pos==0 is known to fail see https://bugs.kde.org/show_bug.cgi?id=239819
+            if (pos!=0)
+                QVERIFY(qAbs(blockLayout->lineAt(2).cursorToX(pos*2+16)- (expected+(pos-1)*tabSpacing)) < 1.0);
         }
     }
 }

@@ -26,6 +26,7 @@
 #include <KoTextDocument.h>
 #include <KoTextEditor.h>
 #include <KoListLevelProperties.h>
+#include <commands/ParagraphFormattingCommand.h>
 
 #include <QTextBlock>
 #include <QTimer>
@@ -80,28 +81,22 @@ void ParagraphSettingsDialog::slotApply()
     if (!m_styleChanged)
         return;
 
-    m_editor->beginEditBlock(i18n("Paragraph Settings"));
     KoParagraphStyle chosenStyle;
     m_paragraphGeneral->save(&chosenStyle);
+
     QTextCharFormat cformat;
     QTextBlockFormat format;
     chosenStyle.KoCharacterStyle::applyStyle(cformat);
     chosenStyle.applyStyle(format);
 
-    m_editor->mergeAutoStyle(cformat, format);
-
-    m_editor->endEditBlock();
-
+    KoListLevelProperties llp;
     if (chosenStyle.listStyle()) {
-        KoTextEditor::ChangeListFlags flags(KoTextEditor::AutoListStyle | KoTextEditor::DontUnsetIfSame);
-        m_tool->textEditor()->setListProperties(chosenStyle.listStyle()->levelProperties(chosenStyle.listStyle()->listLevels().first()),
-                                                flags);
+        llp = chosenStyle.listStyle()->levelProperties(chosenStyle.listStyle()->listLevels().first());
     } else {
-        QTextList *list = m_editor->block().textList();
-        if (list) { // then remove it.
-            list->remove(m_editor->block());
-        }
+        llp.setStyle(KoListStyle::None);
     }
+
+    m_editor->applyDirectFormatting(cformat, format, llp);
 
     m_styleChanged = false;
 }

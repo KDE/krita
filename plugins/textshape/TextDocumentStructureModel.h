@@ -24,6 +24,7 @@
 #include <QAbstractItemModel>
 #include <QVector>
 #include <QHash>
+#include <QPointer>
 
 class QTextDocument;
 class QTextFrame;
@@ -76,7 +77,7 @@ private:
     int frameIndex(QTextFrame *frame) const;
 
 private:
-    QTextDocument *m_textDocument;
+    QPointer<QTextDocument> m_textDocument;
 
     mutable QVector<NodeData> m_nodeDataTable;
     mutable QHash<int, int> m_blockNumberTable;

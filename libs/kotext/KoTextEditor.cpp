@@ -755,7 +755,7 @@ void KoTextEditor::toggleListNumbering(bool numberingEnabled)
 }
 
 void KoTextEditor::setListProperties(const KoListLevelProperties &llp,
-                                     ChangeListFlags flags)
+                                     ChangeListFlags flags, KUndo2Command *parent)
 {
     if (isEditProtected()) {
         return;
@@ -779,7 +779,7 @@ void KoTextEditor::setListProperties(const KoListLevelProperties &llp,
         }
     }
 
-    addCommand(new ChangeListCommand(d->caret, llp, flags));
+    addCommand(new ChangeListCommand(d->caret, llp, flags, parent));
     emit textFormatChanged();
 }
 
@@ -1378,6 +1378,9 @@ void KoTextEditor::insertBibliography(KoBibliographyInfo *info)
 
     bibFormat.setProperty( KoParagraphStyle::BibliographyData, QVariant::fromValue<KoBibliographyInfo*>(newBibInfo));
     bibFormat.setProperty( KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(bibDocument));
+
+    //make sure we set up the textrangemanager on the subdocument as well
+    KoTextDocument(bibDocument).setTextRangeManager(new KoTextRangeManager);
 
     KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
     if (changeTracker && changeTracker->recordChanges()) {

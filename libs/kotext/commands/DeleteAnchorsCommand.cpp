@@ -48,7 +48,6 @@ DeleteAnchorsCommand::DeleteAnchorsCommand(const QList<KoTextAnchor*> &anchors, 
 DeleteAnchorsCommand::~DeleteAnchorsCommand()
 {
     if (m_deleteAnchors) {
-        qDeleteAll(m_anchors);
     }
 }
 

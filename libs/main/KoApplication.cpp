@@ -340,6 +340,7 @@ bool KoApplication::start()
                 KoPart *part = entry.createKoPart(&errorMsg);
                 if (part) {
                     url.setPath(QDir::homePath() + "/" + autoSaveFile);
+                    KoDocument *doc = part->document();
                     KoMainWindow *shell = new KoMainWindow(part->componentData());
                     shell->show();
                     if (shell->openDocument(part, doc, url)) {

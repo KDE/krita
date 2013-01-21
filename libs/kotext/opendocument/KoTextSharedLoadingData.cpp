@@ -145,6 +145,10 @@ void KoTextSharedLoadingData::addDefaultParagraphStyle(KoShapeLoadingContext &co
 
 void KoTextSharedLoadingData::loadOdfStyles(KoShapeLoadingContext &shapeContext, KoStyleManager *styleManager)
 {
+    if (styleManager) {
+        styleManager->useLoadedStyles();
+    }
+
     KoOdfLoadingContext &context = shapeContext.odfLoadingContext();
 
     // only add styles of office:styles to the style manager

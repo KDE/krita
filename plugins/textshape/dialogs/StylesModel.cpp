@@ -353,7 +353,7 @@ void StylesModel::updateParagraphStyles()
     qSort(styles.begin(), styles.end(), sortParagraphStyleByName);
 
     foreach(KoParagraphStyle *style, styles) {
-        if (style != m_styleManager->defaultParagraphStyle()) { //The default character style is not user selectable. It only provides individual property defaults and is not a style per say.
+        if (style != m_styleManager->defaultParagraphStyle() || m_styleManager->isUsingDefaultSet()) { //If we are not using the default set (for applications like Krita), the default paragraph style is not user selectable. It only provides individual property defaults and is not a style per say.
             m_styleList.append(style->styleId());
             m_styleMapper->setMapping(style, style->styleId());
             connect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));

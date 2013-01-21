@@ -26,8 +26,8 @@
 /**
  * This is a workaround for a very slow updates in OpenGL canvas (~6ms).
  * The delay happens because of VSync in the swapBuffers() call. At first
- * we try to select a Signle Buffer context. If it fails (may be true for
- * OpenGL ES (?) ), we just try to disable VSync.
+ * we try to disable VSync. If it fails we just disable Double Buffer
+ * completely.
  *
  * This file is effectively a bit of copy-paste from qgl_x11.cpp
  */
@@ -165,6 +165,7 @@ namespace VSyncWorkaround {
 
     bool tryDisableVSync(QWidget *widget) {
         bool result = false;
+        bool triedDisable = false;
         QX11Info info = widget->x11Info();
         Display *dpy = info.display();
         WId wid = widget->winId();
@@ -177,6 +178,7 @@ namespace VSyncWorkaround {
 
             if (glXSwapIntervalEXT) {
                 glXSwapIntervalEXT(dpy, wid, 0);
+                triedDisable = true;
 
                 unsigned int swap = 1;
 
@@ -197,6 +199,8 @@ namespace VSyncWorkaround {
 
             if (glXSwapIntervalMESA) {
                 int retval = glXSwapIntervalMESA(0);
+                triedDisable = true;
+
                 int swap = 1;
 
                 if (glXGetSwapIntervalMESA) {
@@ -211,6 +215,15 @@ namespace VSyncWorkaround {
             }
         } else {
             qDebug() << "There is neither GLX_EXT_swap_control or GLX_MESA_swap_control extension supported";
+        }
+
+        if (triedDisable && !result) {
+            qCritical();
+            qCritical() << "CRITICAL: Your video driver forbids disabling VSync!";
+            qCritical() << "CRITICAL: Try toggling some VSync- or VBlank-related options in your driver configuration dialog.";
+            qCritical() << "CRITICAL: NVIDIA users can do:";
+            qCritical() << "CRITICAL: sudo nvidia-settings  >  (tab) OpenGL settings > Sync to VBlank  ( unchecked )";
+            qCritical();
         }
 
         return result;

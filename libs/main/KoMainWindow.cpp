@@ -695,13 +695,11 @@ bool KoMainWindow::openDocument(const KUrl & url)
     return openDocumentInternal(url);
 }
 
-bool KoMainWindow::openDocument(KoPart *newPart, KoDocument *newdoc, const KUrl & url)
+bool KoMainWindow::openDocument(KoPart *newPart, const KUrl & url)
 {
+    // the part always has a document; the document doesn't know about the part.
+    KoDocument *newdoc = newPart->document();
     if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0)) {
-        // the part always has a document; the document doesn't know about the part.
-        if (!newdoc) {
-            newdoc = newPart->document();
-        }
         newdoc->initEmpty(); //create an empty document
         setRootDocument(newdoc, newPart);
         newdoc->setUrl(url);

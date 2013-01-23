@@ -325,7 +325,7 @@ bool KoApplication::start()
             KUrl url;
             // bah, we need to re-use the document that was already created
             url.setPath(QDir::homePath() + "/" + autoSaveFiles.takeFirst());
-            if (shell->openDocument(part, doc, url)) {
+            if (shell->openDocument(part, url)) {
                 doc->resetURL();
                 doc->setModified(true);
                 QFile::remove(url.toLocalFile());
@@ -340,10 +340,10 @@ bool KoApplication::start()
                 KoPart *part = entry.createKoPart(&errorMsg);
                 if (part) {
                     url.setPath(QDir::homePath() + "/" + autoSaveFile);
-                    KoDocument *doc = part->document();
+
                     KoMainWindow *shell = new KoMainWindow(part->componentData());
                     shell->show();
-                    if (shell->openDocument(part, doc, url)) {
+                    if (shell->openDocument(part, url)) {
                         doc->resetURL();
                         doc->setModified(true);
                         QFile::remove(url.toLocalFile());
@@ -393,7 +393,6 @@ bool KoApplication::start()
             QString errorMsg;
             KoPart *part = entry.createKoPart(&errorMsg);
             if (part) {
-
                 KoDocument *doc = part->document();
                 // show a shell asap
                 KoMainWindow *shell = new KoMainWindow(part->componentData());
@@ -444,7 +443,7 @@ bool KoApplication::start()
                         QString templateName = templateInfo.readUrl();
                         KUrl templateURL;
                         templateURL.setPath(templateBase.directory() + '/' + templateName);
-                        if (shell->openDocument(part, doc, templateURL)) {
+                        if (shell->openDocument(part, templateURL)) {
                             doc->resetURL();
                             doc->setEmpty();
                             doc->setTitleModified();
@@ -457,7 +456,7 @@ bool KoApplication::start()
                     }
                     // now try to load
                 }
-                else if (shell->openDocument(part, doc, args->url(argNumber))) {
+                else if (shell->openDocument(part, args->url(argNumber))) {
                     if (benchmarkLoading) {
                         if (profileoutput.device()) {
                             profileoutput << "KoApplication::start\t"

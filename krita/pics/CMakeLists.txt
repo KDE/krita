@@ -38,8 +38,6 @@ install(FILES
     broken-preset.png
     DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 
-kde4_install_icons( ${ICON_INSTALL_DIR}   )
-
 add_subdirectory(app)
 
 

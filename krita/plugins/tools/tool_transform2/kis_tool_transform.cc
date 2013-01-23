@@ -97,16 +97,9 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     m_scaleCursors[5] = KisCursor::sizeBDiagCursor();
     m_scaleCursors[6] = KisCursor::sizeVerCursor();
     m_scaleCursors[7] = KisCursor::sizeFDiagCursor();
-    QPixmap shearPixmap;
-    shearPixmap.load(KStandardDirs::locate("data", "calligra/icons/cursor_shear.png"));
-    m_shearCursors[7] = QCursor(shearPixmap.transformed(QTransform().rotate(45)));
-    m_shearCursors[6] = QCursor(shearPixmap.transformed(QTransform().rotate(90)));
-    m_shearCursors[5] = QCursor(shearPixmap.transformed(QTransform().rotate(135)));
-    m_shearCursors[4] = QCursor(shearPixmap.transformed(QTransform().rotate(180)));
-    m_shearCursors[3] = QCursor(shearPixmap.transformed(QTransform().rotate(225)));
-    m_shearCursors[2] = QCursor(shearPixmap.transformed(QTransform().rotate(270)));
-    m_shearCursors[1] = QCursor(shearPixmap.transformed(QTransform().rotate(315)));
-    m_shearCursors[0] = QCursor(shearPixmap);
+
+    m_shearCursorPixmap.load(KStandardDirs::locate("data", "calligra/icons/cursor_shear.png"));
+
     m_defaultPointsPerLine = 3;
     m_imageTooBig = false;
     m_origDevice = 0;
@@ -167,21 +160,6 @@ double KisToolTransform::distsq(const QPointF & v, const QPointF & w)
 {
     QPointF v2 = v - w;
     return v2.x()*v2.x() + v2.y()*v2.y();
-}
-
-int KisToolTransform::octant(double x, double y)
-{
-    double angle = atan2(- y, x) + M_PI / 8;
-    // M_PI / 8 to get the correct octant
-
-    // we want an angle in [0; 2 * Pi[
-    angle = fmod(angle, 2. * M_PI);
-    if (angle < 0)
-            angle += 2 * M_PI;
-
-    int octant = (int)(angle * 4. / M_PI);
-
-    return octant;
 }
 
 void KisToolTransform::storeArgs(ToolTransformArgs &args)
@@ -627,11 +605,33 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
     }
 }
 
+QCursor KisToolTransform::getScaleCursor(const QPointF &handlePt)
+{
+    QPointF direction = handlePt - m_currentArgs.transformedCenter();
+    qreal angle = atan2(-direction.y(), direction.x());
+    qreal rotationAngle = m_canvas->rotationAngle() * M_PI / 180.0;
+    angle -= rotationAngle - M_PI / 8.0;
+
+    angle = fmod(angle, 2.0 * M_PI);
+    if (angle < 0) {
+        angle += 2.0 * M_PI;
+    }
+
+    int octant = (int)(angle * 4. / M_PI);
+    return m_scaleCursors[octant];
+}
+
+QCursor KisToolTransform::getShearCursor(const QPointF &direction)
+{
+    qreal angle = atan2(-direction.y(), direction.x());
+    qreal rotationAngle = m_canvas->rotationAngle() * M_PI / 180.0;
+    angle -= rotationAngle;
+
+    return QCursor(m_shearCursorPixmap.transformed(QTransform().rotateRadians(-angle)));;
+}
+
 void KisToolTransform::setFunctionalCursor()
 {
-    QPointF dir_vect;
-    int rotOctant;
-
     if (!m_strokeId) {
         useCursor(KisCursor::pointingHandCursor());
     } else if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
@@ -653,55 +653,43 @@ void KisToolTransform::setFunctionalCursor()
             useCursor(KisCursor::rotateCursor());
             break;
         case RIGHTSCALE:
-            dir_vect = m_middleRightProj - m_currentArgs.transformedCenter();
-            rotOctant = octant(dir_vect.x(), dir_vect.y());
-            useCursor(m_scaleCursors[rotOctant]);
+            useCursor(getScaleCursor(m_middleRightProj));
             break;
         case TOPSCALE:
-            dir_vect = m_middleTopProj - m_currentArgs.transformedCenter();
-            rotOctant = octant(dir_vect.x(), dir_vect.y());
-            useCursor(m_scaleCursors[rotOctant]);
+            useCursor(getScaleCursor(m_middleTopProj));
             break;
         case LEFTSCALE:
-            dir_vect = m_middleLeftProj - m_currentArgs.transformedCenter();
-            rotOctant = octant(dir_vect.x(), dir_vect.y());
-            useCursor(m_scaleCursors[rotOctant]);
+            useCursor(getScaleCursor(m_middleLeftProj));
             break;
         case BOTTOMSCALE:
-            dir_vect = m_middleBottomProj - m_currentArgs.transformedCenter();
-            rotOctant = octant(dir_vect.x(), dir_vect.y());
-            useCursor(m_scaleCursors[rotOctant]);
+            useCursor(getScaleCursor(m_middleBottomProj));
             break;
         case TOPRIGHTSCALE:
+            useCursor(getScaleCursor(m_topRightProj));
+            break;
         case BOTTOMLEFTSCALE:
-            useCursor(KisCursor::sizeBDiagCursor());
+            useCursor(getScaleCursor(m_bottomLeftProj));
             break;
         case TOPLEFTSCALE:
+            useCursor(getScaleCursor(m_topLeftProj));
+            break;
         case BOTTOMRIGHTSCALE:
-            useCursor(KisCursor::sizeFDiagCursor());
+            useCursor(getScaleCursor(m_bottomRightProj));
             break;
         case MOVECENTER:
             useCursor(KisCursor::handCursor());
             break;
         case BOTTOMSHEAR:
-            dir_vect = m_bottomRightProj - m_bottomLeftProj;
-            rotOctant = octant(dir_vect.x(), dir_vect.y());
-            useCursor(m_shearCursors[rotOctant]);
+            useCursor(getShearCursor(m_bottomLeftProj - m_bottomRightProj));
             break;
         case RIGHTSHEAR:
-            dir_vect = m_bottomRightProj - m_topRightProj;
-            rotOctant = octant(dir_vect.x(), dir_vect.y());
-            useCursor(m_shearCursors[rotOctant]);
+            useCursor(getShearCursor(m_bottomRightProj - m_topRightProj));
             break;
         case TOPSHEAR:
-            dir_vect = m_topRightProj - m_topLeftProj;
-            rotOctant = octant(dir_vect.x(), dir_vect.y());
-            useCursor(m_shearCursors[rotOctant]);
+            useCursor(getShearCursor(m_topRightProj - m_topLeftProj));
             break;
         case LEFTSHEAR:
-            dir_vect = m_bottomLeftProj - m_topLeftProj;
-            rotOctant = octant(dir_vect.x(), dir_vect.y());
-            useCursor(m_shearCursors[rotOctant]);
+            useCursor(getShearCursor(m_topLeftProj - m_bottomLeftProj));
             break;
         }
     }

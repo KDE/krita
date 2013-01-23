@@ -231,8 +231,10 @@ private:
     int det(const QPointF & v, const QPointF & w);
     // Square of the euclidian distance
     double distsq(const QPointF & v, const QPointF & w);
-    // The octant of the direction given by vector (x,y)
-    int octant(double x, double y);
+
+    QCursor getScaleCursor(const QPointF &handlePt);
+    QCursor getShearCursor(const QPointF &direction);
+
     // Makes a copy of m_currentArgs into args
     void storeArgs(ToolTransformArgs &args);
     // Makes a copy of args into m_currentArgs
@@ -284,7 +286,7 @@ private:
     function m_function; // current transformation function
 
     QCursor m_scaleCursors[8]; // cursors for the 8 directions
-    QCursor m_shearCursors[8];
+    QPixmap m_shearCursorPixmap;
 
     ToolTransformArgs m_currentArgs;
     ToolTransformArgs m_clickArgs;

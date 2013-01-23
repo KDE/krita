@@ -29,13 +29,6 @@ class KRITAIMAGE_EXPORT KisDocumentUndoStore : public KisUndoStore
 public:
     KisDocumentUndoStore(KoDocument *doc);
 
-    /**
-     * NOTE: This is a kind of hack to allow KisDoc2
-     * to notify undo store when a command is executed
-     * during undo/redo actions
-     */
-    using KisUndoStore::notifyCommandExecuted;
-
     const KUndo2Command* presentCommand();
     void undoLastCommand();
     void addCommand(KUndo2Command *cmd);

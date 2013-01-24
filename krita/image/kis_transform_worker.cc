@@ -98,8 +98,6 @@ QRect rotateWithTf(int rotation, KisPaintDeviceSP dev,
     QTransform tf;
     tf = tf.rotate(rotation);
 
-    KoColor c(Qt::red, dev->colorSpace());
-
     int ty = 0;
     int tx = 0;
 
@@ -114,7 +112,7 @@ QRect rotateWithTf(int rotation, KisPaintDeviceSP dev,
         progressHelper.step();
     }
 
-    dev->makeCloneFrom(tmp, tmp->extent());
+    dev->makeCloneFrom(tmp, tmp->region().boundingRect());
     return r;
 }
 

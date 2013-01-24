@@ -26,7 +26,6 @@ class KisDoc2Test : public QObject
     Q_OBJECT
 
 private slots:
-    void testUndoRedoNotify();
     void testOpenImageTwiceInSameDoc();
 };
 

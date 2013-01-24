@@ -29,24 +29,6 @@ class KUndo2Command;
 
 
 /**
- * Undo listeners want to be notified of undo and redo actions.
- * add notification is given _before_ the command is added to the
- * stack.
- * execute notification is given on undo and redo
- */
-class KisCommandHistoryListener
-{
-
-public:
-
-    KisCommandHistoryListener() {}
-    virtual ~KisCommandHistoryListener() {}
-    virtual void notifyCommandAdded(const KUndo2Command * cmd) = 0;
-    virtual void notifyCommandExecuted(const KUndo2Command * cmd) = 0;
-};
-
-
-/**
  * See also: http://community.kde.org/Krita/Undo_adapter_vs_Undo_store
  *
  * Split the functionality of KisUndoAdapter into two classes:
@@ -79,9 +61,6 @@ public:
     virtual ~KisUndoStore();
 
 public:
-    void setCommandHistoryListener(KisCommandHistoryListener *listener);
-    void removeCommandHistoryListener(KisCommandHistoryListener *listener);
-
     /**
      * WARNING: All these methods are not considered as thread-safe
      */
@@ -92,13 +71,8 @@ public:
     virtual void beginMacro(const QString& macroName) = 0;
     virtual void endMacro() = 0;
 
-protected:
-    void notifyCommandAdded(const KUndo2Command *command);
-    void notifyCommandExecuted(const KUndo2Command *command);
-
 private:
     Q_DISABLE_COPY(KisUndoStore)
-    QVector<KisCommandHistoryListener*> m_undoListeners;
 };
 
 

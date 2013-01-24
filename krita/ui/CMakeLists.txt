@@ -282,6 +282,13 @@ endif (GHNS)
 
 if(HAVE_OPENGL)
     target_link_libraries(kritaui ${OPENGL_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${OPENEXR_LIBRARIES})
+
+    # activate workaround for the VSync disable
+    # TODO: port this to Glew when Glew 1.7 will become a mandatory dep
+    if(NOT WIN32)
+      target_link_libraries(kritaui ${CMAKE_DL_LIBS})
+    endif(NOT WIN32)
+
     set (GL_INTERFACE_LIBRARIES ";${OPENGL_LIBRARIES};${QT_QTOPENGL_LIBRARY}")
     if(HAVE_GLEW)
         target_link_libraries(kritaui ${GLEW_LIBRARIES})

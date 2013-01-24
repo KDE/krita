@@ -169,10 +169,6 @@ protected slots:
 
     void slotLoadingFinished();
 
-private slots:
-
-    void undoIndexChanged(int idx);
-
 private:
 
     bool init();

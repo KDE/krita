@@ -32,7 +32,8 @@ class KisToolInvocationAction : public KisAbstractInputAction
 public:
     enum Shortcut {
         ActivateShortcut,
-        ConfirmShortcut
+        ConfirmShortcut,
+        CancelShortcut
     };
     explicit KisToolInvocationAction(KisInputManager *manager);
     virtual ~KisToolInvocationAction();

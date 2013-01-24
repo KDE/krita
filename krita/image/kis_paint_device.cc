@@ -271,14 +271,11 @@ void KisPaintDevice::prepareClone(KisPaintDeviceSP src)
             m_datamanager = new KisDataManager(src->pixelSize(), src->defaultPixel());
             m_d->cache.setupCache();
         }
-        else {
-            setDefaultPixel(src->defaultPixel());
-        }
 
         m_d->colorSpace = src->colorSpace();
     }
+    setDefaultPixel(src->defaultPixel());
     setDefaultBounds(src->defaultBounds());
-    setParentNode(0);
 
     Q_ASSERT(fastBitBltPossible(src));
 }
@@ -756,7 +753,7 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h, QRect
 QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h, QRect rect, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
     KisPaintDeviceSP dev = createThumbnailDevice(w, h, rect);
-    QImage thumbnail = dev->convertToQImage(KoColorSpaceRegistry::instance()->rgb8()->profile(), renderingIntent, conversionFlags);
+    QImage thumbnail = dev->convertToQImage(KoColorSpaceRegistry::instance()->rgb8()->profile(), 0, 0, w, h, renderingIntent, conversionFlags);
     return thumbnail;
 }
 
@@ -853,7 +850,7 @@ void KisPaintDevice::clearSelection(KisSelectionSP selection)
     if (r.isValid()) {
 
         KisHLineIteratorSP devIt = createHLineIteratorNG(r.x(), r.y(), r.width());
-        KisHLineConstIteratorSP selectionIt = selection->projection()->createHLineIteratorNG(r.x(), r.y(), r.width());
+        KisHLineConstIteratorSP selectionIt = selection->projection()->createHLineConstIteratorNG(r.x(), r.y(), r.width());
 
         const quint8* defaultPixel_ = defaultPixel();
         bool transparentDefault = (m_d->colorSpace->opacityU8(defaultPixel_) == OPACITY_TRANSPARENT_U8);

@@ -194,8 +194,6 @@ bool KisDoc2::init()
     delete m_d->nserver;
     m_d->nserver = 0;
 
-    connect(undoStack(), SIGNAL(indexChanged(int)), SLOT(undoIndexChanged(int)));
-
     m_d->nserver = new KisNameServer(1);
     Q_CHECK_PTR(m_d->nserver);
 
@@ -516,21 +514,6 @@ void KisDoc2::setImageModified()
 KisUndoStore* KisDoc2::createUndoStore()
 {
     return new KisDocumentUndoStore(this);
-}
-
-void KisDoc2::undoIndexChanged(int idx)
-{
-    const KUndo2Command* command = undoStack()->command(idx);
-    if (!command) return;
-
-    KisImageWSP image = this->image();
-    if(!image) return;
-
-    KisDocumentUndoStore *undoStore =
-            dynamic_cast<KisDocumentUndoStore*>(image->undoStore());
-    Q_ASSERT(undoStore);
-
-    undoStore->notifyCommandExecuted(command);
 }
 
 #include "kis_doc2.moc"

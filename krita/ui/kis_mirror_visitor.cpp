@@ -129,7 +129,7 @@ bool KisMirrorVisitor::mirrorMask(KisMask* mask)
         } else {
             name = i18n("Mirror Mask Y");
         }
-        KisSelectionTransaction transaction(name, m_image, selection);
+        KisSelectionTransaction transaction(name, m_image->undoAdapter(), selection);
 
         QRect dirty;
         if (m_orientation == Qt::Horizontal) {

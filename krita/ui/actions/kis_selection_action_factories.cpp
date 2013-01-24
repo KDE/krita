@@ -152,7 +152,7 @@ void KisSelectAllActionFactory::run(KisView2 *view)
         KisImageSP m_image;
         KUndo2Command* paint() {
             KisSelectionSP selection = m_image->globalSelection();
-            KisSelectionTransaction transaction(QString(), m_image, selection);
+            KisSelectionTransaction transaction(QString(), m_image->undoAdapter(), selection);
             selection->getOrCreatePixelSelection()->select(m_image->bounds());
             return transaction.endAndTake();
         }
@@ -296,7 +296,7 @@ void KisApplySelectionFilterActionFactory::runFromXML(KisView2 *view, const KisU
         KisSelectionFilter *m_filter;
 
         KUndo2Command* paint() {
-            KisSelectionTransaction transaction("", m_image, m_sel);
+            KisSelectionTransaction transaction("", m_image->undoAdapter(), m_sel);
             KisPixelSelectionSP mergedSelection = m_sel->getOrCreatePixelSelection();
             QRect processingRect = m_filter->changeRect(mergedSelection->selectedExactRect());
             m_filter->process(mergedSelection, processingRect);

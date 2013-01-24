@@ -23,8 +23,11 @@
 ToolTransformArgs::ToolTransformArgs()
 {
     m_mode = FREE_TRANSFORM;
-    m_translate = QPointF(0, 0);
+    m_transformedCenter = QPointF(0, 0);
+    m_originalCenter = QPointF(0, 0);
     m_rotationCenterOffset = QPointF(0, 0);
+    m_cameraPos = QVector3D(0,0,1024);
+    m_eyePos = -m_cameraPos;
     m_aX = 0;
     m_aY = 0;
     m_aZ = 0;
@@ -45,8 +48,11 @@ ToolTransformArgs::ToolTransformArgs()
 void ToolTransformArgs::init(const ToolTransformArgs& args)
 {
     m_mode = args.mode();
-    m_translate = args.translate();
+    m_transformedCenter = args.transformedCenter();
+    m_originalCenter = args.originalCenter();
     m_rotationCenterOffset = args.rotationCenterOffset();
+    m_cameraPos = QVector3D(0,0,1024);
+    m_eyePos = -m_cameraPos;
     m_aX = args.aX();
     m_aY = args.aY();
     m_aZ = args.aZ();
@@ -85,12 +91,22 @@ ToolTransformArgs& ToolTransformArgs::operator=(const ToolTransformArgs& args)
 }
 
 ToolTransformArgs::ToolTransformArgs(TransformMode mode,
-                                     QPointF translate, QPointF rotationCenterOffset, double aX, double aY, double aZ, double scaleX, double scaleY, double shearX, double shearY,
-                                     KisWarpTransformWorker::WarpType warpType, double alpha, bool defaultPoints)
+                                     QPointF transformedCenter,
+                                     QPointF originalCenter,
+                                     QPointF rotationCenterOffset,
+                                     double aX, double aY, double aZ,
+                                     double scaleX, double scaleY,
+                                     double shearX, double shearY,
+                                     KisWarpTransformWorker::WarpType warpType,
+                                     double alpha,
+                                     bool defaultPoints)
 {
     m_mode = mode;
-    m_translate = translate;
+    m_transformedCenter = transformedCenter;
+    m_originalCenter = originalCenter;
     m_rotationCenterOffset = rotationCenterOffset;
+    m_cameraPos = QVector3D(0,0,1024);
+    m_eyePos = -m_cameraPos;
     m_aX = aX;
     m_aY = aY;
     m_aZ = aZ;
@@ -115,10 +131,10 @@ ToolTransformArgs::~ToolTransformArgs()
     clear();
 }
 
-bool ToolTransformArgs::isIdentity(QPointF originalTranslate) const
+bool ToolTransformArgs::isIdentity() const
 {
     if (m_mode == FREE_TRANSFORM) {
-        return (m_translate == originalTranslate && m_scaleX == 1
+        return (m_transformedCenter == m_originalCenter && m_scaleX == 1
                 && m_scaleY == 1 && m_shearX == 0 && m_shearY == 0
                 && m_aX == 0 && m_aY == 0 && m_aZ == 0);
     } else {

@@ -41,7 +41,7 @@ public:
 
     void undo() {
         KisImageWSP image = this->image();
-        image->requestStrokeCancellation();
+        image->requestUndoDuringStroke();
         if(image->tryBarrierLock()) {
             KUndo2Stack::undo();
             image->unlock();

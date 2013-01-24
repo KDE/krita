@@ -44,6 +44,7 @@
 #include <kis_tool.h>
 
 #include "tool_transform_args.h"
+#include "tool_transform_changes_tracker.h"
 #include "kis_tool_transform_config_widget.h"
 #include "transform_transaction_properties.h"
 
@@ -91,6 +92,7 @@ public slots:
     virtual void deactivate();
 
 protected:
+    void requestUndoDuringStroke();
     void requestStrokeEnd();
     void requestStrokeCancellation();
 
@@ -261,8 +263,9 @@ private:
     double dichotomyScaleY(QVector3D v1, QVector3D v2, DICHO_DROP flag, double desired, double b, double precision, double maxIterations1, double maxIterations2);
     // If p is inside r, p is returned, otherwise the returned point is the intersection of the line given by vector p, and the rectangle
     inline QPointF clipInRect(QPointF p, QRectF r);
-    // Only commits the changes made on the preview to the undo stack
-    void transform();
+
+    void commitChanges();
+
     // Updated the widget according to m_currentArgs
     void updateOptionWidget();
 
@@ -382,6 +385,7 @@ private:
     bool m_isActive;
 
     TransformTransactionProperties m_transaction;
+    TransformChangesTracker m_changesTracker;
 
 private:
     QPointF imageToFlake(const QPointF &pt);
@@ -393,6 +397,7 @@ private:
     QPointF imageToThumb(const QPointF &pt, bool useFlakeOptimization);
 
 private slots:
+    void slotTrackerChangedConfig();
     void slotUiChangedConfig();
     void slotApplyTransform();
     void slotResetTransform();

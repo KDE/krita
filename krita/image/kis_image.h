@@ -577,6 +577,18 @@ signals:
     void sigLayersChangedAsync();
 
     /**
+     * Emitted when the UI has requested the undo of the last stroke's
+     * operation. The point is, we cannot deal with the internals of
+     * the stroke without its creator knowing about it (which most
+     * probably cause a crash), so we just forward this request from
+     * the UI to the creator of the stroke.
+     *
+     * If your tool supports undoing part of its work, just listen to
+     * this signal and undo when it comes
+     */
+    void sigUndoDuringStrokeRequested();
+
+    /**
      * Emitted when the UI has requested the cancellation of
      * the stroke. The point is, we cannot cancel the stroke
      * without its creator knowing about it (which most probably
@@ -661,7 +673,18 @@ public slots:
     void initialRefreshGraph();
 
     /**
-     * This method is be called by the UI (*not* by the creator
+     * This method is called by the UI (*not* by the creator of the
+     * stroke) when it thinks current stroke should undo its last
+     * action. For example, when the user presses Ctrl+Z while some
+     * stroke is active. If the creator of the stroke supports undoing
+     * of intermediate actions, it will be notified about this request
+     * and (if it decides he likes to do it) will undo its last
+     * action.
+     */
+    void requestUndoDuringStroke();
+
+    /**
+     * This method is called by the UI (*not* by the creator
      * of the stroke) when it thinks current stroke should be
      * cancelled. If the creator of the stroke supports cancelling
      * of the stroke, it will be notified about the request and

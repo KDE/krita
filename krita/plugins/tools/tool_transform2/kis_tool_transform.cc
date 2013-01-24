@@ -82,6 +82,7 @@
 KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
         : KisTool(canvas, KisCursor::rotateCursor())
         , m_isActive(false)
+        , m_changesTracker(&m_transaction)
 {
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     Q_ASSERT(m_canvas);
@@ -107,6 +108,10 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     m_handleRadius = 12;
     m_rotationCenterRadius = 12;
     m_maxRadius = (m_handleRadius > m_rotationCenterRadius) ? m_handleRadius : m_rotationCenterRadius;
+
+
+    connect(&m_changesTracker, SIGNAL(sigConfigChanged()),
+            this, SLOT(slotTrackerChangedConfig()));
 }
 
 KisToolTransform::~KisToolTransform()
@@ -930,14 +935,9 @@ void KisToolTransform::keyReleaseEvent(QKeyEvent *event)
         setTransformFunction(m_prevMousePos, event->modifiers());
 
         if (mode() == KisTool::PAINT_MODE) {
-            // if mode is HOVER_MODE the transformation has already
-            // been comitted to the undo stack when mouse button was released
             if (m_imageTooBig) {
                 restoreArgs(m_clickArgs);
                 outlineChanged();
-            }
-            else {
-                transform();
             }
 
             setMode(KisTool::HOVER_MODE);
@@ -1891,7 +1891,7 @@ void KisToolTransform::mouseReleaseEvent(KoPointerEvent *event)
     if (m_actuallyMoveWhileSelected) {
         if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
             if (m_currentArgs.defaultPoints() || !m_transaction.editWarpPoints())
-                transform();
+                commitChanges();
             recalcOutline();
         }
         else {
@@ -1900,7 +1900,7 @@ void KisToolTransform::mouseReleaseEvent(KoPointerEvent *event)
                 outlineChanged();
             }
             else
-                transform();
+                commitChanges();
 
             m_scaleX_wOutModifier = m_currentArgs.scaleX();
             m_scaleY_wOutModifier = m_currentArgs.scaleY();
@@ -2021,6 +2021,13 @@ void KisToolTransform::deactivate()
     KisTool::deactivate();
 }
 
+void KisToolTransform::requestUndoDuringStroke()
+{
+    if (!m_strokeId) return;
+
+    m_changesTracker.requestUndo();
+}
+
 void KisToolTransform::requestStrokeEnd()
 {
     endStroke();
@@ -2075,6 +2082,9 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
 
     image()->addJob(m_strokeId,
                     new TransformStrokeStrategy::ClearSelectionData());
+
+    Q_ASSERT(m_changesTracker.isEmpty());
+    commitChanges();
 }
 
 void KisToolTransform::endStroke()
@@ -2098,6 +2108,7 @@ void KisToolTransform::endStroke()
     }
 
     m_strokeId.clear();
+    m_changesTracker.reset();
 }
 
 void KisToolTransform::cancelStroke()
@@ -2106,11 +2117,18 @@ void KisToolTransform::cancelStroke()
 
     image()->cancelStroke(m_strokeId);
     m_strokeId.clear();
+    m_changesTracker.reset();
 }
 
-void KisToolTransform::transform()
+void KisToolTransform::commitChanges()
 {
-    Q_ASSERT(image());
+    m_changesTracker.commitConfig(m_currentArgs);
+}
+
+void KisToolTransform::slotTrackerChangedConfig()
+{
+    slotUiChangedConfig();
+    updateOptionWidget();
 }
 
 QWidget* KisToolTransform::createOptionWidget() {
@@ -2181,11 +2199,10 @@ void KisToolTransform::slotResetTransform()
 
 void KisToolTransform::slotEditingFinished()
 {
-    transform();
+    commitChanges();
 
     m_scaleX_wOutModifier = m_currentArgs.scaleX();
     m_scaleY_wOutModifier = m_currentArgs.scaleY();
 }
-
 
 #include "kis_tool_transform.moc"

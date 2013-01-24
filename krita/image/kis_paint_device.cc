@@ -271,14 +271,11 @@ void KisPaintDevice::prepareClone(KisPaintDeviceSP src)
             m_datamanager = new KisDataManager(src->pixelSize(), src->defaultPixel());
             m_d->cache.setupCache();
         }
-        else {
-            setDefaultPixel(src->defaultPixel());
-        }
 
         m_d->colorSpace = src->colorSpace();
     }
+    setDefaultPixel(src->defaultPixel());
     setDefaultBounds(src->defaultBounds());
-    setParentNode(0);
 
     Q_ASSERT(fastBitBltPossible(src));
 }

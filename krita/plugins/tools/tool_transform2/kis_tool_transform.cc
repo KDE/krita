@@ -21,7 +21,6 @@
  */
 
 #include "kis_tool_transform.h"
-#include "tool_transform_commands.h"
 
 
 #include <math.h>

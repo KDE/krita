@@ -3,6 +3,7 @@
  *  Copyright (c) 2005-2007 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2005, 2010 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
+ *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

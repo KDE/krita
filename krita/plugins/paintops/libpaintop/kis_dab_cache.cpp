@@ -310,6 +310,6 @@ void KisDabCache::postProcessDab(KisFixedPaintDeviceSP dab,
     }
 
     if (m_d->textureOption) {
-        m_d->textureOption->apply(dab, info.pos().toPoint());
+        m_d->textureOption->apply(dab, info.pos().toPoint(), info);
     }
 }

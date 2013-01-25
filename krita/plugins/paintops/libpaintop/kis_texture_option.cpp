@@ -322,10 +322,12 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfiguration *sett
     cutoffRight = setting->getInt("Texture/Pattern/CutoffRight", 255);
     cutoffPolicy = setting->getInt("Texture/Pattern/CutoffPolicy", 0);
 
+    m_strengthOption.readOptionSetting(setting);
+
     recalculateMask();
 }
 
-void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset)
+void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset, const KisPaintInformation & info)
 {
     if (!enabled) return;
 
@@ -342,19 +344,28 @@ void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset
     fillPainter.fillRect(x - 1, y - 1, rect.width() + 2, rect.height() + 2, m_mask, m_maskBounds);
     fillPainter.end();
 
+    qreal pressure = m_strengthOption.apply(info);
+    int pressureOffset = (1.0 - pressure) * 255;
+
     quint8 *dabData = dab->data();
 
     KisHLineIteratorSP iter = fillDevice->createHLineIteratorNG(x, y, rect.width());
     for (int row = 0; row < rect.height(); ++row) {
         for (int col = 0; col < rect.width(); ++col) {
             if (!(cutoffPolicy == 2 && (*iter->oldRawData() < cutoffLeft || *iter->oldRawData() > cutoffRight))) {
-                dab->colorSpace()->multiplyAlpha(dabData, *iter->oldRawData(), 1);
+                //dab->colorSpace()->multiplyAlpha(dabData, *iter->oldRawData(), 1);
+
+                int maskA = *iter->oldRawData() + pressureOffset;
+                quint8 dabA = dab->colorSpace()->opacityU8(dabData);
+
+                dabA = qMax(0, (int)dabA - maskA);
+                dab->colorSpace()->setOpacity(dabData, dabA, 1);
+
             }
             iter->nextPixel();
             dabData += dab->pixelSize();
         }
         iter->nextRow();
     }
-
 }
 

@@ -40,6 +40,8 @@
 #include <kis_compositeop_option.h>
 #include <kis_pressure_flow_opacity_option_widget.h>
 #include <kis_texture_option.h>
+#include "kis_pressure_texture_strength_option.h"
+
 
 KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
         : KisBrushBasedPaintopOptionWidget(parent)
@@ -70,6 +72,7 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
 
     // Texture options
     addPaintOpOption(new KisTextureOption());
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption()));
 }
 
 KisBrushOpSettingsWidget::~KisBrushOpSettingsWidget()

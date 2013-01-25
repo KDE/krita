@@ -206,6 +206,8 @@ private slots:
 
     void setCursor(const QCursor &cursor);
 
+    void slotSelectionChanged();
+
 public:
 
     // interface for KisView2 only

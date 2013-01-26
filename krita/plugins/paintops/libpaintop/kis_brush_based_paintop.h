@@ -22,6 +22,7 @@
 #include "kis_paintop.h"
 #include "kis_dab_cache.h"
 #include "kis_brush.h"
+#include "kis_texture_option.h"
 #include "kis_precision_option.h"
 
 
@@ -47,6 +48,7 @@ public:
 protected: // XXX: make private!
 
     KisBrushSP m_brush;
+    KisTextureProperties m_textureProperties;
     KisPrecisionOption m_precisionOption;
     KisDabCache *m_dabCache;
 };

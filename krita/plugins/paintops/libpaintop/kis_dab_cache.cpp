@@ -180,7 +180,7 @@ bool KisDabCache::needSeparateOriginal()
             m_d->mirrorOption->isChecked() &&
             (m_d->mirrorOption->isHorizontalMirrorEnabled() ||
              m_d->mirrorOption->isVerticalMirrorEnabled())) ||
-        (m_d->mirrorOption && m_d->textureOption->enabled);
+        (m_d->textureOption && m_d->textureOption->enabled);
 }
 
 inline

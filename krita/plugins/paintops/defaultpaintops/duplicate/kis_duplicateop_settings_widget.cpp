@@ -44,6 +44,8 @@ KisDuplicateOpSettingsWidget::KisDuplicateOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
     addPaintOpOption(m_duplicateOption);
+
+    addTextureOptions();
 }
 
 KisDuplicateOpSettingsWidget::~KisDuplicateOpSettingsWidget()

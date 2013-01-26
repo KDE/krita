@@ -326,6 +326,7 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfiguration *sett
     cutoffPolicy = setting->getInt("Texture/Pattern/CutoffPolicy", 0);
 
     m_strengthOption.readOptionSetting(setting);
+    m_strengthOption.sensor()->reset();
 
     recalculateMask();
 }

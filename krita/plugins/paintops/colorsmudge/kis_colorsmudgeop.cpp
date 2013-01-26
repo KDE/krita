@@ -123,6 +123,10 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     const KoCompositeOp* oldMode    = painter()->compositeOp();
     qreal                fpOpacity  = (qreal(oldOpacity) / 255.0) * m_opacityOption.getOpacityf(info);
 
+    // update the brush mask if needed. the mask is then stored in m_maskDab
+    // and the extends of the mask is stored in m_maskBounds
+    updateMask(info, scale, rotation);
+
     if(!m_firstRun) {
         // if color is disabled (only smudge) and "overlay mode is enabled
         // then first blit the region under the brush from the image projection
@@ -145,10 +149,6 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
         painter()->bitBltWithFixedSelection(x, y, m_tempDev, m_maskDab, m_maskBounds.width(), m_maskBounds.height());
     }
     else m_firstRun = false;
-
-    // update the brush mask if needed. the mask is then stored in m_maskDab
-    // and the extends of the mask is stored in m_maskBounds
-    updateMask(info, scale, rotation);
 
     if(m_image && m_overlayModeOption.isChecked()) {
         m_tempPainter->setCompositeOp(COMPOSITE_COPY);

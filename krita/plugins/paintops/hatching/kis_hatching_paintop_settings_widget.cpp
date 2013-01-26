@@ -55,6 +55,8 @@ KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget* par
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
     addPaintOpOption(new KisPaintActionTypeOption());
 
+    addTextureOptions();
+
     //-----Useful to read first:------
     /*
     Below you will encounter a reasonably correct solution to the problem of changing

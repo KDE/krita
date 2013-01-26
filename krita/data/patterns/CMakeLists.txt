@@ -1,6 +1,31 @@
 ########### install files ###############
 
 install(FILES
+01_canvas.png
+02_rough-canvas.png
+03_default-paper.png
+04_paper-C-grain.png
+05_paper-torchon.png
+06_hard-grain.png
+07_big-grain.png
+08_bump-relief.png
+09_drawed_crosshatched.png
+10_drawed_dotted.png
+11_drawed_furry.png
+12_drawed_vertical.png
+13_drawed_swirl.png
+14_texture-rock.png
+15_texture-rockB.png
+16_texture-woody.png
+17_texture-melt.png
+18_texture-bark.png
+19_texture-crackle.png
+20_texture-vegetal.png
+21_texture-chainmail.png
+22_texture-reptile.png
+23-dynamic-screentone-A.png
+24-dynamic-screentone-B.png
+25-dynamic-screentone-C.png
 Canvas_01.pat
 Canvas_02.pat
 Canvas_03.pat

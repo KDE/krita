@@ -34,6 +34,9 @@ KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPropertiesConfiguration* set
     m_precisionOption.readOptionSetting(settings);
     m_dabCache = new KisDabCache(m_brush);
     m_dabCache->setPrecisionOption(&m_precisionOption);
+
+    m_textureProperties.fillProperties(settings);
+    m_dabCache->setTexturePostprocessing(&m_textureProperties);
 }
 
 KisBrushBasedPaintOp::~KisBrushBasedPaintOp()

@@ -25,6 +25,7 @@
 #include <kis_paint_device.h>
 #include <kis_types.h>
 #include "kis_paintop_option.h"
+#include "kis_pressure_texture_strength_option.h"
 
 #include <QRect>
 
@@ -63,11 +64,16 @@ public:
         : pattern(0)
     {}
 
+    enum TexturingMode {
+        MULTIPLY,
+        SUBTRACT
+    };
+
     bool enabled;
     qreal scale;
     int offsetX;
     int offsetY;
-    qreal strength;
+    TexturingMode texturingMode;
     bool invert;
     KisPattern *pattern;
     int cutoffLeft;
@@ -78,10 +84,11 @@ public:
      * @param dab the colored, final representation of the dab, after mirroring and everything.
      * @param offset the position of the dab on the image. used to calculate the position of the mask pattern
      */
-    void apply(KisFixedPaintDeviceSP dab, const QPoint& offset);
+    void apply(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation & info);
     void fillProperties(const KisPropertiesConfiguration *setting);
 
 private:
+    KisPressureTextureStrengthOption m_strengthOption;
     QRect m_maskBounds; // this can be different from the extent if we mask out too many pixels in a big mask!
     KisPaintDeviceSP m_mask;
     void recalculateMask();

@@ -66,9 +66,6 @@
                 <property name="text" >
                   <string>Shear angle X:</string>
                 </property>
-                <property name="buddy" stdset="0" >
-                  <cstring>intWidth</cstring>
-                </property>
               </widget>
             </item>
           </layout>

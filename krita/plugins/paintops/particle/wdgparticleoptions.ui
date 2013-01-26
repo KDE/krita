@@ -22,7 +22,7 @@
     <height>300</height>
    </size>
   </property>
-  <widget class="QWidget" name="layoutWidget">
+  <widget class="QWidget">
    <property name="geometry">
     <rect>
      <x>1</x>
@@ -128,7 +128,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="layoutWidget">
+  <widget class="QWidget">
    <property name="geometry">
     <rect>
      <x>10</x>

@@ -21,7 +21,7 @@
      </property>
      <layout class="QGridLayout" columnstretch="0,0,1">
       <item row="0" column="0">
-       <widget class="QLabel" name="label">
+       <widget class="QLabel">
         <property name="text">
          <string>Left:</string>
         </property>
@@ -50,7 +50,7 @@
        </spacer>
       </item>
       <item row="1" column="0">
-       <widget class="QLabel" name="label">
+       <widget class="QLabel">
         <property name="text">
          <string>Right:</string>
         </property>
@@ -66,7 +66,7 @@
        <widget class="KoUnitDoubleSpinBox" name="right"/>
       </item>
       <item row="2" column="0">
-       <widget class="QLabel" name="label">
+       <widget class="QLabel">
         <property name="text">
          <string>First Line:</string>
         </property>
@@ -92,7 +92,7 @@
     </widget>
    </item>
    <item row="1" column="0">
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox">
      <property name="whatsThis">
       <string>&lt;p&gt;&lt;ul&gt;&lt;li&gt;&lt;b&gt;Single&lt;/b&gt;: The normal linespacing&lt;/li&gt;&lt;/ul&gt;&lt;/p&gt; </string>
      </property>
@@ -175,7 +175,7 @@
          <number>0</number>
         </property>
         <item row="0" column="0">
-         <widget class="QLabel" name="label">
+         <widget class="QLabel">
           <property name="text">
            <string>Use Font Metrics:</string>
           </property>
@@ -197,13 +197,13 @@
     </widget>
    </item>
    <item row="2" column="0">
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox">
      <property name="title">
       <string>Paragraph Space</string>
      </property>
      <layout class="QFormLayout">
       <item row="0" column="0">
-       <widget class="QLabel" name="label">
+       <widget class="QLabel">
         <property name="text">
          <string>Before:</string>
         </property>
@@ -216,7 +216,7 @@
        <widget class="KoUnitDoubleSpinBox" name="before"/>
       </item>
       <item row="1" column="0">
-       <widget class="QLabel" name="label">
+       <widget class="QLabel">
         <property name="text">
          <string>After:</string>
         </property>

@@ -10,9 +10,9 @@
     <height>429</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2">
+  <layout class="QGridLayout">
    <item row="0" column="0">
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox">
      <property name="title">
       <string>Colors</string>
      </property>
@@ -288,7 +288,7 @@
      <property name="title">
       <string>Position</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout">
+     <layout class="QGridLayout">
       <item row="0" column="0">
        <widget class="QCheckBox" name="hyphenate">
         <property name="text">

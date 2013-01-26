@@ -64,11 +64,16 @@ public:
         : pattern(0)
     {}
 
+    enum TexturingMode {
+        MULTIPLY,
+        SUBTRACT
+    };
+
     bool enabled;
     qreal scale;
     int offsetX;
     int offsetY;
-    qreal strength;
+    TexturingMode texturingMode;
     bool invert;
     KisPattern *pattern;
     int cutoffLeft;

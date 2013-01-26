@@ -33,6 +33,9 @@ class PAINTOP_EXPORT KisPressureTextureStrengthOption : public KisCurveOption
 public:
     KisPressureTextureStrengthOption();
     double apply(const KisPaintInformation & info) const;
+
+    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
 };
 
 #endif /* __KIS_PRESSURE_TEXTURE_STRENGTH_OPTION_H */

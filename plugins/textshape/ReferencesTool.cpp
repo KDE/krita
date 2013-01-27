@@ -233,7 +233,7 @@ void ReferencesTool::formatTableOfContents()
         return;
     } else if (i == 1 && firstToCTextBlock.isValid()) {
         m_configure = new TableOfContentsConfigure(textEditor(), firstToCTextBlock, m_stocw);
-        connect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog(int)));
+        connect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog()));
     } else {
         m_stocw->setToCConfigureMenu(tocList);
         connect(m_stocw->ToCConfigureMenu(), SIGNAL(triggered(QAction *)), SLOT(showConfigureDialog(QAction*)));
@@ -244,12 +244,12 @@ void ReferencesTool::formatTableOfContents()
 void ReferencesTool::showConfigureDialog(QAction *action)
 {
     m_configure = new TableOfContentsConfigure(textEditor(), action->data().value<QTextBlock>(), m_stocw);
-    connect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog(int)));
+    connect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog()));
 }
 
-void ReferencesTool::hideCofigureDialog(int result)
+void ReferencesTool::hideCofigureDialog()
 {
-    disconnect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog(int)));
+    disconnect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog()));
     m_configure->deleteLater();
 }
 
@@ -311,7 +311,7 @@ void ReferencesTool::insertCustomToC(KoTableOfContentsGeneratorInfo *defaultTemp
 {
     m_configure = new TableOfContentsConfigure(textEditor(), defaultTemplate, m_stocw);
     connect(m_configure, SIGNAL(accepted()), this, SLOT(customToCGenerated()));
-    connect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog(int)));
+    connect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog()));
 }
 
 void ReferencesTool::customToCGenerated()

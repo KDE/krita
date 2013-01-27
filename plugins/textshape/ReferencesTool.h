@@ -66,7 +66,7 @@ private slots:
     /// shows the configuration dialog for a ToC
     void showConfigureDialog(QAction *action);
     /// hides the configuration dialog for ToC
-    void hideCofigureDialog(int result);
+    void hideCofigureDialog();
     /// insert an autonumbered footnote
     void insertAutoFootNote();
     /// insert a labeled footnote

@@ -45,8 +45,8 @@ signals:
 
 private slots:
     void lineSpacingChanged(int);
-    void spacingValueChanged(qreal value);
-    void spacingPercentChanged(int percent);
+    void spacingValueChanged();
+    void spacingPercentChanged();
     void useFontMetrices(bool);
     void autoTextIndentChanged(int state);
     void firstIndentValueChanged();

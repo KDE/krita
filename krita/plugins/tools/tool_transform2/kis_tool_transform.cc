@@ -498,7 +498,7 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
             gc.fillPath(m_selectionPath, Qt::black);
         }
 
-        gc.setOpacity(1.0);
+        gc.setOpacity(0.9);
         gc.setTransform(m_paintingTransform, true);
         gc.drawImage(m_paintingOffset, m_origImg);
 

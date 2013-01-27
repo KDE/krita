@@ -133,7 +133,6 @@ Parser::Token Parser::parseToken()
             type = Token::Identifier;
         }
     }
-    bool dollarPrefix = false;
     if (m_index >= m_input.size())
         type = Token::End;
     else if (*m_pos == QChar::fromLatin1('$')) {
@@ -306,6 +305,7 @@ static QString formatTableName(QString name)
  * Reverts any operation done by formatTableName(), so that ideally
  * unformatTableName(formatTableName(name)) == name
  */
+/* currently not used in CellRegion(TableSource *source, const QString& regions)
 static QString unformatTableName(QString name)
 {
     if (name.startsWith(QLatin1Char('\'')) && name.endsWith(QLatin1Char('\''))) {
@@ -314,7 +314,7 @@ static QString unformatTableName(QString name)
 
     return name;
 }
-
+*/
 class CellRegion::Private
 {
 public:

@@ -53,8 +53,8 @@ public:
 private:
     bool m_first;
     KoTextEditor *m_editor;
-    QTextBlockFormat m_blockFormat;
     QTextCharFormat m_charFormat;
+    QTextBlockFormat m_blockFormat;
     KoListLevelProperties m_levelProperties;
 };
 

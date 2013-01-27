@@ -193,7 +193,6 @@ void ReviewTool::paint(QPainter& painter, const KoViewConverter& converter)
                 TextShape *ts = dynamic_cast<TextShape*>(shape);
                 if (! ts)
                     continue;
-                KoTextShapeData *data = ts->textShapeData();
 
                 if (painter.hasClipping()) {
                     QRect rect = converter.documentToView(ts->boundingRect()).toRect();

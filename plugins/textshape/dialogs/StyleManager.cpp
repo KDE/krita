@@ -162,6 +162,7 @@ void StyleManager::setParagraphStyle(KoParagraphStyle *style)
 
 void StyleManager::setCharacterStyle(KoCharacterStyle *style, bool canDelete)
 {
+    Q_UNUSED(canDelete);
     m_blockStyleChangeSignals = true;
     m_selectedParagStyle = 0;
     m_selectedCharStyle = style;

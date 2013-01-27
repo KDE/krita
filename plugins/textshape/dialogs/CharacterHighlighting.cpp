@@ -174,6 +174,7 @@ void CharacterHighlighting::capitalisationChanged(int item)
 
 void CharacterHighlighting::positionChanged(int item)
 {
+    Q_UNUSED(item);
     m_positionInherited = false;
     emit charStyleChanged();
 }

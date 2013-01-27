@@ -119,7 +119,7 @@ public:
      * \param section The data point to return the MarkerAttributes for. -1 will return
      * the series-wide value
      */
-    KDChart::MarkerAttributes getMarkerAttributes(int section = -1, bool* success = NULL) const;
+    KDChart::MarkerAttributes getMarkerAttributes(int section = -1) const;
 
     // Graphics properties for the visualization of this dataset.
     QPen   pen() const;

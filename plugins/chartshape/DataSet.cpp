@@ -880,7 +880,7 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */
     return attr;
 }
 
-KDChart::MarkerAttributes DataSet::getMarkerAttributes(int section, bool *success) const
+KDChart::MarkerAttributes DataSet::getMarkerAttributes(int section) const
 {
     KDChart::DataValueAttributes attr(d->dataValueAttributes);
     Q_ASSERT(attr.isVisible() == d->dataValueAttributes.isVisible());

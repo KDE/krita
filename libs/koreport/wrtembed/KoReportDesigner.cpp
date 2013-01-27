@@ -818,6 +818,8 @@ void KoReportDesigner::setGridOptions(bool vis, int div)
 //
 void KoReportDesigner::sectionContextMenuEvent(ReportScene * s, QGraphicsSceneContextMenuEvent * e)
 {
+    Q_UNUSED(s);
+
     QMenu pop;
 
     bool itemsSelected = selectionCount() > 0;

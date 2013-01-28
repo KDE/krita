@@ -27,6 +27,7 @@ class KisPatternTest : public QObject
 private slots:
 
     void testCreation();
+    void testRoundTripMd5();
 
 };
 

@@ -2122,6 +2122,8 @@ void KisToolTransform::cancelStroke()
 
 void KisToolTransform::commitChanges()
 {
+    if (!m_strokeId) return;
+
     m_changesTracker.commitConfig(m_currentArgs);
 }
 

@@ -56,8 +56,7 @@ public:
     virtual ~KoReportItemMaps();
 
     virtual QString typeName() const;
-    virtual int render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script);
-    using KoReportItemBase::render;
+    virtual int renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset, const QVariant &data, KRScriptHandler *script);
 
     virtual QString itemDataSource() const;
 public slots:

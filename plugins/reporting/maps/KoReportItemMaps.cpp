@@ -178,11 +178,8 @@ QString KoReportItemMaps::typeName() const
     return "report:maps";
 }
 
-int KoReportItemMaps::render(OROPage* page,
-                             OROSection* section,
-                             QPointF offset,
-                             QVariant data,
-                             KRScriptHandler *script)
+int KoReportItemMaps::renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset,
+                                       const QVariant &data, KRScriptHandler *script)
 {
     Q_UNUSED(script)
     

@@ -47,7 +47,10 @@
 
 QByteArray generateMD5(const QImage &pattern)
 {
-    QByteArray ba = QByteArray::fromRawData((const char*)pattern.constBits(), pattern.width() * pattern.height() * 4);
+    QByteArray ba;
+    QBuffer buffer(&ba);
+    buffer.open(QIODevice::WriteOnly);
+    pattern.save(&buffer, "PNG");
     QCryptographicHash md5(QCryptographicHash::Md5);
     md5.addData(ba);
     return md5.result();

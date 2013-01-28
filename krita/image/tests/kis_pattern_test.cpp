@@ -26,30 +26,6 @@ void KisPatternTest::testCreation()
     KisPattern test(QString(FILES_DATA_DIR) + QDir::separator() + "pattern.pat");
 }
 
-void KisPatternTest::testRoundTripMd5()
-{
-    QString filename(QString(FILES_DATA_DIR) + QDir::separator() + "test_pattern.png");
-    QString patFilename("test_pattern.pat");
-
-    KisPattern pngPattern(filename);
-    QVERIFY(pngPattern.load());
-
-    qDebug() << "PNG Name:" << pngPattern.name();
-    qDebug() << "PNG Filename:" << pngPattern.filename();
-
-    pngPattern.setFilename(patFilename);
-    pngPattern.save();
-
-    KisPattern patPattern(patFilename);
-    QVERIFY(patPattern.load());
-
-    qDebug() << "PAT Name:" << patPattern.name();
-    qDebug() << "PAT Filename:" << patPattern.filename();
-
-    QCOMPARE(pngPattern.image(), patPattern.image());
-    QCOMPARE(pngPattern.md5(), patPattern.md5());
-}
-
 
 QTEST_KDEMAIN(KisPatternTest, GUI)
 #include "kis_pattern_test.moc"

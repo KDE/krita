@@ -23,24 +23,14 @@
 
 #include <KoReportItemBase.h>
 
-
-
 class KOREPORT_EXPORT KoReportASyncItemBase : public KoReportItemBase
 {
     Q_OBJECT
 public:
-    using KoReportItemBase::render;
-    virtual int render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script) = 0;
-    
-protected:    
-    
+    virtual int renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset, const QVariant &data, KRScriptHandler *script) = 0;
+
 signals:
     void finishedRendering();
-    
-public:
-    
-private:
-    
 };
 
 #endif // KOREPORTASYNCITEMBASE_H

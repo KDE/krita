@@ -204,7 +204,8 @@ QString KoReportItemField::typeName() const
     return "report:field";
 }
 
-int KoReportItemField::render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script)
+int KoReportItemField::renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset,
+                                        const QVariant &data, KRScriptHandler *script)
 {
     OROTextBox * tb = new OROTextBox();
     tb->setPosition(m_pos.toScene() + offset);

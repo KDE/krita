@@ -42,9 +42,9 @@ public:
     ~KoReportItemBarcode();
 
     virtual QString typeName() const;
-    virtual int render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script);
+    virtual int renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset, const QVariant &data, KRScriptHandler *script);
     virtual QString itemDataSource() const;
-   
+
 protected:
 
     KoProperty::Property * m_controlSource;

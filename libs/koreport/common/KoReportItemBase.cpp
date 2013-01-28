@@ -60,7 +60,8 @@ void KoReportItemBase::setUnit(const KoUnit& u)
     m_size.setUnit(u);
 }
 
-int KoReportItemBase::render(OROPage* page, OROSection* section, QPointF offset, QVariant data, KRScriptHandler* script)
+int KoReportItemBase::renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset,
+                                       const QVariant &data, KRScriptHandler* script)
 {
     Q_UNUSED(page)
     Q_UNUSED(section)
@@ -70,7 +71,8 @@ int KoReportItemBase::render(OROPage* page, OROSection* section, QPointF offset,
     return 0;
 }
 
-int KoReportItemBase::render(OROPage* page, OROSection* section, QPointF offset, KoReportData* data, KRScriptHandler* script)
+int KoReportItemBase::renderReportData(OROPage *page, OROSection *section, const QPointF &offset,
+                                       KoReportData *data, KRScriptHandler* script)
 {
     Q_UNUSED(page)
     Q_UNUSED(section)

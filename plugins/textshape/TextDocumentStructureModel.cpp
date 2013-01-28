@@ -163,7 +163,7 @@ QModelIndex TextDocumentStructureModel::parent(const QModelIndex &index) const
         }
         ++row;
     }
-    Q_ASSERT(posFound);
+    Q_ASSERT(posFound);Q_UNUSED(posFound);
     return createIndex(row, 0, frameIndex(parentFrame));
 }
 

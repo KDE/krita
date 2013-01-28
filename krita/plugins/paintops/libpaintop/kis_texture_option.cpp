@@ -54,6 +54,7 @@ public:
         : QWidget(parent)
     {
         QFormLayout *formLayout = new QFormLayout(this);
+
         chooser = new KisPatternChooser(this);
         chooser->setGrayscalePreview(true);
         chooser->setMaximumHeight(250);
@@ -163,54 +164,92 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfiguration* setting) c
     setting->setProperty("Texture/Pattern/CutoffPolicy", m_optionWidget->cmbCutoffPolicy->currentIndex());
     setting->setProperty("Texture/Pattern/Invert", invert);
 
+    /**
+     * Save the pattern locally to optimize loading with md5 sum
+     */
+    pattern->save();
+    QByteArray patternMD5 = pattern->md5();
+    setting->setProperty("Texture/Pattern/PatternMD5", patternMD5.toBase64());
+
     QByteArray ba;
     QBuffer buffer(&ba);
     buffer.open(QIODevice::WriteOnly);
     pattern->image().save(&buffer, "PNG");
-
     setting->setProperty("Texture/Pattern/Pattern", ba.toBase64());
+
     setting->setProperty("Texture/Pattern/PatternFileName", pattern->filename());
     setting->setProperty("Texture/Pattern/Name", pattern->name());
-
     setting->setProperty("Texture/Pattern/Enabled", isChecked());
 }
 
-void KisTextureOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+KisPattern* tryFetchPatternByMd5(const QByteArray &md5)
 {
+    KisPattern *pattern = 0;
+
+    if (!md5.isEmpty()) {
+        foreach(KoResource *res, KisResourceServerProvider::instance()->patternServer()->resources()) {
+            KisPattern *pat = static_cast<KisPattern *>(res);
+            if (pat->md5() == md5) {
+                pattern = pat;
+                break;
+            }
+        }
+    }
+
+    return pattern;
+}
+
+KisPattern* tryLoadEmbeddedPattern(const KisPropertiesConfiguration* setting)
+{
+    KisPattern *pattern = 0;
+
     QByteArray ba = QByteArray::fromBase64(setting->getString("Texture/Pattern/Pattern").toLatin1());
     QImage img;
     img.loadFromData(ba, "PNG");
+
     QString name = setting->getString("Texture/Pattern/Name");
     if (name.isEmpty()) {
         name = setting->getString("Texture/Pattern/FileName");
     }
 
-    KisPattern *pattern = 0;
     if (!img.isNull()) {
         pattern = new KisPattern(img, name);
     }
-    // now check whether the pattern already occurs, if not, add it to the
-    // resources.
-    if (pattern) {
-        bool found = false;
-        foreach(KoResource *res, KisResourceServerProvider::instance()->patternServer()->resources()) {
-            KisPattern *pat = static_cast<KisPattern *>(res);
-            if (pat->md5() == pattern->md5()) {
+
+    return pattern;
+}
+
+KisPattern* loadPattern(const KisPropertiesConfiguration* setting)
+{
+    KisPattern *pattern = 0;
+
+    QByteArray md5 = QByteArray::fromBase64(setting->getString("Texture/Pattern/PatternMD5").toLatin1());
+    pattern = tryFetchPatternByMd5(md5);
+
+    if (!pattern) {
+        pattern = tryLoadEmbeddedPattern(setting);
+        if (pattern) {
+            KisPattern *existingPattern = tryFetchPatternByMd5(pattern->md5());
+            if (existingPattern) {
                 delete pattern;
-                pattern = pat;
-                found = true;
-                break;
+                pattern = existingPattern;
+            } else {
+                KisResourceServerProvider::instance()->patternServer()->addResource(pattern, false);
             }
         }
-        if (!found) {
-            KisResourceServerProvider::instance()->patternServer()->addResource(pattern, false);
-        }
-        m_optionWidget->offsetSliderX->setRange(0, pattern->image().width() / 2);
-        m_optionWidget->offsetSliderY->setRange(0, pattern->image().height() / 2);
     }
-    else {
+
+    return pattern;
+}
+
+void KisTextureOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+{
+    KisPattern *pattern = loadPattern(setting);
+
+    if (!pattern) {
         pattern = static_cast<KisPattern*>(m_optionWidget->chooser->currentResource());
     }
+
     m_optionWidget->chooser->setCurrentPattern(pattern);
 
     m_optionWidget->scaleSlider->setValue(setting->getDouble("Texture/Pattern/Scale", 1.0));
@@ -291,28 +330,12 @@ void KisTextureProperties::recalculateMask()
 
 void KisTextureProperties::fillProperties(const KisPropertiesConfiguration *setting)
 {
+    pattern = loadPattern(setting);
 
-    QByteArray ba = QByteArray::fromBase64(setting->getString("Texture/Pattern/Pattern").toLatin1());
-    QImage img;
-    img.loadFromData(ba, "PNG");
-    QString name = setting->getString("Texture/Pattern/Name");
-    if (name.isEmpty()) {
-        name = setting->getString("Texture/Pattern/FileName");
-    }
-
-    pattern = 0;
-    if (!img.isNull()) {
-        pattern = new KisPattern(img, name);
-    }
-    if (pattern) {
-        foreach(KoResource *res, KisResourceServerProvider::instance()->patternServer()->resources()) {
-            KisPattern *pat = static_cast<KisPattern *>(res);
-            if (pat == pattern) {
-                delete pattern;
-                pattern = pat;
-                break;
-            }
-        }
+    if (!pattern) {
+        qWarning() << "WARNING: Couldn't load the pattern for a stroke";
+        enabled = false;
+        return;
     }
 
     enabled = setting->getBool("Texture/Pattern/Enabled", false);

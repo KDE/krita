@@ -72,6 +72,15 @@ bool KoPattern::load()
     } else {
         result = m_image.load(filename());
         setValid(result);
+
+        /**
+         * All our resources code expects the image() of the resource
+         * to be in ARGB32 format, so convert the image when its format
+         * differs
+         */
+        if (result && m_image.format() != QImage::Format_ARGB32) {
+            m_image = m_image.convertToFormat(QImage::Format_ARGB32);
+        }
     }
     return result;
 }

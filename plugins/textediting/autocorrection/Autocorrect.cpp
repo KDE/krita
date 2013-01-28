@@ -597,8 +597,8 @@ QString Autocorrect::autoDetectURL(const QString &_word) const
 
     enum LinkType  { UNCLASSIFIED, SCHEME, MAILTO, WWW, FTP };
     LinkType linkType = UNCLASSIFIED;
-    int pos;
-    int contentPos;
+    int pos = 0;
+    int contentPos = 0;
 
     // TODO: ideally there would be proper pattern matching,
     // instead of just searching for some key string, like done with indexOf.

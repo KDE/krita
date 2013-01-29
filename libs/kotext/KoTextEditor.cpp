@@ -254,6 +254,11 @@ QTextCursor* KoTextEditor::cursor()
     return &(d->caret);
 }
 
+const QTextCursor KoTextEditor::constCursor() const
+{
+    return QTextCursor(d->caret);
+}
+
 void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, const QString &title, QTextFormat& format, QTextFormat& prevFormat, bool applyToWholeBlock)
 {
     KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();

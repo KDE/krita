@@ -116,6 +116,8 @@ public:
 
     bool operator>=(const QTextCursor &other) const;
 
+    const QTextCursor constCursor() const;
+
 private:
 
     // for the call to KoTextLoader::loadBody, which has a QTextCursor

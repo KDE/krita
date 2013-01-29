@@ -106,7 +106,7 @@ void KisCustomPattern::slotAddPredefined()
 
     // Save in the directory that is likely to be: ~/.kde/share/apps/krita/patterns
     // a unique file with this pattern name
-    QString dir = KGlobal::dirs()->saveLocation("data", "krita/patterns");
+    QString dir = KisResourceServerProvider::instance()->patternServer()->saveLocation();
     QString extension;
 
     QString tempFileName;
@@ -124,8 +124,7 @@ void KisCustomPattern::slotAddPredefined()
 
     // Add it to the pattern server, so that it automatically gets to the mediators, and
     // so to the other pattern choosers can pick it up, if they want to
-    if (m_rServerAdapter)
-        m_rServerAdapter->addResource(m_pattern->clone());
+    m_rServerAdapter->addResource(m_pattern->clone());
 }
 
 void KisCustomPattern::slotUsePattern()
@@ -171,8 +170,8 @@ void KisCustomPattern::createPattern()
         size.scale(1000, 1000, Qt::KeepAspectRatio);
     }
 
-    m_pattern = new KisPattern(dev->createThumbnail(size.width(), size.height(), rc, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation), name);
-
+    QString dir = KisResourceServerProvider::instance()->patternServer()->saveLocation();
+    m_pattern = new KisPattern(dev->createThumbnail(size.width(), size.height(), rc, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation), name, dir);
 }
 
 

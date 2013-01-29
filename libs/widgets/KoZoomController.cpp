@@ -213,12 +213,10 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resoluti
         d->action->setEffectiveZoom(zoom);
     }
     else if (mode == KoZoomMode::ZOOM_TEXT) {
-        qDebug() <<"ZOOM_TEXT"<<oldTextViewportSize.width()<<d->zoomHandler->zoom();
         zoom = (d->canvasController->viewportSize().width() - 2 * d->fitMargin)
                     / (oldTextViewportSize.width() / d->zoomHandler->zoom());
         d->action->setSelectedZoomMode(mode);
         d->action->setEffectiveZoom(zoom);
-        qDebug() <<"ZOOM_TEXT"<<zoom;
     }
 
     d->zoomHandler->setZoomMode(mode);

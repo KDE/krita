@@ -328,6 +328,9 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     Q_UNUSED(object);
     bool retval = false;
 
+    // this will accept events when the tool is in text editing, preventing shortcut triggering
+    d->toolProxy->processEvent(event);
+
     switch (event->type()) {
     case QEvent::MouseButtonPress:
     case QEvent::MouseButtonDblClick: {

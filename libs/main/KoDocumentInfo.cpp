@@ -62,9 +62,7 @@ KoDocumentInfo::~KoDocumentInfo()
 
 bool KoDocumentInfo::load(const KoXmlDocument &doc)
 {
-    foreach (const QString tag, m_authorTags) {
-        setActiveAuthorInfo(tag, QString());
-    }
+    m_authorInfo.clear();
 
     if (!loadAboutInfo(doc.documentElement()))
         return false;
@@ -77,9 +75,7 @@ bool KoDocumentInfo::load(const KoXmlDocument &doc)
 
 bool KoDocumentInfo::loadOasis(const KoXmlDocument &metaDoc)
 {
-    foreach (const QString tag, m_authorTags) {
-        setActiveAuthorInfo(tag, QString());
-    }
+    m_authorInfo.clear();
 
     KoXmlNode t = KoXml::namedItemNS(metaDoc, KoXmlNS::office, "document-meta");
     KoXmlNode office = KoXml::namedItemNS(t, KoXmlNS::office, "meta");

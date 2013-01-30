@@ -243,7 +243,6 @@ share\apps\kcmlocale
 share\apps\kcm_componentchooser
 share\apps\kcm_phonon
 share\apps\kglobalaccel
-share\apps\khtml
 share\apps\kjava
 share\apps\konqueror
 share\apps\ksgmltools2

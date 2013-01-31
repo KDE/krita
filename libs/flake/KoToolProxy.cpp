@@ -504,7 +504,9 @@ void KoToolProxy::processEvent(QEvent *e) const
 {
     if(e->type()==QEvent::ShortcutOverride
        && d->activeTool
-       && d->activeTool->isInTextMode()) {
+       && d->activeTool->isInTextMode()
+       && (static_cast<QKeyEvent*>(e)->modifiers()==Qt::NoModifier ||
+           static_cast<QKeyEvent*>(e)->modifiers()==Qt::ShiftModifier)) {
         e->accept();
     }
 }

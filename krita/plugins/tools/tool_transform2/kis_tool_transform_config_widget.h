@@ -26,7 +26,7 @@
 class KisCanvas2;
 
 
-class KisToolTransformConfigWidget : public QWidget, public Ui::WdgToolTransform
+class KisToolTransformConfigWidget : public QWidget, private Ui::WdgToolTransform
 {
     Q_OBJECT
 
@@ -36,6 +36,9 @@ public:
     void setApplyResetDisabled(bool disabled);
     void resetRotationCenterButtons();
     void setDefaultWarpPoints(int pointsPerLine = -1);
+    void setTooBigLabelVisible(bool value);
+    bool showDecorations() const;
+
 
 public slots:
     void updateConfig(const ToolTransformArgs &config);

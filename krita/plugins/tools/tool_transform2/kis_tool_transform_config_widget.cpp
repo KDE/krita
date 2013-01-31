@@ -272,6 +272,16 @@ void KisToolTransformConfigWidget::resetRotationCenterButtons()
     }
 }
 
+void KisToolTransformConfigWidget::setTooBigLabelVisible(bool value)
+{
+    tooBigLabelWidget->setVisible(value);
+}
+
+bool KisToolTransformConfigWidget::showDecorations() const
+{
+    return showDecorationsBox->isChecked();
+}
+
 void KisToolTransformConfigWidget::blockNotifications()
 {
     m_notificationsBlocked++;

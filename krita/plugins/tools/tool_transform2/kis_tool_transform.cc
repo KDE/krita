@@ -372,17 +372,14 @@ void KisToolTransform::recalcOutline()
 
         // check whether image is too big to be displayed or not
         QPointF minmaxZ = minMaxZ(m_topLeft, m_topRight, m_bottomRight, m_bottomLeft);
-        if (minmaxZ.y() >= m_currentArgs.cameraPos().z() * 0.9) {
-            m_imageTooBig = true;
-            if (m_optWidget && m_optWidget->tooBigLabelWidget)
-                m_optWidget->tooBigLabelWidget->show();
-            return;
+
+        m_imageTooBig = minmaxZ.y() >= m_currentArgs.cameraPos().z() * 0.9;
+
+        if (m_optWidget) {
+            m_optWidget->setTooBigLabelVisible(m_imageTooBig);
         }
-        else {
-            m_imageTooBig = false;
-            if (m_optWidget && m_optWidget->tooBigLabelWidget)
-                m_optWidget->tooBigLabelWidget->hide();
-        }
+
+        if (m_imageTooBig) return;
 
 
         QTransform TS = QTransform::fromTranslate(m_transaction.originalCenter().x(), m_transaction.originalCenter().y());
@@ -493,7 +490,7 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
     } else if (m_currentArgs.mode() == ToolTransformArgs::FREE_TRANSFORM) {
         gc.save();
 
-        if (m_optWidget && m_optWidget->showDecorationsBox->isChecked()) {
+        if (m_optWidget && m_optWidget->showDecorations()) {
             gc.setOpacity(0.3);
             gc.fillPath(m_selectionPath, Qt::black);
         }
@@ -550,7 +547,7 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
     else if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
         gc.save();
 
-        if (m_optWidget && m_optWidget->showDecorationsBox->isChecked()) {
+        if (m_optWidget && m_optWidget->showDecorations()) {
             gc.setOpacity(0.3);
             gc.fillPath(m_selectionPath, Qt::black);
         }
@@ -1852,8 +1849,7 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
             dx = signX * m_clickArgs.shearX() * m_currentArgs.scaleY() * m_transaction.originalHalfHeight(); // get the dx pixels corresponding to the current shearX factor
             dx += t.x(); // add the horizontal movement
             m_currentArgs.setShearX(signX * dx / m_currentArgs.scaleY() / m_transaction.originalHalfHeight()); // calculate the new shearX factor
-
-            m_optWidget->shearXBox->setValue(m_currentArgs.shearX());
+            updateOptionWidget();
             break;
         case LEFTSHEAR:
             signY = -1;
@@ -1869,8 +1865,7 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
             dy = signY *  m_clickArgs.shearY() * m_currentArgs.scaleX() * m_transaction.originalHalfWidth(); // get the dx pixels corresponding to the current shearX factor
             dy += t.y(); // add the horizontal movement
             m_currentArgs.setShearY(signY * dy / m_currentArgs.scaleX() / m_transaction.originalHalfWidth()); // calculate the new shearX factor
-
-            m_optWidget->shearYBox->setValue(m_currentArgs.shearY());
+            updateOptionWidget();
             break;
         }
     }

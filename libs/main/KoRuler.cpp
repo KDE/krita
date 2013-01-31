@@ -107,8 +107,10 @@ void RulerTabChooser::paintEvent(QPaintEvent *)
         break;
     case QTextOption::DelimiterTab:
         polygon << QPointF(x-5.5, height() - 2.5)
-            << QPointF(x+0.5, height() - 8.5)
             << QPointF(x+6.5, height() - 2.5);
+        painter.drawPolyline(polygon);
+        polygon << QPointF(x+0.5, height() - 2.5)
+            << QPointF(x+0.5, height() - 8.5);
         painter.drawPolyline(polygon);
         break;
     default:

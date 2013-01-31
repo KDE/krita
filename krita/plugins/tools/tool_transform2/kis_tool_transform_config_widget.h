@@ -31,17 +31,14 @@ class KisToolTransformConfigWidget : public QWidget, private Ui::WdgToolTransfor
     Q_OBJECT
 
 public:
-    KisToolTransformConfigWidget(TransformTransactionProperties *transaction, KisCanvas2 *canvas, QWidget *parent);
+    KisToolTransformConfigWidget(TransformTransactionProperties *transaction, KisCanvas2 *canvas, bool workRecursively, QWidget *parent);
 
     void setApplyResetDisabled(bool disabled);
     void resetRotationCenterButtons();
     void setDefaultWarpPoints(int pointsPerLine = -1);
     void setTooBigLabelVisible(bool value);
     bool showDecorations() const;
-
     bool workRecursively() const;
-    void setRecursiveOptionEnabled(bool value);
-
 
 public slots:
     void updateConfig(const ToolTransformArgs &config);
@@ -50,6 +47,7 @@ signals:
     void sigConfigChanged();
     void sigApplyTransform();
     void sigResetTransform();
+    void sigRestartTransform();
     void sigEditingFinished();
 
 private slots:

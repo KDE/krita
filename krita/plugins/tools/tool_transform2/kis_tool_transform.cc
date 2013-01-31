@@ -83,6 +83,7 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
         : KisTool(canvas, KisCursor::rotateCursor())
         , m_isActive(false)
         , m_changesTracker(&m_transaction)
+        , m_workRecursively(true)
 {
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     Q_ASSERT(m_canvas);
@@ -1988,6 +1989,7 @@ void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShap
     }
 
     m_isActive = true;
+    startStroke(ToolTransformArgs::FREE_TRANSFORM);
 }
 
 void KisToolTransform::deactivate()
@@ -2041,9 +2043,10 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
         return;
     }
 
-    m_optWidget->setRecursiveOptionEnabled(false);
-    m_workRecursively = m_optWidget->workRecursively() ||
-        !currentNode()->paintDevice();
+    if (m_optWidget) {
+        m_workRecursively = m_optWidget->workRecursively() ||
+            !currentNode()->paintDevice();
+    }
 
     TransformStrokeStrategy *strategy = new TransformStrokeStrategy(currentNode(), currentSelection(), image()->postExecutionUndoAdapter(), image()->undoAdapter());
     KisPaintDeviceSP previewDevice = strategy->previewDevice();
@@ -2085,7 +2088,6 @@ void KisToolTransform::endStroke()
 
     m_strokeId.clear();
     m_changesTracker.reset();
-    m_optWidget->setRecursiveOptionEnabled(true);
 }
 
 void KisToolTransform::cancelStroke()
@@ -2095,7 +2097,6 @@ void KisToolTransform::cancelStroke()
     image()->cancelStroke(m_strokeId);
     m_strokeId.clear();
     m_changesTracker.reset();
-    m_optWidget->setRecursiveOptionEnabled(true);
 }
 
 void KisToolTransform::commitChanges()
@@ -2145,7 +2146,7 @@ void KisToolTransform::transformDevices(KisNodeSP node, bool recursive)
 }
 
 QWidget* KisToolTransform::createOptionWidget() {
-    m_optWidget = new KisToolTransformConfigWidget(&m_transaction, m_canvas, 0);
+    m_optWidget = new KisToolTransformConfigWidget(&m_transaction, m_canvas, m_workRecursively, 0);
     Q_CHECK_PTR(m_optWidget);
     m_optWidget->setObjectName(toolId() + " option widget");
 
@@ -2157,6 +2158,9 @@ QWidget* KisToolTransform::createOptionWidget() {
 
     connect(m_optWidget, SIGNAL(sigResetTransform()),
             this, SLOT(slotResetTransform()));
+
+    connect(m_optWidget, SIGNAL(sigRestartTransform()),
+            this, SLOT(slotRestartTransform()));
 
     connect(m_optWidget, SIGNAL(sigEditingFinished()),
             this, SLOT(slotEditingFinished()));
@@ -2208,6 +2212,16 @@ void KisToolTransform::slotResetTransform()
 {
     initTransformMode(m_currentArgs.mode());
     slotEditingFinished();
+}
+
+void KisToolTransform::slotRestartTransform()
+{
+    if (!m_strokeId) return;
+
+    ToolTransformArgs savedArgs(m_currentArgs);
+    cancelStroke();
+    image()->waitForDone();
+    startStroke(savedArgs.mode());
 }
 
 void KisToolTransform::slotEditingFinished()

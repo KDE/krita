@@ -401,6 +401,7 @@ private slots:
     void slotUiChangedConfig();
     void slotApplyTransform();
     void slotResetTransform();
+    void slotRestartTransform();
     void slotEditingFinished();
 };
 

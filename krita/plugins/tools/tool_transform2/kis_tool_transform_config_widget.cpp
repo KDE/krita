@@ -30,7 +30,7 @@ template<typename T> inline T sign(T x) {
 const int KisToolTransformConfigWidget::DEFAULT_POINTS_PER_LINE = 3;
 
 
-KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionProperties *transaction, KisCanvas2 *canvas, QWidget *parent)
+KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionProperties *transaction, KisCanvas2 *canvas, bool workRecursively, QWidget *parent)
     : QWidget(parent),
       m_transaction(transaction),
       m_notificationsBlocked(0),
@@ -57,6 +57,9 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     label_rotateX->setPixmap(rotateX_Pixmap);
     label_rotateY->setPixmap(rotateY_Pixmap);
     label_rotateZ->setPixmap(rotateZ_Pixmap);
+
+    chkWorkRecursively->setChecked(workRecursively);
+    connect(chkWorkRecursively, SIGNAL(toggled(bool)), this, SIGNAL(sigRestartTransform()));
 
     // Init Filter  combo
     cmbFilter->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
@@ -271,11 +274,6 @@ void KisToolTransformConfigWidget::resetRotationCenterButtons()
         // uncheck the current checked button
         m_rotationCenterButtons->button(9)->setChecked(true);
     }
-}
-
-void KisToolTransformConfigWidget::setRecursiveOptionEnabled(bool value)
-{
-    chkWorkRecursively->setEnabled(value);
 }
 
 bool KisToolTransformConfigWidget::workRecursively() const

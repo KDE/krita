@@ -17,19 +17,36 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoDocumentRdfEditWidgetBase.h"
+#ifndef __KoChangeTrackerDisabledRAII_h__
+#define __KoChangeTrackerDisabledRAII_h__
 
-KoDocumentRdfEditWidgetBase::KoDocumentRdfEditWidgetBase(QWidget *parent, KoDocumentRdf *docRdf)
-        : QWidget(parent)
-{
-    Q_UNUSED(docRdf);
-}
+#include "kordf_export.h"
 
-bool KoDocumentRdfEditWidgetBase::shouldDialogCloseBeVetoed()
-{
-    return false;
-}
+class KoChangeTracker;
 
-void KoDocumentRdfEditWidgetBase::apply()
+/**
+ * @short Disable a change tracker and automatically reset it when
+ *        this object is destroyed.
+ *
+ * Resource Acquisition Is Initialization pattern to temporarily
+ * disable the ChangeTracker. Useful for cases where high level
+ * activities like applying a semantic stylesheet are performed where
+ * you might like to add a higher level action to the change tracker
+ * than just text substitution.
+ *
+ * @author Ben Martin <ben.martin@kogmbh.com>
+ * @see KoChangeTracker
+ *
+ */
+class KORDF_EXPORT KoChangeTrackerDisabledRAII
 {
-}
+public:
+    explicit KoChangeTrackerDisabledRAII(KoChangeTracker *changeTracker);
+    ~KoChangeTrackerDisabledRAII();
+
+private:
+    KoChangeTracker *m_changeTracker;
+    bool m_oldval;
+};
+
+#endif

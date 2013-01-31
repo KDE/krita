@@ -21,7 +21,7 @@
 #ifndef __rdf_KoRdfSemanticTree_h__
 #define __rdf_KoRdfSemanticTree_h__
 
-#include "komain_export.h"
+#include "kordf_export.h"
 #include <QSharedPointer>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
@@ -43,7 +43,7 @@ class Model;
  * is created and updated in multiple places, it makes sense to collect
  * the code handling it into a central location for easy global updates.
  */
-class KOMAIN_EXPORT KoRdfSemanticTree
+class KORDF_EXPORT KoRdfSemanticTree
 {
 public:
     KoRdfSemanticTree();

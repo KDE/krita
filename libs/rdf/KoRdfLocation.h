@@ -30,7 +30,7 @@
 #include <ui_KoRdfLocationViewWidget.h>
 /* #endif */
 
-#include "komain_export.h"
+#include "kordf_export.h"
 
 /**
  * @short A Location class which handles ICBM (lat/long) data of various kinds.
@@ -45,7 +45,7 @@
  * http://www.w3.org/TR/rdfcal/     Relates an Rdf "geo" to a list of 2 doubles.
  *
  */
-class KOMAIN_EXPORT KoRdfLocation : public KoRdfSemanticItem
+class KORDF_EXPORT KoRdfLocation : public KoRdfSemanticItem
 {
     Q_OBJECT
 

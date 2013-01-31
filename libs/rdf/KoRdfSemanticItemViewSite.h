@@ -20,7 +20,7 @@
 #ifndef __rdf_KoRdfSemanticItemViewSite_h__
 #define __rdf_KoRdfSemanticItemViewSite_h__
 
-#include "komain_export.h"
+#include "kordf_export.h"
 #include "RdfForward.h"
 #include <Soprano/Soprano>
 
@@ -47,7 +47,7 @@ class KoRdfSemanticItemViewSitePrivate;
  * formatting for each presentation of the same KoRdfSemanticItem
  * (model).
  */
-class KOMAIN_EXPORT KoRdfSemanticItemViewSite
+class KORDF_EXPORT KoRdfSemanticItemViewSite
 {
     KoRdfSemanticItemViewSitePrivate * const d;
 public:

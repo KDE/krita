@@ -37,6 +37,10 @@ class KoStore;
 class KoXmlWriter;
 class KoDocument;
 
+
+///**
+// * Dummy definition in case Soprano is not available.
+// */
 namespace Soprano
 {
     class Model;

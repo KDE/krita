@@ -49,6 +49,7 @@ class KoDocumentInfo;
 class KoDocumentRdf;
 class KoDocumentRdfBase;
 class KoProgressUpdater;
+class KoPageWidgetItem;
 class KoProgressProxy;
 
 class KoVersionInfo
@@ -428,13 +429,7 @@ public:
      * will be deleted, and if RDF support is compiled out, KoDocument does not take ownership.
      * Otherwise, KoDocument will own the rdf document.
      */
-    void setDocumentRdf(KoDocumentRdf *rdfDocument);
-
-    /**
-     * @return the Rdf metadata for this document.
-     * @see KoDocumentRdf
-     */
-    KoDocumentRdfBase *documentRdfBase() const;
+    void setDocumentRdf(KoDocumentRdfBase *rdfDocument);
 
     /**
      * @return the object to report progress to.
@@ -484,7 +479,6 @@ public:
     bool isLoading() const;
 
     int queryCloseDia();
-
 
     /**
      * Sets the backup path of the document

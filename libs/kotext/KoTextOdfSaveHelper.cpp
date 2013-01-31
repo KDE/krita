@@ -28,7 +28,6 @@
 #include <KoTextDocument.h>
 
 #include <opendocument/KoTextSharedSavingData.h>
-#include "KoTextSopranoRdfModel_p.h"
 
 #include <QTextDocument>
 

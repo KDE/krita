@@ -540,8 +540,11 @@ set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
                     ${MARBLE_INCLUDE_DIR}
                     ${CMAKE_SOURCE_DIR}/libs/widgets
                     ${CMAKE_SOURCE_DIR}/libs/main
-                    ${CMAKE_SOURCE_DIR}/libs/main/rdf
                     ${CMAKE_SOURCE_DIR}/libs/main/config)
+
+set(KORDF_INCLUDES ${KOMAIN_INCLUDES}
+                   ${CMAKE_SOURCE_DIR}/libs/rdf
+)
 
 if(SHOULD_BUILD_SCRIPTING)
   set(KOKROSS_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kokross ${CMAKE_BINARY_DIR}/libs/kokross)

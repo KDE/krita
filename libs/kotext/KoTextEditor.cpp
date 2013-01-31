@@ -90,11 +90,7 @@
 #include <kdebug.h>
 #include "KoTextDebug.h"
 
-#ifdef SHOULD_BUILD_RDF
-#include <rdf/KoDocumentRdf.h>
-#else
-#include "KoTextSopranoRdfModel_p.h"
-#endif
+#include <KoDocumentRdfBase.h>
 
 Q_DECLARE_METATYPE(QTextFrame*)
 

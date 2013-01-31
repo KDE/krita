@@ -20,7 +20,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include "KoTextSharedSavingData.h"
 
 #include "KoGenChanges.h"
-#include "KoTextSopranoRdfModel_p.h"
+#include "KoDocumentRdfBase.h"
 
 #include <QMap>
 

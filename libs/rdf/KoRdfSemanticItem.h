@@ -20,7 +20,7 @@
 #ifndef __rdf_KoRdfSemanticItem_h__
 #define __rdf_KoRdfSemanticItem_h__
 
-#include "komain_export.h"
+#include "kordf_export.h"
 
 #include <QObject>
 #include <QSharedData>
@@ -52,7 +52,7 @@ class QTreeWidgetItem;
  * @see KoDocumentRdf
  *
  */
-class KOMAIN_EXPORT KoRdfSemanticItem : public QObject, public QSharedData
+class KORDF_EXPORT KoRdfSemanticItem : public QObject, public QSharedData
 {
     Q_OBJECT
 

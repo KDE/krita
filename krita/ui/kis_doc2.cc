@@ -298,6 +298,11 @@ bool KisDoc2::completeSaving(KoStore *store)
     return true;
 }
 
+int KisDoc2::supportedSpecialFormats() const
+{
+    return 0; // we don't support encryption.
+}
+
 
 bool KisDoc2::completeLoading(KoStore *store)
 {

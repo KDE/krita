@@ -53,9 +53,9 @@ public:
         ColSize
     };
     KoRdfPrefixMappingTreeWidgetItem(KoRdfPrefixMapping *mapping, QString key, int type = Type)
-            : QTreeWidgetItem(type)
-            , m_mapping(mapping)
-            , m_key(key) {
+        : QTreeWidgetItem(type)
+        , m_mapping(mapping)
+        , m_key(key) {
         setFlags(QTreeWidgetItem::flags() | Qt::ItemIsEditable);
     }
     virtual void setData(int column, int role, const QVariant &value) {
@@ -103,9 +103,11 @@ public:
     hKoRdfSemanticItem m_semItemEventTemplate;
     hKoRdfSemanticItem m_semItemLocationTemplate;
     QList<hKoSemanticStylesheet> m_stylesheets;
-    
+
     KoDocumentRdfEditWidgetPrivate(KoDocumentRdf *m_rdf)
-            : m_rdf(m_rdf) , m_tripleProxyModel(0) {
+        : m_rdf(m_rdf)
+        , m_tripleProxyModel(0)
+    {
         m_ui = new Ui::KoDocumentRdfEditWidget();
         m_widget = new QWidget();
         m_ui->setupUi(m_widget);
@@ -114,7 +116,8 @@ public:
         delete m_ui;
     }
 
-    void setupWidget(KoDocumentRdfEditWidget *kdrew) {
+    void setupWidget(KoDocumentRdfEditWidget *kdrew)
+    {
         // setup triple view page
         m_tripleModel = new KoSopranoTableModel(m_rdf);
         m_tripleProxyModel = new QSortFilterProxyModel(m_widget);
@@ -138,7 +141,7 @@ public:
         const QMap<QString,QString> &m = m_rdf->prefixMapping()->mappings();
         for (QMap<QString,QString>::const_iterator mi = m.begin(); mi != m.end(); ++mi) {
             KoRdfPrefixMappingTreeWidgetItem *item =
-                new KoRdfPrefixMappingTreeWidgetItem(mapping, mi.key());
+                    new KoRdfPrefixMappingTreeWidgetItem(mapping, mi.key());
             v->addTopLevelItem(item);
         }
         // setup semantic page
@@ -238,9 +241,8 @@ public:
 };
 
 
-KoDocumentRdfEditWidget::KoDocumentRdfEditWidget(QWidget *parent, KoDocumentRdf *docRdf)
-        : KoDocumentRdfEditWidgetBase(parent, docRdf)
-        , d(new KoDocumentRdfEditWidgetPrivate(docRdf))
+KoDocumentRdfEditWidget::KoDocumentRdfEditWidget( KoDocumentRdf *docRdf)
+    : d(new KoDocumentRdfEditWidgetPrivate(docRdf))
 {
     d->setupWidget(this);
     connect(d->m_ui->newTripleButton, SIGNAL(clicked()), this, SLOT(addTriple()));
@@ -277,14 +279,14 @@ bool KoDocumentRdfEditWidget::shouldDialogCloseBeVetoed()
     if (int invalidCount = d->m_tripleModel->invalidStatementCount()) {
         kDebug(30015) << "invalidCount:" << invalidCount;
         int dialogRet = KMessageBox::warningContinueCancel(
-            this, i18ncp("statement is an Rdf related term",
-                "<qt>Edits will be lost.<p>There is %1 invalid statement left.</qt>",
-                "<qt>Edits will be lost.<p>There are %1 invalid statements left.</qt>",
-                invalidCount),
-            i18nc("statement is an Rdf related term", "Discard invalid statements?"),
-            KStandardGuiItem::cont(),
-            KStandardGuiItem::cancel(),
-            "InvalidTriplesInDocInfoDialog");
+                    this, i18ncp("statement is an Rdf related term",
+                                 "<qt>Edits will be lost.<p>There is %1 invalid statement left.</qt>",
+                                 "<qt>Edits will be lost.<p>There are %1 invalid statements left.</qt>",
+                                 invalidCount),
+                    i18nc("statement is an Rdf related term", "Discard invalid statements?"),
+                    KStandardGuiItem::cont(),
+                    KStandardGuiItem::cancel(),
+                    "InvalidTriplesInDocInfoDialog");
         if (dialogRet == KMessageBox::Cancel) {
             ret = true;
             QModelIndexList invalidList = d->m_tripleModel->invalidStatementList();
@@ -293,7 +295,7 @@ bool KoDocumentRdfEditWidget::shouldDialogCloseBeVetoed()
                 foreach (QModelIndex idx, invalidList) {
                     QModelIndex pidx = d->mapFromSource(idx);
                     d->m_ui->m_tripleView->selectionModel()->select(
-                        pidx, QItemSelectionModel::Select);
+                                pidx, QItemSelectionModel::Select);
                 }
 
                 QModelIndex pidx = d->mapFromSource(invalidList.first());
@@ -310,16 +312,26 @@ void KoDocumentRdfEditWidget::apply()
     KoDocumentRdf *rdf = d->m_rdf;
     if (hKoRdfSemanticItem si = KoRdfSemanticItem::createSemanticItem(0, rdf, "Contact")) {
         si->defaultStylesheet(
-            stylesheetFromComboBox(d->m_ui->m_defaultContactsSheet));
+                    stylesheetFromComboBox(d->m_ui->m_defaultContactsSheet));
     }
     if (hKoRdfSemanticItem si = KoRdfSemanticItem::createSemanticItem(0, rdf, "Event")) {
         si->defaultStylesheet(
-            stylesheetFromComboBox(d->m_ui->m_defaultEventsSheet));
+                    stylesheetFromComboBox(d->m_ui->m_defaultEventsSheet));
     }
     if (hKoRdfSemanticItem si = KoRdfSemanticItem::createSemanticItem(0, rdf, "Location")) {
         si->defaultStylesheet(
-            stylesheetFromComboBox(d->m_ui->m_defaultLocationsSheet));
+                    stylesheetFromComboBox(d->m_ui->m_defaultLocationsSheet));
     }
+}
+
+const QString KoDocumentRdfEditWidget::name() const
+{
+    return i18n("Rdf");
+}
+
+const QLatin1String KoDocumentRdfEditWidget::icon() const
+{
+    return QLatin1String("text-rdf");
 }
 
 void KoDocumentRdfEditWidget::semanticObjectUpdated(hKoRdfSemanticItem item)
@@ -396,7 +408,7 @@ void KoDocumentRdfEditWidget::addNamespace()
     mapping->insert(key, value);
     kDebug(30015) << "adding key:" << key << " value:" << value;
     KoRdfPrefixMappingTreeWidgetItem* item =
-        new KoRdfPrefixMappingTreeWidgetItem(mapping, key);
+            new KoRdfPrefixMappingTreeWidgetItem(mapping, key);
     v->addTopLevelItem(item);
     v->setCurrentItem(item);
     v->editItem(item);
@@ -423,7 +435,7 @@ void KoDocumentRdfEditWidget::sparqlExecute()
     QSharedPointer<Soprano::Model> m = d->m_rdf->model();
     kDebug(30015) << "running SPARQL query:" << sparql;
     Soprano::QueryResultIterator qrIter =
-        m->executeQuery(sparql, Soprano::Query::QueryLanguageSparql);
+            m->executeQuery(sparql, Soprano::Query::QueryLanguageSparql);
     QList<Soprano::BindingSet> bindings = qrIter.allBindings();
     QTableWidget *tableWidget = d->m_ui->m_sparqlResultView;
     tableWidget->setSortingEnabled(false);

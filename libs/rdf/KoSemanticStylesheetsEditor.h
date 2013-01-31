@@ -20,7 +20,7 @@
 #ifndef __rdf_KoSemanticStylesheetsEditor_h__
 #define __rdf_KoSemanticStylesheetsEditor_h__
 
-#include "komain_export.h"
+#include "kordf_export.h"
 
 #include "RdfForward.h"
 #include <KDialog>
@@ -36,7 +36,7 @@ class QTableWidgetItem;
  * @author Ben Martin <ben.martin@kogmbh.com>
  * @see KoDocument
  */
-class KOMAIN_EXPORT KoSemanticStylesheetsEditor : public KDialog
+class KORDF_EXPORT KoSemanticStylesheetsEditor : public KDialog
 {
     Q_OBJECT
 public:

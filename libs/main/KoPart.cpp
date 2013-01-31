@@ -33,6 +33,7 @@
 #include "KoProgressProxy.h"
 #include "KoFilterManager.h"
 #include "KoServiceProvider.h"
+#include <KoDocumentInfoDlg.h>
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
@@ -316,6 +317,11 @@ KoMainWindow *KoPart::currentShell() const
     }
     return shell;
 
+}
+
+KoDocumentInfoDlg *KoPart::createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const
+{
+    return new KoDocumentInfoDlg(parent, docInfo);
 }
 
 void KoPart::showSavingErrorDialog()

@@ -20,7 +20,7 @@
 #ifndef RDF_KORDFSEMANTICTREEWIDGETITEM_H
 #define RDF_KORDFSEMANTICTREEWIDGETITEM_H
 
-#include "komain_export.h"
+#include "kordf_export.h"
 #include "RdfForward.h"
 
 #include <QObject>
@@ -41,7 +41,7 @@ class KoCanvasBase;
  * @see KoRdfSemanticItem::createQTreeWidgetItem()
  * @see KoDocumentRdf
  */
-class KOMAIN_EXPORT KoRdfSemanticTreeWidgetItem : public QObject, public QTreeWidgetItem
+class KORDF_EXPORT KoRdfSemanticTreeWidgetItem : public QObject, public QTreeWidgetItem
 {
     Q_OBJECT
 protected:

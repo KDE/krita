@@ -39,9 +39,14 @@
 #include "KoDocumentRdfBase.h"
 
 #ifdef SHOULD_BUILD_RDF
-#include <rdf/KoDocumentRdf.h>
+#include <Soprano/Soprano>
 #else
-#include "KoTextSopranoRdfModel_p.h"
+namespace Soprano
+{
+    class Model
+    {
+    };
+}
 #endif
 
 TextPasteCommand::TextPasteCommand(const QMimeData *mimeData,

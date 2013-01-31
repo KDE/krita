@@ -20,7 +20,7 @@
 #ifndef __rdf_KoRdfPrefixMapping_h__
 #define __rdf_KoRdfPrefixMapping_h__
 
-#include "komain_export.h"
+#include "kordf_export.h"
 #include "RdfForward.h"
 
 #include <QSharedPointer>
@@ -44,7 +44,7 @@ class KoRdfPrefixMappingPrivate;
  * For example, to be able to say dc:author for the dublin core author uri
  *
  */
-class KOMAIN_EXPORT KoRdfPrefixMapping : public QObject
+class KORDF_EXPORT KoRdfPrefixMapping : public QObject
 {
     Q_OBJECT
     KoRdfPrefixMappingPrivate * const d;

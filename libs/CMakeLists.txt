@@ -31,3 +31,8 @@ endif (SHOULD_BUILD_CALLIGRADB)
 if (SHOULD_BUILD_KOREPORT)
     add_subdirectory( koreport )
 endif (SHOULD_BUILD_KOREPORT)
+
+if (Soprano_FOUND)
+    add_subdirectory( rdf )
+endif (Soprano_FOUND)
+

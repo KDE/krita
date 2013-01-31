@@ -91,7 +91,6 @@ public:
      *  Retrieves the document that is displayed in the mainwindow.
      */
     KoDocument *rootDocument() const;
-    KoPart *rootPart() const;
     KoView *rootView() const;
 
     /**

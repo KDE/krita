@@ -37,7 +37,8 @@ class KoView;
 class KoMainWindow;
 class KoView;
 class KoOpenPane;
-
+class KoDocumentInfoDlg;
+class KoDocumentInfo;
 class QGraphicsItem;
 
 /**
@@ -132,6 +133,8 @@ public:
     void addRecentURLToAllShells(KUrl url);
 
     KoMainWindow *currentShell() const;
+
+    virtual KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
 
 protected slots:
 

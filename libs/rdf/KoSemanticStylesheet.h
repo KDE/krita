@@ -20,7 +20,7 @@
 #ifndef __rdf_KoSemanticStylesheet_h__
 #define __rdf_KoSemanticStylesheet_h__
 
-#include "komain_export.h"
+#include "kordf_export.h"
 
 #include <QObject>
 #include <QSharedData>
@@ -44,7 +44,7 @@ class KoSemanticStylesheetPrivate;
  * @see KoRdfSemanticItemViewSite
  * @see KoDocumentRdf
  */
-class KOMAIN_EXPORT KoSemanticStylesheet : public QObject, public QSharedData
+class KORDF_EXPORT KoSemanticStylesheet : public QObject, public QSharedData
 {
     Q_OBJECT
     KoSemanticStylesheetPrivate * const d;

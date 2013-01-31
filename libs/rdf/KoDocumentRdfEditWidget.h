@@ -21,8 +21,10 @@
 #define __koDocumentRdfEditWidget_h__
 
 #include "RdfForward.h"
-#include "KoDocumentRdfEditWidgetBase.h"
 #include <QWidget>
+#include <KoDocumentInfoDlg.h>
+#include <klocale.h>
+#include <kordf_export.h>
 
 class KoDocumentRdf;
 class KoSemanticStylesheet;
@@ -43,7 +45,7 @@ class QComboBox;
  * document.
  *
  */
-class KoDocumentRdfEditWidget : public KoDocumentRdfEditWidgetBase
+class KORDF_EXPORT KoDocumentRdfEditWidget : public QWidget, public KoPageWidgetItem
 {
     Q_OBJECT
 public:
@@ -53,7 +55,7 @@ public:
      * @param parent a pointer to the parent widget
      * @param docRdf a pointer to the KoDocumentRdf to show/edit
      */
-    KoDocumentRdfEditWidget(QWidget *parent, KoDocumentRdf *docRdf);
+    KoDocumentRdfEditWidget(KoDocumentRdf *docRdf);
 
     /** The destructor */
     virtual ~KoDocumentRdfEditWidget();
@@ -65,6 +67,9 @@ public:
 
     /** OK button in dialog, if this returns false then do not close the dialog */
     void apply();
+
+    const QString name() const;
+    const QLatin1String icon() const;
 
 public slots:
 
@@ -131,5 +136,9 @@ private:
 
     class KoDocumentRdfEditWidgetPrivate;
     KoDocumentRdfEditWidgetPrivate *const d;
+
 };
+
+
+
 #endif

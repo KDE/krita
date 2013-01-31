@@ -20,7 +20,7 @@
 #ifndef KO_DOCUMENT_Rdf_H
 #define KO_DOCUMENT_Rdf_H
 
-#include "komain_export.h"
+#include "kordf_export.h"
 #include "KoDocumentRdfBase.h"
 
 #include "KoXmlReaderForward.h"
@@ -143,7 +143,7 @@ class KoRdfFoaF;
  * expand the soprano::model to add Rdf statements which refer to any
  * subject in the Rdf submodel you pass in.
  */
-class KOMAIN_EXPORT KoDocumentRdf : public KoDocumentRdfBase
+class KORDF_EXPORT KoDocumentRdf : public KoDocumentRdfBase
 {
     Q_OBJECT
 public:

@@ -150,7 +150,9 @@ void CompositionDockerDock::exportClicked()
     foreach(KisLayerComposition* composition, m_canvas->view()->image()->compositions()) {
         composition->apply();
         image->refreshGraph();
+        image->lock();
         image->rootLayer()->projection()->convertToQImage(0).save(path + composition->name() + ".png");
+        image->unlock();
     }
 }
 

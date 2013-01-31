@@ -37,12 +37,15 @@ public:
     virtual void unsetCanvas();
     
     void updateModel();
+protected:
+    bool eventFilter(QObject *obj, QEvent *event);
     
 private slots:
     void activated (const QModelIndex& index);
     void deleteClicked();
     void saveClicked();
     void exportClicked();
+    void activateCurrentIndex();
 
 private:
     KisCanvas2 *m_canvas;

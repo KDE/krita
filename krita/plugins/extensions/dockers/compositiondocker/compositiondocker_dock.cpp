@@ -45,6 +45,7 @@ CompositionDockerDock::CompositionDockerDock( ) : QDockWidget(i18n("Compositions
     setupUi(widget);
     m_model = new CompositionModel(this);
     compositionView->setModel(m_model);
+    compositionView->installEventFilter(this);
     deleteButton->setIcon(koIcon("edit-delete"));
     saveButton->setIcon(koIcon("list-add"));
     exportButton->setIcon(koIcon("document-export"));
@@ -152,5 +153,29 @@ void CompositionDockerDock::exportClicked()
         image->rootLayer()->projection()->convertToQImage(0).save(path + composition->name() + ".png");
     }
 }
+
+bool CompositionDockerDock::eventFilter(QObject* obj, QEvent* event)
+{
+     if (event->type() == QEvent::KeyPress ) {
+         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+         if (keyEvent->key() == Qt::Key_Up || keyEvent->key() == Qt::Key_Down) {
+             // new index will be set after the method is called
+             QTimer::singleShot(0, this, SLOT(activateCurrentIndex()));
+         }
+         return false;
+     } else {
+         return QObject::eventFilter(obj, event);
+     }
+}
+
+void CompositionDockerDock::activateCurrentIndex()
+{
+    QModelIndex index = compositionView->currentIndex();
+    if (index.isValid()) {
+        activated(index);
+    }
+}
+
+
 
 #include "compositiondocker_dock.moc"

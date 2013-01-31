@@ -35,6 +35,7 @@
 #include <KoCanvasBase.h>
 #include <kis_view2.h>
 #include <kis_canvas2.h>
+#include <kis_doc2.h>
 #include "compositionmodel.h"
 #include <kis_group_layer.h>
 
@@ -45,8 +46,13 @@ CompositionDockerDock::CompositionDockerDock( ) : QDockWidget(i18n("Compositions
     m_model = new CompositionModel(this);
     compositionView->setModel(m_model);
     deleteButton->setIcon(koIcon("edit-delete"));
-    saveButton->setIcon(koIcon("document-save"));
+    saveButton->setIcon(koIcon("list-add"));
     exportButton->setIcon(koIcon("document-export"));
+
+    deleteButton->setToolTip(i18n("Delete Composition"));
+    saveButton->setToolTip(i18n("New Composition"));
+    exportButton->setToolTip(i18n("Export Composition"));
+
 
     setWidget(widget);
 
@@ -97,7 +103,24 @@ void CompositionDockerDock::deleteClicked()
 void CompositionDockerDock::saveClicked()
 {
     KisImageWSP image = m_canvas->view()->image();
-    KisLayerComposition* composition = new KisLayerComposition(image, saveNameEdit->text());
+    // format as 001, 002 ...
+    QString name = saveNameEdit->text();
+    if (name.isEmpty()) {
+        bool found = false;
+        int i = 1;
+        do {
+            name = QString("%1").arg(i, 3, 10, QChar('0'));
+            found = false;
+            foreach(KisLayerComposition* composition, m_canvas->view()->image()->compositions()) {
+                if (composition->name() == name) {
+                    found = true;
+                    break;
+                }
+            }
+            i++;
+        } while(found && i < 1000);
+    }
+    KisLayerComposition* composition = new KisLayerComposition(image, name);
     composition->store();
     image->addComposition(composition);
     saveNameEdit->clear();
@@ -118,6 +141,11 @@ void CompositionDockerDock::exportClicked()
     QString path = dialog.url().path(KUrl::AddTrailingSlash);
 
     KisImageWSP image = m_canvas->view()->image();
+    QString filename = m_canvas->view()->document()->localFilePath();
+    if (!filename.isEmpty()) {
+        QFileInfo info(filename);
+        path += info.baseName() + '_';
+    }
     foreach(KisLayerComposition* composition, m_canvas->view()->image()->compositions()) {
         composition->apply();
         image->refreshGraph();

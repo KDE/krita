@@ -39,6 +39,9 @@ public:
     void setTooBigLabelVisible(bool value);
     bool showDecorations() const;
 
+    bool workRecursively() const;
+    void setRecursiveOptionEnabled(bool value);
+
 
 public slots:
     void updateConfig(const ToolTransformArgs &config);

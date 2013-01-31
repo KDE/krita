@@ -39,6 +39,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
 {
     setupUi(this);
     showDecorationsBox->setIcon(koIcon("krita_tool_transform"));
+    chkWorkRecursively->setIcon(koIcon("krita_tool_transform_recursive.png"));
     label_shearX->setPixmap(koIcon("shear_horizontal").pixmap(16, 16));
     label_shearY->setPixmap(koIcon("shear_vertical").pixmap(16, 16));
 
@@ -270,6 +271,16 @@ void KisToolTransformConfigWidget::resetRotationCenterButtons()
         // uncheck the current checked button
         m_rotationCenterButtons->button(9)->setChecked(true);
     }
+}
+
+void KisToolTransformConfigWidget::setRecursiveOptionEnabled(bool value)
+{
+    chkWorkRecursively->setEnabled(value);
+}
+
+bool KisToolTransformConfigWidget::workRecursively() const
+{
+    return chkWorkRecursively->isChecked();;
 }
 
 void KisToolTransformConfigWidget::setTooBigLabelVisible(bool value)

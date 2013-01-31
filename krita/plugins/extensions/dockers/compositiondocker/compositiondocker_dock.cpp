@@ -28,6 +28,7 @@
 
 #include <klocale.h>
 #include <KActionCollection>
+#include <kdirselectdialog.h>
 
 #include <KoIcon.h>
 
@@ -35,6 +36,7 @@
 #include <kis_view2.h>
 #include <kis_canvas2.h>
 #include "compositionmodel.h"
+#include <kis_group_layer.h>
 
 CompositionDockerDock::CompositionDockerDock( ) : QDockWidget(i18n("Compositions")), m_canvas(0)
 {
@@ -44,6 +46,7 @@ CompositionDockerDock::CompositionDockerDock( ) : QDockWidget(i18n("Compositions
     compositionView->setModel(m_model);
     deleteButton->setIcon(koIcon("edit-delete"));
     saveButton->setIcon(koIcon("document-save"));
+    exportButton->setIcon(koIcon("document-export"));
 
     setWidget(widget);
 
@@ -52,6 +55,7 @@ CompositionDockerDock::CompositionDockerDock( ) : QDockWidget(i18n("Compositions
 
     connect( deleteButton, SIGNAL(clicked(bool)), this, SLOT(deleteClicked()));
     connect( saveButton, SIGNAL(clicked(bool)), this, SLOT(saveClicked()));
+    connect( exportButton, SIGNAL(clicked(bool)), this, SLOT(exportClicked()));
 #if QT_VERSION >= 0x040700
     saveNameEdit->setPlaceholderText(i18n("Insert Name"));
 #endif
@@ -105,5 +109,20 @@ void CompositionDockerDock::updateModel()
     m_model->setCompositions(m_canvas->view()->image()->compositions());
 }
 
+void CompositionDockerDock::exportClicked()
+{
+    KDirSelectDialog dialog(KUrl(), true);
+    if(dialog.exec() != KDialog::Accepted) {
+        return;
+    }
+    QString path = dialog.url().path(KUrl::AddTrailingSlash);
+
+    KisImageWSP image = m_canvas->view()->image();
+    foreach(KisLayerComposition* composition, m_canvas->view()->image()->compositions()) {
+        composition->apply();
+        image->refreshGraph();
+        image->rootLayer()->projection()->convertToQImage(0).save(path + composition->name() + ".png");
+    }
+}
 
 #include "compositiondocker_dock.moc"

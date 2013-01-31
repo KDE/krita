@@ -42,6 +42,7 @@ private slots:
     void activated (const QModelIndex& index);
     void deleteClicked();
     void saveClicked();
+    void exportClicked();
 
 private:
     KisCanvas2 *m_canvas;

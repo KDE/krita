@@ -11,9 +11,6 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0" colspan="3">
-    <widget class="QListView" name="compositionView"/>
-   </item>
    <item row="1" column="2">
     <widget class="QPushButton" name="deleteButton">
      <property name="text">
@@ -29,8 +26,17 @@
     </widget>
    </item>
    <item row="1" column="0">
-    <widget class="KLineEdit" name="saveNameEdit">
+    <widget class="KLineEdit" name="saveNameEdit"/>
+   </item>
+   <item row="1" column="3">
+    <widget class="QPushButton" name="exportButton">
+     <property name="text">
+      <string/>
+     </property>
     </widget>
+   </item>
+   <item row="0" column="0" colspan="4">
+    <widget class="QListView" name="compositionView"/>
    </item>
   </layout>
  </widget>

@@ -39,7 +39,7 @@ class KRITAIMAGE_EXPORT KisPattern : public KoPattern
 
 public:
     KisPattern(const QString &file);
-    KisPattern(const QImage &image, const QString &name);
+    KisPattern(const QImage &image, const QString &name, const QString &folderName);
     virtual ~KisPattern();
 
     /**
@@ -50,11 +50,11 @@ public:
 
     KisPattern* clone() const;
 
-    QByteArray md5();
+    QByteArray md5() const;
 
 private:
     mutable QMap<QString, KisPaintDeviceSP> m_colorspaces;
-    QByteArray m_md5;
+    mutable QByteArray m_md5;
 };
 
 #endif

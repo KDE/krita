@@ -1779,7 +1779,6 @@ void KoShape::loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingConte
     if (!hasCenterGluePoint) {
         d->connectors[d->connectors.count()] = KoConnectionPoint(QPointF(0.5, 0.5),
                      KoConnectionPoint::AllDirections, KoConnectionPoint::AlignCenter);
-        kDebug(30006) << "center glue-point added at id " << index;
     }
     kDebug(30006) << "shape has now" << d->connectors.count() << "glue-points";
 }

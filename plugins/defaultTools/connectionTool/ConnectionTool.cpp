@@ -472,7 +472,19 @@ void ConnectionTool::mouseDoubleClickEvent(KoPointerEvent *event)
             QPointF point = m_currentShape->documentToShape(mousePos);
             canvas()->addCommand(new AddConnectionPointCommand(m_currentShape, point));
         } else {
-            canvas()->addCommand(new RemoveConnectionPointCommand(m_currentShape, handleId));
+            // don't remove last center glue point since we want it to be "default"
+            bool dontRemove = m_currentShape->connectionPoint(handleId).position == QPointF(0.5, 0.5);
+            int centerGluePointCount = 0;
+            KoConnectionPoints::const_iterator i;
+            for (i=m_currentShape->connectionPoints().constBegin();
+                    i!=m_currentShape->connectionPoints().constEnd(); ++i) {
+                if (i.value().position == QPointF(0.5, 0.5)) {
+                    centerGluePointCount++;
+                }
+            }
+            if (!dontRemove || (dontRemove && centerGluePointCount > 1)) {
+                canvas()->addCommand(new RemoveConnectionPointCommand(m_currentShape, handleId));
+            }
         }
         setEditMode(m_editMode, m_currentShape, -1);
     } else {
@@ -923,8 +935,20 @@ void ConnectionTool::deleteSelection()
 {
     if (m_editMode == EditConnectionPoint && m_currentShape && m_activeHandle >= 0) {
         repaintDecorations();
-        canvas()->addCommand(new RemoveConnectionPointCommand(m_currentShape, m_activeHandle));
-        setEditMode(m_editMode, m_currentShape, -1);
+        // don't remove last center glue point since we want it to be "default"
+        bool dontRemove = m_currentShape->connectionPoint(m_activeHandle).position == QPointF(0.5, 0.5);
+        int centerGluePointCount = 0;
+        KoConnectionPoints::const_iterator i;
+        for (i=m_currentShape->connectionPoints().constBegin();
+                i!=m_currentShape->connectionPoints().constEnd(); ++i) {
+            if (i.value().position == QPointF(0.5, 0.5)) {
+                centerGluePointCount++;
+            }
+        }
+        if (!dontRemove || (dontRemove && centerGluePointCount > 1)) {
+            canvas()->addCommand(new RemoveConnectionPointCommand(m_currentShape, m_activeHandle));
+            setEditMode(m_editMode, m_currentShape, -1);
+        }
     } else if (m_editMode == EditConnection && m_currentShape) {
         repaintDecorations();
         canvas()->addCommand(canvas()->shapeController()->removeShape(m_currentShape));

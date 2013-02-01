@@ -32,26 +32,79 @@
 #include <kis_warptransform_worker.h>
 
 
-TransformStrokeStrategy::TransformStrokeStrategy(KisNodeSP node,
+TransformStrokeStrategy::TransformStrokeStrategy(KisNodeSP rootNode,
                                                  KisSelectionSP selection,
-                                                 KisPaintDeviceSP selectedPortionCache,
                                                  KisPostExecutionUndoAdapter *undoAdapter,
                                                  KisUndoAdapter *legacyUndoAdapter)
     : KisStrokeStrategyUndoCommandBased(i18n("Transform Stroke"), false, undoAdapter),
-      m_node(node),
       m_selection(selection),
-      m_selectedPortionCache(selectedPortionCache),
-      m_legacyUndoAdapter(legacyUndoAdapter),
-      m_progressUpdater(0)
+      m_legacyUndoAdapter(legacyUndoAdapter)
 {
-    Q_ASSERT(m_node);
+    if (rootNode->childCount() || !rootNode->paintDevice()) {
+        m_previewDevice = createDeviceCache(rootNode->projection());
+    } else {
+        m_previewDevice = createDeviceCache(rootNode->paintDevice());
+        putDeviceCache(rootNode->paintDevice(), m_previewDevice);
+    }
+
+    Q_ASSERT(m_previewDevice);
 }
 
 TransformStrokeStrategy::~TransformStrokeStrategy()
 {
-    if (m_progressUpdater) {
-        m_progressUpdater->deleteLater();
+}
+
+KisPaintDeviceSP TransformStrokeStrategy::previewDevice() const
+{
+    return m_previewDevice;
+}
+
+KisPaintDeviceSP TransformStrokeStrategy::createDeviceCache(KisPaintDeviceSP dev)
+{
+    KisPaintDeviceSP cache;
+
+    if (m_selection) {
+        QRect srcRect = m_selection->selectedExactRect();
+
+        cache = new KisPaintDevice(dev->colorSpace());
+        KisPainter gc(cache);
+        gc.setSelection(m_selection);
+        gc.bitBlt(srcRect.topLeft(), dev, srcRect);
+    } else {
+        cache = new KisPaintDevice(*dev);
     }
+
+    return cache;
+}
+
+bool TransformStrokeStrategy::haveDeviceInCache(KisPaintDeviceSP src)
+{
+    QMutexLocker l(&m_devicesCacheMutex);
+    return m_devicesCacheHash.contains(src.data());
+}
+
+void TransformStrokeStrategy::putDeviceCache(KisPaintDeviceSP src, KisPaintDeviceSP cache)
+{
+    QMutexLocker l(&m_devicesCacheMutex);
+    m_devicesCacheHash.insert(src.data(), cache);
+}
+
+KisPaintDeviceSP TransformStrokeStrategy::getDeviceCache(KisPaintDeviceSP src)
+{
+    QMutexLocker l(&m_devicesCacheMutex);
+    KisPaintDeviceSP cache = m_devicesCacheHash.value(src.data());
+    if (!cache) {
+        qWarning() << "WARNING: Transform Stroke: the device is absent in cache!";
+    }
+
+    return cache;
+}
+
+bool TransformStrokeStrategy::checkBelongsToSelection(KisPaintDeviceSP device) const
+{
+    return m_selection &&
+        (device == m_selection->pixelSelection().data() ||
+         device == m_selection->projection().data());
 }
 
 void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
@@ -61,20 +114,25 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
     if(td) {
         if (td->destination == TransformData::PAINT_DEVICE) {
-            QRect oldExtent = m_node->extent();
+            QRect oldExtent = td->node->extent();
+            KisPaintDeviceSP device = td->node->paintDevice();
 
-            KisPaintDeviceSP device = m_node->paintDevice();
+            if (device && !checkBelongsToSelection(device)) {
+                KisPaintDeviceSP cachedPortion = getDeviceCache(device);
+                Q_ASSERT(cachedPortion);
 
-            KisTransaction transaction("Transform Device", device);
+                KisTransaction transaction("Transform Device", device);
 
-            transformAndMergeDevice(td->config, m_selectedPortionCache,
-                                    device);
+                KisProcessingVisitor::ProgressHelper helper(td->node);
+                transformAndMergeDevice(td->config, cachedPortion,
+                                        device, &helper);
 
-            runAndSaveCommand(KUndo2CommandSP(transaction.endAndTake()),
-                              KisStrokeJobData::CONCURRENT,
-                              KisStrokeJobData::NORMAL);
+                runAndSaveCommand(KUndo2CommandSP(transaction.endAndTake()),
+                                  KisStrokeJobData::CONCURRENT,
+                                  KisStrokeJobData::NORMAL);
 
-            m_node->setDirty(oldExtent | m_node->extent());
+                td->node->setDirty(oldExtent | td->node->extent());
+            }
         } else if (m_selection) {
             // FIXME: do it undoable
             m_selection->flatten();
@@ -82,8 +140,10 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
             KisSelectionTransaction transaction("Transform Selection", m_legacyUndoAdapter, m_selection);
 
+            KisProcessingVisitor::ProgressHelper helper(td->node);
             transformDevice(td->config,
-                            m_selection->pixelSelection());
+                            m_selection->pixelSelection(),
+                            &helper);
 
             runAndSaveCommand(KUndo2CommandSP(transaction.endAndTake()),
                               KisStrokeJobData::CONCURRENT,
@@ -92,17 +152,20 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
             m_legacyUndoAdapter->emitSelectionChanged();
         }
     } else if (csd) {
-        clearSelection();
+        KisPaintDeviceSP device = csd->node->paintDevice();
+        if (device && !checkBelongsToSelection(device)) {
+            if (!haveDeviceInCache(device)) {
+                putDeviceCache(device, createDeviceCache(device));
+            }
+            clearSelection(device);
+        }
     } else {
         KisStrokeStrategyUndoCommandBased::doStrokeCallback(data);
     }
 }
 
-void TransformStrokeStrategy::clearSelection()
+void TransformStrokeStrategy::clearSelection(KisPaintDeviceSP device)
 {
-    KisPaintDeviceSP device = m_node->paintDevice();
-    Q_ASSERT(device);
-
     KisTransaction transaction("Clear Selection", device);
     if (m_selection) {
         device->clearSelection(m_selection);
@@ -118,11 +181,12 @@ void TransformStrokeStrategy::clearSelection()
 
 void TransformStrokeStrategy::transformAndMergeDevice(const ToolTransformArgs &config,
                                                       KisPaintDeviceSP src,
-                                                      KisPaintDeviceSP dst)
+                                                      KisPaintDeviceSP dst,
+                                                      KisProcessingVisitor::ProgressHelper *helper)
 {
-    KoUpdaterPtr mergeUpdater = src != dst ? fetchUpdater() : 0;
+    KoUpdaterPtr mergeUpdater = src != dst ? helper->updater() : 0;
 
-    transformDevice(config, src);
+    transformDevice(config, src, helper);
     if (src != dst) {
         QRect mergeRect = src->extent();
         KisPainter painter(dst);
@@ -132,24 +196,12 @@ void TransformStrokeStrategy::transformAndMergeDevice(const ToolTransformArgs &c
     }
 }
 
-KoUpdaterPtr TransformStrokeStrategy::fetchUpdater()
-{
-    QMutexLocker l(&m_progressMutex);
-
-    if (!m_progressUpdater) {
-        KisNodeProgressProxy *progressProxy = m_node->nodeProgressProxy();
-        m_progressUpdater = new KoProgressUpdater(progressProxy);
-        m_progressUpdater->moveToThread(m_node->thread());
-    }
-
-    return m_progressUpdater->startSubtask();
-}
-
 void TransformStrokeStrategy::transformDevice(const ToolTransformArgs &config,
-                                              KisPaintDeviceSP device)
+                                              KisPaintDeviceSP device,
+                                              KisProcessingVisitor::ProgressHelper *helper)
 {
     if (config.mode() == ToolTransformArgs::WARP) {
-        KoUpdaterPtr updater = fetchUpdater();
+        KoUpdaterPtr updater = helper->updater();
 
         KisWarpTransformWorker worker(config.warpType(),
                                       device,
@@ -178,8 +230,8 @@ void TransformStrokeStrategy::transformDevice(const ToolTransformArgs &config,
 
         QPointF translation = config.transformedCenter() - transformedCenter.toPointF();
 
-        KoUpdaterPtr updater1 = fetchUpdater();
-        KoUpdaterPtr updater2 = fetchUpdater();
+        KoUpdaterPtr updater1 = helper->updater();
+        KoUpdaterPtr updater2 = helper->updater();
 
         KisTransformWorker transformWorker(device,
                                            config.scaleX(), config.scaleY(),

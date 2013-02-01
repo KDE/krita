@@ -26,7 +26,7 @@ photoshop-swatches-sketchlings-swatches.aco.gpl
 Skin.gpl.txt.gpl
 testgimp_swatches.aco.gpl
 Untitled.gpl
-    DESTINATION ${DATA_INSTALL_DIR}/krita/palettes)
+    DESTINATION ${DATA_INSTALL_DIR}/calligra/palettes)
 
 
 

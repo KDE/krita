@@ -24,6 +24,7 @@
 #include "kis_stroke_strategy_undo_command_based.h"
 #include "kis_types.h"
 #include "tool_transform_args.h"
+#include <kis_processing_visitor.h>
 
 class KisUndoAdapter;
 
@@ -42,56 +43,71 @@ public:
         };
 
     public:
-        TransformData(Destination _destination, const ToolTransformArgs &_config)
+    TransformData(Destination _destination, const ToolTransformArgs &_config, KisNodeSP _node)
             : KisStrokeJobData(CONCURRENT, NORMAL),
             destination(_destination),
-            config(_config)
+            config(_config),
+            node(_node)
         {
         }
 
         Destination destination;
         ToolTransformArgs config;
+        KisNodeSP node;
     };
 
     class KDE_EXPORT ClearSelectionData : public KisStrokeJobData {
     public:
-        ClearSelectionData()
-            : KisStrokeJobData(SEQUENTIAL, NORMAL)
+        ClearSelectionData(KisNodeSP _node)
+            : KisStrokeJobData(SEQUENTIAL, NORMAL),
+              node(_node)
         {
         }
+        KisNodeSP node;
     };
 
 public:
-    TransformStrokeStrategy(KisNodeSP node,
+    TransformStrokeStrategy(KisNodeSP rootNode,
                             KisSelectionSP selection,
-                            KisPaintDeviceSP selectedPortionCache,
                             KisPostExecutionUndoAdapter *undoAdapter,
                             KisUndoAdapter *legacyUndoAdapter);
 
     ~TransformStrokeStrategy();
 
+    KisPaintDeviceSP previewDevice() const;
+
     void doStrokeCallback(KisStrokeJobData *data);
 
 private:
-    KoUpdaterPtr fetchUpdater();
+    KoUpdaterPtr fetchUpdater(KisNodeSP node);
 
     void transformAndMergeDevice(const ToolTransformArgs &config,
                                  KisPaintDeviceSP src,
-                                 KisPaintDeviceSP dst);
+                                 KisPaintDeviceSP dst,
+                                 KisProcessingVisitor::ProgressHelper *helper);
     void transformDevice(const ToolTransformArgs &config,
-                         KisPaintDeviceSP device);
+                         KisPaintDeviceSP device,
+                         KisProcessingVisitor::ProgressHelper *helper);
 
-    void clearSelection();
-    void transformDevice(KisPaintDeviceSP src, KisPaintDeviceSP dst);
+    void clearSelection(KisPaintDeviceSP device);
+    //void transformDevice(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisProcessingVisitor::ProgressHelper *helper);
+
+    bool checkBelongsToSelection(KisPaintDeviceSP device) const;
+
+    KisPaintDeviceSP createDeviceCache(KisPaintDeviceSP src);
+
+    bool haveDeviceInCache(KisPaintDeviceSP src);
+    void putDeviceCache(KisPaintDeviceSP src, KisPaintDeviceSP cache);
+    KisPaintDeviceSP getDeviceCache(KisPaintDeviceSP src);
 
 private:
-    KisNodeSP m_node;
     KisSelectionSP m_selection;
-    KisPaintDeviceSP m_selectedPortionCache;
     KisUndoAdapter *m_legacyUndoAdapter;
 
-    QMutex m_progressMutex;
-    KoProgressUpdater *m_progressUpdater;
+    QMutex m_devicesCacheMutex;
+    QHash<KisPaintDevice*, KisPaintDeviceSP> m_devicesCacheHash;
+
+    KisPaintDeviceSP m_previewDevice;
 };
 
 #endif /* __TRANSFORM_STROKE_STRATEGY_H */

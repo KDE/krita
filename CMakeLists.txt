@@ -720,6 +720,7 @@ add_subdirectory(servicetypes)
 add_subdirectory(templates)
 add_subdirectory(tools)
 add_subdirectory(filters)
+add_subdirectory(data)
 
 macro_display_feature_log()
 

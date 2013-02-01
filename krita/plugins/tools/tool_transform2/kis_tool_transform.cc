@@ -83,6 +83,7 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
         : KisTool(canvas, KisCursor::rotateCursor())
         , m_isActive(false)
         , m_changesTracker(&m_transaction)
+        , m_workRecursively(true)
 {
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     Q_ASSERT(m_canvas);
@@ -372,17 +373,14 @@ void KisToolTransform::recalcOutline()
 
         // check whether image is too big to be displayed or not
         QPointF minmaxZ = minMaxZ(m_topLeft, m_topRight, m_bottomRight, m_bottomLeft);
-        if (minmaxZ.y() >= m_currentArgs.cameraPos().z() * 0.9) {
-            m_imageTooBig = true;
-            if (m_optWidget && m_optWidget->tooBigLabelWidget)
-                m_optWidget->tooBigLabelWidget->show();
-            return;
+
+        m_imageTooBig = minmaxZ.y() >= m_currentArgs.cameraPos().z() * 0.9;
+
+        if (m_optWidget) {
+            m_optWidget->setTooBigLabelVisible(m_imageTooBig);
         }
-        else {
-            m_imageTooBig = false;
-            if (m_optWidget && m_optWidget->tooBigLabelWidget)
-                m_optWidget->tooBigLabelWidget->hide();
-        }
+
+        if (m_imageTooBig) return;
 
 
         QTransform TS = QTransform::fromTranslate(m_transaction.originalCenter().x(), m_transaction.originalCenter().y());
@@ -493,7 +491,7 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
     } else if (m_currentArgs.mode() == ToolTransformArgs::FREE_TRANSFORM) {
         gc.save();
 
-        if (m_optWidget && m_optWidget->showDecorationsBox->isChecked()) {
+        if (m_optWidget && m_optWidget->showDecorations()) {
             gc.setOpacity(0.3);
             gc.fillPath(m_selectionPath, Qt::black);
         }
@@ -550,7 +548,7 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
     else if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
         gc.save();
 
-        if (m_optWidget && m_optWidget->showDecorationsBox->isChecked()) {
+        if (m_optWidget && m_optWidget->showDecorations()) {
             gc.setOpacity(0.3);
             gc.fillPath(m_selectionPath, Qt::black);
         }
@@ -862,11 +860,11 @@ void KisToolTransform::mousePressEvent(KoPointerEvent *event)
 
     KisImageWSP kisimage = image();
 
-    if (!currentNode() || !currentNode()->paintDevice())
+    if (!currentNode())
         return;
 
     setMode(KisTool::PAINT_MODE);
-    if (kisimage && currentNode()->paintDevice() && event->button() == Qt::LeftButton) {
+    if (kisimage && event->button() == Qt::LeftButton) {
         QPointF mousePos = QPointF(event->point.x() * kisimage->xRes(), event->point.y() * kisimage->yRes());
         if (!m_strokeId) {
             startStroke(m_currentArgs.mode());
@@ -1852,8 +1850,7 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
             dx = signX * m_clickArgs.shearX() * m_currentArgs.scaleY() * m_transaction.originalHalfHeight(); // get the dx pixels corresponding to the current shearX factor
             dx += t.x(); // add the horizontal movement
             m_currentArgs.setShearX(signX * dx / m_currentArgs.scaleY() / m_transaction.originalHalfHeight()); // calculate the new shearX factor
-
-            m_optWidget->shearXBox->setValue(m_currentArgs.shearX());
+            updateOptionWidget();
             break;
         case LEFTSHEAR:
             signY = -1;
@@ -1869,8 +1866,7 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
             dy = signY *  m_clickArgs.shearY() * m_currentArgs.scaleX() * m_transaction.originalHalfWidth(); // get the dx pixels corresponding to the current shearX factor
             dy += t.y(); // add the horizontal movement
             m_currentArgs.setShearY(signY * dy / m_currentArgs.scaleX() / m_transaction.originalHalfWidth()); // calculate the new shearX factor
-
-            m_optWidget->shearYBox->setValue(m_currentArgs.shearY());
+            updateOptionWidget();
             break;
         }
     }
@@ -1937,8 +1933,7 @@ void KisToolTransform::updateSelectionPath()
     if (selection) {
         selectionOutline = selection->outline();
     } else {
-        KisPaintDeviceSP dev = currentNode()->paintDevice();
-        selectionOutline << dev->exactBounds();
+        selectionOutline << m_selectedPortionCache->exactBounds();
     }
 
     const KisCoordinatesConverter *converter = m_canvas->coordinatesConverter();
@@ -1951,32 +1946,16 @@ void KisToolTransform::updateSelectionPath()
     }
 }
 
-void KisToolTransform::initThumbnailImage()
+void KisToolTransform::initThumbnailImage(KisPaintDeviceSP previewDevice)
 {
     m_transform = QTransform();
     m_origImg = QImage();
     m_currImg = QImage();
-
-    KisPaintDeviceSP dev;
-    KisSelectionSP selection = currentSelection();
-
-    if (!currentNode() || !(dev = currentNode()->paintDevice())) {
-        return;
-    }
-
-    QRect srcRect(m_transaction.originalRect().toAlignedRect());
-
-    if (selection) {
-        m_selectedPortionCache = new KisPaintDevice(dev->colorSpace());
-        KisPainter gc(m_selectedPortionCache);
-        gc.setSelection(selection);
-        gc.bitBlt(srcRect.topLeft(), dev, srcRect);
-    } else {
-        m_selectedPortionCache = new KisPaintDevice(*dev);
-    }
+    m_selectedPortionCache = previewDevice;
 
     const int maxSize = 2000;
 
+    QRect srcRect(m_transaction.originalRect().toAlignedRect());
     int x, y, w, h;
     srcRect.getRect(&x, &y, &w, &h);
 
@@ -2010,6 +1989,7 @@ void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShap
     }
 
     m_isActive = true;
+    startStroke(ToolTransformArgs::FREE_TRANSFORM);
 }
 
 void KisToolTransform::deactivate()
@@ -2044,7 +2024,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
 
     KisPaintDeviceSP dev;
 
-    if (!currentNode() || !(dev = currentNode()->paintDevice())) {
+    if (!currentNode()) {
         return;
     }
 
@@ -2063,25 +2043,26 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
         return;
     }
 
+    if (m_optWidget) {
+        m_workRecursively = m_optWidget->workRecursively() ||
+            !currentNode()->paintDevice();
+    }
+
+    TransformStrokeStrategy *strategy = new TransformStrokeStrategy(currentNode(), currentSelection(), image()->postExecutionUndoAdapter(), image()->undoAdapter());
+    KisPaintDeviceSP previewDevice = strategy->previewDevice();
+
     KisSelectionSP selection = currentSelection();
+    QRect srcRect = selection ? selection->selectedExactRect() : previewDevice->exactBounds();
 
-    QRectF originalRect;
-    originalRect = selection ?
-        selection->selectedExactRect() : dev->exactBounds();
+    m_transaction = TransformTransactionProperties(srcRect, &m_currentArgs);
 
-    m_transaction = TransformTransactionProperties(originalRect, &m_currentArgs);
-
-    initThumbnailImage();
+    initThumbnailImage(previewDevice);
     updateSelectionPath();
 
     initTransformMode(mode);
 
-    KisStrokeStrategy *strategy = new TransformStrokeStrategy(currentNode(), currentSelection(), m_selectedPortionCache, image()->postExecutionUndoAdapter(), image()->undoAdapter());
-
     m_strokeId = image()->startStroke(strategy);
-
-    image()->addJob(m_strokeId,
-                    new TransformStrokeStrategy::ClearSelectionData());
+    clearDevices(currentNode(), m_workRecursively);
 
     Q_ASSERT(m_changesTracker.isEmpty());
     commitChanges();
@@ -2092,15 +2073,13 @@ void KisToolTransform::endStroke()
     if (!m_strokeId) return;
 
     if (!m_currentArgs.isIdentity()) {
-        image()->addJob(m_strokeId,
-                        new TransformStrokeStrategy::TransformData(
-                            TransformStrokeStrategy::TransformData::PAINT_DEVICE,
-                            m_currentArgs));
+        transformDevices(currentNode(), m_workRecursively);
 
         image()->addJob(m_strokeId,
                         new TransformStrokeStrategy::TransformData(
                             TransformStrokeStrategy::TransformData::SELECTION,
-                            m_currentArgs));
+                            m_currentArgs,
+                            currentNode()));
 
         image()->endStroke(m_strokeId);
     } else {
@@ -2133,8 +2112,41 @@ void KisToolTransform::slotTrackerChangedConfig()
     updateOptionWidget();
 }
 
+void KisToolTransform::clearDevices(KisNodeSP node, bool recursive)
+{
+    if (recursive) {
+        // simple tail-recursive iteration
+        KisNodeSP prevNode = node->lastChild();
+        while(prevNode) {
+            clearDevices(prevNode, recursive);
+            prevNode = prevNode->prevSibling();
+        }
+    }
+
+    image()->addJob(m_strokeId,
+                    new TransformStrokeStrategy::ClearSelectionData(node));
+}
+
+void KisToolTransform::transformDevices(KisNodeSP node, bool recursive)
+{
+    if (recursive) {
+        // simple tail-recursive iteration
+        KisNodeSP prevNode = node->lastChild();
+        while(prevNode) {
+            transformDevices(prevNode, recursive);
+            prevNode = prevNode->prevSibling();
+        }
+    }
+
+    image()->addJob(m_strokeId,
+                    new TransformStrokeStrategy::TransformData(
+                        TransformStrokeStrategy::TransformData::PAINT_DEVICE,
+                        m_currentArgs,
+                        node));
+}
+
 QWidget* KisToolTransform::createOptionWidget() {
-    m_optWidget = new KisToolTransformConfigWidget(&m_transaction, m_canvas, 0);
+    m_optWidget = new KisToolTransformConfigWidget(&m_transaction, m_canvas, m_workRecursively, 0);
     Q_CHECK_PTR(m_optWidget);
     m_optWidget->setObjectName(toolId() + " option widget");
 
@@ -2146,6 +2158,9 @@ QWidget* KisToolTransform::createOptionWidget() {
 
     connect(m_optWidget, SIGNAL(sigResetTransform()),
             this, SLOT(slotResetTransform()));
+
+    connect(m_optWidget, SIGNAL(sigRestartTransform()),
+            this, SLOT(slotRestartTransform()));
 
     connect(m_optWidget, SIGNAL(sigEditingFinished()),
             this, SLOT(slotEditingFinished()));
@@ -2197,6 +2212,16 @@ void KisToolTransform::slotResetTransform()
 {
     initTransformMode(m_currentArgs.mode());
     slotEditingFinished();
+}
+
+void KisToolTransform::slotRestartTransform()
+{
+    if (!m_strokeId) return;
+
+    ToolTransformArgs savedArgs(m_currentArgs);
+    cancelStroke();
+    image()->waitForDone();
+    startStroke(savedArgs.mode());
 }
 
 void KisToolTransform::slotEditingFinished()

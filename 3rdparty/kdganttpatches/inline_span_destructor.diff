@@ -1,0 +1,27 @@
+diff --git a/3rdparty/kdgantt/kdganttglobal.cpp b/3rdparty/kdgantt/kdganttglobal.cpp
+index a76ac62..2e930c4 100644
+--- a/3rdparty/kdgantt/kdganttglobal.cpp
++++ b/3rdparty/kdgantt/kdganttglobal.cpp
+@@ -63,9 +63,6 @@ using namespace KDGantt;
+  *\ingroup KDGantt
+  * \brief A class representing a start point and a length */
+ 
+-Span::~Span()
+-{
+-}
+ 
+ DateTimeSpan::DateTimeSpan()
+ {
+diff --git a/3rdparty/kdgantt/kdganttglobal.h b/3rdparty/kdgantt/kdganttglobal.h
+index bd88e3d..a19f93a 100644
+--- a/3rdparty/kdgantt/kdganttglobal.h
++++ b/3rdparty/kdgantt/kdganttglobal.h
+@@ -214,7 +214,7 @@ namespace KDGantt {
+         inline Span() : m_start( -1 ), m_length( 0 ) {}
+         inline Span( qreal start, qreal length ) : m_start( start ), m_length( length ) {}
+         inline Span( const Span& other ) : m_start(other.m_start), m_length(other.m_length) {}
+-        ~Span();
++        inline ~Span() {}
+ 
+         inline Span& operator=( const Span& other ) { m_start=other.m_start; m_length=other.m_length; return *this; }
+ 

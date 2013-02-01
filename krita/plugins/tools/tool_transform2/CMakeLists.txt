@@ -25,5 +25,6 @@ install(TARGETS kritatooltransform  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES  rotate_cursor.xpm
                 krita_tool_transform.png
+                krita_tool_transform_recursive.png
     DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 install( FILES  kritatooltransform.desktop  DESTINATION ${SERVICES_INSTALL_DIR})

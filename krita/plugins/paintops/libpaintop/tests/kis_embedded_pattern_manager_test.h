@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,19 +16,33 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_PATTERN_TEST_H
-#define KIS_PATTERN_TEST_H
+#ifndef __KIS_EMBEDDED_PATTERN_MANAGER_TEST_H
+#define __KIS_EMBEDDED_PATTERN_MANAGER_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
-class KisPatternTest : public QObject
+class KisEmbeddedPatternManagerTest : public QObject
 {
     Q_OBJECT
 private slots:
+    void testRoundTrip();
 
-    void testCreation();
-    void testRoundTripMd5();
+    void testLoadingNoOnServerValidName();
+    void testLoadingNoOnServerEmptyName();
+    void testLoadingNoOnServerPathName();
 
+    void testLoadingOnServerValidName();
+    void testLoadingOnServerEmptyName();
+    void testLoadingOnServerPathName();
+
+    void testLoadingOnServerValidNameMd5();
+    void testLoadingOnServerEmptyNameMd5();
+    void testLoadingOnServerPathNameMd5();
+
+    void init();
+    void cleanUp();
+
+    void initTestCase();
 };
 
-#endif
+#endif /* __KIS_EMBEDDED_PATTERN_MANAGER_TEST_H */

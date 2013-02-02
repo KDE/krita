@@ -589,7 +589,7 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
         glEnable(GL_LINE_SMOOTH);
         glEnable(GL_COLOR_LOGIC_OP);
         glLogicOp(GL_XOR);
-        glColor3f(0.501961, 1.0, 0.501961);
+        glColor3f(0.501961f, 1.0f, 0.501961f);
 
         QList<QPolygonF> subPathPolygons = path.toSubpathPolygons();
         for(int i=0; i<subPathPolygons.size(); i++) {

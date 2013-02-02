@@ -105,6 +105,8 @@ KoShape *TextShapeFactory::createDefaultShape(KoDocumentResourceManager *documen
             document.setChangeTracker(changeTracker);
         }
 
+        document.setShapeController(documentResources->shapeController());
+
         //update the resources of the document
         text->updateDocumentData();
 

@@ -29,6 +29,7 @@
 #include "KoTextDocument.h"
 #include "KoDocumentRdfBase.h"
 #include "opendocument/KoTextLoader.h"
+#include "KoTextSharedLoadingData.h"
 
 #include <kdebug.h>
 #ifdef SHOULD_BUILD_RDF
@@ -39,20 +40,28 @@
 class KoTextPaste::Private
 {
 public:
-    Private(KoTextEditor *editor, KoShapeController *shapeController, QSharedPointer<Soprano::Model> _rdfModel)
+    Private(KoTextEditor *editor, KoShapeController *shapeCont, QSharedPointer<Soprano::Model> _rdfModel,
+        KoCanvasBase *c, KUndo2Command *cmd
+    )
         : editor(editor)
-        , resourceManager(shapeController->resourceManager())
+        , resourceManager(shapeCont->resourceManager())
         , rdfModel(_rdfModel)
+        , shapeController(shapeCont)
+        , command(cmd)
+        , canvas(c)
     {
     }
 
     KoTextEditor *editor;
     KoDocumentResourceManager *resourceManager;
     QSharedPointer<Soprano::Model> rdfModel;
+    KoShapeController *shapeController;
+    KUndo2Command *command;
+    KoCanvasBase *canvas;
 };
 
-KoTextPaste::KoTextPaste(KoTextEditor *editor, KoShapeController *shapeController, QSharedPointer<Soprano::Model> rdfModel)
-        : d(new Private(editor, shapeController, rdfModel))
+KoTextPaste::KoTextPaste(KoTextEditor *editor, KoShapeController *shapeController, QSharedPointer<Soprano::Model> rdfModel, KoCanvasBase *c, KUndo2Command *cmd)
+        : d(new Private(editor, shapeController, rdfModel, c, cmd))
 {
 }
 
@@ -92,6 +101,24 @@ bool KoTextPaste::process(const KoXmlElement &body, KoOdfReadStore &odfStore)
 #endif
     }
 #endif
+
+    KoTextSharedLoadingData *sharedData = dynamic_cast<KoTextSharedLoadingData *>(context.sharedData(KOTEXT_SHARED_LOADING_ID));
+
+    // add shapes to the document
+    foreach (KoShape *shape, sharedData->insertedShapes()) {
+        QPointF move;
+        d->canvas->clipToDocument(shape, move);
+        if (move.x() != 0 || move.y() != 0) {
+            shape->setPosition(shape->position() + move);
+        }
+
+        // During load we make page anchored shapes invisible, because otherwise
+        // they leave empty rects in the text if there is run-around
+        // now is the time to make them visible again
+        shape->setVisible(true);
+
+        d->editor->addCommand(d->shapeController->addShapeDirect(shape, d->command));
+    }
 
     return ok;
 }

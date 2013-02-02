@@ -173,24 +173,6 @@ public:
     KoDocumentRdfBase m_rdfBase;
 };
 
-void TestKoTextEditor::testPaste()
-{
-    TestDocument *source = new TestDocument();
-    TestDocument *destination = new TestDocument();
-
-    Q_ASSERT(source->textEditor() != destination->textEditor());
-
-    KoShapeController shapeController(0, destination);
-
-    source->textEditor()->insertText("bla");
-
-    destination->textEditor()->paste(source->textEditor(), &shapeController);
-
-    Q_ASSERT(destination->m_document->toPlainText() == "bla");
-
-
-}
-
 QTEST_MAIN(TestKoTextEditor)
 
 #include "TestKoTextEditor.moc"

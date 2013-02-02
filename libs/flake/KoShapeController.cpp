@@ -23,6 +23,7 @@
 #include "KoShapeController.h"
 #include "KoShapeBasedDocumentBase.h"
 #include "KoShapeRegistry.h"
+#include "KoDocumentResourceManager.h"
 #include "KoShapeManager.h"
 #include "KoShapeLayer.h"
 #include "KoSelection.h"
@@ -145,6 +146,9 @@ KoShapeController::KoShapeController(KoCanvasBase *canvas, KoShapeBasedDocumentB
 {
     d->canvas = canvas;
     d->shapeBasedDocument = shapeBasedDocument;
+    if (shapeBasedDocument) {
+        shapeBasedDocument->resourceManager()->setShapeController(this);
+    }
 }
 
 KoShapeController::~KoShapeController()

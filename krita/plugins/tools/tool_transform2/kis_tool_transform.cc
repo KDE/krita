@@ -81,9 +81,9 @@
 
 KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
         : KisTool(canvas, KisCursor::rotateCursor())
+        , m_workRecursively(true)
         , m_isActive(false)
         , m_changesTracker(&m_transaction)
-        , m_workRecursively(true)
 {
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     Q_ASSERT(m_canvas);

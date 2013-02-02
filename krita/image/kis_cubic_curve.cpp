@@ -169,8 +169,7 @@ public:
             tri_a.append(m_h[i]);
 
         if (intervals > 1) {
-            KisTridiagonalSystem<T> tridia;
-            m_c = tridia.calculate(tri_a, tri_b, tri_a, tri_f);
+            m_c = KisTridiagonalSystem<T>::calculate(tri_a, tri_b, tri_a, tri_f);
         }
         m_c.prepend(0);
         m_c.append(0);

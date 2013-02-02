@@ -496,10 +496,6 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *rootPart)
         d->rootPart = rootPart;
     }
 
-    // delete the old view unsets the canvas, needs to happen before adding the view
-    while(!oldRootViews.isEmpty()) {
-        delete oldRootViews.takeFirst();
-    }
     if (doc) {
         d->dockWidgetMenu->setVisible(true);
         //d->manager->addPart( doc, false ); // done by KoView::setPartManager
@@ -532,6 +528,9 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *rootPart)
     d->manager->setActivePart(d->rootPart, doc ? d->rootViews.first() : 0);
     emit restoringDone();
 
+    while(!oldRootViews.isEmpty()) {
+        delete oldRootViews.takeFirst();
+    }
     if (oldRootPart && oldRootPart->viewCount() == 0) {
         //kDebug(30003) <<"No more views, deleting old doc" << oldRootDoc;
         oldRootDoc->clearUndoHistory();

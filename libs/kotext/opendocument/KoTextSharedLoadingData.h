@@ -182,6 +182,11 @@ public:
      */
     KoOdfBibliographyConfiguration bibliographyConfiguration() const;
 
+    /**
+     * Returns a list of shapes that should be inserted.
+     */
+    QList<KoShape *> insertedShapes() const;
+
 protected:
     /**
      * This method got called by kotext once a \a KoShape got inserted and an

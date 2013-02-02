@@ -25,6 +25,7 @@
 
 class KoTextEditor;
 class KoShapeController;
+class KUndo2Command;
 
 #include <QSharedPointer>
 namespace Soprano
@@ -43,7 +44,7 @@ public:
      * @param shapeController the shapecontroller that gives access to the document's shapes and resourcemanager
      * @param rdfModel the rdfModel we'll insert the tuples into
      */
-    KoTextPaste(KoTextEditor *editor, KoShapeController *shapeController, QSharedPointer<Soprano::Model> rdfModel);
+    KoTextPaste(KoTextEditor *editor, KoShapeController *shapeController, QSharedPointer<Soprano::Model> rdfModel, KUndo2Command *cmd);
     virtual ~KoTextPaste();
 
 protected:

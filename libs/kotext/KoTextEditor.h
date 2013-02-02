@@ -256,26 +256,9 @@ public slots:
     /**
      * paste the given mimedata object at the current position
      * @param mimeData: the mimedata containing text, html or odf
-     * @param shapeController the canvas' shapeController
      * @param pasteAsText: if true, paste without formatting
      */
-    void paste(const QMimeData *mimeData,
-               KoShapeController *shapeController,
-               bool pasteAsText=false);
-
-    /**
-     * Insert the selection from the given KoTextEditor. If there is no selection, the entire
-     * content of the document behind the editor is used. This changes the cursor position of
-     * the editor instance. Note that this is another text editor, preferably on another document!
-     *
-     * @param editor the KoTextEditor instance.
-     * @param shapeController the canvas' shapeController
-     * @param pasteAsText: if true, paste without formatting
-     * @returns true if the operation succeeded
-     */
-    bool paste(KoTextEditor *editor,
-               KoShapeController *shapeController,
-               bool pasteAsText = false);
+    void paste(const QMimeData *mimeData, bool pasteAsText=false);
 
     /**
      * @param numberingEnabled when true, we will enable numbering for the current paragraph (block).

@@ -30,10 +30,20 @@
 #include "KoShapeManager.h"
 #include "KoSelection.h"
 #include "KoShapeLayer.h"
+#include "KoShapePaste.h"
+#include "KoShapeRegistry.h"
+#include "KoShapeController.h"
+#include "KoOdf.h"
+
+#include <kundo2command.h>
+#include <KoProperties.h>
 
 #include <kdebug.h>
+#include <klocale.h>
+
 #include <QTimer>
 #include <QApplication>
+#include <QClipboard>
 
 KoToolProxyPrivate::KoToolProxyPrivate(KoToolProxy *p)
     : activeTool(0),
@@ -455,10 +465,62 @@ void KoToolProxy::copy() const
 
 bool KoToolProxy::paste()
 {
+    bool success = false;
+    KoCanvasBase *canvas = d->controller->canvas();
+
     // TODO maybe move checking the active layer to KoPasteController ?
     if (d->activeTool && d->isActiveLayerEditable())
-        return d->activeTool->paste();
-    return false;
+        success = d->activeTool->paste();
+
+    if (!success) {
+        const QMimeData *data = QApplication::clipboard()->mimeData();
+
+        if (data->hasFormat(KoOdf::mimeType(KoOdf::Text))) {
+            KoShapeManager *shapeManager = canvas->shapeManager();
+            KoShapePaste paste(canvas, shapeManager->selection()->activeLayer());
+            success = paste.paste(KoOdf::Text, data);
+            if (success) {
+                shapeManager->selection()->deselectAll();
+                foreach(KoShape *shape, paste.pastedShapes()) {
+                    shapeManager->selection()->select(shape);
+                }
+            }
+        }
+    }
+
+   if (!success) {
+        const QMimeData *data = QApplication::clipboard()->mimeData();
+        QImage image = QApplication::clipboard()->image();
+
+        if (image.isNull() && data->hasUrls()) {
+           qDebug() << "FLAKE BASED url paste";
+        }
+
+        if (!image.isNull()) {
+            // create a factory
+            KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("PictureShape");
+            QWidget *canvasWidget = canvas->canvasWidget();
+
+            if (factory && canvasWidget) {
+                canvasWidget->mapFromGlobal(QCursor::pos());
+                KoProperties params;
+                params.setProperty("qimage", image);
+
+                KoShape *shape = factory->createShape(&params, canvas->shapeController()->resourceManager());
+                KUndo2Command *cmd = new KUndo2Command(i18nc("(qtundo-format)", "Paste Image"));
+                if (cmd) {
+                    // add shapes to the document
+                    canvas->shapeController()->addShapeDirect(shape, cmd);
+
+                    canvas->addCommand(cmd);
+                    success = true;
+                } else {
+                    delete shape;
+                }
+            }
+        }
+    }
+    return success;
 }
 
 void KoToolProxy::dragMoveEvent(QDragMoveEvent *event, const QPointF &point)

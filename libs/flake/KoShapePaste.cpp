@@ -131,7 +131,11 @@ bool KoShapePaste::process(const KoXmlElement & body, KoOdfReadStore & odfStore)
         // bounding rect at the current mouse position
         QPointF pasteOffset = mouseDocumentPos - bbox.center();
         foreach (KoShape *shape, d->pastedShapes) {
-            shape->setPosition(shape->position() + pasteOffset);
+            QPointF move(pasteOffset);
+            d->canvas->clipToDocument(shape, move);
+            if (move.x() != 0 || move.y() != 0) {
+                shape->setPosition(shape->position() + move);
+            }
         }
     } else {
         foreach (KoShape *shape, d->pastedShapes) {

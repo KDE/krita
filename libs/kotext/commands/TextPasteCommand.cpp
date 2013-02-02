@@ -117,7 +117,7 @@ void TextPasteCommand::redo()
                 }
 #endif
 
-                KoTextPaste paste(editor, m_shapeController, rdfModel);
+                KoTextPaste paste(editor, m_shapeController, rdfModel, this);
                 paste.paste(odfType, m_mimeData);
 
 #ifdef SHOULD_BUILD_RDF

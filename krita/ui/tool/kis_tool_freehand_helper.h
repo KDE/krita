@@ -35,7 +35,7 @@ class KisStrokesFacade;
 class KisPostExecutionUndoAdapter;
 class KisPaintOp;
 class KisPainter;
-class KisSmoothingOptions;
+struct KisSmoothingOptions;
 
 class KRITAUI_EXPORT KisToolFreehandHelper : public QObject
 {

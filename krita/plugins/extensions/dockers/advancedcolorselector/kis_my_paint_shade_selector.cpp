@@ -83,10 +83,10 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
     for (int x=0; x<width(); x++) {
         for (int y=0; y<height(); y++) {
 
-            float v_factor = 0.6;
-            float s_factor = 0.6;
-            float v_factor2 = 0.013;
-            float s_factor2 = 0.013;
+            float v_factor = 0.6f;
+            float s_factor = 0.6f;
+            float v_factor2 = 0.013f;
+            float s_factor2 = 0.013f;
 
             int stripe_width = 15*size/255.;
 

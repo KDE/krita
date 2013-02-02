@@ -179,13 +179,13 @@ endif (APPLE)
 ## Test for sqlite
 ##
 set(SQLITE_MIN_VERSION 3.6.16)
-set(SQLITE_RECOMMENDED_VERSION 3.7.14)
+set(SQLITE_RECOMMENDED_VERSION 3.7.15)
 set(SQLITE_LOAD_EXTENSION_REQUIRED ON)
 macro_optional_find_package(CalligraSqlite 3.6.16)
 macro_bool_to_01(SQLITE_FOUND HAVE_SQLITE)
 macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine with enabled extensions loading"
                     "http://www.sqlite.org" FALSE "${SQLITE_MIN_VERSION}"
-		    "Required by Calligra's default database handler for Kexi and Words.")
+		    "Required by Calligra's default database handler for Kexi and bibliography in Words.")
 
 ##
 ## Test for ICU

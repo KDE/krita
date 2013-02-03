@@ -30,6 +30,9 @@
 
 #include <KDebug>
 #include <KGlobalSettings>
+#include <KConfigGroup>
+#include <KLocale>
+#include <KSelectAction>
 
 #include <QMap>
 #include <QList>
@@ -45,6 +48,7 @@
 #include <QStackedWidget>
 #include <QPainter>
 #include <QTextLayout>
+#include <QMenu>
 
 class KoModeBox::Private
 {
@@ -54,6 +58,7 @@ public:
         , activeId(-1)
         , iconTextFitted(true)
         , fittingIterations(0)
+        , iconMode(IconAndText)
     {
     }
 
@@ -67,6 +72,7 @@ public:
     QStackedWidget *stack;
     bool iconTextFitted;
     int fittingIterations;
+    IconMode iconMode;
 };
 
 QString KoModeBox::applicationName;
@@ -98,6 +104,9 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
 {
     applicationName = appName;
 
+    KConfigGroup cfg = KGlobal::config()->group("calligra");
+    d->iconMode = (IconMode)cfg.readEntry("ModeBoxIconMode", (int)IconAndText);
+
     QGridLayout *layout = new QGridLayout();
     d->tabBar = new QTabBar();
     d->tabBar->setShape(QTabBar::RoundedWest);
@@ -122,8 +131,10 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
     // Update visibility of buttons
     updateShownTools(canvas, QList<QString>());
 
+    d->tabBar->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(d->tabBar, SIGNAL(currentChanged(int)), this, SLOT(toolSelected(int)));
     connect(d->tabBar, SIGNAL(currentChanged(int)), d->stack, SLOT(setCurrentIndex(int)));
+    connect(d->tabBar, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotContextMenuRequested(QPoint)));
 
     connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController *, int)),
             this, SLOT(setActiveTool(KoCanvasController *, int)));
@@ -219,6 +230,23 @@ QIcon KoModeBox::createRotatedIcon(const KoToolButton button)
     return QIcon(QPixmap::fromImage(pm));
 }
 
+QIcon KoModeBox::createSimpleIcon(const KoToolButton button)
+{
+    QSize iconSize = d->tabBar->iconSize();
+
+    // This must be a QImage, as drawing to a QPixmap outside the
+    // UI thread will cause sporadic crashes.
+    QImage pm(iconSize, QImage::Format_ARGB32_Premultiplied);
+    pm.fill(Qt::transparent);
+    QPainter p(&pm);
+    p.rotate(90);
+    p.translate(0,-iconSize.width());
+
+    button.button->icon().paint(&p, 0, 0, iconSize.height(), iconSize.width());
+
+    return QIcon(QPixmap::fromImage(pm));
+}
+
 void KoModeBox::addItem(const KoToolButton button)
 {
     QWidget *oldwidget = d->addedWidgets[button.buttonGroupId];
@@ -239,7 +267,12 @@ void KoModeBox::addItem(const KoToolButton button)
 
     // Create a rotated icon with text
     d->tabBar->blockSignals(true);
-    d->tabBar->addTab(createRotatedIcon(button), QString());
+    if (d->iconMode == IconAndText) {
+        d->tabBar->addTab(createRotatedIcon(button), QString());
+    } else {
+        int index = d->tabBar->addTab(createSimpleIcon(button), QString());
+        d->tabBar->setTabToolTip(index, button.button->toolTip());
+    }
     d->tabBar->blockSignals(false);
     d->stack->addWidget(widget);
     d->addedButtons.append(button);
@@ -265,6 +298,11 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
 
     d->addedButtons.clear();
 
+    if (d->iconMode == IconAndText) {
+        d->tabBar->setIconSize(QSize(32,64));
+    } else {
+        d->tabBar->setIconSize(QSize(22,22));
+    }
     int newIndex = -1;
     foreach (const KoToolButton button, d->buttons) {
         QString code = button.visibilityCode;
@@ -406,4 +444,26 @@ void KoModeBox::toolSelected(int index)
     if (index != -1) {
         d->addedButtons[index].button->click();
     }
+}
+
+void KoModeBox::slotContextMenuRequested(const QPoint &pos)
+{
+    QMenu menu;
+    KSelectAction* selectionAction = new KSelectAction(i18n("Text"), &menu);
+    connect(selectionAction, SIGNAL(triggered(int)), SLOT(switchIconMode(int)));
+    menu.addAction(selectionAction);
+    selectionAction->addAction(i18n("Icon and Text"));
+    selectionAction->addAction(i18n("Icon only"));
+    selectionAction->setCurrentItem(d->iconMode);
+
+    menu.exec(d->tabBar->mapToGlobal(pos));
+}
+
+void KoModeBox::switchIconMode(int mode)
+{
+    d->iconMode = static_cast<IconMode>(mode);
+    updateShownTools(d->canvas->canvasController(), QList<QString>());
+
+    KConfigGroup cfg = KGlobal::config()->group("calligra");
+    cfg.writeEntry("ModeBoxIconMode", (int)d->iconMode);
 }

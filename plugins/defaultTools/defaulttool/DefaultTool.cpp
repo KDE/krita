@@ -65,6 +65,20 @@
 
 #define HANDLE_DISTANCE 10
 
+class NopInteractionStrategy : public KoInteractionStrategy
+{
+public:
+    explicit NopInteractionStrategy(KoToolBase* parent) : KoInteractionStrategy(parent) {}
+
+    virtual KUndo2Command* createCommand()
+    {
+        return 0;
+    }
+
+    virtual void handleMouseMove(const QPointF& /*mouseLocation*/, Qt::KeyboardModifiers /*modifiers*/) {}
+    virtual void finishInteraction(Qt::KeyboardModifiers /*modifiers*/) {}
+};
+
 class SelectionHandler : public KoToolSelection
 {
 public:
@@ -1222,6 +1236,10 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
             shapeManager->selection()->deselectAll();
         select->select(shape, selectNextInStack ? false : true);
         repaintDecorations();
+        // tablet selection isn't precise and may lead to a move, preventing that
+        if (event->isTabletEvent()) {
+            return new NopInteractionStrategy(this);
+        }
         return new ShapeMoveStrategy(this, event->point);
     }
     return 0;

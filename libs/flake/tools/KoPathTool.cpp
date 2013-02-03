@@ -192,7 +192,6 @@ KoPathTool::~KoPathTool()
 
 QList<QWidget *>  KoPathTool::createOptionWidgets()
 {
-    Q_D(KoToolBase);
     QList<QWidget *> list;
 
     PathToolOptionWidget * toolOptions = new PathToolOptionWidget(this);

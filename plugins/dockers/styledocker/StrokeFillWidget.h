@@ -59,7 +59,7 @@ public:
         StretchHeight
     };
     void setStretchPolicy(StretchPolicy policy);
-    
+
 signals:
     /// Is emitted when stroke or fill is selected in the StylePreview widget.
     /// @param aspect KoFlake::Foreground or KoFlake::Background

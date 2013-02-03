@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 C. Boemann <cbo@kogmbh.com>
+ * Copyright (c) 2013 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,12 +17,42 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoTextLayoutRootAreaProvider.h"
+#ifndef KOCOLORPOPUPBUTTON_H_
+#define KOCOLORPOPUPBUTTON_H_
 
-KoTextLayoutRootAreaProvider::KoTextLayoutRootAreaProvider()
-{
-}
+#include <QToolButton>
 
-KoTextLayoutRootAreaProvider::~KoTextLayoutRootAreaProvider()
+#include "kowidgets_export.h"
+
+/**
+ * @short A widget for 
+ *
+ */
+class KOWIDGETS_EXPORT KoColorPopupButton: public QToolButton
 {
-}
+    Q_OBJECT
+
+public:
+    /**
+     * Constructor for the widget, where value is set to 0
+     *
+     * @param parent parent QWidget
+     */
+    explicit KoColorPopupButton(QWidget *parent=0);
+
+    /**
+     * Destructor
+     */
+    virtual ~KoColorPopupButton();
+
+    QSize sizeHint() const;
+
+signals:
+    /// Emitted when a resource was selected
+    void iconSizeChanged();
+
+protected:
+    virtual void resizeEvent(QResizeEvent *); ///< reimplemented from QToolButton
+};
+
+#endif

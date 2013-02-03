@@ -35,14 +35,11 @@ public:
     virtual ~ShadowDocker();
 
 private slots:
-    /// selection has changed
-    void selectionChanged();
 
     /// reimplemented
     virtual void setCanvas( KoCanvasBase *canvas );
     virtual void unsetCanvas();
-    
-    void shadowChanged();
+
     void locationChanged(Qt::DockWidgetArea area);
 
 private:

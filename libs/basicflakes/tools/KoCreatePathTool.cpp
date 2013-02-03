@@ -30,6 +30,7 @@
 #include "KoCanvasResourceManager.h"
 #include "KoDocumentResourceManager.h"
 #include "KoShapePaintingContext.h"
+#include "KoStrokeConfigWidget.h"
 
 #include <KNumInput>
 #include <KLocale>
@@ -385,6 +386,12 @@ QList<QWidget *> KoCreatePathTool::createOptionWidgets()
     layout->addWidget(specialSpacer, 1, 1);
     angleWidget->setWindowTitle(i18n("Angle Constraints"));
     list.append(angleWidget);
+
+    KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(0);
+    strokeWidget->setWindowTitle(i18n("Line"));
+    strokeWidget->setCanvas(canvas());
+    list.append(strokeWidget);
+
 
     connect(angleEdit, SIGNAL(valueChanged(int)), this, SLOT(angleDeltaChanged(int)));
 

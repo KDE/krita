@@ -79,10 +79,11 @@ set(KRITA_INCLUDES
     ${KOMAIN_INCLUDES}
     ${BASICFLAKES_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/widgets/resources
+    ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets
     ${CMAKE_SOURCE_DIR}/libs/widgetutils
 
     ${EIGEN2_INCLUDE_DIR}
-    
+
     # 'Export' this for use by filters
     CACHE INTERNAL ""
 )

@@ -331,10 +331,6 @@ void KoModeBox::setOptionWidgets(const QList<QWidget *> &optionWidgetList)
     layout->setVerticalSpacing(2);
     int specialCount = 0;
     foreach(QWidget *widget, optionWidgetList) {
-        if (widget->objectName().isEmpty()) {
-            Q_ASSERT(!(widget->objectName().isEmpty()));
-            continue; // skip this docker in release build when assert don't crash
-        }
         if (!widget->windowTitle().isEmpty()) {
             QLabel *l;
             layout->addWidget(l = new QLabel(widget->windowTitle()), cnt++, 1, 1, 3, Qt::AlignHCenter);

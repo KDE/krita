@@ -7,9 +7,6 @@ include_directories(${KDE4_INCLUDE_DIR}
 
 set(calligradockers_SRCS
 
-    strokedocker/StrokeDocker.cpp
-    strokedocker/StrokeDockerFactory.cpp
-
     snapguidedocker/SnapGuideDocker.cpp
     snapguidedocker/SnapGuideDockerFactory.cpp
 
@@ -21,9 +18,6 @@ set(calligradockers_SRCS
     shapecollection/CollectionItemModel.cpp
     shapecollection/OdfCollectionLoader.cpp
 
-    shadowdocker/ShadowDocker.cpp
-    shadowdocker/ShadowDockerFactory.cpp
-
     styledocker/StyleDockerFactory.cpp
     styledocker/StyleDocker.cpp
     styledocker/StrokeFillWidget.cpp
@@ -32,8 +26,6 @@ set(calligradockers_SRCS
 
     Plugin.cpp
 )
-
-add_subdirectory( strokedocker/pics )
 
 set(calligradockers_SRCS ${calligradockers_SRCS}
     colordocker/ColorDocker.h

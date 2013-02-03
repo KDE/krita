@@ -48,7 +48,7 @@ public:
     void deactivate();
 
 protected:
-    virtual QWidget * createOptionWidget();
+    virtual QList<QWidget *> createOptionWidgets();
 
     /**
      * Add path shape to document.

@@ -36,7 +36,6 @@ public:
     Private()
     : widget(0), canvas(0)
     {}
-    KoShapeShadow shadow;
     KoShadowConfigWidget * widget;
     KoCanvasBase * canvas;
     QSpacerItem *spacer;
@@ -62,10 +61,6 @@ ShadowDocker::ShadowDocker()
 
     setWidget( mainWidget );
 
-    connect( d->widget, SIGNAL(shadowColorChanged(const KoColor&)), this, SLOT(shadowChanged()));
-    connect( d->widget, SIGNAL(shadowOffsetChanged(const QPointF&)), this, SLOT(shadowChanged()));
-    connect( d->widget, SIGNAL(shadowBlurChanged(qreal)), this, SLOT(shadowChanged()));
-    connect( d->widget, SIGNAL(shadowVisibilityChanged(bool)), this, SLOT(shadowChanged()));
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea )),
              this, SLOT(locationChanged(Qt::DockWidgetArea)));
 }
@@ -75,71 +70,25 @@ ShadowDocker::~ShadowDocker()
     delete d;
 }
 
-void ShadowDocker::selectionChanged()
-{
-    if( ! d->canvas )
-        return;
-
-    KoSelection *selection = d->canvas->shapeManager()->selection();
-    KoShape * shape = selection->firstSelectedShape(KoFlake::TopLevelSelection);
-    d->widget->setEnabled( shape != 0 );
-
-    if( ! shape )
-    {
-        d->widget->setShadowVisible( false );
-        return;
-    }
-    KoShapeShadow * shadow = shape->shadow();
-    if( ! shadow )
-    {
-        d->widget->setShadowVisible( false );
-        return;
-    }
-
-    d->widget->setShadowVisible( shadow->isVisible() );
-    d->widget->setShadowOffset( shadow->offset() );
-    d->widget->setShadowColor( shadow->color() );
-    d->widget->setShadowBlur( shadow->blur() );
-}
 
 void ShadowDocker::unsetCanvas()
 {
     d->canvas = 0;
 }
 
-void ShadowDocker::setCanvas( KoCanvasBase *canvas )
+void ShadowDocker::setCanvas(KoCanvasBase *canvas)
 {
     if (d->canvas) {
         d->canvas->disconnectCanvasObserver(this); // "Every connection you make emits a signal, so duplicate connections emit two signals"
     }
 
     if (canvas) {
-        connect( canvas->shapeManager(), SIGNAL( selectionChanged() ),
-            this, SLOT( selectionChanged() ) );
-        connect( canvas->shapeManager(), SIGNAL( selectionContentChanged() ),
-            this, SLOT( selectionChanged() ) );
-        d->widget->setUnit( canvas->unit() );
+        d->widget->setCanvas(canvas);
     }
 
     d->canvas = canvas;
 }
 
-void ShadowDocker::shadowChanged()
-{
-    if (d->canvas) {
-        KoSelection *selection = d->canvas->shapeManager()->selection();
-        KoShape * shape = selection->firstSelectedShape(KoFlake::TopLevelSelection);
-        if( ! shape )
-            return;
-
-        KoShapeShadow * newShadow = new KoShapeShadow();
-        newShadow->setVisible(d->widget->shadowVisible());
-        newShadow->setColor( d->widget->shadowColor() );
-        newShadow->setOffset( d->widget->shadowOffset() );
-        newShadow->setBlur( d->widget->shadowBlur() );
-        d->canvas->addCommand( new KoShapeShadowCommand( selection->selectedShapes(KoFlake::TopLevelSelection), newShadow ) );
-    }
-}
 
 void ShadowDocker::locationChanged(Qt::DockWidgetArea area)
 {

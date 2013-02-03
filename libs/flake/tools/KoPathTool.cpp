@@ -197,13 +197,9 @@ QList<QWidget *>  KoPathTool::createOptionWidgets()
 
     PathToolOptionWidget * toolOptions = new PathToolOptionWidget(this);
     connect(this, SIGNAL(typeChanged(int)), toolOptions, SLOT(setSelectionType(int)));
-    //connect(this, SIGNAL(pathChanged(KoPathShape*)), widget, SLOT(setSelectedPath(KoPathShape*)));
     updateOptionsWidget();
     toolOptions->setWindowTitle(i18n("Line/Curve"));
     list.append(toolOptions);
-    QWidget* widget = d->canvas->createSnapGuideConfigWidget();
-    widget->setWindowTitle(i18n("Snapping"));
-    list.append(widget);
 
     return list;
 }

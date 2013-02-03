@@ -52,15 +52,18 @@ public:
 public slots:
     /// Sets a new color to be displayed
     void setCurrentColor( const QColor &color );
-    
+
     /// Sets a new color to be displayed
     void setCurrentColor( const KoColor &color );
 
     /// Returns the current color
     QColor currentColor() const;
-    
+
     /// Returns the current color as a KoColor
     KoColor currentKoColor() const;
+
+    /// update the icon - only needed if you resize the iconsize in the widget that shows the action
+    void updateIcon();
 
 signals:
     /**
@@ -77,7 +80,6 @@ private slots:
     void opacityWasChanged( int opacity );
 
 private:
-    void updateIcon();
     class KoColorPopupActionPrivate;
     KoColorPopupActionPrivate * const d;
 };

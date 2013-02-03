@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 C. Boemann <cbo@kogmbh.com>
+ * Made by Tomislav Lukman (tomislav.lukman@ck.tel.hr)
+ * Copyright (C) 2012 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,12 +18,38 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoTextLayoutRootAreaProvider.h"
+#ifndef OPACITYCONFIGWIDGET_H
+#define OPACITYCONFIGWIDGET_H
 
-KoTextLayoutRootAreaProvider::KoTextLayoutRootAreaProvider()
-{
-}
+#include "kowidgets_export.h"
 
-KoTextLayoutRootAreaProvider::~KoTextLayoutRootAreaProvider()
+#include <QWidget>
+
+class KoCanvasBase;
+class KoColor;
+class KoResource;
+class KoShapeBackground;
+class KoShape;
+
+/// A widget for configuring the opacity of a shape
+class KOWIDGETS_EXPORT KoOpacityConfigWidget : public QWidget
 {
-}
+    Q_OBJECT
+public:
+    KoOpacityConfigWidget(QWidget *parent);
+    ~KoOpacityConfigWidget();
+
+    void setCanvas(KoCanvasBase *canvas);
+
+private slots:
+    /// update the opacity of the shape
+    void updateOpacity(qreal opacity);
+
+    void shapeChanged();
+
+private:
+    class Private;
+    Private * const d;
+};
+
+#endif // OPACITYCONFIGWIDGET_H

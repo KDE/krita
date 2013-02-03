@@ -53,6 +53,10 @@
 #include <commands/KoShapeGroupCommand.h>
 #include <commands/KoShapeUngroupCommand.h>
 #include <KoSnapGuide.h>
+#include <KoStrokeConfigWidget.h>
+#include <KoFillConfigWidget.h>
+#include <KoShadowConfigWidget.h>
+#include <KoOpacityConfigWidget.h>
 
 #include <KoIcon.h>
 
@@ -1122,9 +1126,26 @@ QList<QWidget *> DefaultTool::createOptionWidgets()
     DefaultToolWidget *defaultTool = new DefaultToolWidget(this);
     defaultTool->setWindowTitle(i18n("Geometry"));
     widgets.append(defaultTool);
-    QWidget* snapWidget = canvas()->createSnapGuideConfigWidget();
-    snapWidget->setWindowTitle(i18n("Snapping"));
-    widgets.append(snapWidget);
+    KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(0);
+    strokeWidget->setWindowTitle(i18n("Line"));
+    strokeWidget->setCanvas(canvas());
+    widgets.append(strokeWidget);
+
+    KoFillConfigWidget *fillWidget = new KoFillConfigWidget(0);
+    fillWidget->setWindowTitle(i18n("Fill"));
+    fillWidget->setCanvas(canvas());
+    widgets.append(fillWidget);
+
+    KoShadowConfigWidget *shadowWidget = new KoShadowConfigWidget(0);
+    shadowWidget->setWindowTitle(i18n("Shadow"));
+    shadowWidget->setCanvas(canvas());
+    widgets.append(shadowWidget);
+
+    KoOpacityConfigWidget *opacityWidget = new KoOpacityConfigWidget(0);
+    opacityWidget->setWindowTitle(i18n("Shape Opacity"));
+    opacityWidget->setCanvas(canvas());
+    widgets.append(opacityWidget);
+
     return widgets;
 }
 

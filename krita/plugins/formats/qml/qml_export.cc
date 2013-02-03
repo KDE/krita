@@ -45,6 +45,8 @@ QMLExport::~QMLExport()
 
 KoFilter::ConversionStatus QMLExport::convert(const QByteArray& from, const QByteArray& to)
 {
+    Q_UNUSED(to);
+
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
 

@@ -31,6 +31,8 @@
 KisSmudgeOptionWidget::KisSmudgeOptionWidget(const QString& label, const QString& sliderLabel, const QString& name, bool checked):
     KisCurveOptionWidget(new KisSmudgeOption(name, label, checked))
 {
+    Q_UNUSED(sliderLabel);
+
     mCbSmudgeMode = new QComboBox();
     mCbSmudgeMode->addItem(i18n("Smearing"), KisSmudgeOption::SMEARING_MODE);
     mCbSmudgeMode->addItem(i18n("Dulling") , KisSmudgeOption::DULLING_MODE);

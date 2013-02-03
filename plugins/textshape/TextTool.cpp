@@ -1963,7 +1963,7 @@ void TextTool::repaintCaret()
         return;
 
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-    Q_ASSERT(lay);
+    Q_ASSERT(lay); Q_UNUSED(lay);
 
     // If we have changed root area we need to update m_textShape and m_textShapeData
     if (m_delayedEnsureVisible) {

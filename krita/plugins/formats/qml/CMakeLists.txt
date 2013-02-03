@@ -16,4 +16,3 @@ install(TARGETS kritaqmlexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  krita_qml_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-install( PROGRAMS  krita_qml.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

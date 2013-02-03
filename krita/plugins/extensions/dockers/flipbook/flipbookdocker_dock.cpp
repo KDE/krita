@@ -342,8 +342,8 @@ void FlipbookDockerDock::selectImage(const QModelIndex &index)
         QList<KoCanvasObserverBase*> canvasObservers = m_canvas->view()->shell()->canvasObservers();
         foreach (KoCanvasObserverBase *canvasObserver, canvasObservers) {
             if (canvasObserver != this) {
-                canvasObserver->unsetCanvas();
-                canvasObserver->setCanvas(m_canvas);
+                canvasObserver->unsetObservedCanvas();
+                canvasObserver->setObservedCanvas(m_canvas);
             }
         }
 

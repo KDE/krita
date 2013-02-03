@@ -19,10 +19,36 @@
 
 #include "KoCanvasObserverBase.h"
 
-KoCanvasObserverBase::KoCanvasObserverBase()
+class KoCanvasObserverBasePrivate
+{
+public:
+    KoCanvasObserverBasePrivate() : canvas(0) {}
+    ~KoCanvasObserverBasePrivate() {}
+
+    KoCanvasBase* canvas;
+};
+
+KoCanvasObserverBase::KoCanvasObserverBase() : d(new KoCanvasObserverBasePrivate)
 {
 }
 
 KoCanvasObserverBase::~KoCanvasObserverBase()
 {
+}
+
+void KoCanvasObserverBase::setObservedCanvas(KoCanvasBase* canvas)
+{
+    d->canvas = canvas;
+    setCanvas(canvas);
+}
+
+void KoCanvasObserverBase::unsetObservedCanvas()
+{
+    d->canvas = 0;
+    unsetCanvas();
+}
+
+KoCanvasBase* KoCanvasObserverBase::observedCanvas()
+{
+    return d->canvas;
 }

@@ -60,7 +60,7 @@ public:
     virtual void visit(KisSelectionMask *mask, KisUndoAdapter *undoAdapter) = 0;
 
 public:
-    class ProgressHelper {
+    class KRITAIMAGE_EXPORT ProgressHelper {
     public:
         ProgressHelper(const KisNode *node);
         ~ProgressHelper();

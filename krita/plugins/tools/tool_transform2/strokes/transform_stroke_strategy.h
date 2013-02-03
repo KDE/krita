@@ -20,9 +20,9 @@
 #define __TRANSFORM_STROKE_STRATEGY_H
 
 #include <QMutex>
-
-#include "kis_stroke_strategy_undo_command_based.h"
-#include "kis_types.h"
+#include <KoUpdater.h>
+#include <kis_stroke_strategy_undo_command_based.h>
+#include <kis_types.h>
 #include "tool_transform_args.h"
 #include <kis_processing_visitor.h>
 

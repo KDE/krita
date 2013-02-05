@@ -103,6 +103,11 @@ public:
     {
     }
 
+    ~Private()
+    {
+        delete canvasItem;
+    }
+
     QList<KoView*> views;
     QList<KoMainWindow*> shells;
     KoDocument *document;

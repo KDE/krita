@@ -290,7 +290,6 @@ install( FILES
     filter/kis_filter.h
     filter/kis_filter_registry.h
     kis_filter_strategy.h
-    kis_generic_colorspace.h
     kis_global.h
     kis_image.h
     kis_mask.h

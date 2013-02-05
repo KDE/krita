@@ -256,12 +256,6 @@ target_link_libraries(KisFilterStrategyTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_
 
 ########### next target ###############
 
-set(kis_generic_colorspace_test_SRCS kis_generic_colorspace_test.cpp )
-kde4_add_unit_test(KisGenericColorspaceTest TESTNAME krita-image-KisGenericColorspaceTest ${kis_generic_colorspace_test_SRCS})
-target_link_libraries(KisGenericColorspaceTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(kis_gradient_painter_test_SRCS kis_gradient_painter_test.cpp )
 kde4_add_unit_test(KisGradientPainterTest TESTNAME krita-image-KisGradientPainterTest ${kis_gradient_painter_test_SRCS})
 target_link_libraries(KisGradientPainterTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

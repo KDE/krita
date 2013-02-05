@@ -222,7 +222,6 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
     button->setIcon(QPixmap((const char **) buttonpattern));
     button->setToolTip(i18n("Pattern"));
     button->setCheckable(true);
-    button->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     d->group->addButton(button, Pattern);
     layout->addWidget(button);
 

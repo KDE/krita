@@ -154,8 +154,8 @@ KoDocumentSectionModel::PropertyList KisPaintLayer::sectionModelProperties() con
     KoDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
     
     // XXX: get right icons
-    l << KoDocumentSectionModel::Property(i18n("Alpha Channel Locked"), koIcon("transparency-locked"), koIcon("transparency-unlocked"), alphaLocked());
-    l << KoDocumentSectionModel::Property(i18n("Alpha Channel Disabled"), koIcon("transparency-disabled"), koIcon("transparency-enabled"), alphaChannelDisabled());
+    l << KoDocumentSectionModel::Property(i18n("Alpha Locked"), koIcon("transparency-locked"), koIcon("transparency-unlocked"), alphaLocked());
+    l << KoDocumentSectionModel::Property(i18n("Inherit Alpha"), koIcon("transparency-disabled"), koIcon("transparency-enabled"), alphaChannelDisabled());
     
     return l;
 }
@@ -163,10 +163,10 @@ KoDocumentSectionModel::PropertyList KisPaintLayer::sectionModelProperties() con
 void KisPaintLayer::setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties)
 {
     foreach (const KoDocumentSectionModel::Property &property, properties) {
-        if (property.name == i18n("Alpha Channel Locked")) {
+        if (property.name == i18n("Alpha Locked")) {
             setAlphaLocked(property.state.toBool());
         }
-        else if (property.name == i18n("Alpha Channel Disabled")) {
+        else if (property.name == i18n("Inherit Alpha")) {
             disableAlphaChannel(property.state.toBool());
         }
     }

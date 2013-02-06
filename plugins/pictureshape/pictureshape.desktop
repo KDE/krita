@@ -38,6 +38,7 @@ Name[zh_CN]=图片形状
 Name[zh_TW]=圖片元件
 X-KDE-ServiceTypes=Calligra/Shape
 Type=Service
+X-KDE-PluginInfo-Name=pictureshape
 X-KDE-Library=pictureshape
 X-Flake-MinVersion=27
 X-Flake-PluginVersion=27

@@ -72,3 +72,5 @@ Comment[zh_CN]=Flake 形状边框的定义
 Comment[zh_TW]=Flake 元件邊框定義
 [PropertyDef::X-Flake-PluginVersion]
 Type=int
+[PropertyDef::X-KDE-PluginInfo-Name]
+Type=QString

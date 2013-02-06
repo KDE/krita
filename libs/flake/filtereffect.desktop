@@ -62,3 +62,5 @@ Comment[zh_CN]=Flake 滤镜效果定义
 Comment[zh_TW]=Flake 過濾器效果定義
 [PropertyDef::X-Flake-PluginVersion]
 Type=int
+[PropertyDef::X-KDE-PluginInfo-Name]
+Type=QString

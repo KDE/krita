@@ -68,3 +68,5 @@ Comment[zh_TW]=包含「嵌入元件」的外掛程式
 Type=int
 [PropertyDef::X-Flake-PluginVersion]
 Type=int
+[PropertyDef::X-KDE-PluginInfo-Name]
+Type=QString

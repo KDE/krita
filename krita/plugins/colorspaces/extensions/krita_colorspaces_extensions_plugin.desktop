@@ -71,6 +71,7 @@ Comment[zh_CN]=色彩空间的一些扩展
 Comment[zh_TW]=顏色空間的一些延伸
 X-KDE-ServiceTypes=Calligra/ColorSpaceExtension
 Type=Service
+X-KDE-PluginInfo-Name=krita_colorspaces_extensions
 X-Pigment-MinVersion=27
 X-Pigment-PluginVersion=27
 X-KDE-Library=krita_colorspaces_extensions

@@ -30,6 +30,7 @@ Name[zh_CN]=页面应用程序背景工具
 Name[zh_TW]=頁面應用程式背景工具
 X-KDE-ServiceTypes=Calligra/Tool
 Type=Service
+X-KDE-PluginInfo-Name=kopabackgroundtool
 X-KDE-Library=kopabackgroundtool
 X-Flake-MinVersion=27
 X-Flake-PluginVersion=27

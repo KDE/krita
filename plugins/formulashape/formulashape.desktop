@@ -39,6 +39,7 @@ Name[zh_CN]=公式形状
 Name[zh_TW]=公式元件
 X-KDE-ServiceTypes=Calligra/Flake
 Type=Service
+X-KDE-PluginInfo-Name=formulashape
 X-KDE-Library=formulashape
 X-Flake-MinVersion=27
 X-Flake-PluginVersion=27

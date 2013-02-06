@@ -40,6 +40,7 @@ Name[zh_CN]=自动更正插件
 Name[zh_TW]=自動修正外掛程式
 X-KDE-ServiceTypes=Calligra/Text-EditingPlugin
 Type=Service
+X-KDE-PluginInfo-Name=autocorrect
 X-KoText-MinVersion=27
 X-KoText-PluginVersion=27
 X-KDE-Library=autocorrect

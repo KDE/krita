@@ -22,6 +22,7 @@ Name[uk]=Форма-шаблон
 Name[x-test]=xxTemplate Shapexx
 X-KDE-ServiceTypes=Calligra/Shape
 Type=Service
+X-KDE-PluginInfo-Name=templateshape
 X-KDE-Library=templateshape
 X-Flake-MinVersion=27
 X-Flake-PluginVersion=27

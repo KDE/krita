@@ -40,6 +40,7 @@ Name[wa]=Fôme di tecse
 Name[x-test]=xxText Shapexx
 Name[zh_CN]=文本形状
 Name[zh_TW]=文字元件
+X-KDE-PluginInfo-Name=textshape
 X-KDE-ServiceTypes=Calligra/Flake
 Type=Service
 X-KDE-Library=textshape

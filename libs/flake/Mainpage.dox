@@ -61,6 +61,7 @@ Encoding=UTF-8
 Name=My Flake Shapes Plugin
 ServiceTypes=Calligra/Shape
 Type=Service
+X-KDE-PluginInfo-Name=myflakeshapes
 X-KDE-Library=myflakeshapesplugin
 X-Flake-MinVersion=27
 X-Flake-PluginVersion=27

@@ -77,3 +77,5 @@ Comment[zh_TW]=Flake 工具定義
 Type=int
 [PropertyDef::X-Flake-PluginVersion]
 Type=int
+[PropertyDef::X-KDE-PluginInfo-Name]
+Type=QString

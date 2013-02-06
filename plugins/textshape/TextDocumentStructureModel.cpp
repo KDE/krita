@@ -251,7 +251,7 @@ int TextDocumentStructureModel::blockIndex(const QTextBlock &block) const
     int index;
 
     const int blockNumber = block.blockNumber();
-    QHash<int, int>::ConstIterator it = m_blockNumberTable.find(blockNumber);
+    QHash<int, int>::ConstIterator it = m_blockNumberTable.constFind(blockNumber);
     if (it == m_blockNumberTable.constEnd()) {
         index = m_nodeDataTable.count();
         m_blockNumberTable.insert(blockNumber, index);
@@ -267,7 +267,7 @@ int TextDocumentStructureModel::frameIndex(QTextFrame *frame) const
 {
     int index;
 
-    QHash<QTextFrame*, int>::ConstIterator it = m_frameTable.find(frame);
+    QHash<QTextFrame*, int>::ConstIterator it = m_frameTable.constFind(frame);
     if (it == m_frameTable.constEnd()) {
         index = m_nodeDataTable.count();
         m_frameTable.insert(frame, index);

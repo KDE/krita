@@ -154,6 +154,7 @@ Collapsed=false
 QuickShapes=ArtisticText,TextShapeID,DivineProportionShapeID,EllipseShape,RectangleShape
 
 [calligra]
+DockerPluginsDisabled=textdocumentinspection
 FlakePluginsDisabled=formulashape,divineproportionshape,kexirelationdesignshape,vectorshape
 ShapePluginsDisabled=musicshape,pictureshape,videoshape,chartshape,spreadsheetshape,pluginshape,treeshape,commentshape,stateshape,webshape
 TextEditingPluginsDisabled=thesaurustool,changecase,autocorrect,spellcheck

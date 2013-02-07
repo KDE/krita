@@ -112,6 +112,7 @@ if(BUILD_TEXTDOCUMENT_INSPECTOR)
         TextDocumentStructureModel.cpp
         TextDocumentInspectionDocker.cpp
         TextDocumentInspectionDockerFactory.cpp
+        TextDocumentInspectionPlugin.cpp
     )
 endif(BUILD_TEXTDOCUMENT_INSPECTOR)
 
@@ -164,3 +165,10 @@ install(TARGETS textshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES textshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 #kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )
+
+if(BUILD_TEXTDOCUMENT_INSPECTOR)
+    # workaround: to avoid translations the real desktop file is only generated
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/textdocumentinspection.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/textdocumentinspection.desktop)
+
+    install( FILES ${CMAKE_CURRENT_BINARY_DIR}/textdocumentinspection.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+endif(BUILD_TEXTDOCUMENT_INSPECTOR)

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2012 Dimitrios T. Tanis <dimitrios.tanis@kdemail.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -578,6 +579,9 @@ CALLIGRADB_EXPORT QString sqlite3ProgramPath();
  @a outputFileName will be silently overwritten.
  @return true on success. */
 CALLIGRADB_EXPORT bool importSqliteFile(const QString &inputFileName, const QString &outputFileName);
+
+/*! @return true if there is at least one server-based database driver installed. */
+CALLIGRADB_EXPORT bool hasDatabaseServerDrivers();
 
 #ifdef CALLIGRADB_DEBUG_GUI
 typedef void(*DebugGUIHandler)(const QString&);

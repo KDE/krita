@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2012 Dimitrios T. Tanis <dimitrios.tanis@kdemail.net>
 
    Contains code from KConfigGroupPrivate from kconfiggroup.cpp (kdelibs 4)
    Copyright (c) 2006 Thomas Braxton <brax108@cox.net>
@@ -1664,6 +1665,18 @@ bool KexiDB::importSqliteFile(const QString &inputFileName, const QString &outpu
         return false;
     }
     return true;
+}
+
+bool KexiDB::hasDatabaseServerDrivers()
+{
+    DriverManager manager;
+    Driver::InfoHash driversInfo = manager.driversInfo();
+    foreach(const Driver::Info& info, driversInfo){
+        if (!info.fileBased) {
+            return true;
+        }
+    }
+    return false;
 }
 
 //--------------------------------------------------------------------------------

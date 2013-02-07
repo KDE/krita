@@ -101,7 +101,7 @@ void KisFlipbook::save(const QString &url)
     f.open(QFile::WriteOnly);
     QByteArray ba = doc.toString().toUtf8();
     qint64 written = f.write(ba);
-    Q_ASSERT(written == ba.size());
+    Q_ASSERT(written == ba.size()); Q_UNUSED(written);
 
     KoApplication *app = dynamic_cast<KoApplication*>(qApp);
     if (app) {

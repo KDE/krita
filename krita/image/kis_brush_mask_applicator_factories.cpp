@@ -66,14 +66,9 @@ FastRowProcessor::process<VC_IMPL>(float* buffer, int width, float y, float cosa
     float sinay_ = sina * y_;
     float cosay_ = cosa * y_;
 
-    float *initValues = Vc::malloc<float, Vc::AlignOnVector>(Vc::float_v::Size);
-    for(int i = 0; i < Vc::float_v::Size; i++) {
-        initValues[i] = (float)i;
-    }
-
     float* bufferPointer = buffer;
 
-    Vc::float_v currentIndices(initValues);
+    Vc::float_v currentIndices(Vc::int_v(Vc::IndexesFromZero));
 
     Vc::float_v increment((float)Vc::float_v::Size);
     Vc::float_v vCenterX(centerX);
@@ -115,8 +110,6 @@ FastRowProcessor::process<VC_IMPL>(float* buffer, int width, float y, float cosa
 
         bufferPointer += Vc::float_v::Size;
     }
-
-    Vc::free<float>(initValues);
 }
 
 #endif /* defined HAVE_VC */

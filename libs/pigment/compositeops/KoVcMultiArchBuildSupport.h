@@ -24,7 +24,7 @@
 #ifdef HAVE_VC
 
 #include <Vc/Vc>
-#include <Vc/common/support.h>
+#include <Vc/support.h>
 
 #else /* HAVE_VC */
 
@@ -50,23 +50,19 @@ template<class FactoryType>
 typename FactoryType::ReturnType
 createOptimizedClass(typename FactoryType::ParamType param)
 {
-    /*if (Vc::isImplementationSupported(Vc::Fma4Impl)) {
-        return FactoryType::template create<Vc::Fma4Impl>(param);
-    } else if (Vc::isImplementationSupported(Vc::XopImpl)) {
-        return FactoryType::template create<Vc::XopImpl>(param);
-        } else*/
+    /**
+     * We use SSE2, SSSE3, SSE4.1 and AVX now only.
+     * The rest are integer and string instructions mostly.
+     *
+     * TODO: Add FMA3/4 when it is adopted by Vc
+     */
+
     if (Vc::isImplementationSupported(Vc::AVXImpl)) {
         return FactoryType::template create<Vc::AVXImpl>(param);
-    } else if (Vc::isImplementationSupported(Vc::SSE42Impl)) {
-        return FactoryType::template create<Vc::SSE42Impl>(param);
     } else if (Vc::isImplementationSupported(Vc::SSE41Impl)) {
         return FactoryType::template create<Vc::SSE41Impl>(param);
-    } else if (Vc::isImplementationSupported(Vc::SSE4aImpl)) {
-        return FactoryType::template create<Vc::SSE4aImpl>(param);
     } else if (Vc::isImplementationSupported(Vc::SSSE3Impl)) {
         return FactoryType::template create<Vc::SSSE3Impl>(param);
-    } else if (Vc::isImplementationSupported(Vc::SSE3Impl)) {
-        return FactoryType::template create<Vc::SSE3Impl>(param);
     } else if (Vc::isImplementationSupported(Vc::SSE2Impl)) {
         return FactoryType::template create<Vc::SSE2Impl>(param);
     } else {

@@ -31,7 +31,6 @@
 class KoXmlElement;
 class KoChangeTrackerElement;
 class KoFormatChangeInformation;
-class KoDeleteChangeMarker;
 
 class QTextCursor;
 class QTextFormat;
@@ -110,8 +109,8 @@ public:
     void loadOdfChanges(const KoXmlElement& element);
     int getLoadedChangeId(const QString &odfId) const;
 
-    static QTextDocumentFragment generateDeleteFragment(const QTextCursor &cursor, KoDeleteChangeMarker *marker);
-    static void insertDeleteFragment(QTextCursor &cursor, KoDeleteChangeMarker *marker);
+    static QTextDocumentFragment generateDeleteFragment(const QTextCursor& cursor);
+    static void insertDeleteFragment(QTextCursor &cursor);
     static int fragmentLength(const QTextDocumentFragment &fragment);
 
     QString authorName() const;

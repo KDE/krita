@@ -513,9 +513,8 @@ static KoListStyle::ListIdType ListId(const QTextListFormat &format)
     return listId;
 }
 
-QTextDocumentFragment KoChangeTracker::generateDeleteFragment(const QTextCursor &cursor, KoDeleteChangeMarker *marker)
+QTextDocumentFragment KoChangeTracker::generateDeleteFragment(const QTextCursor &cursor)
 {
-    int changeId = marker->changeId();
     QTextCursor editCursor(cursor);
     QTextDocument *document = cursor.document();
 
@@ -527,10 +526,7 @@ QTextDocumentFragment KoChangeTracker::generateDeleteFragment(const QTextCursor 
         for (int i = cursor.anchor();i <= cursor.position(); i++) {
             if (document->characterAt(i) == QChar::ObjectReplacementCharacter) {
                 editCursor.setPosition(i+1);
-                KoDeleteChangeMarker *testMarker = dynamic_cast<KoDeleteChangeMarker*>(textObjectManager->inlineTextObject(editCursor));
-                if (testMarker)
-                    editCursor.deletePreviousChar();
-            }
+	    }
         }
     }
 
@@ -538,57 +534,19 @@ QTextDocumentFragment KoChangeTracker::generateDeleteFragment(const QTextCursor 
     QTextBlock startBlock = currentBlock;
     QTextBlock endBlock = document->findBlock(cursor.position()).next();
 
-    // First remove any left-over DeletedList set from previous deletes
-    for (;currentBlock != endBlock; currentBlock = currentBlock.next()) {
-        editCursor.setPosition(currentBlock.position());
-        if (editCursor.currentList()) {
-            if (editCursor.currentList()->format().hasProperty(KoDeleteChangeMarker::DeletedList)) {
-                QTextListFormat format = editCursor.currentList()->format();
-                format.clearProperty(KoDeleteChangeMarker::DeletedList);
-                editCursor.currentList()->setFormat(format);
-            }
-        }
-    }
-
     currentBlock = document->findBlock(cursor.anchor());
     startBlock = currentBlock;
     endBlock = document->findBlock(cursor.position()).next();
 
     for (;currentBlock != endBlock; currentBlock = currentBlock.next()) {
         editCursor.setPosition(currentBlock.position());
-        if (editCursor.currentList()) {
-            if (!editCursor.currentList()->format().hasProperty(KoDeleteChangeMarker::DeletedList)) {
-                bool fullyDeletedList = checkListDeletion(*editCursor.currentList(), cursor);
-                QTextListFormat format = editCursor.currentList()->format();
-                format.setProperty(KoDeleteChangeMarker::DeletedList, fullyDeletedList);
-                if (fullyDeletedList) {
-                    KoListStyle::ListIdType listId = ListId(format);
-                    KoList *list = KoTextDocument(document).list(currentBlock);
-                    marker->setDeletedListStyle(listId, list->style());
-                }
-                editCursor.currentList()->setFormat(format);
-            }
-            if (cursor.anchor() <= (currentBlock.position() - 1)) {
-                //Then the list-item has been deleted. Set the block-format to indicate that this is a deleted list-item.
-                QTextBlockFormat blockFormat;
-                blockFormat.setProperty(KoDeleteChangeMarker::DeletedListItem, true);
-                editCursor.mergeBlockFormat(blockFormat);
-            } else {
-                QTextBlockFormat blockFormat;
-                blockFormat.setProperty(KoDeleteChangeMarker::DeletedListItem, false);
-                editCursor.mergeBlockFormat(blockFormat);
-            }
-        }
-
         if (editCursor.currentTable()) {
             QTextTableFormat tableFormat = editCursor.currentTable()->format();
-            tableFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
             editCursor.currentTable()->setFormat(tableFormat);
         }
 
         if (currentBlock != startBlock) {
             QTextBlockFormat blockFormat;
-            blockFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
             editCursor.mergeBlockFormat(blockFormat);
         }
     }
@@ -617,12 +575,10 @@ bool KoChangeTracker::checkListDeletion(const QTextList &list, const QTextCursor
     }
 }
 
-void KoChangeTracker::insertDeleteFragment(QTextCursor &cursor, KoDeleteChangeMarker *marker)
+void KoChangeTracker::insertDeleteFragment(QTextCursor &cursor)
 {
-    QTextDocumentFragment fragment =  KoTextDocument(cursor.document()).changeTracker()->elementById(marker->changeId())->getDeleteData();
     QTextDocument tempDoc;
     QTextCursor tempCursor(&tempDoc);
-    tempCursor.insertFragment(fragment);
 
     bool deletedListItem = false;
 
@@ -655,18 +611,6 @@ void KoChangeTracker::insertDeleteFragment(QTextCursor &cursor, KoDeleteChangeMa
         }
 
         if (textList) {
-            if (textList->format().property(KoDeleteChangeMarker::DeletedList).toBool() && !currentList) {
-                //Found a Deleted List in the fragment. Create a new KoList.
-                KoListStyle::ListIdType listId;
-                if (sizeof(KoListStyle::ListIdType) == sizeof(uint))
-                    listId = textList->format().property(KoListStyle::ListId).toUInt();
-                else
-                    listId = textList->format().property(KoListStyle::ListId).toULongLong();
-                KoListStyle *style = marker->getDeletedListStyle(listId);
-                currentList = new KoList(cursor.document(), style);
-            }
-
-            deletedListItem = currentBlock.blockFormat().property(KoDeleteChangeMarker::DeletedListItem).toBool();
             if (deletedListItem && currentBlock != tempDoc.begin()) {
                 // Found a deleted list item in the fragment. So insert a new list-item
                 int deletedListItemLevel = KoList::level(currentBlock);
@@ -757,7 +701,6 @@ int KoChangeTracker::fragmentLength(const QTextDocumentFragment &fragment)
     for (QTextBlock currentBlock = tempDoc.begin(); currentBlock != tempDoc.end(); currentBlock = currentBlock.next()) {
         tempCursor.setPosition(currentBlock.position());
         if (tempCursor.currentList()) {
-            deletedListItem = currentBlock.blockFormat().property(KoDeleteChangeMarker::DeletedListItem).toBool();
             if (currentBlock != tempDoc.begin() && deletedListItem)
                 length += 1; //For the Block separator
         } else if (tempCursor.currentTable()) {

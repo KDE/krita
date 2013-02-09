@@ -228,8 +228,6 @@ void ChangeTrackedDeleteCommand::deleteSelection(KoTextEditor *editor)
     // XXX: don't allow anyone to steal our cursor!
     QTextCursor *selection = editor->cursor();
     QTextCursor checker = QTextCursor(*editor->cursor());
-    KoDeleteChangeMarker *deleteChangemarker = 0;
-    KoDeleteChangeMarker *testMarker;
 
     bool backwards = (checker.anchor() > checker.position());
     int selectionBegin = qMin(checker.anchor(), checker.position());
@@ -247,23 +245,11 @@ void ChangeTrackedDeleteCommand::deleteSelection(KoTextEditor *editor)
         QChar charAtPos = m_document.data()->characterAt(checker.position());
         checker.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
         if (inlineTextObjectManager->inlineTextObject(checker) && charAtPos == QChar::ObjectReplacementCharacter) {
-            testMarker = dynamic_cast<KoDeleteChangeMarker*>(inlineTextObjectManager->inlineTextObject(checker));
-            if (testMarker) {
-                QTextDocumentFragment inter = KoTextDocument(m_document).changeTracker()->elementById(testMarker->changeId())->getDeleteData();
-                if (!KoTextDocument(m_document).changeTracker()->displayChanges()) {
-                    KoChangeTracker::insertDeleteFragment(checker, testMarker);
-                    selectionEnd = selectionEnd + KoChangeTracker::fragmentLength(inter);
-                }
-                checker.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, KoChangeTracker::fragmentLength(inter));
-                KoTextDocument(m_document).changeTracker()->elementById(testMarker->changeId())->setValid(false);
-                m_removedElements.push_back(testMarker->changeId());
-           } else {
-/* This has changed but since this entire command is going away - let's not bother
+        /* This has changed but since this entire command is going away - let's not bother
                 KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(inlineTextObjectManager->inlineTextObject(checker));
                 if (anchor)
                     shapesInSelection.push_back(anchor->shape());
-*/
-           }
+        */
         }
         checker.setPosition(checker.position());
     }
@@ -272,15 +258,6 @@ void ChangeTrackedDeleteCommand::deleteSelection(KoTextEditor *editor)
 
     if (!KoTextDocument(m_document).changeTracker()->displayChanges()) {
         QChar charAtPos = m_document.data()->characterAt(checker.position() - 1);
-        if (inlineTextObjectManager->inlineTextObject(checker) && charAtPos == QChar::ObjectReplacementCharacter) {
-            testMarker = dynamic_cast<KoDeleteChangeMarker*>(inlineTextObjectManager->inlineTextObject(checker));
-            if (testMarker) {
-                KoChangeTracker::insertDeleteFragment(checker, testMarker);
-                QTextDocumentFragment prevFragment = KoTextDocument(checker.document()).changeTracker()->elementById(testMarker->changeId())->getDeleteData();
-                selectionBegin += KoChangeTracker::fragmentLength(prevFragment);
-                selectionEnd += KoChangeTracker::fragmentLength(prevFragment);
-            }
-        }
     }
 
     if (KoTextDocument(m_document).changeTracker()->containsInlineChanges(checker.charFormat())) {
@@ -297,17 +274,6 @@ void ChangeTrackedDeleteCommand::deleteSelection(KoTextEditor *editor)
     if (!checker.atEnd()) {
         QChar charAtPos = m_document.data()->characterAt(checker.position());
         checker.movePosition(QTextCursor::NextCharacter);
-        if (inlineTextObjectManager->inlineTextObject(checker) && charAtPos == QChar::ObjectReplacementCharacter) {
-            testMarker = dynamic_cast<KoDeleteChangeMarker*>(inlineTextObjectManager->inlineTextObject(checker));
-            if (testMarker) {
-                QTextDocumentFragment sufix =  KoTextDocument(m_document).changeTracker()->elementById(testMarker->changeId())->getDeleteData();
-                if (!KoTextDocument(m_document).changeTracker()->displayChanges())
-                    KoChangeTracker::insertDeleteFragment(checker, testMarker);
-                selectionEnd += KoChangeTracker::fragmentLength(sufix) + 1;
-                KoTextDocument(m_document).changeTracker()->elementById(testMarker->changeId())->setValid(false);
-                m_removedElements.push_back(testMarker->changeId());
-            }
-        }
     }
 
     selection->setPosition(selectionBegin);
@@ -315,15 +281,12 @@ void ChangeTrackedDeleteCommand::deleteSelection(KoTextEditor *editor)
     QTextDocumentFragment deletedFragment;
     changeId = KoTextDocument(m_document).changeTracker()->getDeleteChangeId(i18n("Delete"), deletedFragment, 0);
     KoChangeTrackerElement *element = KoTextDocument(m_document).changeTracker()->elementById(changeId);
-    deleteChangemarker = new KoDeleteChangeMarker(KoTextDocument(m_document).changeTracker());
-    deleteChangemarker->setChangeId(changeId);
-    element->setDeleteChangeMarker(deleteChangemarker);
 
     QTextCharFormat charFormat;
     charFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
     selection->mergeCharFormat(charFormat);
 
-    deletedFragment = KoChangeTracker::generateDeleteFragment(*selection, deleteChangemarker);
+    deletedFragment = KoChangeTracker::generateDeleteFragment(*selection);
     element->setDeleteData(deletedFragment);
 
     //Store the position and length. Will be used in updateListChanges()
@@ -331,14 +294,13 @@ void ChangeTrackedDeleteCommand::deleteSelection(KoTextEditor *editor)
     m_length = qAbs(selection->anchor() - selection->position());
 
     updateListIds(*editor->cursor());
-    inlineTextObjectManager->insertInlineObject(*selection, deleteChangemarker);
 
     m_addedChangeElement = changeId;
 
     //Insert the deleted data again after the marker with the charformat set to the change-id
     if (KoTextDocument(m_document).changeTracker()->displayChanges()) {
         int startPosition = selection->position();
-        KoChangeTracker::insertDeleteFragment(*selection, deleteChangemarker);
+        KoChangeTracker::insertDeleteFragment(*selection);
         QTextCursor tempCursor(*selection);
         tempCursor.setPosition(startPosition);
         tempCursor.setPosition(selection->position(), QTextCursor::KeepAnchor);
@@ -480,7 +442,5 @@ void ChangeTrackedDeleteCommand::removeChangeElement(int changeId)
 {
     KoTextDocument textDocument(m_document);
     KoChangeTrackerElement *element = textDocument.changeTracker()->elementById(changeId);
-    KoDeleteChangeMarker *marker = element->getDeleteChangeMarker();
-    textDocument.inlineTextObjectManager()->removeInlineObject(marker);
     KoTextDocument(m_document).changeTracker()->removeById(changeId);
 }

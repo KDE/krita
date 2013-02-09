@@ -69,7 +69,7 @@ KoInlineObject *KoInlineTextObjectManager::inlineTextObject(int id) const
     return m_objects.value(id);
 }
 
-void KoInlineTextObjectManager::insertInlineObject(QTextCursor &cursor, KoInlineObject *object)
+void KoInlineTextObjectManager::insertInlineObject(QTextCursor& cursor, KoInlineObject *object)
 {
     QTextCharFormat oldCf = cursor.charFormat();
     // create a new format out of the old so that the current formatting is

@@ -107,32 +107,12 @@ void ShowChangesCommand::enableDisableStates(bool showChanges)
     m_textEditor->setCharFormat(format);
 }
 
-bool isPositionLessThan(KoChangeTrackerElement *element1, KoChangeTrackerElement *element2)
-{
-    return element1->getDeleteChangeMarker()->position() < element2->getDeleteChangeMarker()->position();
-}
-
 void ShowChangesCommand::insertDeletedChanges()
 {
     int numAddedChars = 0;
     QVector<KoChangeTrackerElement *> elementVector;
     KoTextDocument(m_textEditor->document()).changeTracker()->getDeletedChanges(elementVector);
-    qSort(elementVector.begin(), elementVector.end(), isPositionLessThan);
-
-    foreach (KoChangeTrackerElement *element, elementVector) {
-        if (element->isValid() && element->getDeleteChangeMarker()) {
-            QTextCursor caret(element->getDeleteChangeMarker()->document());
-            caret.setPosition(element->getDeleteChangeMarker()->position() + numAddedChars +  1);
-            QTextCharFormat f = caret.charFormat();
-            f.setProperty(KoCharacterStyle::ChangeTrackerId, element->getDeleteChangeMarker()->changeId());
-            f.clearProperty(KoCharacterStyle::InlineInstanceId);
-            caret.setCharFormat(f);
-            int insertPosition = caret.position();
-            KoChangeTracker::insertDeleteFragment(caret, element->getDeleteChangeMarker());
-            checkAndAddAnchoredShapes(insertPosition, KoChangeTracker::fragmentLength(element->getDeleteData()));
-            numAddedChars += KoChangeTracker::fragmentLength(element->getDeleteData());
-        }
-    }
+    qSort(elementVector.begin(), elementVector.end());
 }
 
 void ShowChangesCommand::checkAndAddAnchoredShapes(int position, int length)
@@ -178,21 +158,7 @@ void ShowChangesCommand::removeDeletedChanges()
     int numDeletedChars = 0;
     QVector<KoChangeTrackerElement *> elementVector;
     m_changeTracker->getDeletedChanges(elementVector);
-    qSort(elementVector.begin(), elementVector.end(), isPositionLessThan);
-
-    foreach(KoChangeTrackerElement *element, elementVector) {
-        if (element->isValid() && element->getDeleteChangeMarker()) {
-            QTextCursor caret(element->getDeleteChangeMarker()->document());
-            QTextCharFormat f;
-            int deletePosition = element->getDeleteChangeMarker()->position() + 1 - numDeletedChars;
-            caret.setPosition(deletePosition);
-            int deletedLength = KoChangeTracker::fragmentLength(element->getDeleteData());
-            caret.setPosition(deletePosition + deletedLength, QTextCursor::KeepAnchor);
-            checkAndRemoveAnchoredShapes(deletePosition, KoChangeTracker::fragmentLength(element->getDeleteData()));
-            caret.removeSelectedText();
-            numDeletedChars += KoChangeTracker::fragmentLength(element->getDeleteData());
-        }
-    }
+    qSort(elementVector.begin(), elementVector.end());
 }
 
 void ShowChangesCommand::checkAndRemoveAnchoredShapes(int position, int length)

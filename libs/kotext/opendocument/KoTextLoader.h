@@ -118,12 +118,6 @@ private:
     void loadHeading(const KoXmlElement &element, QTextCursor &cursor);
 
     /**
-    * Load delete changes that result in a merge into the cursor
-    * Returns the next Node to be processed
-    */
-    KoXmlNode loadDeleteMerges(const KoXmlElement &element, QString *generatedXmlString);
-
-    /**
     * Load the list from the \p element into the \p cursor .
     */
     void loadList(const KoXmlElement &element, QTextCursor &cursor);
@@ -138,7 +132,6 @@ private:
     */
     void loadSection(const KoXmlElement &element, QTextCursor &cursor);
 
-
     /**
     * Load the text into the \p cursor .
     */
@@ -149,21 +142,6 @@ private:
     * Load the span from the \p element into the \p cursor .
     */
     void loadSpan(const KoXmlElement &element, QTextCursor &cursor, bool *leadingSpace);
-
-    /**
-    * Load the deleted change within a \p or a \h and store it in the Delete Change Marker
-    */
-    void loadDeleteChangeWithinPorH(QString id, QTextCursor &cursor);
-
-    /**
-    * Load the contents of delta:merge. Called from loadSpan
-    */
-    void loadMerge(const KoXmlElement &element, QTextCursor &cursor);
-
-    /**
-    * Load the deleted change outside of a \p or a \h and store it in the Delete Change Marker
-    */
-    void loadDeleteChangeOutsidePorH(QString id, QTextCursor &cursor);
 
     /**
      * Load the table from the \p element into the \p cursor.
@@ -231,20 +209,6 @@ private:
     * This is called in loadBody once the body was read.
     */
     void endBody();
-
-    /**
-    * Store the delete changes in the deleteChangeTable. Will be processed when "change" is encountered
-    */
-    void storeDeleteChanges(KoXmlElement &tag);
-
-    /**
-    * This is called in case of a paragraph or a header split.
-    * Mark the blocks from the start of the split till the end as an insertion type
-    * and set the corresponding changeId in the charFormat
-    */
-    void markBlocksAsInserted(QTextCursor &cursor, int from, const QString& changeId);
-
-
 
     /// \internal d-pointer class.
     class Private;

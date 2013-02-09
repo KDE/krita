@@ -28,7 +28,6 @@
 #include <KoGenChange.h>
 
 #include "kotext_export.h"
-#include "KoDeleteChangeMarker.h"
 
 
 class KOTEXT_EXPORT KoChangeTrackerElement
@@ -81,8 +80,6 @@ public:
     void setDeleteData(const QTextDocumentFragment& fragment);
     QTextDocumentFragment getDeleteData() const;
 
-    void setDeleteChangeMarker(KoDeleteChangeMarker *marker);
-    KoDeleteChangeMarker *getDeleteChangeMarker();
 
 private:
     class Private;

@@ -33,7 +33,6 @@ class QTextDocumentFragment;
 class KoChangeTrackerElement;
 class KoShapeController;
 class KoDocumentRdfBase;
-class KoDeleteChangeMarker;
 class KoInlineTextObjectManager;
 class KoDocumentResourceManager;
 class KoTextEditor;

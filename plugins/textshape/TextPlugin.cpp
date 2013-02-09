@@ -31,12 +31,16 @@
 
 #include <kpluginfactory.h>
 
+#ifdef CREATE_TEXTDOCUMENT_INSPECTOR
 K_PLUGIN_FACTORY(TextPluginFactory,
                  registerPlugin<TextPlugin>();
-#ifdef CREATE_TEXTDOCUMENT_INSPECTOR
                  registerPlugin<TextDocumentInspectionPlugin>(QLatin1String("TextDocumentInspection"));
-#endif
 )
+#else
+K_PLUGIN_FACTORY(TextPluginFactory,
+                 registerPlugin<TextPlugin>();
+)
+#endif
 K_EXPORT_PLUGIN(TextPluginFactory("TextShape"))
 
 TextPlugin::TextPlugin(QObject * parent, const QVariantList &)

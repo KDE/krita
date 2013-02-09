@@ -43,7 +43,7 @@
 class KoResourcePopupAction::Private
 {
 public:
-    Private() : checkerPainter(4)
+    Private() : checkerPainter(4), resourceList(0), background(0)
     {}
     QMenu *menu;
     KoResourceItemView *resourceList;

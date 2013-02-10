@@ -14,19 +14,19 @@ void TestTableCellStyle::testPen()
     KoBorder::BorderData data;
     data.outerPen = QPen(Qt::red, 5.0);
     data.innerPen = QPen(Qt::red, 7.0);
-    border.setTopBorderData(data);
+    border.setBorderData(KoBorder::Top, data);
 
     data.outerPen = QPen(Qt::red, 8.0);
     data.innerPen = QPen(Qt::red, 10.0);
-    border.setLeftBorderData(data);
+    border.setBorderData(KoBorder::Left, data);
 
     data.outerPen = QPen(Qt::red, 11.0);
     data.innerPen = QPen(Qt::red, 13.0);
-    border.setBottomBorderData(data);
+    border.setBorderData(KoBorder::Bottom, data);
 
     data.outerPen = QPen(Qt::red, 14.0);
     data.innerPen = QPen(Qt::red, 16.0);
-    border.setRightBorderData(data);
+    border.setBorderData(KoBorder::Right, data);
 
     format1.setProperty(KoTableCellStyle::Borders, QVariant::fromValue<KoBorder>(border));
 
@@ -35,14 +35,14 @@ void TestTableCellStyle::testPen()
     QTextTableCellFormat format2;
     style->applyStyle(format2);
     KoBorder border2 = format2.property(KoTableCellStyle::Borders).value<KoBorder>();
-    QCOMPARE(border2.topBorderData().outerPen, QPen(Qt::red, 5.0));
-    QCOMPARE(border2.topBorderData().innerPen, QPen(Qt::red, 7.0));
-    QCOMPARE(border2.leftBorderData().outerPen, QPen(Qt::red, 8.0));
-    QCOMPARE(border2.leftBorderData().innerPen, QPen(Qt::red, 10.0));
-    QCOMPARE(border2.bottomBorderData().outerPen, QPen(Qt::red, 11.0));
-    QCOMPARE(border2.bottomBorderData().innerPen, QPen(Qt::red, 13.0));
-    QCOMPARE(border2.rightBorderData().outerPen, QPen(Qt::red, 14.0));
-    QCOMPARE(border2.rightBorderData().innerPen, QPen(Qt::red, 16.0));
+    QCOMPARE(border2.borderData(KoBorder::Top).outerPen, QPen(Qt::red, 5.0));
+    QCOMPARE(border2.borderData(KoBorder::Top).innerPen, QPen(Qt::red, 7.0));
+    QCOMPARE(border2.borderData(KoBorder::Left).outerPen, QPen(Qt::red, 8.0));
+    QCOMPARE(border2.borderData(KoBorder::Left).innerPen, QPen(Qt::red, 10.0));
+    QCOMPARE(border2.borderData(KoBorder::Bottom).outerPen, QPen(Qt::red, 11.0));
+    QCOMPARE(border2.borderData(KoBorder::Bottom).innerPen, QPen(Qt::red, 13.0));
+    QCOMPARE(border2.borderData(KoBorder::Right).outerPen, QPen(Qt::red, 14.0));
+    QCOMPARE(border2.borderData(KoBorder::Right).innerPen, QPen(Qt::red, 16.0));
 }
 
 void TestTableCellStyle::testPadding()
@@ -74,10 +74,10 @@ void TestTableCellStyle::testSpacing()
     // Test basic functionality of the table cell style (roundtripping to format).
     QTextTableCellFormat format1;
     KoBorder border1;
-    border1.setLeftBorderSpacing(9.0);
-    border1.setRightBorderSpacing(15.0);
-    border1.setTopBorderSpacing(6.0);
-    border1.setBottomBorderSpacing(12.0);
+    border1.setBorderSpacing(KoBorder::Left, 9.0);
+    border1.setBorderSpacing(KoBorder::Right, 15.0);
+    border1.setBorderSpacing(KoBorder::Top, 6.0);
+    border1.setBorderSpacing(KoBorder::Bottom, 12.0);
     format1.setProperty(KoTableCellStyle::Borders, QVariant::fromValue<KoBorder>(border1));
 
     KoTableCellStyle *style = new KoTableCellStyle(format1);
@@ -86,10 +86,10 @@ void TestTableCellStyle::testSpacing()
     style->applyStyle(format2);
 
     KoBorder border2 = format2.property(KoTableCellStyle::Borders).value<KoBorder>();
-    QCOMPARE(border2.leftBorderSpacing(), 9.0);
-    QCOMPARE(border2.rightBorderSpacing(), 15.0);
-    QCOMPARE(border2.topBorderSpacing(), 6.0);
-    QCOMPARE(border2.bottomBorderSpacing(), 12.0);
+    QCOMPARE(border2.borderSpacing(KoBorder::Left), 9.0);
+    QCOMPARE(border2.borderSpacing(KoBorder::Right), 15.0);
+    QCOMPARE(border2.borderSpacing(KoBorder::Top), 6.0);
+    QCOMPARE(border2.borderSpacing(KoBorder::Bottom), 12.0);
 
     QRectF rect(0.0, 0.0, 100.0, 100.0);
     QCOMPARE(style->contentRect(rect), QRectF(9.0, 6.0, 76.0, 82.0));

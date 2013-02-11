@@ -27,6 +27,8 @@ class KisDoc2Test : public QObject
 
 private slots:
     void testOpenImageTwiceInSameDoc();
+    void testActiveNodes();
+
 };
 
 #endif /* KIS_DOC2_TEST_H */

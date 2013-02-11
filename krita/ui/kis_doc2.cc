@@ -433,7 +433,7 @@ vKisNodeSP KisDoc2::activeNodes() const
         KisView2 *view = qobject_cast<KisView2*>(v);
         if (view) {
             KisNodeSP activeNode = view->activeNode();
-            if (!nodes.contains(activeNode)) {
+            if (activeNode && !nodes.contains(activeNode)) {
                 if (activeNode->inherits("KisMask")) {
                     activeNode = activeNode->parent();
                 }

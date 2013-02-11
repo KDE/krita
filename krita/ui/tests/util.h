@@ -191,7 +191,20 @@ KisDoc2* createCompleteDocument()
     return doc;
 }
 
+KisDoc2* createEmptyDocument()
+{
+    KisImageWSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test for roundtrip", false);
 
+    // FIXME: p will leak here
+    KisPart2 *p = new KisPart2();
+    KisDoc2 *doc = new KisDoc2(p);
+    p->setDocument(doc);
+
+    doc->setCurrentImage(image);
+    doc->documentInfo()->setAboutInfo("title", image->objectName());
+
+    return doc;
+}
 
 
 #endif

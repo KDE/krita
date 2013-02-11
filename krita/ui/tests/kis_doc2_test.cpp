@@ -28,6 +28,8 @@
 #include <KoDocumentEntry.h>
 #include "kis_part2.h"
 #include <KoMainWindow.h>
+#include <kis_view2.h>
+#include "util.h"
 
 
 void KisDoc2Test::testOpenImageTwiceInSameDoc()
@@ -46,6 +48,22 @@ void KisDoc2Test::testOpenImageTwiceInSameDoc()
     doc.loadNativeFormat(fname);
     doc.loadNativeFormat(fname2);
 }
+
+void KisDoc2Test::testActiveNodes()
+{
+    KisDoc2* doc = createEmptyDocument();
+    KoMainWindow* shell = new KoMainWindow(doc->documentPart()->componentData());
+    KisView2* view = new KisView2(static_cast<KisPart2*>(doc->documentPart()), static_cast<KisDoc2*>(doc), shell);
+    doc->documentPart()->addView(view);
+    vKisNodeSP nodes = doc->activeNodes();
+    QVERIFY(nodes.isEmpty());
+
+    KisPaintLayerSP paintLayer1 = new KisPaintLayer(doc->image(), "paintlayer1", OPACITY_OPAQUE_U8);
+    doc->image()->addNode(paintLayer1);
+    nodes = doc->activeNodes();
+    QCOMPARE(nodes.count(), 1);
+}
+
 
 QTEST_KDEMAIN(KisDoc2Test, GUI)
 #include "kis_doc2_test.moc"

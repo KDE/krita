@@ -29,6 +29,8 @@ private slots:
     // XXX: Also test roundtripping of metadata
     void testRoundTrip();
 
+    void testSaveEmpty();
+
 };
 
 #endif

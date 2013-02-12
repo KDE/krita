@@ -188,6 +188,7 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
             && ( projectionCs->colorDepthId() == Float16BitsColorDepthID
                  || projectionCs->colorDepthId() == Float32BitsColorDepthID)) {
 #ifdef HAVE_OCIO
+#ifdef HAVE_OPENEXR	    
         if (projectionCs->colorDepthId() == Float16BitsColorDepthID) {
             projectionCs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), QString());
 
@@ -202,6 +203,7 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
 
         }
         m_displayFilter->filter(originalBytes, originalBytes, numPixels);
+#endif
 #endif
     }
 

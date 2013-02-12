@@ -132,7 +132,7 @@ public:
             itr = --m_categories.end();
         }
 
-        int pos = getCategoryBegin(itr) + itr->entries.size();
+        int pos = getCategoryBegin(std::distance(m_categories.begin(), itr)) + itr->entries.size();
 
         emit beginInsertRows(QModelIndex(), pos, pos);
         itr->entries.push_back(entry);
@@ -148,7 +148,7 @@ public:
             EntryItr found = qFind(itr->entries.begin(), itr->entries.end(), entry);
 
             if(found != itr->entries.end()) {
-                int pos = getCategoryBegin(itr) + std::distance(itr->entries.begin(), found);
+                int pos = getCategoryBegin(std::distance(m_categories.begin(), itr)) + std::distance(itr->entries.begin(), found);
                 emit beginRemoveRows(QModelIndex(), pos, pos);
                 itr->entries.erase(found, found+1);
                 emit endRemoveRows();
@@ -163,7 +163,7 @@ public:
         QList<TCategory> categories = map.uniqueKeys();
         QModelIndex      beg        = lastIndex();
 
-        for(ListItr cat=categories.begin(); cat!=categories.end(); ++cat) {
+        for(ListItr cat=categories.constBegin(); cat!=categories.constEnd(); ++cat) {
             MapItr   beg = map.find(*cat);
             MapItr   end = beg + map.count(*cat);
             Iterator itr = qFind(m_categories.begin(), m_categories.end(), *cat);
@@ -210,7 +210,7 @@ public:
         Iterator itr = qFind(m_categories.begin(), m_categories.end(), category);
 
         if(itr != m_categories.end() && !itr->entries.empty()) {
-            int pos = getCategoryBegin(itr);
+            int pos = getCategoryBegin(std::distance(m_categories.begin(), itr));
             emit beginRemoveRows(QModelIndex(), pos, pos + itr->entries.size() - 1);
             itr->entries.clear();
             emit endRemoveRows();

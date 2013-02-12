@@ -328,6 +328,8 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     Q_UNUSED(object);
     bool retval = false;
 
+    qDebug() << "Event" << event->type();
+
     // KoToolProxy needs to pre-process some events to ensure the
     // global shortcuts (not the input manager's ones) are not
     // executed, in particular, this line will accept events when the
@@ -336,7 +338,9 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 
     switch (event->type()) {
     case QEvent::MouseButtonPress:
+        qDebug() << "\tMouseButtonPress";
     case QEvent::MouseButtonDblClick: {
+        qDebug() << "\tMouseButtonDblCLick";
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
 
         if (d->tryHidePopupPalette() || d->trySetMirrorMode(widgetToPixel(mouseEvent->posF()))) {
@@ -348,12 +352,14 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         break;
     }
     case QEvent::MouseButtonRelease: {
+        qDebug() << "\tMouseButtonRelease";
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         retval = d->matcher.buttonReleased(mouseEvent->button(), mouseEvent);
         d->resetSavedTabletEvent();
         break;
     }
     case QEvent::KeyPress: {
+        qDebug() << "\tKeyPress";
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
         Qt::Key key = d->workaroundShiftAltMetaHell(keyEvent);
 
@@ -375,6 +381,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         break;
     }
     case QEvent::KeyRelease: {
+        qDebug() << "\tKeyRelease";
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
         if (!keyEvent->isAutoRepeat()) {
             Qt::Key key = d->workaroundShiftAltMetaHell(keyEvent);
@@ -383,6 +390,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         break;
     }
     case QEvent::MouseMove: {
+        qDebug() << "\tMouseMove";
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         if (!d->matcher.mouseMoved(mouseEvent)) {
             //Update the current tool so things like the brush outline gets updated.
@@ -393,6 +401,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         break;
     }
     case QEvent::Wheel: {
+        qDebug() << "\tWheel";
         QWheelEvent *wheelEvent = static_cast<QWheelEvent*>(event);
         KisSingleActionShortcut::WheelAction action =
             wheelEvent->delta() > 0 ?
@@ -410,8 +419,11 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         d->matcher.reset();
         break;
     case QEvent::TabletPress:
+        qDebug() << "\tTabletPress";
     case QEvent::TabletMove:
+        qDebug() << "\tTabletMove";
     case QEvent::TabletRelease: {
+        qDebug() << "\tTabletRelease";
         //We want both the tablet information and the mouse button state.
         //Since QTabletEvent only provides the tablet information, we
         //save that and then ignore the event so it will generate a mouse
@@ -419,7 +431,15 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         QTabletEvent* tabletEvent = static_cast<QTabletEvent*>(event);
         d->saveTabletEvent(tabletEvent);
         event->ignore();
+#ifdef Q_OS_WIN
+        qDebug() << "synthesize a mouserelease event";
+        // TabletRelease does not result in a MouseReleaseEvent on Windows, so synthesize one
+        QMouseEvent mouseEvent(QEvent::MouseButtonRelease, tabletEvent->pos(), Qt::LeftButton, Qt::LeftButton, tabletEvent->modifiers());
+        retval = d->matcher.buttonReleased(mouseEvent.button(), &mouseEvent);
+        d->resetSavedTabletEvent();
+#endif
         break;
+
     }
     default:
         break;

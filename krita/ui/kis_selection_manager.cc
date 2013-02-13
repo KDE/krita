@@ -84,6 +84,8 @@
 #include "kis_figure_painting_tool_helper.h"
 
 #include "actions/kis_selection_action_factories.h"
+#include "kis_action.h"
+#include "kis_action_manager.h"
 
 
 KisSelectionManager::KisSelectionManager(KisView2 * view, KisDoc2 * doc)
@@ -124,10 +126,9 @@ KisSelectionManager::KisSelectionManager(KisView2 * view, KisDoc2 * doc)
 
 KisSelectionManager::~KisSelectionManager()
 {
-    qDeleteAll(m_pluginActions);
 }
 
-void KisSelectionManager::setup(KActionCollection * collection)
+void KisSelectionManager::setup(KActionCollection * collection, KisActionManager* actionManager)
 {
     // XXX: setup shortcuts!
 
@@ -160,8 +161,10 @@ void KisSelectionManager::setup(KActionCollection * collection)
     m_reselect->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_D));
     connect(m_reselect, SIGNAL(triggered()), this, SLOT(reselect()));
 
-    m_invert  = new KAction(i18n("&Invert Selection"), this);
-    collection->addAction("invert", m_invert);
+    m_invert  = new KisAction(i18n("&Invert Selection"), this);
+    m_invert->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
+    m_invert->setActivationConditions(KisAction::SELECTION_EDITABLE);
+    actionManager->addAction("invert", m_invert, collection);
     m_invert->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_I));
     connect(m_invert, SIGNAL(triggered()), this, SLOT(invert()));
 
@@ -175,18 +178,26 @@ void KisSelectionManager::setup(KActionCollection * collection)
     m_cutToNewLayer->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_J));
     connect(m_cutToNewLayer, SIGNAL(triggered()), this, SLOT(cutToNewLayer()));
 
-    m_fillForegroundColor  = new KAction(i18n("Fill with Foreground Color"), this);
-    collection->addAction("fill_selection_foreground_color", m_fillForegroundColor);
+    m_fillForegroundColor  = new KisAction(i18n("Fill with Foreground Color"), this);
+    m_fillForegroundColor->setActivationFlags(KisAction::ACTIVE_DEVICE);
+    m_fillForegroundColor->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    actionManager->addAction("fill_selection_foreground_color", m_fillForegroundColor, collection);
+
     m_fillForegroundColor->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Backspace));
+    
     connect(m_fillForegroundColor, SIGNAL(triggered()), this, SLOT(fillForegroundColor()));
 
-    m_fillBackgroundColor  = new KAction(i18n("Fill with Background Color"), this);
-    collection->addAction("fill_selection_background_color", m_fillBackgroundColor);
+    m_fillBackgroundColor  = new KisAction(i18n("Fill with Background Color"), this);
+    m_fillBackgroundColor->setActivationFlags(KisAction::ACTIVE_DEVICE);
+    m_fillBackgroundColor->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    actionManager->addAction("fill_selection_background_color", m_fillBackgroundColor, collection);
     m_fillBackgroundColor->setShortcut(QKeySequence(Qt::Key_Backspace));
     connect(m_fillBackgroundColor, SIGNAL(triggered()), this, SLOT(fillBackgroundColor()));
 
-    m_fillPattern  = new KAction(i18n("Fill with Pattern"), this);
-    collection->addAction("fill_selection_pattern", m_fillPattern);
+    m_fillPattern  = new KisAction(i18n("Fill with Pattern"), this);
+    m_fillPattern->setActivationFlags(KisAction::ACTIVE_DEVICE);
+    m_fillPattern->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    actionManager->addAction("fill_selection_pattern", m_fillPattern, collection);
     connect(m_fillPattern, SIGNAL(triggered()), this, SLOT(fillPattern()));
 
     m_strokeShapes  = new KAction(i18n("Stroke selected shapes"), this);
@@ -200,8 +211,10 @@ void KisSelectionManager::setup(KActionCollection * collection)
 
     m_toggleDisplaySelection->setChecked(true);
 
-    m_smooth  = new KAction(i18n("Smooth..."), this);
-    collection->addAction("smooth", m_smooth);
+    m_smooth = new KisAction(i18n("Smooth..."), this);
+    m_smooth->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
+    m_smooth->setActivationConditions(KisAction::SELECTION_EDITABLE);
+    actionManager->addAction("smooth", m_smooth, collection);
     connect(m_smooth, SIGNAL(triggered()), this, SLOT(smooth()));
 
     m_imageResizeToSelection  = new KAction(i18n("Size Canvas to Size of Selection"), this);
@@ -231,13 +244,6 @@ void KisSelectionManager::clipboardDataChanged()
 {
     updateGUI();
 }
-
-
-void KisSelectionManager::addSelectionAction(QAction * action)
-{
-    m_pluginActions.append(action);
-}
-
 
 bool KisSelectionManager::havePixelsSelected()
 {
@@ -274,11 +280,8 @@ bool KisSelectionManager::haveShapesInClipboard()
     return false;
 }
 
-bool KisSelectionManager::haveEditablePixelSelectionWithPixels()
+bool KisSelectionManager::havePixelSelectionWithPixels()
 {
-    if (!m_view->selectionEditable()) {
-        return false;
-    }
     KisSelectionSP selection = m_view->selection();
     if (selection && selection->hasPixelSelection()) {
         return !selection->pixelSelection()->selectedRect().isEmpty();
@@ -296,7 +299,6 @@ void KisSelectionManager::updateGUI()
     bool havePixelsInClipboard = this->havePixelsInClipboard();
     bool haveShapesSelected = this->haveShapesSelected();
     bool haveShapesInClipboard = this->haveShapesInClipboard();
-    bool haveEditablePixelSelectionWithPixels = this->haveEditablePixelSelectionWithPixels();
     bool haveDevice = m_view->activeDevice();
 
     KisLayerSP activeLayer = m_view->activeLayer();
@@ -315,26 +317,13 @@ void KisSelectionManager::updateGUI()
     m_copyMerged->setEnabled(havePixelsSelected);
     m_cutToNewLayer->setEnabled(havePixelsSelected);
     m_copyToNewLayer->setEnabled(havePixelsSelected);
-    m_invert->setEnabled(haveEditablePixelSelectionWithPixels);
-    m_smooth->setEnabled(haveEditablePixelSelectionWithPixels);
     m_imageResizeToSelection->setEnabled(havePixelsSelected);
 
-    m_fillForegroundColor->setEnabled(haveDevice);
-    m_fillBackgroundColor->setEnabled(haveDevice);
-    m_fillPattern->setEnabled(haveDevice);
     m_strokeShapes->setEnabled(haveShapesSelected);
 
     m_selectAll->setEnabled(true);
     m_deselect->setEnabled(canDeselect);
     m_reselect->setEnabled(canReselect);
-
-
-    if (!m_pluginActions.isEmpty()) {
-        QListIterator<QAction *> i(m_pluginActions);
-        while (i.hasNext()) {
-            i.next()->setEnabled(true);
-        }
-    }
 
 //    m_load->setEnabled(true);
 //    m_save->setEnabled(havePixelsSelected);

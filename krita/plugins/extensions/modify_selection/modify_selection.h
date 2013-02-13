@@ -24,6 +24,7 @@
 
 #include <kparts/plugin.h>
 
+class KisAction;
 class KisView2;
 
 class ModifySelection : public KParts::Plugin
@@ -35,8 +36,6 @@ public:
 
 private slots:
 
-    void slotUpdateGUI();
-
     void slotGrowSelection();
     void slotShrinkSelection();
     void slotBorderSelection();
@@ -46,10 +45,10 @@ private:
 
     KisView2 * m_view;
 
-    KAction *m_growSelection;
-    KAction *m_shrinkSelection;
-    KAction *m_borderSelection;
-    KAction *m_featherSelection;
+    KisAction *m_growSelection;
+    KisAction *m_shrinkSelection;
+    KisAction *m_borderSelection;
+    KisAction *m_featherSelection;
 };
 
 #endif // MODIFY_SELECTION_H

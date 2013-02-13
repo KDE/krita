@@ -46,7 +46,8 @@
 #include "kis_selection.h"
 #include "kis_selection_manager.h"
 #include "kis_transaction.h"
-
+#include "kis_action.h"
+#include "kis_action_manager.h"
 
 #include "dlg_grow_selection.h"
 #include "dlg_shrink_selection.h"
@@ -66,17 +67,25 @@ ModifySelection::ModifySelection(QObject *parent, const QVariantList &)
         m_view = (KisView2*) parent;
 
         // Selection manager takes ownership
-        m_growSelection  = new KAction(i18n("Grow Selection..."), this);
-        actionCollection()->addAction("growselection", m_growSelection);
+        m_growSelection  = new KisAction(i18n("Grow Selection..."), this);
+        m_growSelection->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
+        m_growSelection->setActivationConditions(KisAction::SELECTION_EDITABLE);
+        m_view->actionManager()->addAction("growselection", m_growSelection, actionCollection());
 
-        m_shrinkSelection = new KAction(i18n("Shrink Selection..."), this);
-        actionCollection()->addAction("shrinkselection", m_shrinkSelection);
+        m_shrinkSelection = new KisAction(i18n("Shrink Selection..."), this);
+        m_shrinkSelection->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
+        m_shrinkSelection->setActivationConditions(KisAction::SELECTION_EDITABLE);
+        m_view->actionManager()->addAction("shrinkselection", m_shrinkSelection, actionCollection());
 
-        m_borderSelection  = new KAction(i18n("Border Selection..."), this);
-        actionCollection()->addAction("borderselection", m_borderSelection);
+        m_borderSelection  = new KisAction(i18n("Border Selection..."), this);
+        m_borderSelection->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
+        m_borderSelection->setActivationConditions(KisAction::SELECTION_EDITABLE);
+        m_view->actionManager()->addAction("borderselection", m_borderSelection, actionCollection());
 
-        m_featherSelection  = new KAction(i18n("Feather Selection..."), this);
-        actionCollection()->addAction("featherselection", m_featherSelection);
+        m_featherSelection  = new KisAction(i18n("Feather Selection..."), this);
+        m_featherSelection->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
+        m_featherSelection->setActivationConditions(KisAction::SELECTION_EDITABLE);
+        m_view->actionManager()->addAction("featherselection", m_featherSelection, actionCollection());
 
         Q_CHECK_PTR(m_growSelection);
         Q_CHECK_PTR(m_shrinkSelection);
@@ -87,30 +96,12 @@ ModifySelection::ModifySelection(QObject *parent, const QVariantList &)
         connect(m_shrinkSelection, SIGNAL(triggered()), this, SLOT(slotShrinkSelection()));
         connect(m_borderSelection, SIGNAL(triggered()), this, SLOT(slotBorderSelection()));
         connect(m_featherSelection, SIGNAL(triggered()), this, SLOT(slotFeatherSelection()));
-
-        m_view->selectionManager()->addSelectionAction(m_growSelection);
-        m_view->selectionManager()->addSelectionAction(m_shrinkSelection);
-        m_view->selectionManager()->addSelectionAction(m_borderSelection);
-        m_view->selectionManager()->addSelectionAction(m_featherSelection);
-
-        connect(m_view->selectionManager(), SIGNAL(signalUpdateGUI()),
-                SLOT(slotUpdateGUI()));
     }
 }
 
 ModifySelection::~ModifySelection()
 {
     m_view = 0;
-}
-
-void ModifySelection::slotUpdateGUI()
-{
-    bool enable = m_view->selectionManager()->haveEditablePixelSelectionWithPixels();
-
-    m_growSelection->setEnabled(enable);
-    m_shrinkSelection->setEnabled(enable);
-    m_borderSelection->setEnabled(enable);
-    m_featherSelection->setEnabled(enable);
 }
 
 void ModifySelection::slotGrowSelection()

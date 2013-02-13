@@ -26,6 +26,7 @@
 
 #include "kis_types.h"
 
+class KisAction;
 class KisView2;
 class KisPainter;
 
@@ -43,14 +44,13 @@ private slots:
     void slotLayerSize();
     void slotSelectionScale();
     void slotNodeChanged(const KisNodeSP);
-    void slotSelectionChanged();
 
 private:
 
     KisView2 * m_view;
     KisPainter * m_painter;
     KAction* m_scaleLayerAction;
-    KAction* m_scaleSelectionAction;
+    KisAction* m_scaleSelectionAction;
 };
 
 #endif // IMAGESIZE_H

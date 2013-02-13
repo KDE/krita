@@ -158,3 +158,9 @@ target_link_libraries(KisInputManagerTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimag
 set(kis_flipbook_test_SRCS kis_flipbook_test.cpp )
 kde4_add_unit_test(KisFlipbookTest TESTNAME krita-ui-KisFlipbookTest  ${kis_flipbook_test_SRCS})
 target_link_libraries(KisFlipbookTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_action_manager_test_SRCS kis_action_manager_test.cpp )
+kde4_add_unit_test(KisActionManagerTest TESTNAME krita-ui-KisActionManagerTest  ${kis_action_manager_test_SRCS})
+target_link_libraries(KisActionManagerTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})

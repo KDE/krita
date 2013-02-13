@@ -192,6 +192,7 @@ public:
 KoDocument::KoDocument(KoPart *parent, KUndo2Stack *undoStack)
         : d(new Private)
 {
+    Q_ASSERT(parent);
     d->parentPart = parent;
 
     d->isEmpty = true;

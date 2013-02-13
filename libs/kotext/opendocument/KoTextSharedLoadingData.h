@@ -195,7 +195,7 @@ protected:
      * @param shape a shape that has finished loading.
      * @param element the xml element that represents the shape being inserted.
      */
-    virtual void shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context, KoShapeAnchor *anchor);
+    virtual void shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context);
 
 private:
     enum StyleType {

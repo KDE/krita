@@ -1464,7 +1464,8 @@ KoShape *KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &curso
 
     KoShapeAnchor *anchor = new KoShapeAnchor(shape);
     anchor->loadOdf(element, d->context);
-    d->textSharedData->shapeInserted(shape, element, d->context, anchor);
+    shape->setAnchor(anchor);
+    d->textSharedData->shapeInserted(shape, element, d->context);
 
     // page anchored shapes are handled differently
     if (anchor->anchorType() == KoShapeAnchor::AnchorPage && shape->hasAdditionalAttribute("text:anchor-page-number")) {

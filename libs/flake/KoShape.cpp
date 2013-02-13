@@ -103,7 +103,8 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
       textRunAroundDistanceRight(0.0),
       textRunAroundDistanceBottom(0.0),
       textRunAroundThreshold(0.0),
-      textRunAroundContour(KoShape::ContourFull)
+      textRunAroundContour(KoShape::ContourFull),
+      anchor(0)
 {
     connectors[KoConnectionPoint::TopConnectionPoint] = KoConnectionPoint::defaultConnectionPoint(KoConnectionPoint::TopConnectionPoint);
     connectors[KoConnectionPoint::RightConnectionPoint] = KoConnectionPoint::defaultConnectionPoint(KoConnectionPoint::RightConnectionPoint);
@@ -991,6 +992,18 @@ void KoShape::setTextRunAroundContour(KoShape::TextRunAroundContour contour)
 {
     Q_D(KoShape);
     d->textRunAroundContour = contour;
+}
+
+void KoShape::setAnchor(KoShapeAnchor *anchor)
+{
+    Q_D(KoShape);
+    d->anchor = anchor;
+}
+
+KoShapeAnchor *KoShape::anchor() const
+{
+    Q_D(const KoShape);
+    return d->anchor;
 }
 
 void KoShape::setBackground(KoShapeBackground *fill)

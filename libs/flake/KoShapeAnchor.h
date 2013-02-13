@@ -21,7 +21,7 @@
 #ifndef KOSHAPEANCHOR_H
 #define KOSHAPEANCHOR_H
 
-#include "kotext_export.h"
+#include "flake_export.h"
 
 #include <QPointF>
 
@@ -45,7 +45,8 @@ class QTextDocument;
  *  -as-char
  *  -char, paragraph anchor
  *
- * If it's a page anchor it just provide the info about how the shape relates to a page number.
+ * If it's a page anchor it just provide the info about how the shape relates to a page with a specific
+ * page number.
  *
  * For the other types of anchoring it has to have a TextLocation in a QTextDocument. This TextLocation
  * can either be an inline character (type as-char) or a position (type char or paragraph) The
@@ -58,9 +59,9 @@ class QTextDocument;
  * which are both implemented as subclasses of TextLocation
  *
  * The position of the shape relative to the anchor is called the offset. It's loaded by loadOdf().
- * @see PlacementStrategy for more information about the layout of anchors/shapes in Words.
+ * @see PlacementStrategy for more information about the layout of anchors/shapes.
  */
-class KOTEXT_EXPORT KoShapeAnchor
+class FLAKE_EXPORT KoShapeAnchor
 {
 public:
     /**
@@ -71,7 +72,12 @@ public:
         PlacementStrategy(){};
         virtual ~PlacementStrategy(){};
 
+        /**
+         * Reparent the anchored shape to not have a parent shape container (and model)
+         *
+         */
         virtual void detachFromModel() = 0;
+
         /**
          * Reparent the anchored shape under an appropriate shape container (and model)
          *

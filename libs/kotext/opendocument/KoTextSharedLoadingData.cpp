@@ -654,11 +654,10 @@ KoOdfBibliographyConfiguration KoTextSharedLoadingData::bibliographyConfiguratio
     return d->bibliographyConfiguration;
 }
 
-void KoTextSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &/*context*/, KoShapeAnchor *anchor)
+void KoTextSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &/*context*/)
 {
     d->insertedShapes.append(shape);
     Q_UNUSED(element);
-    Q_UNUSED(anchor);
 }
 
 QList<KoShape *> KoTextSharedLoadingData::insertedShapes() const

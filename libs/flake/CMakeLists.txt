@@ -32,6 +32,7 @@ set(flake_SRCS
     KoPathSegment.cpp
     KoSelection.cpp
     KoShape.cpp
+    KoShapeAnchor.cpp
     KoShapeBasedDocumentBase.cpp
     KoShapeApplicationData.cpp
     KoShapeContainer.cpp
@@ -275,6 +276,7 @@ install(
     KoRTree.h
     KoSelection.h
     KoShape.h
+    KoShapeAnchor.h
     KoShapeStrokeModel.h
     KoToolSelection.h
     KoShapeContainer.h

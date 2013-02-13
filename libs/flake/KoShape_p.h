@@ -98,6 +98,7 @@ public:
     qreal textRunAroundDistanceBottom;
     qreal textRunAroundThreshold;
     KoShape::TextRunAroundContour textRunAroundContour;
+    KoShapeAnchor *anchor;
 
     /// Convert connection point position from shape coordinates, taking alignment into account
     void convertFromShapeCoordinates(KoConnectionPoint &point, const QSizeF &shapeSize) const;

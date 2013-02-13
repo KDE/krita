@@ -38,5 +38,5 @@ X-KDE-Export=application/x-krita
 X-KDE-Import=application/vnd.oasis.opendocument.graphics
 X-KDE-Weight=1
 X-KDE-Library=kritaodgimport
-X-KDE-ServiceTypes=CalligraFilter
+X-KDE-ServiceTypes=Calligra/Filter
 NoDisplay=true

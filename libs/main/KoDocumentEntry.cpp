@@ -80,7 +80,7 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType(const QString & mimetype)
                 kError(30003) << "Check your installation (for instance, run 'kde4-config --path mime' and check the result)." << endl;
             } else {
                 kError(30003) << "Found no Calligra part able to handle " << mimetype << "!" << endl;
-                kError(30003) << "Check your installation (does the desktop file have X-KDE-NativeMimeType and CalligraPart, did you install Calligra in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
+                kError(30003) << "Check your installation (does the desktop file have X-KDE-NativeMimeType and Calligra/Part, did you install Calligra in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
             }
             return KoDocumentEntry();
         }

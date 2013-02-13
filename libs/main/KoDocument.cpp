@@ -1910,10 +1910,10 @@ QByteArray KoDocument::nativeFormatMimeType() const
 #ifndef NDEBUG
     if (nativeMimeType.isEmpty()) {
         // shouldn't happen, let's find out why it happened
-        if (!service->serviceTypes().contains("CalligraPart"))
-            kWarning(30003) << "Wrong desktop file, CalligraPart isn't mentioned";
-        else if (!KServiceType::serviceType("CalligraPart"))
-            kWarning(30003) << "The CalligraPart service type isn't installed!";
+        if (!service->serviceTypes().contains("Calligra/Part"))
+            kWarning(30003) << "Wrong desktop file, Calligra/Part isn't mentioned";
+        else if (!KServiceType::serviceType("Calligra/Part"))
+            kWarning(30003) << "The Calligra/Part service type isn't installed!";
         else
             kWarning(30003) << "Failed to read NativeMimeType from desktop file!";
     }

@@ -131,25 +131,25 @@ private:
     KisNodeCommandsAdapter* m_adapter;
 
     KAction *m_copy;
-    KAction *m_copyMerged;
+    KisAction *m_copyMerged;
     KAction *m_cut;
     KAction *m_paste;
     KAction *m_pasteAt;
     KAction *m_pasteNew;
-    KAction *m_cutToNewLayer;
+    KisAction *m_cutToNewLayer;
     KAction *m_selectAll;
     KAction *m_deselect;
     KAction *m_clear;
     KAction *m_reselect;
     KisAction *m_invert;
-    KAction *m_copyToNewLayer;
-    KAction *m_load;
-    KAction *m_save;
+    KisAction *m_copyToNewLayer;
+//     KAction *m_load;
+//     KAction *m_save;
     KisAction *m_fillForegroundColor;
     KisAction *m_fillBackgroundColor;
     KisAction *m_fillPattern;
-    KAction *m_imageResizeToSelection;
-    KAction *m_strokeShapes;
+    KisAction *m_imageResizeToSelection;
+    KisAction *m_strokeShapes;
     KToggleAction *m_toggleDisplaySelection;
 
     QList<QAction*> m_pluginActions;

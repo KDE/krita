@@ -55,17 +55,6 @@ KoPAPageBase::KoPAPageBase()
 
 KoPAPageBase::~KoPAPageBase()
 {
-    // Delete all layers and there children cause we are responsible for them.
-    for(int i = shapes().count() - 1; i >= 0; --i) {
-        KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shapes()[i]);
-        if (layer) {
-            removeShape(layer);
-            QList<KoShape*> layershapes = layer->shapes();
-            layer->removeAllShapes();
-            qDeleteAll(layershapes);
-            delete layer;
-        }
-    }
 }
 
 void KoPAPageBase::paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &)

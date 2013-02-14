@@ -170,10 +170,6 @@ KisShapeLayer::~KisShapeLayer()
      */
     KisLayer::setImage(0);
 
-    foreach(KoShape *shape, shapes()) {
-        shape->setParent(0);
-    }
-
     delete m_d->converter;
     delete m_d->canvas;
     delete m_d;

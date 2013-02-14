@@ -106,6 +106,8 @@ set(kritaui_LIB_SRCS
     ko_favorite_resource_manager.cpp
     kis_workspace_resource.cpp
     kis_mirror_visitor.cpp
+    kis_action.cpp
+    kis_action_manager.cpp
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp
     kisexiv2/kis_iptc_io.cpp

@@ -1,7 +1,5 @@
 /*
- * imagesize.h -- Part of Krita
- *
- * Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
+ *  Copyright (c) 2013 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,40 +15,19 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef IMAGESIZE_H
-#define IMAGESIZE_H
 
-#include <QVariant>
 
-#include <kparts/plugin.h>
+#ifndef KIS_ACTION_MANAGER_TEST_H
+#define KIS_ACTION_MANAGER_TEST_H
 
-#include "kis_types.h"
+#include <QtTest>
 
-class KisAction;
-class KisView2;
-class KisPainter;
-
-class ImageSize : public KParts::Plugin
+class KisActionManagerTest : public QObject
 {
     Q_OBJECT
-public:
-    ImageSize(QObject *parent, const QVariantList &);
-    virtual ~ImageSize();
-
 private slots:
-
-    void slotImageSize();
-    void slotCanvasSize();
-    void slotLayerSize();
-    void slotSelectionScale();
-    void slotNodeChanged(const KisNodeSP);
-
-private:
-
-    KisView2 * m_view;
-    KisPainter * m_painter;
-    KAction* m_scaleLayerAction;
-    KisAction* m_scaleSelectionAction;
+    void testUpdateGUI();
+    void testCondition();
 };
 
-#endif // IMAGESIZE_H
+#endif // KIS_ACTION_MANAGER_TEST_H

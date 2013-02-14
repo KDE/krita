@@ -61,6 +61,8 @@
 #include "dlg_layersize.h"
 #include "kis_filter_strategy.h"
 #include "kis_canvas_resource_provider.h"
+#include "kis_action.h"
+#include "kis_action_manager.h"
 
 K_PLUGIN_FACTORY(ImageSizeFactory, registerPlugin<ImageSize>();)
 K_EXPORT_PLUGIN(ImageSizeFactory("krita"))
@@ -84,16 +86,15 @@ ImageSize::ImageSize(QObject *parent, const QVariantList &)
         connect(m_scaleLayerAction, SIGNAL(triggered()), this, SLOT(slotLayerSize()));
 
         m_view = (KisView2*) parent;
-        // Selection manager takes ownership
-        m_scaleSelectionAction  = new KAction(i18n("&Scale..."), this);
-        actionCollection()->addAction("selectionscale", m_scaleSelectionAction);
+
+        m_scaleSelectionAction  = new KisAction(i18n("&Scale..."), this);
+        m_scaleSelectionAction->setActivationFlags(KisAction::PIXELS_SELECTED);
+        m_scaleSelectionAction->setActivationConditions(KisAction::SELECTION_EDITABLE);
+        m_view->actionManager()->addAction("selectionscale", m_scaleSelectionAction, actionCollection());
         Q_CHECK_PTR(m_scaleSelectionAction);
         connect(m_scaleSelectionAction, SIGNAL(triggered()), this, SLOT(slotSelectionScale()));
-        m_view ->selectionManager()->addSelectionAction(m_scaleSelectionAction);
 
         connect(m_view->resourceProvider(), SIGNAL(sigNodeChanged(const KisNodeSP)), SLOT(slotNodeChanged(KisNodeSP)));
-        connect(m_view->selectionManager(), SIGNAL(signalUpdateGUI()),
-                SLOT(slotSelectionChanged()));
     }
 }
 
@@ -230,11 +231,6 @@ void ImageSize::slotNodeChanged(const KisNodeSP node)
 {
     Q_UNUSED(node);
     m_scaleLayerAction->setEnabled(m_view->activeLayer());
-}
-
-void ImageSize::slotSelectionChanged()
-{
-    m_scaleSelectionAction->setEnabled(m_view->selectionEditable() && m_view->selectionManager()->havePixelsSelected());
 }
 
 #include "imagesize.moc"

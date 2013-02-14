@@ -127,6 +127,7 @@
 #include "kis_node_commands_adapter.h"
 #include <kis_paintop_preset.h>
 #include "ko_favorite_resource_manager.h"
+#include "kis_action_manager.h"
 #include "kis_paintop_box.h"
 
 
@@ -168,6 +169,7 @@ public:
         , gridManager(0)
         , perspectiveGridManager(0)
         , paintingAssistantManager(0)
+        , actionManager(0)
     {
     }
 
@@ -188,6 +190,7 @@ public:
         delete paintingAssistantManager;
         delete viewConverter;
         delete statusBar;
+        delete actionManager;
     }
 
 public:
@@ -215,6 +218,7 @@ public:
     KisPaintingAssistantsManager *paintingAssistantManager;
     BlockingUserInputEventFilter blockingEventFilter;
     KisFlipbook *flipbook;
+    KisActionManager* actionManager;
 };
 
 
@@ -786,11 +790,13 @@ void KisView2::createManagers()
     // XXX: When the currentlayer changes, call updateGUI on all
     // managers
 
+    m_d->actionManager = new KisActionManager(this);
+
     m_d->filterManager = new KisFilterManager(this, m_d->doc);
     m_d->filterManager->setup(actionCollection());
 
     m_d->selectionManager = new KisSelectionManager(this, m_d->doc);
-    m_d->selectionManager->setup(actionCollection());
+    m_d->selectionManager->setup(actionCollection(), actionManager());
 
     m_d->nodeManager = new KisNodeManager(this, m_d->doc);
     m_d->nodeManager->setup(actionCollection());
@@ -825,6 +831,7 @@ void KisView2::updateGUI()
     m_d->imageManager->updateGUI();
     m_d->gridManager->updateGUI();
     m_d->perspectiveGridManager->updateGUI();
+    m_d->actionManager->updateGUI();
 }
 
 
@@ -974,6 +981,11 @@ KoPrintJob * KisView2::createPrintJob()
 KisNodeManager * KisView2::nodeManager()
 {
     return m_d->nodeManager;
+}
+
+KisActionManager* KisView2::actionManager()
+{
+    return m_d->actionManager;
 }
 
 KisPerspectiveGridManager* KisView2::perspectiveGridManager()

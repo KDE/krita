@@ -25,6 +25,7 @@
 
 #include <kparts/plugin.h>
 
+class KisAction;
 class KisView2;
 class KisPainter;
 class ColorRange : public KParts::Plugin
@@ -35,15 +36,14 @@ public:
     virtual ~ColorRange();
 
 private slots:
-    void slotUpdateGUI();
     void slotActivated();
     void selectOpaque();
 
 private:
     KisView2 * m_view;
     KisPainter * m_painter;
-    KAction* m_selectRange;
-    KAction* m_selectOpaque;
+    KisAction* m_selectRange;
+    KisAction* m_selectOpaque;
 };
 
 #endif // COLORRANGE_H

@@ -20,32 +20,15 @@
 
 #include "modify_selection.h"
 
-
-#include <math.h>
-
-#include <stdlib.h>
-
-#include <QSlider>
-#include <QPoint>
-
 #include <klocale.h>
 #include <kcomponentdata.h>
-#include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <kstandardaction.h>
 #include <kactioncollection.h>
 
-#include "kis_config.h"
-#include "kis_image.h"
-#include "kis_layer.h"
-#include "kis_global.h"
-#include "kis_types.h"
 #include "kis_view2.h"
-#include "kis_selection.h"
 #include "kis_selection_manager.h"
-#include "kis_transaction.h"
 #include "kis_action.h"
 #include "kis_action_manager.h"
 
@@ -122,8 +105,6 @@ void ModifySelection::slotGrowSelection()
 
     dlgGrowSelection->setCaption(i18n("Grow Selection"));
 
-    KisConfig cfg;
-
     if (dlgGrowSelection->exec() == QDialog::Accepted) {
         qint32 xradius = dlgGrowSelection->xradius();
         qint32 yradius = dlgGrowSelection->yradius();
@@ -144,8 +125,6 @@ void ModifySelection::slotShrinkSelection()
     Q_CHECK_PTR(dlgShrinkSelection);
 
     dlgShrinkSelection->setCaption(i18n("Shrink Selection"));
-
-    KisConfig cfg;
 
     if (dlgShrinkSelection->exec() == QDialog::Accepted) {
         qint32 xradius = dlgShrinkSelection->xradius();
@@ -170,8 +149,6 @@ void ModifySelection::slotBorderSelection()
 
     dlgBorderSelection->setCaption(i18n("Border Selection"));
 
-    KisConfig cfg;
-
     if (dlgBorderSelection->exec() == QDialog::Accepted) {
         qint32 xradius = dlgBorderSelection->xradius();
         qint32 yradius = dlgBorderSelection->yradius();
@@ -192,8 +169,6 @@ void ModifySelection::slotFeatherSelection()
     Q_CHECK_PTR(dlgFeatherSelection);
 
     dlgFeatherSelection->setCaption(i18n("Feather Selection"));
-
-    KisConfig cfg;
 
     if (dlgFeatherSelection->exec() == QDialog::Accepted) {
         qint32 radius = dlgFeatherSelection->radius();

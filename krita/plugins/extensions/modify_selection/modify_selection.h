@@ -40,6 +40,7 @@ private slots:
     void slotShrinkSelection();
     void slotBorderSelection();
     void slotFeatherSelection();
+    void slotSmoothSelection();
 
 private:
 
@@ -49,6 +50,7 @@ private:
     KisAction *m_shrinkSelection;
     KisAction *m_borderSelection;
     KisAction *m_featherSelection;
+    KisAction *m_smoothSelection;
 };
 
 #endif // MODIFY_SELECTION_H

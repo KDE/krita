@@ -104,7 +104,6 @@ KisSelectionManager::KisSelectionManager(KisView2 * view, KisDoc2 * doc)
         m_reselect(0),
         m_invert(0),
         m_copyToNewLayer(0),
-        m_smooth(0),
         m_load(0),
         m_save(0),
         m_fillForegroundColor(0),
@@ -210,12 +209,6 @@ void KisSelectionManager::setup(KActionCollection * collection, KisActionManager
     connect(m_toggleDisplaySelection, SIGNAL(triggered()), this, SLOT(toggleDisplaySelection()));
 
     m_toggleDisplaySelection->setChecked(true);
-
-    m_smooth = new KisAction(i18n("Smooth..."), this);
-    m_smooth->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
-    m_smooth->setActivationConditions(KisAction::SELECTION_EDITABLE);
-    actionManager->addAction("smooth", m_smooth, collection);
-    connect(m_smooth, SIGNAL(triggered()), this, SLOT(smooth()));
 
     m_imageResizeToSelection  = new KAction(i18n("Size Canvas to Size of Selection"), this);
     collection->addAction("resizeimagetoselection", m_imageResizeToSelection);

@@ -122,7 +122,6 @@
     <Separator/>
     <Action name="feather"/>
     <Action name = "similar"/>
-    <Action name = "smooth"/>
    <Separator/>
    <Action name="toggle_display_selection"/>
 </Menu>

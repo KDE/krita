@@ -87,15 +87,22 @@ ModifySelection::ModifySelection(QObject *parent, const QVariantList &)
         m_featherSelection->setActivationConditions(KisAction::SELECTION_EDITABLE);
         m_view->actionManager()->addAction("featherselection", m_featherSelection, actionCollection());
 
+        m_smoothSelection = new KisAction(i18n("Smooth..."), this);
+        m_smoothSelection->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
+        m_smoothSelection->setActivationConditions(KisAction::SELECTION_EDITABLE);
+        m_view->actionManager()->addAction("smoothselection", m_smoothSelection, actionCollection());
+
         Q_CHECK_PTR(m_growSelection);
         Q_CHECK_PTR(m_shrinkSelection);
         Q_CHECK_PTR(m_borderSelection);
         Q_CHECK_PTR(m_featherSelection);
+        Q_CHECK_PTR(m_smoothSelection);
 
         connect(m_growSelection, SIGNAL(triggered()), this, SLOT(slotGrowSelection()));
         connect(m_shrinkSelection, SIGNAL(triggered()), this, SLOT(slotShrinkSelection()));
         connect(m_borderSelection, SIGNAL(triggered()), this, SLOT(slotBorderSelection()));
         connect(m_featherSelection, SIGNAL(triggered()), this, SLOT(slotFeatherSelection()));
+        connect(m_smoothSelection, SIGNAL(triggered()), this, SLOT(slotSmoothSelection()));
     }
 }
 
@@ -196,5 +203,11 @@ void ModifySelection::slotFeatherSelection()
 
     delete dlgFeatherSelection;
 }
+
+void ModifySelection::slotSmoothSelection()
+{
+    m_view->selectionManager()->smooth();
+}
+
 
 #include "modify_selection.moc"

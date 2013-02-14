@@ -143,7 +143,6 @@ private:
     KAction *m_reselect;
     KisAction *m_invert;
     KAction *m_copyToNewLayer;
-    KisAction *m_smooth;
     KAction *m_load;
     KAction *m_save;
     KisAction *m_fillForegroundColor;

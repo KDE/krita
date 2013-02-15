@@ -47,7 +47,18 @@ KisActionManager::~KisActionManager()
 void KisActionManager::addAction(const QString& name, KisAction* action, KActionCollection* actionCollection)
 {
     actionCollection->addAction(name, action);
+    action->setObjectName(name);
     d->actions.append(action);
+}
+
+KisAction *KisActionManager::actionByName(const QString &name) const
+{
+    foreach(KisAction *action, d->actions) {
+        if (action->objectName() == name) {
+            return action;
+        }
+    }
+    return 0;
 }
 
 void KisActionManager::updateGUI()

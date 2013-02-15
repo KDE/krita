@@ -110,6 +110,8 @@ private slots:
     void slotCollapsed(const QModelIndex &index);
     void slotExpanded(const QModelIndex &index);
 
+    void slotSelectOpaque();
+
 private:
 
     KisCanvas2* m_canvas;
@@ -131,6 +133,7 @@ private:
     KAction* m_newTransparencyMaskAction;
     KAction* m_newEffectMaskAction;
     KAction* m_newSelectionMaskAction;
+    KAction* m_selectOpaque;
 
 };
 

@@ -49,6 +49,7 @@
 #include <klocale.h>
 #include <khbox.h>
 #include <kaction.h>
+#include <kactioncollection.h>
 
 #include <KoIcon.h>
 #include <KoDocumentSectionView.h>
@@ -64,6 +65,8 @@
 #include <kis_node.h>
 #include <kis_composite_ops_model.h>
 
+#include "kis_action.h"
+#include "kis_action_manager.h"
 #include "widgets/kis_cmb_composite.h"
 #include "widgets/kis_slider_spin_box.h"
 #include "kis_view2.h"
@@ -192,6 +195,9 @@ KisLayerBox::KisLayerBox()
 
     m_newSelectionMaskAction = new KAction(koIcon("edit-paste"), i18n("&Local Selection"), this);
     connect(m_newSelectionMaskAction, SIGNAL(triggered(bool)), this, SLOT(slotNewSelectionMask()));
+
+    m_selectOpaque = new KAction(i18n("&Select Opaque"), this);
+    connect(m_selectOpaque, SIGNAL(triggered(bool)), this, SLOT(slotSelectOpaque()));
 
     m_newLayerMenu = new KMenu(this);
     m_wdgLayerBox->bnAdd->setMenu(m_newLayerMenu);
@@ -424,7 +430,8 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
     menu.addAction(m_newTransparencyMaskAction);
     menu.addAction(m_newEffectMaskAction);
     menu.addAction(m_newSelectionMaskAction);
-
+    menu.addSeparator();
+    menu.addAction(m_selectOpaque);
     menu.exec(pos);
 }
 
@@ -632,6 +639,15 @@ void KisLayerBox::slotExpanded(const QModelIndex &index)
     KisNodeSP node = m_nodeModel->nodeFromIndex(index);
     if (node) {
         node->setCollapsed(false);
+    }
+}
+
+void KisLayerBox::slotSelectOpaque()
+{
+    if(!m_canvas) return;
+    QAction *action = m_canvas->view()->actionManager()->actionByName("selectopaque");
+    if (action) {
+        action->trigger();
     }
 }
 

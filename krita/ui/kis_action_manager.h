@@ -39,6 +39,8 @@ public:
 
     void updateGUI();
 private:
+    void dumpActionFlags();
+
     struct Private;
     Private* const d;
 };

@@ -598,20 +598,92 @@ void KoTextEditor::insertFrameBreak()
     emit cursorPositionChanged();
 }
 
+//TODO: use the KoTextDocument provided shapeController. Then remove the parameter sent from the TextTool
 void KoTextEditor::paste(const QMimeData *mimeData,
+                         KoShapeController *shapeController,
                          bool pasteAsText)
 {
     if (isEditProtected()) {
         return;
     }
 
-    KoShapeController *shapeController = KoTextDocument(d->document).shapeController();
-
     addCommand(new TextPasteCommand(mimeData,
                                     d->document,
                                     shapeController,
                                     0,
                                     pasteAsText));
+}
+
+bool KoTextEditor::paste(KoTextEditor *editor,
+                         KoShapeController *shapeController,
+                         bool pasteAsText)
+{
+
+    Q_ASSERT(editor);
+    Q_ASSERT(editor != this);
+
+    if (!editor->hasSelection()) {
+        editor->setPosition(0);
+        editor->movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+    }
+
+    int from = editor->position();
+    int to = editor->anchor();
+    KoTextOdfSaveHelper saveHelper(editor->document(), from, to);
+    KoTextDrag drag;
+#ifdef SHOULD_BUILD_RDF
+    KoDocumentRdfBase *rdf = 0;
+    if (shapeController->resourceManager()->hasResource(KoText::DocumentRdf)) {
+        rdf = qobject_cast<KoDocumentRdfBase*>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<QObject*>());
+        saveHelper.setRdfModel(rdf->model());
+    }
+#endif
+    drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
+
+    beginEditBlock();
+
+    if (hasSelection()) {
+        addCommand(new DeleteCommand(DeleteCommand::NextChar, d->document, shapeController));
+    }
+
+    // check for mime type
+    const QMimeData *data = drag.mimeData();
+
+    if (data->hasFormat(KoOdf::mimeType(KoOdf::Text))
+                    || data->hasFormat(KoOdf::mimeType(KoOdf::OpenOfficeClipboard)) ) {
+        KoOdf::DocumentType odfType = KoOdf::Text;
+        if (!data->hasFormat(KoOdf::mimeType(odfType))) {
+            odfType = KoOdf::OpenOfficeClipboard;
+        }
+
+        if (pasteAsText) {
+            insertText(data->text());
+        } else {
+            QSharedPointer<Soprano::Model> rdfModel = QSharedPointer<Soprano::Model>(0);
+#ifdef SHOULD_BUILD_RDF
+            if(!rdf) {
+                rdfModel = QSharedPointer<Soprano::Model>(Soprano::createModel());
+            } else {
+                rdfModel = rdf->model();
+            }
+#endif
+
+            //kDebug() << "pasting odf text";
+            KoTextPaste paste(this, shapeController, rdfModel);
+            paste.paste(odfType, data);
+            //kDebug() << "done with pasting odf";
+
+#ifdef SHOULD_BUILD_RDF
+            if (rdf) {
+                rdf->updateInlineRdfStatements(d->document);
+            }
+#endif
+        }
+    }
+
+    endEditBlock();
+
+    return true;
 }
 
 void KoTextEditor::deleteChar(bool previous, KUndo2Command *parent)

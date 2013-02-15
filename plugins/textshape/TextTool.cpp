@@ -961,7 +961,7 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
         // on windows we do not have data if we try to paste this selection
         if (data) {
             m_prevCursorPosition = m_textEditor.data()->position();
-            m_textEditor.data()->paste(data, canvas()->resourceManager());
+            m_textEditor.data()->paste(data,canvas()->shapeController(), canvas()->resourceManager());
             editingPluginEvents();
         }
     }
@@ -1076,21 +1076,13 @@ bool TextTool::paste()
 {
     const QMimeData *data = QApplication::clipboard()->mimeData(QClipboard::Clipboard);
 
-    // on windows we do not have data if we try to paste the selection
+    // on windows we do not have data if we try to paste this selection
     if (!data) return false;
 
-    // since this is not paste-as-text we will not paste in urls, but instead let KoToolProxy solve it
-    if (data->hasUrls()) return false;
-
-    if (data->hasFormat(KoOdf::mimeType(KoOdf::Text))
-        ||  data->hasText()) {
-        m_prevCursorPosition = m_textEditor.data()->position();
-        m_textEditor.data()->paste(data);
-        editingPluginEvents();
-        return true;
-    }
-
-    return false;
+    m_prevCursorPosition = m_textEditor.data()->position();
+    m_textEditor.data()->paste(data, canvas()->shapeController());
+    editingPluginEvents();
+    return true;
 }
 
 void TextTool::cut()
@@ -1203,7 +1195,7 @@ void TextTool::dropEvent(QDropEvent *event, const QPointF &)
     }
     m_prevCursorPosition = insertCursor.position();
     m_textEditor.data()->setPosition(m_prevCursorPosition);
-    m_textEditor.data()->paste(event->mimeData());
+    m_textEditor.data()->paste(event->mimeData(), canvas()->shapeController());
     m_textEditor.data()->setPosition(m_prevCursorPosition);
     //since the paste made insertCursor we can now use that for the end position
     m_textEditor.data()->setPosition(insertCursor.position(), QTextCursor::KeepAnchor);
@@ -2160,12 +2152,9 @@ void TextTool::pasteAsText()
     // on windows we do not have data if we try to paste this selection
     if (!data) return;
 
-    if (data->hasFormat(KoOdf::mimeType(KoOdf::Text))
-        ||  data->hasText()) {
-        m_prevCursorPosition = m_textEditor.data()->position();
-        m_textEditor.data()->paste(data, true);
-        editingPluginEvents();
-    }
+    m_prevCursorPosition = m_textEditor.data()->position();
+    textEditor->paste(data, canvas()->shapeController(), true);
+    editingPluginEvents();
 }
 
 void TextTool::bold(bool bold)

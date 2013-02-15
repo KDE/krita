@@ -37,6 +37,8 @@ class KisDoc2;
 class KisFilterStrategy;
 class KisView2;
 class KisFilterConfiguration;
+class KisActionManager;
+
 /**
  * The node manager passes requests for new layers or masks on to the mask and layer
  * managers.
@@ -67,7 +69,7 @@ signals:
     
 public:
     
-    void setup(KActionCollection * collection);
+    void setup(KActionCollection * collection, KisActionManager* actionManager);
     void updateGUI();
 
     /// Convenience function to get the active layer or mask

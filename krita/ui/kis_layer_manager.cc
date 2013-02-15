@@ -92,7 +92,8 @@
 #include "kis_progress_widget.h"
 #include "kis_node_commands_adapter.h"
 #include "kis_node_manager.h"
-
+#include "kis_action.h"
+#include "kis_action_manager.h"
 
 class KisSaveGroupVisitor : public KisNodeVisitor
 {
@@ -295,16 +296,18 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     actionCollection->addAction("rasterize_layer", m_rasterizeLayer);
     connect(m_rasterizeLayer, SIGNAL(triggered()), this, SLOT(rasterizeLayer()));
 
-    m_layerSaveAs  = new KAction(koIcon("document-save"), i18n("Save Layer as Image..."), this);
-    actionCollection->addAction("save_layer_as_image", m_layerSaveAs);
+    m_layerSaveAs  = new KisAction(koIcon("document-save"), i18n("Save Layer as Image..."), this);
+    m_layerSaveAs->setActivationFlags(KisAction::ACTIVE_LAYER);
+    m_view->actionManager()->addAction("save_layer_as_image", m_layerSaveAs, actionCollection);
     connect(m_layerSaveAs, SIGNAL(triggered()), this, SLOT(saveLayerAsImage()));
 
     m_groupLayersSave = new KAction(koIcon("document-save"), i18n("Save Group Layers..."), this);
     actionCollection->addAction("save_groups_as_images", m_groupLayersSave);
     connect(m_groupLayersSave, SIGNAL(triggered()), this, SLOT(saveGroupLayers()));
 
-    m_imageResizeToLayer  = new KAction(i18n("Size Canvas to Size of Current Layer"), this);
-    actionCollection->addAction("resizeimagetolayer", m_imageResizeToLayer);
+    m_imageResizeToLayer  = new KisAction(i18n("Size Canvas to Size of Current Layer"), this);
+    m_imageResizeToLayer->setActivationFlags(KisAction::ACTIVE_LAYER);
+    m_view->actionManager()->addAction("resizeimagetolayer", m_imageResizeToLayer, actionCollection);
     connect(m_imageResizeToLayer, SIGNAL(triggered()), this, SLOT(imageResizeToActiveLayer()));
 
     m_addPaintLayer = new KAction(i18n("Add new paint layer"), this);
@@ -333,15 +336,11 @@ void KisLayerManager::updateGUI()
 
     bool enable = image && layer && layer->visible() && !layer->userLocked() && !layer->systemLocked();
 
-    m_layerSaveAs->setEnabled(enable);
-
     // XXX these should be named layer instead of image
     m_imageFlatten->setEnabled(nlayers > 1);
     m_imageMergeLayer->setEnabled(nlayers > 1 && layer && layer->prevSibling());
     m_flattenLayer->setEnabled(nlayers > 1 && layer && layer->firstChild());
     m_rasterizeLayer->setEnabled(enable && layer->inherits("KisShapeLayer"));
-
-    m_imageResizeToLayer->setEnabled(activeLayer());
 
     if (m_view->statusBar())
         m_view->statusBar()->setProfile(image);

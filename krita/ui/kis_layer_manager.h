@@ -37,7 +37,7 @@ class KisFilterStrategy;
 class KisView2;
 class KisFilterConfiguration;
 class KisNodeCommandsAdapter;
-
+class KisAction;
 
 /**
  * KisLayerManager takes care of the gui around working with layers:
@@ -134,10 +134,10 @@ private:
 
     KAction *m_imageFlatten;
     KAction *m_imageMergeLayer;
-    KAction *m_layerSaveAs;
+    KisAction *m_layerSaveAs;
     KAction *m_groupLayersSave;
     bool m_actLayerVis;
-    KAction *m_imageResizeToLayer;
+    KisAction *m_imageResizeToLayer;
     KAction *m_flattenLayer;
     KAction *m_rasterizeLayer;
     KAction *m_addPaintLayer;

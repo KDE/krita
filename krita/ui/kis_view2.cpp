@@ -799,7 +799,7 @@ void KisView2::createManagers()
     m_d->selectionManager->setup(actionCollection(), actionManager());
 
     m_d->nodeManager = new KisNodeManager(this, m_d->doc);
-    m_d->nodeManager->setup(actionCollection());
+    m_d->nodeManager->setup(actionCollection(), actionManager());
 
     // the following cast is not really safe, but better here than in the zoomManager
     // best place would be outside kisview too

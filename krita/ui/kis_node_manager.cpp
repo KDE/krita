@@ -46,6 +46,8 @@
 #include "kis_selection_manager.h"
 #include "kis_node_commands_adapter.h"
 #include "kis_mirror_visitor.h"
+#include "kis_action.h"
+#include "kis_action_manager.h"
 
 struct KisNodeManager::Private {
 
@@ -141,36 +143,44 @@ KisNodeManager::~KisNodeManager()
     delete m_d;
 }
 
-void KisNodeManager::setup(KActionCollection * actionCollection)
+void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManager* actionManager)
 {
     m_d->layerManager->setup(actionCollection);
     m_d->maskManager->setup(actionCollection);
 
-    KAction * action  = new KAction(koIcon("object-flip-horizontal"), i18n("Mirror Horizontally"), this);
-    actionCollection->addAction("mirrorX", action);
+    KisAction * action  = new KisAction(koIcon("object-flip-horizontal"), i18n("Mirror Horizontally"), this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
+    action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    actionManager->addAction("mirrorX", action, actionCollection);
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorNodeX()));
 
-    action  = new KAction(koIcon("object-flip-vertical"), i18n("Mirror Vertically"), this);
-    actionCollection->addAction("mirrorY", action);
+    action  = new KisAction(koIcon("object-flip-vertical"), i18n("Mirror Vertically"), this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
+    action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    actionManager->addAction("mirrorY", action, actionCollection);
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorNodeY()));
 
-    action = new KAction(i18n("Duplicate current layer"), this);
+    action = new KisAction(i18n("Duplicate current layer"), this);
+    action->setActivationFlags(KisAction::ACTIVE_LAYER);
     action->setShortcut(KShortcut(Qt::ControlModifier + Qt::Key_J));
-    actionCollection->addAction("duplicatelayer", action);
+    actionManager->addAction("duplicatelayer", action, actionCollection);
     connect(action, SIGNAL(triggered()), this, SLOT(duplicateActiveNode()));
 
-    action = new KAction(i18n("Delete current layer"), this);
-    actionCollection->addAction("deleteCurrentLayer", action);
+    action = new KisAction(i18n("Delete current layer"), this);
+    action->setActivationFlags(KisAction::ACTIVE_LAYER);
+    actionManager->addAction("deleteCurrentLayer", action, actionCollection);
     connect(action, SIGNAL(triggered()), this, SLOT(removeNode()));
 
-    action = new KAction(i18n("Activate next layer"), this);
+    action = new KisAction(i18n("Activate next layer"), this);
+    action->setActivationFlags(KisAction::ACTIVE_LAYER);
     action->setShortcut(KShortcut(Qt::Key_PageUp));
-    actionCollection->addAction("activateNextLayer", action);
+    actionManager->addAction("activateNextLayer", action, actionCollection);
     connect(action, SIGNAL(triggered()), this, SLOT(activateNextNode()));
 
-    action = new KAction(i18n("Activate previous layer"), this);
+    action = new KisAction(i18n("Activate previous layer"), this);
+    action->setActivationFlags(KisAction::ACTIVE_LAYER);
     action->setShortcut(KShortcut(Qt::Key_PageDown));
-    actionCollection->addAction("activatePreviousLayer", action);
+    actionManager->addAction("activatePreviousLayer", action, actionCollection);
     connect(action, SIGNAL(triggered()), this, SLOT(activatePreviousNode()));
 
 

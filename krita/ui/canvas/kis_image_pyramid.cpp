@@ -25,7 +25,7 @@
 #include "kis_painter.h"
 #include "kis_iterator_ng.h"
 #include "kis_datamanager.h"
-
+#include "kis_config_notifier.h"
 #include "kis_debug.h"
 #include "kis_config.h"
 
@@ -102,6 +102,8 @@ KisImagePyramid::KisImagePyramid(qint32 pyramidHeight)
         , m_displayFilter(0)
         , m_pyramidHeight(pyramidHeight)
 {
+    configChanged();
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(configChanged()));
 }
 
 KisImagePyramid::~KisImagePyramid()
@@ -181,9 +183,7 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
     quint8 *originalBytes = originalProjection->colorSpace()->allocPixelBuffer(numPixels);
     originalProjection->readBytes(originalBytes, rect);
 
-    KisConfig cfg;
-
-    if (m_displayFilter && cfg.useOcio()
+    if (m_displayFilter && m_useOcio
             && projectionCs->colorModelId() == RGBAColorModelID
             && ( projectionCs->colorDepthId() == Float16BitsColorDepthID
                  || projectionCs->colorDepthId() == Float32BitsColorDepthID)) {
@@ -411,4 +411,10 @@ QImage KisImagePyramid::convertToQImageFast(KisPaintDeviceSP paintDevice,
     paintDevice->dataManager()->readBytes(image.bits(), x, y, w, h);
 
     return image;
+}
+
+void KisImagePyramid::configChanged()
+{
+    KisConfig cfg;
+    m_useOcio = cfg.useOcio();
 }

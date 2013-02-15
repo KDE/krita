@@ -61,7 +61,7 @@ public:
     ActivationConditions activationConditions();
 
 private:
-    struct Private;
+    class Private;
     Private* const d;
 };
 

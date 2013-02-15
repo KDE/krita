@@ -42,7 +42,7 @@ public:
 private:
     void dumpActionFlags();
 
-    struct Private;
+    class Private;
     Private* const d;
 };
 

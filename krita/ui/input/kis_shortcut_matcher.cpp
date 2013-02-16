@@ -299,8 +299,10 @@ bool KisShortcutMatcher::tryEndRunningShortcut(Qt::MouseButton button, QMouseEve
     Q_ASSERT(!m_d->readyShortcut);
 
     if (m_d->runningShortcut->matchBegin(button)) {
-        m_d->runningShortcut->action()->end(event);
-        m_d->runningShortcut->action()->deactivate();
+        if (m_d->runningShortcut->action()) {
+            m_d->runningShortcut->action()->end(event);
+            m_d->runningShortcut->action()->deactivate();
+        }
         m_d->runningShortcut = 0;
     }
 

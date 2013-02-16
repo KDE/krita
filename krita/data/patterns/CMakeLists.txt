@@ -3,6 +3,7 @@
 install(FILES
 01_canvas.png
 02_rough-canvas.png
+02b_WoofTissue.png
 03_default-paper.png
 04_paper-C-grain.png
 05_paper-torchon.png
@@ -10,6 +11,7 @@ install(FILES
 07_big-grain.png
 08_bump-relief.png
 09_drawed_crosshatched.png
+09b_drawed-CrossedLines.png
 10_drawed_dotted.png
 11_drawed_furry.png
 12_drawed_vertical.png
@@ -19,6 +21,7 @@ install(FILES
 16_texture-woody.png
 17_texture-melt.png
 18_texture-bark.png
+18b_WaveFlex.png
 19_texture-crackle.png
 20_texture-vegetal.png
 21_texture-chainmail.png

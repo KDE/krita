@@ -20,14 +20,6 @@
 
 #include "shearimage.h"
 
-
-#include <math.h>
-
-#include <stdlib.h>
-
-#include <QSlider>
-#include <QPoint>
-
 #include <klocale.h>
 #include <kcomponentdata.h>
 #include <kmessagebox.h>
@@ -43,7 +35,8 @@
 #include <kis_view2.h>
 #include <kis_node_manager.h>
 #include <kis_image_manager.h>
-
+#include <kis_action.h>
+#include <kis_action_manager.h>
 
 #include "dlg_shearimage.h"
 
@@ -58,15 +51,17 @@ ShearImage::ShearImage(QObject *parent, const QVariantList &)
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/shearimage.rc"),
                    true);
 
+        m_view = (KisView2*) parent;
+
         KAction *action  = new KAction(i18n("&Shear Image..."), this);
         actionCollection()->addAction("shearimage", action);
         connect(action,  SIGNAL(triggered()), this, SLOT(slotShearImage()));
 
-        action  = new KAction(i18n("&Shear Layer..."), this);
-        actionCollection()->addAction("shearlayer", action);
+        KisAction *shearLayer = new KisAction(i18n("&Shear Layer..."), this);
+        shearLayer->setActivationFlags(KisAction::ACTIVE_LAYER);
+        shearLayer->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+        m_view->actionManager()->addAction("shearlayer", shearLayer, actionCollection());
         connect(action,  SIGNAL(triggered()), this, SLOT(slotShearLayer()));
-
-        m_view = (KisView2*) parent;
     }
 }
 

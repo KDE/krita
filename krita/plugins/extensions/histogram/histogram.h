@@ -28,7 +28,7 @@
 
 class KisView2;
 class KisImage;
-class KisPainter;
+
 class Histogram : public KParts::Plugin
 {
     Q_OBJECT
@@ -38,14 +38,9 @@ public:
 
 private slots:
     void slotActivated();
-    void slotLayersChanged();
 
 private:
-    KisImageWSP m_image;
     KisView2 * m_view;
-    KisPainter * m_painter;
-    QAction * m_action;
-
 };
 
 #endif // HISTOGRAM_H

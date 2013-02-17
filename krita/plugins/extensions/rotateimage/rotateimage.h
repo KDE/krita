@@ -26,7 +26,8 @@
 #include "kis_types.h"
 
 class KisView2;
-class KisPainter;
+class KisAction;
+
 class RotateImage : public KParts::Plugin
 {
     Q_OBJECT
@@ -43,16 +44,14 @@ private slots:
     void slotMirrorImageVertical();
     void slotMirrorImageHorizontal();
     void slotRotateLayer();
-    void slotNodeChanged(const KisNodeSP);
 
 private:
 
     KisView2 * m_view;
-    KisPainter * m_painter;
-    KAction* m_rotateLayerAction;
-    KAction* m_rotate90LayerAction;
-    KAction* m_rotate180LayerAction;
-    KAction* m_rotate270LayerAction;
+    KisAction* m_rotateLayerAction;
+    KisAction* m_rotate90LayerAction;
+    KisAction* m_rotate180LayerAction;
+    KisAction* m_rotate270LayerAction;
 
 };
 

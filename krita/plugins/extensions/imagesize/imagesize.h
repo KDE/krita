@@ -43,13 +43,11 @@ private slots:
     void slotCanvasSize();
     void slotLayerSize();
     void slotSelectionScale();
-    void slotNodeChanged(const KisNodeSP);
 
 private:
 
     KisView2 * m_view;
-    KisPainter * m_painter;
-    KAction* m_scaleLayerAction;
+    KisAction* m_scaleLayerAction;
     KisAction* m_scaleSelectionAction;
 };
 

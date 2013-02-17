@@ -20,14 +20,6 @@
 
 #include "rotateimage.h"
 
-
-#include <math.h>
-
-#include <stdlib.h>
-
-#include <QSlider>
-#include <QPoint>
-
 #include <klocale.h>
 #include <kcomponentdata.h>
 #include <kmessagebox.h>
@@ -47,6 +39,8 @@
 #include <kis_node_manager.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_group_layer.h>
+#include <kis_action.h>
+#include <kis_action_manager.h>
 
 #include "dlg_rotateimage.h"
 
@@ -87,20 +81,28 @@ RotateImage::RotateImage(QObject *parent, const QVariantList &)
         connect(action, SIGNAL(triggered()), this, SLOT(slotMirrorImageVertical()));
 
 
-        m_rotateLayerAction  = new KAction(i18n("&Rotate Layer..."), this);
-        actionCollection()->addAction("rotatelayer", m_rotateLayerAction);
+        m_rotateLayerAction  = new KisAction(i18n("&Rotate Layer..."), this);
+        m_rotateLayerAction->setActivationFlags(KisAction::ACTIVE_LAYER);
+        m_rotateLayerAction->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+        m_view->actionManager()->addAction("rotatelayer", m_rotateLayerAction, actionCollection());
         connect(m_rotateLayerAction, SIGNAL(triggered()), this, SLOT(slotRotateLayer()));
 
-        m_rotate90LayerAction  = new KAction(i18nc("rotate the layer 180 degrees", "Rotate Layer 180°"), this);
-        actionCollection()->addAction("rotateLayer180", m_rotate90LayerAction);
+        m_rotate90LayerAction  = new KisAction(i18nc("rotate the layer 180 degrees", "Rotate Layer 180°"), this);
+        m_rotate90LayerAction->setActivationFlags(KisAction::ACTIVE_LAYER);
+        m_rotate90LayerAction->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+        m_view->actionManager()->addAction("rotateLayer180", m_rotate90LayerAction, actionCollection());
         connect(m_rotate90LayerAction, SIGNAL(triggered()), m_view->nodeManager(), SLOT(rotate180()));
 
-        m_rotate180LayerAction  = new KAction(koIcon("object-rotate-right"), i18nc("rotate the layer 90 degrees to the right", "Rotate Layer 90° to the Right"), this);
-        actionCollection()->addAction("rotateLayerCW90", m_rotate180LayerAction);
+        m_rotate180LayerAction  = new KisAction(koIcon("object-rotate-right"), i18nc("rotate the layer 90 degrees to the right", "Rotate Layer 90° to the Right"), this);
+        m_rotate180LayerAction->setActivationFlags(KisAction::ACTIVE_LAYER);
+        m_rotate180LayerAction->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+        m_view->actionManager()->addAction("rotateLayerCW90", m_rotate180LayerAction, actionCollection());
         connect(m_rotate180LayerAction, SIGNAL(triggered()), m_view->nodeManager(), SLOT(rotateRight90()));
 
-        m_rotate270LayerAction  = new KAction(koIcon("object-rotate-left"), i18nc("rotate the layer 90 degrees to the left", "Rotate Layer 90° to the Left"), this);
-        actionCollection()->addAction("rotateLayerCCW90", m_rotate270LayerAction);
+        m_rotate270LayerAction  = new KisAction(koIcon("object-rotate-left"), i18nc("rotate the layer 90 degrees to the left", "Rotate Layer 90° to the Left"), this);
+        m_rotate270LayerAction->setActivationFlags(KisAction::ACTIVE_LAYER);
+        m_rotate270LayerAction->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+        m_view->actionManager()->addAction("rotateLayerCCW90", m_rotate270LayerAction, actionCollection());
         connect(m_rotate270LayerAction, SIGNAL(triggered()), m_view->nodeManager(), SLOT(rotateLeft90()));
 
         connect(m_view->resourceProvider(), SIGNAL(sigNodeChanged(const KisNodeSP)), SLOT(slotNodeChanged(KisNodeSP)));
@@ -177,15 +179,6 @@ void RotateImage::slotRotateLayer()
 
     }
     delete dlgRotateImage;
-}
-
-void RotateImage::slotNodeChanged(const KisNodeSP node)
-{
-    Q_UNUSED(node);
-    m_rotateLayerAction->setEnabled(m_view->activeLayer());
-    m_rotate90LayerAction->setEnabled(m_view->activeLayer());
-    m_rotate180LayerAction->setEnabled(m_view->activeLayer());
-    m_rotate270LayerAction->setEnabled(m_view->activeLayer());
 }
 
 #include "rotateimage.moc"

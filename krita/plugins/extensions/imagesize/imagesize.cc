@@ -73,6 +73,8 @@ ImageSize::ImageSize(QObject *parent, const QVariantList &)
     if (parent->inherits("KisView2")) {
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/imagesize.rc"), true);
 
+        m_view = (KisView2*) parent;
+        
         KAction *action  = new KAction(i18n("Scale To New Size..."), this);
         actionCollection()->addAction("imagesize", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotImageSize()));
@@ -81,11 +83,11 @@ ImageSize::ImageSize(QObject *parent, const QVariantList &)
         actionCollection()->addAction("canvassize", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotCanvasSize()));
 
-        m_scaleLayerAction = new KAction(i18n("Scale &Layer..."), this);
-        actionCollection()->addAction("layersize", m_scaleLayerAction);
+        m_scaleLayerAction = new KisAction(i18n("Scale &Layer..."), this);
+        m_scaleLayerAction->setActivationFlags(KisAction::ACTIVE_LAYER);
+        m_scaleLayerAction->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+        m_view->actionManager()->addAction("layersize", m_scaleLayerAction, actionCollection());
         connect(m_scaleLayerAction, SIGNAL(triggered()), this, SLOT(slotLayerSize()));
-
-        m_view = (KisView2*) parent;
 
         m_scaleSelectionAction  = new KisAction(i18n("&Scale..."), this);
         m_scaleSelectionAction->setActivationFlags(KisAction::PIXELS_SELECTED);
@@ -93,8 +95,6 @@ ImageSize::ImageSize(QObject *parent, const QVariantList &)
         m_view->actionManager()->addAction("selectionscale", m_scaleSelectionAction, actionCollection());
         Q_CHECK_PTR(m_scaleSelectionAction);
         connect(m_scaleSelectionAction, SIGNAL(triggered()), this, SLOT(slotSelectionScale()));
-
-        connect(m_view->resourceProvider(), SIGNAL(sigNodeChanged(const KisNodeSP)), SLOT(slotNodeChanged(KisNodeSP)));
     }
 }
 
@@ -224,13 +224,6 @@ void ImageSize::slotSelectionScale()
         pu->deleteLater();
     }
     delete dlgSize;
-}
-
-
-void ImageSize::slotNodeChanged(const KisNodeSP node)
-{
-    Q_UNUSED(node);
-    m_scaleLayerAction->setEnabled(m_view->activeLayer());
 }
 
 #include "imagesize.moc"

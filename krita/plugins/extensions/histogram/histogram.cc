@@ -20,14 +20,6 @@
 
 #include "histogram.h"
 
-
-#include <math.h>
-
-#include <stdlib.h>
-
-#include <QSlider>
-#include <QPoint>
-
 #include <klocale.h>
 #include <kcomponentdata.h>
 #include <kmessagebox.h>
@@ -49,6 +41,8 @@
 #include "KoColorSpace.h"
 #include "kis_histogram.h"
 #include "kis_node_manager.h"
+#include <kis_action.h>
+#include <kis_action_manager.h>
 
 K_PLUGIN_FACTORY(HistogramFactory, registerPlugin<Histogram>();)
 K_EXPORT_PLUGIN(HistogramFactory("krita"))
@@ -60,30 +54,17 @@ Histogram::Histogram(QObject *parent, const QVariantList &)
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/histogram.rc"),
                    true);
 
-        m_action  = new KAction(i18n("&Histogram..."), this);
-        actionCollection()->addAction("histogram", m_action);
-        connect(m_action,  SIGNAL(triggered()), this, SLOT(slotActivated()));
-
         m_view = (KisView2*) parent;
-        m_image = m_view->image();
 
-        if (m_image) {
-            connect(m_image, SIGNAL(sigLayersChangedAsync()), SLOT(slotLayersChanged()));
-            connect(m_image, SIGNAL(sigNodeAddedAsync(KisNodeSP)), SLOT(slotLayersChanged()));
-            connect(m_image, SIGNAL(sigRemoveNodeAsync(KisNodeSP)), SLOT(slotLayersChanged()));
-
-            connect(m_view->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(slotLayersChanged()));
-        }
+        KisAction* action  = new KisAction(i18n("&Histogram..."), this);
+        action->setActivationFlags(KisAction::ACTIVE_LAYER);
+        m_view->actionManager()->addAction("histogram", action, actionCollection());
+        connect(action,  SIGNAL(triggered()), this, SLOT(slotActivated()));
     }
 }
 
 Histogram::~Histogram()
 {
-}
-
-void Histogram::slotLayersChanged()
-{
-    m_action->setEnabled(m_image && m_view->nodeManager()->activeLayer());
 }
 
 void Histogram::slotActivated()

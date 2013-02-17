@@ -55,6 +55,8 @@
 #include <kis_paint_device.h>
 #include <widgets/kis_cmb_idlist.h>
 #include <widgets/squeezedcombobox.h>
+#include <kis_action.h>
+#include <kis_action_manager.h>
 #include <kis_group_layer.h>
 
 #include "dlg_colorspaceconversion.h"
@@ -74,9 +76,12 @@ ColorSpaceConversion::ColorSpaceConversion(QObject *parent, const QVariantList &
         KAction *action  = new KAction(i18n("&Convert Image Type..."), this);
         actionCollection()->addAction("imagecolorspaceconversion", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotImageColorSpaceConversion()));
-        action  = new KAction(i18n("&Convert Layer Type..."), this);
-        actionCollection()->addAction("layercolorspaceconversion", action);
-        connect(action, SIGNAL(triggered()), this, SLOT(slotLayerColorSpaceConversion()));
+
+        KisAction* convertLayer  = new KisAction(i18n("&Convert Layer Type..."), this);
+        convertLayer->setActivationFlags(KisAction::ACTIVE_LAYER);
+        convertLayer->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+        m_view->actionManager()->addAction("layercolorspaceconversion", convertLayer, actionCollection());
+        connect(convertLayer, SIGNAL(triggered()), this, SLOT(slotLayerColorSpaceConversion()));
     }
 }
 

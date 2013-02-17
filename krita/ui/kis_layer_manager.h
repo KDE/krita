@@ -139,7 +139,7 @@ private:
     bool m_actLayerVis;
     KisAction *m_imageResizeToLayer;
     KAction *m_flattenLayer;
-    KAction *m_rasterizeLayer;
+    KisAction *m_rasterizeLayer;
     KAction *m_addPaintLayer;
     KisLayerSP m_activeLayer;
     KisNodeCommandsAdapter* m_commandsAdapter;

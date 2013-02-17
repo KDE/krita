@@ -37,6 +37,8 @@
 #include "kis_node_manager.h"
 #include "kis_types.h"
 #include "kis_view2.h"
+#include "kis_action.h"
+#include "kis_action_manager.h"
 #include "kis_image.h"
 
 #include <kis_meta_data_store.h>
@@ -58,8 +60,10 @@ metadataeditorPlugin::metadataeditorPlugin(QObject *parent, const QVariantList &
 
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/metadataeditor.rc"), true);
 
-        KAction *action  = new KAction(i18n("&Edit metadata..."), this);
-        actionCollection()->addAction("EditLayerMetaData", action);
+        KisAction *action  = new KisAction(i18n("&Edit metadata..."), this);
+        action->setActivationFlags(KisAction::ACTIVE_LAYER);
+        action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+        m_view->actionManager()->addAction("EditLayerMetaData", action, actionCollection());
         connect(action, SIGNAL(triggered()), this, SLOT(slotEditLayerMetaData()));
         
         QStringList runtimeVersion = QString(qVersion()).split('.');

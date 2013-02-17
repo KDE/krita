@@ -292,8 +292,10 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     actionCollection->addAction("flatten_layer", m_flattenLayer);
     connect(m_flattenLayer, SIGNAL(triggered()), this, SLOT(flattenLayer()));
 
-    m_rasterizeLayer  = new KAction(i18n("Rasterize Layer"), this);
-    actionCollection->addAction("rasterize_layer", m_rasterizeLayer);
+    m_rasterizeLayer  = new KisAction(i18n("Rasterize Layer"), this);
+    m_rasterizeLayer->setActivationFlags(KisAction::ACTIVE_SHAPE_LAYER);
+    m_rasterizeLayer->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    m_view->actionManager()->addAction("rasterize_layer", m_rasterizeLayer, actionCollection);
     connect(m_rasterizeLayer, SIGNAL(triggered()), this, SLOT(rasterizeLayer()));
 
     m_layerSaveAs  = new KisAction(koIcon("document-save"), i18n("Save Layer as Image..."), this);
@@ -340,7 +342,6 @@ void KisLayerManager::updateGUI()
     m_imageFlatten->setEnabled(nlayers > 1);
     m_imageMergeLayer->setEnabled(nlayers > 1 && layer && layer->prevSibling());
     m_flattenLayer->setEnabled(nlayers > 1 && layer && layer->firstChild());
-    m_rasterizeLayer->setEnabled(enable && layer->inherits("KisShapeLayer"));
 
     if (m_view->statusBar())
         m_view->statusBar()->setProfile(image);

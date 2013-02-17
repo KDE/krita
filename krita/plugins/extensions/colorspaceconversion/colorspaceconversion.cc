@@ -19,18 +19,12 @@
  */
 
 #include "colorspaceconversion.h"
-#include <stdlib.h>
 
-#include <QRadioButton>
-#include <QCheckBox>
-#include <QLabel>
-#include <QComboBox>
 #include <QApplication>
 #include <QCursor>
 
 #include <klocale.h>
 #include <kcomponentdata.h>
-#include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
@@ -53,8 +47,6 @@
 
 #include <kis_view2.h>
 #include <kis_paint_device.h>
-#include <widgets/kis_cmb_idlist.h>
-#include <widgets/squeezedcombobox.h>
 #include <kis_action.h>
 #include <kis_action_manager.h>
 #include <kis_group_layer.h>

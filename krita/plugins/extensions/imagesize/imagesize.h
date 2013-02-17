@@ -28,7 +28,6 @@
 
 class KisAction;
 class KisView2;
-class KisPainter;
 
 class ImageSize : public KParts::Plugin
 {

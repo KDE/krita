@@ -24,10 +24,8 @@
 #include <QVariant>
 
 #include <kparts/plugin.h>
-#include "kis_types.h"
 
 class KisView2;
-class KisImage;
 
 class Histogram : public KParts::Plugin
 {

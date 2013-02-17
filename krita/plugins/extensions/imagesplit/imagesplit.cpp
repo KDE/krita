@@ -26,9 +26,7 @@
 #include <kstandarddirs.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <kstandardaction.h>
 #include <kactioncollection.h>
-#include <kis_config.h>
 #include <kis_types.h>
 #include <kis_view2.h>
 #include <kis_image.h>
@@ -44,7 +42,6 @@
 #include <QDir>
 
 #include <kis_paint_device.h>
-#include <kis_background.h>
 #include "dlg_imagesplit.h"
 
 K_PLUGIN_FACTORY(ImagesplitFactory, registerPlugin<Imagesplit>();)

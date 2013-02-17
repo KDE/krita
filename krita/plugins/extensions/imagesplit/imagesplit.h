@@ -27,7 +27,6 @@
 #include <kurl.h>
 
 class KisView2;
-class KisPainter;
 
 class Imagesplit : public KParts::Plugin
 {

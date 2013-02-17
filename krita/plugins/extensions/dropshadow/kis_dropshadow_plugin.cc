@@ -22,7 +22,6 @@
 
 #include <klocale.h>
 #include <kcomponentdata.h>
-#include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
@@ -31,10 +30,7 @@
 #include "kis_view2.h"
 #include "kis_types.h"
 #include "kis_image.h"
-#include "kis_paint_device.h"
 #include "kis_layer.h"
-#include "kis_statusbar.h"
-#include "widgets/kis_progress_widget.h"
 
 #include <KoColorSpace.h>
 #include <KoProgressUpdater.h>

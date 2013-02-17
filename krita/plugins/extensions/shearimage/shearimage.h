@@ -25,7 +25,7 @@
 #include <kparts/plugin.h>
 
 class KisView2;
-class KisPainter;
+
 class ShearImage : public KParts::Plugin
 {
     Q_OBJECT
@@ -41,8 +41,6 @@ private slots:
 private:
 
     KisView2 * m_view;
-    KisPainter * m_painter;
-
 };
 
 #endif // SHEARIMAGE_H

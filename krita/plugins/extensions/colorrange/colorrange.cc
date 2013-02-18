@@ -20,17 +20,8 @@
 
 #include "colorrange.h"
 
-
-#include <math.h>
-
-#include <stdlib.h>
-
-#include <QSlider>
-#include <QPoint>
-
 #include <klocale.h>
 #include <kcomponentdata.h>
-#include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>

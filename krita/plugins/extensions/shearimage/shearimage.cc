@@ -49,14 +49,14 @@ ShearImage::ShearImage(QObject *parent, const QVariantList &)
 
         m_view = (KisView2*) parent;
 
-        KAction *action  = new KAction(i18n("&Shear Image..."), this);
-        actionCollection()->addAction("shearimage", action);
+        KisAction *action  = new KisAction(i18n("&Shear Image..."), this);
+        m_view->actionManager()->addAction("shearimage", action, actionCollection());
         connect(action,  SIGNAL(triggered()), this, SLOT(slotShearImage()));
 
-        KisAction *shearLayer = new KisAction(i18n("&Shear Layer..."), this);
-        shearLayer->setActivationFlags(KisAction::ACTIVE_LAYER);
-        shearLayer->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
-        m_view->actionManager()->addAction("shearlayer", shearLayer, actionCollection());
+        action = new KisAction(i18n("&Shear Layer..."), this);
+        action->setActivationFlags(KisAction::ACTIVE_LAYER);
+        action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+        m_view->actionManager()->addAction("shearlayer", action, actionCollection());
         connect(action,  SIGNAL(triggered()), this, SLOT(slotShearLayer()));
     }
 }

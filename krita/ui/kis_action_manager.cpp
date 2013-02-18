@@ -106,7 +106,12 @@ void KisActionManager::updateGUI()
     }
 
     foreach(KisAction* action, d->actions) {
-        bool enable = action->activationFlags() & flags;
+        bool enable;
+        if (action->activationFlags() == KisAction::NONE) {
+            enable = true;
+        } else {
+            enable = action->activationFlags() & flags;
+        }
         enable = enable && (int)(action->activationConditions() & conditions) == (int)action->activationConditions();
         action->setEnabled(enable);
     }

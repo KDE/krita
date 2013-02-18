@@ -108,6 +108,7 @@ set(kritaui_LIB_SRCS
     kis_mirror_visitor.cpp
     kis_action.cpp
     kis_action_manager.cpp
+    kis_view_plugin.cpp
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp
     kisexiv2/kis_iptc_io.cpp

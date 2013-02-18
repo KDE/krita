@@ -22,13 +22,9 @@
 
 #include <QVariant>
 
-#include <kparts/plugin.h>
-#include "kis_types.h"
+#include <kis_view_plugin.h>
 
-class KisView2;
-class KisAction;
-
-class RotateImage : public KParts::Plugin
+class RotateImage : public KisViewPlugin
 {
     Q_OBJECT
 public:
@@ -44,15 +40,6 @@ private slots:
     void slotMirrorImageVertical();
     void slotMirrorImageHorizontal();
     void slotRotateLayer();
-
-private:
-
-    KisView2 * m_view;
-    KisAction* m_rotateLayerAction;
-    KisAction* m_rotate90LayerAction;
-    KisAction* m_rotate180LayerAction;
-    KisAction* m_rotate270LayerAction;
-
 };
 
 #endif // ROTATEIMAGE_H

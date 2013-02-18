@@ -22,11 +22,9 @@
 
 #include <QVariant>
 
-#include <kparts/plugin.h>
+#include <kis_view_plugin.h>
 
-class KisView2;
-
-class ShearImage : public KParts::Plugin
+class ShearImage : public KisViewPlugin
 {
     Q_OBJECT
 public:
@@ -37,10 +35,6 @@ private slots:
 
     void slotShearImage();
     void slotShearLayer();
-
-private:
-
-    KisView2 * m_view;
 };
 
 #endif // SHEARIMAGE_H

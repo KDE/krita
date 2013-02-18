@@ -38,7 +38,8 @@ public:
         SHAPES_SELECTED = 32,
         PIXEL_SELECTION_WITH_PIXELS = 64,
         PIXELS_IN_CLIPBOARD = 128,
-        SHAPES_IN_CLIPBOARD = 256
+        SHAPES_IN_CLIPBOARD = 256,
+        NEVER_ACTIVATE = 512
     };
     Q_DECLARE_FLAGS(ActivationFlags, ActivationFlag)
 

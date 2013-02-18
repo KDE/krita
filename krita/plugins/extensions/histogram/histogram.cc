@@ -21,11 +21,8 @@
 #include "histogram.h"
 
 #include <klocale.h>
-#include <kcomponentdata.h>
-#include <kstandarddirs.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <kactioncollection.h>
 
 #include <kis_layer.h>
 #include <kis_paint_device.h>
@@ -35,25 +32,17 @@
 #include "dlg_histogram.h"
 #include "kis_node_manager.h"
 #include <kis_action.h>
-#include <kis_action_manager.h>
 
 K_PLUGIN_FACTORY(HistogramFactory, registerPlugin<Histogram>();)
 K_EXPORT_PLUGIN(HistogramFactory("krita"))
 
 Histogram::Histogram(QObject *parent, const QVariantList &)
-        : KParts::Plugin(parent)
+        : KisViewPlugin(parent, "kritaplugins/histogram.rc")
 {
-    if (parent->inherits("KisView2")) {
-        setXMLFile(KStandardDirs::locate("data", "kritaplugins/histogram.rc"),
-                   true);
-
-        m_view = (KisView2*) parent;
-
-        KisAction* action  = new KisAction(i18n("&Histogram..."), this);
-        action->setActivationFlags(KisAction::ACTIVE_LAYER);
-        m_view->actionManager()->addAction("histogram", action, actionCollection());
-        connect(action,  SIGNAL(triggered()), this, SLOT(slotActivated()));
-    }
+    KisAction* action  = new KisAction(i18n("&Histogram..."), this);
+    action->setActivationFlags(KisAction::ACTIVE_LAYER);
+    addAction("histogram", action);
+    connect(action,  SIGNAL(triggered()), this, SLOT(slotActivated()));
 }
 
 Histogram::~Histogram()

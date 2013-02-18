@@ -23,11 +23,9 @@
 
 #include <QVariant>
 
-#include <kparts/plugin.h>
+#include <kis_view_plugin.h>
 
-class KisView2;
-
-class Histogram : public KParts::Plugin
+class Histogram : public KisViewPlugin
 {
     Q_OBJECT
 public:
@@ -36,9 +34,6 @@ public:
 
 private slots:
     void slotActivated();
-
-private:
-    KisView2 * m_view;
 };
 
 #endif // HISTOGRAM_H

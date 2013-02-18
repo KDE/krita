@@ -21,12 +21,8 @@
 #include "imagesize.h"
 
 #include <klocale.h>
-#include <kcomponentdata.h>
-#include <kstandarddirs.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <kstandardaction.h>
-#include <kactioncollection.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
@@ -50,45 +46,37 @@
 #include "kis_filter_strategy.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_action.h"
-#include "kis_action_manager.h"
 
 K_PLUGIN_FACTORY(ImageSizeFactory, registerPlugin<ImageSize>();)
 K_EXPORT_PLUGIN(ImageSizeFactory("krita"))
 
 ImageSize::ImageSize(QObject *parent, const QVariantList &)
-        : KParts::Plugin(parent)
+        : KisViewPlugin(parent, "kritaplugins/imagesize.rc")
 {
-    if (parent->inherits("KisView2")) {
-        setXMLFile(KStandardDirs::locate("data", "kritaplugins/imagesize.rc"), true);
+    KisAction *action  = new KisAction(i18n("Scale To New Size..."), this);
+    addAction("imagesize", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotImageSize()));
 
-        m_view = (KisView2*) parent;
-        
-        KAction *action  = new KAction(i18n("Scale To New Size..."), this);
-        actionCollection()->addAction("imagesize", action);
-        connect(action, SIGNAL(triggered()), this, SLOT(slotImageSize()));
+    action = new KisAction(i18n("Size Canvas..."), this);
+    addAction("canvassize", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotCanvasSize()));
 
-        action = new KAction(i18n("Size Canvas..."), this);
-        actionCollection()->addAction("canvassize", action);
-        connect(action, SIGNAL(triggered()), this, SLOT(slotCanvasSize()));
+    action = new KisAction(i18n("Scale &Layer..."), this);
+    action->setActivationFlags(KisAction::ACTIVE_LAYER);
+    action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    addAction("layersize", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotLayerSize()));
 
-        m_scaleLayerAction = new KisAction(i18n("Scale &Layer..."), this);
-        m_scaleLayerAction->setActivationFlags(KisAction::ACTIVE_LAYER);
-        m_scaleLayerAction->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
-        m_view->actionManager()->addAction("layersize", m_scaleLayerAction, actionCollection());
-        connect(m_scaleLayerAction, SIGNAL(triggered()), this, SLOT(slotLayerSize()));
-
-        m_scaleSelectionAction  = new KisAction(i18n("&Scale..."), this);
-        m_scaleSelectionAction->setActivationFlags(KisAction::PIXELS_SELECTED);
-        m_scaleSelectionAction->setActivationConditions(KisAction::SELECTION_EDITABLE);
-        m_view->actionManager()->addAction("selectionscale", m_scaleSelectionAction, actionCollection());
-        Q_CHECK_PTR(m_scaleSelectionAction);
-        connect(m_scaleSelectionAction, SIGNAL(triggered()), this, SLOT(slotSelectionScale()));
-    }
+    action  = new KisAction(i18n("&Scale..."), this);
+    action->setActivationFlags(KisAction::PIXELS_SELECTED);
+    action->setActivationConditions(KisAction::SELECTION_EDITABLE);
+    addAction("selectionscale", action);
+    Q_CHECK_PTR(action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotSelectionScale()));
 }
 
 ImageSize::~ImageSize()
 {
-    m_view = 0;
 }
 
 void ImageSize::slotImageSize()

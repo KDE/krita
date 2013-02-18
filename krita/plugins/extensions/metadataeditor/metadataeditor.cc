@@ -23,12 +23,9 @@
 #include <QUiLoader>
 #include <QVBoxLayout>
 
-#include <kactioncollection.h>
-#include <kcomponentdata.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
-#include <kstandarddirs.h>
 
 #include "kis_config.h"
 #include "kis_cursor.h"
@@ -38,7 +35,6 @@
 #include "kis_types.h"
 #include "kis_view2.h"
 #include "kis_action.h"
-#include "kis_action_manager.h"
 #include "kis_image.h"
 
 #include <kis_meta_data_store.h>
@@ -53,30 +49,24 @@ K_PLUGIN_FACTORY(metadataeditorPluginFactory, registerPlugin<metadataeditorPlugi
 K_EXPORT_PLUGIN(metadataeditorPluginFactory("krita"))
 
 metadataeditorPlugin::metadataeditorPlugin(QObject *parent, const QVariantList &)
-        : KParts::Plugin(parent)
+        : KisViewPlugin(parent, "kritaplugins/metadataeditor.rc")
 {
-    if (parent->inherits("KisView2")) {
-        m_view = (KisView2*) parent;
+    KisAction *action  = new KisAction(i18n("&Edit metadata..."), this);
+    action->setActivationFlags(KisAction::ACTIVE_LAYER);
+    action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    addAction("EditLayerMetaData", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotEditLayerMetaData()));
 
-        setXMLFile(KStandardDirs::locate("data", "kritaplugins/metadataeditor.rc"), true);
+    QStringList runtimeVersion = QString(qVersion()).split('.');
+    QStringList compileVersion = QString(QT_VERSION_STR).split('.');
 
-        KisAction *action  = new KisAction(i18n("&Edit metadata..."), this);
-        action->setActivationFlags(KisAction::ACTIVE_LAYER);
-        action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
-        m_view->actionManager()->addAction("EditLayerMetaData", action, actionCollection());
-        connect(action, SIGNAL(triggered()), this, SLOT(slotEditLayerMetaData()));
-        
-        QStringList runtimeVersion = QString(qVersion()).split('.');
-        QStringList compileVersion = QString(QT_VERSION_STR).split('.');
-        
-        action->setEnabled(runtimeVersion[1] == compileVersion[1]);
+    if (runtimeVersion[1] == compileVersion[1]) {
+        action->setActivationFlags(KisAction::NEVER_ACTIVATE);
     }
-
 }
 
 metadataeditorPlugin::~metadataeditorPlugin()
 {
-    m_view = 0;
 }
 
 void metadataeditorPlugin::slotEditLayerMetaData()

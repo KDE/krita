@@ -23,12 +23,9 @@
 
 #include <QVariant>
 
-#include <kparts/plugin.h>
+#include <kis_view_plugin.h>
 
-class KisAction;
-class KisView2;
-class KisPainter;
-class ColorRange : public KParts::Plugin
+class ColorRange : public KisViewPlugin
 {
     Q_OBJECT
 public:
@@ -38,12 +35,6 @@ public:
 private slots:
     void slotActivated();
     void selectOpaque();
-
-private:
-    KisView2 * m_view;
-    KisPainter * m_painter;
-    KisAction* m_selectRange;
-    KisAction* m_selectOpaque;
 };
 
 #endif // COLORRANGE_H

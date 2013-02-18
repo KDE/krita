@@ -21,16 +21,12 @@
 #include "modify_selection.h"
 
 #include <klocale.h>
-#include <kcomponentdata.h>
-#include <kstandarddirs.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <kactioncollection.h>
 
 #include "kis_view2.h"
 #include "kis_selection_manager.h"
 #include "kis_action.h"
-#include "kis_action_manager.h"
 
 #include "dlg_grow_selection.h"
 #include "dlg_shrink_selection.h"
@@ -41,57 +37,41 @@ K_PLUGIN_FACTORY(ModifySelectionFactory, registerPlugin<ModifySelection>();)
 K_EXPORT_PLUGIN(ModifySelectionFactory("krita"))
 
 ModifySelection::ModifySelection(QObject *parent, const QVariantList &)
-        : KParts::Plugin(parent)
+        : KisViewPlugin(parent, "kritaplugins/modify_selection.rc")
 {
-    if (parent->inherits("KisView2")) {
-        setXMLFile(KStandardDirs::locate("data", "kritaplugins/modify_selection.rc"),
-                   true);
+    KisAction* action  = new KisAction(i18n("Grow Selection..."), this);
+    action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
+    action->setActivationConditions(KisAction::SELECTION_EDITABLE);
+    addAction("growselection", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotGrowSelection()));
 
-        m_view = (KisView2*) parent;
+    action = new KisAction(i18n("Shrink Selection..."), this);
+    action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
+    action->setActivationConditions(KisAction::SELECTION_EDITABLE);
+    addAction("shrinkselection", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotShrinkSelection()));
 
-        // Selection manager takes ownership
-        m_growSelection  = new KisAction(i18n("Grow Selection..."), this);
-        m_growSelection->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
-        m_growSelection->setActivationConditions(KisAction::SELECTION_EDITABLE);
-        m_view->actionManager()->addAction("growselection", m_growSelection, actionCollection());
+    action  = new KisAction(i18n("Border Selection..."), this);
+    action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
+    action->setActivationConditions(KisAction::SELECTION_EDITABLE);
+    addAction("borderselection", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotBorderSelection()));
 
-        m_shrinkSelection = new KisAction(i18n("Shrink Selection..."), this);
-        m_shrinkSelection->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
-        m_shrinkSelection->setActivationConditions(KisAction::SELECTION_EDITABLE);
-        m_view->actionManager()->addAction("shrinkselection", m_shrinkSelection, actionCollection());
+    action  = new KisAction(i18n("Feather Selection..."), this);
+    action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
+    action->setActivationConditions(KisAction::SELECTION_EDITABLE);
+    addAction("featherselection", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotFeatherSelection()));
 
-        m_borderSelection  = new KisAction(i18n("Border Selection..."), this);
-        m_borderSelection->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
-        m_borderSelection->setActivationConditions(KisAction::SELECTION_EDITABLE);
-        m_view->actionManager()->addAction("borderselection", m_borderSelection, actionCollection());
-
-        m_featherSelection  = new KisAction(i18n("Feather Selection..."), this);
-        m_featherSelection->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
-        m_featherSelection->setActivationConditions(KisAction::SELECTION_EDITABLE);
-        m_view->actionManager()->addAction("featherselection", m_featherSelection, actionCollection());
-
-        m_smoothSelection = new KisAction(i18n("Smooth..."), this);
-        m_smoothSelection->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
-        m_smoothSelection->setActivationConditions(KisAction::SELECTION_EDITABLE);
-        m_view->actionManager()->addAction("smoothselection", m_smoothSelection, actionCollection());
-
-        Q_CHECK_PTR(m_growSelection);
-        Q_CHECK_PTR(m_shrinkSelection);
-        Q_CHECK_PTR(m_borderSelection);
-        Q_CHECK_PTR(m_featherSelection);
-        Q_CHECK_PTR(m_smoothSelection);
-
-        connect(m_growSelection, SIGNAL(triggered()), this, SLOT(slotGrowSelection()));
-        connect(m_shrinkSelection, SIGNAL(triggered()), this, SLOT(slotShrinkSelection()));
-        connect(m_borderSelection, SIGNAL(triggered()), this, SLOT(slotBorderSelection()));
-        connect(m_featherSelection, SIGNAL(triggered()), this, SLOT(slotFeatherSelection()));
-        connect(m_smoothSelection, SIGNAL(triggered()), this, SLOT(slotSmoothSelection()));
-    }
+    action = new KisAction(i18n("Smooth..."), this);
+    action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
+    action->setActivationConditions(KisAction::SELECTION_EDITABLE);
+    addAction("smoothselection", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotSmoothSelection()));
 }
 
 ModifySelection::~ModifySelection()
 {
-    m_view = 0;
 }
 
 void ModifySelection::slotGrowSelection()

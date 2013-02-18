@@ -22,14 +22,12 @@
 #include "imagesplit.h"
 
 #include <klocale.h>
-#include <kcomponentdata.h>
-#include <kstandarddirs.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <kactioncollection.h>
 #include <kis_types.h>
 #include <kis_view2.h>
 #include <kis_image.h>
+#include <kis_action.h>
 
 #include <kis_doc2.h>
 #include <KoDocument.h>
@@ -48,21 +46,15 @@ K_PLUGIN_FACTORY(ImagesplitFactory, registerPlugin<Imagesplit>();)
 K_EXPORT_PLUGIN(ImagesplitFactory("krita"))
 
 Imagesplit::Imagesplit(QObject *parent, const QVariantList &)
-        : KParts::Plugin(parent)
+        : KisViewPlugin(parent, "kritaplugins/imagesplit.rc")
 {
-    if (parent->inherits("KisView2")) {
-        setXMLFile(KStandardDirs::locate("data", "kritaplugins/imagesplit.rc"), true);
-        KAction *action  = new KAction(i18n("Image Split "), this);
-        actionCollection()->addAction("imagesplit", action);
-        connect(action, SIGNAL(triggered()), this, SLOT(slotImagesplit()));
-        m_view = (KisView2*) parent;
-
-    }
+    KisAction *action  = new KisAction(i18n("Image Split "), this);
+    addAction("imagesplit", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotImagesplit()));
 }
 
 Imagesplit::~Imagesplit()
 {
-    m_view = 0;
 }
 
 void Imagesplit::saveAsImage(QRect imgSize,QString mimeType,KUrl url)

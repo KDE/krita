@@ -31,7 +31,7 @@
 #include <kis_layer.h>
 #include <kis_statusbar.h>
 #include <kis_node_manager.h>
-
+#include <kis_action.h>
 
 #include "dlg_compose.h"
 
@@ -39,15 +39,11 @@ K_PLUGIN_FACTORY(KisLayerComposePluginFactory, registerPlugin<KisLayerComposePlu
 K_EXPORT_PLUGIN(KisLayerComposePluginFactory("krita"))
 
 KisLayerComposePlugin::KisLayerComposePlugin(QObject *parent, const QVariantList &)
-        : KParts::Plugin(parent)
+        : KisViewPlugin(parent, "kritaplugins/imageseparate.rc")
 {
-    if (parent->inherits("KisView2")) {
-        setXMLFile(KStandardDirs::locate("data", "kritaplugins/imageseparate.rc"), true);
-        m_view = (KisView2*) parent;
-        KAction *action  = new KAction(i18n("Compose Layer..."), this);
-        actionCollection()->addAction("layercompose", action);
-        connect(action, SIGNAL(triggered(bool)), SLOT(slotCompose()));
-    }
+    KisAction *action  = new KisAction(i18n("Compose Layer..."), this);
+    addAction("layercompose", action);
+    connect(action, SIGNAL(triggered(bool)), SLOT(slotCompose()));
 }
 
 KisLayerComposePlugin::~KisLayerComposePlugin()

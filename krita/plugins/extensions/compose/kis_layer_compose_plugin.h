@@ -20,11 +20,9 @@
 
 #include <QVariant>
 
-#include <kparts/plugin.h>
+#include <kis_view_plugin.h>
 
-class KisView2;
-
-class KisLayerComposePlugin : public KParts::Plugin
+class KisLayerComposePlugin : public KisViewPlugin
 {
     Q_OBJECT
 public:
@@ -34,10 +32,6 @@ public:
 private slots:
 
     void slotCompose();
-
-private:
-
-    KisView2 * m_view;
 };
 
 #endif

@@ -572,7 +572,7 @@ void KisNodeManager::rotate180()
 
 void KisNodeManager::rotateLeft90()
 {
-   rotate(M_PI / 2 - 2*M_PI); 
+   rotate(-M_PI / 2);
 }
 
 void KisNodeManager::rotateRight90()

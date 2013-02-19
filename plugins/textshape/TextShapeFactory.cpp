@@ -153,9 +153,7 @@ void TextShapeFactory::newDocumentResourceManager(KoDocumentResourceManager *man
         manager->setUndoStack(new KUndo2Stack(manager));
     }
     if (!manager->hasResource(KoText::StyleManager)) {
-        KoStyleManager *styleManager = new KoStyleManager(manager);
-        styleManager->createDefaultSet();
-        variant.setValue(styleManager);
+        variant.setValue(new KoStyleManager(manager));
         manager->setResource(KoText::StyleManager, variant);
     }
     if (!manager->imageCollection())

@@ -1024,10 +1024,10 @@ void KoTextEditor::insertTable(int rows, int columns)
             QTextTableCell cell = table->cellAt(row, col);
             QTextTableCellFormat format;
             KoTableCellStyle cellStyle;
-            cellStyle.setEdge(KoBorder::Top, KoBorder::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoBorder::Left, KoBorder::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoBorder::Bottom, KoBorder::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoBorder::Right, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoBorder::LeftBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoBorder::BottomBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoBorder::RightBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
             cellStyle.setPadding(5);
 
             cellStyle.applyStyle(format);
@@ -1221,7 +1221,7 @@ void KoTextEditor::adjustTableWidth(QTextTable *table, qreal dLeft, qreal dRight
 }
 
 void KoTextEditor::setTableBorderData(QTextTable *table, int row, int column,
-         KoBorder::Side cellSide, const KoBorder::BorderData &data)
+         KoBorder::BorderSide cellSide, const KoBorder::BorderData &data)
 {
     d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Change Border Formatting"));
     d->caret.beginEditBlock();

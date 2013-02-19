@@ -53,7 +53,22 @@ class KOODF_EXPORT KoBorder
 {
 public:
 
-    /// The type of border.  Note that some of the border types are legacies from the old Words format.
+    // Names of the border sides.
+    //
+    // The "rect" we refer to below is the rectangle around the object
+    // with the border. This could be a page, a cell, a paragraph, etc.
+    enum BorderSide {
+        TopBorder = 0, ///< References the border at the top of the rect
+        LeftBorder,    ///< References the border at the left side of the rect
+        BottomBorder,  ///< References the border at the bottom of the rect
+        RightBorder,   ///< References the border at the right side of the rect
+        TlbrBorder, ///< References the border from top left corner to bottom right corner of cell
+        BltrBorder  ///< References the border from bottom left corner to top right corner of cell
+    };
+
+    /// Names of the different types of borders.
+    //
+    // Note that some of the border types are legacies from the old Words format.
     enum BorderStyle {
         BorderNone, ///< no border. This value forces the computed value of 'border-width' to be '0'.
         BorderDotted,   ///< The border is a series of dots.
@@ -74,19 +89,6 @@ public:
         // words legacy
         BorderDashDot,
         BorderDashDotDot
-    };
-
-    // The "rect" we refer to below is the rectangle around the object
-    // with the border. This could be a page, a cell, a paragraph, etc.
-    //
-    // FIXME: Should be called Edge instead?  It's used in some places.
-    enum Side {
-        Top = 0, ///< References the border at the top of the rect
-        Left,    ///< References the border at the left side of the rect
-        Bottom,  ///< References the border at the bottom of the rect
-        Right,   ///< References the border at the right side of the rect
-        TopLeftToBottomRight, ///< References the border from top, left corner to bottom, right corner of cell
-        BottomLeftToTopRight  ///< References the border from bottom, left corner to top, right corner of cell
     };
 
     /// Holds data about one border line.
@@ -116,22 +118,22 @@ public:
     bool operator==(const KoBorder &other) const;
     bool operator!=(const KoBorder &other) const { return !operator==(other); }
 
-    void setBorderStyle(Side side, BorderStyle style);
-    BorderStyle borderStyle(Side side) const;
-    void setBorderColor(Side side, const QColor &color);
-    QColor borderColor(Side side) const;
-    void setBorderWidth(Side side, qreal width);
-    qreal borderWidth(Side side) const;
-    void setInnerBorderWidth(Side side, qreal width);
-    qreal innerBorderWidth(Side side) const;
-    void setBorderSpacing(Side side, qreal width);
-    qreal borderSpacing(Side side) const;
+    void setBorderStyle(BorderSide side, BorderStyle style);
+    BorderStyle borderStyle(BorderSide side) const;
+    void setBorderColor(BorderSide side, const QColor &color);
+    QColor borderColor(BorderSide side) const;
+    void setBorderWidth(BorderSide side, qreal width);
+    qreal borderWidth(BorderSide side) const;
+    void setInnerBorderWidth(BorderSide side, qreal width);
+    qreal innerBorderWidth(BorderSide side) const;
+    void setBorderSpacing(BorderSide side, qreal width);
+    qreal borderSpacing(BorderSide side) const;
 
-    BorderData borderData(Side side) const;
-    void setBorderData(Side side, const BorderData &data);
+    BorderData borderData(BorderSide side) const;
+    void setBorderData(BorderSide side, const BorderData &data);
 
     bool hasBorder() const;
-    bool hasBorder(Side side) const;
+    bool hasBorder(BorderSide side) const;
 
     /**
      * Load the style from the element

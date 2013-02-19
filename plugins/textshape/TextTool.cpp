@@ -910,23 +910,23 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
                 if (pointedAt.tableColumnDivider < pointedAt.table->columns()) {
                     m_textEditor.data()->setTableBorderData(pointedAt.table,
                         pointedAt.tableRowDivider, pointedAt.tableColumnDivider,
-                        KoBorder::Left, m_tablePenBorderData);
+                        KoBorder::LeftBorder, m_tablePenBorderData);
                 }
                 if (pointedAt.tableColumnDivider > 0) {
                     m_textEditor.data()->setTableBorderData(pointedAt.table,
                         pointedAt.tableRowDivider, pointedAt.tableColumnDivider - 1,
-                        KoBorder::Right, m_tablePenBorderData);
+                        KoBorder::RightBorder, m_tablePenBorderData);
                 }
             } else if (pointedAt.tableHit == KoPointedAt::RowDivider) {
                 if (pointedAt.tableRowDivider < pointedAt.table->rows()) {
                     m_textEditor.data()->setTableBorderData(pointedAt.table,
                         pointedAt.tableRowDivider, pointedAt.tableColumnDivider,
-                        KoBorder::Top, m_tablePenBorderData);
+                        KoBorder::TopBorder, m_tablePenBorderData);
                 }
                 if (pointedAt.tableRowDivider > 0) {
                     m_textEditor.data()->setTableBorderData(pointedAt.table,
                         pointedAt.tableRowDivider-1, pointedAt.tableColumnDivider,
-                        KoBorder::Bottom, m_tablePenBorderData);
+                        KoBorder::BottomBorder, m_tablePenBorderData);
                 }
             }
             m_textEditor.data()->endEditBlock();

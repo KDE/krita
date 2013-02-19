@@ -412,7 +412,7 @@ public slots:
      * @param column the column coordinate of the cell that is to be adjusted.
      * @param row the row coordinate of the cell that is to be adjusted.
      */
-    void setTableBorderData(QTextTable *table, int row, int column, KoBorder::Side cellSide,
+    void setTableBorderData(QTextTable *table, int row, int column, KoBorder::BorderSide cellSide,
                 const KoBorder::BorderData &data);
 
     /**

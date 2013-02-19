@@ -14,19 +14,19 @@ void TestTableCellStyle::testPen()
     KoBorder::BorderData data;
     data.outerPen = QPen(Qt::red, 5.0);
     data.innerPen = QPen(Qt::red, 7.0);
-    border.setBorderData(KoBorder::Top, data);
+    border.setBorderData(KoBorder::TopBorder, data);
 
     data.outerPen = QPen(Qt::red, 8.0);
     data.innerPen = QPen(Qt::red, 10.0);
-    border.setBorderData(KoBorder::Left, data);
+    border.setBorderData(KoBorder::LeftBorder, data);
 
     data.outerPen = QPen(Qt::red, 11.0);
     data.innerPen = QPen(Qt::red, 13.0);
-    border.setBorderData(KoBorder::Bottom, data);
+    border.setBorderData(KoBorder::BottomBorder, data);
 
     data.outerPen = QPen(Qt::red, 14.0);
     data.innerPen = QPen(Qt::red, 16.0);
-    border.setBorderData(KoBorder::Right, data);
+    border.setBorderData(KoBorder::RightBorder, data);
 
     format1.setProperty(KoTableCellStyle::Borders, QVariant::fromValue<KoBorder>(border));
 
@@ -35,14 +35,14 @@ void TestTableCellStyle::testPen()
     QTextTableCellFormat format2;
     style->applyStyle(format2);
     KoBorder border2 = format2.property(KoTableCellStyle::Borders).value<KoBorder>();
-    QCOMPARE(border2.borderData(KoBorder::Top).outerPen, QPen(Qt::red, 5.0));
-    QCOMPARE(border2.borderData(KoBorder::Top).innerPen, QPen(Qt::red, 7.0));
-    QCOMPARE(border2.borderData(KoBorder::Left).outerPen, QPen(Qt::red, 8.0));
-    QCOMPARE(border2.borderData(KoBorder::Left).innerPen, QPen(Qt::red, 10.0));
-    QCOMPARE(border2.borderData(KoBorder::Bottom).outerPen, QPen(Qt::red, 11.0));
-    QCOMPARE(border2.borderData(KoBorder::Bottom).innerPen, QPen(Qt::red, 13.0));
-    QCOMPARE(border2.borderData(KoBorder::Right).outerPen, QPen(Qt::red, 14.0));
-    QCOMPARE(border2.borderData(KoBorder::Right).innerPen, QPen(Qt::red, 16.0));
+    QCOMPARE(border2.borderData(KoBorder::TopBorder).outerPen, QPen(Qt::red, 5.0));
+    QCOMPARE(border2.borderData(KoBorder::TopBorder).innerPen, QPen(Qt::red, 7.0));
+    QCOMPARE(border2.borderData(KoBorder::LeftBorder).outerPen, QPen(Qt::red, 8.0));
+    QCOMPARE(border2.borderData(KoBorder::LeftBorder).innerPen, QPen(Qt::red, 10.0));
+    QCOMPARE(border2.borderData(KoBorder::BottomBorder).outerPen, QPen(Qt::red, 11.0));
+    QCOMPARE(border2.borderData(KoBorder::BottomBorder).innerPen, QPen(Qt::red, 13.0));
+    QCOMPARE(border2.borderData(KoBorder::RightBorder).outerPen, QPen(Qt::red, 14.0));
+    QCOMPARE(border2.borderData(KoBorder::RightBorder).innerPen, QPen(Qt::red, 16.0));
 }
 
 void TestTableCellStyle::testPadding()
@@ -74,10 +74,10 @@ void TestTableCellStyle::testSpacing()
     // Test basic functionality of the table cell style (roundtripping to format).
     QTextTableCellFormat format1;
     KoBorder border1;
-    border1.setBorderSpacing(KoBorder::Left, 9.0);
-    border1.setBorderSpacing(KoBorder::Right, 15.0);
-    border1.setBorderSpacing(KoBorder::Top, 6.0);
-    border1.setBorderSpacing(KoBorder::Bottom, 12.0);
+    border1.setBorderSpacing(KoBorder::LeftBorder, 9.0);
+    border1.setBorderSpacing(KoBorder::RightBorder, 15.0);
+    border1.setBorderSpacing(KoBorder::TopBorder, 6.0);
+    border1.setBorderSpacing(KoBorder::BottomBorder, 12.0);
     format1.setProperty(KoTableCellStyle::Borders, QVariant::fromValue<KoBorder>(border1));
 
     KoTableCellStyle *style = new KoTableCellStyle(format1);
@@ -86,10 +86,10 @@ void TestTableCellStyle::testSpacing()
     style->applyStyle(format2);
 
     KoBorder border2 = format2.property(KoTableCellStyle::Borders).value<KoBorder>();
-    QCOMPARE(border2.borderSpacing(KoBorder::Left), 9.0);
-    QCOMPARE(border2.borderSpacing(KoBorder::Right), 15.0);
-    QCOMPARE(border2.borderSpacing(KoBorder::Top), 6.0);
-    QCOMPARE(border2.borderSpacing(KoBorder::Bottom), 12.0);
+    QCOMPARE(border2.borderSpacing(KoBorder::LeftBorder), 9.0);
+    QCOMPARE(border2.borderSpacing(KoBorder::RightBorder), 15.0);
+    QCOMPARE(border2.borderSpacing(KoBorder::TopBorder), 6.0);
+    QCOMPARE(border2.borderSpacing(KoBorder::BottomBorder), 12.0);
 
     QRectF rect(0.0, 0.0, 100.0, 100.0);
     QCOMPARE(style->contentRect(rect), QRectF(9.0, 6.0, 76.0, 82.0));

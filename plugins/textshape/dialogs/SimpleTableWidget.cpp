@@ -83,7 +83,7 @@ void SimpleTableWidget::restartPainting()
 void SimpleTableWidget::emitTableBorderDataUpdated(int i)
 {
     m_lastStyleEmitted = i;
-    emit tableBorderDataUpdated(m_cellStyles[i-1]->getEdge(KoBorder::Top));
+    emit tableBorderDataUpdated(m_cellStyles[i-1]->getEdge(KoBorder::TopBorder));
 }
 
 void SimpleTableWidget::setStyleManager(KoStyleManager *sm)
@@ -107,54 +107,54 @@ void SimpleTableWidget::fillBorderButton(const QColor &color)
     qDeleteAll(m_cellStyles);
     m_cellStyles.append(KoTableCellStyle().clone());
     for (int i=8; i<9; i++) {
-        cellStyle.setEdge(KoBorder::Top, KoBorder::BorderDoubleWave, thickness[i], color);
+        cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderDoubleWave, thickness[i], color);
         m_cellStyles.append(cellStyle.clone());
     }
     for (int i=6; i<8; i++) {
-        cellStyle.setEdge(KoBorder::Top, KoBorder::BorderWave, thickness[i], color);
+        cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderWave, thickness[i], color);
         m_cellStyles.append(cellStyle.clone());
     }
     for (int i=4; i<9; i++) {
-        cellStyle.setEdge(KoBorder::Top, KoBorder::BorderDouble, thickness[i]*1.5, color);
-        cellStyle.setEdgeDoubleBorderValues(KoBorder::Top, thickness[i], thickness[i]/4);
+        cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderDouble, thickness[i]*1.5, color);
+        cellStyle.setEdgeDoubleBorderValues(KoBorder::TopBorder, thickness[i], thickness[i]/4);
         m_cellStyles.append(cellStyle.clone());
     }
     for (int i=6; i<7; i++) {
-        cellStyle.setEdge(KoBorder::Top, KoBorder::BorderSlash, thickness[i], color);
+        cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderSlash, thickness[i], color);
         m_cellStyles.append(cellStyle.clone());
     }
     m_cellStyles.append(0);
     for (int i=0; i<7; i++) {
-        cellStyle.setEdge(KoBorder::Top, KoBorder::BorderDouble, thickness[i]*3, color);
+        cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderDouble, thickness[i]*3, color);
         m_cellStyles.append(cellStyle.clone());
     }
     for (int i=0; i<9; i++) {
-        cellStyle.setEdge(KoBorder::Top, KoBorder::BorderDouble, thickness[i]*2, color);
-        cellStyle.setEdgeDoubleBorderValues(KoBorder::Top, thickness[i]/2, thickness[i]/2);
+        cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderDouble, thickness[i]*2, color);
+        cellStyle.setEdgeDoubleBorderValues(KoBorder::TopBorder, thickness[i]/2, thickness[i]/2);
         m_cellStyles.append(cellStyle.clone());
     }
     for (int i=0; i<9; i++) {
-        cellStyle.setEdge(KoBorder::Top, KoBorder::BorderSolid, thickness[i], color);
+        cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderSolid, thickness[i], color);
         m_cellStyles.append(cellStyle.clone());
     }
     for (int i=0; i<9; i++) {
-        cellStyle.setEdge(KoBorder::Top, KoBorder::BorderDotted, thickness[i], color);
+        cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderDotted, thickness[i], color);
         m_cellStyles.append(cellStyle.clone());
     }
     for (int i=0; i<9; i++) {
-        cellStyle.setEdge(KoBorder::Top, KoBorder::BorderDashed, thickness[i], color);
+        cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderDashed, thickness[i], color);
         m_cellStyles.append(cellStyle.clone());
     }
     for (int i=0; i<9; i++) {
-        cellStyle.setEdge(KoBorder::Top, KoBorder::BorderDashedLong, thickness[i], color);
+        cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderDashedLong, thickness[i], color);
         m_cellStyles.append(cellStyle.clone());
     }
     for (int i=0; i<9; i++) {
-        cellStyle.setEdge(KoBorder::Top, KoBorder::BorderDashDot, thickness[i], color);
+        cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderDashDot, thickness[i], color);
         m_cellStyles.append(cellStyle.clone());
     }
     for (int i=0; i<9; i++) {
-        cellStyle.setEdge(KoBorder::Top, KoBorder::BorderDashDotDot, thickness[i], color);
+        cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderDashDotDot, thickness[i], color);
         m_cellStyles.append(cellStyle.clone());
     }
 

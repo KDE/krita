@@ -1,7 +1,6 @@
 install( FILES
 Basic_Airbrush.kpp
 Basic_airbrush_noisy.kpp
-Basic_airbrush_noisy_soft.kpp
 Basic_erase.kpp
 Basic_erase_soft.kpp
 Basic_ink_05.kpp
@@ -27,6 +26,9 @@ Basic_smudge_hard_grain.kpp
 Basic_smudge_oil.kpp
 Basic_smudge_over.kpp
 Basic_smudge_soft.kpp
+Basic_tip_default.kpp
+Basic_tip_gaussian.kpp
+Basic_tip_soft.kpp
 Block_mix_tilt.kpp
 Block_paint.kpp
 Block_paint_dirty_square.kpp

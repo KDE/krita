@@ -21,8 +21,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOLINEBORDER_H
-#define KOLINEBORDER_H
+#ifndef KOSHAPESTROKE_H
+#define KOSHAPESTROKE_H
 
 #include "KoInsets.h"
 #include "KoShapeStrokeModel.h"
@@ -108,4 +108,4 @@ private:
 
 Q_DECLARE_METATYPE( KoShapeStroke )
 
-#endif
+#endif // KOSHAPESTROKE_H

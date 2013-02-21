@@ -395,8 +395,11 @@ QString KoReportItemChart::typeName() const
     return "chart";
 }
 
-int KoReportItemChart::render(OROPage* page, OROSection* section,  QPointF offset, KoReportData *data, KRScriptHandler *script)
+int KoReportItemChart::renderReportData(OROPage *page, OROSection *section, const QPointF &offset,
+                                        KoReportData *data, KRScriptHandler *script)
 {
+    Q_UNUSED(script);
+
     setConnection(data);
 
     QStringList masters = masterFields();

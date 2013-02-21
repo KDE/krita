@@ -27,7 +27,7 @@
 #include <QImage>
 #include <QPainter>
 #include <QtGlobal>
-#include <QtCore/qmath.h>
+#include <qmath.h>
 
 #include <kcursor.h>
 #include <kcomponentdata.h>

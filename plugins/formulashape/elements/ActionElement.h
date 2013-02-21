@@ -33,7 +33,7 @@
 class KOFORMULA_EXPORT ActionElement : public RowElement {
 public:
     /// The standard constructor
-    ActionElement( BasicElement* parent = 0 );
+    explicit ActionElement(BasicElement *parent = 0);
 
     /// @return The element's ElementType
     ElementType elementType() const;

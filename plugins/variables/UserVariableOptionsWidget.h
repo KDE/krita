@@ -32,7 +32,7 @@ class UserVariableOptionsWidget : public QWidget
 {
     Q_OBJECT
 public:
-    UserVariableOptionsWidget(UserVariable* userVariable, QWidget *parent = 0);
+    explicit UserVariableOptionsWidget(UserVariable *userVariable, QWidget *parent = 0);
     virtual ~UserVariableOptionsWidget();
 private Q_SLOTS:
     void nameChanged();

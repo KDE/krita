@@ -47,4 +47,4 @@ Name[zh_TW]=色彩過濾器（延伸）
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaextensioncolorsfilters
-X-Krita-Version=5
+X-Krita-Version=27

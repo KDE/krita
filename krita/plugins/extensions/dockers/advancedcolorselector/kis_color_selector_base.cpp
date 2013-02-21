@@ -128,7 +128,7 @@ KisColorSelectorBase::KisColorSelectorBase(QWidget *parent) :
     m_popup(0),
     m_parent(0),
     m_colorUpdateAllowed(true),
-    m_hideDistance(0),
+    m_hideDistance(250),
     m_hideTimer(new QTimer(this)),
     m_popupOnMouseOver(false),
     m_popupOnMouseClick(true),
@@ -223,7 +223,7 @@ void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
 
 void KisColorSelectorBase::mouseReleaseEvent(QMouseEvent *e) {
     Q_UNUSED(e);
-    hidePopup();
+    //hidePopup();
 }
 
 void KisColorSelectorBase::mouseMoveEvent(QMouseEvent* e)
@@ -278,7 +278,7 @@ void KisColorSelectorBase::mouseMoveEvent(QMouseEvent* e)
         }
 
         m_popup->move(x, y);
-        m_popup->setHidingDistanceAndTime(0, 250);
+        m_popup->setHidingDistanceAndTime(50, 500);
         showPopup(DontMove);
         e->accept();
         return;

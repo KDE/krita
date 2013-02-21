@@ -30,4 +30,4 @@ Name[zh_TW]=素描筆刷
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritasketchpaintop
-X-Krita-Version=5
+X-Krita-Version=27

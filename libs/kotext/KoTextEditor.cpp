@@ -34,7 +34,7 @@
 #include <KoTextPaste.h>
 #include <KoShapeController.h>
 #include <KoTextOdfSaveHelper.h>
-#include "KoTextAnchor.h"
+#include "KoShapeAnchor.h"
 #include "KoTextDocument.h"
 #include "KoTextDrag.h"
 #include "KoTextLocator.h"
@@ -44,7 +44,6 @@
 #include "KoInlineCite.h"
 #include "changetracker/KoChangeTracker.h"
 #include "changetracker/KoChangeTrackerElement.h"
-#include "changetracker/KoDeleteChangeMarker.h"
 #include "styles/KoCharacterStyle.h"
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoStyleManager.h"
@@ -90,11 +89,7 @@
 #include <kdebug.h>
 #include "KoTextDebug.h"
 
-#ifdef SHOULD_BUILD_RDF
-#include <rdf/KoDocumentRdf.h>
-#else
-#include "KoTextSopranoRdfModel_p.h"
-#endif
+#include <KoDocumentRdfBase.h>
 
 Q_DECLARE_METATYPE(QTextFrame*)
 
@@ -254,9 +249,15 @@ QTextCursor* KoTextEditor::cursor()
     return &(d->caret);
 }
 
-void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, QString title, QTextFormat& format, QTextFormat& prevFormat, bool applyToWholeBlock)
+const QTextCursor KoTextEditor::constCursor() const
 {
-    if (!KoTextDocument(d->document).changeTracker() || !KoTextDocument(d->document).changeTracker()->recordChanges()) {
+    return QTextCursor(d->caret);
+}
+
+void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, const QString &title, QTextFormat& format, QTextFormat& prevFormat, bool applyToWholeBlock)
+{
+    KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
+    if (!changeTracker || !changeTracker->recordChanges()) {
         // clear the ChangeTrackerId from the passed in selection, without recursively registring
         // change tracking again  ;)
         int start = qMin(selection.position(), selection.anchor());
@@ -307,7 +308,6 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
             int selectionEnd = qMax(checker.anchor(), checker.position());
 
             checker.setPosition(selectionBegin);
-            KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
             if (!checker.atBlockStart()) {
                 int changeId = checker.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
                 if (changeId && changeTracker->elementById(changeId)->getChangeType() == changeType)
@@ -328,18 +328,18 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
             checker.setPosition(selectionEnd);
             if (!checker.atEnd()) {
                 checker.movePosition(QTextCursor::NextCharacter);
-                idAfter = KoTextDocument(d->document).changeTracker()->mergeableId(changeType, title, checker.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
+                idAfter = changeTracker->mergeableId(changeType, title, checker.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
             }
             changeId = (idBefore)?idBefore:idAfter;
 
             switch (changeType) {//TODO: this whole thing actually needs to be done like a visitor. If the selection contains several change regions, the parenting needs to be individualised.
             case KoGenChange::InsertChange:
                 if (!changeId)
-                    changeId = KoTextDocument(d->document).changeTracker()->getInsertChangeId(title, 0);
+                    changeId = changeTracker->getInsertChangeId(title, 0);
                 break;
             case KoGenChange::FormatChange:
                 if (!changeId)
-                    changeId = KoTextDocument(d->document).changeTracker()->getFormatChangeId(title, format, prevFormat, 0);
+                    changeId = changeTracker->getFormatChangeId(title, format, prevFormat, 0);
                 break;
             case KoGenChange::DeleteChange:
                 //this should never be the case
@@ -560,7 +560,7 @@ void KoTextEditor::updateInlineObjectPosition(int start, int end)
 
 }
 
-void KoTextEditor::removeAnchors(const QList<KoTextAnchor*> &anchors, KUndo2Command *parent)
+void KoTextEditor::removeAnchors(const QList<KoShapeAnchor*> &anchors, KUndo2Command *parent)
 {
     Q_ASSERT(parent);
     addCommand(new DeleteAnchorsCommand(anchors, d->document, parent));
@@ -631,13 +631,13 @@ bool KoTextEditor::paste(KoTextEditor *editor,
     int to = editor->anchor();
     KoTextOdfSaveHelper saveHelper(editor->document(), from, to);
     KoTextDrag drag;
-
+#ifdef SHOULD_BUILD_RDF
     KoDocumentRdfBase *rdf = 0;
     if (shapeController->resourceManager()->hasResource(KoText::DocumentRdf)) {
         rdf = qobject_cast<KoDocumentRdfBase*>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<QObject*>());
         saveHelper.setRdfModel(rdf->model());
     }
-
+#endif
     drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
 
     beginEditBlock();
@@ -695,9 +695,9 @@ void KoTextEditor::deleteChar(bool previous, KUndo2Command *parent)
     KoShapeController *shapeController = KoTextDocument(d->document).shapeController();
 
     // Find out if we should track changes or not
-    KoChangeTracker *ct = KoTextDocument(d->document).changeTracker();
+    KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
     bool trackChanges = false;
-    if (ct && ct->recordChanges()) {
+    if (changeTracker && changeTracker->recordChanges()) {
         trackChanges = true;
     }
 
@@ -755,7 +755,7 @@ void KoTextEditor::toggleListNumbering(bool numberingEnabled)
 }
 
 void KoTextEditor::setListProperties(const KoListLevelProperties &llp,
-                                     ChangeListFlags flags)
+                                     ChangeListFlags flags, KUndo2Command *parent)
 {
     if (isEditProtected()) {
         return;
@@ -779,7 +779,7 @@ void KoTextEditor::setListProperties(const KoListLevelProperties &llp,
         }
     }
 
-    addCommand(new ChangeListCommand(d->caret, llp, flags));
+    addCommand(new ChangeListCommand(d->caret, llp, flags, parent));
     emit textFormatChanged();
 }
 
@@ -932,7 +932,7 @@ public:
     }
 
     // override super's implementation to not waste cpu cycles
-    virtual void visitBlock(QTextBlock , const QTextCursor &)
+    virtual void visitBlock(QTextBlock&, const QTextCursor &)
     {
     }
 
@@ -994,7 +994,7 @@ void KoTextEditor::insertTable(int rows, int columns)
         }
 
         if (!changeId) {
-            changeId = KoTextDocument(d->document).changeTracker()->getInsertChangeId(title, 0);
+            changeId = changeTracker->getInsertChangeId(title, 0);
         }
 
         tableFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
@@ -1024,10 +1024,10 @@ void KoTextEditor::insertTable(int rows, int columns)
             QTextTableCell cell = table->cellAt(row, col);
             QTextTableCellFormat format;
             KoTableCellStyle cellStyle;
-            cellStyle.setEdge(KoBorder::Top, KoBorder::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoBorder::Left, KoBorder::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoBorder::Bottom, KoBorder::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoBorder::Right, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoBorder::LeftBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoBorder::BottomBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoBorder::RightBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
             cellStyle.setPadding(5);
 
             cellStyle.applyStyle(format);
@@ -1221,7 +1221,7 @@ void KoTextEditor::adjustTableWidth(QTextTable *table, qreal dLeft, qreal dRight
 }
 
 void KoTextEditor::setTableBorderData(QTextTable *table, int row, int column,
-         KoBorder::Side cellSide, const KoBorder::BorderData &data)
+         KoBorder::BorderSide cellSide, const KoBorder::BorderData &data)
 {
     d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Change Border Formatting"));
     d->caret.beginEditBlock();
@@ -1229,26 +1229,7 @@ void KoTextEditor::setTableBorderData(QTextTable *table, int row, int column,
     QTextCharFormat fmt = cell.format();
     KoBorder border = fmt.property(KoTableCellStyle::Borders).value<KoBorder>();
 
-    switch (cellSide) {
-    case KoBorder::Top:
-        border.setTopBorderData(data);
-        break;
-    case KoBorder::Left:
-        border.setLeftBorderData(data);
-        break;
-    case KoBorder::Bottom:
-        border.setBottomBorderData(data);
-        break;
-    case KoBorder::Right:
-        border.setRightBorderData(data);
-        break;
-    case KoBorder::TopLeftToBottomRight:
-        border.setTlbrBorderData(data);
-        break;
-    case KoBorder::BottomLeftToTopRight:
-        border.setTrblBorderData(data);
-        break;
-    }
+    border.setBorderData(cellSide, data);
     fmt.setProperty(KoTableCellStyle::Borders, QVariant::fromValue<KoBorder>(border));
     cell.setFormat(fmt);
     d->caret.endEditBlock();
@@ -1319,7 +1300,7 @@ void KoTextEditor::insertTableOfContents(KoTableOfContentsGeneratorInfo *info)
         }
 
         if (!changeId) {
-            changeId = KoTextDocument(d->document).changeTracker()->getInsertChangeId(title, 0);
+            changeId = changeTracker->getInsertChangeId(title, 0);
         }
 
         tocFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
@@ -1340,7 +1321,7 @@ void KoTextEditor::insertTableOfContents(KoTableOfContentsGeneratorInfo *info)
     emit cursorPositionChanged();
 }
 
-void KoTextEditor::setTableOfContentsConfig(KoTableOfContentsGeneratorInfo *info, QTextBlock block)
+void KoTextEditor::setTableOfContentsConfig(KoTableOfContentsGeneratorInfo *info, const QTextBlock &block)
 {
     if (isEditProtected()) {
         return;
@@ -1379,6 +1360,9 @@ void KoTextEditor::insertBibliography(KoBibliographyInfo *info)
     bibFormat.setProperty( KoParagraphStyle::BibliographyData, QVariant::fromValue<KoBibliographyInfo*>(newBibInfo));
     bibFormat.setProperty( KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(bibDocument));
 
+    //make sure we set up the textrangemanager on the subdocument as well
+    KoTextDocument(bibDocument).setTextRangeManager(new KoTextRangeManager);
+
     KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
     if (changeTracker && changeTracker->recordChanges()) {
         QTextCharFormat charFormat = d->caret.charFormat();
@@ -1393,7 +1377,7 @@ void KoTextEditor::insertBibliography(KoBibliographyInfo *info)
         }
 
         if (!changeId) {
-            changeId = KoTextDocument(d->document).changeTracker()->getInsertChangeId(title, 0);
+            changeId = changeTracker->getInsertChangeId(title, 0);
         }
 
         bibFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
@@ -1609,7 +1593,7 @@ public:
     {
     }
 
-    virtual void visitBlock(QTextBlock block, const QTextCursor &caret)
+    virtual void visitBlock(QTextBlock &block, const QTextCursor &caret)
     {
         if (m_position >= qMax(block.position(), caret.selectionStart())
                     && m_position <= qMin(block.position() + block.length(), caret.selectionEnd())) {

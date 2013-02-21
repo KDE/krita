@@ -78,7 +78,7 @@ void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* la
     else if (layer->compositeOpId() == COMPOSITE_DODGE) compop = "color-dodge";
     else if (layer->compositeOpId() == COMPOSITE_BURN) compop = "svg:color-burn";
     else if (layer->compositeOpId() == COMPOSITE_HARD_LIGHT) compop = "svg:hard-light";
-    else if (layer->compositeOpId() == COMPOSITE_SOFT_LIGHT) compop = "svg:soft-light";
+    else if (layer->compositeOpId() == COMPOSITE_SOFT_LIGHT_SVG) compop = "svg:soft-light";
     else if (layer->compositeOpId() == COMPOSITE_DIFF) compop = "svg:difference";
     else if (layer->compositeOpId() == COMPOSITE_COLOR) compop = "svg:color";
     else if (layer->compositeOpId() == COMPOSITE_LUMINIZE) compop = "svg:luminosity";

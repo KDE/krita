@@ -49,6 +49,7 @@ class KoDocumentInfo;
 class KoDocumentRdf;
 class KoDocumentRdfBase;
 class KoProgressUpdater;
+class KoPageWidgetItem;
 class KoProgressProxy;
 
 class KoVersionInfo
@@ -85,8 +86,8 @@ public:
      *        The stack objects will become owned by the document. This is used by Krita's KisDoc2. The default value for this
      *        parameter is a usual Qt's stack.
      */
-    KoDocument(KoPart *parent,
-               KUndo2Stack *undoStack = new KUndo2Stack());
+    explicit KoDocument(KoPart *parent,
+                        KUndo2Stack *undoStack = new KUndo2Stack());
 
     /**
      *  Destructor.
@@ -428,13 +429,7 @@ public:
      * will be deleted, and if RDF support is compiled out, KoDocument does not take ownership.
      * Otherwise, KoDocument will own the rdf document.
      */
-    void setDocumentRdf(KoDocumentRdf *rdfDocument);
-
-    /**
-     * @return the Rdf metadata for this document.
-     * @see KoDocumentRdf
-     */
-    KoDocumentRdfBase *documentRdfBase() const;
+    void setDocumentRdf(KoDocumentRdfBase *rdfDocument);
 
     /**
      * @return the object to report progress to.
@@ -484,7 +479,6 @@ public:
     bool isLoading() const;
 
     int queryCloseDia();
-
 
     /**
      * Sets the backup path of the document

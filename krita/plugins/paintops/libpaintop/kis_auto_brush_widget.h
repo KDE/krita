@@ -72,7 +72,6 @@ protected:
 private:
     QImage m_brush;
     KisBrushSP m_autoBrush;
-    bool m_linkSize;
     bool m_linkFade;
 };
 

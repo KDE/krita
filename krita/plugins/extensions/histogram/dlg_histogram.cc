@@ -20,23 +20,11 @@
 
 #include "dlg_histogram.h"
 
-#include <QPushButton>
-#include <QCheckBox>
-#include <QSlider>
-#include <QComboBox>
-#include <QImage>
-#include <QLabel>
-
-#include <knuminput.h>
 #include <klocale.h>
 #include <kis_debug.h>
 
 #include "kis_types.h"
-#include "kis_histogram.h"
-#include "kis_layer.h"
 #include "kis_paint_device.h"
-
-
 #include "kis_histogram_widget.h"
 
 

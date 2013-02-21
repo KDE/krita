@@ -348,7 +348,7 @@ KisPaintingAssistantFactoryRegistry::KisPaintingAssistantFactoryRegistry()
 
 KisPaintingAssistantFactoryRegistry::~KisPaintingAssistantFactoryRegistry()
 {
-    foreach(QString id, keys()) {
+    foreach(const QString &id, keys()) {
         delete get(id);
     }
     dbgRegistry << "deleting KisPaintingAssistantFactoryRegistry ";

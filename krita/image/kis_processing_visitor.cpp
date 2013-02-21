@@ -30,23 +30,24 @@ KisProcessingVisitor::ProgressHelper::ProgressHelper(const KisNode *node)
     if(progressProxy) {
         m_progressUpdater = new KoProgressUpdater(progressProxy);
         m_progressUpdater->start();
-        m_updater = m_progressUpdater->startSubtask();
         m_progressUpdater->moveToThread(node->thread());
     }
     else {
         m_progressUpdater = 0;
-        m_updater = 0;
     }
 }
 
 KisProcessingVisitor::ProgressHelper::~ProgressHelper()
 {
-    m_progressUpdater->deleteLater();
+    if (m_progressUpdater) {
+        m_progressUpdater->deleteLater();
+    }
 }
 
 KoUpdater* KisProcessingVisitor::ProgressHelper::updater() const
 {
-    return m_updater;
+    QMutexLocker l(&m_progressMutex);
+    return m_progressUpdater ? m_progressUpdater->startSubtask() : 0;
 }
 
 

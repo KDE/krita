@@ -151,7 +151,7 @@ void KoTextEditor::Private::documentCommandAdded()
 }
 
 //This method is used to update the KoTextEditor state, which will condition how the QTextDocument::undoCommandAdded signal will get handled.
-void KoTextEditor::Private::updateState(KoTextEditor::Private::State newState, QString title)
+void KoTextEditor::Private::updateState(KoTextEditor::Private::State newState, const QString &title)
 {
     kDebug(32500) << "updateState from: " << editorState << " to: " << newState << " with: " << title;
     kDebug(32500) << "commandStack count: " << commandStack.count();
@@ -271,7 +271,7 @@ void KoTextEditor::instantlyExecuteCommand(KUndo2Command *command)
 /// ***
 /// The framework does not allow to push a complete KUndo2Command (through KoTextEditor::addCommand) from within an EditBlock. Doing so will lead in the best case to several undo/redo commands on the application's stack instead of one, in the worst case to an out of sync application's stack.
 /// ***
-KUndo2Command *KoTextEditor::beginEditBlock(QString title)
+KUndo2Command *KoTextEditor::beginEditBlock(const QString &title)
 {
     kDebug(32500) << "beginEditBlock";
     kDebug(32500) << "commandStack count: " << d->commandStack.count();

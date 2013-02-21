@@ -25,7 +25,7 @@
 #include <QPainter>
 #include <QTimer>
 #include <QPixmapCache>
-#include <QtCore/QBuffer>
+#include <QBuffer>
 
 // KDE
 #include <KDebug>

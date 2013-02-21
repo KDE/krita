@@ -66,9 +66,9 @@ public:
     };
 
     /// Constructor
-    KoSectionStyle(QObject *parent = 0);
+    explicit KoSectionStyle(QObject *parent = 0);
     /// Creates a KoSectionStyle with the given frame format and \a parent
-    KoSectionStyle(const QTextFrameFormat &frameFormat, QObject *parent = 0);
+    explicit KoSectionStyle(const QTextFrameFormat &frameFormat, QObject *parent = 0);
     /// Destructor
     ~KoSectionStyle();
 

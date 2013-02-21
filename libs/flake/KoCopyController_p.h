@@ -17,6 +17,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#ifndef KOCOPYCONTROLLER_P_H
+#define KOCOPYCONTROLLER_P_H
+
 #include "KoCopyController.h"
 
 class KoCanvasBase;
@@ -37,3 +40,5 @@ public:
     QAction *action;
     bool appHasSelection;
 };
+
+#endif

@@ -29,7 +29,7 @@ class QPainter;
 class KOWIDGETS_EXPORT KoCheckerBoardPainter
 {
 public:
-    KoCheckerBoardPainter( int checkerSize );
+    explicit KoCheckerBoardPainter( int checkerSize );
     void setCheckerColors( const QColor &lightColor, const QColor &darkColor );
     void setCheckerSize( int checkerSize );
     void paint( QPainter &painter, const QRectF &rect ) const;

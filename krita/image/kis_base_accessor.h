@@ -32,6 +32,14 @@ public:
      * @return a pointer to the pixel data as it was at the moment of the last memento creation.
      */
     virtual const quint8 * oldRawData() const = 0;
+
+    /**
+     * @return a pointer to the most actual pixel data,
+     * this points to te same data as rawData() method of
+     * a writable accessor
+     */
+    virtual const quint8 * rawDataConst() const = 0;
+
     /**
      * @return return number of consequential numbers of pixels, useful for optimization
      */

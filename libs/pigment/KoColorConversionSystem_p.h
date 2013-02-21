@@ -17,6 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#ifndef KOCOLORCONVERSIONSYSTEM_P_H
+#define KOCOLORCONVERSIONSYSTEM_P_H
+
 #include <QList>
 
 struct KoColorConversionSystem::Node {
@@ -286,3 +289,5 @@ struct PathQualityChecker {
 };
 
 #undef CHECK_ONE_AND_NOT_THE_OTHER
+
+#endif

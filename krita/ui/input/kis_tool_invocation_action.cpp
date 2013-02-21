@@ -64,7 +64,7 @@ void KisToolInvocationAction::begin(int shortcut, QEvent *event)
         }
 
         d->active = true;
-    } else {
+    } else if (shortcut == ConfirmShortcut) {
         QKeyEvent pressEvent(QEvent::KeyPress, Qt::Key_Return, 0);
         inputManager()->toolProxy()->keyPressEvent(&pressEvent);
         QKeyEvent releaseEvent(QEvent::KeyRelease, Qt::Key_Return, 0);
@@ -77,6 +77,13 @@ void KisToolInvocationAction::begin(int shortcut, QEvent *event)
          * key event and the method call
          */
         inputManager()->canvas()->image()->requestStrokeEnd();
+    } else if (shortcut == CancelShortcut) {
+        /**
+         * The tools now have a KisTool::requestStrokeCancellation() method,
+         * so just request it.
+         */
+
+        inputManager()->canvas()->image()->requestStrokeCancellation();
     }
 }
 

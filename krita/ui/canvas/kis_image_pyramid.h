@@ -111,6 +111,10 @@ private:
     QImage convertToQImageFast(KisPaintDeviceSP paintDevice,
                                const QRect& unscaledRect);
 
+private slots:
+
+    void configChanged();
+
 private:
 
     QVector<KisPaintDeviceSP> m_pyramid;
@@ -129,6 +133,8 @@ private:
      * Number of planes inside pyramid
      */
     qint32 m_pyramidHeight;
+
+    bool m_useOcio;
 
 };
 

@@ -22,14 +22,9 @@
 
 #include <QVariant>
 
-#include <kparts/plugin.h>
+#include <kis_view_plugin.h>
 
-#include "kis_types.h"
-
-class KisView2;
-class KisPainter;
-
-class ImageSize : public KParts::Plugin
+class ImageSize : public KisViewPlugin
 {
     Q_OBJECT
 public:
@@ -42,15 +37,6 @@ private slots:
     void slotCanvasSize();
     void slotLayerSize();
     void slotSelectionScale();
-    void slotNodeChanged(const KisNodeSP);
-    void slotSelectionChanged();
-
-private:
-
-    KisView2 * m_view;
-    KisPainter * m_painter;
-    KAction* m_scaleLayerAction;
-    KAction* m_scaleSelectionAction;
 };
 
 #endif // IMAGESIZE_H

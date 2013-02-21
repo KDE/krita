@@ -89,6 +89,11 @@ public:
     imageToDocument(const T& obj) const { return _Private::Traits<T>::map(imageToDocumentTransform(), obj); }
     template<class T> typename _Private::Traits<T>::Result
     documentToImage(const T& obj) const { return _Private::Traits<T>::map(imageToDocumentTransform().inverted(), obj); }
+
+    template<class T> typename _Private::Traits<T>::Result
+    documentToFlake(const T& obj) const { return _Private::Traits<T>::map(documentToFlakeTransform(), obj); }
+    template<class T> typename _Private::Traits<T>::Result
+    flakeToDocument(const T& obj) const { return _Private::Traits<T>::map(documentToFlakeTransform().inverted(), obj); }
     
     template<class T> typename _Private::Traits<T>::Result
     imageToWidget(const T& obj) const { return _Private::Traits<T>::map(imageToWidgetTransform(), obj); }
@@ -97,6 +102,7 @@ public:
 
     QTransform imageToWidgetTransform() const;
     QTransform imageToDocumentTransform() const;
+    QTransform documentToFlakeTransform() const;
     QTransform imageToViewportTransform() const;
     QTransform viewportToWidgetTransform() const;
     QTransform flakeToWidgetTransform() const;

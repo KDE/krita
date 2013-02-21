@@ -115,6 +115,13 @@ void Autocorrect::finishedParagraph(QTextDocument * /*document*/, int /*cursorPo
     // TODO
 }
 
+void Autocorrect::startingSimpleEdit(QTextDocument *document, int cursorPosition)
+{
+    Q_UNUSED(document);
+    Q_UNUSED(cursorPosition);
+}
+
+
 void Autocorrect::setUpperCaseExceptions(const QSet<QString> &exceptions) { m_upperCaseExceptions = exceptions; }
 void Autocorrect::setTwoUpperLetterExceptions(const QSet<QString> &exceptions) { m_twoUpperLetterExceptions = exceptions; }
 void Autocorrect::setAutocorrectEntries(const QHash<QString, QString> &entries) { m_autocorrectEntries = entries; }
@@ -555,72 +562,115 @@ void Autocorrect::advancedAutocorrect()
 QString Autocorrect::autoDetectURL(const QString &_word) const
 {
     QString word = _word;
-
     /* this method is ported from lib/kotext/KoAutoFormat.cpp KoAutoFormat::doAutoDetectUrl
      * from Calligra 1.x branch */
-    // kDebug() <<"link:" << word;
+    //kDebug() << "link:" << word;
 
-    char link_type = 0;
-    int pos = word.indexOf("http://");
-    int tmp_pos = word.indexOf("https://");
+    // we start by iterating through a list of schemes, and if no match is found,
+    // we proceed to 3 special cases
 
-    if (tmp_pos < pos && tmp_pos != -1)
-          pos = tmp_pos;
-    tmp_pos = word.indexOf("mailto:/");
-    if ((tmp_pos < pos || pos == -1) && tmp_pos != -1)
-          pos = tmp_pos;
-    tmp_pos = word.indexOf("ftp://");
-    if ((tmp_pos < pos || pos == -1) && tmp_pos != -1)
-          pos = tmp_pos;
-    tmp_pos = word.indexOf("ftp.");
-    if ((tmp_pos < pos || pos == -1) && tmp_pos != -1) {
-          pos = tmp_pos;
-          link_type = 3;
-    }
-    tmp_pos = word.indexOf("file:/");
-    if ((tmp_pos < pos || pos == -1) && tmp_pos != -1)
-          pos = tmp_pos;
-    tmp_pos = word.indexOf("news:");
-    if ((tmp_pos < pos || pos == -1) && tmp_pos != -1)
-          pos = tmp_pos;
-    tmp_pos = word.indexOf("www.");
-    if ((tmp_pos < pos || pos == -1) && tmp_pos != -1 && word.indexOf('.', tmp_pos+4) != -1 ) {
-          pos = tmp_pos;
-          link_type = 2;
-    }
-    tmp_pos = word.indexOf('@');
-    if (pos == -1 && tmp_pos != -1) {
-        pos = tmp_pos-1;
-        QChar c;
+    // list of the schemes, starting with http:// as most probable
+    const QStringList schemes = QStringList()
+        << "http://"
+        << "https://"
+        << "mailto:/"
+        << "ftp://"
+        << "file://"
+        << "git://"
+        << "sftp://"
+        << "magnet:?"
+        << "smb://"
+        << "nfs://"
+        << "fish://"
+        << "ssh://"
+        << "telnet://"
+        << "irc://"
+        << "sip:"
+        << "news:"
+        << "gopher://"
+        << "nntp://"
+        << "geo:"
+        << "udp://"
+        << "rsync://"
+        << "dns://";
 
-        while (pos >= 0) {
-            c = word.at(pos);
-            if (c.isPunct() && c != '.' && c != '_') break;
-            else --pos;
+
+    enum LinkType  { UNCLASSIFIED, SCHEME, MAILTO, WWW, FTP };
+    LinkType linkType = UNCLASSIFIED;
+    int pos = 0;
+    int contentPos = 0;
+
+    // TODO: ideally there would be proper pattern matching,
+    // instead of just searching for some key string, like done with indexOf.
+    // This should reduce the amount of possible mismatches
+    foreach (const QString &scheme, schemes) {
+        pos = word.indexOf(scheme);
+        if (pos != -1) {
+            linkType = SCHEME;
+            contentPos = pos + scheme.length();
+            break; //break as soon as you get a match
         }
-        if (pos == tmp_pos - 1) // not a valid address
-            pos = -1;
-        else
-            ++pos;
-        link_type = 1;
     }
 
-    if (pos != -1) {
-        // A URL inside e.g. quotes (like "http://www.calligra.org" with the quotes) shouldn't include the quote in the URL.
-	    while (!word.at(word.length()-1).isLetter() &&  !word.at(word.length()-1).isDigit() && word.at(word.length()-1) != '/')
-            word.truncate(word.length() - 1);
+
+    if (linkType == UNCLASSIFIED) {
+        pos = word.indexOf(QLatin1String("www."), 0, Qt::CaseInsensitive);
+        if (pos != -1 && word.indexOf('.', pos+4) != -1) {
+            linkType = WWW;
+            contentPos = pos + 4;
+        }
+    }
+    if (linkType == UNCLASSIFIED) {
+        pos = word.indexOf(QLatin1String("ftp."), 0, Qt::CaseInsensitive);
+        if (pos != -1 && word.indexOf('.', pos+4) != -1) {
+            linkType = FTP;
+            contentPos = pos + 4;
+        }
+    }
+    if (linkType == UNCLASSIFIED) {
+        const int separatorPos = word.lastIndexOf('@');
+        if (separatorPos != -1) {
+            pos = separatorPos - 1;
+            QChar c;
+            while (pos >= 0) {
+                c = word.at(pos);
+                if ((c.isPunct() && c != '.' && c != '_') || (c == '@')) {
+                    pos = -2;
+                    break;
+                } else {
+                    --pos;
+                }
+            }
+            if (pos == -1) {// a valid address
+                ++pos;
+                contentPos = separatorPos + 1;
+                linkType = MAILTO;
+            }
+        }
+    }
+
+    if (linkType != UNCLASSIFIED) {
+        // A URL inside e.g. quotes (like "http://www.calligra.org" with the quotes)
+        // shouldn't include the quote in the URL.
+        int lastPos = word.length()-1;
+        while (!word.at(lastPos).isLetter() &&  !word.at(lastPos).isDigit() && word.at(lastPos) != '/') {
+            --lastPos;
+        }
+        // sanity check: was there no real content behind the key string?
+        if (lastPos < contentPos) {
+            return QString();
+        }
+        word.truncate(lastPos+1);
         word.remove(0, pos);
-        QString newWord = word;
-
-        if (link_type == 1)
-            newWord = QString("mailto:") + word;
-        else if (link_type == 2)
-            newWord = QString("http://") + word;
-        else if (link_type == 3)
-            newWord = QString("ftp://") + word;
-
-        kDebug() <<"newWord:" << newWord;
-        return newWord;
+        if (linkType == MAILTO) {
+            word.prepend(QLatin1String("mailto:"));
+        } else if (linkType == WWW) {
+            word.prepend(QLatin1String("http//:"));
+        } else if (linkType == FTP) {
+            word.prepend(QLatin1String("ftp://"));
+        }
+        //kDebug() << "modified word:" << word;
+        return word;
     }
 
     return QString();

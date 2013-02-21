@@ -42,7 +42,7 @@ namespace KChart {
 class Surface
 {
 public:
-    Surface(PlotArea *parent);
+    explicit Surface(PlotArea *parent);
     ~Surface();
 
     /**

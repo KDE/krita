@@ -149,7 +149,7 @@ public:
     /*! Creates a database field as a child of \a tableSchema table.
      maxLength property is set to 0 (unlimited length).
      No other properties are set (even the name), so these should be set later. */
-    Field(TableSchema *tableSchema);
+    explicit Field(TableSchema *tableSchema);
 
     /*! Creates a database field.
      maxLength property is set to 0 (unlimited length).

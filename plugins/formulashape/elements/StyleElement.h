@@ -33,7 +33,7 @@
 class KOFORMULA_EXPORT StyleElement : public RowElement {
 public:
     /// The standart constructor
-    StyleElement( BasicElement* parent = 0 );
+    explicit StyleElement(BasicElement *parent = 0);
 
     /// @return The element's ElementType
     ElementType elementType() const;

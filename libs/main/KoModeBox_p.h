@@ -29,7 +29,6 @@
 #include <QMap>
 #include <QHash>
 #include <QDockWidget>
-#include <QToolBox>
 
 #include <KoToolManager.h>
 
@@ -51,7 +50,7 @@ class KoShapeLayer;
  *
  * @see KoToolManager
  */
-class KoModeBox : public QToolBox {
+class KoModeBox : public QWidget {
     Q_OBJECT
 public:
     /// constructor
@@ -107,10 +106,23 @@ private slots:
     /// slot for when a new item have been selected in the QToolBox
     void toolSelected(int index);
 
+    /// slot for context menu of the tabbar
+    void slotContextMenuRequested(const QPoint &pos);
+
+    /// switch icon mode
+    void switchIconMode(int);
+
 public:
     static QString applicationName;
 
 private:
+    enum IconMode {
+        IconAndText,
+        IconOnly
+    };
+
+    QIcon createRotatedIcon(const KoToolButton button);
+    QIcon createSimpleIcon(const KoToolButton button);
     void addItem(const KoToolButton button);
 
 private:

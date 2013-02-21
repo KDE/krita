@@ -143,15 +143,20 @@ KisHLineIterator2::~KisHLineIterator2()
 }
 
 
-quint8 * KisHLineIterator2::rawData()
+quint8* KisHLineIterator2::rawData()
 {
     return m_data;
 }
 
 
-const quint8 * KisHLineIterator2::oldRawData() const
+const quint8* KisHLineIterator2::oldRawData() const
 {
     return m_oldData;
+}
+
+const quint8* KisHLineIterator2::rawDataConst() const
+{
+    return m_data;
 }
 
 void KisHLineIterator2::switchToTile(qint32 xInTile)

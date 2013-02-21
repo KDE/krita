@@ -257,7 +257,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
 {
 
     // icc profile: if present, this overrides the profile product name loaded in loadXML.
-    QString location = external ? QString::null : uri;
+    QString location = external ? QString() : uri;
     location += m_d->imageName + ICC_PATH;
     if (store->hasFile(location)) {
         store->open(location);
@@ -285,7 +285,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
 
     // annotations
     // exif
-    location = external ? QString::null : uri;
+    location = external ? QString() : uri;
     location += m_d->imageName + EXIF_PATH;
     if (store->hasFile(location)) {
         QByteArray data;
@@ -324,7 +324,7 @@ void KisKraLoader::loadAssistants(KoStore *store, const QString &uri, bool exter
         const KisPaintingAssistantFactory* factory = KisPaintingAssistantFactoryRegistry::instance()->get(loadedAssistant.value());
         if (factory) {
             assistant = factory->createPaintingAssistant();
-            location = external ? QString::null : uri;
+            location = external ? QString() : uri;
             location += m_d->imageName + ASSISTANTS_PATH;
             file_path = location + loadedAssistant.key();
             assistant->loadXml(store, handleMap, file_path);

@@ -30,7 +30,7 @@ class Label : public QObject
 {
     Q_OBJECT
 public:
-    Label(KoReportItemLabel *);
+    explicit Label(KoReportItemLabel *);
 
     ~Label();
 

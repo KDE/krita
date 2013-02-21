@@ -23,7 +23,6 @@
 #include <KDebug>
 #include <kconfiggroup.h>
 
-#include "tools/KoCreatePathToolFactory.h"
 #include "tools/KoCreateShapesToolFactory.h"
 #include "tools/KoCreateShapesTool.h"
 #include "tools/KoPathToolFactory.h"
@@ -46,16 +45,15 @@ void KoToolRegistry::init()
     config.blacklist = "FlakePluginsDisabled";
     config.group = "calligra";
     KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Flake"),
-                                     QString::fromLatin1("[X-Flake-MinVersion] <= 4"),
+                                     QString::fromLatin1("[X-Flake-PluginVersion] == 27"),
                                      config);
     config.whiteList = "ToolPlugins";
     config.blacklist = "ToolPluginsDisabled";
     KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Tool"),
-                                     QString::fromLatin1("[X-Flake-MinVersion] <= 4"),
+                                     QString::fromLatin1("[X-Flake-PluginVersion] == 27"),
                                      config);
 
     // register generic tools
-    add(new KoCreatePathToolFactory());
     add(new KoCreateShapesToolFactory());
     add(new KoPathToolFactory());
     add(new KoZoomToolFactory());

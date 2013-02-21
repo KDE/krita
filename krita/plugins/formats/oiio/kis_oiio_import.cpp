@@ -60,15 +60,6 @@ KisOiioImport::~KisOiioImport()
 {
 }
 
-bool hasVisibleWidgets()
-{
-    QWidgetList wl = QApplication::allWidgets();
-    foreach(QWidget* w, wl) {
-        if (w->isVisible()) return true;
-    }
-    return false;
-}
-
 KoFilter::ConversionStatus KisOiioImport::convert(const QByteArray& from, const QByteArray& to)
 {
     dbgFile << "Oiio import! From:" << from << ", To:" << to << 0;

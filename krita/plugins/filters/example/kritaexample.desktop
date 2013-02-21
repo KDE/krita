@@ -91,4 +91,4 @@ Comment[zh_TW]=倒轉圖片的色彩
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaexample
-X-Krita-Version=5
+X-Krita-Version=27

@@ -24,7 +24,7 @@
 
 #include <QMap>
 #include <QObject>
-#include <QtDBus/QtDBus>
+#include <QtDBus>
 
 class QString;
 class QStringList;

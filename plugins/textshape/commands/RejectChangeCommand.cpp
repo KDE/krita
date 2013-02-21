@@ -101,14 +101,9 @@ void RejectChangeCommand::redo()
                 QPair<int, int> range = deleteRanges.pop();
                 cursor.setPosition(range.first);
                 cursor.setPosition(range.second, QTextCursor::KeepAnchor);
-                if (dynamic_cast<KoDeleteChangeMarker*>(m_layout->inlineTextObjectManager()->inlineTextObject(cursor))) {
-                    cursor.deleteChar();
-                }
-                else {
-                    QTextCharFormat format = cursor.charFormat();
-                    format.clearProperty(KoCharacterStyle::ChangeTrackerId);
-                    cursor.setCharFormat(format);
-                }
+		QTextCharFormat format = cursor.charFormat();
+		format.clearProperty(KoCharacterStyle::ChangeTrackerId);
+		cursor.setCharFormat(format);
             }
         }
         m_changeTracker->acceptRejectChange(m_changeId, true);

@@ -19,6 +19,7 @@
 #define KIS_BRUSH_SELECTION_WIDGET_H
 
 #include <QWidget>
+#include <KoGroupButton.h>
 #include "kis_brush.h"
 #include "kis_precision_option.h"
 #include "ui_wdgbrushchooser.h"
@@ -75,7 +76,7 @@ private slots:
 
 private:
     void setCurrentWidget(QWidget * widget);
-    void addChooser(const QString & text, QWidget * widget, int id);
+    void addChooser(const QString & text, QWidget * widget, int id, KoGroupButton::GroupPosition pos);
 
 private:
     enum Type {

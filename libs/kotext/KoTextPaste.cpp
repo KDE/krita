@@ -33,6 +33,7 @@
 #include <kdebug.h>
 #ifdef SHOULD_BUILD_RDF
 #include "KoTextRdfCore.h"
+#include <Soprano/Soprano>
 #endif
 
 class KoTextPaste::Private

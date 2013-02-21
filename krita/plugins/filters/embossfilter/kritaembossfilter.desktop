@@ -82,4 +82,4 @@ Comment[zh_TW]=浮雕過濾器
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaembossfilter
-X-Krita-Version=5
+X-Krita-Version=27

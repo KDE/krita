@@ -21,6 +21,7 @@
 #define KOCANVASOBSERVERBASE_H
 
 class KoCanvasBase;
+class KoCanvasObserverBasePrivate;
 
 #include "flake_export.h"
 
@@ -36,6 +37,23 @@ public:
     KoCanvasObserverBase();
     virtual ~KoCanvasObserverBase();
 
+    /**
+     * set observed canvas
+     * @param canvas canvas to observe
+     */
+    void setObservedCanvas(KoCanvasBase *canvas);
+
+    /**
+     * notify the observer that canvas is gone
+     */
+    void unsetObservedCanvas();
+
+    /**
+     * the currently observed canvas
+     * @return observed canvas, can be 0
+     */
+    KoCanvasBase* observedCanvas();
+protected:
     /**
      * re-implement this method in your canvas observer. It will be called
      * whenever a canvas becomes active. Note that you are responsible for
@@ -54,6 +72,8 @@ public:
      */
     virtual void unsetCanvas() = 0;
 
+private:
+    KoCanvasObserverBasePrivate * const d;
 };
 
 #endif // KOCANVASOBSERVERBASE_H

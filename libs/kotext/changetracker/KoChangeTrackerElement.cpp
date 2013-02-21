@@ -37,7 +37,6 @@ public:
     QString extraMetaData;
     //These two elements are valid for delete changes. Need to move it to a sub-class
     QTextDocumentFragment deleteFragment;
-    KoDeleteChangeMarker *marker;
 
     bool enabled;
     bool acceptedRejected;
@@ -51,7 +50,6 @@ KoChangeTrackerElement::KoChangeTrackerElement(const QString& title, KoGenChange
     d->type = type;
     d->acceptedRejected = false;
     d->valid = true;
-    d->marker = NULL;
 }
 
 KoChangeTrackerElement::KoChangeTrackerElement()
@@ -209,14 +207,3 @@ QTextDocumentFragment KoChangeTrackerElement::getDeleteData() const
 {
     return d->deleteFragment;
 }
-
-void KoChangeTrackerElement::setDeleteChangeMarker(KoDeleteChangeMarker *marker)
-{
-    d->marker = marker;
-}
-
-KoDeleteChangeMarker *KoChangeTrackerElement::getDeleteChangeMarker()
-{
-    return d->marker;
-}
-

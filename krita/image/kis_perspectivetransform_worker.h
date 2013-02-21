@@ -25,10 +25,10 @@
 #include "krita_export.h"
 
 #include <QRect>
+#include <QRegion>
 #include <QTransform>
-
 #include <KoUpdater.h>
-typedef QPointer<KoUpdater> KoUpdaterPtr;
+
 
 class KRITAIMAGE_EXPORT KisPerspectiveTransformWorker : public QObject
 {
@@ -36,23 +36,19 @@ class KRITAIMAGE_EXPORT KisPerspectiveTransformWorker : public QObject
     Q_OBJECT
 
 public:
-    KisPerspectiveTransformWorker(KisPaintDeviceSP dev, KisSelectionSP selection, const QPointF& topLeft, const QPointF& topRight, const QPointF& bottomLeft, const QPointF& bottomRight, KoUpdaterPtr progress);
-    KisPerspectiveTransformWorker(KisPaintDeviceSP dev, QRect r, QPointF center, double aX, double aY, double distance, KoUpdaterPtr progress);
+    //KisPerspectiveTransformWorker(KisPaintDeviceSP dev, KisSelectionSP selection, const QPointF& topLeft, const QPointF& topRight, const QPointF& bottomLeft, const QPointF& bottomRight, KoUpdaterPtr progress);
+    KisPerspectiveTransformWorker(KisPaintDeviceSP dev, QPointF center, double aX, double aY, double distance, KoUpdaterPtr progress);
 
     ~KisPerspectiveTransformWorker();
 
     void run();
 private:
-    qint32 m_progressTotalSteps;
-    qint32 m_lastProgressReport;
-    qint32 m_progressStep;
-    double m_xcenter, m_ycenter, m_p, m_q;
-    QTransform m_transform;
     KisPaintDeviceSP m_dev;
-    KoUpdaterPtr m_progress;
-    KisSelectionSP m_selection;
-    double m_matrix[3][3];
-    QRect m_r;
+    KoUpdaterPtr m_progressUpdater;
+    QRegion m_dstRegion;
+    QRectF m_srcRect;
+    QTransform m_newTransform;
+    bool m_isIdentity;
 };
 
 #endif

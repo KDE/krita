@@ -47,7 +47,7 @@ public:
         BOTTOM_RIGHT_HANDLE = BOTTOM_HANDLE|RIGHT_HANDLE
     };
 
-    SelectionRect(const QRectF& rect=QRectF(), qreal handleSize=10.0);
+    explicit SelectionRect(const QRectF &rect = QRectF(), qreal handleSize = 10.0);
 
     void setRect(const QRectF &rect);
     void setHandleSize(qreal size);

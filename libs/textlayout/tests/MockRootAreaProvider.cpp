@@ -44,6 +44,10 @@ void MockRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isN
     Q_UNUSED(isNewRootArea);
 }
 
+void MockRootAreaProvider::updateAll()
+{
+}
+
 void MockRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
 {
     Q_UNUSED(afterThis);

@@ -28,7 +28,7 @@ class SpaceNavigatorDevice : public KoInputDeviceHandler
 {
     Q_OBJECT
 public:
-    SpaceNavigatorDevice( QObject * parent );
+    explicit SpaceNavigatorDevice(QObject *parent);
     virtual ~SpaceNavigatorDevice();
 
     /// reimplemented from KoInputDeviceHandler

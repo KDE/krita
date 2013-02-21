@@ -62,6 +62,8 @@ KoDocumentInfo::~KoDocumentInfo()
 
 bool KoDocumentInfo::load(const KoXmlDocument &doc)
 {
+    m_authorInfo.clear();
+
     if (!loadAboutInfo(doc.documentElement()))
         return false;
 
@@ -73,6 +75,8 @@ bool KoDocumentInfo::load(const KoXmlDocument &doc)
 
 bool KoDocumentInfo::loadOasis(const KoXmlDocument &metaDoc)
 {
+    m_authorInfo.clear();
+
     KoXmlNode t = KoXml::namedItemNS(metaDoc, KoXmlNS::office, "document-meta");
     KoXmlNode office = KoXml::namedItemNS(t, KoXmlNS::office, "meta");
 
@@ -90,7 +94,7 @@ bool KoDocumentInfo::loadOasis(const KoXmlDocument &metaDoc)
 
 QDomDocument KoDocumentInfo::save()
 {
-    saveParameters();
+    updateParametersAndBumpNumCycles();
 
     QDomDocument doc = KoDocument::createDomDocument("document-info"
                        /*DTD name*/, "document-info" /*tag name*/, "1.1");
@@ -112,7 +116,7 @@ QDomDocument KoDocumentInfo::save()
 
 bool KoDocumentInfo::saveOasis(KoStore *store)
 {
-    saveParameters();
+    updateParametersAndBumpNumCycles();
 
     KoStoreDevice dev(store);
     KoXmlWriter* xmlWriter = KoOdfWriteStore::createOasisXmlWriter(&dev,
@@ -156,6 +160,7 @@ void KoDocumentInfo::setActiveAuthorInfo(const QString &info, const QString &dat
     } else {
         m_authorInfo.insert(info, data);
     }
+    emit infoUpdated(info, data);
 }
 
 QString KoDocumentInfo::authorInfo(const QString &info) const
@@ -304,23 +309,23 @@ bool KoDocumentInfo::loadOasisAboutInfo(const KoXmlNode &metaDoc)
                 keywords << e.text().trimmed();
         } else if (tag == "description") {
             //this is the odf way but add meta:comment if is already loaded
-            KoXmlElement e  = KoXml::namedItemNS(metaDoc, KoXmlNS::dc, tag.toLatin1().constData());
+            KoXmlElement e  = KoXml::namedItemNS(metaDoc, KoXmlNS::dc, tag);
             if (!e.isNull() && !e.text().isEmpty())
                 setAboutInfo("description", aboutInfo("description") + e.text().trimmed());
         } else if (tag == "comments") {
             //this was the old way so add it to dc:description
-            KoXmlElement e  = KoXml::namedItemNS(metaDoc, KoXmlNS::meta, tag.toLatin1().constData());
+            KoXmlElement e  = KoXml::namedItemNS(metaDoc, KoXmlNS::meta, tag);
             if (!e.isNull() && !e.text().isEmpty())
                 setAboutInfo("description", aboutInfo("description") + e.text().trimmed());
         } else if (tag == "title"|| tag == "subject"
                    || tag == "date" || tag == "language") {
-            KoXmlElement e  = KoXml::namedItemNS(metaDoc, KoXmlNS::dc, tag.toLatin1().constData());
+            KoXmlElement e  = KoXml::namedItemNS(metaDoc, KoXmlNS::dc, tag);
             if (!e.isNull() && !e.text().isEmpty())
                 setAboutInfo(tag, e.text().trimmed());
         } else if (tag == "generator") {
             setOriginalGenerator(e.text().trimmed());
         } else {
-            KoXmlElement e  = KoXml::namedItemNS(metaDoc, KoXmlNS::meta, tag.toLatin1().constData());
+            KoXmlElement e  = KoXml::namedItemNS(metaDoc, KoXmlNS::meta, tag);
             if (!e.isNull() && !e.text().isEmpty())
                 setAboutInfo(tag, e.text().trimmed());
         }
@@ -371,7 +376,7 @@ QDomElement KoDocumentInfo::saveAboutInfo(QDomDocument &doc)
     return e;
 }
 
-void KoDocumentInfo::saveParameters()
+void KoDocumentInfo::updateParametersAndBumpNumCycles()
 {
     KoDocument *doc = dynamic_cast< KoDocument *>(parent());
     if (doc && doc->isAutosaving()) {
@@ -379,8 +384,17 @@ void KoDocumentInfo::saveParameters()
     }
 
     setAboutInfo("editing-cycles", QString::number(aboutInfo("editing-cycles").toInt() + 1));
-
     setAboutInfo("date", QDateTime::currentDateTime().toString(Qt::ISODate));
+
+    updateParameters();
+}
+
+void KoDocumentInfo::updateParameters()
+{
+    KoDocument *doc = dynamic_cast< KoDocument *>(parent());
+    if (doc && (!doc->isModified() && !doc->isEmpty())) {
+        return;
+    }
 
     KConfig *config = KoGlobal::calligraConfig();
     config->reparseConfiguration();

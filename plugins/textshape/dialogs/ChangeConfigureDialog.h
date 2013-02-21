@@ -26,7 +26,7 @@
 class ColorDisplayLabel:public QLabel
 {
     public:
-        ColorDisplayLabel(QWidget *parent = NULL);
+        explicit ColorDisplayLabel(QWidget *parent = 0);
         ~ColorDisplayLabel();
         void paintEvent(QPaintEvent *event);
         const QColor& color() const;

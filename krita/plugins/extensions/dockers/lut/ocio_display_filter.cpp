@@ -255,7 +255,7 @@ void OcioDisplayFilter::updateProcessor()
     shaderDesc.setLut3DEdgeLen(LUT3D_EDGE_SIZE);
 
     // Step 2: Compute the 3D LUT
-    QString lut3dCacheID = QString::fromAscii(m_processor->getGpuLut3DCacheID(shaderDesc));
+    QString lut3dCacheID = QString::fromLatin1(m_processor->getGpuLut3DCacheID(shaderDesc));
     if(lut3dCacheID != m_lut3dcacheid)
     {
         //qDebug() << "Computing 3DLut " << m_lut3dcacheid;
@@ -270,7 +270,7 @@ void OcioDisplayFilter::updateProcessor()
     }
 
     // Step 3: Compute the Shader
-    QString shaderCacheID = QString::fromAscii(m_processor->getGpuShaderTextCacheID(shaderDesc));
+    QString shaderCacheID = QString::fromLatin1(m_processor->getGpuShaderTextCacheID(shaderDesc));
     if (m_program == 0 || shaderCacheID != m_shadercacheid) {
         //qDebug() << "Computing Shader " << m_shadercacheid;
 

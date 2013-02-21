@@ -25,6 +25,11 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
+#include <KoShapeContainer.h>
+#include <KoShapeRegistry.h>
+#include "kis_doc2.h"
+#include "kis_shape_layer.h"
+
 #include "kis_undo_stores.h"
 #include "kis_image.h"
 #include "kis_selection.h"
@@ -110,6 +115,29 @@ protected:
 
         KUndo2Command *cmd = new KisSetGlobalSelectionCommand(image, selection);
         image->undoAdapter()->addCommand(cmd);
+    }
+
+    void addShapeLayer(KisDoc2 *doc, KisImageSP image) {
+        KoShapeContainer *parentContainer =
+            dynamic_cast<KoShapeContainer*>(doc->shapeForNode(image->root()));
+
+        Q_ASSERT(parentContainer);
+        KisShapeLayerSP shapeLayer = new KisShapeLayer(parentContainer, doc->shapeController(), image.data(), "shape", OPACITY_OPAQUE_U8);
+        image->addNode(shapeLayer);
+
+        KoShapeFactoryBase *f1 = KoShapeRegistry::instance()->get("StarShape");
+        KoShapeFactoryBase *f2 = KoShapeRegistry::instance()->get("RectangleShape");
+
+        KoShape *shape1 = f1->createDefaultShape();
+        KoShape *shape2 = f2->createDefaultShape();
+
+        shape1->setPosition(QPointF(100,100));
+        shape2->setPosition(QPointF(200,200));
+
+        shapeLayer->addShape(shape1);
+        shapeLayer->addShape(shape2);
+
+        QApplication::processEvents();
     }
 
     /**

@@ -296,7 +296,7 @@ bool KisKraSaveVisitor::saveMetaData(KisNode* node)
 QString KisKraSaveVisitor::getLocation(KisNode* node, const QString& suffix)
 {
 
-    QString location = m_external ? QString::null : m_uri;
+    QString location = m_external ? QString() : m_uri;
     Q_ASSERT(m_nodeFileNames.contains(node));
     location += m_name + LAYER_PATH + m_nodeFileNames[node] + suffix;
     return location;

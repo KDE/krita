@@ -1062,7 +1062,7 @@ aExpr9:
 	$$ = new ConstExpr( SQL_NULL, QVariant() );
 	KexiDBDbg << "  + NULL";
 //	$$ = new Field();
-	//$$->setName(QString::null);
+	//$$->setName(QString());
 }
 | CHARACTER_STRING_LITERAL
 {

@@ -6,6 +6,8 @@ favoriteCompositeOps=normal,erase,multiply,burn,dodge,screen,overlay,hard_light,
 
 [TemplateChooserDialog]
 ShowCustomDocumentWidgetByDefault=true
+LastReturnType=Custom Document
+
 
 [Undo]
 UndoLimit=0
@@ -154,12 +156,13 @@ Collapsed=false
 QuickShapes=ArtisticText,TextShapeID,DivineProportionShapeID,EllipseShape,RectangleShape
 
 [calligra]
+DockerPluginsDisabled=textdocumentinspection
 FlakePluginsDisabled=formulashape,divineproportionshape,kexirelationdesignshape,vectorshape
 ShapePluginsDisabled=musicshape,pictureshape,videoshape,chartshape,spreadsheetshape,pluginshape,treeshape,commentshape,stateshape,webshape
 TextEditingPluginsDisabled=thesaurustool,changecase,autocorrect,spellcheck
 TextInlinePluginsDisabled=textvariables,kprvariables
 ToolPluginsDisabled=paragraphtool,kopabackgroundtool,calligrastagetoolanimation
-ToolsBlacklist=CreatePathTool,ConnectionTool,KarbonFilterEffectsTool,PanTool,KoZoomToolId
+ToolsBlacklist=CreatePathTool,KoPencilTool,ConnectionTool,KarbonFilterEffectsTool,PanTool,KoZoomToolId
 
 [favoriteList]
 favoriteBrushes=paintbrush,deformbrush,hairybrush,hatchingbrush,sketchbrush,smudge,spraybrush,
@@ -201,4 +204,7 @@ shadeSelectorUpdateOnLeftClick=false
 shadeSelectorUpdateOnRightClick=false
 useCustomColorSpace=false
 zoomSize=280
+
+[theme]
+Theme=Krita-dark
 

@@ -6,6 +6,7 @@
             <Action name="growselection"/>
             <Action name="shrinkselection"/>
             <Action name="borderselection"/>
+            <Action name="smoothselection"/>
         </Menu>
     </MenuBar>
 </kpartgui>

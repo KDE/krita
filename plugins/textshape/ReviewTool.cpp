@@ -193,7 +193,6 @@ void ReviewTool::paint(QPainter& painter, const KoViewConverter& converter)
                 TextShape *ts = dynamic_cast<TextShape*>(shape);
                 if (! ts)
                     continue;
-                KoTextShapeData *data = ts->textShapeData();
 
                 if (painter.hasClipping()) {
                     QRect rect = converter.documentToView(ts->boundingRect()).toRect();
@@ -456,7 +455,7 @@ void ReviewTool::readConfig()
             bgColor = interface.readEntry("formatChangeBgColor", defaultColor);
             m_changeTracker->setFormatChangeBgColor(bgColor);
             changeAuthor = interface.readEntry("changeAuthor", changeAuthor);
-            if (changeAuthor == "") {
+            if (changeAuthor.isEmpty()) {
                 KUser user(KUser::UseRealUserID);
                 m_changeTracker->setAuthorName(user.property(KUser::FullName).toString());
             } else {

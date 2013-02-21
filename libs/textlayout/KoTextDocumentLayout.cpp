@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007, 2009-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2010 Johannes Simon <johannes.simon@gmail.com>
- * Copyright (C) 2011 KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2011-2013 KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2011-2013 C.Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,7 +37,10 @@
 #include "AnchorStrategy.h"
 #include "IndexGeneratorManager.h"
 
-#include <KoTextAnchor.h>
+#include <KoShapeAnchor.h>
+#include <KoAnchorInlineObject.h>
+#include <KoAnchorTextRange.h>
+#include <KoTextRangeManager.h>
 #include <KoTextPage.h>
 #include <KoInsets.h>
 #include <KoPostscriptPaintDevice.h>
@@ -86,6 +90,7 @@ public:
        , changesBlocked(false)
        , restartLayout(false)
        , wordprocessingMode(false)
+       , showInlineObjectVisualization(false)
     {
     }
     KoStyleManager *styleManager;
@@ -101,8 +106,8 @@ public:
 
     QHash<int, KoInlineObjectExtent> inlineObjectExtents; // maps text-position to whole-line-height of an inline object
     int inlineObjectOffset;
-    QList<KoTextAnchor *> textAnchors; // list of all inserted inline objects
-    QList<KoTextAnchor *> foundAnchors; // anchors found in an iteration run
+    QList<KoShapeAnchor *> textAnchors; // list of all inserted inline objects
+    QList<KoShapeAnchor *> foundAnchors; // anchors found in an iteration run
     KoTextLayoutRootArea *anchoringRootArea;
     int anchoringIndex; // index of last not positioned inline object inside textAnchors
     bool anAnchorIsPlaced;
@@ -112,8 +117,8 @@ public:
     QRectF anchoringLayoutEnvironmentRect;
     bool allowPositionInlineObject;
 
-    QHash<KoShape*,KoTextLayoutObstruction*> anchoredObstructions; // all obstructions created in positionInlineObjects because KoTextAnchor from m_textAnchors is in text
-    QList<KoTextLayoutObstruction*> freeObstructions; // obstructions affecting the current rootArea, and not anchored
+    QHash<KoShape*,KoTextLayoutObstruction*> anchoredObstructions; // all obstructions created because KoShapeAnchor from m_textAnchors is in text
+    QList<KoTextLayoutObstruction*> freeObstructions; // obstructions affecting the current rootArea, and not anchored to text
     KoTextLayoutObstruction *continuationObstruction;
 
     KoTextDocumentLayout *referencedLayout;
@@ -127,6 +132,7 @@ public:
     bool changesBlocked;
     bool restartLayout;
     bool wordprocessingMode;
+    bool showInlineObjectVisualization;
 };
 
 
@@ -298,9 +304,8 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
         if (! block.isValid())
             break;
         if (from == block.position() && block.textList()) {
-            KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
-            if (data)
-                data->setCounterWidth(-1); // invalidate whole list.
+            KoTextBlockData data(block);
+            data.setCounterWidth(-1);
         }
 
         from = block.position() + block.length();
@@ -389,18 +394,31 @@ KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPoint(const QPointF &poin
     return 0;
 }
 
+void KoTextDocumentLayout::showInlineObjectVisualization(bool show)
+{
+    d->showInlineObjectVisualization = show;
+}
+
 void KoTextDocumentLayout::drawInlineObject(QPainter *painter, const QRectF &rect, QTextInlineObject object, int position, const QTextFormat &format)
 {
     Q_ASSERT(format.isCharFormat());
     if (d->inlineTextObjectManager == 0)
         return;
     QTextCharFormat cf = format.toCharFormat();
+    if (d->showInlineObjectVisualization) {
+        QColor color = cf.foreground().color();
+        // initial idea was to use Qt::gray (#A0A0A4)
+        // for non-black text on non-white background it was derived to use
+        // the text color with a transparency of 0x5F, so white-gray (0xFF-0xA0)
+        color.setAlpha(0x5F);
+        cf.setBackground(QBrush(color));
+    }
     KoInlineObject *obj = d->inlineTextObjectManager->inlineTextObject(cf);
     if (obj)
         obj->paint(*painter, paintDevice(), document(), rect, object, position, cf);
 }
 
-QList<KoTextAnchor *> KoTextDocumentLayout::textAnchors() const
+QList<KoShapeAnchor *> KoTextDocumentLayout::textAnchors() const
 {
     return d->textAnchors;
 }
@@ -417,11 +435,12 @@ qreal KoTextDocumentLayout::maxYOfAnchoredObstructions(int firstCursorPosition, 
 
     while (index < d->anchoringIndex) {
         Q_ASSERT(index < d->textAnchors.count());
-        KoTextAnchor *textAnchor = d->textAnchors[index];
-
-        if (textAnchor->flowWithText() && textAnchor->positionInDocument() >= firstCursorPosition
-                            && textAnchor->positionInDocument() <= lastCursorPosition) {
-            y = qMax(y, textAnchor->shape()->boundingRect().bottom() - textAnchor->shape()->parent()->boundingRect().y());
+        KoShapeAnchor *anchor = d->textAnchors[index];
+        if (anchor->flowWithText()) {
+            if (anchor->textLocation()->position() >= firstCursorPosition
+                        && anchor->textLocation()->position() <= lastCursorPosition) {
+                y = qMax(y, anchor->shape()->boundingRect().bottom() - anchor->shape()->parent()->boundingRect().y());
+            }
         }
         ++index;
     }
@@ -464,8 +483,8 @@ void KoTextDocumentLayout::positionAnchoredObstructions()
     //    MSOffice. It's clear, logical, easy and needs to be supported by all
     //    major office-suites that like to be compatible with MSOffice and OO.org.
     if (d->anchoringIndex < d->textAnchors.count()) {
-        KoTextAnchor *textAnchor = d->textAnchors[d->anchoringIndex];
-        AnchorStrategy *strategy = static_cast<AnchorStrategy *>(textAnchor->anchorStrategy());
+        KoShapeAnchor *textAnchor = d->textAnchors[d->anchoringIndex];
+        AnchorStrategy *strategy = static_cast<AnchorStrategy *>(textAnchor->placementStrategy());
 
         strategy->setPageRect(page->rect());
         strategy->setPageContentRect(page->contentRect());
@@ -514,56 +533,87 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
     KoInlineObject *obj = d->inlineTextObjectManager->inlineTextObject(cf);
     // We need some special treatment for anchors as they need to position their object during
     // layout and not this early
-    KoTextAnchor *anchor = dynamic_cast<KoTextAnchor*>(obj);
-    if (anchor && d->anchoringRootArea->associatedShape()) {
+    KoAnchorInlineObject *anchorObject = dynamic_cast<KoAnchorInlineObject *>(obj);
+    if (anchorObject && d->anchoringRootArea->associatedShape()) {
+        // The type can only be KoShapeAnchor::AnchorAsCharacter since it's inline
+        KoShapeAnchor *anchor = anchorObject->anchor();
         d->foundAnchors.append(anchor);
 
         // if there is no anchor strategy set then create one
-        if (!anchor->anchorStrategy()) {
-            int index = d->textAnchors.count();
-            if (anchor->anchorType() == KoTextAnchor::AnchorAsCharacter) {
-                anchor->setAnchorStrategy(new InlineAnchorStrategy(anchor, d->anchoringRootArea));
-            } else {
-                anchor->setAnchorStrategy(new FloatingAnchorStrategy(anchor, d->anchoringRootArea));
-
-                // The purpose of following code-block is to be sure that our paragraph-anchors are
-                // proper sorted according to there z-index so the FloatingAnchorStrategy::checkStacking
-                // logic does stack in the proper order. Bug 274512 has a testdoc for this attached.
-                if (index > 0 &&
-                    anchor->anchorType() == KoTextAnchor::AnchorParagraph &&
-                    (anchor->horizontalRel() == KoTextAnchor::HParagraph || anchor->horizontalRel() == KoTextAnchor::HParagraphContent) &&
-                    (anchor->horizontalPos() == KoTextAnchor::HLeft || anchor->horizontalPos() == KoTextAnchor::HRight)) {
-                    QTextBlock anchorBlock = document()->findBlock(position);
-                    for(int i = index - 1; i >= 0; --i) {
-                        KoTextAnchor *a = d->textAnchors[i];
-                        if (a->anchorType() != anchor->anchorType())
-                            break;
-                        if (a->horizontalPos() != anchor->horizontalPos())
-                            break;
-                        if (document()->findBlock(a->positionInDocument()) != anchorBlock)
-                            break;
-                        if (a->shape()->zIndex() < anchor->shape()->zIndex())
-                            break;
-                        --index;
-                    }
-                }
-            }
-            d->textAnchors.insert(index, anchor);
-            anchor->updatePosition(document(), position, cf);
+        if (!anchor->placementStrategy()) {
+            anchor->setPlacementStrategy(new InlineAnchorStrategy(anchorObject, d->anchoringRootArea));
+            d->textAnchors.append(anchor);
+            anchorObject->updatePosition(document(), position, cf); // by extension calls updateContainerModel
         }
-        static_cast<AnchorStrategy *>(anchor->anchorStrategy())->setParagraphRect(d->anchoringParagraphRect);
-        static_cast<AnchorStrategy *>(anchor->anchorStrategy())->setParagraphContentRect(d->anchoringParagraphContentRect);
-        static_cast<AnchorStrategy *>(anchor->anchorStrategy())->setLayoutEnvironmentRect(d->anchoringLayoutEnvironmentRect);
+        static_cast<AnchorStrategy *>(anchor->placementStrategy())->setParagraphRect(d->anchoringParagraphRect);
+        static_cast<AnchorStrategy *>(anchor->placementStrategy())->setParagraphContentRect(d->anchoringParagraphContentRect);
+        static_cast<AnchorStrategy *>(anchor->placementStrategy())->setLayoutEnvironmentRect(d->anchoringLayoutEnvironmentRect);
     }
     else if (obj) {
         obj->updatePosition(document(), position, cf);
     }
 }
 
+// This method is called by KoTextLauoutArea every time it encounters a KoAnchorTextRange
+void KoTextDocumentLayout::positionAnchorTextRanges(int pos, int length)
+{
+    if (!d->allowPositionInlineObject)
+        return;
+
+    if (!textRangeManager()) {
+        return;
+    }
+    QHash<int, KoTextRange *> ranges = textRangeManager()->textRangesChangingWithin(pos, pos+length, pos, pos+length);
+
+    foreach(KoTextRange *range, ranges.values()) {
+        KoAnchorTextRange *anchorRange = dynamic_cast<KoAnchorTextRange *>(range);
+        if (anchorRange && document() == range->document()) {
+            // We need some special treatment for anchors as they need to position their object during
+            // layout and not this early
+            KoShapeAnchor *anchor = anchorRange->anchor();
+            d->foundAnchors.append(anchor);
+
+            // At the beginAnchorCollecting the strategy is cleared, so this if will be entered
+            // everytime we layout a page (though not everytime for the inner repeats due to anchors)
+            if (!anchor->placementStrategy()) {
+                int index = d->textAnchors.count();
+                anchor->setPlacementStrategy(new FloatingAnchorStrategy(anchorRange, d->anchoringRootArea));
+
+                // The purpose of following code-block is to be sure that our paragraph-anchors are
+                // properly sorted by their z-index so the FloatingAnchorStrategy::checkStacking
+                // logic stack in the proper order. Bug 274512 has a testdoc for this attached.
+                if (index > 0 &&
+                    anchor->anchorType() == KoShapeAnchor::AnchorParagraph &&
+                    (anchor->horizontalRel() == KoShapeAnchor::HParagraph || anchor->horizontalRel() == KoShapeAnchor::HParagraphContent) &&
+                    (anchor->horizontalPos() == KoShapeAnchor::HLeft || anchor->horizontalPos() == KoShapeAnchor::HRight)) {
+                    QTextBlock anchorBlock = document()->findBlock(anchorRange->position());
+                    for(int i = index - 1; i >= 0; --i) {
+                        KoShapeAnchor *a = d->textAnchors[i];
+                        if (a->anchorType() != anchor->anchorType())
+                            break;
+                        if (a->horizontalPos() != anchor->horizontalPos())
+                            break;
+                        if (document()->findBlock(a->textLocation()->position()) != anchorBlock)
+                            break;
+                        if (a->shape()->zIndex() < anchor->shape()->zIndex())
+                            break;
+                        --index;
+                    }
+                }
+                d->textAnchors.insert(index, anchor);
+                anchorRange->updateContainerModel();
+            }
+            static_cast<AnchorStrategy *>(anchor->placementStrategy())->setParagraphRect(d->anchoringParagraphRect);
+            static_cast<AnchorStrategy *>(anchor->placementStrategy())->setParagraphContentRect(d->anchoringParagraphContentRect);
+            static_cast<AnchorStrategy *>(anchor->placementStrategy())->setLayoutEnvironmentRect(d->anchoringLayoutEnvironmentRect);
+        }
+    }
+}
+
 void KoTextDocumentLayout::beginAnchorCollecting(KoTextLayoutRootArea *rootArea)
 {
     for(int i = 0; i<d->textAnchors.size(); i++ ) {
-        d->textAnchors[i]->setAnchorStrategy(0);
+        d->textAnchors[i]->setPlacementStrategy(0);
     }
 
     qDeleteAll(d->anchoredObstructions);
@@ -683,10 +733,11 @@ bool KoTextDocumentLayout::doLayout()
                 }
             } while (d->anchoringIndex < d->textAnchors.count());
 
-            foreach (KoTextAnchor *anchor, d->textAnchors) {
+            foreach (KoShapeAnchor *anchor, d->textAnchors) {
                 if (!d->foundAnchors.contains(anchor)) {
                     d->anchoredObstructions.remove(anchor->shape());
-                    d->anchoringSoftBreak = qMin(d->anchoringSoftBreak, anchor->positionInDocument());
+
+                    d->anchoringSoftBreak = qMin(d->anchoringSoftBreak, anchor->textLocation()->position());
                 }
             }
 
@@ -769,10 +820,10 @@ bool KoTextDocumentLayout::doLayout()
                 }
             } while (d->anchoringIndex < d->textAnchors.count());
 
-            foreach (KoTextAnchor *anchor, d->textAnchors) {
+            foreach (KoShapeAnchor *anchor, d->textAnchors) {
                 if (!d->foundAnchors.contains(anchor)) {
                     d->anchoredObstructions.remove(anchor->shape());
-                    d->anchoringSoftBreak = qMin(d->anchoringSoftBreak, anchor->positionInDocument());
+                    d->anchoringSoftBreak = qMin(d->anchoringSoftBreak, anchor->textLocation()->position());
                 }
             }
 

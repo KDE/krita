@@ -84,8 +84,8 @@ public:
     KoElementReference(const QString &prefix, int counter);
     KoElementReference(const KoElementReference &other);
     KoElementReference &operator=(const KoElementReference &rhs);
-    bool operator==(const KoElementReference &other);
-    bool operator!=(const KoElementReference &other);
+    bool operator==(const KoElementReference &other) const;
+    bool operator!=(const KoElementReference &other) const;
 
     /**
      * @return true if the xmlid is valid, i.e., not null

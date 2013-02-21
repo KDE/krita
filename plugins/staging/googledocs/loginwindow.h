@@ -36,7 +36,7 @@ class LoginWindow : public QDialog
     Q_OBJECT
 
 public:
-    LoginWindow(OnlineDocument::DocumentType docType, QWidget *parent = 0);
+    explicit LoginWindow(OnlineDocument::DocumentType docType, QWidget *parent = 0);
     ~LoginWindow();
     GoogleDocumentService * googleService() {  return gdoc; }
     void showProgressIndicator(bool visible);

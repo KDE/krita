@@ -35,7 +35,7 @@ class Maps : public QObject
 {
     Q_OBJECT
 public:
-    Maps(KoReportItemMaps *);
+    explicit Maps(KoReportItemMaps *);
 
     ~Maps();
 public slots:

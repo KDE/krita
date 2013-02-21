@@ -47,7 +47,7 @@ KisUiActionFactoryRegistry::KisUiActionFactoryRegistry()
 
 KisUiActionFactoryRegistry::~KisUiActionFactoryRegistry()
 {
-    foreach(QString id, keys()) {
+    foreach(const QString &id, keys()) {
         delete get(id);
     }
 }

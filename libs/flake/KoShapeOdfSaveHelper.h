@@ -40,7 +40,7 @@ public:
      * @param shapes The list of shapes to save. If the shapes contain
      *               children these are also saved.
      */
-    KoShapeOdfSaveHelper(QList<KoShape *> shapes);
+    explicit KoShapeOdfSaveHelper(const QList<KoShape *> &shapes);
 
     /// reimplemented
     virtual bool writeBody();

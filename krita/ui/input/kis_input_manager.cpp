@@ -153,11 +153,13 @@ void KisInputManager::Private::setupActions()
     addStrokeShortcut(action, KisToolInvocationAction::ActivateShortcut, KEYS(), BUTTONS(Qt::LeftButton));
     addKeyShortcut(action, KisToolInvocationAction::ConfirmShortcut, KEYS(), Qt::Key_Return);
     addKeyShortcut(action, KisToolInvocationAction::ConfirmShortcut, KEYS(), Qt::Key_Enter);
+    addKeyShortcut(action, KisToolInvocationAction::CancelShortcut, KEYS(), Qt::Key_Escape);
     defaultInputAction = action;
 
     action = new KisAlternateInvocationAction(q);
     matcher.addAction(action);
-    addStrokeShortcut(action, 0, KEYS(Qt::Key_Control), BUTTONS(Qt::LeftButton));
+    addStrokeShortcut(action, KisAlternateInvocationAction::PrimaryAlternateToggleShortcut, KEYS(Qt::Key_Control), BUTTONS(Qt::LeftButton));
+    addStrokeShortcut(action, KisAlternateInvocationAction::SecondaryAlternateToggleShortcut, KEYS(Qt::Key_Control, Qt::Key_Alt), BUTTONS(Qt::LeftButton));
 
     action = new KisChangePrimarySettingAction(q);
     matcher.addAction(action);
@@ -325,6 +327,12 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 {
     Q_UNUSED(object);
     bool retval = false;
+
+    // KoToolProxy needs to pre-process some events to ensure the
+    // global shortcuts (not the input manager's ones) are not
+    // executed, in particular, this line will accept events when the
+    // tool is in text editing, preventing shortcut triggering
+    d->toolProxy->processEvent(event);
 
     switch (event->type()) {
     case QEvent::MouseButtonPress:

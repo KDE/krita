@@ -28,6 +28,7 @@
 #include <krita_export.h>
 #include <kis_types.h>
 
+class KisAction;
 class QDragEnterEvent;
 class QDropEvent;
 class QPoint;
@@ -52,6 +53,8 @@ class KisSelectionManager;
 class KisStatusBar;
 class KisUndoAdapter;
 class KisZoomManager;
+class KisFlipbook;
+class KisActionManager;
 
 /**
  * Krita view class
@@ -122,6 +125,8 @@ public:  // Krita specific interfaces
     /// The node manager handles everything about nodes
     KisNodeManager * nodeManager();
 
+    KisActionManager* actionManager();
+    
     /**
      * Convenience method to get at the active node, which may be
      * a layer or a mask or a selection
@@ -182,13 +187,17 @@ public:  // Krita specific interfaces
     /// shows a floating message in the top right corner of the canvas
     void showFloatingMessage(const QString message, const QIcon& icon);
 
+public slots:
+
+    void slotLoadingFinished();
+
 signals:
 
     void sigLoadingFinished();
 
 private slots:
 
-    void slotLoadingFinished();
+
     void slotPreferences();
     void slotEditPalette();
     void slotBlacklistCleanup();

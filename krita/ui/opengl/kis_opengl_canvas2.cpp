@@ -18,7 +18,6 @@
 
 #include "opengl/kis_opengl_canvas2.h"
 
-
 #ifdef HAVE_OPENGL
 
 #include <QMenu>
@@ -55,6 +54,8 @@
 #include "kis_selection_manager.h"
 #include "kis_group_layer.h"
 
+#include "opengl/kis_opengl_canvas2_p.h"
+
 #define NEAR_VAL -1000.0
 #define FAR_VAL 1000.0
 
@@ -82,7 +83,7 @@ public:
 };
 
 KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 * canvas, KisCoordinatesConverter *coordinatesConverter, QWidget * parent, KisOpenGLImageTexturesSP imageTextures)
-        : QGLWidget(QGLFormat(QGL::SampleBuffers), parent, KisOpenGL::sharedContextWidget())
+    : QGLWidget(QGLFormat(QGL::SampleBuffers), parent, KisOpenGL::sharedContextWidget())
         , KisCanvasWidgetBase(canvas, coordinatesConverter)
         , m_d(new Private())
 {
@@ -111,6 +112,29 @@ KisOpenGLCanvas2::~KisOpenGLCanvas2()
 
 void KisOpenGLCanvas2::initializeGL()
 {
+    if (!VSyncWorkaround::tryDisableVSync(this)) {
+        qWarning();
+        qWarning() << "WARNING: We didn't manage to switch off VSync on your graphics adapter.";
+        qWarning() << "WARNING: It means either your hardware or driver doesn't support it,";
+        qWarning() << "WARNING: or we just don't know about this hardware. Please report us a bug";
+        qWarning() << "WARNING: with the output of \'glxinfo\' for your card.";
+        qWarning();
+        qWarning() << "WARNING: Trying to workaround it by disabling Double Buffering.";
+        qWarning() << "WARNING: You may see some flickering when painting with some tools. It doesn't";
+        qWarning() << "WARNING: affect the quality of the final image, though.";
+        qWarning();
+
+        QGLFormat format = this->format();
+        format.setDoubleBuffer(false);
+        setFormat(format);
+
+        if (doubleBuffer()) {
+            qCritical() << "CRITICAL: Failed to disable Double Buffering. Lines may look \"bended\" on your image.";
+            qCritical() << "CRITICAL: Your graphics card or driver does not fully support Krita's OpenGL canvas.";
+            qCritical() << "CRITICAL: For an optimal experience, please disable OpenGL";
+            qCritical();
+        }
+    }
 }
 
 void KisOpenGLCanvas2::resizeGL(int width, int height)
@@ -373,14 +397,6 @@ void KisOpenGLCanvas2::setupFlakeToWidgetTransformation()
 
     QTransform transform = coordinatesConverter()->flakeToWidgetTransform();
     loadQTransform(transform);
-}
-
-bool KisOpenGLCanvas2::event(QEvent *e)
-{
-    if(toolProxy()) {
-        toolProxy()->processEvent(e);
-    }
-    return QWidget::event(e);
 }
 
 void KisOpenGLCanvas2::slotConfigChanged()

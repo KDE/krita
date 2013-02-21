@@ -43,6 +43,7 @@ KoCanvasResourceManager::KoCanvasResourceManager(QObject *parent)
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
     setForegroundColor(KoColor(Qt::black, cs));
     setBackgroundColor(KoColor(Qt::white, cs));
+    setResource(ApplicationSpeciality, NoSpecial);
 }
 
 KoCanvasResourceManager::~KoCanvasResourceManager()

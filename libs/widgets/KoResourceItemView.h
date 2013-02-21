@@ -39,7 +39,7 @@ public:
         FIXED_ROWS     /// The number of rows is fixed
     };
     
-    KoResourceItemView( QWidget * parent = 0 );
+    explicit KoResourceItemView(QWidget *parent = 0);
     virtual ~KoResourceItemView() {}
     
     /** reimplemented

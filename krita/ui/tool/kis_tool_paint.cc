@@ -475,12 +475,12 @@ void KisToolPaint::stepAlpha(float step)
 
 void KisToolPaint::increaseOpacity()
 {
-    stepAlpha(0.1);
+    stepAlpha(0.1f);
 }
 
 void KisToolPaint::decreaseOpacity()
 {
-    stepAlpha(-0.1);
+    stepAlpha(-0.1f);
 }
 
 

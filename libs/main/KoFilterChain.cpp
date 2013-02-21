@@ -509,7 +509,7 @@ KoDocument* KoFilterChain::createDocument(const QString& file)
         return 0;
     }
 
-    KoDocument *doc = createDocument(QByteArray(t->name().toLatin1()));
+    KoDocument *doc = createDocument(t->name().toLatin1());
 
     if (!doc || !doc->loadNativeFormat(file)) {
         kError(30500) << "Couldn't load from the file" << endl;

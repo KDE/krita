@@ -44,4 +44,4 @@ Name[zh_TW]=色彩範圍
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritacolorrange
-X-Krita-Version=5
+X-Krita-Version=27

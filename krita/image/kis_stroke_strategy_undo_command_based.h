@@ -20,7 +20,6 @@
 #define __KIS_STROKE_STRATEGY_UNDO_COMMAND_BASED_H
 
 #include <kundo2command.h>
-#include <QSharedPointer>
 #include <QVector>
 #include <QMutex>
 

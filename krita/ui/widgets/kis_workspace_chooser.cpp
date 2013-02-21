@@ -62,9 +62,13 @@ void KisWorkspaceDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
     if (option.state & QStyle::State_Selected) {
         painter->setPen(QPen(option.palette.highlight(), 2.0));
         painter->fillRect(option.rect, option.palette.highlight());
+        painter->setBrush(option.palette.highlightedText());
+    }
+    else {
+        painter->setBrush(option.palette.text());
     }
 
-    painter->setPen(Qt::black);
+
     painter->drawText(option.rect.x() + 5, option.rect.y() + painter->fontMetrics().ascent() + 5, workspace->name());      
 
 }

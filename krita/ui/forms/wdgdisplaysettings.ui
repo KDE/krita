@@ -188,7 +188,7 @@
      <property name="title">
       <string>OpenGL</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout">
+     <layout class="QGridLayout">
       <item row="0" column="0">
        <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
         <item>

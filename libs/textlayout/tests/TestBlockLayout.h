@@ -72,6 +72,7 @@ private slots:
     void testTextIndent();
 
     /// Test tabs.
+    void testTabs_data();
     void testTabs();
 
     void testBasicTextAlignments();

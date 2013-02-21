@@ -366,8 +366,14 @@ protected:
                 QRect changeRect = currentNode->changeRect(m_resultChangeRect);
                 m_changeRectVaries |= changeRect != m_resultChangeRect;
                 m_resultChangeRect = changeRect;
+                m_resultUncroppedChangeRect = changeRect;
             }
         }
+
+        KisNodeSP parentLayer = firstMask->parent();
+        Q_ASSERT(parentLayer);
+
+        registerCloneNotification(parentLayer, N_FILTHY_PROJECTION);
     }
 
     static qint32 calculateChecksum(KisNodeSP node, const QRect &requestedRect) {

@@ -39,7 +39,7 @@ class KoPathShape;
 class KoPathToolHandle
 {
 public:
-    KoPathToolHandle(KoPathTool *tool);
+    explicit KoPathToolHandle(KoPathTool *tool);
     virtual ~KoPathToolHandle();
     virtual void paint(QPainter &painter, const KoViewConverter &converter) = 0;
     virtual void repaint() const = 0;

@@ -25,8 +25,6 @@
 
 #include <KoIcon.h>
 
-#include <complex>
-
 #include <QPoint>
 #include <QPointF>
 #include <QVector2D>
@@ -37,6 +35,7 @@
 
 #include <KoInteractionTool.h>
 #include <KoToolFactoryBase.h>
+#include <KoUpdater.h>
 
 #include <kis_shape_selection.h>
 #include <kis_undo_adapter.h>
@@ -44,30 +43,14 @@
 #include <flake/kis_node_shape.h>
 #include <kis_tool.h>
 
-#include "ui_wdg_tool_transform.h"
 #include "tool_transform_args.h"
+#include "tool_transform_changes_tracker.h"
+#include "kis_tool_transform_config_widget.h"
+#include "transform_transaction_properties.h"
 
 class KoID;
 class KisFilterStrategy;
-
-class WdgToolTransform : public QWidget, public Ui::WdgToolTransform
-{
-    Q_OBJECT
-
-public:
-    WdgToolTransform(QWidget *parent) : QWidget(parent) {
-        setupUi(this);
-        showDecorationsBox->setIcon(koIcon("krita_tool_transform"));
-        label_shearX->setPixmap(koIcon("shear_horizontal").pixmap(16, 16));
-        label_shearY->setPixmap(koIcon("shear_vertical").pixmap(16, 16));
-
-        label_width->setPixmap(koIcon("width_icon").pixmap(16, 16));
-        label_height->setPixmap(koIcon("height_icon").pixmap(16, 16));
-
-        label_offsetX->setPixmap(koIcon("offset_horizontal").pixmap(16, 16));
-        label_offsetY->setPixmap(koIcon("offset_vertical").pixmap(16, 16));
-    }
-};
+class KisCanvas2;
 
 /**
  * Transform tool
@@ -84,7 +67,7 @@ public:
  * until the user click that button is only a preview.
  */
 
-class KisToolTransform : public KisTool, KisCommandHistoryListener
+class KisToolTransform : public KisTool
 {
 
     Q_OBJECT
@@ -101,17 +84,25 @@ public:
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void keyReleaseEvent(QKeyEvent *event);
 
-    virtual void resourceChanged(int key, const QVariant& res);
-
 public:
     void paint(QPainter& gc, const KoViewConverter &converter);
-
-    void notifyCommandAdded(const KUndo2Command *);
-    void notifyCommandExecuted(const KUndo2Command *);
 
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
+
+protected:
+    void requestUndoDuringStroke();
+    void requestStrokeEnd();
+    void requestStrokeCancellation();
+
+private:
+    void clearDevices(KisNodeSP node, bool recursive);
+    void transformDevices(KisNodeSP node, bool recursive);
+
+    void startStroke(ToolTransformArgs::TransformMode mode);
+    void endStroke();
+    void cancelStroke();
 
 private:
     // Used in dichotomic search (see below)
@@ -156,11 +147,11 @@ private:
         if (!m_currentArgs.aX() && !m_currentArgs.aY())
             return QPointF(x, y);
 
-        QVector3D t = QVector3D(x, y, z) - m_cameraPos;
+        QVector3D t = QVector3D(x, y, z) - m_currentArgs.cameraPos();
         if (t.z() == 0.0)
             return QPointF(0,0);
 
-        return QPointF((t.x() - m_eyePos.x()) * m_eyePos.z() / t.z(), (t.y() - m_eyePos.y()) * m_eyePos.z() / t.z());
+        return QPointF((t.x() - m_currentArgs.eyePos().x()) * m_currentArgs.eyePos().z() / t.z(), (t.y() - m_currentArgs.eyePos().y()) * m_currentArgs.eyePos().z() / t.z());
     }
     // The perspective is only invertible if the plane into which the returned point should be is given
     QVector3D invperspective(double x, double y, QVector3D plan) {
@@ -169,8 +160,8 @@ private:
         // y = (yinv - cy)*ez / (zinv - cz)
         // a*xinv + b*yinv + c*zinv = 0
         // where :
-        //    (cx, cy, cz) = (m_cameraPos.x() + m_eyePos.x(), m_cameraPos.y() + m_eyePos.y(), m_cameraPos.z())
-        //    ez = m_eyePos
+        //    (cx, cy, cz) = (m_currentArgs.cameraPos().z().x() + m_currentArgs.eyePos().x(), m_currentArgs.cameraPos().z().y() + m_currentArgs.eyePos().y(), m_currentArgs.cameraPos().z().z())
+        //    ez = m_currentArgs.eyePos()
         //    (a, b, c) = plan
         if (!m_currentArgs.aX() && !m_currentArgs.aY())
             return QVector3D(x, y, 0);
@@ -178,15 +169,15 @@ private:
         double a = plan.x();
         double b = plan.y();
         double c = plan.z();
-        double denom = a*x + b*y + c*m_eyePos.z();
+        double denom = a*x + b*y + c*m_currentArgs.eyePos().z();
 
         if (!denom)
             return QVector3D(0, 0, 0);
 
-        double cx = (m_cameraPos.x() - m_eyePos.x());
-        double cy = (m_cameraPos.y() - m_eyePos.y());
-        double cz = m_cameraPos.z();
-        double ez = m_eyePos.z();
+        double cx = (m_currentArgs.cameraPos().x() - m_currentArgs.eyePos().x());
+        double cy = (m_currentArgs.cameraPos().y() - m_currentArgs.eyePos().y());
+        double cz = m_currentArgs.cameraPos().z();
+        double ez = m_currentArgs.eyePos().z();
         double acx = a * cx;
         double bcy = b * cy;
         double ccz = c * cz;
@@ -241,16 +232,14 @@ private:
     QRectF boundRect(QPointF P0, QPointF P1, QPointF P2, QPointF P3);
     // Returns the minimum and the maximum of the Z component of the 4 given vectors (x being the min, and y the max in the returned point)
     QPointF minMaxZ(QVector3D P0, QVector3D P1, QVector3D P2, QVector3D P3);
-    // rad being in |R, the returned value is in [0; 360[
-    double radianToDegree(double rad);
-    // degree being in |R, the returned value is in [0; 2*M_PI[
-    double degreeToRadian(double degree);
     // Determinant math function
     int det(const QPointF & v, const QPointF & w);
     // Square of the euclidian distance
     double distsq(const QPointF & v, const QPointF & w);
-    // The octant of the direction given by vector (x,y)
-    int octant(double x, double y);
+
+    QCursor getScaleCursor(const QPointF &handlePt);
+    QCursor getShearCursor(const QPointF &direction);
+
     // Makes a copy of m_currentArgs into args
     void storeArgs(ToolTransformArgs &args);
     // Makes a copy of args into m_currentArgs
@@ -277,21 +266,17 @@ private:
     double dichotomyScaleY(QVector3D v1, QVector3D v2, DICHO_DROP flag, double desired, double b, double precision, double maxIterations1, double maxIterations2);
     // If p is inside r, p is returned, otherwise the returned point is the intersection of the line given by vector p, and the rectangle
     inline QPointF clipInRect(QPointF p, QRectF r);
-	void initFreeTransform();
-    // Sets the default control points as a grid of density pointsPerLine. If pointsPerLine < 0, m_defaultPointsPerLine is used for density instead
-    void setDefaultWarpPoints(int pointsPerLine = -1);
-	void initWarpTransform();
-    // Saves the original selection, paintDevice, image previews, and initializes the transformation depending on the mode given in argument
-    void initTransform(ToolTransformArgs::TransfMode mode);
-    // Only commits the changes made on the preview to the undo stack
-    void transform();
-    // Applies the current transformation to the original paint device and commits it to the undo stack
-    void applyTransform();
+
+    void commitChanges();
+
     // Updated the widget according to m_currentArgs
     void updateOptionWidget();
-    // Disable/Enable Apply-Reset button
-    void setButtonBoxDisabled(bool disabled);
-    void setFreeTransformBoxesDisabled(bool disabled);
+
+    void initTransformMode(ToolTransformArgs::TransformMode mode);
+
+    void initThumbnailImage(KisPaintDeviceSP previewDevice);
+    void updateSelectionPath();
+    void updateApplyResetAvailability();
 
 private:
     enum function {ROTATE = 0, MOVE, RIGHTSCALE, TOPRIGHTSCALE, TOPSCALE, TOPLEFTSCALE,
@@ -302,9 +287,8 @@ private:
 
     function m_function; // current transformation function
 
-    QPointF m_handleDir[9];
     QCursor m_scaleCursors[8]; // cursors for the 8 directions
-    QCursor m_shearCursors[8];
+    QPixmap m_shearCursorPixmap;
 
     ToolTransformArgs m_currentArgs;
     ToolTransformArgs m_clickArgs;
@@ -314,32 +298,32 @@ private:
 
     bool m_actuallyMoveWhileSelected; // true <=> selection has been moved while clicked
     bool m_imageTooBig;
-    bool m_boxValueChanged; // true if a boxValue has been changed directly by the user (not by click + move mouse)
-    bool m_editWarpPoints;
 
     QImage m_origImg; // image of the pixels in selection bound rect
     QTransform m_transform; // transformation to apply on origImg
+    QTransform m_thumbToImageTransform;
+    QTransform m_handlesTransform;
+
+    QTransform m_paintingTransform;
+    QPointF m_paintingOffset;
+
     QImage m_currImg; // origImg transformed using m_transform
-    QImage m_origSelectionImg; // original selection with white used as alpha channel
-    QImage m_scaledOrigSelectionImg; // original selection to be drawn, scaled to the view
+    KisPaintDeviceSP m_selectedPortionCache;
+    KisStrokeId m_strokeId;
+    bool m_workRecursively;
+
+    QPainterPath m_selectionPath; // original (unscaled) selection outline, used for painting decorations
+
     QSizeF m_refSize; // used in paint() to check if the view has changed (need to update m_currSelectionImg)
 
-    KisFilterStrategy *m_filter;
-    WdgToolTransform *m_optWidget;
+    KisToolTransformConfigWidget *m_optWidget;
     KisPaintDeviceSP m_target;
     // we don't need this origDevice for now
     // but I keep it here because I might use it when adding one of enkithan's suggestion (cut the seleted pixels instead of keeping them darkened)
     KisPaintDeviceSP m_origDevice;
     KisSelectionSP m_origSelection;
     //KisShapeSelection *m_previousShapeSelection;
-    KoCanvasBase *m_canvas;
-    QButtonGroup *m_rotCenterButtons;
-
-    // information on the original selection (before any transformation)
-    double m_originalWidth2, m_originalHeight2; // '2' meaning half
-    QPoint m_originalTopLeft;  // in image coords
-    QPoint m_originalBottomRight;
-    QPointF m_originalCenter; // original center of the selection
+    KisCanvas2 *m_canvas;
 
     // center used for rotation (calculated from rotationCenterOffset (in m_currentArgs))
     QVector3D m_rotationCenter;
@@ -378,7 +362,6 @@ private:
     QPointF m_clickPoint; //position of the mouse when click occurred
 
     // 'Free-transform'-related :
-    QVector3D m_cameraPos, m_eyePos;
     QVector3D m_currentPlane, m_clickPlane; // vector (a, b, c) represents the vect plane a*x + b*y + c*z = 0
     double m_cosaZ; // cos of currentArgs.aZ()
     double m_sinaZ;
@@ -394,7 +377,6 @@ private:
 
 	// Warp-related :
     int m_defaultPointsPerLine;
-	double m_gridSpaceX, m_gridSpaceY;
     QVector<QPointF> m_viewTransfPoints;
     QVector<QPointF> m_viewOrigPoints;
 	bool m_cursorOverPoint;
@@ -402,32 +384,25 @@ private:
 
     bool m_isActive;
 
+    TransformTransactionProperties m_transaction;
+    TransformChangesTracker m_changesTracker;
+
+private:
+    QPointF imageToFlake(const QPointF &pt);
+    QPointF flakeToImage(const QPointF &pt);
+
+    QRectF imageToFlake(const QRectF &pt);
+    QRectF flakeToImage(const QRectF &pt);
+
+    QPointF imageToThumb(const QPointF &pt, bool useFlakeOptimization);
+
 private slots:
-
-    void slotSetFilter(const KoID &);
-    void setRotCenter(int id);
-    void setScaleX(double scaleX);
-    void setScaleY(double scaleY);
-    void setShearX(double shearX);
-    void setShearY(double shearY);
-    void setAX(double aX);
-    void setAY(double aY);
-    void setAZ(double aZ);
-    void setAlpha(double alpha);
-    void setDensity(int density);
-    void setTranslateX(double translateX);
-    void setTranslateY(double translateY);
-    void slotButtonBoxClicked(QAbstractButton *button);
-    void slotKeepAspectRatioChanged(bool keep);
+    void slotTrackerChangedConfig();
+    void slotUiChangedConfig();
+    void slotApplyTransform();
+    void slotResetTransform();
+    void slotRestartTransform();
     void slotEditingFinished();
-	void slotWarpButtonClicked(bool checked);
-	void slotFreeTransformButtonClicked(bool checked);
-    void slotWarpTypeChanged(int index);
-    void slotWarpDefaultButtonClicked(bool checked);
-    void slotWarpCustomButtonClicked(bool checked);
-    void slotLockUnlockPointsButtonClicked();
-    void slotResetPointsButtonClicked();
-
 };
 
 class KisToolTransformFactory : public KoToolFactoryBase

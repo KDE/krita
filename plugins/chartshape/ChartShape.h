@@ -104,7 +104,7 @@ class CHARTSHAPELIB_EXPORT ChartShape
     Q_INTERFACES(KoChart::ChartInterface)
 
 public:
-    ChartShape(KoDocumentResourceManager *documentResourceManager);
+    explicit ChartShape(KoDocumentResourceManager *documentResourceManager);
     ~ChartShape();
 
     // Getter methods

@@ -47,8 +47,9 @@ public:
 
     static void invalidate(const QTextBlock &block)
     {
-        if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(block.userData()))
-            userData->setCounterWidth(-1.0);
+        QTextBlock currentBlock = block;
+        KoTextBlockData data(currentBlock);
+        data.setCounterWidth(-1.0);
     }
 
     static void invalidateList(const QTextBlock &block)

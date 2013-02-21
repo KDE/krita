@@ -70,6 +70,7 @@ public:
 public:
     virtual bool completeLoading(KoStore *store);
     virtual bool completeSaving(KoStore*);
+    virtual int supportedSpecialFormats() const;
 
     /// Unused
     virtual bool loadOdf(KoOdfReadStore & odfStore);
@@ -168,10 +169,6 @@ signals:
 protected slots:
 
     void slotLoadingFinished();
-
-private slots:
-
-    void undoIndexChanged(int idx);
 
 private:
 

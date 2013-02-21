@@ -30,6 +30,7 @@
 #include <kis_paint_device.h>
 #include <kis_painter.h>
 #include <kis_image.h>
+#include <krita_utils.h>
 
 
 KisExperimentPaintOp::KisExperimentPaintOp(const KisExperimentPaintOpSettings *settings, KisPainter * painter, KisImageSP image)
@@ -64,93 +65,6 @@ KisExperimentPaintOp::KisExperimentPaintOp(const KisExperimentPaintOpSettings *s
 KisExperimentPaintOp::~KisExperimentPaintOp()
 {
     delete m_originalPainter;
-}
-
-bool checkInTriangle(const QRectF &rect,
-                     const QPolygonF &triangle)
-{
-    return triangle.intersected(rect).boundingRect().isValid();
-}
-
-
-QRegion splitTriangles(const QPointF &center,
-                       QVector<QPointF> points)
-{
-    Q_ASSERT(points.size());
-    Q_ASSERT(!(points.size() & 1));
-
-    QVector<QPolygonF> triangles;
-    QRect totalRect;
-
-    for (int i = 0; i < points.size(); i += 2) {
-        QPolygonF triangle;
-        triangle << center;
-        triangle << points[i];
-        triangle << points[i+1];
-
-        totalRect |= triangle.boundingRect().toAlignedRect();
-        triangles << triangle;
-    }
-
-
-    const int step = 64;
-    const int right = totalRect.x() + totalRect.width();
-    const int bottom = totalRect.y() + totalRect.height();
-
-    QRegion dirtyRegion;
-
-    for (int y = totalRect.y(); y < bottom;) {
-        int nextY = qMin((y + step) & ~(step-1), bottom);
-
-        for (int x = totalRect.x(); x < right;) {
-            int nextX = qMin((x + step) & ~(step-1), right);
-
-            QRect rect(x, y, nextX - x, nextY - y);
-
-            foreach(const QPolygonF &triangle, triangles) {
-                if(checkInTriangle(rect, triangle)) {
-                    dirtyRegion |= rect;
-                    break;
-                }
-            }
-
-            x = nextX;
-        }
-        y = nextY;
-    }
-    return dirtyRegion;
-}
-
-QRegion splitPath(QPainterPath path)
-{
-    QRect totalRect = path.boundingRect().toAlignedRect();
-    totalRect.adjusted(-1,-1,1,1);
-
-    const int step = 64;
-    const int right = totalRect.x() + totalRect.width();
-    const int bottom = totalRect.y() + totalRect.height();
-
-    QRegion dirtyRegion;
-
-
-    for (int y = totalRect.y(); y < bottom;) {
-        int nextY = qMin((y + step) & ~(step-1), bottom);
-
-        for (int x = totalRect.x(); x < right;) {
-            int nextX = qMin((x + step) & ~(step-1), right);
-
-            QRect rect(x, y, nextX - x, nextY - y);
-
-            if(path.intersects(rect)) {
-                dirtyRegion |= rect;
-            }
-
-            x = nextX;
-        }
-        y = nextY;
-    }
-
-    return dirtyRegion;
 }
 
 void KisExperimentPaintOp::paintRegion(const QRegion &changedRegion)
@@ -295,13 +209,13 @@ KisDistanceInformation KisExperimentPaintOp::paintLine(const KisPaintInformation
                     QPainterPath diff1 = m_path - m_lastPaintedPath;
                     QPainterPath diff2 = m_lastPaintedPath - m_path;
 
-                    changedRegion = splitPath(diff1 | diff2);
+                    changedRegion = KritaUtils::splitPath(diff1 | diff2);
                 }
 
                 paintRegion(changedRegion);
                 m_lastPaintedPath = m_path;
             } else if (!m_savedPoints.isEmpty()) {
-                QRegion changedRegion = splitTriangles(m_center, m_savedPoints);
+                QRegion changedRegion = KritaUtils::splitTriangles(m_center, m_savedPoints);
                 paintRegion(changedRegion);
             }
 

@@ -58,7 +58,6 @@ void KisDocumentUndoStore::addCommand(KUndo2Command *command)
 {
     if(!command) return;
     m_doc->addCommand(command);
-    notifyCommandAdded(command);
 }
 
 void KisDocumentUndoStore::beginMacro(const QString& macroName)
@@ -100,7 +99,6 @@ void KisSurrogateUndoStore::addCommand(KUndo2Command *command)
 {
     if(!command) return;
     m_undoStack->push(command);
-    notifyCommandAdded(command);
 }
 
 void KisSurrogateUndoStore::beginMacro(const QString& macroName)
@@ -159,7 +157,6 @@ void KisDumbUndoStore::addCommand(KUndo2Command *command)
      * Ermm.. Done with it! :P
      */
     command->redo();
-    notifyCommandAdded(command);
     delete command;
 }
 

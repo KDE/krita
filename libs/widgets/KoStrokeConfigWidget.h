@@ -33,59 +33,56 @@
 #include "kowidgets_export.h"
 
 #include <QWidget>
+#include <KoMarkerData.h>
 
 class KoUnit;
-class KoShapeStroke;
+class KoShapeStrokeModel;
 class KoMarker;
+class KoCanvasBase;
 
 /// A widget for configuring the stroke of a shape
 class KOWIDGETS_EXPORT KoStrokeConfigWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KoStrokeConfigWidget(QWidget * parent);
+    explicit KoStrokeConfigWidget(QWidget *parent);
     ~KoStrokeConfigWidget();
 
     // Getters
     Qt::PenStyle lineStyle() const;
     QVector<qreal> lineDashes() const;
     qreal lineWidth() const;
+    QColor color() const;
     qreal miterLimit() const;
     KoMarker *startMarker() const;
     KoMarker *endMarker() const;
 
-    void updateControls(KoShapeStroke &stroke, KoMarker *startMarker, KoMarker *endMarker);
+    void setCanvas( KoCanvasBase *canvas );
 
-    void locationChanged(Qt::DockWidgetArea area);
-
-public slots:
-    void setUnit(const KoUnit &unit);
+private slots:
+    void updateControls(KoShapeStrokeModel *stroke, KoMarker *startMarker, KoMarker *endMarker);
 
     void updateMarkers(const QList<KoMarker*> &markers);
 
-signals:
-    /// Emitted when the line style changes.
-    void currentIndexChanged();
+    /// start marker has changed
+    void startMarkerChanged();
+    /// end marker has changed
+    void endMarkerChanged();
 
-    /// Emitted when the line width changes.
-    void widthChanged();
+    void resourceChanged(int key, const QVariant &value);
 
-    /// Emitted when the line cap changes.
-    void capChanged(int button);
+    /// selection has changed
+    void selectionChanged();
 
-    /// Emitted when the line join changes.
-    void joinChanged(int button);
-
-    /// Emitted when the line miter limit changes.
-    void miterLimitChanged();
-
-    /// Emitted when the start marker changes.
-    void currentStartMarkerChanged();
-
-    /// Emitted when the end marker changes.
-    void currentEndMarkerChanged();
+    /// apply line changes to the selected shape
+    void applyChanges();
 
 private:
+    void setUnit(const KoUnit &unit);
+
+    /// apply marker changes to the selected shape
+    void applyMarkerChanges(KoMarkerData::MarkerPosition position);
+
     void blockChildSignals(bool block);
 
 private:

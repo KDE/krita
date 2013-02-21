@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOCOLORSPACEFACTORYREGISTRY_H
-#define KOCOLORSPACEFACTORYREGISTRY_H
+#ifndef KOCOLORSPACEREGISTRY_H
+#define KOCOLORSPACEREGISTRY_H
 
 #include <QObject>
 #include <QList>
@@ -333,4 +333,4 @@ private:
     Private * const d;
 };
 
-#endif // KOCOLORSPACEFACTORYREGISTRY_H
+#endif // KOCOLORSPACEREGISTRY_H

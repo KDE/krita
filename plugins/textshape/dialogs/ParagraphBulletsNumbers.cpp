@@ -74,6 +74,7 @@ ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
     connect(widget.insertImage, SIGNAL(clicked()), this, SLOT(selectListImage()));
     connect(widget.imageHeight, SIGNAL(valueChanged(double)), this, SLOT(recalcPreview()));
     connect(widget.imageWidth, SIGNAL(valueChanged(double)), this, SLOT(recalcPreview()));
+    connect(widget.restartNumbering, SIGNAL(clicked()), this, SLOT(recalcPreview()));
 }
 
 int ParagraphBulletsNumbers::addStyle(const Lists::ListStyleItem &lsi)

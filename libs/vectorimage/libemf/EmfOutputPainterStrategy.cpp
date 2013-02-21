@@ -479,7 +479,7 @@ void OutputPainterStrategy::setViewportExtEx( const QSize &size )
 
 
 
-void OutputPainterStrategy::modifyWorldTransform( const quint32 mode, float M11, float M12,
+void OutputPainterStrategy::modifyWorldTransform( quint32 mode, float M11, float M12,
                                                   float M21, float M22, float Dx, float Dy )
 {
 #if DEBUG_EMFPAINT

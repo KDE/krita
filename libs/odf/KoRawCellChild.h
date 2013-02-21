@@ -38,7 +38,7 @@
 class KOODF_EXPORT KoRawCellChild : public KoCellChild
 {
 public:
-    KoRawCellChild(const QByteArray& content);
+    explicit KoRawCellChild(const QByteArray &content);
     virtual ~KoRawCellChild();
 
 protected:

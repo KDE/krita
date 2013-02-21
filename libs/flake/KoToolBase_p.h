@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOTOOLPRIVATE_H
-#define KOTOOLPRIVATE_H
+#ifndef KOTOOLBASE_P_H
+#define KOTOOLBASE_P_H
 
 #include "KoDocumentResourceManager.h"
 #include "KoCanvasResourceManager.h"

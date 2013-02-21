@@ -106,7 +106,7 @@ public:
 
     /**
      * @brief Find all data rectangles
-     * The order is guaranteed to be the same as that used by values().
+     * The order is NOT guaranteed to be the same as that used by values().
      *
      * @return a list containing all the data rectangles used in the tree
      */
@@ -114,7 +114,7 @@ public:
 
     /**
      * @brief Find all data items
-     * The order is guaranteed to be the same as that used by keys().
+     * The order is NOT guaranteed to be the same as that used by keys().
      *
      * @return a list containing all the data used in the tree
      */

@@ -30,7 +30,7 @@ class FullScreenPlayer;
 class VideoEventAction : public KoEventAction
 {
 public:
-    VideoEventAction(VideoShape *parent);
+    explicit VideoEventAction(VideoShape *parent);
 
     /// destructor
     virtual ~VideoEventAction();

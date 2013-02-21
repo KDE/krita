@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KO_PROGRESS_UPDATER__P_H
-#define KO_PROGRESS_UPDATER__P_H
+#ifndef KO_UPDATERPRIVATE__P_H
+#define KO_UPDATERPRIVATE__P_H
 
 #include "KoProgressUpdater.h"
 #include "KoProgressProxy.h"
@@ -47,7 +47,7 @@ class KoUpdaterPrivate : public QObject
 public:
 
     KoUpdaterPrivate(KoProgressUpdater *parent, int weight, const QString& name)
-        : QObject( parent )
+        : QObject(0)
         , m_progress(0)
         , m_weight(weight)
         , m_interrupted(false)

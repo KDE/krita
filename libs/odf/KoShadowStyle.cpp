@@ -73,7 +73,7 @@ bool KoShadowStyle::operator==(const KoShadowStyle &other) const
     if (shadowCount() != other.shadowCount())
         return false;
 
-    foreach (ShadowData data, d->shadows)
+    foreach (const ShadowData &data, d->shadows)
     {
         if (!other.d->shadows.contains(data))
             return false;

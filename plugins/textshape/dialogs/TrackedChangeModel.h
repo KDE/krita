@@ -48,7 +48,7 @@ Q_DECLARE_METATYPE(ItemData)
 class ModelItem
 {
 public:
-    ModelItem(ModelItem *parent = 0);
+    explicit ModelItem(ModelItem *parent = 0);
     ~ModelItem();
 
     void setChangeId(int changeId);

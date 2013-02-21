@@ -179,7 +179,7 @@ bool KisIptcIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
 
                 QStringList list = data.split(',');
                 QList<KisMetaData::Value> values;
-                foreach(const QString entry, list) {
+                foreach(const QString &entry, list) {
                     values.push_back(KisMetaData::Value(entry));
                 }
                 value = KisMetaData::Value(values, KisMetaData::Value::UnorderedArray);

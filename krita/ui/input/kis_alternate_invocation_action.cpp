@@ -31,6 +31,10 @@ KisAlternateInvocationAction::KisAlternateInvocationAction(KisInputManager *mana
 {
     setName(i18n("Alternate Invocation"));
     setDescription(i18n("Alternate Invocation performs an alternate action with the current tool. For example, using the brush tool it picks a color from the canvas."));
+    QHash<QString, int> shortcuts;
+    shortcuts.insert(i18n("Toggle Primary Mode"), PrimaryAlternateToggleShortcut);
+    shortcuts.insert(i18n("Toggle Secondary Mode"), SecondaryAlternateToggleShortcut);
+    setShortcutIndexes(shortcuts);
 }
 
 KisAlternateInvocationAction::~KisAlternateInvocationAction()
@@ -42,14 +46,37 @@ void KisAlternateInvocationAction::begin(int shortcut, QEvent *event)
     KisAbstractInputAction::begin(shortcut, event);
 
     QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
-    QMouseEvent targetEvent(QEvent::MouseButtonPress, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
+    QMouseEvent targetEvent(*mouseEvent);
+
+    m_savedShortcut = (Shortcut)shortcut;
+
+    switch (m_savedShortcut) {
+    case PrimaryAlternateToggleShortcut:
+        targetEvent = QMouseEvent(QEvent::MouseButtonPress, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
+        break;
+    case SecondaryAlternateToggleShortcut:
+        targetEvent = QMouseEvent(QEvent::MouseButtonPress, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier | Qt::AltModifier);
+        break;
+    }
+
     inputManager()->toolProxy()->mousePressEvent(&targetEvent, inputManager()->widgetToPixel(mouseEvent->posF()));
 }
 
 void KisAlternateInvocationAction::end(QEvent *event)
 {
     QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
-    QMouseEvent targetEvent(QEvent::MouseButtonRelease, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
+
+    QMouseEvent targetEvent(*mouseEvent);
+
+    switch (m_savedShortcut) {
+    case PrimaryAlternateToggleShortcut:
+        targetEvent = QMouseEvent(QEvent::MouseButtonRelease, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
+        break;
+    case SecondaryAlternateToggleShortcut:
+        targetEvent = QMouseEvent(QEvent::MouseButtonRelease, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier | Qt::AltModifier);
+        break;
+    }
+
     inputManager()->toolProxy()->mouseReleaseEvent(&targetEvent, inputManager()->widgetToPixel(mouseEvent->posF()));
 
     KisAbstractInputAction::end(event);
@@ -59,6 +86,16 @@ void KisAlternateInvocationAction::mouseMoved(const QPointF &lastPos, const QPoi
 {
     Q_UNUSED(lastPos);
 
-    QMouseEvent targetEvent(QEvent::MouseButtonRelease, pos.toPoint(), Qt::NoButton, Qt::LeftButton, Qt::ControlModifier);
+    QMouseEvent targetEvent(QEvent::MouseMove, pos.toPoint(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
+
+    switch (m_savedShortcut) {
+    case PrimaryAlternateToggleShortcut:
+        targetEvent = QMouseEvent(QEvent::MouseMove, pos.toPoint(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
+        break;
+    case SecondaryAlternateToggleShortcut:
+        targetEvent = QMouseEvent(QEvent::MouseMove, pos.toPoint(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier | Qt::AltModifier);
+        break;
+    }
+
     inputManager()->toolProxy()->mouseMoveEvent(&targetEvent, inputManager()->widgetToPixel(pos));
 }

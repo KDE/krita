@@ -25,19 +25,22 @@
 #include <QList>
 
 class QTextDocument;
-class KoTextAnchor;
+class KoShapeAnchor;
+class KoAnchorInlineObject;
+class KoAnchorTextRange;
 
 class DeleteAnchorsCommand : public KUndo2Command
 {
 public:
-    DeleteAnchorsCommand(const QList<KoTextAnchor*> &anchors, QTextDocument *document, KUndo2Command *parent);
+    DeleteAnchorsCommand(const QList<KoShapeAnchor *> &anchors, QTextDocument *document, KUndo2Command *parent);
     virtual ~DeleteAnchorsCommand();
 
     virtual void redo();
     virtual void undo();
 
 private:
-    QList<KoTextAnchor*> m_anchors;
+    QList<KoAnchorInlineObject *> m_anchorObjects;
+    QList<KoAnchorTextRange *> m_anchorRanges;
     QTextDocument *m_document;
     bool m_first;
     bool m_deleteAnchors;

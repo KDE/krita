@@ -37,7 +37,8 @@ class KoView;
 class KoMainWindow;
 class KoView;
 class KoOpenPane;
-
+class KoDocumentInfoDlg;
+class KoDocumentInfo;
 class QGraphicsItem;
 
 /**
@@ -60,7 +61,7 @@ public:
      * @param parent may be another KoDocument, or anything else.
      *        Usually passed by KPluginFactory::create.
      */
-    KoPart(QObject *parent);
+    explicit KoPart(QObject *parent);
 
     /**
      *  Destructor.
@@ -132,6 +133,8 @@ public:
     void addRecentURLToAllShells(KUrl url);
 
     KoMainWindow *currentShell() const;
+
+    virtual KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
 
 protected slots:
 

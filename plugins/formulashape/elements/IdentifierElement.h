@@ -32,7 +32,7 @@
 class KOFORMULA_EXPORT IdentifierElement : public TokenElement {
 public:
     /// The standart constructor
-    IdentifierElement( BasicElement* parent = 0 );
+    explicit IdentifierElement(BasicElement *parent = 0);
 
     /// @return The element's ElementType
     ElementType elementType() const;

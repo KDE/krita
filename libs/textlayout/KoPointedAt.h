@@ -37,7 +37,7 @@ class TEXTLAYOUT_EXPORT KoPointedAt
 {
 public:
     KoPointedAt();
-    KoPointedAt(KoPointedAt *other);
+    explicit KoPointedAt(KoPointedAt *other);
 
     void fillInLinks(const QTextCursor &cursor, KoInlineTextObjectManager *inlineManager, KoTextRangeManager *rangeManager);
 

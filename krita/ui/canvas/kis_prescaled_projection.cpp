@@ -180,7 +180,7 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
     QPainter gc(&newImage);
     QVector<QRect> rects = updateRegion.rects();
 
-    foreach(QRect rect, rects) {
+    foreach(const QRect &rect, rects) {
 
         QRect imageRect =
             m_d->coordinatesConverter->viewportToImage(rect).toAlignedRect();

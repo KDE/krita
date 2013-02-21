@@ -24,6 +24,8 @@
 
 #include "kis_selection.h"
 
+class KisUndoAdapter;
+
 /**
  * KisSelectionTransactionData records changes to the selection for the undo stack. There
  * are two selections in Krita: the global selection and the per-layer selection mask.
@@ -36,7 +38,7 @@ class KRITAIMAGE_EXPORT KisSelectionTransactionData : public KisTransactionData
 {
 
 public:
-    KisSelectionTransactionData(const QString& name, KisImageWSP image, KisSelectionSP selection, KUndo2Command* parent = 0);
+    KisSelectionTransactionData(const QString& name, KisUndoAdapter *undoAdapter, KisSelectionSP selection, KUndo2Command* parent = 0);
     virtual ~KisSelectionTransactionData();
 
 public:
@@ -44,7 +46,7 @@ public:
     void undo();
 
 private:
-    KisImageWSP m_image;
+    KisUndoAdapter *m_undoAdapter;
     KisSelectionSP m_selection;
 };
 

@@ -107,7 +107,7 @@ public:
     void setBkColor( const quint8 red, const quint8 green, const quint8 blue,
                      const quint8 reserved );
     void setPixelV( QPoint &point, quint8 red, quint8 green, quint8 blue, quint8 reserved );
-    void modifyWorldTransform( const quint32 mode, float M11, float M12,
+    void modifyWorldTransform( quint32 mode, float M11, float M12,
 			       float M21, float M22, float Dx, float Dy );
     void setWorldTransform( float M11, float M12, float M21,
 			    float M22, float Dx, float Dy );

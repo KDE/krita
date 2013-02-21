@@ -72,7 +72,7 @@ public:
     Q_DECLARE_FLAGS(Strategies, Strategy)
 
     /// Creates the snap guide to work on the given canvas
-    KoSnapGuide(KoCanvasBase *canvas);
+    explicit KoSnapGuide(KoCanvasBase *canvas);
 
     virtual ~KoSnapGuide();
 

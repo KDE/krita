@@ -111,7 +111,8 @@ QString KoReportItemCheck::typeName() const
     return "report:check";
 }
 
-int KoReportItemCheck::render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script)
+int KoReportItemCheck::renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset,
+                                        const QVariant &data, KRScriptHandler *script)
 {
     OROCheck *chk = new OROCheck();
 

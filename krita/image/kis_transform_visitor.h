@@ -81,7 +81,7 @@ public:
         KisTransformWorker tw(layer->projection(), m_sx, m_sy,
                               0, 0, 0, 0,
                               m_angle, m_tx, m_ty, 0,
-                              m_filter, true);
+                              m_filter);
 
         KUndo2Command* command = layer->transform(tw.transform());
         if (command)
@@ -157,7 +157,7 @@ private:
 
         KisTransaction transaction(i18n("Rotate Node"), dev);
 
-        KisTransformWorker tw(dev, m_sx, m_sy, 0.0, 0.0, 0.0, 0.0, m_angle, m_tx, m_ty, m_progress, m_filter, true);
+        KisTransformWorker tw(dev, m_sx, m_sy, 0.0, 0.0, 0.0, 0.0, m_angle, m_tx, m_ty, m_progress, m_filter);
         tw.run();
 
         transaction.commit(m_image->undoAdapter());
@@ -167,16 +167,16 @@ private:
     void transformMask(KisMask* mask) {
         KisSelectionSP selection = mask->selection();
         if(selection->hasPixelSelection() && !m_scaleOnlyShapes) {
-            KisSelectionTransaction transaction(QString(), m_image, selection);
+            KisSelectionTransaction transaction(QString(), m_image->undoAdapter(), selection);
 
             KisPaintDeviceSP dev = selection->getOrCreatePixelSelection().data();
-            KisTransformWorker tw(dev, m_sx, m_sy, 0.0, 0.0, 0.0, 0.0, m_angle, m_tx, m_ty, m_progress, m_filter, true);
+            KisTransformWorker tw(dev, m_sx, m_sy, 0.0, 0.0, 0.0, 0.0, m_angle, m_tx, m_ty, m_progress, m_filter);
             tw.run();
 
             transaction.commit(m_image->undoAdapter());
         }
         if (selection->hasShapeSelection()) {
-            KisTransformWorker tw(selection->projection(), m_sx, m_sy, 0.0, 0.0, 0.0, 0.0, m_angle, m_tx, m_ty, 0, m_filter, true);
+            KisTransformWorker tw(selection->projection(), m_sx, m_sy, 0.0, 0.0, 0.0, 0.0, m_angle, m_tx, m_ty, 0, m_filter);
 
             KUndo2Command* command = selection->shapeSelection()->transform(tw.transform());
             if (command)

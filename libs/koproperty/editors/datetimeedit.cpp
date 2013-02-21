@@ -22,9 +22,8 @@
 #include "datetimeedit.h"
 
 #include <koproperty/EditorDataModel.h>
-// KDE
-#include <KLocale>
-#include <KGlobal>
+// Qt
+#include <QLocale>
 
 using namespace KoProperty;
 
@@ -36,6 +35,15 @@ DateTimeEdit::DateTimeEdit(const Property* prop, QWidget* parent)
 
     setFrame(false);
     setCalendarPopup(true);
+
+    const QDateTime minDateTime = prop->option("min").toDateTime();
+    if (minDateTime.isValid()) {
+        setMinimumDateTime(minDateTime);
+    }
+    const QDateTime maxDateTime = prop->option("max").toDateTime();
+    if (maxDateTime.isValid()) {
+        setMaximumDateTime(maxDateTime);
+    }
 
     connect(this, SIGNAL(dateTimeChanged(QDateTime)), this, SLOT(onDateTimeChanged()));
 }
@@ -56,20 +64,29 @@ void DateTimeEdit::setValue(const QVariant& value)
     blockSignals(false);
 }
 
+void DateTimeEdit::paintEvent(QPaintEvent* event)
+{
+    QDateTimeEdit::paintEvent(event);
+    Factory::paintTopGridLine(this);
+}
+
+
 void DateTimeEdit::onDateTimeChanged()
 {
     emit commitData(this);
 }
 
 
+//! @todo Port to KLocale, be inspired by KexiDateTimeTableEdit (with Kexi*Formatter)
 DateTimeDelegate::DateTimeDelegate()
 {
 }
 
 QString DateTimeDelegate::displayTextForProperty(const Property* prop) const
 {
-    // TODO: use KDateTime?
-    return KGlobal::locale()->formatDateTime(prop->value().toDateTime(), KLocale::ShortDate, false /*no sec */);
+    const QLocale locale;
+    const QString defaultDateTimeFormat = locale.dateTimeFormat(QLocale::ShortFormat);
+    return prop->value().toDateTime().toString(defaultDateTimeFormat);
 }
 
 QWidget* DateTimeDelegate::createEditor(int type, QWidget* parent,

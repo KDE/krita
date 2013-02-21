@@ -187,7 +187,9 @@ QString KoReportItemText::typeName() const
     return "report:text";
 }
 
-int KoReportItemText::render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script)
+int KoReportItemText::renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset,
+                                       const QVariant &data, KRScriptHandler *script)
+
 {
     Q_UNUSED(script);
 

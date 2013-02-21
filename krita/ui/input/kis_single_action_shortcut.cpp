@@ -18,8 +18,9 @@
 
 #include "kis_single_action_shortcut.h"
 
-struct KisSingleActionShortcut::Private
+class KisSingleActionShortcut::Private
 {
+public:
     QList<Qt::Key> modifiers;
     Qt::Key key;
     bool useWheel;

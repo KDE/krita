@@ -161,16 +161,26 @@ void KisTool::activate(ToolActivation, const QSet<KoShape*> &)
 
     connect(actions().value("toggle_fg_bg"), SIGNAL(triggered()), SLOT(slotToggleFgBg()), Qt::UniqueConnection);
     connect(actions().value("reset_fg_bg"), SIGNAL(triggered()), SLOT(slotResetFgBg()), Qt::UniqueConnection);
+    connect(image(), SIGNAL(sigUndoDuringStrokeRequested()), SLOT(requestUndoDuringStroke()));
     connect(image(), SIGNAL(sigStrokeCancellationRequested()), SLOT(requestStrokeCancellation()));
     connect(image(), SIGNAL(sigStrokeEndRequested()), SLOT(requestStrokeEnd()));
 }
 
 void KisTool::deactivate()
 {
+    disconnect(image().data(), SIGNAL(sigUndoDuringStrokeRequested()));
     disconnect(image().data(), SIGNAL(sigStrokeCancellationRequested()));
     disconnect(image().data(), SIGNAL(sigStrokeEndRequested()));
     disconnect(actions().value("toggle_fg_bg"), 0, this, 0);
     disconnect(actions().value("reset_fg_bg"), 0, this, 0);
+}
+
+void KisTool::requestUndoDuringStroke()
+{
+    /**
+     * Default implementation just cancells the stroke
+     */
+    requestStrokeCancellation();
 }
 
 void KisTool::requestStrokeCancellation()
@@ -579,7 +589,7 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
         glEnable(GL_LINE_SMOOTH);
         glEnable(GL_COLOR_LOGIC_OP);
         glLogicOp(GL_XOR);
-        glColor3f(0.501961, 1.0, 0.501961);
+        glColor3f(0.501961f, 1.0f, 0.501961f);
 
         QList<QPolygonF> subPathPolygons = path.toSubpathPolygons();
         for(int i=0; i<subPathPolygons.size(); i++) {

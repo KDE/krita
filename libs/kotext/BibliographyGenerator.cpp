@@ -188,7 +188,7 @@ void BibliographyGenerator::generate()
 QMap<QString, BibliographyEntryTemplate> BibliographyGenerator::defaultBibliographyEntryTemplates()
 {
     QMap<QString, BibliographyEntryTemplate> entryTemplates;
-    foreach (QString bibType, KoOdfBibliographyConfiguration::bibTypes) {
+    foreach (const QString &bibType, KoOdfBibliographyConfiguration::bibTypes) {
         BibliographyEntryTemplate bibEntryTemplate;
 
         //Now creating default IndexEntries for all BibliographyEntryTemplates

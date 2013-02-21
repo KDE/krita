@@ -30,7 +30,7 @@ class KoViewConverter;
 class FLAKE_EXPORT KoFilterEffectRenderContext
 {
 public:
-    KoFilterEffectRenderContext(const KoViewConverter &converter);
+    explicit KoFilterEffectRenderContext(const KoViewConverter &converter);
     ~KoFilterEffectRenderContext();
 
     /// Returns the filter region the filter is applied to

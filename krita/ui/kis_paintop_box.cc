@@ -152,7 +152,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
         
         slSize->setRange(0.0, 1000.0, 2);
         slSize->setValue(100.0);
-        slSize->setSingleStep(0.05);
+        slSize->setSingleStep(1);
         slSize->setExponentRatio(3.0);
         slSize->setMinimumWidth(120);
 
@@ -667,7 +667,7 @@ void KisPaintopBox::sliderChanged(int n)
     qreal opacity = m_sliderChooser[n]->getWidget<KisDoubleSliderSpinBox>("opacity")->value();
     qreal flow    = m_sliderChooser[n]->getWidget<KisDoubleSliderSpinBox>("flow")->value();
     qreal size    = m_sliderChooser[n]->getWidget<KisDoubleSliderSpinBox>("size")->value();
-    
+
     setSliderValue("opacity", opacity);
     setSliderValue("flow"   , flow   );
     setSliderValue("size"   , size   );

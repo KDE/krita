@@ -1,5 +1,13 @@
 project( textPlugin)
 
+# only build the textdocument inspector in debug builds
+set(BUILD_TEXTDOCUMENT_INSPECTOR (CMAKE_BUILD_TYPE STREQUAL "Debug"))
+
+if(BUILD_TEXTDOCUMENT_INSPECTOR)
+    add_definitions(-DCREATE_TEXTDOCUMENT_INSPECTOR)
+endif(BUILD_TEXTDOCUMENT_INSPECTOR)
+
+
 add_subdirectory( pics )
 #add_subdirectory( tests )
 
@@ -8,7 +16,6 @@ include_directories(
     ${TEXTLAYOUT_INCLUDES}
     ${FLAKE_INCLUDES}
     ${KOMAIN_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets/
     ${KDE4_INCLUDE_DIR}/threadweaver/)
 
 ########### Flake Plugin library ###############
@@ -99,6 +106,17 @@ SET ( textshape_SRCS
     commands/AutoResizeCommand.cpp
 )
 
+if(BUILD_TEXTDOCUMENT_INSPECTOR)
+    SET ( textshape_SRCS
+        ${textshape_SRCS}
+        TextDocumentStructureModel.cpp
+        TextDocumentInspectionDocker.cpp
+        TextDocumentInspectionDockerFactory.cpp
+        TextDocumentInspectionPlugin.cpp
+    )
+endif(BUILD_TEXTDOCUMENT_INSPECTOR)
+
+
 kde4_add_ui_files(textshape_SRCS
     dialogs/SimpleCharacterWidget.ui
     dialogs/SimpleParagraphWidget.ui
@@ -147,3 +165,10 @@ install(TARGETS textshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES textshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 #kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )
+
+if(BUILD_TEXTDOCUMENT_INSPECTOR)
+    # workaround: to avoid translations the real desktop file is only generated
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/textdocumentinspection.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/textdocumentinspection.desktop)
+
+    install( FILES ${CMAKE_CURRENT_BINARY_DIR}/textdocumentinspection.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+endif(BUILD_TEXTDOCUMENT_INSPECTOR)

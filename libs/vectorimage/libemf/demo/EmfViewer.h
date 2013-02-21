@@ -31,7 +31,7 @@ class EmfViewer : public QMainWindow
     Q_OBJECT
 
 public:
-    EmfViewer( QSize &size );
+    explicit EmfViewer(QSize &size);
     ~EmfViewer();
 
     void loadFile( const QString &fileName );

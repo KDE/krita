@@ -103,7 +103,7 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
 
     m_stylesModel->setStyleThumbnailer(m_thumbnailer);
     widget.paragraphStyleCombo->setStylesModel(m_sortedStylesModel);
-    connect(widget.paragraphStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
+    connect(widget.paragraphStyleCombo, SIGNAL(selected(QModelIndex&)), this, SLOT(styleSelected(QModelIndex&)));
     connect(widget.paragraphStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(newStyleRequested(QString)));
     connect(widget.paragraphStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(doneWithFocus()));
     connect(widget.paragraphStyleCombo, SIGNAL(showStyleManager(int)), this, SLOT(slotShowStyleManager(int)));
@@ -130,7 +130,7 @@ void SimpleParagraphWidget::fillListButtons()
     TextShape textShape(&itom, &tlm);
     textShape.setSize(QSizeF(300, 100));
     QTextCursor cursor (textShape.textShapeData()->document());
-    foreach(Lists::ListStyleItem item, Lists::genericListStyleItems()) {
+    foreach(const Lists::ListStyleItem &item, Lists::genericListStyleItems()) {
         QPixmap pm(48,48);
 
         pm.fill(Qt::transparent);
@@ -153,10 +153,18 @@ void SimpleParagraphWidget::fillListButtons()
             textCharFormat.setFontWeight(QFont::Normal);
             cursor.setCharFormat(textCharFormat);
 
+            QTextBlock cursorBlock = cursor.block();
+            KoTextBlockData data(cursorBlock);
             cursor.insertText("----");
             listStyle.applyStyle(cursor.block(),1);
+            cursorBlock = cursor.block();
+            KoTextBlockData data1(cursorBlock);
             cursor.insertText("\n----");
+            cursorBlock = cursor.block();
+            KoTextBlockData data2(cursorBlock);
             cursor.insertText("\n----");
+            cursorBlock = cursor.block();
+            KoTextBlockData data3(cursorBlock);
 
             KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(textShape.textShapeData()->document()->documentLayout());
             if(lay)
@@ -278,13 +286,13 @@ void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
             }
         }
         //we are updating the combo's selected item to what is the current format. we do not want this to apply the style as it would mess up the undo stack, the change tracking,...
-        disconnect(widget.paragraphStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
+        disconnect(widget.paragraphStyleCombo, SIGNAL(selected(QModelIndex&)), this, SLOT(styleSelected(QModelIndex&)));
         m_sortedStylesModel->styleApplied(style);
         widget.paragraphStyleCombo->setCurrentIndex(m_sortedStylesModel->indexForParagraphStyle(*style).row());
         widget.paragraphStyleCombo->setStyleIsOriginal(unchanged);
         m_stylesModel->setCurrentParagraphStyle(id);
         widget.paragraphStyleCombo->slotUpdatePreview();
-        connect(widget.paragraphStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
+        connect(widget.paragraphStyleCombo, SIGNAL(selected(QModelIndex&)), this, SLOT(styleSelected(QModelIndex&)));
     }
 }
 
@@ -299,10 +307,10 @@ void SimpleParagraphWidget::setStyleManager(KoStyleManager *sm)
     }
     m_styleManager = sm;
     //we want to disconnect this before setting the stylemanager. Populating the model apparently selects the first inserted item. We don't want this to actually set a new style.
-    disconnect(widget.paragraphStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
+    disconnect(widget.paragraphStyleCombo, SIGNAL(selected(QModelIndex&)), this, SLOT(styleSelected(QModelIndex&)));
     m_stylesModel->setStyleManager(sm);
     m_sortedStylesModel->setStyleManager(sm);
-    connect(widget.paragraphStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
+    connect(widget.paragraphStyleCombo, SIGNAL(selected(QModelIndex&)), this, SLOT(styleSelected(QModelIndex&)));
     connect(m_styleManager, SIGNAL(styleApplied(const KoParagraphStyle*)), this, SLOT(slotParagraphStyleApplied(const KoParagraphStyle*)));
 }
 
@@ -318,12 +326,25 @@ void SimpleParagraphWidget::listStyleChanged(int id)
     KoListLevelProperties llp;
     llp.setStyle(static_cast<KoListStyle::Style>(id));
     llp.setLevel(1);
-    m_tool->textEditor()->setListProperties(llp);
+    KoTextEditor::ChangeListFlags flags(KoTextEditor::AutoListStyle);
+    m_tool->textEditor()->setListProperties(llp, flags);
 }
 
 void SimpleParagraphWidget::styleSelected(int index)
 {
-    KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(m_sortedStylesModel->index(index).internalId());
+    KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(m_sortedStylesModel->index(index, 0, QModelIndex()).internalId());
+    if (paragStyle) {
+        emit paragraphStyleSelected(paragStyle);
+    }
+    emit doneWithFocus();
+}
+
+void SimpleParagraphWidget::styleSelected(QModelIndex &index)
+{
+    if (!index.isValid()) {
+        return;
+    }
+    KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(index.internalId());
     if (paragStyle) {
         emit paragraphStyleSelected(paragStyle);
     }
@@ -332,15 +353,13 @@ void SimpleParagraphWidget::styleSelected(int index)
 
 void SimpleParagraphWidget::slotShowStyleManager(int index)
 {
-    int styleId = m_sortedStylesModel->index(index).internalId();
+    int styleId = m_sortedStylesModel->index(index, 0, QModelIndex()).internalId();
     emit showStyleManager(styleId);
     emit doneWithFocus();
 }
 
 void SimpleParagraphWidget::slotParagraphStyleApplied(const KoParagraphStyle *style)
 {
-    if (style) {
-    }
     m_sortedStylesModel->styleApplied(style);
 }
 

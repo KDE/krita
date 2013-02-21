@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>139</width>
-    <height>73</height>
+    <width>271</width>
+    <height>106</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
@@ -22,35 +22,45 @@
      <property name="spacing">
       <number>0</number>
      </property>
-     <item row="0" column="0">
-      <widget class="QLabel" name="lblMode">
-       <property name="cursor">
-        <cursorShape>CrossCursor</cursorShape>
+     <item row="1" column="3">
+      <widget class="KoGroupButton" name="intersect">
+       <property name="toolTip">
+        <string>Intersect (Shortcut T)</string>
        </property>
        <property name="text">
-        <string>Mode:</string>
+        <string>...</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QPushButton" name="pixel">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>24</width>
-         <height>16777215</height>
-        </size>
-       </property>
+     <item row="0" column="3">
+      <widget class="KoGroupButton" name="shape">
        <property name="toolTip">
-        <string>Pixel</string>
+        <string>Vector Selection</string>
        </property>
        <property name="text">
-        <string/>
+        <string>...</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="KoGroupButton" name="replace">
+       <property name="toolTip">
+        <string>Replace (Shortcut R)</string>
+       </property>
+       <property name="text">
+        <string>...</string>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -58,36 +68,34 @@
        <property name="checked">
         <bool>true</bool>
        </property>
-       <property name="autoExclusive">
+       <property name="autoRaise">
         <bool>true</bool>
        </property>
       </widget>
      </item>
-     <item row="0" column="2">
-      <widget class="QPushButton" name="shape">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>24</width>
-         <height>16777215</height>
-        </size>
-       </property>
+     <item row="1" column="6">
+      <widget class="KoGroupButton" name="add">
        <property name="toolTip">
-        <string>Shape</string>
+        <string>Add (Shortcut A)</string>
        </property>
        <property name="text">
-        <string/>
+        <string>...</string>
        </property>
        <property name="checkable">
         <bool>true</bool>
        </property>
-       <property name="autoExclusive">
+       <property name="autoRaise">
         <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="lblMode">
+       <property name="cursor">
+        <cursorShape>CrossCursor</cursorShape>
+       </property>
+       <property name="text">
+        <string>Mode:</string>
        </property>
       </widget>
      </item>
@@ -101,25 +109,13 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
-      <widget class="QPushButton" name="replace">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>24</width>
-         <height>16777215</height>
-        </size>
-       </property>
+     <item row="0" column="1">
+      <widget class="KoGroupButton" name="pixel">
        <property name="toolTip">
-        <string>Replace (Shortcut R)</string>
+        <string>Pixel Selection</string>
        </property>
        <property name="text">
-        <string/>
+        <string>...</string>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -127,98 +123,30 @@
        <property name="checked">
         <bool>true</bool>
        </property>
-       <property name="autoExclusive">
+       <property name="autoRaise">
         <bool>true</bool>
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
-      <widget class="QPushButton" name="intersect">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>24</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string>Intersect (Shortcut T)</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-       <property name="autoExclusive">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="3">
-      <widget class="QPushButton" name="add">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>24</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string>Add (Shortcut A)</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-       <property name="autoExclusive">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="4">
-      <widget class="QPushButton" name="subtract">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>24</width>
-         <height>16777215</height>
-        </size>
-       </property>
+     <item row="1" column="7">
+      <widget class="KoGroupButton" name="subtract">
        <property name="toolTip">
         <string>Subtract (Shortcut S)</string>
        </property>
        <property name="text">
-        <string/>
+        <string>...</string>
        </property>
        <property name="checkable">
         <bool>true</bool>
        </property>
-       <property name="autoExclusive">
+       <property name="autoRaise">
         <bool>true</bool>
        </property>
       </widget>
      </item>
     </layout>
    </item>
-   <item row="0" column="1">
+   <item row="0" column="2">
     <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -244,6 +172,13 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>KoGroupButton</class>
+   <extends>QToolButton</extends>
+   <header location="global">KoGroupButton.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

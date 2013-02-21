@@ -73,7 +73,6 @@ public:
         AlignTop,     ///< canvas is top aligned if smaller than the viewport
         Centered,     ///< canvas is centered if smaller than the viewport
         Infinite,     ///< canvas is never smaller than the viewport
-        Presentation, ///< canvas is not handled by KoCanvasController, canvas is full screen
         Spreadsheet   ///< same as Infinite, but supports right-to-left layouts
     };
 
@@ -329,7 +328,7 @@ class FLAKE_EXPORT KoCanvasControllerProxyObject : public QObject
     Q_OBJECT
     Q_DISABLE_COPY(KoCanvasControllerProxyObject)
 public:
-    KoCanvasControllerProxyObject(KoCanvasController *canvasController, QObject *parent = 0);
+    explicit KoCanvasControllerProxyObject(KoCanvasController *canvasController, QObject *parent = 0);
 
 public:
 

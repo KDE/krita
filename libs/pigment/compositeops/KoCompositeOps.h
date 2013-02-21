@@ -34,19 +34,6 @@
 #include "compositeops/KoCompositeOpErase.h"
 #include "compositeops/KoCompositeOpCopy2.h"
 #include "compositeops/KoCompositeOpDissolve.h"
-
-#include "compositeops/KoCompositeOpAdd.h"
-#include "compositeops/KoCompositeOpBurn.h"
-#include "compositeops/KoCompositeOpDivide.h"
-#include "compositeops/KoCompositeOpDodge.h"
-#include "compositeops/KoCompositeOpMultiply.h"
-#include "compositeops/KoCompositeOpOverlay.h"
-#include "compositeops/KoCompositeOpScreen.h"
-#include "compositeops/KoCompositeOpSubtract.h"
-#include "compositeops/KoCompositeOpInversedSubtract.h"
-#include "compositeops/KoCompositeOpSoftlight.h"
-#include "compositeops/KoCompositeOpHardlight.h"
-
 #include "compositeops/KoCompositeOpBehind.h"
 
 #include "KoOptimizedCompositeOpFactory.h"
@@ -135,7 +122,8 @@ struct AddGeneralOps<Traits, true>
          add<&cfAddition<Arg>    >(cs, COMPOSITE_LINEAR_DODGE, i18n("Linear Dodge"), KoCompositeOp::categoryLight());
          add<&cfLightenOnly<Arg> >(cs, COMPOSITE_LIGHTEN     , i18n("Lighten")     , KoCompositeOp::categoryLight());
          add<&cfHardLight<Arg>   >(cs, COMPOSITE_HARD_LIGHT  , i18n("Hard Light")  , KoCompositeOp::categoryLight());
-         add<&cfSoftLight<Arg>   >(cs, COMPOSITE_SOFT_LIGHT  , i18n("Soft Light")  , KoCompositeOp::categoryLight());
+         add<&cfSoftLightSvg<Arg>   >(cs, COMPOSITE_SOFT_LIGHT_SVG, i18n("Soft Light (SVG)")  , KoCompositeOp::categoryLight());
+         add<&cfSoftLight<Arg>   >(cs, COMPOSITE_SOFT_LIGHT_PHOTOSHOP, i18n("Soft Light (Photoshop)")  , KoCompositeOp::categoryLight());
          add<&cfGammaLight<Arg>  >(cs, COMPOSITE_GAMMA_LIGHT , i18n("Gamma Light") , KoCompositeOp::categoryLight());
          add<&cfVividLight<Arg>  >(cs, COMPOSITE_VIVID_LIGHT , i18n("Vivid Light") , KoCompositeOp::categoryLight());
          add<&cfPinLight<Arg>    >(cs, COMPOSITE_PIN_LIGHT   , i18n("Pin Light")   , KoCompositeOp::categoryLight());
@@ -178,11 +166,13 @@ struct AddRGBOps<Traits, true>
     static const qint32 blue_pos  = Traits::blue_pos;
     
     template<void compositeFunc(Arg, Arg, Arg, Arg&, Arg&, Arg&)>
+
     static void add(KoColorSpace* cs, const QString& id, const QString& description, const QString& category) {
         cs->addCompositeOp(new KoCompositeOpGenericHSL<Traits, compositeFunc>(cs, id, description, category));
     }
     
     static void add(KoColorSpace* cs) {
+
         cs->addCompositeOp(new KoCompositeOpCopyChannel<Traits,red_pos  >(cs, COMPOSITE_COPY_RED  , i18n("Copy Red")  , KoCompositeOp::categoryMisc()));
         cs->addCompositeOp(new KoCompositeOpCopyChannel<Traits,green_pos>(cs, COMPOSITE_COPY_GREEN, i18n("Copy Green"), KoCompositeOp::categoryMisc()));
         cs->addCompositeOp(new KoCompositeOpCopyChannel<Traits,blue_pos >(cs, COMPOSITE_COPY_BLUE , i18n("Copy Blue") , KoCompositeOp::categoryMisc()));
@@ -237,29 +227,11 @@ void addStandardCompositeOps(KoColorSpace* cs)
     typedef typename _Traits_::channels_type channels_type;
     
     static const bool useGeneralOps = true;
-    static const bool useRGBOps     = boost::is_base_of<KoBgrTraits<channels_type>, _Traits_>::value;
+    static const bool useRGBOps = (boost::is_base_of<KoBgrTraits<channels_type>, _Traits_>::value
+                                || boost::is_base_of<KoRgbTraits<channels_type>, _Traits_>::value);
     
     _Private::AddGeneralOps<_Traits_, useGeneralOps>::add(cs);
     _Private::AddRGBOps    <_Traits_, useRGBOps    >::add(cs);
-}
-
-template<class _Traits_>
-void addOldCompositeOps(KoColorSpace* cs)
-{
-    cs->addCompositeOp(new KoCompositeOpAdd<_Traits_>(cs));
-    cs->addCompositeOp(new KoCompositeOpAlphaDarken<_Traits_>(cs));
-    cs->addCompositeOp(new KoCompositeOpBurn<_Traits_>(cs));
-    cs->addCompositeOp(new KoCompositeOpCopy2<_Traits_>(cs));
-    cs->addCompositeOp(new KoCompositeOpDivide<_Traits_>(cs));
-    cs->addCompositeOp(new KoCompositeOpDodge<_Traits_>(cs));
-    cs->addCompositeOp(new KoCompositeOpErase<_Traits_>(cs));
-    cs->addCompositeOp(new KoCompositeOpMultiply<_Traits_>(cs));
-    cs->addCompositeOp(new KoCompositeOpOver<_Traits_>(cs));
-    cs->addCompositeOp(new KoCompositeOpOverlay<_Traits_>(cs));
-    cs->addCompositeOp(new KoCompositeOpScreen<_Traits_>(cs));
-    cs->addCompositeOp(new KoCompositeOpSubtract<_Traits_>(cs));
-    cs->addCompositeOp(new KoCompositeOpSoftlight<_Traits_>(cs));
-    cs->addCompositeOp(new KoCompositeOpHardlight<_Traits_>(cs));
 }
 
 #endif

@@ -115,7 +115,7 @@ KoResourceLoaderThread::KoResourceLoaderThread(KoResourceServerBase * server)
     QStringList fileNames = m_server->blackListedFiles();
 
     if (!fileNames.isEmpty()) {
-        foreach (QString s, fileNames) {
+        foreach (const QString &s, fileNames) {
             if (m_fileNames.contains(s)) {
                m_fileNames.removeAll(s);
             }
@@ -146,7 +146,7 @@ QStringList KoResourceLoaderThread::getFileNames( const QString & extensions)
     QStringList fileNames;
 
     foreach (const QString &extension, extensionList) {
-        fileNames += KGlobal::mainComponent().dirs()->findAllResources(m_server->type().toAscii(), extension, KStandardDirs::Recursive | KStandardDirs::NoDuplicates);
+        fileNames += KGlobal::mainComponent().dirs()->findAllResources(m_server->type().toLatin1(), extension, KStandardDirs::Recursive | KStandardDirs::NoDuplicates);
 
     }
     return fileNames;
@@ -174,7 +174,7 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
     KGlobal::mainComponent().dirs()->addResourceDir("ko_gradients", "/usr/share/create/gradients/gimp");
     KGlobal::mainComponent().dirs()->addResourceDir("ko_gradients", QDir::homePath() + QString("/.create/gradients/gimp"));
 
-    KGlobal::mainComponent().dirs()->addResourceType("ko_palettes", "data", "krita/palettes/");
+    KGlobal::mainComponent().dirs()->addResourceType("ko_palettes", "data", "calligra/palettes/");
     KGlobal::mainComponent().dirs()->addResourceType("ko_palettes", "data", "karbon/palettes/");
     KGlobal::mainComponent().dirs()->addResourceDir("ko_palettes", "/usr/share/create/swatches");
     KGlobal::mainComponent().dirs()->addResourceDir("ko_palettes", QDir::homePath() + QString("/.create/swatches"));

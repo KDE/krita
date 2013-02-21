@@ -78,4 +78,4 @@ Comment[zh_TW]=中繼資料編輯器
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritametadataeditor
-X-Krita-Version=5
+X-Krita-Version=27

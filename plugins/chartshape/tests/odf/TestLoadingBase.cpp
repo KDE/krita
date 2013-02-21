@@ -103,7 +103,7 @@ void TestLoadingBase::testLegendElements(QStringList labels)
     foreach(KDChart::AbstractDiagram *diagram, diagrams) {
         QVERIFY(diagram);
         QStringList diagramLabels = diagram->datasetLabels();
-        foreach(QString diagramLabel, diagramLabels) {
+        foreach(const QString &diagramLabel, diagramLabels) {
             QVERIFY(!labels.isEmpty());
             QCOMPARE(diagramLabel, labels.takeFirst());
         }
@@ -207,6 +207,6 @@ TableSource *TestLoadingBase::tableSource()
 namespace QTest {
     template<>
     char *toString(const KChart::CellRegion &region) {
-        return qstrdup(region.toString().toAscii().data());
+        return qstrdup(region.toString().toLatin1());
     }
 }

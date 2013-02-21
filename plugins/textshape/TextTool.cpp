@@ -125,27 +125,28 @@ static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut s
 }
 
 TextTool::TextTool(KoCanvasBase *canvas)
-        : KoToolBase(canvas),
-        m_textShape(0),
-        m_textShapeData(0),
-        m_changeTracker(0),
-        m_allowActions(true),
-        m_allowAddUndoCommand(true),
-        m_allowResourceManagerUpdates(true),
-        m_prevCursorPosition(-1),
-        m_caretTimer(this),
-        m_caretTimerState(true),
-        m_currentCommand(0),
-        m_currentCommandHasChildren(false),
-        m_specialCharacterDocker(0),
-        m_textTyping(false),
-        m_textDeleting(false)
-        , m_editTipTimer(this),
-        m_delayedEnsureVisible(false),
-        m_toolSelection(0)
+        : KoToolBase(canvas)
+        , m_textShape(0)
+        , m_textShapeData(0)
+        , m_changeTracker(0)
+        , m_allowActions(true)
+        , m_allowAddUndoCommand(true)
+        , m_allowResourceManagerUpdates(true)
+        , m_prevCursorPosition(-1)
+        , m_caretTimer(this)
+        , m_caretTimerState(true)
+        , m_currentCommand(0)
+        , m_currentCommandHasChildren(false)
+        , m_specialCharacterDocker(0)
+        , m_textTyping(false)
+        , m_textDeleting(false)
+        , m_editTipTimer(this)
+        , m_delayedEnsureVisible(false)
+        , m_toolSelection(0)
         , m_tableDraggedOnce(false)
         , m_tablePenMode(false)
-        ,m_lastImMicroFocus(QRectF(0,0,0,0))
+        , m_lastImMicroFocus(QRectF(0,0,0,0))
+        , m_drag(0)
 {
     setTextMode(true);
 
@@ -202,6 +203,9 @@ TextTool::TextTool(KoCanvasBase *canvas)
 
 void TextTool::createActions()
 {
+    bool useAdvancedText = !(canvas()->resourceManager()->intResource(KoCanvasResourceManager::ApplicationSpeciality)
+                             & KoCanvasResourceManager::NoAdvancedText);
+
     m_actionPasteAsText  = new KAction(koIcon("edit-paste"), i18n("Paste As Text"), this);
     addAction("edit_paste_text", m_actionPasteAsText);
     m_actionPasteAsText->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_V);
@@ -340,18 +344,19 @@ void TextTool::createActions()
     //action->setShortcut(Qt::CTRL + Qt::Key_Minus); // TODO this one is also used for the kde-global zoom-out :(
     connect(action, SIGNAL(triggered()), this, SLOT(softHyphen()));
 
-    action  = new KAction(i18n("Line Break"), this);
-    addAction("line_break", action);
-    action->setShortcut(Qt::SHIFT + Qt::Key_Return);
-    connect(action, SIGNAL(triggered()), this, SLOT(lineBreak()));
+    if (useAdvancedText) {
+        action  = new KAction(i18n("Line Break"), this);
+        addAction("line_break", action);
+        action->setShortcut(Qt::SHIFT + Qt::Key_Return);
+        connect(action, SIGNAL(triggered()), this, SLOT(lineBreak()));
 
-    action  = new KAction(koIcon("insert-pagebreak"), i18n("Page Break"), this);
-    addAction("insert_framebreak", action);
-    action->setShortcut(KShortcut(Qt::CTRL + Qt::Key_Return));
-    connect(action, SIGNAL(triggered()), this, SLOT(insertFrameBreak()));
-    action->setToolTip(i18n("Insert a page break"));
-    action->setWhatsThis(i18n("All text after this point will be moved into the next page."));
-
+        action  = new KAction(koIcon("insert-pagebreak"), i18n("Page Break"), this);
+        addAction("insert_framebreak", action);
+        action->setShortcut(KShortcut(Qt::CTRL + Qt::Key_Return));
+        connect(action, SIGNAL(triggered()), this, SLOT(insertFrameBreak()));
+        action->setToolTip(i18n("Insert a page break"));
+        action->setWhatsThis(i18n("All text after this point will be moved into the next page."));
+    }
 
     action  = new KAction(i18n("Font..."), this);
     addAction("format_font", action);
@@ -393,77 +398,50 @@ void TextTool::createActions()
     m_shrinkToFitAction->setCheckable(true);
     connect(m_shrinkToFitAction, SIGNAL(triggered(bool)), this, SLOT(setShrinkToFit(bool)));
 
-    action = new KAction(koIcon("insert-table"), i18n("Insert Custom..."), this);
-    addAction("insert_table", action);
-    action->setToolTip(i18n("Insert a table into the document."));
-    connect(action, SIGNAL(triggered()), this, SLOT(insertTable()));
+    if (useAdvancedText) {
+        action = new KAction(koIcon("insert-table"), i18n("Insert Custom..."), this);
+        addAction("insert_table", action);
+        action->setToolTip(i18n("Insert a table into the document."));
+        connect(action, SIGNAL(triggered()), this, SLOT(insertTable()));
 
-    action  = new KAction(koIcon("edit-table-insert-row-above"), i18n("Row Above"), this);
-    action->setToolTip(i18n("Insert Row Above"));
-    addAction("insert_tablerow_above", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowAbove()));
+        action  = new KAction(koIcon("edit-table-insert-row-above"), i18n("Row Above"), this);
+        action->setToolTip(i18n("Insert Row Above"));
+        addAction("insert_tablerow_above", action);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowAbove()));
 
-    action  = new KAction(koIcon("edit-table-insert-row-below"), i18n("Row Below"), this);
-    action->setToolTip(i18n("Insert Row Below"));
-    addAction("insert_tablerow_below", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowBelow()));
+        action  = new KAction(koIcon("edit-table-insert-row-below"), i18n("Row Below"), this);
+        action->setToolTip(i18n("Insert Row Below"));
+        addAction("insert_tablerow_below", action);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowBelow()));
 
-    action  = new KAction(koIcon("edit-table-insert-column-left"), i18n("Column Left"), this);
-    action->setToolTip(i18n("Insert Column Left"));
-    addAction("insert_tablecolumn_left", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnLeft()));
+        action  = new KAction(koIcon("edit-table-insert-column-left"), i18n("Column Left"), this);
+        action->setToolTip(i18n("Insert Column Left"));
+        addAction("insert_tablecolumn_left", action);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnLeft()));
 
-    action  = new KAction(koIcon("edit-table-insert-column-right"), i18n("Column Right"), this);
-    action->setToolTip(i18n("Insert Column Right"));
-    addAction("insert_tablecolumn_right", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnRight()));
-    action  = new KAction(koIcon("edit-table-delete-column"), i18n("Column"), this);
-    action->setToolTip(i18n("Delete Column"));
-    addAction("delete_tablecolumn", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableColumn()));
+        action  = new KAction(koIcon("edit-table-insert-column-right"), i18n("Column Right"), this);
+        action->setToolTip(i18n("Insert Column Right"));
+        addAction("insert_tablecolumn_right", action);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnRight()));
 
-    action  = new KAction(koIcon("edit-table-delete-row"), i18n("Row"), this);
-    action->setToolTip(i18n("Delete Row"));
-    addAction("delete_tablerow", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableRow()));
+        action  = new KAction(koIcon("edit-table-delete-column"), i18n("Column"), this);
+        action->setToolTip(i18n("Delete Column"));
+        addAction("delete_tablecolumn", action);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableColumn()));
 
-    action  = new KAction(koIcon("edit-table-insert-row-above"), i18n("Row Above"), this);
-    action->setToolTip(i18n("Insert Row Above"));
-    addAction("insert_tablerow_above", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowAbove()));
+        action  = new KAction(koIcon("edit-table-delete-row"), i18n("Row"), this);
+        action->setToolTip(i18n("Delete Row"));
+        addAction("delete_tablerow", action);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableRow()));
 
-    action  = new KAction(koIcon("edit-table-insert-row-below"), i18n("Row Below"), this);
-    action->setToolTip(i18n("Insert Row Below"));
-    addAction("insert_tablerow_below", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowBelow()));
+        action  = new KAction(koIcon("edit-table-cell-merge"), i18n("Merge Cells"), this);
+        addAction("merge_tablecells", action);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(mergeTableCells()));
 
-    action  = new KAction(koIcon("edit-table-insert-column-left"), i18n("Column Left"), this);
-    action->setToolTip(i18n("Insert Column Left"));
-    addAction("insert_tablecolumn_left", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnLeft()));
-
-    action  = new KAction(koIcon("edit-table-insert-column-right"), i18n("Column Right"), this);
-    action->setToolTip(i18n("Insert Column Right"));
-    addAction("insert_tablecolumn_right", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnRight()));
-
-    action  = new KAction(koIcon("edit-table-delete-column"), i18n("Column"), this);
-    action->setToolTip(i18n("Delete Column"));
-    addAction("delete_tablecolumn", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableColumn()));
-
-    action  = new KAction(koIcon("edit-table-delete-row"), i18n("Row"), this);
-    action->setToolTip(i18n("Delete Row"));
-    addAction("delete_tablerow", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableRow()));
-
-    action  = new KAction(koIcon("edit-table-cell-merge"), i18n("Merge Cells"), this);
-    addAction("merge_tablecells", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(mergeTableCells()));
-
-    action  = new KAction(koIcon("edit-table-cell-split"), i18n("Split Cells"), this);
-    addAction("split_tablecells", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(splitTableCells()));
+        action  = new KAction(koIcon("edit-table-cell-split"), i18n("Split Cells"), this);
+        addAction("split_tablecells", action);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(splitTableCells()));
+    }
 
     action = new KAction(i18n("Paragraph..."), this);
     addAction("format_paragraph", action);
@@ -584,8 +562,8 @@ void TextTool::showEditTip()
 
             QString date = element->getDate();
             //Remove the T which separates the Data and Time.
-            date[10] = ' ';
-            date = element->getCreator() + " " + date;
+            date[10] = QLatin1Char(' ');
+            date = element->getCreator() + QLatin1Char(' ') + date;
             text += date + "</p>";
 
             toolTipWidth = QFontMetrics(QToolTip::font()).boundingRect(date).width();
@@ -932,23 +910,23 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
                 if (pointedAt.tableColumnDivider < pointedAt.table->columns()) {
                     m_textEditor.data()->setTableBorderData(pointedAt.table,
                         pointedAt.tableRowDivider, pointedAt.tableColumnDivider,
-                        KoBorder::Left, m_tablePenBorderData);
+                        KoBorder::LeftBorder, m_tablePenBorderData);
                 }
                 if (pointedAt.tableColumnDivider > 0) {
                     m_textEditor.data()->setTableBorderData(pointedAt.table,
                         pointedAt.tableRowDivider, pointedAt.tableColumnDivider - 1,
-                        KoBorder::Right, m_tablePenBorderData);
+                        KoBorder::RightBorder, m_tablePenBorderData);
                 }
             } else if (pointedAt.tableHit == KoPointedAt::RowDivider) {
                 if (pointedAt.tableRowDivider < pointedAt.table->rows()) {
                     m_textEditor.data()->setTableBorderData(pointedAt.table,
                         pointedAt.tableRowDivider, pointedAt.tableColumnDivider,
-                        KoBorder::Top, m_tablePenBorderData);
+                        KoBorder::TopBorder, m_tablePenBorderData);
                 }
                 if (pointedAt.tableRowDivider > 0) {
                     m_textEditor.data()->setTableBorderData(pointedAt.table,
                         pointedAt.tableRowDivider-1, pointedAt.tableColumnDivider,
-                        KoBorder::Bottom, m_tablePenBorderData);
+                        KoBorder::BottomBorder, m_tablePenBorderData);
                 }
             }
             m_textEditor.data()->endEditBlock();
@@ -1064,13 +1042,14 @@ QMimeData *TextTool::generateMimeData() const
     if (canvas()->shapeController()) {
         rm = canvas()->shapeController()->resourceManager();
     }
+#if SHOULD_BUILD_RDF
     if (rm && rm->hasResource(KoText::DocumentRdf)) {
         KoDocumentRdfBase *rdf = qobject_cast<KoDocumentRdfBase*>(rm->resource(KoText::DocumentRdf).value<QObject*>());
         if (rdf) {
             saveHelper.setRdfModel(rdf->model());
         }
     }
-
+#endif
     drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
     QTextDocumentFragment fragment = m_textEditor.data()->selection();
     drag.setData("text/html", fragment.toHtml("utf-8").toUtf8());
@@ -1629,11 +1608,13 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             event->ignore();
             return;
         } else if ((event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)) {
+            m_prevCursorPosition = textEditor->position();
             textEditor->newLine();
             updateActions();
             editingPluginEvents();
         } else if ((event->key() == Qt::Key_Tab || !(event->text().length() == 1 && !event->text().at(0).isPrint()))) { // insert the text
             m_prevCursorPosition = textEditor->position();
+            startingSimpleEdit(); //signal editing plugins that this is a simple edit
             textEditor->insertText(event->text());
             editingPluginEvents();
         }
@@ -1881,16 +1862,20 @@ void TextTool::updateActions()
 
     m_allowActions = true;
 
-    const QTextTable *table = textEditor->currentTable();
+    bool useAdvancedText = !(canvas()->resourceManager()->intResource(KoCanvasResourceManager::ApplicationSpeciality)
+                            & KoCanvasResourceManager::NoAdvancedText);
+    if (useAdvancedText) {
+        const QTextTable *table = textEditor->currentTable();
 
-    action("insert_tablerow_above")->setEnabled(table);
-    action("insert_tablerow_below")->setEnabled(table);
-    action("insert_tablecolumn_left")->setEnabled(table);
-    action("insert_tablecolumn_right")->setEnabled(table);
-    action("delete_tablerow")->setEnabled(table);
-    action("delete_tablecolumn")->setEnabled(table);
-    action("merge_tablecells")->setEnabled(table);
-    action("split_tablecells")->setEnabled(table);
+        action("insert_tablerow_above")->setEnabled(table);
+        action("insert_tablerow_below")->setEnabled(table);
+        action("insert_tablecolumn_left")->setEnabled(table);
+        action("insert_tablecolumn_right")->setEnabled(table);
+        action("delete_tablerow")->setEnabled(table);
+        action("delete_tablecolumn")->setEnabled(table);
+        action("merge_tablecells")->setEnabled(table);
+        action("split_tablecells")->setEnabled(table);
+    }
 
     ///TODO if selection contains several different format
     emit blockChanged(textEditor->block());
@@ -1978,7 +1963,7 @@ void TextTool::repaintCaret()
         return;
 
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-    Q_ASSERT(lay);
+    Q_ASSERT(lay); Q_UNUSED(lay);
 
     // If we have changed root area we need to update m_textShape and m_textShapeData
     if (m_delayedEnsureVisible) {
@@ -2129,10 +2114,15 @@ QList<QWidget *> TextTool::createOptionWidgets()
     widgets.append(scw);
     spw->setWindowTitle(i18n("Paragraph"));
     widgets.append(spw);
-    stw->setWindowTitle(i18n("Table"));
-    widgets.append(stw);
-    siw->setWindowTitle(i18n("Insert"));
-    widgets.append(siw);
+
+    bool useAdvancedText = !(canvas()->resourceManager()->intResource(KoCanvasResourceManager::ApplicationSpeciality)
+                             & KoCanvasResourceManager::NoAdvancedText);
+    if (useAdvancedText) {
+        stw->setWindowTitle(i18n("Table"));
+        widgets.append(stw);
+        siw->setWindowTitle(i18n("Insert"));
+        widgets.append(siw);
+    }
     return widgets;
 }
 
@@ -2518,11 +2508,7 @@ void TextTool::startTextEditingPlugin(const QString &pluginId)
     KoTextEditingPlugin *plugin = m_textEditingPlugins->plugin(pluginId);
     if (plugin) {
         if (m_textEditor.data()->hasSelection()) {
-            int from = m_textEditor.data()->position();
-            int to = m_textEditor.data()->anchor();
-            if (from > to) // make sure we call the plugin consistently
-                qSwap(from, to);
-            plugin->checkSection(m_textShapeData->document(), from, to);
+            plugin->checkSection(m_textShapeData->document(), m_textEditor.data()->selectionStart(), m_textEditor.data()->selectionEnd());
         } else
             plugin->finishedWord(m_textShapeData->document(), m_textEditor.data()->position());
     }
@@ -2673,7 +2659,6 @@ void TextTool::editingPluginEvents()
 
 void TextTool::finishedWord()
 {
-    kDebug();
     if (m_textShapeData)
         foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values())
             plugin->finishedWord(m_textShapeData->document(), m_prevCursorPosition);
@@ -2681,10 +2666,16 @@ void TextTool::finishedWord()
 
 void TextTool::finishedParagraph()
 {
-    kDebug();
     if (m_textShapeData)
         foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values())
             plugin->finishedParagraph(m_textShapeData->document(), m_prevCursorPosition);
+}
+
+void TextTool::startingSimpleEdit()
+{
+    if (m_textShapeData)
+        foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values())
+            plugin->startingSimpleEdit(m_textShapeData->document(), m_prevCursorPosition);
 }
 
 void TextTool::setTextColor(const KoColor &color)
@@ -2820,7 +2811,7 @@ void TextTool::debugTextDocument()
         else if (block.length() == 1) { // no actual tet
             kDebug(32500) << "\\n";
         }
-        foreach (QTextCharFormat cf, inlineCharacters) {
+        foreach (const QTextCharFormat &cf, inlineCharacters) {
             KoInlineObject *object= inlineManager->inlineTextObject(cf);
             kDebug(32500) << "At pos:" << cf.intProperty(CHARPOSITION) << object;
             // kDebug(32500) << "-> id:" << cf.intProperty(577297549);

@@ -38,7 +38,7 @@ public:
         ResourceId = 75208282
     };
     /// constructor
-    VideoCollection(QObject *parent = 0);
+    explicit VideoCollection(QObject *parent = 0);
     virtual ~VideoCollection();
 
     /// reimplemented

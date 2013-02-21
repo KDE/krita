@@ -101,7 +101,8 @@ QString KoReportItemLine::typeName() const
     return "line";
 }
 
-int KoReportItemLine::render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script)
+int KoReportItemLine::renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset,
+                                       const QVariant &data, KRScriptHandler *script)
 {
     Q_UNUSED(script)
     Q_UNUSED(data)

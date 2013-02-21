@@ -43,4 +43,4 @@ Name[zh_TW]=Sobel 過濾器
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritasobelfilter
-X-Krita-Version=5
+X-Krita-Version=27

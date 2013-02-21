@@ -29,7 +29,7 @@ class KoXmlWriter;
 class KoSimpleOdsCell : public QStandardItem
 {
     public:
-        KoSimpleOdsCell(const QString &);
+        explicit KoSimpleOdsCell(const QString &);
         ~KoSimpleOdsCell();
 
         void writeCellData(KoXmlWriter* writer);

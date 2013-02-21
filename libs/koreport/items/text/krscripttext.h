@@ -31,7 +31,7 @@ class Text : public QObject
 {
     Q_OBJECT
 public:
-    Text(KoReportItemText*);
+    explicit Text(KoReportItemText*);
 
     ~Text();
 public slots:

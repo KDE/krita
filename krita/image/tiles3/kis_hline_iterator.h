@@ -43,6 +43,7 @@ public:
     virtual bool nextPixel();
     virtual void nextRow();
     virtual const quint8* oldRawData() const;
+    virtual const quint8* rawDataConst() const;
     virtual quint8* rawData();
     virtual qint32 nConseqPixels() const;
     virtual bool nextPixels(qint32 n);

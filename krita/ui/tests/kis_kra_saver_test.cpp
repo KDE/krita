@@ -70,5 +70,25 @@ void KisKraSaverTest::testRoundTrip()
     QCOMPARE(cv1.count(), cv2.count());
 }
 
+void KisKraSaverTest::testSaveEmpty()
+{
+    KisDoc2* doc = createEmptyDocument();
+    doc->saveNativeFormat("emptytest.kra");
+    QStringList list;
+    KisCountVisitor cv1(list, KoProperties());
+    doc->image()->rootLayer()->accept(cv1);
+
+    //delete doc;
+
+    KisPart2 part;
+    KisDoc2 doc2(&part);
+    part.setDocument(&doc2);
+
+    doc2.loadNativeFormat("emptytest.kra");
+
+    KisCountVisitor cv2(list, KoProperties());
+    doc2.image()->rootLayer()->accept(cv2);
+    QCOMPARE(cv1.count(), cv2.count());
+}
 QTEST_KDEMAIN(KisKraSaverTest, GUI)
 #include "kis_kra_saver_test.moc"

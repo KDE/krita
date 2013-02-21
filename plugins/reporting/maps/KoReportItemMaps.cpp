@@ -178,17 +178,14 @@ QString KoReportItemMaps::typeName() const
     return "report:maps";
 }
 
-int KoReportItemMaps::render(OROPage* page,
-                             OROSection* section,
-                             QPointF offset,
-                             QVariant data,
-                             KRScriptHandler *script)
+int KoReportItemMaps::renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset,
+                                       const QVariant &data, KRScriptHandler *script)
 {
     Q_UNUSED(script)
     
     myDebug() << this << "data:" << data;
     QString dataKey = data.toString();
-    QStringList dataList = dataKey.split(";");
+    QStringList dataList = dataKey.split(QLatin1Char(';'));
     //myDebug() << "splited:" << dataList;
     Marble::MarbleWidget* marble;
     

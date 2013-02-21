@@ -414,11 +414,10 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         cbUseOpenGLTrilinearFiltering->setEnabled(cfg.useOpenGL());
         cbUseOpenGLTrilinearFiltering->setChecked(cfg.useOpenGLTrilinearFiltering());
 #ifdef HAVE_GLEW
-        if (KisOpenGL::hasShadingLanguage()) {
-            cbUseOpenGLShaders->setChecked(cfg.useOpenGLShaders());
+        cbUseOpenGLShaders->setChecked(cfg.useOpenGLShaders());
+        if (cfg.useOpenGL() && KisOpenGL::hasShadingLanguage()) {
             cbUseOpenGLShaders->setEnabled(cfg.useOpenGL());
         } else {
-            cbUseOpenGLShaders->setChecked(false);
             cbUseOpenGLShaders->setEnabled(false);
         }
 #else

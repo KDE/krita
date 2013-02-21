@@ -23,6 +23,12 @@
 #include <KoIcon.h>
 #include <KoResourceServerProvider.h>
 
+#include <kis_paintop_preset.h>
+#include <kis_workspace_resource.h>
+#include <KoColorSet.h>
+#include <KoAbstractGradient.h>
+#include <KoPattern.h>
+
 KisDlgBlacklistCleanup::KisDlgBlacklistCleanup()
 {
     setCaption(i18n("Cleanup resource files"));

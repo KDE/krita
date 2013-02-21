@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIDB_QUERY_H
-#define KEXIDB_QUERY_H
+#ifndef KEXIDB_QUERYSCHEMA_H
+#define KEXIDB_QUERYSCHEMA_H
 
 #include <QVector>
 #include <QString>
@@ -301,7 +301,7 @@ public:
      in a system table, so query connection is set to NULL
      (even if \a tableSchema's connection is not NULL).
      Id of the created query is set to 0. */
-    QuerySchema(TableSchema& tableSchema);
+    explicit QuerySchema(TableSchema& tableSchema);
 
     /*! Copy constructor. Creates deep copy of \a querySchema.
      QueryAsterisk objects are deeply copied while only pointers to Field objects are copied. */
@@ -854,7 +854,7 @@ public:
      (not by TableSchema object like for ordinary Field objects)
      for that the QueryAsterisk object was added (using QuerySchema::addField()).
      */
-    QueryAsterisk(QuerySchema *query, TableSchema *table = 0);
+    explicit QueryAsterisk(QuerySchema *query, TableSchema *table = 0);
 
     QueryAsterisk(const QueryAsterisk& asterisk);
 

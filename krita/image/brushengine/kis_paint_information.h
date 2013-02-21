@@ -111,7 +111,7 @@ public:
     
     /// Number of ms since the beginning of the stroke
     int currentTime() const;
-    
+
     void toXML(QDomDocument&, QDomElement&) const;
 
     static KisPaintInformation fromXML(const QDomElement&);

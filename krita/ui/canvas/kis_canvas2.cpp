@@ -68,7 +68,7 @@
 
 #include "input/kis_input_manager.h"
 
-struct KisCanvas2::KisCanvas2Private
+class KisCanvas2::KisCanvas2Private
 {
 
 public:
@@ -99,6 +99,9 @@ public:
     KoColorConversionTransformation::Intent renderingIntent;
     KoColorConversionTransformation::ConversionFlags conversionFlags;
     bool currentCanvasIsOpenGL;
+#ifdef HAVE_OPENGL
+    bool useTrilinearFiltering;
+#endif
     KoToolProxy *toolProxy;
     KoFavoriteResourceManager *favoriteResourceManager;
 #ifdef HAVE_OPENGL
@@ -146,7 +149,7 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view,
 
     KisShapeController *kritaShapeController = dynamic_cast<KisShapeController*>(sc);
     connect(kritaShapeController, SIGNAL(selectionChanged()),
-            globalShapeManager()->selection(), SIGNAL(selectionChanged()));
+            this, SLOT(slotSelectionChanged()));
     connect(kritaShapeController, SIGNAL(currentLayerChanged(const KoShapeLayer*)),
             globalShapeManager()->selection(), SIGNAL(currentLayerChanged(const KoShapeLayer*)));
 }
@@ -302,6 +305,8 @@ void KisCanvas2::createQPainterCanvas()
 void KisCanvas2::createOpenGLCanvas()
 {
 #ifdef HAVE_OPENGL
+    KisConfig cfg;
+    m_d->useTrilinearFiltering = cfg.useOpenGLTrilinearFiltering();
     m_d->currentCanvasIsOpenGL = true;
 
     // XXX: The image isn't done loading here!
@@ -404,8 +409,11 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
     }
 #ifdef HAVE_OPENGL
     KisConfig cfg;
+    bool needReset = (m_d->currentCanvasIsOpenGL != useOpenGL) ||
+        (m_d->currentCanvasIsOpenGL &&
+         m_d->useTrilinearFiltering != cfg.useOpenGLTrilinearFiltering());
 
-    if (useOpenGL != m_d->currentCanvasIsOpenGL) {
+    if (needReset) {
         disconnectCurrentImage();
         createCanvas(useOpenGL);
         connectCurrentImage();
@@ -733,5 +741,18 @@ void KisCanvas2::setCursor(const QCursor &cursor)
 {
     canvasWidget()->setCursor(cursor);
 }
+
+void KisCanvas2::slotSelectionChanged()
+{
+    KisShapeLayer* shapeLayer = dynamic_cast<KisShapeLayer*>(view()->activeLayer().data());
+    if (!shapeLayer) {
+        return;
+    }
+    m_d->shapeManager->selection()->deselectAll();
+    foreach(KoShape* shape, shapeLayer->shapeManager()->selection()->selectedShapes()) {
+        m_d->shapeManager->selection()->select(shape);
+    }
+}
+
 
 #include "kis_canvas2.moc"

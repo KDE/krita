@@ -41,4 +41,4 @@ Name[zh_TW]=透視格工具
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolperspectivegrid
-X-Krita-Version=5
+X-Krita-Version=27

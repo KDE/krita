@@ -27,7 +27,7 @@
 class KoLineStyleModel : public QAbstractListModel
 {
 public:
-    KoLineStyleModel(QObject *parent = 0);
+    explicit KoLineStyleModel(QObject *parent = 0);
     virtual ~KoLineStyleModel() {}
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;

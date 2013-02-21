@@ -104,6 +104,7 @@ void LoginWindow::saveUserDetails()
 
 void LoginWindow::serviceSelected(int index)
 {
+    Q_UNUSED(index);
 //    if (index == 0) {
 //        m_authDialog->documentBox->setVisible(true);
 //        m_authDialog->presentationBox->setVisible(true);

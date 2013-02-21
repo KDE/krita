@@ -77,11 +77,13 @@ set(KRITA_INCLUDES
     ${PIGMENT_INCLUDES}
     ${KOTEXT_INCLUDES}
     ${KOMAIN_INCLUDES}
+    ${BASICFLAKES_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/widgets/resources
     ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets
-    
+    ${CMAKE_SOURCE_DIR}/libs/widgetutils
+
     ${EIGEN2_INCLUDE_DIR}
-    
+
     # 'Export' this for use by filters
     CACHE INTERNAL ""
 )
@@ -109,7 +111,7 @@ target_link_libraries(kritapart kritaui)
 install(TARGETS kritapart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(krita_KDEINIT_SRCS main.cc)
-kde4_add_app_icon(krita_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/hi*-app-krita.png")
+kde4_add_app_icon(krita_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakrita.png")
 kde4_add_kdeinit_executable(krita ${krita_KDEINIT_SRCS})
 
 if (Q_WS_MAC)

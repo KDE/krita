@@ -42,7 +42,7 @@ public:
     {
     public:
         Data();
-        Data(QByteArray rawData);
+        explicit Data(const QByteArray &rawData);
         ~Data();
         QByteArray rawData();
         void setRawData(const QByteArray &);
@@ -68,8 +68,8 @@ public:
         virtual bool isSuitableForDisplay() const = 0;
     };
 public:
-    IccColorProfile(const KoRGBChromaticities& chromacities, qreal gamma, QString name = "");
-    IccColorProfile(QString fileName = "");
+    IccColorProfile(const KoRGBChromaticities& chromacities, qreal gamma, const QString &name = QString());
+    explicit IccColorProfile(const QString &fileName = QString());
     IccColorProfile(const QByteArray& rawData);
     IccColorProfile(const IccColorProfile& rhs);
     virtual ~IccColorProfile();

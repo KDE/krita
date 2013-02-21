@@ -53,4 +53,4 @@ Comment[zh_TW]=參考影像的嵌入器
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritaimagedocker
-X-Krita-Version=5
+X-Krita-Version=27

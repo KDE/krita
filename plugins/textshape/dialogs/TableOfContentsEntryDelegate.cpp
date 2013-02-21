@@ -36,6 +36,8 @@ TableOfContentsEntryDelegate::TableOfContentsEntryDelegate(KoStyleManager *manag
 
 QSize TableOfContentsEntryDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    Q_UNUSED(option);
+    Q_UNUSED(index);
     return QSize(250,48);
 }
 

@@ -78,7 +78,7 @@ public:
     typedef QMap<QString, QVariant> SimpleMap;
     typedef QMap<QueryColumnInfo*, QVariant> DBMap;
 
-    RowEditBuffer(bool dbAwareBuffer);
+    explicit RowEditBuffer(bool dbAwareBuffer);
     ~RowEditBuffer();
 
     inline bool isDBAware() const {

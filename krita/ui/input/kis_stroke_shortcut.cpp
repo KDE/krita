@@ -19,8 +19,9 @@
 #include "kis_stroke_shortcut.h"
 
 
-struct KisStrokeShortcut::Private
+class KisStrokeShortcut::Private
 {
+public:
     QList<Qt::Key> modifiers;
     QList<Qt::MouseButton> buttons;
 };

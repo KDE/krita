@@ -45,7 +45,7 @@ class KoBibliographyInfo;
 class KoCanvasBase;
 class KoTableOfContentsGeneratorInfo;
 class KoShapeController;
-class KoTextAnchor;
+class KoShapeAnchor;
 class KoBookmark;
 
 class QTextBlock;
@@ -77,7 +77,7 @@ public:
     };
     Q_DECLARE_FLAGS(ChangeListFlags, ChangeListFlag)
 
-    KoTextEditor(QTextDocument *document);
+    explicit KoTextEditor(QTextDocument *document);
 
     virtual ~KoTextEditor();
 
@@ -116,6 +116,8 @@ public:
 
     bool operator>=(const QTextCursor &other) const;
 
+    const QTextCursor constCursor() const;
+
 private:
 
     // for the call to KoTextLoader::loadBody, which has a QTextCursor
@@ -133,6 +135,7 @@ private:
     friend class DeleteCommand;
     friend class InsertInlineObjectCommand;
     friend class InsertNoteCommand;
+    friend class ParagraphFormattingCommand;
 
     // for unittests
     friend class TestKoInlineTextObjectManager;
@@ -175,7 +178,7 @@ public slots:
     /// caller, or the caller can choose to quickly undo and then delete the \ref command.
     void instantlyExecuteCommand(KUndo2Command *command);
 
-    void registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, QString title, QTextFormat &format, QTextFormat &prevFormat, bool applyToWholeBlock = false);
+    void registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, const QString &title, QTextFormat &format, QTextFormat &prevFormat, bool applyToWholeBlock = false);
 
     void bold(bool bold);
 
@@ -209,9 +212,9 @@ public slots:
 
     void setStyle(KoCharacterStyle *style);
 
-    void mergeAutoStyle(QTextCharFormat deltaCharFormat);
+    void mergeAutoStyle(const QTextCharFormat &deltaCharFormat);
 
-    void mergeAutoStyle(QTextCharFormat deltaCharFormat, QTextBlockFormat deltaBlockFormat);
+    void applyDirectFormatting(const QTextCharFormat &deltaCharFormat, const QTextBlockFormat &deltaBlockFormat, const KoListLevelProperties &llp);
 
     /**
      * Insert an inlineObject (such as a variable) at the current cursor position. Possibly replacing the selection.
@@ -229,11 +232,11 @@ public slots:
     void updateInlineObjectPosition(int start = 0, int end = -1);
 
     /**
-     * Remove the KoTextAnchor objects from the document.
+     * Remove the KoShapeAnchor objects from the document.
      *
      * NOTE: Call this method only when the shapes belonging to the anchors have been deleted.
      */
-    void removeAnchors(const QList<KoTextAnchor*> &anchors, KUndo2Command *parent);
+    void removeAnchors(const QList<KoShapeAnchor*> &anchors, KUndo2Command *parent);
 
     /**
     * At the current cursor position, insert a marker that marks the next word as being part of the index.
@@ -283,7 +286,7 @@ public slots:
      * change the current block's list properties
      */
     void setListProperties(const KoListLevelProperties &llp,
-                           ChangeListFlags flags = ChangeListFlags(ModifyExistingList | MergeWithAdjacentList));
+                           ChangeListFlags flags = ChangeListFlags(ModifyExistingList | MergeWithAdjacentList), KUndo2Command *parent = 0);
 
     // -------------------------------------------------------------
     // Wrapped QTextCursor methods
@@ -320,7 +323,7 @@ public slots:
     QTextDocument *document() const;
 
     /// Same as Qt, only to be used inside KUndo2Commands
-    KUndo2Command *beginEditBlock(QString title = QString());
+    KUndo2Command *beginEditBlock(const QString &title = QString());
     void endEditBlock();
 
     /**
@@ -409,7 +412,7 @@ public slots:
      * @param column the column coordinate of the cell that is to be adjusted.
      * @param row the row coordinate of the cell that is to be adjusted.
      */
-    void setTableBorderData(QTextTable *table, int row, int column, KoBorder::Side cellSide,
+    void setTableBorderData(QTextTable *table, int row, int column, KoBorder::BorderSide cellSide,
                 const KoBorder::BorderData &data);
 
     /**
@@ -432,7 +435,7 @@ public slots:
     /**
      * Configures various values of a ToC to the one passed in info
      */
-    void setTableOfContentsConfig(KoTableOfContentsGeneratorInfo *info, QTextBlock block);
+    void setTableOfContentsConfig(KoTableOfContentsGeneratorInfo *info, const QTextBlock &block);
 
     void insertBibliography(KoBibliographyInfo *info);
 

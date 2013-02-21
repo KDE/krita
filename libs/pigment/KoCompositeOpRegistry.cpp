@@ -58,7 +58,8 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[2], KoID(COMPOSITE_PIN_LIGHT   , i18n("Pin Light")));
     m_map.insert(m_categories[2], KoID(COMPOSITE_VIVID_LIGHT , i18n("Vivid Light")));
     m_map.insert(m_categories[2], KoID(COMPOSITE_HARD_LIGHT  , i18n("Hard Light")));
-    m_map.insert(m_categories[2], KoID(COMPOSITE_SOFT_LIGHT  , i18n("Soft Light")));
+    m_map.insert(m_categories[2], KoID(COMPOSITE_SOFT_LIGHT_PHOTOSHOP, i18n("Soft Light (Photoshop)")));
+    m_map.insert(m_categories[2], KoID(COMPOSITE_SOFT_LIGHT_SVG, i18n("Soft Light (SVG)")));
     m_map.insert(m_categories[2], KoID(COMPOSITE_GAMMA_LIGHT , i18n("Gamma Light")));
 
     m_map.insert(m_categories[3], KoID(COMPOSITE_DIFF                 , i18n("Difference")));

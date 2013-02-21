@@ -16,8 +16,8 @@
   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ENHHEADER_H
-#define ENHHEADER_H
+#ifndef EMFHEADER_H
+#define EMFHEADER_H
 
 #include <QDataStream>
 #include <QRect> // also provides QSize
@@ -48,7 +48,7 @@ public:
 
        \param stream the stream to read the header structure from
     */
-    Header( QDataStream &stream );
+    explicit Header(QDataStream &stream);
     ~Header();
 
     /**

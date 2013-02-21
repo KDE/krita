@@ -42,7 +42,7 @@ class SpreadsheetMigrate : public KexiMigrate
     Q_OBJECT
     KEXIMIGRATION_DRIVER
 public:
-    SpreadsheetMigrate(QObject *parent, const QVariantList &args = QVariantList());
+    explicit SpreadsheetMigrate(QObject *parent, const QVariantList &args = QVariantList());
 
     virtual ~SpreadsheetMigrate();
 

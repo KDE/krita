@@ -39,7 +39,7 @@ class CHARTSHAPELIB_EXPORT Legend : public QObject, public KoShape
     Q_OBJECT
 
 public:
-    Legend(ChartShape *parent);
+    explicit Legend(ChartShape *parent);
     ~Legend();
 
     QString title() const;

@@ -117,7 +117,7 @@ void fillText(png_text* p_text, const char* key, QString& text)
     p_text->compression = PNG_TEXT_COMPRESSION_zTXt;
     p_text->key = const_cast<char *>(key);
     char* textc = new char[text.length()+1];
-    strcpy(textc, text.toAscii());
+    strcpy(textc, text.toLatin1());
     p_text->text = textc;
     p_text->text_length = text.length() + 1;
 }
@@ -169,7 +169,7 @@ void writeRawProfile(png_struct *ping, png_info *ping_info, QString profile_type
     png_charp dp = text[0].text;
     *dp++ = '\n';
 
-    memcpy(dp, (const char *) profile_type.toLatin1().data(), profile_type.length());
+    memcpy(dp, profile_type.toLatin1().constData(), profile_type.length());
 
     dp += description_length;
     *dp++ = '\n';
@@ -861,7 +861,8 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     int color_type = getColorTypeforColorSpace(device->colorSpace(), options.alpha);
 
     if (color_type == -1) {
-        return KisImageBuilder_RESULT_UNSUPPORTED;
+        device->convertTo(KoColorSpaceRegistry::instance()->rgb8(0));
+        color_type = options.alpha ? PNG_COLOR_TYPE_RGB_ALPHA : PNG_COLOR_TYPE_RGB;
     }
 
     // Try to compute a table of color if the colorspace is RGB8f
@@ -970,9 +971,9 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     QByteArray colorProfileData = colorProfile->rawData();
     if (!sRGB || options.saveSRGBProfile) {
 #if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 5
-        png_set_iCCP(png_ptr, info_ptr, "icc", PNG_COMPRESSION_TYPE_BASE, (const png_bytep)colorProfileData.data(), colorProfileData . size());
+        png_set_iCCP(png_ptr, info_ptr, "icc", PNG_COMPRESSION_TYPE_BASE, (const png_bytep)colorProfileData.constData(), colorProfileData . size());
 #else
-        png_set_iCCP(png_ptr, info_ptr, "icc", PNG_COMPRESSION_TYPE_BASE, (char*)colorProfileData.data(), colorProfileData . size());
+        png_set_iCCP(png_ptr, info_ptr, "icc", PNG_COMPRESSION_TYPE_BASE, (char*)colorProfileData.constData(), colorProfileData . size());
 #endif
     }
 

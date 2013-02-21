@@ -32,7 +32,7 @@ class QWidget;
 class KoStorePrivate
 {
 public:
-    KoStorePrivate(KoStore *qq)
+    explicit KoStorePrivate(KoStore *qq)
         : q(qq),
         fileMode(Local),
         window(0),

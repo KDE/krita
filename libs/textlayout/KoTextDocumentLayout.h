@@ -41,16 +41,16 @@ class KoTextRangeManager;
 class KoInlineTextObjectManager;
 class KoViewConverter;
 class KoImageCollection;
-class KoTextAnchor;
+class KoShapeAnchor;
 class KoTextLayoutRootArea;
 class KoTextLayoutRootAreaProvider;
 class KoTextLayoutObstruction;
-
+class KoAnchorTextRange;
 
 class TEXTLAYOUT_EXPORT KoInlineObjectExtent
 {
 public:
-    KoInlineObjectExtent(qreal ascent = 0, qreal descent = 0);
+    explicit KoInlineObjectExtent(qreal ascent = 0, qreal descent = 0);
     qreal m_ascent;
     qreal m_descent;
 };
@@ -138,6 +138,9 @@ public:
     /// are the tabs relative to indent or not
     bool relativeTabs(QTextBlock block) const;
 
+    /// visualize inline objects during paint
+    void showInlineObjectVisualization(bool show);
+
     /// Calc a bounding box rect of the selection
     QRectF selectionBoundingBox(QTextCursor &cursor) const;
 
@@ -150,14 +153,14 @@ public:
     /// reimplemented to always return 1
     virtual int pageCount() const;
 
-    QList<KoTextAnchor *> textAnchors() const;
+    QList<KoShapeAnchor *> textAnchors() const;
 
     /**
      * Register the anchored obstruction  for run around
      *
      * We have the concept of Obstructions which text has to run around in various ways.
      * We maintain two collections of obstructions. The free which are tied to just a position
-     * (tied to pages), and the anchored obstructions which are each anchored to a KoTextAnchor
+     * (tied to pages), and the anchored obstructions which are each anchored to a KoShapeAnchor
      *
      * The free obstructions are collected from the KoTextLayoutRootAreaProvider during layout
      *
@@ -200,7 +203,7 @@ public:
     void positionAnchoredObstructions();
 
     /// remove inline object
-    void removeInlineObject(KoTextAnchor *textAnchor);
+    void removeInlineObject(KoShapeAnchor *textAnchor);
 
     void clearInlineObjectRegistry(QTextBlock block);
 
@@ -248,6 +251,13 @@ public:
 
     KoTextDocumentLayout* referencedLayout() const;
     void setReferencedLayout(KoTextDocumentLayout *layout);
+
+    /**
+     * To be called during layout by KoTextLayoutArea - similar to how qt calls positionInlineObject
+     *
+     * It searches for anchor text ranges in the given span
+     */
+    void positionAnchorTextRanges(int pos, int length);
 
 signals:
     /**

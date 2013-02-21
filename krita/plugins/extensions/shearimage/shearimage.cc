@@ -20,59 +20,36 @@
 
 #include "shearimage.h"
 
-
-#include <math.h>
-
-#include <stdlib.h>
-
-#include <QSlider>
-#include <QPoint>
-
 #include <klocale.h>
-#include <kcomponentdata.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
-#include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <kactioncollection.h>
 
 #include <kis_image.h>
-#include <kis_layer.h>
-#include <kis_global.h>
-#include <kis_types.h>
 #include <kis_view2.h>
 #include <kis_node_manager.h>
 #include <kis_image_manager.h>
-
+#include <kis_action.h>
 
 #include "dlg_shearimage.h"
 
 K_PLUGIN_FACTORY(ShearImageFactory, registerPlugin<ShearImage>();)
 K_EXPORT_PLUGIN(ShearImageFactory("krita"))
 
-// XXX: this plugin could also provide layer scaling/resizing
 ShearImage::ShearImage(QObject *parent, const QVariantList &)
-        : KParts::Plugin(parent)
+        : KisViewPlugin(parent, "kritaplugins/shearimage.rc")
 {
-    if (parent->inherits("KisView2")) {
-        setXMLFile(KStandardDirs::locate("data", "kritaplugins/shearimage.rc"),
-                   true);
+    KisAction *action  = new KisAction(i18n("&Shear Image..."), this);
+    addAction("shearimage", action);
+    connect(action,  SIGNAL(triggered()), this, SLOT(slotShearImage()));
 
-        KAction *action  = new KAction(i18n("&Shear Image..."), this);
-        actionCollection()->addAction("shearimage", action);
-        connect(action,  SIGNAL(triggered()), this, SLOT(slotShearImage()));
-
-        action  = new KAction(i18n("&Shear Layer..."), this);
-        actionCollection()->addAction("shearlayer", action);
-        connect(action,  SIGNAL(triggered()), this, SLOT(slotShearLayer()));
-
-        m_view = (KisView2*) parent;
-    }
+    action = new KisAction(i18n("&Shear Layer..."), this);
+    action->setActivationFlags(KisAction::ACTIVE_LAYER);
+    action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    addAction("shearlayer", action);
+    connect(action,  SIGNAL(triggered()), this, SLOT(slotShearLayer()));
 }
 
 ShearImage::~ShearImage()
 {
-    m_view = 0;
 }
 
 void ShearImage::slotShearImage()

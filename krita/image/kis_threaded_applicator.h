@@ -28,7 +28,6 @@
 
 #include <KoProgressUpdater.h>
 
-typedef QPointer<KoUpdater> KoUpdaterPtr;
 
 /**
  * A threadweaver job that knows about paint devices and rects.

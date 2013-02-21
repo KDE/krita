@@ -47,7 +47,7 @@ public:
      *
      * @param parent parent QWidget
      */
-    KoColorSetWidget(QWidget *parent=0);
+    explicit KoColorSetWidget(QWidget *parent=0);
 
     /**
      * Destructor

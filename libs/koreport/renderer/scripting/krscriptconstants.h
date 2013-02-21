@@ -29,7 +29,7 @@ class KRScriptConstants : public QObject
 {
     Q_OBJECT
 public:
-    KRScriptConstants(QObject *parent = 0);
+    explicit KRScriptConstants(QObject *parent = 0);
 
     ~KRScriptConstants();
     Q_ENUMS(PenStyle)

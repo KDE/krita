@@ -397,7 +397,7 @@ QColor PhongPixelProcessor::illuminatePixel(quint32 posup, quint32 posdown, quin
     normal_vector.normalize();
     reflection_vector = (2 * pow(QVector3D::dotProduct(normal_vector, light_vector), shiny_exp)) * normal_vector - light_vector;
 
-    foreach (Illuminant illuminant, lightSources) {
+    foreach (const Illuminant &illuminant, lightSources) {
         for (int channel = 0; channel < totalChannels; channel++) {
             //I = each RGB value
             Il = illuminant.RGBvalue[channel];

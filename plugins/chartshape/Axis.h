@@ -30,7 +30,7 @@
 #include "ChartShape.h"
 
 namespace KoOdfNumberStyles {
-    class NumericStyleFormat;
+    struct NumericStyleFormat;
 }
 
 namespace KChart {

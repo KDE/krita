@@ -24,8 +24,8 @@
 class TiedNoteAction : public AbstractNoteMusicAction
 {
 public:
-    TiedNoteAction(SimpleEntryTool* tool);
-    
+    explicit TiedNoteAction(SimpleEntryTool *tool);
+
     virtual void mousePress(MusicCore::Chord* chord, MusicCore::Note* note, qreal distance, const QPointF& pos);
 
     //! To avoid 'mousePress() was hidden' warning

@@ -137,12 +137,13 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
     m_image->lock();
 
     // set the correct resolution
-    RESN_INFO_1005 *resInfo = dynamic_cast<RESN_INFO_1005*>(resourceSection.resources[PSDResourceSection::RESN_INFO]->resource);
-    if (resInfo) {
-        m_image->setResolution(POINT_TO_INCH(resInfo->hRes), POINT_TO_INCH(resInfo->vRes));
-        // let's skip the unit for now; we can only set that on the KoDocument, and krita doesn't use it.
+    if (resourceSection.resources.contains(PSDResourceSection::RESN_INFO)) {
+        RESN_INFO_1005 *resInfo = dynamic_cast<RESN_INFO_1005*>(resourceSection.resources[PSDResourceSection::RESN_INFO]->resource);
+        if (resInfo) {
+            m_image->setResolution(POINT_TO_INCH(resInfo->hRes), POINT_TO_INCH(resInfo->vRes));
+            // let's skip the unit for now; we can only set that on the KoDocument, and krita doesn't use it.
+        }
     }
-
     // Preserve the duotone colormode block for saving back to psd
     if (header.colormode == DuoTone) {
         KisAnnotationSP annotation = new KisAnnotation("DuotoneColormodeBlock",

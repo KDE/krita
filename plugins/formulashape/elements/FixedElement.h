@@ -36,7 +36,7 @@ class RowElement;
 class KOFORMULA_EXPORT FixedElement : public BasicElement {
 public:
     /// The standard constructor
-    FixedElement( BasicElement* parent = 0 );
+    explicit FixedElement(BasicElement *parent = 0);
 
     /// The standard destructor
     virtual ~FixedElement();

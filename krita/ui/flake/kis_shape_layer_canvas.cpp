@@ -18,8 +18,8 @@
 
 #include "kis_shape_layer_canvas.h"
 
-#include <QTimer>
 #include <QPainter>
+#include <QMutexLocker>
 
 #include <KoShapeManager.h>
 #include <KoViewConverter.h>
@@ -44,10 +44,10 @@ KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KoViewConverter 
         , m_shapeManager(new KoShapeManager(this))
         , m_projection(0)
         , m_parentLayer(parent)
-        , m_repaintTriggered(false)
         , m_antialias(false)
 {
     m_shapeManager->selection()->setActiveLayer(parent);
+    connect(this, SIGNAL(forwardRepaint()), SLOT(repaint()), Qt::QueuedConnection);
 }
 
 KisShapeLayerCanvas::~KisShapeLayerCanvas()
@@ -84,7 +84,7 @@ KoShapeManager *KisShapeLayerCanvas::shapeManager() const
 
 void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
 {
-    dbgImage << "KisShapeLayerCanvas::updateCanvas()" << rc;
+    dbgUI << "KisShapeLayerCanvas::updateCanvas()" << rc;
     //image is 0, if parentLayer is being deleted so don't update
     if (!m_parentLayer->image()) {
         return;
@@ -92,27 +92,39 @@ void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
 
     QRect r = m_viewConverter->documentToView(rc).toRect();
     r.adjust(-2, -2, 2, 2); // for antialias
-    m_dirty += r;
-    if (! m_repaintTriggered) {
+
+    {
+        QMutexLocker locker(&m_dirtyRegionMutex);
+        m_dirtyRegion += r;
         qreal x, y;
         m_viewConverter->zoom(&x, &y);
         m_antialias = x < 3 || y < 3;
-
-        QTimer::singleShot(0, this, SLOT(repaint()));
-        m_repaintTriggered = true;
     }
+
+    emit forwardRepaint();
 }
 
 void KisShapeLayerCanvas::repaint()
 {
-    QRect r = m_dirty.boundingRect();
+    QRect r;
+    bool antialias;
+
+    {
+        QMutexLocker locker(&m_dirtyRegionMutex);
+        antialias = m_antialias;
+        r = m_dirtyRegion.boundingRect();
+        m_dirtyRegion = QRegion();
+    }
+
+    if (r.isEmpty()) return;
+
     r.intersect(m_parentLayer->image()->bounds());
     QImage image(r.width(), r.height(), QImage::Format_ARGB32);
     image.fill(0);
     QPainter p(&image);
 
-    p.setRenderHint(QPainter::Antialiasing, m_antialias);
-    p.setRenderHint(QPainter::TextAntialiasing, m_antialias);
+    p.setRenderHint(QPainter::Antialiasing, antialias);
+    p.setRenderHint(QPainter::TextAntialiasing, antialias);
     p.translate(-r.x(), -r.y());
     p.setClipRect(r);
 #ifdef DEBUG_REPAINT
@@ -130,8 +142,6 @@ void KisShapeLayerCanvas::repaint()
     kp.bitBlt(r.x(), r.y(), dev, 0, 0, r.width(), r.height());
     kp.end();
     m_parentLayer->setDirty(r);
-    m_dirty = QRegion();
-    m_repaintTriggered = false;
 }
 
 KoToolProxy * KisShapeLayerCanvas::toolProxy() const

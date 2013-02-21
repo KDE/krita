@@ -26,7 +26,7 @@
 class KoShapeRubberSelectStrategyPrivate : public KoInteractionStrategyPrivate
 {
 public:
-    KoShapeRubberSelectStrategyPrivate(KoToolBase *owner)
+    explicit KoShapeRubberSelectStrategyPrivate(KoToolBase *owner)
         : KoInteractionStrategyPrivate(owner),
         snapGuide(new KoSnapGuide(owner->canvas()))
     {

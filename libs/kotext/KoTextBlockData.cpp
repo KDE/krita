@@ -34,6 +34,8 @@ public:
         , border(0)
         , paintStrategy(0)
     {
+        layoutedMarkupRanges[KoTextBlockData::Misspell] = false;
+        layoutedMarkupRanges[KoTextBlockData::Grammar] = false;
     }
 
     ~Private() {
@@ -53,6 +55,8 @@ public:
     QTextCharFormat labelFormat;
     KoTextBlockBorderData *border;
     KoTextBlockPaintStrategyBase *paintStrategy;
+    QMap<KoTextBlockData::MarkupType, QList<MarkupRange> > markupRangesMap;
+    QMap<KoTextBlockData::MarkupType, bool> layoutedMarkupRanges;
 };
 
 KoTextBlockData::KoTextBlockData(QTextBlock &block)
@@ -64,10 +68,82 @@ KoTextBlockData::KoTextBlockData(QTextBlock &block)
 KoTextBlockData::KoTextBlockData(QTextBlockUserData *userData)
  : d(dynamic_cast<KoTextBlockData::Private *>(userData))
 {
+    Q_ASSERT(d);
 }
 
 KoTextBlockData::~KoTextBlockData()
 {
+}
+
+
+void KoTextBlockData::appendMarkup(MarkupType type, int firstChar, int lastChar)
+{
+    Q_ASSERT(d->markupRangesMap[type].isEmpty() || d->markupRangesMap[type].last().lastChar < firstChar);
+
+    MarkupRange range;
+    range.firstChar = firstChar;
+    range.lastChar = lastChar;
+    d->layoutedMarkupRanges[type] = false;
+
+    d->markupRangesMap[type].append(range);
+}
+
+void KoTextBlockData::clearMarkups(MarkupType type)
+{
+    d->markupRangesMap[type].clear();
+    d->layoutedMarkupRanges[type] = false;
+}
+
+KoTextBlockData::MarkupRange KoTextBlockData::findMarkup(MarkupType type, int positionWithin) const
+{
+    foreach (const MarkupRange &range, d->markupRangesMap[type]) {
+        if (positionWithin <= range.lastChar) {
+            // possible hit
+            if (positionWithin >= range.firstChar) {
+                return range;
+            } else {
+                return MarkupRange(); // we have passed it without finding
+            }
+        }
+    }
+    return MarkupRange(); // either no ranges or not in last either
+}
+
+void KoTextBlockData::rebaseMarkups(MarkupType type, int fromPosition, int delta)
+{
+    QList<MarkupRange>::Iterator markIt = markupsBegin(type);
+    QList<MarkupRange>::Iterator markEnd = markupsEnd(type);
+    while (markIt != markEnd) {
+        if (fromPosition <= markIt->lastChar) {
+            // we need to modify the end of this
+            markIt->lastChar += delta;
+        }
+        if (fromPosition < markIt->firstChar) {
+            // we need to modify the end of this
+            markIt->firstChar += delta;
+        }
+        ++markIt;
+    }
+}
+
+void KoTextBlockData::setMarkupsLayoutValidity(MarkupType type, bool valid)
+{
+    d->layoutedMarkupRanges[type] = valid;
+}
+
+bool KoTextBlockData::isMarkupsLayoutValid(MarkupType type) const
+{
+    return d->layoutedMarkupRanges[type];
+}
+
+QList<KoTextBlockData::MarkupRange>::Iterator KoTextBlockData::markupsBegin(MarkupType type)
+{
+    return d->markupRangesMap[type].begin();
+}
+
+QList<KoTextBlockData::MarkupRange>::Iterator KoTextBlockData::markupsEnd(MarkupType type)
+{
+    return d->markupRangesMap[type].end();
 }
 
 bool KoTextBlockData::hasCounterData() const

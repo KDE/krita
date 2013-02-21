@@ -72,7 +72,7 @@ bool ChartTableModel::setCellRegion(const QString& /*regionName*/)
 
     const int size = regionName.size();
     for (int i = 0; i < size; i++) {
-        result += (CellRegion::rangeCharToInt(regionName[i].toAscii())
+        result += (CellRegion::rangeCharToInt(regionName[i].toLatin1())
                    * std::pow(10.0, (size - i - 1)));
     }
 

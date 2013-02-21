@@ -70,6 +70,15 @@ public:
     virtual void finishedParagraph(QTextDocument *document, int cursorPosition) = 0;
 
     /**
+     * This method will be called just before the user makes at simple manual change to
+     * the text. Such as inserting a single character.
+     * This is for information only. You should not make any corrections to the text at this point
+     * @param document the text document that was altered.
+     * @param cursorPosition the last altered position in the paragraph.
+     */
+    virtual void startingSimpleEdit(QTextDocument *document, int cursorPosition) = 0;
+
+    /**
      * This method will be called when the user selects a portion of text and selects this plugin
      * to handle it.
      * You are free to alter the text via the textDocument.  Be aware that operations should be done

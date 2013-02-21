@@ -53,7 +53,22 @@ class KOODF_EXPORT KoBorder
 {
 public:
 
-    /// The type of border.  Note that some of the border types are legacies from the old Words format.
+    // Names of the border sides.
+    //
+    // The "rect" we refer to below is the rectangle around the object
+    // with the border. This could be a page, a cell, a paragraph, etc.
+    enum BorderSide {
+        TopBorder = 0, ///< References the border at the top of the rect
+        LeftBorder,    ///< References the border at the left side of the rect
+        BottomBorder,  ///< References the border at the bottom of the rect
+        RightBorder,   ///< References the border at the right side of the rect
+        TlbrBorder, ///< References the border from top left corner to bottom right corner of cell
+        BltrBorder  ///< References the border from bottom left corner to top right corner of cell
+    };
+
+    /// Names of the different types of borders.
+    //
+    // Note that some of the border types are legacies from the old Words format.
     enum BorderStyle {
         BorderNone, ///< no border. This value forces the computed value of 'border-width' to be '0'.
         BorderDotted,   ///< The border is a series of dots.
@@ -74,15 +89,6 @@ public:
         // words legacy
         BorderDashDot,
         BorderDashDotDot
-    };
-
-    enum Side {
-        Top = 0, ///< References the border at the top of the cell
-        Left,    ///< References the border at the left side of the cell
-        Bottom,  ///< References the border at the bottom of the cell
-        Right,   ///< References the border at the right side of the paragraph
-        TopLeftToBottomRight, ///< References the border from top, left corner to bottom, right corner of cell
-        BottomLeftToTopRight  ///< References the border from bottom, left corner to top, right corner of cell
     };
 
     /// Holds data about one border line.
@@ -112,89 +118,22 @@ public:
     bool operator==(const KoBorder &other) const;
     bool operator!=(const KoBorder &other) const { return !operator==(other); }
 
-    void setLeftBorderStyle(BorderStyle style);
-    BorderStyle leftBorderStyle() const;
-    void setLeftBorderColor(const QColor &color);
-    QColor leftBorderColor() const;
-    void setLeftBorderWidth(qreal width);
-    qreal leftBorderWidth() const;
-    void setLeftInnerBorderWidth(qreal width);
-    qreal leftInnerBorderWidth() const;
-    void setLeftBorderSpacing(qreal width);
-    qreal leftBorderSpacing() const;
+    void setBorderStyle(BorderSide side, BorderStyle style);
+    BorderStyle borderStyle(BorderSide side) const;
+    void setBorderColor(BorderSide side, const QColor &color);
+    QColor borderColor(BorderSide side) const;
+    void setBorderWidth(BorderSide side, qreal width);
+    qreal borderWidth(BorderSide side) const;
+    void setInnerBorderWidth(BorderSide side, qreal width);
+    qreal innerBorderWidth(BorderSide side) const;
+    void setBorderSpacing(BorderSide side, qreal width);
+    qreal borderSpacing(BorderSide side) const;
 
-    void setTopBorderStyle(BorderStyle style);
-    BorderStyle topBorderStyle() const;
-    void setTopBorderColor(const QColor &color);
-    QColor topBorderColor() const;
-    void setTopBorderWidth(qreal width);
-    qreal topBorderWidth() const;
-    void setTopInnerBorderWidth(qreal width);
-    qreal topInnerBorderWidth() const;
-    void setTopBorderSpacing(qreal width);
-    qreal topBorderSpacing() const;
-
-    void setRightBorderStyle(BorderStyle style);
-    BorderStyle rightBorderStyle() const;
-    void setRightBorderColor(const QColor &color);
-    QColor rightBorderColor() const;
-    void setRightBorderWidth(qreal width);
-    qreal rightBorderWidth() const;
-    void setRightInnerBorderWidth(qreal width);
-    qreal rightInnerBorderWidth() const;
-    void setRightBorderSpacing(qreal width);
-    qreal rightBorderSpacing() const;
-
-    void setBottomBorderStyle(BorderStyle style);
-    BorderStyle bottomBorderStyle() const;
-    void setBottomBorderColor(const QColor &color);
-    QColor bottomBorderColor() const;
-    void setBottomBorderWidth(qreal width);
-    qreal bottomBorderWidth() const;
-    void setBottomInnerBorderWidth(qreal width);
-    qreal bottomInnerBorderWidth() const;
-    void setBottomBorderSpacing(qreal width);
-    qreal bottomBorderSpacing() const;
-
-    void setTlbrBorderStyle(BorderStyle style);
-    BorderStyle tlbrBorderStyle() const;
-    void setTlbrBorderColor(const QColor &color);
-    QColor tlbrBorderColor() const;
-    void setTlbrBorderWidth(qreal width);
-    qreal tlbrBorderWidth() const;
-    void setTlbrInnerBorderWidth(qreal width);
-    qreal tlbrInnerBorderWidth() const;
-    void setTlbrBorderSpacing(qreal width);
-    qreal tlbrBorderSpacing() const;
-
-    void setTrblBorderStyle(BorderStyle style);
-    BorderStyle trblBorderStyle() const;
-    void setTrblBorderColor(const QColor &color);
-    QColor trblBorderColor() const;
-    void setTrblBorderWidth(qreal width);
-    qreal trblBorderWidth() const;
-    void setTrblInnerBorderWidth(qreal width);
-    qreal trblInnerBorderWidth() const;
-    void setTrblBorderSpacing(qreal width);
-    qreal trblBorderSpacing() const;
-
-    BorderData leftBorderData() const;
-    BorderData topBorderData() const;
-    BorderData rightBorderData() const;
-    BorderData bottomBorderData() const;
-    BorderData tlbrBorderData() const;
-    BorderData trblBorderData() const;
-    void setLeftBorderData(const BorderData &data);
-    void setTopBorderData(const BorderData &data);
-    void setRightBorderData(const BorderData &data);
-    void setBottomBorderData(const BorderData &data);
-    void setTlbrBorderData(const BorderData &data);
-    void setTrblBorderData(const BorderData &data);
-
+    BorderData borderData(BorderSide side) const;
+    void setBorderData(BorderSide side, const BorderData &data);
 
     bool hasBorder() const;
-
-    bool hasBorder(Side side) const;
+    bool hasBorder(BorderSide side) const;
 
     /**
      * Load the style from the element
@@ -203,7 +142,6 @@ public:
      * @return true when border attributes were found
      */
     bool loadOdf(const KoXmlElement &style);
-
     void saveOdf(KoGenStyle &style, KoGenStyle::PropertyType type = KoGenStyle::DefaultType) const;
 
 

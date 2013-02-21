@@ -28,11 +28,12 @@ class KoTextShapeData;
 class QTextBlock;
 class QTextLayout;
 class KoTextLayoutObstruction;
+class KoAnchorTextRange;
 
 class FloatingAnchorStrategy  : public AnchorStrategy
 {
 public:
-    FloatingAnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootArea);
+    FloatingAnchorStrategy(KoAnchorTextRange *anchor, KoTextLayoutRootArea *rootArea);
     ~FloatingAnchorStrategy();
 
     /**
@@ -67,6 +68,7 @@ private:
     void updateObstruction(qreal documentOffset);
 
     KoTextLayoutObstruction *m_obstruction; // the obstruction representation of the subject
+    KoAnchorTextRange *m_anchorRange;
 };
 
 #endif // FLOATINGANCHORSTRATEGY_H

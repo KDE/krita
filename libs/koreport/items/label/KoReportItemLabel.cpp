@@ -171,7 +171,8 @@ QString KoReportItemLabel::typeName() const
     return "report:label";
 }
 
-int KoReportItemLabel::render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script)
+int KoReportItemLabel::renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset,
+                                        const QVariant &data, KRScriptHandler *script)
 {
     Q_UNUSED(data)
     Q_UNUSED(script)

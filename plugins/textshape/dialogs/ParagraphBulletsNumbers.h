@@ -37,7 +37,7 @@ class ParagraphBulletsNumbers : public QWidget
 {
     Q_OBJECT
 public:
-    ParagraphBulletsNumbers(QWidget *parent);
+    explicit ParagraphBulletsNumbers(QWidget *parent);
 
     void setDisplay(KoParagraphStyle *style, int level = 0);
 

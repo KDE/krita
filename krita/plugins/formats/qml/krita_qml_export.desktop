@@ -1,0 +1,10 @@
+[Desktop Entry]
+Icon=
+Name=Krita QML Export Filter
+X-KDE-ServiceTypes=CalligraFilter
+Type=Service
+X-KDE-Export=text/x-qml
+X-KDE-Import=application/x-krita
+X-KDE-Library=kritaqmlexport
+X-KDE-Weight=1
+NoDisplay=true

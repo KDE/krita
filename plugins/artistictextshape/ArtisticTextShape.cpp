@@ -1017,7 +1017,7 @@ bool ArtisticTextShape::saveSvg(SvgSavingContext &context)
         context.styleWriter().endElement();
 
         context.shapeWriter().startElement("textPath");
-        context.shapeWriter().addAttribute("xlink:href", "#"+id);
+        context.shapeWriter().addAttribute("xlink:href", QLatin1Char('#')+id);
         if (startOffset() > 0.0)
             context.shapeWriter().addAttribute("startOffset", QString("%1%").arg(startOffset() * 100.0));
         foreach(const ArtisticTextRange &range, formattedText) {
@@ -1053,7 +1053,7 @@ void ArtisticTextShape::saveSvgTextRange(const ArtisticTextRange &range, SvgSavi
         int charIndex = 0;
         while(range.hasXOffset(charIndex)) {
             if (charIndex)
-                attributeValue += ",";
+                attributeValue += QLatin1Char(',');
             attributeValue += QString("%1").arg(SvgUtil::toUserSpace(range.xOffset(charIndex++)));
         }
         context.shapeWriter().addAttribute(attributeName, attributeValue);
@@ -1066,7 +1066,7 @@ void ArtisticTextShape::saveSvgTextRange(const ArtisticTextRange &range, SvgSavi
         int charIndex = 0;
         while(range.hasYOffset(charIndex)) {
             if (charIndex)
-                attributeValue += ",";
+                attributeValue += QLatin1Char(',');
             attributeValue += QString("%1").arg(SvgUtil::toUserSpace(baselineOffset+range.yOffset(charIndex++)));
         }
         context.shapeWriter().addAttribute(attributeName, attributeValue);

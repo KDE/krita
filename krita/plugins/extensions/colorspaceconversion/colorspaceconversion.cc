@@ -19,22 +19,13 @@
  */
 
 #include "colorspaceconversion.h"
-#include <stdlib.h>
 
-#include <QRadioButton>
-#include <QCheckBox>
-#include <QLabel>
-#include <QComboBox>
 #include <QApplication>
 #include <QCursor>
 
 #include <klocale.h>
-#include <kcomponentdata.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <kactioncollection.h>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -53,8 +44,7 @@
 
 #include <kis_view2.h>
 #include <kis_paint_device.h>
-#include <widgets/kis_cmb_idlist.h>
-#include <widgets/squeezedcombobox.h>
+#include <kis_action.h>
 #include <kis_group_layer.h>
 
 #include "dlg_colorspaceconversion.h"
@@ -64,25 +54,21 @@ K_EXPORT_PLUGIN(ColorSpaceConversionFactory("krita"))
 
 
 ColorSpaceConversion::ColorSpaceConversion(QObject *parent, const QVariantList &)
-        : KParts::Plugin(parent)
+        : KisViewPlugin(parent, "kritaplugins/colorspaceconversion.rc")
 {
-    if (parent->inherits("KisView2")) {
-        m_view = (KisView2*) parent;
-        setXMLFile(KStandardDirs::locate("data", "kritaplugins/colorspaceconversion.rc"),
-                   true);
+    KisAction *action  = new KisAction(i18n("&Convert Image Type..."), this);
+    addAction("imagecolorspaceconversion", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotImageColorSpaceConversion()));
 
-        KAction *action  = new KAction(i18n("&Convert Image Type..."), this);
-        actionCollection()->addAction("imagecolorspaceconversion", action);
-        connect(action, SIGNAL(triggered()), this, SLOT(slotImageColorSpaceConversion()));
-        action  = new KAction(i18n("&Convert Layer Type..."), this);
-        actionCollection()->addAction("layercolorspaceconversion", action);
-        connect(action, SIGNAL(triggered()), this, SLOT(slotLayerColorSpaceConversion()));
-    }
+    action  = new KisAction(i18n("&Convert Layer Type..."), this);
+    action->setActivationFlags(KisAction::ACTIVE_LAYER);
+    action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    addAction("layercolorspaceconversion", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotLayerColorSpaceConversion()));
 }
 
 ColorSpaceConversion::~ColorSpaceConversion()
 {
-    m_view = 0;
 }
 
 void ColorSpaceConversion::slotImageColorSpaceConversion()
@@ -93,6 +79,8 @@ void ColorSpaceConversion::slotImageColorSpaceConversion()
 
 
     DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(m_view, "ColorSpaceConversion");
+    bool allowLCMSOptimization = KisConfig().allowLCMSOptimization();
+    dlgColorSpaceConversion->m_page->chkAllowLCMSOptimization->setChecked(allowLCMSOptimization);
     Q_CHECK_PTR(dlgColorSpaceConversion);
 
     dlgColorSpaceConversion->setCaption(i18n("Convert All Layers From ") + image->colorSpace()->name());

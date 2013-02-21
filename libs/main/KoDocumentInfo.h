@@ -58,7 +58,7 @@ public:
      * The constructor
      * @param parent a pointer to the parent object
      */
-    KoDocumentInfo(QObject* parent = 0);
+    explicit KoDocumentInfo(QObject *parent = 0);
 
     /** The destructor */
     ~KoDocumentInfo();
@@ -137,7 +137,14 @@ public:
     /** Resets part of the meta data */
     void resetMetaData();
 
+public slots:
+    /** Takes care of updating the document info from configuration correctly */
+    void updateParameters();
+
 private:
+    /// Bumps the editing cycles count and save date, and then calls updateParameters
+    void updateParametersAndBumpNumCycles();
+
     /**
      * Set information about the author
      * This sets what is actualy saved to file. The public method setAuthorInfo() can be used to set
@@ -203,9 +210,6 @@ private:
      * @return true if success
      */
     bool saveOasisAuthorInfo(KoXmlWriter &xmlWriter);
-
-    /** Takes care of saving the per-editing-cycle data correctly */
-    void saveParameters();
 
     /** A QStringList containing all tags for the document information */
     QStringList m_aboutTags;

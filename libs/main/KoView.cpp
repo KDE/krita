@@ -28,12 +28,17 @@
 #include "KoDockRegistry.h"
 #include "KoDocument.h"
 #include "KoMainWindow.h"
+
+#ifndef QT_NO_DBUS
 #include "KoViewAdaptor.h"
+#endif
+
 #include "KoDockFactoryBase.h"
 #include "KoUndoStackAction.h"
 #include "KoGlobal.h"
 #include "KoPageLayout.h"
 #include "KoPrintJob.h"
+#include "KoDocumentInfo.h"
 
 #include <KoIcon.h>
 
@@ -168,8 +173,10 @@ KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
 
     setObjectName(newObjectName());
 
+#ifndef QT_NO_DBUS
     new KoViewAdaptor(this);
     QDBusConnection::sessionBus().registerObject('/' + objectName(), this);
+#endif
 
     //kDebug(30003) <<"KoView::KoView" << this;
     d->document = document;
@@ -239,7 +246,7 @@ void KoView::dropEvent(QDropEvent *event)
     }
     else if (event->mimeData()->hasUrls()) {
         QList<QUrl> urls = event->mimeData()->urls();
-        foreach (const QUrl url, urls) {
+        foreach (const QUrl &url, urls) {
             QImage image;
             KUrl kurl(url);
             // make sure we download the files before inserting them
@@ -575,6 +582,7 @@ void KoView::changeAuthorProfile(const QString &profileName)
         appAuthorGroup.writeEntry("active-profile", profileName);
     }
     appAuthorGroup.sync();
+    d->document->documentInfo()->updateParameters();
 }
 
 KoMainWindow * KoView::shell() const

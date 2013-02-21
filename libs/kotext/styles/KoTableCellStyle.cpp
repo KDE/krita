@@ -160,10 +160,10 @@ QTextCharFormat KoTableCellStyle::cleanCharFormat(const QTextCharFormat &charFor
 
 QRectF KoTableCellStyle::contentRect(const QRectF &boundingRect) const
 {
-    const KoBorder::BorderData &leftEdge = getEdge(KoBorder::Left);
-    const KoBorder::BorderData &topEdge = getEdge(KoBorder::Top);
-    const KoBorder::BorderData &rightEdge = getEdge(KoBorder::Right);
-    const KoBorder::BorderData &bottomEdge = getEdge(KoBorder::Bottom);
+    const KoBorder::BorderData &leftEdge = getEdge(KoBorder::LeftBorder);
+    const KoBorder::BorderData &topEdge = getEdge(KoBorder::TopBorder);
+    const KoBorder::BorderData &rightEdge = getEdge(KoBorder::RightBorder);
+    const KoBorder::BorderData &bottomEdge = getEdge(KoBorder::BottomBorder);
 
     return boundingRect.adjusted(
                 leftEdge.outerPen.widthF() + leftEdge.spacing + leftEdge.innerPen.widthF() + propertyDouble(QTextFormat::TableCellLeftPadding),
@@ -175,10 +175,10 @@ QRectF KoTableCellStyle::contentRect(const QRectF &boundingRect) const
 
 QRectF KoTableCellStyle::boundingRect(const QRectF &contentRect) const
 {
-    const KoBorder::BorderData &leftEdge = getEdge(KoBorder::Left);
-    const KoBorder::BorderData &topEdge = getEdge(KoBorder::Top);
-    const KoBorder::BorderData &rightEdge = getEdge(KoBorder::Right);
-    const KoBorder::BorderData &bottomEdge = getEdge(KoBorder::Bottom);
+    const KoBorder::BorderData &leftEdge = getEdge(KoBorder::LeftBorder);
+    const KoBorder::BorderData &topEdge = getEdge(KoBorder::TopBorder);
+    const KoBorder::BorderData &rightEdge = getEdge(KoBorder::RightBorder);
+    const KoBorder::BorderData &bottomEdge = getEdge(KoBorder::BottomBorder);
 
     return contentRect.adjusted(
                 - leftEdge.outerPen.widthF() - leftEdge.spacing - leftEdge.innerPen.widthF() - propertyDouble(QTextFormat::TableCellLeftPadding),
@@ -348,18 +348,18 @@ void KoTableCellStyle::applyStyle(QTextTableCellFormat &format) const
     if (d->parentStyle && d->parentStyle->hasProperty(Borders) && this->hasProperty(Borders)) {
         KoBorder parentBorder = d->parentStyle->borders();
         KoBorder childBorder = this->borders();
-        if (childBorder.hasBorder(KoBorder::Left))
-            parentBorder.setLeftBorderData(childBorder.leftBorderData());
-        if (childBorder.hasBorder(KoBorder::Right))
-            parentBorder.setRightBorderData(childBorder.rightBorderData());
-        if (childBorder.hasBorder(KoBorder::Top))
-            parentBorder.setTopBorderData(childBorder.topBorderData());
-        if (childBorder.hasBorder(KoBorder::Bottom))
-            parentBorder.setBottomBorderData(childBorder.bottomBorderData());
-        if (childBorder.hasBorder(KoBorder::BottomLeftToTopRight))
-            parentBorder.setTrblBorderData(childBorder.trblBorderData());
-        if (childBorder.hasBorder(KoBorder::TopLeftToBottomRight))
-            parentBorder.setTlbrBorderData(childBorder.tlbrBorderData());
+        if (childBorder.hasBorder(KoBorder::LeftBorder))
+            parentBorder.setBorderData(KoBorder::LeftBorder, childBorder.borderData(KoBorder::LeftBorder));
+        if (childBorder.hasBorder(KoBorder::RightBorder))
+            parentBorder.setBorderData(KoBorder::RightBorder, childBorder.borderData(KoBorder::RightBorder));
+        if (childBorder.hasBorder(KoBorder::TopBorder))
+            parentBorder.setBorderData(KoBorder::TopBorder, childBorder.borderData(KoBorder::TopBorder));
+        if (childBorder.hasBorder(KoBorder::BottomBorder))
+            parentBorder.setBorderData(KoBorder::BottomBorder, childBorder.borderData(KoBorder::BottomBorder));
+        if (childBorder.hasBorder(KoBorder::BltrBorder))
+            parentBorder.setBorderData(KoBorder::BltrBorder, childBorder.borderData(KoBorder::BltrBorder));
+        if (childBorder.hasBorder(KoBorder::TlbrBorder))
+            parentBorder.setBorderData(KoBorder::TlbrBorder, childBorder.borderData(KoBorder::TlbrBorder));
         format.setProperty(Borders, QVariant::fromValue<KoBorder>(parentBorder));
     }
 }
@@ -871,7 +871,8 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
 
 }
 
-void KoTableCellStyle::setEdge(KoBorder::Side side, KoBorder::BorderStyle style, qreal width, QColor color)
+void KoTableCellStyle::setEdge(KoBorder::BorderSide side, KoBorder::BorderStyle style,
+                               qreal width, QColor color)
 {
     KoBorder::BorderData edge;
     qreal innerWidth = 0;
@@ -943,36 +944,16 @@ void KoTableCellStyle::setEdge(KoBorder::Side side, KoBorder::BorderStyle style,
     setEdge(side, edge, style);
 }
 
-void KoTableCellStyle::setEdge(KoBorder::Side side, const KoBorder::BorderData &edge, KoBorder::BorderStyle style)
+void KoTableCellStyle::setEdge(KoBorder::BorderSide side, const KoBorder::BorderData &edge, KoBorder::BorderStyle style)
 {
     KoBorder borders = this->borders();
     KoBorder::BorderData edgeCopy(edge);
     edgeCopy.style = style;                 // Just for safety.
-    switch (side)
-    {
-        case KoBorder::Top:
-            borders.setTopBorderData(edgeCopy);
-            break;
-        case KoBorder::Left:
-            borders.setLeftBorderData(edgeCopy);
-            break;
-        case KoBorder::Bottom:
-            borders.setBottomBorderData(edgeCopy);
-            break;
-        case KoBorder::Right:
-            borders.setRightBorderData(edgeCopy);
-            break;
-        case KoBorder::TopLeftToBottomRight:
-            borders.setTlbrBorderData(edgeCopy);
-            break;
-        case KoBorder::BottomLeftToTopRight:
-            borders.setTrblBorderData(edgeCopy);
-            break;
-    }
+    borders.setBorderData(side, edgeCopy);
     setBorders(borders);
 }
 
-void KoTableCellStyle::setEdgeDoubleBorderValues(KoBorder::Side side, qreal innerWidth, qreal space)
+void KoTableCellStyle::setEdgeDoubleBorderValues(KoBorder::BorderSide side, qreal innerWidth, qreal space)
 {
     KoBorder::BorderData edge = getEdge(side);
 
@@ -992,98 +973,83 @@ bool KoTableCellStyle::hasBorders() const
 
 qreal KoTableCellStyle::leftBorderWidth() const
 {
-    const KoBorder::BorderData &edge = getEdge(KoBorder::Left);
+    const KoBorder::BorderData &edge = getEdge(KoBorder::LeftBorder);
     return edge.spacing + edge.innerPen.widthF() + edge.outerPen.widthF();
 }
 
 qreal KoTableCellStyle::rightBorderWidth() const
 {
-    const KoBorder::BorderData &edge = getEdge(KoBorder::Right);
+    const KoBorder::BorderData &edge = getEdge(KoBorder::RightBorder);
     return edge.spacing + edge.innerPen.widthF() + edge.outerPen.widthF();
 }
 
 qreal KoTableCellStyle::topBorderWidth() const
 {
-    const KoBorder::BorderData &edge = getEdge(KoBorder::Top);
+    const KoBorder::BorderData &edge = getEdge(KoBorder::TopBorder);
     return edge.spacing + edge.innerPen.widthF() + edge.outerPen.widthF();
 }
 
 qreal KoTableCellStyle::bottomBorderWidth() const
 {
-    const KoBorder::BorderData &edge = getEdge(KoBorder::Bottom);
+    const KoBorder::BorderData &edge = getEdge(KoBorder::BottomBorder);
     return edge.spacing + edge.innerPen.widthF() + edge.outerPen.widthF();
 }
 
 qreal KoTableCellStyle::leftInnerBorderWidth() const
 {
-    const KoBorder::BorderData &edge = getEdge(KoBorder::Left);
+    const KoBorder::BorderData &edge = getEdge(KoBorder::LeftBorder);
     return edge.innerPen.widthF();
 }
 
 qreal KoTableCellStyle::rightInnerBorderWidth() const
 {
-    const KoBorder::BorderData &edge = getEdge(KoBorder::Right);
+    const KoBorder::BorderData &edge = getEdge(KoBorder::RightBorder);
     return edge.innerPen.widthF();
 }
 
 qreal KoTableCellStyle::topInnerBorderWidth() const
 {
-    const KoBorder::BorderData &edge = getEdge(KoBorder::Top);
+    const KoBorder::BorderData &edge = getEdge(KoBorder::TopBorder);
     return edge.innerPen.widthF();
 }
 
 qreal KoTableCellStyle::bottomInnerBorderWidth() const
 {
-    const KoBorder::BorderData &edge = getEdge(KoBorder::Bottom);
+    const KoBorder::BorderData &edge = getEdge(KoBorder::BottomBorder);
     return edge.innerPen.widthF();
 }
 
 qreal KoTableCellStyle::leftOuterBorderWidth() const
 {
-    const KoBorder::BorderData &edge = getEdge(KoBorder::Left);
+    const KoBorder::BorderData &edge = getEdge(KoBorder::LeftBorder);
     return edge.outerPen.widthF();
 }
 
 qreal KoTableCellStyle::rightOuterBorderWidth() const
 {
-    const KoBorder::BorderData &edge = getEdge(KoBorder::Right);
+    const KoBorder::BorderData &edge = getEdge(KoBorder::RightBorder);
     return edge.outerPen.widthF();
 }
 
 qreal KoTableCellStyle::topOuterBorderWidth() const
 {
-    const KoBorder::BorderData &edge = getEdge(KoBorder::Top);
+    const KoBorder::BorderData &edge = getEdge(KoBorder::TopBorder);
     return edge.outerPen.widthF();
 }
 
 qreal KoTableCellStyle::bottomOuterBorderWidth() const
 {
-    const KoBorder::BorderData &edge = getEdge(KoBorder::Bottom);
+    const KoBorder::BorderData &edge = getEdge(KoBorder::BottomBorder);
     return edge.outerPen.widthF();
 }
 
-KoBorder::BorderData KoTableCellStyle::getEdge(KoBorder::Side side) const
+KoBorder::BorderData KoTableCellStyle::getEdge(KoBorder::BorderSide side) const
 {
     KoBorder border = this->borders();
-    switch (side)
-    {
-        case KoBorder::Top:
-            return border.topBorderData();
-        case KoBorder::Left:
-            return border.leftBorderData();
-        case KoBorder::Bottom:
-            return border.bottomBorderData();
-        case KoBorder::Right:
-            return border.rightBorderData();
-        case KoBorder::TopLeftToBottomRight:
-            return border.tlbrBorderData();
-        case KoBorder::BottomLeftToTopRight:
-            return border.trblBorderData();
-    }
-    return KoBorder::BorderData();
+    return border.borderData(side);
 }
 
-KoBorder::BorderStyle KoTableCellStyle::getBorderStyle(KoBorder::Side side) const
+KoBorder::BorderStyle KoTableCellStyle::getBorderStyle(KoBorder::BorderSide side) const
 {
     KoBorder::BorderData edge = getEdge(side);
     return edge.style;

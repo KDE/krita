@@ -21,7 +21,7 @@
 
 #include <ui_KoPageLayoutWidget.h>
 
-struct KoPageLayoutWidget::Private
+class KoPageLayoutWidget::Private
 {
 public:
     Ui::KoPageLayoutWidget widget;

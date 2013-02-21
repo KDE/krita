@@ -47,7 +47,7 @@ public:
     /**
      * Construct a new cite to be inserted in the text using KoTextSelectionHandler::insertInlineObject() for example.
      */
-    KoInlineCite(Type type);
+    explicit KoInlineCite(Type type);
 
     virtual ~KoInlineCite();
 

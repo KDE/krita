@@ -1,0 +1,10 @@
+This directory contains patches to KDGantt.  The reason is that we
+want to be able to reapply them to the next version of KDGantt when we
+upgrade to the next version.
+
+Patches:
+
+inline_span_destructor.diff
+  This patch makes Span::~Span() destructor inline, this way matching all other
+  methods of Span and thus allowing other libs to use the class even though no
+  symbols are exported

@@ -31,7 +31,6 @@
 #include <KoFilterManager.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
-typedef QPointer<KoUpdater> KoUpdaterPtr;
 
 #include <kis_types.h>
 #include <kis_image.h>
@@ -109,7 +108,7 @@ void KisImageManager::resizeCurrentImage(qint32 w, qint32 h, qint32 xOffset, qin
 {
     if (!m_view->image()) return;
 
-    m_view->image()->cropImage(QRect(-xOffset, -yOffset, w, h));
+    m_view->image()->resizeImage(QRect(-xOffset, -yOffset, w, h));
 }
 
 void KisImageManager::scaleCurrentImage(const QSize &size, qreal xres, qreal yres, KisFilterStrategy *filterStrategy)

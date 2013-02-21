@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization 
+	Culture="en-us"
+	Codepage="1252"
+	xmlns="http://schemas.microsoft.com/wix/2006/localization">
+	
+	<!-- Standard Application  -->
+	<String Id="SummaryCodepage">1252</String>
+	<String Id="LanguageId">1033</String>
+	<String Id="Description">Calligra Suite of applications and their dependencies.</String>
+	<String Id="Comments">unstable, built from revision</String>
+	<String Id="ApplicationName">Calligra Suite !(wix.VERSIONSTRING) (unstable)</String>
+	
+	<!-- Suite Applications -->
+	<String Id="ApplicationNameWords">Calligra Words [C2WINSTALL_VERSIONSTRING]</String>
+	<String Id="ApplicationNameSheets">Calligra Sheets [C2WINSTALL_VERSIONSTRING]</String>
+	<String Id="ApplicationNameStage">Calligra Stage [C2WINSTALL_VERSIONSTRING]</String>
+	<String Id="ApplicationNameFlow">Calligra Flow [C2WINSTALL_VERSIONSTRING]</String>
+	<String Id="ApplicationNameKarbon">Karbon [C2WINSTALL_VERSIONSTRING]</String>
+	<String Id="ApplicationNameKrita">Krita [C2WINSTALL_VERSIONSTRING]</String>
+	<String Id="ApplicationDescriptionKrita">Krita Painting Application</String>
+	
+	<!-- Filetype assocations -->
+	<String Id="ExplorerMenuOpen">Open</String>
+	
+	<String Id="OdtFileDescription">ODF Text Document</String>
+	<String Id="OdsFileDescription">ODF Spreadsheet Document</String>
+	<String Id="OdpFileDescription">ODF Presentation Document</String>
+	<String Id="KraFileDescription">Krita Image</String>
+	
+	<!--
+	<String Id="ExplorerMenuOpenXYZ"></String>
+	<String Id=""></String>
+	-->
+	
+</WixLocalization>

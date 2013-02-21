@@ -28,7 +28,7 @@ class QTextDocument;
 class FindDirection
 {
 public:
-    FindDirection(KoCanvasResourceManager *provider);
+    explicit FindDirection(KoCanvasResourceManager *provider);
     virtual ~FindDirection();
 
     virtual bool positionReached(const QTextCursor &currentPos, const QTextCursor &endPos) = 0;
@@ -46,7 +46,7 @@ protected:
 class FindForward : public FindDirection
 {
 public:
-    FindForward(KoCanvasResourceManager *provider);
+    explicit FindForward(KoCanvasResourceManager *provider);
     virtual ~FindForward();
 
     virtual bool positionReached(const QTextCursor &currentPos, const QTextCursor &endPos);
@@ -61,7 +61,7 @@ public:
 class FindBackward : public FindDirection
 {
 public:
-    FindBackward(KoCanvasResourceManager *provider);
+    explicit FindBackward(KoCanvasResourceManager *provider);
     virtual ~FindBackward();
 
     virtual bool positionReached(const QTextCursor &currentPos, const QTextCursor &endPos);

@@ -3,7 +3,6 @@ add_subdirectory( paintoppresets )
 add_subdirectory( patterns )
 add_subdirectory( gradients )
 add_subdirectory( profiles )
-add_subdirectory( palettes )
 add_subdirectory( templates )
 add_subdirectory( shaders )
 add_subdirectory( images )
@@ -31,3 +30,8 @@ install( FILES
     kritagradients.knsrc
     kritaiccprofiles.knsrc
     DESTINATION ${CONFIG_INSTALL_DIR} )
+
+install( FILES
+    krita.xml
+    DESTINATION ${DATA_INSTALL_DIR}/mime/packages
+)

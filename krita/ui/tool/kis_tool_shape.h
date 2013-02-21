@@ -27,6 +27,7 @@
 #include "ui_wdgshapeoptions.h"
 
 class KoCanvasBase;
+class KoPathShape;
 
 class QGridLayout;
 
@@ -62,6 +63,8 @@ protected:
     virtual void setupPaintAction(KisRecordedPaintAction* action);
 
     void addShape(KoShape* shape);
+
+    void addPathShape(KoPathShape* pathShape, const QString& name);
 
 private:
     WdgGeometryOptions *m_shapeOptionsWidget;

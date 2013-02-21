@@ -21,9 +21,7 @@
 
 #include <QVariant>
 
-#include <kparts/plugin.h>
-
-class KisView2;
+#include <kis_view_plugin.h>
 
 namespace KisMetaData
 {
@@ -33,7 +31,7 @@ class Store;
 /**
  * Template of view plugin
  */
-class metadataeditorPlugin : public KParts::Plugin
+class metadataeditorPlugin : public KisViewPlugin
 {
     Q_OBJECT
 public:
@@ -43,10 +41,6 @@ public:
 private slots:
 
     void slotEditLayerMetaData();
-
-private:
-
-    KisView2 * m_view;
 };
 
 #endif // metadataeditorPlugin_H

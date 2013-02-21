@@ -37,7 +37,7 @@
 class KOFORMULA_EXPORT SquareRootElement : public RowElement {
 public:
     /// The standard constructor
-    SquareRootElement( BasicElement* parent = 0 );
+    explicit SquareRootElement(BasicElement *parent = 0);
 
     /// The standard destructor
     ~SquareRootElement();

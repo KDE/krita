@@ -17,11 +17,9 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "Plugin.h"
-#include "strokedocker/StrokeDockerFactory.h"
 #include "snapguidedocker/SnapGuideDockerFactory.h"
 #include "shapeproperties/ShapePropertiesDockerFactory.h"
 #include "styledocker/StyleDockerFactory.h"
-#include "shadowdocker/ShadowDockerFactory.h"
 #include "colordocker/ColorDockerFactory.h"
 #include "shapecollection/ShapeCollectionDocker.h"
 
@@ -36,11 +34,9 @@ Plugin::Plugin(QObject *parent, const QVariantList&)
     : QObject(parent)
 {
     Q_UNUSED(parent);
-    KoDockRegistry::instance()->add(new StrokeDockerFactory());
     KoDockRegistry::instance()->add(new SnapGuideDockerFactory());
     KoDockRegistry::instance()->add(new ShapePropertiesDockerFactory());
     KoDockRegistry::instance()->add(new StyleDockerFactory());
-    KoDockRegistry::instance()->add(new ShadowDockerFactory());
 //    KoDockRegistry::instance()->add(new ShapeSelectorFactory());
     // TODO color docker isn't finished and connected'
 //     KoDockRegistry::instance()->add(new ColorDockerFactory());

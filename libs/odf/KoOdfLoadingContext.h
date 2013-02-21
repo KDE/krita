@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOOASISLOADINGCONTEXT_H
-#define KOOASISLOADINGCONTEXT_H
+#ifndef KOODFLOADINGCONTEXT_H
+#define KOODFLOADINGCONTEXT_H
 
 #include <QString>
 
@@ -136,4 +136,4 @@ private:
     bool parseManifest(const KoXmlDocument &manifestDocument);
 };
 
-#endif /* KOOASISLOADINGCONTEXT_H */
+#endif /* KOODFLOADINGCONTEXT_H */

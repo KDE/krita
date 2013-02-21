@@ -91,7 +91,6 @@ public:
      *  Retrieves the document that is displayed in the mainwindow.
      */
     KoDocument *rootDocument() const;
-    KoPart *rootPart() const;
     KoView *rootView() const;
 
     /**
@@ -134,7 +133,7 @@ public:
      *
      * Special method for KoApplication::start, don't use.
      */
-    bool openDocument(KoPart *newPart, KoDocument *newdoc, const KUrl & url);
+    bool openDocument(KoPart *newPart, const KUrl & url);
 
     /**
      * Reloads the recent documents list.

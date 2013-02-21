@@ -45,9 +45,7 @@
 #include <KoConfig.h>
 
 #include <kdeversion.h>
-#if KDE_IS_VERSION(4,6,0)
 #include <krecentdirs.h>
-#endif
 #include <krecentfilesaction.h>
 #include <kaboutdata.h>
 #include <ktoggleaction.h>
@@ -166,7 +164,7 @@ public:
                 QString extension = mime->property("X-KDE-NativeExtension").toString();
 
                 if (title.endsWith(extension))
-                    title.truncate(title.length() - extension.length());
+                    title.chop(extension.length());
             }
         }
 
@@ -337,11 +335,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     d->themeManager->setCurrentTheme(group.readEntry("Theme",
                                                      d->themeManager->defaultThemeName()));
 
-    // set up the action "list" for "Close all Views" (hacky :) (Werner)
-    KToggleAction *fullscreenAction  = new KToggleAction(koIcon("view-fullscreen"), i18n("Full Screen Mode"), this);
-    actionCollection()->addAction("view_fullscreen", fullscreenAction);
-    fullscreenAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_F));
-    connect(fullscreenAction, SIGNAL(toggled(bool)), this, SLOT(viewFullscreen(bool)));
+    actionCollection()->addAction(KStandardAction::FullScreen, "view_fullscreen", this, SLOT(viewFullscreen(bool)));
 
     d->toggleDockers = new KToggleAction(i18n("Show Dockers"), this);
     d->toggleDockers->setChecked(true);
@@ -400,7 +394,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     }
 
     // Now ask kde to restore the size of the window; this could probably be replaced by
-    // QWidget::saveGeometry asnd QWidget::restoreGeometry, but let's stay with the KDE
+    // QWidget::saveGeometry and QWidget::restoreGeometry, but let's stay with the KDE
     // way of doing things.
     KConfigGroup config(KGlobal::config(), "MainWindow");
     restoreWindowSize( config );
@@ -586,9 +580,7 @@ void KoMainWindow::addRecentURL(const KUrl& url)
                     ok = false; // it's in the tmp resource
             if (ok) {
                 KRecentDocument::add(path);
-#if KDE_IS_VERSION(4,6,0)
                 KRecentDirs::add(":OpenDialog", QFileInfo(path).dir().canonicalPath());
-#endif
             }
         } else {
             KRecentDocument::add(url.url(KUrl::RemoveTrailingSlash), true);
@@ -699,13 +691,11 @@ bool KoMainWindow::openDocument(const KUrl & url)
     return openDocumentInternal(url);
 }
 
-bool KoMainWindow::openDocument(KoPart *newPart, KoDocument *newdoc, const KUrl & url)
+bool KoMainWindow::openDocument(KoPart *newPart, const KUrl & url)
 {
+    // the part always has a document; the document doesn't know about the part.
+    KoDocument *newdoc = newPart->document();
     if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0)) {
-        // the part always has a document; the document doesn't know about the part.
-        if (!newdoc) {
-            newdoc = newPart->document();
-        }
         newdoc->initEmpty(); //create an empty document
         setRootDocument(newdoc, newPart);
         newdoc->setUrl(url);
@@ -957,7 +947,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
             bOk = true;
             if (dialog->exec() == QDialog::Accepted) {
                 newURL = dialog->selectedUrl();
-                QString outputFormatString = dialog->currentMimeFilter().toLatin1();
+                QString outputFormatString = dialog->currentMimeFilter();
                 if (outputFormatString.isNull()) {
                     KMimeType::Ptr mime = KMimeType::findByUrl(newURL);
                     outputFormatString = mime->name();
@@ -1114,6 +1104,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
     if (!ret && reset_url)
         d->rootDocument->resetURL(); //clean the suggested filename as the save dialog was rejected
 
+    updateReloadFileAction(d->rootDocument);
     updateCaption();
 
     return ret;
@@ -1337,7 +1328,8 @@ void KoMainWindow::slotDocumentInfo()
     if (!docInfo)
         return;
 
-    KoDocumentInfoDlg *dlg = new KoDocumentInfoDlg(this, docInfo, rootDocument()->documentRdf());
+    KoDocumentInfoDlg *dlg = d->rootPart->createDocumentInfoDialog(this, docInfo);
+
     if (dlg->exec()) {
         if (dlg->isDocumentSaved()) {
             rootDocument()->setModified(false);

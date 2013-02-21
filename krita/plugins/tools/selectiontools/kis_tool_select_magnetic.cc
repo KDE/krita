@@ -426,7 +426,7 @@ void KisToolSelectMagnetic::LocalTool::cleanDetectedBorder()
 {
     //load the points into a linked list, because removing on a vector is expensive
     QLinkedList<QPoint> detectedBorder;
-    foreach(QPoint point, m_detectedBorder) {
+    foreach(const QPoint &point, m_detectedBorder) {
         detectedBorder << point;
     }
 
@@ -457,7 +457,7 @@ void KisToolSelectMagnetic::LocalTool::cleanDetectedBorder()
     }
 
     m_detectedBorder.clear();
-    foreach(QPoint point, detectedBorder) {
+    foreach(const QPoint &point, detectedBorder) {
         m_detectedBorder << point;
     }
 }

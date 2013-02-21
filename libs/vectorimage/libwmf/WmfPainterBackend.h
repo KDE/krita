@@ -17,8 +17,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#ifndef _KOWMFPAINT_H_
-#define _KOWMFPAINT_H_
+#ifndef _WMFPAINTERBACKEND_H_
+#define _WMFPAINTERPACKEND_H_
 
 #include "vectorimage_export.h"
 #include "WmfAbstractBackend.h"

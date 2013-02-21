@@ -35,7 +35,7 @@ class GoogleDocumentService : public QObject
     Q_OBJECT
 
 public:
-    GoogleDocumentService(OnlineDocument::DocumentType type);
+    explicit GoogleDocumentService(OnlineDocument::DocumentType type);
     virtual ~GoogleDocumentService();
     void clientLogin(const QString & username, const QString & password);
     void getDocument();

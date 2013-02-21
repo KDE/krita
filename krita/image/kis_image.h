@@ -577,6 +577,18 @@ signals:
     void sigLayersChangedAsync();
 
     /**
+     * Emitted when the UI has requested the undo of the last stroke's
+     * operation. The point is, we cannot deal with the internals of
+     * the stroke without its creator knowing about it (which most
+     * probably cause a crash), so we just forward this request from
+     * the UI to the creator of the stroke.
+     *
+     * If your tool supports undoing part of its work, just listen to
+     * this signal and undo when it comes
+     */
+    void sigUndoDuringStrokeRequested();
+
+    /**
      * Emitted when the UI has requested the cancellation of
      * the stroke. The point is, we cannot cancel the stroke
      * without its creator knowing about it (which most probably
@@ -617,8 +629,37 @@ public slots:
     void blockUpdates();
     void unblockUpdates();
 
+    /**
+     * Disables notification of the UI about the changes in the image.
+     * This feature is used by KisProcessingApplicator. It is needed
+     * when we change the size of the image. In this case, the whole
+     * image will be reloaded into UI by sigSizeChanged(), so there is
+     * no need to inform the UI about individual dirty rects.
+     */
     void disableUIUpdates();
+
+    /**
+     * \see disableUIUpdates
+     */
     void enableUIUpdates();
+
+    /**
+     * Disables the processing of all the setDirty() requests that
+     * come to the image. The incoming requests are effectively
+     * *dropped*.
+     *
+     * This feature is used by KisProcessingApplicator. For many cases
+     * it provides its own updates interface, which recalculates the
+     * whole subtree of nodes. But while we change any particular
+     * node, it can ask for an update itself. This method is a way of
+     * blocking such intermediate (and excessive) requests.
+     */
+    void disableDirtyRequests();
+
+    /**
+     * \see disableDirtyRequests()
+     */
+    void enableDirtyRequests();
 
     void refreshGraphAsync(KisNodeSP root = 0);
     void refreshGraphAsync(KisNodeSP root, const QRect &rc);
@@ -632,7 +673,18 @@ public slots:
     void initialRefreshGraph();
 
     /**
-     * This method is be called by the UI (*not* by the creator
+     * This method is called by the UI (*not* by the creator of the
+     * stroke) when it thinks current stroke should undo its last
+     * action. For example, when the user presses Ctrl+Z while some
+     * stroke is active. If the creator of the stroke supports undoing
+     * of intermediate actions, it will be notified about this request
+     * and (if it decides he likes to do it) will undo its last
+     * action.
+     */
+    void requestUndoDuringStroke();
+
+    /**
+     * This method is called by the UI (*not* by the creator
      * of the stroke) when it thinks current stroke should be
      * cancelled. If the creator of the stroke supports cancelling
      * of the stroke, it will be notified about the request and
@@ -661,6 +713,8 @@ private:
     void shearImpl(const QString &actionName, KisNodeSP rootNode,
                    bool resizeImage, double angleX, double angleY,
                    const QPointF &origin);
+
+    void safeRemoveTwoNodes(KisNodeSP node1, KisNodeSP node2);
 
     void refreshHiddenArea(KisNodeSP rootNode, const QRect &preparedArea);
     static QRect realNodeExtent(KisNodeSP rootNode, QRect currentRect = QRect());

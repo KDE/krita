@@ -46,7 +46,7 @@ KisBrushRegistry::KisBrushRegistry()
 
 KisBrushRegistry::~KisBrushRegistry()
 {
-    foreach(QString id, keys()) {
+    foreach(const QString &id, keys()) {
         delete get(id);
     }
     dbgRegistry << "deleting KisBrushRegistry";
@@ -62,7 +62,7 @@ KisBrushRegistry* KisBrushRegistry::instance()
         s_instance->add(new KisTextBrushFactory());
         s_instance->add(new KisPngBrushFactory());
         s_instance->add(new KisSvgBrushFactory());
-        KoPluginLoader::instance()->load("Krita/Brush", "Type == 'Service' and ([X-Krita-Version] == 5)");
+        KoPluginLoader::instance()->load("Krita/Brush", "Type == 'Service' and ([X-Krita-Version] == 27)");
     }
     return s_instance;
 }

@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (c) 2011-2012 KO GmbH.  All rights reserved.
+    Copyright (c) 2011-2012 Stuart Dickson <stuartmd@kogmbh.com>
+
+    The use and distribution terms for this software are covered by the
+    Common Public License 1.0 (http://opensource.org/licenses/cpl1.0.php)
+    which can be found in the file CPL.TXT at the root of this distribution.
+    By using this software in any fashion, you are agreeing to be bound by
+    the terms of this license.
+
+    You must not remove this notice, or any other, from this software.
+-->
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+    <!-- Information such as name and manufacturer stored in include file -->
+    <?include "calligra.wxi" ?>
+	
+    <Product Id="*"
+        Name="!(loc.ApplicationName)"
+        Language="!(loc.LanguageId)"
+		Codepage="0"
+        Version="$(env.C2WINSTALL_VERSION)"
+        Manufacturer="$(var.ProductManufacturer)"
+        UpgradeCode="355292C5-4E08-4B0B-8003-67830956EAD8">
+
+		<Package
+            Description="!(loc.Description)"
+            Comments="$(env.C2WINSTALL_VERSIONSTRING) !(loc.Comments) $(env.C2WINSTALL_GITREV)"
+            InstallerVersion="300"
+            Compressed="yes" />
+
+	
+        <Media Id="1" Cabinet="simple.cab" EmbedCab="yes" />
+
+		<!-- Need to store variables in properties used by localisation files 
+			These are referenced with !(wix.VARNAME)
+			-->
+		<WixVariable Id="VERSIONSTRING" Value="$(env.C2WINSTALL_VERSIONSTRING)"/>
+	
+	
+	
+        <!-- Support upgrades -->
+        <Property Id="PREVIOUSVERSIONSINSTALLED" Secure="yes" />
+        <Upgrade Id="355292C5-4E08-4B0B-8003-67830956EAD8">
+           <UpgradeVersion
+              Minimum="2.3.87.1" Maximum="$(env.C2WINSTALL_VERSION)"
+              Property="PREVIOUSVERSIONSINSTALLED"
+              IncludeMinimum="yes" IncludeMaximum="no" />
+        </Upgrade>
+
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="ProgramFilesFolder" Name="PFiles">
+                <Directory Id="CALLIGRADIR" Name="Calligra">
+
+					<!-- Remove Generated/User files -->
+					<Component Id="RemoveFiles" Guid="3EAA47CF-97BB-4cf3-81AC-BF25B8E90867">
+					  <CreateFolder />
+					  <RemoveFile Id="SycocaFiles" Name="sycoca*" On="uninstall" />
+					</Component>
+
+                    <Component Id="ENV.BAT" DiskId="1" Guid="C58493DF-C500-475D-B011-3AF792F8D40A">
+                        <File Id="ENV.BAT" Name="env.bat" Source="res\package\env.bat" />
+                    </Component>
+					
+					<Component Id="STARTAPP.VBS" DiskId="1" Guid="6A53D7FC-9ACE-4275-9B0F-97BF4FBB4D16">
+                        <File Id="STARTAPP.VBS" Name="StartApp.vbs" Source="res\package\StartApp.vbs" />
+
+                        <!-- CALLIGRA PROGRAM MENU -->
+						
+                        <!-- Shortcut to Uninstall -->
+                        <Shortcut Id="ProgramMenu.Tools.UninstallProduct"
+                                  Directory="ProgramMenuDir.Tools"
+                                  Name="Uninstall Calligra"
+                                  Target="[SystemFolder]msiexec.exe"
+                                  Arguments="/x [ProductCode]"
+                                  Description="Uninstalls the Calligra Office Suite"/>
+                        <!-- Shortcut to terminate KDE processes -->
+                        <Shortcut Id="ProgramMenu.Tools.Terminate" Directory="ProgramMenuDir.Tools" Name="Close Applications"
+                                  WorkingDirectory='CALLIGRADIR' Advertise="no"
+                                  Arguments="kdeinit4 --terminate"  Target="[CALLIGRADIR]StartApp.vbs"/>
+                    </Component>
+					
+					
+					<?if $(env.BUILDflow) = on ?>
+					<Component Id="FLOW.LNK" DiskId="1" Guid="{C52C9784-19E8-414d-B083-893EA8B79B83}">
+                        <CreateFolder/>
+							<Shortcut Id="ProgramMenu.CalligraFlow" Directory="ProgramMenuDir" Name="Calligra Flow"
+                                  WorkingDirectory='CALLIGRADIR' Icon="Icon.Flow.exe" IconIndex="0" Advertise="no"
+                                  Arguments="--style windowsvista" Target="[CALLIGRADIR]bin\calligraflow.exe" />
+					</Component>
+					<?endif ?>
+						
+					<?if $(env.BUILDkarbon) = on ?>
+					<Component Id="KARBON.LNK" DiskId="1" Guid="F784F8B3-1F5F-404f-8480-ECF870C03D5B">
+                        <!-- CALLIGRA PROGRAM MENU -->
+						<CreateFolder/>
+						<Shortcut Id="ProgramMenu.Karbon" Directory="ProgramMenuDir" Name="Karbon"
+							  WorkingDirectory='CALLIGRADIR' Icon="Icon.Karbon.exe" IconIndex="0" Advertise="no"
+							  Arguments="--style windowsvista" Target="[CALLIGRADIR]bin\karbon.exe" />
+					</Component>
+					<?endif ?>
+                    <?if $(env.BUILDkrita) = on ?>
+					<Component Id="KRITA.LNK" DiskId="1" Guid="{568D67B5-54E0-46b4-AC25-67864F776D6A}">
+                        <CreateFolder/>
+							<Shortcut Id="ProgramMenu.Krita" Directory="ProgramMenuDir" Name="Krita"
+                                  WorkingDirectory='CALLIGRADIR' Icon="Icon.Krita.exe" IconIndex="0" Advertise="no"
+                                  Arguments="--style windowsvista" Target="[CALLIGRADIR]bin\krita.exe" />
+					</Component>
+					<?endif ?>
+					<?if $(env.BUILDplan) = on ?>
+					<Component Id="PLAN.LNK" DiskId="1" Guid="{76CFA135-95E0-4edb-9506-5E78F1EE3579}">
+                        <CreateFolder/>
+							<Shortcut Id="ProgramMenu.CalligraPlan" Directory="ProgramMenuDir" Name="Calligra Plan"
+                                  WorkingDirectory='CALLIGRADIR' Icon="Icon.Plan.exe" IconIndex="0" Advertise="no"
+                                  Arguments="--style windowsvista" Target="[CALLIGRADIR]bin\calligraplan.exe" />
+					</Component>
+					<?endif ?>
+					<?if $(env.BUILDsheets) = on ?>
+					<Component Id="SHEETS.LNK" DiskId="1" Guid="{3673F822-F0E4-4696-A01F-0A2941032733}">
+                        <CreateFolder/>
+						<Shortcut Id="ProgramMenu.CalligraSheets" Directory="ProgramMenuDir" Name="Calligra Sheets"
+							  WorkingDirectory='CALLIGRADIR' Icon="Icon.Sheets.exe" IconIndex="0" Advertise="no"
+							  Arguments="--style windowsvista" Target="[CALLIGRADIR]bin\calligrasheets.exe" />
+					</Component>
+					<?endif ?>
+					<?if $(env.BUILDstage) = on ?>
+					<Component Id="STAGE.LNK" DiskId="1" Guid="{226AD486-6711-49f0-AD59-753C701A83EF}">
+                        <CreateFolder/>
+							<Shortcut Id="ProgramMenu.CalligraStage" Directory="ProgramMenuDir" Name="Calligra Stage"
+                                  WorkingDirectory='CALLIGRADIR' Icon="Icon.Stage.exe" IconIndex="0" Advertise="no"
+                                  Arguments="--style windowsvista" Target="[CALLIGRADIR]bin\calligrastage.exe" />
+					</Component>
+					<?endif ?>
+					<Component Id="WORDS.LNK" DiskId="1" Guid="C718583E-F2DD-4603-97CA-63DBCD4D30A2">
+                        <CreateFolder/>
+						<Shortcut Id="ProgramMenu.CalligraWords" Directory="ProgramMenuDir" Name="CalligraWords"
+							  WorkingDirectory='CALLIGRADIR' Icon="Icon.Words.exe" IconIndex="0" Advertise="no"
+							  Arguments="--style windowsvista" Target="[CALLIGRADIR]bin\calligrawords.exe" />
+					</Component>
+					
+					
+					<Component Id="DesktopShortcuts" DiskId="1" Guid="95136A79-458C-4c9d-860F-0319FD47B3EA">
+						<!-- CALLIGRA PROGRAM MENU -->
+						<!-- Removed Flow icon from Desktop until correct icon is available -->
+                        						
+						<CreateFolder/>
+                        <?if $(env.BUILDkarbon) = on ?>
+							<Shortcut Id="Desktop.Karbon" Directory="DesktopFolder" Name="Karbon"
+								  Target="[CALLIGRADIR]bin\karbon.exe"
+							
+                                  WorkingDirectory='CALLIGRADIR' Icon="Icon.Karbon.exe" IconIndex="0"
+                                  Arguments="--style windowsvista" />
+						<?endif ?>
+                        <?if $(env.BUILDkrita) = on ?>
+							<Shortcut Id="Desktop.Krita" Directory="DesktopFolder" 
+								Name="Krita"
+								Target="[CALLIGRADIR]bin\krita.exe"
+								WorkingDirectory='CALLIGRADIR' Icon="Icon.Krita.exe" IconIndex="0"
+								Arguments="--style windowsvista" />
+						<?endif ?>
+						<?if $(env.BUILDplan) = on ?>
+							<Shortcut Id="Desktop.CalligraPlan" Directory="DesktopFolder"
+								Name="Calligra Plan"
+								Target="[CALLIGRADIR]bin\calligraplan.exe"
+                                  WorkingDirectory='CALLIGRADIR' Icon="Icon.Plan.exe" IconIndex="0"
+                                  Arguments="--style windowsvista" />
+						<?endif ?>
+                        <?if $(env.BUILDsheets) = on ?>
+							<Shortcut Id="Desktop.CalligraSheets" Directory="DesktopFolder" 
+								Name="Calligra Sheets"
+								Target="[CALLIGRADIR]bin\calligrasheets.exe"
+                                  WorkingDirectory='CALLIGRADIR' Icon="Icon.Sheets.exe" IconIndex="0"
+                                  Arguments="--style windowsvista" />
+                        <?endif ?>
+						<?if $(env.BUILDstage) = on ?>
+							<Shortcut Id="Desktop.CalligraStage" Directory="DesktopFolder" 
+								Name="Calligra Stage"
+								Target="[CALLIGRADIR]bin\calligrastage.exe"
+                                  WorkingDirectory='CALLIGRADIR' Icon="Icon.Stage.exe" IconIndex="0"
+                                  Arguments="--style windowsvista" />
+						<?endif ?>
+                        <?if $(env.BUILDwords) = on ?>
+							<Shortcut Id="Desktop.CalligraWords" Directory="DesktopFolder" 
+								Name="Calligra Words"
+								Target="[CALLIGRADIR]bin\calligrawords.exe"
+                                  WorkingDirectory='CALLIGRADIR' Icon="Icon.Words.exe" IconIndex="0"
+                                  Arguments="--style windowsvista" />
+                        <?endif ?>
+                    </Component>
+                </Directory>
+            </Directory>
+
+            <Directory Id="ProgramMenuFolder" Name="Programs">
+                <Directory Id="ProgramMenuDir" Name="Calligra Suite">
+                    <Component Id="ProgramMenuDir" Guid="*">
+                        <RemoveFolder Id='ProgramMenuDir' On='uninstall' />
+                        <RegistryValue Root='HKCU' Key='Software\$(var.ProductManufacturer)\Calligra' Type='string' Value='' KeyPath='yes' />
+                    </Component>
+
+                    <Directory Id="ProgramMenuDir.Tools" Name="Tools">
+                        <Component Id="ProgramMenuDir.Tools" Guid="{B9C1F04A-991A-4be3-96E1-CFCAFA70E0D4}">
+                            <RemoveFolder Id='ProgramMenuDir.Tools' On='uninstall' />
+                            <RegistryValue Root='HKCU' Key='Software\$(var.ProductManufacturer)\Calligra' Type='string' Value='' KeyPath='yes' />
+                        </Component>
+                    </Directory>
+                </Directory>
+            </Directory>
+
+            <!-- Allow installation of shortcuts on the desktop -->
+            <!-- TODO make these optional -->
+            <Directory Id="DesktopFolder" Name="Desktop" />
+        </Directory>
+
+        <!-- Currently just the one feature for all of Calligra + dependencies -->
+        <Feature 
+			Id="DefaultFeature" 
+			Title="Calligra Suite" 
+			Level="1"
+			ConfigurableDirectory="CALLIGRADIR">
+            <ComponentGroupRef Id="CG.VC2010_Support"/>
+
+			<ComponentRef Id="RemoveFiles" />
+			
+            <ComponentRef Id="ENV.BAT" />
+            <ComponentRef Id="STARTAPP.VBS" />
+
+			
+			<?if $(env.BUILDflow) = on ?>
+				<ComponentRef Id="FLOW.LNK" />
+			<?endif ?>
+			<?if $(env.BUILDkarbon) = on ?>
+				<ComponentRef Id="KARBON.LNK" />
+			<?endif ?>
+			<?if $(env.BUILDkrita) = on ?>
+				<ComponentRef Id="KRITA.LNK" />
+			<?endif ?>
+			<?if $(env.BUILDplan) = on ?>
+				<ComponentRef Id="PLAN.LNK" />
+			<?endif ?>
+			<?if $(env.BUILDsheets) = on ?>
+				<ComponentRef Id="SHEETS.LNK" />
+			<?endif ?>
+			<?if $(env.BUILDstage) = on ?>
+				<ComponentRef Id="STAGE.LNK" />
+			<?endif ?>
+			<?if $(env.BUILDwords) = on ?>
+				<ComponentRef Id="WORDS.LNK" />
+			<?endif ?>
+			
+			<!-- Packaged by heat from the %C2WINSTALL_INPUT% folder -->
+            <ComponentGroupRef Id="CalligraBaseFiles" />
+
+            <!-- Program Menu -->
+            <ComponentRef Id="ProgramMenuDir" />
+            <ComponentRef Id="ProgramMenuDir.Tools" />
+        </Feature>
+		<Feature
+			Id="DesktopIconsFeaure"
+			Title="Desktop Icons"
+			Description="Create shortcuts to the Calligra applications on the Windows Desktop."
+			Display="expand"
+			InstallDefault="local"
+			TypicalDefault="install"
+			AllowAdvertise="no"
+			Level="1">
+			
+			<ComponentRef Id="DesktopShortcuts" />
+		</Feature>
+		<!--
+		<Feature
+			Id="FileAssociations"
+			Title="Associate File Types"
+			Level="1">
+			<ComponentRef Id="FileAssociations"/>
+			<ComponentRef Id="FILEEXT_KRA"/>
+			<ComponentRef Id="FILEEXT_ODT"/>			
+		</Feature>
+		-->
+
+        <!-- Icons -->
+        <?if $(env.BUILDflow) = on ?>
+			<Icon Id="Icon.Flow.exe" SourceFile="$(env.C2WINSTALL_INPUT)\bin\CALLIGRAFLOW.EXE" />
+        <?endif ?>
+        <?if $(env.BUILDkarbon) = on ?>
+			<Icon Id="Icon.Karbon.exe" SourceFile="$(env.C2WINSTALL_INPUT)\bin\KARBON.EXE" />
+        <?endif ?>
+        <?if $(env.BUILDkrita) = on ?>
+			<Icon Id="Icon.Krita.exe" SourceFile="$(env.C2WINSTALL_INPUT)\bin\KRITA.EXE" />
+        <?endif ?>
+        <?if $(env.BUILDplan) = on ?>
+			<Icon Id="Icon.Plan.exe" SourceFile="$(env.C2WINSTALL_INPUT)\bin\CALLIGRAPLAN.EXE" />
+        <?endif ?>
+        <?if $(env.BUILDsheets) = on ?>
+			<Icon Id="Icon.Sheets.exe" SourceFile="$(env.C2WINSTALL_INPUT)\bin\CALLIGRASHEETS.EXE" />
+        <?endif ?>
+        <?if $(env.BUILDstage) = on ?>
+			<Icon Id="Icon.Stage.exe" SourceFile="$(env.C2WINSTALL_INPUT)\bin\CALLIGRASTAGE.EXE" />
+        <?endif ?>
+        <?if $(env.BUILDwords) = on ?>
+			<Icon Id="Icon.Words.exe" SourceFile="$(env.C2WINSTALL_INPUT)\bin\CALLIGRAWORDS.EXE" />
+		<?endif ?>
+		
+		<!-- Uninstall Icon -->
+        <Icon Id="Icon.Calligra.ico" SourceFile="res\package\calligra-icon.ico" />
+		<Property Id="ARPPRODUCTICON" Value="Icon.Calligra.ico" />
+		
+		<!-- File Associations -->
+		<!--
+		<?include "calligra_fileassociations.wxi" ?>
+		-->
+		
+        <!-- Custom UI -->
+        <WixVariable Id="WixUILicenseRtf" Value="res\UIExtension\gpl-2.0.rtf" />
+        <WixVariable Id="WixUIBannerBmp" Overridable="yes" Value="res\UIExtension\Bitmaps\bannrbmp.bmp"/>
+        <WixVariable Id="WixUIDialogBmp" Overridable="yes" Value="res\UIExtension\Bitmaps\dlgbmp.bmp"/>
+
+		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
+        <UI>
+            <UIRef Id="WixUI_MondoCalligra" />
+        </UI>
+
+        <!-- Custom post-install actions
+             Need to run update-mime-database, followed by kbuildsycoca4 -->
+        <CustomAction   Id="RunUpdateMimeDb"
+                        FileKey="ENV.BAT"
+                        ExeCommand="update-mime-database &quot;[CALLIGRADIR]share\mime&quot;"
+                        Return="ignore"
+                        Impersonate="no"
+                        Execute="deferred"/>
+        <CustomAction   Id="RunKBuildSycoca4"
+                        FileKey="ENV.BAT"
+                        ExeCommand="kbuildsycoca4 --noincremental"
+                        Return="ignore"
+						Impersonate="no"
+                        Execute="deferred"/>
+		<CustomAction   Id="RunKdeinit4Terminate"
+                        FileKey="ENV.BAT"
+                        ExeCommand="kdeinit4 --terminate"
+                        Return="ignore"
+						Impersonate="no"
+                        Execute="deferred"/>
+
+        <!-- Custom pre-install action - ensure Callligra apps and KDE framework are shut down -->
+        <!-- TODO debug - this is not currently working -->
+        <CustomAction   Id="RunKdeTerminate"
+                        Directory="CALLIGRADIR"
+                        ExeCommand="[CALLIGRADIR]STARTAPP.VBS kdeinit4 --terminate"
+                        Return="ignore"
+                        Execute="immediate"/>
+
+        <InstallExecuteSequence>
+            <!-- When installing the app -->
+            <RemoveExistingProducts Before="InstallInitialize" />
+
+            <Custom Action="RunKdeTerminate" After="InstallInitialize">REMOVE~="ALL"</Custom>
+
+            <!-- Only on successful install/upgrade -->
+            <Custom Action="RunUpdateMimeDb" After="PublishProduct">NOT Installed</Custom>
+            <Custom Action="RunKBuildSycoca4" After="RunUpdateMimeDb">NOT Installed</Custom>
+            <Custom Action="RunKdeinit4Terminate" After="RunKBuildSycoca4">NOT Installed</Custom>
+        </InstallExecuteSequence>
+    </Product>
+</Wix>

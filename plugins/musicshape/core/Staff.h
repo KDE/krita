@@ -44,7 +44,7 @@ public:
      *
      * @param part the part in which to create a staff
      */
-    Staff(Part* part);
+    explicit Staff(Part *part);
 
     /**
      * Destructor.

@@ -40,13 +40,8 @@
 KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
         : KisWdgAutobrush(parent, name)
         , m_autoBrush(0)
+        , m_linkFade(false)
 {
-
-    m_linkSize = true;
-    m_linkFade = true;
-
-//     linkFadeToggled(m_linkSize);
-//     linkSizeToggled(m_linkFade);
 
     connect(aspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(linkFadeToggled(bool)));
     aspectButton->setKeepAspectRatio(m_linkFade);
@@ -240,10 +235,17 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
 
     comboBoxMaskType->setCurrentIndex( comboBoxMaskType->findText( aBrush->maskGenerator()->name() ) );
 
+
     inputRadius->setValue(aBrush->maskGenerator()->diameter());
     inputRatio->setValue(aBrush->maskGenerator()->ratio());
+
+    inputVFade->blockSignals(true);
+    inputHFade->blockSignals(true);
     inputHFade->setValue(aBrush->maskGenerator()->horizontalFade());
     inputVFade->setValue(aBrush->maskGenerator()->verticalFade());
+    inputVFade->blockSignals(false);
+    inputHFade->blockSignals(false);
+
     inputAngle->setValue(aBrush->angle() * 180 / M_PI);
     inputSpikes->setValue(aBrush->maskGenerator()->spikes());
     inputSpacing->setValue(aBrush->spacing());

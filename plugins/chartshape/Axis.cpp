@@ -1649,13 +1649,13 @@ void Axis::saveOdf(KoShapeSavingContext &context)
     QString name;
     switch(dimension()) {
     case XAxisDimension:
-        name = "x";
+        name = QLatin1Char('x');
         break;
     case YAxisDimension:
-        name = "y";
+        name = QLatin1Char('y');
         break;
     case ZAxisDimension:
-        name = "z";
+        name = QLatin1Char('z');
         break;
     }
     int i = 1;

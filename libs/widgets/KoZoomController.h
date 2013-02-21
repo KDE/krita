@@ -139,6 +139,14 @@ public slots:
     QSizeF pageSize() const;
 
     /**
+    * Set the dimensions of where text can appear which allows zoom modes that use the text
+    * to update.
+    * @param min the minimum x value (in document coordinates) where text can appear
+    * @param max the maximum x value (in document coordinates) where text can appear
+    */
+    void setTextMinMax(qreal min, qreal max);
+
+    /**
     * Set the size of the whole document currently being shown on the canvas.
     * The document size will be used together with the current zoom level to calculate the size of the
     * canvas in the canvasController.

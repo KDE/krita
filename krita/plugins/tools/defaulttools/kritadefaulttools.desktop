@@ -56,4 +56,4 @@ Name[zh_TW]=預設工具
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritadefaulttools
-X-Krita-Version=5
+X-Krita-Version=27

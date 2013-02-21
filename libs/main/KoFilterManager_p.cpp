@@ -59,7 +59,7 @@ KoFilterChooser::KoFilterChooser(QWidget *parent, const QStringList &mimeTypes, 
     Q_ASSERT(!m_mimeTypes.isEmpty());
     for (QStringList::ConstIterator it = m_mimeTypes.constBegin();
             it != m_mimeTypes.constEnd();
-            it++) {
+            ++it) {
 
         KMimeType::Ptr mime = KMimeType::mimeType(*it);
         const QString name = mime ? mime->comment() : *it;

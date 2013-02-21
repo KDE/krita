@@ -173,8 +173,9 @@ const _ext3of9map ext3of9map[] = {
 
 QString convertTo3of9(QChar c)
 {
+    const char code = c.toLatin1();
     for (int i = 0; !ext3of9map[i].conversion.isEmpty(); i++)
-        if (ext3of9map[i].code == c.toAscii())
+        if (ext3of9map[i].code == code)
             return ext3of9map[i].conversion;
     return QString();
 }

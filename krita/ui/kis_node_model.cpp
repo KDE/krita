@@ -308,7 +308,7 @@ QModelIndex KisNodeModel::parent(const QModelIndex &index) const
 
 QVariant KisNodeModel::data(const QModelIndex &index, int role) const
 {
-    if(!m_d->dummiesFacade || !index.isValid()) return QVariant();
+    if (!m_d->dummiesFacade || !index.isValid() || !m_d->image.isValid()) return QVariant();
 
     KisNodeSP node = nodeFromIndex(index);
 
@@ -366,7 +366,7 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
             // don't record undo/redo for visibility, locked or alpha locked changes
             PropertyList proplist = value.value<PropertyList>();
             bool undo = true;
-            foreach(KoDocumentSectionModel::Property prop, proplist) {
+            foreach(const KoDocumentSectionModel::Property &prop, proplist) {
                 if (prop.name == i18n("Visible") && node->visible() !=prop.state.toBool()) undo = false;
                 if (prop.name == i18n("Locked") && node->userLocked() != prop.state.toBool()) undo = false;
                 if (prop.name == i18n("Active")) {

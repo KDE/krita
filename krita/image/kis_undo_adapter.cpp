@@ -28,15 +28,6 @@ KisUndoAdapter::~KisUndoAdapter()
 {
 }
 
-void KisUndoAdapter::setCommandHistoryListener(KisCommandHistoryListener *listener)
-{
-    m_undoStore->setCommandHistoryListener(listener);
-}
-void KisUndoAdapter::removeCommandHistoryListener(KisCommandHistoryListener *listener)
-{
-    m_undoStore->removeCommandHistoryListener(listener);
-}
-
 void KisUndoAdapter::emitSelectionChanged()
 {
     emit selectionChanged();

@@ -98,7 +98,7 @@ p, li { white-space: pre-wrap; }
        </item>
        <item row="2" column="0" colspan="3">
         <widget class="QWidget" name="axisConfiguration" native="true">
-         <layout class="QGridLayout" name="gridLayout_3">
+         <layout class="QGridLayout">
           <item row="0" column="0" colspan="3">
            <widget class="Line" name="line_2">
             <property name="orientation">
@@ -195,7 +195,7 @@ p, li { white-space: pre-wrap; }
       <attribute name="title">
        <string>Data Sets</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_2">
+      <layout class="QGridLayout">
        <item row="0" column="0" colspan="2">
         <widget class="QComboBox" name="dataSets">
          <property name="toolTip">
@@ -247,7 +247,7 @@ p, li { white-space: pre-wrap; }
        </item>
        <item row="14" column="0" colspan="2">
         <widget class="QWidget" name="barProperties" native="true">
-         <layout class="QGridLayout" name="gridLayout">
+         <layout class="QGridLayout">
           <property name="margin">
            <number>0</number>
           </property>
@@ -357,7 +357,7 @@ p, li { white-space: pre-wrap; }
        </item>
        <item row="13" column="0" colspan="2">
         <widget class="QWidget" name="pieProperties" native="true">
-         <layout class="QGridLayout" name="gridLayout_4">
+         <layout class="QGridLayout">
           <property name="leftMargin">
            <number>0</number>
           </property>
@@ -597,7 +597,7 @@ p, li { white-space: pre-wrap; }
        </item>
        <item row="9" column="0" colspan="2">
         <widget class="QWidget" name="widget" native="true">
-         <layout class="QGridLayout" name="gridLayout_5">
+         <layout class="QGridLayout">
           <item row="1" column="0">
            <widget class="QCheckBox" name="datasetShowCategory">
             <property name="text">

@@ -91,7 +91,7 @@ KisNode::KisNode(const KisNode & rhs)
 
 KisNode::~KisNode()
 {
-    delete m_d->nodeProgressProxy;
+    m_d->nodeProgressProxy->deleteLater();
     m_d->nodes.clear();
     delete m_d;
 }
@@ -239,7 +239,7 @@ QList<KisNodeSP> KisNode::childNodes(const QStringList & nodeTypes, const KoProp
             if(!nodeTypes.isEmpty()) {
                 rightType = false;
                 foreach(const QString &nodeType,  nodeTypes) {
-                    if ((*iter)->inherits(nodeType.toAscii())) {
+                    if ((*iter)->inherits(nodeType.toLatin1())) {
                         rightType = true;
                         break;
                     }

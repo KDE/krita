@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_XMLREADER
-#define CALLIGRA_XMLREADER
+#ifndef KO_XMLREADER_H
+#define KO_XMLREADER_H
 
 // KOXML_USE_QDOM is defined there
 #include "KoXmlReaderForward.h"
@@ -160,7 +160,7 @@ public:
 
 protected:
     KoXmlNodeData* d;
-    KoXmlNode(KoXmlNodeData*);
+    explicit KoXmlNode(KoXmlNodeData*);
 };
 
 /**
@@ -194,7 +194,7 @@ public:
 private:
     friend class KoXmlNode;
     friend class KoXmlDocument;
-    KoXmlElement(KoXmlNodeData*);
+    explicit KoXmlElement(KoXmlNodeData*);
 };
 
 /**
@@ -217,7 +217,7 @@ private:
     friend class KoXmlNode;
     friend class KoXmlCDATASection;
     friend class KoXmlDocument;
-    KoXmlText(KoXmlNodeData*);
+    explicit KoXmlText(KoXmlNodeData*);
 };
 
 /**
@@ -237,7 +237,7 @@ public:
 private:
     friend class KoXmlNode;
     friend class KoXmlDocument;
-    KoXmlCDATASection(KoXmlNodeData*);
+    explicit KoXmlCDATASection(KoXmlNodeData*);
 };
 
 /**
@@ -261,7 +261,7 @@ public:
 private:
     friend class KoXmlNode;
     friend class KoXmlDocument;
-    KoXmlDocumentType(KoXmlNodeData*);
+    explicit KoXmlDocumentType(KoXmlNodeData*);
 };
 
 
@@ -318,7 +318,7 @@ public:
 private:
     friend class KoXmlNode;
     KoXmlDocumentType dt;
-    KoXmlDocument(KoXmlNodeData*);
+    explicit KoXmlDocument(KoXmlNodeData*);
 };
 
 #endif // KOXML_USE_QDOM
@@ -463,4 +463,4 @@ KOODF_EXPORT bool setDocument(KoXmlDocument& doc, QIODevice* device,
         if ( ( elem = _node.toElement() ).isNull() ) {} else
 
 
-#endif // CALLIGRA_XMLREADER
+#endif // KO_XMLREADER_H

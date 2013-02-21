@@ -45,7 +45,7 @@ class SQLiteVacuum : public QObject
 {
     Q_OBJECT
 public:
-    SQLiteVacuum(const QString& filePath);
+    explicit SQLiteVacuum(const QString &filePath);
     ~SQLiteVacuum();
 
     /*! Performs compacting procedure.

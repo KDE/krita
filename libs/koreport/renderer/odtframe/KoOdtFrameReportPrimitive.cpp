@@ -84,6 +84,7 @@ void KoOdtFrameReportPrimitive::createStyle(KoGenStyles &coll)
 
 void KoOdtFrameReportPrimitive::createBody(KoXmlWriter *bodyWriter) const
 {
+    Q_UNUSED(bodyWriter);
 }
 
 void KoOdtFrameReportPrimitive::commonAttributes(KoXmlWriter *bodyWriter) const

@@ -44,12 +44,12 @@ public:
      just points any field that was added.
      \sa isOwner()
     */
-    FieldList(bool owner = false);
+    explicit FieldList(bool owner = false);
 
     /*! Copy constructor.
      If \a deepCopyFields is true, all fields are deeply copied, else only pointer are copied.
      Reimplemented in QuerySchema constructor. */
-    FieldList(const FieldList& fl, bool deepCopyFields = true);
+    explicit FieldList(const FieldList &fl, bool deepCopyFields = true);
 
     /*! Destroys the list. If the list owns fields (see constructor),
      these are also deleted. */

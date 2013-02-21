@@ -46,4 +46,4 @@ Name[zh_TW]=色彩空間轉換
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritacolorspaceconversion
-X-Krita-Version=5
+X-Krita-Version=27

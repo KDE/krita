@@ -54,9 +54,6 @@
 
 #include <KoChangeTracker.h>
 #include <KoChangeTrackerElement.h>
-#include <KoTextAnchor.h>
-#include <KoInlineTextObjectManager.h>
-#include <KoCanvasBase.h>
 #include <KoShapeController.h>
 #include <KoShapeContainer.h>
 #include <kundo2stack.h>

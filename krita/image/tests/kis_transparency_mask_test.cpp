@@ -77,7 +77,7 @@ void KisTransparencyMaskTest::testApply()
     if (!TestUtil::compareQImages(errpoint,
                                   QImage(QString(FILES_DATA_DIR) + QDir::separator() + "transparency_mask_test_2.png"),
                                   qimage)) {
-        QFAIL(QString("Failed to mask out image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to mask out image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 
     // Invert the mask, so that nothing will be selected, then select a rect
@@ -90,7 +90,7 @@ void KisTransparencyMaskTest::testApply()
     if (!TestUtil::compareQImages(errpoint,
                                   QImage(QString(FILES_DATA_DIR) + QDir::separator() + "transparency_mask_test_1.png"),
                                   qimage)) {
-        QFAIL(QString("Failed to mask in image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to mask in image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 
     initImage(image, layer, dev, mask);
@@ -104,7 +104,7 @@ void KisTransparencyMaskTest::testApply()
                                   QImage(QString(FILES_DATA_DIR) + QDir::separator() + "transparency_mask_test_3.png"),
                                   qimage)) {
 
-        QFAIL(QString("Failed to apply partial mask, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to apply partial mask, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 
 }

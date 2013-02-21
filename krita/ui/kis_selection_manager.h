@@ -27,6 +27,8 @@
 
 #include <krita_export.h>
 
+class KisActionManager;
+class KisAction;
 class KAction;
 class KToggleAction;
 class KActionCollection;
@@ -53,9 +55,7 @@ public:
     KisSelectionManager(KisView2 * view, KisDoc2 * doc);
     virtual ~KisSelectionManager();
 
-    void setup(KActionCollection * collection);
-
-    void addSelectionAction(QAction * action);
+    void setup(KActionCollection * collection, KisActionManager* actionManager);
 
 public:
     /**
@@ -90,6 +90,7 @@ public slots:
 
     void shapeSelectionChanged();
     void imageResizeToSelection();
+    void paintSelectedShapes();
 
 signals:
     void currentSelectionChanged();
@@ -102,7 +103,7 @@ public:
     bool haveShapesInClipboard();
 
     /// Checks if the current selection is editabl and has some pixels selected in the pixel selection
-    bool haveEditablePixelSelectionWithPixels();
+    bool havePixelSelectionWithPixels();
 
     void grow(qint32 xradius, qint32 yradius);
     void shrink(qint32 xradius, qint32 yradius, bool edge_lock);
@@ -130,25 +131,25 @@ private:
     KisNodeCommandsAdapter* m_adapter;
 
     KAction *m_copy;
-    KAction *m_copyMerged;
+    KisAction *m_copyMerged;
     KAction *m_cut;
     KAction *m_paste;
     KAction *m_pasteAt;
     KAction *m_pasteNew;
-    KAction *m_cutToNewLayer;
+    KisAction *m_cutToNewLayer;
     KAction *m_selectAll;
     KAction *m_deselect;
     KAction *m_clear;
     KAction *m_reselect;
-    KAction *m_invert;
-    KAction *m_copyToNewLayer;
-    KAction *m_smooth;
-    KAction *m_load;
-    KAction *m_save;
-    KAction *m_fillForegroundColor;
-    KAction *m_fillBackgroundColor;
-    KAction *m_fillPattern;
-    KAction *m_imageResizeToSelection;
+    KisAction *m_invert;
+    KisAction *m_copyToNewLayer;
+//     KAction *m_load;
+//     KAction *m_save;
+    KisAction *m_fillForegroundColor;
+    KisAction *m_fillBackgroundColor;
+    KisAction *m_fillPattern;
+    KisAction *m_imageResizeToSelection;
+    KisAction *m_strokeShapes;
     KToggleAction *m_toggleDisplaySelection;
 
     QList<QAction*> m_pluginActions;

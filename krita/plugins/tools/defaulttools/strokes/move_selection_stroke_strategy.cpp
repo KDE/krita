@@ -18,6 +18,7 @@
 
 #include "move_selection_stroke_strategy.h"
 
+#include <klocale.h>
 #include <KoColorSpace.h>
 #include "kis_image.h"
 #include "kis_paint_layer.h"
@@ -30,7 +31,7 @@ MoveSelectionStrokeStrategy::MoveSelectionStrokeStrategy(KisPaintLayerSP paintLa
                                                          KisSelectionSP selection,
                                                          KisUpdatesFacade *updatesFacade,
                                                          KisPostExecutionUndoAdapter *undoAdapter)
-    : KisStrokeStrategyUndoCommandBased("Move Selection Stroke", false, undoAdapter),
+    : KisStrokeStrategyUndoCommandBased(i18n("Move Selection Stroke"), false, undoAdapter),
       m_paintLayer(paintLayer),
       m_selection(selection),
       m_updatesFacade(updatesFacade),

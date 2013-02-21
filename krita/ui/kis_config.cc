@@ -27,6 +27,8 @@
 #include <QX11Info>
 #endif
 
+
+#include <QMutex>
 #include <QFont>
 #include <QThread>
 #include <QStringList>
@@ -56,6 +58,9 @@ const qint32 IMAGE_DEFAULT_WIDTH = 1600;
 const qint32 IMAGE_DEFAULT_HEIGHT = 1200;
 const enumCursorStyle DEFAULT_CURSOR_STYLE = CURSOR_STYLE_OUTLINE;
 const qint32 DEFAULT_MAX_TILES_MEM = 5000;
+
+static QMutex s_synchLocker;
+
 }
 
 KisConfig::KisConfig()
@@ -65,7 +70,9 @@ KisConfig::KisConfig()
 
 KisConfig::~KisConfig()
 {
+    s_synchLocker.lock();
     m_cfg.sync();
+    s_synchLocker.unlock();
 }
 
 

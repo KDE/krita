@@ -315,6 +315,7 @@ private:
     void editingPluginEvents();
     void finishedWord();
     void finishedParagraph();
+    void startingSimpleEdit();
     void runUrl(KoPointerEvent *event, QString &url);
     void useTableBorderCursor();
 

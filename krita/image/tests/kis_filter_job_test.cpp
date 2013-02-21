@@ -82,7 +82,7 @@ void KisFilterJobTest::testInWeaver()
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, inverted, dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
         dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()).save("filtermasktest2.png");
-        QFAIL(QString("Failed to create inverted image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to create inverted image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
     delete pu;
     delete bar;

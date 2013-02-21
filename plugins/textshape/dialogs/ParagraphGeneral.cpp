@@ -157,6 +157,7 @@ void ParagraphGeneral::setUnit(const KoUnit &unit)
 void ParagraphGeneral::save(KoParagraphStyle *style)
 {
     KoParagraphStyle *savingStyle;
+
     if (style == 0) {
         if (m_style == 0)
             return;

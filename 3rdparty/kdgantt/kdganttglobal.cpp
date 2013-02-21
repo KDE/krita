@@ -63,9 +63,6 @@ using namespace KDGantt;
  *\ingroup KDGantt
  * \brief A class representing a start point and a length */
 
-Span::~Span()
-{
-}
 
 DateTimeSpan::DateTimeSpan()
 {

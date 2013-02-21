@@ -32,6 +32,7 @@ set(flake_SRCS
     KoPathSegment.cpp
     KoSelection.cpp
     KoShape.cpp
+    KoShapeAnchor.cpp
     KoShapeBasedDocumentBase.cpp
     KoShapeApplicationData.cpp
     KoShapeContainer.cpp
@@ -124,6 +125,7 @@ set(flake_SRCS
     KoTosContainer.cpp
     KoTosContainerModel.cpp
     KoClipPath.cpp
+    KoCurveFit.cpp
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
     commands/KoShapeBackgroundCommand.cpp
@@ -167,8 +169,6 @@ set(flake_SRCS
     commands/KoShapeUnclipCommand.cpp
     commands/KoPathShapeMarkerCommand.cpp
     commands/KoShapeConnectionChangeCommand.cpp
-    tools/KoCreatePathTool.cpp
-    tools/KoCreatePathToolFactory.cpp
     tools/KoCreateShapeStrategy.cpp
     tools/KoPathToolFactory.cpp
     tools/KoPathTool.cpp
@@ -276,6 +276,7 @@ install(
     KoRTree.h
     KoSelection.h
     KoShape.h
+    KoShapeAnchor.h
     KoShapeStrokeModel.h
     KoToolSelection.h
     KoShapeContainer.h

@@ -31,7 +31,7 @@
 class SectionLayout : public QLayout
 {
 public:
-    SectionLayout(QWidget *parent)
+    explicit SectionLayout(QWidget *parent)
         : QLayout(parent), m_orientation(Qt::Vertical)
     {
     }
@@ -128,7 +128,7 @@ public:
         SeparatorTop = 0x0001,/* SeparatorBottom = 0x0002, SeparatorRight = 0x0004,*/ SeparatorLeft = 0x0008
     };
     Q_DECLARE_FLAGS(Separators, SeparatorFlag)
-    Section(QWidget *parent = 0)
+    explicit Section(QWidget *parent = 0)
         : QWidget(parent),
         m_layout(new SectionLayout(this))
     {
@@ -191,7 +191,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Section::Separators)
 class KoToolBoxLayout : public QLayout
 {
 public:
-    KoToolBoxLayout(QWidget *parent)
+    explicit KoToolBoxLayout(QWidget *parent)
         : QLayout(parent), m_orientation(Qt::Vertical), m_currentHeight(0)
     {
         setSpacing(6);

@@ -104,7 +104,7 @@ typedef KSharedPtr<KoHistogramProducer> KoHistogramProducerSP;
 class PIGMENTCMS_EXPORT KoHistogramProducerFactory
 {
 public:
-    KoHistogramProducerFactory(const KoID& id) : m_id(id) {}
+    explicit KoHistogramProducerFactory(const KoID &id) : m_id(id) {}
     virtual ~KoHistogramProducerFactory() {}
     /// Factory method, generates a new KoHistogramProducer
     virtual KoHistogramProducerSP generate() = 0;

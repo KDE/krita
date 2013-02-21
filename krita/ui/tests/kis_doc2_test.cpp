@@ -28,132 +28,9 @@
 #include <KoDocumentEntry.h>
 #include "kis_part2.h"
 #include <KoMainWindow.h>
+#include <kis_view2.h>
+#include "util.h"
 
-class KisCommandHistoryListenerFake : public KisCommandHistoryListener
-{
-public:
-    KisCommandHistoryListenerFake() {
-        reset();
-    }
-
-    void reset() {
-        m_command = 0;
-        m_executed = false;
-        m_added = false;
-    }
-
-    void notifyCommandAdded(const KUndo2Command * cmd) {
-        if(!m_command) {
-            m_command = cmd;
-        }
-        Q_ASSERT(cmd == m_command);
-
-        m_added = true;
-    }
-
-    void notifyCommandExecuted(const KUndo2Command * cmd) {
-        if(!m_command) {
-            m_command = cmd;
-        }
-        Q_ASSERT(cmd == m_command);
-
-        m_executed = true;
-    }
-
-    bool wasAdded() {
-        return m_added;
-    }
-
-    bool wasExecuted() {
-        return m_executed;
-    }
-
-    const KUndo2Command* command() {
-        return m_command;
-    }
-
-private:
-    const KUndo2Command* m_command;
-    bool m_executed;
-    bool m_added;
-};
-
-
-class TestCommand : public KUndo2Command
-{
-public:
-    void undo() {}
-    void redo() {}
-};
-
-void KisDoc2Test::testUndoRedoNotify()
-{
-    KisPart2 part;
-    KisDoc2 doc(&part);
-    part.setDocument(&doc);
-
-    doc.initEmpty();
-
-    KUndo2Command *testCommand1 = new TestCommand();
-    KUndo2Command *testCommand2 = new TestCommand();
-
-    KisUndoStore *undoStore = doc.image()->undoStore();
-    KisCommandHistoryListenerFake listener;
-
-    undoStore->setCommandHistoryListener(&listener);
-
-    qDebug() << "Undo index:" << doc.undoStack()->index();
-
-    qDebug() << "Adding one command";
-    listener.reset();
-    undoStore->addCommand(testCommand1);
-    QVERIFY(listener.wasAdded());
-    QVERIFY(!listener.wasExecuted());
-    QCOMPARE(listener.command(), testCommand1);
-    qDebug() << "Undo index:" << doc.undoStack()->index();
-
-    qDebug() << "Adding one more command";
-    listener.reset();
-    undoStore->addCommand(testCommand2);
-    QVERIFY(listener.wasAdded());
-    QVERIFY(!listener.wasExecuted());
-    QCOMPARE(listener.command(), testCommand2);
-    qDebug() << "Undo index:" << doc.undoStack()->index();
-
-    qDebug() << "Undo";
-    listener.reset();
-    doc.undoStack()->undo();
-    QVERIFY(!listener.wasAdded());
-    QVERIFY(listener.wasExecuted());
-    QCOMPARE(listener.command(), testCommand2);
-    qDebug() << "Undo index:" << doc.undoStack()->index();
-
-    qDebug() << "Undo";
-    listener.reset();
-    doc.undoStack()->undo();
-    QVERIFY(!listener.wasAdded());
-    QVERIFY(listener.wasExecuted());
-    QCOMPARE(listener.command(), testCommand1);
-    qDebug() << "Undo index:" << doc.undoStack()->index();
-
-
-    /**
-     * FIXME: Here is a bug in undo listeners framework
-     * notifyCommandExecuted works wrong with redo(),
-     * because KUndo2Stack->index() returns "the command
-     * that will be executed on the next redo()", but
-     * not the undone command
-     */
-
-    qDebug() << "Redo";
-    listener.reset();
-    doc.undoStack()->redo();
-    QVERIFY(!listener.wasAdded());
-    QVERIFY(listener.wasExecuted());
-    QCOMPARE(listener.command(), testCommand2);
-    qDebug() << "Undo index:" << doc.undoStack()->index();
-
-}
 
 void KisDoc2Test::testOpenImageTwiceInSameDoc()
 {
@@ -171,6 +48,22 @@ void KisDoc2Test::testOpenImageTwiceInSameDoc()
     doc.loadNativeFormat(fname);
     doc.loadNativeFormat(fname2);
 }
+
+void KisDoc2Test::testActiveNodes()
+{
+    KisDoc2* doc = createEmptyDocument();
+    KoMainWindow* shell = new KoMainWindow(doc->documentPart()->componentData());
+    KisView2* view = new KisView2(static_cast<KisPart2*>(doc->documentPart()), static_cast<KisDoc2*>(doc), shell);
+    doc->documentPart()->addView(view);
+    vKisNodeSP nodes = doc->activeNodes();
+    QVERIFY(nodes.isEmpty());
+
+    KisPaintLayerSP paintLayer1 = new KisPaintLayer(doc->image(), "paintlayer1", OPACITY_OPAQUE_U8);
+    doc->image()->addNode(paintLayer1);
+    nodes = doc->activeNodes();
+    QCOMPARE(nodes.count(), 1);
+}
+
 
 QTEST_KDEMAIN(KisDoc2Test, GUI)
 #include "kis_doc2_test.moc"

@@ -29,7 +29,7 @@
 class KoShapePrivate
 {
 public:
-    KoShapePrivate(KoShape *shape);
+    explicit KoShapePrivate(KoShape *shape);
     virtual ~KoShapePrivate();
     /**
      * Notify the shape that a change was done. To be used by inheriting shapes.
@@ -98,6 +98,7 @@ public:
     qreal textRunAroundDistanceBottom;
     qreal textRunAroundThreshold;
     KoShape::TextRunAroundContour textRunAroundContour;
+    KoShapeAnchor *anchor;
 
     /// Convert connection point position from shape coordinates, taking alignment into account
     void convertFromShapeCoordinates(KoConnectionPoint &point, const QSizeF &shapeSize) const;

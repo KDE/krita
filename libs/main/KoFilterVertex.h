@@ -31,7 +31,7 @@ class Vertex
 {
 
 public:
-    Vertex(const QByteArray& mimeType);
+    explicit Vertex(const QByteArray &mimeType);
     ~Vertex();
 
     QByteArray mimeType() const {

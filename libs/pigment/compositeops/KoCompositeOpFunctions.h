@@ -178,6 +178,22 @@ inline T cfHardLight(T src, T dst) {
 }
 
 template<class T>
+inline T cfSoftLightSvg(T src, T dst) {
+    using namespace Arithmetic;
+
+    qreal fsrc = scale<qreal>(src);
+    qreal fdst = scale<qreal>(dst);
+
+    if(fsrc > 0.5f) {
+        qreal D = (fdst > 0.25f) ? sqrt(fdst) : ((16.0f*fdst - 12.0)*fdst + 4.0f)*fdst;
+        return scale<T>(fdst + (2.0f*fsrc - 1.0f) * (D - fdst));
+    }
+
+    return scale<T>(fdst - (1.0f - 2.0f * fsrc) * fdst * (1.0f - fdst));
+}
+
+
+template<class T>
 inline T cfSoftLight(T src, T dst) {
     using namespace Arithmetic;
     
@@ -185,8 +201,7 @@ inline T cfSoftLight(T src, T dst) {
     qreal fdst = scale<qreal>(dst);
     
     if(fsrc > 0.5f) {
-        qreal D = (fdst > 0.25f) ? sqrt(fdst) : ((16.0f*fdst - 12.0)*fdst + 4.0f)*fdst;
-        return scale<T>(fdst + (2.0f*fsrc - 1.0f) * (D - fdst));
+        return scale<T>(fdst + (2.0f * fsrc - 1.0f) * (sqrt(fdst) - fdst));
     }
     
     return scale<T>(fdst - (1.0f - 2.0f*fsrc) * fdst * (1.0f - fdst));

@@ -111,6 +111,9 @@ void KisFilterHandler::showDialog()
     m_d->view->image()->unlock();
 
     KisPaintDeviceSP dev = m_d->view->activeDevice();
+    if (!dev) {
+        return;
+    }
     if (dev->colorSpace()->willDegrade(m_d->filter->colorSpaceIndependence())) {
         // Warning bells!
         if (m_d->filter->colorSpaceIndependence() == TO_LAB16) {

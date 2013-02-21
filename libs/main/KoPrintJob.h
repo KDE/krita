@@ -46,7 +46,7 @@ public:
      * Constructor.
      * @param parent the parent qobject that is passed for memory management purposes.
      */
-    KoPrintJob(QObject *parent = 0);
+    explicit KoPrintJob(QObject *parent = 0);
     virtual ~KoPrintJob();
 
     /// A policy to allow the printjob to delete itself after its done printing.

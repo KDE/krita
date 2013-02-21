@@ -40,7 +40,7 @@ class InsertGuidesToolOptionWidget : public QWidget
     Q_OBJECT
 public:
 
-    InsertGuidesToolOptionWidget(QWidget *parent = 0);
+    explicit InsertGuidesToolOptionWidget(QWidget *parent = 0);
     ~InsertGuidesToolOptionWidget();
 
 signals:

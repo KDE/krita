@@ -71,7 +71,7 @@ void  KoProperties::load(const QDomElement &root)
                 const QString name = e.attribute("name");
                 const QString type = e.attribute("type");
                 const QString value = e.text();
-                QDataStream in(value.toAscii());
+                QDataStream in(value.toLatin1());
                 QVariant v;
                 in >> v;
                 d->properties[name] = v;
@@ -105,7 +105,7 @@ void KoProperties::save(QDomElement &root) const
         QByteArray bytes;
         QDataStream out(&bytes, QIODevice::WriteOnly);
         out << v;
-        QDomText text = doc.createCDATASection(QString::fromAscii(bytes, bytes.size()));
+        QDomText text = doc.createCDATASection(QString::fromLatin1(bytes, bytes.size()));
         e.appendChild(text);
         root.appendChild(e);
     }

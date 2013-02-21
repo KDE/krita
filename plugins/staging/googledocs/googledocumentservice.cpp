@@ -129,7 +129,7 @@ void GoogleDocumentService::handleNetworkData(QNetworkReply *networkReply)
         }
         else if (waitingForDoc) {
             QByteArray data = networkReply->readAll();
-            QFile file(QDir::tempPath() + "/" + documentList->currentDocument());
+            QFile file(QDir::tempPath() + QLatin1Char('/') + documentList->currentDocument());
             file.open(QIODevice::ReadWrite);
             file.write(data);
             file.close();
@@ -206,7 +206,7 @@ void GoogleDocumentService::downloadDocument(const QString & _url, const QString
     requestHeader.setRawHeader("Authorization", authToken.toUtf8());
 
     QList<QByteArray> headerlist = requestHeader.rawHeaderList();
-    foreach (QByteArray element, headerlist)
+    foreach (const QByteArray &element, headerlist)
         qDebug() << element << requestHeader.rawHeader(element);
 
     networkManager.get(requestHeader);

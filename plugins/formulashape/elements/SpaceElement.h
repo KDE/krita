@@ -47,7 +47,7 @@ enum LineBreak {
 class KOFORMULA_EXPORT SpaceElement : public BasicElement {
 public:
     /// The standard constructor
-    SpaceElement( BasicElement* parent = 0 );
+    explicit SpaceElement(BasicElement *parent = 0);
 
     /**
      * Render the element to the given QPainter

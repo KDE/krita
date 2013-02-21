@@ -327,7 +327,7 @@ static int lzff_compress(const void* input, int length, void* output, int maxout
     quint8* anchor;
 
     /* initializes hash table */
-    for (hslot = htab; hslot < htab + HASH_SIZE; hslot++)
+    for (hslot = htab; hslot < htab + HASH_SIZE; ++hslot)
         *hslot = ip;
 
     /* we start with literal copy */
@@ -383,7 +383,7 @@ static int lzff_compress(const void* input, int length, void* output, int maxout
                 if (*ref++ != *ip++) break;
                 len += 8;
             }
-            ip--;
+            --ip;
         }
         len = ip - anchor;
 
@@ -398,13 +398,13 @@ static int lzff_compress(const void* input, int length, void* output, int maxout
             copy = 0;
         } else
             /* back, to overwrite the copy count */
-            op--;
+            --op;
 
         /* length is biased, '1' means a match of 3 bytes */
         len -= 2;
 
         /* distance is also biased */
-        distance--;
+        --distance;
 
         /* encode the match */
         if (len < 7)
@@ -422,13 +422,13 @@ static int lzff_compress(const void* input, int length, void* output, int maxout
         --ip;
         UPDATE_HASH(hval, ip);
         htab[hval & HASH_MASK] = ip;
-        ip++;
+        ++ip;
 
         continue;
 
     literal:
         *op++ = *ip++;
-        copy++;
+        ++copy;
         if (copy >= MAX_COPY) {
             copy = 0;
             *op++ = MAX_COPY - 1;
@@ -439,7 +439,7 @@ static int lzff_compress(const void* input, int length, void* output, int maxout
     ip_limit = (const quint8*)input + length;
     while (ip < ip_limit) {
         *op++ = *ip++;
-        copy++;
+        ++copy;
         if (copy == MAX_COPY) {
             copy = 0;
             *op++ = MAX_COPY - 1;
@@ -450,7 +450,7 @@ static int lzff_compress(const void* input, int length, void* output, int maxout
     if (copy)
         *(op - copy - 1) = copy - 1;
     else
-        op--;
+        --op;
 
     return op - (quint8*)output;
 }
@@ -476,26 +476,26 @@ static int lzff_decompress(const void* input, int length, void* output, int maxo
             /* crazy unrolling */
             if (ctrl) {
                 *op++ = *ip++;
-                ctrl--;
+                --ctrl;
 
                 if (ctrl) {
                     *op++ = *ip++;
-                    ctrl--;
+                    --ctrl;
 
                     if (ctrl) {
                         *op++ = *ip++;
-                        ctrl--;
+                        --ctrl;
 
-                        for (;ctrl; ctrl--)
+                        for (;ctrl; --ctrl)
                             *op++ = *ip++;
                     }
                 }
             }
         } else {
             /* back reference */
-            len--;
+            --len;
             ref = op - ofs;
-            ref--;
+            --ref;
 
             if (len == 7 - 1)
                 len += *ip++;
@@ -625,7 +625,7 @@ protected:
         // search in the stored blocks
         // TODO: binary search to speed up
         int loc = startIndex.count() - 1;
-        for (int c = 0; c < startIndex.count() - 1; c++)
+        for (int c = 0; c < startIndex.count() - 1; ++c)
             if (index >= startIndex[c])
                 if (index < startIndex[c+1]) {
                     loc = c;
@@ -694,7 +694,7 @@ public:
         if (bufferItems.count() >= ITEMS_FULL - 1)
             storeBuffer();
 
-        totalItems++;
+        ++totalItems;
         bufferItems.resize(bufferItems.count() + 1);
         return bufferItems[bufferItems.count()-1];
     }
@@ -855,7 +855,7 @@ public:
         valueList.clear();
 
         // optimize, see documentation on QVector::squeeze
-        for (int d = 0; d < groups.count(); d++) {
+        for (int d = 0; d < groups.count(); ++d) {
             KoXmlPackedGroup& group = groups[d];
             group.squeeze();
         }
@@ -867,11 +867,11 @@ public:
         item.type = KoXmlNode::ElementNode;
         item.qnameIndex = cacheQName(name, nsURI);
 
-        currentDepth++;
+        ++currentDepth;
     }
 
     void closeElement() {
-        currentDepth--;
+        --currentDepth;
     }
 
     void addDTD(const QString& dt) {
@@ -936,7 +936,7 @@ public:
 
     void addElement(const QString& name, const QString& nsURI) {
         // we are going one level deeper
-        elementDepth++;
+        ++elementDepth;
 
         KoXmlPackedItem& item = newItem();
 
@@ -949,7 +949,7 @@ public:
 
     void closeElement() {
         // we are going up one level
-        elementDepth--;
+        --elementDepth;
     }
 
     void addAttribute(const QString& name, const QString& nsURI, const QString& value) {
@@ -1209,7 +1209,7 @@ public:
     // reference counting
     unsigned long count;
     void ref() {
-        count++;
+        ++count;
     }
     void unref() {
         if (this == &null) return; if (!--count) delete this;
@@ -1516,7 +1516,7 @@ void KoXmlNodeData::loadChildren(int depth)
 
     const KoXmlPackedItem& self = packedDoc->itemAt(nodeDepth, nodeIndex);
 
-    for (unsigned i = self.childStart; i < childStop; i++) {
+    for (unsigned i = self.childStart; i < childStop; ++i) {
         const KoXmlPackedItem& item = packedDoc->itemAt(nodeDepth + 1, i);
         bool textItem = (item.type == KoXmlNode::TextNode);
         textItem |= (item.type == KoXmlNode::CDATASectionNode);
@@ -1610,7 +1610,7 @@ void KoXmlNodeData::loadChildren(int depth)
     KoXmlNodeData* lastDat = 0;
     int nodeDepth = packedDoc->items[nodeIndex].depth;
 
-    for (int i = nodeIndex + 1; i < packedDoc->items.count(); i++) {
+    for (int i = nodeIndex + 1; i < packedDoc->items.count(); ++i) {
         KoXmlPackedItem& item = packedDoc->items[i];
         bool textItem = (item.type == KoXmlNode::TextNode);
         textItem |= (item.type == KoXmlNode::CDATASectionNode);
@@ -1767,7 +1767,7 @@ static void itemAsQDomNode(QDomDocument& ownerDoc, KoXmlPackedDocument* packedDo
             parentNode.appendChild( element );
         }
         // check all subnodes for attributes
-        for (unsigned i = self.childStart; i < childStop; i++) {
+        for (unsigned i = self.childStart; i < childStop; ++i) {
             const KoXmlPackedItem& item = packedDoc->itemAt(nodeDepth + 1, i);
             bool textItem = (item.type == KoXmlNode::TextNode);
             textItem |= (item.type == KoXmlNode::CDATASectionNode);
@@ -1856,7 +1856,7 @@ static void itemAsQDomNode(QDomDocument& ownerDoc, KoXmlPackedDocument* packedDo
         }
         // check all subnodes for attributes
         int nodeDepth = item.depth;
-        for (int i = nodeIndex + 1; i < packedDoc->items.count(); i++) {
+        for (int i = nodeIndex + 1; i < packedDoc->items.count(); ++i) {
             KoXmlPackedItem& item = packedDoc->items[i];
             bool textItem = (item.type == KoXmlNode::TextNode);
             textItem |= (item.type == KoXmlNode::CDATASectionNode);
@@ -2104,7 +2104,7 @@ int KoXmlNode::childNodesCount() const
     KoXmlNodeData* node = d->first;
     int count = 0;
     while (node) {
-        count++;
+        ++count;
         node = node->next;
     }
 
@@ -2783,7 +2783,7 @@ QStringList KoXml::attributeNames(const KoXmlNode& node)
     QStringList result;
 
     QDomNamedNodeMap attrMap = node.attributes();
-    for (int i = 0; i < attrMap.count(); i++)
+    for (int i = 0; i < attrMap.count(); ++i)
         result += attrMap.item(i).toAttr().name();
 
     return result;

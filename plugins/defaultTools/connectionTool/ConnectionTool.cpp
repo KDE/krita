@@ -48,6 +48,8 @@
 #include <KoShapeConfigWidgetBase.h>
 #include <KoConnectionShapeConfigWidget.h>
 #include <KoPathConnectionPointStrategy.h>
+#include <KoStrokeConfigWidget.h>
+
 #include <KoToolManager.h>
 #include <KoIcon.h>
 
@@ -813,6 +815,11 @@ QList<QWidget *> ConnectionTool::createOptionWidgets()
             list.append(cw);
         }
     }
+    KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(0);
+    strokeWidget->setWindowTitle(i18n("Line"));
+    strokeWidget->setCanvas(canvas());
+    list.append(strokeWidget);
+
     ConnectionPointWidget *connectPoint = new ConnectionPointWidget(this);
     connectPoint->setWindowTitle(i18n("Connection Point"));
     list.append(connectPoint);

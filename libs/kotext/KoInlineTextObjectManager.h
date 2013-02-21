@@ -164,7 +164,6 @@ public:
 
 public slots:
     void documentInformationUpdated(const QString &info, const QString &data);
-    void activeAuthorUpdated(const QString &data);
 
 signals:
     /**

@@ -172,6 +172,7 @@ KisShapeLayer::~KisShapeLayer()
 
     foreach(KoShape *shape, shapes()) {
         shape->setParent(0);
+        delete shape;
     }
 
     delete m_d->converter;

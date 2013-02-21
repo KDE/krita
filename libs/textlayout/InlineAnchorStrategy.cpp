@@ -21,13 +21,15 @@
 
 #include <KoShapeContainer.h>
 #include <KoTextShapeData.h>
+#include <KoAnchorInlineObject.h>
 
 #include <QTextLayout>
 #include <QTextBlock>
 #include <kdebug.h>
 
-InlineAnchorStrategy::InlineAnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootArea)
-    : AnchorStrategy(anchor, rootArea)
+InlineAnchorStrategy::InlineAnchorStrategy(KoAnchorInlineObject *anchorObject, KoTextLayoutRootArea *rootArea)
+    : AnchorStrategy(anchorObject->anchor(), rootArea)
+    , m_anchorObject(anchorObject)
 {
 }
 
@@ -47,7 +49,7 @@ bool InlineAnchorStrategy::moveSubject()
     }
 
     QPointF newPosition;
-    QTextBlock block = m_anchor->document()->findBlock(m_anchor->positionInDocument());
+    QTextBlock block = m_anchorObject->document()->findBlock(m_anchorObject->position());
     QTextLayout *layout = block.layout();
 
     // set anchor bounding rectangle horizontal position and size
@@ -78,9 +80,9 @@ bool InlineAnchorStrategy::moveSubject()
 bool InlineAnchorStrategy::countHorizontalPos(QPointF &newPosition, QTextBlock &block, QTextLayout *layout)
 {
     if (layout->lineCount() != 0) {
-        QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
+        QTextLine tl = layout->lineForTextPosition(m_anchorObject->position() - block.position());
         if (tl.isValid()) {
-            newPosition.setX(tl.cursorToX(m_anchor->positionInDocument() - block.position()));
+            newPosition.setX(tl.cursorToX(m_anchorObject->position() - block.position()));
         } else {
             return false; // lets go for a second round.
         }
@@ -93,12 +95,12 @@ bool InlineAnchorStrategy::countHorizontalPos(QPointF &newPosition, QTextBlock &
 bool InlineAnchorStrategy::countVerticalPos(QPointF &newPosition, KoTextShapeData *data, QTextBlock &block, QTextLayout *layout)
 {
     if (layout->lineCount()) {
-        QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
+        QTextLine tl = layout->lineForTextPosition(m_anchorObject->position() - block.position());
         Q_ASSERT(tl.isValid());
-        if (m_anchor->inlineObjectAscent() > 0) {
-            newPosition.setY(tl.y() + tl.ascent() - m_anchor->inlineObjectAscent() - data->documentOffset());
+        if (m_anchorObject->inlineObjectAscent() > 0) {
+            newPosition.setY(tl.y() + tl.ascent() - m_anchorObject->inlineObjectAscent() - data->documentOffset());
         } else {
-            newPosition.setY(tl.y() + tl.ascent() + m_anchor->inlineObjectDescent() - m_anchor->shape()->size().height() - data->documentOffset());
+            newPosition.setY(tl.y() + tl.ascent() + m_anchorObject->inlineObjectDescent() - m_anchor->shape()->size().height() - data->documentOffset());
         }
     } else {
         return false; // lets go for a second round.

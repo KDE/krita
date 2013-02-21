@@ -65,7 +65,7 @@ class CHARTSHAPELIB_EXPORT PlotArea : public QObject, public KoShape
     Q_OBJECT
     
 public:
-    PlotArea(ChartShape *parent);
+    explicit PlotArea(ChartShape *parent);
     ~PlotArea();
     
     void plotAreaInit();

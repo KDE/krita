@@ -37,7 +37,7 @@ public:
      * Create a ShapeDeleter that will delete param shape
      * @param shape the shape that will be deleted soon after this object is created.
      */
-    ShapeDeleter(KoShape *shape);
+    explicit ShapeDeleter(KoShape *shape);
     ~ShapeDeleter();
 
 private:

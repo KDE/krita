@@ -207,7 +207,7 @@ bool KisTiledDataManager::writeTilesHeader(KoStore *store, quint32 numTiles)
         .arg(pixelSize())
         .arg(numTiles);
 
-    store->write(buffer.toAscii());
+    store->write(buffer.toLatin1());
     return true;
 }
 

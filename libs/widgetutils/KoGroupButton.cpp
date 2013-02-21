@@ -93,20 +93,22 @@ void KoGroupButton::paintEvent(QPaintEvent* event)
     case NoGroup:
         Q_ASSERT(0);
     }
-    if (!isChecked() && !isDown() && !(panelOpt.state & QStyle::State_MouseOver)) {
-        // Use 'pushed' appearance for all buttons but button that are not really pushed
-        // have less contrast and is toned down.
-        panelOpt.state |= (QStyle::State_On | QStyle::State_Sunken);
-        QPalette panelPal(panelOpt.palette);
-        QColor c;
-        c = panelPal.color(QPalette::Button);
-        c.setAlpha(50);
-        panelPal.setColor(QPalette::Button, c);
-        c = panelPal.color(QPalette::Window);
-        c.setAlpha(50);
-        panelPal.setColor(QPalette::Window, c);
-        panelOpt.palette = panelPal;
-        painter.setOpacity(0.5);
+    if (autoRaise()) {
+        if (!isChecked() && !isDown() && !(panelOpt.state & QStyle::State_MouseOver)) {
+            // Use 'pushed' appearance for all buttons, but those that are not really pushed
+            // are drawn with less contrast and are toned down.
+            panelOpt.state |= (QStyle::State_On | QStyle::State_Sunken);
+            QPalette panelPal(panelOpt.palette);
+            QColor c;
+            c = panelPal.color(QPalette::Button);
+            c.setAlpha(50);
+            panelPal.setColor(QPalette::Button, c);
+            c = panelPal.color(QPalette::Window);
+            c.setAlpha(50);
+            panelPal.setColor(QPalette::Window, c);
+            panelOpt.palette = panelPal;
+            painter.setOpacity(0.5);
+        }
     }
     painter.drawPrimitive(QStyle::PE_PanelButtonTool, panelOpt);
     painter.setOpacity(1.0);

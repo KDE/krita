@@ -18,7 +18,7 @@
 #ifndef PSD_RESOURCE_BLOCK_H
 #define PSD_RESOURCE_BLOCK_H
 
-struct QIODevice;
+class QIODevice;
 
 #include <QDebug>
 #include <QString>

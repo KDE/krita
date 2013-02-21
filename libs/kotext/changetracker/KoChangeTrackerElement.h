@@ -16,8 +16,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KOCHANGETRACKERELEMT_H
-#define KOCHANGETRACKERELEMT_H
+#ifndef KOCHANGETRACKERELEMENT_H
+#define KOCHANGETRACKERELEMENT_H
 
 #include <QObject>
 #include <QMetaType>
@@ -28,7 +28,6 @@
 #include <KoGenChange.h>
 
 #include "kotext_export.h"
-#include "KoDeleteChangeMarker.h"
 
 
 class KOTEXT_EXPORT KoChangeTrackerElement
@@ -81,8 +80,6 @@ public:
     void setDeleteData(const QTextDocumentFragment& fragment);
     QTextDocumentFragment getDeleteData() const;
 
-    void setDeleteChangeMarker(KoDeleteChangeMarker *marker);
-    KoDeleteChangeMarker *getDeleteChangeMarker();
 
 private:
     class Private;

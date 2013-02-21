@@ -80,12 +80,12 @@ void ShivaGenerator::generate(KisProcessingInformation dstInfo,
     if (config) {
         QMap<QString, QVariant> map = config->getProperties();
         for (QMap<QString, QVariant>::iterator it = map.begin(); it != map.end(); ++it) {
-            const GTLCore::Metadata::Entry* entry = kernel.metadata()->parameter(it.key().toAscii().data());
+            const GTLCore::Metadata::Entry* entry = kernel.metadata()->parameter(it.key().toLatin1().constData());
             if (entry && entry->asParameterEntry()) {
                 GTLCore::Value val = qvariantToValue(it.value(), entry->asParameterEntry()->type());
                 if(val.isValid())
                 {
-                    kernel.setParameter(it.key().toAscii().data(), val);
+                    kernel.setParameter(it.key().toLatin1().constData(), val);
                 }
             }
         }

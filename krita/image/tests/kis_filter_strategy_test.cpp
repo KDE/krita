@@ -27,7 +27,7 @@ void KisFilterStrategyTest::testCreation()
     Q_UNUSED(reg);
     KisHermiteFilterStrategy hermite;
     KisBoxFilterStrategy box;
-    KisTriangleFilterStrategy triangle;
+    KisBilinearFilterStrategy triangle;
     KisBellFilterStrategy bell;
     KisBSplineFilterStrategy bspline;
     KisLanczos3FilterStrategy  lanczos3;

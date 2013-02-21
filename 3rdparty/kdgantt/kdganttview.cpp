@@ -448,7 +448,8 @@ QRectF View::printRect(bool drawRowLabels, bool drawHeader)
     return d->gfxview.printRect( drawRowLabels, drawHeader );
 }
 
-#include "moc_kdganttview.cpp"
+//#include "moc_kdganttview.cpp"
+#include "kdganttview.moc"
 
 #ifndef KDAB_NO_UNIT_TESTS
 #include "unittest/test.h"

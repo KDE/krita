@@ -22,11 +22,9 @@
 
 #include <QVariant>
 
-#include <kparts/plugin.h>
+#include <kis_view_plugin.h>
 
-class KisView2;
-
-class ModifySelection : public KParts::Plugin
+class ModifySelection : public KisViewPlugin
 {
     Q_OBJECT
 public:
@@ -35,21 +33,11 @@ public:
 
 private slots:
 
-    void slotUpdateGUI();
-
     void slotGrowSelection();
     void slotShrinkSelection();
     void slotBorderSelection();
     void slotFeatherSelection();
-
-private:
-
-    KisView2 * m_view;
-
-    KAction *m_growSelection;
-    KAction *m_shrinkSelection;
-    KAction *m_borderSelection;
-    KAction *m_featherSelection;
+    void slotSmoothSelection();
 };
 
 #endif // MODIFY_SELECTION_H

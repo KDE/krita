@@ -134,15 +134,6 @@ QString KoTextLocator::chapter() const
     return block.text().remove(QChar::ObjectReplacementCharacter);
 }
 
-KoTextBlockData *KoTextLocator::chapterBlockData() const
-{
-    d->update();
-    if (d->chapterPosition < 0)
-        return 0;
-    QTextBlock block = d->document->findBlock(d->chapterPosition);
-    return dynamic_cast<KoTextBlockData*>(block.userData());
-}
-
 int KoTextLocator::pageNumber() const
 {
     d->update();

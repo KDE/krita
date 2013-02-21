@@ -24,6 +24,7 @@
 #include "kis_doc2.h"
 #include "kis_doc2_p.h"
 
+#include <QDesktopServices>
 #include <QApplication>
 #include <QDomDocument>
 #include <QDomElement>
@@ -141,6 +142,8 @@ public:
     QList<KisPaintingAssistant*> assistants;
 
     KisPart2 *part; // XXX: we shouldn't know about the part here!
+
+    QString flipbook;
 };
 
 
@@ -190,8 +193,6 @@ bool KisDoc2::init()
 {
     delete m_d->nserver;
     m_d->nserver = 0;
-
-    connect(undoStack(), SIGNAL(indexChanged(int)), SLOT(undoIndexChanged(int)));
 
     m_d->nserver = new KisNameServer(1);
     Q_CHECK_PTR(m_d->nserver);
@@ -297,6 +298,11 @@ bool KisDoc2::completeSaving(KoStore *store)
     return true;
 }
 
+int KisDoc2::supportedSpecialFormats() const
+{
+    return 0; // we don't support encryption.
+}
+
 
 bool KisDoc2::completeLoading(KoStore *store)
 {
@@ -366,6 +372,9 @@ bool KisDoc2::newImage(const QString& name,
 
     image->assignImageProfile(cs->profile());
     documentInfo()->setAboutInfo("title", name);
+    if (name != i18n("unnamed") && !name.isEmpty()) {
+        setUrl(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) + "/" + name + ".kra");
+    }
     documentInfo()->setAboutInfo("comments", description);
 
     layer = new KisPaintLayer(image.data(), image->nextLayerName(), bgColor.opacityU8(), cs);
@@ -424,7 +433,7 @@ vKisNodeSP KisDoc2::activeNodes() const
         KisView2 *view = qobject_cast<KisView2*>(v);
         if (view) {
             KisNodeSP activeNode = view->activeNode();
-            if (!nodes.contains(activeNode)) {
+            if (activeNode && !nodes.contains(activeNode)) {
                 if (activeNode->inherits("KisMask")) {
                     activeNode = activeNode->parent();
                 }
@@ -477,9 +486,12 @@ KisImageWSP KisDoc2::image() const
 
 void KisDoc2::setCurrentImage(KisImageWSP image)
 {
+    //if (!image.isValid()) return;
+
     if (m_d->image) {
         // Disconnect existing sig/slot connections
         m_d->image->disconnect(this);
+        m_d->shapeController->setImage(0);
     }
     m_d->image = image;
     m_d->shapeController->setImage(image);
@@ -508,22 +520,6 @@ KisUndoStore* KisDoc2::createUndoStore()
 {
     return new KisDocumentUndoStore(this);
 }
-
-void KisDoc2::undoIndexChanged(int idx)
-{
-    const KUndo2Command* command = undoStack()->command(idx);
-    if (!command) return;
-
-    KisImageWSP image = this->image();
-    if(!image) return;
-
-    KisDocumentUndoStore *undoStore =
-            dynamic_cast<KisDocumentUndoStore*>(image->undoStore());
-    Q_ASSERT(undoStore);
-
-    undoStore->notifyCommandExecuted(command);
-}
-
 
 #include "kis_doc2.moc"
 

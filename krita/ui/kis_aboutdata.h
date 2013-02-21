@@ -24,6 +24,7 @@
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <calligraversion.h>
+#include <KoIcon.h>
 
 KAboutData * newKritaAboutData()
 {
@@ -36,6 +37,7 @@ KAboutData * newKritaAboutData()
                                             KLocalizedString(),
                                             "http://www.krita.org",
                                             "submit@bugs.kde.org");
+    aboutData->setProgramIconName(koIconName("calligrakrita"));
     aboutData->addAuthor(ki18n("Adrian Page"), KLocalizedString(), "Adrian.Page@tesco.net");
     aboutData->addAuthor(ki18n("Adam Celarek"), KLocalizedString(), "tuobaatirk@xibo.at");
     aboutData->addAuthor(ki18n("Alan Horkan"), KLocalizedString(), "", "http://www.openclipart.org");

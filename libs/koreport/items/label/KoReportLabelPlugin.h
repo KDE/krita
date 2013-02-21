@@ -26,7 +26,7 @@
 class KoReportLabelPlugin : public KoReportPluginInterface
 {
     public:
-    KoReportLabelPlugin(QObject *parent, const QVariantList &args = QVariantList());
+    explicit KoReportLabelPlugin(QObject *parent, const QVariantList &args = QVariantList());
     
     virtual ~KoReportLabelPlugin();
 

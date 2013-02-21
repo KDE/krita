@@ -35,6 +35,7 @@ public:
 
     void finishedWord(QTextDocument *document, int cursorPosition);
     void finishedParagraph(QTextDocument *document, int cursorPosition);
+    void startingSimpleEdit(QTextDocument *document, int cursorPosition);
     void checkSection(QTextDocument *document, int startPosition, int endPosition);
 
 private slots:

@@ -17,8 +17,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef __calligra_filter_chain_h__
-#define __calligra_filter_chain_h__
+#ifndef __KO_FILTER_CHAIN_H__
+#define __KO_FILTER_CHAIN_H__
 
 #include <QHash>
 #include <QList>
@@ -81,7 +81,7 @@ public:
     /**
      * Tells the @ref KoFilterManager the output file of the
      * filter chain in case of an import operation. If it's
-     * QString::null we directly manipulated the document.
+     * an empty QString we directly manipulated the document.
      */
     QString chainOutput() const;
 
@@ -137,7 +137,7 @@ private:
 
     friend class CalligraFilter::Graph;
 
-    KoFilterChain(const KoFilterManager* manager);
+    explicit KoFilterChain(const KoFilterManager* manager);
 
     void appendChainLink(KoFilterEntry::Ptr filterEntry, const QByteArray& from, const QByteArray& to);
     void prependChainLink(KoFilterEntry::Ptr filterEntry, const QByteArray& from, const QByteArray& to);
@@ -210,4 +210,4 @@ private:
     Private * const d;
 };
 
-#endif // __calligra_filter_chain_h__
+#endif // __KO_FILTER_CHAIN_H__

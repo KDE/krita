@@ -57,11 +57,11 @@ class KOTEXT_EXPORT KoTextDocument
 {
 public:
     /// Constructor
-    KoTextDocument(QTextDocument *document);
+    KoTextDocument(QTextDocument *document); // krazy:exclude=explicit
     /// Constructor
-    KoTextDocument(const QTextDocument *document);
+    KoTextDocument(const QTextDocument *document); // krazy:exclude=explicit
     /// Constructor
-    KoTextDocument(QWeakPointer<QTextDocument> document);
+    KoTextDocument(QWeakPointer<QTextDocument> document); // krazy:exclude=explicit
 
     /// Destructor
     ~KoTextDocument();

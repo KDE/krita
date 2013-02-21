@@ -5,7 +5,7 @@ find_package(Marble REQUIRED)
 
 include_directories(${MARBLE_INCLUDE_DIR})
 
-include_directories( ${KOMAIN_INCLUDES}
+include_directories( ${KORDF_INCLUDES}
     ${KOODF_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/
     ${CMAKE_SOURCE_DIR}/libs/koreport
@@ -25,7 +25,7 @@ set(koreport_mapsplugin_LIB_SRCS
 
 kde4_add_plugin(${MAPS_PLUG} ${koreport_mapsplugin_LIB_SRCS})
 
-target_link_libraries(${MAPS_PLUG} ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} koreport ${KOPROPERTY_LIBS} ${MARBLE_LIBRARIES})
+target_link_libraries(${MAPS_PLUG} ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} kordf koreport ${KOPROPERTY_LIBS} ${MARBLE_LIBRARIES})
 
 
 ########### install files ###############

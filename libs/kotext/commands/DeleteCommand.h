@@ -75,9 +75,9 @@ private:
     bool m_mergePossible;
 
     void doDelete();
-    void deleteTextAnchor(KoInlineObject *object);
+    void deleteAnchorInlineObject(KoInlineObject *object);
     bool checkMerge(const KUndo2Command *command);
     void updateListChanges();
 };
 
-#endif // DELTECOMMAND_H
+#endif // DELETECOMMAND_H

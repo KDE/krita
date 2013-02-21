@@ -48,7 +48,7 @@ class ThemeManager : public QObject
 
 public:
 
-    ThemeManager(QObject *parent);
+    explicit ThemeManager(QObject *parent);
     ~ThemeManager();
 
     QString currentThemeName() const;

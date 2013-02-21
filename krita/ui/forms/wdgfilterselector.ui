@@ -31,7 +31,7 @@
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QWidget" name="layoutWidget">
+     <widget class="QWidget">
       <layout class="QVBoxLayout">
        <item>
         <widget class="QLabel" name="label_2">
@@ -55,7 +55,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="layoutWidget">
+     <widget class="QWidget">
       <layout class="QGridLayout">
        <property name="margin">
         <number>0</number>
@@ -100,7 +100,7 @@
         </widget>
        </item>
        <item row="1" column="0" colspan="3">
-        <layout class="QGridLayout" name="gridLayout">
+        <layout class="QGridLayout">
          <item row="0" column="0">
           <widget class="QWidget" name="centralWidgetHolder" native="true">
            <property name="sizePolicy">

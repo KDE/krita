@@ -67,7 +67,7 @@ public:
     @brief Constructor that create a blank designer
     @param widget QWidget parent
     */
-    KoReportDesigner(QWidget *);
+    explicit KoReportDesigner(QWidget *);
 
     /**
     @brief Constructor that create a designer, and loads the report described in the QDomElement

@@ -50,7 +50,7 @@
     <attribute name="title">
      <string>Dynamics settings</string>
     </attribute>
-    <widget class="QWidget" name="layoutWidget">
+    <widget class="QWidget">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -147,7 +147,7 @@
     <attribute name="title">
      <string>Shape</string>
     </attribute>
-    <widget class="QWidget" name="layoutWidget">
+    <widget class="QWidget">
      <property name="geometry">
       <rect>
        <x>0</x>

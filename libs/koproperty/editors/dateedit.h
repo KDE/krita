@@ -46,6 +46,9 @@ signals:
 public slots:
     void setValue(const QVariant& value);
 
+protected:
+    virtual void paintEvent(QPaintEvent* event);
+
 protected slots:
     void onDateChanged();
 };

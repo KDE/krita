@@ -60,7 +60,7 @@ KisFilterRegistry* KisFilterRegistry::instance()
     KisFilterRegistry *reg = qApp->findChild<KisFilterRegistry *>("");
     if (!reg) {
         reg = new KisFilterRegistry(qApp);
-        KoPluginLoader::instance()->load("Krita/Filter", "Type == 'Service' and ([X-Krita-Version] == 5)");
+        KoPluginLoader::instance()->load("Krita/Filter", "Type == 'Service' and ([X-Krita-Version] == 27)");
     }
     return reg;
 }

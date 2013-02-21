@@ -54,7 +54,7 @@ BibliographyConfigureDialog::BibliographyConfigureDialog(const QTextDocument *do
                                         << QPair<QString, Qt::SortOrder>("identifier", Qt::AscendingOrder));
     }
 
-    foreach (SortKeyPair key, m_bibConfiguration->sortKeys()) {
+    foreach (const SortKeyPair &key, m_bibConfiguration->sortKeys()) {
         dialog.sortKeyGroupBox->layout()->addWidget(
                     new SortKeyWidget(key.first, key.second, dialog.sortKeyGroupBox));
     }

@@ -26,7 +26,7 @@
 class KoCopyColorConversionTransformation : public KoColorConversionTransformation
 {
 public:
-    KoCopyColorConversionTransformation(const KoColorSpace* cs);
+    explicit KoCopyColorConversionTransformation(const KoColorSpace *cs);
     virtual void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const;
 };
 

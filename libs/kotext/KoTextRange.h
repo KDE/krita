@@ -69,6 +69,11 @@ public:
      */
     KoTextRangeManager *manager();
 
+     /**
+     * Return the textdocument the range points to.
+     */
+   QTextDocument *document() const;
+
     /**
      * Save the part of this text range corresponding to position as ODF
      * This may save a beginning tag, ending tag, or nothing at all

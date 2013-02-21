@@ -209,12 +209,17 @@ void KisRectIterator2::fetchTileData(qint32 col, qint32 row)
     m_oldData = m_oldTile->data();
 }
 
-const quint8 * KisRectIterator2::oldRawData() const
+const quint8* KisRectIterator2::rawDataConst() const
+{
+    return m_data + m_offset;
+}
+
+const quint8* KisRectIterator2::oldRawData() const
 {
     return m_oldData + m_offset;    
 }
 
-quint8 * KisRectIterator2::rawData()
+quint8* KisRectIterator2::rawData()
 {
     return m_data + m_offset;
 }

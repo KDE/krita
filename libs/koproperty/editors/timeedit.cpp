@@ -22,9 +22,8 @@
 #include "timeedit.h"
 
 #include <koproperty/EditorDataModel.h>
-// KDE
-#include <KLocale>
-#include <KGlobal>
+// Qt
+#include <QLocale>
 
 using namespace KoProperty;
 
@@ -62,19 +61,29 @@ void TimeEdit::setValue(const QVariant& value)
     blockSignals(false);
 }
 
+void TimeEdit::paintEvent(QPaintEvent* event)
+{
+    QTimeEdit::paintEvent(event);
+    Factory::paintTopGridLine(this);
+}
+
+
 void TimeEdit::onTimeChanged()
 {
     emit commitData(this);
 }
 
 
+//! @todo Port to KLocale, be inspired by KexiTimeTableEdit (with Kexi*Formatter)
 TimeDelegate::TimeDelegate()
 {
 }
 
 QString TimeDelegate::displayTextForProperty(const Property* prop) const
 {
-    return KGlobal::locale()->formatLocaleTime(prop->value().toTime());
+    const QLocale locale;
+    const QString defaultTimeFormat = locale.timeFormat(QLocale::ShortFormat);
+    return prop->value().toTime().toString(defaultTimeFormat);
 }
 
 QWidget* TimeDelegate::createEditor(int type, QWidget* parent,

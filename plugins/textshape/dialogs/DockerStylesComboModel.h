@@ -30,7 +30,19 @@ class DockerStylesComboModel : public StylesFilteredModelBase
 {
     Q_OBJECT
 public:
+
+    enum CategoriesInternalIds {
+        UsedStyleId = -32000,
+        UnusedStyleId = -32001
+    };
+
     explicit DockerStylesComboModel(QObject *parent = 0);
+
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+
+    virtual QModelIndex index(int row, int column, const QModelIndex &parent) const;
+
+    virtual QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
 
     void setStyleManager(KoStyleManager *sm);
 

@@ -214,7 +214,7 @@ namespace KDGantt {
         inline Span() : m_start( -1 ), m_length( 0 ) {}
         inline Span( qreal start, qreal length ) : m_start( start ), m_length( length ) {}
         inline Span( const Span& other ) : m_start(other.m_start), m_length(other.m_length) {}
-        ~Span();
+        inline ~Span() {}
 
         inline Span& operator=( const Span& other ) { m_start=other.m_start; m_length=other.m_length; return *this; }
 

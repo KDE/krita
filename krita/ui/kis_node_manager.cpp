@@ -19,7 +19,6 @@
 #include "kis_node_manager.h"
 
 #include <kactioncollection.h>
-#include <kaction.h>
 
 #include <KoIcon.h>
 #include <KoSelection.h>

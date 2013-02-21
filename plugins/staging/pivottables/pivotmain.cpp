@@ -183,7 +183,7 @@ Sheet* PivotMain::filter()
   QVector<QString> vect;
   QVector<int> filtered;
   
-  qDebug()<<"filterVect count ="<<d->filterVect.count();
+  
   if(d->filterVect.count()<3)
       return sheet1;
   
@@ -191,7 +191,7 @@ Sheet* PivotMain::filter()
   for(int k=row+1;k<=b;k++)
   {
       bool pass=true;
-//       qDebug()<<"DEBUG"<<d->filterVect<<d->filterVect.count();
+
       if(d->filterVect.count()==3)
       {
 	  pass=checkCondition(d->filterVect.at(0),d->filterVect.at(1),d->filterVect.at(2),k);
@@ -235,7 +235,7 @@ Sheet* PivotMain::filter()
       if(pass==true)
 	filtered.append(k);
     }
-    //qDebug()<<filtered;
+
       for(int j=1;j<=r;j++)
 	Cell(sheet2,j,1).setValue(Cell(sheet1,j,1).value());
       for(int i=0;i<filtered.count();i++)
@@ -275,7 +275,6 @@ bool PivotMain::checkCondition(QString field,QString condition,QString value,int
 	
     if(condition=="<"){
       if(Cell(sheet1,vect.indexOf(field)+1,line).displayText() < value){
-	 qDebug()<<"comparing";	 
 	return true;}
       else
 		  return false;
@@ -320,8 +319,7 @@ void PivotMain::Summarize()
     color.setBlue(50);
     QPen pen(color);
     
-//     qDebug()<<"range"<<range;
-    //qDebug()<<"range2"<<range2;
+
     Style st,st2,st3,str,stl,stb,stt;
     st.setFontUnderline(true);
     st3.setBackgroundColor("lightGray");

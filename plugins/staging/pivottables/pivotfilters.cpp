@@ -173,7 +173,7 @@ QVector<QString> PivotFilters::filterData()
   data.append(d->mainWidget.Field->currentText());
   data.append(d->mainWidget.Condition->currentText());
   data.append(d->mainWidget.Value->currentText());
-  qDebug()<<"operator"<<d->mainWidget.Operator->currentText();
+  
   if(d->mainWidget.Operator->currentText()!="None")
   {
     data.append(d->mainWidget.Operator->currentText());

@@ -105,21 +105,21 @@ CapNJoinButton::CapNJoinButton(QWidget *parent)
     QToolButton *button = 0;
 
     button = new QToolButton(this);
-    button->setIcon(koIcon("cap_butt"));
+    button->setIcon(koIcon("stroke-cap-butt"));
     button->setCheckable(true);
     button->setToolTip(i18n("Butt cap"));
     capGroup->addButton(button, Qt::FlatCap);
     mainLayout->addWidget(button, 2, 0);
 
     button = new QToolButton(this);
-    button->setIcon(koIcon("cap_round"));
+    button->setIcon(koIcon("stroke-cap-round"));
     button->setCheckable(true);
     button->setToolTip(i18n("Round cap"));
     capGroup->addButton(button, Qt::RoundCap);
     mainLayout->addWidget(button, 2, 1);
 
     button = new QToolButton(this);
-    button->setIcon(koIcon("cap_square"));
+    button->setIcon(koIcon("stroke-cap-square"));
     button->setCheckable(true);
     button->setToolTip(i18n("Square cap"));
     capGroup->addButton(button, Qt::SquareCap);
@@ -130,21 +130,21 @@ CapNJoinButton::CapNJoinButton(QWidget *parent)
     joinGroup->setExclusive(true);
 
     button = new QToolButton(this);
-    button->setIcon(koIcon("join_miter"));
+    button->setIcon(koIcon("stroke-join-miter"));
     button->setCheckable(true);
     button->setToolTip(i18n("Miter join"));
     joinGroup->addButton(button, Qt::MiterJoin);
     mainLayout->addWidget(button, 3, 0);
 
     button = new QToolButton(this);
-    button->setIcon(koIcon("join_round"));
+    button->setIcon(koIcon("stroke-join-round"));
     button->setCheckable(true);
     button->setToolTip(i18n("Round join"));
     joinGroup->addButton(button, Qt::RoundJoin);
     mainLayout->addWidget(button, 3, 1);
 
     button = new QToolButton(this);
-    button->setIcon(koIcon("join_bevel"));
+    button->setIcon(koIcon("stroke-join-bevel"));
     button->setCheckable(true);
     button->setToolTip(i18n("Bevel join"));
     joinGroup->addButton(button, Qt::BevelJoin);

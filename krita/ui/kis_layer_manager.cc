@@ -318,11 +318,6 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     connect(m_addPaintLayer, SIGNAL(triggered()), this, SLOT(layerAdd()));
 }
 
-void KisLayerManager::addAction(QAction * action)
-{
-    m_pluginActions.append(action);
-}
-
 void KisLayerManager::updateGUI()
 {
     KisImageWSP image = m_view->image();

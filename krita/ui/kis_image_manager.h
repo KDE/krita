@@ -39,7 +39,6 @@ public:
     ~KisImageManager() {}
 
     void setup(KActionCollection * actionCollection);
-    void updateGUI();
 
 public slots:
 

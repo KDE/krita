@@ -828,7 +828,6 @@ void KisView2::updateGUI()
     m_d->selectionManager->updateGUI();
     m_d->filterManager->updateGUI();
     m_d->zoomManager->updateGUI();
-    m_d->imageManager->updateGUI();
     m_d->gridManager->updateGUI();
     m_d->perspectiveGridManager->updateGUI();
     m_d->actionManager->updateGUI();

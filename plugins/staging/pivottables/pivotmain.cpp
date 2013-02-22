@@ -20,24 +20,27 @@
 // Local
 
 #include "pivotmain.h"
-#include "ui_pivotmain.h"
-#include "ui_pivotoptions.h"
 #include "pivotoptions.h"
 #include "pivotfilters.h"
-#include <sheets/ui/Selection.h>
-#include <sheets/Sheet.h>
+#include "ui_pivotmain.h"
+#include "ui_pivotoptions.h"
+
+#include<QTimer>
+#include<QObject>
+#include<QColor>
+#include<QPen>
 #include<QMessageBox>
+
 #include <sheets/Value.h>
 #include <sheets/ValueCalc.h>
 #include <sheets/ValueConverter.h>
 #include <sheets/Map.h>
 #include <sheets/DocBase.h>
-#include<QTimer>
-#include<QObject>
 #include <sheets/Cell.h>
 #include <sheets/Style.h>
-#include<QColor>
-#include<QPen>
+#include <sheets/Sheet.h>
+#include <sheets/ui/Selection.h>
+
 
 using namespace Calligra::Sheets;
 

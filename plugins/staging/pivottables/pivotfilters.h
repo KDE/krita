@@ -23,12 +23,15 @@
 #define PIVOTFILTERS_H
 
 #include <KDialog>
+
 #include<QtGui>
 #include<QString>
 #include<QVector>
+
 namespace Calligra{
   namespace Sheets{
-class Selection;    
+
+    class Selection;    
 class PivotFilters : public KDialog
 {
   Q_OBJECT

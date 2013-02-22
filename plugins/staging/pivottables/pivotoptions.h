@@ -22,8 +22,10 @@
 #define PIVOTOPTIONS_H
 
 #include <KDialog>
+
 #include<QListWidgetItem>
 #include<QObject>
+
 namespace Calligra{
   namespace Sheets{
     /**

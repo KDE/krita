@@ -19,17 +19,11 @@
 
 // Local
 
-
-// #include "SubtotalDialog.h"
-
-// #include "ui_SubtotalWidget.h"
-//#include "ui_SubtotalsDetailsWidget.h"
-
-
 #include "pivot.h"
 #include "ui_pivot.h"
 #include "ui_pivotmain.h"
 #include "pivotmain.h"
+
 #include <QApplication>
 #include <QMessageBox>
 

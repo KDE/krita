@@ -54,8 +54,7 @@ private:
 };
 }
 }
-//}
-  
+ 
 
 
 #endif // PIVOT_H

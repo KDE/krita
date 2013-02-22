@@ -20,12 +20,16 @@
 // Local
 #include "pivotoptions.h"
 #include "ui_pivotoptions.h"
-#include <sheets/Sheet.h>
-#include <sheets/ui/Selection.h>
+
+
 #include<QtGui>
 #include<QListWidgetItem>
 #include<QListWidget>
 #include<QObject>
+
+#include <sheets/Sheet.h>
+#include <sheets/ui/Selection.h>
+
 using namespace Calligra::Sheets;
 
 class PivotOptions::Private
@@ -100,4 +104,4 @@ PivotOptions::~PivotOptions()
 {
     delete d;
 }
-//#include "PivotOptions.moc"
+

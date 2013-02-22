@@ -23,6 +23,7 @@
 #define PIVOTMAIN_H
 
 #include <KDialog>
+
 #include <sheets/Sheet.h>
 namespace Calligra{
   namespace Sheets{

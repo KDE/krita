@@ -20,8 +20,10 @@
 // Local
 #include "pivotsubtotals.h"
 #include "ui_pivotsubtotals.h"
+
 #include "Sheet.h"
 #include "ui/Selection.h"
+
 using namespace Calligra::Sheets;
 
 class PivotSubTotals::Private

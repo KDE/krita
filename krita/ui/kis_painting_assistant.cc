@@ -340,32 +340,40 @@ void KisPaintingAssistant::saveXmlList(QDomDocument& doc, QDomElement& assistant
 }
 
 void KisPaintingAssistant::findHandleLocation() {
-    QList<KisPaintingAssistantHandleSP> handlesList;
+    QList<KisPaintingAssistantHandleSP> adjacentHandles;
+    adjacentHandles.operator =(findAdjacentHandles());
+    QList<KisPaintingAssistantHandleSP> hHandlesList;
+    QList<KisPaintingAssistantHandleSP> vHandlesList;
     uint hole = 0;
+    hHandlesList.operator =();
     if (d->handles.size() == 4 && d->id == "perspective") {
+        /*
+         sort handles on the basis of X-coordinate
+         */
         foreach(const KisPaintingAssistantHandleSP handle,d->handles) {
-            handlesList.append(handle);
-            hole = handlesList.size() - 1;
-            while(hole > 0 && handlesList.at(hole -1).data()->x() > handle.data()->x()) {
-                handlesList.swap(hole-1, hole);
+            hHandlesList.append(handle);
+            hole = hHandlesList.size() - 1;
+            while(hole > 0 && hHandlesList.at(hole -1).data()->x() > handle.data()->x()) {
+                hHandlesList.swap(hole-1, hole);
                 hole = hole - 1;
             }
         }
-        if(handlesList.at(0).data()->y() > handlesList.at(1).data()->y()) {
-            d->topLeft = handlesList.at(1);
-            d->bottomLeft= handlesList.at(0);
+
+        if(hHandlesList.at(0).data()->y() > hHandlesList.at(1).data()->y()) {
+            d->topLeft = hHandlesList.at(1);
+            d->bottomLeft= hHandlesList.at(0);
         }
         else {
-            d->topLeft = handlesList.at(0);
-            d->bottomLeft = handlesList.at(1);
+            d->topLeft = hHandlesList.at(0);
+            d->bottomLeft = hHandlesList.at(1);
         }
-        if(handlesList.at(2).data()->y() > handlesList.at(3).data()->y()) {
-            d->topRight = handlesList.at(3);
-            d->bottomRight = handlesList.at(2);
+        if(hHandlesList.at(2).data()->y() > hHandlesList.at(3).data()->y()) {
+            d->topRight = hHandlesList.at(3);
+            d->bottomRight = hHandlesList.at(2);
         }
         else {
-            d->topRight= handlesList.at(2);
-            d->bottomRight = handlesList.at(3);
+            d->topRight= hHandlesList.at(2);
+            d->bottomRight = hHandlesList.at(3);
         }
         if(!d->bottomMiddle && !d->topMiddle && !d->leftMiddle && !d->rightMiddle) {
             d->bottomMiddle = new KisPaintingAssistantHandle((d->bottomLeft.data()->x() + d->bottomRight.data()->x())*0.5,
@@ -390,6 +398,65 @@ void KisPaintingAssistant::findHandleLocation() {
                                                              (d->topRight.data()->y() + d->bottomRight.data()->y())*0.5));
             d->leftMiddle.data()->operator =(QPointF((d->bottomLeft.data()->x() + d->topLeft.data()->x())*0.5,
                                                              (d->bottomLeft.data()->y() + d->topLeft.data()->y())*0.5));
+        }
+
+        if((d->topLeft == adjacentHandles[0] && d->bottomRight != adjacentHandles[1]) ||
+                (d->topLeft == adjacentHandles[1] && d->bottomRight != adjacentHandles[0]) ||
+                (d->topLeft == adjacentHandles[3] && d->bottomRight != adjacentHandles[2]) ||
+                (d->topLeft == adjacentHandles[2] && d->bottomRight != adjacentHandles[3])) {
+            /*
+             sort handles on the basis of Y-coordinate
+             */
+            foreach(const KisPaintingAssistantHandleSP handle,d->handles) {
+                vHandlesList.append(handle);
+                hole = vHandlesList.size() - 1;
+                while(hole > 0 && vHandlesList.at(hole -1).data()->y() > handle.data()->y()) {
+                    vHandlesList.swap(hole-1, hole);
+                    hole = hole - 1;
+                }
+            }
+
+            if(vHandlesList.at(0).data()->x() > vHandlesList.at(1).data()->x()) {
+                d->topLeft = vHandlesList.at(1);
+                d->topRight= vHandlesList.at(0);
+            }
+            else {
+                d->topLeft = vHandlesList.at(0);
+                d->topRight = vHandlesList.at(1);
+            }
+            if(vHandlesList.at(2).data()->x() > vHandlesList.at(3).data()->x()) {
+                d->bottomLeft = vHandlesList.at(3);
+                d->bottomRight = vHandlesList.at(2);
+            }
+            else {
+                d->bottomLeft= vHandlesList.at(2);
+                d->bottomRight = vHandlesList.at(3);
+            }
+            if(!d->bottomMiddle && !d->topMiddle && !d->leftMiddle && !d->rightMiddle) {
+                d->bottomMiddle = new KisPaintingAssistantHandle((d->bottomLeft.data()->x() + d->bottomRight.data()->x())*0.5,
+                                                                 (d->bottomLeft.data()->y() + d->bottomRight.data()->y())*0.5);
+                d->topMiddle = new KisPaintingAssistantHandle((d->topLeft.data()->x() + d->topRight.data()->x())*0.5,
+                                                                 (d->topLeft.data()->y() + d->topRight.data()->y())*0.5);
+                d->rightMiddle= new KisPaintingAssistantHandle((d->topRight.data()->x() + d->bottomRight.data()->x())*0.5,
+                                                                 (d->topRight.data()->y() + d->bottomRight.data()->y())*0.5);
+                d->leftMiddle= new KisPaintingAssistantHandle((d->bottomLeft.data()->x() + d->topLeft.data()->x())*0.5,
+                                                                 (d->bottomLeft.data()->y() + d->topLeft.data()->y())*0.5);
+                addSideHandle(d->rightMiddle.data());
+                addSideHandle(d->leftMiddle.data());
+                addSideHandle(d->bottomMiddle.data());
+                addSideHandle(d->topMiddle.data());
+            }
+            else {
+                d->bottomMiddle.data()->operator =(QPointF((d->bottomLeft.data()->x() + d->bottomRight.data()->x())*0.5,
+                                                                 (d->bottomLeft.data()->y() + d->bottomRight.data()->y())*0.5));
+                d->topMiddle.data()->operator =(QPointF((d->topLeft.data()->x() + d->topRight.data()->x())*0.5,
+                                                                 (d->topLeft.data()->y() + d->topRight.data()->y())*0.5));
+                d->rightMiddle.data()->operator =(QPointF((d->topRight.data()->x() + d->bottomRight.data()->x())*0.5,
+                                                                 (d->topRight.data()->y() + d->bottomRight.data()->y())*0.5));
+                d->leftMiddle.data()->operator =(QPointF((d->bottomLeft.data()->x() + d->topLeft.data()->x())*0.5,
+                                                                 (d->bottomLeft.data()->y() + d->topLeft.data()->y())*0.5));
+            }
+
         }
     }
 }

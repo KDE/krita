@@ -203,10 +203,14 @@ void KisFillActionFactory::run(const QString &fillSource, KisView2 *view)
         painter.end();
         actionName = i18n("Fill with Pattern");
     } else if (fillSource == "bg") {
-        filled->setDefaultPixel(view->resourceProvider()->bgColor().data());
+        KoColor color(node->paintDevice()->colorSpace());
+        color.fromKoColor(view->resourceProvider()->bgColor());
+        filled->setDefaultPixel(color.data());
         actionName = i18n("Fill with Background Color");
     } else if (fillSource == "fg") {
-        filled->setDefaultPixel(view->resourceProvider()->fgColor().data());
+        KoColor color(node->paintDevice()->colorSpace());
+        color.fromKoColor(view->resourceProvider()->fgColor());
+        filled->setDefaultPixel(color.data());
         actionName = i18n("Fill with Foreground Color");
     }
 

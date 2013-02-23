@@ -125,16 +125,19 @@ private:
     int m_newOpacity;
 
     QVector<KisAction*> m_actions;
-    KAction* m_newPainterLayerAction;
-    KAction* m_newGroupLayerAction;
-    KAction* m_newCloneLayerAction;
-    KAction* m_newShapeLayerAction;
-    KAction* m_newAdjustmentLayerAction;
-    KAction* m_newGeneratorLayerAction;
-    KAction* m_newTransparencyMaskAction;
-    KAction* m_newEffectMaskAction;
-    KAction* m_newSelectionMaskAction;
-    KAction* m_selectOpaque;
+    KisAction* m_removeAction;
+    KisAction* m_dulicateAction;
+    KisAction* m_propertiesAction;
+    KisAction* m_newPainterLayerAction;
+    KisAction* m_newGroupLayerAction;
+    KisAction* m_newCloneLayerAction;
+    KisAction* m_newShapeLayerAction;
+    KisAction* m_newAdjustmentLayerAction;
+    KisAction* m_newGeneratorLayerAction;
+    KisAction* m_newTransparencyMaskAction;
+    KisAction* m_newEffectMaskAction;
+    KisAction* m_newSelectionMaskAction;
+    KisAction* m_selectOpaque;
 
 };
 

@@ -18,6 +18,7 @@
 #include "kis_brush_server.h"
 
 #include <QDir>
+#include <QApplication>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -145,6 +146,10 @@ KisBrushServer::KisBrushServer()
     m_brushServer = new BrushResourceServer();
     m_brushThread = new KoResourceLoaderThread(m_brushServer);
     m_brushThread->start();
+
+    if (qApp->applicationName().toLower().contains("test")) {
+        m_brushThread->wait();
+    }
 
     connect(KisResourceServerProvider::instance(), SIGNAL(notifyBrushBlacklistCleanup()),
             this, SLOT(slotRemoveBlacklistedResources()));

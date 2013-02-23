@@ -81,6 +81,19 @@ public:
 
     void cancel() { m_cancelled = true; }
 
+    QStringList getFileNames()
+    {
+        QStringList extensionList = m_extensions.split(':');
+        QStringList fileNames;
+
+        foreach (const QString &extension, extensionList) {
+            fileNames += KGlobal::mainComponent().dirs()->findAllResources(type().toLatin1(), extension, KStandardDirs::Recursive | KStandardDirs::NoDuplicates);
+
+        }
+        return fileNames;
+    }
+
+
 private:
     QString m_type;
     QString m_extensions;

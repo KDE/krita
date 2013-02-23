@@ -111,7 +111,7 @@ KoResourceLoaderThread::KoResourceLoaderThread(KoResourceServerBase * server)
     : QThread()
     , m_server(server)
 {
-    m_fileNames = getFileNames(m_server->extensions());
+    m_fileNames = m_server->getFileNames();
     QStringList fileNames = m_server->blackListedFiles();
 
     if (!fileNames.isEmpty()) {
@@ -140,17 +140,6 @@ void KoResourceLoaderThread::barrier()
     }
 }
 
-QStringList KoResourceLoaderThread::getFileNames( const QString & extensions)
-{
-    QStringList extensionList = extensions.split(':');
-    QStringList fileNames;
-
-    foreach (const QString &extension, extensionList) {
-        fileNames += KGlobal::mainComponent().dirs()->findAllResources(m_server->type().toLatin1(), extension, KStandardDirs::Recursive | KStandardDirs::NoDuplicates);
-
-    }
-    return fileNames;
-}
 
 struct KoResourceServerProvider::Private
 {

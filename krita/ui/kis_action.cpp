@@ -66,3 +66,7 @@ KisAction::ActivationConditions KisAction::activationConditions()
     return d->conditions;
 }
 
+void KisAction::setActionEnabled(bool enabled)
+{
+    setEnabled(enabled);
+}

@@ -124,6 +124,7 @@ private:
     QTimer m_delayTimer;
     int m_newOpacity;
 
+    QVector<KisAction*> m_actions;
     KAction* m_newPainterLayerAction;
     KAction* m_newGroupLayerAction;
     KAction* m_newCloneLayerAction;

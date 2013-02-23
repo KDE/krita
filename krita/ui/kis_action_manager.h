@@ -21,8 +21,6 @@
 #define KIS_ACTION_MANAGER_H
 
 #include <krita_export.h>
-#include <kis_paint_device.h>
-#include <kis_layer.h>
 
 class KActionCollection;
 class KisView2;
@@ -36,6 +34,9 @@ public:
     virtual ~KisActionManager();
 
     void addAction(const QString& name, KisAction* action, KActionCollection* actionCollection);
+    void addAction(KisAction* action);
+    void takeAction(KisAction* action);
+
     KisAction *actionByName(const QString &name) const;
 
     void updateGUI();

@@ -80,6 +80,21 @@
 
 #include "ui_wdglayerbox.h"
 
+class ButtonAction : public KisAction
+{
+public:
+    ButtonAction(QAbstractButton* button, QObject* parent) : KisAction(parent) , m_button(button)
+    {
+        connect(m_button, SIGNAL(clicked()), this, SLOT(trigger()));
+    }
+
+    virtual void setActionEnabled(bool enabled) {
+        KisAction::setActionEnabled(enabled);
+        m_button->setEnabled(enabled);
+    }
+private:
+    QAbstractButton* m_button;
+};
 
 KisLayerBox::KisLayerBox()
         : QDockWidget(i18n("Layers"))
@@ -151,16 +166,39 @@ KisLayerBox::KisLayerBox()
     m_wdgLayerBox->bnDuplicate->setIcon(koIcon("edit-copy"));
     m_wdgLayerBox->bnDuplicate->setIconSize(QSize(22, 22));
 
-    connect(m_wdgLayerBox->bnDelete, SIGNAL(clicked()), SLOT(slotRmClicked()));
+    ButtonAction * action  = new ButtonAction(m_wdgLayerBox->bnDelete, this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
+    action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotRmClicked()));
+    m_actions.append(action);
+
+    action  = new ButtonAction(m_wdgLayerBox->bnLeft, this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
+    action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotLeftClicked()));
+    m_actions.append(action);
+
+    action  = new ButtonAction(m_wdgLayerBox->bnRight, this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
+    action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotRightClicked()));
+    m_actions.append(action);
+
+    action  = new ButtonAction(m_wdgLayerBox->bnProperties, this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
+    action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotPropertiesClicked()));
+    m_actions.append(action);
+
+    action  = new ButtonAction(m_wdgLayerBox->bnDuplicate, this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotDuplicateClicked()));
+    m_actions.append(action);
+
     // NOTE: this is _not_ a mistake. The layerbox shows the layers in the reverse order
     connect(m_wdgLayerBox->bnRaise, SIGNAL(clicked()), SLOT(slotLowerClicked()));
     connect(m_wdgLayerBox->bnLower, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
     // END NOTE
-    connect(m_wdgLayerBox->bnLeft, SIGNAL(clicked()), SLOT(slotLeftClicked()));
-    connect(m_wdgLayerBox->bnRight, SIGNAL(clicked()), SLOT(slotRightClicked()));
-
-    connect(m_wdgLayerBox->bnProperties, SIGNAL(clicked()), SLOT(slotPropertiesClicked()));
-    connect(m_wdgLayerBox->bnDuplicate, SIGNAL(clicked()), SLOT(slotDuplicateClicked()));
 
     connect(m_wdgLayerBox->doubleOpacity, SIGNAL(valueChanged(qreal)), SLOT(slotOpacitySliderMoved(qreal)));
     connect(&m_delayTimer, SIGNAL(timeout()), SLOT(slotOpacityChanged()));
@@ -308,6 +346,10 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         m_wdgLayerBox->listLayers->expandAll();
         expandNodesRecursively(m_image->rootLayer(), m_nodeModel, m_wdgLayerBox->listLayers);
         m_wdgLayerBox->listLayers->scrollToBottom();
+
+        foreach(KisAction *action, m_actions) {
+            m_canvas->view()->actionManager()->addAction(action);
+        }
     }
 
 }
@@ -315,6 +357,11 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
 
 void KisLayerBox::unsetCanvas()
 {
+    if (m_canvas) {
+        foreach(KisAction *action, m_actions) {
+            m_canvas->view()->actionManager()->takeAction(action);
+        }
+    }
     setCanvas(0);
 }
 
@@ -329,20 +376,15 @@ void KisLayerBox::updateUI()
 
     KisNodeSP active = m_nodeManager->activeNode();
 
-    m_wdgLayerBox->bnDelete->setEnabled(active);
-    m_wdgLayerBox->bnRaise->setEnabled(active && (active->nextSibling()
+    m_wdgLayerBox->bnRaise->setEnabled(active && (active->nextSibling() && active->isEditable()
                                        || (active->parent() && active->parent() != m_image->root())));
-    m_wdgLayerBox->bnLower->setEnabled(active && (active->prevSibling()
+    m_wdgLayerBox->bnLower->setEnabled(active && (active->prevSibling() && active->isEditable()
                                        || (active->parent() && active->parent() != m_image->root())));
-    m_wdgLayerBox->bnLeft->setEnabled(active);
-    m_wdgLayerBox->bnRight->setEnabled(active);
-    m_wdgLayerBox->bnDuplicate->setEnabled(active);
-    m_wdgLayerBox->bnProperties->setEnabled(active);
 
-    m_wdgLayerBox->doubleOpacity->setEnabled(active);
+    m_wdgLayerBox->doubleOpacity->setEnabled(active && active->isEditable());
     m_wdgLayerBox->doubleOpacity->setRange(0, 100, 0);
 
-    m_wdgLayerBox->cmbComposite->setEnabled(active);
+    m_wdgLayerBox->cmbComposite->setEnabled(active && active->isEditable());
 
     if (active) {
         if (m_nodeManager->activePaintDevice()) {

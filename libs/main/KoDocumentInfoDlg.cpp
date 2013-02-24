@@ -36,11 +36,6 @@
 #include <kglobal.h>
 #include <kmessagebox.h>
 
-#ifdef KDEPIMLIBS_FOUND
-#include <kabc/addressee.h>
-#include <kabc/stdaddressbook.h>
-#endif
-
 #include <KoEncryptionChecker.h>
 
 #include <QLabel>

@@ -24,11 +24,9 @@
 
 // contacts
 #ifdef KDEPIMLIBS_FOUND
-#include <kabc/addressee.h>
-#include <kabc/stdaddressbook.h>
-#include <kabc/addressbook.h>
-#include <kabc/phonenumber.h>
-#include <kabc/vcardconverter.h>
+namespace KABC {
+    class Addressee;
+}
 #endif
 
 #include "ui_KoRdfFoaFEditWidget.h"

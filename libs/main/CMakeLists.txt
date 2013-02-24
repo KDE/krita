@@ -2,11 +2,6 @@ add_subdirectory( tests )
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
-if (KdepimLibs_FOUND)
-   include_directories(${KDEPIMLIBS_INCLUDE_DIR})
-   add_definitions(-DKDEPIMLIBS_FOUND)
-endif (KdepimLibs_FOUND)
-
 if (APPLE)
     find_library(FOUNDATION_LIBRARY Foundation)
 endif (APPLE)
@@ -123,12 +118,9 @@ kde4_add_library(komain SHARED ${komain_LIB_SRCS})
 
 target_link_libraries(komain ${extra_libs}
     ${KDE4_KPARTS_LIBS}
-    ${KDE4_KABC_LIBS}
     ${KDE4_KFILE_LIBRARY}
-    ${KDE4_KCAL_LIBS}
     kowidgets
     textlayout
-    
 )
 
 if( KActivities_FOUND )

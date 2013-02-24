@@ -24,19 +24,13 @@
 
 // calendars
 #ifdef KDEPIMLIBS_FOUND
-#include <kcal/calendarresources.h>
-#include <kcal/calendarlocal.h>
-#include <kcal/vcalformat.h>
-#include <ksystemtimezone.h>
-#include <KConfigGroup>
-#endif
-
-#include <ui_KoRdfCalendarEventEditWidget.h>
-
 namespace KCal
 {
     class Event;
 }
+#endif
+
+#include <ui_KoRdfCalendarEventEditWidget.h>
 
 /**
  * @short Calendar event information from Rdf (ical/vevent).
@@ -85,8 +79,10 @@ public:
     KDateTime end() const;
 
 private:
+#ifdef KDEPIMLIBS_FOUND
     KCal::Event *toKEvent() const;
     void fromKEvent(KCal::Event *e);
+#endif
 private:
     Soprano::Node m_linkSubject;
     QString m_location;

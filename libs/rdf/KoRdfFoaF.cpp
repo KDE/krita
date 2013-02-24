@@ -27,6 +27,14 @@
 #include <kdebug.h>
 #include <kfiledialog.h>
 
+#ifdef KDEPIMLIBS_FOUND
+#include <kabc/addressee.h>
+#include <kabc/stdaddressbook.h>
+#include <kabc/addressbook.h>
+#include <kabc/phonenumber.h>
+#include <kabc/vcardconverter.h>
+#endif
+
 using namespace Soprano;
 
 

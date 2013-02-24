@@ -454,5 +454,9 @@ void KoRdfCalendarEvent::importFromData(const QByteArray &ba, KoDocumentRdf *_rd
     }
     delete cal;
     importFromDataComplete(ba, documentRdf(), host);
+#else
+    Q_UNUSED(ba);
+    Q_UNUSED(_rdf);
+    Q_UNUSED(host);
 #endif
 }

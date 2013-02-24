@@ -281,7 +281,7 @@ void TestDocumentLayout::testAdvancedLineSpacing()
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     // qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (77.6 + qMax(12 * 1.2, 5.0))) < ROUNDING); // 92
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (77.6 + qMax(qreal(12 * 1.2), qreal(5.0)))) < ROUNDING); // 92
     block = block.next(); // line6
     QVERIFY(block.isValid());
     blockLayout = block.layout();

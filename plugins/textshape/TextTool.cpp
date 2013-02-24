@@ -2072,7 +2072,7 @@ QList<QWidget *> TextTool::createOptionWidgets()
     SimpleTableWidget *stw = new SimpleTableWidget(this, 0);
     SimpleInsertWidget *siw = new SimpleInsertWidget(this, 0);
 
-/* We do not use these for now. Let's see if they become usefull at a certain point in time. If not, we can remove the whole chain (SimpleCharWidget, SimpleParWidget, DockerStyleComboModel)
+/* We do not use these for now. Let's see if they become useful at a certain point in time. If not, we can remove the whole chain (SimpleCharWidget, SimpleParWidget, DockerStyleComboModel)
     if (m_textShapeData && KoTextDocument(m_textShapeData->document()).styleManager()) {
         scw->setInitialUsedStyles(KoTextDocument(m_textShapeData->document()).styleManager()->usedCharacterStyles());
         spw->setInitialUsedStyles(KoTextDocument(m_textShapeData->document()).styleManager()->usedParagraphStyles());

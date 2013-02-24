@@ -360,7 +360,7 @@ void Engraver::engraveBar(Bar* bar, qreal sizeFactor)
 
     QVarLengthArray<QList<StaffElement*> > staffElements(staffCount);
 
-    for (int st = 0, p = 0; p < sheet->partCount(); p++) {
+    for (int st = 0, p = 0; p < sheet->partCount(); ++p) {
         Part* part = sheet->part(p);
         for (int s = 0; s < part->staffCount(); s++, st++) {
             Staff* staff = part->staff(s);

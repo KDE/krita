@@ -99,7 +99,7 @@ class LabeledNoteWidget : public QWidget
 {
     Q_OBJECT
 public:
-    LabeledNoteWidget(KAction *action);
+    explicit LabeledNoteWidget(KAction *action);
     KAction *m_action;
     QLineEdit *m_lineEdit;
 

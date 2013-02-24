@@ -70,7 +70,7 @@ public:
 public:
     IccColorProfile(const KoRGBChromaticities& chromacities, qreal gamma, const QString &name = QString());
     explicit IccColorProfile(const QString &fileName = QString());
-    IccColorProfile(const QByteArray& rawData);
+    explicit IccColorProfile(const QByteArray& rawData);
     IccColorProfile(const IccColorProfile& rhs);
     virtual ~IccColorProfile();
 

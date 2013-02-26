@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Change case plugin
 Name[bg]=Приставка за смяна на регистъра
+Name[bs]=Plugin za Promjenu Slučaja
 Name[ca]=Connector de canvi de caixa
 Name[ca@valencia]=Connector de canvi de caixa
 Name[cs]=Modul pro změnu velikosti písmen
@@ -30,6 +31,7 @@ Name[pt]='Plugin' de mudança de capitalização
 Name[pt_BR]=Plugin de mudança de capitalização
 Name[ru]=Модуль изменения регистра
 Name[sk]=Plugin zmeny veľkosti písmen
+Name[sl]=Vstavek za spremembo velikosti črk
 Name[sv]=Insticksprogram för skiftlägesändring
 Name[tr]=Büyük küçük harf değiştirme eklentisi
 Name[uk]=Додаток зміни регістру

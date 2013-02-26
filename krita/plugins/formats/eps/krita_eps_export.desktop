@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Krita Encapsulated PostScript Export Filter
 Name[bg]=Филтър за изнасяне от Krita във вграден PostScript
+Name[bs]=Krita EPS izvozni filter
 Name[ca]=Filtre d'exportació de PostScript encapsulat per al Krita
 Name[ca@valencia]=Filtre d'exportació de PostScript encapsulat per al Krita
 Name[cs]=Exportní filtr do formátu Encapsulated PostScript
@@ -16,6 +17,7 @@ Name[gl]=Filtro para Krita de exportación de PostScript encapsulado
 Name[it]=Filtro di esportazione Encapsulated PostScript per Krita
 Name[ja]=Krita Encapsulated PostScript エクスポートフィルタ
 Name[kk]=Krita -> Encapsulated PostScript экспорт сүзгісі
+Name[lt]=Krita uždaro PostScript eksportavimo filtras
 Name[nb]=Krita eksportfilter for EPS – Encapsulated PostScript
 Name[nds]=Inbett PostScript-Exportfilter för Krita
 Name[nl]=Ingekapselde Postscript-exportfilter voor Krita

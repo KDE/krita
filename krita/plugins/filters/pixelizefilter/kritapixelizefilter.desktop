@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Pixelize Filter
 Name[bg]=Филтър пикселизиране
+Name[bs]=Filter za pikseliziranje
 Name[ca]=Filtre de pixelació
 Name[ca@valencia]=Filtre de pixelació
 Name[cs]=Filtr pixelizace
@@ -48,6 +49,7 @@ Name[zh_CN]=像素化滤镜
 Name[zh_TW]=像素化過濾器
 Comment=Pixelize filter
 Comment[bg]=Филтър пикселизиране
+Comment[bs]=Filter za pikseliziranje
 Comment[ca]=Filtre de pixelació
 Comment[ca@valencia]=Filtre de pixelació
 Comment[cs]=Filtr pixelizace

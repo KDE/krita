@@ -1,6 +1,8 @@
 [Desktop Entry]
 Icon=
 Name=Krita QML Export Filter
+Name[sk]=Exportný filter Krita QML
+Name[uk]=Фільтр експорту QML для Krita
 X-KDE-ServiceTypes=CalligraFilter
 Type=Service
 X-KDE-Export=text/x-qml

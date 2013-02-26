@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Phong Bumpmap Filter
+Name[bs]=Filter za Phong Grbavu mapu
 Name[ca]=Filtre de mapa de relleu Phong
 Name[ca@valencia]=Filtre de mapa de relleu Phong
 Name[da]=Phong Bumpmap-filter
@@ -29,6 +30,7 @@ Name[wa]=Passete Bumpmap Phong
 Name[x-test]=xxPhong Bumpmap Filterxx
 Name[zh_TW]=Phong Bumpmap 過濾器
 Comment=Phong Bumpmap filter
+Comment[bs]=Filter za Phong Grbavu mapu
 Comment[ca]=Filtre de mapa de relleu Phong
 Comment[ca@valencia]=Filtre de mapa de relleu Phong
 Comment[da]=Phong Bumpmap-filter

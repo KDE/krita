@@ -1,15 +1,23 @@
 [Desktop Entry]
 Name=Texture Templates
+Name[da]=Teksturskabeloner
+Name[de]=Textur-Vorlagen
 Name[el]=Πρότυπα υφής
+Name[es]=Plantillas de textura
 Name[et]=Tekstuurimallid
 Name[fi]=Tekstuuripohjat
 Name[fr]=Modèles de textures
+Name[gl]=Modelos de texturas
 Name[hu]=Textúrasablonok
 Name[it]=Modelli di trama
+Name[kk]=Текстура үлгілері
+Name[nb]=Tekstur-malrt
 Name[nl]=Textuur-sjablonen
+Name[pl]=Szablony teksturowe
 Name[pt]=Modelos de Texturas
 Name[pt_BR]=Modelos de textura
 Name[sk]=Šablóny textúr
+Name[sl]=Predloge tekstur
 Name[sv]=Strukturmallar
 Name[uk]=Шаблони текстур
 Name[x-test]=xxTexture Templatesxx

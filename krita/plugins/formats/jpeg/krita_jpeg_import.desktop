@@ -2,6 +2,7 @@
 Icon=
 Name=Krita JPEG Import Filter
 Name[bg]=Филтър за внасяне от JPEG в Krita
+Name[bs]=Krita JPEG unosni Filter
 Name[ca]=Filtre d'importació JPEG per al Krita
 Name[ca@valencia]=Filtre d'importació JPEG per al Krita
 Name[cs]=Importní filtr formátu JPEG pro Kritu
@@ -24,6 +25,7 @@ Name[hu]=Krita JPEG importszűrő
 Name[it]=Filtro di importazione JPEG per Krita
 Name[ja]=Krita JPEG インポートフィルタ
 Name[kk]=JPEG -> Krita импорт сүзгісі
+Name[lt]=Krita JPEG importavimo filtras
 Name[lv]=Krita JPEG importa filtrs
 Name[nb]=JPEG-importfilter for Krita
 Name[nds]=JPEG-Importfilter för Krita

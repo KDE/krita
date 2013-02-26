@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Flipbook Docker
-Name[x-test]=xxFlipbook Dockerxx
+Name[sk]=Flipbook Docker
+Name[uk]=Панель кінеографа
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritaflipbookdocker

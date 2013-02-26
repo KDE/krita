@@ -1,7 +1,8 @@
 [Desktop Entry]
 Name=Calligra Docker Plugin
+Name[bs]=Calligra doker plugin
 Name[ca]=Connector acoblador del Calligra
-Name[ca@valencia]=Connector amarrador del Calligra
+Name[ca@valencia]=Connector acoblador del Calligra
 Name[cs]=Modul doků Calligra
 Name[da]=Dokker-plugin til Calligra
 Name[de]=Calligra Docker-Modul
@@ -31,6 +32,7 @@ Name[zh_TW]=Calligra 嵌入外掛程式
 Type=ServiceType
 X-KDE-ServiceType=Calligra/Dock
 Comment=A plugin that contains a so called 'dockwidget'
+Comment[bs]=Plugin koji sadrzi "sprave za dokiranje"
 Comment[ca]=Un connector que en conté un anomenat «dockwidget»
 Comment[ca@valencia]=Un connector que en conté un anomenat «dockwidget»
 Comment[da]=Et plugin som indeholder en såkaldt 'dock-kontrol'

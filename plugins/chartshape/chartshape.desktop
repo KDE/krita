@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Chart Shape
 Name[bg]=Форма на диаграмата
+Name[bs]=Oblik dijagrama
 Name[ca]=Forma del diagrama
 Name[ca@valencia]=Forma del diagrama
 Name[cs]=Tvar grafu
@@ -24,6 +25,7 @@ Name[it]=Forma di grafico
 Name[ja]=グラフシェイプ
 Name[kk]=Диаграмма қалыпы
 Name[lv]=Diagrammas figūra
+Name[mr]=चार्ट आकार
 Name[nb]=Diagramform
 Name[nds]=Form "Diagramm"
 Name[ne]=चित्रपट आकार
@@ -33,7 +35,7 @@ Name[pt]=Forma do Gráfico
 Name[pt_BR]=Forma do gráfico
 Name[ru]=Диаграмма
 Name[sk]=Tvar grafu
-Name[sl]=Oblika grafikona
+Name[sl]=Oblika za grafikone
 Name[sv]=Diagramform
 Name[tg]=Шакли диаграмма
 Name[tr]=Çizelge Şekil

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Noise Filter
 Name[bg]=Филтър за шум
+Name[bs]=Filter za šum
 Name[ca]=Filtre de soroll
 Name[ca@valencia]=Filtre de soroll
 Name[cs]=Šumový filtr
@@ -47,6 +48,7 @@ Name[zh_CN]=噪音滤镜
 Name[zh_TW]=雜訊過濾器
 Comment=Add noise to an image
 Comment[bg]=Добавяне на шум към изображение
+Comment[bs]=Dodaj Snijeg na Sliku
 Comment[ca]=Afegeix soroll a una imatge
 Comment[ca@valencia]=Afig soroll a una imatge
 Comment[cs]=Přidat do obrázku šum

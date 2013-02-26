@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=SpecificColorSelector
+Name[bs]=SelektorSpecifičnieBoje
 Name[ca]=SelectorDeColorEspecific
 Name[ca@valencia]=SelectorDeColorEspecific
 Name[da]=SpecifikFarveVælger
@@ -33,6 +34,7 @@ Name[wa]=Tchoezixheu specifike di coleur
 Name[x-test]=xxSpecificColorSelectorxx
 Name[zh_TW]=指定顏色選擇器
 Comment=SpecificColorSelector
+Comment[bs]=SelektorSpecifičneBoje
 Comment[ca]=SelectorDeColorEspecific
 Comment[ca@valencia]=SelectorDeColorEspecific
 Comment[da]=SpecifikFarveVælger

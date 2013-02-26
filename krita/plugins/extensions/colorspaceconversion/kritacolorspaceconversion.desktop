@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Colorspace Conversion
 Name[bg]=Цветово обръщане
+Name[bs]=Pretvaranje prostora boja
 Name[ca]=Conversió d'espai de color
 Name[ca@valencia]=Conversió d'espai de color
 Name[cs]=Převod prostoru barev
@@ -23,7 +24,9 @@ Name[is]=Litasvæðis umbreyting
 Name[it]=Conversione dello spazio dei colori
 Name[ja]=カラースペース変換
 Name[kk]=Түстер кеңістігін түрлендіру
+Name[lt]=Spalvų schemos konvertavimas
 Name[lv]=Krāsu telpas mainīšana
+Name[mr]=रंगाच्या जागेचा बदल
 Name[nb]=Fargerom-konvertering
 Name[nds]=Klörenruum-Ümwanneln
 Name[ne]=रङ खालीस्थान रुपान्तरण

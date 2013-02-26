@@ -1,8 +1,9 @@
 [Desktop Entry]
 Name=Default Dockers
 Name[bg]=Канали по подразбиране
+Name[bs]=Zadani Dokeri
 Name[ca]=Acobladors per defecte
-Name[ca@valencia]=Amarradors per defecte
+Name[ca@valencia]=Acobladors per defecte
 Name[cs]=Výchozí doky
 Name[da]=Standard-dokkere
 Name[de]=Standarddocker
@@ -25,6 +26,7 @@ Name[pt]=Áreas Acopláveis Predefinidas
 Name[pt_BR]=Áreas de Ferramentas Padrão
 Name[ru]=Панели по-умолчанию
 Name[sk]=Štandardné dockery
+Name[sl]=Privzeta sidrišča
 Name[sv]=Standarddockningsfönster
 Name[uk]=Типові панелі швартування
 Name[wa]=Prémetowès bårs di wårdaedje

@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=Composition Docker
+Name[bs]=Kompozicijski doker
 Name[ca]=Acoblador de composició
+Name[ca@valencia]=Acoblador de composició
 Name[da]=Kompositionsdokker
 Name[el]=Εργαλείο προσάρτησης σύνθεσης
 Name[es]=Acoplable de composición
@@ -10,11 +12,13 @@ Name[gl]=Doca de composición
 Name[hu]=Összetétel dokkoló
 Name[it]=Gancio di composizione
 Name[kk]=Құрылым докері
+Name[nb]=Komposisjonsdokker
 Name[nl]=Vaszetter van compositie
 Name[pl]=Dokowanie kompozycji
 Name[pt]=Área de Composição
 Name[pt_BR]=Área de composição
 Name[sk]=Kompozičný docker
+Name[sl]=Sidrišče za kompozicijo
 Name[sv]=Kompositionsdockningsfönster
 Name[uk]=Панель композиції
 Name[x-test]=xxComposition Dockerxx

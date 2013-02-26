@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Autocorrection plugin
 Name[bg]=Приставка за автокорекция
+Name[bs]=Plugin za Automatske Popravke
 Name[ca]=Connector d'autocorrecció
 Name[ca@valencia]=Connector d'autocorrecció
 Name[cs]=Modul pro automatické opravy
@@ -26,11 +27,12 @@ Name[nb]=Programtillegg for autorettelse
 Name[nds]=Moduul "Automaatsche Korrektuur"
 Name[ne]=स्वत: सुधार गर्ने प्लगइन
 Name[nl]=Autocorrectieplug-in
-Name[pl]=Wtyczka automatycznego poprawiania
+Name[pl]=Wtyczka samoczynnego poprawiania
 Name[pt]='Plugin' de correcção automática
 Name[pt_BR]=Plugin de correção automática
 Name[ru]=Модуль автоматического исправления
 Name[sk]=Plugin automatických opráv
+Name[sl]=Vstavek za samodejno popravljanje
 Name[sv]=Insticksprogram för automatisk korrigering
 Name[tr]=Otomatik düzeltme eklentisi
 Name[uk]=Додаток автовиправлення

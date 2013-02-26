@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Invert Filter
 Name[bg]=Инвертиращ филтър
+Name[bs]=Filter za inverziju
 Name[ca]=Inverteix filtre
 Name[ca@valencia]=Inverteix filtre
 Name[cy]=Hidlen Wrthdroi
@@ -45,6 +46,7 @@ Name[zh_CN]=反转过滤器
 Name[zh_TW]=倒轉過濾器
 Comment=Invert the colors of an image
 Comment[bg]=Инвертиране цветовете в изображението
+Comment[bs]=Izvrši inverziju boja na slici
 Comment[ca]=Inverteix els colors d'una imatge
 Comment[ca@valencia]=Inverteix els colors d'una imatge
 Comment[cy]=Gwrthdroi lliwiau delwedd

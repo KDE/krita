@@ -111,7 +111,7 @@ void KoFormulaTool::activate(ToolActivation toolActivation, const QSet<KoShape*>
         m_formulaEditor = new FormulaEditor( m_formulaShape->formulaData());
     }
     connect(m_formulaShape->formulaData(), SIGNAL(dataChanged(FormulaCommand*,bool)), this, SLOT(updateCursor(FormulaCommand*,bool)));
-    connect(m_signalMapper, SIGNAL(mapped(const QString&)), this, SLOT(insert(const QString&)));
+    connect(m_signalMapper, SIGNAL(mapped(QString)), this, SLOT(insert(QString)));
     //Only for debugging:
     connect(action("write_elementTree"),SIGNAL(triggered(bool)), m_formulaShape->formulaData(), SLOT(writeElementTree()));
 }
@@ -483,7 +483,7 @@ void KoFormulaTool::addTemplateAction(const QString &caption, const QString &nam
     m_signalMapper->setMapping(action, data);
     addAction( name , action );
     action->setIcon(KIcon(QLatin1String(iconName)));
-    connect( action, SIGNAL (triggered()), m_signalMapper, SLOT (map()));
+    connect( action, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
 }
 
 

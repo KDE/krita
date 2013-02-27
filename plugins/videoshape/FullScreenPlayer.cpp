@@ -108,8 +108,8 @@ FullScreenPlayer::FullScreenPlayer(const QUrl &url)
 
     m_mediaObject->setCurrentSource(url);
     connect(m_mediaObject, SIGNAL(finished()), this, SLOT(stop()));
-    connect(m_mediaObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
-            this, SLOT(playStateChanged(Phonon::State, Phonon::State)));
+    connect(m_mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)),
+            this, SLOT(playStateChanged(Phonon::State,Phonon::State)));
     connect(m_mediaObject, SIGNAL(tick(qint64)), this, SLOT(updatePlaybackTime(qint64)));
 
     play();

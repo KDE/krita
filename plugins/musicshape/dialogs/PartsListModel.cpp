@@ -25,8 +25,8 @@ using namespace MusicCore;
 PartsListModel::PartsListModel(Sheet* sheet)
     : m_sheet(sheet)
 {
-    connect(m_sheet, SIGNAL(partAdded(int, MusicCore::Part*)), this, SLOT(partAdded(int, MusicCore::Part*)));
-    connect(m_sheet, SIGNAL(partRemoved(int, MusicCore::Part*)), this, SLOT(partRemoved(int, MusicCore::Part*)));
+    connect(m_sheet, SIGNAL(partAdded(int,MusicCore::Part*)), this, SLOT(partAdded(int,MusicCore::Part*)));
+    connect(m_sheet, SIGNAL(partRemoved(int,MusicCore::Part*)), this, SLOT(partRemoved(int,MusicCore::Part*)));
 }
 
 int PartsListModel::rowCount(const QModelIndex& parent) const

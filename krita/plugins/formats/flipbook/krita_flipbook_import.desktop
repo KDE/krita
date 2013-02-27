@@ -2,6 +2,7 @@
 Name=Krita Flipbook Import Filter
 Name[sk]=Importný filter Krita Flipbook
 Name[uk]=Фільтр імпорту кінеографів для Krita
+Name[x-test]=xxKrita Flipbook Import Filterxx
 X-KDE-Export=application/x-krita
 X-KDE-ServiceTypes=CalligraFilter
 Type=Service

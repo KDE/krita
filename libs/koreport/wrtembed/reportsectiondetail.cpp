@@ -98,7 +98,7 @@ void ReportSectionDetail::initFromXML(QDomNode & section)
         } else if (n == "report:group") {
             ReportSectionDetailGroup * rsdg = new ReportSectionDetailGroup("unnamed", this, this);
             rsdg->initFromXML( node.toElement() );
-            insertSection(groupSectionCount(), rsdg);
+            insertGroupSection(groupSectionCount(), rsdg);
         } else if (n == "report:section" && node.toElement().attribute("report:section-type") == "detail") {
             kDebug() << "Creating detail section";
             m_detail->initFromXML(node);
@@ -125,7 +125,7 @@ ReportSectionDetailGroup * ReportSectionDetail::groupSection(int i) const
     return groupList.at(i);
 }
 
-void ReportSectionDetail::insertSection(int idx, ReportSectionDetailGroup * rsd)
+void ReportSectionDetail::insertGroupSection(int idx, ReportSectionDetailGroup * rsd)
 {
     groupList.insert(idx, rsd);
 
@@ -154,18 +154,18 @@ void ReportSectionDetail::insertSection(int idx, ReportSectionDetailGroup * rsd)
     adjustSize();
 }
 
-int ReportSectionDetail::indexOfSection(const QString & name) const
+int ReportSectionDetail::indexOfGroupSection(const QString & column) const
 {
     // find the item by its name
     ReportSectionDetailGroup * rsd = 0;
     for (uint i = 0; i < (uint)groupList.count(); i++) {
         rsd = groupList.at(i);
-        if (name == rsd->column()) return i;
+        if (column == rsd->column()) return i;
     }
     return -1;
 }
 
-void ReportSectionDetail::removeSection(int idx, bool del)
+void ReportSectionDetail::removeGroupSection(int idx, bool del)
 {
     ReportSectionDetailGroup * rsd = groupList.at(idx);
 

@@ -54,9 +54,9 @@ public:
 
     int groupSectionCount() const;
     ReportSectionDetailGroup * groupSection(int i) const;
-    void insertSection(int idx, ReportSectionDetailGroup * rsd);
-    int indexOfSection(const QString & name) const;
-    void removeSection(int idx, bool del = false);
+    void insertGroupSection(int idx, ReportSectionDetailGroup * rsd);
+    int indexOfGroupSection(const QString & column) const;
+    void removeGroupSection(int idx, bool del = false);
     virtual QSize sizeHint() const;
 
     void setSectionCursor(const QCursor&);

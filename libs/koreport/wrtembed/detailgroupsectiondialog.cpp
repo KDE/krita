@@ -19,21 +19,23 @@
 
 #include "detailgroupsectiondialog.h"
 
+#include <KLocalizedString>
+
 /*
- *  Constructs a DetailGroupSectionDialog as a child of 'parent', with the
- *  name 'name' and widget flags set to 'f'.
+ *  Constructs a DetailGroupSectionDialog as a child of 'parent'.
  *
  *  The dialog will by default be modeless, unless you set 'modal' to
  *  true to construct a modal dialog.
  */
-DetailGroupSectionDialog::DetailGroupSectionDialog(QWidget* parent, Qt::WindowFlags fl)
-        : QDialog(parent, fl)
+DetailGroupSectionDialog::DetailGroupSectionDialog(QWidget* parent)
+  : KDialog(parent)
 {
-    setupUi(this);
+    QWidget *widget = new QWidget(this);
+    setupUi(widget);
+    setMainWidget(widget);
 
-    // signals and slots connections
-    connect(btnOk, SIGNAL(clicked()), this, SLOT(accept()));
-    connect(bntCancel, SIGNAL(clicked()), this, SLOT(reject()));
+    setButtons(Ok | Cancel);
+    setCaption(i18n("Group Section Editor"));
 }
 
 /*
@@ -43,13 +45,3 @@ DetailGroupSectionDialog::~DetailGroupSectionDialog()
 {
     // no need to delete child widgets, Qt does it all for us
 }
-
-/*
- *  Sets the strings of the subwidgets using the current
- *  language.
- */
-void DetailGroupSectionDialog::languageChange()
-{
-    retranslateUi(this);
-}
-

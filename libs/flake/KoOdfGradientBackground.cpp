@@ -18,20 +18,22 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QColor>
-#include <QImage>
-#include <qmath.h>
+#include "KoOdfGradientBackground.h"
 
-#include <KoOdfGradientBackground.h>
+#include "KoShapeBackground_p.h"
+#include "KoShapeSavingContext.h"
 
 #include <KoUnit.h>
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoGenStyles.h>
-#include <QPainter>
-#include "KoShapeSavingContext.h"
 #include <KoOdfLoadingContext.h>
-#include "KoShapeBackground_p.h"
+
+#include <QPainter>
+#include <QColor>
+#include <QImage>
+#include <qmath.h>
+
 
 class KoOdfGradientBackgroundPrivate : public KoShapeBackgroundPrivate
 {

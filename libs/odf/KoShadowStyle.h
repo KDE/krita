@@ -21,6 +21,8 @@
 #ifndef KOSHADOWSTYLE_H
 #define KOSHADOWSTYLE_H
 
+#include "koodf_export.h"
+
 #include <QColor>
 #include <QMetaType>
 #include <QPointF>

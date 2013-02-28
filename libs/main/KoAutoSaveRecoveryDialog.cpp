@@ -19,6 +19,11 @@
 
 #include "KoAutoSaveRecoveryDialog.h"
 
+#include <KoStore.h>
+
+#include <kwidgetitemdelegate.h>
+#include <klocale.h>
+
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QListView>
@@ -33,13 +38,7 @@
 #include <QStyledItemDelegate>
 #include <QPainter>
 #include <QCheckBox>
-#include <QLabel>
 #include <QDebug>
-
-#include <KoStore.h>
-
-#include <kwidgetitemdelegate.h>
-#include <klocale.h>
 
 
 struct FileItem {

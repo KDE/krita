@@ -24,12 +24,11 @@
 
 #include "KoShapeLoadingContext.h"
 #include "KoShape.h"
-#include <KoPathShape.h>
+#include "KoPathShape.h"
+#include "KoColorBackground.h"
 #include <KoOdfLoadingContext.h>
-#include <KoOdfWorkaround.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
-#include <KoColorBackground.h>
 #include <KoStyleStack.h>
 #include <KoUnit.h>
 

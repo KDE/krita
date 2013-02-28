@@ -2,7 +2,11 @@
 Icon=
 Name=Krita QML Export Filter
 Name[cs]=Exportní filtr do formátu QML pro Kritu
+Name[it]=Filtro di esportazione QML per Krita
+Name[nl]=QML-exportfilter voor Krita
+Name[pt]=Filtro de Exportação de QML para o Krita
 Name[sk]=Exportný filter Krita QML
+Name[sv]=Krita QML-exportfilter
 Name[uk]=Фільтр експорту QML для Krita
 Name[x-test]=xxKrita QML Export Filterxx
 X-KDE-ServiceTypes=CalligraFilter

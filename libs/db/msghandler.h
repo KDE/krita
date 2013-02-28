@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2013 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -70,30 +70,48 @@ public:
         m_enableMessages = enable;
     }
 
-    /*! Shows error message with \a title (it is not caption) and details. */
-    virtual void showErrorMessage(const QString &title,
-                                  const QString &details = QString()) = 0;
+    /*! Shows error message with \a msg message and \a details details. */
+    void showErrorMessage(const QString &msg, const QString &details = QString());
 
     /*! Shows error message with \a msg text. Existing error message from \a obj object
      is also copied, if present. */
-    virtual void showErrorMessage(KexiDB::Object *obj, const QString& msg = QString()) = 0;
+    void showErrorMessage(KexiDB::Object *obj, const QString& msg = QString());
 
     /*! Interactively asks a question. For GUI version, KMessageBox class is used.
      See KMessageBox documentation for explanation of the parameters.
      \a defaultResult is returned in case when no message handler is installed.
      \a message should be i18n'd string.
-     Value from KMessageBox::ButtonCode enum is returned.
-     Reimplement this. This implementation does nothing, just returns \a defaultResult. */
-    virtual int askQuestion(const QString& message,
-                            KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
-                            const KGuiItem &buttonYes = KStandardGuiItem::yes(),
-                            const KGuiItem &buttonNo = KStandardGuiItem::no(),
-                            const QString &dontShowAskAgainName = QString(),
-                            KMessageBox::Options options = KMessageBox::Notify);
+     Value from KMessageBox::ButtonCode enum is returned. */
+    int askQuestion(const QString& message,
+                    KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
+                    const KGuiItem &buttonYes = KStandardGuiItem::yes(),
+                    const KGuiItem &buttonNo = KStandardGuiItem::no(),
+                    const QString &dontShowAskAgainName = QString(),
+                    KMessageBox::Options options = KMessageBox::Notify);
+
+    /*! Redirects all messages for this handler to @a otherHandler.
+        Passing 0 removes redirection. Setting new redirection replaces previous. */
+    void redirectMessagesTo(MessageHandler *otherHandler);
 
 protected:
+    /*! @see showErrorMessage(). Implement this. */
+    virtual void showErrorMessageInternal(const QString &msg,
+                                          const QString &details = QString()) = 0;
+
+    /*! @see showErrorMessage(). Implement this. */
+    virtual void showErrorMessageInternal(KexiDB::Object *obj, const QString& msg = QString()) = 0;
+
+    /*! @see askQuestion(). Reimplement this, or just return @a defaultResult. */
+    virtual int askQuestionInternal(const QString& message,
+                                    KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
+                                    const KGuiItem &buttonYes = KStandardGuiItem::yes(),
+                                    const KGuiItem &buttonNo = KStandardGuiItem::no(),
+                                    const QString &dontShowAskAgainName = QString(),
+                                    KMessageBox::Options options = KMessageBox::Notify);
+
     QPointer<QWidget> m_messageHandlerParentWidget;
-    bool m_enableMessages : 1;
+    MessageHandler *m_messageHandlerProxy;
+    bool m_enableMessages;
 };
 
 }

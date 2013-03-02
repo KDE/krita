@@ -66,6 +66,13 @@ set(kowidgets_LIB_SRCS
     KoDockWidgetTitleBarButton.cpp
     KoViewItemContextBar.cpp
     KoContextBarButton.cpp
+
+
+    KoUpdater.cpp
+    KoUpdaterPrivate_p.cpp
+
+    KoProgressBar.cpp
+    KoProgressUpdater.cpp
 )
 
 kde4_add_ui_files( kowidgets_LIB_SRCS
@@ -131,6 +138,13 @@ install( FILES
     KoDockWidgetTitleBar.h
     KoDockWidgetTitleBar.h
     KoDockWidgetTitleBarButton.h
+
+    
+    KoProgressBar.h
+    KoProgressProxy.h
+    KoProgressUpdater.h
+
+   KoUpdater.h
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR}

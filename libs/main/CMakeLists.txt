@@ -64,11 +64,6 @@ set(komain_LIB_SRCS
     KoDocumentSectionToolTip.cpp
     KoDocumentSectionView.cpp
 
-    KoProgressBar.cpp
-    KoProgressUpdater.cpp
-    KoUpdater.cpp
-    KoUpdaterPrivate_p.cpp
-
     KoDetailsPane.cpp
     KoExistingDocumentPane.cpp
     KoOpenPane.cpp
@@ -172,14 +167,9 @@ install( FILES
     KoServiceProvider.h
     KoPart.h
     KoPrintJob.h
-    KoProgressUpdater.h
-    KoProgressProxy.h
     KoVersionDialog.h
     KoView.h
     calligraversion.h
-    KoProgressUpdater.h
-    KoProgressBar.h
-    KoUpdater.h
     KoStandardAction.h
     komain_export.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)

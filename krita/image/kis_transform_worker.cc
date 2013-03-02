@@ -520,3 +520,76 @@ QRect KisTransformWorker::mirrorY(KisPaintDeviceSP dev, qreal axis, const KisSel
 
 }
 
+void KisTransformWorker::offset(KisPaintDeviceSP device, const QPoint& offsetPosition, const QSize& wrapSize)
+{
+    // inspired by gimp offset code, only wrap mode supported
+    int width = wrapSize.width();
+    int height = wrapSize.height();
+
+    int offsetX = offsetPosition.x();
+    int offsetY = offsetPosition.y();
+
+    while (offsetX < 0)
+    {
+        offsetX += width;
+    }
+
+    while (offsetY < 0)
+    {
+        offsetY += height;
+    }
+
+    if ((offsetX == 0) && (offsetY == 0))
+    {
+        return;
+    }
+
+    KisPaintDeviceSP offsetDevice = new KisPaintDevice(device->colorSpace());
+    KisPainter gc(offsetDevice);
+    gc.setCompositeOp(COMPOSITE_COPY);
+
+    int srcX = 0;
+    int srcY = 0;
+    int destX = offsetX;
+    int destY = offsetY;
+
+    width = qBound<int>(0, width - offsetX, width);
+    height = qBound<int>(0, height - offsetY, height);
+
+
+    if ((width != 0) && (height != 0))
+    {
+        gc.bitBlt(destX, destY, device, srcX, srcY, width, height);
+    }
+
+    srcX = wrapSize.width() - offsetX;
+    srcY = wrapSize.height() - offsetY;
+
+    destX = (srcX + offsetX) % wrapSize.width();
+    destY = (srcY + offsetY) % wrapSize.height();
+
+    if (offsetX != 0 && offsetY != 0)
+    {
+          gc.bitBlt(destX, destY, device, srcX, srcY, offsetX, offsetY);
+    }
+
+    if (offsetX != 0)
+    {
+        gc.bitBlt(destX, destY + offsetY, device, srcX, 0, offsetX, wrapSize.height() - offsetY);
+    }
+
+    if (offsetY != 0)
+    {
+        gc.bitBlt(destX + offsetX, destY, device, 0, srcY, wrapSize.width() - offsetX, offsetY);
+    }
+
+    gc.end();
+
+    // bitblt the result back
+    KisPainter gc2(device);
+    gc2.setCompositeOp(COMPOSITE_COPY);
+    gc2.bitBlt(0,0,offsetDevice, 0, 0, wrapSize.width(), wrapSize.height());
+    gc2.end();
+}
+
+

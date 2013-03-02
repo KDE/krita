@@ -24,6 +24,7 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <QTransform>
+#include <QVector>
 
 #include "kis_types.h"
 #include "kis_image.h"
@@ -94,6 +95,43 @@ void KisTransformWorkerTest::testMirrorY()
     }
 
 }
+
+void KisTransformWorkerTest::testOffset()
+{
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    QString imageName("mirror_source.png");
+    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + imageName);
+    QPoint bottomRight(image.width(), image.height());
+    KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
+
+    QVector<QPoint> offsetPoints;
+    offsetPoints.append(QPoint(image.width() / 2, image.height() / 2));     // offset to 1/2 of image
+    offsetPoints.append(QPoint(image.width() / 4, image.height() / 4)); // offset to 1/4 of image
+    offsetPoints.append(QPoint(image.width() - image.width() / 4, image.height() - image.height() / 4)); // offset to 3/4 of image
+    offsetPoints.append(QPoint(image.width() / 4, 0));      // offset with y == 0
+    offsetPoints.append(QPoint(0, image.height() / 4));     // offset with x == 0
+
+    QPoint errpoint;
+    QPoint backOffsetPoint;
+    QImage result;
+    int test = 0;
+    foreach (QPoint offsetPoint, offsetPoints)
+    {
+        dev2->convertFromQImage(image, 0);
+        KisTransformWorker::offset(dev2, offsetPoint , image.size());
+        backOffsetPoint = bottomRight - offsetPoint;
+        KisTransformWorker::offset(dev2, backOffsetPoint , image.size());
+        result = dev2->convertToQImage(0, 0, 0, image.width(), image.height());
+        if (!TestUtil::compareQImages(errpoint, image, result))
+        {
+            // They are the same, but should be mirrored
+            image.save(QString("offset_test_%1_source.png").arg(test));
+            result.save(QString("offset_test_%1_result.png").arg(test));
+            QFAIL(QString("Failed to offset the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
+        }
+    }
+}
+
 
 void KisTransformWorkerTest::testMirrorTransactionX()
 {

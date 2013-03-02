@@ -12,10 +12,6 @@
             <Action name="Macro_Open_Play" />
             <Action name="Macro_Open_Edit" />
         </Menu>
-        <Menu name="Tutorials"><text>Tutorials</text>
-            <Action name="Tutorials_start" />
-            <Action name="Tutorials_stop" />
-        </Menu>
     </Menu>
 </MenuBar>
 </kpartgui>

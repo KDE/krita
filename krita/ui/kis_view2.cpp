@@ -252,7 +252,16 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
 
     m_d->resourceProvider = new KisCanvasResourceProvider(this);
     m_d->resourceProvider->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
+
+
+    KConfigGroup grp(KGlobal::config(), "krita/crashprevention");
+    if (grp.readEntry("CreatingCanvas", false)) {
+        KisConfig cfg;
+        cfg.setUseOpenGL(false);
+    }
+    grp.writeEntry("CreatingCanvas", true);
     m_d->canvas = new KisCanvas2(m_d->viewConverter, this, doc->shapeController());
+    grp.writeEntry("CreatingCanvas", false);
     connect(m_d->resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile *)), m_d->canvas, SLOT(slotSetDisplayProfile(const KoColorProfile *)));
 
     m_d->canvasController->setCanvas(m_d->canvas);

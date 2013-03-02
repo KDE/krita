@@ -19,18 +19,15 @@
 #define _BIGBROTHER_H_
 
 #include <QVariant>
+#include <kis_view_plugin.h>
 
-#include <kparts/plugin.h>
 
-class QAction;
+class KisAction;
 class KisMacro;
 class KisView2;
 class KUrl;
 
-/**
- * Template of view plugin
- */
-class BigBrotherPlugin : public KParts::Plugin
+class BigBrotherPlugin : public KisViewPlugin
 {
     Q_OBJECT
 public:
@@ -52,8 +49,8 @@ private:
 
     KisView2 * m_view;
     KisMacro * m_recorder;
-    KAction* m_startRecordingMacroAction;
-    KAction* m_stopRecordingMacroAction;
+    KisAction* m_startRecordingMacroAction;
+    KisAction* m_stopRecordingMacroAction;
 
 };
 

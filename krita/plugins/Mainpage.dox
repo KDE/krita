@@ -38,9 +38,7 @@ There are several kinds of plugins for Krita:
     Extensions are loaded by every view instance. They provide user interface
     elements such as dialog boxes and wizards. Their parent is KisView and
     they provide an .rc file to merge their gui with the view gui. Extensions
-    have the servicetype Krita/Plugin. They are not loaded automatically by
-    the KParts mechanism; please do not create ordinary kparts that are to
-    be loaded by the Krita view since KParts are not versioned. 
+    have the servicetype Krita/Plugin. 
 
 * Formats
 

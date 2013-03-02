@@ -48,6 +48,7 @@
 #include <metadata/kis_meta_data_store.h>
 #include <metadata/kis_meta_data_io_backend.h>
 
+#include "kis_store_paintdevice_writer.h"
 #include "flake/kis_shape_selection.h"
 
 using namespace KRA;
@@ -59,7 +60,13 @@ KisKraSaveVisitor::KisKraSaveVisitor(KoStore *store, quint32 &count, const QStri
         , m_count(count)
         , m_name(name)
         , m_nodeFileNames(nodeFileNames)
+        , m_writer(new KisStorePaintDeviceWriter(store))
 {
+}
+
+KisKraSaveVisitor::~KisKraSaveVisitor()
+{
+    delete m_writer;
 }
 
 void KisKraSaveVisitor::setExternalUri(const QString &uri)
@@ -156,7 +163,7 @@ bool KisKraSaveVisitor::savePaintDevice(KisPaintDeviceSP device,
     // Layer data
     m_store->setCompressionEnabled(false);
     if (m_store->open(location)) {
-        if (!device->write(m_store)) {
+        if (!device->write(*m_writer)) {
             device->disconnect();
             m_store->close();
             return false;

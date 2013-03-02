@@ -21,7 +21,6 @@
 
 #include <QTime>
 
-#include <KoStore.h>
 #include <KoColorSpace.h>
 #include <KoColor.h>
 #include <KoColorSpaceRegistry.h>

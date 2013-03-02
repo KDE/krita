@@ -39,8 +39,9 @@ void KisTileCompressorsTest::doRoundTrip(KisAbstractTileCompressor *compressor)
     QVERIFY(memoryIsFilled(oddPixel1, tile11->data(), TILESIZE));
 
     KoStoreFake fakeStore;
-
-    compressor->writeTile(tile11, &fakeStore);
+    KisFakePaintDeviceWriter writer(&fakeStore);
+    
+    compressor->writeTile(tile11, writer);
     tile11 = 0;
 
     fakeStore.startReading();
@@ -51,8 +52,7 @@ void KisTileCompressorsTest::doRoundTrip(KisAbstractTileCompressor *compressor)
     QVERIFY(memoryIsFilled(defaultPixel, tile11->data(), TILESIZE));
     tile11 = 0;
 
-    compressor->readTile(&fakeStore, &dm);
-
+    compressor->readTile(fakeStore.device(), &dm);
     tile11 = dm.getTile(1, 1, false);
     QVERIFY(memoryIsFilled(oddPixel1, tile11->data(), TILESIZE));
     tile11 = 0;

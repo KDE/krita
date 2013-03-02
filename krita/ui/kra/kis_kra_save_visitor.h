@@ -25,13 +25,14 @@
 #include "kis_node_visitor.h"
 #include "kis_image.h"
 
+class KisPaintDeviceWriter;
 class KoStore;
 
 class KisKraSaveVisitor : public KisNodeVisitor
 {
 public:
     KisKraSaveVisitor(KoStore *store, quint32 &count, const QString & name, QMap<const KisNode*, QString> nodeFileNames);
-
+    virtual ~KisKraSaveVisitor();
     using KisNodeVisitor::visit;
 
 public:
@@ -76,6 +77,8 @@ private:
     quint32 &m_count;
     QString m_name;
     QMap<const KisNode*, QString> m_nodeFileNames;
+    KisPaintDeviceWriter *m_writer;
+
 };
 
 #endif // KIS_KRA_SAVE_VISITOR_H_

@@ -39,8 +39,8 @@ typedef KisSharedPtr<KisTiledDataManager> KisTiledDataManagerSP;
 
 class KisTiledIterator;
 class KisTiledRandomAccessor;
-class KoStore;
-
+class KisPaintDeviceWriter;
+class QIODevice;
 
 /**
  * KisTileDataWrapper is a special object, that fetches the tile from
@@ -232,11 +232,10 @@ public:
 
 protected:
     /**
-     * Reads and writes the tiles from/onto a KoStore
-     * (which is simply a file within a zip file)
+     * Reads and writes the tiles 
      */
-    bool write(KoStore *store);
-    bool read(KoStore *store);
+    bool write(KisPaintDeviceWriter &store);
+    bool read(QIODevice *stream);
 
     void purge(const QRect& area);
 
@@ -377,7 +376,7 @@ private:
 private:
     void setDefaultPixelImpl(const quint8 *defPixel);
 
-    bool writeTilesHeader(KoStore *store, quint32 numTiles);
+    bool writeTilesHeader(KisPaintDeviceWriter &store, quint32 numTiles);
     bool processTilesHeader(QIODevice *stream, quint32 &numTiles);
 
     qint32 divideRoundDown(qint32 x, const qint32 y) const;

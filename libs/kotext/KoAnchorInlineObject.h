@@ -63,7 +63,7 @@ public:
      * Constructor for an as-char anchor.
      * @param parent the shapeanchor.
      */
-    KoAnchorInlineObject(KoShapeAnchor *parent);
+    explicit  KoAnchorInlineObject(KoShapeAnchor *parent);
     virtual ~KoAnchorInlineObject();
 
     /// returns the parent anchor

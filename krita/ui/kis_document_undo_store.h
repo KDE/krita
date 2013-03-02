@@ -16,52 +16,27 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_UNDO_STORES_H
-#define __KIS_UNDO_STORES_H
+#ifndef __KIS_DOCUMENT_UNDO_STORE_H
+#define __KIS_DOCUMENT_UNDO_STORE_H
 
 #include "kis_undo_store.h"
 
+class KoDocument;
 class KUndo2Stack;
 
-/**
- * KisSurrogateUndoAdapter -- saves commands directly to the
- * internal stack. Used for wrapping around legacy code into
- * a single command.
- */
-class KRITAIMAGE_EXPORT KisSurrogateUndoStore : public KisUndoStore
+class KRITAIMAGE_EXPORT KisDocumentUndoStore : public KisUndoStore
 {
 public:
-    KisSurrogateUndoStore();
-    ~KisSurrogateUndoStore();
+    KisDocumentUndoStore(KoDocument *doc);
 
     const KUndo2Command* presentCommand();
     void undoLastCommand();
     void addCommand(KUndo2Command *cmd);
     void beginMacro(const QString& macroName);
     void endMacro();
-
-    void undo();
-    void redo();
-
-    void undoAll();
-    void redoAll();
 
 private:
-    KUndo2Stack *m_undoStack;
+    KoDocument* m_doc;
 };
 
-/**
- * @brief The KisDumbUndoStore class doesn't actually save commands,
- * so you cannot undo or redo!
- */
-class KRITAIMAGE_EXPORT KisDumbUndoStore : public KisUndoStore
-{
-public:
-    const KUndo2Command* presentCommand();
-    void undoLastCommand();
-    void addCommand(KUndo2Command *cmd);
-    void beginMacro(const QString& macroName);
-    void endMacro();
-};
-
-#endif /* __KIS_UNDO_STORES_H */
+#endif /* __KIS_DOCUMENT_UNDO_STORES_H */

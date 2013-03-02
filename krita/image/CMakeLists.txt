@@ -240,8 +240,8 @@ set(kritaimage_LIB_SRCS
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
 
-target_link_libraries(kritaimage ${KDE4_KPARTS_LIBS} komain pigmentcms)
-target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES pigmentcms komain ${KDE4_KPARTS_LIBS} )
+target_link_libraries(kritaimage ${KDE4_KPARTS_LIBS} pigmentcms kundo2 kowidgets koodf)
+target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES pigmentcms kundo2 kowidgets koodf)
 
 if(OPENEXR_FOUND)
   target_link_libraries(kritaimage  ${OPENEXR_LIBRARIES})

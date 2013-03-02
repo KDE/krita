@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Lut Docker
+Name[ca]=Acoblador LUT
 Name[da]=LUT-dokker
 Name[de]=LUT-Docker (Lookup-Tabelle)
 Name[el]=Εργαλείο προσάρτησης lut
@@ -19,6 +20,7 @@ Name[sv]=Dockningsfönster för uppslagningstabell
 Name[uk]=Бічна панель таблиці пошуку
 Name[x-test]=xxLut Dockerxx
 Comment=Docker for selecting luts
+Comment[ca]=Acoblador per LUT seleccionats
 Comment[da]=Dokker til at vælge LUT'er
 Comment[de]=Docker für die Auswahl von LUTs (Lookup-Tabellen)
 Comment[el]=Εργαλείο προσάρτησης για επιλογή lut

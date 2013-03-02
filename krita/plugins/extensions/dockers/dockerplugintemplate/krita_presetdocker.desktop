@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Preset Docker
 Name[bs]=Podesiti Doker
-Name[ca]=Acoblador de prearranjament
+Name[ca]=Acoblador d'ambients
 Name[ca@valencia]=Acoblador de prearranjament
 Name[cs]=Dok předvoleb
 Name[da]=Forudindstilling-dokker
@@ -31,7 +31,7 @@ Name[x-test]=xxPreset Dockerxx
 Name[zh_TW]=預設定嵌入器
 Comment=Docker for selecting presets
 Comment[bs]=Doker za selektovanje podešavanja
-Comment[ca]=Acoblador per prearranjaments seleccionats
+Comment[ca]=Acoblador per seleccionar ambients
 Comment[ca@valencia]=Acoblador per prearranjaments seleccionats
 Comment[da]=Dokker til at vælge forudindstillinger
 Comment[de]=Docker für die Auswahl von Voreinstellungen

@@ -28,7 +28,7 @@ set(kotext_LIB_SRCS
     KoInlineTextObjectManager.cpp
     KoInlineObjectFactoryBase.cpp
     KoInlineObjectRegistry.cpp
-    InsertInlineObjectActionBase.cpp
+    InsertInlineObjectActionBase_p.cpp
     InsertVariableAction.cpp
     InsertNamedVariableAction.cpp
     InsertTextReferenceAction.cpp

@@ -90,7 +90,7 @@ FlipbookDockerDock::FlipbookDockerDock( )
     connect(bnNextItem, SIGNAL(clicked()), SLOT(goNext()));
 
     bnLastItem->setIcon(koIcon("arrow-down-double"));
-    bnLastItem->setToolTip(i18n("Go to the last image in the current flipblook"));
+    bnLastItem->setToolTip(i18n("Go to the last image in the current flipbook"));
     connect(bnLastItem, SIGNAL(clicked()), SLOT(goLast()));
 
     bnAddItem->setIcon(koIcon("list-add"));

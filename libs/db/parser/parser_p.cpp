@@ -504,7 +504,6 @@ QuerySchema* buildSelectQuery(
                 || c == KexiDBExpr_Arithm
                 || c == KexiDBExpr_Logical
                 || c == KexiDBExpr_Relational
-                || c == KexiDBExpr_Const
                 || c == KexiDBExpr_Function
                 || c == KexiDBExpr_Aggregation;
 

@@ -87,13 +87,7 @@ void TextPasteCommand::redo()
         editor->beginEditBlock(); //this is needed so Qt does not merge successive paste actions together
         m_first = false;
         if (editor->hasSelection()) { //TODO
-            // XXX: this was m_tool->m_actionShowChanges.isChecked -- but shouldn't we check
-            // whether we should record changes here, instead of showing?
-            if (textDocument.changeTracker() && textDocument.changeTracker()->recordChanges()) {
-                editor->addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, m_document.data(), m_shapeController, this));
-            } else {
-                editor->addCommand(new DeleteCommand(DeleteCommand::NextChar, m_document.data(), m_shapeController, this));
-            }
+            editor->addCommand(new DeleteCommand(DeleteCommand::NextChar, m_document.data(), m_shapeController, this));
         }
 
         // check for mime type

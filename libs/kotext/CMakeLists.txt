@@ -99,19 +99,16 @@ set(kotext_LIB_SRCS
     commands/ChangeListCommand.cpp
     commands/ChangeStylesCommand.cpp
     commands/ChangeStylesMacroCommand.cpp
-    commands/ChangeTrackedDeleteCommand.cpp
     commands/DeleteAnchorsCommand.cpp
     commands/DeleteCommand.cpp
     commands/DeleteTableColumnCommand.cpp
     commands/DeleteTableRowCommand.cpp
-    commands/InsertDeleteChangesCommand.cpp
     commands/InsertNoteCommand.cpp
     commands/InsertTableColumnCommand.cpp
     commands/InsertTableRowCommand.cpp
     commands/ResizeTableCommand.cpp
     commands/InsertInlineObjectCommand.cpp
     commands/ListItemNumberingCommand.cpp
-    commands/RemoveDeleteChangesCommand.cpp
     commands/TextPasteCommand.cpp
     commands/AddTextRangeCommand.cpp
     commands/ParagraphFormattingCommand.cpp

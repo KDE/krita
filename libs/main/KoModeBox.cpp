@@ -111,7 +111,11 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
     d->tabBar = new QTabBar();
     d->tabBar->setShape(QTabBar::RoundedWest);
     d->tabBar->setExpanding(false);
-    d->tabBar->setIconSize(QSize(32,64));
+    if (d->iconMode == IconAndText) {
+        d->tabBar->setIconSize(QSize(32,64));
+    } else {
+        d->tabBar->setIconSize(QSize(22,22));
+    }
     d->tabBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     layout->addWidget(d->tabBar, 0, 0);
 
@@ -298,11 +302,6 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
 
     d->addedButtons.clear();
 
-    if (d->iconMode == IconAndText) {
-        d->tabBar->setIconSize(QSize(32,64));
-    } else {
-        d->tabBar->setIconSize(QSize(22,22));
-    }
     int newIndex = -1;
     foreach (const KoToolButton button, d->buttons) {
         QString code = button.visibilityCode;
@@ -462,8 +461,14 @@ void KoModeBox::slotContextMenuRequested(const QPoint &pos)
 void KoModeBox::switchIconMode(int mode)
 {
     d->iconMode = static_cast<IconMode>(mode);
+    if (d->iconMode == IconAndText) {
+        d->tabBar->setIconSize(QSize(32,64));
+    } else {
+        d->tabBar->setIconSize(QSize(22,22));
+    }
     updateShownTools(d->canvas->canvasController(), QList<QString>());
 
     KConfigGroup cfg = KGlobal::config()->group("calligra");
     cfg.writeEntry("ModeBoxIconMode", (int)d->iconMode);
+
 }

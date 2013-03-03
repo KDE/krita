@@ -437,7 +437,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
     if (textRangeManager) {
         // write tags for ranges which end at the first position of the block
         const QHash<int, KoTextRange *> endingTextRangesAtStart =
-            textRangeManager->textRangesChangingWithin(block.position(), block.position(), globalFrom, globalTo);
+            textRangeManager->textRangesChangingWithin(block.document(), block.position(), block.position(), globalFrom, globalTo);
         foreach (const KoTextRange *range, endingTextRangesAtStart) {
             range->saveOdf(context, block.position(), KoTextRange::EndTag);
         }
@@ -512,10 +512,9 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
 
 		// get all text ranges which start before this inline object
 		// or end directly after it (+1 to last position for that)
-		const QHash<int, KoTextRange *> textRanges = textRangeManager ?
-		    textRangeManager->textRangesChangingWithin(currentFragment.position(), currentFragment.position()+1,
-							      globalFrom, (globalTo==-1)?-1:globalTo+1) :
-		    QHash<int, KoTextRange *>();
+                const QHash<int, KoTextRange *> textRanges = textRangeManager ?
+                        textRangeManager->textRangesChangingWithin(block.document(), currentFragment.position(), currentFragment.position()+1,
+                        globalFrom, (globalTo==-1)?-1:globalTo+1) : QHash<int, KoTextRange *>();
 		// get all text ranges which start before this
 		const QList<KoTextRange *> textRangesBefore = textRanges.values(currentFragment.position());
 		// write tags for ranges which start before this content or at positioned at it
@@ -586,7 +585,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                 // get all text ranges which change within this span
                 // or end directly after it (+1 to last position to include those)
                 const QHash<int, KoTextRange *> textRanges = textRangeManager ?
-                    textRangeManager->textRangesChangingWithin(spanFrom, spanTo, globalFrom, (globalTo==-1)?-1:globalTo+1) :
+                    textRangeManager->textRangesChangingWithin(block.document(), spanFrom, spanTo, globalFrom, (globalTo==-1)?-1:globalTo+1) :
                     QHash<int, KoTextRange *>();
                 // avoid mid, if possible
                 if (spanFrom != fragmentStart || spanTo != fragmentEnd || !textRanges.isEmpty()) {
@@ -645,7 +644,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
         // write tags for ranges which start at the last position of the block,
         // i.e. at the position after the last (text) fragment
         const QHash<int, KoTextRange *> startingTextRangesAtEnd =
-            textRangeManager->textRangesChangingWithin(lastEndPosition, lastEndPosition, globalFrom, globalTo);
+            textRangeManager->textRangesChangingWithin(block.document(), lastEndPosition, lastEndPosition, globalFrom, globalTo);
         foreach (const KoTextRange *range, startingTextRangesAtEnd) {
             range->saveOdf(context, lastEndPosition, KoTextRange::StartTag);
         }

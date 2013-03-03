@@ -32,7 +32,7 @@ class QObject;
 class QRect;
 
 
-class KRITAIMAGE_EXPORT KisFilterJob : public KisJob
+class KRITAUI_EXPORT KisFilterJob : public KisJob
 {
 public:
 

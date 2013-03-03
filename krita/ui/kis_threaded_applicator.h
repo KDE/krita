@@ -35,7 +35,7 @@
  * Any subclass of KisJob is responsible for setting the interrupted
  * status when applicable.
  */
-class KRITAIMAGE_EXPORT KisJob : public ThreadWeaver::Job
+class KRITAUI_EXPORT KisJob : public ThreadWeaver::Job
 {
 public:
 

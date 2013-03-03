@@ -32,7 +32,7 @@ class QObject;
 class QRect;
 
 
-class KRITAIMAGE_EXPORT KisFilterJob : public KisJob
+class KRITAUI_EXPORT KisFilterJob : public KisJob
 {
 public:
 
@@ -57,7 +57,7 @@ private:
     const KisSelectionSP m_selection;
 };
 
-class KRITAIMAGE_EXPORT KisFilterJobFactory : public KisJobFactory
+class KRITAUI_EXPORT KisFilterJobFactory : public KisJobFactory
 {
 public:
 

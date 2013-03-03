@@ -35,7 +35,7 @@
  * Any subclass of KisJob is responsible for setting the interrupted
  * status when applicable.
  */
-class KRITAIMAGE_EXPORT KisJob : public ThreadWeaver::Job
+class KRITAUI_EXPORT KisJob : public ThreadWeaver::Job
 {
 public:
 
@@ -78,7 +78,7 @@ protected:
 /**
    Implement this interface to create the specific jobs you need.
  */
-class KRITAIMAGE_EXPORT KisJobFactory
+class KRITAUI_EXPORT KisJobFactory
 {
 
 public:
@@ -97,7 +97,7 @@ public:
  *
  * XXX: make it use kissystemlocker & threadweaver jobcollections
  */
-class KRITAIMAGE_EXPORT KisThreadedApplicator : public QObject
+class KRITAUI_EXPORT KisThreadedApplicator : public QObject
 {
 
     Q_OBJECT

@@ -27,7 +27,8 @@
 #include "kis_filter_mask.h"
 #include "kis_transparency_mask.h"
 #include "kis_selection_mask.h"
-#include <KoXmlReader.h>
+
+#include <QDomDocument>
 
 class KisCompositionVisitor : public KisNodeVisitor {
 public:
@@ -112,15 +113,9 @@ void KisLayerComposition::apply()
     m_image->rootLayer()->accept(visitor);
 }
 
-void KisLayerComposition::load(const KoXmlElement& elem)
+void KisLayerComposition::setVisible(QUuid id, bool visible)
 {
-    KoXmlNode child;
-    for (child = elem.lastChild(); !child.isNull(); child = child.previousSibling()) {
-        KoXmlElement e = child.toElement();
-        QUuid uuid(e.attribute("uuid"));
-        bool visible = e.attribute("visible", "1") == "0" ? false : true;
-        m_visibilityMap[uuid] = visible;
-    }
+    m_visibilityMap[id] = visible;
 }
 
 void KisLayerComposition::save(QDomDocument& doc, QDomElement& element)

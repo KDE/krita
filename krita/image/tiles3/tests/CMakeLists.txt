@@ -15,7 +15,7 @@ target_link_libraries(KisLowMemoryTests  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTE
 ########### next target ###############
 set(kis_tile_compressors_test_SRCS kis_tile_compressors_test.cpp )
 kde4_add_unit_test(KisTileCompressorsTest TESTNAME krita-image-KisTileCompressorsTest  ${kis_tile_compressors_test_SRCS})
-target_link_libraries(KisTileCompressorsTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+target_link_libraries(KisTileCompressorsTest  ${KDE4_KDEUI_LIBS} koodf kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 set(kis_compression_tests_SRCS kis_compression_tests.cpp )

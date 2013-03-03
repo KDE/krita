@@ -20,7 +20,7 @@
 #ifndef KO_PROGRESS_PROXY
 #define KO_PROGRESS_PROXY
 
-#include "komain_export.h"
+#include "kowidgetutils_export.h"
 #include <QString>
 
 /**
@@ -28,7 +28,7 @@
  * a widget such as a KoProgressProxy childclass that also inherits this
  * interface, or something that prints progress to stdout.
  */
-class KOMAIN_EXPORT KoProgressProxy
+class KOWIDGETUTILS_EXPORT KoProgressProxy
 {
 
 public:

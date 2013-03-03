@@ -2,7 +2,12 @@ include_directories(${KDE4_INCLUDES})
 
 set(kowidgetutils_LIB_SRCS
     KoGroupButton.cpp
+    KoProgressBar.cpp
+    KoProgressUpdater.cpp
+    KoUpdater.cpp
+    KoUpdaterPrivate_p.cpp
 )
+
 
 kde4_add_library(kowidgetutils SHARED ${kowidgetutils_LIB_SRCS})
 
@@ -16,9 +21,12 @@ set_target_properties(kowidgetutils
 install(TARGETS kowidgetutils ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES
-    kowidgetutils_export.h
     KoGroupButton.h
-
+    KoProgressBar.h
+    KoProgressProxy.h
+    KoProgressUpdater.h
+    KoUpdater.h
+    kowidgetutils_export.h
     DESTINATION ${INCLUDE_INSTALL_DIR}
     COMPONENT Devel
 )

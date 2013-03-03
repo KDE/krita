@@ -57,7 +57,7 @@ private:
     const KisSelectionSP m_selection;
 };
 
-class KRITAIMAGE_EXPORT KisFilterJobFactory : public KisJobFactory
+class KRITAUI_EXPORT KisFilterJobFactory : public KisJobFactory
 {
 public:
 

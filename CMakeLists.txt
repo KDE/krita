@@ -502,6 +502,7 @@ set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake
                    ${KOPLUGIN_INCLUDES}
                    ${PIGMENT_INCLUDES}
                    ${KUNDO2_INCLUDES}
+                   ${CMAKE_SOURCE_DIR}/libs/widgetutils
                    ${CMAKE_SOURCE_DIR}/libs/flake/commands
                    ${CMAKE_SOURCE_DIR}/libs/flake/tools
                    ${CMAKE_SOURCE_DIR}/libs/flake/svg

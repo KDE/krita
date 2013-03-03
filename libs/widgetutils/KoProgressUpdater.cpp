@@ -28,7 +28,6 @@
 #include "KoUpdater.h"
 #include "KoProgressProxy.h"
 
-#include <kdebug.h>
 
 // 4 updates per second should be enough
 #define PROGRESSUPDATER_GUITIMERINTERVAL 250
@@ -112,7 +111,6 @@ QTime KoProgressUpdater::referenceTime() const
 
 void KoProgressUpdater::start(int range, const QString &text)
 {
-    kDebug(30003) << range << text;
     d->updateGuiTimer.start(PROGRESSUPDATER_GUITIMERINTERVAL);
 
     qDeleteAll(d->subtasks);
@@ -134,7 +132,6 @@ void KoProgressUpdater::start(int range, const QString &text)
 QPointer<KoUpdater> KoProgressUpdater::startSubtask(int weight,
                                                     const QString &name)
 {
-    kDebug(30003) << name << weight;
     KoUpdaterPrivate *p = new KoUpdaterPrivate(this, weight, name);
     d->totalWeight += weight;
     d->subtasks.append(p);

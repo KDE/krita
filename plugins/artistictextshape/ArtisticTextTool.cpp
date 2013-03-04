@@ -915,4 +915,39 @@ void ArtisticTextTool::deselectAll()
     }
 }
 
+QVariant ArtisticTextTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const
+{
+    if (!m_currentShape)
+        return QVariant();
+
+    switch (query) {
+    case Qt::ImMicroFocus: {
+        // The rectangle covering the area of the input cursor in widget coordinates.
+        QRectF rect = m_textCursorShape.boundingRect();
+        rect.moveTop(rect.bottom());
+        QTransform shapeMatrix = m_currentShape->absoluteTransformation(&converter);
+        qreal zoomX, zoomY;
+        converter.zoom(&zoomX, &zoomY);
+        shapeMatrix.scale(zoomX, zoomY);
+        rect = shapeMatrix.mapRect(rect);
+        return rect.toRect();
+    }
+    case Qt::ImFont:
+        // The currently used font for text input.
+        return m_currentShape->fontAt(m_textCursor);
+    case Qt::ImCursorPosition:
+        // The logical position of the cursor within the text surrounding the input area (see ImSurroundingText).
+        return m_currentShape->charPositionAt(m_textCursor);
+    case Qt::ImSurroundingText:
+        // The plain text around the input area, for example the current paragraph.
+        return m_currentShape->plainText();
+    case Qt::ImCurrentSelection:
+        // The currently selected text.
+        return QVariant();
+    default:
+        ; // Qt 4.6 adds ImMaximumTextLength and ImAnchorPosition
+    }
+    return QVariant();
+}
+
 #include <ArtisticTextTool.moc>

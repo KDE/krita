@@ -713,12 +713,16 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, QTextBlock &block, b
 
                         // end position: note that x2 can be smaller than x1 when we are handling RTL
                         int p2 = startOfFragmentInBlock + currentFragment.length();
-                        int lineEnd = line.textStart() + line.textLength();
-                        while (lineEnd > line.textStart() && block.text().at(lineEnd - 1) == ' ') {
-                            --lineEnd;
+                        int lineEndWithoutPreedit = line.textStart() + line.textLength();
+                        if (block.layout()->preeditAreaPosition() >= block.position() + line.textStart() &&
+                                block.layout()->preeditAreaPosition() <= block.position() + line.textStart() + line.textLength()) {
+                            lineEndWithoutPreedit -= block.layout()->preeditAreaText().length();
                         }
-                        if (lineEnd < p2) { //line caps
-                            p2 = lineEnd;
+                        while (lineEndWithoutPreedit > line.textStart() && block.text().at(lineEndWithoutPreedit - 1) == ' ') {
+                            --lineEndWithoutPreedit;
+                        }
+                        if (lineEndWithoutPreedit < p2) { //line caps
+                            p2 = lineEndWithoutPreedit;
                         }
                         int fragmentToLineOffset = qMax(startOfFragmentInBlock - line.textStart(), 0);
 

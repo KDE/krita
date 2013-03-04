@@ -1531,7 +1531,12 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
 
         bool lineBreak = false;
         int lastCharPos = block.position() + line.textStart() + line.textLength() - 1;
-        if (block.text().at(line.textStart() + line.textLength() - 1) == QChar(0x2028)) {
+        int blockLastCharWithoutPreedit = line.textStart() + line.textLength() - 1;
+        if (block.layout()->preeditAreaPosition() >= block.position() + line.textStart() &&
+                block.layout()->preeditAreaPosition() <= lastCharPos) {
+            blockLastCharWithoutPreedit -= block.layout()->preeditAreaText().length();
+        }
+        if (block.text().at(blockLastCharWithoutPreedit) == QChar(0x2028)) {
             // Was a line with line-break
             if (line.textLength() != 1) { //unless empty line we should ignore the format of it
                 --lastCharPos;

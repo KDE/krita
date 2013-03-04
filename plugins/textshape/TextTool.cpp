@@ -1738,7 +1738,7 @@ void TextTool::inputMethodEvent(QInputMethodEvent *event)
         QTextLayout *layout = block.layout();
         Q_ASSERT(layout);
         layout->setPreeditArea(textEditor->position() - block.position(), event->preeditString());
-        const_cast<QTextDocument*>(textEditor->document())->markContentsDirty(textEditor->position(), 1);
+        const_cast<QTextDocument*>(textEditor->document())->markContentsDirty(textEditor->position(), event->preeditString().length());
     }
     event->accept();
 }

@@ -157,7 +157,8 @@ void KoTextEditor::Private::updateState(KoTextEditor::Private::State newState, c
     kDebug(32500) << "commandStack count: " << commandStack.count();
     if (editorState == Custom && newState != NoOp) {
         //We already are in a custom state (meaning that either a KUndo2Command was pushed on us, an on-the-fly macro command was started or we are executing a complex editing from within the KoTextEditor.
-        //In that state any update of the state different from NoOp is part of that "macro". However, updating the state means that we are now wanting to have a new command for parenting the UndoTextCommand generated after the signal from QTextDocument. This is to ensure that undo/redo actions are done in the proper order. Setting addNewCommand will ensure that we create such a child headCommand on the commandStack. This command will not be pushed on the application's stack.
+        //In that state any update of the state different from NoOp is part of that "macro". However, updating the state means that we are now wanting to have a new command for parenting the UndoTextCommand generated after the signal
+        //from QTextDocument. This is to ensure that undo/redo actions are done in the proper order. Setting addNewCommand will ensure that we create such a child headCommand on the commandStack. This command will not be pushed on the application's stack.
         kDebug(32500) << "we are already in a custom state. a new state, which is not NoOp is part of the macro we are doing. we need however to create a new command on the commandStack to parent a signal induced UndoTextCommand";
         addNewCommand = true;
         if (!title.isEmpty())

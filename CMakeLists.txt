@@ -28,6 +28,35 @@ set(GENERIC_CALLIGRA_LIB_SOVERSION "12")
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
+
+ ####################
+#####################
+## Product defines ##
+#####################
+####################
+
+# There are currently 4 product sets predefined:
+# "ACTIVE", "CREATIVE", "DESKTOP", "ALL" (default).
+# One can define her/his own set, see cmake/productsts/README
+
+# Finding out the products to build is done in x steps:
+# 1. have the user define the products wanted
+# 2. estimate all additional required products
+# 3. estimate which of the products can be build by external deps
+# 4. estimate which of the products can be build by internal deps
+
+include(CalligraProductSetMacros)
+
+option(GHNS "support Get Hot New Stuff" ON)
+option(NEPOMUK "support NEPOMUK Tagging" ON)
+# TODO: orthogonal setting, results in minimal features, yet needs to be defined
+# option(TINY "compile a tiny Calligra" OFF)
+option(QT3SUPPORT "Build the parts of Calligra that still depend on Qt3" ON)
+option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binary. Should be used by packagers only." OFF)
+
+# TODO: remove option and migration code below before 3.0 release
+option(CREATIVEONLY "compile only Karbon and Krita" OFF)
+
 #
 # WARNING: don't change the SHOULD_BUILD_app if an application
 # doesn't build, but rather add the following line:
@@ -36,65 +65,76 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 #eg:
 #option(BUILD_kexi "Build directory kexi" OFF) # kexi isn't buildable at the moment
 
-option(GHNS "support Get Hot New Stuff" ON)
-option(NEPOMUK "support NEPOMUK Tagging" ON)
-option(TINY "compile a tiny Calligra" OFF)
-option(CREATIVEONLY "compile only Karbon and Krita" OFF)
-option(QT3SUPPORT "Build the parts of Calligra that still depend on Qt3" ON)
-option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binary. Should be used by packagers only." OFF)
+# temporary migration support
+set(PRODUCTSET_DEFAULT "ALL")
+if (CREATIVEONLY)
+    set(WARN_ABOUT_CREATIVEONLY TRUE)
+    set(PRODUCTSET_DEFAULT "CREATIVE")
+endif (CREATIVEONLY)
 
-IF (TINY)
-    set(SHOULD_BUILD_WORDS TRUE)
-    set(SHOULD_BUILD_STAGE TRUE)
-    set(SHOULD_BUILD_SHEETS TRUE)
-    set(SHOULD_BUILD_KARBON FALSE)
-    set(SHOULD_BUILD_KRITA FALSE)
-    set(SHOULD_BUILD_KEXI FALSE)
-    set(SHOULD_BUILD_FLOW FALSE)
-    set(SHOULD_BUILD_PLAN FALSE)
-    set(SHOULD_BUILD_KDGANTT FALSE)
-    set(SHOULD_BUILD_SCRIPTING FALSE)
-    set(SHOULD_BUILD_KOREPORT FALSE)
-    set(SHOULD_BUILD_BRAINDUMP FALSE)
-    set(SHOULD_BUILD_CALLIGRA FALSE)
-    set(SHOULD_BUILD_CSTESTER FALSE)
-    set(SHOULD_BUILD_KOABSTRACTION TRUE)
-    set(SHOULD_BUILD_ACTIVE TRUE)
-ELSEIF (CREATIVEONLY)
-    set(SHOULD_BUILD_WORDS FALSE)
-    set(SHOULD_BUILD_STAGE FALSE)
-    set(SHOULD_BUILD_SHEETS FALSE)
-    set(SHOULD_BUILD_KARBON TRUE)
-    set(SHOULD_BUILD_KRITA TRUE)
-    set(SHOULD_BUILD_KEXI FALSE)
-    set(SHOULD_BUILD_FLOW FALSE)
-    set(SHOULD_BUILD_PLAN FALSE)
-    set(SHOULD_BUILD_KDGANTT FALSE)
-    set(SHOULD_BUILD_SCRIPTING FALSE)
-    set(SHOULD_BUILD_KOREPORT FALSE)
-    set(SHOULD_BUILD_BRAINDUMP FALSE)
-    set(SHOULD_BUILD_CALLIGRA FALSE)
-    set(SHOULD_BUILD_CSTESTER FALSE)
-    set(SHOULD_BUILD_KOABSTRACTION FALSE)
-    set(SHOULD_BUILD_ACTIVE FALSE)
-ELSE()
-    set(SHOULD_BUILD_WORDS TRUE)
-    set(SHOULD_BUILD_STAGE TRUE)
-    set(SHOULD_BUILD_SHEETS TRUE)
-    set(SHOULD_BUILD_KARBON TRUE)
-    set(SHOULD_BUILD_KRITA TRUE)
-    set(SHOULD_BUILD_KEXI TRUE)
-    set(SHOULD_BUILD_FLOW TRUE)
-    set(SHOULD_BUILD_PLAN TRUE)
-    set(SHOULD_BUILD_KDGANTT TRUE)
-    set(SHOULD_BUILD_SCRIPTING TRUE)
-    set(SHOULD_BUILD_KOREPORT TRUE)
-    set(SHOULD_BUILD_BRAINDUMP TRUE)
-    set(SHOULD_BUILD_CALLIGRA TRUE)
-    set(SHOULD_BUILD_CSTESTER TRUE)
-    set(SHOULD_BUILD_KOABSTRACTION TRUE)
-    set(SHOULD_BUILD_ACTIVE FALSE)
-ENDIF()
+if(NOT PRODUCTSET)
+    set(PRODUCTSET ${PRODUCTSET_DEFAULT} CACHE STRING "Product set to build, currently supported: ACTIVE, CREATIVE, DESKTOP, ALL (default)" FORCE)
+endif(NOT PRODUCTSET)
+
+# TODO: also add headers/sdk for all the libs ("_DEVEL"?)
+# TODO: filters
+# TODO: note external deps for products, so they are only checked if needed
+# There can be required or optional external deps, required will also result
+# in automatic disabling of product building
+# TODO: some products have multiple optional requirements, but need at least one.
+# See CONVERTER, CSTESTER, EXTRA_*
+calligra_define_product(LIB_KDGANTT "libkdgantt")
+calligra_define_product(LIB_KDCHART "libkdchart")
+calligra_define_product(LIB_KOPROPERTY "libkoproperty")
+calligra_define_product(LIB_KOREPORT "libkoreport" NEEDS LIB_KOPROPERTY)
+calligra_define_product(LIB_CALLIGRADB "libcalligradb")
+calligra_define_product(LIB_KOPAGEAPP "Lib for paged documents")
+calligra_define_product(SCRIPTING "") # TODO
+calligra_define_product(WORDS_PART "Words engine")
+calligra_define_product(WORDS_APP "Words executable (for Desktop)"  NEEDS WORDS_PART)
+calligra_define_product(WORDS "Full Words (for Desktop)"  NEEDS WORDS_APP)
+calligra_define_product(STAGE_PART "Stage engine" NEEDS LIB_KOPAGEAPP)
+calligra_define_product(STAGE_APP "Stage executable (for Desktop)"  NEEDS STAGE_PART)
+calligra_define_product(STAGE "Full Stage (for Desktop)"  NEEDS STAGE_APP)
+calligra_define_product(SHEETS_PART "Sheets engine")
+calligra_define_product(SHEETS_APP "Sheets executable (for Desktop)" NEEDS SHEETS_PART)
+calligra_define_product(SHEETS "Full Sheets (for Desktop)" NEEDS SHEETS_APP)
+calligra_define_product(AUTHOR "Full Author (for Desktop)")
+calligra_define_product(KARBON "Full Karbon (for Desktop)")
+calligra_define_product(KRITA "Full Krita (for Desktop)")
+calligra_define_product(KEXI "Full Kexi (for Desktop)"  NEEDS LIB_KOREPORT LIB_CALLIGRADB)
+calligra_define_product(FLOW "Full Flow (for Desktop)"  NEEDS LIB_KOPAGEAPP)
+calligra_define_product(PLAN "Full Plan (for Desktop)"  NEEDS LIB_KOREPORT LIB_KDCHART LIB_KDGANTT)
+calligra_define_product(BRAINDUMP "Full Braindump (for Desktop)")
+calligra_define_product(ACTIVE "Calligra Active" NEEDS  SHEETS_PART STAGE_PART WORDS_PART)
+calligra_define_product(CALLIGRA "")
+calligra_define_product(CONVERTER "Format converter for commandline")
+calligra_define_product(EXTRA_PROPERTIES "Plugin for the KDE file properties dialog")
+calligra_define_product(EXTRA_THUMBNAIL "Plugins for KDE filesystem thumbnailing")
+calligra_define_product(EXTRA_QUICKPRINT "Plugin for the KDE filemanager adding a \"Print\" action")
+calligra_define_product(OKULARODPGENERATOR "Plugin for Okular adding support for ODP and MS PPT/PPTX" NEEDS STAGE_PART)
+calligra_define_product(PLUGIN_COLORENGINES "")
+calligra_define_product(PLUGIN_MUSICSHAPE "")
+calligra_define_product(PLUGIN_SPACENAVIGATOR "")
+calligra_define_product(PLUGIN_ARTISTICTEXTSHAPE "")
+calligra_define_product(PLUGIN_DOCKERS "")
+calligra_define_product(PLUGIN_TEXTEDITING "")
+calligra_define_product(PLUGIN_STAGING "")
+calligra_define_product(PLUGIN_KEXI ""  NEEDS KEXI)
+calligra_define_product(PLUGIN_DEFAULTTOOLS "")
+calligra_define_product(PLUGIN_PATHSHAPES "")
+calligra_define_product(PLUGIN_VARIABLES "")
+calligra_define_product(PLUGIN_CHARTSHAPE "")
+calligra_define_product(PLUGIN_PICTURESHAPE "")
+calligra_define_product(PLUGIN_TEXTSHAPE "")
+calligra_define_product(PLUGIN_PLUGINSHAPE "")
+calligra_define_product(PLUGIN_FORMULASHAPE "")
+calligra_define_product(PLUGIN_VECTORSHAPE "")
+calligra_define_product(PLUGIN_REPORTING ""  NEEDS LIB_KOREPORT)
+calligra_define_product(DEVTOOLS "Tools for developers")
+calligra_define_product(CSTESTER "")
+
+calligra_set_productset(${PRODUCTSET})
 
  ########################
 #########################
@@ -118,8 +158,8 @@ include (MacroAddFileDependencies)
 set(SHOULD_BUILD_TEXTSHAPE TRUE)
 if ((${QTVERSION} VERSION_EQUAL 4.8.0) OR (${QTVERSION} VERSION_EQUAL 4.8.1))
     if (NOT IHAVEPATCHEDQT)
-        set(SHOULD_BUILD_WORDS FALSE)
-        set(SHOULD_BUILD_STAGE FALSE)
+        set(SHOULD_BUILD_WORDS_PART FALSE)
+        set(SHOULD_BUILD_STAGE_PART FALSE)
         set(SHOULD_BUILD_TEXTSHAPE FALSE)
         MESSAGE(STATUS "WARNING: You are using a version of Qt that causes crashes. As a result Words and Stage will not be built. Please upgrade to 4.8.2. You can also patch Qt and when building Calligra set IHAVEPATCHEDQT. Patch against Qt can be found in qt48setx.patch")
     endif (NOT IHAVEPATCHEDQT)
@@ -259,10 +299,8 @@ if(NOT Soprano_FOUND)
     set(SOPRANO_INCLUDE_DIR "")
 else(NOT Soprano_FOUND)
     set(SHOULD_BUILD_RDF TRUE)
-endif(NOT Soprano_FOUND)
-if( Soprano_FOUND )
    add_definitions( -DSHOULD_BUILD_RDF )
-endif( Soprano_FOUND )
+endif(NOT Soprano_FOUND)
 
 
 ##
@@ -436,9 +474,6 @@ endif(QT_QTWEBKIT_FOUND)
 ## Test for KDeclarative
 ##
 macro_optional_find_package(KDeclarative)
-if(NOT KDECLARATIVE_FOUND)
-    set(SHOULD_BUILD_ACTIVE FALSE)
-endif(NOT KDECLARATIVE_FOUND)
 
 ##
 ## Test endianess
@@ -452,6 +487,11 @@ TEST_BIG_ENDIAN(CMAKE_WORDS_BIGENDIAN)
 macro_optional_find_package(SharedMimeInfo)
 macro_log_feature(SHARED_MIME_INFO_FOUND "SharedMimeInfo" "Shared Mime Info" "http://freedesktop.org/wiki/Software/shared-mime-info" FALSE "" "Required to determine file types OpenRaster (Krita default format), SVM or all of MSOOXML.")
 
+##
+## Test for Okular
+##
+macro_optional_find_package(Okular)
+macro_log_feature(OKULAR_FOUND "Okular" "Okular ODP Plugin" "http://okular.kde.org/" FALSE "" "Required to build the Okular OpenDocument Presenter plugin")
 
 ##
 ## Generate a file for prefix information
@@ -567,15 +607,13 @@ set(KOPROPERTY_LIBS koproperty)
 
 # calligradb
 # TODO: remove when Predicate lib arrives
-if (NOT TINY AND NOT CREATIVEONLY AND HAVE_ICU AND HAVE_SQLITE) # These are hard deps for calligradb
-   set(SHOULD_BUILD_CALLIGRADB TRUE)
+if (HAVE_ICU AND HAVE_SQLITE) # These are hard deps for calligradb
    set(CALLIGRADB_LIBS calligradb)                    # TODO remove when Predicate lib arrives
    set(CALLIGRADB_INCLUDES ${CMAKE_SOURCE_DIR}/libs   # TODO remove when Predicate lib arrives
                            ${CMAKE_BINARY_DIR}/libs/db)
-else (NOT TINY AND NOT CREATIVEONLY AND HAVE_ICU AND HAVE_SQLITE)
+else (HAVE_ICU AND HAVE_SQLITE)
    set(SHOULD_BUILD_CALLIGRADB FALSE)
-   set(SHOULD_BUILD_KEXI FALSE)
-endif (NOT TINY AND NOT CREATIVEONLY AND HAVE_ICU AND HAVE_SQLITE)
+endif (HAVE_ICU AND HAVE_SQLITE)
 
 #############################################
 ####          3rd party libraries        ####
@@ -589,11 +627,11 @@ set(KDCHART_INCLUDES
     ${CMAKE_SOURCE_DIR}/3rdparty/kdchart/include
 )
 
- #############################################
-##############################################
-## Detect which applications can be compile ##
-##############################################
-#############################################
+ #########################################
+##########################################
+## Detect which products can be compile ##
+##########################################
+#########################################
 
 #
 # WARNING: when adding a dependency if there is already a line
@@ -604,7 +642,7 @@ set(KDCHART_INCLUDES
 
 ### Calligra Sheets: eigen2, boost
 if(NOT EIGEN2_FOUND)
-    set(SHOULD_BUILD_SHEETS FALSE)
+    set(SHOULD_BUILD_SHEETS_PART FALSE)
 endif(NOT EIGEN2_FOUND)
 
 ### Krita: pigment, eigen2, exiv2, sharedmimeinfo
@@ -612,24 +650,15 @@ if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT 
    set(SHOULD_BUILD_KRITA FALSE)
 endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
 
-### Active needs sheets, stage and words
-if (NOT SHOULD_BUILD_SHEETS OR NOT SHOULD_BUILD_STAGE OR NOT SHOULD_BUILD_WORDS)
-    set(SHOULD_BUILD_ACTIVE FALSE)
-endif (NOT SHOULD_BUILD_SHEETS OR NOT SHOULD_BUILD_STAGE OR NOT SHOULD_BUILD_WORDS)
-
 
 ### Active: only build with Qt 4.7.0 or better
 if (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
     set(SHOULD_BUILD_ACTIVE FALSE)
 endif (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
 
-if (NOT QT_QTDECLARATIVE_FOUND)
+if (NOT QT_QTDECLARATIVE_FOUND OR NOT KDECLARATIVE_FOUND)
     set(SHOULD_BUILD_ACTIVE FALSE)
-endif (NOT QT_QTDECLARATIVE_FOUND)
-
-if(${KDE_VERSION} VERSION_LESS 4.8.0)
-    set(SHOULD_BUILD_ACTIVE FALSE)
-endif(${KDE_VERSION} VERSION_LESS 4.8.0)
+endif(NOT QT_QTDECLARATIVE_FOUND OR NOT KDECLARATIVE_FOUND)
 
 #if(NOT QIMAGEBLITZ_FOUND)
 #    set (SHOULD_BUILD_KEXI FALSE)
@@ -639,15 +668,12 @@ if (NOT QT3SUPPORT)
     set (SHOULD_BUILD_KEXI FALSE)
 endif (NOT QT3SUPPORT)
 
-### HACK ###
-# Those BUILD_ are illegally used below before they are defined, which cause problem on a first build
-option(BUILD_kexi   "Build directory kexi" ON)
-option(BUILD_koreport "Build directory libs/koreport" ON)
-### HACK ###
+if(NOT OKULAR_FOUND)
+    set(SHOULD_BUILD_OKULARODPGENERATOR FALSE)
+endif(NOT OKULAR_FOUND)
 
-if(BUILD_kexi AND SHOULD_BUILD_KEXI)
-###
-endif(BUILD_kexi AND SHOULD_BUILD_KEXI)
+# finally disable all those which are missing internal dependencies
+calligra_drop_unbuildable_products()
 
  ###################
 ####################
@@ -655,64 +681,41 @@ endif(BUILD_kexi AND SHOULD_BUILD_KEXI)
 ####################
 ###################
 
-if(SHOULD_BUILD_WORDS)
-   macro_optional_add_subdirectory(words)
-endif(SHOULD_BUILD_WORDS)
+add_subdirectory(words)
 
 if (SHOULD_BUILD_FLOW)
-    macro_optional_add_subdirectory(flow)
+    add_subdirectory(flow)
 endif (SHOULD_BUILD_FLOW)
 
-if(SHOULD_BUILD_STAGE)
-  macro_optional_add_subdirectory(stage)
-endif(SHOULD_BUILD_STAGE)
+add_subdirectory(stage)
 
 if(SHOULD_BUILD_KEXI)
-    macro_optional_add_subdirectory(kexi)
+    add_subdirectory(kexi)
 endif(SHOULD_BUILD_KEXI)
 
 if(SHOULD_BUILD_PLAN)
-    macro_optional_add_subdirectory(plan)
+    add_subdirectory(plan)
 endif(SHOULD_BUILD_PLAN)
 
-if(SHOULD_BUILD_SHEETS)
-    macro_optional_add_subdirectory(sheets)
-endif(SHOULD_BUILD_SHEETS)
+add_subdirectory(sheets)
 
 if(SHOULD_BUILD_KRITA)
-  macro_optional_add_subdirectory(krita)
+  add_subdirectory(krita)
 endif(SHOULD_BUILD_KRITA)
 
 if(SHOULD_BUILD_KARBON)
-  macro_optional_add_subdirectory(karbon)
+  add_subdirectory(karbon)
 endif(SHOULD_BUILD_KARBON)
 
 if(SHOULD_BUILD_BRAINDUMP)
-  macro_optional_add_subdirectory(braindump)
+  add_subdirectory(braindump)
 endif(SHOULD_BUILD_BRAINDUMP)
 
 if(SHOULD_BUILD_ACTIVE)
-  macro_optional_add_subdirectory(active)
+  add_subdirectory(active)
 endif(SHOULD_BUILD_ACTIVE)
 
-
-if(   NOT SHOULD_BUILD_SHEETS OR NOT BUILD_sheets
-   OR NOT SHOULD_BUILD_WORDS OR NOT BUILD_words
-   OR NOT SHOULD_BUILD_STAGE OR NOT BUILD_stage
-  )
-    set(SHOULD_BUILD_KOABSTRACTION FALSE)
-endif(   NOT SHOULD_BUILD_SHEETS OR NOT BUILD_sheets
-      OR NOT SHOULD_BUILD_WORDS OR NOT BUILD_words
-      OR NOT SHOULD_BUILD_STAGE OR NOT BUILD_stage
-     )
-
-if(SHOULD_BUILD_SHEETS AND SHOULD_BUILD_WORDS)
-    # build cstester
-else(SHOULD_BUILD_SHEETS AND SHOULD_BUILD_WORDS)
-    set(SHOULD_BUILD_CSTESTER FALSE)
-endif(SHOULD_BUILD_SHEETS AND SHOULD_BUILD_WORDS)
-
-macro_optional_add_subdirectory(doc)
+add_subdirectory(doc)
 
 # non-app directories are moved here because they can depend on SHOULD_BUILD_{appname} variables set above
 add_subdirectory(libs)
@@ -730,30 +733,15 @@ add_subdirectory(data)
 
 macro_display_feature_log()
 
-macro(macro_display_application_enabled _appName _shouldBuild)
-if( BUILD_${_appName} AND ${_shouldBuild} MATCHES "[Tt][Rr][Uu][Ee]" )
-  message(STATUS ${_appName} )
-endif( BUILD_${_appName} AND ${_shouldBuild} MATCHES "[Tt][Rr][Uu][Ee]" )
-endmacro(macro_display_application_enabled)
-
-message(STATUS "---------------- The following applications will be built ----------------" )
-
-macro_display_application_enabled(words ${SHOULD_BUILD_WORDS})
-macro_display_application_enabled(sheets ${SHOULD_BUILD_SHEETS})
-macro_display_application_enabled(stage ${SHOULD_BUILD_STAGE})
-macro_display_application_enabled(flow ${SHOULD_BUILD_FLOW})
-macro_display_application_enabled(kexi ${SHOULD_BUILD_KEXI})
-macro_display_application_enabled(plan ${SHOULD_BUILD_PLAN})
-macro_display_application_enabled(krita ${SHOULD_BUILD_KRITA})
-macro_display_application_enabled(karbon ${SHOULD_BUILD_KARBON})
-macro_display_application_enabled(braindump ${SHOULD_BUILD_BRAINDUMP})
-macro_display_application_enabled(calligra ${SHOULD_BUILD_CALLIGRA})
-macro_display_application_enabled(cstester ${SHOULD_BUILD_CSTESTER})
-macro_display_application_enabled(active ${SHOULD_BUILD_ACTIVE})
-
-message(STATUS "--------------------------------------------------------------------------" )
+calligra_log_should_build()
 
 add_custom_target(apidox doc/api/gendocs.pl WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 configure_file(KoConfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/KoConfig.h )
 install( FILES  ${CMAKE_CURRENT_BINARY_DIR}/KoConfig.h DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+
+## temporary warning
+if (WARN_ABOUT_CREATIVEONLY)
+    message(STATUS "WARNING:\n   You are using a deprecated build flag,\n   switch from \"-DCREATIVEONLY=ON\" to \"-DPRODUCTSET=CREATIVE\"\n   and remove the line \"CREATIVEONLY:BOOL=ON\" from CMakeCache.txt")
+    message(STATUS "--------------------------------------------------------------------------" )
+endif (WARN_ABOUT_CREATIVEONLY)

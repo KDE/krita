@@ -1,0 +1,27 @@
+This directory stores the productsets.
+
+You can add your own productset by adding a file in this directory and selecting
+that productset when calling cmake:
+
+The file must be named with the name of the productset in lowercase and have
+the extension ".cmake". The content should be a cmake command that sets the
+variable "CALLIGRA_SHOULD_BUILD_PRODUCTS" to the list of products the productset
+should consist of.
+
+For the possible products have a look at the list of product definitions in the
+toplevel "CMakeLists.txt" file.
+
+
+Example:
+
+You want a productset "PUREWORDS". For that you add a file name "purewords.cmake"
+into this directory, with the content:
+--- 8< ---
+set( CALLIGRA_SHOULD_BUILD_PRODUCTS
+    WORDS
+)
+--- 8< ---
+
+When calling cmake you use the string "PUREWORDS" as value for the parameter
+"PRODUCTSET, like this:
+    cmake -DPRODUCTSET=PUREWORDS [other parameters]

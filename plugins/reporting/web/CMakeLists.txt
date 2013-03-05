@@ -26,7 +26,6 @@ target_link_libraries(koreport_webplugin
     ${KOPROPERTY_LIBS}
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
-    ${KDE4_KDE3SUPPORT_LIBS}
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     ${QT_QTWEBKIT_LIBRARY}

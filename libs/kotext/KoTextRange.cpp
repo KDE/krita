@@ -53,7 +53,9 @@ KoTextRange::KoTextRange(const QTextCursor &cursor)
 {
     d_ptr->cursor = cursor;
     d_ptr->cursor.setPosition(cursor.selectionStart());
+#if QT_VERSION >= 0x040700
     d_ptr->cursor.setKeepPositionOnInsert(true);
+#endif
     if (cursor.hasSelection()) {
         setRangeEnd(cursor.selectionEnd());
     }

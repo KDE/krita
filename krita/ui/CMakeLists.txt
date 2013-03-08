@@ -212,6 +212,9 @@ set(kritaui_LIB_SRCS
     kis_ui_action_factory.cpp
     kis_ui_action_factory_registry.cpp
     actions/kis_selection_action_factories.cpp
+    kis_filter_job.cpp
+    kis_threaded_applicator.cpp
+    kis_document_undo_store.cpp
 )
 
 if(HAVE_OPENGL)
@@ -278,9 +281,9 @@ kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
 target_link_libraries(kritaui ${X11_X11_LIB})
 
 if(GHNS)
-    target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KFILE_LIBRARY} kritaimage komain kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
+    target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KFILE_LIBRARY} ${KDE4_THREADWEAVER_LIBRARIES} kritaimage komain kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
 else(GHNS)
-    target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KFILE_LIBRARY} kritaimage komain kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
+    target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KFILE_LIBRARY} ${KDE4_THREADWEAVER_LIBRARIES} kritaimage komain kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
 endif (GHNS)
 
 if(HAVE_OPENGL)

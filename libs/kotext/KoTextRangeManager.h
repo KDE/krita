@@ -72,7 +72,7 @@ public:
      * matchLast.
      * Single position text ranges is only added once to the hash
      */
-    QHash<int, KoTextRange *> textRangesChangingWithin(int first, int last, int matchFirst, int matchLast) const;
+    QHash<int, KoTextRange *> textRangesChangingWithin(const QTextDocument *, int first, int last, int matchFirst, int matchLast) const;
 
 private:
     QSet<KoTextRange *> m_textRanges;

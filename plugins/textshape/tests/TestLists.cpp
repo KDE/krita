@@ -94,7 +94,7 @@ void TestDocumentLayout::testNumberedList()
     QTextBlock blok = m_doc->begin().next();
     qreal indent = blok.layout()->lineAt(0).x();
     QVERIFY(indent > 0.0);
-    for (i = 1; i <= 9; i++) {
+    for (i = 1; i <= 9; ++i) {
         // qDebug() << "=>" << blok.text();
         QTextList *textList = blok.textList();
         QVERIFY(textList);
@@ -103,7 +103,7 @@ void TestDocumentLayout::testNumberedList()
     }
 
     // now make number of listitems be more than 10, so we use 2 digits.
-    for (i = 9; i <= 12; i++) {
+    for (i = 9; i <= 12; ++i) {
         QVERIFY(block.isValid());
         style.applyStyle(block);
         // qDebug() << "->" << block.text();
@@ -116,7 +116,7 @@ void TestDocumentLayout::testNumberedList()
     blok = m_doc->begin().next();
     qreal indent2 = blok.layout()->lineAt(0).x();
     QVERIFY(indent2 > indent); // since it takes an extra digit
-    for (i = 2; i <= 12; i++) {
+    for (i = 2; i <= 12; ++i) {
         // qDebug() << "=>" << blok.text();
         QCOMPARE(blok.layout()->lineAt(0).x(), indent2); // all the same indent.
         blok = blok.next();

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Calligra Painting and Image Editor Component
 Name[bg]=Компонент за рисуване и редактиране на изображения в Calligra
+Name[bs]=Clligra Komponenta za Bojenje i Editovanje Slika
 Name[ca]=Component de dibuix i manipulació d'imatges del Calligra
 Name[ca@valencia]=Component de dibuix i manipulació d'imatges del Calligra
 Name[cs]=Komponenta Calligra pro malování a úpravu fotografií
@@ -38,6 +39,7 @@ X-KDE-NativeMimeType=application/x-krita
 GenericName=Image Object
 GenericName[bg]=Графично изображение
 GenericName[br]=Tra skeudenn
+GenericName[bs]=Objekat slike
 GenericName[ca]=Objecte d'imatge
 GenericName[ca@valencia]=Objecte d'imatge
 GenericName[cy]=Gwrthrych Delwedd

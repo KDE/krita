@@ -18,7 +18,6 @@
 
 #include "kis_transaction_test.h"
 #include <qtest_kde.h>
-#include <KoStore.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 

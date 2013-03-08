@@ -120,7 +120,7 @@ bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
 
             KisSelectionSP selection = KisSelectionSP(new KisSelection());
             KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
-            if (!pixelSelection->read(m_store)) {
+            if (!pixelSelection->read(m_store->device())) {
                 pixelSelection->disconnect();
             } else {
                 KisTransparencyMask* mask = new KisTransparencyMask();
@@ -236,7 +236,7 @@ bool KisKraLoadVisitor::loadPaintDevice(KisPaintDeviceSP device, const QString& 
 {
     // Layer data
     if (m_store->open(location)) {
-        if (!device->read(m_store)) {
+        if (!device->read(m_store->device())) {
             device->disconnect();
             m_store->close();
             return false;

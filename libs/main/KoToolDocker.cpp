@@ -41,7 +41,7 @@
 #include <QStyleOptionFrame>
 #include <QToolButton>
 #include <QTabWidget>
-#include <QToolButton>
+
 
 class KoToolDocker::Private {
 public:

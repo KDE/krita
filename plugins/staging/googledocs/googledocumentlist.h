@@ -27,6 +27,8 @@ class GoogleDocument;
 
 class GoogleDocumentList : public QObject
 {
+    Q_OBJECT
+
 public:
     GoogleDocumentList();
 

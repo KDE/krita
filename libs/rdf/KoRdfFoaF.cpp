@@ -27,6 +27,14 @@
 #include <kdebug.h>
 #include <kfiledialog.h>
 
+#ifdef KDEPIMLIBS_FOUND
+#include <kabc/addressee.h>
+#include <kabc/stdaddressbook.h>
+#include <kabc/addressbook.h>
+#include <kabc/phonenumber.h>
+#include <kabc/vcardconverter.h>
+#endif
+
 using namespace Soprano;
 
 
@@ -235,6 +243,10 @@ void KoRdfFoaF::importFromData(const QByteArray &ba, KoDocumentRdf *_rdf, KoCanv
     kDebug(30015) << "uri:" << m_uri;
     importFromDataComplete(ba, documentRdf(), host);
 #else
+    Q_UNUSED(ba);
+    Q_UNUSED(_rdf);
+    Q_UNUSED(host);
+
     kDebug(30015) << "KDEPIM support not built!";
 #endif
 }

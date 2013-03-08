@@ -44,6 +44,7 @@
 // local
 #include "kis_factory2.h"
 #include "kis_config.h"
+#include "kis_store_paintdevice_writer.h"
 
 KisClipboard::KisClipboard()
 {
@@ -83,13 +84,14 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
     QBuffer buffer;
     QByteArray mimeType("application/x-krita-selection");
     KoStore* store = KoStore::createStore(&buffer, KoStore::Write, mimeType);
+    KisStorePaintDeviceWriter writer(store);
     Q_ASSERT(store);
     Q_ASSERT(!store->bad());
     store->disallowNameExpansion();
 
     // Layer data
     if (store->open("layerdata")) {
-        if (!dev->write(store)) {
+        if (!dev->write(writer)) {
             dev->disconnect();
             store->close();
             delete store;
@@ -225,7 +227,7 @@ KisPaintDeviceSP KisClipboard::clip(const QPoint& topLeftHint)
 
             if (store->hasFile("layerdata")) {
                 store->open("layerdata");
-                asKrita = clip->read(store);
+                asKrita = clip->read(store->device());
                 store->close();
             }
         }
@@ -341,7 +343,7 @@ QSize KisClipboard::clipSize()
 
         if (store->hasFile("layerdata")) {
             store->open("layerdata");
-            clip->read(store);
+            clip->read(store->device());
             store->close();
         }
         delete store;

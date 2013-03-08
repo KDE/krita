@@ -29,6 +29,12 @@
 #include <KMessageBox>
 #include "ksystemtimezone.h"
 
+#ifdef KDEPIMLIBS_FOUND
+#include <kcal/calendarresources.h>
+#include <kcal/calendarlocal.h>
+#include <kcal/vcalformat.h>
+#endif
+
 using namespace Soprano;
 
 KoRdfCalendarEvent::KoRdfCalendarEvent(QObject *parent, const KoDocumentRdf *m_rdf)
@@ -362,11 +368,9 @@ KCal::Event *KoRdfCalendarEvent::toKEvent() const
     event->setUid(uid());
     return event;
 }
-#endif
 
 void KoRdfCalendarEvent::fromKEvent(KCal::Event *event)
 {
-#ifdef KDEPIMLIBS_FOUND
     m_dtstart = event->dtStart();
     m_dtend   = event->dtEnd();
     m_summary = event->summary();
@@ -387,8 +391,8 @@ void KoRdfCalendarEvent::fromKEvent(KCal::Event *event)
     kDebug(30015) << "dtend:" << m_dtend;
     kDebug(30015) << "dtstart.rdfnode:" << n;
     kDebug(30015) << "dtstart.roundTrip.offset:" << tz.timeZone().currentOffset();
-#endif
 }
+#endif
 
 void KoRdfCalendarEvent::saveToKCal()
 {
@@ -450,5 +454,9 @@ void KoRdfCalendarEvent::importFromData(const QByteArray &ba, KoDocumentRdf *_rd
     }
     delete cal;
     importFromDataComplete(ba, documentRdf(), host);
+#else
+    Q_UNUSED(ba);
+    Q_UNUSED(_rdf);
+    Q_UNUSED(host);
 #endif
 }

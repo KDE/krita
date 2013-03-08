@@ -28,6 +28,7 @@ class KisActionManagerTest : public QObject
 private slots:
     void testUpdateGUI();
     void testCondition();
+    void testTakeAction();
 };
 
 #endif // KIS_ACTION_MANAGER_TEST_H

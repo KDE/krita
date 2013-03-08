@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Flake device definition
+Name[bs]=Definicija pahuljastog uređaja
 Name[ca]=Definició d'aparell de floc
 Name[ca@valencia]=Definició d'aparell de floc
 Name[da]=Definition af flake-enhed
@@ -34,6 +35,7 @@ Name[zh_TW]=Flake 裝置定義
 Type=ServiceType
 X-KDE-ServiceType=Calligra/Device
 Comment=Definition of flake devices
+Comment[bs]=Definicija pahuljastih uređaja
 Comment[ca]=Definició d'aparells de floc
 Comment[ca@valencia]=Definició d'aparells de floc
 Comment[da]=Definition af flake-enheder

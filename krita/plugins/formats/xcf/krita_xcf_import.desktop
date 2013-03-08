@@ -2,6 +2,7 @@
 Type=Service
 Name=Krita Gimp Import Filter
 Name[bg]=Филтър за внасяне от Gimp в Krita
+Name[bs]=Krita Gimp unosni Filter
 Name[ca]=Filtre d'importació Gimp per al Krita
 Name[ca@valencia]=Filtre d'importació Gimp per al Krita
 Name[cs]=Importní filtr do GIMPu pro Kritu
@@ -19,6 +20,7 @@ Name[hu]=Krita Gimp importszűrő
 Name[it]=Filtro di importazione Gimp per Krita
 Name[ja]=Krita GIMP インポートフィルタ
 Name[kk]=Gimp -> Krita импорт сүзгісі
+Name[lt]=Krita Gimp importavimo filtras
 Name[nb]=Gimp importfilter for Krita
 Name[nds]=Gimp-Importfilter för Krita
 Name[nl]=Gimp-importfilter voor Krita

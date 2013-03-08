@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=SpellCheck plugin
 Name[bg]=Проверка на правописа
+Name[bs]=Plugin za Provjeru Gramatike
 Name[ca]=Connector d'ortografia
 Name[ca@valencia]=Connector d'ortografia
 Name[cs]=Modul pro kontrolu pravopisu
@@ -22,6 +23,7 @@ Name[hu]=Helyesírás-ellenőrző bővítmény
 Name[it]=Estensione di correzione ortografica
 Name[ja]=スペルチェックプラグイン
 Name[kk]=Емле тексеру плагині
+Name[lt]=Rašybos tikrinimo įrankis
 Name[lv]=Pareizrakstības pārbaudes spraudnis
 Name[ms]=Plugmasuk Penyemak Eja
 Name[nb]=Programtillegg for stavekontroll

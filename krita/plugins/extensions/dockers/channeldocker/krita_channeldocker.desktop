@@ -1,8 +1,9 @@
 [Desktop Entry]
 Name=Channel Docker
 Name[bg]=Контейнер за канали
+Name[bs]=Kanalni doker
 Name[ca]=Acoblador de canal
-Name[ca@valencia]=Amarrador de canal
+Name[ca@valencia]=Acoblador de canal
 Name[cs]=Dok kanálů
 Name[da]=Kanal-dokker
 Name[el]=Εργαλείο προσάρτησης καναλιού
@@ -22,6 +23,7 @@ Name[pt]=Área de Canais
 Name[pt_BR]=Área de canais
 Name[ru]=Панель каналов
 Name[sk]=Kanálový docker
+Name[sl]=Sidrišče za kanale
 Name[sv]=Kanaldockningsfönster
 Name[uk]=Панель швартування каналів
 Name[x-test]=xxChannel Dockerxx

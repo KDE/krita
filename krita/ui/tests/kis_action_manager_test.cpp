@@ -91,4 +91,20 @@ void KisActionManagerTest::testCondition()
     QVERIFY(action->isEnabled());
 }
 
+void KisActionManagerTest::testTakeAction()
+{
+    KisDoc2* doc = createEmptyDocument();
+    KoMainWindow* shell = new KoMainWindow(doc->documentPart()->componentData());
+    KisView2* view = new KisView2(static_cast<KisPart2*>(doc->documentPart()), static_cast<KisDoc2*>(doc), shell);
+    doc->documentPart()->addView(view);
+
+    KisAction* action = new KisAction("dummy", this);
+    view->actionManager()->addAction("dummy", action, view->actionCollection());
+    QVERIFY(view->actionManager()->actionByName("dummy") != 0);
+
+    view->actionManager()->takeAction(action);
+    QVERIFY(view->actionManager()->actionByName("dummy") == 0);
+}
+
+
 QTEST_KDEMAIN(KisActionManagerTest, GUI)

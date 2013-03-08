@@ -20,9 +20,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoOdfWorkaround.h"
 #include "KoPathShape.h"
 #include "KoPathShape_p.h"
+
+#include "KoOdfWorkaround.h"
 #include "KoPathPoint.h"
 #include "KoShapeStrokeModel.h"
 #include "KoViewConverter.h"

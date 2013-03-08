@@ -23,6 +23,8 @@
 #include "kis_resource_server_provider.h"
 
 #include <QDir>
+#include <QApplication>
+#include <QDebug>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -52,13 +54,25 @@ KisResourceServerProvider::KisResourceServerProvider()
     patternThread = new KoResourceLoaderThread(m_patternServer);
     patternThread->start();
 
+    if (qApp->applicationName().toLower().contains("test")) {
+        patternThread->wait();
+    }
+
+
     m_paintOpPresetServer = new KoResourceServer<KisPaintOpPreset>("kis_paintoppresets", "*.kpp");
     paintOpPresetThread = new KoResourceLoaderThread(m_paintOpPresetServer);
     paintOpPresetThread->start();
-    
+    if (qApp->applicationName().toLower().contains("test")) {
+        paintOpPresetThread->wait();
+    }
+
     m_workspaceServer = new KoResourceServer<KisWorkspaceResource>("kis_workspaces", "*.kws");
     workspaceThread = new KoResourceLoaderThread(m_workspaceServer);
     workspaceThread->start();
+    if (qApp->applicationName().toLower().contains("test")) {
+        workspaceThread->wait();
+    }
+
 }
 
 KisResourceServerProvider::~KisResourceServerProvider()

@@ -19,7 +19,7 @@
 #include "kis_tile_compressor_2.h"
 #include "kis_lzf_compression.h"
 #include <QIODevice>
-
+#include "kis_paint_device_writer.h"
 #define TILE_DATA_SIZE(pixelSize) ((pixelSize) * KisTileData::WIDTH * KisTileData::HEIGHT)
 
 const QString KisTileCompressor2::m_compressionName = "LZF";
@@ -35,7 +35,7 @@ KisTileCompressor2::~KisTileCompressor2()
     delete m_compression;
 }
 
-void KisTileCompressor2::writeTile(KisTileSP tile, KoStore *store)
+void KisTileCompressor2::writeTile(KisTileSP tile, KisPaintDeviceWriter &store)
 {
     const qint32 tileDataSize = TILE_DATA_SIZE(tile->pixelSize());
     prepareStreamingBuffer(tileDataSize);
@@ -48,16 +48,15 @@ void KisTileCompressor2::writeTile(KisTileSP tile, KoStore *store)
     tile->unlock();
 
     QString header = getHeader(tile, bytesWritten);
-    store->write(header.toLatin1());
-    store->write(m_streamingBuffer.data(), bytesWritten);
+    store.write(header.toLatin1());
+    store.write(m_streamingBuffer.data(), bytesWritten);
 }
 
-void KisTileCompressor2::readTile(KoStore *store, KisTiledDataManager *dm)
+void KisTileCompressor2::readTile(QIODevice *stream, KisTiledDataManager *dm)
 {
     const qint32 tileDataSize = TILE_DATA_SIZE(pixelSize(dm));
     prepareStreamingBuffer(tileDataSize);
 
-    QIODevice *stream = store->device();
     QByteArray header = stream->readLine(maxHeaderLength());
 
     QList<QByteArray> headerItems = header.trimmed().split(',');

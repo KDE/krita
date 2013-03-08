@@ -99,9 +99,9 @@ FormulaToolWidget::FormulaToolWidget( KoFormulaTool* tool, QWidget* parent )
                                                                    <<symbolsInRange(0x221F,0x2222));
 
     buttonRow->hide();
-    connect( buttonLoad, SIGNAL( clicked() ), m_tool, SLOT( loadFormula() ) );
-    connect( buttonSave, SIGNAL( clicked() ), m_tool, SLOT( saveFormula() ) );
-    connect( buttonAlterTable, SIGNAL( triggered( QAction* ) ), m_tool, SLOT( changeTable(QAction*)));
+    connect( buttonLoad, SIGNAL(clicked()), m_tool, SLOT(loadFormula()) );
+    connect( buttonSave, SIGNAL(clicked()), m_tool, SLOT(saveFormula()) );
+    connect( buttonAlterTable, SIGNAL(triggered(QAction*)), m_tool, SLOT(changeTable(QAction*)));
 }
 
 FormulaToolWidget::~FormulaToolWidget()
@@ -139,11 +139,11 @@ void FormulaToolWidget::setupButton ( QToolButton* button, QMenu& menu, const QS
     table->setFixedSize(table->horizontalHeader()->length(), table->verticalHeader()->length());
     button->setToolTip(text);
     //TODO: that is a little bit hackish
-//     connect( table,SIGNAL( itemActivated(QTableWidgetItem*)),
-//              table, SIGNAL( itemClicked(QTableWidgetItem*)));
-    connect( table,SIGNAL( itemClicked(QTableWidgetItem*)),
-             this, SLOT( insertSymbol(QTableWidgetItem*)));
-    connect( table,SIGNAL( itemClicked(QTableWidgetItem*)),
+//     connect( table,SIGNAL(itemActivated(QTableWidgetItem*)),
+//              table, SIGNAL(itemClicked(QTableWidgetItem*)));
+    connect( table,SIGNAL(itemClicked(QTableWidgetItem*)),
+             this, SLOT(insertSymbol(QTableWidgetItem*)));
+    connect( table,SIGNAL(itemClicked(QTableWidgetItem*)),
              &menu, SLOT(hide()));
     button->setPopupMode(QToolButton::InstantPopup);
     button->setMenu(&menu);

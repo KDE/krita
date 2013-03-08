@@ -225,6 +225,7 @@ KoDocument::KoDocument(KoPart *parent, KUndo2Stack *undoStack)
 
 KoDocument::~KoDocument()
 {
+    d->autoSaveTimer.disconnect(this);
     d->autoSaveTimer.stop();
     delete d->filterManager;
     delete d;

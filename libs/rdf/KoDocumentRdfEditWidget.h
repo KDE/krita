@@ -55,7 +55,7 @@ public:
      * @param parent a pointer to the parent widget
      * @param docRdf a pointer to the KoDocumentRdf to show/edit
      */
-    KoDocumentRdfEditWidget(KoDocumentRdf *docRdf);
+    explicit KoDocumentRdfEditWidget(KoDocumentRdf *docRdf);
 
     /** The destructor */
     virtual ~KoDocumentRdfEditWidget();

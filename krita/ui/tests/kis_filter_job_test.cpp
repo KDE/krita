@@ -30,7 +30,7 @@
 #include "filter/kis_filter.h"
 #include "testutil.h"
 #include "kis_threaded_applicator.h"
-#include "filter/kis_filter_job.h"
+#include "kis_filter_job.h"
 #include "testutil.h"
 #include "kis_fill_painter.h"
 

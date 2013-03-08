@@ -65,12 +65,6 @@ target_link_libraries(TestStorage koodf ${QT_QTTEST_LIBRARY} ${QT_QTGUI_LIBRARY}
 
 ########### next target ###############
 
-set(kopropertiestest_SRCS KoPropertiesTest.cpp )
-kde4_add_unit_test(KoPropertiesTest TESTNAME libs-koodf-KoPropertiesTest ${kopropertiestest_SRCS})
-target_link_libraries(KoPropertiesTest  ${KDE4_KDEUI_LIBS} koodf ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(TestKoUnit_SRCS TestKoUnit.cpp)
 kde4_add_unit_test(TestKoUnit TESTNAME libs-koodf-TestKoUnit ${TestKoUnit_SRCS})
 target_link_libraries(TestKoUnit koodf ${QT_QTTEST_LIBRARY})

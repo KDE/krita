@@ -198,12 +198,18 @@ void SelectionRect::fixAspect(HandleFlags handle)
 
     if (m_rect.top() < m_tConstr || m_rect.top() > m_bConstr) {
         m_rect.setTop(qBound(m_tConstr, m_rect.top(), m_bConstr));
-        fixAspect(TOP_HANDLE);
+
+        if (!qFuzzyCompare(1.0 + (oldRect.top() - m_rect.top()), 1.0)) {
+            fixAspect(TOP_HANDLE);
+        }
     }
 
     if (m_rect.bottom() < m_tConstr || m_rect.bottom() > m_bConstr) {
         m_rect.setBottom(qBound(m_tConstr, m_rect.bottom(), m_bConstr));
-        fixAspect(BOTTOM_HANDLE);
+
+        if (!qFuzzyCompare(1.0 + (oldRect.bottom() - m_rect.bottom()), 1.0)) {
+            fixAspect(BOTTOM_HANDLE);
+        }
 
         if (handle & LEFT_HANDLE) {
             m_rect.moveTopRight(oldRect.topRight());
@@ -216,12 +222,19 @@ void SelectionRect::fixAspect(HandleFlags handle)
 
     if (m_rect.left() < m_lConstr || m_rect.left() > m_rConstr) {
         m_rect.setLeft(qBound(m_lConstr, m_rect.left(), m_rConstr));
-        fixAspect(LEFT_HANDLE);
+
+        if (!qFuzzyCompare(1.0 + (oldRect.left() - m_rect.left()), 1.0)) {
+            fixAspect(LEFT_HANDLE);
+        }
     }
 
     if (m_rect.right() < m_lConstr || m_rect.right() > m_rConstr) {
         m_rect.setRight(qBound(m_lConstr, m_rect.right(), m_rConstr));
-        fixAspect(RIGHT_HANDLE);
+
+        if (!qFuzzyCompare(1.0 + (oldRect.right() - m_rect.right()), 1.0)) {
+            fixAspect(RIGHT_HANDLE);
+        }
+
         m_rect.moveBottomRight(oldRect.bottomRight());
     }
 }

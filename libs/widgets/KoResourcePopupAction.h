@@ -37,7 +37,7 @@ public:
      *
      * @param parent The parent for this action.
      */
-    KoResourcePopupAction(KoAbstractResourceServerAdapter *gradientResourceAdapter, QObject *parent = 0);
+    explicit KoResourcePopupAction(KoAbstractResourceServerAdapter *gradientResourceAdapter, QObject *parent = 0);
 
     /**
      * Destructor

@@ -342,9 +342,9 @@ bool RectangleShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &con
     setSize(QSizeF(w, h));
     setPosition(QPointF(x, y));
     if (rx >= 0.0)
-        setCornerRadiusX(qMin(100.0, rx / (0.5 * w) * 100.0));
+        setCornerRadiusX(qMin(qreal(100.0), rx / (0.5 * w) * 100.0));
     if (ry >= 0.0)
-        setCornerRadiusY(qMin(100.0, ry / (0.5 * h) * 100.0));
+        setCornerRadiusY(qMin(qreal(100.0), ry / (0.5 * h) * 100.0));
     if (w == 0.0 || h == 0.0)
         setVisible(false);
 

@@ -73,6 +73,7 @@ signals:
 private:
     quint8 backgroundOpacity() const;
     void fillPredefined();
+    void showEvent(QShowEvent *);
 
     KisDoc2 *m_doc;
     double m_width, m_height;

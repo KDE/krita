@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Chart Report Plugin
+Name[bs]=Plugin za Izvještaj Dijagrama
 Name[ca]=Connector d'informes de diagrames
 Name[ca@valencia]=Connector d'informes de diagrames
 Name[da]=Plugin til diagramrapporter
@@ -25,6 +26,7 @@ Name[uk]=Додаток діаграм звіту
 Name[x-test]=xxChart Report Pluginxx
 Name[zh_TW]=圖表報告外掛程式
 Comment=KoReport Chart Plugin
+Comment[bs]=Plugin za KoIzvještaj Dijagrama
 Comment[ca]=Connector de diagrames KoReport
 Comment[ca@valencia]=Connector de diagrames KoReport
 Comment[da]=Diagram-plugin til KoReport

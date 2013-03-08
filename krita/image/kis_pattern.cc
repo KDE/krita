@@ -49,7 +49,11 @@
 
 QByteArray generateMD5(const QImage &pattern)
 {
+#if QT_VERSION >= 0x040700
     QByteArray ba = QByteArray::fromRawData((const char*)pattern.constBits(), pattern.width() * pattern.height() * 4);
+#else
+    QByteArray ba = QByteArray::fromRawData((const char*)pattern.bits(), pattern.width() * pattern.height() * 4);
+#endif
     QCryptographicHash md5(QCryptographicHash::Md5);
     md5.addData(ba);
     return md5.result();

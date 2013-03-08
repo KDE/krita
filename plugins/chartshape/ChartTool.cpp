@@ -263,48 +263,48 @@ QWidget *ChartTool::createOptionWidget()
 {
     ChartConfigWidget  *widget = new ChartConfigWidget();
     
-    connect(widget, SIGNAL(dataSetXDataRegionChanged(DataSet*, const CellRegion&)),
-            this,   SLOT(setDataSetXDataRegion(DataSet*, const CellRegion&)));
-    connect(widget, SIGNAL(dataSetYDataRegionChanged(DataSet*, const CellRegion&)),
-            this,   SLOT(setDataSetYDataRegion(DataSet*, const CellRegion&)));
-    connect(widget, SIGNAL(dataSetCustomDataRegionChanged(DataSet*, const CellRegion&)),
-            this,   SLOT(setDataSetCustomDataRegion(DataSet*, const CellRegion&)));
-    connect(widget, SIGNAL(dataSetLabelDataRegionChanged(DataSet*, const CellRegion&)),
-            this,   SLOT(setDataSetLabelDataRegion(DataSet*, const CellRegion&)));
-    connect(widget, SIGNAL(dataSetCategoryDataRegionChanged(DataSet*, const CellRegion&)),
-            this,   SLOT(setDataSetCategoryDataRegion(DataSet*, const CellRegion&)));
-    connect(widget, SIGNAL(dataSetChartTypeChanged(DataSet*, ChartType)),
-            this,   SLOT(setDataSetChartType(DataSet*, ChartType)));
-    connect(widget, SIGNAL(dataSetChartSubTypeChanged(DataSet*, ChartSubtype)),
-            this,   SLOT(setDataSetChartSubType(DataSet*, ChartSubtype)));
-    connect(widget, SIGNAL(datasetBrushChanged(DataSet*, const QColor&)),
-            this, SLOT(setDataSetBrush(DataSet*, const QColor&)));
+    connect(widget, SIGNAL(dataSetXDataRegionChanged(DataSet*,CellRegion)),
+            this,   SLOT(setDataSetXDataRegion(DataSet*,CellRegion)));
+    connect(widget, SIGNAL(dataSetYDataRegionChanged(DataSet*,CellRegion)),
+            this,   SLOT(setDataSetYDataRegion(DataSet*,CellRegion)));
+    connect(widget, SIGNAL(dataSetCustomDataRegionChanged(DataSet*,CellRegion)),
+            this,   SLOT(setDataSetCustomDataRegion(DataSet*,CellRegion)));
+    connect(widget, SIGNAL(dataSetLabelDataRegionChanged(DataSet*,CellRegion)),
+            this,   SLOT(setDataSetLabelDataRegion(DataSet*,CellRegion)));
+    connect(widget, SIGNAL(dataSetCategoryDataRegionChanged(DataSet*,CellRegion)),
+            this,   SLOT(setDataSetCategoryDataRegion(DataSet*,CellRegion)));
+    connect(widget, SIGNAL(dataSetChartTypeChanged(DataSet*,ChartType)),
+            this,   SLOT(setDataSetChartType(DataSet*,ChartType)));
+    connect(widget, SIGNAL(dataSetChartSubTypeChanged(DataSet*,ChartSubtype)),
+            this,   SLOT(setDataSetChartSubType(DataSet*,ChartSubtype)));
+    connect(widget, SIGNAL(datasetBrushChanged(DataSet*,QColor)),
+            this, SLOT(setDataSetBrush(DataSet*,QColor)));
     connect(widget, SIGNAL(dataSetMarkerChanged(DataSet*,OdfMarkerStyle)),
             this, SLOT(setDataSetMarker(DataSet*,OdfMarkerStyle)));
-    connect(widget, SIGNAL(datasetPenChanged(DataSet*, const QColor&)),
-            this, SLOT(setDataSetPen(DataSet*, const QColor&)));
-    connect(widget, SIGNAL(datasetShowCategoryChanged(DataSet*, bool)),
-            this, SLOT(setDataSetShowCategory(DataSet*, bool)));
-    connect(widget, SIGNAL(dataSetShowNumberChanged(DataSet*, bool)),
-            this, SLOT(setDataSetShowNumber(DataSet*, bool)));
-    connect(widget, SIGNAL(datasetShowPercentChanged(DataSet*, bool)),
-            this, SLOT(setDataSetShowPercent(DataSet*, bool)));
-    connect(widget, SIGNAL(datasetShowSymbolChanged(DataSet*, bool)),
-            this, SLOT(setDataSetShowSymbol(DataSet*, bool)));
-    connect(widget, SIGNAL(dataSetAxisChanged(DataSet*, Axis*)),
-            this, SLOT(setDataSetAxis(DataSet*, Axis*)));
+    connect(widget, SIGNAL(datasetPenChanged(DataSet*,QColor)),
+            this, SLOT(setDataSetPen(DataSet*,QColor)));
+    connect(widget, SIGNAL(datasetShowCategoryChanged(DataSet*,bool)),
+            this, SLOT(setDataSetShowCategory(DataSet*,bool)));
+    connect(widget, SIGNAL(dataSetShowNumberChanged(DataSet*,bool)),
+            this, SLOT(setDataSetShowNumber(DataSet*,bool)));
+    connect(widget, SIGNAL(datasetShowPercentChanged(DataSet*,bool)),
+            this, SLOT(setDataSetShowPercent(DataSet*,bool)));
+    connect(widget, SIGNAL(datasetShowSymbolChanged(DataSet*,bool)),
+            this, SLOT(setDataSetShowSymbol(DataSet*,bool)));
+    connect(widget, SIGNAL(dataSetAxisChanged(DataSet*,Axis*)),
+            this, SLOT(setDataSetAxis(DataSet*,Axis*)));
     connect(widget, SIGNAL(gapBetweenBarsChanged(int)),
             this,   SLOT(setGapBetweenBars(int)));
     connect(widget, SIGNAL(gapBetweenSetsChanged(int)),
             this,   SLOT(setGapBetweenSets(int)));
-    connect(widget, SIGNAL(pieExplodeFactorChanged(DataSet*, int)),
-            this,   SLOT(setPieExplodeFactor(DataSet*, int)));
+    connect(widget, SIGNAL(pieExplodeFactorChanged(DataSet*,int)),
+            this,   SLOT(setPieExplodeFactor(DataSet*,int)));
     
     connect(widget, SIGNAL(showLegendChanged(bool)),
             this,   SLOT(setShowLegend(bool)));
 
-    connect(widget, SIGNAL(chartTypeChanged(ChartType, ChartSubtype)),
-            this,   SLOT(setChartType(ChartType, ChartSubtype)));
+    connect(widget, SIGNAL(chartTypeChanged(ChartType,ChartSubtype)),
+            this,   SLOT(setChartType(ChartType,ChartSubtype)));
     connect(widget, SIGNAL(chartSubTypeChanged(ChartSubtype)),
             this,   SLOT(setChartSubType(ChartSubtype)));
     connect(widget, SIGNAL(threeDModeToggled(bool)),
@@ -316,33 +316,33 @@ QWidget *ChartTool::createOptionWidget()
     connect(widget, SIGNAL(showFooterChanged(bool)),
             this,   SLOT(setShowFooter(bool)));
 
-    connect(widget, SIGNAL(axisAdded(AxisDimension, const QString&)),
-            this,   SLOT(addAxis(AxisDimension, const QString&)));
+    connect(widget, SIGNAL(axisAdded(AxisDimension,QString)),
+            this,   SLOT(addAxis(AxisDimension,QString)));
     connect(widget, SIGNAL(axisRemoved(Axis*)),
             this,   SLOT(removeAxis(Axis*)));
-    connect(widget, SIGNAL(axisTitleChanged(Axis*, const QString&)),
-            this,   SLOT(setAxisTitle(Axis*, const QString&)));
-    connect(widget, SIGNAL(axisShowTitleChanged(Axis*, bool)),
-            this,   SLOT(setAxisShowTitle(Axis*, bool)));
-    connect(widget, SIGNAL(axisShowGridLinesChanged(Axis*, bool)),
-            this,   SLOT(setAxisShowGridLines(Axis*, bool)));
-    connect(widget, SIGNAL(axisUseLogarithmicScalingChanged(Axis*, bool)),
-            this,   SLOT(setAxisUseLogarithmicScaling(Axis*, bool)));
-    connect(widget, SIGNAL(axisStepWidthChanged(Axis*, qreal)),
-            this,   SLOT(setAxisStepWidth(Axis*, qreal)));
-    connect(widget, SIGNAL(axisSubStepWidthChanged(Axis*, qreal)),
-            this,   SLOT(setAxisSubStepWidth(Axis*, qreal)));
-    connect(widget, SIGNAL(axisUseAutomaticStepWidthChanged(Axis*, bool)),
-            this,   SLOT(setAxisUseAutomaticStepWidth(Axis*, bool)));
-    connect(widget, SIGNAL(axisUseAutomaticSubStepWidthChanged(Axis*, bool)),
-            this,   SLOT(setAxisUseAutomaticSubStepWidth(Axis*, bool)));
-    connect(widget, SIGNAL(axisLabelsFontChanged(Axis*, const QFont&)),
-            this,   SLOT(setAxisLabelsFont(Axis*, const QFont&)));
+    connect(widget, SIGNAL(axisTitleChanged(Axis*,QString)),
+            this,   SLOT(setAxisTitle(Axis*,QString)));
+    connect(widget, SIGNAL(axisShowTitleChanged(Axis*,bool)),
+            this,   SLOT(setAxisShowTitle(Axis*,bool)));
+    connect(widget, SIGNAL(axisShowGridLinesChanged(Axis*,bool)),
+            this,   SLOT(setAxisShowGridLines(Axis*,bool)));
+    connect(widget, SIGNAL(axisUseLogarithmicScalingChanged(Axis*,bool)),
+            this,   SLOT(setAxisUseLogarithmicScaling(Axis*,bool)));
+    connect(widget, SIGNAL(axisStepWidthChanged(Axis*,qreal)),
+            this,   SLOT(setAxisStepWidth(Axis*,qreal)));
+    connect(widget, SIGNAL(axisSubStepWidthChanged(Axis*,qreal)),
+            this,   SLOT(setAxisSubStepWidth(Axis*,qreal)));
+    connect(widget, SIGNAL(axisUseAutomaticStepWidthChanged(Axis*,bool)),
+            this,   SLOT(setAxisUseAutomaticStepWidth(Axis*,bool)));
+    connect(widget, SIGNAL(axisUseAutomaticSubStepWidthChanged(Axis*,bool)),
+            this,   SLOT(setAxisUseAutomaticSubStepWidth(Axis*,bool)));
+    connect(widget, SIGNAL(axisLabelsFontChanged(Axis*,QFont)),
+            this,   SLOT(setAxisLabelsFont(Axis*,QFont)));
 
-    connect(widget, SIGNAL(legendTitleChanged(const QString&)),
-            this,   SLOT(setLegendTitle(const QString&)));
-    connect(widget, SIGNAL(legendFontChanged(const QFont&)),
-            this,   SLOT(setLegendFont(const QFont&)));
+    connect(widget, SIGNAL(legendTitleChanged(QString)),
+            this,   SLOT(setLegendTitle(QString)));
+    connect(widget, SIGNAL(legendFontChanged(QFont)),
+            this,   SLOT(setLegendFont(QFont)));
     connect(widget, SIGNAL(legendFontSizeChanged(int)),
             this,   SLOT(setLegendFontSize(int)));
 
@@ -354,10 +354,10 @@ QWidget *ChartTool::createOptionWidget()
     connect(widget, SIGNAL(legendFixedPositionChanged(Position)),
             this,   SLOT(setLegendFixedPosition(Position)));
     
-    connect(widget, SIGNAL(legendBackgroundColorChanged(const QColor&)) ,
-            this,   SLOT(setLegendBackgroundColor(const QColor&)));
-    connect(widget, SIGNAL(legendFrameColorChanged(const QColor&)) ,
-            this,   SLOT(setLegendFrameColor(const QColor&)));
+    connect(widget, SIGNAL(legendBackgroundColorChanged(QColor)) ,
+            this,   SLOT(setLegendBackgroundColor(QColor)));
+    connect(widget, SIGNAL(legendFrameColorChanged(QColor)) ,
+            this,   SLOT(setLegendFrameColor(QColor)));
     connect(widget, SIGNAL(legendShowFrameChanged(bool)) ,
             this,   SLOT(setLegendShowFrame(bool)));
 

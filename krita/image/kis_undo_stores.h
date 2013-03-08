@@ -21,24 +21,7 @@
 
 #include "kis_undo_store.h"
 
-class KoDocument;
 class KUndo2Stack;
-
-class KRITAIMAGE_EXPORT KisDocumentUndoStore : public KisUndoStore
-{
-public:
-    KisDocumentUndoStore(KoDocument *doc);
-
-    const KUndo2Command* presentCommand();
-    void undoLastCommand();
-    void addCommand(KUndo2Command *cmd);
-    void beginMacro(const QString& macroName);
-    void endMacro();
-
-private:
-    KoDocument* m_doc;
-};
-
 
 /**
  * KisSurrogateUndoAdapter -- saves commands directly to the

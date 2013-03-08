@@ -149,12 +149,12 @@ void TableSource::setSheetAccessModel(QAbstractItemModel *model)
     d->sheetAccessModel = model;
 
     if (model) {
-        connect(model, SIGNAL(columnsInserted(QModelIndex, int, int)),
-                this,  SLOT(samColumnsInserted(QModelIndex, int, int)));
-        connect(model, SIGNAL(columnsAboutToBeRemoved(QModelIndex, int, int)),
-                this,  SLOT(samColumnsRemoved(QModelIndex, int, int)));
-        connect(model, SIGNAL(headerDataChanged(Qt::Orientation, int, int)),
-                this,  SLOT(samHeaderDataChanged(Qt::Orientation, int, int)));
+        connect(model, SIGNAL(columnsInserted(QModelIndex,int,int)),
+                this,  SLOT(samColumnsInserted(QModelIndex,int,int)));
+        connect(model, SIGNAL(columnsAboutToBeRemoved(QModelIndex,int,int)),
+                this,  SLOT(samColumnsRemoved(QModelIndex,int,int)));
+        connect(model, SIGNAL(headerDataChanged(Qt::Orientation,int,int)),
+                this,  SLOT(samHeaderDataChanged(Qt::Orientation,int,int)));
 
         // Process existing data
         samColumnsInserted(QModelIndex(), 0, model->columnCount() - 1);

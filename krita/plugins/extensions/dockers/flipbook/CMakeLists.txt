@@ -12,6 +12,6 @@ kde4_add_plugin(kritaflipbookdocker ${KRITA_flipbookDOCKER_PART_SRCS})
 
 target_link_libraries(kritaflipbookdocker kritaui)
 
-install(TARGETS kritaflipbookdocker  DESTINATION ${PLUGIN_INSTALL_DIR})
-install( FILES  krita_flipbookdocker.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+#install(TARGETS kritaflipbookdocker  DESTINATION ${PLUGIN_INSTALL_DIR})
+#install( FILES  krita_flipbookdocker.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 

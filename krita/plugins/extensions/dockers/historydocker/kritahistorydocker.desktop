@@ -1,7 +1,8 @@
 [Desktop Entry]
 Name=Krita Undo History Docker plugin
+Name[bs]=Krita plugin za Vraćanje Historije Dokera
 Name[ca]=Connector acoblador d'historial de desfer del Krita
-Name[ca@valencia]=Connector amarrador d'històric de desfer del Krita
+Name[ca@valencia]=Connector acoblador d'historial de desfer del Krita
 Name[da]=Dokker-plugin til at fortryde historik til Krita
 Name[el]=Πρόσθετο προσάρτησης αναίρεσης ιστορικού του Krita
 Name[en_GB]=Krita Undo History Docker plugin
@@ -12,6 +13,7 @@ Name[fr]=Module de panneau d'historique des annulations pour Krita
 Name[gl]=Complemento para Krita de doca cun historial de cambios
 Name[it]=Estensione di aggancio per l'annullamento della cronologia di Krita
 Name[kk]=Krita-ның амалдан қайту тарихы докер плагині
+Name[lt]=Atšaukimo sąrašo įrankinėje papildinys Krita programai
 Name[nb]=Dockers programtillegg for Krita angrehistorie
 Name[nds]=Torüchnehmlist-Andockmoduul för Krita
 Name[nl]=Vastzetterplug-in van ongedaan maken-geschiedenis van Krita

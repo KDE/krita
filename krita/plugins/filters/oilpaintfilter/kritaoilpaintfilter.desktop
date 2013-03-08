@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Oilpaint Filter
 Name[bg]=Филтър маслена боя
+Name[bs]=Filter za uljane boje
 Name[ca]=Filtre de pintura a l'oli
 Name[ca@valencia]=Filtre de pintura a l'oli
 Name[cs]=Filtr olejomalby
@@ -46,6 +47,7 @@ Name[zh_CN]=油画滤镜
 Name[zh_TW]=油畫過濾器
 Comment=Oilpaint filter
 Comment[bg]=Филтър маслена боя
+Comment[bs]=Filter za uljane boje
 Comment[ca]=Filtre de pintura a l'oli
 Comment[ca@valencia]=Filtre de pintura a l'oli
 Comment[cs]=Filtr olejomalby

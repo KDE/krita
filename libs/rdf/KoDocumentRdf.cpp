@@ -927,7 +927,7 @@ QPair<int, int> KoDocumentRdf::findExtent(KoTextEditor *handler) const
     // first check for bookmarks
     KoTextRangeManager *mgr = KoTextDocument(document).textRangeManager();
     Q_ASSERT(mgr);
-    QHash<int, KoTextRange *> textRanges = mgr->textRangesChangingWithin(0, handler->selectionEnd(), handler->selectionStart(), -1);
+    QHash<int, KoTextRange *> textRanges = mgr->textRangesChangingWithin(handler->document(), 0, handler->selectionEnd(), handler->selectionStart(), -1);
     foreach (const KoTextRange *range, textRanges) {
         return QPair<int,int>(range->rangeStart(), range->rangeEnd());
     }
@@ -975,7 +975,7 @@ QString KoDocumentRdf::findXmlId(KoTextEditor *handler) const
     // first check for bookmarks
     KoTextRangeManager *mgr = KoTextDocument(document).textRangeManager();
     Q_ASSERT(mgr);
-    QHash<int, KoTextRange *> textRanges = mgr->textRangesChangingWithin(0, handler->selectionEnd(), handler->selectionStart(), -1);
+    QHash<int, KoTextRange *> textRanges = mgr->textRangesChangingWithin(document, 0, handler->selectionEnd(), handler->selectionStart(), -1);
     foreach (const KoTextRange *range, textRanges) {
         inlineRdf = range->inlineRdf();
         if (inlineRdf) {

@@ -254,17 +254,17 @@ PlotArea::PlotArea(ChartShape *parent)
 
     connect(d->shape->proxyModel(), SIGNAL(modelReset()),
             this,                   SLOT(proxyModelStructureChanged()));
-    connect(d->shape->proxyModel(), SIGNAL(rowsInserted(const QModelIndex, int, int)),
+    connect(d->shape->proxyModel(), SIGNAL(rowsInserted(QModelIndex,int,int)),
             this,                   SLOT(proxyModelStructureChanged()));
-    connect(d->shape->proxyModel(), SIGNAL(rowsRemoved(const QModelIndex, int, int)),
+    connect(d->shape->proxyModel(), SIGNAL(rowsRemoved(QModelIndex,int,int)),
             this,                   SLOT(proxyModelStructureChanged()));
-    connect(d->shape->proxyModel(), SIGNAL(columnsInserted(const QModelIndex, int, int)),
+    connect(d->shape->proxyModel(), SIGNAL(columnsInserted(QModelIndex,int,int)),
             this,                   SLOT(proxyModelStructureChanged()));
-    connect(d->shape->proxyModel(), SIGNAL(columnsRemoved(const QModelIndex, int, int)),
+    connect(d->shape->proxyModel(), SIGNAL(columnsRemoved(QModelIndex,int,int)),
             this,                   SLOT(proxyModelStructureChanged()));
-    connect(d->shape->proxyModel(), SIGNAL(columnsInserted(const QModelIndex, int, int)),
+    connect(d->shape->proxyModel(), SIGNAL(columnsInserted(QModelIndex,int,int)),
             this,                   SLOT(plotAreaUpdate()));
-    connect(d->shape->proxyModel(), SIGNAL(columnsRemoved(const QModelIndex, int, int)),
+    connect(d->shape->proxyModel(), SIGNAL(columnsRemoved(QModelIndex,int,int)),
             this,                   SLOT(plotAreaUpdate()));
     connect(d->shape->proxyModel(), SIGNAL(dataChanged()),
             this,                   SLOT(plotAreaUpdate()));

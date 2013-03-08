@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SimpleSpellCheckingWidget</class>
+ <widget class="QWidget" name="SimpleSpellCheckingWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>16</width>
+    <height>16</height>
+   </rect>
+  </property>
+  <widget class="QToolButton" name="toolAutoSpellCheck">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>140</y>
+     <width>25</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>...</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="SpecialSpacer" native="true">
+   <property name="geometry">
+    <rect>
+     <x>8</x>
+     <y>16</y>
+     <width>0</width>
+     <height>0</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

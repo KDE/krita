@@ -135,7 +135,8 @@ void KisMaskManager::createSelectionMask(KisNodeSP parent, KisNodeSP above)
 
     //counting number of KisSelectionMask
     QList<KisNodeSP> selectionMasks = parentLayer->childNodes(QStringList("KisSelectionMask"),KoProperties());
-    mask->setName(i18n("Selection ")+QString::number(selectionMasks.count()+1));
+    int number = selectionMasks.count()+1;
+    mask->setName(i18n("Selection <numid>%1</numid>", number));
     m_commandsAdapter->addNode(mask, parentLayer, above);
 
     mask->setActive(true);

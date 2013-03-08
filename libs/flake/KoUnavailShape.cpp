@@ -37,20 +37,19 @@
 #include <KDebug>
 
 // Calligra
-#include "KoUnit.h"
-#include "KoStore.h"
-#include "KoXmlNS.h"
-#include "KoXmlReader.h"
+#include <KoUnit.h>
+#include <KoStore.h>
+#include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoOdfManifestEntry.h>
 #include <KoOdfLoadingContext.h>
-#include <KoShapeLoadingContext.h>
-#include <KoShapeSavingContext.h>
 #include <KoEmbeddedDocumentSaver.h>
+#include "KoShapeLoadingContext.h"
+#include "KoShapeSavingContext.h"
 #include "KoShapeContainerDefaultModel.h"
 #include "KoShapeRegistry.h"
-#include <KoShapeBackground.h>
+#include "KoShapeBackground.h"
 
 
 // The XML of a frame looks something like this:

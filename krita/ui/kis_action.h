@@ -61,6 +61,8 @@ public:
     void setActivationConditions(ActivationConditions conditions);
     ActivationConditions activationConditions();
 
+    virtual void setActionEnabled(bool enabled);
+
 private:
     class Private;
     Private* const d;

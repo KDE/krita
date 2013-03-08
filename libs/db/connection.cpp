@@ -494,7 +494,7 @@ bool Connection::databaseExists(const QString &dbName, bool ignoreErrors)
                                                  QDir::convertSeparators(d->conn_data->fileName())));
             return false;
         }
-        if (!file.isWritable()) {
+        if (!d->readOnly && !file.isWritable()) {
             if (!ignoreErrors)
                 setError(ERR_ACCESS_RIGHTS, i18n("Database file \"%1\" is not writable.",
                                                  QDir::convertSeparators(d->conn_data->fileName())));

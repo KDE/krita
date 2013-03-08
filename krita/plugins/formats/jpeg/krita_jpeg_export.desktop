@@ -2,6 +2,7 @@
 Icon=
 Name=Krita JPEG Export Filter
 Name[bg]=Филтър за изнасяне от Krita в JPEG
+Name[bs]=Krita JPEG izvozni Filter
 Name[ca]=Filtre d'exportació JPEG per al Krita
 Name[ca@valencia]=Filtre d'exportació JPEG per al Krita
 Name[cs]=Exportní filtr do formátu JPEG pro Krita
@@ -24,6 +25,7 @@ Name[hu]=Krita JPEG exportszűrő
 Name[it]=Filtro di esportazione JPEG per Krita
 Name[ja]=Krita JPEG エクスポートフィルタ
 Name[kk]=Krita -> JPEG экспорт сүзгісі
+Name[lt]=Krita JPEG eksportavimo filtras
 Name[lv]=Krita JPEG eksporta filtrs
 Name[nb]=JPEG-eksportfilter for Krita
 Name[nds]=JPEG-Exportfilter för Krita

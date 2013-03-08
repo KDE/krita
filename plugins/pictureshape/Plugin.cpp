@@ -20,11 +20,14 @@
 #include "PictureShapeFactory.h"
 #include "PictureToolFactory.h"
 
+#include <QPixmapCache>
+
 #include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
 
 #include <kpluginfactory.h>
 
+#define CACHE_SIZE 40960 //5 images of 2048x1024 at 32bpp
 
 K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
 K_EXPORT_PLUGIN(PluginFactory("PictureShape"))
@@ -32,6 +35,10 @@ K_EXPORT_PLUGIN(PluginFactory("PictureShape"))
 Plugin::Plugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
+    if(QPixmapCache::cacheLimit() < CACHE_SIZE) {
+        QPixmapCache::setCacheLimit(CACHE_SIZE);
+    }
+
     KoShapeRegistry::instance()->add( new PictureShapeFactory() );
     KoToolRegistry::instance()->add( new PictureToolFactory() );
 }

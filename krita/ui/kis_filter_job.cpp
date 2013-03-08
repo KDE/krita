@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "filter/kis_filter_job.h"
+#include "kis_filter_job.h"
 #include <QObject>
 #include <QRect>
 

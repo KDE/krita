@@ -36,7 +36,7 @@ add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
 add_definitions(-DFILES_OUTPUT_DIR="${CMAKE_CURRENT_BINARY_DIR}")
 set(kis_paint_device_test_SRCS kis_paint_device_test.cpp )
 kde4_add_unit_test(KisPaintDeviceTest TESTNAME krita-image-KisPaintDeviceTest ${kis_paint_device_test_SRCS})
-target_link_libraries(KisPaintDeviceTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+target_link_libraries(KisPaintDeviceTest  ${KDE4_KDEUI_LIBS} kritaimage koodf ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -72,14 +72,6 @@ set(kis_painter_test_SRCS kis_painter_test.cpp )
 kde4_add_unit_test(KisPainterTest TESTNAME krita-image-KisPainterTest ${kis_painter_test_SRCS})
 
 target_link_libraries(KisPainterTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
-set(kis_threaded_applicator_test_SRCS kis_threaded_applicator_test.cpp )
-
-kde4_add_unit_test(KisThreadedApplicatorTest TESTNAME krita-image-KisThreadedApplicatorTest ${kis_threaded_applicator_test_SRCS})
-
-target_link_libraries(KisThreadedApplicatorTest  ${KDE4_KDEUI_LIBS} ${KDE4_THREADWEAVER_LIBRARY} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -518,12 +510,6 @@ target_link_libraries(KisVecTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBR
 set(kis_filter_config_widget_test_SRCS kis_filter_config_widget_test.cpp )
 kde4_add_unit_test(KisFilterConfigWidgetTest TESTNAME krita-image-KisFilterConfigWidgetTest ${kis_filter_config_widget_test_SRCS})
 target_link_libraries(KisFilterConfigWidgetTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
-set(kis_filter_job_test_SRCS kis_filter_job_test.cpp )
-kde4_add_unit_test(KisFilterJobTest TESTNAME krita-image-KisFilterJobTest ${kis_filter_job_test_SRCS})
-target_link_libraries(KisFilterJobTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

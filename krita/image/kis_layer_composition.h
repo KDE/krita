@@ -25,7 +25,6 @@
 #include <QUuid>
 #include <QDomDocument>
 #include <QDomElement>
-#include <KoXmlReader.h>
 
 #include "kis_image.h"
 
@@ -55,8 +54,10 @@ public:
     */
     void apply();
 
-    void load(const KoXmlElement& elem);
+    void setVisible(QUuid id, bool visible);
+
     void save(QDomDocument& doc, QDomElement& element);
+
 private:
     KisImageWSP m_image;
     QString m_name;

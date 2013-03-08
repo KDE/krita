@@ -62,6 +62,9 @@ public:
     /// reimplemented
     virtual KoToolSelection *selection();
 
+    /// reimplemented from superclass
+    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
+
     /// Sets cursor for specified text shape it is the current text shape
     void setTextCursor(ArtisticTextShape *textShape, int textCursor);
 

@@ -18,12 +18,13 @@
 
 #include "kis_action_manager.h"
 
-#include <QVector>
+#include <QList>
 #include <kactioncollection.h>
 
 #include "kis_action.h"
 #include "kis_view2.h"
 #include "kis_selection_manager.h"
+#include "kis_layer.h"
 
 class KisActionManager::Private {
 
@@ -31,7 +32,7 @@ public:
     Private() {}
 
     KisView2* view;
-    QVector<KisAction*> actions;
+    QList<KisAction*> actions;
 };
 
 KisActionManager::KisActionManager(KisView2* view) : d(new Private)
@@ -49,6 +50,16 @@ void KisActionManager::addAction(const QString& name, KisAction* action, KAction
     actionCollection->addAction(name, action);
     action->setObjectName(name);
     d->actions.append(action);
+}
+
+void KisActionManager::addAction(KisAction* action)
+{
+    d->actions.append(action);
+}
+
+void KisActionManager::takeAction(KisAction* action)
+{
+    d->actions.removeOne(action);
 }
 
 KisAction *KisActionManager::actionByName(const QString &name) const
@@ -113,7 +124,7 @@ void KisActionManager::updateGUI()
             enable = action->activationFlags() & flags;
         }
         enable = enable && (int)(action->activationConditions() & conditions) == (int)action->activationConditions();
-        action->setEnabled(enable);
+        action->setActionEnabled(enable);
     }
 }
 

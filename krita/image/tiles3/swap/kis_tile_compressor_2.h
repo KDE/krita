@@ -29,8 +29,8 @@ public:
     KisTileCompressor2();
     virtual ~KisTileCompressor2();
 
-    void writeTile(KisTileSP tile, KoStore *store);
-    void readTile(KoStore *store, KisTiledDataManager *dm);
+    void writeTile(KisTileSP tile, KisPaintDeviceWriter &store);
+    void readTile(QIODevice *io, KisTiledDataManager *dm);
 
 
     void compressTileData(KisTileData *tileData,quint8 *buffer,

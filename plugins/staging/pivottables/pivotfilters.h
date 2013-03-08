@@ -29,30 +29,31 @@
 #include<QVector>
 
 namespace Calligra{
-  namespace Sheets{
+    namespace Sheets{
 
     class Selection;    
-class PivotFilters : public KDialog
-{
-  Q_OBJECT
+    class PivotFilters : public KDialog
+    
+    {
+    Q_OBJECT
 
-public:
-    explicit PivotFilters(QWidget* parent,Selection* selection);
-     QVector<QString> filterData();
-    ~PivotFilters();
-private slots:
-    void activateBoxes();
-    void activateBoxes2();
-    void fillValue();
-    void fillValue2();
-    void fillValue3();
+    public:
+      explicit PivotFilters(QWidget* parent,Selection* selection);
+      QVector<QString> filterData();
+      ~PivotFilters();
+    private slots:
+      void activateBoxes();
+      void activateBoxes2();
+      void fillValue();
+      void fillValue2();
+      void fillValue3();
 
-   
-private:
-    void selectFields(QComboBox* box);
-    class Private;
-    Private *const d;
-};
-}
-}
+    
+    private:
+      void selectFields(QComboBox* box);
+      class Private;
+      Private *const d;
+    };
+  }//Sheets
+}//Calligra
 #endif // PIVOTFILTERS_H

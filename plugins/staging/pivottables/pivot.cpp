@@ -63,21 +63,21 @@ Pivot::~Pivot()
 
 void Pivot::slotUser2Clicked()
 {
-	if(d->mainWidget.Current->isChecked())
-	{
-	    PivotMain *pMain= new PivotMain(this,d->selection);
-	    pMain->setModal(true);
-	    pMain->exec();
-	}
-	
-	if(d->mainWidget.External->isChecked())
-	{
-	    QMessageBox msgBox;
-	    msgBox.setText("Functionality Yet to be Added");
-	    msgBox.exec();
-	    
-	    Pivot *p=new Pivot(this,d->selection);
-	    p->setModal(true);
-	    p->exec();
-	}
+	  if(d->mainWidget.Current->isChecked())
+	  {
+	      PivotMain *pMain= new PivotMain(this,d->selection);
+	      pMain->setModal(true);
+	      pMain->exec();
+	  }
+	  
+	  if(d->mainWidget.External->isChecked())
+	  {
+	      QMessageBox msgBox;
+	      msgBox.setText("Functionality Yet to be Added");
+	      msgBox.exec();
+	      
+	      Pivot *p=new Pivot(this,d->selection);
+	      p->setModal(true);
+	      p->exec();
+	  }
 }

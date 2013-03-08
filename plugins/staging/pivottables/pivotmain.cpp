@@ -123,7 +123,7 @@ PivotMain::PivotMain(QWidget* parent, Selection* selection) :
 PivotMain::~PivotMain()
 {
     delete d;
-}
+}//PivotMain
 
 //Function to read the title of every column and add it to Labels.
 void PivotMain::extractColumnNames()
@@ -158,7 +158,8 @@ void PivotMain::on_Options_clicked()
     pOptions->setModal(true);
     pOptions->exec();
     d->func=pOptions->returnFunction();
-}
+}//on_Options_Clicked
+
 //When add filter button is clicked, the dialog box for filtering data appears
 void PivotMain::on_AddFilter_clicked()
 {
@@ -167,7 +168,7 @@ void PivotMain::on_AddFilter_clicked()
         pFilters->setModal(true);
         pFilters->exec();
 	d->filterVect=pFilters->filterData();
-}
+}//on_AddFilter_clicked
 
 //The function receives the data from Add Filter and filters the data. The filtered sheet is then used to further processing
 Sheet* PivotMain::filter()
@@ -298,7 +299,7 @@ bool PivotMain::checkCondition(QString field,QString condition,QString value,int
     }
     return false;
     
-}
+}//checkCondition
 
 
 
@@ -648,7 +649,7 @@ void PivotMain::Summarize()
   //Adding built sheet to myMap for viewing
   myMap->addSheet(mySheet);
   
-}
+}//Summarize
 
 QVector<QString> PivotMain::ValueData(QString str)
 {
@@ -680,8 +681,7 @@ QVector<QString> PivotMain::ValueData(QString str)
 	   d->retVect.append(conv->toString(Value(Cell(sheet,position+1,j).value())));
       }
       return d->retVect;
- 
-}
+}//ValueData
 
 void PivotMain::Reset()
 {
@@ -690,7 +690,7 @@ void PivotMain::Reset()
   d->mainWidget.Columns->clear();
   d->mainWidget.PageFields->clear();
   extractColumnNames();
-}
+}//Reset
 void PivotMain::on_Ok_clicked()
 {
   
@@ -698,4 +698,4 @@ void PivotMain::on_Ok_clicked()
   QMessageBox msgBox;
   msgBox.setText("Pivot Tables Built");
   msgBox.exec();
-}
+}//on_Ok_clicked

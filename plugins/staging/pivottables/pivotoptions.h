@@ -34,21 +34,21 @@ namespace Calligra{
  */
 class Selection;
 class PivotOptions : public KDialog
-{
+   {
    Q_OBJECT
 
-public:
-    explicit PivotOptions(QWidget* parent, Selection* selection);
-    ~PivotOptions();
-    QString returnFunction();
-public slots:
-    void on_Ok_clicked();
-private:
-    
-//     void selectBase();
-    class Private;
-    Private *const d;
-};
-  }
-}
+  public:
+      explicit PivotOptions(QWidget* parent, Selection* selection);
+      ~PivotOptions();
+      QString returnFunction();
+  public slots:
+      void on_Ok_clicked();
+  private:
+      
+  //     void selectBase();
+      class Private;
+      Private *const d;
+    };
+  }//Sheets
+}//Calligra
 #endif // PIVOTOPTIONS_H

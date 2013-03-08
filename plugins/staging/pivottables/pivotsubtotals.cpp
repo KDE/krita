@@ -26,8 +26,7 @@
 
 using namespace Calligra::Sheets;
 
-class PivotSubTotals::Private
-{
+class PivotSubTotals::Private{
 public:
     Selection *selection;
     Ui::PivotSubTotals mainWidget;
@@ -37,7 +36,7 @@ public:
 PivotSubTotals::PivotSubTotals(QWidget* parent,Selection* selection):
     KDialog(parent),
     d(new Private)
-{
+    {
   
     QWidget* widget = new QWidget(this);
     d->mainWidget.setupUi(widget);    
@@ -48,6 +47,18 @@ PivotSubTotals::PivotSubTotals(QWidget* parent,Selection* selection):
     selectLabels();
 
 }
+public:
+    explicit PivotOptions(QWidget* parent, Selection* selection);
+    ~PivotOptions();
+    QString returnFunction();
+public slots:
+    void on_Ok_clicked();
+private:
+    
+//     void selectBase();
+    class Private;
+    Private *const d;
+
 void PivotFilters::selectLabels()
 {
     Sheet *const sheet = d->selection->lastSheet();

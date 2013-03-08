@@ -30,31 +30,31 @@ namespace Calligra{
 
 class Selection;
 class PivotMain : public KDialog
-{
-    Q_OBJECT
+    {
+	Q_OBJECT
 
-public:
-    explicit PivotMain(QWidget* parent,Selection* selection);
-    QVector<QString> ValueData(QString str);
-    bool checkCondition(QString field,QString condition,QString value,int line);
-    Sheet* filter();
-    ~PivotMain();
+    public:
+      explicit PivotMain(QWidget* parent,Selection* selection);
+      QVector<QString> ValueData(QString str);
+      bool checkCondition(QString field,QString condition,QString value,int line);
+      Sheet* filter();
+      ~PivotMain();
 
-private slots:
-      
-   void on_Options_clicked();
+    private slots:
+	  
+      void on_Options_clicked();
 
-   void on_AddFilter_clicked();
-   void on_Ok_clicked();
-   void Summarize();
-   void Reset();
+      void on_AddFilter_clicked();
+      void on_Ok_clicked();
+      void Summarize();
+      void Reset();
 
-private:
-    void extractColumnNames();
-    PivotMain *ui;
-    class Private;
-    Private *const d;
-};
-}
-}
+    private:
+      void extractColumnNames();
+      PivotMain *ui;
+      class Private;
+      Private *const d;
+    };
+  }//Sheets
+}//Calligra
 #endif // PIVOTMAIN_H

@@ -38,7 +38,7 @@ public:
     Selection *selection;
     Ui::PivotOptions mainWidget;
     QString function;
-};
+}//Private
 
 PivotOptions::PivotOptions(QWidget* parent,Selection* selection) :
     KDialog(parent),
@@ -58,14 +58,14 @@ PivotOptions::PivotOptions(QWidget* parent,Selection* selection) :
    
    connect(this, SIGNAL(okClicked()), this, SLOT(on_Ok_clicked()));   
      
-}
+}//PivotOptions
 
 QString PivotOptions::returnFunction()
 {
     d->function=d->mainWidget.SelectFunction->currentText();
     return d->function;
   
-}
+}//returnFunction
 
 
 /*
@@ -103,5 +103,5 @@ void PivotOptions::on_Ok_clicked()
 PivotOptions::~PivotOptions()
 {
     delete d;
-}
+}//~PivotOptions
 

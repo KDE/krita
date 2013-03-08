@@ -424,6 +424,8 @@ bool PictureShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
                  size().height() / imageData->imageSize().height());
 
         loadOdfClipContour(element, context, scaleFactor);
+        // this is needed so that the image is already normalized when calling waitUntilReady e.g. by cstester
+        m_clippingRect.normalize(imageData->imageSize());
 
         return true;
     }

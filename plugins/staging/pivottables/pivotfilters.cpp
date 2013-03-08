@@ -35,8 +35,8 @@ class PivotFilters::Private
   public:
       Selection *selection;
       Ui::PivotFilters mainWidget;
-      int flag1,flag2;
-      bool flag;
+      int operatorselected1,operatorselected2;
+      bool isoperatorselected;
       QVector<QString> conditions;
 };
 
@@ -50,9 +50,9 @@ PivotFilters::PivotFilters(QWidget* parent,Selection* selection):
       setMainWidget(widget);
       d->selection=selection;
       selectFields(d->mainWidget.Field);
-      d->flag1=1;
-      d->flag2=1;
-      d->flag=false;
+      d->operatorselected1=1;
+      d->operatorselected2=1;
+      d->isoperatorselected=false;
     
 //     setButtons(Ok|Cancel);
 //     enableButton(Ok,"true");
@@ -98,11 +98,11 @@ void PivotFilters::activateBoxes()
       d->mainWidget.Value3->clear();
       d->mainWidget.Condition2->clear();
       d->mainWidget.Condition3->clear();
-      d->flag2=0;
-      d->flag1=0;
-      d->flag=true;
+      d->operatorselected2=0;
+      d->operatorselected1=0;
+      d->isoperatorselected=true;
     }
-    if(d->flag1==1)
+    if(d->operatorselected1==1)
     {
       selectFields(d->mainWidget.Field2);
       d->mainWidget.Operator2->addItem("None");
@@ -114,7 +114,7 @@ void PivotFilters::activateBoxes()
       d->mainWidget.Condition2->addItem("!=");
       
     }
-    d->flag1++;
+    d->operatorselected1++;
 }
 void PivotFilters::activateBoxes2()
 {
@@ -124,20 +124,20 @@ void PivotFilters::activateBoxes2()
       d->mainWidget.Value3->clear();
       d->mainWidget.Condition3->clear();
       
-      d->flag2=0;
+      d->operatorselected2=0;
     }
       
     
-    if(d->flag2==1 || d->flag==true)
+    if(d->operatorselected2==1 || d->isoperatorselected==true)
     {
       selectFields(d->mainWidget.Field3);
       d->mainWidget.Condition3->addItem("<");
       d->mainWidget.Condition3->addItem(">");
       d->mainWidget.Condition3->addItem("==");
       d->mainWidget.Condition3->addItem("!=");
-      d->flag=false;
+      d->isoperatorselected=false;
     }
-    d->flag2++;
+    d->operatorselected2++;
 }
 void PivotFilters::fillValue()
 {

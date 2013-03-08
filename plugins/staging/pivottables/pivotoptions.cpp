@@ -38,9 +38,9 @@ public:
     Selection *selection;
     Ui::PivotOptions mainWidget;
     QString function;
-}//Private
+};//Private
 
-PivotOptions::PivotOptions(QWidget* parent,Selection* selection) :
+PivotOptions::PivotOptions(QWidget* parent,Selection* selection):
     KDialog(parent),
     d(new Private)
 {

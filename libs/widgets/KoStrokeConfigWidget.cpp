@@ -196,7 +196,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setMargin(0);
 
-    QHBoxLayout *firstLineLayout = new QHBoxLayout(this);
+    QHBoxLayout *firstLineLayout = new QHBoxLayout();
 
     // Start marker
     QList<KoMarker*> markers;
@@ -217,7 +217,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     d->endMarkerSelector->setMaximumWidth(50);
     firstLineLayout->addWidget(d->endMarkerSelector);
 
-    QHBoxLayout *secondLineLayout = new QHBoxLayout(this);
+    QHBoxLayout *secondLineLayout = new QHBoxLayout();
 
     // Line width
     QLabel *l = new QLabel(this);

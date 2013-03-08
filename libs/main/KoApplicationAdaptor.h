@@ -21,6 +21,8 @@
 #ifndef __KoApplicationAdaptor_h__
 #define __KoApplicationAdaptor_h__
 
+#ifndef QT_NO_DBUS
+
 #include <QObject>
 #include <QtDBus>
 #include "komain_export.h"
@@ -82,6 +84,8 @@ private:
 
     KoApplication *m_application;
 };
+
+#endif // QT_NO_DBUS
 
 #endif
 

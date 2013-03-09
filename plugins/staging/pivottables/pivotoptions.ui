@@ -16,7 +16,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Select Function</string>
+        <string>Function</string>
        </property>
       </widget>
      </item>

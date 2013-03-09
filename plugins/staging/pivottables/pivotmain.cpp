@@ -64,13 +64,13 @@ PivotMain::PivotMain(QWidget* parent, Selection* selection) :
     d->mainWidget.setupUi(widget);
     setMainWidget(widget);
     d->selection=selection;
-    setCaption(i18n("Pivot Main"));
+    setCaption(i18n("Pivot Table Configuration Window"));
     
     //Adding Buttons
     setButtons(Ok|Cancel|User1|User2|User3);
     setButtonGuiItem(User1, KGuiItem(i18n("Options")));
     setButtonGuiItem(User2, KGuiItem(i18n("Add Filter")));
-    setButtonGuiItem(User3, KGuiItem(i18n("Reset DnD")));
+    setButtonGuiItem(User3, KGuiItem(i18nc("DnD = Drag and Drop","Reset DnD")));
     enableButton(User1,true);
     enableButton(User2,true);
     enableButton(Ok,true);

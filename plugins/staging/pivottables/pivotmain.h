@@ -42,7 +42,7 @@ class PivotMain : public KDialog
 
     private slots:
 	  
-      void on_Options_clicked();
+      //void on_Options_clicked();
 
       void on_AddFilter_clicked();
       void on_Ok_clicked();

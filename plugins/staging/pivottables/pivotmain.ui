@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>291</width>
-    <height>249</height>
+    <width>295</width>
+    <height>254</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -87,14 +87,14 @@
          <item row="1" column="0">
           <layout class="QVBoxLayout" name="verticalLayout_6">
            <item>
-            <widget class="QLabel" name="label_5">
+            <widget class="QLabel" name="label_8">
              <property name="text">
-              <string>Page Fields</string>
+              <string>Values</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QListWidget" name="PageFields"/>
+            <widget class="QListWidget" name="Values"/>
            </item>
           </layout>
          </item>
@@ -103,12 +103,45 @@
            <item>
             <widget class="QLabel" name="label_4">
              <property name="text">
-              <string>Values</string>
+              <string>Select Option</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QListWidget" name="Values"/>
+            <widget class="QComboBox" name="selectOption">
+             <item>
+              <property name="text">
+               <string>sum</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>average</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>max</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>min</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>count</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_5">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>

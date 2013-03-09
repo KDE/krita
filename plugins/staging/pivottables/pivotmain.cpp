@@ -23,7 +23,7 @@
 #include "pivotoptions.h"
 #include "pivotfilters.h"
 #include "ui_pivotmain.h"
-#include "ui_pivotoptions.h"
+//#include "ui_pivotoptions.h"
 
 #include<QTimer>
 #include<QObject>
@@ -67,8 +67,8 @@ PivotMain::PivotMain(QWidget* parent, Selection* selection) :
     setCaption(i18n("Pivot Main"));
     
     //Adding Buttons
-    setButtons(Ok|Cancel|User1|User2|User3);
-    setButtonGuiItem(User1, KGuiItem(i18n("Options")));
+    setButtons(Ok|Cancel|User2|User3);
+  //  setButtonGuiItem(User1, KGuiItem(i18n("Options")));
     setButtonGuiItem(User2, KGuiItem(i18n("Add Filter")));
     setButtonGuiItem(User3, KGuiItem(i18n("Reset DnD")));
     enableButton(User1,true);
@@ -109,11 +109,12 @@ PivotMain::PivotMain(QWidget* parent, Selection* selection) :
     d->mainWidget.PageFields->setDragDropMode(QAbstractItemView::DropOnly);
     d->mainWidget.PageFields->viewport()->setAcceptDrops(true);
     d->mainWidget.PageFields->setDropIndicatorShown(true);
-*/  
-    d->func="sum";
-    
+*/
+    d->mainWidget.selectOption->addItem("prod");
+    d->mainWidget.selectOption->addItem("devsq");
+
     connect(this,SIGNAL(user2Clicked()),this,SLOT(on_AddFilter_clicked()));
-    connect(this, SIGNAL(user1Clicked()), this, SLOT(on_Options_clicked()));
+//  connect(this, SIGNAL(user1Clicked()), this, SLOT(on_Options_clicked()));
     extractColumnNames();
     connect(this, SIGNAL(okClicked()), this, SLOT(on_Ok_clicked()));
     connect(this, SIGNAL(user3Clicked()), this, SLOT(Reset()));
@@ -151,7 +152,7 @@ void PivotMain::extractColumnNames()
     }  
 }
 
-//When the option button is clicked, a dialog for setting options appears
+/*//When the option button is clicked, a dialog for setting options appears
 void PivotMain::on_Options_clicked()
 {
     PivotOptions *pOptions=new PivotOptions(this,d->selection);
@@ -159,6 +160,7 @@ void PivotMain::on_Options_clicked()
     pOptions->exec();
     d->func=pOptions->returnFunction();
 }//on_Options_Clicked
+*/
 
 //When add filter button is clicked, the dialog box for filtering data appears
 void PivotMain::on_AddFilter_clicked()
@@ -357,7 +359,7 @@ void PivotMain::Summarize()
 	vect.append(Value(cell.value()));
     }
 
-
+  d->func=d->mainWidget.selectOption->currentText();//check for the function to be performed
   
   //For Creating QLists for Rows,Columns,Values and PageField
   int counter;
@@ -379,12 +381,12 @@ void PivotMain::Summarize()
         item1=d->mainWidget.Columns->item(i);
         columnList.append(item1); 
   }
-  counter= d->mainWidget.PageFields->count();
+  /*counter= d->mainWidget.PageFields->count();
   for(int i=0;i<counter;i++)
   {
         item1=d->mainWidget.PageFields->item(i);
         pageList.append(item1);
-  }
+  }*/
   counter= d->mainWidget.Values->count();
   for(int i=0;i<counter;i++)
   {
@@ -676,7 +678,7 @@ QVector<QString> PivotMain::ValueData(QString str)
 	{
 	
 	  if(d->retVect.contains(QString::number(conv->toInteger(Value(Cell(sheet,position+1,j).value()))))==0)
-	   d->retVect.append(QString::number(conv->toInteger(Value(Cell(sheet,position+1,j).value())))); 
+       d->retVect.append(QString::number(conv->toInteger(Value(Cell(sheet,position+1,j).value()))));
 	}
 	else if(d->retVect.contains(conv->toString(Value(Cell(sheet,position+1,j).value())))==0)
 	   d->retVect.append(conv->toString(Value(Cell(sheet,position+1,j).value())));
@@ -689,7 +691,7 @@ void PivotMain::Reset()
   d->mainWidget.Rows->clear();
   d->mainWidget.Values->clear();
   d->mainWidget.Columns->clear();
-  d->mainWidget.PageFields->clear();
+  //d->mainWidget.PageFields->clear();
   extractColumnNames();
 }//Reset
 void PivotMain::on_Ok_clicked()

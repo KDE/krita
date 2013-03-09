@@ -41,9 +41,7 @@ if (SHOULD_BUILD_PLUGIN_STAGING)
         add_subdirectory( staging )
 endif (SHOULD_BUILD_PLUGIN_STAGING)
 
-if(SHOULD_BUILD_PLUGIN_KEXI)
-        add_subdirectory( kexi )
-endif(SHOULD_BUILD_PLUGIN_KEXI)
+add_subdirectory( kexi )
 
 if (SHOULD_BUILD_PLUGIN_DEFAULTTOOLS)
     add_subdirectory( defaultTools )

@@ -131,7 +131,7 @@ calligra_define_product(PLUGIN_TEXTSHAPE "")
 calligra_define_product(PLUGIN_PLUGINSHAPE "")
 calligra_define_product(PLUGIN_FORMULASHAPE "")
 calligra_define_product(PLUGIN_VECTORSHAPE "" NEEDS LIB_VECTORIMAGE)
-calligra_define_product(PLUGIN_REPORTING ""  NEEDS LIB_KOREPORT)
+calligra_define_product(PLUGIN_REPORTING ""  NEEDS LIB_KOREPORT LIB_KDCHART)
 calligra_define_product(DEVTOOLS "Tools for developers")
 calligra_define_product(CSTESTER "")
 

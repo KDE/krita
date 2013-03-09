@@ -86,6 +86,7 @@
 #include "actions/kis_selection_action_factories.h"
 #include "kis_action.h"
 #include "kis_action_manager.h"
+#include "operations/kis_operation_configuration.h"
 
 
 KisSelectionManager::KisSelectionManager(KisView2 * view, KisDoc2 * doc)
@@ -439,7 +440,7 @@ bool KisSelectionManager::displaySelection()
 void KisSelectionManager::invert()
 {
     KisApplySelectionFilterActionFactory factory;
-    KisUiActionConfiguration config(factory.id());
+    KisOperationConfiguration config(factory.id());
     config.setProperty("filter-name", "invert");
     factory.runFromXML(m_view, config);
 }
@@ -447,7 +448,7 @@ void KisSelectionManager::invert()
 void KisSelectionManager::grow(qint32 xRadius, qint32 yRadius)
 {
     KisApplySelectionFilterActionFactory factory;
-    KisUiActionConfiguration config(factory.id());
+    KisOperationConfiguration config(factory.id());
     config.setProperty("filter-name", "grow");
     config.setProperty("x-radius", xRadius);
     config.setProperty("y-radius", yRadius);
@@ -457,7 +458,7 @@ void KisSelectionManager::grow(qint32 xRadius, qint32 yRadius)
 void KisSelectionManager::shrink(qint32 xRadius, qint32 yRadius, bool edgeLock)
 {
     KisApplySelectionFilterActionFactory factory;
-    KisUiActionConfiguration config(factory.id());
+    KisOperationConfiguration config(factory.id());
     config.setProperty("filter-name", "shrink");
     config.setProperty("x-radius", xRadius);
     config.setProperty("y-radius", yRadius);
@@ -468,7 +469,7 @@ void KisSelectionManager::shrink(qint32 xRadius, qint32 yRadius, bool edgeLock)
 void KisSelectionManager::smooth()
 {
     KisApplySelectionFilterActionFactory factory;
-    KisUiActionConfiguration config(factory.id());
+    KisOperationConfiguration config(factory.id());
     config.setProperty("filter-name", "smooth");
     factory.runFromXML(m_view, config);
 }
@@ -476,7 +477,7 @@ void KisSelectionManager::smooth()
 void KisSelectionManager::erode()
 {
     KisApplySelectionFilterActionFactory factory;
-    KisUiActionConfiguration config(factory.id());
+    KisOperationConfiguration config(factory.id());
     config.setProperty("filter-name", "erode");
     factory.runFromXML(m_view, config);
 }
@@ -484,7 +485,7 @@ void KisSelectionManager::erode()
 void KisSelectionManager::dilate()
 {
     KisApplySelectionFilterActionFactory factory;
-    KisUiActionConfiguration config(factory.id());
+    KisOperationConfiguration config(factory.id());
     config.setProperty("filter-name", "dilate");
     factory.runFromXML(m_view, config);
 }
@@ -492,7 +493,7 @@ void KisSelectionManager::dilate()
 void KisSelectionManager::border(qint32 xRadius, qint32 yRadius)
 {
     KisApplySelectionFilterActionFactory factory;
-    KisUiActionConfiguration config(factory.id());
+    KisOperationConfiguration config(factory.id());
     config.setProperty("filter-name", "border");
     config.setProperty("x-radius", xRadius);
     config.setProperty("y-radius", yRadius);
@@ -502,7 +503,7 @@ void KisSelectionManager::border(qint32 xRadius, qint32 yRadius)
 void KisSelectionManager::feather(qint32 radius)
 {
     KisApplySelectionFilterActionFactory factory;
-    KisUiActionConfiguration config(factory.id());
+    KisOperationConfiguration config(factory.id());
     config.setProperty("filter-name", "feather");
     config.setProperty("radius", radius);
     factory.runFromXML(m_view, config);

@@ -10,16 +10,13 @@
     <height>292</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>PivotOptions</string>
-  </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Select Function</string>
+        <string>Function</string>
        </property>
       </widget>
      </item>

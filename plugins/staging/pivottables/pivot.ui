@@ -13,9 +13,6 @@
   <property name="acceptDrops">
    <bool>false</bool>
   </property>
-  <property name="windowTitle">
-   <string>Pivot</string>
-  </property>
   <property name="layoutDirection">
    <enum>Qt::LeftToRight</enum>
   </property>

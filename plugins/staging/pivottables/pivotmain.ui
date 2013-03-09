@@ -10,9 +10,6 @@
     <height>254</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Form</string>
-  </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -159,7 +156,7 @@
      <item>
       <widget class="QLabel" name="label_6">
        <property name="text">
-        <string>Drag from Labels and Drop in desired field</string>
+        <string>Drag from Labels and drop in the desired field</string>
        </property>
       </widget>
      </item>

@@ -16,20 +16,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_UI_ACTION_FACTORY_REGISTRY_H
-#define __KIS_UI_ACTION_FACTORY_REGISTRY_H
+#ifndef __KIS_OPERATION_H
+#define __KIS_OPERATION_H
 
+#include <QString>
 #include <krita_export.h>
-#include <KoGenericRegistry.h>
-#include "kis_ui_action_factory.h"
+#include "kis_properties_configuration.h"
+#include "operations/kis_operation_configuration.h"
 
+class KisView2;
 
-class KRITAUI_EXPORT KisUiActionFactoryRegistry : public KoGenericRegistry<KisUiActionFactory*>
+class KRITAUI_EXPORT KisOperation
 {
 public:
-    KisUiActionFactoryRegistry();
-    ~KisUiActionFactoryRegistry();
-    static KisUiActionFactoryRegistry* instance();
+    KisOperation(const QString &id);
+    virtual ~KisOperation();
+
+    QString id() const;
+
+    virtual void runFromXML(KisView2 *view, const KisOperationConfiguration &config);
+
+private:
+    const QString m_id;
 };
 
-#endif /* __KIS_UI_ACTION_FACTORY_REGISTRY_H */
+#endif /* __KIS_OPERATION_H */

@@ -445,16 +445,6 @@ void KisSelectionManager::invert()
     factory.runFromXML(m_view, config);
 }
 
-void KisSelectionManager::grow(qint32 xRadius, qint32 yRadius)
-{
-    KisApplySelectionFilterActionFactory factory;
-    KisOperationConfiguration config(factory.id());
-    config.setProperty("filter-name", "grow");
-    config.setProperty("x-radius", xRadius);
-    config.setProperty("y-radius", yRadius);
-    factory.runFromXML(m_view, config);
-}
-
 void KisSelectionManager::shrink(qint32 xRadius, qint32 yRadius, bool edgeLock)
 {
     KisApplySelectionFilterActionFactory factory;

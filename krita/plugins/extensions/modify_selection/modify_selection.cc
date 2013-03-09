@@ -22,12 +22,10 @@
 
 #include <klocale.h>
 #include <kis_debug.h>
-#include <kpluginfactory.h>
 
 #include "kis_view2.h"
 #include "kis_selection_manager.h"
 #include "kis_action.h"
-#include <kis_action_manager.h>
 #include <operations/kis_operation_ui_widget_factory.h>
 
 #include "dlg_grow_selection.h"

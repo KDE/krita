@@ -606,6 +606,15 @@ set(KOPROPERTY_INCLUDES ${KOODF_INCLUDES}
                         ${CMAKE_SOURCE_DIR}/libs/widgets)
 set(KOPROPERTY_LIBS koproperty)
 
+# koreport
+set(KOREPORT_INCLUDES
+    ${CMAKE_SOURCE_DIR}/libs/
+    ${CMAKE_SOURCE_DIR}/libs/koreport
+    ${CMAKE_SOURCE_DIR}/libs/koreport/common
+    ${CMAKE_SOURCE_DIR}/libs/koreport/renderer
+    ${CMAKE_SOURCE_DIR}/libs/koreport/wrtembed)
+set(KOREPORT_LIBS koreport)
+
 # calligradb
 # TODO: remove when Predicate lib arrives
 if (HAVE_ICU AND HAVE_SQLITE) # These are hard deps for calligradb

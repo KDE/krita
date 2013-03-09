@@ -1,11 +1,6 @@
-include_directories( ${KOMAIN_INCLUDES}
-    ${KOODF_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/libs/
-    ${CMAKE_SOURCE_DIR}/libs/koreport
-    ${CMAKE_SOURCE_DIR}/libs/koreport/common
-    ${CMAKE_SOURCE_DIR}/libs/koreport/renderer
-    ${CMAKE_SOURCE_DIR}/libs/koreport/wrtembed
-    ${CMAKE_SOURCE_DIR}/plugins/chartshape/kdchart/include
+include_directories(
+    ${KOPROPERTY_INCLUDES}
+    ${KOREPORT_INCLUDES}
 )
 
 #build a shared library
@@ -22,7 +17,7 @@ set (QT_USE_QTWEBKIT TRUE)
 target_link_libraries(koreport_webplugin
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KPARTS_LIBS}
-    koreport
+    ${KOREPORT_LIBS}
     ${KOPROPERTY_LIBS}
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}

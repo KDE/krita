@@ -1,0 +1,14 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritaoffsetimage" version="8">
+    <MenuBar>
+        <Menu name="Image">
+            <text>&amp;Image</text>
+            <Action name="offsetimage" group="image_transform_merge"/>
+        </Menu>
+
+        <Menu name="Layer">
+            <text>La&amp;yer</text>
+            <Action name="offsetlayer" group="layer_transform_merge"/>
+        </Menu>
+    </MenuBar>
+</kpartgui>

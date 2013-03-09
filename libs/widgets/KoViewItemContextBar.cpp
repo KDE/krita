@@ -84,6 +84,7 @@ bool KoViewItemContextBar::eventFilter(QObject *watched, QEvent *event)
             if (m_ContextBar->isVisible()) {
                 m_ContextBar->hide();
             }
+            restoreCursor();
             break;
         default:
             break;

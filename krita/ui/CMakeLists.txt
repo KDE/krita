@@ -209,8 +209,9 @@ set(kritaui_LIB_SRCS
     input/kis_single_action_shortcut.cpp
     input/kis_stroke_shortcut.cpp
     input/kis_shortcut_matcher.cpp
-    kis_ui_action_factory.cpp
-    kis_ui_action_factory_registry.cpp
+    operations/kis_operation.cpp
+    operations/kis_operation_configuration.cpp
+    operations/kis_operation_registry.cpp
     actions/kis_selection_action_factories.cpp
     kis_filter_job.cpp
     kis_threaded_applicator.cpp

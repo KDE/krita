@@ -162,7 +162,7 @@ void KisSelectAllActionFactory::run(KisView2 *view)
                      KisStrokeJobData::SEQUENTIAL,
                      KisStrokeJobData::EXCLUSIVE);
 
-    ActionHelper::endAction(ap, KisUiActionConfiguration(id()).toXML());
+    ActionHelper::endAction(ap, KisOperationConfiguration(id()).toXML());
 }
 
 void KisDeselectActionFactory::run(KisView2 *view)
@@ -171,7 +171,7 @@ void KisDeselectActionFactory::run(KisView2 *view)
 
     KisProcessingApplicator *ap = ActionHelper::beginAction(view, cmd->text());
     ap->applyCommand(cmd, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
-    ActionHelper::endAction(ap, KisUiActionConfiguration(id()).toXML());
+    ActionHelper::endAction(ap, KisOperationConfiguration(id()).toXML());
 }
 
 void KisReselectActionFactory::run(KisView2 *view)
@@ -180,7 +180,7 @@ void KisReselectActionFactory::run(KisView2 *view)
 
     KisProcessingApplicator *ap = ActionHelper::beginAction(view, cmd->text());
     ap->applyCommand(cmd, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
-    ActionHelper::endAction(ap, KisUiActionConfiguration(id()).toXML());
+    ActionHelper::endAction(ap, KisOperationConfiguration(id()).toXML());
 }
 
 void KisFillActionFactory::run(const QString &fillSource, KisView2 *view)
@@ -239,7 +239,7 @@ void KisFillActionFactory::run(const QString &fillSource, KisView2 *view)
     ap->applyCommand(new BitBlt(filled, view->activeDevice()/*node->paintDevice()*/, selection, selectedRect),
                      KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
 
-    KisUiActionConfiguration config(id());
+    KisOperationConfiguration config(id());
     config.setProperty("fill-source", fillSource);
 
     ActionHelper::endAction(ap, config.toXML());
@@ -257,7 +257,7 @@ void KisClearActionFactory::run(KisView2 *view)
     view->canvasBase()->toolProxy()->deleteSelection();
 }
 
-void KisApplySelectionFilterActionFactory::runFromXML(KisView2 *view, const KisUiActionConfiguration &config)
+void KisApplySelectionFilterActionFactory::runFromXML(KisView2 *view, const KisOperationConfiguration &config)
 {
     QString filterName = config.getString("filter-name", "no-filter");
 
@@ -381,7 +381,7 @@ void KisCutCopyActionFactory::run(bool willCut, KisView2 *view)
                              KisStrokeJobData::NORMAL);
         }
 
-        KisUiActionConfiguration config(id());
+        KisOperationConfiguration config(id());
         config.setProperty("will-cut", willCut);
         ActionHelper::endAction(ap, config.toXML());
     }
@@ -397,7 +397,7 @@ void KisCopyMergedActionFactory::run(KisView2 *view)
     image->unlock();
 
     KisProcessingApplicator *ap = ActionHelper::beginAction(view, i18n("Copy Merged"));
-    ActionHelper::endAction(ap, KisUiActionConfiguration(id()).toXML());
+    ActionHelper::endAction(ap, KisOperationConfiguration(id()).toXML());
 }
 
 void KisPasteActionFactory::run(KisView2 *view)
@@ -437,7 +437,7 @@ void KisPasteActionFactory::run(KisView2 *view)
         KUndo2Command *cmd = new KisImageLayerAddCommand(image, newLayer, parentNode, aboveNode);
         KisProcessingApplicator *ap = ActionHelper::beginAction(view, cmd->text());
         ap->applyCommand(cmd, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
-        ActionHelper::endAction(ap, KisUiActionConfiguration(id()).toXML());
+        ActionHelper::endAction(ap, KisOperationConfiguration(id()).toXML());
     } else {
 #ifdef __GNUC__
 #warning "Add saving of XML data for Paste of shapes"

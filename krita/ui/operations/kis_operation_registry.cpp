@@ -17,20 +17,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_ui_action_factory_registry.h"
+#include "kis_operation_registry.h"
 
 #include <kglobal.h>
 #include "actions/kis_selection_action_factories.h"
 
 
-KisUiActionFactoryRegistry* KisUiActionFactoryRegistry::instance()
+KisOperationRegistry* KisOperationRegistry::instance()
 {
-    K_GLOBAL_STATIC(KisUiActionFactoryRegistry, s_instance);
+    K_GLOBAL_STATIC(KisOperationRegistry, s_instance);
     return s_instance;
 }
 
 
-KisUiActionFactoryRegistry::KisUiActionFactoryRegistry()
+KisOperationRegistry::KisOperationRegistry()
 {
     add(new KisSelectAllActionFactory);
     add(new KisDeselectActionFactory);
@@ -45,7 +45,7 @@ KisUiActionFactoryRegistry::KisUiActionFactoryRegistry()
     add(new KisPasteNewActionFactory);
 }
 
-KisUiActionFactoryRegistry::~KisUiActionFactoryRegistry()
+KisOperationRegistry::~KisOperationRegistry()
 {
     foreach(const QString &id, keys()) {
         delete get(id);

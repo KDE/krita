@@ -16,38 +16,23 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_ui_action_factory.h"
+#include "kis_operation.h"
 
-KisUiActionConfiguration::KisUiActionConfiguration()
-{
-}
-
-KisUiActionConfiguration::KisUiActionConfiguration(const QString &id)
-{
-    setProperty("id", id);
-}
-
-QString KisUiActionConfiguration::id() const
-{
-    return getString("id", "wrong-id");
-}
-
-
-KisUiActionFactory::KisUiActionFactory(const QString &id)
+KisOperation::KisOperation(const QString &id)
     : m_id(id)
 {
 }
 
-KisUiActionFactory::~KisUiActionFactory()
+KisOperation::~KisOperation()
 {
 }
 
-QString KisUiActionFactory::id() const
+QString KisOperation::id() const
 {
     return m_id;
 }
 
-void KisUiActionFactory::runFromXML(KisView2 *view, const KisUiActionConfiguration &config)
+void KisOperation::runFromXML(KisView2 *view, const KisOperationConfiguration &config)
 {
     Q_UNUSED(view);
     Q_UNUSED(config);

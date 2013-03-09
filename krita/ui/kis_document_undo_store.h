@@ -24,7 +24,7 @@
 class KoDocument;
 class KUndo2Stack;
 
-class KRITAIMAGE_EXPORT KisDocumentUndoStore : public KisUndoStore
+class KRITAUI_EXPORT KisDocumentUndoStore : public KisUndoStore
 {
 public:
     KisDocumentUndoStore(KoDocument *doc);

@@ -193,7 +193,7 @@ void KoStyleManager::saveReferredStylesToOdf(KoShapeSavingContext &context)
     QSet<KoParagraphStyle *> savedParaStyles;
     QList<KoGenStyles::NamedStyle>  namedStyles = context.mainStyles().styles(KoGenStyle::ParagraphAutoStyle);
     namedStyles += context.mainStyles().styles(KoGenStyle::ParagraphStyle);
-   foreach(const KoGenStyles::NamedStyle &namedStyle, namedStyles) {
+    foreach(const KoGenStyles::NamedStyle &namedStyle, namedStyles) {
         KoParagraphStyle *paraStyle = 0;
         // first find the parent style
         foreach(KoParagraphStyle *p, d->paragStyles) {

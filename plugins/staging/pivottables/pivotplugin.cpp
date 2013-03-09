@@ -44,6 +44,7 @@ PivotPlugin::PivotPlugin(QObject *parent, const QVariantList &)
     setComponentData(PivotPluginFactory::componentData());
 
     KAction *action = new KAction(i18n("&Pivot..."), this);
+    action->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_P));
     actionCollection()->addAction("pivot", action );
     connect(action, SIGNAL(triggered(bool)), this, SLOT(pivot()));
     action->setToolTip(i18n("Pivot Tables"));

@@ -16,36 +16,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_operation_ui_factory.h"
 
-#ifndef KIS_VIEW_PLUGIN_H
-#define KIS_VIEW_PLUGIN_H
+class KisOperationUIFactory::Private {
 
-#include <kparts/plugin.h>
-#include <krita_export.h>
-#include "operations/kis_operation_ui_factory.h"
-
-class KisAction;
-class KisView2;
-
-/**
- *  KisViewPlugin is the base for plugins which add actions to the view
- */
-class KRITAUI_EXPORT KisViewPlugin : public KParts::Plugin
-{
 public:
-    KisViewPlugin(QObject* parent = 0, const QString& rcFile = QString());
-
-protected:
-    /**
-    *  adds an action to UI and action manager
-    *  @param name name of the action in the rc file
-    *  @param action the action that should be added
-    */
-    void addAction(const QString& name, KisAction* action);
-
-    void addUIFactory(KisOperationUIFactory* factory);
-    
-    KisView2* m_view;
+    Private() {}
+    QString id;
 };
 
-#endif // KIS_VIEW_PLUGIN_H
+KisOperationUIFactory::KisOperationUIFactory(const QString& id): d(new KisOperationUIFactory::Private)
+{
+    d->id = id;
+}
+
+KisOperationUIFactory::~KisOperationUIFactory()
+{
+    delete d;
+}
+
+QString KisOperationUIFactory::id() const
+{
+    return d->id;
+}
+
+

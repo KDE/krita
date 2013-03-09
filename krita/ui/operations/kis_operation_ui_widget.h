@@ -17,35 +17,38 @@
  */
 
 
-#ifndef KIS_VIEW_PLUGIN_H
-#define KIS_VIEW_PLUGIN_H
+#ifndef KIS_OPERATION_UI_WIDGET_H
+#define KIS_OPERATION_UI_WIDGET_H
 
-#include <kparts/plugin.h>
+#include <QWidget>
 #include <krita_export.h>
-#include "operations/kis_operation_ui_factory.h"
 
-class KisAction;
-class KisView2;
+class KisOperationConfiguration;
 
 /**
- *  KisViewPlugin is the base for plugins which add actions to the view
- */
-class KRITAUI_EXPORT KisViewPlugin : public KParts::Plugin
+*  Base class for the QWidget based operation config widgets
+*/
+class KRITAUI_EXPORT KisOperationUIWidget : public QWidget
 {
+
 public:
-    KisViewPlugin(QObject* parent = 0, const QString& rcFile = QString());
+    explicit KisOperationUIWidget(const QString& caption, QWidget* parent = 0);
+    virtual ~KisOperationUIWidget();
 
-protected:
-    /**
-    *  adds an action to UI and action manager
-    *  @param name name of the action in the rc file
-    *  @param action the action that should be added
+   /**
+    * Caption of the operation widget, used in dialog caption 
     */
-    void addAction(const QString& name, KisAction* action);
+    QString caption();
 
-    void addUIFactory(KisOperationUIFactory* factory);
-    
-    KisView2* m_view;
+   /**
+    * Fetch the setting from the config widet
+    * @param config configuration to which the setting will be written
+    */
+    virtual void getConfiguration(KisOperationConfiguration* config) = 0;
+
+private:
+    class Private;
+    Private* const d;
 };
 
-#endif // KIS_VIEW_PLUGIN_H
+#endif // KIS_OPERATION_UI_WIDGET_H

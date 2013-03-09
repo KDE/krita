@@ -43,6 +43,7 @@ KisOperationRegistry::KisOperationRegistry()
     add(new KisCopyMergedActionFactory);
     add(new KisPasteActionFactory);
     add(new KisPasteNewActionFactory);
+    add(new KisGrowSelectionOperation);
 }
 
 KisOperationRegistry::~KisOperationRegistry()

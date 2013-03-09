@@ -25,6 +25,7 @@
 class KActionCollection;
 class KisView2;
 class KisAction;
+class KisOperationUIFactory;
 
 class KRITAUI_EXPORT KisActionManager
 {
@@ -39,6 +40,10 @@ public:
 
     KisAction *actionByName(const QString &name) const;
 
+    void registerOperationUIFactory(KisOperationUIFactory* factory);
+
+    void runOperation(const QString &id);
+    
     void updateGUI();
 private:
     void dumpActionFlags();

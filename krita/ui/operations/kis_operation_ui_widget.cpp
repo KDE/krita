@@ -17,35 +17,27 @@
  */
 
 
-#ifndef KIS_VIEW_PLUGIN_H
-#define KIS_VIEW_PLUGIN_H
+#include "kis_operation_ui_widget.h"
 
-#include <kparts/plugin.h>
-#include <krita_export.h>
-#include "operations/kis_operation_ui_factory.h"
+class KisOperationUIWidget::Private {
 
-class KisAction;
-class KisView2;
-
-/**
- *  KisViewPlugin is the base for plugins which add actions to the view
- */
-class KRITAUI_EXPORT KisViewPlugin : public KParts::Plugin
-{
 public:
-    KisViewPlugin(QObject* parent = 0, const QString& rcFile = QString());
-
-protected:
-    /**
-    *  adds an action to UI and action manager
-    *  @param name name of the action in the rc file
-    *  @param action the action that should be added
-    */
-    void addAction(const QString& name, KisAction* action);
-
-    void addUIFactory(KisOperationUIFactory* factory);
-    
-    KisView2* m_view;
+    Private() {}
+    QString caption;
 };
 
-#endif // KIS_VIEW_PLUGIN_H
+
+KisOperationUIWidget::KisOperationUIWidget(const QString& caption, QWidget* parent) : d(new KisOperationUIWidget::Private)
+{
+    d->caption = caption;
+}
+
+KisOperationUIWidget::~KisOperationUIWidget()
+{
+    delete d;
+}
+
+QString KisOperationUIWidget::caption()
+{
+    return d->caption;
+}

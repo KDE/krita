@@ -24,6 +24,8 @@
 #include "kis_action.h"
 #include "kis_view2.h"
 #include "kis_selection_manager.h"
+#include "operations/kis_operation_ui_factory.h"
+#include "operations/kis_operation_registry.h"
 #include "kis_layer.h"
 
 class KisActionManager::Private {
@@ -33,6 +35,8 @@ public:
 
     KisView2* view;
     QList<KisAction*> actions;
+    KoGenericRegistry<KisOperationUIFactory*> uiRegistry;
+    KisOperationRegistry operationRegistry;
 };
 
 KisActionManager::KisActionManager(KisView2* view) : d(new Private)
@@ -49,12 +53,13 @@ void KisActionManager::addAction(const QString& name, KisAction* action, KAction
 {
     actionCollection->addAction(name, action);
     action->setObjectName(name);
-    d->actions.append(action);
+    addAction(action);
 }
 
 void KisActionManager::addAction(KisAction* action)
 {
     d->actions.append(action);
+    action->setActionManager(this);
 }
 
 void KisActionManager::takeAction(KisAction* action)
@@ -126,6 +131,30 @@ void KisActionManager::updateGUI()
         enable = enable && (int)(action->activationConditions() & conditions) == (int)action->activationConditions();
         action->setActionEnabled(enable);
     }
+}
+
+void KisActionManager::registerOperationUIFactory(KisOperationUIFactory* factory)
+{
+    d->uiRegistry.add(factory);
+}
+
+void KisActionManager::runOperation(const QString& id)
+{
+    KisOperationConfiguration* config = new KisOperationConfiguration(id);
+
+    KisOperationUIFactory* uiFactory = d->uiRegistry.get(id);
+    if (uiFactory) {
+        bool gotConfig = uiFactory->fetchConfiguration(d->view, config);
+        if (!gotConfig) {
+            return;
+        }
+    }
+    KisOperation* operation = d->operationRegistry.get(id);
+    if (operation) {
+        operation->runFromXML(d->view, *config);
+    }
+    delete operation;
+    delete config;
 }
 
 void KisActionManager::dumpActionFlags()

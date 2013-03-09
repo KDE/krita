@@ -38,3 +38,10 @@ void KisViewPlugin::addAction(const QString& name, KisAction* action)
         m_view->actionManager()->addAction(name, action, actionCollection());
     }
 }
+
+void KisViewPlugin::addUIFactory(KisOperationUIFactory* factory)
+{
+    if (m_view) {
+        m_view->actionManager()->registerOperationUIFactory(factory);
+    }
+}

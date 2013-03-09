@@ -103,4 +103,9 @@ struct KRITAUI_EXPORT KisPasteNewActionFactory : public KisNoParameterActionFact
     void run(KisView2 *view);
 };
 
+struct KRITAUI_EXPORT KisGrowSelectionOperation : public KisOperation {
+    KisGrowSelectionOperation() : KisOperation("growselection") {}
+    void runFromXML(KisView2 *view, const KisOperationConfiguration &config);
+};
+
 #endif /* __KIS_SELECTION_ACTION_FACTORIES_H */

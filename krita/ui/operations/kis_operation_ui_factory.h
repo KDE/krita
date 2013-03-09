@@ -16,36 +16,37 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#ifndef KIS_OPERATION_UI_FACTORY_H
+#define KIS_OPERATION_UI_FACTORY_H
 
-#ifndef KIS_VIEW_PLUGIN_H
-#define KIS_VIEW_PLUGIN_H
-
-#include <kparts/plugin.h>
-#include <krita_export.h>
-#include "operations/kis_operation_ui_factory.h"
-
-class KisAction;
+#include "kis_operation_configuration.h"
 class KisView2;
 
-/**
- *  KisViewPlugin is the base for plugins which add actions to the view
- */
-class KRITAUI_EXPORT KisViewPlugin : public KParts::Plugin
+class KRITAUI_EXPORT KisOperationUIFactory
 {
 public:
-    KisViewPlugin(QObject* parent = 0, const QString& rcFile = QString());
-
-protected:
-    /**
-    *  adds an action to UI and action manager
-    *  @param name name of the action in the rc file
-    *  @param action the action that should be added
+   /**
+    * Construct a Ui factory
+    * @param id the id for the ui, has to be the same as the operation id of the KisAction
     */
-    void addAction(const QString& name, KisAction* action);
+    KisOperationUIFactory(const QString &id);
+    virtual ~KisOperationUIFactory();
 
-    void addUIFactory(KisOperationUIFactory* factory);
+   /**
+    * id for the UI registry
+    */
+    QString id() const;
+
+   /**
+    * Fetch the configuration for a QWidget or other UI
+    * @param view the view
+    * @param configuration the into which the setting will be written
+    */
+    virtual bool fetchConfiguration(KisView2* view, KisOperationConfiguration* configuration) = 0;
     
-    KisView2* m_view;
+private:
+    class Private;
+    Private* const d;
 };
 
-#endif // KIS_VIEW_PLUGIN_H
+#endif // KIS_OPERATION_UI_FACTORY_H

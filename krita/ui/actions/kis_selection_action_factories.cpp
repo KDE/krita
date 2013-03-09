@@ -488,3 +488,35 @@ void KisPasteNewActionFactory::run(KisView2 *view)
     win->show();
     win->setRootDocument(doc);
 }
+
+void KisGrowSelectionOperation::runFromXML(KisView2* view, const KisOperationConfiguration& config)
+{
+    int radius = config.getInt("radius", 1);
+    KisSelectionFilter* filter = new KisGrowSelectionFilter(radius, radius);
+
+    KisSelectionSP selection = view->selection();
+    if (!selection) return;
+
+    struct FilterSelection : public ActionHelper::KisTransactionBasedCommand {
+        FilterSelection(KisImageSP image, KisSelectionSP sel, KisSelectionFilter *filter)
+            : m_image(image), m_sel(sel), m_filter(filter) {}
+        ~FilterSelection() { delete m_filter;}
+        KisImageSP m_image;
+        KisSelectionSP m_sel;
+        KisSelectionFilter *m_filter;
+
+        KUndo2Command* paint() {
+            KisSelectionTransaction transaction("", m_image->undoAdapter(), m_sel);
+            KisPixelSelectionSP mergedSelection = m_sel->getOrCreatePixelSelection();
+            QRect processingRect = m_filter->changeRect(mergedSelection->selectedExactRect());
+            m_filter->process(mergedSelection, processingRect);
+            m_sel->setDirty(processingRect); // check if really needed
+            return transaction.endAndTake();
+        }
+    };
+
+    KisProcessingApplicator *ap = ActionHelper::beginAction(view, filter->name());
+    ap->applyCommand(new FilterSelection(view->image(), selection, filter),
+                     KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
+    ActionHelper::endAction(ap, config.toXML());
+}

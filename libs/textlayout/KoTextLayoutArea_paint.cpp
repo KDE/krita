@@ -729,8 +729,9 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, QTextBlock &block, b
                         qreal x1 = line.cursorToX(p1);
                         qreal x2 = line.cursorToX(p2);
 
-//                        qDebug() << "\n\t\t\tp1:" << p1 << "x1:" << x1
-//                                 << "\n\t\t\tp2:" << p2 << "x2:" << x2;
+                        qDebug() << "\n\t\t\tp1:" << p1 << "x1:" << x1
+                                 << "\n\t\t\tp2:" << p2 << "x2:" << x2
+                                 << "\n\t\t\tlineEndWithoutPreedit" << lineEndWithoutPreedit;
 
                         if (x1 != x2) {
                             drawStrikeOuts(painter, fmt, currentFragment.text(), line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
@@ -738,6 +739,75 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, QTextBlock &block, b
                             drawUnderlines(painter, fmt, currentFragment.text(), line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
                         }
                         decorateTabsAndFormatting(painter, currentFragment, line, startOfFragmentInBlock, tabList, currentTabStop, showFormattingCharacters);
+
+                        if (layout->preeditAreaPosition() > -1) {
+                            int start = block.layout()->preeditAreaPosition();
+                            int end = block.layout()->preeditAreaPosition() + block.layout()->preeditAreaText().length();
+
+                            QTextCharFormat underline;
+                            underline.setFontUnderline(true);
+                            underline.setUnderlineStyle(QTextCharFormat::DashUnderline);
+
+                            qDebug() << "underline style" << underline.underlineStyle();
+                            qreal z1 = 0;
+                            qreal z2 = 0;
+
+                            // preedit start in this line, end in this line
+                            if ( start >= block.position() + line.textStart() &&
+                                 end <= block.position() + line.textStart() + line.textLength() ) {
+                                z1 = line.cursorToX(start);
+                                z2 = line.cursorToX(end);
+                            }
+                            // preedit start in this line, end after this line
+                            if ( start >= block.position() + line.textStart() &&
+                                 end > block.position() + line.textStart() + line.textLength() ) {
+                                z1 = line.cursorToX(start);
+                                z2 = line.cursorToX(block.position() + line.textStart() + line.textLength());
+                            }
+                            // preedit start before this line, end in this line
+                            if ( start < block.position() + line.textStart() &&
+                                 end <= block.position() + line.textStart() + line.textLength() ) {
+                                z1 = line.cursorToX(block.position() + line.textStart());
+                                z2 = line.cursorToX(end);
+                            }
+                            // preedit start before this line, end after this line
+                            if ( start < block.position() + line.textStart() &&
+                                 end > block.position() + line.textStart() + line.textLength() ) {
+                                z1 = line.cursorToX(block.position() + line.textStart());
+                                z2 = line.cursorToX(block.position() + line.textStart() + line.textLength());
+                            }
+                            if (z2 > z1) {
+                                qDebug() << "z1: " << z1 << "z2: " << z2;
+                                KoCharacterStyle::LineStyle fontUnderLineStyle = KoCharacterStyle::DashLine;
+                                KoCharacterStyle::LineType fontUnderLineType = KoCharacterStyle::SingleLine;
+                                QTextCharFormat::VerticalAlignment valign = fmt.verticalAlignment();
+
+                                QFont font(fmt.font());
+                                if (valign == QTextCharFormat::AlignSubScript
+                                        || valign == QTextCharFormat::AlignSuperScript)
+                                    font.setPointSize(font.pointSize() * 2 / 3);
+                                QFontMetricsF metrics(font, d->documentLayout->paintDevice());
+
+                                qreal y = line.position().y();
+                                if (valign == QTextCharFormat::AlignSubScript)
+                                    y += line.height() - metrics.descent() + metrics.underlinePos();
+                                else if (valign == QTextCharFormat::AlignSuperScript)
+                                    y += metrics.ascent() + metrics.underlinePos();
+                                else
+                                    y += line.ascent() + metrics.underlinePos();
+
+                                QColor color = fmt.foreground().color();
+                                qreal width = computeWidth( // line thickness
+                                                            (KoCharacterStyle::LineWeight) underline.intProperty(KoCharacterStyle::UnderlineWeight),
+                                                            underline.doubleProperty(KoCharacterStyle::UnderlineWidth),
+                                                            font);
+                                if (valign == QTextCharFormat::AlignSubScript
+                                        || valign == QTextCharFormat::AlignSuperScript) // adjust size.
+                                    width = width * 2 / 3;
+
+                                drawDecorationLine(painter, color, fontUnderLineType, fontUnderLineStyle, width, z1, z2, y);
+                            }
+                        }
                     }
                 }
             }

@@ -76,6 +76,10 @@ if (SHOULD_BUILD_PLUGIN_VECTORSHAPE)
     add_subdirectory( vectorshape )
 endif (SHOULD_BUILD_PLUGIN_VECTORSHAPE)
 
+if (SHOULD_BUILD_PLUGIN_VIDEOSHAPE)
+    add_subdirectory( videoshape )
+endif (SHOULD_BUILD_PLUGIN_VIDEOSHAPE)
+
 # only build the reporting plugins if building koreport
 if(SHOULD_BUILD_PLUGIN_REPORTING)
     add_subdirectory( reporting )

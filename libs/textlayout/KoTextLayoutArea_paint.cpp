@@ -729,9 +729,9 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, QTextBlock &block, b
                         qreal x1 = line.cursorToX(p1);
                         qreal x2 = line.cursorToX(p2);
 
-                        qDebug() << "\n\t\t\tp1:" << p1 << "x1:" << x1
-                                 << "\n\t\t\tp2:" << p2 << "x2:" << x2
-                                 << "\n\t\t\tlineEndWithoutPreedit" << lineEndWithoutPreedit;
+                        //qDebug() << "\n\t\t\tp1:" << p1 << "x1:" << x1
+                          //       << "\n\t\t\tp2:" << p2 << "x2:" << x2
+                            //     << "\n\t\t\tlineEndWithoutPreedit" << lineEndWithoutPreedit;
 
                         if (x1 != x2) {
                             drawStrikeOuts(painter, fmt, currentFragment.text(), line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
@@ -748,7 +748,8 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, QTextBlock &block, b
                             underline.setFontUnderline(true);
                             underline.setUnderlineStyle(QTextCharFormat::DashUnderline);
 
-                            qDebug() << "underline style" << underline.underlineStyle();
+                            //qDebug() << "underline style" << underline.underlineStyle();
+                            //qDebug() << "line start: " << block.position() << line.textStart();
                             qreal z1 = 0;
                             qreal z2 = 0;
 
@@ -777,7 +778,7 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, QTextBlock &block, b
                                 z2 = line.cursorToX(block.position() + line.textStart() + line.textLength());
                             }
                             if (z2 > z1) {
-                                qDebug() << "z1: " << z1 << "z2: " << z2;
+                                //qDebug() << "z1: " << z1 << "z2: " << z2;
                                 KoCharacterStyle::LineStyle fontUnderLineStyle = KoCharacterStyle::DashLine;
                                 KoCharacterStyle::LineType fontUnderLineType = KoCharacterStyle::SingleLine;
                                 QTextCharFormat::VerticalAlignment valign = fmt.verticalAlignment();

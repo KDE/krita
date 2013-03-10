@@ -38,7 +38,7 @@ public:
    /**
     * Caption of the operation widget, used in dialog caption 
     */
-    QString caption();
+    QString caption() const;
 
    /**
     * Fetch the setting from the config widet

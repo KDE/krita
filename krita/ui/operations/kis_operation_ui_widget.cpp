@@ -39,7 +39,7 @@ KisOperationUIWidget::~KisOperationUIWidget()
     delete d;
 }
 
-QString KisOperationUIWidget::caption()
+QString KisOperationUIWidget::caption() const
 {
     return d->caption;
 }

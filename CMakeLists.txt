@@ -109,18 +109,19 @@ calligra_define_product(PLAN "Full Plan (for Desktop)"  NEEDS LIB_KOREPORT LIB_K
 calligra_define_product(BRAINDUMP "Full Braindump (for Desktop)")
 calligra_define_product(ACTIVE "Calligra Active" NEEDS  SHEETS_PART STAGE_PART WORDS_PART)
 calligra_define_product(CALLIGRA "")
+# extras
 calligra_define_product(CONVERTER "Format converter for commandline")
 calligra_define_product(EXTRA_PROPERTIES "Plugin for the KDE file properties dialog")
 calligra_define_product(EXTRA_THUMBNAIL "Plugins for KDE filesystem thumbnailing")
 calligra_define_product(EXTRA_QUICKPRINT "Plugin for the KDE filemanager adding a \"Print\" action")
 calligra_define_product(OKULARODPGENERATOR "Plugin for Okular adding support for ODP and MS PPT/PPTX" NEEDS STAGE_PART)
+# plugins
 calligra_define_product(PLUGIN_COLORENGINES "")
 calligra_define_product(PLUGIN_MUSICSHAPE "")
 calligra_define_product(PLUGIN_SPACENAVIGATOR "")
 calligra_define_product(PLUGIN_ARTISTICTEXTSHAPE "")
 calligra_define_product(PLUGIN_DOCKERS "")
 calligra_define_product(PLUGIN_TEXTEDITING "")
-calligra_define_product(PLUGIN_STAGING "")
 calligra_define_product(PLUGIN_KEXI_SPREADSHEETMIGRATION ""  NEEDS KEXI SHEETS_PART)
 calligra_define_product(PLUGIN_DEFAULTTOOLS "")
 calligra_define_product(PLUGIN_PATHSHAPES "")
@@ -132,6 +133,12 @@ calligra_define_product(PLUGIN_PLUGINSHAPE "")
 calligra_define_product(PLUGIN_FORMULASHAPE "")
 calligra_define_product(PLUGIN_VECTORSHAPE "" NEEDS LIB_VECTORIMAGE)
 calligra_define_product(PLUGIN_REPORTING ""  NEEDS LIB_KOREPORT LIB_KDCHART)
+# staging plugins
+calligra_define_product(PLUGIN_GOOGLEDOCS "")
+calligra_define_product(PLUGIN_THREEDSHAPE "")
+calligra_define_product(PLUGIN_SHEETS_PIVOTTABLES ""  NEEDS SHEETS_PART)
+calligra_define_product(PLUGIN_STAGING "All plugins in staging status"  NEEDS PLUGIN_GOOGLEDOCS PLUGIN_THREEDSHAPE PLUGIN_SHEETS_PIVOTTABLES)
+# developer utils
 calligra_define_product(DEVTOOLS "Tools for developers")
 calligra_define_product(CSTESTER "")
 

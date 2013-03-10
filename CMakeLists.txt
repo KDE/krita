@@ -109,6 +109,7 @@ calligra_define_product(PLAN "Full Plan (for Desktop)"  NEEDS LIB_KOREPORT LIB_K
 calligra_define_product(BRAINDUMP "Full Braindump (for Desktop)")
 calligra_define_product(ACTIVE "Calligra Active" NEEDS  SHEETS_PART STAGE_PART WORDS_PART)
 calligra_define_product(CALLIGRA "")
+calligra_define_product(DOC "Calligra Documentations")
 # extras
 calligra_define_product(CONVERTER "Format converter for commandline")
 calligra_define_product(EXTRA_PROPERTIES "Plugin for the KDE file properties dialog")
@@ -731,7 +732,9 @@ if(SHOULD_BUILD_ACTIVE)
   add_subdirectory(active)
 endif(SHOULD_BUILD_ACTIVE)
 
-add_subdirectory(doc)
+if(SHOULD_BUILD_DOC)
+	add_subdirectory(doc)
+endif(SHOULD_BUILD_DOC)
 
 # non-app directories are moved here because they can depend on SHOULD_BUILD_{appname} variables set above
 add_subdirectory(libs)

@@ -153,7 +153,6 @@ void KisActionManager::runOperation(const QString& id)
     if (operation) {
         operation->runFromXML(d->view, *config);
     }
-    delete operation;
     delete config;
 }
 

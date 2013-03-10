@@ -26,13 +26,12 @@
 
 #include "kis_operation_ui_factory.h"
 #include "operations/kis_operation_ui_widget.h"
-#include <krita_export.h>
 
 /**
  *  Factory to get operation configurations from QWidget based operation widgets
  *  T has to be a KisOperationUIWidget
  */
-template <class T> KRITAUI_EXPORT class KisOperationUIWidgetFactory : public KisOperationUIFactory
+template <class T> class KisOperationUIWidgetFactory : public KisOperationUIFactory
 {
 
 public:

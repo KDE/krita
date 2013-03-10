@@ -1,5 +1,26 @@
 This directory stores the productsets.
 
+When building Calligra a lot of different things are created and installed.
+All these things are grouped into so-called products. Each product is defined in
+the toplevel CMakeList.txt by a call of calligra_define_product, with the id of
+the product as first parameter.
+These product ids are used to generate cmake variables SHOULD_BUILD_${PRODUCT_ID}
+which then are used to control if the things belonging to the product are build,
+usually with
+if(SHOULD_BUILD_SOME_PRODUCT_ID)
+    [...]
+endif(SHOULD_BUILD_SOME_PRODUCT_ID)
+.
+Dependencies of products on other products are also defined. Using this information
+it is also ensured that if an internal dependency cannot be built due to missing
+external dependencies, all depending products will also not built.
+
+There can be also meta-products, which simply require a certain set of other
+products but are never used directly to control what is build (e.g. WORDS).
+
+At time of writing there are 4 predefined product sets, which you can all see in
+this directory: ALL (default), DESKTOP, ACTIVE, CREATIVE.
+
 You can add your own productset by adding a file in this directory and selecting
 that productset when calling cmake:
 

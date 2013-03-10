@@ -116,6 +116,8 @@ void KisPixelSelection::applySelection(KisPixelSelectionSP selection, SelectionA
 void KisPixelSelection::addSelection(KisPixelSelectionSP selection)
 {
     QRect r = selection->selectedRect();
+    if (r.isEmpty()) return;
+
     KisHLineIteratorSP dst = createHLineIteratorNG(r.x(), r.y(), r.width());
     KisHLineConstIteratorSP src = selection->createHLineConstIteratorNG(r.x(), r.y(), r.width());
     for (int i = 0; i < r.height(); ++i) {
@@ -134,6 +136,9 @@ void KisPixelSelection::addSelection(KisPixelSelectionSP selection)
 void KisPixelSelection::subtractSelection(KisPixelSelectionSP selection)
 {
     QRect r = selection->selectedRect();
+    if (r.isEmpty()) return;
+
+
     KisHLineIteratorSP dst = createHLineIteratorNG(r.x(), r.y(), r.width());
     KisHLineConstIteratorSP src = selection->createHLineConstIteratorNG(r.x(), r.y(), r.width());
     for (int i = 0; i < r.height(); ++i) {
@@ -150,8 +155,9 @@ void KisPixelSelection::subtractSelection(KisPixelSelectionSP selection)
 }
 
 void KisPixelSelection::intersectSelection(KisPixelSelectionSP selection)
-{
+{    
     QRect r = selection->selectedRect().united(selectedRect());
+    if (r.isEmpty()) return;
 
     KisHLineIteratorSP dst = createHLineIteratorNG(r.x(), r.y(), r.width());
     KisHLineConstIteratorSP src = selection->createHLineConstIteratorNG(r.x(), r.y(), r.width());

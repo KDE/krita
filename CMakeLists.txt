@@ -82,7 +82,7 @@ endif(NOT PRODUCTSET)
 # There can be required or optional external deps, required will also result
 # in automatic disabling of product building
 # TODO: some products have multiple optional requirements, but need at least one.
-# See CONVERTER, CSTESTER, EXTRA_*
+# See CONVERTER, EXTRA_*
 calligra_define_product(LIB_KDGANTT "libkdgantt")
 calligra_define_product(LIB_KDCHART "libkdchart")
 calligra_define_product(LIB_VECTORIMAGE "libvectorimage")
@@ -140,7 +140,7 @@ calligra_define_product(PLUGIN_SHEETS_PIVOTTABLES ""  NEEDS SHEETS_PART)
 calligra_define_product(PLUGIN_STAGING "All plugins in staging status"  NEEDS PLUGIN_GOOGLEDOCS PLUGIN_THREEDSHAPE PLUGIN_SHEETS_PIVOTTABLES)
 # developer utils
 calligra_define_product(DEVTOOLS "Tools for developers")
-calligra_define_product(CSTESTER "")
+calligra_define_product(CSTESTER "" NEEDS SHEETS_PART STAGE_PART WORDS_PART)
 
 calligra_set_productset(${PRODUCTSET})
 

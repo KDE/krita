@@ -54,6 +54,11 @@ KisSelectionToolHelper::~KisSelectionToolHelper()
 
 void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection, SelectionAction action)
 {
+    if (selection->selectedRect().isEmpty()) {
+        m_canvas->view()->selectionManager()->deselect();
+        return;
+    }
+
     KisUndoAdapter *undoAdapter = m_layer->image()->undoAdapter();
     undoAdapter->beginMacro(m_name);
 

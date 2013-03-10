@@ -49,6 +49,7 @@
 #include <QPainter>
 #include <QTextLayout>
 #include <QMenu>
+#include <QScrollArea>
 
 class KoModeBox::Private
 {
@@ -267,6 +268,7 @@ void KoModeBox::addItem(const KoToolButton button)
     widget = new QWidget();
     widget->setLayout(layout);
     layout->setContentsMargins(0,0,0,0);
+    layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
     d->addedWidgets[button.buttonGroupId] = widget;
 
     // Create a rotated icon with text
@@ -278,7 +280,13 @@ void KoModeBox::addItem(const KoToolButton button)
         d->tabBar->setTabToolTip(index, button.button->toolTip());
     }
     d->tabBar->blockSignals(false);
-    d->stack->addWidget(widget);
+    QScrollArea *sa = new QScrollArea();
+    sa->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    sa->setWidgetResizable(true);
+    sa->setContentsMargins(0,0,0,0);
+    sa->setWidget(widget);
+    sa->setFrameShape(QFrame::NoFrame);
+    d->stack->addWidget(sa);
     d->addedButtons.append(button);
 }
 
@@ -358,6 +366,7 @@ void KoModeBox::setOptionWidgets(const QList<QWidget *> &optionWidgetList)
 
     int cnt = 0;
     QGridLayout *layout = (QGridLayout *)d->addedWidgets[d->activeId]->layout();
+
     // need to unstretch row that have previously been stretched
     layout->setRowStretch(layout->rowCount()-1, 0);
     layout->setColumnMinimumWidth(0, 0); // used to be indent

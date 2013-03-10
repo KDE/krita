@@ -27,7 +27,9 @@ public:
 };
 
 
-KisOperationUIWidget::KisOperationUIWidget(const QString& caption, QWidget* parent) : d(new KisOperationUIWidget::Private)
+KisOperationUIWidget::KisOperationUIWidget(const QString& caption, QWidget* parent)
+  : QWidget(parent)
+  , d(new KisOperationUIWidget::Private)
 {
     d->caption = caption;
 }

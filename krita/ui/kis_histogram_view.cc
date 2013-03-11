@@ -26,7 +26,6 @@
 #include <QComboBox>
 #include <QPushButton>
 #include <QScrollBar>
-//Added by qt3to4:
 #include <QMouseEvent>
 #include <QFrame>
 #include <QBrush>

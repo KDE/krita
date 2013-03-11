@@ -37,7 +37,7 @@ public:
         image = createImage(undoStore);
         image->initialRefreshGraph();
 
-        QVERIFY(checkLayers(image, "initial"));
+        QVERIFY(checkLayersInitial(image));
     }
 
     KisPaintDeviceSP paintDevice() {

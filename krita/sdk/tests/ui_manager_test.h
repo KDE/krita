@@ -55,12 +55,12 @@ public:
         if(useShapeLayer) addShapeLayer(doc, image);
         image->initialRefreshGraph();
 
-        QVERIFY(checkLayers("initial"));
+        QVERIFY(checkLayersInitial());
 
         shell = new KoMainWindow(part->componentData());
         view = new KisView2(part, doc, shell);
 
-        KisPattern *newPattern = new KisPattern(QString(FILES_DATA_DIR) + QDir::separator() + "HR_SketchPaper_01.pat");
+        KisPattern *newPattern = new KisPattern(fetchDataFileLazy("HR_SketchPaper_01.pat"));
         newPattern->load();
         Q_ASSERT(newPattern->valid());
         view->resourceProvider()->slotPatternActivated(newPattern);
@@ -105,14 +105,14 @@ public:
     void checkUndo() {
         undoStore->undo();
         image->waitForDone();
-        QVERIFY(checkLayers("initial"));
+        QVERIFY(checkLayersInitial());
     }
 
     void checkDoubleUndo() {
         undoStore->undo();
         undoStore->undo();
         image->waitForDone();
-        QVERIFY(checkLayers("initial"));
+        QVERIFY(checkLayersInitial());
     }
 
     void startConcurrentTask() {
@@ -129,6 +129,12 @@ public:
 
     bool checkLayers(const QString &name) {
         return checkLayers(image, name);
+    }
+
+    using QImageBasedTest::checkLayersInitial;
+
+    bool checkLayersInitial() {
+        return checkLayersInitial(image);
     }
 
     bool checkLayersFuzzy(const QString &name) {

@@ -95,6 +95,7 @@ set(kritaimage_LIB_SRCS
    commands_new/kis_image_resize_command.cpp
    commands_new/kis_image_set_resolution_command.cpp
    commands_new/kis_update_command.cpp
+   processing/kis_simple_processing_visitor.cpp
    processing/kis_crop_processing_visitor.cpp
    processing/kis_transform_processing_visitor.cpp
    filter/kis_filter.cc

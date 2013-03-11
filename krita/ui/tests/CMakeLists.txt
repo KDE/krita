@@ -3,8 +3,7 @@ include_directories(  ${KOMAIN_INCLUDES}   ${CMAKE_SOURCE_DIR}/krita/sdk/tests )
 
 add_subdirectory(scratchpad)
 
-add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
-add_definitions(-DFILES_OUTPUT_DIR="${CMAKE_CURRENT_BINARY_DIR}")
+macro_add_unittest_definitions()
 
 ########### next target ###############
 

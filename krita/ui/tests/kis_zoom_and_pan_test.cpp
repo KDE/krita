@@ -49,7 +49,7 @@ public:
         m_undoStore = new KisSurrogateUndoStore();
         m_image = createImage(m_undoStore);
         m_image->initialRefreshGraph();
-        QVERIFY(checkLayers(m_image, "initial"));
+        QVERIFY(checkLayersInitial(m_image));
 
         m_part = new KisPart2(0);
 

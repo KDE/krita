@@ -1,7 +1,14 @@
 project(krita)
 
+set(KRITA_DEFAULT_TEST_DATA_DIR ${CMAKE_CURRENT_SOURCE_DIR}/sdk/tests/data/)
 
-# 
+macro(macro_add_unittest_definitions)
+  add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
+  add_definitions(-DFILES_OUTPUT_DIR="${CMAKE_CURRENT_BINARY_DIR}")
+  add_definitions(-DFILES_DEFAULT_DATA_DIR="${KRITA_DEFAULT_TEST_DATA_DIR}")
+endmacro()
+
+#
 # The reason for this mode is that the Debug mode disable inlining
 #
 if(CMAKE_COMPILER_IS_GNUCXX)

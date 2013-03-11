@@ -19,28 +19,18 @@
 #ifndef __KIS_CROP_PROCESSING_VISITOR_H
 #define __KIS_CROP_PROCESSING_VISITOR_H
 
-#include "kis_processing_visitor.h"
+#include "kis_simple_processing_visitor.h"
 #include <QRect>
 
 
-class KRITAIMAGE_EXPORT  KisCropProcessingVisitor : public KisProcessingVisitor
+class KRITAIMAGE_EXPORT  KisCropProcessingVisitor : public KisSimpleProcessingVisitor
 {
 public:
     KisCropProcessingVisitor(const QRect &rect, bool cropLayers, bool moveLayers);
 
-    void visit(KisNode *node, KisUndoAdapter *undoAdapter);
-    void visit(KisPaintLayer *layer, KisUndoAdapter *undoAdapter);
-    void visit(KisGroupLayer *layer, KisUndoAdapter *undoAdapter);
-    void visit(KisAdjustmentLayer *layer, KisUndoAdapter *undoAdapter);
-    void visit(KisExternalLayer *layer, KisUndoAdapter *undoAdapter);
-    void visit(KisGeneratorLayer *layer, KisUndoAdapter *undoAdapter);
-    void visit(KisCloneLayer *layer, KisUndoAdapter *undoAdapter);
-    void visit(KisFilterMask *mask, KisUndoAdapter *undoAdapter);
-    void visit(KisTransparencyMask *mask, KisUndoAdapter *undoAdapter);
-    void visit(KisSelectionMask *mask, KisUndoAdapter *undoAdapter);
-
 private:
-    void cropNode(KisNode *node, KisUndoAdapter *undoAdapter);
+    void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter);
+    void visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter);
 
 private:
     QRect m_rect;

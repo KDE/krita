@@ -29,8 +29,6 @@
 #include <kpluginfactory.h>
 #include <kstandarddirs.h>
 #include <klocale.h>
-#include <kservice.h>
-#include <kservicetypetrader.h>
 #include <kglobal.h>
 
 #include <KoBasicHistogramProducers.h>

@@ -1,7 +1,6 @@
 /*
- *  dlg_grow_selection.cc - part of Krita
- *
- *  Copyright (c) 2006 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2013 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,21 +17,18 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "dlg_grow_selection.h"
+#ifndef KIS_FILTER_SELECTION_OPERATION_H
+#define KIS_FILTER_SELECTION_OPERATION_H
 
-#include <klocale.h>
-#include <kis_debug.h>
-#include <operations/kis_operation_configuration.h>
+#include <krita_export.h>
+#include "kis_operation.h"
 
-WdgGrowSelection::WdgGrowSelection(QWidget* parent) : KisOperationUIWidget(i18n("Grow Selection"), parent)
-{
-    setupUi(this);
-}
+class KisSelectionFilter;
+class KisView2;
 
-void WdgGrowSelection::getConfiguration(KisOperationConfiguration* config)
-{
-    config->setProperty("x-radius", radiusSpinBox->value());
-    config->setProperty("y-radius", radiusSpinBox->value());
-}
+struct KRITAUI_EXPORT KisFilterSelectionOperation : public KisOperation {
+    KisFilterSelectionOperation(const QString& id) : KisOperation(id) {}
+    void runFilter(KisSelectionFilter* filter, KisView2 *view, const KisOperationConfiguration &config);
+};
 
-#include "dlg_grow_selection.moc"
+#endif // KIS_FILTER_SELECTION_OPERATION_H

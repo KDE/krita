@@ -23,15 +23,15 @@
 #include <klocale.h>
 #include <kis_debug.h>
 
-#include "kis_view2.h"
-#include "kis_selection_manager.h"
 #include "kis_action.h"
+#include <kpluginfactory.h>
 #include <operations/kis_operation_ui_widget_factory.h>
 
 #include "dlg_grow_selection.h"
 #include "dlg_shrink_selection.h"
 #include "dlg_border_selection.h"
 #include "dlg_feather_selection.h"
+#include "modify_selection_operations.h"
 
 K_PLUGIN_FACTORY(ModifySelectionFactory, registerPlugin<ModifySelection>();)
 K_EXPORT_PLUGIN(ModifySelectionFactory("krita"))
@@ -46,104 +46,46 @@ ModifySelection::ModifySelection(QObject *parent, const QVariantList &)
     addAction("growselection", action);
 
     addUIFactory(new KisOperationUIWidgetFactory<WdgGrowSelection>("growselection"));
+    addOperation(new GrowSelectionOperation);
 
     action = new KisAction(i18n("Shrink Selection..."), this);
     action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
     action->setActivationConditions(KisAction::SELECTION_EDITABLE);
+    action->setOperationID("shrinkselection");
     addAction("shrinkselection", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(slotShrinkSelection()));
+
+    addUIFactory(new KisOperationUIWidgetFactory<WdgShrinkSelection>("shrinkselection"));
+    addOperation(new ShrinkSelectionOperation);
 
     action  = new KisAction(i18n("Border Selection..."), this);
     action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
     action->setActivationConditions(KisAction::SELECTION_EDITABLE);
+    action->setOperationID("borderselection");
     addAction("borderselection", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(slotBorderSelection()));
+
+    addUIFactory(new KisOperationUIWidgetFactory<WdgBorderSelection>("borderselection"));
+    addOperation(new BorderSelectionOperation);
 
     action  = new KisAction(i18n("Feather Selection..."), this);
     action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
     action->setActivationConditions(KisAction::SELECTION_EDITABLE);
+    action->setOperationID("featherselection");
     addAction("featherselection", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(slotFeatherSelection()));
 
-    action = new KisAction(i18n("Smooth..."), this);
+    addUIFactory(new KisOperationUIWidgetFactory<WdgFeatherSelection>("featherselection"));
+    addOperation(new FeatherSelectionOperation);
+
+    action = new KisAction(i18n("Smooth"), this);
     action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
     action->setActivationConditions(KisAction::SELECTION_EDITABLE);
+    action->setOperationID("smoothselection");
     addAction("smoothselection", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(slotSmoothSelection()));
+
+    addOperation(new SmoothSelectionOperation);
 }
 
 ModifySelection::~ModifySelection()
 {
 }
-
-void ModifySelection::slotShrinkSelection()
-{
-    KisImageWSP image = m_view->image();
-
-    if (!image) return;
-
-    DlgShrinkSelection * dlgShrinkSelection = new DlgShrinkSelection(m_view, "ShrinkSelection");
-    Q_CHECK_PTR(dlgShrinkSelection);
-
-    dlgShrinkSelection->setCaption(i18n("Shrink Selection"));
-
-    if (dlgShrinkSelection->exec() == QDialog::Accepted) {
-        qint32 xradius = dlgShrinkSelection->xradius();
-        qint32 yradius = dlgShrinkSelection->yradius();
-        bool shrinkFromImageBorder = dlgShrinkSelection->shrinkFromImageBorder();
-
-        //third parameter is edge_lock so shrinkFromImageBorder needs to be inverted
-        m_view->selectionManager()->shrink(xradius, yradius, !shrinkFromImageBorder);
-    }
-
-    delete dlgShrinkSelection;
-}
-
-void ModifySelection::slotBorderSelection()
-{
-    KisImageWSP image = m_view->image();
-
-    if (!image) return;
-
-    DlgBorderSelection * dlgBorderSelection = new DlgBorderSelection(m_view, "BorderSelection");
-    Q_CHECK_PTR(dlgBorderSelection);
-
-    dlgBorderSelection->setCaption(i18n("Border Selection"));
-
-    if (dlgBorderSelection->exec() == QDialog::Accepted) {
-        qint32 xradius = dlgBorderSelection->xradius();
-        qint32 yradius = dlgBorderSelection->yradius();
-
-        m_view->selectionManager()->border(xradius, yradius);
-    }
-
-    delete dlgBorderSelection;
-}
-
-void ModifySelection::slotFeatherSelection()
-{
-    KisImageWSP image = m_view->image();
-
-    if (!image) return;
-
-    DlgFeatherSelection * dlgFeatherSelection = new DlgFeatherSelection(m_view, "FeatherSelection");
-    Q_CHECK_PTR(dlgFeatherSelection);
-
-    dlgFeatherSelection->setCaption(i18n("Feather Selection"));
-
-    if (dlgFeatherSelection->exec() == QDialog::Accepted) {
-        qint32 radius = dlgFeatherSelection->radius();
-
-        m_view->selectionManager()->feather(radius);
-    }
-
-    delete dlgFeatherSelection;
-}
-
-void ModifySelection::slotSmoothSelection()
-{
-    m_view->selectionManager()->smooth();
-}
-
 
 #include "modify_selection.moc"

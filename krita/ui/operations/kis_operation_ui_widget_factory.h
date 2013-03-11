@@ -26,6 +26,7 @@
 
 #include "kis_operation_ui_factory.h"
 #include "operations/kis_operation_ui_widget.h"
+#include "kis_view2.h"
 
 /**
  *  Factory to get operation configurations from QWidget based operation widgets

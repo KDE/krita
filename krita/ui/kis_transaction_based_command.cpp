@@ -1,7 +1,5 @@
 /*
- *  dlg_grow_selection.cc - part of Krita
- *
- *  Copyright (c) 2006 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,21 +16,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "dlg_grow_selection.h"
+#include "kis_transaction_based_command.h"
 
-#include <klocale.h>
-#include <kis_debug.h>
-#include <operations/kis_operation_configuration.h>
-
-WdgGrowSelection::WdgGrowSelection(QWidget* parent) : KisOperationUIWidget(i18n("Grow Selection"), parent)
+KisTransactionBasedCommand::KisTransactionBasedCommand(const QString& text, KUndo2Command* parent)
+    : KUndo2Command(text, parent), m_firstRedo(true), m_transactionData(0)
 {
-    setupUi(this);
 }
 
-void WdgGrowSelection::getConfiguration(KisOperationConfiguration* config)
+KisTransactionBasedCommand::~KisTransactionBasedCommand()
 {
-    config->setProperty("x-radius", radiusSpinBox->value());
-    config->setProperty("y-radius", radiusSpinBox->value());
+    delete m_transactionData;
 }
 
-#include "dlg_grow_selection.moc"
+void KisTransactionBasedCommand::redo()
+{
+    if (m_firstRedo) {
+        m_transactionData = paint();
+    }
+    m_transactionData->redo();
+}
+
+void KisTransactionBasedCommand::undo()
+{
+    m_transactionData->undo();
+}
+

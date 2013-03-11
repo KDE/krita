@@ -37,13 +37,11 @@ KisOperationRegistry::KisOperationRegistry()
     add(new KisReselectActionFactory);
     add(new KisFillActionFactory);
     add(new KisClearActionFactory);
-    add(new KisApplySelectionFilterActionFactory);
     add(new KisImageResizeToSelectionActionFactory);
     add(new KisCutCopyActionFactory);
     add(new KisCopyMergedActionFactory);
     add(new KisPasteActionFactory);
     add(new KisPasteNewActionFactory);
-    add(new KisGrowSelectionOperation);
 }
 
 KisOperationRegistry::~KisOperationRegistry()

@@ -1,7 +1,5 @@
 /*
- *  dlg_grow_selection.cc - part of Krita
- *
- *  Copyright (c) 2006 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,21 +16,26 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "dlg_grow_selection.h"
+#ifndef KIS_TRANSACTION_BASED_COMMAND_H
+#define KIS_TRANSACTION_BASED_COMMAND_H
 
-#include <klocale.h>
-#include <kis_debug.h>
-#include <operations/kis_operation_configuration.h>
+#include <krita_export.h>
+#include <kundo2command.h>
 
-WdgGrowSelection::WdgGrowSelection(QWidget* parent) : KisOperationUIWidget(i18n("Grow Selection"), parent)
+class KRITAUI_EXPORT KisTransactionBasedCommand : public KUndo2Command
 {
-    setupUi(this);
-}
+public:
+    KisTransactionBasedCommand(const QString &text = "", KUndo2Command *parent = 0);
 
-void WdgGrowSelection::getConfiguration(KisOperationConfiguration* config)
-{
-    config->setProperty("x-radius", radiusSpinBox->value());
-    config->setProperty("y-radius", radiusSpinBox->value());
-}
+    ~KisTransactionBasedCommand();
 
-#include "dlg_grow_selection.moc"
+    void redo();
+    void undo();
+
+protected:
+    virtual KUndo2Command* paint() = 0;
+private:
+    bool m_firstRedo;
+    KUndo2Command *m_transactionData;
+};
+#endif // KIS_TRANSACTION_BASED_COMMAND_H

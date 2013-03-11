@@ -17,6 +17,7 @@
  */
 
 #include "kis_selection_manager_test.h"
+#include <operations/kis_operation_configuration.h>
 
 #include <qtest_kde.h>
 
@@ -225,14 +226,16 @@ void KisSelectionManagerTest::testInvertSelection()
 {
     SelectionManagerTester t(true);
 
-    t.selectionManager->invert();
+    KisOperationConfiguration* config = new KisOperationConfiguration("invertselection");
+    t.actionManager->runOperationFromConfiguration(config);
     t.image->waitForDone();
     QVERIFY(t.checkLayers("invert_selection"));
 
     t.checkUndo();
     t.startConcurrentTask();
 
-    t.selectionManager->invert();
+    config = new KisOperationConfiguration("invertselection");
+    t.actionManager->runOperationFromConfiguration(config);
     t.image->waitForDone();
     QVERIFY(t.checkLayers("invert_selection"));
 }
@@ -241,32 +244,43 @@ void KisSelectionManagerTest::testFeatherSelection()
 {
     SelectionManagerTester t(true);
 
-    t.selectionManager->feather(10);
+    KisOperationConfiguration* config = new KisOperationConfiguration("featherselection");
+    config->setProperty("radius", 10);
+    t.actionManager->runOperationFromConfiguration(config);
     t.image->waitForDone();
     QVERIFY(t.checkSelectionOnly("feather_selection"));
 
     t.checkUndo();
     t.startConcurrentTask();
 
-    t.selectionManager->feather(10);
+    config = new KisOperationConfiguration("featherselection");
+    config->setProperty("radius", 10);
+    t.actionManager->runOperationFromConfiguration(config);
     t.image->waitForDone();
     QVERIFY(t.checkSelectionOnly("feather_selection"));
 }
 
 void KisSelectionManagerTest::testGrowSelectionSimplified()
 {
-//     SelectionManagerTester t(true);
-// 
-//     t.selectionManager->grow(10,5);
-//     t.image->waitForDone();
-//     QVERIFY(t.checkSelectionOnly("grow_selection"));
+    SelectionManagerTester t(true);
+
+    KisOperationConfiguration* config = new KisOperationConfiguration("growselection");
+    config->setProperty("x-radius", 10);
+    config->setProperty("y-radius", 5);
+    t.actionManager->runOperationFromConfiguration(config);
+    t.image->waitForDone();
+    QVERIFY(t.checkSelectionOnly("grow_selection"));
 }
 
 void KisSelectionManagerTest::testShrinkSelectionUnlockedSimplified()
 {
     SelectionManagerTester t(true);
 
-    t.selectionManager->shrink(10, 5, false);
+    KisOperationConfiguration* config = new KisOperationConfiguration("shrinkselection");
+    config->setProperty("x-radius", 10);
+    config->setProperty("y-radius", 5);
+    config->setProperty("edgeLock", false);
+    t.actionManager->runOperationFromConfiguration(config);
     t.image->waitForDone();
     QVERIFY(t.checkSelectionOnly("shrink_selection_unlocked"));
 }
@@ -275,7 +289,11 @@ void KisSelectionManagerTest::testShrinkSelectionLockedSimplified()
 {
     SelectionManagerTester t(true);
 
-    t.selectionManager->shrink(10, 5, true);
+    KisOperationConfiguration* config = new KisOperationConfiguration("shrinkselection");
+    config->setProperty("x-radius", 10);
+    config->setProperty("y-radius", 5);
+    config->setProperty("edgeLock", true);
+    t.actionManager->runOperationFromConfiguration(config);
     t.image->waitForDone();
     QVERIFY(t.checkSelectionOnly("shrink_selection_locked"));
 }
@@ -284,34 +302,38 @@ void KisSelectionManagerTest::testSmoothSelectionSimplified()
 {
     SelectionManagerTester t(true);
 
-    t.selectionManager->smooth();
+    KisOperationConfiguration* config = new KisOperationConfiguration("smoothselection");
+    t.actionManager->runOperationFromConfiguration(config);
     t.image->waitForDone();
     QVERIFY(t.checkSelectionOnly("smooth_selection"));
 }
 
 void KisSelectionManagerTest::testErodeSelectionSimplified()
 {
-    SelectionManagerTester t(true);
-
-    t.selectionManager->erode();
-    t.image->waitForDone();
-    QVERIFY(t.checkSelectionOnly("erode_selection"));
+//     SelectionManagerTester t(true);
+// 
+//     t.selectionManager->erode();
+//     t.image->waitForDone();
+//     QVERIFY(t.checkSelectionOnly("erode_selection"));
 }
 
 void KisSelectionManagerTest::testDilateSelectionSimplified()
 {
-    SelectionManagerTester t(true);
-
-    t.selectionManager->dilate();
-    t.image->waitForDone();
-    QVERIFY(t.checkSelectionOnly("dilate_selection"));
+//     SelectionManagerTester t(true);
+// 
+//     t.selectionManager->dilate();
+//     t.image->waitForDone();
+//     QVERIFY(t.checkSelectionOnly("dilate_selection"));
 }
 
 void KisSelectionManagerTest::testBorderSelectionSimplified()
 {
     SelectionManagerTester t(true);
 
-    t.selectionManager->border(10,5);
+    KisOperationConfiguration* config = new KisOperationConfiguration("borderselection");
+    config->setProperty("x-radius", 10);
+    config->setProperty("y-radius", 5);
+    t.actionManager->runOperationFromConfiguration(config);
     t.image->waitForDone();
     QVERIFY(t.checkSelectionOnly("border_selection"));
 }

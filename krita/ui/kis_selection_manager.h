@@ -83,8 +83,7 @@ public slots:
     void fillBackgroundColor();
     void fillPattern();
     void reselect();
-    void invert();
-    void smooth();
+
     void copySelectionToNewLayer();
     void toggleDisplaySelection();
 
@@ -104,14 +103,6 @@ public:
 
     /// Checks if the current selection is editabl and has some pixels selected in the pixel selection
     bool havePixelSelectionWithPixels();
-
-    void shrink(qint32 xradius, qint32 yradius, bool edge_lock);
-    void border(qint32 xradius, qint32 yradius);
-    void feather(qint32 radius);
-    // the following functions are needed for the siox tool
-    // they might be also useful on its own
-    void erode();
-    void dilate();
 
     void paint(QPainter& gc, const KoViewConverter &converter);
 

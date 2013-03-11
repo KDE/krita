@@ -20,54 +20,18 @@
 
 #include "dlg_shrink_selection.h"
 
-#include <math.h>
-
 #include <klocale.h>
 #include <kis_debug.h>
-DlgShrinkSelection::DlgShrinkSelection(QWidget *  parent, const char * name)
-        : KDialog(parent)
-{
-    setCaption(i18n("Shrink Selection"));
-    setButtons(Ok | Cancel);
-    setDefaultButton(Ok);
-    setObjectName(name);
 
-    m_page = new WdgShrinkSelection(this);
-    Q_CHECK_PTR(m_page);
-    m_page->setObjectName("shrink_selection");
-
-    setMainWidget(m_page);
-    resize(m_page->sizeHint());
-
-    connect(this, SIGNAL(okClicked()), this, SLOT(okClicked()));
+WdgShrinkSelection::WdgShrinkSelection(QWidget* parent): KisOperationUIWidget(i18n("Shrink Selection"), parent) {
+        setupUi(this);
 }
 
-DlgShrinkSelection::~DlgShrinkSelection()
+void WdgShrinkSelection::getConfiguration(KisOperationConfiguration* config)
 {
-    delete m_page;
-}
-
-qint32 DlgShrinkSelection::xradius()
-{
-    return m_page->radiusSpinBox->value();
-}
-
-qint32 DlgShrinkSelection::yradius()
-{
-    return m_page->radiusSpinBox->value();
-}
-
-bool DlgShrinkSelection::shrinkFromImageBorder()
-{
-    return m_page->shrinkFromImageBorderCheckBox->isChecked();
-}
-
-
-// SLOTS
-
-void DlgShrinkSelection::okClicked()
-{
-    accept();
+    config->setProperty("x-radius", radiusSpinBox->value());
+    config->setProperty("y-radius", radiusSpinBox->value());
+    config->setProperty("edgeLock", !shrinkFromImageBorderCheckBox->isChecked());
 }
 
 #include "dlg_shrink_selection.moc"

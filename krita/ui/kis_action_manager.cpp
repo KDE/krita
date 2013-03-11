@@ -26,6 +26,7 @@
 #include "kis_selection_manager.h"
 #include "operations/kis_operation_ui_factory.h"
 #include "operations/kis_operation_registry.h"
+#include "operations/kis_operation.h"
 #include "kis_layer.h"
 
 class KisActionManager::Private {
@@ -138,6 +139,11 @@ void KisActionManager::registerOperationUIFactory(KisOperationUIFactory* factory
     d->uiRegistry.add(factory);
 }
 
+void KisActionManager::registerOperation(KisOperation* operation)
+{
+    d->operationRegistry.add(operation);
+}
+
 void KisActionManager::runOperation(const QString& id)
 {
     KisOperationConfiguration* config = new KisOperationConfiguration(id);
@@ -149,7 +155,13 @@ void KisActionManager::runOperation(const QString& id)
             return;
         }
     }
-    KisOperation* operation = d->operationRegistry.get(id);
+    runOperationFromConfiguration(config);
+}
+
+void KisActionManager::runOperationFromConfiguration(KisOperationConfiguration* config)
+{
+    KisOperation* operation = d->operationRegistry.get(config->id());
+    Q_ASSERT(operation);
     if (operation) {
         operation->runFromXML(d->view, *config);
     }

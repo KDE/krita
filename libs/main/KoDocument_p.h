@@ -35,7 +35,7 @@ public:
 
 public slots:
     /// Automatically detected by konqueror
-    void print();
+    void print() {}
 };
 
 #endif

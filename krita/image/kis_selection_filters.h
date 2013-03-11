@@ -22,6 +22,7 @@
 #define KIS_SELECTION_FILTERS_H
 
 #include "kis_types.h"
+#include "krita_export.h"
 
 class KRITAIMAGE_EXPORT KisSelectionFilter
 {

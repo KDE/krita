@@ -74,6 +74,12 @@ void KisNodeShapesGraphTest::init()
 
 void KisNodeShapesGraphTest::cleanup()
 {
+    if (m_rootDummy) {
+        KisNodeShape *tempShape = m_rootDummy->nodeShape();
+        delete m_rootDummy;
+        delete tempShape;
+    }
+
     delete m_shapesGraph;
 }
 

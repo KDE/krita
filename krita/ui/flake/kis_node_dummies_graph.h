@@ -47,6 +47,15 @@ class KisNodeShape;
 class KRITAUI_EXPORT KisNodeDummy
 {
 public:
+    /**
+     * Take care tha KisNodeDummy does not take ownership over
+     * the \p nodeShape since the handling of the removal of the
+     * children of the shape is done by flake. So please handle it
+     * manually.
+     *
+     * The children dummies of the dummy are still owned by the
+     * dummy and are deleted automatically.
+     */
     KisNodeDummy(KisNodeShape *nodeShape, KisNodeSP node);
     ~KisNodeDummy();
 
@@ -64,6 +73,7 @@ public:
 
 private:
     friend class KisNodeShapesGraph; // for ::nodeShape() method
+    friend class KisNodeShapesGraphTest;
     KisNodeShape* nodeShape() const;
 
     friend class KisNodeDummiesGraph;

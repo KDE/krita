@@ -104,7 +104,7 @@ QList<KoDocumentEntry> KoDocumentEntry::query(QueryFlags flags, const QString & 
     const bool onlyDocEmb = flags & OnlyEmbeddableDocuments;
 
     // Query the trader
-    const KService::List offers = KServiceTypeTrader::self()->query("CalligraPart", constr);
+    const KService::List offers = KServiceTypeTrader::self()->query("Calligra/Part", constr);
 
     KService::List::ConstIterator it = offers.begin();
     unsigned int max = offers.count();

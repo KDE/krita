@@ -31,6 +31,6 @@ target_link_libraries(TestTableCellStyle kotext ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
-set(TestOpenDocumentStyle_test_SRCS TestOpenDocumentStyle.cpp)
-kde4_add_unit_test(TestOpenDocumentStyle TESTNAME libs-kotext-styles-TestOpenDocumentStyle ${TestOpenDocumentStyle_test_SRCS})
-target_link_libraries(TestOpenDocumentStyle kotext ${QT_QTTEST_LIBRARY} ${QT_XML_LIBRARY})
+#set(TestOpenDocumentStyle_test_SRCS TestOpenDocumentStyle.cpp)
+#kde4_add_unit_test(TestOpenDocumentStyle TESTNAME libs-kotext-styles-TestOpenDocumentStyle ${TestOpenDocumentStyle_test_SRCS})
+#target_link_libraries(TestOpenDocumentStyle kotext ${QT_QTTEST_LIBRARY} ${QT_XML_LIBRARY})

@@ -34,7 +34,7 @@ KisNodeDummy::KisNodeDummy(KisNodeShape *nodeShape, KisNodeSP node)
 KisNodeDummy::~KisNodeDummy()
 {
     delete m_nodeShape;
-    qDeleteAll(m_children);
+    // the children are deleted by the flake hierarchy
 }
 
 KisNodeDummy* KisNodeDummy::firstChild() const

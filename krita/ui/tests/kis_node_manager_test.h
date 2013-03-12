@@ -24,15 +24,13 @@
 class KisNodeManagerTest : public QObject
 {
     Q_OBJECT
-
-    void testRotatePaintNode();
-
 private slots:
-
+    void testRotatePaintNode();
     void testShearPaintNode();
     void testScalePaintNode();
     void testMirrorXPaintNode();
     void testMirrorYPaintNode();
+
     void testRotateShapeNode();
     void testShearShapeNode();
     void testScaleShapeNode();

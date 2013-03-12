@@ -74,9 +74,6 @@ void KisNodeShapesGraphTest::init()
 
 void KisNodeShapesGraphTest::cleanup()
 {
-    if (m_rootDummy->parent() == 0) {
-        delete m_rootDummy;
-    }
     delete m_shapesGraph;
 }
 

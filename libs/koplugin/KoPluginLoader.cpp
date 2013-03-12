@@ -68,14 +68,15 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
     const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
     KService::List plugins;
     bool configChanged = false;
-    QStringList blacklist; // what we will save out afterwards
+    QList<QString> blacklist; // what we will save out afterwards
     if (config.whiteList && config.blacklist && config.group) {
         kDebug(30003) << "Loading" << serviceType << "with checking the config";
         KConfigGroup configGroup = KGlobal::config()->group(config.group);
-        QStringList whiteList = configGroup.readEntry(config.whiteList, QStringList());
-        QStringList knownList;
+        QList<QString> whiteList = configGroup.readEntry(config.whiteList, config.defaults);
+        QList<QString> knownList;
 
-        const bool firstStart = !configGroup.hasKey(config.whiteList);
+        // if there was no list of defaults; all plugins are loaded.
+        const bool firstStart = !config.defaults.isEmpty() && !configGroup.hasKey(config.whiteList);
         knownList = configGroup.readEntry(config.blacklist, knownList);
         if (firstStart) {
             configChanged = true;
@@ -99,7 +100,6 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         plugins = offers;
     }
 
-    // XXX: This shouldn't use X-Flake-PLuginVersion, that only works for flake plugins
     QMap<QString, KSharedPtr<KService> > serviceNames;
     foreach(KSharedPtr<KService> service, plugins) {
         if (serviceNames.contains(service->name())) { // duplicate
@@ -116,7 +116,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         serviceNames.insert(service->name(), service);
     }
 
-    QStringList whiteList;
+    QList<QString> whiteList;
     foreach(KSharedPtr<KService> service, serviceNames) {
         QString error = 0;
         QObject * plugin = service->createInstance<QObject>(this, QVariantList(), &error);

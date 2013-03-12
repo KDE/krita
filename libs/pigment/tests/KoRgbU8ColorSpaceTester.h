@@ -25,10 +25,10 @@
 class KoRgbColorSpaceTester : public QObject
 {
     Q_OBJECT
+    void testCompositeOps();
 private slots:
     void testBasics();
     void testMixColors();
-    void testCompositeOps();
     void testCompositeOpsWithChannelFlags();
 };
 

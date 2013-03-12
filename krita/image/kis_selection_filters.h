@@ -24,6 +24,10 @@
 #include "kis_types.h"
 #include "krita_export.h"
 
+#include <QRect>
+#include <QString>
+
+
 class KRITAIMAGE_EXPORT KisSelectionFilter
 {
 public:

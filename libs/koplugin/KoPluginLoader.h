@@ -81,13 +81,12 @@ public:
          * For most cases you can pass the string "calligra" into this variable.
          */
         const char * group;
+
         /// This contains the variable name for the list of plugins (by library name) the user wants to load
         const char * whiteList;
+
         /// This contains the variable name for the list of plugins (by library name) that will not be loaded
         const char * blacklist;
-        /// A registry can state it wants to load a default set of plugins instead of all plugins
-        /// when the application starts the first time.  Append all such plugin (library) names to this list.
-        QStringList defaults;
     };
 
     ~KoPluginLoader();

@@ -475,7 +475,7 @@ void KisToolSelectMagnetic::LocalTool::addPathShape(KoPathShape* pathShape)
     if (!kisCanvas)
         return;
 
-    KisSelectionToolHelper helper(kisCanvas, currentNode, i18n("Path Selection"));
+    KisSelectionToolHelper helper(kisCanvas, i18n("Path Selection"));
 
 
     KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());

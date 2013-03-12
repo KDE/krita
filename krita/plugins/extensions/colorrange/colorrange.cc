@@ -84,7 +84,7 @@ void ColorRange::selectOpaque()
     KisPaintDeviceSP device = node->paintDevice();
     if (!device) return;
     
-    KisSelectionToolHelper helper(canvas, node, i18n("Select Opaque"));
+    KisSelectionToolHelper helper(canvas, i18n("Select Opaque"));
     
     qint32 x, y, w, h;
     QRect rc = device->exactBounds();

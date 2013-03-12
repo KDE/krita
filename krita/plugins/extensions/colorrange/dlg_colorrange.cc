@@ -313,7 +313,7 @@ void DlgColorRange::slotSelectClicked()
     }
 
     // Enable translation after 2.4 release
-    KisSelectionToolHelper helper(m_view->canvasBase(), m_view->activeNode(),"Color Range Selection");
+    KisSelectionToolHelper helper(m_view->canvasBase(), "Color Range Selection");
     helper.selectPixelSelection(selection->pixelSelection(), m_mode);
 
     m_page->bnDeselect->setEnabled(true);

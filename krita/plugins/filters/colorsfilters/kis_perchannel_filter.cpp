@@ -176,7 +176,7 @@ void KisPerChannelConfigWidget::setActiveChannel(int ch)
     m_page->curveWidget->setPixmap(getHistogram());
     m_page->cmbChannel->setCurrentIndex(ch);
 
-    // Getting range accepted by chahhel
+    // Getting range accepted by channel
     KoChannelInfo *channel = m_dev->colorSpace()->channels()[m_activeCh];
     int order = BITS_PER_BYTE * channel->size();
     int maxValue = pwr2(order);

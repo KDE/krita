@@ -24,9 +24,11 @@
 
 #include <kcolorbutton.h>
 
+#include <KoColorSpaceMaths.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
+#include "kis_progress_update_helper.h"
 #include <kis_paint_device.h>
 #include <kis_selection.h>
 #include <filter/kis_filter_configuration.h>
@@ -54,8 +56,51 @@ KisFilterConfiguration* KisFilterColorToAlpha::factoryConfiguration(const KisPai
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("colortoalpha", 1);
     config->setProperty("targetcolor", QColor(255, 255, 255));
-    config->setProperty("threshold", 0);
+    config->setProperty("threshold", 100);
     return config;
+}
+
+template<typename channel_type, typename composite_type>
+inline void inverseOver(const int numChannels, const int *channelIndex,
+                        channel_type *dst, const channel_type *baseColor,
+                        qreal dstOpacity)
+{
+    for (int i = 0; i < numChannels; i++) {
+        const int idx = channelIndex[i];
+        dst[idx] =
+            KoColorSpaceMaths<channel_type>::clamp(
+                (static_cast<composite_type>(dst[idx]) - baseColor[idx]) / dstOpacity + baseColor[idx]);
+    }
+}
+
+template<typename channel_type, typename composite_type>
+void applyToIterator(const int numChannels, const int *channelIndex,
+                     KisRectIteratorSP it, KoColor baseColor,
+                     int threshold, const KoColorSpace *cs,
+                     KisProgressUpdateHelper &progressHelper)
+{
+    qreal thresholdF = threshold;
+    quint8 *baseColorData_uint8 = baseColor.data();
+    channel_type *baseColorData = reinterpret_cast<channel_type*>(baseColorData_uint8);
+
+    do {
+        channel_type *dst = reinterpret_cast<channel_type*>(it->rawData());
+        quint8 *dst_uint8 = it->rawData();
+
+        quint8 diff = cs->difference(baseColorData_uint8, dst_uint8);
+
+        qreal newOpacity = diff >= threshold ? 1.0 : diff / thresholdF;
+
+        if(newOpacity < cs->opacityF(dst_uint8)) {
+          cs->setOpacity(dst_uint8, newOpacity, 1);
+        }
+
+        inverseOver<channel_type, composite_type>(numChannels, channelIndex,
+                                                    dst, baseColorData,
+                                                    newOpacity);
+
+        progressHelper.step();
+    } while(it->nextPixel());
 }
 
 void KisFilterColorToAlpha::process(KisPaintDeviceSP device,
@@ -71,36 +116,69 @@ void KisFilterColorToAlpha::process(KisPaintDeviceSP device,
     QVariant value;
     QColor cTA = (config->getProperty("targetcolor", value)) ? value.value<QColor>() : QColor(255, 255, 255);
     int threshold = (config->getProperty("threshold", value)) ? value.toInt() : 1;
-    qreal thresholdF = threshold;
-
-    int totalCost = rect.width() * rect.height() / 100;
-    if (totalCost == 0) totalCost = 1;
-    int currentProgress = 0;
 
     const KoColorSpace * cs = device->colorSpace();
-    qint32 pixelsize = cs->pixelSize();
 
-    quint8* color = new quint8[pixelsize];
-    cs->fromQColor(cTA, color);
-
+    KisProgressUpdateHelper progressHelper(progressUpdater, 100, rect.width() * rect.height());
     KisRectIteratorSP it = device->createRectIteratorNG(rect);
+    KoColor baseColor(cTA, cs);
 
-    do {
-        quint8 d = cs->difference(color, it->oldRawData());
-        qreal newOpacity; // = cs->opacityF(srcIt->rawData());
+    QVector<int> channelIndex;
+    KoChannelInfo::enumChannelValueType valueType = KoChannelInfo::OTHER;
 
-        if (d >= threshold) {
-            newOpacity = 1.0;
+    QList<KoChannelInfo*> channels = cs->channels();
+
+    for (int i = 0; i < channels.size(); i++) {
+        const KoChannelInfo *info = channels[i];
+
+        if (info->channelType() != KoChannelInfo::COLOR) continue;
+
+        KoChannelInfo::enumChannelValueType currentValueType =
+            info->channelValueType();
+
+        if (valueType != KoChannelInfo::OTHER &&
+            valueType != currentValueType) {
+
+            qWarning() << "Cannot apply a Color-to-Alpha filter to a heterogeneous colorspace";
+            return;
         } else {
-            newOpacity = d / thresholdF;
+            valueType = currentValueType;
         }
 
-        if(newOpacity < cs->opacityF(it->rawData())) {
-          cs->setOpacity(it->rawData(), newOpacity, 1);
-        }
+        channelIndex.append(i);
+    }
 
-        if (progressUpdater) progressUpdater->setProgress((++currentProgress) / totalCost);
+    switch (valueType) {
+    case KoChannelInfo::UINT8:
+        applyToIterator<quint8, qint16>(channelIndex.size(), channelIndex.data(),
+                                        it, baseColor,
+                                        threshold, cs, progressHelper);
+        break;
+    case KoChannelInfo::UINT16:
+        applyToIterator<quint16, qint32>(channelIndex.size(), channelIndex.data(),
+                                         it, baseColor,
+                                         threshold, cs, progressHelper);
+        break;
+    case KoChannelInfo::UINT32:
+        applyToIterator<quint32, qint64>(channelIndex.size(), channelIndex.data(),
+                                         it, baseColor,
+                                         threshold, cs, progressHelper);
+        break;
 
-    } while(it->nextPixel());
-    delete[] color;
+    case KoChannelInfo::FLOAT32:
+        applyToIterator<float, float>(channelIndex.size(), channelIndex.data(),
+                                      it, baseColor,
+                                      threshold, cs, progressHelper);
+        break;
+    case KoChannelInfo::FLOAT64:
+        applyToIterator<double, double>(channelIndex.size(), channelIndex.data(),
+                                        it, baseColor,
+                                        threshold, cs, progressHelper);
+        break;
+    case KoChannelInfo::INT8: /* !UNSUPPORTED! */
+    case KoChannelInfo::INT16: /* !UNSUPPORTED! */
+    case KoChannelInfo::FLOAT16: /* !UNSUPPORTED! */
+    case KoChannelInfo::OTHER:
+        qWarning() << "Color To Alpha: Unsupported channel type:" << valueType;
+    }
 }

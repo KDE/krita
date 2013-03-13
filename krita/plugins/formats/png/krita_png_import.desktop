@@ -55,5 +55,5 @@ X-KDE-Export=application/x-krita
 X-KDE-Import=image/png
 X-KDE-Weight=1
 X-KDE-Library=kritapngimport
-X-KDE-ServiceTypes=CalligraFilter
+X-KDE-ServiceTypes=Calligra/Filter
 NoDisplay=true

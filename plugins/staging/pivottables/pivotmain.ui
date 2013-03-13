@@ -43,7 +43,7 @@
            <item>
             <widget class="QCheckBox" name="TotalColumns">
              <property name="text">
-              <string>Total Cloumns</string>
+              <string>Total Columns</string>
              </property>
             </widget>
            </item>

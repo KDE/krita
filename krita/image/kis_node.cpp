@@ -233,20 +233,22 @@ QList<KisNodeSP> KisNode::childNodes(const QStringList & nodeTypes, const KoProp
 
     KisSafeReadNodeList::const_iterator iter;
     FOREACH_SAFE(iter, m_d->nodes) {
-        if (properties.isEmpty() || (*iter)->check(properties)) {
-            bool rightType = true;
+        if (*iter) {
+            if (properties.isEmpty() || (*iter)->check(properties)) {
+                bool rightType = true;
 
-            if(!nodeTypes.isEmpty()) {
-                rightType = false;
-                foreach(const QString &nodeType,  nodeTypes) {
-                    if ((*iter)->inherits(nodeType.toLatin1())) {
-                        rightType = true;
-                        break;
+                if(!nodeTypes.isEmpty()) {
+                    rightType = false;
+                    foreach(const QString &nodeType,  nodeTypes) {
+                        if ((*iter)->inherits(nodeType.toLatin1())) {
+                            rightType = true;
+                            break;
+                        }
                     }
                 }
-            }
-            if(rightType) {
-                nodes.append(*iter);
+                if(rightType) {
+                    nodes.append(*iter);
+                }
             }
         }
     }

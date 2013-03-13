@@ -38,6 +38,7 @@
 #include <QPainter>
 #include <QLabel>
 #include <QGridLayout>
+#include <QCheckBox>
 
 #include "KoCreatePathTool_p.h"
 
@@ -188,7 +189,7 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
 
         canvas()->snapGuide()->setEditedShape(pathShape);
 
-        d->angleSnapStrategy = new AngleSnapStrategy(d->angleSnappingDelta);
+        d->angleSnapStrategy = new AngleSnapStrategy(d->angleSnappingDelta, d->angleSnapStatus);
         canvas()->snapGuide()->addCustomSnapStrategy(d->angleSnapStrategy);
     }
 
@@ -381,9 +382,14 @@ QList<QWidget *> KoCreatePathTool::createOptionWidgets()
     angleEdit->setRange(1, 360, 1);
     angleEdit->setSuffix(QChar(Qt::Key_degree));
     layout->addWidget(angleEdit, 0, 1);
+    layout->addWidget(new QLabel(i18n("Activate angle snap:"), angleWidget), 1, 0);
+    QCheckBox *angleSnap = new QCheckBox(angleWidget);
+    angleSnap->setChecked(false);
+    angleSnap->setCheckable(true);
+    layout->addWidget(angleSnap, 1, 1);
     QWidget *specialSpacer =new QWidget();
     specialSpacer->setObjectName("SpecialSpacer");
-    layout->addWidget(specialSpacer, 1, 1);
+    layout->addWidget(specialSpacer, 2, 1);
     angleWidget->setWindowTitle(i18n("Angle Constraints"));
     list.append(angleWidget);
 
@@ -394,6 +400,7 @@ QList<QWidget *> KoCreatePathTool::createOptionWidgets()
 
 
     connect(angleEdit, SIGNAL(valueChanged(int)), this, SLOT(angleDeltaChanged(int)));
+    connect(angleSnap, SIGNAL(stateChanged(int)), this, SLOT(angleSnapChanged(int)));
 
     return list;
 }

@@ -21,6 +21,7 @@
 
 #include "operations/kis_operation.h"
 #include "operations/kis_operation_configuration.h"
+#include "operations/kis_filter_selection_operation.h"
 
 class KRITAUI_EXPORT KisNoParameterActionFactory : public KisOperation
 {
@@ -68,12 +69,6 @@ struct KRITAUI_EXPORT KisClearActionFactory : public KisNoParameterActionFactory
     void run(KisView2 *view);
 };
 
-struct KRITAUI_EXPORT KisApplySelectionFilterActionFactory : public KisOperation
-{
-    KisApplySelectionFilterActionFactory() : KisOperation("apply-selection-filter-ui-action") {}
-    void runFromXML(KisView2 *view, const KisOperationConfiguration &config);
-};
-
 struct KRITAUI_EXPORT KisImageResizeToSelectionActionFactory : public KisNoParameterActionFactory {
     KisImageResizeToSelectionActionFactory() : KisNoParameterActionFactory("resize-to-selection-ui-action") {}
     void run(KisView2 *view);
@@ -101,6 +96,11 @@ struct KRITAUI_EXPORT KisPasteActionFactory : public KisNoParameterActionFactory
 struct KRITAUI_EXPORT KisPasteNewActionFactory : public KisNoParameterActionFactory {
     KisPasteNewActionFactory() : KisNoParameterActionFactory("paste-new-ui-action") {}
     void run(KisView2 *view);
+};
+
+struct KisInvertSelectionOperaton : public KisFilterSelectionOperation {
+    KisInvertSelectionOperaton() : KisFilterSelectionOperation("invertselection") {}
+    void runFromXML(KisView2 *view, const KisOperationConfiguration &config);
 };
 
 #endif /* __KIS_SELECTION_ACTION_FACTORIES_H */

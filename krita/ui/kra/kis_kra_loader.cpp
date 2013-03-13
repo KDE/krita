@@ -116,7 +116,7 @@ void convertColorSpaceNames(QString &colorspacename, QString &profileProductName
         profileProductName.clear();
     }
     else if (colorspacename == "RgbAF16") {
-        colorspacename = "RGBAF32";
+        colorspacename = "RGBAF16";
         profileProductName.clear();
     }
     else if (colorspacename == "CMYKA16") {

@@ -30,6 +30,7 @@
 #include "kis_node_manager.h"
 #include "kis_view2.h"
 #include "kis_part2.h"
+#include <kis_action_manager.h>
 #include "KoMainWindow.h"
 
 
@@ -74,6 +75,7 @@ public:
 
         view->nodeManager()->slotNonUiActivatedNode(paint1);
         selectionManager = view->selectionManager();
+        actionManager = view->actionManager();
     }
 
     ~UiManagerTest() {
@@ -145,6 +147,7 @@ public:
 
     KisImageSP image;
     KisSelectionManager *selectionManager;
+    KisActionManager *actionManager;
     KisSurrogateUndoStore *undoStore;
 
 protected:

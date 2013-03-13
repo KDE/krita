@@ -18,15 +18,18 @@
 
 
 #include "kis_action.h"
+#include "kis_action_manager.h"
 #include <QEvent>
 
 class KisAction::Private {
 
 public:
-    Private() : flags(NONE), conditions(NO_CONDITION) {}
+    Private() : flags(NONE), conditions(NO_CONDITION), actionManager(0) {}
 
     ActivationFlags flags;
     ActivationConditions conditions;
+    QString operationID;
+    KisActionManager* actionManager;
 };
 
 KisAction::KisAction(QObject* parent): KAction(parent), d(new Private)
@@ -70,3 +73,22 @@ void KisAction::setActionEnabled(bool enabled)
 {
     setEnabled(enabled);
 }
+
+void KisAction::setActionManager(KisActionManager* actionManager)
+{
+    d->actionManager = actionManager;
+}
+
+void KisAction::setOperationID(const QString& id)
+{
+    d->operationID = id;
+    connect(this, SIGNAL(triggered()), this, SLOT(slotTriggered()));
+}
+
+void KisAction::slotTriggered()
+{
+    if (d->actionManager && !d->operationID.isEmpty()) {
+        d->actionManager->runOperation(d->operationID);
+    }
+}
+

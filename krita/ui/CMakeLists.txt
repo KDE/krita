@@ -212,10 +212,14 @@ set(kritaui_LIB_SRCS
     operations/kis_operation.cpp
     operations/kis_operation_configuration.cpp
     operations/kis_operation_registry.cpp
+    operations/kis_operation_ui_factory.cpp
+    operations/kis_operation_ui_widget.cpp
+    operations/kis_filter_selection_operation.cpp
     actions/kis_selection_action_factories.cpp
     kis_filter_job.cpp
     kis_threaded_applicator.cpp
     kis_document_undo_store.cpp
+    kis_transaction_based_command.cpp
 )
 
 if(HAVE_OPENGL)

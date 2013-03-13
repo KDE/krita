@@ -73,7 +73,7 @@ if (CREATIVEONLY)
 endif (CREATIVEONLY)
 
 if(NOT PRODUCTSET)
-    set(PRODUCTSET ${PRODUCTSET_DEFAULT} CACHE STRING "Product set to build, currently supported: ACTIVE, CREATIVE, DESKTOP, ALL (default)" FORCE)
+    set(PRODUCTSET ${PRODUCTSET_DEFAULT} CACHE STRING "Set of products to build" FORCE)
 endif(NOT PRODUCTSET)
 
 # TODO: also add headers/sdk for all the libs ("_DEVEL"?)
@@ -82,15 +82,16 @@ endif(NOT PRODUCTSET)
 # There can be required or optional external deps, required will also result
 # in automatic disabling of product building
 # TODO: some products have multiple optional requirements, but need at least one.
-# See CONVERTER, CSTESTER, EXTRA_*
+# See CONVERTER, EXTRA_*
 calligra_define_product(LIB_KDGANTT "libkdgantt")
 calligra_define_product(LIB_KDCHART "libkdchart")
+calligra_define_product(LIB_VECTORIMAGE "libvectorimage")
 calligra_define_product(LIB_KOPROPERTY "libkoproperty")
 calligra_define_product(LIB_KOREPORT "libkoreport" NEEDS LIB_KOPROPERTY)
 calligra_define_product(LIB_CALLIGRADB "libcalligradb")
 calligra_define_product(LIB_KOPAGEAPP "Lib for paged documents")
 calligra_define_product(SCRIPTING "") # TODO
-calligra_define_product(WORDS_PART "Words engine")
+calligra_define_product(WORDS_PART "Words engine" NEEDS LIB_VECTORIMAGE) # LIB_VECTORIMAGE for epub filter, TODO
 calligra_define_product(WORDS_APP "Words executable (for Desktop)"  NEEDS WORDS_PART)
 calligra_define_product(WORDS "Full Words (for Desktop)"  NEEDS WORDS_APP)
 calligra_define_product(STAGE_PART "Stage engine" NEEDS LIB_KOPAGEAPP)
@@ -100,7 +101,7 @@ calligra_define_product(SHEETS_PART "Sheets engine")
 calligra_define_product(SHEETS_APP "Sheets executable (for Desktop)" NEEDS SHEETS_PART)
 calligra_define_product(SHEETS "Full Sheets (for Desktop)" NEEDS SHEETS_APP)
 calligra_define_product(AUTHOR "Full Author (for Desktop)" NEEDS WORDS_PART)
-calligra_define_product(KARBON "Full Karbon (for Desktop)")
+calligra_define_product(KARBON "Full Karbon (for Desktop)" NEEDS LIB_VECTORIMAGE) # LIB_VECTORIMAGE for wmf filter, TODO
 calligra_define_product(KRITA "Full Krita (for Desktop)")
 calligra_define_product(KEXI "Full Kexi (for Desktop)"  NEEDS LIB_KOREPORT LIB_CALLIGRADB)
 calligra_define_product(FLOW "Full Flow (for Desktop)"  NEEDS LIB_KOPAGEAPP)
@@ -108,19 +109,21 @@ calligra_define_product(PLAN "Full Plan (for Desktop)"  NEEDS LIB_KOREPORT LIB_K
 calligra_define_product(BRAINDUMP "Full Braindump (for Desktop)")
 calligra_define_product(ACTIVE "Calligra Active" NEEDS  SHEETS_PART STAGE_PART WORDS_PART)
 calligra_define_product(CALLIGRA "")
+calligra_define_product(DOC "Calligra Documentations")
+# extras
 calligra_define_product(CONVERTER "Format converter for commandline")
 calligra_define_product(EXTRA_PROPERTIES "Plugin for the KDE file properties dialog")
 calligra_define_product(EXTRA_THUMBNAIL "Plugins for KDE filesystem thumbnailing")
 calligra_define_product(EXTRA_QUICKPRINT "Plugin for the KDE filemanager adding a \"Print\" action")
 calligra_define_product(OKULARODPGENERATOR "Plugin for Okular adding support for ODP and MS PPT/PPTX" NEEDS STAGE_PART)
+# plugins
 calligra_define_product(PLUGIN_COLORENGINES "")
 calligra_define_product(PLUGIN_MUSICSHAPE "")
 calligra_define_product(PLUGIN_SPACENAVIGATOR "")
 calligra_define_product(PLUGIN_ARTISTICTEXTSHAPE "")
 calligra_define_product(PLUGIN_DOCKERS "")
 calligra_define_product(PLUGIN_TEXTEDITING "")
-calligra_define_product(PLUGIN_STAGING "")
-calligra_define_product(PLUGIN_KEXI ""  NEEDS KEXI)
+calligra_define_product(PLUGIN_KEXI_SPREADSHEETMIGRATION ""  NEEDS KEXI SHEETS_PART)
 calligra_define_product(PLUGIN_DEFAULTTOOLS "")
 calligra_define_product(PLUGIN_PATHSHAPES "")
 calligra_define_product(PLUGIN_VARIABLES "")
@@ -129,10 +132,17 @@ calligra_define_product(PLUGIN_PICTURESHAPE "")
 calligra_define_product(PLUGIN_TEXTSHAPE "")
 calligra_define_product(PLUGIN_PLUGINSHAPE "")
 calligra_define_product(PLUGIN_FORMULASHAPE "")
-calligra_define_product(PLUGIN_VECTORSHAPE "")
-calligra_define_product(PLUGIN_REPORTING ""  NEEDS LIB_KOREPORT)
+calligra_define_product(PLUGIN_VIDEOSHAPE "Plugin for handling videos in Calligra")
+calligra_define_product(PLUGIN_VECTORSHAPE "" NEEDS LIB_VECTORIMAGE)
+calligra_define_product(PLUGIN_REPORTING ""  NEEDS LIB_KOREPORT LIB_KDCHART)
+# staging plugins
+calligra_define_product(PLUGIN_GOOGLEDOCS "")
+calligra_define_product(PLUGIN_THREEDSHAPE "")
+calligra_define_product(PLUGIN_SHEETS_PIVOTTABLES ""  NEEDS SHEETS_PART)
+calligra_define_product(PLUGIN_STAGING "All plugins in staging status"  NEEDS PLUGIN_GOOGLEDOCS PLUGIN_THREEDSHAPE PLUGIN_SHEETS_PIVOTTABLES)
+# developer utils
 calligra_define_product(DEVTOOLS "Tools for developers")
-calligra_define_product(CSTESTER "")
+calligra_define_product(CSTESTER "" NEEDS SHEETS_PART STAGE_PART WORDS_PART)
 
 calligra_set_productset(${PRODUCTSET})
 
@@ -155,12 +165,12 @@ include (MacroLibrary)
 include (MacroAdditionalCleanFiles)
 include (MacroAddFileDependencies)
 
-set(SHOULD_BUILD_TEXTSHAPE TRUE)
 if ((${QTVERSION} VERSION_EQUAL 4.8.0) OR (${QTVERSION} VERSION_EQUAL 4.8.1))
     if (NOT IHAVEPATCHEDQT)
         set(SHOULD_BUILD_WORDS_PART FALSE)
         set(SHOULD_BUILD_STAGE_PART FALSE)
-        set(SHOULD_BUILD_TEXTSHAPE FALSE)
+        set(SHOULD_BUILD_PLUGIN_TEXTSHAPE FALSE)
+        set(SHOULD_BUILD_PLUGIN_TEXTEDITING FALSE)
         MESSAGE(STATUS "WARNING: You are using a version of Qt that causes crashes. As a result Words and Stage will not be built. Please upgrade to 4.8.2. You can also patch Qt and when building Calligra set IHAVEPATCHEDQT. Patch against Qt can be found in qt48setx.patch")
     endif (NOT IHAVEPATCHEDQT)
 endif ((${QTVERSION} VERSION_EQUAL 4.8.0) OR (${QTVERSION} VERSION_EQUAL 4.8.1))
@@ -578,7 +588,6 @@ set(BASICFLAKES_INCLUDES ${KOWIDGETS_INCLUDES} ${FLAKE_INCLUDES}
 # komain depends on kotext & flake
 set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
                     ${TEXTLAYOUT_INCLUDES}
-                    ${MARBLE_INCLUDE_DIR}
                     ${CMAKE_SOURCE_DIR}/libs/widgets
                     ${CMAKE_SOURCE_DIR}/libs/widgetutils
                     ${CMAKE_SOURCE_DIR}/libs/main
@@ -604,6 +613,15 @@ set(KOPROPERTY_INCLUDES ${KOODF_INCLUDES}
                         ${CMAKE_SOURCE_DIR}/libs
                         ${CMAKE_SOURCE_DIR}/libs/widgets)
 set(KOPROPERTY_LIBS koproperty)
+
+# koreport
+set(KOREPORT_INCLUDES
+    ${CMAKE_SOURCE_DIR}/libs/
+    ${CMAKE_SOURCE_DIR}/libs/koreport
+    ${CMAKE_SOURCE_DIR}/libs/koreport/common
+    ${CMAKE_SOURCE_DIR}/libs/koreport/renderer
+    ${CMAKE_SOURCE_DIR}/libs/koreport/wrtembed)
+set(KOREPORT_LIBS koreport)
 
 # calligradb
 # TODO: remove when Predicate lib arrives
@@ -715,7 +733,9 @@ if(SHOULD_BUILD_ACTIVE)
   add_subdirectory(active)
 endif(SHOULD_BUILD_ACTIVE)
 
-add_subdirectory(doc)
+if(SHOULD_BUILD_DOC)
+	add_subdirectory(doc)
+endif(SHOULD_BUILD_DOC)
 
 # non-app directories are moved here because they can depend on SHOULD_BUILD_{appname} variables set above
 add_subdirectory(libs)

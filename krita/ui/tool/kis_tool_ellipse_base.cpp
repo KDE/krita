@@ -125,9 +125,7 @@ void KisToolEllipseBase::mouseReleaseEvent(KoPointerEvent *event)
 
         updateArea();
 
-        if (currentNode()->isEditable()) {
-            finishEllipse(QRectF(m_dragStart, m_dragEnd).normalized());
-        }
+        finishEllipse(QRectF(m_dragStart, m_dragEnd).normalized());
         event->accept();
     }
     else {

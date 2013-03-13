@@ -30,14 +30,6 @@ class ModifySelection : public KisViewPlugin
 public:
     ModifySelection(QObject *parent, const QVariantList &);
     virtual ~ModifySelection();
-
-private slots:
-
-    void slotGrowSelection();
-    void slotShrinkSelection();
-    void slotBorderSelection();
-    void slotFeatherSelection();
-    void slotSmoothSelection();
 };
 
 #endif // MODIFY_SELECTION_H

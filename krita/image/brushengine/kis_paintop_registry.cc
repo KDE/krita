@@ -21,8 +21,6 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <kservice.h>
-#include <kservicetypetrader.h>
 
 #include <KoGenericRegistry.h>
 #include <KoPluginLoader.h>

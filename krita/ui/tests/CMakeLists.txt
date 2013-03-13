@@ -110,12 +110,13 @@ target_link_libraries(FreehandStrokeTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage
 set(kis_selection_manager_test_SRCS kis_selection_manager_test.cpp)
 kde4_add_unit_test(KisSelectionManagerTest TESTNAME krita-ui-KisSelectionManagerTest  ${kis_selection_manager_test_SRCS})
 target_link_libraries(KisSelectionManagerTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+set_tests_properties(krita-ui-KisSelectionManagerTest PROPERTIES TIMEOUT 300)
 
 ########### next target ###############
 
-set(kis_node_manager_test_SRCS kis_node_manager_test.cpp)
-kde4_add_unit_test(KisNodeManagerTest TESTNAME krita-ui-KisNodeManagerTest  ${kis_node_manager_test_SRCS})
-target_link_libraries(KisNodeManagerTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+#set(kis_node_manager_test_SRCS kis_node_manager_test.cpp)
+#kde4_add_unit_test(KisNodeManagerTest TESTNAME krita-ui-KisNodeManagerTest  ${kis_node_manager_test_SRCS})
+#target_link_libraries(KisNodeManagerTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -146,6 +147,7 @@ target_link_libraries(KisModelIndexConverterTest  ${KDE4_KDEUI_LIBS}  kritaui kr
 set(kis_zoom_and_pan_test_SRCS kis_zoom_and_pan_test.cpp ../../sdk/tests/testutil.cpp)
 kde4_add_unit_test(KisZoomAndPanTest TESTNAME krita-ui-KisZoomAndPanTest  ${kis_zoom_and_pan_test_SRCS})
 target_link_libraries(KisZoomAndPanTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+set_tests_properties(krita-ui-KisZoomAndPanTest PROPERTIES TIMEOUT 300)
 
 ########### next target ###############
 

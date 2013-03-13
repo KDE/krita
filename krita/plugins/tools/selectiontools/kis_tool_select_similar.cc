@@ -112,7 +112,7 @@ void KisToolSelectSimilar::mousePressEvent(KoPointerEvent *event)
         KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
         selectByColor(dev, tmpSel, c.data(), m_fuzziness);
 
-        KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Similar Selection"));
+        KisSelectionToolHelper helper(kisCanvas, i18n("Similar Selection"));
         helper.selectPixelSelection(tmpSel, selectionAction());
 
         QApplication::restoreOverrideCursor();

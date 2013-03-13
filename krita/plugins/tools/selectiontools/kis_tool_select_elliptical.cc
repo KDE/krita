@@ -67,9 +67,7 @@ void KisToolSelectElliptical::finishEllipse(const QRectF &rect)
         return;
     }
 
-    KisSystemLocker locker(currentNode());
-
-    KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Elliptical Selection"));
+    KisSelectionToolHelper helper(kisCanvas, i18n("Elliptical Selection"));
 
     if (m_widgetHelper.selectionMode() == PIXEL_SELECTION) {
         KisPixelSelectionSP tmpSel = new KisPixelSelection();

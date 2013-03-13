@@ -126,8 +126,8 @@ void KoOdtFramesReportDocument::createStyles(KoGenStyles &coll)
     page.addProperty("fo:margin-bottom", QString("%1in").arg(bottomMargin));
     page.addProperty("fo:margin-left", QString("%1in").arg(leftMargin));
     page.addProperty("fo:margin-right", QString("%1in").arg(rightMargin));
+    page.setAutoStyleInStylesDotXml(true);
     QString pagename = coll.insert(page, "pm");
-    coll.markStyleForStylesXml(pagename);
 
     KoGenStyle master(KoGenStyle::MasterPageStyle, "master-page");
     master.addAttribute("style:page-layout-name", pagename);

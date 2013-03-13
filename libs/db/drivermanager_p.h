@@ -79,8 +79,6 @@ protected:
     QString m_serverErrMsg;
     int m_serverResultNum;
     QString m_serverResultName;
-    //! result names for KParts::ComponentFactory::ComponentLoadingError
-    //QHash<int, QString> m_componentLoadingErrors;
 
     QStringList possibleProblems;
 

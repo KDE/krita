@@ -23,10 +23,11 @@
 #include <krita_export.h>
 #include <kdebug.h>
 
+class KisActionManager;
 
 class KRITAUI_EXPORT KisAction : public KAction
 {
-
+    Q_OBJECT
 public:
     enum ActivationFlag {
         NONE = 0,
@@ -62,6 +63,19 @@ public:
     ActivationConditions activationConditions();
 
     virtual void setActionEnabled(bool enabled);
+
+   /**
+    * Set the action manager. Only used by KisActionManager
+    */
+    void setActionManager(KisActionManager* actionManager);
+
+   /**
+    * Set operation id. This will used to run an operation in the KisActionManager
+    */
+    void setOperationID(const QString& id);
+
+private slots:
+    void slotTriggered();
 
 private:
     class Private;

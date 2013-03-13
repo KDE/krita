@@ -21,6 +21,7 @@
 
 #include <QRectF>
 #include <QPointF>
+#include "kis_node.h"
 
 class ToolTransformArgs;
 
@@ -33,10 +34,11 @@ public:
     {
     }
 
-    TransformTransactionProperties(const QRectF &originalRect, ToolTransformArgs *currentConfig)
+TransformTransactionProperties(const QRectF &originalRect, ToolTransformArgs *currentConfig, KisNodeSP rootNode)
         : m_originalRect(originalRect),
           m_currentConfig(currentConfig),
-          m_editWarpPoints(false)
+          m_editWarpPoints(false),
+          m_rootNode(rootNode)
     {
     }
 
@@ -108,6 +110,10 @@ public:
         return m_currentConfig;
     }
 
+    KisNodeSP rootNode() const {
+        return m_rootNode;
+    }
+
 private:
     /**
      * Information about the original selected rect
@@ -116,6 +122,7 @@ private:
     QRectF m_originalRect;
     ToolTransformArgs *m_currentConfig;
     bool m_editWarpPoints;
+    KisNodeSP m_rootNode;
 };
 
 #endif /* __TRANSFORM_TRANSACTION_PROPERTIES_H */

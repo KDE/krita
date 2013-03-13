@@ -24,7 +24,6 @@
 #include <QImage>
 #include <QPushButton>
 #include <QComboBox>
-//Added by qt3to4:
 #include <QPixmap>
 #include <QShowEvent>
 #include <kglobal.h>

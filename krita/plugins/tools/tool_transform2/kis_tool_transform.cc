@@ -1985,7 +1985,7 @@ void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShap
     KisTool::activate(toolActivation, shapes);
 
     if (currentNode()) {
-        m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs);
+        m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs, currentNode());
     }
 
     m_isActive = true;
@@ -2024,7 +2024,9 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
 
     KisPaintDeviceSP dev;
 
-    if (!currentNode()) {
+    KisNodeSP currentNode = this->currentNode();
+
+    if (!currentNode) {
         return;
     }
 
@@ -2045,16 +2047,16 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
 
     if (m_optWidget) {
         m_workRecursively = m_optWidget->workRecursively() ||
-            !currentNode()->paintDevice();
+            !currentNode->paintDevice();
     }
 
-    TransformStrokeStrategy *strategy = new TransformStrokeStrategy(currentNode(), currentSelection(), image()->postExecutionUndoAdapter(), image()->undoAdapter());
+    TransformStrokeStrategy *strategy = new TransformStrokeStrategy(currentNode, currentSelection(), image()->postExecutionUndoAdapter(), image()->undoAdapter());
     KisPaintDeviceSP previewDevice = strategy->previewDevice();
 
     KisSelectionSP selection = currentSelection();
     QRect srcRect = selection ? selection->selectedExactRect() : previewDevice->exactBounds();
 
-    m_transaction = TransformTransactionProperties(srcRect, &m_currentArgs);
+    m_transaction = TransformTransactionProperties(srcRect, &m_currentArgs, currentNode);
 
     initThumbnailImage(previewDevice);
     updateSelectionPath();
@@ -2062,7 +2064,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
     initTransformMode(mode);
 
     m_strokeId = image()->startStroke(strategy);
-    clearDevices(currentNode(), m_workRecursively);
+    clearDevices(m_transaction.rootNode(), m_workRecursively);
 
     Q_ASSERT(m_changesTracker.isEmpty());
     commitChanges();
@@ -2073,13 +2075,13 @@ void KisToolTransform::endStroke()
     if (!m_strokeId) return;
 
     if (!m_currentArgs.isIdentity()) {
-        transformDevices(currentNode(), m_workRecursively);
+        transformDevices(m_transaction.rootNode(), m_workRecursively);
 
         image()->addJob(m_strokeId,
                         new TransformStrokeStrategy::TransformData(
                             TransformStrokeStrategy::TransformData::SELECTION,
                             m_currentArgs,
-                            currentNode()));
+                            m_transaction.rootNode()));
 
         image()->endStroke(m_strokeId);
     } else {

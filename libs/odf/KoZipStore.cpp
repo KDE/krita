@@ -22,7 +22,6 @@
 #include "KoStore_p.h"
 
 #include <QBuffer>
-//Added by qt3to4:
 #include <QByteArray>
 
 #include <kzip.h>

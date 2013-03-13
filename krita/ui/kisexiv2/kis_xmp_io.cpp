@@ -212,7 +212,7 @@ bool KisXMPIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
                         arrayIndex = regexp2.capturedTexts()[2].toInt() - 1;
                         tagName = regexp2.capturedTexts()[4];
                         dbgFile << ppVar(structName) << ppVar(regexp2.capturedTexts()[3]);
-                        Q_ASSERT(schema->propertyType(structName));
+                        //Q_ASSERT(schema->propertyType(structName));
                         if (schema->propertyType(structName)) {
                             typeInfo = schema->propertyType(structName)->embeddedPropertyType();
                             Q_ASSERT(typeInfo);

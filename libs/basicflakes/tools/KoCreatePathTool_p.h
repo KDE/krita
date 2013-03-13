@@ -111,15 +111,14 @@ inline qreal squareDistance( const QPointF &p1, const QPointF &p2)
 class AngleSnapStrategy : public KoSnapStrategy
 {
 public:
-    explicit AngleSnapStrategy( qreal angleStep )
-    : KoSnapStrategy(KoSnapGuide::CustomSnapping), m_angleStep(angleStep), m_active(false)
+    explicit AngleSnapStrategy( qreal angleStep, bool active)
+    : KoSnapStrategy(KoSnapGuide::CustomSnapping), m_angleStep(angleStep), m_active(active)
     {
     }
 
     void setStartPoint(const QPointF &startPoint)
     {
         m_startPoint = startPoint;
-        m_active = true;
     }
 
     void setAngleStep(qreal angleStep)
@@ -170,6 +169,11 @@ public:
     {
         m_active = false;
     }
+
+    void activate(){
+        m_active = true;
+    }
+
 private:
     QPointF m_startPoint;
     qreal m_angleStep;
@@ -191,7 +195,8 @@ public:
         pointIsDragged(false),
         hoveredPoint(0),
         angleSnapStrategy(0),
-        angleSnappingDelta(15)
+        angleSnappingDelta(15),
+        angleSnapStatus(false)
 
     {}
 
@@ -207,6 +212,7 @@ public:
 
     AngleSnapStrategy *angleSnapStrategy;
     int angleSnappingDelta;
+    bool angleSnapStatus;
 
     void repaintActivePoint() const
     {
@@ -412,6 +418,17 @@ public:
         angleSnappingDelta = value;
         if (angleSnapStrategy)
             angleSnapStrategy->setAngleStep(angleSnappingDelta);
+    }
+
+    void angleSnapChanged(int angleSnap){
+        angleSnapStatus = ! angleSnapStatus;
+        if(angleSnapStrategy)
+        {
+            if(angleSnap == Qt::Checked)
+                angleSnapStrategy->activate();
+            else
+                angleSnapStrategy->deactivate();
+        }
     }
 };
 

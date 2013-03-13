@@ -17,6 +17,9 @@
  */
 
 #include "kis_operation.h"
+#include "kis_processing_applicator.h"
+#include "kis_view2.h"
+#include "kis_image.h"
 
 KisOperation::KisOperation(const QString &id)
     : m_id(id)
@@ -40,3 +43,20 @@ void KisOperation::runFromXML(KisView2 *view, const KisOperationConfiguration &c
     qFatal("Not implemented yet");
 }
 
+KisProcessingApplicator* KisOperation::beginAction(KisView2 *view, const QString &actionName) {
+    KisImageSP image = view->image();
+    Q_ASSERT(image);
+
+    KisImageSignalVector emitSignals;
+    emitSignals << ModifiedSignal;
+
+    return new KisProcessingApplicator(image, 0,
+                                        KisProcessingApplicator::NONE,
+                                        emitSignals, actionName);
+}
+
+void KisOperation::endAction(KisProcessingApplicator *applicator, const QString &xmlData) {
+    Q_UNUSED(xmlData);
+    applicator->end();
+    delete applicator;
+}

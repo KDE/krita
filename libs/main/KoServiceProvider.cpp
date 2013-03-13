@@ -32,10 +32,10 @@ QByteArray KoServiceProvider::readNativeFormatMimeType(const KComponentData &com
         return QByteArray();
 
     if (service->property("X-KDE-NativeMimeType").toString().isEmpty()) {
-        // It may be that the servicetype "CalligraPart" is missing, which leads to this property not being known
-        KServiceType::Ptr ptr = KServiceType::serviceType("CalligraPart");
+        // It may be that the servicetype "Calligra/Part" is missing, which leads to this property not being known
+        KServiceType::Ptr ptr = KServiceType::serviceType("Calligra/Part");
         if (!ptr)
-            kError(30003) << "The serviceType CalligraPart is missing. Check that you have a calligrapart.desktop file in the share/servicetypes directory." << endl;
+            kError(30003) << "The serviceType Calligra/Part is missing. Check that you have a calligra_part.desktop file in the share/servicetypes directory." << endl;
         else {
             kWarning(30003) << service->entryPath() << ": no X-KDE-NativeMimeType entry!";
         }

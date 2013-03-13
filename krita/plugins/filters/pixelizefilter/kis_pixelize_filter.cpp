@@ -29,7 +29,6 @@
 
 #include <QPoint>
 #include <QSpinBox>
-//Added by qt3to4:
 #include <QVector>
 
 #include <klocale.h>

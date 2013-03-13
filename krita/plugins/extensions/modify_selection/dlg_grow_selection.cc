@@ -20,48 +20,19 @@
 
 #include "dlg_grow_selection.h"
 
-#include <math.h>
-
 #include <klocale.h>
 #include <kis_debug.h>
-DlgGrowSelection::DlgGrowSelection(QWidget *  parent, const char * name)
-        : KDialog(parent)
+#include <operations/kis_operation_configuration.h>
+
+WdgGrowSelection::WdgGrowSelection(QWidget* parent) : KisOperationUIWidget(i18n("Grow Selection"), parent)
 {
-    setCaption(i18n("Grow Selection"));
-    setButtons(Ok | Cancel);
-    setDefaultButton(Ok);
-    setObjectName(name);
-    m_page = new WdgGrowSelection(this);
-    Q_CHECK_PTR(m_page);
-    m_page->setObjectName("grow_selection");
-
-    setMainWidget(m_page);
-    resize(m_page->sizeHint());
-
-    connect(this, SIGNAL(okClicked()), this, SLOT(okClicked()));
+    setupUi(this);
 }
 
-DlgGrowSelection::~DlgGrowSelection()
+void WdgGrowSelection::getConfiguration(KisOperationConfiguration* config)
 {
-    delete m_page;
-}
-
-qint32 DlgGrowSelection::xradius()
-{
-    return m_page->radiusSpinBox->value();
-}
-
-qint32 DlgGrowSelection::yradius()
-{
-    return m_page->radiusSpinBox->value();
-}
-
-
-// SLOTS
-
-void DlgGrowSelection::okClicked()
-{
-    accept();
+    config->setProperty("x-radius", radiusSpinBox->value());
+    config->setProperty("y-radius", radiusSpinBox->value());
 }
 
 #include "dlg_grow_selection.moc"

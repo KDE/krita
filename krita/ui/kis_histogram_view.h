@@ -23,12 +23,14 @@
 #include <QPixmap>
 #include <QVector>
 #include <QStringList>
-//Added by qt3to4:
 #include <QMouseEvent>
-#include <krita_export.h>
+
 #include "kis_types.h"
 #include "KoHistogramProducer.h"
 #include "kis_histogram.h"
+
+#include <krita_export.h>
+
 
 class KoChannelInfo;
 

@@ -88,16 +88,19 @@ void KisFilterColorToAlpha::process(KisPaintDeviceSP device,
     do {
         quint8 d = cs->difference(color, it->oldRawData());
         qreal newOpacity; // = cs->opacityF(srcIt->rawData());
+
         if (d >= threshold) {
             newOpacity = 1.0;
         } else {
             newOpacity = d / thresholdF;
         }
-        if(newOpacity < cs->opacityF(it->rawData()))
-        {
+
+        if(newOpacity < cs->opacityF(it->rawData())) {
           cs->setOpacity(it->rawData(), newOpacity, 1);
         }
+
         if (progressUpdater) progressUpdater->setProgress((++currentProgress) / totalCost);
+
     } while(it->nextPixel());
     delete[] color;
 }

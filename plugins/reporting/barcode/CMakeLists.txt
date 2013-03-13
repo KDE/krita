@@ -1,10 +1,6 @@
-include_directories( ${KOMAIN_INCLUDES}
-${KOODF_INCLUDES}
-${CMAKE_SOURCE_DIR}/libs/
-${CMAKE_SOURCE_DIR}/libs/koreport
-${CMAKE_SOURCE_DIR}/libs/koreport/common
-${CMAKE_SOURCE_DIR}/libs/koreport/renderer
-${CMAKE_SOURCE_DIR}/libs/koreport/wrtembed
+include_directories(
+    ${KOPROPERTY_INCLUDES}
+    ${KOREPORT_INCLUDES}
 )
 
 #build a shared library
@@ -25,7 +21,7 @@ set(koreport_barcodeplugin_LIB_SRCS
 
 kde4_add_plugin(koreport_barcodeplugin ${koreport_barcodeplugin_LIB_SRCS})
 
-target_link_libraries(koreport_barcodeplugin ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} koreport ${KOPROPERTY_LIBS})
+target_link_libraries(koreport_barcodeplugin ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} ${KOREPORT_LIBS} ${KOPROPERTY_LIBS})
 
 
 ########### install files ###############

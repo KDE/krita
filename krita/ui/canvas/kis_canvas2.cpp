@@ -240,9 +240,12 @@ KoShapeManager* KisCanvas2::shapeManager() const
         if (shapeLayer) {
             return shapeLayer->shapeManager();
         }
-        if (activeLayer->selection() && activeLayer->selection()->hasShapeSelection()) {
-            KoShapeManager* m = static_cast<KisShapeSelection*>(activeLayer->selection()->shapeSelection())->shapeManager();
-            return m;
+        KisSelectionSP selection = activeLayer->selection();
+        if (selection && !selection.isNull()) {
+            if (selection->hasShapeSelection()) {
+                KoShapeManager* m = dynamic_cast<KisShapeSelection*>(selection->shapeSelection())->shapeManager();
+                return m;
+            }
 
         }
     }

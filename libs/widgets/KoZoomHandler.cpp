@@ -79,7 +79,7 @@ void KoZoomHandler::setZoomedResolution( qreal zoomedResolutionX, qreal zoomedRe
 
 void KoZoomHandler::setZoom( qreal zoom )
 {
-    if (qFuzzyCompare(zoom, 1.0)) {
+    if (qFuzzyCompare(zoom, qreal(1.0))) {
         zoom = 1.0;
     }
 

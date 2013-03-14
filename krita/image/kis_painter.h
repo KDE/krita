@@ -368,7 +368,7 @@ public:
     void renderMirrorMask(QRect rc, KisPaintDeviceSP dab, int sx, int sy, KisFixedPaintDeviceSP mask);
 
     /**
-     * Convinience method for renderMirrorMask(), allows to choose whether
+     * Convenience method for renderMirrorMask(), allows to choose whether
      * we need to preserve out dab or do the transformations in-place.
      *
      * @param rc rectangle area covered by dab
@@ -379,7 +379,7 @@ public:
     void renderMirrorMaskSafe(QRect rc, KisFixedPaintDeviceSP dab, bool preserveDab);
 
     /**
-     * Convinience method for renderMirrorMask(), allows to choose whether
+     * Convenience method for renderMirrorMask(), allows to choose whether
      * we need to preserve our fixed mask or do the transformations in-place.
      *
      * @param rc rectangle area covered by dab

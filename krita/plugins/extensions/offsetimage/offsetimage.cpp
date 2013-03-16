@@ -132,7 +132,7 @@ QRect OffsetImage::offsetWrapRect()
     QRect offsetWrapRect;
     if (m_view->selection())
     {
-        offsetWrapRect = m_view->selection()->projection()->exactBounds();
+        offsetWrapRect = m_view->selection()->selectedExactRect();
     }
     else
     {

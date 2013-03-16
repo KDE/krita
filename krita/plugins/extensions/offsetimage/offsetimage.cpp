@@ -34,6 +34,7 @@
 #include <kis_image_signal_router.h>
 #include <kis_processing_applicator.h>
 #include <kis_action.h>
+#include <kis_selection.h>
 
 #include "dlg_offsetimage.h"
 #include "kis_offset_processing_visitor.h"
@@ -66,7 +67,7 @@ void OffsetImage::slotOffsetImage()
     KisImageWSP image = m_view->image();
     if (image) {
 
-        DlgOffsetImage * dlgOffsetImage = new DlgOffsetImage(m_view, "OffsetImage", image->size());
+        DlgOffsetImage * dlgOffsetImage = new DlgOffsetImage(m_view, "OffsetImage", offsetWrapRect().size());
         Q_CHECK_PTR(dlgOffsetImage);
 
         QString actionName = i18n("Offset Image");
@@ -90,7 +91,7 @@ void OffsetImage::slotOffsetLayer()
     KisImageWSP image = m_view->image();
     if (image) {
 
-    DlgOffsetImage * dlgOffsetImage = new DlgOffsetImage(m_view, "OffsetLayer", image->size());
+    DlgOffsetImage * dlgOffsetImage = new DlgOffsetImage(m_view, "OffsetLayer", offsetWrapRect().size());
     Q_CHECK_PTR(dlgOffsetImage);
 
     QString actionName = i18n("Offset Layer");
@@ -119,10 +120,27 @@ void OffsetImage::offsetImpl(const QString& actionName, KisNodeSP node, const QP
                                        KisProcessingApplicator::RECURSIVE,
                                        emitSignals, actionName);
 
-    KisProcessingVisitorSP visitor = new KisOffsetProcessingVisitor(offsetPoint, m_view->image()->bounds());
+    QRect rc = offsetWrapRect();
+    KisProcessingVisitorSP visitor = new KisOffsetProcessingVisitor(offsetPoint, rc);
     applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
     applicator.end();
 }
+
+
+QRect OffsetImage::offsetWrapRect()
+{
+    QRect offsetWrapRect;
+    if (m_view->selection())
+    {
+        offsetWrapRect = m_view->selection()->projection()->exactBounds();
+    }
+    else
+    {
+        offsetWrapRect = m_view->image()->bounds();
+    }
+    return offsetWrapRect;
+}
+
 
 
 #include "offsetimage.moc"

@@ -80,7 +80,7 @@ public:
      * @param wrapSize width and height of the wrap edge, usual scenario is to use canvas width&height
      *
      **/
-    static void offset(KisPaintDeviceSP device, const QPoint &offsetPosition, const QSize &wrapSize);
+    static void offset(KisPaintDeviceSP device, const QPoint &offsetPosition, const QRect &wrapRect);
 
 
 public:

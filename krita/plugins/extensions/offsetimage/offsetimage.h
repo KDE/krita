@@ -37,7 +37,8 @@ private slots:
     void slotOffsetLayer();
 
     void offsetImpl(const QString &actionName,KisNodeSP node, const QPoint &offsetPoint);
-
+private:
+    QRect offsetWrapRect();
 
 };
 

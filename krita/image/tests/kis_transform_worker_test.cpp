@@ -115,12 +115,13 @@ void KisTransformWorkerTest::testOffset()
     QPoint backOffsetPoint;
     QImage result;
     int test = 0;
+    QPoint origin(0,0);
     foreach (QPoint offsetPoint, offsetPoints)
     {
         dev2->convertFromQImage(image, 0);
-        KisTransformWorker::offset(dev2, offsetPoint , image.size());
+        KisTransformWorker::offset(dev2, offsetPoint, QRect(origin, image.size()) );
         backOffsetPoint = bottomRight - offsetPoint;
-        KisTransformWorker::offset(dev2, backOffsetPoint , image.size());
+        KisTransformWorker::offset(dev2, backOffsetPoint , QRect(origin, image.size()) );
         result = dev2->convertToQImage(0, 0, 0, image.width(), image.height());
         if (!TestUtil::compareQImages(errpoint, image, result))
         {

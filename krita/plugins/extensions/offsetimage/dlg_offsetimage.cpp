@@ -23,7 +23,7 @@
 
 DlgOffsetImage::DlgOffsetImage(QWidget *  parent, const char * name, QSize imageSize)
         :   KDialog(parent),
-            m_imageSize(imageSize)
+            m_offsetSize(imageSize)
 {
     setCaption(i18n("Offset Image"));
     setButtons(Ok | Cancel);
@@ -65,8 +65,8 @@ void DlgOffsetImage::slotOffsetYChanged(int newOffsetY)
 
 void DlgOffsetImage::slotMiddleOffset()
 {
-    int offsetX = m_imageSize.width() / 2;
-    int offsetY = m_imageSize.height() / 2;
+    int offsetX = m_offsetSize.width() / 2;
+    int offsetY = m_offsetSize.height() / 2;
     m_page->offsetXspinBox->setValue(offsetX);
     m_page->offsetYspinBox->setValue(offsetY);
 }

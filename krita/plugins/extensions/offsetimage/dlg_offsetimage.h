@@ -59,7 +59,7 @@ private:
     int m_offsetX;
     int m_offsetY;
     bool m_lock;
-    QSize m_imageSize;
+    QSize m_offsetSize;
 
 };
 

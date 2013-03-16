@@ -82,7 +82,14 @@ void OnlineDocument::slotOnlineDocument()
             m_login = 0;
         }
     } else {
-        m_login->googleService()->showDocumentListWindow(true);
+        GoogleDocumentService *service = m_login->googleService();
+        if (service) {
+            service->showDocumentListWindow(true);
+        } else {
+            m_login->show();
+            m_login->activateWindow();
+            m_login->raise();
+        }
     }
 }
 

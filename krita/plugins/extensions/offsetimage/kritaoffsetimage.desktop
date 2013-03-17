@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=Offset Image Plugin
+Name[pt_BR]=Plugin de deslocamento de imagem
+Name[sk]=Plugin posunu obrázku
+Name[uk]=Додаток зміщення зображення
+Name[x-test]=xxOffset Image Pluginxx
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaoffsetimage

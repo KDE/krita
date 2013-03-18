@@ -72,7 +72,7 @@ void KisInputManagerTest::testStrokeShortcut()
 
 struct TestingAction : public KisAbstractInputAction
 {
-    TestingAction() : KisAbstractInputAction(0) { reset(); }
+    TestingAction() : KisAbstractInputAction(0), m_isHighResolution(false) { reset(); }
     ~TestingAction() {}
 
     void begin(int shortcut, QEvent *event) { m_beginIndex = shortcut; m_beginNonNull = event;}
@@ -87,12 +87,21 @@ struct TestingAction : public KisAbstractInputAction
         m_endNonNull = false;
     }
 
+    bool supportsHiResInputEvents() const {
+        return m_isHighResolution;
+    }
+
+    void setHighResInputEvents(bool value) {
+        m_isHighResolution = value;
+    }
 
     int m_beginIndex;
     bool m_ended;
     bool m_gotInput;
     bool m_beginNonNull;
     bool m_endNonNull;
+
+    bool m_isHighResolution;
 };
 
 KisSingleActionShortcut* createKeyShortcut(KisAbstractInputAction *action,
@@ -343,6 +352,28 @@ void KisInputManagerTest::testMouseMoves()
     QVERIFY(m.mouseMoved(&mouseEvent));
     QCOMPARE(a->m_gotInput, true);
     a->reset();
+
+    // Check High Resolution events for usual action
+    QTabletEvent tabletEvent(QEvent::TabletMove, QPoint(), QPoint(), QPointF(),
+                             0, 0, 0.0, 0, 0, 0.0, 0.0, 0, Qt::NoModifier, 0);
+    QVERIFY(!m.tabletMoved(&tabletEvent));
+    QCOMPARE(a->m_gotInput, false);
+    a->reset();
+
+    // Check usual events for High Resolution actions
+    a->setHighResInputEvents(true);
+    QVERIFY(m.mouseMoved(&mouseEvent));
+    QCOMPARE(a->m_gotInput, true);
+    a->reset();
+    a->setHighResInputEvents(false);
+
+    // Check High Resolution for High Resolution actions
+    a->setHighResInputEvents(true);
+    QVERIFY(m.tabletMoved(&tabletEvent));
+    QCOMPARE(a->m_gotInput, true);
+    a->reset();
+    a->setHighResInputEvents(false);
+
 
     // Release Ctrl
     QVERIFY(!m.keyReleased(Qt::Key_Control));

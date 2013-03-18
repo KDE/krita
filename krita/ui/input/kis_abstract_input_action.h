@@ -108,6 +108,15 @@ public:
     virtual void inputEvent(QEvent* event);
 
     /**
+     * On some platforms (Windows in particular), tablet and mouse
+     * events generate different flows of messages. The amount of
+     * tablet events may be hard to process for some actions, so it is
+     * false by default. On Linux platform the flows are exactly the
+     * same so there is no difference between tablet and mouse events.
+     */
+    virtual bool supportsHiResInputEvents() const;
+
+    /**
      * The indexes of shortcut behaviours available.
      */
     virtual QHash<QString, int> shortcutIndexes() const;

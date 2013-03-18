@@ -61,7 +61,7 @@ public:
     bool tryHidePopupPalette();
     bool trySetMirrorMode(const QPointF &mousePosition);
     void saveTabletEvent(const QTabletEvent *event);
-    void resetSavedTabletEvent();
+    void resetSavedTabletEvent(QEvent::Type type);
     void addStrokeShortcut(KisAbstractInputAction* action, int index,
                            const QList<Qt::Key> &modifiers,
                            const QList<Qt::MouseButton> &buttons);
@@ -283,10 +283,30 @@ void KisInputManager::Private::saveTabletEvent(const QTabletEvent *event)
                          event->uniqueId());
 }
 
-void KisInputManager::Private::resetSavedTabletEvent()
+void KisInputManager::Private::resetSavedTabletEvent(QEvent::Type type)
 {
-    delete lastTabletEvent;
-    lastTabletEvent = 0;
+    bool needResetSavedEvent = true;
+
+#ifdef Q_OS_WIN
+    /**
+     * For linux platform each mouse event corresponds to a single
+     * tablet event so the saved tablet event is deleted after any
+     * mouse event.
+     *
+     * For windows platform the mouse events get compressed so one
+     * mouse event may correspond to a few tablet events, so we keep a
+     * saved tablet event till the end of the stroke, that is till
+     * mouseRelese event
+     */
+    needResetSavedEvent = type == QEvent::MouseButtonRelease;
+#else
+    Q_UNUSED(type);
+#endif
+
+    if (needResetSavedEvent) {
+        delete lastTabletEvent;
+        lastTabletEvent = 0;
+    }
 }
 
 QTabletEvent* KisInputManager::lastTabletEvent() const
@@ -344,13 +364,13 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         } else {
             retval = d->matcher.buttonPressed(mouseEvent->button(), mouseEvent);
         }
-        d->resetSavedTabletEvent();
+        d->resetSavedTabletEvent(event->type());
         break;
     }
     case QEvent::MouseButtonRelease: {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         retval = d->matcher.buttonReleased(mouseEvent->button(), mouseEvent);
-        d->resetSavedTabletEvent();
+        d->resetSavedTabletEvent(event->type());
         break;
     }
     case QEvent::KeyPress: {
@@ -389,7 +409,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
             d->toolProxy->mouseMoveEvent(mouseEvent, widgetToPixel(mouseEvent->posF()));
         }
         retval = true;
-        d->resetSavedTabletEvent();
+        d->resetSavedTabletEvent(event->type());
         break;
     }
     case QEvent::Wheel: {
@@ -418,7 +438,22 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         //event.
         QTabletEvent* tabletEvent = static_cast<QTabletEvent*>(event);
         d->saveTabletEvent(tabletEvent);
+
+#ifdef Q_OS_WIN
+        if (event->type() == QEvent::TabletMove) {
+            retval = d->matcher.tabletMoved(static_cast<QTabletEvent*>(event));
+        }
+
+        if (retval) {
+            event->accept();
+        } else {
+            event->ignore();
+        }
+#else
         event->ignore();
+#endif
+
+
         break;
     }
     default:

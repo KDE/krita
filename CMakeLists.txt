@@ -630,7 +630,7 @@ if (HAVE_ICU AND HAVE_SQLITE) # These are hard deps for calligradb
    set(CALLIGRADB_INCLUDES ${CMAKE_SOURCE_DIR}/libs   # TODO remove when Predicate lib arrives
                            ${CMAKE_BINARY_DIR}/libs/db)
 else (HAVE_ICU AND HAVE_SQLITE)
-   set(SHOULD_BUILD_CALLIGRADB FALSE)
+   set(SHOULD_BUILD_LIB_CALLIGRADB FALSE)
 endif (HAVE_ICU AND HAVE_SQLITE)
 
 #############################################

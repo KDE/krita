@@ -139,6 +139,11 @@ install(TARGETS komain ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install(FILES calligradocker.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR} )
 install(FILES calligra_shell.rc DESTINATION ${DATA_INSTALL_DIR}/calligra )
+
+if (APPLE)
+    install(FILES osx.stylesheet DESTINATION ${DATA_INSTALL_DIR}/calligra )
+endif (APPLE)
+
 install( FILES
     KoApplication.h
     KoDocument.h

@@ -58,6 +58,10 @@
 // Calligra
 #include <KoIcon.h>
 
+#ifdef __APPLE__
+#include <QStyle>
+#endif
+
 namespace Digikam
 {
 
@@ -127,8 +131,20 @@ void ThemeManager::slotChangePalette()
 
     QString theme(currentThemeName());
 
-    if (theme == defaultThemeName() || theme.isEmpty())
+    if (theme == defaultThemeName() || theme.isEmpty()) {
         theme = currentKDEdefaultTheme();
+#ifdef __APPLE__
+        kapp->setStyle("Macintosh");
+        kapp->style()->unpolish(kapp);
+        kapp->style()->polish(kapp);
+#endif
+    } else {
+#ifdef __APPLE__
+        kapp->setStyle("Plastique");
+        kapp->style()->unpolish(kapp);
+        kapp->style()->polish(kapp);
+#endif
+    }
 
     QString filename        = d->themeMap.value(theme);
     KSharedConfigPtr config = KSharedConfig::openConfig(filename);

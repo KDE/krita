@@ -39,17 +39,20 @@ KisRecordedFilterActionEditor::KisRecordedFilterActionEditor(QWidget* parent, Ki
     m_nodeQueryPathEditor->setNodeQueryPath(m_action->nodeQueryPath());
     connect(m_nodeQueryPathEditor, SIGNAL(nodeQueryPathChanged()), SLOT(nodeQueryPathChanged()));
     m_gridLayout->addWidget(m_nodeQueryPathEditor, 1, 0);
-    
+
     // Create the filter editor
     m_configWidget = m_action->filter()->createConfigurationWidget(this, 0);
     if (m_configWidget) {
         m_gridLayout->addWidget(m_configWidget);
+
+        // FIXME: pass the view object to the config widget
+        //m_configWidget->setView(view);
+
         m_configWidget->setConfiguration(m_action->filterConfiguration());
         connect(m_configWidget, SIGNAL(sigConfigurationItemChanged()), SLOT(configurationUpdated()));
     } else {
         m_gridLayout->addWidget(new QLabel("No configuration option.", this));
     }
-    
 }
 
 KisRecordedFilterActionEditor::~KisRecordedFilterActionEditor()

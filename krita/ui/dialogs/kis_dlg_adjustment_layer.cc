@@ -33,20 +33,18 @@
 #include "filter/kis_filter_configuration.h"
 #include "kis_paint_device.h"
 #include "kis_transaction.h"
-#include "kis_image.h"
 #include "kis_node.h"
 #include "kis_node_filter_interface.h"
 #include <kis_config.h>
+#include "kis_view2.h"
 
 KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
                                              KisNodeFilterInterface* nfi,
                                              KisPaintDeviceSP paintDevice,
-                                             KisImageWSP image,
                                              const QString &layerName,
                                              const QString &caption,
-                                             QWidget *parent,
-                                             const char */*name*/)
-    : KDialog(parent)
+                                             KisView2 *view)
+    : KDialog(view)
     , m_node(node)
     , m_nodeFilterInterface(nfi)
     , m_currentFilter(0)
@@ -59,6 +57,7 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
     QWidget * page = new QWidget(this);
     wdgFilterNodeCreation.setupUi(page);
     setMainWidget(page);
+    wdgFilterNodeCreation.filterSelector->setView(view);
     wdgFilterNodeCreation.filterSelector->showFilterGallery(KisConfig().showFilterGalleryLayerMaskDialog());
 
     connect(wdgFilterNodeCreation.filterSelector, SIGNAL(configurationChanged()), SLOT(slotConfigChanged()));

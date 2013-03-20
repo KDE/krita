@@ -31,7 +31,6 @@
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
-#include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_adjustment_layer.h"
 #include "kis_paint_device.h"
@@ -42,7 +41,7 @@
 KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisNodeSP node,
                                          KisNodeFilterInterface* nfi,
                                          KisPaintDeviceSP paintDevice,
-                                         const KisImageWSP image,
+                                         KisView2 *view,
                                          KisFilterConfiguration *configuration,
                                          const QString & layerName,
                                          const QString & caption,
@@ -51,7 +50,6 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisNodeSP node,
     : KDialog(parent)
     , m_node(node)
     , m_paintDevice(paintDevice)
-    , m_image(0)
     , m_currentConfigWidget(0)
     , m_currentFilter(0)
     , m_currentConfiguration(0)
@@ -96,6 +94,7 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisNodeSP node,
         m_currentConfigWidget = m_currentFilter->createConfigurationWidget(page, paintDevice);
 
         if (m_currentConfigWidget) {
+            m_currentConfigWidget->setView(view);
             m_currentConfigWidget->setConfiguration(m_currentConfiguration);
         }
     }

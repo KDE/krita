@@ -176,9 +176,9 @@ void KisMaskManager::createFilterMask(KisNodeSP parent, KisNodeSP above)
     KisPaintDeviceSP originalDevice = layer->original();
 
 
-    KisDlgAdjustmentLayer dialog(mask, mask, originalDevice, m_view->image(),
+    KisDlgAdjustmentLayer dialog(mask, mask, originalDevice,
                                  mask->name(), i18n("New Filter Mask"),
-                                 m_view, "dlgfiltermask");
+                                 m_view);
 
     if (dialog.exec() == QDialog::Accepted) {
         KisFilterConfiguration *filter = dialog.filterConfiguration();
@@ -291,7 +291,7 @@ void KisMaskManager::maskProperties()
             return;
 
         KisPaintDeviceSP dev = layer->paintDevice();
-        KisDlgAdjLayerProps dlg(layer, mask, dev, layer->image(), mask->filter().data(), mask->name(), i18n("Effect Mask Properties"), m_view, "dlgeffectmaskprops");
+        KisDlgAdjLayerProps dlg(layer, mask, dev, m_view, mask->filter().data(), mask->name(), i18n("Effect Mask Properties"), m_view, "dlgeffectmaskprops");
 
         KisSafeFilterConfigurationSP configBefore(mask->filter());
         Q_ASSERT(configBefore);

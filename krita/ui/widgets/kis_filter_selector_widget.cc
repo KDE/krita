@@ -56,6 +56,7 @@ struct KisFilterSelectorWidget::Private {
     KisBookmarkedFilterConfigurationsModel* currentBookmarkedFilterConfigurationsModel;
     KisFiltersModel* filtersModel;
     QGridLayout *widgetLayout;
+    KisView2 *view;
 };
 
 KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent) : d(new Private)
@@ -67,6 +68,7 @@ KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent) : d(new Privat
     d->currentBookmarkedFilterConfigurationsModel = 0;
     d->currentFilter = 0;
     d->filtersModel = 0;
+    d->view = 0;
     d->uiFilterSelector.setupUi(this);
 
     d->widgetLayout = new QGridLayout(d->uiFilterSelector.centralWidgetHolder);
@@ -91,6 +93,11 @@ KisFilterSelectorWidget::~KisFilterSelectorWidget()
     delete d->currentCentralWidget;
     delete d->widgetLayout;
     delete d;
+}
+
+void KisFilterSelectorWidget::setView(KisView2 *view)
+{
+    d->view = view;
 }
 
 void KisFilterSelectorWidget::setPaintDevice(KisPaintDeviceSP _paintDevice)
@@ -147,6 +154,7 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
     } else {
         d->currentFilterConfigurationWidget = widget;
         d->currentCentralWidget = widget;
+        d->currentFilterConfigurationWidget->setView(d->view);
         d->currentFilterConfigurationWidget->blockSignals(true);
         d->currentFilterConfigurationWidget->setConfiguration(
             d->currentFilter->defaultConfiguration(d->paintDevice));

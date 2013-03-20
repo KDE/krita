@@ -25,9 +25,9 @@ class KLineEdit;
 class KisFilter;
 class KisFilterConfiguration;
 class KisConfigWidget;
-class KisImage;
 class KisAdjustmentLayer;
 class KisNodeFilterInterface;
+class KisView2;
 
 #include "kis_types.h"
 
@@ -51,7 +51,7 @@ public:
     KisDlgAdjLayerProps(KisNodeSP node,
                         KisNodeFilterInterface *nfi,
                         KisPaintDeviceSP paintDevice,
-                        const KisImageWSP image,
+                        KisView2 *view,
                         KisFilterConfiguration *configuration,
                         const QString & layerName,
                         const QString & caption,
@@ -69,7 +69,6 @@ private slots:
 private:
     KisNodeSP m_node;
     KisPaintDeviceSP m_paintDevice;
-    KisImage *m_image;
     KisConfigWidget *m_currentConfigWidget;
     KisFilter *m_currentFilter;
     KisFilterConfiguration *m_currentConfiguration;

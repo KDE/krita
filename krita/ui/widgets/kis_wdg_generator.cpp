@@ -52,7 +52,7 @@ struct KisWdgGenerator::Private
 
 public:
     Private()
-            : centralWidget(0) {
+        : centralWidget(0), view(0) {
     }
 
     QWidget * centralWidget; // Active generator settings widget
@@ -60,6 +60,7 @@ public:
     Ui_WdgGenerators uiWdgGenerators;
     KisPaintDeviceSP dev;
     QGridLayout *widgetLayout;
+    KisView2 *view;
 };
 
 KisWdgGenerator::KisWdgGenerator(QWidget * parent)
@@ -67,14 +68,6 @@ KisWdgGenerator::KisWdgGenerator(QWidget * parent)
         , d(new Private())
 {
     KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(0));
-    init(dev);
-}
-
-KisWdgGenerator::KisWdgGenerator(QWidget * parent, KisPaintDeviceSP dev)
-        : QWidget(parent)
-        , d(new Private())
-{
-    init(dev);
 }
 
 KisWdgGenerator::~KisWdgGenerator()
@@ -82,14 +75,9 @@ KisWdgGenerator::~KisWdgGenerator()
   delete d;
 }
 
-void KisWdgGenerator::setPaintdevice(KisPaintDeviceSP dev)
+void KisWdgGenerator::initialize(KisView2 *view)
 {
-    d->dev = dev;
-}
-
-void KisWdgGenerator::init(KisPaintDeviceSP dev)
-{
-    d->dev = dev;
+    d->view = view;
     d->uiWdgGenerators.setupUi(this);
     d->widgetLayout = new QGridLayout(d->uiWdgGenerators.centralWidgetHolder);
     QList<KisGeneratorSP> generators = KisGeneratorRegistry::instance()->values();
@@ -164,6 +152,7 @@ void KisWdgGenerator::slotGeneratorActivated(int row)
                                           d->uiWdgGenerators.centralWidgetHolder);
         } else {
             d->centralWidget = widget;
+            widget->setView(d->view);
             widget->setConfiguration(d->currentGenerator->defaultConfiguration(d->dev));
         }
     }

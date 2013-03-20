@@ -154,10 +154,9 @@ int KisEmbossFilter::Lim_Max(int Now, int Up, int Max) const
     return (Up);
 }
 
-KisConfigWidget * KisEmbossFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
+KisConfigWidget * KisEmbossFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
 {
     Q_UNUSED(dev);
-    Q_UNUSED(image);
 
     vKisIntegerWidgetParam param;
     param.push_back(KisIntegerWidgetParam(10, 300, 30, i18n("Depth"), "depth"));

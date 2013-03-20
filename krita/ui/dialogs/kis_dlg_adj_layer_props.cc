@@ -93,7 +93,7 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisNodeSP node,
     connect(m_layerName, SIGNAL(textChanged(const QString &)), this, SLOT(slotNameChanged(const QString &)));
 
     if (m_currentFilter) {
-        m_currentConfigWidget = m_currentFilter->createConfigurationWidget(page, paintDevice, image);
+        m_currentConfigWidget = m_currentFilter->createConfigurationWidget(page, paintDevice);
 
         if (m_currentConfigWidget) {
             m_currentConfigWidget->setConfiguration(m_currentConfiguration);

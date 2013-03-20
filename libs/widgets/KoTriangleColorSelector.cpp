@@ -217,6 +217,7 @@ void KoTriangleColorSelector::setQColor(const QColor& c)
         if( hue >= 0 && hue <= 360)
             d->hue = hue;
         d->invalidTriangle = true;
+        tellColorChanged();
         d->updateTimer.start();
     }
 }

@@ -30,7 +30,6 @@
 #include <filter/kis_filter.h>
 #include <kis_config_widget.h>
 #include <filter/kis_filter_configuration.h>
-#include <kis_image.h>
 
 // From krita/ui
 #include "kis_bookmarked_configurations_editor.h"
@@ -51,7 +50,6 @@ struct KisFilterSelectorWidget::Private {
     QWidget* currentCentralWidget;
     KisConfigWidget* currentFilterConfigurationWidget;
     KisFilterSP currentFilter;
-    KisImageWSP image;
     KisPaintDeviceSP paintDevice;
     Ui_FilterSelector uiFilterSelector;
     KisPaintDeviceSP thumb;
@@ -107,11 +105,6 @@ void KisFilterSelectorWidget::setPaintDevice(KisPaintDeviceSP _paintDevice)
     d->uiFilterSelector.filtersSelector->header()->setVisible(false);
 }
 
-void KisFilterSelectorWidget::setImage(KisImageWSP _image)
-{
-    d->image = _image;
-}
-
 void KisFilterSelectorWidget::showFilterGallery(bool visible)
 {
     QList<int> sizes;
@@ -145,7 +138,7 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
     }
 
     KisConfigWidget* widget =
-        d->currentFilter->createConfigurationWidget(d->uiFilterSelector.centralWidgetHolder, d->paintDevice, d->image);
+        d->currentFilter->createConfigurationWidget(d->uiFilterSelector.centralWidgetHolder, d->paintDevice);
 
     if (!widget) { // No widget, so display a label instead
         d->currentFilterConfigurationWidget = 0;

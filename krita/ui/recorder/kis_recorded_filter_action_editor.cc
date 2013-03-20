@@ -41,7 +41,7 @@ KisRecordedFilterActionEditor::KisRecordedFilterActionEditor(QWidget* parent, Ki
     m_gridLayout->addWidget(m_nodeQueryPathEditor, 1, 0);
     
     // Create the filter editor
-    m_configWidget = m_action->filter()->createConfigurationWidget(this, 0 , 0);
+    m_configWidget = m_action->filter()->createConfigurationWidget(this, 0);
     if (m_configWidget) {
         m_gridLayout->addWidget(m_configWidget);
         m_configWidget->setConfiguration(m_action->filterConfiguration());

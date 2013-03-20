@@ -76,7 +76,7 @@ class KisPerChannelFilter
 public:
     KisPerChannelFilter();
 public:
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image = 0) const;
+    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
     virtual KisFilterConfiguration * factoryConfiguration(const KisPaintDeviceSP) const;
 
     virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
@@ -92,7 +92,7 @@ class KisPerChannelConfigWidget : public KisConfigWidget
     Q_OBJECT
 
 public:
-    KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, const QRect &bounds, Qt::WFlags f = 0);
+    KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f = 0);
     virtual ~KisPerChannelConfigWidget();
 
     virtual void setConfiguration(const KisPropertiesConfiguration* config);

@@ -88,7 +88,7 @@ public:
     }
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image = 0) const;
+    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 
     virtual bool workWith(const KoColorSpace* cs) const;
 };
@@ -98,7 +98,7 @@ class KisBrightnessContrastConfigWidget : public KisConfigWidget
 {
 
 public:
-    KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, const QRect &bounds, Qt::WFlags f = 0);
+    KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f = 0);
     virtual ~KisBrightnessContrastConfigWidget() {}
 
     virtual KisBrightnessContrastFilterConfiguration * configuration() const;

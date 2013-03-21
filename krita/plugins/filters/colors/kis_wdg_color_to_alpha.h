@@ -23,8 +23,10 @@
 
 #include <kis_config_widget.h>
 
+class KoColor;
 class KisFilter;
 class Ui_WdgColorToAlphaBase;
+
 
 class KisWdgColorToAlpha : public KisConfigWidget
 {
@@ -35,10 +37,18 @@ public:
     inline const Ui_WdgColorToAlphaBase* widget() const {
         return m_widget;
     }
+
+    void setView(KisView2 *view);
+
     virtual void setConfiguration(const KisPropertiesConfiguration*);
     virtual KisPropertiesConfiguration* configuration() const;
+
+private slots:
+    void slotFgColorChanged(const KoColor &color);
+
 private:
     Ui_WdgColorToAlphaBase* m_widget;
+    KisView2 *m_view;
 };
 
 #endif

@@ -25,6 +25,10 @@
 
 #include <kcolorbutton.h>
 
+#include <KoColor.h>
+
+#include <kis_view2.h>
+#include <kis_canvas_resource_provider.h>
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>
@@ -33,7 +37,9 @@
 
 #include "ui_wdgcolortoalphabase.h"
 
-KisWdgColorToAlpha::KisWdgColorToAlpha(QWidget * parent) : KisConfigWidget(parent)
+KisWdgColorToAlpha::KisWdgColorToAlpha(QWidget * parent)
+    : KisConfigWidget(parent),
+      m_view(0)
 {
     m_widget = new Ui_WdgColorToAlphaBase();
     m_widget->setupUi(this);
@@ -43,7 +49,22 @@ KisWdgColorToAlpha::KisWdgColorToAlpha(QWidget * parent) : KisConfigWidget(paren
 
 KisWdgColorToAlpha::~KisWdgColorToAlpha()
 {
+    KoToolManager::instance()->switchBackRequested();
     delete m_widget;
+}
+
+void KisWdgColorToAlpha::setView(KisView2 *view)
+{
+    m_view = view;
+    connect(view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), this, SLOT(slotFgColorChanged(const KoColor&)));
+
+    KoToolManager::instance()->switchToolTemporaryRequested("KritaSelected/KisToolColorPicker");
+}
+
+void KisWdgColorToAlpha::slotFgColorChanged(const KoColor &color)
+{
+    m_widget->colorSelector->setQColor(color.toQColor());
+    emit sigConfigurationItemChanged();
 }
 
 void KisWdgColorToAlpha::setConfiguration(const KisPropertiesConfiguration* config)

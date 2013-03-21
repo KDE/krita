@@ -95,7 +95,6 @@ KisPaintDeviceSP KisMaskManager::activeDevice()
 void KisMaskManager::activateMask(KisMaskSP mask)
 {
     m_activeMask = mask;
-    emit sigMaskActivated(mask);
 }
 
 void KisMaskManager::masksUpdated()
@@ -140,8 +139,6 @@ void KisMaskManager::createSelectionMask(KisNodeSP parent, KisNodeSP above)
     m_commandsAdapter->addNode(mask, parentLayer, above);
 
     mask->setActive(true);
-
-    activateMask(mask);
     masksUpdated();
 }
 
@@ -154,8 +151,6 @@ void KisMaskManager::createTransparencyMask(KisNodeSP parent, KisNodeSP above)
     QList<KisNodeSP> transparencyMasks = layer->childNodes(QStringList("KisTransparencyMask"),KoProperties());
     mask->setName(i18n("Transparency Mask")+QString::number(transparencyMasks.count()+1));
     m_commandsAdapter->addNode(mask, parent, above);
-
-    activateMask(mask);
     masksUpdated();
 }
 
@@ -186,7 +181,6 @@ void KisMaskManager::createFilterMask(KisNodeSP parent, KisNodeSP above)
             QString name = dialog.layerName();
             mask->setFilter(filter);
             mask->setName(name);
-            activateMask(mask);
         }
     } else {
         m_commandsAdapter->undoLastCommand();
@@ -204,8 +198,6 @@ void KisMaskManager::maskToSelection()
     image->undoAdapter()->addCommand(cmd);
     m_commandsAdapter->removeNode(m_activeMask);
     m_commandsAdapter->endMacro();
-
-    activateMask(0);
     masksUpdated();
 }
 
@@ -246,8 +238,6 @@ void KisMaskManager::maskToLayer()
     m_commandsAdapter->removeNode(m_activeMask);
     m_commandsAdapter->addNode(layer, activeLayer->parent(), activeLayer);
     m_commandsAdapter->endMacro();
-
-    activateMask(0);
     masksUpdated();
 }
 
@@ -264,8 +254,6 @@ void KisMaskManager::duplicateMask()
     if (selectionMask) {
         selectionMask->setActive(true);
     }
-
-    activateMask(newMask);
     masksUpdated();
 }
 
@@ -274,8 +262,6 @@ void KisMaskManager::removeMask()
     if (!m_activeMask) return;
     if (!m_view->image()) return;
     m_commandsAdapter->removeNode(m_activeMask);
-
-    activateMask(0);
     masksUpdated();
 }
 

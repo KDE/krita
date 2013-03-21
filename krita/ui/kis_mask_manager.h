@@ -44,10 +44,6 @@ public:
     KisMaskManager(KisView2 * view);
     ~KisMaskManager() {}
 
-signals:
-
-    void sigMaskActivated(KisMaskSP mask);
-
 private slots:
     
     /**

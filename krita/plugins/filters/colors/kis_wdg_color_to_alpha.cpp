@@ -43,8 +43,11 @@ KisWdgColorToAlpha::KisWdgColorToAlpha(QWidget * parent)
 {
     m_widget = new Ui_WdgColorToAlphaBase();
     m_widget->setupUi(this);
-    connect(m_widget->colorSelector, SIGNAL(colorChanged(const QColor&)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_widget->colorSelector, SIGNAL(colorChanged(const QColor&)), SLOT(slotColorSelectorChanged(const QColor&)));
     connect(m_widget->intThreshold, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_widget->btnCustomColor, SIGNAL(changed(const QColor&)), SLOT(slotCustomColorSelected(const QColor&)));
+
+    m_widget->btnCustomColor->setColor(Qt::white);
 }
 
 KisWdgColorToAlpha::~KisWdgColorToAlpha()
@@ -63,7 +66,17 @@ void KisWdgColorToAlpha::setView(KisView2 *view)
 
 void KisWdgColorToAlpha::slotFgColorChanged(const KoColor &color)
 {
-    m_widget->colorSelector->setQColor(color.toQColor());
+    m_widget->btnCustomColor->setColor(color.toQColor());
+}
+
+void KisWdgColorToAlpha::slotColorSelectorChanged(const QColor &color)
+{
+    m_widget->btnCustomColor->setColor(color);
+}
+
+void KisWdgColorToAlpha::slotCustomColorSelected(const QColor &color)
+{
+    m_widget->colorSelector->setQColor(color);
     emit sigConfigurationItemChanged();
 }
 

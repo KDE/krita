@@ -45,6 +45,8 @@ public:
 
 private slots:
     void slotFgColorChanged(const KoColor &color);
+    void slotColorSelectorChanged(const QColor &color);
+    void slotCustomColorSelected(const QColor &color);
 
 private:
     Ui_WdgColorToAlphaBase* m_widget;

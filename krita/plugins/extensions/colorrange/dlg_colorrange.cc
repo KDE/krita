@@ -164,7 +164,6 @@ quint32 matchColors(const QColor & c, enumAction action)
 
 DlgColorRange::DlgColorRange(KisView2 *view, QWidget *parent)
         : KDialog(parent)
-        , m_transaction(0)
         , m_selectionCommandsAdded(0)
 {
     setCaption(i18n("Color Range"));

@@ -257,7 +257,7 @@ void KisCutCopyActionFactory::run(bool willCut, KisView2 *view)
                 KisSelectionSP m_sel;
 
                 KUndo2Command* paint() {
-                    KisSelectedTransaction transaction("", m_node);
+                    KisTransaction transaction("", m_node->paintDevice());
                     m_node->paintDevice()->clearSelection(m_sel);
                     m_node->setDirty(m_sel->selectedRect());
                     return transaction.endAndTake();

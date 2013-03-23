@@ -33,7 +33,6 @@
 
 class KisView2;
 class DlgColorRange;
-class KisSelectedTransaction;
 
 enum enumAction {
     REDS,
@@ -92,7 +91,6 @@ private:
     KisView2 * m_view;
     SelectionAction m_mode;
     QCursor m_oldCursor;
-    KisSelectedTransaction *m_transaction;
     enumAction m_currentAction;
     bool m_invert;
     int m_selectionCommandsAdded;

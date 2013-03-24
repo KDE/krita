@@ -48,9 +48,8 @@ KisGaussianBlurFilter::KisGaussianBlurFilter() : KisFilter(id(), categoryBlur(),
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-KisConfigWidget * KisGaussianBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageWSP image) const
+KisConfigWidget * KisGaussianBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
 {
-    Q_UNUSED(image)
     return new KisWdgGaussianBlur(parent);
 }
 

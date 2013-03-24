@@ -24,6 +24,7 @@
 
 #include <QTimer>
 
+class KisView2;
 class KisPropertiesConfiguration;
 
 /**
@@ -55,6 +56,12 @@ public:
      * @return the configuration
      */
     virtual KisPropertiesConfiguration* configuration() const = 0;
+
+    /**
+     * Sets the view object that can be used by the configuration
+     * widget for richer functionality
+     */
+    virtual void setView(KisView2 *view);
 
 signals:
 

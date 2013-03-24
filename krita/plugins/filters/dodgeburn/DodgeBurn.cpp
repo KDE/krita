@@ -28,10 +28,9 @@ KisFilterDodgeBurn::KisFilterDodgeBurn(const QString& id, const QString& prefix,
     setSupportsIncrementalPainting(false);
 }
 
-KisConfigWidget * KisFilterDodgeBurn::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
+KisConfigWidget * KisFilterDodgeBurn::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
 {
     Q_UNUSED(dev);
-    Q_UNUSED(image);
     return new KisDodgeBurnConfigWidget(parent, id());
 }
 

@@ -53,7 +53,7 @@ public:
         return KoID("color", i18n("Color"));
     }
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image = 0) const;
+    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 };
 
 #endif

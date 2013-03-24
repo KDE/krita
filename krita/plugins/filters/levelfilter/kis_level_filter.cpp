@@ -56,9 +56,9 @@ KisLevelFilter::~KisLevelFilter()
 {
 }
 
-KisConfigWidget * KisLevelFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
+KisConfigWidget * KisLevelFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
 {
-    return new KisLevelConfigWidget(parent, dev, image->bounds());
+    return new KisLevelConfigWidget(parent, dev);
 }
 
 bool KisLevelFilter::workWith(KoColorSpace* cs) const
@@ -98,7 +98,7 @@ KoColorTransformation* KisLevelFilter::createTransformation(const KoColorSpace* 
     return cs->createBrightnessContrastAdjustment(transfer);
 }
 
-KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, const QRect &bounds)
+KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP dev)
         : KisConfigWidget(parent)
 {
     m_page.setupUi(this);
@@ -143,7 +143,7 @@ KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP de
     connect((QObject*)(m_page.chkLogarithmic), SIGNAL(toggled(bool)), this, SLOT(slotDrawHistogram(bool)));
 
     KoHistogramProducerSP producer = KoHistogramProducerSP(new KoGenericLabHistogramProducer());
-    histogram = new KisHistogram(dev, bounds, producer, LINEAR);
+    histogram = new KisHistogram(dev, dev->exactBounds(), producer, LINEAR);
     m_histlog = false;
     slotDrawHistogram();
 

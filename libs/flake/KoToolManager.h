@@ -215,6 +215,21 @@ public slots:
      */
     void addDeferredToolFactory(KoToolFactoryBase *toolFactory);
 
+    /**
+     * Request for temporary switching the tools.
+     * This switch can be later reverted with switchBackRequested().
+     * @param id the id of the tool
+     *
+     * @see switchBackRequested()
+     */
+    void switchToolTemporaryRequested(const QString &id);
+
+    /**
+     * Switches back to the original tool after the temporary switch
+     * has been done. It the user changed the tool manually on the way,
+     * then it switches to the interaction tool
+     */
+    void switchBackRequested();
 
 signals:
     /**
@@ -272,10 +287,8 @@ private:
     Q_PRIVATE_SLOT(d, void attachCanvas(KoCanvasController *controller))
     Q_PRIVATE_SLOT(d, void movedFocus(QWidget *from, QWidget *to))
     Q_PRIVATE_SLOT(d, void updateCursor(const QCursor &cursor))
-    Q_PRIVATE_SLOT(d, void switchBackRequested())
     Q_PRIVATE_SLOT(d, void selectionChanged(QList<KoShape*> shapes))
     Q_PRIVATE_SLOT(d, void currentLayerChanged(const KoShapeLayer *layer))
-    Q_PRIVATE_SLOT(d, void switchToolTemporaryRequested(const QString &id))
 
     QPair<QString, KoToolBase*> createTools(KoCanvasController *controller, ToolHelper *tool);
 

@@ -44,7 +44,8 @@ struct KisFilterDialog::Private {
     Private()
             : currentFilter(0)
             , mask(0)
-            , resizeCount(0) {
+            , resizeCount(0)
+            , view(0) {
     }
 
     KisFilterSP currentFilter;
@@ -53,10 +54,11 @@ struct KisFilterDialog::Private {
     KisNodeSP node;
     KisImageWSP image;
     int resizeCount;
+    KisView2 *view;
 };
 
-KisFilterDialog::KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageWSP image, KisSelectionSP selection) :
-        QDialog(parent),
+KisFilterDialog::KisFilterDialog(KisView2 *view, KisNodeSP node, KisImageWSP image, KisSelectionSP selection) :
+        QDialog(view),
         d(new Private)
 {
     setModal(false);
@@ -64,8 +66,10 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageWSP im
     d->uiFilterDialog.setupUi(this);
     d->node = node;
     d->image = image;
+    d->view = view;
     d->mask = new KisFilterMask();
     d->mask->initSelection(selection, dynamic_cast<KisLayer*>(node.data()));
+    d->uiFilterDialog.filterSelection->setView(view);
     d->uiFilterDialog.filterSelection->showFilterGallery(KisConfig().showFilterGallery());
 
     if (d->node->inherits("KisLayer")) {
@@ -78,7 +82,6 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageWSP im
     }
     d->uiFilterDialog.pushButtonCreateMaskEffect->hide(); // TODO fixme, understand why the mask isn't created, and then remove that line
     d->uiFilterDialog.filterSelection->setPaintDevice(d->node->original());
-    d->uiFilterDialog.filterSelection->setImage(d->image);
     d->uiFilterDialog.pushButtonOk->setGuiItem(KStandardGuiItem::ok());
     d->uiFilterDialog.pushButtonCancel->setGuiItem(KStandardGuiItem::cancel());
 
@@ -176,15 +179,13 @@ void KisFilterDialog::resizeEvent(QResizeEvent* event)
 
     // Workaround, after the initalisation don't center the dialog anymore
     if(d->resizeCount < 2) {
-        KisView2* view = dynamic_cast<KisView2*>(parentWidget());
-        if(view) {
-            QWidget* canvas = dynamic_cast<KisView2*>(parentWidget())->canvas();
-            QRect rect(canvas->mapToGlobal(canvas->geometry().topLeft()), size());
-            int deltaX = (canvas->geometry().width() - geometry().width())/2;
-            int deltaY = (canvas->geometry().height() - geometry().height())/2;
-            rect.translate(deltaX, deltaY);
-            setGeometry(rect);
-        }
+        QWidget* canvas = d->view->canvas();
+        QRect rect(canvas->mapToGlobal(canvas->geometry().topLeft()), size());
+        int deltaX = (canvas->geometry().width() - geometry().width())/2;
+        int deltaY = (canvas->geometry().height() - geometry().height())/2;
+        rect.translate(deltaX, deltaY);
+        setGeometry(rect);
+
         d->resizeCount++;
     }
 }

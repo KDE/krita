@@ -49,10 +49,9 @@ ShivaGenerator::ShivaGenerator(OpenShiva::Source* kernel) : KisGenerator(KoID(ke
     setSupportsIncrementalPainting(false);
 }
 
-KisConfigWidget * ShivaGenerator::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
+KisConfigWidget * ShivaGenerator::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
 {
     Q_UNUSED(dev);
-    Q_UNUSED(image);
     return new ShivaGeneratorConfigWidget(m_source, parent);
 }
 

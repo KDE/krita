@@ -52,8 +52,22 @@ public:
     virtual ~KisToolColorPicker();
 
 public:
-    virtual QWidget* createOptionWidget();
+    struct Configuration {
+        Configuration();
 
+        bool toForegroundColor;
+        bool updateColor;
+        bool addPalette;
+        bool normaliseValues;
+        bool sampleMerged;
+        int radius;
+
+        void save(ToolActivation activation) const;
+        void load(ToolActivation activation);
+    };
+
+public:
+    virtual QWidget* createOptionWidget();
 
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseMoveEvent(KoPointerEvent *event);
@@ -61,22 +75,27 @@ public:
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
+protected:
+    void activate(ToolActivation activation, const QSet<KoShape*> &);
+    void deactivate();
+
 public slots:
     void slotSetUpdateColor(bool);
     void slotSetNormaliseValues(bool);
     void slotSetAddPalette(bool);
     void slotChangeRadius(int);
     void slotAddPalette(KoResource* resource);
+    void slotSetColorSource(int value);
 
 private:
     void displayPickedColor();
     void pickColor(const QPointF& pos);
+    void updateOptionWidget();
 
-    bool m_toForegroundColor;
-    bool m_updateColor;
-    bool m_addPalette;
-    bool m_normaliseValues;
-    int m_radius;
+    Configuration m_config;
+    ToolActivation m_toolActivationSource;
+    bool m_isActivated;
+
     KoColor m_pickedColor;
 
     // used to skip some of the tablet events and don't update the colour that often

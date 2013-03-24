@@ -106,8 +106,8 @@ public:
     QByteArray saveXml( QMap<KisPaintingAssistantHandleSP, int> &handleMap);
     void loadXml(KoStore *store, QMap<int, KisPaintingAssistantHandleSP> &handleMap, QString path);
     void saveXmlList(QDomDocument& doc, QDomElement& ssistantsElement, int count);
-    QList findAdjacentHandles();
     void findHandleLocation();
+    KisPaintingAssistantHandleSP oppHandleOne();
 
     /**
       * Get the topLeft, bottomLeft, topRight and BottomRight corners of the assistant

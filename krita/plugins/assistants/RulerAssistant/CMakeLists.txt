@@ -8,8 +8,6 @@ set(kritarulerassistanttool_PART_SRCS
     PerspectiveAssistant.cc
     ruler_assistant_tool.cc
     kis_ruler_assistant_tool.cc
-    mesh_assistant.cpp
-    math_3d.cpp
     )
 
 find_package(AssImp)

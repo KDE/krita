@@ -1376,6 +1376,11 @@ void KoDocument::setProgressProxy(KoProgressProxy *progressProxy)
     d->progressProxy = progressProxy;
 }
 
+KoProgressProxy* KoDocument::progressProxy() const
+{
+    return d->progressProxy;
+}
+
 // shared between openFile and koMainWindow's "create new empty document" code
 void KoDocument::setMimeTypeAfterLoading(const QString& mimeType)
 {

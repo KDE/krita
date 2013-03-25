@@ -173,11 +173,8 @@ void KoTextEditor::setVerticalTextAlignment(Qt::Alignment align)
     d->updateState(KoTextEditor::Private::Format, i18nc("(qtundo-format)", "Set Vertical Alignment"));
     QTextCharFormat format;
     format.setVerticalAlignment(charAlign);
-    QTextCharFormat prevFormat(d->caret.charFormat());
-    d->caret.mergeCharFormat(format);
-    registerTrackedChange(d->caret, KoGenChange::FormatChange, i18nc("(qtundo-format)", "Set Vertical Alignment"), format, prevFormat, false);
+    mergeAutoStyle(format);
     d->updateState(KoTextEditor::Private::NoOp);
-    emit textFormatChanged();
 }
 
 void KoTextEditor::decreaseIndent()
@@ -308,11 +305,8 @@ void KoTextEditor::setFontFamily(const QString &font)
     d->updateState(KoTextEditor::Private::Format, i18nc("(qtundo-format)", "Set Font"));
     QTextCharFormat format;
     format.setFontFamily(font);
-    QTextCharFormat prevFormat(d->caret.charFormat());
-    d->caret.mergeCharFormat(format);
-    registerTrackedChange(d->caret, KoGenChange::FormatChange, i18nc("(qtundo-format)", "Set Font"), format, prevFormat, false);
+    mergeAutoStyle(format);
     d->updateState(KoTextEditor::Private::NoOp);
-    emit textFormatChanged();
 }
 
 void KoTextEditor::setFontSize(qreal size)
@@ -324,11 +318,8 @@ void KoTextEditor::setFontSize(qreal size)
     d->updateState(KoTextEditor::Private::Format, i18nc("(qtundo-format)", "Set Font Size"));
     QTextCharFormat format;
     format.setFontPointSize(size);
-    QTextCharFormat prevFormat(d->caret.charFormat());
-    d->caret.mergeCharFormat(format);
-    registerTrackedChange(d->caret, KoGenChange::FormatChange, i18nc("(qtundo-format)", "Set Font Size"), format, prevFormat, false);
+    mergeAutoStyle(format);
     d->updateState(KoTextEditor::Private::NoOp);
-    emit textFormatChanged();
 }
 
 void KoTextEditor::setTextBackgroundColor(const QColor &color)
@@ -340,11 +331,8 @@ void KoTextEditor::setTextBackgroundColor(const QColor &color)
     d->updateState(KoTextEditor::Private::Format, i18nc("(qtundo-format)", "Set Background Color"));
     QTextCharFormat format;
     format.setBackground(QBrush(color));
-    QTextCharFormat prevFormat(d->caret.charFormat());
-    d->caret.mergeCharFormat(format);
-    registerTrackedChange(d->caret, KoGenChange::FormatChange, i18nc("(qtundo-format)", "Set Background Color"), format, prevFormat, false);
+    mergeAutoStyle(format);
     d->updateState(KoTextEditor::Private::NoOp);
-    emit textFormatChanged();
 }
 
 void KoTextEditor::setTextColor(const QColor &color)
@@ -356,11 +344,8 @@ void KoTextEditor::setTextColor(const QColor &color)
     d->updateState(KoTextEditor::Private::Format, i18nc("(qtundo-format)", "Set Text Color"));
     QTextCharFormat format;
     format.setForeground(QBrush(color));
-    QTextCharFormat prevFormat(d->caret.charFormat());
-    d->caret.mergeCharFormat(format);
-    registerTrackedChange(d->caret, KoGenChange::FormatChange, i18nc("(qtundo-format)", "Set Text Color"), format, prevFormat, false);
+    mergeAutoStyle(format);
     d->updateState(KoTextEditor::Private::NoOp);
-    emit textFormatChanged();
 }
 
 class SetCharacterStyleVisitor : public KoTextVisitor

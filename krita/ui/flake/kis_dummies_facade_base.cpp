@@ -34,8 +34,8 @@ KisDummiesFacadeBase::KisDummiesFacadeBase(QObject *parent)
     : QObject(parent),
       m_d(new Private())
 {
-    connect(this, SIGNAL(sigContinueAddNode(KisNodeSP, KisNodeSP, KisNodeSP)),
-            SLOT(slotContinueAddNode(KisNodeSP, KisNodeSP, KisNodeSP)));
+    connect(this, SIGNAL(sigContinueAddNode(KisNodeSP,KisNodeSP,KisNodeSP)),
+            SLOT(slotContinueAddNode(KisNodeSP,KisNodeSP,KisNodeSP)));
     connect(this, SIGNAL(sigContinueRemoveNode(KisNodeSP)),
             SLOT(slotContinueRemoveNode(KisNodeSP)));
 }

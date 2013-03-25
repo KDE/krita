@@ -262,7 +262,7 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
     grp.writeEntry("CreatingCanvas", true);
     m_d->canvas = new KisCanvas2(m_d->viewConverter, this, doc->shapeController());
     grp.writeEntry("CreatingCanvas", false);
-    connect(m_d->resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile *)), m_d->canvas, SLOT(slotSetDisplayProfile(const KoColorProfile *)));
+    connect(m_d->resourceProvider, SIGNAL(sigDisplayProfileChanged(KoColorProfile*)), m_d->canvas, SLOT(slotSetDisplayProfile(KoColorProfile*)));
 
     m_d->canvasController->setCanvas(m_d->canvas);
 
@@ -362,15 +362,15 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
         KoToolBoxFactory toolBoxFactory(m_d->canvasController);
         shell()->createDockWidget(&toolBoxFactory);
 
-        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
-                shell()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &)));
+        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QWidget*>)),
+                shell()->dockerManager(), SLOT(newOptionWidgets(QList<QWidget*>)));
 
         shell()->dockerManager()->setIcons(false);
     }
 
     m_d->statusBar = new KisStatusBar(this);
-    connect(m_d->canvasController->proxyObject, SIGNAL(documentMousePositionChanged(const QPointF &)),
-            m_d->statusBar, SLOT(documentMousePositionChanged(const QPointF &)));
+    connect(m_d->canvasController->proxyObject, SIGNAL(documentMousePositionChanged(QPointF)),
+            m_d->statusBar, SLOT(documentMousePositionChanged(QPointF)));
 
     connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
             m_d->resourceProvider, SLOT(slotNodeActivated(KisNodeSP)));
@@ -381,8 +381,8 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
     connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
             m_d->doc->image(), SLOT(requestStrokeEnd()));
 
-    connect(KoToolManager::instance(), SIGNAL(inputDeviceChanged(const KoInputDevice &)),
-            m_d->controlFrame->paintopBox(), SLOT(slotInputDeviceChanged(const KoInputDevice &)));
+    connect(KoToolManager::instance(), SIGNAL(inputDeviceChanged(KoInputDevice)),
+            m_d->controlFrame->paintopBox(), SLOT(slotInputDeviceChanged(KoInputDevice)));
 
     connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
             m_d->controlFrame->paintopBox(), SLOT(slotToolChanged(KoCanvasController*,int)));
@@ -847,20 +847,20 @@ void KisView2::connectCurrentImage()
 {
     if (image()) {
         if (m_d->statusBar) {
-            connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace *)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
-            connect(image(), SIGNAL(sigProfileChanged(const KoColorProfile *)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
-            connect(image(), SIGNAL(sigSizeChanged(qint32, qint32)), m_d->statusBar, SLOT(imageSizeChanged(qint32, qint32)));
+            connect(image(), SIGNAL(sigColorSpaceChanged(KoColorSpace*)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
+            connect(image(), SIGNAL(sigProfileChanged(KoColorProfile*)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
+            connect(image(), SIGNAL(sigSizeChanged(qint32,qint32)), m_d->statusBar, SLOT(imageSizeChanged(qint32,qint32)));
 
         }
-        connect(image(), SIGNAL(sigSizeChanged(qint32, qint32)), m_d->resourceProvider, SLOT(slotImageSizeChanged()));
+        connect(image(), SIGNAL(sigSizeChanged(qint32,qint32)), m_d->resourceProvider, SLOT(slotImageSizeChanged()));
 
-        connect(image(), SIGNAL(sigResolutionChanged(double, double)),
+        connect(image(), SIGNAL(sigResolutionChanged(double,double)),
                 m_d->resourceProvider, SLOT(slotOnScreenResolutionChanged()));
-        connect(zoomManager()->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)),
+        connect(zoomManager()->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
                 m_d->resourceProvider, SLOT(slotOnScreenResolutionChanged()));
 
-        connect(image(), SIGNAL(sigSizeChanged(qint32, qint32)), this, SLOT(slotImageSizeChanged()));
-        connect(image(), SIGNAL(sigResolutionChanged(double, double)), this, SLOT(slotImageSizeChanged()));
+        connect(image(), SIGNAL(sigSizeChanged(qint32,qint32)), this, SLOT(slotImageSizeChanged()));
+        connect(image(), SIGNAL(sigResolutionChanged(double,double)), this, SLOT(slotImageSizeChanged()));
         connect(image(), SIGNAL(sigNodeChanged(KisNodeSP)), this, SLOT(slotNodeChanged()));
         connect(image()->undoAdapter(), SIGNAL(selectionChanged()), selectionManager(), SLOT(selectionChanged()));
 
@@ -876,7 +876,7 @@ void KisView2::connectCurrentImage()
     m_d->canvas->connectCurrentImage();
 
     if (m_d->controlFrame) {
-        connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace *)), m_d->controlFrame->paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));
+        connect(image(), SIGNAL(sigColorSpaceChanged(KoColorSpace*)), m_d->controlFrame->paintopBox(), SLOT(slotColorSpaceChanged(KoColorSpace*)));
     }
 
 }

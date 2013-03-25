@@ -47,8 +47,8 @@ KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & name, KisView2 *view)
 
     setMainWidget(page);
     dlgWidget.txtLayerName->setText(name);
-    connect(dlgWidget.txtLayerName, SIGNAL(textChanged(const QString &)),
-            this, SLOT(slotNameChanged(const QString &)));
+    connect(dlgWidget.txtLayerName, SIGNAL(textChanged(QString)),
+            this, SLOT(slotNameChanged(QString)));
 }
 
 void KisDlgGeneratorLayer::slotNameChanged(const QString & text)

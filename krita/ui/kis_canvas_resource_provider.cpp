@@ -80,8 +80,8 @@ void KisCanvasResourceProvider::setResourceManager(KoCanvasResourceManager *reso
     m_resourceManager->setResource(HdrExposure, 0.0);
     m_resourceManager->setResource(HdrGamma, 1.0);
 
-    connect(m_resourceManager, SIGNAL(resourceChanged(int, const QVariant &)),
-            this, SLOT(slotResourceChanged(int, const QVariant&)));
+    connect(m_resourceManager, SIGNAL(resourceChanged(int,QVariant)),
+            this, SLOT(slotResourceChanged(int,QVariant)));
 
     m_resourceManager->setResource(KoCanvasResourceManager::ApplicationSpeciality, KoCanvasResourceManager::NoAdvancedText);
 }

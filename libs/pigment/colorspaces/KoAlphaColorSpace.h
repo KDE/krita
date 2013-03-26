@@ -160,6 +160,8 @@ public:
         warnPigment << i18n("Undefined operation in the alpha color space");
     }
 
+protected:
+    virtual bool preferCompositionInSourceColorSpace() const;
 
 private:
     KoColorProfile* m_profile;

@@ -356,3 +356,7 @@ KoColorSpace* KoAlphaColorSpace::clone() const
     return new KoAlphaColorSpace();
 }
 
+bool KoAlphaColorSpace::preferCompositionInSourceColorSpace() const
+{
+    return true;
+}

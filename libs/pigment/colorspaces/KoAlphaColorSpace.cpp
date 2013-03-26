@@ -296,22 +296,6 @@ quint8 KoAlphaColorSpace::difference(const quint8 *src1, const quint8 *src2) con
     return qAbs(src2[PIXEL_MASK] - src1[PIXEL_MASK]);
 }
 
-bool KoAlphaColorSpace::convertPixelsTo(const quint8 *src,
-                                        quint8 *dst, const KoColorSpace * dstColorSpace,
-                                        quint32 numPixels,
-                                        KoColorConversionTransformation::Intent /*renderingIntent*/,
-                                        KoColorConversionTransformation::ConversionFlags /*conversionFlags*/) const
-{
-    // No lcms trickery here, we are only a opacity channel
-    qint32 size = dstColorSpace->pixelSize();
-
-    memset(dst, 0, numPixels * size);
-    dstColorSpace->applyInverseAlphaU8Mask(dst, src, numPixels);
-
-    return true;
-
-}
-
 QString KoAlphaColorSpace::channelValueText(const quint8 *pixel, quint32 channelIndex) const
 {
     Q_ASSERT(channelIndex < channelCount());

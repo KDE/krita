@@ -20,6 +20,8 @@
 #include "KoColorConversionAlphaTransformation.h"
 
 #include "KoColorSpace.h"
+#include "KoIntegerMaths.h"
+#include "KoColorSpaceTraits.h"
 #include "KoColorModelStandardIds.h"
 
 /**
@@ -60,6 +62,29 @@ void KoColorConversionFromAlphaTransformation::transform(const quint8 *src, quin
     }
 }
 
+class KoColorConversionGrayAU8FromAlphaTransformation : public KoColorConversionTransformation
+{
+public:
+    KoColorConversionGrayAU8FromAlphaTransformation(const KoColorSpace* srcCs,
+                                                    const KoColorSpace* dstCs,
+                                                    Intent renderingIntent,
+                                                    KoColorConversionTransformation::ConversionFlags conversionFlags)
+        : KoColorConversionTransformation(srcCs, dstCs, renderingIntent, conversionFlags)
+    {
+    }
+    virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const {
+        while (nPixels > 0) {
+
+            dst[0] = *src;
+            dst[1] = 255;
+
+            src ++;
+            dst += 2;
+            nPixels--;
+        }
+    }
+};
+
 //------ KoColorConversionFromAlphaTransformationFactory ------//
 
 KoColorConversionFromAlphaTransformationFactory::KoColorConversionFromAlphaTransformationFactory(const QString& _dstModelId, const QString& _dstDepthId, const QString& _dstProfileName)
@@ -74,17 +99,22 @@ KoColorConversionTransformation* KoColorConversionFromAlphaTransformationFactory
 {
     Q_ASSERT(canBeSource(srcColorSpace));
     Q_ASSERT(canBeDestination(dstColorSpace));
-    return new KoColorConversionFromAlphaTransformation(srcColorSpace, dstColorSpace, renderingIntent, conversionFlags);
+
+    if (dstColorSpace->id() == "GRAYA") {
+        return new KoColorConversionGrayAU8FromAlphaTransformation(srcColorSpace, dstColorSpace, renderingIntent, conversionFlags);
+    } else {
+        return new KoColorConversionFromAlphaTransformation(srcColorSpace, dstColorSpace, renderingIntent, conversionFlags);
+    }
 }
 
 bool KoColorConversionFromAlphaTransformationFactory::conserveColorInformation() const
 {
-    return true;
+    return false;
 }
 
 bool KoColorConversionFromAlphaTransformationFactory::conserveDynamicRange() const
 {
-    return true;
+    return false;
 }
 
 //------ KoColorConversionToAlphaTransformation ------//
@@ -124,6 +154,31 @@ void KoColorConversionToAlphaTransformation::transform(const quint8 *src, quint8
     }
 }
 
+//------ KoColorConversionGrayAU8ToAlphaTransformation ------//
+
+class KoColorConversionGrayAU8ToAlphaTransformation : public KoColorConversionTransformation
+{
+public:
+    KoColorConversionGrayAU8ToAlphaTransformation(const KoColorSpace* srcCs,
+                                                  const KoColorSpace* dstCs,
+                                                  Intent renderingIntent,
+                                                  ConversionFlags conversionFlags)
+        : KoColorConversionTransformation(srcCs, dstCs, renderingIntent, conversionFlags)
+    {
+    }
+
+    virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
+    {
+        while (nPixels > 0) {
+
+            *dst = UINT8_MULT(src[0], src[1]);
+
+            src += 2;
+            dst ++;
+            nPixels --;
+        }
+    }
+};
 
 //------ KoColorConversionToAlphaTransformationFactory ------//
 
@@ -139,7 +194,12 @@ KoColorConversionTransformation* KoColorConversionToAlphaTransformationFactory::
 {
     Q_ASSERT(canBeSource(srcColorSpace));
     Q_ASSERT(canBeDestination(dstColorSpace));
-    return new KoColorConversionToAlphaTransformation(srcColorSpace, dstColorSpace, renderingIntent, conversionFlags);
+
+    if (srcColorSpace->id() == "GRAYA") {
+        return new KoColorConversionGrayAU8ToAlphaTransformation(srcColorSpace, dstColorSpace, renderingIntent, conversionFlags);
+    } else {
+        return new KoColorConversionToAlphaTransformation(srcColorSpace, dstColorSpace, renderingIntent, conversionFlags);
+    }
 }
 
 bool KoColorConversionToAlphaTransformationFactory::conserveColorInformation() const

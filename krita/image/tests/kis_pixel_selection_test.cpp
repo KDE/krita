@@ -29,6 +29,7 @@
 #include "kis_image.h"
 #include "kis_paint_layer.h"
 #include "kis_paint_device.h"
+#include "kis_fixed_paint_device.h"
 #include "kis_pixel_selection.h"
 #include "testutil.h"
 #include "kis_fill_painter.h"
@@ -230,6 +231,53 @@ void KisPixelSelectionTest::testUndo()
     }
 
     QCOMPARE(psel->selectedExactRect(), QRect(50, 50, 200, 100));
+}
+
+void KisPixelSelectionTest::testCrossColorSpacePainting()
+{
+    QRect r0(0,0,50,50);
+    QRect r1(40,40,60,60);
+    QRect r2(80,40,50,50);
+    QRect r3(85,45,45,45);
+
+    KisPixelSelectionSP psel1 = new KisPixelSelection();
+    psel1->select(r0);
+
+    const KoColorSpace *cs = psel1->preferredDabColorSpace();
+
+    KisPaintDeviceSP dev1 = new KisPaintDevice(cs);
+    KisFixedPaintDeviceSP dev2 = new KisFixedPaintDevice(cs);
+    KisFixedPaintDeviceSP dev3 = new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
+
+    dev1->fill(r1, KoColor(Qt::white, cs));
+    dev2->fill(r2.x(), r2.y(), r2.width(), r2.height() ,KoColor(Qt::white, cs).data());
+    dev3->fill(r3.x(), r3.y(), r3.width(), r3.height() ,KoColor(Qt::white, cs).data());
+
+    KisPainter painter(psel1);
+
+    painter.bitBlt(r1.topLeft(), dev1, r1);
+    QCOMPARE(psel1->selectedExactRect(), r0 | r1);
+
+    painter.bltFixed(r2.x(), r2.y(), dev2, r2.x(), r2.y(), r2.width(), r2.height());
+    QCOMPARE(psel1->selectedExactRect(), r0 | r1 | r2);
+
+    psel1->clear();
+    psel1->select(r0);
+
+    painter.bitBltWithFixedSelection(r3.x(), r3.y(), dev1, dev3, r3.x(), r3.y(), r3.x(), r3.y(), r3.width(), r3.height());
+    QCOMPARE(psel1->selectedExactRect(), r0 | (r1 & r3));
+
+    psel1->clear();
+    psel1->select(r0);
+
+    painter.bltFixedWithFixedSelection(r3.x(), r3.y(), dev2, dev3, r3.x(), r3.y(), r3.x(), r3.y(), r3.width(), r3.height());
+    QCOMPARE(psel1->selectedExactRect(), r0 | (r2 & r3));
+
+    psel1->clear();
+    psel1->select(r0);
+
+    painter.fill(r3.x(), r3.y(), r3.width(), r3.height(), KoColor(Qt::white, cs));
+    QCOMPARE(psel1->selectedExactRect(), r0 | r3);
 }
 
 QTEST_KDEMAIN(KisPixelSelectionTest, NoGUI)

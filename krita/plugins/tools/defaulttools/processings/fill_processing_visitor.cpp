@@ -59,7 +59,7 @@ void FillProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapt
     QRect fillRect = m_resources->image()->bounds();
 
     if (m_selectionOnly) {
-        KisPaintDeviceSP filledDevice = new KisPaintDevice(device->colorSpace());
+        KisPaintDeviceSP filledDevice = new KisPaintDevice(device->preferredDabColorSpace());
         KisFillPainter fillPainter(filledDevice);
         fillPainter.setProgress(helper.updater());
 

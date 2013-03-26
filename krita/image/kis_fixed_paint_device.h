@@ -135,7 +135,7 @@ public:
      */
     virtual QImage convertToQImage(const KoColorProfile *dstProfile, qint32 x, qint32 y, qint32 w, qint32 h,
                                    KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
-                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::Empty);
+                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::Empty) const;
 
     /**
      * Create an RGBA QImage from a rectangle in the paint device. The
@@ -147,7 +147,7 @@ public:
      */
     virtual QImage convertToQImage(const KoColorProfile *dstProfile,
                                    KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
-                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::Empty);
+                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::Empty) const;
 
     /**
      * Clear the given rectangle to transparent black.

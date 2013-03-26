@@ -98,32 +98,13 @@ public:
 public:
 
     /**
-     * gets this layer's selection
-     * @return the lsyer's selection
-     */
-    KisSelectionSP selection() const;
-
-    /**
      * sets the selection of this layer to a copy of
      * selection
      * @param selection the selection to set
      * @return void
      */
+
     void setSelection(KisSelectionSP selection);
-
-    /**
-     * gets the state of the selection - if it is shown or
-     * not.
-     * @return the state of the selection
-     */
-    bool showSelection() const;
-
-    /**
-     * sets the state of the selection to show or !show
-     * @param show the state to set the selection visibility to
-     * @return void
-     */
-    void setShowSelection(bool show);
 
     /**
      * gets this layer's x coordinate, taking selection into account

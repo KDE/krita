@@ -55,11 +55,10 @@ KisGridPaintOp::KisGridPaintOp(const KisGridPaintOpSettings *settings, KisPainte
     m_ySpacing = m_properties.gridHeight * m_properties.scale;
     m_spacing = m_xSpacing;
 
-    m_dab = new KisPaintDevice( painter->device()->colorSpace() );
+    m_dab = new KisPaintDevice( painter->device()->preferredDabColorSpace() );
     m_painter = new KisPainter(m_dab);
     m_painter->setPaintColor( painter->paintColor() );
     m_painter->setFillStyle(KisPainter::FillStyleForegroundColor);
-    m_pixelSize = settings->node()->paintDevice()->colorSpace()->pixelSize();
 #ifdef BENCHMARK
     m_count = m_total = 0;
 #endif
@@ -102,7 +101,9 @@ qreal KisGridPaintOp::paintAt(const KisPaintInformation& info)
     qreal yStep = gridHeight / (qreal)divide;
     qreal xStep = gridWidth / (qreal)divide;
 
-    KisRandomSubAccessorSP acc = m_settings->node()->paintDevice()->createRandomSubAccessor();
+    KisRandomSubAccessorSP acc = painter()->device()->createRandomSubAccessor();
+    KoColor sourcePixel(painter()->device()->colorSpace());
+
 
     QRectF tile;
     KoColor color( painter()->paintColor() );
@@ -135,10 +136,13 @@ qreal KisGridPaintOp::paintAt(const KisPaintInformation& info)
             if (shouldColor){
                 if (m_colorProperties.sampleInputColor){
                     acc->moveTo(tile.center().x(), tile.center().y());
-                    acc->sampledOldRawData( color.data() );
+                    acc->sampledOldRawData( sourcePixel.data() );
+                    color = sourcePixel;
+                    color.convertTo(m_dab->colorSpace());
+
                 }
                 else {
-                    memcpy(color.data(),painter()->paintColor().data(), m_pixelSize);
+                    color = painter()->paintColor();
                 }
 
                 // mix the color with background color

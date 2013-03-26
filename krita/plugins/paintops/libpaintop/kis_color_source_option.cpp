@@ -86,15 +86,15 @@ KisColorSource* KisColorSourceOption::createColorSource(const KisPainter* _paint
       case PLAIN:
         return new KisPlainColorSource(_painter->backgroundColor(), _painter->paintColor());
       case GRADIENT:
-        return new KisGradientColorSource(_painter->gradient(), _painter->device()->colorSpace() );
+        return new KisGradientColorSource(_painter->gradient(), _painter->device()->preferredDabColorSpace() );
       case UNIFORM_RANDOM:
         return new KisUniformRandomColorSource();
       case TOTAL_RANDOM:
         return new KisTotalRandomColorSource();
       case PATTERN:
-        return new KisPatternColorSource(_painter->pattern()->paintDevice(_painter->device()->colorSpace()), _painter->pattern()->width(), _painter->pattern()->height(), false);
+        return new KisPatternColorSource(_painter->pattern()->paintDevice(_painter->device()->preferredDabColorSpace()), _painter->pattern()->width(), _painter->pattern()->height(), false);
       case PATTERN_LOCKED:
-        return new KisPatternColorSource(_painter->pattern()->paintDevice(_painter->device()->colorSpace()), _painter->pattern()->width(), _painter->pattern()->height(), true);
+        return new KisPatternColorSource(_painter->pattern()->paintDevice(_painter->device()->preferredDabColorSpace()), _painter->pattern()->width(), _painter->pattern()->height(), true);
     }
     qFatal("Unknown color source");
     return 0;

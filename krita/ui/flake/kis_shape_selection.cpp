@@ -339,9 +339,6 @@ void KisShapeSelection::renderSelection(KisPaintDeviceSP projection, const QRect
     QTransform resolutionMatrix;
     resolutionMatrix.scale(m_image->xRes(), m_image->yRes());
 
-    QTime t;
-    t.start();
-
     KisPaintDeviceSP tmpMask = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
 
     const qint32 MASK_IMAGE_WIDTH = 256;
@@ -374,7 +371,6 @@ void KisShapeSelection::renderSelection(KisPaintDeviceSP projection, const QRect
     KisPainter painter(projection);
     painter.bitBlt(r.x(), r.y(), tmpMask, r.x(), r.y(), r.width(), r.height());
     painter.end();
-    dbgRender << "Shape selection rendering: " << t.elapsed();
 }
 
 void KisShapeSelection::setDirty()

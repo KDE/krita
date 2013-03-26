@@ -81,7 +81,7 @@ KisDistanceInformation KisDynaPaintOp::paintLine(const KisPaintInformation &pi1,
     if (!painter()) return KisDistanceInformation();
 
     if (!m_dab) {
-        m_dab = new KisPaintDevice(painter()->device()->colorSpace());
+        m_dab = new KisPaintDevice(painter()->device()->preferredDabColorSpace());
     } else {
         m_dab->clear();
     }

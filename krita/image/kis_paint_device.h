@@ -527,7 +527,16 @@ public:
     /**
      * @return the colorspace of the pixels in this paint device
      */
-    const KoColorSpace *colorSpace() const;
+    const KoColorSpace* colorSpace() const;
+
+    /**
+     * The color space that should preferrably be used for the dabs
+     * which are going to be used for bitBlt'ing into this device.
+     *
+     * This is used by the KisPixelSelection to ensure the
+     * compositioning is done right way.
+     */
+    virtual const KoColorSpace* preferredDabColorSpace() const;
 
     /**
      * @return the internal datamanager that keeps the pixels.

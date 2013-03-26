@@ -433,6 +433,7 @@ double HairyBrush::computeMousePressure(double distance)
 
 void HairyBrush::colorifyBristles(KisRandomConstAccessorSP acc, const KoColorSpace * cs, QPointF point)
 {
+    KoColor bristleColor(m_dab->colorSpace());
     KoColor color(cs);
     int pixelSize = cs->pixelSize();
 
@@ -444,7 +445,9 @@ void HairyBrush::colorifyBristles(KisRandomConstAccessorSP acc, const KoColorSpa
         int y = qRound(b->y() + point.y());
         acc->moveTo(x,y);
         memcpy(color.data(), acc->oldRawData(), pixelSize);
-        b->setColor(color);
+        bristleColor = color;
+        bristleColor.convertTo(m_dab->colorSpace());
+        b->setColor(bristleColor);
     }
 
 }

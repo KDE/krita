@@ -29,12 +29,13 @@
 
 #include "kis_pressure_flow_opacity_option_widget.h"
 #include "kis_curve_option_widget.h"
+#include "kis_node.h"
 #include <kis_slider_spin_box.h>
 
 #include "ui_wdgflowopacityoption.h"
 
 KisFlowOpacityOptionWidget::KisFlowOpacityOptionWidget():
-    KisCurveOptionWidget(new KisFlowOpacityOption(), true)
+    KisCurveOptionWidget(new KisFlowOpacityOption(0), true)
 {
     QWidget* widget = new QWidget();
     

@@ -95,35 +95,6 @@ KisSelection::KisSelection(const KisSelection& rhs)
     }
 }
 
-KisSelection &KisSelection::operator=(const KisSelection &rhs)
-{
-    if (&rhs != this) {
-        m_d->isVisible = rhs.m_d->isVisible;
-        m_d->defaultBounds = rhs.m_d->defaultBounds;
-        m_d->parentNode = 0; // not supposed to be shared
-
-        if(rhs.m_d->projection) {
-            m_d->projection = new KisPixelSelection(*rhs.m_d->projection);
-            Q_ASSERT(m_d->projection);
-        }
-
-        if(rhs.m_d->pixelSelection) {
-            m_d->pixelSelection = new KisPixelSelection(*rhs.m_d->pixelSelection);
-            Q_ASSERT(m_d->pixelSelection);
-        }
-
-        if (rhs.m_d->shapeSelection) {
-            m_d->shapeSelection = rhs.m_d->shapeSelection->clone(this);
-            Q_ASSERT(m_d->shapeSelection);
-            Q_ASSERT(m_d->shapeSelection != rhs.m_d->shapeSelection);
-        }
-        else {
-            m_d->shapeSelection = 0;
-        }
-    }
-    return *this;
-}
-
 KisSelection::~KisSelection()
 {
     delete m_d->shapeSelection;
@@ -174,14 +145,6 @@ KisPixelSelectionSP KisSelection::pixelSelection() const
 KisSelectionComponent* KisSelection::shapeSelection() const
 {
     return m_d->shapeSelection;
-}
-
-void KisSelection::setPixelSelection(KisPixelSelectionSP pixelSelection)
-{
-    m_d->pixelSelection = pixelSelection;
-    if(m_d->pixelSelection) {
-        m_d->pixelSelection->setParentNode(m_d->parentNode);
-    }
 }
 
 void KisSelection::setShapeSelection(KisSelectionComponent* shapeSelection)

@@ -72,8 +72,6 @@ public:
      */
     KisSelection(const KisSelection& rhs);
 
-    KisSelection &operator=(const KisSelection &rhs);
-
     /**
      * Delete the selection. The shape selection component is deleted, the
      * pixel selection component is contained in a shared pointer, so that
@@ -106,7 +104,6 @@ public:
      */
     KisSelectionComponent* shapeSelection() const;
 
-    void setPixelSelection(KisPixelSelectionSP pixelSelection);
     void setShapeSelection(KisSelectionComponent* shapeSelection);
 
     /**

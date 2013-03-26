@@ -52,7 +52,7 @@ public:
 
     KisSelectionComponent* clone(KisSelection*);
 
-    KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, QRect rect) const;
+    const KoColorSpace* preferredDabColorSpace() const;
 
     /**
      * Fill the specified rect with the specified selectedness.

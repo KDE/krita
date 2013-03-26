@@ -96,7 +96,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
         m_painter = new KisPainter(dab);
         m_painter->setFillStyle(KisPainter::FillStyleForegroundColor);
         m_painter->setMaskImageSize(m_shapeProperties->width, m_shapeProperties->height );
-        m_pixelSize = dab->colorSpace()->pixelSize();
+        m_dabPixelSize = dab->colorSpace()->pixelSize();
         if (m_colorProperties->useRandomHSV){
             m_transfo = dab->colorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
         }
@@ -200,17 +200,22 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
 
         if (shouldColor){
             if (m_colorProperties->sampleInputColor){
+                KoColor tempColor(source->colorSpace());
+
                 subAcc->moveTo(nx+x, ny+y);
-                subAcc->sampledOldRawData( m_inkColor.data() );
+                subAcc->sampledOldRawData(tempColor.data());
+
+                tempColor.convertTo(m_inkColor.colorSpace());
+                m_inkColor = tempColor;
             }else{
-                 //revert the color
-                 memcpy(m_inkColor.data(),color.data(), m_pixelSize);
+                //revert the color
+                m_inkColor = color;
             }
 
             // mix the color with background color
             if (m_colorProperties->mixBgColor)
             {
-                KoMixColorsOp * mixOp = source->colorSpace()->mixColorsOp();
+                KoMixColorsOp * mixOp = dab->colorSpace()->mixColorsOp();
 
                 const quint8 *colors[2];
                 colors[0] = m_inkColor.data();
@@ -279,7 +284,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
                 ix = qRound(nx + x);
                 iy = qRound(ny + y);
                 accessor->moveTo(ix, iy);
-                memcpy(accessor->rawData(), m_inkColor.data(), m_pixelSize);
+                memcpy(accessor->rawData(), m_inkColor.data(), m_dabPixelSize);
                 break;
             }
             case 4:
@@ -376,19 +381,19 @@ void SprayBrush::paintParticle(KisRandomAccessorSP &writeAccessor, const KoColor
 
     pcolor.setOpacity(btl);
     writeAccessor->moveTo(ipx  , ipy);
-    memcpy(writeAccessor->rawData(), pcolor.data(), m_pixelSize);
+    memcpy(writeAccessor->rawData(), pcolor.data(), m_dabPixelSize);
 
     pcolor.setOpacity(btr);
     writeAccessor->moveTo(ipx + 1, ipy);
-    memcpy(writeAccessor->rawData(), pcolor.data(), m_pixelSize);
+    memcpy(writeAccessor->rawData(), pcolor.data(), m_dabPixelSize);
 
     pcolor.setOpacity(bbl);
     writeAccessor->moveTo(ipx, ipy + 1);
-    memcpy(writeAccessor->rawData(), pcolor.data(), m_pixelSize);
+    memcpy(writeAccessor->rawData(), pcolor.data(), m_dabPixelSize);
 
     pcolor.setOpacity(bbr);
     writeAccessor->moveTo(ipx + 1, ipy + 1);
-    memcpy(writeAccessor->rawData(), pcolor.data(), m_pixelSize);
+    memcpy(writeAccessor->rawData(), pcolor.data(), m_dabPixelSize);
 }
 
 void SprayBrush::paintCircle(KisPainter * painter, qreal x, qreal y, int radius, int steps)

@@ -94,7 +94,7 @@ qreal KisSprayPaintOp::paintAt(const KisPaintInformation& info)
     }
 
     if (!m_dab) {
-        m_dab = new KisPaintDevice(painter()->device()->colorSpace());
+        m_dab = new KisPaintDevice(painter()->device()->preferredDabColorSpace());
     } else {
         m_dab->clear();
     }
@@ -109,7 +109,7 @@ qreal KisSprayPaintOp::paintAt(const KisPaintInformation& info)
     setCurrentScale(scale);
 
     m_sprayBrush.paint( m_dab,
-                        m_settings->node()->paintDevice(),
+                        painter()->device(),
                         info,
                         rotation,
                         scale,

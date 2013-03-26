@@ -1044,12 +1044,16 @@ quint32 KisPaintDevice::channelCount() const
     return _channelCount;
 }
 
-const KoColorSpace *KisPaintDevice::colorSpace() const
+const KoColorSpace* KisPaintDevice::colorSpace() const
 {
     Q_ASSERT(m_d->colorSpace != 0);
     return m_d->colorSpace;
 }
 
+const KoColorSpace* KisPaintDevice::preferredDabColorSpace() const
+{
+    return colorSpace();
+}
 
 qint32 KisPaintDevice::x() const
 {

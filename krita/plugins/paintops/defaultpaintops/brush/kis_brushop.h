@@ -72,7 +72,7 @@ private:
     QList<KisPressureHSVOption*> m_hsvOptions;
 
     KoColorTransformation *m_hsvTransformation;
-    KisPaintDeviceSP m_dab;
+    KisPaintDeviceSP m_lineCacheDevice;
     KisPaintDeviceSP m_colorSourceDevice;
 };
 

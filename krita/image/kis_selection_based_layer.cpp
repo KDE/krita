@@ -39,7 +39,6 @@
 struct KisSelectionBasedLayer::Private
 {
 public:
-    bool showSelection;
     KisSelectionSP selection;
     KisPaintDeviceSP paintDevice;
 };
@@ -59,8 +58,6 @@ KisSelectionBasedLayer::KisSelectionBasedLayer(KisImageWSP image,
     else
         setSelection(selection);
 
-    setShowSelection(true);
-
     m_d->paintDevice = new KisPaintDevice(this, image->colorSpace(), new KisDefaultBounds(image));
 }
 
@@ -71,7 +68,6 @@ KisSelectionBasedLayer::KisSelectionBasedLayer(const KisSelectionBasedLayer& rhs
         , m_d(new Private())
 {
     setSelection(rhs.m_d->selection);
-    setShowSelection(rhs.m_d->showSelection);
 
     m_d->paintDevice = new KisPaintDevice(*rhs.m_d->paintDevice.data());
 }
@@ -184,11 +180,6 @@ void KisSelectionBasedLayer::resetCache(const KoColorSpace *colorSpace)
     }
 }
 
-KisSelectionSP KisSelectionBasedLayer::selection() const
-{
-    return m_d->selection;
-}
-
 void KisSelectionBasedLayer::setSelection(KisSelectionSP selection)
 {
     if (selection) {
@@ -197,15 +188,6 @@ void KisSelectionBasedLayer::setSelection(KisSelectionSP selection)
         m_d->selection->updateProjection();
     } else
         m_d->selection = 0;
-}
-
-bool KisSelectionBasedLayer::showSelection() const
-{
-    return m_d->showSelection;
-}
-void KisSelectionBasedLayer::setShowSelection(bool b)
-{
-    m_d->showSelection = b;
 }
 
 qint32 KisSelectionBasedLayer::x() const

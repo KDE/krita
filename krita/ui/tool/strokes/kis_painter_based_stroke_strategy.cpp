@@ -110,7 +110,7 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
             dynamic_cast<KisIndirectPaintingSupport*>(node.data());
 
         if (indirect) {
-            targetDevice = new KisPaintDevice(node, paintDevice->colorSpace());
+            targetDevice = new KisPaintDevice(node, paintDevice->preferredDabColorSpace());
             indirect->setTemporaryTarget(targetDevice);
             indirect->setTemporaryCompositeOp(m_resources->compositeOp());
             indirect->setTemporaryOpacity(m_resources->opacity());

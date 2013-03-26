@@ -102,7 +102,7 @@ QImage KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size, bool r
     if (!size.isValid() || size.isNull()) {
         size = d->defaultSize;
     }
-    QString imageKey = "p_" + QString::number(style->styleId()) + "_" + QString::number(size.width()) + "_" + QString::number(size.height());
+    QString imageKey = "p_" + QString::number(reinterpret_cast<unsigned long>(style)) + "_" + QString::number(size.width()) + "_" + QString::number(size.height());
 
     if (!recreateThumbnail && d->thumbnailCache.object(imageKey)) {
         return QImage(*(d->thumbnailCache.object(imageKey)));
@@ -150,12 +150,16 @@ QImage KoStyleThumbnailer::thumbnail(KoCharacterStyle *characterStyle, KoParagra
     } else if ((! (flags & UseStyleNameText)) && d->thumbnailText.isEmpty()) {
         return QImage();
     }
+    else if (characterStyle == 0) {
+        return QImage();
+    }
 
     if (!size.isValid() || size.isNull()) {
         size = d->defaultSize;
     }
-    int paragraphStyleId = (paragraphStyle)?paragraphStyle->styleId():0;
-    QString imageKey = "c_" + QString::number(characterStyle->styleId()) + "_" + "p_" + QString::number(paragraphStyleId) + "_" + QString::number(size.width()) + "_" + QString::number(size.height());
+    QString imageKey = "c_" + QString::number(reinterpret_cast<unsigned long>(characterStyle)) + "_"
+                     + "p_" + QString::number(reinterpret_cast<unsigned long>(paragraphStyle)) + "_"
+                     + QString::number(size.width()) + "_" + QString::number(size.height());
 
     if (!recreateThumbnail && d->thumbnailCache.object(imageKey)) {
         return QImage(*(d->thumbnailCache.object(imageKey)));
@@ -282,13 +286,13 @@ void KoStyleThumbnailer::layoutThumbnail(QSize size, QImage *im, KoStyleThumbnai
 
 void KoStyleThumbnailer::removeFromCache(KoParagraphStyle *style)
 {
-    QString imageKey = "p_" + QString::number(style->styleId()) + "_";
+    QString imageKey = "p_" + QString::number(reinterpret_cast<unsigned long>(style)) + "_";
     removeFromCache(imageKey);
 }
 
 void KoStyleThumbnailer::removeFromCache(KoCharacterStyle *style)
 {
-    QString imageKey = "c_" + QString::number(style->styleId()) + "_";
+    QString imageKey = "c_" + QString::number(reinterpret_cast<unsigned long>(style)) + "_";
     removeFromCache(imageKey);
 }
 

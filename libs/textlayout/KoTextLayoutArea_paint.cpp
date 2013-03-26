@@ -740,6 +740,7 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, QTextBlock &block, b
                         }
                         decorateTabsAndFormatting(painter, currentFragment, line, startOfFragmentInBlock, tabList, currentTabStop, showFormattingCharacters);
 
+                        // underline preedit strings
                         if (layout->preeditAreaPosition() > -1) {
                             int start = block.layout()->preeditAreaPosition();
                             int end = block.layout()->preeditAreaPosition() + block.layout()->preeditAreaText().length();

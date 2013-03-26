@@ -221,7 +221,7 @@ void KisColorSelector::resizeEvent(QResizeEvent* e) {
             }
         }
     }
-    if(m_canvas) {
+    if(m_canvas && m_canvas->resourceManager()) {
         if (m_lastColorRole==Foreground) {
             setColor(m_canvas->resourceManager()->foregroundColor().toQColor());
         } else {

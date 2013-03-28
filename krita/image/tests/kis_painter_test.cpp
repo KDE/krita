@@ -334,7 +334,7 @@ void KisPainterTest::testSelectionBitBltFixedSelection()
     KisFixedPaintDeviceSP fixedSelection = new KisFixedPaintDevice(cs);
     fixedSelection->setRect(QRect(0, 0, 20, 20));
     fixedSelection->initialize();
-    KoColor fill(Qt::black, cs);
+    KoColor fill(Qt::white, cs);
     fixedSelection->fill(5, 5, 10, 10, fill.data());
     fixedSelection->convertTo(KoColorSpaceRegistry::instance()->alpha8());
 

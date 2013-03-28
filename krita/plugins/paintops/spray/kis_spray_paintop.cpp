@@ -109,7 +109,7 @@ qreal KisSprayPaintOp::paintAt(const KisPaintInformation& info)
     setCurrentScale(scale);
 
     m_sprayBrush.paint( m_dab,
-                        painter()->device(),
+                        m_settings->node()->paintDevice(),
                         info,
                         rotation,
                         scale,

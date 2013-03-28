@@ -27,8 +27,8 @@
 #include <QRect>
 
 #include <kis_types.h>
-#include <kis_random_sub_accessor.h>
 #include <kis_iterator_ng.h>
+#include <kis_cross_device_color_picker.h>
 
 #include <cmath>
 #include <ctime>
@@ -167,12 +167,7 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
                                              QPointF pos, qreal subPixelX, qreal subPixelY, int dabX, int dabY)
 {
     KisFixedPaintDeviceSP mask = new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
-    m_srcAcc = layer->createRandomSubAccessor();
-
-    const KoColorSpace *dabColorSpace = dab->colorSpace();
-    const KoColorSpace *sourceColorSpace = layer->colorSpace();
-    int dabPixelSize = dabColorSpace->pixelSize();
-
+    KisCrossDeviceColorPicker colorPicker(layer, dab);
 
     qreal fWidth = maskWidth(scale);
     qreal fHeight = maskHeight(scale);
@@ -190,8 +185,6 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
 
     m_centerX = dstWidth  * 0.5  + subPixelX;
     m_centerY = dstHeight * 0.5  + subPixelY;
-
-    quint8* dabPointer = dab->data();
 
     // major axis
     m_majorAxis = 2.0/fWidth;
@@ -222,7 +215,9 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
     mask->initialize();
     quint8* maskPointer = mask->data();
     qint8 maskPixelSize = mask->pixelSize();
-    KoColor sourcePixel(sourceColorSpace);
+
+    quint8* dabPointer = dab->data();
+    int dabPixelSize = dab->colorSpace()->pixelSize();
 
     for (int y = 0; y <  dstHeight; y++){
         for (int x = 0; x < dstWidth; x++){
@@ -235,16 +230,8 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
             distance = norme(rmaskX * m_majorAxis, rmaskY * m_minorAxis);
             if (distance > 1.0){
                 // leave there OPACITY TRANSPARENT pixel (default pixel)
-                m_srcAcc->moveTo(x + dabX, y + dabY);
-                m_srcAcc->sampledOldRawData(sourcePixel.data());
 
-                sourceColorSpace->convertPixelsTo(sourcePixel.data(),
-                                                  dabPointer,
-                                                  dabColorSpace,
-                                                  1,
-                                                  KoColorConversionTransformation::IntentPerceptual,
-                                                  KoColorConversionTransformation::Empty);
-
+                colorPicker.pickOldColor(x + dabX, y + dabY, dabPointer);
                 dabPointer += dabPixelSize;
 
                 *maskPointer = OPACITY_TRANSPARENT_U8;
@@ -273,20 +260,12 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
                 maskX = qRound(maskX);
                 maskY = qRound(maskY);
             }
-            m_srcAcc->moveTo(maskX, maskY);
 
             if (m_properties->useOldData) {
-                m_srcAcc->sampledOldRawData(sourcePixel.data());
+                colorPicker.pickOldColor(maskX, maskY, dabPointer);
             } else {
-                m_srcAcc->sampledRawData(sourcePixel.data());
+                colorPicker.pickColor(maskX, maskY, dabPointer);
             }
-
-            sourceColorSpace->convertPixelsTo(sourcePixel.data(),
-                                              dabPointer,
-                                              dabColorSpace,
-                                              1,
-                                              KoColorConversionTransformation::IntentPerceptual,
-                                              KoColorConversionTransformation::Empty);
 
             dabPointer += dabPixelSize;
 

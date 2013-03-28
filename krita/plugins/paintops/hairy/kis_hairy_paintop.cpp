@@ -50,7 +50,7 @@ KisHairyPaintOp::KisHairyPaintOp(const KisBrushBasedPaintOpSettings *settings, K
     if (!settings->node()) {
         m_dev = 0;
     } else {
-        m_dev = painter->device();
+        m_dev = settings->node()->paintDevice();
     }
 
     KisBrushOption brushOption;

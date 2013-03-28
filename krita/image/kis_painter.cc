@@ -1217,7 +1217,7 @@ void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& pen)
     Q_ASSERT(pen.color() == Qt::white);
 
     if (!d->fillPainter) {
-        d->polygon = new KisPaintDevice(d->device->colorSpace());
+        d->polygon = new KisPaintDevice(d->device->preferredDabColorSpace());
         d->fillPainter = new KisFillPainter(d->polygon);
     } else {
         d->polygon->clear();

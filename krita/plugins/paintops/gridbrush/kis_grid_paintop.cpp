@@ -29,7 +29,7 @@
 #include <kis_types.h>
 #include <kis_paintop.h>
 #include <kis_paint_information.h>
-#include <kis_random_sub_accessor.h>
+#include <kis_cross_device_color_picker.h>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -101,12 +101,9 @@ qreal KisGridPaintOp::paintAt(const KisPaintInformation& info)
     qreal yStep = gridHeight / (qreal)divide;
     qreal xStep = gridWidth / (qreal)divide;
 
-    KisRandomSubAccessorSP acc = painter()->device()->createRandomSubAccessor();
-    KoColor sourcePixel(painter()->device()->colorSpace());
-
-
     QRectF tile;
     KoColor color( painter()->paintColor() );
+    KisCrossDeviceColorPicker colorPicker(m_settings->node()->paintDevice(), color);
 
     qreal vertBorder = m_properties.vertBorder;
     qreal horzBorder = m_properties.horizBorder;
@@ -135,14 +132,7 @@ qreal KisGridPaintOp::paintAt(const KisPaintInformation& info)
             // do color transformation
             if (shouldColor){
                 if (m_colorProperties.sampleInputColor){
-                    acc->moveTo(tile.center().x(), tile.center().y());
-                    acc->sampledOldRawData( sourcePixel.data() );
-                    color = sourcePixel;
-                    color.convertTo(m_dab->colorSpace());
-
-                }
-                else {
-                    color = painter()->paintColor();
+                    colorPicker.pickOldColor(tile.center().x(), tile.center().y(), color.data());
                 }
 
                 // mix the color with background color

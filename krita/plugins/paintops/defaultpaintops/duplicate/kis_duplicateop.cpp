@@ -76,6 +76,8 @@ KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings *settings, KisPainte
     m_healing = settings->getBool(DUPLICATE_HEALING);
     m_perspectiveCorrection = settings->getBool(DUPLICATE_CORRECT_PERSPECTIVE);
     m_moveSourcePoint = settings->getBool(DUPLICATE_MOVE_SOURCE_POINT);
+
+    m_srcdev = new KisPaintDevice(source()->preferredDabColorSpace());
 }
 
 KisDuplicateOp::~KisDuplicateOp()
@@ -162,10 +164,6 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     if (srcPoint.y() < 0)
         srcPoint.setY(0);
-    if (!(m_srcdev && !(*m_srcdev->colorSpace() == *source()->colorSpace()))) {
-        m_srcdev = new KisPaintDevice(source()->colorSpace());
-    }
-    Q_CHECK_PTR(m_srcdev);
 
     // Perspective correction ?
     KisImageWSP image = settings->m_image;
@@ -206,23 +204,10 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
 
     } else {
-        // TODO make it a mode to get the behaviour where the source is rawData
-        // Or, copy the source data on the temporary device:
-//         KisPainter copyPainter(m_srcdev);
-//         copyPainter.setCompositeOp(COMPOSITE_COPY);
-//         copyPainter.bitBlt(0, 0, source(), srcPoint.x(), srcPoint.y(), sw, sh);
-//         copyPainter.end();
-        // Do the copy manually to access old raw data
-        KisHLineIteratorSP dstIt = m_srcdev->createHLineIteratorNG(0, 0, sw);
-        KisHLineConstIteratorSP srcIt = source()->createHLineConstIteratorNG(srcPoint.x(), srcPoint.y(), sw);
-        int pixelSize = m_srcdev->pixelSize();
-        for (int i = 0; i < sh; ++i) {
-            do {
-                memcpy(dstIt->rawData(), srcIt->oldRawData(), pixelSize);
-            } while (dstIt->nextPixel() && srcIt->nextPixel());
-            dstIt->nextRow();
-            srcIt->nextRow();
-        }
+        KisPainter copyPainter(m_srcdev);
+        copyPainter.setCompositeOp(COMPOSITE_COPY);
+        copyPainter.bitBltOldData(0, 0, source(), srcPoint.x(), srcPoint.y(), sw, sh);
+        copyPainter.end();
     }
 
     // heal ?

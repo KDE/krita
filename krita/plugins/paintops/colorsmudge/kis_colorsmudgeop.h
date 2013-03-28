@@ -34,7 +34,7 @@
 #include "kis_overlay_mode_option.h"
 #include "kis_rate_option.h"
 #include "kis_smudge_option.h"
-#include "kis_random_accessor_ng.h"
+#include <kis_cross_device_color_picker.h>
 
 class QPointF;
 class KoAbstractGradient;
@@ -54,8 +54,8 @@ private:
 
 private:
     bool                      m_firstRun;
-    KisPaintDeviceSP          m_tempDev;
     KisImageWSP               m_image;
+    KisPaintDeviceSP          m_tempDev;
     KisPainter*               m_tempPainter;
     const KoAbstractGradient* m_gradient;
     KisPressureSizeOption     m_sizeOption;
@@ -69,7 +69,7 @@ private:
     KisPressureGradientOption m_gradientOption;
     QRect                     m_maskBounds;
     KisFixedPaintDeviceSP     m_maskDab;
-    KisRandomAccessorSP       m_smudgeAccessor;
+    KisCrossDeviceColorPickerInt m_colorPicker;
 };
 
 #endif // _KIS_COLORSMUDGEOP_H_

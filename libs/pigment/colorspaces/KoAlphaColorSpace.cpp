@@ -32,6 +32,7 @@
 #include "KoIntegerMaths.h"
 #include "KoCompositeOpOver.h"
 #include "KoCompositeOpErase.h"
+#include "KoCompositeOpCopy2.h"
 #include "KoCompositeOpAlphaDarken.h"
 #include <colorprofiles/KoDummyColorProfile.h>
 
@@ -263,6 +264,7 @@ KoAlphaColorSpace::KoAlphaColorSpace() :
     m_compositeOps << new KoCompositeOpOver<AlphaU8Traits>(this)
             << new CompositeClear(this)
             << new KoCompositeOpErase<AlphaU8Traits>(this)
+            << new KoCompositeOpCopy2<AlphaU8Traits>(this)
             << new CompositeSubtract(this)
             << new CompositeMultiply(this)
             << new KoCompositeOpAlphaDarken<AlphaU8Traits>(this);

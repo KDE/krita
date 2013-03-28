@@ -35,12 +35,15 @@
 #include <kis_brush_based_paintop_settings.h>
 #include <kis_fixed_paint_device.h>
 
+
 KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings, KisPainter* painter, KisImageWSP image):
     KisBrushBasedPaintOp(settings, painter),
-    m_firstRun(true), m_tempDev(0), m_image(image),
+    m_firstRun(true), m_image(image),
+    m_tempDev(new KisPaintDevice(painter->device()->preferredDabColorSpace())),
+    m_tempPainter(new KisPainter(m_tempDev)),
     m_smudgeRateOption("SmudgeRate"),
     m_colorRateOption("ColorRate"),
-    m_smudgeAccessor(painter->device()->createRandomAccessorNG(0, 0))
+    m_colorPicker(painter->device(), painter->paintColor())
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
@@ -65,8 +68,6 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings,
     m_gradientOption.sensor()->reset();
 
     m_gradient    = painter->gradient();
-    m_tempDev     = new KisPaintDevice(painter->device()->colorSpace());
-    m_tempPainter = new KisPainter(m_tempDev);
 }
 
 KisColorSmudgeOp::~KisColorSmudgeOp()
@@ -120,7 +121,7 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
 
     // save the old opacity value and composite mode
     quint8               oldOpacity = painter()->opacity();
-    const KoCompositeOp* oldMode    = painter()->compositeOp();
+    QString              oldModeId = painter()->compositeOp()->id();
     qreal                fpOpacity  = (qreal(oldOpacity) / 255.0) * m_opacityOption.getOpacityf(info);
 
     // update the brush mask if needed. the mask is then stored in m_maskDab
@@ -173,13 +174,14 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
         m_tempPainter->bitBlt(0, 0, painter()->device(), x, y, m_maskBounds.width(), m_maskBounds.height());
     }
     else {
-        const KoColorSpace* cs = painter()->device()->colorSpace();
         qint32 px = x + m_maskBounds.width()  / 2;
         qint32 py = y + m_maskBounds.height() / 2;
         // get the pixel on the canvas that lies beneath the center
         // of the dab and fill  the temporary paint device with that color
-        m_smudgeAccessor->moveTo(px, py);
-        m_tempPainter->fill(0, 0, m_maskBounds.width(), m_maskBounds.height(), KoColor(m_smudgeAccessor->rawData(), cs));
+
+        KoColor color = painter()->paintColor();
+        m_colorPicker.pickColor(px, py, color.data());
+        m_tempPainter->fill(0, 0, m_maskBounds.width(), m_maskBounds.height(), color);
     }
 
     // if the user selected the color smudge option
@@ -196,13 +198,13 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
         // composite mode
         KoColor color = painter()->paintColor();
         m_gradientOption.apply(color, m_gradient, info);
-        m_tempPainter->setCompositeOp(oldMode);
+        m_tempPainter->setCompositeOp(oldModeId);
         m_tempPainter->fill(0, 0, m_maskBounds.width(), m_maskBounds.height(), color);
     }
 
     // restore orginal opacy and composite mode values
     painter()->setOpacity(oldOpacity);
-    painter()->setCompositeOp(oldMode);
+    painter()->setCompositeOp(oldModeId);
 
     if(m_spacingOption.isChecked())
         return spacing(m_spacingOption.apply(info));

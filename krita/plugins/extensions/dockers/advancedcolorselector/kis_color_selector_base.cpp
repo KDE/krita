@@ -462,7 +462,7 @@ const KoColorSpace* KisColorSelectorBase::colorSpace() const
                                 resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
         if (currentNode) {
             m_colorSpace = currentNode->paintDevice() ?
-                currentNode->paintDevice()->preferredDabColorSpace() :
+                currentNode->paintDevice()->compositionSourceColorSpace() :
                 currentNode->colorSpace();
         } else {
             m_colorSpace=m_canvas->view()->image()->colorSpace();

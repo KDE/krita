@@ -118,7 +118,7 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const Ki
     if (w < 1) return;
     if (h < 1) return;
 
-    KisPaintDeviceSP patternLayer = pattern->paintDevice(device()->preferredDabColorSpace());
+    KisPaintDeviceSP patternLayer = pattern->paintDevice(device()->compositionSourceColorSpace());
     fillRect(x1, y1, w, h, patternLayer, QRect(0, 0, pattern->width(), pattern->height()));
 }
 
@@ -185,7 +185,7 @@ void KisFillPainter::fillColor(int startX, int startY, KisPaintDeviceSP projecti
     genericFillStart(startX, startY, projection);
 
     // Now create a layer and fill it
-    KisPaintDeviceSP filled = KisPaintDeviceSP(new KisPaintDevice(device()->preferredDabColorSpace()));
+    KisPaintDeviceSP filled = device()->createCompositionSourceDevice();
     Q_CHECK_PTR(filled);
     KisFillPainter painter(filled);
     painter.fillRect(0, 0, m_width, m_height, paintColor());
@@ -199,7 +199,7 @@ void KisFillPainter::fillPattern(int startX, int startY, KisPaintDeviceSP projec
     genericFillStart(startX, startY, projection);
 
     // Now create a layer and fill it
-    KisPaintDeviceSP filled = KisPaintDeviceSP(new KisPaintDevice(device()->preferredDabColorSpace()));
+    KisPaintDeviceSP filled = device()->createCompositionSourceDevice();
     Q_CHECK_PTR(filled);
     KisFillPainter painter(filled);
     painter.fillRect(0, 0, m_width, m_height, pattern());

@@ -530,13 +530,67 @@ public:
     const KoColorSpace* colorSpace() const;
 
     /**
-     * The color space that should preferrably be used for the dabs
-     * which are going to be used for bitBlt'ing into this device.
+     * There is quite a common technique in Krita. It is used in
+     * cases, when we want to paint something over a paint device
+     * using the composition, opacity or selection. E.g. painting a
+     * dab in a paint op, filling the selection in the Fill Tool.
+     * Such work is usually done in the following way:
      *
-     * This is used by the KisPixelSelection to ensure the
-     * compositioning is done right way.
+     * 1) Create a paint device
+     *
+     * 2) Fill it with the desired color or data
+     *
+     * 3) Create a KisPainter and set all the properties of the
+     *    trasaction: selection, compositeOp, opacity and etc.
+     *
+     * 4) Paint a newly created paint device over the destination
+     *    device.
+     *
+     * The following two methods (createCompositionSourceDevice() or
+     * createCompositionSourceDeviceFixed())should be used for the
+     * accomplishing the step 1). The point is that the desired color
+     * space of the temporary device may not coincide with the color
+     * space of the destination. That is the case, for example, for
+     * the alpha8() colorspace used in the selections. So for such
+     * devices the temporary target would have a different (grayscale)
+     * color space.
+     *
+     * So there are two rules of thumb:
+     *
+     * 1) If you need a temporary device which you are going to fill
+     *    with some data and then paint over the paint device, create
+     *    it with either createCompositionSourceDevice() or
+     *    createCompositionSourceDeviceFixed().
+     *
+     * 2) Do *not* expect that the color spaces of the destination and
+     *    the temporary device would coincide. If you need to copy a
+     *    single pixel from one device to another, you can use
+     *    KisCrossDeviceColorPicker class, that will handle all the
+     *    necessary conversions for you.
+     *
+     * \see createCompositionSourceDeviceFixed()
+     * \see compositionSourceColorSpace()
+     * \see KisCrossDeviceColorPicker
+     * \see KisCrossDeviceColorPickerInt
      */
-    virtual const KoColorSpace* preferredDabColorSpace() const;
+    KisPaintDeviceSP createCompositionSourceDevice() const;
+
+    /**
+     * This is a convenience method for createCompositionSourceDevice()
+     *
+     * \see createCompositionSourceDevice()
+     */
+    KisFixedPaintDeviceSP createCompositionSourceDeviceFixed() const;
+
+    /**
+     * This is a lowlevel method for the principle used in
+     * createCompositionSourceDevice(). In most of the cases the paint
+     * device creation methods should be used instead of this function.
+     *
+     * \see createCompositionSourceDevice()
+     * \see createCompositionSourceDeviceFixed()
+     */
+    virtual const KoColorSpace* compositionSourceColorSpace() const;
 
     /**
      * @return the internal datamanager that keeps the pixels.

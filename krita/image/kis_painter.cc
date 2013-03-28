@@ -629,7 +629,7 @@ void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoC
     if(width == 0 || height == 0 || d->device.isNull())
         return;
 
-    KoColor srcColor(color, d->device->preferredDabColorSpace());
+    KoColor srcColor(color, d->device->compositionSourceColorSpace());
     qint32  dstY          = y;
     qint32  rowsRemaining = height;
 
@@ -1120,7 +1120,7 @@ void KisPainter::fillPainterPath(const QPainterPath& path, const QRect &requeste
     // create a mask for the actual polygon coverage.
 
     if (!d->fillPainter) {
-        d->polygon = new KisPaintDevice(d->device->preferredDabColorSpace());
+        d->polygon = d->device->createCompositionSourceDevice();
         d->fillPainter = new KisFillPainter(d->polygon);
     } else {
         d->polygon->clear();
@@ -1217,7 +1217,7 @@ void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& pen)
     Q_ASSERT(pen.color() == Qt::white);
 
     if (!d->fillPainter) {
-        d->polygon = new KisPaintDevice(d->device->preferredDabColorSpace());
+        d->polygon = d->device->createCompositionSourceDevice();
         d->fillPainter = new KisFillPainter(d->polygon);
     } else {
         d->polygon->clear();
@@ -2258,7 +2258,7 @@ void KisPainter::setPaintColor(const KoColor& color)
 {
     d->paintColor = color;
     if (d->device) {
-        d->paintColor.convertTo(d->device->preferredDabColorSpace());
+        d->paintColor.convertTo(d->device->compositionSourceColorSpace());
     }
 }
 
@@ -2271,7 +2271,7 @@ void KisPainter::setBackgroundColor(const KoColor& color)
 {
     d->backgroundColor = color;
     if (d->device) {
-        d->backgroundColor.convertTo(d->device->preferredDabColorSpace());
+        d->backgroundColor.convertTo(d->device->compositionSourceColorSpace());
     }
 }
 

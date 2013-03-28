@@ -52,7 +52,7 @@ KisExperimentPaintOp::KisExperimentPaintOp(const KisExperimentPaintOpSettings *s
     m_useMirroring = painter->hasMirroring();
 
     if (m_useMirroring) {
-        m_originalDevice = new KisPaintDevice(painter->device()->preferredDabColorSpace());
+        m_originalDevice = source()->createCompositionSourceDevice();
         m_originalPainter = new KisPainter(m_originalDevice);
         m_originalPainter->setCompositeOp(COMPOSITE_COPY);
         m_originalPainter->setPaintColor(painter->paintColor());

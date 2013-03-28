@@ -55,7 +55,7 @@ KisGridPaintOp::KisGridPaintOp(const KisGridPaintOpSettings *settings, KisPainte
     m_ySpacing = m_properties.gridHeight * m_properties.scale;
     m_spacing = m_xSpacing;
 
-    m_dab = new KisPaintDevice( painter->device()->preferredDabColorSpace() );
+    m_dab = source()->createCompositionSourceDevice();
     m_painter = new KisPainter(m_dab);
     m_painter->setPaintColor( painter->paintColor() );
     m_painter->setFillStyle(KisPainter::FillStyleForegroundColor);

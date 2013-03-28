@@ -243,7 +243,7 @@ void KisPixelSelectionTest::testCrossColorSpacePainting()
     KisPixelSelectionSP psel1 = new KisPixelSelection();
     psel1->select(r0);
 
-    const KoColorSpace *cs = psel1->preferredDabColorSpace();
+    const KoColorSpace *cs = psel1->compositionSourceColorSpace();
 
     KisPaintDeviceSP dev1 = new KisPaintDevice(cs);
     KisFixedPaintDeviceSP dev2 = new KisFixedPaintDevice(cs);

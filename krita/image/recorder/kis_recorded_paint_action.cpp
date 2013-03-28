@@ -270,7 +270,7 @@ void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info, KoUpd
     if (d->paintIncremental) {
         target = node->paintDevice();
     } else {
-        target = new KisPaintDevice(node->paintDevice()->preferredDabColorSpace());
+        target = node->paintDevice()->createCompositionSourceDevice();
     }
 
     KisPainter* painter = createPainter(target);

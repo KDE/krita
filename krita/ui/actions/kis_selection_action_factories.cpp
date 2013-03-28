@@ -144,7 +144,7 @@ void KisFillActionFactory::run(const QString &fillSource, KisView2 *view)
     KisSelectionSP selection = view->selection();
     QRect selectedRect = selection ?
         selection->selectedRect() : view->image()->bounds();
-    KisPaintDeviceSP filled = new KisPaintDevice(node->paintDevice()->preferredDabColorSpace());
+    KisPaintDeviceSP filled = node->paintDevice()->createCompositionSourceDevice();
 
     QString actionName;
 

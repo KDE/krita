@@ -72,7 +72,7 @@ qreal KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
     //------START SIMPLE ERROR CATCHING-------
     if (!painter()->device()) return 1;
     if (!m_hatchedDab)
-        m_hatchedDab = new KisPaintDevice(painter()->device()->preferredDabColorSpace());
+        m_hatchedDab = source()->createCompositionSourceDevice();
     else
         m_hatchedDab->clear();
 

@@ -539,7 +539,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
     qint32 endx = startx + width - 1;
     qint32 endy = starty + height - 1;
 
-    KisPaintDeviceSP dev = new KisPaintDevice(device()->preferredDabColorSpace());
+    KisPaintDeviceSP dev = device()->createCompositionSourceDevice();
 
     const KoColorSpace * colorSpace = dev->colorSpace();
     KoColor color(colorSpace);

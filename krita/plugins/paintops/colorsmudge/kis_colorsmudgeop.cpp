@@ -39,7 +39,7 @@
 KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings, KisPainter* painter, KisImageWSP image):
     KisBrushBasedPaintOp(settings, painter),
     m_firstRun(true), m_image(image),
-    m_tempDev(new KisPaintDevice(painter->device()->preferredDabColorSpace())),
+    m_tempDev(painter->device()->createCompositionSourceDevice()),
     m_tempPainter(new KisPainter(m_tempDev)),
     m_smudgeRateOption("SmudgeRate"),
     m_colorRateOption("ColorRate"),

@@ -52,7 +52,7 @@ public:
 
     KisSelectionComponent* clone(KisSelection*);
 
-    const KoColorSpace* preferredDabColorSpace() const;
+    const KoColorSpace* compositionSourceColorSpace() const;
 
     /**
      * Fill the specified rect with the specified selectedness.

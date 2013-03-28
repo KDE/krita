@@ -32,6 +32,7 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoColorModelStandardIds.h>
 #include <KoIntegerMaths.h>
 
 #include "kis_global.h"
@@ -45,7 +46,7 @@
 #include "kis_selection_component.h"
 #include "kis_pixel_selection.h"
 #include "kis_repeat_iterators_pixel.h"
-#include <KoColorModelStandardIds.h>
+#include "kis_fixed_paint_device.h"
 
 #include "tiles3/kis_hline_iterator.h"
 #include "tiles3/kis_vline_iterator.h"
@@ -1050,7 +1051,17 @@ const KoColorSpace* KisPaintDevice::colorSpace() const
     return m_d->colorSpace;
 }
 
-const KoColorSpace* KisPaintDevice::preferredDabColorSpace() const
+KisPaintDeviceSP KisPaintDevice::createCompositionSourceDevice() const
+{
+    return new KisPaintDevice(compositionSourceColorSpace());
+}
+
+KisFixedPaintDeviceSP KisPaintDevice::createCompositionSourceDeviceFixed() const
+{
+    return new KisFixedPaintDevice(compositionSourceColorSpace());
+}
+
+const KoColorSpace* KisPaintDevice::compositionSourceColorSpace() const
 {
     return colorSpace();
 }

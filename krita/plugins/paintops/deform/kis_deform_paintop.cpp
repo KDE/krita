@@ -90,7 +90,7 @@ qreal KisDeformPaintOp::paintAt(const KisPaintInformation& info)
     if (!painter()) return m_spacing;
     if (!m_dev) return m_spacing;
 
-    KisFixedPaintDeviceSP dab = cachedDab(painter()->device()->preferredDabColorSpace());
+    KisFixedPaintDeviceSP dab = cachedDab(source()->compositionSourceColorSpace());
 
     qint32 x;
     qreal subPixelX;

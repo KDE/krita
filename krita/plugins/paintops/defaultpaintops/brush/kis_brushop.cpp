@@ -148,13 +148,13 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
         m_colorSource->applyColorTransformation(m_hsvTransformation);
     }
 
-    KisFixedPaintDeviceSP dab = m_dabCache->fetchDab(device->preferredDabColorSpace(),
-                                                    m_colorSource,
-                                                    scale, scale,
-                                                    rotation,
-                                                    info,
-                                                    xFraction, yFraction,
-                                                    m_softnessOption.apply(info));
+    KisFixedPaintDeviceSP dab = m_dabCache->fetchDab(device->compositionSourceColorSpace(),
+                                                     m_colorSource,
+                                                     scale, scale,
+                                                     rotation,
+                                                     info,
+                                                     xFraction, yFraction,
+                                                     m_softnessOption.apply(info));
 
     painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
 
@@ -175,7 +175,7 @@ KisDistanceInformation KisBrushOp::paintLine(const KisPaintInformation& pi1, con
     if(m_sharpnessOption.isChecked() && m_brush && (m_brush->width() == 1) && (m_brush->height() == 1)) {
 
         if (!m_lineCacheDevice) {
-            m_lineCacheDevice = new KisPaintDevice(painter()->device()->preferredDabColorSpace());
+            m_lineCacheDevice = source()->createCompositionSourceDevice();
         } else {
             m_lineCacheDevice->clear();
         }

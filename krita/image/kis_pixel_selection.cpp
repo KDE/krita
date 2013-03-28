@@ -66,7 +66,7 @@ KisPixelSelection::~KisPixelSelection()
     delete m_d;
 }
 
-const KoColorSpace *KisPixelSelection::preferredDabColorSpace() const
+const KoColorSpace *KisPixelSelection::compositionSourceColorSpace() const
 {
     return KoColorSpaceRegistry::instance()->
         colorSpace(GrayAColorModelID.id(),

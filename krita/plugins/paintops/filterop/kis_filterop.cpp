@@ -52,7 +52,7 @@ KisFilterOp::KisFilterOp(const KisFilterOpSettings *settings, KisPainter *painte
     Q_UNUSED(image);
     Q_ASSERT(settings);
     Q_ASSERT(painter);
-    m_tmpDevice = new KisPaintDevice(source()->preferredDabColorSpace());
+    m_tmpDevice = source()->createCompositionSourceDevice();
     m_sizeOption.readOptionSetting(settings);
     m_sizeOption.sensor()->reset();
     m_filter = KisFilterRegistry::instance()->get(settings->getString(FILTER_ID));
@@ -120,7 +120,7 @@ qreal KisFilterOp::paintAt(const KisPaintInformation& info)
 
     // Apply the mask on the paint device (filter before mask because edge pixels may be important)
 
-    KisFixedPaintDeviceSP fixedDab = new KisFixedPaintDevice(painter()->device()->preferredDabColorSpace());
+    KisFixedPaintDeviceSP fixedDab = source()->createCompositionSourceDeviceFixed();
     fixedDab->setRect(rect);
     fixedDab->initialize();
 

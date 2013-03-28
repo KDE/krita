@@ -77,7 +77,7 @@ KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings *settings, KisPainte
     m_perspectiveCorrection = settings->getBool(DUPLICATE_CORRECT_PERSPECTIVE);
     m_moveSourcePoint = settings->getBool(DUPLICATE_MOVE_SOURCE_POINT);
 
-    m_srcdev = new KisPaintDevice(source()->preferredDabColorSpace());
+    m_srcdev = source()->createCompositionSourceDevice();
 }
 
 KisDuplicateOp::~KisDuplicateOp()

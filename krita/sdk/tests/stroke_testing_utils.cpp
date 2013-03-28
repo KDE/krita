@@ -91,14 +91,15 @@ KoCanvasResourceManager* utils::createResourceManager(KisImageWSP image,
 
     KisPaintOpPresetSP preset;
 
-    QString fullFileName = TestUtil::fetchDataFileLazy(presetFileName);
+    if (!presetFileName.isEmpty()) {
+        QString fullFileName = TestUtil::fetchDataFileLazy(presetFileName);
+        preset = new KisPaintOpPreset(fullFileName);
+        bool presetValid = preset->load();
+        Q_ASSERT(presetValid);
 
-    preset = new KisPaintOpPreset(fullFileName);
-    bool presetValid = preset->load();
-    Q_ASSERT(presetValid);
-
-    i.setValue(preset);
-    manager->setResource(KisCanvasResourceProvider::CurrentPaintOpPreset, i);
+        i.setValue(preset);
+        manager->setResource(KisCanvasResourceProvider::CurrentPaintOpPreset, i);
+    }
 
     i.setValue(COMPOSITE_OVER);
     manager->setResource(KisCanvasResourceProvider::CurrentCompositeOp, i);

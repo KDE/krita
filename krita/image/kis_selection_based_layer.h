@@ -98,13 +98,21 @@ public:
 public:
 
     /**
+     * Returns the selection of the layer
+     *
+     * Do not mix it with selection() which returns
+     * the currently active selection of the image
+     */
+    KisSelectionSP internalSelection() const;
+
+    /**
      * sets the selection of this layer to a copy of
      * selection
      * @param selection the selection to set
      * @return void
      */
 
-    void setSelection(KisSelectionSP selection);
+    void setInternalSelection(KisSelectionSP selection);
 
     /**
      * gets this layer's x coordinate, taking selection into account

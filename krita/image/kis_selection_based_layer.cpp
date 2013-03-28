@@ -56,7 +56,7 @@ KisSelectionBasedLayer::KisSelectionBasedLayer(KisImageWSP image,
     if (!selection)
         initSelection();
     else
-        setSelection(selection);
+        setInternalSelection(selection);
 
     m_d->paintDevice = new KisPaintDevice(this, image->colorSpace(), new KisDefaultBounds(image));
 }
@@ -67,7 +67,7 @@ KisSelectionBasedLayer::KisSelectionBasedLayer(const KisSelectionBasedLayer& rhs
         , KisNodeFilterInterface(rhs)
         , m_d(new Private())
 {
-    setSelection(rhs.m_d->selection);
+    setInternalSelection(rhs.m_d->selection);
 
     m_d->paintDevice = new KisPaintDevice(*rhs.m_d->paintDevice.data());
 }
@@ -180,7 +180,12 @@ void KisSelectionBasedLayer::resetCache(const KoColorSpace *colorSpace)
     }
 }
 
-void KisSelectionBasedLayer::setSelection(KisSelectionSP selection)
+KisSelectionSP KisSelectionBasedLayer::internalSelection() const
+{
+    return m_d->selection;
+}
+
+void KisSelectionBasedLayer::setInternalSelection(KisSelectionSP selection)
 {
     if (selection) {
         m_d->selection = new KisSelection(*selection.data());
@@ -246,7 +251,7 @@ QRect KisSelectionBasedLayer::exactBounds() const
 
 QImage KisSelectionBasedLayer::createThumbnail(qint32 w, qint32 h)
 {
-    KisSelectionSP originalSelection = selection();
+    KisSelectionSP originalSelection = internalSelection();
     KisPaintDeviceSP originalDevice = original();
 
     return originalDevice && originalSelection ?

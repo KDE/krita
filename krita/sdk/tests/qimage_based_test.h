@@ -81,8 +81,8 @@ protected:
         Q_ASSERT(configuration);
 
         KisAdjustmentLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration, 0);
-        blur1->selection()->clear();
-        blur1->selection()->getOrCreatePixelSelection()->select(blurRect);
+        blur1->internalSelection()->clear();
+        blur1->internalSelection()->getOrCreatePixelSelection()->select(blurRect);
         blur1->setX(blurShift.x());
         blur1->setY(blurShift.y());
 

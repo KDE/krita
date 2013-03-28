@@ -71,6 +71,19 @@ KisSelection::KisSelection(const KisSelection& rhs)
     : KisShared(),
       m_d(new Private)
 {
+    copyFrom(rhs);
+}
+
+KisSelection &KisSelection::operator=(const KisSelection &rhs)
+{
+    if (&rhs != this) {
+        copyFrom(rhs);
+    }
+    return *this;
+}
+
+void KisSelection::copyFrom(const KisSelection &rhs)
+{
     m_d->isVisible = rhs.m_d->isVisible;
     m_d->defaultBounds = rhs.m_d->defaultBounds;
     m_d->parentNode = 0; // not supposed to be shared

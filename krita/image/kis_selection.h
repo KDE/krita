@@ -71,6 +71,7 @@ public:
      * Copy the selection. The selection components are copied, too.
      */
     KisSelection(const KisSelection& rhs);
+    KisSelection& operator=(const KisSelection &rhs);
 
     /**
      * Delete the selection. The shape selection component is deleted, the
@@ -174,6 +175,8 @@ private:
     friend class KisMaskTest;
     friend class KisAdjustmentLayerTest;
     KisNodeWSP parentNode() const;
+
+    void copyFrom(const KisSelection &rhs);
 
 private:
 

@@ -244,7 +244,12 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
             qreal* solution = new qreal [ 3 * sw * sh ];
             do {
                 err = minimizeEnergy(&matrix[0], &solution[0], sw, sh);
-                memcpy(&matrix[0], &solution[0], sw * sh * 3 * sizeof(qreal));
+
+                // swap pointers
+                qreal *tmp = matrix;
+                matrix = solution;
+                solution = tmp;
+
                 iter++;
             } while (err > 0.00001 && iter < 100);
             delete [] solution;

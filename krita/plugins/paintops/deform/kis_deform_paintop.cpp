@@ -90,68 +90,54 @@ qreal KisDeformPaintOp::paintAt(const KisPaintInformation& info)
     if (!painter()) return m_spacing;
     if (!m_dev) return m_spacing;
 
-#if 1
-        KisFixedPaintDeviceSP dab = cachedDab(painter()->device()->colorSpace());
+    KisFixedPaintDeviceSP dab = cachedDab(source()->compositionSourceColorSpace());
 
-        qint32 x;
-        qreal subPixelX;
-        qint32 y;
-        qreal subPixelY;
+    qint32 x;
+    qreal subPixelX;
+    qint32 y;
+    qreal subPixelY;
 
-        QPointF pt = info.pos();
-        if (m_sizeProperties.jitterEnabled){
-                pt.setX(pt.x() + (  ( m_sizeProperties.diameter * drand48() ) - m_sizeProperties.diameter * 0.5) * m_sizeProperties.jitterMovementAmount);
-                pt.setY(pt.y() + (  ( m_sizeProperties.diameter * drand48() ) - m_sizeProperties.diameter * 0.5) * m_sizeProperties.jitterMovementAmount);
-        }
+    QPointF pt = info.pos();
+    if (m_sizeProperties.jitterEnabled){
+        pt.setX(pt.x() + (  ( m_sizeProperties.diameter * drand48() ) - m_sizeProperties.diameter * 0.5) * m_sizeProperties.jitterMovementAmount);
+        pt.setY(pt.y() + (  ( m_sizeProperties.diameter * drand48() ) - m_sizeProperties.diameter * 0.5) * m_sizeProperties.jitterMovementAmount);
+    }
 
-        qreal rotation = m_rotationOption.apply(info);
+    qreal rotation = m_rotationOption.apply(info);
 
-        // Deform Brush is capable of working with zero scale,
-        // so no additional checks for 'zero'ness are needed
-        qreal scale = m_sizeOption.apply(info);
+    // Deform Brush is capable of working with zero scale,
+    // so no additional checks for 'zero'ness are needed
+    qreal scale = m_sizeOption.apply(info);
 
-        setCurrentRotation(rotation);
-        setCurrentScale(scale);
+    setCurrentRotation(rotation);
+    setCurrentScale(scale);
 
-        rotation += m_sizeProperties.rotation;
-        scale *= m_sizeProperties.scale;
+    rotation += m_sizeProperties.rotation;
+    scale *= m_sizeProperties.scale;
 
-        QPointF pos = pt - m_deformBrush.hotSpot(scale,rotation);
+    QPointF pos = pt - m_deformBrush.hotSpot(scale,rotation);
 
-        splitCoordinate(pos.x(), &x, &subPixelX);
-        splitCoordinate(pos.y(), &y, &subPixelY);
+    splitCoordinate(pos.x(), &x, &subPixelX);
+    splitCoordinate(pos.y(), &y, &subPixelY);
 
-        KisFixedPaintDeviceSP mask = m_deformBrush.paintMask(dab, m_dev,
-                                                             scale,rotation,
-                                                             info.pos(),
-                                                             subPixelX,subPixelY,
-                                                             x,y
-                                                             );
+    KisFixedPaintDeviceSP mask = m_deformBrush.paintMask(dab, m_dev,
+                                                         scale,rotation,
+                                                         info.pos(),
+                                                         subPixelX,subPixelY,
+                                                         x,y
+        );
 
-        // this happens for the first dab of the move mode, we need more information for being able to move
-        if (!mask){
-            return m_spacing;
-        }
-
-        quint8 origOpacity = m_opacityOption.apply(painter(), info);
-        painter()->bltFixedWithFixedSelection(x,y, dab, mask, mask->bounds().width() ,mask->bounds().height() );
-        painter()->renderMirrorMask(QRect(QPoint(x,y), QSize(mask->bounds().width() ,mask->bounds().height())),dab,mask);
-        painter()->setOpacity(origOpacity);
-
+    // this happens for the first dab of the move mode, we need more information for being able to move
+    if (!mask){
         return m_spacing;
-#else
-        if (!m_dab) {
-            m_dab = new KisPaintDevice(painter()->device()->colorSpace());
-        } else {
-            m_dab->clear();
-        }
+    }
 
-        m_deformBrush.oldDeform(m_dab,m_dev,info.pos());
-        QRect rc = m_dab->extent();
-        painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
-        return m_spacing;
-#endif
+    quint8 origOpacity = m_opacityOption.apply(painter(), info);
+    painter()->bltFixedWithFixedSelection(x,y, dab, mask, mask->bounds().width() ,mask->bounds().height() );
+    painter()->renderMirrorMask(QRect(QPoint(x,y), QSize(mask->bounds().width() ,mask->bounds().height())),dab,mask);
+    painter()->setOpacity(origOpacity);
 
+    return m_spacing;
 }
 
 

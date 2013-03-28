@@ -76,6 +76,8 @@ KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings *settings, KisPainte
     m_healing = settings->getBool(DUPLICATE_HEALING);
     m_perspectiveCorrection = settings->getBool(DUPLICATE_CORRECT_PERSPECTIVE);
     m_moveSourcePoint = settings->getBool(DUPLICATE_MOVE_SOURCE_POINT);
+
+    m_srcdev = source()->createCompositionSourceDevice();
 }
 
 KisDuplicateOp::~KisDuplicateOp()
@@ -162,10 +164,6 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     if (srcPoint.y() < 0)
         srcPoint.setY(0);
-    if (!(m_srcdev && !(*m_srcdev->colorSpace() == *source()->colorSpace()))) {
-        m_srcdev = new KisPaintDevice(source()->colorSpace());
-    }
-    Q_CHECK_PTR(m_srcdev);
 
     // Perspective correction ?
     KisImageWSP image = settings->m_image;
@@ -206,50 +204,38 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
 
     } else {
-        // TODO make it a mode to get the behaviour where the source is rawData
-        // Or, copy the source data on the temporary device:
-//         KisPainter copyPainter(m_srcdev);
-//         copyPainter.setCompositeOp(COMPOSITE_COPY);
-//         copyPainter.bitBlt(0, 0, source(), srcPoint.x(), srcPoint.y(), sw, sh);
-//         copyPainter.end();
-        // Do the copy manually to access old raw data
-        KisHLineIteratorSP dstIt = m_srcdev->createHLineIteratorNG(0, 0, sw);
-        KisHLineConstIteratorSP srcIt = source()->createHLineConstIteratorNG(srcPoint.x(), srcPoint.y(), sw);
-        int pixelSize = m_srcdev->pixelSize();
-        for (int i = 0; i < sh; ++i) {
-            do {
-                memcpy(dstIt->rawData(), srcIt->oldRawData(), pixelSize);
-            } while (dstIt->nextPixel() && srcIt->nextPixel());
-            dstIt->nextRow();
-            srcIt->nextRow();
-        }
+        KisPainter copyPainter(m_srcdev);
+        copyPainter.setCompositeOp(COMPOSITE_COPY);
+        copyPainter.bitBltOldData(0, 0, source(), srcPoint.x(), srcPoint.y(), sw, sh);
+        copyPainter.end();
     }
 
     // heal ?
 
     if (m_healing) {
-        quint16 dataDevice[4];
-        quint16 dataSrcDev[4];
+        quint16 srcData[4];
+        quint16 tmpData[4];
         qreal* matrix = new qreal[ 3 * sw * sh ];
         // First divide
-        const KoColorSpace* deviceCs = source()->colorSpace();
-        KisHLineConstIteratorSP deviceIt = source()->createHLineConstIteratorNG(x, y, sw);
-        KisHLineIteratorSP srcDevIt = m_srcdev->createHLineIteratorNG(0, 0, sw);
+        const KoColorSpace* srcCs = source()->colorSpace();
+        const KoColorSpace* tmpCs = source()->colorSpace();
+        KisHLineConstIteratorSP srcIt = source()->createHLineConstIteratorNG(x, y, sw);
+        KisHLineIteratorSP tmpIt = m_srcdev->createHLineIteratorNG(0, 0, sw);
         qreal* matrixIt = &matrix[0];
         for (int j = 0; j < sh; j++) {
             for (int i = 0; i < sw; i++) {
-                deviceCs->toLabA16(deviceIt->oldRawData(), (quint8*)dataDevice, 1);
-                deviceCs->toLabA16(srcDevIt->rawData(), (quint8*)dataSrcDev, 1);
+                srcCs->toLabA16(srcIt->oldRawData(), (quint8*)srcData, 1);
+                tmpCs->toLabA16(tmpIt->rawData(), (quint8*)tmpData, 1);
                 // Division
                 for (int k = 0; k < 3; k++) {
-                    matrixIt[k] = dataDevice[k] / (qreal)qMax((int)dataSrcDev [k], 1);
+                    matrixIt[k] = srcData[k] / (qreal)qMax((int)tmpData [k], 1);
                 }
-                deviceIt->nextPixel();
-                srcDevIt->nextPixel();
+                srcIt->nextPixel();
+                tmpIt->nextPixel();
                 matrixIt += 3;
             }
-            deviceIt->nextRow();
-            srcDevIt->nextRow();
+            srcIt->nextRow();
+            tmpIt->nextRow();
         }
         // Minimize energy
         {
@@ -258,31 +244,36 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
             qreal* solution = new qreal [ 3 * sw * sh ];
             do {
                 err = minimizeEnergy(&matrix[0], &solution[0], sw, sh);
-                memcpy(&matrix[0], &solution[0], sw * sh * 3 * sizeof(qreal));
+
+                // swap pointers
+                qreal *tmp = matrix;
+                matrix = solution;
+                solution = tmp;
+
                 iter++;
-            } while (err < 0.00001 && iter < 100);
+            } while (err > 0.00001 && iter < 100);
             delete [] solution;
         }
 
         // Finaly multiply
-        KisHLineIteratorSP deviceIt2 = source()->createHLineIteratorNG(x, y, sw);
-        KisHLineIteratorSP srcDevIt2 = m_srcdev->createHLineIteratorNG(0, 0, sw);
+        KisHLineIteratorSP srcIt2 = source()->createHLineIteratorNG(x, y, sw);
+        KisHLineIteratorSP tmpIt2 = m_srcdev->createHLineIteratorNG(0, 0, sw);
         matrixIt = &matrix[0];
         for (int j = 0; j < sh; j++) {
             for (int i = 0; i < sw; i++) {
-                deviceCs->toLabA16(deviceIt2->rawData(), (quint8*)dataDevice, 1);
-                deviceCs->toLabA16(srcDevIt2->rawData(), (quint8*)dataSrcDev, 1);
+                srcCs->toLabA16(srcIt2->rawData(), (quint8*)srcData, 1);
+                tmpCs->toLabA16(tmpIt2->rawData(), (quint8*)tmpData, 1);
                 // Multiplication
                 for (int k = 0; k < 3; k++) {
-                    dataSrcDev[k] = (int)CLAMP(matrixIt[k] * qMax((int) dataSrcDev[k], 1), 0, 65535);
+                    tmpData[k] = (int)CLAMP(matrixIt[k] * qMax((int) tmpData[k], 1), 0, 65535);
                 }
-                deviceCs->fromLabA16((quint8*)dataSrcDev, srcDevIt2->rawData(), 1);
-                deviceIt2->nextPixel();
-                srcDevIt2->nextPixel();
+                tmpCs->fromLabA16((quint8*)tmpData, tmpIt2->rawData(), 1);
+                srcIt2->nextPixel();
+                tmpIt2->nextPixel();
                 matrixIt += 3;
             }
-            deviceIt2->nextRow();
-            srcDevIt2->nextRow();
+            srcIt2->nextRow();
+            tmpIt2->nextRow();
         }
         delete [] matrix;
     }

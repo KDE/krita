@@ -181,7 +181,7 @@ public slots:
     void rotateLeft90();
     void rotateRight90();
 
-    
+    void saveNodeAsImage();
 public:
 
     // merges the active layer with the layer below it.

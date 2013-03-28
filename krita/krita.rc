@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="42">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="43">
 
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
@@ -95,7 +95,7 @@
   </Menu>
   <Action name="resizelayertoowner"/>
   <Separator/>
-  <Action name="save_layer_as_image"/>
+  <Action name="save_node_as_image"/>
   <Action name="save_groups_as_images"/>
   <Action name="layer_to_image"/>
   <Separator/>

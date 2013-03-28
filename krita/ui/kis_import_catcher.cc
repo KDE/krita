@@ -39,6 +39,7 @@
 #include "kis_doc2.h"
 #include "kis_image.h"
 #include "kis_layer.h"
+#include "kis_painter.h"
 #include "kis_selection.h"
 #include "kis_node_commands_adapter.h"
 #include "kis_group_layer.h"
@@ -55,9 +56,64 @@ public:
     KisDoc2* doc;
     KisView2* view;
     KUrl url;
+
+    void importAsPaintLayer(KisPaintDeviceSP device);
+    void importAsTransparencyMask(KisPaintDeviceSP device);
 };
 
-KisImportCatcher::KisImportCatcher(const KUrl & url, KisView2 * view)
+void KisImportCatcher::Private::importAsPaintLayer(KisPaintDeviceSP device)
+{
+    KisLayerSP newLayer =
+        new KisPaintLayer(view->image(),
+                          url.prettyUrl(),
+                          OPACITY_OPAQUE_U8,
+                          device);
+
+    KisNodeSP parent = 0;
+    KisLayerSP currentActiveLayer = view->activeLayer();
+
+    if (currentActiveLayer) {
+        parent = currentActiveLayer->parent();
+    }
+
+    if (parent.isNull()) {
+        parent = view->image()->rootLayer();
+    }
+
+    KisNodeCommandsAdapter adapter(view);
+    adapter.addNode(newLayer, parent, currentActiveLayer);
+}
+
+void KisImportCatcher::Private::importAsTransparencyMask(KisPaintDeviceSP device)
+{
+    KisLayerSP currentActiveLayer = view->activeLayer();
+
+    if (!currentActiveLayer) {
+        KisNodeSP node = view->activeNode();
+        if (!node) return;
+
+        do {
+            currentActiveLayer = dynamic_cast<KisLayer*>(node.data());
+        } while (!currentActiveLayer && (node = node->parent()));
+
+        if (!currentActiveLayer) return;
+    }
+
+    KisTransparencyMaskSP mask = new KisTransparencyMask();
+    mask->setSelection(new KisSelection(new KisDefaultBounds(currentActiveLayer->image())));
+    mask->setName(url.prettyUrl());
+
+    QRect rc(device->exactBounds());
+    KisPainter painter(mask->paintDevice());
+    painter.bitBlt(rc.topLeft(), device, rc);
+
+    KisNodeCommandsAdapter adapter(view);
+    adapter.addNode(mask,
+                    currentActiveLayer,
+                    currentActiveLayer->lastChild());
+}
+
+KisImportCatcher::KisImportCatcher(const KUrl & url, KisView2 * view, bool importAsLayer)
         : m_d(new Private)
 {
     KisPart2 *part = new KisPart2(0);
@@ -72,44 +128,11 @@ KisImportCatcher::KisImportCatcher(const KUrl & url, KisView2 * view)
 
     KisImageWSP importedImage = m_d->doc->image();
 
-    if (importedImage) {
-        KisLayerSP importedImageLayer =
-                new KisPaintLayer(importedImage.data(),
-                                  importedImage->nextLayerName(),
-                                  OPACITY_OPAQUE_U8,
-                                  importedImage->projection());
-
-        if (!importedImageLayer.isNull()) {
-            QStringList list;
-            list << "KisLayer";
-
-            KisCountVisitor visitor(list, KoProperties());
-            importedImageLayer->accept(visitor);
-
-            if (visitor.count() == 2) {
-                // Don't import the root if this is not a layered image (1 group layer
-                // plus 1 other).
-                importedImageLayer = dynamic_cast<KisLayer*>(importedImageLayer->firstChild().data());
-                if (importedImageLayer)
-                    importedImage->removeNode(importedImageLayer.data());
-            }
-
-            importedImageLayer->setName(m_d->url.prettyUrl());
-            importedImageLayer->setImage(m_d->view->image());
-
-            KisNodeSP parent = 0;
-            KisLayerSP currentActiveLayer = m_d->view->activeLayer();
-
-            if (currentActiveLayer) {
-                parent = currentActiveLayer->parent();
-            }
-
-            if (parent.isNull()) {
-                parent = m_d->view->image()->rootLayer();
-            }
-
-            KisNodeCommandsAdapter adapter(m_d->view);
-            adapter.addNode(importedImageLayer.data(), parent, currentActiveLayer.data());
+    if (importedImage && importedImage->projection()->exactBounds().isValid()) {
+        if (importAsLayer) {
+            m_d->importAsPaintLayer(importedImage->projection());
+        } else {
+            m_d->importAsTransparencyMask(importedImage->projection());
         }
     }
 

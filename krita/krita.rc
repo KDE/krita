@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="43">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="46">
 
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
@@ -86,9 +86,10 @@
 <Menu name="Layer"><text>&amp;Layer</text>
   <Menu name="LayerNew"><text>New</text>
     <Action name="duplicate_layer"/>
-  	<Action name="insert_image_as_layer"/>
-  	<Action name="cut_selection_to_new_layer"/>
-  	<Action name="copy_selection_to_new_layer"/>
+    <Action name="import_layer_from_file"/>
+    <Action name="import_mask_from_file"/>
+    <Action name="cut_selection_to_new_layer"/>
+    <Action name="copy_selection_to_new_layer"/>
     <Action name="create_layer_from_mask"/>
     <Action name="duplicatelayer"/>
     <Action name="add_new_paint_layer"/>

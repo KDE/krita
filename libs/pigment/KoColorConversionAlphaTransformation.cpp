@@ -49,11 +49,17 @@ KoColorConversionFromAlphaTransformation::KoColorConversionFromAlphaTransformati
 
 void KoColorConversionFromAlphaTransformation::transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
 {
+    quint16 data[4];
     qint32 size = dstColorSpace()->pixelSize();
+
+    data[1] = 0;          // a
+    data[2] = 0;          // b
+    data[3] = UINT16_MAX; // A
 
     while (nPixels > 0) {
 
-        dstColorSpace()->setOpacity(dst, *src, 1);
+        data[0] = UINT8_TO_UINT16(*src); // L
+        dstColorSpace()->fromLabA16((quint8*)data, dst, 1);
 
         src ++;
         dst += size;
@@ -141,11 +147,13 @@ KoColorConversionToAlphaTransformation::KoColorConversionToAlphaTransformation(c
 
 void KoColorConversionToAlphaTransformation::transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
 {
+    quint16 data[4];
     qint32 size = srcColorSpace()->pixelSize();
 
     while (nPixels > 0) {
 
-        *dst = srcColorSpace()->opacityU8(src);
+        srcColorSpace()->toLabA16(src, (quint8*)data, 1);
+        *dst = UINT16_TO_UINT8(UINT16_MULT(data[0], data[3])); // L * A
 
         src += size;
         dst ++;

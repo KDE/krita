@@ -96,7 +96,6 @@
 #include "kis_config_notifier.h"
 #include "kis_control_frame.h"
 #include "kis_coordinates_converter.h"
-#include "kis_custom_palette.h"
 #include "kis_doc2.h"
 #include "kis_factory2.h"
 #include "kis_filter_manager.h"
@@ -782,11 +781,7 @@ void KisView2::createActions()
 {
     actionCollection()->addAction(KStandardAction::Preferences,  "preferences", this, SLOT(slotPreferences()));
 
-    KAction* action = new KAction(i18n("Edit Palette..."), this);
-    actionCollection()->addAction("edit_palette", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(slotEditPalette()));
-
-    action = new KAction(i18n("Cleanup removed files..."), this);
+    KAction *action = new KAction(i18n("Cleanup removed files..."), this);
     actionCollection()->addAction("edit_blacklist_cleanup", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotBlacklistCleanup()));
 }
@@ -911,19 +906,6 @@ void KisView2::slotPreferences()
         KisNode* node = dynamic_cast<KisNode*>(image()->rootLayer().data());
         node->updateSettings();
     }
-}
-
-void KisView2::slotEditPalette()
-{
-    QList<KoColorSet*> palettes = KoResourceServerProvider::instance()->paletteServer()->resources();
-
-    KDialog* base = new KDialog(this);
-    base->setCaption(i18n("Edit Palette"));
-    base->setButtons(KDialog::Ok);
-    base->setDefaultButton(KDialog::Ok);
-    KisCustomPalette* cp = new KisCustomPalette(palettes, base, "edit palette", i18n("Edit Palette"), this);
-    base->setMainWidget(cp);
-    base->show();
 }
 
 void KisView2::slotBlacklistCleanup()

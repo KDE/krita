@@ -96,7 +96,7 @@ KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
     m_gradientWidget->setResourceAdapter(adapter);
 
     KoDualColorButton * dual = new KoDualColorButton(view->resourceProvider()->fgColor(), view->resourceProvider()->bgColor(), view, view);
-    dual->setPopDialog(false);
+    dual->setPopDialog(true);
     action  = new KAction(i18n("&Color"), this);
     view->actionCollection()->addAction("dual", action);
     action->setDefaultWidget(dual);

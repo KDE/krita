@@ -38,6 +38,7 @@ public:
     ///@param paintopID id of the paintop for which the presets will be shown
     void setPresetFilter(const KoID & paintopID);
 
+    void showButtons(bool show);
 signals:
     void resourceSelected( KoResource * resource );
     

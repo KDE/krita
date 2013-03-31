@@ -585,6 +585,8 @@ void KisView2::dropEvent(QDropEvent *event)
             }
         }
     }
+    qApp->setActiveWindow(shell());
+    activateWindow();
 }
 
 KoZoomController *KisView2::zoomController() const

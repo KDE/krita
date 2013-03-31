@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="46">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="47">
 
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
@@ -100,8 +100,8 @@
   <Action name="save_groups_as_images"/>
   <Action name="layer_to_image"/>
   <Separator/>
-  <Action name="mirrorX"/>
-  <Action name="mirrorY"/>
+  <Action name="mirrorNodeX"/>
+  <Action name="mirrorNodeY"/>
   <DefineGroup name="layer_transform_merge" append="layer_transform_merge"/>
   <Separator/>
   <DefineGroup name="layer_properties_merge" />

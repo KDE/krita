@@ -9,8 +9,8 @@
            <Action name="rotateImageCCW90"/>
            <Action name="rotateImage180"/>
         <Separator />
-           <Action name="mirrorHorizontal"/>
-           <Action name="mirrorVertical"/>
+           <Action name="mirrorImageHorizontal"/>
+           <Action name="mirrorImageVertical"/>
        </Menu>
     </Menu>
 

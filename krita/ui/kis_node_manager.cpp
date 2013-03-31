@@ -150,16 +150,16 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     m_d->layerManager->setup(actionCollection);
     m_d->maskManager->setup(actionCollection);
 
-    KisAction * action  = new KisAction(koIcon("object-flip-horizontal"), i18n("Mirror Horizontally"), this);
+    KisAction * action  = new KisAction(koIcon("object-flip-horizontal"), i18n("Mirror Layer Horizontally"), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
-    actionManager->addAction("mirrorX", action, actionCollection);
+    actionManager->addAction("mirrorNodeX", action, actionCollection);
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorNodeX()));
 
-    action  = new KisAction(koIcon("object-flip-vertical"), i18n("Mirror Vertically"), this);
+    action  = new KisAction(koIcon("object-flip-vertical"), i18n("Mirror Layer Vertically"), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
-    actionManager->addAction("mirrorY", action, actionCollection);
+    actionManager->addAction("mirrorNodeY", action, actionCollection);
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorNodeY()));
 
     action = new KisAction(i18n("Duplicate current layer"), this);

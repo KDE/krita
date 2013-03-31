@@ -47,7 +47,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
 include(CalligraProductSetMacros)
 
-option(GHNS "support Get Hot New Stuff" ON)
+option(GHNS "support Get Hot New Stuff" OFF)
 option(NEPOMUK "support NEPOMUK Tagging" ON)
 # TODO: orthogonal setting, results in minimal features, yet needs to be defined
 # option(TINY "compile a tiny Calligra" OFF)
@@ -254,16 +254,20 @@ if ((${QTVERSION} VERSION_EQUAL 4.8.0) OR (${QTVERSION} VERSION_EQUAL 4.8.1))
     endif (NOT IHAVEPATCHEDQT)
 endif ((${QTVERSION} VERSION_EQUAL 4.8.0) OR (${QTVERSION} VERSION_EQUAL 4.8.1))
 
-if(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
-    set(GHNS FALSE)
-endif(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
+if (GHNS)
+    if(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
+        set(GHNS FALSE)
+    endif(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
 
-macro_optional_find_package(LibAttica)
-macro_log_feature(LIBATTICA_FOUND "LibAttica" "Attica is used for Get Hot New Stuff." "https://projects.kde.org/projects/kdesupport/attica" FALSE "" "You need at least version 3.0 for uploading of resources to work.")
+    macro_optional_find_package(LibAttica)
+    macro_log_feature(LIBATTICA_FOUND "LibAttica" "Attica is used for Get Hot New Stuff." "https://projects.kde.org/projects/kdesupport/attica" FALSE "" "You need at least version 3.0 for uploading of resources to work.")
 
-if (NOT LIBATTICA_FOUND)
-    set(GHNS FALSE)
-endif (NOT LIBATTICA_FOUND)
+    if (NOT LIBATTICA_FOUND)
+        set(GHNS FALSE)
+    else (NOT LIBATTICA_FOUND)
+        MESSAGE(STATUS "WARNING: You are compiling with Get Hot New Stuff enabled. Do not do that when building distribution packages. GHNS is unusable these days until someone starts maintaining it again.")
+    endif (NOT LIBATTICA_FOUND)
+endif (GHNS)
 
 if(NOT ${KDE_VERSION} VERSION_GREATER 4.6.4)
   set(NEPOMUK FALSE)

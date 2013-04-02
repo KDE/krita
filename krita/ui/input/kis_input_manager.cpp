@@ -55,6 +55,9 @@ public:
         , toolProxy(0)
         , setMirrorMode(false)
         , forwardAllEventsToTool(false)
+#ifdef Q_WS_X11
+        , hiResEventsWorkaroundCoeff(1.0, 1.0)
+#endif
         , lastTabletEvent(0)
     { }
 
@@ -84,6 +87,9 @@ public:
     bool forwardAllEventsToTool;
 
     KisShortcutMatcher matcher;
+#ifdef Q_WS_X11
+    QPointF hiResEventsWorkaroundCoeff;
+#endif
     QTabletEvent *lastTabletEvent;
 
     KisAbstractInputAction *defaultInputAction;
@@ -263,14 +269,46 @@ bool KisInputManager::Private::trySetMirrorMode(const QPointF &mousePosition)
     return false;
 }
 
+#ifdef Q_WS_X11
+inline QPointF dividePoints(const QPointF &pt1, const QPointF &pt2) {
+    return QPointF(pt1.x() / pt2.x(), pt1.y() / pt2.y());
+}
+
+inline QPointF multiplyPoints(const QPointF &pt1, const QPointF &pt2) {
+    return QPointF(pt1.x() * pt2.x(), pt1.y() * pt2.y());
+}
+#endif
+
 void KisInputManager::Private::saveTabletEvent(const QTabletEvent *event)
 {
     delete lastTabletEvent;
+
+#ifdef Q_WS_X11
+    /**
+     * There is a bug in Qt-x11 when working in 2 tablets + 2 monitors
+     * setup. The hiResGlobalPos() value gets scaled wrongly somehow.
+     * Happily, the error is linear (without the offset) so we can simply
+     * scale it a bit.
+     */
+
+    if (event->type() == QEvent::TabletPress) {
+        if ((event->globalPos() - event->hiResGlobalPos()).manhattanLength() > 4) {
+            hiResEventsWorkaroundCoeff = dividePoints(event->globalPos(), event->hiResGlobalPos());
+        } else {
+            hiResEventsWorkaroundCoeff = QPointF(1.0, 1.0);
+        }
+    }
+#endif
+
     lastTabletEvent =
         new QTabletEvent(event->type(),
                          event->pos(),
                          event->globalPos(),
-                         event->hiResGlobalPos(),
+#ifdef Q_WS_X11
+                         multiplyPoints(event->hiResGlobalPos(), hiResEventsWorkaroundCoeff),
+#else
+                         event->hiResGlobalPos()
+#endif
                          event->device(),
                          event->pointerType(),
                          event->pressure(),

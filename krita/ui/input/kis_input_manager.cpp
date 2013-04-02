@@ -307,7 +307,7 @@ void KisInputManager::Private::saveTabletEvent(const QTabletEvent *event)
 #ifdef Q_WS_X11
                          multiplyPoints(event->hiResGlobalPos(), hiResEventsWorkaroundCoeff),
 #else
-                         event->hiResGlobalPos()
+                         event->hiResGlobalPos(),
 #endif
                          event->device(),
                          event->pointerType(),

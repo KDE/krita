@@ -136,7 +136,7 @@ KisLayer::KisLayer(const KisLayer& rhs)
     if (this != &rhs) {
         m_d->image = rhs.m_d->image;
         m_d->metaDataStore = new KisMetaData::Store(*rhs.m_d->metaDataStore);
-        setName(i18n("Duplicate of '%1'", rhs.name()));
+        setName(rhs.name());
     }
 }
 

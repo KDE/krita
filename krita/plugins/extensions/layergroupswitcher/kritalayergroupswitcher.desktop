@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Quick Layergroup Switcher
+X-KDE-ServiceTypes=Krita/ViewPlugin
+Type=Service
+X-KDE-Library=kritalayergroupswitcher
+X-Krita-Version=27

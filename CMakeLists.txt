@@ -340,8 +340,9 @@ macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
 ## Look for OpenGL
 ##
 set(HAVE_OPENGL 0)
-if (!WIN32 AND !APPLE)
-
+if (WIN32)
+    message(STATUS "OpenGL is not supported on Windows.")
+else (WIN32)
     macro_optional_find_package(OpenGL)
 
     if(OPENGL_FOUND)
@@ -355,7 +356,7 @@ if (!WIN32 AND !APPLE)
     else(OPENGL_FOUND)
         message(STATUS "Did NOT find OpenGL libraries")
     endif(OPENGL_FOUND)
-endif (!WIN32 AND !APPLE)
+endif (WIN32)
 
 macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by parts of Krita and optionally by flake")
 

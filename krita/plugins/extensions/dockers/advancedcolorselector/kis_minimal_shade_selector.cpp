@@ -22,10 +22,10 @@
 #include <QPainter>
 #include <QMouseEvent>
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KComponentData>
-#include <KGlobal>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kcomponentdata.h>
+#include <kglobal.h>
 
 #include "KoCanvasResourceManager.h"
 

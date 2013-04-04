@@ -19,7 +19,7 @@
 #include "kis_rotate_canvas_action.h"
 
 #include <QApplication>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 
 #include "kis_cursor.h"
 #include "kis_canvas_controller.h"

@@ -24,9 +24,9 @@
 #include "ClipCommand.h"
 #include "CropWidget.h"
 
-#include <KLocale>
-#include <KUrl>
-#include <KFileDialog>
+#include <klocale.h>
+#include <kurl.h>
+#include <kfiledialog.h>
 #include <KIO/Job>
 
 #include <KoIcon.h>

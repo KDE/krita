@@ -32,7 +32,7 @@
 #include <KoOdfGraphicStyles.h>
 #include "KoParagraphStyle.h"
 
-#include <KDebug>
+#include <kdebug.h>
 #include <KoTextDebug.h>
 
 #include <QTextTable>

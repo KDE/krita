@@ -54,7 +54,7 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoTableOfContentsGeneratorInfo.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <QTextTable>
 #include <QTextList>

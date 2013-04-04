@@ -52,9 +52,9 @@
 
 #include <KoIcon.h>
 
-#include <KAction>
-#include <KDebug>
-#include <KLocale>
+#include <kaction.h>
+#include <kdebug.h>
+#include <klocale.h>
 #include <QPainter>
 #include <QBitmap>
 #include <QTabWidget>

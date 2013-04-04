@@ -24,12 +24,12 @@
 
 #include <KoIcon.h>
 
-#include <KIconLoader>
-#include <KLocale>
-#include <KComboBox>
-#include <KDebug>
-#include <KColorScheme>
-#include <KGlobal>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kcombobox.h>
+#include <kdebug.h>
+#include <kcolorscheme.h>
+#include <kglobal.h>
 
 #include <QApplication>
 #include <QPainter>

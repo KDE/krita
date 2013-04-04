@@ -34,7 +34,7 @@
 #include <QTextBlock>
 #include <QTextCursor>
 #include <QWeakPointer>
-#include <KDebug>
+#include <kdebug.h>
 
 class KoBookmark::Private
 {

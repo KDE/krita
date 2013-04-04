@@ -26,10 +26,10 @@
 #include <KoFilterManager.h>
 #include <KoServiceProvider.h>
 
-#include <KGlobal>
-#include <KStandardDirs>
-#include <KFileDialog>
-#include <KUrl>
+#include <kglobal.h>
+#include <kstandarddirs.h>
+#include <kfiledialog.h>
+#include <kurl.h>
 
 #include <QDesktopServices>
 #include <QListWidget>

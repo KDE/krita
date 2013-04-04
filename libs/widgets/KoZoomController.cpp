@@ -22,9 +22,9 @@
  */
 #include <KoZoomController.h>
 
-#include <KActionCollection>
-#include <KLocale>
-#include <KDebug>
+#include <kactioncollection.h>
+#include <klocale.h>
+#include <kdebug.h>
 
 #include <KoZoomHandler.h>
 #include <KoCanvasBase.h>

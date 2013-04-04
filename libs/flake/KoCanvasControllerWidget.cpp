@@ -34,7 +34,7 @@
 #include "KoToolManager_p.h"
 
 #include <ksharedconfig.h>
-#include <KDebug>
+#include <kdebug.h>
 #include <kconfiggroup.h>
 #include <QApplication>
 #include <QMouseEvent>

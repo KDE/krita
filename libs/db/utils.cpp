@@ -48,8 +48,8 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <klocale.h>
-#include <KMimeType>
-#include <KStandardDirs>
+#include <kmimetype.h>
+#include <kstandarddirs.h>
 
 #include <memory>
 

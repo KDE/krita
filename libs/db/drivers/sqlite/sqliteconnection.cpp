@@ -34,9 +34,9 @@
 #include <QDir>
 #include <QRegExp>
 
-#include <KDebug>
-#include <KLocale>
-#include <KStandardDirs>
+#include <kdebug.h>
+#include <klocale.h>
+#include <kstandarddirs.h>
 
 //remove debug
 #undef KexiDBDrvDbg

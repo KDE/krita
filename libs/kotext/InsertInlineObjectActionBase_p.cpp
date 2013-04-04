@@ -30,7 +30,7 @@
 #include <KoTextDocument.h>
 #include <KoTextEditor.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 InsertInlineObjectActionBase::InsertInlineObjectActionBase(KoCanvasBase *canvas, const QString &name)
         : KAction(name, canvas->canvasWidget()),

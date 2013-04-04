@@ -19,7 +19,7 @@
 
 #include "kis_selection_filters.h"
 
-#include <KLocale>
+#include <klocale.h>
 
 #include <KoColorSpace.h>
 #include "kis_convolution_painter.h"

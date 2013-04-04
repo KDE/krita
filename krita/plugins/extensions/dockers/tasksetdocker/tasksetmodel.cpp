@@ -18,7 +18,7 @@
 #include "tasksetmodel.h"
 
 #include <QAction>
-#include <KLocale>
+#include <klocale.h>
 #include <KoIcon.h>
 
 TasksetModel::TasksetModel(QObject* parent): QAbstractTableModel(parent)

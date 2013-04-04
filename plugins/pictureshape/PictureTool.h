@@ -22,7 +22,7 @@
 #define PICTURE_TOOL
 
 #include <KoToolBase.h>
-#include <KJob>
+#include <kjob.h>
 
 class PictureShape;
 class KoFilterEffect;

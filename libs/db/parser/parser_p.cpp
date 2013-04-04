@@ -23,8 +23,8 @@
 #include <QRegExp>
 #include <QMutableListIterator>
 
-#include <KDebug>
-#include <KLocale>
+#include <kdebug.h>
+#include <klocale.h>
 
 #include <assert.h>
 

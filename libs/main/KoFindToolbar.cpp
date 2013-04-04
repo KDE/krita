@@ -29,13 +29,13 @@
 #include <QApplication>
 #include <QDebug>
 
-#include <KLocalizedString>
-#include <KLineEdit>
-#include <KSqueezedTextLabel>
-#include <KHistoryComboBox>
-#include <KAction>
-#include <KActionCollection>
-#include <KColorScheme>
+#include <klocalizedstring.h>
+#include <klineedit.h>
+#include <ksqueezedtextlabel.h>
+#include <khistorycombobox.h>
+#include <kaction.h>
+#include <kactioncollection.h>
+#include <kcolorscheme.h>
 
 #include <KoIcon.h>
 

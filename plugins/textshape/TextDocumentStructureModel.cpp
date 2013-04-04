@@ -21,7 +21,7 @@
 #include <TextDocumentStructureModel.h>
 
 // KDE
-#include <KDebug>
+#include <kdebug.h>
 // Qt
 #include <QTextDocument>
 #include <QTextFrame>

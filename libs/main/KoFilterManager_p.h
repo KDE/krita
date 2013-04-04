@@ -23,8 +23,8 @@ Boston, MA 02110-1301, USA.
 
 #include "KoFilterManager.h"
 
-#include <KUrl>
-#include <KDialog>
+#include <kurl.h>
+#include <kdialog.h>
 #include <KoProgressUpdater.h>
 
 #include <QString>

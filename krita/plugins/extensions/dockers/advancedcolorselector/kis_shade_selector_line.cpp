@@ -21,11 +21,11 @@
 #include <QColor>
 #include <QMouseEvent>
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KComponentData>
-#include <KGlobal>
-#include <KLocale>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kcomponentdata.h>
+#include <kglobal.h>
+#include <klocale.h>
 #include <KoColor.h>
 #include "KoColorSpaceRegistry.h"
 

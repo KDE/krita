@@ -36,7 +36,7 @@
 #include "Styles_p.h"
 #include "KoTextDocument.h"
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <QTextBlock>
 #include <QTextBlockFormat>

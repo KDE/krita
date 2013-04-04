@@ -1,6 +1,6 @@
-#include <KApplication>
-#include <KCmdLineArgs>
-#include <KAboutData>
+#include <kapplication.h>
+#include <kcmdlineargs.h>
+#include <kaboutdata.h>
 
 #include "kis_random_generator_demo.h"
 #include "../kis_random_generator.h"

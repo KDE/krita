@@ -22,7 +22,7 @@
 #include "SpaceNavigatorEvent.h"
 #include <KoToolManager.h>
 #include <KoCanvasController.h>
-#include <KDebug>
+#include <kdebug.h>
 #include <spnav.h>
 #include <math.h>
 

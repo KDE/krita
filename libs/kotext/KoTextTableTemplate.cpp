@@ -30,7 +30,7 @@
 
 #include "Styles_p.h"
 
-#include <KDebug>
+#include <kdebug.h>
 
 static const struct {
     KoTextTableTemplate::Property m_property;

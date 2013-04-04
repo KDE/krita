@@ -24,7 +24,7 @@
 #include <KoCanvasResourceManager.h>
 #include <KoTextDocument.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <QVariant>
 #include <QTextOption>

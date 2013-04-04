@@ -62,7 +62,7 @@
 #include <KoTableOfContentsGeneratorInfo.h>
 #include <KoBibliographyInfo.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <QTextFrame>
 #include <QTextTable>

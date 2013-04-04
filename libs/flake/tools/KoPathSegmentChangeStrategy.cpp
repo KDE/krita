@@ -25,7 +25,7 @@
 #include "commands/KoPathControlPointMoveCommand.h"
 #include "commands/KoPathSegmentTypeCommand.h"
 #include <KoCanvasBase.h>
-#include <KLocale>
+#include <klocale.h>
 #include <limits>
 
 KoPathSegmentChangeStrategy::KoPathSegmentChangeStrategy(KoPathTool *tool, const QPointF &pos, const KoPathPointData &segment, qreal segmentParam)

@@ -23,7 +23,7 @@
 #include "TextShape.h"
 
 #include <klocale.h>
-//#include <KAction>
+//#include <kaction.h>
 
 AutoResizeCommand::AutoResizeCommand(KoTextShapeData *shapeData, KoTextShapeData::ResizeMethod resizeMethod, bool enabled)
     : KUndo2Command()

@@ -40,8 +40,8 @@
 #include <KoGenStyles.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoView.h>
-#include <KComponentData>
-#include <KDebug>
+#include <kcomponentdata.h>
+#include <kdebug.h>
 
 // KChart
 #include "ChartShape.h"

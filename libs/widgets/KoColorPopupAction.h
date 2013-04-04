@@ -21,7 +21,7 @@
 #ifndef KOCOLORPOPUPACTION_H
 #define KOCOLORPOPUPACTION_H
 
-#include <KAction>
+#include <kaction.h>
 
 #include "kowidgets_export.h"
 

@@ -26,11 +26,11 @@
 #include <QTimer>
 #include <QPushButton>
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KComponentData>
-#include <KGlobal>
-#include <KDebug>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kcomponentdata.h>
+#include <kglobal.h>
+#include <kdebug.h>
 
 #include <KoCanvasResourceManager.h>
 #include <KoIcon.h>

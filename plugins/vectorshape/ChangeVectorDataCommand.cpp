@@ -22,7 +22,7 @@
 #include <math.h>
 #include <klocale.h>
 #include <KoImageData.h>
-#include <KDebug>
+#include <kdebug.h>
 
 #include "VectorShape.h"
 

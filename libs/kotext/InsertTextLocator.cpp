@@ -25,7 +25,7 @@
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoTextShapeDataBase.h>
-#include <KLocale>
+#include <klocale.h>
 
 
 

@@ -32,8 +32,8 @@
 #include <QPainter>
 
 // KDE
-#include <KLocale>
-#include <KDebug>
+#include <klocale.h>
+#include <kdebug.h>
 
 // Calligra
 #include <KoCanvasBase.h>

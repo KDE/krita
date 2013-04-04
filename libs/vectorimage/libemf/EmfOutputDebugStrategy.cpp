@@ -20,7 +20,7 @@
 
 #include <math.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include "EmfObjects.h"
 

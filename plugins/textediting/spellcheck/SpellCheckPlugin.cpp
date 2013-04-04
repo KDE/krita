@@ -20,8 +20,8 @@
 #include "SpellCheckPlugin.h"
 #include "SpellCheckFactory.h"
 
-#include <KPluginFactory>
-#include <KPluginLoader>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 
 #include <KoTextEditingRegistry.h>
 

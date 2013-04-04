@@ -21,9 +21,9 @@
 #include <QDebug>
 #include <QQueue>
 
-#include <KAction>
-#include <KLocalizedString>
-#include <KActionCollection>
+#include <kaction.h>
+#include <klocalizedstring.h>
+#include <kactioncollection.h>
 #include <QApplication>
 
 #include <KoToolProxy.h>

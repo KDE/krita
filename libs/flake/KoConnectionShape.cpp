@@ -36,7 +36,7 @@
 #include <KoUnit.h>
 #include <QPainter>
 
-#include <KDebug>
+#include <kdebug.h>
 
 KoConnectionShapePrivate::KoConnectionShapePrivate(KoConnectionShape *q)
     : KoParameterShapePrivate(q),

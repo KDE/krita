@@ -27,9 +27,9 @@
 #include <QDateTime>
 #include <QTime>
 
-#include <KGlobal>
-#include <KLocale>
-#include <KDebug>
+#include <kglobal.h>
+#include <klocale.h>
+#include <kdebug.h>
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>

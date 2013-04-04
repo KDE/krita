@@ -23,8 +23,8 @@
 #include <QVBoxLayout>
 #include <QLabel>
 
-#include <KLocale>
-#include <KDebug>
+#include <klocale.h>
+#include <kdebug.h>
 
 #include "KoPADocument.h"
 #include "KoPAMasterPage.h"

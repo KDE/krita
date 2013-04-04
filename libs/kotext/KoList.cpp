@@ -25,7 +25,7 @@
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoStyleManager.h"
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <QTextCursor>
 #include <QWeakPointer>

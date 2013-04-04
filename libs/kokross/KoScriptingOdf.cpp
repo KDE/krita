@@ -26,7 +26,7 @@
 #include <KoPartAdaptor.h>
 #include <KoEmbeddedDocumentSaver.h>
 
-#include <KDebug>
+#include <kdebug.h>
 #include <QBuffer>
 
 /************************************************************************************************

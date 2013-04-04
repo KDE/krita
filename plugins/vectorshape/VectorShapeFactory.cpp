@@ -33,7 +33,7 @@
 
 // KDE
 #include <klocale.h>
-#include <KDebug>
+#include <kdebug.h>
 
 
 VectorShapeFactory::VectorShapeFactory()

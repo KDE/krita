@@ -24,7 +24,7 @@
 // KDE
 #include <kstandarddirs.h>
 #include <kdebug.h>
-#include <KMimeType>
+#include <kmimetype.h>
 
 // Calligra
 #include <KoOdfReadStore.h>

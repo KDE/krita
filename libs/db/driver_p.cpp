@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <KDebug>
-#include <KLocale>
+#include <kdebug.h>
+#include <klocale.h>
 #include "driver_p.h"
 
 using namespace KexiDB;

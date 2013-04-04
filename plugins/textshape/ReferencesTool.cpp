@@ -41,8 +41,8 @@
 
 #include <kdebug.h>
 
-#include <KLocale>
-#include <KAction>
+#include <klocale.h>
+#include <kaction.h>
 #include <QTextDocument>
 #include <QLineEdit>
 #include <QBoxLayout>

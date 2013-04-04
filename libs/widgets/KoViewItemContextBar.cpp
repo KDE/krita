@@ -26,7 +26,7 @@
 #include <KoIcon.h>
 
 //KDE headers
-#include <KGlobalSettings>
+#include <kglobalsettings.h>
 #include <klocale.h>
 
 //Qt Headers

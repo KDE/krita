@@ -27,8 +27,8 @@
 #include "StylesDelegate.h"
 #include <KoStyleThumbnailer.h>
 
-#include <KAction>
-#include <KSelectAction>
+#include <kaction.h>
+#include <kselectaction.h>
 #include <KoTextBlockData.h>
 #include <KoCharacterStyle.h>
 #include <KoParagraphStyle.h>
@@ -37,7 +37,7 @@
 #include <KoZoomHandler.h>
 #include <KoStyleManager.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <QTextLayout>
 #include <QComboBox>

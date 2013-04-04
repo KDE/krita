@@ -22,7 +22,7 @@
 #include "ConnectionTool.h"
 
 #include <KoIcon.h>
-#include <KDebug>
+#include <kdebug.h>
 
 ConnectionToolFactory::ConnectionToolFactory()
     : KoToolFactoryBase(ConnectionTool_ID)

@@ -42,9 +42,9 @@
 
 #include <kundo2command.h>
 #include <klocale.h>
-#include <KAction>
+#include <kaction.h>
 
-#include <KDebug>
+#include <kdebug.h>
 #include <QDebug>
 #include <QWeakPointer>
 #include <QApplication>

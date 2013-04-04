@@ -23,7 +23,7 @@
 #include "kordf_export.h"
 
 #include "RdfForward.h"
-#include <KDialog>
+#include <kdialog.h>
 #include <QSharedPointer>
 
 class QTreeWidgetItem;

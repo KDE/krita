@@ -26,8 +26,8 @@
 #include <KoParagraphStyle.h>
 #include <KoImageCollection.h>
 
-#include <KLocale>
-#include <KDebug>
+#include <klocale.h>
+#include <kdebug.h>
 
 #define MARGIN_DEFAULT 18 // we consider it the default value
 

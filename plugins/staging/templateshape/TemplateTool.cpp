@@ -27,9 +27,9 @@
 #include <QGridLayout>
 
 // KDE
-#include <KLocale>
-#include <KUrl>
-#include <KFileDialog>
+#include <klocale.h>
+#include <kurl.h>
+#include <kfiledialog.h>
 #include <KIO/Job>
 
 // Calligra

@@ -33,7 +33,7 @@
 #include <KoShapeLoadingContext.h>
 #include <KoUnit.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include "KoTextDocument.h"
 

@@ -23,7 +23,7 @@
 #include <QDialogButtonBox>
 #include <QPushButton>
 
-#include <KConfigGroup>
+#include <kconfiggroup.h>
 
 #include <KoIcon.h>
 #include "KoColorSpace.h"

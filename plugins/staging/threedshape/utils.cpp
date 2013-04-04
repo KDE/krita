@@ -26,7 +26,7 @@
 #include <QStringList>
 
 // KDE
-#include <KDebug>
+#include <kdebug.h>
 
 
 QVector3D odfToVector3D(QString &string)

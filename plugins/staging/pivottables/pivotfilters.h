@@ -22,7 +22,7 @@
 #ifndef PIVOTFILTERS_H
 #define PIVOTFILTERS_H
 
-#include <KDialog>
+#include <kdialog.h>
 
 #include<QtGui>
 #include<QString>

@@ -24,16 +24,16 @@
 #include <KoCanvasResourceManager.h>
 
 #include <KWindowSystem>
-#include <KFindDialog>
-#include <KReplaceDialog>
-#include <KFind>
-#include <KLocale>
-#include <KAction>
+#include <kfinddialog.h>
+#include <kreplacedialog.h>
+#include <kfind.h>
+#include <klocale.h>
+#include <kaction.h>
 
 #include <QTextDocument>
 #include <QTextCursor>
 #include <QTimer>
-#include <KDebug>
+#include <kdebug.h>
 
 #include "KoFind.h"
 #include "KoText.h"

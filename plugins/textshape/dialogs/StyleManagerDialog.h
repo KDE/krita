@@ -19,7 +19,7 @@
 #ifndef STYLEMANAGERDIALOG_H
 #define STYLEMANAGERDIALOG_H
 
-#include <KDialog>
+#include <kdialog.h>
 #include <QCloseEvent>
 
 class StyleManager;

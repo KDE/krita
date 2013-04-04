@@ -27,7 +27,7 @@
 #include <QAction>
 
 #include <klocale.h>
-#include <KActionCollection>
+#include <kactioncollection.h>
 
 #include <KoIcon.h>
 

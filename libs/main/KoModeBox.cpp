@@ -28,11 +28,11 @@
 #include <KoShapeLayer.h>
 #include <KoInteractionTool.h>
 
-#include <KDebug>
-#include <KGlobalSettings>
-#include <KConfigGroup>
-#include <KLocale>
-#include <KSelectAction>
+#include <kdebug.h>
+#include <kglobalsettings.h>
+#include <kconfiggroup.h>
+#include <klocale.h>
+#include <kselectaction.h>
 
 #include <QMap>
 #include <QList>

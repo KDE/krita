@@ -54,7 +54,7 @@ NOT TODO:
 #include <QListWidget>
 #include <QGroupBox>
 
-#include <KTabWidget>
+#include <ktabwidget.h>
 #include <kglobal.h>
 #include <kprocess.h>
 #include <kstandarddirs.h>

@@ -27,8 +27,8 @@
 #include <KoUpdater.h>
 
 #include <QCoreApplication>
-#include <KDebug>
-#include <KLocale>
+#include <kdebug.h>
+#include <klocale.h>
 #include <QPainter>
 #include <QPrinter>
 #include <QGridLayout>

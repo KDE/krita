@@ -22,12 +22,12 @@
 #include "fontedit.h"
 #include "utils.h"
 
-#include <KFontChooser>
-#include <KFontDialog>
-#include <KLocale>
-#include <KDebug>
-#include <KPushButton>
-#include <KDialog>
+#include <kfontchooser.h>
+#include <kfontdialog.h>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kpushbutton.h>
+#include <kdialog.h>
 
 #include <QLabel>
 #include <QPushButton>

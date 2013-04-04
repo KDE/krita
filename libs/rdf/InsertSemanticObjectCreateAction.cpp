@@ -26,7 +26,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <KPageDialog>
+#include <kpagedialog.h>
 
 #include <QVBoxLayout>
 

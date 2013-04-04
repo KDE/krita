@@ -40,8 +40,8 @@
 #include <SvgWriter.h>
 #include <SvgStyleWriter.h>
 
-#include <KLocale>
-#include <KDebug>
+#include <klocale.h>
+#include <kdebug.h>
 
 #include <QBuffer>
 #include <QPen>

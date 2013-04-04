@@ -23,9 +23,9 @@
 #include <QProcess>
 #include <QTemporaryFile>
 
-#include <KAboutData>
-#include <KCmdLineArgs>
-#include <KApplication>
+#include <kaboutdata.h>
+#include <kcmdlineargs.h>
+#include <kapplication.h>
 #include <kdebug.h>
 
 #include <KoColorProfile.h>

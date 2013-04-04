@@ -18,7 +18,7 @@
  */
 
 #include "KoInputDeviceHandlerRegistry.h"
-#include <KGlobal>
+#include <kglobal.h>
 
 #include <KoPluginLoader.h>
 

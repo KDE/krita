@@ -28,7 +28,7 @@
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <KAction>
+#include <kaction.h>
 
 #include <QTextDocument>
 #include <QApplication>

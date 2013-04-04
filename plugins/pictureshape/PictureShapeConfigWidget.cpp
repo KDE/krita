@@ -23,9 +23,9 @@
 #include <KoImageData.h>
 #include <KoImageCollection.h>
 
-#include <KDebug>
-#include <KFileWidget>
-#include <KJob>
+#include <kdebug.h>
+#include <kfilewidget.h>
+#include <kjob.h>
 #include <KIO/Job>
 
 #include <QGridLayout>

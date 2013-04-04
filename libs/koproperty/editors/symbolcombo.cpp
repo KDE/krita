@@ -20,9 +20,9 @@
 
 #include "symbolcombo.h"
 
-#include <KCharSelect>
-#include <KLocale>
-#include <KDialog>
+#include <kcharselect.h>
+#include <klocale.h>
+#include <kdialog.h>
 
 #include <QLineEdit>
 #include <QPushButton>

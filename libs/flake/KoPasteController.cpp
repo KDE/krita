@@ -22,7 +22,7 @@
 #include <KoCanvasBase.h>
 #include <KoToolProxy.h>
 
-#include <KDebug>
+#include <kdebug.h>
 #include <QAction>
 
 class KoPasteController::Private {

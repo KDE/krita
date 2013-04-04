@@ -25,7 +25,7 @@
 
 #include <KoDocumentResourceManager.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <QStack>
 #include <QFileInfo>

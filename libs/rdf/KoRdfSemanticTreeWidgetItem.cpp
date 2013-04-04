@@ -26,9 +26,9 @@
 #include <KoDocumentResourceManager.h>
 #include <KoTextEditor.h>
 
-#include <KActionMenu>
+#include <kactionmenu.h>
 #include <QVBoxLayout>
-#include <KPageDialog>
+#include <kpagedialog.h>
 
 #include <kdebug.h>
 #include <klocale.h>

@@ -42,7 +42,7 @@
 #include <KoListLevelProperties.h>
 #include <KoShapePaintingContext.h>
 
-#include <KAction>
+#include <kaction.h>
 
 #include <QTextLayout>
 #include <QFlags>
@@ -50,7 +50,7 @@
 #include <QWidgetAction>
 #include <QSignalMapper>
 
-#include <KDebug>
+#include <kdebug.h>
 
 SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
         : QWidget(parent)

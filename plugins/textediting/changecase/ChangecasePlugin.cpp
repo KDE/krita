@@ -19,8 +19,8 @@
 #include "ChangecasePlugin.h"
 #include "ChangecaseFactory.h"
 
-#include <KPluginFactory>
-#include <KPluginLoader>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 
 #include <KoTextEditingRegistry.h>
 

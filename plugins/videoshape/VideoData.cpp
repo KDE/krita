@@ -34,7 +34,7 @@
 #include <QBuffer>
 #include <QCryptographicHash>
 #include <QFileInfo>
-#include <KTemporaryFile>
+#include <ktemporaryfile.h>
 #include <QPainter>
 #include <QAtomicInt>
 #include <QFile>

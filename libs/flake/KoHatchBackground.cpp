@@ -29,7 +29,7 @@
 #include <KoXmlNS.h>
 #include <KoUnit.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <QColor>
 #include <QString>

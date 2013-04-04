@@ -22,7 +22,7 @@
 #include <KoCharacterStyle.h>
 #include <KoParagraphStyle.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 StylesFilteredModelBase::StylesFilteredModelBase(QObject *parent) :
     AbstractStylesModel(parent),

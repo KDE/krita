@@ -223,8 +223,9 @@ KisPropertiesConfiguration * KisPerChannelConfigWidget::configuration() const
     KisPerChannelFilterConfiguration * cfg = new KisPerChannelFilterConfiguration(nCh);
 
     // updating current state
-    m_curves[m_activeCh] = m_page->curveWidget->curve();
-
+    if (m_activeCh < m_curves.size()) {
+        m_curves[m_activeCh] = m_page->curveWidget->curve();
+    }
     cfg->setCurves(m_curves);
 
     return cfg;

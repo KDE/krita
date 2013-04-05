@@ -25,6 +25,7 @@
 #include "ui_wdgautobrush.h"
 #include <kis_auto_brush.h>
 
+class KisWidgetChooser;
 class PAINTOP_EXPORT KisWdgAutobrush : public QWidget, public Ui::KisWdgAutobrush
 {
     Q_OBJECT
@@ -54,13 +55,18 @@ public:
     QSizeF brushSize() const;
 
 private slots:
-
     void paramChanged();
     void setStackedWidget(int);
     void spinBoxHorizontalChanged(qreal);
     void spinBoxVerticalChanged(qreal);
     void linkFadeToggled(bool);
-
+    void spinBoxRatioChanged(qreal);
+    void spinBoxRandomnessChanged(qreal);
+    void spinBoxRadiusChanged(qreal);
+    void spinBoxSpikesChanged(int);
+    void spinBoxSpacingChanged(qreal);
+    void spinBoxAngleChanged(int);
+    void spinBoxDensityChanged(qreal);
 
 signals:
 
@@ -73,6 +79,7 @@ private:
     QImage m_brush;
     KisBrushSP m_autoBrush;
     bool m_linkFade;
+    KisWidgetChooser* m_sliderChooser[2];
 };
 
 

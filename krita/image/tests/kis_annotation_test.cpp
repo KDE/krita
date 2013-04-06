@@ -23,7 +23,9 @@
 
 void KisAnnotationTest::testCreation()
 {
-    KisAnnotation test();
+    QString s("Test");
+    QByteArray b("test");
+    KisAnnotation test(s,s,b);
 }
 
 

@@ -763,7 +763,11 @@ void KexiDB::getFieldProperties(const Field &field, QMap<QByteArray, QVariant> *
     values->insert("maxLengthIsDefault", field.maxLengthStrategy() & Field::DefaultMaxLength);
     values->insert("precision", field.precision());
     values->insert("defaultValue", field.defaultValue());
+#ifdef __GNUC__
 #warning TODO    values->insert("defaultWidth", field.defaultWidth());
+#else
+#pragma WARNING(TODO    values->insert("defaultWidth", field.defaultWidth());)
+#endif
     if (KexiDB::supportsVisibleDecimalPlacesProperty(field.type())) {
         values->insert("visibleDecimalPlaces", field.defaultValue());
     }
@@ -844,7 +848,11 @@ bool KexiDB::setFieldProperties(Field& field, const QMap<QByteArray, QVariant>& 
         return false;
     if ((it = values.find("defaultValue")) != values.constEnd())
         field.setDefaultValue(*it);
+#ifdef __GNUC__
 #warning TODO defaultWidth
+#else
+#pragma WARNING(TODO defaultWidth)
+#endif
 #if 0
     if ((it = values.find("defaultWidth")) != values.constEnd())
         field.setDefaultWidth((*it).isNull() ? 0/*default*/ : (*it).toUInt(&ok));
@@ -1026,7 +1034,11 @@ bool KexiDB::setFieldProperty(Field& field, const QByteArray& propertyName, cons
             field.setDefaultValue(value);
             return true;
         }
+#ifdef __GNUC__
 #warning TODO defaultWidth
+#else
+#pragma WARNING(TODO defaultWidth)
+#endif
 #if 0
         if ("defaultWidth" == propertyName)
             GET_INT(setDefaultWidth);

@@ -22,12 +22,6 @@
       <string>Custom Gradient</string>
      </property>
      <layout class="QVBoxLayout" >
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <property name="margin" >
-       <number>11</number>
-      </property>
       <item>
        <widget class="KisGradientSliderWidget" native="1" name="gradientSlider" >
         <property name="sizePolicy" >
@@ -49,17 +43,11 @@
       </item>
       <item>
        <layout class="QHBoxLayout" >
-        <property name="spacing" >
-         <number>6</number>
-        </property>
         <property name="margin" >
          <number>0</number>
         </property>
         <item>
          <layout class="QVBoxLayout" >
-          <property name="spacing" >
-           <number>6</number>
-          </property>
           <property name="margin" >
            <number>0</number>
           </property>
@@ -83,9 +71,6 @@
           </item>
           <item>
            <layout class="QHBoxLayout" >
-            <property name="spacing" >
-             <number>6</number>
-            </property>
             <property name="margin" >
              <number>0</number>
             </property>
@@ -141,9 +126,6 @@
           </item>
           <item>
            <layout class="QHBoxLayout" >
-            <property name="spacing" >
-             <number>6</number>
-            </property>
             <property name="margin" >
              <number>0</number>
             </property>
@@ -215,9 +197,6 @@
         </item>
         <item>
          <layout class="QVBoxLayout" >
-          <property name="spacing" >
-           <number>6</number>
-          </property>
           <property name="margin" >
            <number>0</number>
           </property>
@@ -305,9 +284,6 @@
       </item>
       <item>
        <layout class="QHBoxLayout" >
-        <property name="spacing" >
-         <number>6</number>
-        </property>
         <property name="margin" >
          <number>0</number>
         </property>
@@ -394,7 +370,6 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
  <customwidgets>
   <customwidget>
    <class>KColorButton</class>

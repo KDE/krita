@@ -116,7 +116,6 @@
       </item>
     </layout>
   </widget>
-  <layoutdefault spacing="6" margin="11" />
   <tabstops>
     <tabstop>m11</tabstop>
     <tabstop>m12</tabstop>

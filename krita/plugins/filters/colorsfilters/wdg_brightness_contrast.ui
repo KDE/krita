@@ -27,16 +27,10 @@
    <property name="margin" >
     <number>0</number>
    </property>
-   <property name="spacing" >
-    <number>6</number>
-   </property>
    <item row="0" column="0" colspan="2" >
     <layout class="QGridLayout" >
      <property name="margin" >
       <number>0</number>
-     </property>
-     <property name="spacing" >
-      <number>6</number>
      </property>
      <item row="1" column="1" >
       <widget class="QLabel" name="hgradient" >
@@ -103,9 +97,6 @@
         <property name="margin" >
          <number>0</number>
         </property>
-        <property name="spacing" >
-         <number>6</number>
-        </property>
         <item>
          <widget class="KisCurveWidget" name="curveWidget" >
           <property name="minimumSize" >
@@ -164,9 +155,6 @@
     <layout class="QGridLayout" >
      <property name="margin" >
       <number>0</number>
-     </property>
-     <property name="spacing" >
-      <number>6</number>
      </property>
      <item row="1" column="2" >
       <widget class="QPushButton" name="pb_more_contrast" >
@@ -248,7 +236,6 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
  <pixmapfunction></pixmapfunction>
  <customwidgets>
   <customwidget>

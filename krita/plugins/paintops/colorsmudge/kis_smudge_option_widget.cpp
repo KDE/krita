@@ -42,6 +42,7 @@ KisSmudgeOptionWidget::KisSmudgeOptionWidget(const QString& label, const QString
     h->addWidget(mCbSmudgeMode, 1);
     
     QVBoxLayout* v = new QVBoxLayout();
+    v->setMargin(0);
     QWidget*     w = new QWidget();
     
     v->addLayout(h);

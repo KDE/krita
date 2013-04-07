@@ -23,6 +23,9 @@
    </size>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
+   <property name="margin">
+    <number>0</number>
+   </property>
    <item row="0" column="0" colspan="2">
     <layout class="QGridLayout" name="gridLayout" columnstretch="0,1">
      <item row="0" column="0">

@@ -46,6 +46,7 @@ KisPressureSharpnessOptionWidget::KisPressureSharpnessOptionWidget():
     hl->addWidget(m_threshold, 1);
     
     QVBoxLayout* vl = new QVBoxLayout;
+    vl->setMargin(0);
     vl->addLayout(hl);
     vl->addWidget(KisCurveOptionWidget::curveWidget());
 

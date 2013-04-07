@@ -136,8 +136,6 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setObjectName("main layout");
-    mainLayout->setMargin(2);
-    mainLayout->setSpacing(2);
 
     mainLayout->addWidget(m_lbName);
     mainLayout->addWidget(m_itemChooser, 10);

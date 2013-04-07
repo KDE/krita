@@ -13,9 +13,6 @@
   <layout class="QVBoxLayout">
    <item>
     <layout class="QHBoxLayout">
-     <property name="margin">
-      <number>0</number>
-     </property>
      <item>
       <widget class="QLabel" name="textLabel1">
        <property name="text">
@@ -44,9 +41,6 @@
    </item>
    <item>
     <layout class="QHBoxLayout">
-     <property name="margin">
-      <number>0</number>
-     </property>
      <item>
       <spacer name="spacer2">
        <property name="orientation">
@@ -105,9 +99,6 @@
    </item>
    <item>
     <layout class="QVBoxLayout">
-     <property name="margin">
-      <number>0</number>
-     </property>
      <item>
       <widget class="QLabel" name="lblWarning">
        <property name="text">
@@ -143,7 +134,6 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections/>
 </ui>

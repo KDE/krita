@@ -50,8 +50,6 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
     m_buttonGroup->setExclusive(true);
 
     m_layout = new QGridLayout(uiWdgBrushChooser.settingsFrame);
-    m_layout->setSpacing(0);
-    m_layout->setMargin(0);
 
     m_autoBrushWidget = new KisAutoBrushWidget(this, "autobrush");
     connect(m_autoBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));

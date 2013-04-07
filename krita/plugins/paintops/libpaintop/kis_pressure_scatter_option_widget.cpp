@@ -46,6 +46,7 @@ KisPressureScatterOptionWidget::KisPressureScatterOptionWidget()
     hl->addWidget(m_axisY);
     
     QVBoxLayout* vl = new QVBoxLayout;
+    vl->setMargin(0);
     vl->addLayout(hl);
     vl->addWidget(curveWidget());
 

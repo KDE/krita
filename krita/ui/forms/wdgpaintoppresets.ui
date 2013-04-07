@@ -17,9 +17,6 @@
    </sizepolicy>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="margin">
-    <number>0</number>
-   </property>
    <item>
     <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,1,0" columnminimumwidth="0,0,0">
      <item row="0" column="0">

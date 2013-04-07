@@ -18,8 +18,8 @@
  */
 #include "InsertCharacter.h"
 
-#include <KLocale>
-#include <KCharSelect>
+#include <klocale.h>
+#include <kcharselect.h>
 
 #include <QMainWindow>
 #include <QGridLayout>

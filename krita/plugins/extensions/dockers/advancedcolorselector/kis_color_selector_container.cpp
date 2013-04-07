@@ -25,12 +25,12 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KComponentData>
-#include <KGlobal>
-#include <KAction>
-#include <KActionCollection>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kcomponentdata.h>
+#include <kglobal.h>
+#include <kaction.h>
+#include <kactioncollection.h>
 
 #include "kis_view2.h"
 #include "kis_canvas2.h"

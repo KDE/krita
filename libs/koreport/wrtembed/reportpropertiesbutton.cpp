@@ -20,7 +20,7 @@
 
 #include "reportpropertiesbutton.h"
 #include <QPainter>
-#include <KLocale>
+#include <klocale.h>
 
 ReportPropertiesButton::ReportPropertiesButton(QWidget* parent) :  QCheckBox(parent)
 {

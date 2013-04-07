@@ -35,9 +35,9 @@
 #include <QApplication>
 #include <QHeaderView>
 
-#include <KLocale>
-#include <KIconEffect>
-#include <KDebug>
+#include <klocale.h>
+#include <kiconeffect.h>
+#include <kdebug.h>
 
 using namespace KoProperty;
 

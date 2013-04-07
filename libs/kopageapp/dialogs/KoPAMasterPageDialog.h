@@ -20,7 +20,7 @@
 #ifndef KOPAMASTERPAGEDIALOG_H
 #define KOPAMASTERPAGEDIALOG_H
 
-#include <KDialog>
+#include <kdialog.h>
 
 class QListView;
 

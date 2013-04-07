@@ -19,7 +19,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include "spreadsheetmigrate.h"
 
-#include <KGlobal>
+#include <kglobal.h>
 
 namespace KexiMigration
 {

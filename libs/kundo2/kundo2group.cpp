@@ -42,7 +42,7 @@
 #include "kundo2group.h"
 #include "kundo2stack.h"
 #include "kundo2stack_p.h"
-#include <KLocale>
+#include <klocale.h>
 
 #ifndef QT_NO_UNDOGROUP
 

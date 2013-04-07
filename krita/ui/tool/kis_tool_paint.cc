@@ -422,7 +422,7 @@ void KisToolPaint::setupPaintAction(KisRecordedPaintAction* action)
 KisToolPaint::NodePaintAbility KisToolPaint::nodePaintAbility()
 {
     KisNodeSP node = currentNode();
-    if (!node || node->systemLocked() || node->inherits("KisSelectionMask")) {
+    if (!node || node->systemLocked()) {
         return NONE;
     }
     if (node->inherits("KisShapeLayer")) {

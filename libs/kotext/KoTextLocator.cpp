@@ -27,7 +27,7 @@
 #include <KoShapeLoadingContext.h>
 #include "KoShapeSavingContext.h"
 
-#include <KDebug>
+#include <kdebug.h>
 #include <QTextDocument>
 #include <QTextList>
 #include <QTextInlineObject>

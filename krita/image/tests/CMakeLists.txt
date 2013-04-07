@@ -422,12 +422,6 @@ target_link_libraries(KisPerspectiveGridTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT
 
 ########### next target ###############
 
-set(kis_perspective_math_test_SRCS kis_perspective_math_test.cpp )
-kde4_add_unit_test(KisPerspectiveMathTest TESTNAME krita-image-KisPerspectiveMathTest ${kis_perspective_math_test_SRCS})
-target_link_libraries(KisPerspectiveMathTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(kis_recorded_action_factory_registry_test_SRCS kis_recorded_action_factory_registry_test.cpp )
 kde4_add_unit_test(KisRecordedActionFactoryRegistryTest TESTNAME krita-image-KisRecordedActionFactoryRegistryTest ${kis_recorded_action_factory_registry_test_SRCS})
 target_link_libraries(KisRecordedActionFactoryRegistryTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
@@ -443,12 +437,6 @@ target_link_libraries(KisRecordedActionTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_
 set(kis_recorded_filter_action_test_SRCS kis_recorded_filter_action_test.cpp )
 kde4_add_unit_test(KisRecordedFilterActionTest TESTNAME krita-image-KisRecordedFilterActionTest ${kis_recorded_filter_action_test_SRCS})
 target_link_libraries(KisRecordedFilterActionTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
-set(kis_selected_transaction_test_SRCS kis_selected_transaction_test.cpp )
-kde4_add_unit_test(KisSelectedTransactionTest TESTNAME krita-image-KisSelectedTransactionTest ${kis_selected_transaction_test_SRCS})
-target_link_libraries(KisSelectedTransactionTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

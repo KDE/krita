@@ -110,7 +110,7 @@ KisScratchPad::KisScratchPad(QWidget *parent)
     m_undoAdapter = new KisPostExecutionUndoAdapter(m_undoStore, m_updateScheduler);
     m_nodeListener = new KisScratchPadNodeListener(this);
 
-    connect(this, SIGNAL(sigUpdateCanvas(const QRect&)), SLOT(slotUpdateCanvas(const QRect&)), Qt::QueuedConnection);
+    connect(this, SIGNAL(sigUpdateCanvas(QRect)), SLOT(slotUpdateCanvas(QRect)), Qt::QueuedConnection);
 
     // filter will be deleted by the QObject hierarchy
     m_eventFilter = new KisScratchPadEventFilter(this);
@@ -329,8 +329,8 @@ void KisScratchPad::setupScratchPad(KisCanvasResourceProvider* resourceProvider,
     connect(m_resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile*)),
             SLOT(setDisplayProfile(const KoColorProfile*)));
 
-    connect(m_resourceProvider, SIGNAL(sigOnScreenResolutionChanged(qreal, qreal)),
-            SLOT(setOnScreenResolution(qreal, qreal)));
+    connect(m_resourceProvider, SIGNAL(sigOnScreenResolutionChanged(qreal,qreal)),
+            SLOT(setOnScreenResolution(qreal,qreal)));
 
     m_defaultColor = KoColor(defaultColor, KoColorSpaceRegistry::instance()->rgb8());
 

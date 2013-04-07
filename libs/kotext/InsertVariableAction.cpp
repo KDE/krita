@@ -29,7 +29,7 @@
 
 #include <kpagedialog.h>
 
-#include <KLocale>
+#include <klocale.h>
 #include <QLayout>
 
 InsertVariableAction::InsertVariableAction(KoCanvasBase *base, KoInlineObjectFactoryBase *factory, const KoInlineObjectTemplate &templ)

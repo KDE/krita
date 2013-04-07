@@ -21,7 +21,7 @@
 
 #include "krita_export.h"
 
-#include <KTemporaryFile>
+#include <ktemporaryfile.h>
 #include "kis_chunk_allocator.h"
 
 

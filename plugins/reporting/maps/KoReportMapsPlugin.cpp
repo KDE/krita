@@ -24,7 +24,7 @@
 #include "KoReportPluginInfo.h"
 #include "krscriptmaps.h"
 #include <KoIcon.h>
-#include <KDebug>
+#include <kdebug.h>
 
 
 K_EXPORT_KOREPORT_ITEMPLUGIN(KoReportMapsPlugin, mapsplugin)

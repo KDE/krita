@@ -23,8 +23,8 @@
 #include <QList>
 #include <QPointF>
 #include <klocale.h>
-#include <KActionCollection>
-#include <KToggleAction>
+#include <kactioncollection.h>
+#include <ktoggleaction.h>
 
 #include "kis_painting_assistant.h"
 #include <QPainter>

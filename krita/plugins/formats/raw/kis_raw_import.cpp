@@ -18,7 +18,7 @@
  */
 #include "kis_raw_import.h"
 
-#include <KPluginFactory>
+#include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
 #include <KoColorSpace.h>

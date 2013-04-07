@@ -18,7 +18,7 @@
 
 #include "EmfObjects.h"
 
-#include <KDebug>
+#include <kdebug.h>
 
 
 namespace Libemf

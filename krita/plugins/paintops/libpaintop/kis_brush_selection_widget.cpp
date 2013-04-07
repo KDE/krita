@@ -246,7 +246,9 @@ void KisBrushSelectionWidget::precisionChanged(int value)
                  "The slowest performance. Best quality.");
         break;
     }
-
+    uiWdgBrushChooser.sliderPrecision->blockSignals(true);
+    uiWdgBrushChooser.sliderPrecision->setValue(value);
+    uiWdgBrushChooser.sliderPrecision->blockSignals(false);
     uiWdgBrushChooser.sliderPrecision->setToolTip(toolTip);
     m_precisionOption.setPrecisionLevel(value);
     emit sigPrecisionChanged();

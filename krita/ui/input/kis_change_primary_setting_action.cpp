@@ -18,7 +18,7 @@
 
 #include "kis_change_primary_setting_action.h"
 
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 
 #include "kis_input_manager.h"
 #include <KoToolProxy.h>

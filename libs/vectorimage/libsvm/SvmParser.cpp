@@ -29,7 +29,7 @@
 #include <QPolygon>
 
 // KDE
-#include <KDebug>
+#include <kdebug.h>
 
 // Libsvm
 #include "SvmEnums.h"

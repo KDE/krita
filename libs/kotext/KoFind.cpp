@@ -22,8 +22,8 @@
 #include "KoFind.h"
 
 #include <KoCanvasResourceManager.h>
-#include <KActionCollection>
-#include <KAction>
+#include <kactioncollection.h>
+#include <kaction.h>
 
 #include "KoFind_p.h"
 

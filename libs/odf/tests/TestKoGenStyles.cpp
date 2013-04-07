@@ -24,7 +24,7 @@
 
 #include <KoGenStyles.h>
 #include <KoXmlWriter.h>
-#include <KDebug>
+#include <kdebug.h>
 #include <QList>
 #include <QBuffer>
 #include <QRegExp>

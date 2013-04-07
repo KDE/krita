@@ -23,8 +23,8 @@
 #include <KoInlineNote.h>
 #include <KoIcon.h>
 
-#include <KAction>
-#include <KDebug>
+#include <kaction.h>
+#include <kdebug.h>
 
 #include <QWidget>
 

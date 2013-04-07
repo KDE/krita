@@ -30,7 +30,7 @@
 
 #include <KoTextLayoutRootArea.h>
 
-#include <KDebug>
+#include <kdebug.h>
 #include <QUrl>
 #include <QTextDocument>
 #include <QTextBlock>

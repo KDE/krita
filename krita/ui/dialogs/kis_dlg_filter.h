@@ -26,6 +26,7 @@
 
 class KisFilter;
 class KisFilterConfiguration;
+class KisView2;
 
 class KisFilterDialog : public QDialog
 {
@@ -34,7 +35,7 @@ class KisFilterDialog : public QDialog
 
 public:
 
-    KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageWSP image, KisSelectionSP selection = 0);
+    KisFilterDialog(KisView2 *view, KisNodeSP node, KisImageWSP image, KisSelectionSP selection = 0);
 
     ~KisFilterDialog();
 

@@ -32,8 +32,8 @@
 #include "KoShapePaintingContext.h"
 #include "KoStrokeConfigWidget.h"
 
-#include <KNumInput>
-#include <KLocale>
+#include <knuminput.h>
+#include <klocale.h>
 
 #include <QPainter>
 #include <QLabel>

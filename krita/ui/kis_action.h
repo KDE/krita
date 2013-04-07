@@ -19,7 +19,7 @@
 #ifndef KIS_ACTION_H
 #define KIS_ACTION_H
 
-#include <KAction>
+#include <kaction.h>
 #include <krita_export.h>
 #include <kdebug.h>
 

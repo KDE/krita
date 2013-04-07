@@ -144,7 +144,7 @@ void KisFillActionFactory::run(const QString &fillSource, KisView2 *view)
     KisSelectionSP selection = view->selection();
     QRect selectedRect = selection ?
         selection->selectedRect() : view->image()->bounds();
-    KisPaintDeviceSP filled = new KisPaintDevice(node->paintDevice()->colorSpace());
+    KisPaintDeviceSP filled = node->paintDevice()->createCompositionSourceDevice();
 
     QString actionName;
 
@@ -156,12 +156,12 @@ void KisFillActionFactory::run(const QString &fillSource, KisView2 *view)
         painter.end();
         actionName = i18n("Fill with Pattern");
     } else if (fillSource == "bg") {
-        KoColor color(node->paintDevice()->colorSpace());
+        KoColor color(filled->colorSpace());
         color.fromKoColor(view->resourceProvider()->bgColor());
         filled->setDefaultPixel(color.data());
         actionName = i18n("Fill with Background Color");
     } else if (fillSource == "fg") {
-        KoColor color(node->paintDevice()->colorSpace());
+        KoColor color(filled->colorSpace());
         color.fromKoColor(view->resourceProvider()->fgColor());
         filled->setDefaultPixel(color.data());
         actionName = i18n("Fill with Foreground Color");
@@ -257,7 +257,7 @@ void KisCutCopyActionFactory::run(bool willCut, KisView2 *view)
                 KisSelectionSP m_sel;
 
                 KUndo2Command* paint() {
-                    KisSelectedTransaction transaction("", m_node);
+                    KisTransaction transaction("", m_node->paintDevice());
                     m_node->paintDevice()->clearSelection(m_sel);
                     m_node->setDirty(m_sel->selectedRect());
                     return transaction.endAndTake();

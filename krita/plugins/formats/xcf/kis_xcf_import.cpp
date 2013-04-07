@@ -25,7 +25,7 @@
 #include <QFile>
 #include <qendian.h>
 
-#include <KPluginFactory>
+#include <kpluginfactory.h>
 
 #include <kio/netaccess.h>
 #include <kio/deletejob.h>

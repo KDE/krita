@@ -20,7 +20,7 @@
 #include "KoPAChangePageLayoutCommand.h"
 
 #include <klocale.h>
-#include <KDebug>
+#include <kdebug.h>
 
 #include "KoPADocument.h"
 #include "KoPAMasterPage.h"

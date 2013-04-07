@@ -26,11 +26,11 @@
 #include <QTimer>
 #include <QPushButton>
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KComponentData>
-#include <KGlobal>
-#include <KDebug>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kcomponentdata.h>
+#include <kglobal.h>
+#include <kdebug.h>
 
 #include <KoCanvasResourceManager.h>
 #include <KoIcon.h>
@@ -221,7 +221,7 @@ void KisColorSelector::resizeEvent(QResizeEvent* e) {
             }
         }
     }
-    if(m_canvas) {
+    if(m_canvas && m_canvas->resourceManager()) {
         if (m_lastColorRole==Foreground) {
             setColor(m_canvas->resourceManager()->foregroundColor().toQColor());
         } else {

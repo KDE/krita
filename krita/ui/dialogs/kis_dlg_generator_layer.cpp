@@ -31,9 +31,10 @@
 #include <filter/kis_filter_configuration.h>
 #include <kis_paint_device.h>
 #include <kis_transaction.h>
+#include <kis_view2.h>
 
-KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & name, QWidget * parent)
-        : KDialog(parent)
+KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & name, KisView2 *view)
+        : KDialog(view)
         , m_customName(false)
         , m_freezeName(false)
 {
@@ -42,11 +43,12 @@ KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & name, QWidget * paren
     setDefaultButton(Ok);
     QWidget * page = new QWidget(this);
     dlgWidget.setupUi(page);
-    setMainWidget(page);
+    dlgWidget.wdgGenerator->initialize(view);
 
+    setMainWidget(page);
     dlgWidget.txtLayerName->setText(name);
-    connect(dlgWidget.txtLayerName, SIGNAL(textChanged(const QString &)),
-            this, SLOT(slotNameChanged(const QString &)));
+    connect(dlgWidget.txtLayerName, SIGNAL(textChanged(QString)),
+            this, SLOT(slotNameChanged(QString)));
 }
 
 void KisDlgGeneratorLayer::slotNameChanged(const QString & text)

@@ -20,8 +20,8 @@
 #include "KoFilterEffectRegistry.h"
 #include "KoFilterEffect.h"
 #include <KoPluginLoader.h>
-#include <KGlobal>
-#include <KDebug>
+#include <kglobal.h>
+#include <kdebug.h>
 #include <KoXmlReader.h>
 
 KoFilterEffectRegistry::KoFilterEffectRegistry()

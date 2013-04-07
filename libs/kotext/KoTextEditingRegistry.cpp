@@ -21,7 +21,7 @@
 
 #include <KoPluginLoader.h>
 
-#include <KGlobal>
+#include <kglobal.h>
 
 void KoTextEditingRegistry::init()
 {

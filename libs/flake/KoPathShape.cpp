@@ -46,7 +46,7 @@
 #include <KoStyleStack.h>
 #include <KoOdfLoadingContext.h>
 
-#include <KDebug>
+#include <kdebug.h>
 #include <QPainter>
 
 #ifndef QT_NO_DEBUG

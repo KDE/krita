@@ -32,7 +32,7 @@
 #include <KoShapeController.h>
 #include <KoShapeContainer.h>
 
-#include <KAction>
+#include <kaction.h>
 #include <klocale.h>
 
 #include <QTextDocument>

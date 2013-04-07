@@ -22,7 +22,7 @@
 #ifndef KORTREE_H
 #define KORTREE_H
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <QPair>
 #include <QMap>

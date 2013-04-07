@@ -40,9 +40,9 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QMenu>
 #include <QMessageBox>
-#include <KStandardGuiItem>
-#include <KGuiItem>
-#include <KStandardAction>
+#include <kstandardguiitem.h>
+#include <kguiitem.h>
+#include <kstandardaction.h>
 
 #include <KoIcon.h>
 #include <koproperty/EditorView.h>
@@ -51,9 +51,9 @@
 #include <KoDpi.h>
 #include <KoPageFormat.h>
 #include <kaction.h>
-#include <KLocale>
-#include <KDebug>
-#include <KToggleAction>
+#include <klocale.h>
+#include <kdebug.h>
+#include <ktoggleaction.h>
 #include <kross/core/manager.h>
 
 //! Also add public method for runtime?

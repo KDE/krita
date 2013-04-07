@@ -26,8 +26,8 @@
 #include <KoTextDocument.h>
 #include <KoList.h>
 
-#include <KDebug>
-#include <KLocale>
+#include <kdebug.h>
+#include <klocale.h>
 #include <QTextList>
 #include <QTextDocument>
 #include <QAbstractTextDocumentLayout>

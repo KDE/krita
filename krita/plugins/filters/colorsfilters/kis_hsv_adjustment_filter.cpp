@@ -35,10 +35,9 @@ KisHSVAdjustmentFilter::KisHSVAdjustmentFilter()
     setSupportsIncrementalPainting(false);
 }
 
-KisConfigWidget * KisHSVAdjustmentFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
+KisConfigWidget * KisHSVAdjustmentFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
 {
     Q_UNUSED(dev);
-    Q_UNUSED(image);
     return new KisHSVConfigWidget(parent);
 }
 

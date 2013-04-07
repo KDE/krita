@@ -23,11 +23,11 @@
 #include "KoImageData_p.h"
 #include "KoImageCollection.h"
 
-#include <KTemporaryFile>
+#include <ktemporaryfile.h>
 #include <QImageWriter>
 #include <QCryptographicHash>
 #include <QFileInfo>
-#include <KDebug>
+#include <kdebug.h>
 #include <QBuffer>
 
 KoImageDataPrivate::KoImageDataPrivate(KoImageData *q)

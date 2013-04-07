@@ -219,4 +219,9 @@ void ParagraphGeneral::setStyleManager(KoStyleManager *sm)
     m_paragraphInheritedStyleModel->setStyleManager(m_styleManager);
 }
 
+KoParagraphStyle *ParagraphGeneral::style() const
+{
+    return m_style;
+}
+
 #include <ParagraphGeneral.moc>

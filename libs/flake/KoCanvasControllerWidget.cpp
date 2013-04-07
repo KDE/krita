@@ -24,6 +24,7 @@
  */
 
 #include "KoCanvasControllerWidget.h"
+#include "KoCanvasControllerWidget_p.h"
 
 #include "KoCanvasControllerWidgetViewport_p.h"
 #include "KoShape.h"
@@ -34,7 +35,7 @@
 #include "KoToolManager_p.h"
 
 #include <ksharedconfig.h>
-#include <KDebug>
+#include <kdebug.h>
 #include <kconfiggroup.h>
 #include <QApplication>
 #include <QMouseEvent>
@@ -49,41 +50,6 @@
 #ifdef HAVE_OPENGL
 #include <QGLWidget>
 #endif
-
-
-class KoCanvasControllerWidget::Private
-{
-public:
-
-    Private(KoCanvasControllerWidget *qq)
-        : q(qq)
-        , canvas(0)
-        , lastActivatedCanvas(0)
-        , ignoreScrollSignals(false)
-        , zoomWithWheel(false)
-        , vastScrollingFactor(0)
-    {
-    }
-
-    /**
-     * Gets called by the tool manager if this canvas controller is the current active canvas controller.
-     */
-    void setDocumentOffset();
-
-    void resetScrollBars();
-    void emitPointerPositionChangedSignals(QEvent *event);
-
-    void activate();
-    void unsetCanvas();
-
-    KoCanvasControllerWidget *q;
-    KoCanvasBase *canvas;
-    KoCanvasBase *lastActivatedCanvas;
-    Viewport *viewportWidget;
-    bool ignoreScrollSignals;
-    bool zoomWithWheel;
-    qreal vastScrollingFactor;
-};
 
 
 void KoCanvasControllerWidget::Private::setDocumentOffset()

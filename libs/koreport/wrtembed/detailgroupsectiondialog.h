@@ -20,7 +20,7 @@
 #ifndef DETAILGROUPSECTIONDIALOG_H
 #define DETAILGROUPSECTIONDIALOG_H
 
-#include <KDialog>
+#include <kdialog.h>
 
 #include <ui_detailgroupsectiondialog.h>
 

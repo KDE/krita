@@ -19,7 +19,7 @@
 #include "kis_alternate_invocation_action.h"
 
 #include <QApplication>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 
 #include <KoToolProxy.h>
 #include <kis_canvas2.h>

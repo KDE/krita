@@ -28,7 +28,7 @@
 #include <changetracker/KoChangeTrackerElement.h>
 #include <styles/KoCharacterStyle.h>
 
-#include <KLocale>
+#include <klocale.h>
 
 #include <QPair>
 #include <QStack>

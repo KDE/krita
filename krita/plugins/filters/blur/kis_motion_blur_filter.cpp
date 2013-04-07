@@ -50,9 +50,8 @@ KisMotionBlurFilter::KisMotionBlurFilter() : KisFilter(id(), categoryBlur(), i18
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-KisConfigWidget * KisMotionBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageWSP image) const
+KisConfigWidget * KisMotionBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
 {
-    Q_UNUSED(image)
     return new KisWdgMotionBlur(parent);
 }
 

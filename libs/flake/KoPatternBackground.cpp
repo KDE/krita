@@ -34,7 +34,7 @@
 #include <KoViewConverter.h>
 #include <KoXmlWriter.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <QBrush>
 #include <QPainter>

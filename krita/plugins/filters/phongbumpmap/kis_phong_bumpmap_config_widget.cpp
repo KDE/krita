@@ -22,10 +22,9 @@
 #include "KoChannelInfo.h"
 #include "KoColorSpace.h"
 
-KisPhongBumpmapConfigWidget::KisPhongBumpmapConfigWidget(const KisPaintDeviceSP dev, const KisImageWSP image, QWidget *parent, Qt::WFlags f)
+KisPhongBumpmapConfigWidget::KisPhongBumpmapConfigWidget(const KisPaintDeviceSP dev, QWidget *parent, Qt::WFlags f)
                             : KisConfigWidget(parent, f)
                             , m_device(dev)
-                            , m_image(image)
 {
     Q_ASSERT(m_device);
     m_page = new KisPhongBumpmapWidget(this);

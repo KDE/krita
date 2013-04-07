@@ -26,7 +26,7 @@
 #include <KoOdfGraphicStyles.h>
 #include <KoShapeSavingContext.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <QBrush>
 #include <QPainter>

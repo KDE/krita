@@ -32,6 +32,7 @@
 #include "KoIntegerMaths.h"
 #include "KoCompositeOpOver.h"
 #include "KoCompositeOpErase.h"
+#include "KoCompositeOpCopy2.h"
 #include "KoCompositeOpAlphaDarken.h"
 #include <colorprofiles/KoDummyColorProfile.h>
 
@@ -263,6 +264,7 @@ KoAlphaColorSpace::KoAlphaColorSpace() :
     m_compositeOps << new KoCompositeOpOver<AlphaU8Traits>(this)
             << new CompositeClear(this)
             << new KoCompositeOpErase<AlphaU8Traits>(this)
+            << new KoCompositeOpCopy2<AlphaU8Traits>(this)
             << new CompositeSubtract(this)
             << new CompositeMultiply(this)
             << new KoCompositeOpAlphaDarken<AlphaU8Traits>(this);
@@ -294,22 +296,6 @@ quint8 KoAlphaColorSpace::difference(const quint8 *src1, const quint8 *src2) con
 {
     // Arithmetic operands smaller than int are converted to int automatically
     return qAbs(src2[PIXEL_MASK] - src1[PIXEL_MASK]);
-}
-
-bool KoAlphaColorSpace::convertPixelsTo(const quint8 *src,
-                                        quint8 *dst, const KoColorSpace * dstColorSpace,
-                                        quint32 numPixels,
-                                        KoColorConversionTransformation::Intent /*renderingIntent*/,
-                                        KoColorConversionTransformation::ConversionFlags /*conversionFlags*/) const
-{
-    // No lcms trickery here, we are only a opacity channel
-    qint32 size = dstColorSpace->pixelSize();
-
-    memset(dst, 0, numPixels * size);
-    dstColorSpace->applyInverseAlphaU8Mask(dst, src, numPixels);
-
-    return true;
-
 }
 
 QString KoAlphaColorSpace::channelValueText(const quint8 *pixel, quint32 channelIndex) const
@@ -372,3 +358,7 @@ KoColorSpace* KoAlphaColorSpace::clone() const
     return new KoAlphaColorSpace();
 }
 
+bool KoAlphaColorSpace::preferCompositionInSourceColorSpace() const
+{
+    return true;
+}

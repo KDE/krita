@@ -50,7 +50,7 @@
 #include <KoClipPath.h>
 #include <KoXmlNS.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <QColor>
 

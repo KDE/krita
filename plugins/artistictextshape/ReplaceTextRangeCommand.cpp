@@ -19,7 +19,7 @@
 
 #include "ReplaceTextRangeCommand.h"
 #include "ArtisticTextShape.h"
-#include <KLocale>
+#include <klocale.h>
 
 ReplaceTextRangeCommand::ReplaceTextRangeCommand(ArtisticTextShape *shape, const QString &text, int from, int count, ArtisticTextTool *tool, KUndo2Command *parent)
     : KUndo2Command(parent), m_tool(tool), m_shape(shape), m_from(from), m_count(count)

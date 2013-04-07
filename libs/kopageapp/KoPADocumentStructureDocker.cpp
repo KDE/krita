@@ -49,12 +49,12 @@
 
 #include <KoIcon.h>
 
-#include <KMenu>
+#include <kmenu.h>
 #include <klocale.h>
 #include <kinputdialog.h>
 #include <kmessagebox.h>
-#include <KConfigGroup>
-#include <KDebug>
+#include <kconfiggroup.h>
+#include <kdebug.h>
 
 #include <QGridLayout>
 #include <QToolButton>

@@ -39,6 +39,7 @@
 #include "kis_cursor.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
+#include "kis_properties_configuration.h"
 
 #include "kis_tool_colorpicker.moc"
 #include "KoPointerEvent.h"
@@ -50,32 +51,102 @@
 
 namespace
 {
-// The location of the sample all visible layers in the combobox
-const int SAMPLE_MERGED = 0;
+    // The location of the sample all visible layers in the combobox
+    const int SAMPLE_MERGED = 0;
+    const QString CONFIG_GROUP_NAME = "tool_color_picker";
+}
+
+KisToolColorPicker::Configuration::Configuration()
+    : toForegroundColor(true),
+      updateColor(true),
+      addPalette(false),
+      normaliseValues(false),
+      sampleMerged(true),
+      radius(1)
+{
+}
+
+inline QString getConfigKey(KisTool::ToolActivation activation) {
+    QString configKey;
+
+    switch (activation) {
+    case KisTool::TemporaryActivation:
+        configKey = "ColorPickerTemporaryActivation";
+        break;
+    case KisTool::DefaultActivation:
+        configKey = "ColorPickerDefaultActivation";
+        break;
+    };
+
+    return configKey;
+}
+
+void KisToolColorPicker::Configuration::save(ToolActivation activation) const
+{
+    KisPropertiesConfiguration props;
+    props.setProperty("toForegroundColor", toForegroundColor);
+    props.setProperty("updateColor", updateColor);
+    props.setProperty("addPalette", addPalette);
+    props.setProperty("normaliseValues", normaliseValues);
+    props.setProperty("sampleMerged", sampleMerged);
+    props.setProperty("radius", radius);
+
+    KConfigGroup config = KGlobal::config()->group(CONFIG_GROUP_NAME);
+
+    config.writeEntry(getConfigKey(activation), props.toXML());
+}
+
+void KisToolColorPicker::Configuration::load(ToolActivation activation)
+{
+    KisPropertiesConfiguration props;
+
+    KConfigGroup config = KGlobal::config()->group(CONFIG_GROUP_NAME);
+    props.fromXML(config.readEntry(getConfigKey(activation)));
+
+    toForegroundColor = props.getBool("toForegroundColor", true);
+    updateColor = props.getBool("updateColor", true);
+    addPalette = props.getBool("addPalette", false);
+    normaliseValues = props.getBool("normaliseValues", false);
+    sampleMerged = props.getBool("sampleMerged", activation == KisTool::TemporaryActivation ? false : true);
+    radius = props.getInt("radius", 1);
 }
 
 KisToolColorPicker::KisToolColorPicker(KoCanvasBase* canvas)
         :  KisTool(canvas, KisCursor::pickerCursor())
 {
     setObjectName("tool_colorpicker");
+    m_isActivated = false;
     m_optionsWidget = 0;
-    m_radius = 1;
-    m_addPalette = false;
-    m_updateColor = true;
-    m_normaliseValues = false;
     m_pickedColor = KoColor();
-    m_toForegroundColor = true;
 }
 
 KisToolColorPicker::~KisToolColorPicker()
 {
+    if (m_isActivated) {
+        m_config.save(m_toolActivationSource);
+    }
 }
-
 
 void KisToolColorPicker::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_UNUSED(gc);
     Q_UNUSED(converter);
+}
+
+void KisToolColorPicker::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
+{
+    m_isActivated = true;
+    m_toolActivationSource = activation;
+    m_config.load(m_toolActivationSource);
+    updateOptionWidget();
+
+    KisTool::activate(activation, shapes);
+}
+void KisToolColorPicker::deactivate()
+{
+    m_config.save(m_toolActivationSource);
+    m_isActivated = false;
+    KisTool::deactivate();
 }
 
 void KisToolColorPicker::pickColor(const QPointF& pos)
@@ -103,7 +174,7 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
             dev = currentImage()->projection();
         }
 
-        if (m_radius == 1) {
+        if (m_config.radius == 1) {
             dev->pixel(pos.x(), pos.y(), &m_pickedColor);
         } else {
             // radius 2 ==> 9 pixels, 3 => 9 pixels, etc
@@ -113,15 +184,15 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
             int pixelSize = cs->pixelSize();
 
             quint8* data = new quint8[pixelSize];
-            quint8** pixels = new quint8*[counts[m_radius]];
-            qint16* weights = new qint16[counts[m_radius]];
+            quint8** pixels = new quint8*[counts[m_config.radius]];
+            qint16* weights = new qint16[counts[m_config.radius]];
 
             int i = 0;
             KisRandomConstAccessorSP accessor = dev->createRandomConstAccessorNG(0, 0);
 
-            for (int y = -m_radius; y <= m_radius; y++) {
-                for (int x = -m_radius; x <= m_radius; x++) {
-                    if (((x * x) + (y * y)) < m_radius * m_radius) {
+            for (int y = -m_config.radius; y <= m_config.radius; y++) {
+                for (int x = -m_config.radius; x <= m_config.radius; x++) {
+                    if (((x * x) + (y * y)) < m_config.radius * m_config.radius) {
 
                         accessor->moveTo(pos.x() + x, pos.y() + y);
 
@@ -134,9 +205,9 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
                             // to sum to 255 in total
                             // It's -(counts -1), because we'll add the center one implicitly
                             // through that calculation
-                            weights[i] = 255 - (counts[m_radius] - 1) * (255 / counts[m_radius]);
+                            weights[i] = 255 - (counts[m_config.radius] - 1) * (255 / counts[m_config.radius]);
                         } else {
-                            weights[i] = 255 / counts[m_radius];
+                            weights[i] = 255 / counts[m_config.radius];
                         }
                         i++;
                     }
@@ -144,18 +215,18 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
             }
             // Weird, I can't do that directly :/
             const quint8** cpixels = const_cast<const quint8**>(pixels);
-            cs->mixColorsOp()->mixColors(cpixels, weights, counts[m_radius], data);
+            cs->mixColorsOp()->mixColors(cpixels, weights, counts[m_config.radius], data);
             m_pickedColor = KoColor(data, cs);
 
-            for (i = 0; i < counts[m_radius]; i++){
+            for (i = 0; i < counts[m_config.radius]; i++){
                 delete[] pixels[i];
             }
             delete[] pixels;
             delete[] data;
         }
 
-        if (m_updateColor) {
-            if (m_toForegroundColor)
+        if (m_config.updateColor) {
+            if (m_config.toForegroundColor)
                 canvas()->resourceManager()->setResource(KoCanvasResourceManager::ForegroundColor, m_pickedColor);
             else
                 canvas()->resourceManager()->setResource(KoCanvasResourceManager::BackgroundColor, m_pickedColor);
@@ -192,7 +263,7 @@ void KisToolColorPicker::mousePressEvent(KoPointerEvent *event)
             return;
         }
 
-        m_toForegroundColor = (event->button() == Qt::LeftButton);
+        //m_toForegroundColor = (event->button() == Qt::LeftButton);
         pickColor(pos);
         displayPickedColor();
     }
@@ -218,7 +289,7 @@ void KisToolColorPicker::mouseReleaseEvent(KoPointerEvent *event)
     if(RELEASE_CONDITION_WB(event, KisTool::PAINT_MODE, Qt::LeftButton | Qt::RightButton)) {
         setMode(KisTool::HOVER_MODE);
 
-        if (m_addPalette) {
+        if (m_config.addPalette) {
             KoColorSetEntry ent;
             ent.color = m_pickedColor;
             // We don't ask for a name, too intrusive here
@@ -247,7 +318,7 @@ void KisToolColorPicker::displayPickedColor()
             QString channelValueText;
             int pos = channels[i]->pos() / channels[i]->size(); // HACK This doesn't work if the channels differ in size
 
-            if (m_normaliseValues) {
+            if (m_config.normaliseValues) {
                 channelValueText = m_pickedColor.colorSpace()->normalisedChannelValueText(m_pickedColor.data(), pos);
             } else {
                 channelValueText = m_pickedColor.colorSpace()->channelValueText(m_pickedColor.data(), pos);
@@ -264,15 +335,9 @@ QWidget* KisToolColorPicker::createOptionWidget()
 {
     m_optionsWidget = new ColorPickerOptionsWidget(0);
     m_optionsWidget->setObjectName(toolId() + " option widget");
-    m_optionsWidget->cbUpdateCurrentColor->setChecked(m_updateColor);
-
-    m_optionsWidget->cmbSources->setCurrentIndex(0);
-
-    m_optionsWidget->cbNormaliseValues->setChecked(m_normaliseValues);
-    m_optionsWidget->cbPalette->setChecked(m_addPalette);
-    m_optionsWidget->radius->setValue(m_radius);
-
     m_optionsWidget->listViewChannels->setSortingEnabled(false);
+
+    updateOptionWidget();
 
     connect(m_optionsWidget->cbUpdateCurrentColor, SIGNAL(toggled(bool)), SLOT(slotSetUpdateColor(bool)));
     connect(m_optionsWidget->cbNormaliseValues, SIGNAL(toggled(bool)), SLOT(slotSetNormaliseValues(bool)));
@@ -280,6 +345,8 @@ QWidget* KisToolColorPicker::createOptionWidget()
             SLOT(slotSetAddPalette(bool)));
     connect(m_optionsWidget->radius, SIGNAL(valueChanged(int)),
             SLOT(slotChangeRadius(int)));
+    connect(m_optionsWidget->cmbSources, SIGNAL(currentIndexChanged(int)),
+            SLOT(slotSetColorSource(int)));
 
     KoResourceServer<KoColorSet>* srv = KoResourceServerProvider::instance()->paletteServer();
 
@@ -298,31 +365,47 @@ QWidget* KisToolColorPicker::createOptionWidget()
 
     //TODO
     //connect(srv, SIGNAL(resourceAdded(KoResource*)), this, SLOT(slotAddPalette(KoResource*)));
+    //m_optionsWidget->setFixedHeight(m_optionsWidget->sizeHint().height());
 
-//     m_optionsWidget->setFixedHeight(m_optionsWidget->sizeHint().height());
     return m_optionsWidget;
+}
+
+void KisToolColorPicker::updateOptionWidget()
+{
+    if (!m_optionsWidget) return;
+
+    m_optionsWidget->cbNormaliseValues->setChecked(m_config.normaliseValues);
+    m_optionsWidget->cbUpdateCurrentColor->setChecked(m_config.updateColor);
+    m_optionsWidget->cmbSources->setCurrentIndex(SAMPLE_MERGED + !m_config.sampleMerged);
+    m_optionsWidget->cbPalette->setChecked(m_config.addPalette);
+    m_optionsWidget->radius->setValue(m_config.radius);
 }
 
 void KisToolColorPicker::slotSetUpdateColor(bool state)
 {
-    m_updateColor = state;
+    m_config.updateColor = state;
 }
 
 
 void KisToolColorPicker::slotSetNormaliseValues(bool state)
 {
-    m_normaliseValues = state;
+    m_config.normaliseValues = state;
     displayPickedColor();
 }
 
 void KisToolColorPicker::slotSetAddPalette(bool state)
 {
-    m_addPalette = state;
+    m_config.addPalette = state;
 }
 
 void KisToolColorPicker::slotChangeRadius(int value)
 {
-    m_radius = value;
+    m_config.radius = value;
+}
+
+void KisToolColorPicker::slotSetColorSource(int value)
+{
+    m_config.sampleMerged = value == SAMPLE_MERGED;
 }
 
 void KisToolColorPicker::slotAddPalette(KoResource* resource)

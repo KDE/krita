@@ -92,7 +92,7 @@ public:
         QStringList cutOffPolicies;
         cutOffPolicies << i18n("Cut Off Disabled") << i18n("Cut Off Brush") << i18n("Cut Off Pattern");
         cmbCutoffPolicy->addItems(cutOffPolicies);
-        formLayout->addRow(i18n("Cutoff Policy"), cmbCutoffPolicy);
+        formLayout->addRow(i18n("Cutoff Policy:"), cmbCutoffPolicy);
 
         cutoffSlider = new KisGradientSlider(this);
         cutoffSlider->setMinimumSize(256, 30);
@@ -100,9 +100,9 @@ public:
         cutoffSlider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         cutoffSlider->setToolTip(i18n("When pattern texture values are outside the range specified"
                                       " by the slider, the cut-off policy will be applied."));
-        formLayout->addRow(i18n("Cutoff"), cutoffSlider);
+        formLayout->addRow(i18n("Cutoff:"), cutoffSlider);
 
-        chkInvert = new QCheckBox("", this);
+        chkInvert = new QCheckBox(this);
         chkInvert->setChecked(false);
         formLayout->addRow(i18n("Invert Texture:"), chkInvert);
 

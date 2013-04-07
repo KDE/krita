@@ -32,9 +32,9 @@
 #include <QMenu>
 
 // KDE
-#include <KLocale>
-#include <KDebug>
-#include <KMessageBox>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kmessagebox.h>
 
 // Calligra
 #include <interfaces/KoChartModel.h>

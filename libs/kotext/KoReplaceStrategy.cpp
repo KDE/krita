@@ -20,10 +20,10 @@
 #include "KoReplaceStrategy.h"
 
 #include <QTextCursor>
-#include <KFind>
-#include <KReplaceDialog>
-#include <KMessageBox>
-#include <KLocale>
+#include <kfind.h>
+#include <kreplacedialog.h>
+#include <kmessagebox.h>
+#include <klocale.h>
 
 #include "FindDirection_p.h"
 

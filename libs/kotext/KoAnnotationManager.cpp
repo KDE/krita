@@ -22,7 +22,7 @@
 #include "KoAnnotationManager.h"
 #include "KoAnnotation.h"
 
-#include <KDebug>
+#include <kdebug.h>
 #include <QHash>
 
 class KoAnnotationManagerPrivate

@@ -38,7 +38,7 @@
 #include <QFontMetricsF>
 #include <QPainter>
 #include <QRectF>
-#include <KDebug>
+#include <kdebug.h>
 
 #include "changetracker/KoChangeTracker.h"
 #include "changetracker/KoChangeTrackerElement.h"

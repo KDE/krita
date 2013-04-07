@@ -25,20 +25,20 @@
 #include <QHBoxLayout>
 #include <QFileInfo>
 
-#include <KLocale>
-#include <KColorDialog>
-#include <KInputDialog>
-#include <KMessageBox>
-#include <KFileDialog>
+#include <klocale.h>
+#include <kcolordialog.h>
+#include <kinputdialog.h>
+#include <kmessagebox.h>
+#include <kfiledialog.h>
 
 #include <KoColorSet.h>
 #include <KoColorPatch.h>
 #include <KoColorSpaceRegistry.h>
 
 // debug
-#include <KGlobal>
-#include <KStandardDirs>
-#include <KDebug>
+#include <kglobal.h>
+#include <kstandarddirs.h>
+#include <kdebug.h>
 
 KoEditColorSetWidget::KoEditColorSetWidget(const QList<KoColorSet *> &palettes, const QString &activePalette, QWidget *parent)
     : QWidget(parent),

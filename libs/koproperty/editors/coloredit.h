@@ -21,7 +21,7 @@
 #define KPROPERTY_COLOREDIT_H
 
 #include "koproperty/Factory.h"
-#include <KColorCombo>
+#include <kcolorcombo.h>
 
 namespace KoProperty
 {

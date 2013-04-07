@@ -26,9 +26,9 @@
 #include <kdebug.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
-#include <KGlobal>
-#include <KConfig>
-#include <KConfigGroup>
+#include <kglobal.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 
 class KoPluginLoader::Private
 {

@@ -115,6 +115,7 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
     colorSpaceSelector->setCurrentColorDepth(KoID(defColorDepth));
     colorSpaceSelector->setCurrentProfile(defColorProfile);
 
+    connect(chkFromClipboard,SIGNAL(stateChanged(int)),this,SLOT(clipboardDataChanged()));
     connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));
     connect(QApplication::clipboard(), SIGNAL(selectionChanged()), this, SLOT(clipboardDataChanged()));
     connect(QApplication::clipboard(), SIGNAL(changed(QClipboard::Mode)), this, SLOT(clipboardDataChanged()));
@@ -260,16 +261,20 @@ void KisCustomImageWidget::clipboardDataChanged()
         KisClipboard * cb = KisClipboard::instance();
         QSize sz = cb->clipSize();
         if (sz.isValid() && sz.width() != 0 && sz.height() != 0) {
-            chkFromClipboard->setChecked(true);
             chkFromClipboard->setEnabled(true);
-            doubleWidth->setValue(sz.width());
+            if (chkFromClipboard->isChecked()) {
+                doubleWidth->setValue(sz.width());
+                doubleHeight->setValue(sz.height());
+            }
+            else {
+                doubleWidth->setValue(doubleWidth->value());
+                doubleHeight->setValue(doubleHeight->value());
+            }
             doubleWidth->setDecimals(0);
-            doubleHeight->setValue(sz.height());
             doubleHeight->setDecimals(0);
         } else {
             chkFromClipboard->setChecked(false);
             chkFromClipboard->setEnabled(false);
-
         }
     }
 

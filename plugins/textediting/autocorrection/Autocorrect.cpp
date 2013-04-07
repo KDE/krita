@@ -21,15 +21,15 @@
 #include "AutocorrectConfigDialog.h"
 
 #include <QTextBlock>
-#include <KAction>
+#include <kaction.h>
 #include <QFile>
 #include <QDomDocument>
 
-#include <KLocale>
-#include <KConfigGroup>
-#include <KCalendarSystem>
-#include <KStandardDirs>
-#include <KDebug>
+#include <klocale.h>
+#include <kconfiggroup.h>
+#include <kcalendarsystem.h>
+#include <kstandarddirs.h>
+#include <kdebug.h>
 
 #include <KoGlobal.h>
 

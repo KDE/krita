@@ -183,32 +183,50 @@ void KoPart::setReadWrite(bool readwrite)
 
 bool KoPart::openFile()
 {
-    KoMainWindow *shell = 0;
-    if (shellCount() > 0) {
-        shell = shells()[0];
+    DocumentProgressProxy *progressProxy = 0;
+    if (!d->document->progressProxy()) {
+        KoMainWindow *shell = 0;
+        if (shellCount() > 0) {
+            shell = shells()[0];
+        }
+        progressProxy = new DocumentProgressProxy(shell);
+        d->document->setProgressProxy(progressProxy);
     }
-    DocumentProgressProxy progressProxy(shell);
-    d->document->setProgressProxy(&progressProxy);
     d->document->setUrl(url());
 
     // THIS IS WRONG! KoDocument::openFile should move here, and whoever subclassed KoDocument to
     // reimplement openFile shold now subclass KoPart.
-    return d->document->openFile();
+    bool ok = d->document->openFile();
+
+    if (progressProxy) {
+        d->document->setProgressProxy(0);
+        delete progressProxy;
+    }
+    return ok;
 }
 
 bool KoPart::saveFile()
 {
-    KoMainWindow *shell = 0;
-    if (shellCount() > 0) {
-        shell = shells()[0];
+    DocumentProgressProxy *progressProxy = 0;
+    if (!d->document->progressProxy()) {
+        KoMainWindow *shell = 0;
+        if (shellCount() > 0) {
+            shell = shells()[0];
+        }
+        progressProxy = new DocumentProgressProxy(shell);
+        d->document->setProgressProxy(progressProxy);
     }
-    DocumentProgressProxy progressProxy(shell);
-    d->document->setProgressProxy(&progressProxy);
     d->document->setUrl(url());
 
     // THIS IS WRONG! KoDocument::saveFile should move here, and whoever subclassed KoDocument to
     // reimplement saveFile shold now subclass KoPart.
-    return d->document->saveFile();
+    bool ok = d->document->saveFile();
+
+    if (progressProxy) {
+        d->document->setProgressProxy(0);
+        delete progressProxy;
+    }
+    return ok;
 }
 
 KoView *KoPart::createView(QWidget *parent)

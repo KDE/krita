@@ -27,7 +27,7 @@
 #include <QVBoxLayout>
 #include <QVarLengthArray>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #define THRESHOLD_FRAME_VARIANCE 40.0
 

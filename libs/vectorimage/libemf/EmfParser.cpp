@@ -25,7 +25,7 @@
 #include <QBuffer>
 
 // KDE
-#include <KDebug>
+#include <kdebug.h>
 
 // LibEmf
 #include "EmfRecords.h"

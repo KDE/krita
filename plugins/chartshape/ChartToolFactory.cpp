@@ -29,7 +29,7 @@
 #include <KoIcon.h>
 
 // KDE
-#include <KLocale>
+#include <klocale.h>
 
 
 

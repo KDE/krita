@@ -21,8 +21,8 @@
 #include "KoPageNavigatorButton_p.h"
 
 // KDE
-#include <KIcon>
-#include <KDebug>
+#include <kicon.h>
+#include <kdebug.h>
 // Qt
 #include <QAction>
 

@@ -165,7 +165,8 @@ ToolPluginsDisabled=paragraphtool,kopabackgroundtool,calligrastagetoolanimation
 ToolsBlacklist=CreatePathTool,KoPencilTool,ConnectionTool,KarbonFilterEffectsTool,PanTool,KoZoomToolId
 
 [favoriteList]
-favoriteBrushes=paintbrush,deformbrush,hairybrush,hatchingbrush,sketchbrush,smudge,spraybrush,
+favoritePresets=Basic_Airbrush,Basic_ink_10,Hairy_clean,Hatch_diag_S,Pencil_2B,Pencil_HB,Sketch_ink_small,Sketch_wires,
+
 
 [advancedColorSelector]
 allowHorizontalLayout=true
@@ -206,5 +207,5 @@ useCustomColorSpace=false
 zoomSize=280
 
 [theme]
-Theme=Krita-dark
+Tiheme=Krita-dark
 

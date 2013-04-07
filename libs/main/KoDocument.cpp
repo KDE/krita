@@ -22,7 +22,7 @@
  */
 
 #include "KoMainWindow.h" // XXX: remove
-#include <KMessageBox> // XXX: remove
+#include <kmessagebox.h> // XXX: remove
 #include <KNotification> // XXX: remove
 
 #include "KoDocument.h"
@@ -1374,6 +1374,11 @@ KoProgressUpdater *KoDocument::progressUpdater() const
 void KoDocument::setProgressProxy(KoProgressProxy *progressProxy)
 {
     d->progressProxy = progressProxy;
+}
+
+KoProgressProxy* KoDocument::progressProxy() const
+{
+    return d->progressProxy;
 }
 
 // shared between openFile and koMainWindow's "create new empty document" code

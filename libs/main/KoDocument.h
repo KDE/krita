@@ -443,6 +443,7 @@ public:
      * progress to.
      */
     void setProgressProxy(KoProgressProxy *progressProxy);
+    KoProgressProxy* progressProxy() const;
 
     /**
      * Return true if url() is a real filename, false if url() is

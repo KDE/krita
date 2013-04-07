@@ -66,11 +66,11 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
     connect(m_d->uiWdgPaintOpPresets.wdgPresetChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SIGNAL(resourceSelected(KoResource*)));
 
-    connect(m_d->uiWdgPaintOpPresets.searchBar, SIGNAL(textChanged(const QString&)),
-            m_d->uiWdgPaintOpPresets.wdgPresetChooser, SLOT(searchTextChanged(const QString&)));
+    connect(m_d->uiWdgPaintOpPresets.searchBar, SIGNAL(textChanged(QString)),
+            m_d->uiWdgPaintOpPresets.wdgPresetChooser, SLOT(searchTextChanged(QString)));
 
-    connect(m_d->uiWdgPaintOpPresets.searchBar, SIGNAL(textChanged(const QString&)),
-                this, SLOT(setLineEditCompleter(const QString&)));
+    connect(m_d->uiWdgPaintOpPresets.searchBar, SIGNAL(textChanged(QString)),
+                this, SLOT(setLineEditCompleter(QString)));
 
     connect(m_d->uiWdgPaintOpPresets.searchBar, SIGNAL(returnPressed(QString)),
                 this, SLOT(returnKeyPressed(QString)));
@@ -129,4 +129,9 @@ void KisPaintOpPresetsChooserPopup::returnKeyPressed(QString lineEditText)
     }
     m_d->uiWdgPaintOpPresets.searchBar->setText(lineEditText);
     setLineEditCompleter(lineEditText);
+}
+
+void KisPaintOpPresetsChooserPopup::showButtons(bool show)
+{
+    m_d->uiWdgPaintOpPresets.wdgPresetChooser->showButtons(show);
 }

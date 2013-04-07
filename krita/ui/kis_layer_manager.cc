@@ -59,9 +59,6 @@
 #include <kis_image.h>
 #include <kis_layer.h>
 #include <kis_paint_device.h>
-#include <kis_paint_layer.h>
-#include <kis_transaction.h>
-#include <kis_selection.h>
 #include <flake/kis_shape_layer.h>
 #include <kis_transform_visitor.h>
 #include <kis_undo_adapter.h>
@@ -235,7 +232,6 @@ KisLayerManager::KisLayerManager(KisView2 * view, KisDoc2 * doc)
     , m_doc(doc)
     , m_imageFlatten(0)
     , m_imageMergeLayer(0)
-    , m_layerSaveAs(0)
     , m_groupLayersSave(0)
     , m_actLayerVis(false)
     , m_imageResizeToLayer(0)
@@ -298,11 +294,6 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     m_view->actionManager()->addAction("rasterize_layer", m_rasterizeLayer, actionCollection);
     connect(m_rasterizeLayer, SIGNAL(triggered()), this, SLOT(rasterizeLayer()));
 
-    m_layerSaveAs  = new KisAction(koIcon("document-save"), i18n("Save Layer as Image..."), this);
-    m_layerSaveAs->setActivationFlags(KisAction::ACTIVE_LAYER);
-    m_view->actionManager()->addAction("save_layer_as_image", m_layerSaveAs, actionCollection);
-    connect(m_layerSaveAs, SIGNAL(triggered()), this, SLOT(saveLayerAsImage()));
-
     m_groupLayersSave = new KAction(koIcon("document-save"), i18n("Save Group Layers..."), this);
     actionCollection->addAction("save_groups_as_images", m_groupLayersSave);
     connect(m_groupLayersSave, SIGNAL(triggered()), this, SLOT(saveGroupLayers()));
@@ -330,8 +321,6 @@ void KisLayerManager::updateGUI()
         layer = m_activeLayer;
         nlayers = image->nlayers();
     }
-
-    bool enable = image && layer && layer->visible() && !layer->userLocked() && !layer->systemLocked();
 
     // XXX these should be named layer instead of image
     m_imageFlatten->setEnabled(nlayers > 1);
@@ -369,7 +358,7 @@ void KisLayerManager::layerProperties()
         KisLayerSP prev = dynamic_cast<KisLayer*>(alayer->prevSibling().data());
         if (prev) dev = prev->projection();
 
-        KisDlgAdjLayerProps dlg(alayer, alayer.data(), dev, alayer->image(), alayer->filter().data(), alayer->name(), i18n("Filter Layer Properties"), m_view, "dlgadjlayerprops");
+        KisDlgAdjLayerProps dlg(alayer, alayer.data(), dev, m_view, alayer->filter().data(), alayer->name(), i18n("Filter Layer Properties"), m_view, "dlgadjlayerprops");
         dlg.resize(dlg.minimumSizeHint());
 
 
@@ -582,7 +571,7 @@ void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above)
     KisSelectionSP selection = l->selection();
     KisAdjustmentLayerSP adjl = addAdjustmentLayer(parent, above, QString(), 0, selection);
 
-    KisDlgAdjustmentLayer dlg(adjl, adjl.data(), dev, adjl->image(), image->nextLayerName(), i18n("New Filter Layer"), m_view, "dlgadjustmentlayer");
+    KisDlgAdjustmentLayer dlg(adjl, adjl.data(), dev, image->nextLayerName(), i18n("New Filter Layer"), m_view);
     dlg.resize(dlg.minimumSizeHint());
 
     if (dlg.exec() != QDialog::Accepted) {
@@ -857,58 +846,6 @@ void KisLayerManager::layersUpdated()
     if (!layer) return;
 
     m_view->updateGUI();
-}
-
-void KisLayerManager::saveLayerAsImage()
-{
-    QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
-    QString mimelist = listMimeFilter.join(" ");
-
-    KFileDialog fd(KUrl(QString()), mimelist, m_view);
-    fd.setObjectName("Export Layer");
-    fd.setCaption(i18n("Export Layer"));
-    fd.setMimeFilter(listMimeFilter);
-    fd.setOperationMode(KFileDialog::Saving);
-
-    if (!fd.exec()) return;
-
-    KUrl url = fd.selectedUrl();
-    QString mimefilter = fd.currentMimeFilter();
-
-    if (mimefilter.isNull()) {
-        KMimeType::Ptr mime = KMimeType::findByUrl(url);
-        mimefilter = mime->name();
-    }
-
-    if (url.isEmpty())
-        return;
-
-    KisImageWSP image = m_view->image();
-    if (!image) return;
-
-    KisLayerSP l = activeLayer();
-    if (!l) return;
-
-    QRect r = image->bounds();
-
-    KisPart2 part;
-    KisDoc2 d(&part);
-    part.setDocument(&d);
-
-    d.prepareForImport();
-
-    KisImageWSP dst = new KisImage(d.createUndoStore(), r.width(), r.height(), image->colorSpace(), l->name());
-    dst->setResolution(image->xRes(), image->yRes());
-    d.setCurrentImage(dst);
-    KisPaintLayer* paintLayer = new KisPaintLayer(dst, "projection", l->opacity());
-    KisPainter gc(paintLayer->paintDevice());
-    gc.bitBlt(QPoint(0, 0), l->projection(), r);
-    dst->addNode(paintLayer, dst->rootLayer(), KisLayerSP(0));
-
-    dst->refreshGraph();
-
-    d.setOutputMimeType(mimefilter.toLatin1());
-    d.exportDocument(url);
 }
 
 void KisLayerManager::saveGroupLayers()

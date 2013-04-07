@@ -57,30 +57,22 @@ public:
     qint32 xOffset();
     qint32 yOffset();
 
-    KisFilterStrategy *filterType();
-
 protected slots:
+    void slotAnchorButtonClicked(int id);
+    void slotUpdateSizeTextBoxes();
+
     void slotAspectChanged(bool keep);
     void slotWidthChanged(int v);
     void slotHeightChanged(int v);
     void slotXOffsetChanged(int v);
     void slotYOffsetChanged(int v);
-    void slotTopLeftClicked();
-    void slotTopCenterClicked();
-    void slotTopRightClicked();
-    void slotMiddleLeftClicked();
-    void slotMiddleCenterClicked();
-    void slotMiddleRightClicked();
-    void slotBottomLeftClicked();
-    void slotBottomCenterClicked();
-    void slotBottomRightClicked();
-    void slotWidthUnitChanged(QString);
-    void slotHeightUnitChanged(QString);
 
 protected:
     void loadAnchorIcons();
-    void updateAnchorIcons(anchor enumAnchor);
-    void setButtonIcon(QPushButton * button, anchor enumAnchorIcon);
+    void updateAnchorIcons(int id);
+    void updateOffset(int id);
+    void expectedOffset(int id, int &xOffset, int &yOffset);
+    void updateButtons(int forceId);
 
 private:
     const int m_originalWidth, m_originalHeight;
@@ -90,6 +82,8 @@ private:
     int m_xOffset, m_yOffset;
     KIcon m_anchorIcons[9];
     WdgCanvasSize * m_page;
+
+    QButtonGroup *m_group;
 };
 
 

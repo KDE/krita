@@ -22,7 +22,7 @@
 #include "KoParameterShape_p.h"
 
 #include <QPainter>
-#include <KDebug>
+#include <kdebug.h>
 
 KoParameterShape::KoParameterShape()
     : KoPathShape(*(new KoParameterShapePrivate(this)))

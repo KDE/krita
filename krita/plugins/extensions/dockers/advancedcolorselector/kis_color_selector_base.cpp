@@ -24,10 +24,10 @@
 #include <QCursor>
 #include <QPainter>
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KComponentData>
-#include <KGlobal>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kcomponentdata.h>
+#include <kglobal.h>
 
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
@@ -461,7 +461,9 @@ const KoColorSpace* KisColorSelectorBase::colorSpace() const
         KisNodeSP currentNode = m_canvas->resourceManager()->
                                 resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
         if (currentNode) {
-            m_colorSpace=currentNode->colorSpace();
+            m_colorSpace = currentNode->paintDevice() ?
+                currentNode->paintDevice()->compositionSourceColorSpace() :
+                currentNode->colorSpace();
         } else {
             m_colorSpace=m_canvas->view()->image()->colorSpace();
         }

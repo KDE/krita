@@ -26,7 +26,7 @@
 #include <QTextDocument>
 #include <QCoreApplication>
 #include <QTextBlock>
-#include <KDebug>
+#include <kdebug.h>
 
 #define MaxCharsPerRun 1000
 

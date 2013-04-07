@@ -27,7 +27,7 @@
 #include <QHideEvent>
 #include <QShowEvent>
 
-#include <KDebug>
+#include <kdebug.h>
 
 SpecialButton::SpecialButton(QWidget *parent)
     : QFrame(parent),

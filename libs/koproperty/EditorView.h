@@ -26,7 +26,7 @@
 #include <QTreeView>
 #include <QLabel>
 
-#include <KLineEdit>
+#include <klineedit.h>
 
 namespace KoProperty
 {

@@ -29,9 +29,9 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
 
-#include <KColorDialog>
-#include <KDebug>
-#include <KLocale>
+#include <kcolordialog.h>
+#include <kdebug.h>
+#include <klocale.h>
 
 #include <QPainter>
 #include <QWidgetAction>

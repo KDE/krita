@@ -22,7 +22,7 @@
 #include <QMouseEvent>
 #include <QApplication>
 
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 
 #include <KoCanvasController.h>
 

@@ -47,23 +47,30 @@ KisImageManager::KisImageManager(KisView2 * view)
 
 void KisImageManager::setup(KActionCollection * actionCollection)
 {
-    KAction *action  = new KAction(i18n("I&nsert Image as Layer..."), this);
-    actionCollection->addAction("insert_image_as_layer", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(slotInsertImageAsLayer()));
+    KAction *action  = new KAction(i18n("I&mport Layer..."), this);
+    actionCollection->addAction("import_layer_from_file", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerFromFile()));
+
+    action  = new KAction(i18n("Import &Transparency Mask..."), this);
+    actionCollection->addAction("import_mask_from_file", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotImportMaskFromFile()));
 
     action  = new KAction(koIcon("document-properties"), i18n("Properties..."), this);
     actionCollection->addAction("image_properties", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageProperties()));
 }
 
-void KisImageManager::slotInsertImageAsLayer()
+void KisImageManager::slotImportLayerFromFile()
 {
-    if (importImage() > 0)
-        m_view->image()->setModified();
-
+    importImage(KUrl(), true);
 }
 
-qint32 KisImageManager::importImage(const KUrl& urlArg)
+void KisImageManager::slotImportMaskFromFile()
+{
+    importImage(KUrl(), false);
+}
+
+qint32 KisImageManager::importImage(const KUrl& urlArg, bool importAsLayer)
 {
     KisImageWSP currentImage = m_view->image();
 
@@ -85,7 +92,7 @@ qint32 KisImageManager::importImage(const KUrl& urlArg)
         return 0;
 
     for (KUrl::List::iterator it = urls.begin(); it != urls.end(); ++it) {
-        new KisImportCatcher(*it, m_view);
+        new KisImportCatcher(*it, m_view, importAsLayer);
     }
 
     m_view->canvas()->update();

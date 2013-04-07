@@ -22,7 +22,7 @@
 #include <KoTextEditingRegistry.h>
 #include <KoTextEditingPlugin.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 TextEditingPluginContainer::TextEditingPluginContainer(QObject * parent)
     : QObject(parent)

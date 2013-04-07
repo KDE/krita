@@ -39,7 +39,7 @@ public:
                          KoUpdater* progressUpdater
                         ) const;
 
-    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image) const;
+    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 private:
     OpenShiva::Source* m_source;
 };

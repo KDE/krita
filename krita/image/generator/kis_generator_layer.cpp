@@ -75,7 +75,7 @@ void KisGeneratorLayer::update()
 
     KisProcessingInformation dstCfg(originalDevice,
                                     processRect.topLeft(),
-                                    selection());
+                                    internalSelection());
 
     filterConfig->setChannelFlags(channelFlags());
     f->generate(dstCfg, processRect.size(), filterConfig.data());

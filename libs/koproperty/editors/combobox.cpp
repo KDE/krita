@@ -24,8 +24,8 @@
 #include "koproperty/EditorView.h"
 #include "koproperty/Property.h"
 
-#include <KColorScheme>
-#include <KDebug>
+#include <kcolorscheme.h>
+#include <kdebug.h>
 
 using namespace KoProperty;
 

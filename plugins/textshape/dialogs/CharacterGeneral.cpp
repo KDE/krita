@@ -183,4 +183,9 @@ int CharacterGeneral::nextStyleId()
     return m_styleManager->paragraphStyle(m_paragraphStyleModel->index(widget.nextStyle->currentIndex()).internalId())->styleId();
 }
 
+KoCharacterStyle *CharacterGeneral::style() const
+{
+    return m_style;
+}
+
 #include <CharacterGeneral.moc>

@@ -20,7 +20,7 @@
 #include "SpellCheckFactory.h"
 #include "SpellCheck.h"
 
-#include <KLocale>
+#include <klocale.h>
 
 SpellCheckFactory::SpellCheckFactory()
     : KoTextEditingFactory("spellcheck")

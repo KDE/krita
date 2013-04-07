@@ -18,20 +18,11 @@
  */
 
 #include "kis_multipliers_double_slider_spinbox.h"
+#include "kis_multipliers_double_slider_spinbox_p.h"
 
 #include "ui_wdgmultipliersdoublesliderspinbox.h"
 
 #include "kis_debug.h"
-
-struct KisMultipliersDoubleSliderSpinBox::Private {
-    qreal currentMultiplier();
-    /// Update the range of the slider depending on the currentMultiplier
-    void updateRange();
-    
-    Ui::WdgMultipliersDoubleSliderSpinBox form;
-    qreal min, max;
-    int decimals;
-};
 
 qreal KisMultipliersDoubleSliderSpinBox::Private::currentMultiplier()
 {

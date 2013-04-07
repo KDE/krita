@@ -26,9 +26,9 @@
 #include <QWidgetAction>
 #include <QTableWidget>
 
-#include <KAction>
+#include <kaction.h>
 
-#include <KMessageBox>
+#include <kmessagebox.h>
 #include <QMenu>
 #include <kdebug.h>
 #include "FormulaCursor.h"

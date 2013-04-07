@@ -122,7 +122,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     connect(m_d->uiWdgPaintOpPresetSettings.txtPreset, SIGNAL(textChanged(QString)),
             this, SIGNAL(presetNameLineEditChanged(QString)));
 
-    connect(m_d->uiWdgPaintOpPresetSettings.paintopList, SIGNAL(activated(const QString&)),
+    connect(m_d->uiWdgPaintOpPresetSettings.paintopList, SIGNAL(activated(QString)),
             this, SIGNAL(paintopActivated(QString)));
 
     connect(this, SIGNAL(paintopActivated(QString)),

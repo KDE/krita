@@ -57,6 +57,8 @@ public:
     KoImageCollection *imageCollection();
     void setStyleManager(KoStyleManager *sm);
 
+    KoParagraphStyle *style() const;
+
 public slots:
     void save(KoParagraphStyle *style = 0);
 

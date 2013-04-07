@@ -34,7 +34,7 @@
 #include <KoXmlNS.h>
 #include <KoShadowStyle.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <QBuffer>
 #include <QDomDocument>

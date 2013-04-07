@@ -22,11 +22,11 @@
 #include "KoReportPluginManagerPrivate.h"
 #include "KoReportPluginInfo.h"
 
-#include <KIcon>
-#include <KService>
-#include <KServiceTypeTrader>
-#include <KIconLoader>
-#include <KToggleAction>
+#include <kicon.h>
+#include <kservice.h>
+#include <kservicetypetrader.h>
+#include <kiconloader.h>
+#include <ktoggleaction.h>
 
 //Include the static items
 #include "../items/label/KoReportLabelPlugin.h"

@@ -30,7 +30,7 @@
 #include <KoShapeShadowCommand.h>
 #include <KoShapeManager.h>
 
-#include <KLocale>
+#include <klocale.h>
 
 #include <QCheckBox>
 

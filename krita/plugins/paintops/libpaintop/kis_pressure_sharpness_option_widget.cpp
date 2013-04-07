@@ -34,8 +34,8 @@
 KisPressureSharpnessOptionWidget::KisPressureSharpnessOptionWidget():
     KisCurveOptionWidget(new KisPressureSharpnessOption())
 {
-    QLabel* thresholdLbl = new QLabel(i18n("Threshold"));
-    
+    QLabel* thresholdLbl = new QLabel(i18n("Threshold:"));
+
     m_threshold = new KisSliderSpinBox();
     m_threshold->setRange(1, 100);
     m_threshold->setValue(40);

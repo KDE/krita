@@ -34,7 +34,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Scale</string>
+        <string>Scale:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -50,7 +50,10 @@
         </size>
        </property>
        <property name="text">
-        <string>Random offset</string>
+        <string>Random offset:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
@@ -63,7 +66,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Shear</string>
+        <string>Shear:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -79,7 +82,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Density</string>
+        <string>Density:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

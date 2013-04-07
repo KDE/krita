@@ -28,7 +28,7 @@
      <item>
       <widget class="QLabel" name="lineWidthLbl">
        <property name="text">
-        <string>Line width</string>
+        <string>Line width:</string>
        </property>
       </widget>
      </item>
@@ -42,7 +42,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>History size</string>
+        <string>History size:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -59,7 +59,7 @@
      <item>
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Curves opacity</string>
+        <string>Curves opacity:</string>
        </property>
       </widget>
      </item>

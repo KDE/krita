@@ -37,7 +37,7 @@
      <item>
       <widget class="QCheckBox" name="checkBoxIgnoreAlpha">
        <property name="text">
-        <string>ignore alpha</string>
+        <string>Ignore Alpha</string>
        </property>
       </widget>
      </item>

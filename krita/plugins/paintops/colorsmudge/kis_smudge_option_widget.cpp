@@ -38,7 +38,7 @@ KisSmudgeOptionWidget::KisSmudgeOptionWidget(const QString& label, const QString
     mCbSmudgeMode->addItem(i18n("Dulling") , KisSmudgeOption::DULLING_MODE);
     
     QHBoxLayout* h = new QHBoxLayout();
-    h->addWidget(new QLabel(i18n("Smudge Mode")));
+    h->addWidget(new QLabel(i18n("Smudge mode:")));
     h->addWidget(mCbSmudgeMode, 1);
     
     QVBoxLayout* v = new QVBoxLayout();

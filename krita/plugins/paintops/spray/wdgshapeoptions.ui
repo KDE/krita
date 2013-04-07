@@ -218,7 +218,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Texture</string>
+        <string>Texture:</string>
        </property>
       </widget>
      </item>

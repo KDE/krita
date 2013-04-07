@@ -43,7 +43,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Diameter</string>
+        <string>Diameter:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -90,7 +90,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Aspect ratio</string>
+        <string>Aspect ratio:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -137,7 +137,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Angle</string>
+        <string>Angle:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -187,7 +187,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Scale</string>
+        <string>Scale:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -231,7 +231,7 @@
      <item row="4" column="0">
       <widget class="QLabel" name="spacingLabel">
        <property name="text">
-        <string>Spacing</string>
+        <string>Spacing:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

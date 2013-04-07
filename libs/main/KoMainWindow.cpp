@@ -74,6 +74,7 @@
 #include <kurlcombobox.h>
 #include <kdiroperator.h>
 #include <kmenubar.h>
+#include <kfiledialog.h>
 
 #ifdef HAVE_KACTIVITIES
 #include <KActivities/ResourceInstance>
@@ -926,9 +927,9 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
         // don't want to be reminded about overwriting files etc.
         bool justChangingFilterOptions = false;
 
-        KoFileDialog *dialog = new KoFileDialog(
+        KFileDialog *dialog = new KFileDialog(
             (isExporting() && !d->lastExportUrl.isEmpty()) ?
-            d->lastExportUrl.url() : suggestedURL.url(), this);
+                        d->lastExportUrl.url() : suggestedURL.url(), mimeFilter.join(" "), this);
 
         if (!isExporting())
             dialog->setCaption(i18n("Save Document As"));
@@ -937,11 +938,11 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
 
         dialog->setOperationMode(KFileDialog::Saving);
         dialog->setMode(KFile::File);
-        dialog->setSpecialMimeFilter(mimeFilter,
+        /*dialog->setSpecialMimeFilter(mimeFilter,
                                      isExporting() ? d->lastExportedFormat : d->rootDocument->mimeType(),
                                      isExporting() ? d->lastExportSpecialOutputFlag : oldSpecialOutputFlag,
                                      _native_format,
-                                     d->rootDocument->supportedSpecialFormats());
+                                     d->rootDocument->supportedSpecialFormats());*/
 
         KUrl newURL;
         QByteArray outputFormat = _native_format;
@@ -958,7 +959,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
                 }
                 outputFormat = outputFormatString.toLatin1();
 
-                specialOutputFlag = dialog->specialEntrySelected();
+                //specialOutputFlag = dialog->specialEntrySelected();
                 kDebug(30003) << "KoMainWindow::saveDocument outputFormat =" << outputFormat;
 
                 if (!isExporting())

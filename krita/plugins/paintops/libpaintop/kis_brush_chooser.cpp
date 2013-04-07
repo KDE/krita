@@ -92,7 +92,7 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
 {
     setObjectName(name);
 
-    m_lbScale = new QLabel(i18n("Scale: "), this);
+    m_lbScale = new QLabel(i18n("Scale:"), this);
     m_slScale = new KisMultipliersDoubleSliderSpinBox(this);
     m_slScale->setRange(0.0, 2.0, 2);
     m_slScale->setValue(1.0);
@@ -101,13 +101,13 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     m_slScale->addMultiplier(10);
     QObject::connect(m_slScale, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemScale(qreal)));
 
-    m_lbRotation = new QLabel(i18n("Rotation: "), this);
+    m_lbRotation = new QLabel(i18n("Rotation:"), this);
     m_slRotation = new KisDoubleSliderSpinBox(this);
     m_slRotation->setRange(0.0, 360, 2);
     m_slRotation->setValue(0.0);
     QObject::connect(m_slRotation, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemRotation(qreal)));
 
-    m_lbSpacing = new QLabel(i18n("Spacing: "), this);
+    m_lbSpacing = new QLabel(i18n("Spacing:"), this);
     m_slSpacing = new KisDoubleSliderSpinBox(this);
     m_slSpacing->setRange(0.02, 10, 2);
     m_slSpacing->setValue(0.1);

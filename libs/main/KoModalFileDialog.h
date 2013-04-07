@@ -31,23 +31,20 @@
  * chooser sheet on os x.
  * @note Used only when a modal dialog is really needed!
  */
-class KOMAIN_EXPORT KoModalFileDialog
+class KOMAIN_EXPORT KoModalFileDialog : QObject
 {
     Q_OBJECT
 public:
     KoModalFileDialog() {}
-    static QString getOpenFileName(QWidget * parent = 0,
+    QString getOpenFileName(QWidget * parent = 0,
                                    const QString & caption = QString(),
                                    const QString & dir = QString(),
-                                   const QString & filter = QString(),
-                                   QString * selectedFilter = 0,
-                                   QFileDialog::Options options = 0);
+                                   const QString & filter = QString());
 
 private slots:
     void getFileName(QString filename);
 
 private:
-    QFileDialog* m_dialog;
     QString m_fileName;
 };
 

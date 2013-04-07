@@ -31,7 +31,7 @@
 #include "KoFilterManager.h"
 #include "KoDocumentInfo.h"
 #include "KoDocumentInfoDlg.h"
-#include "KoFileDialog.h"
+#include "KoModalFileDialog.h"
 #include "KoVersionDialog.h"
 #include "KoDockFactoryBase.h"
 #include "KoDockWidgetTitleBar.h"

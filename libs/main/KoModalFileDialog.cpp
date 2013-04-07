@@ -20,12 +20,10 @@
 #include "KoModalFileDialog.h"
 
 QString KoModalFileDialog::getOpenFileName(QWidget * parent, const QString & caption,
-                        const QString & dir, const QString & filter,
-                        QString * selectedFilter,
-                        QFileDialog::Options options)
+                        const QString & dir, const QString & filter)
 {
-    m_dialog = new QFileDialog(parent, caption, dir, filter, selectedFilter, options);
-    m_dialog->open(this, SLOT(getFileName(QString)));
+    QFileDialog* dialog = new QFileDialog(parent, caption, dir, filter);
+    dialog->open(parent, SLOT(getFileName(QString)));
 
     return m_fileName;
 }

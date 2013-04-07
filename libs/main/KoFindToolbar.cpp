@@ -17,10 +17,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-
-
-
 #include "KoFindToolbar.h"
+#include "KoFindToolbar_p.h"
 
 #include <QHBoxLayout>
 #include <QToolButton>
@@ -42,42 +40,6 @@
 #include "KoFindBase.h"
 #include "KoFindOptionSet.h"
 #include "KoFindOption.h"
-
-class KoFindToolbar::Private
-{
-public:
-    Private(KoFindToolbar *qq) : q(qq) { }
-
-    void matchFound();
-    void noMatchFound();
-    void searchWrapped(bool direction);
-    void addToHistory();
-    void find(const QString &pattern);
-    void optionChanged();
-    void replace();
-    void replaceAll();
-    void inputTimeout();
-
-    KoFindToolbar *q;
-
-    KoFindBase *finder;
-
-    QToolButton *closeButton;
-    KHistoryComboBox *searchLine;
-    KHistoryComboBox *replaceLine;
-    QToolButton *previousButton;
-    QToolButton *nextButton;
-    QToolButton *optionsButton;
-    QToolButton *replaceButton;
-    QToolButton *replaceAllButton;
-    QLabel *replaceLabel;
-    KSqueezedTextLabel *information;
-    QLabel *matchCounter;
-    QTimer *textTimeout;
-
-    static QStringList searchCompletionItems;
-    static QStringList replaceCompletionItems;
-};
 
 QStringList KoFindToolbar::Private::searchCompletionItems = QStringList();
 QStringList KoFindToolbar::Private::replaceCompletionItems = QStringList();

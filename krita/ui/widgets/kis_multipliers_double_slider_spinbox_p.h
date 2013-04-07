@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,27 +16,23 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef kis_multipliers_double_slider_spinbox_p_h
+#define kis_multipliers_double_slider_spinbox_p_h
 
-#include "KoPasteController.h"
-#include "KoPasteController_p.h"
+#include "kis_multipliers_double_slider_spinbox.h"
 
-#include <KoCanvasBase.h>
-#include <KoToolProxy.h>
+#include "ui_wdgmultipliersdoublesliderspinbox.h"
 
-#include <kdebug.h>
-#include <QAction>
+#include "kis_debug.h"
 
-KoPasteController::KoPasteController(KoCanvasBase *canvas, QAction *pasteAction)
-    : QObject(pasteAction),
-    d(new Private(this, canvas, pasteAction))
-{
-    //connect(canvas->toolProxy(), SIGNAL(selectionChanged(bool)), this, SLOT(selectionChanged(bool)));
-    connect(pasteAction, SIGNAL(triggered()), this, SLOT(paste()));
-}
+struct KisMultipliersDoubleSliderSpinBox::Private {
+    qreal currentMultiplier();
+    /// Update the range of the slider depending on the currentMultiplier
+    void updateRange();
+    
+    Ui::WdgMultipliersDoubleSliderSpinBox form;
+    qreal min, max;
+    int decimals;
+};
 
-KoPasteController::~KoPasteController()
-{
-    delete d;
-}
-
-#include <KoPasteController.moc>
+#endif

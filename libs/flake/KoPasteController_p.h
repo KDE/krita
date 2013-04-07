@@ -16,9 +16,10 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef KOPASTECONTROLLER_P_H
+#define KOPASTECONTROLLER_P_H
 
 #include "KoPasteController.h"
-#include "KoPasteController_p.h"
 
 #include <KoCanvasBase.h>
 #include <KoToolProxy.h>
@@ -26,17 +27,20 @@
 #include <kdebug.h>
 #include <QAction>
 
-KoPasteController::KoPasteController(KoCanvasBase *canvas, QAction *pasteAction)
-    : QObject(pasteAction),
-    d(new Private(this, canvas, pasteAction))
-{
-    //connect(canvas->toolProxy(), SIGNAL(selectionChanged(bool)), this, SLOT(selectionChanged(bool)));
-    connect(pasteAction, SIGNAL(triggered()), this, SLOT(paste()));
-}
+class KoPasteController::Private {
+public:
+    Private(KoPasteController *p, KoCanvasBase *c, QAction *a) : parent(p), canvas(c), action(a) {
+    }
 
-KoPasteController::~KoPasteController()
-{
-    delete d;
-}
+    void paste() {
+        kDebug(30004) <<"Paste!";
+        canvas->toolProxy()->paste();
+    }
 
-#include <KoPasteController.moc>
+    KoPasteController *parent;
+    KoCanvasBase *canvas;
+    QAction *action;
+};
+
+
+#endif

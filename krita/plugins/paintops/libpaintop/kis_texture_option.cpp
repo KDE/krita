@@ -102,7 +102,7 @@ public:
                                       " by the slider, the cut-off policy will be applied."));
         formLayout->addRow(i18n("Cutoff:"), cutoffSlider);
 
-        chkInvert = new QCheckBox("", this);
+        chkInvert = new QCheckBox(this);
         chkInvert->setChecked(false);
         formLayout->addRow(i18n("Invert Texture:"), chkInvert);
 

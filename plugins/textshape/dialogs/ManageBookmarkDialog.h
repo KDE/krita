@@ -18,10 +18,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef SELECTBOOKMARKDIALOG_H
-#define SELECTBOOKMARKDIALOG_H
+#ifndef MANAGEBOOKMARKDIALOG_H
+#define MANAGEBOOKMARKDIALOG_H
 #include <KoTextEditor.h>
-#include <ui_SelectBookmark.h>
+#include <ui_ManageBookmark.h>
 
 #include <QWidget>
 #include <KDialog>
@@ -48,7 +48,7 @@ private slots:
     void slotBookmarkItemActivated(QListWidgetItem *item);
 
 private:
-    Ui::SelectBookmark widget;
+    Ui::ManageBookmark widget;
     KoTextEditor *m_editor;
 };
 

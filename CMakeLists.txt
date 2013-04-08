@@ -64,6 +64,9 @@ option(CREATIVEONLY "compile only Karbon and Krita" OFF)
 #
 #eg:
 #option(BUILD_kexi "Build directory kexi" OFF) # kexi isn't buildable at the moment
+if(WIN32)
+    option(BUILD_braindump "Build directory braindump" OFF) # braindump is unmaintained on Windows.
+endif()
 
 # temporary migration support
 set(PRODUCTSET_DEFAULT "ALL")

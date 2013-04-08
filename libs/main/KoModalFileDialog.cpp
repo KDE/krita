@@ -20,10 +20,63 @@
 #include "KoModalFileDialog.h"
 
 QString KoModalFileDialog::getOpenFileName(QWidget * parent, const QString & caption,
-                        const QString & dir, const QString & filter)
+                                           const QString & dir, const QString &filter,
+                                           QString *selectedFilter, QFileDialog::Options options)
 {
     QFileDialog* dialog = new QFileDialog(parent, caption, dir, filter);
-    dialog->open(parent, SLOT(getFileName(QString)));
+    dialog->setAcceptMode(QFileDialog::AcceptOpen);
+    dialog->setFileMode(QFileDialog::ExistingFile);
+    if (selectedFilter)
+        dialog->selectNameFilter(*selectedFilter);
+    if (options)
+        dialog->setOptions(options);
+    dialog->open(this, SLOT(getFileName(QString)));
+
+    return m_fileName;
+}
+
+QStringList KoModalFileDialog::getOpenFileNames(QWidget * parent, const QString & caption,
+                                                const QString & dir, const QString &filter,
+                                                QString *selectedFilter, QFileDialog::Options options)
+{
+    QFileDialog* dialog = new QFileDialog(parent, caption, dir, filter);
+    dialog->setAcceptMode(QFileDialog::AcceptOpen);
+    dialog->setFileMode(QFileDialog::ExistingFiles);
+    if (selectedFilter)
+        dialog->selectNameFilter(*selectedFilter);
+    if (options)
+        dialog->setOptions(options);
+    dialog->open(this, SLOT(getFileNames(QStringList)));
+
+    return m_fileNames;
+}
+QString KoModalFileDialog::getSaveFileName(QWidget * parent, const QString & caption,
+                                           const QString & dir, const QString & filter,
+                                           QString *selectedFilter, QFileDialog::Options options)
+{
+    QFileDialog* dialog = new QFileDialog(parent, caption, dir, filter);
+    dialog->setAcceptMode(QFileDialog::AcceptSave);
+    dialog->setFileMode(QFileDialog::AnyFile);
+    if (selectedFilter)
+        dialog->selectNameFilter(*selectedFilter);
+    if (options)
+        dialog->setOptions(options);
+    dialog->open(this, SLOT(getFileName(QString)));
+
+    return m_fileName;
+}
+
+QString KoModalFileDialog::getExistingDirectory(QWidget * parent, const QString & caption,
+                                                const QString & dir, QFileDialog::Options options)
+{
+    QFileDialog* dialog = new QFileDialog(parent, caption, dir);
+    dialog->setAcceptMode(QFileDialog::AcceptSave);
+    dialog->setFileMode(QFileDialog::Directory);
+    if (options)
+        dialog->setOptions(options);
+    else
+        dialog->setOption(QFileDialog::ShowDirsOnly, true);
+    dialog->open(this, SLOT(getFileName(QString)));
 
     return m_fileName;
 }
@@ -31,4 +84,9 @@ QString KoModalFileDialog::getOpenFileName(QWidget * parent, const QString & cap
 void KoModalFileDialog::getFileName(QString fileName)
 {
     m_fileName = fileName;
+}
+
+void KoModalFileDialog::getFileNames(QStringList fileNames)
+{
+    m_fileNames = fileNames;
 }

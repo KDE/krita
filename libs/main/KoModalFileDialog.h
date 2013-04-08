@@ -36,16 +36,39 @@ class KOMAIN_EXPORT KoModalFileDialog : QObject
     Q_OBJECT
 public:
     KoModalFileDialog() {}
-    QString getOpenFileName(QWidget * parent = 0,
-                                   const QString & caption = QString(),
-                                   const QString & dir = QString(),
-                                   const QString & filter = QString());
+    QString getOpenFileName(QWidget* parent = 0,
+                            const QString & caption = QString(),
+                            const QString & dir = QString(),
+                            const QString &filter = QString(),
+                            QString* selectedFilter = 0,
+                            QFileDialog::Options options = 0);
+
+    QStringList getOpenFileNames(QWidget* parent = 0,
+                                 const QString & caption = QString(),
+                                 const QString & dir = QString(),
+                                 const QString &filter = QString(),
+                                 QString* selectedFilter = 0,
+                                 QFileDialog::Options options = 0);
+
+    QString getSaveFileName(QWidget * parent = 0,
+                            const QString & caption = QString(),
+                            const QString & dir = QString(),
+                            const QString &filter = QString(),
+                            QString* selectedFilter = 0,
+                            QFileDialog::Options options = 0);
+
+    QString getExistingDirectory(QWidget* parent = 0,
+                                 const QString & caption = QString(),
+                                 const QString & dir = QString(),
+                                 QFileDialog::Options options = QFileDialog::ShowDirsOnly);
 
 private slots:
     void getFileName(QString filename);
+    void getFileNames(QStringList filenames);
 
 private:
     QString m_fileName;
+    QStringList m_fileNames;
 };
 
 #endif /* KOMODALFILEDIALOG_H */

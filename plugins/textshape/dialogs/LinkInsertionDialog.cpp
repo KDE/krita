@@ -198,6 +198,7 @@ void LinkInsertionDialog::fetchTitleFromURL()
         displayInlineWarning(i18n("The URL is invalid"), dlg.weblinkStatusLabel);
         return;
     }
+    //xgettext: no-c-format
     dlg.weblinkStatusLabel->setText(i18n("Fetching the title : 0% complete"));
 }
 void LinkInsertionDialog::sendRequest()

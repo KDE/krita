@@ -39,7 +39,7 @@
          <item row="0" column="0">
           <widget class="QLabel" name="label_2">
            <property name="toolTip">
-            <string>The address of your document ( Uniform Resource Locator)</string>
+            <string>The address of your document (Uniform Resource Locator)</string>
            </property>
            <property name="text">
             <string> URL:</string>
@@ -114,7 +114,7 @@
       </attribute>
       <attribute name="toolTip">
        <string>Insert links to Bookmarks. To create bookmarks,
-click &quot;Bookmarks&quot; in the Links and References section</string>
+click &quot;Bookmarks&quot; in the Links and Bookmarks section</string>
       </attribute>
       <widget class="QWidget" name="layoutWidget">
        <property name="geometry">

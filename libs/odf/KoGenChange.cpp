@@ -17,10 +17,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <QDateTime>
-
 #include "KoGenChange.h"
+
 #include <KoXmlWriter.h>
+#include <QDateTime>
 
 #include <kdebug.h>
 

@@ -80,7 +80,7 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType(const QString & mimetype)
                 kError(30003) << "Check your installation (for instance, run 'kde4-config --path mime' and check the result)." << endl;
             } else {
                 kError(30003) << "Found no Calligra part able to handle " << mimetype << "!" << endl;
-                kError(30003) << "Check your installation (does the desktop file have X-KDE-NativeMimeType and CalligraPart, did you install Calligra in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
+                kError(30003) << "Check your installation (does the desktop file have X-KDE-NativeMimeType and Calligra/Part, did you install Calligra in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
             }
             return KoDocumentEntry();
         }
@@ -104,7 +104,7 @@ QList<KoDocumentEntry> KoDocumentEntry::query(QueryFlags flags, const QString & 
     const bool onlyDocEmb = flags & OnlyEmbeddableDocuments;
 
     // Query the trader
-    const KService::List offers = KServiceTypeTrader::self()->query("CalligraPart", constr);
+    const KService::List offers = KServiceTypeTrader::self()->query("Calligra/Part", constr);
 
     KService::List::ConstIterator it = offers.begin();
     unsigned int max = offers.count();

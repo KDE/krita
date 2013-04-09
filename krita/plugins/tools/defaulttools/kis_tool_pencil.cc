@@ -39,6 +39,7 @@ void KisToolPencil::activate(ToolActivation toolActivation, const QSet<KoShape*>
 {
     KisToolShape::activate(toolActivation, shapes);
     m_localTool->activate(toolActivation, shapes);
+    m_localTool->setFittingError(1.0);
 }
 
 void KisToolPencil::deactivate()

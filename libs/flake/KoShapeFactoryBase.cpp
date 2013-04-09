@@ -19,19 +19,24 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include <QMutexLocker>
-#include <QMutex>
+
+#include "KoShapeFactoryBase.h"
+
+#include "KoDocumentResourceManager.h"
+#include "KoDeferredShapeFactoryBase.h"
+#include "KoShape.h"
+#include "KoShapeLoadingContext.h"
+
+#include <KoOdfLoadingContext.h>
+#include <KoProperties.h>
 
 #include <kservice.h>
 #include <kservicetypetrader.h>
 
-#include <KoDocumentResourceManager.h>
-#include "KoShapeFactoryBase.h"
-#include "KoDeferredShapeFactoryBase.h"
-#include "KoShape.h"
-#include "KoShapeLoadingContext.h"
-#include <KoOdfLoadingContext.h>
-#include <KoProperties.h>
+#include <QMutexLocker>
+#include <QMutex>
+
+
 
 #include <kdebug.h>
 

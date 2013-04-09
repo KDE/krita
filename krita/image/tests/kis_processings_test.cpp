@@ -45,7 +45,7 @@ public:
         KisImageSP image = createImage(undoStore);
         image->initialRefreshGraph();
 
-        QVERIFY(checkLayers(image, "initial"));
+        QVERIFY(checkLayersInitial(image));
 
         KisProcessingApplicator applicator(image, image->root(),
                                            KisProcessingApplicator::RECURSIVE);
@@ -59,7 +59,7 @@ public:
         undoStore->undo();
         image->waitForDone();
 
-        QVERIFY(checkLayers(image, "initial"));
+        QVERIFY(checkLayersInitial(image));
     }
 };
 

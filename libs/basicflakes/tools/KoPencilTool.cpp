@@ -530,4 +530,12 @@ bool KoPencilTool::connectPaths(KoPathShape *pathShape, KoPathPoint *pointAtStar
     return true;
 }
 
+qreal KoPencilTool::getFittingError(){
+    return this->m_fittingError;
+}
+
+void KoPencilTool::setFittingError(qreal fittingError){
+    this->m_fittingError = fittingError;
+}
+
 #include "KoPencilTool.moc"

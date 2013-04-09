@@ -581,19 +581,6 @@ void KoToolManager::Private::updateCursor(const QCursor &cursor)
     canvasData->canvas->canvas()->setCursor(cursor);
 }
 
-void KoToolManager::Private::switchBackRequested()
-{
-    Q_ASSERT(canvasData);
-    if (!canvasData) return;
-
-    if (canvasData->stack.isEmpty()) {
-        // default to changing to the interactionTool
-        switchTool(KoInteractionTool_ID, false);
-        return;
-    }
-    switchTool(canvasData->stack.pop(), false);
-}
-
 void KoToolManager::Private::selectionChanged(QList<KoShape*> shapes)
 {
     QList<QString> types;
@@ -715,11 +702,6 @@ void KoToolManager::Private::switchToolByShortcut(QKeyEvent *event)
     }
 }
 
-void KoToolManager::Private::switchToolTemporaryRequested(const QString &id)
-{
-    switchTool(id, true);
-}
-
 // ******** KoToolManager **********
 KoToolManager::KoToolManager()
     : QObject(),
@@ -838,6 +820,24 @@ void KoToolManager::switchToolRequested(const QString & id)
     while (!d->canvasData->stack.isEmpty()) // switching means to flush the stack
         d->canvasData->stack.pop();
     d->switchTool(id, false);
+}
+
+void KoToolManager::switchToolTemporaryRequested(const QString &id)
+{
+    d->switchTool(id, true);
+}
+
+void KoToolManager::switchBackRequested()
+{
+    Q_ASSERT(d->canvasData);
+    if (!d->canvasData) return;
+
+    if (d->canvasData->stack.isEmpty()) {
+        // default to changing to the interactionTool
+        d->switchTool(KoInteractionTool_ID, false);
+        return;
+    }
+    d->switchTool(d->canvasData->stack.pop(), false);
 }
 
 KoCreateShapesTool * KoToolManager::shapeCreatorTool(KoCanvasBase *canvas) const

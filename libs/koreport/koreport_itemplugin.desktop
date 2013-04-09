@@ -2,6 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=KoReport/ItemPlugin
 Comment=KoReport Item Plugin
+Comment[bs]=KoReport dodatak
 Comment[ca]=Connector de l'ítem KoReport
 Comment[ca@valencia]=Connector de l'ítem KoReport
 Comment[da]=Plugin til KoReport-element

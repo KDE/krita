@@ -82,7 +82,7 @@
 #include <kis_painter.h>
 #include <kis_selection.h>
 #include <kis_fill_painter.h>
-#include <kis_undo_stores.h>
+#include <kis_document_undo_store.h>
 #include <kis_painting_assistants_manager.h>
 
 // Local

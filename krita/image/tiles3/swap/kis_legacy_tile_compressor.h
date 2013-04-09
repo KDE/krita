@@ -28,8 +28,8 @@ public:
     KisLegacyTileCompressor();
     virtual ~KisLegacyTileCompressor();
 
-    void writeTile(KisTileSP tile, KoStore *store);
-    void readTile(KoStore *store, KisTiledDataManager *dm);
+    void writeTile(KisTileSP tile, KisPaintDeviceWriter &store);
+    void readTile(QIODevice *stream, KisTiledDataManager *dm);
 
 
     void compressTileData(KisTileData *tileData,quint8 *buffer,

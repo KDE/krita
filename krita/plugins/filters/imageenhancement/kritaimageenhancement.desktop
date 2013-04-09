@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Enhancement Filters
 Name[bg]=Филтри за подобрения
+Name[bs]=Filteri za povećanje
 Name[ca]=Filtres de millora
 Name[ca@valencia]=Filtres de millora
 Name[cy]=Hidlau Tecáu
@@ -46,6 +47,7 @@ Name[zh_CN]=增强过滤器
 Name[zh_TW]=增強過濾器
 Comment=Enhance the quality of an image
 Comment[bg]=Подобряване на качеството на изображения
+Comment[bs]=Povećaj kvalitet slike
 Comment[ca]=Millora la qualitat de la imatge
 Comment[ca@valencia]=Millora la qualitat de la imatge
 Comment[cy]=Tecâu ansawdd delwedd

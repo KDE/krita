@@ -76,7 +76,7 @@ protected:
     class KOTEXT_EXPORT UndoRedoFinalizer
     {
     public:
-        UndoRedoFinalizer(KoTextCommandBase* parent) : m_parent(parent) {}
+        explicit UndoRedoFinalizer(KoTextCommandBase* parent) : m_parent(parent) {}
         ~UndoRedoFinalizer();
     private:
         KoTextCommandBase* m_parent;

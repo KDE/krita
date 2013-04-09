@@ -21,19 +21,20 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoApplication.h"
 #include "KoPart.h"
+
+#include "KoApplication.h"
 #include "KoMainWindow.h"
 #include "KoDocument.h"
 #include "KoView.h"
-#include "KoCanvasController.h"
-#include "KoCanvasControllerWidget.h"
 #include "KoOpenPane.h"
-#include "KoMainWindow.h"
 #include "KoProgressProxy.h"
 #include "KoFilterManager.h"
 #include "KoServiceProvider.h"
 #include <KoDocumentInfoDlg.h>
+
+#include <KoCanvasController.h>
+#include <KoCanvasControllerWidget.h>
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
@@ -41,7 +42,6 @@
 #include <kdeprintdialog.h>
 #include <knotification.h>
 #include <kdialog.h>
-#include <kmessagebox.h>
 #include <kdesktopfile.h>
 #include <kmessagebox.h>
 #include <kmimetype.h>
@@ -183,32 +183,50 @@ void KoPart::setReadWrite(bool readwrite)
 
 bool KoPart::openFile()
 {
-    KoMainWindow *shell = 0;
-    if (shellCount() > 0) {
-        shell = shells()[0];
+    DocumentProgressProxy *progressProxy = 0;
+    if (!d->document->progressProxy()) {
+        KoMainWindow *shell = 0;
+        if (shellCount() > 0) {
+            shell = shells()[0];
+        }
+        progressProxy = new DocumentProgressProxy(shell);
+        d->document->setProgressProxy(progressProxy);
     }
-    DocumentProgressProxy progressProxy(shell);
-    d->document->setProgressProxy(&progressProxy);
     d->document->setUrl(url());
 
     // THIS IS WRONG! KoDocument::openFile should move here, and whoever subclassed KoDocument to
     // reimplement openFile shold now subclass KoPart.
-    return d->document->openFile();
+    bool ok = d->document->openFile();
+
+    if (progressProxy) {
+        d->document->setProgressProxy(0);
+        delete progressProxy;
+    }
+    return ok;
 }
 
 bool KoPart::saveFile()
 {
-    KoMainWindow *shell = 0;
-    if (shellCount() > 0) {
-        shell = shells()[0];
+    DocumentProgressProxy *progressProxy = 0;
+    if (!d->document->progressProxy()) {
+        KoMainWindow *shell = 0;
+        if (shellCount() > 0) {
+            shell = shells()[0];
+        }
+        progressProxy = new DocumentProgressProxy(shell);
+        d->document->setProgressProxy(progressProxy);
     }
-    DocumentProgressProxy progressProxy(shell);
-    d->document->setProgressProxy(&progressProxy);
     d->document->setUrl(url());
 
     // THIS IS WRONG! KoDocument::saveFile should move here, and whoever subclassed KoDocument to
     // reimplement saveFile shold now subclass KoPart.
-    return d->document->saveFile();
+    bool ok = d->document->saveFile();
+
+    if (progressProxy) {
+        d->document->setProgressProxy(0);
+        delete progressProxy;
+    }
+    return ok;
 }
 
 KoView *KoPart::createView(QWidget *parent)

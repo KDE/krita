@@ -128,9 +128,9 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view,
     m_d->renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();
     createCanvas(cfg.useOpenGL());
 
-    connect(view->canvasController()->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), SLOT(documentOffsetMoved(const QPoint&)));
+    connect(view->canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SLOT(documentOffsetMoved(QPoint)));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
-    connect(this, SIGNAL(canvasDestroyed(QWidget *)), this, SLOT(slotCanvasDestroyed(QWidget *)));
+    connect(this, SIGNAL(canvasDestroyed(QWidget*)), this, SLOT(slotCanvasDestroyed(QWidget*)));
 
     /**
      * We switch the shape manager every time vector layer or
@@ -150,8 +150,8 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view,
     KisShapeController *kritaShapeController = dynamic_cast<KisShapeController*>(sc);
     connect(kritaShapeController, SIGNAL(selectionChanged()),
             this, SLOT(slotSelectionChanged()));
-    connect(kritaShapeController, SIGNAL(currentLayerChanged(const KoShapeLayer*)),
-            globalShapeManager()->selection(), SIGNAL(currentLayerChanged(const KoShapeLayer*)));
+    connect(kritaShapeController, SIGNAL(currentLayerChanged(KoShapeLayer*)),
+            globalShapeManager()->selection(), SIGNAL(currentLayerChanged(KoShapeLayer*)));
 }
 
 KisCanvas2::~KisCanvas2()
@@ -240,9 +240,12 @@ KoShapeManager* KisCanvas2::shapeManager() const
         if (shapeLayer) {
             return shapeLayer->shapeManager();
         }
-        if (activeLayer->selection() && activeLayer->selection()->hasShapeSelection()) {
-            KoShapeManager* m = static_cast<KisShapeSelection*>(activeLayer->selection()->shapeSelection())->shapeManager();
-            return m;
+        KisSelectionSP selection = activeLayer->selection();
+        if (selection && !selection.isNull()) {
+            if (selection->hasShapeSelection()) {
+                KoShapeManager* m = dynamic_cast<KisShapeSelection*>(selection->shapeSelection())->shapeManager();
+                return m;
+            }
 
         }
     }
@@ -363,17 +366,17 @@ void KisCanvas2::connectCurrentImage()
         m_d->prescaledProjection->setImage(image);
     }
 
-    connect(image, SIGNAL(sigImageUpdated(const QRect &)),
-            SLOT(startUpdateCanvasProjection(const QRect &)),
+    connect(image, SIGNAL(sigImageUpdated(QRect)),
+            SLOT(startUpdateCanvasProjection(QRect)),
             Qt::DirectConnection);
     connect(this, SIGNAL(sigCanvasCacheUpdated(KisUpdateInfoSP)),
             this, SLOT(updateCanvasProjection(KisUpdateInfoSP)));
 
-    connect(image, SIGNAL(sigSizeChanged(qint32, qint32)),
-            SLOT(startResizingImage(qint32, qint32)),
+    connect(image, SIGNAL(sigSizeChanged(qint32,qint32)),
+            SLOT(startResizingImage(qint32,qint32)),
             Qt::DirectConnection);
-    connect(this, SIGNAL(sigContinueResizeImage(qint32, qint32)),
-            this, SLOT(finishResizingImage(qint32, qint32)));
+    connect(this, SIGNAL(sigContinueResizeImage(qint32,qint32)),
+            this, SLOT(finishResizingImage(qint32,qint32)));
 
     startResizingImage(image->width(), image->height());
 
@@ -705,7 +708,7 @@ QPoint KisCanvas2::documentOffset() const
 void KisCanvas2::createFavoriteResourceManager(KisPaintopBox* paintopbox)
 {
     m_d->favoriteResourceManager = new KoFavoriteResourceManager(paintopbox, canvasWidget());
-    connect(this, SIGNAL(favoritePaletteCalled(const QPoint&)), favoriteResourceManager(), SLOT(slotShowPopupPalette(const QPoint&)));
+    connect(this, SIGNAL(favoritePaletteCalled(QPoint)), favoriteResourceManager(), SLOT(slotShowPopupPalette(QPoint)));
     connect(view()->resourceProvider(), SIGNAL(sigFGColorUsed(KoColor)), favoriteResourceManager(), SLOT(slotAddRecentColor(KoColor)));
     connect(view()->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), favoriteResourceManager(), SLOT(slotChangeFGColorSelector(KoColor)));
     connect(favoriteResourceManager(), SIGNAL(sigSetFGColor(KoColor)), view()->resourceProvider(), SLOT(slotSetFGColor(KoColor)));

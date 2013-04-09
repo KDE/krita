@@ -5,7 +5,7 @@ if(BUILD_chartshape AND NOT WIN32)
 endif(BUILD_chartshape AND NOT WIN32)
 
 if(MARBLE_FOUND AND Soprano_FOUND)
-  macro_optional_add_subdirectory(maps)
+  add_subdirectory(maps)
 endif(MARBLE_FOUND AND Soprano_FOUND)
 
 if(QT_QTWEBKIT_FOUND)

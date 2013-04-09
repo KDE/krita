@@ -74,10 +74,12 @@ private:
     template<class U, Vc::Implementation V> struct TypeHelper {};
 
 private:
+#if QT_VERSION >= 0x040700
     template<class U>
     inline void startProcessing(const QRect &rect, TypeHelper<U, Vc::ScalarImpl>) {
         KisBrushMaskScalarApplicator<MaskGenerator, _impl>::processScalar(rect);
     }
+#endif
 
     template<class U, Vc::Implementation V>
     inline void startProcessing(const QRect &rect, TypeHelper<U, V>) {

@@ -43,6 +43,29 @@
 namespace TestUtil
 {
 
+inline QString fetchDataFileLazy(const QString relativeFileName)
+{
+    QString filename  =
+        QString(FILES_DATA_DIR) +
+        QDir::separator() +
+        relativeFileName;
+
+    if (QFileInfo(filename).exists()) {
+        return filename;
+    }
+
+    filename  =
+        QString(FILES_DEFAULT_DATA_DIR) +
+        QDir::separator() +
+        relativeFileName;
+
+    if (QFileInfo(filename).exists()) {
+        return filename;
+    }
+
+    return QString();
+}
+
 inline void dumpNodeStack(KisNodeSP node, QString prefix = QString("\t"))
 {
     qDebug() << node->name();

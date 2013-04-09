@@ -520,3 +520,83 @@ QRect KisTransformWorker::mirrorY(KisPaintDeviceSP dev, qreal axis, const KisSel
 
 }
 
+void KisTransformWorker::offset(KisPaintDeviceSP device, const QPoint& offsetPosition, const QRect& wrapRect)
+{
+    Q_ASSERT(wrapRect == wrapRect.normalized());
+
+    // inspired by gimp offset code, only wrap mode supported
+    int sx = wrapRect.x();
+    int sy = wrapRect.y();
+
+    int width = wrapRect.width();
+    int height = wrapRect.height();
+
+    // offset coords are relative to space wrapRect
+    int offsetX = offsetPosition.x();
+    int offsetY = offsetPosition.y();
+
+    while (offsetX < 0)
+    {
+        offsetX += width;
+    }
+
+    while (offsetY < 0)
+    {
+        offsetY += height;
+    }
+
+    if ((offsetX == 0) && (offsetY == 0))
+    {
+        return;
+    }
+
+    KisPaintDeviceSP offsetDevice = new KisPaintDevice(device->colorSpace());
+    KisPainter gc(offsetDevice);
+    gc.setCompositeOp(COMPOSITE_COPY);
+
+    int srcX = 0;
+    int srcY = 0;
+
+    int destX = offsetX;
+    int destY = offsetY;
+
+    width = qBound<int>(0, width - offsetX, width);
+    height = qBound<int>(0, height - offsetY, height);
+
+    if ((width != 0) && (height != 0))
+    {
+        // convert back to paint device space
+        gc.bitBlt(destX + sx, destY + sy, device, srcX + sx, srcY + sy, width, height);
+    }
+
+    srcX = wrapRect.width() - offsetX;
+    srcY = wrapRect.height() - offsetY;
+
+    destX = (srcX + offsetX) % wrapRect.width();
+    destY = (srcY + offsetY) % wrapRect.height();
+
+    if (offsetX != 0 && offsetY != 0)
+    {
+          gc.bitBlt(destX + sx, destY + sy, device, srcX + sx, srcY + sy, offsetX, offsetY);
+    }
+
+    if (offsetX != 0)
+    {
+        gc.bitBlt(destX + sx, (destY + offsetY) + sy, device, srcX + sx, 0 + sy, offsetX, wrapRect.height() - offsetY);
+    }
+
+    if (offsetY != 0)
+    {
+        gc.bitBlt((destX + offsetX) + sx, destY + sy, device, 0 + sx, srcY + sy, wrapRect.width() - offsetX, offsetY);
+    }
+
+    gc.end();
+
+    // bitblt the result back
+    KisPainter gc2(device);
+    gc2.setCompositeOp(COMPOSITE_COPY);
+    gc2.bitBlt(sx,sy,offsetDevice, sx, sy, wrapRect.width(), wrapRect.height());
+    gc2.end();
+}
+
+

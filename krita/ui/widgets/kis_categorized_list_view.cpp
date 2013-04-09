@@ -23,7 +23,7 @@
 KisCategorizedListView::KisCategorizedListView(bool useCheckBoxHack, QWidget* parent):
     QListView(parent), m_useCheckBoxHack(useCheckBoxHack)
 {
-    connect(this, SIGNAL(clicked(const QModelIndex&)), this, SLOT(slotIndexChanged(const QModelIndex&)));
+    connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(slotIndexChanged(QModelIndex)));
 }
 
 KisCategorizedListView::~KisCategorizedListView()

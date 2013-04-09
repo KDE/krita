@@ -1,6 +1,7 @@
 [Desktop Entry]
 Comment=Random pick to an image
 Comment[bg]=Случайно избиране на изображение
+Comment[bs]=Slučajan odabir na sliku
 Comment[ca]=Agafa aleatòriament una imatge
 Comment[ca@valencia]=Agafa aleatòriament una imatge
 Comment[da]=Udfør tilfældigt valg i et billede
@@ -39,6 +40,7 @@ Comment[zh_TW]=隨機挑選圖片
 Icon=
 Name=Random pick Filter
 Name[bg]=Филтър за случайно избиране
+Name[bs]=Filter za slučajan odabir
 Name[ca]=Aplica un filtre aleatòriament
 Name[ca@valencia]=Aplica un filtre aleatòriament
 Name[da]=Tilfældigt udvalgsfilter

@@ -3,7 +3,7 @@ include_directories( ${PHONON_INCLUDES} )
 # The next line is a workaround for a issue wherein FindPhononInternal.cmake would change the value of CMAKE_AUTOMOC
 # and cause build error "CMake Error: Attempt to add a custom rule to output ...."
 set(CMAKE_AUTOMOC_TEMP ${CMAKE_AUTOMOC})
-find_package(Phonon CONFIG)
+find_package(Phonon NO_MODULE)
 set(CMAKE_AUTOMOC ${CMAKE_AUTOMOC_TEMP})
 
 if(PHONON_FOUND_EXPERIMENTAL)

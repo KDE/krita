@@ -62,13 +62,12 @@ void KisToolSelectPolygonal::keyPressEvent(QKeyEvent *event)
 
 void KisToolSelectPolygonal::finishPolyline(const QVector<QPointF> &points)
 {
-    KisSystemLocker locker(currentNode());
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     Q_ASSERT(kisCanvas);
     if (!kisCanvas)
         return;
 
-    KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Polygonal Selection"));
+    KisSelectionToolHelper helper(kisCanvas, i18n("Polygonal Selection"));
 
     if (m_widgetHelper.selectionMode() == PIXEL_SELECTION) {
         KisPixelSelectionSP tmpSel = new KisPixelSelection();

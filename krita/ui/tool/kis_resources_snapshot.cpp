@@ -214,3 +214,18 @@ const KoCompositeOp* KisResourcesSnapshot::compositeOp() const
 {
     return m_d->compositeOp;
 }
+
+KisPattern* KisResourcesSnapshot::currentPattern() const
+{
+    return m_d->currentPattern;
+}
+
+KoColor KisResourcesSnapshot::currentFgColor() const
+{
+    return m_d->currentFgColor;
+}
+
+KoColor KisResourcesSnapshot::currentBgColor() const
+{
+    return m_d->currentBgColor;
+}

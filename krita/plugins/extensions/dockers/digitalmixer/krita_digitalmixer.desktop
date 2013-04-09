@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=DigitalMixer
+Name[bs]=DigitalniMixer
 Name[ca]=DigitalMixer
 Name[ca@valencia]=DigitalMixer
 Name[da]=DigitalMixer
@@ -28,6 +29,7 @@ Name[wa]=Maxheu limerike
 Name[x-test]=xxDigitalMixerxx
 Name[zh_TW]=數位混合器
 Comment=DigitalMixer
+Comment[bs]=DigitalniMixer
 Comment[ca]=DigitalMixer
 Comment[ca@valencia]=DigitalMixer
 Comment[da]=DigitalMixer

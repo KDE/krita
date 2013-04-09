@@ -20,44 +20,18 @@
 
 #include "dlg_feather_selection.h"
 
-#include <math.h>
-
 #include <klocale.h>
 #include <kis_debug.h>
+#include <operations/kis_operation_configuration.h>
 
-
-DlgFeatherSelection::DlgFeatherSelection(QWidget *  parent, const char * name)
-        : KDialog(parent)
+WdgFeatherSelection::WdgFeatherSelection(QWidget* parent) : KisOperationUIWidget(i18n("Feather Selection"), parent)
 {
-    setCaption(i18n("Feather Selection"));
-    setButtons(Ok | Cancel);
-    setDefaultButton(Ok);
-    setObjectName(name);
-    m_page = new WdgFeatherSelection(this);
-    Q_CHECK_PTR(m_page);
-    m_page->setObjectName("feather_selection");
-
-    setMainWidget(m_page);
-    resize(m_page->sizeHint());
-
-    connect(this, SIGNAL(okClicked()), this, SLOT(okClicked()));
+    setupUi(this);
 }
 
-DlgFeatherSelection::~DlgFeatherSelection()
+void WdgFeatherSelection::getConfiguration(KisOperationConfiguration* config)
 {
-    delete m_page;
-}
-
-qint32 DlgFeatherSelection::radius()
-{
-    return m_page->radiusSpinBox->value();
-}
-
-// SLOTS
-
-void DlgFeatherSelection::okClicked()
-{
-    accept();
+    config->setProperty("radius", radiusSpinBox->value());
 }
 
 #include "dlg_feather_selection.moc"

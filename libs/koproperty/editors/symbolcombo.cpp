@@ -18,18 +18,18 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "symbolcombo.h"
+
+#include <KCharSelect>
+#include <KLocale>
+#include <KDialog>
+
 #include <QLineEdit>
 #include <QPushButton>
 #include <QLayout>
 #include <QPainter>
 #include <QVariant>
 #include <QHBoxLayout>
-
-#include <kcharselect.h>
-#include <klocale.h>
-#include <kdialog.h>
-
-#include "symbolcombo.h"
 
 using namespace KoProperty;
 

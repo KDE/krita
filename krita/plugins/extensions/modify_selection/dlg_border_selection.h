@@ -23,37 +23,17 @@
 #include <kdialog.h>
 
 #include "ui_wdg_border_selection.h"
+#include <operations/kis_operation_ui_widget.h>
+#include <operations/kis_operation_configuration.h>
 
-class WdgBorderSelection : public QWidget, public Ui::WdgBorderSelection
+class WdgBorderSelection : public KisOperationUIWidget, public Ui::WdgBorderSelection
 {
     Q_OBJECT
 
 public:
-    WdgBorderSelection(QWidget *parent) : QWidget(parent) {
-        setupUi(this);
-    }
-};
+    WdgBorderSelection(QWidget *parent);
 
-class DlgBorderSelection: public KDialog
-{
-
-    Q_OBJECT
-
-public:
-
-    DlgBorderSelection(QWidget * parent = 0, const char* name = 0);
-    ~DlgBorderSelection();
-
-    qint32 xradius();
-    qint32 yradius();
-
-private slots:
-
-    void okClicked();
-
-private:
-
-    WdgBorderSelection * m_page;
+    virtual void getConfiguration(KisOperationConfiguration* config);
 };
 
 #endif // DLG_BORDER_SELECTION_H

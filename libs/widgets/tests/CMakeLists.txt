@@ -19,4 +19,10 @@ target_link_libraries(zoomcontroller_test  kowidgets komain ${QT_QTTEST_LIBRARY}
 #kde4_add_unit_test(KoResourceTagging_test TESTNAME libs-widgets-KoResourceTagging_test  ${KoResourceTagging_test_SRCS})
 #target_link_libraries(KoResourceTagging_test  kowidgets komain ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(KoProgressUpdater_test_SRCS KoProgressUpdater_test.cpp )
+kde4_add_unit_test(KoProgressUpdaterTest TESTNAME libs-widgets-KoProgressUpdaterTest ${KoProgressUpdater_test_SRCS})
+target_link_libraries(KoProgressUpdaterTest komain ${QT_QTTEST_LIBRARY} ${KDE4_THREADWEAVER_LIBRARIES})
+
 ########### end ###############

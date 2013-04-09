@@ -58,10 +58,18 @@
     </widget>
    </item>
    <item row="1" column="2">
-    <widget class="KPushButton" name="pushButtonOk"/>
+    <widget class="KPushButton" name="pushButtonOk">
+     <property name="default">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item row="1" column="4">
-    <widget class="KPushButton" name="pushButtonCancel"/>
+    <widget class="KPushButton" name="pushButtonCancel">
+     <property name="autoDefault">
+      <bool>false</bool>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

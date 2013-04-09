@@ -49,6 +49,7 @@
 #include <QPainter>
 #include <QTextLayout>
 #include <QMenu>
+#include <QScrollArea>
 
 class KoModeBox::Private
 {
@@ -111,7 +112,11 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
     d->tabBar = new QTabBar();
     d->tabBar->setShape(QTabBar::RoundedWest);
     d->tabBar->setExpanding(false);
-    d->tabBar->setIconSize(QSize(32,64));
+    if (d->iconMode == IconAndText) {
+        d->tabBar->setIconSize(QSize(32,64));
+    } else {
+        d->tabBar->setIconSize(QSize(22,22));
+    }
     d->tabBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     layout->addWidget(d->tabBar, 0, 0);
 
@@ -263,6 +268,7 @@ void KoModeBox::addItem(const KoToolButton button)
     widget = new QWidget();
     widget->setLayout(layout);
     layout->setContentsMargins(0,0,0,0);
+    layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
     d->addedWidgets[button.buttonGroupId] = widget;
 
     // Create a rotated icon with text
@@ -274,7 +280,13 @@ void KoModeBox::addItem(const KoToolButton button)
         d->tabBar->setTabToolTip(index, button.button->toolTip());
     }
     d->tabBar->blockSignals(false);
-    d->stack->addWidget(widget);
+    QScrollArea *sa = new QScrollArea();
+    sa->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    sa->setWidgetResizable(true);
+    sa->setContentsMargins(0,0,0,0);
+    sa->setWidget(widget);
+    sa->setFrameShape(QFrame::NoFrame);
+    d->stack->addWidget(sa);
     d->addedButtons.append(button);
 }
 
@@ -298,11 +310,6 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
 
     d->addedButtons.clear();
 
-    if (d->iconMode == IconAndText) {
-        d->tabBar->setIconSize(QSize(32,64));
-    } else {
-        d->tabBar->setIconSize(QSize(22,22));
-    }
     int newIndex = -1;
     foreach (const KoToolButton button, d->buttons) {
         QString code = button.visibilityCode;
@@ -359,6 +366,7 @@ void KoModeBox::setOptionWidgets(const QList<QWidget *> &optionWidgetList)
 
     int cnt = 0;
     QGridLayout *layout = (QGridLayout *)d->addedWidgets[d->activeId]->layout();
+
     // need to unstretch row that have previously been stretched
     layout->setRowStretch(layout->rowCount()-1, 0);
     layout->setColumnMinimumWidth(0, 0); // used to be indent
@@ -462,8 +470,14 @@ void KoModeBox::slotContextMenuRequested(const QPoint &pos)
 void KoModeBox::switchIconMode(int mode)
 {
     d->iconMode = static_cast<IconMode>(mode);
+    if (d->iconMode == IconAndText) {
+        d->tabBar->setIconSize(QSize(32,64));
+    } else {
+        d->tabBar->setIconSize(QSize(22,22));
+    }
     updateShownTools(d->canvas->canvasController(), QList<QString>());
 
     KConfigGroup cfg = KGlobal::config()->group("calligra");
     cfg.writeEntry("ModeBoxIconMode", (int)d->iconMode);
+
 }

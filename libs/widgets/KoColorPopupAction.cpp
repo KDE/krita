@@ -24,9 +24,14 @@
 #include "KoTriangleColorSelector.h"
 #include "KoColorSlider.h"
 #include "KoCheckerBoardPainter.h"
-#include "KoColorSpaceRegistry.h"
-#include <KoResourceServer.h>
-#include <KoResourceServerProvider.h>
+#include "KoResourceServer.h"
+#include "KoResourceServerProvider.h"
+#include <KoColorSpaceRegistry.h>
+#include <KoColor.h>
+
+#include <KColorDialog>
+#include <KDebug>
+#include <KLocale>
 
 #include <QPainter>
 #include <QWidgetAction>
@@ -35,12 +40,6 @@
 #include <QGridLayout>
 #include <QToolButton>
 
-#include <KColorDialog>
-#include <KDebug>
-#include <klocale.h>
-
-#include <KoColor.h>
-#include <KoColorSpaceRegistry.h>
 
 class KoColorPopupAction::KoColorPopupActionPrivate
 {

@@ -29,6 +29,7 @@ private slots:
     void testCreation();
     void testMirrorX();
     void testMirrorY();
+    void testOffset();
     void testMirrorTransactionX();
     void testMirrorTransactionY();
     void testIdentity();

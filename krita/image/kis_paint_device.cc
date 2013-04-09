@@ -24,6 +24,7 @@
 #include <QImage>
 #include <QList>
 #include <QHash>
+#include <QIODevice>
 
 #include <klocale.h>
 
@@ -32,7 +33,6 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoIntegerMaths.h>
-#include <KoStore.h>
 
 #include "kis_global.h"
 #include "kis_types.h"
@@ -41,7 +41,7 @@
 #include "kis_node.h"
 #include "commands/kis_paintdevice_convert_type_command.h"
 #include "kis_datamanager.h"
-
+#include "kis_paint_device_writer.h"
 #include "kis_selection_component.h"
 #include "kis_pixel_selection.h"
 #include "kis_repeat_iterators_pixel.h"
@@ -538,14 +538,14 @@ void KisPaintDevice::fill(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *
     m_d->cache.invalidate();
 }
 
-bool KisPaintDevice::write(KoStore *store)
+bool KisPaintDevice::write(KisPaintDeviceWriter &store)
 {
     return m_datamanager->write(store);
 }
 
-bool KisPaintDevice::read(KoStore *store)
+bool KisPaintDevice::read(QIODevice *stream)
 {
-    bool retval = m_datamanager->read(store);
+    bool retval = m_datamanager->read(stream);
     m_d->cache.invalidate();
     return retval;
 }

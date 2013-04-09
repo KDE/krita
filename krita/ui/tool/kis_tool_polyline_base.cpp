@@ -168,8 +168,6 @@ void KisToolPolylineBase::updateArea()
 void KisToolPolylineBase::finish()
 {
     Q_ASSERT(canvas() && currentImage());
-    if (!currentNode())
-        return;
 
     m_dragging = false;
     updateArea();

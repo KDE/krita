@@ -46,7 +46,7 @@
 #include "kis_view2.h"
 #include "kis_painter.h"
 #include "kis_threaded_applicator.h"
-#include "filter/kis_filter_job.h"
+#include "kis_filter_job.h"
 #include "filter/kis_filter_registry.h"
 #include "kis_system_locker.h"
 #include "kis_progress_widget.h"

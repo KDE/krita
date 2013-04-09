@@ -42,7 +42,7 @@ class KOWIDGETS_EXPORT KoFillConfigWidget : public QWidget
         Pattern
     };
 public:
-    KoFillConfigWidget(QWidget *parent);
+    explicit KoFillConfigWidget(QWidget *parent);
     ~KoFillConfigWidget();
 
     void setCanvas( KoCanvasBase *canvas );

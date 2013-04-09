@@ -1076,7 +1076,7 @@ void ArtisticTextShape::saveSvgTextRange(const ArtisticTextRange &range, SvgSavi
         int charIndex = 0;
         while(range.hasRotation(charIndex)) {
             if (charIndex)
-                attributeValue += ",";
+                attributeValue += ',';
             attributeValue += QString("%1").arg(range.rotation(charIndex++));
         }
         context.shapeWriter().addAttribute("rotate", attributeValue);

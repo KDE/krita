@@ -25,11 +25,13 @@
 #include <kapplication.h>
 #include <kdialog.h>
 #include <kpluginfactory.h>
+#include <kmessagebox.h>
 
 #include <KoColorSpace.h>
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
 #include <KoColorProfile.h>
+#include <KoColorModelStandardIds.h>
 
 #include <kis_paint_device.h>
 #include <kis_doc2.h>
@@ -96,6 +98,19 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     pd = new KisPaintDevice(*image->projection());
     KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
     image->unlock();
+
+    QStringList supportedColorModelIds;
+    supportedColorModelIds << RGBAColorModelID.id() << GrayAColorModelID.id() << GrayColorModelID.id();
+    QStringList supportedColorDepthIds;
+    supportedColorDepthIds << Integer8BitsColorDepthID.id() << Integer16BitsColorDepthID.id();
+    if (!supportedColorModelIds.contains(pd->colorSpace()->colorModelId().id()) ||
+            !supportedColorDepthIds.contains(pd->colorSpace()->colorDepthId().id())) {
+        if (!m_chain->manager()->getBatchMode()) {
+            KMessageBox::error(0, i18n("Cannot export images in this colorspace or channel depth to PNG"), i18n("Krita PNG Export"));
+        }
+        return KoFilter::UsageError;
+    }
+
 
     KisRectConstIteratorSP it = l->paintDevice()->createRectConstIteratorNG(0, 0, image->width(), image->height());
     const KoColorSpace* cs = l->paintDevice()->colorSpace();

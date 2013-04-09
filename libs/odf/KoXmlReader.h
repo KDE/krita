@@ -280,7 +280,7 @@ private:
 class KOODF_EXPORT KoXmlDocument: public KoXmlNode
 {
 public:
-    KoXmlDocument(bool stripSpaces = false);
+    explicit KoXmlDocument(bool stripSpaces = false);
     KoXmlDocument(const KoXmlDocument& node);
     KoXmlDocument& operator=(const KoXmlDocument& node);
     bool operator==(const KoXmlDocument&) const;

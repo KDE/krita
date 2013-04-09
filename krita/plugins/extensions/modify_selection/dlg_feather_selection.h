@@ -20,39 +20,17 @@
 #ifndef DLG_FEATHER_SELECTION_H
 #define DLG_FEATHER_SELECTION_H
 
-#include <kdialog.h>
-
 #include "ui_wdg_feather_selection.h"
+#include <operations/kis_operation_ui_widget.h>
 
-class WdgFeatherSelection : public QWidget, public Ui::WdgFeatherSelection
+class WdgFeatherSelection : public KisOperationUIWidget, public Ui::WdgFeatherSelection
 {
     Q_OBJECT
 
 public:
-    WdgFeatherSelection(QWidget *parent) : QWidget(parent) {
-        setupUi(this);
-    }
-};
+    WdgFeatherSelection(QWidget *parent);
 
-class DlgFeatherSelection: public KDialog
-{
-
-    Q_OBJECT
-
-public:
-
-    DlgFeatherSelection(QWidget * parent = 0, const char* name = 0);
-    ~DlgFeatherSelection();
-
-    qint32 radius();
-
-private slots:
-
-    void okClicked();
-
-private:
-
-    WdgFeatherSelection * m_page;
+    virtual void getConfiguration(KisOperationConfiguration* config);
 };
 
 #endif // DLG_GROW_SELECTION_H

@@ -9,9 +9,7 @@ if(HAVE_VC)
   set(LINK_VC_LIB ${Vc_LIBRARIES})
 endif(HAVE_VC)
 
-add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
-add_definitions(-DFILES_OUTPUT_DIR="${CMAKE_CURRENT_BINARY_DIR}")
-
+macro_add_unittest_definitions()
 
 ########### next target ###############
 

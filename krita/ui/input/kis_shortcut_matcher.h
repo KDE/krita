@@ -27,6 +27,7 @@
 class QMouseEvent;
 class QKeyEvent;
 class QWheelEvent;
+class QTabletEvent;
 
 class KisStrokeShortcut;
 class KisAbstractInputAction;
@@ -153,6 +154,17 @@ public:
      * should be eaten by the events filter
      */
     bool mouseMoved(QMouseEvent *event);
+
+    /**
+     * Handles the High Resolution tablet events
+     * (used on Windows only)
+     *
+     * \param event the event that caused this call
+     *
+     * \return whether the event has been handled successfully and
+     * should be eaten by the events filter
+     */
+    bool tabletMoved(QTabletEvent *event);
 
     /**
      * Resets the internal state of the matcher

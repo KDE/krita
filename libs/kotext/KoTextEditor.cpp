@@ -720,27 +720,14 @@ void KoTextEditor::deleteChar(bool previous, KUndo2Command *parent)
         }
     }
 
-    if (trackChanges) {
-        if (previous) {
-            addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::PreviousChar,
-                                                      d->document,
-                                                      shapeController, parent));
-        } else {
-            addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar,
-                                                      d->document,
-                                                      shapeController, parent));
-        }
-    }
-    else {
-        if (previous) {
-            addCommand(new DeleteCommand(DeleteCommand::PreviousChar,
-                                         d->document,
-                                         shapeController, parent));
-        } else {
-            addCommand(new DeleteCommand(DeleteCommand::NextChar,
-                                         d->document,
-                                         shapeController, parent));
-        }
+    if (previous) {
+        addCommand(new DeleteCommand(DeleteCommand::PreviousChar,
+                                        d->document,
+                                        shapeController, parent));
+    } else {
+        addCommand(new DeleteCommand(DeleteCommand::NextChar,
+                                        d->document,
+                                        shapeController, parent));
     }
 }
 

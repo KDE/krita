@@ -66,6 +66,7 @@ set(kowidgets_LIB_SRCS
     KoDockWidgetTitleBarButton.cpp
     KoViewItemContextBar.cpp
     KoContextBarButton.cpp
+
 )
 
 kde4_add_ui_files( kowidgets_LIB_SRCS

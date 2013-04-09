@@ -20,21 +20,17 @@
 #ifndef DETAILGROUPSECTIONDIALOG_H
 #define DETAILGROUPSECTIONDIALOG_H
 
-#include <QDialog>
+#include <KDialog>
 
 #include <ui_detailgroupsectiondialog.h>
 
-class DetailGroupSectionDialog : public QDialog, public Ui::DetailGroupSectionDialog
+class DetailGroupSectionDialog : public KDialog, public Ui::DetailGroupSectionDialog
 {
     Q_OBJECT
 
 public:
-    explicit DetailGroupSectionDialog(QWidget* parent = 0, Qt::WindowFlags fl = 0);
+    explicit DetailGroupSectionDialog(QWidget* parent = 0);
     ~DetailGroupSectionDialog();
-
-protected slots:
-    virtual void languageChange();
-
 };
 
 #endif // DETAILGROUPSECTIONDIALOG_H

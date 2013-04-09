@@ -57,6 +57,9 @@
 #include <recorder/kis_action_recorder.h>
 #include "kis_resources_snapshot.h"
 
+#include <processings/fill_processing_visitor.h>
+#include <kis_processing_applicator.h>
+
 
 KisToolFill::KisToolFill(KoCanvasBase * canvas)
         : KisToolPaint(canvas, KisCursor::load("tool_fill_cursor.png", 6, 6))
@@ -64,121 +67,14 @@ KisToolFill::KisToolFill(KoCanvasBase * canvas)
     setObjectName("tool_fill");
     m_feather = 0;
     m_sizemod = 0;
-    m_painter = 0;
-    m_oldColor = 0;
     m_threshold = 80;
-    m_depth = 0;
     m_usePattern = false;
     m_unmerged = false;
     m_fillOnlySelection = false;
-
 }
 
 KisToolFill::~KisToolFill()
 {
-}
-
-bool KisToolFill::flood(int startX, int startY)
-{
-    if (image()) {
-        KisNodeSP projectionNode;
-        if(m_unmerged) {
-            projectionNode = currentNode();
-        } else {
-            projectionNode = image()->root();
-        }
-        KisRecordedFillPaintAction paintAction(KisNodeQueryPath::absolutePath(currentNode()), QPoint(startX, startY), KisNodeQueryPath::absolutePath(projectionNode));
-        setupPaintAction(&paintAction);
-        paintAction.setPattern(currentPattern());
-        if(m_usePattern)
-        {
-            paintAction.setFillStyle(KisPainter::FillStylePattern);
-        }
-        image()->actionRecorder()->addAction(paintAction);
-    }
-
-    KisPaintDeviceSP device = currentNode()->paintDevice();
-    if (!device) return false;
-    KisSelectionSP selection = currentSelection();
-
-    KisCanvas2* canvas = dynamic_cast<KisCanvas2 *>(this->canvas());
-    KoProgressUpdater * updater = canvas->view()->createProgressUpdater(KoProgressUpdater::Unthreaded);
-    updater->start(100, i18n("Flood Fill"));
-
-    QVector<QRect> dirty;
-
-    KisUndoAdapter *undoAdapter = image()->undoAdapter();
-    undoAdapter->beginMacro(i18n("Flood Fill"));
-
-    if (m_fillOnlySelection && selection) {
-        KisPaintDeviceSP filled = new KisPaintDevice(device->colorSpace());
-        KisFillPainter fillPainter(filled);
-        fillPainter.setProgress(updater->startSubtask());
-
-        if (m_usePattern)
-            fillPainter.fillRect(0, 0,
-                                 currentImage()->width(),
-                                 currentImage()->height(),
-                                 currentPattern());
-        else
-            fillPainter.fillRect(0, 0,
-                                 currentImage()->width(),
-                                 currentImage()->height(),
-                                 currentFgColor(),
-                                 m_opacity);
-
-        dirty = fillPainter.takeDirtyRegion();
-
-        m_painter = new KisPainter(device, currentSelection());
-        Q_CHECK_PTR(m_painter);
-
-        m_painter->beginTransaction("");
-
-        m_painter->setCompositeOp(compositeOp());
-        m_painter->setOpacity(m_opacity);
-
-        foreach(const QRect &rc, dirty) {
-            m_painter->bitBlt(rc.topLeft(), filled, rc);
-        }
-
-        m_painter->endTransaction(image()->undoAdapter());
-
-    } else {
-
-        KisFillPainter fillPainter(device, currentSelection());
-
-        KisResourcesSnapshotSP resources =
-            new KisResourcesSnapshot(image(), 0, this->canvas()->resourceManager());
-        resources->setupPainter(&fillPainter);
-
-        fillPainter.beginTransaction("");
-
-        fillPainter.setSizemod(m_sizemod);
-        fillPainter.setFeather(m_feather);
-        fillPainter.setProgress(updater->startSubtask());
-        fillPainter.setOpacity(m_opacity);
-        fillPainter.setFillThreshold(m_threshold);
-        fillPainter.setCompositeOp(compositeOp());
-        fillPainter.setSampleMerged(!m_unmerged);
-        fillPainter.setCareForSelection(true);
-        fillPainter.setWidth(currentImage()->width());
-        fillPainter.setHeight(currentImage()->height());
-
-        if (m_usePattern)
-            fillPainter.fillPattern(startX, startY, currentImage()->mergedImage());
-        else
-            fillPainter.fillColor(startX, startY, currentImage()->mergedImage());
-
-        fillPainter.endTransaction(image()->undoAdapter());
-        dirty = fillPainter.takeDirtyRegion();
-    }
-
-    undoAdapter->endMacro();
-
-    device->setDirty(dirty);
-    delete updater;
-
-    return true;
 }
 
 void KisToolFill::mousePressEvent(KoPointerEvent *event)
@@ -204,15 +100,53 @@ void KisToolFill::mouseReleaseEvent(KoPointerEvent *event)
     if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
         setMode(KisTool::HOVER_MODE);
 
-        if (!currentNode() || currentNode()->systemLocked() ||
+        if (!currentNode() ||
             !currentImage()->bounds().contains(m_startPos)) {
 
             return;
         }
 
-        KisSystemLocker locker(currentNode());
-        flood(m_startPos.x(), m_startPos.y());
-        notifyModified();
+        // TODO: remove this block after recording refactorign
+        if (image()) {
+            KisNodeSP projectionNode;
+            if(m_unmerged) {
+                projectionNode = currentNode();
+            } else {
+                projectionNode = image()->root();
+            }
+            KisRecordedFillPaintAction paintAction(KisNodeQueryPath::absolutePath(currentNode()), m_startPos, KisNodeQueryPath::absolutePath(projectionNode));
+            setupPaintAction(&paintAction);
+            paintAction.setPattern(currentPattern());
+            if(m_usePattern) {
+                paintAction.setFillStyle(KisPainter::FillStylePattern);
+            }
+            image()->actionRecorder()->addAction(paintAction);
+        }
+
+        KisProcessingApplicator applicator(currentImage(), currentNode(),
+                                           KisProcessingApplicator::NONE,
+                                           KisImageSignalVector() << ModifiedSignal,
+                                           i18n("Flood Fill"));
+
+        KisResourcesSnapshotSP resources =
+            new KisResourcesSnapshot(image(), 0, this->canvas()->resourceManager());
+
+        KisProcessingVisitorSP visitor =
+            new FillProcessingVisitor(m_startPos,
+                                      currentSelection(),
+                                      resources,
+                                      m_usePattern,
+                                      m_fillOnlySelection,
+                                      m_feather,
+                                      m_sizemod,
+                                      m_threshold,
+                                      m_unmerged);
+
+        applicator.applyVisitor(visitor,
+                                KisStrokeJobData::SEQUENTIAL,
+                                KisStrokeJobData::EXCLUSIVE);
+
+        applicator.end();
     }
     else {
         KisToolPaint::mouseReleaseEvent(event);

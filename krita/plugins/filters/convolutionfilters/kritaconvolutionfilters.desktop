@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Convolution Filters
 Name[bg]=Изкривяващи филтри
+Name[bs]=Filteri za konvoluciju
 Name[ca]=Filtres de convolució
 Name[ca@valencia]=Filtres de convolució
 Name[cy]=Hidlau cordeddiadau
@@ -31,7 +32,7 @@ Name[ne]=मोड फिल्टर
 Name[nl]=Verdraaïngs
 Name[pl]=Filtry splotowe
 Name[pt]=Filtros de Convolução
-Name[pt_BR]=Filtros de Convolução
+Name[pt_BR]=Filtros de convolução
 Name[ru]=Cвёртка
 Name[sk]=Filtre zvinutia
 Name[sl]=Konvolucijski filtri
@@ -43,6 +44,7 @@ Name[x-test]=xxConvolution Filtersxx
 Name[zh_TW]=皺褶過濾器
 Comment=Convolution filters
 Comment[bg]=Изкривяващи филтри
+Comment[bs]=Filteri za konvoluciju
 Comment[ca]=Filtres de Convolution
 Comment[ca@valencia]=Filtres de Convolution
 Comment[cy]=Hidlau cordeddiadau

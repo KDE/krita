@@ -21,8 +21,8 @@
 #include <QtGlobal>
 
 class QRect;
-class KoStore;
-
+class KisPaintDeviceWriter;
+class QIODevice;
 
 // Change the following line to switch (at compiletime) to different datamanager
 #include <config-tiles.h> // For the next define
@@ -121,15 +121,15 @@ public:
 public:
 
     /**
-     * Reads and writes the tiles from/onto a KoStore (which is simply a file within a zip file)
+     * Reads and writes the tiles
      *
      */
-    inline bool write(KoStore *store) {
-        return ACTUAL_DATAMGR::write(store);
+    inline bool write(KisPaintDeviceWriter &writer) {
+        return ACTUAL_DATAMGR::write(writer);
     }
 
-    inline bool read(KoStore *store) {
-        return ACTUAL_DATAMGR::read(store);
+    inline bool read(QIODevice *io) {
+        return ACTUAL_DATAMGR::read(io);
     }
 
     inline void purge(const QRect& area) {

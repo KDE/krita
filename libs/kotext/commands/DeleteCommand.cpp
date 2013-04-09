@@ -159,7 +159,7 @@ void DeleteCommand::doDelete()
 
     KoTextRangeManager *rangeManager = KoTextDocument(m_document).textRangeManager();
 
-    m_rangesToRemove = rangeManager->textRangesChangingWithin(textEditor->selectionStart(), textEditor->selectionEnd(), textEditor->selectionStart(), textEditor->selectionEnd());
+    m_rangesToRemove = rangeManager->textRangesChangingWithin(textEditor->document(), textEditor->selectionStart(), textEditor->selectionEnd(), textEditor->selectionStart(), textEditor->selectionEnd());
 
     foreach (KoTextRange *range, m_rangesToRemove) {
         KoAnchorTextRange *anchorRange = dynamic_cast<KoAnchorTextRange *>(range);

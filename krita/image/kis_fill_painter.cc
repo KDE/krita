@@ -61,7 +61,7 @@
 #include "KoColor.h"
 #include "kis_selection.h"
 
-#include "kis_selection_manager_p.h"
+#include "kis_selection_filters.h"
 
 KisFillPainter::KisFillPainter()
         : KisPainter()

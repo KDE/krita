@@ -71,10 +71,6 @@ void KisToolSelectOutline::mousePressEvent(KoPointerEvent *event)
     if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
                        Qt::LeftButton, Qt::NoModifier)) {
 
-        if (!currentNode()) {
-            return;
-        }
-
         if (!selectionEditable()) {
             return;
         }
@@ -111,12 +107,12 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
 
         if (m_points.count() > 2) {
             KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-            if (!kisCanvas || !currentNode())
+            if (!kisCanvas)
                 return;
 
             QApplication::setOverrideCursor(KisCursor::waitCursor());
 
-            KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Outline Selection"));
+            KisSelectionToolHelper helper(kisCanvas, i18n("Outline Selection"));
 
             if (selectionMode() == PIXEL_SELECTION) {
 

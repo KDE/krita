@@ -22,15 +22,6 @@
 
 #include "commands_new/kis_node_move_command2.h"
 
-#include "kis_group_layer.h"
-#include "kis_paint_layer.h"
-#include "kis_adjustment_layer.h"
-#include "generator/kis_generator_layer.h"
-
-#include "kis_transparency_mask.h"
-#include "kis_filter_mask.h"
-#include "kis_selection_mask.h"
-
 #include "kis_external_layer_iface.h"
 
 #include "kis_paint_device.h"
@@ -46,64 +37,13 @@ KisCropProcessingVisitor::KisCropProcessingVisitor(const QRect &rect, bool cropL
 {
 }
 
-void KisCropProcessingVisitor::visit(KisNode *node, KisUndoAdapter *undoAdapter)
-{
-    Q_UNUSED(node);
-    Q_UNUSED(undoAdapter);
-}
-
-void KisCropProcessingVisitor::visit(KisCloneLayer *layer, KisUndoAdapter *undoAdapter)
-{
-    Q_UNUSED(layer);
-    Q_UNUSED(undoAdapter);
-}
-
-void KisCropProcessingVisitor::visit(KisExternalLayer *layer, KisUndoAdapter *undoAdapter)
+void KisCropProcessingVisitor::visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter)
 {
     KUndo2Command* command = layer->crop(m_rect);
     undoAdapter->addCommand(command);
 }
 
-void KisCropProcessingVisitor::visit(KisPaintLayer *layer, KisUndoAdapter *undoAdapter)
-{
-    cropNode(layer, undoAdapter);
-}
-
-void KisCropProcessingVisitor::visit(KisGroupLayer *layer, KisUndoAdapter *undoAdapter)
-{
-    Q_UNUSED(undoAdapter);
-
-    layer->resetCache();
-}
-
-void KisCropProcessingVisitor::visit(KisAdjustmentLayer *layer, KisUndoAdapter *undoAdapter)
-{
-    cropNode(layer, undoAdapter);
-    layer->resetCache();
-}
-
-void KisCropProcessingVisitor::visit(KisGeneratorLayer *layer, KisUndoAdapter *undoAdapter)
-{
-    cropNode(layer, undoAdapter);
-    layer->resetCache();
-}
-
-void KisCropProcessingVisitor::visit(KisFilterMask *mask, KisUndoAdapter *undoAdapter)
-{
-    cropNode(mask, undoAdapter);
-}
-
-void KisCropProcessingVisitor::visit(KisTransparencyMask *mask, KisUndoAdapter *undoAdapter)
-{
-    cropNode(mask, undoAdapter);
-}
-
-void KisCropProcessingVisitor::visit(KisSelectionMask *mask, KisUndoAdapter *undoAdapter)
-{
-    cropNode(mask, undoAdapter);
-}
-
-void KisCropProcessingVisitor::cropNode(KisNode *node, KisUndoAdapter *undoAdapter)
+void KisCropProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter)
 {
     /**
      * TODO: implement actual robust cropping of the selections,

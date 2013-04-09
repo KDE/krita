@@ -38,7 +38,7 @@ set(komain_LIB_SRCS
     KoToolBox.cpp
     KoToolBoxDocker.cpp
     KoToolBoxFactory.cpp
-    KoToolDocker.cpp
+    KoToolDocker_p.cpp
     KoVersionDialog.cpp
     KoView.cpp
     calligraversion.cpp
@@ -63,11 +63,6 @@ set(komain_LIB_SRCS
     KoDocumentSectionDelegate.cpp
     KoDocumentSectionToolTip.cpp
     KoDocumentSectionView.cpp
-
-    KoProgressBar.cpp
-    KoProgressUpdater.cpp
-    KoUpdater.cpp
-    KoUpdaterPrivate_p.cpp
 
     KoDetailsPane.cpp
     KoExistingDocumentPane.cpp
@@ -144,6 +139,11 @@ install(TARGETS komain ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install(FILES calligradocker.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR} )
 install(FILES calligra_shell.rc DESTINATION ${DATA_INSTALL_DIR}/calligra )
+
+if (APPLE)
+    install(FILES osx.stylesheet DESTINATION ${DATA_INSTALL_DIR}/calligra )
+endif (APPLE)
+
 install( FILES
     KoApplication.h
     KoDocument.h
@@ -172,14 +172,9 @@ install( FILES
     KoServiceProvider.h
     KoPart.h
     KoPrintJob.h
-    KoProgressUpdater.h
-    KoProgressProxy.h
     KoVersionDialog.h
     KoView.h
     calligraversion.h
-    KoProgressUpdater.h
-    KoProgressBar.h
-    KoUpdater.h
     KoStandardAction.h
     komain_export.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)

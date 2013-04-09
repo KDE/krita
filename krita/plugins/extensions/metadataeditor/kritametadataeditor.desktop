@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=metadataeditor
 Name[bg]=редактор на метаданни
+Name[bs]=urednik meta-podataka
 Name[ca]=metadataeditor
 Name[ca@valencia]=metadataeditor
 Name[cs]=Editor metadat
@@ -39,6 +40,7 @@ Name[zh_CN]=元数据编辑器
 Name[zh_TW]=中繼資料編輯器
 Comment=metadataeditor
 Comment[bg]=редактор на метаданни
+Comment[bs]=urednik meta-podataka
 Comment[ca]=metadataeditor
 Comment[ca@valencia]=metadataeditor
 Comment[cs]=Editor metadat

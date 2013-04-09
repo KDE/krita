@@ -18,8 +18,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <KoUnit.h>
 #include "KoShadowStyle.h"
+
+#include <KoUnit.h>
+
 
 // KoShadowStyle private class
 class KoShadowStylePrivate: public QSharedData

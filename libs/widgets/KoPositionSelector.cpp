@@ -23,7 +23,6 @@
 #include <QRadioButton>
 #include <QGridLayout>
 #include <QButtonGroup>
-#include <QButtonGroup>
 #include <QPainter>
 #include <kdebug.h>
 #include <QStyleOption>

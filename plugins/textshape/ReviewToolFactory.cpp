@@ -28,6 +28,8 @@
 #include <KoIcon.h>
 #include <klocale.h>
 
+#include <QDebug>
+
 ReviewToolFactory::ReviewToolFactory()
         : KoToolFactoryBase("ReviewToolFactory_ID")
 {
@@ -49,7 +51,8 @@ KoToolBase *ReviewToolFactory::createTool(KoCanvasBase *canvas)
 
 bool ReviewToolFactory::canCreateTool(KoCanvasBase* canvas) const
 {
-    if (canvas->shapeController()->resourceManager() && canvas->shapeController()->resourceManager()->hasResource(KoText::ChangeTracker))
-        return true;
-    return false;
+    //if (canvas->shapeController()->resourceManager() && canvas->shapeController()->resourceManager()->hasResource(KoText::ChangeTracker))
+    //    return true;
+    //return false;
+    return true;
 }

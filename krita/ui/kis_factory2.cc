@@ -33,8 +33,6 @@
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 #include <kparts/plugin.h>
-#include <kservice.h>
-#include <kservicetypetrader.h>
 #include <kparts/componentfactory.h>
 #include <kconfiggroup.h>
 

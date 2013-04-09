@@ -50,6 +50,7 @@ KisPressureHSVOption::KisPressureHSVOption(const QString& name, const QString& p
     d->min = min;
     d->max = max;
 
+    // xgettext: no-c-format
     QString activeColorMsg = i18n("(50% is active color)");
     QString br("<br />");
     QString fullPercent = i18n("100%");

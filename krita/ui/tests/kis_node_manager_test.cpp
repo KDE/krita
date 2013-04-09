@@ -41,7 +41,7 @@ public:
         undoStore->undo();
         QTest::qWait(1000);
         image->waitForDone();
-        QVERIFY(checkLayers("initial"));
+        QVERIFY(checkLayersInitial());
     }
 
     KisNodeManager *nodeManager;

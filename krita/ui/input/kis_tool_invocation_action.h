@@ -42,6 +42,8 @@ public:
     void end(QEvent *event);
     void inputEvent(QEvent* event);
 
+    bool supportsHiResInputEvents() const;
+
 private:
     class Private;
     Private * const d;

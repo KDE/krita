@@ -1,5 +1,14 @@
 [Desktop Entry]
 Name=Flipbook Docker
+Name[de]=Andockbarer Daumenkino-Dialog
+Name[el]=Εργαλείο προσάρτησης κινηματορροής
+Name[it]=Gancio di Flipbook
+Name[nl]=Vastzetter van Flipbook
+Name[pt]=Área de Livro Animado
+Name[pt_BR]=Área de Flipbook
+Name[sk]=Flipbook Docker
+Name[sv]=Flipbook-dockningsfönster
+Name[uk]=Панель кінеографа
 Name[x-test]=xxFlipbook Dockerxx
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service

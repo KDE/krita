@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Shiva Kernel Language Support For Filters
+Name[bs]=Podrška Shiva Kernel jezika za Filtere
 Name[ca]=Compatibilitat del llenguatge del nucli Shiva per a filtres
 Name[ca@valencia]=Compatibilitat del llenguatge del nucli Shiva per a filtres
 Name[da]=Sprogunderstøttelse af Shiva-kerne til filtre
@@ -28,6 +29,7 @@ Name[wa]=Sopoirt di lingaedje do nawea Shiva po les passetes
 Name[x-test]=xxShiva Kernel Language Support For Filtersxx
 Name[zh_TW]=過濾器使用之 Shiva 核心語言支援
 Comment=Shiva Kernel Language Support For Filters
+Comment[bs]=Podrška Shiva Kernel jezika za Filtere
 Comment[ca]=Compatibilitat del llenguatge del nucli Shiva per a filtres
 Comment[ca@valencia]=Compatibilitat del llenguatge del nucli Shiva per a filtres
 Comment[da]=Sprogunderstøttelse af Shiva-kerne til filtre

@@ -1,4 +1,4 @@
-add_subdirectory(tests)
+#add_subdirectory(tests)
 
 include_directories( ${OPENEXR_INCLUDE_DIR} ${KRITA_INCLUDES} )
 

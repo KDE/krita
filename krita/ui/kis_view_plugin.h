@@ -22,7 +22,9 @@
 
 #include <kparts/plugin.h>
 #include <krita_export.h>
+#include "operations/kis_operation_ui_factory.h"
 
+class KisOperation;
 class KisAction;
 class KisView2;
 
@@ -42,6 +44,10 @@ protected:
     */
     void addAction(const QString& name, KisAction* action);
 
+    void addUIFactory(KisOperationUIFactory* factory);
+
+    void addOperation(KisOperation* operation);
+    
     KisView2* m_view;
 };
 

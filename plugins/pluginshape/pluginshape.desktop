@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Plugin Shape
+Name[bs]=Oblik dodatka
 Name[ca]=Forma de connector
 Name[ca@valencia]=Forma de connector
 Name[cs]=Tvar modulu
@@ -25,6 +26,7 @@ Name[pt]=Forma de 'Plugin'
 Name[pt_BR]=Forma do plugin
 Name[ru]=Модуль фигуры
 Name[sk]=Tvar pluginu
+Name[sl]=Oblika za vstavke
 Name[sv]=Insticksform
 Name[uk]=Форма додатка
 Name[wa]=Fôme Tchôke-divins

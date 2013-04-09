@@ -36,8 +36,8 @@ VideoThumbnailer::VideoThumbnailer()
 {
     m_vdata.setRunning(true);
     Phonon::createPath(&m_media, &m_vdata);
-    connect(&m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)), this,
-        SLOT(stateChanged(Phonon::State, Phonon::State)));
+    connect(&m_media, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this,
+        SLOT(stateChanged(Phonon::State,Phonon::State)));
     connect(this,SIGNAL(signalCreateThumbnail(VideoData*,QSize)),
             this, SLOT(slotCreateThumbnail(VideoData*,QSize)), Qt::QueuedConnection);
 }
@@ -83,8 +83,8 @@ void VideoThumbnailer::frameReady(const Phonon::Experimental::VideoFrame2 &frame
     QImage thumb = frame.qImage().scaled(m_thumbnailSize.width(), m_thumbnailSize.height(), Qt::KeepAspectRatio);
     if (isFrameInteresting(thumb)) {
         m_thumbnailImage = thumb;
-        m_vdata.disconnect(SIGNAL(frameReadySignal(const Phonon::Experimental::VideoFrame2 &)),
-            this, SLOT(frameReady(const Phonon::Experimental::VideoFrame2 &)));
+        m_vdata.disconnect(SIGNAL(frameReadySignal(Phonon::Experimental::VideoFrame2)),
+            this, SLOT(frameReady(Phonon::Experimental::VideoFrame2)));
         m_eventLoop.quit();
         return;
     }
@@ -95,8 +95,8 @@ void VideoThumbnailer::stateChanged(Phonon::State newState, Phonon::State oldSta
 {
     Q_UNUSED(oldState);
     if (newState == Phonon::PlayingState) {
-        connect(&m_vdata, SIGNAL(frameReadySignal(const Phonon::Experimental::VideoFrame2 &)),
-            this, SLOT(frameReady(const Phonon::Experimental::VideoFrame2 &)));
+        connect(&m_vdata, SIGNAL(frameReadySignal(Phonon::Experimental::VideoFrame2)),
+            this, SLOT(frameReady(Phonon::Experimental::VideoFrame2)));
         m_eventLoop.exit(1);
     }
 }

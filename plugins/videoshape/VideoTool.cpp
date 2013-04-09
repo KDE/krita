@@ -29,10 +29,12 @@
 
 #include <KoIcon.h>
 #include <KoCanvasBase.h>
+#include <KoViewConverter.h>
 
 #include <KDialog>
 
 #include <QPointer>
+#include <QPainter>
 
 class VideoToolUI: public QWidget, public Ui::VideoTool
 {

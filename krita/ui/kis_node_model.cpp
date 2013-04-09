@@ -140,8 +140,8 @@ void KisNodeModel::connectDummy(KisNodeDummy *dummy, bool needConnect)
     KisNodeProgressProxy *progressProxy = node->nodeProgressProxy();
     if(progressProxy) {
         if(needConnect) {
-            connect(progressProxy, SIGNAL(percentageChanged(int, const KisNodeSP&)),
-                    SLOT(progressPercentageChanged(int, const KisNodeSP&)));
+            connect(progressProxy, SIGNAL(percentageChanged(int,KisNodeSP)),
+                    SLOT(progressPercentageChanged(int,KisNodeSP)));
         } else {
             progressProxy->disconnect(this);
         }
@@ -177,8 +177,8 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImag
             connectDummies(rootDummy, true);
         }
 
-        connect(m_d->dummiesFacade, SIGNAL(sigBeginInsertDummy(KisNodeDummy*, int, const QString&)),
-                SLOT(slotBeginInsertDummy(KisNodeDummy*, int, QString)));
+        connect(m_d->dummiesFacade, SIGNAL(sigBeginInsertDummy(KisNodeDummy*,int,QString)),
+                SLOT(slotBeginInsertDummy(KisNodeDummy*,int,QString)));
         connect(m_d->dummiesFacade, SIGNAL(sigEndInsertDummy(KisNodeDummy*)),
                 SLOT(slotEndInsertDummy(KisNodeDummy*)));
         connect(m_d->dummiesFacade, SIGNAL(sigBeginRemoveDummy(KisNodeDummy*)),

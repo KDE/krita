@@ -20,6 +20,7 @@
 #include "kis_view_plugin.h"
 #include "kis_view2.h"
 #include "kis_action_manager.h"
+#include "operations/kis_operation.h"
 
 #include <kstandarddirs.h>
 
@@ -36,5 +37,19 @@ void KisViewPlugin::addAction(const QString& name, KisAction* action)
 {
     if (m_view) {
         m_view->actionManager()->addAction(name, action, actionCollection());
+    }
+}
+
+void KisViewPlugin::addUIFactory(KisOperationUIFactory* factory)
+{
+    if (m_view) {
+        m_view->actionManager()->registerOperationUIFactory(factory);
+    }
+}
+
+void KisViewPlugin::addOperation(KisOperation* operation)
+{
+    if (m_view) {
+        m_view->actionManager()->registerOperation(operation);
     }
 }

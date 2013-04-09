@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Dodge and Burn Filter
+Name[bs]=Filter za izmicanje i sagorjevanje
 Name[ca]=Filtre d'aclarit i cremat
 Name[ca@valencia]=Filtre d'aclarit i cremat
 Name[da]=Undvig og brænd-filter
@@ -27,6 +28,7 @@ Name[wa]=Passete raclairixhaedje et noerixhaedje
 Name[x-test]=xxDodge and Burn Filterxx
 Name[zh_TW]=曝光過濾器
 Comment=Dodge and Burn Filter
+Comment[bs]=Filter za izmicanje i sagorjevanje
 Comment[ca]=Filtre d'aclarit i cremat
 Comment[ca@valencia]=Filtre d'aclarit i cremat
 Comment[da]=Undvig og brænd-filter

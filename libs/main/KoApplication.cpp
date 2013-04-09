@@ -47,7 +47,9 @@
 #include <kdebug.h>
 #include <kmimetype.h>
 
+#if KDE_IS_VERSION(4,6,0)
 #include <krecentdirs.h>
+#endif
 
 #include <QFile>
 #include <QSplashScreen>
@@ -62,7 +64,7 @@
 bool KoApplication::m_starting = true;
 
 namespace {
-    const QTime appStartTime(QTime::currentTime());
+const QTime appStartTime(QTime::currentTime());
 }
 
 class KoApplicationPrivate
@@ -77,8 +79,8 @@ public:
 };
 
 KoApplication::KoApplication()
-        : KApplication(initHack())
-        , d(new KoApplicationPrivate)
+    : KApplication(initHack())
+    , d(new KoApplicationPrivate)
 {
     // Tell the iconloader about share/apps/calligra/icons
     KIconLoader::global()->addAppDir("calligra");
@@ -92,9 +94,27 @@ KoApplication::KoApplication()
 #endif
 
     m_starting = true;
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
     setStyle("Plastique");
+#elif defined Q_OS_MAC
+    QString styleSheetPath = KGlobal::dirs()->findResource("data", "calligra/osx.stylesheet");
+    if (styleSheetPath.isEmpty()) {
+        kError(30003) << KGlobal::mainComponent().componentName() << "Cannot find OS X UI stylesheet." << endl;
+    }
+    QFile file(styleSheetPath);
+    if (!file.open(QFile::ReadOnly)) {
+        kError(30003) << KGlobal::mainComponent().componentName() << "Cannot open OS X UI stylesheet." << endl;
+    }
+    QString styleSheet = QLatin1String(file.readAll());
+    file.close();
+    setStyleSheet(styleSheet);
 #endif
+
+    if (applicationName() == "krita" && qgetenv("KDE_FULL_SESSION").isEmpty()) {
+        // There are two themes that work for Krita, oxygen and plastique. Try plastique first, then oxygen
+        setStyle("Plastique");
+        setStyle("Oxygen");
+    }
 
 }
 
@@ -157,9 +177,9 @@ bool KoApplication::start()
         qputenv("KDEDIRS", QFile::encodeName(appdir.absolutePath()));
     }
     qputenv("PATH", QFile::encodeName(appdir.absolutePath() + "/bin" + ";"
-              + appdir.absolutePath() + "/lib" + ";"
-              + appdir.absolutePath() + "/lib"  +  "/kde4" + ";"
-              + appdir.absolutePath()));
+                                      + appdir.absolutePath() + "/lib" + ";"
+                                      + appdir.absolutePath() + "/lib"  +  "/kde4" + ";"
+                                      + appdir.absolutePath()));
 #endif
 
     if (d->splashScreen) {
@@ -204,12 +224,13 @@ bool KoApplication::start()
     }
     // No argument -> create an empty document
     if (!argsCount) {
+#if KDE_IS_VERSION(4,6,0)
         // if there's no document, add the current working directory
         // to the recent dirs so the open dialog and open pane show
         // the directory from where the app was started, instead of
         // the last directory from where we opened a file
         KRecentDirs::add(":OpenDialog", QDir::currentPath());
-
+#endif
         QString errorMsg;
         KoPart *part = entry.createKoPart(&errorMsg);
 
@@ -347,8 +368,8 @@ bool KoApplication::start()
         const QString roundtripFileName = koargs->getOption("roundtrip-filename");
         const bool doTemplate = koargs->isSet("template");
         const bool benchmarkLoading = koargs->isSet("benchmark-loading")
-                                      || koargs->isSet("benchmark-loading-show-window")
-                                      || !roundtripFileName.isEmpty();
+                || koargs->isSet("benchmark-loading-show-window")
+                || !roundtripFileName.isEmpty();
         // only show the shell when no command-line mode option is passed
         const bool showShell =
                 koargs->isSet("benchmark-loading-show-window") || (
@@ -388,8 +409,8 @@ bool KoApplication::start()
                 if (profileoutput.device()) {
                     doc->setProfileStream(&profileoutput);
                     profileoutput << "KoApplication::start\t"
-                            << appStartTime.msecsTo(QTime::currentTime())
-                            <<"\t0" << endl;
+                                  << appStartTime.msecsTo(QTime::currentTime())
+                                  <<"\t0" << endl;
                     doc->setAutoErrorHandlingEnabled(false);
                 }
                 doc->setProfileReferenceTime(appStartTime);
@@ -442,8 +463,8 @@ bool KoApplication::start()
                     if (benchmarkLoading) {
                         if (profileoutput.device()) {
                             profileoutput << "KoApplication::start\t"
-                                   << appStartTime.msecsTo(QTime::currentTime())
-                                   <<"\t100" << endl;
+                                          << appStartTime.msecsTo(QTime::currentTime())
+                                          <<"\t100" << endl;
                         }
                         if (!roundtripFileName.isEmpty()) {
                             part->saveAs(KUrl("file:"+roundtripFileName));
@@ -460,7 +481,7 @@ bool KoApplication::start()
                         KoPrintJob *job = shell->exportToPdf(pdfFileName);
                         if (job)
                             connect (job, SIGNAL(destroyed(QObject*)), shell,
-                                    SLOT(slotFileQuit()), Qt::QueuedConnection);
+                                     SLOT(slotFileQuit()), Qt::QueuedConnection);
                         nPrinted++;
                     } else {
                         // Normal case, success
@@ -474,8 +495,8 @@ bool KoApplication::start()
 
                 if (profileoutput.device()) {
                     profileoutput << "KoApplication::start\t"
-                            << appStartTime.msecsTo(QTime::currentTime())
-                            <<"\t100" << endl;
+                                  << appStartTime.msecsTo(QTime::currentTime())
+                                  <<"\t100" << endl;
                 }
 
                 d->partList << part;
@@ -497,7 +518,7 @@ bool KoApplication::start()
 
 KoApplication::~KoApplication()
 {
-//     delete d->m_appIface;
+    //     delete d->m_appIface;
     delete d;
 }
 
@@ -523,12 +544,12 @@ void KoApplication::addPart(KoPart* part)
 
 int KoApplication::documents()
 {
-   QSet<QString> nameList;
-   QList<KoPart*> parts = d->partList;
-   foreach(KoPart* part, parts) {
-      nameList.insert(part->document()->objectName());
-   }
-   return nameList.size();
+    QSet<QString> nameList;
+    QList<KoPart*> parts = d->partList;
+    foreach(KoPart* part, parts) {
+        nameList.insert(part->document()->objectName());
+    }
+    return nameList.size();
 }
 
 bool KoApplication::notify(QObject *receiver, QEvent *event)

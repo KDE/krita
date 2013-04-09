@@ -58,6 +58,10 @@
 // Calligra
 #include <KoIcon.h>
 
+#ifdef __APPLE__
+#include <QStyle>
+#endif
+
 namespace Digikam
 {
 
@@ -174,6 +178,19 @@ void ThemeManager::slotChangePalette()
     }
 
     kapp->setPalette(palette);
+
+    if (theme == defaultThemeName() || theme.isEmpty()) {
+#ifdef __APPLE__
+        kapp->setStyle("Macintosh");
+        kapp->style()->polish(kapp);
+#endif
+    } else {
+#ifdef __APPLE__
+        kapp->setStyle("Plastique");
+        kapp->style()->polish(kapp);
+#endif
+    }
+
     emit signalThemeChanged();
 }
 

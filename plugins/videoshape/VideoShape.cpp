@@ -46,12 +46,13 @@
 
 VideoShape::VideoShape()
     : KoFrameShape(KoXmlNS::draw, "plugin")
+    , m_videoCollection(0)
     , m_videoEventAction(new VideoEventAction(this))
-    , m_icon(koIconName("video-x-generic"))
-    , m_oldVideoData(0)
 #ifdef SHOULD_BUILD_THUMBNAIL
     , m_thumbnailer(new VideoThumbnailer())
 #endif
+    , m_oldVideoData(0)
+    , m_icon(koIconName("video-x-generic"))
 {
     setKeepAspectRatio(true);
     addEventAction(m_videoEventAction);

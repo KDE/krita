@@ -47,8 +47,6 @@ public:
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
 
-    bool flood(int startX, int startY);
-
     virtual QWidget * createOptionWidget();
 
 public slots:
@@ -60,16 +58,13 @@ public slots:
     virtual void slotSetFeather(int);
 
 private:
-    int         m_feather;
-    int         m_sizemod;
-    QPoint      m_startPos;
-    int         m_threshold;
-    qint32      m_depth;
-    quint8*     m_oldColor, *m_color;
-    KisPainter *m_painter;
-
-    bool *m_map, m_unmerged, m_usePattern, m_fillOnlySelection;
-    KisSelectionSP m_selection;
+    int m_feather;
+    int m_sizemod;
+    QPoint m_startPos;
+    int m_threshold;
+    bool m_unmerged;
+    bool m_usePattern;
+    bool m_fillOnlySelection;
 
     KisSliderSpinBox *m_slThreshold;
     QCheckBox *m_checkUsePattern;

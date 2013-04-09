@@ -164,7 +164,6 @@ quint32 matchColors(const QColor & c, enumAction action)
 
 DlgColorRange::DlgColorRange(KisView2 *view, QWidget *parent)
         : KDialog(parent)
-        , m_transaction(0)
         , m_selectionCommandsAdded(0)
 {
     setCaption(i18n("Color Range"));
@@ -312,8 +311,7 @@ void DlgColorRange::slotSelectClicked()
         selIter->nextRow();
     }
 
-    // Enable translation after 2.4 release
-    KisSelectionToolHelper helper(m_view->canvasBase(), m_view->activeNode(),"Color Range Selection");
+    KisSelectionToolHelper helper(m_view->canvasBase(), i18n("Color Range Selection"));
     helper.selectPixelSelection(selection->pixelSelection(), m_mode);
 
     m_page->bnDeselect->setEnabled(true);

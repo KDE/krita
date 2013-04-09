@@ -53,7 +53,9 @@ void KisDummiesFacade::removeNodeImpl(KisNodeSP node)
 {
     KisNodeDummy *nodeDummy = dummyForNode(node);
     m_d->dummiesGraph.removeNode(nodeDummy);
+
     delete nodeDummy;
+    // this dummy had no nodeShape pointer, so no cleaning here
 }
 
 bool KisDummiesFacade::hasDummyForNode(KisNodeSP node) const

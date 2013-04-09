@@ -27,7 +27,7 @@
 #include <QToolButton>
 
 // KDE
-#include <KLocale>
+#include <klocale.h>
 
 class KoGroupButton::Private
 {

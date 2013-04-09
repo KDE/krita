@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Grayscale Color Model with Alpha
 Name[bg]=Цветови модел със степени на сивото и алфа-канал
+Name[bs]=Sivo skalirana model boje sa Alpha
 Name[ca]=Model de color d'escala de grisos amb alfa
 Name[ca@valencia]=Model de color d'escala de grisos amb alfa
 Name[da]=Gråskala-farvemodel med alfa
@@ -41,6 +42,7 @@ Name[zh_CN]=带有 Alpha 的灰度色彩模型
 Name[zh_TW]=有 Alpha 的灰階色彩模型
 Comment=Color model for 8-bit grayscale images
 Comment[bg]=Цветови модел за 8 битови сиви изображения
+Comment[bs]=Model boje za 8-bitne slike sa sivim tonovima
 Comment[ca]=Model de color d'escala de grisos de 8 bits
 Comment[ca@valencia]=Model de color d'escala de grisos de 8 bits
 Comment[cs]=Model barev pro obrázky v odstínech šedi s 8 bity na kanál

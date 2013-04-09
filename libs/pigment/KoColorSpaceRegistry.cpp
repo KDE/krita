@@ -360,7 +360,9 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
 
 const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const KoColorProfile *profile)
 {
-    Q_ASSERT(!csID.isEmpty());
+    if (csID.isEmpty()) {
+        return 0;
+    }
     if (profile) {
         const KoColorSpace *cs = 0;
         if (isCached(csID, profile->name())) {
@@ -380,7 +382,6 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
                 dbgPigmentCSRegistry << "Unknown color space type :" << csf;
                 return 0;
             }
-            Q_ASSERT(csf->profileIsCompatible(profile));
             if (!csf->profileIsCompatible(profile ) ) {
                 return 0;
             }

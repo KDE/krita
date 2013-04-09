@@ -155,15 +155,13 @@ void KisFilterOption::updateFilterConfigWidget()
     if (m_currentFilter && m_image && m_paintDevice) {
         m_currentFilterConfigWidget =
             m_currentFilter->createConfigurationWidget(m_options->grpFilterOptions,
-                    m_paintDevice,
-                    m_image);
+                    m_paintDevice);
         if (m_currentFilterConfigWidget) {
             m_layout->addWidget(m_currentFilterConfigWidget);
             m_options->grpFilterOptions->updateGeometry();
             m_currentFilterConfigWidget->show();
             connect(m_currentFilterConfigWidget, SIGNAL(sigConfigurationUpdated()), this, SIGNAL(sigSettingChanged()));
         }
-
     }
     m_layout->update();
 }

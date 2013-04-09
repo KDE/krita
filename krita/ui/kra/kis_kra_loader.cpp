@@ -116,7 +116,7 @@ void convertColorSpaceNames(QString &colorspacename, QString &profileProductName
         profileProductName.clear();
     }
     else if (colorspacename == "RgbAF16") {
-        colorspacename = "RGBAF32";
+        colorspacename = "RGBAF16";
         profileProductName.clear();
     }
     else if (colorspacename == "CMYKA16") {
@@ -710,7 +710,15 @@ void KisKraLoader::loadCompositions(const KoXmlElement& elem, KisImageWSP image)
         KoXmlElement e = child.toElement();
         QString name = e.attribute("name");
         KisLayerComposition* composition = new KisLayerComposition(image, name);
-        composition->load(e);
+        {
+            KoXmlNode child;
+            for (child = elem.lastChild(); !child.isNull(); child = child.previousSibling()) {
+                KoXmlElement e = child.toElement();
+                QUuid uuid(e.attribute("uuid"));
+                bool visible = e.attribute("visible", "1") == "0" ? false : true;
+                composition->setVisible(uuid, visible);
+            }
+        }
         image->addComposition(composition);
     }
 }

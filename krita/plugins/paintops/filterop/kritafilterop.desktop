@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Filter Op
+Name[bs]=Filter Op
 Name[ca]=Operador de filtre
 Name[ca@valencia]=Operador de filtre
 Name[da]=Filterop.
@@ -33,6 +34,7 @@ Name[wa]=Passete Op
 Name[x-test]=xxFilter Opxx
 Name[zh_TW]=濾鏡工具
 Comment=Filter Op
+Comment[bs]=Filter Op
 Comment[ca]=Operador de filtre
 Comment[ca@valencia]=Operador de filtre
 Comment[da]=Filterop.

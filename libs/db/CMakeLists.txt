@@ -78,8 +78,11 @@ set(calligradb_LIB_SRCS
 )
 
 kde4_add_library(calligradb SHARED ${calligradb_LIB_SRCS})
-target_link_libraries(calligradb
-   ${KDE4_KDECORE_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KPARTS_LIBS})
+target_link_libraries(calligradb ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY}
+                                 ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS})
+
+target_link_libraries(calligradb LINK_INTERFACE_LIBRARIES ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY}
+                                 ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS})
 
 set_target_properties(calligradb PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 

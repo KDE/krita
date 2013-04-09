@@ -85,6 +85,11 @@ void KisAbstractInputAction::mouseMoved(const QPointF &lastPos, const QPointF &p
     Q_UNUSED(pos);
 }
 
+bool KisAbstractInputAction::supportsHiResInputEvents() const
+{
+    return false;
+}
+
 KisInputManager* KisAbstractInputAction::inputManager() const
 {
     return d->inputManager;

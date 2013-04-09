@@ -1,0 +1,45 @@
+/*
+ *  Copyright (c) 2013 Boudewijn Rempt <boud@valdyas.org>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+#ifndef KIS_STORE_PAINTDEVICE_WRITER_H
+#define KIS_STORE_PAINTDEVICE_WRITER_H
+
+#include <kis_paint_device_writer.h>
+#include <KoStore.h>
+
+class KisStorePaintDeviceWriter : public KisPaintDeviceWriter {
+public:
+    KisStorePaintDeviceWriter(KoStore *store)
+        : m_store(store)
+    {
+    }
+
+    virtual ~KisStorePaintDeviceWriter() {}
+
+    qint64 write(const QByteArray &data) {
+        return m_store->write(data);
+    }
+
+    qint64 write(const char* data, qint64 length) {
+        return m_store->write(data, length);
+    }
+
+    KoStore *m_store;
+
+};
+
+#endif // KIS_STORE_PAINTDEVICE_WRITER_H

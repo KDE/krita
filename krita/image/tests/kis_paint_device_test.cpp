@@ -21,11 +21,12 @@
 
 #include <QTime>
 
-#include <KoStore.h>
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoStore.h>
 
+#include "kis_paint_device_writer.h"
 #include "kis_painter.h"
 #include "kis_types.h"
 #include "kis_paint_device.h"
@@ -37,6 +38,24 @@
 #include "testutil.h"
 #include "kis_transaction.h"
 #include "kis_image.h"
+
+class KisFakePaintDeviceWriter : public KisPaintDeviceWriter {
+public:
+    KisFakePaintDeviceWriter(KoStore *store)
+        : m_store(store)
+    {
+    }
+
+    qint64 write(const QByteArray &data) {
+        return m_store->write(data);
+    }
+
+    qint64 write(const char* data, qint64 length) {
+        return m_store->write(data, length);
+    }
+
+    KoStore *m_store;
+};
 
 void KisPaintDeviceTest::testCreation()
 {
@@ -81,7 +100,7 @@ void KisPaintDeviceTest::testStore()
     KoStore * readStore =
         KoStore::createStore(QString(FILES_DATA_DIR) + QDir::separator() + "store_test.kra", KoStore::Read);
     readStore->open("built image/layers/layer0");
-    QVERIFY(dev->read(readStore));
+    QVERIFY(dev->read(readStore->device()));
     readStore->close();
     delete readStore;
 
@@ -89,8 +108,9 @@ void KisPaintDeviceTest::testStore()
 
     KoStore * writeStore =
         KoStore::createStore(QString(FILES_OUTPUT_DIR) + QDir::separator() + "store_test_out.kra", KoStore::Write);
+    KisFakePaintDeviceWriter fakeWriter(writeStore);
     writeStore->open("built image/layers/layer0");
-    QVERIFY(dev->write(writeStore));
+    QVERIFY(dev->write(fakeWriter));
     writeStore->close();
     delete writeStore;
 
@@ -98,7 +118,7 @@ void KisPaintDeviceTest::testStore()
     readStore =
         KoStore::createStore(QString(FILES_OUTPUT_DIR) + QDir::separator() + "store_test_out.kra", KoStore::Read);
     readStore->open("built image/layers/layer0");
-    QVERIFY(dev2->read(readStore));
+    QVERIFY(dev2->read(readStore->device()));
     readStore->close();
     delete readStore;
 

@@ -76,7 +76,7 @@ void ToCGenerator::setBlock(const QTextBlock &block)
 
 QString ToCGenerator::fetchBookmarkRef(QTextBlock block, KoTextRangeManager *textRangeManager)
 {
-    QHash<int, KoTextRange *> ranges = textRangeManager->textRangesChangingWithin(block.position(), block.position() + block.length(), block.position(), block.position() + block.length());
+    QHash<int, KoTextRange *> ranges = textRangeManager->textRangesChangingWithin(block.document(), block.position(), block.position() + block.length(), block.position(), block.position() + block.length());
 
     foreach (KoTextRange *range, ranges) {
         KoBookmark *bookmark = dynamic_cast<KoBookmark *>(range);

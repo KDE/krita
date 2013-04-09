@@ -40,6 +40,7 @@ class QImage;
 class QPoint;
 class QString;
 class QColor;
+class QIODevice;
 
 class KoStore;
 class KoColor;
@@ -50,9 +51,10 @@ class KisHLineIteratorNG;
 class KisRandomSubAccessorPixel;
 class KisDataManager;
 class KisSelectionComponent;
-
+class KisPaintDeviceWriter;
 
 typedef KisSharedPtr<KisDataManager> KisDataManagerSP;
+
 
 /**
  * A paint device contains the actual pixel data and offers methods
@@ -109,12 +111,12 @@ public:
     /**
      * Write the pixels of this paint device into the specified file store.
      */
-    virtual bool write(KoStore *store);
+    virtual bool write(KisPaintDeviceWriter &store);
 
     /**
      * Fill this paint device with the pixels from the specified file store.
      */
-    virtual bool read(KoStore *store);
+    virtual bool read(QIODevice *stream);
 
 public:
 
@@ -129,7 +131,7 @@ public:
      */
     virtual void setDefaultBounds(KisDefaultBoundsBaseSP bounds);
 
-     /**
+    /**
      * the default bounds rect of the paint device
      */
     KisDefaultBoundsBaseSP defaultBounds() const;

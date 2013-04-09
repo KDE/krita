@@ -95,11 +95,11 @@ set(kritaimage_LIB_SRCS
    commands_new/kis_image_resize_command.cpp
    commands_new/kis_image_set_resolution_command.cpp
    commands_new/kis_update_command.cpp
+   processing/kis_simple_processing_visitor.cpp
    processing/kis_crop_processing_visitor.cpp
    processing/kis_transform_processing_visitor.cpp
    filter/kis_filter.cc
    filter/kis_filter_configuration.cc
-   filter/kis_filter_job.cpp
    filter/kis_filter_registry.cc
    filter/kis_color_transformation_filter.cc
    generator/kis_generator.cpp
@@ -183,13 +183,11 @@ set(kritaimage_LIB_SRCS
    kis_random_accessor_ng.cpp
    kis_random_generator.cc
    kis_random_sub_accessor.cpp
-   kis_selected_transaction_data.cpp
    kis_selection.cc
    kis_selection_mask.cpp
    kis_selection_transaction_data.cpp
    kis_serializable_configuration.cc
    kis_shared.cc
-   kis_threaded_applicator.cpp
    kis_transaction_data.cpp
    kis_transform_worker.cc
    kis_perspectivetransform_worker.cpp
@@ -206,6 +204,7 @@ set(kritaimage_LIB_SRCS
    krita_utils.cpp
    kis_outline_generator.cpp
    kis_layer_composition.cpp
+   kis_selection_filters.cpp
    metadata/kis_meta_data_entry.cc
    metadata/kis_meta_data_filter.cc
    metadata/kis_meta_data_filter_p.cc
@@ -242,8 +241,8 @@ set(kritaimage_LIB_SRCS
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
 
-target_link_libraries(kritaimage ${KDE4_KPARTS_LIBS} komain pigmentcms ${KDE4_THREADWEAVER_LIBRARIES})
-target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES pigmentcms komain ${KDE4_KPARTS_LIBS} )
+target_link_libraries(kritaimage ${KDE4_KDEUI_LIBS} pigmentcms kundo2 kowidgetutils)
+target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES pigmentcms kundo2 kowidgetutils)
 
 if(OPENEXR_FOUND)
   target_link_libraries(kritaimage  ${OPENEXR_LIBRARIES})

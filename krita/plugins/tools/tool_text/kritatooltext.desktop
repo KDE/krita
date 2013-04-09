@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Text Tool
 Name[bg]=Инструмент текст
+Name[bs]=Alat za tekst
 Name[ca]=Eina de text
 Name[ca@valencia]=Eina de text
 Name[cs]=Textový nástroj
@@ -15,6 +16,8 @@ Name[gl]=Ferramenta de texto
 Name[hu]=Szöveg eszköz
 Name[it]=Strumento testo
 Name[kk]=Мәтін құралы
+Name[lt]=Teksto įrankis
+Name[mr]=मजकुराचे साधन
 Name[nb]=Tekstverktøy
 Name[nds]=Textwarktüüch
 Name[nl]=Tekstgereedschap

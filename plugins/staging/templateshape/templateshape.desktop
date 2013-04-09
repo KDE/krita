@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=Template Shape
+Name[bs]=Oblik predloška
 Name[ca]=Forma de plantilla
+Name[ca@valencia]=Forma de plantilla
 Name[da]=Skabelon-form
 Name[de]=Vorlagen-Objekt
 Name[el]=Template Shape
@@ -12,11 +14,14 @@ Name[gl]=Obxecto de modelo
 Name[hu]=Sablon alakzat
 Name[it]=Forma di modello
 Name[kk]=Үлгі қалыпы
+Name[mr]=नमूना आकार
+Name[nb]=Mal-form
 Name[nl]=Vorm van sjabloon
 Name[pl]=Szablon kształtu
 Name[pt]=Forma de Modelo
 Name[pt_BR]=Forma de modelo
 Name[sk]=Tvar vzorca
+Name[sl]=Oblika predloge
 Name[sv]=Mallform
 Name[uk]=Форма-шаблон
 Name[x-test]=xxTemplate Shapexx

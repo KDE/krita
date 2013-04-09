@@ -100,10 +100,10 @@ KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
     action  = new KAction(i18n("&Color"), this);
     view->actionCollection()->addAction("dual", action);
     action->setDefaultWidget(dual);
-    connect(dual, SIGNAL(foregroundColorChanged(const KoColor &)), view->resourceProvider(), SLOT(slotSetFGColor(const KoColor &)));
-    connect(dual, SIGNAL(backgroundColorChanged(const KoColor &)), view->resourceProvider(), SLOT(slotSetBGColor(const KoColor &)));
-    connect(view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor &)), dual, SLOT(setForegroundColor(const KoColor &)));
-    connect(view->resourceProvider(), SIGNAL(sigBGColorChanged(const KoColor &)), dual, SLOT(setBackgroundColor(const KoColor &)));
+    connect(dual, SIGNAL(foregroundColorChanged(KoColor)), view->resourceProvider(), SLOT(slotSetFGColor(KoColor)));
+    connect(dual, SIGNAL(backgroundColorChanged(KoColor)), view->resourceProvider(), SLOT(slotSetBGColor(KoColor)));
+    connect(view->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), dual, SLOT(setForegroundColor(KoColor)));
+    connect(view->resourceProvider(), SIGNAL(sigBGColorChanged(KoColor)), dual, SLOT(setBackgroundColor(KoColor)));
     dual->setFixedSize(26, 26);
 
     createPatternsChooser(m_view);
@@ -161,8 +161,8 @@ void KisControlFrame::createPatternsChooser(KisView2 * view)
     connect(customPatterns, SIGNAL(activatedResource(KoResource*)),
             view->resourceProvider(), SLOT(slotPatternActivated(KoResource*)));
 
-    connect(view->resourceProvider(), SIGNAL(sigPatternChanged(KisPattern *)),
-            this, SLOT(slotSetPattern(KisPattern *)));
+    connect(view->resourceProvider(), SIGNAL(sigPatternChanged(KisPattern*)),
+            this, SLOT(slotSetPattern(KisPattern*)));
 
     m_patternChooser->setCurrentItem(0, 0);
     if (m_patternChooser->currentResource())
@@ -193,8 +193,8 @@ void KisControlFrame::createGradientsChooser(KisView2 * view)
     connect(m_gradientChooser, SIGNAL(resourceSelected(KoResource*)),
             view->resourceProvider(), SLOT(slotGradientActivated(KoResource*)));
 
-    connect(view->resourceProvider(), SIGNAL(sigGradientChanged(KoAbstractGradient *)),
-            this, SLOT(slotSetGradient(KoAbstractGradient *)));
+    connect(view->resourceProvider(), SIGNAL(sigGradientChanged(KoAbstractGradient*)),
+            this, SLOT(slotSetGradient(KoAbstractGradient*)));
 
     m_gradientChooser->setCurrentItem(0, 0);
     if (m_gradientChooser->currentResource())

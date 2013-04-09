@@ -104,10 +104,13 @@ QList<KoTextRange *> KoTextRangeManager::textRanges() const
 }
 
 
-QHash<int, KoTextRange *> KoTextRangeManager::textRangesChangingWithin(int first, int last, int matchFirst, int matchLast) const
+QHash<int, KoTextRange *> KoTextRangeManager::textRangesChangingWithin(const QTextDocument *doc, int first, int last, int matchFirst, int matchLast) const
 {
     QHash<int, KoTextRange *> ranges;
     foreach (KoTextRange *range, m_textRanges) {
+        if (range->document() != doc) {
+            continue;
+        }
         if (!range->hasRange()) {
             if (range->rangeStart() >= first && range->rangeStart() <= last) {
                 ranges.insertMulti(range->rangeStart(), range);

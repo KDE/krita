@@ -1,8 +1,3 @@
-# Look for OpenCTL , this is needed here for openexr
-macro_optional_find_package(OpenCTL)
-
-macro_log_feature(OPENCTL_FOUND "OpenCTL" "Free Color Transformation Language implementation (part of OpenGTL)" "http://www.opengtl.org" FALSE "0.9.16" "Required for High Dynamic Range Color Spaces, YCbCr and LMS support")
-
 add_subdirectory( assistants )
 add_subdirectory( filters )
 add_subdirectory( tools )

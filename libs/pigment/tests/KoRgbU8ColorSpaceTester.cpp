@@ -151,6 +151,9 @@ void KoRgbColorSpaceTester::testCompositeOps()
                            KoColorSpaceRegistry::AllColorSpaces);
 
     foreach(const KoID& depthId, depthIDs) {
+
+        if (depthId.id().contains("Float")) continue;
+
         kDebug() << depthId.id();
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(
                                      RGBAColorModelID.id(), depthId.id(), "");

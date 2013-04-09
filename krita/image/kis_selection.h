@@ -141,6 +141,15 @@ public:
     bool isTotallyUnselected(const QRect & r) const;
 
     QRect selectedRect() const;
+
+    /**
+     * @brief Slow, but exact way of determining the rectangle
+     * that encloses the selection.
+     *
+     * Default pixel of the selection device may vary and you would get wrong bounds.
+     * selectedExactRect() handles all these cases.
+     *
+     */
     QRect selectedExactRect() const;
 
     void setX(qint32 x);

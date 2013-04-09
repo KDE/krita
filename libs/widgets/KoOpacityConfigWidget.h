@@ -36,7 +36,7 @@ class KOWIDGETS_EXPORT KoOpacityConfigWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KoOpacityConfigWidget(QWidget *parent);
+    explicit KoOpacityConfigWidget(QWidget *parent);
     ~KoOpacityConfigWidget();
 
     void setCanvas(KoCanvasBase *canvas);

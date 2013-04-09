@@ -199,7 +199,7 @@ void LinkInsertionDialog::fetchTitleFromURL()
         return;
     }
     //xgettext: no-c-format
-    dlg.weblinkStatusLabel->setText(i18n("Fetching the title : 0% complete"));
+    dlg.weblinkStatusLabel->setText(i18n("Fetching the title: 0% complete"));
 }
 void LinkInsertionDialog::sendRequest()
 {
@@ -276,7 +276,8 @@ void LinkInsertionDialog::replyFinished()
 void LinkInsertionDialog::updateTitleDownloadProgress(qint64 received, qint64 total)
 {
     float percentComplete = (static_cast<float>(received) / total) * 100;
-    dlg.weblinkStatusLabel->setText(i18n("Fetching the title : %1 % complete", QString::number(percentComplete)));
+    //xgettext: no-c-format
+    dlg.weblinkStatusLabel->setText(i18n("Fetching the title: %1% complete", QString::number(percentComplete)));
 }
 
 LinkInsertionDialog::~LinkInsertionDialog()

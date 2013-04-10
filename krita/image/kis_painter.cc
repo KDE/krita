@@ -360,6 +360,10 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
     quint8* srcBytes = new quint8[srcWidth * srcHeight * srcDev->pixelSize()];
     srcDev->readBytes(srcBytes, srcX, srcY, srcWidth, srcHeight);
 
+    QRect selBounds = selection->bounds();
+    const quint8 *selRowStart = selection->data() +
+        (selBounds.width() * (selY - selBounds.top()) + (selX - selBounds.left())) * selection->pixelSize();
+
     /*
      * This checks whether there is nothing selected.
      */
@@ -370,8 +374,8 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
         d->paramInfo.dstRowStride  = srcWidth * d->device->pixelSize();
         d->paramInfo.srcRowStart   = srcBytes;
         d->paramInfo.srcRowStride  = srcWidth * srcDev->pixelSize();
-        d->paramInfo.maskRowStart  = selection->data() + selX;
-        d->paramInfo.maskRowStride = srcWidth * selection->pixelSize();
+        d->paramInfo.maskRowStart  = selRowStart;
+        d->paramInfo.maskRowStride = selBounds.width() * selection->pixelSize();
         d->paramInfo.rows          = srcHeight;
         d->paramInfo.cols          = srcWidth;
         d->colorSpace->bitBlt(srcDev->colorSpace(), d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
@@ -386,8 +390,8 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
         // Merge selections here by multiplying them - compositeOP(COMPOSITE_MULT)
         d->paramInfo.dstRowStart   = mergedSelectionBytes;
         d->paramInfo.dstRowStride  = srcWidth * selection->pixelSize();
-        d->paramInfo.srcRowStart   = selection->data() + selX;
-        d->paramInfo.srcRowStride  = srcWidth * selection->pixelSize();
+        d->paramInfo.srcRowStart   = selRowStart;
+        d->paramInfo.srcRowStride  = selBounds.width() * selection->pixelSize();
         d->paramInfo.maskRowStart  = 0;
         d->paramInfo.maskRowStride = 0;
         d->paramInfo.rows          = srcHeight;
@@ -731,10 +735,11 @@ void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
     if (d->device.isNull()) return;
 
     QRect srcRect = QRect(srcX, srcY, srcWidth, srcHeight);
+    QRect srcBounds = srcDev->bounds();
 
     /* Trying to read outside a KisFixedPaintDevice is inherently wrong and shouldn't be done,
     so crash if someone attempts to do this. Don't resize as it would obfuscate the mistake. */
-    Q_ASSERT(srcDev->bounds().contains(srcRect));
+    Q_ASSERT(srcBounds.contains(srcRect));
     Q_UNUSED(srcRect); // only used in above assertion
 
     /* Create an intermediate byte array to hold information before it is written
@@ -742,10 +747,13 @@ void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
     quint8* dstBytes = new quint8[srcWidth * srcHeight * d->device->pixelSize()];
     d->device->readBytes(dstBytes, dstX, dstY, srcWidth, srcHeight);
 
+    const quint8 *srcRowStart = srcDev->data() +
+        (srcBounds.width() * (srcY - srcBounds.top()) + (srcX - srcBounds.left())) * srcDev->pixelSize();
+
     d->paramInfo.dstRowStart   = dstBytes;
     d->paramInfo.dstRowStride  = srcWidth * d->device->pixelSize();
-    d->paramInfo.srcRowStart   = srcDev->data() + srcX;
-    d->paramInfo.srcRowStride  = srcDev->bounds().width() * srcDev->pixelSize();
+    d->paramInfo.srcRowStart   = srcRowStart;
+    d->paramInfo.srcRowStride  = srcBounds.width() * srcDev->pixelSize();
     d->paramInfo.maskRowStart  = 0;
     d->paramInfo.maskRowStride = 0;
     d->paramInfo.rows          = srcHeight;
@@ -797,11 +805,14 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
     QRect srcRect = QRect(srcX, srcY, srcWidth, srcHeight);
     QRect selRect = QRect(selX, selY, srcWidth, srcHeight);
 
+    QRect srcBounds = srcDev->bounds();
+    QRect selBounds = selection->bounds();
+
     /* Trying to read outside a KisFixedPaintDevice is inherently wrong and shouldn't be done,
     so crash if someone attempts to do this. Don't resize as it would obfuscate the mistake. */
-    Q_ASSERT(srcDev->bounds().contains(srcRect));
+    Q_ASSERT(srcBounds.contains(srcRect));
     Q_UNUSED(srcRect); // only used in above assertion
-    Q_ASSERT(selection->bounds().contains(selRect));
+    Q_ASSERT(selBounds.contains(selRect));
     Q_UNUSED(selRect); // only used in above assertion
 
     /* Create an intermediate byte array to hold information before it is written
@@ -809,15 +820,20 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
     quint8* dstBytes = new quint8[srcWidth * srcHeight * d->device->pixelSize()];
     d->device->readBytes(dstBytes, dstX, dstY, srcWidth, srcHeight);
 
+    const quint8 *srcRowStart = srcDev->data() +
+        (srcBounds.width() * (srcY - srcBounds.top()) + (srcX - srcBounds.left())) * srcDev->pixelSize();
+    const quint8 *selRowStart = selection->data() +
+        (selBounds.width() * (selY - selBounds.top()) + (selX - selBounds.left())) * selection->pixelSize();
+
     if (!d->selection) {
         /* As there's nothing selected, blit to dstBytes (intermediary bit array),
           ignoring d->selection (the user selection)*/
         d->paramInfo.dstRowStart   = dstBytes;
         d->paramInfo.dstRowStride  = srcWidth * d->device->pixelSize();
-        d->paramInfo.srcRowStart   = srcDev->data() + srcX;
-        d->paramInfo.srcRowStride  = srcDev->bounds().width() * srcDev->pixelSize();
-        d->paramInfo.maskRowStart  = selection->data() + selX;
-        d->paramInfo.maskRowStride = srcWidth * selection->pixelSize();
+        d->paramInfo.srcRowStart   = srcRowStart;
+        d->paramInfo.srcRowStride  = srcBounds.width() * srcDev->pixelSize();
+        d->paramInfo.maskRowStart  = selRowStart;
+        d->paramInfo.maskRowStride = selBounds.width() * selection->pixelSize();
         d->paramInfo.rows          = srcHeight;
         d->paramInfo.cols          = srcWidth;
         d->colorSpace->bitBlt(srcDev->colorSpace(), d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
@@ -832,8 +848,8 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
         // Merge selections here by multiplying them - compositeOp(COMPOSITE_MULT)
         d->paramInfo.dstRowStart   = mergedSelectionBytes;
         d->paramInfo.dstRowStride  = srcWidth * selection->pixelSize();
-        d->paramInfo.srcRowStart   = selection->data();
-        d->paramInfo.srcRowStride  = srcWidth * selection->pixelSize();
+        d->paramInfo.srcRowStart   = selRowStart;
+        d->paramInfo.srcRowStride  = selBounds.width() * selection->pixelSize();
         d->paramInfo.maskRowStart  = 0;
         d->paramInfo.maskRowStride = 0;
         d->paramInfo.rows          = srcHeight;
@@ -843,8 +859,8 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
         // Blit to dstBytes (intermediary bit array)
         d->paramInfo.dstRowStart   = dstBytes;
         d->paramInfo.dstRowStride  = srcWidth * d->device->pixelSize();
-        d->paramInfo.srcRowStart   = srcDev->data() + srcX;
-        d->paramInfo.srcRowStride  = srcDev->bounds().width() * srcDev->pixelSize();
+        d->paramInfo.srcRowStart   = srcRowStart;
+        d->paramInfo.srcRowStride  = srcBounds.width() * srcDev->pixelSize();
         d->paramInfo.maskRowStart  = mergedSelectionBytes;
         d->paramInfo.maskRowStride = srcWidth * selection->pixelSize();
         d->colorSpace->bitBlt(srcDev->colorSpace(), d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);

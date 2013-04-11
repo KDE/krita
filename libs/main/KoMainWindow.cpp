@@ -31,7 +31,7 @@
 #include "KoFilterManager.h"
 #include "KoDocumentInfo.h"
 #include "KoDocumentInfoDlg.h"
-#include "KoModalFileDialog.h"
+#include "KoFileDialog.h"
 #include "KoVersionDialog.h"
 #include "KoDockFactoryBase.h"
 #include "KoDockWidgetTitleBar.h"
@@ -927,26 +927,13 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
         // don't want to be reminded about overwriting files etc.
         bool justChangingFilterOptions = false;
 
-        KoModalFileDialog saveDialog;
-        QString filter;
-        for (QStringList::ConstIterator it = mimeFilter.begin(); it != mimeFilter.end(); ++it) {
-            KMimeType::Ptr type = KMimeType::mimeType( *it );
-            if(!type)
-                continue;
-            filter.append(type->comment() + " ( ");
-            QStringList patterns = type->patterns();
-            QStringList::ConstIterator jt;
-            for (jt = patterns.begin(); jt != patterns.end(); ++jt)
-                filter.append(*jt + " ");
-            filter.append(");;");
-        }
-        filter.chop(2);
+        KoFileDialog saveDialog;
         KUrl newURL(saveDialog.getSaveFileName(this,
                                                isExporting() && !d->lastExportUrl.isEmpty() ?
                                                    d->lastExportUrl.url() : suggestedURL.url(),
                                                isExporting() ?
                                                    i18n("Export Document As") : i18n("Save Document As"),
-                                               filter));
+                                               KoFileDialog::getNameFilters(mimeFilter)));
 
         KMimeType::Ptr mime = KMimeType::findByUrl(newURL);
         QString outputFormatString = mime->name();
@@ -1265,31 +1252,18 @@ void KoMainWindow::slotFileOpen()
     const QStringList mimeFilter = KoFilterManager::mimeFilter(KoServiceProvider::readNativeFormatMimeType(),
                                                                KoFilterManager::Import,
                                                                KoServiceProvider::readExtraNativeMimeTypes());
-    QString filter;
-    for (QStringList::ConstIterator it = mimeFilter.begin(); it != mimeFilter.end(); ++it) {
-        KMimeType::Ptr type = KMimeType::mimeType( *it );
-        if(!type)
-            continue;
-        filter.append(type->comment() + " ( ");
-        QStringList patterns = type->patterns();
-        QStringList::ConstIterator jt;
-        for (jt = patterns.begin(); jt != patterns.end(); ++jt)
-            filter.append(*jt + " ");
-        filter.append(");;");
-    }
-    filter.chop(2);
     QString url;
     if (!isImporting()) {
         url = QFileDialog::getOpenFileName(this,
                                            i18n("Open Document"),
                                            "",
-                                           filter);
+                                           KoFileDialog::getNameFilters(mimeFilter));
     } else {
-        KoModalFileDialog importDialog;
+        KoFileDialog importDialog;
         url = importDialog.getOpenFileName(this,
                                            i18n("Import Document"),
                                            "",
-                                           filter);
+                                           KoFileDialog::getNameFilters(mimeFilter));
     }
 
     if (url.isEmpty())

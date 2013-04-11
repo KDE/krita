@@ -31,6 +31,7 @@ class KoTemplatesPane;
 class KoDetailsPane;
 class KUrl;
 class QTreeWidgetItem;
+class QString;
 
 /// \internal
 class KoOpenPane : public QWidget
@@ -67,6 +68,9 @@ protected slots:
     /// Saves the splitter sizes for KoDetailsPaneBase based panes
     void saveSplitterSizes(KoDetailsPane* sender, const QList<int>& sizes);
 
+private slots:
+    void openFileDialog();
+
 signals:
     void openExistingFile(const KUrl&);
     void openTemplate(const KUrl&);
@@ -86,7 +90,7 @@ protected:
     void initTemplates(const QString& templateType);
 
 private:
-    void initExistingFilesPane(const QStringList& mimeFilter);
+    QString m_nameFiletrs;
 
     KoOpenPanePrivate * const d;
 };

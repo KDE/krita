@@ -25,9 +25,9 @@
 
 #include <KoIcon.h>
 
-#include <KLocale>
-#include <KDebug>
-#include <KCmdLineArgs>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kcmdlineargs.h>
 
 #include <QDate>
 #include <QDateTime>

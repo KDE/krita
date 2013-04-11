@@ -652,6 +652,7 @@ KisNodeSP KisKraLoader::loadCloneLayer(const KoXmlElement& element, KisImageWSP 
 
 KisNodeSP KisKraLoader::loadFilterMask(const KoXmlElement& element, KisNodeSP parent)
 {
+    Q_UNUSED(parent);
     QString attr;
     KisFilterMask* mask;
     QString filtername;
@@ -674,7 +675,6 @@ KisNodeSP KisKraLoader::loadFilterMask(const KoXmlElement& element, KisNodeSP pa
 
     // We'll load the configuration and the selection later.
     mask = new KisFilterMask();
-    mask->initSelection(0, dynamic_cast<KisLayer*>(parent.data()));
     mask->setFilter(kfc);
     Q_CHECK_PTR(mask);
 
@@ -684,8 +684,8 @@ KisNodeSP KisKraLoader::loadFilterMask(const KoXmlElement& element, KisNodeSP pa
 KisNodeSP KisKraLoader::loadTransparencyMask(const KoXmlElement& element, KisNodeSP parent)
 {
     Q_UNUSED(element);
+    Q_UNUSED(parent);
     KisTransparencyMask* mask = new KisTransparencyMask();
-    mask->initSelection(0, dynamic_cast<KisLayer*>(parent.data()));
     Q_CHECK_PTR(mask);
 
     return mask;
@@ -694,8 +694,8 @@ KisNodeSP KisKraLoader::loadTransparencyMask(const KoXmlElement& element, KisNod
 KisNodeSP KisKraLoader::loadSelectionMask(KisImageWSP image, const KoXmlElement& element, KisNodeSP parent)
 {
     Q_UNUSED(element);
+    Q_UNUSED(parent);
     KisSelectionMaskSP mask = new KisSelectionMask(image);
-    mask->initSelection(0, dynamic_cast<KisLayer*>(parent.data()));
     bool active = element.attribute(ACTIVE, "1") == "0" ? false : true;
     mask->setActive(active);
     Q_CHECK_PTR(mask);

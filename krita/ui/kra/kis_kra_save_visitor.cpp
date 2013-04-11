@@ -218,9 +218,9 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
     if (node->inherits("KisMask")) {
         selection = static_cast<KisMask*>(node)->selection();
     } else if (node->inherits("KisAdjustmentLayer")) {
-        selection = static_cast<KisAdjustmentLayer*>(node)->selection();
+        selection = static_cast<KisAdjustmentLayer*>(node)->internalSelection();
     } else if (node->inherits("KisGeneratorLayer")) {
-        selection = static_cast<KisGeneratorLayer*>(node)->selection();
+        selection = static_cast<KisGeneratorLayer*>(node)->internalSelection();
     } else {
         return false;
     }

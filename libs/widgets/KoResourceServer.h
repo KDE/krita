@@ -45,7 +45,7 @@
 
 #include "kowidgets_export.h"
 
-#include <KDebug>
+#include <kdebug.h>
 
 class KoResource;
 

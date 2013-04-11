@@ -48,7 +48,7 @@ KisChalkPaintOp::KisChalkPaintOp(const KisChalkPaintOpSettings *settings, KisPai
 
     KoColorTransformation* transfo = 0;
     if (m_properties.inkDepletion && m_properties.useSaturation){
-        transfo = painter->device()->colorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
+        transfo = painter->device()->compositionSourceColorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
     }
     m_chalkBrush = new ChalkBrush( &m_properties, transfo );
 }
@@ -63,7 +63,7 @@ qreal KisChalkPaintOp::paintAt(const KisPaintInformation& info)
     if (!painter()) return 1.0;
 
     if (!m_dab) {
-        m_dab = new KisPaintDevice(painter()->device()->colorSpace());
+        m_dab = source()->createCompositionSourceDevice();
     } else {
         m_dab->clear();
     }

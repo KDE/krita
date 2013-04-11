@@ -28,10 +28,10 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QValidator>
-#include <KLocale>
-#include <KMessageBox>
-#include <KInputDialog>
-#include <KDebug>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kinputdialog.h>
+#include <kdebug.h>
 
 UserVariableOptionsWidget::UserVariableOptionsWidget(UserVariable* userVariable, QWidget *parent)
     : QWidget(parent)

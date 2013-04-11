@@ -17,8 +17,8 @@
  */
 #include "KoReportItemChart.h"
 #include <KoGlobal.h>
-#include <KLocale>
-#include <KDebug>
+#include <klocale.h>
+#include <kdebug.h>
 #include <kglobalsettings.h>
 #include <klocalizedstring.h>
 #include "renderobjects.h"

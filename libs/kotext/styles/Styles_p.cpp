@@ -19,7 +19,7 @@
  */
 
 #include "Styles_p.h"
-#include <KDebug>
+#include <kdebug.h>
 #include <QTextFormat>
 
 StylePrivate::StylePrivate()

@@ -326,8 +326,8 @@ void KisScratchPad::setupScratchPad(KisCanvasResourceProvider* resourceProvider,
     m_resourceProvider = resourceProvider;
     KisConfig cfg;
     setDisplayProfile(cfg.displayProfile(QApplication::desktop()->screenNumber(this)));
-    connect(m_resourceProvider, SIGNAL(sigDisplayProfileChanged(KoColorProfile*)),
-            SLOT(setDisplayProfile(KoColorProfile*)));
+    connect(m_resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile*)),
+            SLOT(setDisplayProfile(const KoColorProfile*)));
 
     connect(m_resourceProvider, SIGNAL(sigOnScreenResolutionChanged(qreal,qreal)),
             SLOT(setOnScreenResolution(qreal,qreal)));

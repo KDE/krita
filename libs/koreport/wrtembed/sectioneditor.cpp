@@ -26,8 +26,8 @@
 #include "reportsectiondetailgroup.h"
 #include <KoIcon.h>
 // KDE
-#include <KPushButton>
-#include <KLocalizedString>
+#include <kpushbutton.h>
+#include <klocalizedstring.h>
 // Qt
 #include <QVariant>
 #include <QComboBox>

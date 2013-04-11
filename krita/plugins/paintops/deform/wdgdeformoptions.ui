@@ -128,7 +128,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Deform Amount</string>
+          <string>Deform amount:</string>
          </property>
         </widget>
        </item>

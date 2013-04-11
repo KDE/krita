@@ -23,7 +23,7 @@
 #include <db/driver.h>
 #include <db/connection.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <QFile>
 #include <QTest>

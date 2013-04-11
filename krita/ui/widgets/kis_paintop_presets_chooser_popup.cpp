@@ -130,3 +130,8 @@ void KisPaintOpPresetsChooserPopup::returnKeyPressed(QString lineEditText)
     m_d->uiWdgPaintOpPresets.searchBar->setText(lineEditText);
     setLineEditCompleter(lineEditText);
 }
+
+void KisPaintOpPresetsChooserPopup::showButtons(bool show)
+{
+    m_d->uiWdgPaintOpPresets.wdgPresetChooser->showButtons(show);
+}

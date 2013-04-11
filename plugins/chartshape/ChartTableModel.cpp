@@ -31,7 +31,7 @@
 #include <QDomDocument>
 
 // KDE
-#include <KDebug>
+#include <kdebug.h>
 
 // Calligra
 #include <KoXmlReader.h>

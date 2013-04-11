@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "RemoveBarCommand.h"
-#include <KLocale>
+#include <klocale.h>
 #include "../core/Bar.h"
 #include "../core/Sheet.h"
 

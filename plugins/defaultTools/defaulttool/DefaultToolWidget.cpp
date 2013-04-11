@@ -35,7 +35,7 @@
 #include "SelectionDecorator.h"
 #include "DefaultToolTransformWidget.h"
 
-#include <KAction>
+#include <kaction.h>
 #include <QSize>
 #include <QRadioButton>
 #include <QLabel>

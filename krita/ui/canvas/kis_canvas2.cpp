@@ -150,8 +150,8 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view,
     KisShapeController *kritaShapeController = dynamic_cast<KisShapeController*>(sc);
     connect(kritaShapeController, SIGNAL(selectionChanged()),
             this, SLOT(slotSelectionChanged()));
-    connect(kritaShapeController, SIGNAL(currentLayerChanged(KoShapeLayer*)),
-            globalShapeManager()->selection(), SIGNAL(currentLayerChanged(KoShapeLayer*)));
+    connect(kritaShapeController, SIGNAL(currentLayerChanged(const KoShapeLayer*)),
+            globalShapeManager()->selection(), SIGNAL(currentLayerChanged(const KoShapeLayer*)));
 }
 
 KisCanvas2::~KisCanvas2()

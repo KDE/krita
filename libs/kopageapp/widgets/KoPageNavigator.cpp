@@ -27,9 +27,9 @@
 #include <KoPAPage.h>
 #include <KoIcon.h>
 // KDE
-#include <KDebug>
-#include <KLocale>
-#include <KActionCollection>
+#include <kdebug.h>
+#include <klocale.h>
+#include <kactioncollection.h>
 // Qt
 #include <QLabel>
 #include <QHBoxLayout>

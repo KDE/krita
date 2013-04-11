@@ -21,7 +21,7 @@
 #include "ChangeTracker.h"
 #include "TextTool.h"
 
-#include <KDebug>
+#include <kdebug.h>
 
 ChangeTracker::ChangeTracker(TextTool *parent)
         : QObject(parent),

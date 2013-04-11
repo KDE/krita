@@ -20,7 +20,7 @@
 #ifndef SELECTVIDEOWIDGET_H
 #define SELECTVIDEOWIDGET_H
 
-#include <KUrl>
+#include <kurl.h>
 
 #include <QWidget>
 

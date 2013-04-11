@@ -21,7 +21,7 @@
 #include <cmath>
 #include <klocale.h>
 #include <KoImageData.h>
-#include <KDebug>
+#include <kdebug.h>
 
 ChangeImageCommand::ChangeImageCommand(PictureShape *shape, KoImageData *newImageData, KUndo2Command *parent):
     KUndo2Command(parent),

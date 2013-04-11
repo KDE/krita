@@ -154,9 +154,9 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
         KisSelectionSP selection = new KisSelection();
         KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
         loadPaintDevice(pixelSelection, getLocation(layer, ".selection"));
-        layer->setSelection(selection);
+        layer->setInternalSelection(selection);
     } else if (m_syntaxVersion == 2) {
-        loadSelection(getLocation(layer), layer->selection());
+        loadSelection(getLocation(layer), layer->internalSelection());
 
     } else {
         // We use the default, empty selection
@@ -186,7 +186,7 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
         return false;
     }
 
-    loadSelection(getLocation(layer), layer->selection());
+    loadSelection(getLocation(layer), layer->internalSelection());
 
     loadFilterConfiguration(layer->filter().data(), getLocation(layer, DOT_FILTERCONFIG));
 
@@ -202,6 +202,12 @@ bool KisKraLoadVisitor::visit(KisCloneLayer *layer)
         return false;
     }
 
+    // the layer might have already been lazily initialized
+    // from the mask loading code
+    if (layer->copyFrom()) {
+        return true;
+    }
+
     KisNodeSP srcNode = layer->copyFromInfo().findNode(m_image->rootLayer());
     KisLayerSP srcLayer = dynamic_cast<KisLayer*>(srcNode.data());
     Q_ASSERT(srcLayer);
@@ -213,8 +219,25 @@ bool KisKraLoadVisitor::visit(KisCloneLayer *layer)
     return result;
 }
 
+void KisKraLoadVisitor::initSelectionForMask(KisMask *mask)
+{
+    KisLayer *cloneLayer = dynamic_cast<KisCloneLayer*>(mask->parent().data());
+    if (cloneLayer) {
+        // the clone layers should be initialized out of order
+        // and lazily, because their original() is still not
+        // initialized
+        cloneLayer->accept(*this);
+    }
+
+    KisLayer *parentLayer = dynamic_cast<KisLayer*>(mask->parent().data());
+    // the KisKraLoader must have already set the parent for us
+    Q_ASSERT(parentLayer);
+    mask->initSelection(0, parentLayer);
+}
+
 bool KisKraLoadVisitor::visit(KisFilterMask *mask)
 {
+    initSelectionForMask(mask);
     loadSelection(getLocation(mask), mask->selection());
     loadFilterConfiguration(mask->filter().data(), getLocation(mask, DOT_FILTERCONFIG));
     return true;
@@ -222,12 +245,14 @@ bool KisKraLoadVisitor::visit(KisFilterMask *mask)
 
 bool KisKraLoadVisitor::visit(KisTransparencyMask *mask)
 {
+    initSelectionForMask(mask);
     loadSelection(getLocation(mask), mask->selection());
     return true;
 }
 
 bool KisKraLoadVisitor::visit(KisSelectionMask *mask)
 {
+    initSelectionForMask(mask);
     loadSelection(getLocation(mask), mask->selection());
     return true;
 }

@@ -26,7 +26,7 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 
-#include <KGlobal>
+#include <kglobal.h>
 
 static const struct {
     KoInlineObject::Property property;

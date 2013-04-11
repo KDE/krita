@@ -19,7 +19,7 @@
 #include "SimpleEntryWidget.h"
 #include "../SimpleEntryTool.h"
 
-#include <KAction>
+#include <kaction.h>
 
 SimpleEntryWidget::SimpleEntryWidget(SimpleEntryTool *tool, QWidget *parent)
     : QWidget(parent),

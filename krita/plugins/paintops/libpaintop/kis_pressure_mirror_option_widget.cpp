@@ -45,6 +45,7 @@ KisPressureMirrorOptionWidget::KisPressureMirrorOptionWidget()
     hl->addWidget(m_verticalMirror);
 
     QVBoxLayout* vl = new QVBoxLayout;
+    vl->setMargin(0);
     vl->addLayout(hl);
     vl->addWidget(curveWidget());
 

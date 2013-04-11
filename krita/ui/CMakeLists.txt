@@ -66,7 +66,6 @@ set(kritaui_LIB_SRCS
     kis_composite_ops_model.cc
     kis_paint_ops_model.cpp
     kis_cursor.cc
-    kis_custom_palette.cc
     kis_custom_pattern.cc
     kis_doc2.cc
     kis_part2.cpp

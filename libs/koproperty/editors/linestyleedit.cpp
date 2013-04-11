@@ -23,8 +23,8 @@
 #include <QPainter>
 #include <QPen>
 
-#include <KColorScheme>
-#include <KDebug>
+#include <kcolorscheme.h>
+#include <kdebug.h>
 
 using namespace KoProperty;
 

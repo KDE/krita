@@ -32,8 +32,8 @@
 #include <KoTextDocument.h>
 
 #include <QTextInlineObject>
-#include <KLocale>
-#include <KDebug>
+#include <klocale.h>
+#include <kdebug.h>
 
 UserVariable::UserVariable()
     : KoVariable(true)

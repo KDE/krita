@@ -22,7 +22,7 @@
 #include <KoUnit.h>
 #include <KoTextEditor.h>
 
-#include <KDialog>
+#include <kdialog.h>
 
 class TextTool;
 class ParagraphGeneral;

@@ -22,7 +22,7 @@
 #include "KoInlineTextObjectManager.h"
 #include "KoNamedVariable.h"
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>

@@ -23,7 +23,7 @@
 #include <KoBibliographyInfo.h>
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
-#include <KLocale>
+#include <klocale.h>
 
 BibliographyTemplate::BibliographyTemplate(KoStyleManager *manager):
     m_manager(manager)

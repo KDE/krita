@@ -27,7 +27,7 @@
 #include "KDChartModel.h"
 
 // KDE
-#include <KDebug>
+#include <kdebug.h>
 
 // KChart
 #include "DataSet.h"

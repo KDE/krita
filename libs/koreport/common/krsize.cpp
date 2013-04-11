@@ -17,7 +17,7 @@
  */
 
 #include "krsize.h"
-#include <KLocale>
+#include <klocale.h>
 #include <KoDpi.h>
 
 KRSize::KRSize(const KoUnit& unit)

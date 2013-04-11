@@ -22,11 +22,11 @@
 #include <kcomponentdata.h>
 #include <kdebug.h>
 #include <kurl.h>
-#include <KMimeType>
-#include <KMimeTypeTrader>
+#include <kmimetype.h>
+#include <kmimetypetrader.h>
 #include <kpluginfactory.h>
-#include <KCmdLineArgs>
-#include <KAboutData>
+#include <kcmdlineargs.h>
+#include <kaboutdata.h>
 
 #include <KoView.h>
 #include <KoDocument.h>

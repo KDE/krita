@@ -32,7 +32,7 @@
 #include <QTextCursor>
 #include <QWeakPointer>
 
-#include <KDebug>
+#include <kdebug.h>
 
 class KoTextMeta::Private
 {

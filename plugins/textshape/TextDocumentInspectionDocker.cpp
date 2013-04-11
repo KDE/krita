@@ -28,7 +28,7 @@
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
 // KDE
-#include <KDebug>
+#include <kdebug.h>
 // Qt
 #include <QTreeView>
 

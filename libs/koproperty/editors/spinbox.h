@@ -24,7 +24,7 @@
 
 #include "koproperty/Factory.h"
 
-#include <KNumInput>
+#include <knuminput.h>
 
 namespace KoProperty {
 

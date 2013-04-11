@@ -60,7 +60,7 @@
 
 #include <KoIcon.h>
 
-#include <KAction>
+#include <kaction.h>
 #include <QKeyEvent>
 #include <QClipboard>
 #include <kstandarddirs.h>

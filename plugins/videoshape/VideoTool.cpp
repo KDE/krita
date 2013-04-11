@@ -31,7 +31,7 @@
 #include <KoCanvasBase.h>
 #include <KoViewConverter.h>
 
-#include <KDialog>
+#include <kdialog.h>
 
 #include <QPointer>
 #include <QPainter>

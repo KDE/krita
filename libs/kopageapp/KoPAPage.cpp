@@ -20,7 +20,7 @@
 #include "KoPAPage.h"
 
 #include <QPainter>
-#include <KDebug>
+#include <kdebug.h>
 
 #include <KoShapePainter.h>
 #include <KoShapeSavingContext.h>

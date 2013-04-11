@@ -118,6 +118,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     connect( d->tagSearchLineEdit, SIGNAL(textChanged(QString)), this, SLOT(tagSearchLineEditTextChanged(QString)));
 
     QVBoxLayout* layout = new QVBoxLayout( this );
+    layout->setMargin(0);
     layout->addWidget( d->tagSearchLineEdit );
     layout->addWidget( d->splitter );
 

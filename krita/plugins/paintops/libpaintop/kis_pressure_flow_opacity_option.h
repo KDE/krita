@@ -31,7 +31,7 @@ class KisPainter;
 class PAINTOP_EXPORT KisFlowOpacityOption: public KisCurveOption
 {
 public:
-    KisFlowOpacityOption();
+    KisFlowOpacityOption(KisNodeSP currentNode);
     virtual ~KisFlowOpacityOption() { }
 
     virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
@@ -48,6 +48,7 @@ public:
 protected:
     qreal m_flow;
     int   m_paintActionType;
+    bool  m_nodeHasIndirectPaintingSupport;
 };
 
 #endif //KIS_PRESSURE_FLOW_OPACITY_OPTION_H

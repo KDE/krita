@@ -30,7 +30,7 @@
 #include <KoSnapGuide.h>
 #include <KoPointerEvent.h>
 #include <KoToolBase.h>
-#include <KLocale>
+#include <klocale.h>
 
 ShapeMoveStrategy::ShapeMoveStrategy(KoToolBase *tool, const QPointF &clicked)
     : KoInteractionStrategy(tool)

@@ -61,7 +61,7 @@ KisDistanceInformation KisCurvePaintOp::paintLine(const KisPaintInformation& pi1
     }
 
     if (!m_dab) {
-        m_dab = new KisPaintDevice(painter()->device()->colorSpace());
+        m_dab = source()->createCompositionSourceDevice();
     } else {
         m_dab->clear();
     }

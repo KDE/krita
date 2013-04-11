@@ -31,7 +31,7 @@
 #include <QByteArray>
 #include <QSet>
 
-#include <KPluginFactory>
+#include <kpluginfactory.h>
 
 #include "connection.h"
 #include "admin.h"

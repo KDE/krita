@@ -26,7 +26,7 @@
 #include <KoCanvasController.h>
 #include <KoShadowConfigWidget.h>
 #include <KoShapeShadowCommand.h>
-#include <KLocale>
+#include <klocale.h>
 #include <QSpacerItem>
 #include <QGridLayout>
 

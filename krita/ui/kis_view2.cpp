@@ -96,7 +96,6 @@
 #include "kis_config_notifier.h"
 #include "kis_control_frame.h"
 #include "kis_coordinates_converter.h"
-#include "kis_custom_palette.h"
 #include "kis_doc2.h"
 #include "kis_factory2.h"
 #include "kis_filter_manager.h"
@@ -262,7 +261,7 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
     grp.writeEntry("CreatingCanvas", true);
     m_d->canvas = new KisCanvas2(m_d->viewConverter, this, doc->shapeController());
     grp.writeEntry("CreatingCanvas", false);
-    connect(m_d->resourceProvider, SIGNAL(sigDisplayProfileChanged(KoColorProfile*)), m_d->canvas, SLOT(slotSetDisplayProfile(KoColorProfile*)));
+    connect(m_d->resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile*)), m_d->canvas, SLOT(slotSetDisplayProfile(const KoColorProfile*)));
 
     m_d->canvasController->setCanvas(m_d->canvas);
 
@@ -586,6 +585,8 @@ void KisView2::dropEvent(QDropEvent *event)
             }
         }
     }
+    qApp->setActiveWindow(shell());
+    activateWindow();
 }
 
 KoZoomController *KisView2::zoomController() const
@@ -782,11 +783,7 @@ void KisView2::createActions()
 {
     actionCollection()->addAction(KStandardAction::Preferences,  "preferences", this, SLOT(slotPreferences()));
 
-    KAction* action = new KAction(i18n("Edit Palette..."), this);
-    actionCollection()->addAction("edit_palette", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(slotEditPalette()));
-
-    action = new KAction(i18n("Cleanup removed files..."), this);
+    KAction *action = new KAction(i18n("Cleanup removed files..."), this);
     actionCollection()->addAction("edit_blacklist_cleanup", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotBlacklistCleanup()));
 }
@@ -847,8 +844,8 @@ void KisView2::connectCurrentImage()
 {
     if (image()) {
         if (m_d->statusBar) {
-            connect(image(), SIGNAL(sigColorSpaceChanged(KoColorSpace*)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
-            connect(image(), SIGNAL(sigProfileChanged(KoColorProfile*)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
+            connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
+            connect(image(), SIGNAL(sigProfileChanged(const KoColorProfile*)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
             connect(image(), SIGNAL(sigSizeChanged(qint32,qint32)), m_d->statusBar, SLOT(imageSizeChanged(qint32,qint32)));
 
         }
@@ -876,7 +873,7 @@ void KisView2::connectCurrentImage()
     m_d->canvas->connectCurrentImage();
 
     if (m_d->controlFrame) {
-        connect(image(), SIGNAL(sigColorSpaceChanged(KoColorSpace*)), m_d->controlFrame->paintopBox(), SLOT(slotColorSpaceChanged(KoColorSpace*)));
+        connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), m_d->controlFrame->paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));
     }
 
 }
@@ -911,19 +908,6 @@ void KisView2::slotPreferences()
         KisNode* node = dynamic_cast<KisNode*>(image()->rootLayer().data());
         node->updateSettings();
     }
-}
-
-void KisView2::slotEditPalette()
-{
-    QList<KoColorSet*> palettes = KoResourceServerProvider::instance()->paletteServer()->resources();
-
-    KDialog* base = new KDialog(this);
-    base->setCaption(i18n("Edit Palette"));
-    base->setButtons(KDialog::Ok);
-    base->setDefaultButton(KDialog::Ok);
-    KisCustomPalette* cp = new KisCustomPalette(palettes, base, "edit palette", i18n("Edit Palette"), this);
-    base->setMainWidget(cp);
-    base->show();
 }
 
 void KisView2::slotBlacklistCleanup()

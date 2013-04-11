@@ -84,6 +84,8 @@ private slots:
     void updateToggleSelectionButton();
     /** Update Bar */
     void update();
+    /** Called when model resets */
+    void slotModelReset();
 
 private:
     QAbstractItemView *m_view;

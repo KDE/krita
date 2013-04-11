@@ -33,8 +33,8 @@
 #include <kdebug.h>
 #include <QComboBox>
 #include <QSortFilterProxyModel>
-#include <KMenu>
-#include <KMessageBox>
+#include <kmenu.h>
+#include <kmessagebox.h>
 
 
 /**

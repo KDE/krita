@@ -28,7 +28,7 @@
 #include <QTextLine>
 #include <QTextDocument>
 
-#include <KDebug>
+#include <kdebug.h>
 
 struct Relation
 {

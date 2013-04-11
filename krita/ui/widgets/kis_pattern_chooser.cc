@@ -64,11 +64,9 @@ KisPatternChooser::KisPatternChooser(QWidget *parent)
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setObjectName("main layout");
-    mainLayout->setMargin(2);
+    mainLayout->setMargin(0);
     mainLayout->addWidget(m_lbName);
     mainLayout->addWidget(m_itemChooser, 10);
-
-
 
     setLayout(mainLayout);
 }

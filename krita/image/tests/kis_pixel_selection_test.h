@@ -41,6 +41,8 @@ private slots:
     void testExactRectWithImage();
     void testUndo();
     void testInvertWithImage();
+
+    void testCrossColorSpacePainting();
 };
 
 #endif

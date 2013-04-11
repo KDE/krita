@@ -45,7 +45,7 @@
 #include <KoStore.h>
 #include <KoUnit.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 // KDChart
 #include <KDChartCartesianCoordinatePlane>

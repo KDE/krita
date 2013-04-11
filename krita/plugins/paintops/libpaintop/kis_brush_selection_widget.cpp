@@ -50,8 +50,6 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
     m_buttonGroup->setExclusive(true);
 
     m_layout = new QGridLayout(uiWdgBrushChooser.settingsFrame);
-    m_layout->setSpacing(0);
-    m_layout->setMargin(0);
 
     m_autoBrushWidget = new KisAutoBrushWidget(this, "autobrush");
     connect(m_autoBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
@@ -246,7 +244,9 @@ void KisBrushSelectionWidget::precisionChanged(int value)
                  "The slowest performance. Best quality.");
         break;
     }
-
+    uiWdgBrushChooser.sliderPrecision->blockSignals(true);
+    uiWdgBrushChooser.sliderPrecision->setValue(value);
+    uiWdgBrushChooser.sliderPrecision->blockSignals(false);
     uiWdgBrushChooser.sliderPrecision->setToolTip(toolTip);
     m_precisionOption.setPrecisionLevel(value);
     emit sigPrecisionChanged();

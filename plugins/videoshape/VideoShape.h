@@ -24,7 +24,7 @@
 #include <KoShape.h>
 #include <KoFrameShape.h>
 
-#include <KIcon>
+#include <kicon.h>
 
 #include <QPixmap>
 

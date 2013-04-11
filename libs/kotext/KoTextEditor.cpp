@@ -69,7 +69,7 @@
 
 #include <KoShapeCreateCommand.h>
 
-#include <KLocale>
+#include <klocale.h>
 #include <kundo2stack.h>
 
 #include <QApplication>
@@ -1412,7 +1412,7 @@ KoInlineCite *KoTextEditor::insertCitation()
     return cite;
 }
 
-void KoTextEditor::insertText(const QString &text)
+void KoTextEditor::insertText(const QString &text, const QString &hRef)
 {
     if (isEditProtected()) {
         return;
@@ -1442,7 +1442,18 @@ void KoTextEditor::insertText(const QString &text)
     if (format.hasProperty(KoCharacterStyle::ChangeTrackerId)) {
         format.clearProperty(KoCharacterStyle::ChangeTrackerId);
     }
+    static QRegExp urlScanner("\\S+://\\S+");
+    if (!hRef.isEmpty()) {
+        format.setAnchor(true);
+        format.setProperty(KoCharacterStyle::AnchorType, KoCharacterStyle::Anchor);
+        if ((urlScanner.indexIn(hRef)) == 0) {//web url
+            format.setAnchorHref(hRef);
+        } else {
+            format.setAnchorHref("#"+hRef);
+        }
+    }
     d->caret.insertText(text, format);
+
     int endPosition = d->caret.position();
 
     //Mark the inserted text
@@ -1457,7 +1468,12 @@ void KoTextEditor::insertText(const QString &text)
         d->caret.endEditBlock();
         endEditBlock();
     }
-
+    if (!hRef.isEmpty()) {
+        format.setAnchor(false);
+        format.clearProperty(KoCharacterStyle::Anchor);
+        format.clearProperty(KoCharacterStyle::AnchorType);
+        d->caret.setCharFormat(format);
+    }
     emit cursorPositionChanged();
 }
 

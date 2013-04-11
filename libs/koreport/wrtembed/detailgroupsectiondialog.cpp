@@ -19,7 +19,7 @@
 
 #include "detailgroupsectiondialog.h"
 
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 
 /*
  *  Constructs a DetailGroupSectionDialog as a child of 'parent'.

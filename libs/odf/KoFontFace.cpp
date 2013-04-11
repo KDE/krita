@@ -21,7 +21,7 @@
 
 #include "KoFontFace.h"
 #include <KoXmlWriter.h>
-#include <KDebug>
+#include <kdebug.h>
 
 class KoFontFacePrivate : public QSharedData
 {

@@ -28,7 +28,7 @@
 #include "styles/KoStyleManager.h"
 #include "changetracker/KoChangeTracker.h"
 
-#include <KLocale>
+#include <klocale.h>
 #include <kdebug.h>
 
 #include <QStack>

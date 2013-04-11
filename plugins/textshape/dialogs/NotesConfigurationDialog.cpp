@@ -20,8 +20,8 @@
 #include "KoTextDocument.h"
 #include "KoStyleManager.h"
 
-#include <KAction>
-#include <KLocale>
+#include <kaction.h>
+#include <klocale.h>
 
 #include <QWidget>
 #include <QDebug>

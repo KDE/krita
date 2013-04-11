@@ -22,8 +22,8 @@
 #define KOICON_H
 
 // KDE
-#include <KIcon>
-#include <KIconLoader>
+#include <kicon.h>
+#include <kiconloader.h>
 
 /**
  * Macros to support collecting the icons in use.

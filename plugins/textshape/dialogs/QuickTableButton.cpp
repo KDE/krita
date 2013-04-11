@@ -23,7 +23,7 @@
 #include <KoIcon.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <KAction>
+#include <kaction.h>
 
 #include <QMenu>
 #include <QFrame>

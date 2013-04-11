@@ -32,7 +32,7 @@ Parser::~Parser()
 #include <QRegExp>
 #include <QStringList>
 #include <QVariant>
-#include <KDateTime>
+#include <kdatetime.h>
 
 Value IntegerParser::parse(const QString& _v) const
 {

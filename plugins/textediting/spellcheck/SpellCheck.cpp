@@ -29,10 +29,10 @@
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootAreaProvider.h>
 
-#include <KLocale>
-#include <KDebug>
-#include <KAction>
-#include <KToggleAction>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kaction.h>
+#include <ktoggleaction.h>
 #include <sonnet/configdialog.h>
 
 #include <QTextBlock>

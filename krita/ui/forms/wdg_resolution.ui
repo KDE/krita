@@ -13,12 +13,6 @@
    <string>Image Resolution</string>
   </property>
   <layout class="QVBoxLayout" >
-   <property name="margin" >
-    <number>9</number>
-   </property>
-   <property name="spacing" >
-    <number>6</number>
-   </property>
    <item>
     <widget class="QLabel" name="lblWidth" >
      <property name="text" >
@@ -38,9 +32,6 @@
      <property name="margin" >
       <number>0</number>
      </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
      <item>
       <widget class="QLabel" name="lblImageXRes" >
        <property name="text" >
@@ -57,9 +48,6 @@
     <layout class="QHBoxLayout" >
      <property name="margin" >
       <number>0</number>
-     </property>
-     <property name="spacing" >
-      <number>6</number>
      </property>
      <item>
       <widget class="QLabel" name="lblYResolution" >
@@ -78,9 +66,6 @@
      <property name="margin" >
       <number>0</number>
      </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
      <item>
       <widget class="QLabel" name="lblYResolution_3" >
        <property name="text" >
@@ -95,7 +80,6 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
  <customwidgets>
   <customwidget>
    <class>QDoubleSpinBox</class>

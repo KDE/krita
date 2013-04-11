@@ -40,8 +40,8 @@
 #include <QLabel>
 #include <QComboBox>
 #include <QGridLayout>
-#include <KNumInput>
-#include <KLocale>
+#include <knuminput.h>
+#include <klocale.h>
 
 ChapterVariable::ChapterVariable()
         : KoVariable(true)

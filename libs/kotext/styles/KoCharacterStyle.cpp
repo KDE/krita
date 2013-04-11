@@ -62,7 +62,7 @@
 #include FT_SFNT_NAMES_H
 #endif
 
-#include <KDebug>
+#include <kdebug.h>
 #include "KoTextDebug.h"
 
 #ifdef SHOULD_BUILD_FONT_CONVERSION

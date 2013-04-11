@@ -63,8 +63,8 @@ public:
     void visit(KisGroupLayer*, KisUndoAdapter*) {}
     void visit(KisCloneLayer*, KisUndoAdapter*) {}
 
-    void visit(KisAdjustmentLayer *layer, KisUndoAdapter*) { layer->selection()->updateProjection(); }
-    void visit(KisGeneratorLayer *layer, KisUndoAdapter*) { layer->selection()->updateProjection(); }
+    void visit(KisAdjustmentLayer *layer, KisUndoAdapter*) { layer->internalSelection()->updateProjection(); }
+    void visit(KisGeneratorLayer *layer, KisUndoAdapter*) { layer->internalSelection()->updateProjection(); }
     void visit(KisExternalLayer *layer, KisUndoAdapter*) { layer->resetCache(); }
     void visit(KisFilterMask *mask, KisUndoAdapter*) { mask->selection()->updateProjection(); }
     void visit(KisTransparencyMask *mask, KisUndoAdapter*) { mask->selection()->updateProjection(); }

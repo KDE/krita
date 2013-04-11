@@ -22,7 +22,7 @@
 #include "EmfObjects.h"
 #include "Bitmap.h"
 
-#include <KDebug>
+#include <kdebug.h>
 
 namespace Libemf
 {

@@ -19,7 +19,7 @@
 
 #include "KoChangeTrackerElement.h"
 
-#include <KDebug>
+#include <kdebug.h>
 
 class KoChangeTrackerElement::Private
 {

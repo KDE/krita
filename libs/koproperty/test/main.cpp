@@ -19,10 +19,10 @@
 
 #include <QFont>
 
-#include <KApplication>
-#include <KAboutData>
-#include <KCmdLineArgs>
-#include <KLocale>
+#include <kapplication.h>
+#include <kaboutdata.h>
+#include <kcmdlineargs.h>
+#include <klocale.h>
 
 #include "test.h"
 

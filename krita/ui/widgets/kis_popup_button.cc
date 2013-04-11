@@ -32,7 +32,11 @@
 
 
 struct KisPopupButton::Private {
-    Private() : frame(0), frameLayout(0), popupWidget(0) {}
+    Private()
+        : frame(0)
+        , frameLayout(0)
+        , popupWidget(0)
+    {}
     QFrame* frame;
     QHBoxLayout* frameLayout;
     QWidget* popupWidget;
@@ -94,11 +98,13 @@ void KisPopupButton::setPopupWidgetWidth(int w)
 
 void KisPopupButton::showPopupWidget()
 {
-    if (m_d->popupWidget) {
+    if (m_d->popupWidget && !m_d->frame->isVisible()) {
         m_d->frame->raise();
         m_d->frame->show();
-
         adjustPosition();
+    }
+    else {
+        hidePopupWidget();
     }
 }
 

@@ -31,7 +31,7 @@
 #include "commands/TextPasteCommand.h"
 #include "commands/ParagraphFormattingCommand.h"
 
-#include <KLocale>
+#include <klocale.h>
 #include <kundo2stack.h>
 
 #include <QApplication>

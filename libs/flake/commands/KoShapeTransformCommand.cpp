@@ -24,7 +24,7 @@
 #include <QList>
 #include <QTransform>
 
-#include <KDebug>
+#include <kdebug.h>
 
 class KoShapeTransformCommand::Private
 {

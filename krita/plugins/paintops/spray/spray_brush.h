@@ -67,7 +67,7 @@ private:
     KoColor m_inkColor;
     qreal m_radius;
     quint32 m_particlesCount; 
-    quint8 m_pixelSize;
+    quint8 m_dabPixelSize;
 
     RandomGauss * m_rand;
     KisPainter * m_painter;

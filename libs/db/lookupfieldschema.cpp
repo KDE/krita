@@ -24,7 +24,7 @@
 #include <QVariant>
 #include <QStringList>
 
-#include <KDebug>
+#include <kdebug.h>
 
 namespace KexiDB
 {

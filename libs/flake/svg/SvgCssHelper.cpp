@@ -19,7 +19,7 @@
 
 #include "SvgCssHelper.h"
 #include <KoXmlReader.h>
-#include <KDebug>
+#include <kdebug.h>
 #include <QPair>
 #include <QStack>
 

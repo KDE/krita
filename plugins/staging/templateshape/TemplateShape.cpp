@@ -25,7 +25,7 @@
 #include <QPainter>
 
 // KDE
-#include <KDebug>
+#include <kdebug.h>
 
 // Calligra
 #include <KoViewConverter.h>

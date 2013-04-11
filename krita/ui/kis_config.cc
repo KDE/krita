@@ -561,7 +561,7 @@ void KisConfig::setScrollingCheckers(bool sc)
 
 QColor KisConfig::canvasBorderColor()
 {
-    QColor color(QColor(38,38,40));
+    QColor color(QColor(128,128,128));
     return m_cfg.readEntry("canvasBorderColor", color);
 }
 

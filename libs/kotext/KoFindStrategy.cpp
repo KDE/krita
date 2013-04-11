@@ -19,10 +19,10 @@
 
 #include "KoFindStrategy.h"
 
-#include <KFind>
-#include <KFindDialog>
-#include <KMessageBox>
-#include <KLocale>
+#include <kfind.h>
+#include <kfinddialog.h>
+#include <kmessagebox.h>
+#include <klocale.h>
 
 #include "FindDirection_p.h"
 

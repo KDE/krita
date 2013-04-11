@@ -48,7 +48,7 @@
 #include <KoClipPath.h>
 #include <KoXmlWriter.h>
 
-#include <KMimeType>
+#include <kmimetype.h>
 
 #include <QBuffer>
 #include <QGradient>

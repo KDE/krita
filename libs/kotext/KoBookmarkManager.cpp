@@ -21,7 +21,7 @@
 #include "KoBookmarkManager.h"
 #include "KoBookmark.h"
 
-#include <KDebug>
+#include <kdebug.h>
 #include <QHash>
 
 class KoBookmarkManagerPrivate

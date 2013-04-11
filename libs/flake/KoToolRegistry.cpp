@@ -19,8 +19,8 @@
  */
 
 #include "KoToolRegistry.h"
-#include <KGlobal>
-#include <KDebug>
+#include <kglobal.h>
+#include <kdebug.h>
 #include <kconfiggroup.h>
 
 #include "tools/KoCreateShapesToolFactory.h"

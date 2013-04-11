@@ -49,8 +49,10 @@ SET ( textshape_SRCS
     dialogs/SimpleParagraphWidget.cpp
     dialogs/SimpleTableWidget.cpp
     dialogs/SimpleInsertWidget.cpp
+    dialogs/LinkInsertionDialog.cpp
     dialogs/SimpleTableOfContentsWidget.cpp
     dialogs/SimpleCitationBibliographyWidget.cpp
+    dialogs/SimpleLinksWidget.cpp
     dialogs/SimpleSpellCheckingWidget.cpp
     dialogs/CitationInsertionDialog.cpp
     dialogs/InsertBibliographyDialog.cpp
@@ -101,6 +103,7 @@ SET ( textshape_SRCS
     dialogs/BibliographyTemplate.cpp
     dialogs/BibliographyPreview.cpp
     dialogs/ListLevelChooser.cpp
+    dialogs/ManageBookmarkDialog.cpp
 
     commands/ChangeListLevelCommand.cpp
     commands/ShowChangesCommand.cpp
@@ -146,13 +149,16 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/TableDialog.ui
     dialogs/BibliographyConfigureDialog.ui
     dialogs/TableOfContentsConfigure.ui
+    dialogs/SimpleLinksWidget.ui
     dialogs/TableOfContentsStyleConfigure.ui
-
     dialogs/FontDecorations.ui
     dialogs/LanguageTab.ui
     dialogs/ChangeConfigureDialog.ui
     dialogs/AcceptRejectChangeDialog.ui
     dialogs/TrackedChangeManager.ui
+    dialogs/LinkInsertionDialog.ui
+    dialogs/ManageBookmark.ui
+
 )
 
 kde4_add_plugin(textshape ${textshape_SRCS})

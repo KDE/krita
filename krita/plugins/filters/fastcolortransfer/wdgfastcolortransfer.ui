@@ -13,16 +13,10 @@
    <property name="margin" >
     <number>0</number>
    </property>
-   <property name="spacing" >
-    <number>6</number>
-   </property>
    <item>
     <layout class="QHBoxLayout" >
      <property name="margin" >
       <number>0</number>
-     </property>
-     <property name="spacing" >
-      <number>6</number>
      </property>
      <item>
       <widget class="QLabel" name="label1" >
@@ -61,7 +55,6 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
   <customwidgets>
   <customwidget>
    <class>KUrlRequester</class>

@@ -20,7 +20,7 @@
 
 #include <QTimer>
 
-#include <KLocale>
+#include <klocale.h>
 
 #include <KoPointerEvent.h>
 #include <KoCanvasResourceManager.h>

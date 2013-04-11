@@ -23,10 +23,10 @@
 #include <KoParagraphStyle.h>
 #include <KoStyleManager.h>
 
-#include <KLocale>
-#include <KStringHandler>
+#include <klocale.h>
+#include <kstringhandler.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 DockerStylesComboModel::DockerStylesComboModel(QObject *parent) :
     StylesFilteredModelBase(parent),

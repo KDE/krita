@@ -18,8 +18,8 @@
  */
 #include "CitationInsertionDialog.h"
 
-#include <KAction>
-#include <KDebug>
+#include <kaction.h>
+#include <kdebug.h>
 #include <KoInlineCite.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTextDocument.h>

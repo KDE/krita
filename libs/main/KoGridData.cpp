@@ -27,11 +27,11 @@
 
 #include <KoIcon.h>
 
-#include <KToggleAction>
-#include <KLocale>
+#include <ktoggleaction.h>
+#include <klocale.h>
 #include <QPainter>
 #include <QRectF>
-#include <KDebug>
+#include <kdebug.h>
 
 #define DEFAULT_GRID_SIZE_MM 5.0
 

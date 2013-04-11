@@ -554,6 +554,33 @@ protected:
      */
     QVector<quint8> * threadLocalConversionCache(quint32 size) const;
 
+    /**
+     * This function defines the behavior of the bitBlt function
+     * when the composition of pixels in different colorspaces is
+     * requested, that is in case:
+     *
+     * srcCS == any
+     * dstCS == this
+     *
+     * 1) preferCompositionInSourceColorSpace() == false,
+     *
+     *    the source pixels are first converted to *this color space
+     *    and then composition is performed.
+     *
+     *2)  preferCompositionInSourceColorSpace() == true,
+     *
+     *    the destination pixels are first converted into *srcCS color
+     *    space, then the composition is done, and the result is finally
+     *    converted into *this colorspace.
+     *
+     *    This is used by alpha8() color space mostly, because it has
+     *    weaker representation of the color, so the composition
+     *    should be done in CS with richer functionality.
+     */
+
+    virtual bool preferCompositionInSourceColorSpace() const;
+
+
     struct Private;
     Private * const d;
 

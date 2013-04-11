@@ -43,9 +43,9 @@
 #include <KoInteractionStrategy.h>
 #include <KoIcon.h>
 
-#include <KLocale>
-#include <KStandardAction>
-#include <KDebug>
+#include <klocale.h>
+#include <kstandardaction.h>
+#include <kdebug.h>
 
 #include <QAction>
 #include <QGridLayout>

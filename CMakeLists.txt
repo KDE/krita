@@ -47,7 +47,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
 include(CalligraProductSetMacros)
 
-option(GHNS "support Get Hot New Stuff" ON)
+option(GHNS "support Get Hot New Stuff" OFF)
 option(NEPOMUK "support NEPOMUK Tagging" ON)
 # TODO: orthogonal setting, results in minimal features, yet needs to be defined
 # option(TINY "compile a tiny Calligra" OFF)
@@ -64,6 +64,9 @@ option(CREATIVEONLY "compile only Karbon and Krita" OFF)
 #
 #eg:
 #option(BUILD_kexi "Build directory kexi" OFF) # kexi isn't buildable at the moment
+if(WIN32)
+    option(BUILD_braindump "Build directory braindump" OFF) # braindump is unmaintained on Windows.
+endif()
 
 # temporary migration support
 set(PRODUCTSET_DEFAULT "ALL")
@@ -254,16 +257,20 @@ if ((${QTVERSION} VERSION_EQUAL 4.8.0) OR (${QTVERSION} VERSION_EQUAL 4.8.1))
     endif (NOT IHAVEPATCHEDQT)
 endif ((${QTVERSION} VERSION_EQUAL 4.8.0) OR (${QTVERSION} VERSION_EQUAL 4.8.1))
 
-if(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
-    set(GHNS FALSE)
-endif(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
+if (GHNS)
+    if(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
+        set(GHNS FALSE)
+    endif(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
 
-macro_optional_find_package(LibAttica)
-macro_log_feature(LIBATTICA_FOUND "LibAttica" "Attica is used for Get Hot New Stuff." "https://projects.kde.org/projects/kdesupport/attica" FALSE "" "You need at least version 3.0 for uploading of resources to work.")
+    macro_optional_find_package(LibAttica)
+    macro_log_feature(LIBATTICA_FOUND "LibAttica" "Attica is used for Get Hot New Stuff." "https://projects.kde.org/projects/kdesupport/attica" FALSE "" "You need at least version 3.0 for uploading of resources to work.")
 
-if (NOT LIBATTICA_FOUND)
-    set(GHNS FALSE)
-endif (NOT LIBATTICA_FOUND)
+    if (NOT LIBATTICA_FOUND)
+        set(GHNS FALSE)
+    else (NOT LIBATTICA_FOUND)
+        MESSAGE(STATUS "WARNING: You are compiling with Get Hot New Stuff enabled. Do not do that when building distribution packages. GHNS is unusable these days until someone starts maintaining it again.")
+    endif (NOT LIBATTICA_FOUND)
+endif (GHNS)
 
 if(NOT ${KDE_VERSION} VERSION_GREATER 4.6.4)
   set(NEPOMUK FALSE)
@@ -336,19 +343,23 @@ macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
 ## Look for OpenGL
 ##
 set(HAVE_OPENGL 0)
-macro_optional_find_package(OpenGL)
+if (WIN32)
+    message(STATUS "OpenGL is not supported on Windows.")
+else (WIN32)
+    macro_optional_find_package(OpenGL)
 
-if(OPENGL_FOUND)
-    message(STATUS "Found OpenGL: ${OPENGL_LIBRARIES}")
-    if(QT_QTOPENGL_FOUND)
-        message(STATUS "Found Qt OpenGL support")
-        set(HAVE_OPENGL 1)
-    else(QT_QTOPENGL_FOUND)
-        message(STATUS "Did NOT find Qt OpenGL support. Check your Qt configuration")
-    endif(QT_QTOPENGL_FOUND)
-else(OPENGL_FOUND)
-    message(STATUS "Did NOT find OpenGL libraries")
-endif(OPENGL_FOUND)
+    if(OPENGL_FOUND)
+        message(STATUS "Found OpenGL: ${OPENGL_LIBRARIES}")
+        if(QT_QTOPENGL_FOUND)
+            message(STATUS "Found Qt OpenGL support")
+            set(HAVE_OPENGL 1)
+        else(QT_QTOPENGL_FOUND)
+            message(STATUS "Did NOT find Qt OpenGL support. Check your Qt configuration")
+        endif(QT_QTOPENGL_FOUND)
+    else(OPENGL_FOUND)
+        message(STATUS "Did NOT find OpenGL libraries")
+    endif(OPENGL_FOUND)
+endif (WIN32)
 
 macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by parts of Krita and optionally by flake")
 

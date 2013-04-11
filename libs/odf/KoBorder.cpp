@@ -22,7 +22,7 @@
 
 #include "KoBorder.h"
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <KoUnit.h>
 #include <KoXmlNS.h>

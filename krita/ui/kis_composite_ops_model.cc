@@ -29,9 +29,9 @@ struct CompositeOpModelInitializer
 {
     CompositeOpModelInitializer() {
         model.addEntries(KoCompositeOpRegistry::instance().getCompositeOps(), false, true);
-		model.expandAllCategories(false);
+        model.expandAllCategories(false);
         model.addCategory(KoID("favorites", i18n("Favorites")));
-        model.readFavriteCompositeOpsFromConfig();
+        model.readFavoriteCompositeOpsFromConfig();
         model.expandCategory(KoID("favorites"), true);
     }
     
@@ -62,19 +62,19 @@ void KisCompositeOpListModel::validateCompositeOps(const KoColorSpace* colorSpac
 
 bool KisCompositeOpListModel::setData(const QModelIndex& idx, const QVariant& value, int role)
 {
-	KoID entry;
-	bool result = BaseClass::setData(idx, value, role);
-	
-	if(role == Qt::CheckStateRole && BaseClass::entryAt(entry, idx.row())) {
-		if(value.toInt() == Qt::Checked)
-			BaseClass::addEntry(KoID("favorites"), entry);
-		else
-			BaseClass::removeEntry(KoID("favorites"), entry);
-		
-		writeFavoriteCompositeOpsToConfig();
-	}
-	
-	return result;
+    KoID entry;
+    bool result = BaseClass::setData(idx, value, role);
+
+    if(role == Qt::CheckStateRole && BaseClass::entryAt(entry, idx.row())) {
+        if(value.toInt() == Qt::Checked)
+            BaseClass::addEntry(KoID("favorites"), entry);
+        else
+            BaseClass::removeEntry(KoID("favorites"), entry);
+
+        writeFavoriteCompositeOpsToConfig();
+    }
+
+    return result;
 }
 
 QVariant KisCompositeOpListModel::data(const QModelIndex& idx, int role) const
@@ -89,30 +89,30 @@ QVariant KisCompositeOpListModel::data(const QModelIndex& idx, int role) const
     return BaseClass::data(idx, role);
 }
 
-void KisCompositeOpListModel::readFavriteCompositeOpsFromConfig()
+void KisCompositeOpListModel::readFavoriteCompositeOpsFromConfig()
 {
-	KisConfig   config;
-	QStringList compositeOps = config.favoriteCompositeOps();
-	
-	BaseClass::clearCategory(KoID("favorites"));
-	
-	for(QStringList::iterator i=compositeOps.begin(); i!=compositeOps.end(); ++i) {
-		KoID entry = KoCompositeOpRegistry::instance().getKoID(*i);
-		setData(BaseClass::indexOf(entry), Qt::Checked, Qt::CheckStateRole);
-	}
+    KisConfig   config;
+    QStringList compositeOps = config.favoriteCompositeOps();
+
+    BaseClass::clearCategory(KoID("favorites"));
+
+    for(QStringList::iterator i=compositeOps.begin(); i!=compositeOps.end(); ++i) {
+        KoID entry = KoCompositeOpRegistry::instance().getKoID(*i);
+        setData(BaseClass::indexOf(entry), Qt::Checked, Qt::CheckStateRole);
+    }
 }
 
 void KisCompositeOpListModel::writeFavoriteCompositeOpsToConfig() const
 {
-	QList<KoID> compositeOps;
-	
-	if(BaseClass::getCategory(compositeOps, KoID("favorites"))) {
-		QStringList list;
-		KisConfig   config;
-		
-		for(QList<KoID>::iterator i=compositeOps.begin(); i!=compositeOps.end(); ++i)
-			list.push_back(i->id());
-		
-		config.setFavoriteCompositeOps(list);
-	}
+    QList<KoID> compositeOps;
+
+    if(BaseClass::getCategory(compositeOps, KoID("favorites"))) {
+        QStringList list;
+        KisConfig   config;
+
+        for(QList<KoID>::iterator i=compositeOps.begin(); i!=compositeOps.end(); ++i)
+            list.push_back(i->id());
+
+        config.setFavoriteCompositeOps(list);
+    }
 }

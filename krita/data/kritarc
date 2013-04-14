@@ -2,7 +2,7 @@
 WantExportConfirmation=false
 cursorStyleDef=3
 
-favoriteCompositeOps=normal,erase,multiply,burn,dodge,screen,overlay,hard_light,soft_light,color_hsi
+favoriteCompositeOps=favoriteCompositeOps=normal,erase,multiply,burn,dodge,screen,overlay,hard_light,soft_light,color_hsi
 
 [TemplateChooserDialog]
 ShowCustomDocumentWidgetByDefault=true

@@ -113,13 +113,9 @@ qreal KisFilterOp::paintAt(const KisPaintInformation& info)
     KisPainter p(m_tmpDevice);
     p.bitBltOldData(QPoint(x-neededRect.x(), y-neededRect.y()), source(), neededRect);
 
-    static int i = 0;
-    m_tmpDevice->convertToQImage(0).save(QString("%1_dev.png").arg(i++));
     m_filter->process(m_tmpDevice, rect, m_filterConfiguration, 0);
-    m_tmpDevice->convertToQImage(0).save(QString("%1_fil.png").arg(i++));
 
     // Apply the mask on the paint device (filter before mask because edge pixels may be important)
-
     KisFixedPaintDeviceSP fixedDab = source()->createCompositionSourceDeviceFixed();
     fixedDab->setRect(rect);
     fixedDab->initialize();
@@ -127,8 +123,6 @@ qreal KisFilterOp::paintAt(const KisPaintInformation& info)
     m_tmpDevice->readBytes(fixedDab->data(), fixedDab->bounds());
     brush->mask(fixedDab, scale, scale, 0.0, info, xFraction, yFraction);
     m_tmpDevice->writeBytes(fixedDab->data(), fixedDab->bounds());
-
-    m_tmpDevice->convertToQImage(0).save(QString("%1_mas.png").arg(i++));
 
     const KoColorSpace* tmpCS = m_tmpDevice->colorSpace();
     const KoColorSpace* srcCS = source()->colorSpace();

@@ -13,9 +13,6 @@
   <layout class="QGridLayout">
    <item row="0" column="0" colspan="2">
     <layout class="QHBoxLayout">
-     <property name="spacing">
-      <number>6</number>
-     </property>
      <property name="margin">
       <number>0</number>
      </property>
@@ -74,7 +71,6 @@ Note that this number is only a guideline for Krita, and is not guaranteed to be
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
    <class>KIntNumInput</class>

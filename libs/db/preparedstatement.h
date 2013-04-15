@@ -22,7 +22,7 @@
 
 #include <QVariant>
 #include <QStringList>
-#include <KSharedPtr>
+#include <ksharedptr.h>
 
 #include "field.h"
 

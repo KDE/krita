@@ -24,9 +24,9 @@
 #include <QObject>
 #include <KoReportDesigner.h>
 #include <QGraphicsScene>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include "koreport_export.h"
-#include <KPluginFactory>
+#include <kpluginfactory.h>
 
 class KService;
 class KoReportPluginInfo;

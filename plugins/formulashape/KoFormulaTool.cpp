@@ -31,13 +31,13 @@
 #include <KoIcon.h>
 #include <klocale.h>
 #include <QKeyEvent>
-#include <KAction>
+#include <kaction.h>
 #include <QPainter>
 #include <kdebug.h>
 
 #include <QFile>
 #include <QSignalMapper>
-#include <KFileDialog>
+#include <kfiledialog.h>
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>

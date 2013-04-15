@@ -56,7 +56,7 @@ KisHairyPaintOp::KisHairyPaintOp(const KisBrushBasedPaintOpSettings *settings, K
     KisBrushOption brushOption;
     brushOption.readOptionSetting(settings);
     KisBrushSP brush = brushOption.brush();
-    KisFixedPaintDeviceSP dab = cachedDab(source()->colorSpace());
+    KisFixedPaintDeviceSP dab = cachedDab(painter->device()->compositionSourceColorSpace());
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
         dab = brush->paintDevice(source()->colorSpace(), 1.0, 0.0, KisPaintInformation());
     } else {
@@ -121,7 +121,7 @@ KisDistanceInformation KisHairyPaintOp::paintLine(const KisPaintInformation &pi1
     if (!painter()) return KisDistanceInformation();
 
     if (!m_dab) {
-        m_dab = new KisPaintDevice(painter()->device()->colorSpace());
+        m_dab = source()->createCompositionSourceDevice();
     } else {
         m_dab->clear();
     }

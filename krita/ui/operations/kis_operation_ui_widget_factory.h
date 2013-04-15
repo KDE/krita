@@ -21,8 +21,8 @@
 #ifndef KIS_OPERATION_UI_WIDGET_FACTORY_H
 #define KIS_OPERATION_UI_WIDGET_FACTORY_H
 
-#include <KDialog>
-#include <KLocale>
+#include <kdialog.h>
+#include <klocale.h>
 
 #include "kis_operation_ui_factory.h"
 #include "operations/kis_operation_ui_widget.h"

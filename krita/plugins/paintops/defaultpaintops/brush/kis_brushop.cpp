@@ -43,7 +43,7 @@
 #include <kis_fixed_paint_device.h>
 
 KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter *painter, KisImageWSP image)
-    : KisBrushBasedPaintOp(settings, painter), m_hsvTransformation(0)
+    : KisBrushBasedPaintOp(settings, painter), m_opacityOption(settings->node()), m_hsvTransformation(0)
 {
     Q_UNUSED(image);
     Q_ASSERT(settings);
@@ -148,13 +148,13 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
         m_colorSource->applyColorTransformation(m_hsvTransformation);
     }
 
-    KisFixedPaintDeviceSP dab = m_dabCache->fetchDab(device->colorSpace(),
-                                                    m_colorSource,
-                                                    scale, scale,
-                                                    rotation,
-                                                    info,
-                                                    xFraction, yFraction,
-                                                    m_softnessOption.apply(info));
+    KisFixedPaintDeviceSP dab = m_dabCache->fetchDab(device->compositionSourceColorSpace(),
+                                                     m_colorSource,
+                                                     scale, scale,
+                                                     rotation,
+                                                     info,
+                                                     xFraction, yFraction,
+                                                     m_softnessOption.apply(info));
 
     painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
 
@@ -174,18 +174,18 @@ KisDistanceInformation KisBrushOp::paintLine(const KisPaintInformation& pi1, con
 {
     if(m_sharpnessOption.isChecked() && m_brush && (m_brush->width() == 1) && (m_brush->height() == 1)) {
 
-        if (!m_dab) {
-            m_dab = new KisPaintDevice(painter()->device()->colorSpace());
+        if (!m_lineCacheDevice) {
+            m_lineCacheDevice = source()->createCompositionSourceDevice();
         } else {
-            m_dab->clear();
+            m_lineCacheDevice->clear();
         }
 
-        KisPainter p(m_dab);
+        KisPainter p(m_lineCacheDevice);
         p.setPaintColor(painter()->paintColor());
         p.drawDDALine(pi1.pos(), pi2.pos());
 
-        QRect rc = m_dab->extent();
-        painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
+        QRect rc = m_lineCacheDevice->extent();
+        painter()->bitBlt(rc.x(), rc.y(), m_lineCacheDevice, rc.x(), rc.y(), rc.width(), rc.height());
 
         return KisDistanceInformation(0.0, 0.0);
     }

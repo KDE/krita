@@ -23,7 +23,7 @@
 #include "KoPAPageMoveCommand.h"
 #include "KoPAMasterPage.h"
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <qtest_kde.h>
 

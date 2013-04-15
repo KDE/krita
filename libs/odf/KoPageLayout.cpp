@@ -23,7 +23,7 @@
 
 #include "KoPageLayout.h"
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include "KoXmlNS.h"
 #include "KoUnit.h"

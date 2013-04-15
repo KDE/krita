@@ -101,7 +101,6 @@ private slots:
 
     void layersUpdated();
 
-    void saveLayerAsImage();
     void saveGroupLayers();
     bool activeLayerHasSelection();
 
@@ -131,7 +130,6 @@ private:
 
     KAction *m_imageFlatten;
     KAction *m_imageMergeLayer;
-    KisAction *m_layerSaveAs;
     KAction *m_groupLayersSave;
     bool m_actLayerVis;
     KisAction *m_imageResizeToLayer;

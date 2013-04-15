@@ -46,9 +46,9 @@
 #include <QPushButton>
 #include <QString>
 
-#include <KLocale>
+#include <klocale.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 StylesComboPreview::StylesComboPreview(QWidget *parent) :
     QLineEdit(parent),

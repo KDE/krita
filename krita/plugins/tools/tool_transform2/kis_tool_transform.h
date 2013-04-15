@@ -31,7 +31,7 @@
 #include <QVector3D>
 #include <QButtonGroup>
 
-#include <KStandardDirs>
+#include <kstandarddirs.h>
 
 #include <KoInteractionTool.h>
 #include <KoToolFactoryBase.h>

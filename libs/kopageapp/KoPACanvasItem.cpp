@@ -32,7 +32,7 @@
 #include <KoText.h>
 
 #include <kxmlguifactory.h>
-#include <KAction>
+#include <kaction.h>
 
 #include <QStyleOptionGraphicsItem>
 #include <QGraphicsSceneResizeEvent>

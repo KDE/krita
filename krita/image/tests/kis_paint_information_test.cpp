@@ -25,7 +25,7 @@
 #include <QDomDocument>
 #include <Eigen/Array>
 
-#include <KDebug>
+#include <kdebug.h>
 
 void KisPaintInformationTest::testCreation()
 {

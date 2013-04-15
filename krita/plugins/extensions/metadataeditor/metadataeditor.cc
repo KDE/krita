@@ -60,7 +60,7 @@ metadataeditorPlugin::metadataeditorPlugin(QObject *parent, const QVariantList &
     QStringList runtimeVersion = QString(qVersion()).split('.');
     QStringList compileVersion = QString(QT_VERSION_STR).split('.');
 
-    if (runtimeVersion[1] == compileVersion[1]) {
+    if (runtimeVersion[1] != compileVersion[1]) {
         action->setActivationFlags(KisAction::NEVER_ACTIVATE);
     }
 }

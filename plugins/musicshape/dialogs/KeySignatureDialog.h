@@ -21,7 +21,7 @@
 
 #include <ui_KeySignatureDialog.h>
 
-#include <KDialog>
+#include <kdialog.h>
 namespace MusicCore {
     class KeySignature;
 }

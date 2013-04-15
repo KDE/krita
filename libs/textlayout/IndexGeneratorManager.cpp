@@ -29,7 +29,7 @@
 #include <QTextDocument>
 #include <QTimer>
 #include <QTextDocument>
-#include <KDebug>
+#include <kdebug.h>
 
 IndexGeneratorManager::IndexGeneratorManager(QTextDocument *document)
     : QObject(document)

@@ -29,7 +29,7 @@
 #include <QPoint>
 
 // KDE
-#include <KDebug>
+#include <kdebug.h>
 
 // Calligra
 #include <KoXmlReader.h>

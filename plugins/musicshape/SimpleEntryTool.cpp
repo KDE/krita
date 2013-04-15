@@ -24,9 +24,9 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <KFileDialog>
-#include <KInputDialog>
-#include <KAction>
+#include <kfiledialog.h>
+#include <kinputdialog.h>
+#include <kaction.h>
 
 #include <KoIcon.h>
 #include <KoCanvasBase.h>

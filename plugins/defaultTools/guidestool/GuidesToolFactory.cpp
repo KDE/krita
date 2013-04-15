@@ -19,7 +19,7 @@
 
 #include "GuidesToolFactory.h"
 #include "GuidesTool.h"
-#include <KLocale>
+#include <klocale.h>
 
 GuidesToolFactory::GuidesToolFactory()
     : KoToolFactoryBase(GuidesToolId)

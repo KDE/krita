@@ -23,7 +23,7 @@
 
 #include <ui_sectioneditor.h>
 // KDE
-#include <KDialog>
+#include <kdialog.h>
 // Qt
 #include <QSet>
 

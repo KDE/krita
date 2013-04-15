@@ -23,8 +23,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <kiconloader.h>
-#include <KIcon>
-#include <KGlobalSettings>
+#include <kicon.h>
+#include <kglobalsettings.h>
 
 // Qt
 #include <QStyleOptionToolButton>

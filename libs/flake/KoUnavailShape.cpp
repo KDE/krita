@@ -34,7 +34,7 @@
 
 // KDE
 #include <kstandarddirs.h>
-#include <KDebug>
+#include <kdebug.h>
 
 // Calligra
 #include <KoUnit.h>

@@ -39,32 +39,6 @@
 #include <KoColorSpace.h>
 #include <KoColor.h>
 
-#if 0
-KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP dev, KisSelectionSP selection, const QPointF& topLeft, const QPointF& topRight, const QPointF& bottomLeft, const QPointF& bottomRight, KoUpdaterPtr progress)
-        : m_dev(dev), m_progressUpdater(progress), m_selection(selection)
-
-{
-    if (selection)
-        m_r = m_selection->selectedExactRect();
-    else {
-        m_r = m_dev->exactBounds();
-    }
-
-    m_xcenter = 0;
-    m_ycenter = 0;
-    // below was commented
-    /*    if(m_dev->hasSelection())
-            m_dev->selection()->clear();*/
-
-    Matrix3qreal b = KisPerspectiveMath::computeMatrixTransfoToPerspective(topLeft, topRight, bottomLeft, bottomRight, m_r);
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            m_matrix[i][j] = b(i, j);
-        }
-    }
-}
-#endif
-
 KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP dev, QPointF center, double aX, double aY, double distance, KoUpdaterPtr progress)
         : m_dev(dev), m_progressUpdater(progress)
 

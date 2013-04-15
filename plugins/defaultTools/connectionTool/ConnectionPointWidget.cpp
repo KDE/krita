@@ -20,7 +20,7 @@
 
 #include "ConnectionPointWidget.h"
 #include "ConnectionTool.h"
-#include <KAction>
+#include <kaction.h>
 
 ConnectionPointWidget::ConnectionPointWidget(ConnectionTool *tool, QWidget * parent)
     :QWidget(parent)

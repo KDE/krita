@@ -22,7 +22,7 @@
 #ifndef PIVOTSUBTOTALS_H
 #define PIVOTSUBTOTALS_H
 
-#include <KDialog>
+#include <kdialog.h>
 
 namespace Calligra;
   namespace Sheets{

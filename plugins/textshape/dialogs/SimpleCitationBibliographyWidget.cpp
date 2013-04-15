@@ -21,8 +21,8 @@
 #include "BibliographyPreview.h"
 #include "BibliographyTemplate.h"
 
-#include <KAction>
-#include <KDebug>
+#include <kaction.h>
+#include <kdebug.h>
 
 #include <QWidget>
 #include <QSignalMapper>

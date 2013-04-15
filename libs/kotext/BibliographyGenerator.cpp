@@ -22,7 +22,7 @@
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <KDebug>
+#include <kdebug.h>
 
 #include <KoInlineTextObjectManager.h>
 #include <KoParagraphStyle.h>

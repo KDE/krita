@@ -39,9 +39,9 @@
 #include "KoDocumentResourceManager.h"
 #include "commands/KoShapeCreateCommand.h"
 
-#include <KGlobal>
-#include <KConfig>
-#include <KConfigGroup>
+#include <kglobal.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 
 class KoShapePaste::Private
 {

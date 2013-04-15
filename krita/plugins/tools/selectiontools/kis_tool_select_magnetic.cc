@@ -23,7 +23,7 @@
 #include <QLabel>
 #include <QVector2D>
 #include <QLinkedList>
-#include <KIntNumInput>
+#include <kintnuminput.h>
 #include <cmath>
 #include <cstdlib>
 

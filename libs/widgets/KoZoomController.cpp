@@ -21,60 +21,16 @@
  * Boston, MA 02110-1301, USA.
  */
 #include <KoZoomController.h>
+#include <KoZoomController_p.h>
 
-#include <KActionCollection>
-#include <KLocale>
-#include <KDebug>
+#include <kactioncollection.h>
+#include <klocale.h>
+#include <kdebug.h>
 
 #include <KoZoomHandler.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 
-class KoZoomController::Private
-{
-public:
-    Private(KoZoomController *p, KoZoomAction::SpecialButtons specialButtons)
-        : canvasController(0), zoomHandler(0), textMinX(1), textMaxX(600), fitMargin(0), parent(p)
-    {
-        action = new KoZoomAction(KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE, i18n("Zoom"), p);
-        action->setSpecialButtons(specialButtons);
-    }
-    ~Private()
-    {
-    }
-
-    /// so we know when the canvasController changes size
-    void setAvailableSize()
-    {
-        if(zoomHandler->zoomMode() == KoZoomMode::ZOOM_WIDTH)
-            setZoom(KoZoomMode::ZOOM_WIDTH, -1);
-        if(zoomHandler->zoomMode() == KoZoomMode::ZOOM_PAGE)
-            setZoom(KoZoomMode::ZOOM_PAGE, -1);
-        if(zoomHandler->zoomMode() == KoZoomMode::ZOOM_TEXT)
-            setZoom(KoZoomMode::ZOOM_TEXT, -1);
-    }
-
-    /// when the canvas controller wants us to change zoom
-    void requestZoomRelative(const qreal factor, const QPointF& stillPoint)
-    {
-        parent->setZoom(KoZoomMode::ZOOM_CONSTANT, factor * zoomHandler->zoom(), stillPoint);
-    }
-
-    void setZoom(KoZoomMode::Mode mode, qreal zoom)
-    {
-        parent->setZoom(mode, zoom);
-    }
-
-    KoCanvasController *canvasController;
-    KoZoomHandler *zoomHandler;
-    KoZoomAction *action;
-    QSizeF pageSize;
-    qreal textMinX;
-    qreal textMaxX;
-    QSizeF documentSize;
-    int fitMargin;
-    KoZoomController *parent;
-};
 
 KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KActionCollection *actionCollection, KoZoomAction::SpecialButtons specialButtons, QObject *parent)
     : QObject(parent),

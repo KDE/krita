@@ -19,6 +19,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoDockerManager.h"
+#include "KoDockerManager_p.h"
 #include "KoDockFactoryBase.h"
 
 #include <kglobal.h>
@@ -49,30 +50,6 @@ public:
 
     DockPosition defaultDockPosition() const {
         return DockRight;
-    }
-};
-
-class KoDockerManager::Private
-{
-public:
-    Private(KoMainWindow *mw) :
-        mainWindow(mw)
-        ,ignore(true)
-        ,showOptionsDocker(true)
-    {
-    }
-
-    KoToolDocker *toolOptionsDocker;
-    KoMainWindow *mainWindow;
-    bool ignore;
-    bool showOptionsDocker;
-
-    void restoringDone()
-    {
-        if (ignore) {
-            ignore = false;
-            toolOptionsDocker->setVisible(showOptionsDocker);
-        }
     }
 };
 

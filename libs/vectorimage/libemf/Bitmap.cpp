@@ -20,7 +20,7 @@
 #include <QDataStream>
 #include <QImage>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include "EmfEnums.h"
 

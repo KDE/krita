@@ -396,7 +396,10 @@ void PivotMain::Summarize()
   
   //Summarization using vectors
   int rowpos=-1,colpos=-1,valpos=-1;
-  QVector<Value> rowVector,rowVectorArr[rowList.size()],columnVectorArr[columnList.size()],columnVector,valueVector;
+  QVector<Value> rowVector;
+  QVector<QVector<Value> > rowVectorArr(rowList.size());
+  QVector<QVector<Value> > columnVectorArr(columnList.size());
+  QVector<Value> columnVector,valueVector;
   QVector<int> rowposVect,colposVect,valposVect;
   
   for(int i=0;i<rowList.size();i++)
@@ -431,7 +434,7 @@ void PivotMain::Summarize()
   }
   
   int count=1,count2=0,prevcount=1;
-  QVector<Value> rowVect[rowposVect.count()];
+  QVector<QVector<Value> > rowVect(rowposVect.count());
   for(int i=0;i<rowposVect.count();i++)
   {
     for(int j=i+1;j<rowposVect.count();j++)
@@ -453,7 +456,7 @@ void PivotMain::Summarize()
   }
 
   count=1,count2=0,prevcount=1;
-  QVector<Value> colVect[colposVect.count()];
+  QVector<QVector<Value> > colVect(colposVect.count());
   for(int i=0;i<colposVect.count();i++)
   {
     for(int j=i+1;j<colposVect.count();j++)

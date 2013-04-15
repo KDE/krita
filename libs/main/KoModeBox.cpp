@@ -28,11 +28,11 @@
 #include <KoShapeLayer.h>
 #include <KoInteractionTool.h>
 
-#include <KDebug>
-#include <KGlobalSettings>
-#include <KConfigGroup>
-#include <KLocale>
-#include <KSelectAction>
+#include <kdebug.h>
+#include <kglobalsettings.h>
+#include <kconfiggroup.h>
+#include <klocale.h>
+#include <kselectaction.h>
 
 #include <QMap>
 #include <QList>
@@ -80,21 +80,28 @@ QString KoModeBox::applicationName;
 
 static bool compareButton(const KoToolButton &b1, const KoToolButton &b2)
 {
-    if (b1.section == b2.section) {
+    int b1Level;
+    int b2Level;
+    if (b1.section.contains(KoModeBox::applicationName)) {
+        b1Level = 0;
+    } else if (b1.section.contains("main")) {
+        b1Level = 1;
+    } else {
+        b1Level = 2;
+    }
+
+    if (b2.section.contains(KoModeBox::applicationName)) {
+        b2Level = 0;
+    } else if (b2.section.contains("main")) {
+        b2Level = 1;
+    } else {
+        b2Level = 2;
+    }
+
+    if (b1Level == b2Level) {
         return b1.priority < b2.priority;
     } else {
-        if (b1.section.contains(KoModeBox::applicationName)) {
-            return true;
-        } else if (b2.section.contains(KoModeBox::applicationName)) {
-            return false;
-        }
-
-        if (b1.section == "main") {
-            return true;
-        } else if (b2.section == "main") {
-            return false;
-        }
-        return b1.section < b2.section;
+        return b1Level < b2Level;
     }
 }
 

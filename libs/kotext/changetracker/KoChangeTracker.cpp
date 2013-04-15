@@ -34,10 +34,10 @@
 #include <KoFormatChangeInformation.h>
 
 //KDE includes
-#include <KDebug>
-#include <KDateTime>
-#include <KGlobal>
-#include <KLocale>
+#include <kdebug.h>
+#include <kdatetime.h>
+#include <kglobal.h>
+#include <klocale.h>
 
 //Qt includes
 #include <QColor>

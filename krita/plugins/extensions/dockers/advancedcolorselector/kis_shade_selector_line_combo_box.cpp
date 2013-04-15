@@ -25,7 +25,7 @@
 #include <QDoubleSpinBox>
 #include <QLabel>
 
-#include <KLocale>
+#include <klocale.h>
 
 #include "kis_shade_selector_line.h"
 

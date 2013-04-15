@@ -22,7 +22,7 @@
 #include "ParagraphIndentSpacing.h"
 
 #include <KoParagraphStyle.h>
-#include <KDebug>
+#include <kdebug.h>
 
 ParagraphIndentSpacing::ParagraphIndentSpacing(QWidget *parent)
         : QWidget(parent),

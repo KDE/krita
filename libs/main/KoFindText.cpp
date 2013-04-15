@@ -20,6 +20,7 @@
  */
 
 #include "KoFindText.h"
+#include "KoFindText_p.h"
 
 #include <QTextDocument>
 #include <QTextCursor>
@@ -30,8 +31,8 @@
 #include <QApplication>
 #include <QAbstractTextDocumentLayout>
 
-#include <KDebug>
-#include <KLocalizedString>
+#include <kdebug.h>
+#include <klocalizedstring.h>
 
 #include <KoText.h>
 #include <KoTextDocument.h>
@@ -42,37 +43,6 @@
 #include "KoFindOptionSet.h"
 #include "KoFindOption.h"
 #include "KoDocument.h"
-
-class KoFindText::Private
-{
-public:
-    Private(KoFindText* qq) : q(qq), selectionStart(-1), selectionEnd(-1) { }
-
-    void updateSelections();
-    void updateDocumentList();
-    void documentDestroyed(QObject *document);
-    void updateCurrentMatch(int position);
-    static void initializeFormats();
-
-    KoFindText *q;
-
-    QList<QTextDocument*> documents;
-
-    QTextCursor currentCursor;
-    QTextCursor selection;
-    QHash<QTextDocument*, QVector<QAbstractTextDocumentLayout::Selection> > selections;
-
-    int selectionStart;
-    int selectionEnd;
-
-    static QTextCharFormat highlightFormat;
-    static QTextCharFormat currentMatchFormat;
-    static QTextCharFormat currentSelectionFormat;
-    static QTextCharFormat replacedFormat;
-    static bool formatsInitialized;
-
-    QPair<QTextDocument*, int> currentMatch;
-};
 
 QTextCharFormat KoFindText::Private::highlightFormat;
 QTextCharFormat KoFindText::Private::currentMatchFormat;

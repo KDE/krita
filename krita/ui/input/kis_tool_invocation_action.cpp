@@ -20,7 +20,7 @@
 
 #include <QDebug>
 
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 
 #include <KoToolProxy.h>
 #include <kis_canvas2.h>

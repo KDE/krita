@@ -20,7 +20,7 @@
 
 #include "ParagraphDecorations.h"
 
-#include <KDebug>
+#include <kdebug.h>
 
 ParagraphDecorations::ParagraphDecorations(QWidget* parent)
         : QWidget(parent)

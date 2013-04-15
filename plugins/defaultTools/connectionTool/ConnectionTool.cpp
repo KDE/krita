@@ -53,10 +53,10 @@
 #include <KoToolManager.h>
 #include <KoIcon.h>
 
-#include <KAction>
-#include <KLocale>
-#include <KDebug>
-#include <KStandardDirs>
+#include <kaction.h>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kstandarddirs.h>
 #include <kundo2command.h>
 
 

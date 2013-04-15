@@ -52,7 +52,7 @@ KisFilterOp::KisFilterOp(const KisFilterOpSettings *settings, KisPainter *painte
     Q_UNUSED(image);
     Q_ASSERT(settings);
     Q_ASSERT(painter);
-    m_tmpDevice = new KisPaintDevice(source()->colorSpace());
+    m_tmpDevice = source()->createCompositionSourceDevice();
     m_sizeOption.readOptionSetting(settings);
     m_sizeOption.sensor()->reset();
     m_filter = KisFilterRegistry::instance()->get(settings->getString(FILTER_ID));
@@ -116,8 +116,7 @@ qreal KisFilterOp::paintAt(const KisPaintInformation& info)
     m_filter->process(m_tmpDevice, rect, m_filterConfiguration, 0);
 
     // Apply the mask on the paint device (filter before mask because edge pixels may be important)
-
-    KisFixedPaintDeviceSP fixedDab = new KisFixedPaintDevice(m_tmpDevice->colorSpace());
+    KisFixedPaintDeviceSP fixedDab = source()->createCompositionSourceDeviceFixed();
     fixedDab->setRect(rect);
     fixedDab->initialize();
 
@@ -125,15 +124,17 @@ qreal KisFilterOp::paintAt(const KisPaintInformation& info)
     brush->mask(fixedDab, scale, scale, 0.0, info, xFraction, yFraction);
     m_tmpDevice->writeBytes(fixedDab->data(), fixedDab->bounds());
 
-    if (!m_ignoreAlpha) {
+    const KoColorSpace* tmpCS = m_tmpDevice->colorSpace();
+    const KoColorSpace* srcCS = source()->colorSpace();
+    if (!m_ignoreAlpha && srcCS->id() != "ALPHA") {
         KisHLineIteratorSP itTmpDev = m_tmpDevice->createHLineIteratorNG(0, 0, maskWidth);
         KisHLineConstIteratorSP itSrc = source()->createHLineConstIteratorNG(x, y, maskWidth);
-        const KoColorSpace* cs = m_tmpDevice->colorSpace();
+
         for (int y = 0; y < maskHeight; ++y) {
             do {
-                quint8 alphaTmpDev = cs->opacityU8(itTmpDev->rawData());
-                quint8 alphaSrc = cs->opacityU8(itSrc->oldRawData());
-                cs->setOpacity(itTmpDev->rawData(), qMin(alphaTmpDev, alphaSrc), 1);
+                quint8 alphaTmpDev = tmpCS->opacityU8(itTmpDev->rawData());
+                quint8 alphaSrc = srcCS->opacityU8(itSrc->oldRawData());
+                tmpCS->setOpacity(itTmpDev->rawData(), qMin(alphaTmpDev, alphaSrc), 1);
             } while (itTmpDev->nextPixel() && itSrc->nextPixel());
 
             itTmpDev->nextRow();

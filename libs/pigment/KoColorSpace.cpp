@@ -262,22 +262,53 @@ void KoColorSpace::bitBlt(const KoColorSpace* srcSpace, const KoCompositeOp::Par
         return;
 
     if(!(*this == *srcSpace)) {
-        quint32           conversionBufferStride = params.cols * pixelSize();
-        QVector<quint8> * conversionCache        = threadLocalConversionCache(params.rows * conversionBufferStride);
-        quint8*           conversionData         = conversionCache->data();
+         if (preferCompositionInSourceColorSpace() &&
+             srcSpace->hasCompositeOp(op->id())) {
 
-        for(qint32 row=0; row<params.rows; row++) {
-            srcSpace->convertPixelsTo(params.srcRowStart + row*params.srcRowStride,
-                                      conversionData     + row*conversionBufferStride, this, params.cols,
-                                      renderingIntent, conversionFlags);
+             quint32           conversionDstBufferStride = params.cols * srcSpace->pixelSize();
+             QVector<quint8> * conversionDstCache        = threadLocalConversionCache(params.rows * conversionDstBufferStride);
+             quint8*           conversionDstData         = conversionDstCache->data();
+
+             for(qint32 row=0; row<params.rows; row++) {
+                 convertPixelsTo(params.dstRowStart + row * params.dstRowStride,
+                                 conversionDstData  + row * conversionDstBufferStride, srcSpace, params.cols,
+                                 renderingIntent, conversionFlags);
+             }
+
+             // FIXME: do not calculate the otherOp every time
+             const KoCompositeOp *otherOp = srcSpace->compositeOp(op->id());
+
+             KoCompositeOp::ParameterInfo paramInfo(params);
+             paramInfo.dstRowStart  = conversionDstData;
+             paramInfo.dstRowStride = conversionDstBufferStride;
+             otherOp->composite(paramInfo);
+
+             for(qint32 row=0; row<params.rows; row++) {
+                 srcSpace->convertPixelsTo(conversionDstData  + row * conversionDstBufferStride,
+                                           params.dstRowStart + row * params.dstRowStride, this, params.cols,
+                                           renderingIntent, conversionFlags);
+             }
+
+        } else {
+            quint32           conversionBufferStride = params.cols * pixelSize();
+            QVector<quint8> * conversionCache        = threadLocalConversionCache(params.rows * conversionBufferStride);
+            quint8*           conversionData         = conversionCache->data();
+
+            for(qint32 row=0; row<params.rows; row++) {
+                srcSpace->convertPixelsTo(params.srcRowStart + row * params.srcRowStride,
+                                          conversionData     + row * conversionBufferStride, this, params.cols,
+                                          renderingIntent, conversionFlags);
+            }
+
+            KoCompositeOp::ParameterInfo paramInfo(params);
+            paramInfo.srcRowStart  = conversionData;
+            paramInfo.srcRowStride = conversionBufferStride;
+            op->composite(paramInfo);
         }
-
-        KoCompositeOp::ParameterInfo paramInfo(params);
-        paramInfo.srcRowStart  = conversionData;
-        paramInfo.srcRowStride = conversionBufferStride;
-        op->composite(paramInfo);
     }
-    else op->composite(params);
+    else {
+        op->composite(params);
+    }
 }
 
 
@@ -330,4 +361,9 @@ QImage KoColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 he
         this->convertPixelsTo(const_cast<quint8 *>(data), img.bits(), dstCS, width * height, renderingIntent, conversionFlags);
 
     return img;
+}
+
+bool KoColorSpace::preferCompositionInSourceColorSpace() const
+{
+    return false;
 }

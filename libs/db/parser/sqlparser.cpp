@@ -100,8 +100,8 @@
 #include <QList>
 #include <QVariant>
 
-#include <KDebug>
-#include <KLocale>
+#include <kdebug.h>
+#include <klocale.h>
 
 #include <db/connection.h>
 #include <db/queryschema.h>

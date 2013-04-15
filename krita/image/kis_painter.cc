@@ -80,7 +80,6 @@ struct KisPainter::Private {
     QRect                       bounds;
     KoColor                     paintColor;
     KoColor                     backgroundColor;
-    KoColor                     fillColor;
     const KisFilterConfiguration* generator;
     KisPaintLayer*              sourceLayer;
     FillStyle                   fillStyle;
@@ -313,8 +312,6 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
     if (srcDev.isNull()) return;
     if (d->device.isNull()) return;
 
-    // TODO: What purpose has checking if src and this have the same pixel size?
-    Q_ASSERT(srcDev->pixelSize() == d->pixelSize);
     // Check that selection has an alpha colorspace, crash if false
     Q_ASSERT(selection->colorSpace() == KoColorSpaceRegistry::instance()->alpha8());
 
@@ -360,8 +357,12 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
     d->device->readBytes(dstBytes, dstX, dstY, srcWidth, srcHeight);
 
     // Copy the relevant bytes of raw data from srcDev
-    quint8* srcBytes = new quint8[srcWidth * srcHeight * d->device->pixelSize()];
+    quint8* srcBytes = new quint8[srcWidth * srcHeight * srcDev->pixelSize()];
     srcDev->readBytes(srcBytes, srcX, srcY, srcWidth, srcHeight);
+
+    QRect selBounds = selection->bounds();
+    const quint8 *selRowStart = selection->data() +
+        (selBounds.width() * (selY - selBounds.top()) + (selX - selBounds.left())) * selection->pixelSize();
 
     /*
      * This checks whether there is nothing selected.
@@ -373,8 +374,8 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
         d->paramInfo.dstRowStride  = srcWidth * d->device->pixelSize();
         d->paramInfo.srcRowStart   = srcBytes;
         d->paramInfo.srcRowStride  = srcWidth * srcDev->pixelSize();
-        d->paramInfo.maskRowStart  = selection->data() + selX;
-        d->paramInfo.maskRowStride = srcWidth * selection->pixelSize();
+        d->paramInfo.maskRowStart  = selRowStart;
+        d->paramInfo.maskRowStride = selBounds.width() * selection->pixelSize();
         d->paramInfo.rows          = srcHeight;
         d->paramInfo.cols          = srcWidth;
         d->colorSpace->bitBlt(srcDev->colorSpace(), d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
@@ -389,8 +390,8 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
         // Merge selections here by multiplying them - compositeOP(COMPOSITE_MULT)
         d->paramInfo.dstRowStart   = mergedSelectionBytes;
         d->paramInfo.dstRowStride  = srcWidth * selection->pixelSize();
-        d->paramInfo.srcRowStart   = selection->data() + selX;
-        d->paramInfo.srcRowStride  = srcWidth * selection->pixelSize();
+        d->paramInfo.srcRowStart   = selRowStart;
+        d->paramInfo.srcRowStride  = selBounds.width() * selection->pixelSize();
         d->paramInfo.maskRowStart  = 0;
         d->paramInfo.maskRowStride = 0;
         d->paramInfo.rows          = srcHeight;
@@ -404,7 +405,7 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
         d->paramInfo.srcRowStride  = srcWidth * srcDev->pixelSize();
         d->paramInfo.maskRowStart  = mergedSelectionBytes;
         d->paramInfo.maskRowStride = srcWidth * selection->pixelSize();
-        d->colorSpace->bitBlt(d->colorSpace, d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
+        d->colorSpace->bitBlt(srcDev->colorSpace(), d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
         delete[] mergedSelectionBytes;
     }
 
@@ -474,7 +475,6 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
             srcHeight = srcRect.height();
         }
     }
-    const KoColorSpace * srcCs = srcDev->colorSpace();
 
     qint32 dstY_ = dstY;
     qint32 srcY_ = srcY;
@@ -532,7 +532,7 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
                 d->paramInfo.maskRowStride = maskRowStride;
                 d->paramInfo.rows          = rows;
                 d->paramInfo.cols          = columns;
-                d->colorSpace->bitBlt(srcCs, d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
+                d->colorSpace->bitBlt(srcDev->colorSpace(), d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
 
                 srcX_ += columns;
                 dstX_ += columns;
@@ -580,7 +580,7 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
                 d->paramInfo.maskRowStride = 0;
                 d->paramInfo.rows          = rows;
                 d->paramInfo.cols          = columns;
-                d->colorSpace->bitBlt(srcCs, d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
+                d->colorSpace->bitBlt(srcDev->colorSpace(), d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
 
                 srcX_ += columns;
                 dstX_ += columns;
@@ -633,7 +633,7 @@ void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoC
     if(width == 0 || height == 0 || d->device.isNull())
         return;
 
-    KoColor srcColor(color, d->colorSpace);
+    KoColor srcColor(color, d->device->compositionSourceColorSpace());
     qint32  dstY          = y;
     qint32  rowsRemaining = height;
 
@@ -674,7 +674,7 @@ void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoC
                 d->paramInfo.maskRowStride = maskRowStride;
                 d->paramInfo.rows          = rows;
                 d->paramInfo.cols          = columns;
-                d->colorSpace->bitBlt(d->colorSpace, d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
+                d->colorSpace->bitBlt(srcColor.colorSpace(), d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
 
                 dstX             += columns;
                 columnsRemaining -= columns;
@@ -708,7 +708,7 @@ void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoC
                 d->paramInfo.maskRowStride = 0;
                 d->paramInfo.rows          = rows;
                 d->paramInfo.cols          = columns;
-                d->colorSpace->bitBlt(d->colorSpace, d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
+                d->colorSpace->bitBlt(srcColor.colorSpace(), d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
 
                 dstX             += columns;
                 columnsRemaining -= columns;
@@ -734,28 +734,26 @@ void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
     if (srcDev.isNull()) return;
     if (d->device.isNull()) return;
 
-    // TODO: What purpose has checking if src and this have the same pixel size?
-    Q_ASSERT(srcDev->pixelSize() == d->pixelSize);
-
     QRect srcRect = QRect(srcX, srcY, srcWidth, srcHeight);
+    QRect srcBounds = srcDev->bounds();
 
     /* Trying to read outside a KisFixedPaintDevice is inherently wrong and shouldn't be done,
     so crash if someone attempts to do this. Don't resize as it would obfuscate the mistake. */
-    Q_ASSERT(srcDev->bounds().contains(srcRect));
+    Q_ASSERT(srcBounds.contains(srcRect));
     Q_UNUSED(srcRect); // only used in above assertion
-
-    // Convenient renaming
-    const KoColorSpace * srcCs = d->colorSpace;
 
     /* Create an intermediate byte array to hold information before it is written
     to the current paint device (aka: d->device) */
     quint8* dstBytes = new quint8[srcWidth * srcHeight * d->device->pixelSize()];
     d->device->readBytes(dstBytes, dstX, dstY, srcWidth, srcHeight);
 
+    const quint8 *srcRowStart = srcDev->data() +
+        (srcBounds.width() * (srcY - srcBounds.top()) + (srcX - srcBounds.left())) * srcDev->pixelSize();
+
     d->paramInfo.dstRowStart   = dstBytes;
     d->paramInfo.dstRowStride  = srcWidth * d->device->pixelSize();
-    d->paramInfo.srcRowStart   = srcDev->data() + srcX;
-    d->paramInfo.srcRowStride  = srcDev->bounds().width() * srcDev->pixelSize();
+    d->paramInfo.srcRowStart   = srcRowStart;
+    d->paramInfo.srcRowStride  = srcBounds.width() * srcDev->pixelSize();
     d->paramInfo.maskRowStart  = 0;
     d->paramInfo.maskRowStride = 0;
     d->paramInfo.rows          = srcHeight;
@@ -772,7 +770,7 @@ void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
     }
 
     // ...and then blit.
-    d->colorSpace->bitBlt(srcCs, d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
+    d->colorSpace->bitBlt(srcDev->colorSpace(), d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
     d->device->writeBytes(dstBytes, dstX, dstY, srcWidth, srcHeight);
 
     delete[] d->paramInfo.maskRowStart;
@@ -801,19 +799,20 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
     if (srcDev.isNull()) return;
     if (d->device.isNull()) return;
 
-    // TODO: What purpose has checking if src and this have the same pixel size?
-    Q_ASSERT(srcDev->pixelSize() == d->pixelSize);
-    // Check that selection has an alpha colorspace, crash if false
+     // Check that selection has an alpha colorspace, crash if false
     Q_ASSERT(selection->colorSpace() == KoColorSpaceRegistry::instance()->alpha8());
 
     QRect srcRect = QRect(srcX, srcY, srcWidth, srcHeight);
     QRect selRect = QRect(selX, selY, srcWidth, srcHeight);
 
+    QRect srcBounds = srcDev->bounds();
+    QRect selBounds = selection->bounds();
+
     /* Trying to read outside a KisFixedPaintDevice is inherently wrong and shouldn't be done,
     so crash if someone attempts to do this. Don't resize as it would obfuscate the mistake. */
-    Q_ASSERT(srcDev->bounds().contains(srcRect));
+    Q_ASSERT(srcBounds.contains(srcRect));
     Q_UNUSED(srcRect); // only used in above assertion
-    Q_ASSERT(selection->bounds().contains(selRect));
+    Q_ASSERT(selBounds.contains(selRect));
     Q_UNUSED(selRect); // only used in above assertion
 
     /* Create an intermediate byte array to hold information before it is written
@@ -821,18 +820,23 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
     quint8* dstBytes = new quint8[srcWidth * srcHeight * d->device->pixelSize()];
     d->device->readBytes(dstBytes, dstX, dstY, srcWidth, srcHeight);
 
+    const quint8 *srcRowStart = srcDev->data() +
+        (srcBounds.width() * (srcY - srcBounds.top()) + (srcX - srcBounds.left())) * srcDev->pixelSize();
+    const quint8 *selRowStart = selection->data() +
+        (selBounds.width() * (selY - selBounds.top()) + (selX - selBounds.left())) * selection->pixelSize();
+
     if (!d->selection) {
         /* As there's nothing selected, blit to dstBytes (intermediary bit array),
           ignoring d->selection (the user selection)*/
         d->paramInfo.dstRowStart   = dstBytes;
         d->paramInfo.dstRowStride  = srcWidth * d->device->pixelSize();
-        d->paramInfo.srcRowStart   = srcDev->data() + srcX;
-        d->paramInfo.srcRowStride  = srcDev->bounds().width() * srcDev->pixelSize();
-        d->paramInfo.maskRowStart  = selection->data() + selX;
-        d->paramInfo.maskRowStride = srcWidth * selection->pixelSize();
+        d->paramInfo.srcRowStart   = srcRowStart;
+        d->paramInfo.srcRowStride  = srcBounds.width() * srcDev->pixelSize();
+        d->paramInfo.maskRowStart  = selRowStart;
+        d->paramInfo.maskRowStride = selBounds.width() * selection->pixelSize();
         d->paramInfo.rows          = srcHeight;
         d->paramInfo.cols          = srcWidth;
-        d->colorSpace->bitBlt(d->colorSpace, d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
+        d->colorSpace->bitBlt(srcDev->colorSpace(), d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
     }
     else {
         /* Read the user selection (d->selection) bytes into an array, ready
@@ -844,8 +848,8 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
         // Merge selections here by multiplying them - compositeOp(COMPOSITE_MULT)
         d->paramInfo.dstRowStart   = mergedSelectionBytes;
         d->paramInfo.dstRowStride  = srcWidth * selection->pixelSize();
-        d->paramInfo.srcRowStart   = selection->data();
-        d->paramInfo.srcRowStride  = srcWidth * selection->pixelSize();
+        d->paramInfo.srcRowStart   = selRowStart;
+        d->paramInfo.srcRowStride  = selBounds.width() * selection->pixelSize();
         d->paramInfo.maskRowStart  = 0;
         d->paramInfo.maskRowStride = 0;
         d->paramInfo.rows          = srcHeight;
@@ -855,11 +859,11 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
         // Blit to dstBytes (intermediary bit array)
         d->paramInfo.dstRowStart   = dstBytes;
         d->paramInfo.dstRowStride  = srcWidth * d->device->pixelSize();
-        d->paramInfo.srcRowStart   = srcDev->data() + srcX;
-        d->paramInfo.srcRowStride  = srcDev->bounds().width() * srcDev->pixelSize();
+        d->paramInfo.srcRowStart   = srcRowStart;
+        d->paramInfo.srcRowStride  = srcBounds.width() * srcDev->pixelSize();
         d->paramInfo.maskRowStart  = mergedSelectionBytes;
         d->paramInfo.maskRowStride = srcWidth * selection->pixelSize();
-        d->colorSpace->bitBlt(d->colorSpace, d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
+        d->colorSpace->bitBlt(srcDev->colorSpace(), d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
 
         delete[] mergedSelectionBytes;
     }
@@ -1132,7 +1136,7 @@ void KisPainter::fillPainterPath(const QPainterPath& path, const QRect &requeste
     // create a mask for the actual polygon coverage.
 
     if (!d->fillPainter) {
-        d->polygon = new KisPaintDevice(d->device->colorSpace());
+        d->polygon = d->device->createCompositionSourceDevice();
         d->fillPainter = new KisFillPainter(d->polygon);
     } else {
         d->polygon->clear();
@@ -1229,7 +1233,7 @@ void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& pen)
     Q_ASSERT(pen.color() == Qt::white);
 
     if (!d->fillPainter) {
-        d->polygon = new KisPaintDevice(d->device->colorSpace());
+        d->polygon = d->device->createCompositionSourceDevice();
         d->fillPainter = new KisFillPainter(d->polygon);
     } else {
         d->polygon->clear();
@@ -1303,6 +1307,22 @@ void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& pen)
     bitBlt(r.x(), r.y(), d->polygon, r.x(), r.y(), r.width(), r.height());
 }
 
+inline void KisPainter::compositeOnePixel(quint8 *dst, const KoColor &color)
+{
+    d->paramInfo.dstRowStart = dst;
+    d->paramInfo.dstRowStride = 0;
+    d->paramInfo.srcRowStart = color.data();
+    d->paramInfo.srcRowStride = 0;
+    d->paramInfo.maskRowStart = 0;
+    d->paramInfo.maskRowStride = 0;
+    d->paramInfo.rows = 1;
+    d->paramInfo.cols = 1;
+
+    d->colorSpace->bitBlt(color.colorSpace(), d->paramInfo, d->compositeOp,
+                          KoColorConversionTransformation::IntentPerceptual,
+                          KoColorConversionTransformation::Empty);
+}
+
 /**/
 void KisPainter::drawLine(const QPointF& start, const QPointF& end, qreal width, bool antialias){
     int x1 = start.x();
@@ -1344,8 +1364,6 @@ void KisPainter::drawLine(const QPointF& start, const QPointF& end, qreal width,
     denominator = 1.0/denominator;
 
     qreal projection,scanX,scanY,AA_;
-    quint8 pixelOpacity = quint8(d->paramInfo.opacity * 255.0f);
-    int pixelSize = d->device->pixelSize();
     KisRandomAccessorSP accessor = d->device->createRandomAccessorNG(x1, y1);
     KisRandomConstAccessorSP selectionAccessor;
     if (d->selection) {
@@ -1370,19 +1388,17 @@ void KisPainter::drawLine(const QPointF& start, const QPointF& end, qreal width,
                 continue;
             }
 
-            if (antialias) {
-                if (AA_ > halfWidth-1.0) {
-                    pixelOpacity = quint8((d->paramInfo.opacity*255.0f) * ( 1.0 - (AA_-(halfWidth-1.0))));
-                }else{
-                    pixelOpacity = quint8(d->paramInfo.opacity*255.0f);
-                }
-            }
-
             accessor->moveTo(x, y);
             if (selectionAccessor) selectionAccessor->moveTo(x,y);
 
             if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
-                d->compositeOp->composite(accessor->rawData(), pixelSize, d->paintColor.data() , pixelSize, 0,0,1,1,pixelOpacity);
+                KoColor mycolor = d->paintColor;
+
+                if (antialias && AA_ > halfWidth-1.0) {
+                    mycolor.colorSpace()->multiplyAlpha(mycolor.data(), 1.0 - (AA_-(halfWidth-1.0)), 1);
+                }
+
+                compositeOnePixel(accessor->rawData(), mycolor);
             }
         }
     }
@@ -1414,9 +1430,6 @@ void KisPainter::drawDDALine(const QPointF & start, const QPointF & end)
     float fy = y;
     int inc;
 
-    int    pixelSize    = d->device->pixelSize();
-    quint8 pixelOpacity = quint8(d->paramInfo.opacity*255.0f);
-
     KisRandomAccessorSP accessor = d->device->createRandomAccessorNG(x, y);
     KisRandomConstAccessorSP selectionAccessor;
     if (d->selection) {
@@ -1428,7 +1441,7 @@ void KisPainter::drawDDALine(const QPointF & start, const QPointF & end)
     if (selectionAccessor) selectionAccessor->moveTo(x,y);
 
     if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
-        d->compositeOp->composite(accessor->rawData(), pixelSize, d->paintColor.data(), pixelSize, 0,0,1,1, pixelOpacity);
+        compositeOnePixel(accessor->rawData(), d->paintColor);
     }
 
     if (fabs(m) > 1.0f) {
@@ -1444,7 +1457,7 @@ void KisPainter::drawDDALine(const QPointF & start, const QPointF & end)
             if (selectionAccessor) selectionAccessor->moveTo(x, y);
 
             if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
-                d->compositeOp->composite(accessor->rawData(), pixelSize, d->paintColor.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                compositeOnePixel(accessor->rawData(), d->paintColor);
             }
         }
     } else {
@@ -1459,7 +1472,7 @@ void KisPainter::drawDDALine(const QPointF & start, const QPointF & end)
             if (selectionAccessor) selectionAccessor->moveTo(x, y);
 
             if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
-                d->compositeOp->composite(accessor->rawData(), pixelSize, d->paintColor.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                compositeOnePixel(accessor->rawData(), d->paintColor);
             }
         }
     }
@@ -1473,8 +1486,6 @@ void KisPainter::drawWobblyLine(const QPointF & start, const QPointF & end)
         selectionAccessor = d->selection->projection()->createRandomConstAccessorNG(start.x(), start.y());
     }
 
-    int     pixelSize    = d->device->pixelSize();
-    quint8  pixelOpacity = quint8(d->paramInfo.opacity*255.0f);
     KoColor mycolor(d->paintColor);
 
     int x1 = start.x();
@@ -1510,7 +1521,7 @@ void KisPainter::drawWobblyLine(const QPointF & start, const QPointF & end)
 
             if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
                 mycolor.setOpacity((quint8)(255*br1));
-                d->compositeOp->composite(accessor->rawData(), pixelSize, mycolor.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                compositeOnePixel(accessor->rawData(), mycolor);
             }
 
             accessor->moveTo(x + 1, y);
@@ -1518,7 +1529,7 @@ void KisPainter::drawWobblyLine(const QPointF & start, const QPointF & end)
 
             if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
                 mycolor.setOpacity((quint8)(255*br2));
-                d->compositeOp->composite(accessor->rawData(), pixelSize, mycolor.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                compositeOnePixel(accessor->rawData(), mycolor);
             }
         }
     } else {
@@ -1537,7 +1548,7 @@ void KisPainter::drawWobblyLine(const QPointF & start, const QPointF & end)
 
             if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
                 mycolor.setOpacity((quint8)(255*br1));
-                d->compositeOp->composite(accessor->rawData(), pixelSize, mycolor.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                compositeOnePixel(accessor->rawData(), mycolor);
             }
 
             accessor->moveTo(x, y + 1);
@@ -1545,7 +1556,7 @@ void KisPainter::drawWobblyLine(const QPointF & start, const QPointF & end)
 
             if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
                 mycolor.setOpacity((quint8)(255*br2));
-                d->compositeOp->composite(accessor->rawData(), pixelSize, mycolor.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                compositeOnePixel(accessor->rawData(), mycolor);
             }
         }
     }
@@ -1560,8 +1571,6 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
         selectionAccessor = d->selection->projection()->createRandomConstAccessorNG(start.x(), start.y());
     }
 
-    int     pixelSize    = d->device->pixelSize();
-    quint8  pixelOpacity = quint8(d->paramInfo.opacity*255.0f);
     KoColor lineColor(d->paintColor);
 
     int x1 = start.x();
@@ -1594,7 +1603,7 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
             if (selectionAccessor) selectionAccessor->moveTo(ix1, iy1);
 
             if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
-                d->compositeOp->composite(accessor->rawData(), pixelSize, lineColor.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                compositeOnePixel(accessor->rawData(), lineColor);
             }
         }
         return;
@@ -1613,7 +1622,7 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
             if (selectionAccessor) selectionAccessor->moveTo(ix1, iy1);
 
             if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
-                d->compositeOp->composite(accessor->rawData(), pixelSize, lineColor.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                compositeOnePixel(accessor->rawData(), lineColor);
             }
         }
         return;
@@ -1651,7 +1660,7 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
 
         if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
             lineColor.setOpacity(c1);
-            d->compositeOp->composite(accessor->rawData(), pixelSize, lineColor.data() , pixelSize, 0,0,1,1, pixelOpacity);
+            compositeOnePixel(accessor->rawData(), lineColor);
         }
 
         accessor->moveTo(ix1, iy1 + 1);
@@ -1659,7 +1668,7 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
 
         if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
             lineColor.setOpacity(c2);
-            d->compositeOp->composite(accessor->rawData(), pixelSize, lineColor.data() , pixelSize, 0,0,1,1, pixelOpacity);
+            compositeOnePixel(accessor->rawData(), lineColor);
         }
 
         // calc first Y-intersection for main loop
@@ -1684,7 +1693,7 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
 
         if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
             lineColor.setOpacity(c1);
-            d->compositeOp->composite(accessor->rawData(), pixelSize, lineColor.data() , pixelSize, 0,0,1,1, pixelOpacity);
+            compositeOnePixel(accessor->rawData(), lineColor);
         }
 
         accessor->moveTo(ix2, iy2 + 1);
@@ -1692,7 +1701,7 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
 
         if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
             lineColor.setOpacity(c2);
-            d->compositeOp->composite(accessor->rawData(), pixelSize, lineColor.data() , pixelSize, 0,0,1,1, pixelOpacity);
+            compositeOnePixel(accessor->rawData(), lineColor);
         }
 
         // main loop
@@ -1707,7 +1716,7 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
 
             if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
                 lineColor.setOpacity(c1);
-                d->compositeOp->composite(accessor->rawData(), pixelSize, lineColor.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                compositeOnePixel(accessor->rawData(), lineColor);
             }
 
             accessor->moveTo(x, int (yf) + 1);
@@ -1715,7 +1724,7 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
 
             if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
                 lineColor.setOpacity(c2);
-                d->compositeOp->composite(accessor->rawData(), pixelSize, lineColor.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                compositeOnePixel(accessor->rawData(), lineColor);
             }
 
             yf = yf + grad;
@@ -1754,7 +1763,7 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
 
         if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
             lineColor.setOpacity(c1);
-            d->compositeOp->composite(accessor->rawData(), pixelSize, lineColor.data() , pixelSize, 0,0,1,1, pixelOpacity);
+            compositeOnePixel(accessor->rawData(), lineColor);
         }
 
         accessor->moveTo(x1 + 1, y1);
@@ -1762,7 +1771,7 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
 
         if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
             lineColor.setOpacity(c2);
-            d->compositeOp->composite(accessor->rawData(), pixelSize, lineColor.data() , pixelSize, 0,0,1,1, pixelOpacity);
+            compositeOnePixel(accessor->rawData(), lineColor);
         }
 
         // calc first Y-intersection for main loop
@@ -1787,7 +1796,7 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
 
         if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
             lineColor.setOpacity(c1);
-            d->compositeOp->composite(accessor->rawData(), pixelSize, lineColor.data() , pixelSize, 0,0,1,1, pixelOpacity);
+            compositeOnePixel(accessor->rawData(), lineColor);
         }
 
         accessor->moveTo(ix2 + 1, iy2);
@@ -1795,7 +1804,7 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
 
         if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
             lineColor.setOpacity(c2);
-            d->compositeOp->composite(accessor->rawData(), pixelSize, lineColor.data() , pixelSize, 0,0,1,1, pixelOpacity);
+            compositeOnePixel(accessor->rawData(), lineColor);
         }
 
         // main loop
@@ -1810,7 +1819,7 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
 
             if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
                 lineColor.setOpacity(c1);
-                d->compositeOp->composite(accessor->rawData(), pixelSize, lineColor.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                compositeOnePixel(accessor->rawData(), lineColor);
             }
 
             accessor->moveTo(int (xf) + 1, y);
@@ -1818,7 +1827,7 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
 
             if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
                 lineColor.setOpacity(c2);
-                d->compositeOp->composite(accessor->rawData(), pixelSize, lineColor.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                compositeOnePixel(accessor->rawData(), lineColor);
             }
 
             xf = xf + grad;
@@ -1836,8 +1845,6 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
         selectionAccessor = d->selection->projection()->createRandomConstAccessorNG(start.x(), start.y());
     }
 
-    int pixelSize = d->device->pixelSize();
-    quint8 pixelOpacity = quint8(d->paramInfo.opacity*255.0f);
     const KoColorSpace *cs = d->device->colorSpace();
 
     KoColor c1(d->paintColor);
@@ -1897,7 +1904,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
             if (selectionAccessor) selectionAccessor->moveTo(x0, i);
 
             if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
-                d->compositeOp->composite(accessor->rawData(), pixelSize, c1.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                compositeOnePixel(accessor->rawData(), c1);
             }
         }
         for (int i = y1a; i <= y1b; i++) {
@@ -1906,7 +1913,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
             if (selectionAccessor) selectionAccessor->moveTo(x1, i);
 
             if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
-                d->compositeOp->composite(accessor->rawData(), pixelSize, c1.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                compositeOnePixel(accessor->rawData(), c1);
             }
         }
 
@@ -1917,13 +1924,13 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
             if (selectionAccessor) selectionAccessor->moveTo(i, y0);
 
             if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
-                d->compositeOp->composite(accessor->rawData(), pixelSize, c1.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                compositeOnePixel(accessor->rawData(), c1);
             }
         }
         for (int i = x1a; i <= x1b; i++) {
             accessor->moveTo(i, y1);
             if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
-                d->compositeOp->composite(accessor->rawData(), pixelSize, c1.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                compositeOnePixel(accessor->rawData(), c1);
             }
         }
     }
@@ -1939,7 +1946,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                 qreal alpha = cs->opacityF(accessor->rawData());
                 opacity = .25 * c1.opacityF() + (1 - .25) * alpha;
                 col1.setOpacity(opacity);
-                d->compositeOp->composite(accessor->rawData(), pixelSize, col1.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                compositeOnePixel(accessor->rawData(), col1);
             }
 
             accessor->moveTo(x1b, y1b + 1);
@@ -1949,7 +1956,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                 qreal alpha = cs->opacityF(accessor->rawData());
                 opacity = .25 * c2.opacityF() + (1 - .25) * alpha;
                 col1.setOpacity(opacity);
-                d->compositeOp->composite(accessor->rawData(), pixelSize, col1.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                compositeOnePixel(accessor->rawData(), col1);
             }
 
         } else {
@@ -1961,7 +1968,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                 qreal alpha = cs->opacityF(accessor->rawData());
                 opacity = .25 * c1.opacityF() + (1 - .25) * alpha;
                 col1.setOpacity(opacity);
-                d->compositeOp->composite(accessor->rawData(), pixelSize, col1.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                compositeOnePixel(accessor->rawData(), col1);
             }
 
             accessor->moveTo(x1b + 1, y1b);
@@ -1971,7 +1978,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                 qreal alpha = cs->opacityF(accessor->rawData());
                 opacity = .25 * c2.opacityF() + (1 - .25) * alpha;
                 col1.setOpacity(opacity);
-                d->compositeOp->composite(accessor->rawData(), pixelSize, col1.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                compositeOnePixel(accessor->rawData(), col1);
             }
         }
     }
@@ -2025,7 +2032,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                 qreal alpha = cs->opacityF(accessor->rawData());
                 opacity = b1a * c3.opacityF() + (1 - b1a) * alpha;
                 col1.setOpacity(opacity);
-                d->compositeOp->composite(accessor->rawData(), pixelSize, col1.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                compositeOnePixel(accessor->rawData(), col1);
             }
 
             // color first pixel of top line
@@ -2037,7 +2044,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                     qreal alpha = cs->opacityF(accessor->rawData());
                     opacity = b1b * c3.opacityF() + (1 - b1b) * alpha;
                     col1.setOpacity(opacity);
-                    d->compositeOp->composite(accessor->rawData(), pixelSize, col1.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                    compositeOnePixel(accessor->rawData(), col1);
                 }
             }
 
@@ -2051,7 +2058,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                     qreal alpha = cs->opacityF(accessor->rawData());
                     opacity = b2a * c3.opacityF() + (1 - b2a)  * alpha;
                     col2.setOpacity(opacity);
-                    d->compositeOp->composite(accessor->rawData(), pixelSize, col2.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                    compositeOnePixel(accessor->rawData(), col2);
                 }
 
             }
@@ -2066,7 +2073,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                     qreal alpha = cs->opacityF(accessor->rawData());
                     opacity = b2b * c3.opacityF() + (1 - b2b) * alpha;
                     col2.setOpacity(opacity);
-                    d->compositeOp->composite(accessor->rawData(), pixelSize, col2.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                    compositeOnePixel(accessor->rawData(), col2);
                 }
 
             }
@@ -2080,7 +2087,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                         if (selectionAccessor) selectionAccessor->moveTo(x, i);
 
                         if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
-                            d->compositeOp->composite(accessor->rawData(), pixelSize, c3.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                            compositeOnePixel(accessor->rawData(), c3);
                         }
                     }
                 else
@@ -2090,7 +2097,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                         if (selectionAccessor) selectionAccessor->moveTo(x, i);
 
                         if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
-                            d->compositeOp->composite(accessor->rawData(), pixelSize, c3.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                            compositeOnePixel(accessor->rawData(), c3);
                         }
                     }
 
@@ -2143,7 +2150,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                 qreal alpha = cs->opacityF(accessor->rawData());
                 opacity = b1a * c3.opacityF() + (1 - b1a) * alpha;
                 col1.setOpacity(opacity);
-                d->compositeOp->composite(accessor->rawData(), pixelSize, col1.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                compositeOnePixel(accessor->rawData(), col1);
             }
 
             // color first pixel of right line
@@ -2156,7 +2163,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                     qreal alpha = cs->opacityF(accessor->rawData());
                     opacity = b1b * c3.opacityF() + (1 - b1b)  * alpha;
                     col1.setOpacity(opacity);
-                    d->compositeOp->composite(accessor->rawData(), pixelSize, col1.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                    compositeOnePixel(accessor->rawData(), col1);
                 }
             }
 
@@ -2170,7 +2177,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                     qreal alpha = cs->opacityF(accessor->rawData());
                     opacity = b2a * c3.opacityF() + (1 - b2a) * alpha;
                     col2.setOpacity(opacity);
-                    d->compositeOp->composite(accessor->rawData(), pixelSize, col2.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                    compositeOnePixel(accessor->rawData(), col2);
                 }
 
             }
@@ -2185,7 +2192,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                     qreal alpha = cs->opacityF(accessor->rawData());
                     opacity = b2b * c3.opacityF() + (1 - b2b) * alpha;
                     col2.setOpacity(opacity);
-                    d->compositeOp->composite(accessor->rawData(), pixelSize, col2.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                    compositeOnePixel(accessor->rawData(), col2);
                 }
             }
 
@@ -2198,7 +2205,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                         if (selectionAccessor) selectionAccessor->moveTo(i, y);
 
                         if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
-                            d->compositeOp->composite(accessor->rawData(), pixelSize, c3.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                            compositeOnePixel(accessor->rawData(), c3);
                         }
                     }
                 else
@@ -2208,7 +2215,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
                         if (selectionAccessor) selectionAccessor->moveTo(i, y);
 
                         if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
-                            d->compositeOp->composite(accessor->rawData(), pixelSize, c3.data() , pixelSize, 0,0,1,1, pixelOpacity);
+                            compositeOnePixel(accessor->rawData(), c3);
                         }
                     }
             }
@@ -2267,7 +2274,7 @@ void KisPainter::setPaintColor(const KoColor& color)
 {
     d->paintColor = color;
     if (d->device) {
-        d->paintColor.convertTo(d->device->colorSpace());
+        d->paintColor.convertTo(d->device->compositionSourceColorSpace());
     }
 }
 
@@ -2280,23 +2287,13 @@ void KisPainter::setBackgroundColor(const KoColor& color)
 {
     d->backgroundColor = color;
     if (d->device) {
-        d->backgroundColor.convertTo(d->device->colorSpace());
+        d->backgroundColor.convertTo(d->device->compositionSourceColorSpace());
     }
 }
 
 const KoColor &KisPainter::backgroundColor() const
 {
     return d->backgroundColor;
-}
-
-void KisPainter::setFillColor(const KoColor& color)
-{
-    d->fillColor = color;
-}
-
-const KoColor &KisPainter::fillColor() const
-{
-    return d->fillColor;
 }
 
 void KisPainter::setGenerator(const KisFilterConfiguration * generator)
@@ -2578,7 +2575,7 @@ void KisPainter::renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab, KisFixedP
 
 void KisPainter::renderMirrorMask(QRect rc, KisPaintDeviceSP dab){
     if (d->mirrorHorizontaly || d->mirrorVerticaly){
-        KisFixedPaintDeviceSP mirrorDab = new KisFixedPaintDevice(device()->colorSpace());
+        KisFixedPaintDeviceSP mirrorDab = new KisFixedPaintDevice(dab->colorSpace());
         QRect dabRc( QPoint(0,0), QSize(rc.width(),rc.height()) );
         mirrorDab->setRect(dabRc);
         mirrorDab->initialize();
@@ -2592,7 +2589,7 @@ void KisPainter::renderMirrorMask(QRect rc, KisPaintDeviceSP dab){
 void KisPainter::renderMirrorMask(QRect rc, KisPaintDeviceSP dab, int sx, int sy, KisFixedPaintDeviceSP mask)
 {
     if (d->mirrorHorizontaly || d->mirrorVerticaly){
-        KisFixedPaintDeviceSP mirrorDab = new KisFixedPaintDevice(device()->colorSpace());
+        KisFixedPaintDeviceSP mirrorDab = new KisFixedPaintDevice(dab->colorSpace());
         QRect dabRc( QPoint(0,0), QSize(rc.width(),rc.height()) );
         mirrorDab->setRect(dabRc);
         mirrorDab->initialize();

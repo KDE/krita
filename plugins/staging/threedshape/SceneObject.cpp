@@ -28,7 +28,7 @@
 #include <QBuffer>
 
 // KDE
-#include <KDebug>
+#include <kdebug.h>
 
 // Calligra
 #include <KoViewConverter.h>

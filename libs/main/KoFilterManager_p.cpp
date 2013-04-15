@@ -26,9 +26,9 @@ Boston, MA 02110-1301, USA.
 #include <QListWidget>
 #include <QListWidgetItem>
 
-#include <KLocale>
-#include <KSqueezedTextLabel>
-#include <KMimeType>
+#include <klocale.h>
+#include <ksqueezedtextlabel.h>
+#include <kmimetype.h>
 
 #include <unistd.h>
 

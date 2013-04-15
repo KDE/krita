@@ -53,9 +53,10 @@ KisColorSourceOptionWidget::KisColorSourceOptionWidget() : KisPaintOpOption(i18n
         verticalLayout->addWidget(radioButton);
     }
     QVBoxLayout* verticalLayout_2 = new QVBoxLayout(configurationWidget);
+    verticalLayout_2->setMargin(0);
     verticalLayout_2->addWidget(groupBox);
-    verticalLayout_2->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
-  
+    verticalLayout_2->addStretch();
+
     setConfigurationPage(configurationWidget);
   
 }

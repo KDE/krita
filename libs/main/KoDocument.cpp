@@ -22,7 +22,7 @@
  */
 
 #include "KoMainWindow.h" // XXX: remove
-#include <KMessageBox> // XXX: remove
+#include <kmessagebox.h> // XXX: remove
 #include <KNotification> // XXX: remove
 
 #include "KoDocument.h"

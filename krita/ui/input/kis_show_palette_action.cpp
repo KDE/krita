@@ -18,7 +18,7 @@
 
 #include "kis_show_palette_action.h"
 
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 
 #include <ko_favorite_resource_manager.h>
 #include <kis_canvas2.h>

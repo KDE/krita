@@ -25,7 +25,7 @@
 
 #include <kparts/plugin.h>
 
-#include <KPluginFactory>
+#include <kpluginfactory.h>
 
 #include <krita_export.h>
 

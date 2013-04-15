@@ -18,7 +18,7 @@
  */
 #include "KoAspectButton.h"
 
-#include <KIcon>
+#include <kicon.h>
 
 #include <QPixmap>
 #include <QPainter>

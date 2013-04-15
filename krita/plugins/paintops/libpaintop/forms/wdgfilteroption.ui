@@ -11,6 +11,9 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
    <item row="0" column="0">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
@@ -37,7 +40,7 @@
      <item>
       <widget class="QCheckBox" name="checkBoxIgnoreAlpha">
        <property name="text">
-        <string>ignore alpha</string>
+        <string>Ignore Alpha</string>
        </property>
       </widget>
      </item>

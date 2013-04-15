@@ -20,8 +20,8 @@
 #include "AutocorrectPlugin.h"
 #include "AutocorrectFactory.h"
 
-#include <KPluginFactory>
-#include <KPluginLoader>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 
 #include <KoTextEditingRegistry.h>
 

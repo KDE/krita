@@ -23,7 +23,7 @@
 //#include <QRect> // also provides QSize
 //#include <QString>
 
-#include <KDebug>
+#include <kdebug.h>
 
 
 namespace Libemf

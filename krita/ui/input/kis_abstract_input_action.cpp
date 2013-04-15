@@ -20,7 +20,7 @@
 
 #include <QPointF>
 #include <QMouseEvent>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 
 class KisAbstractInputAction::Private
 {

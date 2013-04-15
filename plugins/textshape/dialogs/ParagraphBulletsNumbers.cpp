@@ -26,11 +26,11 @@
 #include <KoImageData.h>
 #include <KoImageCollection.h>
 
-#include <KDebug>
-#include <KCharSelect>
-#include <KDialog>
-#include <KUrl>
-#include <KFileDialog>
+#include <kdebug.h>
+#include <kcharselect.h>
+#include <kdialog.h>
+#include <kurl.h>
+#include <kfiledialog.h>
 #include <KIO/Job>
 
 ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)

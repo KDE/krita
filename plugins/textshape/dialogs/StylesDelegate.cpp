@@ -37,7 +37,7 @@
 #include <QStyleOptionButton>
 #include <QStyleOptionViewItemV4>
 
-#include <KDebug>
+#include <kdebug.h>
 
 
 StylesDelegate::StylesDelegate()

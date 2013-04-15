@@ -30,7 +30,7 @@
 
 #include "renderobjects.h"
 
-#include <KMimeType>
+#include <kmimetype.h>
 #include <kdebug.h>
 
 #include <QPainter>

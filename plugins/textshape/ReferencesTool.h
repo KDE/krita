@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2011 C. Boemann <cbo@boemann.dk>
+ * Copyright (C) 2013 Aman Madaan <madaan.amanmadaan@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,6 +22,7 @@
 #define REFERENCESTOOL_H
 
 #include "TextTool.h"
+#include <signal.h>
 
 class KoCanvasBase;
 class TableOfContentsConfigure;
@@ -30,7 +32,8 @@ class SimpleCitationBibliographyWidget;
 class KoInlineNote;
 class KoTextEditor;
 class QPainter;
-
+class SimpleLinksWidget;
+class LabeledWidget;
 /// This tool is the ui for inserting Table of Contents, Citations/bibliography, footnotes, endnotes, index, table of illustrations etc
 
 class ReferencesTool : public TextTool
@@ -83,34 +86,48 @@ private slots:
     void updateButtons();
 
     void customToCGenerated();
-
+    /// insert a Link
+    void insertLink();
+    ///insert a bookmark
+    void insertBookmark(QString bookmarkName);
+    /// validate a bookmark
+    bool validateBookmark(QString bookmarkName);
 private:
     TableOfContentsConfigure *m_configure;
     SimpleTableOfContentsWidget *m_stocw;
-        SimpleFootEndNotesWidget *m_sfenw;
-        KoInlineNote *m_note;
+    SimpleFootEndNotesWidget *m_sfenw;
+    KoInlineNote *m_note;
     SimpleCitationBibliographyWidget *m_scbw;
+    SimpleLinksWidget *m_slw;
+    LabeledWidget *m_bmark;
+    KoCanvasBase *m_canvas;
 };
 
 class KAction;
 class QLineEdit;
-
-class LabeledNoteWidget : public QWidget
+class QLabel;
+class LabeledWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit LabeledNoteWidget(KAction *action);
-    KAction *m_action;
-    QLineEdit *m_lineEdit;
-
+    enum LabelPosition {INLINE, ABOVE};
+    LabeledWidget(KAction *action, const QString label, LabelPosition pos, bool warningLabelRequired);
+    void setWarningText(int pos, const QString &warning);
+    void clearLineEdit();
 signals:
     void triggered(QString label);
+    void lineEditChanged(QString);
 
 private slots:
     void returnPressed();
 
 protected:
     virtual void enterEvent(QEvent *event);
+
+private :
+    QLineEdit *m_lineEdit;
+    QLabel *m_warningLabel[2];
+    KAction *m_action;
 };
 
 #endif // REFERENCESTOOL_H

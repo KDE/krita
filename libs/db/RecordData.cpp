@@ -24,7 +24,7 @@
 
 #include "RecordData.h"
 #include "global.h"
-#include <KDebug>
+#include <kdebug.h>
 
 using namespace KexiDB;
 

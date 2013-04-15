@@ -22,10 +22,10 @@
 #include <QFileInfo>
 #include <QTextStream>
 
-#include <KCmdLineArgs>
-#include <KDebug>
-#include <KLocale>
-#include <KComponentData>
+#include <kcmdlineargs.h>
+#include <kdebug.h>
+#include <klocale.h>
+#include <kcomponentdata.h>
 
 #include "connectiondata.h"
 #include "drivermanager.h"

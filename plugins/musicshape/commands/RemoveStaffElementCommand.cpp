@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "RemoveStaffElementCommand.h"
-#include <KLocale>
+#include <klocale.h>
 #include "../core/StaffElement.h"
 #include "../core/Clef.h"
 #include "../core/Bar.h"

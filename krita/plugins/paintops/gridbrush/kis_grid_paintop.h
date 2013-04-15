@@ -68,7 +68,6 @@ private:
     qreal              m_xSpacing;
     qreal              m_ySpacing;
     qreal              m_spacing;
-    int                 m_pixelSize;
     KisGridProperties   m_properties;
     KisColorProperties  m_colorProperties;
 

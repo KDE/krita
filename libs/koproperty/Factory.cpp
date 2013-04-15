@@ -45,8 +45,8 @@
 #include "timeedit.h"
 #include "urledit.h"
 */
-#include <KDebug>
-#include <KIconLoader>
+#include <kdebug.h>
+#include <kiconloader.h>
 
 namespace KoProperty
 {

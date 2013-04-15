@@ -197,9 +197,7 @@ signals:
 
 private slots:
 
-
     void slotPreferences();
-    void slotEditPalette();
     void slotBlacklistCleanup();
     void slotImageSizeChanged();
     void slotNodeChanged();

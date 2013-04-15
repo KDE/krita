@@ -25,7 +25,7 @@
 #include "KoXmlNS.h"
 #include "KoUnit.h"
 // KDE
-#include <KDebug>
+#include <kdebug.h>
 
 static const int defaultColumnCount = 1;
 static const KoColumns::SeparatorStyle defaultSeparatorStyle = KoColumns::None;

@@ -36,7 +36,7 @@
 #include <QThreadPool>
 
 // KDE
-#include <KDebug>
+#include <kdebug.h>
 
 // Calligra
 #include "KoUnit.h"

@@ -27,13 +27,13 @@
 
 #include <kundo2command.h>
 
-#include <KLocale>
+#include <klocale.h>
 
 #include <QString>
 #include <QTextDocument>
 #include <QWeakPointer>
 
-#include <KDebug>
+#include <kdebug.h>
 
 /** Calligra's undo/redo framework.
     The @class KoTextEditor undo/redo framework sits between the @class QTextDocument and the apllication's undo/redo stack.

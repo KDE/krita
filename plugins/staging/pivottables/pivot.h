@@ -23,7 +23,7 @@
 #ifndef PIVOT_H
 #define PIVOT_H
 
-#include <KDialog>
+#include <kdialog.h>
 
 namespace Calligra{
     namespace Sheets{

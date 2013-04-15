@@ -21,7 +21,7 @@
 #ifndef PIVOTOPTIONS_H
 #define PIVOTOPTIONS_H
 
-#include <KDialog>
+#include <kdialog.h>
 
 #include<QListWidgetItem>
 #include<QObject>

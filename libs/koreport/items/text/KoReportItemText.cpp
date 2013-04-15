@@ -19,8 +19,8 @@
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
 #include <KoGlobal.h>
-#include <KLocale>
-#include <KDebug>
+#include <klocale.h>
+#include <kdebug.h>
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
 #include <QPrinter>

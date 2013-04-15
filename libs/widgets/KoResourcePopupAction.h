@@ -21,7 +21,7 @@
 #ifndef KORESOURCEPOPUPACTION_H
 #define KORESOURCEPOPUPACTION_H
 
-#include <KAction>
+#include <kaction.h>
 
 class KoShapeBackground;
 class KoAbstractResourceServerAdapter;

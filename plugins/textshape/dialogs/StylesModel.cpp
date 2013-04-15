@@ -30,9 +30,9 @@
 #include <QSharedPointer>
 #include <QSignalMapper>
 
-#include <KStringHandler>
-#include <KLocale>
-#include <KDebug>
+#include <kstringhandler.h>
+#include <klocale.h>
+#include <kdebug.h>
 
 StylesModel::StylesModel(KoStyleManager *manager, AbstractStylesModel::Type modelType, QObject *parent)
     : AbstractStylesModel(parent),

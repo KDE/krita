@@ -22,7 +22,7 @@
 
 #include <ui_TableDialog.h>
 
-#include <KDialog>
+#include <kdialog.h>
 
 
 class TableDialog : public KDialog

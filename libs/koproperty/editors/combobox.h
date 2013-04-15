@@ -24,7 +24,7 @@
 
 #include "koproperty/Factory.h"
 
-#include <KComboBox>
+#include <kcombobox.h>
 
 namespace KoProperty
 {

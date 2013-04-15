@@ -21,8 +21,8 @@
 
 #include "KoUnitDoubleSpinBox.h"
 #include <kdebug.h>
-#include <KGlobal>
-#include <KLocale>
+#include <kglobal.h>
+#include <klocale.h>
 
 // #define DEBUG_VALIDATOR
 // #define DEBUG_VALUEFROMTEXT

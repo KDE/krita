@@ -24,7 +24,7 @@
 #include "KoPathShape.h"
 #include "KoShapeBasedDocumentBase.h"
 
-#include <KLocale>
+#include <klocale.h>
 
 class KoShapeClipCommand::Private
 {

@@ -23,7 +23,7 @@
 
 #include <QVariant>
 #include <kundo2stack.h>
-#include <KDebug>
+#include <kdebug.h>
 
 #include "KoShape.h"
 #include "KoShapeStroke.h"

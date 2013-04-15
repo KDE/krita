@@ -44,8 +44,8 @@
 #include <QMultiMap>
 #include <QPainter>
 
-#include <KDebug>
-#include <KGlobal>
+#include <kdebug.h>
+#include <kglobal.h>
 
 class KoShapeRegistry::Private
 {

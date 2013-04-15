@@ -21,7 +21,7 @@
 #include "TestStyles.h"
 
 #include <styles/KoParagraphStyle.h>
-#include <KDebug>
+#include <kdebug.h>
 #include <QTextDocument>
 #include <QTextBlock>
 #include <QTextBlockFormat>

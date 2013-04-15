@@ -1,5 +1,7 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ * layergroupswitcher.h -- Part of Krita
+ *
+ * Copyright (c) 2013 Boudewijn Rempt (boud@valdyas.org)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,19 +17,24 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef LAYERGROUP_SWITCHER_H
+#define LAYERGROUP_SWITCHER_H
 
-#ifndef KIS_PERSPECTIVE_MATH_TEST_H
-#define KIS_PERSPECTIVE_MATH_TEST_H
+#include <QVariant>
 
-#include <QtTest>
+#include <kis_view_plugin.h>
 
-class KisPerspectiveMathTest : public QObject
+class LayerGroupSwitcher : public KisViewPlugin
 {
     Q_OBJECT
+public:
+    LayerGroupSwitcher(QObject *parent, const QVariantList &);
+    virtual ~LayerGroupSwitcher();
+
 private slots:
 
-    void testComputeMatrixTransfo();
-
+    void moveIntoNextGroup();
+    void moveIntoPreviousGroup();
 };
 
-#endif
+#endif // LAYERGROUP_SWITCHER_H

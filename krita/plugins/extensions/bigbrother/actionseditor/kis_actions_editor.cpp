@@ -31,7 +31,7 @@
 
 #include <KoIcon.h>
 
-#include <KMessageBox>
+#include <kmessagebox.h>
 
 #include <QMenu>
 #include <QSignalMapper>

@@ -24,7 +24,7 @@
 #include <VideoCollection.h>
 #include <SelectVideoWidget.h>
 
-#include <KDebug>
+#include <kdebug.h>
 #include <QGridLayout>
 
 VideoShapeConfigWidget::VideoShapeConfigWidget()

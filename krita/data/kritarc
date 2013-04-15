@@ -1,8 +1,7 @@
 [krita]
 WantExportConfirmation=false
 cursorStyleDef=3
-
-favoriteCompositeOps=normal,erase,multiply,burn,dodge,screen,overlay,hard_light,soft_light,color_hsi
+favoriteCompositeOps=normal,erase,multiply,burn,darken,add,dodge,screen,overlay,soft_light_svg,luminize,lighten,saturation,color
 
 [TemplateChooserDialog]
 ShowCustomDocumentWidgetByDefault=true
@@ -165,7 +164,8 @@ ToolPluginsDisabled=paragraphtool,kopabackgroundtool,calligrastagetoolanimation
 ToolsBlacklist=CreatePathTool,KoPencilTool,ConnectionTool,KarbonFilterEffectsTool,PanTool,KoZoomToolId
 
 [favoriteList]
-favoriteBrushes=paintbrush,deformbrush,hairybrush,hatchingbrush,sketchbrush,smudge,spraybrush,
+favoritePresets=Basic_Airbrush,Basic_ink_10,Hairy_clean,Hatch_diag_S,Pencil_2B,Pencil_HB,Sketch_ink_small,Sketch_wires,
+
 
 [advancedColorSelector]
 allowHorizontalLayout=true

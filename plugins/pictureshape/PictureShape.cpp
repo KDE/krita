@@ -46,8 +46,8 @@
 #include <SvgUtil.h>
 #include <KoPathShape.h>
 
-#include <KDebug>
-#include <KJob>
+#include <kdebug.h>
+#include <kjob.h>
 #include <KIO/Job>
 
 #include <QPainter>

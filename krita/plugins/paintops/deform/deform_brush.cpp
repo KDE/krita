@@ -27,8 +27,8 @@
 #include <QRect>
 
 #include <kis_types.h>
-#include <kis_random_sub_accessor.h>
 #include <kis_iterator_ng.h>
+#include <kis_cross_device_color_picker.h>
 
 #include <cmath>
 #include <ctime>
@@ -49,64 +49,6 @@ DeformBrush::~DeformBrush()
 {
     delete m_deformAction;
 }
-
-/// this method uses KisSubPixelAccessor
-inline void DeformBrush::movePixel(qreal newX, qreal newY, quint8 *dst)
-{
-    if (!m_properties->useBilinear) {
-        newX = qRound(newX);
-        newY = qRound(newY);
-    }
-    m_srcAcc->moveTo(newX, newY);
-
-    if (m_properties->useOldData) {
-        m_srcAcc->sampledOldRawData(dst);
-    } else {
-        m_srcAcc->sampledRawData(dst);
-    }
-}
-
-void DeformBrush::oldDeform(KisPaintDeviceSP dab,KisPaintDeviceSP layer,QPointF pos)
-{
-    m_srcAcc = layer->createRandomSubAccessor();
-    m_pixelSize = layer->pixelSize();
-
-    if (!setupAction(DeformModes(m_properties->action-1),pos)){ return; }
-
-    int curXi = static_cast<int>(pos.x() + 0.5);
-    int curYi = static_cast<int>(pos.y() + 0.5);
-
-    qreal maskX, maskY;
-    qreal distance;
-
-    int radius = m_sizeProperties->diameter * 0.5;
-    int left = curXi - radius;
-    int top = curYi - radius;
-    int w = radius * 2 + 1;
-    int h = w;
-    qreal m_majorAxis = 2.0/radius;
-    qreal m_minorAxis = 2.0/radius;
-
-    KisRectIteratorSP m_srcIt = dab->createRectIteratorNG(left, top, w , h);
-
-    do {
-        maskX = m_srcIt->x() - curXi;
-        maskY = m_srcIt->y() - curYi;
-
-        distance = norme(maskX * m_majorAxis, maskY * m_minorAxis);
-        if (distance > 1.0){ continue; }
-
-        m_deformAction->transform( &maskX, &maskY, distance);
-
-        maskX += curXi;
-        maskY += curYi;
-
-        movePixel(maskX, maskY, m_srcIt->rawData());
-    } while (m_srcIt->nextPixel());
-
-    m_counter++;
-}
-
 
 void DeformBrush::initDeformAction()
 {
@@ -225,9 +167,7 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
                                              QPointF pos, qreal subPixelX, qreal subPixelY, int dabX, int dabY)
 {
     KisFixedPaintDeviceSP mask = new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
-    m_srcAcc = layer->createRandomSubAccessor();
-
-    m_pixelSize = layer->colorSpace()->pixelSize();
+    KisCrossDeviceColorPicker colorPicker(layer, dab);
 
     qreal fWidth = maskWidth(scale);
     qreal fHeight = maskHeight(scale);
@@ -245,8 +185,6 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
 
     m_centerX = dstWidth  * 0.5  + subPixelX;
     m_centerY = dstHeight * 0.5  + subPixelY;
-
-    quint8* dabPointer = dab->data();
 
     // major axis
     m_majorAxis = 2.0/fWidth;
@@ -277,7 +215,9 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
     mask->initialize();
     quint8* maskPointer = mask->data();
     qint8 maskPixelSize = mask->pixelSize();
-    KoColor pixel(dab->colorSpace());
+
+    quint8* dabPointer = dab->data();
+    int dabPixelSize = dab->colorSpace()->pixelSize();
 
     for (int y = 0; y <  dstHeight; y++){
         for (int x = 0; x < dstWidth; x++){
@@ -290,9 +230,9 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
             distance = norme(rmaskX * m_majorAxis, rmaskY * m_minorAxis);
             if (distance > 1.0){
                 // leave there OPACITY TRANSPARENT pixel (default pixel)
-                m_srcAcc->moveTo(x + dabX, y + dabY);
-                m_srcAcc->sampledOldRawData(dabPointer);
-                dabPointer += m_pixelSize;
+
+                colorPicker.pickOldColor(x + dabX, y + dabY, dabPointer);
+                dabPointer += dabPixelSize;
 
                 *maskPointer = OPACITY_TRANSPARENT_U8;
                 maskPointer += maskPixelSize;
@@ -301,7 +241,7 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
 
             if (m_sizeProperties->density != 1.0){
                 if (m_sizeProperties->density < drand48()){
-                    dabPointer += m_pixelSize;
+                    dabPointer += dabPixelSize;
                     *maskPointer = OPACITY_TRANSPARENT_U8;
                     maskPointer += maskPixelSize;
                     continue;
@@ -316,8 +256,18 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
             maskX += pos.x();
             maskY += pos.y();
 
-            movePixel(maskX, maskY, dabPointer);
-            dabPointer += m_pixelSize;
+            if (!m_properties->useBilinear) {
+                maskX = qRound(maskX);
+                maskY = qRound(maskY);
+            }
+
+            if (m_properties->useOldData) {
+                colorPicker.pickOldColor(maskX, maskY, dabPointer);
+            } else {
+                colorPicker.pickColor(maskX, maskY, dabPointer);
+            }
+
+            dabPointer += dabPixelSize;
 
             *maskPointer = OPACITY_OPAQUE_U8;
             maskPointer += maskPixelSize;

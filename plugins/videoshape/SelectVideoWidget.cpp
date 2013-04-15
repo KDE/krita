@@ -20,9 +20,9 @@
 
 #include "SelectVideoWidget.h"
 
-#include <KLocale>
+#include <klocale.h>
 
-#include <KFileWidget>
+#include <kfilewidget.h>
 #include <Phonon/BackendCapabilities>
 
 #include <QVBoxLayout>

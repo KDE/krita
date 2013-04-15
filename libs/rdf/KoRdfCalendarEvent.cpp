@@ -26,7 +26,7 @@
 #include <QTemporaryFile>
 #include <kdebug.h>
 #include <kfiledialog.h>
-#include <KMessageBox>
+#include <kmessagebox.h>
 #include "ksystemtimezone.h"
 
 #ifdef KDEPIMLIBS_FOUND

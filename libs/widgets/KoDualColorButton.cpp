@@ -32,6 +32,7 @@
 #include <QDrag>
 #include <QDragEnterEvent>
 #include <QPainter>
+#include <qdrawutil.h>
 
 class KoDualColorButton::Private
 {

@@ -89,7 +89,6 @@ private:
     bool doDrop(QList<KoPAPageBase *> pages, KoPAPageBase *pageAfter, Qt::DropAction action);
 
     KoPADocument *m_document; ///< the undelying data structure
-    KoShape *m_shape;
     bool m_master;
     mutable QList<KoShape*> m_childs;
     mutable KoShapeContainer *m_lastContainer;

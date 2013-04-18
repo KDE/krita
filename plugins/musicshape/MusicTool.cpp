@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include <QPainter>
-#include <ktabwidget.h>
+#include <QTabWidget>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -93,7 +93,7 @@ void MusicTool::addCommand(KUndo2Command* command)
 
 QWidget * MusicTool::createOptionWidget()
 {
-    KTabWidget *widget = new KTabWidget();
+    QTabWidget *widget = new QTabWidget();
 
     PartsWidget *pw = new PartsWidget(this, widget);
     widget->addTab(pw, i18n("Parts"));

@@ -1,4 +1,4 @@
-# Kexi and Sheets for Desktop environment
+#defines the set of products commonly wanted for classic Desktop environment
 
 set( CALLIGRA_SHOULD_BUILD_PRODUCTS
 # apps

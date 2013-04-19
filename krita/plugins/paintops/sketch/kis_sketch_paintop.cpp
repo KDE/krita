@@ -117,6 +117,7 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
     if (!m_dab) {
         m_dab = source()->createCompositionSourceDevice();
         m_painter = new KisPainter(m_dab);
+        m_painter->setPaintColor(painter()->paintColor());
     } else {
         m_dab->clear();
     }
@@ -134,7 +135,7 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
     KisVector2D endVec = toKisVector2D(pi2.pos());
     KisVector2D startVec = toKisVector2D(pi1.pos());
     KisVector2D dragVec = endVec - startVec;
-    if ((scale * m_brush->width()) <= 0.01 || (scale * m_brush->height()) <= 0.01) return KisDistanceInformation(0, dragVec.norm());;
+    if ((scale * m_brush->width()) <= 0.01 || (scale * m_brush->height()) <= 0.01) return KisDistanceInformation(0, dragVec.norm());
 
     // shaded: does not draw this line, chrome does, fur does
     if (m_sketchProperties.makeConnection){
@@ -182,7 +183,6 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
     QPoint  positionInMask;
     QPointF diff;
 
-    m_painter->setPaintColor( painter()->paintColor() );
     int size = m_points.size();
     // MAIN LOOP
     for (int i = 0; i < size; i++) {

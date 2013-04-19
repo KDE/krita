@@ -299,7 +299,7 @@ bool KisGbrBrush::initFromPaintDev(KisPaintDeviceSP image, int x, int y, int w, 
 {
     // Forcefully convert to RGBA8
     // XXX profile and exposure?
-    setImage(image->convertToQImage(0, x, y, w, h, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation));
+    setImage(image->convertToQImage(0, x, y, w, h, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags));
     setName(image->objectName());
 
     setHasColor(true);

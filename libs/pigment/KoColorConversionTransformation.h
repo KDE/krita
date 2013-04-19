@@ -62,6 +62,11 @@ public:
     };
     Q_DECLARE_FLAGS(ConversionFlags, ConversionFlag)
 
+    static Intent InternalRenderingIntent;
+    static ConversionFlags InternalConversionFlags;
+
+    static Intent AdjustmentRenderingIntent;
+    static ConversionFlags AdjustmentConversionFlags;
 
 public:
     KoColorConversionTransformation(const KoColorSpace* srcCs,

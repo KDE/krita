@@ -1093,7 +1093,9 @@ QImage KisImage::convertToQImage(qint32 x,
 {
     KisPaintDeviceSP dev = m_d->rootLayer->projection();
     if (!dev) return QImage();
-    QImage image = dev->convertToQImage(const_cast<KoColorProfile*>(profile), x, y, w, h, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+    QImage image = dev->convertToQImage(const_cast<KoColorProfile*>(profile), x, y, w, h,
+                                        KoColorConversionTransformation::InternalRenderingIntent,
+                                        KoColorConversionTransformation::InternalConversionFlags);
 
     if (m_d->backgroundPattern) {
         m_d->backgroundPattern->paintBackground(image, QRect(x, y, w, h));
@@ -1174,7 +1176,9 @@ QImage KisImage::convertToQImage(const QRect& scaledRect, const QSize& scaledIma
     }
     delete [] imageRow;
 
-    QImage image = colorSpace()->convertToQImage(scaledImageData, scaledRect.width(), scaledRect.height(), const_cast<KoColorProfile*>(profile), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+    QImage image = colorSpace()->convertToQImage(scaledImageData, scaledRect.width(), scaledRect.height(), const_cast<KoColorProfile*>(profile),
+                                                 KoColorConversionTransformation::InternalRenderingIntent,
+                                                 KoColorConversionTransformation::InternalConversionFlags);
 
     if (m_d->backgroundPattern) {
         m_d->backgroundPattern->paintBackground(image, scaledRect, scaledImageSize, QSize(imageWidth, imageHeight));

@@ -60,10 +60,15 @@ public:
     static inline void initDefaultCurves(QList<KisCubicCurve> &curves, int nCh);
     bool isCompatible(const KisPaintDeviceSP) const;
 
-public:
+    const QVector<QVector<quint16> >& transfers() const;
+    const QList<KisCubicCurve>& curves() const;
+private:
     QList<KisCubicCurve> m_curves;
-    const KoColorSpace* oldCs;
 
+private:
+    void updateTransfers();
+private:
+    QVector<QVector<quint16> > m_transfers;
 };
 
 

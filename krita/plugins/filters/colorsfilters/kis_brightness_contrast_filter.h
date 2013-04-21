@@ -61,11 +61,17 @@ public:
     KisBrightnessContrastFilterConfiguration();
     virtual ~KisBrightnessContrastFilterConfiguration();
 
-public:
-    KisCubicCurve m_curve;
-
-protected:
     void setCurve(const KisCubicCurve &curve);
+
+    const QVector<quint16>& transfer() const;
+    const KisCubicCurve& curve() const;
+
+private:
+    void updateTransfer();
+
+private:
+    KisCubicCurve m_curve;
+    QVector<quint16> m_transfer;
 };
 
 /**

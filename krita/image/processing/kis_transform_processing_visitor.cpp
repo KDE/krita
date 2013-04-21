@@ -107,7 +107,7 @@ void KisTransformProcessingVisitor::visit(KisGeneratorLayer *layer, KisUndoAdapt
 {
     ProgressHelper helper(layer);
     transformSelection(layer->internalSelection(), undoAdapter, ProgressHelper(layer));
-    layer->resetCache();
+    layer->update();
     transformClones(layer, undoAdapter);
 }
 

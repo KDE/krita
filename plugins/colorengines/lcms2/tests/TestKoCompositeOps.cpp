@@ -1189,7 +1189,7 @@ void TestKoCompositeOps::testCompositeCopy()
     }
 
     // full white image
-    //cs->convertToQImage(layer, w, h, 0,KoColorConversionTransformation::IntentPerceptual).save("0dst.png");
+    //cs->convertToQImage(layer, w, h, 0,KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags).save("0dst.png");
 
     // src
     quint8 * dab = new quint8[pixelCount * pixelSize];
@@ -1200,7 +1200,7 @@ void TestKoCompositeOps::testCompositeCopy()
     }
 
     // full black image
-    //cs->convertToQImage(dab, w, h, 0,KoColorConversionTransformation::IntentPerceptual).save("1src.png");
+    //cs->convertToQImage(dab, w, h, 0,KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags).save("1src.png");
 
 
     // selection
@@ -1219,7 +1219,7 @@ void TestKoCompositeOps::testCompositeCopy()
     }
 
     // white rectangle at 128,128
-    //KoColorSpaceRegistry::instance()->alpha8()->convertToQImage(selection, w, h, 0, KoColorConversionTransformation::IntentPerceptual).save("1mask.png");
+    //KoColorSpaceRegistry::instance()->alpha8()->convertToQImage(selection, w, h, 0, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags).save("1mask.png");
 
     copy->composite(layer,w * pixelSize,
                     dab, w * pixelSize,
@@ -1230,7 +1230,7 @@ void TestKoCompositeOps::testCompositeCopy()
 
 
     // full black image
-    //cs->convertToQImage(layer, w, h, 0,KoColorConversionTransformation::IntentPerceptual).save("2result.png");
+    //cs->convertToQImage(layer, w, h, 0,KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags).save("2result.png");
 
     copy->composite(layer,w * pixelSize,
                     opaque.data(), 0,
@@ -1241,7 +1241,7 @@ void TestKoCompositeOps::testCompositeCopy()
                     );
 
     // full opaque image
-    //cs->convertToQImage(layer, w, h, 0,KoColorConversionTransformation::IntentPerceptual).save("3result.png");
+    //cs->convertToQImage(layer, w, h, 0,KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags).save("3result.png");
 
     copy->composite(layer,w * pixelSize,
                     dab, w * pixelSize,
@@ -1252,7 +1252,7 @@ void TestKoCompositeOps::testCompositeCopy()
                     );
 
     // black rectangle on opaque background
-    QImage result = cs->convertToQImage(layer, w, h, 0,KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+    QImage result = cs->convertToQImage(layer, w, h, 0, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
     QImage expectedResult(QString(FILES_DATA_DIR) + QDir::separator() + "CopyWithSelectionExpectedResult.png");
 
     bool testOk = (result == expectedResult);
@@ -1271,7 +1271,7 @@ void TestKoCompositeOps::testCompositeCopy()
                     QBitArray());
 
 
-    result = cs->convertToQImage(layer, w, h, 0,KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+    result = cs->convertToQImage(layer, w, h, 0, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
     expectedResult = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "CopySingleWithSelectionExpectedResult.png");
 
     testOk = (result == expectedResult);

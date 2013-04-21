@@ -164,7 +164,7 @@ public slots:
 
     void setDisplayFilter(KisDisplayFilter *displayFilter);
 
-    void startResizingImage(qint32 w, qint32 h);
+    void startResizingImage();
     void finishResizingImage(qint32 w, qint32 h);
 
     /// canvas rotation in degrees

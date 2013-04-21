@@ -177,7 +177,7 @@ void KoColorSpace::addCompositeOp(const KoCompositeOp * op)
 const KoColorConversionTransformation* KoColorSpace::toLabA16Converter() const
 {
     if (!d->transfoToLABA16) {
-        d->transfoToLABA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(this, KoColorSpaceRegistry::instance()->lab16(""), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation) ;
+        d->transfoToLABA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(this, KoColorSpaceRegistry::instance()->lab16(""), KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags) ;
     }
     return d->transfoToLABA16;
 }
@@ -185,21 +185,21 @@ const KoColorConversionTransformation* KoColorSpace::toLabA16Converter() const
 const KoColorConversionTransformation* KoColorSpace::fromLabA16Converter() const
 {
     if (!d->transfoFromLABA16) {
-        d->transfoFromLABA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(KoColorSpaceRegistry::instance()->lab16(""), this, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation) ;
+        d->transfoFromLABA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(KoColorSpaceRegistry::instance()->lab16(""), this, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags) ;
     }
     return d->transfoFromLABA16;
 }
 const KoColorConversionTransformation* KoColorSpace::toRgbA16Converter() const
 {
     if (!d->transfoToRGBA16) {
-        d->transfoToRGBA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(this, KoColorSpaceRegistry::instance()->rgb16(""), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation) ;
+        d->transfoToRGBA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(this, KoColorSpaceRegistry::instance()->rgb16(""), KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags) ;
     }
     return d->transfoToRGBA16;
 }
 const KoColorConversionTransformation* KoColorSpace::fromRgbA16Converter() const
 {
     if (!d->transfoFromRGBA16) {
-        d->transfoFromRGBA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(KoColorSpaceRegistry::instance()->rgb16("") , this, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation) ;
+        d->transfoFromRGBA16 = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorConverter(KoColorSpaceRegistry::instance()->rgb16("") , this, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags) ;
     }
     return d->transfoFromRGBA16;
 }

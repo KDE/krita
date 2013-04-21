@@ -43,6 +43,9 @@ private slots:
     void testSequentialWheelZoomAndPanRotateFullscreen();
     void testSequentialWheelZoomAndPanMirror();
 
+    void testImageRescaled_0_5();
+    void testImageCropped();
+
     void testRotation_VastScrolling_1_0();
     void testRotation_VastScrolling_0_5();
 

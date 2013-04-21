@@ -34,7 +34,9 @@ class KoSimpleColorConversionTransformation : public KoColorConversionTransforma
 {
 public:
     KoSimpleColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs)
-            : KoColorConversionTransformation(srcCs, dstCs, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation) {
+        : KoColorConversionTransformation(srcCs, dstCs,
+                                          KoColorConversionTransformation::InternalRenderingIntent,
+                                          KoColorConversionTransformation::InternalConversionFlags) {
     }
 
     ~KoSimpleColorConversionTransformation() {

@@ -172,7 +172,9 @@ QImage generatePreview(const KisFilter* filter, KisPaintDeviceSP thumb)
 {
     KisPaintDeviceSP target = new KisPaintDevice(*thumb);
     filter->process(target, QRect(0, 0, 100, 100), filter->defaultConfiguration(thumb));
-    return target->convertToQImage(0, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+    return target->convertToQImage(0,
+                                   KoColorConversionTransformation::InternalRenderingIntent,
+                                   KoColorConversionTransformation::InternalConversionFlags);
 }
 
 QVariant KisFiltersModel::data(const QModelIndex &index, int role) const

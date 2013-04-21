@@ -170,7 +170,9 @@ void KisCustomPattern::createPattern()
     }
 
     QString dir = KisResourceServerProvider::instance()->patternServer()->saveLocation();
-    m_pattern = new KisPattern(dev->createThumbnail(size.width(), size.height(), rc, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation), name, dir);
+    m_pattern = new KisPattern(dev->createThumbnail(size.width(), size.height(), rc,
+                                                    KoColorConversionTransformation::InternalRenderingIntent,
+                                                    KoColorConversionTransformation::InternalConversionFlags), name, dir);
 }
 
 

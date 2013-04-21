@@ -116,8 +116,12 @@ void KisStatusBar::documentMousePositionChanged(const QPointF &pos)
     m_pointerPositionLabel->setText(QString("%1, %2").arg(pixelPos.x()).arg(pixelPos.y()));
 }
 
-void KisStatusBar::imageSizeChanged(qint32 w, qint32 h)
+void KisStatusBar::imageSizeChanged()
 {
+    KisImageWSP image = m_view->image();
+    qint32 w = image->width();
+    qint32 h = image->height();
+
     m_imageSizeLabel->setText(QString("%1 x %2").arg(w).arg(h));
 }
 

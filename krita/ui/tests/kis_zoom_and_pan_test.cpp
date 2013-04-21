@@ -36,6 +36,7 @@
 #include "kis_canvas2.h"
 #include "kis_canvas_controller.h"
 #include "kis_coordinates_converter.h"
+#include "kis_filter_strategy.h"
 
 
 class ZoomAndPanTester : public TestUtil::QImageBasedTest
@@ -713,6 +714,52 @@ void KisZoomAndPanTest::testRotation_NoVastScrolling_1_0()
 void KisZoomAndPanTest::testRotation_NoVastScrolling_0_5()
 {
     testRotation(0.2, 0.5);
+}
+
+void KisZoomAndPanTest::testImageRescaled_0_5()
+{
+    ZoomAndPanTester t;
+    QApplication::processEvents();
+    initializeViewport(t, false, false, false);
+    QApplication::processEvents();
+    QVERIFY(checkPan(t, QPoint(200,200)));
+    QApplication::processEvents();
+
+    QPointF oldStillPoint =
+        t.coordinatesConverter()->imageRectInWidgetPixels().center();
+
+    KisFilterStrategy *strategy = new KisBilinearFilterStrategy();
+    t.image()->scaleImage(QSize(320, 220), t.image()->xRes(), t.image()->yRes(), strategy);
+    t.image()->waitForDone();
+    QApplication::processEvents();
+    delete strategy;
+
+    QPointF newStillPoint =
+        t.coordinatesConverter()->imageRectInWidgetPixels().center();
+
+    QVERIFY(compareWithRounding(oldStillPoint, newStillPoint, 1.0));
+}
+
+void KisZoomAndPanTest::testImageCropped()
+{
+    ZoomAndPanTester t;
+    QApplication::processEvents();
+    initializeViewport(t, false, false, false);
+    QApplication::processEvents();
+    QVERIFY(checkPan(t, QPoint(-150,-150)));
+    QApplication::processEvents();
+
+    QPointF oldStillPoint =
+        t.coordinatesConverter()->imageToWidget(QPointF(150,150));
+
+    t.image()->cropImage(QRect(100,100,100,100));
+    t.image()->waitForDone();
+    QApplication::processEvents();
+
+    QPointF newStillPoint =
+        t.coordinatesConverter()->imageToWidget(QPointF(50,50));
+
+    QVERIFY(compareWithRounding(oldStillPoint, newStillPoint, 1.0));
 }
 
 QTEST_KDEMAIN(KisZoomAndPanTest, GUI)

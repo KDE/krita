@@ -41,7 +41,7 @@ KisImageSignalRouter::KisImageSignalRouter(KisImageWSP image)
             SLOT(slotNotification(KisImageSignalType)));
 
     CONNECT_TO_IMAGE(sigImageModified());
-    CONNECT_TO_IMAGE(sigSizeChanged(qint32, qint32));
+    CONNECT_TO_IMAGE(sigSizeChanged(const QPointF&, const QPointF&));
     CONNECT_TO_IMAGE(sigProfileChanged(const KoColorProfile*));
     CONNECT_TO_IMAGE(sigColorSpaceChanged(const KoColorSpace*));
     CONNECT_TO_IMAGE(sigResolutionChanged(double, double));
@@ -86,7 +86,7 @@ void KisImageSignalRouter::emitAboutToRemoveANode(KisNode *parent, int index)
 
 void KisImageSignalRouter::slotNotification(KisImageSignalType type)
 {
-    switch(type) {
+    switch(type.id) {
     case LayersChangedSignal:
         emit sigLayersChangedAsync();
         break;
@@ -94,7 +94,8 @@ void KisImageSignalRouter::slotNotification(KisImageSignalType type)
         emit sigImageModified();
         break;
     case SizeChangedSignal:
-        emit sigSizeChanged(m_image->width(), m_image->height());
+        emit sigSizeChanged(type.sizeChangedSignal.oldStillPoint,
+                            type.sizeChangedSignal.newStillPoint);
         break;
     case ProfileChangedSignal:
         emit sigProfileChanged(m_image->profile());

@@ -99,7 +99,7 @@ void KisSketchPaintOp::drawConnection(const QPointF& start, const QPointF& end, 
 
 void KisSketchPaintOp::updateBrushMask(const KisPaintInformation& info, qreal scale, qreal rotation){
     m_maskDab = m_dabCache->fetchDab(m_dab->colorSpace(), painter()->paintColor(), scale, scale,
-                                     rotation, info, 0.0, 0.0, 0.0);
+                                     rotation, info);
 
     // update bounding box
     m_brushBoundingBox = m_maskDab->bounds();

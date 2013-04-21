@@ -84,9 +84,7 @@ void KisColorSmudgeOp::updateMask(const KisPaintInformation& info, double scale,
                                      color,
                                      scale, scale,
                                      rotation,
-                                     info,
-                                     0.0, 0.0,
-                                     0.0);
+                                     info);
 
     m_maskBounds = m_maskDab->bounds();
 }

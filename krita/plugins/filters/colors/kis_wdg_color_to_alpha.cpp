@@ -52,7 +52,10 @@ KisWdgColorToAlpha::KisWdgColorToAlpha(QWidget * parent)
 
 KisWdgColorToAlpha::~KisWdgColorToAlpha()
 {
-    KoToolManager::instance()->switchBackRequested();
+    if (m_view) {
+        KoToolManager::instance()->switchBackRequested();
+    }
+
     delete m_widget;
 }
 

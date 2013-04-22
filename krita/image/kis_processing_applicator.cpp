@@ -155,7 +155,7 @@ public:
             KisImageSignalVector::iterator i = m_emitSignals.end();
             while (i != m_emitSignals.begin()) {
                 --i;
-                reverseSignals.append(*i);
+                reverseSignals.append(i->inverted());
             }
 
             doUpdate(reverseSignals);

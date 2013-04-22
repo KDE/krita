@@ -47,8 +47,8 @@ tile_request_start(MyPaintTiledSurface *tiled_surface, MyPaintTiledSurfaceTileRe
 
     m_dst->readBytes(m_dstData, tx * TILE_SIZE, ty * TILE_SIZE, TILE_SIZE, TILE_SIZE);
     m_dst->colorSpace()->convertPixelsTo(m_dstData, m_dstRgb16Data, m_rgb16, TILE_SIZE * TILE_SIZE,
-                                         KoColorConversionTransformation::IntentPerceptual,
-                                         KoColorConversionTransformation::BlackpointCompensation);
+                                         KoColorConversionTransformation::InternalRenderingIntent,
+                                         KoColorConversionTransformation::InternalConversionFlags);
 
     quint16* rgba_p = reinterpret_cast<quint16*>(m_dstRgb16Data);
 
@@ -67,8 +67,8 @@ tile_request_end(MyPaintTiledSurface *tiled_surface, MyPaintTiledSurfaceTileRequ
     // SomeThing *something = (SomeThing*)request->context;
 
     m_rgb16->convertPixelsTo(m_dstRgb16Data, m_dstData, m_dst->colorSpace(), TILE_SIZE * TILE_SIZE,
-                             KoColorConversionTransformation::IntentPerceptual, 
-                             KoColorConversionTransformation::BlackpointCompensation);
+                             KoColorConversionTransformation::InternalRenderingIntent,
+                             KoColorConversionTransformation::InternalConversionFlags);
     m_dst->writeBytes(m_dstData, tx * TILE_SIZE, ty * TILE_SIZE, TILE_SIZE, TILE_SIZE);
     m_painter->addDirtyRect(QRect(tx * TILE_SIZE, ty * TILE_SIZE, TILE_SIZE, TILE_SIZE));
 }

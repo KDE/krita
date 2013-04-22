@@ -505,6 +505,25 @@ void KisNodeManager::nodeToBottom()
     }
 }
 
+bool scanForLastLayer(KisImageWSP image, KisNodeSP nodeToRemove)
+{
+    if (!dynamic_cast<KisLayer*>(nodeToRemove.data())) {
+        return false;
+    }
+
+    bool lastLayer = true;
+    KisNodeSP node = image->root()->firstChild();
+    while (node) {
+        if (node != nodeToRemove && dynamic_cast<KisLayer*>(node.data())) {
+            lastLayer = false;
+            break;
+        }
+        node = node->nextSibling();
+    }
+
+    return lastLayer;
+}
+
 void KisNodeManager::removeNode()
 {
     //do not delete root layer
@@ -514,7 +533,15 @@ void KisNodeManager::removeNode()
     if(node->parent()==0)
         return;
 
-    m_d->commandsAdapter->removeNode(node);
+    if (scanForLastLayer(m_d->view->image(), node)) {
+        m_d->commandsAdapter->beginMacro(i18n("Remove Last Layer"));
+        m_d->commandsAdapter->removeNode(node);
+        m_d->layerManager->layerAdd();
+        m_d->commandsAdapter->endMacro();
+    } else {
+        m_d->commandsAdapter->removeNode(node);
+    }
+
 }
 
 void KisNodeManager::mirrorNodeX()

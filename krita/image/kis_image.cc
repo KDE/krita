@@ -96,7 +96,6 @@ class KisImage::KisImagePrivate
 public:
     KisBackgroundSP  backgroundPattern;
     quint32 lockCount;
-    bool sizeChangedWhileLocked;
     KisPerspectiveGrid* perspectiveGrid;
 
     qint32 width;
@@ -291,7 +290,6 @@ void KisImage::init(KisUndoStore *undoStore, qint32 width, qint32 height, const 
     }
 
     m_d->lockCount = 0;
-    m_d->sizeChangedWhileLocked = false;
     m_d->perspectiveGrid = 0;
 
     m_d->signalRouter = new KisImageSignalRouter(this);
@@ -345,7 +343,6 @@ void KisImage::barrierLock()
         if (m_d->scheduler) {
             m_d->scheduler->barrierLock();
         }
-        m_d->sizeChangedWhileLocked = false;
     }
     m_d->lockCount++;
 }
@@ -357,10 +354,6 @@ bool KisImage::tryBarrierLock()
     if (!locked()) {
         if (m_d->scheduler) {
             result = m_d->scheduler->tryBarrierLock();
-        }
-
-        if (result) {
-            m_d->sizeChangedWhileLocked = false;
         }
     }
 
@@ -379,7 +372,6 @@ void KisImage::lock()
         if (m_d->scheduler) {
             m_d->scheduler->lock();
         }
-        m_d->sizeChangedWhileLocked = false;
     }
     m_d->lockCount++;
 }
@@ -392,10 +384,6 @@ void KisImage::unlock()
         m_d->lockCount--;
 
         if (m_d->lockCount == 0) {
-            if (m_d->sizeChangedWhileLocked) {
-                m_d->signalRouter->emitNotification(SizeChangedSignal);
-            }
-
             if (m_d->scheduler) {
                 m_d->scheduler->unlock();
             }
@@ -429,7 +417,6 @@ void KisImage::setSize(const QSize& size)
 {
     m_d->width = size.width();
     m_d->height = size.height();
-    emitSizeChanged();
 }
 
 void KisImage::resizeImageImpl(const QRect& newRect, bool cropLayers)
@@ -439,7 +426,8 @@ void KisImage::resizeImageImpl(const QRect& newRect, bool cropLayers)
     QString actionName = cropLayers ? i18n("Crop Image") : i18n("Resize Image");
 
     KisImageSignalVector emitSignals;
-    emitSignals << SizeChangedSignal << ModifiedSignal;
+    emitSignals << ComplexSizeChangedSignal(newRect, newRect.size());
+    emitSignals << ModifiedSignal;
 
     KisProcessingApplicator applicator(this, m_d->rootLayer,
                                        KisProcessingApplicator::RECURSIVE |
@@ -483,15 +471,6 @@ void KisImage::cropNode(KisNodeSP node, const QRect& newRect)
     applicator.end();
 }
 
-void KisImage::emitSizeChanged()
-{
-    if (!locked()) {
-        m_d->signalRouter->emitNotification(SizeChangedSignal);
-    } else {
-        m_d->sizeChangedWhileLocked = true;
-    }
-}
-
 void KisImage::scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterStrategy *filterStrategy)
 {
     bool resolutionChanged = xres != xRes() && yres != yRes();
@@ -501,11 +480,10 @@ void KisImage::scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterSt
 
     KisImageSignalVector emitSignals;
     if (resolutionChanged) emitSignals << ResolutionChangedSignal;
-    if (sizeChanged) emitSignals << SizeChangedSignal;
+    if (sizeChanged) emitSignals << ComplexSizeChangedSignal(bounds(), size);
     emitSignals << ModifiedSignal;
 
-    // XXX: Translate after 2.4 is released
-    QString actionName = sizeChanged ? "Scale Image" : "Change Image Resolution";
+    QString actionName = sizeChanged ? i18n("Scale Image") : i18n("Change Image Resolution");
 
     KisProcessingApplicator::ProcessingFlags signalFlags =
         (resolutionChanged || sizeChanged) ?
@@ -584,7 +562,7 @@ void KisImage::rotateImpl(const QString &actionName,
 
     // These signals will be emitted after processing is done
     KisImageSignalVector emitSignals;
-    if (sizeChanged) emitSignals << SizeChangedSignal;
+    if (sizeChanged) emitSignals << ComplexSizeChangedSignal(bounds(), newSize);
     emitSignals << ModifiedSignal;
 
     // These flags determine whether updates are transferred to the UI during processing
@@ -658,7 +636,7 @@ void KisImage::shearImpl(const QString &actionName,
     if (newSize == size()) return;
 
     KisImageSignalVector emitSignals;
-    if (resizeImage) emitSignals << SizeChangedSignal;
+    if (resizeImage) emitSignals << ComplexSizeChangedSignal(bounds(), newSize);
     emitSignals << ModifiedSignal;
 
     KisProcessingApplicator::ProcessingFlags signalFlags =
@@ -1093,7 +1071,9 @@ QImage KisImage::convertToQImage(qint32 x,
 {
     KisPaintDeviceSP dev = m_d->rootLayer->projection();
     if (!dev) return QImage();
-    QImage image = dev->convertToQImage(const_cast<KoColorProfile*>(profile), x, y, w, h, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+    QImage image = dev->convertToQImage(const_cast<KoColorProfile*>(profile), x, y, w, h,
+                                        KoColorConversionTransformation::InternalRenderingIntent,
+                                        KoColorConversionTransformation::InternalConversionFlags);
 
     if (m_d->backgroundPattern) {
         m_d->backgroundPattern->paintBackground(image, QRect(x, y, w, h));
@@ -1174,7 +1154,9 @@ QImage KisImage::convertToQImage(const QRect& scaledRect, const QSize& scaledIma
     }
     delete [] imageRow;
 
-    QImage image = colorSpace()->convertToQImage(scaledImageData, scaledRect.width(), scaledRect.height(), const_cast<KoColorProfile*>(profile), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+    QImage image = colorSpace()->convertToQImage(scaledImageData, scaledRect.width(), scaledRect.height(), const_cast<KoColorProfile*>(profile),
+                                                 KoColorConversionTransformation::InternalRenderingIntent,
+                                                 KoColorConversionTransformation::InternalConversionFlags);
 
     if (m_d->backgroundPattern) {
         m_d->backgroundPattern->paintBackground(image, scaledRect, scaledImageSize, QSize(imageWidth, imageHeight));

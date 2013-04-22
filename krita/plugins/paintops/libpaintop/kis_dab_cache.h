@@ -46,16 +46,16 @@ public:
                                    double scaleX, double scaleY,
                                    double angle,
                                    const KisPaintInformation& info,
-                                   double subPixelX, double subPixelY,
-                                   qreal softnessFactor);
+                                   double subPixelX = 0.0, double subPixelY = 0.0,
+                                   qreal softnessFactor = 1.0);
 
     KisFixedPaintDeviceSP fetchDab(const KoColorSpace *cs,
                                    const KisColorSource *colorSource,
                                    double scaleX, double scaleY,
                                    double angle,
                                    const KisPaintInformation& info,
-                                   double subPixelX, double subPixelY,
-                                   qreal softnessFactor);
+                                   double subPixelX = 0.0, double subPixelY = 0.0,
+                                   qreal softnessFactor = 1.0);
 
 private:
     struct SavedDabParameters;

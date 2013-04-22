@@ -372,13 +372,13 @@ void KisCanvas2::connectCurrentImage()
     connect(this, SIGNAL(sigCanvasCacheUpdated(KisUpdateInfoSP)),
             this, SLOT(updateCanvasProjection(KisUpdateInfoSP)));
 
-    connect(image, SIGNAL(sigSizeChanged(qint32,qint32)),
-            SLOT(startResizingImage(qint32,qint32)),
+    connect(image, SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)),
+            SLOT(startResizingImage()),
             Qt::DirectConnection);
     connect(this, SIGNAL(sigContinueResizeImage(qint32,qint32)),
             this, SLOT(finishResizingImage(qint32,qint32)));
 
-    startResizingImage(image->width(), image->height());
+    startResizingImage();
 
     emit imageChanged(image);
 }
@@ -500,8 +500,12 @@ void KisCanvas2::setDisplayFilter(KisDisplayFilter *displayFilter)
 
 }
 
-void KisCanvas2::startResizingImage(qint32 w, qint32 h)
+void KisCanvas2::startResizingImage()
 {
+    KisImageWSP image = this->image();
+    qint32 w = image->width();
+    qint32 h = image->height();
+
     emit sigContinueResizeImage(w, h);
 
     QRect imageBounds(0, 0, w, h);

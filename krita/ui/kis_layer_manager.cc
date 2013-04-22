@@ -567,12 +567,17 @@ void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above)
 
     KisLayerSP l = activeLayer();
 
-    KisPaintDeviceSP dev = l->projection();
     KisSelectionSP selection = l->selection();
     KisAdjustmentLayerSP adjl = addAdjustmentLayer(parent, above, QString(), 0, selection);
 
-    KisDlgAdjustmentLayer dlg(adjl, adjl.data(), dev, image->nextLayerName(), i18n("New Filter Layer"), m_view);
+    KisPaintDeviceSP previewDevice = new KisPaintDevice(*adjl->original());
+
+    KisDlgAdjustmentLayer dlg(adjl, adjl.data(), previewDevice, image->nextLayerName(), i18n("New Filter Layer"), m_view);
     dlg.resize(dlg.minimumSizeHint());
+
+    // ensure that the device may be free'd by the dialog
+    // when it is not needed anymore
+    previewDevice = 0;
 
     if (dlg.exec() != QDialog::Accepted) {
         m_commandsAdapter->undoLastCommand();
@@ -592,6 +597,7 @@ KisAdjustmentLayerSP KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNo
     KisAdjustmentLayerSP l = new KisAdjustmentLayer(image, name, filter, selection);
     m_commandsAdapter->addNode(l.data(), parent, above);
     l->setDirty(image->bounds());
+    image->waitForDone();
     return l;
 }
 

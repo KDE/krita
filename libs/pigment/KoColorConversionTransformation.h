@@ -62,6 +62,29 @@ public:
     };
     Q_DECLARE_FLAGS(ConversionFlags, ConversionFlag)
 
+    /**
+     * We have numerous places where we need to convert color spaces.
+     *
+     * In several cases the user asks us about the conversion
+     * explicitly, e.g. when changing the image type or converting
+     * pixel data to the monitor profile. Doing this explicitly the
+     * user can choose what rendering intent and conversion flags to
+     * use.
+     *
+     * But there are also cases when we have to do a conversion
+     * internally (transparently for the user), for example, when
+     * merging heterogeneous images, creating thumbnails, converting
+     * data to/from QImage or while doing some adjustments. We cannot
+     * ask the user about parameters for every single
+     * conversion. That's why in all these non-critical cases the
+     * following default values should be used.
+     */
+
+    static Intent InternalRenderingIntent;
+    static ConversionFlags InternalConversionFlags;
+
+    static Intent AdjustmentRenderingIntent;
+    static ConversionFlags AdjustmentConversionFlags;
 
 public:
     KoColorConversionTransformation(const KoColorSpace* srcCs,

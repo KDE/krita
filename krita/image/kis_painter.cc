@@ -151,8 +151,8 @@ void KisPainter::init()
     d->mirrorVerticaly = false;
     d->paramInfo.opacity = 1.0f;
     d->paramInfo.flow = 1.0f;
-    d->renderingIntent = KoColorConversionTransformation::IntentPerceptual;
-    d->conversionFlags = KoColorConversionTransformation::Empty;
+    d->renderingIntent = KoColorConversionTransformation::InternalRenderingIntent;
+    d->conversionFlags = KoColorConversionTransformation::InternalConversionFlags;
 }
 
 KisPainter::~KisPainter()
@@ -1319,8 +1319,8 @@ inline void KisPainter::compositeOnePixel(quint8 *dst, const KoColor &color)
     d->paramInfo.cols = 1;
 
     d->colorSpace->bitBlt(color.colorSpace(), d->paramInfo, d->compositeOp,
-                          KoColorConversionTransformation::IntentPerceptual,
-                          KoColorConversionTransformation::Empty);
+                          d->renderingIntent,
+                          d->conversionFlags);
 }
 
 /**/

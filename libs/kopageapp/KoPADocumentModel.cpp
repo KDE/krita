@@ -55,6 +55,7 @@
 
 KoPADocumentModel::KoPADocumentModel( QObject* parent, KoPADocument *document )
 : KoDocumentSectionModel( parent )
+, m_document(0)
 , m_master(false)
 , m_lastContainer( 0 )
 {

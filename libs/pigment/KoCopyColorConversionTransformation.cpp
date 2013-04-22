@@ -23,7 +23,7 @@
 
 // --- KoCopyColorConversionTransformation ---
 KoCopyColorConversionTransformation::KoCopyColorConversionTransformation(const KoColorSpace* cs)
-        : KoColorConversionTransformation(cs, cs, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation)
+        : KoColorConversionTransformation(cs, cs, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags)
 {
 }
 void KoCopyColorConversionTransformation::transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const

@@ -62,6 +62,27 @@ void KisBrightnessContrastFilterConfiguration::fromLegacyXML(const QDomElement& 
     fromXML(root);
 }
 
+void KisBrightnessContrastFilterConfiguration::updateTransfer()
+{
+    m_transfer = m_curve.uint16Transfer();
+}
+
+void KisBrightnessContrastFilterConfiguration::setCurve(const KisCubicCurve &curve)
+{
+    m_curve = curve;
+    updateTransfer();
+}
+
+const QVector<quint16>& KisBrightnessContrastFilterConfiguration::transfer() const
+{
+    return m_transfer;
+}
+
+const KisCubicCurve& KisBrightnessContrastFilterConfiguration::curve() const
+{
+    return m_curve;
+}
+
 void KisBrightnessContrastFilterConfiguration::fromXML(const QDomElement& root)
 {
     KisCubicCurve curve;
@@ -90,11 +111,6 @@ void KisBrightnessContrastFilterConfiguration::fromXML(const QDomElement& root)
 
     setVersion(version);
     setCurve(curve);
-}
-
-void KisBrightnessContrastFilterConfiguration::setCurve(const KisCubicCurve &curve)
-{
-    m_curve = curve;
 }
 
 /**
@@ -167,7 +183,7 @@ KoColorTransformation* KisBrightnessContrastFilter::createTransformation(const K
     const KisBrightnessContrastFilterConfiguration* configBC = dynamic_cast<const KisBrightnessContrastFilterConfiguration*>(config);
     if (!configBC) return 0;
 
-    KoColorTransformation * adjustment = cs->createBrightnessContrastAdjustment(configBC->m_curve.uint16Transfer().data());
+    KoColorTransformation * adjustment = cs->createBrightnessContrastAdjustment(configBC->transfer().constData());
     return adjustment;
 }
 
@@ -241,8 +257,7 @@ KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * p
 KisBrightnessContrastFilterConfiguration * KisBrightnessContrastConfigWidget::configuration() const
 {
     KisBrightnessContrastFilterConfiguration * cfg = new KisBrightnessContrastFilterConfiguration();
-
-    cfg->m_curve = m_page->curveWidget->curve();
+    cfg->setCurve(m_page->curveWidget->curve());
     return cfg;
 }
 
@@ -250,7 +265,7 @@ void KisBrightnessContrastConfigWidget::setConfiguration(const KisPropertiesConf
 {
     const KisBrightnessContrastFilterConfiguration * cfg = dynamic_cast<const KisBrightnessContrastFilterConfiguration *>(config);
     Q_ASSERT(cfg);
-    m_page->curveWidget->setCurve(cfg->m_curve);
+    m_page->curveWidget->setCurve(cfg->curve());
 }
 
 #include "kis_brightness_contrast_filter.moc"

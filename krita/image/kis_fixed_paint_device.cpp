@@ -127,7 +127,9 @@ void KisFixedPaintDevice::convertFromQImage(const QImage& _image, const QString 
     } else {
         KoColorSpaceRegistry::instance()
         ->colorSpace( RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), srcProfileName)
-        ->convertPixelsTo(image.bits(), data(), colorSpace(), image.width() * image.height(), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+        ->convertPixelsTo(image.bits(), data(), colorSpace(), image.width() * image.height(),
+                          KoColorConversionTransformation::InternalRenderingIntent,
+                          KoColorConversionTransformation::InternalConversionFlags);
     }
 }
 

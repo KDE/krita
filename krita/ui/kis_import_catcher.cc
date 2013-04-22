@@ -56,6 +56,7 @@ public:
     KisDoc2* doc;
     KisView2* view;
     KUrl url;
+    bool importAsLayer;
 
     void importAsPaintLayer(KisPaintDeviceSP device);
     void importAsTransparencyMask(KisPaintDeviceSP device);
@@ -124,18 +125,33 @@ KisImportCatcher::KisImportCatcher(const KUrl & url, KisView2 * view, bool impor
     m_d->doc->setProgressProxy(progressProxy);
     m_d->view = view;
     m_d->url = url;
-    m_d->doc->openUrl(url);
+    m_d->importAsLayer = importAsLayer;
+    connect(m_d->doc, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
+    bool result = m_d->doc->openUrl(url);
 
+    if (!result) {
+        deleteMyself();
+    }
+}
+
+void KisImportCatcher::slotLoadingFinished()
+{
     KisImageWSP importedImage = m_d->doc->image();
+    importedImage->waitForDone();
 
     if (importedImage && importedImage->projection()->exactBounds().isValid()) {
-        if (importAsLayer) {
+        if (m_d->importAsLayer) {
             m_d->importAsPaintLayer(importedImage->projection());
         } else {
             m_d->importAsTransparencyMask(importedImage->projection());
         }
     }
 
+    deleteMyself();
+}
+
+void KisImportCatcher::deleteMyself()
+{
     m_d->doc->deleteLater();
     deleteLater();
 }

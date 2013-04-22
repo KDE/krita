@@ -181,6 +181,12 @@ signals:
 
     /// This signal is emitted right after the docker states have been succefully restored from config
     void restoringDone();
+
+    /// This signal is emitted when this windows has finished loading of a
+    /// document. The document may be opened in another window in the end.
+    /// In this case, the signal means there is no link between the window
+    /// and the document anymore.
+    void loadCompleted();
 public slots:
 
     /**

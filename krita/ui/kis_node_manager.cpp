@@ -348,6 +348,8 @@ void KisNodeManager::createNode(const QString & nodeType)
         m_d->maskManager->createFilterMask(parent, above);
     } else if (nodeType == "KisSelectionMask") {
         m_d->maskManager->createSelectionMask(parent, above);
+    } else if (nodeType == "KisFileLayer") {
+        m_d->layerManager->addFileLayer(parent, above);
     }
 
 }

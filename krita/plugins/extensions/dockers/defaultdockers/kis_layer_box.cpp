@@ -235,6 +235,10 @@ KisLayerBox::KisLayerBox()
     connect(m_newGeneratorLayerAction, SIGNAL(triggered(bool)), this, SLOT(slotNewGeneratorLayer()));
     m_actions.append(m_newGeneratorLayerAction);
 
+    m_newFileLayerAction = new KisAction(koIcon("document-open"), i18n("&File Layer"), this);
+    connect(m_newFileLayerAction, SIGNAL(triggered(bool)), this, SLOT(slotNewFileLayer()));
+    m_actions.append(m_newFileLayerAction);
+
     m_newTransparencyMaskAction = new KisAction(koIcon("edit-copy"), i18n("&Transparency Mask"), this);
     m_newTransparencyMaskAction->setActivationFlags(KisAction::ACTIVE_LAYER);
     connect(m_newTransparencyMaskAction, SIGNAL(triggered(bool)), this, SLOT(slotNewTransparencyMask()));
@@ -265,6 +269,7 @@ KisLayerBox::KisLayerBox()
     m_newLayerMenu->addAction(m_newShapeLayerAction);
     m_newLayerMenu->addAction(m_newAdjustmentLayerAction);
     m_newLayerMenu->addAction(m_newGeneratorLayerAction);
+    m_newLayerMenu->addAction(m_newFileLayerAction);
     m_newLayerMenu->addSeparator();
     m_newLayerMenu->addAction(m_newTransparencyMaskAction);
     m_newLayerMenu->addAction(m_newEffectMaskAction);
@@ -533,6 +538,12 @@ void KisLayerBox::slotNewShapeLayer()
 {
     if(!m_canvas) return;
     m_nodeManager->createNode("KisShapeLayer");
+}
+
+void KisLayerBox::slotNewFileLayer()
+{
+    if (!m_canvas) return;
+    m_nodeManager->createNode("KisFileLayer");
 }
 
 

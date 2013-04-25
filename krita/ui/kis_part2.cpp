@@ -139,6 +139,7 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
         item.icon = "application-x-krita";
         widgetList << item;
     }
+#if 0
     {
         KoPart::CustomDocumentWidgetItem item;
         item.widget = new KisFlipbookSelector(parent, qobject_cast<KisDoc2*>(document()));
@@ -146,7 +147,7 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
         item.icon = "folder-video";
         widgetList << item;
     }
-
+#endif
     return widgetList;
 }
 

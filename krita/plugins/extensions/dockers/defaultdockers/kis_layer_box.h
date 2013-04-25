@@ -100,6 +100,7 @@ private slots:
     void slotNewGeneratorLayer();
     void slotNewCloneLayer();
     void slotNewShapeLayer();
+    void slotNewFileLayer();
     void slotNewTransparencyMask();
     void slotNewEffectMask();
     void slotNewSelectionMask();
@@ -138,6 +139,7 @@ private:
     KisAction* m_newEffectMaskAction;
     KisAction* m_newSelectionMaskAction;
     KisAction* m_selectOpaque;
+    KisAction* m_newFileLayerAction;
 
 };
 

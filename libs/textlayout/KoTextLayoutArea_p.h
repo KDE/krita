@@ -41,6 +41,7 @@ public:
         , bottom(0.0)
         , maximalAllowedBottom(0.0)
         , maximumAllowedWidth(0.0)
+        , neededWidth(0.0)
         , isLayoutEnvironment(false)
         , actsHorizontally(false)
         , dropCapsWidth(0)
@@ -73,6 +74,7 @@ public:
     qreal bottom; // reference area top
     qreal maximalAllowedBottom;
     qreal maximumAllowedWidth; // 0 indicates wrapping is allowed
+    qreal neededWidth; // used in conjuntion with grow-text-width
     QRectF boundingRect;
     bool isLayoutEnvironment;
     bool actsHorizontally;

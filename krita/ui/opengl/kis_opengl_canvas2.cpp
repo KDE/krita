@@ -24,7 +24,6 @@
 #include <QWidget>
 #include <QGLWidget>
 #include <QGLContext>
-#include <QImage>
 #include <QBrush>
 #include <QPainter>
 #include <QPaintEvent>

@@ -259,6 +259,9 @@ bool PSDImageData::write(QIODevice *io, KisPaintDeviceSP dev)
         }
     }
 
+    qDeleteAll(planes);
+    planes.clear();
+
     return true;
 }
 

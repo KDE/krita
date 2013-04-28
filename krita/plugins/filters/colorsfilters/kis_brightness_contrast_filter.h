@@ -31,6 +31,7 @@
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
 #include <KoProgressUpdater.h>
+#include <KoColor.h>
 
 class QWidget;
 class KoColorTransformation;
@@ -47,7 +48,7 @@ public:
 
 class KisBrightnessContrastFilterConfiguration : public KisFilterConfiguration
 {
-
+    
 public:
     using KisFilterConfiguration::fromXML;
     using KisFilterConfiguration::toXML;
@@ -102,14 +103,18 @@ public:
 
 class KisBrightnessContrastConfigWidget : public KisConfigWidget
 {
-
+    Q_OBJECT
 public:
     KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f = 0);
-    virtual ~KisBrightnessContrastConfigWidget() {}
+    virtual ~KisBrightnessContrastConfigWidget();
 
     virtual KisBrightnessContrastFilterConfiguration * configuration() const;
     virtual void setConfiguration(const KisPropertiesConfiguration* config);
     WdgBrightnessContrast * m_page;
+    void setView(KisView2 *view);
+
+public slots:
+    void slotDrawLine(const KoColor &color);
 };
 
 #endif

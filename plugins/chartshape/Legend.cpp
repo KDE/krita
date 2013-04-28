@@ -95,7 +95,7 @@ public:
 Legend::Private::Private()
 {
     lineBorder = new KoShapeStroke(0.5, Qt::black);
-    showFrame = true;
+    showFrame = false;
     framePen = QPen();
     backgroundBrush = QBrush();
     expansion = HighLegendExpansion;
@@ -154,6 +154,8 @@ void Legend::setTitle(const QString &title)
     d->title = title;
     d->kdLegend->setTitleText(title);
     d->pixmapRepaintRequested = true;
+
+    emit updateConfigWidget();
 }
 
 bool Legend::showFrame() const
@@ -165,6 +167,8 @@ void Legend::setShowFrame(bool show)
 {
     d->showFrame = show;
     setStroke(show ? d->lineBorder : 0);
+
+    emit updateConfigWidget();
 }
 
 QPen Legend::framePen() const
@@ -257,6 +261,7 @@ void Legend::setFont(const QFont &font)
     d->kdLegend->setTextAttributes(attributes);
 
     d->pixmapRepaintRequested = true;
+    emit updateConfigWidget();
 }
 
 qreal Legend::fontSize() const
@@ -276,6 +281,7 @@ void Legend::setFontSize(qreal size)
     d->kdLegend->setTextAttributes(attributes);
 
     d->pixmapRepaintRequested = true;
+    emit updateConfigWidget();
 }
 
 void Legend::setFontColor(const QColor &color)
@@ -340,6 +346,8 @@ void Legend::setExpansion(LegendExpansion expansion)
     d->expansion = expansion;
     d->kdLegend->setOrientation(LegendExpansionToQtOrientation(expansion));
     d->pixmapRepaintRequested = true;
+
+    emit updateConfigWidget();
 }
 
 Qt::Alignment Legend::alignment() const

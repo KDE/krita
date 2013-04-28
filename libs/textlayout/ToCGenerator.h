@@ -27,7 +27,7 @@
 #include <QTextBlock>
 #include <QObject>
 
-class KoInlineTextObjectManager;
+class KoTextRangeManager;
 class KoTextDocumentLayout;
 class KoTableOfContentsGeneratorInfo;
 
@@ -58,7 +58,7 @@ private:
     bool m_preservePagebreak;
 
     // Return the ref (name) of the first KoBookmark in the block, if KoBookmark not found, null QString is returned
-    QString fetchBookmarkRef(QTextBlock block, KoInlineTextObjectManager * inlineTextObjectManager);
+    QString fetchBookmarkRef(QTextBlock block, KoTextRangeManager *textRangeManager);
 };
 
 #endif

@@ -27,21 +27,19 @@
 #include <QStringList>
 #include <QDir>
 
-#include <kis_debug.h>
 #include <kcomponentdata.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 #include <kparts/plugin.h>
-#include <kservice.h>
-#include <kservicetypetrader.h>
 #include <kparts/componentfactory.h>
 #include <kconfiggroup.h>
 
 #include <KoPluginLoader.h>
 #include <KoShapeRegistry.h>
 
+#include <kis_debug.h>
 #include <metadata/kis_meta_data_io_backend.h>
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_registry.h>
@@ -52,6 +50,7 @@
 #include "kis_aboutdata.h"
 #include "flake/kis_shape_selection.h"
 #include "kis_doc2.h"
+#include "kis_part2.h"
 
 #include "kisexiv2/kis_exiv2.h"
 
@@ -59,7 +58,7 @@ KAboutData* KisFactory2::s_aboutData = 0;
 KComponentData* KisFactory2::s_instance = 0;
 
 KisFactory2::KisFactory2(QObject* parent)
-        : KPluginFactory(*aboutData(), parent)
+    : KPluginFactory(*aboutData(), parent)
 {
     (void)componentData();
 }
@@ -76,14 +75,16 @@ KisFactory2::~KisFactory2()
  * Create the document
  */
 QObject* KisFactory2::create( const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent,
-                             const QVariantList& args, const QString& keyword )
+                              const QVariantList& args, const QString& keyword )
 {
     Q_UNUSED( args );
     Q_UNUSED( keyword );
 
-    KisDoc2 *doc = new KisDoc2(parent);
-    Q_CHECK_PTR(doc);
-    return doc;
+    KisPart2 *part = new KisPart2(parent);
+    KisDoc2 *doc = new KisDoc2(part);
+    part->setDocument(doc);
+
+    return part;
 }
 
 
@@ -116,14 +117,14 @@ const KComponentData &KisFactory2::componentData()
 
         // Load the krita-specific tools
         KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),
-                                         QString::fromLatin1("[X-Krita-Version] == 5"));
+                                         QString::fromLatin1("[X-Krita-Version] == 27"));
 
         // Load dockers
         KoPluginLoader::PluginsConfig config;
         config.blacklist = "DockerPluginsDisabled";
         config.group = "krita";
         KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Dock"),
-                                         QString::fromLatin1("[X-Krita-Version] == 5"));
+                                         QString::fromLatin1("[X-Krita-Version] == 27"));
 
         s_instance->dirs()->addResourceType("krita_template", "data", "krita/templates");
 

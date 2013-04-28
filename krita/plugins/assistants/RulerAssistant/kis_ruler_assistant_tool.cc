@@ -30,6 +30,8 @@
 #include <kio/netaccess.h>
 #include <kio/jobuidelegate.h>
 
+#include <KoIcon.h>
+
 #include <KoViewConverter.h>
 #include <KoPointerEvent.h>
 
@@ -433,7 +435,6 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
         path.addEllipse(ellipse);
         KisPaintingAssistant::drawPath(_gc, path);        
     }
-
     foreach(KisPaintingAssistant* assistant, m_canvas->view()->paintingAssistantManager()->assistants()) {
         if(assistant->id()=="perspective") {
             QPointF topMiddle, bottomMiddle, rightMiddle, leftMiddle;
@@ -452,6 +453,7 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
 
     QPixmap iconDelete = KIcon("edit-delete").pixmap(16, 16);
     QPixmap iconMove = KIcon("transform-move").pixmap(32, 32);
+
     foreach(const KisPaintingAssistant* assistant, m_canvas->view()->paintingAssistantManager()->assistants()) {
         QPointF iconDeletePos = _converter.documentToView(assistant->buttonPosition());
         _gc.drawPixmap(iconDeletePos - QPointF(32, 32), iconDelete);
@@ -619,9 +621,9 @@ QWidget *KisRulerAssistantTool::createOptionWidget()
     if (!m_optionsWidget) {
         m_optionsWidget = new QWidget;
         m_options.setupUi(m_optionsWidget);
-        m_options.loadButton->setIcon(KIcon("document-open"));
-        m_options.saveButton->setIcon(KIcon("document-save"));
-        m_options.deleteButton->setIcon(KIcon("edit-delete"));
+        m_options.loadButton->setIcon(koIcon("document-open"));
+        m_options.saveButton->setIcon(koIcon("document-save"));
+        m_options.deleteButton->setIcon(koIcon("edit-delete"));
         foreach(const QString& key, KisPaintingAssistantFactoryRegistry::instance()->keys()) {
             QString name = KisPaintingAssistantFactoryRegistry::instance()->get(key)->name();
             m_options.comboBox->addItem(name, key);

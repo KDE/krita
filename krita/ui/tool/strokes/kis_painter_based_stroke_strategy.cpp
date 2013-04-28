@@ -110,7 +110,8 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
             dynamic_cast<KisIndirectPaintingSupport*>(node.data());
 
         if (indirect) {
-            targetDevice = new KisPaintDevice(node, paintDevice->colorSpace());
+            targetDevice = paintDevice->createCompositionSourceDevice();
+            targetDevice->setParentNode(node);
             indirect->setTemporaryTarget(targetDevice);
             indirect->setTemporaryCompositeOp(m_resources->compositeOp());
             indirect->setTemporaryOpacity(m_resources->opacity());
@@ -129,6 +130,8 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
     KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
     if(layer) {
         selection = layer->selection();
+    } else {
+        selection = m_resources->image()->globalSelection();
     }
 
     m_transaction = new KisTransaction(name(), targetDevice);

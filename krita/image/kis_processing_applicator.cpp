@@ -21,6 +21,7 @@
 #include "kis_image.h"
 #include "kis_image_signal_router.h"
 #include "kis_node.h"
+#include "kis_clone_layer.h"
 #include "kis_processing_visitor.h"
 #include "commands_new/kis_processing_command.h"
 #include "kis_stroke_strategy_undo_command_based.h"
@@ -66,20 +67,61 @@ public:
     }
 
     void redo() {
-        if(m_finalUpdate) finalize();
+        if(!m_finalUpdate) initialize();
+        else finalize();
     }
 
     void undo() {
-        if(!m_finalUpdate) finalize();
+        if(m_finalUpdate) initialize();
+        else finalize();
     }
 
 private:
+    void initialize() {
+        /**
+         * We disable all non-centralized updates here. Everything
+         * should be done by this command's explicit updates.
+         *
+         * If you still need third-party updates work, please add a
+         * flag to the applicator.
+         */
+
+        m_image->disableDirtyRequests();
+    }
+
     void finalize() {
+        m_image->enableDirtyRequests();
+
         if(m_flags.testFlag(KisProcessingApplicator::RECURSIVE)) {
             m_image->refreshGraphAsync(m_node);
         }
 
         m_node->setDirty(m_image->bounds());
+
+        updateClones(m_node);
+    }
+
+    void updateClones(KisNodeSP node) {
+        // simple tail-recursive iteration
+
+        KisNodeSP prevNode = node->lastChild();
+        while(prevNode) {
+            updateClones(prevNode);
+            prevNode = prevNode->prevSibling();
+        }
+
+        KisLayer *layer = dynamic_cast<KisLayer*>(m_node.data());
+        if(layer && layer->hasClones()) {
+            foreach(KisCloneLayerSP clone, layer->registeredClones()) {
+                if(!clone) continue;
+
+                QPoint offset(clone->x(), clone->y());
+                QRegion dirtyRegion(m_image->bounds());
+                dirtyRegion -= m_image->bounds().translated(offset);
+
+                clone->setDirty(dirtyRegion);
+            }
+        }
     }
 
 private:
@@ -113,7 +155,7 @@ public:
             KisImageSignalVector::iterator i = m_emitSignals.end();
             while (i != m_emitSignals.begin()) {
                 --i;
-                reverseSignals.append(*i);
+                reverseSignals.append(i->inverted());
             }
 
             doUpdate(reverseSignals);
@@ -157,7 +199,9 @@ KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
         applyCommand(new DisableUIUpdatesCommand(m_image, false), KisStrokeJobData::BARRIER);
     }
 
-    applyCommand(new UpdateCommand(m_image, m_node, m_flags, false));
+    if (m_node) {
+        applyCommand(new UpdateCommand(m_image, m_node, m_flags, false));
+    }
 }
 
 KisProcessingApplicator::~KisProcessingApplicator()
@@ -209,7 +253,9 @@ void KisProcessingApplicator::applyCommand(KUndo2Command *command,
 
 void KisProcessingApplicator::end()
 {
-    applyCommand(new UpdateCommand(m_image, m_node, m_flags, true));
+    if (m_node) {
+        applyCommand(new UpdateCommand(m_image, m_node, m_flags, true));
+    }
 
     if(m_flags.testFlag(NO_UI_UPDATES)) {
         applyCommand(new DisableUIUpdatesCommand(m_image, true), KisStrokeJobData::BARRIER);

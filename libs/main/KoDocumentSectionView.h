@@ -56,7 +56,7 @@ public:
     /**
      * Create a new KoDocumentSectionView.
      */
-    KoDocumentSectionView(QWidget *parent = 0);
+    explicit KoDocumentSectionView(QWidget *parent = 0);
     virtual ~KoDocumentSectionView();
 
     /// how items should be displayed

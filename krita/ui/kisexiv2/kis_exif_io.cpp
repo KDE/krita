@@ -57,7 +57,7 @@ KisMetaData::Value exifVersionToKMDValue(const Exiv2::Value::AutoPtr value)
         return KisMetaData::Value(QString(array));
     } else {
         Q_ASSERT(value->typeId() == Exiv2::asciiString);
-        return KisMetaData::Value(QString::fromAscii(value->toString().c_str()));
+        return KisMetaData::Value(QString::fromLatin1(value->toString().c_str()));
     }
 }
 
@@ -66,7 +66,7 @@ Exiv2::Value* kmdValueToExifVersion(const KisMetaData::Value& value)
 {
     Exiv2::DataValue* dvalue = new Exiv2::DataValue;
     QString ver = value.asVariant().toString();
-    dvalue->read((const Exiv2::byte*)ver.toAscii().data(), ver.size());
+    dvalue->read((const Exiv2::byte*)ver.toLatin1().constData(), ver.size());
     return dvalue;
 }
 
@@ -85,7 +85,7 @@ KisMetaData::Value exifArrayToKMDIntOrderedArray(const Exiv2::Value::AutoPtr val
         }
     } else {
         Q_ASSERT(value->typeId() == Exiv2::asciiString);
-        QString str = QString::fromAscii(value->toString().c_str());
+        QString str = QString::fromLatin1(value->toString().c_str());
         v.push_back(KisMetaData::Value(str.toInt()));
     }
     return KisMetaData::Value(v, KisMetaData::Value::OrderedArray);
@@ -95,13 +95,13 @@ KisMetaData::Value exifArrayToKMDIntOrderedArray(const Exiv2::Value::AutoPtr val
 Exiv2::Value* kmdIntOrderedArrayToExifArray(const KisMetaData::Value& value)
 {
     QList<KisMetaData::Value> v = value.asArray();
-    QString s;
+    QByteArray s;
     for (QList<KisMetaData::Value>::iterator it = v.begin();
             it != v.end(); ++it) {
         int val = it->asVariant().toInt(0);
-        s += QString::number(val);
+        s += QByteArray::number(val);
     }
-    return new Exiv2::DataValue((const Exiv2::byte*)s.toAscii().data(), s.toAscii().size());
+    return new Exiv2::DataValue((const Exiv2::byte*)s.data(), s.size());
 }
 
 QDateTime exivValueToDateTime(const Exiv2::Value::AutoPtr value)
@@ -205,7 +205,7 @@ Exiv2::Value* kmdOECFStructureToExifOECF(const KisMetaData::Value& value)
     int index = 4;
     if (saveNames) {
         for (int i = 0; i < columns; i++) {
-            QByteArray name = names[i].asVariant().toString().toAscii();
+            QByteArray name = names[i].asVariant().toString().toLatin1();
             name.append((char)0);
             memcpy(array.data() + index, name.data(), name.size());
             index += name.size();
@@ -470,7 +470,7 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
 #endif
                 }
                 if (v && v->typeId() != Exiv2::invalidTypeId) {
-                    dbgFile << "Saving key" << exivKey; // << " of KMD value" << entry.value();
+                    dbgFile << "Saving key" << exivKey << " of KMD value" << entry.value();
                     exifData.add(exifKey, v);
                 } else {
                     dbgFile << "No exif value was created for" << entry.qualifiedName() << " as" << exivKey;// << " of KMD value" << entry.value();
@@ -586,7 +586,8 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
                 if (commentVar.type() == QVariant::String) {
                     comment = commentVar.toString();
                 } else if (commentVar.type() == QVariant::ByteArray) {
-                    comment = QString::fromLatin1(commentVar.toByteArray().data(), commentVar.toByteArray().size());
+                    const QByteArray commentString = commentVar.toByteArray();
+                    comment = QString::fromLatin1(commentString.constData(), commentString.size());
                 } else {
                     warnKrita << "KisExifIO: Unhandled UserComment value type.";
                 }

@@ -104,6 +104,7 @@ QDockWidget* KisPaletteDockerFactory::createDockWidget()
 
 void KisPaletteDocker::resourceAddedToServer(KoResource* resource)
 {
+    Q_UNUSED(resource);
     // Avoiding resource mutex deadlock
     QTimer::singleShot( 0, this, SLOT( checkForDefaultResource() ) );
 }

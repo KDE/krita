@@ -80,7 +80,7 @@ public:
     CellRegion(Table *table, const QPoint &point);
     CellRegion(Table *table, const QRect &rect);
     CellRegion(Table *table, const QVector<QRect> &rects);
-    CellRegion(Table *table);
+    explicit CellRegion(Table *table);
     ~CellRegion();
     
     CellRegion& operator = (const CellRegion& region);    

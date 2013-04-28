@@ -23,7 +23,7 @@
 #include "connection.h"
 #include "driver.h"
 
-#include <KAboutData>
+#include <kaboutdata.h>
 
 class KCmdLineOptions;
 class KComponentData;

@@ -29,11 +29,9 @@
 
 #include <QPoint>
 #include <QSpinBox>
-//Added by qt3to4:
 #include <QVector>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kpluginfactory.h>
@@ -131,7 +129,7 @@ void KisPixelizeFilter::process(KisPaintDeviceSP device,
     }
 }
 
-KisConfigWidget * KisPixelizeFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageWSP) const
+KisConfigWidget * KisPixelizeFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
 {
     vKisIntegerWidgetParam param;
     param.push_back(KisIntegerWidgetParam(2, 40, 10, i18n("Pixel width"), "pixelWidth"));

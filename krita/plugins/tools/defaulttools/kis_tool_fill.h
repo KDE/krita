@@ -21,13 +21,10 @@
 #ifndef KIS_TOOL_FILL_H_
 #define KIS_TOOL_FILL_H_
 
-#include <QPoint>
-//Added by qt3to4:
-#include <QLabel>
-
-
 #include "kis_tool_paint.h"
 #include <flake/kis_node_shape.h>
+#include <KoIcon.h>
+#include <QPoint>
 
 class KisPainter;
 class KisFillPainter;
@@ -50,8 +47,6 @@ public:
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
 
-    bool flood(int startX, int startY);
-
     virtual QWidget * createOptionWidget();
 
 public slots:
@@ -59,18 +54,18 @@ public slots:
     virtual void slotSetUsePattern(bool);
     virtual void slotSetSampleMerged(bool);
     virtual void slotSetFillSelection(bool);
+    virtual void slotSetSizemod(int);
+    virtual void slotSetFeather(int);
 
 private:
+    int m_feather;
+    int m_sizemod;
     QPoint m_startPos;
     int m_threshold;
-    qint32 m_depth;
-    quint8* m_oldColor, *m_color;
-    KisPainter *m_painter;
+    bool m_unmerged;
+    bool m_usePattern;
+    bool m_fillOnlySelection;
 
-    bool *m_map, m_unmerged, m_usePattern, m_fillOnlySelection;
-    KisSelectionSP m_selection;
-
-    QLabel *m_lbThreshold;
     KisSliderSpinBox *m_slThreshold;
     QCheckBox *m_checkUsePattern;
     QCheckBox *m_checkSampleMerged;
@@ -89,7 +84,7 @@ public:
         setToolTip(i18n("Fill a contiguous area of color with a color, or fill a selection."));
         setToolType(TOOL_TYPE_FILL);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
-        setIcon("krita_tool_color_fill");
+        setIconName(koIconNameCStr("krita_tool_color_fill"));
         //setShortcut( QKeySequence( Qt::Key_F ) );
         setPriority(14);
     }

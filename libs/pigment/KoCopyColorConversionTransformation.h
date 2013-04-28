@@ -26,7 +26,7 @@
 class KoCopyColorConversionTransformation : public KoColorConversionTransformation
 {
 public:
-    KoCopyColorConversionTransformation(const KoColorSpace* cs);
+    explicit KoCopyColorConversionTransformation(const KoColorSpace *cs);
     virtual void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const;
 };
 
@@ -34,7 +34,10 @@ class KoCopyColorConversionTransformationFactory : public KoColorConversionTrans
 {
 public:
     KoCopyColorConversionTransformationFactory(const QString& _colorModelId, const QString& _depthId, const QString& _profileName);
-    virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
+    virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace,
+                                                                       const KoColorSpace* dstColorSpace,
+                                                                       KoColorConversionTransformation::Intent renderingIntent,
+                                                                       KoColorConversionTransformation::ConversionFlags conversionFlags) const;
     virtual bool conserveColorInformation() const;
     virtual bool conserveDynamicRange() const;
 };

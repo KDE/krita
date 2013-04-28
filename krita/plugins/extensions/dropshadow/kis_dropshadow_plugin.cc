@@ -21,21 +21,14 @@
 #include "kis_dropshadow_plugin.h"
 
 #include <klocale.h>
-#include <kiconloader.h>
-#include <kcomponentdata.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <kactioncollection.h>
 
 #include "kis_view2.h"
+#include <kis_action.h>
 #include "kis_types.h"
 #include "kis_image.h"
-#include "kis_paint_device.h"
 #include "kis_layer.h"
-#include "kis_statusbar.h"
-#include "widgets/kis_progress_widget.h"
 
 #include <KoColorSpace.h>
 #include <KoProgressUpdater.h>
@@ -48,16 +41,12 @@ K_PLUGIN_FACTORY(KisDropshadowPluginFactory, registerPlugin<KisDropshadowPlugin>
 K_EXPORT_PLUGIN(KisDropshadowPluginFactory("krita"))
 
 KisDropshadowPlugin::KisDropshadowPlugin(QObject *parent, const QVariantList &)
-        : KParts::Plugin(parent)
+        : KisViewPlugin(parent, "kritaplugins/dropshadow.rc")
 {
-    if (parent->inherits("KisView2")) {
-        setXMLFile(KStandardDirs::locate("data", "kritaplugins/dropshadow.rc"), true);
-
-        m_view = (KisView2*) parent;
-        KAction *action  = new KAction(i18n("Add Drop Shadow..."), this);
-        actionCollection()->addAction("dropshadow", action);
-        connect(action, SIGNAL(triggered()), this, SLOT(slotDropshadow()));
-    }
+    KisAction *action  = new KisAction(i18n("Add Drop Shadow..."), this);
+    action->setActivationFlags(KisAction::ACTIVE_LAYER);
+    addAction("dropshadow", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotDropshadow()));
 }
 
 KisDropshadowPlugin::~KisDropshadowPlugin()

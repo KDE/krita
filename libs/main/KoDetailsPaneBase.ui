@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>DetailsPaneBase</string>
+   <string comment="KDE::DoNotExtract">DetailsPaneBase</string>
   </property>
   <layout class="QGridLayout">
    <property name="margin">
@@ -172,8 +172,6 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
- <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
  <customwidgets>
   <customwidget>
    <class>KPushButton</class>

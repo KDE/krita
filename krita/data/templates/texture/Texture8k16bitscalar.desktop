@@ -1,6 +1,27 @@
 [Desktop Entry]
 Icon=template_texture
 Name=Texture 8k 16bit scalar
+Name[ca]=Textura 8k 16bit escalar
+Name[cs]=Textura 8k 16bit skalární
+Name[da]=Tekstur 8k 16bit scalar
+Name[de]=Textur 8k 16bit scalar
+Name[el]=Texture 8k 16bit βαθμωτό
+Name[es]=Textura 8k 16bit escalar
+Name[et]=Tekstuur 8k 16bit skalaar
+Name[fr]=Texture 8k 16bit scalaire
+Name[gl]=Textura de 8k e 16 bits escalar.
+Name[hu]=Textúra 8k 16bit skalár
+Name[it]=Trama 8k 16bit scalare
+Name[kk]=Текстура 8k 16 бит скаляр
+Name[nb]=Tekstur 8k 16bit skalar
+Name[nl]=Textuur 8k 16bit scalar
+Name[pl]=Tekstura 8k 16bit skalar
+Name[pt]=Textura 8k 16-bits escalar
+Name[pt_BR]=Textura 8k 16bit escalar
+Name[sk]=Textúra 8k 16bit skalár
+Name[sv]=Struktur 8k 16-bitar skalär
+Name[uk]=Текстура 8k, 16-бітова, скалярна
+Name[x-test]=xxTexture 8k 16bit scalarxx
 Type=Link
 URL[$e]=.source/Texture8k16bitscalar.kra
 X-KDE-Hidden=false

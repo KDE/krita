@@ -182,7 +182,7 @@ private:
     QColor propertyColor(int key) const;
 
     class Private;
-    QExplicitlySharedDataPointer<Private> d;
+    QSharedDataPointer<Private> d;
 };
 
 #endif

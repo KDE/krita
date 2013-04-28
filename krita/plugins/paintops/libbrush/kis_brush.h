@@ -26,8 +26,6 @@
 
 #include <kis_types.h>
 #include <kis_shared.h>
-#include <kis_paint_information.h>
-#include <kis_fixed_paint_device.h>
 #include <krita_export.h>
 
 class KisQImagemask;
@@ -40,6 +38,7 @@ class QIODevice;
 class KoColor;
 class KoColorSpace;
 
+class KisPaintInformation;
 class KisBoundary;
 class KisQImageSP;
 class KisScaledBrush;
@@ -174,12 +173,12 @@ public:
     /**
      * @return the width of the mask for the given scale and angle
      */
-    virtual qint32 maskWidth(double scale, double angle) const;
+    virtual qint32 maskWidth(double scale, double angle, const KisPaintInformation& info) const;
 
     /**
      * @return the height of the mask for the given scale and angle
      */
-    virtual qint32 maskHeight(double scale, double angle) const;
+    virtual qint32 maskHeight(double scale, double angle, const KisPaintInformation& info) const;
 
     /**
      * @return the angle of the mask adding the given angle
@@ -197,13 +196,23 @@ public:
      */
     virtual enumBrushType brushType() const;
 
-    virtual QPointF hotSpot(double scaleX, double scaleY, double rotation = 0.0) const;
+    virtual QPointF hotSpot(double scaleX, double scaleY, double rotation, const KisPaintInformation& info) const;
 
     /**
      * Returns true if this brush can return something useful for the info. This is used
      * by Pipe Brushes that can't paint sometimes
      **/
     virtual bool canPaintFor(const KisPaintInformation& /*info*/);
+
+    /**
+     * Is called by the cache, when cache hit has happened.
+     * Having got this notification the brush can update the counters
+     * of dabs, generate some new random values if needed.
+     *
+     * Currently, this is used by pipe'd brushes to implement
+     * incremental and random parasites
+     */
+    void notifyCachedDabPainted();
 
     /**
      * Return a fixed paint device that contains a correctly scaled image dab.
@@ -218,7 +227,7 @@ public:
      */
     void mask(KisFixedPaintDeviceSP dst,
               double scaleX, double scaleY, double angle,
-              const KisPaintInformation& info = KisPaintInformation(),
+              const KisPaintInformation& info,
               double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
     /**
@@ -227,7 +236,7 @@ public:
     void mask(KisFixedPaintDeviceSP dst,
               const KoColor& color,
               double scaleX, double scaleY, double angle,
-              const KisPaintInformation& info = KisPaintInformation(),
+              const KisPaintInformation& info,
               double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
     /**
@@ -236,7 +245,7 @@ public:
     void mask(KisFixedPaintDeviceSP dst,
               const KisPaintDeviceSP src,
               double scaleX, double scaleY, double angle,
-              const KisPaintInformation& info = KisPaintInformation(),
+              const KisPaintInformation& info,
               double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
 
@@ -265,7 +274,7 @@ public:
     virtual void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
                                                      ColoringInformation* coloringInfo,
                                                      double scaleX, double scaleY, double angle,
-                                                     const KisPaintInformation& info = KisPaintInformation(),
+                                                     const KisPaintInformation& info,
                                                      double subPixelX = 0, double subPixelY = 0,qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
 

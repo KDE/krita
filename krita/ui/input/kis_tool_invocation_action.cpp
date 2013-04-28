@@ -20,29 +20,23 @@
 
 #include <QDebug>
 
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 
 #include <KoToolProxy.h>
 #include <kis_canvas2.h>
 #include <kis_coordinates_converter.h>
 
 #include "kis_input_manager.h"
+#include "kis_image.h"
 
 class KisToolInvocationAction::Private
 {
 public:
-    Private(KisToolInvocationAction *qq) : q(qq), useTablet(false) { }
+    Private(KisToolInvocationAction *qq) : q(qq), active(false) { }
     QPointF tabletToPixel(const QPointF& globalPos);
 
     KisToolInvocationAction *q;
-
-    bool useTablet;
-    QTabletEvent::TabletDevice tabletDevice;
-    QTabletEvent::PointerType pointerType;
-    int tabletZ;
-    qint64 tabletID;
-
-    Qt::KeyboardModifiers modifiers;
+    bool active;
 };
 
 KisToolInvocationAction::KisToolInvocationAction(KisInputManager *manager)
@@ -57,60 +51,86 @@ KisToolInvocationAction::~KisToolInvocationAction()
     delete d;
 }
 
-void KisToolInvocationAction::begin(int shortcut)
+void KisToolInvocationAction::begin(int shortcut, QEvent *event)
 {
     if (shortcut == ActivateShortcut) {
-        if (inputManager()->tabletPressEvent()) {
-            QTabletEvent *pressEvent = inputManager()->tabletPressEvent();
-            inputManager()->toolProxy()->tabletEvent(pressEvent, d->tabletToPixel(pressEvent->hiResGlobalPos()));
-            d->useTablet = true;
-            d->pointerType = pressEvent->pointerType();
-            d->tabletDevice = pressEvent->device();
-            d->tabletZ = pressEvent->z();
-            d->tabletID = pressEvent->uniqueId();
-            setMousePosition(d->tabletToPixel(pressEvent->hiResGlobalPos()));
+        QTabletEvent *tabletEvent = inputManager()->lastTabletEvent();
+        QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
 
-        } else {
-            QMouseEvent pressEvent(QEvent::MouseButtonPress, inputManager()->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, 0);
-            inputManager()->toolProxy()->mousePressEvent(&pressEvent, inputManager()->mousePosition());
-            setMousePosition(inputManager()->mousePosition());
+        if (tabletEvent) {
+            inputManager()->toolProxy()->tabletEvent(tabletEvent, d->tabletToPixel(tabletEvent->hiResGlobalPos()));
+        } else if (mouseEvent) {
+            inputManager()->toolProxy()->mousePressEvent(mouseEvent, inputManager()->widgetToPixel(mouseEvent->posF()));
         }
-    } else {
+
+        d->active = true;
+    } else if (shortcut == ConfirmShortcut) {
         QKeyEvent pressEvent(QEvent::KeyPress, Qt::Key_Return, 0);
         inputManager()->toolProxy()->keyPressEvent(&pressEvent);
         QKeyEvent releaseEvent(QEvent::KeyRelease, Qt::Key_Return, 0);
         inputManager()->toolProxy()->keyReleaseEvent(&releaseEvent);
+
+        /**
+         * All the tools now have a KisTool::requestStrokeEnd() method,
+         * so they should use this instead of direct filtering Enter key
+         * press. Until all the tools support it, we just duplicate the
+         * key event and the method call
+         */
+        inputManager()->canvas()->image()->requestStrokeEnd();
+    } else if (shortcut == CancelShortcut) {
+        /**
+         * The tools now have a KisTool::requestStrokeCancellation() method,
+         * so just request it.
+         */
+
+        inputManager()->canvas()->image()->requestStrokeCancellation();
     }
 }
 
-void KisToolInvocationAction::end()
+void KisToolInvocationAction::end(QEvent *event)
 {
-    if(d->useTablet) {
-        QTabletEvent releaseEvent(QEvent::TabletRelease, mousePosition().toPoint(), mousePosition().toPoint(), mousePosition(), d->tabletDevice, d->pointerType, 0.f, 0, 0, 0.f, 0.f, d->tabletZ, d->modifiers, d->tabletID);
-        inputManager()->toolProxy()->tabletEvent(&releaseEvent, mousePosition());
-        d->useTablet = false;
-    } else {
-        QMouseEvent releaseEvent(QEvent::MouseButtonRelease, mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, d->modifiers);
-        inputManager()->toolProxy()->mouseReleaseEvent(&releaseEvent, mousePosition());
+    if (d->active) {
+        QTabletEvent *tabletEvent = inputManager()->lastTabletEvent();
+        QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
+
+        if (tabletEvent) {
+            inputManager()->toolProxy()->tabletEvent(tabletEvent, d->tabletToPixel(tabletEvent->hiResGlobalPos()));
+        } else {
+            inputManager()->toolProxy()->mouseReleaseEvent(mouseEvent, inputManager()->widgetToPixel(mouseEvent->posF()));
+        }
+
+        d->active = false;
     }
+
+    KisAbstractInputAction::end(event);
 }
 
 void KisToolInvocationAction::inputEvent(QEvent* event)
 {
-    if(event->type() == QEvent::MouseMove) {
+    if(event->type() == QEvent::MouseButtonPress) {
         QMouseEvent* mevent = static_cast<QMouseEvent*>(event);
-        setMousePosition(inputManager()->widgetToPixel(mevent->posF()));
-        d->modifiers = mevent->modifiers();
-        inputManager()->toolProxy()->mouseMoveEvent(mevent, mousePosition());
-    } else if(event->type() == QEvent::TabletMove) {
-        QTabletEvent* tevent = static_cast<QTabletEvent*>(event);
-        setMousePosition(d->tabletToPixel(tevent->hiResGlobalPos()));
-        d->modifiers = tevent->modifiers();
-        inputManager()->toolProxy()->tabletEvent(tevent, mousePosition());
+        inputManager()->toolProxy()->mousePressEvent(mevent, inputManager()->widgetToPixel(mevent->posF()));
+    } else if(event->type() == QEvent::MouseButtonRelease) {
+        QMouseEvent* mevent = static_cast<QMouseEvent*>(event);
+        inputManager()->toolProxy()->mouseReleaseEvent(mevent, inputManager()->widgetToPixel(mevent->posF()));
+    } else if(event->type() == QEvent::MouseMove) {
+        QTabletEvent* tevent = inputManager()->lastTabletEvent();
+        QMouseEvent* mevent = static_cast<QMouseEvent*>(event);
+        if (tevent && tevent->type() == QEvent::TabletMove) {
+            inputManager()->toolProxy()->tabletEvent(tevent, d->tabletToPixel(tevent->hiResGlobalPos()));
+        } else {
+            inputManager()->toolProxy()->mouseMoveEvent(mevent, inputManager()->widgetToPixel(mevent->posF()));
+        }
+    } else if(event->type() == QEvent::KeyPress) {
+        QKeyEvent* kevent = static_cast<QKeyEvent*>(event);
+        inputManager()->toolProxy()->keyPressEvent(kevent);
+    } else if(event->type() == QEvent::KeyRelease) {
+        QKeyEvent* kevent = static_cast<QKeyEvent*>(event);
+        inputManager()->toolProxy()->keyReleaseEvent(kevent);
     }
 }
 
-bool KisToolInvocationAction::handleTablet() const
+bool KisToolInvocationAction::supportsHiResInputEvents() const
 {
     return true;
 }
@@ -120,3 +140,4 @@ QPointF KisToolInvocationAction::Private::tabletToPixel(const QPointF &globalPos
     const QPointF pos = globalPos - q->inputManager()->canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0));
     return q->inputManager()->widgetToPixel(pos);
 }
+

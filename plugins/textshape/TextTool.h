@@ -256,7 +256,7 @@ private slots:
     void setGrowHeightToFit(bool enabled);
     /// Enable or disable shrink-to-fit-text.
     void setShrinkToFit(bool enabled);
-    /// set Paragraph style of current selection. Exisiting style will be completely overridden.
+    /// set Paragraph style of current selection. Existing style will be completely overridden.
     void setStyle(KoParagraphStyle *syle);
     /// set the characterStyle of the current selection. see above.
     void setStyle(KoCharacterStyle *style);
@@ -315,6 +315,7 @@ private:
     void editingPluginEvents();
     void finishedWord();
     void finishedParagraph();
+    void startingSimpleEdit();
     void runUrl(KoPointerEvent *event, QString &url);
     void useTableBorderCursor();
 

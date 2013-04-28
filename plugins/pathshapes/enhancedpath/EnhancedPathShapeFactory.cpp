@@ -27,6 +27,8 @@
 #include <KoColorBackground.h>
 #include <KoShapeLoadingContext.h>
 
+#include <KoIcon.h>
+
 #include <klocale.h>
 
 #include <QString>
@@ -37,7 +39,7 @@ EnhancedPathShapeFactory::EnhancedPathShapeFactory()
     : KoShapeFactoryBase(EnhancedPathShapeId, i18n("An enhanced path shape"))
 {
     setToolTip(i18n("An enhanced path"));
-    setIcon("enhancedpath");
+    setIconName(koIconNameCStr("enhancedpath"));
     setXmlElementNames(KoXmlNS::draw, QStringList("custom-shape"));
     setLoadingPriority(1);
 
@@ -68,7 +70,7 @@ KoShape *EnhancedPathShapeFactory::createDefaultShape(KoDocumentResourceManager 
 
     ComplexType handle;
     handle["draw:handle-position"] = "$0 0";
-    handle["draw:handle-range-x-minimum"] = "0";
+    handle["draw:handle-range-x-minimum"] = '0';
     handle["draw:handle-range-x-maximum"] = "?Half";
     shape->addHandle(handle);
     shape->setSize(QSize(100, 100));
@@ -142,7 +144,7 @@ void EnhancedPathShapeFactory::addCross()
     ListType handles;
     ComplexType handle;
     handle["draw:handle-position"] = "$0 0";
-    handle["draw:handle-range-x-minimum"] = "0";
+    handle["draw:handle-range-x-minimum"] = '0';
     handle["draw:handle-range-x-maximum"] = "?Half";
     handles.append(QVariant(handle));
 
@@ -157,7 +159,7 @@ void EnhancedPathShapeFactory::addCross()
     t.name = i18n("Cross");
     t.family = "funny";
     t.toolTip = i18n("A cross");
-    t.icon = "cross-shape";
+    t.iconName = koIconName("cross-shape");
     t.properties = dataToProperties(modifiers, commands, handles, formulae);
 
     addTemplate(t);
@@ -176,9 +178,9 @@ void EnhancedPathShapeFactory::addArrow()
         ListType handles;
         ComplexType handle;
         handle["draw:handle-position"] = "$0 $1";
-        handle["draw:handle-range-x-minimum"] = "0";
+        handle["draw:handle-range-x-minimum"] = '0';
         handle["draw:handle-range-x-maximum"] = "width";
-        handle["draw:handle-range-y-minimum"] = "0";
+        handle["draw:handle-range-y-minimum"] = '0';
         handle["draw:handle-range-y-maximum"] = "?HalfHeight";
         handles.append(QVariant(handle));
 
@@ -192,7 +194,7 @@ void EnhancedPathShapeFactory::addArrow()
         t.name = i18n("Arrow");
         t.family = "arrow";
         t.toolTip = i18n("An arrow");
-        t.icon = "arrow-right-calligra";
+        t.iconName = koIconName("draw-arrow-forward");
         t.properties = dataToProperties(modifiers, commands, handles, formulae);
 
         addTemplate(t);
@@ -209,9 +211,9 @@ void EnhancedPathShapeFactory::addArrow()
         ListType handles;
         ComplexType handle;
         handle["draw:handle-position"] = "$0 $1";
-        handle["draw:handle-range-x-minimum"] = "0";
+        handle["draw:handle-range-x-minimum"] = '0';
         handle["draw:handle-range-x-maximum"] = "width";
-        handle["draw:handle-range-y-minimum"] = "0";
+        handle["draw:handle-range-y-minimum"] = '0';
         handle["draw:handle-range-y-maximum"] = "?HalfHeight";
         handles.append(QVariant(handle));
 
@@ -225,7 +227,7 @@ void EnhancedPathShapeFactory::addArrow()
         t.name = i18n("Arrow");
         t.family = "arrow";
         t.toolTip = i18n("An arrow");
-        t.icon = "arrow-left-calligra";
+        t.iconName = koIconName("draw-arrow-back");
         t.properties = dataToProperties(modifiers, commands, handles, formulae);
 
         addTemplate(t);
@@ -242,9 +244,9 @@ void EnhancedPathShapeFactory::addArrow()
         ListType handles;
         ComplexType handle;
         handle["draw:handle-position"] = "$0 $1";
-        handle["draw:handle-range-x-minimum"] = "0";
+        handle["draw:handle-range-x-minimum"] = '0';
         handle["draw:handle-range-x-maximum"] = "?HalfWidth";
-        handle["draw:handle-range-y-minimum"] = "0";
+        handle["draw:handle-range-y-minimum"] = '0';
         handle["draw:handle-range-y-maximum"] = "height";
         handles.append(QVariant(handle));
 
@@ -258,7 +260,7 @@ void EnhancedPathShapeFactory::addArrow()
         t.name = i18n("Arrow");
         t.family = "arrow";
         t.toolTip = i18n("An arrow");
-        t.icon = "arrow-up-calligra";
+        t.iconName = koIconName("draw-arrow-up");
         t.properties = dataToProperties(modifiers, commands, handles, formulae);
 
         addTemplate(t);
@@ -275,9 +277,9 @@ void EnhancedPathShapeFactory::addArrow()
         ListType handles;
         ComplexType handle;
         handle["draw:handle-position"] = "$0 $1";
-        handle["draw:handle-range-x-minimum"] = "0";
+        handle["draw:handle-range-x-minimum"] = '0';
         handle["draw:handle-range-x-maximum"] = "?HalfWidth";
-        handle["draw:handle-range-y-minimum"] = "0";
+        handle["draw:handle-range-y-minimum"] = '0';
         handle["draw:handle-range-y-maximum"] = "height";
         handles.append(QVariant(handle));
 
@@ -291,7 +293,7 @@ void EnhancedPathShapeFactory::addArrow()
         t.name = i18n("Arrow");
         t.family = "arrow";
         t.toolTip = i18n("An arrow");
-        t.icon = "arrow-down-calligra";
+        t.iconName = koIconName("draw-arrow-down");
         t.properties = dataToProperties(modifiers, commands, handles, formulae);
 
         addTemplate(t);
@@ -370,7 +372,7 @@ void EnhancedPathShapeFactory::addCallout()
     t.name = i18n("Callout");
     t.family = "funny";
     t.toolTip = i18n("A callout");
-    t.icon = "callout-shape";
+    t.iconName = koIconName("callout-shape");
     t.properties = dataToProperties(modifiers, commands, handles, formulae);
     t.properties->setProperty(QLatin1String("viewBox"), QRect(0, 0, 21600, 21600));
 
@@ -415,7 +417,7 @@ void EnhancedPathShapeFactory::addSmiley()
     t.name = i18n("Smiley");
     t.family = "funny";
     t.toolTip = i18n("Smiley");
-    t.icon = "smiley-shape";
+    t.iconName = koIconName("smiley-shape");
     t.properties = dataToProperties(modifiers, commands, handles, formulae);
     t.properties->setProperty(QLatin1String("viewBox"), QRect(0, 0, 21600, 21600));
 
@@ -484,7 +486,7 @@ void EnhancedPathShapeFactory::addCircularArrow()
     handle.clear();
     handle["draw:handle-position"] = "$1 $2";
     handle["draw:handle-polar"] = "10800 10800";
-    handle["draw:handle-radius-range-minimum"] = "0";
+    handle["draw:handle-radius-range-minimum"] = '0';
     handle["draw:handle-radius-range-maximum"] = "10800";
     handles.append(QVariant(handle));
 
@@ -494,7 +496,7 @@ void EnhancedPathShapeFactory::addCircularArrow()
     t.name = i18n("Circular Arrow");
     t.family = "arrow";
     t.toolTip = i18n("A circular-arrow");
-    t.icon = "circular-arrow-shape";
+    t.iconName = koIconName("circular-arrow-shape");
     t.properties = dataToProperties(modifiers, commands, handles, formulae);
     t.properties->setProperty(QLatin1String("viewBox"), QRect(0, 0, 21600, 21600));
     addTemplate(t);
@@ -538,7 +540,7 @@ void EnhancedPathShapeFactory::addGearhead()
     t.name = i18n("Gearhead");
     t.family = "funny";
     t.toolTip = i18n("A gearhead");
-    t.icon = "gearhead-shape";
+    t.iconName = koIconName("gearhead-shape");
     t.properties = dataToProperties(QString(), commands, ListType(), ComplexType());
     t.properties->setProperty("background", QVariant::fromValue<QColor>(QColor(Qt::blue)));
     t.properties->setProperty(QLatin1String("viewBox"), QRect(0, 0, 40, 90));

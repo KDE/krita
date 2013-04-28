@@ -26,7 +26,7 @@ class InsertCharacter : public QDockWidget
 {
     Q_OBJECT
 public:
-    InsertCharacter(QWidget *parent);
+    explicit InsertCharacter(QWidget *parent);
 
 signals:
     void insertCharacter(const QString &character);

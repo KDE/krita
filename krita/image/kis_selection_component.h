@@ -20,8 +20,9 @@
 
 #include <krita_export.h>
 
+#include <QTransform>
+
 class QRect;
-class QTransform;
 class KUndo2Command;
 class KisSelection;
 class KisPixelSelection;

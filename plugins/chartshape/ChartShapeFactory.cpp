@@ -30,6 +30,7 @@
 #include <klocale.h>
 
 // Calligra
+#include <KoIcon.h>
 #include <KoProperties.h>
 #include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
@@ -53,6 +54,7 @@ K_PLUGIN_FACTORY(ChartShapePluginFactory, registerPlugin<ChartShapePlugin>();)
 K_EXPORT_PLUGIN(ChartShapePluginFactory("ChartShape"))
 
 ChartShapePlugin::ChartShapePlugin(QObject * parent, const QVariantList&)
+    : QObject(parent)
 {
     // Register the chart shape factory.
     KoShapeRegistry::instance()->add(new ChartShapeFactory());
@@ -69,7 +71,7 @@ ChartShapeFactory::ChartShapeFactory()
     setToolTip(i18n("Business charts"));
 
     KIconLoader::global()->addAppDir("kchart");
-    setIcon("kchart");
+    setIconName(koIconNameCStr("kchart"));
 
     // Default 'app specific' config pages i.e. unless an app defines
     // other config pages, these are used.
@@ -81,9 +83,20 @@ ChartShapeFactory::ChartShapeFactory()
 
 bool ChartShapeFactory::supports(const KoXmlElement &element, KoShapeLoadingContext &context) const
 {
-    Q_UNUSED(context);
-    return element.namespaceURI() == "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
-        && element.tagName() == "object";
+    if (element.namespaceURI() == "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+        && element.tagName() == "object") {
+
+        QString href = element.attribute("href");
+        if (!href.isEmpty()) {
+            // check the mimetype
+            if (href.startsWith(QLatin1String("./"))) {
+                href.remove(0, 2);
+            }
+            const QString mimetype = context.odfLoadingContext().mimeTypeForPath(href);
+            return mimetype.isEmpty() || mimetype == "application/vnd.oasis.opendocument.chart";
+        }
+    }
+    return false;
 }
 
 KoShape *ChartShapeFactory::createShapeFromOdf(const KoXmlElement &element,

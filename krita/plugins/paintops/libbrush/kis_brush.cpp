@@ -42,6 +42,9 @@
 #include "kis_qimage_mask.h"
 #include "kis_iterator_ng.h"
 #include "kis_brush_registry.h"
+#include <kis_paint_information.h>
+#include <kis_fixed_paint_device.h>
+
 
 const static int MAXIMUM_MIPMAP_SCALE = 10;
 const static int MAXIMUM_MIPMAP_SIZE  = 400;
@@ -102,7 +105,7 @@ struct KisBrush::Private {
         , angle(0)
         , scale(1.0)
         , hasColor(false)
-	, brushType(INVALID)
+    , brushType(INVALID)
     {}
 
     ~Private() {
@@ -204,11 +207,12 @@ void KisBrush::setHotSpot(QPointF pt)
     d->hotSpot = QPointF(x, y);
 }
 
-QPointF KisBrush::hotSpot(double scaleX, double scaleY, double rotation) const
+QPointF KisBrush::hotSpot(double scaleX, double scaleY, double rotation, const KisPaintInformation& info) const
 {
     Q_UNUSED(scaleY);
-    double w = maskWidth( scaleX, rotation);
-    double h = maskHeight( scaleX, rotation);
+
+    double w = maskWidth(scaleX, rotation, info);
+    double h = maskHeight(scaleX, rotation, info);
 
     // The smallest brush we can produce is a single pixel.
     if (w < 1) {
@@ -280,8 +284,10 @@ KisBrushSP KisBrush::fromXML(const QDomElement& element)
     return brush;
 }
 
-qint32 KisBrush::maskWidth(double scale, double angle) const
+qint32 KisBrush::maskWidth(double scale, double angle, const KisPaintInformation& info) const
 {
+    Q_UNUSED(info);
+
     angle += d->angle;
 
     // Make sure the angle stay in [0;2*M_PI]
@@ -306,8 +312,10 @@ qint32 KisBrush::maskWidth(double scale, double angle) const
     }
 }
 
-qint32 KisBrush::maskHeight(double scale, double angle) const
+qint32 KisBrush::maskHeight(double scale, double angle, const KisPaintInformation& info) const
 {
+    Q_UNUSED(info);
+
     angle += d->angle;
 
     // Make sure the angle stay in [0;2*M_PI]
@@ -368,6 +376,10 @@ double KisBrush::spacing() const
 {
     return d->spacing;
 }
+
+void KisBrush::notifyCachedDabPainted() {
+}
+
 void KisBrush::mask(KisFixedPaintDeviceSP dst, double scaleX, double scaleY, double angle, const KisPaintInformation& info , double subPixelX, double subPixelY, qreal softnessFactor) const
 {
     generateMaskAndApplyMaskOrCreateDab(dst, 0, scaleX, scaleY, angle, info, subPixelX, subPixelY, softnessFactor);
@@ -381,7 +393,7 @@ void KisBrush::mask(KisFixedPaintDeviceSP dst, const KoColor& color, double scal
 
 void KisBrush::mask(KisFixedPaintDeviceSP dst, const KisPaintDeviceSP src, double scaleX, double scaleY, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY, qreal softnessFactor) const
 {
-    PaintDeviceColoringInformation pdci(src, maskWidth(scaleX, angle));
+    PaintDeviceColoringInformation pdci(src, maskWidth(scaleX, angle, info));
     generateMaskAndApplyMaskOrCreateDab(dst, &pdci, scaleX, scaleY, angle, info, subPixelX, subPixelY, softnessFactor);
 }
 
@@ -575,7 +587,7 @@ KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
         dab2->initialize();
         dabPointer = dab->data();
         quint8* dabPointer2 = dab2->data();
-        KoColorSpaceRegistry::instance()->rgb8()->convertPixelsTo(dabPointer, dabPointer2, colorSpace, outputWidth * outputHeight);
+        KoColorSpaceRegistry::instance()->rgb8()->convertPixelsTo(dabPointer, dabPointer2, colorSpace, outputWidth * outputHeight, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
         dab = dab2;
     }
     return dab;
@@ -598,7 +610,7 @@ void KisBrush::createScaledBrushes() const
 
     // Construct a series of brushes where each one's dimensions are
     // half the size of the previous one.
-    // IMORTANT: and make sure that a brush with a size > MAXIMUM_MIPMAP_SIZE
+    // IMPORTANT: and make sure that a brush with a size > MAXIMUM_MIPMAP_SIZE
     // will not get scaled up anymore or the memory consumption gets too high
     // also don't scale the brush up more then MAXIMUM_MIPMAP_SCALE times
     int scale  = qBound(1, MAXIMUM_MIPMAP_SIZE*2 / qMax(image().width(),image().height()), MAXIMUM_MIPMAP_SCALE);

@@ -30,7 +30,6 @@ private slots:
     void testCompositeOver();
     void testCompositeAlphaDarken();
     void testCompositeAdd();
-    void testCompositeBurn();
     void testCompositeDivide();
     void testCompositeDodge();
     void testCompositeInversedSubtract();

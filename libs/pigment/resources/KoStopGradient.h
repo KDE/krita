@@ -37,7 +37,7 @@ class PIGMENTCMS_EXPORT KoStopGradient : public KoAbstractGradient
 {
 
 public:
-    KoStopGradient(const QString& filename);
+    explicit KoStopGradient(const QString &filename);
     virtual ~KoStopGradient();
 
     virtual bool load();

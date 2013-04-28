@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2004,2007-2009 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2012 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,16 +20,20 @@
 
 #include <cmath>
 
+#include "config-vc.h"
+#ifdef HAVE_VC
+#include <Vc/Vc>
+#include <Vc/IO>
+#endif
+
 #include <QDomDocument>
 
 #include "kis_fast_math.h"
 #include "kis_circle_mask_generator.h"
+#include "kis_circle_mask_generator_p.h"
 #include "kis_base_mask_generator.h"
+#include "kis_brush_mask_applicator_factories.h"
 
-struct KisCircleMaskGenerator::Private {
-    double xcoef, ycoef;
-    double xfadecoef, yfadecoef;
-};
 
 KisCircleMaskGenerator::KisCircleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes)
         : KisMaskGenerator(diameter, ratio, fh, fv, spikes, CIRCLE, DefaultId), d(new Private)
@@ -37,16 +42,31 @@ KisCircleMaskGenerator::KisCircleMaskGenerator(qreal diameter, qreal ratio, qrea
     d->ycoef = 2.0 / (KisMaskGenerator::d->ratio * width());
     d->xfadecoef = (KisMaskGenerator::d->fh == 0) ? 1 : (1.0 / (KisMaskGenerator::d->fh * width()));
     d->yfadecoef = (KisMaskGenerator::d->fv == 0) ? 1 : (1.0 / (KisMaskGenerator::d->fv * KisMaskGenerator::d->ratio * width()));
+    d->transformedFadeX = d->xfadecoef * softness();
+    d->transformedFadeY = d->yfadecoef * softness();
+
+    d->applicator = createOptimizedClass<MaskApplicatorFactory<KisCircleMaskGenerator, KisBrushMaskVectorApplicator> >(this);
 }
 
 KisCircleMaskGenerator::~KisCircleMaskGenerator()
 {
+    delete d->applicator;
     delete d;
 }
 
 bool KisCircleMaskGenerator::shouldSupersample() const
 {
     return width() < 10 || KisMaskGenerator::d->ratio * width() < 10;
+}
+
+bool KisCircleMaskGenerator::shouldVectorize() const
+{
+    return !shouldSupersample() && spikes() == 2;
+}
+
+KisBrushMaskApplicatorBase* KisCircleMaskGenerator::applicator()
+{
+    return d->applicator;
 }
 
 quint8 KisCircleMaskGenerator::valueAt(qreal x, qreal y) const
@@ -74,10 +94,7 @@ quint8 KisCircleMaskGenerator::valueAt(qreal x, qreal y) const
     if (n > 1) {
         return 255;
     } else {
-        qreal transformedFadeX = d->xfadecoef * softness();
-        qreal transformedFadeY = d->yfadecoef * softness();
-        
-        double normeFade = norme(xr * transformedFadeX, yr * transformedFadeY);
+        double normeFade = norme(xr * d->transformedFadeX, yr * d->transformedFadeY);
         if (normeFade > 1) {
             // xle stands for x-coordinate limit exterior
             // yle stands for y-coordinate limit exterior
@@ -117,4 +134,6 @@ void KisCircleMaskGenerator::setSoftness(qreal softness)
     }else{
         KisMaskGenerator::setSoftness(1.0 / softness);
     }
+    d->transformedFadeX = d->xfadecoef * this->softness();
+    d->transformedFadeY = d->yfadecoef * this->softness();
 }

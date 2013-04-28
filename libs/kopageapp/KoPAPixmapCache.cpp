@@ -20,7 +20,7 @@
 #include "KoPAPixmapCache.h"
 
 #include <QPixmapCache>
-#include <KGlobal>
+#include <kglobal.h>
 
 class KoPAPixmapCache::Singleton
 {

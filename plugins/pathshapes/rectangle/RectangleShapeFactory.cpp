@@ -26,13 +26,14 @@
 #include <KoGradientBackground.h>
 #include <KoShapeLoadingContext.h>
 
+#include <KoIcon.h>
 #include <klocale.h>
 
 RectangleShapeFactory::RectangleShapeFactory()
     : KoShapeFactoryBase(RectangleShapeId, i18n("Rectangle"))
 {
     setToolTip(i18n("A rectangle"));
-    setIcon("rectangle-shape");
+    setIconName(koIconNameCStr("rectangle-shape"));
     setFamily("geometric");
     setLoadingPriority(1);
 

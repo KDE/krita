@@ -54,12 +54,11 @@ class KoReportItemWeb : public KoReportASyncItemBase
     Q_OBJECT
 public:
     KoReportItemWeb();
-    KoReportItemWeb(QDomNode &element);
+    explicit KoReportItemWeb(QDomNode &element);
     virtual ~KoReportItemWeb();
-    
+
     virtual QString typeName() const;
-    virtual int render(OROPage *page, OROSection *section,  QPointF offset,
-                       QVariant data, KRScriptHandler *script);
+    virtual int renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset, const QVariant &data, KRScriptHandler *script);
     virtual QString itemDataSource() const;
 
 private slots:
@@ -67,7 +66,7 @@ private slots:
 
 private:
     void init();
-    
+
     bool m_rendering;
     OROPage *m_targetPage;
     OROSection *m_targetSection;

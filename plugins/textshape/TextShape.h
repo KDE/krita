@@ -34,10 +34,12 @@
 #define TextShape_SHAPEID "TextShapeID"
 
 class KoInlineTextObjectManager;
+class KoTextRangeManager;
 class KoPageProvider;
 class KoImageCollection;
 class KoTextDocument;
 class TextShape;
+class KoTextDocumentLayout;
 
 /**
  * A text shape.
@@ -47,7 +49,7 @@ class TextShape;
 class TextShape : public KoShapeContainer, public KoFrameShape
 {
 public:
-    TextShape(KoInlineTextObjectManager *inlineTextObjectManager);
+    TextShape(KoInlineTextObjectManager *inlineTextObjectManager, KoTextRangeManager *textRangeManager);
     virtual ~TextShape();
 
     /// reimplemented
@@ -96,6 +98,8 @@ public:
         return m_textShapeData;
     }
 
+    void updateDocumentData();
+
     virtual void update() const;
     virtual void update(const QRectF &shape) const;
 
@@ -123,6 +127,7 @@ private:
     QRegion m_paintRegion;
     KoParagraphStyle * m_paragraphStyle;
     bool m_clip;
+    KoTextDocumentLayout *m_layout;
 };
 
 #endif

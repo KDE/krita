@@ -36,7 +36,7 @@ class CropWidget : public QWidget
     Q_OBJECT
 
 public:
-    CropWidget(QWidget *parent=0);
+    explicit CropWidget(QWidget *parent=0);
 
     virtual void paintEvent(QPaintEvent *event);
     virtual void mousePressEvent(QMouseEvent *event);

@@ -27,7 +27,7 @@
 class ReportPropertiesButton : public QCheckBox
 {
 public:
-    ReportPropertiesButton(QWidget*);
+    explicit ReportPropertiesButton(QWidget*);
 protected:
     virtual void paintEvent(QPaintEvent*);
 };

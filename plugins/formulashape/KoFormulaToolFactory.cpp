@@ -21,6 +21,7 @@
 #include "KoFormulaTool.h"
 #include "KoFormulaShape.h"
 
+#include <KoIcon.h>
 #include <klocale.h>
 
 KoFormulaToolFactory::KoFormulaToolFactory()
@@ -28,7 +29,7 @@ KoFormulaToolFactory::KoFormulaToolFactory()
 {
     setToolTip( i18n( "Formula editing tool" ) );
     setToolType( dynamicToolType() );
-    setIcon( "edittext" );
+    setIconName(koIconNameCStr("edittext"));
     setPriority( 1 );
     setActivationShapeId( KoFormulaShapeId );
 }

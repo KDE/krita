@@ -28,7 +28,7 @@ class CommentTool : public KoToolBase
 {
     Q_OBJECT
 public:
-    CommentTool(KoCanvasBase* canvas);
+    explicit CommentTool(KoCanvasBase *canvas);
     virtual ~CommentTool();
 
     virtual void activate(KoToolBase::ToolActivation toolActivation, const QSet< KoShape* >& shapes);

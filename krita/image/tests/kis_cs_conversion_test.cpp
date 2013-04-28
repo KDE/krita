@@ -21,7 +21,6 @@
 
 #include <QTime>
 
-#include <KoStore.h>
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -53,7 +52,7 @@ void logFailure(const QString & reason, const KoColorSpace * srcCs, const KoColo
           .arg(dstCs->name())
           .arg(profile2)
           .arg(reason)
-          .toAscii());
+          .toLatin1());
 }
 
 void KisCsConversionTest::testColorSpaceConversion()
@@ -95,7 +94,7 @@ void KisCsConversionTest::testColorSpaceConversion()
     << "ms";
 
     if (failedColorSpaces > 0) {
-        QFAIL(QString("Failed conversions %1, see log for details.").arg(failedColorSpaces).toAscii());
+        QFAIL(QString("Failed conversions %1, see log for details.").arg(failedColorSpaces).toLatin1());
     }
 }
 

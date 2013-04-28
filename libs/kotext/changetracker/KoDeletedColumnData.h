@@ -29,7 +29,7 @@ class QTextTable;
 class KoDeletedColumnData
 {
     public:
-        KoDeletedColumnData(int columnNumber);
+        explicit KoDeletedColumnData(int columnNumber);
 
         ~KoDeletedColumnData();
 

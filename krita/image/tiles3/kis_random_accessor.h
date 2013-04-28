@@ -76,6 +76,7 @@ public:
     void moveTo(qint32 x, qint32 y);
     quint8* rawData();
     const quint8* oldRawData() const;
+    const quint8* rawDataConst() const;
     virtual qint32 nConseqPixels() const;
     qint32 x() const;
     qint32 y() const;

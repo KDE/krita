@@ -32,6 +32,7 @@ class KisTextBrushesPipe : public KisBrushesPipe<KisGbrBrush>
 public:
     KisTextBrushesPipe() {
         m_charIndex = 0;
+        m_currentBrushIndex = 0;
     }
 
     KisTextBrushesPipe(const KisTextBrushesPipe &rhs)
@@ -95,9 +96,11 @@ public:
     }
 
 protected:
-    void selectNextBrush(const KisPaintInformation& info) {
+    int chooseNextBrush(const KisPaintInformation& info) const {
         Q_UNUSED(info);
-
+        return m_currentBrushIndex;
+    }
+    void updateBrushIndexes() {
         m_charIndex++;
         if (m_charIndex >= m_text.size()) {
             m_charIndex = 0;
@@ -113,6 +116,7 @@ private:
     QMap<QChar, KisGbrBrush*> m_brushesMap;
     QString m_text;
     int m_charIndex;
+    int m_currentBrushIndex;
 };
 
 
@@ -156,6 +160,11 @@ void KisTextBrush::setFont(const QFont& font)
 QFont KisTextBrush::font()
 {
     return m_font;
+}
+
+void KisTextBrush::notifyCachedDabPainted()
+{
+    m_brushesPipe->notifyCachedDabPainted();
 }
 
 void KisTextBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation, double scaleX, double scaleY, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY, qreal softnessFactor) const
@@ -202,18 +211,23 @@ void KisTextBrush::updateBrush()
     setValid(true);
 }
 
-qint32 KisTextBrush::maskWidth(double scale, double angle) const
+quint32 KisTextBrush::brushIndex(const KisPaintInformation& info) const
 {
-    return brushType() == MASK ?
-        KisBrush::maskWidth(scale, angle) :
-        m_brushesPipe->maskWidth(scale, angle);
+    return brushType() == MASK ? 0 : 1 + m_brushesPipe->brushIndex(info);
 }
 
-qint32 KisTextBrush::maskHeight(double scale, double angle) const
+qint32 KisTextBrush::maskWidth(double scale, double angle, const KisPaintInformation& info) const
 {
     return brushType() == MASK ?
-        KisBrush::maskHeight(scale, angle) :
-        m_brushesPipe->maskHeight(scale, angle);
+        KisBrush::maskWidth(scale, angle, info) :
+        m_brushesPipe->maskWidth(scale, angle, info);
+}
+
+qint32 KisTextBrush::maskHeight(double scale, double angle, const KisPaintInformation& info) const
+{
+    return brushType() == MASK ?
+        KisBrush::maskHeight(scale, angle, info) :
+        m_brushesPipe->maskHeight(scale, angle, info);
 }
 
 void KisTextBrush::setAngle(qreal _angle)

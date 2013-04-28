@@ -50,8 +50,6 @@ public:
     void setTemporaryOpacity(quint8 o);
     void setTemporaryChannelFlags(const QBitArray& channelFlags);
 
-    void setDirty(const QRect &rect);
-
     /**
      * Writes the temporary target into the paint device of the layer.
      * This action will lock the temporary target itself.
@@ -82,15 +80,6 @@ public:
     const QBitArray& temporaryChannelFlags() const;
 
 private:
-    /**
-     * Adds a dirty rect to the list of rects those should be
-     * merged to the layer after the indirect painting is finished
-     * WARNING: should be called with the lock held
-     *
-     * \see lockTemporaryTarget()
-     */
-    void addIndirectlyDirtyRect(const QRect &rect);
-    QRegion indirectlyDirtyRegion();
 
     template<class UndoAdapter>
         void mergeToLayerImpl(KisLayerSP layer,

@@ -3,7 +3,7 @@ words and kpresenter have autoformat feature:
 -> Simple autocorrection :
 	-> Convert first letter of a sentence automatically to uppercase
 	-> Convert two uppercase characters to one uppercase and one lowercase
-	-> Auto format Url => when we write http://www.kde.org it is replaced 
+	-> Auto format Url => when we write http://www.kde.org it is replaced
 	by a link variable, we detect as an url all words started by http:// ftp://
 	mailto: news:/
 	-> Suppress double space
@@ -11,23 +11,23 @@ words and kpresenter have autoformat feature:
 	-> Automatically do bold and underline formatting => when we write
 	*kde* => it replace by <bold>kde</bold> and when we write _kde_
 	it replaces by <underline>kde</underline>
-	-> Replace 1/2 to 1/2 => replace to fraction charactere it works for 
+	-> Replace 1/2 to 1/2 => replace to fraction charactere it works for
 	1/2, 1/4 3/4
 	-> Use auto-numbering for numbered paragraphs, when we start a paragraph
 	with a <number>+<space>+<text> and we press enter this paragraph and
 	next paragraph is replace by number style.
-	-> use list-formatting for bulletted paragraph, when we write "* kde" and 
+	-> use list-formatting for bulletted paragraph, when we write "* kde" and
 	press enter style of paragraph is replaced by bullet style. We can
 	configurate bullet.
--> Custom Quotes : 
+-> Custom Quotes :
 	-> we can replace double quotes and simple quotes by specific
 	characters.
 -> Advanced autocorrection:
-	-> we can define a word which will be replaced by another word 
+	-> we can define a word which will be replaced by another word
 	=> for example calligras by calligra, or microsoft by linux
 ->Exception:
 	-> we can define list of exception word:
-		=>Do not treat as the end of a sequence 
+		=>Do not treat as the end of a sequence
 		==>don't upper case after specific word.
 		
 		=>there is a autoInclude. Autoformat analyse line and detect

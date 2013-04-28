@@ -25,6 +25,7 @@
 #include <QtPlugin>
 
 #include <KoDocument.h>
+#include <KoPart.h>
 #include "kochart_export.h"
 #include "KoChartModel.h"
 
@@ -62,11 +63,11 @@ namespace KoChart
         WizardExtensionPrivate *d;
     };
 
-    class KOCHART_EXPORT Part : public KoDocument
+    class KOCHART_EXPORT Part : public KoPart
     {
         Q_OBJECT
     public:
-        Part(QObject *parent);
+        explicit Part(QObject *parent);
 
         virtual ~Part();
 

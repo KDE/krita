@@ -25,9 +25,9 @@
 #include <QColor>
 #include <QPainter>
 
-#include <KGlobal>
-#include <KColorCombo>
-#include <KColorCollection>
+#include <kglobal.h>
+#include <kcolorcombo.h>
+#include <kcolorcollection.h>
 
 using namespace KoProperty;
 

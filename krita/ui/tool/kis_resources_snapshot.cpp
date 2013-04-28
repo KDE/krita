@@ -114,7 +114,6 @@ void KisResourcesSnapshot::setupPainter(KisPainter* painter)
     painter->setGenerator(m_d->currentGenerator);
     painter->setPattern(m_d->currentPattern);
     painter->setGradient(m_d->currentGradient);
-    painter->setPaintOpPreset(m_d->currentPaintOpPreset, m_d->image);
 
     KisPaintLayer *paintLayer;
     if ((paintLayer = dynamic_cast<KisPaintLayer*>(m_d->currentNode.data()))) {
@@ -127,6 +126,12 @@ void KisResourcesSnapshot::setupPainter(KisPainter* painter)
 
     painter->setStrokeStyle(m_d->strokeStyle);
     painter->setFillStyle(m_d->fillStyle);
+
+    /**
+     * The paintOp should be initialized the last, because it may
+     * ask the painter for some options while initialization
+     */
+    painter->setPaintOpPreset(m_d->currentPaintOpPreset, m_d->image);
 }
 
 void KisResourcesSnapshot::setupPaintAction(KisRecordedPaintAction *action)
@@ -180,6 +185,11 @@ KisNodeSP KisResourcesSnapshot::currentNode() const
     return m_d->currentNode;
 }
 
+KisImageWSP KisResourcesSnapshot::image() const
+{
+    return m_d->image;
+}
+
 bool KisResourcesSnapshot::needsIndirectPainting() const
 {
     return !m_d->currentPaintOpPreset->settings()->paintIncremental();
@@ -203,4 +213,19 @@ quint8 KisResourcesSnapshot::opacity() const
 const KoCompositeOp* KisResourcesSnapshot::compositeOp() const
 {
     return m_d->compositeOp;
+}
+
+KisPattern* KisResourcesSnapshot::currentPattern() const
+{
+    return m_d->currentPattern;
+}
+
+KoColor KisResourcesSnapshot::currentFgColor() const
+{
+    return m_d->currentFgColor;
+}
+
+KoColor KisResourcesSnapshot::currentBgColor() const
+{
+    return m_d->currentBgColor;
 }

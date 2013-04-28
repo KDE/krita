@@ -23,7 +23,8 @@
 
 const QString EXPERIMENT_DISPLACEMENT_ENABLED = "Experiment/displacementEnabled";
 const QString EXPERIMENT_DISPLACEMENT_VALUE = "Experiment/displacement";
-const QString EXPERIMENT_SMOOTHING = "Experiment/smoothing";
+const QString EXPERIMENT_SMOOTHING_ENABLED = "Experiment/smoothing";
+const QString EXPERIMENT_SMOOTHING_VALUE = "Experiment/smoothingValue";
 const QString EXPERIMENT_SPEED_ENABLED = "Experiment/speedEnabled";
 const QString EXPERIMENT_SPEED_VALUE = "Experiment/speed";
 
@@ -32,12 +33,18 @@ class KisExperimentOpOptionsWidget;
 
 class KisExperimentOpOption : public KisPaintOpOption
 {
+    Q_OBJECT
 public:
     KisExperimentOpOption();
     ~KisExperimentOpOption();
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
+
+private slots:
+    void enableSpeed(qreal value);
+    void enableSmooth(qreal value);
+    void enableDisplacement(qreal value);
 
 private:
     KisExperimentOpOptionsWidget * m_options;
@@ -51,14 +58,16 @@ class ExperimentOption{
         qreal displacement;
         bool isSpeedEnabled;
         qreal speed;
-        bool smoothing;
-        
+        bool isSmoothingEnabled;
+        qreal smoothing;
+
         void readOptionSetting(const KisPropertiesConfiguration* setting){
             isDisplacementEnabled = setting->getBool(EXPERIMENT_DISPLACEMENT_ENABLED);
-            displacement = setting->getDouble(EXPERIMENT_DISPLACEMENT_VALUE);
+            displacement = setting->getDouble(EXPERIMENT_DISPLACEMENT_VALUE, 50.0);
             isSpeedEnabled = setting->getBool(EXPERIMENT_SPEED_ENABLED);
-            speed = setting->getDouble(EXPERIMENT_SPEED_VALUE);
-            smoothing = setting->getBool(EXPERIMENT_SMOOTHING);
+            speed = setting->getDouble(EXPERIMENT_SPEED_VALUE, 50.0);
+            isSmoothingEnabled = setting->getBool(EXPERIMENT_SMOOTHING_ENABLED);
+            smoothing = setting->getDouble(EXPERIMENT_SMOOTHING_VALUE, 20.0);
         }
 };
 

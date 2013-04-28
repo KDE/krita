@@ -30,6 +30,7 @@
 class KoXmlWriter;
 class KoShapeSavingContext;
 class KoBookmark;
+class KoAnnotation;
 class KoTextMeta;
 class KoTextInlineRdf;
 class RdfSemanticItem;
@@ -78,6 +79,7 @@ class KOTEXT_EXPORT KoTextInlineRdf : public QObject
 public:
     KoTextInlineRdf(const QTextDocument *doc, const QTextBlock &b);
     KoTextInlineRdf(const QTextDocument *doc, KoBookmark *b);
+    KoTextInlineRdf(const QTextDocument *doc, KoAnnotation *b);
     KoTextInlineRdf(const QTextDocument *doc, KoTextMeta *b);
     KoTextInlineRdf(const QTextDocument *doc, const QTextTableCell &b);
 

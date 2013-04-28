@@ -21,13 +21,25 @@
 
 #include "KoColorSpace.h"
 
+KoColorConversionTransformation::Intent KoColorConversionTransformation::InternalRenderingIntent = IntentPerceptual;
+KoColorConversionTransformation::ConversionFlags KoColorConversionTransformation::InternalConversionFlags = BlackpointCompensation;
+
+KoColorConversionTransformation::Intent KoColorConversionTransformation::AdjustmentRenderingIntent = IntentPerceptual;
+KoColorConversionTransformation::ConversionFlags KoColorConversionTransformation::AdjustmentConversionFlags = BlackpointCompensation | NoWhiteOnWhiteFixup;
+
+
 struct KoColorConversionTransformation::Private {
     const KoColorSpace* srcColorSpace;
     const KoColorSpace* dstColorSpace;
     Intent renderingIntent;
+    ConversionFlags conversionFlags;
 };
 
-KoColorConversionTransformation::KoColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs, Intent renderingIntent) : d(new Private)
+KoColorConversionTransformation::KoColorConversionTransformation(const KoColorSpace* srcCs,
+                                                                 const KoColorSpace* dstCs,
+                                                                 Intent renderingIntent,
+                                                                 ConversionFlags conversionFlags)
+    : d(new Private)
 {
     Q_ASSERT(srcCs);
     Q_ASSERT(dstCs);
@@ -35,6 +47,7 @@ KoColorConversionTransformation::KoColorConversionTransformation(const KoColorSp
     d->srcColorSpace = srcCs;
     d->dstColorSpace = dstCs;
     d->renderingIntent = renderingIntent;
+    d->conversionFlags = conversionFlags;
 }
 
 KoColorConversionTransformation::~KoColorConversionTransformation()
@@ -52,9 +65,14 @@ const KoColorSpace* KoColorConversionTransformation::dstColorSpace() const
     return d->dstColorSpace;
 }
 
-KoColorConversionTransformation::Intent KoColorConversionTransformation::renderingIntent()
+KoColorConversionTransformation::Intent KoColorConversionTransformation::renderingIntent() const
 {
     return d->renderingIntent;
+}
+
+KoColorConversionTransformation::ConversionFlags KoColorConversionTransformation::conversionFlags() const
+{
+    return d->conversionFlags;
 }
 
 void KoColorConversionTransformation::setSrcColorSpace(const KoColorSpace* cs) const

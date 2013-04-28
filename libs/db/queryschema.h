@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIDB_QUERY_H
-#define KEXIDB_QUERY_H
+#ifndef KEXIDB_QUERYSCHEMA_H
+#define KEXIDB_QUERYSCHEMA_H
 
 #include <QVector>
 #include <QString>
@@ -301,7 +301,7 @@ public:
      in a system table, so query connection is set to NULL
      (even if \a tableSchema's connection is not NULL).
      Id of the created query is set to 0. */
-    QuerySchema(TableSchema& tableSchema);
+    explicit QuerySchema(TableSchema& tableSchema);
 
     /*! Copy constructor. Creates deep copy of \a querySchema.
      QueryAsterisk objects are deeply copied while only pointers to Field objects are copied. */
@@ -353,7 +353,7 @@ public:
                         bool visible = true);
 
     /*! Removes field from the columns list. Use with care. */
-    virtual void removeField(Field *field);
+    virtual bool removeField(Field *field);
 
     /*! Adds a field built on top of \a expr expression.
      This creates a new Field object and adds it to the query schema using addField(). */
@@ -377,7 +377,7 @@ public:
     virtual void clear();
 
     /*! \return string for debugging purposes. */
-    virtual QString debugString();
+    virtual QString debugString() const;
 
     /*! If query was created using a connection,
       returns this connection object, otherwise NULL. */
@@ -390,7 +390,7 @@ public:
      with removeTable().
      Every query that has at least one table defined, should have
      assigned a master table.
-     If no master table is assigned explicitym but this method there is only
+     If no master table is assigned explicitly but this method there is only
      one table used for this query even if there are table aliases,
      a single table is returned here.
      (e.g. "T" table is returned for "SELECT T1.A, T2.B FROM T T1, T T2" statement). */
@@ -520,7 +520,7 @@ public:
     QList<int> tablePositions(const QString& tableName) const;
 
     /*! Provided for convenience.
-     \return true if a table at \a position (within FROM section of the the query)
+     \return true if a table at \a position (within FROM section of the query)
      has non empty alias defined.
      If there is no alias for this table,
      or if there is no such table in the query defined, false is returned. */
@@ -531,7 +531,7 @@ public:
     int columnPositionForAlias(const QByteArray& name) const;
 
     /*! Sets \a alias for a table at \a position (within FROM section
-     of the the query).
+     of the query).
      Passing empty sting to \a alias clears alias for a given table
      (only for specified \a position). */
     void setTableAlias(uint position, const QByteArray& alias);
@@ -854,7 +854,7 @@ public:
      (not by TableSchema object like for ordinary Field objects)
      for that the QueryAsterisk object was added (using QuerySchema::addField()).
      */
-    QueryAsterisk(QuerySchema *query, TableSchema *table = 0);
+    explicit QueryAsterisk(QuerySchema *query, TableSchema *table = 0);
 
     QueryAsterisk(const QueryAsterisk& asterisk);
 

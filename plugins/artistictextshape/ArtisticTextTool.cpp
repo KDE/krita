@@ -41,11 +41,11 @@
 #include <KoShapeController.h>
 #include <KoShapeContainer.h>
 #include <KoInteractionStrategy.h>
+#include <KoIcon.h>
 
-#include <KLocale>
-#include <KIcon>
-#include <KStandardAction>
-#include <KDebug>
+#include <klocale.h>
+#include <kstandardaction.h>
+#include <kdebug.h>
 
 #include <QAction>
 #include <QGridLayout>
@@ -63,47 +63,47 @@ ArtisticTextTool::ArtisticTextTool(KoCanvasBase *canvas)
     : KoToolBase(canvas), m_selection(canvas, this), m_currentShape(0), m_hoverText(0), m_hoverPath(0), m_hoverHandle(false)
     , m_textCursor( -1 ), m_showCursor( true ), m_currentStrategy(0)
 {
-    m_detachPath  = new KAction(KIcon("artistictext-detach-path"), i18n("Detach Path"), this);
+    m_detachPath  = new KAction(koIcon("artistictext-detach-path"), i18n("Detach Path"), this);
     m_detachPath->setEnabled( false );
     connect( m_detachPath, SIGNAL(triggered()), this, SLOT(detachPath()) );
     addAction("artistictext_detach_from_path", m_detachPath);
 
-    m_convertText  = new KAction(KIcon("pathshape"), i18n("Convert to Path"), this);
+    m_convertText  = new KAction(koIcon("pathshape"), i18n("Convert to Path"), this);
     m_convertText->setEnabled( false );
     connect( m_convertText, SIGNAL(triggered()), this, SLOT(convertText()) );
     addAction("artistictext_convert_to_path", m_convertText);
 
-    m_fontBold = new KAction(KIcon("format-text-bold"), i18n("Bold text"), this);
+    m_fontBold = new KAction(koIcon("format-text-bold"), i18n("Bold text"), this);
     m_fontBold->setCheckable(true);
     connect(m_fontBold, SIGNAL(toggled(bool)), this, SLOT(toggleFontBold(bool)));
     addAction("artistictext_font_bold", m_fontBold);
 
-    m_fontItalic = new KAction(KIcon("format-text-italic"), i18n("Italic text"), this);
+    m_fontItalic = new KAction(koIcon("format-text-italic"), i18n("Italic text"), this);
     m_fontItalic->setCheckable(true);
     connect(m_fontItalic, SIGNAL(toggled(bool)), this, SLOT(toggleFontItalic(bool)));
     addAction("artistictext_font_italic", m_fontItalic);
 
-    m_superScript = new KAction(KIcon("format-text-superscript"), i18n("Superscript"), this);
+    m_superScript = new KAction(koIcon("format-text-superscript"), i18n("Superscript"), this);
     m_superScript->setCheckable(true);
     connect(m_superScript, SIGNAL(triggered()), this, SLOT(setSuperScript()));
     addAction("artistictext_superscript", m_superScript);
 
-    m_subScript = new KAction(KIcon("format-text-subscript"), i18n("Subscript"), this);
+    m_subScript = new KAction(koIcon("format-text-subscript"), i18n("Subscript"), this);
     m_subScript->setCheckable(true);
     connect(m_subScript, SIGNAL(triggered()), this, SLOT(setSubScript()));
     addAction("artistictext_subscript", m_subScript);
 
-    KAction *anchorStart = new KAction(KIcon("format-justify-left"), i18n("Anchor at Start"), this);
+    KAction *anchorStart = new KAction(koIcon("format-justify-left"), i18n("Anchor at Start"), this);
     anchorStart->setCheckable( true );
     anchorStart->setData(ArtisticTextShape::AnchorStart);
     addAction("artistictext_anchor_start", anchorStart);
 
-    KAction *anchorMiddle = new KAction(KIcon("format-justify-center"), i18n("Anchor at Middle"), this);
+    KAction *anchorMiddle = new KAction(koIcon("format-justify-center"), i18n("Anchor at Middle"), this);
     anchorMiddle->setCheckable( true );
     anchorMiddle->setData(ArtisticTextShape::AnchorMiddle);
     addAction("artistictext_anchor_middle", anchorMiddle);
 
-    KAction *anchorEnd = new KAction(KIcon("format-justify-right"), i18n("Anchor at End"), this);
+    KAction *anchorEnd = new KAction(koIcon("format-justify-right"), i18n("Anchor at End"), this);
     anchorEnd->setCheckable( true );
     anchorEnd->setData(ArtisticTextShape::AnchorEnd);
     addAction("artistictext_anchor_end", anchorEnd);
@@ -913,6 +913,41 @@ void ArtisticTextTool::deselectAll()
     if (m_currentShape) {
         m_selection.clear();
     }
+}
+
+QVariant ArtisticTextTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const
+{
+    if (!m_currentShape)
+        return QVariant();
+
+    switch (query) {
+    case Qt::ImMicroFocus: {
+        // The rectangle covering the area of the input cursor in widget coordinates.
+        QRectF rect = m_textCursorShape.boundingRect();
+        rect.moveTop(rect.bottom());
+        QTransform shapeMatrix = m_currentShape->absoluteTransformation(&converter);
+        qreal zoomX, zoomY;
+        converter.zoom(&zoomX, &zoomY);
+        shapeMatrix.scale(zoomX, zoomY);
+        rect = shapeMatrix.mapRect(rect);
+        return rect.toRect();
+    }
+    case Qt::ImFont:
+        // The currently used font for text input.
+        return m_currentShape->fontAt(m_textCursor);
+    case Qt::ImCursorPosition:
+        // The logical position of the cursor within the text surrounding the input area (see ImSurroundingText).
+        return m_currentShape->charPositionAt(m_textCursor);
+    case Qt::ImSurroundingText:
+        // The plain text around the input area, for example the current paragraph.
+        return m_currentShape->plainText();
+    case Qt::ImCurrentSelection:
+        // The currently selected text.
+        return QVariant();
+    default:
+        ; // Qt 4.6 adds ImMaximumTextLength and ImAnchorPosition
+    }
+    return QVariant();
 }
 
 #include <ArtisticTextTool.moc>

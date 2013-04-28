@@ -1,0 +1,51 @@
+ * Create the basic shape                               DONE
+
+---------------- Milestone 1: Shape plugin ----------------
+
+ * Load 3D scene                                        DONE
+
+ * Store the 3D scene                                   DONE
+
+ * Save the 3D scene                                    DONE
+
+ * Test roundtrip with all types
+    + ODG                                               Done
+    + ODT                                               Done
+    + ODS
+    + ODP
+
+ * Fix bugs / feedback from the review
+    + Only toplevel scenes support position/size        Done
+    + All level objects should have layer               Done
+    + Separate Objects into their own files.
+
+ * Integrate with the apps
+    + Karbon: Fix the layer bug                         Done
+    + Words:  Inline text manager thingie               Done
+    + Sheets: Test it
+    + Stage:  Test it
+
+---------------- Milestone 2: Load/Store/Save ----------------
+
+ * Interpret all necessary information
+
+ * Paint
+    + Paint just a frame around the shape.              Done
+    + Connect to SiPP and create a SiPP scene
+       - View parameters
+       - sphere
+       - cube
+       - extrude
+       - rotate
+    + Render into a QImage
+
+ * SiPP
+    + ANSI C-ify SiPP                                   Done
+    + Import it into the shape
+    + Make a C++ wrapper.
+
+---------------- Milestone 3: Viewer shape ----------------
+
+ * Edit a scene
+
+---------------- Milestone 4: Full 3D support ----------------

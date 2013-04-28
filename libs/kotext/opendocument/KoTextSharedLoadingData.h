@@ -43,7 +43,8 @@ class KoShape;
 class KoShapeLoadingContext;
 class KoOdfNotesConfiguration;
 class KoOdfBibliographyConfiguration;
-class KoTextAnchor;
+class KoShapeAnchor;
+class KoTextTableTemplate;
 
 #define KOTEXT_SHARED_LOADING_ID "KoTextSharedLoadingId"
 
@@ -189,7 +190,7 @@ protected:
      * @param shape a shape that has finished loading.
      * @param element the xml element that represents the shape being inserted.
      */
-    virtual void shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context, KoTextAnchor *anchor);
+    virtual void shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context);
 
 private:
     enum StyleType {
@@ -251,6 +252,10 @@ private:
     void addNotesConfiguration(KoShapeLoadingContext &context);
 
     void addBibliographyConfiguration(KoShapeLoadingContext &context);
+
+    void addTableTemplate(KoShapeLoadingContext &context, KoStyleManager *styleManager);
+    QList<QPair<QString, KoTextTableTemplate *> > loadTableTemplates(KoShapeLoadingContext &context);
+
 
     class Private;
     Private * const d;

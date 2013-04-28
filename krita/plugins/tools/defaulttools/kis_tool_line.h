@@ -30,6 +30,7 @@
 #include "KoToolFactoryBase.h"
 #include "flake/kis_node_shape.h"
 #include "kis_paint_information.h"
+#include <KoIcon.h>
 
 class KisPainter;
 class QPoint;
@@ -87,7 +88,7 @@ public:
         setToolType(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setPriority(1);
-        setIcon("krita_tool_line");
+        setIconName(koIconNameCStr("krita_tool_line"));
     }
 
     virtual ~KisToolLineFactory() {}

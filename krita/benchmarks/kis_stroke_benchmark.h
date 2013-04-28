@@ -35,7 +35,6 @@ class KisStrokeBenchmark : public QObject
     Q_OBJECT
 private:
     const KoColorSpace * m_colorSpace;
-    KisPaintDeviceSP m_device;
     KoColor m_color;
     KisImageSP m_image;
     KisLayerSP m_layer;

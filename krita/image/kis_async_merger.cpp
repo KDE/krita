@@ -83,12 +83,6 @@ public:
             return true;
         }
 
-        KisFilterConfiguration *filterConfig = layer->filter();
-        if (!filterConfig) return true;
-
-        KisFilterSP filter = KisFilterRegistry::instance()->value(filterConfig->name());
-        if (!filter) return false;
-
         KisPaintDeviceSP originalDevice = layer->original();
         originalDevice->clear(m_updateRect);
 
@@ -98,6 +92,22 @@ public:
         //      null, we are finish here.
         if(applyRect.isNull()) return true;
 
+        KisSafeFilterConfigurationSP filterConfig = layer->filter();
+        if (!filterConfig) {
+            /**
+             * When an adjustment layer is just created, it may have no
+             * filter inside. Then the layer has work as a pass-through
+             * node. Just copy the merged data to the layer's original.
+             */
+            KisPainter gc(originalDevice);
+            gc.setCompositeOp(COMPOSITE_COPY);
+            gc.bitBlt(applyRect.topLeft(), m_projection, applyRect);
+            return true;
+        }
+
+        KisFilterSP filter = KisFilterRegistry::instance()->value(filterConfig->name());
+        if (!filter) return false;
+
         Q_ASSERT(layer->nodeProgressProxy());
 
         KoProgressUpdater updater(layer->nodeProgressProxy());
@@ -105,7 +115,7 @@ public:
         QPointer<KoUpdater> updaterPtr = updater.startSubtask();
 
         // We do not create a transaction here, as srcDevice != dstDevice
-        filter->process(m_projection, originalDevice, 0, applyRect, filterConfig, updaterPtr);
+        filter->process(m_projection, originalDevice, 0, applyRect, filterConfig.data(), updaterPtr);
 
         updaterPtr->setProgress(100);
 
@@ -325,8 +335,8 @@ bool KisAsyncMerger::compositeWithProjection(KisLayerSP layer, const QRect &rect
     // because the channel flags from the source layer doesn't match with the colorspace of the projection device
     // this leads to the situation that the wrong channels will be enabled/disabled
     if(!channelFlags.isEmpty() && m_currentProjection->colorSpace() != device->colorSpace()) {
-        KoColorSpace* src = device->colorSpace();
-        KoColorSpace* dst = m_currentProjection->colorSpace();
+        const KoColorSpace* src = device->colorSpace();
+        const KoColorSpace* dst = m_currentProjection->colorSpace();
 
         bool alphaFlagIsSet        = (src->channelFlags(false,true) & channelFlags) == src->channelFlags(false,true);
         bool allColorFlagsAreSet   = (src->channelFlags(true,false) & channelFlags) == src->channelFlags(true,false);

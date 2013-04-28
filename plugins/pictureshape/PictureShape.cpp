@@ -46,8 +46,8 @@
 #include <SvgUtil.h>
 #include <KoPathShape.h>
 
-#include <KDebug>
-#include <KJob>
+#include <kdebug.h>
+#include <kjob.h>
 #include <KIO/Job>
 
 #include <QPainter>
@@ -145,7 +145,7 @@ QPainterPath _Private::generateOutline(const QImage &imageIn, int treshold)
         return path;
     }
 
-    for (int y = 100-1; y >= first; y--) {
+    for (int y = 100-1; y >= 0; --y) {
         if (leftArray[y] != -1) {
             path.lineTo(leftArray[y] / 99.0, y / 99.0);
         }
@@ -424,6 +424,8 @@ bool PictureShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
                  size().height() / imageData->imageSize().height());
 
         loadOdfClipContour(element, context, scaleFactor);
+        // this is needed so that the image is already normalized when calling waitUntilReady e.g. by cstester
+        m_clippingRect.normalize(imageData->imageSize());
 
         return true;
     }

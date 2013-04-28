@@ -24,7 +24,7 @@
 #include <QDir>
 
 #include <klocale.h>
-#include <KDebug>
+#include <kdebug.h>
 
 using namespace KexiDB;
 

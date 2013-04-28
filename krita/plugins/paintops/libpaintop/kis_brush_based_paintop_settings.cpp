@@ -54,7 +54,7 @@ QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const QPointF& pos, KisP
         }
         
         KisBrushSP brush = options->brush();
-        QPointF hotSpot = brush->hotSpot(1.0/brush->scale(),1.0/brush->scale(), -brush->angle());
+        QPointF hotSpot = brush->hotSpot(1.0/brush->scale(),1.0/brush->scale(), -brush->angle(), KisPaintInformation());
 
         QTransform m;
         m.reset();

@@ -109,7 +109,7 @@ public:
 private:
     QAtomicPointer<void> m_array[SIZE];
     QAtomicInt m_allocated;
-    DECLARE_STATUS_VAR();
+    DECLARE_STATUS_VAR()
 };
 
 

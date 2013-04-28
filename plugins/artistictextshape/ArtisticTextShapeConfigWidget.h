@@ -31,7 +31,7 @@ class ArtisticTextShapeConfigWidget : public QWidget
 {
     Q_OBJECT
 public:
-    ArtisticTextShapeConfigWidget(ArtisticTextTool *textTool);
+    explicit ArtisticTextShapeConfigWidget(ArtisticTextTool *textTool);
 
 public slots:
     /// updates the widget form the current artistic text shape

@@ -37,6 +37,10 @@ class KoStore;
 class KoXmlWriter;
 class KoDocument;
 
+
+///**
+// * Dummy definition in case Soprano is not available.
+// */
 namespace Soprano
 {
     class Model;
@@ -55,7 +59,7 @@ class KOTEXT_EXPORT KoDocumentRdfBase : public QObject, public KoDataCenterBase
     Q_OBJECT
 
 public:
-    KoDocumentRdfBase(QObject *parent = 0);
+    explicit KoDocumentRdfBase(QObject *parent = 0);
 
     /**
      * Get the Soprano::Model that contains all the Rdf

@@ -39,7 +39,7 @@ class CHARTSHAPELIB_EXPORT Legend : public QObject, public KoShape
     Q_OBJECT
 
 public:
-    Legend(ChartShape *parent);
+    explicit Legend(ChartShape *parent);
     ~Legend();
 
     QString title() const;
@@ -84,6 +84,9 @@ public:
     void rebuild();
     using KoShape::update;
     void update() const;
+
+signals:
+    void updateConfigWidget();
 
 private slots:
     void slotChartTypeChanged(ChartType chartType );

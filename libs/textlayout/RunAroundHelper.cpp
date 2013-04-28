@@ -93,7 +93,7 @@ bool RunAroundHelper::fit(const bool resetHorizontalPosition, bool isRightToLeft
         // The line rect could be split into no further linerectpart, so we have
         // to move the lineRect down a bit and try again
         // No line rect part was enough big, to fit the line. Recreate line rect further down
-        // (and that is devided into new line parts). Line rect is at different position to
+        // (and that is divided into new line parts). Line rect is at different position to
         // obstructions, so new parts are completely different. if there are no obstructions, then we
         // have only one line part which is full line rect
 
@@ -148,7 +148,7 @@ void RunAroundHelper::createLineParts()
         QRectF rightLineRect = m_lineRect;
         bool lastRightRectValid = false;
         qSort(m_validObstructions.begin(), m_validObstructions.end(), KoTextLayoutObstruction::compareRectLeft);
-        // Devide rect to parts, part can be invalid when obstructions are not disjunct.
+        // Divide rect to parts, part can be invalid when obstructions are not disjunct.
         foreach (KoTextLayoutObstruction *validObstruction, m_validObstructions) {
             QRectF leftLineRect = validObstruction->getLeftLinePart(rightLineRect);
             lineParts.append(leftLineRect);
@@ -197,7 +197,7 @@ void RunAroundHelper::createLineParts()
             }
         }
         // Filter invalid parts.
-        foreach (QRectF rect, lineParts) {
+        foreach (const QRectF &rect, lineParts) {
             if (rect.isValid()) {
                 m_lineParts.append(rect);
             }
@@ -234,7 +234,7 @@ void RunAroundHelper::updateLineParts(const QRectF &lineRect)
 QRectF RunAroundHelper::getLineRectPart()
 {
     QRectF retVal;
-    foreach (QRectF lineRectPart, m_lineParts) {
+    foreach (const QRectF &lineRectPart, m_lineParts) {
         if (m_horizontalPosition <= lineRectPart.left() && m_textWidth <= lineRectPart.width()) {
             retVal = lineRectPart;
             break;

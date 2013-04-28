@@ -46,7 +46,7 @@
 #include "kis_view2.h"
 #include "kis_painter.h"
 #include "kis_threaded_applicator.h"
-#include "filter/kis_filter_job.h"
+#include "kis_filter_job.h"
 #include "filter/kis_filter_registry.h"
 #include "kis_system_locker.h"
 #include "kis_progress_widget.h"
@@ -102,7 +102,18 @@ KisFilterHandler::~KisFilterHandler()
 
 void KisFilterHandler::showDialog()
 {
+    /**
+     * HACK ALERT:
+     * Until filters are ported to strokes, there should be a barrier
+     * to finish all the running strokes in the system
+     */
+    m_d->view->image()->barrierLock();
+    m_d->view->image()->unlock();
+
     KisPaintDeviceSP dev = m_d->view->activeDevice();
+    if (!dev) {
+        return;
+    }
     if (dev->colorSpace()->willDegrade(m_d->filter->colorSpaceIndependence())) {
         // Warning bells!
         if (m_d->filter->colorSpaceIndependence() == TO_LAB16) {

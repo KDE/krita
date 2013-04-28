@@ -34,7 +34,7 @@ class Image : public QObject
 {
     Q_OBJECT
 public:
-    Image(KoReportItemImage *);
+    explicit Image(KoReportItemImage *);
 
     ~Image();
 public slots:

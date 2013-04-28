@@ -26,7 +26,6 @@
 #include <QRect>
 #include <QDomElement>
 #include <QDomDocument>
-#include <QIcon>
 #include <QString>
 #include <QList>
 #include <QMap>
@@ -35,9 +34,9 @@
 #include <QMimeData>
 
 #include <ktemporaryfile.h>
-#include <kicon.h>
 #include <kdebug.h>
 
+#include <KoIcon.h>
 #include <KoElementReference.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
@@ -173,6 +172,7 @@ KisShapeLayer::~KisShapeLayer()
 
     foreach(KoShape *shape, shapes()) {
         shape->setParent(0);
+        delete shape;
     }
 
     delete m_d->converter;
@@ -193,7 +193,8 @@ void KisShapeLayer::initShapeLayer(KoShapeBasedDocumentBase* controller)
     m_d->canvas->shapeManager()->selection()->disconnect(this);
 
     connect(m_d->canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()));
-    connect(m_d->canvas->shapeManager()->selection(), SIGNAL(currentLayerChanged(const KoShapeLayer*)), this, SIGNAL(currentLayerChanged(const KoShapeLayer*)));
+    connect(m_d->canvas->shapeManager()->selection(), SIGNAL(currentLayerChanged(const KoShapeLayer*)),
+            this, SIGNAL(currentLayerChanged(const KoShapeLayer*)));
 
     connect(this, SIGNAL(sigMoveShapes(const QPointF&)), SLOT(slotMoveShapes(const QPointF&)));
 }
@@ -213,7 +214,7 @@ void KisShapeLayer::setImage(KisImageWSP _image)
 
 QIcon KisShapeLayer::icon() const
 {
-    return KIcon("bookmark-new");
+    return koIcon("bookmark-new");
 }
 
 KisPaintDeviceSP KisShapeLayer::original() const

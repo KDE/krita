@@ -119,8 +119,8 @@ void KoReportItemWeb::loadFinished(bool)
     }
 }
 
-int KoReportItemWeb::render(OROPage *page, OROSection *section,  QPointF offset,
-                            QVariant data, KRScriptHandler *script)
+int KoReportItemWeb::renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset,
+                                      const QVariant &data, KRScriptHandler *script)
 {
     Q_UNUSED(script);
  
@@ -139,7 +139,7 @@ int KoReportItemWeb::render(OROPage *page, OROSection *section,  QPointF offset,
         m_webPage->mainFrame()->setHtml(data.toString());
     }
     
-    return 0; //Item doesnt stretch the section height
+    return 0; //Item doesn't stretch the section height
 }
 
 QString KoReportItemWeb::itemDataSource() const

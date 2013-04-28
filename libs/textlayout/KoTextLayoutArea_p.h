@@ -28,6 +28,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#ifndef KOTEXTLAYOUTAREA_P_H
+#define KOTEXTLAYOUTAREA_P_H
+
 class KoTextLayoutArea::Private
 {
 public:
@@ -112,3 +115,5 @@ public:
     KoTextLayoutEndNotesArea *endNotesArea;
     QList<KoTextLayoutArea *> generatedDocAreas;
 };
+
+#endif // KOTEXTLAYOUTAREA_P_H

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=MyPaint brush
+Name[bs]=MyPaint četka
 Name[ca]=Pinzell de MyPaint
 Name[ca@valencia]=Pinzell de MyPaint
 Name[da]=MyPaint-pensel
@@ -10,11 +11,12 @@ Name[es]=Pincel MyPaint
 Name[et]=MyPainti pintsel
 Name[fi]=MyPaint-sivellin
 Name[fr]=Brosse MyPaint
-Name[gl]=Pincel MyPaint
+Name[gl]=Pincel de MyPaint
 Name[hu]=MyPaint ecset
 Name[it]=Il mio pennello
 Name[ja]=MyPaint ブラシ
 Name[kk]=Менің қылқаламым
+Name[mr]=माय पेंट ब्रश
 Name[nb]=MyPaint-pensel
 Name[nds]=MyPaint-Pinsel
 Name[nl]=MijnTekenen-penseel
@@ -33,4 +35,4 @@ Name[zh_TW]=MyPaint 筆刷
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritamypaintpaintop
-X-Krita-Version=5
+X-Krita-Version=27

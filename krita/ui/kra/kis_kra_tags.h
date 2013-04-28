@@ -84,6 +84,7 @@ const QString PROFILE = "profile";
 const QString ROTATION = "rotation";
 const QString SELECTION_MASK = "selectionmask";
 const QString SHAPE_LAYER = "shapelayer";
+const QString FILE_LAYER = "filelayer";
 const QString TRANSPARENCY_MASK = "transparencymask";
 const QString UUID = "uuid";
 const QString VISIBLE = "visible";

@@ -28,7 +28,7 @@ class QuickTableButton : public QToolButton
 {
     Q_OBJECT
 public:
-    QuickTableButton( QWidget *parent = 0 );
+    explicit QuickTableButton(QWidget *parent = 0);
     void emitCreate(int rows, int columns);
     void addAction(QAction *action);
 

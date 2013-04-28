@@ -68,7 +68,7 @@ public:
     /**
      * Constructor.
      */
-    KoFindText(QObject *parent = 0);
+    explicit KoFindText(QObject *parent = 0);
     virtual ~KoFindText();
 
     /**
@@ -142,10 +142,10 @@ private:
     class Private;
     Private * const d;
 
-    Q_PRIVATE_SLOT(d, void documentDestroyed(QObject* object));
+    Q_PRIVATE_SLOT(d, void documentDestroyed(QObject* object))
 };
 
-Q_DECLARE_METATYPE(QTextDocument *);
-Q_DECLARE_METATYPE(QTextCursor);
+Q_DECLARE_METATYPE(QTextDocument *)
+Q_DECLARE_METATYPE(QTextCursor)
 
 #endif // KOFINDTEXT_H

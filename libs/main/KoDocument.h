@@ -40,21 +40,16 @@
 #include <KoOdfDocument.h>
 #include <kundo2stack.h>
 
-
 class KUndo2Command;
-class QGraphicsItem;
-
+class KoPart;
 class KoStore;
 class KoOdfReadStore;
 class KoOdfWriteStore;
-class KoMainWindow;
-class KoView;
 class KoDocumentInfo;
 class KoDocumentRdf;
 class KoDocumentRdfBase;
-class KoOpenPane;
-class KoTextEditor;
 class KoProgressUpdater;
+class KoPageWidgetItem;
 class KoProgressProxy;
 
 class KoVersionInfo
@@ -75,7 +70,7 @@ public:
  *
  *  @short The %Calligra document class
  */
-class KOMAIN_EXPORT KoDocument : public KParts::ReadWritePart, public KoOdfDocument
+class KOMAIN_EXPORT KoDocument : public QObject, public KoOdfDocument
 {
     Q_OBJECT
     Q_PROPERTY(bool backupFile READ backupFile WRITE setBackupFile)
@@ -86,17 +81,13 @@ public:
     /**
      * Constructor.
      *
-     * @param parentWidget the parent widget, in case we create a wrapper widget
-     *        (in single view mode).
-     *        Usually passed by KPluginFactory::create.
-     * @param parent may be another KoDocument, or anything else.
-     *        Usually passed by KPluginFactory::create.
+     * @param parent The KoPart that owns the document. XXX: should be removed!
      * @param undoStack accepts the stack for the document. You can create any type of stack if you need.
      *        The stack objects will become owned by the document. This is used by Krita's KisDoc2. The default value for this
      *        parameter is a usual Qt's stack.
      */
-    KoDocument(QObject *parent,
-               KUndo2Stack *undoStack = new KUndo2Stack());
+    explicit KoDocument(KoPart *parent,
+                        KUndo2Stack *undoStack = new KUndo2Stack());
 
     /**
      *  Destructor.
@@ -105,6 +96,9 @@ public:
      * delete the attached widget as returned by widget().
      */
     virtual ~KoDocument();
+
+    /// XXX: Temporary!
+    KoPart *documentPart();
 
     /**
      * Reimplemented from KParts::ReadWritePart for internal reasons
@@ -256,63 +250,6 @@ public:
     QString errorMessage() const;
 
     /**
-     * Show the last error message in a message box.
-     * The dialog box will mention a saving problem.
-     * Note that save/saveFile takes care of doing it.
-     */
-    void showSavingErrorDialog();
-
-    /**
-     * Show the last error message in a message box.
-     * The dialog box will mention a loading problem.
-     * openUrl/openFile takes care of doing it, but not loadNativeFormat itself,
-     * so this is often called after loadNativeFormat returned false.
-     */
-    void showLoadingErrorDialog();
-
-    /**
-     *  Create a new view for the document.
-     */
-    KoView *createView(QWidget *parent = 0);
-
-    /**
-     * Adds a view to the document.
-     *
-     * This calls KoView::updateReadWrite to tell the new view
-     * whether the document is readonly or not.
-     */
-    virtual void addView(KoView *view);
-
-    /**
-     * Removes a view of the document.
-     */
-    virtual void removeView(KoView *view);
-
-    /**
-     * @return a list of views this document is displayed in
-     */
-    QList<KoView*> views() const;
-
-    /**
-     * @return number of views this document is displayed in
-     */
-    int viewCount() const;
-
-    /**
-     * @return a QGraphicsItem canvas displaying this document. There is only one QGraphicsItem canvas that can
-     * be shown by many QGraphicsView subclasses (those should reimplement KoCanvasController
-     * as well).
-     *
-     * @param create if true, a new canvas item is created if there wasn't one.
-     */
-    QGraphicsItem *canvasItem(bool create = true);
-
-    /**
-     * Reimplemented from KParts::Part
-     */
-    virtual KParts::Part *hitTest(QWidget *widget, const QPoint &globalPos);
-
-    /**
      * @brief Generates a preview picture of the document
      * @note The preview is used in the File Dialog and also to create the Thumbnail
      */
@@ -328,23 +265,11 @@ public:
     virtual void paintContent(QPainter &painter, const QRect &rect) = 0;
 
     /**
-     * Creates and shows the start up widget.
-     * @param parent the KoMainWindow used as parent for the widget.
-     * @param alwaysShow always show the widget even if the user has configured it to not show.
-     */
-    virtual void showStartUpWidget(KoMainWindow *parent, bool alwaysShow = false);
-
-    /**
-     * Removes the startupWidget shown at application start up.
-     */
-    void deleteOpenPane(bool closing = false);
-
-    /**
      *  Tells the document that its title has been modified, either because
      *  the modified status changes (this is done by setModified() ) or
      *  because the URL or the document-info's title changed.
      */
-    virtual void setTitleModified();
+    void setTitleModified();
 
     /**
      *  @return true if the document is empty.
@@ -448,8 +373,6 @@ public:
      */
     bool saveNativeFormatCalligra(KoStore *store);
 
-public:
-
     /**
      * Activate/deactivate/configure the autosave feature.
      * @param delay in seconds, 0 to disable
@@ -506,13 +429,7 @@ public:
      * will be deleted, and if RDF support is compiled out, KoDocument does not take ownership.
      * Otherwise, KoDocument will own the rdf document.
      */
-    void setDocumentRdf(KoDocumentRdf *rdfDocument);
-
-    /**
-     * @return the Rdf metadata for this document.
-     * @see KoDocumentRdf
-     */
-    KoDocumentRdfBase *documentRdfBase() const;
+    void setDocumentRdf(KoDocumentRdfBase *rdfDocument);
 
     /**
      * @return the object to report progress to.
@@ -526,38 +443,7 @@ public:
      * progress to.
      */
     void setProgressProxy(KoProgressProxy *progressProxy);
-
-    /**
-     * Appends the shell to the list of shells which show this
-     * document as their root document.
-     *
-     * This method is automatically called from KoMainWindow::setRootDocument,
-     * so you do not need to call it.
-     */
-    virtual void addShell(KoMainWindow *shell);
-
-    /**
-     * Removes the shell from the list. That happens automatically if the shell changes its
-     * root document. Usually you do not need to call this method.
-     */
-    virtual void removeShell(KoMainWindow *shell);
-
-    /**
-     * @return the list of shells for the main window
-     */
-    const QList<KoMainWindow*>& shells() const;
-
-    /**
-     * @return the number of shells for the main window
-     */
-    int shellCount() const;
-
-    /**
-     * @return the list of all the currently opened documents
-     */
-    static QList<KoDocument*> *documentList() {
-        return s_documentList;
-    }
+    KoProgressProxy* progressProxy() const;
 
     /**
      * Return true if url() is a real filename, false if url() is
@@ -595,7 +481,6 @@ public:
 
     int queryCloseDia();
 
-
     /**
      * Sets the backup path of the document
      */
@@ -605,21 +490,6 @@ public:
      * @return path to the backup document
      */
     QString backupPath()const;
-
-    /**
-     * Indicates that this document is currently viewed
-     * and thus should control the title caption.
-     * Also resets current flag for all parents.
-     */
-    void setCurrent(bool on = true);
-
-    /**
-     * Sets current flag for this document and all its parents
-     */
-    void forceCurrent(bool on);
-    bool isCurrent() const;
-
-    void setTitleModified(const QString &caption, bool mod);
 
     /**
      * @return caption of the document
@@ -637,10 +507,7 @@ public:
      * After using loadNativeFormat on a template, one wants
      * to set the url to KUrl()
      */
-    void resetURL() {
-        setUrl(KUrl());
-        setLocalFilePath(QString());
-    }
+    void resetURL();
 
     /**
      * Set when you want an external embedded document to be stored internally
@@ -662,9 +529,7 @@ public:
     /**
      * @return returns the number of pages in the document.
      */
-    virtual int pageCount() const {
-        return 1;
-    }
+    virtual int pageCount() const;
 
     /**
      * Returns the unit used to display all measures/distances.
@@ -682,24 +547,6 @@ public:
      * @param settingsWriter
      */
     void saveUnitOdf(KoXmlWriter *settingsWriter) const;
-
-    /**
-     * Set the template type used. This is used by the start up widget to show
-     * the correct templates.
-     */
-    void setTemplateType(const QString& _templateType);
-    /**
-     * Template type used. This is used by the start up widget to show
-     * the correct templates.
-     */
-    QString templateType() const;
-
-    /**
-     * Shows the init dialog when embeding
-     * @param parent the parent widget
-     */
-    virtual bool showEmbedInitDialog(QWidget *parent);
-
 
     QList<KoVersionInfo> &versionList();
 
@@ -720,11 +567,8 @@ public:
 
     void clearUndoHistory();
 
-    using ReadWritePart::setUrl;
-    using ReadWritePart::localFilePath;
-    using ReadWritePart::setLocalFilePath;
-
 public slots:
+
     /**
      * Initialize an empty document using default values
      */
@@ -756,12 +600,6 @@ public slots:
      *  to be saved or not before deleting it.
      */
     virtual void setModified(bool _mod);
-
-    /**
-     * Called by the undo stack when the document is saved or all changes has been undone
-     * @param clean if the document's undo stack is clean or not
-     */
-    virtual void setDocumentClean(bool clean);
 
     /**
      * Set the output stream to report profile information to.
@@ -806,49 +644,19 @@ signals:
     */
     void modified(bool);
 
-    void closeEmbedInitDialog();
-
-protected slots:
-    /**
-     * This slot loads an existing file and deletes the start up widget.
-     * @param url the file to load
-     */
-    virtual void openExistingFile(const KUrl& url);
-    /**
-     * This slot loads a template and deletes the start up widget.
-     * @param url the template to load
-     */
-    virtual void openTemplate(const KUrl& url);
+    void titleModified(QString caption, bool isModified);
 
 protected:
-    /**
-     * Struct used in the list created by createCustomDocumentWidgets()
-     */
-    struct CustomDocumentWidgetItem {
-        /// Pointer to the custom document widget
-        QWidget *widget;
-        /// title used in the sidebar. If left empty it will be displayed as "Custom Document"
-        QString title;
-        /// icon used in the sidebar. If left empty it will use the unknown icon
-        QString icon;
-    };
+
+    friend class KoPart;
 
     /**
-        Generate a name for the document.
-    */
+     * Generate a name for the document.
+     */
     QString newObjectName();
 
     QString autoSaveFile(const QString & path) const;
 
-
-
-    virtual KoView *createViewInstance(QWidget *parent) = 0;
-
-    /**
-     * Override this to create a QGraphicsItem that does not rely
-     * on proxying a KoCanvasController.
-     */
-    virtual QGraphicsItem *createCanvasItem();
 
     /**
      *  Loads a document from KReadOnlyPart::m_file (KParts takes care of downloading
@@ -867,7 +675,7 @@ protected:
      * own KoProgressUpdater-subTasks which are then taken into account for the
      * displayed progressbar during loading.
      */
-    virtual void setupOpenFileSubProgress() {}
+    virtual void setupOpenFileSubProgress();
 
     /**
      *  Saves a document to KReadOnlyPart::m_file (KParts takes care of uploading
@@ -876,19 +684,6 @@ protected:
      *  You should not have to reimplement, except for very special cases.
      */
     virtual bool saveFile();
-
-    /**
-     * Override this method in your derived class to show a widget in the startup 'dialog'.
-     * This widget should allow the user to set settings for a custom document (i.e. one
-     * not based on a template).
-     * The returned widget should provide its own button (preferably 'Create') and
-     * implement the logic to implement the document instance correctly.
-     * After initializing the widget should emit a signal called 'documentSelected()' which
-     * will remove the startupWidget and show the document.
-     * @param parent the parent of the to be created widget.
-     * @return a list of KoDocument::CustomDocumentWidgetItem.
-     */
-    virtual QList<CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
 
     /**
      *  Overload this function if you have to load additional files
@@ -911,9 +706,7 @@ protected:
 
 
     /** @internal */
-    virtual void setModified() {
-        KParts::ReadWritePart::setModified();
-    }
+    virtual void setModified();
 
     /**
      *  Returns whether or not the current openUrl() or openFile() call is
@@ -931,40 +724,26 @@ protected:
      */
     bool isExporting() const;
 
-    /**
-     * Creates the open widget showed at application start up.
-     * @param parent the parent widget
-     * @param instance the KComponentData to be used for KConfig data
-     * @param templateType the template-type (group) that should be selected on creation.
-     */
-    KoOpenPane *createOpenPane(QWidget *parent, const KComponentData &instance,
-                               const QString& templateType = QString());
+public:
 
+    QString localFilePath() const;
 
+    virtual KUrl url() const;
 
-    /// to satisfy KoOdfDocument where it overlaps with kparts
-    virtual KUrl odfUrl() const {
-        return url();
-    }
-
-    virtual void setOdfUrl( const KUrl& url ) {
-        setUrl( url );
-    }
+    virtual void setUrl(const KUrl& url);
 
 private slots:
 
     void slotAutoSave();
-    void slotStarted(KIO::Job*);
-    void startCustomDocument();
+
+    /// Called by the undo stack when undo or redo is called
+    void slotUndoStackIndexChanged(int idx);
 
 private:
 
     bool saveToStream(QIODevice *dev);
 
     QString checkImageMimeTypes(const QString &mimeType, const KUrl& url) const;
-
-    /// @return the current KoMainWindow shell
-    KoMainWindow *currentShell();
 
     KService::Ptr nativeService();
     bool oldLoadAndParse(KoStore *store, const QString& filename, KoXmlDocument& doc);
@@ -978,9 +757,6 @@ private:
 
     class Private;
     Private *const d;
-
-
-    static QList<KoDocument*> *s_documentList;
 };
 
 #endif

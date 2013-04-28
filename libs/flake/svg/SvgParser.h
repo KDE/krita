@@ -45,7 +45,7 @@ class SvgTextHelper;
 class FLAKE_EXPORT SvgParser
 {
 public:
-    SvgParser(KoDocumentResourceManager *documentResourceManager);
+    explicit SvgParser(KoDocumentResourceManager *documentResourceManager);
     virtual ~SvgParser();
 
     /// Parses a svg fragment, returning the list of top level child shapes

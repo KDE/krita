@@ -32,7 +32,7 @@ class KoTextBlockPaintStrategyBase;
  * This class is used to store properties for KoText layouting inside Qt QTextBlock
  * instances.
  */
-class KOTEXT_EXPORT KoTextBlockData : public QTextBlockUserData
+class KOTEXT_EXPORT KoTextBlockData
 {
 public:
     /**
@@ -53,8 +53,57 @@ public:
         QList<qreal> tabLength;
     };
 
-    KoTextBlockData();
+    /**
+     * Datastructure to define a range of characters assigned a temporary meaning.
+     * Common use cases are spellchecking and grammar.
+     */
+    struct MarkupRange {
+        int firstChar;
+        int lastChar;
+        qreal startX;
+        qreal endX;
+    };
+
+    /**
+     * The different types of markups.
+     */
+    enum MarkupType {
+        Misspell,
+        Grammar
+    };
+
+    explicit KoTextBlockData(QTextBlock &block);
+    explicit KoTextBlockData(QTextBlockUserData *userData);
     virtual ~KoTextBlockData();
+
+    /**
+     * Add a range to the _end_ of the list of markups. It's important that firstChar is after
+     * lastChar of the previous range for that type of markup.
+     */
+    void appendMarkup(MarkupType type, int firstChar, int lastChar);
+
+    /**
+     * Clear all ranges for a specific type of markup.
+     */
+    void clearMarkups(MarkupType type);
+
+    /**
+     * Move all ranges following fromPosition delta number of characters to the right.
+     * Applies to a specific type of markup.
+     */
+    void rebaseMarkups(MarkupType type, int fromPosition, int delta);
+
+    /**
+     * Find a range that contains positionWithin.
+     * If none is found a default Markuprange firstChar = lastChar = 0 is returned
+     */
+    MarkupRange findMarkup(MarkupType type, int positionWithin) const;
+
+    void setMarkupsLayoutValidity(MarkupType type, bool valid);
+    bool isMarkupsLayoutValid(MarkupType type) const;
+
+    QList<MarkupRange>::Iterator markupsBegin(MarkupType type);
+    QList<MarkupRange>::Iterator markupsEnd(MarkupType type);
 
     /**
      * Clear the counter and set everything to default values.
@@ -106,7 +155,6 @@ public:
     void setCounterSuffix(const QString &text);
     QString counterSuffix() const;
 
-   
     /// Set if the counter is a image or not
     void setCounterIsImage(bool isImage);
 
@@ -171,6 +219,6 @@ private:
     Private * const d;
 };
 
-Q_DECLARE_METATYPE(KoTextBlockData*)
+Q_DECLARE_METATYPE(QTextBlockUserData*)
 
 #endif

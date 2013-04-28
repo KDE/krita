@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIDB_TABLE_H
-#define KEXIDB_TABLE_H
+#ifndef KEXIDB_TABLESCHEMA_H
+#define KEXIDB_TABLESCHEMA_H
 
 #include <QList>
 #include <QString>
@@ -46,8 +46,8 @@ public:
     typedef QList<TableSchema*> List; //!< Type of tables list
     typedef QList<TableSchema>::ConstIterator ListIterator; //!< Iterator for tables list
 
-    TableSchema(const QString & name);
-    TableSchema(const SchemaData& sdata);
+    explicit TableSchema(const QString &name);
+    explicit TableSchema(const SchemaData &sdata);
     TableSchema();
 
     /*! Copy constructor.
@@ -68,7 +68,7 @@ public:
     virtual FieldList& insertField(uint index, Field *field);
 
     /*! Reimplemented for internal reasons. */
-    virtual void removeField(KexiDB::Field *field);
+    virtual bool removeField(KexiDB::Field *field);
 
     /*! \return list of fields that are primary key of this table.
      This method never returns 0 value,
@@ -105,10 +105,10 @@ public:
     /*! \return String for debugging purposes, if \a includeTableName is true,
      table name, caption, etc. is prepended, else only debug string for
      the fields are returned. */
-    QString debugString(bool includeTableName);
+    QString debugString(bool includeTableName) const;
 
     /*! \return String for debugging purposes. Equal to debugString(true). */
-    virtual QString debugString();
+    virtual QString debugString() const;
 
     /*! \return connection object if table was created/retrieved using a connection,
       otherwise 0. */
@@ -174,7 +174,7 @@ public:
 
     /*! \return list of lookup field schemas for this table.
      The order is the same as the order of fields within the table. */
-    const QVector<LookupFieldSchema*>& lookupFieldsList();
+    QVector<LookupFieldSchema*> lookupFields() const;
 
 protected:
     /*! Automatically retrieves table schema via connection. */
@@ -210,8 +210,8 @@ private:
 class CALLIGRADB_EXPORT InternalTableSchema : public TableSchema
 {
 public:
-    InternalTableSchema(const QString& name);
-    InternalTableSchema(const TableSchema& ts);
+    explicit InternalTableSchema(const QString& name);
+    InternalTableSchema(const TableSchema& ts); // krazy:exclude=explicit
     virtual ~InternalTableSchema();
 };
 

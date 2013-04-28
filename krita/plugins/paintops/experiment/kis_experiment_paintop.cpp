@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2010-2011 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,147 +22,209 @@
 
 #include <cmath>
 
-#include <QRect>
-#include <QColor>
-#include <QList>
-
-#include <KoColor.h>
+#include <KoCompositeOp.h>
 #include <KoColorSpace.h>
 
-#include <kis_image.h>
 #include <kis_debug.h>
 
-#include <kis_brush.h>
-#include <kis_global.h>
 #include <kis_paint_device.h>
 #include <kis_painter.h>
-#include <kis_types.h>
-#include <kis_paintop.h>
-#include <kis_selection.h>
-#include <kis_random_accessor_ng.h>
-#include <KoCompositeOp.h>
+#include <kis_image.h>
+#include <krita_utils.h>
 
-#include <kis_experimentop_option.h>
-#include <kis_transaction.h>
-#include "kis_fixed_painter.h"
-
-static const QColor BLACK(Qt::black);
-static const QBrush KIS_WHITE_BRUSH(Qt::white);
 
 KisExperimentPaintOp::KisExperimentPaintOp(const KisExperimentPaintOpSettings *settings, KisPainter * painter, KisImageSP image)
     : KisPaintOp( painter )
-    , m_settings( settings )
 {
     Q_UNUSED(image);
-    m_isFirst = true;
+    m_firstRun = true;
 
-    m_rotationOption.readOptionSetting(settings);
-    m_sizeOption.readOptionSetting(settings);
-    m_opacityOption.readOptionSetting(settings);
     m_experimentOption.readOptionSetting(settings);
 
-    m_displacement = (m_experimentOption.displacement * 0.01 * 14) + 1; // 1..15 [7 default according alchemy]
-    m_multiplier = (m_experimentOption.speed * 0.01 * 35); // 0..35 [15 default according alchemy]
-    m_smoothing = m_experimentOption.smoothing;
+    m_displaceEnabled = m_experimentOption.isDisplacementEnabled;
+    m_displaceCoeff = (m_experimentOption.displacement * 0.01 * 14) + 1; // 1..15 [7 default according alchemy]
 
-    m_path = QPainterPath();
-    m_polygonMaskImage = QImage(256, 256, QImage::Format_ARGB32_Premultiplied);
-    m_polygonDevice = new KisFixedPaintDevice(source()->colorSpace());
+    m_speedEnabled = m_experimentOption.isSpeedEnabled;
+    m_speedMultiplier = (m_experimentOption.speed * 0.01 * 35); // 0..35 [15 default according alchemy]
+    m_smoothingEnabled = m_experimentOption.isSmoothingEnabled;
+    m_smoothingThreshold = m_experimentOption.smoothing;
 
-    m_fixedPainter = new KisFixedPainter(m_polygonDevice);
-    m_fixedPainter->setPaintColor(painter->paintColor());
+    m_useMirroring = painter->hasMirroring();
 
-    m_currentLayerDevice = new KisPaintDevice(source()->colorSpace());
-    m_currentLayerDevice->prepareClone(source());
-    m_currentLayerDevice->makeCloneFromRough(source(), source()->extent());
-
-    m_copyPainter = new KisPainter(m_currentLayerDevice);
-    m_copyPainter->setOpacity(painter->opacity());
-    m_copyPainter->setPaintColor(painter->paintColor());
-    m_copyPainter->setCompositeOp(painter->compositeOp());
-    m_copyPainter->setFillStyle(KisPainter::FillStyleForegroundColor);
+    if (m_useMirroring) {
+        m_originalDevice = source()->createCompositionSourceDevice();
+        m_originalPainter = new KisPainter(m_originalDevice);
+        m_originalPainter->setCompositeOp(COMPOSITE_COPY);
+        m_originalPainter->setPaintColor(painter->paintColor());
+        m_originalPainter->setFillStyle(KisPainter::FillStyleForegroundColor);
+    } else {
+        m_originalPainter = 0;
+    }
 }
 
 KisExperimentPaintOp::~KisExperimentPaintOp()
 {
-    delete m_copyPainter;
-    delete m_fixedPainter;
+    delete m_originalPainter;
 }
 
+void KisExperimentPaintOp::paintRegion(const QRegion &changedRegion)
+{
+    if (m_useMirroring) {
+        foreach(const QRect &rect, changedRegion.rects()) {
+            m_originalPainter->fillPainterPath(m_path, rect);
+            painter()->renderDabWithMirroringNonIncremental(rect, m_originalDevice);
+        }
+    } else {
+        painter()->setFillStyle(KisPainter::FillStyleForegroundColor);
+        painter()->setCompositeOp(COMPOSITE_COPY);
+
+        foreach(const QRect &rect, changedRegion.rects()) {
+            painter()->fillPainterPath(m_path, rect);
+        }
+    }
+}
+
+QPointF KisExperimentPaintOp::speedCorrectedPosition(const KisPaintInformation& pi1,
+                                                     const KisPaintInformation& pi2)
+{
+    const qreal fadeFactor = 0.6;
+
+    QPointF diff = pi2.pos() - pi1.pos();
+    qreal realLength = sqrt(diff.x() * diff.x() + diff.y() * diff.y());
+
+    if (realLength < 0.1) return pi2.pos();
+
+    qreal coeff = 0.5 * realLength * m_speedMultiplier;
+    m_savedSpeedCoeff = fadeFactor * m_savedSpeedCoeff + (1 - fadeFactor) * coeff;
+    QPointF newPoint = pi1.pos() + diff * m_savedSpeedCoeff / realLength;
+    m_savedSpeedPoint = fadeFactor * m_savedSpeedPoint + (1 - fadeFactor) * newPoint;
+
+    return m_savedSpeedPoint;
+}
 
 KisDistanceInformation KisExperimentPaintOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& /*savedDist*/)
 {
     KisDistanceInformation kdi(0,0);
     if (!painter()) return kdi;
 
-    // create the QPainterPath
-    if (m_isFirst){
+    if (m_firstRun){
+        m_firstRun = false;
+
         m_path.moveTo(pi1.pos());
-        addPosition(pi2.pos());
-        //qDebug() << "Running the new version with KisTransaction.";
+        m_path.lineTo(pi2.pos());
+
+        m_center = pi1.pos();
+
+        m_savedUpdateDistance = 0;
+        m_lastPaintTime = 0;
+
+        m_savedSpeedCoeff = 0;
+        m_savedSpeedPoint = m_center;
+
+        m_savedSmoothingDistance = 0;
+        m_savedSmoothingPoint = m_center;
+
     }else{
-        // pre-process
-        if (m_experimentOption.isSpeedEnabled) {
-            int speed = getCursorSpeed(pi2.pos(), pi1.pos()) / 2;
-            QPointF pos = getAngle(pi2.pos(), pi1.pos(), speed * m_multiplier);
-            addPosition(pos);
-        }else{
-            addPosition(pi2.pos());
+
+        const QPointF pos1 = pi1.pos();
+        QPointF pos2 = pi2.pos();
+
+        if (m_speedEnabled) {
+            pos2 = speedCorrectedPosition(pi1, pi2);
         }
 
-        // post-process
-        if (m_experimentOption.isDisplacementEnabled) {
-            int speed = m_displacement - getCursorSpeed(pi2.pos(),pi1.pos());
-            m_path = applyDisplace(m_path, speed);
-        }
+        int length = (pos2 - pos1).manhattanLength();
+        m_savedUpdateDistance += length;
 
+        if (m_smoothingEnabled) {
+            m_savedSmoothingDistance += length;
 
-        quint8 origOpacity = m_opacityOption.apply(m_copyPainter, pi2);
+            if (m_savedSmoothingDistance > m_smoothingThreshold) {
+                QPointF pt = (m_savedSmoothingPoint + pos2) * 0.5;
 
-        QRect rc = m_fixedPainter->fillPainterPath(m_path);
-        KisTransaction transaction("", m_currentLayerDevice);
-        m_copyPainter->bltFixed(rc.topLeft().x(),rc.topLeft().y(), m_polygonDevice, 0,0,rc.width(), rc.height());
-        painter()->copyMirrorInformation( m_copyPainter );
-        QVector<QRect> rects = m_copyPainter->regionsRenderMirrorMask(rc, m_polygonDevice);
-        m_copyPainter->setOpacity(origOpacity);
+                // for updates approximate curve with two lines
+                m_savedPoints << m_path.currentPosition();
+                m_savedPoints << m_savedSmoothingPoint;
+                m_savedPoints << m_savedSmoothingPoint;
+                m_savedPoints << pt;
 
-        const KoCompositeOp * op = painter()->compositeOp();
-        painter()->setCompositeOp(COMPOSITE_COPY);
+                m_path.quadTo(m_savedSmoothingPoint, pt);
+                m_savedSmoothingPoint = pos2;
 
-        if (m_previousRect.isNull()){
-            painter()->bitBlt(rc.topLeft(),m_currentLayerDevice,rc);
-
-            if (!rects.isEmpty()) {
-                for (int i = 0 ; i < rects.size(); i++) {
-                    const QRect &area = rects.at(i);
-                    painter()->bitBlt(area.topLeft(),m_currentLayerDevice,area);
-                    m_previousRects.append(area);
-                }
+                m_savedSmoothingDistance = 0;
             }
-
         } else {
-            QRect unitedRc = m_previousRect.united(rc).normalized();
-            painter()->bitBlt(unitedRc.topLeft(),m_currentLayerDevice,unitedRc);
+            m_path.lineTo(pos2);
+            m_savedPoints << pos1;
+            m_savedPoints << pos2;
+        }
 
-            if (!rects.isEmpty()) {
-                for (int i = 0 ; i < rects.size(); i++) {
-                    const QRect &area = rects.at(i);
-                    unitedRc = m_previousRects.at(0).united(area);
-                    painter()->bitBlt(unitedRc.topLeft(),m_currentLayerDevice,unitedRc);
-                    m_previousRects[i] = area;
+        if (m_displaceEnabled) {
+            if (m_path.elementCount() % 16 == 0) {
+                QRectF bounds = m_path.boundingRect();
+                m_path = applyDisplace(m_path, m_displaceCoeff - length);
+                bounds |= m_path.boundingRect();
+
+                qreal threshold = simplifyThreshold(bounds);
+                m_path = trySimplifyPath(m_path, threshold);
+            }
+            else {
+                m_path = applyDisplace(m_path, m_displaceCoeff - length);
+            }
+        }
+
+        /**
+         * Refresh rate at least 25fps
+         */
+        const int timeThreshold = 40;
+        const int elapsedTime = pi2.currentTime() - m_lastPaintTime;
+
+        QRect pathBounds = m_path.boundingRect().toRect();
+        int distanceMetric = qMax(pathBounds.width(), pathBounds.height());
+
+        if(elapsedTime > timeThreshold ||
+           (!m_displaceEnabled &&
+            m_savedUpdateDistance > distanceMetric / 8)) {
+
+            if (m_displaceEnabled) {
+                /**
+                 * Rendering the path with diff'ed rects is up to two
+                 * times more efficient for really huge shapes (tested
+                 * on 2000+ px shapes), however for smaller ones doing
+                 * paths arithmetics eats too much time. That's why we
+                 * choose the method on the base of the size of the
+                 * shape.
+                 */
+                const int pathSizeThreshold = 128;
+
+                QRegion changedRegion;
+                if (distanceMetric < pathSizeThreshold) {
+
+                    QRectF changedRect = m_path.boundingRect().toRect() |
+                        m_lastPaintedPath.boundingRect().toRect();
+                    changedRect.adjust(-1,-1,1,1);
+
+                    changedRegion = changedRect.toRect();
+                } else {
+                    QPainterPath diff1 = m_path - m_lastPaintedPath;
+                    QPainterPath diff2 = m_lastPaintedPath - m_path;
+
+                    changedRegion = KritaUtils::splitPath(diff1 | diff2);
                 }
+
+                paintRegion(changedRegion);
+                m_lastPaintedPath = m_path;
+            } else if (!m_savedPoints.isEmpty()) {
+                QRegion changedRegion = KritaUtils::splitTriangles(m_center, m_savedPoints);
+                paintRegion(changedRegion);
             }
 
+            m_savedPoints.clear();
+            m_savedUpdateDistance = 0;
+            m_lastPaintTime = pi2.currentTime();
         }
-        m_previousRect = rc;
-
-
-
-
-        painter()->setCompositeOp(op);
-        transaction.revert();
     }
-    m_isFirst = false;
+
     return kdi;
 }
 
@@ -172,6 +235,91 @@ qreal KisExperimentPaintOp::paintAt(const KisPaintInformation& info)
     return 1.0;
 }
 
+bool tryMergePoints(QPainterPath &path,
+                    const QPointF &startPoint,
+                    const QPointF &endPoint,
+                    qreal &distance,
+                    qreal distanceThreshold,
+                    bool lastSegment)
+{
+    qreal length = (endPoint - startPoint).manhattanLength();
+
+    if (lastSegment || length > distanceThreshold) {
+        if (distance != 0) {
+            path.lineTo(startPoint);
+        }
+        distance = 0;
+        return false;
+    }
+
+    distance += length;
+
+    if (distance > distanceThreshold) {
+        path.lineTo(endPoint);
+        distance = 0;
+    }
+
+    return true;
+}
+
+qreal KisExperimentPaintOp::simplifyThreshold(const QRectF &bounds)
+{
+    qreal maxDimension = qMax(bounds.width(), bounds.height());
+    return qMax(0.01 * maxDimension, 1.0);
+}
+
+QPainterPath KisExperimentPaintOp::trySimplifyPath(const QPainterPath &path, qreal lengthThreshold)
+{
+    QPainterPath newPath;
+    QPointF startPoint;
+    qreal distance = 0;
+
+    int count = path.elementCount();
+    for (int i = 0; i < count; i++){
+        QPainterPath::Element e = path.elementAt(i);
+        QPointF endPoint = QPointF(e.x, e.y);
+
+        switch(e.type){
+        case QPainterPath::MoveToElement:
+            newPath.moveTo(endPoint);
+            break;
+        case QPainterPath::LineToElement:
+            if (!tryMergePoints(newPath, startPoint, endPoint,
+                                distance, lengthThreshold, i == count - 1)) {
+
+                newPath.lineTo(endPoint);
+            }
+            break;
+        case QPainterPath::CurveToElement:{
+            Q_ASSERT(i + 2 < count);
+
+            if (!tryMergePoints(newPath, startPoint, endPoint,
+                                distance, lengthThreshold, i == count - 1)) {
+
+                e = path.elementAt(i + 1);
+                Q_ASSERT(e.type == QPainterPath::CurveToDataElement);
+                QPointF ctrl1 = QPointF(e.x, e.y);
+                e = path.elementAt(i + 2);
+                Q_ASSERT(e.type == QPainterPath::CurveToDataElement);
+                QPointF ctrl2 = QPointF(e.x, e.y);
+                newPath.cubicTo(ctrl1, ctrl2, endPoint);
+            }
+
+            i += 2;
+        }
+        }
+        startPoint = endPoint;
+    }
+
+    return newPath;
+}
+
+QPointF KisExperimentPaintOp::getAngle(const QPointF& p1, const QPointF& p2, qreal distance)
+{
+    QPointF diff = p1 - p2;
+    qreal realLength = sqrt(diff.x() * diff.x() + diff.y() * diff.y());
+    return realLength > 0.5 ? p1 + diff * distance / realLength : p1;
+}
 
 QPainterPath KisExperimentPaintOp::applyDisplace(const QPainterPath& path, int speed)
 {
@@ -203,10 +351,10 @@ QPainterPath KisExperimentPaintOp::applyDisplace(const QPainterPath& path, int s
                 curveElementCounter++;
 
                 if (curveElementCounter == 1){
-                    ctrl1 = QPointF(e.x,e.y);
+                    ctrl1 = getAngle(QPointF(e.x,e.y),lastPoint,speed);
                 }
                 else if (curveElementCounter == 2){
-                    ctrl2 = QPointF(e.x,e.y);
+                    ctrl2 = getAngle(QPointF(e.x,e.y),lastPoint,speed);
                     newPath.cubicTo(ctrl1,ctrl2,endPoint);
                 }
                 break;
@@ -218,26 +366,3 @@ QPainterPath KisExperimentPaintOp::applyDisplace(const QPainterPath& path, int s
     return newPath;
 }
 
-
-QPointF KisExperimentPaintOp::getAngle(const QPointF& p1, const QPointF& p2, double distance)
-{
-    double angle = atan2(p1.y() - p2.y(), p1.x() - p2.x());
-    double x = p1.x() + (distance * cos(angle));
-    double y = p1.y() + (distance * sin(angle));
-    return QPointF(x,y);
-}
-
-void KisExperimentPaintOp::curveTo(QPainterPath& path, QPointF pos)
-{
-    QPointF pt = (path.currentPosition() + pos) * 0.5;
-    path.quadTo(path.currentPosition(), pt);
-}
-
-void KisExperimentPaintOp::addPosition(const QPointF& pos)
-{
-    if (m_smoothing){
-        curveTo(m_path,pos);
-    }else{
-        m_path.lineTo(pos);
-    }
-}

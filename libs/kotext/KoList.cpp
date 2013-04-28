@@ -25,7 +25,7 @@
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoStyleManager.h"
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <QTextCursor>
 #include <QWeakPointer>
@@ -148,6 +148,10 @@ void KoList::add(const QTextBlock &block, int level)
 
 void KoList::remove(const QTextBlock &block)
 {
+    //QTextLists are created with a blockIndent of 1. When a block is removed from a QTextList, it's blockIndent is set to (block.indent + list.indent).
+    //Since we do not use Qt's indentation for lists, we need to clear the block's blockIndent, otherwise the block's style will appear as modified.
+    bool clearIndent = !block.blockFormat().hasProperty(4160);
+
     if (QTextList *textList = block.textList()) {
         // invalidate the list before we remove the item
         // (since the list might disappear if the block is the only item)
@@ -155,6 +159,13 @@ void KoList::remove(const QTextBlock &block)
         textList->remove(block);
     }
     KoListPrivate::invalidate(block);
+
+    if (clearIndent) {
+        QTextBlockFormat format = block.blockFormat();
+        format.clearProperty(4160);
+        QTextCursor cursor(block);
+        cursor.setBlockFormat(format);
+    }
 }
 
 void KoList::setStyle(KoListStyle *style)

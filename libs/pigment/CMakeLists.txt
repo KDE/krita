@@ -10,6 +10,17 @@ if(OPENEXR_FOUND)
     add_definitions(${OPENEXR_DEFINITIONS})
 endif(OPENEXR_FOUND)
 
+set(LINK_VC_LIB)
+
+if(HAVE_VC)
+    include_directories(${Vc_INCLUDE_DIR})
+    set(LINK_VC_LIB ${Vc_LIBRARIES})
+    ko_compile_for_all_implementations_no_scalar(__per_arch_factory_objs compositeops/KoOptimizedCompositeOpFactoryPerArch.cpp)
+
+    message("Following objects are generated from the per-arch lib")
+    message(${__per_arch_factory_objs})
+endif(HAVE_VC)
+
 add_subdirectory(tests)
 add_subdirectory(benchmarks)
 
@@ -44,6 +55,9 @@ set(pigmentcms_SRCS
     colorspaces/KoRgbU16ColorSpace.cpp
     colorspaces/KoRgbU8ColorSpace.cpp
     colorspaces/KoSimpleColorSpaceEngine.cpp
+    compositeops/KoOptimizedCompositeOpFactory.cpp
+    compositeops/KoOptimizedCompositeOpFactoryPerArch_Scalar.cpp
+    ${__per_arch_factory_objs}
     colorprofiles/KoDummyColorProfile.cpp
     resources/KoAbstractGradient.cpp
     resources/KoColorSet.cpp
@@ -91,7 +105,7 @@ set(PIGMENT_INSTALL_FILES
         KoHistogramProducer.h
 )
 
-set (EXTRA_LIBRARIES ${LINK_OPENEXR_LIB})
+set (EXTRA_LIBRARIES ${LINK_OPENEXR_LIB} ${LINK_VC_LIB})
 
 if(MSVC)
   # avoid "cannot open file 'LIBC.lib'" error

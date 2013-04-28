@@ -83,10 +83,41 @@ public:
     void setZoomMode(KoZoomMode::Mode mode);
 
     /**
-     * Set the zoom and the zoom mode for this zoom Controller.  Typically for use just after construction
-     * to restore the persistent data.
+     * Set the resolution, zoom, the zoom mode for this zoom Controller.
+     * Typically for use just after construction to restore the
+     * persistent data.
+     *
+     * @param mode new zoom mode for the canvas
+     * @param zoom (for ZOOM_CONSTANT zoom mode only) new zoom value for
+     *             the canvas
+     * @param resolutionX new X resolution for the document
+     * @param resolutionY new Y resolution for the document
+     * @param stillPoint (for ZOOM_CONSTANT zoom mode only) the point
+     *                   which will not change its position in widget
+     *                   during the zooming. It is measured in view
+     *                   coordinate system *before* zoom.
+     */
+    void setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY, const QPointF &stillPoint);
+
+
+    /**
+     * Convenience function that changes resolution with
+     * keeping the centering unchanged
+     */
+    void setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY);
+
+    /**
+     * Convenience function that does not touch the resolution of the
+     * document
+     */
+    void setZoom(KoZoomMode::Mode mode, qreal zoom, const QPointF &stillPoint);
+
+    /**
+     * Convenience function with @p center always set to the current
+     * center point of the canvas
      */
     void setZoom(KoZoomMode::Mode mode, qreal zoom);
+
 
   /**
    * Set Aspect Mode button status and begin a chain of signals
@@ -106,6 +137,14 @@ public slots:
     * @returns the page size in points
     */
     QSizeF pageSize() const;
+
+    /**
+    * Set the dimensions of where text can appear which allows zoom modes that use the text
+    * to update.
+    * @param min the minimum x value (in document coordinates) where text can appear
+    * @param max the maximum x value (in document coordinates) where text can appear
+    */
+    void setTextMinMax(qreal min, qreal max);
 
     /**
     * Set the size of the whole document currently being shown on the canvas.
@@ -148,9 +187,12 @@ signals:
      */
     void zoomedToAll();
 
+protected:
+    virtual QSize documentToViewport(const QSizeF &size);
+
 private:
     Q_PRIVATE_SLOT(d, void setAvailableSize())
-    Q_PRIVATE_SLOT(d, void requestZoomBy(const qreal))
+    Q_PRIVATE_SLOT(d, void requestZoomRelative(const qreal, const QPointF&))
     Q_PRIVATE_SLOT(d, void setZoom(KoZoomMode::Mode, qreal))
     Q_DISABLE_COPY( KoZoomController )
 

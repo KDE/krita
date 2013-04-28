@@ -26,8 +26,8 @@
 #include <KoParagraphStyle.h>
 #include <KoImageCollection.h>
 
-#include <KLocale>
-#include <KDebug>
+#include <klocale.h>
+#include <kdebug.h>
 
 #define MARGIN_DEFAULT 18 // we consider it the default value
 
@@ -234,14 +234,20 @@ void ChangeListCommand::redo()
 {
     if (!m_first) {
         for (int i = 0; i < m_blocks.size(); ++i) { // We invalidate the lists before calling redo on the QTextDocument
-            if (m_actions.value(i) == ChangeListCommand::RemoveList)
+            if (m_actions.value(i) == ChangeListCommand::RemoveList) {
+                //if the block is not part of a list continue
+                if (!m_blocks.at(i).textList()) {
+                    continue;
+                }
                 for (int j = 0; j < m_blocks.at(i).textList()->count(); j++) {
                     if (m_blocks.at(i).textList()->item(j) != m_blocks.at(i)) {
-                        if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).textList()->item(j).userData()))
-                            userData->setCounterWidth(-1.0);
+                        QTextBlock currentBlock = m_blocks.at(i).textList()->item(j);
+                        KoTextBlockData userData(currentBlock);
+                        userData.setCounterWidth(-1.0);
                         break;
                     }
                 }
+            }
         }
         KoTextCommandBase::redo();
         UndoRedoFinalizer finalizer(this);
@@ -253,19 +259,25 @@ void ChangeListCommand::redo()
                 listStyle->refreshLevelProperties(m_newProperties.value(i));
                 for (int j = 0; j < m_blocks.at(i).textList()->count(); j++) {
                     if (m_blocks.at(i).textList()->item(j) != m_blocks.at(i)) {
-                        if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).textList()->item(j).userData()))
-                            userData->setCounterWidth(-1.0);
+                        QTextBlock currentBlock = m_blocks.at(i).textList()->item(j);
+                        KoTextBlockData userData(currentBlock);
+                        userData.setCounterWidth(-1.0);
                         break;
                     }
                 }
             }
-            if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).userData()))
-                userData->setCounterWidth(-1.0);
+            QTextBlock currentBlock = m_blocks.at(i);
+            KoTextBlockData userData(currentBlock);
+            userData.setCounterWidth(-1.0);
         }
     }
     else {
         for (int i = 0; i < m_blocks.size(); ++i) {
             if (m_actions.value(i) == ChangeListCommand::RemoveList) {
+                //if the block is not part of a list continue
+                if (!m_blocks.at(i).textList()) {
+                    continue;
+                }
                 KoList::remove(m_blocks.at(i));
             }
             else if (m_actions.value(i) == ChangeListCommand::ModifyExisting) {
@@ -298,6 +310,10 @@ void ChangeListCommand::undo()
     for (int i = 0; i < m_blocks.size(); ++i) {
         // command to undo:
         if (m_actions.value(i) == ChangeListCommand::RemoveList) {
+            //if the block is not part of a list continue
+            if (!m_blocks.at(i).textList()) {
+                continue;
+            }
             m_oldList.value(i)->updateStoredList(m_blocks.at(i));
             if ((m_flags & KoTextEditor::ModifyExistingList) && (m_formerProperties.value(i).style() != KoListStyle::None)) {
                 KoListStyle *listStyle = m_oldList.value(i)->style();
@@ -305,8 +321,9 @@ void ChangeListCommand::undo()
             }
             for (int j = 0; j < m_blocks.at(i).textList()->count(); j++) {
                 if (m_blocks.at(i).textList()->item(j) != m_blocks.at(i)) {
-                    if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).textList()->item(j).userData()))
-                        userData->setCounterWidth(-1.0);
+                    QTextBlock currentBlock = m_blocks.at(i).textList()->item(j);
+                    KoTextBlockData userData(currentBlock);
+                    userData.setCounterWidth(-1.0);
                     break;
                 }
             }
@@ -319,8 +336,9 @@ void ChangeListCommand::undo()
             }
             for (int j = 0; j < m_blocks.at(i).textList()->count(); j++) {
                 if (m_blocks.at(i).textList()->item(j) != m_blocks.at(i)) {
-                    if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).textList()->item(j).userData()))
-                        userData->setCounterWidth(-1.0);
+                    QTextBlock currentBlock = m_blocks.at(i).textList()->item(j);
+                    KoTextBlockData userData(currentBlock);
+                    userData.setCounterWidth(-1.0);
                     break;
                 }
             }
@@ -334,16 +352,18 @@ void ChangeListCommand::undo()
                 m_oldList.value(i)->updateStoredList(m_blocks.at(i));
                 for (int j = 0; j < m_blocks.at(i).textList()->count(); j++) {
                     if (m_blocks.at(i).textList()->item(j) != m_blocks.at(i)) {
-                        if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).textList()->item(j).userData()))
-                            userData->setCounterWidth(-1.0);
+                        QTextBlock currentBlock = m_blocks.at(i).textList()->item(j);
+                        KoTextBlockData userData(currentBlock);
+                        userData.setCounterWidth(-1.0);
                         break;
                     }
                 }
             }
         }
 
-        if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).userData()))
-            userData->setCounterWidth(-1.0);
+        QTextBlock currentBlock = m_blocks.at(i);
+        KoTextBlockData userData(currentBlock);
+        userData.setCounterWidth(-1.0);
     }
 }
 

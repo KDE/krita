@@ -19,7 +19,7 @@
 
 #include "KoPAPageLayoutDialog.h"
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include "KoPageLayout.h"
 #include "KoPADocument.h"
@@ -31,6 +31,7 @@ KoPAPageLayoutDialog::KoPAPageLayoutDialog( KoPADocument *document, const KoPage
 {
     setPageSpread( false );
     showPageSpread( false );
+    setUnit(document->unit());
 }
 
 KoPAPageLayoutDialog::~KoPAPageLayoutDialog()

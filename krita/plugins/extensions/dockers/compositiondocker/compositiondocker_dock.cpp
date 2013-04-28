@@ -27,12 +27,17 @@
 #include <QAction>
 
 #include <klocale.h>
-#include <KActionCollection>
+#include <kactioncollection.h>
+#include <kdirselectdialog.h>
+
+#include <KoIcon.h>
 
 #include <KoCanvasBase.h>
 #include <kis_view2.h>
 #include <kis_canvas2.h>
+#include <kis_doc2.h>
 #include "compositionmodel.h"
+#include <kis_group_layer.h>
 
 CompositionDockerDock::CompositionDockerDock( ) : QDockWidget(i18n("Compositions")), m_canvas(0)
 {
@@ -40,8 +45,15 @@ CompositionDockerDock::CompositionDockerDock( ) : QDockWidget(i18n("Compositions
     setupUi(widget);
     m_model = new CompositionModel(this);
     compositionView->setModel(m_model);
-    deleteButton->setIcon(KIcon("edit-delete"));
-    saveButton->setIcon(KIcon("document-save"));
+    compositionView->installEventFilter(this);
+    deleteButton->setIcon(koIcon("edit-delete"));
+    saveButton->setIcon(koIcon("list-add"));
+    exportButton->setIcon(koIcon("document-export"));
+
+    deleteButton->setToolTip(i18n("Delete Composition"));
+    saveButton->setToolTip(i18n("New Composition"));
+    exportButton->setToolTip(i18n("Export Composition"));
+
 
     setWidget(widget);
 
@@ -50,6 +62,7 @@ CompositionDockerDock::CompositionDockerDock( ) : QDockWidget(i18n("Compositions
 
     connect( deleteButton, SIGNAL(clicked(bool)), this, SLOT(deleteClicked()));
     connect( saveButton, SIGNAL(clicked(bool)), this, SLOT(saveClicked()));
+    connect( exportButton, SIGNAL(clicked(bool)), this, SLOT(exportClicked()));
 #if QT_VERSION >= 0x040700
     saveNameEdit->setPlaceholderText(i18n("Insert Name"));
 #endif
@@ -91,7 +104,24 @@ void CompositionDockerDock::deleteClicked()
 void CompositionDockerDock::saveClicked()
 {
     KisImageWSP image = m_canvas->view()->image();
-    KisLayerComposition* composition = new KisLayerComposition(image, saveNameEdit->text());
+    // format as 001, 002 ...
+    QString name = saveNameEdit->text();
+    if (name.isEmpty()) {
+        bool found = false;
+        int i = 1;
+        do {
+            name = QString("%1").arg(i, 3, 10, QChar('0'));
+            found = false;
+            foreach(KisLayerComposition* composition, m_canvas->view()->image()->compositions()) {
+                if (composition->name() == name) {
+                    found = true;
+                    break;
+                }
+            }
+            i++;
+        } while(found && i < 1000);
+    }
+    KisLayerComposition* composition = new KisLayerComposition(image, name);
     composition->store();
     image->addComposition(composition);
     saveNameEdit->clear();
@@ -102,6 +132,52 @@ void CompositionDockerDock::updateModel()
 {
     m_model->setCompositions(m_canvas->view()->image()->compositions());
 }
+
+void CompositionDockerDock::exportClicked()
+{
+    KDirSelectDialog dialog(KUrl(), true);
+    if(dialog.exec() != KDialog::Accepted) {
+        return;
+    }
+    QString path = dialog.url().path(KUrl::AddTrailingSlash);
+
+    KisImageWSP image = m_canvas->view()->image();
+    QString filename = m_canvas->view()->document()->localFilePath();
+    if (!filename.isEmpty()) {
+        QFileInfo info(filename);
+        path += info.baseName() + '_';
+    }
+    foreach(KisLayerComposition* composition, m_canvas->view()->image()->compositions()) {
+        composition->apply();
+        image->refreshGraph();
+        image->lock();
+        image->rootLayer()->projection()->convertToQImage(0).save(path + composition->name() + ".png");
+        image->unlock();
+    }
+}
+
+bool CompositionDockerDock::eventFilter(QObject* obj, QEvent* event)
+{
+     if (event->type() == QEvent::KeyPress ) {
+         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+         if (keyEvent->key() == Qt::Key_Up || keyEvent->key() == Qt::Key_Down) {
+             // new index will be set after the method is called
+             QTimer::singleShot(0, this, SLOT(activateCurrentIndex()));
+         }
+         return false;
+     } else {
+         return QObject::eventFilter(obj, event);
+     }
+}
+
+void CompositionDockerDock::activateCurrentIndex()
+{
+    QModelIndex index = compositionView->currentIndex();
+    if (index.isValid()) {
+        activated(index);
+    }
+}
+
 
 
 #include "compositiondocker_dock.moc"

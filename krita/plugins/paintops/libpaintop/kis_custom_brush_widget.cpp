@@ -39,6 +39,7 @@
 #include "kis_paint_device.h"
 #include "kis_gbr_brush.h"
 #include "kis_imagepipe_brush.h"
+#include <kis_fixed_paint_device.h>
 
 #include "kis_brush_server.h"
 #include "kis_paint_layer.h"

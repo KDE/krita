@@ -57,7 +57,7 @@ class KOTEXT_EXPORT KoTextCommandBase : public KUndo2Command
 public:
 
     /// constructor
-    KoTextCommandBase(KUndo2Command *parent);
+    explicit KoTextCommandBase(KUndo2Command *parent);
     virtual ~KoTextCommandBase();
 
     /// method called by the tool.
@@ -76,7 +76,7 @@ protected:
     class KOTEXT_EXPORT UndoRedoFinalizer
     {
     public:
-        UndoRedoFinalizer(KoTextCommandBase* parent) : m_parent(parent) {}
+        explicit UndoRedoFinalizer(KoTextCommandBase* parent) : m_parent(parent) {}
         ~UndoRedoFinalizer();
     private:
         KoTextCommandBase* m_parent;

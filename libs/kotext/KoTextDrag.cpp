@@ -36,6 +36,7 @@
 #include <KoOdfDocument.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include "KoShapeSavingContext.h"
+#include "KoStyleManager.h"
 #include <opendocument/KoTextSharedSavingData.h>
 
 #include "KoTextOdfSaveHelper.h"
@@ -103,11 +104,16 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
             Q_ASSERT(false);
         }
     }
+#if SHOULD_BUILD_RDF    
     kDebug(30015) << "helper.model:" << helper.rdfModel();
     textSharedData->setRdfModel(helper.rdfModel());
-
+#endif
     if (!helper.writeBody()) {
         return false;
+    }
+    // Save the named styles that was referred to by the copied text
+    if (KoStyleManager *styleManager = helper.styleManager()) {
+        styleManager->saveReferredStylesToOdf(*context);
     }
 
     mainStyles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
@@ -119,7 +125,7 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
     manifestWriter->addManifestEntry("content.xml", "text/xml");
 
     kDebug(30015) << "testing to see if we should add rdf to odf file?";
-    
+
 #ifdef SHOULD_BUILD_RDF
     kDebug(30015) << "helper has model" << ( helper.rdfModel() != 0 );
     // RDF: Copy relevant RDF to output ODF

@@ -69,9 +69,6 @@
        <layout class="QHBoxLayout">
         <item>
          <layout class="QVBoxLayout">
-          <property name="spacing">
-           <number>6</number>
-          </property>
           <property name="margin">
            <number>0</number>
           </property>
@@ -105,9 +102,6 @@
         </item>
         <item>
          <layout class="QVBoxLayout">
-          <property name="spacing">
-           <number>6</number>
-          </property>
           <property name="margin">
            <number>0</number>
           </property>
@@ -150,9 +144,6 @@
         </item>
         <item>
          <layout class="QVBoxLayout">
-          <property name="spacing">
-           <number>6</number>
-          </property>
           <property name="margin">
            <number>0</number>
           </property>
@@ -359,9 +350,6 @@
          <enum>QFrame::Plain</enum>
         </property>
         <layout class="QHBoxLayout">
-         <property name="spacing">
-          <number>6</number>
-         </property>
          <property name="margin">
           <number>0</number>
          </property>
@@ -453,9 +441,6 @@
    </item>
    <item>
     <layout class="QHBoxLayout">
-     <property name="spacing">
-      <number>6</number>
-     </property>
      <property name="margin">
       <number>0</number>
      </property>
@@ -492,8 +477,6 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
- <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
  <customwidgets>
   <customwidget>
    <class>KColorButton</class>

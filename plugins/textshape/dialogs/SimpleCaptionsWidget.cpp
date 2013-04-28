@@ -19,8 +19,8 @@
 #include "SimpleCaptionsWidget.h"
 #include "TextTool.h"
 
-#include <KAction>
-#include <KDebug>
+#include <kaction.h>
+#include <kdebug.h>
 
 #include <QWidget>
 

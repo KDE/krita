@@ -64,12 +64,7 @@ public:
     KoID(const KoID &rhs)
     {
         m_id = rhs.m_id;
-        if (rhs.m_name.isEmpty()) {
-            m_name = rhs.m_localizedString.toString();
-        }
-        else {
-            m_name = rhs.m_name;
-        }
+        m_name = rhs.name();
     }
 
     QString id() const {

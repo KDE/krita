@@ -18,7 +18,7 @@
 #include "kis_compositeop_option.h"
 
 #include <klocale.h>
-#include <kicon.h>
+#include <KoIcon.h>
 
 #include <kis_cmb_composite.h>
 #include <KoCompositeOp.h>
@@ -40,7 +40,7 @@ KisCompositeOpOption::KisCompositeOpOption(bool createConfigWidget):
         
         Ui_wdgCompositeOpOption ui;
         ui.setupUi(widget);
-        ui.bnEraser->setIcon(KIcon("draw-eraser"));
+        ui.bnEraser->setIcon(koIcon("draw-eraser"));
         
         m_label    = ui.lbChoosenMode;
         m_list     = ui.list;

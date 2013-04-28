@@ -35,6 +35,7 @@
 #include <KoBookmark.h>
 #include <KoTextDocument.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoTextRangeManager.h>
 #include <KoShapeController.h>
 #include <KoDocumentResourceManager.h>
 #include <KoDocumentRdfBase.h>
@@ -62,10 +63,10 @@ void TestKoTextEditor::testInsertInlineObject()
     KoTextEditor editor(&doc);
     textDoc.setTextEditor(&editor);
 
+    /* Hmm, what kind of inline object should we test. variables maybe?
     // enter some lorem ipsum
     editor.insertText(lorem);
     KoBookmark *startmark = new KoBookmark(editor.document());
-    startmark->setType(KoBookmark::SinglePosition);
     startmark->setName("single!");
     editor.insertInlineObject(startmark);
     Q_ASSERT(startmark->id() == 1);
@@ -78,7 +79,7 @@ void TestKoTextEditor::testInsertInlineObject()
     KoInlineObject *obj = inlineObjectManager.inlineTextObject(cursor.charFormat());
 
     Q_ASSERT(obj == startmark);
-
+*/
 }
 
 void TestKoTextEditor::testRemoveSelectedText()
@@ -88,9 +89,9 @@ void TestKoTextEditor::testRemoveSelectedText()
     // create a document
     QTextDocument doc;
 
-    KoInlineTextObjectManager inlineObjectManager(&parent);
+    KoTextRangeManager rangeManager(&parent);
     KoTextDocument textDoc(&doc);
-    textDoc.setInlineTextObjectManager(&inlineObjectManager);
+    textDoc.setTextRangeManager(&rangeManager);
 
     KoTextEditor editor(&doc);
     textDoc.setTextEditor(&editor);
@@ -98,19 +99,20 @@ void TestKoTextEditor::testRemoveSelectedText()
     // enter some lorem ipsum
     editor.insertText(lorem);
 
-    KoBookmark *startmark = new KoBookmark(editor.document());
-    startmark->setType(KoBookmark::StartBookmark);
-    startmark->setName("start!");
-    editor.insertInlineObject(startmark);
-    Q_ASSERT(startmark->position() == 444);
+    QTextCursor cur(&doc);
+    cur.setPosition(editor.position());
+    KoBookmark *bookmark = new KoBookmark(cur);
+    bookmark->setName("start!");
+    bookmark->setPositionOnlyMode(false); // we want it to be several chars long
+    rangeManager.insert(bookmark);
 
     editor.insertText(lorem);
 
-    KoBookmark *endmark = new KoBookmark(editor.document());
-    endmark->setType(KoBookmark::EndBookmark);
-    startmark->setEndBookmark(endmark);
-    editor.insertInlineObject(endmark);
-    Q_ASSERT(endmark->position() == 888);
+    bookmark->setRangeEnd(editor.position());
+
+    QCOMPARE(bookmark->rangeStart(), lorem.length());
+    QCOMPARE(bookmark->rangeEnd(), lorem.length() * 2);
+    Q_ASSERT(rangeManager.textRanges().length() == 1);
 
     // select all text
     editor.setPosition(0, QTextCursor::MoveAnchor);
@@ -118,11 +120,11 @@ void TestKoTextEditor::testRemoveSelectedText()
 
     Q_ASSERT(editor.hasSelection());
 
-    // remove the table + the markers from the document
+    // remove the text + the bookmark from the document
     editor.deleteChar();
 
-    // check whether the bookmarks have gone.
-    Q_ASSERT(inlineObjectManager.inlineTextObjects().length() == 0);
+    // check whether the bookmark has gone.
+    Q_ASSERT(rangeManager.textRanges().length() == 0);
 }
 
 class TestDocument : public KoShapeBasedDocumentBase
@@ -137,6 +139,7 @@ public:
         KoTextEditor *editor = new KoTextEditor(m_document);
 
         textDoc.setInlineTextObjectManager(&m_inlineObjectManager);
+        textDoc.setTextRangeManager(&m_rangeManager);
         textDoc.setStyleManager(new KoStyleManager(0));
         textDoc.setTextEditor(editor);
 
@@ -166,6 +169,7 @@ public:
 
     QTextDocument *m_document;
     KoInlineTextObjectManager m_inlineObjectManager;
+    KoTextRangeManager m_rangeManager;
     KoDocumentRdfBase m_rdfBase;
 };
 

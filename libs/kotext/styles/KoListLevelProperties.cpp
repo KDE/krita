@@ -558,13 +558,13 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
                 // often StarSymbol when it comes from OO; doesn't matter, Qt finds it in another font if needed.
                 if ( listStyleProperties.hasAttributeNS( KoXmlNS::style, "font-name" ) )
                 {
-                    customBulletFont = listStyleProperties.attributeNS( KoXmlNS::style, "font-name", QString::null );
-                    kDebug(32500) <<"customBulletFont style:font-name =" << listStyleProperties.attributeNS( KoXmlNS::style,"font-name", QString::null );
+                    customBulletFont = listStyleProperties.attributeNS( KoXmlNS::style, "font-name", QString() );
+                    kDebug(32500) <<"customBulletFont style:font-name =" << listStyleProperties.attributeNS( KoXmlNS::style,"font-name", QString() );
                 }
                 else if ( listStyleTextProperties.hasAttributeNS( KoXmlNS::fo, "font-family" ) )
                 {
-                    customBulletFont = listStyleTextProperties.attributeNS( KoXmlNS::fo, "font-family", QString::null );
-                    kDebug(32500) <<"customBulletFont fo:font-family =" << listStyleTextProperties.attributeNS( KoXmlNS::fo,"font-family", QString::null );
+                    customBulletFont = listStyleTextProperties.attributeNS( KoXmlNS::fo, "font-family", QString() );
+                    kDebug(32500) <<"customBulletFont fo:font-family =" << listStyleTextProperties.attributeNS( KoXmlNS::fo,"font-family", QString() );
                 }
                 // ## TODO in fact we're supposed to read it from the style pointed to by text:style-name
                 */
@@ -583,7 +583,7 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
         if (style.localName() == "outline-level-style") {
             setOutlineList(true);
         }
-        setRelativeBulletSize(100); //arbitary value for numbered list
+        setRelativeBulletSize(100); //arbitrary value for numbered list
 
         KoOdfNumberDefinition numberDefinition;
         numberDefinition.loadOdf(style);

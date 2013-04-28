@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIDB_INDEX_H
-#define KEXIDB_INDEX_H
+#ifndef KEXIDB_INDEXSCHEMA_H
+#define KEXIDB_INDEXSCHEMA_H
 
 #include <QList>
 #include <QString>
@@ -54,7 +54,7 @@ public:
      but by its table. Do not forget to add these fields to table,
      because adding these to IndexSchema is not enough.
      */
-    IndexSchema(TableSchema *tableSchema);
+    explicit IndexSchema(TableSchema *tableSchema);
 
     /*! Copy constructor. Copies all attributes from index \a idx, and
      fields assigned with it but the fields are taken (by name) from
@@ -157,7 +157,7 @@ public:
     void setUnique(bool set);
 
     /*! \return String for debugging purposes. */
-    virtual QString debugString();
+    virtual QString debugString() const;
 protected:
 
     /*! Internal constructor for convenience.

@@ -36,7 +36,6 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoTextEditor.h>
 #include <KoTextDocument.h>
-#include <KoBookmark.h>
 
 class DummyInlineObject : public KoInlineObject
 {
@@ -63,7 +62,7 @@ public:
 
     virtual void updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &/*format*/)
     {
-        Q_ASSERT(posInDocument <= document->toPlainText().size());
+        Q_ASSERT(posInDocument <= document->toPlainText().size()); Q_UNUSED(document);
         m_position = posInDocument;
     }
 

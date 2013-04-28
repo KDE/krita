@@ -55,8 +55,9 @@ KoShapeContainer::~KoShapeContainer()
 {
     Q_D(KoShapeContainer);
     if (d->model) {
-        foreach(KoShape *shape, d->model->shapes())
-            shape->setParent(0);
+        foreach(KoShape *shape, d->model->shapes()) {
+            delete shape;
+        }
     }
 }
 

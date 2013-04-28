@@ -146,7 +146,7 @@ KoCanvasBase* KoToolProxy::canvas() const
     return d->controller->canvas();
 }
 
-#include <KDebug>
+#include <kdebug.h>
 void KoToolProxy::tabletEvent(QTabletEvent *event, const QPointF &point)
 {
     // don't process tablet events for stylus middle and right mouse button
@@ -505,7 +505,8 @@ void KoToolProxy::processEvent(QEvent *e) const
     if(e->type()==QEvent::ShortcutOverride
        && d->activeTool
        && d->activeTool->isInTextMode()
-       && static_cast<QKeyEvent*>(e)->modifiers()==Qt::NoModifier) {
+       && (static_cast<QKeyEvent*>(e)->modifiers()==Qt::NoModifier ||
+           static_cast<QKeyEvent*>(e)->modifiers()==Qt::ShiftModifier)) {
         e->accept();
     }
 }

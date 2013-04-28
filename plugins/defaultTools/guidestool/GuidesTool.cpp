@@ -31,7 +31,7 @@
 #include <KoGuidesData.h>
 #include <KoToolManager.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <QPainter>
 

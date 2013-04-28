@@ -20,41 +20,18 @@
 #ifndef DLG_SHRINK_SELECTION_H
 #define DLG_SHRINK_SELECTION_H
 
-#include <kdialog.h>
-
 #include "ui_wdg_shrink_selection.h"
+#include <operations/kis_operation_ui_widget.h>
+#include "operations/kis_operation_configuration.h"
 
-class WdgShrinkSelection : public QWidget, public Ui::WdgShrinkSelection
+class WdgShrinkSelection : public KisOperationUIWidget, public Ui::WdgShrinkSelection
 {
     Q_OBJECT
 
 public:
-    WdgShrinkSelection(QWidget *parent) : QWidget(parent) {
-        setupUi(this);
-    }
-};
+    WdgShrinkSelection(QWidget *parent);
 
-class DlgShrinkSelection: public KDialog
-{
-
-    Q_OBJECT
-
-public:
-
-    DlgShrinkSelection(QWidget * parent = 0, const char* name = 0);
-    ~DlgShrinkSelection();
-
-    qint32 xradius();
-    qint32 yradius();
-    bool shrinkFromImageBorder();
-
-private slots:
-
-    void okClicked();
-
-private:
-
-    WdgShrinkSelection * m_page;
+    virtual void getConfiguration(KisOperationConfiguration* config);
 };
 
 #endif // DLG_SHRINK_SELECTION_H

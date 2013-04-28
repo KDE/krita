@@ -36,6 +36,7 @@
 #include "kis_default_bounds.h"
 #include "kis_image_interfaces.h"
 
+#include <krita_export.h>
 
 class KoDocument;
 class KoColorSpace;
@@ -227,7 +228,9 @@ public:
     /**
      * Convert the image and all its layers to the dstColorSpace
      */
-    void convertImageColorSpace(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
+    void convertImageColorSpace(const KoColorSpace *dstColorSpace,
+                                KoColorConversionTransformation::Intent renderingIntent,
+                                KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     /**
      * Set the color space of  the projection (and the root layer)
@@ -526,7 +529,24 @@ signals:
      */
     void sigImageModified();
 
-    void sigSizeChanged(qint32 w, qint32 h);
+    /**
+     * The signal is emitted when the size of the image is changed.
+     * \p oldStillPoint and \p newStillPoint give the reciever the
+     * hint about how the new and old rect of the image correspond to
+     * each other. They specify the point of the image around which
+     * the conversion was done. This point will stay still on the
+     * user's screen. That is the \p newStillPoint of the new image
+     * will be painted at the same screen position, where \p
+     * oldStillPoint of the old image was painted.
+     *
+     * \param oldStillPoint is a still point represented in *old*
+     *                      image coordinates
+     *
+     * \param newStillPoint is a still point represented in *new*
+     *                      image coordinates
+     */
+    void sigSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
+
     void sigProfileChanged(const KoColorProfile *  profile);
     void sigColorSpaceChanged(const KoColorSpace*  cs);
     void sigResolutionChanged(double xRes, double yRes);
@@ -569,11 +589,48 @@ signals:
     /**
      * Emitted when the root node of the image has changed.
      * It happens, e.g. when we flatten the image. When
-     * this happens the reciever should reload information
+     * this happens the receiver should reload information
      * about the image
      */
     void sigLayersChangedAsync();
 
+    /**
+     * Emitted when the UI has requested the undo of the last stroke's
+     * operation. The point is, we cannot deal with the internals of
+     * the stroke without its creator knowing about it (which most
+     * probably cause a crash), so we just forward this request from
+     * the UI to the creator of the stroke.
+     *
+     * If your tool supports undoing part of its work, just listen to
+     * this signal and undo when it comes
+     */
+    void sigUndoDuringStrokeRequested();
+
+    /**
+     * Emitted when the UI has requested the cancellation of
+     * the stroke. The point is, we cannot cancel the stroke
+     * without its creator knowing about it (which most probably
+     * cause a crash), so we just forward this request from the UI
+     * to the creator of the stroke.
+     *
+     * If your tool supports cancelling of its work in the middle
+     * of operation, just listen to this signal and cancel
+     * the stroke when it comes
+     */
+    void sigStrokeCancellationRequested();
+
+    /**
+     * Emitted when the image decides that the stroke should better
+     * be ended. The point is, we cannot just end the stroke
+     * without its creator knowing about it (which most probably
+     * cause a crash), so we just forward this request from the UI
+     * to the creator of the stroke.
+     *
+     * If your tool supports long  strokes that may involve multiple
+     * mouse actions in one stroke, just listen to this signal and
+     * end the stroke when it comes.
+     */
+    void sigStrokeEndRequested();
 
 public slots:
     KisCompositeProgressProxy* compositeProgressProxy();
@@ -590,8 +647,37 @@ public slots:
     void blockUpdates();
     void unblockUpdates();
 
+    /**
+     * Disables notification of the UI about the changes in the image.
+     * This feature is used by KisProcessingApplicator. It is needed
+     * when we change the size of the image. In this case, the whole
+     * image will be reloaded into UI by sigSizeChanged(), so there is
+     * no need to inform the UI about individual dirty rects.
+     */
     void disableUIUpdates();
+
+    /**
+     * \see disableUIUpdates
+     */
     void enableUIUpdates();
+
+    /**
+     * Disables the processing of all the setDirty() requests that
+     * come to the image. The incoming requests are effectively
+     * *dropped*.
+     *
+     * This feature is used by KisProcessingApplicator. For many cases
+     * it provides its own updates interface, which recalculates the
+     * whole subtree of nodes. But while we change any particular
+     * node, it can ask for an update itself. This method is a way of
+     * blocking such intermediate (and excessive) requests.
+     */
+    void disableDirtyRequests();
+
+    /**
+     * \see disableDirtyRequests()
+     */
+    void enableDirtyRequests();
 
     void refreshGraphAsync(KisNodeSP root = 0);
     void refreshGraphAsync(KisNodeSP root, const QRect &rc);
@@ -604,7 +690,36 @@ public slots:
     void refreshGraph(KisNodeSP root, const QRect& rc, const QRect &cropRect);
     void initialRefreshGraph();
 
+    /**
+     * This method is called by the UI (*not* by the creator of the
+     * stroke) when it thinks current stroke should undo its last
+     * action. For example, when the user presses Ctrl+Z while some
+     * stroke is active. If the creator of the stroke supports undoing
+     * of intermediate actions, it will be notified about this request
+     * and (if it decides he likes to do it) will undo its last
+     * action.
+     */
+    void requestUndoDuringStroke();
+
+    /**
+     * This method is called by the UI (*not* by the creator
+     * of the stroke) when it thinks current stroke should be
+     * cancelled. If the creator of the stroke supports cancelling
+     * of the stroke, it will be notified about the request and
+     * the stroke will be cancelled
+     */
+    void requestStrokeCancellation();
+
+    /**
+     * This method is called when image or some other part of Krita
+     * (*not* the creator of the stroke) decides that the stroke
+     * should be ended. If the creator of the stroke supports it, it
+     * will be notified and the stroke will be cancelled
+     */
+    void requestStrokeEnd();
+
 private:
+
     KisImage(const KisImage& rhs);
     KisImage& operator=(const KisImage& rhs);
     void init(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace);
@@ -616,6 +731,8 @@ private:
     void shearImpl(const QString &actionName, KisNodeSP rootNode,
                    bool resizeImage, double angleX, double angleY,
                    const QPointF &origin);
+
+    void safeRemoveTwoNodes(KisNodeSP node1, KisNodeSP node2);
 
     void refreshHiddenArea(KisNodeSP rootNode, const QRect &preparedArea);
     static QRect realNodeExtent(KisNodeSP rootNode, QRect currentRect = QRect());

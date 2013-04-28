@@ -33,7 +33,6 @@ KisNodeDummy::KisNodeDummy(KisNodeShape *nodeShape, KisNodeSP node)
 
 KisNodeDummy::~KisNodeDummy()
 {
-    delete m_nodeShape;
     qDeleteAll(m_children);
 }
 

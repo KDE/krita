@@ -23,10 +23,10 @@
 
 class QListView;
 
-class StylesModel;
+class AbstractStylesModel;
 class StylesComboPreview;
 
-/** This combo is specifically designed to allow chosing a text style, be it a character style or a paragraph style.
+/** This combo is specifically designed to allow choosing a text style, be it a character style or a paragraph style.
   * The combo itself does not know what type of style it is dealing with. In that respect it follows pretty much the normal QComboBox paradigm.
   * This is achieved by setting a @class StylesModel to the combo.
   * The combo also creates and uses a @class StylesDelegate in order to paint the items as preview in the dropdown menu. This delegate also provide a button to call the style manager dialog directly.
@@ -42,7 +42,7 @@ public:
     ~StylesCombo();
 
     /** Use this method to set the @param model of the combo. */
-    void setStylesModel(StylesModel *model);
+    void setStylesModel(AbstractStylesModel *model);
 
     /** This method is an override of QComboBox setLineEdit. We need to make it public since its Qt counterpart is public. However, this method is not supposed to be used (unless you know what you are doing). The StylesCombo relies on its own internal QLineEdit subclass for quite a lot of its functionnality. There is no guarantee that the whole thing will work in case the line edit is replaced */
     void setLineEdit(QLineEdit *lineEdit);
@@ -54,7 +54,7 @@ public:
 
     bool eventFilter(QObject *, QEvent *);
 
-    /** When we dont want edit icon for our items in combo */
+    /** When we don't want edit icon for our items in combo */
     void showEditIcon(bool show);
 
 public slots:
@@ -66,6 +66,7 @@ signals:
       * to be noted that this signal is also emitted when an item is selected again.
       * @param index: the index of the selected item. */
     void selected(int index);
+    void selected(QModelIndex &index);
 
     /** This is emitted when a selection is changed (programatically or by user interaction). It is
       * to be noted that this signal is _not_ emitted when an item is selected again. Not even if it
@@ -92,13 +93,15 @@ private slots:
     void slotSelectionChanged(int index);
     void slotItemClicked(QModelIndex);
     void slotPreviewClicked();
+    void slotModelReset();
 
 private:
-    StylesModel *m_stylesModel;
+    AbstractStylesModel *m_stylesModel;
     StylesComboPreview *m_preview;
     QListView *m_view;
     int m_selectedItem;
     bool m_originalStyle;
+    QModelIndex m_currentIndex;
 };
 
 #endif //STYLESCOMBO_H

@@ -21,10 +21,10 @@
 #include "SpellCheckMenu.h"
 #include "SpellCheck.h"
 
-#include <KDebug>
-#include <KActionMenu>
-#include <KMenu>
-#include <KLocale>
+#include <kdebug.h>
+#include <kactionmenu.h>
+#include <kmenu.h>
+#include <klocale.h>
 
 #include <QSignalMapper>
 

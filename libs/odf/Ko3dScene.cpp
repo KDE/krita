@@ -22,7 +22,7 @@
 #include "Ko3dScene.h"
 
 // KDE
-#include <KDebug>
+#include <kdebug.h>
 
 // Calligra
 #include <KoXmlReader.h>

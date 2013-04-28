@@ -1,0 +1,11 @@
+[Desktop Entry]
+# only used for debugging, so no translation needed
+Name=Textdocument Inspection
+Comment=
+X-KDE-ServiceTypes=Calligra/Dock
+Type=Service
+X-KDE-Library=textshape
+X-KDE-PluginInfo-Name=textdocumentinspection
+X-KDE-PluginKeyword=TextDocumentInspection
+X-Flake-MinVersion=27
+X-Flake-PluginVersion=27

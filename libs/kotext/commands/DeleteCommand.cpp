@@ -29,8 +29,10 @@
 #include "KoTextEditor_p.h"
 #include <KoTextDocument.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoTextRangeManager.h>
 #include "KoBookmark.h"
-#include <KoTextAnchor.h>
+#include <KoAnchorInlineObject.h>
+#include <KoAnchorTextRange.h>
 #include <KoCanvasBase.h>
 #include <KoShapeController.h>
 
@@ -56,6 +58,10 @@ void DeleteCommand::undo()
     UndoRedoFinalizer finalizer(this);
     updateListChanges();
     m_undone = true;
+    KoTextRangeManager *rangeManager = KoTextDocument(m_document).textRangeManager();
+    foreach (KoTextRange *range, m_rangesToRemove) {
+        rangeManager->insert(range);
+    }
 }
 
 void DeleteCommand::redo()
@@ -64,6 +70,10 @@ void DeleteCommand::redo()
     if (!m_first) {
         KoTextCommandBase::redo();
         UndoRedoFinalizer finalizer(this);
+        KoTextRangeManager *rangeManager = KoTextDocument(m_document).textRangeManager();
+        foreach (KoTextRange *range, m_rangesToRemove) {
+            rangeManager->remove(range);
+        }
     } else {
         m_first = false;
         if (m_document) {
@@ -88,7 +98,7 @@ public:
     {
     }
 
-    virtual void visitFragmentSelection(QTextCursor fragmentSelection)
+    virtual void visitFragmentSelection(QTextCursor &fragmentSelection)
     {
         if (m_first) {
             m_firstFormat = fragmentSelection.charFormat();
@@ -129,7 +139,7 @@ void DeleteCommand::doDelete()
     Q_ASSERT(textEditor);
     QTextCursor *caret = textEditor->cursor();
     QTextCharFormat charFormat = caret->charFormat();
-    KoInlineTextObjectManager *inlineObjectManager = KoTextDocument(m_document).inlineTextObjectManager();
+    bool caretAtBeginOfBlock = (caret->position() == caret->block().position());
 
     if (!textEditor->hasSelection()) {
         if (m_mode == PreviousChar) {
@@ -144,11 +154,26 @@ void DeleteCommand::doDelete()
     m_mergePossible = visitor.m_mergePossible;
 
     foreach (KoInlineObject *object, m_invalidInlineObjects) {
-        deleteTextAnchor(object);
-        deleteBookmark(object);
+        deleteAnchorInlineObject(object);
     }
-    foreach (KoInlineObject *object, m_bookmarksToRemove) {
-        inlineObjectManager->removeInlineObject(object); // doesn't remove the character
+
+    KoTextRangeManager *rangeManager = KoTextDocument(m_document).textRangeManager();
+
+    m_rangesToRemove = rangeManager->textRangesChangingWithin(textEditor->document(), textEditor->selectionStart(), textEditor->selectionEnd(), textEditor->selectionStart(), textEditor->selectionEnd());
+
+    foreach (KoTextRange *range, m_rangesToRemove) {
+        KoAnchorTextRange *anchorRange = dynamic_cast<KoAnchorTextRange *>(range);
+        if (anchorRange) {
+            KoShape *shape = anchorRange->anchor()->shape();
+            if (m_shapeController) {
+                KUndo2Command *shapeDeleteCommand = m_shapeController->removeShape(shape, this);
+                shapeDeleteCommand->redo();
+            }
+            // via m_shapeController->removeShape a DeleteAnchorsCommand should be created that
+            // also calls rangeManager->remove(range), so we shouldn't do that here aswell
+        } else {
+            rangeManager->remove(range);
+        }
     }
 
     if (textEditor->hasComplexSelection()) {
@@ -164,74 +189,17 @@ void DeleteCommand::doDelete()
 
     caret->deleteChar();
 
-    restoreUnmatchedBookmarks(textEditor);
-
-    caret->setCharFormat(charFormat);
-}
-
-void DeleteCommand::deleteBookmark(KoInlineObject *object)
-{
-    KoBookmark *bookmark = dynamic_cast<KoBookmark*>(object);
-    if (bookmark) {
-        KoInlineTextObjectManager *inlineObjectManager = KoTextDocument(m_document).inlineTextObjectManager();
-        KoBookmarkManager *bookmarkManager = inlineObjectManager->bookmarkManager();
-
-        KoBookmark::BookmarkType type = bookmark->type();
-        if (type == KoBookmark::StartBookmark) {
-            KoBookmark *endmark = bookmark->endBookmark();
-            Q_ASSERT(endmark);
-            if (endmark && !m_invalidInlineObjects.contains(endmark)) {
-                m_unmatchedBookmarks << bookmark;
-            } else {
-                //don't remove it yet as we need to find it below
-                m_bookmarksToRemove << bookmark;
-            }
-        } else if (type == KoBookmark::EndBookmark) {
-            KoBookmark *startmark = bookmarkManager->retrieveBookmark(bookmark->name());
-            Q_ASSERT(startmark);
-            if (startmark && !m_invalidInlineObjects.contains(startmark)) {
-                m_unmatchedBookmarks << bookmark;
-            } else {
-                inlineObjectManager->removeInlineObject(object); // doesn't remove the character
-            }
-        } else {
-            // single bookmark - can be removed right away
-            inlineObjectManager->removeInlineObject(object); // doesn't remove the character
-        }
-        // Note: Don't delete the object. Removed objects are stored by the bookmark manager
-        // for future use. Also, start bookmarks might still have a reference to the end bookmark
-        // that is being removed.
+    if (m_mode != PreviousChar || !caretAtBeginOfBlock) {
+        caret->setCharFormat(charFormat);
     }
 }
 
-void DeleteCommand::restoreUnmatchedBookmarks(KoTextEditor *editor)
-{
-    QTextCursor *caret = editor->cursor();
-    int currentPosition = caret->position();
-
-    // now restore the bookmarks that spanned beyond the selection we removed
-    foreach(KoBookmark *bookmark, m_unmatchedBookmarks) {
-
-        QTextCharFormat oldCf = editor->charFormat();
-        // create a new format out of the old so that the current formatting is
-        // also used for the inserted object.  KoVariables render text too ;)
-        QTextCharFormat cf(oldCf);
-        cf.setObjectType(QTextFormat::UserObject + 1);
-        cf.setProperty(KoInlineTextObjectManager::InlineInstanceId, bookmark->id());
-        caret->insertText(QString(QChar::ObjectReplacementCharacter), cf);
-        // reset to use old format so that the InlineInstanceId is no longer set.
-        caret->setCharFormat(oldCf);
-    }
-
-    editor->updateInlineObjectPosition(currentPosition);
-}
-
-void DeleteCommand::deleteTextAnchor(KoInlineObject *object)
+void DeleteCommand::deleteAnchorInlineObject(KoInlineObject *object)
 {
     if (object) {
-        KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(object);
-        if (anchor) {
-            KoShape *shape = anchor->shape();
+        KoAnchorInlineObject *anchorObject = dynamic_cast<KoAnchorInlineObject *>(object);
+        if (anchorObject) {
+            KoShape *shape = anchorObject->anchor()->shape();
             KUndo2Command *shapeDeleteCommand = m_shapeController->removeShape(shape, this);
             shapeDeleteCommand->redo();
         }

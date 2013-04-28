@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Inline Text Object Plugin
+Name[bs]=Plugin za inline tekst objekte
 Name[ca]=Connector d'objecte de text a la línia
 Name[ca@valencia]=Connector d'objecte de text a la línia
 Name[da]=Plugin til indlejret tekstobjekt
@@ -10,9 +11,10 @@ Name[es]=Complemento de objetos incorporados de texto
 Name[et]=Tekstiobjekti plugin
 Name[fi]=Liitännäinen rivinsisäisiä tekstiobjekteja varten
 Name[fr]=Module externe d'objet de texte interne
-Name[gl]=Engadido de obxectos de texto citado
+Name[gl]=Complemento de obxectos de texto inserido
 Name[hi]=इनलाइन पाठ वस्तु प्लगइन
 Name[hne]=इनलाइन पाठ चीज प्लगइन
+Name[hu]=Sorközi szövegobjektum bővítmény
 Name[it]=Estensione per oggetti di testo in linea
 Name[ja]=インラインテキストオブジェクトのためのプラグイン
 Name[kk]=Мәтіні ішіндегі нысан плагині
@@ -36,8 +38,10 @@ Name[zh_TW]=內含文字物件外掛程式
 Type=ServiceType
 X-KDE-ServiceType=Calligra/Text-InlineObject
 Comment=Definition of a text object
+Comment[bs]=Definicija tekstualnog objekta
 Comment[ca]=Definició d'objecte de text
 Comment[ca@valencia]=Definició d'objecte de text
+Comment[cs]=Definice textového objektu
 Comment[da]=Definition af et tekstobjekt
 Comment[de]=Definition eines Textobjektes
 Comment[el]=Ορισμός ενός αντικειμένου κειμένου
@@ -50,6 +54,7 @@ Comment[fy]=Defenysje fan in tekstobjekt
 Comment[gl]=Definción dun obxecto de texto
 Comment[hi]=पाठ वस्तु की परिभाषा
 Comment[hne]=पाठ चीज के परिभासा
+Comment[hu]=Egy szövegobjektum meghatározása
 Comment[it]=Definizione di un oggetto di testo
 Comment[ja]=テキストオブジェクトの定義
 Comment[kk]=Мәтін нысанының анықтамасы
@@ -72,5 +77,5 @@ Comment[zh_CN]=文本对象的定义
 Comment[zh_TW]=定義文字物件
 [PropertyDef::X-KoText-MinVersion]
 Type=int
-[PropertyDef::X-Flake-PluginVersion]
+[PropertyDef::X-KoText-PluginVersion]
 Type=int

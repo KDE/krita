@@ -34,7 +34,7 @@ class Line : public QObject
 {
     Q_OBJECT
 public:
-    Line(KoReportItemLine *);
+    explicit Line(KoReportItemLine *);
 
     ~Line();
 

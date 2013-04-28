@@ -43,6 +43,29 @@
 namespace TestUtil
 {
 
+inline QString fetchDataFileLazy(const QString relativeFileName)
+{
+    QString filename  =
+        QString(FILES_DATA_DIR) +
+        QDir::separator() +
+        relativeFileName;
+
+    if (QFileInfo(filename).exists()) {
+        return filename;
+    }
+
+    filename  =
+        QString(FILES_DEFAULT_DATA_DIR) +
+        QDir::separator() +
+        relativeFileName;
+
+    if (QFileInfo(filename).exists()) {
+        return filename;
+    }
+
+    return QString();
+}
+
 inline void dumpNodeStack(KisNodeSP node, QString prefix = QString("\t"))
 {
     qDebug() << node->name();
@@ -92,7 +115,7 @@ private:
 };
 
 
-inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2, int fuzzy = 0)
+inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2, int fuzzy = 0, int fuzzyAlpha = 0)
 {
     //     QTime t;
     //     t.start();
@@ -121,7 +144,7 @@ inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & im
                 const bool same = qAbs(qRed(a) - qRed(b)) <= fuzzy
                                   && qAbs(qGreen(a) - qGreen(b)) <= fuzzy
                                   && qAbs(qBlue(a) - qBlue(b)) <= fuzzy;
-                const bool sameAlpha = qAlpha(a) == qAlpha(b);
+                const bool sameAlpha = qAlpha(a) - qAlpha(b) <= fuzzyAlpha;
                 const bool bothTransparent = sameAlpha && qAlpha(a)==0;
 
                 if (!bothTransparent && (!same || !sameAlpha)) {
@@ -301,6 +324,30 @@ public:
         beforeMove = false;
         afterMove = false;
     }
+};
+
+}
+
+#include <kis_paint_layer.h>
+#include <kis_image.h>
+#include "kis_undo_stores.h"
+
+namespace TestUtil {
+
+struct MaskParent
+{
+    MaskParent()
+        : imageRect(0,0,512,512) {
+        const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+        image = new KisImage(new KisSurrogateUndoStore(), imageRect.width(), imageRect.height(), cs, "test image");
+        layer = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
+        image->addNode(layer);
+    }
+
+
+    const QRect imageRect;
+    KisImageSP image;
+    KisPaintLayerSP layer;
 };
 
 }

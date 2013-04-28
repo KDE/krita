@@ -33,7 +33,7 @@ class KoModeBoxDocker : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 public:
-    KoModeBoxDocker(KoModeBox *modeBox);
+    explicit KoModeBoxDocker(KoModeBox *modeBox);
 
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);

@@ -21,6 +21,7 @@
 #include "ArtisticTextTool.h"
 #include "ArtisticTextShape.h"
 
+#include <KoIcon.h>
 #include <klocale.h>
 
 ArtisticTextToolFactory::ArtisticTextToolFactory()
@@ -28,7 +29,7 @@ ArtisticTextToolFactory::ArtisticTextToolFactory()
 {
     setToolTip( i18n("Artistic Text Editing Tool") );
     setToolType( dynamicToolType() );
-    setIcon ("artistictext-tool");
+    setIconName(koIconNameCStr("artistictext-tool"));
     setPriority( 1 );
     setActivationShapeId( ArtisticTextShapeID );
 }

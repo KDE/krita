@@ -130,6 +130,14 @@ public:
         _CSTrait::applyInverseAlphaU8Mask(pixels, alpha, nPixels);
     }
 
+    virtual void applyAlphaNormedFloatMask(quint8 * pixels, const float * alpha, qint32 nPixels) const {
+        _CSTrait::applyAlphaNormedFloatMask(pixels, alpha, nPixels);
+    }
+
+    virtual void applyInverseNormedFloatMask(quint8 * pixels, const float * alpha, qint32 nPixels) const {
+        _CSTrait::applyInverseAlphaNormedFloatMask(pixels, alpha, nPixels);
+    }
+
     virtual quint8 intensity8(const quint8 * src) const {
         QColor c;
         const_cast<KoColorSpaceAbstract<_CSTrait> *>(this)->toQColor(src, &c);
@@ -151,7 +159,9 @@ public:
     virtual bool convertPixelsTo(const quint8 *src,
                                  quint8 *dst, const KoColorSpace *dstColorSpace,
                                  quint32 numPixels,
-                                 KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const {
+                                 KoColorConversionTransformation::Intent renderingIntent,
+                                 KoColorConversionTransformation::ConversionFlags conversionFlags) const
+    {
         
         // check whether we have the same profile and color model, but only a different bit
         // depth; in that case we don't convert as such, but scale
@@ -190,7 +200,7 @@ public:
             }
         }
         
-        return KoColorSpace::convertPixelsTo(src, dst, dstColorSpace, numPixels, renderingIntent);
+        return KoColorSpace::convertPixelsTo(src, dst, dstColorSpace, numPixels, renderingIntent, conversionFlags);
     }
     
 private:

@@ -35,17 +35,11 @@
 #include "commands/kis_selection_commands.h"
 #include "kis_shape_controller.h"
 
-KisSelectionToolHelper::KisSelectionToolHelper(KisCanvas2* canvas, KisNodeSP node, const QString& name)
+KisSelectionToolHelper::KisSelectionToolHelper(KisCanvas2* canvas, const QString& name)
         : m_canvas(canvas)
-        , m_layer(0)
         , m_name(name)
 {
-    m_layer = dynamic_cast<KisLayer*>(node.data());
-    while (!m_layer && node->parent()) {
-        m_layer = dynamic_cast<KisLayer*>(node->parent().data());
-        node = node->parent();
-    }
-    m_image = m_layer->image();
+    m_image = m_canvas->view()->image();
 }
 
 KisSelectionToolHelper::~KisSelectionToolHelper()
@@ -54,18 +48,24 @@ KisSelectionToolHelper::~KisSelectionToolHelper()
 
 void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection, SelectionAction action)
 {
-    KisUndoAdapter *undoAdapter = m_layer->image()->undoAdapter();
+    KisView2* view = m_canvas->view();
+    if (selection->selectedRect().isEmpty()) {
+        m_canvas->view()->selectionManager()->deselect();
+        return;
+    }
+
+    KisUndoAdapter *undoAdapter = view->image()->undoAdapter();
     undoAdapter->beginMacro(m_name);
 
-    bool hasSelection = m_layer->selection();
+    bool hasSelection = view->selection();
 
     if (!hasSelection) {
         undoAdapter->addCommand(new KisSetEmptyGlobalSelectionCommand(m_image));
     }
 
-    KisSelectionTransaction transaction(m_name, m_image, m_layer->selection());
+    KisSelectionTransaction transaction(m_name, m_image->undoAdapter(), view->selection());
 
-    KisPixelSelectionSP pixelSelection = m_layer->selection()->getOrCreatePixelSelection();
+    KisPixelSelectionSP pixelSelection = view->selection()->getOrCreatePixelSelection();
 
     if (!hasSelection && action == SELECTION_SUBTRACT) {
         pixelSelection->invert();
@@ -77,7 +77,7 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
     if (hasSelection && action != SELECTION_REPLACE && action != SELECTION_INTERSECT) {
         dirtyRect = selection->selectedRect();
     }
-    m_layer->selection()->updateProjection(dirtyRect);
+    view->selection()->updateProjection(dirtyRect);
 
     transaction.commit(undoAdapter);
     undoAdapter->endMacro();
@@ -88,6 +88,7 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
 
 void KisSelectionToolHelper::addSelectionShape(KoShape* shape)
 {
+    KisView2* view = m_canvas->view();
     /**
      * Mark a shape that it belongs to a shape selection
      */
@@ -95,15 +96,15 @@ void KisSelectionToolHelper::addSelectionShape(KoShape* shape)
         shape->setUserData(new KisShapeSelectionMarker);
     }
 
-    KisUndoAdapter *undoAdapter = m_layer->image()->undoAdapter();
+    KisUndoAdapter *undoAdapter = view->image()->undoAdapter();
     undoAdapter->beginMacro(m_name);
 
-    if (!m_layer->selection()) {
+    if (!view->selection()) {
         undoAdapter->addCommand(new KisSetEmptyGlobalSelectionCommand(m_image));
     }
 
-    KisSelectionSP selection = m_layer->selection();
-    KisSelectionTransaction transaction(m_name, m_image, selection);
+    KisSelectionSP selection = view->selection();
+    KisSelectionTransaction transaction(m_name, m_image->undoAdapter(), selection);
 
     transaction.commit(undoAdapter);
 

@@ -31,7 +31,7 @@
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
-
+#include <kis_fixed_paint_device.h>
 #include <kis_brush_option.h>
 #include <kis_sprayop_option.h>
 #include <kis_spray_shape_option.h>
@@ -94,7 +94,7 @@ qreal KisSprayPaintOp::paintAt(const KisPaintInformation& info)
     }
 
     if (!m_dab) {
-        m_dab = new KisPaintDevice(painter()->device()->colorSpace());
+        m_dab = source()->createCompositionSourceDevice();
     } else {
         m_dab->clear();
     }

@@ -19,7 +19,7 @@
  */
 
 #include "ArtisticTextRange.h"
-#include <KDebug>
+#include <kdebug.h>
 
 ArtisticTextRange::ArtisticTextRange(const QString &text, const QFont &font)
     : m_text(text), m_font(font), m_letterSpacing(0.0), m_wordSpacing(0.0)

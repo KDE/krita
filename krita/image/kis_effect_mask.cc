@@ -19,6 +19,8 @@
 
 #include "kis_effect_mask.h"
 
+#include <KoIcon.h>
+
 
 KisEffectMask::KisEffectMask()
         : KisMask("effect")
@@ -32,6 +34,11 @@ KisEffectMask::~KisEffectMask()
 KisEffectMask::KisEffectMask(const KisEffectMask& rhs)
         : KisMask(rhs)
 {
+}
+
+QIcon KisEffectMask::icon() const
+{
+    return koIcon("bookmarks");
 }
 
 #include "kis_effect_mask.moc"

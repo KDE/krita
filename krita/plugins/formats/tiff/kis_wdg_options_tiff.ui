@@ -180,7 +180,7 @@ You can uncheck the box if you are not using transparency and you want to make t
      <property name="frameShape" >
       <enum>QFrame::NoFrame</enum>
      </property>
-     <widget class="QWidget" name="WStackPage" >
+     <widget class="QWidget">
       <property name="geometry" >
        <rect>
         <x>0</x>
@@ -208,7 +208,7 @@ You can uncheck the box if you are not using transparency and you want to make t
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="WStackPage" >
+     <widget class="QWidget">
       <property name="geometry" >
        <rect>
         <x>0</x>
@@ -316,7 +316,7 @@ You can uncheck the box if you are not using transparency and you want to make t
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="WStackPage" >
+     <widget class="QWidget">
       <property name="geometry" >
        <rect>
         <x>0</x>
@@ -437,7 +437,7 @@ You can uncheck the box if you are not using transparency and you want to make t
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="WStackPage" >
+     <widget class="QWidget">
       <property name="geometry" >
        <rect>
         <x>0</x>
@@ -499,7 +499,7 @@ You can uncheck the box if you are not using transparency and you want to make t
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="WStackPage" >
+     <widget class="QWidget">
       <property name="geometry" >
        <rect>
         <x>0</x>
@@ -637,7 +637,6 @@ You can uncheck the box if you are not using transparency and you want to make t
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
   <customwidgets>
   <customwidget>
    <class>KComboBox</class>

@@ -17,7 +17,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+
 #include "kis_auto_brush_widget.h"
+
+#include <math.h>
 #include <kis_debug.h>
 #include <QSpinBox>
 #include <QToolButton>
@@ -27,8 +30,9 @@
 #include <QPixmap>
 #include <QResizeEvent>
 
-#include "kis_mask_generator.h"
-#include "kis_slider_spin_box.h"
+#include <kis_fixed_paint_device.h>
+#include <kis_mask_generator.h>
+#include <kis_slider_spin_box.h>
 
 #define showSlider(input, step) input->setRange(input->minimum(), input->maximum(), step)
 #include <kis_cubic_curve.h>
@@ -36,13 +40,8 @@
 KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
         : KisWdgAutobrush(parent, name)
         , m_autoBrush(0)
+        , m_linkFade(false)
 {
-
-    m_linkSize = true;
-    m_linkFade = true;
-
-//     linkFadeToggled(m_linkSize);
-//     linkSizeToggled(m_linkFade);
 
     connect(aspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(linkFadeToggled(bool)));
     aspectButton->setKeepAspectRatio(m_linkFade);
@@ -54,12 +53,12 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
     inputRadius->addMultiplier(100.0);
     inputRadius->setExponentRatio(3.0);
     inputRadius->setValue(5.0);
-    connect(inputRadius, SIGNAL(valueChanged(qreal)), this, SLOT(paramChanged()));
+    connect(inputRadius, SIGNAL(valueChanged(qreal)), this, SLOT(spinBoxRadiusChanged(qreal)));
 
     inputRatio->setRange(0.0, 1.0, 2);
     inputRatio->setSingleStep(0.1);
     inputRatio->setValue(1.0);
-    connect(inputRatio, SIGNAL(valueChanged(qreal)), this, SLOT(paramChanged()));
+    connect(inputRatio, SIGNAL(valueChanged(qreal)), this, SLOT(spinBoxRatioChanged(qreal)));
 
     inputHFade->setRange(0.0, 1.0, 2);
     inputHFade->setSingleStep(0.1);
@@ -73,27 +72,27 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
 
     inputSpikes->setRange(2, 20);
     inputSpikes->setValue(2);
-    connect(inputSpikes, SIGNAL(valueChanged(int)), this, SLOT(paramChanged()));
+    connect(inputSpikes, SIGNAL(valueChanged(int)), this, SLOT(spinBoxSpikesChanged(int)));
 
     inputRandomness->setRange(0, 100);
     inputRandomness->setValue(0);
-    connect(inputRandomness, SIGNAL(valueChanged(qreal)), this, SLOT(paramChanged()));
+    connect(inputRandomness, SIGNAL(valueChanged(qreal)), this, SLOT(spinBoxRandomnessChanged(qreal)));
 
     inputAngle->setRange(0, 360);
     inputAngle->setSuffix(QChar(Qt::Key_degree));
     inputAngle->setValue(0);
-    connect(inputAngle, SIGNAL(valueChanged(int)), this, SLOT(paramChanged()));
+    connect(inputAngle, SIGNAL(valueChanged(int)), this, SLOT(spinBoxAngleChanged(int)));
 
     inputSpacing->setRange(0.0, 10.0, 2);
     inputSpacing->setSingleStep(0.1);
     inputSpacing->setValue(0.1);
-    connect(inputSpacing, SIGNAL(valueChanged(qreal)), this, SLOT(paramChanged()));
+    connect(inputSpacing, SIGNAL(valueChanged(qreal)), this, SLOT(spinBoxSpacingChanged(qreal)));
 
     density->setRange(0, 100, 0);
     density->setSingleStep(1);
     density->setValue(100);
     density->setSuffix("%");
-    connect(density, SIGNAL(valueChanged(qreal)),this, SLOT(paramChanged()));
+    connect(density, SIGNAL(valueChanged(qreal)),this, SLOT(spinBoxDensityChanged(qreal)));
 
     KisCubicCurve topLeftBottomRightLinearCurve;
     topLeftBottomRightLinearCurve.setPoint(0, QPointF(0.0,1.0));
@@ -190,9 +189,17 @@ void KisAutoBrushWidget::setStackedWidget(int index)
 void KisAutoBrushWidget::spinBoxHorizontalChanged(qreal a)
 {
     if (m_linkFade) {
+        inputHFade->blockSignals(true);
+        inputHFade->setValue(a);
+        inputHFade->blockSignals(false);
         inputVFade->blockSignals(true);
         inputVFade->setValue(a);
         inputVFade->blockSignals(false);
+    }
+    else {
+        inputHFade->blockSignals(true);
+        inputHFade->setValue(a);
+        inputHFade->blockSignals(false);
     }
     paramChanged();
 }
@@ -203,8 +210,73 @@ void KisAutoBrushWidget::spinBoxVerticalChanged(qreal a)
         inputHFade->blockSignals(true);
         inputHFade->setValue(a);
         inputHFade->blockSignals(false);
+        inputVFade->blockSignals(true);
+        inputVFade->setValue(a);
+        inputVFade->blockSignals(false);
+    }
+    else {
+        inputVFade->blockSignals(true);
+        inputVFade->setValue(a);
+        inputVFade->blockSignals(false);
     }
     paramChanged();
+}
+
+void KisAutoBrushWidget::spinBoxRatioChanged(qreal a)
+{
+    inputRatio->blockSignals(true);
+    inputRatio->setValue(a);
+    inputRatio->blockSignals(false);
+    paramChanged();
+
+}
+
+void KisAutoBrushWidget::spinBoxRandomnessChanged(qreal a)
+{
+    inputRandomness->blockSignals(true);
+    inputRandomness->setValue(a);
+    inputRandomness->blockSignals(false);
+    paramChanged();
+}
+
+void KisAutoBrushWidget::spinBoxRadiusChanged(qreal a)
+{
+    inputRadius->blockSignals(true);
+    inputRadius->setValue(a);
+    inputRadius->blockSignals(false);
+    paramChanged();
+}
+
+void KisAutoBrushWidget::spinBoxSpikesChanged(int a)
+{
+    inputSpikes->blockSignals(true);
+    inputSpikes->setValue(a);
+    inputSpikes->blockSignals(false);
+    paramChanged();
+}
+
+void KisAutoBrushWidget::spinBoxAngleChanged(int a)
+{
+    inputAngle->blockSignals(true);
+    inputAngle->setValue(a);
+    inputAngle->blockSignals(false);
+    paramChanged();
+}
+
+void KisAutoBrushWidget::spinBoxSpacingChanged(qreal a)
+{
+    inputSpacing->blockSignals(true);
+    inputSpacing->setValue(a);
+    inputSpacing->blockSignals(false);
+    paramChanged();
+}
+
+void KisAutoBrushWidget::spinBoxDensityChanged(qreal a)
+{
+    density->blockSignals(true);
+    density->setValue(a);
+    density->blockSignals(false);
+    paramChanged();   
 }
 
 void KisAutoBrushWidget::linkFadeToggled(bool b)
@@ -236,10 +308,17 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
 
     comboBoxMaskType->setCurrentIndex( comboBoxMaskType->findText( aBrush->maskGenerator()->name() ) );
 
+
     inputRadius->setValue(aBrush->maskGenerator()->diameter());
     inputRatio->setValue(aBrush->maskGenerator()->ratio());
+
+    inputVFade->blockSignals(true);
+    inputHFade->blockSignals(true);
     inputHFade->setValue(aBrush->maskGenerator()->horizontalFade());
     inputVFade->setValue(aBrush->maskGenerator()->verticalFade());
+    inputVFade->blockSignals(false);
+    inputHFade->blockSignals(false);
+
     inputAngle->setValue(aBrush->angle() * 180 / M_PI);
     inputSpikes->setValue(aBrush->maskGenerator()->spikes());
     inputSpacing->setValue(aBrush->spacing());

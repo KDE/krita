@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+ * Copyright (C) 2012 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -17,70 +18,60 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef SHADOWCONFIGWIDGET_H
-#define SHADOWCONFIGWIDGET_H
+#ifndef KOSHADOWCONFIGWIDGET_H
+#define KOSHADOWCONFIGWIDGET_H
 
 #include "kowidgets_export.h"
 #include <QWidget>
 
 class KoUnit;
 class KoColor;
+class KoCanvasBase;
 
 /// A widget for configuring the shadow of a shape
 class KOWIDGETS_EXPORT KoShadowConfigWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KoShadowConfigWidget( QWidget * parent );
+    explicit KoShadowConfigWidget(QWidget *parent);
     ~KoShadowConfigWidget();
 
     /// Sets the shadow color
-    void setShadowColor( const QColor &color );
+    void setShadowColor(const QColor &color);
 
     /// Returns the shadow color
     QColor shadowColor() const;
 
     /// Sets the shadow offset
-    void setShadowOffset( const QPointF &offset );
+    void setShadowOffset(const QPointF &offset);
 
     /// Returns the shadow offset
     QPointF shadowOffset() const;
 
     /// Sets the shadow blur radius
-    void setShadowBlur( const qreal &blur );
+    void setShadowBlur(const qreal &blur);
 
     /// Returns the shadow blur radius
     qreal shadowBlur() const;
 
     /// Sets if the shadow is visible
-    void setShadowVisible( bool visible );
+    void setShadowVisible(bool visible);
 
     /// Returns if shadow is visible
     bool shadowVisible() const;
 
 public slots:
     void setUnit( const KoUnit &unit );
-
-signals:
-    /// Is emitted whenever the shadow color has changed
-    void shadowColorChanged( const KoColor &color );
-
-    /// Is emitted whenever the shadow offset has changed
-    void shadowOffsetChanged( const QPointF &offset );
-
-    /// Is emitted whenever the shadow blur radius has changed
-    void shadowBlurChanged(qreal blur);
-
-    /// Is emitted whenever the shadow visibility has changed
-    void shadowVisibilityChanged( bool visible );
+    void setCanvas(KoCanvasBase *canvas);
 
 private slots:
     void visibilityChanged();
-    void offsetChanged();
+    void applyChanges();
+    void selectionChanged();
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
-#endif // SHADOWCONFIGWIDGET_H
+#endif // KOSHADOWCONFIGWIDGET_H

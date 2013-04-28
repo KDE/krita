@@ -20,7 +20,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include "KoTextSharedSavingData.h"
 
 #include "KoGenChanges.h"
-#include "KoTextSopranoRdfModel_p.h"
+#include "KoDocumentRdfBase.h"
 
 #include <QMap>
 
@@ -82,4 +82,9 @@ void KoTextSharedSavingData::setStyleName(int styleId, const QString &name)
 QString KoTextSharedSavingData::styleName(int styleId)
 {
     return d->styleIdToName.value(styleId);
+}
+
+QList<QString> KoTextSharedSavingData::styleNames()
+{
+    return d->styleIdToName.values();
 }

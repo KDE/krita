@@ -19,12 +19,13 @@
 #ifndef __KIS_BRUSHES_PIPE_H
 #define __KIS_BRUSHES_PIPE_H
 
+#include <kis_fixed_paint_device.h>
+
 template<class BrushType>
 class KisBrushesPipe
 {
 public:
     KisBrushesPipe() {
-        m_currentBrushIndex = 0;
     }
 
     KisBrushesPipe(const KisBrushesPipe &rhs) {
@@ -33,8 +34,6 @@ public:
         foreach(BrushType *brush, rhs.m_brushes) {
             m_brushes.append(brush->clone());
         }
-
-        m_currentBrushIndex = rhs.m_currentBrushIndex;
     }
 
     virtual ~KisBrushesPipe() {
@@ -44,7 +43,6 @@ public:
     virtual void clear() {
         qDeleteAll(m_brushes);
         m_brushes.clear();
-        m_currentBrushIndex = 0;
     }
 
     BrushType* firstBrush() const {
@@ -55,18 +53,22 @@ public:
         return m_brushes.last();
     }
 
-    BrushType* currentBrush() const {
-        return !m_brushes.isEmpty() ? m_brushes.at(m_currentBrushIndex) : 0;
+    BrushType* currentBrush(const KisPaintInformation& info) const {
+        return !m_brushes.isEmpty() ? m_brushes.at(chooseNextBrush(info)) : 0;
     }
 
-    qint32 maskWidth(double scale, double angle) const {
-        BrushType *brush = currentBrush();
-        return brush ? brush->maskWidth(scale, angle) : 0;
+    int brushIndex(const KisPaintInformation& info) const {
+        return chooseNextBrush(info);
     }
 
-    qint32 maskHeight(double scale, double angle) const {
-        BrushType *brush = currentBrush();
-        return brush ? brush->maskHeight(scale, angle) : 0;
+    qint32 maskWidth(double scale, double angle, const KisPaintInformation& info) const {
+        BrushType *brush = currentBrush(info);
+        return brush ? brush->maskWidth(scale, angle, info) : 0;
+    }
+
+    qint32 maskHeight(double scale, double angle, const KisPaintInformation& info) const {
+        BrushType *brush = currentBrush(info);
+        return brush ? brush->maskHeight(scale, angle, info) : 0;
     }
 
     void setAngle(qreal angle) {
@@ -94,16 +96,21 @@ public:
         return false;
     }
 
+    void notifyCachedDabPainted() {
+        updateBrushIndexes();
+    }
+
     void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
                                              double scaleX, double scaleY, double angle, const KisPaintInformation& info,
                                              double subPixelX , double subPixelY,
                                              qreal softnessFactor) {
 
-        BrushType *brush = currentBrush();
+        BrushType *brush = currentBrush(info);
         if (!brush) return;
 
+
         brush->generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, scaleX, scaleY, angle, info, subPixelX, subPixelY, softnessFactor);
-        selectNextBrush(info);
+        updateBrushIndexes();
     }
 
     KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
@@ -111,11 +118,12 @@ public:
                                       const KisPaintInformation& info,
                                       double subPixelX, double subPixelY) {
 
-        BrushType *brush = currentBrush();
+        BrushType *brush = currentBrush(info);
         if (!brush) return 0;
 
+
         KisFixedPaintDeviceSP device = brush->paintDevice(colorSpace, scale, angle, info, subPixelX, subPixelY);
-        selectNextBrush(info);
+        updateBrushIndexes();
         return device;
     }
 
@@ -124,7 +132,8 @@ public:
     }
 
     void testingSelectNextBrush(const KisPaintInformation& info) {
-        selectNextBrush(info);
+        (void) chooseNextBrush(info);
+        updateBrushIndexes();
     }
 
 protected:
@@ -132,11 +141,25 @@ protected:
         m_brushes.append(brush);
     }
 
-    virtual void selectNextBrush(const KisPaintInformation& info) = 0;
+    /**
+     * Returns the index of the brush that corresponds to the current
+     * values of \p info. This method is called *before* the dab is
+     * actually painted.
+     *
+     * The method is const, so no internal counters of the brush should
+     * change during its execution
+     */
+    virtual int chooseNextBrush(const KisPaintInformation& info) const = 0;
+
+    /**
+     * Updates internal counters of the brush *after* a dab has been
+     * painted on the canvas. Some incremental switching of the brushes
+     * may me implemented in this method.
+     */
+    virtual void updateBrushIndexes() = 0;
 
 protected:
     QVector<BrushType*> m_brushes;
-    int m_currentBrushIndex;
 };
 
 #endif /* __KIS_BRUSHES_PIPE_H */

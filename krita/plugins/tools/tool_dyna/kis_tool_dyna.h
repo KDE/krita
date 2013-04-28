@@ -25,6 +25,7 @@
 #include "KoPointerEvent.h"
 
 #include <flake/kis_node_shape.h>
+#include <KoIcon.h>
 
 class KisDoubleSliderSpinBox;
 class QCheckBox;
@@ -156,7 +157,7 @@ public:
 
         // Temporarily
         setToolType(TOOL_TYPE_SHAPE);
-        setIcon("krita_tool_dyna");
+        setIconName(koIconNameCStr("krita_tool_dyna"));
         // TODO
         //setShortcut(KShortcut(Qt::Key_F));
         setPriority(10);

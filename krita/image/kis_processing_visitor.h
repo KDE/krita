@@ -22,6 +22,8 @@
 #include "krita_export.h"
 #include "kis_shared.h"
 
+#include <QMutex>
+
 class KisNode;
 class KoUpdater;
 class KoProgressUpdater;
@@ -57,8 +59,8 @@ public:
     virtual void visit(KisTransparencyMask *mask, KisUndoAdapter *undoAdapter) = 0;
     virtual void visit(KisSelectionMask *mask, KisUndoAdapter *undoAdapter) = 0;
 
-protected:
-    class ProgressHelper {
+public:
+    class KRITAIMAGE_EXPORT ProgressHelper {
     public:
         ProgressHelper(const KisNode *node);
         ~ProgressHelper();
@@ -66,7 +68,7 @@ protected:
         KoUpdater* updater() const;
     private:
         KoProgressUpdater *m_progressUpdater;
-        KoUpdater *m_updater;
+        mutable QMutex m_progressMutex;
     };
 };
 

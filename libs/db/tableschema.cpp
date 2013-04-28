@@ -63,7 +63,7 @@ TableSchema::TableSchema(const QString& name)
         , d( new Private )
         , m_isKexiDBSystem(false)
 {
-    m_name = name.toLower();
+    m_name = name;
     init();
 }
 
@@ -154,6 +154,15 @@ void TableSchema::init(const TableSchema& ts, bool copyId)
         }
         m_indices.append(idx);
     }
+
+    Field::ListIterator tsIter(ts.fieldsIterator());
+    Field::ListIterator iter(fieldsIterator());
+    for (; iter != fieldsIteratorConstEnd(); ++tsIter, ++iter) {
+        const LookupFieldSchema *lookup = ts.lookupFieldSchema(**tsIter);
+        if (lookup) {
+            d->lookupFields.insert(*iter, new LookupFieldSchema(*lookup));
+        }
+    }
 }
 
 void TableSchema::setPrimaryKey(IndexSchema *pkey)
@@ -219,12 +228,16 @@ FieldList& TableSchema::insertField(uint index, Field *field)
     return *this;
 }
 
-void TableSchema::removeField(KexiDB::Field *field)
+bool TableSchema::removeField(KexiDB::Field *field)
 {
+    LookupFieldSchema* lookup = d->lookupFields.take(field);
+    if (!FieldList::removeField(field)) {
+        return false;
+    }
     if (d->anyNonPKField && field == d->anyNonPKField) //d->anyNonPKField will be removed!
         d->anyNonPKField = 0;
-    delete d->lookupFields.take(field);
-    FieldList::removeField(field);
+    delete lookup;
+    return true;
 }
 
 #if 0 //original  
@@ -319,12 +332,12 @@ unsigned int TableSchema::fieldCount() const
   return m_fields.count();
 }*/
 
-QString TableSchema::debugString()
+QString TableSchema::debugString() const
 {
     return debugString(true);
 }
 
-QString TableSchema::debugString(bool includeTableName)
+QString TableSchema::debugString(bool includeTableName) const
 {
     QString s;
     if (includeTableName)
@@ -334,7 +347,7 @@ QString TableSchema::debugString(bool includeTableName)
     foreach(Field *f, m_fields) {
         LookupFieldSchema *lookupSchema = lookupFieldSchema(*f);
         if (lookupSchema)
-            s.append(QString("\n") + lookupSchema->debugString());
+            s.append(QLatin1String("\n") + lookupSchema->debugString(f->name()));
     }
     return s;
 }
@@ -391,10 +404,10 @@ bool TableSchema::setLookupFieldSchema(const QString& fieldName, LookupFieldSche
         << "' in table " << name();
         return false;
     }
-    if (lookupFieldSchema)
+    delete d->lookupFields.take(f);
+    if (lookupFieldSchema) {
         d->lookupFields.insert(f, lookupFieldSchema);
-    else
-        delete d->lookupFields.take(f);
+    }
     d->lookupFieldsList.clear(); //this will force to rebuid the internal cache
     return true;
 }
@@ -412,10 +425,10 @@ LookupFieldSchema *TableSchema::lookupFieldSchema(const QString& fieldName)
     return lookupFieldSchema(*f);
 }
 
-const QVector<LookupFieldSchema*>& TableSchema::lookupFieldsList()
+QVector<LookupFieldSchema*> TableSchema::lookupFields() const
 {
     if (d->lookupFields.isEmpty())
-        return d->lookupFieldsList;
+        return QVector<LookupFieldSchema*>();
     if (!d->lookupFields.isEmpty() && !d->lookupFieldsList.isEmpty())
         return d->lookupFieldsList; //already updated
     //update

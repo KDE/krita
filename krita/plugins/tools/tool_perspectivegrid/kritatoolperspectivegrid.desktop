@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Perspective Grid Tool
 Name[bg]=Инструмент перспективна мрежа
+Name[bs]=Alati za perspektivnu mrežu
 Name[ca]=Eina de graella de perspectiva
 Name[ca@valencia]=Eina de graella de perspectiva
 Name[da]=Perspektivgitterværktøj
@@ -14,7 +15,7 @@ Name[fa]=ابزار توری بُعدنما
 Name[fi]=Perspektiiviruudukko
 Name[fr]=Outils de de grille en perspective
 Name[fy]=Perspektive magnetyskfjild ark
-Name[gl]=Ferramenta de Grella de Perspectiva
+Name[gl]=Ferramenta de grade de perspectiva
 Name[hi]=पर्सपेक्टिव ग्रिड औज़ार
 Name[hne]=पर्सपेक्टिव ग्रिड औजार
 Name[hu]=Perspektívarács
@@ -41,4 +42,4 @@ Name[zh_TW]=透視格工具
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolperspectivegrid
-X-Krita-Version=5
+X-Krita-Version=27

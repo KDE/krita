@@ -21,7 +21,7 @@
 
 #include <QIcon>
 
-#include <KLocale>
+#include <klocale.h>
 
 #include "KoPAPageBase.h"
 

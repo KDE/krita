@@ -24,13 +24,14 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <KoGridData.h>
 #include <KoUnitDoubleSpinBox.h>
 #include <KoAspectButton.h>
+#include <KoPart.h>
 
 #include <kcolorbutton.h>
 #include <kdialog.h>
 
 #include <QCheckBox>
 #include <QGroupBox>
-#include <QGridLayout>
+#include <QFormLayout>
 #include <QHBoxLayout>
 #include <QLabel>
 
@@ -57,66 +58,48 @@ KoConfigGridPage::KoConfigGridPage(KoDocument* doc, char* name)
 {
     setObjectName(name);
 
-    d->config = d->doc->componentData().config();
+    d->config = d->doc->documentPart()->componentData().config();
 
     KoUnit unit = d->doc->unit();
     KoGridData &gd = d->doc->gridData();
 
     QGroupBox* generalGrp = new QGroupBox(i18n("Grid"), this);
-    QGridLayout *layoutGeneral = new QGridLayout(generalGrp);
-    QLabel * showGridLabel = new QLabel(i18n("Show grid:"), generalGrp);
-    d->gridChBox = new QCheckBox("", generalGrp);
+    QFormLayout *layoutGeneral = new QFormLayout(generalGrp);
+    d->gridChBox = new QCheckBox(generalGrp);
     d->gridChBox->setChecked(gd.showGrid());
-    QLabel * snapGridLabel = new QLabel(i18n("Snap to grid:"), generalGrp);
-    d->snapChBox = new QCheckBox("", generalGrp);
+    d->snapChBox = new QCheckBox(generalGrp);
     d->snapChBox->setChecked(gd.snapToGrid());
-    QLabel* gridColorLbl = new QLabel(i18n("Grid color:"), generalGrp);
     d->gridColorBtn = new KColorButton(gd.gridColor(), generalGrp);
 #if KDE_IS_VERSION(4,5,0)
     d->gridColorBtn->setAlphaChannelEnabled(true);
 #endif
-    gridColorLbl->setBuddy(d->gridColorBtn);
-    layoutGeneral->addWidget(showGridLabel, 0, 0);
-    layoutGeneral->addWidget(d->gridChBox, 0, 1);
-    layoutGeneral->addWidget(snapGridLabel, 1, 0);
-    layoutGeneral->addWidget(d->snapChBox, 1, 1);
-    layoutGeneral->addWidget(gridColorLbl, 2, 0);
-    layoutGeneral->addWidget(d->gridColorBtn, 2, 1);
+    layoutGeneral->addRow(i18n("Show grid:"), d->gridChBox);
+    layoutGeneral->addRow(i18n("Snap to grid:"), d->snapChBox);
+    layoutGeneral->addRow(i18n("Grid color:"), d->gridColorBtn);
 
     QGroupBox* spacingGrp = new QGroupBox(i18n("Spacing"), this);
     QHBoxLayout *hboxLayout = new QHBoxLayout(spacingGrp);
-    QGridLayout* layoutSpacingGrp = new QGridLayout();
-    QLabel* spaceHorizLbl = new QLabel(i18nc("Horizontal grid spacing", "&Horizontal:"));
+    QFormLayout *layoutSpacingGrp = new QFormLayout();
     d->spaceHorizUSpin = new KoUnitDoubleSpinBox(spacingGrp);
     d->spaceHorizUSpin->setMinMaxStep(0.0, 1000, 0.1);
     d->spaceHorizUSpin->setUnit(unit);
     d->spaceHorizUSpin->changeValue(gd.gridX());
-    spaceHorizLbl->setBuddy(d->spaceHorizUSpin);
-    QLabel* spaceVertLbl = new QLabel(i18nc("Vertical grid spacing", "&Vertical:"));
     d->spaceVertUSpin = new KoUnitDoubleSpinBox(spacingGrp);
     d->spaceVertUSpin->setMinMaxStep(0.0, 1000, 0.1);
     d->spaceVertUSpin->setUnit(unit);
     d->spaceVertUSpin->changeValue(gd.gridY());
-    spaceVertLbl->setBuddy(d->spaceVertUSpin);
-    layoutSpacingGrp->addWidget(spaceHorizLbl, 0, 0);
-    layoutSpacingGrp->addWidget(d->spaceHorizUSpin, 0, 1);
-    layoutSpacingGrp->addWidget(spaceVertLbl, 1, 0);
-    layoutSpacingGrp->addWidget(d->spaceVertUSpin, 1, 1);
+    layoutSpacingGrp->addRow(i18nc("Horizontal grid spacing", "&Horizontal:"), d->spaceHorizUSpin);
+    layoutSpacingGrp->addRow(i18nc("Vertical grid spacing", "&Vertical:"), d->spaceVertUSpin);
     hboxLayout->addLayout(layoutSpacingGrp);
     d->bnLinkSpacing = new KoAspectButton(spacingGrp);
     d->bnLinkSpacing->setKeepAspectRatio(gd.gridX() == gd.gridY());
     hboxLayout->addWidget(d->bnLinkSpacing);
+    hboxLayout->addStretch();
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
-
-    QGridLayout* gl = new QGridLayout();
-    gl->setSpacing(KDialog::spacingHint());
-    gl->setMargin(KDialog::marginHint());
-    gl->addWidget(generalGrp, 0, 0, 1, 2);
-    gl->addItem(new QSpacerItem(0, 0), 1, 1);
-    gl->addWidget(spacingGrp, 2, 0, 1, 2);
-    gl->addItem(new QSpacerItem(0, 0), 4, 0, 1, 2);
-    mainLayout->addLayout(gl);
+    mainLayout->setMargin(0);
+    mainLayout->addWidget(generalGrp);
+    mainLayout->addWidget(spacingGrp);
     mainLayout->addStretch();
 
     setValuesFromGrid(d->doc->gridData());

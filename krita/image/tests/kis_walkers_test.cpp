@@ -201,7 +201,7 @@ void KisWalkersTest::verifyResult(KisBaseRectsWalker &walker, QStringList refere
         qDebug() << "*** We are going to crash soon... just wait...";
     }
 
-    foreach(KisMergeWalker::JobItem item, list) {
+    foreach(const KisMergeWalker::JobItem &item, list) {
 #ifdef DEBUG_VISITORS
         qDebug() << item.m_node->name() << '\t'
                  << item.m_applyRect << '\t'
@@ -327,6 +327,7 @@ void KisWalkersTest::testVisitingWithTopmostMask()
 
 
     KisFilterMaskSP filterMask1 = new KisFilterMask();
+    filterMask1->initSelection(0, groupLayer);
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
     KisFilterConfiguration *configuration1 = filter->defaultConfiguration(0);
@@ -853,9 +854,9 @@ void KisWalkersTest::testMasksVisiting()
     QRect selection2(30, 15, 10, 10);
     QRect selection3(20, 10, 20, 10);
 
-    filterMask1->select(selection1, MAX_SELECTED);
-    transparencyMask->select(selection2, MAX_SELECTED);
-    filterMask2->select(selection3, MAX_SELECTED);
+    filterMask1->testingInitSelection(selection1);
+    transparencyMask->testingInitSelection(selection2);
+    filterMask2->testingInitSelection(selection3);
 
     image->addNode(filterMask1, paintLayer1);
     image->addNode(transparencyMask, paintLayer1);
@@ -928,9 +929,9 @@ void KisWalkersTest::testMasksOverlapping()
     QRect selection2(128, 0, 128, 128);
     QRect selection3(0, 64, 256, 128);
 
-    filterMask1->select(selection1, MAX_SELECTED);
-    transparencyMask->select(selection2, MAX_SELECTED);
-    filterMask2->select(selection3, MAX_SELECTED);
+    filterMask1->testingInitSelection(selection1);
+    transparencyMask->testingInitSelection(selection2);
+    filterMask2->testingInitSelection(selection3);
 
     image->addNode(filterMask1, paintLayer1);
     image->addNode(transparencyMask, paintLayer1);
@@ -1068,18 +1069,20 @@ void KisWalkersTest::testRectsChecksum()
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
-    KisFilterConfiguration *configuration = filter->defaultConfiguration(0);
+    KisFilterConfiguration *configuration;
 
     KisMergeWalker walker(imageRect);
     walker.collectRects(adjustmentLayer, dirtyRect);
     QCOMPARE(walker.checksumValid(), true);
 
+    configuration = filter->defaultConfiguration(0);
     adjustmentLayer->setFilter(configuration);
     QCOMPARE(walker.checksumValid(), false);
 
     walker.recalculate(dirtyRect);
     QCOMPARE(walker.checksumValid(), true);
 
+    configuration = filter->defaultConfiguration(0);
     configuration->setProperty("halfWidth", 20);
     configuration->setProperty("halfHeight", 20);
     adjustmentLayer->setFilter(configuration);
@@ -1088,6 +1091,7 @@ void KisWalkersTest::testRectsChecksum()
     walker.recalculate(dirtyRect);
     QCOMPARE(walker.checksumValid(), true);
 
+    configuration = filter->defaultConfiguration(0);
     configuration->setProperty("halfWidth", 21);
     configuration->setProperty("halfHeight", 21);
     adjustmentLayer->setFilter(configuration);

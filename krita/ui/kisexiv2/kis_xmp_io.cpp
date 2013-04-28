@@ -41,11 +41,12 @@ KisXMPIO::~KisXMPIO()
 
 inline std::string exiv2Prefix(const KisMetaData::Schema* _schema)
 {
-    std::string prefix = Exiv2::XmpProperties::prefix(_schema->uri().toAscii().data());
+    const QByteArray latin1SchemaUri = _schema->uri().toLatin1();
+    std::string prefix = Exiv2::XmpProperties::prefix(latin1SchemaUri.constData());
     if (prefix.empty()) {
         dbgFile << "Unknown namespace " << ppVar(_schema->uri()) << ppVar(_schema->prefix());
-        prefix = _schema->prefix().toAscii().data();
-        Exiv2::XmpProperties::registerNs(_schema->uri().toAscii().data(), prefix);
+        prefix = _schema->prefix().toLatin1().constData();
+        Exiv2::XmpProperties::registerNs(latin1SchemaUri.constData(), prefix);
     }
     return prefix;
 }
@@ -59,9 +60,12 @@ void saveStructure(Exiv2::XmpData& xmpData_, const QString& name, const std::str
             it != structure.end(); ++it) {
         Q_ASSERT(it.value().type() != KisMetaData::Value::Structure);   // Can't nest structure
         QString key = QString("%1/%2:%3").arg(name).arg(structPrefix.c_str()).arg(it.key());
-        Exiv2::XmpKey ekey(prefix, key.toAscii().data());
+        Exiv2::XmpKey ekey(prefix, key.toLatin1().constData());
         dbgFile << ppVar(key) << ppVar(ekey.key().c_str());
-        xmpData_.add(ekey, kmdValueToExivXmpValue(it.value()));
+        Exiv2::Value *v = kmdValueToExivXmpValue(it.value());
+        if (v) {
+            xmpData_.add(ekey, v);
+        }
     }
 }
 }
@@ -95,7 +99,7 @@ bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType
             Q_ASSERT(structureSchema);
             saveStructure(xmpData_, entry.name(), prefix, structure, structureSchema);
         } else {
-            Exiv2::XmpKey key(prefix, entry.name().toAscii().data());
+            Exiv2::XmpKey key(prefix, entry.name().toLatin1().constData());
             if (typeInfo && (typeInfo->propertyType() == KisMetaData::TypeInfo::OrderedArrayType
                              || typeInfo->propertyType() == KisMetaData::TypeInfo::UnorderedArrayType
                              || typeInfo->propertyType() == KisMetaData::TypeInfo::AlternativeArrayType)
@@ -133,7 +137,10 @@ bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType
                 }
             } else {
                 dbgFile << ppVar(key.key().c_str());
-                xmpData_.add(key, kmdValueToExivXmpValue(value));
+                Exiv2::Value *v = kmdValueToExivXmpValue(value);
+                if (v) {
+                    xmpData_.add(key, v);
+                }
             }
         }
         // TODO property qualifier
@@ -205,7 +212,7 @@ bool KisXMPIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
                         arrayIndex = regexp2.capturedTexts()[2].toInt() - 1;
                         tagName = regexp2.capturedTexts()[4];
                         dbgFile << ppVar(structName) << ppVar(regexp2.capturedTexts()[3]);
-                        Q_ASSERT(schema->propertyType(structName));
+                        //Q_ASSERT(schema->propertyType(structName));
                         if (schema->propertyType(structName)) {
                             typeInfo = schema->propertyType(structName)->embeddedPropertyType();
                             Q_ASSERT(typeInfo);

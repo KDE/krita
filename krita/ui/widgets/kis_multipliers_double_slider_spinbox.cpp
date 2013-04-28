@@ -18,18 +18,11 @@
  */
 
 #include "kis_multipliers_double_slider_spinbox.h"
+#include "kis_multipliers_double_slider_spinbox_p.h"
 
 #include "ui_wdgmultipliersdoublesliderspinbox.h"
 
-struct KisMultipliersDoubleSliderSpinBox::Private {
-    qreal currentMultiplier();
-    /// Update the range of the slider depending on the currentMultiplier
-    void updateRange();
-    
-    Ui::WdgMultipliersDoubleSliderSpinBox form;
-    qreal min, max;
-    int decimals;
-};
+#include "kis_debug.h"
 
 qreal KisMultipliersDoubleSliderSpinBox::Private::currentMultiplier()
 {
@@ -77,11 +70,9 @@ qreal KisMultipliersDoubleSliderSpinBox::value()
 
 void KisMultipliersDoubleSliderSpinBox::setValue(qreal value)
 {
-    for(int i = 0; i < d->form.comboBox->count(); ++i)
-    {
+    for(int i = 0; i < d->form.comboBox->count(); ++i) {
         qreal m = d->form.comboBox->itemData(i).toDouble();
-        if(value >= m * d->min && value <= m * d->max)
-        {
+        if (value >= m * d->min && value <= m * d->max) {
             d->form.comboBox->setCurrentIndex(i);
             d->updateRange();
             break;

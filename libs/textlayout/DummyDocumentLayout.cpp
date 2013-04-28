@@ -88,7 +88,7 @@ void DummyDocumentLayout::drawInlineObject(QPainter *, const QRectF &, QTextInli
 {
 }
 
-// This method is called by qt every time  QTextLine.setWidth()/setNumColums() is called
+// This method is called by qt every time  QTextLine.setWidth()/setNumColumns() is called
 void DummyDocumentLayout::positionInlineObject(QTextInlineObject , int , const QTextFormat &)
 {
 }

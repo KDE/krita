@@ -22,7 +22,7 @@
 bool KisCountVisitor::inList(KisNode* node)
 {
     foreach(const QString& nodeType, m_nodeTypes) {
-        if (node->inherits(nodeType.toAscii()))
+        if (node->inherits(nodeType.toLatin1()))
             return true;
     }
     return false;

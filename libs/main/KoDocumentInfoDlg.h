@@ -27,6 +27,24 @@ class KoDocumentInfo;
 class KoDocumentRdfBase;
 class KPageWidgetItem;
 
+#include <kpagewidgetmodel.h>
+#include "komain_export.h"
+
+// This class can be implemented when we want to extend the
+// dialog with new, specific pages.
+class KOMAIN_EXPORT KoPageWidgetItem
+{
+
+public:
+
+    virtual ~KoPageWidgetItem() {}
+    virtual QWidget *widget() = 0;
+    virtual const QString name() const = 0;
+    virtual const QLatin1String icon() const = 0;
+    virtual bool shouldDialogCloseBeVetoed() = 0;
+    virtual void apply() = 0;
+};
+
 /**
  * @short The dialog that shows information about the document
  * @author Simon Hausmann <hausmann@kde.org>
@@ -45,7 +63,7 @@ class KPageWidgetItem;
  * KPageDialog and uses the face type Tabbed.
  */
 
-class KoDocumentInfoDlg : public KPageDialog
+class KOMAIN_EXPORT KoDocumentInfoDlg : public KPageDialog
 {
     Q_OBJECT
 
@@ -55,7 +73,7 @@ public:
      * @param parent a pointer to the parent widget
      * @param docInfo a pointer to the shown KoDocumentInfo
      */
-    KoDocumentInfoDlg(QWidget *parent, KoDocumentInfo* docInfo, KoDocumentRdfBase* docRdf = 0);
+    KoDocumentInfoDlg(QWidget *parent, KoDocumentInfo* docInfo);
 
     /** The destructor */
     virtual ~KoDocumentInfoDlg();
@@ -67,6 +85,8 @@ public:
 
     /** Sets all fields to read-only mode. Used by the property dialog. */
     void setReadOnly(bool ro);
+
+    void addPageItem(KoPageWidgetItem *item);
 
 public slots:
     /** Connected to the okClicked() signal */

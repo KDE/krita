@@ -25,7 +25,6 @@
 #include <QPoint>
 
 #include <kis_debug.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
@@ -84,10 +83,9 @@ KisFilterConfiguration* KisFilterNoise::factoryConfiguration(const KisPaintDevic
     return config;
 }
 
-KisConfigWidget * KisFilterNoise::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
+KisConfigWidget * KisFilterNoise::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
 {
     Q_UNUSED(dev);
-    Q_UNUSED(image);
     return new KisWdgNoise((KisFilter*)this, (QWidget*)parent);
 }
 

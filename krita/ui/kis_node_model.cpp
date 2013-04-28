@@ -126,8 +126,12 @@ void KisNodeModel::progressPercentageChanged(int, const KisNodeSP node)
 {
     if(!m_d->dummiesFacade) return;
 
-    QModelIndex index = indexFromNode(node);
-    emit dataChanged(index, index);
+    // Need to check here as the node might already be removed, but there might
+    // still be some signals arriving from another thread
+    if (m_d->dummiesFacade->hasDummyForNode(node)) {
+        QModelIndex index = indexFromNode(node);
+        emit dataChanged(index, index);
+    }
 }
 
 void KisNodeModel::connectDummy(KisNodeDummy *dummy, bool needConnect)
@@ -136,8 +140,8 @@ void KisNodeModel::connectDummy(KisNodeDummy *dummy, bool needConnect)
     KisNodeProgressProxy *progressProxy = node->nodeProgressProxy();
     if(progressProxy) {
         if(needConnect) {
-            connect(progressProxy, SIGNAL(percentageChanged(int, const KisNodeSP&)),
-                    SLOT(progressPercentageChanged(int, const KisNodeSP&)));
+            connect(progressProxy, SIGNAL(percentageChanged(int,KisNodeSP)),
+                    SLOT(progressPercentageChanged(int,KisNodeSP)));
         } else {
             progressProxy->disconnect(this);
         }
@@ -173,8 +177,8 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImag
             connectDummies(rootDummy, true);
         }
 
-        connect(m_d->dummiesFacade, SIGNAL(sigBeginInsertDummy(KisNodeDummy*, int, const QString&)),
-                SLOT(slotBeginInsertDummy(KisNodeDummy*, int, QString)));
+        connect(m_d->dummiesFacade, SIGNAL(sigBeginInsertDummy(KisNodeDummy*,int,QString)),
+                SLOT(slotBeginInsertDummy(KisNodeDummy*,int,QString)));
         connect(m_d->dummiesFacade, SIGNAL(sigEndInsertDummy(KisNodeDummy*)),
                 SLOT(slotEndInsertDummy(KisNodeDummy*)));
         connect(m_d->dummiesFacade, SIGNAL(sigBeginRemoveDummy(KisNodeDummy*)),
@@ -304,7 +308,7 @@ QModelIndex KisNodeModel::parent(const QModelIndex &index) const
 
 QVariant KisNodeModel::data(const QModelIndex &index, int role) const
 {
-    if(!m_d->dummiesFacade || !index.isValid()) return QVariant();
+    if (!m_d->dummiesFacade || !index.isValid() || !m_d->image.isValid()) return QVariant();
 
     KisNodeSP node = nodeFromIndex(index);
 
@@ -362,7 +366,7 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
             // don't record undo/redo for visibility, locked or alpha locked changes
             PropertyList proplist = value.value<PropertyList>();
             bool undo = true;
-            foreach(KoDocumentSectionModel::Property prop, proplist) {
+            foreach(const KoDocumentSectionModel::Property &prop, proplist) {
                 if (prop.name == i18n("Visible") && node->visible() !=prop.state.toBool()) undo = false;
                 if (prop.name == i18n("Locked") && node->userLocked() != prop.state.toBool()) undo = false;
                 if (prop.name == i18n("Active")) {

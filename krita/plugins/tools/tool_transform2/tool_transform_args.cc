@@ -22,9 +22,12 @@
 
 ToolTransformArgs::ToolTransformArgs()
 {
-	m_mode = FREE_TRANSFORM;
-    m_translate = QPointF(0, 0);
+    m_mode = FREE_TRANSFORM;
+    m_transformedCenter = QPointF(0, 0);
+    m_originalCenter = QPointF(0, 0);
     m_rotationCenterOffset = QPointF(0, 0);
+    m_cameraPos = QVector3D(0,0,1024);
+    m_eyePos = -m_cameraPos;
     m_aX = 0;
     m_aY = 0;
     m_aZ = 0;
@@ -32,33 +35,39 @@ ToolTransformArgs::ToolTransformArgs()
     m_scaleY = 1.0;
     m_shearX = 0.0;
     m_shearY = 0.0;
-	m_pointsPerLine = 0;
+    m_pointsPerLine = 0;
     m_origPoints = QVector<QPointF>();
     m_transfPoints = QVector<QPointF>();
-	m_warpType = KisWarpTransformWorker::AFFINE_TRANSFORM;
-	m_alpha = 1.0;
-	m_previewPos = QPointF(0, 0);
+    m_warpType = KisWarpTransformWorker::AFFINE_TRANSFORM;
+    m_alpha = 1.0;
+    m_keepAspectRatio = true;
+
+    setFilterId("Bicubic");
 }
 
 void ToolTransformArgs::init(const ToolTransformArgs& args)
 {
-	m_mode = args.mode();
-	m_translate = args.translate();
-	m_rotationCenterOffset = args.rotationCenterOffset();
-	m_aX = args.aX();
-	m_aY = args.aY();
-	m_aZ = args.aZ();
-	m_scaleX = args.scaleX();
-	m_scaleY = args.scaleY();
-	m_shearX = args.shearX();
-	m_shearY = args.shearY();
-	m_pointsPerLine = args.pointsPerLine();
+    m_mode = args.mode();
+    m_transformedCenter = args.transformedCenter();
+    m_originalCenter = args.originalCenter();
+    m_rotationCenterOffset = args.rotationCenterOffset();
+    m_cameraPos = QVector3D(0,0,1024);
+    m_eyePos = -m_cameraPos;
+    m_aX = args.aX();
+    m_aY = args.aY();
+    m_aZ = args.aZ();
+    m_scaleX = args.scaleX();
+    m_scaleY = args.scaleY();
+    m_shearX = args.shearX();
+    m_shearY = args.shearY();
+    m_pointsPerLine = args.pointsPerLine();
     m_origPoints = args.origPoints(); //it's a copy
     m_transfPoints = args.transfPoints();
-	m_warpType = args.warpType();
-	m_alpha = args.alpha();
-	m_previewPos = args.previewPos();
+    m_warpType = args.warpType();
+    m_alpha = args.alpha();
     m_defaultPoints = args.defaultPoints();
+    m_keepAspectRatio = args.keepAspectRatio();
+    m_filter = args.m_filter;
 }
 
 void ToolTransformArgs::clear()
@@ -81,13 +90,23 @@ ToolTransformArgs& ToolTransformArgs::operator=(const ToolTransformArgs& args)
     return *this;
 }
 
-ToolTransformArgs::ToolTransformArgs(TransfMode mode,
-							QPointF translate, QPointF rotationCenterOffset, double aX, double aY, double aZ, double scaleX, double scaleY, double shearX, double shearY,
-							KisWarpTransformWorker::WarpType warpType, double alpha, QPointF previewPos, bool defaultPoints)
+ToolTransformArgs::ToolTransformArgs(TransformMode mode,
+                                     QPointF transformedCenter,
+                                     QPointF originalCenter,
+                                     QPointF rotationCenterOffset,
+                                     double aX, double aY, double aZ,
+                                     double scaleX, double scaleY,
+                                     double shearX, double shearY,
+                                     KisWarpTransformWorker::WarpType warpType,
+                                     double alpha,
+                                     bool defaultPoints)
 {
-	m_mode = mode;
-    m_translate = translate;
+    m_mode = mode;
+    m_transformedCenter = transformedCenter;
+    m_originalCenter = originalCenter;
     m_rotationCenterOffset = rotationCenterOffset;
+    m_cameraPos = QVector3D(0,0,1024);
+    m_eyePos = -m_cameraPos;
     m_aX = aX;
     m_aY = aY;
     m_aZ = aZ;
@@ -95,14 +114,15 @@ ToolTransformArgs::ToolTransformArgs(TransfMode mode,
     m_scaleY = scaleY;
     m_shearX = shearX;
     m_shearY = shearY;
-	m_pointsPerLine = 0;
+    m_pointsPerLine = 0;
     m_origPoints = QVector<QPointF>();
     m_transfPoints = QVector<QPointF>();
 
-	m_warpType = warpType;
-	m_alpha = alpha;
-	m_previewPos = previewPos;
+    m_warpType = warpType;
+    m_alpha = alpha;
     m_defaultPoints = defaultPoints;
+    m_keepAspectRatio = true;
+    setFilterId("Bicubic");
 }
 
 
@@ -111,10 +131,10 @@ ToolTransformArgs::~ToolTransformArgs()
     clear();
 }
 
-bool ToolTransformArgs::isIdentity(QPointF originalTranslate) const
+bool ToolTransformArgs::isIdentity() const
 {
     if (m_mode == FREE_TRANSFORM) {
-        return (m_translate == originalTranslate && m_scaleX == 1
+        return (m_transformedCenter == m_originalCenter && m_scaleX == 1
                 && m_scaleY == 1 && m_shearX == 0 && m_shearY == 0
                 && m_aX == 0 && m_aY == 0 && m_aZ == 0);
     } else {

@@ -53,7 +53,7 @@ public:
     };
 
     /// Constructs a new pattern background utilizing the given image collection
-    KoPatternBackground(KoImageCollection *collection);
+    explicit KoPatternBackground(KoImageCollection *collection);
 
     virtual ~KoPatternBackground();
 

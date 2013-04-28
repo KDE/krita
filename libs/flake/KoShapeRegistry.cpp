@@ -44,8 +44,8 @@
 #include <QMultiMap>
 #include <QPainter>
 
-#include <KDebug>
-#include <KGlobal>
+#include <kdebug.h>
+#include <kglobal.h>
 
 class KoShapeRegistry::Private
 {
@@ -78,12 +78,12 @@ void KoShapeRegistry::Private::init(KoShapeRegistry *q)
     config.blacklist = "FlakePluginsDisabled";
     config.group = "calligra";
     KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Flake"),
-                                     QString::fromLatin1("[X-Flake-MinVersion] <= 4"),
+                                     QString::fromLatin1("[X-Flake-PluginVersion] == 27"),
                                      config);
     config.whiteList = "ShapePlugins";
     config.blacklist = "ShapePluginsDisabled";
     KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Shape"),
-                                     QString::fromLatin1("[X-Flake-MinVersion] <= 4"),
+                                     QString::fromLatin1("[X-Flake-PluginVersion] == 27"),
                                      config);
 
     // Also add our hard-coded basic shapes
@@ -216,7 +216,13 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
                 // Check whether we can load a shape to fit the current object.
                 KoXmlElement child;
                 KoShape *childShape = 0;
+                bool first = true;
                 forEachElement(child, e) {
+                    // no need to try to load the first element again as it was already tried before and we could not load it
+                    if (first) {
+                        first = false;
+                        continue;
+                    }
                     kDebug(30006) << "--------------------------------------------------------";
                     kDebug(30006) << "Attempting to check if we can fall back ability to the item"
                                   << child.nodeName();
@@ -318,6 +324,9 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
             }
             // Maybe a shape with a lower priority can load our
             // element, but this attempt has failed.
+        }
+        else {
+            kDebug(30006) << "No support for" << p << "by" << factory->id();
         }
     }
 

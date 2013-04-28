@@ -25,7 +25,7 @@
 // calligra
 #include <KoMainWindow.h>
 #include <KoApplicationAdaptor.h>
-#include <KoDocumentAdaptor.h>
+#include <KoPartAdaptor.h>
 #include <KoView.h>
 
 /// \internal d-pointer class.
@@ -80,7 +80,7 @@ QWidget *KoScriptingModule::mainWindow()
 QObject *KoScriptingModule::document()
 {
     KoDocument *kdoc = doc();
-    return kdoc ? kdoc->findChild<KoDocumentAdaptor*>() : 0;
+    return kdoc ? kdoc->findChild<KoPartAdaptor*>() : 0;
 }
 
 QObject *KoScriptingModule::store()

@@ -32,16 +32,17 @@ class KisToolInvocationAction : public KisAbstractInputAction
 public:
     enum Shortcut {
         ActivateShortcut,
-        ConfirmShortcut
+        ConfirmShortcut,
+        CancelShortcut
     };
     explicit KisToolInvocationAction(KisInputManager *manager);
     virtual ~KisToolInvocationAction();
 
-    virtual void begin(int shortcut);
-    virtual void end();
-    virtual void inputEvent(QEvent* event);
+    void begin(int shortcut, QEvent *event);
+    void end(QEvent *event);
+    void inputEvent(QEvent* event);
 
-    virtual bool handleTablet() const;
+    bool supportsHiResInputEvents() const;
 
 private:
     class Private;

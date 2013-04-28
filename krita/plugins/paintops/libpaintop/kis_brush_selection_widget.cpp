@@ -31,6 +31,7 @@
 
 #include <widgets/kis_preset_chooser.h>
 #include <kis_image.h>
+#include <kis_fixed_paint_device.h>
 
 #include "kis_brush.h"
 #include "kis_auto_brush.h"
@@ -49,24 +50,22 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
     m_buttonGroup->setExclusive(true);
 
     m_layout = new QGridLayout(uiWdgBrushChooser.settingsFrame);
-    m_layout->setSpacing(0);
-    m_layout->setMargin(0);
 
     m_autoBrushWidget = new KisAutoBrushWidget(this, "autobrush");
     connect(m_autoBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
-    addChooser(i18n("Autobrush"), m_autoBrushWidget, AUTOBRUSH);
+    addChooser(i18n("Autobrush"), m_autoBrushWidget, AUTOBRUSH, KoGroupButton::GroupLeft);
 
     m_brushChooser = new KisBrushChooser(this);
     connect(m_brushChooser, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
-    addChooser(i18n("Predefined Brushes"), m_brushChooser, PREDEFINEDBRUSH);
+    addChooser(i18n("Predefined Brushes"), m_brushChooser, PREDEFINEDBRUSH, KoGroupButton::GroupCenter);
 
     m_customBrushWidget = new KisCustomBrushWidget(0, i18n("Custom Brush"), 0);
     connect(m_customBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
-    addChooser(i18n("Custom Brush"), m_customBrushWidget, CUSTOMBRUSH);
+    addChooser(i18n("Custom Brush"), m_customBrushWidget, CUSTOMBRUSH, KoGroupButton::GroupCenter);
 
     m_textBrushWidget = new KisTextBrushChooser(this, "textbrush", i18n("Text Brush"));
     connect(m_textBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
-    addChooser(i18n("Text Brush"), m_textBrushWidget, TEXTBRUSH);
+    addChooser(i18n("Text Brush"), m_textBrushWidget, TEXTBRUSH, KoGroupButton::GroupRight);
 
     connect(m_buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(buttonClicked(int)));
 
@@ -75,6 +74,13 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
     }
 
     setCurrentWidget(m_autoBrushWidget);
+
+    uiWdgBrushChooser.sliderPrecision->setRange(1,5);
+    uiWdgBrushChooser.sliderPrecision->setSingleStep(1);
+    uiWdgBrushChooser.sliderPrecision->setPageStep(1);
+    connect(uiWdgBrushChooser.sliderPrecision, SIGNAL(valueChanged(int)), SLOT(precisionChanged(int)));
+    uiWdgBrushChooser.sliderPrecision->setValue(4);
+    setPrecisionEnabled(false);
 
     m_presetIsValid = true;
 }
@@ -194,6 +200,75 @@ void KisBrushSelectionWidget::buttonClicked(int id)
     emit sigBrushChanged();
 }
 
+void KisBrushSelectionWidget::precisionChanged(int value)
+{
+    QString toolTip;
+
+    switch(value) {
+    case 1:
+        toolTip =
+            i18n("Precision Level 1 (fastest)\n"
+                 "Subpixel precision: disabled\n"
+                 "Brush size precision: 5%\n"
+                 "\n"
+                 "Optimal for very big brushes");
+        break;
+    case 2:
+        toolTip =
+            i18n("Precision Level 2\n"
+                 "Subpixel precision: disabled\n"
+                 "Brush size precision: 1%\n"
+                 "\n"
+                 "Optimal for big brushes");
+        break;
+    case 3:
+        toolTip =
+            i18n("Precision Level 3\n"
+                 "Subpixel precision: disabled\n"
+                 "Brush size precision: exact");
+        break;
+    case 4:
+        toolTip =
+            i18n("Precision Level 4 (optimal)\n"
+                 "Subpixel precision: 50%\n"
+                 "Brush size precision: exact\n"
+                 "\n"
+                 "Gives up to 50% better performance in comparison to Level 5");
+        break;
+    case 5:
+        toolTip =
+            i18n("Precision Level 5 (best quality)\n"
+                 "Subpixel precision: exact\n"
+                 "Brush size precision: exact\n"
+                 "\n"
+                 "The slowest performance. Best quality.");
+        break;
+    }
+    uiWdgBrushChooser.sliderPrecision->blockSignals(true);
+    uiWdgBrushChooser.sliderPrecision->setValue(value);
+    uiWdgBrushChooser.sliderPrecision->blockSignals(false);
+    uiWdgBrushChooser.sliderPrecision->setToolTip(toolTip);
+    m_precisionOption.setPrecisionLevel(value);
+    emit sigPrecisionChanged();
+}
+
+void KisBrushSelectionWidget::writeOptionSetting(KisPropertiesConfiguration* settings) const
+{
+    m_precisionOption.writeOptionSetting(settings);
+}
+
+void KisBrushSelectionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
+{
+    m_precisionOption.readOptionSetting(setting);
+    uiWdgBrushChooser.sliderPrecision->setValue(m_precisionOption.precisionLevel());
+}
+
+void KisBrushSelectionWidget::setPrecisionEnabled(bool value)
+{
+    uiWdgBrushChooser.sliderPrecision->setVisible(value);
+    uiWdgBrushChooser.lblPrecision->setVisible(value);
+}
+
 void KisBrushSelectionWidget::setCurrentWidget(QWidget* widget)
 {
     if (m_currentBrushWidget) {
@@ -212,9 +287,10 @@ void KisBrushSelectionWidget::setCurrentWidget(QWidget* widget)
     m_presetIsValid = (m_buttonGroup->checkedId() != CUSTOMBRUSH);
 }
 
-void KisBrushSelectionWidget::addChooser(const QString& text, QWidget* widget, int id)
+void KisBrushSelectionWidget::addChooser(const QString& text, QWidget* widget, int id, KoGroupButton::GroupPosition pos)
 {
-    QToolButton * button = new QToolButton(this);
+    KoGroupButton * button = new KoGroupButton(this);
+    button->setGroupPosition(pos);
     button->setText(text);
     button->setAutoRaise(true);
     button->setCheckable(true);

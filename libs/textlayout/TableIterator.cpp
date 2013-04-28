@@ -86,7 +86,7 @@ bool TableIterator::operator ==(const TableIterator &other) const
         return false;
 
     for (int col = 0; col < table->columns(); ++col) {
-        if (frameIterators[col]) {
+        if (frameIterators[col] && other.frameIterators[col]) {
             if (!(*frameIterators[col] ==
                             *(other.frameIterators[col])))
                 return false;

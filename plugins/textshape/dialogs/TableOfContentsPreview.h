@@ -21,6 +21,7 @@
 
 #include <KoZoomHandler.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoTextRangeManager.h>
 
 #include <QFrame>
 #include <QPixmap>
@@ -57,6 +58,7 @@ private:
     KoZoomHandler m_zoomHandler;
     KoStyleManager *m_styleManager;
     KoInlineTextObjectManager m_itom;
+    KoTextRangeManager m_tlm;
     QSize m_previewPixSize;
 
     void deleteTextShape();

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=RulerAssistantTool
+Name[bs]=Alat za Ravnanje
 Name[ca]=EinaAssistentRegla
 Name[ca@valencia]=EinaAssistentRegla
 Name[da]=LinealAssistentVærktøj
@@ -10,7 +11,7 @@ Name[es]=RulerAssistantTool
 Name[et]=Joonlauaabilise tööriist
 Name[fr]=OutilAssistantRègle
 Name[ga]=RulerAssistantTool
-Name[gl]=AsistenteRegra
+Name[gl]=Ferramenta de regra
 Name[it]=Strumento dell'assistente dei righelli
 Name[ja]=ルーラーアシスタントツール
 Name[kk]=RulerAssistantTool
@@ -32,4 +33,4 @@ Name[zh_TW]=尺規小助手工具
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritarulerassistanttool
-X-Krita-Version=5
+X-Krita-Version=27

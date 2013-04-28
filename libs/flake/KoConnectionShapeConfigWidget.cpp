@@ -19,18 +19,18 @@
 
 #include "KoConnectionShapeConfigWidget.h"
 #include "commands/KoConnectionShapeTypeCommand.h"
+#include <KoIcon.h>
 #include <klocale.h>
-#include <KIcon>
 
 KoConnectionShapeConfigWidget::KoConnectionShapeConfigWidget()
 {
     widget.setupUi(this);
 
     widget.connectionType->clear();
-    widget.connectionType->addItem(KIcon("standard-connector"), i18n("Standard"));
-    widget.connectionType->addItem(KIcon("lines-connector"), i18n("Lines"));
-    widget.connectionType->addItem(KIcon("straight-connector"), i18n("Straight"));
-    widget.connectionType->addItem(KIcon("curve-connector"), i18n("Curve"));
+    widget.connectionType->addItem(koIcon("standard-connector"), i18n("Standard"));
+    widget.connectionType->addItem(koIcon("lines-connector"), i18n("Lines"));
+    widget.connectionType->addItem(koIcon("straight-connector"), i18n("Straight"));
+    widget.connectionType->addItem(koIcon("curve-connector"), i18n("Curve"));
 
     connect(widget.connectionType, SIGNAL(currentIndexChanged(int)), this, SIGNAL(propertyChanged()));
     connect(widget.connectionType, SIGNAL(currentIndexChanged(int)), this, SIGNAL(connectionTypeChanged(int)));

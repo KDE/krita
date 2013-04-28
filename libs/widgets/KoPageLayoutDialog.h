@@ -24,7 +24,7 @@
 
 #include <KoText.h>
 
-#include <KPageDialog>
+#include <kpagedialog.h>
 
 struct KoPageLayout;
 

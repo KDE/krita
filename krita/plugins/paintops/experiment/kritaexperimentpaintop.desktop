@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Experiment
+Name[bs]=Eksperiment
 Name[ca]=Experiment
 Name[ca@valencia]=Experiment
 Name[da]=Eksperiment
@@ -9,6 +10,8 @@ Name[en_GB]=Experiment
 Name[es]=Experimento
 Name[et]=Eksperiment
 Name[fr]=Expérience
+Name[gl]=Experimento
+Name[hu]=Kísérleti
 Name[it]=Esperimento
 Name[ja]=実験
 Name[kk]=Эксперимент
@@ -29,4 +32,4 @@ Name[zh_TW]=實驗
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritaexperimentpaintop
-X-Krita-Version=5
+X-Krita-Version=27

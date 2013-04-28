@@ -22,14 +22,14 @@
 
 #include <ui_TableDialog.h>
 
-#include <KDialog>
+#include <kdialog.h>
 
 
 class TableDialog : public KDialog
 {
     Q_OBJECT
 public:
-    TableDialog(QWidget *parent);
+    explicit TableDialog(QWidget *parent);
 
     int columns();
     int rows();

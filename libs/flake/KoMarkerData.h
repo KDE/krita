@@ -39,7 +39,7 @@ public:
     };
 
     KoMarkerData(KoMarker *marker, qreal width, MarkerPosition position, bool center);
-    KoMarkerData(MarkerPosition position);
+    explicit KoMarkerData(MarkerPosition position);
     KoMarkerData(const KoMarkerData &other);
     ~KoMarkerData();
 
@@ -74,7 +74,7 @@ public:
     void setWidth(qreal width, qreal penWidth);
 
     /**
-     * Get the positon of the marker
+     * Get the position of the marker
      *
      * @return Position of the marker
      */

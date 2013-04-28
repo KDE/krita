@@ -170,14 +170,6 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
     painter.drawImage(ev->rect(), m_buffer, ev->rect());
 }
 
-bool KisQPainterCanvas::event(QEvent *e)
-{
-    if(toolProxy()) {
-        toolProxy()->processEvent(e);
-    }
-    return QWidget::event(e);
-}
-
 QVariant KisQPainterCanvas::inputMethodQuery(Qt::InputMethodQuery query) const
 {
     return processInputMethodQuery(query);
@@ -200,7 +192,6 @@ void KisQPainterCanvas::resizeEvent(QResizeEvent *e)
 
     coordinatesConverter()->setCanvasWidgetSize(size);
     m_d->prescaledProjection->notifyCanvasSizeChanged(size);
-    emit needAdjustOrigin();
 }
 
 void KisQPainterCanvas::slotConfigChanged()

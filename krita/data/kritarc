@@ -1,10 +1,13 @@
+favoriteCompositeOps=normal,erase,multiply,burn,darken,add,dodge,screen,overlay,soft_light_svg,luminize,lighten,saturation,color
+
 [krita]
 WantExportConfirmation=false
-
-favoriteCompositeOps=normal,erase,multiply
+cursorStyleDef=3
 
 [TemplateChooserDialog]
 ShowCustomDocumentWidgetByDefault=true
+LastReturnType=Custom Document
+
 
 [Undo]
 UndoLimit=0
@@ -153,15 +156,17 @@ Collapsed=false
 QuickShapes=ArtisticText,TextShapeID,DivineProportionShapeID,EllipseShape,RectangleShape
 
 [calligra]
+DockerPluginsDisabled=textdocumentinspection
 FlakePluginsDisabled=formulashape,divineproportionshape,kexirelationdesignshape,vectorshape
-ShapePluginsDisabled=musicshape,pictureshape,videoshape,chartshape,spreadsheetshape,pluginshape,treeshape
+ShapePluginsDisabled=musicshape,pictureshape,videoshape,chartshape,spreadsheetshape,pluginshape,treeshape,commentshape,stateshape,webshape
 TextEditingPluginsDisabled=thesaurustool,changecase,autocorrect,spellcheck
 TextInlinePluginsDisabled=textvariables,kprvariables
 ToolPluginsDisabled=paragraphtool,kopabackgroundtool,calligrastagetoolanimation
-ToolsBlacklist=CreatePathTool,ConnectionTool,KarbonFilterEffectsTool,PanTool,KoZoomToolId
+ToolsBlacklist=CreatePathTool,KoPencilTool,ConnectionTool,KarbonFilterEffectsTool,PanTool,KoZoomToolId
 
 [favoriteList]
-favoriteBrushes=paintbrush,deformbrush,hairybrush,hatchingbrush,sketchbrush,smudge,spraybrush,
+favoritePresets=Basic_Airbrush,Basic_ink_10,Hairy_clean,Hatch_diag_S,Pencil_2B,Pencil_HB,Sketch_ink_small,Sketch_wires,
+
 
 [advancedColorSelector]
 allowHorizontalLayout=true
@@ -200,4 +205,7 @@ shadeSelectorUpdateOnLeftClick=false
 shadeSelectorUpdateOnRightClick=false
 useCustomColorSpace=false
 zoomSize=280
+
+[theme]
+Theme=Krita-dark
 

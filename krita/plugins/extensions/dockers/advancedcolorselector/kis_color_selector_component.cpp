@@ -153,6 +153,9 @@ void KisColorSelectorComponent::setConfiguration(Parameter param, Type type)
 
 void KisColorSelectorComponent::setLastMousePosition(int x, int y)
 {
-   m_lastX = x;
-   m_lastY = y;
+    // prevent movement due to rouding errors
+    if (abs((int)m_lastX - x) > 1 || abs((int)m_lastY - y) > 1) {
+        m_lastX = x;
+        m_lastY = y;
+    }
 }

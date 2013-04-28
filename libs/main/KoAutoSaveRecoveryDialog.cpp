@@ -19,6 +19,11 @@
 
 #include "KoAutoSaveRecoveryDialog.h"
 
+#include <KoStore.h>
+
+#include <kwidgetitemdelegate.h>
+#include <klocale.h>
+
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QListView>
@@ -33,13 +38,7 @@
 #include <QStyledItemDelegate>
 #include <QPainter>
 #include <QCheckBox>
-#include <QLabel>
 #include <QDebug>
-
-#include <KoStore.h>
-
-#include <kwidgetitemdelegate.h>
-#include <klocale.h>
 
 
 struct FileItem {
@@ -181,7 +180,7 @@ public:
 KoAutoSaveRecoveryDialog::KoAutoSaveRecoveryDialog(const QStringList &filenames, QWidget *parent) :
     KDialog(parent)
 {
-    setCaption(i18n("Recover Files"));
+    setCaption(i18nc("@title:window", "Recover Files"));
     setMinimumSize(650, 500);
     QWidget *page = new QWidget(this);
     QVBoxLayout *layout = new QVBoxLayout(page);

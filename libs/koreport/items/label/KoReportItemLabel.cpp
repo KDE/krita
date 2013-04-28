@@ -171,7 +171,8 @@ QString KoReportItemLabel::typeName() const
     return "report:label";
 }
 
-int KoReportItemLabel::render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script)
+int KoReportItemLabel::renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset,
+                                        const QVariant &data, KRScriptHandler *script)
 {
     Q_UNUSED(data)
     Q_UNUSED(script)
@@ -199,6 +200,6 @@ int KoReportItemLabel::render(OROPage* page, OROSection* section,  QPointF offse
         delete tb;
     }
     
-    return 0; //Item doesnt stretch the section height
+    return 0; //Item doesn't stretch the section height
 }
 

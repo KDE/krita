@@ -30,7 +30,7 @@ class KoMarkerSelector : public QComboBox
 {
     Q_OBJECT
 public:
-    KoMarkerSelector(KoMarkerData::MarkerPosition position, QWidget *parent = 0);
+    explicit KoMarkerSelector(KoMarkerData::MarkerPosition position, QWidget *parent = 0);
     virtual ~KoMarkerSelector();
 
     // set the current marker style

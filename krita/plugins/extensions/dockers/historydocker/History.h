@@ -21,14 +21,13 @@
 #define _HISTORY_H_
 
 #include <QObject>
-
-class QStringList;
+#include <QVariant>
 
 class HistoryPlugin : public QObject
 {
     Q_OBJECT
 public:
-    HistoryPlugin(QObject *parent, const QStringList &);
+    HistoryPlugin(QObject *parent, const QVariantList &);
     virtual ~HistoryPlugin();
 };
 

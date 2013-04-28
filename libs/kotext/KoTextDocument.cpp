@@ -2,6 +2,7 @@
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_calligra@gadz.org>
+ * Copyright (C) 2011-2012 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -33,6 +34,7 @@
 #include "KoTextDocument.h"
 #include "KoTextEditor.h"
 #include "styles/KoStyleManager.h"
+#include "KoTextRangeManager.h"
 #include "KoInlineTextObjectManager.h"
 #include "styles/KoParagraphStyle.h"
 #include "KoList.h"
@@ -48,11 +50,11 @@ Q_DECLARE_METATYPE(QTextBlockFormat)
 const QUrl KoTextDocument::StyleManagerURL = QUrl("kotext://stylemanager");
 const QUrl KoTextDocument::ListsURL = QUrl("kotext://lists");
 const QUrl KoTextDocument::InlineObjectTextManagerURL = QUrl("kotext://inlineObjectTextManager");
+const QUrl KoTextDocument::TextRangeManagerURL = QUrl("kotext://textRangeManager");
 const QUrl KoTextDocument::UndoStackURL = QUrl("kotext://undoStack");
 const QUrl KoTextDocument::ChangeTrackerURL = QUrl("kotext://changetracker");
 const QUrl KoTextDocument::TextEditorURL = QUrl("kotext://textEditor");
 const QUrl KoTextDocument::LineNumberingConfigurationURL = QUrl("kotext://linenumberingconfiguration");
-const QUrl KoTextDocument::AuxillaryFrameURL = QUrl("kotext://auxillaryframe");
 const QUrl KoTextDocument::RelativeTabsURL = QUrl("kotext://relativetabs");
 const QUrl KoTextDocument::HeadingListURL = QUrl("kotext://headingList");
 const QUrl KoTextDocument::SelectionsURL = QUrl("kotext://selections");
@@ -119,6 +121,13 @@ void KoTextDocument::setInlineTextObjectManager(KoInlineTextObjectManager *manag
     QVariant v;
     v.setValue(manager);
     m_document->addResource(KoTextDocument::InlineTextManager, InlineObjectTextManagerURL, v);
+}
+
+void KoTextDocument::setTextRangeManager(KoTextRangeManager *manager)
+{
+    QVariant v;
+    v.setValue(manager);
+    m_document->addResource(KoTextDocument::TextRangeManager, TextRangeManagerURL, v);
 }
 
 KoStyleManager *KoTextDocument::styleManager() const
@@ -306,22 +315,26 @@ KoInlineTextObjectManager *KoTextDocument::inlineTextObjectManager() const
     return resource.value<KoInlineTextObjectManager *>();
 }
 
+KoTextRangeManager *KoTextDocument::textRangeManager() const
+{
+    QVariant resource = m_document->resource(KoTextDocument::TextRangeManager,
+            TextRangeManagerURL);
+    return resource.value<KoTextRangeManager *>();
+}
+
 QTextFrame *KoTextDocument::auxillaryFrame()
 {
-    QVariant resource = m_document->resource(KoTextDocument::AuxillaryFrame,
-            AuxillaryFrameURL);
+    QTextCursor cursor(m_document->rootFrame()->lastCursorPosition());
+    cursor.movePosition(QTextCursor::PreviousCharacter);
+    QTextFrame *frame = cursor.currentFrame();
 
-    QTextFrame *frame = resource.value<QTextFrame *>();
+    if (frame->format().intProperty(KoText::SubFrameType) != KoText::AuxillaryFrameType) {
+        cursor = m_document->rootFrame()->lastCursorPosition();
 
-    if (frame == 0) {
-        QTextCursor cursor(m_document->rootFrame()->lastCursorPosition());
         QTextFrameFormat format;
         format.setProperty(KoText::SubFrameType, KoText::AuxillaryFrameType);
 
         frame = cursor.insertFrame(format);
-
-        resource.setValue(frame);
-        m_document->addResource(KoTextDocument::AuxillaryFrame, AuxillaryFrameURL, resource);
     }
     return frame;
 }

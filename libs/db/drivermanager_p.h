@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIDB_DRIVER_MNGR_P_H
-#define KEXIDB_DRIVER_MNGR_P_H
+#ifndef KEXIDB_DRIVER_MANAGER_P_H
+#define KEXIDB_DRIVER_MANAGER_P_H
 
 #include "object.h"
 
@@ -79,8 +79,6 @@ protected:
     QString m_serverErrMsg;
     int m_serverResultNum;
     QString m_serverResultName;
-    //! result names for KParts::ComponentFactory::ComponentLoadingError
-    //QHash<int, QString> m_componentLoadingErrors;
 
     QStringList possibleProblems;
 

@@ -24,10 +24,10 @@
 #include <QCursor>
 #include <QPainter>
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KComponentData>
-#include <KGlobal>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kcomponentdata.h>
+#include <kglobal.h>
 
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
@@ -83,7 +83,7 @@ protected:
         p.fillRect(0,0, width(), width(), m_color);
     }
 
-    // these are hacks, as it seems, that at a time only one widget can be a Qt::Popup and therefore grab the mouse globaly
+    // these are hacks, as it seems, that at a time only one widget can be a Qt::Popup and therefore grab the mouse globally
     void mouseReleaseEvent(QMouseEvent *e) {
         QMouseEvent* newEvent = new QMouseEvent(e->type(),
                                              m_parent->mapFromGlobal(e->globalPos()),
@@ -128,7 +128,7 @@ KisColorSelectorBase::KisColorSelectorBase(QWidget *parent) :
     m_popup(0),
     m_parent(0),
     m_colorUpdateAllowed(true),
-    m_hideDistance(0),
+    m_hideDistance(20),
     m_hideTimer(new QTimer(this)),
     m_popupOnMouseOver(false),
     m_popupOnMouseClick(true),
@@ -223,12 +223,11 @@ void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
 
 void KisColorSelectorBase::mouseReleaseEvent(QMouseEvent *e) {
     Q_UNUSED(e);
+    //hidePopup();
 }
 
 void KisColorSelectorBase::mouseMoveEvent(QMouseEvent* e)
 {
-//    kDebug()<<"mouse move event, e="<<e->pos()<<"  global="<<e->globalPos();
-
     if(!(e->buttons()&Qt::LeftButton || e->buttons()&Qt::RightButton)
        && (qMin(e->x(), e->y())<-m_hideDistance || e->x() > width()+m_hideDistance || e->y()>height()+m_hideDistance)) {
 
@@ -272,16 +271,14 @@ void KisColorSelectorBase::mouseMoveEvent(QMouseEvent* e)
         if(forbiddenRect.x()+forbiddenRect.width()/2 < availRect.width()/2) {
             //left edge of popup justified with left edge of popup
             x = forbiddenRect.x();
-//            kDebug()<<"1 forbiddenRect.x="<<forbiddenRect.x();
         }
         else {
             //the other way round
             x = forbiddenRect.x()+forbiddenRect.width()-m_popup->width();
-//            kDebug()<<"2 forbiddenRect.x="<<m_popup->width();
         }
 
         m_popup->move(x, y);
-        m_popup->setHidingDistanceAndTime(0, 250);
+        m_popup->setHidingDistanceAndTime(20, 400);
         showPopup(DontMove);
         e->accept();
         return;
@@ -324,36 +321,26 @@ inline bool modify(QColor* estimate, const QColor& target, const QColor& result)
 
 QColor KisColorSelectorBase::findGeneratingColor(const KoColor& ref) const
 {
-//    kDebug() << "starting search for generating colour";
     KoColor converter(colorSpace());
     QColor currentEstimate;
     ref.toQColor(&currentEstimate);
-//    kDebug() << "currentEstimate: " << currentEstimate;
 
     QColor currentResult;
     converter.fromQColor(currentEstimate);
     converter.toQColor(&currentResult);
-//    kDebug() << "currentResult: " << currentResult;
-
 
     QColor target;
     ref.toQColor(&target);
-//    kDebug() << "target: " << target;
 
     bool estimateValid=true;
     int iterationCounter=0;
 
-//    kDebug() << "current distance = " << distance(target, currentResult);
     while(distance(target, currentResult)>0.001 && estimateValid && iterationCounter<100) {
         estimateValid = modify(&currentEstimate, target, currentResult);
         converter.fromQColor(currentEstimate);
         converter.toQColor(&currentResult);
-//        kDebug() << "current distance = " << distance(target, currentResult);
-
         iterationCounter++;
     }
-
-//    kDebug() << "end search for generating colour";
 
     return currentEstimate;
 }
@@ -451,7 +438,6 @@ void KisColorSelectorBase::commitColor(const KoColor& color, ColorRole role)
 
 void KisColorSelectorBase::updateColorPreview(const QColor& color)
 {
-//    kDebug() << "updating color preview " << color.red() << "," << color.green() << "," << color.blue();
     m_colorPreviewPopup->setColor(color);
 }
 
@@ -475,7 +461,9 @@ const KoColorSpace* KisColorSelectorBase::colorSpace() const
         KisNodeSP currentNode = m_canvas->resourceManager()->
                                 resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
         if (currentNode) {
-            m_colorSpace=currentNode->colorSpace();
+            m_colorSpace = currentNode->paintDevice() ?
+                currentNode->paintDevice()->compositionSourceColorSpace() :
+                currentNode->colorSpace();
         } else {
             m_colorSpace=m_canvas->view()->image()->colorSpace();
         }

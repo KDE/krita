@@ -1,6 +1,7 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(  ${KOMAIN_INCLUDES} ${KOGUIUTILS_INCLUDES} )
-add_definitions(-DFILES_DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/data/\\"")
+
+macro_add_unittest_definitions()
 
 ########### next target ###############
 set(kis_tiled_data_manager_test_SRCS kis_tiled_data_manager_test.cpp )
@@ -11,11 +12,12 @@ target_link_libraries(KisTiledDataManagerTest  ${KDE4_KDEUI_LIBS} kritaimage ${Q
 set(kis_low_memory_tests_SRCS kis_low_memory_tests.cpp )
 kde4_add_unit_test(KisLowMemoryTests TESTNAME krita-image-KisLowMemoryTests  ${kis_low_memory_tests_SRCS})
 target_link_libraries(KisLowMemoryTests  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+set_tests_properties(krita-image-KisLowMemoryTests PROPERTIES TIMEOUT 180)
 
 ########### next target ###############
 set(kis_tile_compressors_test_SRCS kis_tile_compressors_test.cpp )
 kde4_add_unit_test(KisTileCompressorsTest TESTNAME krita-image-KisTileCompressorsTest  ${kis_tile_compressors_test_SRCS})
-target_link_libraries(KisTileCompressorsTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+target_link_libraries(KisTileCompressorsTest  ${KDE4_KDEUI_LIBS} koodf kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 set(kis_compression_tests_SRCS kis_compression_tests.cpp )

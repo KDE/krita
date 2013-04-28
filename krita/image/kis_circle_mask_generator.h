@@ -31,13 +31,19 @@ class QDomDocument;
  */
 class KRITAIMAGE_EXPORT KisCircleMaskGenerator : public KisMaskGenerator
 {
-
+public:
+    struct FastRowProcessor;
 public:
     KisCircleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes);
     virtual ~KisCircleMaskGenerator();
     
     virtual quint8 valueAt(qreal x, qreal y) const;
+
     virtual bool shouldSupersample() const;
+
+    virtual bool shouldVectorize() const;
+
+    KisBrushMaskApplicatorBase* applicator();
 
     virtual void toXML(QDomDocument& , QDomElement&) const;
     

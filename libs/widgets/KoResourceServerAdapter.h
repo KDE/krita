@@ -48,7 +48,7 @@ public:
     virtual QStringList getAssignedTagsList( KoResource* resource )=0;
     virtual QStringList getTagNamesList()=0;
     virtual void addTag( KoResource* resource,const QString& tag)=0;
-    virtual void delTag( KoResource* resource,const QString& tag)=0;
+    virtual void deleteTag( KoResource* resource,const QString& tag)=0;
     virtual QStringList searchTag(const QString& lineEditText)=0;
 
 signals:
@@ -206,7 +206,7 @@ public:
         m_resourceServer->addTag(resource,tag);
     }
 
-    void delTag( KoResource* resource,const QString& tag)
+    void deleteTag( KoResource* resource,const QString& tag)
     {
         m_resourceServer->delTag(resource,tag);
     }

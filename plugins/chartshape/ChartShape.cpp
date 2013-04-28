@@ -35,11 +35,11 @@
 #include <QStandardItemModel>
 
 // KDE
-#include <KDebug>
-#include <KApplication>
-#include <KMessageBox>
-#include <KMimeType>
-#include <KUrl>
+#include <kdebug.h>
+#include <kapplication.h>
+#include <kmessagebox.h>
+#include <kmimetype.h>
+#include <kurl.h>
 
 // KDChart
 #include <KDChartChart>
@@ -1337,6 +1337,8 @@ void ChartShape::saveOdfData(KoXmlWriter &bodyWriter, KoGenStyles &mainStyles) c
 void ChartShape::update() const
 {
     KoShape::update();
+
+    emit updateConfigWidget();
 }
 
 void ChartShape::relayout() const

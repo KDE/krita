@@ -35,6 +35,7 @@ class QDomDocument;
 class QDomElement;
 class KoStore;
 class KoXmlWriter;
+class KoPartAdaptor;
 
 /**
  * @short The class containing all meta information about a document
@@ -45,8 +46,8 @@ class KoXmlWriter;
  * @see KoDocumentInfoDlg
  *
  * This class contains the meta information for a document. They are
- * stored in two QMap and can be accessed through setAuthorInfo(),
- * setAboutInfo(), aboutInfo() and authorInfo().
+ * stored in two QMap and can be accessed through aboutInfo() and authorInfo().
+ * The about info can be changed with setAboutInfo() and setAuthorInfo()
  */
 class KOMAIN_EXPORT KoDocumentInfo : public QObject
 {
@@ -57,7 +58,7 @@ public:
      * The constructor
      * @param parent a pointer to the parent object
      */
-    KoDocumentInfo(QObject* parent = 0);
+    explicit KoDocumentInfo(QObject *parent = 0);
 
     /** The destructor */
     ~KoDocumentInfo();
@@ -90,7 +91,11 @@ public:
     QDomDocument save();
 
     /**
-     * Set information about the author
+     * Set information about the author.
+     * This will override any information retrieved from the author profile
+     * But it does not change the author profile
+     * Note: authorInfo() will not return the new value until the document has been
+     * saved by the user.(autosave doesn't count)
      * @param info the kind of information to set
      * @param data the data to set for this information
      */
@@ -132,7 +137,24 @@ public:
     /** Resets part of the meta data */
     void resetMetaData();
 
+public slots:
+    /** Takes care of updating the document info from configuration correctly */
+    void updateParameters();
+
 private:
+    /// Bumps the editing cycles count and save date, and then calls updateParameters
+    void updateParametersAndBumpNumCycles();
+
+    /**
+     * Set information about the author
+     * This sets what is actualy saved to file. The public method setAuthorInfo() can be used to set
+     * values that overide what is fetched from the author profile. During saveParameters() author
+     * profile and any overrides is combined resulting in calls to this method.
+     * @param info the kind of information to set
+     * @param data the data to set for this information
+     */
+    void setActiveAuthorInfo(const QString& info, const QString& data);
+
     /**
      * Load the information about the document from an OASIS file
      * @param metaDoc a reference to the information node
@@ -189,15 +211,14 @@ private:
      */
     bool saveOasisAuthorInfo(KoXmlWriter &xmlWriter);
 
-    /** Takes care of saving the per-editing-cycle data correctly */
-    void saveParameters();
-
     /** A QStringList containing all tags for the document information */
     QStringList m_aboutTags;
     /** A QStringList containing all tags for the author information */
     QStringList m_authorTags;
     /** The map containing information about the author */
     QMap<QString, QString> m_authorInfo;
+    /** The map containing information about the author set programatically*/
+    QMap<QString, QString> m_authorInfoOverride;
     /** The map containing information about the document */
     QMap<QString, QString> m_aboutInfo;
     /** The original meta:generator of the document */

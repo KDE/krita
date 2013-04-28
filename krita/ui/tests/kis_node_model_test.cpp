@@ -33,7 +33,10 @@
 
 void KisNodeModelTest::init()
 {
-    m_doc = new KisDoc2;
+    m_part = new KisPart2();
+    m_doc = new KisDoc2(m_part);
+    m_part->setDocument(m_doc);
+
     m_nameServer = new KisNameServer();
     m_shapeController = new KisShapeController(m_doc, m_nameServer);
     m_nodeModel = new KisNodeModel(0);
@@ -49,6 +52,7 @@ void KisNodeModelTest::cleanup()
     delete m_shapeController;
     delete m_nameServer;
     delete m_doc;
+    delete m_part;
 }
 
 void KisNodeModelTest::testSetImage()

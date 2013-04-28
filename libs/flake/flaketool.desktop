@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Flake tool definition
+Name[bs]=Definicija pahuljičastog alata
 Name[ca]=Definició d'eina de floc
 Name[ca@valencia]=Definició d'eina de floc
 Name[da]=Definition af flake-værktøj
@@ -12,7 +13,7 @@ Name[fa]=تعریف ابزار Flake
 Name[fi]=Flake-työkalun määrittely
 Name[fr]=Définition d'outil de flocon
 Name[fy]=Defenysje fan flok-ark
-Name[gl]=Definición da ferramenta Flake
+Name[gl]=Definición de ferramentas de Flake
 Name[hi]=फ्लेक औजार परिभाषा
 Name[hne]=फ्लेक औजार परिभासा
 Name[it]=Definizione dello strumento Flake
@@ -38,6 +39,7 @@ Name[zh_TW]=Flake 工具定義
 Type=ServiceType
 X-KDE-ServiceType=Calligra/Tool
 Comment=Definition of flake tools
+Comment[bs]=Definicija pahuljičastih alata
 Comment[ca]=Definició d'eines de floc
 Comment[ca@valencia]=Definició d'eines de floc
 Comment[da]=Definition af flake-værktøjer
@@ -49,7 +51,7 @@ Comment[et]=Helbetööriistade definitsioon
 Comment[fi]=Flake-työkalujen määrittely
 Comment[fr]=Définition d'outil de flocon
 Comment[fy]=Defenysje fan flok-arken
-Comment[gl]=Definición dunha ferramente para elementos
+Comment[gl]=Definición de ferramentas de Flake.
 Comment[hi]=फ्लेक औज़ार की परिभाषा
 Comment[hne]=फ्लेक औजार के परिभासा
 Comment[it]=Definizione degli strumenti Flake
@@ -77,3 +79,5 @@ Comment[zh_TW]=Flake 工具定義
 Type=int
 [PropertyDef::X-Flake-PluginVersion]
 Type=int
+[PropertyDef::X-KDE-PluginInfo-Name]
+Type=QString

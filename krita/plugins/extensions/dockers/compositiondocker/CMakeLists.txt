@@ -6,7 +6,7 @@ kde4_add_ui_files(KRITA_COMPOSITIONDOCKER_PART_SRCS
 )
 kde4_add_plugin(kritacompositiondocker ${KRITA_COMPOSITIONDOCKER_PART_SRCS})
 
-target_link_libraries(kritacompositiondocker kritaui)
+target_link_libraries(kritacompositiondocker ${KDE4_KFILE_LIBRARY} kritaui)
 
 install(TARGETS kritacompositiondocker  DESTINATION ${PLUGIN_INSTALL_DIR})
 

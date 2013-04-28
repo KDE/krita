@@ -64,7 +64,7 @@ void PluginShape::saveOdf(KoShapeSavingContext &context) const
     saveOdfAttributes(context, OdfAllAttributes);
     writer.startElement("draw:plugin");
     // cannot use "this" as referent for context.xmlid, already done for getting the xml:id for the frame
-    // so (randomly) chosing m_xlinkhref to get another, separate unique referent for this shape
+    // so (randomly) choosing m_xlinkhref to get another, separate unique referent for this shape
     const QString xmlId = context.xmlid(&m_xlinkhref, QLatin1String("plugin"), KoElementReference::Counter).toString();
     writer.addAttribute("xml:id", xmlId);
     writer.addAttribute("draw:mime-type", m_mimetype);

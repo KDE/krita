@@ -26,18 +26,21 @@
 #include <QTimer>
 #include <QPushButton>
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KComponentData>
-#include <KGlobal>
-#include <KIcon>
-#include <KDebug>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kcomponentdata.h>
+#include <kglobal.h>
+#include <kdebug.h>
+
+#include <KoCanvasResourceManager.h>
+#include <KoIcon.h>
 
 #include "kis_color_selector_ring.h"
 #include "kis_color_selector_triangle.h"
 #include "kis_color_selector_simple.h"
 #include "kis_color_selector_wheel.h"
 #include "kis_color_selector_container.h"
+#include "kis_canvas2.h"
 
 KisColorSelector::KisColorSelector(Configuration conf, QWidget* parent)
     : KisColorSelectorBase(parent),
@@ -218,7 +221,13 @@ void KisColorSelector::resizeEvent(QResizeEvent* e) {
             }
         }
     }
-
+    if(m_canvas && m_canvas->resourceManager()) {
+        if (m_lastColorRole==Foreground) {
+            setColor(m_canvas->resourceManager()->foregroundColor().toQColor());
+        } else {
+            setColor(m_canvas->resourceManager()->backgroundColor().toQColor());
+        }
+    }
     KisColorSelectorBase::resizeEvent(e);
 }
 
@@ -249,16 +258,15 @@ void KisColorSelector::mouseReleaseEvent(QMouseEvent* e)
     KisColorSelectorBase::mouseReleaseEvent(e);
     if(m_lastColor!=m_currentColor && m_currentColor.isValid()) {
         m_lastColor=m_currentColor;
-        ColorRole role;
         if(e->button() == Qt::LeftButton)
-            role=Foreground;
+            m_lastColorRole=Foreground;
         else
-            role=Background;
-        commitColor(KoColor(m_currentColor, colorSpace()), role);
+            m_lastColorRole=Background;
+        commitColor(KoColor(m_currentColor, colorSpace()), m_lastColorRole);
 
-        if(isPopup() && m_mainComponent->containsPoint(e->pos())) {
-            hidePopup();
-        }
+//        if(isPopup() && m_mainComponent->containsPoint(e->pos())) {
+//            hidePopup();
+//        }
     }
     e->accept();
     m_grabbingComponent=0;
@@ -295,6 +303,7 @@ void KisColorSelector::init()
 {
     setAcceptDrops(true);
 
+    m_lastColorRole = Foreground;
     m_ring = new KisColorSelectorRing(this);
     m_triangle = new KisColorSelectorTriangle(this);
     m_slider = new KisColorSelectorSimple(this);
@@ -303,7 +312,7 @@ void KisColorSelector::init()
 
     if(displaySettingsButton()) {
         m_button = new QPushButton(this);
-        m_button->setIcon(KIcon("configure"));
+        m_button->setIcon(koIcon("configure"));
         connect(m_button, SIGNAL(clicked()), SIGNAL(settingsButtonClicked()));
     }
 

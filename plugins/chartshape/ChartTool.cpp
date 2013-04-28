@@ -32,9 +32,8 @@
 #include <QPainter>
 
 // KDE
-#include <KLocale>
-#include <KIcon>
-#include <KDebug>
+#include <klocale.h>
+#include <kdebug.h>
 
 // Calligra
 #include <KoCanvasBase.h>
@@ -62,6 +61,10 @@
 #include "ChartConfigWidget.h"
 #include "KDChartConvertions.h"
 #include "commands/ChartTypeCommand.h"
+#include "commands/LegendCommand.h"
+#include "commands/AxisCommand.h"
+#include "commands/DatasetCommand.h"
+#include "commands/ChartTextShapeCommand.h"
 
 
 using namespace KChart;
@@ -97,12 +100,12 @@ ChartTool::ChartTool(KoCanvasBase *canvas)
     // Create QActions here.
 #if 0
     QActionGroup *group = new QActionGroup(this);
-    m_foo  = new QAction(KIcon("this-action"), i18n("Do something"), this);
+    m_foo  = new QAction(koIcon("this-action"), i18n("Do something"), this);
     m_foo->setCheckable(true);
     group->addAction(m_foo);
     connect(m_foo, SIGNAL(toggled(bool)), this, SLOT(catchFoo(bool)));
 
-    m_bar  = new QAction(KIcon("that-action"), i18n("Do something else"), this);
+    m_bar  = new QAction(koIcon("that-action"), i18n("Do something else"), this);
     m_bar->setCheckable(true);
     group->addAction(m_bar);
     connect(m_foo, SIGNAL(toggled(bool)), this, SLOT(catchBar(bool)));
@@ -260,48 +263,48 @@ QWidget *ChartTool::createOptionWidget()
 {
     ChartConfigWidget  *widget = new ChartConfigWidget();
     
-    connect(widget, SIGNAL(dataSetXDataRegionChanged(DataSet*, const CellRegion&)),
-            this,   SLOT(setDataSetXDataRegion(DataSet*, const CellRegion&)));
-    connect(widget, SIGNAL(dataSetYDataRegionChanged(DataSet*, const CellRegion&)),
-            this,   SLOT(setDataSetYDataRegion(DataSet*, const CellRegion&)));
-    connect(widget, SIGNAL(dataSetCustomDataRegionChanged(DataSet*, const CellRegion&)),
-            this,   SLOT(setDataSetCustomDataRegion(DataSet*, const CellRegion&)));
-    connect(widget, SIGNAL(dataSetLabelDataRegionChanged(DataSet*, const CellRegion&)),
-            this,   SLOT(setDataSetLabelDataRegion(DataSet*, const CellRegion&)));
-    connect(widget, SIGNAL(dataSetCategoryDataRegionChanged(DataSet*, const CellRegion&)),
-            this,   SLOT(setDataSetCategoryDataRegion(DataSet*, const CellRegion&)));
-    connect(widget, SIGNAL(dataSetChartTypeChanged(DataSet*, ChartType)),
-            this,   SLOT(setDataSetChartType(DataSet*, ChartType)));
-    connect(widget, SIGNAL(dataSetChartSubTypeChanged(DataSet*, ChartSubtype)),
-            this,   SLOT(setDataSetChartSubType(DataSet*, ChartSubtype)));
-    connect(widget, SIGNAL(datasetBrushChanged(DataSet*, const QColor&)),
-            this, SLOT(setDataSetBrush(DataSet*, const QColor&)));
+    connect(widget, SIGNAL(dataSetXDataRegionChanged(DataSet*,CellRegion)),
+            this,   SLOT(setDataSetXDataRegion(DataSet*,CellRegion)));
+    connect(widget, SIGNAL(dataSetYDataRegionChanged(DataSet*,CellRegion)),
+            this,   SLOT(setDataSetYDataRegion(DataSet*,CellRegion)));
+    connect(widget, SIGNAL(dataSetCustomDataRegionChanged(DataSet*,CellRegion)),
+            this,   SLOT(setDataSetCustomDataRegion(DataSet*,CellRegion)));
+    connect(widget, SIGNAL(dataSetLabelDataRegionChanged(DataSet*,CellRegion)),
+            this,   SLOT(setDataSetLabelDataRegion(DataSet*,CellRegion)));
+    connect(widget, SIGNAL(dataSetCategoryDataRegionChanged(DataSet*,CellRegion)),
+            this,   SLOT(setDataSetCategoryDataRegion(DataSet*,CellRegion)));
+    connect(widget, SIGNAL(dataSetChartTypeChanged(DataSet*,ChartType)),
+            this,   SLOT(setDataSetChartType(DataSet*,ChartType)));
+    connect(widget, SIGNAL(dataSetChartSubTypeChanged(DataSet*,ChartSubtype)),
+            this,   SLOT(setDataSetChartSubType(DataSet*,ChartSubtype)));
+    connect(widget, SIGNAL(datasetBrushChanged(DataSet*,QColor)),
+            this, SLOT(setDataSetBrush(DataSet*,QColor)));
     connect(widget, SIGNAL(dataSetMarkerChanged(DataSet*,OdfMarkerStyle)),
             this, SLOT(setDataSetMarker(DataSet*,OdfMarkerStyle)));
-    connect(widget, SIGNAL(datasetPenChanged(DataSet*, const QColor&)),
-            this, SLOT(setDataSetPen(DataSet*, const QColor&)));
-    connect(widget, SIGNAL(datasetShowCategoryChanged(DataSet*, bool)),
-            this, SLOT(setDataSetShowCategory(DataSet*, bool)));
-    connect(widget, SIGNAL(dataSetShowNumberChanged(DataSet*, bool)),
-            this, SLOT(setDataSetShowNumber(DataSet*, bool)));
-    connect(widget, SIGNAL(datasetShowPercentChanged(DataSet*, bool)),
-            this, SLOT(setDataSetShowPercent(DataSet*, bool)));
-    connect(widget, SIGNAL(datasetShowSymbolChanged(DataSet*, bool)),
-            this, SLOT(setDataSetShowSymbol(DataSet*, bool)));
-    connect(widget, SIGNAL(dataSetAxisChanged(DataSet*, Axis*)),
-            this, SLOT(setDataSetAxis(DataSet*, Axis*)));
+    connect(widget, SIGNAL(datasetPenChanged(DataSet*,QColor)),
+            this, SLOT(setDataSetPen(DataSet*,QColor)));
+    connect(widget, SIGNAL(datasetShowCategoryChanged(DataSet*,bool)),
+            this, SLOT(setDataSetShowCategory(DataSet*,bool)));
+    connect(widget, SIGNAL(dataSetShowNumberChanged(DataSet*,bool)),
+            this, SLOT(setDataSetShowNumber(DataSet*,bool)));
+    connect(widget, SIGNAL(datasetShowPercentChanged(DataSet*,bool)),
+            this, SLOT(setDataSetShowPercent(DataSet*,bool)));
+    connect(widget, SIGNAL(datasetShowSymbolChanged(DataSet*,bool)),
+            this, SLOT(setDataSetShowSymbol(DataSet*,bool)));
+    connect(widget, SIGNAL(dataSetAxisChanged(DataSet*,Axis*)),
+            this, SLOT(setDataSetAxis(DataSet*,Axis*)));
     connect(widget, SIGNAL(gapBetweenBarsChanged(int)),
             this,   SLOT(setGapBetweenBars(int)));
     connect(widget, SIGNAL(gapBetweenSetsChanged(int)),
             this,   SLOT(setGapBetweenSets(int)));
-    connect(widget, SIGNAL(pieExplodeFactorChanged(DataSet*, int)),
-            this,   SLOT(setPieExplodeFactor(DataSet*, int)));
+    connect(widget, SIGNAL(pieExplodeFactorChanged(DataSet*,int)),
+            this,   SLOT(setPieExplodeFactor(DataSet*,int)));
     
     connect(widget, SIGNAL(showLegendChanged(bool)),
             this,   SLOT(setShowLegend(bool)));
 
-    connect(widget, SIGNAL(chartTypeChanged(ChartType, ChartSubtype)),
-            this,   SLOT(setChartType(ChartType, ChartSubtype)));
+    connect(widget, SIGNAL(chartTypeChanged(ChartType,ChartSubtype)),
+            this,   SLOT(setChartType(ChartType,ChartSubtype)));
     connect(widget, SIGNAL(chartSubTypeChanged(ChartSubtype)),
             this,   SLOT(setChartSubType(ChartSubtype)));
     connect(widget, SIGNAL(threeDModeToggled(bool)),
@@ -313,31 +316,33 @@ QWidget *ChartTool::createOptionWidget()
     connect(widget, SIGNAL(showFooterChanged(bool)),
             this,   SLOT(setShowFooter(bool)));
 
-    connect(widget, SIGNAL(axisAdded(AxisDimension, const QString&)),
-            this,   SLOT(addAxis(AxisDimension, const QString&)));
+    connect(widget, SIGNAL(axisAdded(AxisDimension,QString)),
+            this,   SLOT(addAxis(AxisDimension,QString)));
     connect(widget, SIGNAL(axisRemoved(Axis*)),
             this,   SLOT(removeAxis(Axis*)));
-    connect(widget, SIGNAL(axisTitleChanged(Axis*, const QString&)),
-            this,   SLOT(setAxisTitle(Axis*, const QString&)));
-    connect(widget, SIGNAL(axisShowTitleChanged(Axis*, bool)),
-            this,   SLOT(setAxisShowTitle(Axis*, bool)));
-    connect(widget, SIGNAL(axisShowGridLinesChanged(Axis*, bool)),
-            this,   SLOT(setAxisShowGridLines(Axis*, bool)));
-    connect(widget, SIGNAL(axisUseLogarithmicScalingChanged(Axis*, bool)),
-            this,   SLOT(setAxisUseLogarithmicScaling(Axis*, bool)));
-    connect(widget, SIGNAL(axisStepWidthChanged(Axis*, qreal)),
-            this,   SLOT(setAxisStepWidth(Axis*, qreal)));
-    connect(widget, SIGNAL(axisSubStepWidthChanged(Axis*, qreal)),
-            this,   SLOT(setAxisSubStepWidth(Axis*, qreal)));
-    connect(widget, SIGNAL(axisUseAutomaticStepWidthChanged(Axis*, bool)),
-            this,   SLOT(setAxisUseAutomaticStepWidth(Axis*, bool)));
-    connect(widget, SIGNAL(axisUseAutomaticSubStepWidthChanged(Axis*, bool)),
-            this,   SLOT(setAxisUseAutomaticSubStepWidth(Axis*, bool)));
+    connect(widget, SIGNAL(axisTitleChanged(Axis*,QString)),
+            this,   SLOT(setAxisTitle(Axis*,QString)));
+    connect(widget, SIGNAL(axisShowTitleChanged(Axis*,bool)),
+            this,   SLOT(setAxisShowTitle(Axis*,bool)));
+    connect(widget, SIGNAL(axisShowGridLinesChanged(Axis*,bool)),
+            this,   SLOT(setAxisShowGridLines(Axis*,bool)));
+    connect(widget, SIGNAL(axisUseLogarithmicScalingChanged(Axis*,bool)),
+            this,   SLOT(setAxisUseLogarithmicScaling(Axis*,bool)));
+    connect(widget, SIGNAL(axisStepWidthChanged(Axis*,qreal)),
+            this,   SLOT(setAxisStepWidth(Axis*,qreal)));
+    connect(widget, SIGNAL(axisSubStepWidthChanged(Axis*,qreal)),
+            this,   SLOT(setAxisSubStepWidth(Axis*,qreal)));
+    connect(widget, SIGNAL(axisUseAutomaticStepWidthChanged(Axis*,bool)),
+            this,   SLOT(setAxisUseAutomaticStepWidth(Axis*,bool)));
+    connect(widget, SIGNAL(axisUseAutomaticSubStepWidthChanged(Axis*,bool)),
+            this,   SLOT(setAxisUseAutomaticSubStepWidth(Axis*,bool)));
+    connect(widget, SIGNAL(axisLabelsFontChanged(Axis*,QFont)),
+            this,   SLOT(setAxisLabelsFont(Axis*,QFont)));
 
-    connect(widget, SIGNAL(legendTitleChanged(const QString&)),
-            this,   SLOT(setLegendTitle(const QString&)));
-    connect(widget, SIGNAL(legendFontChanged(const QFont&)),
-            this,   SLOT(setLegendFont(const QFont&)));
+    connect(widget, SIGNAL(legendTitleChanged(QString)),
+            this,   SLOT(setLegendTitle(QString)));
+    connect(widget, SIGNAL(legendFontChanged(QFont)),
+            this,   SLOT(setLegendFont(QFont)));
     connect(widget, SIGNAL(legendFontSizeChanged(int)),
             this,   SLOT(setLegendFontSize(int)));
 
@@ -349,15 +354,17 @@ QWidget *ChartTool::createOptionWidget()
     connect(widget, SIGNAL(legendFixedPositionChanged(Position)),
             this,   SLOT(setLegendFixedPosition(Position)));
     
-    connect(widget, SIGNAL(legendBackgroundColorChanged(const QColor&)) ,
-            this,   SLOT(setLegendBackgroundColor(const QColor&)));
-    connect(widget, SIGNAL(legendFrameColorChanged(const QColor&)) ,
-            this,   SLOT(setLegendFrameColor(const QColor&)));
+    connect(widget, SIGNAL(legendBackgroundColorChanged(QColor)) ,
+            this,   SLOT(setLegendBackgroundColor(QColor)));
+    connect(widget, SIGNAL(legendFrameColorChanged(QColor)) ,
+            this,   SLOT(setLegendFrameColor(QColor)));
     connect(widget, SIGNAL(legendShowFrameChanged(bool)) ,
             this,   SLOT(setLegendShowFrame(bool)));
 
     connect(d->shape, SIGNAL(updateConfigWidget()),
-            widget,     SLOT(update()));
+            widget,   SLOT(update()));
+    connect(d->shape->legend(), SIGNAL(updateConfigWidget()),
+            widget,             SLOT(update()));
 
 
     return widget;
@@ -458,7 +465,10 @@ void ChartTool::setDataSetBrush(DataSet *dataSet, const QColor& color)
     if (!dataSet)
         return;
 
-    dataSet->setBrush(QBrush(color));
+    DatasetCommand *command = new DatasetCommand(dataSet, d->shape);
+    command->setDataSetBrush(color);
+    canvas()->addCommand(command);
+
     d->shape->update();
 }
 void ChartTool::setDataSetPen(DataSet *dataSet, const QColor& color)
@@ -467,7 +477,10 @@ void ChartTool::setDataSetPen(DataSet *dataSet, const QColor& color)
     if (!dataSet)
         return;
 
-    dataSet->setPen(QPen(color));
+    DatasetCommand *command = new DatasetCommand(dataSet, d->shape);
+    command->setDataSetPen(color);
+    canvas()->addCommand(command);
+
     d->shape->update();
 }
 
@@ -477,7 +490,10 @@ void ChartTool::setDataSetMarker(DataSet *dataSet, OdfMarkerStyle style)
     if (!dataSet)
         return;
 
-    dataSet->setMarkerStyle(style);
+    DatasetCommand *command = new DatasetCommand(dataSet, d->shape);
+    command->setDataSetMarker(style);
+    canvas()->addCommand(command);
+
     d->shape->update();
 }
 void ChartTool::setDataSetAxis(DataSet *dataSet, Axis *axis)
@@ -521,22 +537,58 @@ void ChartTool::Private::setDataSetShowLabel(DataSet *dataSet, bool *number, boo
 
 void ChartTool::setDataSetShowCategory(DataSet *dataSet, bool b)
 {
-    d->setDataSetShowLabel(dataSet, 0, 0, &b, 0);
+    //d->setDataSetShowLabel(dataSet, 0, 0, &b, 0);
+    Q_ASSERT(d->shape);
+    if (!dataSet)
+        return;
+
+    DatasetCommand *command = new DatasetCommand(dataSet, d->shape);
+    command->setDataSetShowCategory(b);
+    canvas()->addCommand(command);
+
+    d->shape->update();
 }
 
 void ChartTool::setDataSetShowNumber(DataSet *dataSet, bool b)
 {
-    d->setDataSetShowLabel(dataSet, &b, 0, 0, 0);
+    //d->setDataSetShowLabel(dataSet, &b, 0, 0, 0);
+    Q_ASSERT(d->shape);
+    if (!dataSet)
+        return;
+
+    DatasetCommand *command = new DatasetCommand(dataSet, d->shape);
+    command->setDataSetShowNumber(b);
+    canvas()->addCommand(command);
+
+    d->shape->update();
 }
 
 void ChartTool::setDataSetShowPercent(DataSet *dataSet, bool b)
 {
-    d->setDataSetShowLabel(dataSet, 0, &b, 0, 0);
+    //d->setDataSetShowLabel(dataSet, 0, &b, 0, 0);
+    Q_ASSERT(d->shape);
+    if (!dataSet)
+        return;
+
+    DatasetCommand *command = new DatasetCommand(dataSet, d->shape);
+    command->setDataSetShowPercent(b);
+    canvas()->addCommand(command);
+
+    d->shape->update();
 }
 
 void ChartTool::setDataSetShowSymbol(DataSet *dataSet, bool b)
 {
-    d->setDataSetShowLabel(dataSet, 0, 0, 0, &b);
+    //d->setDataSetShowLabel(dataSet, 0, 0, 0, &b);
+    Q_ASSERT(d->shape);
+    if (!dataSet)
+        return;
+
+    DatasetCommand *command = new DatasetCommand(dataSet, d->shape);
+    command->setDataSetShowSymbol(b);
+    canvas()->addCommand(command);
+
+    d->shape->update();
 }
 
 void ChartTool::setThreeDMode(bool threeD)
@@ -555,7 +607,9 @@ void ChartTool::setShowTitle(bool show)
     if (!d->shape)
         return;
 
-    d->shape->showTitle(show);
+    ChartTextShapeCommand *command = new ChartTextShapeCommand(d->shape->title(), d->shape, show);
+    canvas()->addCommand(command);
+
     d->shape->update();
 }
 
@@ -565,7 +619,9 @@ void ChartTool::setShowSubTitle(bool show)
     if (!d->shape)
         return;
 
-    d->shape->showSubTitle(show);
+    ChartTextShapeCommand *command = new ChartTextShapeCommand(d->shape->subTitle(), d->shape, show);
+    canvas()->addCommand(command);
+
     d->shape->update();
 }
 
@@ -575,7 +631,9 @@ void ChartTool::setShowFooter(bool show)
     if (!d->shape)
         return;
 
-    d->shape->showFooter(show);
+    ChartTextShapeCommand *command = new ChartTextShapeCommand(d->shape->footer(), d->shape, show);
+    canvas()->addCommand(command);
+
     d->shape->update();
 }
 
@@ -595,8 +653,9 @@ void ChartTool::setLegendTitle(const QString &title)
     Q_ASSERT(d->shape);
     Q_ASSERT(d->shape->legend());
 
-    d->shape->legend()->setTitle(title);
-    d->shape->legend()->update();
+    LegendCommand *command = new LegendCommand(d->shape->legend());
+    command->setLegendTitle(title);
+    canvas()->addCommand(command);
 }
 
 void ChartTool::setLegendFont(const QFont &font)
@@ -605,8 +664,9 @@ void ChartTool::setLegendFont(const QFont &font)
     Q_ASSERT(d->shape->legend());
 
     // There only is a general font, for the legend items and the legend title
-    d->shape->legend()->setFont(font);
-    d->shape->legend()->update();
+    LegendCommand *command = new LegendCommand(d->shape->legend());
+    command->setLegendFont(font);
+    canvas()->addCommand(command);
 }
 
 void ChartTool::setLegendFontSize(int size)
@@ -614,8 +674,9 @@ void ChartTool::setLegendFontSize(int size)
     Q_ASSERT(d->shape);
     Q_ASSERT(d->shape->legend());
 
-    d->shape->legend()->setFontSize(size);
-    d->shape->legend()->update();
+    LegendCommand *command = new LegendCommand(d->shape->legend());
+    command->setLegendFontSize(size);
+    canvas()->addCommand(command);
 }
 
 void ChartTool::setLegendOrientation(Qt::Orientation orientation)
@@ -623,8 +684,9 @@ void ChartTool::setLegendOrientation(Qt::Orientation orientation)
     Q_ASSERT(d->shape);
     Q_ASSERT(d->shape->legend());
 
-    d->shape->legend()->setExpansion(QtOrientationToLegendExpansion(orientation));
-    d->shape->legend()->update();
+    LegendCommand *command = new LegendCommand(d->shape->legend());
+    command->setLegendExpansion(QtOrientationToLegendExpansion(orientation));
+    canvas()->addCommand(command);
 }
 
 void ChartTool::setLegendAlignment(Qt::Alignment alignment)
@@ -673,8 +735,9 @@ void ChartTool::setLegendShowFrame(bool show)
     Q_ASSERT(d->shape);
     Q_ASSERT(d->shape->legend());
 
-    d->shape->legend()->setShowFrame(show);
-    d->shape->legend()->update();
+    LegendCommand *command = new LegendCommand(d->shape->legend());
+    command->setLegendShowFrame(show);
+    canvas()->addCommand(command);
 }
 
 
@@ -697,7 +760,12 @@ void ChartTool::removeAxis(Axis *axis)
 
 void ChartTool::setAxisTitle(Axis *axis, const QString& title)
 {
-    axis->setTitleText(title);
+    Q_ASSERT(d->shape);
+
+    AxisCommand *command = new AxisCommand(axis, d->shape);
+    command->setAxisTitle(title);
+    canvas()->addCommand(command);
+
     d->shape->update();
 }
 
@@ -705,44 +773,87 @@ void ChartTool::setAxisShowTitle(Axis *axis, bool show)
 {
     Q_ASSERT(d->shape);
 
-    axis->title()->setVisible(show);
+    AxisCommand *command = new AxisCommand(axis, d->shape);
+    command->setAxisShowTitle(show);
+    canvas()->addCommand(command);
+
     d->shape->update();
 }
 
 void ChartTool::setAxisShowGridLines(Axis *axis, bool b)
 {
-    axis->setShowMajorGrid(b);
-    axis->setShowMinorGrid(b);
+    Q_ASSERT(d->shape);
+
+    AxisCommand *command = new AxisCommand(axis, d->shape);
+    command->setAxisShowGridLines(b);
+    canvas()->addCommand(command);
+
     d->shape->update();
 }
 
 void ChartTool::setAxisUseLogarithmicScaling(Axis *axis, bool b)
 {
-    axis->setScalingLogarithmic(b);
+    Q_ASSERT(d->shape);
+
+    AxisCommand *command = new AxisCommand(axis, d->shape);
+    command->setAxisUseLogarithmicScaling(b);
+    canvas()->addCommand(command);
+
     d->shape->update();
 }
 
 void ChartTool::setAxisStepWidth(Axis *axis, qreal width)
 {
-    axis->setMajorInterval(width);
+    Q_ASSERT(d->shape);
+
+    AxisCommand *command = new AxisCommand(axis, d->shape);
+    command->setAxisStepWidth(width);
+    canvas()->addCommand(command);
+
     d->shape->update();
 }
 
 void ChartTool::setAxisSubStepWidth(Axis *axis, qreal width)
 {
-    axis->setMinorInterval(width);
+    Q_ASSERT(d->shape);
+
+    AxisCommand *command = new AxisCommand(axis, d->shape);
+    command->setAxisSubStepWidth(width);
+    canvas()->addCommand(command);
+
     d->shape->update();
 }
 
 void ChartTool::setAxisUseAutomaticStepWidth(Axis *axis, bool automatic)
 {
-    axis->setUseAutomaticMajorInterval(automatic);
+    Q_ASSERT(d->shape);
+
+    AxisCommand *command = new AxisCommand(axis, d->shape);
+    command->setAxisUseAutomaticStepWidth(automatic);
+    canvas()->addCommand(command);
+
     d->shape->update();
 }
 
 void ChartTool::setAxisUseAutomaticSubStepWidth(Axis *axis, bool automatic)
 {
-    axis->setUseAutomaticMinorInterval(automatic);
+    Q_ASSERT(d->shape);
+
+    AxisCommand *command = new AxisCommand(axis, d->shape);
+    command->setAxisUseAutomaticSubStepWidth(automatic);
+    canvas()->addCommand(command);
+
+    d->shape->update();
+}
+
+void ChartTool::setAxisLabelsFont(Axis *axis, const QFont &font)
+{
+    Q_ASSERT(d->shape);
+
+    AxisCommand *command = new AxisCommand(axis, d->shape);
+    command->setAxisLabelsFont(font);
+    canvas()->addCommand(command);
+
     d->shape->update();
 }
 
@@ -771,11 +882,13 @@ void ChartTool::setPieExplodeFactor(DataSet *dataSet, int percent)
     d->shape->update();
 }
 
-void ChartTool::setShowLegend(bool b)
+void ChartTool::setShowLegend(bool show)
 {
     Q_ASSERT(d->shape);
 
-    d->shape->legend()->setVisible(b);
+    ChartTextShapeCommand *command = new ChartTextShapeCommand(d->shape->legend(), d->shape, show);
+    canvas()->addCommand(command);
+
     d->shape->legend()->update();
 }
 

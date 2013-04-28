@@ -49,10 +49,10 @@ protected:
         return new FreehandStrokeStrategy(indirectPainting, resources, m_painterInfo, QLatin1String("Freehand Stroke"));
     }
 
-    void addPaintingJobs(KisImageWSP image, KisResourcesSnapshotSP resources,
-                         KisPainter *painter) {
+    void addPaintingJobs(KisImageWSP image, KisResourcesSnapshotSP resources, KisPainter *painter) {
 
         Q_ASSERT(painter == m_painterInfo->painter);
+        Q_UNUSED(painter);
 
         KisPaintInformation pi1;
         KisPaintInformation pi2;

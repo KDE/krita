@@ -36,6 +36,7 @@
 #include <KoImageCollection.h>
 #include <KoImageData.h>
 #include <KoProperties.h>
+#include <KoIcon.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -43,7 +44,7 @@ PictureShapeFactory::PictureShapeFactory()
     : KoShapeFactoryBase(PICTURESHAPEID, i18n("Image"))
 {
     setToolTip(i18n("Image shape that can display jpg, png etc."));
-    setIcon("x-shape-image");
+    setIconName(koIconNameCStr("x-shape-image"));
     setLoadingPriority(1);
 
     QList<QPair<QString, QStringList> > elementNamesList;
@@ -86,8 +87,8 @@ bool PictureShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext 
         QString href = e.attribute("href");
         if (!href.isEmpty()) {
             // check the mimetype
-            if (href.startsWith("./")) {
-                href.remove(0,2);
+            if (href.startsWith(QLatin1String("./"))) {
+                href.remove(0, 2);
             }
             QString mimetype = context.odfLoadingContext().mimeTypeForPath(href);
             if (!mimetype.isEmpty()) {

@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Shape border definition
+Name[bs]=Definicija oblika granice
 Name[ca]=Definició de forma de la vora
 Name[ca@valencia]=Definició de forma de la vora
+Name[cs]=Definice okraje tvaru
 Name[da]=Definition af form-kant
 Name[de]=Objektumrandungsdefinition
 Name[el]=Ορισμός περιγράμματος σχήματος
@@ -12,7 +14,7 @@ Name[fa]=تعریف لبه شکل
 Name[fi]=Muodon rajan määrittely
 Name[fr]=Définition d'une bordure de forme
 Name[fy]=Defenysje fan in foarmrâne
-Name[gl]=Obexto de definición de contornos
+Name[gl]=Definición do contorno de obxectos
 Name[hi]=किनारा परिभाषा आकार
 Name[hne]=किनारा परिभासा आकार
 Name[it]=Definizione del bordo di una forma
@@ -37,6 +39,7 @@ Name[zh_TW]=元件邊框定義
 Type=ServiceType
 X-KDE-ServiceType=Calligra/Border
 Comment=Definition of a flake shape border
+Comment[bs]=Definicija pahuljastog oblika granice
 Comment[ca]=Definició d'una vora en forma de floc
 Comment[ca@valencia]=Definició d'una vora en forma de floc
 Comment[da]=Definition af en flake-forms kant
@@ -47,7 +50,7 @@ Comment[es]=Definición del borde de una forma de Flake
 Comment[et]=Helbekujundi piirde definitsioon
 Comment[fi]=Flake-muodon rajan määrittely
 Comment[fr]=Définition d'une bordure de forme de flocons
-Comment[gl]=Definición do elemento contorno dunha obxecto
+Comment[gl]=Definición do contorno de obxectos de Flake.
 Comment[hi]=फ्लेक आकार किनारा की परिभाषा
 Comment[hne]=फ्लेक आकार किनारा के परिभासा
 Comment[it]=Definizione del bordo di una forma di Flake
@@ -70,5 +73,7 @@ Comment[wa]=Definixha d' ene boirdeure di fôme e ploumion
 Comment[x-test]=xxDefinition of a flake shape borderxx
 Comment[zh_CN]=Flake 形状边框的定义
 Comment[zh_TW]=Flake 元件邊框定義
-[PropertyDef::X-Flake-Version]
+[PropertyDef::X-Flake-PluginVersion]
 Type=int
+[PropertyDef::X-KDE-PluginInfo-Name]
+Type=QString

@@ -197,16 +197,16 @@ private:
     bool presentationListTabWorkaround(qreal indent, qreal labelBoxWidth, qreal presentationListTabValue);
 
     /// Returns vertical height of line
-    qreal addLine(QTextLine &line, FrameIterator *cursor, KoTextBlockData *blockData);
+    qreal addLine(QTextLine &line, FrameIterator *cursor, KoTextBlockData &blockData);
 
     /// looks for footnotes and preregisters them
     void findFootNotes(QTextBlock block, const QTextLine &line, qreal bottomOfText);
 
     void clearPreregisteredFootNotes();
 
-    void drawListItem(QPainter *painter, const QTextBlock &block);
+    void drawListItem(QPainter *painter, QTextBlock &block);
 
-    void decorateParagraph(QPainter *painter, const QTextBlock &block, bool showFormattingCharacter);
+    void decorateParagraph(QPainter *painter, QTextBlock &block, bool showFormattingCharacter);
 
     void drawStrikeOuts(QPainter *painter, const QTextCharFormat &currentCharFormat, const QString &text, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const;
 
@@ -216,9 +216,9 @@ private:
 
     int decorateTabsAndFormatting(QPainter *painter, const QTextFragment& currentFragment, const QTextLine &line, const int startOfFragmentInBlock, const QVariantList& tabList, int currentTabStop, bool showFormattingCharacter);
 
-    void decorateListLabel(QPainter *painter, const KoTextBlockData *blockData, const QTextLine &listLabelLine, const QTextBlock &listItem);
+    void decorateListLabel(QPainter *painter, const KoTextBlockData &blockData, const QTextLine &listLabelLine, const QTextBlock &listItem);
 
-    void handleBordersAndSpacing(KoTextBlockData *blockData, QTextBlock *block);
+    void handleBordersAndSpacing(KoTextBlockData &blockData, QTextBlock *block);
 
 private:
     class Private;

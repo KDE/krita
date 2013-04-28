@@ -28,12 +28,13 @@ class KisSelectionTest : public QObject
     Q_OBJECT
 
 private slots:
+    void testGrayColorspaceConversion();
+    void testGrayColorspaceOverComposition();
 
     void testSelectionComponents();
     void testSelectionActions();
     void testInvertSelection();
-    void testUpdatePixelSelection();
-    void testUpdateSelectionProjection();
+    void testInvertSelectionSemi();
     void testCopy();
     void testSelectionExactBounds();
     void testSetParentNodeAfterCreation();

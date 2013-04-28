@@ -29,6 +29,7 @@ private slots:
     void testCreation();
     void testMirrorX();
     void testMirrorY();
+    void testOffset();
     void testMirrorTransactionX();
     void testMirrorTransactionY();
     void testIdentity();
@@ -44,11 +45,18 @@ private slots:
     void testMatrices();
     void testRotationSpecialCases();
     void testScaleUp5times();
-    void rotateNone();
     void rotate90Left();
     void rotate90Right();
     void rotate180();
 
+    void benchmarkScale();
+    void benchmarkRotate();
+    void benchmarkRotate1Q();
+    void benchmarkShear();
+    void benchmarkScaleRotateShear();
+
+private:
+    void generateTestImages();
 };
 
 #endif

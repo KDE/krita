@@ -38,6 +38,8 @@ public:
     void kick();
     void terminatePooler();
 
+    void testingRereadConfig();
+
 protected:
     static const qint32 MAX_NUM_CLONES;
     static const qint32 MAX_TIMEOUT;

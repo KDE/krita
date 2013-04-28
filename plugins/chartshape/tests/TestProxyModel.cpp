@@ -38,7 +38,7 @@ namespace QTest {
     template<>
     char *toString(const CellRegion &region)
     {
-        return qstrdup(region.toString().toAscii().data());
+        return qstrdup(region.toString().toLatin1());
     }
 }
 

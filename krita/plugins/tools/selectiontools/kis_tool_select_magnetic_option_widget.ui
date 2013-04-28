@@ -54,7 +54,7 @@
      <item row="1" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Threshold</string>
+        <string>Threshold:</string>
        </property>
       </widget>
      </item>

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Dyna Tool
+Name[bs]=Alati za Dyna-u
 Name[ca]=Eina dinàmica
 Name[ca@valencia]=Eina dinàmica
 Name[da]=Dyna-værktøj
@@ -8,9 +9,10 @@ Name[el]=Εργαλείο Dyna
 Name[en_GB]=Dyna Tool
 Name[es]=Herramienta Dyna
 Name[et]=Dyna tööriist
+Name[fi]=Dynatyökalu
 Name[fr]=Outil Dyna
 Name[ga]=Uirlis Dyna
-Name[gl]=Ferramenta Dyna
+Name[gl]=Ferramenta dinámica
 Name[it]=Strumento dinamico
 Name[ja]=Dyna ツール
 Name[kk]=Дайна құралы
@@ -31,4 +33,4 @@ Name[zh_TW]=Dyna 工具
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatooldyna
-X-Krita-Version=5
+X-Krita-Version=27

@@ -48,16 +48,16 @@ public:
     virtual void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
             KisBrush::ColoringInformation* src,
             double scaleX, double scaleY, double angle,
-            const KisPaintInformation& info = KisPaintInformation(),
+            const KisPaintInformation& info,
             double subPixelX = 0, double subPixelY = 0,
             qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
     virtual QPainterPath outline() const;
-            
+
 protected:
     virtual void setImage(const QImage& image);
 
-            
+
 public:
 
     bool load() {
@@ -70,13 +70,7 @@ public:
     qreal density() const;
 private:
     QImage createBrushPreview();
-    bool isBrushSymmetric(double angle) const;
-    quint8 interpolatedValueAt(double x, double y,const QVector<quint8> &precomputedQuarter,int width) const;    
 
-    inline quint8 valueAt(quint32 x, quint32 y, const QVector<quint8> &precomputedQuarter,int width) const{
-        return precomputedQuarter[y*width+x];
-    }
-        
 private:
 
     struct Private;

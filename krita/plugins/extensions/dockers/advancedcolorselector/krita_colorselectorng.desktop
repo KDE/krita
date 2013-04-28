@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ColorSelectorNG
+Name[bs]=Izbot BOjaNG
 Name[ca]=SelectorColorNG
 Name[ca@valencia]=SelectorColorNG
 Name[da]=ColorSelectorNG
@@ -8,6 +9,7 @@ Name[en_GB]=ColourSelectorNG
 Name[es]=Selector de colores de nueva generación
 Name[et]=Uue põlvkonna värvivalija
 Name[fr]=SélecteurcouleursNG
+Name[gl]=Selector de cores NG
 Name[it]=Selettore del colore di nuova generazione
 Name[kk]=ЖаңаТүсТаңдағыш
 Name[nb]=FargevelgerNG
@@ -25,4 +27,4 @@ Name[zh_TW]=ColorSelectorNG
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritacolorselectorng
-X-Krita-Version=5
+X-Krita-Version=27

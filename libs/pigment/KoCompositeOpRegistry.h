@@ -29,6 +29,7 @@
 #include "pigment_export.h"
 
 class KoColorSpace;
+#include <KoID.h>
 
 const QString COMPOSITE_OVER         = "normal";
 const QString COMPOSITE_ERASE        = "erase";
@@ -47,7 +48,7 @@ const QString COMPOSITE_MULT                  = "multiply";
 const QString COMPOSITE_DIVIDE                = "divide";
 const QString COMPOSITE_ARC_TANGENT           = "arc_tangent";
 const QString COMPOSITE_GEOMETRIC_MEAN        = "geometric_mean";
-const QString COMPOSITE_ADDITIVE_SUBTRACTIVE = "additive_subtractive";
+const QString COMPOSITE_ADDITIVE_SUBTRACTIVE  = "additive_subtractive";
 const QString COMPOSITE_INVERTED_DIVIDE       = "inverted_divide"; // XXX: not implemented anywhere yet
 
 const QString COMPOSITE_EQUIVALENCE   = "equivalence";
@@ -58,6 +59,7 @@ const QString COMPOSITE_GRAIN_EXTRACT = "grain_extract";
 const QString COMPOSITE_EXCLUSION     = "exclusion";
 const QString COMPOSITE_HARD_MIX      = "hard mix";
 const QString COMPOSITE_OVERLAY       = "overlay";
+const QString COMPOSITE_BEHIND        = "behind";
 
 const QString COMPOSITE_DARKEN      = "darken";
 const QString COMPOSITE_BURN        = "burn";
@@ -69,7 +71,8 @@ const QString COMPOSITE_DODGE        = "dodge";
 const QString COMPOSITE_LINEAR_DODGE = "linear_dodge";
 const QString COMPOSITE_SCREEN       = "screen";
 const QString COMPOSITE_HARD_LIGHT   = "hard_light";
-const QString COMPOSITE_SOFT_LIGHT   = "soft_light";
+const QString COMPOSITE_SOFT_LIGHT_PHOTOSHOP = "soft_light";
+const QString COMPOSITE_SOFT_LIGHT_SVG  = "soft_light_svg";
 const QString COMPOSITE_GAMMA_LIGHT  = "gamma_light";
 const QString COMPOSITE_VIVID_LIGHT  = "vivid_light";
 const QString COMPOSITE_LINEAR_LIGHT = "linear light";
@@ -125,9 +128,6 @@ const QString COMPOSITE_NO           = "nocomposition";
 const QString COMPOSITE_PASS_THROUGH = "pass through"; // XXX: not implemented anywhere yet
 const QString COMPOSITE_UNDEF        = "undefined";
 
-
-class KoID;
-class KoColorSpace;
 
 class PIGMENTCMS_EXPORT KoCompositeOpRegistry
 {

@@ -128,7 +128,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Deform Amount</string>
+          <string>Deform amount:</string>
          </property>
         </widget>
        </item>
@@ -211,8 +211,6 @@
   <zorder>useCounter</zorder>
   <zorder>useOldData</zorder>
   <zorder>deformAmount</zorder>
-  <zorder>middleSpacer</zorder>
-  <zorder>topSpacer</zorder>
   <zorder>interpolationChBox</zorder>
  </widget>
  <customwidgets>

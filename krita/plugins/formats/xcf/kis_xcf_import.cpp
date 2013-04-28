@@ -25,7 +25,7 @@
 #include <QFile>
 #include <qendian.h>
 
-#include <KPluginFactory>
+#include <kpluginfactory.h>
 
 #include <kio/netaccess.h>
 #include <kio/deletejob.h>
@@ -84,7 +84,7 @@ KoFilter::ConversionStatus KisXCFImport::convert(const QByteArray& from, const Q
     KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain -> outputDocument());
 
     if (!doc)
-        return KoFilter::CreationError;
+        return KoFilter::NoDocumentCreated;
 
     QString filename = m_chain -> inputFile();
 
@@ -123,7 +123,7 @@ KoFilter::ConversionStatus KisXCFImport::convert(const QByteArray& from, const Q
         return result;
     }
     dbgFile << "Download failed";
-    return KoFilter::CreationError;
+    return KoFilter::DownloadFailed;
 }
 
 QString layerModeG2K(GimpLayerModeEffects mode)
@@ -285,6 +285,7 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
         // Create the mask
         if (xcflayer.hasMask) {
             KisTransparencyMaskSP mask = new KisTransparencyMask();
+            mask->initSelection(0, layer);
             for (unsigned int x = 0; x < xcflayer.dim.width; x += TILE_WIDTH) {
                 for (unsigned int y = 0; y < xcflayer.dim.height; y += TILE_HEIGHT) {
                     rect want;

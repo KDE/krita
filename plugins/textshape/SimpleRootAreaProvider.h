@@ -37,6 +37,8 @@ public:
 
     virtual void doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea);
 
+    virtual void updateAll();
+
     virtual QSizeF suggestSize(KoTextLayoutRootArea *rootArea);
 
     virtual QList<KoTextLayoutObstruction *> relevantObstructions(KoTextLayoutRootArea *rootArea);

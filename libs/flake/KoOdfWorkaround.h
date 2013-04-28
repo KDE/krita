@@ -133,6 +133,20 @@ namespace KoOdfWorkaround
      * This method changes the string with the offset values to have commas as separators.
      */
     FLAKE_EXPORT void fixClipRectOffsetValuesString(QString &offsetValuesString);
+
+    /**
+     * LibreOffice used to write text:style-name attribute for table:table-template element,
+     * which is not a valid attribute for the element.
+     */
+    FLAKE_EXPORT QString fixTableTemplateName(const KoXmlElement &e);
+
+    /**
+     * LibreOffice used to write text:style-name attribute for
+     * table:first-row, table:last-row, table:first-column,
+     * table:last-column, table:odd-rows, table:odd-columns,
+     * table:body elements, which is not a valid attribute for the element.
+     */
+    FLAKE_EXPORT QString fixTableTemplateCellStyleName(const KoXmlElement &e);
 }
 
 #endif /* KOODFWORKAROUND_H */

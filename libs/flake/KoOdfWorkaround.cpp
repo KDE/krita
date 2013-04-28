@@ -24,12 +24,11 @@
 
 #include "KoShapeLoadingContext.h"
 #include "KoShape.h"
-#include <KoPathShape.h>
+#include "KoPathShape.h"
+#include "KoColorBackground.h"
 #include <KoOdfLoadingContext.h>
-#include <KoOdfWorkaround.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
-#include <KoColorBackground.h>
 #include <KoStyleStack.h>
 #include <KoUnit.h>
 
@@ -291,4 +290,14 @@ void KoOdfWorkaround::fixClipRectOffsetValuesString(QString &offsetValuesString)
         // assumes no spaces existing between values and units
         offsetValuesString = offsetValuesString.simplified().replace(QLatin1Char(' '), QLatin1Char(','));
     }
+}
+
+QString KoOdfWorkaround::fixTableTemplateName(const KoXmlElement &e)
+{
+    return e.attributeNS(KoXmlNS::text, "style-name", QString());
+}
+
+QString KoOdfWorkaround::fixTableTemplateCellStyleName(const KoXmlElement &e)
+{
+    return e.attributeNS(KoXmlNS::text, "style-name", QString());
 }

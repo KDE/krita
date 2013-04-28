@@ -26,8 +26,8 @@
 #include <KoShapeLayer.h>
 #include <KoImageData.h>
 
-#include <KMimeType>
-#include <KTemporaryFile>
+#include <kmimetype.h>
+#include <ktemporaryfile.h>
 #include <KIO/NetAccess>
 #include <KIO/CopyJob>
 

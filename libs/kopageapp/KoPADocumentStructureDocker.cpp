@@ -47,14 +47,14 @@
 #include <KoShapePaste.h>
 #include <KoViewItemContextBar.h>
 
-#include <KMenu>
+#include <KoIcon.h>
+
+#include <kmenu.h>
 #include <klocale.h>
-#include <kicon.h>
-#include <kiconloader.h>
 #include <kinputdialog.h>
 #include <kmessagebox.h>
-#include <KConfigGroup>
-#include <KDebug>
+#include <kconfiggroup.h>
+#include <kdebug.h>
 
 #include <QGridLayout>
 #include <QToolButton>
@@ -99,7 +99,7 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker(KoDocumentSectionView::
     layout->addWidget(m_sectionView = new KoDocumentSectionView(mainWidget), 0, 0, 1, -1);
 
     QToolButton *button = new QToolButton(mainWidget);
-    button->setIcon(SmallIcon("list-add"));
+    button->setIcon(koIcon("list-add"));
     if (pageType == KoPageApp::Slide) {
         button->setToolTip(i18n("Add a new slide or layer"));
     }
@@ -111,31 +111,28 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker(KoDocumentSectionView::
     KMenu *menu = new KMenu(button);
     button->setMenu(menu);
     button->setPopupMode(QToolButton::InstantPopup);
-    if (pageType == KoPageApp::Slide) {
-        menu->addAction(SmallIcon("document-new"), i18n("Slide"), this, SLOT(addPage()));
-    }
-    else {
-        menu->addAction(SmallIcon("document-new"), i18n("Page"), this, SLOT(addPage()));
-    }
-    m_addLayerAction = menu->addAction(SmallIcon("layer-new"), i18n("Layer"), this, SLOT(addLayer()));
+    menu->addAction(koIcon("document-new"),
+                    (pageType == KoPageApp::Slide) ? i18n("Slide") : i18n("Page"),
+                    this, SLOT(addPage()));
+    m_addLayerAction = menu->addAction(koIcon("layer-new"), i18n("Layer"), this, SLOT(addLayer()));
 
     m_buttonGroup = new QButtonGroup(mainWidget);
     m_buttonGroup->setExclusive(false);
 
     button = new QToolButton(mainWidget);
-    button->setIcon(SmallIcon("list-remove"));
+    button->setIcon(koIcon("list-remove"));
     button->setToolTip(i18n("Delete selected objects"));
     m_buttonGroup->addButton(button, Button_Delete);
     layout->addWidget(button, 1, 1);
 
     button = new QToolButton(mainWidget);
-    button->setIcon(SmallIcon("arrow-up"));
+    button->setIcon(koIcon("arrow-up"));
     button->setToolTip(i18n("Raise selected objects"));
     m_buttonGroup->addButton(button, Button_Raise);
     layout->addWidget(button, 1, 3);
 
     button = new QToolButton(mainWidget);
-    button->setIcon(SmallIcon("arrow-down"));
+    button->setIcon(koIcon("arrow-down"));
     button->setToolTip(i18n("Lower selected objects"));
     m_buttonGroup->addButton(button, Button_Lower);
     layout->addWidget(button, 1, 4);
@@ -145,11 +142,11 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker(KoDocumentSectionView::
     QActionGroup *group = new QActionGroup(this);
 
     m_viewModeActions.insert(KoDocumentSectionView::MinimalMode,
-                              menu->addAction(SmallIcon("view-list-text"), i18n("Minimal View"), this, SLOT(minimalView())));
+                              menu->addAction(koIcon("view-list-text"), i18n("Minimal View"), this, SLOT(minimalView())));
     m_viewModeActions.insert(KoDocumentSectionView::DetailedMode,
-                              menu->addAction(SmallIcon("view-list-details"), i18n("Detailed View"), this, SLOT(detailedView())));
+                              menu->addAction(koIcon("view-list-details"), i18n("Detailed View"), this, SLOT(detailedView())));
     m_viewModeActions.insert(KoDocumentSectionView::ThumbnailMode,
-                              menu->addAction(SmallIcon("view-preview"), i18n("Thumbnail View"), this, SLOT(thumbnailView())));
+                              menu->addAction(koIcon("view-preview"), i18n("Thumbnail View"), this, SLOT(thumbnailView())));
 
     foreach (QAction* action, m_viewModeActions) {
         action->setCheckable(true);
@@ -158,7 +155,7 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker(KoDocumentSectionView::
 
     button->setMenu(menu);
     button->setPopupMode(QToolButton::InstantPopup);
-    button->setIcon(SmallIcon("view-choose"));
+    button->setIcon(koIcon("view-choose"));
     button->setText(i18n("View mode"));
     layout->addWidget(button, 1, 5);
 
@@ -203,19 +200,6 @@ KoPADocumentStructureDocker::~KoPADocumentStructureDocker()
 void KoPADocumentStructureDocker::updateView()
 {
     m_model->update();
-}
-
-void KoPADocumentStructureDocker::setPart(KParts::Part * part)
-{
-    m_doc = dynamic_cast<KoPADocument *>(part);
-    m_model->setDocument(m_doc); // this either contains the doc or is 0
-
-    m_buttonGroup->button(Button_Delete)->setEnabled(false);
-    if (m_doc) {
-        if (m_sectionView->selectionModel()->selectedIndexes().count() < m_doc->pages().count()) {
-            m_buttonGroup->button(Button_Delete)->setEnabled(true);
-        }
-    }
 }
 
 void KoPADocumentStructureDocker::slotButtonClicked(int buttonId)
@@ -639,16 +623,16 @@ void KoPADocumentStructureDocker::contextMenuEvent(QContextMenuEvent* event)
 
     // Not connected yet
     if (m_doc->pageType() == KoPageApp::Slide) {
-        menu.addAction(KIcon("document-new"), i18n("Add a new slide"), this, SLOT(addPage()));
+        menu.addAction(koIcon("document-new"), i18n("Add a new slide"), this, SLOT(addPage()));
     }
     else {
-        menu.addAction(KIcon("document-new"), i18n("Add a new page"), this, SLOT(addPage()));
+        menu.addAction(koIcon("document-new"), i18n("Add a new page"), this, SLOT(addPage()));
     }
-    menu.addAction(KIcon("edit-delete"), i18n("Delete selected objects"), this, SLOT(deleteItem()));
+    menu.addAction(koIcon("edit-delete"), i18n("Delete selected objects"), this, SLOT(deleteItem()));
     menu.addSeparator();
-    menu.addAction(KIcon("edit-cut"), i18n("Cut"), this, SLOT(editCut()));
-    menu.addAction(KIcon("edit-copy"), i18n("Copy"), this, SLOT(editCopy()));
-    menu.addAction(KIcon("edit-paste"), i18n("Paste"), this, SLOT(editPaste()));
+    menu.addAction(koIcon("edit-cut"), i18n("Cut"), this, SLOT(editCut()));
+    menu.addAction(koIcon("edit-copy"), i18n("Copy"), this, SLOT(editCopy()));
+    menu.addAction(koIcon("edit-paste"), i18n("Paste"), this, SLOT(editPaste()));
 
     menu.exec(event->globalPos());
 }

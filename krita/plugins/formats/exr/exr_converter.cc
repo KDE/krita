@@ -159,7 +159,7 @@ void decodeData1(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP 
     for (int y = 0; y < height; ++y) {
         Imf::FrameBuffer frameBuffer;
         _T_* frameBufferData = (pixels.data()) - xstart - (ystart + y) * width;
-        frameBuffer.insert(info.channelMap["G"].toAscii().data(),
+        frameBuffer.insert(info.channelMap["G"].toLatin1().constData(),
                            Imf::Slice(ptype, (char *) frameBufferData,
                                       sizeof(_T_) * 1,
                                       sizeof(_T_) * width));
@@ -197,20 +197,20 @@ void decodeData4(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP 
     for (int y = 0; y < height; ++y) {
         Imf::FrameBuffer frameBuffer;
         Rgba* frameBufferData = (pixels.data()) - xstart - (ystart + y) * width;
-        frameBuffer.insert(info.channelMap["R"].toAscii().data(),
+        frameBuffer.insert(info.channelMap["R"].toLatin1().constData(),
                            Imf::Slice(ptype, (char *) &frameBufferData->r,
                                       sizeof(Rgba) * 1,
                                       sizeof(Rgba) * width));
-        frameBuffer.insert(info.channelMap["G"].toAscii().data(),
+        frameBuffer.insert(info.channelMap["G"].toLatin1().constData(),
                            Imf::Slice(ptype, (char *) &frameBufferData->g,
                                       sizeof(Rgba) * 1,
                                       sizeof(Rgba) * width));
-        frameBuffer.insert(info.channelMap["B"].toAscii().data(),
+        frameBuffer.insert(info.channelMap["B"].toLatin1().constData(),
                            Imf::Slice(ptype, (char *) &frameBufferData->b,
                                       sizeof(Rgba) * 1,
                                       sizeof(Rgba) * width));
         if (hasAlpha) {
-            frameBuffer.insert(info.channelMap["A"].toAscii().data(),
+            frameBuffer.insert(info.channelMap["A"].toLatin1().constData(),
                                Imf::Slice(ptype, (char *) &frameBufferData->a,
                                           sizeof(Rgba) * 1,
                                           sizeof(Rgba) * width));
@@ -224,16 +224,16 @@ void decodeData4(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP 
 
             // XXX: For now unmultiply the alpha, though compositing will be faster if we
             // keep it premultiplied.
-            _T_ unmultipliedRed = rgba -> r;
-            _T_ unmultipliedGreen = rgba -> g;
-            _T_ unmultipliedBlue = rgba -> b;
+            _T_ unmultipliedRed = rgba->r;
+            _T_ unmultipliedGreen = rgba->g;
+            _T_ unmultipliedBlue = rgba->b;
 
             if (hasAlpha && rgba -> a >= HALF_EPSILON) {
-                unmultipliedRed /= rgba -> a;
-                unmultipliedGreen /= rgba -> a;
-                unmultipliedBlue /= rgba -> a;
+                unmultipliedRed /= rgba->a;
+                unmultipliedGreen /= rgba->a;
+                unmultipliedBlue /= rgba->a;
             }
-            typename KoBgrTraits<_T_>::Pixel* dst = reinterpret_cast<typename KoBgrTraits<_T_>::Pixel*>(it->rawData());
+            typename KoRgbTraits<_T_>::Pixel* dst = reinterpret_cast<typename KoRgbTraits<_T_>::Pixel*>(it->rawData());
 
             dst->red = unmultipliedRed;
             dst->green = unmultipliedGreen;
@@ -368,6 +368,7 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
     for (int i = 0; i < informationObjects.size(); ++i) {
         ExrPaintLayerInfo& info = informationObjects[i];
         QString modelId;
+
         if (info.channelMap.size() == 1) {
             modelId = GrayColorModelID.id();
             QString key = info.channelMap.begin().key();
@@ -377,10 +378,13 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
                 info.channelMap.clear();
                 info.channelMap["G"] = channel;
             }
-        } else if (info.channelMap.size() == 3 || info.channelMap.size() == 4) {
+        }
+        else if (info.channelMap.size() == 3 || info.channelMap.size() == 4) {
+
             if (info.channelMap.contains("R") && info.channelMap.contains("G") && info.channelMap.contains("B")) {
                 modelId = RGBAColorModelID.id();
-            } else if (info.channelMap.contains("X") && info.channelMap.contains("Y") && info.channelMap.contains("Z")) {
+            }
+            else if (info.channelMap.contains("X") && info.channelMap.contains("Y") && info.channelMap.contains("Z")) {
                 modelId = XYZAColorModelID.id();
                 QMap<QString, QString> newChannelMap;
                 if (info.channelMap.contains("W")) {
@@ -397,7 +401,8 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
                 newChannelMap["G"] = info.channelMap["Y"];
                 newChannelMap["R"] = info.channelMap["Z"];
                 info.channelMap = newChannelMap;
-            } else {
+            }
+            else {
                 modelId = RGBAColorModelID.id();
                 QMap<QString, QString> newChannelMap;
                 QMap<QString, QString>::iterator it = info.channelMap.begin();
@@ -422,6 +427,7 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
             info.colorSpace = kisTypeToColorSpace(modelId, info.imageType);
         }
     }
+
     // Get colorspace
     dbgFile << "Image type = " << imageType;
     const KoColorSpace* colorSpace = kisTypeToColorSpace(RGBAColorModelID.id(), imageType);
@@ -524,7 +530,7 @@ KisImageBuilder_Result exrConverter::buildImage(const KUrl& uri)
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
 
-    if (!KIO::NetAccess::exists(uri, false, QApplication::activeWindow())) {
+    if (!KIO::NetAccess::exists(uri, KIO::NetAccess::DestinationSide, QApplication::activeWindow())) {
         return KisImageBuilder_RESULT_NOT_EXIST;
     }
 
@@ -727,9 +733,9 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisPaintLayerSP 
 
     ExrPaintLayerSaveInfo info;
     info.layer = layer;
-    info.channels.push_back("B");
-    info.channels.push_back("G");
     info.channels.push_back("R");
+    info.channels.push_back("G");
+    info.channels.push_back("B");
     info.channels.push_back("A");
     info.pixelType = pixelType;
 
@@ -772,9 +778,9 @@ void recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveInfo>& informationObjects
             info.name = name + paintLayer->name() + '.';
             info.layer = paintLayer;
             if (paintLayer->colorSpace()->colorModelId() == RGBAColorModelID) {
-                info.channels.push_back(info.name + remap(current2original, "B"));
-                info.channels.push_back(info.name + remap(current2original, "G"));
                 info.channels.push_back(info.name + remap(current2original, "R"));
+                info.channels.push_back(info.name + remap(current2original, "G"));
+                info.channels.push_back(info.name + remap(current2original, "B"));
                 info.channels.push_back(info.name + remap(current2original, "A"));
             } else if (paintLayer->colorSpace()->colorModelId() == GrayAColorModelID) {
                 info.channels.push_back(info.name + remap(current2original, "G"));

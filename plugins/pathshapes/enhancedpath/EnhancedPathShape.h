@@ -110,6 +110,12 @@ public:
     //it's assumed like this because of the behavior shwon in OOo
     void setMirrorVertically(bool mirrorVertically);
 
+    // Sets member variable representing draw:path-stretchpoint-x attribute
+    void setPathStretchPointX(qreal pathStretchPointX);
+
+    // Sets member variable representing draw:path-stretchpoint-y attribute
+    void setPathStretchPointY(qreal pathStretchPointY);
+
     /// Returns parameter from given textual representation
     EnhancedPathParameter *parameter(const QString &text);
 
@@ -141,6 +147,13 @@ private:
     /// Enables chaching results
     void enableResultCache(bool enable);
 
+    // This function checks if draw:path-stretchpoint-x or draw:path-stretchpoint-y attributes are set.
+    // If the attributes are set the path shape coordinates (m_subpaths) are changed so that the form
+    // of the shape is preserved after stretching. It is needed for example in round-rectangles, to
+    // have the corners round after stretching. Without it the corners would be eliptical.
+    // Returns true if any points were actually changed, otherwise false.
+    bool useStretchPoints(const QSizeF &size, qreal &scale);
+
     typedef QMap<QString, EnhancedPathFormula*> FormulaStore;
     typedef QList<qreal> ModifierStore;
     typedef QMap<QString, EnhancedPathParameter*> ParameterStore;
@@ -158,6 +171,8 @@ private:
     ParameterStore m_parameters; ///< the shared parameters
     bool m_mirrorVertically; ///<whether or not the shape is to be mirrored vertically before transforming it
     bool m_mirrorHorizontally; ///<whether or not the shape is to be mirrored horizontally before transforming it
+    qreal m_pathStretchPointX; ///< draw:path-stretchpoint-x attribute
+    qreal m_pathStretchPointY; ///< draw:path-stretchpoint-y attribute
     QHash<QString, qreal> m_resultChache; ///< cache for intermediate results used when evaluating path
     bool m_cacheResults; ///< indicates if result cache is enabled
 };

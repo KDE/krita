@@ -27,7 +27,7 @@ class KRScriptDebug : public QObject
 {
     Q_OBJECT
 public:
-    KRScriptDebug(QObject *parent = 0);
+    explicit KRScriptDebug(QObject *parent = 0);
 
     ~KRScriptDebug();
 

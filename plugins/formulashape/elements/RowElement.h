@@ -45,7 +45,7 @@ class FormulaCursor;
 class KOFORMULA_EXPORT RowElement : public BasicElement {
 public:
     /// The standard constructor
-    RowElement( BasicElement* parent = 0 );
+    explicit RowElement(BasicElement *parent = 0);
 
     /// The standard destructor
     virtual ~RowElement();

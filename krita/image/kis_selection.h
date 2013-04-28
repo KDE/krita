@@ -71,8 +71,7 @@ public:
      * Copy the selection. The selection components are copied, too.
      */
     KisSelection(const KisSelection& rhs);
-
-    KisSelection &operator=(const KisSelection &rhs);
+    KisSelection& operator=(const KisSelection &rhs);
 
     /**
      * Delete the selection. The shape selection component is deleted, the
@@ -106,7 +105,6 @@ public:
      */
     KisSelectionComponent* shapeSelection() const;
 
-    void setPixelSelection(KisPixelSelectionSP pixelSelection);
     void setShapeSelection(KisSelectionComponent* shapeSelection);
 
     /**
@@ -141,6 +139,15 @@ public:
     bool isTotallyUnselected(const QRect & r) const;
 
     QRect selectedRect() const;
+
+    /**
+     * @brief Slow, but exact way of determining the rectangle
+     * that encloses the selection.
+     *
+     * Default pixel of the selection device may vary and you would get wrong bounds.
+     * selectedExactRect() handles all these cases.
+     *
+     */
     QRect selectedExactRect() const;
 
     void setX(qint32 x);
@@ -168,6 +175,8 @@ private:
     friend class KisMaskTest;
     friend class KisAdjustmentLayerTest;
     KisNodeWSP parentNode() const;
+
+    void copyFrom(const KisSelection &rhs);
 
 private:
 

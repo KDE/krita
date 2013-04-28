@@ -28,7 +28,6 @@
 #include <vector>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
@@ -254,7 +253,10 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
                 KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), ch->name(), OPACITY_OPAQUE_U8, *deviceIt));
                 QRect r = l->exactBounds();
 
-                KisDoc2 d;
+                KisPart2 part;
+                KisDoc2 d(&part);
+                part.setDocument(&d);
+
                 d.prepareForImport();
 
                 KisImageWSP dst = KisImageWSP(new KisImage(d.createUndoStore(), r.width(), r.height(), (*deviceIt)->colorSpace(), l->name()));

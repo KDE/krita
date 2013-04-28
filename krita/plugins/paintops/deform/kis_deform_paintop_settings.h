@@ -27,7 +27,9 @@ class KisDeformPaintOpSettingsWidget;
 #include <opengl/kis_opengl.h>
 
 #if defined(_WIN32) || defined(_WIN64)
+#ifndef __MINGW32__
 # include <windows.h>
+#endif
 #endif
 
 class KisDeformPaintOpSettings : public KisPaintOpSettings

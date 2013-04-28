@@ -18,6 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 #include "KoColorSetWidget.h"
+#include "KoColorSetWidget_p.h"
 
 #include <QTimer>
 #include <QApplication>
@@ -38,7 +39,6 @@
 #include <kstandarddirs.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kicon.h>
 
 #include <KoColorSet.h>
 #include <KoColorPatch.h>
@@ -46,28 +46,6 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
-
-class KoColorSetWidget::KoColorSetWidgetPrivate {
-public:
-    KoColorSetWidget *thePublic;
-    QPointer<KoColorSet> colorSet;
-    QTimer m_timer;
-    QVBoxLayout *mainLayout;
-    bool firstShowOfContainer;
-    QWidget *colorSetContainer;
-    QScrollArea *scrollArea;
-    QGridLayout *colorSetLayout;
-    QHBoxLayout *recentsLayout;
-    KoColorPatch *recentPatches[6];
-    QToolButton *addRemoveButton;
-    int numRecents;
-
-    void colorTriggered(KoColorPatch *patch);
-    void addRecent(const KoColor &);
-    void activateRecent(int i);
-    void fillColors();
-    void addRemoveColors();
-};
 
 void KoColorSetWidget::KoColorSetWidgetPrivate::fillColors()
 {
@@ -182,7 +160,6 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     d->recentsLayout = new QHBoxLayout();
     d->mainLayout->addLayout(d->recentsLayout);
     d->recentsLayout->setMargin(0);
-    d->recentsLayout->setSpacing(KDialog::spacingHint());
     d->recentsLayout->addWidget(new QLabel(i18n("Recent:")));
     d->recentsLayout->addStretch(1);
 

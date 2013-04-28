@@ -270,7 +270,7 @@ static QString abr_read_ucs2_text (QDataStream & abr)
     abr >> name_size;
     if (name_size == 0)
     {
-        return QString::Null();
+        return QString();
     }
     
     //buf_size = name_size * 2;

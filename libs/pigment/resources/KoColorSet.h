@@ -51,7 +51,7 @@ public:
      * Load a color set from a file. This can be a Gimp
      * palette, a RIFF palette or a Photoshop palette.
      */
-    KoColorSet(const QString& filename);
+    explicit KoColorSet(const QString &filename);
 
     /// Create an empty color set
     KoColorSet();

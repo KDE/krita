@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="39">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="47">
 
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
@@ -21,6 +21,7 @@
   <Action name="fill_selection_foreground_color"/>
   <Action name="fill_selection_background_color"/>
   <Action name="fill_selection_pattern"/>
+  <Action name="stroke_shapes"/>
   <Action name="delete"/>
   <Separator/>
   <Action name="revert"/>
@@ -28,6 +29,7 @@
   <Menu name="Resources"><text>&amp;Resources</text>
    <Action name="add_palette"/>
    <Action name="edit_palette"/>
+   <Action name="edit_blacklist_cleanup"/>
   </Menu>
  </Menu>
 
@@ -84,21 +86,22 @@
 <Menu name="Layer"><text>&amp;Layer</text>
   <Menu name="LayerNew"><text>New</text>
     <Action name="duplicate_layer"/>
-  	<Action name="insert_image_as_layer"/>
-  	<Action name="cut_selection_to_new_layer"/>
-  	<Action name="copy_selection_to_new_layer"/>
+    <Action name="import_layer_from_file"/>
+    <Action name="import_mask_from_file"/>
+    <Action name="cut_selection_to_new_layer"/>
+    <Action name="copy_selection_to_new_layer"/>
     <Action name="create_layer_from_mask"/>
     <Action name="duplicatelayer"/>
     <Action name="add_new_paint_layer"/>
   </Menu>
   <Action name="resizelayertoowner"/>
   <Separator/>
-  <Action name="save_layer_as_image"/>
+  <Action name="save_node_as_image"/>
   <Action name="save_groups_as_images"/>
   <Action name="layer_to_image"/>
   <Separator/>
-  <Action name="mirrorX"/>
-  <Action name="mirrorY"/>
+  <Action name="mirrorNodeX"/>
+  <Action name="mirrorNodeY"/>
   <DefineGroup name="layer_transform_merge" append="layer_transform_merge"/>
   <Separator/>
   <DefineGroup name="layer_properties_merge" />
@@ -119,7 +122,7 @@
 
     <Separator/>
     <Action name="feather"/>
-   <Action name = "similar"/>
+    <Action name = "similar"/>
    <Separator/>
    <Action name="toggle_display_selection"/>
 </Menu>

@@ -40,10 +40,9 @@
 #include <KoPAOdfPageSaveHelper.h>
 #include <KoDrag.h>
 #include <KoPAPastePage.h>
+#include <KoIcon.h>
 
 #include <klocale.h>
-#include <kicon.h>
-#include <kiconloader.h>
 #include <kdebug.h>
 
 #include <QAbstractItemModel>
@@ -56,6 +55,7 @@
 
 KoPADocumentModel::KoPADocumentModel( QObject* parent, KoPADocument *document )
 : KoDocumentSectionModel( parent )
+, m_document(0)
 , m_master(false)
 , m_lastContainer( 0 )
 {
@@ -312,8 +312,8 @@ KoDocumentSectionModel::PropertyList KoPADocumentModel::properties( KoShape* sha
         l << Property(i18n("Slide"), QString::number(m_document->pageIndex(page) + 1));
     }
 
-    l << Property(i18n("Visible"), SmallIcon("14_layer_visible"), SmallIcon("14_layer_novisible"), shape->isVisible());
-    l << Property(i18n("Locked"), SmallIcon("object-locked"), SmallIcon("object-unlocked"), shape->isGeometryProtected());
+    l << Property(i18n("Visible"), koIcon("layer-visible-on"), koIcon("layer-visible-off"), shape->isVisible());
+    l << Property(i18n("Locked"), koIcon("object-locked"), koIcon("object-unlocked"), shape->isGeometryProtected());
     return l;
 }
 
@@ -334,8 +334,6 @@ QImage KoPADocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSiz
     QSize size(thumbSize.width(), thumbSize.height());
     KoShapePainter shapePainter;
 
-    QList<KoShape*> shapes;
-
     KoPAPageBase *page = dynamic_cast<KoPAPageBase*>(shape);
     if (page) { // We create a thumbnail with actual width / height ratio for page
         KoZoomHandler zoomHandler;
@@ -351,10 +349,11 @@ QImage KoPADocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSiz
         return pixmap.toImage();
     }
 
-    shapes.append( shape );
-    KoShapeContainer * container = dynamic_cast<KoShapeContainer*>( shape );
-    if( container )
+    QList<KoShape*> shapes;
+    KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
+    if (container)
         shapes = container->shapes();
+    shapes.append(shape);
 
     shapePainter.setShapes( shapes );
 
@@ -625,12 +624,23 @@ QModelIndex KoPADocumentModel::parentIndexFromShape( const KoShape * child )
 
 void KoPADocumentModel::setDocument( KoPADocument* document )
 {
+    if (m_document == document) {
+        return;
+    }
+    if (m_document) {
+        disconnect( m_document, SIGNAL(pageAdded( KoPAPageBase* ) ), this, SLOT( update() ) );
+        disconnect( m_document, SIGNAL(pageRemoved( KoPAPageBase* ) ), this, SLOT( update() ) );
+        disconnect( m_document, SIGNAL(update(KoPAPageBase*)), this, SLOT( update() ) );
+        disconnect( m_document, SIGNAL(shapeAdded( KoShape* ) ), this, SLOT( update() ) );
+        disconnect( m_document, SIGNAL(shapeRemoved( KoShape* ) ), this, SLOT( update() ) );
+    }
     m_document = document;
 
     if ( m_document )
     {
         connect( m_document, SIGNAL(pageAdded( KoPAPageBase* ) ), this, SLOT( update() ) );
         connect( m_document, SIGNAL(pageRemoved( KoPAPageBase* ) ), this, SLOT( update() ) );
+        connect( m_document, SIGNAL(update(KoPAPageBase*)), this, SLOT( update() ) );
         connect( m_document, SIGNAL(shapeAdded( KoShape* ) ), this, SLOT( update() ) );
         connect( m_document, SIGNAL(shapeRemoved( KoShape* ) ), this, SLOT( update() ) );
     }
@@ -664,15 +674,15 @@ bool KoPADocumentModel::doDrop(QList<KoPAPageBase *> pages, KoPAPageBase *pageAf
            QString seq = QKeySequence(Qt::ShiftModifier).toString();
            seq.chop(1);
            QAction *popupMoveAction = new QAction(i18n("&Move Here") + '\t' + seq, this);
-           popupMoveAction->setIcon(KIcon("go-jump"));
+           popupMoveAction->setIcon(koIcon("go-jump"));
            seq = QKeySequence(Qt::ControlModifier).toString();
            seq.chop(1);
            QAction *popupCopyAction = new QAction(i18n("&Copy Here") + '\t' + seq, this);
-           popupCopyAction->setIcon(KIcon("edit-copy"));
+           popupCopyAction->setIcon(koIcon("edit-copy"));
            seq = QKeySequence( Qt::ControlModifier + Qt::ShiftModifier ).toString();
            seq.chop(1);
            QAction *popupCancelAction = new QAction(i18n("C&ancel") + '\t' + QKeySequence(Qt::Key_Escape).toString(), this);
-           popupCancelAction->setIcon(KIcon("process-stop"));
+           popupCancelAction->setIcon(koIcon("process-stop"));
 
            if (enableMove) {
                popup.addAction(popupMoveAction);

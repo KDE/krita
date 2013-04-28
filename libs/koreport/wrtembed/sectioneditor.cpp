@@ -2,6 +2,7 @@
  * OpenRPT report writer and rendering engine
  * Copyright (C) 2001-2007 by OpenMFG, LLC (info@openmfg.com)
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
+ * Copyright (C) 2012 by Friedrich W. H. Kossebau (kossebau@kde.org)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,45 +24,78 @@
 #include "reportsectiondetail.h"
 #include "detailgroupsectiondialog.h"
 #include "reportsectiondetailgroup.h"
-
+#include <KoIcon.h>
+// KDE
+#include <kpushbutton.h>
+#include <klocalizedstring.h>
+// Qt
 #include <QVariant>
 #include <QComboBox>
 #include <QLineEdit>
 #include <QMessageBox>
 
+enum {
+    KeyRole = Qt::UserRole
+};
+
+// KoReportDesigner currently prepends an empty key/fieldname pair to the list
+// of fields, possibly to offer the option to have report elements not yet
+// bound to fields
+static inline bool isEditorHelperField(const QString &key)
+{
+    return key.isEmpty();
+}
 
 /*
- *  Constructs a SectionEditor as a child of 'parent', with the
- *  name 'name' and widget flags set to 'f'.
+ *  Constructs a SectionEditor as a child of 'parent'.
  *
  *  The dialog will by default be modeless, unless you set 'modal' to
  *  true to construct a modal dialog.
  */
-SectionEditor::SectionEditor(QWidget* parent, Qt::WindowFlags fl)
-        : QDialog(parent, fl)
+SectionEditor::SectionEditor(QWidget* parent)
+  : KDialog(parent)
 {
-    setupUi(this);
+    setButtons(Close);
+    setCaption(i18n("Section Editor"));
+
+    QWidget *widget = new QWidget(this);
+    m_ui.setupUi(widget);
+    m_btnAdd = new KPushButton(koIcon("list-add"), i18n("Add..."), this);
+    m_ui.lGroupSectionsButtons->addWidget(m_btnAdd);
+    m_btnEdit = new KPushButton(koIcon("document-edit"), i18n("Edit..."), this);
+    m_ui.lGroupSectionsButtons->addWidget(m_btnEdit);
+    m_btnRemove = new KPushButton(koIcon("list-remove"), i18n("Delete"), this);
+    m_ui.lGroupSectionsButtons->addWidget(m_btnRemove);
+    m_btnMoveUp = new KPushButton(koIcon("arrow-up"), i18n("Move Up"), this);
+    m_ui.lGroupSectionsButtons->addWidget(m_btnMoveUp);
+    m_btnMoveDown = new KPushButton(koIcon("arrow-down"), i18n("Move Down"), this);
+    m_ui.lGroupSectionsButtons->addWidget(m_btnMoveDown);
+    m_ui.lGroupSectionsButtons->addStretch();
+    setMainWidget(widget);
 
     // signals and slots connections
-    connect(buttonOk, SIGNAL(clicked()), this, SLOT(accept()));
-    connect(cbReportHeader, SIGNAL(toggled(bool)), this, SLOT(cbReportHeader_toggled(bool)));
-    connect(cbReportFooter, SIGNAL(toggled(bool)), this, SLOT(cbReportFooter_toggled(bool)));
-    connect(cbHeadFirst, SIGNAL(toggled(bool)), this, SLOT(cbHeadFirst_toggled(bool)));
-    connect(cbHeadLast, SIGNAL(toggled(bool)), this, SLOT(cbHeadLast_toggled(bool)));
-    connect(cbHeadEven, SIGNAL(toggled(bool)), this, SLOT(cbHeadEven_toggled(bool)));
-    connect(cbHeadOdd, SIGNAL(toggled(bool)), this, SLOT(cbHeadOdd_toggled(bool)));
-    connect(cbFootFirst, SIGNAL(toggled(bool)), this, SLOT(cbFootFirst_toggled(bool)));
-    connect(cbFootLast, SIGNAL(toggled(bool)), this, SLOT(cbFootLast_toggled(bool)));
-    connect(cbFootEven, SIGNAL(toggled(bool)), this, SLOT(cbFootEven_toggled(bool)));
-    connect(cbFootOdd, SIGNAL(toggled(bool)), this, SLOT(cbFootOdd_toggled(bool)));
-    connect(cbHeadAny, SIGNAL(toggled(bool)), this, SLOT(cbHeadAny_toggled(bool)));
-    connect(cbFootAny, SIGNAL(toggled(bool)), this, SLOT(cbFootAny_toggled(bool)));
+    connect(m_ui.cbReportHeader, SIGNAL(toggled(bool)), this, SLOT(cbReportHeader_toggled(bool)));
+    connect(m_ui.cbReportFooter, SIGNAL(toggled(bool)), this, SLOT(cbReportFooter_toggled(bool)));
+    connect(m_ui.cbHeadFirst, SIGNAL(toggled(bool)), this, SLOT(cbHeadFirst_toggled(bool)));
+    connect(m_ui.cbHeadLast, SIGNAL(toggled(bool)), this, SLOT(cbHeadLast_toggled(bool)));
+    connect(m_ui.cbHeadEven, SIGNAL(toggled(bool)), this, SLOT(cbHeadEven_toggled(bool)));
+    connect(m_ui.cbHeadOdd, SIGNAL(toggled(bool)), this, SLOT(cbHeadOdd_toggled(bool)));
+    connect(m_ui.cbFootFirst, SIGNAL(toggled(bool)), this, SLOT(cbFootFirst_toggled(bool)));
+    connect(m_ui.cbFootLast, SIGNAL(toggled(bool)), this, SLOT(cbFootLast_toggled(bool)));
+    connect(m_ui.cbFootEven, SIGNAL(toggled(bool)), this, SLOT(cbFootEven_toggled(bool)));
+    connect(m_ui.cbFootOdd, SIGNAL(toggled(bool)), this, SLOT(cbFootOdd_toggled(bool)));
+    connect(m_ui.cbHeadAny, SIGNAL(toggled(bool)), this, SLOT(cbHeadAny_toggled(bool)));
+    connect(m_ui.cbFootAny, SIGNAL(toggled(bool)), this, SLOT(cbFootAny_toggled(bool)));
+    connect(m_ui.lbGroups, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
+            this, SLOT(updateButtonsForItem(QListWidgetItem*)));
+    connect(m_ui.lbGroups, SIGNAL(currentRowChanged(int)),
+            this, SLOT(updateButtonsForRow(int)));
 
-    connect(btnAdd, SIGNAL(clicked()), this, SLOT(btnAdd_clicked()));
-    connect(btnEdit, SIGNAL(clicked()), this, SLOT(btnEdit_clicked()));
-    connect(btnRemove, SIGNAL(clicked()), this, SLOT(btnRemove_clicked()));
-    connect(btnMoveUp, SIGNAL(clicked()), this, SLOT(btnMoveUp_clicked()));
-    connect(brnMoveDown, SIGNAL(clicked()), this, SLOT(brnMoveDown_clicked()));
+    connect(m_btnAdd, SIGNAL(clicked(bool)), this, SLOT(btnAdd_clicked()));
+    connect(m_btnEdit, SIGNAL(clicked(bool)), this, SLOT(btnEdit_clicked()));
+    connect(m_btnRemove, SIGNAL(clicked(bool)), this, SLOT(btnRemove_clicked()));
+    connect(m_btnMoveUp, SIGNAL(clicked(bool)), this, SLOT(btnMoveUp_clicked()));
+    connect(m_btnMoveDown, SIGNAL(clicked(bool)), this, SLOT(brnMoveDown_clicked()));
 }
 
 /*
@@ -70,15 +104,6 @@ SectionEditor::SectionEditor(QWidget* parent, Qt::WindowFlags fl)
 SectionEditor::~SectionEditor()
 {
     // no need to delete child widgets, Qt does it all for us
-}
-
-/*
- *  Sets the strings of the subwidgets using the current
- *  language.
- */
-void SectionEditor::languageChange()
-{
-    retranslateUi(this);
 }
 
 void SectionEditor::cbReportHeader_toggled(bool yes)
@@ -207,34 +232,126 @@ void SectionEditor::init(KoReportDesigner * rw)
     m_reportDesigner = 0;
     // set all the properties
 
-    cbReportHeader->setChecked(rw->section(KRSectionData::ReportHeader));
-    cbReportFooter->setChecked(rw->section(KRSectionData::ReportFooter));
+    m_ui.cbReportHeader->setChecked(rw->section(KRSectionData::ReportHeader));
+    m_ui.cbReportFooter->setChecked(rw->section(KRSectionData::ReportFooter));
 
-    cbHeadFirst->setChecked(rw->section(KRSectionData::PageHeaderFirst));
-    cbHeadOdd->setChecked(rw->section(KRSectionData::PageHeaderOdd));
-    cbHeadEven->setChecked(rw->section(KRSectionData::PageHeaderEven));
-    cbHeadLast->setChecked(rw->section(KRSectionData::PageHeaderLast));
-    cbHeadAny->setChecked(rw->section(KRSectionData::PageHeaderAny));
+    m_ui.cbHeadFirst->setChecked(rw->section(KRSectionData::PageHeaderFirst));
+    m_ui.cbHeadOdd->setChecked(rw->section(KRSectionData::PageHeaderOdd));
+    m_ui.cbHeadEven->setChecked(rw->section(KRSectionData::PageHeaderEven));
+    m_ui.cbHeadLast->setChecked(rw->section(KRSectionData::PageHeaderLast));
+    m_ui.cbHeadAny->setChecked(rw->section(KRSectionData::PageHeaderAny));
 
-    cbFootFirst->setChecked(rw->section(KRSectionData::PageFooterFirst));
-    cbFootOdd->setChecked(rw->section(KRSectionData::PageFooterOdd));
-    cbFootEven->setChecked(rw->section(KRSectionData::PageFooterEven));
-    cbFootLast->setChecked(rw->section(KRSectionData::PageFooterLast));
-    cbFootAny->setChecked(rw->section(KRSectionData::PageFooterAny));
+    m_ui.cbFootFirst->setChecked(rw->section(KRSectionData::PageFooterFirst));
+    m_ui.cbFootOdd->setChecked(rw->section(KRSectionData::PageFooterOdd));
+    m_ui.cbFootEven->setChecked(rw->section(KRSectionData::PageFooterEven));
+    m_ui.cbFootLast->setChecked(rw->section(KRSectionData::PageFooterLast));
+    m_ui.cbFootAny->setChecked(rw->section(KRSectionData::PageFooterAny));
 
     // now set the rw value
     m_reportDesigner = rw;
     m_reportSectionDetail = rw->detailSection();
 
     if (m_reportSectionDetail) {
-        for (int i = 0; i < m_reportSectionDetail->groupSectionCount(); i++) {
-            QStringList names = rw->fieldNames();
-            QStringList keys = rw->fieldKeys();
-            int idx = keys.indexOf( m_reportSectionDetail->groupSection(i)->column() );
-            QString column = names.value( idx );
-            lbGroups->addItem(column);
+        const QStringList columnNames = m_reportDesigner->fieldNames();
+        const QStringList keys = m_reportDesigner->fieldKeys();
+        for (int i = 0; i < m_reportSectionDetail->groupSectionCount(); ++i) {
+            const QString key = m_reportSectionDetail->groupSection(i)->column();
+            const int idx = keys.indexOf(key);
+            const QString columnName = columnNames.value(idx);
+            QListWidgetItem *item = new QListWidgetItem(columnName);
+            item->setData(KeyRole, key);
+            m_ui.lbGroups->addItem(item);
         }
     }
+    if (m_ui.lbGroups->count() == 0) {
+    } else {
+        m_ui.lbGroups->setCurrentItem(m_ui.lbGroups->item(0));
+    }
+    updateButtonsForItem(m_ui.lbGroups->currentItem());
+    updateAddButton();
+    updateButtonsForRow(m_ui.lbGroups->currentRow());
+}
+
+bool SectionEditor::editDetailGroup(ReportSectionDetailGroup * rsdg)
+{
+    DetailGroupSectionDialog * dgsd = new DetailGroupSectionDialog(this);
+
+    // add the current column and all columns not yet used for groups
+    const QStringList keys = m_reportDesigner->fieldKeys();
+    const QStringList columnNames = m_reportDesigner->fieldNames();
+    // in case of to-be-added group that column needs to be added to the used
+    const QSet<QString> usedColumns = groupingColumns() << rsdg->column();
+    // if the current column is not among the keys, something is broken.
+    // for now just simply select no column in the combobox, achieved by -1
+    int indexOfCurrentColumn = -1;
+    for (int i = 0; i < keys.count(); ++i) {
+        const QString &key = keys.at(i);
+        // skip any editor helper fields
+        if (isEditorHelperField(key)) {
+            continue;
+        }
+        // already used?
+        if (usedColumns.contains(key)) {
+            // and not the one of the group?
+            if (key != rsdg->column()) {
+                continue;
+            }
+            // remember index
+            indexOfCurrentColumn = dgsd->cbColumn->count();
+        }
+        dgsd->cbColumn->insertItem( i, columnNames.value(i), key);
+    }
+    dgsd->cbColumn->setCurrentIndex(indexOfCurrentColumn);
+
+    dgsd->cbSort->addItem(i18n("Ascending"), Qt::AscendingOrder);
+    dgsd->cbSort->addItem(i18n("Descending"), Qt::DescendingOrder);
+    dgsd->cbSort->setCurrentIndex(dgsd->cbSort->findData(rsdg->sort()));
+
+    dgsd->breakAfterFooter->setChecked(rsdg->pageBreak() == ReportSectionDetailGroup::BreakAfterGroupFooter);
+    dgsd->cbHead->setChecked(rsdg->groupHeaderVisible());
+    dgsd->cbFoot->setChecked(rsdg->groupFooterVisible());
+
+    const bool isOkayed = (dgsd->exec() == QDialog::Accepted);
+
+    if (isOkayed) {
+        const QString newColumn =
+            dgsd->cbColumn->itemData(dgsd->cbColumn->currentIndex()).toString();
+        const QString oldColumn = rsdg->column();
+        if (newColumn != oldColumn) {
+            rsdg->setColumn(newColumn);
+        }
+
+        rsdg->setGroupHeaderVisible(dgsd->cbHead->isChecked());
+        rsdg->setGroupFooterVisible(dgsd->cbFoot->isChecked());
+
+        const ReportSectionDetailGroup::PageBreak pageBreak = dgsd->breakAfterFooter->isChecked() ?
+            ReportSectionDetailGroup::BreakAfterGroupFooter : ReportSectionDetailGroup::BreakNone;
+        rsdg->setPageBreak(pageBreak);
+
+        const Qt::SortOrder sortOrder =
+            static_cast<Qt::SortOrder>(dgsd->cbSort->itemData(dgsd->cbSort->currentIndex()).toInt());
+        rsdg->setSort(sortOrder);
+    }
+
+    delete dgsd;
+
+    return isOkayed;
+}
+
+QString SectionEditor::columnName(const QString &column) const
+{
+    const QStringList keys = m_reportDesigner->fieldKeys();
+    const QStringList columnNames = m_reportDesigner->fieldNames();
+    return columnNames.at(keys.indexOf(column));
+}
+
+QSet<QString> SectionEditor::groupingColumns() const
+{
+    QSet<QString> result;
+    for (int i = 0; i < m_ui.lbGroups->count(); ++i) {
+        result.insert(m_ui.lbGroups->item(i)->data(KeyRole).toString());
+    }
+    return result;
 }
 
 void SectionEditor::cbHeadAny_toggled(bool yes)
@@ -262,69 +379,15 @@ void SectionEditor::cbFootAny_toggled(bool yes)
 void SectionEditor::btnEdit_clicked()
 {
     if (m_reportSectionDetail) {
-        int idx = lbGroups->currentRow();
-        if (idx < 0) return;
+        const int idx = m_ui.lbGroups->currentRow();
+        if (idx < 0) {
+            return;
+        }
         ReportSectionDetailGroup * rsdg = m_reportSectionDetail->groupSection(idx);
-        DetailGroupSectionDialog * dgsd = new DetailGroupSectionDialog(this);
-
-        dgsd->cbColumn->clear();
-        QStringList keys = m_reportDesigner->fieldKeys();
-        QStringList names = m_reportDesigner->fieldNames();
-        for (int i = 0; i < keys.count(); ++i) {
-            dgsd->cbColumn->insertItem( i, names.value(i), keys.at(i));
+        if (editDetailGroup(rsdg)) {
+            // update name in list
+            m_ui.lbGroups->item(idx)->setText(columnName(rsdg->column()));
         }
-        dgsd->cbColumn->setCurrentIndex(keys.indexOf(rsdg->column()));
-
-        dgsd->cbSort->clear();
-        dgsd->cbSort->addItem(i18n("Ascending"), "ascending");
-        dgsd->cbSort->addItem(i18n("Descending"), "descending");
-
-        if (rsdg->sort() == Qt::AscendingOrder) {
-            dgsd->cbSort->setCurrentIndex(dgsd->cbSort->findData("ascending"));
-        }
-        else {
-            dgsd->cbSort->setCurrentIndex(dgsd->cbSort->findData("descending"));
-        }
-
-        dgsd->breakAfterFooter->setChecked(rsdg->pageBreak() == ReportSectionDetailGroup::BreakAfterGroupFooter);
-        dgsd->cbHead->setChecked(rsdg->groupHeaderVisible());
-        dgsd->cbFoot->setChecked(rsdg->groupFooterVisible());
-
-        bool exitLoop = false;
-        while (!exitLoop) {
-            if (dgsd->exec() == QDialog::Accepted) {
-                QString column = dgsd->cbColumn->itemData(dgsd->cbColumn->currentIndex()).toString();
-                bool showgh = dgsd->cbHead->isChecked();
-                bool showgf = dgsd->cbFoot->isChecked();
-                bool breakafterfoot = dgsd->breakAfterFooter->isChecked();
-
-                if (column != rsdg->column() && m_reportSectionDetail->indexOfSection(column) != -1) {
-                    QMessageBox::warning(this, i18n("Error Encountered"),
-                                         i18n("Unable to add a new group because its name would not be unique"));
-                } else {
-                    lbGroups->item(idx)->setText(dgsd->cbColumn->currentText());
-                    rsdg->setColumn(column);
-                    rsdg->setGroupHeaderVisible(showgh);
-                    rsdg->setGroupFooterVisible(showgf);
-                    if (breakafterfoot)
-                        rsdg->setPageBreak(ReportSectionDetailGroup::BreakAfterGroupFooter);
-                    else
-                        rsdg->setPageBreak(ReportSectionDetailGroup::BreakNone);
-
-                    if (dgsd->cbSort->itemData(dgsd->cbSort->currentIndex()).toString() == "ascending") {
-                        rsdg->setSort(Qt::AscendingOrder);
-                    }
-                    else {
-                        rsdg->setSort(Qt::DescendingOrder);
-                    }
-                    exitLoop = true;
-                }
-            } else {
-                exitLoop = true;
-            }
-        }
-
-        delete dgsd;
     }
 }
 
@@ -332,23 +395,41 @@ void SectionEditor::btnAdd_clicked()
 {
     if (m_reportSectionDetail) {
         // lets add a new section
-        QString name;
-        int i = 0;
-        while (i < 100 && m_reportSectionDetail->indexOfSection(name) != -1) {
-            i++;
-            name = QString().sprintf("unnamed%d", i);
+        // search for unused column
+        QString column;
+        const QStringList keys = m_reportDesigner->fieldKeys();
+        const QSet<QString> columns = groupingColumns();
+        foreach(const QString &key, keys) {
+            // skip any editor helper fields
+            if (isEditorHelperField(key)) {
+                continue;
+            }
+            if (! columns.contains(key)) {
+                column = key;
+                break;
+            }
         }
-        if (m_reportSectionDetail->indexOfSection(name) != -1) {
-            QMessageBox::warning(
-                this, i18n("Error Encountered"),
-                i18n("Unable to add a new group because its name would not be unique"));
+        // should not happen, but we do not really know if m_reportDesigner is in sync
+        if (column.isEmpty()) {
             return;
         }
-        ReportSectionDetailGroup * rsdg = new ReportSectionDetailGroup(name, m_reportSectionDetail, m_reportSectionDetail);
-        m_reportSectionDetail->insertSection(m_reportSectionDetail->groupSectionCount(), rsdg);
-        lbGroups->addItem(name);
-        lbGroups->setCurrentRow(lbGroups->count() - 1);
-        btnEdit_clicked();
+
+        // create new group, have it edited and add it, if not cancelled
+        ReportSectionDetailGroup * rsdg =
+            new ReportSectionDetailGroup(column, m_reportSectionDetail, m_reportSectionDetail);
+        if (editDetailGroup(rsdg)) {
+            // append to group sections
+            m_reportSectionDetail->insertGroupSection(m_reportSectionDetail->groupSectionCount(), rsdg);
+            // add to combobox
+            const QString column = rsdg->column();
+            QListWidgetItem *item = new QListWidgetItem(columnName(column));
+            item->setData(KeyRole, column);
+            m_ui.lbGroups->addItem(item);
+            m_ui.lbGroups->setCurrentRow(m_ui.lbGroups->count() - 1);
+            updateAddButton();
+        } else {
+            delete rsdg;
+        }
     }
 }
 
@@ -356,11 +437,16 @@ void SectionEditor::btnAdd_clicked()
 void SectionEditor::btnRemove_clicked()
 {
     if (m_reportSectionDetail) {
-        int idx = lbGroups->currentRow();
-        if (idx != -1) {
-            QListWidgetItem *itm = lbGroups->takeItem(idx);
-	    delete itm;
-            m_reportSectionDetail->removeSection(idx, true);
+        const int index = m_ui.lbGroups->currentRow();
+        if (index != -1) {
+            QListWidgetItem *item = m_ui.lbGroups->takeItem(index);
+            delete item;
+            m_reportSectionDetail->removeGroupSection(index, true);
+            // a field got usable, so make sure add button is available again
+            m_btnAdd->setEnabled(true);
+            // workaround for at least Qt 4.8.1, which does not emit the proper
+            // currentRowChanged signal on deletion of the first element
+            updateButtonsForRow(m_ui.lbGroups->currentRow());
         }
     }
 }
@@ -369,17 +455,17 @@ void SectionEditor::btnRemove_clicked()
 void SectionEditor::btnMoveUp_clicked()
 {
     if (m_reportSectionDetail) {
-        int idx = lbGroups->currentRow();
+        int idx = m_ui.lbGroups->currentRow();
         if (idx <= 0) return;
-        QString s = lbGroups->currentItem()->text();
-        lbGroups->takeItem(idx);
-        lbGroups->insertItem(idx - 1, s);
-        lbGroups->setCurrentRow(idx - 1, QItemSelectionModel::ClearAndSelect);
+        QString s = m_ui.lbGroups->currentItem()->text();
+        m_ui.lbGroups->takeItem(idx);
+        m_ui.lbGroups->insertItem(idx - 1, s);
+        m_ui.lbGroups->setCurrentRow(idx - 1, QItemSelectionModel::ClearAndSelect);
         ReportSectionDetailGroup * rsdg = m_reportSectionDetail->groupSection(idx);
         bool showgh = rsdg->groupHeaderVisible();
         bool showgf = rsdg->groupFooterVisible();
-        m_reportSectionDetail->removeSection(idx);
-        m_reportSectionDetail->insertSection(idx - 1, rsdg);
+        m_reportSectionDetail->removeGroupSection(idx);
+        m_reportSectionDetail->insertGroupSection(idx - 1, rsdg);
         rsdg->setGroupHeaderVisible(showgh);
         rsdg->setGroupFooterVisible(showgf);
     }
@@ -389,18 +475,55 @@ void SectionEditor::btnMoveUp_clicked()
 void SectionEditor::brnMoveDown_clicked()
 {
     if (m_reportSectionDetail) {
-        int idx = lbGroups->currentRow();
-        if (idx == (int)(lbGroups->count() - 1)) return;
-        QString s = lbGroups->currentItem()->text();
-        lbGroups->takeItem(idx);
-        lbGroups->insertItem (idx + 1, s);
-        lbGroups->setCurrentRow(idx + 1, QItemSelectionModel::ClearAndSelect);
+        int idx = m_ui.lbGroups->currentRow();
+        if (idx == (int)(m_ui.lbGroups->count() - 1)) return;
+        QString s = m_ui.lbGroups->currentItem()->text();
+        m_ui.lbGroups->takeItem(idx);
+        m_ui.lbGroups->insertItem (idx + 1, s);
+        m_ui.lbGroups->setCurrentRow(idx + 1, QItemSelectionModel::ClearAndSelect);
         ReportSectionDetailGroup * rsdg = m_reportSectionDetail->groupSection(idx);
         bool showgh = rsdg->groupHeaderVisible();
         bool showgf = rsdg->groupFooterVisible();
-        m_reportSectionDetail->removeSection(idx);
-        m_reportSectionDetail->insertSection(idx + 1, rsdg);
+        m_reportSectionDetail->removeGroupSection(idx);
+        m_reportSectionDetail->insertGroupSection(idx + 1, rsdg);
         rsdg->setGroupHeaderVisible(showgh);
         rsdg->setGroupFooterVisible(showgf);
     }
+}
+
+void SectionEditor::updateButtonsForItem(QListWidgetItem* currentItem)
+{
+    const bool isItemSelected = (currentItem != 0);
+
+    m_btnEdit->setEnabled(isItemSelected);
+    m_btnRemove->setEnabled(isItemSelected);
+
+}
+
+void SectionEditor::updateButtonsForRow(int row)
+{
+    const bool enableMoveUpButton = (row > 0);
+    const bool enableMoveDownButton = (0 <= row) && (row+1 < m_ui.lbGroups->count());
+
+    m_btnMoveUp->setEnabled(enableMoveUpButton);
+    m_btnMoveDown->setEnabled(enableMoveDownButton);
+}
+
+void SectionEditor::updateAddButton()
+{
+    // search for unused column
+    bool foundUnusedColumn = false;
+    const QStringList keys = m_reportDesigner->fieldKeys();
+    const QSet<QString> columns = groupingColumns();
+    foreach(const QString &key, keys) {
+        // skip any editor helper fields
+        if (isEditorHelperField(key)) {
+            continue;
+        }
+        if (! columns.contains(key)) {
+            foundUnusedColumn = true;
+            break;
+        }
+    }
+    m_btnAdd->setEnabled(foundUnusedColumn);
 }

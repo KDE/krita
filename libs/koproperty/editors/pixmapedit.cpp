@@ -34,7 +34,6 @@
 #include <QToolTip>
 #include <QApplication>
 #include <QDesktopWidget>
-//Added by qt3to4:
 #include <QPixmap>
 #include <QEvent>
 #include <QKeyEvent>
@@ -42,11 +41,11 @@
 #include <QResizeEvent>
 #include <QMouseEvent>
 
-#include <KDebug>
-#include <KImageIO>
-#include <KPushButton>
-#include <KFileDialog>
-#include <KLocale>
+#include <kdebug.h>
+#include <kimageio.h>
+#include <kpushbutton.h>
+#include <kfiledialog.h>
+#include <klocale.h>
 
 /* KDE4:
 #ifdef Q_WS_WIN

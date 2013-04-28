@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Hairy brushes
+Name[bs]=Dlakave četke
 Name[ca]=Pinzells espessos
 Name[ca@valencia]=Pinzells espessos
 Name[cs]=Chlupaté štětce
@@ -10,6 +11,7 @@ Name[en_GB]=Hairy brushes
 Name[es]=Pincel peludo
 Name[et]=Harjastega pintslid
 Name[fr]=Brosses à cheveux
+Name[gl]=Pinceis de pelos
 Name[it]=Pennelli pelosi
 Name[ja]=Hairy ブラシ
 Name[kk]=Түкті қылқалам
@@ -29,4 +31,4 @@ Name[zh_TW]=毛筆刷
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritahairypaintop
-X-Krita-Version=5
+X-Krita-Version=27

@@ -32,6 +32,7 @@ set(flake_SRCS
     KoPathSegment.cpp
     KoSelection.cpp
     KoShape.cpp
+    KoShapeAnchor.cpp
     KoShapeBasedDocumentBase.cpp
     KoShapeApplicationData.cpp
     KoShapeContainer.cpp
@@ -82,6 +83,7 @@ set(flake_SRCS
     KoColorBackground.cpp
     KoGradientBackground.cpp
     KoOdfGradientBackground.cpp
+    KoHatchBackground.cpp
     KoPatternBackground.cpp
     KoShapeConfigWidgetBase.cpp
     KoShapeConfigFactoryBase.cpp
@@ -123,6 +125,7 @@ set(flake_SRCS
     KoTosContainer.cpp
     KoTosContainerModel.cpp
     KoClipPath.cpp
+    KoCurveFit.cpp
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
     commands/KoShapeBackgroundCommand.cpp
@@ -166,8 +169,6 @@ set(flake_SRCS
     commands/KoShapeUnclipCommand.cpp
     commands/KoPathShapeMarkerCommand.cpp
     commands/KoShapeConnectionChangeCommand.cpp
-    tools/KoCreatePathTool.cpp
-    tools/KoCreatePathToolFactory.cpp
     tools/KoCreateShapeStrategy.cpp
     tools/KoPathToolFactory.cpp
     tools/KoPathTool.cpp
@@ -217,9 +218,9 @@ kde4_add_ui_files(flake_SRCS
 
 kde4_add_library(flake SHARED ${flake_SRCS})
 
-target_link_libraries(flake ${KDE4_KDEUI_LIBS} pigmentcms koodf)
+target_link_libraries(flake ${KDE4_KDEUI_LIBS} pigmentcms kowidgetutils koodf)
 
-target_link_libraries(flake LINK_INTERFACE_LIBRARIES pigmentcms koodf)
+target_link_libraries(flake LINK_INTERFACE_LIBRARIES pigmentcms kowidgetutils koodf)
 target_link_libraries(flake kundo2)
 target_link_libraries(flake LINK_INTERFACE_LIBRARIES kundo2)
 
@@ -275,6 +276,7 @@ install(
     KoRTree.h
     KoSelection.h
     KoShape.h
+    KoShapeAnchor.h
     KoShapeStrokeModel.h
     KoToolSelection.h
     KoShapeContainer.h

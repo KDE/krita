@@ -23,8 +23,8 @@
 #include "KoReportDesignerItemMaps.h"
 #include "KoReportPluginInfo.h"
 #include "krscriptmaps.h"
-#include <KIcon>
-#include <KDebug>
+#include <KoIcon.h>
+#include <kdebug.h>
 
 
 K_EXPORT_KOREPORT_ITEMPLUGIN(KoReportMapsPlugin, mapsplugin)
@@ -38,7 +38,7 @@ KoReportMapsPlugin::KoReportMapsPlugin(QObject *parent, const QVariantList &args
     myDebug() << "\e[35m======\e[0m";
     KoReportPluginInfo *info = new KoReportPluginInfo();
     info->setClassName("report:map");
-    info->setIcon(KIcon("report_map_element"));
+    info->setIcon(koIcon("report_map_element"));
     info->setName(i18n("Map"));
     info->setPriority(40);
     setInfo(info);

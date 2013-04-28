@@ -21,7 +21,12 @@
 #include "KoDocumentSectionDelegate.h"
 #include "KoDocumentSectionModel.h"
 
-#include <KIconLoader>
+#include <kglobal.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kiconloader.h>
+#include <ksharedconfig.h>
+#include <ksharedptr.h>
 
 #include <QtDebug>
 #include <QContextMenuEvent>
@@ -38,7 +43,14 @@
 class KoDocumentSectionView::Private
 {
 public:
-    Private(): delegate(0), mode(DetailedMode) { }
+    Private()
+        : delegate(0)
+        , mode(DetailedMode)
+    {
+        KSharedConfigPtr config = KGlobal::config();
+        KConfigGroup group = config->group("DocumentSectionView");
+        mode = (DisplayMode) group.readEntry("DocumentSectionViewMode", (int)DetailedMode);
+    }
     KoDocumentSectionDelegate *delegate;
     DisplayMode mode;
     QPersistentModelIndex hovered;
@@ -71,6 +83,9 @@ void KoDocumentSectionView::setDisplayMode(DisplayMode mode)
 {
     if (d->mode != mode) {
         d->mode = mode;
+        KSharedConfigPtr config = KGlobal::config();
+        KConfigGroup group = config->group("DocumentSectionView");
+        group.writeEntry("DocumentSectionViewMode", (int)mode);
         scheduleDelayedItemsLayout();
     }
 }
@@ -87,7 +102,7 @@ void KoDocumentSectionView::addPropertyActions(QMenu *menu, const QModelIndex &i
         if (list.at(i).isMutable) {
             PropertyAction *a = new PropertyAction(i, list.at(i), index, menu);
             connect(a, SIGNAL(toggled(bool, const QPersistentModelIndex&, int)),
-                     this, SLOT(slotActionToggled(bool, const QPersistentModelIndex&, int)));
+                    this, SLOT(slotActionToggled(bool, const QPersistentModelIndex&, int)));
             menu->addAction(a);
         }
     }
@@ -137,7 +152,7 @@ bool KoDocumentSectionView::viewportEvent(QEvent *e)
                 return true;
             }
         } break;
-       case QEvent::ToolTip: {
+        case QEvent::ToolTip: {
             const QPoint pos = static_cast<QHelpEvent*>(e)->pos();
             if (!indexAt(pos).isValid()) {
                 return QTreeView::viewportEvent(e);

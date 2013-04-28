@@ -40,29 +40,11 @@ void RemoveDeleteChangesCommand::redo()
     removeDeleteChanges();
 }
 
-static bool isPositionLessThan(KoChangeTrackerElement *element1, KoChangeTrackerElement *element2)
-{
-    return element1->getDeleteChangeMarker()->position() < element2->getDeleteChangeMarker()->position();
-}
-
-
 void RemoveDeleteChangesCommand::removeDeleteChanges()
 {
     int numDeletedChars = 0;
     QVector<KoChangeTrackerElement *> elementVector;
     KoTextDocument(m_document).changeTracker()->getDeletedChanges(elementVector);
-    qSort(elementVector.begin(), elementVector.end(), isPositionLessThan);
+    qSort(elementVector.begin(), elementVector.end());
 
-    foreach(KoChangeTrackerElement *element, elementVector) {
-        if (element->isValid() && element->getDeleteChangeMarker()) {
-            QTextCursor caret(element->getDeleteChangeMarker()->document());
-            QTextCharFormat f;
-            int deletePosition = element->getDeleteChangeMarker()->position() + 1 - numDeletedChars;
-            caret.setPosition(deletePosition);
-            int deletedLength = KoChangeTracker::fragmentLength(element->getDeleteData());
-            caret.setPosition(deletePosition + deletedLength, QTextCursor::KeepAnchor);
-            caret.removeSelectedText();
-            numDeletedChars += KoChangeTracker::fragmentLength(element->getDeleteData());
-        }
-    }
 }

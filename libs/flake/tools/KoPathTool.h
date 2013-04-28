@@ -76,6 +76,9 @@ public:
     /// repaints the specified rect
     void repaint(const QRectF &repaintRect);
 
+public slots:
+    void documentResourceChanged(int key, const QVariant & res);
+
 signals:
     void typeChanged(int types);
     void pathChanged(KoPathShape* path); // TODO this is unused, can we remove this one?
@@ -100,19 +103,21 @@ private slots:
     void mergePoints();
     void breakAtPoint();
     void breakAtSegment();
-    void resourceChanged(int key, const QVariant & res);
     void pointSelectionChanged();
     void updateActions();
     void pointToLine();
     void pointToCurve();
     void activate();
 
+protected:
+    KoPathToolSelection m_pointSelection; ///< the point selection
+    QCursor m_selectCursor;
+
 private:
 
     KoPathToolHandle * m_activeHandle;       ///< the currently active handle
     int m_handleRadius;    ///< the radius of the control point handles
     uint m_grabSensitivity; ///< the grab sensitivity
-    KoPathToolSelection m_pointSelection; ///< the point selection
     QPointF m_lastPoint; ///< needed for interaction strategy
     PathSegment *m_activeSegment;
 
@@ -137,7 +142,6 @@ private:
     KAction *m_actionJoinSegment;
     KAction *m_actionMergePoints;
     KAction *m_actionConvertToPath;
-    QCursor m_selectCursor;
     QCursor m_moveCursor;
 
     Q_DECLARE_PRIVATE(KoToolBase)

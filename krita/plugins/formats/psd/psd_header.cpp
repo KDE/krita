@@ -73,7 +73,6 @@ bool PSDHeader::read(QIODevice* device)
 
 bool PSDHeader::write(QIODevice* device)
 {
-    Q_ASSERT(valid());
     if (!valid()) return false;
     if (!psdwrite(device, signature)) return false;
     if (!psdwrite(device, version)) return false;

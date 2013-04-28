@@ -20,8 +20,8 @@
 #include "sizepolicyedit.h"
 
 #include <QSizePolicy>
-#include <KLocale>
-#include <KGlobal>
+#include <klocale.h>
+#include <kglobal.h>
 
 using namespace KoProperty;
 

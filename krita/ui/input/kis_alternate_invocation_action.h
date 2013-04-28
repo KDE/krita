@@ -31,14 +31,23 @@
 class KisAlternateInvocationAction : public KisAbstractInputAction
 {
 public:
+    /**
+     * The different behaviours for this action.
+     */
+    enum Shortcut {
+        PrimaryAlternateToggleShortcut, ///< Toggle Primary mode.
+        SecondaryAlternateToggleShortcut, ///< Toggle Secondary mode.
+    };
+
     explicit KisAlternateInvocationAction(KisInputManager *manager);
     virtual ~KisAlternateInvocationAction();
 
-    virtual void begin(int /*shortcut*/);
-    virtual void end();
-    virtual void inputEvent(QEvent* event);
+    void begin(int shortcut, QEvent *event);
+    void end(QEvent *event);
+    void mouseMoved(const QPointF &lastPos, const QPointF &pos);
 
-    virtual bool isBlockingAutoRepeat() const;
+private:
+    Shortcut m_savedShortcut;
 };
 
 #endif // KIS_ALTERNATE_INVOCATION_ACTION_H

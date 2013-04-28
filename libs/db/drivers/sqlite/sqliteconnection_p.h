@@ -31,7 +31,7 @@ namespace KexiDB
 class SQLiteConnectionInternal : public ConnectionInternal
 {
 public:
-    SQLiteConnectionInternal(Connection* connection);
+    explicit SQLiteConnectionInternal(Connection* connection);
     virtual ~SQLiteConnectionInternal();
 
     //! stores last result's message

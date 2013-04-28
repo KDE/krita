@@ -20,22 +20,18 @@
 #ifndef ANCHORSTRATEGY_H_
 #define ANCHORSTRATEGY_H_
 
-#include "KoTextAnchor.h"
+#include "KoShapeAnchor.h"
 
 #include <QRectF>
 
 class KoTextShapeContainerModel;
-class KoTextShapeData;
 class KoTextLayoutRootArea;
-class KoShape;
-class QTextBlock;
-class QTextLayout;
 
 
-class AnchorStrategy  : public KoAnchorStrategy
+class AnchorStrategy  : public KoShapeAnchor::PlacementStrategy
 {
 public:
-    AnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootArea);
+    AnchorStrategy(KoShapeAnchor *anchor, KoTextLayoutRootArea *rootArea);
     virtual ~AnchorStrategy();
 
     /**
@@ -47,7 +43,13 @@ public:
 
     virtual void detachFromModel();
 
-    virtual void updatePosition(KoShape *shape, const QTextDocument *document, int position);
+    /**
+     * Reparent the anchored shape under the rootArea's container this AnchorStrategy acts for
+    .*
+     * If needed changes the parent KoShapeContainerModel and KoShapeContainer of the anchored shape.
+     * It is changed so the anchored shape is now under the rootArea
+     */
+    virtual void updateContainerModel();
 
     /// get page rectangle coordinates to which this text anchor is anchored (needed for HPage)
     QRectF pageRect();
@@ -94,7 +96,7 @@ public:
     void setPageNumber(int pageNumber);
 
 protected:
-    KoTextAnchor * const m_anchor;
+    KoShapeAnchor * const m_anchor;
     KoTextLayoutRootArea *m_rootArea;
 
 private:
@@ -107,4 +109,4 @@ private:
     int m_pageNumber;
 };
 
-#endif /* INLINEANCHORSTRATEGY_H_ */
+#endif /* ANCHORSTRATEGY_H_ */

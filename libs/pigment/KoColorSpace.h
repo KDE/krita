@@ -233,7 +233,7 @@ public:
      * Tests if the colorspace offers the specific composite op.
      */
     virtual bool hasCompositeOp(const QString & id) const;
-    
+
     /**
      * Returns the list of user-visible composite ops supported by this colorspace.
      */
@@ -257,16 +257,13 @@ public:
     virtual bool hasHighDynamicRange() const = 0;
 
 
-    //========== Display profiles =============================================//
+//========== Display profiles =============================================//
 
     /**
      * Return the profile of this color space.
      */
     virtual const KoColorProfile * profile() const = 0;
-    /**
-     * Return the profile of this color space.
-     */
-    virtual KoColorProfile * profile() = 0;
+
 
 //================= Conversion functions ==================================//
 
@@ -303,7 +300,9 @@ public:
      * @param renderingIntent the rendering intent
      */
     virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                                   const KoColorProfile *  dstProfile, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const ;
+                                   const KoColorProfile *  dstProfile,
+                                   KoColorConversionTransformation::Intent renderingIntent,
+                                   KoColorConversionTransformation::ConversionFlags conversionFlags) const;
 
     /**
      * This functions allocates the ncessary memory for numPixels number of pixels.
@@ -352,7 +351,9 @@ public:
     /**
      * Create a color conversion transformation.
      */
-    virtual KoColorConversionTransformation* createColorConverter(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
+    virtual KoColorConversionTransformation* createColorConverter(const KoColorSpace * dstColorSpace,
+                                                                  KoColorConversionTransformation::Intent renderingIntent,
+                                                                  KoColorConversionTransformation::ConversionFlags conversionFlags) const;
 
     /**
      * Convert a byte array of srcLen pixels *src to the specified color space
@@ -367,7 +368,8 @@ public:
     virtual bool convertPixelsTo(const quint8 * src,
                                  quint8 * dst, const KoColorSpace * dstColorSpace,
                                  quint32 numPixels,
-                                 KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
+                                 KoColorConversionTransformation::Intent renderingIntent,
+                                 KoColorConversionTransformation::ConversionFlags conversionFlags) const;
 
 //============================== Manipulation functions ==========================//
 
@@ -417,6 +419,18 @@ public:
      * are assumed to be 8-bits.
      */
     virtual void applyInverseAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const = 0;
+
+    /**
+     * Applies the specified float alpha mask to the pixels. We assume that there are just
+     * as many alpha values as pixels but we do not check this; alpha values have to be between 0.0 and 1.0
+     */
+    virtual void applyAlphaNormedFloatMask(quint8 * pixels, const float * alpha, qint32 nPixels) const = 0;
+
+    /**
+     * Applies the inverted specified float alpha mask to the pixels. We assume that there are just
+     * as many alpha values as pixels but we do not check this; alpha values have to be between 0.0 and 1.0
+     */
+    virtual void applyInverseNormedFloatMask(quint8 * pixels, const float * alpha, qint32 nPixels) const = 0;
 
     /**
      * Create an adjustment object for adjusting the brightness and contrast
@@ -479,39 +493,6 @@ public:
     virtual KoID mathToolboxId() const = 0;
 
     /**
-     * Compose two arrays of pixels together. If source and target
-     * are not the same color model, the source pixels will be
-     * converted to the target model. We're "dst" -- "dst" pixels are always in _this_
-     * colorspace.
-     *
-     * @param dst pointer to the pixels onto which src will be composited. dst is "below" src.
-     * @param dststride the total number of bytes in one line in the dst paint device
-     * @param srcSpace the colorspace of the source pixels that will be composited onto "us"
-     * @param src pointer to the pixels that will be composited onto "us"
-     * @param srcRowStride the total number of bytes in one line in the src paint device
-     * @param srcAlphaMask pointer to an alpha mask that determines whether and how much
-     *        of src will be composited onto dst
-     * @param maskRowStride the total number of bytes in one line in the mask paint device
-     * @param rows the number of rows of pixels we'll be compositing
-     * @param cols the length in pixels of a single row we'll be compositing.
-     * @param op the composition operator to use, e.g. COPY_OVER
-     * @param channelFlags a bit array reflecting which channels will be composited and which
-     *        channels won't. The order is pixel order, not colorspace order.
-     */
-    virtual void bitBlt(quint8 *dst,
-                        qint32 dststride,
-                        const KoColorSpace* srcSpace,
-                        const quint8 *src,
-                        qint32 srcRowStride,
-                        const quint8 *srcAlphaMask,
-                        qint32 maskRowStride,
-                        quint8 opacity,
-                        qint32 rows,
-                        qint32 cols,
-                        const KoCompositeOp* op,
-                        const QBitArray& channelFlags=QBitArray()) const;
-    
-    /**
     * Compose two arrays of pixels together. If source and target
     * are not the same color model, the source pixels will be
     * converted to the target model. We're "dst" -- "dst" pixels are always in _this_
@@ -521,26 +502,12 @@ public:
     * @param param the information needed for blitting e.g. the source and destination pixel data,
     *        the opacity and flow, ...
     * @param op the composition operator to use, e.g. COPY_OVER
-    * 
+    *
     */
-    virtual void bitBlt(const KoColorSpace* srcSpace, const KoCompositeOp::ParameterInfo& params, const KoCompositeOp* op) const;
+    virtual void bitBlt(const KoColorSpace* srcSpace, const KoCompositeOp::ParameterInfo& params, const KoCompositeOp* op,
+                        KoColorConversionTransformation::Intent renderingIntent,
+                        KoColorConversionTransformation::ConversionFlags conversionFlags) const;
 
-    /**
-     * Convenience function for the above if you don't have the composite op object yet.
-     */
-    virtual void bitBlt(quint8* dst,
-                        qint32 dststride,
-                        const KoColorSpace* srcSpace,
-                        const quint8* src,
-                        qint32 srcRowStride,
-                        const quint8* srcAlphaMask,
-                        qint32 maskRowStride,
-                        quint8 opacity,
-                        qint32 rows,
-                        qint32 cols,
-                        const QString& op,
-                        const QBitArray& channelFlags=QBitArray()) const;
-    
     /**
      * Serialize this color following Create's swatch color specification available
      * at http://create.freedesktop.org/wiki/index.php/Swatches_-_colour_file_format
@@ -587,8 +554,36 @@ protected:
      */
     QVector<quint8> * threadLocalConversionCache(quint32 size) const;
 
+    /**
+     * This function defines the behavior of the bitBlt function
+     * when the composition of pixels in different colorspaces is
+     * requested, that is in case:
+     *
+     * srcCS == any
+     * dstCS == this
+     *
+     * 1) preferCompositionInSourceColorSpace() == false,
+     *
+     *    the source pixels are first converted to *this color space
+     *    and then composition is performed.
+     *
+     *2)  preferCompositionInSourceColorSpace() == true,
+     *
+     *    the destination pixels are first converted into *srcCS color
+     *    space, then the composition is done, and the result is finally
+     *    converted into *this colorspace.
+     *
+     *    This is used by alpha8() color space mostly, because it has
+     *    weaker representation of the color, so the composition
+     *    should be done in CS with richer functionality.
+     */
+
+    virtual bool preferCompositionInSourceColorSpace() const;
+
+
     struct Private;
     Private * const d;
+
 };
 
 inline QDebug operator<<(QDebug dbg, const KoColorSpace *cs)

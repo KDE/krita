@@ -57,7 +57,7 @@ void KoReportASyncItemManager::itemFinished()
     kDebug();
     if (m_renderList.count() > 0) {
         RenderData *rdata = m_renderList.dequeue();
-        rdata->item->render(rdata->page, rdata->section, rdata->offset, rdata->data, rdata->script);
+        rdata->item->renderSimpleData(rdata->page, rdata->section, rdata->offset, rdata->data, rdata->script);
     } else {
         emit(finished());
     }
@@ -68,7 +68,7 @@ void KoReportASyncItemManager::startRendering()
     kDebug();
     if (m_renderList.count() > 0) {
         RenderData *rdata = m_renderList.dequeue();
-        rdata->item->render(rdata->page, rdata->section, rdata->offset, rdata->data, rdata->script);
+        rdata->item->renderSimpleData(rdata->page, rdata->section, rdata->offset, rdata->data, rdata->script);
     } else {
         emit(finished());
     }

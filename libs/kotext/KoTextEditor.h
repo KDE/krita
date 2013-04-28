@@ -45,7 +45,8 @@ class KoBibliographyInfo;
 class KoCanvasBase;
 class KoTableOfContentsGeneratorInfo;
 class KoShapeController;
-class KoTextAnchor;
+class KoShapeAnchor;
+class KoBookmark;
 
 class QTextBlock;
 class QTextCharFormat;
@@ -76,7 +77,7 @@ public:
     };
     Q_DECLARE_FLAGS(ChangeListFlags, ChangeListFlag)
 
-    KoTextEditor(QTextDocument *document);
+    explicit KoTextEditor(QTextDocument *document);
 
     virtual ~KoTextEditor();
 
@@ -115,6 +116,8 @@ public:
 
     bool operator>=(const QTextCursor &other) const;
 
+    const QTextCursor constCursor() const;
+
 private:
 
     // for the call to KoTextLoader::loadBody, which has a QTextCursor
@@ -132,6 +135,7 @@ private:
     friend class DeleteCommand;
     friend class InsertInlineObjectCommand;
     friend class InsertNoteCommand;
+    friend class ParagraphFormattingCommand;
 
     // for unittests
     friend class TestKoInlineTextObjectManager;
@@ -158,7 +162,7 @@ public slots:
     ///
     /// Note: Be aware that many KoTextEditor methods start their own commands thus terminating
     /// the recording of this \ref command. Only use QTextCursor manipulation (with all the issues
-    /// that brings) or only use KoTextEditor methods that don't start their own commmand.
+    /// that brings) or only use KoTextEditor methods that don't start their own command.
     ///
     /// The recording is automatically terminated when another command is added, which as mentioned
     /// can happen by executing some of the KoTextEditor methods.
@@ -174,7 +178,7 @@ public slots:
     /// caller, or the caller can choose to quickly undo and then delete the \ref command.
     void instantlyExecuteCommand(KUndo2Command *command);
 
-    void registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, QString title, QTextFormat &format, QTextFormat &prevFormat, bool applyToWholeBlock = false);
+    void registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, const QString &title, QTextFormat &format, QTextFormat &prevFormat, bool applyToWholeBlock = false);
 
     void bold(bool bold);
 
@@ -208,9 +212,9 @@ public slots:
 
     void setStyle(KoCharacterStyle *style);
 
-    void mergeAutoStyle(QTextCharFormat deltaCharFormat);
+    void mergeAutoStyle(const QTextCharFormat &deltaCharFormat);
 
-    void mergeAutoStyle(QTextCharFormat deltaCharFormat, QTextBlockFormat deltaBlockFormat);
+    void applyDirectFormatting(const QTextCharFormat &deltaCharFormat, const QTextBlockFormat &deltaBlockFormat, const KoListLevelProperties &llp);
 
     /**
      * Insert an inlineObject (such as a variable) at the current cursor position. Possibly replacing the selection.
@@ -228,11 +232,11 @@ public slots:
     void updateInlineObjectPosition(int start = 0, int end = -1);
 
     /**
-     * Remove the KoTextAnchor objects from the document.
+     * Remove the KoShapeAnchor objects from the document.
      *
-     * NOTE: Call this method only when the the shapes belonging to the anchors have been deleted.
+     * NOTE: Call this method only when the shapes belonging to the anchors have been deleted.
      */
-    void removeAnchors(const QList<KoTextAnchor*> &anchors, KUndo2Command *parent);
+    void removeAnchors(const QList<KoShapeAnchor*> &anchors, KUndo2Command *parent);
 
     /**
     * At the current cursor position, insert a marker that marks the next word as being part of the index.
@@ -242,7 +246,7 @@ public slots:
     KoInlineObject *insertIndexMarker();
 
     /// add a bookmark on current cursor location or current selection
-    void addBookmark(const QString &name);
+    KoBookmark *addBookmark(const QString &name);
 
     /**
      * Insert a frame break at the cursor position, moving the rest of the text to the next frame.
@@ -282,7 +286,7 @@ public slots:
      * change the current block's list properties
      */
     void setListProperties(const KoListLevelProperties &llp,
-                           ChangeListFlags flags = ChangeListFlags(ModifyExistingList | MergeWithAdjacentList));
+                           ChangeListFlags flags = ChangeListFlags(ModifyExistingList | MergeWithAdjacentList), KUndo2Command *parent = 0);
 
     // -------------------------------------------------------------
     // Wrapped QTextCursor methods
@@ -316,10 +320,10 @@ public slots:
 
     void deletePreviousChar();
 
-    const QTextDocument *document() const;
+    QTextDocument *document() const;
 
     /// Same as Qt, only to be used inside KUndo2Commands
-    KUndo2Command *beginEditBlock(QString title = QString());
+    KUndo2Command *beginEditBlock(const QString &title = QString());
     void endEditBlock();
 
     /**
@@ -408,7 +412,7 @@ public slots:
      * @param column the column coordinate of the cell that is to be adjusted.
      * @param row the row coordinate of the cell that is to be adjusted.
      */
-    void setTableBorderData(QTextTable *table, int row, int column, KoBorder::Side cellSide,
+    void setTableBorderData(QTextTable *table, int row, int column, KoBorder::BorderSide cellSide,
                 const KoBorder::BorderData &data);
 
     /**
@@ -431,13 +435,21 @@ public slots:
     /**
      * Configures various values of a ToC to the one passed in info
      */
-    void setTableOfContentsConfig(KoTableOfContentsGeneratorInfo *info, QTextBlock block);
+    void setTableOfContentsConfig(KoTableOfContentsGeneratorInfo *info, const QTextBlock &block);
 
     void insertBibliography(KoBibliographyInfo *info);
 
     KoInlineCite *insertCitation();
 
-    void insertText(const QString &text);
+    /**
+     * Inserts the supplied text at the current cursor position. If the second argument is
+     * supplied, a link is inserted at the current cursor position with the hRef as given
+     * by the user. To test whether the supplied link destination is a web url or a bookmark,
+     * a regular expression ( \\S+://\\S+ ) is used. 
+     * @param text is the text to be inserted
+     * @param hRef if supplied is the Hypertext reference
+     */
+    void insertText(const QString &text, const QString &hRef = QString());
 
     void insertHtml(const QString &html);
 
@@ -478,6 +490,8 @@ public slots:
 signals:
     void cursorPositionChanged();
     void textFormatChanged();
+    void characterStyleApplied(KoCharacterStyle *style);
+    void paragraphStyleApplied(KoParagraphStyle *style);
 
 protected:
     void recursivelyVisitSelection(QTextFrame::iterator it, KoTextVisitor &visitor) const;

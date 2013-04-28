@@ -84,8 +84,6 @@ public:
     void setupFlakeToWidgetTransformation();
 
 public: // QWidget
-    /// reimplemented method from superclass
-    bool event(QEvent *);
 
     /// reimplemented method from superclass
     void paintEvent(QPaintEvent * ev);
@@ -98,9 +96,6 @@ public: // QWidget
 
 private slots:
     void slotConfigChanged();
-
-signals:
-    void needAdjustOrigin();
 
 protected:
 

@@ -138,7 +138,7 @@ public:
      * The behaviour might be different per paintop. Most of the time
      * the brush diameter is increased by x pixels, y ignored
      *
-     * @param x is add to the the diameter or radius (according the paintop)
+     * @param x is add to the diameter or radius (according the paintop)
      *  It might be also negative, to decrease the value of the brush diameter/radius.
      *  x is in pixels
      * @param y is unused, it supposed to be used to change some different attribute
@@ -166,7 +166,7 @@ public:
     /// @return state of the settings, default implementation is true
     virtual bool isValid();
 
-    /// Check if the settings are loadable, that might the the case if we can fallback to something
+    /// Check if the settings are loadable, that might the case if we can fallback to something
     /// Overwrite if the settings can do some kind of fallback
     /// @return loadable state of the settings, by default implementation return the same as isValid()
     virtual bool isLoadable();

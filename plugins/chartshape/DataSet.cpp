@@ -34,7 +34,7 @@
 #include <QPainter>
 
 // KDE
-#include <KLocale>
+#include <klocale.h>
 
 // KDChart
 #include <KDChartDataValueAttributes>
@@ -833,7 +833,7 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */
         ma.setVisible(true);
         d->symbolsActivated = true;
 //             attr.setVisible(true);
-        // Do not overwrite visiblity in this case. It could very well have
+        // Do not overwrite visibility in this case. It could very well have
         // been set to 'visible' on purpose by e.g. loadOdf().
         //else
         //    ma.setVisible(false);
@@ -851,11 +851,11 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */
     }
     if (type.category) {
         QString s = categoryData(section, Qt::DisplayRole).toString().trimmed();
-        if (!s.isEmpty()) dataLabel += s + " ";
+        if (!s.isEmpty()) dataLabel += s + QLatin1Char(' ');
     }
     if (type.number) {
         QString s = d->formatData(d->yDataRegion, section, Qt::DisplayRole);
-        if (!s.isEmpty()) dataLabel += s + " ";
+        if (!s.isEmpty()) dataLabel += s + QLatin1Char(' ');
     }
     if (type.percentage) {
         bool ok;
@@ -880,7 +880,7 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */
     return attr;
 }
 
-KDChart::MarkerAttributes DataSet::getMarkerAttributes(int section, bool *success) const
+KDChart::MarkerAttributes DataSet::getMarkerAttributes(int section) const
 {
     KDChart::DataValueAttributes attr(d->dataValueAttributes);
     Q_ASSERT(attr.isVisible() == d->dataValueAttributes.isVisible());
@@ -1139,7 +1139,7 @@ QVariant DataSet::labelData() const
             QString s = d->data(d->labelDataRegion, i, Qt::EditRole).toString();
             if (!s.isEmpty()) {
                 if (!label.isEmpty())
-                    label += " ";
+                    label += QLatin1Char(' ');
                 label += s;
             }
         }
@@ -1383,7 +1383,7 @@ bool loadBrushAndPen(KoStyleStack &styleStack, KoShapeLoadingContext &context,
 * The question is if this is 100% the correct thing to do or if we
 * need more logic that e.g. differs between where the data-labels got
 * defined? It would make sense but there is no information about that
-* available and it seems OO.org/LO just save redundant informations
+* available and it seems OO.org/LO just save redundant information
 * here at least with pie-charts...
 */
 void DataSet::Private::readValueLabelType(KoStyleStack &styleStack, int section /* = -1 */)
@@ -1751,7 +1751,7 @@ void DataSet::saveOdf(KoShapeSavingContext &context) const
             case 7: symbolName = "hourglass"; break;
             case 8: symbolName = "circle"; break;
             case 9: symbolName = "star"; break;
-            case 10: symbolName = "x"; break;
+            case 10: symbolName = 'x'; break;
             case 11: symbolName = "plus"; break;
             case 12: symbolName = "asterisk"; break;
             case 13: symbolName = "horizontal-bar"; break;

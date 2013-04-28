@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2012 Dimitrios T. Tanis <dimitrios.tanis@kdemail.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,6 +27,7 @@
 
 #include "connection.h"
 #include "driver.h"
+#include "calligradb_global.h"
 
 class QDomNode;
 class QDomElement;
@@ -70,6 +72,18 @@ inline CALLIGRADB_EXPORT bool deleteRow(Connection &conn, const QString &tableNa
     return conn.executeSQL("DELETE FROM " + tableName + " WHERE "
                            + keyname1 + "=" + conn.driver()->valueToSQL(keytype1, keyval1)
                            + " AND " + keyname2 + "=" + conn.driver()->valueToSQL(keytype2, keyval2));
+}
+
+/*! Delete record with three generic criterias. */
+inline CALLIGRADB_EXPORT bool deleteRow(Connection &conn, const QString &tableName,
+                                     const QString &keyname1, Field::Type keytype1, const QVariant& keyval1,
+                                     const QString &keyname2, Field::Type keytype2, const QVariant& keyval2,
+                                     const QString &keyname3, Field::Type keytype3, const QVariant& keyval3)
+{
+    return conn.executeSQL("DELETE FROM " + tableName + " WHERE "
+                           + keyname1 + "=" + conn.driver()->valueToSQL(keytype1, keyval1)
+                           + " AND " + keyname2 + "=" + conn.driver()->valueToSQL(keytype2, keyval2)
+                           + " AND " + keyname3 + "=" + conn.driver()->valueToSQL(keytype3, keyval3));
 }
 
 inline CALLIGRADB_EXPORT bool replaceRow(Connection &conn, TableSchema *table,
@@ -169,7 +183,7 @@ public:
      class TableSchema or QuerySchema.
      You should check whether a query or table has been found by testing
      (query() || table()) expression. */
-    TableOrQuerySchema(FieldList &tableOrQuery);
+    explicit TableOrQuerySchema(FieldList &tableOrQuery);
 
     /*! Creates a new TableOrQuerySchema variant object, retrieving table or query schema
      using \a conn connection and \a id.
@@ -179,11 +193,11 @@ public:
 
     /*! Creates a new TableOrQuerySchema variant object, keeping a pointer so \a table
      object. */
-    TableOrQuerySchema(TableSchema* table);
+    explicit TableOrQuerySchema(TableSchema* table);
 
     /*! Creates a new TableOrQuerySchema variant object, keeping a pointer so \a query
      object. */
-    TableOrQuerySchema(QuerySchema* query);
+    explicit TableOrQuerySchema(QuerySchema* query);
 
     //! \return a pointer to the query if it's provided
     QuerySchema* query() const {
@@ -219,10 +233,10 @@ public:
     Connection* connection() const;
 
     /*! \return String for debugging purposes. */
-    QString debugString();
+    QString debugString() const;
 
     /*! Shows debug information about table or query. */
-    void debug();
+    void debug() const;
 
 protected:
     QByteArray m_name; //!< the name is kept here because m_table and m_table can be 0
@@ -321,27 +335,37 @@ CALLIGRADB_EXPORT bool isBuiltinTableFieldProperty(const QByteArray& propertyNam
 //! \return true if \a propertyName is an extended field property.
 CALLIGRADB_EXPORT bool isExtendedTableFieldProperty(const QByteArray& propertyName);
 
+//! \return true if \a propertyName is belongs to lookup field's schema.
+CALLIGRADB_EXPORT bool isLookupFieldSchemaProperty(const QByteArray& propertyName);
+
 /*! \return type of field for integer value \a type.
  If \a type cannot be casted to KexiDB::Field::Type, KexiDB::Field::InvalidType is returned.
  This can be used when type information is deserialized from a string or QVariant. */
 CALLIGRADB_EXPORT Field::Type intToFieldType(int type);
 
+/*! Gets property values for \a field.
+ Properties from extended schema are included. \a values is cleared before filling.
+ The same number of properties in the same order is returned.
+ This function is used e.g. for altering table design.
+ */
+CALLIGRADB_EXPORT void getFieldProperties(const Field &field, QMap<QByteArray, QVariant> *values);
+
 /*! Sets property values for \a field. \return true if all the values are valid and allowed.
  On failure contents of \a field is undefined.
- Properties coming from extended schema are also supported.
+ Properties from extended schema are also supported.
  This function is used e.g. by AlterTableHandler when property information comes in form of text.
  */
-CALLIGRADB_EXPORT bool setFieldProperties(Field& field, const QHash<QByteArray, QVariant>& values);
+CALLIGRADB_EXPORT bool setFieldProperties(Field& field, const QMap<QByteArray, QVariant>& values);
 
 /*! Sets property value for \a field. \return true if the property has been found and
  the value is valid for this property. On failure contents of \a field is undefined.
- Properties coming from extended schema are also supported as well as
+ Properties from extended schema are also supported as well as
    QVariant customProperty(const QString& propertyName) const;
 
  This function is used e.g. by AlterTableHandler when property information comes in form of text.
  */
 CALLIGRADB_EXPORT bool setFieldProperty(Field& field, const QByteArray& propertyName,
-                                     const QVariant& value);
+                                        const QVariant& value);
 
 /*! @return property value loaded from a DOM \a node, written in a QtDesigner-like
  notation: &lt;number&gt;int&lt;/number&gt; or &lt;bool&gt;bool&lt;/bool&gt;, etc. Supported types are
@@ -415,6 +439,29 @@ CALLIGRADB_EXPORT QString escapeBLOB(const QByteArray& array, BLOBEscapingType t
  This function is used by PostgreSQL KexiDB and migration drivers. */
 CALLIGRADB_EXPORT QByteArray pgsqlByteaToByteArray(const char* data, int length);
 
+/*! \return int list converted from string list.
+   If \a ok is not 0, *ok is set to result of the conversion.
+   */
+CALLIGRADB_EXPORT QList<int> stringListToIntList(const QStringList &list, bool *ok);
+
+/*! \return string converted from list \a list.
+   Separators are ',' characters, "," and "\\" are escaped.
+    @see deserializeList()
+  */
+CALLIGRADB_EXPORT QString serializeList(const QStringList &list);
+
+/*! \return string list converted from \a data which was built using serializeList().
+   Separators are ',' characters, escaping is assumed as "\\,".
+  */
+CALLIGRADB_EXPORT QStringList deserializeList(const QString &data);
+
+/*! \return int list converted from \a data which was built using serializeList().
+   Separators are ',' characters, escaping is assumed as "\\,".
+   If \a ok is not 0, *ok is set to result of the conversion.
+   @see KexiDB::stringListToIntList()
+  */
+CALLIGRADB_EXPORT QList<int> deserializeIntList(const QString &data, bool *ok);
+
 /*! \return string value serialized from a variant value \a v.
  This functions works like QVariant::toString() except the case when \a v is of type ByteArray.
  In this case KexiDB::escapeBLOB(v.toByteArray(), KexiDB::BLOBEscapeHex) is used.
@@ -479,7 +526,7 @@ CALLIGRADB_EXPORT QString defaultFileBasedDriverMimeType();
 /*! \return icon name for default file-based driver
  (typically icon for something like "application/x-kexiproject-sqlite").
  @see KexiDB::defaultFileBasedDriverMimeType() */
-CALLIGRADB_EXPORT QString defaultFileBasedDriverIcon();
+CALLIGRADB_EXPORT QString defaultFileBasedDriverIconName();
 
 /*! \return default file-based driver name (currently, "sqlite3"). */
 CALLIGRADB_EXPORT QString defaultFileBasedDriverName();
@@ -489,7 +536,7 @@ class CALLIGRADB_EXPORT StaticSetOfStrings
 {
 public:
     StaticSetOfStrings();
-    StaticSetOfStrings(const char* array[]);
+    explicit StaticSetOfStrings(const char* array[]);
     ~StaticSetOfStrings();
     void setStrings(const char* array[]);
     bool isEmpty() const;
@@ -515,6 +562,37 @@ inline CALLIGRADB_EXPORT QDateTime stringToHackedQTime(const QString& s)
     return QDateTime(QDate(0, 1, 2), QTime::fromString(s, Qt::ISODate));
 }
 
-}
+/*! @return new temporary name suitable for creating new table.
+ The name has mask tmp__{baseName}{rand} where baseName is passed as argument
+ and {rand} is 10 digits long hexadecimal number. @a baseName can be empty.
+ It is not 100% guaranteed that the name will but it is very likely.
+ The function checks for existence of table in connection @a conn.
+ It is adviced to use the returned name as quickly as possible for creating new physical table. */
+CALLIGRADB_EXPORT QString temporaryTableName(Connection *conn, const QString &baseName);
+
+/*! @return absolute path to "sqlite3" program.
+ Empty string is returned if the program was not found. */
+CALLIGRADB_EXPORT QString sqlite3ProgramPath();
+
+/*! Imports SQL file from @a inputFileName into @a outputFileName.
+ Works for any SQLite 3 file. Requires access to "sqlite3" command.
+ @a outputFileName will be silently overwritten.
+ @return true on success. */
+CALLIGRADB_EXPORT bool importSqliteFile(const QString &inputFileName, const QString &outputFileName);
+
+/*! @return true if there is at least one server-based database driver installed. */
+CALLIGRADB_EXPORT bool hasDatabaseServerDrivers();
+
+#ifdef CALLIGRADB_DEBUG_GUI
+typedef void(*DebugGUIHandler)(const QString&);
+CALLIGRADB_EXPORT void setDebugGUIHandler(DebugGUIHandler handler);
+CALLIGRADB_EXPORT void debugGUI(const QString& text);
+
+typedef void(*AlterTableActionDebugGUIHandler)(const QString&, int);
+CALLIGRADB_EXPORT void setAlterTableActionDebugHandler(AlterTableActionDebugGUIHandler handler);
+CALLIGRADB_EXPORT void alterTableActionDebugGUI(const QString& text, int nestingLevel = 0);
+#endif
+
+} // namespace KexiDB
 
 #endif

@@ -54,6 +54,8 @@ public:
     QHash < QString /*name*/, KoXmlElement* > presentationPageLayouts;
     QHash < QString /*drawType*/, QHash< QString /*name*/, KoXmlElement* > > drawStyles;
 
+    QList <KoXmlElement* > tableTemplates;
+
     KoXmlElement           officeStyle;
     KoXmlElement           layerSet;
 
@@ -90,6 +92,7 @@ KoOdfStylesReader::~KoOdfStylesReader()
     qDeleteAll(d->styles);
     qDeleteAll(d->masterPages);
     qDeleteAll(d->presentationPageLayouts);
+    qDeleteAll(d->tableTemplates);
     foreach(const AutoStylesMap& map, d->drawStyles) {
         qDeleteAll(map);
     }
@@ -220,8 +223,11 @@ void KoOdfStylesReader::insertOfficeStyles(const KoXmlElement& styles)
             Q_ASSERT(!name.isEmpty());
             KoXmlElement* ep = new KoXmlElement(e);
             d->drawStyles[drawType].insert(name, ep);
-        } else
+        }else if(ns == KoXmlNS::table && localName == "table-template") {
+            d->tableTemplates.append(new KoXmlElement(e));
+        } else {
             insertStyle(e, CustomInStyles);
+        }
     }
 }
 
@@ -423,4 +429,9 @@ const KoXmlElement* KoOdfStylesReader::findContentAutoStyle(const QString& style
         }
     }
     return style;
+}
+
+QList<KoXmlElement*> KoOdfStylesReader::tableTemplates() const
+{
+    return d->tableTemplates;
 }

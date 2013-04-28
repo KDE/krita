@@ -58,7 +58,7 @@ public slots:
     /** Return the \a KXmlGuiWindow object. */
     virtual QWidget *mainWindow();
 
-    /** Return the \a KoDocumentAdaptor object. */
+    /** Return the \a KoPartAdaptor object. */
     virtual QObject *document();
 
     /** Return a \a KoScriptingOdfStore object. */

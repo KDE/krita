@@ -22,7 +22,7 @@
     device into the canvas and commit the undo information.
 
     The jobs of the stroke can demand special order of their
-    execution. That is the the way how they will be executed on a
+    execution. That is the way how they will be executed on a
     multi-core machine. Every job can be either of the type:
     - =CONCURRENT= :: /concurrent/ job may be executed in parallel with
                       any other concurrent job of the stroke as well as

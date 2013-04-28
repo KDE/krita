@@ -83,28 +83,48 @@ void TestShapeGroupCommand::init()
 
 void TestShapeGroupCommand::cleanup()
 {
+    if (toplevelShape1->parent() == 0) {
+        delete toplevelShape1;
+    }
+    toplevelShape1 = 0;
+    if (toplevelShape2->parent() == 0) {
+        delete toplevelShape2;
+    }
+    toplevelShape2 = 0;
+    if (sublevelShape1->parent() == 0) {
+        delete sublevelShape1;
+    }
+    sublevelShape1 = 0;
+    if (sublevelShape2->parent() == 0) {
+        delete sublevelShape2;
+    }
+    sublevelShape2 = 0;
+    if (extraShape1->parent() == 0) {
+        delete extraShape1;
+    }
+    extraShape1 = 0;
+    if (extraShape2->parent() == 0) {
+        delete extraShape2;
+    }
+    extraShape2 = 0;
+    if (strokeShape1->parent() == 0) {
+        delete strokeShape1;
+    }
+    strokeShape1 = 0;
+    if (strokeShape2->parent() == 0) {
+        delete strokeShape2;
+    }
+    strokeShape2 = 0;
+    if (sublevelGroup->parent() == 0) {
+        delete sublevelGroup;
+    }
+    sublevelGroup = 0;
+    if (strokeGroup->parent() == 0) {
+        delete strokeGroup;
+        strokeGroup = 0;
+    }
     delete toplevelGroup;
     toplevelGroup = 0;
-    delete sublevelGroup;
-    sublevelGroup = 0;
-    delete strokeGroup;
-    strokeGroup = 0;
-    delete toplevelShape1;
-    toplevelShape1 = 0;
-    delete toplevelShape2;
-    toplevelShape2 = 0;
-    delete sublevelShape1;
-    sublevelShape1 = 0;
-    delete sublevelShape2;
-    sublevelShape2 = 0;
-    delete extraShape1;
-    extraShape1 = 0;
-    delete extraShape2;
-    extraShape2 = 0;
-    delete strokeShape1;
-    strokeShape1 = 0;
-    delete strokeShape2;
-    strokeShape2 = 0;
     delete cmd1;
     cmd1 = 0;
     delete cmd2;

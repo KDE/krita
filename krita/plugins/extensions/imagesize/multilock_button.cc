@@ -18,16 +18,17 @@
  */
 #include "multilock_button.h"
 
+#include <KoIcon.h>
+
 #include <QPixmap>
 #include <QPainter>
-#include <KIcon>
 #include <QMouseEvent>
 
 class MultiLockButton::Private {
 public:
     Private()
-        : lockedPixmap(KIcon("object-locked").pixmap(24,24)),
-        unlockedPixmap(KIcon("object-unlocked").pixmap(24,24)),
+        : lockedPixmap(koIcon("object-locked").pixmap(24,24)),
+        unlockedPixmap(koIcon("object-unlocked").pixmap(24,24)),
         locked(true)
     {
     }

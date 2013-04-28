@@ -303,4 +303,3 @@ double HatchingBrush::separationAsFunctionOfParameter(double parameter, double s
     qDebug() << "Fix your function" << parameter << ">" << upperlimit ;
     return separation;
 }
-;

@@ -19,13 +19,18 @@
 #include "kis_imagepipe_brush_test.h"
 
 #include <qtest_kde.h>
+#include <QPainter>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <kis_fixed_paint_device.h>
+#include <kis_paint_information.h>
 
 #include "kis_imagepipe_brush.h"
 #include "kis_qimage_mask.h"
+#include <kis_paint_device.h>
+#include <kis_painter.h>
 
 #define COMPARE_ALL(brush, method)                                      \
     foreach(KisGbrBrush *child, brush->testingGetBrushes()) {           \
@@ -65,19 +70,25 @@ inline void KisImagePipeBrushTest::checkConsistency(KisImagePipeBrush *brush)
      * Check mask size values, they depend on current brush
      */
 
-    QVERIFY(brush->testingGetCurrentBrush());
+    KisPaintInformation info;
+
+    KisBrush *oldBrush = brush->testingGetCurrentBrush(info);
+    QVERIFY(oldBrush);
 
     qreal realScale = 1;
     qreal realAngle = 0;
     qreal subPixelX = 0;
     qreal subPixelY = 0;
 
-    int maskWidth = brush->maskWidth(realScale, realAngle);
-    int maskHeight = brush->maskHeight(realScale, realAngle);
-    KisQImagemaskSP outputMask = brush->testingGetCurrentBrush()->createMask(realScale, subPixelX, subPixelY);
+    int maskWidth = brush->maskWidth(realScale, realAngle, info);
+    int maskHeight = brush->maskHeight(realScale, realAngle, info);
+    KisQImagemaskSP outputMask = brush->testingGetCurrentBrush(info)->createMask(realScale, subPixelX, subPixelY);
 
     QCOMPARE(maskWidth, outputMask->width());
     QCOMPARE(maskHeight, outputMask->height());
+
+    KisBrush *newBrush = brush->testingGetCurrentBrush(info);
+    QCOMPARE(oldBrush, newBrush);
 }
 
 
@@ -125,8 +136,8 @@ void checkIncrementalPainting(KisBrush *brush, const QString &prefix)
     KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, movement, rotation, 0);
 
     for (int i = 0; i < 20; i++) {
-        int maskWidth = brush->maskWidth(realScale, realAngle);
-        int maskHeight = brush->maskHeight(realScale, realAngle);
+        int maskWidth = brush->maskWidth(realScale, realAngle, info);
+        int maskHeight = brush->maskHeight(realScale, realAngle, info);
         QRect fillRect(0, 0, maskWidth, maskHeight);
 
         fixedDab->setRect(fillRect);
@@ -189,6 +200,50 @@ void KisImagePipeBrushTest::testColoredDab()
     checkConsistency(brush);
     delete brush;
 }
+
+void KisImagePipeBrushTest::testColoredDabWash()
+{
+    KisImagePipeBrush *brush = new KisImagePipeBrush(QString(FILES_DATA_DIR) + QDir::separator() + "G_Sparks.gih");
+    brush->load();
+    QVERIFY(brush->valid());
+
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+
+    KisVector2D movement = KisVector2D::Zero();
+    qreal rotation = 0;
+    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, movement, rotation, 0);
+
+    KisPaintDeviceSP layer = new KisPaintDevice(cs);
+    KisPainter painter(layer);
+    painter.setCompositeOp(COMPOSITE_ALPHA_DARKEN);
+
+    const QVector<KisGbrBrush*> gbrs = brush->testingGetBrushes();
+
+    KisFixedPaintDeviceSP dab = gbrs.at(0)->paintDevice(cs, 2.0, 0.0, info);
+    painter.bltFixed(0,0, dab, 0,0,dab->bounds().width(), dab->bounds().height());
+    painter.bltFixed(80,60, dab, 0,0,dab->bounds().width(), dab->bounds().height());
+
+    painter.end();
+
+    QRect rc = layer->exactBounds();
+
+    QImage result = layer->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
+
+
+#if 0
+    // if you want to see the result on white background, set #if 1
+    QImage bg(result.size(), result.format());
+    bg.fill(Qt::white);
+    QPainter qPainter(&bg);
+    qPainter.drawImage(0, 0, result);
+    result = bg;
+#endif
+    result.save("z_spark_alpha_darken.png");
+
+    delete brush;
+}
+
+
 
 #include "kis_text_brush.h"
 

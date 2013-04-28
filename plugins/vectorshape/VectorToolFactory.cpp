@@ -18,19 +18,20 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <klocale.h>
+#include "VectorToolFactory.h"
 
 #include "VectorShape.h"
 #include "VectorTool.h"
 
-#include "VectorToolFactory.h"
+#include <KoIcon.h>
+#include <klocale.h>
 
 
 VectorToolFactory::VectorToolFactory()
     : KoToolFactoryBase("VectorToolFactoryId")
 {
-    setToolTip( i18n( "EMF/WMF Vector Shape tool" ) );
-    setIcon( "vectorshape" );
+    setToolTip(i18n("Vector Image (EMF/WMF/SVM) tool"));
+    setIconName(koIconNameCStrNeededWithSubs("a generic vector image icon", "x-shape-vectorimage", "application-x-wmf"));
     setToolType( dynamicToolType() );
     setPriority( 1 );
     setActivationShapeId( VectorShape_SHAPEID );

@@ -91,9 +91,6 @@ public:
     QPixmap paintopPixmap(const KoID& paintop);
     ~KisPaintopBox();
 
-signals:
-    void signalPaintopChanged(KisPaintOpPresetSP paintop);
-
 public slots:
     void slotColorSpaceChanged(const KoColorSpace* colorSpace);
     void slotInputDeviceChanged(const KoInputDevice & inputDevice);
@@ -126,7 +123,10 @@ private slots:
     void slotSlider2Changed();
     void slotToolChanged(KoCanvasController* canvas, int toolId);
     void slotOpacityChanged(qreal);
-    
+    void slotPreviousFavoritePreset();
+    void slotNextFavoritePreset();
+    void slotSwitchToPreviousPreset();
+    void slotUnsetEraseMode();
 private:
     KisCanvasResourceProvider*           m_resourceProvider;
     QHBoxLayout*                         m_layout;
@@ -146,10 +146,11 @@ private:
     QMap<KoID,KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
 
     KisPaintOpPresetSP  m_activePreset;
+    KisPaintOpPresetSP  m_previousPreset;
     QString             m_prevCompositeOpID;
     QString             m_currCompositeOpID;
     KisNodeSP           m_previousNode;
-    
+
     struct TabletToolID
     {
         TabletToolID(const KoInputDevice& dev) {
@@ -184,6 +185,7 @@ private:
     PaintOpPresetMap m_paintOpPresetMap;
     TabletToolID     m_currTabletToolID;
     bool             m_presetsEnabled;
+    bool             m_blockUpdate;
 };
 
 #endif //KIS_PAINTOP_BOX_H_

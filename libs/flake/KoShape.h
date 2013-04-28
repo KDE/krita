@@ -64,6 +64,7 @@ class KoFilterEffectStack;
 class KoSnapData;
 class KoClipPath;
 class KoShapePaintingContext;
+class KoShapeAnchor;
 
 /**
  *
@@ -464,6 +465,16 @@ public:
      * @param contour the new contour
      */
     void setTextRunAroundContour(TextRunAroundContour contour);
+
+    /**
+     * Set the KoShapeAnchor
+     */
+    void setAnchor(KoShapeAnchor *anchor);
+
+    /**
+     * Return the KoShapeAnchor, or 0
+     */
+    KoShapeAnchor *anchor() const;
 
     /**
      * Set the background of the shape.

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Deform brush
+Name[bs]=Deformisana četka
 Name[ca]=Pinzell deformat
 Name[ca@valencia]=Pinzell deformat
 Name[da]=Deformationspensel
@@ -17,6 +18,7 @@ Name[it]=Pennello deformato
 Name[ja]=変形ブラシ
 Name[kk]=Қисайған қылқалам
 Name[lv]=Deformēšanas ota
+Name[mr]=डिफॉर्म  कुंचला
 Name[nb]=Deformer pensel
 Name[nds]=Verformen-Pinsel
 Name[nl]=Vervorm penseel
@@ -35,4 +37,4 @@ Name[zh_TW]=變形筆刷
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritadeformpaintop
-X-Krita-Version=5
+X-Krita-Version=27

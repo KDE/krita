@@ -1,10 +1,9 @@
 include_directories(${KOTEXT_INCLUDES}
-                    ${FONTCONFIG_INCLUDE_DIR}/fontconfig 
+                    ${FONTCONFIG_INCLUDE_DIR}/fontconfig
                     ${FREETYPE_INCLUDE_DIRS})
 
 add_subdirectory( tests )
 add_subdirectory( styles/tests )
-add_subdirectory( opendocument/tests )
 
 ########### next target ###############
 set(kotext_LIB_SRCS
@@ -25,23 +24,28 @@ set(kotext_LIB_SRCS
     KoTextEditingFactory.cpp
     KoTextEditingPlugin.cpp
 
+    KoTextRangeManager.cpp
     KoInlineTextObjectManager.cpp
     KoInlineObjectFactoryBase.cpp
     KoInlineObjectRegistry.cpp
-    InsertInlineObjectActionBase.cpp
+    InsertInlineObjectActionBase_p.cpp
     InsertVariableAction.cpp
     InsertNamedVariableAction.cpp
     InsertTextReferenceAction.cpp
     InsertTextLocator.cpp
     KoInlineObject.cpp
+    KoTextRange.cpp
     KoVariable.cpp
     KoVariableManager.cpp
     KoNamedVariable.cpp
     KoSection.cpp
     KoTextLocator.cpp
     KoTextReference.cpp
-    KoTextAnchor.cpp
+    KoAnchorInlineObject.cpp
+    KoAnchorTextRange.cpp
     KoTextShapeSavingContext.cpp
+    KoAnnotation.cpp
+    KoAnnotationManager.cpp
     KoBookmark.cpp
     KoBookmarkManager.cpp
     KoInlineNote.cpp
@@ -58,6 +62,7 @@ set(kotext_LIB_SRCS
     KoTableColumnAndRowStyleManager.cpp
     KoTextInlineRdf.cpp
     KoTextMeta.cpp
+    KoTextTableTemplate.cpp
 
     ToCBibGeneratorInfo.cpp
     KoTableOfContentsGeneratorInfo.cpp
@@ -84,7 +89,6 @@ set(kotext_LIB_SRCS
 
     changetracker/KoChangeTracker.cpp
     changetracker/KoChangeTrackerElement.cpp
-    changetracker/KoDeleteChangeMarker.cpp
     changetracker/KoFormatChangeInformation.cpp
     changetracker/KoDeletedRowColumnDataStore.cpp
     changetracker/KoDeletedRowData.cpp
@@ -95,20 +99,19 @@ set(kotext_LIB_SRCS
     commands/ChangeListCommand.cpp
     commands/ChangeStylesCommand.cpp
     commands/ChangeStylesMacroCommand.cpp
-    commands/ChangeTrackedDeleteCommand.cpp
     commands/DeleteAnchorsCommand.cpp
     commands/DeleteCommand.cpp
     commands/DeleteTableColumnCommand.cpp
     commands/DeleteTableRowCommand.cpp
-    commands/InsertDeleteChangesCommand.cpp
     commands/InsertNoteCommand.cpp
     commands/InsertTableColumnCommand.cpp
     commands/InsertTableRowCommand.cpp
     commands/ResizeTableCommand.cpp
     commands/InsertInlineObjectCommand.cpp
     commands/ListItemNumberingCommand.cpp
-    commands/RemoveDeleteChangesCommand.cpp
     commands/TextPasteCommand.cpp
+    commands/AddTextRangeCommand.cpp
+    commands/ParagraphFormattingCommand.cpp
 
     KoTextDrag.cpp
     KoTextCommandBase.cpp
@@ -159,12 +162,16 @@ install(
     KoInlineObjectFactoryBase.h
     KoBookmark.h
     KoBookmarkManager.h
+    KoAnnotationManager.h
     KoInlineTextObjectManager.h
-    KoTextAnchor.h
+    KoAnchorInlineObject.h
+    KoAnchorTextRange.h
     KoTextBlockBorderData.h
     KoTextBlockData.h
     KoTextDocument.h
     KoText.h
+    KoTextRange.h
+    KoTextRangeManager.h
     KoList.h
     KoTextLocator.h
     KoTextPage.h
@@ -177,6 +184,7 @@ install(
     KoTextSoftPageBreak.cpp
     KoSection.h
     KoTextCommandBase.h
+    KoTextTableTemplate.h
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel
@@ -202,7 +210,6 @@ install(
     FILES
     changetracker/KoChangeTracker.h
     changetracker/KoChangeTrackerElement.h
-    changetracker/KoDeleteChangeMarker.h
     changetracker/KoDeletedRowColumnDataStore.h
     changetracker/KoDeletedRowData.cpp
     changetracker/KoDeletedColumnData.cpp

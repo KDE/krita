@@ -290,6 +290,11 @@ Qt::Orientation KoPointerEvent::orientation() const
         return Qt::Horizontal;
 }
 
+bool KoPointerEvent::isTabletEvent()
+{
+    return dynamic_cast<QTabletEvent*>(m_event) != 0;
+}
+
 void KoPointerEvent::setTabletButton(Qt::MouseButton button)
 {
     d->tabletButton = button;

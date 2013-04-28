@@ -21,15 +21,16 @@
 #include "DefaultToolFactory.h"
 #include "DefaultTool.h"
 
+#include <KoIcon.h>
 #include <klocale.h>
 
 DefaultToolFactory::DefaultToolFactory()
     : KoToolFactoryBase(KoInteractionTool_ID)
 {
-    setToolTip(i18n("Basic shape manipulation"));
+    setToolTip(i18n("Shape handling"));
     setToolType(mainToolType());
     setPriority(0);
-    setIcon("select");
+    setIconName(koIconNameCStr("select"));
     setActivationShapeId("flake/always");
 }
 

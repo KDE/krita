@@ -38,7 +38,7 @@ K_PLUGIN_FACTORY(ShivaPluginFactory, registerPlugin<ShivaPlugin>();)
 K_EXPORT_PLUGIN(ShivaPluginFactory("krita"))
 
 ShivaPlugin::ShivaPlugin(QObject *parent, const QVariantList &)
-        : KParts::Plugin(parent)
+        : QObject(parent)
 {
     m_sourceCollection = new OpenShiva::SourcesCollection();
 
@@ -46,7 +46,7 @@ ShivaPlugin::ShivaPlugin(QObject *parent, const QVariantList &)
     dbgPlugins << kernelModulesDirs;
     foreach(const QString & dir, kernelModulesDirs) {
         dbgPlugins << "Append : " << dir << " to the list of CTL modules";
-        m_sourceCollection->addDirectory(dir.toAscii().data());
+        m_sourceCollection->addDirectory(dir.toLatin1().constData());
     }
     {
         KisGeneratorRegistry * manager = KisGeneratorRegistry::instance();

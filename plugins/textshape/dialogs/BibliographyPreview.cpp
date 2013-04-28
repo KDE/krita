@@ -88,7 +88,7 @@ void BibliographyPreview::updatePreview(KoBibliographyInfo *newbibInfo)
 
     deleteTextShape();
 
-    m_textShape = new TextShape(&m_itom);
+    m_textShape = new TextShape(&m_itom, &m_tlm);
     if (m_previewPixSize.isEmpty()) {
         m_textShape->setSize(size());
     } else {

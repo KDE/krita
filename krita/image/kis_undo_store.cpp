@@ -28,39 +28,3 @@ KisUndoStore::KisUndoStore()
 KisUndoStore::~KisUndoStore()
 {
 }
-
-void KisUndoStore::setCommandHistoryListener(KisCommandHistoryListener *listener)
-{
-    if (!m_undoListeners.contains(listener)) {
-        m_undoListeners.append(listener);
-    }
-}
-void KisUndoStore::removeCommandHistoryListener(KisCommandHistoryListener *listener)
-{
-    int index = m_undoListeners.indexOf(listener);
-    if (index != -1) {
-        m_undoListeners.remove(index);
-    }
-}
-
-void KisUndoStore::notifyCommandAdded(const KUndo2Command *command)
-{
-    if (!command) {
-        kWarning() << "KisUndoStore::notifyCommandAdded(): empty command!";
-        return;
-    }
-    foreach(KisCommandHistoryListener*  l, m_undoListeners) {
-        l->notifyCommandAdded(command);
-    }
-}
-
-void KisUndoStore::notifyCommandExecuted(const KUndo2Command *command)
-{
-    if (!command) {
-        kWarning() << "KisUndoStore::notifyCommandExecuted(): empty command!";
-        return;
-    }
-    foreach(KisCommandHistoryListener*  l, m_undoListeners) {
-        l->notifyCommandExecuted(command);
-    }
-}

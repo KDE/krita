@@ -30,6 +30,18 @@ KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPropertiesConfiguration* set
     KisBrushOption brushOption;
     brushOption.readOptionSetting(settings);
     m_brush = brushOption.brush();
+
+    m_precisionOption.readOptionSetting(settings);
+    m_dabCache = new KisDabCache(m_brush);
+    m_dabCache->setPrecisionOption(&m_precisionOption);
+
+    m_textureProperties.fillProperties(settings);
+    m_dabCache->setTexturePostprocessing(&m_textureProperties);
+}
+
+KisBrushBasedPaintOp::~KisBrushBasedPaintOp()
+{
+    delete m_dabCache;
 }
 
 double KisBrushBasedPaintOp::spacing(double scale) const

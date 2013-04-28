@@ -27,7 +27,6 @@
 #include <kcombobox.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -124,7 +123,7 @@ KisFilterConfiguration* KisFilterWave::factoryConfiguration(const KisPaintDevice
     return config;
 }
 
-KisConfigWidget * KisFilterWave::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageWSP) const
+KisConfigWidget * KisFilterWave::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
 {
     return new KisWdgWave((KisFilter*)this, (QWidget*)parent);
 }

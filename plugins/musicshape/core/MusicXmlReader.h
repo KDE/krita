@@ -31,7 +31,7 @@ namespace MusicCore {
 
 class MusicXmlReader {
 public:
-    MusicXmlReader(const char* musicNamespace = "http://www.calligra.org/music");
+    explicit MusicXmlReader(const char* musicNamespace = "http://www.calligra.org/music");
     
     Sheet* loadSheet(const KoXmlElement& scoreElement);
 private:

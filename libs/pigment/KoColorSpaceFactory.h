@@ -114,9 +114,8 @@ public:
      */
     const KoColorProfile* colorProfile(const QByteArray& rawData) const;
 
-    KoColorSpace* grabColorSpace(const KoColorProfile* profile);
+    const KoColorSpace *grabColorSpace(const KoColorProfile *profile);
 
-    void releaseColorSpace(KoColorSpace *);
 protected:
     /**
      * creates a color space using the given profile.

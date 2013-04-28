@@ -57,7 +57,7 @@ int KRUtils::readPercent(const QDomElement& el, const char* name, int defaultPer
 static QString roundValueToString(qreal value)
 {
     QString s(QString::number(value, 'g', 2));
-    if (s.endsWith(".00"))
+    if (s.endsWith(QLatin1String(".00")))
         return QString::number(qRound(value));
     return s;
 }

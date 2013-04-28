@@ -22,7 +22,7 @@
 #include "ParagraphIndentSpacing.h"
 
 #include <KoParagraphStyle.h>
-#include <KDebug>
+#include <kdebug.h>
 
 ParagraphIndentSpacing::ParagraphIndentSpacing(QWidget *parent)
         : QWidget(parent),
@@ -51,8 +51,8 @@ ParagraphIndentSpacing::ParagraphIndentSpacing(QWidget *parent)
     connect(widget.lineSpacing, SIGNAL(currentIndexChanged(int)), this, SLOT(lineSpacingChanged(int)));
     connect(widget.useFont, SIGNAL(toggled(bool)), this, SLOT(useFontMetrices(bool)));
     connect(widget.autoTextIndent, SIGNAL(stateChanged(int)), this, SLOT(autoTextIndentChanged(int)));
-    connect(widget.proportional, SIGNAL(valueChanged(int)), this, SLOT(spacingPercentChanged(int)));
-    connect(widget.custom, SIGNAL(valueChangedPt(qreal)), this, SLOT(spacingValueChanged(qreal)));
+    connect(widget.proportional, SIGNAL(valueChanged(int)), this, SLOT(spacingPercentChanged()));
+    connect(widget.custom, SIGNAL(valueChangedPt(qreal)), this, SLOT(spacingValueChanged()));
     lineSpacingChanged(0);
 }
 
@@ -190,13 +190,13 @@ void ParagraphIndentSpacing::lineSpacingChanged(int row)
     emit parStyleChanged();
 }
 
-void ParagraphIndentSpacing::spacingPercentChanged(int percent)
+void ParagraphIndentSpacing::spacingPercentChanged()
 {
     m_spacingInherited = false;
     emit parStyleChanged();
 }
 
-void ParagraphIndentSpacing::spacingValueChanged(qreal value)
+void ParagraphIndentSpacing::spacingValueChanged()
 {
     m_spacingInherited = false;
     emit parStyleChanged();

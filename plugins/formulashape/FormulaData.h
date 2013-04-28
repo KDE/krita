@@ -36,7 +36,7 @@ class FormulaCommand;
 class KOFORMULA_EXPORT FormulaData : public QObject {
 Q_OBJECT
 public:
-    FormulaData(FormulaElement* element);
+    explicit FormulaData(FormulaElement *element);
     
     ~FormulaData();
 

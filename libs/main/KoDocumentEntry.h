@@ -29,6 +29,7 @@
 class QStringList;
 class KoDocument;
 class KoFilter;
+class KoPart;
 
 /**
  *  Represents an available Calligra component
@@ -82,9 +83,9 @@ public:
 
     /**
      *  Uses the factory of the component to create
-     *  a document. If that is not possible, 0 is returned.
+     *  a part. If that is not possible, 0 is returned.
      */
-    KoDocument* createDoc(QString* errorMsg = 0, KoDocument* parent = 0) const;
+    KoPart *createKoPart(QString* errorMsg = 0) const;
 
     enum QueryFlag {
         AllEntries = 0,

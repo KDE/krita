@@ -32,6 +32,7 @@
 #include "kis_shape_tool_helper.h"
 #include "kis_view2.h"
 #include "kis_selection_manager.h"
+#include "kis_system_locker.h"
 
 KisToolSelectElliptical::KisToolSelectElliptical(KoCanvasBase *canvas)
     : KisToolEllipseBase(canvas, KisToolEllipseBase::SELECT, KisCursor::load("tool_elliptical_selection_cursor.png", 6, 6)),
@@ -66,7 +67,7 @@ void KisToolSelectElliptical::finishEllipse(const QRectF &rect)
         return;
     }
 
-    KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Elliptical Selection"));
+    KisSelectionToolHelper helper(kisCanvas, i18n("Elliptical Selection"));
 
     if (m_widgetHelper.selectionMode() == PIXEL_SELECTION) {
         KisPixelSelectionSP tmpSel = new KisPixelSelection();

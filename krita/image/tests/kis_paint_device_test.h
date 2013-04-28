@@ -47,6 +47,8 @@ private slots:
     void testSharedDataManager();
     void testTranslate();
     void testOpacity();
+    void testExactBoundsWeirdNullAlphaCase();
+    void benchmarkExactBoundsNullDefaultPixel();
 };
 
 #endif

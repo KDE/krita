@@ -136,7 +136,7 @@ void KisConvolutionPainterTest::testIdentityConvolution()
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, qimage, resultImage)) {
         resultImage.save("identity_convolution.png");
-        QFAIL(QString("Identity kernel did change image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Identity kernel did change image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 

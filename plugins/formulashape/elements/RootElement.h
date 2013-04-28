@@ -36,7 +36,7 @@
 class KOFORMULA_EXPORT RootElement : public FixedElement {
 public:
     /// The standard constructor
-    RootElement( BasicElement* parent = 0 );
+    explicit RootElement(BasicElement *parent = 0);
 
     /// The standard destructor
     ~RootElement();

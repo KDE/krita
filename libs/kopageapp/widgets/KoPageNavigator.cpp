@@ -25,10 +25,11 @@
 #include <KoPAView.h>
 #include <KoPADocument.h>
 #include <KoPAPage.h>
+#include <KoIcon.h>
 // KDE
-#include <KDebug>
-#include <KLocale>
-#include <KActionCollection>
+#include <kdebug.h>
+#include <klocale.h>
+#include <kactioncollection.h>
 // Qt
 #include <QLabel>
 #include <QHBoxLayout>
@@ -96,13 +97,13 @@ KoPageNavigator::KoPageNavigator(KoPAView *view)
     // because they look too complex, at least with the Oxygen icons
     // also installing an event filter for all buttons, to get wheel events even
     // for disabled buttons
-    d->gotoFirstPageButton = new KoPageNavigatorButton("go-first-view", this);
+    d->gotoFirstPageButton = new KoPageNavigatorButton(koIconNameCStr("go-first-view"), this);
     d->gotoFirstPageButton->installEventFilter(this);
-    d->gotoPreviousPageButton = new KoPageNavigatorButton("go-previous-view", this);
+    d->gotoPreviousPageButton = new KoPageNavigatorButton(koIconNameCStr("go-previous-view"), this);
     d->gotoPreviousPageButton->installEventFilter(this);
-    d->gotoNextPageButton = new KoPageNavigatorButton("go-next-view", this);
+    d->gotoNextPageButton = new KoPageNavigatorButton(koIconNameCStr("go-next-view"), this);
     d->gotoNextPageButton->installEventFilter(this);
-    d->gotoLastPageButton = new KoPageNavigatorButton("go-last-view", this);
+    d->gotoLastPageButton = new KoPageNavigatorButton(koIconNameCStr("go-last-view"), this);
     d->gotoLastPageButton->installEventFilter(this);
 
     d->pageNumberEdit = new QLineEdit(this);

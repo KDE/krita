@@ -1,11 +1,16 @@
 [Desktop Entry]
 Name=Taskset Docker
-Name[ca]=Amarrador Taskset
-Name[ca@valencia]=Amarrador Taskset
+Name[bs]=Doker za Skup zadataka
+Name[ca]=Acoblador Taskset
+Name[ca@valencia]=Acoblador Taskset
 Name[da]=Taskset-dokker
+Name[de]=Aufgabenstellung-Docker
 Name[el]=Εργαλείο προσάρτησης συνόλου εργασιών
 Name[es]=Acoplable de conjunto de tareas
 Name[et]=Ülesandekogumi dokk
+Name[fi]=Tehtäväjoukkotelakka
+Name[fr]=Panneau de définition de tâches
+Name[gl]=Doca de grupos de tarefas
 Name[it]=Area di aggancio taskset
 Name[kk]=Тапсырма жиынның докері
 Name[nb]=Dokker for oppgavesett
@@ -22,4 +27,4 @@ Name[zh_TW]=Taskset 嵌入器
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritatasksetdocker
-X-Krita-Version=5
+X-Krita-Version=27

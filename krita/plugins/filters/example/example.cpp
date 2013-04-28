@@ -25,7 +25,6 @@
 #include <QTime>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -54,6 +53,7 @@ KritaExample::~KritaExample()
 
 KisFilterInvert::KisFilterInvert() : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Invert"))
 {
+    setShortcut(KShortcut(QKeySequence(Qt::CTRL + Qt::Key_I)));
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
     setSupportsIncrementalPainting(false);

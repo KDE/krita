@@ -22,6 +22,7 @@
 #include "kis_dummies_facade_base_test.h"
 
 class KisDoc2;
+class KisPart2;
 class KisNameServer;
 class KisShapeController;
 
@@ -39,6 +40,7 @@ protected:
 
 private:
     KisDoc2 *m_doc;
+    KisPart2 *m_part;
     KisNameServer *m_nameServer;
 };
 

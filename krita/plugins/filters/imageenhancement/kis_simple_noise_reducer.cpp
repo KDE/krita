@@ -47,10 +47,9 @@ KisSimpleNoiseReducer::~KisSimpleNoiseReducer()
 {
 }
 
-KisConfigWidget * KisSimpleNoiseReducer::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
+KisConfigWidget * KisSimpleNoiseReducer::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
 {
     Q_UNUSED(dev);
-    Q_UNUSED(image);
     vKisIntegerWidgetParam param;
     param.push_back(KisIntegerWidgetParam(0, 255, 15, i18n("Threshold"), "threshold"));
     param.push_back(KisIntegerWidgetParam(0, 10, 1, i18n("Window size"), "windowsize"));

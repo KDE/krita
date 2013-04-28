@@ -148,7 +148,7 @@ void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
 
     KisPaintDeviceSP bumpmapPaintDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb16());
     bumpmapPaintDevice->writeBytes(bumpmap.data(), outputArea.x(), outputArea.y(), outputArea.width(), outputArea.height());
-    KUndo2Command *leaker = bumpmapPaintDevice->convertTo(device->colorSpace());
+    KUndo2Command *leaker = bumpmapPaintDevice->convertTo(device->colorSpace(), KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
     KisPainter copier(device);
     copier.bitBlt(outputArea.x(), outputArea.y(), bumpmapPaintDevice,
                   outputArea.x(), outputArea.y(), outputArea.width(), outputArea.height());
@@ -198,9 +198,9 @@ QRect KisFilterPhongBumpmap::changedRect(const QRect &rect, const KisFilterConfi
     return rect;
 }
 
-KisConfigWidget *KisFilterPhongBumpmap::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
+KisConfigWidget *KisFilterPhongBumpmap::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
 {
-    KisPhongBumpmapConfigWidget *w = new KisPhongBumpmapConfigWidget(dev, image, parent);
+    KisPhongBumpmapConfigWidget *w = new KisPhongBumpmapConfigWidget(dev, parent);
     return w;
 }
 

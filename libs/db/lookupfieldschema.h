@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,6 +19,8 @@
 
 #ifndef KEXIDB_LOOKUPFIELDSCHEMA_H
 #define KEXIDB_LOOKUPFIELDSCHEMA_H
+
+#include <QMap>
 
 #include "global.h"
 
@@ -86,7 +88,7 @@ public:
         /*! @return row source type name. @see setTypeByName() */
         QString typeName() const;
 
-        /*! Sets row source type by name using \a typeName. Accepted (cast sensitive)
+        /*! Sets row source type by name using \a typeName. Accepted (case sensitive)
          names are "table", "query", "sql", "valuelist", "fieldlist".
          For other value NoType type is set. */
         void setTypeByName(const QString& typeName);
@@ -121,6 +123,8 @@ public:
     };
 
     LookupFieldSchema();
+
+    LookupFieldSchema(const LookupFieldSchema &schema);
 
     ~LookupFieldSchema();
 
@@ -199,11 +203,11 @@ public:
     /*! Sets type of widget to display within the forms for this lookup field. @see displayWidget() */
     void setDisplayWidget(DisplayWidget widget);
 
-    /*! \return String for debugging purposes. */
-    QString debugString() const;
+    /*! \return String for debugging purposes. \a fieldName will be printed if provided. */
+    QString debugString(const QString &fieldName = QString()) const;
 
-    /*! Shows debug information. */
-    void debug() const;
+    /*! Shows debug information. \a fieldName will be printed if provided. */
+    void debug(const QString &fieldName = QString()) const;
 
     /*! Loads data of lookup column schema from DOM tree.
      The data can be outdated or invalid, so the app should handle such cases.
@@ -211,16 +215,25 @@ public:
     static LookupFieldSchema* loadFromDom(const QDomElement& lookupEl);
 
     /*! Saves data of lookup column schema to \a parentEl DOM element of \a doc document. */
-    static void saveToDom(LookupFieldSchema& lookupSchema, QDomDocument& doc, QDomElement& parentEl);
+    void saveToDom(QDomDocument *doc, QDomElement *parentEl) const;
+
+    /*! Gets property values for the lookup schema.
+     \a values is cleared before filling.
+     This function is used e.g. for altering table design. */
+    void getProperties(QMap<QByteArray, QVariant> *values) const;
 
     /*! Sets property of name \a propertyName and value \a value for the lookup schema \a lookup
      \return true on successful set and false on failure because of invalid value or invalid property name. */
-    static bool setProperty(
-        LookupFieldSchema& lookup, const QByteArray& propertyName,
-        const QVariant& value);
+    bool setProperty(const QByteArray& propertyName, const QVariant& value);
+
+    /*! Sets property values for the lookup schema.
+     Properties coming from extended schema are also supported.
+     Properties not listed are kept untouched.
+     This function is used e.g. for altering table design.
+     \return true on successful set and false on failure because of invalid value or invalid property name. */
+    bool setProperties(const QMap<QByteArray, QVariant>& values);
 
 private:
-    Q_DISABLE_COPY(LookupFieldSchema)
     class Private;
     Private * const d;
 };

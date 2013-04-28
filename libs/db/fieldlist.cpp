@@ -68,13 +68,15 @@ FieldList& FieldList::insertField(uint index, KexiDB::Field *field)
     if (!field)
         return *this;
     if (index > (uint)m_fields.count()) {
-        KexiDBFatal << "FieldList::insertField(): index (" << index << ") out of range";
+        KexiDBFatal << "index (" << index << ") out of range";
         return *this;
     }
     m_fields.insert(index, field);
     if (!field->name().isEmpty())
         m_fields_by_name.insert(field->name().toLower(), field);
     m_sqlFields.clear();
+    delete m_autoinc_fields;
+    m_autoinc_fields = 0;
     return *this;
 }
 
@@ -82,8 +84,7 @@ void FieldList::renameField(const QString& oldName, const QString& newName)
 {
     Field *field = m_fields_by_name.value(oldName.toLower());
     if (!field) {
-        KexiDBFatal << "FieldList::renameField() no field found "
-        << QString("\"%1\"").arg(oldName);
+        KexiDBFatal << "no field found" << QString("\"%1\"").arg(oldName);
         return;
     }
     renameFieldInternal(field, newName.toLower());
@@ -92,8 +93,8 @@ void FieldList::renameField(const QString& oldName, const QString& newName)
 void FieldList::renameField(KexiDB::Field *field, const QString& newName)
 {
     if (!field || field != m_fields_by_name.value(field->name().toLower())) {
-        KexiDBFatal << "FieldList::renameField() no field found "
-        << (field ? QString("\"%1\"").arg(field->name()) : QString());
+        KexiDBFatal << "no field found"
+            << (field ? QString("\"%1\"").arg(field->name()) : QString());
         return;
     }
     renameFieldInternal(field, newName.toLower());
@@ -112,14 +113,34 @@ FieldList& FieldList::addField(KexiDB::Field *field)
     return insertField(m_fields.count(), field);
 }
 
-void FieldList::removeField(KexiDB::Field *field)
+bool FieldList::removeField(KexiDB::Field *field)
 {
     assert(field);
     if (!field)
-        return;
-    m_fields_by_name.remove(field->name().toLower());
+        return false;
+    if (m_fields_by_name.remove(field->name().toLower()) < 1)
+        return false;
     m_fields.removeAt(m_fields.indexOf(field));
     m_sqlFields.clear();
+    delete m_autoinc_fields;
+    m_autoinc_fields = 0;
+    return true;
+}
+
+bool FieldList::moveField(KexiDB::Field *field, uint newIndex)
+{
+    assert(field);
+    if (!field || !m_fields.removeOne(field)) {
+        return false;
+    }
+    if (int(newIndex) > m_fields.count()) {
+        newIndex = m_fields.count();
+    }
+    m_fields.insert(newIndex, field);
+    m_sqlFields.clear();
+    delete m_autoinc_fields;
+    m_autoinc_fields = 0;
+    return true;
 }
 
 Field* FieldList::field(const QString& name)
@@ -127,7 +148,7 @@ Field* FieldList::field(const QString& name)
     return m_fields_by_name.value(name.toLower());
 }
 
-QString FieldList::debugString()
+QString FieldList::debugString() const
 {
     if (m_fields.isEmpty())
         return "<NO FIELDS>";
@@ -160,7 +181,7 @@ void FieldList::debug()
 
 static QString subListWarning1(const QString& fname)
 {
-    return QString("FieldList::subList() could not find field \"%1\"").arg(fname);
+    return QString("could not find field \"%1\"").arg(fname);
 }
 
 FieldList* FieldList::subList(const QString& n1, const QString& n2,
@@ -215,7 +236,7 @@ FieldList* FieldList::subList(const QList<uint>& list)
     foreach(uint index, list) {
         f = field(index);
         if (!f) {
-            KexiDBWarn << QString("FieldList::subList() could not find field at position %1").arg(index);
+            KexiDBWarn << QString("could not find field at position %1").arg(index);
             delete fl;
             return 0;
         }

@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Calligra/ColorSpaceExtension
 Comment=A module implementing an extension to a colorspace of the Pigment Color Manipulation System
 Comment[bg]=Модул, реализиращ пълна цветова гама за употреба с Pigment Color Manipulation System
+Comment[bs]=Modul koji implementuje proširenje na prostor boja u Manipulacionom Sistemu Pigmentnih Boja
 Comment[ca]=Un mòdul que implementa una extensió a un espai de colors del Sistema de Manipulació Pigment Color
 Comment[ca@valencia]=Un mòdul que implementa una extensió a un espai de colors del Sistema de Manipulació Pigment Color
 Comment[da]=Et modul som implementerer et udvidelse til et farveområde til Pigment Color Manipulation System
@@ -14,7 +15,7 @@ Comment[et]=Pigmenti värvikäitlussüsteemi värviruumi laiendit teostav moodul
 Comment[fi]=Moduli, joka laajentaa Pigment Color Manipulation System -väriavaruuden laajennuksen
 Comment[fr]=Un module implantant une extension à un espace de couleurs d'un système de manipulation des pigment de couleurs
 Comment[fy]=In útwreiding dy't in folslein kleurgebiet ymplementearret dat brûkt kin wurde mei libkritacolor
-Comment[gl]=Un módulo que complementa un engadido para os espazos de cores para o seu uso co sistema de manipulación dos pigmentos de cores
+Comment[gl]=Módulo que introduce os espazos de cores para o sistema de manipulación dos pigmentos das cores (PCMS).
 Comment[it]=Un modulo che implementa un'estensione a uno spazio di colori da usare con il sistema di manipolazione dei colori di Pigment
 Comment[kk]=Пигмент түсімен айналасу жүйесінің түстер кеңістігінің кеңейтуін іске асыратын модулі
 Comment[nb]=En modul som implementerer en utvidelse til et fargerom for Pigment Color Manipulation System
@@ -34,5 +35,5 @@ Comment[x-test]=xxA module implementing an extension to a colorspace of the Pigm
 Comment[zh_TW]=實作完整色彩空間以使用 Pigment 色彩處理系統的模組
 [PropertyDef::X-Pigment-MinVersion]
 Type=int
-[PropertyDef::X-Flake-PluginVersion]
+[PropertyDef::X-Pigment-PluginVersion]
 Type=int

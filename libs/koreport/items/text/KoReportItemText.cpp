@@ -19,8 +19,8 @@
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
 #include <KoGlobal.h>
-#include <KLocale>
-#include <KDebug>
+#include <klocale.h>
+#include <kdebug.h>
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
 #include <QPrinter>
@@ -187,7 +187,9 @@ QString KoReportItemText::typeName() const
     return "report:text";
 }
 
-int KoReportItemText::render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script)
+int KoReportItemText::renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset,
+                                       const QVariant &data, KRScriptHandler *script)
+
 {
     Q_UNUSED(script);
 

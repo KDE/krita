@@ -21,12 +21,12 @@
 
 #include "TrackedChangeModel.h"
 
-#include <KLocale>
+#include <klocale.h>
 
 #include <QModelIndex>
 #include <QTreeView>
 
-#include <KDebug>
+#include <kdebug.h>
 
 TrackedChangeManager::TrackedChangeManager(QWidget* parent): QWidget(parent),
     m_model(0)

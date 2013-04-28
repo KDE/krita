@@ -124,7 +124,7 @@ void KoResourceTagging_test::testReadWriteXML()
 {
 
     /// this will delete tagObject and also calls writeXML()
-    m_tagObject->~KoResourceTagging();
+    delete m_tagObject;
 
     m_tagObject = new KoResourceTagging("*.test");
 
@@ -142,7 +142,7 @@ void KoResourceTagging_test::testReadWriteXML()
     resource = new KoPattern(m_resourceNames.at(1));
     m_tagObject->delTag(resource,m_tags.at(0));
 
-    m_tagObject->~KoResourceTagging();
+    delete m_tagObject;
 }
 
 #ifdef NEPOMUK
@@ -156,7 +156,7 @@ void KoResourceTagging_test::testNepomukBackend()
     resource = new KoPattern(m_resourceNames.at(1));
     m_tagObject->addTag(resource,m_tags.at(1));
 
-    m_tagObject->~KoResourceTagging();
+    delete m_tagObject;
 
     m_tagObject = new KoResourceTagging("*.test");
 
@@ -185,8 +185,8 @@ void KoResourceTagging_test::testNepomukBackend()
     resource = new KoPattern(m_resourceNames.at(1));
     m_tagObject->delTag(resource,m_tags.at(1));
 
-    m_tagObject->~KoResourceTagging();
-    tagObjectForNepo->~KoResourceTagging();
+    delete m_tagObject;
+    delete tagObjectForNepo;
 }
 #endif
 

@@ -39,6 +39,7 @@
 
 #include <kis_debug.h>
 
+#include <KoIcon.h>
 #include <KoCompositeOp.h>
 #include <KoUnitDoubleSpinBox.h>
 #include <KoColorSpaceRegistry.h>
@@ -101,9 +102,9 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
     connect(createButton, SIGNAL(clicked()), this, SLOT(createImage()));
     createButton->setDefault(true);
 
-    bnPortrait->setIcon(KIcon("portrait"));
+    bnPortrait->setIcon(koIcon("portrait"));
     connect(bnPortrait, SIGNAL(toggled(bool)), SLOT(switchWidthHeight()));
-    bnLandscape->setIcon(KIcon("landscape"));
+    bnLandscape->setIcon(koIcon("landscape"));
 
     connect(bnSaveAsPredefined, SIGNAL(clicked()), this, SLOT(saveAsPredefined()));
 
@@ -114,6 +115,7 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
     colorSpaceSelector->setCurrentColorDepth(KoID(defColorDepth));
     colorSpaceSelector->setCurrentProfile(defColorProfile);
 
+    connect(chkFromClipboard,SIGNAL(stateChanged(int)),this,SLOT(clipboardDataChanged()));
     connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));
     connect(QApplication::clipboard(), SIGNAL(selectionChanged()), this, SLOT(clipboardDataChanged()));
     connect(QApplication::clipboard(), SIGNAL(changed(QClipboard::Mode)), this, SLOT(clipboardDataChanged()));
@@ -122,6 +124,10 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
     connect(colorSpaceSelector, SIGNAL(selectionChanged(bool)), createButton, SLOT(setEnabled(bool)));
 
     fillPredefined();
+}
+
+void KisCustomImageWidget::showEvent(QShowEvent *){
+    this->createButton->setFocus();
 }
 
 KisCustomImageWidget::~KisCustomImageWidget()
@@ -255,16 +261,20 @@ void KisCustomImageWidget::clipboardDataChanged()
         KisClipboard * cb = KisClipboard::instance();
         QSize sz = cb->clipSize();
         if (sz.isValid() && sz.width() != 0 && sz.height() != 0) {
-            chkFromClipboard->setChecked(true);
             chkFromClipboard->setEnabled(true);
-            doubleWidth->setValue(sz.width());
+            if (chkFromClipboard->isChecked()) {
+                doubleWidth->setValue(sz.width());
+                doubleHeight->setValue(sz.height());
+            }
+            else {
+                doubleWidth->setValue(doubleWidth->value());
+                doubleHeight->setValue(doubleHeight->value());
+            }
             doubleWidth->setDecimals(0);
-            doubleHeight->setValue(sz.height());
             doubleHeight->setDecimals(0);
         } else {
             chkFromClipboard->setChecked(false);
             chkFromClipboard->setEnabled(false);
-
         }
     }
 
@@ -293,7 +303,7 @@ void KisCustomImageWidget::fillPredefined()
 
     if (!definitions.empty()) {
 
-        foreach(QString definition, definitions) {
+        foreach(const QString &definition, definitions) {
             QFile f(definition);
             f.open(QIODevice::ReadOnly);
             if (f.exists()) {

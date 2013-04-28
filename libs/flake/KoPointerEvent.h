@@ -223,6 +223,11 @@ public:
     /// The point in document coordinates.
     const QPointF point;
 
+    /**
+     * Returns if the event comes from a tablet
+     */
+    bool isTabletEvent();
+
 protected:
     friend class KoToolProxy;
     friend class KisScratchPadEventFilter;

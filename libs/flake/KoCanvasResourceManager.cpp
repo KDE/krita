@@ -23,7 +23,7 @@
 
 #include <QVariant>
 #include <kundo2stack.h>
-#include <KDebug>
+#include <kdebug.h>
 
 #include "KoShape.h"
 #include "KoShapeStroke.h"
@@ -43,6 +43,7 @@ KoCanvasResourceManager::KoCanvasResourceManager(QObject *parent)
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
     setForegroundColor(KoColor(Qt::black, cs));
     setBackgroundColor(KoColor(Qt::white, cs));
+    setResource(ApplicationSpeciality, NoSpecial);
 }
 
 KoCanvasResourceManager::~KoCanvasResourceManager()

@@ -36,7 +36,7 @@
 #include "Styles_p.h"
 #include "KoTextDocument.h"
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <QTextBlock>
 #include <QTextBlockFormat>
@@ -61,7 +61,7 @@ static int compareTabs(KoText::Tab &tab1, KoText::Tab &tab2)
 class KoParagraphStyle::Private
 {
 public:
-    Private() : parentStyle(0), defaultStyle(0), list(0) {}
+    Private() : parentStyle(0), defaultStyle(0), list(0), m_inUse(false) {}
 
     ~Private()
     {
@@ -91,6 +91,7 @@ public:
     KoParagraphStyle *defaultStyle;
     KoList *list;
     StylePrivate stylesPrivate;
+    bool m_inUse;
 };
 
 KoParagraphStyle::KoParagraphStyle(QObject *parent)
@@ -127,6 +128,11 @@ KoParagraphStyle *KoParagraphStyle::fromBlock(const QTextBlock &block, QObject *
 KoParagraphStyle::~KoParagraphStyle()
 {
     delete d;
+}
+
+KoCharacterStyle::Type KoParagraphStyle::styleType() const
+{
+    return KoCharacterStyle::ParagraphStyle;
 }
 
 void KoParagraphStyle::setDefaultStyle(KoParagraphStyle *defaultStyle)
@@ -229,23 +235,10 @@ QColor KoParagraphStyle::propertyColor(int key) const
 
 void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const
 {
-    bool hadBreakBefore = format.hasProperty(BreakBefore);
-    bool hadBreakAfter = format.hasProperty(BreakAfter);
-
     if (d->parentStyle) {
         d->parentStyle->applyStyle(format);
     }
 
-    if (!hadBreakBefore) {
-         // page preak should not be inherited according to odf, yet if it was there
-         // before we shouldn't remove
-         format.clearProperty(BreakBefore);
-    }
-    if (!hadBreakAfter) {
-         // page preak should not be inherited according to odf, yet if it was there
-         // before we shouldn't remove
-         format.clearProperty(BreakAfter);
-    }
     const QMap<int, QVariant> props = d->stylesPrivate.properties();
     QMap<int, QVariant>::const_iterator it = props.begin();
     while (it != props.end()) {
@@ -263,6 +256,8 @@ void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const
     if ((hasProperty(DefaultOutlineLevel)) && (!format.hasProperty(OutlineLevel))) {
        format.setProperty(OutlineLevel, defaultOutlineLevel());
     }
+    emit styleApplied(this);
+    d->m_inUse = true;
 }
 
 void KoParagraphStyle::applyStyle(QTextBlock &block, bool applyListStyle) const
@@ -278,6 +273,11 @@ void KoParagraphStyle::applyStyle(QTextBlock &block, bool applyListStyle) const
     if (applyListStyle) {
         applyParagraphListStyle(block, format);
     }
+}
+
+bool KoParagraphStyle::isApplied() const
+{
+    return d->m_inUse;
 }
 
 void KoParagraphStyle::applyParagraphListStyle(QTextBlock &block, const QTextBlockFormat &blockFormat) const
@@ -314,9 +314,8 @@ void KoParagraphStyle::applyParagraphListStyle(QTextBlock &block, const QTextBlo
         } else {
             if (block.textList())
                 block.textList()->remove(block);
-            KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
-            if (data)
-                data->setCounterWidth(-1);
+            KoTextBlockData data(block);
+            data.setCounterWidth(-1);
         }
     }
 }
@@ -357,10 +356,9 @@ void KoParagraphStyle::unapplyStyle(QTextBlock &block) const
     if (d->list && block.textList()) { // TODO check its the same one?
         KoList::remove(block);
     }
-
 }
 
-void KoParagraphStyle::setLineHeightPercent(int lineHeight)
+void KoParagraphStyle::setLineHeightPercent(qreal lineHeight)
 {
     setProperty(PercentLineHeight, lineHeight);
     setProperty(FixedLineHeight, 0.0);
@@ -368,7 +366,7 @@ void KoParagraphStyle::setLineHeightPercent(int lineHeight)
     remove(NormalLineHeight);
 }
 
-int KoParagraphStyle::lineHeightPercent() const
+qreal KoParagraphStyle::lineHeightPercent() const
 {
     return propertyInt(PercentLineHeight);
 }
@@ -1061,7 +1059,7 @@ bool KoParagraphStyle::isListHeader() const
 }
 
 KoListStyle *KoParagraphStyle::listStyle() const
-{    
+{
     QVariant variant = value(ParagraphListStyleId);
     if (variant.isNull())
         return 0;
@@ -1236,7 +1234,7 @@ void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContex
     }
 
     QString family = element->attributeNS(KoXmlNS::style, "family", "paragraph");
- 
+
     context.styleStack().save();
     if (loadParents) {
         context.addStyles(element, family.toLocal8Bit().constData());   // Load all parent
@@ -1265,6 +1263,82 @@ void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContex
     context.styleStack().restore();
 }
 
+struct ParagraphBorderData {
+    enum Values {Style = 1, Color = 2, Width = 4};
+
+    ParagraphBorderData()
+    : values(0) {}
+
+    ParagraphBorderData(const ParagraphBorderData &other)
+    : values(other.values), style(other.style), color(other.color), width(other.width) {}
+
+    // flag defining which data is set
+    int values;
+
+    KoBorder::BorderStyle style;
+    QColor color;
+    qreal width; ///< in pt
+};
+
+
+/// Parses the @p dataString as value defined by CSS2 §7.29.3 "border"
+/// Adds parsed data to the data as set for @p defaultParagraphBorderData.
+/// Returns the enriched border data on success, the original @p defaultParagraphBorderData on a parsing error
+static ParagraphBorderData parseParagraphBorderData(const QString &dataString, const ParagraphBorderData &defaultParagraphBorderData)
+{
+    const QStringList bv = dataString.split(QLatin1Char(' '), QString::SkipEmptyParts);
+    // too many items? ignore complete value
+    if (bv.count() > 3) {
+        return defaultParagraphBorderData;
+    }
+
+    ParagraphBorderData borderData = defaultParagraphBorderData;
+    int parsedValues = 0; ///< used to track what is read from the given string
+
+    foreach(const QString &v, bv) {
+        // try style
+        if (! (parsedValues & ParagraphBorderData::Style)) {
+            bool success = false;
+            KoBorder::BorderStyle style = KoBorder::odfBorderStyle(v, &success);
+            // workaround for not yet supported "hidden"
+            if (! success && (v == QLatin1String("hidden"))) {
+                // map to "none" for now TODO: KoBorder needs to support "hidden"
+                style = KoBorder::BorderNone;
+                success = true;
+            }
+            if (success) {
+                borderData.style = style;
+                borderData.values |= ParagraphBorderData::Style;
+                parsedValues |= ParagraphBorderData::Style;
+                continue;
+            }
+        }
+        // try color
+        if (! (parsedValues & ParagraphBorderData::Color)) {
+            const QColor color(v);
+            if (color.isValid()) {
+                borderData.color = color;
+                borderData.values |= ParagraphBorderData::Color;
+                parsedValues |= ParagraphBorderData::Color;
+                continue;
+            }
+        }
+        // try width
+        if (! (parsedValues & ParagraphBorderData::Width)) {
+            const qreal width = KoUnit::parseValue(v);
+            if (width >= 0.0) {
+                borderData.width = width;
+                borderData.values |= ParagraphBorderData::Width;
+                parsedValues |= ParagraphBorderData::Width;
+                continue;
+            }
+        }
+        // still here? found a value which cannot be parsed
+        return defaultParagraphBorderData;
+    }
+    return borderData;
+}
+
 void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
 {
     KoStyleStack &styleStack = scontext.odfLoadingContext().styleStack();
@@ -1282,6 +1356,10 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     }
 
     // Spacing (padding)
+    const QString padding(styleStack.property(KoXmlNS::fo, "padding"));
+    if (!padding.isEmpty()) {
+        setPadding(KoUnit::parseValue(padding));
+    }
     const QString paddingLeft(styleStack.property(KoXmlNS::fo, "padding-left" ));
     if (!paddingLeft.isEmpty()) {
         setLeftPadding(KoUnit::parseValue(paddingLeft));
@@ -1298,12 +1376,12 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     if (!paddingBottom.isEmpty()) {
         setBottomPadding(KoUnit::parseValue(paddingBottom));
     }
-    const QString padding(styleStack.property(KoXmlNS::fo, "padding"));
-    if (!padding.isEmpty()) {
-        setPadding(KoUnit::parseValue(padding));
-    }
 
     // Indentation (margin)
+    const QString margin(styleStack.property(KoXmlNS::fo, "margin"));
+    if (!margin.isEmpty()) {
+        setMargin(KoText::parseLength(margin));
+    }
     const QString marginLeft(styleStack.property(KoXmlNS::fo, "margin-left" ));
     if (!marginLeft.isEmpty()) {
         setLeftMargin(KoText::parseLength(marginLeft));
@@ -1319,10 +1397,6 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     const QString marginBottom(styleStack.property(KoXmlNS::fo, "margin-bottom"));
     if (!marginBottom.isEmpty()) {
         setBottomMargin(KoText::parseLength(marginBottom));
-    }
-    const QString margin(styleStack.property(KoXmlNS::fo, "margin"));
-    if (!margin.isEmpty()) {
-        setMargin(KoText::parseLength(margin));
     }
 
     // Automatic Text indent
@@ -1348,9 +1422,9 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     QString lineHeight(styleStack.property(KoXmlNS::fo, "line-height"));
     if (!lineHeight.isEmpty()) {
         if (lineHeight != "normal") {
-            if (lineHeight.indexOf('%') > -1) { // percent value is between 50% and 200%
+            if (lineHeight.indexOf('%') > -1) {
                 bool ok;
-                const int percent = lineHeight.remove('%').toInt(&ok);
+                const qreal percent = lineHeight.remove('%').toDouble(&ok);
                 if (ok) {
                     setLineHeightPercent(percent);
                 }
@@ -1541,59 +1615,85 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
 #endif
 
     // Borders
-    const QString borderLeft(styleStack.property(KoXmlNS::fo, "border", "left"));
-    if (!borderLeft.isEmpty() && borderLeft != "none" && borderLeft != "hidden") {
-        QStringList bv = borderLeft.split(' ', QString::SkipEmptyParts);
-        setLeftBorderWidth(KoUnit::parseValue(bv.value(0), 1.0));
-        setLeftBorderStyle(KoBorder::odfBorderStyle(bv.value(1)));
-        setLeftBorderColor(QColor(bv.value(2)));
-        //setLeftInnerBorderWidth(qreal width);
-        //setLeftBorderSpacing(qreal width);
+    // The border attribute is actually three attributes in one string, all optional
+    // and with no given order. Also there is a hierachy, first the common for all
+    // sides and then overwrites per side, while in the code only the sides are stored.
+    // So first the common data border is fetched, then this is overwritten per
+    // side and the result stored.
+    const QString border(styleStack.property(KoXmlNS::fo, "border"));
+    const ParagraphBorderData borderData = parseParagraphBorderData(border, ParagraphBorderData());
+
+    const QString borderLeft(styleStack.property(KoXmlNS::fo, "border-left"));
+    const ParagraphBorderData leftParagraphBorderData = parseParagraphBorderData(borderLeft, borderData);
+    if (leftParagraphBorderData.values & ParagraphBorderData::Width) {
+        setLeftBorderWidth(leftParagraphBorderData.width);
     }
-    const QString borderTop(styleStack.property(KoXmlNS::fo, "border", "top"));
-    if (!borderTop.isEmpty() && borderTop != "none" && borderTop != "hidden") {
-        QStringList bv = borderTop.split(' ', QString::SkipEmptyParts);
-        setTopBorderWidth(KoUnit::parseValue(bv.value(0), 1.0));
-        setTopBorderStyle(KoBorder::odfBorderStyle(bv.value(1)));
-        setTopBorderColor(QColor(bv.value(2)));
+    if (leftParagraphBorderData.values & ParagraphBorderData::Style) {
+        setLeftBorderStyle(leftParagraphBorderData.style);
     }
-    const QString borderRight(styleStack.property(KoXmlNS::fo, "border", "right"));
-    if (!borderRight.isEmpty() && borderRight != "none" && borderRight != "hidden") {
-        QStringList bv = borderRight.split(' ', QString::SkipEmptyParts);
-        setRightBorderWidth(KoUnit::parseValue(bv.value(0), 1.0));
-        setRightBorderStyle(KoBorder::odfBorderStyle(bv.value(1)));
-        setRightBorderColor(QColor(bv.value(2)));
+    if (leftParagraphBorderData.values & ParagraphBorderData::Color) {
+        setLeftBorderColor(leftParagraphBorderData.color);
     }
-    const QString borderBottom(styleStack.property(KoXmlNS::fo, "border", "bottom"));
-    if (!borderBottom.isEmpty() && borderBottom != "none" && borderBottom != "hidden") {
-        QStringList bv = borderBottom.split(' ', QString::SkipEmptyParts);
-        setBottomBorderWidth(KoUnit::parseValue(bv.value(0), 1.0));
-        setBottomBorderStyle(KoBorder::odfBorderStyle(bv.value(1)));
-        setBottomBorderColor(QColor(bv.value(2)));
+
+    const QString borderTop(styleStack.property(KoXmlNS::fo, "border-top"));
+    const ParagraphBorderData topParagraphBorderData = parseParagraphBorderData(borderTop, borderData);
+    if (topParagraphBorderData.values & ParagraphBorderData::Width) {
+        setTopBorderWidth(topParagraphBorderData.width);
     }
+    if (topParagraphBorderData.values & ParagraphBorderData::Style) {
+        setTopBorderStyle(topParagraphBorderData.style);
+    }
+    if (topParagraphBorderData.values & ParagraphBorderData::Color) {
+        setTopBorderColor(topParagraphBorderData.color);
+    }
+
+    const QString borderRight(styleStack.property(KoXmlNS::fo, "border-right"));
+    const ParagraphBorderData rightParagraphBorderData = parseParagraphBorderData(borderRight, borderData);
+    if (rightParagraphBorderData.values & ParagraphBorderData::Width) {
+        setRightBorderWidth(rightParagraphBorderData.width);
+    }
+    if (rightParagraphBorderData.values & ParagraphBorderData::Style) {
+        setRightBorderStyle(rightParagraphBorderData.style);
+    }
+    if (rightParagraphBorderData.values & ParagraphBorderData::Color) {
+        setRightBorderColor(rightParagraphBorderData.color);
+    }
+
+    const QString borderBottom(styleStack.property(KoXmlNS::fo, "border-bottom"));
+    const ParagraphBorderData bottomParagraphBorderData = parseParagraphBorderData(borderBottom, borderData);
+    if (bottomParagraphBorderData.values & ParagraphBorderData::Width) {
+        setBottomBorderWidth(bottomParagraphBorderData.width);
+    }
+    if (bottomParagraphBorderData.values & ParagraphBorderData::Style) {
+        setBottomBorderStyle(bottomParagraphBorderData.style);
+    }
+    if (bottomParagraphBorderData.values & ParagraphBorderData::Color) {
+        setBottomBorderColor(bottomParagraphBorderData.color);
+    }
+
     const QString borderLineWidthLeft(styleStack.property(KoXmlNS::style, "border-line-width", "left"));
-    if (!borderLineWidthLeft.isEmpty() && borderLineWidthLeft != "none" && borderLineWidthLeft != "hidden") {
+    if (!borderLineWidthLeft.isEmpty()) {
         QStringList blw = borderLineWidthLeft.split(' ', QString::SkipEmptyParts);
         setLeftInnerBorderWidth(KoUnit::parseValue(blw.value(0), 0.1));
         setLeftBorderSpacing(KoUnit::parseValue(blw.value(1), 1.0));
         setLeftBorderWidth(KoUnit::parseValue(blw.value(2), 0.1));
     }
     const QString borderLineWidthTop(styleStack.property(KoXmlNS::style, "border-line-width", "top"));
-    if (!borderLineWidthTop.isEmpty() && borderLineWidthTop != "none" && borderLineWidthTop != "hidden") {
+    if (!borderLineWidthTop.isEmpty()) {
         QStringList blw = borderLineWidthTop.split(' ', QString::SkipEmptyParts);
         setTopInnerBorderWidth(KoUnit::parseValue(blw.value(0), 0.1));
         setTopBorderSpacing(KoUnit::parseValue(blw.value(1), 1.0));
         setTopBorderWidth(KoUnit::parseValue(blw.value(2), 0.1));
     }
     const QString borderLineWidthRight(styleStack.property(KoXmlNS::style, "border-line-width", "right"));
-    if (!borderLineWidthRight.isEmpty() && borderLineWidthRight != "none" && borderLineWidthRight != "hidden") {
+    if (!borderLineWidthRight.isEmpty()) {
         QStringList blw = borderLineWidthRight.split(' ', QString::SkipEmptyParts);
         setRightInnerBorderWidth(KoUnit::parseValue(blw.value(0), 0.1));
         setRightBorderSpacing(KoUnit::parseValue(blw.value(1), 1.0));
         setRightBorderWidth(KoUnit::parseValue(blw.value(2), 0.1));
     }
     const QString borderLineWidthBottom(styleStack.property(KoXmlNS::style, "border-line-width", "bottom"));
-    if (!borderLineWidthBottom.isEmpty() && borderLineWidthBottom != "none" && borderLineWidthBottom != "hidden") {
+    if (!borderLineWidthBottom.isEmpty()) {
         QStringList blw = borderLineWidthBottom.split(' ', QString::SkipEmptyParts);
         setBottomInnerBorderWidth(KoUnit::parseValue(blw.value(0), 0.1));
         setBottomBorderSpacing(KoUnit::parseValue(blw.value(1), 1.0));
@@ -1611,7 +1711,7 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
             int l = length.toInt();
             if (l > 0) // somefiles may use this to turn dropcaps off
                 setDropCapsLength(length.toInt());
-            else 
+            else
                 setDropCaps(false);
         }
         const QString lines = dropCap.attributeNS(KoXmlNS::style, "lines", QString("1"));

@@ -31,15 +31,18 @@
 KisSmudgeOptionWidget::KisSmudgeOptionWidget(const QString& label, const QString& sliderLabel, const QString& name, bool checked):
     KisCurveOptionWidget(new KisSmudgeOption(name, label, checked))
 {
+    Q_UNUSED(sliderLabel);
+
     mCbSmudgeMode = new QComboBox();
     mCbSmudgeMode->addItem(i18n("Smearing"), KisSmudgeOption::SMEARING_MODE);
     mCbSmudgeMode->addItem(i18n("Dulling") , KisSmudgeOption::DULLING_MODE);
     
     QHBoxLayout* h = new QHBoxLayout();
-    h->addWidget(new QLabel(i18n("Smudge Mode")));
+    h->addWidget(new QLabel(i18n("Smudge mode:")));
     h->addWidget(mCbSmudgeMode, 1);
     
     QVBoxLayout* v = new QVBoxLayout();
+    v->setMargin(0);
     QWidget*     w = new QWidget();
     
     v->addLayout(h);

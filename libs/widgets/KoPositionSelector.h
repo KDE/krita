@@ -31,7 +31,7 @@ class KOWIDGETS_EXPORT KoPositionSelector : public QWidget
 {
     Q_OBJECT
 public:
-    KoPositionSelector(QWidget *parent);
+    explicit KoPositionSelector(QWidget *parent);
     ~KoPositionSelector();
 
     KoFlake::Position position() const;

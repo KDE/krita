@@ -24,15 +24,17 @@
 #include "KoReportPluginInfo.h"
 #include "krscriptchart.h"
 
-#include <KIcon>
+#include <KoIcon.h>
 
 K_EXPORT_KOREPORT_ITEMPLUGIN(KoReportChartPlugin, chartplugin)
 
 KoReportChartPlugin::KoReportChartPlugin(QObject *parent, const QVariantList &args) : KoReportPluginInterface(parent)
 {
+    Q_UNUSED(args);
+
     KoReportPluginInfo *info = new KoReportPluginInfo();
     info->setClassName("report:chart");
-    info->setIcon(KIcon("office-chart-area"));
+    info->setIcon(koIcon("office-chart-area"));
     info->setName(i18n("Chart"));
     info->setPriority(10);
     setInfo(info);

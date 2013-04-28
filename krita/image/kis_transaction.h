@@ -26,7 +26,6 @@
 
 #include "kis_transaction_data.h"
 #include "kis_selection_transaction_data.h"
-#include "kis_selected_transaction_data.h"
 #include "kis_paint_device.h"
 
 #include "kis_undo_adapter.h"
@@ -115,21 +114,12 @@ protected:
     KisTransactionData* m_transactionData;
 };
 
-class KisSelectedTransaction : public KisTransaction
-{
-public:
-    KisSelectedTransaction(const QString& name, KisNodeSP node, KUndo2Command* parent = 0)
-    {
-        m_transactionData = new KisSelectedTransactionData(name, node, parent);
-    }
-};
-
 class KisSelectionTransaction : public KisTransaction
 {
 public:
-    KisSelectionTransaction(const QString& name, KisImageWSP image, KisSelectionSP selection, KUndo2Command* parent = 0)
+    KisSelectionTransaction(const QString& name, KisUndoAdapter *undoAdapter, KisSelectionSP selection, KUndo2Command* parent = 0)
     {
-        m_transactionData = new KisSelectionTransactionData(name, image, selection, parent);
+        m_transactionData = new KisSelectionTransactionData(name, undoAdapter, selection, parent);
     }
 };
 

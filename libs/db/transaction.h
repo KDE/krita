@@ -36,7 +36,7 @@ class Connection;
 class CALLIGRADB_EXPORT TransactionData
 {
 public:
-    TransactionData(Connection *conn);
+    explicit TransactionData(Connection *conn);
     ~TransactionData();
 
     //helper for debugging
@@ -122,10 +122,10 @@ class CALLIGRADB_EXPORT TransactionGuard
 public:
     /*! Constructor #1: Starts new transaction constructor for \a connection.
      Started transaction handle is available via transaction().*/
-    TransactionGuard(Connection& conn);
+    explicit TransactionGuard(Connection &conn);
 
     /*! Constructor #2: Uses already started transaction. */
-    TransactionGuard(const Transaction& trans);
+    explicit TransactionGuard(const Transaction &trans);
 
     /*! Constructor #3: Creates TransactionGuard without transaction assigned.
      setTransaction() can be used later to do so. */

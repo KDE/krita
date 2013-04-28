@@ -19,7 +19,7 @@
 #ifndef __KIS_DUMMIES_FACADE_BASE_TEST_H
 #define __KIS_DUMMIES_FACADE_BASE_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 #include "empty_nodes_test.h"
 

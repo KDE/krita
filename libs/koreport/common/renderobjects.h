@@ -54,7 +54,7 @@ class KOREPORT_EXPORT ORODocument : public QObject
     friend class OROSection;
 
 public:
-    ORODocument(const QString & = QString());
+    explicit ORODocument(const QString & = QString());
     ~ORODocument();
 
     QString title() const {
@@ -103,7 +103,7 @@ class KOREPORT_EXPORT OROPage
     friend class OROPrimitive;
 
 public:
-    OROPage(ORODocument * = 0);
+    explicit OROPage(ORODocument * = 0);
     ~OROPage();
 
     ORODocument* document() const {
@@ -138,7 +138,7 @@ public:
         SortZ
     };
 
-    OROSection(ORODocument * = 0);
+    explicit OROSection(ORODocument * = 0);
     ~OROSection();
 
     void setHeight(int);

@@ -19,12 +19,13 @@
 #include "kis_node_manager.h"
 
 #include <kactioncollection.h>
-#include <kaction.h>
 
+#include <KoIcon.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoShape.h>
 #include <KoShapeLayer.h>
+#include <KoFilterManager.h>
 
 #include <kis_types.h>
 #include <kis_node.h>
@@ -33,6 +34,8 @@
 #include <kis_layer.h>
 #include <kis_mask.h>
 #include <kis_image.h>
+#include <kis_painter.h>
+#include <kis_paint_layer.h>
 
 #include "canvas/kis_canvas2.h"
 #include "kis_shape_controller.h"
@@ -45,6 +48,8 @@
 #include "kis_selection_manager.h"
 #include "kis_node_commands_adapter.h"
 #include "kis_mirror_visitor.h"
+#include "kis_action.h"
+#include "kis_action_manager.h"
 
 struct KisNodeManager::Private {
 
@@ -131,6 +136,7 @@ KisNodeManager::KisNodeManager(KisView2 * view, KisDoc2 * doc)
 
     connect(shapeController, SIGNAL(sigActivateNode(KisNodeSP)), SLOT(slotNonUiActivatedNode(KisNodeSP)));
     connect(m_d->layerManager, SIGNAL(sigLayerActivated(KisLayerSP)), SIGNAL(sigLayerActivated(KisLayerSP)));
+
 }
 
 KisNodeManager::~KisNodeManager()
@@ -139,18 +145,50 @@ KisNodeManager::~KisNodeManager()
     delete m_d;
 }
 
-void KisNodeManager::setup(KActionCollection * actionCollection)
+void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManager* actionManager)
 {
     m_d->layerManager->setup(actionCollection);
     m_d->maskManager->setup(actionCollection);
 
-    KAction * action  = new KAction(KIcon("object-flip-horizontal"), i18n("Mirror Horizontally"), this);
-    actionCollection->addAction("mirrorX", action);
+    KisAction * action  = new KisAction(koIcon("object-flip-horizontal"), i18n("Mirror Layer Horizontally"), this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
+    action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    actionManager->addAction("mirrorNodeX", action, actionCollection);
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorNodeX()));
 
-    action  = new KAction(KIcon("object-flip-vertical"), i18n("Mirror Vertically"), this);
-    actionCollection->addAction("mirrorY", action);
+    action  = new KisAction(koIcon("object-flip-vertical"), i18n("Mirror Layer Vertically"), this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
+    action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    actionManager->addAction("mirrorNodeY", action, actionCollection);
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorNodeY()));
+
+    action = new KisAction(i18n("Duplicate current layer"), this);
+    action->setActivationFlags(KisAction::ACTIVE_LAYER);
+    action->setShortcut(KShortcut(Qt::ControlModifier + Qt::Key_J));
+    actionManager->addAction("duplicatelayer", action, actionCollection);
+    connect(action, SIGNAL(triggered()), this, SLOT(duplicateActiveNode()));
+
+    action = new KisAction(i18n("Delete current layer"), this);
+    action->setActivationFlags(KisAction::ACTIVE_LAYER);
+    actionManager->addAction("deleteCurrentLayer", action, actionCollection);
+    connect(action, SIGNAL(triggered()), this, SLOT(removeNode()));
+
+    action = new KisAction(i18n("Activate next layer"), this);
+    action->setActivationFlags(KisAction::ACTIVE_LAYER);
+    action->setShortcut(KShortcut(Qt::Key_PageUp));
+    actionManager->addAction("activateNextLayer", action, actionCollection);
+    connect(action, SIGNAL(triggered()), this, SLOT(activateNextNode()));
+
+    action = new KisAction(i18n("Activate previous layer"), this);
+    action->setActivationFlags(KisAction::ACTIVE_LAYER);
+    action->setShortcut(KShortcut(Qt::Key_PageDown));
+    actionManager->addAction("activatePreviousLayer", action, actionCollection);
+    connect(action, SIGNAL(triggered()), this, SLOT(activatePreviousNode()));
+
+    action  = new KisAction(koIcon("document-save"), i18n("Save Layer/Mask..."), this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
+    actionManager->addAction("save_node_as_image", action, actionCollection);
+    connect(action, SIGNAL(triggered()), this, SLOT(saveNodeAsImage()));
 }
 
 void KisNodeManager::updateGUI()
@@ -310,6 +348,8 @@ void KisNodeManager::createNode(const QString & nodeType)
         m_d->maskManager->createFilterMask(parent, above);
     } else if (nodeType == "KisSelectionMask") {
         m_d->maskManager->createSelectionMask(parent, above);
+    } else if (nodeType == "KisFileLayer") {
+        m_d->layerManager->addFileLayer(parent, above);
     }
 
 }
@@ -467,13 +507,43 @@ void KisNodeManager::nodeToBottom()
     }
 }
 
-void KisNodeManager::removeNode(KisNodeSP node)
+bool scanForLastLayer(KisImageWSP image, KisNodeSP nodeToRemove)
+{
+    if (!dynamic_cast<KisLayer*>(nodeToRemove.data())) {
+        return false;
+    }
+
+    bool lastLayer = true;
+    KisNodeSP node = image->root()->firstChild();
+    while (node) {
+        if (node != nodeToRemove && dynamic_cast<KisLayer*>(node.data())) {
+            lastLayer = false;
+            break;
+        }
+        node = node->nextSibling();
+    }
+
+    return lastLayer;
+}
+
+void KisNodeManager::removeNode()
 {
     //do not delete root layer
+
+    KisNodeSP node = activeNode();
+
     if(node->parent()==0)
         return;
 
-    m_d->commandsAdapter->removeNode(node);
+    if (scanForLastLayer(m_d->view->image(), node)) {
+        m_d->commandsAdapter->beginMacro(i18n("Remove Last Layer"));
+        m_d->commandsAdapter->removeNode(node);
+        m_d->layerManager->layerAdd();
+        m_d->commandsAdapter->endMacro();
+    } else {
+        m_d->commandsAdapter->removeNode(node);
+    }
+
 }
 
 void KisNodeManager::mirrorNodeX()
@@ -502,6 +572,20 @@ void KisNodeManager::mirrorNodeY()
     mirrorNode(node, commandName, Qt::Vertical);
 }
 
+void KisNodeManager::activateNextNode()
+{
+    if (activeNode() && activeNode()->nextSibling()) {
+        slotNonUiActivatedNode(activeNode()->nextSibling());
+    }
+}
+
+void KisNodeManager::activatePreviousNode()
+{
+    if (activeNode() && activeNode()->prevSibling()) {
+        slotNonUiActivatedNode(activeNode()->prevSibling());
+    }
+}
+
 void KisNodeManager::mergeLayerDown()
 {
     m_d->layerManager->mergeLayer();
@@ -522,7 +606,7 @@ void KisNodeManager::rotate180()
 
 void KisNodeManager::rotateLeft90()
 {
-   rotate(M_PI / 2 - 2*M_PI); 
+   rotate(-M_PI / 2);
 }
 
 void KisNodeManager::rotateRight90()
@@ -558,6 +642,61 @@ void KisNodeManager::mirrorNode(KisNodeSP node, const QString& commandName, Qt::
         m_d->maskManager->masksUpdated();
     }
     m_d->view->canvas()->update();
+}
+
+void KisNodeManager::saveNodeAsImage()
+{
+    KisNodeSP node = activeNode();
+
+    if (!node) {
+        qWarning() << "BUG: Save Node As Image was called without any node selected";
+        return;
+    }
+
+    QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
+    QString mimelist = listMimeFilter.join(" ");
+
+    KFileDialog fd(KUrl(QString()), mimelist, m_d->view);
+    fd.setObjectName("Export Node");
+    fd.setCaption(i18n("Export Node"));
+    fd.setMimeFilter(listMimeFilter);
+    fd.setOperationMode(KFileDialog::Saving);
+
+    if (!fd.exec()) return;
+
+    KUrl url = fd.selectedUrl();
+    QString mimefilter = fd.currentMimeFilter();
+
+    if (mimefilter.isNull()) {
+        KMimeType::Ptr mime = KMimeType::findByUrl(url);
+        mimefilter = mime->name();
+    }
+
+    if (url.isEmpty())
+        return;
+
+    KisImageWSP image = m_d->view->image();
+
+    QRect savedRect = image->bounds() | node->exactBounds();
+
+    KisPart2 part;
+    KisDoc2 d(&part);
+    part.setDocument(&d);
+
+    d.prepareForImport();
+
+    KisImageWSP dst = new KisImage(d.createUndoStore(), savedRect.width(), savedRect.height(), node->paintDevice()->compositionSourceColorSpace(), node->name());
+    dst->setResolution(image->xRes(), image->yRes());
+    d.setCurrentImage(dst);
+    KisPaintLayer* paintLayer = new KisPaintLayer(dst, "paint device", node->opacity());
+    KisPainter gc(paintLayer->paintDevice());
+    gc.bitBlt(QPoint(0, 0), node->paintDevice(), savedRect);
+    dst->addNode(paintLayer, dst->rootLayer(), KisLayerSP(0));
+
+    dst->initialRefreshGraph();
+
+    d.setOutputMimeType(mimefilter.toLatin1());
+    d.exportDocument(url);
 }
 
 #include "kis_node_manager.moc"

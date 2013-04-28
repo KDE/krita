@@ -143,7 +143,8 @@ QString KoReportItemImage::typeName() const
     return "report:image";
 }
 
-int KoReportItemImage::render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script)
+int KoReportItemImage::renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset,
+                                        const QVariant &data, KRScriptHandler *script)
 {
     Q_UNUSED(script)
 
@@ -182,7 +183,7 @@ int KoReportItemImage::render(OROPage* page, OROSection* section,  QPointF offse
         delete id;
     }
     
-    return 0; //Item doesnt stretch the section height
+    return 0; //Item doesn't stretch the section height
 }
 
 

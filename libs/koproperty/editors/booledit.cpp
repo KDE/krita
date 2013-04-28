@@ -22,12 +22,14 @@
 #include "koproperty/Property.h"
 #include "koproperty/EditorDataModel.h"
 
-#include <KIconLoader>
-#include <KLocale>
-#include <KComboBox>
-#include <KDebug>
-#include <KColorScheme>
-#include <KGlobal>
+#include <KoIcon.h>
+
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kcombobox.h>
+#include <kdebug.h>
+#include <kcolorscheme.h>
+#include <kglobal.h>
 
 #include <QApplication>
 #include <QPainter>
@@ -82,8 +84,8 @@ class BoolEditGlobal
 {
 public:
     BoolEditGlobal()
-        : yesIcon(SmallIcon("dialog-ok"))
-        , noIcon(SmallIcon("button_no"))
+        : yesIcon(koSmallIcon("dialog-ok"))
+        , noIcon(koSmallIcon("button_no"))
         , noneIcon(IconSize(KIconLoader::Small), IconSize(KIconLoader::Small))
     {
         noneIcon.fill(Qt::transparent);
@@ -214,10 +216,10 @@ BoolEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const Q
 void BoolEdit::setState(bool state)
 {
     if (state) {
-        setIcon(KIcon("dialog-ok")); //QIcon(g_boolEdit->yesIcon));
+        setIcon(koIcon("dialog-ok")); //QIcon(g_boolEdit->yesIcon));
         setText(i18n("Yes"));
     } else {
-        setIcon(KIcon("button_no")); //QIcon(g_boolEdit->noIcon));
+        setIcon(koIcon("button_no")); //QIcon(g_boolEdit->noIcon));
         setText(i18n("No"));
     }
 }

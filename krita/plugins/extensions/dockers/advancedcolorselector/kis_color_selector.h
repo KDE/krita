@@ -132,6 +132,7 @@ private:
     QColor m_lastColor;
     QColor m_currentColor;
     bool m_blipDisplay;
+    ColorRole m_lastColorRole;
 
 public:
     void setDisplayBlip(bool disp) {m_blipDisplay = disp;}

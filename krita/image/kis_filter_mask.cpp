@@ -17,6 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <KoIcon.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoCompositeOp.h>
@@ -36,28 +37,17 @@
 #include "kis_painter.h"
 
 #include <KoUpdater.h>
-#include <QMutex>
 
-struct KisFilterMask::Private
-{
-public:
-
-    KisFilterConfiguration * filterConfig;
-    QMutex filterConfigMutex;
-};
 
 KisFilterMask::KisFilterMask()
-        : KisEffectMask()
-        , m_d(new Private())
+    : KisEffectMask(),
+      KisNodeFilterInterface(0, false)
 {
-    m_d->filterConfig = 0;
     setCompositeOp(COMPOSITE_COPY);
 }
 
 KisFilterMask::~KisFilterMask()
 {
-    delete m_d->filterConfig;
-    delete m_d;
 }
 
 bool KisFilterMask::allowAsChild(KisNodeSP node) const
@@ -69,56 +59,43 @@ bool KisFilterMask::allowAsChild(KisNodeSP node) const
 KisFilterMask::KisFilterMask(const KisFilterMask& rhs)
         : KisEffectMask(rhs)
         , KisNodeFilterInterface(rhs)
-        , m_d(new Private())
 {
-    m_d->filterConfig = KisFilterRegistry::instance()->cloneConfiguration(rhs.m_d->filterConfig);
-}
-
-KisFilterConfiguration * KisFilterMask::filter() const
-{
-    return m_d->filterConfig;
 }
 
 QIcon KisFilterMask::icon() const
 {
-    return KIcon("view-filter");
+    return koIcon("view-filter");
 }
 
 void KisFilterMask::setFilter(KisFilterConfiguration * filterConfig)
 {
-    QMutexLocker l(&m_d->filterConfigMutex);
-    Q_ASSERT(filterConfig);
-    delete m_d->filterConfig;
-    m_d->filterConfig = KisFilterRegistry::instance()->cloneConfiguration(filterConfig);
     if (parent() && parent()->inherits("KisLayer")) {
-        m_d->filterConfig->setChannelFlags(qobject_cast<KisLayer*>(parent().data())->channelFlags());
+        filterConfig->setChannelFlags(qobject_cast<KisLayer*>(parent().data())->channelFlags());
     }
+    KisNodeFilterInterface::setFilter(filterConfig);
 }
 
 QRect KisFilterMask::decorateRect(KisPaintDeviceSP &src,
                                   KisPaintDeviceSP &dst,
                                   const QRect & rc) const
 {
+    KisSafeFilterConfigurationSP filterConfig = filter();
+
     Q_ASSERT(nodeProgressProxy());
     Q_ASSERT_X(src != dst, "KisFilterMask::decorateRect",
                "src must be != dst, because we cant create transactions "
                "during merge, as it breaks reentrancy");
 
-    if (!m_d->filterConfig) {
+    if (!filterConfig) {
         warnKrita << "No filter configuration present";
         return QRect();
     }
-    KisFilterConfiguration* config;
-    {
-        QMutexLocker l(&m_d->filterConfigMutex);
-        config = KisFilterRegistry::instance()->cloneConfiguration(m_d->filterConfig);
-    }
 
     KisFilterSP filter =
-        KisFilterRegistry::instance()->value(config->name());
+        KisFilterRegistry::instance()->value(filterConfig->name());
 
     if (!filter) {
-        warnKrita << "Could not retrieve filter \"" << config->name() << "\"";
+        warnKrita << "Could not retrieve filter \"" << filterConfig->name() << "\"";
         return QRect();
     }
 
@@ -127,12 +104,11 @@ QRect KisFilterMask::decorateRect(KisPaintDeviceSP &src,
 
     QPointer<KoUpdater> updaterPtr = updater.startSubtask();
 
-    filter->process(src, dst, 0, rc, config, updaterPtr);
+    filter->process(src, dst, 0, rc, filterConfig.data(), updaterPtr);
 
     updaterPtr->setProgress(100);
 
-    QRect r = filter->changedRect(rc, config);
-    delete config;
+    QRect r = filter->changedRect(rc, filterConfig.data());
     return r;
 }
 
@@ -159,9 +135,10 @@ QRect KisFilterMask::changeRect(const QRect &rect, PositionToFilthy pos) const
 
     QRect filteredRect = rect;
 
-    if (m_d->filterConfig) {
-        KisFilterSP filter = KisFilterRegistry::instance()->value(m_d->filterConfig->name());
-        filteredRect = filter->changedRect(rect, m_d->filterConfig);
+    KisSafeFilterConfigurationSP filterConfig = filter();
+    if (filterConfig) {
+        KisFilterSP filter = KisFilterRegistry::instance()->value(filterConfig->name());
+        filteredRect = filter->changedRect(rect, filterConfig.data());
     }
 
     /**
@@ -187,9 +164,13 @@ QRect KisFilterMask::needRect(const QRect& rect, PositionToFilthy pos) const
      * FIXME: This check of the emptiness should be done
      * on the higher/lower level
      */
+
     if(rect.isEmpty()) return rect;
-    if (!m_d->filterConfig) return rect;
-    KisFilterSP filter = KisFilterRegistry::instance()->value(m_d->filterConfig->name());
+
+    KisSafeFilterConfigurationSP filterConfig = filter();
+    if (!filterConfig) return rect;
+
+    KisFilterSP filter = KisFilterRegistry::instance()->value(filterConfig->name());
 
     /**
      * If we need some additional pixels even outside of a selection
@@ -197,7 +178,7 @@ QRect KisFilterMask::needRect(const QRect& rect, PositionToFilthy pos) const
      * And no KisMask::needRect will prevent us from doing this! ;)
      * That's why simply we do not call KisMask::needRect here :)
      */
-    return filter->neededRect(rect, m_d->filterConfig);
+    return filter->neededRect(rect, filterConfig.data());
 }
 
 #include "kis_filter_mask.moc"

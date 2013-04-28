@@ -64,7 +64,7 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
 
     KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
     if (!output)
-        return KoFilter::CreationError;
+        return KoFilter::NoDocumentCreated;
 
     const KoColorSpace* cs = output->image()->colorSpace();
     KoChannelInfo::enumChannelValueType type = cs->channels()[0]->channelValueType();
@@ -118,6 +118,7 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
     KisImageBuilder_Result res;
     if ((res = ktc.buildFile(url, image, options)) == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
+        image->unlock();
         return KoFilter::OK;
     }
     image->unlock();

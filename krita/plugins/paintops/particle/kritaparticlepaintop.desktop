@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Particle brush
+Name[bs]=Četka od čestica
 Name[ca]=Pinzell de partícules
 Name[ca@valencia]=Pinzell de partícules
 Name[da]=Partikelpensel
@@ -8,11 +9,14 @@ Name[el]=Πινέλο σωματιδίων
 Name[en_GB]=Particle brush
 Name[es]=Pincel de partículas
 Name[et]=Osakestepintsel
+Name[fi]=Osassivellin
 Name[fr]=Brosse à particules
+Name[gl]=Pincel de partículas
 Name[hu]=Részecske ecset
 Name[it]=Pennello particellare
 Name[ja]=Particle ブラシ
 Name[kk]=Арнаулы дақ қылқаламы
+Name[mr]=कण कुंचला
 Name[nb]=Partikkelpensel
 Name[nds]=Drüppels-Pinsel
 Name[nl]=Deeltjes-penseel
@@ -30,4 +34,4 @@ Name[zh_TW]=粒子筆刷
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritaparticlepaintop
-X-Krita-Version=5
+X-Krita-Version=27

@@ -1,6 +1,27 @@
 [Desktop Entry]
 Icon=template_texture
 Name=Texture 8k 16bit float rgb
+Name[ca]=Textura 8k 16bit flotant RGB
+Name[cs]=Textura 8k 16bit float rgb
+Name[da]=Tekstur 8k 16bit float rgb
+Name[de]=Textur 8k 16bit float rgb
+Name[el]=Texture 8k 16bit float rgb
+Name[es]=Textura 8k 16bit float rgb
+Name[et]=Tekstuur 8k 16bit murdarvuline rgb
+Name[fr]=Texture 8k 16bit flottante rgb
+Name[gl]=Textura de 8k e 16 bits flotante RGB.
+Name[hu]=Textúra 8k 16bit lebegőpontos rgb
+Name[it]=Trama 8k 16bit float rgb
+Name[kk]=Текстура 8k 16 бит жылжымалы үтірлі rgb
+Name[nb]=Tekstur 8k 16bit flyt rgb
+Name[nl]=Textuur 8k 16bit float rgb
+Name[pl]=Tekstura 8k 16bit zmiennoprzecinkowa rgb
+Name[pt]=Textura 8k 16-bits vírgula flutuante RGB
+Name[pt_BR]=Textura 8k 16bit flutuante rgb
+Name[sk]=Textúra 8k 16bit reálne rgb
+Name[sv]=Struktur 8k 16-bitar flyttal RGB
+Name[uk]=Текстура 8k, 16-бітова з рухомою комою, rgb
+Name[x-test]=xxTexture 8k 16bit float rgbxx
 Type=Link
 URL[$e]=.source/Texture8k16bitfloatrgb.kra
 X-KDE-Hidden=false

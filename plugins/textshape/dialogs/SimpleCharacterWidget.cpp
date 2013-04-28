@@ -23,10 +23,12 @@
 #include "TextTool.h"
 #include "../commands/ChangeListCommand.h"
 #include "StylesModel.h"
+#include "DockerStylesComboModel.h"
+#include "StylesDelegate.h"
 #include <KoStyleThumbnailer.h>
 
-#include <KAction>
-#include <KSelectAction>
+#include <kaction.h>
+#include <kselectaction.h>
 #include <KoTextBlockData.h>
 #include <KoCharacterStyle.h>
 #include <KoParagraphStyle.h>
@@ -35,19 +37,21 @@
 #include <KoZoomHandler.h>
 #include <KoStyleManager.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <QTextLayout>
 #include <QComboBox>
 
 SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
     : QWidget(parent),
-      m_styleManager(0),
-      m_blockSignals(false),
-      m_comboboxHasBidiItems(false),
-      m_tool(tool),
-      m_thumbnailer(new KoStyleThumbnailer()),
-      m_stylesModel(new StylesModel(0, StylesModel::CharacterStyle))
+    m_styleManager(0),
+    m_blockSignals(false),
+    m_comboboxHasBidiItems(false),
+    m_tool(tool),
+    m_thumbnailer(new KoStyleThumbnailer()),
+    m_stylesModel(new StylesModel(0, StylesModel::CharacterStyle)),
+    m_sortedStylesModel(new DockerStylesComboModel()),
+    m_stylesDelegate(0)
 {
     widget.setupUi(this);
     widget.bold->setDefaultAction(tool->action("format_bold"));
@@ -89,12 +93,13 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
     widget.fontsFrame->setColumnStretch(0,1);
 
     m_stylesModel->setStyleThumbnailer(m_thumbnailer);
-    widget.characterStyleCombo->setStylesModel(m_stylesModel);
-    connect(widget.characterStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
+    widget.characterStyleCombo->setStylesModel(m_sortedStylesModel);
+    connect(widget.characterStyleCombo, SIGNAL(selected(QModelIndex&)), this, SLOT(styleSelected(QModelIndex&)));
     connect(widget.characterStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(newStyleRequested(QString)));
     connect(widget.characterStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(doneWithFocus()));
     connect(widget.characterStyleCombo, SIGNAL(showStyleManager(int)), this, SLOT(slotShowStyleManager(int)));
 
+    m_sortedStylesModel->setStylesModel(m_stylesModel);
 }
 
 SimpleCharacterWidget::~SimpleCharacterWidget()
@@ -105,11 +110,25 @@ SimpleCharacterWidget::~SimpleCharacterWidget()
 
 void SimpleCharacterWidget::setStyleManager(KoStyleManager *sm)
 {
+    Q_ASSERT(sm);
+    if (!sm || m_styleManager == sm) {
+        return;
+    }
+    if (m_styleManager) {
+        disconnect(m_styleManager, SIGNAL(styleApplied(const KoCharacterStyle*)), this, SLOT(slotParagraphStyleApplied(const KoCharacterStyle*)));
+    }
     m_styleManager = sm;
     //we want to disconnect this before setting the stylemanager. Populating the model apparently selects the first inserted item. We don't want this to actually set a new style.
-    disconnect(widget.characterStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
+    disconnect(widget.characterStyleCombo, SIGNAL(selected(QModelIndex&)), this, SLOT(styleSelected(QModelIndex&)));
     m_stylesModel->setStyleManager(sm);
-    connect(widget.characterStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
+    m_sortedStylesModel->setStyleManager(sm);
+    connect(widget.characterStyleCombo, SIGNAL(selected(QModelIndex&)), this, SLOT(styleSelected(QModelIndex&)));
+    connect(m_styleManager, SIGNAL(styleApplied(const KoCharacterStyle*)), this, SLOT(slotCharacterStyleApplied(const KoCharacterStyle*)));
+}
+
+void SimpleCharacterWidget::setInitialUsedStyles(QVector<int> list)
+{
+    m_sortedStylesModel->setInitialUsedStyles(list);
 }
 
 void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format, const QTextCharFormat& refBlockCharFormat)
@@ -146,11 +165,12 @@ void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format, cons
                 }
             }
         }
-        disconnect(widget.characterStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
-        widget.characterStyleCombo->setCurrentIndex((useParagraphStyle)?0:m_stylesModel->indexForCharacterStyle(*style).row());
+        disconnect(widget.characterStyleCombo, SIGNAL(selected(QModelIndex&)), this, SLOT(styleSelected(QModelIndex&)));
+         //TODO, this is very brittle index 1 is because index 0 is the title. The proper solution to that would be for the "None" style to have a styleId which does not get applied on the text, but can be used in the ui
+        widget.characterStyleCombo->setCurrentIndex((useParagraphStyle)?1:m_sortedStylesModel->indexForCharacterStyle(*style).row());
         widget.characterStyleCombo->setStyleIsOriginal(unchanged);
         widget.characterStyleCombo->slotUpdatePreview();
-        connect(widget.characterStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
+        connect(widget.characterStyleCombo, SIGNAL(selected(QModelIndex&)), this, SLOT(styleSelected(QModelIndex&)));
     }
 }
 
@@ -201,14 +221,27 @@ void SimpleCharacterWidget::setCurrentBlockFormat(const QTextBlockFormat &format
     m_currentBlockFormat = format;
 
     m_stylesModel->setCurrentParagraphStyle(format.intProperty(KoParagraphStyle::StyleId));
-    disconnect(widget.characterStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
+    disconnect(widget.characterStyleCombo, SIGNAL(selected(QModelIndex&)), this, SLOT(styleSelected(QModelIndex&)));
     widget.characterStyleCombo->slotUpdatePreview();
-    connect(widget.characterStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
+    connect(widget.characterStyleCombo, SIGNAL(selected(QModelIndex&)), this, SLOT(styleSelected(QModelIndex&)));
 }
 
 void SimpleCharacterWidget::styleSelected(int index)
 {
-    KoCharacterStyle *charStyle = m_styleManager->characterStyle(m_stylesModel->index(index).internalId());
+    KoCharacterStyle *charStyle = m_styleManager->characterStyle(m_sortedStylesModel->index(index, 0, QModelIndex()).internalId());
+
+    //if the selected item correspond to a null characterStyle, send the null pointer. the tool should set the characterStyle as per paragraph
+    emit characterStyleSelected(charStyle);
+    emit doneWithFocus();
+}
+
+void SimpleCharacterWidget::styleSelected(QModelIndex &index)
+{
+    if (!index.isValid()) {
+        emit doneWithFocus();
+        return;
+    }
+    KoCharacterStyle *charStyle = m_styleManager->characterStyle(index.internalId());
 
     //if the selected item correspond to a null characterStyle, send the null pointer. the tool should set the characterStyle as per paragraph
     emit characterStyleSelected(charStyle);
@@ -217,9 +250,14 @@ void SimpleCharacterWidget::styleSelected(int index)
 
 void SimpleCharacterWidget::slotShowStyleManager(int index)
 {
-    int styleId = m_stylesModel->index(index).internalId();
+    int styleId = m_sortedStylesModel->index(index, 0, QModelIndex()).internalId();
     emit showStyleManager(styleId);
     emit doneWithFocus();
+}
+
+void SimpleCharacterWidget::slotCharacterStyleApplied(const KoCharacterStyle *style)
+{
+    m_sortedStylesModel->styleApplied(style);
 }
 
 #include <SimpleCharacterWidget.moc>

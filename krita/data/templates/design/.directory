@@ -1,31 +1,25 @@
 [Desktop Entry]
-Name[fr]=Modèle de design
 Name=Design Templates
-Name[ca@valencia]=Plantilles per a design
-Name[ca]=Plantilles per a design
-Name[da]=designskabeloner
+Name[ca]=Plantilles de disseny
+Name[da]=Designskabeloner
 Name[de]=Design-Vorlagen
-Name[el]=Πρότυπα σχέδιο
-Name[en_GB]=Design Templates
+Name[el]=Πρότυπα σχεδίασης
 Name[es]=Plantillas de diseño
-Name[it]=Modelli di design
-Name[ja]=デザインテンプレート
-Name[kk]=дизајн үлгілері
+Name[et]=Disainmallid
+Name[fi]=Suunnittelupohjat
+Name[fr]=Modèles design
+Name[gl]=Modelos de deseño
+Name[it]=Modelli di stile
+Name[kk]=Пішім үлгілері
+Name[lt]=Dizaino šablonai
 Name[nb]=Designmaler
-Name[nds]=Design-Vörlagen
-Name[nl]=ontwerpsjabloon
-Name[pl]=Szablony projektów
-Name[pt]=Modelos de design
+Name[nl]=Design-sjablonen
+Name[pl]=Szablony projekcyjne
+Name[pt]=Modelos de Desenho
 Name[pt_BR]=Modelos de design
-Name[ru]=Шаблоны Дизайн
-Name[sk]=Dizajnové šablóny
-Name[sl]=Predloge spletnih strani
+Name[sk]=Šablóny dizajnu
+Name[sl]=Oblikovalske predloge
 Name[sv]=Designmallar
-Name[uk]=Шаблони Дизайн
-Name[wa]=Modeles di design
+Name[uk]=Шаблони компонування
 Name[x-test]=xxDesign Templatesxx
-Name[zh_TW]=漫畫樣本
 X-KDE-DefaultTab=true
-
-[Dolphin]
-Timestamp=2012,7,7,14,50,38

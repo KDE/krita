@@ -368,7 +368,7 @@ void KisCurveWidget::mouseMoveEvent(QMouseEvent * e)
     double x = e->pos().x() / (double)(width() - 1);
     double y = 1.0 - e->pos().y() / (double)(height() - 1);
 
-    if (d->state() == ST_NORMAL) { // If no point is selected set the the cursor shape if on top
+    if (d->state() == ST_NORMAL) { // If no point is selected set the cursor shape if on top
         int nearestPointIndex = d->nearestPointInRange(QPointF(x, y), width(), height());
 
         if (nearestPointIndex < 0)

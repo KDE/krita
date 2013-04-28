@@ -18,8 +18,8 @@
 */
 #include "ClipCommand.h"
 
-#include <KDebug>
-#include <KLocale>
+#include <kdebug.h>
+#include <klocale.h>
 
 ClipCommand::ClipCommand(PictureShape *shape, bool clip)
     : KUndo2Command(0)

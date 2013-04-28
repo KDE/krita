@@ -62,7 +62,8 @@ private:
     bool loadProfile(KisPaintDeviceSP device,  const QString& location);
     bool loadFilterConfiguration(KisFilterConfiguration* kfc, const QString& location);
     bool loadMetaData(KisNode* node);
-    KisSelectionSP loadSelection(const QString& location);
+    void initSelectionForMask(KisMask *mask);
+    void loadSelection(const QString& location, KisSelectionSP dstSelection);
     QString getLocation(KisNode* node, const QString& suffix = "");
 
 private:

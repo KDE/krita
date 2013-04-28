@@ -82,7 +82,7 @@ void KisFilterTest::testWithProgressUpdater()
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, inverted, dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
         dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()).save("filtertest.png");
-        QFAIL(QString("Failed to create inverted image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to create inverted image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
     delete pu;
     delete bar;
@@ -108,7 +108,7 @@ void KisFilterTest::testSingleThreaded()
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, inverted, dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
         dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()).save("filtertest.png");
-        QFAIL(QString("Failed to create inverted image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to create inverted image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 
@@ -137,7 +137,7 @@ void KisFilterTest::testDifferentSrcAndDst()
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, inverted, dst->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
         dst->convertToQImage(0, 0, 0, qimage.width(), qimage.height()).save("filtertest.png");
-        QFAIL(QString("Failed to create inverted image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to create inverted image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 

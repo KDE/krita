@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Histogram Plugin
 Name[bg]=Приставка за хистограма
+Name[bs]=Histogram dodatak
 Name[ca]=Connector d'histograma
 Name[ca@valencia]=Connector d'histograma
 Name[cs]=Modul histogramu
@@ -16,7 +17,7 @@ Name[fi]=Histogrammiliitännäinen
 Name[fr]=Module d'histogramme
 Name[fy]=Histogram plugin
 Name[ga]=Breiseán Histeagraim
-Name[gl]=Plugin de Histograma
+Name[gl]=Complemento de histograma
 Name[hi]=हिस्टोग्राम प्लगइन
 Name[hne]=हिस्टोग्राम प्लगइन
 Name[hu]=Hisztogram modul
@@ -48,4 +49,4 @@ Name[zh_TW]=直方圖外掛程式
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritahistogram
-X-Krita-Version=5
+X-Krita-Version=27

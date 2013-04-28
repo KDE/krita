@@ -121,8 +121,6 @@ void KisColorSelectorTriangle::setColor(const QColor &color)
     qreal horizontalLineStart = 0.5*(triangleWidth()-horizontalLineLength);
     qreal x=color.saturationF()*horizontalLineLength+horizontalLineStart;
 
-//    kDebug()<<"y="<<y<<"  horzLineLength="<<horizontalLineLength<<"  horizLineStart="<<horizontalLineStart<<"  x="<<x;
-
     QPoint tmp = triangleToWidgetCoordinates(QPoint(x, y));
 
     m_lastClickPos.setX(tmp.x()/qreal(width()));

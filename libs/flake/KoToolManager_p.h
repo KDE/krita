@@ -51,9 +51,14 @@ public:
     ~Private();
 
     void setup();
+
+    void connectActiveTool();
+    void disconnectActiveTool();
     void switchTool(KoToolBase *tool, bool temporary);
     void switchTool(const QString &id, bool temporary);
     void postSwitchTool(bool temporary);
+    void switchCanvasData(CanvasData *cd);
+
     bool eventFilter(QObject *object, QEvent *event);
     void toolActivated(ToolHelper *tool);
 
@@ -163,7 +168,7 @@ class ToolAction : public KAction
 {
     Q_OBJECT
 public:
-    ToolAction(KoToolManager* toolManager, QString id, QString name);
+    ToolAction(KoToolManager* toolManager, QString id, QString name, QObject *parent);
     virtual ~ToolAction();
 
 private slots:

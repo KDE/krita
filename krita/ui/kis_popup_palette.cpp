@@ -87,11 +87,11 @@ KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *pa
     setAttribute(Qt::WA_ContentsPropagated,true);
     //    setAttribute(Qt::WA_TranslucentBackground, true);
 
-    connect(m_triangleColorSelector, SIGNAL(colorChanged(const QColor& )), SLOT(slotChangefGColor(QColor)));
+    connect(m_triangleColorSelector, SIGNAL(colorChanged(QColor)), SLOT(slotChangefGColor(QColor)));
     connect(this, SIGNAL(sigChangeActivePaintop(int)), m_resourceManager, SLOT(slotChangeActivePaintop(int)));
     connect(this, SIGNAL(sigUpdateRecentColor(int)), m_resourceManager, SLOT(slotUpdateRecentColor(int)));
-    connect(this, SIGNAL(sigChangefGColor(const KoColor&)), m_resourceManager, SIGNAL(sigSetFGColor(const KoColor&)));
-    connect(m_resourceManager, SIGNAL(sigChangeFGColorSelector(const QColor&)), m_triangleColorSelector, SLOT(setQColor(const QColor&)));
+    connect(this, SIGNAL(sigChangefGColor(KoColor)), m_resourceManager, SIGNAL(sigSetFGColor(KoColor)));
+    connect(m_resourceManager, SIGNAL(sigChangeFGColorSelector(QColor)), m_triangleColorSelector, SLOT(setQColor(QColor)));
 
     // This is used to handle a bug:
     // If pop up palette is visible and a new colour is selected, the new colour
@@ -370,7 +370,7 @@ void KisPopupPalette::mouseMoveEvent (QMouseEvent* event)
 
     if (pathBrush.contains(point))
     { //in favorite brushes area
-        int pos = calculatePresetIndex(point, m_resourceManager->favoritePresetsTotal());
+        int pos = calculatePresetIndex(point, m_resourceManager->numFavoritePresets());
 
         if (pos >= 0)
         {
@@ -400,8 +400,8 @@ void KisPopupPalette::mousePressEvent(QMouseEvent* event)
 
         if (pathBrush.contains(point))
         { //in favorite brushes area
-            int pos = calculateIndex(point, m_resourceManager->favoritePresetsTotal());
-            if (pos >= 0 && pos < m_resourceManager->favoritePresetsTotal()
+            int pos = calculateIndex(point, m_resourceManager->numFavoritePresets());
+            if (pos >= 0 && pos < m_resourceManager->numFavoritePresets()
                     && isPointInPixmap(point, pos))
             {
                 //setSelectedBrush(pos);

@@ -22,6 +22,8 @@
 
 #include <QObject>
 
+#include "koreport_export.h"
+
 class ReportSection;
 class ReportSectionDetail;
 
@@ -31,11 +33,11 @@ class QDomDocument;
 /**
  @author
 */
-class ReportSectionDetailGroup : public QObject
+class KOREPORT_EXPORT ReportSectionDetailGroup : public QObject
 {
     Q_OBJECT
 public:
-    ReportSectionDetailGroup(const QString &, ReportSectionDetail *, QWidget * parent = 0);
+    ReportSectionDetailGroup(const QString &column, ReportSectionDetail *, QWidget * parent = 0);
     ~ReportSectionDetailGroup();
 
     enum PageBreak {

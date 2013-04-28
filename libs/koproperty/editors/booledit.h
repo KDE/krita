@@ -80,7 +80,7 @@ class KOPROPERTY_EXPORT ThreeStateBoolEdit : public ComboBox
 //    Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 
 public:
-    ThreeStateBoolEdit(const Property::ListData& listData, QWidget *parent = 0);
+    explicit ThreeStateBoolEdit(const Property::ListData& listData, QWidget *parent = 0);
     ~ThreeStateBoolEdit();
 
     QVariant value() const;

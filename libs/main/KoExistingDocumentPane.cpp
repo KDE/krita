@@ -32,7 +32,6 @@ KoExistingDocumentPane::KoExistingDocumentPane(QWidget* parent, const QStringLis
         , m_seen(false)
 {
     QGridLayout* layout = new QGridLayout(this);
-    layout->setSpacing(KDialog::spacingHint());
     layout->setMargin(0);
 
     m_fileWidget = new KFileWidget(KUrl("kfiledialog:///OpenDialog"), this);
@@ -65,7 +64,7 @@ void KoExistingDocumentPane::onAccepted()
         m_seen = false;
     }
     // Don't set the flag after emiting Signal, Then end up emiting the signal twice
-    // before settiing the falg
+    // before setting the flag
 }
 
 #include <KoExistingDocumentPane.moc>

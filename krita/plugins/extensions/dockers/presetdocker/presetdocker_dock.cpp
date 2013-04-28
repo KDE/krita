@@ -39,6 +39,7 @@ PresetDockerDock::PresetDockerDock( )
 {
     m_presetChooser = new KisPaintOpPresetsChooserPopup(this);
     m_presetChooser->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    m_presetChooser->showButtons(false);
     setWidget(m_presetChooser);
 }
 

@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOTOOLPRIVATE_H
-#define KOTOOLPRIVATE_H
+#ifndef KOTOOLBASE_P_H
+#define KOTOOLBASE_P_H
 
 #include "KoDocumentResourceManager.h"
 #include "KoCanvasResourceManager.h"
@@ -75,7 +75,7 @@ public:
             KoDocumentResourceManager *scrm = canvas->shapeController()->resourceManager();
             if (scrm) {
                 q->connect(scrm, SIGNAL(resourceChanged(int, const QVariant &)),
-                        SLOT(resourceChanged(int, const QVariant &)));
+                        SLOT(documentResourceChanged(int, const QVariant &)));
             }
         }
     }

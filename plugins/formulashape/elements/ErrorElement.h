@@ -28,7 +28,7 @@
 class KOFORMULA_EXPORT ErrorElement : public RowElement {
 public:
     /// The standart constructor
-    ErrorElement( BasicElement* parent = 0 );
+    explicit ErrorElement(BasicElement *parent = 0);
 
     /**
      * Render the element to the given QPainter

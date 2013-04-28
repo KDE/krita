@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Shear Image Plugin
 Name[bg]=Приставка за отрязване на изображение
+Name[bs]=Plugin za Sječenje Slike
 Name[ca]=Connector de tall d'imatge
 Name[ca@valencia]=Connector de tall d'imatge
 Name[da]=Plugin til vridning af billeder
@@ -12,7 +13,7 @@ Name[et]=Pildinihke plugin
 Name[fa]=اشتراک وصله تصویر
 Name[fr]=Module de rognage d'images
 Name[fy]=Plugin foar ôfbylding skeanlûke
-Name[gl]=Plugin de Inclinación da Imaxe
+Name[gl]=Complemento de inclinación de imaxes
 Name[hi]=छवि कतरने का प्लगइन
 Name[hne]=फोटू कतरने के प्लगइन
 Name[hu]=Képnyíró modul
@@ -40,4 +41,4 @@ Name[zh_TW]=修剪圖片外掛程式
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritashearimage
-X-Krita-Version=5
+X-Krita-Version=27

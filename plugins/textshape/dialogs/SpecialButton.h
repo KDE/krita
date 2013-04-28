@@ -29,7 +29,7 @@ class SpecialButton : public QFrame
 {
     Q_OBJECT
 public:
-    SpecialButton(QWidget *parent);
+    explicit SpecialButton(QWidget *parent);
     ~SpecialButton();
 
     void setStylesWidget(StylesWidget *stylesWidget);

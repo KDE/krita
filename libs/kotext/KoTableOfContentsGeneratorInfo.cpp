@@ -51,7 +51,7 @@ int KoTableOfContentsGeneratorInfo::styleNameToStyleId(KoTextSharedLoadingData *
 
 
 KoTableOfContentsGeneratorInfo::KoTableOfContentsGeneratorInfo(bool generateEntryTemplate)
-  : 
+  :
    m_indexScope("document")
   , m_outlineLevel(10)
   , m_relativeTabStopPosition(true)
@@ -248,7 +248,7 @@ KoTableOfContentsGeneratorInfo *KoTableOfContentsGeneratorInfo::clone()
     KoTableOfContentsGeneratorInfo *newToCInfo=new KoTableOfContentsGeneratorInfo(false);
     newToCInfo->m_entryTemplate.clear();
     newToCInfo->m_name = QString(m_name);
-    newToCInfo->m_styleName = QString(m_name);
+    newToCInfo->m_styleName = QString(m_styleName);
     newToCInfo->m_indexScope = QString(m_indexScope);
     newToCInfo->m_outlineLevel = m_outlineLevel;
     newToCInfo->m_relativeTabStopPosition = m_relativeTabStopPosition;

@@ -66,7 +66,7 @@ public:
     void removeFavoritePreset(const QString& name);
     //returns -1 if paintop is not in the list, returns the paintop position otherwise
     int isFavoriteBrushSaved(const QString& name);
-    int favoritePresetsTotal();
+    int numFavoritePresets();
 
     QStringList favoritePresetList();
 

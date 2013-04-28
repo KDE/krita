@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,7 +24,7 @@
 #include <KoShape.h>
 #include <KoFrameShape.h>
 
-#include <KIcon>
+#include <kicon.h>
 
 #include <QPixmap>
 
@@ -31,6 +32,12 @@
 
 class VideoCollection;
 class VideoEventAction;
+class VideoData;
+#ifdef SHOULD_BUILD_THUMBNAIL
+class VideoThumbnailer;
+#endif
+
+class QImage;
 
 class VideoShape : public KoShape, public KoFrameShape
 {
@@ -54,13 +61,29 @@ public:
      */
     void setVideoCollection(VideoCollection *collection);
 
+    /**
+     * return the video data used in this shape. Returns 0 if not set
+     */
+    VideoData *videoData() const;
+
 protected:
     virtual bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context);
+
+private slots:
+    void updateThumbnail();
+
+signals:
+    void createThumbnail(VideoData *videoData, const QSize &size);
 
 private:
     VideoCollection *m_videoCollection;
     VideoEventAction *m_videoEventAction;
+#ifdef SHOULD_BUILD_THUMBNAIL
+    VideoThumbnailer *m_thumbnailer;
+#endif
+    VideoData *m_oldVideoData;
     KIcon m_icon;
+    QRectF m_playIconArea;
 };
 
 #endif

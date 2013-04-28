@@ -42,7 +42,6 @@ Kis3DObjectModel::Kis3DObjectModel(const QString& model, const QString& material
 
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        kDebug() << "File " + model + " Not Found";
         return;
     }
 
@@ -93,29 +92,6 @@ Kis3DObjectModel::Kis3DObjectModel(const QString& model, const QString& material
         }
     } // while
 
-// DEBUG CODE
-#if 0
-    kDebug() << "(v) vertex: " << m_vertex.size();
-    kDebug() << "(vn) normals: " << m_normal.size();
-    kDebug() << "(usemtl) keys (v): " << m_vertexHash.keys();
-    kDebug() << "(usemtl) keys (vn): " << m_normalHash.keys();
-
-    int vSize = 0;
-    int nSize = 0;
-    QList<QString> keyList = m_vertexHash.keys();
-    for (int i = 0; i < keyList.size(); i++) {
-        vSize += m_vertexHash[ keyList[i] ].size();
-    }
-    keyList = m_normalHash.keys();
-    for (int i = 0; i < keyList.size(); i++) {
-        nSize += m_normalHash[ keyList[i] ].size();
-    }
-    kDebug() << "(f) faces-vertex: " << vSize;
-    kDebug() << "(f) faces-normal: " << nSize;
-    kDebug() << "(f) faces-vertex/3.0: " << vSize / 3.0;
-    kDebug() << "(f) faces-normal/3.0: " << nSize / 3.0;
-
-#endif
 }
 
 #define MODEL_SCALE 30
@@ -145,10 +121,6 @@ GLuint Kis3DObjectModel::displayList()
 
         Material m = m_material.value(keyList[k]);
         glColor3f(m.Kd[0], m.Kd[1], m.Kd[2]);
-#if 0
-        kDebug() << "Name: " << keyList[k];
-        debug(m);
-#endif
 
         for (int i = 0; i < m_vertexIndex.size(); i += 3) {
             for (int j = 0; j < 3; j++) {
@@ -195,7 +167,6 @@ void Kis3DObjectModel::parseMaterial(const QString& fileName)
 
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        kDebug() << "File " + fileName + " Not Found";
         return;
     }
 
@@ -244,24 +215,4 @@ void Kis3DObjectModel::parseMaterial(const QString& fileName)
         }
 
     }
-
-#if 0
-    QList<QString> list = m_material.keys();
-    kDebug() << list;
-    kDebug() << "----------------------------\n";
-    for (int i = 0; i < list.size(); i++) {
-        kDebug() << list[ i ];
-        debug(m_material.value(list[ i ]));
-    }
-    kDebug() << "----------------------------\n";
-#endif
-
-}
-
-
-void Kis3DObjectModel::debug(Material m)
-{
-    kDebug() << "Ka:" << m.Ka[0] << " " << m.Ka[1] << " " << m.Ka[2];
-    kDebug() << "Kd:" << m.Kd[0] << " " << m.Kd[1] << " " << m.Kd[2];
-    kDebug() << "Ks:" << m.Ks[0] << " " << m.Ks[1] << " " << m.Ks[2];
 }

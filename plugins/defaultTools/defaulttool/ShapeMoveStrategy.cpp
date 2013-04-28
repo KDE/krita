@@ -30,13 +30,14 @@
 #include <KoSnapGuide.h>
 #include <KoPointerEvent.h>
 #include <KoToolBase.h>
-#include <KLocale>
+#include <klocale.h>
 
 ShapeMoveStrategy::ShapeMoveStrategy(KoToolBase *tool, const QPointF &clicked)
-    : KoInteractionStrategy(tool),
-    m_start(clicked)
+    : KoInteractionStrategy(tool)
+    , m_start(clicked)
+    , m_canvas(tool->canvas())
 {
-    QList<KoShape*> selectedShapes = tool->canvas()->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
+    QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
     QRectF boundingRect;
     foreach(KoShape *shape, selectedShapes) {
         if (! shape->isEditable())
@@ -46,10 +47,10 @@ ShapeMoveStrategy::ShapeMoveStrategy(KoToolBase *tool, const QPointF &clicked)
         m_newPositions << shape->position();
         boundingRect = boundingRect.unite( shape->boundingRect() );
     }
-    KoSelection * selection = tool->canvas()->shapeManager()->selection();
+    KoSelection * selection = m_canvas->shapeManager()->selection();
     m_initialOffset = selection->absolutePosition( SelectionDecorator::hotPosition() ) - m_start;
     m_initialSelectionPosition = selection->position();
-    tool->canvas()->snapGuide()->setIgnoredShapes( selection->selectedShapes( KoFlake::FullSelection ) );
+    m_canvas->snapGuide()->setIgnoredShapes( selection->selectedShapes( KoFlake::FullSelection ) );
 
     tool->setStatusText(i18n("Press ALT to hold x- or y-position."));
 }
@@ -103,8 +104,9 @@ void ShapeMoveStrategy::moveSelection()
     int i=0;
     foreach(KoShape *shape, m_selectedShapes) {
         QPointF delta = m_previousPositions.at(i) + m_diff - shape->position();
-        if(shape->parent())
+        if (shape->parent()) {
             shape->parent()->model()->proposeMove(shape, delta);
+        }
         tool()->canvas()->clipToDocument(shape, delta);
         QPointF newPos (shape->position() + delta);
         m_newPositions[i] = newPos;

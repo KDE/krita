@@ -73,7 +73,7 @@ class KoDocumentSectionModel: public QAbstractItemModel
 {
     public:
 
-    KoDocumentSectionModel( QObject *parent = 0 ): QAbstractItemModel( parent ) { }
+    explicit KoDocumentSectionModel(QObject *parent = 0) : QAbstractItemModel(parent) {}
 
     /// Extensions to Qt::ItemDataRole.
     enum ItemDataRole

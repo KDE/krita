@@ -27,14 +27,16 @@
 #include <db/driver.h>
 #include <db/cursor.h>
 #include <db/error.h>
+#include <db/utils.h>
+#include <db/calligradb_global.h>
 
 #include <QFile>
 #include <QDir>
 #include <QRegExp>
 
-#include <KDebug>
-#include <KLocale>
-#include <KStandardDirs>
+#include <kdebug.h>
+#include <klocale.h>
+#include <kstandarddirs.h>
 
 //remove debug
 #undef KexiDBDrvDbg
@@ -145,7 +147,7 @@ bool SQLiteConnection::drv_containsTable(const QString &tableName)
 bool SQLiteConnection::drv_getTablesList(QStringList &list)
 {
     KexiDB::Cursor *cursor;
-    m_sql = "select lower(name) from sqlite_master where type='table'";
+    m_sql = "select name from sqlite_master where type='table'";
     if (!(cursor = executeQuery(m_sql))) {
         KexiDBWarn << "Connection::drv_getTablesList(): !executeQuery()";
         return false;
@@ -244,7 +246,7 @@ bool SQLiteConnection::drv_useDatabaseInternal(bool *cancelled,
                     + i18n("The file is probably already open on this or another computer.") + " "
                     + i18n("Could not gain exclusive access for writing the file."),
                     KMessageBox::WarningContinueCancel, KMessageBox::Continue,
-                    KGuiItem(i18n("Open As Read-Only"), "document-open"), KStandardGuiItem::cancel(),
+                    KGuiItem(i18n("Open As Read-Only"), koIconName("document-open")), KStandardGuiItem::cancel(),
                     "askBeforeOpeningFileReadOnly", KMessageBox::Notify, msgHandler)) {
             clearError();
             if (!drv_closeDatabase())
@@ -335,8 +337,8 @@ bool SQLiteConnection::drv_executeSQL(const QString& statement)
     d->temp_st = statement.toLocal8Bit(); //latin1 only
 #endif
 
-#ifdef KEXI_DEBUG_GUI
-    KexiDB::addKexiDBDebug(QString("ExecuteSQL (SQLite): ") + statement);
+#ifdef CALLIGRADB_DEBUG_GUI
+    KexiDB::debugGUI(QString("ExecuteSQL (SQLite): ") + statement);
 #endif
 
     d->res = sqlite3_exec(
@@ -346,8 +348,8 @@ bool SQLiteConnection::drv_executeSQL(const QString& statement)
                  0,
                  &d->errmsg_p);
     d->storeResult();
-#ifdef KEXI_DEBUG_GUI
-    KexiDB::addKexiDBDebug(d->res == SQLITE_OK ? "  Success" : "  Failure");
+#ifdef CALLIGRADB_DEBUG_GUI
+    KexiDB::debugGUI(d->res == SQLITE_OK ? "  Success" : "  Failure");
 #endif
     return d->res == SQLITE_OK;
 }

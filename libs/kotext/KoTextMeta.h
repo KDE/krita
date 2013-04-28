@@ -46,7 +46,7 @@ public:
      * @param name the name for this bookmark
      * @param document the text document where this bookmark is located
      */
-    KoTextMeta(const QTextDocument *document);
+    explicit KoTextMeta(const QTextDocument *document);
 
     virtual ~KoTextMeta();
 

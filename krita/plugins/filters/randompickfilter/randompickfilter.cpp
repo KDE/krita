@@ -26,7 +26,6 @@
 #include <QPoint>
 
 #include <kis_debug.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
@@ -132,9 +131,8 @@ void KisFilterRandomPick::process(KisPaintDeviceSP device,
 
 }
 
-KisConfigWidget * KisFilterRandomPick::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
+KisConfigWidget * KisFilterRandomPick::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
 {
-    Q_UNUSED(image);
     Q_UNUSED(dev);
     return new KisWdgRandomPick((KisFilter*)this, (QWidget*)parent);
 }

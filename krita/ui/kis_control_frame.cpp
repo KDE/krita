@@ -96,14 +96,14 @@ KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
     m_gradientWidget->setResourceAdapter(adapter);
 
     KoDualColorButton * dual = new KoDualColorButton(view->resourceProvider()->fgColor(), view->resourceProvider()->bgColor(), view, view);
-    dual->setPopDialog(false);
+    dual->setPopDialog(true);
     action  = new KAction(i18n("&Color"), this);
     view->actionCollection()->addAction("dual", action);
     action->setDefaultWidget(dual);
-    connect(dual, SIGNAL(foregroundColorChanged(const KoColor &)), view->resourceProvider(), SLOT(slotSetFGColor(const KoColor &)));
-    connect(dual, SIGNAL(backgroundColorChanged(const KoColor &)), view->resourceProvider(), SLOT(slotSetBGColor(const KoColor &)));
-    connect(view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor &)), dual, SLOT(setForegroundColor(const KoColor &)));
-    connect(view->resourceProvider(), SIGNAL(sigBGColorChanged(const KoColor &)), dual, SLOT(setBackgroundColor(const KoColor &)));
+    connect(dual, SIGNAL(foregroundColorChanged(KoColor)), view->resourceProvider(), SLOT(slotSetFGColor(KoColor)));
+    connect(dual, SIGNAL(backgroundColorChanged(KoColor)), view->resourceProvider(), SLOT(slotSetBGColor(KoColor)));
+    connect(view->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), dual, SLOT(setForegroundColor(KoColor)));
+    connect(view->resourceProvider(), SIGNAL(sigBGColorChanged(KoColor)), dual, SLOT(setBackgroundColor(KoColor)));
     dual->setFixedSize(26, 26);
 
     createPatternsChooser(m_view);
@@ -136,19 +136,19 @@ void KisControlFrame::createPatternsChooser(KisView2 * view)
     m_patternChooserPopup->setObjectName("pattern_chooser_popup");
     QHBoxLayout * l2 = new QHBoxLayout(m_patternChooserPopup);
     l2->setObjectName("patternpopuplayout");
-    l2->setMargin(2);
-    l2->setSpacing(2);
 
     m_patternsTab = new QTabWidget(m_patternChooserPopup);
     m_patternsTab->setObjectName("patternstab");
     m_patternsTab->setFocusPolicy(Qt::NoFocus);
     m_patternsTab->setFont(m_font);
-    m_patternsTab->setContentsMargins(1, 1, 1, 1);
     l2->addWidget(m_patternsTab);
 
     m_patternChooser = new KisPatternChooser(m_patternChooserPopup);
     m_patternChooser->setFont(m_font);
-    m_patternsTab->addTab(m_patternChooser, i18n("Patterns"));
+    QWidget *patternChooserPage = new QWidget(m_patternChooserPopup);
+    QHBoxLayout *patternChooserPageLayout  = new QHBoxLayout(patternChooserPage);
+    patternChooserPageLayout->addWidget(m_patternChooser);
+    m_patternsTab->addTab(patternChooserPage, i18n("Patterns"));
 
     KisCustomPattern* customPatterns = new KisCustomPattern(0, "custompatterns",
             i18n("Custom Pattern"), m_view);
@@ -161,8 +161,8 @@ void KisControlFrame::createPatternsChooser(KisView2 * view)
     connect(customPatterns, SIGNAL(activatedResource(KoResource*)),
             view->resourceProvider(), SLOT(slotPatternActivated(KoResource*)));
 
-    connect(view->resourceProvider(), SIGNAL(sigPatternChanged(KisPattern *)),
-            this, SLOT(slotSetPattern(KisPattern *)));
+    connect(view->resourceProvider(), SIGNAL(sigPatternChanged(KisPattern*)),
+            this, SLOT(slotSetPattern(KisPattern*)));
 
     m_patternChooser->setCurrentItem(0, 0);
     if (m_patternChooser->currentResource())
@@ -176,14 +176,11 @@ void KisControlFrame::createGradientsChooser(KisView2 * view)
     m_gradientChooserPopup->setObjectName("gradient_chooser_popup");
     QHBoxLayout * l2 = new QHBoxLayout(m_gradientChooserPopup);
     l2->setObjectName("gradientpopuplayout");
-    l2->setMargin(2);
-    l2->setSpacing(2);
 
     m_gradientTab = new QTabWidget(m_gradientChooserPopup);
     m_gradientTab->setObjectName("gradientstab");
     m_gradientTab->setFocusPolicy(Qt::NoFocus);
     m_gradientTab->setFont(m_font);
-    m_gradientTab->setContentsMargins(1, 1, 1, 1);
     l2->addWidget(m_gradientTab);
 
     m_gradientChooser = new KisGradientChooser(m_view, m_gradientChooserPopup);
@@ -193,8 +190,8 @@ void KisControlFrame::createGradientsChooser(KisView2 * view)
     connect(m_gradientChooser, SIGNAL(resourceSelected(KoResource*)),
             view->resourceProvider(), SLOT(slotGradientActivated(KoResource*)));
 
-    connect(view->resourceProvider(), SIGNAL(sigGradientChanged(KoAbstractGradient *)),
-            this, SLOT(slotSetGradient(KoAbstractGradient *)));
+    connect(view->resourceProvider(), SIGNAL(sigGradientChanged(KoAbstractGradient*)),
+            this, SLOT(slotSetGradient(KoAbstractGradient*)));
 
     m_gradientChooser->setCurrentItem(0, 0);
     if (m_gradientChooser->currentResource())

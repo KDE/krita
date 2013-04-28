@@ -66,10 +66,9 @@ KisFilterFastColorTransfer::KisFilterFastColorTransfer() : KisFilter(id(), categ
 }
 
 
-KisConfigWidget * KisFilterFastColorTransfer::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
+KisConfigWidget * KisFilterFastColorTransfer::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
 {
     Q_UNUSED(dev);
-    Q_UNUSED(image);
     return new KisWdgFastColorTransfer(parent);
 }
 
@@ -102,7 +101,7 @@ void KisFilterFastColorTransfer::process(KisPaintDeviceSP device,
     const KoColorSpace* oldCS = device->colorSpace();
     KisPaintDeviceSP srcLAB = new KisPaintDevice(*device.data());
     dbgPlugins << "srcLab : " << srcLAB->extent();
-    KUndo2Command* cmd = srcLAB->convertTo(labCS);
+    KUndo2Command* cmd = srcLAB->convertTo(labCS, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
     delete cmd;
 
     if (progressUpdater) {

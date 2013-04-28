@@ -27,7 +27,7 @@ class ORODocument;
 
 /**
  @author Adam Pigg <adam@piggz.co.uk>
- Provides a widget that renderes a specific page of
+ Provides a widget that renders a specific page of
  and ORODocument
  The widget is sized to the document size in pixels.
 */

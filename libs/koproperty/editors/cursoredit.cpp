@@ -47,10 +47,9 @@
 #include <QCursor>
 #include <QBitmap>
 
-#include <KLocale>
-#include <KDebug>
-#include <KGlobal>
-#include <KIconLoader>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kglobal.h>
 
 using namespace KoProperty;
 

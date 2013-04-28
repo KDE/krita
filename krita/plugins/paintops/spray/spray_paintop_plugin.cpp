@@ -18,14 +18,13 @@
 #include "spray_paintop_plugin.h"
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 
 #include <kis_paintop_registry.h>
-
+#include <kis_fixed_paint_device.h>
 #include "kis_spray_paintop.h"
 #include "kis_simple_paintop_factory.h"
 

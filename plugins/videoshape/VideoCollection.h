@@ -38,7 +38,7 @@ public:
         ResourceId = 75208282
     };
     /// constructor
-    VideoCollection(QObject *parent = 0);
+    explicit VideoCollection(QObject *parent = 0);
     virtual ~VideoCollection();
 
     /// reimplemented
@@ -56,9 +56,10 @@ public:
      * existing data object with the same video the returned VideoData will
      * share its data.
      * @param url a valid, local url to point to an video on the filesystem.
+     * @param saveInternal, if true then the video is saved inside the resulting document
      * @see VideoData::isValid()
      */
-    VideoData *createExternalVideoData(const QUrl &url);
+    VideoData *createExternalVideoData(const QUrl &url, bool saveInternal);
 
     /**
      * Create a data object for the video data.

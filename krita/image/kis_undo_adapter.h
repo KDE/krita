@@ -37,9 +37,6 @@ public:
 public:
     void emitSelectionChanged();
 
-    void setCommandHistoryListener(KisCommandHistoryListener *listener);
-    void removeCommandHistoryListener(KisCommandHistoryListener *listener);
-
     virtual const KUndo2Command* presentCommand() = 0;
     virtual void undoLastCommand() = 0;
     virtual void addCommand(KUndo2Command *cmd) = 0;
@@ -59,7 +56,7 @@ protected:
     }
 
 private:
-    Q_DISABLE_COPY(KisUndoAdapter);
+    Q_DISABLE_COPY(KisUndoAdapter)
     KisUndoStore *m_undoStore;
 };
 

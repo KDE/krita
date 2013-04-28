@@ -14,12 +14,6 @@
    <string>Color Picker</string>
   </property>
   <layout class="QGridLayout">
-   <property name="margin">
-    <number>9</number>
-   </property>
-   <property name="spacing">
-    <number>6</number>
-   </property>
    <item row="5" column="0">
     <widget class="QTreeWidget" name="listViewChannels">
      <property name="columnCount">
@@ -132,7 +126,6 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
    <class>SqueezedComboBox</class>

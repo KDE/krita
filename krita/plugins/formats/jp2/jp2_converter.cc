@@ -23,7 +23,7 @@
 #include <QFileInfo>
 
 #include <kapplication.h>
-#include <KMessageBox>
+#include <kmessagebox.h>
 
 #include <kio/netaccess.h>
 #include <kio/deletejob.h>
@@ -216,6 +216,8 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
         channelorder[2] = 2;
         break;
     }
+    default:
+        ;
     }
     if (!colorSpace) {
         dbgFile << "No colors space found for that image";

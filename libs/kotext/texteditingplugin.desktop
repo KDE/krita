@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Text Editing plugin for the Calligra text tool
+Name[bs]=Plugin za editovanje teksta za Calligra tekst alat
 Name[ca]=Connector d'edició de text per a l'eina de text del Calligra
 Name[ca@valencia]=Connector d'edició de text per a l'eina de text del Calligra
 Name[cs]=Modul pro editaci textu nástroje Calligra pro úpravu textu
@@ -8,8 +9,10 @@ Name[de]=Modul zur Textbearbeitung für das Calligra-Textwerkzeug
 Name[el]=Πρόσθετο επεξεργασίας κειμένου για το εργαλείο κειμένου του Calligra
 Name[es]=Complemento de edición de texto para la herramienta de texto de Calligra
 Name[et]=Calligra tekstitööriista teksti redigeerimise plugin
+Name[fi]=Tekstinmuokkausliitännäinen Calligran tekstityökalua varten
 Name[fr]=Module externe d'édition de texte pour l'outil texte de Calligra
-Name[gl]=Engadido de edición de texto para a ferramenta de texto de Calligra 
+Name[gl]=Complemento de edición de texto para a ferramenta de texto de Calligra 
+Name[hu]=Szövegszerkesztő bővítmény a Calligra szövegeszközhöz
 Name[it]=Estensione di modifica del testo per lo strumento di testo di Calligra
 Name[ja]=Calligra テキストツールのためのテキスト編集プラグイン
 Name[kk]=Calligra мәтін құралына арналған мәтін өңдеу плагині
@@ -29,6 +32,7 @@ Name[zh_TW]=Calligra 文字工具的文字編輯外掛程式
 Type=ServiceType
 X-KDE-ServiceType=Calligra/Text-EditingPlugin
 Comment=Definition of a text-editing plugin
+Comment[bs]=Definicija plugina za editovanje teksta
 Comment[ca]=Definició d'un connector d'edició de text
 Comment[ca@valencia]=Definició d'un connector d'edició de text
 Comment[da]=Definition af et plugin til tekstredigering
@@ -39,9 +43,10 @@ Comment[es]=Definición de un complemento de edición de texto
 Comment[et]=Teksti redigeerimise plugina definitsioon
 Comment[fi]=Tekstinmuokkausliitännäisen määrittely
 Comment[fr]=Définition d'un module externe d'édition de texte
-Comment[gl]=Definición dun engadido de edición de texto
+Comment[gl]=Definición dun complemento de edición de texto
 Comment[hi]=पाठ संपादन प्लगइन की परिभाषा
 Comment[hne]=पाठ संपादन प्लगइन के परिभासा
+Comment[hu]=Egy szövegszerkesztő bővítmény meghatározása
 Comment[it]=Definizione di un'estensione di modifica di testo
 Comment[ja]=テキスト編集プラグインの定義
 Comment[kk]=Мәтін-өңдеу плагинінің анықтамасы
@@ -65,5 +70,5 @@ Comment[zh_CN]=文本编辑插件的定义
 Comment[zh_TW]=文字編輯外掛程式定義
 [PropertyDef::X-KoText-MinVersion]
 Type=int
-[PropertyDef::X-Flake-PluginVersion]
+[PropertyDef::X-KoText-PluginVersion]
 Type=int

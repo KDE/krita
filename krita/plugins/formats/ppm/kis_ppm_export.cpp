@@ -18,16 +18,16 @@
 
 #include "kis_ppm_export.h"
 
-#include <KPluginFactory>
-#include <KApplication>
+#include <kpluginfactory.h>
+#include <kapplication.h>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceConstants.h>
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
 
-#include <KDialog>
-#include <KMessageBox>
+#include <kdialog.h>
+#include <kmessagebox.h>
 
 #include <kis_debug.h>
 #include <kis_doc2.h>
@@ -147,7 +147,7 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
     QString filename = m_chain->outputFile();
 
     if (!output)
-        return KoFilter::CreationError;
+        return KoFilter::NoDocumentCreated;
 
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 
@@ -193,10 +193,10 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
     if (((rgb && (pd->colorSpace()->id() != "RGBA" && pd->colorSpace()->id() != "RGBA16"))
             || (!rgb && (pd->colorSpace()->id() != "GRAYA" && pd->colorSpace()->id() != "GRAYA16")))) {
         if (rgb) {
-            pd->convertTo(KoColorSpaceRegistry::instance()->rgb8(0));
+            pd->convertTo(KoColorSpaceRegistry::instance()->rgb8(0), KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
         }
         else {
-            pd->convertTo(KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), 0));
+            pd->convertTo(KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), 0), KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
         }
     }
 

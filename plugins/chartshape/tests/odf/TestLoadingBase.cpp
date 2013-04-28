@@ -70,6 +70,9 @@ void TestLoadingBase::initTestCase()
 
     bool hasDocDirInSrcDir = srcdir.cd("doc");
     QVERIFY(hasDocDirInSrcDir);
+    // Go back up, we only used the cd as a test.
+    if (hasDocDirInSrcDir)
+        srcdir.cd("..");
 
     KoStore *store = KoStore::createStore(srcdir.absolutePath(), KoStore::Read);
     QVERIFY(store->enterDirectory("doc"));
@@ -100,7 +103,7 @@ void TestLoadingBase::testLegendElements(QStringList labels)
     foreach(KDChart::AbstractDiagram *diagram, diagrams) {
         QVERIFY(diagram);
         QStringList diagramLabels = diagram->datasetLabels();
-        foreach(QString diagramLabel, diagramLabels) {
+        foreach(const QString &diagramLabel, diagramLabels) {
             QVERIFY(!labels.isEmpty());
             QCOMPARE(diagramLabel, labels.takeFirst());
         }
@@ -204,6 +207,6 @@ TableSource *TestLoadingBase::tableSource()
 namespace QTest {
     template<>
     char *toString(const KChart::CellRegion &region) {
-        return qstrdup(region.toString().toAscii().data());
+        return qstrdup(region.toString().toLatin1());
     }
 }

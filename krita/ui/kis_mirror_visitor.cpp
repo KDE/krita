@@ -46,13 +46,13 @@ bool KisMirrorVisitor::visit(KisFilterMask* mask)
     return true;
 }
 
-bool KisMirrorVisitor::visit(KisCloneLayer* layer)
+bool KisMirrorVisitor::visit(KisCloneLayer* /*layer*/)
 {
     return true;
 
 }
 
-bool KisMirrorVisitor::visit(KisGeneratorLayer* layer)
+bool KisMirrorVisitor::visit(KisGeneratorLayer* /*layer*/)
 {
     return true;
 
@@ -72,7 +72,7 @@ bool KisMirrorVisitor::visit(KisExternalLayer* layer)
 
 }
 
-bool KisMirrorVisitor::visit(KisAdjustmentLayer* layer)
+bool KisMirrorVisitor::visit(KisAdjustmentLayer* /*layer*/)
 {
     return true;
 
@@ -110,7 +110,7 @@ bool KisMirrorVisitor::visit(KisPaintLayer* layer)
     return true;
 }
 
-bool KisMirrorVisitor::visit(KisNode* node)
+bool KisMirrorVisitor::visit(KisNode* /*node*/)
 {
     return true;
 
@@ -129,7 +129,7 @@ bool KisMirrorVisitor::mirrorMask(KisMask* mask)
         } else {
             name = i18n("Mirror Mask Y");
         }
-        KisSelectionTransaction transaction(name, m_image, selection);
+        KisSelectionTransaction transaction(name, m_image->undoAdapter(), selection);
 
         QRect dirty;
         if (m_orientation == Qt::Horizontal) {
@@ -138,7 +138,7 @@ bool KisMirrorVisitor::mirrorMask(KisMask* mask)
             dirty = KisTransformWorker::mirrorY(dev, m_image->height()/2.0f);
         }
         mask->setDirty(dirty);
-        transaction.commit(m_image->undoAdapter());   
+        transaction.commit(m_image->undoAdapter());
         dev->setDirty(dirty);
     }
 /* TODO: Doesn't work correctly even thoush it's the same code as the shape layer

@@ -118,7 +118,7 @@ void KisAsyncMergerTest::testMerger()
     QImage resultProjection = rootLayer->projection()->convertToQImage(0);
     resultProjection.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + "actual_merge_result.png");
     QPoint pt;
-    QVERIFY(TestUtil::compareQImages(pt, resultProjection, referenceProjection));
+    QVERIFY(TestUtil::compareQImages(pt, resultProjection, referenceProjection, 1));
 }
 
 
@@ -190,6 +190,7 @@ void KisAsyncMergerTest::testFullRefreshWithClones()
 
     KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, device1);
     KisFilterMaskSP invertMask1 = new KisFilterMask();
+    invertMask1->initSelection(0, paintLayer1);
     invertMask1->setFilter(configuration);
 
     KisLayerSP cloneLayer1 = new KisCloneLayer(paintLayer1, image, "clone_of_1", OPACITY_OPAQUE_U8);

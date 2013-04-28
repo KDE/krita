@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Compose Layer plugin
 Name[bg]=Приставка за създаване на слоеве
+Name[bs]=Dodatak za sastavljanje sloja
 Name[ca]=Connector de composició de capa
 Name[ca@valencia]=Connector de composició de capa
 Name[da]=Plugin til komponering af lag
@@ -10,7 +11,7 @@ Name[en_GB]=Compose Layer plugin
 Name[es]=Complemento de capas de composición
 Name[et]=Komposiitkihi plugin
 Name[fr]=Module extérieur de composition de calque
-Name[gl]=Plugin de Capas Compostas
+Name[gl]=Complemento de capas compostas
 Name[hi]=कंपोज लेयर प्लगइन
 Name[hne]=कंपोज लेयर प्लगइन
 Name[it]=Estensione per la composizione dei livelli
@@ -34,4 +35,4 @@ Name[zh_TW]=編寫佈局外掛程式
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritalayercompose
-X-Krita-Version=5
+X-Krita-Version=27

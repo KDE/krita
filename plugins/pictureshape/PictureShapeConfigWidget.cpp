@@ -23,9 +23,9 @@
 #include <KoImageData.h>
 #include <KoImageCollection.h>
 
-#include <KDebug>
-#include <KFileWidget>
-#include <KJob>
+#include <kdebug.h>
+#include <kfilewidget.h>
+#include <kjob.h>
 #include <KIO/Job>
 
 #include <QGridLayout>
@@ -45,6 +45,8 @@ void LoadWaiter::setImageData(KJob *job)
             if (qFuzzyCompare(m_pictureShape->size().width(), 50.0)) {
                 m_pictureShape->setSize(data->imageSize());
             }
+            // trigger repaint as the userData was changed
+            m_pictureShape->update();
         }
     }
     deleteLater();

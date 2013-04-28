@@ -37,7 +37,7 @@ class KTemporaryFile;
 class KoImageDataPrivate
 {
 public:
-    KoImageDataPrivate(KoImageData *q);
+    explicit KoImageDataPrivate(KoImageData *q);
     virtual ~KoImageDataPrivate();
 
     /**

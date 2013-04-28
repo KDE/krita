@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Flake device definition
+Name[bs]=Definicija pahuljastog uređaja
 Name[ca]=Definició d'aparell de floc
 Name[ca@valencia]=Definició d'aparell de floc
 Name[da]=Definition af flake-enhed
@@ -8,8 +9,9 @@ Name[el]=Ορισμός συσκευής Flake
 Name[en_GB]=Flake device definition
 Name[es]=Definición de dispositivo de Flake
 Name[et]=Helbeseadme definitsioon
+Name[fi]=Flake-laitteiden määrittely
 Name[fr]=Définition d'outil de flocon
-Name[gl]=Definición do dispositivo Flake
+Name[gl]=Definición de dispositivos de Flake
 Name[hne]=फ्लेक उपकरन परिभासा
 Name[it]=Definizione del dispositivo Flake
 Name[ja]=Flake デバイス定義
@@ -33,6 +35,7 @@ Name[zh_TW]=Flake 裝置定義
 Type=ServiceType
 X-KDE-ServiceType=Calligra/Device
 Comment=Definition of flake devices
+Comment[bs]=Definicija pahuljastih uređaja
 Comment[ca]=Definició d'aparells de floc
 Comment[ca@valencia]=Definició d'aparells de floc
 Comment[da]=Definition af flake-enheder
@@ -41,8 +44,9 @@ Comment[el]=Ορισμός των συσκευών Flake
 Comment[en_GB]=Definition of flake devices
 Comment[es]=Definición de dispositivos de Flake
 Comment[et]=Helbeseadmete definitsioon
+Comment[fi]=Flake-laitteiden määrittely
 Comment[fr]=Définition de dispositifs de flocons
-Comment[gl]=Definición de dispositivos de flake
+Comment[gl]=Definición de dispositivos de Flake.
 Comment[hne]=फ्लेक उपकरन के परिभासा
 Comment[it]=Definizione dei dispositivi Flake
 Comment[ja]=Flake デバイスの定義
@@ -68,3 +72,5 @@ Comment[zh_TW]=Flake 裝置定義
 Type=int
 [PropertyDef::X-Flake-PluginVersion]
 Type=int
+[PropertyDef::X-KDE-PluginInfo-Name]
+Type=QString

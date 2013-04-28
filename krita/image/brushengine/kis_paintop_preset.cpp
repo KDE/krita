@@ -118,6 +118,7 @@ bool KisPaintOpPreset::load()
 {
     dbgImage << "Load preset " << filename();
     setValid(false);
+
     if (filename().isEmpty()) {
         return false;
     }
@@ -175,8 +176,6 @@ bool KisPaintOpPreset::save()
 
     writer.setText("version", "2.2");
     writer.setText("preset", doc.toString());
-
-    kDebug() << "preset: " << doc.toString();
 
     QImage img;
 

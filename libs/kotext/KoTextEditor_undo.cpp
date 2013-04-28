@@ -27,13 +27,13 @@
 
 #include <kundo2command.h>
 
-#include <KLocale>
+#include <klocale.h>
 
 #include <QString>
 #include <QTextDocument>
 #include <QWeakPointer>
 
-#include <KDebug>
+#include <kdebug.h>
 
 /** Calligra's undo/redo framework.
     The @class KoTextEditor undo/redo framework sits between the @class QTextDocument and the apllication's undo/redo stack.
@@ -151,13 +151,14 @@ void KoTextEditor::Private::documentCommandAdded()
 }
 
 //This method is used to update the KoTextEditor state, which will condition how the QTextDocument::undoCommandAdded signal will get handled.
-void KoTextEditor::Private::updateState(KoTextEditor::Private::State newState, QString title)
+void KoTextEditor::Private::updateState(KoTextEditor::Private::State newState, const QString &title)
 {
     kDebug(32500) << "updateState from: " << editorState << " to: " << newState << " with: " << title;
     kDebug(32500) << "commandStack count: " << commandStack.count();
     if (editorState == Custom && newState != NoOp) {
         //We already are in a custom state (meaning that either a KUndo2Command was pushed on us, an on-the-fly macro command was started or we are executing a complex editing from within the KoTextEditor.
-        //In that state any update of the state different from NoOp is part of that "macro". However, updating the state means that we are now wanting to have a new command for parenting the UndoTextCommand generated after the signal from QTextDocument. This is to ensure that undo/redo actions are done in the proper order. Setting addNewCommand will ensure that we create such a child headCommand on the commandStack. This command will not be pushed on the application's stack.
+        //In that state any update of the state different from NoOp is part of that "macro". However, updating the state means that we are now wanting to have a new command for parenting the UndoTextCommand generated after the signal
+        //from QTextDocument. This is to ensure that undo/redo actions are done in the proper order. Setting addNewCommand will ensure that we create such a child headCommand on the commandStack. This command will not be pushed on the application's stack.
         kDebug(32500) << "we are already in a custom state. a new state, which is not NoOp is part of the macro we are doing. we need however to create a new command on the commandStack to parent a signal induced UndoTextCommand";
         addNewCommand = true;
         if (!title.isEmpty())
@@ -271,13 +272,13 @@ void KoTextEditor::instantlyExecuteCommand(KUndo2Command *command)
 /// ***
 /// The framework does not allow to push a complete KUndo2Command (through KoTextEditor::addCommand) from within an EditBlock. Doing so will lead in the best case to several undo/redo commands on the application's stack instead of one, in the worst case to an out of sync application's stack.
 /// ***
-KUndo2Command *KoTextEditor::beginEditBlock(QString title)
+KUndo2Command *KoTextEditor::beginEditBlock(const QString &title)
 {
     kDebug(32500) << "beginEditBlock";
     kDebug(32500) << "commandStack count: " << d->commandStack.count();
     kDebug(32500) << "customCommandCount counter: " << d->customCommandCount;
     if (!d->customCommandCount) {
-        // We are not in a custom macro command. So we first need to update the KoTextEditor's state to Custom. Additionnaly, if the commandStack is empty, we need to create a master headCommand for our macro and push it on the stack.
+        // We are not in a custom macro command. So we first need to update the KoTextEditor's state to Custom. Additionally, if the commandStack is empty, we need to create a master headCommand for our macro and push it on the stack.
         kDebug(32500) << "we are not in a custom command. will update state to custom";
         d->updateState(KoTextEditor::Private::Custom, title);
         kDebug(32500) << "commandStack count: " << d->commandStack.count();

@@ -30,7 +30,7 @@ class PartsListModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    PartsListModel(MusicCore::Sheet* sheet);
+    explicit PartsListModel(MusicCore::Sheet *sheet);
 
     virtual int rowCount(const QModelIndex & parent = QModelIndex()) const;
     virtual QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;

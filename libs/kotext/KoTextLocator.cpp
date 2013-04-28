@@ -27,7 +27,7 @@
 #include <KoShapeLoadingContext.h>
 #include "KoShapeSavingContext.h"
 
-#include <KDebug>
+#include <kdebug.h>
 #include <QTextDocument>
 #include <QTextList>
 #include <QTextInlineObject>
@@ -132,15 +132,6 @@ QString KoTextLocator::chapter() const
         return QString();
     QTextBlock block = d->document->findBlock(d->chapterPosition);
     return block.text().remove(QChar::ObjectReplacementCharacter);
-}
-
-KoTextBlockData *KoTextLocator::chapterBlockData() const
-{
-    d->update();
-    if (d->chapterPosition < 0)
-        return 0;
-    QTextBlock block = d->document->findBlock(d->chapterPosition);
-    return dynamic_cast<KoTextBlockData*>(block.userData());
 }
 
 int KoTextLocator::pageNumber() const

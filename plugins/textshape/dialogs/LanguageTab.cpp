@@ -21,9 +21,9 @@
 #include "KoGlobal.h"
 
 #include <KoCharacterStyle.h>
+#include <KoIcon.h>
 
 #include <kcombobox.h>
-#include <kiconloader.h>
 
 #include <QSet>
 #include <QStringList>
@@ -56,7 +56,7 @@ LanguageTab::LanguageTab(/*KSpell2::Loader::Ptr loader,*/bool uniqueFormat, QWid
         if (spellCheckLanguages.contains(*itTag)) {
             QListWidgetItem* item = new QListWidgetItem();
             item->setText(*itName);
-            item->setIcon(SmallIcon("tools-check-spelling"));
+            item->setIcon(koIcon("tools-check-spelling"));
 
             widget.languageList->addItem(item);
         } else

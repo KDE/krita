@@ -47,7 +47,7 @@ KoFilter::ConversionStatus psdImport::convert(const QByteArray&, const QByteArra
     KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain->outputDocument());
 
     if (!doc)
-        return KoFilter::CreationError;
+        return KoFilter::NoDocumentCreated;
 
     QString filename = m_chain->inputFile();
 
@@ -83,7 +83,7 @@ KoFilter::ConversionStatus psdImport::convert(const QByteArray&, const QByteArra
             return KoFilter::OK;
         default:
             return KoFilter::StorageCreationError;
-            //qDebug() << "Result was: " << result;
+            //dbgFile << "Result was: " << result;
         }
     }
     return KoFilter::StorageCreationError;

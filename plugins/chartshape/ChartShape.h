@@ -104,7 +104,7 @@ class CHARTSHAPELIB_EXPORT ChartShape
     Q_INTERFACES(KoChart::ChartInterface)
 
 public:
-    ChartShape(KoDocumentResourceManager *documentResourceManager);
+    explicit ChartShape(KoDocumentResourceManager *documentResourceManager);
     ~ChartShape();
 
     // Getter methods
@@ -235,7 +235,7 @@ public:
 
 signals:
     void chartTypeChanged(ChartType);
-    void updateConfigWidget();
+    void updateConfigWidget() const;
 
 private:
     bool loadEmbeddedDocument(KoStore *store, const KoXmlElement &objectElement,

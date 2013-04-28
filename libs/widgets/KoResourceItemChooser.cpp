@@ -36,7 +36,6 @@
 #include <QSplitter>
 
 #include <kfiledialog.h>
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <klineedit.h>
@@ -47,6 +46,8 @@
 #include <knewstuff3/downloaddialog.h>
 #include <knewstuff3/uploaddialog.h>
 #endif
+
+#include <KoIcon.h>
 
 #include "KoResourceServerAdapter.h"
 #include "KoResourceItemView.h"
@@ -88,8 +89,9 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     d->view->setModel(d->model);
     d->view->setItemDelegate( new KoResourceItemDelegate( this ) );
     d->view->setSelectionMode( QAbstractItemView::SingleSelection );
-    connect( d->view, SIGNAL(clicked( const QModelIndex & ) ),
-             this, SLOT(activated ( const QModelIndex & ) ) );
+
+    connect(d->view, SIGNAL(currentResourceChanged( const QModelIndex &)),
+            this, SLOT(activated(const QModelIndex &)));
 
     d->previewScroller = new QScrollArea(this);
     d->previewScroller->setWidgetResizable(true);
@@ -116,27 +118,28 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     connect( d->tagSearchLineEdit, SIGNAL(textChanged(QString)), this, SLOT(tagSearchLineEditTextChanged(QString)));
 
     QVBoxLayout* layout = new QVBoxLayout( this );
+    layout->setMargin(0);
     layout->addWidget( d->tagSearchLineEdit );
     layout->addWidget( d->splitter );
 
     QGridLayout* buttonLayout = new QGridLayout;
 
     QPushButton *button = new QPushButton( this );
-    button->setIcon( SmallIcon("document-open") );
+    button->setIcon(koIcon("document-open"));
     button->setToolTip( i18n("Import Resource") );
     button->setEnabled( true );
     d->buttonGroup->addButton( button, Button_Import );
     buttonLayout->addWidget( button, 0, 0 );
 
     button = new QPushButton( this );
-    button->setIcon( SmallIcon("trash-empty") );
+    button->setIcon(koIcon("trash-empty"));
     button->setToolTip( i18n("Delete Resource") );
     button->setEnabled( false );
     d->buttonGroup->addButton( button, Button_Remove );
     buttonLayout->addWidget( button, 0, 1 );
 
     button = new QPushButton( this );
-    button->setIcon( SmallIcon("download") );
+    button->setIcon(koIcon("download"));
     button->setToolTip( i18n("Download Resource") );
     button->setEnabled( true );
     button->hide();
@@ -144,7 +147,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     buttonLayout->addWidget( button, 0, 3 );
 
     button = new QPushButton( this );
-    button->setIcon( SmallIcon("go-up") );
+    button->setIcon(koIcon("go-up"));
     button->setToolTip( i18n("Share Resource") );
     button->setEnabled( false );
     button->hide();
@@ -164,8 +167,8 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     d->tagOpLineEdit->setEnabled( false );
     d->tagOpLineEdit->hide();
 
-    connect( d->tagOpLineEdit, SIGNAL(returnPressed(QString)), this, SLOT(tagOpLineEditActivated(QString)));
-    connect( d->tagOpLineEdit, SIGNAL(textChanged(QString)), this, SLOT(tagOpLineEditTextChanged(QString)));
+    connect(d->tagOpLineEdit, SIGNAL(returnPressed(QString)), this, SLOT(tagOpLineEditActivated(QString)));
+    connect(d->tagOpLineEdit, SIGNAL(textChanged(QString)), this, SLOT(tagOpLineEditTextChanged(QString)));
 
     layout->addWidget( d->tagOpLineEdit );
     layout->addLayout( buttonLayout );
@@ -185,11 +188,11 @@ KoResourceItemChooser::~KoResourceItemChooser()
 void KoResourceItemChooser::slotButtonClicked( int button )
 {
     if( button == Button_Import ) {
-        QString extensions = d->model->resourceServerAdapter()->extensions();
+        QString extensions = d->model->extensions();
         QString filter = extensions.replace(QString(":"), QString(" "));
         QString filename = KFileDialog::getOpenFileName( KUrl(), filter, 0, i18n( "Choose File to Add" ) );
 
-        d->model->resourceServerAdapter()->importResourceFile(filename);
+        d->model->importResourceFile(filename);
     }
     else if( button == Button_Remove ) {
         QModelIndex index = d->view->currentIndex();
@@ -199,7 +202,7 @@ void KoResourceItemChooser::slotButtonClicked( int button )
 
             KoResource * resource = resourceFromModelIndex(index);
             if( resource ) {
-                d->model->resourceServerAdapter()->removeResource(resource);
+                d->model->removeResource(resource);
             }
         }
         if (column == 0) {
@@ -221,12 +224,12 @@ void KoResourceItemChooser::slotButtonClicked( int button )
 
             foreach(const QString &file, e.installedFiles()) {
                 QFileInfo fi(file);
-                d->model->resourceServerAdapter()->importResourceFile( fi.absolutePath()+'/'+fi.fileName() , false );
+                d->model->importResourceFile( fi.absolutePath()+'/'+fi.fileName() , false );
             }
 
             foreach(const QString &file, e.uninstalledFiles()) {
                 QFileInfo fi(file);
-                d->model->resourceServerAdapter()->removeResourceFile(fi.absolutePath()+'/'+fi.fileName());
+                d->model->removeResourceFile(fi.absolutePath()+'/'+fi.fileName());
             }
         }
     }
@@ -279,7 +282,7 @@ void KoResourceItemChooser::showTaggingBar(bool showSearchBar, bool showOpBar)
 
 void KoResourceItemChooser::setRowCount( int rowCount )
 {
-    int resourceCount = d->model->resourceServerAdapter()->resources().count();
+    int resourceCount = d->model->resourcesCount();
     d->model->setColumnCount( static_cast<qreal>(resourceCount) / rowCount );
     //Force an update to get the right row height (in theory)
     QRect geometry = d->view->geometry();
@@ -328,7 +331,7 @@ void KoResourceItemChooser::setCurrentResource(KoResource* resource)
         return;
 
     d->view->setCurrentIndex(index);
-    setTagOpLineEdit(d->model->resourceServerAdapter()->getAssignedTagsList(resource));
+    setTagOpLineEdit(d->model->getAssignedTagsList(resource));
     updatePreview(resource);
 }
 
@@ -377,7 +380,7 @@ void KoResourceItemChooser::activated(const QModelIndex &/*index*/)
     KoResource* resource = currentResource();
     if (resource) {
         emit resourceSelected( resource );
-        setTagOpLineEdit(d->model->resourceServerAdapter()->getAssignedTagsList(resource));
+        setTagOpLineEdit(d->model->getAssignedTagsList(resource));
         updatePreview(resource);
         updateButtonState();
     }
@@ -411,9 +414,25 @@ void KoResourceItemChooser::updatePreview(KoResource *resource)
     if (!resource) return;
 
     QImage image = resource->image();
+
+    /**
+     * Most of our resources code expects the image() of the resource
+     * to be in ARGB32 (or alike) format. If some resource returns the
+     * image in another format, then it is actually a bug (and it may
+     * result in a SIGSEGV somewhere). But here we will not assert
+     * with it, just warn the user that something is wrong.
+     */
+    if (image.format() != QImage::Format_RGB32 &&
+        image.format() != QImage::Format_ARGB32 &&
+        image.format() != QImage::Format_ARGB32_Premultiplied) {
+
+        image = image.convertToFormat(QImage::Format_ARGB32_Premultiplied);
+        qWarning() << "WARNING (KoResourceItemChooser::updatePreview): the resource" << resource->name() << "has created a non-rgb32 image thumbnail. It may not work properly.";
+    }
+
     if (d->tiledPreview) {
-        int width = qMax(d->previewScroller->width() * 4, image.width() * 4);
-        int height = qMax(d->previewScroller->height() * 4, image.height() * 4);
+        int width = d->previewScroller->width() * 4;
+        int height = d->previewScroller->height() * 4;
         QImage img(width, height, image.format());
         QPainter gc(&img);
         gc.fillRect(img.rect(), Qt::white);
@@ -495,21 +514,21 @@ void KoResourceItemChooser::tagOpLineEditActivated(QString lineEditText)
     if(!resource) {
         return;
     }
-    QStringList tagsList = d->model->resourceServerAdapter()->getAssignedTagsList(resource);
+    QStringList tagsList = d->model->getAssignedTagsList(resource);
 
     foreach(const QString& tag, tagsListNew) {
         if(!tagsList.contains(tag)) {
-            d->model->resourceServerAdapter()->addTag(resource, tag);
+            d->model->addTag(resource, tag);
         }
     }
 
     foreach(const QString& tag, tagsList) {
         if(!tagsListNew.contains(tag)) {
-            d->model->resourceServerAdapter()->delTag(resource, tag);
+            d->model->deleteTag(resource, tag);
         }
     }
 
-    setTagOpLineEdit( d->model->resourceServerAdapter()->getAssignedTagsList(resource));
+    setTagOpLineEdit( d->model->getAssignedTagsList(resource));
 }
 
 void KoResourceItemChooser::tagOpLineEditTextChanged(QString lineEditText)
@@ -519,9 +538,9 @@ void KoResourceItemChooser::tagOpLineEditTextChanged(QString lineEditText)
         return;
     }
     if(lineEditText.isEmpty()) {
-        QStringList assignedTagsList = d->model->resourceServerAdapter()->getAssignedTagsList(resource);
+        QStringList assignedTagsList = d->model->getAssignedTagsList(resource);
         foreach(const QString& tag, assignedTagsList) {
-            d->model->resourceServerAdapter()->delTag(resource, tag);
+            d->model->deleteTag(resource, tag);
         }
     }
     d->tagCompleter = new QCompleter(getTagNamesList(lineEditText),this);
@@ -530,7 +549,7 @@ void KoResourceItemChooser::tagOpLineEditTextChanged(QString lineEditText)
 
 QStringList KoResourceItemChooser::getTagNamesList(QString lineEditText)
 {
-    QStringList tagNamesList = d->model->resourceServerAdapter()->getTagNamesList();
+    QStringList tagNamesList = d->model->getTagNamesList();
 
     if(lineEditText.contains(", ")) {
         QStringList tagsList = lineEditText.split(", ");
@@ -560,16 +579,21 @@ QStringList KoResourceItemChooser::getTagNamesList(QString lineEditText)
     return tagNamesList;
 }
 
+KoResourceItemView *KoResourceItemChooser::itemView()
+{
+    return d->view;
+}
+
 QStringList KoResourceItemChooser::getTaggedResourceFileNames(QString lineEditText)
 {
-    return d->model->resourceServerAdapter()->searchTag(lineEditText);
+    return d->model->searchTag(lineEditText);
 }
 
 void KoResourceItemChooser::tagSearchLineEditActivated(QString lineEditText)
 {
-    d->model->resourceServerAdapter()->setTagSearch(true);
-    d->model->resourceServerAdapter()->setTaggedResourceFileNames(getTaggedResourceFileNames(lineEditText));
-    d->model->resourceServerAdapter()->updateServer();
+    d->model->setTagSearch(true);
+    d->model->setTaggedResourceFileNames(getTaggedResourceFileNames(lineEditText));
+    d->model->updateServer();
 
     if(!lineEditText.endsWith(", ")) {
         lineEditText.append(", ");
@@ -583,8 +607,8 @@ void KoResourceItemChooser::tagSearchLineEditActivated(QString lineEditText)
 void KoResourceItemChooser::tagSearchLineEditTextChanged(QString lineEditText)
 {
     if(lineEditText.isEmpty()) {
-        d->model->resourceServerAdapter()->setTagSearch(false);
-        d->model->resourceServerAdapter()->updateServer();
+        d->model->setTagSearch(false);
+        d->model->updateServer();
     }
     d->tagCompleter = new QCompleter(getTagNamesList(lineEditText),this);
     d->tagSearchLineEdit->setCompleter(d->tagCompleter);

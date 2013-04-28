@@ -550,6 +550,19 @@ public:
     */
     bool createTable(TableSchema* tableSchema, bool replaceExisting = false);
 
+    /*! Creates a copy of table schema defined by \a tableSchema with data.
+     Name, caption and description will be copied from \a newData.
+     \return a table schema object which is inserted to the Connection structures
+     - it becomes owned by Connection object. The created table schema object should not
+     be destroyed by hand afterwards.
+     0 is returned on failure. Table with destination name must not exist.
+     @see createTable() */
+    TableSchema *copyTable(const TableSchema &tableSchema, const KexiDB::SchemaData &newData);
+
+    /*! It is a convenience function, does exactly the same as
+     TableSchema *copyTable(const TableSchema&, const KexiDB::SchemaData&). */
+    TableSchema *copyTable(const QString& table, const KexiDB::SchemaData &newData);
+
     /*! Drops a table defined by \a tableSchema (both table object as well as physically).
      If true is returned, schema information \a tableSchema is destoyed
      (because it's owned), so don't keep this anymore!
@@ -728,7 +741,7 @@ public:
 
     /*! Added for convenience.
      \sa setupObjectSchemaData( const KexiDB::RecordData &data, SchemaData &sdata ).
-     \return true on success, false on failure and cancelled when such object couldn't */
+     \return true on success, false on failure and cancelled when such object couldn't be found. */
     tristate loadObjectSchemaData(int objectID, SchemaData &sdata);
 
     /*! Finds object schema data for object of type \a objectType and name \a objectName.
@@ -740,22 +753,32 @@ public:
      and puts it to \a dataString. The can be block indexed with optional \a dataID.
      \return true on success, false on failure and cancelled when there is no such data block
      \sa storeDataBlock(). */
-    tristate loadDataBlock(int objectID, QString &dataString, const QString& dataID);
+    tristate loadDataBlock(int objectID, QString &dataString, const QString& dataID = QString());
 
     /*! Stores (potentially large) data block \a dataString (e.g. xml form's representation),
      referenced by objectID. Block will be stored in "kexi__objectdata" table and
      an optional \a dataID identifier.
      If there is already such record in the table, it's simply overwritten.
      \return true on success
-     \sa loadDataBlock(). */
+     \sa loadDataBlock() removeDataBlock() copyDataBlock(). */
     bool storeDataBlock(int objectID, const QString &dataString,
                         const QString& dataID = QString());
 
+    /*! Copies (potentially large) data (e.g. form's XML representation),
+     referenced by \a sourceObjectID, and pointed by optional \a dataID.
+     \return true on success. Does not fail if blocks do not exist.
+     Prior to copying, existing data blocks are removed even if there is nothing to copy.
+     Copied data blocks will have \a destObjectID object identifier assigned.
+     Note that if \a dataID is not specified, all data blocks found for the \a sourceObjectID
+     will be copied.
+     \sa loadDataBlock() storeDataBlock() removeDataBlock(). */
+    bool copyDataBlock(int sourceObjectID, int destObjectID, const QString& dataID = QString());
+
     /*! Removes (potentially large) string data (e.g. xml form's representation),
-     referenced by objectID, and pointed by optional \a dataID.
+     referenced by \a objectID, and pointed by optional \a dataID.
      \return true on success. Does not fail if the block does not exist.
-     Note that if \a dataID is not specified, all data blocks for this dialog will be removed.
-     \sa loadDataBlock() storeDataBlock(). */
+     Note that if \a dataID is not specified, all data blocks for the \a objectID will be removed.
+     \sa loadDataBlock() storeDataBlock() copyDataBlock(). */
     bool removeDataBlock(int objectID, const QString& dataID = QString());
 
     class CALLIGRADB_EXPORT TableSchemaChangeListenerInterface
@@ -819,12 +842,18 @@ public:
     */
     virtual bool drv_alterTableName(TableSchema& tableSchema, const QString& newName);
 
+    /*! Copies table data from \a tableSchema to \a destinationTableSchema
+     Default implementation executed "INSERT INTO .. SELECT * FROM .."
+     \return true on success.
+    */
+    virtual bool drv_copyTableData(const TableSchema &tableSchema, TableSchema &destinationTableSchema);
+
     /*! Physically drops table named with \a name.
      Default impelmentation executes "DROP TABLE.." command,
      so you rarely want to change this.
 
       Moved to public for KexiMigrate
-      @todo fix this after refatoring
+      @todo fix this after refactoring
     */
     virtual bool drv_dropTable(const QString& name);
 
@@ -869,7 +898,7 @@ protected:
     /*! @internal drops table \a tableSchema physically, but destroys
      \a tableSchema object only if \a alsoRemoveSchema is true.
      Used (alsoRemoveSchema==false) on table altering:
-     if recreating table can failed we're giving up and keeping
+     if recreating table can fail we're giving up and keeping
      the original table schema (even if it is no longer points to any real data). */
     tristate dropTable(KexiDB::TableSchema* tableSchema, bool alsoRemoveSchema);
 

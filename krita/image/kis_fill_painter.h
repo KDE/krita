@@ -123,7 +123,7 @@ public:
      * @param startY the Y position where the floodfill starts
      * @param projection the projection that determines the area that
      * is floodfilled if sampleMerged is on (XXX: fix this API to
-     * always use the the projection param and deprecated the
+     * always use the projection param and deprecated the
      * sampleMerged setting)
      */
     void fillColor(int startX, int startY, KisPaintDeviceSP projection);
@@ -138,7 +138,7 @@ public:
      * @param startY the Y position where the floodfill starts
      * @param projection the projection that determines the area that
      * is floodfilled if sampleMerged is on (XXX: fix this API to
-     * always use the the projection param and deprecated the
+     * always use the projection param and deprecated the
      * sampleMerged setting)
      */
     void fillPattern(int startX, int startY, KisPaintDeviceSP projection);
@@ -150,7 +150,7 @@ public:
      * @param startY the Y position where the floodfill starts
      * @param projection the projection that determines the area that
      * is floodfilled if sampleMerged is on (XXX: fix this API to
-     * always use the the projection param and deprecated the
+     * always use the projection param and deprecated the
      * sampleMerged setting)
      */
     KisSelectionSP createFloodSelection(int startX, int startY, KisPaintDeviceSP projection);
@@ -210,6 +210,28 @@ public:
     void setFuzzyFill(bool set) {
         m_fuzzy = set;
     }
+        
+    /** Sets the auto growth/shrinking radius */
+    void setSizemod(int sizemod) {
+        m_sizemod = sizemod;
+    }
+    
+    /** Sets how much to auto-grow or shrink (if @param sizemod is negative) the selection
+    flood before painting, this affects every fill operation except fillRect */
+    int sizemod() {
+        return m_sizemod;
+    }
+    
+    /** Sets feathering radius */
+    void setFeather(int feather) {
+        m_feather = feather;
+    }
+    
+    /** defines the feathering radius for selection flood operations, this affects every
+    fill operation except fillRect */
+    uint feather() {
+        return m_feather;
+    }
 
 private:
     // for floodfill
@@ -218,6 +240,8 @@ private:
 
     KisSelectionSP m_fillSelection;
 
+    int m_feather;
+    int m_sizemod;
     int m_threshold;
     int m_size;
     int m_width, m_height;

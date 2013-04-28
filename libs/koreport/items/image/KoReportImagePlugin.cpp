@@ -23,7 +23,7 @@
 #include "KoReportDesignerItemImage.h"
 #include "KoReportPluginInfo.h"
 #include "krscriptimage.h"
-#include <KIcon>
+#include <KoIcon.h>
 
 KoReportImagePlugin::KoReportImagePlugin(QObject *parent, const QVariantList &args) : KoReportPluginInterface(parent)
 {
@@ -31,7 +31,7 @@ KoReportImagePlugin::KoReportImagePlugin(QObject *parent, const QVariantList &ar
     
     KoReportPluginInfo *info = new KoReportPluginInfo();
     info->setClassName("report:image");
-    info->setIcon(KIcon("insert-image"));
+    info->setIcon(koIcon("insert-image"));
     info->setName(i18n("Image"));
     info->setPriority(4);
     setInfo(info);

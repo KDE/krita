@@ -1,15 +1,18 @@
 [Desktop Entry]
 Name=Filter effect definition
+Name[bs]=Definicija filter efekta
 Name[ca]=Definició d'efecte de filtre
 Name[ca@valencia]=Definició d'efecte de filtre
+Name[cs]=Definice efektu filtru
 Name[da]=Definition af filtereffekt
 Name[de]=Filtereffekt-Definition
 Name[el]=Ορισμός εφέ φίλτρου
 Name[en_GB]=Filter effect definition
 Name[es]=Definición de los efectos del filtro
 Name[et]=Filtriefekti definitsioon
+Name[fi]=Suodintehostetyökalun määrittely
 Name[fr]=Définition d'un effet de filtrage
-Name[gl]=Definición do filtro de efecto
+Name[gl]=Definición de efectos de filtro
 Name[it]=Definizione dell'effetto del filtro
 Name[ja]=フィルタ効果定義
 Name[kk]=Сүзгі эффекттің анықтамасы
@@ -31,6 +34,7 @@ Name[zh_TW]=過濾器效果定義
 Type=ServiceType
 X-KDE-ServiceType=Calligra/FilterEffect
 Comment=Definition of a flake filter effect
+Comment[bs]=Definicija pahuljice filter efekta
 Comment[ca]=Definició d'un efecte de filtre de floc
 Comment[ca@valencia]=Definició d'un efecte de filtre de floc
 Comment[da]=Definition af et flake filtereffekt
@@ -39,8 +43,9 @@ Comment[el]=Ορισμός εφέ φίλτρου flake
 Comment[en_GB]=Definition of a flake filter effect
 Comment[es]=Definición del efecto de un filtro de Flake
 Comment[et]=Helbe filtriefekti definitsioon
+Comment[fi]=Flake-suodintehosteen määrittely
 Comment[fr]=Définition d'un effet de filtre de flocons
-Comment[gl]=Definición do efecto de filtro dun flake
+Comment[gl]=Definición de efectos de filtro de Flake.
 Comment[it]=Definizione di un effetto di filtro Flake
 Comment[ja]=Flake フィルタ効果の定義
 Comment[kk]=Flake сүзгі эффектінің анықтамасы
@@ -58,5 +63,7 @@ Comment[wa]=Definixha d' on efet d' passete di ploumion
 Comment[x-test]=xxDefinition of a flake filter effectxx
 Comment[zh_CN]=Flake 滤镜效果定义
 Comment[zh_TW]=Flake 過濾器效果定義
-[PropertyDef::X-Flake-Version]
+[PropertyDef::X-Flake-PluginVersion]
 Type=int
+[PropertyDef::X-KDE-PluginInfo-Name]
+Type=QString

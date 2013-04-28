@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Spacenavigator Device
+Name[bs]=Uređaj za prostornu navigaciju
 Name[ca]=Aparell NavegadorEspacial
 Name[ca@valencia]=Aparell NavegadorEspacial
 Name[da]=Enhed til rumnavigering
@@ -9,7 +10,7 @@ Name[en_GB]=Spacenavigator Device
 Name[es]=Dispositivo de Spacenavigator
 Name[et]=Spacenavigatori seade
 Name[fr]=Dispositif de NavigateurEspace
-Name[gl]=Dispositivo Spacenavigator
+Name[gl]=Dispositivo de Spacenavigator
 Name[it]=Dispositivo per la navigazione spaziale
 Name[ja]=スペースナビゲータデバイス
 Name[kk]=Кеңістікте бағдарлау құралы
@@ -31,6 +32,7 @@ Name[x-test]=xxSpacenavigator Devicexx
 Name[zh_TW]=Spacenavigator 裝置
 X-KDE-ServiceTypes=Calligra/Device
 Type=Service
+X-KDE-PluginInfo-Name=spacenavigator
 X-KDE-Library=spacenavigator
-X-Flake-MinVersion=4
-X-Flake-PluginVersion=4
+X-Flake-MinVersion=27
+X-Flake-PluginVersion=27

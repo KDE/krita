@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KODEVICEREGISTRY_H
-#define KODEVICEREGISTRY_H
+#ifndef KOINPUTDEVICEHANDLERREGISTRY_H
+#define KOINPUTDEVICEHANDLERREGISTRY_H
 
 #include <QObject>
 
@@ -29,7 +29,7 @@
 /**
  * This singleton class keeps a register of all custom input devices
  * for instance the 3D Space Navigator which generate input events.
- * These will get routed the the active tools which can then do whatever
+ * These will get routed the active tools which can then do whatever
  * they like with it.
  */
 class FLAKE_EXPORT KoInputDeviceHandlerRegistry : public KoGenericRegistry<KoInputDeviceHandler*>
@@ -53,4 +53,4 @@ private:
     Private *d;
 };
 
-#endif // KODEVICEREGISTRY_H
+#endif // KOINPUTDEVICEHANDLERREGISTRY_H

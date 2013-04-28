@@ -23,6 +23,7 @@
 
 #include "KoToolFactoryBase.h"
 #include "krita/ui/tool/kis_tool_select_base.h"
+#include <KoIcon.h>
 #include <QPointF>
 #include <QPainterPath>
 
@@ -73,7 +74,7 @@ public:
         setToolTip(i18n("Select by brush"));
         setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
-        setIcon("tool_brush_selection");
+        setIconName(koIconNameCStr("tool_brush_selection"));
         //setShortcut(KShortcut(Qt::Key_B));
         setPriority(53);
     }

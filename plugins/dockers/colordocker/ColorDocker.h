@@ -41,7 +41,7 @@ class ColorDocker : public QDockWidget
     Q_OBJECT
 
 public:
-    ColorDocker(bool showOpacitySlider);
+    explicit ColorDocker(bool showOpacitySlider);
     virtual ~ColorDocker();
 
 private:

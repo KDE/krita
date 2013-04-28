@@ -26,22 +26,25 @@
 
 class QEvent;
 class KoResourceModel;
+class QModelIndex;
 
 /// The resource view
 class KoResourceItemView : public QTableView
 {
+    Q_OBJECT
+
 public:
     enum ViewMode{
         FIXED_COLUMS,  /// The number of columns is fixed
         FIXED_ROWS     /// The number of rows is fixed
     };
     
-    KoResourceItemView( QWidget * parent = 0 );
+    explicit KoResourceItemView(QWidget *parent = 0);
     virtual ~KoResourceItemView() {}
     
     /** reimplemented
-    * This will draw a number of rows based on the number of colums if m_viewMode is FIXED_COLUMS
-    * And it will draw a number of colums based on the number of rows if m_viewMode is FIXED_ROWS
+    * This will draw a number of rows based on the number of columns if m_viewMode is FIXED_COLUMS
+    * And it will draw a number of columns based on the number of rows if m_viewMode is FIXED_ROWS
     */
     virtual void resizeEvent ( QResizeEvent * event );
     
@@ -50,6 +53,14 @@ public:
     
     void setViewMode(ViewMode mode);
     
+signals:
+
+    void currentResourceChanged(const QModelIndex &);
+
+protected:
+
+    void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+
 private:
     KoIconToolTip m_tip;
     ViewMode m_viewMode;

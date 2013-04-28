@@ -43,6 +43,7 @@
 
 #include "kis_global.h"
 #include "kis_gbr_brush.h"
+#include "kis_debug.h"
 
 /// The resource item delegate for rendering the resource preview
 class KisBrushDelegate : public QAbstractItemDelegate
@@ -87,11 +88,11 @@ void KisBrushDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
 
 
 KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
-        : QWidget(parent)
+    : QWidget(parent)
 {
     setObjectName(name);
 
-    m_lbScale = new QLabel(i18n("Scale: "), this);
+    m_lbScale = new QLabel(i18n("Scale:"), this);
     m_slScale = new KisMultipliersDoubleSliderSpinBox(this);
     m_slScale->setRange(0.0, 2.0, 2);
     m_slScale->setValue(1.0);
@@ -100,13 +101,13 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     m_slScale->addMultiplier(10);
     QObject::connect(m_slScale, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemScale(qreal)));
 
-    m_lbRotation = new QLabel(i18n("Rotation: "), this);
+    m_lbRotation = new QLabel(i18n("Rotation:"), this);
     m_slRotation = new KisDoubleSliderSpinBox(this);
     m_slRotation->setRange(0.0, 360, 2);
     m_slRotation->setValue(0.0);
     QObject::connect(m_slRotation, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemRotation(qreal)));
 
-    m_lbSpacing = new QLabel(i18n("Spacing: "), this);
+    m_lbSpacing = new QLabel(i18n("Spacing:"), this);
     m_slSpacing = new KisDoubleSliderSpinBox(this);
     m_slSpacing->setRange(0.02, 10, 2);
     m_slSpacing->setValue(0.1);
@@ -135,8 +136,6 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setObjectName("main layout");
-    mainLayout->setMargin(2);
-    mainLayout->setSpacing(2);
 
     mainLayout->addWidget(m_lbName);
     mainLayout->addWidget(m_itemChooser, 10);
@@ -248,21 +247,28 @@ void KisBrushChooser::slotActivatedBrush(KoResource * resource)
 
 void KisBrushChooser::setBrushSize(qreal xPixels, qreal yPixels)
 {
-        Q_UNUSED(yPixels);
-        qreal oldWidth = m_brush->width() * m_brush->scale(); // or maybe m_slScale->value()
-        qreal newWidth = oldWidth + xPixels;
-        if (newWidth <= 0.0) {
-            return;
-        }
+    Q_UNUSED(yPixels);
+    qreal oldWidth = m_brush->width() * m_brush->scale();
+    qreal newWidth = oldWidth + xPixels;
+    if (newWidth <= 0.1) {
+        newWidth = 0.1;
+    }
 
-        qreal newScale = newWidth / m_brush->width();
+    qreal newScale = floor((newWidth / m_brush->width()) * 100) / 100;
 
-        // If the size is increased, use at least the minimum that the slider doesn't interpret as zero
-        if (xPixels > 0 && newScale < 0.05) {
-            newScale  = 0.05;
-        }
-        // signal valueChanged will care about call to slotSetItemScale
-        m_slScale->setValue(newScale);
+    // If the size is increased, use at least the minimum that the slider doesn't interpret as zero
+    if (xPixels > 0 && newScale < 0.05) {
+        newScale  = 0.05;
+    }
+
+    // check whether we are trying to increase the size, but fail because we only handle two decimals
+    // for the scale
+    if (xPixels > 0 && qFuzzyCompare(newScale, m_brush->scale())) {
+        newScale += 0.02;
+    }
+
+    // signal valueChanged will care about call to slotSetItemScale
+    m_slScale->setValue(newScale);
 }
 
 QSizeF KisBrushChooser::brushSize() const

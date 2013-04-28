@@ -24,7 +24,7 @@
 class KoConnectionShapePrivate : public KoParameterShapePrivate
 {
 public:
-    KoConnectionShapePrivate(KoConnectionShape *q);
+    explicit KoConnectionShapePrivate(KoConnectionShape *q);
 
     /// Returns escape direction of given handle
     QPointF escapeDirection(int handleId) const;

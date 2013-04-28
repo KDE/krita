@@ -27,15 +27,17 @@
 #include <KoTextShapeData.h>
 #include <KoTextBlockData.h>
 #include <KoTextLayoutRootArea.h>
+#include <KoAnchorTextRange.h>
 
 #include <kdebug.h>
 
 #include <QTextLayout>
 #include <QTextBlock>
 
-FloatingAnchorStrategy::FloatingAnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootArea)
-    : AnchorStrategy(anchor, rootArea)
-    , m_obstruction(new KoTextLayoutObstruction(anchor->shape(), QTransform()))
+FloatingAnchorStrategy::FloatingAnchorStrategy(KoAnchorTextRange *anchorRange, KoTextLayoutRootArea *rootArea)
+    : AnchorStrategy(anchorRange->anchor(), rootArea)
+    , m_obstruction(new KoTextLayoutObstruction(anchorRange->anchor()->shape(), QTransform()))
+    , m_anchorRange(anchorRange)
 {
 }
 
@@ -46,7 +48,7 @@ FloatingAnchorStrategy::~FloatingAnchorStrategy()
 
 void FloatingAnchorStrategy::updateObstruction(qreal documentOffset)
 {
-    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout *>(m_anchor->document()->documentLayout());
+    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout *>(m_anchorRange->document()->documentLayout());
 
     QTransform matrix = m_anchor->shape()->absoluteTransformation(0);
     matrix = matrix * m_anchor->shape()->parent()->absoluteTransformation(0).inverted();
@@ -69,7 +71,7 @@ bool FloatingAnchorStrategy::moveSubject()
         return false; // let's fake we moved to force another relayout
     }
 
-    QTextBlock block = m_anchor->document()->findBlock(m_anchor->positionInDocument());
+    QTextBlock block = m_anchorRange->document()->findBlock(m_anchorRange->position());
     QTextLayout *layout = block.layout();
 
     // there should be always at least one line
@@ -87,11 +89,11 @@ bool FloatingAnchorStrategy::moveSubject()
     QPointF newPosition;
 
     QPointF offset;
-    if (m_anchor->horizontalPos() == KoTextAnchor::HFromLeft
-        || m_anchor->horizontalPos() == KoTextAnchor::HFromInside) {
+    if (m_anchor->horizontalPos() == KoShapeAnchor::HFromLeft
+        || m_anchor->horizontalPos() == KoShapeAnchor::HFromInside) {
         offset.setX(m_anchor->offset().x());
     }
-    if (m_anchor->verticalPos() == KoTextAnchor::VFromTop) {
+    if (m_anchor->verticalPos() == KoShapeAnchor::VFromTop) {
         offset.setY(m_anchor->offset().y());
     }
 
@@ -145,46 +147,46 @@ bool FloatingAnchorStrategy::moveSubject()
 bool FloatingAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRectF containerBoundingRect, QTextBlock &block, QTextLayout *layout)
 {
     switch (m_anchor->horizontalRel()) {
-    case KoTextAnchor::HPage:
+    case KoShapeAnchor::HPage:
         anchorBoundingRect.setX(pageRect().x());
         anchorBoundingRect.setWidth(pageRect().width());
         break;
 
-    case KoTextAnchor::HFrameContent:
-    case KoTextAnchor::HFrame:
+    case KoShapeAnchor::HFrameContent:
+    case KoShapeAnchor::HFrame:
         anchorBoundingRect.setX(containerBoundingRect.x());
         anchorBoundingRect.setWidth(containerBoundingRect.width());
         break;
 
-    case KoTextAnchor::HPageContent:
+    case KoShapeAnchor::HPageContent:
         anchorBoundingRect.setX(pageContentRect().x());
         anchorBoundingRect.setWidth(pageContentRect().width());
         break;
 
-    case KoTextAnchor::HParagraph:
+    case KoShapeAnchor::HParagraph:
         anchorBoundingRect.setX(paragraphRect().x() + containerBoundingRect.x());
         anchorBoundingRect.setWidth(paragraphRect().width());
         break;
 
-    case KoTextAnchor::HParagraphContent:
+    case KoShapeAnchor::HParagraphContent:
         anchorBoundingRect.setX(paragraphContentRect().x() + containerBoundingRect.x());
         anchorBoundingRect.setWidth(paragraphContentRect().width());
         break;
 
-    case KoTextAnchor::HChar: {
-        QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
+    case KoShapeAnchor::HChar: {
+        QTextLine tl = layout->lineForTextPosition(m_anchorRange->position() - block.position());
         if (!tl.isValid())
             return false; // lets go for a second round.
-        anchorBoundingRect.setX(tl.cursorToX(m_anchor->positionInDocument() - block.position()) + containerBoundingRect.x());
+        anchorBoundingRect.setX(tl.cursorToX(m_anchorRange->position() - block.position()) + containerBoundingRect.x());
         anchorBoundingRect.setWidth(0.1); // just some small value
         break;
     }
-    case KoTextAnchor::HPageStartMargin: {
+    case KoShapeAnchor::HPageStartMargin: {
         int horizontalPos = m_anchor->horizontalPos();
         // if verticalRel is HFromInside or HInside or HOutside and the page number is even,
         // than set anchorBoundingRect to HPageEndMargin area
-        if ((pageNumber()%2 == 0) && (horizontalPos == KoTextAnchor::HFromInside ||
-                horizontalPos == KoTextAnchor::HInside || horizontalPos == KoTextAnchor::HOutside)) {
+        if ((pageNumber()%2 == 0) && (horizontalPos == KoShapeAnchor::HFromInside ||
+                horizontalPos == KoShapeAnchor::HInside || horizontalPos == KoShapeAnchor::HOutside)) {
             anchorBoundingRect.setX(containerBoundingRect.x() + containerBoundingRect.width());
             anchorBoundingRect.setWidth(pageRect().width() - anchorBoundingRect.x());
         } else {
@@ -193,13 +195,13 @@ bool FloatingAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRec
         }
         break;
     }
-    case KoTextAnchor::HPageEndMargin:
+    case KoShapeAnchor::HPageEndMargin:
     {
         int horizontalPos = m_anchor->horizontalPos();
         // if verticalRel is HFromInside or HInside or HOutside and the page number is even,
         // than set anchorBoundingRect to HPageStartMargin area
-        if ((pageNumber()%2 == 0) && (horizontalPos == KoTextAnchor::HFromInside ||
-                horizontalPos == KoTextAnchor::HInside || horizontalPos == KoTextAnchor::HOutside)) {
+        if ((pageNumber()%2 == 0) && (horizontalPos == KoShapeAnchor::HFromInside ||
+                horizontalPos == KoShapeAnchor::HInside || horizontalPos == KoShapeAnchor::HOutside)) {
             anchorBoundingRect.setX(pageRect().x());
             anchorBoundingRect.setWidth(containerBoundingRect.x());
         } else {
@@ -208,13 +210,13 @@ bool FloatingAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRec
         }
         break;
     }
-    case KoTextAnchor::HParagraphStartMargin:
+    case KoShapeAnchor::HParagraphStartMargin:
     {
         int horizontalPos = m_anchor->horizontalPos();
         // if verticalRel is HFromInside or HInside or HOutside and the page number is even,
         // than set anchorBoundingRect to HParagraphEndMargin area
-        if ((pageNumber()%2 == 0) && (horizontalPos == KoTextAnchor::HFromInside ||
-                horizontalPos == KoTextAnchor::HInside || horizontalPos == KoTextAnchor::HOutside)) {
+        if ((pageNumber()%2 == 0) && (horizontalPos == KoShapeAnchor::HFromInside ||
+                horizontalPos == KoShapeAnchor::HInside || horizontalPos == KoShapeAnchor::HOutside)) {
 //FIXME             anchorBoundingRect.setX(state->x() + containerBoundingRect.x() + state->width());
             anchorBoundingRect.setWidth(containerBoundingRect.x() + containerBoundingRect.width() - anchorBoundingRect.x());
         } else {
@@ -223,13 +225,13 @@ bool FloatingAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRec
         }
         break;
     }
-    case KoTextAnchor::HParagraphEndMargin:
+    case KoShapeAnchor::HParagraphEndMargin:
     {
         int horizontalPos = m_anchor->horizontalPos();
         // if verticalRel is HFromInside or HInside or HOutside and the page number is even,
         // than set anchorBoundingRect to HParagraphStartMargin area
-        if ((pageNumber()%2 == 0) && (horizontalPos == KoTextAnchor::HFromInside ||
-                horizontalPos == KoTextAnchor::HInside || horizontalPos == KoTextAnchor::HOutside)) {
+        if ((pageNumber()%2 == 0) && (horizontalPos == KoShapeAnchor::HFromInside ||
+                horizontalPos == KoShapeAnchor::HInside || horizontalPos == KoShapeAnchor::HOutside)) {
             anchorBoundingRect.setX(containerBoundingRect.x());
 //FIXME             anchorBoundingRect.setWidth(state->x());
         } else {
@@ -247,13 +249,13 @@ bool FloatingAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRec
 void FloatingAnchorStrategy::countHorizontalPos(QPointF &newPosition, QRectF anchorBoundingRect, QRectF containerBoundingRect)
 {
     switch (m_anchor->horizontalPos()) {
-    case KoTextAnchor::HCenter:
+    case KoShapeAnchor::HCenter:
         newPosition.setX(anchorBoundingRect.x() + anchorBoundingRect.width()/2 
          - m_anchor->shape()->size().width()/2 - containerBoundingRect.x());
         break;
 
-    case KoTextAnchor::HFromInside:
-    case KoTextAnchor::HInside:
+    case KoShapeAnchor::HFromInside:
+    case KoShapeAnchor::HInside:
     {
         if (pageNumber()%2 == 1) {
             newPosition.setX(anchorBoundingRect.x() - containerBoundingRect.x());
@@ -263,12 +265,12 @@ void FloatingAnchorStrategy::countHorizontalPos(QPointF &newPosition, QRectF anc
         }
         break;
     }
-    case KoTextAnchor::HLeft:
-    case KoTextAnchor::HFromLeft:
+    case KoShapeAnchor::HLeft:
+    case KoShapeAnchor::HFromLeft:
         newPosition.setX(anchorBoundingRect.x() - containerBoundingRect.x());
         break;
 
-    case KoTextAnchor::HOutside:
+    case KoShapeAnchor::HOutside:
     {
         if (pageNumber()%2 == 1) {
             newPosition.setX(anchorBoundingRect.right() - containerBoundingRect.x());
@@ -279,7 +281,7 @@ void FloatingAnchorStrategy::countHorizontalPos(QPointF &newPosition, QRectF anc
         }
         break;
     }
-    case KoTextAnchor::HRight: {
+    case KoShapeAnchor::HRight: {
         QSizeF size = m_anchor->shape()->boundingRect().size();
         newPosition.setX(anchorBoundingRect.right() - containerBoundingRect.x()
                            - size.width());
@@ -296,35 +298,35 @@ bool FloatingAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, QRectF
     //FIXME proper handle VFrame and VFrameContent but fallback to VPage/VPageContent for now to produce better results
 
     switch (m_anchor->verticalRel()) {
-    case KoTextAnchor::VPage:
+    case KoShapeAnchor::VPage:
         anchorBoundingRect.setY(pageRect().y());
         anchorBoundingRect.setHeight(pageRect().height());
         break;
 
-    case KoTextAnchor::VFrame:
-    case KoTextAnchor::VFrameContent:
+    case KoShapeAnchor::VFrame:
+    case KoShapeAnchor::VFrameContent:
         anchorBoundingRect.setY(containerBoundingRect.y());
         anchorBoundingRect.setHeight(containerBoundingRect.height());
         break;
 
-    case KoTextAnchor::VPageContent:
+    case KoShapeAnchor::VPageContent:
         anchorBoundingRect.setY(pageContentRect().y());
         anchorBoundingRect.setHeight(pageContentRect().height());
         break;
 
-    case KoTextAnchor::VParagraph:
+    case KoShapeAnchor::VParagraph:
         anchorBoundingRect.setY(paragraphRect().y() + containerBoundingRect.y()  - data->documentOffset());
         anchorBoundingRect.setHeight(paragraphRect().height());
         break;
 
-    case KoTextAnchor::VParagraphContent: {
+    case KoShapeAnchor::VParagraphContent: {
         anchorBoundingRect.setY(paragraphContentRect().y() + containerBoundingRect.y()  - data->documentOffset());
         anchorBoundingRect.setHeight(paragraphContentRect().height());
     }
     break;
 
-    case KoTextAnchor::VLine: {
-        QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
+    case KoShapeAnchor::VLine: {
+        QTextLine tl = layout->lineForTextPosition(m_anchorRange->position() - block.position());
         if (!tl.isValid())
             return false; // lets go for a second round.
         QSizeF size = m_anchor->shape()->boundingRect().size();
@@ -334,9 +336,9 @@ bool FloatingAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, QRectF
     }
     break;
 
-    case KoTextAnchor::VText: // same as char apparently only used when as-char
-    case KoTextAnchor::VChar: {
-         QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
+    case KoShapeAnchor::VText: // same as char apparently only used when as-char
+    case KoShapeAnchor::VChar: {
+         QTextLine tl = layout->lineForTextPosition(m_anchorRange->position() - block.position());
          if (!tl.isValid())
              return false; // lets go for a second round.
          anchorBoundingRect.setY(tl.y() + containerBoundingRect.y() - data->documentOffset());
@@ -344,8 +346,8 @@ bool FloatingAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, QRectF
      }
      break;
 
-    case KoTextAnchor::VBaseline: {
-         QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
+    case KoShapeAnchor::VBaseline: {
+         QTextLine tl = layout->lineForTextPosition(m_anchorRange->position() - block.position());
          if (!tl.isValid())
              return false; // lets go for a second round.
          QSizeF size = m_anchor->shape()->boundingRect().size();
@@ -363,20 +365,20 @@ bool FloatingAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, QRectF
 void FloatingAnchorStrategy::countVerticalPos(QPointF &newPosition, QRectF anchorBoundingRect, QRectF containerBoundingRect)
 {
     switch (m_anchor->verticalPos()) {
-    case KoTextAnchor::VBottom:
+    case KoShapeAnchor::VBottom:
         newPosition.setY(anchorBoundingRect.bottom() - containerBoundingRect.y()
         - m_anchor->shape()->size().height());
         break;
-    case KoTextAnchor::VBelow:
+    case KoShapeAnchor::VBelow:
         newPosition.setY(anchorBoundingRect.bottom() - containerBoundingRect.y());
         break;
 
-    case KoTextAnchor::VMiddle:
+    case KoShapeAnchor::VMiddle:
         newPosition.setY(anchorBoundingRect.y() + anchorBoundingRect.height()/2 - m_anchor->shape()->size().height()/2 - containerBoundingRect.y());
         break;
 
-    case KoTextAnchor::VFromTop:
-    case KoTextAnchor::VTop:
+    case KoShapeAnchor::VFromTop:
+    case KoShapeAnchor::VTop:
         newPosition.setY(anchorBoundingRect.y() - containerBoundingRect.y());
         break;
 
@@ -443,7 +445,7 @@ void FloatingAnchorStrategy::checkPageBorder(QPointF &newPosition, const QRectF 
 // floating over each other.
 void FloatingAnchorStrategy::checkStacking(QPointF &newPosition)
 {
-    if (m_anchor->anchorType() != KoTextAnchor::AnchorParagraph || (m_anchor->horizontalPos() != KoTextAnchor::HLeft && m_anchor->horizontalPos() != KoTextAnchor::HRight))
+    if (m_anchor->anchorType() != KoShapeAnchor::AnchorParagraph || (m_anchor->horizontalPos() != KoShapeAnchor::HLeft && m_anchor->horizontalPos() != KoShapeAnchor::HRight))
         return;
 
     int idx = m_rootArea->documentLayout()->textAnchors().indexOf(m_anchor);
@@ -451,16 +453,16 @@ void FloatingAnchorStrategy::checkStacking(QPointF &newPosition)
 
     QSizeF size = m_anchor->shape()->boundingRect().size();
     for(int i = 0; i < idx; ++i) {
-        KoTextAnchor *a = m_rootArea->documentLayout()->textAnchors()[i];
+        KoShapeAnchor *a = m_rootArea->documentLayout()->textAnchors()[i];
         if (m_anchor->anchorType() != a->anchorType() || m_anchor->horizontalPos() != a->horizontalPos())
             continue;
 
         QRectF thisRect(newPosition, size);
         QRectF r(a->shape()->boundingRect());
         if (thisRect.intersects(r)) {
-            if (m_anchor->horizontalPos() == KoTextAnchor::HLeft)
+            if (m_anchor->horizontalPos() == KoShapeAnchor::HLeft)
                 newPosition.setX(a->shape()->position().x() + r.width());
-            else // KoTextAnchor::HRight
+            else // KoShapeAnchor::HRight
                 newPosition.setX(a->shape()->position().x() - size.width());
         }
     }

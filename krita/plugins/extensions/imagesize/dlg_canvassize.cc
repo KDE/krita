@@ -20,13 +20,21 @@
 #include "dlg_canvassize.h"
 #include "kcanvaspreview.h"
 
-#include <klocalizedstring.h>
+#include <KoIcon.h>
 
-#include <math.h>
+#include <klocalizedstring.h>
 
 
 DlgCanvasSize::DlgCanvasSize(QWidget *parent, int width, int height)
-        : KDialog(parent), m_originalWidth(width), m_originalHeight(height), m_aspectRatio((double)width / height), m_keepAspect(true)
+        : KDialog(parent),
+          m_originalWidth(width),
+          m_originalHeight(height),
+          m_aspectRatio((double)width / height),
+          m_keepAspect(true),
+          m_newWidth(width),
+          m_newHeight(height),
+          m_xOffset(0),
+          m_yOffset(0)
 {
     setCaption(i18n("Canvas Size"));
     setButtons(Ok | Cancel);
@@ -45,40 +53,36 @@ DlgCanvasSize::DlgCanvasSize(QWidget *parent, int width, int height)
     connect(m_page->xOffset, SIGNAL(valueChanged(int)), this, SLOT(slotXOffsetChanged(int)));
     connect(m_page->yOffset, SIGNAL(valueChanged(int)), this, SLOT(slotYOffsetChanged(int)));
 
-    connect(m_page->topLeft, SIGNAL(clicked()), this, SLOT(slotTopLeftClicked()));
-    connect(m_page->topCenter, SIGNAL(clicked()), this, SLOT(slotTopCenterClicked()));
-    connect(m_page->topRight, SIGNAL(clicked()), this, SLOT(slotTopRightClicked()));
-    connect(m_page->middleLeft, SIGNAL(clicked()), this, SLOT(slotMiddleLeftClicked()));
-    connect(m_page->middleCenter, SIGNAL(clicked()), this, SLOT(slotMiddleCenterClicked()));
-    connect(m_page->middleRight, SIGNAL(clicked()), this, SLOT(slotMiddleRightClicked()));
-    connect(m_page->bottomLeft, SIGNAL(clicked()), this, SLOT(slotBottomLeftClicked()));
-    connect(m_page->bottomCenter, SIGNAL(clicked()), this, SLOT(slotBottomCenterClicked()));
-    connect(m_page->bottomRight, SIGNAL(clicked()), this, SLOT(slotBottomRightClicked()));
+    m_group = new QButtonGroup(m_page);
+    m_group->addButton(m_page->topLeft, NORTH_WEST);
+    m_group->addButton(m_page->topCenter, NORTH);
+    m_group->addButton(m_page->topRight, NORTH_EAST);
 
-    connect(m_page->comboWidthUnit, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotWidthUnitChanged(QString)));
-    connect(m_page->comboHeightUnit, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotHeightUnitChanged(QString)));
+    m_group->addButton(m_page->middleLeft, WEST);
+    m_group->addButton(m_page->middleCenter, CENTER);
+    m_group->addButton(m_page->middleRight, EAST);
 
+    m_group->addButton(m_page->bottomLeft, SOUTH_WEST);
+    m_group->addButton(m_page->bottomCenter, SOUTH);
+    m_group->addButton(m_page->bottomRight, SOUTH_EAST);
+
+    connect(m_group, SIGNAL(buttonClicked(int)), SLOT(slotAnchorButtonClicked(int)));
+    connect(m_page->comboUnit, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotUpdateSizeTextBoxes()));
     connect(m_page->aspectRatio, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(slotAspectChanged(bool)));
-
     connect(m_page->canvasPreview, SIGNAL(sigModifiedXOffset(int)), m_page->xOffset, SLOT(setValue(int)));
     connect(m_page->canvasPreview, SIGNAL(sigModifiedYOffset(int)), m_page->yOffset, SLOT(setValue(int)));
-
-    m_page->xOffset->setMinimum(-width + 1);
-    m_page->xOffset->setMaximum(width - 1);
-    m_page->yOffset->setMinimum(-height + 1);
-    m_page->yOffset->setMaximum(height - 1);
 
     m_page->newWidth->setValue(width);
     m_page->newHeight->setValue(height);
 
     m_page->canvasPreview->setImageSize(m_originalWidth, m_originalHeight);
     m_page->canvasPreview->setCanvasSize(m_originalWidth, m_originalHeight);
-    m_page->canvasPreview->setImageOffset(0, 0);
-
-    loadAnchorIcons();
-    updateAnchorIcons(CENTER);
+    m_page->canvasPreview->setImageOffset(m_xOffset, m_yOffset);
 
     setMainWidget(m_page);
+    loadAnchorIcons();
+    m_group->button(NORTH_WEST)->setChecked(true);
+    updateAnchorIcons(NORTH_WEST);
 }
 
 DlgCanvasSize::~DlgCanvasSize()
@@ -113,180 +117,164 @@ void DlgCanvasSize::slotAspectChanged(bool keep)
 
 void DlgCanvasSize::slotWidthChanged(int v)
 {
-    QString index = m_page->comboWidthUnit->currentText();
+    QString index = m_page->comboUnit->currentText();
 
     m_newWidth = v;
-    if (index == i18n("Percent"))
+    if (index == i18n("Percent")) {
         m_newWidth = m_page->newWidth->value() / 100.0f * m_originalWidth;
-
-    m_page->xOffset->setMaximum(m_newWidth - 1);
-
-    if (m_keepAspect) {
-        m_newHeight = (qint32)round(m_newWidth / m_aspectRatio);
-
-        m_page->yOffset->setMaximum(m_newHeight - 1);
-
-        m_page->newHeight->blockSignals(true);
-        slotHeightUnitChanged(QString());
-        m_page->newHeight->blockSignals(false);
     }
 
+    if (m_keepAspect) {
+        m_newHeight = (qint32)qRound(m_newWidth / m_aspectRatio);
+    }
+
+    int savedId = m_group->checkedId();
+
     m_page->canvasPreview->setCanvasSize(m_newWidth, m_newHeight);
+    slotUpdateSizeTextBoxes();
+    updateOffset(savedId);
+    updateButtons(savedId);
 }
 
 void DlgCanvasSize::slotHeightChanged(int v)
 {
-    QString index = m_page->comboWidthUnit->currentText();
+    QString index = m_page->comboUnit->currentText();
 
     m_newHeight = v;
-    if (index == i18n("Percent"))
+    if (index == i18n("Percent")) {
         m_newHeight = m_page->newHeight->value() / 100.0f * m_originalHeight;
-
-    if (m_keepAspect) {
-        m_newWidth = (qint32)round(m_newHeight * m_aspectRatio);
-
-        m_page->xOffset->setMaximum(m_newWidth - 1);
-
-        m_page->newWidth->blockSignals(true);
-        slotWidthUnitChanged(QString());
-        m_page->newWidth->blockSignals(false);
     }
 
+    if (m_keepAspect) {
+        m_newWidth = (qint32)qRound(m_newHeight * m_aspectRatio);
+    }
+
+    int savedId = m_group->checkedId();
+
     m_page->canvasPreview->setCanvasSize(m_newWidth, m_newHeight);
+    slotUpdateSizeTextBoxes();
+    updateOffset(savedId);
+    updateButtons(savedId);
 }
 
 void DlgCanvasSize::slotXOffsetChanged(int v)
 {
     m_xOffset = v;
     m_page->canvasPreview->setImageOffset(m_xOffset, m_yOffset);
+    updateButtons(-1);
 }
 
 void DlgCanvasSize::slotYOffsetChanged(int v)
 {
     m_yOffset = v;
     m_page->canvasPreview->setImageOffset(m_xOffset, m_yOffset);
+    updateButtons(-1);
 }
 
-void DlgCanvasSize::slotTopLeftClicked()
+void DlgCanvasSize::slotAnchorButtonClicked(int id)
 {
-    m_page->xOffset->setValue(0);
-    m_page->yOffset->setValue(0);
-
-    updateAnchorIcons(NORTH_WEST);
+    updateOffset(id);
+    updateButtons(id);
 }
 
-void DlgCanvasSize::slotTopCenterClicked()
+void DlgCanvasSize::updateButtons(int forceId)
 {
-    m_page->xOffset->setValue((int)((m_newWidth - m_originalWidth) / 2.0));
-    m_page->yOffset->setValue(0);
+    int id = m_group->checkedId();
 
-    updateAnchorIcons(NORTH);
+    if (forceId != -1) {
+        m_group->setExclusive(true);
+        m_group->button(forceId)->setChecked(true);
+        updateAnchorIcons(forceId);
+    } else if (id != -1) {
+        int xOffset, yOffset;
+        expectedOffset(id, xOffset, yOffset);
+
+        bool offsetAsExpected =
+            xOffset == m_xOffset &&
+            yOffset == m_yOffset;
+
+        if (offsetAsExpected) {
+            m_group->setExclusive(true);
+        } else {
+            m_group->setExclusive(false);
+            m_group->button(id)->setChecked(false);
+            id = -1;
+        }
+
+        updateAnchorIcons(id);
+    } else {
+        updateAnchorIcons(id);
+    }
 }
 
-void DlgCanvasSize::slotTopRightClicked()
+void DlgCanvasSize::expectedOffset(int id, int &xOffset, int &yOffset)
 {
-    m_page->xOffset->setValue(m_newWidth - m_originalWidth);
-    m_page->yOffset->setValue(0);
+    qreal xCoeff = (id % 3) * 0.5;
+    qreal yCoeff = (id / 3) * 0.5;
 
-    updateAnchorIcons(NORTH_EAST);
+    int xDiff = m_newWidth - m_originalWidth;
+    int yDiff = m_newHeight - m_originalHeight;
+
+    xOffset = xDiff * xCoeff;
+    yOffset = yDiff * yCoeff;
 }
 
-void DlgCanvasSize::slotMiddleLeftClicked()
+void DlgCanvasSize::updateOffset(int id)
 {
-    m_page->xOffset->setValue(0);
-    m_page->yOffset->setValue((int)((m_newHeight - m_originalHeight) / 2.0));
+    if (id == -1) return;
 
-    updateAnchorIcons(WEST);
+    int xOffset;
+    int yOffset;
+    expectedOffset(id, xOffset, yOffset);
+
+    m_page->xOffset->setValue(xOffset);
+    m_page->yOffset->setValue(yOffset);
 }
 
-void DlgCanvasSize::slotMiddleCenterClicked()
+void DlgCanvasSize::slotUpdateSizeTextBoxes()
 {
-    m_page->xOffset->setValue((int)(m_newWidth - m_originalWidth) / 2.0);
-    m_page->yOffset->setValue((int)((m_newHeight - m_originalHeight) / 2.0));
-
-    updateAnchorIcons(CENTER);
-}
-
-void DlgCanvasSize::slotMiddleRightClicked()
-{
-    m_page->xOffset->setValue(m_newWidth - m_originalWidth);
-    m_page->yOffset->setValue((int)((m_newHeight - m_originalHeight) / 2.0));
-
-    updateAnchorIcons(EAST);
-}
-
-void DlgCanvasSize::slotBottomLeftClicked()
-{
-    m_page->xOffset->setValue(0);
-    m_page->yOffset->setValue(m_newHeight - m_originalHeight);
-
-    updateAnchorIcons(SOUTH_WEST);
-}
-
-void DlgCanvasSize::slotBottomCenterClicked()
-{
-    m_page->xOffset->setValue((int)(m_newWidth - m_originalWidth) / 2.0);
-    m_page->yOffset->setValue(m_newHeight - m_originalHeight);
-
-    updateAnchorIcons(SOUTH);
-}
-
-void DlgCanvasSize::slotBottomRightClicked()
-{
-    m_page->xOffset->setValue(m_newWidth - m_originalWidth);
-    m_page->yOffset->setValue(m_newHeight - m_originalHeight);
-
-    updateAnchorIcons(SOUTH_EAST);
-}
-
-void DlgCanvasSize::slotWidthUnitChanged(QString)
-{
-    QString index = m_page->comboWidthUnit->currentText();
+    QString index = m_page->comboUnit->currentText();
     m_page->newWidth->blockSignals(true);
+    m_page->newHeight->blockSignals(true);
 
     if (index == i18n("Pixels")) {
         m_page->newWidth->setSuffix(QString());
         m_page->newWidth->setValue(m_newWidth);
-    } else if (index == i18n("Percent")) {
-        m_page->newWidth->setSuffix(QString("%"));
-        m_page->newWidth->setValue(round((float)m_newWidth / m_originalWidth * 100));
-    }
-
-    m_page->newWidth->blockSignals(false);
-}
-
-void DlgCanvasSize::slotHeightUnitChanged(QString)
-{
-    QString index = m_page->comboHeightUnit->currentText();
-    m_page->newHeight->blockSignals(true);
-
-    if (index == QString("Pixels")) {
         m_page->newHeight->setSuffix(QString());
         m_page->newHeight->setValue(m_newHeight);
-    } else if (index == QString("Percent")) {
+    } else if (index == i18n("Percent")) {
+        m_page->newWidth->setSuffix(QString("%"));
+        m_page->newWidth->setValue(qRound((float)m_newWidth / m_originalWidth * 100));
         m_page->newHeight->setSuffix(QString("%"));
-        m_page->newHeight->setValue(round((float)m_newHeight / m_originalHeight * 100));
+        m_page->newHeight->setValue(qRound((float)m_newHeight / m_originalHeight * 100));
     }
 
+    m_page->xOffset->setMinimum(-m_newWidth + 1);
+    m_page->xOffset->setMaximum(m_newWidth - 1);
+    m_page->yOffset->setMinimum(-m_newHeight + 1);
+    m_page->yOffset->setMaximum(m_newHeight - 1);
+
+    m_page->newWidth->blockSignals(false);
     m_page->newHeight->blockSignals(false);
 }
 
 void DlgCanvasSize::loadAnchorIcons()
 {
-    m_anchorIcons[NORTH_WEST] =  KIcon("arrow_north_west.png");
-    m_anchorIcons[NORTH] = KIcon("arrow_north.png");
-    m_anchorIcons[NORTH_EAST] = KIcon("arrow_north_east.png");
-    m_anchorIcons[EAST] = KIcon("arrow_east.png");
-    m_anchorIcons[CENTER] = KIcon("arrow_center.png");
-    m_anchorIcons[WEST] = KIcon("arrow_west.png");
-    m_anchorIcons[SOUTH_WEST] = KIcon("arrow_south_west.png");
-    m_anchorIcons[SOUTH] = KIcon("arrow_south.png");
-    m_anchorIcons[SOUTH_EAST] = KIcon("arrow_south_east.png");
+    m_anchorIcons[NORTH_WEST] =  koIcon("arrow_north_west");
+    m_anchorIcons[NORTH] = koIcon("arrow_north");
+    m_anchorIcons[NORTH_EAST] = koIcon("arrow_north_east");
+    m_anchorIcons[EAST] = koIcon("arrow_east");
+    m_anchorIcons[CENTER] = koIconWanted("though currently m_anchorIcons[CENTER] is not used","arrow_center");
+    m_anchorIcons[WEST] = koIcon("arrow_west");
+    m_anchorIcons[SOUTH_WEST] = koIcon("arrow_south_west");
+    m_anchorIcons[SOUTH] = koIcon("arrow_south");
+    m_anchorIcons[SOUTH_EAST] = koIcon("arrow_south_east");
 }
 
-void DlgCanvasSize::updateAnchorIcons(anchor enumAnchor)
+void DlgCanvasSize::updateAnchorIcons(int id)
 {
-    anchor iconLayout[9][9] = { {NONE, EAST, NONE, SOUTH, SOUTH_EAST, NONE, NONE, NONE, NONE},
+    anchor iconLayout[10][9] = {
+        {NONE, EAST, NONE, SOUTH, SOUTH_EAST, NONE, NONE, NONE, NONE},
         {WEST, NONE, EAST, SOUTH_WEST, SOUTH, SOUTH_EAST, NONE, NONE, NONE},
         {NONE, WEST, NONE, NONE, SOUTH_WEST, SOUTH, NONE, NONE, NONE},
         {NORTH, NORTH_EAST, NONE, NONE, EAST, NONE, SOUTH, SOUTH_EAST, NONE},
@@ -294,27 +282,23 @@ void DlgCanvasSize::updateAnchorIcons(anchor enumAnchor)
         {NONE, NORTH_WEST, NORTH, NONE, WEST, NONE, NONE, SOUTH_WEST, SOUTH},
         {NONE, NONE, NONE, NORTH, NORTH_EAST, NONE, NONE, EAST, NONE},
         {NONE, NONE, NONE, NORTH_WEST, NORTH, NORTH_EAST, WEST, NONE, EAST},
-        {NONE, NONE, NONE, NONE, NORTH_WEST, NORTH, NONE, WEST, NONE}
+        {NONE, NONE, NONE, NONE, NORTH_WEST, NORTH, NONE, WEST, NONE},
+        {NONE, NONE, NONE, NONE, NONE, NONE, NONE, NONE, NONE}
     };
 
-    setButtonIcon(m_page->topLeft, iconLayout[enumAnchor][NORTH_WEST]);
-    setButtonIcon(m_page->topCenter, iconLayout[enumAnchor][NORTH]);
-    setButtonIcon(m_page->topRight, iconLayout[enumAnchor][NORTH_EAST]);
-    setButtonIcon(m_page->middleLeft, iconLayout[enumAnchor][WEST]);
-    setButtonIcon(m_page->middleCenter, iconLayout[enumAnchor][CENTER]);
-    setButtonIcon(m_page->middleRight, iconLayout[enumAnchor][EAST]);
-    setButtonIcon(m_page->bottomLeft, iconLayout[enumAnchor][SOUTH_WEST]);
-    setButtonIcon(m_page->bottomCenter, iconLayout[enumAnchor][SOUTH]);
-    setButtonIcon(m_page->bottomRight, iconLayout[enumAnchor][SOUTH_EAST]);
-}
-
-void DlgCanvasSize::setButtonIcon(QPushButton *button, anchor enumAnchorIcon)
-{
-    if (enumAnchorIcon == NONE) {
-        button->setIcon(KIcon());
-    } else {
-        button->setIcon(m_anchorIcons[enumAnchorIcon]);
+    if (id == -1) {
+        id = SOUTH_EAST + 1;
     }
-}
 
-#include "dlg_canvassize.moc"
+    for (int i = NORTH_WEST; i <= SOUTH_EAST; i++) {
+        anchor iconId = iconLayout[id][i];
+        QAbstractButton *button = m_group->button(i);
+
+        if (iconId == NONE) {
+            button->setIcon(KIcon());
+        } else {
+            button->setIcon(m_anchorIcons[iconId]);
+        }
+    }
+
+}

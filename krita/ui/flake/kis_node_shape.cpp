@@ -67,7 +67,7 @@ KisNodeSP KisNodeShape::node()
     return m_d->node;
 }
 
-void KisNodeShape::setNodeVisible(bool v)
+void KisNodeShape::setNodeVisible(bool /*v*/)
 {
     // Necessary because shapes are not QObjects
 //     setVisible(v);

@@ -25,7 +25,7 @@
 #include "KoReportPluginManager.h"
 #include "KoReportDesignerItemRectBase.h"
 #include "KoReportDesignerItemLine.h"
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 
 #include "reportscene.h"
 #include "reportsceneview.h"
@@ -41,7 +41,7 @@
 #include <KoRuler.h>
 #include <KoZoomHandler.h>
 #include <koproperty/EditorView.h>
-#include <KColorScheme>
+#include <kcolorscheme.h>
 #include <QBitmap>
 
 #include <kdebug.h>

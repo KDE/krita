@@ -23,15 +23,6 @@
 #include "../compositeops/KoCompositeOpOver.h"
 
 #include <KoColorSpaceTraits.h>
-#include <KoCompositeOpAdd.h>
-#include <KoCompositeOpBurn.h>
-#include <KoCompositeOpDivide.h>
-#include <KoCompositeOpDodge.h>
-#include <KoCompositeOpInversedSubtract.h>
-#include <KoCompositeOpMultiply.h>
-#include <KoCompositeOpOverlay.h>
-#include <KoCompositeOpScreen.h>
-#include <KoCompositeOpSubtract.h>
 
 const int TILE_WIDTH = 64;
 const int TILE_HEIGHT = 64;
@@ -84,14 +75,6 @@ void KoCompositeOpsBenchmark::benchmarkCompositeOver()
     }
 }
 
-void KoCompositeOpsBenchmark::benchmarkCompositeAdd()
-{
-    KoCompositeOpAdd<KoBgrU16Traits> compositeOp(0);
-    QBENCHMARK{
-        COMPOSITE_BENCHMARK
-    }
-}    
-
 void KoCompositeOpsBenchmark::benchmarkCompositeAlphaDarken()
 {
     KoCompositeOpAlphaDarken<KoBgrU16Traits> compositeOp(0);
@@ -100,69 +83,6 @@ void KoCompositeOpsBenchmark::benchmarkCompositeAlphaDarken()
     }
 }
 
-void KoCompositeOpsBenchmark::benchmarkCompositeBurn()
-{
-    KoCompositeOpBurn<KoBgrU16Traits> compositeOp(0);
-    QBENCHMARK{
-        COMPOSITE_BENCHMARK
-    }
-}
-
-void KoCompositeOpsBenchmark::benchmarkCompositeDivide()
-{
-    KoCompositeOpDivide<KoBgrU16Traits> compositeOp(0);
-    QBENCHMARK{
-        COMPOSITE_BENCHMARK
-    }
-}
-
-void KoCompositeOpsBenchmark::benchmarkCompositeDodge()
-{
-    KoCompositeOpDodge<KoBgrU16Traits> compositeOp(0);
-    QBENCHMARK{
-        COMPOSITE_BENCHMARK
-    }
-}
-
-void KoCompositeOpsBenchmark::benchmarkCompositeInversedSubtract()
-{
-    KoCompositeOpInversedSubtract<KoBgrU16Traits> compositeOp(0);
-    QBENCHMARK{
-        COMPOSITE_BENCHMARK
-    }
-}
-
-void KoCompositeOpsBenchmark::benchmarkCompositeMulitply()
-{
-    KoCompositeOpMultiply<KoBgrU16Traits> compositeOp(0);
-    QBENCHMARK{
-        COMPOSITE_BENCHMARK
-    }
-}
-
-void KoCompositeOpsBenchmark::benchmarkCompositeOverlay()
-{
-    KoCompositeOpOverlay<KoBgrU16Traits> compositeOp(0);
-    QBENCHMARK{
-        COMPOSITE_BENCHMARK
-    }
-}
-
-void KoCompositeOpsBenchmark::benchmarkCompositeScreen()
-{
-    KoCompositeOpScreen<KoBgrU16Traits> compositeOp(0);
-    QBENCHMARK{
-        COMPOSITE_BENCHMARK
-    }
-}
-
-void KoCompositeOpsBenchmark::benchmarkCompositeSubtract()
-{
-    KoCompositeOpSubtract<KoBgrU16Traits> compositeOp(0);
-    QBENCHMARK{
-        COMPOSITE_BENCHMARK
-    }
-}
 
 QTEST_KDEMAIN(KoCompositeOpsBenchmark, NoGUI)
 #include "KoCompositeOpsBenchmark.moc"

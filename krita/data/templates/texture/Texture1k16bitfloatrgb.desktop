@@ -1,6 +1,27 @@
 [Desktop Entry]
 Icon=template_texture
 Name=Texture 1k 16bit float rgb
+Name[ca]=Textura 1k 16bit flotant RGB
+Name[cs]=Textura 1k 16bit float rgb
+Name[da]=Tekstur 1k 16bit float rgb
+Name[de]=Textur 1k 16bit float rgb
+Name[el]=Texture 1k 16bit float rgb
+Name[es]=Textura 1k 16bit flotante rgb
+Name[et]=Tekstuur 1k 16bit murdarvuline rgb
+Name[fr]=Texture 1k 16bit float rgb
+Name[gl]=Textura de 1k e 16 bits flotante RGB.
+Name[hu]=Textúra 1k 16bit lebegőpontos rgb
+Name[it]=Trama 1k 16bit float rgb
+Name[kk]=Текстура 1k 16 бит жылжымалы үтірлі rgb
+Name[nb]=Tekstur 1k 16bit flyt rgb
+Name[nl]=Textuur 1k 16bit float rgb
+Name[pl]=Tekstura 1k 16bit zmiennoprzecinkowa rgb
+Name[pt]=Textura 1k 16-bits vírgula flutuante RGB
+Name[pt_BR]=Textura 1k 16bit flutuante rgb
+Name[sk]=Textúra 1k 16bit reálne rgb
+Name[sv]=Struktur 1k 16-bitar flyttal RGB
+Name[uk]=Текстура 1k, 16-бітова з рухомою комою, rgb
+Name[x-test]=xxTexture 1k 16bit float rgbxx
 Type=Link
 URL[$e]=.source/Texture1k16bitfloatrgb.kra
 X-KDE-Hidden=false

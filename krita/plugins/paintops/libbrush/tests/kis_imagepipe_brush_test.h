@@ -19,7 +19,7 @@
 #ifndef __KIS_IMAGEPIPE_BRUSH_TEST_H
 #define __KIS_IMAGEPIPE_BRUSH_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisImagePipeBrush;
 
@@ -31,6 +31,7 @@ private slots:
     void testChangingBrushes();
     void testSimpleDabApplication();
     void testColoredDab();
+    void testColoredDabWash();
     void testTextBrushNoPipes();
     void testTextBrushPiped();
 

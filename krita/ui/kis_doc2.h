@@ -27,21 +27,22 @@
 #include <KoDocument.h>
 
 #include "kis_types.h"
-
+#include "kis_part2.h"
 #include <krita_export.h>
 #include <kis_painting_assistant.h>
 
 class QString;
 
-class KoColorSpace;
 class KoColor;
+class KoColorSpace;
+class KoPart2;
+class KoShapeBasedDocumentBase;
 class KoShapeLayer;
 
-class KoShapeBasedDocumentBase;
-class KisView2;
 class KisChildDoc;
 class KisUndoStore;
 class KisPaintingAssistant;
+class KisView2;
 
 /**
  * The class that represents a Krita document containing content and
@@ -63,12 +64,13 @@ class KRITAUI_EXPORT KisDoc2 : public KoDocument
     Q_OBJECT
 
 public:
-    KisDoc2(QObject* parent = 0);
+    KisDoc2(KoPart* parent);
     virtual ~KisDoc2();
 
 public:
     virtual bool completeLoading(KoStore *store);
     virtual bool completeSaving(KoStore*);
+    virtual int supportedSpecialFormats() const;
 
     /// Unused
     virtual bool loadOdf(KoOdfReadStore & odfStore);
@@ -79,14 +81,11 @@ public:
     virtual bool loadXML(const KoXmlDocument& doc, KoStore* store);
 
     virtual QByteArray mimeType() const;
-    virtual QList<KoDocument::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
 
     /**
      * Draw the image embedded in another Calligra document
      */
     virtual void paintContent(QPainter& painter, const QRect& rect);
-
-    void showStartUpWidget(KoMainWindow* parent, bool alwaysShow);
 
     /// Generate a scaled-down pixmap of the image projection that fits in size
     virtual QPixmap generatePreview(const QSize& size);
@@ -99,7 +98,7 @@ public slots:
      */
     virtual void initEmpty();
 
-    void showErrorAndDie();
+    void setImageModified();
 
 public:
 
@@ -166,22 +165,10 @@ signals:
 
     void sigLoadingFinished();
 
-public:
-
-    // Overide KoDocument
-    virtual KoView* createViewInstance(QWidget *parent);
 
 protected slots:
 
     void slotLoadingFinished();
-
-    // Overide KoDocument
-    virtual void openExistingFile(const KUrl& url);
-    virtual void openTemplate(const KUrl& url);
-
-private slots:
-
-    void undoIndexChanged(int idx);
 
 private:
 

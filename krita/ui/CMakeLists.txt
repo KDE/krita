@@ -1,7 +1,7 @@
 include_directories( ${KOTEXT_INCLUDES}
     ${TEXTLAYOUT_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/pigment/colorprofiles
-	${CMAKE_CURRENT_SOURCE_DIR}/flake
+    ${CMAKE_CURRENT_SOURCE_DIR}/flake
 	${CMAKE_CURRENT_SOURCE_DIR}/pigment/resources
 	${CMAKE_CURRENT_SOURCE_DIR}/widgets/resources
 	${CMAKE_CURRENT_SOURCE_DIR}/openrastertk
@@ -19,6 +19,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_canvas_widget_base.cpp
     canvas/kis_canvas2.cpp
     canvas/kis_canvas_controller.cpp
+    canvas/kis_display_filter.cpp
     canvas/kis_tool_proxy.cpp
     canvas/kis_canvas_decoration.cc
     canvas/kis_coordinates_converter.cpp
@@ -35,9 +36,11 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_adjustment_layer.cc
     dialogs/kis_dlg_filter.cpp
     dialogs/kis_dlg_generator_layer.cpp
+    dialogs/kis_dlg_file_layer.cpp
     dialogs/kis_dlg_image_properties.cc
     dialogs/kis_dlg_layer_properties.cc
     dialogs/kis_dlg_preferences.cc
+    dialogs/kis_dlg_blacklist_cleanup.cpp
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp
     flake/kis_dummies_facade.cpp
@@ -64,14 +67,16 @@ set(kritaui_LIB_SRCS
     kis_composite_ops_model.cc
     kis_paint_ops_model.cpp
     kis_cursor.cc
-    kis_custom_palette.cc
     kis_custom_pattern.cc
     kis_doc2.cc
-    kis_exposure_visitor.cc
+    kis_part2.cpp
     kis_factory2.cc
+    kis_file_layer.cpp
     kis_filter_handler.cc
     kis_filter_manager.cc
     kis_filters_model.cc
+    kis_flipbook.cpp
+    kis_flipbook_item.cpp
     kis_histogram_view.cc
     kis_image_manager.cc
     kis_image_view_converter.cpp
@@ -99,10 +104,12 @@ set(kritaui_LIB_SRCS
     kis_statusbar.cc
     kis_view2.cpp
     kis_zoom_manager.cc
-    thememanager.cpp
     ko_favorite_resource_manager.cpp
     kis_workspace_resource.cpp
     kis_mirror_visitor.cpp
+    kis_action.cpp
+    kis_action_manager.cpp
+    kis_view_plugin.cpp
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp
     kisexiv2/kis_iptc_io.cpp
@@ -146,8 +153,10 @@ set(kritaui_LIB_SRCS
     tool/kis_tool_polyline_base.cpp
     tool/kis_color_picker_utils.cpp
     tool/kis_resources_snapshot.cpp
+    tool/kis_smoothing_options.cpp
     tool/strokes/freehand_stroke.cpp
     tool/strokes/kis_painter_based_stroke_strategy.cpp
+    widgets/KisFlipbookSelector.cpp
     widgets/kis_channelflags_widget.cpp
     widgets/kis_cmb_composite.cc
     widgets/kis_paintop_list_widget.cpp
@@ -189,7 +198,6 @@ set(kritaui_LIB_SRCS
 #    widgets/kis_light_source.cpp
 #    widgets/kis_light_stage.cpp
     input/kis_input_manager.cpp
-    input/kis_shortcut.cpp
     input/kis_abstract_input_action.cpp
     input/kis_tool_invocation_action.cpp
     input/kis_pan_action.cpp
@@ -198,6 +206,21 @@ set(kritaui_LIB_SRCS
     input/kis_zoom_action.cpp
     input/kis_show_palette_action.cpp
     input/kis_change_primary_setting_action.cpp
+    input/kis_abstract_shortcut.cpp
+    input/kis_single_action_shortcut.cpp
+    input/kis_stroke_shortcut.cpp
+    input/kis_shortcut_matcher.cpp
+    operations/kis_operation.cpp
+    operations/kis_operation_configuration.cpp
+    operations/kis_operation_registry.cpp
+    operations/kis_operation_ui_factory.cpp
+    operations/kis_operation_ui_widget.cpp
+    operations/kis_filter_selection_operation.cpp
+    actions/kis_selection_action_factories.cpp
+    kis_filter_job.cpp
+    kis_threaded_applicator.cpp
+    kis_document_undo_store.cpp
+    kis_transaction_based_command.cpp
 )
 
 if(HAVE_OPENGL)
@@ -208,7 +231,6 @@ if(HAVE_OPENGL)
             opengl/kis_opengl_fragment_shader.cpp
             opengl/kis_opengl_vertex_shader.cpp
             opengl/kis_opengl_program.cpp
-            opengl/kis_opengl_hdr_exposure_program.cpp
             opengl/kis_opengl_gradient_program.cpp
             )
     endif(HAVE_GLEW)
@@ -250,12 +272,15 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgpaintoppresets.ui
     forms/wdgpaintopsettings.ui
     forms/wdgdlggeneratorlayer.ui
+    forms/wdgdlgfilelayer.ui
     forms/wdgfilterselector.ui
     forms/wdgfilternodecreation.ui
     forms/wdgpaintactioneditor.ui
     forms/wdgmultipliersdoublesliderspinbox.ui
     forms/wdgnodequerypatheditor.ui
     forms/wdgpresetselectorstrip.ui
+    forms/wdgdlgblacklistcleanup.ui
+    forms/wdgflipbookselector.ui
 )
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
@@ -265,13 +290,20 @@ target_link_libraries(kritaui ${X11_X11_LIB})
 target_link_libraries(kritaui ${GLEW_LIBRARIES})
 
 if(GHNS)
-    target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KFILE_LIBRARY} kritaimage komain kowidgets ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
+    target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KFILE_LIBRARY} ${KDE4_THREADWEAVER_LIBRARIES} kritaimage komain kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
 else(GHNS)
-    target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KFILE_LIBRARY} kritaimage komain kowidgets ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
+    target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KFILE_LIBRARY} ${KDE4_THREADWEAVER_LIBRARIES} kritaimage komain kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
 endif (GHNS)
 
 if(HAVE_OPENGL)
     target_link_libraries(kritaui ${OPENGL_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${OPENEXR_LIBRARIES})
+
+    # activate workaround for the VSync disable
+    # TODO: port this to Glew when Glew 1.7 will become a mandatory dep
+    if(NOT WIN32)
+      target_link_libraries(kritaui ${CMAKE_DL_LIBS})
+    endif(NOT WIN32)
+
     set (GL_INTERFACE_LIBRARIES ";${OPENGL_LIBRARIES};${QT_QTOPENGL_LIBRARY}")
     if(HAVE_GLEW)
         target_link_libraries(kritaui ${GLEW_LIBRARIES})
@@ -322,7 +354,6 @@ install( FILES
 #    kis_tool_dummy.h
 #    kis_tool_manager.h
 #    kis_tool_types.h
-#    kis_view2.h
 #    KoInputDevice.h
 #    canvas/kis_perspective_grid_manager.h
    DESTINATION ${INCLUDE_INSTALL_DIR})

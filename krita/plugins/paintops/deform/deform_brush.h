@@ -175,7 +175,6 @@ public:
                    qreal scale,qreal rotation,QPointF pos,
                    qreal subPixelX,qreal subPixelY, int dabX, int dabY);
 
-    void oldDeform(KisPaintDeviceSP dab,KisPaintDeviceSP layer,QPointF pos);
     void setSizeProperties(KisBrushSizeProperties * properties){ m_sizeProperties = properties; }
     void setProperties(DeformProperties * properties){ m_properties = properties; }
     void initDeformAction();
@@ -184,8 +183,6 @@ public:
 private:
     // return true if can paint
     bool setupAction(DeformModes mode,const QPointF &pos);
-    /// move pixel from new computed coords newX, newY to x,y (inverse mapping)
-    void movePixel(qreal newX, qreal newY, quint8 *dst);
     void debugColor(const quint8* data, KoColorSpace * cs);
 
     qreal maskWidth(qreal scale){
@@ -206,7 +203,6 @@ private:
     bool m_firstPaint;
     qreal m_prevX, m_prevY;
     int m_counter;
-    quint32 m_pixelSize;
 
     qreal m_centerX;
     qreal m_centerY;

@@ -1,0 +1,2 @@
+kowidgetutils - this library contains utilities for Calligra. It has light dependencies compared
+to kowidgets library; the only dependency is QtCore and QtGui (QWidgets).

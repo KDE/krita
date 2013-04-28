@@ -40,14 +40,13 @@ class ChartShape;
 class ChartDocument : public KoDocument
 {
 public:
-    ChartDocument(ChartShape *parent);
+    explicit ChartDocument(ChartShape *parent);
     ~ChartDocument();
     
     bool loadOdf(KoOdfReadStore &odfStore);
     bool loadXML(const KoXmlDocument &doc, KoStore *store);
     
     bool saveOdf(SavingContext &context);
-    KoView *createViewInstance(QWidget *parent);
     
     void paintContent(QPainter &painter, const QRect &rect); 
     

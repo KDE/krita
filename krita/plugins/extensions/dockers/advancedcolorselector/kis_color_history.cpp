@@ -64,7 +64,7 @@ KisColorSelectorBase* KisColorHistory::createPopup() const
 void KisColorHistory::commitColor(const KoColor& color)
 {
     // don't add color in erase mode. See https://bugs.kde.org/show_bug.cgi?id=298940
-    if (m_resourceProvider->currentCompositeOp() == COMPOSITE_ERASE) return;
+    if (m_resourceProvider && m_resourceProvider->currentCompositeOp() == COMPOSITE_ERASE) return;
 
     m_colorHistory.removeAll(color);
     m_colorHistory.prepend(color);

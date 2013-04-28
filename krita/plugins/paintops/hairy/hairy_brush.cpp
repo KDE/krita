@@ -24,8 +24,6 @@ inline double drand48() {
 }
 #endif
 
-#include <KoCompositeOps.h>
-
 #include "hairy_brush.h"
 #include "trajectory.h"
 
@@ -39,7 +37,9 @@ inline double drand48() {
 
 #include <kis_types.h>
 #include <kis_random_accessor_ng.h>
+#include <kis_cross_device_color_picker.h>
 #include <kis_fixed_paint_device.h>
+
 
 #include <cmath>
 #include <ctime>
@@ -157,8 +157,7 @@ void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
     // if this is first time the brush touches the canvas and we use soak the ink from canvas
     if (firstStroke() && m_properties->useSoakInk){
         if (layer){
-            KisRandomConstAccessorSP laccessor = layer->createRandomConstAccessorNG((int)x1, (int)y1);
-            colorifyBristles(laccessor,layer->colorSpace() ,pi1.pos());
+            colorifyBristles(layer, pi1.pos());
         }else{
             kWarning() << "Can't soak the ink from the layer";
         }
@@ -433,10 +432,10 @@ double HairyBrush::computeMousePressure(double distance)
 }
 
 
-void HairyBrush::colorifyBristles(KisRandomConstAccessorSP acc, KoColorSpace * cs, QPointF point)
+void HairyBrush::colorifyBristles(KisPaintDeviceSP source, QPointF point)
 {
-    KoColor color(cs);
-    int pixelSize = cs->pixelSize();
+    KoColor bristleColor(m_dab->colorSpace());
+    KisCrossDeviceColorPickerInt colorPicker(source, bristleColor);
 
     Bristle *b = 0;
     int size = m_bristles.size();
@@ -444,9 +443,9 @@ void HairyBrush::colorifyBristles(KisRandomConstAccessorSP acc, KoColorSpace * c
         b = m_bristles[i];
         int x = qRound(b->x() + point.x());
         int y = qRound(b->y() + point.y());
-        acc->moveTo(x,y);
-        memcpy(color.data(), acc->oldRawData(), pixelSize);
-        b->setColor(color);
+
+        colorPicker.pickOldColor(x, y, bristleColor.data());
+        b->setColor(bristleColor);
     }
 
 }

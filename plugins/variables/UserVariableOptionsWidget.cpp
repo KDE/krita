@@ -28,10 +28,10 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QValidator>
-#include <KLocale>
-#include <KMessageBox>
-#include <KInputDialog>
-#include <KDebug>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kinputdialog.h>
+#include <kdebug.h>
 
 UserVariableOptionsWidget::UserVariableOptionsWidget(UserVariable* userVariable, QWidget *parent)
     : QWidget(parent)
@@ -44,7 +44,7 @@ UserVariableOptionsWidget::UserVariableOptionsWidget(UserVariable* userVariable,
     QLabel *nameLabel = new QLabel(i18n("Name:"), this);
     nameLabel->setAlignment(Qt::AlignRight);
     layout->addWidget(nameLabel, 0, 0);
-    QHBoxLayout *nameLayout = new QHBoxLayout(this);
+    QHBoxLayout *nameLayout = new QHBoxLayout();
     nameEdit = new QComboBox(this);
     nameEdit->setObjectName(QLatin1String("nameEdit"));
     nameEdit->setMinimumContentsLength(10);

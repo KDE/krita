@@ -68,6 +68,9 @@ public:
     /// Sets the visibility of tagging klineEdits
     void showTaggingBar( bool showSearchBar, bool showOpBar );
 
+
+    KoResourceItemChooser *itemChooser();
+
 signals:
     void resourceSelected(KoResource * resource);
     

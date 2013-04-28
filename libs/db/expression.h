@@ -72,7 +72,7 @@ public:
     typedef QList<BaseExpr*> List;
     typedef QList<BaseExpr*>::ConstIterator ListIterator;
 
-    BaseExpr(int token);
+    explicit BaseExpr(int token);
     virtual ~BaseExpr();
 
     //! \return a deep copy of this object.
@@ -238,7 +238,7 @@ public:
 class CALLIGRADB_EXPORT QueryParameterExpr : public ConstExpr
 {
 public:
-    QueryParameterExpr(const QString& message);
+    explicit QueryParameterExpr(const QString &message);
     QueryParameterExpr(const QueryParameterExpr& expr);
     virtual ~QueryParameterExpr();
     //! \return a deep copy of this object.
@@ -265,7 +265,7 @@ protected:
 class CALLIGRADB_EXPORT VariableExpr : public BaseExpr
 {
 public:
-    VariableExpr(const QString& _name);
+    explicit VariableExpr(const QString &_name);
     VariableExpr(const VariableExpr& expr);
     virtual ~VariableExpr();
     //! \return a deep copy of this object.
@@ -309,7 +309,7 @@ public:
 class CALLIGRADB_EXPORT FunctionExpr : public BaseExpr
 {
 public:
-    FunctionExpr(const QString& _name, NArgExpr* args_ = 0);
+    explicit FunctionExpr(const QString &_name, NArgExpr *args_ = 0);
     FunctionExpr(const FunctionExpr& expr);
     virtual ~FunctionExpr();
     //! \return a deep copy of this object.

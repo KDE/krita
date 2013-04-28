@@ -21,6 +21,7 @@
 #include "KoZoomToolFactory.h"
 #include "KoZoomTool.h"
 
+#include <KoIcon.h>
 #include <klocale.h>
 
 KoZoomToolFactory::KoZoomToolFactory()
@@ -29,7 +30,7 @@ KoZoomToolFactory::KoZoomToolFactory()
     setToolTip(i18n("Zoom"));
     setToolType(navigationToolType());
     setPriority(5);
-    setIcon("zoom-original");
+    setIconName(koIconNameCStr("zoom-original"));
     setActivationShapeId("flake/always");
 }
 

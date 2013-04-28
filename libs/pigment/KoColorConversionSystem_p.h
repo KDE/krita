@@ -17,20 +17,22 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#ifndef KOCOLORCONVERSIONSYSTEM_P_H
+#define KOCOLORCONVERSIONSYSTEM_P_H
+
 #include <QList>
 
 struct KoColorConversionSystem::Node {
 
     Node()
-            : isIcc(false)
-            , isHdr(false)
-            , isInitialized(false)
-            , referenceDepth(0)
-            , isGray(false)
-            , crossingCost(1)
-            , colorSpaceFactory(0)
-            , isEngine(false)
-            , engine(0) {}
+        : isHdr(false)
+        , isInitialized(false)
+        , referenceDepth(0)
+        , isGray(false)
+        , crossingCost(1)
+        , colorSpaceFactory(0)
+        , isEngine(false)
+        , engine(0) {}
 
     void init(const KoColorSpaceFactory* _colorSpaceFactory) {
         dbgPigment << "Initialise " << modelId << " " << depthId << " " << profileName;
@@ -41,7 +43,6 @@ struct KoColorConversionSystem::Node {
         isInitialized = true;
 
         if (_colorSpaceFactory) {
-            isIcc = _colorSpaceFactory->colorSpaceEngine() == "icc";
             isHdr = _colorSpaceFactory->isHdr();
             colorSpaceFactory = _colorSpaceFactory;
             referenceDepth = _colorSpaceFactory->referenceDepth();
@@ -65,7 +66,6 @@ struct KoColorConversionSystem::Node {
     QString modelId;
     QString depthId;
     QString profileName;
-    bool isIcc;
     bool isHdr;
     bool isInitialized;
     int referenceDepth;
@@ -80,10 +80,10 @@ struct KoColorConversionSystem::Node {
 struct KoColorConversionSystem::Vertex {
 
     Vertex(Node* _srcNode, Node* _dstNode)
-            : srcNode(_srcNode)
-            , dstNode(_dstNode)
-            , factoryFromSrc(0)
-            , factoryFromDst(0) {
+        : srcNode(_srcNode)
+        , dstNode(_dstNode)
+        , factoryFromSrc(0)
+        , factoryFromDst(0) {
     }
 
     ~Vertex() {
@@ -131,9 +131,9 @@ private:
 struct KoColorConversionSystem::NodeKey {
 
     NodeKey(QString _modelId, QString _depthId, QString _profileName)
-            : modelId(_modelId)
-            , depthId(_depthId)
-            , profileName(_profileName) {}
+        : modelId(_modelId)
+        , depthId(_depthId)
+        , profileName(_profileName) {}
 
     bool operator==(const KoColorConversionSystem::NodeKey& rhs) const {
         return modelId == rhs.modelId && depthId == rhs.depthId && profileName == rhs.profileName;
@@ -147,11 +147,11 @@ struct KoColorConversionSystem::NodeKey {
 struct KoColorConversionSystem::Path {
 
     Path()
-            : respectColorCorrectness(true)
-            , referenceDepth(0)
-            , keepDynamicRange(true)
-            , isGood(false)
-            , cost(0) {}
+        : respectColorCorrectness(true)
+        , referenceDepth(0)
+        , keepDynamicRange(true)
+        , isGood(false)
+        , cost(0) {}
 
     Node* startNode() {
         return (vertexes.first())->srcNode;
@@ -192,8 +192,8 @@ struct KoColorConversionSystem::Path {
                 previousFactory = n->engine;
             } else {
                 nodes.push_back(
-                    node2factory(n,
-                                 previousFactory ? previousFactory : vertex->factory()));
+                            node2factory(n,
+                                         previousFactory ? previousFactory : vertex->factory()));
                 previousFactory = 0;
             }
         }
@@ -243,22 +243,30 @@ struct KoColorConversionSystem::Private {
 
 #define CHECK_ONE_AND_NOT_THE_OTHER(name) \
     if(path1-> name && !path2-> name) \
-    { \
-        return true; \
+{ \
+    return true; \
     } \
     if(!path1-> name && path2-> name) \
-    { \
-        return false; \
+{ \
+    return false; \
     }
 
 struct PathQualityChecker {
-    PathQualityChecker(int _referenceDepth, bool _ignoreHdr, bool _ignoreColorCorrectness) : referenceDepth(_referenceDepth), ignoreHdr(_ignoreHdr), ignoreColorCorrectness(_ignoreColorCorrectness) {}
+
+    PathQualityChecker(int _referenceDepth, bool _ignoreHdr, bool _ignoreColorCorrectness)
+        : referenceDepth(_referenceDepth)
+        , ignoreHdr(_ignoreHdr)
+        , ignoreColorCorrectness(_ignoreColorCorrectness)
+    {}
+
     /// @return true if the path maximize all the criterions (except length)
     inline bool isGoodPath(KoColorConversionSystem::Path* path) const {
+
         return (path->respectColorCorrectness || ignoreColorCorrectness) &&
-               (path->referenceDepth >= referenceDepth) &&
-               (path->keepDynamicRange || ignoreHdr);
+                (path->referenceDepth >= referenceDepth) &&
+                (path->keepDynamicRange || ignoreHdr);
     }
+
     /**
      * Compare two paths.
      */
@@ -281,3 +289,5 @@ struct PathQualityChecker {
 };
 
 #undef CHECK_ONE_AND_NOT_THE_OTHER
+
+#endif

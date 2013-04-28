@@ -81,7 +81,7 @@ KoFilter::ConversionStatus OraExport::convert(const QByteArray& from, const QByt
     QString filename = m_chain->outputFile();
 
     if (!output)
-        return KoFilter::CreationError;
+        return KoFilter::NoDocumentCreated;
 
 
     if (filename.isEmpty()) return KoFilter::FileNotFound;

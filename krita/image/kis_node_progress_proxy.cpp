@@ -71,7 +71,7 @@ void KisNodeProgressProxy::setValue(int _value)
 {
     //QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     d->value = _value;
-    if (d->computePercentage()) {
+    if (d->node && d->computePercentage()) {
         emit(percentageChanged(d->percentage, d->node));
     }
 }
@@ -80,7 +80,7 @@ void KisNodeProgressProxy::setRange(int _minimum, int _maximum)
 {
     d->minimum = _minimum;
     d->maximum = _maximum;
-    if (d->computePercentage()) {
+    if (d->node && d->computePercentage()) {
         emit(percentageChanged(d->percentage, d->node));
     }
 }

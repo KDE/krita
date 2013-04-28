@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Rotate Image Plugin
 Name[bg]=Приставка за въртене на изображение
+Name[bs]=Plugin za rotiranje slike
 Name[ca]=Connector de rotació d'imatge
 Name[ca@valencia]=Connector de rotació d'imatge
 Name[da]=Plugin for rotering af billede
@@ -14,7 +15,7 @@ Name[fi]=Kuvan kierrätysliitännäinen
 Name[fr]=Module de rotation d'images
 Name[fy]=Plugin foar ôfbydlingrotaasje
 Name[ga]=Breiseán Rothlaithe Íomhánna
-Name[gl]=Plugin para Rodar a Imaxe
+Name[gl]=Complemento de rotación de imaxes
 Name[he]=תוסף לשינוי גודל של תמונה
 Name[hi]=छवि घुमाने का प्लगइन
 Name[hne]=फोटू घुमाय के प्लगइन
@@ -47,4 +48,4 @@ Name[zh_TW]=旋轉圖片外掛程式
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritarotateimage
-X-Krita-Version=5
+X-Krita-Version=27

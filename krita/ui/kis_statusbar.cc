@@ -29,6 +29,7 @@
 #include <kstatusbar.h>
 #include <klocale.h>
 
+#include <KoIcon.h>
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
 
@@ -52,7 +53,7 @@ KisStatusBar::KisStatusBar(KisView2 * view)
         : m_view(view)
 {
     m_selectionStatusLabel = new QLabel(view);
-    m_selectionStatusLabel->setPixmap(KIcon("tool_rect_selection").pixmap(22));
+    m_selectionStatusLabel->setPixmap(koIcon("tool_rect_selection").pixmap(22));
     m_selectionStatusLabel->setEnabled(false);
     view->addStatusBarItem(m_selectionStatusLabel);
 
@@ -115,8 +116,12 @@ void KisStatusBar::documentMousePositionChanged(const QPointF &pos)
     m_pointerPositionLabel->setText(QString("%1, %2").arg(pixelPos.x()).arg(pixelPos.y()));
 }
 
-void KisStatusBar::imageSizeChanged(qint32 w, qint32 h)
+void KisStatusBar::imageSizeChanged()
 {
+    KisImageWSP image = m_view->image();
+    qint32 w = image->width();
+    qint32 h = image->height();
+
     m_imageSizeLabel->setText(QString("%1 x %2").arg(w).arg(h));
 }
 

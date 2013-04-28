@@ -60,7 +60,15 @@ void KisNodeShapesGraph::removeNode(KisNodeSP node)
     KisNodeDummy *nodeDummy = nodeToDummy(node);
 
     m_dummiesGraph.removeNode(nodeDummy);
+
+    /**
+     * The shapes remove their children automatically,
+     * so the dummies do not own them. Delete them manually.
+     */
+    KisNodeShape *tempShape = nodeDummy->nodeShape();
+
     delete nodeDummy;
+    delete tempShape;
 }
 
 KisNodeDummy* KisNodeShapesGraph::rootDummy() const

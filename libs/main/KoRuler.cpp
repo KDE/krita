@@ -107,8 +107,10 @@ void RulerTabChooser::paintEvent(QPaintEvent *)
         break;
     case QTextOption::DelimiterTab:
         polygon << QPointF(x-5.5, height() - 2.5)
-            << QPointF(x+0.5, height() - 8.5)
             << QPointF(x+6.5, height() - 2.5);
+        painter.drawPolyline(polygon);
+        polygon << QPointF(x+0.5, height() - 2.5)
+            << QPointF(x+0.5, height() - 8.5);
         painter.drawPolyline(polygon);
         break;
     default:
@@ -251,10 +253,13 @@ void HorizontalPaintingStrategy::drawTabs(const KoRulerPrivate *d, QPainter &pai
 void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainter &painter, const QRectF &rectangle)
 {
     qreal numberStep = d->numberStepForUnit(); // number step in unit
-    QRectF activeRangeRectangle;
+//    QRectF activeRangeRectangle;
     int numberStepPixel = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(numberStep)));
-    const bool adjustMillimeters = (d->unit.type() == KoUnit::Millimeter);
-    QFontMetrics fontMetrics(KGlobalSettings::toolBarFont());
+//    const bool adjustMillimeters = (d->unit.type() == KoUnit::Millimeter);
+
+    const QFont font = KGlobalSettings::smallestReadableFont();
+    const QFontMetrics fontMetrics(font);
+    painter.setFont(font);
 
     if (numberStepPixel == 0 || numberStep == 0)
         return;
@@ -263,8 +268,7 @@ void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPain
     int textLength = 0;
     for(int i = 0; i < lengthInPixel; i += numberStepPixel) {
         int number = qRound((i / numberStepPixel) * numberStep);
-        if (adjustMillimeters)
-            number /= 10;
+
         textLength = qMax(textLength, fontMetrics.width(QString::number(number)));
     }
     textLength += 4;  // Add some padding
@@ -317,8 +321,7 @@ void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPain
                                  QPointF(pos, rectangle.bottom() - fullStepMarkerLength));
 
             int number = qRound(stepCount * numberStep);
-            if (adjustMillimeters)
-                number /= 10;
+
             QString numberText = QString::number(number);
             int x = pos;
             if (d->rightToLeft) { // this is done in a hacky way with the fine tuning done above
@@ -428,7 +431,7 @@ void HorizontalPaintingStrategy::drawIndents(const KoRulerPrivate *d, QPainter &
 QSize HorizontalPaintingStrategy::sizeHint()
 {
     // assumes that digits for the number only use glyphs which do not go below the baseline
-    const QFontMetrics fm(KGlobalSettings::toolBarFont());
+    const QFontMetrics fm(KGlobalSettings::smallestReadableFont());
     const int digitsHeight = fm.ascent() + 1; // +1 for baseline
     const int minimum = digitsHeight + fullStepMarkerLength + 2*measurementTextAboveBelowMargin;
 
@@ -482,14 +485,15 @@ void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainte
     if (numberStepPixel <= 0)
         return;
 
-    QFontMetrics fontMetrics(KGlobalSettings::toolBarFont());
+    const QFont font = KGlobalSettings::smallestReadableFont();
+    const QFontMetrics fontMetrics(font);
+    painter.setFont(font);
+
     // Calc the longest text length
     int textLength = 0;
-    const bool adjustMillimeters = (d->unit.type() == KoUnit::Millimeter);
+
     for(int i = 0; i < lengthInPixel; i += numberStepPixel) {
         int number = qRound((i / numberStepPixel) * numberStep);
-        if (adjustMillimeters)
-            number /= 10;
         textLength = qMax(textLength, fontMetrics.width(QString::number(number)));
     }
     textLength += 4;  // Add some padding
@@ -537,8 +541,6 @@ void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainte
 
             painter.rotate(-90);
             int number = qRound(stepCount * numberStep);
-            if (adjustMillimeters)
-                number /= 10;
             QString numberText = QString::number(number);
             painter.setPen(numberPen);
             painter.drawText(QPointF(-fontMetrics.width(numberText) / 2.0, -measurementTextAboveBelowMargin), numberText);
@@ -592,7 +594,7 @@ void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainte
 QSize VerticalPaintingStrategy::sizeHint()
 {
     // assumes that digits for the number only use glyphs which do not go below the baseline
-    const QFontMetrics fm(KGlobalSettings::toolBarFont());
+    const QFontMetrics fm(KGlobalSettings::smallestReadableFont());
     const int digitsHeight = fm.ascent() + 1; // +1 for baseline
     const int minimum = digitsHeight + fullStepMarkerLength + 2*measurementTextAboveBelowMargin;
 
@@ -617,9 +619,8 @@ void HorizontalDistancesPaintingStrategy::drawDistanceLine(const KoRulerPrivate 
     QPointF midPoint = line.pointAt(0.5);
 
     // Draw the label text
-    QFont font = KGlobalSettings::smallestReadableFont();
-    font.setPointSize(6);
-    QFontMetrics fontMetrics(font);
+    const QFont font = KGlobalSettings::smallestReadableFont();
+    const QFontMetrics fontMetrics(font);
     QString label = d->unit.toUserStringValue(
             d->viewConverter->viewToDocumentX(line.length())) + ' ' + d->unit.symbol();
     QPointF labelPosition = QPointF(midPoint.x() - fontMetrics.width(label)/2,
@@ -715,8 +716,8 @@ qreal KoRulerPrivate::numberStepForUnit() const
         case KoUnit::Inch:
         case KoUnit::Centimeter:
         case KoUnit::Decimeter:
-            return 1.0;
         case KoUnit::Millimeter:
+            return 1.0;
         case KoUnit::Pica:
         case KoUnit::Cicero:
             return 10.0;

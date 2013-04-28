@@ -19,7 +19,7 @@
 
 #ifndef KoEncryptedStore_h
 #define KoEncryptedStore_h
-
+#ifdef QCA2
 #include "KoStore.h"
 #include <QHash>
 #include <QtCrypto>
@@ -120,5 +120,5 @@ protected:
 private:
     Q_DECLARE_PRIVATE(KoStore)
 };
-
+#endif
 #endif

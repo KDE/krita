@@ -80,11 +80,8 @@ private:
      KFontChooser *m_fontChooser;
 
     bool m_uniqueFormat;
-    bool m_underlineStyleInherited;
-    bool m_underlineTypeInherited;
-    bool m_strikeoutStyleInherited;
-    bool m_strikeoutcolorInherited;
-    bool m_strikeoutTypeInherited;
+    bool m_underlineInherited;
+    bool m_strikeoutInherited;
     bool m_mixedCaseInherited;
     bool m_smallCapsInherited;
     bool m_allUpperCaseInherited;

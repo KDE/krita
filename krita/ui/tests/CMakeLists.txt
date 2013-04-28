@@ -3,47 +3,36 @@ include_directories(  ${KOMAIN_INCLUDES}   ${CMAKE_SOURCE_DIR}/krita/sdk/tests )
 
 add_subdirectory(scratchpad)
 
-add_definitions(-DFILES_DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/data/\\"")
-add_definitions(-DFILES_OUTPUT_DIR="\\"${CMAKE_CURRENT_BINARY_DIR}\\"")
+macro_add_unittest_definitions()
 
 ########### next target ###############
 
 set(kis_node_model_test_SRCS kis_node_model_test.cpp modeltest.cpp )
-
 kde4_add_unit_test(kis_node_model_test TESTNAME krita-ui-kis_node_model_test  ${kis_node_model_test_SRCS})
-
 target_link_libraries(kis_node_model_test  ${KDE4_KDEUI_LIBS}  komain kritaui ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(kis_image_view_converter_test_SRCS kis_image_view_converter_test.cpp )
-
 kde4_add_unit_test(KisImageViewConverterTest TESTNAME krita-ui-KisImageViewConverterTest  ${kis_image_view_converter_test_SRCS})
-
 target_link_libraries(KisImageViewConverterTest  ${KDE4_KDEUI_LIBS}  komain kritaui ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(kis_shape_controller_test_SRCS kis_shape_controller_test.cpp kis_dummies_facade_base_test.cpp)
-
 kde4_add_unit_test(kis_shape_controller_test TESTNAME krita-ui-kis_shape_controller_test  ${kis_shape_controller_test_SRCS})
-
 target_link_libraries(kis_shape_controller_test  ${KDE4_KDEUI_LIBS}  komain kritaimage kritaui ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(squeezedcombobox_test_SRCS squeezedcombobox_test.cpp )
-
 kde4_add_unit_test(squeezedcombobox_test TESTNAME krita-ui-squeezedcombobox_test  ${squeezedcombobox_test_SRCS})
-
 target_link_libraries(squeezedcombobox_test  ${KDE4_KDEUI_LIBS} kritaui ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(kis_prescaled_projection_test_SRCS kis_prescaled_projection_test.cpp )
-
 kde4_add_unit_test(KisPrescaledProjectionTest TESTNAME krita-ui-kis_prescaled_projection_test ${kis_prescaled_projection_test_SRCS})
-
 target_link_libraries(KisPrescaledProjectionTest  ${KDE4_KDEUI_LIBS} kritaui ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
@@ -120,6 +109,13 @@ target_link_libraries(FreehandStrokeTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage
 set(kis_selection_manager_test_SRCS kis_selection_manager_test.cpp)
 kde4_add_unit_test(KisSelectionManagerTest TESTNAME krita-ui-KisSelectionManagerTest  ${kis_selection_manager_test_SRCS})
 target_link_libraries(KisSelectionManagerTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+set_tests_properties(krita-ui-KisSelectionManagerTest PROPERTIES TIMEOUT 300)
+
+########### next target ###############
+
+#set(kis_node_manager_test_SRCS kis_node_manager_test.cpp)
+#kde4_add_unit_test(KisNodeManagerTest TESTNAME krita-ui-KisNodeManagerTest  ${kis_node_manager_test_SRCS})
+#target_link_libraries(KisNodeManagerTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -144,3 +140,43 @@ target_link_libraries(KisDummiesFacadeTest  ${KDE4_KDEUI_LIBS}  kritaui kritaima
 set(kis_model_index_converter_test_SRCS kis_model_index_converter_test.cpp ../../sdk/tests/testutil.cpp)
 kde4_add_unit_test(KisModelIndexConverterTest TESTNAME krita-ui-KisModelIndexConverterTest  ${kis_model_index_converter_test_SRCS})
 target_link_libraries(KisModelIndexConverterTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_zoom_and_pan_test_SRCS kis_zoom_and_pan_test.cpp ../../sdk/tests/testutil.cpp)
+kde4_add_unit_test(KisZoomAndPanTest TESTNAME krita-ui-KisZoomAndPanTest  ${kis_zoom_and_pan_test_SRCS})
+target_link_libraries(KisZoomAndPanTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+set_tests_properties(krita-ui-KisZoomAndPanTest PROPERTIES TIMEOUT 300)
+
+########### next target ###############
+
+set(kis_input_manager_test_SRCS kis_input_manager_test.cpp ../../sdk/tests/testutil.cpp)
+kde4_add_unit_test(KisInputManagerTest TESTNAME krita-ui-KisInputManagerTest  ${kis_input_manager_test_SRCS})
+target_link_libraries(KisInputManagerTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_flipbook_test_SRCS kis_flipbook_test.cpp )
+kde4_add_unit_test(KisFlipbookTest TESTNAME krita-ui-KisFlipbookTest  ${kis_flipbook_test_SRCS})
+target_link_libraries(KisFlipbookTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_action_manager_test_SRCS kis_action_manager_test.cpp )
+kde4_add_unit_test(KisActionManagerTest TESTNAME krita-ui-KisActionManagerTest  ${kis_action_manager_test_SRCS})
+target_link_libraries(KisActionManagerTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_filter_job_test_SRCS kis_filter_job_test.cpp )
+kde4_add_unit_test(KisFilterJobTest TESTNAME krita-ui-KisFilterJobTest ${kis_filter_job_test_SRCS})
+target_link_libraries(KisFilterJobTest  ${KDE4_KDEUI_LIBS} kritaui ${QT_QTTEST_LIBRARY})
+
+
+########### next target ###############
+
+set(kis_threaded_applicator_test_SRCS kis_threaded_applicator_test.cpp )
+kde4_add_unit_test(KisThreadedApplicatorTest TESTNAME krita-ui-KisThreadedApplicatorTest ${kis_threaded_applicator_test_SRCS})
+target_link_libraries(KisThreadedApplicatorTest  ${KDE4_KDEUI_LIBS} ${KDE4_THREADWEAVER_LIBRARY} kritaui ${QT_QTTEST_LIBRARY})
+
+

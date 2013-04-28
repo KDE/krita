@@ -25,6 +25,7 @@
 #include <KoDocument.h>
 #include <KoUnitDoubleSpinBox.h>
 #include <KoDocumentResourceManager.h>
+#include <KoPart.h>
 
 #include <kcomponentdata.h>
 #include <kcombobox.h>
@@ -33,7 +34,7 @@
 #include <kdialog.h>
 #include <kconfig.h>
 
-#include <QGridLayout>
+#include <QFormLayout>
 #include <QGroupBox>
 #include <QLabel>
 #include <QCheckBox>
@@ -66,7 +67,7 @@ KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, KoDocumentResourceManager *d
 {
     setObjectName(name);
 
-    d->config = d->doc->componentData().config();
+    d->config = d->doc->documentPart()->componentData().config();
 
     d->oldGrabSensitivity = d->docResources->grabSensitivity();
     d->oldHandleRadius = d->docResources->handleRadius();
@@ -75,57 +76,44 @@ KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, KoDocumentResourceManager *d
 
     const KoUnit documentUnit = d->doc->unit();
 
-    QGroupBox* tmpQGroupBox = new QGroupBox(i18n("Misc"), this);
+    QGroupBox *miscGroupBox = new QGroupBox(i18n("Misc"), this);
 
-    QGridLayout* grid = new QGridLayout();
-    grid->setSpacing(KDialog::spacingHint());
-    grid->setMargin(KDialog::marginHint());
+    QFormLayout *miscLayout = new QFormLayout();
 
     //#################"laurent
     //don't load unitType from config file because unit is
     //depend from words file => unit can be different from config file
 
-    grid->addWidget(new QLabel(i18n("Units:"), tmpQGroupBox), 0, 0);
-
-    d->unit = new KComboBox(tmpQGroupBox);
+    d->unit = new KComboBox(miscGroupBox);
     d->unit->addItems(KoUnit::listOfUnitNameForUi(KoUnit::HidePixel));
-    grid->addWidget(d->unit, 0, 1);
+    miscLayout->addRow(i18n("Units:"), d->unit);
     d->oldUnit = documentUnit;
     d->unit->setCurrentIndex(d->oldUnit.indexInListForUi(KoUnit::HidePixel));
 
-    grid->addWidget(new QLabel(i18n("Handle radius:"), tmpQGroupBox), 1, 0);
-
-    d->handleRadius = new KIntNumInput(tmpQGroupBox);
+    d->handleRadius = new KIntNumInput(miscGroupBox);
     d->handleRadius->setRange(3, 20, 1);
     d->handleRadius->setSuffix(" px");
     d->handleRadius->setValue(d->oldHandleRadius);
-    grid->addWidget(d->handleRadius, 1, 1);
+    miscLayout->addRow(i18n("Handle radius:"), d->handleRadius);
 
-    grid->addWidget(new QLabel(i18n("Grab sensitivity:"), tmpQGroupBox), 2, 0);
-
-    d->grabSensitivity = new KIntNumInput(tmpQGroupBox);
+    d->grabSensitivity = new KIntNumInput(miscGroupBox);
     d->grabSensitivity->setRange(3, 20, 1);
     d->grabSensitivity->setSuffix(" px");
     d->grabSensitivity->setValue(d->oldGrabSensitivity);
-    grid->addWidget(d->grabSensitivity, 2, 1);
+    miscLayout->addRow(i18n("Grab sensitivity:"), d->grabSensitivity);
 
-    grid->addWidget(new QLabel(i18n("Paste offset:"), tmpQGroupBox), 3, 0);
-
-    d->pasteOffset = new KoUnitDoubleSpinBox(tmpQGroupBox);
+    d->pasteOffset = new KoUnitDoubleSpinBox(miscGroupBox);
     d->pasteOffset->setMinMaxStep(-1000, 1000, 0.1);
     d->pasteOffset->setValue(d->oldPasteOffset);
     d->pasteOffset->setUnit(documentUnit);
     d->pasteOffset->setDisabled(d->oldPasteAtCursor);
-    grid->addWidget(d->pasteOffset, 3, 1);
+    miscLayout->addRow(i18n("Paste offset:"), d->pasteOffset);
 
-    grid->addWidget(new QLabel(i18n("Paste at Cursor"), tmpQGroupBox), 4, 0);
-    d->pasteAtCursor = new QCheckBox(tmpQGroupBox);
+    d->pasteAtCursor = new QCheckBox(miscGroupBox);
     d->pasteAtCursor->setChecked(d->oldPasteAtCursor);
-    grid->addWidget(d->pasteAtCursor, 4, 1);
+    miscLayout->addRow(i18n("Paste at Cursor:"), d->pasteAtCursor);
 
-    grid->setRowStretch(5, 1);
-
-    tmpQGroupBox->setLayout(grid);
+    miscGroupBox->setLayout(miscLayout);
 
     connect(d->unit, SIGNAL(activated(int)), SLOT(slotUnitChanged(int)));
     connect(d->pasteAtCursor, SIGNAL(clicked(bool)), d->pasteOffset, SLOT(setDisabled(bool)));

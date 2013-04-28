@@ -126,18 +126,7 @@ QString KoTextDebug::inlineObjectAttributes(const QTextCharFormat &textFormat)
     if (textFormat.objectType() == QTextFormat::UserObject + 1) {
         KoInlineTextObjectManager *inlineObjectManager = KoTextDocument(document).inlineTextObjectManager();
         KoInlineObject *inlineObject = inlineObjectManager->inlineTextObject(textFormat);
-        if (KoBookmark *bookmark = dynamic_cast<KoBookmark *>(inlineObject)) {
-            if (bookmark->type() == KoBookmark::SinglePosition) {
-                attrs.append(" type=\"bookmark\"");
-            } else if (bookmark->type() == KoBookmark::StartBookmark) {
-                attrs.append(" type=\"bookmark-start\"");
-            } else if (bookmark->type() == KoBookmark::EndBookmark) {
-                attrs.append(" type=\"bookmark-end\"");
-            } else {
-                attrs.append(" type=\"bookmark-unknown\"");
-            }
-            attrs.append(QString(" name=\"%1\"").arg(bookmark->name()));
-        } else if (KoInlineNote *note = dynamic_cast<KoInlineNote *>(inlineObject)) {
+        if (KoInlineNote *note = dynamic_cast<KoInlineNote *>(inlineObject)) {
             attrs.append(QString(" id=\"%1\"").arg(note->id()));
             if (note->type() == KoInlineNote::Footnote) {
                 attrs.append(" type=\"footnote\"");

@@ -60,7 +60,7 @@ KoPageLayoutWidget::KoPageLayoutWidget(QWidget *parent, const KoPageLayout &layo
     d->widget.leftLabel->setMinimumSize(QSize(width, 5));
 
     d->widget.units->addItems(KoUnit::listOfUnitNameForUi(KoUnit::HidePixel));
-    d->widget.sizes->addItems(KoPageFormat::allFormats());
+    d->widget.sizes->addItems(KoPageFormat::localizedPageFormatNames());
     setPageSpread(false);
 
     connect(d->widget.sizes, SIGNAL(currentIndexChanged(int)), this, SLOT(sizeChanged(int)));

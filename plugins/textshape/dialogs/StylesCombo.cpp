@@ -19,7 +19,7 @@
 #include "StylesCombo.h"
 #include <KoStyleThumbnailer.h>
 
-#include "StylesModel.h"
+#include "AbstractStylesModel.h"
 #include "StylesComboPreview.h"
 #include "StylesDelegate.h"
 
@@ -27,7 +27,7 @@
 #include <QMouseEvent>
 #include <QStyleOptionViewItemV4>
 
-#include <KDebug>
+#include <kdebug.h>
 
 StylesCombo::StylesCombo(QWidget *parent)
     : QComboBox(parent),
@@ -42,7 +42,7 @@ StylesCombo::StylesCombo(QWidget *parent)
     // color scheme they are hardly seen.
     // Force palette entry "Text" to black as contrast, as the pop-up button
     // symbol is often drawn with this palette entry
-    // TODO: update to background color of currently selected/focussed shape/page
+    // TODO: update to background color of currently selected/focused shape/page
     QPalette palette = this->palette();
     palette.setColor(QPalette::Base, QColor(Qt::white));
     palette.setColor(QPalette::Text, QColor(Qt::black));
@@ -62,7 +62,7 @@ StylesCombo::StylesCombo(QWidget *parent)
     connect(delegate, SIGNAL(clickedInItem(QModelIndex)), this, SLOT(slotItemClicked(QModelIndex)));
     setItemDelegate(delegate);
 
-    connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSelectionChanged(int)));
+//    connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSelectionChanged(int)));
 
     QComboBox::setEditable(true);
     setIconSize(QSize(0,0));
@@ -87,7 +87,7 @@ void StylesCombo::setStyleIsOriginal(bool original)
     }
 }
 
-void StylesCombo::setStylesModel(StylesModel *model)
+void StylesCombo::setStylesModel(AbstractStylesModel *model)
 {
     m_stylesModel = model;
     setModel(model);
@@ -135,20 +135,26 @@ void StylesCombo::slotSelectionChanged(int index)
     m_selectedItem = index;
     m_preview->setPreview(m_stylesModel->stylePreview(index, m_preview->availableSize()));
     update();
-    emit selectionChanged(index);
+//    emit selectionChanged(index);
 }
 
 void StylesCombo::slotItemClicked(QModelIndex index)
 {
-    //this slot allows us to emit a selected signal. There is a bit of redundancy if the item clicked was indeed a new selection, wher we also emit the selectionChanged signal from the slot above.
+    //this slot allows us to emit a selected signal. There is a bit of redundancy if the item clicked was indeed a new selection, where we also emit the selectionChanged signal from the slot above.
     m_selectedItem = index.row();
     m_preview->setPreview(m_stylesModel->stylePreview(m_selectedItem, m_preview->availableSize()));
+    m_currentIndex = index;
     update();
     emit selected(m_selectedItem);
+    emit selected(index);
+    hidePopup(); //the editor event has accepted the mouseReleased event. Call hidePopup ourselves then.
 }
 
 void StylesCombo::slotUpdatePreview()
 {
+    if (!m_stylesModel) {
+        return;
+    }
     m_preview->setPreview(m_stylesModel->stylePreview(currentIndex(), m_preview->availableSize()));
     update();
 }
@@ -191,10 +197,23 @@ void StylesCombo::slotDeleteStyle(QModelIndex index)
     emit deleteStyle(index.row());
 }
 
+void StylesCombo::slotModelReset()
+{
+    m_view->reset();
+}
+
 void StylesCombo::showEditIcon(bool show){
-    StylesDelegate *delegate = new StylesDelegate();
+    StylesDelegate *delegate = dynamic_cast<StylesDelegate*>(itemDelegate());
+    Q_ASSERT(delegate);
+    if (!delegate) { //the following should never get called as we are creating a StylesDelegate on the constructor;
+        StylesDelegate *delegate = new StylesDelegate();
+        connect(delegate, SIGNAL(needsUpdate(QModelIndex)), m_view, SLOT(update(QModelIndex)));
+        connect(delegate, SIGNAL(styleManagerButtonClicked(QModelIndex)), this, SLOT(slotShowDia(QModelIndex)));
+        connect(delegate, SIGNAL(deleteStyleButtonClicked(QModelIndex)), this, SLOT(slotDeleteStyle(QModelIndex)));
+        connect(delegate, SIGNAL(clickedInItem(QModelIndex)), this, SLOT(slotItemClicked(QModelIndex)));
+        setItemDelegate(delegate);
+    }
     delegate->setEditButtonEnable(show);
-    setItemDelegate(delegate);
 }
 
 #include <StylesCombo.moc>

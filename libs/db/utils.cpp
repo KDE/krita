@@ -1,5 +1,11 @@
 /* This file is part of the KDE project
    Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2012 Dimitrios T. Tanis <dimitrios.tanis@kdemail.net>
+
+   Contains code from KConfigGroupPrivate from kconfiggroup.cpp (kdelibs 4)
+   Copyright (c) 2006 Thomas Braxton <brax108@cox.net>
+   Copyright (c) 1999 Preston Brown <pbrown@kde.org>
+   Copyright (c) 1997-1999 Matthias Kalle Dalheimer <kalle@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,6 +28,7 @@
 #include "drivermanager.h"
 #include "lookupfieldschema.h"
 #include "calligradb_global.h"
+#include <KoIcon.h>
 
 #include <QMap>
 #include <QHash>
@@ -32,13 +39,17 @@
 #include <QMutex>
 #include <QSet>
 #include <QProgressBar>
+#include <QProcess>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <klocale.h>
-#include <kiconloader.h>
-#include <KMimeType>
+#include <kmimetype.h>
+#include <kstandarddirs.h>
 
 #include <memory>
 
@@ -181,8 +192,8 @@ int KexiDB::idForObjectName(Connection &conn, const QString& objName, int objTyp
 {
     RecordData data;
     if (true != conn.querySingleRecord(
-                QString::fromLatin1("select o_id from kexi__objects where lower(o_name)='%1' and o_type=%2")
-                .arg(objName.toLower()).arg(objType), data))
+                QString::fromLatin1("select o_id from kexi__objects where o_name='%1' and o_type=%2")
+                .arg(objName).arg(objType), data))
         return 0;
     bool ok;
     int id = data[0].toInt(&ok);
@@ -308,7 +319,7 @@ QueryColumnInfo* TableOrQuerySchema::columnInfo(const QString& name)
     return 0;
 }
 
-QString TableOrQuerySchema::debugString()
+QString TableOrQuerySchema::debugString() const
 {
     if (m_table)
         return m_table->debugString();
@@ -317,7 +328,7 @@ QString TableOrQuerySchema::debugString()
     return QString();
 }
 
-void TableOrQuerySchema::debug()
+void TableOrQuerySchema::debug() const
 {
     if (m_table)
         return m_table->debug();
@@ -672,7 +683,7 @@ struct KexiDB_BuiltinFieldProperties {
         ADD("maxLengthIsDefault");
         ADD("precision");
         ADD("defaultValue");
-        ADD("width");
+        ADD("defaultWidth");
         ADD("visibleDecimalPlaces");
 //! @todo always update this when new builtins appear!
 #undef ADD
@@ -689,9 +700,97 @@ bool KexiDB::isBuiltinTableFieldProperty(const QByteArray& propertyName)
     return KexiDB_builtinFieldProperties->set.contains(propertyName);
 }
 
-bool KexiDB::setFieldProperties(Field& field, const QHash<QByteArray, QVariant>& values)
+namespace KexiDB {
+void getProperties(const LookupFieldSchema *lookup, QMap<QByteArray, QVariant> *values)
 {
-    QHash<QByteArray, QVariant>::ConstIterator it;
+    Q_ASSERT(values);
+    LookupFieldSchema::RowSource rowSource;
+    if (lookup) {
+        rowSource = lookup->rowSource();
+    }
+    values->insert("rowSource", lookup ? rowSource.name() : QVariant());
+    values->insert("rowSourceType", lookup ? rowSource.typeName() : QVariant());
+    values->insert("rowSourceValues",
+        (lookup && !rowSource.values().isEmpty()) ? rowSource.values() : QVariant());
+    values->insert("boundColumn", lookup ? lookup->boundColumn() : QVariant());
+    QList<QVariant> variantList;
+    if (!lookup || lookup->visibleColumns().count() == 1) {
+        values->insert("visibleColumn", lookup ? lookup->visibleColumns().first() : QVariant());
+    }
+    else {
+        QList<uint> visibleColumns = lookup->visibleColumns();
+        foreach(const QVariant& variant, visibleColumns) {
+            variantList.append(variant);
+        }
+        values->insert("visibleColumn", variantList);
+    }
+    QList<int> columnWidths;
+    variantList.clear();
+    if (lookup) {
+        columnWidths = lookup->columnWidths();
+        foreach(const QVariant& variant, columnWidths) {
+            variantList.append(variant);
+        }
+    }
+    values->insert("columnWidths", lookup ? variantList : QVariant());
+    values->insert("showColumnHeaders", lookup ? lookup->columnHeadersVisible() : QVariant());
+    values->insert("listRows", lookup ? lookup->maximumListRows() : QVariant());
+    values->insert("limitToList", lookup ? lookup->limitToList() : QVariant());
+    values->insert("displayWidget", lookup ? uint(lookup->displayWidget()) : QVariant());
+}
+} // namespace KexiDB
+
+void KexiDB::getFieldProperties(const Field &field, QMap<QByteArray, QVariant> *values)
+{
+    Q_ASSERT(values);
+    values->clear();
+    // normal values
+    values->insert("type", field.type());
+    const uint constraints = field.constraints();
+    values->insert("primaryKey", constraints & KexiDB::Field::PrimaryKey);
+    values->insert("indexed", constraints & KexiDB::Field::Indexed);
+    values->insert("autoIncrement", KexiDB::Field::isAutoIncrementAllowed(field.type())
+                                    && (constraints & KexiDB::Field::AutoInc));
+    values->insert("unique", constraints & KexiDB::Field::Unique);
+    values->insert("notNull", constraints & KexiDB::Field::NotNull);
+    values->insert("allowEmpty", !(constraints & KexiDB::Field::NotEmpty));
+    const uint options = field.options();
+    values->insert("unsigned", options & KexiDB::Field::Unsigned);
+    values->insert("name", field.name());
+    values->insert("caption", field.caption());
+    values->insert("description", field.description());
+    values->insert("maxLength", field.maxLength());
+    values->insert("maxLengthIsDefault", field.maxLengthStrategy() & Field::DefaultMaxLength);
+    values->insert("precision", field.precision());
+    values->insert("defaultValue", field.defaultValue());
+#ifdef __GNUC__
+#warning TODO    values->insert("defaultWidth", field.defaultWidth());
+#else
+#pragma WARNING(TODO    values->insert("defaultWidth", field.defaultWidth());)
+#endif
+    if (KexiDB::supportsVisibleDecimalPlacesProperty(field.type())) {
+        values->insert("visibleDecimalPlaces", field.defaultValue());
+    }
+    // insert lookup-related values
+    LookupFieldSchema *lookup = field.table()->lookupFieldSchema(field);
+    KexiDB::getProperties(lookup, values);
+}
+
+static bool containsLookupFieldSchemaProperties(const QMap<QByteArray, QVariant>& values)
+{
+    for (QMap<QByteArray, QVariant>::ConstIterator it(values.constBegin());
+         it != values.constEnd(); ++it)
+    {
+        if (KexiDB::isLookupFieldSchemaProperty(it.key())) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool KexiDB::setFieldProperties(Field& field, const QMap<QByteArray, QVariant>& values)
+{
+    QMap<QByteArray, QVariant>::ConstIterator it;
     if ((it = values.find("type")) != values.constEnd()) {
         if (!setIntToFieldType(field, *it))
             return false;
@@ -749,15 +848,40 @@ bool KexiDB::setFieldProperties(Field& field, const QHash<QByteArray, QVariant>&
         return false;
     if ((it = values.find("defaultValue")) != values.constEnd())
         field.setDefaultValue(*it);
-    if ((it = values.find("width")) != values.constEnd())
-        field.setWidth((*it).isNull() ? 0/*default*/ : (*it).toUInt(&ok));
+#ifdef __GNUC__
+#warning TODO defaultWidth
+#else
+#pragma WARNING(TODO defaultWidth)
+#endif
+#if 0
+    if ((it = values.find("defaultWidth")) != values.constEnd())
+        field.setDefaultWidth((*it).isNull() ? 0/*default*/ : (*it).toUInt(&ok));
     if (!ok)
         return false;
+#endif
+
+    // -- extended properties
     if ((it = values.find("visibleDecimalPlaces")) != values.constEnd()
             && KexiDB::supportsVisibleDecimalPlacesProperty(field.type()))
         field.setVisibleDecimalPlaces((*it).isNull() ? -1/*default*/ : (*it).toInt(&ok));
     if (!ok)
         return false;
+
+    if (field.table() && containsLookupFieldSchemaProperties(values)) {
+        LookupFieldSchema *lookup = field.table()->lookupFieldSchema(field);
+        QScopedPointer<LookupFieldSchema> createdLookup;
+        if (!lookup) { // create lookup if needed
+            createdLookup.reset(lookup = new LookupFieldSchema());
+        }
+        if (lookup->setProperties(values)) {
+            if (createdLookup) {
+                if (field.table()->setLookupFieldSchema(field.name(), lookup)) {
+                    createdLookup.take(); // ownership passed
+                    lookup = 0;
+                }
+            }
+        }
+    }
 
     return true;
 #undef SET_BOOLEAN_FLAG
@@ -791,6 +915,26 @@ bool KexiDB::isExtendedTableFieldProperty(const QByteArray& propertyName)
     return KexiDB_extendedProperties->set.contains(QByteArray(propertyName).toLower());
 }
 
+//! @internal for isLookupFieldSchemaProperty()
+struct KexiDB_LookupFieldSchemaProperties {
+    KexiDB_LookupFieldSchemaProperties() {
+        QMap<QByteArray, QVariant> tmp;
+        KexiDB::getProperties(0, &tmp);
+        foreach (const QByteArray &p, tmp.keys()) {
+            set.insert(p.toLower());
+        }
+    }
+    QSet<QByteArray> set;
+};
+
+//! for isLookupFieldSchemaProperty()
+K_GLOBAL_STATIC(KexiDB_LookupFieldSchemaProperties, KexiDB_lookupFieldSchemaProperties)
+
+bool KexiDB::isLookupFieldSchemaProperty(const QByteArray& propertyName)
+{
+    return KexiDB_lookupFieldSchemaProperties->set.contains(QByteArray(propertyName).toLower());
+}
+
 bool KexiDB::setFieldProperty(Field& field, const QByteArray& propertyName, const QVariant& value)
 {
 #define SET_BOOLEAN_FLAG(flag, value) { \
@@ -822,17 +966,19 @@ bool KexiDB::setFieldProperty(Field& field, const QByteArray& propertyName, cons
                 KexiDBWarn << QString(
                     "KexiDB::setFieldProperty() Cannot set \"%1\" property - no table assigned for field!")
                 .arg(QString(propertyName));
-            } else {
+            }
+            else if (KexiDB::isLookupFieldSchemaProperty(propertyName)) {
                 LookupFieldSchema *lookup = field.table()->lookupFieldSchema(field);
-                const bool hasLookup = lookup != 0;
-                if (!hasLookup)
+                const bool createLookup = !lookup;
+                if (createLookup) // create lookup if needed
                     lookup = new LookupFieldSchema();
-                if (LookupFieldSchema::setProperty(*lookup, propertyName, value)) {
-                    if (!hasLookup && lookup)
+                if (lookup->setProperty(propertyName, value)) {
+                    if (createLookup)
                         field.table()->setLookupFieldSchema(field.name(), lookup);
                     return true;
                 }
-                delete lookup;
+                if (createLookup)
+                    delete lookup; // not set, delete
             }
         }
     } else {//non-extended
@@ -888,9 +1034,15 @@ bool KexiDB::setFieldProperty(Field& field, const QByteArray& propertyName, cons
             field.setDefaultValue(value);
             return true;
         }
-        if ("width" == propertyName)
-            GET_INT(setWidth);
-
+#ifdef __GNUC__
+#warning TODO defaultWidth
+#else
+#pragma WARNING(TODO defaultWidth)
+#endif
+#if 0
+        if ("defaultWidth" == propertyName)
+            GET_INT(setDefaultWidth);
+#endif
         // last chance that never fails: custom field property
         field.setCustomProperty(propertyName, value);
     }
@@ -1056,7 +1208,7 @@ struct KexiDB_NotEmptyValueForTypeCache {
                 QByteArray ba;
                 QBuffer buffer(&ba);
                 buffer.open(QIODevice::WriteOnly);
-                QPixmap pm(SmallIcon("document-new"));
+                QPixmap pm(koSmallIcon("document-new"));
                 pm.save(&buffer, "PNG"/*! @todo default? */);
                 ADD(i, ba);
                 continue;
@@ -1186,10 +1338,94 @@ QByteArray KexiDB::pgsqlByteaToByteArray(const char* data, int length)
     return array;
 }
 
+QList<int> KexiDB::stringListToIntList(const QStringList &list, bool *ok)
+{
+    QList<int> result;
+    foreach (const QString &item, list) {
+        int val = item.toInt(ok);
+        if (ok && !*ok) {
+            return QList<int>();
+        }
+        result.append(val);
+    }
+    if (ok) {
+        *ok = true;
+    }
+    return result;
+}
+
+// Based on KConfigGroupPrivate::serializeList() from kconfiggroup.cpp (kdelibs 4)
+QString KexiDB::serializeList(const QStringList &list)
+{
+    QString value = "";
+
+    if (!list.isEmpty()) {
+        QStringList::ConstIterator it = list.constBegin();
+        const QStringList::ConstIterator end = list.constEnd();
+
+        value = QString(*it).replace('\\', "\\\\").replace(',', "\\,");
+
+        while (++it != end) {
+            // In the loop, so it is not done when there is only one element.
+            // Doing it repeatedly is a pretty cheap operation.
+            value.reserve(4096);
+
+            value += ',';
+            value += QString(*it).replace('\\', "\\\\").replace(',', "\\,");
+        }
+
+        // To be able to distinguish an empty list from a list with one empty element.
+        if (value.isEmpty())
+            value = "\\0";
+    }
+
+    return value;
+}
+
+// Based on KConfigGroupPrivate::deserializeList() from kconfiggroup.cpp (kdelibs 4)
+QStringList KexiDB::deserializeList(const QString &data)
+{
+    if (data.isEmpty())
+        return QStringList();
+    if (data == QLatin1String("\\0"))
+        return QStringList(QString());
+    QStringList value;
+    QString val;
+    val.reserve(data.size());
+    bool quoted = false;
+    for (int p = 0; p < data.length(); p++) {
+        if (quoted) {
+            val += data[p];
+            quoted = false;
+        } else if (data[p].unicode() == '\\') {
+            quoted = true;
+        } else if (data[p].unicode() == ',') {
+            val.squeeze(); // release any unused memory
+            value.append(val);
+            val.clear();
+            val.reserve(data.size() - p);
+        } else {
+            val += data[p];
+        }
+    }
+    value.append(val);
+    return value;
+}
+
+QList<int> KexiDB::deserializeIntList(const QString &data, bool *ok)
+{
+    return KexiDB::stringListToIntList(
+        KexiDB::deserializeList(data), ok);
+}
+
 QString KexiDB::variantToString(const QVariant& v)
 {
-    if (v.type() == QVariant::ByteArray)
+    if (v.type() == QVariant::ByteArray) {
         return KexiDB::escapeBLOB(v.toByteArray(), KexiDB::BLOBEscapeHex);
+    }
+    else if (v.type() == QVariant::StringList) {
+        return serializeList(v.toStringList());
+    }
     return v.toString();
 }
 
@@ -1217,6 +1453,10 @@ QVariant KexiDB::stringToVariant(const QString& s, QVariant::Type type, bool &ok
         }
         ok = true;
         return ba;
+    }
+    if (type == QVariant::StringList) {
+        ok = true;
+        return deserializeList(s);
     }
     QVariant result(s);
     if (!result.convert(type)) {
@@ -1283,7 +1523,7 @@ QString KexiDB::defaultFileBasedDriverMimeType()
     return QString::fromLatin1("application/x-kexiproject-sqlite3");
 }
 
-QString KexiDB::defaultFileBasedDriverIcon()
+QString KexiDB::defaultFileBasedDriverIconName()
 {
     KMimeType::Ptr mimeType(KMimeType::mimeType(
                                 KexiDB::defaultFileBasedDriverMimeType()));
@@ -1376,5 +1616,111 @@ QString KexiDB::string2FileName(const QString &s)
     fn.replace(':', "-"); fn.replace('*', "-");
     return fn;
 }
+
+QString KexiDB::temporaryTableName(Connection *conn, const QString &baseName)
+{
+    while (true) {
+        QString name = QLatin1String("tmp__") + baseName;
+        for (int i = 0; i < 10; ++i) {
+            name += QString::number(qrand() % 0x10, 16);
+        }
+        if (!conn->drv_containsTable(name)) {
+            return name;
+        }
+    }
+}
+
+QString KexiDB::sqlite3ProgramPath()
+{
+    QString path = KStandardDirs::findExe("sqlite3");
+    if (path.isEmpty()) {
+        KexiDBWarn << "Could not find program \"sqlite3\"";
+    }
+    return path;
+}
+
+bool KexiDB::importSqliteFile(const QString &inputFileName, const QString &outputFileName)
+{
+    const QString sqlite_app = KexiDB::sqlite3ProgramPath();
+    if (sqlite_app.isEmpty()) {
+        return false;
+    }
+
+    QFileInfo fi(inputFileName);
+    if (!fi.isReadable()) {
+        KexiDBWarn << "No readable input file" << fi.absoluteFilePath();
+        return false;
+    }
+    QFileInfo fo(outputFileName);
+    if (QFile(fo.absoluteFilePath()).exists()) {
+        if (!QFile::remove(fo.absoluteFilePath())) {
+            KexiDBWarn << "Cannot remove output file" << fo.absoluteFilePath();
+            return false;
+        }
+    }
+    kDebug() << inputFileName << fi.absoluteDir().path() << fo.absoluteFilePath();
+
+    QProcess p;
+    p.start(sqlite_app, QStringList() << fo.absoluteFilePath());
+    if (!p.waitForStarted()) {
+        KexiDBWarn << "Failed to start program" << sqlite_app;
+        return false;
+    }
+    QByteArray line(".read " + QFile::encodeName(fi.absoluteFilePath()));
+    if (p.write(line) != line.length() || !p.waitForBytesWritten()) {
+        KexiDBWarn << "Failed to send \".read\" command to program" << sqlite_app;
+        return false;
+    }
+    p.closeWriteChannel();
+    if (!p.waitForFinished()) {
+        KexiDBWarn << "Failed to finish program" << sqlite_app;
+        return false;
+    }
+    return true;
+}
+
+bool KexiDB::hasDatabaseServerDrivers()
+{
+    DriverManager manager;
+    Driver::InfoHash driversInfo = manager.driversInfo();
+    foreach(const Driver::Info& info, driversInfo){
+        if (!info.fileBased) {
+            return true;
+        }
+    }
+    return false;
+}
+
+//--------------------------------------------------------------------------------
+
+#ifdef CALLIGRADB_DEBUG_GUI
+
+static DebugGUIHandler s_debugGUIHandler = 0;
+
+void KexiDB::setDebugGUIHandler(DebugGUIHandler handler)
+{
+    s_debugGUIHandler = handler;
+}
+
+void KexiDB::debugGUI(const QString& text)
+{
+    if (s_debugGUIHandler)
+        s_debugGUIHandler(text);
+}
+
+static AlterTableActionDebugGUIHandler s_alterTableActionDebugHandler = 0;
+
+void KexiDB::setAlterTableActionDebugHandler(AlterTableActionDebugGUIHandler handler)
+{
+    s_alterTableActionDebugHandler = handler;
+}
+
+void KexiDB::alterTableActionDebugGUI(const QString& text, int nestingLevel)
+{
+    if (s_alterTableActionDebugHandler)
+        s_alterTableActionDebugHandler(text, nestingLevel);
+}
+
+#endif // CALLIGRADB_DEBUG_GUI
 
 #include "utils_p.moc"

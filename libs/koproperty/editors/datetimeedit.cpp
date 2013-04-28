@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2012  Friedrich W. H. Kossebau <kossebau@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,74 +21,83 @@
 
 #include "datetimeedit.h"
 
-#include <q3datetimeedit.h>
-#include <q3rangecontrol.h>
-#include <QObject>
-#include <QLayout>
-#include <QPainter>
-#include <QVariant>
-#include <QHBoxLayout>
-
-#include <klocale.h>
-#include <kglobal.h>
+#include <koproperty/EditorDataModel.h>
+// Qt
+#include <QLocale>
 
 using namespace KoProperty;
 
-DateTimeEdit::DateTimeEdit(Property *property, QWidget *parent)
-        : Widget(property, parent)
+
+DateTimeEdit::DateTimeEdit(const Property* prop, QWidget* parent)
+  : QDateTimeEdit(parent)
 {
-    QHBoxLayout *l = new QHBoxLayout(this);
-    l->setMargin(0);
-    l->setSpacing(0);
+    Q_UNUSED(prop);
 
-    m_edit = new Q3DateTimeEdit(this);
-    m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_edit->setMinimumHeight(5);
-    l->addWidget(m_edit);
+    setFrame(false);
+    setCalendarPopup(true);
 
-    setLeavesTheSpaceForRevertButton(true);
-    setFocusWidget(m_edit);
-    connect(m_edit, SIGNAL(valueChanged(const QDateTime&)), this, SLOT(slotValueChanged(const QDateTime&)));
+    const QDateTime minDateTime = prop->option("min").toDateTime();
+    if (minDateTime.isValid()) {
+        setMinimumDateTime(minDateTime);
+    }
+    const QDateTime maxDateTime = prop->option("max").toDateTime();
+    if (maxDateTime.isValid()) {
+        setMaximumDateTime(maxDateTime);
+    }
+
+    connect(this, SIGNAL(dateTimeChanged(QDateTime)), this, SLOT(onDateTimeChanged()));
 }
 
 DateTimeEdit::~DateTimeEdit()
-{}
-
-QVariant
-DateTimeEdit::value() const
 {
-    return m_edit->dateTime();
 }
 
-void
-DateTimeEdit::setValue(const QVariant &value, bool emitChange)
+QVariant DateTimeEdit::value() const
 {
-    m_edit->blockSignals(true);
-    m_edit->setDateTime(value.toDateTime());
-    m_edit->blockSignals(false);
-    if (emitChange)
-        emit valueChanged(this);
+    return QVariant(dateTime());
 }
 
-void
-DateTimeEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
+void DateTimeEdit::setValue(const QVariant& value)
 {
-    p->eraseRect(r);
-    Widget::drawViewer(p, cg, r, KGlobal::locale()->formatDateTime(value.toDateTime(), KLocale::ShortDate, false /*no sec */));
-// p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine,
-//  KGlobal::locale()->formatDateTime(value.toDateTime(), KLocale::ShortDate, false /*no sec */ ));
+    blockSignals(true);
+    setDateTime(value.toDateTime());
+    blockSignals(false);
 }
 
-void
-DateTimeEdit::slotValueChanged(const QDateTime&)
+void DateTimeEdit::paintEvent(QPaintEvent* event)
 {
-    emit valueChanged(this);
+    QDateTimeEdit::paintEvent(event);
+    Factory::paintTopGridLine(this);
 }
 
-void
-DateTimeEdit::setReadOnlyInternal(bool readOnly)
+
+void DateTimeEdit::onDateTimeChanged()
 {
-    setVisibleFlag(!readOnly);
+    emit commitData(this);
 }
 
-#include "datetimeedit.moc"
+
+//! @todo Port to KLocale, be inspired by KexiDateTimeTableEdit (with Kexi*Formatter)
+DateTimeDelegate::DateTimeDelegate()
+{
+}
+
+QString DateTimeDelegate::displayTextForProperty(const Property* prop) const
+{
+    const QLocale locale;
+    const QString defaultDateTimeFormat = locale.dateTimeFormat(QLocale::ShortFormat);
+    return prop->value().toDateTime().toString(defaultDateTimeFormat);
+}
+
+QWidget* DateTimeDelegate::createEditor(int type, QWidget* parent,
+    const QStyleOptionViewItem& option, const QModelIndex& index) const
+{
+    Q_UNUSED(type);
+    Q_UNUSED(option);
+
+    const EditorDataModel *editorModel
+        = dynamic_cast<const EditorDataModel*>(index.model());
+    Property *prop = editorModel->propertyForItem(index);
+
+    return new DateTimeEdit(prop, parent);
+}

@@ -20,14 +20,27 @@
 #include "TextToolFactory.h"
 #include "ReferencesToolFactory.h"
 #include "ReviewToolFactory.h"
+#ifdef CREATE_TEXTDOCUMENT_INSPECTOR
+#include "TextDocumentInspectionPlugin.h"
+#endif
 #include "TextShapeFactory.h"
 
 #include <KoShapeRegistry.h>
+#include <KoDockRegistry.h>
 #include <KoToolRegistry.h>
 
 #include <kpluginfactory.h>
 
-K_PLUGIN_FACTORY(TextPluginFactory, registerPlugin<TextPlugin>();)
+#ifdef CREATE_TEXTDOCUMENT_INSPECTOR
+K_PLUGIN_FACTORY(TextPluginFactory,
+                 registerPlugin<TextPlugin>();
+                 registerPlugin<TextDocumentInspectionPlugin>(QLatin1String("TextDocumentInspection"));
+)
+#else
+K_PLUGIN_FACTORY(TextPluginFactory,
+                 registerPlugin<TextPlugin>();
+)
+#endif
 K_EXPORT_PLUGIN(TextPluginFactory("TextShape"))
 
 TextPlugin::TextPlugin(QObject * parent, const QVariantList &)

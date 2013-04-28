@@ -29,7 +29,7 @@
 #include <QPoint>
 
 // KDE
-#include <KDebug>
+#include <kdebug.h>
 
 // Calligra
 #include <KoXmlReader.h>
@@ -174,8 +174,8 @@ void ChartProxyModel::Private::rebuildDataMap()
 void ChartProxyModel::addTable(Table *table)
 {
     QAbstractItemModel *model = table->model();
-    connect(model, SIGNAL(dataChanged(QModelIndex, QModelIndex)),
-            this,  SLOT(dataChanged(QModelIndex, QModelIndex)));
+    connect(model, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+            this,  SLOT(dataChanged(QModelIndex,QModelIndex)));
 }
 
 void ChartProxyModel::removeTable(Table *table)
@@ -364,9 +364,9 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion(QList<DataSet
 
     // In the end, the contents of this list will look something like this:
     // (Category-Data, X-Data, Y-Data, Y-Data, Y-Data)
-    // Semantic seperation of the regions will follow later.
+    // Semantic separation of the regions will follow later.
     QList<CellRegion> dataRegions;
-    // This region exlusively contains (global) data set labels, i.e.
+    // This region exclusively contains (global) data set labels, i.e.
     // one label per data set (thus in opposite data direction)
     QList<CellRegion> labelRegions;
 
@@ -481,7 +481,7 @@ if(overrideCategories) categoryDataRegion = CellRegion();
     QList<DataSet*> createdDataSets;
     int dataSetNumber = 0;
     // Now assign all dataRegions to a number of data sets.
-    // Here they're semantically seperated into x data, y data, etc.
+    // Here they're semantically separated into x data, y data, etc.
     Q_ASSERT(dataRegions.count() == labelRegions.count());
     while (!dataRegions.isEmpty()) {
         // Get a data set instance we can use

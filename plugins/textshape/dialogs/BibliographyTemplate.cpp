@@ -23,7 +23,7 @@
 #include <KoBibliographyInfo.h>
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
-#include <KLocale>
+#include <klocale.h>
 
 BibliographyTemplate::BibliographyTemplate(KoStyleManager *manager):
     m_manager(manager)
@@ -43,7 +43,7 @@ QList<KoBibliographyInfo *> BibliographyTemplate::templates()
     firstTemplate->m_indexTitleTemplate.styleId = m_manager->defaultBibliographyTitleStyle()->styleId();
     firstTemplate->m_indexTitleTemplate.styleName = m_manager->defaultBibliographyTitleStyle()->name();
 
-    foreach(QString bibType, KoOdfBibliographyConfiguration::bibTypes) {
+    foreach(const QString &bibType, KoOdfBibliographyConfiguration::bibTypes) {
         firstTemplate->m_entryTemplate[bibType].styleId = m_manager->defaultBibliographyEntryStyle(bibType)->styleId();
         firstTemplate->m_entryTemplate[bibType].styleName = m_manager->defaultBibliographyEntryStyle(bibType)->name();
     }
@@ -55,7 +55,7 @@ QList<KoBibliographyInfo *> BibliographyTemplate::templates()
     secondTemplate->m_indexTitleTemplate.styleId = m_manager->defaultBibliographyTitleStyle()->styleId();
     secondTemplate->m_indexTitleTemplate.styleName = m_manager->defaultBibliographyTitleStyle()->name();
 
-    foreach(QString bibType, KoOdfBibliographyConfiguration::bibTypes) {
+    foreach(const QString &bibType, KoOdfBibliographyConfiguration::bibTypes) {
         secondTemplate->m_entryTemplate[bibType].styleId = m_manager->defaultBibliographyEntryStyle(bibType)->styleId();
         secondTemplate->m_entryTemplate[bibType].styleName = m_manager->defaultBibliographyEntryStyle(bibType)->name();
     }
@@ -72,7 +72,7 @@ void BibliographyTemplate::moveTemplateToUsed(KoBibliographyInfo *info)
         m_manager->moveToUsedStyles(info->m_indexTitleTemplate.styleId);
     }
 
-    foreach(QString bibType, KoOdfBibliographyConfiguration::bibTypes) {
+    foreach(const QString &bibType, KoOdfBibliographyConfiguration::bibTypes) {
         if (m_manager->unusedStyle(info->m_entryTemplate[bibType].styleId)) {
             m_manager->moveToUsedStyles(info->m_entryTemplate[bibType].styleId);
         }

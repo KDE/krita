@@ -37,7 +37,12 @@
 #include <KoPathPoint.h>
 
 EnhancedPathShape::EnhancedPathShape(const QRect &viewBox)
-: m_viewBox(viewBox), m_viewBoxOffset(0.0, 0.0), m_mirrorVertically(false), m_mirrorHorizontally(false)
+: m_viewBox(viewBox)
+, m_viewBoxOffset(0.0, 0.0)
+, m_mirrorVertically(false)
+, m_mirrorHorizontally(false)
+, m_pathStretchPointX(-1)
+, m_pathStretchPointY(-1)
 , m_cacheResults(false)
 {
 }
@@ -74,7 +79,7 @@ void EnhancedPathShape::moveHandleAction(int handleId, const QPointF & point, Qt
     }
 }
 
-void EnhancedPathShape::updatePath(const QSizeF &)
+void EnhancedPathShape::updatePath(const QSizeF & size)
 {
     if (isParametricShape()) {
         clear();
@@ -85,24 +90,30 @@ void EnhancedPathShape::updatePath(const QSizeF &)
 
         enableResultCache(false);
 
+        qreal stretchPointsScale = 1;
+        bool isStretched = useStretchPoints(size, stretchPointsScale);
         m_viewBound = outline().boundingRect();
-
         m_mirrorMatrix.reset();
         m_mirrorMatrix.translate(m_viewBound.center().x(), m_viewBound.center().y());
         m_mirrorMatrix.scale(m_mirrorHorizontally ? -1 : 1, m_mirrorVertically ? -1 : 1);
         m_mirrorMatrix.translate(-m_viewBound.center().x(), -m_viewBound.center().y());
+        QTransform matrix(1.0, 0.0, 0.0, 1.0, m_viewBoxOffset.x(), m_viewBoxOffset.y());
 
-        QTransform matrix;
-        matrix.translate(m_viewBoxOffset.x(), m_viewBoxOffset.y());
-        matrix = m_mirrorMatrix * m_viewMatrix * matrix;
-
-        KoSubpathList::const_iterator pathIt(m_subpaths.constBegin());
-        for (; pathIt != m_subpaths.constEnd(); ++pathIt) {
-            KoSubpath::const_iterator it((*pathIt)->constBegin());
-            for (; it != (*pathIt)->constEnd(); ++it) {
-                (*it)->map(matrix);
+        // if stretch points are set than stretch the path manually
+        if (isStretched) {
+            //if the path was stretched manually the stretch matrix is not more valid
+            //and it has to be recalculated so that stretching in x and y direction is the same
+            matrix.scale(stretchPointsScale, stretchPointsScale);
+            matrix = m_mirrorMatrix * matrix;
+        } else {
+            matrix = m_mirrorMatrix * m_viewMatrix * matrix;
+        }
+        foreach (KoSubpath *subpath, m_subpaths) {
+            foreach (KoPathPoint *point, *subpath) {
+                point->map(matrix);
             }
         }
+
         const int handleCount = m_enhancedHandles.count();
         QList<QPointF> handles;
         for (int i = 0; i < handleCount; ++i)
@@ -162,11 +173,11 @@ qreal EnhancedPathShape::evaluateReference(const QString &reference)
     if (reference.isEmpty())
         return 0.0;
 
-    QChar c = reference[0];
+    const char c = reference[0].toLatin1();
 
     qreal res = 0.0;
 
-    switch(c.toAscii()) {
+    switch(c) {
     // referenced modifier
     case '$': {
         bool success = false;
@@ -215,9 +226,9 @@ void EnhancedPathShape::modifyReference(const QString &reference, qreal value)
     if (reference.isEmpty())
         return;
 
-    QChar c = reference[0];
+    const char c = reference[0].toLatin1();
 
-    if (c.toAscii() == '$') {
+    if (c == '$') {
         bool success = false;
         int modifierIndex = reference.mid(1).toInt(&success);
         if (modifierIndex >= 0 && modifierIndex < m_modifiers.count())
@@ -234,8 +245,8 @@ EnhancedPathParameter * EnhancedPathShape::parameter(const QString & text)
         return parameterIt.value();
     } else {
         EnhancedPathParameter *parameter = 0;
-        QChar c = text[0];
-        if (c.toAscii() == '$' || c.toAscii() == '?') {
+        const char c = text[0].toLatin1();
+        if (c == '$' || c == '?') {
             parameter = new EnhancedPathReferenceParameter(text, this);
         } else {
             bool success = false;
@@ -350,6 +361,51 @@ void EnhancedPathShape::addCommand(const QString &command, bool triggerUpdate)
         updatePath(size());
 }
 
+bool EnhancedPathShape::useStretchPoints(const QSizeF &size, qreal &scale)
+{
+    bool retval = false;
+    if (m_pathStretchPointX != -1 && m_pathStretchPointY != -1) {
+        qreal scaleX = size.width();
+        qreal scaleY = size.height();
+        if (m_viewBox.width() / m_viewBox.height() < scaleX / scaleY) {
+            qreal deltaX = (scaleX * m_viewBox.height()) / scaleY - m_viewBox.width();
+            foreach (KoSubpath *subpath, m_subpaths) {
+                foreach (KoPathPoint *currPoint, *subpath) {
+                    if (currPoint->point().x() >=  m_pathStretchPointX &&
+                        currPoint->controlPoint1().x() >= m_pathStretchPointX &&
+                        currPoint->controlPoint2().x() >= m_pathStretchPointX) {
+                        currPoint->setPoint(QPointF(currPoint->point().x() + deltaX, currPoint->point().y()));
+                        currPoint->setControlPoint1(QPointF(currPoint->controlPoint1().x() + deltaX,
+                                                    currPoint->controlPoint1().y()));
+                        currPoint->setControlPoint2(QPointF(currPoint->controlPoint2().x() + deltaX,
+                                                    currPoint->controlPoint2().y()));
+                        retval = true;
+                    }
+                }
+            }
+            scale = scaleY / m_viewBox.height();
+        } else if (m_viewBox.width() / m_viewBox.height() > scaleX / scaleY) {
+            qreal deltaY = (m_viewBox.width() * scaleY) / scaleX - m_viewBox.height();
+            foreach (KoSubpath *subpath, m_subpaths) {
+                foreach (KoPathPoint *currPoint, *subpath) {
+                    if (currPoint->point().y() >=  m_pathStretchPointY &&
+                        currPoint->controlPoint1().y() >= m_pathStretchPointY &&
+                        currPoint->controlPoint2().y() >= m_pathStretchPointY) {
+                        currPoint->setPoint(QPointF(currPoint->point().x(), currPoint->point().y() + deltaY));
+                        currPoint->setControlPoint1(QPointF(currPoint->controlPoint1().x(),
+                                                    currPoint->controlPoint1().y() + deltaY));
+                        currPoint->setControlPoint2(QPointF(currPoint->controlPoint2().x(),
+                                                    currPoint->controlPoint2().y() + deltaY));
+                        retval = true;
+                    }
+                }
+            }
+            scale = scaleX / m_viewBox.width();
+        }
+    }
+    return retval;
+}
+
 void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
 {
     if (isParametricShape()) {
@@ -399,6 +455,13 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
         context.xmlWriter().startElement("draw:enhanced-geometry");
         context.xmlWriter().addAttribute("svg:viewBox", QString("%1 %2 %3 %4").arg(m_viewBox.x()).arg(m_viewBox.y()).arg(m_viewBox.width()).arg(m_viewBox.height()));
 
+        if (m_pathStretchPointX != -1) {
+            context.xmlWriter().addAttribute("draw:path-stretchpoint-x", m_pathStretchPointX);
+        }
+        if (m_pathStretchPointY != -1) {
+            context.xmlWriter().addAttribute("draw:path-stretchpoint-y", m_pathStretchPointY);
+        }
+
         if (m_mirrorHorizontally) {
             context.xmlWriter().addAttribute("draw:mirror-horizontal", "true");
         }
@@ -446,6 +509,10 @@ bool EnhancedPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
 
     const KoXmlElement enhancedGeometry(KoXml::namedItemNS(element, KoXmlNS::draw, "enhanced-geometry" ) );
     if (!enhancedGeometry.isNull() ) {
+
+        setPathStretchPointX(enhancedGeometry.attributeNS(KoXmlNS::draw, "path-stretchpoint-x","-1").toDouble());
+        setPathStretchPointY(enhancedGeometry.attributeNS(KoXmlNS::draw, "path-stretchpoint-y","-1").toDouble());
+
         // load the modifiers
         QString modifiers = enhancedGeometry.attributeNS(KoXmlNS::draw, "modifiers", "");
         if (! modifiers.isEmpty()) {
@@ -596,4 +663,20 @@ void EnhancedPathShape::enableResultCache(bool enable)
 {
     m_resultChache.clear();
     m_cacheResults = enable;
+}
+
+void EnhancedPathShape::setPathStretchPointX(qreal pathStretchPointX)
+{
+    if (m_pathStretchPointX != pathStretchPointX) {
+        m_pathStretchPointX = pathStretchPointX;
+    }
+
+}
+
+void EnhancedPathShape::setPathStretchPointY(qreal pathStretchPointY)
+{
+    if (m_pathStretchPointY != pathStretchPointY) {
+        m_pathStretchPointY = pathStretchPointY;
+    }
+
 }

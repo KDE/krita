@@ -29,6 +29,7 @@ private slots:
 
     void testUndo();
     void testRedo();
+    void testDeviceMove();
 };
 
 #endif

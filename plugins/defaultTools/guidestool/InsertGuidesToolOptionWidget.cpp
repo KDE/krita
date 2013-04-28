@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2009 Carlos Licea <carlos.licea@kdemail.net>
+ * Copyright 2012 Friedrich W. H. Kossebau <kossebau@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,53 +20,33 @@
 
 #include "InsertGuidesToolOptionWidget.h"
 
-#include <KIcon>
+#include <KoIcon.h>
 
 InsertGuidesToolOptionWidget::InsertGuidesToolOptionWidget(QWidget *parent)
     : QWidget(parent)
 {
     m_widget.setupUi(this);
 
-    //FIXME give real icon names
-    m_widget.m_erasePreviousCheckBox->setIcon(KIcon("erase-previous-guides"));
-    m_widget.m_horizontalEdgesCheckBox->setIcon(KIcon("add-horizontal-edges"));
-    m_widget.m_verticalEdgesCheckBox->setIcon(KIcon("add-vertical-edges"));
-
-    connect(m_widget.m_verticalCheckBox, SIGNAL(toggled(bool)),
-             this, SLOT(verticalCheckBoxSlot(bool)));
-    connect(m_widget.m_horizontalCheckBox, SIGNAL(toggled(bool)),
-             this, SLOT(horizontalCheckBoxSlot(bool)));
+    m_widget.m_horizontalEdgesCheckBox->setIcon(koIconNeeded("add guides at top & bottom side of page","add-horizontal-edges"));
+    m_widget.m_verticalEdgesCheckBox->setIcon(koIconNeeded("add guides at left & right side of page","add-vertical-edges"));
 
     connect(m_widget.m_createButton, SIGNAL(clicked(bool)),
-             this, SLOT(createButtonClickedSlot(bool)));
+             this, SLOT(onCreateButtonClicked(bool)));
 }
 
 InsertGuidesToolOptionWidget::~InsertGuidesToolOptionWidget()
 {
 }
 
-
-void InsertGuidesToolOptionWidget::horizontalCheckBoxSlot(bool state)
-{
-    m_widget.m_horizontalSpinBox->setEnabled(state);
-}
-
-void InsertGuidesToolOptionWidget::verticalCheckBoxSlot(bool state)
-{
-    m_widget.m_verticalSpinBox->setEnabled(state);
-}
-
-void InsertGuidesToolOptionWidget::createButtonClickedSlot(bool checked)
+void InsertGuidesToolOptionWidget::onCreateButtonClicked(bool checked)
 {
     Q_UNUSED(checked);
 
     GuidesTransaction *transaction = new GuidesTransaction;
     transaction->erasePreviousGuides = m_widget.m_erasePreviousCheckBox->isChecked();
-    transaction->verticalGuides = (m_widget.m_verticalCheckBox->isChecked())
-        ? m_widget.m_verticalSpinBox->value() : 0;
+    transaction->verticalGuides = m_widget.m_verticalSpinBox->value();
     transaction->insertVerticalEdgesGuides = m_widget.m_verticalEdgesCheckBox->isChecked();
-    transaction->horizontalGuides = (m_widget.m_horizontalCheckBox->isChecked())
-        ? m_widget.m_horizontalSpinBox->value() : 0;
+    transaction->horizontalGuides = m_widget.m_horizontalSpinBox->value();
     transaction->insertHorizontalEdgesGuides = m_widget.m_horizontalEdgesCheckBox->isChecked();
 
     emit createGuides(transaction);

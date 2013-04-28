@@ -41,7 +41,7 @@ public:
      * Note that an empty handle is not valid, as long as there are no
      * positional parameters set with setPosition.
     */
-    EnhancedPathHandle(EnhancedPathShape *parent);
+    explicit EnhancedPathHandle(EnhancedPathShape *parent);
 
     /// Destroys the handle
     ~EnhancedPathHandle();
@@ -100,7 +100,7 @@ public:
      * Sets the center of a polar handle.
      *
      * If both parameters are valid pointers, then the handle behaves like
-     * a polar handle. This means the the x-coordinate of the position represents
+     * a polar handle. This means the x-coordinate of the position represents
      * an angle in degree and the y-coordinate a radius.
      * 
      * @param polarX the polar center x-coordinate

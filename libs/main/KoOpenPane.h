@@ -47,7 +47,7 @@ public:
     KoOpenPane(QWidget *parent, const KComponentData &instance, const QStringList& mimeFilter, const QString& templateType = QString());
     virtual ~KoOpenPane();
 
-    QTreeWidgetItem* addPane(const QString& title, const QString& icon, QWidget* widget, int sortWeight);
+    QTreeWidgetItem* addPane(const QString &title, const QString &iconName, QWidget *widget, int sortWeight);
     QTreeWidgetItem* addPane(const QString& title, const QPixmap& icon, QWidget* widget, int sortWeight);
 
     /**

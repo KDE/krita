@@ -20,7 +20,6 @@
 #define __KIS_STROKE_STRATEGY_UNDO_COMMAND_BASED_H
 
 #include <kundo2command.h>
-#include <QSharedPointer>
 #include <QVector>
 #include <QMutex>
 
@@ -79,10 +78,15 @@ public:
     void doStrokeCallback(KisStrokeJobData *data);
 
 protected:
-    void executeCommand(KUndo2CommandSP command, bool undo);
+    void runAndSaveCommand(KUndo2CommandSP command,
+                           KisStrokeJobData::Sequentiality sequentiality,
+                           KisStrokeJobData::Exclusivity exclusivity);
     void notifyCommandDone(KUndo2CommandSP command,
                            KisStrokeJobData::Sequentiality sequentiality,
                            KisStrokeJobData::Exclusivity exclusivity);
+
+private:
+    void executeCommand(KUndo2CommandSP command, bool undo);
 
 private:
     bool m_undo;

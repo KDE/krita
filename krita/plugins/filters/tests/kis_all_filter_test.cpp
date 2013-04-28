@@ -242,7 +242,7 @@ void KisAllFilterTest::testAllFilters()
     }
     qDebug() << "Success: " << successes;
     if (failures.size() > 0) {
-        QFAIL(QString("Failed filters:\n\t %1").arg(failures.join("\n\t")).toAscii());
+        QFAIL(QString("Failed filters:\n\t %1").arg(failures.join("\n\t")).toLatin1());
     }
 }
 
@@ -261,7 +261,7 @@ void KisAllFilterTest::testAllFiltersNoTransaction()
     }
     qDebug() << "Success (no transaction): " << successes;
     if (failures.size() > 0) {
-        QFAIL(QString("Failed filters (no transaction):\n\t %1").arg(failures.join("\n\t")).toAscii());
+        QFAIL(QString("Failed filters (no transaction):\n\t %1").arg(failures.join("\n\t")).toLatin1());
     }
 
 }
@@ -281,7 +281,7 @@ void KisAllFilterTest::testAllFiltersSrcNotIsDev()
     }
     qDebug() << "Src!=Dev Success: " << successes;
     if (failures.size() > 0) {
-        QFAIL(QString("Src!=Dev Failed filters:\n\t %1").arg(failures.join("\n\t")).toAscii());
+        QFAIL(QString("Src!=Dev Failed filters:\n\t %1").arg(failures.join("\n\t")).toLatin1());
     }
 
 }
@@ -301,7 +301,7 @@ void KisAllFilterTest::testAllFiltersWithSelections()
     }
     qDebug() << "Success: " << successes;
     if (failures.size() > 0) {
-        QFAIL(QString("Failed filters with selections:\n\t %1").arg(failures.join("\n\t")).toAscii());
+        QFAIL(QString("Failed filters with selections:\n\t %1").arg(failures.join("\n\t")).toLatin1());
     }
 }
 

@@ -21,7 +21,6 @@
 
 #include <QTime>
 
-#include <KoStore.h>
 #include <KoColorSpace.h>
 #include <KoColor.h>
 #include <KoColorSpaceRegistry.h>
@@ -76,7 +75,7 @@ void logFailure(const QString & reason, const KoColorSpace * srcCs, const KoColo
           .arg(dstCs->name())
           .arg(profile2)
           .arg(reason)
-          .toAscii());
+          .toLatin1());
 }
 
 void KisFixedPaintDeviceTest::testColorSpaceConversion()
@@ -109,7 +108,7 @@ void KisFixedPaintDeviceTest::testRoundtripQImageConversion()
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("kis_fixed_paint_device_test_test_roundtrip_qimage.png");
         result.save("kis_fixed_paint_device_test_test_roundtrip_result.png");
-        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 
@@ -129,10 +128,10 @@ void KisFixedPaintDeviceTest::testBltFixed()
 
     QPoint errpoint;
 
-    if (!TestUtil::compareQImages(errpoint, image, result)) {
-        fdev->convertToQImage().save("kis_fixed_paint_device_test_test_blt_fixed_expected.png");
+    if (!TestUtil::compareQImages(errpoint, image, result, 1)) {
+        fdev->convertToQImage(0).save("kis_fixed_paint_device_test_test_blt_fixed_expected.png");
         result.save("kis_fixed_paint_device_test_test_blt_fixed_result.png");
-        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 
 }
@@ -155,10 +154,10 @@ void KisFixedPaintDeviceTest::testBltFixedOpacity()
     QImage checkResult(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa_transparent_result.png");
     QPoint errpoint;
 
-    if (!TestUtil::compareQImages(errpoint, checkResult, result)) {
+    if (!TestUtil::compareQImages(errpoint, checkResult, result, 1)) {
         checkResult.save("kis_fixed_paint_device_test_test_blt_fixed_opactiy_expected.png");
         result.save("kis_fixed_paint_device_test_test_blt_fixed_opacity_result.png");
-        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 
@@ -209,7 +208,7 @@ void KisFixedPaintDeviceTest::testFill()
     if (!TestUtil::compareQImages(errpoint, image, checkImage)) {
         image.save("kis_fixed_paint_device_filled_result.png");
         checkImage.save("kis_fixed_paint_device_filled_result_expected.png");
-        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     } 
     
     delete[] red;
@@ -234,7 +233,7 @@ void KisFixedPaintDeviceTest::testBltFixedSmall()
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("kis_fixed_paint_device_test_blt_small_image.png");
         result.save("kis_fixed_paint_device_test_blt_small_result.png");
-        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 

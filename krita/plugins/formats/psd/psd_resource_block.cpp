@@ -55,7 +55,7 @@ bool PSDResourceBlock::read(QIODevice* io)
 
     dbgFile << "\tresource block identifier" << identifier;
 
-    if (!psdread_pascalstring(io, name)) {
+    if (!psdread_pascalstring(io, name, 2)) {
         error = "Could not read name of resource block";
         return false;
     }
@@ -253,14 +253,23 @@ bool PSDResourceBlock::read(QIODevice* io)
 
 bool PSDResourceBlock::write(QIODevice* io)
 {
-    Q_UNUSED(io);
-    Q_ASSERT(valid());
-    if (!valid()) {
+    if (!resource->valid()) {
         error = QString("Cannot write an invalid Resource Block");
         return false;
     }
-    qFatal("TODO: implement writing the resource block");
-    return false;
+
+    QByteArray ba;
+    if (!resource->createBlock(ba)) {
+        error = resource->error;
+        return false;
+    }
+
+    if (!io->write(ba.constData(), ba.size()) == ba.size()) {
+        error = QString("Could not write complete resource");
+        return false;
+    }
+
+    return true;
 }
 
 bool PSDResourceBlock::valid()
@@ -278,6 +287,8 @@ bool PSDResourceBlock::valid()
 
 bool RESN_INFO_1005::interpretBlock(QByteArray data)
 {
+    dbgFile << "Reading RESN_INFO_1005";
+
     // the resolution we set on the image should be dpi; we can also set the unit on the KoDocument.
     QDataStream ds(data);
     ds.setByteOrder(QDataStream::BigEndian);
@@ -287,15 +298,75 @@ bool RESN_INFO_1005::interpretBlock(QByteArray data)
     /* Resolution always recorded as pixels / inch in a fixed point implied
        decimal int32 with 16 bits before point and 16 after (i.e. cast as
        double and divide resolution by 2^16 */
-    qDebug() << "hres" << hRes / 65536.0 << "vres" << vRes / 65536.0;
+    dbgFile << "hres" << hRes << "vres" << vRes;
 
     hRes = hRes / 65536.0;
     vRes = vRes / 65536.0;
 
+    dbgFile << hRes << hResUnit << widthUnit << vRes << vResUnit << heightUnit;
+
     return ds.atEnd();
 }
 
-bool RESN_INFO_1005::valid()
+bool RESN_INFO_1005::createBlock(QByteArray & data)
 {
+    dbgFile << "Writing RESN_INFO_1005";
+    QBuffer buf(&data);
+    buf.open(QBuffer::WriteOnly);
+
+    buf.write("8BIM", 4);
+    psdwrite(&buf, (quint16)PSDResourceSection::RESN_INFO);
+    psdwrite(&buf, (quint16)0);
+    psdwrite(&buf, (quint32)16);
+
+    // Convert to 16.16 fixed point
+    Fixed h = hRes * 65536.0 + 0.5;
+    dbgFile << "h" << h << "hRes" << hRes;
+    psdwrite(&buf, (quint32)h);
+    psdwrite(&buf, hResUnit);
+    psdwrite(&buf, widthUnit);
+
+    // Convert to 16.16 fixed point
+    Fixed v = vRes * 65536.0 + 0.5;
+    dbgFile << "v" << v << "vRes" << vRes;
+    psdwrite(&buf, (quint32)v);
+    psdwrite(&buf, vResUnit);
+    psdwrite(&buf, heightUnit);
+
+    buf.close();
+
     return true;
 }
+
+bool ICC_PROFILE_1039::interpretBlock(QByteArray data)
+{
+    dbgFile << "Reading ICC_PROFILE_1039";
+
+    icc = data;
+
+    return true;
+
+}
+
+bool ICC_PROFILE_1039::createBlock(QByteArray &data)
+{
+    dbgFile << "Writing ICC_PROFILE_1039";
+    if (icc.size() == 0) {
+        error = "ICC_PROFILE_1039: Trying to save an empty profile";
+        return false;
+    }
+    QBuffer buf(&data);
+    buf.open(QBuffer::WriteOnly);
+
+    buf.write("8BIM", 4);
+    psdwrite(&buf, (quint16)PSDResourceSection::ICC_PROFILE);
+    psdwrite(&buf, (quint16)0);
+    psdwrite(&buf, (quint32)icc.size());
+
+    buf.write(icc.constData(), icc.size());
+    buf.close();
+
+
+    return true;
+}
+

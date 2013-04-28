@@ -178,8 +178,6 @@ QList<KoColor> KisCommonColorsRecalculationRunner::extractColors()
     for(int i=0; i<boxes.size(); i++) {
         if(boxes.at(i).population()>=1) {
             colorList.append(KoColor(QColor(boxes.at(i).mean()), colorSpace));
-//            if(colorList.last()==QColor(0,0,0))
-//                kDebug()<<"dude!";
         }
     }
 

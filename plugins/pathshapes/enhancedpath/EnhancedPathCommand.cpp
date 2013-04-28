@@ -24,7 +24,7 @@
 #include <KoPathPoint.h>
 #include <math.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 // radian to degree factor
 const qreal rad2deg = 180.0/M_PI;

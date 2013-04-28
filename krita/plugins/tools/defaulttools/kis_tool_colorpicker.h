@@ -28,6 +28,7 @@
 #include "ui_wdgcolorpicker.h"
 #include "kis_tool.h"
 #include <flake/kis_node_shape.h>
+#include <KoIcon.h>
 class KoResource;
 class KoColorSet;
 
@@ -51,8 +52,22 @@ public:
     virtual ~KisToolColorPicker();
 
 public:
-    virtual QWidget* createOptionWidget();
+    struct Configuration {
+        Configuration();
 
+        bool toForegroundColor;
+        bool updateColor;
+        bool addPalette;
+        bool normaliseValues;
+        bool sampleMerged;
+        int radius;
+
+        void save(ToolActivation activation) const;
+        void load(ToolActivation activation);
+    };
+
+public:
+    virtual QWidget* createOptionWidget();
 
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseMoveEvent(KoPointerEvent *event);
@@ -60,22 +75,27 @@ public:
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
+protected:
+    void activate(ToolActivation activation, const QSet<KoShape*> &);
+    void deactivate();
+
 public slots:
     void slotSetUpdateColor(bool);
     void slotSetNormaliseValues(bool);
     void slotSetAddPalette(bool);
     void slotChangeRadius(int);
     void slotAddPalette(KoResource* resource);
+    void slotSetColorSource(int value);
 
 private:
     void displayPickedColor();
     void pickColor(const QPointF& pos);
+    void updateOptionWidget();
 
-    bool m_toForegroundColor;
-    bool m_updateColor;
-    bool m_addPalette;
-    bool m_normaliseValues;
-    int m_radius;
+    Configuration m_config;
+    ToolActivation m_toolActivationSource;
+    bool m_isActivated;
+
     KoColor m_pickedColor;
 
     // used to skip some of the tablet events and don't update the colour that often
@@ -95,7 +115,7 @@ public:
         setToolTip(i18n("Select a color from the image or current layer"));
         setToolType(TOOL_TYPE_FILL);
         setPriority(15);
-        setIcon("krita_tool_color_picker");
+        setIconName(koIconNameCStr("krita_tool_color_picker"));
         setShortcut(KShortcut(Qt::Key_P));
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID_ALWAYS_ACTIVE);
     }

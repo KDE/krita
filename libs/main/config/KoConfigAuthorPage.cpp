@@ -24,11 +24,12 @@
 #include "ui_KoConfigAuthorPage.h"
 
 #include <KoGlobal.h>
+#include <KoIcon.h>
 
 #include <klocale.h>
 #include <kglobal.h>
 #include <kuser.h>
-#include <kicon.h>
+#include <kemailsettings.h>
 
 #include <QLineEdit>
 #include <QStackedWidget>
@@ -58,11 +59,11 @@ KoConfigAuthorPage::KoConfigAuthorPage()
     d->combo = new QComboBox;
     layout->addWidget(d->combo, 0, 0);
     QToolButton *newUser = new QToolButton;
-    newUser->setIcon(KIcon("list-add-user"));
+    newUser->setIcon(koIcon("list-add-user"));
     newUser->setToolTip(i18n("Add new author profile (starts out as a copy of current)"));
     layout->addWidget(newUser, 0, 1);
     d->deleteUser = new QToolButton;
-    d->deleteUser->setIcon(KIcon("list-remove-user"));
+    d->deleteUser->setIcon(koIcon("list-remove-user"));
     d->deleteUser->setToolTip(i18n("Delete the author profile"));
     layout->addWidget(d->deleteUser, 0, 2);
     QFrame *f = new QFrame;
@@ -81,6 +82,10 @@ KoConfigAuthorPage::KoConfigAuthorPage()
     d->stack->addWidget(w);
     KUser user(KUser::UseRealUserID);
     aUi->leFullName->setText(user.property(KUser::FullName).toString());
+    aUi->lePhoneWork->setText(user.property(KUser::WorkPhone).toString());
+    aUi->lePhoneHome->setText(user.property(KUser::HomePhone).toString());
+    KEMailSettings eMailSettings;
+    aUi->leEmail->setText(eMailSettings.getSetting(KEMailSettings::EmailAddress));
     d->profileUiList.append(aUi);
 
     // Add all the user defined profiles

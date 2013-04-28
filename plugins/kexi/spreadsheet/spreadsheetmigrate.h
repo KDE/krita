@@ -29,6 +29,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <KoOdfWriteStore.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoDocument.h>
+#include <KoPart.h>
 
 namespace KexiMigration
 {
@@ -41,7 +42,7 @@ class SpreadsheetMigrate : public KexiMigrate
     Q_OBJECT
     KEXIMIGRATION_DRIVER
 public:
-    SpreadsheetMigrate(QObject *parent, const QVariantList &args = QVariantList());
+    explicit SpreadsheetMigrate(QObject *parent, const QVariantList &args = QVariantList());
 
     virtual ~SpreadsheetMigrate();
 

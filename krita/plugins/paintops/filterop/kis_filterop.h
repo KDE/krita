@@ -26,6 +26,7 @@
 #include "kis_brush_based_paintop.h"
 #include <KoColorSpace.h>
 #include <kis_pressure_size_option.h>
+#include <kis_pressure_rotation_option.h>
 
 class KisFilterConfiguration;
 class KisFilterOpSettings;
@@ -47,9 +48,10 @@ private:
     const KisFilterOpSettings * settings;
     KisPaintDeviceSP m_tmpDevice;
     KisPressureSizeOption m_sizeOption;
+    KisPressureRotationOption m_rotationOption;
     KisFilterSP m_filter;
     KisFilterConfiguration* m_filterConfiguration;
-    bool m_ignoreAlpha;
+    bool m_smudgeMode;
 };
 
 #endif // KIS_FILTEROP_H_

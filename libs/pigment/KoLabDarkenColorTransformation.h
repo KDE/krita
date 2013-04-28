@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef _KO_LAB_DARKEN_TRANSFORMATION_H_
-#define _KO_LAB_DARKEN_TRANSFORMATION_H_
+#ifndef _KO_LAB_DARKEN_COLOR_TRANSFORMATION_H_
+#define _KO_LAB_DARKEN_COLOR_TRANSFORMATION_H_
 
 template<typename _lab_channels_type_>
 struct KoLabDarkenColorTransformation : public KoColorTransformation {

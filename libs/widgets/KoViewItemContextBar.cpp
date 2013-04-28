@@ -23,10 +23,10 @@
 
 //Calligra headers
 #include "KoContextBarButton.h"
+#include <KoIcon.h>
 
 //KDE headers
-#include <KGlobalSettings>
-#include <KIconLoader>
+#include <kglobalsettings.h>
 #include <klocale.h>
 
 //Qt Headers
@@ -38,12 +38,13 @@
 
 /** Space between the item outer rect and the context bar */
 const int CONTEXTBAR_MARGIN = 4;
+const int MIN_BUTTON_WIDTH = 24;
 
 KoViewItemContextBar::KoViewItemContextBar(QAbstractItemView *parent)
     : QObject(parent)
     , m_view(parent)
     , m_enabled(true)
-    , m_appliedPointingHandCursor(false)
+    , m_showToggleButton(true)
 {
     connect(parent, SIGNAL(entered(const QModelIndex&)),
             this, SLOT(slotEntered(const QModelIndex&)));
@@ -64,6 +65,8 @@ KoViewItemContextBar::KoViewItemContextBar(QAbstractItemView *parent)
     // Hides context bar if item removed
     connect(m_view->model(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
             this, SLOT(slotRowsRemoved(const QModelIndex&, int, int)));
+
+    connect(m_view->model(), SIGNAL(modelReset()), this, SLOT(slotModelReset()));
 
     m_ContextBar->installEventFilter(this);
     m_view->viewport()->installEventFilter(this);
@@ -87,20 +90,6 @@ bool KoViewItemContextBar::eventFilter(QObject *watched, QEvent *event)
             break;
         }
     }
-    else if (watched == m_ContextBar) {
-            switch (event->type()) {
-            case QEvent::Enter:
-                QApplication::changeOverrideCursor(Qt::PointingHandCursor);
-                break;
-
-            case QEvent::Leave:
-                QApplication::changeOverrideCursor(Qt::ArrowCursor);
-                break;
-
-            default:
-                break;
-            }
-        }
     return QObject::eventFilter(watched, event);
 }
 
@@ -108,10 +97,6 @@ void KoViewItemContextBar::slotEntered(const QModelIndex &index)
 {
     const bool isSelectionCandidate = index.isValid() &&
             (QApplication::mouseButtons() == Qt::NoButton);
-    restoreCursor();
-    if (isSelectionCandidate && KGlobalSettings::singleClick()) {
-        applyPointingHandCursor();
-    }
 
     if (!m_ContextBar || !m_enabled) {
         return;
@@ -150,12 +135,17 @@ void KoViewItemContextBar::showContextBar(const QRect &rect)
     // Center bar in FullContextBar mode, left align in
     // SelectionOnlyContextBar mode
     const int posX = 0;
-    const int posY = CONTEXTBAR_MARGIN;
+    const int posY = CONTEXTBAR_MARGIN / 4;
     int numButtons = 0;
     m_ContextBar->move(rect.topLeft() + QPoint(posX, posY));
     //Hide buttons if item is too small
+    int width = m_ToggleSelectionButton->width();
+    if (!m_showToggleButton) {
+        m_ToggleSelectionButton->setVisible(false);
+        width = qMin(m_contextBarButtons.at(0)->width(), MIN_BUTTON_WIDTH);
+    }
     for (int i=m_contextBarButtons.size()-1; i>=0; --i) {
-        if ((rect.width() - 2*CONTEXTBAR_MARGIN) > ((i+1)*m_ToggleSelectionButton->width())) {
+        if ((rect.width() - 2 * CONTEXTBAR_MARGIN) > ((i + 1) * width)) {
             m_contextBarButtons.at(i)->setVisible(true);
             numButtons++;
             continue;
@@ -173,7 +163,6 @@ void KoViewItemContextBar::showContextBar(const QRect &rect)
 void KoViewItemContextBar::slotViewportEntered()
 {
     m_ContextBar->hide();
-    restoreCursor();
 }
 
 void KoViewItemContextBar::setItemSelected()
@@ -201,30 +190,15 @@ void KoViewItemContextBar::slotRowsRemoved(const QModelIndex &parent, int start,
     if (m_ContextBar) {
         m_ContextBar->hide();
     }
-    restoreCursor();
-}
-
-void KoViewItemContextBar::applyPointingHandCursor()
-{
-    if (!m_appliedPointingHandCursor) {
-        QApplication::setOverrideCursor(QCursor(Qt::PointingHandCursor));
-        m_appliedPointingHandCursor = true;
-    }
-}
-
-void KoViewItemContextBar::restoreCursor()
-{
-    if (m_appliedPointingHandCursor) {
-        QApplication::restoreOverrideCursor();
-        m_appliedPointingHandCursor = false;
-    }
 }
 
 void KoViewItemContextBar::updateToggleSelectionButton()
 {
-    m_ToggleSelectionButton->setIcon(SmallIcon(
-            m_view->selectionModel()->isSelected(m_IndexUnderCursor) ? "list-remove" : "list-add"));
-    m_ToggleSelectionButton->setToolTip( m_view->selectionModel()->isSelected(m_IndexUnderCursor) ? i18n("deselect item") : i18n("select item"));
+    const bool isHoveredIndexSelected = m_view->selectionModel()->isSelected(m_IndexUnderCursor);
+    const char *const iconName = (isHoveredIndexSelected ? koIconNameCStr("list-remove") : koIconNameCStr("list-add"));
+
+    m_ToggleSelectionButton->setIcon(KIcon(QLatin1String(iconName)));
+    m_ToggleSelectionButton->setToolTip(isHoveredIndexSelected ? i18n("deselect item") : i18n("select item"));
 }
 
 void KoViewItemContextBar::update()
@@ -257,12 +231,22 @@ int KoViewItemContextBar::preferredWidth()
     return ((m_contextBarButtons.count()+1)*m_ToggleSelectionButton->sizeHint().width() + 2*CONTEXTBAR_MARGIN);
 }
 
+void KoViewItemContextBar::setShowSelectionToggleButton(bool enabled)
+{
+    m_showToggleButton = enabled;
+}
+
 void KoViewItemContextBar::reset()
 {
     if (m_ContextBar) {
         m_ContextBar->hide();
     }
-    restoreCursor();
+}
+
+void KoViewItemContextBar::slotModelReset()
+{
+    // reset the model index so it does no longer point to suff no longer available.
+    m_IndexUnderCursor = QModelIndex();
 }
 
 void KoViewItemContextBar::enableContextBar()

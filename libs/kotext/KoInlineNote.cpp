@@ -31,7 +31,7 @@
 #include <KoGenStyles.h>
 #include <KoStyleManager.h>
 #include <KoElementReference.h>
-#include <KDebug>
+#include <kdebug.h>
 
 #include <QTextDocument>
 #include <QTextFrame>

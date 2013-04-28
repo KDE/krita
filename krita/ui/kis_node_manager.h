@@ -37,6 +37,8 @@ class KisDoc2;
 class KisFilterStrategy;
 class KisView2;
 class KisFilterConfiguration;
+class KisActionManager;
+
 /**
  * The node manager passes requests for new layers or masks on to the mask and layer
  * managers.
@@ -67,7 +69,7 @@ signals:
     
 public:
     
-    void setup(KActionCollection * collection);
+    void setup(KActionCollection * collection, KisActionManager* actionManager);
     void updateGUI();
 
     /// Convenience function to get the active layer or mask
@@ -143,9 +145,12 @@ public slots:
     void nodeOpacityChanged(qreal opacity, bool finalChange);
     void nodeCompositeOpChanged(const KoCompositeOp* op);
     void duplicateActiveNode();
-    void removeNode(KisNodeSP node);
+    void removeNode();
     void mirrorNodeX();
     void mirrorNodeY();
+    void mirrorNode(KisNodeSP node, const QString & commandName, Qt::Orientation orientation);
+    void activateNextNode();
+    void activatePreviousNode();
 
     /**
      * move the active node up the nodestack.
@@ -176,7 +181,7 @@ public slots:
     void rotateLeft90();
     void rotateRight90();
 
-    
+    void saveNodeAsImage();
 public:
 
     // merges the active layer with the layer below it.
@@ -191,7 +196,6 @@ private:
     void getNewNodeLocation(const QString & nodeType, KisNodeSP &parent, KisNodeSP &above, KisNodeSP active);
     void getNewNodeLocation(KisNodeSP node, KisNodeSP &parent, KisNodeSP &above, KisNodeSP _activeNode);
 
-    void mirrorNode(KisNodeSP node, const QString & commandName, Qt::Orientation orientation);
 
     /**
      * Scales opacity from the range 0...1

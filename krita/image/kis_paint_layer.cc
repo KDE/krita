@@ -24,6 +24,7 @@
 #include <kis_debug.h>
 #include <klocale.h>
 
+#include <KoIcon.h>
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
 #include <KoCompositeOp.h>
@@ -134,7 +135,6 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
 
 void KisPaintLayer::setDirty(const QRect & rect)
 {
-    KisIndirectPaintingSupport::setDirty(rect);
     KisLayer::setDirty(rect);
 }
 
@@ -154,19 +154,19 @@ KoDocumentSectionModel::PropertyList KisPaintLayer::sectionModelProperties() con
     KoDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
     
     // XXX: get right icons
-    l << KoDocumentSectionModel::Property(i18n("Alpha Channel Locked"), KIcon("transparency-locked"), KIcon("transparency-unlocked"), alphaLocked());
-    l << KoDocumentSectionModel::Property(i18n("Alpha Channel Disabled"), KIcon("transparency-disabled"), KIcon("transparency-enabled"), alphaChannelDisabled());
+    l << KoDocumentSectionModel::Property(i18n("Alpha Locked"), koIcon("transparency-locked"), koIcon("transparency-unlocked"), alphaLocked());
+    l << KoDocumentSectionModel::Property(i18n("Inherit Alpha"), koIcon("transparency-disabled"), koIcon("transparency-enabled"), alphaChannelDisabled());
     
     return l;
 }
 
 void KisPaintLayer::setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties)
 {
-    foreach (KoDocumentSectionModel::Property property, properties) {
-        if (property.name == i18n("Alpha Channel Locked")) {
+    foreach (const KoDocumentSectionModel::Property &property, properties) {
+        if (property.name == i18n("Alpha Locked")) {
             setAlphaLocked(property.state.toBool());
         }
-        else if (property.name == i18n("Alpha Channel Disabled")) {
+        else if (property.name == i18n("Inherit Alpha")) {
             disableAlphaChannel(property.state.toBool());
         }
     }

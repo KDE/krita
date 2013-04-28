@@ -23,6 +23,10 @@
 #include <QString>
 #include <QPixmap>
 #include <QDebug>
+#include <QProcess>
+#include <QProcessEnvironment>
+#include <QDesktopServices>
+#include <QDir>
 
 #include <kglobal.h>
 #include <kcmdlineargs.h>
@@ -35,6 +39,10 @@
 #include "data/splash/splash_screen.xpm"
 #include "ui/kis_aboutdata.h"
 
+#ifdef Q_OS_WIN
+#include "stdlib.h"
+#endif
+
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
 #ifdef Q_WS_X11
@@ -42,7 +50,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 #endif
 
     int state;
-    KAboutData * aboutData = newKritaAboutData();
+    KAboutData *aboutData = newKritaAboutData();
 
     KCmdLineArgs::init(argc, argv, aboutData);
 
@@ -56,9 +64,9 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     // then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,
     // so use an xpm.
-    QPixmap pm(splash_screen_xpm);
-    QSplashScreen *splash = new KSplashScreen(pm);
+    QSplashScreen *splash = new KSplashScreen(QPixmap(splash_screen_xpm));
     app.setSplashScreen(splash);
+
 
     if (!app.start()) {
         return 1;

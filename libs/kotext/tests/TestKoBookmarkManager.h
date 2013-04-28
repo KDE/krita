@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  *
  * Copyright (c) 2011 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (c) 2012 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,9 +31,7 @@ class TestKoBookmarkManager : public QObject
 private slots:
 
     void testCreation();
-    void testRetrieve();
-    void testRetrieveByEndmark();
-    void testInsert();
+    void testInsertAndRetrieve();
     void testRemove();
     void testRename();
 };

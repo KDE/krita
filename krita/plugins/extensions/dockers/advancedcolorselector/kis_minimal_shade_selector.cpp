@@ -22,10 +22,10 @@
 #include <QPainter>
 #include <QMouseEvent>
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KComponentData>
-#include <KGlobal>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kcomponentdata.h>
+#include <kglobal.h>
 
 #include "KoCanvasResourceManager.h"
 
@@ -94,7 +94,6 @@ void KisMinimalShadeSelector::updateSettings()
 
 void KisMinimalShadeSelector::mousePressEvent(QMouseEvent * e)
 {
-//    kDebug() << e->globalX() << "/" << e->globalY();
     foreach(KisShadeSelectorLine* line, m_shadingLines) {
         QMouseEvent newEvent(e->type(),
                                           line->mapFromGlobal(e->globalPos()),
@@ -109,7 +108,6 @@ void KisMinimalShadeSelector::mousePressEvent(QMouseEvent * e)
 
 void KisMinimalShadeSelector::mouseMoveEvent(QMouseEvent * e)
 {
-//    kDebug() << e->globalX() << "/" << e->globalY();
     foreach(KisShadeSelectorLine* line, m_shadingLines) {
         QMouseEvent newEvent(e->type(),
                                           line->mapFromGlobal(e->globalPos()),

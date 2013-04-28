@@ -19,19 +19,24 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include <QMutexLocker>
-#include <QMutex>
+
+#include "KoShapeFactoryBase.h"
+
+#include "KoDocumentResourceManager.h"
+#include "KoDeferredShapeFactoryBase.h"
+#include "KoShape.h"
+#include "KoShapeLoadingContext.h"
+
+#include <KoOdfLoadingContext.h>
+#include <KoProperties.h>
 
 #include <kservice.h>
 #include <kservicetypetrader.h>
 
-#include <KoDocumentResourceManager.h>
-#include "KoShapeFactoryBase.h"
-#include "KoDeferredShapeFactoryBase.h"
-#include "KoShape.h"
-#include "KoShapeLoadingContext.h"
-#include <KoOdfLoadingContext.h>
-#include <KoProperties.h>
+#include <QMutexLocker>
+#include <QMutex>
+
+
 
 #include <kdebug.h>
 
@@ -86,7 +91,7 @@ QString KoShapeFactoryBase::toolTip() const
     return d->tooltip;
 }
 
-QString KoShapeFactoryBase::icon() const
+QString KoShapeFactoryBase::iconName() const
 {
     return d->iconName;
 }
@@ -123,9 +128,9 @@ void KoShapeFactoryBase::setToolTip(const QString & tooltip)
     d->tooltip = tooltip;
 }
 
-void KoShapeFactoryBase::setIcon(const QString & iconName)
+void KoShapeFactoryBase::setIconName(const char *iconName)
 {
-    d->iconName = iconName;
+    d->iconName = QLatin1String(iconName);
 }
 
 void KoShapeFactoryBase::setFamily(const QString & family)

@@ -119,8 +119,8 @@ QString KoFilterEffectLoadingContext::pathFromHref(const QString &href) const
     QFileInfo pathInfo(QFileInfo(d->basePath).filePath());
 
     QString relFile = href;
-    while (relFile.startsWith("../")) {
-        relFile = relFile.mid(3);
+    while (relFile.startsWith(QLatin1String("../"))) {
+        relFile.remove(0, 3);
         pathInfo.setFile(pathInfo.dir(), QString());
     }
 

@@ -24,7 +24,7 @@
 
 // KDE
 #include <klocale.h>
-#include <KDebug>
+#include <kdebug.h>
 
 // Calligra
 #include <KoSomethingData.h>

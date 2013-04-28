@@ -50,8 +50,6 @@ private slots:
 private:
 
     KisHistogramWidget * m_page;
-    KisHistogramSP m_histogram;
-    KisLayerSP m_layer;
 };
 
 #endif // DLG_HISTOGRAM

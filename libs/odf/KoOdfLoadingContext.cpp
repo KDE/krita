@@ -24,11 +24,13 @@
 // KDE
 #include <kstandarddirs.h>
 #include <kdebug.h>
+#include <kmimetype.h>
 
 // Calligra
 #include <KoOdfReadStore.h>
 #include <KoOdfStylesReader.h>
 #include <KoStore.h>
+#include <KoStoreDevice.h>
 #include <KoXmlNS.h>
 #include <KoOdfManifestEntry.h>
 
@@ -93,7 +95,7 @@ KoOdfLoadingContext::KoOdfLoadingContext(KoOdfStylesReader &stylesReader, KoStor
     }
 
     if (!parseManifest(d->manifestDoc)) {
-        kWarning(30010) << "could not parse manifest document";
+        kDebug(30010) << "could not parse manifest document";
     }
 }
 
@@ -107,7 +109,7 @@ void KoOdfLoadingContext::setManifestFile(const QString& fileName) {
     QString dummy;
     (void)oasisStore.loadAndParse(fileName, d->manifestDoc, dummy);
     if (!parseManifest(d->manifestDoc)) {
-        kWarning(30010) << "could not parse manifest document";
+        kDebug(30010) << "could not parse manifest document";
     }
 }
 
@@ -250,10 +252,33 @@ bool KoOdfLoadingContext::useStylesAutoStyles() const
     return d->useStylesAutoStyles;
 }
 
-QString KoOdfLoadingContext::mimeTypeForPath(const QString& path) const
+QString KoOdfLoadingContext::mimeTypeForPath(const QString& path, bool guess) const
 {
-    if (d->manifestEntries.contains(path)) {
-        return d->manifestEntries[path]->mediaType();
+    QHash<QString, KoOdfManifestEntry *>::iterator it(d->manifestEntries.find(path));
+    if (it == d->manifestEntries.end()) {
+        // try to find it with an added / at the end
+        QString dirPath = path + '/';
+        it = d->manifestEntries.find(dirPath);
+    }
+    if (it != d->manifestEntries.end()) {
+        QString mimeType = it.value()->mediaType();
+
+        // figure out mimetype by content if it is not provided
+        if (mimeType.isEmpty() && guess) {
+            Q_ASSERT(!d->store->isOpen());
+            if (d->store->open(path)) {
+                KoStoreDevice device(d->store);
+                QByteArray data = device.read(16384);
+                d->store->close();
+                KMimeType::Ptr mtp = KMimeType::findByContent(data);
+                mimeType = mtp->name();
+                if (!mimeType.isEmpty()) {
+                    it.value()->setMediaType(mimeType);
+                }
+            }
+        }
+
+        return mimeType;
     }
     else {
         return QString();

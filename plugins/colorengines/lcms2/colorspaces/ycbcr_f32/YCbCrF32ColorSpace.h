@@ -99,7 +99,7 @@ public:
     }
 
     virtual QString defaultProfile() const {
-        return QString::null;
+        return QString();
     }
 
     virtual bool isHdr() const

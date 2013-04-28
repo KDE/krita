@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 KO GmbH <ben.martin@kogmbh.com>
+ * Copyright (C) 2012 C. Boemann <cbo@boemann.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,6 +28,7 @@
 #include <KoElementReference.h>
 
 #include "KoBookmark.h"
+#include "KoAnnotation.h"
 #include "KoTextMeta.h"
 #include "KoTextEditor.h"
 #include "KoTextDocument.h"
@@ -76,6 +78,14 @@ public:
         sopranoObjectType = LiteralNode;
     }
 
+    Private(const QTextDocument *doc, KoAnnotation *b)
+            : document(doc),
+            annotation(b)
+    {
+        isObjectAttributeUsed = false;
+        sopranoObjectType = LiteralNode;
+    }
+
     Private(const QTextDocument *doc, KoTextMeta *b)
             : document(doc),
             kotextmeta(b)
@@ -97,9 +107,10 @@ public:
     // where we might get the object value from
     QTextBlock block;
 
-    // or document and one of bookmark, kotextmeta, ...
+    // or document and one of bookmark, annotation, kotextmeta, ...
     QWeakPointer<const QTextDocument> document;
     QWeakPointer<KoBookmark> bookmark;
+    QWeakPointer<KoAnnotation> annotation;
     QWeakPointer<KoTextMeta> kotextmeta;
     QTextTableCell cell;
 
@@ -121,6 +132,12 @@ KoTextInlineRdf::KoTextInlineRdf(const QTextDocument *doc, const QTextBlock &b)
 }
 
 KoTextInlineRdf::KoTextInlineRdf(const QTextDocument *doc, KoBookmark *b)
+        : QObject(const_cast<QTextDocument*>(doc))
+        , d(new Private(doc, b))
+{
+}
+
+KoTextInlineRdf::KoTextInlineRdf(const QTextDocument *doc, KoAnnotation *b)
         : QObject(const_cast<QTextDocument*>(doc))
         , d(new Private(doc, b))
 {
@@ -212,12 +229,13 @@ QString KoTextInlineRdf::predicate()
 QPair<int, int>  KoTextInlineRdf::findExtent()
 {
     if (d->bookmark && d->document) {
-        KoBookmark *e = d->bookmark.data()->endBookmark();
-        if (e) {
-            // kDebug(30015) << "(Semantic)bmark... start:" << d->bookmark.data()->position() << " end:" << e->position();
-            return QPair<int, int>(d->bookmark.data()->position(), e->position());
-        }
+        return QPair<int, int>(d->bookmark.data()->rangeStart(), d->bookmark.data()->rangeEnd());
     }
+    if (d->annotation && d->document) {
+        return QPair<int, int>(d->annotation.data()->rangeStart(), d->annotation.data()->rangeEnd());
+    }
+    // FIXME: We probably have to do something with endAnnotation()
+    //        too, but I don't know exactly what...
     if (d->kotextmeta && d->document) {
         KoTextMeta *e = d->kotextmeta.data()->endBookmark();
         if (!e) {
@@ -241,23 +259,19 @@ QString KoTextInlineRdf::object()
     }
 
     KoTextDocument textDocument(d->document.data());
-    KoTextEditor *editor = textDocument.textEditor();
 
     if (d->bookmark && d->document) {
-        KoBookmark *e = d->bookmark.data()->endBookmark();
-
-        editor->setPosition(d->bookmark.data()->position(), QTextCursor::MoveAnchor);
-        editor->setPosition(e->position(), QTextCursor::KeepAnchor);
-
-        QString ret = editor->selectedText();
+        QString ret  = d->bookmark.data()->text();
         return ret.remove(QChar::ObjectReplacementCharacter);
     }
     else if (d->kotextmeta && d->document) {
+        // FIXME: Need to do something with endAnnotation?
         KoTextMeta *e = d->kotextmeta.data()->endBookmark();
         if (!e) {
             kDebug(30015) << "Broken KoTextMeta, no end tag found!";
             return QString();
         } else {
+            KoTextEditor *editor = textDocument.textEditor();
             editor->setPosition(d->kotextmeta.data()->position(), QTextCursor::MoveAnchor);
             editor->setPosition(e->position(), QTextCursor::KeepAnchor);
             QString ret = editor->selectedText();
@@ -266,10 +280,8 @@ QString KoTextInlineRdf::object()
     }
     else if (d->cell.isValid() && d->document) {
         QTextCursor b = d->cell.firstCursorPosition();
-        QTextCursor e = d->cell.lastCursorPosition();
-        editor->setPosition(b.position(), QTextCursor::MoveAnchor);
-        editor->setPosition(e.position(),  QTextCursor::KeepAnchor);
-        QString ret = editor->selectedText();
+        b.setPosition(d->cell.lastCursorPosition().position(), QTextCursor::KeepAnchor);
+        QString ret = b.selectedText();
         return ret.remove(QChar::ObjectReplacementCharacter);
     }
 

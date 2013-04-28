@@ -30,7 +30,7 @@ class ParagraphLayout : public QWidget
 {
     Q_OBJECT
 public:
-    ParagraphLayout(QWidget *parent);
+    explicit ParagraphLayout(QWidget *parent);
 
     void setDisplay(KoParagraphStyle *style);
 

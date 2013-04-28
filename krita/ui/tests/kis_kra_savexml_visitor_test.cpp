@@ -75,7 +75,7 @@ void KisKraSaveXmlVisitorTest::testCreateDomDocument()
 
     QCOMPARE((int)visitor.m_count, (int)cv.count());
 
-    delete doc;
+    //delete doc;
 }
 
 QTEST_KDEMAIN(KisKraSaveXmlVisitorTest, GUI)

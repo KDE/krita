@@ -367,6 +367,13 @@ public slots:
     virtual void resourceChanged(int key, const QVariant &res);
 
     /**
+     * This method is called whenever a property in the resource
+     * provider associated with the document this tool belongs to
+     * changes. An example is the handle radius
+     */
+    virtual void documentResourceChanged(int key, const QVariant &res);
+
+    /**
      * This method just relays the given text via the tools statusTextChanged signal.
      * @param statusText the new status text
      */

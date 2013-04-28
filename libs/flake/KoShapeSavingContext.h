@@ -154,7 +154,7 @@ public:
      * @param counter if counter is true, shapesavingcontext will use a counter to create the xml:id
      * @return a KoElementReference; if insert is false and referent doesn't exist yet in the list, the elementrefence will be invalid.
      */
-    KoElementReference xmlid(const void *referent, const QString& prefix = QString::null, KoElementReference::GenerationOption counter = KoElementReference::UUID);
+    KoElementReference xmlid(const void *referent, const QString& prefix = QString(), KoElementReference::GenerationOption counter = KoElementReference::UUID);
 
     /**
      * @brief existingXmlid retrieve an existing xml id or invalid xml id if the referent object doesn't exist

@@ -20,22 +20,9 @@
 
 #include "colorrange.h"
 
-
-#include <math.h>
-
-#include <stdlib.h>
-
-#include <QSlider>
-#include <QPoint>
-
 #include <klocale.h>
-#include <kiconloader.h>
-#include <kcomponentdata.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <kactioncollection.h>
 
 #include "kis_image.h"
 #include "kis_layer.h"
@@ -48,6 +35,7 @@
 #include "kis_selection_tool_helper.h"
 #include "kis_canvas2.h"
 #include "kis_iterator_ng.h"
+#include "kis_action.h"
 
 #include "dlg_colorrange.h"
 #include <KoColorSpace.h>
@@ -56,36 +44,23 @@ K_PLUGIN_FACTORY(ColorRangeFactory, registerPlugin<ColorRange>();)
 K_EXPORT_PLUGIN(ColorRangeFactory("krita"))
 
 ColorRange::ColorRange(QObject *parent, const QVariantList &)
-        : KParts::Plugin(parent)
+        : KisViewPlugin(parent, "kritaplugins/colorrange.rc")
 {
-    if (parent->inherits("KisView2")) {
-        setXMLFile(KStandardDirs::locate("data", "kritaplugins/colorrange.rc"),
-                   true);
-        m_view = dynamic_cast<KisView2*>(parent);
-        m_selectRange = new KAction(i18n("Select from Color Range..."), this);
-        actionCollection()->addAction("colorrange", m_selectRange);
-        connect(m_selectRange, SIGNAL(triggered()), this, SLOT(slotActivated()));
-        m_view->selectionManager()->addSelectionAction(m_selectRange);
+    KisAction* action = new KisAction(i18n("Select from Color Range..."), this);
+    action->setActivationFlags(KisAction::ACTIVE_DEVICE);
+    action->setActivationConditions(KisAction::SELECTION_EDITABLE);
+    addAction("colorrange", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotActivated()));
 
-        m_selectOpaque  = new KAction(i18n("Select Opaque"), this);
-        actionCollection()->addAction("selectopaque", m_selectOpaque);
-        connect(m_selectOpaque, SIGNAL(triggered()), this, SLOT(selectOpaque()));
-        m_view->selectionManager()->addSelectionAction(m_selectOpaque);
-
-        connect(m_view->selectionManager(), SIGNAL(signalUpdateGUI()),
-                SLOT(slotUpdateGUI()));
-    }
+    action  = new KisAction(i18n("Select Opaque"), this);
+    action->setActivationFlags(KisAction::ACTIVE_DEVICE);
+    action->setActivationConditions(KisAction::SELECTION_EDITABLE);
+    addAction("selectopaque", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(selectOpaque()));
 }
 
 ColorRange::~ColorRange()
 {
-}
-
-void ColorRange::slotUpdateGUI()
-{
-    bool enable = m_view->selectionEditable();
-    m_selectRange->setEnabled(enable);
-    m_selectOpaque->setEnabled(enable);
 }
 
 void ColorRange::slotActivated()
@@ -109,7 +84,7 @@ void ColorRange::selectOpaque()
     KisPaintDeviceSP device = node->paintDevice();
     if (!device) return;
     
-    KisSelectionToolHelper helper(canvas, node, i18n("Select Opaque"));
+    KisSelectionToolHelper helper(canvas, i18n("Select Opaque"));
     
     qint32 x, y, w, h;
     QRect rc = device->exactBounds();

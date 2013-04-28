@@ -80,7 +80,7 @@ void KisPressureSharpnessOption::apply(const KisPaintInformation &info, const QP
     }
 }
 
-void KisPressureSharpnessOption::applyTreshold(KisFixedPaintDeviceSP dab)
+void KisPressureSharpnessOption::applyThreshold(KisFixedPaintDeviceSP dab)
 {
     if (!isChecked()) return;
     const KoColorSpace * cs = dab->colorSpace();

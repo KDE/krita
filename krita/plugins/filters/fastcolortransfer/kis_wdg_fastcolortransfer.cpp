@@ -34,6 +34,7 @@
 #include <kis_paint_device.h>
 #include <kundo2command.h>
 #include <KoColorSpaceRegistry.h>
+#include <kis_part2.h>
 
 #include "ui_wdgfastcolortransfer.h"
 
@@ -63,13 +64,17 @@ KisPropertiesConfiguration* KisWdgFastColorTransfer::configuration() const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("colortransfer", 1);
     QString fileName = this->widget()->fileNameURLRequester->url().url();
-    
+
     if (fileName.isEmpty()) return config;
 
     KisPaintDeviceSP ref;
 
     dbgPlugins << "Use as reference file : " << fileName;
-    KisDoc2 d;
+
+    KisPart2 part;
+    KisDoc2 d(&part);
+    part.setDocument(&d);
+
     KoFilterManager manager(&d);
     KoFilter::ConversionStatus status;
     QString s = manager.importDocument(fileName, QString(), status);
@@ -83,22 +88,22 @@ KisPropertiesConfiguration* KisWdgFastColorTransfer::configuration() const
         dbgPlugins << "No reference image was specified.";
         return config;
     }
-    
+
     // Convert ref to LAB
     const KoColorSpace* labCS = KoColorSpaceRegistry::instance()->lab16();
     if (!labCS) {
         dbgPlugins << "The LAB colorspace is not available.";
         return config;
     }
-    
+
     dbgPlugins << "convert ref to lab";
-    KUndo2Command* cmd = ref->convertTo(labCS);
+    KUndo2Command* cmd = ref->convertTo(labCS, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
     delete cmd;
-    
+
     // Compute the means and sigmas of ref
     double meanL_ref = 0., meanA_ref = 0., meanB_ref = 0.;
     double sigmaL_ref = 0., sigmaA_ref = 0., sigmaB_ref = 0.;
-    
+
     KisRectConstIteratorSP refIt = ref->createRectConstIteratorNG(0, 0, importedImage->width(), importedImage->height());
     do {
         const quint16* data = reinterpret_cast<const quint16*>(refIt->oldRawData());
@@ -125,7 +130,7 @@ KisPropertiesConfiguration* KisWdgFastColorTransfer::configuration() const
     sigmaL_ref *= totalSize;
     sigmaA_ref *= totalSize;
     sigmaB_ref *= totalSize;
-    
+
     dbgPlugins << totalSize << "" << meanL_ref << "" << meanA_ref << "" << meanB_ref << "" << sigmaL_ref << "" << sigmaA_ref << "" << sigmaB_ref;
 
     config->setProperty("filename", fileName);
@@ -135,6 +140,6 @@ KisPropertiesConfiguration* KisWdgFastColorTransfer::configuration() const
     config->setProperty("sigmaL", sigmaL_ref);
     config->setProperty("sigmaA", sigmaA_ref);
     config->setProperty("sigmaB", sigmaB_ref);
-    
+
     return config;
 }

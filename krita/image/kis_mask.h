@@ -145,6 +145,8 @@ public:
     QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
     QImage createThumbnail(qint32 w, qint32 h);
 
+    void testingInitSelection(const QRect &rect);
+
 protected:
     /**
      * Apply the effect the projection using the mask as a selection.

@@ -52,7 +52,7 @@ signals:
     void valueChanged(qreal value);
     
 private:
-    Q_PRIVATE_SLOT(d, void updateRange());
+    Q_PRIVATE_SLOT(d, void updateRange())
     struct Private;
     Private* const d;
 };

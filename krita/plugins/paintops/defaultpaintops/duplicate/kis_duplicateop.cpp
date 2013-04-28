@@ -64,7 +64,7 @@
 #include "kis_duplicateop_settings.h"
 #include "kis_duplicateop_settings_widget.h"
 #include "kis_duplicateop_option.h"
-
+#include <kis_fixed_paint_device.h>
 
 KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings *settings, KisPainter *painter)
         : KisBrushBasedPaintOp(settings, painter)
@@ -76,6 +76,8 @@ KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings *settings, KisPainte
     m_healing = settings->getBool(DUPLICATE_HEALING);
     m_perspectiveCorrection = settings->getBool(DUPLICATE_CORRECT_PERSPECTIVE);
     m_moveSourcePoint = settings->getBool(DUPLICATE_MOVE_SOURCE_POINT);
+
+    m_srcdev = source()->createCompositionSourceDevice();
 }
 
 KisDuplicateOp::~KisDuplicateOp()
@@ -130,7 +132,7 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
     qreal scale = m_sizeOption.apply(info);
     if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return spacing(info.pressure());
 
-    QPointF hotSpot = brush->hotSpot(scale, scale);
+    QPointF hotSpot = brush->hotSpot(scale, scale, 0, info);
     QPointF pt = info.pos() - hotSpot;
 
     setCurrentScale(scale);
@@ -138,14 +140,10 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
     // Split the coordinates into integer plus fractional parts. The integer
     // is where the dab will be positioned and the fractional part determines
     // the sub-pixel positioning.
-    qint32 x;
-    qreal xFraction;
-    qint32 y;
-    qreal yFraction;
-
+    qint32 x, y;
+    qreal xFraction, yFraction; // will not be used
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
-    xFraction = yFraction = 0.0;
 
     QPoint srcPoint;
 
@@ -158,18 +156,14 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
                           static_cast<qint32>(settings->position().y() - hotSpot.y()));
     }
 
-    qint32 sw = brush->maskWidth(scale, 0.0);
-    qint32 sh = brush->maskHeight(scale, 0.0);
+    qint32 sw = brush->maskWidth(scale, 0.0, info);
+    qint32 sh = brush->maskHeight(scale, 0.0, info);
 
     if (srcPoint.x() < 0)
         srcPoint.setX(0);
 
     if (srcPoint.y() < 0)
         srcPoint.setY(0);
-    if (!(m_srcdev && !(*m_srcdev->colorSpace() == *source()->colorSpace()))) {
-        m_srcdev = new KisPaintDevice(source()->colorSpace());
-    }
-    Q_CHECK_PTR(m_srcdev);
 
     // Perspective correction ?
     KisImageWSP image = settings->m_image;
@@ -210,50 +204,38 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
 
     } else {
-        // TODO make it a mode to get the behaviour where the source is rawData
-        // Or, copy the source data on the temporary device:
-//         KisPainter copyPainter(m_srcdev);
-//         copyPainter.setCompositeOp(COMPOSITE_COPY);
-//         copyPainter.bitBlt(0, 0, source(), srcPoint.x(), srcPoint.y(), sw, sh);
-//         copyPainter.end();
-        // Do the copy manually to access old raw data
-        KisHLineIteratorSP dstIt = m_srcdev->createHLineIteratorNG(0, 0, sw);
-        KisHLineConstIteratorSP srcIt = source()->createHLineConstIteratorNG(srcPoint.x(), srcPoint.y(), sw);
-        int pixelSize = m_srcdev->pixelSize();
-        for (int i = 0; i < sh; ++i) {
-            do {
-                memcpy(dstIt->rawData(), srcIt->oldRawData(), pixelSize);
-            } while (dstIt->nextPixel() && srcIt->nextPixel());
-            dstIt->nextRow();
-            srcIt->nextRow();
-        }
+        KisPainter copyPainter(m_srcdev);
+        copyPainter.setCompositeOp(COMPOSITE_COPY);
+        copyPainter.bitBltOldData(0, 0, source(), srcPoint.x(), srcPoint.y(), sw, sh);
+        copyPainter.end();
     }
 
     // heal ?
 
     if (m_healing) {
-        quint16 dataDevice[4];
-        quint16 dataSrcDev[4];
+        quint16 srcData[4];
+        quint16 tmpData[4];
         qreal* matrix = new qreal[ 3 * sw * sh ];
         // First divide
-        const KoColorSpace* deviceCs = source()->colorSpace();
-        KisHLineConstIteratorSP deviceIt = source()->createHLineConstIteratorNG(x, y, sw);
-        KisHLineIteratorSP srcDevIt = m_srcdev->createHLineIteratorNG(0, 0, sw);
+        const KoColorSpace* srcCs = source()->colorSpace();
+        const KoColorSpace* tmpCs = source()->colorSpace();
+        KisHLineConstIteratorSP srcIt = source()->createHLineConstIteratorNG(x, y, sw);
+        KisHLineIteratorSP tmpIt = m_srcdev->createHLineIteratorNG(0, 0, sw);
         qreal* matrixIt = &matrix[0];
         for (int j = 0; j < sh; j++) {
             for (int i = 0; i < sw; i++) {
-                deviceCs->toLabA16(deviceIt->oldRawData(), (quint8*)dataDevice, 1);
-                deviceCs->toLabA16(srcDevIt->rawData(), (quint8*)dataSrcDev, 1);
+                srcCs->toLabA16(srcIt->oldRawData(), (quint8*)srcData, 1);
+                tmpCs->toLabA16(tmpIt->rawData(), (quint8*)tmpData, 1);
                 // Division
                 for (int k = 0; k < 3; k++) {
-                    matrixIt[k] = dataDevice[k] / (qreal)qMax((int)dataSrcDev [k], 1);
+                    matrixIt[k] = srcData[k] / (qreal)qMax((int)tmpData [k], 1);
                 }
-                deviceIt->nextPixel();
-                srcDevIt->nextPixel();
+                srcIt->nextPixel();
+                tmpIt->nextPixel();
                 matrixIt += 3;
             }
-            deviceIt->nextRow();
-            srcDevIt->nextRow();
+            srcIt->nextRow();
+            tmpIt->nextRow();
         }
         // Minimize energy
         {
@@ -262,58 +244,57 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
             qreal* solution = new qreal [ 3 * sw * sh ];
             do {
                 err = minimizeEnergy(&matrix[0], &solution[0], sw, sh);
-                memcpy(&matrix[0], &solution[0], sw * sh * 3 * sizeof(qreal));
+
+                // swap pointers
+                qreal *tmp = matrix;
+                matrix = solution;
+                solution = tmp;
+
                 iter++;
-            } while (err < 0.00001 && iter < 100);
+            } while (err > 0.00001 && iter < 100);
             delete [] solution;
         }
 
         // Finaly multiply
-        KisHLineIteratorSP deviceIt2 = source()->createHLineIteratorNG(x, y, sw);
-        KisHLineIteratorSP srcDevIt2 = m_srcdev->createHLineIteratorNG(0, 0, sw);
+        KisHLineIteratorSP srcIt2 = source()->createHLineIteratorNG(x, y, sw);
+        KisHLineIteratorSP tmpIt2 = m_srcdev->createHLineIteratorNG(0, 0, sw);
         matrixIt = &matrix[0];
         for (int j = 0; j < sh; j++) {
             for (int i = 0; i < sw; i++) {
-                deviceCs->toLabA16(deviceIt2->rawData(), (quint8*)dataDevice, 1);
-                deviceCs->toLabA16(srcDevIt2->rawData(), (quint8*)dataSrcDev, 1);
+                srcCs->toLabA16(srcIt2->rawData(), (quint8*)srcData, 1);
+                tmpCs->toLabA16(tmpIt2->rawData(), (quint8*)tmpData, 1);
                 // Multiplication
                 for (int k = 0; k < 3; k++) {
-                    dataSrcDev[k] = (int)CLAMP(matrixIt[k] * qMax((int) dataSrcDev[k], 1), 0, 65535);
+                    tmpData[k] = (int)CLAMP(matrixIt[k] * qMax((int) tmpData[k], 1), 0, 65535);
                 }
-                deviceCs->fromLabA16((quint8*)dataSrcDev, srcDevIt2->rawData(), 1);
-                deviceIt2->nextPixel();
-                srcDevIt2->nextPixel();
+                tmpCs->fromLabA16((quint8*)tmpData, tmpIt2->rawData(), 1);
+                srcIt2->nextPixel();
+                tmpIt2->nextPixel();
                 matrixIt += 3;
             }
-            deviceIt2->nextRow();
-            srcDevIt2->nextRow();
+            srcIt2->nextRow();
+            tmpIt2->nextRow();
         }
         delete [] matrix;
     }
 
-    KisFixedPaintDeviceSP dab = 0;
-    if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
-        dab = brush->paintDevice(m_srcdev->colorSpace(), scale, 0.0, info, xFraction, yFraction);
-        dab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
-    } else {
-        dab = cachedDab();
-        KoColor color = painter()->paintColor();
-        color.convertTo(dab->colorSpace());
-        brush->mask(dab, color, scale, scale, 0.0, info, xFraction, yFraction);
-        dab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
-    }
+    static const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
+    static KoColor color(Qt::black, cs);
+
+    KisFixedPaintDeviceSP dab =
+        m_dabCache->fetchDab(cs, color, scale, scale,
+                             0.0, info);
 
     QRect dstRect = QRect(x, y, dab->bounds().width(), dab->bounds().height());
+    if (dstRect.isEmpty()) return 1.0;
 
-    if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return 1.0;
+    painter()->bitBltWithFixedSelection(dstRect.x(), dstRect.y(),
+                                        m_srcdev, dab,
+                                        dstRect.width(),
+                                        dstRect.height());
 
-    qint32 sx = dstRect.x() - x;
-    qint32 sy = dstRect.y() - y;
-    sw = dstRect.width();
-    sh = dstRect.height();
-
-    painter()->bitBltWithFixedSelection(dstRect.x(), dstRect.y(), m_srcdev, dab, sx, sy, 0, 0, sw, sh);
-    painter()->renderMirrorMask(QRect(dstRect.topLeft(),dstRect.size()),m_srcdev,0,0,dab);
+    painter()->renderMirrorMaskSafe(dstRect, m_srcdev, 0, 0, dab,
+                                    !m_dabCache->needSeparateOriginal());
 
     return spacing(scale);
 }

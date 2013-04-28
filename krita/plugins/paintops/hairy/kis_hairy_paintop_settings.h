@@ -31,6 +31,8 @@ class KisHairyPaintOpSettings : public KisBrushBasedPaintOpSettings
 {
 
 public:
+    using KisPaintOpSettings::fromXML;
+
     KisHairyPaintOpSettings();
     virtual QPainterPath brushOutline(const QPointF& pos, OutlineMode mode, qreal scale = 1.0, qreal rotation = 0.0) const;
     virtual void fromXML(const QDomElement&);

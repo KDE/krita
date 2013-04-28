@@ -38,8 +38,8 @@ void KoCellValue::saveOdf(KoXmlWriter& writer) const
         writer.addAttribute("office:value-type", type());
     }
 
-    QPair<QString, QString> attribute;
-    foreach(attribute, attributes()) {
+    typedef QPair<QString, QString> Attribute;
+    foreach(const Attribute &attribute, attributes()) {
         //TODO is this safe? I think that it didn't use to be
         writer.addAttribute(attribute.first.toLatin1(), attribute.second);
     }

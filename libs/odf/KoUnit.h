@@ -94,6 +94,7 @@ public:
 
     /** Returns a KoUnit instance with the type at the @p index of the UI list with the given @p listOptions. */
     static KoUnit fromListForUi(int index, ListOptions listOptions = ListAll, qreal factor = 1.0);
+
     /// Convert a unit symbol string into a KoUnit
     /// @param symbol symbol to convert
     /// @param ok if set, it will be true if the unit was known, false if unknown
@@ -101,7 +102,8 @@ public:
 
     /** Construction requires initialization. The factor is for variable factor units like pixel */
     explicit KoUnit(Type unit = Point, qreal factor = 1.0) {
-        m_type = unit; m_pixelConversion = factor;
+        m_type = unit;
+        m_pixelConversion = factor;
     }
 
     KoUnit& operator=(Type unit) {
@@ -185,6 +187,12 @@ public:
     }
 
     /**
+     * convert the given value directly from one unit to another
+     */
+    static qreal convertFromUnitToUnit(const qreal value, const KoUnit &fromUnit, const KoUnit &toUnit, qreal factor = 1.0);
+
+
+    /**
      * This method is the one to use to display a value in a dialog
      * \return the value @p ptValue converted to unit and rounded, ready to be displayed
      */
@@ -217,6 +225,7 @@ public:
 
     /// Returns the list of unit types for the UI, controlled with the given @p listOptions.
     static QStringList listOfUnitNameForUi(ListOptions listOptions = ListAll);
+
     /// Get the index of this unit in the list of unit types for the UI,
     /// if it is controlled with the given @p listOptions.
     int indexInListForUi(ListOptions listOptions = ListAll) const;

@@ -178,17 +178,14 @@ QString KoReportItemMaps::typeName() const
     return "report:maps";
 }
 
-int KoReportItemMaps::render(OROPage* page,
-                             OROSection* section,
-                             QPointF offset,
-                             QVariant data,
-                             KRScriptHandler *script)
+int KoReportItemMaps::renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset,
+                                       const QVariant &data, KRScriptHandler *script)
 {
     Q_UNUSED(script)
     
     myDebug() << this << "data:" << data;
     QString dataKey = data.toString();
-    QStringList dataList = dataKey.split(";");
+    QStringList dataList = dataKey.split(QLatin1Char(';'));
     //myDebug() << "splited:" << dataList;
     Marble::MarbleWidget* marble;
     
@@ -235,7 +232,7 @@ int KoReportItemMaps::render(OROPage* page,
     oroIds.marbleWidget = marble;
     m_marbleImgs[marble->model()]=oroIds;
     
-    return 0; //Item doesnt stretch the section height
+    return 0; //Item doesn't stretch the section height
 }
 
 void KoReportItemMaps::requestRedraw()

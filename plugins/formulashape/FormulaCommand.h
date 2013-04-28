@@ -46,7 +46,7 @@ class TableRowElement;
 
 class FormulaCommand :  public KUndo2Command {
 public:
-    FormulaCommand(KUndo2Command* parent=0);
+    explicit FormulaCommand(KUndo2Command *parent=0);
     
     virtual void changeCursor(FormulaCursor& cursor, bool undo) const;
 

@@ -35,7 +35,7 @@ class SQLiteDriver : public Driver
     KEXIDB_DRIVER
 
 public:
-    SQLiteDriver(QObject *parent, const QVariantList &args = QVariantList());
+    explicit SQLiteDriver(QObject *parent, const QVariantList &args = QVariantList());
     virtual ~SQLiteDriver();
 
     /*! \return true if \a n is a system object name;

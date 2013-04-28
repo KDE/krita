@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Image Resize and Scale Plugin
 Name[bg]=Приставка за преоразмеряване и мащабиране
+Name[bs]=Dodatak za promjenu veličine slike i skaliranja
 Name[ca]=Connector de redimensionament i escalat d'imatge
 Name[ca@valencia]=Connector de redimensionament i escalat d'imatge
 Name[da]=Plugin for størrelsesændring og skalering
@@ -13,7 +14,7 @@ Name[fa]=تغییر اندازه تصویر و مقیاس‌بندی وصله
 Name[fi]=Liitännäinen kuvan koon muuttamista ja skaalaamista varten
 Name[fr]=Module de redimensionnement d'images
 Name[fy]=Grutte wizigje en skale fan ôfbylding plugin
-Name[gl]=Plugin de Redimensionamento e Escalado da Imaxe
+Name[gl]=Complemento de redimensión de imaxes
 Name[he]=תוסף לשינוי גודל וזוויות של תמונ
 Name[hi]=छवि आकार बदलने का प्लगइन
 Name[hne]=फोटू आकार बदले के प्लगइन
@@ -44,4 +45,4 @@ Name[zh_TW]=圖片大小與縮放外掛程式
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaimagesize
-X-Krita-Version=5
+X-Krita-Version=27

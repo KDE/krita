@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Sobel Filter
 Name[bg]=Филтър Sobel
+Name[bs]=Filter za Sobel
 Name[ca]=Filtre Sobel
 Name[ca@valencia]=Filtre Sobel
 Name[cy]=Hidlen Sobel
@@ -11,7 +12,7 @@ Name[en_GB]=Sobel Filter
 Name[es]=Filtro Sobel
 Name[et]=Sobeli filter
 Name[fa]=پالایه Sobel
-Name[fi]=Sobel-suodin
+Name[fi]=Sobel-suodatin
 Name[fr]=Filtre de Sobel
 Name[fy]=Sobelfilter
 Name[ga]=Scagaire Sobel
@@ -43,4 +44,4 @@ Name[zh_TW]=Sobel 過濾器
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritasobelfilter
-X-Krita-Version=5
+X-Krita-Version=27

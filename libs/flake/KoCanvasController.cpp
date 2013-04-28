@@ -69,7 +69,6 @@ void KoCanvasController::setCanvasMode(CanvasMode mode)
         d->preferredCenterFractionX = 0.5;
         d->preferredCenterFractionY = 0.5;
         break;
-    case Presentation:
     case Spreadsheet:
         d->preferredCenterFractionX = 0;
         d->preferredCenterFractionY = 0;

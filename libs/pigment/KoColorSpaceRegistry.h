@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOCOLORSPACEFACTORYREGISTRY_H
-#define KOCOLORSPACEFACTORYREGISTRY_H
+#ifndef KOCOLORSPACEREGISTRY_H
+#define KOCOLORSPACEREGISTRY_H
 
 #include <QObject>
 #include <QList>
@@ -152,8 +152,6 @@ public:
     QList<const KoColorProfile *>  profilesFor(const QString& id) const;
     const KoColorSpaceFactory* colorSpaceFactory(const QString &colorSpaceId) const;
 
-    KoColorSpace* grabColorSpace(const KoColorSpace*);
-    void releaseColorSpace(KoColorSpace*);
 private:
     /**
      * Return a colorspace that works with the parameter profile.
@@ -335,4 +333,4 @@ private:
     Private * const d;
 };
 
-#endif // KOCOLORSPACEFACTORYREGISTRY_H
+#endif // KOCOLORSPACEREGISTRY_H

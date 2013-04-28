@@ -53,7 +53,7 @@ public:
 
     /**
      * Convolve all channels in src using the specified kernel; there is only one kernel for all
-     * channels possible. By default the the border pixels are not convolved, that is, convolving
+     * channels possible. By default the border pixels are not convolved, that is, convolving
      * starts with at (x + kernel.width/2, y + kernel.height/2) and stops at w - (kernel.width/2)
      * and h - (kernel.height/2)
      *

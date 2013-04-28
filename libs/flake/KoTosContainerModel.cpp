@@ -22,7 +22,7 @@
 #include "KoTextShapeDataBase.h"
 #include "KoTosContainer.h"
 
-#include <KDebug>
+#include <kdebug.h>
 
 KoTosContainerModel::KoTosContainerModel()
 : m_textShape(0)

@@ -33,6 +33,9 @@
 #include "kis_linewidth_option.h"
 #include "kis_offset_scale_option.h"
 
+class KisDabCache;
+
+
 class KisSketchPaintOp : public KisPaintOp
 {
 
@@ -69,6 +72,7 @@ private:
     int m_count;
     KisPainter * m_painter;
     KisBrushSP m_brush;
+    KisDabCache *m_dabCache;
 
 private:
     void drawConnection(const QPointF &start, const QPointF &end, double lineWidth);

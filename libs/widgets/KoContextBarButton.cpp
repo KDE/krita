@@ -23,7 +23,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <kiconloader.h>
-#include <KGlobalSettings>
+#include <kicon.h>
+#include <kglobalsettings.h>
 
 // Qt
 #include <QStyleOptionToolButton>
@@ -49,10 +50,10 @@ KoContextBarButton::KoContextBarButton(const QString &iconName, QWidget* parent)
 , m_fadingValue(0)
 , m_fadingTimeLine(0)
 {
-    const int size = KIconLoader::global()->currentSize(KIconLoader::Small);
+    const int size = IconSize(KIconLoader::Small);
     setIconSize(QSize(size, size));
     setAutoRaise(true);
-    setIcon(SmallIcon(iconName));
+    setIcon(KIcon(iconName));
 }
 
 
@@ -89,7 +90,7 @@ void KoContextBarButton::paintEvent(QPaintEvent*)
     painter.fillPath(path, color);
 
     if (opt.state & QStyle::State_Raised && opt.state & QStyle::State_Enabled) {
-        // Botton shadow
+        // Bottom shadow
         QLinearGradient gradient(rectF.bottomLeft(), rectF.bottomLeft() - QPoint(0, 5));
         gradient.setColorAt(0, QColor::fromHsvF(0, 0, 0, .3));
         gradient.setColorAt(1, Qt::transparent);

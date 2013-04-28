@@ -25,9 +25,7 @@
 #include "krita_export.h"
 
 #include <QRect>
-
 #include <KoUpdater.h>
-typedef QPointer<KoUpdater> KoUpdaterPtr;
 
 class KisPaintDevice;
 class KisFilterStrategy;
@@ -56,7 +54,7 @@ public:
                        double rotation,
                        qint32  xtranslate, qint32  ytranslate,
                        KoUpdaterPtr progress,
-                       KisFilterStrategy *filter, bool fixBorderAlpha = false);
+                       KisFilterStrategy *filter);
     ~KisTransformWorker();
 
     /**
@@ -74,6 +72,15 @@ public:
      * @param selection optional selection that will be used for the mirror
      */
     static QRect mirrorY(KisPaintDeviceSP dev, qreal axis = -1.0f, const KisSelection* selection = 0);
+
+    /**
+     * Offset the specified device with wraping around edges of rect specified as QRect(0,0,wrapSize.width, wrapSize.height)*
+     * @param device device to be offset
+     * @param offsetPosition position where the new origin will be
+     * @param wrapSize width and height of the wrap edge, usual scenario is to use canvas width&height
+     *
+     **/
+    static void offset(KisPaintDeviceSP device, const QPoint &offsetPosition, const QRect &wrapRect);
 
 
 public:
@@ -109,38 +116,26 @@ private:
                                           KisPaintDevice* dst,
                                           double xscale,
                                           double  shear,
-                                          qint32 dx,
-                                          KisFilterStrategy *filterStrategy, bool fixBorderAlpha);
+                                          double dx,
+                                          KisFilterStrategy *filterStrategy,
+                                          int portion);
 
     friend class KisTransformWorkerTest;
 
-    static QRect rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst,
-                            QRect boundRect,
-                            KoUpdaterPtr progressUpdater,
-                            int &lastProgressReport,
-                            int &progressTotalSteps,
-                            int &progressStep);
-
-    static QRect rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP dst,
+    static QRect rotateRight90(KisPaintDeviceSP dev,
                                QRect boundRect,
                                KoUpdaterPtr progressUpdater,
-                               int &lastProgressReport,
-                               int &progressTotalSteps,
-                               int &progressStep);
+                               int portion);
 
-    static QRect rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst,
+    static QRect rotateLeft90(KisPaintDeviceSP dev,
                               QRect boundRect,
                               KoUpdaterPtr progressUpdater,
-                              int &lastProgressReport,
-                              int &progressTotalSteps,
-                              int &progressStep);
+                              int portion);
 
-    static QRect rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst,
+    static QRect rotate180(KisPaintDeviceSP dev,
                            QRect boundRect,
                            KoUpdaterPtr progressUpdater,
-                           int &lastProgressReport,
-                           int &progressTotalSteps,
-                           int &progressStep);
+                           int portion);
 
 private:
     KisPaintDeviceSP m_dev;
@@ -150,12 +145,7 @@ private:
     qint32  m_xtranslate, m_ytranslate;
     KoUpdaterPtr m_progressUpdater;
     KisFilterStrategy *m_filter;
-    int m_progressTotalSteps;
-    int m_progressStep;
-    int m_lastProgressReport;
     QRect m_boundRect;
-
-    bool m_fixBorderAlpha;
 };
 
 #endif // KIS_TRANSFORM_VISITOR_H_

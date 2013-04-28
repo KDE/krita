@@ -26,8 +26,8 @@
 #include <KoTextDocument.h>
 #include <KoList.h>
 
-#include <KDebug>
-#include <KLocale>
+#include <kdebug.h>
+#include <klocale.h>
 #include <QTextList>
 #include <QTextDocument>
 #include <QAbstractTextDocumentLayout>
@@ -308,40 +308,34 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
             //find the previous list of the same level
             QTextList *previousTextList = listContinued->textLists().at(level - 1).data();
             if (previousTextList) {
-                const QTextBlock textBlock = previousTextList->item(previousTextList->count() - 1);
-                KoTextBlockData *blockData = 0;
-                if (textBlock.isValid() && (blockData = dynamic_cast<KoTextBlockData *>(textBlock.userData()))) {
-                    index = blockData->counterIndex() + 1; //resume the previous list count
+                QTextBlock textBlock = previousTextList->item(previousTextList->count() - 1);
+                if (textBlock.isValid()) {
+                    index = KoTextBlockData(textBlock).counterIndex() + 1; //resume the previous list count
                 }
             }
         } else if (m_textList->itemNumber(block) > 0) {
-            const QTextBlock textBlock = m_textList->item(m_textList->itemNumber(block) - 1);
-            KoTextBlockData *blockData = 0;
-            if (textBlock.isValid() && (blockData = dynamic_cast<KoTextBlockData *>(textBlock.userData()))) {
-                index = blockData->counterIndex() + 1; //resume the previous list count
+            QTextBlock textBlock = m_textList->item(m_textList->itemNumber(block) - 1);
+            if (textBlock.isValid()) {
+                index = KoTextBlockData(textBlock).counterIndex() + 1; //resume the previous list count
             }
         }
     }
 
     qreal width = 0.0;
-    KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
-    if (!data) {
-        data = new KoTextBlockData();
-        block.setUserData(data);
-    }
+    KoTextBlockData blockData(block);
 
     if (blockFormat.boolProperty(KoParagraphStyle::UnnumberedListItem)
         || blockFormat.boolProperty(KoParagraphStyle::IsListHeader)) {
-        data->setCounterPlainText(QString());
-        data->setCounterPrefix(QString());
-        data->setCounterSuffix(QString());
-        data->setPartialCounterText(QString());
+        blockData.setCounterPlainText(QString());
+        blockData.setCounterPrefix(QString());
+        blockData.setCounterSuffix(QString());
+        blockData.setPartialCounterText(QString());
         // set the counter for the current un-numbered list to the counter index of the previous list item.
         // index-1 because the list counter would have already incremented by one
-        data->setCounterIndex(index - 1);
+        blockData.setCounterIndex(index - 1);
         if (blockFormat.boolProperty(KoParagraphStyle::IsListHeader)) {
-            data->setCounterWidth(format.doubleProperty(KoListStyle::MinimumWidth));
-            data->setCounterSpacing(0);
+            blockData.setCounterWidth(format.doubleProperty(KoListStyle::MinimumWidth));
+            blockData.setCounterSpacing(0);
         }
         return;
     }
@@ -375,17 +369,14 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
 
             if (checkLevel <= otherLevel)
                 continue;
-            /*if(needsRecalc(b->textList())) {
-                    TODO
-                } */
-            KoTextBlockData *otherData = dynamic_cast<KoTextBlockData*>(b.userData());
-            if (! otherData) {
-                //kWarning(32500) << "Missing KoTextBlockData, Skipping textblock";
+
+            KoTextBlockData otherData(b);
+            if (!otherData.hasCounterData()) {
                 continue;
             }
             if (tmpDisplayLevel - 1 < otherLevel) { // can't just copy it fully since we are
                 // displaying less then the full counter
-                item += otherData->partialCounterText();
+                item += otherData.partialCounterText();
                 tmpDisplayLevel--;
                 checkLevel--;
                 for (int i = otherLevel + 1; i < level; i++) {
@@ -396,7 +387,7 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
             } else { // just copy previous counter as prefix
                 QString otherPrefix = lf.stringProperty(KoListStyle::ListItemPrefix);
                 QString otherSuffix = lf.stringProperty(KoListStyle::ListItemSuffix);
-                QString pureCounter = otherData->counterText().mid(otherPrefix.size());
+                QString pureCounter = otherData.counterText().mid(otherPrefix.size());
                 pureCounter = pureCounter.left(pureCounter.size() - otherSuffix.size());
                 item += pureCounter;
                 for (int i = otherLevel + 1; i < level; i++)
@@ -468,13 +459,13 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
         }
     }
 
-    data->setCounterIsImage(listStyle == KoListStyle::ImageItem);
-    data->setPartialCounterText(partialCounterText);
-    data->setCounterIndex(index);
+    blockData.setCounterIsImage(listStyle == KoListStyle::ImageItem);
+    blockData.setPartialCounterText(partialCounterText);
+    blockData.setCounterIndex(index);
     item += partialCounterText;
-    data->setCounterPlainText(item);
-    data->setCounterPrefix(prefix);
-    data->setCounterSuffix(suffix);
+    blockData.setCounterPlainText(item);
+    blockData.setCounterPrefix(prefix);
+    blockData.setCounterSuffix(suffix);
     if (calcWidth)
         width = m_fm.width(item);
     index++;
@@ -496,8 +487,8 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
         }
         width = qMax(width, format.doubleProperty(KoListStyle::MinimumWidth));
     }
-    data->setCounterWidth(width);
-    data->setCounterSpacing(counterSpacing);
+    blockData.setCounterWidth(width);
+    blockData.setCounterSpacing(counterSpacing);
     //kDebug(32500);
 }
 
@@ -506,8 +497,6 @@ bool ListItemsHelper::needsRecalc(QTextList *textList)
 {
     Q_ASSERT(textList);
     QTextBlock tb = textList->item(0);
-    KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(tb.userData());
-    if (data == 0)
-        return true;
-    return !data->hasCounterData();
+    KoTextBlockData blockData(tb);
+    return !blockData.hasCounterData();
 }

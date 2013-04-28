@@ -30,6 +30,7 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 
+#include <KoIcon.h>
 #include <KoPointerEvent.h>
 #include <KoViewConverter.h>
 #include <KoCanvasController.h>
@@ -70,9 +71,7 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
 {
     m_explicitShowOutline = false;
 
-    m_smooth = true;
     m_assistant = false;
-    m_smoothness = 1.0;
     m_magnetism = 1.0;
 
     setSupportOutline(true);
@@ -88,13 +87,13 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
 
     if (!collection->action("increase_brush_size")) {
         KAction *increaseBrushSize = new KAction(i18n("Increase Brush Size"), collection);
-        increaseBrushSize->setShortcut(Qt::Key_Period);
+        increaseBrushSize->setShortcut(Qt::Key_BracketRight);
         collection->addAction("increase_brush_size", increaseBrushSize);
     }
 
     if (!collection->action("decrease_brush_size")) {
         KAction *decreaseBrushSize = new KAction(i18n("Decrease Brush Size"), collection);
-        decreaseBrushSize->setShortcut(Qt::Key_Comma);
+        decreaseBrushSize->setShortcut(Qt::Key_BracketLeft);
         collection->addAction("decrease_brush_size", decreaseBrushSize);
     }
 
@@ -159,7 +158,7 @@ void KisToolFreehand::initStroke(KoPointerEvent *event)
 {
     setCurrentNodeLocked(true);
 
-    m_helper->setSmoothness(m_smooth, m_smoothness);
+    m_helper->setSmoothness(m_smoothingOptions);
     m_helper->initPaint(event, canvas()->resourceManager(),
                         image(),
                         image().data(),
@@ -212,6 +211,11 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
             !specialModifierActive()) {
 
         requestUpdateOutline(e->point);
+
+        if (currentNode() && currentNode()->inherits("KisShapeLayer")) {
+            KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
+            canvas2->view()->showFloatingMessage(i18n("Can't paint on vector layer."), koIcon("draw-brush"));
+        }
 
         if (nodePaintAbility() != PAINT)
             return;
@@ -275,7 +279,12 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
 {
     if (mode() == KisTool::PAINT_MODE &&
             e->button() == Qt::LeftButton) {
-
+        if (m_smoothingOptions.smoothingType == KisSmoothingOptions::WEIGHTED_SMOOTHING) {
+            m_smoothingOptions.smoothingType = KisSmoothingOptions::SIMPLE_SMOOTHING;
+            m_helper->setSmoothness(m_smoothingOptions);
+            doStroke(e);
+            m_smoothingOptions.smoothingType =  KisSmoothingOptions::WEIGHTED_SMOOTHING;
+        }
         endStroke();
 
         if (m_assistant) {
@@ -328,11 +337,6 @@ void KisToolFreehand::gesture(const QPointF &offsetInDocPixels, const QPointF &i
 bool KisToolFreehand::wantsAutoScroll() const
 {
     return false;
-}
-
-void KisToolFreehand::setSmooth(bool smooth)
-{
-    m_smooth = smooth;
 }
 
 void KisToolFreehand::setAssistant(bool assistant)

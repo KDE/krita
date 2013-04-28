@@ -29,7 +29,7 @@ class ChangeTracker : public QObject
 {
     Q_OBJECT
 public:
-    ChangeTracker(TextTool *parent);
+    explicit ChangeTracker(TextTool *parent);
 
     void setDocument(QTextDocument * document);
     

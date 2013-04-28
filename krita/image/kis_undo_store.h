@@ -29,22 +29,31 @@ class KUndo2Command;
 
 
 /**
- * Undo listeners want to be notified of undo and redo actions.
- * add notification is given _before_ the command is added to the
- * stack.
- * execute notification is given on undo and redo
+ * See also: http://community.kde.org/Krita/Undo_adapter_vs_Undo_store
+ *
+ * Split the functionality of KisUndoAdapter into two classes:
+ * KisUndoStore and KisUndoAdapter. The former one works as an
+ * interface to an external storage of the undo information:
+ * undo stack, KoDocument, /dev/null. The latter one defines the
+ * behavior of the system when someone wants to add a command. There
+ * are three variants:
+ *    1) KisSurrogateUndoAdapter -- saves commands directly to the
+ *       internal stack. Used for wrapping around legacy code into
+ *       a single command.
+ *    2) KisLegacyUndoAdapter -- blocks the strokes and updates queue,
+ *       and then adds the command to a store
+ *    3) KisPostExecutionUndoAdapter -- used by the strokes. It doesn't
+ *       call redo() when you add a command. It is assumed, that you have
+ *       already executed the command yourself and now just notify
+ *       the system about it. Warning: it doesn't inherit KisUndoAdapter
+ *       because it doesn't fit the contract of this class. And, more
+ *       important, KisTransaction should work differently with this class.
+ *
+ * The ownership on the KisUndoStore (that substituted KisUndoAdapter
+ * in the document's code) now belongs to the image. It means that
+ * KisDoc2::createUndoStore() is just a factory method, the document
+ * doesn't store the undo store itself.
  */
-class KisCommandHistoryListener
-{
-
-public:
-
-    KisCommandHistoryListener() {}
-    virtual ~KisCommandHistoryListener() {}
-    virtual void notifyCommandAdded(const KUndo2Command * cmd) = 0;
-    virtual void notifyCommandExecuted(const KUndo2Command * cmd) = 0;
-};
-
 class KRITAIMAGE_EXPORT KisUndoStore
 {
 public:
@@ -52,9 +61,6 @@ public:
     virtual ~KisUndoStore();
 
 public:
-    void setCommandHistoryListener(KisCommandHistoryListener *listener);
-    void removeCommandHistoryListener(KisCommandHistoryListener *listener);
-
     /**
      * WARNING: All these methods are not considered as thread-safe
      */
@@ -65,13 +71,8 @@ public:
     virtual void beginMacro(const QString& macroName) = 0;
     virtual void endMacro() = 0;
 
-protected:
-    void notifyCommandAdded(const KUndo2Command *command);
-    void notifyCommandExecuted(const KUndo2Command *command);
-
 private:
-    Q_DISABLE_COPY(KisUndoStore);
-    QVector<KisCommandHistoryListener*> m_undoListeners;
+    Q_DISABLE_COPY(KisUndoStore)
 };
 
 

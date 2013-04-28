@@ -29,7 +29,7 @@
 #include "swap/kis_legacy_tile_compressor.h"
 #include "swap/kis_tile_compressor_factory.h"
 
-#include <KoStore.h>
+#include "kis_paint_device_writer.h"
 
 #include "kis_global.h"
 //#include "kis_debug.h"
@@ -117,15 +117,14 @@ void KisTiledDataManager::setDefaultPixelImpl(const quint8 *defaultPixel)
     memcpy(m_defaultPixel, defaultPixel, pixelSize());
 }
 
-bool KisTiledDataManager::write(KoStore *store)
+bool KisTiledDataManager::write(KisPaintDeviceWriter &store)
 {
     QReadLocker locker(&m_lock);
-    if (!store) return false;
 
     if(CURRENT_VERSION == LEGACY_VERSION) {
         char str[80];
         sprintf(str, "%d\n", m_hashTable->numTiles());
-        store->write(str, strlen(str));
+        store.write(str, strlen(str));
     }
     else {
         writeTilesHeader(store, m_hashTable->numTiles());
@@ -145,15 +144,14 @@ bool KisTiledDataManager::write(KoStore *store)
 
     return true;
 }
-bool KisTiledDataManager::read(KoStore *store)
+bool KisTiledDataManager::read(QIODevice *stream)
 {
-    if (!store) return false;
+    if (!stream) return false;
     clear();
 
     QWriteLocker locker(&m_lock);
     KisMementoSP nothing = m_mementoManager->getMemento();
 
-    QIODevice *stream = store->device();
     if (!stream) {
         m_mementoManager->commit();
         return false;
@@ -185,14 +183,14 @@ bool KisTiledDataManager::read(KoStore *store)
         KisTileCompressorFactory::create(tilesVersion);
 
     for (quint32 i = 0; i < numTiles; i++) {
-        compressor->readTile(store, this);
+        compressor->readTile(stream, this);
     }
 
     m_mementoManager->commit();
     return true;
 }
 
-bool KisTiledDataManager::writeTilesHeader(KoStore *store, quint32 numTiles)
+bool KisTiledDataManager::writeTilesHeader(KisPaintDeviceWriter &store, quint32 numTiles)
 {
     QString buffer;
 
@@ -207,7 +205,7 @@ bool KisTiledDataManager::writeTilesHeader(KoStore *store, quint32 numTiles)
         .arg(pixelSize())
         .arg(numTiles);
 
-    store->write(buffer.toAscii());
+    store.write(buffer.toLatin1());
     return true;
 }
 

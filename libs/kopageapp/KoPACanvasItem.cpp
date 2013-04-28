@@ -20,27 +20,25 @@
 
 #include "KoPACanvasItem.h"
 
-#include <QStyleOptionGraphicsItem>
-#include <QGraphicsSceneResizeEvent>
-#include <QGraphicsSceneMouseEvent>
-#include <QGraphicsSceneWheelEvent>
-
-#include <KoShapeManager.h>
-#include <KoToolProxy.h>
-#include <KoUnit.h>
-#include <KoText.h>
-
 #include "KoPADocument.h"
 #include "KoPAView.h"
 #include "KoPAViewMode.h"
 #include "KoPAPage.h"
 #include "KoPAPageProvider.h"
 
-#include <kxmlguifactory.h>
+#include <KoShapeManager.h>
+#include <KoToolProxy.h>
+#include <KoUnit.h>
+#include <KoText.h>
 
-#include <KAction>
-#include <QMenu>
+#include <kxmlguifactory.h>
+#include <kaction.h>
+
+#include <QStyleOptionGraphicsItem>
+#include <QGraphicsSceneResizeEvent>
 #include <QGraphicsSceneMouseEvent>
+#include <QGraphicsSceneWheelEvent>
+#include <QMenu>
 
 KoPACanvasItem::KoPACanvasItem( KoPADocument * doc)
     : QGraphicsWidget()

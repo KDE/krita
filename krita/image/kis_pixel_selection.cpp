@@ -26,8 +26,9 @@
 #include <QPoint>
 #include <QPolygon>
 
-#include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoColorModelStandardIds.h>
 #include <KoIntegerMaths.h>
 #include <KoCompositeOp.h>
 
@@ -65,21 +66,12 @@ KisPixelSelection::~KisPixelSelection()
     delete m_d;
 }
 
-KisPaintDeviceSP KisPixelSelection::createThumbnailDevice(qint32 w, qint32 h, const KisSelection * selection, QRect rect) const
+const KoColorSpace *KisPixelSelection::compositionSourceColorSpace() const
 {
-    KisPaintDeviceSP dev =
-        KisPaintDevice::createThumbnailDevice(w, h, selection, rect);
-
-    QRect bounds = dev->exactBounds();
-    KisHLineIteratorSP it = dev->createHLineIteratorNG(bounds.x(), bounds.y(), bounds.width());
-
-    for (int y2 = bounds.y(); y2 < bounds.height() + bounds.y(); ++y2) {
-        do {
-            *(it->rawData()) = MAX_SELECTED - *(it->rawData());
-        } while (it->nextPixel());
-        it->nextRow();
-    }
-    return dev;
+    return KoColorSpaceRegistry::instance()->
+        colorSpace(GrayAColorModelID.id(),
+                   Integer8BitsColorDepthID.id(),
+                   QString());
 }
 
 void KisPixelSelection::select(const QRect & rc, quint8 selectedness)
@@ -116,6 +108,8 @@ void KisPixelSelection::applySelection(KisPixelSelectionSP selection, SelectionA
 void KisPixelSelection::addSelection(KisPixelSelectionSP selection)
 {
     QRect r = selection->selectedRect();
+    if (r.isEmpty()) return;
+
     KisHLineIteratorSP dst = createHLineIteratorNG(r.x(), r.y(), r.width());
     KisHLineConstIteratorSP src = selection->createHLineConstIteratorNG(r.x(), r.y(), r.width());
     for (int i = 0; i < r.height(); ++i) {
@@ -134,6 +128,9 @@ void KisPixelSelection::addSelection(KisPixelSelectionSP selection)
 void KisPixelSelection::subtractSelection(KisPixelSelectionSP selection)
 {
     QRect r = selection->selectedRect();
+    if (r.isEmpty()) return;
+
+
     KisHLineIteratorSP dst = createHLineIteratorNG(r.x(), r.y(), r.width());
     KisHLineConstIteratorSP src = selection->createHLineConstIteratorNG(r.x(), r.y(), r.width());
     for (int i = 0; i < r.height(); ++i) {
@@ -150,8 +147,9 @@ void KisPixelSelection::subtractSelection(KisPixelSelectionSP selection)
 }
 
 void KisPixelSelection::intersectSelection(KisPixelSelectionSP selection)
-{
+{    
     QRect r = selection->selectedRect().united(selectedRect());
+    if (r.isEmpty()) return;
 
     KisHLineIteratorSP dst = createHLineIteratorNG(r.x(), r.y(), r.width());
     KisHLineConstIteratorSP src = selection->createHLineConstIteratorNG(r.x(), r.y(), r.width());
@@ -189,22 +187,10 @@ void KisPixelSelection::invert()
     QRect rc = region().boundingRect();
 
     if (!rc.isEmpty()) {
-#if 0
-        quint8 *bytes = new quint8[rc.width()];
-        for(int row = rc.y(); row < rc.height(); ++row) {
-            readBytes(bytes, rc.x(), row, rc.width(), 1);
-            for (int i = 0; i < rc.width(); ++i) {
-                bytes[i] = MAX_SELECTED - bytes[i];
-            }
-            writeBytes(bytes, rc.x(), row, rc.width(), 1);
-        }
-        delete []bytes;
-#else
         KisRectIteratorSP it = createRectIteratorNG(rc.x(), rc.y(), rc.width(), rc.height());
         do {
             *(it->rawData()) = MAX_SELECTED - *(it->rawData());
         } while (it->nextPixel());
-#endif
     }
     quint8 defPixel = MAX_SELECTED - *defaultPixel();
     setDefaultPixel(&defPixel);

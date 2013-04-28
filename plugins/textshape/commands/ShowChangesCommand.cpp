@@ -26,13 +26,13 @@
 #include <KoTextDocument.h>
 #include <KoTextDocumentLayout.h>
 #include <KoTextEditor.h>
-#include <KoTextAnchor.h>
+#include <KoShapeAnchor.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoCanvasBase.h>
 #include <KoShapeController.h>
 #include <KoShapeContainer.h>
 
-#include <KAction>
+#include <kaction.h>
 #include <klocale.h>
 
 #include <QTextDocument>
@@ -107,32 +107,12 @@ void ShowChangesCommand::enableDisableStates(bool showChanges)
     m_textEditor->setCharFormat(format);
 }
 
-bool isPositionLessThan(KoChangeTrackerElement *element1, KoChangeTrackerElement *element2)
-{
-    return element1->getDeleteChangeMarker()->position() < element2->getDeleteChangeMarker()->position();
-}
-
 void ShowChangesCommand::insertDeletedChanges()
 {
     int numAddedChars = 0;
     QVector<KoChangeTrackerElement *> elementVector;
     KoTextDocument(m_textEditor->document()).changeTracker()->getDeletedChanges(elementVector);
-    qSort(elementVector.begin(), elementVector.end(), isPositionLessThan);
-
-    foreach (KoChangeTrackerElement *element, elementVector) {
-        if (element->isValid() && element->getDeleteChangeMarker()) {
-            QTextCursor caret(element->getDeleteChangeMarker()->document());
-            caret.setPosition(element->getDeleteChangeMarker()->position() + numAddedChars +  1);
-            QTextCharFormat f = caret.charFormat();
-            f.setProperty(KoCharacterStyle::ChangeTrackerId, element->getDeleteChangeMarker()->changeId());
-            f.clearProperty(KoCharacterStyle::InlineInstanceId);
-            caret.setCharFormat(f);
-            int insertPosition = caret.position();
-            KoChangeTracker::insertDeleteFragment(caret, element->getDeleteChangeMarker());
-            checkAndAddAnchoredShapes(insertPosition, KoChangeTracker::fragmentLength(element->getDeleteData()));
-            numAddedChars += KoChangeTracker::fragmentLength(element->getDeleteData());
-        }
-    }
+    qSort(elementVector.begin(), elementVector.end());
 }
 
 void ShowChangesCommand::checkAndAddAnchoredShapes(int position, int length)
@@ -146,11 +126,12 @@ void ShowChangesCommand::checkAndAddAnchoredShapes(int position, int length)
         QTextCharFormat fmt = cursor.charFormat();
         KoInlineObject *object = inlineObjectManager->inlineTextObject(fmt);
         Q_ASSERT(object);
-
+/* FIXME
         KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(object);
         if (!anchor) {
             continue;
         }
+        */
 #if 0
         // TODO -- since March 2010...
         KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_document->documentLayout());
@@ -177,21 +158,7 @@ void ShowChangesCommand::removeDeletedChanges()
     int numDeletedChars = 0;
     QVector<KoChangeTrackerElement *> elementVector;
     m_changeTracker->getDeletedChanges(elementVector);
-    qSort(elementVector.begin(), elementVector.end(), isPositionLessThan);
-
-    foreach(KoChangeTrackerElement *element, elementVector) {
-        if (element->isValid() && element->getDeleteChangeMarker()) {
-            QTextCursor caret(element->getDeleteChangeMarker()->document());
-            QTextCharFormat f;
-            int deletePosition = element->getDeleteChangeMarker()->position() + 1 - numDeletedChars;
-            caret.setPosition(deletePosition);
-            int deletedLength = KoChangeTracker::fragmentLength(element->getDeleteData());
-            caret.setPosition(deletePosition + deletedLength, QTextCursor::KeepAnchor);
-            checkAndRemoveAnchoredShapes(deletePosition, KoChangeTracker::fragmentLength(element->getDeleteData()));
-            caret.removeSelectedText();
-            numDeletedChars += KoChangeTracker::fragmentLength(element->getDeleteData());
-        }
-    }
+    qSort(elementVector.begin(), elementVector.end());
 }
 
 void ShowChangesCommand::checkAndRemoveAnchoredShapes(int position, int length)
@@ -205,6 +172,7 @@ void ShowChangesCommand::checkAndRemoveAnchoredShapes(int position, int length)
         QTextCharFormat fmt = cursor.charFormat();
         KoInlineObject *object = inlineObjectManager->inlineTextObject(fmt);
         Q_ASSERT(object);
+        /* FIXME
         KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(object);
         if (!anchor)
             continue;
@@ -212,6 +180,7 @@ void ShowChangesCommand::checkAndRemoveAnchoredShapes(int position, int length)
         KUndo2Command *shapeCommand = m_canvas->shapeController()->removeShape(anchor->shape());
         shapeCommand->redo();
         m_shapeCommands.push_front(shapeCommand);
+        */
     }
 }
 

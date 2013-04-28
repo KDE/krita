@@ -21,12 +21,18 @@
 
 class QRect;
 class QSize;
+class QPointF;
+class QPainterPath;
 #include <QVector>
 #include "krita_export.h"
 
 namespace KritaUtils
 {
     QVector<QRect> KRITAIMAGE_EXPORT splitRectIntoPatches(const QRect &rc, const QSize &patchSize);
+
+    QRegion KRITAIMAGE_EXPORT splitTriangles(const QPointF &center,
+                                             const QVector<QPointF> &points);
+    QRegion KRITAIMAGE_EXPORT splitPath(const QPainterPath &path);
 }
 
 #endif /* __KRITA_UTILS_H */

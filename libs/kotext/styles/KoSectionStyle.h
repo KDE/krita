@@ -54,27 +54,27 @@ class KOTEXT_EXPORT KoSectionStyle : public QObject
 public:
     enum Property {
         StyleId = QTextFormat::UserProperty + 1,
-        TextProgressionDirection
+        TextProgressionDirection,
+        ColumnCount,
+        ColumnData,
+        ColumnGapWidth,
+        SeparatorStyle,
+        SeparatorColor,
+        SeparatorVerticalAlignment,
+        SeparatorWidth,
+        SeparatorHeight
     };
 
     /// Constructor
-    KoSectionStyle(QObject *parent = 0);
+    explicit KoSectionStyle(QObject *parent = 0);
     /// Creates a KoSectionStyle with the given frame format and \a parent
-    KoSectionStyle(const QTextFrameFormat &frameFormat, QObject *parent = 0);
+    explicit KoSectionStyle(const QTextFrameFormat &frameFormat, QObject *parent = 0);
     /// Destructor
     ~KoSectionStyle();
 
     /// creates a clone of this style with the specified parent
     KoSectionStyle *clone(QObject *parent = 0) const;
 
-    /**
-     * Return the current columns settings.
-     */
-    KoColumns columns() const;
-    /**
-     * Set the new columns settings
-     */
-    void setColumns(const KoColumns &columns);
 
     /// duplicated property from QTextBlockFormat
     void setLeftMargin(qreal margin);
@@ -103,6 +103,30 @@ public:
     /// duplicated property from QTextBlockFormat
     int indent() const;
 #endif
+
+    void setColumnCount(int columnCount);
+    int columnCount() const;
+
+    void setColumnGapWidth(qreal columnGapWidth);
+    qreal columnGapWidth() const;
+
+    void setColumnData(const QList<KoColumns::ColumnDatum> &columnData);
+    QList<KoColumns::ColumnDatum> columnData() const;
+
+    void setSeparatorStyle(KoColumns::SeparatorStyle separatorStyle);
+    KoColumns::SeparatorStyle separatorStyle() const;
+
+    void setSeparatorColor(const QColor &separatorColor);
+    QColor separatorColor() const;
+
+    void setSeparatorVerticalAlignment(KoColumns::SeparatorVerticalAlignment separatorVerticalAlignment);
+    KoColumns::SeparatorVerticalAlignment separatorVerticalAlignment() const;
+
+    void setSeparatorWidth(qreal separatorWidth);
+    qreal separatorWidth() const;
+
+    void setSeparatorHeight(int separatorHeight);
+    int separatorHeight() const;
 
     /// set the parent style this one inherits its unset properties from.
     void setParentStyle(KoSectionStyle *parent);

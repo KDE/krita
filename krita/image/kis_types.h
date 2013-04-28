@@ -216,6 +216,10 @@ typedef KisSharedPtr<KisPaintOp> KisPaintOpSP;
 class KoID;
 typedef QList<KoID> KoIDList;
 
+class KoUpdater;
+template<class T> class QPointer;
+typedef QPointer<KoUpdater> KoUpdaterPtr;
+
 class KisProcessingVisitor;
 typedef KisSharedPtr<KisProcessingVisitor> KisProcessingVisitorSP;
 

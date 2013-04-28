@@ -92,7 +92,7 @@ public:
         Direction,                  ///< The direction of the text in the cell. This is a CellTextDirection.
         RotationAlign,              ///< How the edge of the text is aligned after rotation. This is a RotationAlignment
         TextWritingMode,            ///< KoText::Direction, the direction for writing text in the cell
-        VerticalGlyphOrientation,   ///< bool, specify wether this feature is enabled or not
+        VerticalGlyphOrientation,   ///< bool, specify whether this feature is enabled or not
         CellBackgroundBrush,        ///< the cell background brush, as QTextFormat::BackgroundBrush is used by paragraphs
         VerticalAlignment,          ///< the vertical alignment oinside the cell
         MasterPageName,             ///< Optional name of the master-page
@@ -105,9 +105,12 @@ public:
     };
 
     /// Constructor
-    KoTableCellStyle(QObject *parent = 0);
+    explicit KoTableCellStyle(QObject *parent = 0);
     /// Creates a KoTableCellStyle with the given table cell format, and \a parent
-    KoTableCellStyle(const QTextTableCellFormat &tableCellFormat, QObject *parent = 0);
+    explicit KoTableCellStyle(const QTextTableCellFormat &tableCellFormat, QObject *parent = 0);
+    KoTableCellStyle(const KoTableCellStyle &other);
+    KoTableCellStyle& operator=(const KoTableCellStyle &other);
+
     /// Destructor
     ~KoTableCellStyle();
 
@@ -154,7 +157,7 @@ public:
      *
      * @return the paragraph style
      */
-    KoParagraphStyle *paragraphStyle();
+    KoParagraphStyle *paragraphStyle() const;
 
     bool shrinkToFit() const;
     void setShrinkToFit(bool state);
@@ -298,7 +301,8 @@ public:
      * @param totalWidth the thickness of the border. Sum of outerwidth, spacing and innerwidth for double borders
      * @param color the color of the border line(s).
      */
-    void setEdge(KoBorder::Side side, KoBorder::BorderStyle style, qreal totalWidth, QColor color);
+    void setEdge(KoBorder::BorderSide side, KoBorder::BorderStyle style,
+                 qreal totalWidth, QColor color);
 
     /**
      * Set the properties of a double border.
@@ -310,7 +314,7 @@ public:
      * @param space the amount of spacing between the outer border and the inner border in case of style being double
      * @param innerWidth the thickness of the inner border line in case of style being double
      */
-    void setEdgeDoubleBorderValues(KoBorder::Side side, qreal innerWidth, qreal space);
+    void setEdgeDoubleBorderValues(KoBorder::BorderSide side, qreal innerWidth, qreal space);
 
     /**
      * Check if the border data has any borders.
@@ -334,8 +338,8 @@ public:
     qreal topOuterBorderWidth() const;
     qreal bottomOuterBorderWidth() const;
 
-    KoBorder::BorderData getEdge(KoBorder::Side side) const;
-    KoBorder::BorderStyle getBorderStyle(KoBorder::Side side) const;
+    KoBorder::BorderData getEdge(KoBorder::BorderSide side) const;
+    KoBorder::BorderStyle getBorderStyle(KoBorder::BorderSide side) const;
 signals:
     void nameChanged(const QString &newName);
 
@@ -362,7 +366,7 @@ private:
      * @param style the border style for this side.
      * @param edge the Edge that hold the properties values
      */
-    void setEdge(KoBorder::Side side, const KoBorder::BorderData &edge, KoBorder::BorderStyle style);
+    void setEdge(KoBorder::BorderSide side, const KoBorder::BorderData &edge, KoBorder::BorderStyle style);
 
     Q_DECLARE_PRIVATE(KoTableCellStyle)
 

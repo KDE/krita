@@ -32,6 +32,7 @@
 #include "KoIntegerMaths.h"
 #include "KoCompositeOpOver.h"
 #include "KoCompositeOpErase.h"
+#include "KoCompositeOpCopy2.h"
 #include "KoCompositeOpAlphaDarken.h"
 #include <colorprofiles/KoDummyColorProfile.h>
 
@@ -89,15 +90,15 @@ public:
 
                 d = dst;
 
-                for (qint32 i = cols; i > 0; i--, d++) {
+                for (qint32 i = cols; i > 0; --i, ++d) {
                     // If the mask tells us to completely not
                     // blend this pixel, continue.
                     if (mask != 0) {
                         if (mask[0] == OPACITY_TRANSPARENT_U8) {
-                            mask++;
+                            ++mask;
                             continue;
                         }
-                        mask++;
+                        ++mask;
                     }
                     // linesize is uninitialized here, so it just crashes
                     //memset(d, OPACITY_TRANSPARENT, linesize);
@@ -152,16 +153,16 @@ public:
             d = dst;
             s = src;
 
-            for (i = cols; i > 0; i--, d++, s++) {
+            for (i = cols; i > 0; --i, ++d, ++s) {
 
                 // If the mask tells us to completely not
                 // blend this pixel, continue.
                 if (mask != 0) {
                     if (mask[0] == OPACITY_TRANSPARENT_U8) {
-                        mask++;
+                        ++mask;
                         continue;
                     }
-                    mask++;
+                    ++mask;
                 }
 
                 if (d[PIXEL_MASK] <= s[PIXEL_MASK]) {
@@ -224,16 +225,16 @@ public:
             destination = dst;
             source = src;
 
-            for (i = cols; i > 0; i--, destination++, source++) {
+            for (i = cols; i > 0; --i, ++destination, ++source) {
 
                 // If the mask tells us to completely not
                 // blend this pixel, continue.
                 if (mask != 0) {
                     if (mask[0] == OPACITY_TRANSPARENT_U8) {
-                        mask++;
+                        ++mask;
                         continue;
                     }
-                    mask++;
+                    ++mask;
                 }
 
                 // here comes the math
@@ -263,6 +264,7 @@ KoAlphaColorSpace::KoAlphaColorSpace() :
     m_compositeOps << new KoCompositeOpOver<AlphaU8Traits>(this)
             << new CompositeClear(this)
             << new KoCompositeOpErase<AlphaU8Traits>(this)
+            << new KoCompositeOpCopy2<AlphaU8Traits>(this)
             << new CompositeSubtract(this)
             << new CompositeMultiply(this)
             << new KoCompositeOpAlphaDarken<AlphaU8Traits>(this);
@@ -296,21 +298,6 @@ quint8 KoAlphaColorSpace::difference(const quint8 *src1, const quint8 *src2) con
     return qAbs(src2[PIXEL_MASK] - src1[PIXEL_MASK]);
 }
 
-bool KoAlphaColorSpace::convertPixelsTo(const quint8 *src,
-                                        quint8 *dst, const KoColorSpace * dstColorSpace,
-                                        quint32 numPixels,
-                                        KoColorConversionTransformation::Intent /*renderingIntent*/) const
-{
-    // No lcms trickery here, we are only a opacity channel
-    qint32 size = dstColorSpace->pixelSize();
-
-    memset(dst, 0, numPixels * size);
-    dstColorSpace->applyInverseAlphaU8Mask(dst, src, numPixels);
-
-    return true;
-
-}
-
 QString KoAlphaColorSpace::channelValueText(const quint8 *pixel, quint32 channelIndex) const
 {
     Q_ASSERT(channelIndex < channelCount());
@@ -337,8 +324,8 @@ void KoAlphaColorSpace::convolveColors(quint8** colors, qreal * kernelValues, qu
         if (weight != 0) {
             totalAlpha += (*colors)[PIXEL_MASK] * weight;
         }
-        colors++;
-        kernelValues++;
+        ++colors;
+        ++kernelValues;
     }
 
     if (channelFlags.isEmpty() || channelFlags.testBit(PIXEL_MASK))
@@ -347,7 +334,9 @@ void KoAlphaColorSpace::convolveColors(quint8** colors, qreal * kernelValues, qu
 
 
 QImage KoAlphaColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 height,
-        const KoColorProfile *  /*dstProfile*/, KoColorConversionTransformation::Intent /*renderingIntent*/) const
+                                          const KoColorProfile *  /*dstProfile*/,
+                                          KoColorConversionTransformation::Intent /*renderingIntent*/,
+                                          KoColorConversionTransformation::ConversionFlags /*conversionFlags*/) const
 {
     QImage img(width, height, QImage::Format_Indexed8);
     QVector<QRgb> table;
@@ -357,7 +346,7 @@ QImage KoAlphaColorSpace::convertToQImage(const quint8 *data, qint32 width, qint
     quint8* data_img;
     for (int i = 0; i < height; ++i) {
         data_img=img.scanLine(i);
-        for (int j = 0; j < width; j++)
+        for (int j = 0; j < width; ++j)
             data_img[j]=*(data++);
     }
 
@@ -369,3 +358,7 @@ KoColorSpace* KoAlphaColorSpace::clone() const
     return new KoAlphaColorSpace();
 }
 
+bool KoAlphaColorSpace::preferCompositionInSourceColorSpace() const
+{
+    return true;
+}

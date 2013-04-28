@@ -38,6 +38,7 @@
 #include <kis_paint_layer.h>
 #include <kis_selection.h>
 #include <kis_shape_layer.h>
+#include <kis_file_layer.h>
 #include <kis_clone_layer.h>
 #include <kis_mask.h>
 #include <kis_filter_mask.h>
@@ -48,6 +49,7 @@
 #include <metadata/kis_meta_data_store.h>
 #include <metadata/kis_meta_data_io_backend.h>
 
+#include "kis_store_paintdevice_writer.h"
 #include "flake/kis_shape_selection.h"
 
 using namespace KRA;
@@ -59,7 +61,13 @@ KisKraSaveVisitor::KisKraSaveVisitor(KoStore *store, quint32 &count, const QStri
         , m_count(count)
         , m_name(name)
         , m_nodeFileNames(nodeFileNames)
+        , m_writer(new KisStorePaintDeviceWriter(store))
 {
+}
+
+KisKraSaveVisitor::~KisKraSaveVisitor()
+{
+    delete m_writer;
 }
 
 void KisKraSaveVisitor::setExternalUri(const QString &uri)
@@ -156,7 +164,7 @@ bool KisKraSaveVisitor::savePaintDevice(KisPaintDeviceSP device,
     // Layer data
     m_store->setCompressionEnabled(false);
     if (m_store->open(location)) {
-        if (!device->write(m_store)) {
+        if (!device->write(*m_writer)) {
             device->disconnect();
             m_store->close();
             return false;
@@ -211,9 +219,9 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
     if (node->inherits("KisMask")) {
         selection = static_cast<KisMask*>(node)->selection();
     } else if (node->inherits("KisAdjustmentLayer")) {
-        selection = static_cast<KisAdjustmentLayer*>(node)->selection();
+        selection = static_cast<KisAdjustmentLayer*>(node)->internalSelection();
     } else if (node->inherits("KisGeneratorLayer")) {
-        selection = static_cast<KisGeneratorLayer*>(node)->selection();
+        selection = static_cast<KisGeneratorLayer*>(node)->internalSelection();
     } else {
         return false;
     }
@@ -242,14 +250,15 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
 
 bool KisKraSaveVisitor::saveFilterConfiguration(KisNode* node)
 {
-    KisFilterConfiguration* filter = 0;
-    if (node->inherits("KisFilterMask")) {
-        filter = static_cast<KisFilterMask*>(node)->filter();
-    } else if (node->inherits("KisAdjustmentLayer")) {
-        filter = static_cast<KisAdjustmentLayer*>(node)->filter();
-    } else if (node->inherits("KisGeneratorLayer")) {
-        filter = static_cast<KisGeneratorLayer*>(node)->filter();
+    KisNodeFilterInterface *filterInterface =
+        dynamic_cast<KisNodeFilterInterface*>(node);
+
+    KisSafeFilterConfigurationSP filter;
+
+    if (filterInterface) {
+        filter = filterInterface->filter();
     }
+
     if (filter) {
         QString location = getLocation(node, DOT_FILTERCONFIG);
         if (m_store->open(location)) {
@@ -295,7 +304,7 @@ bool KisKraSaveVisitor::saveMetaData(KisNode* node)
 QString KisKraSaveVisitor::getLocation(KisNode* node, const QString& suffix)
 {
 
-    QString location = m_external ? QString::null : m_uri;
+    QString location = m_external ? QString() : m_uri;
     Q_ASSERT(m_nodeFileNames.contains(node));
     location += m_name + LAYER_PATH + m_nodeFileNames[node] + suffix;
     return location;

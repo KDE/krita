@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOCANVASCONTROLLERWIDGET_P_H
-#define KOCANVASCONTROLLERWIDGET_P_H
+#ifndef KOCANVASCONTROLLERWIDGETVIEWPORT_P_H
+#define KOCANVASCONTROLLERWIDGETVIEWPORT_P_H
 
 #include "KoCanvasControllerWidget.h"
 
@@ -33,7 +33,7 @@ class Viewport : public QWidget
 
 public:
 
-    Viewport(KoCanvasControllerWidget *parent);
+    explicit Viewport(KoCanvasControllerWidget *parent);
     ~Viewport() {}
 
     void setCanvas(QWidget *canvas);

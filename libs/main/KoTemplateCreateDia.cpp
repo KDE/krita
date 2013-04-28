@@ -39,6 +39,7 @@
 #include <ktemporaryfile.h>
 #include <klineedit.h>
 #include <klocale.h>
+#include <KoIcon.h>
 #include <KoDocument.h>
 #include <KoTemplates.h>
 #include <KoTemplateTree.h>
@@ -121,7 +122,7 @@ KoTemplateCreateDia::KoTemplateCreateDia(const char *templateType, const KCompon
     QVBoxLayout* leftbox = new QVBoxLayout();
     mbox->addLayout( leftbox );
 
-    QLabel *label=new QLabel(i18n("Name:"), mainwidget);
+    QLabel *label=new QLabel(i18nc("Template name", "Name:"), mainwidget);
     QHBoxLayout *namefield=new QHBoxLayout();
     leftbox->addLayout( namefield );
     namefield->addWidget(label);
@@ -468,7 +469,7 @@ void KoTemplateCreateDia::slotRemove() {
         }
 
     if(KMessageBox::warningContinueCancel(this, what,
-                                 removed,KGuiItem(i18n("&Delete"),"edit-delete"))==KMessageBox::Cancel) {
+                                 removed,KGuiItem(i18n("&Delete"), koIconName("edit-delete")))==KMessageBox::Cancel) {
         d->m_name->setFocus();
         return;
     }

@@ -80,6 +80,8 @@ KoReportPage::~KoReportPage()
 
 void KoReportPage::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
     painter->drawPixmap(QPoint(0, 0), *m_pixmap);
 }
 

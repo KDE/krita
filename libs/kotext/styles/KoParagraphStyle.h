@@ -159,7 +159,7 @@ public:
         HyphenationLadderCount,   ///< int, 0 means no limit, else limit the number of successive hyphenated line areas in a block
         PunctuationWrap,          ///< bool, whether a punctuation mark can be at the end of a full line (false) or not (true)
         VerticalAlignment,        ///< KoParagraphStyle::VerticalAlign, the alignment of this paragraph text
-        HiddenByTable,        ///< dont let this paragraph have any height
+        HiddenByTable,        ///< don't let this paragraph have any height
 
         NormalLineHeight,         ///< bool, internal property for reserved usage
         BibliographyData,
@@ -192,6 +192,8 @@ public:
     /// Destructor
     ~KoParagraphStyle();
 
+    virtual KoCharacterStyle::Type styleType() const;
+
     /// Creates a KoParagraphStyle that represents the formatting of \a block.
     static KoParagraphStyle *fromBlock(const QTextBlock &block, QObject *parent = 0);
 
@@ -207,9 +209,9 @@ public:
      *  be used instead of this value.
      * @see setLineSpacingFromFont
      */
-    void setLineHeightPercent(int lineHeight);
+    void setLineHeightPercent(qreal lineHeight);
     /// @see setLineHeightPercent
-    int lineHeightPercent() const;
+    qreal lineHeightPercent() const;
 
     /**
      * Sets the line height to a specific pt-based height, ignoring the font size.
@@ -473,7 +475,7 @@ public:
     KoBorder::BorderStyle bottomBorderStyle() const;
     void setBottomBorderColor(const QColor &color);
     QColor bottomBorderColor() const;
- 
+
     bool joinBorder() const;
     void setJoinBorder(bool value);
 
@@ -720,8 +722,14 @@ public:
 
     void applyParagraphListStyle(QTextBlock &block, const QTextBlockFormat &blockFormat) const;
 
+    /** Returns true if the style is in use.
+     */
+    bool isApplied() const;
+
+
 signals:
     void nameChanged(const QString &newName);
+    void styleApplied(const KoParagraphStyle*) const;
 
 private:
     /**
@@ -738,5 +746,6 @@ private:
     class Private;
     Private * const d;
 };
-Q_DECLARE_METATYPE(KoListStyle *);
+Q_DECLARE_METATYPE(KoListStyle *)
+Q_DECLARE_METATYPE(QSharedPointer<KoParagraphStyle>)
 #endif

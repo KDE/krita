@@ -20,6 +20,7 @@
 
 #include <KoToolFactoryBase.h>
 #include "kis_tool_select_base.h"
+#include <KoIcon.h>
 
 /**
  * Tool to select colors by pointing at a color on the image.
@@ -46,7 +47,7 @@ public:
         setToolTip(i18n("Select similar colors"));
         setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
-        setIcon("tool_similar_selection");
+        setIconName(koIconNameCStr("tool_similar_selection"));
         setPriority(57);
     }
 

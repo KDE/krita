@@ -18,7 +18,7 @@
  */
 #include "kis_raw_import.h"
 
-#include <KPluginFactory>
+#include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
 #include <KoColorSpace.h>
@@ -78,7 +78,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
 
     KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain -> outputDocument());
     if (!doc) {
-        return KoFilter::CreationError;
+        return KoFilter::NoDocumentCreated;
     }
 
     doc -> prepareForImport();

@@ -43,7 +43,7 @@ public:
      *
      * @param filename the file name to save and load from.
      */
-    KoResource(const QString& filename);
+    explicit KoResource(const QString &filename);
     virtual ~KoResource();
 
 public:

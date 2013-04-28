@@ -63,7 +63,8 @@ public:
         MirrorHorizontal,
         MirrorVertical,
         MirrorAxisCenter,
-        Opacity
+        Opacity,
+        HdrGamma
     };
 
 
@@ -83,6 +84,9 @@ public:
 
     float HDRExposure() const;
     void setHDRExposure(float exposure);
+
+    float HDRGamma() const;
+    void setHDRGamma(float gamma);
 
     KisPattern *currentPattern() const;
 
@@ -175,8 +179,8 @@ signals:
 private:
 
     KisView2 * m_view;
-    KoCanvasResourceManager * m_resourceManager;
-    const KoColorProfile * m_displayProfile;
+    KoCanvasResourceManager *m_resourceManager;
+    const KoColorProfile *m_displayProfile;
     bool m_fGChanged;
     QList<KisAbstractPerspectiveGrid*> m_perspectiveGrids;
 

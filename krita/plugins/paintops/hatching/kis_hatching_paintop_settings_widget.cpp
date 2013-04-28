@@ -41,6 +41,8 @@
 KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget* parent)
                                  : KisBrushBasedPaintopOptionWidget(parent)
 {
+    setPrecisionEnabled(true);
+
     //-------Adding widgets to the screen------------
     
     addPaintOpOption(new KisHatchingOptions());
@@ -52,6 +54,8 @@ KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget* par
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
     addPaintOpOption(new KisPaintActionTypeOption());
+
+    addTextureOptions();
 
     //-----Useful to read first:------
     /*
@@ -125,4 +129,3 @@ KisPropertiesConfiguration*  KisHatchingPaintOpSettingsWidget::configuration() c
     writeConfiguration(config);
     return config;
 }
-;

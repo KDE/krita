@@ -38,9 +38,20 @@
 
 
 KisGradientSlider::KisGradientSlider(QWidget *parent)
-        : QWidget(parent), m_black(0), m_white(255), m_gamma(1.0), m_gammaEnabled(false)
+        : QWidget(parent)
+        , m_leftmost(0)
+        , m_rightmost(0)
+        , m_grabIndex(0)
+        , m_scalingFactor(0)
+        , m_blackCursor(0)
+        , m_whiteCursor(0)
+        , m_gammaCursor(0)
+        , m_black(0)
+        , m_white(255)
+        , m_gamma(1.0)
+        , m_gammaEnabled(false)
+        , m_feedback(false)
 {
-    m_feedback = false;
     m_grabCursor = None;
 
     setMouseTracking(true);

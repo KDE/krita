@@ -45,7 +45,7 @@ CharacterGeneral::CharacterGeneral(QWidget *parent)
         , m_characterInheritedStyleModel(new StylesModel(0, StylesModel::CharacterStyle))
 {
     widget.setupUi(this);
-    // we dont have next style for character styles
+    // we don't have next style for character styles
     widget.nextStyle->setVisible(false);
     widget.label_2->setVisible(false);
     //
@@ -181,6 +181,11 @@ int CharacterGeneral::nextStyleId()
     }
 
     return m_styleManager->paragraphStyle(m_paragraphStyleModel->index(widget.nextStyle->currentIndex()).internalId())->styleId();
+}
+
+KoCharacterStyle *CharacterGeneral::style() const
+{
+    return m_style;
 }
 
 #include <CharacterGeneral.moc>

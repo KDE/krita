@@ -29,7 +29,7 @@ class MusicShape;
 
 class AddPartCommand : public KUndo2Command {
 public:
-    AddPartCommand(MusicShape* shape);
+    explicit AddPartCommand(MusicShape* shape);
     virtual void redo();
     virtual void undo();
 private:

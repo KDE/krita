@@ -17,6 +17,8 @@
 
 #include "kis_image_strip_scene.h"
 
+#include <KoIcon.h>
+
 #include <QDir>
 #include <QPainter>
 #include <QHash>
@@ -24,7 +26,6 @@
 #include <QGraphicsLinearLayout>
 #include <QGraphicsWidget>
 #include <QMutexLocker>
-#include <QIcon>
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // ------------- KisImageLoader ---------------------------------------------------------- //
@@ -77,14 +78,14 @@ void KisImageItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* opti
             painter->drawImage(offset, image);
         }
         else {
-            QIcon   icon = QIcon::fromTheme("image-missing");
+            QIcon   icon = koIcon("image-missing");
             QRect   rect = boundingRect().toRect();
             QPixmap img  = icon.pixmap(rect.size());
             painter->drawPixmap(rect, img, img.rect());
         }
     }
     else {
-        QIcon   icon = QIcon::fromTheme("image-loading");
+        QIcon   icon = koIcon("image-loading");
         QRect   rect = boundingRect().toRect();
         QPixmap img  = icon.pixmap(rect.size());
         painter->drawPixmap(rect, img, img.rect());

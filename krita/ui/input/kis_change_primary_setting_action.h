@@ -33,11 +33,9 @@ public:
     explicit KisChangePrimarySettingAction(KisInputManager* manager);
     virtual ~KisChangePrimarySettingAction();
 
-    virtual void begin(int shortcut);
-    virtual void end();
-    virtual void inputEvent(QEvent* event);
-
-    virtual bool isBlockingAutoRepeat() const;
+    void begin(int shortcut, QEvent *event);
+    void end(QEvent *event);
+    void mouseMoved(const QPointF &lastPos, const QPointF &pos);
 };
 
 #endif // KISCHANGEPRIMARYSETTINGACTION_H

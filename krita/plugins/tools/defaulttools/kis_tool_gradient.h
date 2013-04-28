@@ -33,6 +33,7 @@
 #include <kis_types.h>
 #include <kis_gradient_painter.h>
 #include <flake/kis_node_shape.h>
+#include <KoIcon.h>
 
 #include <opengl/kis_opengl.h>
 
@@ -122,7 +123,7 @@ public:
             : KoToolFactoryBase("KritaFill/KisToolGradient") {
         setToolTip(i18n("Draw a gradient."));
         setToolType(TOOL_TYPE_FILL);
-        setIcon("krita_tool_gradient");
+        setIconName(koIconNameCStr("krita_tool_gradient"));
         setShortcut(KShortcut(Qt::Key_G));
         setPriority(15);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

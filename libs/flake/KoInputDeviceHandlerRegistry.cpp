@@ -18,7 +18,7 @@
  */
 
 #include "KoInputDeviceHandlerRegistry.h"
-#include <KGlobal>
+#include <kglobal.h>
 
 #include <KoPluginLoader.h>
 
@@ -33,7 +33,7 @@ void KoInputDeviceHandlerRegistry::init()
     config.blacklist = "DevicePluginsDisabled";
     config.group = "calligra";
     KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Device"),
-                                     QString::fromLatin1("[X-Flake-MinVersion] <= 4"), config);
+                                     QString::fromLatin1("[X-Flake-PluginVersion] == 27"), config);
 
     foreach(const QString & id, keys()) {
         KoInputDeviceHandler * d = value(id);
@@ -50,7 +50,7 @@ KoInputDeviceHandlerRegistry::~KoInputDeviceHandlerRegistry()
             d->stop();
         }
     }
-    foreach(QString id, keys()) {
+    foreach(const QString &id, keys()) {
         get(id)->deleteLater();
     }
     // just leak on exit -- we get into trouble for explicitly

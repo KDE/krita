@@ -40,15 +40,24 @@ option(HAVE_MEMORY_LEAK_TRACKER "Enable memory leak tracker (always disabled in 
 option(HAVE_BACKTRACE_SUPPORT "Enable recording of backtrace in memory leak tracker" OFF)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-memory-leak-tracker.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-memory-leak-tracker.h) ### WRONG PLACE???
 
-macro_optional_find_package(FFTW3)
-macro_log_feature(FFTW3_FOUND "FFTW3" "A fast, free C FFT library" "http://www.fftw.org/" FALSE "" "Required by the Krita for fast convolution operators")
-macro_bool_to_01(FFTW3_FOUND HAVE_FFTW3)
+if(NOT WIN32)
+    macro_optional_find_package(FFTW3)
+    macro_log_feature(FFTW3_FOUND "FFTW3" "A fast, free C FFT library" "http://www.fftw.org/" FALSE "" "Required by the Krita for fast convolution operators")
+    macro_bool_to_01(FFTW3_FOUND HAVE_FFTW3)
+endif(NOT WIN32)
 configure_file(config_convolution.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_convolution.h)
 
 include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
                      ${CMAKE_SOURCE_DIR}/krita/image/metadata
                      ${KOMAIN_INCLUDES}
 )
+
+if(HAVE_VC)
+  include_directories(${Vc_INCLUDE_DIR})
+  ko_compile_for_all_implementations(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp)
+else(HAVE_VC)
+  set(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp)
+endif(HAVE_VC)
 
 set(kritaimage_LIB_SRCS
    ${libkritatile_SRCS}
@@ -77,7 +86,6 @@ set(kritaimage_LIB_SRCS
    commands/kis_node_command.cpp
    commands/kis_node_compositeop_command.cpp
    commands/kis_node_opacity_command.cpp
-   commands/kis_node_move_command.cpp
    commands/kis_node_property_list_command.cpp
    commands/kis_reselect_global_selection_command.cpp
    commands/kis_set_global_selection_command.cpp
@@ -87,11 +95,11 @@ set(kritaimage_LIB_SRCS
    commands_new/kis_image_resize_command.cpp
    commands_new/kis_image_set_resolution_command.cpp
    commands_new/kis_update_command.cpp
+   processing/kis_simple_processing_visitor.cpp
    processing/kis_crop_processing_visitor.cpp
    processing/kis_transform_processing_visitor.cpp
    filter/kis_filter.cc
    filter/kis_filter_configuration.cc
-   filter/kis_filter_job.cpp
    filter/kis_filter_registry.cc
    filter/kis_color_transformation_filter.cc
    generator/kis_generator.cpp
@@ -99,6 +107,7 @@ set(kritaimage_LIB_SRCS
    generator/kis_generator_registry.cpp
    kis_adjustment_layer.cc
    kis_selection_based_layer.cpp
+   kis_node_filter_interface.cpp
    kis_background.cpp
    kis_base_accessor.cpp
    kis_base_node.cpp
@@ -151,6 +160,7 @@ set(kritaimage_LIB_SRCS
    kis_circle_mask_generator.cpp
    kis_gauss_circle_mask_generator.cpp
    kis_gauss_rect_mask_generator.cpp
+   ${__per_arch_circle_mask_generator_objs}
    kis_gtl_lock.cpp
    kis_curve_circle_mask_generator.cpp
    kis_curve_rect_mask_generator.cpp
@@ -173,13 +183,11 @@ set(kritaimage_LIB_SRCS
    kis_random_accessor_ng.cpp
    kis_random_generator.cc
    kis_random_sub_accessor.cpp
-   kis_selected_transaction_data.cpp
    kis_selection.cc
    kis_selection_mask.cpp
    kis_selection_transaction_data.cpp
    kis_serializable_configuration.cc
    kis_shared.cc
-   kis_threaded_applicator.cpp
    kis_transaction_data.cpp
    kis_transform_worker.cc
    kis_perspectivetransform_worker.cpp
@@ -196,6 +204,7 @@ set(kritaimage_LIB_SRCS
    krita_utils.cpp
    kis_outline_generator.cpp
    kis_layer_composition.cpp
+   kis_selection_filters.cpp
    metadata/kis_meta_data_entry.cc
    metadata/kis_meta_data_filter.cc
    metadata/kis_meta_data_filter_p.cc
@@ -232,8 +241,8 @@ set(kritaimage_LIB_SRCS
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
 
-target_link_libraries(kritaimage ${KDE4_KPARTS_LIBS} komain pigmentcms ${KDE4_THREADWEAVER_LIBRARIES} )
-target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES pigmentcms komain ${KDE4_KPARTS_LIBS} )
+target_link_libraries(kritaimage ${KDE4_KDEUI_LIBS} pigmentcms kundo2 kowidgetutils)
+target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES pigmentcms kundo2 kowidgetutils)
 
 if(OPENEXR_FOUND)
   target_link_libraries(kritaimage  ${OPENEXR_LIBRARIES})
@@ -243,6 +252,9 @@ if(FFTW3_FOUND)
   target_link_libraries(kritaimage  ${FFTW3_LIBRARIES})
 endif(FFTW3_FOUND)
 
+if(HAVE_VC)
+  target_link_libraries(kritaimage  ${Vc_LIBRARIES})
+endif(HAVE_VC)
 
 set_target_properties(kritaimage PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
@@ -277,7 +289,6 @@ install( FILES
     filter/kis_filter.h
     filter/kis_filter_registry.h
     kis_filter_strategy.h
-    kis_generic_colorspace.h
     kis_global.h
     kis_image.h
     kis_mask.h

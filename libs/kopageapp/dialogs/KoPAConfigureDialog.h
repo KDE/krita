@@ -33,7 +33,7 @@ class KoPAConfigureDialog : public KPageDialog
     Q_OBJECT
 
 public:
-    KoPAConfigureDialog(KoPAView *parent);
+    explicit KoPAConfigureDialog(KoPAView *parent);
 
 public slots:
     void slotApply();

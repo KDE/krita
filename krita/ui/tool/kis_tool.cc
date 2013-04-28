@@ -27,6 +27,7 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 
+#include <KoIcon.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
 #include <KoCanvasBase.h>
@@ -160,12 +161,34 @@ void KisTool::activate(ToolActivation, const QSet<KoShape*> &)
 
     connect(actions().value("toggle_fg_bg"), SIGNAL(triggered()), SLOT(slotToggleFgBg()), Qt::UniqueConnection);
     connect(actions().value("reset_fg_bg"), SIGNAL(triggered()), SLOT(slotResetFgBg()), Qt::UniqueConnection);
+    connect(image(), SIGNAL(sigUndoDuringStrokeRequested()), SLOT(requestUndoDuringStroke()));
+    connect(image(), SIGNAL(sigStrokeCancellationRequested()), SLOT(requestStrokeCancellation()));
+    connect(image(), SIGNAL(sigStrokeEndRequested()), SLOT(requestStrokeEnd()));
 }
 
 void KisTool::deactivate()
 {
+    disconnect(image().data(), SIGNAL(sigUndoDuringStrokeRequested()));
+    disconnect(image().data(), SIGNAL(sigStrokeCancellationRequested()));
+    disconnect(image().data(), SIGNAL(sigStrokeEndRequested()));
     disconnect(actions().value("toggle_fg_bg"), 0, this, 0);
     disconnect(actions().value("reset_fg_bg"), 0, this, 0);
+}
+
+void KisTool::requestUndoDuringStroke()
+{
+    /**
+     * Default implementation just cancells the stroke
+     */
+    requestStrokeCancellation();
+}
+
+void KisTool::requestStrokeCancellation()
+{
+}
+
+void KisTool::requestStrokeEnd()
+{
 }
 
 void KisTool::resourceChanged(int key, const QVariant & v)
@@ -518,6 +541,7 @@ void KisTool::deleteSelection()
     KisPaintDeviceSP device;
 
     if(node && (device = node->paintDevice())) {
+        image()->barrierLock();
         KisTransaction transaction(i18n("Clear"), device);
 
         QRect dirtyRect;
@@ -532,6 +556,7 @@ void KisTool::deleteSelection()
 
         transaction.commit(image()->undoAdapter());
         device->setDirty(dirtyRect);
+        image()->unlock();
     }
     else {
         KoToolBase::deleteSelection();
@@ -564,7 +589,7 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
         glEnable(GL_LINE_SMOOTH);
         glEnable(GL_COLOR_LOGIC_OP);
         glLogicOp(GL_XOR);
-        glColor3f(0.501961, 1.0, 0.501961);
+        glColor3f(0.501961f, 1.0f, 0.501961f);
 
         QList<QPolygonF> subPathPolygons = path.toSubpathPolygons();
         for(int i=0; i<subPathPolygons.size(); i++) {
@@ -710,10 +735,7 @@ bool KisTool::nodeEditable()
         } else {
             message = i18n("Group not editable.");
         }
-        KisFloatingMessage *floatingMessage = new KisFloatingMessage(message, kiscanvas->canvasWidget());
-        floatingMessage->setShowOverParent(true);
-        floatingMessage->setIcon(KIcon("object-locked"));
-        floatingMessage->showMessage();
+        kiscanvas->view()->showFloatingMessage(message, koIcon("object-locked"));
     }
     return node->isEditable();
 }
@@ -726,11 +748,7 @@ bool KisTool::selectionEditable()
     bool editable = view->selectionEditable();
     if (!editable) {
         KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
-        KisFloatingMessage *floatingMessage = new KisFloatingMessage(i18n("Local selection is locked."),
-                                                                    kiscanvas->canvasWidget());
-        floatingMessage->setShowOverParent(true);
-        floatingMessage->setIcon(KIcon("object-locked"));
-        floatingMessage->showMessage();
+        kiscanvas->view()->showFloatingMessage(i18n("Local selection is locked."), koIcon("object-locked"));
     }
     return editable;
 }

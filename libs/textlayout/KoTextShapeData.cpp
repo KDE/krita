@@ -30,7 +30,7 @@
 
 #include <KoTextLayoutRootArea.h>
 
-#include <KDebug>
+#include <kdebug.h>
 #include <QUrl>
 #include <QTextDocument>
 #include <QTextBlock>
@@ -54,9 +54,6 @@
 
 #include <KoChangeTracker.h>
 #include <KoChangeTrackerElement.h>
-#include <KoTextAnchor.h>
-#include <KoInlineTextObjectManager.h>
-#include <KoCanvasBase.h>
 #include <KoShapeController.h>
 #include <KoShapeContainer.h>
 #include <kundo2stack.h>
@@ -360,6 +357,7 @@ void KoTextShapeData::loadStyle(const KoXmlElement &element, KoShapeLoadingConte
 
         d->paragraphStyle = new KoParagraphStyle(format, cformat);
         qDeleteAll(paragraphStyles);
+        delete defaultStyle;
     }
 }
 

@@ -45,15 +45,6 @@ KisBMPExport::~KisBMPExport()
 {
 }
 
-bool hasVisibleWidgets()
-{
-    QWidgetList wl = QApplication::allWidgets();
-    foreach(QWidget* w, wl) {
-        if (w->isVisible()) return true;
-    }
-    return false;
-}
-
 KoFilter::ConversionStatus KisBMPExport::convert(const QByteArray& from, const QByteArray& to)
 {
     dbgFile << "BMP export! From:" << from << ", To:" << to << "";
@@ -62,7 +53,7 @@ KoFilter::ConversionStatus KisBMPExport::convert(const QByteArray& from, const Q
     QString filename = m_chain->outputFile();
 
     if (!output)
-        return KoFilter::CreationError;
+        return KoFilter::NoDocumentCreated;
 
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 
@@ -75,7 +66,7 @@ KoFilter::ConversionStatus KisBMPExport::convert(const QByteArray& from, const Q
     QRect rc = output->image()->bounds();
     output->image()->refreshGraph();
     output->image()->lock();
-    QImage image = output->image()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height());
+    QImage image = output->image()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
     output->image()->unlock();
     image.save(url.toLocalFile());
     return KoFilter::OK;

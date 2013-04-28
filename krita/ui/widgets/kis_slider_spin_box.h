@@ -59,6 +59,7 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent* e);
     virtual void mouseDoubleClickEvent(QMouseEvent* e);
     virtual void keyPressEvent(QKeyEvent* e);
+    virtual void wheelEvent(QWheelEvent *);
 
     virtual bool eventFilter(QObject* recv, QEvent* e);
 

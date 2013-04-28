@@ -48,7 +48,7 @@ void TestTableSource::init()
     m_sheetAccessModel.setHeaderData(0, Qt::Horizontal, "Table3");
 
     // Setting the sheetAccessModel now is done on purpose to test
-    // if already existant data is automatically used by table source
+    // if already existent data is automatically used by table source
     m_source.setSheetAccessModel(&m_sheetAccessModel);
 
     m_sheetAccessModel.setItem(0, 1, table4);

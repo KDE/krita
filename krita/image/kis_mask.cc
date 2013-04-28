@@ -138,29 +138,12 @@ void KisMask::initSelection(KisSelectionSP copyFrom, KisLayerSP parentLayer)
 
 KisSelectionSP KisMask::selection() const
 {
-    #ifdef __GNUC__
-    #warning "Please remove lazyness from KisMask::selection() after release of 2.3"
-    #else
-    #pragma WARNING( "Please remove lazyness from KisMask::selection() after release of 2.3" )
-    #endif
+    /**
+     * The mask is created without any selection present.
+     * You must always init the selection with initSelection() method.
+     */
+    Q_ASSERT(m_d->selection);
 
-    if(!m_d->selection) {
-        KisLayer *parentLayer = dynamic_cast<KisLayer*>(parent().data());
-        if(parentLayer) {
-            KisPaintDeviceSP parentPaintDevice = parentLayer->paintDevice();
-            m_d->selection = new KisSelection(
-                new KisSelectionDefaultBounds(parentPaintDevice,
-                                              parentLayer->image()));
-
-            quint8 newDefaultPixel = MAX_SELECTED;
-            m_d->selection->getOrCreatePixelSelection()->setDefaultPixel(&newDefaultPixel);
-        }
-        else {
-            m_d->selection = new KisSelection();
-        }
-        m_d->selection->setParentNode(const_cast<KisMask*>(this));
-        m_d->selection->updateProjection();
-    }
     return m_d->selection;
 }
 
@@ -293,7 +276,17 @@ QImage KisMask::createThumbnail(qint32 w, qint32 h)
         selection() ? selection()->projection() : 0;
 
     return originalDevice ?
-           originalDevice->createThumbnail(w, h) : QImage();
+           originalDevice->createThumbnail(w, h,
+                                           KoColorConversionTransformation::InternalRenderingIntent,
+                                           KoColorConversionTransformation::InternalConversionFlags) : QImage();
+}
+
+void KisMask::testingInitSelection(const QRect &rect)
+{
+    m_d->selection = new KisSelection();
+    m_d->selection->getOrCreatePixelSelection()->select(rect, OPACITY_OPAQUE_U8);
+    m_d->selection->updateProjection(rect);
+    m_d->selection->setParentNode(this);
 }
 
 #include "kis_mask.moc"

@@ -18,6 +18,7 @@
  */
 #include "kis_pressure_hsv_option.h"
 #include <KoColorTransformation.h>
+#include <kis_debug.h>
 
 KisPressureHSVOption* KisPressureHSVOption::createHueOption()
 {
@@ -48,6 +49,34 @@ KisPressureHSVOption::KisPressureHSVOption(const QString& name, const QString& p
     d->paramId = -1;
     d->min = min;
     d->max = max;
+
+    // xgettext: no-c-format
+    QString activeColorMsg = i18n("(50% is active color)");
+    QString br("<br />");
+    QString fullPercent = i18n("100%");
+    QString zeroPercent = i18n("0%");
+
+    if (parameterName == "h")
+    {
+        setMaximumLabel(fullPercent + br + i18n("CW hue"));
+        setMinimumLabel(zeroPercent + br +i18n("CCW hue") + br + activeColorMsg);
+    }
+    else if (parameterName == "s")
+    {
+        setMaximumLabel(fullPercent + br + i18n("More saturation"));
+        setMinimumLabel(zeroPercent + br +i18n("Less saturation ") + br + activeColorMsg);
+
+    }
+    else if (parameterName == "v")
+    {
+        setMaximumLabel(fullPercent + br + i18n("Higher value"));
+        setMinimumLabel(zeroPercent + br + i18n("Lower value ") + br + activeColorMsg);
+    }
+    else
+    {
+        // defaults to unchanged labels
+        dbgPlugins << "Unknown parameter for " << name << ", parameterName " << parameterName;
+    }
 }
 
 
@@ -56,13 +85,13 @@ void KisPressureHSVOption::apply(KoColorTransformation* transfo, const KisPaintI
     if (!isChecked()) {
         return;
     }
-    
+
     if(d->paramId == -1)
     {
         d->paramId = transfo->parameterId(d->parameterName);
     }
 
     double v = computeValue(info) * (d->max - d->min) + d->min;
-    
+
     transfo->setParameter(d->paramId, v);
 }

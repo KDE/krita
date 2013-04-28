@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <db/global.h>
+#include <db/utils.h>
 #include "sqlitevacuum.h"
 
 #include <kstandarddirs.h>
@@ -72,25 +72,25 @@ tristate SQLiteVacuum::run()
         m_result = false;
         return m_result;
     }
-    const QString sqlite_app = KStandardDirs::findExe("sqlite3");
+
+    const QString sqlite_app = KexiDB::sqlite3ProgramPath();
     kDebug() << sqlite_app;
     if (sqlite_app.isEmpty()) {
-        KexiDBDrvWarn << "Could not find tool \"sqlite3\"";
         m_result = false;
         return m_result;
     }
-    
+
     QFileInfo fi(m_filePath);
     if (!fi.isReadable()) {
-        KexiDBDrvWarn << "No such file" << m_filePath;
+        KexiDBDrvWarn << "No readable file" << m_filePath;
         return false;
     }
 
-    kDebug() << m_filePath << QFileInfo(m_filePath).absoluteDir().path();
+    kDebug() << fi.absoluteFilePath() << fi.absoluteDir().path();
 
     delete m_dumpProcess;
     m_dumpProcess = new QProcess(this);
-    m_dumpProcess->setWorkingDirectory(QFileInfo(m_filePath).absoluteDir().path());
+    m_dumpProcess->setWorkingDirectory(fi.absoluteDir().path());
     m_dumpProcess->setReadChannel(QProcess::StandardError);
     connect(m_dumpProcess, SIGNAL(readyReadStandardError()), this, SLOT(readFromStdErr()));
     connect(m_dumpProcess, SIGNAL(finished(int,QProcess::ExitStatus)),
@@ -98,12 +98,12 @@ tristate SQLiteVacuum::run()
             
     delete m_sqliteProcess;
     m_sqliteProcess = new QProcess(this);
-    m_sqliteProcess->setWorkingDirectory(QFileInfo(m_filePath).absoluteDir().path());
+    m_sqliteProcess->setWorkingDirectory(fi.absoluteDir().path());
     connect(m_sqliteProcess, SIGNAL(finished(int,QProcess::ExitStatus)),
             this, SLOT(sqliteProcessFinished(int,QProcess::ExitStatus)));
 
     m_dumpProcess->setStandardOutputProcess(m_sqliteProcess);
-    m_dumpProcess->start(dump_app, QStringList() << m_filePath);
+    m_dumpProcess->start(dump_app, QStringList() << fi.absoluteFilePath());
     if (!m_dumpProcess->waitForStarted()) {
         delete m_dumpProcess;
         m_dumpProcess = 0;
@@ -111,7 +111,7 @@ tristate SQLiteVacuum::run()
         return m_result;
     }
     
-    QTemporaryFile *tempFile = new QTemporaryFile(m_filePath);
+    QTemporaryFile *tempFile = new QTemporaryFile(fi.absoluteFilePath());
     tempFile->open();
     m_tmpFilePath = tempFile->fileName();
     delete tempFile;
@@ -128,7 +128,7 @@ tristate SQLiteVacuum::run()
     
     m_dlg = new KProgressDialog(0, i18n("Compacting database"),
                                 "<qt>" + i18n("Compacting database \"%1\"...",
-                                              "<nobr>" + QDir::convertSeparators(QFileInfo(m_filePath).fileName()) + "</nobr>")
+                                              "<nobr>" + QDir::convertSeparators(fi.fileName()) + "</nobr>")
                                );
     m_dlg->adjustSize();
     m_dlg->resize(300, m_dlg->height());
@@ -179,10 +179,33 @@ void SQLiteVacuum::readFromStdErr()
 void SQLiteVacuum::dumpProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     KexiDBDrvDbg << exitCode << exitStatus;
+    if (exitCode != 0 || exitStatus != QProcess::NormalExit) {
+        cancelClicked();
+        m_result = false;
+    }
+
     if (m_dlg) {
         m_dlg->close();
         delete m_dlg;
         m_dlg = 0;
+    }
+
+    if (true != m_result) {
+        return;
+    }
+
+    QFileInfo fi(m_filePath);
+    const uint origSize = fi.size();
+
+    if (0 != KDE::rename(m_tmpFilePath, fi.absoluteFilePath())) {
+        kWarning() << "Rename" << m_tmpFilePath << "to" << fi.absoluteFilePath() << "failed.";
+        m_result = false;
+    }
+
+    if (m_result == true) {
+        const uint newSize = fi.size();
+        const uint decrease = 100 - 100 * newSize / origSize;
+        KMessageBox::information(0, i18n("The database has been compacted. Current size decreased by %1% to %2.", decrease, KIO::convertSize(newSize)));
     }
 }
 
@@ -190,17 +213,9 @@ void SQLiteVacuum::sqliteProcessFinished(int exitCode, QProcess::ExitStatus exit
 {
     KexiDBDrvDbg << exitCode << exitStatus;
 
-    const uint origSize = QFileInfo(m_filePath).size();
-
-    if (0 != KDE::rename(m_tmpFilePath, m_filePath)) {
-        kWarning() << "Rename" << m_tmpFilePath << "to" << m_filePath << "failed.";
+    if (exitCode != 0 || exitStatus != QProcess::NormalExit) {
         m_result = false;
-    }
-
-    if (m_result == true) {
-        const uint newSize = QFileInfo(m_filePath).size();
-        const uint decrease = 100 - 100 * newSize / origSize;
-        KMessageBox::information(0, i18n("The database has been compacted. Current size decreased by %1% to %2.", decrease, KIO::convertSize(newSize)));
+        return;
     }
 }
 

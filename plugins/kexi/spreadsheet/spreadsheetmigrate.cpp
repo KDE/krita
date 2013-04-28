@@ -19,7 +19,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include "spreadsheetmigrate.h"
 
-#include <KGlobal>
+#include <kglobal.h>
 
 namespace KexiMigration
 {
@@ -36,7 +36,7 @@ SpreadsheetMigrate::SpreadsheetMigrate(QObject *parent, const QVariantList &args
 SpreadsheetMigrate::~SpreadsheetMigrate()
 {
   if (m_KSDoc) {
-    m_KSDoc->closeUrl();
+    m_KSDoc->documentPart()->closeUrl();
     m_KSDoc->deleteLater();
   }
 }
@@ -44,7 +44,7 @@ SpreadsheetMigrate::~SpreadsheetMigrate()
 bool SpreadsheetMigrate::drv_connect()
 {
   drv_disconnect();
-  m_FileName = m_migrateData->source->dbPath() + '/' + m_migrateData->source->dbFileName();
+  m_FileName = data()->source->dbPath() + '/' + data()->source->dbFileName();
   
   if (!QFile::exists(m_FileName)) 
     return false;
@@ -59,7 +59,7 @@ bool SpreadsheetMigrate::drv_connect()
 bool SpreadsheetMigrate::drv_disconnect()
 {
   if (m_KSDoc) {
-    m_KSDoc->closeUrl();
+    m_KSDoc->documentPart()->closeUrl();
     delete m_KSDoc;
     m_KSDoc = 0;
   }

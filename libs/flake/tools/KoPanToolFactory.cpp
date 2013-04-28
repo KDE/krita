@@ -21,6 +21,7 @@
 #include "KoPanToolFactory.h"
 #include "KoPanTool.h"
 
+#include <KoIcon.h>
 #include <klocale.h>
 
 KoPanToolFactory::KoPanToolFactory()
@@ -29,7 +30,7 @@ KoPanToolFactory::KoPanToolFactory()
     setToolTip(i18n("Pan"));
     setToolType(navigationToolType());
     setPriority(5);
-    setIcon("hand");
+    setIconName(koIconNameCStr("hand"));
     setActivationShapeId("flake/always");
 }
 

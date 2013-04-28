@@ -23,13 +23,9 @@
 
 #include <QVariant>
 
-#include <kparts/plugin.h>
-#include "kis_types.h"
+#include <kis_view_plugin.h>
 
-class KisView2;
-class KisImage;
-class KisPainter;
-class Histogram : public KParts::Plugin
+class Histogram : public KisViewPlugin
 {
     Q_OBJECT
 public:
@@ -38,14 +34,6 @@ public:
 
 private slots:
     void slotActivated();
-    void slotLayersChanged();
-
-private:
-    KisImageWSP m_image;
-    KisView2 * m_view;
-    KisPainter * m_painter;
-    QAction * m_action;
-
 };
 
 #endif // HISTOGRAM_H

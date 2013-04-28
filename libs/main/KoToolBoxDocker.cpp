@@ -22,7 +22,7 @@
 #include "KoToolBoxDocker_p.h"
 #include "KoToolBox_p.h"
 #include <KoDockWidgetTitleBar.h>
-#include <KLocale>
+#include <klocale.h>
 
 
 KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)

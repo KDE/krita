@@ -20,9 +20,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoOdfWorkaround.h"
 #include "KoPathShape.h"
 #include "KoPathShape_p.h"
+
+#include "KoOdfWorkaround.h"
 #include "KoPathPoint.h"
 #include "KoShapeStrokeModel.h"
 #include "KoViewConverter.h"
@@ -45,7 +46,7 @@
 #include <KoStyleStack.h>
 #include <KoOdfLoadingContext.h>
 
-#include <KDebug>
+#include <kdebug.h>
 #include <QPainter>
 
 #ifndef QT_NO_DEBUG
@@ -176,7 +177,7 @@ void KoPathShape::saveOdf(KoShapeSavingContext & context) const
     context.xmlWriter().endElement();
 }
 
-bool KoPathShape::loadContourOdf(const KoXmlElement & element, KoShapeLoadingContext &, const QSizeF &scaleFactor)
+bool KoPathShape::loadContourOdf(const KoXmlElement &element, KoShapeLoadingContext &, const QSizeF &scaleFactor)
 {
     Q_D(KoPathShape);
 

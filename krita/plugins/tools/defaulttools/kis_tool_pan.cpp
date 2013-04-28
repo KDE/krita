@@ -23,11 +23,10 @@
 
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>
-#include <KoCanvasController.h>
-#include <KoCanvasControllerWidget.h>
 #include <KoViewConverter.h>
 
 #include <kis_canvas2.h>
+#include "kis_canvas_controller.h"
 
 #include "kis_cursor.h"
 #include "kis_coordinates_converter.h"
@@ -82,6 +81,14 @@ KisCanvas2* KisToolPan::kritaCanvas() const
     return kritaCanvas;
 }
 
+KisCanvasController* KisToolPan::kritaCanvasController() const
+{
+    KisCanvasController *controller =
+        dynamic_cast<KisCanvasController*>(canvas()->canvasController());
+    Q_ASSERT(controller);
+    return controller;
+}
+
 bool KisToolPan::isInCheckerArea(QPointF pt)
 {
     QPointF centerPoint = widgetCenterInWidgetPixels();
@@ -112,7 +119,7 @@ void KisToolPan::mousePressEvent(KoPointerEvent *e)
     adjustCursor();
 
     if(m_rotationMode && isInCheckerArea(m_lastPosition)) {
-        kritaCanvas()->resetCanvasTransformations();
+        kritaCanvasController()->resetCanvasTransformations();
     }
 }
 
@@ -144,12 +151,12 @@ void KisToolPan::mouseMoveEvent(KoPointerEvent *e)
     if(e->modifiers() & Qt::ShiftModifier) {
         if(!isInCheckerArea(actualPosition)) {
             qreal angle = calculateAngle(m_lastPosition, actualPosition);
-            kritaCanvas()->rotateCanvas(angle, false);
+            kritaCanvasController()->rotateCanvas(angle);
         }
     }
     else {
         QPointF distance(m_lastPosition - actualPosition);
-        canvas()->canvasController()->pan(distance.toPoint());
+        kritaCanvasController()->pan(distance.toPoint());
     }
 
     m_lastPosition = actualPosition;
@@ -159,16 +166,14 @@ void KisToolPan::mouseReleaseEvent(KoPointerEvent *e)
 {
     Q_UNUSED(e);
     m_defaultCursor = KisCursor::openHandCursor();
-    kritaCanvas()->rotateCanvas(0.0, true);
+    kritaCanvasController()->rotateCanvas(0.0);
     adjustCursor();
 }
 
 void KisToolPan::keyPressEvent(QKeyEvent *event)
 {
-    KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvas()->canvasController());
-    if (!canvasControllerWidget) {
-        return;
-    }
+    KoCanvasControllerWidget *canvasControllerWidget = kritaCanvasController();
+
     switch (event->key()) {
         case Qt::Key_Up:
             canvasControllerWidget->pan(QPoint(0, -canvasControllerWidget->verticalScrollBar()->singleStep()));

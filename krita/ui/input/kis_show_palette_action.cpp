@@ -18,7 +18,7 @@
 
 #include "kis_show_palette_action.h"
 
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 
 #include <ko_favorite_resource_manager.h>
 #include <kis_canvas2.h>
@@ -36,17 +36,16 @@ KisShowPaletteAction::~KisShowPaletteAction()
 
 }
 
-void KisShowPaletteAction::begin(int /*shortcut*/)
+void KisShowPaletteAction::begin(int, QEvent *event)
 {
-    inputManager()->canvas()->favoriteResourceManager()->slotShowPopupPalette(inputManager()->canvas()->coordinatesConverter()->documentToWidget(inputManager()->mousePosition()).toPoint());
-}
+    QPoint pos;
 
-void KisShowPaletteAction::end()
-{
+    QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
+    if (mouseEvent) {
+        pos = mouseEvent->pos();
+    } else {
+        pos = inputManager()->canvas()->coordinatesConverter()->widgetCenterPoint().toPoint();
+    }
 
-}
-
-void KisShowPaletteAction::inputEvent(QEvent* event)
-{
-    Q_UNUSED(event);
+    inputManager()->canvas()->favoriteResourceManager()->slotShowPopupPalette(pos);
 }

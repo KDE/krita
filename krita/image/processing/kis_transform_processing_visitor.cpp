@@ -83,7 +83,7 @@ void KisTransformProcessingVisitor::visit(KisGroupLayer *layer, KisUndoAdapter *
 
 void KisTransformProcessingVisitor::visit(KisAdjustmentLayer *layer, KisUndoAdapter *undoAdapter)
 {
-    transformSelection(layer->selection(), undoAdapter, ProgressHelper(layer));
+    transformSelection(layer->internalSelection(), undoAdapter, ProgressHelper(layer));
     layer->resetCache();
     transformClones(layer, undoAdapter);
 }
@@ -93,7 +93,7 @@ void KisTransformProcessingVisitor::visit(KisExternalLayer *layer, KisUndoAdapte
     KisTransformWorker tw(layer->projection(), m_sx, m_sy, m_shearx, m_sheary,
                           m_shearOrigin.x(), m_shearOrigin.y(),
                           m_angle, m_tx, m_ty, 0,
-                          m_filter, true);
+                          m_filter);
 
     KUndo2Command* command = layer->transform(tw.transform() * m_shapesCorrection);
     if(command) {
@@ -106,8 +106,8 @@ void KisTransformProcessingVisitor::visit(KisExternalLayer *layer, KisUndoAdapte
 void KisTransformProcessingVisitor::visit(KisGeneratorLayer *layer, KisUndoAdapter *undoAdapter)
 {
     ProgressHelper helper(layer);
-    transformSelection(layer->selection(), undoAdapter, ProgressHelper(layer));
-    layer->resetCache();
+    transformSelection(layer->internalSelection(), undoAdapter, ProgressHelper(layer));
+    layer->update();
     transformClones(layer, undoAdapter);
 }
 
@@ -143,7 +143,7 @@ void KisTransformProcessingVisitor::transformClones(KisLayer *layer, KisUndoAdap
         KisTransformWorker tw(clone->projection(), m_sx, m_sy, m_shearx, m_sheary,
                               m_shearOrigin.x(), m_shearOrigin.y(),
                               m_angle, m_tx, m_ty, 0,
-                              m_filter, true);
+                              m_filter);
 
         QTransform trans  = tw.transform();
         QTransform offsetTrans = QTransform::fromTranslate(clone->x(), clone->y());
@@ -164,7 +164,7 @@ void KisTransformProcessingVisitor::transformPaintDevice(KisPaintDeviceSP device
     KisTransformWorker tw(device, m_sx, m_sy, m_shearx, m_sheary,
                           m_shearOrigin.x(), m_shearOrigin.y(),
                           m_angle, m_tx, m_ty, helper.updater(),
-                          m_filter, true);
+                          m_filter);
     tw.run();
     transaction.commit(adapter);
 }
@@ -179,7 +179,7 @@ void KisTransformProcessingVisitor::transformSelection(KisSelectionSP selection,
         KisTransformWorker tw(selection->projection(), m_sx, m_sy, m_shearx, m_sheary,
                               m_shearOrigin.x(), m_shearOrigin.y(),
                               m_angle, m_tx, m_ty, 0,
-                              m_filter, true);
+                              m_filter);
 
         KUndo2Command* command =
             selection->shapeSelection()->transform(tw.transform() * m_shapesCorrection);

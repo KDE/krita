@@ -58,6 +58,12 @@ class KOTEXT_EXPORT KoCharacterStyle : public QObject
 {
     Q_OBJECT
 public:
+    /// types of style
+    enum Type {
+        CharacterStyle,
+        ParagraphStyle
+    };
+
     /// list of character style properties we can store in a QTextCharFormat
     enum Property {
         StyleId = QTextFormat::UserProperty + 1, ///< The id stored in the charFormat to link the text to this style.
@@ -101,6 +107,7 @@ public:
         AdditionalFontSize, //font-size-rel can specify an addition to the parent value
         UseWindowFontColor, //boolean, same as odf
         Blink,
+        AnchorType, //valid only if QTextCharFormat::isAnchor() is true
         InlineInstanceId = 577297549, // Internal: Reserved for KoInlineTextObjectManager
         ChangeTrackerId = 577297550, // Internal: Reserved for ChangeTracker
         FontYStretch = 577297551 // Internal: Ratio between Linux font pt size and Windows font height
@@ -112,14 +119,14 @@ public:
         TextCombineLetters,
         TextCombineLines
     };
-    
+
     /// list of possible line type : no line, single line, double line
     enum LineType {
         NoLineType,
         SingleLine,
         DoubleLine
     };
-    
+
     /// List of possible font relief : none, embossed, engraved
     enum ReliefType {
         NoRelief,
@@ -134,13 +141,13 @@ public:
         DiscEmphasis,
         DotEmphasis
     };
-    
+
     enum EmphasisPosition {
         EmphasisAbove,
         EmphasisBelow
     };
-        
-    
+
+
     /// list of possible line style.
     enum LineStyle {
         NoLineStyle = Qt::NoPen,
@@ -177,6 +184,11 @@ public:
         LineHeight
     };
 
+    enum AnchorTypes {
+        Bookmark,
+        Anchor // corresponds to text:a ODF element
+    };
+
     /**
      * Constructor. Initializes with standard size/font properties.
      * @param parent the parent object for memory management purposes.
@@ -186,6 +198,9 @@ public:
     explicit KoCharacterStyle(const QTextCharFormat &format, QObject *parent = 0);
     /// Destructor
     ~KoCharacterStyle();
+
+    /// returns the type of style
+    virtual Type styleType() const;
 
     /// set the default style this one inherits its unset properties from if no parent style.
     void setDefaultStyle(KoCharacterStyle *parent);
@@ -249,7 +264,7 @@ public:
     QFont::Capitalization fontCapitalization() const;
     /// Set font Y stretch
     void setFontYStretch(qreal stretch);
-    /// Return font Y stretch (value relevant for MS compatability)
+    /// Return font Y stretch (value relevant for MS compatibility)
     qreal fontYStretch() const;
 
 
@@ -324,7 +339,7 @@ public:
     void setOverlineMode(LineMode mode);
     /// Get the current overline mode of this KoCharacterStyle
     LineMode overlineMode() const;
-    
+
     /// Apply a font underline style to this KoCharacterStyle
     void setUnderlineStyle(LineStyle style);
     /// Get the current font underline style of this KoCharacterStyle
@@ -362,7 +377,7 @@ public:
     void setTextScale(int scale);
     /// Get the current text scale of this KoCharacterStyle
     int textScale() const;
-    
+
     KoShadowStyle textShadow() const;
     void setTextShadow(const KoShadowStyle &shadow);
 
@@ -396,7 +411,7 @@ public:
 
     bool blinking() const;
     void setBlinking(bool blink);
-    
+
     void setHasHyphenation(bool on);
     bool hasHyphenation() const;
 
@@ -411,7 +426,12 @@ public:
 
     void setAdditionalFontSize(qreal percent);
     qreal additionalFontSize() const;
- 
+
+    /// set the anchor type, valid only if QTextCharFormat::isAnchor() is true
+    void setAnchorType(AnchorTypes anchorType);
+    /// returns the anchor type, valid only if QTextCharFormat::isAnchor() is true
+    AnchorTypes anchorType() const;
+
     void copyProperties(const KoCharacterStyle *style);
     void copyProperties(const QTextCharFormat &format);
 
@@ -436,7 +456,7 @@ public:
      * Apply this style to a blockFormat by copying all properties from this
      * style to the target char format.
      */
-    void applyStyle(QTextCharFormat &format) const;
+    void applyStyle(QTextCharFormat &format, bool emitSignal = true) const;
     /**
      * Apply this style to the textBlock by copying all properties from this
      * style to the target block formats.
@@ -487,13 +507,17 @@ public:
      * @return pointer to autostyle that has this as parent style
      */
     KoCharacterStyle *autoStyle(const QTextCharFormat &format, QTextCharFormat blockCharFormat) const;
- 
+
     void saveOdf(KoGenStyle &style) const;
 
     /**
      * Returns true if this style has no properties set. Else, returns false.
      */
     bool isEmpty() const;
+
+    /** Returns true if the style is in use.
+     */
+    bool isApplied() const;
 
     /**
      * Return the value of key as represented on this style.
@@ -510,8 +534,12 @@ public:
      * no font etc. set are not something you should want.
      */
     void removeHardCodedDefaults();
+
+    void remove(int key);
+
 signals:
     void nameChanged(const QString &newName);
+    void styleApplied(const KoCharacterStyle*) const;
 
 protected:
     /**
@@ -525,6 +553,7 @@ private:
     Private * const d;
 };
 
+Q_DECLARE_METATYPE(KoCharacterStyle *)
 Q_DECLARE_METATYPE(QSharedPointer<KoCharacterStyle>)
 
 #endif

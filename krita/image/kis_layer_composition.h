@@ -25,7 +25,6 @@
 #include <QUuid>
 #include <QDomDocument>
 #include <QDomElement>
-#include <KoXmlReader.h>
 
 #include "kis_image.h"
 
@@ -46,17 +45,19 @@ public:
     QString name();
 
    /**
-    * Stores the current visiblity of all layers in the composition
+    * Stores the current visibility of all layers in the composition
     */
     void store();
     
    /**
-    * Applies the stored visiblity to all the nodes
+    * Applies the stored visibility to all the nodes
     */
     void apply();
 
-    void load(const KoXmlElement& elem);
+    void setVisible(QUuid id, bool visible);
+
     void save(QDomDocument& doc, QDomElement& element);
+
 private:
     KisImageWSP m_image;
     QString m_name;

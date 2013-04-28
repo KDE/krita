@@ -51,6 +51,7 @@ DriverManagerInternal::DriverManagerInternal() /* protected */
 {
     setObjectName("KexiDB::DriverManager");
     m_serverResultNum = 0;
+    qsrand(QTime::currentTime().msec()); // needed e.g. to create random table names
 }
 
 DriverManagerInternal::~DriverManagerInternal()
@@ -385,7 +386,7 @@ QString DriverManager::lookupByMime(const QString &mimeType)
 {
     if (!d_int->lookupDrivers()) {
         setError(d_int);
-        return 0;
+        return QString();
     }
 
     KService::Ptr ptr = d_int->m_services_by_mimetype[mimeType.toLower()];

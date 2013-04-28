@@ -21,7 +21,7 @@
 #include <QGridLayout>
 #include <QHeaderView>
 
-#include <KLocale>
+#include <klocale.h>
 
 #include <filter/kis_filter.h>
 #include <kis_paint_device.h>

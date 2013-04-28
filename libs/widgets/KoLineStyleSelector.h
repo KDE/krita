@@ -30,7 +30,7 @@ class KOWIDGETS_EXPORT KoLineStyleSelector : public QComboBox
 {
     Q_OBJECT
 public:
-    KoLineStyleSelector(QWidget * parent = 0);
+    explicit KoLineStyleSelector(QWidget *parent = 0);
     virtual ~KoLineStyleSelector();
 
     /**

@@ -30,6 +30,7 @@
 
 class KoMainWindowPrivate;
 class KoDocument;
+class KoPart;
 class KoView;
 class KoPrintJob;
 class KoDockFactoryBase;
@@ -41,11 +42,6 @@ struct KoPageLayout;
 
 // Calligra class but not in main module
 class KoDockerManager;
-
-namespace KParts
-{
-class PartManager;
-}
 
 /**
  * @brief Main window for a Calligra application
@@ -77,28 +73,25 @@ public:
      * Called when a document is assigned to this mainwindow.
      * This creates a view for this document, makes it the active part, etc.
      */
-    virtual void setRootDocument(KoDocument *doc);
+    void setRootDocument(KoDocument *doc, KoPart *rootPart = 0);
 
     /**
      * This is used to handle the document used at start up before it actually
      * added as root document.
      */
-    void setDocToOpen(KoDocument *doc);
+    void setDocToOpen(KoPart *part);
 
     /**
      * Update caption from document info - call when document info
      * (title in the about page) changes.
      */
-    virtual void updateCaption();
+    void updateCaption();
 
     /**
      *  Retrieves the document that is displayed in the mainwindow.
      */
-    virtual KoDocument* rootDocument() const;
-
-    virtual KoView *rootView() const;
-
-    virtual KParts::PartManager *partManager();
+    KoDocument *rootDocument() const;
+    KoView *rootView() const;
 
     /**
      * The application should call this to show or hide a toolbar.
@@ -115,7 +108,7 @@ public:
      * Get hold of the label in the statusbar, to write messages to it.
      * You can also insert other items in the status bar by using QStatusBar::addWidget.
      */
-    QLabel * statusBarLabel();
+    QLabel *statusBarLabel();
 
     /**
      * Sets the maximum number of recent documents entries.
@@ -133,14 +126,14 @@ public:
      *
      * @return TRUE on success.
      */
-    virtual bool openDocument(const KUrl & url);
+    bool openDocument(const KUrl & url);
 
     /**
      * Load the URL into this document (and make it root doc after loading)
      *
      * Special method for KoApplication::start, don't use.
      */
-    bool openDocument(KoDocument *newdoc, const KUrl & url);
+    bool openDocument(KoPart *newPart, const KUrl & url);
 
     /**
      * Reloads the recent documents list.
@@ -150,7 +143,7 @@ public:
     /**
      * Updates the window caption based on the document info and path.
      */
-    virtual void updateCaption(const QString & caption, bool mod);
+    void updateCaption(const QString & caption, bool mod);
     void updateReloadFileAction(KoDocument *doc);
     void updateVersionsFileAction(KoDocument *doc);
 
@@ -204,7 +197,7 @@ public slots:
      *  If the current document is empty, the new document replaces it.
      *  If not, a new shell will be opened for showing the document.
      */
-    virtual void slotFileNew();
+    void slotFileNew();
 
     /**
      *  Slot for opening a saved file.
@@ -212,7 +205,7 @@ public slots:
      *  If the current document is empty, the opened document replaces it.
      *  If not a new shell will be opened for showing the opened file.
      */
-    virtual void slotFileOpen();
+    void slotFileOpen();
 
     /**
      *  Slot for opening a file among the recently opened files.
@@ -220,23 +213,23 @@ public slots:
      *  If the current document is empty, the opened document replaces it.
      *  If not a new shell will be opened for showing the opened file.
      */
-    virtual void slotFileOpenRecent(const KUrl &);
+    void slotFileOpenRecent(const KUrl &);
 
     /**
      *  Saves the current document with the current name.
      */
-    virtual void slotFileSave();
+    void slotFileSave();
 
     /**
      *  Saves the current document with a new name.
      */
-    virtual void slotFileSaveAs();
+    void slotFileSaveAs();
 
     /**
      *  Prints the actual document.
      */
-    virtual void slotFilePrint();
-    virtual void slotFilePrintPreview();
+    void slotFilePrint();
+    void slotFilePrintPreview();
 
     KoPrintJob* exportToPdf(QString pdfFileName = QString());
     KoPrintJob* exportToPdf(KoPageLayout pageLayout, QString pdfFileName = QString());
@@ -244,43 +237,43 @@ public slots:
     /**
      * Show a dialog with author and document information.
      */
-    virtual void slotDocumentInfo();
+    void slotDocumentInfo();
 
     /**
      *  Closes the document.
      */
-    virtual void slotFileClose();
+    void slotFileClose();
 
     /**
      *  Closes the shell.
      */
-    virtual void slotFileQuit();
+    void slotFileQuit();
 
     /**
      *  Configure key bindings.
      */
-    virtual void slotConfigureKeys();
+    void slotConfigureKeys();
 
     /**
      *  Configure toolbars.
      */
-    virtual void slotConfigureToolbars();
+    void slotConfigureToolbars();
 
     /**
      *  Post toolbar config.
      * (Plug action lists back in, etc.)
      */
-    virtual void slotNewToolbarConfig();
+    void slotNewToolbarConfig();
 
     /**
      *  Shows or hides a toolbar
      */
-    virtual void slotToolbarToggled(bool toggle);
+    void slotToolbarToggled(bool toggle);
 
     /**
      * Toggle full screen on/off.
      */
-    virtual void viewFullscreen(bool fullScreen);
+    void viewFullscreen(bool fullScreen);
 
     /**
      * Reload file
@@ -332,7 +325,7 @@ private:
     /**
      * Create a new empty document.
      */
-    virtual KoDocument* createDoc() const;
+    KoPart* createPart() const;
 
     /**
      * Saves the document, asking for a filename if necessary.
@@ -345,17 +338,17 @@ private:
      *         (don't display anything in this case, the error dialog box is also implemented here
      *         but restore the original URL in slotFileSaveAs)
      */
-    virtual bool saveDocument(bool saveas = false, bool silent = false);
+    bool saveDocument(bool saveas = false, bool silent = false);
 
-    virtual void closeEvent(QCloseEvent * e);
-    virtual void resizeEvent(QResizeEvent * e);
+    void closeEvent(QCloseEvent * e);
+    void resizeEvent(QResizeEvent * e);
 
     /**
      * Ask user about saving changes to the document upon exit.
      */
-    virtual bool queryClose();
+    bool queryClose();
 
-    virtual bool openDocumentInternal(const KUrl &url, KoDocument *newdoc = 0);
+    bool openDocumentInternal(const KUrl &url, KoPart *newpart = 0, KoDocument *newdoc = 0);
 
     /**
      * Returns whether or not the current slotFileSave[As]() or saveDocument()
@@ -377,18 +370,17 @@ private:
      */
     bool isImporting() const;
 
-    /**
-     * Save the list of recent files.
-     */
-    void saveRecentFiles();
-
     KRecentFilesAction *recentAction() const;
 
 protected slots:
 
-    virtual void slotActivePartChanged(KParts::Part *newPart);
+    void slotActivePartChanged(KParts::Part *newPart);
 
 private slots:
+    /**
+     * Save the list of recent files.
+     */
+    void saveRecentFiles();
 
     void slotLoadCompleted();
     void slotLoadCanceled(const QString &);

@@ -31,7 +31,7 @@ class Barcode : public QObject
 {
     Q_OBJECT
 public:
-    Barcode(KoReportItemBarcode *f);
+    explicit Barcode(KoReportItemBarcode *f);
 
     ~Barcode();
 

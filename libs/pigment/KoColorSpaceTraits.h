@@ -193,6 +193,25 @@ struct KoColorSpaceTrait {
         }
     }
 
+    inline static void applyAlphaNormedFloatMask(quint8 * pixels, const float * alpha, qint32 nPixels) {
+        if (alpha_pos < 0) return;
+
+        for (; nPixels > 0; --nPixels, pixels += pixelSize, ++alpha) {
+            channels_type valpha =  channels_type(KoColorSpaceMathsTraits<channels_type>::unitValue * (*alpha));
+            channels_type* alphapixel = nativeArray(pixels) + alpha_pos;
+            *alphapixel = KoColorSpaceMaths<channels_type>::multiply(*alphapixel, valpha);
+        }
+    }
+
+    inline static void applyInverseAlphaNormedFloatMask(quint8 * pixels, const float * alpha, qint32 nPixels) {
+        if (alpha_pos < 0) return;
+
+        for (; nPixels > 0; --nPixels, pixels += pixelSize, ++alpha) {
+            channels_type valpha =  channels_type(KoColorSpaceMathsTraits<channels_type>::unitValue * (1.0f - *alpha));
+            channels_type* alphapixel = nativeArray(pixels) + alpha_pos;
+            *alphapixel = KoColorSpaceMaths<channels_type>::multiply(*alphapixel, valpha);
+        }
+    }
 };
 
 #include "KoRgbColorSpaceTraits.h"

@@ -21,7 +21,7 @@
 #include "kis_pdf_import.h"
 
 // poppler's headers
-#include <poppler-qt4.h>
+#include <poppler/qt4/poppler-qt4.h>
 
 // Qt's headers
 #include <QFile>
@@ -127,7 +127,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
     if (!doc) {
         delete pdoc;
         delete kdb;
-        return KoFilter::CreationError;
+        return KoFilter::NoDocumentCreated;
     }
 
     doc -> prepareForImport();

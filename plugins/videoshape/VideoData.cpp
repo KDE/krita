@@ -3,6 +3,7 @@
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -33,63 +34,121 @@
 #include <QBuffer>
 #include <QCryptographicHash>
 #include <QFileInfo>
-#include <KTemporaryFile>
+#include <ktemporaryfile.h>
 #include <QPainter>
+#include <QAtomicInt>
+#include <QFile>
 
-VideoData::VideoData()
-    : KoShapeUserData()
+class VideoDataPrivate
+{
+public:
+    VideoDataPrivate();
+    ~VideoDataPrivate();
+
+    /// store the suffix based on the full filename.
+    void setSuffix(const QString &fileName);
+
+    QAtomicInt refCount;
+    KTemporaryFile *temporaryFile;
+    /**
+     * a unique key of the video data
+     */
+    qint64 key;
+
+    QString suffix; // the suffix of the video e.g. avi  TODO use a QByteArray ?
+
+    QString saveName;
+
+    QUrl videoLocation;
+
+    VideoData::ErrorCode errorCode;
+
+    VideoCollection *collection;
+
+    // video data store.
+    VideoData::DataStoreState dataStoreState;
+
+    bool saveVideoInZip;
+};
+
+VideoDataPrivate::VideoDataPrivate()
+    : refCount(0)
+    , temporaryFile(0)
     , key(0)
     , errorCode(VideoData::Success)
     , collection(0)
-    , dataStoreState(StateEmpty)
-    , temporaryFile(0)
+    , dataStoreState(VideoData::StateEmpty)
+    , saveVideoInZip(false)
+{
+
+}
+
+VideoDataPrivate::~VideoDataPrivate()
+{
+    delete temporaryFile;
+}
+
+void VideoDataPrivate::setSuffix(const QString &name)
+{
+    QRegExp rx("\\.([^/]+$)"); // TODO does this work on windows or do we have to use \ instead of / for a path separator?
+    if (rx.indexIn(name) != -1) {
+        suffix = rx.cap(1);
+    }
+}
+
+VideoData::VideoData()
+    : KoShapeUserData()
+    , d(0)
 {
 }
 
 VideoData::VideoData(const VideoData &videoData)
     : KoShapeUserData()
+    , d(videoData.d)
 {
     Q_UNUSED(videoData);
-    //TODO copy the videodata - this is a copy constructor
+
+    if(d) {
+        d->refCount.ref();
+    }
 }
 
 VideoData::~VideoData()
 {
-    if (collection)
-        collection->removeOnKey(key);
-    delete temporaryFile;
-}
-
-QString VideoData::tagForSaving(QUrl storeUrl, int &counter)
-{
-    if (!saveName.isEmpty())
-        return saveName;
-
-    if (!videoLocation.isEmpty()) {
-        return videoLocation.toString();
+    if (d && d->collection) {
+        d->collection->removeOnKey(d->key);
     }
 
-    if (suffix.isEmpty()) {
-        return saveName = QString("Videos/video%1").arg(++counter);
-    } else {
-        return saveName = QString("Videos/video%1.%2").arg(++counter).arg(suffix);
+    if (d && !d->refCount.deref()) {
+        delete d;
     }
 }
 
-void VideoData::setExternalVideo(const QUrl &location, VideoCollection *collection)
+void VideoData::setExternalVideo(const QUrl &location, bool saveInternal, VideoCollection *collection)
 {
     if (collection) {
         // let the collection first check if it already has one. If it doesn't it'll call this method
         // again and we'll go to the other clause
-        VideoData *other = collection->createExternalVideoData(location);
+        VideoData *other = collection->createExternalVideoData(location, saveInternal);
         this->operator=(*other);
         delete other;
     } else {
-        videoLocation = location;
-        setSuffix(location.toEncoded());
+        delete d;
+        d = new VideoDataPrivate();
+        d->refCount.ref();
+
+        d->videoLocation = location;
+        d->saveVideoInZip = saveInternal;
+        if (d->saveVideoInZip) {
+            QFileInfo fileInfo(location.toLocalFile());
+            d->setSuffix(fileInfo.fileName());
+        } else {
+            d->setSuffix(location.toEncoded());
+        }
+
         QCryptographicHash md5(QCryptographicHash::Md5);
-        md5.addData(location.toEncoded());
-        key = VideoData::generateKey(md5.result());
+        md5.addData(location.toEncoded().append(saveInternal ? "true" : "false"));
+        d->key = VideoData::generateKey(md5.result());
     }
 }
 
@@ -102,20 +161,28 @@ void VideoData::setVideo(const QString &url, KoStore *store, VideoCollection *co
         this->operator=(*other);
         delete other;
     } else {
-        setSuffix(url);
         if (store->open(url)) {
+            struct Finalizer {
+                ~Finalizer() { store->close(); }
+                KoStore *store;
+            };
+            Finalizer closer;
+            closer.store = store;
             KoStoreDevice device(store);
-            QByteArray data = device.readAll();
+            //QByteArray data = device.readAll();
             if (!device.open(QIODevice::ReadOnly)) {
                 kWarning(30006) << "open file from store " << url << "failed";
-                errorCode = OpenFailed;
+                d->errorCode = OpenFailed;
                 store->close();
                 return;
             }
+
             copyToTemporary(device);
+
+            d->setSuffix(url);
         } else {
             kWarning(30006) << "Find file in store " << url << "failed";
-            errorCode = OpenFailed;
+            d->errorCode = OpenFailed;
             return;
         }
     }
@@ -123,17 +190,39 @@ void VideoData::setVideo(const QString &url, KoStore *store, VideoCollection *co
 
 QUrl VideoData::playableUrl() const
 {
-    if (dataStoreState == StateSpooled) {
-        return QUrl(temporaryFile->fileName());
+    if (d->dataStoreState == StateSpooled) {
+        Q_ASSERT(d);
+        return QUrl(d->temporaryFile->fileName());
     } else {
-        return videoLocation;
+        return d->videoLocation;
+    }
+}
+
+QString VideoData::tagForSaving(QUrl storeUrl, int &counter)
+{
+    if (!d->saveName.isEmpty())
+        return d->saveName;
+
+    if (!d->videoLocation.isEmpty()) {
+        if (d->saveVideoInZip) {
+            d->saveName = QString("Videos/video%1.%2").arg(++counter).arg(d->suffix);
+            return d->saveName;
+        } else {
+            return d->videoLocation.toString();
+        }
+    }
+
+    if (d->suffix.isEmpty()) {
+        return d->saveName = QString("Videos/video%1").arg(++counter);
+    } else {
+        return d->saveName = QString("Videos/video%1.%2").arg(++counter).arg(d->suffix);
     }
 }
 
 bool VideoData::isValid() const
 {
-    return dataStoreState != VideoData::StateEmpty
-        && errorCode == Success;
+    return d->dataStoreState != VideoData::StateEmpty
+        && d->errorCode == Success;
 }
 
 bool VideoData::operator==(const VideoData &other) const
@@ -144,42 +233,49 @@ bool VideoData::operator==(const VideoData &other) const
 
 VideoData &VideoData::operator=(const VideoData &other)
 {
-    Q_UNUSED(other);
+    if (other.d) {
+        other.d->refCount.ref();
+    }
+
+    if (d && !d->refCount.deref()) {
+        delete d;
+    }
+
+    d = other.d;
     return *this;
 }
 
 bool VideoData::saveData(QIODevice &device)
 {
-    if (dataStoreState == StateSpooled) {
-        Q_ASSERT(temporaryFile); // otherwise the collection should not have called this
-        if (temporaryFile) {
-            if (!temporaryFile->open()) {
+    if (d->dataStoreState == StateSpooled) {
+        Q_ASSERT(d->temporaryFile); // otherwise the collection should not have called this
+        if (d->temporaryFile) {
+            if (!d->temporaryFile->open()) {
                 kWarning(30006) << "Read file from temporary store failed";
                 return false;
             }
             char buf[8192];
             while (true) {
-                temporaryFile->waitForReadyRead(-1);
-                qint64 bytes = temporaryFile->read(buf, sizeof(buf));
+                d->temporaryFile->waitForReadyRead(-1);
+                qint64 bytes = d->temporaryFile->read(buf, sizeof(buf));
                 if (bytes <= 0)
                     break; // done!
                 do {
                     qint64 nWritten = device.write(buf, bytes);
                     if (nWritten == -1) {
-                        temporaryFile->close();
+                        d->temporaryFile->close();
                         return false;
                     }
                     bytes -= nWritten;
                 } while (bytes > 0);
             }
-            temporaryFile->close();
+            d->temporaryFile->close();
         }
         return true;
-    } else if (!videoLocation.isEmpty()) {
-        bool putExtrenalIntoZip = false;
-        if (putExtrenalIntoZip) { //later on this should check if the user wants us to do this
+    } else if (!d->videoLocation.isEmpty()) {
+        if (d->saveVideoInZip) {
             // An external video have been specified
-            QFile file(videoLocation.toLocalFile());
+            QFile file(d->videoLocation.toLocalFile());
 
             if (!file.open(QIODevice::ReadOnly)) {
                 kWarning(30006) << "Read file failed";
@@ -208,18 +304,20 @@ bool VideoData::saveData(QIODevice &device)
 
 void VideoData::copyToTemporary(QIODevice &device)
 {
-    delete temporaryFile;
-    temporaryFile = new KTemporaryFile();
-    temporaryFile->setPrefix("KoVideoData");
-    if (!temporaryFile->open()) {
+    delete d;
+    d = new VideoDataPrivate();
+    d->temporaryFile = new KTemporaryFile();
+    d->refCount.ref();
+    d->temporaryFile->setPrefix("KoVideoData");
+    if (!d->temporaryFile->open()) {
         kWarning(30006) << "open temporary file for writing failed";
-        errorCode = VideoData::StorageFailed;
-	delete temporaryFile;
-	temporaryFile = 0;
+        d->errorCode = VideoData::StorageFailed;
+        delete d;
+        d = 0;
         return;
     }
     QCryptographicHash md5(QCryptographicHash::Md5);
-    char buf[8096];
+    char buf[8192];
     while (true) {
         device.waitForReadyRead(-1);
         qint64 bytes = device.read(buf, sizeof(buf));
@@ -227,22 +325,14 @@ void VideoData::copyToTemporary(QIODevice &device)
             break; // done!
         md5.addData(buf, bytes);
         do {
-            bytes -= temporaryFile->write(buf, bytes);
+            bytes -= d->temporaryFile->write(buf, bytes);
         } while (bytes > 0);
     }
-    key = VideoData::generateKey(md5.result());
-    temporaryFile->close();
+    d->key = VideoData::generateKey(md5.result());
+    d->temporaryFile->close();
 
-    QFileInfo fi(*temporaryFile);
-    dataStoreState = StateSpooled;
-}
-
-void VideoData::setSuffix(const QString &name)
-{
-    QRegExp rx("\\.([^/]+$)"); // TODO does this work on windows or do we have to use \ instead of / for a path separator?
-    if (rx.indexIn(name) != -1) {
-        suffix = rx.cap(1);
-    }
+    QFileInfo fi(*(d->temporaryFile));
+    d->dataStoreState = StateSpooled;
 }
 
 qint64 VideoData::generateKey(const QByteArray &bytes)
@@ -252,6 +342,31 @@ qint64 VideoData::generateKey(const QByteArray &bytes)
     for (int x = 0; x < max; ++x)
         answer += bytes[x] << (8 * x);
     return answer;
+}
+
+QString VideoData::saveName() const
+{
+    return d->saveName;
+}
+
+void VideoData::setSaveName(const QString &saveName)
+{
+    d->saveName = saveName;
+}
+
+VideoCollection *VideoData::collection()
+{
+    return d->collection;
+}
+
+void VideoData::setCollection(VideoCollection *collection)
+{
+    d->collection = collection;
+}
+
+qint64 VideoData::key()
+{
+    return d->key;
 }
 
 #include <VideoData.moc>

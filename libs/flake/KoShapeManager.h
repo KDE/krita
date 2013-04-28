@@ -91,13 +91,14 @@ public:
      */
     QList<KoShape*> topLevelShapes() const;
 
+public slots:
     /**
      * Add a KoShape to be displayed and managed by this manager.
      * This will trigger a repaint of the shape.
      * @param shape the shape to add
      * @param repaint if true it will trigger a repaint of the shape
      */
-    void addShape(KoShape *shape, Repaint repaint = PaintShapeOnAdd);
+    void addShape(KoShape *shape, KoShapeManager::Repaint repaint = PaintShapeOnAdd);
 
     /**
      * Add an additional shape to the manager.
@@ -119,6 +120,7 @@ public:
      */
     void removeAdditional(KoShape *shape);
 
+public:
     /// return the selection shapes for this shapeManager
     KoSelection *selection() const;
 

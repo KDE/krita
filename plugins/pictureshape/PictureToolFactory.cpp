@@ -18,6 +18,7 @@
 */
 
 #include <klocale.h>
+#include <KoIcon.h>
 
 #include "PictureShape.h"
 #include "PictureTool.h"
@@ -29,7 +30,7 @@ PictureToolFactory::PictureToolFactory()
     : KoToolFactoryBase("PictureToolFactoryId")
 {
     setToolTip( i18n( "Picture editing tool" ) );
-    setIcon( "pictureshape" );
+    setIconName(koIconNameCStr("x-shape-image"));
     setToolType( dynamicToolType() );
     setPriority( 1 );
     setActivationShapeId( PICTURESHAPEID );

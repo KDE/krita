@@ -33,7 +33,7 @@ WizardExtension::~WizardExtension()
 }
 
 Part::Part(QObject *parent)
-    : KoDocument(parent)
+    : KoPart(parent)
 {
 }
 

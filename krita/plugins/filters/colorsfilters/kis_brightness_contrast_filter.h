@@ -61,11 +61,17 @@ public:
     KisBrightnessContrastFilterConfiguration();
     virtual ~KisBrightnessContrastFilterConfiguration();
 
-public:
-    KisCubicCurve m_curve;
-
-protected:
     void setCurve(const KisCubicCurve &curve);
+
+    const QVector<quint16>& transfer() const;
+    const KisCubicCurve& curve() const;
+
+private:
+    void updateTransfer();
+
+private:
+    KisCubicCurve m_curve;
+    QVector<quint16> m_transfer;
 };
 
 /**
@@ -88,7 +94,7 @@ public:
     }
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image = 0) const;
+    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 
     virtual bool workWith(const KoColorSpace* cs) const;
 };
@@ -98,7 +104,7 @@ class KisBrightnessContrastConfigWidget : public KisConfigWidget
 {
 
 public:
-    KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, const QRect &bounds, Qt::WFlags f = 0);
+    KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f = 0);
     virtual ~KisBrightnessContrastConfigWidget() {}
 
     virtual KisBrightnessContrastFilterConfiguration * configuration() const;

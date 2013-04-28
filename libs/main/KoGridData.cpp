@@ -25,12 +25,13 @@
 #include <KoOasisSettings.h>
 #include <KoXmlWriter.h>
 
-#include <KToggleAction>
-#include <KLocale>
+#include <KoIcon.h>
+
+#include <ktoggleaction.h>
+#include <klocale.h>
 #include <QPainter>
 #include <QRectF>
-#include <KIcon>
-#include <KDebug>
+#include <kdebug.h>
 
 #define DEFAULT_GRID_SIZE_MM 5.0
 
@@ -219,7 +220,7 @@ void KoGridData::saveOdfSettings(KoXmlWriter &settingsWriter)
 KToggleAction *KoGridData::gridToggleAction(QWidget* canvas)
 {
     if (! d->toggleGridAction) {
-        d->toggleGridAction = new KToggleAction(KIcon("view-grid"), i18n("Show Grid"), 0);
+        d->toggleGridAction = new KToggleAction(koIcon("view-grid"), i18n("Show Grid"), 0);
         d->toggleGridAction->setToolTip(i18n("Shows or hides grid"));
         d->toggleGridAction->setChecked(d->showGrid);
     }

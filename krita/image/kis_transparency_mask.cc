@@ -20,6 +20,7 @@
 
 #include "kis_debug.h"
 
+#include <KoIcon.h>
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
@@ -93,7 +94,7 @@ QRect KisTransparencyMask::needRect(const QRect &rect, PositionToFilthy pos) con
 
 QIcon KisTransparencyMask::icon() const
 {
-    return KIcon("view-filter");
+    return koIcon("view-filter");
 }
 
 bool KisTransparencyMask::accept(KisNodeVisitor &v)

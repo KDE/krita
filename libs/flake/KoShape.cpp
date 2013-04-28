@@ -32,6 +32,7 @@
 #include "KoShapeStrokeModel.h"
 #include "KoShapeBackground.h"
 #include "KoColorBackground.h"
+#include "KoHatchBackground.h"
 #include "KoGradientBackground.h"
 #include "KoPatternBackground.h"
 #include "KoShapeManager.h"
@@ -102,12 +103,14 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
       textRunAroundDistanceRight(0.0),
       textRunAroundDistanceBottom(0.0),
       textRunAroundThreshold(0.0),
-      textRunAroundContour(KoShape::ContourFull)
+      textRunAroundContour(KoShape::ContourFull),
+      anchor(0)
 {
     connectors[KoConnectionPoint::TopConnectionPoint] = KoConnectionPoint::defaultConnectionPoint(KoConnectionPoint::TopConnectionPoint);
     connectors[KoConnectionPoint::RightConnectionPoint] = KoConnectionPoint::defaultConnectionPoint(KoConnectionPoint::RightConnectionPoint);
     connectors[KoConnectionPoint::BottomConnectionPoint] = KoConnectionPoint::defaultConnectionPoint(KoConnectionPoint::BottomConnectionPoint);
     connectors[KoConnectionPoint::LeftConnectionPoint] = KoConnectionPoint::defaultConnectionPoint(KoConnectionPoint::LeftConnectionPoint);
+    connectors[KoConnectionPoint::FirstCustomConnectionPoint] = KoConnectionPoint(QPointF(0.5, 0.5), KoConnectionPoint::AllDirections, KoConnectionPoint::AlignCenter);
 }
 
 KoShapePrivate::~KoShapePrivate()
@@ -991,6 +994,18 @@ void KoShape::setTextRunAroundContour(KoShape::TextRunAroundContour contour)
     d->textRunAroundContour = contour;
 }
 
+void KoShape::setAnchor(KoShapeAnchor *anchor)
+{
+    Q_D(KoShape);
+    d->anchor = anchor;
+}
+
+KoShapeAnchor *KoShape::anchor() const
+{
+    Q_D(const KoShape);
+    return d->anchor;
+}
+
 void KoShape::setBackground(KoShapeBackground *fill)
 {
     Q_D(KoShape);
@@ -1033,8 +1048,9 @@ void KoShape::setRunThrough(short int runThrough)
 void KoShape::setVisible(bool on)
 {
     Q_D(KoShape);
-    if (d->visible == on) return;
-    d->visible = on;
+    int _on = (on ? 1 : 0);
+    if (d->visible == _on) return;
+    d->visible = _on;
 }
 
 bool KoShape::isVisible(bool recursive) const
@@ -1559,9 +1575,13 @@ KoShapeBackground *KoShape::loadOdfFill(KoShapeLoadingContext &context) const
 {
     QString fill = KoShapePrivate::getStyleProperty("fill", context);
     KoShapeBackground *bg = 0;
-    if (fill == "solid" || fill == "hatch") {
+    if (fill == "solid") {
         bg = new KoColorBackground();
-    } else if (fill == "gradient") {
+    }
+    else if (fill == "hatch") {
+        bg = new KoHatchBackground();
+    }
+    else if (fill == "gradient") {
         QString styleName = KoShapePrivate::getStyleProperty("fill-gradient-name", context);
         KoXmlElement *e = context.odfLoadingContext().stylesReader().drawStyles("gradient")[styleName];
         QString style;
@@ -1674,6 +1694,7 @@ void KoShape::loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingConte
     Q_D(KoShape);
 
     KoXmlElement child;
+    bool hasCenterGluePoint = false;
     forEachElement(child, element) {
         if (child.namespaceURI() != KoXmlNS::draw)
             continue;
@@ -1685,7 +1706,11 @@ void KoShape::loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingConte
         // doesn't support xml:id (and so, maybe, shouldn't use KoElementReference.
         const QString id = child.attributeNS(KoXmlNS::draw, "id", QString());
         const int index = id.toInt();
-        if(id.isEmpty() || index < 4 || d->connectors.contains(index)) {
+        // connection point in center should be default but odf doesn't support,
+        // in new shape, first custom point is in center, it's okay to replace that point
+        // with point from xml now, we'll add it back later
+        if(id.isEmpty() || index < KoConnectionPoint::FirstCustomConnectionPoint ||
+                (index != KoConnectionPoint::FirstCustomConnectionPoint && d->connectors.contains(index))) {
             kWarning(30006) << "glue-point with no or invalid id";
             continue;
         }
@@ -1759,6 +1784,14 @@ void KoShape::loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingConte
         }
         d->connectors[index] = connector;
         kDebug(30006) << "loaded glue-point" << index << "at position" << connector.position;
+        if (d->connectors[index].position == QPointF(0.5, 0.5)) {
+            hasCenterGluePoint = true;
+            kDebug(30006) << "center glue-point found at id " << index;
+        }
+    }
+    if (!hasCenterGluePoint) {
+        d->connectors[d->connectors.count()] = KoConnectionPoint(QPointF(0.5, 0.5),
+                     KoConnectionPoint::AllDirections, KoConnectionPoint::AlignCenter);
     }
     kDebug(30006) << "shape has now" << d->connectors.count() << "glue-points";
 }

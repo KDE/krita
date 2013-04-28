@@ -1,7 +1,25 @@
 [Desktop Entry]
-Name[fr]=Modèle DSLR
 Name=DSLR Templates
+Name[ca]=Plantilles DSLR
+Name[da]=DSLR-skabeloner
+Name[de]=DSLR-Vorlagen
+Name[el]=Πρότυπα DSLR
+Name[es]=Plantillas DSLR
+Name[et]=Digitaalpeegelkaamera (DSLR) mallid
+Name[fr]=Modèles DSLR
+Name[gl]=Modelos DSLR
+Name[hu]=DSLR sablonok
+Name[it]=Modelli DSLR
+Name[kk]=DSLR үлгілері
+Name[lt]=DSLR šablonai
+Name[nb]=DSLR-maler
+Name[nl]=DSLR-sjablonen
+Name[pl]=Szablony DSLR
+Name[pt]=Modelos de DSLR
+Name[pt_BR]=Modelos DSLR
+Name[sk]=Šablóny DSLR
+Name[sl]=Predloge DSLR
+Name[sv]=Mallar för digitala spegelreflexkameror
+Name[uk]=Шаблони DSLR
+Name[x-test]=xxDSLR Templatesxx
 X-KDE-DefaultTab=true
-
-[Dolphin]
-Timestamp=2012,7,7,13,47,20

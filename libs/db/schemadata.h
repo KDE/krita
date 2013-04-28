@@ -34,7 +34,7 @@ namespace KexiDB
 class CALLIGRADB_EXPORT SchemaData
 {
 public:
-    SchemaData(int obj_type = KexiDB::UnknownObjectType);
+    explicit SchemaData(int obj_type = KexiDB::UnknownObjectType);
     virtual ~SchemaData();
 
     int type() const {
@@ -44,10 +44,6 @@ public:
         return m_id;
     }
     QString name() const {
-        return m_name;
-    }
-    /*! The same as name(). Added to avoid conflict with QObject::name() */
-    QString objectName() const {
         return m_name;
     }
     void setName(const QString& n) {

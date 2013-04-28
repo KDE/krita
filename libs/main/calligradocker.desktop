@@ -1,15 +1,18 @@
 [Desktop Entry]
 Name=Calligra Docker Plugin
-Name[ca]=Connector amarrador del Calligra
-Name[ca@valencia]=Connector amarrador del Calligra
+Name[bs]=Calligra doker plugin
+Name[ca]=Connector acoblador del Calligra
+Name[ca@valencia]=Connector acoblador del Calligra
 Name[cs]=Modul doků Calligra
 Name[da]=Dokker-plugin til Calligra
 Name[de]=Calligra Docker-Modul
 Name[el]=Πρόσθετο προσάρτησης Calligra
 Name[es]=Complemento de ventana acoplable de Calligra
 Name[et]=Calligra dokkide plugin
-Name[fr]=Module externe de panneaux pour  Calligra
-Name[gl]=Engadido Calligra Docker
+Name[fi]=Calligran telakkaliitännäinen
+Name[fr]=Module externe de panneaux pour Calligra
+Name[gl]=Complemento para Calligra de doca
+Name[hu]=Calligra dokkoló bővítmény
 Name[it]=Estensione per i ganci di Calligra
 Name[ja]=Calligra ドッキングパネル・プラグイン
 Name[kk]=Calligra-ның докер плагині
@@ -29,6 +32,7 @@ Name[zh_TW]=Calligra 嵌入外掛程式
 Type=ServiceType
 X-KDE-ServiceType=Calligra/Dock
 Comment=A plugin that contains a so called 'dockwidget'
+Comment[bs]=Plugin koji sadrzi "sprave za dokiranje"
 Comment[ca]=Un connector que en conté un anomenat «dockwidget»
 Comment[ca@valencia]=Un connector que en conté un anomenat «dockwidget»
 Comment[da]=Et plugin som indeholder en såkaldt 'dock-kontrol'
@@ -39,7 +43,7 @@ Comment[es]=Un complemento que contiene un, así llamado, «widget acoplable»
 Comment[et]=Niinimetatud dokividinat sisaldav plugin
 Comment[fi]=Liitännäinen, joka sisältää ns. dock-elementin
 Comment[fr]=Module externe contenant un plasmoïde « panneau »
-Comment[gl]=Un engadido que contén o chamado 'dockwidget'
+Comment[gl]=Complemento que contén o trebello denominado «doca».
 Comment[hi]=एक प्लगइन जिसमें तथाकथित 'डॉकविजेट' हैं
 Comment[hne]=एक प्लगइन जेमां तथाकथित 'डाकविजेट' हे
 Comment[it]=Un'estensione contenente un cosiddetto «oggetto agganciato»
@@ -66,3 +70,5 @@ Comment[zh_TW]=包含「嵌入元件」的外掛程式
 Type=int
 [PropertyDef::X-Flake-PluginVersion]
 Type=int
+[PropertyDef::X-KDE-PluginInfo-Name]
+Type=QString

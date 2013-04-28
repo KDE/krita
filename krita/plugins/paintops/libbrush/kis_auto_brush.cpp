@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2004,2007-2009 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2012 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,14 +18,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#if defined(_WIN32) || defined(_WIN64)
-#include <stdlib.h>
-#define srand48 srand
-inline double drand48() {
-    return double(rand()) / RAND_MAX;
-}
-#endif
-
 #include "kis_auto_brush.h"
 
 #include <kis_debug.h>
@@ -39,109 +32,25 @@ inline double drand48() {
 #include <KoColorSpaceRegistry.h>
 
 #include "kis_datamanager.h"
+#include "kis_fixed_paint_device.h"
 #include "kis_paint_device.h"
-
+#include "kis_paint_information.h"
 #include "kis_mask_generator.h"
 #include "kis_boundary.h"
 
-// 3x3 supersampling
-#define SUPERSAMPLING 3
-
-struct MaskProcessor
-{
-    MaskProcessor(KisFixedPaintDeviceSP device, const KoColorSpace* cs, qreal randomness, qreal density,
-           double centerX, double centerY, double invScaleX, double invScaleY, double angle,
-           KisMaskGenerator* shape)
-    : m_device(device)
-    , m_cs(cs)
-    , m_randomness(randomness)
-    , m_density(density)
-    , m_pixelSize(cs->pixelSize())
-    , m_centerX(centerX)
-    , m_centerY(centerY)
-    , m_invScaleX(invScaleX)
-    , m_invScaleY(invScaleY)
-    , m_shape(shape)
-    {
-
-        m_cosa = cos(angle);
-        m_sina = sin(angle);
-    }
-
-    void operator()(QRect& rect)
-    {
-        process(rect);
-    }
-
-    void process(QRect& rect){
-//         kDebug() << "rect " << rect;
-        qreal random = 1.0;
-        quint8* dabPointer = m_device->data() + rect.y() * rect.width() * m_pixelSize;
-        quint8 alphaValue = OPACITY_TRANSPARENT_U8;
-        // this offset is needed when brush size is smaller then fixed device size
-        int offset = (m_device->bounds().width() - rect.width()) * m_pixelSize;
-        int supersample = (m_shape->shouldSupersample() ? SUPERSAMPLING : 1);
-        double invss = 1.0 / supersample;
-        int samplearea = supersample * supersample;
-        for (int y = rect.y(); y < rect.y() + rect.height(); y++) {
-            for (int x = rect.x(); x < rect.x() + rect.width(); x++) {
-                int value = 0;
-                for (int sy = 0; sy < supersample; sy++) {
-                    for (int sx = 0; sx < supersample; sx++) {
-                        double x_ = (x + sx * invss - m_centerX) * m_invScaleX;
-                        double y_ = (y + sy * invss - m_centerY) * m_invScaleY;
-                        double maskX = m_cosa * x_ - m_sina * y_;
-                        double maskY = m_sina * x_ + m_cosa * y_;
-                        value += m_shape->valueAt(maskX, maskY);
-                    }
-                }
-                if (supersample != 1) value /= samplearea;
-
-                if (m_randomness!= 0.0){
-                    random = (1.0 - m_randomness) + m_randomness * float(rand()) / RAND_MAX;
-                }
-
-                alphaValue = quint8( (OPACITY_OPAQUE_U8 - value) * random);
-
-                // avoid computation of random numbers if density is full
-                if (m_density != 1.0){
-                    // compute density only for visible pixels of the mask
-                    if (alphaValue != OPACITY_TRANSPARENT_U8){
-                        if ( !(m_density >= drand48()) ){
-                            alphaValue = OPACITY_TRANSPARENT_U8;
-                        }
-                    }
-                }
-
-                m_cs->applyAlphaU8Mask(dabPointer, &alphaValue, 1);
-                dabPointer += m_pixelSize;
-            }//endfor x
-            dabPointer += offset;
-        }//endfor y
-    }
-
-    KisFixedPaintDeviceSP m_device;
-    const KoColorSpace* m_cs;
-    qreal m_randomness;
-    qreal m_density;
-    quint32 m_pixelSize;
-    double m_centerX;
-    double m_centerY;
-    double m_invScaleX;
-    double m_invScaleY;
-    double m_cosa;
-    double m_sina;
-    KisMaskGenerator* m_shape;
-};
-
-
+#if defined(_WIN32) || defined(_WIN64)
+#include <stdlib.h>
+#define srand48 srand
+inline double drand48() {
+    return double(rand()) / RAND_MAX;
+}
+#endif
 
 struct KisAutoBrush::Private {
     KisMaskGenerator* shape;
     qreal randomness;
     qreal density;
     int idealThreadCountCached;
-    mutable QVector<quint8> precomputedQuarter;
 };
 
 KisAutoBrush::KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness, qreal density)
@@ -166,7 +75,86 @@ KisAutoBrush::~KisAutoBrush()
     delete d;
 }
 
+inline void fillPixelOptimized_4bytes(quint8 *color, quint8 *buf, int size)
+{
+    /**
+     * This version of filling uses low granularity of data transfers
+     * (32-bit chunks) and internal processor's parallelism. It reaches
+     * 25% better performance in KisStrokeBenchmark in comparison to
+     * per-pixel memcpy version (tested on Sandy Bridge).
+     */
 
+    int block1 = size / 8;
+    int block2 = size % 8;
+
+    quint32 *src = reinterpret_cast<quint32*>(color);
+    quint32 *dst = reinterpret_cast<quint32*>(buf);
+
+    // check whether all buffers are 4 bytes aligned
+    // (uncomment if experience some problems)
+    // Q_ASSERT(((qint64)src & 3) == 0);
+    // Q_ASSERT(((qint64)dst & 3) == 0);
+
+    for (int i = 0; i < block1; i++) {
+        *dst = *src;
+        *(dst+1) = *src;
+        *(dst+2) = *src;
+        *(dst+3) = *src;
+        *(dst+4) = *src;
+        *(dst+5) = *src;
+        *(dst+6) = *src;
+        *(dst+7) = *src;
+
+        dst += 8;
+    }
+
+    for (int i = 0; i < block2; i++) {
+        *dst = *src;
+        dst++;
+    }
+}
+
+inline void fillPixelOptimized_general(quint8 *color, quint8 *buf, int size, int pixelSize)
+{
+    /**
+     * This version uses internal processor's parallelism and gives
+     * 20% better performance in KisStrokeBenchmark in comparison to
+     * per-pixel memcpy version (tested on Sandy Bridge (+20%) and
+     * on Merom (+10%)).
+     */
+
+    int block1 = size / 8;
+    int block2 = size % 8;
+
+    for (int i = 0; i < block1; i++) {
+        quint8 *d1 = buf;
+        quint8 *d2 = buf + pixelSize;
+        quint8 *d3 = buf + 2 * pixelSize;
+        quint8 *d4 = buf + 3 * pixelSize;
+        quint8 *d5 = buf + 4 * pixelSize;
+        quint8 *d6 = buf + 5 * pixelSize;
+        quint8 *d7 = buf + 6 * pixelSize;
+        quint8 *d8 = buf + 7 * pixelSize;
+
+        for (int j = 0; j < pixelSize; j++) {
+            *(d1 + j) = color[j];
+            *(d2 + j) = color[j];
+            *(d3 + j) = color[j];
+            *(d4 + j) = color[j];
+            *(d5 + j) = color[j];
+            *(d6 + j) = color[j];
+            *(d7 + j) = color[j];
+            *(d8 + j) = color[j];
+        }
+
+        buf += 8 * pixelSize;
+    }
+
+    for (int i = 0; i < block2; i++) {
+        memcpy(buf, color, pixelSize);
+        buf += pixelSize;
+    }
+}
 
 void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
         KisBrush::ColoringInformation* coloringInformation,
@@ -181,8 +169,8 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
     quint32 pixelSize = cs->pixelSize();
 
     // mask dimension methods already includes KisBrush::angle()
-    int dstWidth = maskWidth(scaleX, angle);
-    int dstHeight = maskHeight(scaleY, angle);
+    int dstWidth = maskWidth(scaleX, angle, info);
+    int dstHeight = maskHeight(scaleY, angle, info);
 
     angle += KisBrush::angle();
 
@@ -220,134 +208,53 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
         }
     }
 
-    int rowWidth = dst->bounds().width();
-
     double invScaleX = 1.0 / scaleX;
     double invScaleY = 1.0 / scaleY;
 
     double centerX = dstWidth  * 0.5 - 0.5 + subPixelX;
     double centerY = dstHeight * 0.5 - 0.5 + subPixelY;
 
-    // the results differ, sometimes this code is faster, sometimes it is not
-    // more investigation is probably needed
-    // valueAt is costly similary to interpolation is some cases
-    if (false && isBrushSymmetric(angle) && (dynamic_cast<PlainColoringInformation*>(coloringInformation))){
-        // round eg. 14.3 to 15 so that we can interpolate
-        // we have to add one pixel because of subpixel precision (see the centerX, centerY computation)
-        // and add one pixel because of interpolation
-        int halfWidth = qRound((dstWidth - centerX) ) + 2;
-        int halfHeight = qRound((dstHeight - centerY) ) + 2;
+    d->shape->setSoftness( softnessFactor );
 
-        int size = halfWidth * halfHeight;
-        if (d->precomputedQuarter.size() != size)
-        {
-            d->precomputedQuarter.resize(size);
-        }
-
-        // precompute the table for interpolation
-        int pos = 0;
-        d->shape->setSoftness(softnessFactor);
-        int supersample = d->shape->shouldSupersample() ? SUPERSAMPLING : 1;
-        double invss = 1.0 / supersample;
-        int samplearea = supersample * supersample;
-        for (int y = 0; y < halfHeight; y++){
-            for (int x = 0; x < halfWidth; x++, pos++){
-                int value = 0;
-                for (int sy = 0; sy < supersample; sy++) {
-                    for (int sx = 0; sx < supersample; sx++) {
-                        double maskX = (x + sx * invss) * invScaleX;
-                        double maskY = (y + sy * invss) * invScaleY;
-                        value += d->shape->valueAt(maskX, maskY);
-                    }
-                }
-                if (supersample != 1) value /= samplearea;
-                d->precomputedQuarter[pos] = value;
-            }
-        }
-
-        qreal random = 1.0;
-        quint8 alphaValue = OPACITY_TRANSPARENT_U8;
-        for (int y = 0; y < dstHeight; y++) {
-            for (int x = 0; x < dstWidth; x++) {
-
-                double maskX = (x - centerX);
-                double maskY = (y - centerY);
-
-                if (coloringInformation) {
-                    if (color) {
-                        memcpy(dabPointer, color, pixelSize);
-                    } else {
-                        memcpy(dabPointer, coloringInformation->color(), pixelSize);
-                        coloringInformation->nextColumn();
-                    }
-                }
-                if (d->randomness != 0.0){
-                    random = (1.0 - d->randomness) + d->randomness * qreal(rand()) / RAND_MAX;
-                }
-
-                alphaValue = quint8( ( OPACITY_OPAQUE_U8 - interpolatedValueAt(maskX, maskY,d->precomputedQuarter,halfWidth) ) * random);
-                if (d->density != 1.0){
-                    // compute density only for visible pixels of the mask
-                    if (alphaValue != OPACITY_TRANSPARENT_U8){
-                        if ( !(d->density >= drand48()) ){
-                            alphaValue = OPACITY_TRANSPARENT_U8;
-                        }
-                    }
-                }
-
-                cs->setOpacity(dabPointer, alphaValue, 1);
-                dabPointer += pixelSize;
-
-            }//endfor x
-            //printf("\n");
-
-            if (!color && coloringInformation) {
-                coloringInformation->nextRow();
-            }
-            //TODO: this never happens probably?
-            if (dstWidth < rowWidth) {
-                dabPointer += (pixelSize * (rowWidth - dstWidth));
-            }
-
-        }//endfor y
-
-    } else
-    {
-        d->shape->setSoftness( softnessFactor );
-
-        for (int y = 0; y < dstHeight; y++) {
-            for (int x = 0; x < dstWidth; x++) {
-
-                if (coloringInformation) {
-                    if (color) {
-                        memcpy(dabPointer, color, pixelSize);
-                    } else {
-                        memcpy(dabPointer, coloringInformation->color(), pixelSize);
-                        coloringInformation->nextColumn();
-                    }
-                }
-                dabPointer += pixelSize;
-             }//endfor x
-             if (!color && coloringInformation) {
-                coloringInformation->nextRow();
-             }
-        }//endfor y
-
-        MaskProcessor s(dst, cs, d->randomness, d->density, centerX, centerY, invScaleX, invScaleY, angle, d->shape);
-        int jobs = d->idealThreadCountCached;
-        if(dstHeight > 100 && jobs >= 4) {
-            int splitter = dstHeight/jobs;
-            QVector<QRect> rects;
-            for(int i = 0; i < jobs - 1; i++) {
-                rects << QRect(0, i*splitter, dstWidth, splitter);
-            }
-            rects << QRect(0, (jobs - 1)*splitter, dstWidth, dstHeight - (jobs - 1)*splitter);
-            QtConcurrent::blockingMap(rects, s);
+    if (coloringInformation) {
+        if (color && pixelSize == 4) {
+            fillPixelOptimized_4bytes(color, dabPointer, dstWidth * dstHeight);
+        } else if (color) {
+            fillPixelOptimized_general(color, dabPointer, dstWidth * dstHeight, pixelSize);
         } else {
-            QRect rect(0, 0, dstWidth, dstHeight);
-            s.process(rect);
+            for (int y = 0; y < dstHeight; y++) {
+                for (int x = 0; x < dstWidth; x++) {
+                    memcpy(dabPointer, coloringInformation->color(), pixelSize);
+                    coloringInformation->nextColumn();
+                    dabPointer += pixelSize;
+                }
+                coloringInformation->nextRow();
+            }
         }
-    }//else
+    }
+
+    MaskProcessingData data(dst, cs, d->randomness, d->density,
+                            centerX, centerY,
+                            invScaleX, invScaleY,
+                            angle);
+
+    KisBrushMaskApplicatorBase *applicator = d->shape->applicator();
+    applicator->initializeData(&data);
+
+    int jobs = d->idealThreadCountCached;
+    if(dstHeight > 100 && jobs >= 4) {
+        int splitter = dstHeight/jobs;
+        QVector<QRect> rects;
+        for(int i = 0; i < jobs - 1; i++) {
+            rects << QRect(0, i*splitter, dstWidth, splitter);
+        }
+        rects << QRect(0, (jobs - 1)*splitter, dstWidth, dstHeight - (jobs - 1)*splitter);
+        OperatorWrapper wrapper(applicator);
+        QtConcurrent::blockingMap(rects, wrapper);
+    } else {
+        QRect rect(0, 0, dstWidth, dstHeight);
+        applicator->process(rect);
+    }
 }
 
 
@@ -368,8 +275,8 @@ QImage KisAutoBrush::createBrushPreview()
 {
     srand(0);
     srand48(0);
-    int width = maskWidth(1.0, 0.0);
-    int height = maskHeight(1.0, 0.0);
+    int width = maskWidth(1.0, 0.0, KisPaintInformation());
+    int height = maskHeight(1.0, 0.0, KisPaintInformation());
 
     KisPaintInformation info(QPointF(width * 0.5, height * 0.5), 0.5, 0, 0, KisVector2D::Zero(), 0, 0);
 
@@ -378,7 +285,7 @@ QImage KisAutoBrush::createBrushPreview()
     fdev->initialize();
 
     mask(fdev,KoColor(Qt::black, fdev->colorSpace()),1.0, 1.0, 0.0, info);
-    return fdev->convertToQImage();
+    return fdev->convertToQImage(0);
 }
 
 
@@ -396,40 +303,6 @@ qreal KisAutoBrush::randomness() const
 {
     return d->randomness;
 }
-
-
-bool KisAutoBrush::isBrushSymmetric(double angle) const
-{
-    // small brushes compute directly
-    if (d->shape->height() < 3 ) return false;
-    // even spikes are symmetric
-    if ((d->shape->spikes() % 2) != 0) return false;
-    // main condition, if not rotated or use optimization for rotated circles - rotated circle is circle again
-    if ( angle == 0.0 || ( ( d->shape->type() == KisMaskGenerator::CIRCLE ) && ( d->shape->width() == d->shape->height() ) ) ) return true;
-    // in other case return false
-    return false;
-}
-
-
-quint8 KisAutoBrush::interpolatedValueAt(double x, double y,const QVector<quint8> &precomputedQuarter,int width) const
-{
-    x = qAbs(x);
-    y = qAbs(y);
-
-    double x_i = floor(x);
-    double x_f = x - x_i;
-    double x_f_r = 1.0 - x_f;
-
-    double y_i = floor(y);
-    double y_f = fabs(y - y_i);
-    double y_f_r = 1.0 - y_f;
-
-    return (x_f_r * y_f_r * valueAt(x_i , y_i, precomputedQuarter, width) +
-            x_f   * y_f_r * valueAt(x_i + 1, y_i, precomputedQuarter, width) +
-            x_f_r * y_f   * valueAt(x_i,  y_i + 1, precomputedQuarter, width) +
-            x_f   * y_f   * valueAt(x_i + 1,  y_i + 1, precomputedQuarter, width));
-}
-
 
 void KisAutoBrush::setImage(const QImage& image)
 {

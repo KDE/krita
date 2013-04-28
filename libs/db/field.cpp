@@ -70,8 +70,7 @@ Field::Field(QuerySchema *querySchema, BaseExpr* expr)
 
 Field::Field(const QString& name, Type ctype,
              uint cconst, uint options, uint maxLength, uint precision,
-             QVariant defaultValue, const QString& caption, const QString& description,
-             uint width)
+             QVariant defaultValue, const QString& caption, const QString& description)
         : m_parent(0)
         , m_name(name.toLower())
         , m_precision(precision)
@@ -81,7 +80,6 @@ Field::Field(const QString& name, Type ctype,
         , m_order(-1)
         , m_caption(caption)
         , m_desc(description)
-        , m_width(width)
         , m_expr(0)
         , m_customProperties(0)
         , m_type(ctype)
@@ -127,7 +125,6 @@ void Field::init()
     m_options = NoOptions;
     m_defaultValue = QVariant(QString());
     m_order = -1;
-    m_width = 0;
     m_expr = 0;
     m_customProperties = 0;
     setMaxLength(0); // do not move this line up!
@@ -671,7 +668,7 @@ QString Field::debugString() const
     return dbg;
 }
 
-void Field::debug()
+void Field::debug() const
 {
     KexiDBDbg << debugString();
 }

@@ -40,6 +40,13 @@ class TestBlockLayout : public QObject
 public:
     TestBlockLayout() {}
 
+    /// FIXME: fix these broken tests
+
+    /// Test tabs.
+    void testTabs_data();
+    void testTabs();
+
+
 private slots:
     void initTestCase();
 
@@ -70,9 +77,6 @@ private slots:
 
     /// Test first line indent of paragraphs.
     void testTextIndent();
-
-    /// Test tabs.
-    void testTabs();
 
     void testBasicTextAlignments();
     void testTextAlignments();

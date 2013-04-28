@@ -81,7 +81,7 @@ public:
         //! Creates iterator for @a set set of properties.
         /*!             The properties are sorted by insertion order by default.
             Use setOrder(Iterator::Alphabetical) to have alphabetical order. */
-        Iterator(const Set &set);
+        explicit Iterator(const Set &set);
 
         //! Creates iterator for @a set set of properties.
         /*! @a selector functor is used to iterate only 
@@ -328,7 +328,7 @@ class KOPROPERTY_EXPORT Buffer : public Set
 
 public:
     Buffer();
-    Buffer(const KoProperty::Set& set);
+    explicit Buffer(const KoProperty::Set &set);
 
     /*! Intersects with other Set.*/
     virtual void intersect(const KoProperty::Set& set);
@@ -342,7 +342,7 @@ private:
 };
 
 //! @return property values for set @a set
-KOPROPERTY_EXPORT QHash<QByteArray, QVariant> propertyValues(const Set& set);
+KOPROPERTY_EXPORT QMap<QByteArray, QVariant> propertyValues(const Set& set);
 
 }
 

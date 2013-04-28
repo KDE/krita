@@ -25,9 +25,9 @@
 #include "KoTextWriter.h"
 #include <KoGenChanges.h>
 #include <KoShapeSavingContext.h>
+#include <KoTextDocument.h>
 
 #include <opendocument/KoTextSharedSavingData.h>
-#include "KoTextSopranoRdfModel_p.h"
 
 #include <QTextDocument>
 
@@ -37,7 +37,9 @@ struct KoTextOdfSaveHelper::Private {
         , document(document)
         , from(from)
         , to(to)
+#ifdef SHOULD_BUILD_RDF
         , rdfModel(0)
+#endif
     {
     }
 
@@ -47,7 +49,9 @@ struct KoTextOdfSaveHelper::Private {
     int from;
     int to;
 
+#ifdef SHOULD_BUILD_RDF
     QSharedPointer<Soprano::Model> rdfModel; //< This is so cut/paste can serialize the relevant RDF to the clipboard
+#endif
 };
 
 
@@ -87,6 +91,7 @@ KoShapeSavingContext * KoTextOdfSaveHelper::context(KoXmlWriter * bodyWriter,
     return d->context;
 }
 
+#ifdef SHOULD_BUILD_RDF
 void KoTextOdfSaveHelper::setRdfModel(QSharedPointer<Soprano::Model> m)
 {
     d->rdfModel = m;
@@ -96,4 +101,9 @@ QSharedPointer<Soprano::Model> KoTextOdfSaveHelper::rdfModel() const
 {
     return d->rdfModel;
 }
+#endif
 
+KoStyleManager *KoTextOdfSaveHelper::styleManager() const
+{
+    return KoTextDocument(d->document).styleManager();
+}

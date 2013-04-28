@@ -29,7 +29,7 @@
 #include "../commands/RemovePartCommand.h"
 #include "../commands/AddPartCommand.h"
 
-#include <KIcon>
+#include <KoIcon.h>
 
 using namespace MusicCore;
 
@@ -39,11 +39,11 @@ PartsWidget::PartsWidget(MusicTool *tool, QWidget *parent)
 {
     widget.setupUi(this);
 
-    widget.addPart->setIcon(KIcon("list-add"));
-    widget.removePart->setIcon(KIcon("list-remove"));
-    widget.editPart->setIcon(KIcon("document-properties"));
+    widget.addPart->setIcon(koIcon("list-add"));
+    widget.removePart->setIcon(koIcon("list-remove"));
+    widget.editPart->setIcon(koIcon("document-properties"));
 
-    connect(widget.partsList, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(partDoubleClicked(const QModelIndex&)));
+    connect(widget.partsList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(partDoubleClicked(QModelIndex)));
     //connect(widget.partsList, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)), this, SLOT(selectionChanged(QListWidgetItem*,QListWidgetItem*)));
     connect(widget.addPart, SIGNAL(clicked()), this, SLOT(addPart()));
     connect(widget.removePart, SIGNAL(clicked()), this, SLOT(removePart()));
@@ -59,7 +59,7 @@ void PartsWidget::setShape(MusicShape* shape)
 //        widget.partsList->addItem(sheet->part(i)->name());
 //    }
     widget.partsList->setModel(new PartsListModel(sheet));
-    connect(widget.partsList->selectionModel(), SIGNAL(currentRowChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(selectionChanged(const QModelIndex&, const QModelIndex&)));
+    connect(widget.partsList->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(selectionChanged(QModelIndex,QModelIndex)));
     m_sheet = sheet;
 }
 

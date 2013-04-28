@@ -45,7 +45,7 @@ public:
     /**
     * Apply threshold specified by user
     */
-    void applyTreshold(KisFixedPaintDeviceSP dab);
+    void applyThreshold(KisFixedPaintDeviceSP dab);
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);

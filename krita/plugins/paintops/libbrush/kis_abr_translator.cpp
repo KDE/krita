@@ -89,7 +89,7 @@ void KisAbrTranslator::finishPreset()
     m_doc.appendChild(m_root);
 
     m_abrTipDynamics.reset();
-    m_currentObjectName = QString::null;
+    m_currentObjectName.clear();
 }
 
 

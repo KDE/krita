@@ -20,6 +20,8 @@
 #ifndef _KEXIDB_GLOBAL_H_
 #define _KEXIDB_GLOBAL_H_
 
+#include "config-calligradb.h"
+
 #ifndef WARNING
 #ifdef _MSC_VER
 /* WARNING preprocessor directive

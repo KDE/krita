@@ -18,6 +18,7 @@
 #include "kis_brush_server.h"
 
 #include <QDir>
+#include <QApplication>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -35,6 +36,7 @@
 #include "kis_imagepipe_brush.h"
 #include "kis_png_brush.h"
 #include "kis_svg_brush.h"
+#include <kis_resource_server_provider.h>
 
 class BrushResourceServer : public KoResourceServer<KisBrush>, public KoResourceServerObserver<KisBrush>
 {
@@ -104,7 +106,6 @@ private:
         if(fileExtension == "abr") {
             KisAbrBrushCollection collection(filename);
             collection.load();
-            kDebug() << "abr brushes " << collection.brushes().count();
             foreach(KisAbrBrush* abrBrush, collection.brushes()) {
                 brushes.append(abrBrush);
             }
@@ -145,6 +146,13 @@ KisBrushServer::KisBrushServer()
     m_brushServer = new BrushResourceServer();
     m_brushThread = new KoResourceLoaderThread(m_brushServer);
     m_brushThread->start();
+
+    if (qApp->applicationName().toLower().contains("test")) {
+        m_brushThread->wait();
+    }
+
+    connect(KisResourceServerProvider::instance(), SIGNAL(notifyBrushBlacklistCleanup()),
+            this, SLOT(slotRemoveBlacklistedResources()));
 }
 
 KisBrushServer::~KisBrushServer()
@@ -165,6 +173,11 @@ KoResourceServer<KisBrush>* KisBrushServer::brushServer()
 {
     m_brushThread->barrier();
     return m_brushServer;
+}
+
+void KisBrushServer::slotRemoveBlacklistedResources()
+{
+    m_brushServer->removeBlackListedFiles();
 }
 
 #include "kis_brush_server.moc"

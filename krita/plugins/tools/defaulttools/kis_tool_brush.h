@@ -24,6 +24,7 @@
 #include "KoToolFactoryBase.h"
 
 #include <flake/kis_node_shape.h>
+#include <KoIcon.h>
 
 class QCheckBox;
 class QComboBox;
@@ -31,6 +32,7 @@ class QGridLayout;
 
 class KoCanvasBase;
 class KisSliderSpinBox;
+class KisDoubleSliderSpinBox;
 
 class KisToolBrush : public KisToolFreehand
 {
@@ -43,15 +45,19 @@ public:
     QWidget * createOptionWidget();
 
 private slots:
-    void slotSetSmoothness(int smoothness);
+    void slotSetSmoothnessQuality(int quality);
+    void slotSetSmoothnessFactor(qreal factor);
     void slotSetMagnetism(int magnetism);
+    void slotSetSmoothingType(int index);
 
 private:
     QGridLayout *m_optionLayout;
-    QCheckBox *m_chkSmooth;
+    QComboBox *m_cmbSmoothingType;
+
     QCheckBox *m_chkAssistant;
     KisSliderSpinBox *m_sliderMagnetism;
-    KisSliderSpinBox *m_sliderSmoothness;
+    KisDoubleSliderSpinBox *m_sliderSmoothnessFactor;
+    KisSliderSpinBox *m_sliderSmoothnessQuality;
 };
 
 
@@ -66,7 +72,7 @@ public:
 
         // Temporarily
         setToolType(TOOL_TYPE_SHAPE);
-        setIcon("krita_tool_freehand");
+        setIconName(koIconNameCStr("krita_tool_freehand"));
         setShortcut(KShortcut(Qt::Key_B));
         setPriority(0);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

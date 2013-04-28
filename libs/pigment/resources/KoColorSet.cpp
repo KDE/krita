@@ -136,7 +136,7 @@ bool KoColorSet::init()
             return false;
         }
 
-        setName(i18n(lines[1].mid(strlen("Name: ")).trimmed().toAscii()));
+        setName(i18n(lines[1].mid(strlen("Name: ")).trimmed().toLatin1()));
 
         index = 2;
 

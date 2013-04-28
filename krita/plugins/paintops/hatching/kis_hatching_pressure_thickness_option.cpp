@@ -36,5 +36,3 @@
      if (!isChecked()) return 0.5;
      return computeValue(info);
  }
- 
- 

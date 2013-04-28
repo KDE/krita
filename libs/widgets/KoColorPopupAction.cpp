@@ -24,23 +24,22 @@
 #include "KoTriangleColorSelector.h"
 #include "KoColorSlider.h"
 #include "KoCheckerBoardPainter.h"
-#include "KoColorSpaceRegistry.h"
-#include <KoResourceServer.h>
-#include <KoResourceServerProvider.h>
+#include "KoResourceServer.h"
+#include "KoResourceServerProvider.h"
+#include <KoColorSpaceRegistry.h>
+#include <KoColor.h>
+
+#include <kcolordialog.h>
+#include <kdebug.h>
+#include <klocale.h>
 
 #include <QPainter>
 #include <QWidgetAction>
 #include <QMenu>
 #include <QHBoxLayout>
 #include <QGridLayout>
+#include <QToolButton>
 
-#include <KColorDialog>
-#include <KDebug>
-#include <klocale.h>
-#include <kicon.h>
-
-#include <KoColor.h>
-#include <KoColorSpaceRegistry.h>
 
 class KoColorPopupAction::KoColorPopupActionPrivate
 {
@@ -163,29 +162,39 @@ KoColor KoColorPopupAction::currentKoColor() const
 
 void KoColorPopupAction::updateIcon( )
 {
-    QSize iconSize(16,16);
+    QSize iconSize;
+    QToolButton *toolButton = dynamic_cast<QToolButton*>(parentWidget());
+    if (toolButton) {
+        iconSize = QSize(toolButton->iconSize());
+    } else {
+        iconSize = QSize(16, 16);
+    }
+
     // This must be a QImage, as drawing to a QPixmap outside the
     // UI thread will cause sporadic crashes.
-    QImage pm = icon().pixmap(iconSize).toImage();
-    if(pm.isNull())
-    {
-        pm = QImage(iconSize, QImage::Format_ARGB32_Premultiplied);
-        pm.fill(Qt::transparent);
-        // there was no icon set so we assume
-        // that we create an icon from the current color
+    QImage pm;
+
+    if (icon().isNull()) {
         d->applyMode = false;
     }
-    QPainter p(&pm);
+
     if(d->applyMode) {
+        pm = icon().pixmap(iconSize).toImage();
+        if (pm.isNull()) {
+            pm = QImage(iconSize, QImage::Format_ARGB32_Premultiplied);
+            pm.fill(Qt::transparent);
+        }
+        QPainter p(&pm);
         p.fillRect(0, iconSize.height() - 4, iconSize.width(), 4, d->currentColor.toQColor());
-    }
-    else {
+        p.end();
+    } else {
+        pm = QImage(iconSize, QImage::Format_ARGB32_Premultiplied);
+        pm.fill(Qt::transparent);
+        QPainter p(&pm);
         d->checkerPainter.paint(p, QRect(QPoint(),iconSize));
         p.fillRect(0, 0, iconSize.width(), iconSize.height(), d->currentColor.toQColor());
+        p.end();
     }
-
-    p.end();
-
     setIcon(QIcon(QPixmap::fromImage(pm)));
 }
 

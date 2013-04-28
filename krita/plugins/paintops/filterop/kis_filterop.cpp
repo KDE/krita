@@ -24,6 +24,7 @@
 
 #include <kis_debug.h>
 
+#include <KoColorSpaceRegistry.h>
 #include <KoColorTransformation.h>
 #include <KoColor.h>
 #include <KoInputDevice.h>
@@ -41,7 +42,8 @@
 #include <kis_pressure_size_option.h>
 #include <kis_filter_option.h>
 #include <kis_filterop_settings.h>
-#include "kis_iterator_ng.h"
+#include <kis_iterator_ng.h>
+#include <kis_fixed_paint_device.h>
 
 KisFilterOp::KisFilterOp(const KisFilterOpSettings *settings, KisPainter *painter, KisImageWSP image)
         : KisBrushBasedPaintOp(settings, painter)
@@ -51,12 +53,14 @@ KisFilterOp::KisFilterOp(const KisFilterOpSettings *settings, KisPainter *painte
     Q_UNUSED(image);
     Q_ASSERT(settings);
     Q_ASSERT(painter);
-    m_tmpDevice = new KisPaintDevice(source()->colorSpace());
+    m_tmpDevice = source()->createCompositionSourceDevice();
     m_sizeOption.readOptionSetting(settings);
+    m_rotationOption.readOptionSetting(settings);
     m_sizeOption.sensor()->reset();
+    m_rotationOption.sensor()->reset();
     m_filter = KisFilterRegistry::instance()->get(settings->getString(FILTER_ID));
     m_filterConfiguration = settings->filterConfig();
-    m_ignoreAlpha = settings->getBool(FILTER_IGNORE_ALPHA);
+    m_smudgeMode = settings->getBool(FILTER_SMUDGE_MODE);
 }
 
 KisFilterOp::~KisFilterOp()
@@ -88,7 +92,8 @@ qreal KisFilterOp::paintAt(const KisPaintInformation& info)
 
     setCurrentScale(scale);
 
-    QPointF hotSpot = brush->hotSpot(scale, scale);
+    qreal rotation = m_rotationOption.apply(info);
+    QPointF hotSpot = brush->hotSpot(scale, scale, rotation, info);
     QPointF pt = info.pos() - hotSpot;
 
 
@@ -103,42 +108,32 @@ qreal KisFilterOp::paintAt(const KisPaintInformation& info)
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
 
-    qint32 maskWidth = brush->maskWidth(scale, 0.0);
-    qint32 maskHeight = brush->maskHeight(scale, 0.0);
+    qint32 maskWidth = brush->maskWidth(scale, rotation, info);
+    qint32 maskHeight = brush->maskHeight(scale, rotation, info);
 
     // Filter the paint device
     QRect rect = QRect(0, 0, maskWidth, maskHeight);
     QRect neededRect = m_filter->neededRect(rect.translated(x, y), m_filterConfiguration);
-    KisPainter p(m_tmpDevice);
-    p.bitBltOldData(QPoint(x-neededRect.x(), y-neededRect.y()), source(), neededRect);
 
+    if (!m_smudgeMode) {
+        m_tmpDevice->clear();
+    }
+
+    KisPainter p(m_tmpDevice);
+    p.bitBltOldData(QPoint(neededRect.x()-x, neededRect.y()-y), source(), neededRect);
     m_filter->process(m_tmpDevice, rect, m_filterConfiguration, 0);
 
-    // Apply the mask on the paint device (filter before mask because edge pixels may be important)
+    // Fetch the mask
+    static const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
+    static KoColor color(Qt::black, cs);
 
-    KisFixedPaintDeviceSP fixedDab = new KisFixedPaintDevice(m_tmpDevice->colorSpace());
-    fixedDab->setRect(rect);
-    fixedDab->initialize();
-
-    m_tmpDevice->readBytes(fixedDab->data(), fixedDab->bounds());
-    brush->mask(fixedDab, scale, scale, 0.0, info, xFraction, yFraction);
-    m_tmpDevice->writeBytes(fixedDab->data(), fixedDab->bounds());
-
-    if (!m_ignoreAlpha) {
-        KisHLineIteratorSP itTmpDev = m_tmpDevice->createHLineIteratorNG(0, 0, maskWidth);
-        KisHLineConstIteratorSP itSrc = source()->createHLineConstIteratorNG(x, y, maskWidth);
-        const KoColorSpace* cs = m_tmpDevice->colorSpace();
-        for (int y = 0; y < maskHeight; ++y) {
-            do {
-                quint8 alphaTmpDev = cs->opacityU8(itTmpDev->rawData());
-                quint8 alphaSrc = cs->opacityU8(itSrc->oldRawData());
-                cs->setOpacity(itTmpDev->rawData(), qMin(alphaTmpDev, alphaSrc), 1);
-            } while (itTmpDev->nextPixel() && itSrc->nextPixel());
-
-            itTmpDev->nextRow();
-            itSrc->nextRow();
-        }
-    }
+    KisFixedPaintDeviceSP fixedDab = m_dabCache->fetchDab(cs,
+                                                          color,
+                                                          scale, scale,
+                                                          rotation,
+                                                          info,
+                                                          xFraction,
+                                                          yFraction);
 
     // Blit the paint device onto the layer
     QRect dabRect = QRect(0, 0, maskWidth, maskHeight);
@@ -146,11 +141,12 @@ qreal KisFilterOp::paintAt(const KisPaintInformation& info)
 
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return 1.0;
 
-    qint32 sx = dstRect.x() - x;
-    qint32 sy = dstRect.y() - y;
-    qint32 sw = dstRect.width();
-    qint32 sh = dstRect.height();
+    painter()->
+        bitBltWithFixedSelection(dstRect.x(), dstRect.y(),
+                                 m_tmpDevice, fixedDab,
+                                 0,0,
+                                 0,0,
+                                 maskWidth, maskHeight);
 
-    painter()->bitBlt(dstRect.x(), dstRect.y(), m_tmpDevice, sx, sy, sw, sh);
     return spacing(scale);
 }

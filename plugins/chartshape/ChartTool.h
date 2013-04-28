@@ -107,9 +107,10 @@ private slots:
     void setAxisSubStepWidth(Axis *axis, qreal width);
     void setAxisUseAutomaticStepWidth(Axis *axis, bool automatic);
     void setAxisUseAutomaticSubStepWidth(Axis *axis, bool automatic);
+    void setAxisLabelsFont(Axis *axis, const QFont& font);
 
     // Legend
-    void setShowLegend(bool b);
+    void setShowLegend(bool show);
     void setLegendTitle(const QString& title);
     void setLegendFont(const QFont& font);
     void setLegendFontSize(int size);

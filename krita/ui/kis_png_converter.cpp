@@ -73,14 +73,17 @@ const quint8 PIXEL_ALPHA = 3;
 
 int getColorTypeforColorSpace(const KoColorSpace * cs , bool alpha)
 {
-    if (KoID(cs->id()) == KoID("GRAYA") || KoID(cs->id()) == KoID("GRAYA16")) {
+
+    QString id = cs->id();
+
+    if (id == "GRAYA" || id == "GRAYAU16" || id == "GRAYA16") {
         return alpha ? PNG_COLOR_TYPE_GRAY_ALPHA : PNG_COLOR_TYPE_GRAY;
     }
-    if (KoID(cs->id()) == KoID("RGBA") || KoID(cs->id()) == KoID("RGBA16")) {
+    if (id == "RGBA" || id == "RGBA16") {
         return alpha ? PNG_COLOR_TYPE_RGB_ALPHA : PNG_COLOR_TYPE_RGB;
     }
 
-    KMessageBox::error(0, i18n("Cannot export images in %1.\n", cs->name())) ;
+//    KMessageBox::error(0, i18n("Cannot export images in %1.\n", cs->name())) ;
     return -1;
 
 }
@@ -114,7 +117,7 @@ void fillText(png_text* p_text, const char* key, QString& text)
     p_text->compression = PNG_TEXT_COMPRESSION_zTXt;
     p_text->key = const_cast<char *>(key);
     char* textc = new char[text.length()+1];
-    strcpy(textc, text.toAscii());
+    strcpy(textc, text.toLatin1());
     p_text->text = textc;
     p_text->text_length = text.length() + 1;
 }
@@ -166,7 +169,7 @@ void writeRawProfile(png_struct *ping, png_info *ping_info, QString profile_type
     png_charp dp = text[0].text;
     *dp++ = '\n';
 
-    memcpy(dp, (const char *) profile_type.toLatin1().data(), profile_type.length());
+    memcpy(dp, profile_type.toLatin1().constData(), profile_type.length());
 
     dp += description_length;
     *dp++ = '\n';
@@ -518,7 +521,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     } else {
         dbgFile << "no embedded profile, will use the default profile";
     }
-    
+
     // Check that the profile is used by the color space
     if (profile && !KoColorSpaceRegistry::instance()->colorSpaceFactory(
         KoColorSpaceRegistry::instance()->colorSpaceId(
@@ -543,7 +546,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     // Create the cmsTransform if needed
     KoColorTransformation* transform = 0;
     if (profile && !profile->isSuitableForOutput()) {
-        transform = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, profile)->createColorConverter(cs);
+        transform = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, profile)->createColorConverter(cs, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
     }
 
     // Creating the KisImageWSP
@@ -858,7 +861,8 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     int color_type = getColorTypeforColorSpace(device->colorSpace(), options.alpha);
 
     if (color_type == -1) {
-        return KisImageBuilder_RESULT_UNSUPPORTED;
+        device->convertTo(KoColorSpaceRegistry::instance()->rgb8(0));
+        color_type = options.alpha ? PNG_COLOR_TYPE_RGB_ALPHA : PNG_COLOR_TYPE_RGB;
     }
 
     // Try to compute a table of color if the colorspace is RGB8f
@@ -922,7 +926,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     // set sRGB only if the profile is sRGB  -- http://www.w3.org/TR/PNG/#11sRGB says sRGB and iCCP should not both be present
 
     bool sRGB = device->colorSpace()->profile()->name().toLower().contains("srgb");
-    if (sRGB) {
+    if (!options.saveSRGBProfile && sRGB) {
         png_set_sRGB(png_ptr, info_ptr, PNG_sRGB_INTENT_ABSOLUTE);
     }
     // set the palette
@@ -934,7 +938,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     while (it != annotationsEnd) {
         if (!(*it) || (*it)->type().isEmpty()) {
             dbgFile << "Warning: empty annotation";
-            
+            it++;
             continue;
         }
 
@@ -949,27 +953,27 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
         } else if ((*it)->type() == "kpp_version" || (*it)->type() == "kpp_preset" ) {
             dbgFile << "Saving preset information " << (*it)->description();
             png_textp      text = (png_textp) png_malloc(png_ptr, (png_uint_32) sizeof(png_text));
-            
+
             QByteArray keyData = (*it)->description().toLatin1();
             text[0].key = keyData.data();
             text[0].text = (*it)->annotation().data();
             text[0].text_length = (*it)->annotation().size();
             text[0].compression = -1;
-            
+
             png_set_text(png_ptr, info_ptr, text, 1);
             png_free(png_ptr, text);
         }
-        
+        it++;
     }
-    
+
     // Save the color profile
     const KoColorProfile* colorProfile = device->colorSpace()->profile();
     QByteArray colorProfileData = colorProfile->rawData();
-    if (!sRGB) {
+    if (!sRGB || options.saveSRGBProfile) {
 #if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 5
-        png_set_iCCP(png_ptr, info_ptr, "icc", PNG_COMPRESSION_TYPE_BASE, (const png_bytep)colorProfileData.data(), colorProfileData . size());
+        png_set_iCCP(png_ptr, info_ptr, "icc", PNG_COMPRESSION_TYPE_BASE, (const png_bytep)colorProfileData.constData(), colorProfileData . size());
 #else
-        png_set_iCCP(png_ptr, info_ptr, "icc", PNG_COMPRESSION_TYPE_BASE, (char*)colorProfileData.data(), colorProfileData . size());
+        png_set_iCCP(png_ptr, info_ptr, "icc", PNG_COMPRESSION_TYPE_BASE, (char*)colorProfileData.constData(), colorProfileData . size());
 #endif
     }
 

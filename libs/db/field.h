@@ -55,7 +55,7 @@ class BaseExpr;
  - defaultValue
  - caption (user readable name that can be e.g. translated)
  - description (user readable name additional text, can be useful for developers)
- - width (a hint for displaying in tabular mode or as text box)
+ - defaultWidth (a hint for displaying in tabular mode or as text box)
 
  Field can also have assigned expression (see KexiDB::BaseExpr class,
  and expression() method).
@@ -149,7 +149,7 @@ public:
     /*! Creates a database field as a child of \a tableSchema table.
      maxLength property is set to 0 (unlimited length).
      No other properties are set (even the name), so these should be set later. */
-    Field(TableSchema *tableSchema);
+    explicit Field(TableSchema *tableSchema);
 
     /*! Creates a database field.
      maxLength property is set to 0 (unlimited length).
@@ -164,8 +164,7 @@ public:
           uint maxLength = 0, uint precision = 0,
           QVariant defaultValue = QVariant(),
           const QString& caption = QString(),
-          const QString& description = QString(),
-          uint width = 0);
+          const QString& description = QString());
 
     /*! Copy constructor. */
     Field(const Field& f);
@@ -495,12 +494,6 @@ public:
         return m_desc;
     }
 
-    /*! \return width of this field (usually in pixels or points)
-    0 (the default) means there is no hint for the width. */
-    inline uint width() const {
-        return m_width;
-    }
-
     //! if the type has the unsigned attribute
     inline bool isUnsigned() const {
         return m_options & Unsigned;
@@ -622,12 +615,6 @@ public:
         m_desc = description;
     }
 
-    /*! Sets visible width for this field to \a w
-     (usually in pixels or points). 0 means there is no hint for the width. */
-    void setWidth(uint w) {
-        m_width = w;
-    }
-
     /*! There can be added asterisks (QueryAsterisk objects)
      to query schemas' field list. QueryAsterisk subclasses Field class,
      and to check if the given object (pointed by Field*)
@@ -644,7 +631,7 @@ public:
     virtual QString debugString() const;
 
     /*! Shows debug information about this field. */
-    void debug();
+    void debug() const;
 
     /*! \return KexiDB::BaseExpr object if the field value is an
      expression.  Unless the expression is set with setExpression(), it is null.
@@ -729,7 +716,6 @@ protected:
     int m_order;
     QString m_caption;
     QString m_desc;
-    uint m_width;
     QVector<QString> m_hints;
 
     KexiDB::BaseExpr *m_expr;

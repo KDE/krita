@@ -20,10 +20,10 @@
 
 #include "QuickTableButton.h"
 
+#include <KoIcon.h>
 #include <klocale.h>
-#include <kicon.h>
 #include <kdebug.h>
-#include <KAction>
+#include <kaction.h>
 
 #include <QMenu>
 #include <QFrame>
@@ -159,7 +159,7 @@ QuickTableButton::QuickTableButton(QWidget *parent)
 {
     setToolTip(i18n("Insert a table"));
     setToolButtonStyle(Qt::ToolButtonIconOnly);
-    setIcon(KIcon("insert-table"));
+    setIcon(koIcon("insert-table"));
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     m_menu = new QMenu(this);

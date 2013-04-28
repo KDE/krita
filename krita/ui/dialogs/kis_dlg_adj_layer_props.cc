@@ -31,7 +31,6 @@
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
-#include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_adjustment_layer.h"
 #include "kis_paint_device.h"
@@ -42,7 +41,7 @@
 KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisNodeSP node,
                                          KisNodeFilterInterface* nfi,
                                          KisPaintDeviceSP paintDevice,
-                                         const KisImageWSP image,
+                                         KisView2 *view,
                                          KisFilterConfiguration *configuration,
                                          const QString & layerName,
                                          const QString & caption,
@@ -51,7 +50,6 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisNodeSP node,
     : KDialog(parent)
     , m_node(node)
     , m_paintDevice(paintDevice)
-    , m_image(0)
     , m_currentConfigWidget(0)
     , m_currentFilter(0)
     , m_currentConfiguration(0)
@@ -73,7 +71,6 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisNodeSP node,
     page->setObjectName("page widget");
     QHBoxLayout * layout = new QHBoxLayout(page);
     layout->setMargin(0);
-    layout->setSpacing(6);
     setMainWidget(page);
 
     QVBoxLayout *v1 = new QVBoxLayout();
@@ -93,9 +90,10 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisNodeSP node,
     connect(m_layerName, SIGNAL(textChanged(const QString &)), this, SLOT(slotNameChanged(const QString &)));
 
     if (m_currentFilter) {
-        m_currentConfigWidget = m_currentFilter->createConfigurationWidget(page, paintDevice, image);
+        m_currentConfigWidget = m_currentFilter->createConfigurationWidget(page, paintDevice);
 
         if (m_currentConfigWidget) {
+            m_currentConfigWidget->setView(view);
             m_currentConfigWidget->setConfiguration(m_currentConfiguration);
         }
     }

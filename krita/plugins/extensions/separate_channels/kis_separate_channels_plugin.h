@@ -22,13 +22,9 @@
 
 #include <QVariant>
 
-#include <kparts/plugin.h>
+#include <kis_view_plugin.h>
 
-class KisView2;
-
-
-
-class KisSeparateChannelsPlugin : public KParts::Plugin
+class KisSeparateChannelsPlugin : public KisViewPlugin
 {
     Q_OBJECT
 public:
@@ -38,10 +34,6 @@ public:
 private slots:
 
     void slotSeparate();
-
-private:
-
-    KisView2 * m_view;
 };
 
 #endif

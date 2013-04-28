@@ -18,8 +18,10 @@
  */
 #include "Plugin.h"
 #include "VideoShapeFactory.h"
+#include "VideoToolFactory.h"
 
 #include <KoShapeRegistry.h>
+#include <KoToolRegistry.h>
 
 #include <kpluginfactory.h>
 
@@ -31,7 +33,7 @@ Plugin::Plugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     KoShapeRegistry::instance()->add( new VideoShapeFactory() );
-//    KoToolRegistry::instance()->add( new VideoToolFactory() );
+    KoToolRegistry::instance()->add(new VideoToolFactory());
 }
 
 #include <Plugin.moc>

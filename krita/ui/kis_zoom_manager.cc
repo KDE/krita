@@ -26,7 +26,6 @@
 #include <kactioncollection.h>
 #include <kstandardaction.h>
 #include <ktoggleaction.h>
-#include <kicon.h>
 #include <kstatusbar.h>
 #include <kis_debug.h>
 
@@ -38,6 +37,9 @@
 #include <KoCanvasControllerWidget.h>
 #include <KoGlobal.h>
 #include <KoRulerController.h>
+#include <KoUnit.h>
+#include <KoDpi.h>
+
 
 #include "kis_doc2.h"
 #include "kis_view2.h"
@@ -46,6 +48,26 @@
 #include "kis_image.h"
 #include "kis_statusbar.h"
 #include "kis_config.h"
+
+class KisZoomController : public KoZoomController
+{
+public:
+    KisZoomController(KoCanvasController *co, KisCoordinatesConverter *zh, KActionCollection *actionCollection, KoZoomAction::SpecialButtons specialButtons, QObject *parent)
+        : KoZoomController(co, zh, actionCollection, specialButtons, parent),
+          m_converter(zh)
+    {
+    }
+
+protected:
+    QSize documentToViewport(const QSizeF &size) {
+        QRectF docRect(QPointF(), size);
+        return m_converter->documentToWidget(docRect).toRect().size();
+    }
+
+private:
+    KisCoordinatesConverter *m_converter;
+};
+
 
 KisZoomManager::KisZoomManager(KisView2 * view, KoZoomHandler * zoomHandler,
                                KoCanvasController * canvasController)
@@ -69,11 +91,18 @@ KisZoomManager::~KisZoomManager()
 
 void KisZoomManager::setup(KActionCollection * actionCollection)
 {
-    KoZoomMode::setMinimumZoom(0.125);
-    KoZoomMode::setMaximumZoom(64.0);
+    QSize imageSize = m_view->image()->size();
+    qreal minDimension = qMin(imageSize.width(), imageSize.height());
+    qreal minZoom = qMin(100.0 / minDimension, 0.1);
+
+    KoZoomMode::setMinimumZoom(minZoom);
+    KoZoomMode::setMaximumZoom(90.0);
+
+    KisCoordinatesConverter *converter =
+        dynamic_cast<KisCoordinatesConverter*>(m_zoomHandler);
 
     KisConfig cfg;
-    m_zoomController = new KoZoomController(m_canvasController, m_zoomHandler, actionCollection, KoZoomAction::AspectMode, this);
+    m_zoomController = new KisZoomController(m_canvasController, converter, actionCollection, KoZoomAction::AspectMode, this);
     m_zoomHandler->setZoomMode(KoZoomMode::ZOOM_PIXELS);
     m_zoomHandler->setZoom(1.0);
 
@@ -90,7 +119,7 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
     m_showRulersAction  = new KToggleAction(i18n("Show Rulers"), this);
     actionCollection->addAction("view_ruler", m_showRulersAction);
     m_showRulersAction->setWhatsThis(i18n("The rulers show the horizontal and vertical positions of the mouse on the image "
-                                          "and can be used to position your mouse at the right place on the canvas. <p>Uncheck this to hide the rulers."));
+                                          "and can be used to position your mouse at the right place on the canvas. <p>Uncheck this to hide the rulers.</p>"));
     connect(m_showRulersAction, SIGNAL(toggled(bool)), SLOT(toggleShowRulers(bool)));
 
     m_100pct = new KAction(i18n("Reset zoom"), this);
@@ -148,9 +177,8 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
 
 void KisZoomManager::mousePositionChanged(const QPoint &pos)
 {
-    // "widget-to-postprocessed-flake"
-    QPoint canvasOffset(m_canvasController->canvasOffsetX(), m_canvasController->canvasOffsetY());
-    QPoint viewPos = pos - m_canvasController->canvas()->documentOrigin() - canvasOffset;
+    QPoint canvasShift = m_view->canvasBase()->coordinatesConverter()->flakeToWidget(QPointF(m_canvasController->canvasOffsetX(), m_canvasController->canvasOffsetY())).toPoint();
+    QPoint viewPos = pos - canvasShift;
 
     m_horizontalRuler->updateMouseCoordinate(viewPos.x());
     m_verticalRuler->updateMouseCoordinate(viewPos.y());
@@ -177,13 +205,11 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
     Q_UNUSED(zoom);
 
     m_view->canvasBase()->notifyZoomChanged();
-    m_canvasController->pan(m_view->canvasBase()->coordinatesConverter()->updateOffsetAfterTransform());
 }
 
 void KisZoomManager::slotScrollAreaSizeChanged()
 {
-    QSize widgetSize = m_view->canvasBase()->coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect().size();
-    m_canvasController->updateDocumentSize(widgetSize, true);
+    pageOffsetChanged();
     updateGUI();
 }
 
@@ -191,20 +217,24 @@ void KisZoomManager::changeAspectMode(bool aspectMode)
 {
     KisImageWSP image = m_view->image();
 
-    if (aspectMode)
-        m_zoomHandler->setResolution(image->xRes(), image->yRes());
-    else
-        m_zoomHandler->setResolutionToStandard();
+    KoZoomMode::Mode newMode = KoZoomMode::ZOOM_CONSTANT;
+    qreal newZoom = m_zoomHandler->zoom();
 
-    m_zoomController->setZoom(m_zoomHandler->zoomMode(), m_zoomHandler->zoom());
+    qreal resolutionX = aspectMode ? image->xRes() : POINT_TO_INCH(static_cast<qreal>(KoDpi::dpiX()));
+    qreal resolutionY = aspectMode ? image->yRes() : POINT_TO_INCH(static_cast<qreal>(KoDpi::dpiY()));
+
+    m_zoomController->setZoom(newMode, newZoom, resolutionX, resolutionY);
     m_view->canvasBase()->notifyZoomChanged();
 }
 
 
 void KisZoomManager::pageOffsetChanged()
 {
-    m_horizontalRuler->setOffset(m_canvasController->canvasOffsetX() + m_view->canvasBase()->documentOrigin().x());
-    m_verticalRuler->setOffset(m_canvasController->canvasOffsetY() + m_view->canvasBase()->documentOrigin().y());
+    QRectF widgetRect = m_view->canvasBase()->coordinatesConverter()->imageRectInWidgetPixels();
+    QPoint canvasShift = widgetRect.topLeft().toPoint();
+
+    m_horizontalRuler->setOffset(canvasShift.x());
+    m_verticalRuler->setOffset(canvasShift.y());
 }
 
 void KisZoomManager::zoomTo100()

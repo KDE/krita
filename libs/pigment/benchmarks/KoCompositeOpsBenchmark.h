@@ -32,15 +32,6 @@ private slots:
     
     void benchmarkCompositeOver();
     void benchmarkCompositeAlphaDarken();
-    void benchmarkCompositeAdd();
-    void benchmarkCompositeBurn();
-    void benchmarkCompositeDivide();
-    void benchmarkCompositeDodge();
-    void benchmarkCompositeInversedSubtract();
-    void benchmarkCompositeMulitply();
-    void benchmarkCompositeOverlay();
-    void benchmarkCompositeScreen();
-    void benchmarkCompositeSubtract();
 
 private:
     quint8 * m_dstBuffer;

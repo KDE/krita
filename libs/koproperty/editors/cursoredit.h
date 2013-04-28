@@ -33,7 +33,7 @@ class KOPROPERTY_EXPORT CursorEdit : public ComboBox
     Q_PROPERTY(QCursor value READ cursorValue WRITE setCursorValue USER true)
 
 public:
-    CursorEdit(QWidget *parent = 0);
+    explicit CursorEdit(QWidget *parent = 0);
     virtual ~CursorEdit();
 
     virtual QCursor cursorValue() const;

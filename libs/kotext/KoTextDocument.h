@@ -39,6 +39,7 @@
 
 class KoStyleManager;
 class KoInlineTextObjectManager;
+class KoTextRangeManager;
 class KUndo2Stack;
 class KoTextEditor;
 class KoOdfLineNumberingConfiguration;
@@ -56,11 +57,11 @@ class KOTEXT_EXPORT KoTextDocument
 {
 public:
     /// Constructor
-    KoTextDocument(QTextDocument *document);
+    KoTextDocument(QTextDocument *document); // krazy:exclude=explicit
     /// Constructor
-    KoTextDocument(const QTextDocument *document);
+    KoTextDocument(const QTextDocument *document); // krazy:exclude=explicit
     /// Constructor
-    KoTextDocument(QWeakPointer<QTextDocument> document);
+    KoTextDocument(QWeakPointer<QTextDocument> document); // krazy:exclude=explicit
 
     /// Destructor
     ~KoTextDocument();
@@ -143,6 +144,12 @@ public:
     /// Set the KoInlineTextObjectManager
     void setInlineTextObjectManager(KoInlineTextObjectManager *manager);
 
+    /// Returns the KoTextRangeManager
+    KoTextRangeManager *textRangeManager() const;
+
+    /// Set the KoTextRangeManager
+    void setTextRangeManager(KoTextRangeManager *manager);
+
     /// Set the KoDocument's shapeController. This controller exists as long as KoDocument exists. It should only be used for deleting shapes.
     void setShapeController(KoShapeController *controller);
 
@@ -212,12 +219,12 @@ public:
     enum ResourceType {
         StyleManager = QTextDocument::UserResource,
         Lists,
+        TextRangeManager,
         InlineTextManager,
         ChangeTrackerResource,
         UndoStack,
         TextEditor,
         LineNumberingConfiguration,
-        AuxillaryFrame,
         RelativeTabs,
         HeadingList,
         Selections,
@@ -231,13 +238,13 @@ public:
 
     static const QUrl StyleManagerURL;
     static const QUrl ListsURL;
+    static const QUrl TextRangeManagerURL;
     static const QUrl InlineObjectTextManagerURL;
     static const QUrl ChangeTrackerURL;
     static const QUrl UndoStackURL;
     static const QUrl TextEditorURL;
     static const QUrl LineNumberingConfigurationURL;
     static const QUrl BibliographyConfigurationURL;
-    static const QUrl AuxillaryFrameURL;
     static const QUrl RelativeTabsURL;
     static const QUrl HeadingListURL;
     static const QUrl SelectionsURL;

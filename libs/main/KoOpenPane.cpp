@@ -34,10 +34,9 @@
 #include <klocale.h>
 #include <kcomponentdata.h>
 #include <kpushbutton.h>
-#include <kiconloader.h>
-#include <kicon.h>
 #include <kdebug.h>
 
+#include <KoIcon.h>
 #include "KoTemplateTree.h"
 #include "KoTemplateGroup.h"
 #include "KoTemplate.h"
@@ -191,7 +190,7 @@ void KoOpenPane::initRecentDocs()
     QString header = i18n("Recent Documents");
     KoRecentDocumentsPane* recentDocPane = new KoRecentDocumentsPane(this, d->m_componentData, header);
     connect(recentDocPane, SIGNAL(openUrl(const KUrl&)), this, SIGNAL(openExistingFile(const KUrl&)));
-    QTreeWidgetItem* item = addPane(header, "document-open", recentDocPane, 0);
+    QTreeWidgetItem* item = addPane(header, koIconName("document-open"), recentDocPane, 0);
     connect(recentDocPane, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)),
             this, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)));
     connect(this, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)),
@@ -285,7 +284,7 @@ void KoOpenPane::addCustomDocumentWidget(QWidget *widget, const QString& title, 
     }
 }
 
-QTreeWidgetItem* KoOpenPane::addPane(const QString& title, const QString& icon, QWidget* widget, int sortWeight)
+QTreeWidgetItem* KoOpenPane::addPane(const QString &title, const QString &iconName, QWidget *widget, int sortWeight)
 {
     if (!widget) {
         return 0;
@@ -293,7 +292,7 @@ QTreeWidgetItem* KoOpenPane::addPane(const QString& title, const QString& icon, 
 
     int id = d->m_widgetStack->addWidget(widget);
     KoSectionListItem* listItem = new KoSectionListItem(d->m_sectionList, title, sortWeight, id);
-    listItem->setIcon(0, KIcon(icon));
+    listItem->setIcon(0, KIcon(iconName));
 
     return listItem;
 }
@@ -314,7 +313,7 @@ QTreeWidgetItem* KoOpenPane::addPane(const QString& title, const QPixmap& icon, 
             image = image.scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
 
-        image.convertToFormat(QImage::Format_ARGB32);
+        image = image.convertToFormat(QImage::Format_ARGB32);
         image = image.copy((image.width() - 48) / 2, (image.height() - 48) / 2, 48, 48);
         listItem->setIcon(0, QIcon(QPixmap::fromImage(image)));
     }

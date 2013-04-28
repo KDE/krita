@@ -54,6 +54,10 @@ public:
     ///   - do other things to other structures (eg resizing the textshape)
     virtual void doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea) = 0;
 
+    /// Makes all canvases redraw the shapes maintained by this provider
+    ///    use with care - it eats a lot of processing for no real gain
+    virtual void updateAll() = 0;
+
     /// Returns a suggested a size for the root area
     virtual QSizeF suggestSize(KoTextLayoutRootArea *rootArea) = 0;
 

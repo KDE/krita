@@ -18,6 +18,7 @@
 #ifndef KIS_SHAPE_LAYER_CANVAS_H
 #define KIS_SHAPE_LAYER_CANVAS_H
 
+#include <QMutex>
 #include <KoCanvasBase.h>
 
 #include <kis_types.h>
@@ -64,7 +65,8 @@ public:
 
 private slots:
     void repaint();
-
+signals:
+    void forwardRepaint();
 private:
 
     KoViewConverter * m_viewConverter;
@@ -72,8 +74,9 @@ private:
     KisPaintDeviceSP m_projection;
     KisShapeLayer *m_parentLayer;
 
-    QRegion m_dirty;
-    bool m_repaintTriggered, m_antialias;
+    bool m_antialias;
+    QRegion m_dirtyRegion;
+    QMutex m_dirtyRegionMutex;
 };
 
 #endif

@@ -157,6 +157,7 @@ void ParagraphGeneral::setUnit(const KoUnit &unit)
 void ParagraphGeneral::save(KoParagraphStyle *style)
 {
     KoParagraphStyle *savingStyle;
+
     if (style == 0) {
         if (m_style == 0)
             return;
@@ -216,6 +217,11 @@ void ParagraphGeneral::setStyleManager(KoStyleManager *sm)
     m_styleManager = sm;
     CharacterGeneral::setStyleManager(m_styleManager);
     m_paragraphInheritedStyleModel->setStyleManager(m_styleManager);
+}
+
+KoParagraphStyle *ParagraphGeneral::style() const
+{
+    return m_style;
 }
 
 #include <ParagraphGeneral.moc>

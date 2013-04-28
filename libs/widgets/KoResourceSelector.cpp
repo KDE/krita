@@ -26,11 +26,10 @@
 #include <QTableView>
 #include <QListView>
 #include <QHeaderView>
-#include <QHeaderView>
 #include <QMouseEvent>
 #include <QStyledItemDelegate>
 
-#include <KDebug>
+#include <kdebug.h>
 
 class KoResourceSelector::Private
 {

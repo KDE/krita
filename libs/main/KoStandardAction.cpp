@@ -18,9 +18,9 @@
 
 #include "KoStandardAction.h"
 
-#include <KActionCollection>
-#include <KToggleAction>
-#include <KLocale>
+#include <kactioncollection.h>
+#include <ktoggleaction.h>
+#include <klocale.h>
 
 KAction *KoStandardAction::create(StandardAction id, const QObject *recvr, const char *slot, QObject *parent)
 {

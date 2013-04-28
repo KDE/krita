@@ -28,7 +28,7 @@ class KoStyleManager;
 class QTextDocument;
 class QTextTable;
 
-class KoChangeTracker;
+
 class KoDocumentRdfBase;
 
 #include <QTextBlock>

@@ -358,7 +358,7 @@ qreal KoReportPreRendererPrivate::renderSectionSize(const KRSectionData & sectio
         KoReportASyncItemBase *async_ob = qobject_cast<KoReportASyncItemBase*>(ob);
         
         if (!async_ob) { 
-            itemHeight = ob->render(0, 0, offset, itemData, m_scriptHandler);
+            itemHeight = ob->renderSimpleData(0, 0, offset, itemData, m_scriptHandler);
            
             if (itemHeight > intHeight) {
                 intHeight = itemHeight;
@@ -400,7 +400,7 @@ qreal KoReportPreRendererPrivate::renderSection(const KRSectionData & sectionDat
         QVariant itemData = m_kodata->value(ob->itemDataSource());
 
         if (ob->supportsSubQuery()) {
-           itemHeight = ob->render(m_page, sec, offset, m_kodata, m_scriptHandler);
+           itemHeight = ob->renderReportData(m_page, sec, offset, m_kodata, m_scriptHandler);
         } else {
             KoReportASyncItemBase *async_ob = qobject_cast<KoReportASyncItemBase*>(ob);
             if (async_ob){
@@ -408,7 +408,7 @@ qreal KoReportPreRendererPrivate::renderSection(const KRSectionData & sectionDat
                 asyncManager->addItem(async_ob, m_page, sec, offset, itemData, m_scriptHandler);
             } else {
                 kDebug() << "sync object";
-                itemHeight = ob->render(m_page, sec, offset, itemData, m_scriptHandler);
+                itemHeight = ob->renderSimpleData(m_page, sec, offset, itemData, m_scriptHandler);
             }
         }
 

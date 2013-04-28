@@ -30,7 +30,6 @@
 #include <QSpinBox>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
@@ -197,7 +196,7 @@ void KisSobelFilter::process(KisPaintDeviceSP device,
 }
 
 
-KisConfigWidget * KisSobelFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageWSP) const
+KisConfigWidget * KisSobelFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
 {
     vKisBoolWidgetParam param;
     param.push_back(KisBoolWidgetParam(true, i18n("Sobel horizontally"), "doHorizontally"));

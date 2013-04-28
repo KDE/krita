@@ -21,13 +21,15 @@ Boston, MA 02110-1301, USA.
 #ifndef __koFilterManager_p_h__
 #define __koFilterManager_p_h__
 
+#include "KoFilterManager.h"
+
+#include <kurl.h>
+#include <kdialog.h>
+#include <KoProgressUpdater.h>
+
 #include <QString>
 #include <QStringList>
 #include <QWeakPointer>
-#include <KUrl>
-#include <KDialog>
-
-#include <KoProgressUpdater.h>
 
 class QListWidget;
 

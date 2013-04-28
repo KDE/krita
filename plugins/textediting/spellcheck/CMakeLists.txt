@@ -13,7 +13,7 @@ set(spellcheck_SRCS
 
 kde4_add_plugin(spellcheck ${spellcheck_SRCS})
 
-target_link_libraries(spellcheck kotext)
+target_link_libraries(spellcheck kotext textlayout)
 
 install(TARGETS spellcheck DESTINATION ${PLUGIN_INSTALL_DIR})
 

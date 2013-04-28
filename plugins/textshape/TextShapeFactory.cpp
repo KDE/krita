@@ -29,10 +29,12 @@
 #include <KoStyleManager.h>
 #include <KoDocumentResourceManager.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoTextRangeManager.h>
 #include <changetracker/KoChangeTracker.h>
 #include <KoImageCollection.h>
 #include <KoShapeLoadingContext.h>
-#include <KoInlineNote.h>
+
+#include <KoIcon.h>
 
 #include <klocale.h>
 #include <kundo2stack.h>
@@ -50,7 +52,7 @@ TextShapeFactory::TextShapeFactory()
 
     KoShapeTemplate t;
     t.name = i18n("Text");
-    t.icon = "x-shape-text";
+    t.iconName = koIconName("x-shape-text");
     t.toolTip = i18n("Text Shape");
     KoProperties *props = new KoProperties();
     t.properties = props;
@@ -61,16 +63,26 @@ TextShapeFactory::TextShapeFactory()
 KoShape *TextShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
     KoInlineTextObjectManager *manager = 0;
+    KoTextRangeManager *locationManager = 0;
     if (documentResources && documentResources->hasResource(KoText::InlineTextObjectManager)) {
         QVariant variant = documentResources->resource(KoText::InlineTextObjectManager);
         if (variant.isValid()) {
-            manager = variant.value<KoInlineTextObjectManager*>();
+            manager = variant.value<KoInlineTextObjectManager *>();
+        }
+    }
+    if (documentResources && documentResources->hasResource(KoText::TextRangeManager)) {
+        QVariant variant = documentResources->resource(KoText::TextRangeManager);
+        if (variant.isValid()) {
+            locationManager = variant.value<KoTextRangeManager *>();
         }
     }
     if (!manager) {
         manager = new KoInlineTextObjectManager();
     }
-    TextShape *text = new TextShape(manager);
+    if (!locationManager) {
+        locationManager = new KoTextRangeManager();
+    }
+    TextShape *text = new TextShape(manager, locationManager);
     if (documentResources) {
         KoTextDocument document(text->textShapeData()->document());
 
@@ -92,6 +104,9 @@ KoShape *TextShapeFactory::createDefaultShape(KoDocumentResourceManager *documen
             KoChangeTracker *changeTracker = documentResources->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
             document.setChangeTracker(changeTracker);
         }
+
+        //update the resources of the document
+        text->updateDocumentData();
 
         text->setImageCollection(documentResources->imageCollection());
     }
@@ -129,6 +144,9 @@ void TextShapeFactory::newDocumentResourceManager(KoDocumentResourceManager *man
     QVariant variant;
     variant.setValue<KoInlineTextObjectManager*>(new KoInlineTextObjectManager(manager));
     manager->setResource(KoText::InlineTextObjectManager, variant);
+
+    variant.setValue<KoTextRangeManager *>(new KoTextRangeManager());
+    manager->setResource(KoText::TextRangeManager, variant);
 
     if (!manager->hasResource(KoDocumentResourceManager::UndoStack)) {
 //        kWarning(32500) << "No KUndo2Stack found in the document resource manager, creating a new one";

@@ -26,16 +26,14 @@
 #include <kdebug.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
-#include <KGlobal>
-#include <KConfig>
-#include <KConfigGroup>
+#include <kglobal.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 
 class KoPluginLoader::Private
 {
 public:
     QStringList loadedServiceTypes;
-
-    static KoPluginLoader *singleton;
 };
 
 KoPluginLoader::KoPluginLoader()
@@ -84,14 +82,18 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
             configChanged = true;
         }
         foreach(KSharedPtr<KService> service, offers) {
-            QString lib = service->library();
-            if (whiteList.contains(lib)) {
+            const QString pluginName = service->property(QLatin1String("X-KDE-PluginInfo-Name")).toString();
+            if (pluginName.isEmpty()) {
+                kWarning(30003) << "Loading plugin" << service->name() << "failed, has no X-KDE-PluginInfo-Name.";
+                continue;
+            }
+            if (whiteList.contains(pluginName)) {
                 plugins.append(service);
-            } else if (!firstStart && !knownList.contains(lib)) { // also load newly installed plugins.
+            } else if (!firstStart && !knownList.contains(pluginName)) { // also load newly installed plugins.
                 plugins.append(service);
                 configChanged = true;
             } else {
-                blacklist << service->library();
+                blacklist << pluginName;
             }
         }
     } else {
@@ -119,7 +121,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         QString error = 0;
         QObject * plugin = service->createInstance<QObject>(this, QVariantList(), &error);
         if (plugin) {
-            whiteList << service->library();
+            whiteList << service->property(QLatin1String("X-KDE-PluginInfo-Name")).toString();
             kDebug(30003) << "Loaded plugin" << service->name();
             delete plugin;
         } else {

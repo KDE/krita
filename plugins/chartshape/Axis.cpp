@@ -296,8 +296,8 @@ void Axis::Private::registerDiagram(KDChart::AbstractDiagram *diagram)
     KDChartModel *model = new KDChartModel(plotArea);
     diagram->setModel(model);
 
-    QObject::connect(plotArea->proxyModel(), SIGNAL(columnsInserted(const QModelIndex&, int, int)),
-                     model,                  SLOT(slotColumnsInserted(const QModelIndex&, int, int)));
+    QObject::connect(plotArea->proxyModel(), SIGNAL(columnsInserted(QModelIndex,int,int)),
+                     model,                  SLOT(slotColumnsInserted(QModelIndex,int,int)));
 
     QObject::connect(diagram, SIGNAL(propertiesChanged()),
                      plotArea, SLOT(plotAreaUpdate()));
@@ -314,8 +314,8 @@ void Axis::Private::deregisterDiagram(KDChart::AbstractDiagram *diagram)
     KDChartModel *model = dynamic_cast<KDChartModel*>(diagram->model());
     Q_ASSERT(model);
 
-    QObject::disconnect(plotArea->proxyModel(), SIGNAL(columnsInserted(const QModelIndex&, int, int)),
-                        model,                  SLOT(slotColumnsInserted(const QModelIndex&, int, int)));
+    QObject::disconnect(plotArea->proxyModel(), SIGNAL(columnsInserted(QModelIndex,int,int)),
+                        model,                  SLOT(slotColumnsInserted(QModelIndex,int,int)));
 
     QObject::disconnect(diagram, SIGNAL(propertiesChanged()),
                         plotArea, SLOT(plotAreaUpdate()));
@@ -1649,13 +1649,13 @@ void Axis::saveOdf(KoShapeSavingContext &context)
     QString name;
     switch(dimension()) {
     case XAxisDimension:
-        name = "x";
+        name = QLatin1Char('x');
         break;
     case YAxisDimension:
-        name = "y";
+        name = QLatin1Char('y');
         break;
     case ZAxisDimension:
-        name = "z";
+        name = QLatin1Char('z');
         break;
     }
     int i = 1;

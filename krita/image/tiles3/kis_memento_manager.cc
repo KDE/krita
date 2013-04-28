@@ -170,7 +170,7 @@ void KisMementoManager::commit()
 {
     if (m_index.isEmpty()) {
         if(namedTransactionInProgress()) {
-            warnTiles << "Named Transaction is empty";
+            //warnTiles << "Named Transaction is empty";
             /**
              * We still need to continue commit, because
              * a named transaction may be reverted by the user
@@ -391,7 +391,6 @@ void KisMementoManager::debugPrintInfo()
 {
     printf("KisMementoManager stats:\n");
     printf("Index list\n");
-    KisHistoryItem changeList;
     KisMementoItemSP mi;
     KisMementoItemHashTableIterator iter(&m_index);
 
@@ -402,7 +401,7 @@ void KisMementoManager::debugPrintInfo()
 
     printf("Revisions list:\n");
     qint32 i = 0;
-    foreach(changeList, m_revisions) {
+    foreach(const KisHistoryItem &changeList, m_revisions) {
         printf("--- revision #%d ---\n", i++);
         foreach(mi, changeList.itemList) {
             mi->debugPrintInfo();
@@ -411,7 +410,7 @@ void KisMementoManager::debugPrintInfo()
 
     printf("\nCancelled revisions list:\n");
     i = 0;
-    foreach(changeList, m_cancelledRevisions) {
+    foreach(const KisHistoryItem &changeList, m_cancelledRevisions) {
         printf("--- revision #%d ---\n", m_revisions.size() + i++);
         foreach(mi, changeList.itemList) {
             mi->debugPrintInfo();

@@ -21,7 +21,7 @@
 #include <KoTableOfContentsGeneratorInfo.h>
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
-#include <KLocale>
+#include <klocale.h>
 
 TableOfContentsEntryModel::TableOfContentsEntryModel(KoStyleManager *manager, KoTableOfContentsGeneratorInfo *info)
     :m_styleManager(manager),

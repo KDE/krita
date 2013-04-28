@@ -18,6 +18,7 @@
 
 #include "move_stroke_strategy.h"
 
+#include <klocale.h>
 #include "kis_image_interfaces.h"
 #include "kis_node.h"
 #include "commands_new/kis_update_command.h"
@@ -28,7 +29,7 @@ MoveStrokeStrategy::MoveStrokeStrategy(KisNodeSP node,
                                        KisUpdatesFacade *updatesFacade,
                                        KisPostExecutionUndoAdapter *undoAdapter,
                                        KisUndoAdapter *legacyUndoAdapter)
-    : KisStrokeStrategyUndoCommandBased("Move stroke", false, undoAdapter),
+    : KisStrokeStrategyUndoCommandBased(i18n("Move Stroke"), false, undoAdapter),
       m_node(node),
       m_updatesFacade(updatesFacade),
       m_legacyUndoAdapter(legacyUndoAdapter)

@@ -24,7 +24,7 @@
 #include <QPainter>
 #include <QPainterPath>
 
-#include <KIntNumInput>
+#include "knuminput.h"
 
 #include <KoCanvasBase.h>
 #include <KoViewConverter.h>
@@ -110,10 +110,6 @@ void KisToolSelectBrush::mousePressEvent(KoPointerEvent *event)
     if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
                        Qt::LeftButton, Qt::NoModifier)) {
 
-        if (!currentNode()) {
-            return;
-        }
-
         if (!selectionEditable()) {
             return;
         }
@@ -195,7 +191,7 @@ void KisToolSelectBrush::applyToSelection(const QPainterPath &selection) {
     if (!kisCanvas)
         return;
 
-    KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Brush Selection"));
+    KisSelectionToolHelper helper(kisCanvas, i18n("Brush Selection"));
 
     if (selectionMode() == PIXEL_SELECTION) {
 

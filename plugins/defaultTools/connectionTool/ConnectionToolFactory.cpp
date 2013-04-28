@@ -21,13 +21,14 @@
 #include "ConnectionToolFactory.h"
 #include "ConnectionTool.h"
 
-#include <KDebug>
+#include <KoIcon.h>
+#include <kdebug.h>
 
 ConnectionToolFactory::ConnectionToolFactory()
     : KoToolFactoryBase(ConnectionTool_ID)
 {
-    setToolTip(i18n("Connect shapes"));    
-    setIcon("x-shape-connection");
+    setToolTip(i18n("Connect shapes"));
+    setIconName(koIconNameCStr("x-shape-connection"));
     setToolType(mainToolType());
     setPriority(1);
     setActivationShapeId("flake/always");

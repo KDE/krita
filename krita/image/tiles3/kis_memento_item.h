@@ -33,7 +33,7 @@ class KisMementoItem : public KisShared
 public:
     enum enumType {
         CHANGED  = 0x0,
-        DELETED  = 0x1,
+        DELETED  = 0x1
     };
 
 public:

@@ -21,7 +21,7 @@
 
 #include "KoPluginLoader.h"
 
-#include <KGlobal>
+#include <kglobal.h>
 
 KoDockRegistry::KoDockRegistry()
 {
@@ -34,7 +34,7 @@ void KoDockRegistry::init()
     config.blacklist = "DockerPluginsDisabled";
     config.group = "calligra";
     KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Dock"),
-                                     QString::fromLatin1("[X-Flake-MinVersion] <= 4"),
+                                     QString::fromLatin1("[X-Flake-PluginVersion] == 27"),
                                      config);
 }
 

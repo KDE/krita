@@ -31,7 +31,7 @@
 class KOWIDGETS_EXPORT KoPagePreviewWidget : public QWidget {
     Q_OBJECT
 public:
-    KoPagePreviewWidget(QWidget *parent = 0);
+    explicit KoPagePreviewWidget(QWidget *parent = 0);
     ~KoPagePreviewWidget();
 
 protected:

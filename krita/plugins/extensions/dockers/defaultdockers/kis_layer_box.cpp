@@ -46,13 +46,12 @@
 #include <kmenu.h>
 #include <kmessagebox.h>
 #include <kpushbutton.h>
-#include <kiconloader.h>
-#include <kicontheme.h>
 #include <klocale.h>
 #include <khbox.h>
-#include <kicon.h>
 #include <kaction.h>
+#include <kactioncollection.h>
 
+#include <KoIcon.h>
 #include <KoDocumentSectionView.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
@@ -66,6 +65,8 @@
 #include <kis_node.h>
 #include <kis_composite_ops_model.h>
 
+#include "kis_action.h"
+#include "kis_action_manager.h"
 #include "widgets/kis_cmb_composite.h"
 #include "widgets/kis_slider_spin_box.h"
 #include "kis_view2.h"
@@ -79,6 +80,26 @@
 
 #include "ui_wdglayerbox.h"
 
+class ButtonAction : public KisAction
+{
+public:
+    ButtonAction(QAbstractButton* button, const KIcon& icon, const QString& text, QObject* parent) : KisAction(icon, text, parent) , m_button(button)
+    {
+        connect(m_button, SIGNAL(clicked()), this, SLOT(trigger()));
+    }
+
+    ButtonAction(QAbstractButton* button, QObject* parent) : KisAction(parent) , m_button(button)
+    {
+        connect(m_button, SIGNAL(clicked()), this, SLOT(trigger()));
+    }
+
+    virtual void setActionEnabled(bool enabled) {
+        KisAction::setActionEnabled(enabled);
+        m_button->setEnabled(enabled);
+    }
+private:
+    QAbstractButton* m_button;
+};
 
 KisLayerBox::KisLayerBox()
         : QDockWidget(i18n("Layers"))
@@ -106,61 +127,83 @@ KisLayerBox::KisLayerBox()
     QActionGroup *group = new QActionGroup(this);
     QList<QAction*> actions;
 
-    actions << m_viewModeMenu->addAction(KIcon("view-list-text"),
+    actions << m_viewModeMenu->addAction(koIcon("view-list-text"),
                                          i18n("Minimal View"), this, SLOT(slotMinimalView()));
-    actions << m_viewModeMenu->addAction(KIcon("view-list-details"),
+    actions << m_viewModeMenu->addAction(koIcon("view-list-details"),
                                          i18n("Detailed View"), this, SLOT(slotDetailedView()));
-    actions << m_viewModeMenu->addAction(KIcon("view-preview"),
+    actions << m_viewModeMenu->addAction(koIcon("view-preview"),
                                          i18n("Thumbnail View"), this, SLOT(slotThumbnailView()));
 
     for (int i = 0, n = actions.count(); i < n; ++i) {
         actions[i]->setCheckable(true);
         actions[i]->setActionGroup(group);
     }
-    actions[1]->trigger(); //TODO save/load previous state
 
-    m_wdgLayerBox->bnAdd->setIcon(BarIcon("list-add"));
+    m_wdgLayerBox->bnAdd->setIcon(koIcon("list-add"));
 
     m_wdgLayerBox->bnViewMode->setMenu(m_viewModeMenu);
     m_wdgLayerBox->bnViewMode->setPopupMode(QToolButton::InstantPopup);
-    m_wdgLayerBox->bnViewMode->setIcon(KIcon("view-choose"));
+    m_wdgLayerBox->bnViewMode->setIcon(koIcon("view-choose"));
     m_wdgLayerBox->bnViewMode->setText(i18n("View mode"));
 
-    m_wdgLayerBox->bnDelete->setIcon(BarIcon("list-remove"));
+    m_wdgLayerBox->bnDelete->setIcon(koIcon("list-remove"));
     m_wdgLayerBox->bnDelete->setIconSize(QSize(22, 22));
 
     m_wdgLayerBox->bnRaise->setEnabled(false);
-    m_wdgLayerBox->bnRaise->setIcon(BarIcon("go-up"));
+    m_wdgLayerBox->bnRaise->setIcon(koIcon("go-up"));
     m_wdgLayerBox->bnRaise->setIconSize(QSize(22, 22));
-    
+
     m_wdgLayerBox->bnLower->setEnabled(false);
-    m_wdgLayerBox->bnLower->setIcon(BarIcon("go-down"));
+    m_wdgLayerBox->bnLower->setIcon(koIcon("go-down"));
     m_wdgLayerBox->bnLower->setIconSize(QSize(22, 22));
-    
+
     m_wdgLayerBox->bnLeft->setEnabled(true);
-    m_wdgLayerBox->bnLeft->setIcon(BarIcon("arrow-left"));
+    m_wdgLayerBox->bnLeft->setIcon(koIcon("arrow-left"));
     m_wdgLayerBox->bnLeft->setIconSize(QSize(22, 22));
-    
+
     m_wdgLayerBox->bnRight->setEnabled(true);
-    m_wdgLayerBox->bnRight->setIcon(BarIcon("arrow-right"));
+    m_wdgLayerBox->bnRight->setIcon(koIcon("arrow-right"));
     m_wdgLayerBox->bnRight->setIconSize(QSize(22, 22));
 
-    m_wdgLayerBox->bnProperties->setIcon(BarIcon("document-properties"));
+    m_wdgLayerBox->bnProperties->setIcon(koIcon("document-properties"));
     m_wdgLayerBox->bnProperties->setIconSize(QSize(22, 22));
 
-    m_wdgLayerBox->bnDuplicate->setIcon(BarIcon("edit-copy"));
+    m_wdgLayerBox->bnDuplicate->setIcon(koIcon("edit-copy"));
     m_wdgLayerBox->bnDuplicate->setIconSize(QSize(22, 22));
 
-    connect(m_wdgLayerBox->bnDelete, SIGNAL(clicked()), SLOT(slotRmClicked()));
+    m_removeAction  = new ButtonAction(m_wdgLayerBox->bnDelete, koIcon("edit-delete"), i18n("&Remove Layer"), this);
+    m_removeAction->setActivationFlags(KisAction::ACTIVE_NODE);
+    m_removeAction->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    connect(m_removeAction, SIGNAL(triggered()), this, SLOT(slotRmClicked()));
+    m_actions.append(m_removeAction);
+
+    KisAction* action  = new ButtonAction(m_wdgLayerBox->bnLeft, this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
+    action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotLeftClicked()));
+    m_actions.append(action);
+
+    action  = new ButtonAction(m_wdgLayerBox->bnRight, this);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
+    action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotRightClicked()));
+    m_actions.append(action);
+
+    m_propertiesAction  = new ButtonAction(m_wdgLayerBox->bnProperties, koIcon("document-properties"), i18n("&Properties..."),this);
+    m_propertiesAction->setActivationFlags(KisAction::ACTIVE_NODE);
+    m_propertiesAction->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    connect(m_propertiesAction, SIGNAL(triggered()), this, SLOT(slotPropertiesClicked()));
+    m_actions.append(m_propertiesAction);
+
+    m_dulicateAction  = new ButtonAction(m_wdgLayerBox->bnDuplicate, koIcon("edit-copy"), i18n("&Duplicate Layer or Mask"), this);
+    m_dulicateAction->setActivationFlags(KisAction::ACTIVE_NODE);
+    connect(m_dulicateAction, SIGNAL(triggered()), this, SLOT(slotDuplicateClicked()));
+    m_actions.append(m_dulicateAction);
+
     // NOTE: this is _not_ a mistake. The layerbox shows the layers in the reverse order
     connect(m_wdgLayerBox->bnRaise, SIGNAL(clicked()), SLOT(slotLowerClicked()));
     connect(m_wdgLayerBox->bnLower, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
     // END NOTE
-    connect(m_wdgLayerBox->bnLeft, SIGNAL(clicked()), SLOT(slotLeftClicked()));
-    connect(m_wdgLayerBox->bnRight, SIGNAL(clicked()), SLOT(slotRightClicked()));
-
-    connect(m_wdgLayerBox->bnProperties, SIGNAL(clicked()), SLOT(slotPropertiesClicked()));
-    connect(m_wdgLayerBox->bnDuplicate, SIGNAL(clicked()), SLOT(slotDuplicateClicked()));
 
     connect(m_wdgLayerBox->doubleOpacity, SIGNAL(valueChanged(qreal)), SLOT(slotOpacitySliderMoved(qreal)));
     connect(&m_delayTimer, SIGNAL(timeout()), SLOT(slotOpacityChanged()));
@@ -168,32 +211,53 @@ KisLayerBox::KisLayerBox()
     connect(m_wdgLayerBox->cmbComposite, SIGNAL(activated(int)), SLOT(slotCompositeOpChanged(int)));
     connect(m_wdgLayerBox->bnAdd, SIGNAL(clicked()), SLOT(slotNewPaintLayer()));
 
-    m_newPainterLayerAction = new KAction(KIcon("document-new"), i18n("&Paint Layer"), this);
+    m_newPainterLayerAction = new KisAction(koIcon("document-new"), i18n("&Paint Layer"), this);
     connect(m_newPainterLayerAction, SIGNAL(triggered(bool)), this, SLOT(slotNewPaintLayer()));
+    m_actions.append(m_newPainterLayerAction);
 
-    m_newGroupLayerAction = new KAction(KIcon("folder-new"), i18n("&Group Layer"), this);
+    m_newGroupLayerAction = new KisAction(koIcon("folder-new"), i18n("&Group Layer"), this);
     connect(m_newGroupLayerAction, SIGNAL(triggered(bool)), this, SLOT(slotNewGroupLayer()));
+    m_actions.append(m_newGroupLayerAction);
 
-    m_newCloneLayerAction = new KAction(KIcon("edit-copy"), i18n("&Clone Layer"), this);
+    m_newCloneLayerAction = new KisAction(koIcon("edit-copy"), i18n("&Clone Layer"), this);
     connect(m_newCloneLayerAction, SIGNAL(triggered(bool)), this, SLOT(slotNewCloneLayer()));
+    m_actions.append(m_newCloneLayerAction);
 
-    m_newShapeLayerAction = new KAction(KIcon("bookmark-new"), i18n("&Vector Layer"), this);
+    m_newShapeLayerAction = new KisAction(koIcon("bookmark-new"), i18n("&Vector Layer"), this);
     connect(m_newShapeLayerAction, SIGNAL(triggered(bool)), this, SLOT(slotNewShapeLayer()));
+    m_actions.append(m_newShapeLayerAction);
 
-    m_newAdjustmentLayerAction = new KAction(KIcon("view-filter"), i18n("&Filter Layer..."), this);
+    m_newAdjustmentLayerAction = new KisAction(koIcon("view-filter"), i18n("&Filter Layer..."), this);
     connect(m_newAdjustmentLayerAction, SIGNAL(triggered(bool)), this, SLOT(slotNewAdjustmentLayer()));
+    m_actions.append(m_newAdjustmentLayerAction);
 
-    m_newGeneratorLayerAction = new KAction(KIcon("view-filter"), i18n("&Generated Layer..."), this);
+    m_newGeneratorLayerAction = new KisAction(koIcon("view-filter"), i18n("&Generated Layer..."), this);
     connect(m_newGeneratorLayerAction, SIGNAL(triggered(bool)), this, SLOT(slotNewGeneratorLayer()));
+    m_actions.append(m_newGeneratorLayerAction);
 
-    m_newTransparencyMaskAction = new KAction(KIcon("edit-copy"), i18n("&Transparency Mask"), this);
+    m_newFileLayerAction = new KisAction(koIcon("document-open"), i18n("&File Layer"), this);
+    connect(m_newFileLayerAction, SIGNAL(triggered(bool)), this, SLOT(slotNewFileLayer()));
+    m_actions.append(m_newFileLayerAction);
+
+    m_newTransparencyMaskAction = new KisAction(koIcon("edit-copy"), i18n("&Transparency Mask"), this);
+    m_newTransparencyMaskAction->setActivationFlags(KisAction::ACTIVE_LAYER);
     connect(m_newTransparencyMaskAction, SIGNAL(triggered(bool)), this, SLOT(slotNewTransparencyMask()));
+    m_actions.append(m_newTransparencyMaskAction);
 
-    m_newEffectMaskAction = new KAction(KIcon("bookmarks"), i18n("&Filter Mask..."), this);
+    m_newEffectMaskAction = new KisAction(koIcon("bookmarks"), i18n("&Filter Mask..."), this);
+    m_newEffectMaskAction->setActivationFlags(KisAction::ACTIVE_LAYER);
     connect(m_newEffectMaskAction, SIGNAL(triggered(bool)), this, SLOT(slotNewEffectMask()));
+    m_actions.append(m_newEffectMaskAction);
 
-    m_newSelectionMaskAction = new KAction(KIcon("edit-paste"), i18n("&Local Selection"), this);
+    m_newSelectionMaskAction = new KisAction(koIcon("edit-paste"), i18n("&Local Selection"), this);
+    m_newSelectionMaskAction->setActivationFlags(KisAction::ACTIVE_LAYER);
     connect(m_newSelectionMaskAction, SIGNAL(triggered(bool)), this, SLOT(slotNewSelectionMask()));
+    m_actions.append(m_newSelectionMaskAction);
+
+    m_selectOpaque = new KisAction(i18n("&Select Opaque"), this);
+    m_selectOpaque->setActivationFlags(KisAction::ACTIVE_LAYER);
+    connect(m_selectOpaque, SIGNAL(triggered(bool)), this, SLOT(slotSelectOpaque()));
+    m_actions.append(m_selectOpaque);
 
     m_newLayerMenu = new KMenu(this);
     m_wdgLayerBox->bnAdd->setMenu(m_newLayerMenu);
@@ -205,21 +269,20 @@ KisLayerBox::KisLayerBox()
     m_newLayerMenu->addAction(m_newShapeLayerAction);
     m_newLayerMenu->addAction(m_newAdjustmentLayerAction);
     m_newLayerMenu->addAction(m_newGeneratorLayerAction);
+    m_newLayerMenu->addAction(m_newFileLayerAction);
     m_newLayerMenu->addSeparator();
     m_newLayerMenu->addAction(m_newTransparencyMaskAction);
     m_newLayerMenu->addAction(m_newEffectMaskAction);
 #if 0 // XXX_2.0
-    m_newLayerMenu->addAction(KIcon("view-filter"), i18n("&Transformation Mask..."), this, SLOT(slotNewTransformationMa
-    sk()));
+    m_newLayerMenu->addAction(koIcon("view-filter"), i18n("&Transformation Mask..."), this, SLOT(slotNewTransformationMask()));
 #endif
     m_newLayerMenu->addAction(m_newSelectionMaskAction);
-
     
     m_nodeModel = new KisNodeModel(this);
 
     /**
      * Connect model updateUI() to enable/disable controls.
-     * Note: nodeActivated() is connected seperately in setImage(), because
+     * Note: nodeActivated() is connected separately in setImage(), because
      *       it needs particular order of calls: first the connection to the
      *       node manager should be called, then updateUI()
      */
@@ -307,6 +370,10 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         m_wdgLayerBox->listLayers->expandAll();
         expandNodesRecursively(m_image->rootLayer(), m_nodeModel, m_wdgLayerBox->listLayers);
         m_wdgLayerBox->listLayers->scrollToBottom();
+
+        foreach(KisAction *action, m_actions) {
+            m_canvas->view()->actionManager()->addAction(action);
+        }
     }
 
 }
@@ -314,6 +381,11 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
 
 void KisLayerBox::unsetCanvas()
 {
+    if (m_canvas) {
+        foreach(KisAction *action, m_actions) {
+            m_canvas->view()->actionManager()->takeAction(action);
+        }
+    }
     setCanvas(0);
 }
 
@@ -328,20 +400,15 @@ void KisLayerBox::updateUI()
 
     KisNodeSP active = m_nodeManager->activeNode();
 
-    m_wdgLayerBox->bnDelete->setEnabled(active);
-    m_wdgLayerBox->bnRaise->setEnabled(active && (active->nextSibling()
+    m_wdgLayerBox->bnRaise->setEnabled(active && active->isEditable() && (active->nextSibling()
                                        || (active->parent() && active->parent() != m_image->root())));
-    m_wdgLayerBox->bnLower->setEnabled(active && (active->prevSibling()
+    m_wdgLayerBox->bnLower->setEnabled(active && active->isEditable() && (active->prevSibling()
                                        || (active->parent() && active->parent() != m_image->root())));
-    m_wdgLayerBox->bnLeft->setEnabled(active);
-    m_wdgLayerBox->bnRight->setEnabled(active);
-    m_wdgLayerBox->bnDuplicate->setEnabled(active);
-    m_wdgLayerBox->bnProperties->setEnabled(active);
 
-    m_wdgLayerBox->doubleOpacity->setEnabled(active);
+    m_wdgLayerBox->doubleOpacity->setEnabled(active && active->isEditable());
     m_wdgLayerBox->doubleOpacity->setRange(0, 100, 0);
 
-    m_wdgLayerBox->cmbComposite->setEnabled(active);
+    m_wdgLayerBox->cmbComposite->setEnabled(active && active->isEditable());
 
     if (active) {
         if (m_nodeManager->activePaintDevice()) {
@@ -365,10 +432,6 @@ void KisLayerBox::updateUI()
             }
         }
     }
-    m_newTransparencyMaskAction->setEnabled(active);
-    m_newEffectMaskAction->setEnabled(active);
-    m_newSelectionMaskAction->setEnabled(active);
-    m_newCloneLayerAction->setEnabled(active);
 }
 
 
@@ -413,11 +476,12 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
     QMenu menu;
 
     if (index.isValid()) {
-        menu.addAction(KIcon("document-properties"), i18n("&Properties..."), this, SLOT(slotPropertiesClicked()));
+        menu.addAction(m_propertiesAction);
         menu.addSeparator();
-        menu.addAction(KIcon("edit-delete"), i18n("&Remove Layer"), this, SLOT(slotRmClicked()));
-        menu.addAction(KIcon("edit-duplicate"), i18n("&Duplicate Layer or Mask"), this, SLOT(slotDuplicateClicked()));
-        QAction* mergeLayerDown = menu.addAction(KIcon("edit-merge"), i18n("&Merge with Layer Below"), this, SLOT(slotMergeLayer()));
+        menu.addAction(m_removeAction);
+        menu.addAction(m_dulicateAction);
+        // TODO: missing icon "edit-merge"
+        QAction* mergeLayerDown = menu.addAction(i18n("&Merge with Layer Below"), this, SLOT(slotMergeLayer()));
         if (!index.sibling(index.row() + 1, 0).isValid()) mergeLayerDown->setEnabled(false);
         menu.addSeparator();
     }
@@ -425,7 +489,8 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
     menu.addAction(m_newTransparencyMaskAction);
     menu.addAction(m_newEffectMaskAction);
     menu.addAction(m_newSelectionMaskAction);
-
+    menu.addSeparator();
+    menu.addAction(m_selectOpaque);
     menu.exec(pos);
 }
 
@@ -475,6 +540,12 @@ void KisLayerBox::slotNewShapeLayer()
     m_nodeManager->createNode("KisShapeLayer");
 }
 
+void KisLayerBox::slotNewFileLayer()
+{
+    if (!m_canvas) return;
+    m_nodeManager->createNode("KisFileLayer");
+}
+
 
 void KisLayerBox::slotNewAdjustmentLayer()
 {
@@ -511,9 +582,7 @@ void KisLayerBox::slotNewSelectionMask()
 void KisLayerBox::slotRmClicked()
 {
     if(!m_canvas) return;
-
-    KisNodeSP node = m_nodeManager->activeNode();
-    m_nodeManager->removeNode(node);
+    m_nodeManager->removeNode();
 }
 
 void KisLayerBox::slotRaiseClicked()
@@ -635,6 +704,15 @@ void KisLayerBox::slotExpanded(const QModelIndex &index)
     KisNodeSP node = m_nodeModel->nodeFromIndex(index);
     if (node) {
         node->setCollapsed(false);
+    }
+}
+
+void KisLayerBox::slotSelectOpaque()
+{
+    if(!m_canvas) return;
+    QAction *action = m_canvas->view()->actionManager()->actionByName("selectopaque");
+    if (action) {
+        action->trigger();
     }
 }
 

@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2010 Mani Chandrasekar <maninc@gmail.com>
+ *  Copyright (c) 2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,11 +22,11 @@
 #include <kcomponentdata.h>
 #include <kdebug.h>
 #include <kurl.h>
-#include <KMimeType>
-#include <KMimeTypeTrader>
+#include <kmimetype.h>
+#include <kmimetypetrader.h>
 #include <kpluginfactory.h>
-#include <KCmdLineArgs>
-#include <KAboutData>
+#include <kcmdlineargs.h>
+#include <kaboutdata.h>
 
 #include <KoView.h>
 #include <KoDocument.h>
@@ -50,16 +51,17 @@ OnlineDocument::OnlineDocument(QObject *parent, const QVariantList &)
     connect(action, SIGNAL(triggered(bool)), SLOT(slotOnlineDocument()));
 
     const KAboutData *about = KCmdLineArgs::aboutData();
-    QString name = about->appName();
+    m_type = OnlineDocument::UNKNOWN; // default
+    if (about) {
+        QString name = about->appName();
 
-    if (name.contains("words")) {
-        m_type = OnlineDocument::WORDS;
-    } else if (name.contains("stage")) {
-        m_type = OnlineDocument::STAGE;
-    } else if (name.contains("sheets")) {
-        m_type = OnlineDocument::SHEETS;
-    } else {
-        m_type = OnlineDocument::UNKNOWN;
+        if (name.contains("words")) {
+            m_type = OnlineDocument::WORDS;
+        } else if (name.contains("stage")) {
+            m_type = OnlineDocument::STAGE;
+        } else if (name.contains("sheets")) {
+            m_type = OnlineDocument::SHEETS;
+        }
     }
 }
 
@@ -75,21 +77,24 @@ void OnlineDocument::slotOnlineDocument()
         if (QDialog::Accepted == m_login->exec()) {
             connect(m_login->googleService(), SIGNAL(receivedDocument(QString)), this,
                     SLOT(receivedOnlineDocument(QString )));
+        } else {
+            delete m_login;
+            m_login = 0;
         }
     } else {
-        m_login->googleService()->showDocumentListWindow(true);
+        GoogleDocumentService *service = m_login->googleService();
+        if (service) {
+            service->showDocumentListWindow(true);
+        } else {
+            m_login->show();
+            m_login->activateWindow();
+            m_login->raise();
+        }
     }
 }
 
 void OnlineDocument::receivedOnlineDocument(QString  path)
 {
-//    QString mimetype = KMimeType::findByPath(path)->name();
-//    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(mimetype);
-//    QString error;
-//    KoDocument *doc = entry.createDoc(&error);
-//    KUrl url;
-//    url.setPath(path);
-//    doc->openUrl(url);
     KoView *view = dynamic_cast<KoView *>(parent());
     if (!view) {
         return;

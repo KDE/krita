@@ -24,6 +24,7 @@
 #include "kis_tool_shape.h"
 #include "flake/kis_node_shape.h"
 #include <kis_tool_polyline_base.h>
+#include <KoIcon.h>
 
 class KoCanvasBase;
 
@@ -50,7 +51,7 @@ public:
         setToolTip(i18n("Draw a polygon. Shift-mouseclick ends the polygon."));
         setToolType(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
-        setIcon("tool_polygon");
+        setIconName(koIconNameCStr("tool_polygon"));
         setPriority(4);
     }
 

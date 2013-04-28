@@ -27,6 +27,7 @@
 #include <KoID.h>
 
 #include <KoConfig.h>
+#include <KoIcon.h>
 
 #ifdef GHNS
 #include <knewstuff3/downloaddialog.h>
@@ -58,15 +59,15 @@ KisColorSpaceSelector::KisColorSpaceSelector(QWidget* parent) : QWidget(parent),
     d->colorSpaceSelector->cmbColorModels->setIDList(KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::OnlyUserVisible));
     fillCmbDepths(d->colorSpaceSelector->cmbColorModels->currentItem());
 
-    d->colorSpaceSelector->bnInstallProfile->setIcon( SmallIcon("document-open") );
+    d->colorSpaceSelector->bnInstallProfile->setIcon(koIcon("document-open"));
     d->colorSpaceSelector->bnInstallProfile->setToolTip( i18n("Open Color Profile") );
 
-    d->colorSpaceSelector->bnDownloadProfile->setIcon( SmallIcon("download") );
+    d->colorSpaceSelector->bnDownloadProfile->setIcon(koIcon("download"));
     d->colorSpaceSelector->bnDownloadProfile->setToolTip( i18n("Download Color Profile") );
     d->colorSpaceSelector->bnDownloadProfile->setEnabled( true );
     d->colorSpaceSelector->bnDownloadProfile->hide();
 
-    d->colorSpaceSelector->bnUploadProfile->setIcon( SmallIcon("go-up") );
+    d->colorSpaceSelector->bnUploadProfile->setIcon(koIcon("go-up"));
     d->colorSpaceSelector->bnUploadProfile->setToolTip( i18n("Share Color Profile") );
     d->colorSpaceSelector->bnUploadProfile->setEnabled( false );
     d->colorSpaceSelector->bnUploadProfile->hide();
@@ -182,7 +183,7 @@ void KisColorSpaceSelector::installProfile()
 
     QString saveLocation = KGlobal::mainComponent().dirs()->saveLocation("icc_profiles");
 
-    foreach (QString profileName, profileNames) {
+    foreach (const QString &profileName, profileNames) {
         KUrl file(profileName);
         if (!QFile::copy(profileName, saveLocation + file.fileName())) {
             kWarning() << "Could not install profile!";

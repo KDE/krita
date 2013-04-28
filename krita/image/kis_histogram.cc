@@ -33,6 +33,8 @@ KisHistogram::KisHistogram(const KisPaintLayerSP layer,
                            KoHistogramProducerSP producer,
                            const enumHistogramType type)
 {
+    Q_ASSERT(producer);
+
     m_paintDevice = layer->projection();
     m_bounds = layer->image()->bounds();
     m_type = type;
@@ -48,6 +50,8 @@ KisHistogram::KisHistogram(const KisPaintDeviceSP paintdev,
                            KoHistogramProducerSP producer,
                            const enumHistogramType type)
 {
+    Q_ASSERT(producer);
+
     m_paintDevice = paintdev;
     m_bounds = bounds;
     m_producer = producer;
@@ -66,7 +70,17 @@ KisHistogram::~KisHistogram()
 
 void KisHistogram::updateHistogram()
 {
-    if (!m_producer) return;
+    if (m_bounds.isEmpty()) {
+        int numChannels = m_producer->channels().count();
+
+        m_completeCalculations.clear();
+        m_completeCalculations.resize(numChannels);
+
+        m_completeCalculations.clear();
+        m_completeCalculations.resize(numChannels);
+
+        return;
+    }
 
     KisRectConstIteratorSP srcIt = m_paintDevice->createRectConstIteratorNG(m_bounds.left(), m_bounds.top(), m_bounds.width(), m_bounds.height());
     const KoColorSpace* cs = m_paintDevice->colorSpace();
@@ -79,7 +93,7 @@ void KisHistogram::updateHistogram()
     //      if the paint device had a selection. When we changed that to passing an
     //      explicit selection to the createRectIterator call, that broke because
     //      paint devices didn't know about their selections anymore.
-    //      updateHistogram should get a selection paramater.
+    //      updateHistogram should get a selection parameter.
     do {
         i = srcIt->nConseqPixels();
         m_producer->addRegionToBin(srcIt->oldRawData(), 0, i, cs);

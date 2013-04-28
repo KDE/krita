@@ -48,7 +48,7 @@ Q_DECLARE_METATYPE(ItemData)
 class ModelItem
 {
 public:
-    ModelItem(ModelItem *parent = 0);
+    explicit ModelItem(ModelItem *parent = 0);
     ~ModelItem();
 
     void setChangeId(int changeId);
@@ -81,7 +81,7 @@ class TrackedChangeModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
-    TrackedChangeModel(QTextDocument *document, QObject *parent = 0);
+    explicit TrackedChangeModel(QTextDocument *document, QObject *parent = 0);
     ~TrackedChangeModel();
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;

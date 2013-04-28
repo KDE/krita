@@ -22,7 +22,7 @@
 #include <KoTableOfContentsGeneratorInfo.h>
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
-#include <KLocale>
+#include <klocale.h>
 
 TableOfContentsTemplate::TableOfContentsTemplate(KoStyleManager *manager):
     m_manager(manager)

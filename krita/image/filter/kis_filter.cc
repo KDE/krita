@@ -123,6 +123,7 @@ void KisFilter::process(const KisPaintDeviceSP src,
     {
         delete transaction;
         KisPainter p(dst);
+        p.setCompositeOp(COMPOSITE_COPY);
         p.setSelection(sel);
         p.bitBlt(applyRect.topLeft(), temporary, applyRect);
     }

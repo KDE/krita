@@ -85,14 +85,14 @@ void KisEntryEditor::valueChanged()
 {
     if (d->store->containsEntry(d->key)) {
         bool blocked = d->object->blockSignals(true);
-        d->object->setProperty(d->propertyName.toAscii(), d->value().asVariant());
+        d->object->setProperty(d->propertyName.toLatin1(), d->value().asVariant());
         d->object->blockSignals(blocked);
     }
 }
 
 void KisEntryEditor::valueEdited()
 {
-    QVariant val = d->object->property(d->propertyName.toAscii());
+    QVariant val = d->object->property(d->propertyName.toLatin1());
     dbgPlugins << "Value edited: " << d->propertyName << val;
     d->setValue(val);
     emit valueHasBeenEdited();

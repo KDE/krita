@@ -100,6 +100,7 @@ private slots:
     void slotNewGeneratorLayer();
     void slotNewCloneLayer();
     void slotNewShapeLayer();
+    void slotNewFileLayer();
     void slotNewTransparencyMask();
     void slotNewEffectMask();
     void slotNewSelectionMask();
@@ -109,6 +110,8 @@ private slots:
 
     void slotCollapsed(const QModelIndex &index);
     void slotExpanded(const QModelIndex &index);
+
+    void slotSelectOpaque();
 
 private:
 
@@ -122,15 +125,21 @@ private:
     QTimer m_delayTimer;
     int m_newOpacity;
 
-    KAction* m_newPainterLayerAction;
-    KAction* m_newGroupLayerAction;
-    KAction* m_newCloneLayerAction;
-    KAction* m_newShapeLayerAction;
-    KAction* m_newAdjustmentLayerAction;
-    KAction* m_newGeneratorLayerAction;
-    KAction* m_newTransparencyMaskAction;
-    KAction* m_newEffectMaskAction;
-    KAction* m_newSelectionMaskAction;
+    QVector<KisAction*> m_actions;
+    KisAction* m_removeAction;
+    KisAction* m_dulicateAction;
+    KisAction* m_propertiesAction;
+    KisAction* m_newPainterLayerAction;
+    KisAction* m_newGroupLayerAction;
+    KisAction* m_newCloneLayerAction;
+    KisAction* m_newShapeLayerAction;
+    KisAction* m_newAdjustmentLayerAction;
+    KisAction* m_newGeneratorLayerAction;
+    KisAction* m_newTransparencyMaskAction;
+    KisAction* m_newEffectMaskAction;
+    KisAction* m_newSelectionMaskAction;
+    KisAction* m_selectOpaque;
+    KisAction* m_newFileLayerAction;
 
 };
 

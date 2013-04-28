@@ -41,22 +41,25 @@
 #include <qgl.h>
 #endif
 
-#include <libs/main/KoDocument.h>
+#include <KoDocument.h>
 #include <KoColorProfile.h>
+#include <KoApplication.h>
 #include <KoConfigAuthorPage.h>
+#include <KoPart.h>
 
+#include <kapplication.h>
 #include <kmessagebox.h>
 #include <kcolorbutton.h>
 #include <kcombobox.h>
 #include <kfiledialog.h>
-#include <kiconloader.h>
 #include <klineedit.h>
 #include <klocale.h>
 #include <kurlrequester.h>
 #include <kpagewidgetmodel.h>
-#include <kicon.h>
 #include <kvbox.h>
 #include <kundo2stack.h>
+
+#include <KoIcon.h>
 #include <KoConfig.h>
 
 #ifdef NEPOMUK
@@ -82,6 +85,8 @@
 
 // for the performance update
 #include <kis_cubic_curve.h>
+#include <config-ocio.h>
+
 
 GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     : WdgGeneralSettings(_parent, _name)
@@ -193,7 +198,6 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     // are shown in the profile combos
 
     QGridLayout * l = new QGridLayout(this);
-    l->setSpacing(KDialog::spacingHint());
     l->setMargin(0);
     m_page = new WdgColorSettings(this);
     l->addWidget(m_page, 0, 0);
@@ -218,7 +222,9 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
         m_page->cmbMonitorProfile->setCurrent(cfg.monitorProfile());
     if (m_page->cmbPrintProfile->contains(cfg.printerProfile()))
         m_page->cmbPrintProfile->setCurrentIndex(m_page->cmbPrintProfile->findText(cfg.printerProfile()));
+
     m_page->chkBlackpoint->setChecked(cfg.useBlackPointCompensation());
+    m_page->chkAllowLCMSOptimization->setChecked(cfg.allowLCMSOptimization());
 
     m_pasteBehaviourGroup.addButton(m_page->radioPasteWeb, PASTE_ASSUME_WEB);
     m_pasteBehaviourGroup.addButton(m_page->radioPasteMonitor, PASTE_ASSUME_MONITOR);
@@ -249,6 +255,17 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
     connect(m_page->cmbPrintingColorSpace, SIGNAL(activated(const KoID &)),
             this, SLOT(refillPrintProfiles(const KoID &)));
+
+#ifndef HAVE_OCIO
+    m_page->grpOcio->hide();
+#endif
+    m_page->grpOcio->setChecked(cfg.useOcio());
+    m_page->chkOcioUseEnvironment->setChecked(cfg.useOcioEnvironmentVariable());
+    enableOcioConfigPath(cfg.useOcioEnvironmentVariable());
+    m_page->txtOcioConfigPath->setText(cfg.ocioConfigurationPath());
+    connect(m_page->bnSelectOcioConfigPath, SIGNAL(clicked()), this, SLOT(selectOcioConfigPath()));
+    connect(m_page->chkOcioUseEnvironment, SIGNAL(toggled(bool)), this, SLOT(enableOcioConfigPath(bool)));
+
 }
 
 void ColorSettingsTab::setDefault()
@@ -261,7 +278,11 @@ void ColorSettingsTab::setDefault()
     refillMonitorProfiles(KoID("RGBA", ""));
 
     m_page->chkBlackpoint->setChecked(false);
+    m_page->chkAllowLCMSOptimization->setChecked(true);
     m_page->cmbMonitorIntent->setCurrentIndex(INTENT_PERCEPTUAL);
+
+    m_page->chkOcioUseEnvironment->setChecked(true);
+    m_page->txtOcioConfigPath->setText(QString());
 
     QAbstractButton *button = m_pasteBehaviourGroup.button(PASTE_ASK);
     Q_ASSERT(button);
@@ -310,6 +331,24 @@ void ColorSettingsTab::refillPrintProfiles(const KoID & s)
     m_page->cmbPrintProfile->setCurrent(csf->defaultProfile());
 }
 
+void ColorSettingsTab::selectOcioConfigPath()
+{
+    QString filename = m_page->txtOcioConfigPath->text();
+
+    filename = KFileDialog::getOpenFileName(QDir::cleanPath(filename), "*.ocio|OpenColorIO configuration (*.ocio)", m_page);
+    QFile f(filename);
+    if (f.exists()) {
+        m_page->txtOcioConfigPath->setText(filename);
+    }
+}
+
+void ColorSettingsTab::enableOcioConfigPath(bool enable)
+{
+    m_page->lblOcioConfig->setEnabled(!enable);
+    m_page->txtOcioConfigPath->setEnabled(!enable);
+    m_page->bnSelectOcioConfigPath->setEnabled(!enable);
+}
+
 //---------------------------------------------------------------------------------------------------
 
 void TabletSettingsTab::setDefault()
@@ -324,7 +363,6 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
     setObjectName(name);
 
     QGridLayout * l = new QGridLayout(this);
-    l->setSpacing(KDialog::spacingHint());
     l->setMargin(0);
     m_page = new WdgTabletSettings(this);
     l->addWidget(m_page, 0, 0);
@@ -362,7 +400,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 {
     KisConfig cfg;
 
-    labelWarning->setPixmap(KIcon("dialog-warning").pixmap(32, 32));
+    labelWarning->setPixmap(koIcon("dialog-warning").pixmap(32, 32));
 #ifdef HAVE_OPENGL
     if (!QGLFormat::hasOpenGL()) {
         cbUseOpenGL->setEnabled(false);
@@ -376,11 +414,10 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         cbUseOpenGLTrilinearFiltering->setEnabled(cfg.useOpenGL());
         cbUseOpenGLTrilinearFiltering->setChecked(cfg.useOpenGLTrilinearFiltering());
 #ifdef HAVE_GLEW
-        if (KisOpenGL::hasShadingLanguage()) {
-            cbUseOpenGLShaders->setChecked(cfg.useOpenGLShaders());
+        cbUseOpenGLShaders->setChecked(cfg.useOpenGLShaders());
+        if (cfg.useOpenGL() && KisOpenGL::hasShadingLanguage()) {
             cbUseOpenGLShaders->setEnabled(cfg.useOpenGL());
         } else {
-            cbUseOpenGLShaders->setChecked(false);
             cbUseOpenGLShaders->setEnabled(false);
         }
 #else
@@ -577,7 +614,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     KVBox *vbox = new KVBox();
     KPageWidgetItem *page = new KPageWidgetItem(vbox, i18n("General"));
     page->setHeader(i18n("General"));
-    page->setIcon(KIcon(BarIcon("configure", KIconLoader::SizeMedium)));
+    page->setIcon(koIcon("configure"));
     addPage(page);
     m_general = new GeneralTab(vbox);
 
@@ -585,7 +622,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Display"));
     page->setHeader(i18n("Display"));
-    page->setIcon(KIcon("preferences-desktop-display"));
+    page->setIcon(koIcon("preferences-desktop-display"));
     addPage(page);
     m_displaySettings = new DisplaySettingsTab(vbox);
 
@@ -593,7 +630,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Color Management"));
     page->setHeader(i18n("Color"));
-    page->setIcon(KIcon("preferences-desktop-color"));
+    page->setIcon(koIcon("preferences-desktop-color"));
     addPage(page);
     m_colorSettings = new ColorSettingsTab(vbox);
 
@@ -602,7 +639,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Performance"));
     page->setHeader(i18n("Performance"));
-    page->setIcon(KIcon("preferences-system-performance"));
+    page->setIcon(koIcon("preferences-system-performance"));
     addPage(page);
     m_performanceSettings = new PerformanceTab(vbox);
 #endif
@@ -611,7 +648,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Grid"));
     page->setHeader(i18n("Grid"));
-    page->setIcon(KIcon(BarIcon("grid", KIconLoader::SizeMedium)));
+    page->setIcon(koIcon("grid"));
     addPage(page);
     m_gridSettings = new GridSettingsTab(vbox);
 
@@ -619,7 +656,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Tablet settings"));
     page->setHeader(i18n("Tablet"));
-    page->setIcon(KIcon("input-tablet"));
+    page->setIcon(koIcon("input-tablet"));
     addPage(page);
     m_tabletSettings = new TabletSettingsTab(vbox);
 
@@ -628,7 +665,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Canvas-only settings"));
     page->setHeader(i18n("Canvas-only"));
-    page->setIcon(KIcon("preferences-system-performance"));
+    page->setIcon(koIcon("preferences-system-performance"));
     addPage(page);
     m_fullscreenSettings = new FullscreenSettingsTab(vbox);
 
@@ -638,7 +675,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     m_authorSettings = new KoConfigAuthorPage();
     page = addPage(m_authorSettings, i18nc("@title:tab Author page", "Author"));
     page->setHeader(i18n("Author"));
-    page->setIcon(KIcon("user-identity"));
+    page->setIcon(koIcon("user-identity"));
 
 
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
@@ -694,7 +731,9 @@ bool KisDlgPreferences::editPreferences()
 
         cfg.setAutoSaveInterval(dialog->m_general->autoSaveInterval());
         cfg.setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
-        foreach(KoDocument* doc, *KoDocument::documentList()) {
+        KoApplication *app = qobject_cast<KoApplication*>(qApp);
+        foreach(KoPart* part, app->partList()) {
+            KoDocument *doc = part->document();
             doc->setAutoSave(dialog->m_general->autoSaveInterval());
             doc->setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
             doc->undoStack()->setUndoLimit(dialog->m_general->undoStackSize());
@@ -710,8 +749,13 @@ bool KisDlgPreferences::editPreferences()
         cfg.setPrinterProfile(dialog->m_colorSettings->m_page->cmbPrintProfile->itemHighlighted());
 
         cfg.setUseBlackPointCompensation(dialog->m_colorSettings->m_page->chkBlackpoint->isChecked());
+        cfg.setAllowLCMSOptimization(dialog->m_colorSettings->m_page->chkAllowLCMSOptimization->isChecked());
         cfg.setPasteBehaviour(dialog->m_colorSettings->m_pasteBehaviourGroup.checkedId());
         cfg.setRenderIntent(dialog->m_colorSettings->m_page->cmbMonitorIntent->currentIndex());
+
+        cfg.setUseOcio(dialog->m_colorSettings->m_page->grpOcio->isChecked());
+        cfg.setUseOcioEnvironmentVariable(dialog->m_colorSettings->m_page->chkOcioUseEnvironment->isChecked());
+        cfg.setOcioConfigurationPath(dialog->m_colorSettings->m_page->txtOcioConfigPath->text());
 
         // Tablet settings
         cfg.setPressureTabletCurve( dialog->m_tabletSettings->m_page->pressureCurve->curve().toString() );

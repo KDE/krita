@@ -20,49 +20,18 @@
 
 #include "dlg_border_selection.h"
 
-#include <math.h>
-
 #include <klocale.h>
 #include <kis_debug.h>
 
-DlgBorderSelection::DlgBorderSelection(QWidget *  parent, const char * name)
-        : KDialog(parent)
+WdgBorderSelection::WdgBorderSelection(QWidget* parent) : KisOperationUIWidget(i18n("Border Selection"), parent)
 {
-    setCaption(i18n("Border Selection"));
-    setButtons(Ok | Cancel);
-    setDefaultButton(Ok);
-    setObjectName(name);
-    m_page = new WdgBorderSelection(this);
-    Q_CHECK_PTR(m_page);
-    m_page->setObjectName("border_selection");
-
-    setMainWidget(m_page);
-    resize(m_page->sizeHint());
-
-    connect(this, SIGNAL(okClicked()), this, SLOT(okClicked()));
+    setupUi(this);
 }
 
-DlgBorderSelection::~DlgBorderSelection()
+void WdgBorderSelection::getConfiguration(KisOperationConfiguration* config)
 {
-    delete m_page;
-}
-
-qint32 DlgBorderSelection::xradius()
-{
-    return m_page->radiusSpinBox->value();
-}
-
-qint32 DlgBorderSelection::yradius()
-{
-    return m_page->radiusSpinBox->value();
-}
-
-
-// SLOTS
-
-void DlgBorderSelection::okClicked()
-{
-    accept();
+    config->setProperty("x-radius", radiusSpinBox->value());
+    config->setProperty("y-radius", radiusSpinBox->value());
 }
 
 #include "dlg_border_selection.moc"

@@ -19,8 +19,8 @@
  */
 
 #include "StyleDocker.h"
-#include "StylePreview.h"
-#include "StyleButtonBox.h"
+
+#include <klocale.h>
 
 #include <KoFlake.h>
 #include <KoGradientBackground.h>
@@ -49,109 +49,51 @@
 #include <KoColorPopupAction.h>
 #include <KoSliderCombo.h>
 
-#include <klocale.h>
+#include "StrokeFillWidget.h"
 
-#include <QGridLayout>
-#include <QStackedWidget>
-#include <QToolButton>
-#include <QLabel>
 
 const int MsecsThresholdForMergingCommands = 2000;
 
-StyleButtonBox::StyleButtons StrokeButtons = StyleButtonBox::None|StyleButtonBox::Solid|StyleButtonBox::Gradient;
-
-StyleButtonBox::StyleButtons FillButtons = StyleButtonBox::None|StyleButtonBox::Solid|StyleButtonBox::Gradient|StyleButtonBox::Pattern;
-
-StyleButtonBox::StyleButtons FillRuleButtons = StyleButtonBox::EvenOdd|StyleButtonBox::Winding;
 
 StyleDocker::StyleDocker(QWidget * parent)
     : QDockWidget(parent)
     , m_canvas(0)
-    , m_lastFillCommand(0)
-    , m_lastStrokeCommand(0)
-    , m_lastColorFill(0)
+    , m_mainWidget(new StrokeFillWidget(this))
 {
     setWindowTitle(i18n("Stroke and Fill"));
 
-    QWidget *mainWidget = new QWidget(this);
-
-    m_preview = new StylePreview(mainWidget);
-
-    m_buttons = new StyleButtonBox(mainWidget, 2, 3);
-    m_buttons->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-
-    m_stack = new QStackedWidget(mainWidget);
-    m_stack->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-
-    m_opacity = new KoSliderCombo(mainWidget);
-    m_opacity->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-    m_opacity->setMinimum(0);
-    m_opacity->setMaximum(100);
-    m_opacity->setValue(100);
-    m_opacity->setDecimals(0);
-
-    m_spacer = new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
-
-    m_layout = new QGridLayout(mainWidget);
-    m_layout->addWidget(m_preview, 0, 0, 2, 1);
-    m_layout->addWidget(m_buttons, 0, 1, 2, 1);
-    m_layout->addWidget(m_stack, 0, 2, 1, 2);
-    m_layout->addWidget(new QLabel(i18n("Opacity:")), 1, 2);
-    m_layout->addWidget(m_opacity, 1, 3);
-    m_layout->addItem(m_spacer, 2, 2);
-    m_layout->setMargin(0);
-    m_layout->setVerticalSpacing(0);
-    m_layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
-
-    m_colorSelector = new QToolButton(m_stack);
-    m_actionColor = new KoColorPopupAction(m_stack);
-    m_colorSelector->setDefaultAction(m_actionColor);
-
-    KoResourceServerProvider * serverProvider = KoResourceServerProvider::instance();
-    KoAbstractResourceServerAdapter * gradientResourceAdapter = new KoResourceServerAdapter<KoAbstractGradient>(serverProvider->gradientServer(), this);
-    KoResourceSelector * gradientSelector = new KoResourceSelector(gradientResourceAdapter, m_stack);
-    gradientSelector->setColumnCount(1);
-    gradientSelector->setRowHeight(20);
-    gradientSelector->setMinimumWidth(100);
-
-    KoAbstractResourceServerAdapter * patternResourceAdapter = new KoResourceServerAdapter<KoPattern>(serverProvider->patternServer(), this);
-    KoResourceSelector * patternSelector = new KoResourceSelector(patternResourceAdapter, m_stack);
-    patternSelector->setColumnCount(5);
-    patternSelector->setRowHeight(30);
-    patternSelector->setMinimumWidth(100);
-
-    m_stack->addWidget(m_colorSelector);
-    m_stack->addWidget(gradientSelector);
-    m_stack->addWidget(patternSelector);
-    m_stack->setContentsMargins(0, 0, 0, 0);
-    m_stack->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-    m_stack->setMinimumWidth(100);
-
-    connect(m_preview, SIGNAL(fillSelected()), this, SLOT(fillSelected()));
-    connect(m_preview, SIGNAL(strokeSelected()), this, SLOT(strokeSelected()));
-    connect(m_buttons, SIGNAL(buttonPressed(int)), this, SLOT(styleButtonPressed(int)));
-    connect(m_actionColor, SIGNAL(colorChanged(const KoColor &)),
-             this, SLOT(updateColor(const KoColor &)));
-    connect(gradientSelector, SIGNAL(resourceSelected(KoResource*)),
-             this, SLOT(updateGradient(KoResource*)));
-    connect(gradientSelector, SIGNAL(resourceApplied(KoResource*)),
-             this, SLOT(updateGradient(KoResource*)));
-    connect(patternSelector, SIGNAL(resourceSelected(KoResource*)),
-             this, SLOT(updatePattern(KoResource*)));
-    connect(patternSelector, SIGNAL(resourceApplied(KoResource*)),
-             this, SLOT(updatePattern(KoResource*)));
+    // Connections for the docker
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
-             this, SLOT(locationChanged(Qt::DockWidgetArea)));
-    connect(m_opacity, SIGNAL(valueChanged(qreal, bool)), this, SLOT(updateOpacity(qreal)));
+            this, SLOT(locationChanged(Qt::DockWidgetArea)));
 
-    setWidget(mainWidget);
+    // Connections from the StrokeFillWidget
+    connect(m_mainWidget, SIGNAL(aspectSelected(int)),
+            this,         SLOT(aspectSelected(int)));
+    connect(m_mainWidget, SIGNAL(noColorSelected()),
+            this,         SLOT(noColorSelected()));
+    connect(m_mainWidget, SIGNAL(colorChanged(const KoColor &)),
+            this,         SLOT(updateColor(const KoColor &)));
+    connect(m_mainWidget, SIGNAL(gradientChanged(KoResource *)),
+            this,         SLOT(updateGradient(KoResource *)));
+    connect(m_mainWidget, SIGNAL(patternChanged(KoResource *)),
+            this,         SLOT(updatePattern(KoResource *)));
+    connect(m_mainWidget, SIGNAL(fillruleChanged(Qt::FillRule)),
+            this,         SLOT(updateFillRule(Qt::FillRule)));
+    connect(m_mainWidget, SIGNAL(opacityChanged(qreal)),
+            this,         SLOT(updateOpacity(qreal)));
+
+    setWidget(m_mainWidget);
 }
 
 StyleDocker::~StyleDocker()
 {
 }
 
-void StyleDocker::setCanvas(KoCanvasBase * canvas)
+// ----------------------------------------------------------------
+//                         Canvas handling
+
+
+void StyleDocker::setCanvas(KoCanvasBase *canvas)
 {
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this); // "Every connection you make emits a signal, so duplicate connections emit two signals"
@@ -169,70 +111,109 @@ void StyleDocker::setCanvas(KoCanvasBase * canvas)
     connect(m_canvas->shapeManager(), SIGNAL(selectionContentChanged()),
             this, SLOT(selectionContentChanged()));
     connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
-             this, SLOT(resourceChanged(int, const QVariant&)));
+            this, SLOT(resourceChanged(int, const QVariant&)));
 
-    KoShape * shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
+    // Select what to work on. If a selection is made, work on that.
+    // Otherwise work on the current page (if in a KoPageApp).
+    KoShape *shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
     if (shape)
-        updateStyle(shape->stroke(), shape->background());
+        updateWidget(shape->stroke(), shape->background(), 100 - shape->transparency() * 100);
     else {
-        KoShape* page = m_canvas->resourceManager()->koShapeResource(KoPageApp::CurrentPage);
+        KoShape *page = m_canvas->resourceManager()->koShapeResource(KoPageApp::CurrentPage);
         if (page) {
-            updateStyle(page->stroke(), page->background());
+            updateWidget(page->stroke(), page->background(), 100);
         }
         else {
-            updateStyle(0, 0);
+            updateWidget(0, 0, 100);
         }
     }
+}
+
+void StyleDocker::unsetCanvas()
+{
+    m_canvas = 0;
 }
 
 void StyleDocker::selectionChanged()
 {
     resetColorCommands();
-    updateStyle();
-}
-
-void StyleDocker::resetColorCommands()
-{
-    m_lastFillCommand = 0;
-    m_lastStrokeCommand = 0;
-    m_lastColorFill = 0;
-    m_lastColorStrokes.clear();
+    updateWidget();
 }
 
 void StyleDocker::selectionContentChanged()
 {
-    updateStyle();
+    updateWidget();
 }
 
-void StyleDocker::updateStyle()
+void StyleDocker::resourceChanged(int key, const QVariant&)
+{
+    switch (key) {
+        case KoCanvasResourceManager::ForegroundColor:
+        case KoCanvasResourceManager::BackgroundColor:
+            updateWidget();
+            break;
+    }
+}
+
+
+// ----------------------------------------------------------------
+
+
+void StyleDocker::aspectSelected(int aspect)
 {
     if (! m_canvas)
         return;
 
-    m_opacity->blockSignals(true);
+    // aspect is either KoFlake::Background or KoFlake::Foreground
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ActiveStyleType, aspect);
+}
+
+void StyleDocker::noColorSelected()
+{
+    if (!m_canvas)
+        return;
+
+    resetColorCommands();
+
+    KoSelection *selection = m_canvas->shapeManager()->selection();
+    if (!selection || ! selection->count())
+        return;
+
+    KoCanvasResourceManager *provider = m_canvas->resourceManager();
+    if (provider->resource(KoCanvasResourceManager::ActiveStyleType).toInt() == KoFlake::Background)
+        m_canvas->addCommand(new KoShapeBackgroundCommand(selection->selectedShapes(), 0));
+    else
+        m_canvas->addCommand(new KoShapeStrokeCommand(selection->selectedShapes(), 0));
+
+    updateWidget();
+}
+
+void StyleDocker::updateWidget()
+{
+    if (! m_canvas)
+        return;
+
     KoShape * shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
     if (shape) {
-        updateStyle(shape->stroke(), shape->background());
-        m_opacity->setValue(100-shape->transparency()*100);
+        updateWidget(shape->stroke(), shape->background(), 100 - shape->transparency() * 100);
     }
     else {
-        updateStyle(0, 0);
-        m_opacity->setValue(100);
+        updateWidget(0, 0, 100);
     }
-    m_opacity->blockSignals(false);
 }
 
-void StyleDocker::updateStyle(KoShapeStrokeModel * stroke, KoShapeBackground * fill)
+// Update the widget with the current values.
+void StyleDocker::updateWidget(KoShapeStrokeModel *stroke, KoShapeBackground *fill, int opacity)
 {
     if (! m_canvas)
         return;
 
-    KoCanvasResourceManager * provider = m_canvas->resourceManager();
+    KoCanvasResourceManager *provider = m_canvas->resourceManager();
     int activeStyle = provider->resource(KoCanvasResourceManager::ActiveStyleType).toInt();
 
     QColor qColor;
     if (activeStyle == KoFlake::Foreground) {
-        KoShapeStroke * stroke2 = dynamic_cast<KoShapeStroke*>(stroke);
+        KoShapeStroke *stroke2 = dynamic_cast<KoShapeStroke*>(stroke);
         if (stroke)
             qColor = stroke2->color();
         else
@@ -245,79 +226,10 @@ void StyleDocker::updateStyle(KoShapeStrokeModel * stroke, KoShapeBackground * f
         else
             qColor = m_canvas->resourceManager()->backgroundColor().toQColor();
     }
-    m_actionColor->setCurrentColor(qColor);
-    updateStyleButtons(activeStyle);
-    m_preview->update(stroke, fill);
+
+    m_mainWidget->updateWidget(stroke, fill, opacity, qColor, activeStyle);
 }
 
-void StyleDocker::fillSelected()
-{
-    if (! m_canvas)
-        return;
-
-    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ActiveStyleType, KoFlake::Background);
-    updateStyleButtons(KoFlake::Background);
-}
-
-void StyleDocker::strokeSelected()
-{
-    if (! m_canvas)
-        return;
-
-    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ActiveStyleType, KoFlake::Foreground);
-    updateStyleButtons(KoFlake::Foreground);
-}
-
-void StyleDocker::resourceChanged(int key, const QVariant&)
-{
-    switch (key) {
-        case KoCanvasResourceManager::ForegroundColor:
-        case KoCanvasResourceManager::BackgroundColor:
-            updateStyle();
-            break;
-    }
-}
-
-void StyleDocker::styleButtonPressed(int buttonId)
-{
-    if (! m_canvas)
-        return;
-
-    switch (buttonId) {
-        case StyleButtonBox::None:
-        {
-            resetColorCommands();
-
-            KoCanvasResourceManager * provider = m_canvas->resourceManager();
-            KoSelection *selection = m_canvas->shapeManager()->selection();
-            if (! selection || ! selection->count())
-                break;
-
-            if (provider->resource(KoCanvasResourceManager::ActiveStyleType).toInt() == KoFlake::Background)
-                m_canvas->addCommand(new KoShapeBackgroundCommand(selection->selectedShapes(), 0));
-            else
-                m_canvas->addCommand(new KoShapeStrokeCommand(selection->selectedShapes(), 0));
-            m_stack->setCurrentIndex(0);
-            updateStyle();
-            break;
-        }
-        case StyleButtonBox::Solid:
-            m_stack->setCurrentIndex(0);
-            break;
-        case StyleButtonBox::Gradient:
-            m_stack->setCurrentIndex(1);
-            break;
-        case StyleButtonBox::Pattern:
-            m_stack->setCurrentIndex(2);
-            break;
-        case StyleButtonBox::EvenOdd:
-            updateFillRule(Qt::OddEvenFill);
-            break;
-        case StyleButtonBox::Winding:
-            updateFillRule(Qt::WindingFill);
-            break;
-    }
-}
 
 void StyleDocker::updateColor(const KoColor &c)
 {
@@ -344,7 +256,7 @@ void StyleDocker::updateColor(const KoColor &c)
     }
     else {
         updateColor(c.toQColor(), selection->selectedShapes());
-        updateStyle();
+        updateWidget();
     }
 }
 
@@ -482,7 +394,7 @@ void StyleDocker::updateGradient(KoResource * item)
         }
         m_canvas->addCommand(new KoShapeStrokeCommand(selectedShapes, newStrokes));
     }
-    updateStyle();
+    updateWidget();
 }
 
 void StyleDocker::updatePattern(KoResource * item)
@@ -512,7 +424,7 @@ void StyleDocker::updatePattern(KoResource * item)
         KoPatternBackground * fill = new KoPatternBackground(imageCollection);
         fill->setPattern(pattern->image());
         m_canvas->addCommand(new KoShapeBackgroundCommand(selectedShapes, fill ));
-        updateStyle();
+        updateWidget();
     }
 }
 
@@ -548,8 +460,11 @@ void StyleDocker::updateOpacity(qreal opacity)
     if (!selectedShapes.count())
         return;
 
-    m_canvas->addCommand(new KoShapeTransparencyCommand(selectedShapes, 1.0-opacity/100));
+    m_canvas->addCommand(new KoShapeTransparencyCommand(selectedShapes, 1.0 - opacity / 100));
 }
+
+// ----------------------------------------------------------------
+
 
 QList<KoPathShape*> StyleDocker::selectedPathShapes()
 {
@@ -571,37 +486,20 @@ QList<KoPathShape*> StyleDocker::selectedPathShapes()
     return pathShapes;
 }
 
-void StyleDocker::updateStyleButtons(int activeStyle)
-{
-    if (activeStyle == KoFlake::Background) {
-        if (selectedPathShapes().count())
-            m_buttons->showButtons(FillButtons|FillRuleButtons);
-        else
-            m_buttons->showButtons(FillButtons);
-    }
-    else {
-        m_buttons->showButtons(StrokeButtons);
-        if (m_stack->currentIndex() == 2)
-            m_stack->setCurrentIndex(0);
-    }
-}
-
 void StyleDocker::locationChanged(Qt::DockWidgetArea area)
 {
     switch (area) {
         case Qt::TopDockWidgetArea:
         case Qt::BottomDockWidgetArea:
-            m_spacer->changeSize(0, 0, QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
+            m_mainWidget->setStretchPolicy(StrokeFillWidget::StretchHeight);
             break;
         case Qt::LeftDockWidgetArea:
         case Qt::RightDockWidgetArea:
-            m_spacer->changeSize(0, 0, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+            m_mainWidget->setStretchPolicy(StrokeFillWidget::StretchWidth);
             break;
         default:
             break;
     }
-    m_layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
-    m_layout->invalidate();
 }
 
 KoShapeBackground *StyleDocker::applyFillGradientStops(KoShape *shape, const QGradientStops &stops)
@@ -658,5 +556,15 @@ QBrush StyleDocker::applyStrokeGradientStops(KoShape *shape, const QGradientStop
 
     return brush;
 }
+
+
+void StyleDocker::resetColorCommands()
+{
+    m_lastFillCommand = 0;
+    m_lastStrokeCommand = 0;
+    m_lastColorFill = 0;
+    m_lastColorStrokes.clear();
+}
+
 
 #include <StyleDocker.moc>

@@ -28,6 +28,8 @@
 #include <kross/ui/model.h>
 #include <kross/ui/view.h>
 
+#include <KoIcon.h>
+
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -297,7 +299,7 @@ KoScriptManagerDialog::KoScriptManagerDialog()
     setCaption(i18n("Script Manager"));
     setButtons(KDialog::Ok | KDialog::Cancel);
     setButtonText(KDialog::Ok, i18n("Save"));
-    setButtonIcon(KDialog::Ok, KIcon("document-save"));
+    setButtonIcon(KDialog::Ok, koIcon("document-save"));
     m_collection = new KoScriptManagerCollection(mainWidget());
     setMainWidget(m_collection);
     resize(QSize(520, 380).expandedTo(minimumSizeHint()));

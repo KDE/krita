@@ -41,7 +41,7 @@ class ParagraphGeneral : public CharacterGeneral
 {
     Q_OBJECT
 public:
-    ParagraphGeneral(QWidget *parent = 0);
+    explicit ParagraphGeneral(QWidget *parent = 0);
 
     void setStyle(KoParagraphStyle *style, int level = 0);
     void setParagraphStyles(const QList<KoParagraphStyle*> styles);
@@ -56,6 +56,8 @@ public:
     void setImageCollection(KoImageCollection *imageCollection);
     KoImageCollection *imageCollection();
     void setStyleManager(KoStyleManager *sm);
+
+    KoParagraphStyle *style() const;
 
 public slots:
     void save(KoParagraphStyle *style = 0);

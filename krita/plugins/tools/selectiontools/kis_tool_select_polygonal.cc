@@ -33,6 +33,8 @@
 #include "kis_selection_tool_helper.h"
 #include "kis_shape_tool_helper.h"
 
+#include "kis_system_locker.h"
+
 
 KisToolSelectPolygonal::KisToolSelectPolygonal(KoCanvasBase *canvas)
     : KisToolPolylineBase(canvas, KisToolPolylineBase::SELECT,
@@ -65,7 +67,7 @@ void KisToolSelectPolygonal::finishPolyline(const QVector<QPointF> &points)
     if (!kisCanvas)
         return;
 
-    KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Polygonal Selection"));
+    KisSelectionToolHelper helper(kisCanvas, i18n("Polygonal Selection"));
 
     if (m_widgetHelper.selectionMode() == PIXEL_SELECTION) {
         KisPixelSelectionSP tmpSel = new KisPixelSelection();

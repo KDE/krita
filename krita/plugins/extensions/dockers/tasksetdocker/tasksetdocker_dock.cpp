@@ -27,7 +27,9 @@
 #include <QAction>
 
 #include <klocale.h>
-#include <KActionCollection>
+#include <kactioncollection.h>
+
+#include <KoIcon.h>
 
 #include <KoCanvasBase.h>
 #include <KoResourceItemChooser.h>
@@ -71,9 +73,12 @@ void KisTasksetResourceDelegate::paint(QPainter * painter, const QStyleOptionVie
     if (option.state & QStyle::State_Selected) {
         painter->setPen(QPen(option.palette.highlight(), 2.0));
         painter->fillRect(option.rect, option.palette.highlight());
+        painter->setBrush(option.palette.highlightedText());
+    }
+    else {
+        painter->setBrush(option.palette.text());
     }
 
-    painter->setPen(Qt::black);
     painter->drawText(option.rect.x() + 5, option.rect.y() + painter->fontMetrics().ascent() + 5, taskset->name());
 
 }
@@ -85,13 +90,13 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
     m_model = new TasksetModel(this);
     tasksetView->setModel(m_model);
     tasksetView->setItemDelegate(new KisTasksetDelegate(this));
-    recordButton->setIcon(KIcon("media-record"));
+    recordButton->setIcon(koIcon("media-record"));
     recordButton->setCheckable(true);
-    clearButton->setIcon(KIcon("edit-delete"));
-    saveButton->setIcon(KIcon("document-save"));
+    clearButton->setIcon(koIcon("edit-delete"));
+    saveButton->setIcon(koIcon("document-save"));
     saveButton->setEnabled(false);
 
-    chooserButton->setIcon(KIcon("document-multiple"));
+    chooserButton->setIcon(koIcon("document-multiple"));
 
     KGlobal::mainComponent().dirs()->addResourceType("kis_taskset", "data", "krita/taskset/");
     m_rserver = new KoResourceServer<TasksetResource>("kis_taskset", "*.kts");

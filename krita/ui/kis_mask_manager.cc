@@ -95,7 +95,6 @@ KisPaintDeviceSP KisMaskManager::activeDevice()
 void KisMaskManager::activateMask(KisMaskSP mask)
 {
     m_activeMask = mask;
-    emit sigMaskActivated(mask);
 }
 
 void KisMaskManager::masksUpdated()
@@ -135,12 +134,11 @@ void KisMaskManager::createSelectionMask(KisNodeSP parent, KisNodeSP above)
 
     //counting number of KisSelectionMask
     QList<KisNodeSP> selectionMasks = parentLayer->childNodes(QStringList("KisSelectionMask"),KoProperties());
-    mask->setName(i18n("Selection ")+QString::number(selectionMasks.count()+1));
+    int number = selectionMasks.count()+1;
+    mask->setName(i18n("Selection <numid>%1</numid>", number));
     m_commandsAdapter->addNode(mask, parentLayer, above);
 
     mask->setActive(true);
-
-    activateMask(mask);
     masksUpdated();
 }
 
@@ -153,8 +151,6 @@ void KisMaskManager::createTransparencyMask(KisNodeSP parent, KisNodeSP above)
     QList<KisNodeSP> transparencyMasks = layer->childNodes(QStringList("KisTransparencyMask"),KoProperties());
     mask->setName(i18n("Transparency Mask")+QString::number(transparencyMasks.count()+1));
     m_commandsAdapter->addNode(mask, parent, above);
-
-    activateMask(mask);
     masksUpdated();
 }
 
@@ -175,9 +171,9 @@ void KisMaskManager::createFilterMask(KisNodeSP parent, KisNodeSP above)
     KisPaintDeviceSP originalDevice = layer->original();
 
 
-    KisDlgAdjustmentLayer dialog(mask, mask, originalDevice, m_view->image(),
+    KisDlgAdjustmentLayer dialog(mask, mask, originalDevice,
                                  mask->name(), i18n("New Filter Mask"),
-                                 m_view, "dlgfiltermask");
+                                 m_view);
 
     if (dialog.exec() == QDialog::Accepted) {
         KisFilterConfiguration *filter = dialog.filterConfiguration();
@@ -185,7 +181,6 @@ void KisMaskManager::createFilterMask(KisNodeSP parent, KisNodeSP above)
             QString name = dialog.layerName();
             mask->setFilter(filter);
             mask->setName(name);
-            activateMask(mask);
         }
     } else {
         m_commandsAdapter->undoLastCommand();
@@ -203,8 +198,6 @@ void KisMaskManager::maskToSelection()
     image->undoAdapter()->addCommand(cmd);
     m_commandsAdapter->removeNode(m_activeMask);
     m_commandsAdapter->endMacro();
-
-    activateMask(0);
     masksUpdated();
 }
 
@@ -245,8 +238,6 @@ void KisMaskManager::maskToLayer()
     m_commandsAdapter->removeNode(m_activeMask);
     m_commandsAdapter->addNode(layer, activeLayer->parent(), activeLayer);
     m_commandsAdapter->endMacro();
-
-    activateMask(0);
     masksUpdated();
 }
 
@@ -263,8 +254,6 @@ void KisMaskManager::duplicateMask()
     if (selectionMask) {
         selectionMask->setActive(true);
     }
-
-    activateMask(newMask);
     masksUpdated();
 }
 
@@ -273,8 +262,6 @@ void KisMaskManager::removeMask()
     if (!m_activeMask) return;
     if (!m_view->image()) return;
     m_commandsAdapter->removeNode(m_activeMask);
-
-    activateMask(0);
     masksUpdated();
 }
 
@@ -290,34 +277,43 @@ void KisMaskManager::maskProperties()
             return;
 
         KisPaintDeviceSP dev = layer->paintDevice();
-        KisDlgAdjLayerProps dlg(layer, mask, dev, layer->image(), mask->filter(), mask->name(), i18n("Effect Mask Properties"), m_view, "dlgeffectmaskprops");
-        KisFilterConfiguration* config = dlg.filterConfiguration();
-        QString before;
-        if (config) {
-            before = config->toXML();
-        }
-        if (dlg.exec() == QDialog::Accepted) {
-            QString after;
-            if (dlg.filterConfiguration())
-                after = dlg.filterConfiguration()->toXML();
-            KisChangeFilterCmd<KisFilterMaskSP> * cmd = new KisChangeFilterCmd<KisFilterMaskSP>(mask,
-                    dlg.filterConfiguration(),
-                    before,
-                    after);
+        KisDlgAdjLayerProps dlg(layer, mask, dev, m_view, mask->filter().data(), mask->name(), i18n("Effect Mask Properties"), m_view, "dlgeffectmaskprops");
 
-            // FIXME: Check why don't we use m_commandsAdapter instead
-            cmd->redo();
-            m_view->undoAdapter()->addCommand(cmd);
-            m_view->document()->setModified(true);
-            mask->setDirty();
+        KisSafeFilterConfigurationSP configBefore(mask->filter());
+        Q_ASSERT(configBefore);
+        QString xmlBefore = configBefore->toXML();
+
+
+        if (dlg.exec() == QDialog::Accepted) {
+
+            KisSafeFilterConfigurationSP configAfter(dlg.filterConfiguration());
+            Q_ASSERT(configAfter);
+            QString xmlAfter = configAfter->toXML();
+
+
+            if(xmlBefore != xmlAfter) {
+                KisChangeFilterCmd *cmd
+                    = new KisChangeFilterCmd(mask,
+                                             configBefore->name(),
+                                             xmlBefore,
+                                             configAfter->name(),
+                                             xmlAfter,
+                                             false);
+
+                // FIXME: check whether is needed
+                cmd->redo();
+                m_view->undoAdapter()->addCommand(cmd);
+                m_view->document()->setModified(true);
+            }
         }
         else {
-            if (dlg.filterConfiguration() && config) {
-                QString after = dlg.filterConfiguration()->toXML();
-                if (after != before) {
-                    mask->setFilter(config);
-                    mask->setDirty();
-                }
+            KisSafeFilterConfigurationSP configAfter(dlg.filterConfiguration());
+            Q_ASSERT(configAfter);
+            QString xmlAfter = configAfter->toXML();
+
+            if(xmlBefore != xmlAfter) {
+                mask->setFilter(KisFilterRegistry::instance()->cloneConfiguration(configBefore.data()));
+                mask->setDirty();
             }
         }
 

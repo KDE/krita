@@ -112,7 +112,7 @@ void KoDomTest::testKoDom()
 
     // Attributes
     // ### Qt bug: it doesn't work if using style-name instead of text:style-name in the XML
-    const QString styleName = p.attributeNS(KoXmlNS_text, "style-name", QString::null);
+    const QString styleName = p.attributeNS(KoXmlNS_text, "style-name", QString());
     // qDebug( "%s", qPrintable( styleName ) );
     QCOMPARE(styleName, QString("L1"));
 }

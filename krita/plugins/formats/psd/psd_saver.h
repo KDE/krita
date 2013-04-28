@@ -58,7 +58,7 @@ public:
 
 public:
 
-    KisImageBuilder_Result buildFile(const KUrl& uri, KisPaintLayerSP layer);
+    KisImageBuilder_Result buildFile(const KUrl& uri);
 
     KisImageWSP image();
 

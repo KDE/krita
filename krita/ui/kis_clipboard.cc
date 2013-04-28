@@ -44,6 +44,7 @@
 // local
 #include "kis_factory2.h"
 #include "kis_config.h"
+#include "kis_store_paintdevice_writer.h"
 
 KisClipboard::KisClipboard()
 {
@@ -83,13 +84,14 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
     QBuffer buffer;
     QByteArray mimeType("application/x-krita-selection");
     KoStore* store = KoStore::createStore(&buffer, KoStore::Write, mimeType);
+    KisStorePaintDeviceWriter writer(store);
     Q_ASSERT(store);
     Q_ASSERT(!store->bad());
     store->disallowNameExpansion();
 
     // Layer data
     if (store->open("layerdata")) {
-        if (!dev->write(store)) {
+        if (!dev->write(writer)) {
             dev->disconnect();
             store->close();
             delete store;
@@ -100,18 +102,18 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
 
     // Coordinates
     if (store->open("topLeft")) {
-        store->write(QString("%1 %2").arg(topLeft.x()).arg(topLeft.y()).toAscii());
+        store->write(QString("%1 %2").arg(topLeft.x()).arg(topLeft.y()).toLatin1());
         store->close();
     }
     // ColorSpace id of layer data
     if (store->open("colormodel")) {
         QString csName = dev->colorSpace()->colorModelId().id();
-        store->write(csName.toAscii(), strlen(csName.toAscii()));
+        store->write(csName.toLatin1());
         store->close();
     }
     if (store->open("colordepth")) {
         QString csName = dev->colorSpace()->colorDepthId().id();
-        store->write(csName.toAscii(), strlen(csName.toAscii()));
+        store->write(csName.toLatin1());
         store->close();
     }
 
@@ -145,7 +147,7 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
     QImage qimage;
     KisConfig cfg;
     const KoColorProfile *monitorProfile = cfg.displayProfile();
-    qimage = dev->convertToQImage(monitorProfile);
+    qimage = dev->convertToQImage(monitorProfile, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
     if (!qimage.isNull() && mimeData) {
         mimeData->setImageData(qimage);
     }
@@ -225,7 +227,7 @@ KisPaintDeviceSP KisClipboard::clip(const QPoint& topLeftHint)
 
             if (store->hasFile("layerdata")) {
                 store->open("layerdata");
-                asKrita = clip->read(store);
+                asKrita = clip->read(store->device());
                 store->close();
             }
         }
@@ -341,7 +343,7 @@ QSize KisClipboard::clipSize()
 
         if (store->hasFile("layerdata")) {
             store->open("layerdata");
-            clip->read(store);
+            clip->read(store->device());
             store->close();
         }
         delete store;

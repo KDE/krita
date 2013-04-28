@@ -30,6 +30,7 @@ KisBrushOptionWidget::KisBrushOptionWidget()
 {
     m_checkable = false;
     m_brushSelectionWidget = new KisBrushSelectionWidget();
+    connect(m_brushSelectionWidget, SIGNAL(sigPrecisionChanged()), SIGNAL(sigSettingChanged()));
     connect(m_brushSelectionWidget, SIGNAL(sigBrushChanged()), SLOT(brushChanged()));
     m_brushSelectionWidget->hide();
     setConfigurationPage(m_brushSelectionWidget);
@@ -66,14 +67,20 @@ void KisBrushOptionWidget::setImage(KisImageWSP image)
     m_brushSelectionWidget->setImage(image);
 }
 
+void KisBrushOptionWidget::setPrecisionEnabled(bool value)
+{
+    m_brushSelectionWidget->setPrecisionEnabled(value);
+}
 
 void KisBrushOptionWidget::writeOptionSetting(KisPropertiesConfiguration* settings) const
 {
+    m_brushSelectionWidget->writeOptionSetting(settings);
     m_brushOption.writeOptionSetting(settings);
 }
 
 void KisBrushOptionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
+    m_brushSelectionWidget->readOptionSetting(setting);
     m_brushOption.readOptionSetting(setting);
     m_brushSelectionWidget->setCurrentBrush(m_brushOption.brush());
 }
@@ -89,7 +96,6 @@ QSizeF KisBrushOptionWidget::brushSize() const
 {
     return m_brushSelectionWidget->brushSize();
 }
-
 
 void KisBrushOptionWidget::brushChanged()
 {

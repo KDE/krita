@@ -19,7 +19,7 @@
 #ifndef KIS_INPUTMANAGER_H
 #define KIS_INPUTMANAGER_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class QPointF;
 class QTabletEvent;
@@ -75,17 +75,12 @@ public:
      * The tool proxy of the current application.
      */
     KoToolProxy *toolProxy() const;
+
     /**
-     * The mouse position of the last mouse press event.
+     * Returns the event object for the last tablet event
+     * happened. Returns null if there was no tablet event recently
      */
-    QPointF mousePosition() const;
-    /**
-     * This method can be used by actions to check whether we are
-     * dealing with tablet events.
-     *
-     * \return A tablet press event if there was one, otherwise 0.
-     */
-    QTabletEvent *tabletPressEvent() const;
+    QTabletEvent *lastTabletEvent() const;
 
     /**
      * Convert a widget position to a pixel position.
@@ -94,6 +89,7 @@ public:
 
 private Q_SLOTS:
     void setMirrorAxis();
+    void slotToolChanged();
 
 private:
     class Private;

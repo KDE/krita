@@ -324,7 +324,7 @@ void SQLiteCursor::drv_bufferMovePointerPrev()
 void SQLiteCursor::drv_bufferMovePointerTo(qint64 at)
 {
     if (d->records.count() > at)
-	d->curr_coldata = d->records.at(at);
+        d->curr_coldata = d->records.at(at);
 }
 
 void SQLiteCursor::drv_clearBuffer()

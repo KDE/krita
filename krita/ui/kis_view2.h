@@ -28,6 +28,7 @@
 #include <krita_export.h>
 #include <kis_types.h>
 
+class KisAction;
 class QDragEnterEvent;
 class QDropEvent;
 class QPoint;
@@ -37,21 +38,23 @@ class KisPaintOpPreset;
 class KoCanvasController;
 
 class KisCanvas2;
+class KisCanvasResourceProvider;
 class KisDoc2;
 class KisFilterManager;
+class KisGridManager;
 class KisImage;
-class KisCanvasResourceProvider;
+class KisImageManager;
+class KisNodeManager;
+class KisPaintingAssistantsManager;
+class KisPaintopBox;
+class KisPart2;
+class KisPerspectiveGridManager;
 class KisSelectionManager;
 class KisStatusBar;
 class KisUndoAdapter;
 class KisZoomManager;
-class KisImageManager;
-class KisNodeManager;
-class KisPerspectiveGridManager;
-class KisPaintingAssistantsManager;
-class KisGridManager;
-class KoFavoriteResourceManager;
-class KisPaintopBox;
+class KisFlipbook;
+class KisActionManager;
 
 /**
  * Krita view class
@@ -70,7 +73,7 @@ public:
      * @param document   the document we show.
      * @param parent   a parent widget we show ourselves in.
      */
-    KisView2(KisDoc2 * document, QWidget * parent);
+    KisView2(KisPart2 *part, KisDoc2 *document, QWidget *parent);
     virtual ~KisView2();
 
 public:
@@ -122,6 +125,8 @@ public:  // Krita specific interfaces
     /// The node manager handles everything about nodes
     KisNodeManager * nodeManager();
 
+    KisActionManager* actionManager();
+    
     /**
      * Convenience method to get at the active node, which may be
      * a layer or a mask or a selection
@@ -179,16 +184,23 @@ public:  // Krita specific interfaces
     void enableControls();
     void disableControls();
 
+    /// shows a floating message in the top right corner of the canvas
+    void showFloatingMessage(const QString message, const QIcon& icon);
+
+public slots:
+
+    void slotLoadingFinished();
+
 signals:
 
     void sigLoadingFinished();
 
 private slots:
 
-    void slotLoadingFinished();
     void slotPreferences();
-    void slotEditPalette();
-    void slotImageSizeChanged();
+    void slotBlacklistCleanup();
+    void slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
+    void slotImageResolutionChanged();
     void slotNodeChanged();
     void slotTotalRefresh();
     void slotCreateTemplate();
@@ -199,14 +211,14 @@ private slots:
     void showJustTheCanvas(bool toggled);
 
 private:
-
-
     void createGUI();
     void createActions();
     void createManagers();
-
     void loadPlugins();
 
+    void resetImageSizeAndScroll(bool changeCentering,
+                                 const QPointF oldImageStillPoint = QPointF(),
+                                 const QPointF newImageStillPoint = QPointF());
 private:
     class KisView2Private;
     KisView2Private * const m_d;

@@ -62,7 +62,6 @@ void KisToolSelectRectangular::keyPressEvent(QKeyEvent *event)
 
 void KisToolSelectRectangular::finishRect(const QRectF& rect)
 {
-    KisSystemLocker locker(currentNode());
     QRect rc(rect.toRect());
     rc = rc.intersected(currentImage()->bounds());
     rc = rc.normalized();
@@ -77,7 +76,7 @@ void KisToolSelectRectangular::finishRect(const QRectF& rect)
         return;
     }
 
-    KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Rectangular Selection"));
+    KisSelectionToolHelper helper(kisCanvas, i18n("Rectangular Selection"));
 
     if (m_widgetHelper.selectionMode() == PIXEL_SELECTION) {
         if (rc.isValid()) {

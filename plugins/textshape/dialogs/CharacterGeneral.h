@@ -48,6 +48,8 @@ public:
     void updateNextStyleCombo(KoParagraphStyle *style); // set current style in next style combo
     int nextStyleId(); //return the current style id in next style combo
 
+    KoCharacterStyle *style() const;
+
 public slots:
     void save(KoCharacterStyle *style = 0);
 

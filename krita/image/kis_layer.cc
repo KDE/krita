@@ -21,9 +21,7 @@
 #include "kis_layer.h"
 
 
-#include <kicon.h>
 #include <klocale.h>
-#include <QIcon>
 #include <QImage>
 #include <QBitArray>
 #include <QStack>
@@ -138,7 +136,7 @@ KisLayer::KisLayer(const KisLayer& rhs)
     if (this != &rhs) {
         m_d->image = rhs.m_d->image;
         m_d->metaDataStore = new KisMetaData::Store(*rhs.m_d->metaDataStore);
-        setName(i18n("Duplicate of '%1'", rhs.name()));
+        setName(rhs.name());
     }
 }
 
@@ -206,7 +204,7 @@ bool KisLayer::alphaChannelDisabled() const
 
 void KisLayer::setChannelFlags(const QBitArray & channelFlags)
 {
-    Q_ASSERT(((quint32)channelFlags.count() == colorSpace()->channelCount() || channelFlags.isEmpty()));
+    Q_ASSERT(channelFlags.isEmpty() ||((quint32)channelFlags.count() == colorSpace()->channelCount()));
     m_d->channelFlags = channelFlags;
 }
 
@@ -521,7 +519,9 @@ QImage KisLayer::createThumbnail(qint32 w, qint32 h)
     KisPaintDeviceSP originalDevice = original();
 
     return originalDevice ?
-           originalDevice->createThumbnail(w, h) : QImage();
+           originalDevice->createThumbnail(w, h,
+                                           KoColorConversionTransformation::InternalRenderingIntent,
+                                           KoColorConversionTransformation::InternalConversionFlags) : QImage();
 }
 
 qint32 KisLayer::x() const

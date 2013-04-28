@@ -31,7 +31,6 @@
 #include <QVector>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kpluginfactory.h>
 
 #include <KoProgressUpdater.h>
@@ -96,7 +95,7 @@ void KisSmallTilesFilter::process(KisPaintDeviceSP device,
     gc.end();
 }
 
-KisConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageWSP) const
+KisConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
 {
     vKisIntegerWidgetParam param;
     param.push_back(KisIntegerWidgetParam(2, 5, 1, i18n("Number of tiles"), "numberOfTiles"));

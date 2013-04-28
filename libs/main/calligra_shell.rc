@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="Calligra" version="24">
+<kpartgui name="Calligra" version="25">
 <MenuBar>
  <Menu name="file" noMerge="1"><text>&amp;File</text>
   <Action name="file_new" />
@@ -38,6 +38,7 @@
   <Separator/>
   <Action name="options_configure_keybinding"/>
   <Action name="options_configure_toolbars"/>
+  <Action name="theme_menu" />
   <DefineGroup name="settings_configure"/>
  </Menu>
 </MenuBar>

@@ -57,7 +57,7 @@ struct FLAKE_EXPORT KoShapeTemplate {
     QString name;       ///< The name to be shown for this template
     QString family;       ///< The family of the shape (possible values are: "funny","arrow")
     QString toolTip;    ///< The tooltip text for the template
-    QString icon;       ///< Icon name
+    QString iconName;       ///< Icon name
     /**
      * The properties which, when passed to the KoShapeFactoryBase::createShape() method
      * result in the shape this template represents.
@@ -98,7 +98,7 @@ public:
      *   example for use by the KoToolBase::activateTemporary.
      * @param name the user visible name of the shape this factory creates.
      */
-    KoShapeFactoryBase(const QString &id, const QString &name, const QString &deferredPluginName = QString::null);
+    KoShapeFactoryBase(const QString &id, const QString &name, const QString &deferredPluginName = QString());
     virtual ~KoShapeFactoryBase();
 
     /**
@@ -155,7 +155,7 @@ public:
      * return the basename of the icon for a selector of shapes
      * @return the basename of the icon for a selector of shapes
      */
-    QString icon() const;
+    QString iconName() const;
     /**
      * return the user visible (and translated) name to be seen by the user.
      * @return the user visible (and translated) name to be seen by the user.
@@ -265,7 +265,7 @@ protected:
      * @param iconName the basename (without extension) of the icon
      * @see KIconLoader
      */
-    void setIcon(const QString &iconName);
+    void setIconName(const char *iconName);
 
     /**
      * Set the family name of the default shape

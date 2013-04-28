@@ -29,7 +29,7 @@ namespace KexiDB
 class CALLIGRADB_EXPORT ConnectionInternal
 {
 public:
-    ConnectionInternal(Connection *conn);
+    explicit ConnectionInternal(Connection *conn);
     virtual ~ConnectionInternal();
     virtual void storeResult() = 0;
 

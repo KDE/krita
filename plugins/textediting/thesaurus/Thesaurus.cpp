@@ -43,6 +43,8 @@ NOT TODO:
 
 #include "Thesaurus.h"
 
+#include <KoIcon.h>
+
 #include <QToolButton>
 #include <QByteArray>
 #include <QTextCursor>
@@ -52,7 +54,7 @@ NOT TODO:
 #include <QListWidget>
 #include <QGroupBox>
 
-#include <KTabWidget>
+#include <ktabwidget.h>
 #include <kglobal.h>
 #include <kprocess.h>
 #include <kstandarddirs.h>
@@ -93,8 +95,6 @@ Thesaurus::Thesaurus()
     QWidget *page = new QWidget();
     m_dialog->setMainWidget(page);
     QVBoxLayout *topLayout = new QVBoxLayout(page);
-    topLayout->setMargin(KDialog::marginHint());
-    topLayout->setSpacing(KDialog::spacingHint());
 
     QHBoxLayout *row1 = new QHBoxLayout;
     topLayout->addLayout(row1);
@@ -108,11 +108,11 @@ Thesaurus::Thesaurus()
     row1->addWidget(m_edit, 1);
     row1->addWidget(m_search, 0);
     m_back = new QToolButton(page);
-    m_back->setIcon(KIcon(QString::fromLatin1("go-previous")));
+    m_back->setIcon(koIcon("go-previous"));
     m_back->setToolTip(i18nc("@action:button Go back to the previous word in history", "Back"));
     row1->addWidget(m_back, 0);
     m_forward = new QToolButton(page);
-    m_forward->setIcon(KIcon(QString::fromLatin1("go-next")));
+    m_forward->setIcon(koIcon("go-next"));
     m_forward->setToolTip(i18nc("@action:button Go forward to the next word in history", "Forward"));
     row1->addWidget(m_forward, 0);
 
@@ -132,7 +132,6 @@ Thesaurus::Thesaurus()
     QWidget *thesWidget = new QWidget(m_tabWidget);
     m_tabWidget->addTab(thesWidget, i18n("&Thesaurus"));
     QHBoxLayout *thesLayout = new QHBoxLayout;
-    thesLayout->setSpacing(KDialog::spacingHint());
     thesWidget->setLayout(thesLayout);
 
     QGroupBox *synGroupBox = new QGroupBox(i18n("Synonyms"), thesWidget);
@@ -181,8 +180,6 @@ Thesaurus::Thesaurus()
     QWidget *wnWidget = new QWidget(m_tabWidget);
     m_tabWidget->addTab(wnWidget, i18n("&Wordnet"));
     QVBoxLayout *wnLayout = new QVBoxLayout;
-    wnLayout->setSpacing(KDialog::spacingHint());
-    wnLayout->setMargin(KDialog::marginHint());
     wnWidget->setLayout(wnLayout);
 
     m_wnComboBox = new KComboBox(wnWidget);
@@ -241,6 +238,12 @@ void Thesaurus::finishedParagraph(QTextDocument *document, int cursorPosition)
     Q_UNUSED(cursorPosition);
 }
 
+void Thesaurus::startingSimpleEdit(QTextDocument *document, int cursorPosition)
+{
+    Q_UNUSED(document);
+    Q_UNUSED(cursorPosition);
+}
+
 void Thesaurus::checkSection(QTextDocument *document, int startPosition, int endPosition)
 {
     if (endPosition == -1 && startPosition == -1) { // standalone
@@ -249,7 +252,7 @@ void Thesaurus::checkSection(QTextDocument *document, int startPosition, int end
             m_word = document->toPlainText();
         m_dialog->showButton(KDialog::Ok, false);
         m_dialog->setButtonGuiItem(KDialog::Cancel,
-                KGuiItem(i18nc("@action:button Close thesaurus dialog", "&Close"), QString::fromLatin1("dialog-cancel")));
+                KGuiItem(i18nc("@action:button Close thesaurus dialog", "&Close"), koIconName("dialog-cancel")));
         m_replaceLineEdit->setEnabled(false);
         m_replaceLabel->setEnabled(false);
     }
@@ -261,7 +264,7 @@ void Thesaurus::checkSection(QTextDocument *document, int startPosition, int end
         m_document = document;
         m_startPosition = startPosition;
         m_dialog->setButtonGuiItem(KDialog::Ok,
-                KGuiItem(i18n("&Replace"), QString::fromLatin1("dialog-ok")));
+                KGuiItem(i18n("&Replace"), koIconName("dialog-ok")));
         slotFindTerm(m_word.trimmed());
         m_replaceLineEdit->setText(m_word.trimmed());
     }

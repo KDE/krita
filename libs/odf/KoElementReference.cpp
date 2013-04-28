@@ -54,12 +54,12 @@ KoElementReference &KoElementReference::operator=(const KoElementReference &rhs)
     return *this;
 }
 
-bool KoElementReference::operator==(const KoElementReference &other)
+bool KoElementReference::operator==(const KoElementReference &other) const
 {
     return d->xmlid == other.d->xmlid;
 }
 
-bool KoElementReference::operator!=(const KoElementReference &other)
+bool KoElementReference::operator!=(const KoElementReference &other) const
 {
     return !(*this == other);
 }
@@ -91,7 +91,7 @@ QString KoElementReference::toString() const
 
 KoElementReference KoElementReference::loadOdf(const KoXmlElement &element)
 {
-    QString xmlid = QString::null;
+    QString xmlid;
 
     if (element.hasAttributeNS(KoXmlNS::xml, "id")) {
         xmlid = element.attributeNS(KoXmlNS::xml, "id");
@@ -110,5 +110,5 @@ KoElementReference KoElementReference::loadOdf(const KoXmlElement &element)
 
 void KoElementReference::invalidate()
 {
-    d->xmlid = QString::null;
+    d->xmlid.clear();
 }

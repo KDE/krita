@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Colorrange
 Name[bg]=Цветови обхват
+Name[bs]=DometBoje
 Name[ca]=Interval de color
 Name[ca@valencia]=Interval de color
 Name[da]=Farveområde
@@ -15,7 +16,7 @@ Name[fi]=Värialue
 Name[fr]=Plage de couleurs
 Name[fy]=Kleurberik
 Name[ga]=Raon datha
-Name[gl]=Gamas de Cores
+Name[gl]=Gamas de cores
 Name[he]=טווח צבעים
 Name[hi]=रंगसीमा
 Name[hne]=रंगसीमा
@@ -44,4 +45,4 @@ Name[zh_TW]=色彩範圍
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritacolorrange
-X-Krita-Version=5
+X-Krita-Version=27

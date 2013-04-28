@@ -29,12 +29,8 @@
 #include "KoChannelInfo.h"
 #include "KoID.h"
 #include "KoIntegerMaths.h"
-#include "KoCompositeOpOver.h"
-#include "KoCompositeOpErase.h"
-#include "KoCompositeOpAlphaDarken.h"
 #include "compositeops/KoCompositeOps.h"
-#include "compositeops/KoCompositeOpAdd.h"
-#include "compositeops/KoCompositeOpSubtract.h"
+
 
 KoRgbU8ColorSpace::KoRgbU8ColorSpace() :
 

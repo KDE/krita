@@ -35,9 +35,9 @@ struct KoRgbTraits : public KoColorSpaceTrait<_channels_type_, 4, 3> {
      * An RGB pixel
      */
     struct Pixel {
-        channels_type blue;
-        channels_type green;
         channels_type red;
+        channels_type green;
+        channels_type blue;
         channels_type alpha;
     };
 

@@ -33,6 +33,9 @@ void KisHistogramTest::testCreation()
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     QList<QString> producers = KoHistogramProducerFactoryRegistry::instance()->keysCompatibleWith(cs);
     foreach (const QString &id, producers) {
+        if (id.contains("YCBCR")) {
+            continue;
+        }
         KoHistogramProducerSP producer = KoHistogramProducerFactoryRegistry::instance()->get(id)->generate();
         KisHistogram test(dev, QRect(0, 0, 100, 100), producer, LINEAR);
     }

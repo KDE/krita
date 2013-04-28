@@ -39,7 +39,7 @@ class KoFormulaShape;
 class FormulaDocument : public KoDocument
 {
 public:
-    FormulaDocument(KoFormulaShape *parent);
+    explicit FormulaDocument(KoFormulaShape *parent);
     ~FormulaDocument();
     
     bool loadOdf( KoOdfReadStore &odfStore );

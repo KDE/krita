@@ -80,10 +80,12 @@ void SpecificColorSelectorDock::layerChanged(const KisNodeSP node)
 {
     if (!node) return;
     if (!m_colorSelector) return;
-    if (node->inherits("KisMask") && node->parent())
-        m_colorSelector->setColorSpace(static_cast<const KisLayer*>(node->parent().data())->colorSpace());
-    else
-        m_colorSelector->setColorSpace(static_cast<const KisLayer*>(node.data())->colorSpace());
+    if (!m_colorSelector->customColorSpaceUsed()) {
+        if (node->inherits("KisMask") && node->parent())
+            m_colorSelector->setColorSpace(static_cast<const KisLayer*>(node->parent().data())->colorSpace());
+        else
+            m_colorSelector->setColorSpace(static_cast<const KisLayer*>(node.data())->colorSpace());
+    }
     m_colorSelector->setColor(m_view->resourceProvider()->fgColor());
 }
 

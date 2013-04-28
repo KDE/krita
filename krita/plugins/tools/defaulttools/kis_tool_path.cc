@@ -18,33 +18,10 @@
  */
 
 #include "kis_tool_path.h"
-//#include <klocale.h>
 #include <KoPathShape.h>
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
-//#include <KoColorSpace.h>
-//#include <KoCompositeOp.h>
-//#include <KoShapeController.h>
-
-//#include <kis_paint_layer.h>
-//#include <kis_image.h>
-//#include <kis_painter.h>
-//#include <kis_paint_information.h>
-//#include <kis_layer.h>
-//#include <canvas/kis_canvas2.h>
-//#include <kis_view2.h>
-#include <kis_canvas_resource_provider.h>
-#include <kis_paintop_registry.h>
-//#include <kis_selection.h>
 #include <kis_cursor.h>
-#include <kis_system_locker.h>
-
-#include <recorder/kis_action_recorder.h>
-#include <recorder/kis_recorded_path_paint_action.h>
-#include <recorder/kis_node_query_path.h>
-
-#include "kis_figure_painting_tool_helper.h"
-
 
 KisToolPath::KisToolPath(KoCanvasBase * canvas)
         : KisToolShape(canvas, Qt::ArrowCursor), m_localTool(new LocalTool(canvas, this))
@@ -123,79 +100,6 @@ void KisToolPath::mouseReleaseEvent(KoPointerEvent *event)
     }
 }
 
-void KisToolPath::addPathShape(KoPathShape* pathShape)
-{
-    KisNodeSP currentNode =
-        canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
-    if (!currentNode || currentNode->systemLocked()) {
-        return;
-    }
-    // Get painting options
-    KisPaintOpPresetSP preset = canvas()->resourceManager()->
-                                resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
-    KoColor paintColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
-
-    // Compute the outline
-    KisImageWSP image = this->image();
-    QTransform matrix;
-    matrix.scale(image->xRes(), image->yRes());
-    matrix.translate(pathShape->position().x(), pathShape->position().y());
-    QPainterPath mapedOutline = matrix.map(pathShape->outline());
-
-    // Recorde the paint action
-    KisRecordedPathPaintAction bezierCurvePaintAction(
-            KisNodeQueryPath::absolutePath(currentNode),
-            preset );
-    bezierCurvePaintAction.setPaintColor(paintColor);
-    QPointF lastPoint, nextPoint;
-    int elementCount = mapedOutline.elementCount();
-    for (int i = 0; i < elementCount; i++) {
-        QPainterPath::Element element = mapedOutline.elementAt(i);
-        switch (element.type) {
-        case QPainterPath::MoveToElement:
-            if (i != 0) {
-                qFatal("Unhandled"); // XXX: I am not sure the tool can produce such element, deal with it when it can
-            }
-            lastPoint =  QPointF(element.x, element.y);
-            break;
-        case QPainterPath::LineToElement:
-            nextPoint =  QPointF(element.x, element.y);
-            bezierCurvePaintAction.addLine(KisPaintInformation(lastPoint), KisPaintInformation(nextPoint));
-            lastPoint = nextPoint;
-            break;
-        case QPainterPath::CurveToElement:
-            nextPoint =  QPointF(mapedOutline.elementAt(i + 2).x, mapedOutline.elementAt(i + 2).y);
-            bezierCurvePaintAction.addCurve(KisPaintInformation(lastPoint),
-                                             QPointF(mapedOutline.elementAt(i).x,
-                                                     mapedOutline.elementAt(i).y),
-                                             QPointF(mapedOutline.elementAt(i + 1).x,
-                                                     mapedOutline.elementAt(i + 1).y),
-                                             KisPaintInformation(nextPoint));
-            lastPoint = nextPoint;
-            break;
-        default:
-            continue;
-        }
-    }
-    image->actionRecorder()->addAction(bezierCurvePaintAction);
-
-    if (!currentNode->inherits("KisShapeLayer")) {
-        KisSystemLocker locker(currentNode);
-
-        KisFigurePaintingToolHelper helper(i18n("Path"),
-                                           image,
-                                           canvas()->resourceManager(),
-                                           strokeStyle(),
-                                           fillStyle());
-        helper.paintPainterPath(mapedOutline);
-    } else {
-        pathShape->normalize();
-        addShape(pathShape);
-    }
-
-    notifyModified();
-}
-
 void KisToolPath::paint(QPainter &painter, const KoViewConverter &converter)
 {
     Q_ASSERT(m_localTool);
@@ -224,7 +128,7 @@ void KisToolPath::LocalTool::paintPath(KoPathShape &pathShape, QPainter &painter
 
 void KisToolPath::LocalTool::addPathShape(KoPathShape* pathShape)
 {
-    m_parentTool->addPathShape(pathShape);
+    m_parentTool->addPathShape(pathShape, i18n("Path"));
 }
 
 #include "kis_tool_path.moc"

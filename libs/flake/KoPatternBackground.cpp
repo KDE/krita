@@ -34,7 +34,7 @@
 #include <KoViewConverter.h>
 #include <KoXmlWriter.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <QBrush>
 #include <QPainter>
@@ -281,7 +281,7 @@ KoPatternBackground &KoPatternBackground::operator = (const KoPatternBackground 
     return *this;
 }
 
-void KoPatternBackground::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &context, const QPainterPath &fillPath) const
+void KoPatternBackground::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &/*context*/, const QPainterPath &fillPath) const
 {
     Q_D(const KoPatternBackground);
     if (! d->imageData)

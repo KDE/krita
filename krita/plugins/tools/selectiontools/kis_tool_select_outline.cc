@@ -71,10 +71,6 @@ void KisToolSelectOutline::mousePressEvent(KoPointerEvent *event)
     if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
                        Qt::LeftButton, Qt::NoModifier)) {
 
-        if (!currentNode()) {
-            return;
-        }
-
         if (!selectionEditable()) {
             return;
         }
@@ -94,12 +90,6 @@ void KisToolSelectOutline::mouseMoveEvent(KoPointerEvent *event)
 {
     if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
         QPointF point = convertToPixelCoord(event);
-        //don't add the point, if the distance is very small
-        if (!m_points.isEmpty()) {
-            QPointF diff = point - m_points.last();
-            if(fabs(diff.x())<3 && fabs(diff.y())<3)
-                return;
-        }
         m_paintPath->lineTo(pixelToView(point));
         m_points.append(point);
         updateFeedback();
@@ -117,12 +107,12 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
 
         if (m_points.count() > 2) {
             KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-            if (!kisCanvas || !currentNode())
+            if (!kisCanvas)
                 return;
 
             QApplication::setOverrideCursor(KisCursor::waitCursor());
 
-            KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Outline Selection"));
+            KisSelectionToolHelper helper(kisCanvas, i18n("Outline Selection"));
 
             if (selectionMode() == PIXEL_SELECTION) {
 

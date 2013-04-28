@@ -26,6 +26,7 @@
 
 #include "kis_brush.h"
 #include "kis_brush_factory.h"
+#include "kis_fixed_paint_device.h"
 
 /**
  * A brush factory can create a new brush instance based

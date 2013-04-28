@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2012  Friedrich W. H. Kossebau <kossebau@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,34 +23,47 @@
 #define KPROPERTY_DATEEDIT_H
 
 #include "koproperty/Factory.h"
+#include <QDateEdit>
 
-class Q3DateEdit;
-class QDate;
 
 namespace KoProperty
 {
 
-class KOPROPERTY_EXPORT DateEdit : public Widget
+class KOPROPERTY_EXPORT DateEdit : public QDateEdit
 {
     Q_OBJECT
+    Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 
 public:
-    explicit DateEdit(Property *property, QWidget *parent = 0);
+    DateEdit(const Property* prop, QWidget* parent);
     virtual ~DateEdit();
 
-    virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange = true);
+    QVariant value() const;
 
-    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
+signals:
+    void commitData(QWidget* editor);
+
+public slots:
+    void setValue(const QVariant& value);
 
 protected:
-    virtual void setReadOnlyInternal(bool readOnly);
+    virtual void paintEvent(QPaintEvent* event);
 
 protected slots:
-    void  slotValueChanged(const QDate &date);
+    void onDateChanged();
+};
 
-private:
-    Q3DateEdit   *m_edit;
+
+class KOPROPERTY_EXPORT DateDelegate : public EditorCreatorInterface,
+                                       public ValueDisplayInterface
+{
+public:
+    DateDelegate();
+
+    virtual QString displayTextForProperty(const Property* prop) const;
+
+    virtual QWidget* createEditor(int type, QWidget* parent,
+        const QStyleOptionViewItem& option, const QModelIndex& index) const;
 };
 
 }

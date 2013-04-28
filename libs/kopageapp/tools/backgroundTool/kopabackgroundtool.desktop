@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Page Application Background Tool
+Name[bs]=Alat za pozadinu stranice aplikacije
 Name[ca]=Eina d'aplicació de fons de pàgina
 Name[ca@valencia]=Eina d'aplicació de fons de pàgina
 Name[da]=Værktøj til side-program-baggrund
@@ -9,7 +10,8 @@ Name[en_GB]=Page Application Background Tool
 Name[es]=Herramienta de fondo de las aplicaciones de la página
 Name[et]=Leheküljepõhiste rakenduste tausta tööriist
 Name[fr]=Outil de page d'application en arrière-plan
-Name[gl]=Ferramenta do Fondo de Páxina da Aplicación
+Name[gl]=Ferramenta de aplicación de fondos a páxinas
+Name[hu]=Oldal alkalmazás háttéreszköz
 Name[it]=Strumento per l'applicazione di sfondi sulle pagine
 Name[ja]=ページアプリケーション背景ツール
 Name[kk]=Қолданба бетінің аясымен айналысу
@@ -29,6 +31,7 @@ Name[zh_CN]=页面应用程序背景工具
 Name[zh_TW]=頁面應用程式背景工具
 X-KDE-ServiceTypes=Calligra/Tool
 Type=Service
+X-KDE-PluginInfo-Name=kopabackgroundtool
 X-KDE-Library=kopabackgroundtool
-X-Flake-MinVersion=4
-X-Flake-PluginVersion=4
+X-Flake-MinVersion=27
+X-Flake-PluginVersion=27

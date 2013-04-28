@@ -113,8 +113,10 @@ void KisPlainColorSource::selectColor(double mix)
     const quint8 * colors[2];
     colors[0] = m_cachedBackGroundColor->data();
     colors[1] = m_foreGroundColor.data();
-    int weight = (int)(mix * 255);
-    const qint16 weights[2] = { 255 - weight, weight };
+    // equally distribute mix factor over [0..255]
+    // mix * 256 ensures that, with exception of mix==1.0, which gets special handling
+    const int weight = (mix == 1.0) ? 255 : (int)(mix * 256);
+    const qint16 weights[2] = { (qint16)(255 - weight), (qint16)weight };
 
     m_color->colorSpace()->mixColorsOp()->mixColors(colors, weights, 2, m_color->data());
 

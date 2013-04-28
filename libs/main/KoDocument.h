@@ -567,7 +567,12 @@ public:
 
     void clearUndoHistory();
 
-public slots:
+
+    /**
+     *  Sets the modified flag on the document. This means that it has
+     *  to be saved or not before deleting it.
+     */
+    virtual void setModified(bool _mod);
 
     /**
      * Initialize an empty document using default values
@@ -578,6 +583,20 @@ public slots:
      * Returns the global undo stack
      */
     KUndo2Stack *undoStack();
+
+
+    /**
+     * Set the output stream to report profile information to.
+     */
+    void setProfileStream(QTextStream *profilestream);
+
+    /**
+     * Set the output stream to report profile information to.
+     */
+    void setProfileReferenceTime(const QTime& referenceTime);
+
+public slots:
+
     /**
      * Adds a command to the undo stack and executes it by calling the redo() function.
      * @param command command to add to the undo stack
@@ -594,22 +613,6 @@ public slots:
      * Ends the recording of a macro command.
      */
     virtual void endMacro();
-
-    /**
-     *  Sets the modified flag on the document. This means that it has
-     *  to be saved or not before deleting it.
-     */
-    virtual void setModified(bool _mod);
-
-    /**
-     * Set the output stream to report profile information to.
-     */
-    void setProfileStream(QTextStream *profilestream);
-
-    /**
-     * Set the output stream to report profile information to.
-     */
-    void setProfileReferenceTime(const QTime& referenceTime);
 
 signals:
 

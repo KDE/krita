@@ -98,7 +98,7 @@ public:
     virtual ~KoDocument();
 
     /// XXX: Temporary!
-    KoPart *documentPart();
+    KoPart *documentPart() const;
 
     /**
      * Reimplemented from KParts::ReadWritePart for internal reasons

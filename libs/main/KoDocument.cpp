@@ -230,7 +230,7 @@ KoDocument::~KoDocument()
 }
 
 
-KoPart *KoDocument::documentPart()
+KoPart *KoDocument::documentPart() const
 {
     return d->parentPart;
 }

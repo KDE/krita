@@ -104,7 +104,8 @@ QString KoDocument::newObjectName()
 class KoDocument::Private
 {
 public:
-    Private() :
+    Private(KoPart *part) :
+        parentPart(part),
         docInfo(0),
         docRdf(0),
         progressUpdater(0),
@@ -125,7 +126,6 @@ public:
         storeInternal(false),
         isLoading(false),
         undoStack(0),
-        parentPart(0),
         modified(0)
     {
         confirmNonNativeSave[0] = true;
@@ -137,6 +137,7 @@ public:
         }
     }
 
+    KoPart *const parentPart;
 
     KoDocumentInfo *docInfo;
     KoDocumentRdfBase *docRdf;
@@ -186,17 +187,15 @@ public:
 
     KoPageLayout pageLayout;
 
-    KoPart *parentPart;
 
     bool modified;
 
 };
 
 KoDocument::KoDocument(KoPart *parent, KUndo2Stack *undoStack)
-        : d(new Private)
+    : d(new Private(parent))
 {
     Q_ASSERT(parent);
-    d->parentPart = parent;
 
     d->isEmpty = true;
     connect(&d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));

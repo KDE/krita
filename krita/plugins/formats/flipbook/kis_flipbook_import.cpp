@@ -36,6 +36,7 @@
 #include <kis_transaction.h>
 #include <kis_paint_device.h>
 #include <kis_doc2.h>
+#include <kis_part2.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>
 #include <kis_node.h>

@@ -679,9 +679,7 @@ void KisNodeManager::saveNodeAsImage()
 
     QRect savedRect = image->bounds() | node->exactBounds();
 
-    KisPart2 part;
-    KisDoc2 d(&part);
-    part.setDocument(&d);
+    KisDoc2 d;
 
     d.prepareForImport();
 

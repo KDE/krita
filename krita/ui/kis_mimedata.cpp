@@ -24,7 +24,6 @@
 #include "kis_shared_ptr.h"
 #include "kis_image.h"
 #include "kis_doc2.h"
-#include "kis_part2.h"
 
 #include <KoStore.h>
 #include <KoColorProfile.h>
@@ -84,9 +83,7 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
         Q_ASSERT(!store->bad());
         store->disallowNameExpansion();
 
-        KisPart2 part;
-        KisDoc2 doc(&part);
-        part.setDocument(&doc);
+        KisDoc2 doc;
 
         QRect rc = node->exactBounds();
 

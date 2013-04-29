@@ -52,9 +52,9 @@ public:
         m_image->initialRefreshGraph();
         QVERIFY(checkLayersInitial(m_image));
 
-        m_part = new KisPart2(0);
+        m_doc = new KisDoc2();
+        m_part = m_doc->documentPart();
 
-        m_doc = new KisDoc2(m_part);
         m_doc->setCurrentImage(m_image);
 
         m_part->setDocument(m_doc);
@@ -119,7 +119,7 @@ public:
 private:
     KisSurrogateUndoStore *m_undoStore;
     KisImageSP m_image;
-    KisPart2 *m_part;
+    KoPart *m_part;
     KisDoc2 *m_doc;
     KisView2 *m_view;
     KoMainWindow *m_shell;

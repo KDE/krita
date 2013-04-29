@@ -48,6 +48,7 @@ KisPart2::KisPart2(QObject *parent)
     : KoPart(parent)
     , m_flipbook(0)
     , m_dieOnError(false)
+    , m_document(0)
 {
     setComponentData(KisFactory2::componentData(), false);
     setTemplateType("krita_template");

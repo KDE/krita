@@ -43,7 +43,6 @@
 #include "kis_selection.h"
 #include "kis_node_commands_adapter.h"
 #include "kis_group_layer.h"
-#include "kis_part2.h"
 #include "kis_statusbar.h"
 #include "kis_progress_widget.h"
 
@@ -52,7 +51,6 @@
 struct KisImportCatcher::Private
 {
 public:
-    KisPart2* part;
     KisDoc2* doc;
     KisView2* view;
     KUrl url;
@@ -116,9 +114,7 @@ void KisImportCatcher::Private::importAsTransparencyMask(KisPaintDeviceSP device
 KisImportCatcher::KisImportCatcher(const KUrl & url, KisView2 * view, bool importAsLayer)
         : m_d(new Private)
 {
-    KisPart2 *part = new KisPart2(0);
-    m_d->doc = new KisDoc2(part);
-    part->setDocument(m_d->doc);
+    m_d->doc = new KisDoc2();
 
     KoProgressProxy *progressProxy = view->statusBar()->progress()->progressProxy();
     m_d->doc->setProgressProxy(progressProxy);

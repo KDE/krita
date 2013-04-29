@@ -72,7 +72,6 @@
 #include <metadata/kis_meta_data_merge_strategy_registry.h>
 #include <kis_file_layer.h>
 
-#include "kis_part2.h"
 #include "kis_config.h"
 #include "kis_cursor.h"
 #include "dialogs/kis_dlg_adj_layer_props.h"
@@ -98,7 +97,6 @@
 #include "kis_node_manager.h"
 #include "kis_action.h"
 #include "kis_action_manager.h"
-#include "kis_part2.h"
 
 class KisSaveGroupVisitor : public KisNodeVisitor
 {
@@ -183,9 +181,7 @@ public:
 
             QRect r = m_image->bounds();
 
-            KisPart2 part;
-            KisDoc2 d(&part);
-            part.setDocument(&d);
+            KisDoc2 d;
 
             d.prepareForImport();
 

@@ -26,14 +26,11 @@
 #include <KoColorSpace.h>
 
 #include "kis_doc2.h"
-#include "kis_part2.h"
 #include "kis_image.h"
 
 void KisKraLoaderTest::testLoading()
 {
-    KisPart2 part;
-    KisDoc2 doc(&part);
-    part.setDocument(&doc);
+    KisDoc2 doc;
 
     doc.loadNativeFormat(QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra");
     KisImageWSP image = doc.image();

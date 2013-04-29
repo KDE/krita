@@ -79,6 +79,7 @@
 #include <KoCanvasControllerWidget.h>
 #include <KoDocumentEntry.h>
 #include <KoProperties.h>
+#include <KoPart.h>
 
 #include <kis_image.h>
 #include <kis_undo_adapter.h>
@@ -107,7 +108,6 @@
 #include "kis_painting_assistants_manager.h"
 #include <kis_paint_layer.h>
 #include "kis_paintop_box.h"
-#include "kis_part2.h"
 #include "kis_print_job.h"
 #include "kis_progress_widget.h"
 #include "kis_resource_server_provider.h"
@@ -118,7 +118,6 @@
 #include "kis_zoom_manager.h"
 #include "kra/kis_kra_loader.h"
 #include "widgets/kis_floating_message.h"
-
 
 #include <QDebug>
 #include <QPoint>
@@ -154,7 +153,6 @@ public:
     KisView2Private()
         : canvas(0)
         , doc(0)
-        , part(0)
         , viewConverter(0)
         , canvasController(0)
         , resourceProvider(0)
@@ -196,7 +194,6 @@ public:
 
     KisCanvas2 *canvas;
     KisDoc2 *doc;
-    KisPart2 *part;
     KisCoordinatesConverter *viewConverter;
     KisCanvasController *canvasController;
     KisCanvasResourceProvider *resourceProvider;
@@ -221,7 +218,7 @@ public:
 };
 
 
-KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
+KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     : KoView(part, doc, parent),
       m_d(new KisView2Private())
 {
@@ -235,7 +232,6 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
     }
 
     m_d->doc = doc;
-    m_d->part = part;
     m_d->viewConverter = new KisCoordinatesConverter();
 
     KisCanvasController *canvasController = new KisCanvasController(this, actionCollection());
@@ -466,10 +462,7 @@ void KisView2::dropEvent(QDropEvent *event)
 
             QByteArray ba = event->mimeData()->data("application/x-krita-node");
 
-            KisPart2 part;
-            KisDoc2 tempDoc(&part);
-            part.setDocument(&tempDoc);
-
+            KisDoc2 tempDoc;
             tempDoc.loadNativeFormatFromStore(ba);
 
             KisImageWSP tempImage = tempDoc.image();
@@ -567,8 +560,8 @@ void KisView2::dropEvent(QDropEvent *event)
                         m_d->imageManager->importImage(KUrl(url));
                     }
                     else if (action == replaceCurrentDocument) {
-                        if (m_d->part->isModified()) {
-                            m_d->part->save();
+                        if (m_d->doc->isModified()) {
+                            m_d->doc->documentPart()->save();
                         }
                         if (shell() != 0) {
                             shell()->openDocument(url);
@@ -1150,7 +1143,7 @@ void KisView2::slotSaveIncremental()
         return;
     }
     pDoc->setSaveInBatchMode(true);
-    m_d->part->saveAs(fileName);
+    m_d->doc->documentPart()->saveAs(fileName);
     pDoc->setSaveInBatchMode(false);
 
     shell()->updateCaption();
@@ -1217,7 +1210,7 @@ void KisView2::slotSaveIncrementalBackup()
             KMessageBox::error(this, "Alternative names exhausted, try manually saving with a higher number", "Couldn't save incremental backup");
             return;
         }
-        m_d->part->saveAs(fileName);
+        m_d->doc->documentPart()->saveAs(fileName);
 
         shell()->updateCaption();
     }
@@ -1254,8 +1247,8 @@ void KisView2::slotSaveIncrementalBackup()
 
         // Save both as backup and on current file for interapplication workflow
         pDoc->setSaveInBatchMode(true);
-        m_d->part->saveAs(backupFileName);
-        m_d->part->saveAs(fileName);
+        m_d->doc->documentPart()->saveAs(backupFileName);
+        m_d->doc->documentPart()->saveAs(fileName);
         pDoc->setSaveInBatchMode(false);
 
         shell()->updateCaption();

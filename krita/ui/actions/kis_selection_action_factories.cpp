@@ -20,9 +20,12 @@
 
 #include <klocale.h>
 #include <kundo2command.h>
+
 #include <KoMainWindow.h>
 #include <KoDocumentEntry.h>
 #include <KoServiceProvider.h>
+#include <KoPart.h>
+
 #include "kis_view2.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_clipboard.h"
@@ -352,15 +355,8 @@ void KisPasteNewActionFactory::run(KisView2 *view)
     QRect rect = clip->exactBounds();
     if (rect.isEmpty()) return;
 
-    const QByteArray mimetype = KoServiceProvider::readNativeFormatMimeType();
-    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(mimetype);
-
-    QString error;
-    KisPart2* part = dynamic_cast<KisPart2*>(entry.createKoPart(&error));
-    if (!part) return;
-    KisDoc2 *doc = new KisDoc2(part);
+    KisDoc2 *doc = new KisDoc2();
     if (!doc) return;
-    part->setDocument(doc);
 
     KisImageSP image = new KisImage(doc->createUndoStore(),
                                     rect.width(),
@@ -379,7 +375,7 @@ void KisPasteNewActionFactory::run(KisView2 *view)
     image->addNode(layer.data(), image->rootLayer());
     doc->setCurrentImage(image);
 
-    KoMainWindow *win = new KoMainWindow(part->componentData());
+    KoMainWindow *win = new KoMainWindow(doc->documentPart()->componentData());
     win->show();
     win->setRootDocument(doc);
 }

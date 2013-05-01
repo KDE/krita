@@ -29,21 +29,22 @@ set(GENERIC_CALLIGRA_LIB_SOVERSION "12")
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
 
- ####################
-#####################
-## Product defines ##
-#####################
-####################
+ ########################
+#########################
+## Product definitions ##
+#########################
+########################
 
 # There are currently 4 product sets predefined:
 # "ACTIVE", "CREATIVE", "DESKTOP", "ALL" (default).
-# One can define her/his own set, see cmake/productsts/README
+# One can define her/his own set, see cmake/productsets/README
 
-# Finding out the products to build is done in x steps:
-# 1. have the user define the products wanted
+# Finding out the products to build is done in 5 steps:
+# 1. have the user define the products wanted, by choosing a productset
 # 2. estimate all additional required products
 # 3. estimate which of the products can be build by external deps
-# 4. estimate which of the products can be build by internal deps
+# 4. find which products have been temporarily disabled due to problems
+# 5. estimate which of the products can be build by internal deps
 
 include(CalligraProductSetMacros)
 
@@ -56,17 +57,6 @@ option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binar
 
 # TODO: remove option and migration code below before 3.0 release
 option(CREATIVEONLY "compile only Karbon and Krita" OFF)
-
-#
-# WARNING: don't change the SHOULD_BUILD_app if an application
-# doesn't build, but rather add the following line:
-# option(BUILD_app "Build directory app" OFF)
-#
-#eg:
-#option(BUILD_kexi "Build directory kexi" OFF) # kexi isn't buildable at the moment
-if(WIN32)
-    option(BUILD_braindump "Build directory braindump" OFF) # braindump is unmaintained on Windows.
-endif()
 
 # temporary migration support
 set(PRODUCTSET_DEFAULT "ALL")
@@ -225,6 +215,12 @@ calligra_define_product(CALLIGRA ""  NEEDS CALLIGRA_LIBS)
 # developer utils
 calligra_define_product(DEVTOOLS "Tools for developers")
 calligra_define_product(CSTESTER "" NEEDS SHEETS_PART STAGE_PART WORDS_PART)
+
+# For new products see cmake/productsets/README, "How to add another product?"
+
+#############################################
+####      Choose products to build       ####
+#############################################
 
 calligra_set_productset(${PRODUCTSET})
 
@@ -868,8 +864,26 @@ if(WIN32 OR QT_MAC_USE_COCOA)
     set(SHOULD_BUILD_FILTER_KSPREAD_TO_LATEX FALSE)
 endif(WIN32 OR QT_MAC_USE_COCOA)
 
-# finally disable all those which are missing internal dependencies
+if(WIN32)
+     # braindump is unmaintained on Windows.
+    set(SHOULD_BUILD_BRAINDUMP_APP FALSE)
+endif()
+
+#############################################
+####      Temporarily broken products    ####
+#############################################
+
+# If a product does not build due to some temporary brokeness disable it here,
+# by setting the related SHOULD_BUILD_$X to FALSE
+#eg:
+#set(SHOULD_BUILD_KEXI FALSE) # kexi isn't buildable at the moment
+
+#############################################
+####     Calculate buildable products    ####
+#############################################
+
 calligra_drop_unbuildable_products()
+
 
  ###################
 ####################

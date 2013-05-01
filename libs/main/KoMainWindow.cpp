@@ -772,6 +772,7 @@ void KoMainWindow::slotLoadCompleted()
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     disconnect(newpart, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
     disconnect(newpart, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
+    emit loadCompleted();
 }
 
 void KoMainWindow::slotLoadCanceled(const QString & errMsg)

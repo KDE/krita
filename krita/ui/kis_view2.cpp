@@ -536,7 +536,7 @@ void KisView2::dropEvent(QDropEvent *event)
             QAction *cancel = new KAction(i18n("Cancel"), &popup);
 
             if (urls.count() == 1) {
-                if (!image().isNull()) {
+                if (image()) {
                     popup.addAction(insertAsNewLayer);
                 }
                 popup.addAction(openInNewDocument);
@@ -563,10 +563,17 @@ void KisView2::dropEvent(QDropEvent *event)
                         if (m_d->doc->isModified()) {
                             m_d->doc->documentPart()->save();
                         }
+
+                        bool result = false;
                         if (shell() != 0) {
+                            /**
+                             * NOTE: this is effectively deferred self-destruction
+                             */
+                            connect(shell(), SIGNAL(loadCompleted()),
+                                    shell(), SLOT(close()));
+
                             shell()->openDocument(url);
                         }
-                        shell()->close();
                     } else {
                         Q_ASSERT(action == openInNewDocument || action == openInNewDocuments);
 
@@ -578,8 +585,6 @@ void KisView2::dropEvent(QDropEvent *event)
             }
         }
     }
-    qApp->setActiveWindow(shell());
-    activateWindow();
 }
 
 KoZoomController *KisView2::zoomController() const

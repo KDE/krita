@@ -47,6 +47,12 @@ public:
     KisImportCatcher(const KUrl & url, KisView2* view, bool importAsLayer);
     ~KisImportCatcher();
 
+private slots:
+    void slotLoadingFinished();
+
+private:
+    void deleteMyself();
+
 private:
 
     struct Private;

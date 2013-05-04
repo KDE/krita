@@ -23,8 +23,8 @@ endif()
 
 # define the generic version of the Calligra libraries here
 # this makes it easy to advance it when the next Calligra release comes
-set(GENERIC_CALLIGRA_LIB_VERSION "12.0.0")
-set(GENERIC_CALLIGRA_LIB_SOVERSION "12")
+set(GENERIC_CALLIGRA_LIB_VERSION "13.0.0")
+set(GENERIC_CALLIGRA_LIB_SOVERSION "13")
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 

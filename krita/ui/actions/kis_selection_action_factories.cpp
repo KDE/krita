@@ -301,33 +301,9 @@ void KisCopyMergedActionFactory::run(KisView2 *view)
 void KisPasteActionFactory::run(KisView2 *view)
 {
     KisImageWSP image = view->image();
-
-    //figure out where to position the clip
-    // XXX: Fix this for internal points & zoom! (BSAR)
-    QWidget * w = view->canvas();
-    QPoint center = QPoint(w->width() / 2, w->height() / 2);
-    QPoint bottomright = QPoint(w->width(), w->height());
-    if (bottomright.x() > image->width())
-        center.setX(image->width() / 2);
-    if (bottomright.y() > image->height())
-        center.setY(image->height() / 2);
-
-    const KoCanvasBase* canvasBase = view->canvasBase();
-    const KoViewConverter* viewConverter = view->canvasBase()->viewConverter();
-
-    KisPaintDeviceSP clip = KisClipboard::instance()->clip(
-        QPoint(
-            viewConverter->viewToDocumentX(canvasBase->canvasController()->canvasOffsetX()) + center.x(),
-            viewConverter->viewToDocumentY(canvasBase->canvasController()->canvasOffsetY()) + center.y()));
+    KisPaintDeviceSP clip = KisClipboard::instance()->clip(image->bounds());
 
     if (clip) {
-        // Pasted layer content could be outside image bounds and invisible, if that is the case move content into the bounds
-        QRect exactBounds = clip->exactBounds();
-        if (!exactBounds.isEmpty() && !exactBounds.intersects(image->bounds())) {
-            clip->setX(clip->x() - exactBounds.x());
-            clip->setY(clip->y() - exactBounds.y());
-        }
-
         KisPaintLayer *newLayer = new KisPaintLayer(image.data(), image->nextLayerName() + i18n("(pasted)"), OPACITY_OPAQUE_U8, clip);
         KisNodeSP aboveNode = view->activeLayer();
         KisNodeSP parentNode = aboveNode ? aboveNode->parent() : image->root();
@@ -349,7 +325,7 @@ void KisPasteNewActionFactory::run(KisView2 *view)
 {
     Q_UNUSED(view);
 
-    KisPaintDeviceSP clip = KisClipboard::instance()->clip(QPoint());
+    KisPaintDeviceSP clip = KisClipboard::instance()->clip(QRect());
     if (!clip) return;
 
     QRect rect = clip->exactBounds();

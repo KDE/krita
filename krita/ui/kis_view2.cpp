@@ -517,7 +517,8 @@ void KisView2::dropEvent(QDropEvent *event)
         if (node) {
             QRect bounds = node->projection()->exactBounds();
             if (alwaysRecenter || forceRecenter ||
-                !imageBounds.contains(bounds)) {
+                (!imageBounds.contains(bounds) &&
+                 !imageBounds.intersects(bounds))) {
 
                 QPoint pt = pasteCenter - bounds.center();
                 node->setX(pt.x());

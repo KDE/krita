@@ -451,11 +451,27 @@ void KisView2::dragEnterEvent(QDragEnterEvent *event)
 void KisView2::dropEvent(QDropEvent *event)
 {
     KisImageSP kisimage = image();
+    Q_ASSERT(kisimage);
 
-    QPointF pos = canvasBase()->coordinatesConverter()->widgetToImage(event->pos());
+    QPoint cursorPos = canvasBase()->coordinatesConverter()->widgetToImage(event->pos()).toPoint();
+    QRect imageBounds = kisimage->bounds();
+    QPoint pasteCenter;
+    bool forceRecenter;
 
-    if (event->mimeData()->hasFormat("application/x-krita-node") || event->mimeData()->hasImage())
+    if (event->keyboardModifiers() & Qt::ShiftModifier &&
+        imageBounds.contains(cursorPos)) {
+
+        pasteCenter = cursorPos;
+        forceRecenter = true;
+    } else {
+        pasteCenter = imageBounds.center();
+        forceRecenter = false;
+    }
+
+    if (event->mimeData()->hasFormat("application/x-krita-node") ||
+        event->mimeData()->hasImage())
     {
+        bool alwaysRecenter = false;
         KisNodeSP node;
 
         if (event->mimeData()->hasFormat("application/x-krita-node")) {
@@ -487,22 +503,26 @@ void KisView2::dropEvent(QDropEvent *event)
                 }
                 node = shapeLayer2;
             }
-
         }
         else if (event->mimeData()->hasImage()) {
             QImage qimage = qvariant_cast<QImage>(event->mimeData()->imageData());
 
-            if (kisimage) {
-                KisPaintDeviceSP device = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
-                device->convertFromQImage(qimage, 0);
-                node = new KisPaintLayer(kisimage.data(), kisimage->nextLayerName(), OPACITY_OPAQUE_U8, device);
-            }
+            KisPaintDeviceSP device = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+            device->convertFromQImage(qimage, 0);
+            node = new KisPaintLayer(kisimage.data(), kisimage->nextLayerName(), OPACITY_OPAQUE_U8, device);
+
+            alwaysRecenter = true;
         }
 
         if (node) {
+            QRect bounds = node->projection()->exactBounds();
+            if (alwaysRecenter || forceRecenter ||
+                !imageBounds.contains(bounds)) {
 
-            node->setX(pos.x() - node->projection()->exactBounds().width());
-            node->setY(pos.y() - node->projection()->exactBounds().height());
+                QPoint pt = pasteCenter - bounds.center();
+                node->setX(pt.x());
+                node->setY(pt.y());
+            }
 
             KisNodeCommandsAdapter adapter(this);
             if (!m_d->nodeManager->activeLayer()) {
@@ -564,7 +584,6 @@ void KisView2::dropEvent(QDropEvent *event)
                             m_d->doc->documentPart()->save();
                         }
 
-                        bool result = false;
                         if (shell() != 0) {
                             /**
                              * NOTE: this is effectively deferred self-destruction

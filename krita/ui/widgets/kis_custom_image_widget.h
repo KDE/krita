@@ -66,6 +66,7 @@ private slots:
     void predefinedClicked(int index);
     void saveAsPredefined();
     void switchWidthHeight();
+    void setClipImage();
 signals:
     /// this signal is emitted (as defined by KoDocument) the moment the document is 'ready'
     void documentSelected();

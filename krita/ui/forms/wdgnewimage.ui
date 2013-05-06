@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>472</width>
-    <height>503</height>
+    <width>618</width>
+    <height>518</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -260,6 +260,20 @@
          </widget>
         </item>
         <item>
+         <widget class="QPushButton" name="btnFromClipboard">
+          <property name="text">
+           <string>Use clip image</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="chkFromClipboard">
+          <property name="text">
+           <string>&amp;First layer from clipboard</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <spacer>
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -411,13 +425,6 @@
       <item row="2" column="1">
        <widget class="QTextEdit" name="txtDescription"/>
       </item>
-      <item row="3" column="0" colspan="2">
-       <widget class="QCheckBox" name="chkFromClipboard">
-        <property name="text">
-         <string>&amp;First layer from clipboard</string>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="1">
        <widget class="KColorButton" name="cmbColor">
         <property name="color">
@@ -502,7 +509,6 @@
   <tabstop>cmbColor</tabstop>
   <tabstop>sliderOpacity</tabstop>
   <tabstop>txtDescription</tabstop>
-  <tabstop>chkFromClipboard</tabstop>
   <tabstop>createButton</tabstop>
  </tabstops>
  <resources/>

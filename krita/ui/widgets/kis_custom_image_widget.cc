@@ -107,9 +107,10 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
     bnLandscape->setIcon(koIcon("landscape"));
 
     connect(bnSaveAsPredefined, SIGNAL(clicked()), this, SLOT(saveAsPredefined()));
+    connect(btnFromClipboard, SIGNAL(clicked()), this, SLOT(setClipImage()));
 
-    chkFromClipboard->setChecked(clipAvailable);
     chkFromClipboard->setEnabled(clipAvailable);
+    btnFromClipboard->setEnabled(clipAvailable);
 
     colorSpaceSelector->setCurrentColorModel(KoID(defColorModel));
     colorSpaceSelector->setCurrentColorDepth(KoID(defColorDepth));
@@ -194,6 +195,21 @@ void KisCustomImageWidget::heightChanged(double value)
     m_height = m_heightUnit.fromUserValue(value);
 }
 
+void KisCustomImageWidget::setClipImage()
+{
+    KisClipboard * cb = KisClipboard::instance();
+    QSize sz = cb->clipSize();
+    if (sz.isValid() && sz.width() != 0 && sz.height() != 0) {
+        doubleWidth->setValue(sz.width());
+        doubleHeight->setValue(sz.height());
+        chkFromClipboard->setChecked(true);
+    }
+    else {
+         chkFromClipboard->setChecked(false);
+         chkFromClipboard->setEnabled(false);
+    }
+}
+
 void KisCustomImageWidget::createImage()
 {
     const KoColorSpace * cs = colorSpaceSelector->currentColorSpace();
@@ -260,16 +276,11 @@ void KisCustomImageWidget::clipboardDataChanged()
     if ((cbData && cbData->hasFormat(mimeType)) || !qimage.isNull()) {
         KisClipboard * cb = KisClipboard::instance();
         QSize sz = cb->clipSize();
+        
         if (sz.isValid() && sz.width() != 0 && sz.height() != 0) {
             chkFromClipboard->setEnabled(true);
-            if (chkFromClipboard->isChecked()) {
-                doubleWidth->setValue(sz.width());
-                doubleHeight->setValue(sz.height());
-            }
-            else {
-                doubleWidth->setValue(doubleWidth->value());
-                doubleHeight->setValue(doubleHeight->value());
-            }
+            doubleWidth->setValue(doubleWidth->value());
+            doubleHeight->setValue(doubleHeight->value());
             doubleWidth->setDecimals(0);
             doubleHeight->setDecimals(0);
         } else {
@@ -277,7 +288,6 @@ void KisCustomImageWidget::clipboardDataChanged()
             chkFromClipboard->setEnabled(false);
         }
     }
-
 }
 
 void KisCustomImageWidget::screenSizeClicked()

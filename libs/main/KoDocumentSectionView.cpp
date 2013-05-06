@@ -40,12 +40,28 @@
 #include <QPainter>
 #include <QScrollBar>
 
+#ifdef Q_WS_X11
+#define DRAG_WHILE_DRAG_WORKAROUND
+#endif
+
+#ifdef DRAG_WHILE_DRAG_WORKAROUND
+#define DRAG_WHILE_DRAG_WORKAROUND_START() d->isDragging = true
+#define DRAG_WHILE_DRAG_WORKAROUND_STOP() d->isDragging = false
+#else
+#define DRAG_WHILE_DRAG_WORKAROUND_START()
+#define DRAG_WHILE_DRAG_WORKAROUND_STOP()
+#endif
+
+
 class KoDocumentSectionView::Private
 {
 public:
     Private()
         : delegate(0)
         , mode(DetailedMode)
+#ifdef DRAG_WHILE_DRAG_WORKAROUND
+        , isDragging(false)
+#endif
     {
         KSharedConfigPtr config = KGlobal::config();
         KConfigGroup group = config->group("DocumentSectionView");
@@ -55,6 +71,10 @@ public:
     DisplayMode mode;
     QPersistentModelIndex hovered;
     QPoint lastPos;
+
+#ifdef DRAG_WHILE_DRAG_WORKAROUND
+    bool isDragging;
+#endif
 };
 
 KoDocumentSectionView::KoDocumentSectionView(QWidget *parent)
@@ -129,6 +149,12 @@ bool KoDocumentSectionView::viewportEvent(QEvent *e)
             d->hovered = QModelIndex();
         } break;
         case QEvent::MouseMove: {
+#ifdef DRAG_WHILE_DRAG_WORKAROUND
+            if (d->isDragging) {
+                return false;
+            }
+#endif
+
             const QPoint pos = static_cast<QMouseEvent*>(e)->pos();
             QModelIndex hovered = indexAt(pos);
             if (hovered != d->hovered) {
@@ -224,6 +250,8 @@ QStyleOptionViewItem KoDocumentSectionView::optionForIndex(const QModelIndex &in
 
 void KoDocumentSectionView::startDrag(Qt::DropActions supportedActions)
 {
+    DRAG_WHILE_DRAG_WORKAROUND_START();
+
     if (displayMode() == KoDocumentSectionView::ThumbnailMode) {
         const QModelIndexList indexes = selectionModel()->selectedIndexes();
         if (!indexes.isEmpty()) {
@@ -339,6 +367,8 @@ void KoDocumentSectionView::dropEvent(QDropEvent *ev)
         return;
     }
     QTreeView::dropEvent(ev);
+
+    DRAG_WHILE_DRAG_WORKAROUND_STOP();
 }
 
 int KoDocumentSectionView::cursorPageIndex() const
@@ -363,8 +393,16 @@ int KoDocumentSectionView::cursorPageIndex() const
     return numberRow;
 }
 
+void KoDocumentSectionView::dragEnterEvent(QDragEnterEvent *ev)
+{
+    DRAG_WHILE_DRAG_WORKAROUND_START();
+    QTreeView::dragEnterEvent(ev);
+}
+
 void KoDocumentSectionView::dragMoveEvent(QDragMoveEvent *ev)
 {
+    DRAG_WHILE_DRAG_WORKAROUND_START();
+
     if (displayMode() == KoDocumentSectionView::ThumbnailMode) {
         ev->accept();
         if (!model()) {
@@ -382,9 +420,11 @@ void KoDocumentSectionView::dragLeaveEvent(QDragLeaveEvent *e)
 {
     if (displayMode() == KoDocumentSectionView::ThumbnailMode) {
         setDraggingFlag(false);
-        return;
+    } else {
+        QTreeView::dragLeaveEvent(e);
     }
-    QTreeView::dragLeaveEvent(e);
+
+    DRAG_WHILE_DRAG_WORKAROUND_STOP();
 }
 
 bool KoDocumentSectionView::isDragging() const

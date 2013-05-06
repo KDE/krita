@@ -103,6 +103,7 @@
 #include "kis_group_layer.h"
 #include "kis_image_manager.h"
 #include "kis_mask_manager.h"
+#include "kis_mimedata.h"
 #include "kis_node.h"
 #include "kis_node_manager.h"
 #include "kis_painting_assistants_manager.h"
@@ -114,6 +115,7 @@
 #include "kis_selection.h"
 #include "kis_selection_manager.h"
 #include "kis_shape_layer.h"
+#include "kis_shape_controller.h"
 #include "kis_statusbar.h"
 #include "kis_zoom_manager.h"
 #include "kra/kis_kra_loader.h"
@@ -471,60 +473,15 @@ void KisView2::dropEvent(QDropEvent *event)
     if (event->mimeData()->hasFormat("application/x-krita-node") ||
         event->mimeData()->hasImage())
     {
-        bool alwaysRecenter = false;
-        KisNodeSP node;
+        KisShapeController *kritaShapeController =
+            dynamic_cast<KisShapeController*>(m_d->doc->shapeController());
 
-        if (event->mimeData()->hasFormat("application/x-krita-node")) {
-
-            QByteArray ba = event->mimeData()->data("application/x-krita-node");
-
-            KisDoc2 tempDoc;
-            tempDoc.loadNativeFormatFromStore(ba);
-
-            KisImageWSP tempImage = tempDoc.image();
-            node = tempImage->rootLayer()->firstChild();
-            tempImage->removeNode(node);
-
-            // layers store a link to the image, so update it
-            KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
-            if (layer) {
-                layer->setImage(kisimage);
-            }
-            KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node.data());
-            if (shapeLayer) {
-                KoShapeContainer * parentContainer =
-                    dynamic_cast<KoShapeContainer*>(m_d->doc->shapeForNode(kisimage->rootLayer()));
-
-                KisShapeLayer *shapeLayer2 = new KisShapeLayer(parentContainer, m_d->doc->shapeController(), kisimage, node->name(), node->opacity());
-                QList<KoShape *> shapes = shapeLayer->shapes();
-                shapeLayer->removeAllShapes();
-                foreach(KoShape *shape, shapes) {
-                    shapeLayer2->addShape(shape);
-                }
-                node = shapeLayer2;
-            }
-        }
-        else if (event->mimeData()->hasImage()) {
-            QImage qimage = qvariant_cast<QImage>(event->mimeData()->imageData());
-
-            KisPaintDeviceSP device = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
-            device->convertFromQImage(qimage, 0);
-            node = new KisPaintLayer(kisimage.data(), kisimage->nextLayerName(), OPACITY_OPAQUE_U8, device);
-
-            alwaysRecenter = true;
-        }
+        KisNodeSP node =
+            KisMimeData::loadNode(event->mimeData(), imageBounds,
+                                  pasteCenter, forceRecenter,
+                                  kisimage, kritaShapeController);
 
         if (node) {
-            QRect bounds = node->projection()->exactBounds();
-            if (alwaysRecenter || forceRecenter ||
-                (!imageBounds.contains(bounds) &&
-                 !imageBounds.intersects(bounds))) {
-
-                QPoint pt = pasteCenter - bounds.center();
-                node->setX(pt.x());
-                node->setY(pt.y());
-            }
-
             KisNodeCommandsAdapter adapter(this);
             if (!m_d->nodeManager->activeLayer()) {
                 adapter.addNode(node, kisimage->rootLayer() , 0);
@@ -535,11 +492,8 @@ void KisView2::dropEvent(QDropEvent *event)
             }
         }
 
-        return;
+    } else if (event->mimeData()->hasUrls()) {
 
-    }
-
-    if (event->mimeData()->hasUrls()) {
         QList<QUrl> urls = event->mimeData()->urls();
         if (urls.length() > 0) {
 

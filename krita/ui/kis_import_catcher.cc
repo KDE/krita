@@ -56,15 +56,22 @@ public:
     KUrl url;
     bool importAsLayer;
 
+    QString prettyLayerName() const;
     void importAsPaintLayer(KisPaintDeviceSP device);
     void importAsTransparencyMask(KisPaintDeviceSP device);
 };
+
+QString KisImportCatcher::Private::prettyLayerName() const
+{
+    QString name = url.fileName();
+    return !name.isEmpty() ? name : url.prettyUrl();
+}
 
 void KisImportCatcher::Private::importAsPaintLayer(KisPaintDeviceSP device)
 {
     KisLayerSP newLayer =
         new KisPaintLayer(view->image(),
-                          url.prettyUrl(),
+                          prettyLayerName(),
                           OPACITY_OPAQUE_U8,
                           device);
 
@@ -100,7 +107,7 @@ void KisImportCatcher::Private::importAsTransparencyMask(KisPaintDeviceSP device
 
     KisTransparencyMaskSP mask = new KisTransparencyMask();
     mask->setSelection(new KisSelection(new KisDefaultBounds(currentActiveLayer->image())));
-    mask->setName(url.prettyUrl());
+    mask->setName(prettyLayerName());
 
     QRect rc(device->exactBounds());
     KisPainter painter(mask->paintDevice());

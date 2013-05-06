@@ -114,17 +114,42 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
     }
 }
 
-KisNodeSP KisMimeData::tryLoadInternalNode(const QMimeData *data)
+void KisMimeData::initializeExternalNode(KisNodeSP &node,
+                                         KisImageWSP image,
+                                         KisShapeController *shapeController)
+{
+    // layers store a link to the image, so update it
+    KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
+    if (layer) {
+        layer->setImage(image);
+    }
+    KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node.data());
+    if (shapeLayer) {
+        KoShapeContainer * parentContainer =
+            dynamic_cast<KoShapeContainer*>(shapeController->shapeForNode(image->root()));
+
+        KisShapeLayer *shapeLayer2 = new KisShapeLayer(parentContainer, shapeController, image, node->name(), node->opacity());
+        QList<KoShape *> shapes = shapeLayer->shapes();
+        shapeLayer->removeAllShapes();
+        foreach(KoShape *shape, shapes) {
+            shapeLayer2->addShape(shape);
+        }
+        node = shapeLayer2;
+    }
+}
+
+KisNodeSP KisMimeData::tryLoadInternalNode(const QMimeData *data,
+                                           KisImageWSP image,
+                                           KisShapeController *shapeController,
+                                           bool /* IN-OUT */ &copyNode)
 {
     const KisMimeData *mimedata = qobject_cast<const KisMimeData*>(data);
     KisNodeSP node = mimedata ? mimedata->node() : 0;
 
-    /**
-     * Shape Layers need special treatment, so let them go through
-     * the serialization process instead
-     */
-    if (node && dynamic_cast<KisShapeLayer*>(node.data())) {
-        node = 0;
+    if (node && (copyNode || node->graphListener() != image.data())) {
+        node = node->clone();
+        initializeExternalNode(node, image, shapeController);
+        copyNode = true;
     }
 
     return node;
@@ -149,24 +174,7 @@ KisNodeSP KisMimeData::loadNode(const QMimeData *data,
         node = tempImage->root()->firstChild();
         tempImage->removeNode(node);
 
-        // layers store a link to the image, so update it
-        KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
-        if (layer) {
-            layer->setImage(image);
-        }
-        KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node.data());
-        if (shapeLayer) {
-            KoShapeContainer * parentContainer =
-                dynamic_cast<KoShapeContainer*>(shapeController->shapeForNode(image->root()));
-
-            KisShapeLayer *shapeLayer2 = new KisShapeLayer(parentContainer, shapeController, image, node->name(), node->opacity());
-            QList<KoShape *> shapes = shapeLayer->shapes();
-            shapeLayer->removeAllShapes();
-            foreach(KoShape *shape, shapes) {
-                shapeLayer2->addShape(shape);
-            }
-            node = shapeLayer2;
-        }
+        initializeExternalNode(node, image, shapeController);
     }
     else if (data->hasImage()) {
         QImage qimage = qvariant_cast<QImage>(data->imageData());

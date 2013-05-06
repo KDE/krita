@@ -56,7 +56,10 @@ public:
      * Try load the node, which belongs to the same Krita instance,
      * that is can be fetched without serialization
      */
-    static KisNodeSP tryLoadInternalNode(const QMimeData *data);
+    static KisNodeSP tryLoadInternalNode(const QMimeData *data,
+                                         KisImageWSP image,
+                                         KisShapeController *shapeController,
+                                         bool /* IN-OUT */ &copyNode);
 
     /**
      * Loads a node from a mime container
@@ -72,6 +75,11 @@ public:
 protected:
 
     QVariant retrieveData(const QString &mimetype, QVariant::Type preferredType) const;
+
+private:
+    static void initializeExternalNode(KisNodeSP &node,
+                                       KisImageWSP image,
+                                       KisShapeController *shapeController);
 
 private:
 

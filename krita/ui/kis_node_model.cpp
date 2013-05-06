@@ -461,8 +461,12 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
 {
     Q_UNUSED(column);
 
-    bool loadedInternalNode = true;
-    KisNodeSP node = KisMimeData::tryLoadInternalNode(data);
+    bool copyNode = action == Qt::CopyAction;
+    KisNodeSP node =
+        KisMimeData::tryLoadInternalNode(data,
+                                         m_d->image,
+                                         m_d->shapeController,
+                                         copyNode /* IN-OUT */);
 
     if (!node) {
         QRect imageBounds = m_d->image->bounds();
@@ -470,12 +474,11 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
                                      imageBounds, imageBounds.center(),
                                      false,
                                      m_d->image, m_d->shapeController);
-        loadedInternalNode = false;
     }
 
     if (!node) return false;
 
-    if (node->graphListener() != m_d->image.data()) {
+    if (copyNode) {
         /**
          * Don't try to move a node originating from another image,
          * just copy it.
@@ -508,10 +511,6 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
     bool result = true;
 
     if (action == Qt::CopyAction) {
-        if (loadedInternalNode) {
-            node = node->clone();
-        }
-
         emit requestAddNode(node, parentDummy->node(), aboveThisNode);
     }
     else if (action == Qt::MoveAction) {

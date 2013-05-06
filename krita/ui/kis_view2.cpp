@@ -501,27 +501,26 @@ void KisView2::dropEvent(QDropEvent *event)
             popup.setObjectName("drop_popup");
 
             QAction *insertAsNewLayer = new KAction(i18n("Insert as New Layer"), &popup);
-            QAction *insertAsNewLayers = new KAction(i18n("Insert as New Layers"), &popup);
+            QAction *insertManyLayers = new KAction(i18n("Insert Many Layers"), &popup);
 
             QAction *openInNewDocument = new KAction(i18n("Open in New Document"), &popup);
-            QAction *openInNewDocuments = new KAction(i18n("Open in New Documents"), &popup);
+            QAction *openManyDocuments = new KAction(i18n("Open Many Documents"), &popup);
 
             QAction *replaceCurrentDocument = new KAction(i18n("Replace Current Document"), &popup);
 
             QAction *cancel = new KAction(i18n("Cancel"), &popup);
 
-            if (urls.count() == 1) {
-                if (image()) {
-                    popup.addAction(insertAsNewLayer);
-                }
-                popup.addAction(openInNewDocument);
-                popup.addAction(replaceCurrentDocument);
-            } else {
-                if (!image().isNull()) {
-                    popup.addAction(insertAsNewLayers);
-                }
-                popup.addAction(openInNewDocuments);
-            }
+            popup.addAction(insertAsNewLayer);
+            popup.addAction(openInNewDocument);
+            popup.addAction(replaceCurrentDocument);
+            popup.addAction(insertManyLayers);
+            popup.addAction(openManyDocuments);
+
+            insertAsNewLayer->setEnabled(image() && urls.count() == 1);
+            openInNewDocument->setEnabled(urls.count() == 1);
+            replaceCurrentDocument->setEnabled(image() && urls.count() == 1);
+            insertManyLayers->setEnabled(image() && urls.count() > 1);
+            openManyDocuments->setEnabled(urls.count() > 1);
 
             popup.addSeparator();
             popup.addAction(cancel);
@@ -531,7 +530,7 @@ void KisView2::dropEvent(QDropEvent *event)
             if (action != 0 && action != cancel) {
                 foreach(const QUrl &url, urls) {
 
-                    if (action == insertAsNewLayer || action == insertAsNewLayers) {
+                    if (action == insertAsNewLayer || action == insertManyLayers) {
                         m_d->imageManager->importImage(KUrl(url));
                     }
                     else if (action == replaceCurrentDocument) {
@@ -549,7 +548,7 @@ void KisView2::dropEvent(QDropEvent *event)
                             shell()->openDocument(url);
                         }
                     } else {
-                        Q_ASSERT(action == openInNewDocument || action == openInNewDocuments);
+                        Q_ASSERT(action == openInNewDocument || action == openManyDocuments);
 
                         if (shell() != 0) {
                             shell()->openDocument(url);

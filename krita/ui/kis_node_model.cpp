@@ -50,12 +50,14 @@
 struct KisNodeModel::Private
 {
 public:
-    Private() : indexConverter(0),
+    Private() : shapeController(0),
+                indexConverter(0),
                 dummiesFacade(0),
                 needFinishRemoveRows(false),
                 needFinishInsertRows(false) {}
 
     KisImageWSP image;
+    KisShapeController *shapeController;
     bool showRootLayer;
     QList<KisNodeDummy*> updateQueue;
     QTimer* updateTimer;
@@ -159,9 +161,10 @@ void KisNodeModel::connectDummies(KisNodeDummy *dummy, bool needConnect)
     }
 }
 
-void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageWSP image)
+void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageWSP image, KisShapeController *shapeController)
 {
     m_d->image = image;
+    m_d->shapeController = shapeController;
 
     if(m_d->dummiesFacade) {
         m_d->dummiesFacade->disconnect(this);
@@ -422,6 +425,7 @@ QStringList KisNodeModel::mimeTypes() const
 {
     QStringList types;
     types << QLatin1String("application/x-krita-node");
+    types << QLatin1String("application/x-qt-image");
     return types;
 }
 
@@ -457,10 +461,30 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
 {
     Q_UNUSED(column);
 
-    const KisMimeData *mimedata = qobject_cast<const KisMimeData*>(data);
-    KisNodeSP node = mimedata ? mimedata->node() : 0;
+    bool copyNode = action == Qt::CopyAction;
+    KisNodeSP node =
+        KisMimeData::tryLoadInternalNode(data,
+                                         m_d->image,
+                                         m_d->shapeController,
+                                         copyNode /* IN-OUT */);
+
+    if (!node) {
+        QRect imageBounds = m_d->image->bounds();
+        node = KisMimeData::loadNode(data,
+                                     imageBounds, imageBounds.center(),
+                                     false,
+                                     m_d->image, m_d->shapeController);
+    }
 
     if (!node) return false;
+
+    if (copyNode) {
+        /**
+         * Don't try to move a node originating from another image,
+         * just copy it.
+         */
+        action = Qt::CopyAction;
+    }
 
     KisNodeDummy *parentDummy = 0;
     KisNodeDummy *aboveThisDummy = 0;
@@ -487,9 +511,10 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
     bool result = true;
 
     if (action == Qt::CopyAction) {
-        emit requestAddNode(node->clone(), parentDummy->node(), aboveThisNode);
+        emit requestAddNode(node, parentDummy->node(), aboveThisNode);
     }
     else if (action == Qt::MoveAction) {
+        Q_ASSERT(node->graphListener() == m_d->image.data());
         emit requestMoveNode(node, parentDummy->node(), aboveThisNode);
     }
     else {

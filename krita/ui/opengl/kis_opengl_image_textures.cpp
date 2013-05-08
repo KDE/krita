@@ -183,8 +183,7 @@ void KisOpenGLImageTextures::destroyImageTextureTiles()
     m_storedImageBounds = QRect();
 }
 
-KisOpenGLUpdateInfoSP
-KisOpenGLImageTextures::updateCache(const QRect& rect)
+KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
 {
     KisOpenGLUpdateInfoSP info = new KisOpenGLUpdateInfo();
 

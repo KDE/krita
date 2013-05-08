@@ -382,23 +382,6 @@ void KisToolPaint::resetCursorStyle()
             useCursor(cursor());
         }
     }
-
-#if defined(HAVE_OPENGL)
-    // TODO: maybe m_support 3D outline would be cooler. So far just freehand tool support 3D_MODEL cursor style
-    if (cfg.cursorStyle() == CURSOR_STYLE_3D_MODEL) {
-        if(isCanvasOpenGL()) {
-            if (m_supportOutline) {
-                useCursor(KisCursor::blankCursor());
-            } else {
-                useCursor(cursor());
-            }
-        } else {
-            useCursor(KisCursor::arrowCursor());
-        }
-    }
-#endif
-
-
 }
 
 void KisToolPaint::updateTabletPressureSamples()

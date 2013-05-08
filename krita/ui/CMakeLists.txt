@@ -223,15 +223,7 @@ set(kritaui_LIB_SRCS
     kis_transaction_based_command.cpp
 )
 
-if(HAVE_OPENGL)
-    set(kritaui_LIB_SRCS
-        ${kritaui_LIB_SRCS}
-        kis_3d_object_model.cpp
-        )
-endif(HAVE_OPENGL)
-
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
-
 
 kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgfullscreensettings.ui

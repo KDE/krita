@@ -648,15 +648,6 @@ void KisTool::resetCursorStyle()
     case CURSOR_STYLE_NO_CURSOR:
         useCursor(KisCursor::blankCursor());
         break;
-#if defined(HAVE_OPENGL)
-    case CURSOR_STYLE_3D_MODEL:
-        if(isCanvasOpenGL()) {
-            useCursor(d->cursor);
-        } else {
-            useCursor(KisCursor::upArrowCursor());
-        }
-        break;
-#endif
     case CURSOR_STYLE_OUTLINE:
     default:
         // use tool cursor as default, if the tool supports outline, it will set the cursor to blank and show outline

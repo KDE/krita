@@ -94,9 +94,6 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     KisConfig cfg;
 
     m_cmbCursorShape->addItem(i18n("Small Circle"));
-#if defined(HAVE_OPENGL)
-    m_cmbCursorShape->addItem("3D Brush Model");
-#endif
 
 #ifdef NEPOMUK
     grpResourceTagging->show();

@@ -328,7 +328,7 @@ void KisOpenGLImageTextures::activateHDRExposureProgram()
 
 void KisOpenGLImageTextures::deactivateHDRExposureProgram()
 {
-    glUseProgram(0);
+    //glUseProgram(0);
 }
 
 void KisOpenGLImageTextures::getTextureSize(KisGLTexturesInfo *texturesInfo)

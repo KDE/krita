@@ -252,6 +252,7 @@ protected slots:
 private slots:
     void slotToggleFgBg();
     void slotResetFgBg();
+    void slotDelayedGesture();
 
 private:
     void initPan(const QPointF &docPoint);

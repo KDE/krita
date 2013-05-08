@@ -97,6 +97,10 @@ struct KisTool::Private {
     QPointF lastDocumentPoint;
     QPointF initialGestureDocPoint;
     QPoint initialGestureGlobalPoint;
+
+    QTimer delayedGestureTimer;
+    QPointF delayedGestureOffset;
+    QPointF delayedGesturePoint;
 };
 
 KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
@@ -105,6 +109,10 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
 {
     d->cursor = cursor;
     m_outlinePaintMode = XOR_MODE;
+
+    d->delayedGestureTimer.setSingleShot(true);
+    d->delayedGestureTimer.setInterval(40); // 25fps
+    connect(&d->delayedGestureTimer, SIGNAL(timeout()), SLOT(slotDelayedGesture()));
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetCursorStyle()));
 
@@ -517,15 +525,31 @@ void KisTool::processGesture(const QPointF &docPoint)
      * need to scale the gesture down, not rotate or anything
      */
     QPointF scaledOffset = canvas()->viewConverter()->viewToDocument(offset);
-    gesture(scaledOffset, d->initialGestureDocPoint);
+
+    d->delayedGestureOffset += scaledOffset;
+    d->delayedGesturePoint = d->initialGestureDocPoint;
+    if (!d->delayedGestureTimer.isActive()) {
+        d->delayedGestureTimer.start();
+    }
 }
 
 void KisTool::endGesture()
 {
-    gesture(QPointF(), d->initialGestureDocPoint);
+    // d->delayedGestureOffset += QPointF();
+    d->delayedGesturePoint = d->initialGestureDocPoint;
+    if (!d->delayedGestureTimer.isActive()) {
+        d->delayedGestureTimer.start();
+    }
+
     setMode(HOVER_MODE);
     resetCursorStyle();
     QCursor::setPos(d->initialGestureGlobalPoint);
+}
+
+void KisTool::slotDelayedGesture()
+{
+    gesture(d->delayedGestureOffset, d->delayedGesturePoint);
+    d->delayedGestureOffset = QPointF();
 }
 
 void KisTool::gesture(const QPointF &offsetInDocPixels, const QPointF &initialDocPoint)

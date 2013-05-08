@@ -28,6 +28,7 @@
 #include <kis_config.h>
 
 #ifdef HAVE_OPENGL
+#include <opengl/kis_opengl.h>
 
 static const int LUT3D_EDGE_SIZE = 32;
 
@@ -103,7 +104,7 @@ OcioDisplayFilter::OcioDisplayFilter(QObject *parent)
     #endif
 {
 #ifdef HAVE_OPENGL
-    QGLFunctions::initializeGLFunctions();
+    QGLFunctions::initializeGLFunctions(KisOpenGL::sharedContextWidget()->context());
 #endif
 }
 

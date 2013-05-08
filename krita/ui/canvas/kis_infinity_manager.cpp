@@ -121,6 +121,7 @@ void KisInfinityManager::drawDecoration(QPainter& gc, const QRectF& updateArea, 
     Q_UNUSED(updateArea);
     Q_UNUSED(converter);
 
+    gc.save();
     gc.setTransform(QTransform(), false);
 
     KisConfig cfg;
@@ -141,6 +142,8 @@ void KisInfinityManager::drawDecoration(QPainter& gc, const QRectF& updateArea, 
     foreach (const QTransform &t, m_handleTransform) {
         gc.fillPath(t.map(p), color);
     }
+
+    gc.restore();
 }
 
 bool KisInfinityManager::eventFilter(QObject *obj, QEvent *event)

@@ -269,7 +269,7 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
     }
 }
 
-void KisOpenGLImageTextures::generateBackgroundTexture(const QImage & checkImage)
+void KisOpenGLImageTextures::generateBackgroundTexture(const QImage &checkImage)
 {
     KisOpenGL::makeContextCurrent();
 

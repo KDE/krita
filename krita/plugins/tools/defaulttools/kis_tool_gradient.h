@@ -72,7 +72,7 @@ public slots:
     void slotSetReverse(bool);
     void slotSetAntiAliasThreshold(qreal);
 
-#if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
+#if defined(HAVE_OPENGL)
     void slotSetPreviewOpacity(qreal value);
     void slotConfigChanged();
 #endif
@@ -107,7 +107,7 @@ private:
     QLabel *m_lbAntiAliasThreshold;
     KisDoubleSliderSpinBox *m_slAntiAliasThreshold;
 
-#if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
+#if defined(HAVE_OPENGL)
     KisOpenGLGradientProgram *m_gradientProgram;
     int m_previewOpacityPercent;
     QLabel *m_lbPreviewOpacity;

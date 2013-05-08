@@ -22,7 +22,7 @@
 
 #include "kis_tool_gradient.h"
 
-#if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
+#if defined(HAVE_OPENGL)
 #include <QGLWidget>
 #endif
 
@@ -65,8 +65,8 @@
 
 #include "kis_resources_snapshot.h"
 
-#if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
-#include <opengl/kis_opengl_gradient_program.h>
+#if defined(HAVE_OPENGL)
+#include <kis_opengl_gradient_program.h>
 #include <opengl/kis_opengl_canvas2.h>
 #include <canvas/kis_canvas2.h>
 #include <kis_slider_spin_box.h>
@@ -86,7 +86,7 @@ KisToolGradient::KisToolGradient(KoCanvasBase * canvas)
     m_repeat = KisGradientPainter::GradientRepeatNone;
     m_antiAliasThreshold = 0.2;
 
-#if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
+#if defined(HAVE_OPENGL)
     m_gradientProgram = 0;
     m_previewOpacityPercent = 75;
 #endif
@@ -100,70 +100,70 @@ void KisToolGradient::paint(QPainter &painter, const KoViewConverter &converter)
 {
     if (mode() == KisTool::PAINT_MODE && m_startPos != m_endPos) {
 
-#if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
-        if (m_gradientProgram) {
+#if defined(HAVE_OPENGL)
+//        if (m_gradientProgram) {
 
-            QPointF gradientVector = m_endPos - m_startPos;
-            double gradientVectorLength = sqrt((gradientVector.x() * gradientVector.x()) + (gradientVector.y() * gradientVector.y()));
+//            QPointF gradientVector = m_endPos - m_startPos;
+//            double gradientVectorLength = sqrt((gradientVector.x() * gradientVector.x()) + (gradientVector.y() * gradientVector.y()));
 
-            if (gradientVectorLength > DBL_EPSILON) {
-                QPointF normalisedGradientVector;
+//            if (gradientVectorLength > DBL_EPSILON) {
+//                QPointF normalisedGradientVector;
 
-                normalisedGradientVector.rx() = gradientVector.x() / gradientVectorLength;
-                normalisedGradientVector.ry() = gradientVector.y() / gradientVectorLength;
+//                normalisedGradientVector.rx() = gradientVector.x() / gradientVectorLength;
+//                normalisedGradientVector.ry() = gradientVector.y() / gradientVectorLength;
 
-                QPointF normalisedGradientVectorStart = m_startPos;
-                normalisedGradientVectorStart /= gradientVectorLength;
+//                QPointF normalisedGradientVectorStart = m_startPos;
+//                normalisedGradientVectorStart /= gradientVectorLength;
 
-                KisOpenGLCanvas2 *canvasWidget = dynamic_cast<KisOpenGLCanvas2 *>(canvas()->canvasWidget());
-                Q_ASSERT(canvasWidget);
+//                KisOpenGLCanvas2 *canvasWidget = dynamic_cast<KisOpenGLCanvas2 *>(canvas()->canvasWidget());
+//                Q_ASSERT(canvasWidget);
 
-                if (canvasWidget) {
-                    beginOpenGL();
-                    canvasWidget->setupImageToWidgetTransformation();
+//                if (canvasWidget) {
+//                    beginOpenGL();
+//                    canvasWidget->setupImageToWidgetTransformation();
 
-                    glMatrixMode(GL_MODELVIEW);
-                    glTranslatef(0.5, 0.5, 0.0);
+//                    glMatrixMode(GL_MODELVIEW);
+//                    glTranslatef(0.5, 0.5, 0.0);
 
-                    glMatrixMode(GL_TEXTURE);
-                    glLoadIdentity();
-                    glScalef(1 / gradientVectorLength, 1 / gradientVectorLength, 1);
+//                    glMatrixMode(GL_TEXTURE);
+//                    glLoadIdentity();
+//                    glScalef(1 / gradientVectorLength, 1 / gradientVectorLength, 1);
 
-                    glEnable(GL_BLEND);
-                    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//                    glEnable(GL_BLEND);
+//                    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-                    canvasWidget->makeCurrent();
-                    m_gradientProgram->activate(normalisedGradientVectorStart,
-                                                normalisedGradientVectorStart + normalisedGradientVector);
+//                    canvasWidget->makeCurrent();
+//                    m_gradientProgram->activate(normalisedGradientVectorStart,
+//                                                normalisedGradientVectorStart + normalisedGradientVector);
 
-                    glBegin(GL_QUADS);
+//                    glBegin(GL_QUADS);
 
-                    glTexCoord2f(0.0, 0.0);
-                    glVertex2f(0.0, 0.0);
+//                    glTexCoord2f(0.0, 0.0);
+//                    glVertex2f(0.0, 0.0);
 
-                    glTexCoord2f(currentImage()->width(), 0.0);
-                    glVertex2f(currentImage()->width(), 0.0);
+//                    glTexCoord2f(currentImage()->width(), 0.0);
+//                    glVertex2f(currentImage()->width(), 0.0);
 
-                    glTexCoord2f(currentImage()->width(), currentImage()->height());
-                    glVertex2f(currentImage()->width(), currentImage()->height());
+//                    glTexCoord2f(currentImage()->width(), currentImage()->height());
+//                    glVertex2f(currentImage()->width(), currentImage()->height());
 
-                    glTexCoord2f(0.0, currentImage()->height());
-                    glVertex2f(0.0, currentImage()->height());
+//                    glTexCoord2f(0.0, currentImage()->height());
+//                    glVertex2f(0.0, currentImage()->height());
 
-                    glEnd();
+//                    glEnd();
 
-                    KisOpenGLProgram::deactivate();
+//                    KisOpenGLProgram::deactivate();
 
-                    glDisable(GL_BLEND);
+//                    glDisable(GL_BLEND);
 
-                    // Unbind the texture otherwise the ATI driver crashes when the canvas context is
-                    // made current after the textures are deleted following an image resize.
-                    glBindTexture(GL_TEXTURE_1D, 0);
+//                    // Unbind the texture otherwise the ATI driver crashes when the canvas context is
+//                    // made current after the textures are deleted following an image resize.
+//                    glBindTexture(GL_TEXTURE_1D, 0);
 
-                    endOpenGL();
-                }
-            }
-        } else
+//                    endOpenGL();
+//                }
+//            }
+//        } else
 #endif
         {
             qreal sx, sy;
@@ -188,10 +188,10 @@ void KisToolGradient::mousePressEvent(KoPointerEvent *event)
         m_startPos = convertToPixelCoord(event);
         m_endPos = m_startPos;
 
-#if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
+#if defined(HAVE_OPENGL)
         KisConfig cfg;
 
-        if (cfg.useOpenGL() && cfg.useOpenGLShaders()) {
+        if (cfg.useOpenGL()) {
 
             KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(this->canvas());
             KoColorProfile *monitorProfile = 0;
@@ -246,7 +246,7 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *event)
         if (!currentNode() || currentNode()->systemLocked())
             return;
 
-#if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
+#if defined(HAVE_OPENGL)
         delete m_gradientProgram;
         m_gradientProgram = 0;
 #endif
@@ -378,7 +378,7 @@ QWidget* KisToolGradient::createOptionWidget()
 
     addOptionWidgetOption(m_slAntiAliasThreshold, m_lbAntiAliasThreshold);
 
-#if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
+#if defined(HAVE_OPENGL)
     m_lbPreviewOpacity = new QLabel(i18n("Preview opacity:"), widget);
     m_slPreviewOpacity = new KisDoubleSliderSpinBox(widget);
     m_slPreviewOpacity->setRange(0, 100, 0);
@@ -414,7 +414,7 @@ void KisToolGradient::slotSetAntiAliasThreshold(qreal value)
     m_antiAliasThreshold = value;
 }
 
-#if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
+#if defined(HAVE_OPENGL)
 
 void KisToolGradient::slotSetPreviewOpacity(qreal value)
 {
@@ -424,7 +424,7 @@ void KisToolGradient::slotSetPreviewOpacity(qreal value)
 void KisToolGradient::slotConfigChanged()
 {
     KisConfig cfg;
-    bool enablePreviewOpacity = cfg.useOpenGL() && cfg.useOpenGLShaders();
+    bool enablePreviewOpacity = cfg.useOpenGL();
 
     m_slPreviewOpacity->setEnabled(enablePreviewOpacity);
     m_lbPreviewOpacity->setEnabled(enablePreviewOpacity);

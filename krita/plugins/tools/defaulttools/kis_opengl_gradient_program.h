@@ -21,10 +21,10 @@
 #include <opengl/kis_opengl.h>
 
 #include <QPoint>
+#include <QGLShaderProgram>
 
 #include "krita_export.h"
 
-#include "opengl/kis_opengl_program.h"
 #include "kis_gradient_painter.h"
 
 class KoAbstractGradient;
@@ -32,7 +32,7 @@ class KisOpenGLGradientShader;
 class KoColorProfile;
 class KoColorSpace;
 
-class KRITAUI_EXPORT KisOpenGLGradientProgram : public KisOpenGLProgram
+class KRITAUI_EXPORT KisOpenGLGradientProgram : public QGLShaderProgram
 {
 public:
     KisOpenGLGradientProgram(const KoAbstractGradient *gradient,
@@ -43,8 +43,6 @@ public:
                              KoColorProfile *monitorProfile,
                              double opacity);
     ~KisOpenGLGradientProgram();
-
-    using KisOpenGLProgram::activate;
 
     void activate(const QPointF &gradientVectorStart, const QPointF &gradientVectorEnd);
 

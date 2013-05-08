@@ -47,6 +47,8 @@ KisOpenGLImageTextures::ImageTexturesMap KisOpenGLImageTextures::imageTexturesMa
 KisOpenGLImageTextures::KisOpenGLImageTextures()
     : m_displayFilter(0)
 {
+    initializeGLFunctions(KisOpenGL::sharedContextWidget()->context());
+
     m_image = 0;
     m_monitorProfile = 0;
     KisConfig cfg;
@@ -245,7 +247,7 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
         case GL_UNSIGNED_BYTE:
             dstCS = KoColorSpaceRegistry::instance()->rgb8(m_monitorProfile);
             break;
-#if defined(HAVE_GLEW) && defined(HAVE_OPENEXR)
+#if defined(HAVE_OPENEXR)
         case GL_UNSIGNED_SHORT:
             dstCS = KoColorSpaceRegistry::instance()->rgb16(m_monitorProfile);
             break;
@@ -319,18 +321,14 @@ void KisOpenGLImageTextures::setDisplayFilter(KisDisplayFilter *displayFilter)
 
 void KisOpenGLImageTextures::activateHDRExposureProgram()
 {
-#ifdef HAVE_GLEW
     if (m_displayFilter && m_displayFilter->program()) {
         glUseProgram(m_displayFilter->program());
     }
-#endif
 }
 
 void KisOpenGLImageTextures::deactivateHDRExposureProgram()
 {
-#ifdef HAVE_GLEW
     glUseProgram(0);
-#endif
 }
 
 void KisOpenGLImageTextures::getTextureSize(KisGLTexturesInfo *texturesInfo)
@@ -355,60 +353,60 @@ void KisOpenGLImageTextures::updateTextureFormat()
     m_texturesInfo.format = GL_RGBA8;
     m_texturesInfo.type = GL_UNSIGNED_BYTE;
 
-    #ifdef HAVE_GLEW
-
-    KoID colorModelId = m_image->colorSpace()->colorModelId();
-    KoID colorDepthId = m_image->colorSpace()->colorDepthId();
+//    KoID colorModelId = m_image->colorSpace()->colorModelId();
+//    KoID colorDepthId = m_image->colorSpace()->colorDepthId();
 
     dbgUI << "Choosing texture format:";
 
-    if (colorModelId == RGBAColorModelID) {
-        if (colorDepthId == Float16BitsColorDepthID) {
+// XXX: port to GL_HALF_FLOAT_OES
 
-            if (GLEW_ARB_texture_float) {
-                m_texturesInfo.format = GL_RGBA16F_ARB;
-                dbgUI << "Using ARB half";
-            }
-            else if (GLEW_ATI_texture_float){
-                m_texturesInfo.format = GL_RGBA_FLOAT16_ATI;
-                dbgUI << "Using ATI half";
-            }
-            else if (GLEW_ARB_half_float_pixel) {
-                dbgUI << "Pixel type half";
-                m_texturesInfo.type = GL_HALF_FLOAT_ARB;
-            } else {
-                dbgUI << "Pixel type float";
-                m_texturesInfo.type = GL_FLOAT;
-            }
-        }
-        else if (colorDepthId == Float32BitsColorDepthID) {
+//    if (colorModelId == RGBAColorModelID) {
+//        if (colorDepthId == Float16BitsColorDepthID) {
 
-            if (GLEW_ARB_texture_float) {
-                m_texturesInfo.format = GL_RGBA32F_ARB;
-                dbgUI << "Using ARB float";
-                m_texturesInfo.type = GL_FLOAT;
-            }
-            else if (GLEW_ATI_texture_float) {
-                m_texturesInfo.format = GL_RGBA_FLOAT32_ATI;
-                dbgUI << "Using ATI float";
-                m_texturesInfo.type = GL_FLOAT;
-            }
-        }
-        else if (colorDepthId == Integer16BitsColorDepthID) {
-            dbgUI << "Using 16 bits rgba";
-            m_texturesInfo.format = GL_RGBA16;
-            m_texturesInfo.type = GL_UNSIGNED_SHORT;
-        }
-    }
-    else {
-        // We will convert the colorspace to 16 bits rgba, instead of 8 bits
-        if (colorDepthId == Integer16BitsColorDepthID) {
-            dbgUI << "Using conversion to 16 bits rgba";
-            m_texturesInfo.format = GL_RGBA16;
-            m_texturesInfo.type = GL_UNSIGNED_SHORT;
-        }
-    }
-#endif
+//            if (GLEW_ARB_texture_float) {
+//                m_texturesInfo.format = GL_RGBA16F_ARB;
+//                dbgUI << "Using ARB half";
+//            }
+//            else if (GLEW_ATI_texture_float){
+//                m_texturesInfo.format = GL_RGBA_FLOAT16_ATI;
+//                dbgUI << "Using ATI half";
+//            }
+//            else if (GLEW_ARB_half_float_pixel) {
+//                dbgUI << "Pixel type half";
+//                m_texturesInfo.type = GL_HALF_FLOAT_ARB;
+//            } else {
+//                dbgUI << "Pixel type float";
+//                m_texturesInfo.type = GL_FLOAT;
+//            }
+//        }
+//        else if (colorDepthId == Float32BitsColorDepthID) {
+
+//            if (GLEW_ARB_texture_float) {
+//                m_texturesInfo.format = GL_RGBA32F_ARB;
+//                dbgUI << "Using ARB float";
+//                m_texturesInfo.type = GL_FLOAT;
+//            }
+//            else if (GLEW_ATI_texture_float) {
+//                m_texturesInfo.format = GL_RGBA_FLOAT32_ATI;
+//                dbgUI << "Using ATI float";
+//                m_texturesInfo.type = GL_FLOAT;
+//            }
+//        }
+//        else if (colorDepthId == Integer16BitsColorDepthID) {
+//            dbgUI << "Using 16 bits rgba";
+//            m_texturesInfo.format = GL_RGBA16;
+//            m_texturesInfo.type = GL_UNSIGNED_SHORT;
+//        }
+//    }
+//    else {
+//        // We will convert the colorspace to 16 bits rgba, instead of 8 bits
+//        if (colorDepthId == Integer16BitsColorDepthID) {
+//            dbgUI << "Using conversion to 16 bits rgba";
+//            m_texturesInfo.format = GL_RGBA16;
+//            m_texturesInfo.type = GL_UNSIGNED_SHORT;
+//        }
+//    }
+
 }
 
 

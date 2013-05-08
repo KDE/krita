@@ -224,7 +224,6 @@ void OcioDisplayFilter::updateProcessor()
     // check whether we are allowed to use shaders -- though that should
     // work for everyone these days
     KisConfig cfg;
-    if (!cfg.useOpenGLShaders()) return;
     if (!cfg.useOpenGL()) return;
 
     if (m_lut3d.size() == 0) {

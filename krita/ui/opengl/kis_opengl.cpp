@@ -27,7 +27,6 @@
 namespace
 {
     QGLWidget *SharedContextWidget = 0;
-    bool ContextHasShadingLanguage = false;
 }
 
 void KisOpenGL::createContext()
@@ -38,17 +37,6 @@ void KisOpenGL::createContext()
 
     SharedContextWidget = new QGLWidget();
     SharedContextWidget->makeCurrent();
-    initGlew();
-
-    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_2_0) {
-        dbgUI << "Have OpenGL >= 2.0";
-        ContextHasShadingLanguage = true;
-    } else {
-        dbgUI << "Have OpengGL < 2.0";
-        // We could check for the ARB extensions but it's unlikely now to find a 
-        // card that has them but is less than version 2.0
-        ContextHasShadingLanguage = false;
-    }
 }
 
 void KisOpenGL::makeContextCurrent()
@@ -62,27 +50,6 @@ QGLWidget *KisOpenGL::sharedContextWidget()
         createContext();
     }
     return SharedContextWidget;
-}
-
-void KisOpenGL::initGlew()
-{
-#ifdef HAVE_GLEW
-    GLenum err = glewInit();
-    if (GLEW_OK != err) {
-        dbgUI << "glewInit error:" << (const char *)glewGetErrorString(err);
-    } else {
-        dbgUI << "Status: Using GLEW" << (const char *)glewGetString(GLEW_VERSION);
-    }
-#endif
-}
-
-bool KisOpenGL::hasShadingLanguage()
-{
-    if (SharedContextWidget == 0) {
-        createContext();
-    }
-
-    return ContextHasShadingLanguage;
 }
 
 void KisOpenGL::printError(const char *file, int line)

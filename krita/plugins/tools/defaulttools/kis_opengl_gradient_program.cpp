@@ -15,8 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
-#include "opengl/kis_opengl_gradient_program.h"
+#include <kis_opengl_gradient_program.h>
 
 #include <QGLWidget>
 
@@ -24,8 +23,9 @@
 
 #include <KoAbstractGradient.h>
 
-#include "opengl/kis_opengl_fragment_shader.h"
 #include "kis_debug.h"
+#include <kglobal.h>
+#include <kstandarddirs.h>
 #include <kis_paint_device.h>
 
 //-----------------------------------------------------------------------------
@@ -40,31 +40,25 @@ class KisOpenGLGradientShader
 public:
     virtual ~KisOpenGLGradientShader();
 
-    KisOpenGLShader &shader();
     virtual void setGradientVector(const QPointF &gradientVectorStart, const QPointF &gradientVectorEnd) = 0;
 
 protected:
-    KisOpenGLGradientShader(KisOpenGLProgram *program, const QString &sourceFilename);
-
-    KisOpenGLProgram *m_program;
-    KisOpenGLFragmentShader *m_shader;
+    KisOpenGLGradientShader(QGLShaderProgram *program, const QString &sourceFilename);
+    QGLShaderProgram *m_program;
 };
 
-KisOpenGLGradientShader::KisOpenGLGradientShader(KisOpenGLProgram *program, const QString &sourceFilename)
-        : m_program(program),
-        m_shader(KisOpenGLFragmentShader::createFromSourceCodeFile(sourceFilename))
+KisOpenGLGradientShader::KisOpenGLGradientShader(QGLShaderProgram *program, const QString &sourceFilename)
+    : m_program(program)
 {
+    m_program = new QGLShaderProgram();
+    // Huh? Where did krita get the vertex shader from?
+    m_program->addShaderFromSourceFile(QGLShader::Fragment, KGlobal::dirs()->findResource("data", sourceFilename));
+    m_program->link();
 }
 
 KisOpenGLGradientShader::~KisOpenGLGradientShader()
 {
-    delete m_shader;
-}
-
-KisOpenGLShader &KisOpenGLGradientShader::shader()
-{
-    Q_ASSERT(m_shader);
-    return *m_shader;
+    delete m_program;
 }
 
 //-----------------------------------------------------------------------------
@@ -72,21 +66,21 @@ KisOpenGLShader &KisOpenGLGradientShader::shader()
 class KisOpenGLLinearGradientShader : public KisOpenGLGradientShader
 {
 public:
-    KisOpenGLLinearGradientShader(KisOpenGLProgram *program);
+    KisOpenGLLinearGradientShader(QGLShaderProgram *program);
 
     virtual void setGradientVector(const QPointF &gradientVectorStart, const QPointF &gradientVectorEnd);
 
 protected:
-    KisOpenGLLinearGradientShader(KisOpenGLProgram *program, const QString &shaderSourceFilename);
+    KisOpenGLLinearGradientShader(QGLShaderProgram *program, const QString &shaderSourceFilename);
 };
 
-KisOpenGLLinearGradientShader::KisOpenGLLinearGradientShader(KisOpenGLProgram *program)
-        : KisOpenGLGradientShader(program, "linear_gradient.frag")
+KisOpenGLLinearGradientShader::KisOpenGLLinearGradientShader(QGLShaderProgram *program)
+    : KisOpenGLGradientShader(program, "linear_gradient.frag")
 {
 }
 
-KisOpenGLLinearGradientShader::KisOpenGLLinearGradientShader(KisOpenGLProgram *program, const QString &shaderSourceFilename)
-        : KisOpenGLGradientShader(program, shaderSourceFilename)
+KisOpenGLLinearGradientShader::KisOpenGLLinearGradientShader(QGLShaderProgram *program, const QString &shaderSourceFilename)
+    : KisOpenGLGradientShader(program, shaderSourceFilename)
 {
 }
 
@@ -94,11 +88,11 @@ void KisOpenGLLinearGradientShader::setGradientVector(const QPointF &gradientVec
 {
     Q_ASSERT(m_program);
     if (m_program) {
-        m_program->setUniformVariable("gradientVectorStart", gradientVectorStart);
+        m_program->setUniformValue("gradientVectorStart", gradientVectorStart);
 
         QPointF gradientVector = gradientVectorEnd - gradientVectorStart;
 
-        m_program->setUniformVariable("normalisedGradientVector", gradientVector);
+        m_program->setUniformValue("normalisedGradientVector", gradientVector);
     }
 }
 
@@ -107,11 +101,11 @@ void KisOpenGLLinearGradientShader::setGradientVector(const QPointF &gradientVec
 class KisOpenGLBilinearGradientShader : public KisOpenGLLinearGradientShader
 {
 public:
-    KisOpenGLBilinearGradientShader(KisOpenGLProgram *program);
+    KisOpenGLBilinearGradientShader(QGLShaderProgram *program);
 };
 
-KisOpenGLBilinearGradientShader::KisOpenGLBilinearGradientShader(KisOpenGLProgram *program)
-        : KisOpenGLLinearGradientShader(program, "bilinear_gradient.frag")
+KisOpenGLBilinearGradientShader::KisOpenGLBilinearGradientShader(QGLShaderProgram *program)
+    : KisOpenGLLinearGradientShader(program, "bilinear_gradient.frag")
 {
 }
 
@@ -120,13 +114,13 @@ KisOpenGLBilinearGradientShader::KisOpenGLBilinearGradientShader(KisOpenGLProgra
 class KisOpenGLRadialGradientShader : public KisOpenGLGradientShader
 {
 public:
-    KisOpenGLRadialGradientShader(KisOpenGLProgram *program);
+    KisOpenGLRadialGradientShader(QGLShaderProgram *program);
 
     virtual void setGradientVector(const QPointF &gradientVectorStart, const QPointF &gradientVectorEnd);
 };
 
-KisOpenGLRadialGradientShader::KisOpenGLRadialGradientShader(KisOpenGLProgram *program)
-        : KisOpenGLGradientShader(program, "radial_gradient.frag")
+KisOpenGLRadialGradientShader::KisOpenGLRadialGradientShader(QGLShaderProgram *program)
+    : KisOpenGLGradientShader(program, "radial_gradient.frag")
 {
 }
 
@@ -136,7 +130,7 @@ void KisOpenGLRadialGradientShader::setGradientVector(const QPointF &gradientVec
 
     Q_ASSERT(m_program);
     if (m_program) {
-        m_program->setUniformVariable("gradientVectorStart", gradientVectorStart);
+        m_program->setUniformValue("gradientVectorStart", gradientVectorStart);
     }
 }
 
@@ -145,13 +139,13 @@ void KisOpenGLRadialGradientShader::setGradientVector(const QPointF &gradientVec
 class KisOpenGLSquareGradientShader : public KisOpenGLGradientShader
 {
 public:
-    KisOpenGLSquareGradientShader(KisOpenGLProgram *program);
+    KisOpenGLSquareGradientShader(QGLShaderProgram *program);
 
     virtual void setGradientVector(const QPointF &gradientVectorStart, const QPointF &gradientVectorEnd);
 };
 
-KisOpenGLSquareGradientShader::KisOpenGLSquareGradientShader(KisOpenGLProgram *program)
-        : KisOpenGLGradientShader(program, "square_gradient.frag")
+KisOpenGLSquareGradientShader::KisOpenGLSquareGradientShader(QGLShaderProgram *program)
+    : KisOpenGLGradientShader(program, "square_gradient.frag")
 {
 }
 
@@ -159,11 +153,11 @@ void KisOpenGLSquareGradientShader::setGradientVector(const QPointF &gradientVec
 {
     Q_ASSERT(m_program);
     if (m_program) {
-        m_program->setUniformVariable("gradientVectorStart", gradientVectorStart);
+        m_program->setUniformValue("gradientVectorStart", gradientVectorStart);
 
         QPointF gradientVector = gradientVectorEnd - gradientVectorStart;
 
-        m_program->setUniformVariable("normalisedGradientVector", gradientVector);
+        m_program->setUniformValue("normalisedGradientVector", gradientVector);
     }
 }
 
@@ -172,21 +166,21 @@ void KisOpenGLSquareGradientShader::setGradientVector(const QPointF &gradientVec
 class KisOpenGLConicalGradientShader : public KisOpenGLGradientShader
 {
 public:
-    KisOpenGLConicalGradientShader(KisOpenGLProgram *program);
+    KisOpenGLConicalGradientShader(QGLShaderProgram *program);
 
     virtual void setGradientVector(const QPointF &gradientVectorStart, const QPointF &gradientVectorEnd);
 
 protected:
-    KisOpenGLConicalGradientShader(KisOpenGLProgram *program, const QString &shaderSourceFilename);
+    KisOpenGLConicalGradientShader(QGLShaderProgram *program, const QString &shaderSourceFilename);
 };
 
-KisOpenGLConicalGradientShader::KisOpenGLConicalGradientShader(KisOpenGLProgram *program)
-        : KisOpenGLGradientShader(program, "conical_gradient.frag")
+KisOpenGLConicalGradientShader::KisOpenGLConicalGradientShader(QGLShaderProgram *program)
+    : KisOpenGLGradientShader(program, "conical_gradient.frag")
 {
 }
 
-KisOpenGLConicalGradientShader::KisOpenGLConicalGradientShader(KisOpenGLProgram *program, const QString &shaderSourceFilename)
-        : KisOpenGLGradientShader(program, shaderSourceFilename)
+KisOpenGLConicalGradientShader::KisOpenGLConicalGradientShader(QGLShaderProgram *program, const QString &shaderSourceFilename)
+    : KisOpenGLGradientShader(program, shaderSourceFilename)
 {
 }
 
@@ -194,14 +188,14 @@ void KisOpenGLConicalGradientShader::setGradientVector(const QPointF &gradientVe
 {
     Q_ASSERT(m_program);
     if (m_program) {
-        m_program->setUniformVariable("gradientVectorStart", gradientVectorStart);
+        m_program->setUniformValue("gradientVectorStart", gradientVectorStart);
 
         QPointF gradientVector = gradientVectorEnd - gradientVectorStart;
 
         // Get angle from 0 to 2 PI.
         GLfloat gradientVectorAngle = atan2(gradientVector.y(), gradientVector.x()) + M_PI;
 
-        m_program->setUniformVariable("gradientVectorAngle", gradientVectorAngle);
+        m_program->setUniformValue("gradientVectorAngle", gradientVectorAngle);
     }
 }
 
@@ -210,23 +204,23 @@ void KisOpenGLConicalGradientShader::setGradientVector(const QPointF &gradientVe
 class KisOpenGLConicalSymetricGradientShader : public KisOpenGLConicalGradientShader
 {
 public:
-    KisOpenGLConicalSymetricGradientShader(KisOpenGLProgram *program);
+    KisOpenGLConicalSymetricGradientShader(QGLShaderProgram *program);
 };
 
-KisOpenGLConicalSymetricGradientShader::KisOpenGLConicalSymetricGradientShader(KisOpenGLProgram *program)
-        : KisOpenGLConicalGradientShader(program, "conical_symetric_gradient.frag")
+KisOpenGLConicalSymetricGradientShader::KisOpenGLConicalSymetricGradientShader(QGLShaderProgram *program)
+    : KisOpenGLConicalGradientShader(program, "conical_symetric_gradient.frag")
 {
 }
 
 //-----------------------------------------------------------------------------
 
 KisOpenGLGradientProgram::KisOpenGLGradientProgram(const KoAbstractGradient *gradient,
-        KisGradientPainter::enumGradientShape shape,
-        KisGradientPainter::enumGradientRepeat repeat,
-        bool reverseGradient,
-        const KoColorSpace *colorSpace,
-        KoColorProfile *monitorProfile,
-        double opacity)
+                                                   KisGradientPainter::enumGradientShape shape,
+                                                   KisGradientPainter::enumGradientRepeat repeat,
+                                                   bool reverseGradient,
+                                                   const KoColorSpace *colorSpace,
+                                                   KoColorProfile *monitorProfile,
+                                                   double opacity)
 {
     createGradientColorsTexture(gradient, repeat, reverseGradient, colorSpace, monitorProfile, opacity);
 
@@ -251,10 +245,6 @@ KisOpenGLGradientProgram::KisOpenGLGradientProgram(const KoAbstractGradient *gra
         break;
     }
     Q_CHECK_PTR(m_gradientShader);
-
-    attachShader(m_gradientShader->shader());
-    link();
-    dbgTools << getInfoLog();
 }
 
 KisOpenGLGradientProgram::~KisOpenGLGradientProgram()
@@ -265,11 +255,11 @@ KisOpenGLGradientProgram::~KisOpenGLGradientProgram()
 }
 
 void KisOpenGLGradientProgram::createGradientColorsTexture(const KoAbstractGradient *gradient,
-        KisGradientPainter::enumGradientRepeat repeat,
-        bool reverseGradient,
-        const KoColorSpace *colorSpace,
-        KoColorProfile *monitorProfile,
-        double opacity)
+                                                           KisGradientPainter::enumGradientRepeat repeat,
+                                                           bool reverseGradient,
+                                                           const KoColorSpace *colorSpace,
+                                                           KoColorProfile *monitorProfile,
+                                                           double opacity)
 {
     KisOpenGL::makeContextCurrent();
 
@@ -327,12 +317,10 @@ void KisOpenGLGradientProgram::createGradientColorsTexture(const KoAbstractGradi
 
 void KisOpenGLGradientProgram::activate(const QPointF &gradientVectorStart, const QPointF &gradientVectorEnd)
 {
-    KisOpenGLProgram::activate();
-
     Q_ASSERT(m_gradientShader);
     if (m_gradientShader) {
         m_gradientShader->setGradientVector(gradientVectorStart, gradientVectorEnd);
-        setUniformVariable("gradientColors", (GLint) 0);
+        setUniformValue("gradientColors", (GLint) 0);
         glBindTexture(GL_TEXTURE_1D, m_gradientColorsTexture);
     }
 }

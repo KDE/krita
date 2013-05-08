@@ -24,6 +24,7 @@
 #ifdef HAVE_OPENGL
 
 #include <QGLWidget>
+#include <QGLFunctions>
 
 #include <KoCanvasBase.h>
 
@@ -44,7 +45,7 @@ class KisCanvas2;
  * in the qpainter canvas.
  *
  */
-class KRITAUI_EXPORT KisOpenGLCanvas2 : public QGLWidget, public KisCanvasWidgetBase
+class KRITAUI_EXPORT KisOpenGLCanvas2 : public QGLWidget, public KisCanvasWidgetBase, protected QGLFunctions
 {
 
     Q_OBJECT

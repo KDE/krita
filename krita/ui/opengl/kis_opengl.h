@@ -31,10 +31,6 @@
 #include <windows.h>
 #endif
 
-#ifdef HAVE_GLEW
-#include <GL/glew.h>
-#endif
-
 #include <QtGlobal>
 #ifdef Q_WS_MAC
 #include <OpenGL/glu.h>
@@ -68,12 +64,6 @@ public:
     static void makeContextCurrent();
 
     /**
-     * Returns true if the OpenGL shading language is available
-     * (using the core API, i.e. OpenGL version is 2.0 or greater).
-     */
-    static bool hasShadingLanguage();
-
-    /**
      * Print any error messages waiting to be read from glGetError(). Use
      * the helper macro KIS_OPENGL_PRINT_ERROR() to generate the source
      * file and line number to identify the location the error is reported
@@ -90,7 +80,6 @@ private:
     KisOpenGL();
 
     static void createContext();
-    static void initGlew();
 };
 
 /**

@@ -22,14 +22,14 @@
 
 #include <QMenu>
 #include <QWidget>
-#include <QGLWidget>
-#include <QGLContext>
 #include <QBrush>
 #include <QPainter>
 #include <QPaintEvent>
 #include <QPoint>
 #include <QPainter>
 #include <QTransform>
+
+#include <QGLContext>
 
 #include <kxmlguifactory.h>
 
@@ -64,15 +64,15 @@
 
 namespace
 {
-    const GLuint NO_PROGRAM = 0;
+const GLuint NO_PROGRAM = 0;
 }
 
 struct KisOpenGLCanvas2::Private
 {
 public:
     Private()
-            : savedCurrentProgram(NO_PROGRAM)
-            , GLStateSaved(false)
+        : savedCurrentProgram(NO_PROGRAM)
+        , GLStateSaved(false)
     {
     }
 
@@ -83,8 +83,8 @@ public:
 
 KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 * canvas, KisCoordinatesConverter *coordinatesConverter, QWidget * parent, KisOpenGLImageTexturesSP imageTextures)
     : QGLWidget(QGLFormat(QGL::SampleBuffers), parent, KisOpenGL::sharedContextWidget())
-        , KisCanvasWidgetBase(canvas, coordinatesConverter)
-        , m_d(new Private())
+    , KisCanvasWidgetBase(canvas, coordinatesConverter)
+    , m_d(new Private())
 {
     m_d->openGLImageTextures = imageTextures;
 
@@ -111,6 +111,8 @@ KisOpenGLCanvas2::~KisOpenGLCanvas2()
 
 void KisOpenGLCanvas2::initializeGL()
 {
+    initializeGLFunctions(KisOpenGL::sharedContextWidget()->context());
+
     if (!VSyncWorkaround::tryDisableVSync(this)) {
         qWarning();
         qWarning() << "WARNING: We didn't manage to switch off VSync on your graphics adapter.";
@@ -156,7 +158,6 @@ void KisOpenGLCanvas2::paintEvent(QPaintEvent *)
         drawBackground();
         drawImage();
         restoreGLState();
-
 
         QRect boundingRect = coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect();
         drawDecorations(gc, boundingRect);
@@ -211,7 +212,7 @@ void KisOpenGLCanvas2::drawBackground()
     GLfloat checkSizeScale = KisOpenGLImageTextures::BACKGROUND_TEXTURE_CHECK_SIZE / static_cast<GLfloat>(cfg.checkSize());
 
     textureTransform *= QTransform::fromScale(checkSizeScale / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE,
-                                               checkSizeScale / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE);
+                                              checkSizeScale / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE);
 
 
     glMatrixMode(GL_PROJECTION);
@@ -264,13 +265,13 @@ void KisOpenGLCanvas2::drawImage()
 
     QRectF widgetRect(0,0, width(), height());
     QRectF widgetRectInImagePixels = converter->
-        documentToImage(converter->widgetToDocument(widgetRect));
+            documentToImage(converter->widgetToDocument(widgetRect));
 
     qreal scaleX, scaleY;
     converter->imageScale(&scaleX, &scaleY);
 
     QRect wr = widgetRectInImagePixels.toAlignedRect() &
-        m_d->openGLImageTextures->storedImageBounds();
+            m_d->openGLImageTextures->storedImageBounds();
 
     m_d->openGLImageTextures->activateHDRExposureProgram();
 
@@ -285,7 +286,7 @@ void KisOpenGLCanvas2::drawImage()
         for (int row = firstRow; row <= lastRow; row++) {
 
             KisTextureTile *tile =
-                m_d->openGLImageTextures->getTextureTileCR(col, row);
+                    m_d->openGLImageTextures->getTextureTileCR(col, row);
 
             glBindTexture(GL_TEXTURE_2D, tile->textureId());
 
@@ -324,12 +325,8 @@ void KisOpenGLCanvas2::saveGLState()
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
 
-#ifdef HAVE_GLEW
-        if (KisOpenGL::hasShadingLanguage()) {
-            glGetIntegerv(GL_CURRENT_PROGRAM, &m_d->savedCurrentProgram);
-            glUseProgram(NO_PROGRAM);
-        }
-#endif
+        glGetIntegerv(GL_CURRENT_PROGRAM, &m_d->savedCurrentProgram);
+        glUseProgram(NO_PROGRAM);
     }
 }
 
@@ -348,11 +345,7 @@ void KisOpenGLCanvas2::restoreGLState()
         glPopMatrix();
         glPopAttrib();
 
-#ifdef HAVE_GLEW
-        if (KisOpenGL::hasShadingLanguage()) {
-            glUseProgram(m_d->savedCurrentProgram);
-        }
-#endif
+        glUseProgram(m_d->savedCurrentProgram);
     }
 }
 

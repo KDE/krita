@@ -21,6 +21,12 @@ set(kritadefaulttools_PART_SRCS
     kis_tool_pencil.cc
     )
 
+if (HAVE_OPENGL)
+    set(kritadefaulttools_PART_SRCS ${kritadefaulttools_PART_SRCS}
+        kis_opengl_gradient_program.cpp
+    )
+endif (HAVE_OPENGL)
+
 kde4_add_ui_files(kritadefaulttools_PART_SRCS wdgcolorpicker.ui wdgmovetool.ui)
 
 kde4_add_plugin(kritadefaulttools ${kritadefaulttools_PART_SRCS})
@@ -29,9 +35,6 @@ target_link_libraries(kritadefaulttools kritaui basicflakes)
 if (HAVE_OPENGL)
   target_link_libraries(kritadefaulttools ${QT_QTOPENGL_LIBRARY} ${OPENGL_LIBRARIES} )
 endif (HAVE_OPENGL)
-if (HAVE_GLEW)
-  target_link_libraries(kritadefaulttools ${GLEW_LIBRARIES} )
-endif (HAVE_GLEW)
 
 install(TARGETS kritadefaulttools  DESTINATION ${PLUGIN_INSTALL_DIR})
 

@@ -365,16 +365,6 @@ void KisConfig::setUseOpenGL(bool useOpenGL)
     m_cfg.writeEntry("useOpenGL", useOpenGL);
 }
 
-bool KisConfig::useOpenGLShaders() const
-{
-    return m_cfg.readEntry("useOpenGLShaders", false);
-}
-
-void KisConfig::setUseOpenGLShaders(bool useOpenGLShaders)
-{
-    m_cfg.writeEntry("useOpenGLShaders", useOpenGLShaders);
-}
-
 bool KisConfig::useOpenGLToolOutlineWorkaround() const
 {
     return m_cfg.readEntry("useOpenGLToolOutlineWorkaround", false);

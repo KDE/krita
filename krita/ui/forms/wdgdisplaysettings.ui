@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>457</width>
-    <height>435</height>
+    <height>468</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -217,13 +217,6 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="3" column="0">
-       <widget class="QCheckBox" name="cbUseOpenGLShaders">
-        <property name="text">
-         <string>Enable OpenGL shaders</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0">
        <widget class="QCheckBox" name="cbUseOpenGLToolOutlineWorkaround">
         <property name="toolTip">
          <string>This enables a workaround for a bug in Qt. 
@@ -236,7 +229,7 @@ then you can try to enable this.</string>
         </property>
        </widget>
       </item>
-      <item row="5" column="0">
+      <item row="4" column="0">
        <widget class="QCheckBox" name="cbUseOpenGLTrilinearFiltering">
         <property name="toolTip">
          <string>Use trilinear filtering when zooming. Disabling this may improve painting performance.</string>

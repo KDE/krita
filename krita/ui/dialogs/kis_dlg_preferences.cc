@@ -404,7 +404,6 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 #ifdef HAVE_OPENGL
     if (!QGLFormat::hasOpenGL()) {
         cbUseOpenGL->setEnabled(false);
-        cbUseOpenGLShaders->setEnabled(false);
         cbUseOpenGLToolOutlineWorkaround->setEnabled(false);
         cbUseOpenGLTrilinearFiltering->setEnabled(false);
     } else {
@@ -413,21 +412,9 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         cbUseOpenGLToolOutlineWorkaround->setChecked(cfg.useOpenGLToolOutlineWorkaround());
         cbUseOpenGLTrilinearFiltering->setEnabled(cfg.useOpenGL());
         cbUseOpenGLTrilinearFiltering->setChecked(cfg.useOpenGLTrilinearFiltering());
-#ifdef HAVE_GLEW
-        cbUseOpenGLShaders->setChecked(cfg.useOpenGLShaders());
-        if (cfg.useOpenGL() && KisOpenGL::hasShadingLanguage()) {
-            cbUseOpenGLShaders->setEnabled(cfg.useOpenGL());
-        } else {
-            cbUseOpenGLShaders->setEnabled(false);
-        }
-#else
-        cbUseOpenGLShaders->setChecked(false);
-        cbUseOpenGLShaders->setEnabled(false);
-#endif
     }
 #else
     grpOpenGL->setEnabled(false);
-    cbUseOpenGLShaders->setEnabled(false);
 #endif
 
     QStringList qtVersion = QString(qVersion()).split('.');
@@ -449,8 +436,6 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 void DisplaySettingsTab::setDefault()
 {
     cbUseOpenGL->setChecked(false);
-    cbUseOpenGLShaders->setChecked(false);
-    cbUseOpenGLShaders->setEnabled(false);
     cbUseOpenGLToolOutlineWorkaround->setChecked(false);
     cbUseOpenGLToolOutlineWorkaround->setEnabled(false);
     cbUseOpenGLTrilinearFiltering->setEnabled(false);
@@ -464,11 +449,6 @@ void DisplaySettingsTab::setDefault()
 void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
 {
 #ifdef HAVE_OPENGL
-#ifdef HAVE_GLEW
-    if (KisOpenGL::hasShadingLanguage()) {
-        cbUseOpenGLShaders->setEnabled(isChecked);
-    }
-#endif
     cbUseOpenGLToolOutlineWorkaround->setEnabled(isChecked);
     cbUseOpenGLTrilinearFiltering->setEnabled(isChecked);
 #else
@@ -780,7 +760,6 @@ bool KisDlgPreferences::editPreferences()
         }
 
         cfg.setUseOpenGL(dialog->m_displaySettings->cbUseOpenGL->isChecked());
-        cfg.setUseOpenGLShaders(dialog->m_displaySettings->cbUseOpenGLShaders->isChecked());
         cfg.setUseOpenGLToolOutlineWorkaround(dialog->m_displaySettings->cbUseOpenGLToolOutlineWorkaround->isChecked());
         cfg.setUseOpenGLTrilinearFiltering(dialog->m_displaySettings->cbUseOpenGLTrilinearFiltering->isChecked());
 #else

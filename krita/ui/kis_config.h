@@ -123,9 +123,6 @@ public:
     bool useOpenGL() const;
     void setUseOpenGL(bool useOpenGL);
 
-    bool useOpenGLShaders() const;
-    void setUseOpenGLShaders(bool useOpenGLShaders);
-
     bool useOpenGLToolOutlineWorkaround() const;
     void setUseOpenGLToolOutlineWorkaround(bool useWorkaround);
 

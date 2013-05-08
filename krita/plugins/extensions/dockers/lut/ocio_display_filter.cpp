@@ -31,7 +31,7 @@
 
 static const int LUT3D_EDGE_SIZE = 32;
 
-GLuint compileShaderText(GLenum shaderType, const char *text)
+GLuint OcioDisplayFilter::compileShaderText(GLenum shaderType, const char *text)
 {
     GLuint shader;
     GLint stat;
@@ -52,7 +52,7 @@ GLuint compileShaderText(GLenum shaderType, const char *text)
     return shader;
 }
 
-GLuint linkShaders(GLuint fragShader)
+GLuint OcioDisplayFilter::linkShaders(GLuint fragShader)
 {
     if (!fragShader) return 0;
 
@@ -102,6 +102,9 @@ OcioDisplayFilter::OcioDisplayFilter(QObject *parent)
     , m_program(0)
     #endif
 {
+#ifdef HAVE_OPENGL
+    QGLFunctions::initializeGLFunctions();
+#endif
 }
 
 

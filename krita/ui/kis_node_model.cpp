@@ -474,6 +474,7 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
                                      imageBounds, imageBounds.center(),
                                      false,
                                      m_d->image, m_d->shapeController);
+        copyNode = true;
     }
 
     if (!node) return false;

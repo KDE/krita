@@ -133,6 +133,8 @@ bool KoDocumentSectionView::viewportEvent(QEvent *e)
     if (model()) {
         switch(e->type()) {
         case QEvent::MouseButtonPress: {
+            DRAG_WHILE_DRAG_WORKAROUND_STOP();
+
             const QPoint pos = static_cast<QMouseEvent*>(e)->pos();
             d->lastPos = pos;
             if (!indexAt(pos).isValid()) {

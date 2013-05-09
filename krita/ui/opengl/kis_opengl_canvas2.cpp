@@ -152,7 +152,11 @@ void KisOpenGLCanvas2::paintEvent(QPaintEvent *)
 
     saveGLState();
 
-    drawBorder();
+    // Draw the border
+    QColor widgetBackgroundColor = borderColor();
+    glClearColor(widgetBackgroundColor.redF(), widgetBackgroundColor.greenF(), widgetBackgroundColor.blueF(), 1.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+
 
     Q_ASSERT(canvas()->image());
 
@@ -190,14 +194,6 @@ void KisOpenGLCanvas2::loadQTransform(QTransform transform)
     matrix[15] = transform.m33();
 
     glLoadMatrixf(matrix);
-}
-
-void KisOpenGLCanvas2::drawBorder()
-{
-    QColor widgetBackgroundColor = borderColor();
-
-    glClearColor(widgetBackgroundColor.redF(),widgetBackgroundColor.greenF(),widgetBackgroundColor.blueF(),1.0);
-    glClear(GL_COLOR_BUFFER_BIT);
 }
 
 void KisOpenGLCanvas2::drawBackground()

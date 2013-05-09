@@ -118,7 +118,6 @@ private:
 
     void loadQTransform(QTransform transform);
 
-    void drawBorder();
     void drawImage();
     void drawBackground();
 

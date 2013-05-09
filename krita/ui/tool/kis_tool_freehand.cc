@@ -327,6 +327,11 @@ void KisToolFreehand::keyReleaseEvent(QKeyEvent* event)
     event->accept();
 }
 
+bool KisToolFreehand::isGestureSupported() const
+{
+    return true;
+}
+
 void KisToolFreehand::gesture(const QPointF &offsetInDocPixels, const QPointF &initialDocPoint)
 {
     currentPaintOpPreset()->settings()->changePaintOpSize(offsetInDocPixels.x(), offsetInDocPixels.y());

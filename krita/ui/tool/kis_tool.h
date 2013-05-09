@@ -156,6 +156,7 @@ protected:
 
 protected:
     bool specialModifierActive();
+    virtual bool isGestureSupported() const;
     virtual void gesture(const QPointF &offsetInDocPixels,
                          const QPointF &initialDocPoint);
 

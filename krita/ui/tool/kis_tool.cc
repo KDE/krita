@@ -446,9 +446,10 @@ void KisTool::mousePressEvent(KoPointerEvent *event)
 
     KisConfig cfg;
 
-    if (mode() == KisTool::HOVER_MODE &&
-             (event->button() == Qt::LeftButton &&
-              event->modifiers() == Qt::ShiftModifier)) {
+    if (isGestureSupported() &&
+        mode() == KisTool::HOVER_MODE &&
+        (event->button() == Qt::LeftButton &&
+         event->modifiers() == Qt::ShiftModifier)) {
 
         initGesture(event->point);
         event->accept();
@@ -550,6 +551,11 @@ void KisTool::slotDelayedGesture()
 {
     gesture(d->delayedGestureOffset, d->delayedGesturePoint);
     d->delayedGestureOffset = QPointF();
+}
+
+bool KisTool::isGestureSupported() const
+{
+    return false;
 }
 
 void KisTool::gesture(const QPointF &offsetInDocPixels, const QPointF &initialDocPoint)

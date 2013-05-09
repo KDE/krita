@@ -138,8 +138,8 @@ void KisToolMeasure::paint(QPainter& gc, const KoViewConverter &converter)
 
 void KisToolMeasure::mousePressEvent(KoPointerEvent *event)
 {
-    if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
-                       Qt::LeftButton, Qt::NoModifier)) {
+    if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
+                          Qt::LeftButton, Qt::AltModifier)) {
 
         setMode(KisTool::PAINT_MODE);
 

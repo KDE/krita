@@ -273,7 +273,7 @@ void KisOpenGLCanvas2::drawImage()
     QRect wr = widgetRectInImagePixels.toAlignedRect() &
             m_d->openGLImageTextures->storedImageBounds();
 
-    m_d->openGLImageTextures->activateHDRExposureProgram();
+//    m_d->openGLImageTextures->activateHDRExposureProgram();
 
     makeCurrent();
 
@@ -300,7 +300,7 @@ void KisOpenGLCanvas2::drawImage()
         }
     }
 
-    m_d->openGLImageTextures->deactivateHDRExposureProgram();
+//    m_d->openGLImageTextures->deactivateHDRExposureProgram();
 
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_BLEND);

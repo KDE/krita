@@ -20,6 +20,7 @@
 
 #ifdef HAVE_OPENGL
 
+#include <QGLContext>
 #include <QGLWidget>
 
 #include <kis_debug.h>
@@ -50,6 +51,11 @@ QGLWidget *KisOpenGL::sharedContextWidget()
         createContext();
     }
     return SharedContextWidget;
+}
+
+QGLContext *KisOpenGL::sharedContext()
+{
+    return const_cast<QGLContext*>(KisOpenGL::sharedContextWidget()->context());
 }
 
 void KisOpenGL::printError(const char *file, int line)

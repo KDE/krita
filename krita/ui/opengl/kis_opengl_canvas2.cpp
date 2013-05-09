@@ -91,7 +91,9 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 * canvas, KisCoordinatesConverter 
     setAcceptDrops(true);
     setFocusPolicy(Qt::StrongFocus);
     setAttribute(Qt::WA_NoSystemBackground);
-    imageTextures->generateBackgroundTexture(checkImage(KisOpenGLImageTextures::BACKGROUND_TEXTURE_CHECK_SIZE));
+
+    KisConfig cfg;
+    imageTextures->generateCheckerTexture(checkImage(cfg.checkSize()));
     setAttribute(Qt::WA_InputMethodEnabled, true);
 
     if (isSharing()) {
@@ -209,10 +211,10 @@ void KisOpenGLCanvas2::drawBackground()
     converter->getOpenGLCheckersInfo(&textureTransform, &modelTransform, &textureRect, &modelRect);
 
     KisConfig cfg;
-    GLfloat checkSizeScale = KisOpenGLImageTextures::BACKGROUND_TEXTURE_CHECK_SIZE / static_cast<GLfloat>(cfg.checkSize());
+    GLfloat checkSizeScale = m_d->openGLImageTextures->checkerTextureSize() / static_cast<GLfloat>(cfg.checkSize());
 
-    textureTransform *= QTransform::fromScale(checkSizeScale / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE,
-                                              checkSizeScale / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE);
+    textureTransform *= QTransform::fromScale(checkSizeScale / m_d->openGLImageTextures->checkerTextureSize(),
+                                              checkSizeScale / m_d->openGLImageTextures->checkerTextureSize());
 
 
     glMatrixMode(GL_PROJECTION);
@@ -228,7 +230,7 @@ void KisOpenGLCanvas2::drawBackground()
     glLoadIdentity();
     loadQTransform(modelTransform);
 
-    glBindTexture(GL_TEXTURE_2D, m_d->openGLImageTextures->backgroundTexture());
+    glBindTexture(GL_TEXTURE_2D, m_d->openGLImageTextures->checkerTexture());
     glEnable(GL_TEXTURE_2D);
     glShadeModel(GL_FLAT);
 

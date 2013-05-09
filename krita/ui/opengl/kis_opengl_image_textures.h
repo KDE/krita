@@ -81,31 +81,19 @@ public:
      * set the (ocio) display filter.
      */
     void setDisplayFilter(KisDisplayFilter *displayFilter);
-
-    /**
-     * Generate a background texture from the given QImage. This is used for the checker
-     * pattern on which the image is rendered.
-     */
-    void generateBackgroundTexture(const QImage & checkImage);
+    KisDisplayFilter *displayFilter() const;
 
     /**
      * The background texture.
      */
-    GLuint backgroundTexture() const;
-
-    static const int BACKGROUND_TEXTURE_CHECK_SIZE = 32;
-    static const int BACKGROUND_TEXTURE_SIZE = BACKGROUND_TEXTURE_CHECK_SIZE * 2;
-
     /**
-     * Activate the high dynamic range image program. Call this before rendering
-     * the image textures if the image has high dynamic range.
+     * Generate a background texture from the given QImage. This is used for the checker
+     * pattern on which the image is rendered.
      */
-    void activateHDRExposureProgram();
+    void generateCheckerTexture(const QImage & checkImage);
 
-    /**
-     * Detivate the high dynamic range image program.
-     */
-    void deactivateHDRExposureProgram();
+    GLuint checkerTexture() const;
+    qreal checkerTextureSize() const;
 
 public:
     inline QRect storedImageBounds() {
@@ -129,24 +117,31 @@ public:
     }
 
 public slots:
+
     KisOpenGLUpdateInfoSP updateCache(const QRect& rect);
+
     void recalculateCache(KisUpdateInfoSP info);
 
     void slotImageSizeChanged(qint32 w, qint32 h);
 
 protected:
+
     KisOpenGLImageTextures(KisImageWSP image, KoColorProfile *monitorProfile,
                            KoColorConversionTransformation::Intent renderingIntent,
                            KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     void createImageTextureTiles();
+
     void destroyImageTextureTiles();
 
     static bool imageCanShareTextures();
 
 private:
+
     QRect calculateTileRect(int col, int row) const;
+
     static void getTextureSize(KisGLTexturesInfo *texturesInfo);
+
     void updateTextureFormat();
 
 private:
@@ -155,7 +150,8 @@ private:
     const KoColorProfile *m_monitorProfile;
     KoColorConversionTransformation::Intent m_renderingIntent;
     KoColorConversionTransformation::ConversionFlags m_conversionFlags;
-    GLuint m_backgroundTexture;
+    GLuint m_checkerTexture;
+    qreal m_checkerSize;
 
     KisGLTexturesInfo m_texturesInfo;
     int m_numCols;

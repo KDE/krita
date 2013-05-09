@@ -41,6 +41,7 @@
 #include "krita_export.h"
 
 class QGLWidget;
+class QGLContext;
 
 /**
  * This class manages a shared OpenGL context and provides utility
@@ -55,6 +56,12 @@ public:
      * QGLWidget constructor.
      */
     static QGLWidget *sharedContextWidget();
+
+    /**
+     * @brief sharedContext the shared context
+     * @return the context associated with the shared context widget
+     */
+    static QGLContext *sharedContext();
 
     /**
      * Make the shared OpenGL context the current context. You should

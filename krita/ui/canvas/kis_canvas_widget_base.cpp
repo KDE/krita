@@ -171,7 +171,7 @@ QList<KisCanvasDecoration*> KisCanvasWidgetBase::decorations()
     return m_d->decorations;
 }
 
-QImage KisCanvasWidgetBase::checkImage(qint32 checkSize)
+QImage KisCanvasWidgetBase::createCheckersImage(qint32 checkSize)
 {
     KisConfig cfg;
 

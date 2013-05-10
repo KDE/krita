@@ -35,7 +35,7 @@
 #include <QGLFramebufferObject>
 #include <QGLContext>
 
-#include <kxmlguifactory.h>
+#include <kstandarddirs.h>
 
 #include "KoToolProxy.h"
 #include "KoToolManager.h"
@@ -53,6 +53,7 @@
 #include "kis_config.h"
 #include "kis_config_notifier.h"
 #include "kis_debug.h"
+
 
 #include "opengl/kis_opengl_canvas2_p.h"
 
@@ -104,7 +105,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
     setAttribute(Qt::WA_NoSystemBackground);
 
     KisConfig cfg;
-    imageTextures->generateCheckerTexture(checkImage(cfg.checkSize()));
+    imageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
     setAttribute(Qt::WA_InputMethodEnabled, true);
 
     if (isSharing()) {
@@ -160,18 +161,34 @@ void KisOpenGLCanvas2::resizeGL(int width, int height)
     coordinatesConverter()->setCanvasWidgetSize(QSize(width, height));
 }
 
+//void KisOpenGLCanvas2::paintGL()
+//{
+//    QColor widgetBackgroundColor = borderColor();
+//    glClearColor(widgetBackgroundColor.redF(), widgetBackgroundColor.greenF(), widgetBackgroundColor.blueF(), 1.0);
+//    glClear(GL_COLOR_BUFFER_BIT);
+//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+//    Q_ASSERT(canvas()->image());
+
+//    if (canvas()->image()) {
+//        drawCheckers();
+//        drawImage();
+//    }
+//}
+
 void KisOpenGLCanvas2::paintEvent(QPaintEvent *)
 {
     // Draw the border (that is, clear the whole widget to the border color)
     QColor widgetBackgroundColor = borderColor();
     glClearColor(widgetBackgroundColor.redF(), widgetBackgroundColor.greenF(), widgetBackgroundColor.blueF(), 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     Q_ASSERT(canvas()->image());
 
     if (canvas()->image()) {
         drawCheckers();
-        drawImage();
+        //drawImage();
         restoreGLState();
 
         QRect boundingRect = coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect();
@@ -209,6 +226,39 @@ void KisOpenGLCanvas2::paintEvent(QPaintEvent *)
 
 void KisOpenGLCanvas2::drawCheckers()
 {
+    m_d->displayShader->bind();
+
+    QMatrix4x4 model;
+    m_d->displayShader->setUniformValue("modelMatrix", model);
+
+    //Set view/projection matrices
+    QMatrix4x4 view;
+    m_d->displayShader->setUniformValue("viewMatrix", view);
+
+    QMatrix4x4 proj;
+    proj.ortho(0, 1, 0, 1, -1, 1);
+    m_d->displayShader->setUniformValue("projectionMatrix", proj);
+
+    //Setup the geometry for rendering
+    m_d->vertexBuffer->bind();
+    m_d->indexBuffer->bind();
+
+    m_d->displayShader->setAttributeBuffer("vertex", GL_FLOAT, 0, 3);
+    m_d->displayShader->enableAttributeArray("vertex");
+    m_d->displayShader->setAttributeBuffer("uv0", GL_FLOAT, 12 * sizeof(float), 2);
+    m_d->displayShader->enableAttributeArray("uv0");
+    m_d->displayShader->setUniformValue("texture0", 0);
+
+    qreal checkerSize = m_d->openGLImageTextures->checkerTextureSize();
+    qDebug() << width()<< checkerSize << width() / checkerSize;
+    m_d->displayShader->setUniformValue("textureScale", QVector2D(width() / checkerSize, height() / checkerSize));
+
+    // render checkers
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, m_d->openGLImageTextures->checkerTexture());
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+    m_d->displayShader->release();
 }
 
 void KisOpenGLCanvas2::drawImage()
@@ -308,11 +358,11 @@ void KisOpenGLCanvas2::initializeShaders()
 {
     m_d->displayShader = new QGLShaderProgram();
     m_d->displayShader->addShaderFromSourceFile(QGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/gl2.vert"));
-    m_d->displayShader->addShaderFromSourceFile(QGLShader::Fragment, addShaderFromSourceFile(QGLShader::Fragment, ":/gl2.frag"));
+    m_d->displayShader->addShaderFromSourceFile(QGLShader::Fragment, KGlobal::dirs()->findResource("data", "krita/shaders/gl2.frag"));
 
-    bool r = m_d->displayShader->link();
-    if (!r) {
-        qFatal("Failed linking display shader" + glGetError());
+    if (! m_d->displayShader->link()) {
+        qDebug() << "OpenGL error" << glGetError();
+        qFatal("Failed linking display shader");
     }
 
     m_d->vertexBuffer = new QGLBuffer(QGLBuffer::VertexBuffer);

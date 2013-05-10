@@ -99,7 +99,8 @@ KisScratchPad::KisScratchPad(QWidget *parent)
     m_cursor = KisCursor::load("tool_freehand_cursor.png", 5, 5);
     setCursor(m_cursor);
 
-    QImage checkImage = KisCanvasWidgetBase::checkImage();
+    KisConfig cfg;
+    QImage checkImage = KisCanvasWidgetBase::createCheckersImage(cfg.checkSize());
     m_checkBrush = QBrush(checkImage);
 
 

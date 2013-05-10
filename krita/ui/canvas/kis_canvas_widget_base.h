@@ -71,7 +71,7 @@ public: // KisAbstractCanvasWidget
     /**
      * Returns one check of the background checkerboard pattern.
      */
-    static QImage checkImage(qint32 checkSize = -1);
+    static QImage createCheckersImage(qint32 checkSize = -1);
 
 protected:
     KisCanvas2 *canvas() const;

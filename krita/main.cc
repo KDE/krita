@@ -61,6 +61,10 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     // first create the application so we can create a  pixmap
     KoApplication app;
 
+#ifdef Q_WS_X11
+    app.setAttribute(Qt::AA_X11InitThreads, true);
+#endif
+
     // then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,
     // so use an xpm.

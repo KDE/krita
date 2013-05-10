@@ -34,17 +34,19 @@ typedef QVector<KisTextureTileUpdateInfo> KisTextureTileUpdateInfoList;
 class KisTextureTileUpdateInfo
 {
 public:
-    KisTextureTileUpdateInfo() {
-        m_patchPixels = 0;
+    KisTextureTileUpdateInfo()
+        : m_patchPixels(0)
+    {
     }
 
-    KisTextureTileUpdateInfo(qint32 col, qint32 row, QRect tileRect, QRect updateRect, QRect currentImageRect) {
+    KisTextureTileUpdateInfo(qint32 col, qint32 row, QRect tileRect, QRect updateRect, QRect currentImageRect)
+        : m_patchPixels(0)
+    {
         m_tileCol = col;
         m_tileRow = row;
         m_tileRect = tileRect;
         m_patchRect = m_tileRect & updateRect;
         m_currentImageRect = currentImageRect;
-        m_patchPixels = 0;
     }
 
     ~KisTextureTileUpdateInfo() {

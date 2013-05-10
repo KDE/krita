@@ -66,9 +66,6 @@ public:
                    KoColorConversionTransformation::Intent renderingIntent,
                    KoColorConversionTransformation::ConversionFlags conversionFlags) {
         const qint32 numPixels = m_patchRect.width() * m_patchRect.height();
-        /**
-         * FIXME: is it possible to do an in-place conversion?
-         */
         quint8* dstBuffer = dstCS->allocPixelBuffer(numPixels);
         // FIXME: rendering intent
         Q_ASSERT(dstBuffer && m_patchPixels);

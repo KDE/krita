@@ -97,8 +97,9 @@ void KisToolLine::paint(QPainter& gc, const KoViewConverter &converter)
 
 void KisToolLine::mousePressEvent(KoPointerEvent *event)
 {
-    if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
-                       Qt::LeftButton, Qt::NoModifier)) {
+    if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
+                          Qt::LeftButton,
+                          Qt::AltModifier | Qt::ShiftModifier)) {
 
         if (nodePaintAbility() == NONE) {
            return;

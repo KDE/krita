@@ -75,7 +75,7 @@
 #include "canvas/kis_canvas2.h"
 #include "kis_doc2.h"
 #include "kis_dummies_facade_base.h"
-#include <KoShapeBasedDocumentBase.h>
+#include "kis_shape_controller.h"
 
 
 #include "ui_wdglayerbox.h"
@@ -330,7 +330,7 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
 
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
-        m_nodeModel->setDummiesFacade(0, 0);
+        m_nodeModel->setDummiesFacade(0, 0, 0);
 
         disconnect(m_image, 0, this, 0);
         disconnect(m_nodeManager, 0, this, 0);
@@ -345,8 +345,9 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
 
         m_nodeManager = m_canvas->view()->nodeManager();
 
-        KisDummiesFacadeBase *kritaDummiesFacade = dynamic_cast<KisDummiesFacadeBase*>(m_canvas->view()->document()->shapeController());
-        m_nodeModel->setDummiesFacade(kritaDummiesFacade, m_image);
+        KisShapeController *kritaShapeController = dynamic_cast<KisShapeController*>(m_canvas->view()->document()->shapeController());
+        KisDummiesFacadeBase *kritaDummiesFacade = static_cast<KisDummiesFacadeBase*>(kritaShapeController);
+        m_nodeModel->setDummiesFacade(kritaDummiesFacade, m_image, kritaShapeController);
 
         connect(m_image, SIGNAL(sigAboutToBeDeleted()), SLOT(notifyImageDeleted()));
 

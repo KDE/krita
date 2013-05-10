@@ -233,13 +233,12 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 
 void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 {
-    requestUpdateOutline(e->point);
-
     /**
      * Update outline
      */
     if (mode() == KisTool::HOVER_MODE ||
             mode() == KisTool::PAINT_MODE) {
+        requestUpdateOutline(e->point);
     }
 
     if (mode() != KisTool::PAINT_MODE) {
@@ -304,6 +303,11 @@ void KisToolFreehand::keyReleaseEvent(QKeyEvent* event)
     }
 
     event->accept();
+}
+
+bool KisToolFreehand::isGestureSupported() const
+{
+    return true;
 }
 
 void KisToolFreehand::gesture(const QPointF &offsetInDocPixels, const QPointF &initialDocPoint)

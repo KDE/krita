@@ -250,7 +250,6 @@ void KisOpenGLCanvas2::drawCheckers()
     m_d->displayShader->setUniformValue("texture0", 0);
 
     qreal checkerSize = m_d->openGLImageTextures->checkerTextureSize();
-    qDebug() << width()<< checkerSize << width() / checkerSize;
     m_d->displayShader->setUniformValue("textureScale", QVector2D(width() / checkerSize, height() / checkerSize));
 
     // render checkers

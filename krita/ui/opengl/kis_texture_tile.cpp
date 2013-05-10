@@ -42,7 +42,9 @@ inline QRectF relativeRect(const QRect &br /* baseRect */,
 KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texturesInfo,
                                const GLvoid *fillData, FilterMode filter)
 
-    : m_tileRectInImagePixels(imageRect), m_texturesInfo(texturesInfo)
+    : m_textureId(0)
+    , m_tileRectInImagePixels(imageRect)
+    , m_texturesInfo(texturesInfo)
 {
     m_textureRectInImagePixels =
         stretchRect(m_tileRectInImagePixels, texturesInfo->border);
@@ -184,41 +186,6 @@ inline void KisTextureTile::repeatStripes(const KisTextureTileUpdateInfo &update
                         columnBuffer.constData());
     }
 
-}
-
-void KisTextureTile::drawPoints() {
-    /**
-     * We create a float rect here to workaround Qt's
-     * "history reasons" in calculation of right()
-     * and bottom() coordinates of integer rects.
-     */
-    QRectF imageRect(m_tileRectInImagePixels);
-    QPointF ipt;
-    QPointF tpt;
-
-    glBegin(GL_QUADS);
-
-    ipt = imageRect.topLeft();
-    tpt = m_tileRectInTexturePixels.topLeft();
-    glTexCoord2f(tpt.x(), tpt.y());
-    glVertex2f(ipt.x(), ipt.y());
-
-    ipt = imageRect.topRight();
-    tpt = m_tileRectInTexturePixels.topRight();
-    glTexCoord2f(tpt.x(), tpt.y());
-    glVertex2f(ipt.x(), ipt.y());
-
-    ipt = imageRect.bottomRight();
-    tpt = m_tileRectInTexturePixels.bottomRight();
-    glTexCoord2f(tpt.x(), tpt.y());
-    glVertex2f(ipt.x(), ipt.y());
-
-    ipt = imageRect.bottomLeft();
-    tpt = m_tileRectInTexturePixels.bottomLeft();
-    glTexCoord2f(tpt.x(), tpt.y());
-    glVertex2f(ipt.x(), ipt.y());
-
-    glEnd();
 }
 
 

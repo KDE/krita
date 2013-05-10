@@ -1,5 +1,7 @@
 
 install( FILES  
+    gl2.vert
+    gl2.frag
     linear_gradient.frag
     bilinear_gradient.frag
     radial_gradient.frag

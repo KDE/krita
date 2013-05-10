@@ -71,18 +71,6 @@ public:
      */
     void endOpenGL();
 
-    /**
-     * Set the projection and model view matrices so that primitives can be
-     * rendered using image pixel coordinates. This handles zooming and
-     * scrolling of the canvas.
-     */
-    void setupImageToWidgetTransformation();
-
-    /**
-     * The same as \ref setupImageToWidgetTransformation(), but input
-     * coordinate system is flake
-     */
-    void setupFlakeToWidgetTransformation();
 
 public: // QWidget
 

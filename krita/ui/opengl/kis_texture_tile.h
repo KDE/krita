@@ -61,7 +61,6 @@ public:
     ~KisTextureTile();
 
     void update(const KisTextureTileUpdateInfo &updateInfo);
-    void drawPoints();
 
     inline QRect tileRectInImagePixels() {
         return m_tileRectInImagePixels;

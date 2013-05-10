@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2006
+ * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2006-2013
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,8 +27,12 @@
 #include <QPaintEvent>
 #include <QPoint>
 #include <QPainter>
-#include <QTransform>
+#include <QMatrix>
+#include <QDebug>
 
+#include <QGLShaderProgram>
+#include <QGLBuffer>
+#include <QGLFramebufferObject>
 #include <QGLContext>
 
 #include <kxmlguifactory.h>
@@ -45,13 +49,10 @@
 #include "kis_image.h"
 #include "opengl/kis_opengl.h"
 #include "opengl/kis_opengl_image_textures.h"
-#include "kis_view2.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"
 #include "kis_debug.h"
-#include "kis_selection_manager.h"
-#include "kis_group_layer.h"
 
 #include "opengl/kis_opengl_canvas2_p.h"
 
@@ -71,17 +72,27 @@ struct KisOpenGLCanvas2::Private
 {
 public:
     Private()
-        : savedCurrentProgram(NO_PROGRAM)
-        , GLStateSaved(false)
+        : displayShader(0)
+        , vertexBuffer(0)
+        , indexBuffer(0)
     {
     }
 
+    ~Private() {
+        delete displayShader;
+        delete vertexBuffer;
+        delete indexBuffer;
+    }
+
     KisOpenGLImageTexturesSP openGLImageTextures;
-    GLint savedCurrentProgram;
-    bool GLStateSaved;
+
+    QGLShaderProgram *displayShader;
+    QGLBuffer *vertexBuffer;
+    QGLBuffer *indexBuffer;
+
 };
 
-KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 * canvas, KisCoordinatesConverter *coordinatesConverter, QWidget * parent, KisOpenGLImageTexturesSP imageTextures)
+KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget *parent, KisOpenGLImageTexturesSP imageTextures)
     : QGLWidget(QGLFormat(QGL::SampleBuffers), parent, KisOpenGL::sharedContextWidget())
     , KisCanvasWidgetBase(canvas, coordinatesConverter)
     , m_d(new Private())
@@ -138,6 +149,9 @@ void KisOpenGLCanvas2::initializeGL()
             qCritical();
         }
     }
+
+    initializeShaders();
+
 }
 
 void KisOpenGLCanvas2::resizeGL(int width, int height)
@@ -148,113 +162,57 @@ void KisOpenGLCanvas2::resizeGL(int width, int height)
 
 void KisOpenGLCanvas2::paintEvent(QPaintEvent *)
 {
-    QPainter gc(this);
-
-    saveGLState();
-
-    // Draw the border
+    // Draw the border (that is, clear the whole widget to the border color)
     QColor widgetBackgroundColor = borderColor();
     glClearColor(widgetBackgroundColor.redF(), widgetBackgroundColor.greenF(), widgetBackgroundColor.blueF(), 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
 
-
     Q_ASSERT(canvas()->image());
 
     if (canvas()->image()) {
-        drawBackground();
+        drawCheckers();
         drawImage();
         restoreGLState();
 
         QRect boundingRect = coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect();
+
+        QPainter gc(this);
         drawDecorations(gc, boundingRect);
+        gc.end();
     } else {
         restoreGLState();
     }
 
-    gc.end();
 }
 
-void KisOpenGLCanvas2::loadQTransform(QTransform transform)
+//void KisOpenGLCanvas2::loadQTransform(QTransform transform)
+//{
+//    GLfloat matrix[16];
+//    memset(matrix, 0, sizeof(GLfloat) * 16);
+
+//    matrix[0] = transform.m11();
+//    matrix[1] = transform.m12();
+
+//    matrix[4] = transform.m21();
+//    matrix[5] = transform.m22();
+
+//    matrix[12] = transform.m31();
+//    matrix[13] = transform.m32();
+
+//    matrix[3] = transform.m13();
+//    matrix[7] = transform.m23();
+
+//    matrix[15] = transform.m33();
+
+//    glLoadMatrixf(matrix);
+//}
+
+void KisOpenGLCanvas2::drawCheckers()
 {
-    GLfloat matrix[16];
-    memset(matrix, 0, sizeof(GLfloat) * 16);
-
-    matrix[0] = transform.m11();
-    matrix[1] = transform.m12();
-
-    matrix[4] = transform.m21();
-    matrix[5] = transform.m22();
-
-    matrix[12] = transform.m31();
-    matrix[13] = transform.m32();
-
-    matrix[3] = transform.m13();
-    matrix[7] = transform.m23();
-
-    matrix[15] = transform.m33();
-
-    glLoadMatrixf(matrix);
-}
-
-void KisOpenGLCanvas2::drawBackground()
-{
-    KisCoordinatesConverter *converter = coordinatesConverter();
-
-    QTransform textureTransform;
-    QTransform modelTransform;
-    QRectF textureRect;
-    QRectF modelRect;
-    converter->getOpenGLCheckersInfo(&textureTransform, &modelTransform, &textureRect, &modelRect);
-
-    KisConfig cfg;
-    GLfloat checkSizeScale = m_d->openGLImageTextures->checkerTextureSize() / static_cast<GLfloat>(cfg.checkSize());
-
-    textureTransform *= QTransform::fromScale(checkSizeScale / m_d->openGLImageTextures->checkerTextureSize(),
-                                              checkSizeScale / m_d->openGLImageTextures->checkerTextureSize());
-
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glViewport(0, 0, width(), height());
-    glOrtho(0, width(), height(), 0, NEAR_VAL, FAR_VAL);
-
-    glMatrixMode(GL_TEXTURE);
-    glLoadIdentity();
-    loadQTransform(textureTransform);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    loadQTransform(modelTransform);
-
-    glBindTexture(GL_TEXTURE_2D, m_d->openGLImageTextures->checkerTexture());
-    glEnable(GL_TEXTURE_2D);
-    glShadeModel(GL_FLAT);
-
-    glBegin(GL_QUADS);
-    glColor3f(1.0, 1.0, 1.0);
-
-    glTexCoord2f(textureRect.left(), textureRect.top());
-    glVertex2f(modelRect.left(), modelRect.top());
-
-    glTexCoord2f(textureRect.right(), textureRect.top());
-    glVertex2f(modelRect.right(), modelRect.top());
-
-    glTexCoord2f(textureRect.right(), textureRect.bottom());
-    glVertex2f(modelRect.right(), modelRect.bottom());
-
-    glTexCoord2f(textureRect.left(), textureRect.bottom());
-    glVertex2f(modelRect.left(), modelRect.bottom());
-
-    glEnd();
-
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glDisable(GL_TEXTURE_2D);
 }
 
 void KisOpenGLCanvas2::drawImage()
 {
-    setupImageToWidgetTransformation();
-
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -262,8 +220,7 @@ void KisOpenGLCanvas2::drawImage()
     KisCoordinatesConverter *converter = coordinatesConverter();
 
     QRectF widgetRect(0,0, width(), height());
-    QRectF widgetRectInImagePixels = converter->
-            documentToImage(converter->widgetToDocument(widgetRect));
+    QRectF widgetRectInImagePixels = converter->documentToImage(converter->widgetToDocument(widgetRect));
 
     qreal scaleX, scaleY;
     converter->imageScale(&scaleX, &scaleY);
@@ -294,7 +251,7 @@ void KisOpenGLCanvas2::drawImage()
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             }
 
-            tile->drawPoints();
+
         }
     }
 
@@ -310,84 +267,114 @@ void KisOpenGLCanvas2::drawImage()
 
 void KisOpenGLCanvas2::saveGLState()
 {
-    Q_ASSERT(!m_d->GLStateSaved);
+//    Q_ASSERT(!m_d->GLStateSaved);
 
-    if (!m_d->GLStateSaved) {
-        m_d->GLStateSaved = true;
+//    if (!m_d->GLStateSaved) {
+//        m_d->GLStateSaved = true;
 
-        glPushAttrib(GL_ALL_ATTRIB_BITS);
-        glMatrixMode(GL_PROJECTION);
-        glPushMatrix();
-        glMatrixMode(GL_TEXTURE);
-        glPushMatrix();
-        glMatrixMode(GL_MODELVIEW);
-        glPushMatrix();
+//        glPushAttrib(GL_ALL_ATTRIB_BITS);
+//        glMatrixMode(GL_PROJECTION);
+//        glPushMatrix();
+//        glMatrixMode(GL_TEXTURE);
+//        glPushMatrix();
+//        glMatrixMode(GL_MODELVIEW);
+//        glPushMatrix();
 
-        glGetIntegerv(GL_CURRENT_PROGRAM, &m_d->savedCurrentProgram);
-        glUseProgram(NO_PROGRAM);
-    }
+//        glGetIntegerv(GL_CURRENT_PROGRAM, &m_d->savedCurrentProgram);
+//        glUseProgram(NO_PROGRAM);
+//    }
 }
 
 void KisOpenGLCanvas2::restoreGLState()
 {
-    Q_ASSERT(m_d->GLStateSaved);
+//    Q_ASSERT(m_d->GLStateSaved);
 
-    if (m_d->GLStateSaved) {
-        m_d->GLStateSaved = false;
+//    if (m_d->GLStateSaved) {
+//        m_d->GLStateSaved = false;
 
-        glMatrixMode(GL_PROJECTION);
-        glPopMatrix();
-        glMatrixMode(GL_TEXTURE);
-        glPopMatrix();
-        glMatrixMode(GL_MODELVIEW);
-        glPopMatrix();
-        glPopAttrib();
+//        glMatrixMode(GL_PROJECTION);
+//        glPopMatrix();
+//        glMatrixMode(GL_TEXTURE);
+//        glPopMatrix();
+//        glMatrixMode(GL_MODELVIEW);
+//        glPopMatrix();
+//        glPopAttrib();
 
-        glUseProgram(m_d->savedCurrentProgram);
+//        glUseProgram(m_d->savedCurrentProgram);
+    //    }
+}
+
+void KisOpenGLCanvas2::initializeShaders()
+{
+    m_d->displayShader = new QGLShaderProgram();
+    m_d->displayShader->addShaderFromSourceFile(QGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/gl2.vert"));
+    m_d->displayShader->addShaderFromSourceFile(QGLShader::Fragment, addShaderFromSourceFile(QGLShader::Fragment, ":/gl2.frag"));
+
+    bool r = m_d->displayShader->link();
+    if (!r) {
+        qFatal("Failed linking display shader" + glGetError());
     }
+
+    m_d->vertexBuffer = new QGLBuffer(QGLBuffer::VertexBuffer);
+    m_d->vertexBuffer->create();
+    m_d->vertexBuffer->bind();
+
+    QVector<float> vertices;
+    /*
+     *  0.0, 1.0  ---- 1.0, 1.0
+     *     |              |
+     *     |              |
+     *  0.0, 0.0  ---- 1.0, 0.0
+     */
+    vertices << 0.0f << 0.0f << 0.0f;
+    vertices << 0.0f << 1.0f << 0.0f;
+    vertices << 1.0f << 0.0f << 0.0f;
+    vertices << 1.0f << 1.0f << 0.0f;
+    int vertSize = sizeof(float) * vertices.count();
+
+    // coordinates to convert vertex points to a position in the texture. Follows order of corner
+    // points in vertices
+    QVector<float> uvs;
+    uvs << 0.f << 0.f;
+    uvs << 0.f << 1.f;
+    uvs << 1.f << 0.f;
+    uvs << 1.f << 1.f;
+    int uvSize = sizeof(float) * uvs.count();
+
+    m_d->vertexBuffer->allocate(vertSize + uvSize);
+    m_d->vertexBuffer->write(0, reinterpret_cast<void*>(vertices.data()), vertSize);
+    m_d->vertexBuffer->write(vertSize, reinterpret_cast<void*>(uvs.data()), uvSize);
+    m_d->vertexBuffer->release();
+
+    m_d->indexBuffer = new QGLBuffer(QGLBuffer::IndexBuffer);
+    m_d->indexBuffer->create();
+    m_d->indexBuffer->bind();
+
+    QVector<uint> indices;
+    // determines where opengl looks for vertex data. create two clockwise triangles from
+    // the points.
+    /*
+     *  1->-3
+     *  |\  |
+     *  ^ \ v
+     *  |  \|
+     *  0...2
+     */
+    indices << 0 << 1 << 2 << 1 << 3 << 2;
+    m_d->indexBuffer->allocate(reinterpret_cast<void*>(indices.data()), indices.size() * sizeof(uint));
+    m_d->indexBuffer->release();
 }
 
 void KisOpenGLCanvas2::beginOpenGL(void)
 {
-    saveGLState();
+//    saveGLState();
 }
 
 void KisOpenGLCanvas2::endOpenGL(void)
 {
-    restoreGLState();
+//    restoreGLState();
 }
 
-void KisOpenGLCanvas2::setupImageToWidgetTransformation()
-{
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glViewport(0, 0, width(), height());
-    glOrtho(0, width(), height(), 0, NEAR_VAL, FAR_VAL);
-
-    glMatrixMode(GL_TEXTURE);
-    glLoadIdentity();
-
-    glMatrixMode(GL_MODELVIEW);
-
-    QTransform transform = coordinatesConverter()->imageToWidgetTransform();
-    loadQTransform(transform);
-}
-
-void KisOpenGLCanvas2::setupFlakeToWidgetTransformation()
-{
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glViewport(0, 0, width(), height());
-    glOrtho(0, width(), height(), 0, NEAR_VAL, FAR_VAL);
-
-    glMatrixMode(GL_TEXTURE);
-    glLoadIdentity();
-
-    glMatrixMode(GL_MODELVIEW);
-
-    QTransform transform = coordinatesConverter()->flakeToWidgetTransform();
-    loadQTransform(transform);
-}
 
 void KisOpenGLCanvas2::slotConfigChanged()
 {

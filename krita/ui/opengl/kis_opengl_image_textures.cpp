@@ -246,17 +246,17 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
         case GL_UNSIGNED_BYTE:
             dstCS = KoColorSpaceRegistry::instance()->rgb8(m_monitorProfile);
             break;
-#if defined(HAVE_OPENEXR)
         case GL_UNSIGNED_SHORT:
             dstCS = KoColorSpaceRegistry::instance()->rgb16(m_monitorProfile);
             break;
+#if defined(HAVE_OPENEXR)
         case GL_HALF_FLOAT_ARB:
             dstCS = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F16", 0);
             break;
+#endif
         case GL_FLOAT:
             dstCS = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F32", 0);
             break;
-#endif
         default:
             qFatal("Unknown m_imageTextureType");
         }

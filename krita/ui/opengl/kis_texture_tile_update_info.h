@@ -67,12 +67,16 @@ public:
     void convertTo(const KoColorSpace* dstCS,
                    KoColorConversionTransformation::Intent renderingIntent,
                    KoColorConversionTransformation::ConversionFlags conversionFlags) {
+
         const qint32 numPixels = m_patchRect.width() * m_patchRect.height();
         quint8* dstBuffer = dstCS->allocPixelBuffer(numPixels);
+
         // FIXME: rendering intent
         Q_ASSERT(dstBuffer && m_patchPixels);
         m_patchColorSpace->convertPixelsTo(m_patchPixels, dstBuffer, dstCS, numPixels, renderingIntent, conversionFlags);
+
         delete[] m_patchPixels;
+
         m_patchColorSpace = dstCS;
         m_patchPixels = dstBuffer;
     }

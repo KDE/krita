@@ -30,6 +30,9 @@
 #include <QDesktopWidget>
 #include <kundo2command.h>
 #include <QFile>
+#include <QGraphicsPixmapItem>
+#include <QGraphicsScene>
+
 
 #include <kcolorcombo.h>
 #include <kcomponentdata.h>
@@ -63,7 +66,8 @@
 #include "widgets/kis_cmb_idlist.h"
 #include "widgets/squeezedcombobox.h"
 
-KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32 defWidth, qint32 defHeight, bool clipAvailable, double resolution, const QString& defColorModel, const QString& defColorDepth, const QString& defColorProfile, const QString& imageName)
+
+KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32 defWidth, qint32 defHeight, double resolution, const QString& defColorModel, const QString& defColorDepth, const QString& defColorProfile, const QString& imageName)
     : WdgNewImage(parent)
 {
     setObjectName("KisCustomImageWidget");
@@ -87,6 +91,8 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
 
     doubleResolution->setValue(72.0 * resolution);
     doubleResolution->setDecimals(0);
+    
+    grpClipboard->hide();
 
     connect(cmbPredefined, SIGNAL(activated(int)), SLOT(predefinedClicked(int)));
     connect(doubleResolution, SIGNAL(valueChanged(double)),
@@ -107,16 +113,12 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
     bnLandscape->setIcon(koIcon("landscape"));
 
     connect(bnSaveAsPredefined, SIGNAL(clicked()), this, SLOT(saveAsPredefined()));
-    connect(btnFromClipboard, SIGNAL(clicked()), this, SLOT(setClipImage()));
-
-    chkFromClipboard->setEnabled(clipAvailable);
-    btnFromClipboard->setEnabled(clipAvailable);
 
     colorSpaceSelector->setCurrentColorModel(KoID(defColorModel));
     colorSpaceSelector->setCurrentColorDepth(KoID(defColorDepth));
     colorSpaceSelector->setCurrentProfile(defColorProfile);
 
-    connect(chkFromClipboard,SIGNAL(stateChanged(int)),this,SLOT(clipboardDataChanged()));
+    //connect(chkFromClipboard,SIGNAL(stateChanged(int)),this,SLOT(clipboardDataChanged()));
     connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));
     connect(QApplication::clipboard(), SIGNAL(selectionChanged()), this, SLOT(clipboardDataChanged()));
     connect(QApplication::clipboard(), SIGNAL(changed(QClipboard::Mode)), this, SLOT(clipboardDataChanged()));
@@ -124,11 +126,11 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
     connect(bnScreenSize, SIGNAL(clicked()), this, SLOT(screenSizeClicked()));
     connect(colorSpaceSelector, SIGNAL(selectionChanged(bool)), createButton, SLOT(setEnabled(bool)));
 
-    fillPredefined();
+    fillPredefined();   
 }
 
 void KisCustomImageWidget::showEvent(QShowEvent *){
-    this->createButton->setFocus();
+    this->createButton->setFocus(); 
 }
 
 KisCustomImageWidget::~KisCustomImageWidget()
@@ -195,22 +197,14 @@ void KisCustomImageWidget::heightChanged(double value)
     m_height = m_heightUnit.fromUserValue(value);
 }
 
-void KisCustomImageWidget::setClipImage()
+void KisCustomImageWidget::createImage()
 {
-    KisClipboard * cb = KisClipboard::instance();
-    QSize sz = cb->clipSize();
-    if (sz.isValid() && sz.width() != 0 && sz.height() != 0) {
-        doubleWidth->setValue(sz.width());
-        doubleHeight->setValue(sz.height());
-        chkFromClipboard->setChecked(true);
-    }
-    else {
-         chkFromClipboard->setChecked(false);
-         chkFromClipboard->setEnabled(false);
-    }
+    createNewImage();
+
+    emit documentSelected();
 }
 
-void KisCustomImageWidget::createImage()
+void KisCustomImageWidget::createNewImage()
 {
     const KoColorSpace * cs = colorSpaceSelector->currentColorSpace();
 
@@ -240,20 +234,9 @@ void KisCustomImageWidget::createImage()
             painter.fillRect(0, 0, width, height, bgColor, backgroundOpacity());
 
         }
-        if (chkFromClipboard->isChecked()) {
-            KisPaintDeviceSP clip = KisClipboard::instance()->clip(QRect());
-            if (clip) {
-                QRect r = clip->exactBounds();
-                KisPainter painter;
-                painter.begin(layer->paintDevice());
-                painter.setCompositeOp(COMPOSITE_COPY);
-                painter.bitBlt(0, 0, clip, r.x(), r.y(), r.width(), r.height());
-            }
-        }
+       
         layer->setDirty(QRect(0, 0, width, height));
     }
-
-    emit documentSelected();
 }
 
 quint8 KisCustomImageWidget::backgroundOpacity() const
@@ -268,26 +251,6 @@ quint8 KisCustomImageWidget::backgroundOpacity() const
 
 void KisCustomImageWidget::clipboardDataChanged()
 {
-    QClipboard *cb = QApplication::clipboard();
-    QImage qimage = cb->image();
-    const QMimeData *cbData = cb->mimeData();
-    QByteArray mimeType("application/x-krita-selection");
-
-    if ((cbData && cbData->hasFormat(mimeType)) || !qimage.isNull()) {
-        KisClipboard * cb = KisClipboard::instance();
-        QSize sz = cb->clipSize();
-        
-        if (sz.isValid() && sz.width() != 0 && sz.height() != 0) {
-            chkFromClipboard->setEnabled(true);
-            doubleWidth->setValue(doubleWidth->value());
-            doubleHeight->setValue(doubleHeight->value());
-            doubleWidth->setDecimals(0);
-            doubleHeight->setDecimals(0);
-        } else {
-            chkFromClipboard->setChecked(false);
-            chkFromClipboard->setEnabled(false);
-        }
-    }
 }
 
 void KisCustomImageWidget::screenSizeClicked()

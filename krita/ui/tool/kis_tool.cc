@@ -40,7 +40,6 @@
 #include <KoViewConverter.h>
 #include <KoSelection.h>
 #include <KoAbstractGradient.h>
-#include <KoFloatingMessage.h>
 
 #include <opengl/kis_opengl.h>
 
@@ -61,6 +60,7 @@
 #include <kis_pattern.h>
 #include <kis_transaction.h>
 #include <kis_selection.h>
+#include <kis_floating_message.h>
 
 #include "kis_canvas_resource_provider.h"
 #include "canvas/kis_canvas2.h"

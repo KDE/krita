@@ -80,7 +80,6 @@
 #include <KoDocumentEntry.h>
 #include <KoProperties.h>
 #include <KoPart.h>
-#include <KoFloatingMessage.h>
 
 #include <kis_image.h>
 #include <kis_undo_adapter.h>
@@ -120,6 +119,7 @@
 #include "kis_statusbar.h"
 #include "kis_zoom_manager.h"
 #include "kra/kis_kra_loader.h"
+#include "widgets/kis_floating_message.h"
 
 #include <QDebug>
 #include <QPoint>
@@ -1313,16 +1313,15 @@ void KisView2::showJustTheCanvas(bool toggled)
 
     if (toggled) {
         // show a fading heads-up display about the shortcut to go back
-        KoFloatingMessage *floatingMessage = new KoFloatingMessage(i18n("Going into Canvas-Only mode.\nPress %1 to go back.",
-                                                                        actionCollection()->action("view_show_just_the_canvas")->shortcut().toString()), this);
-        floatingMessage->setIcon(koIcon("calligrakrita"));
+        KisFloatingMessage *floatingMessage = new KisFloatingMessage(i18n("Going into Canvas-Only mode.\nPress %1 to go back.",
+                                                                          actionCollection()->action("view_show_just_the_canvas")->shortcut().toString()), this);
         floatingMessage->showMessage();
     }
 }
 
 void KisView2::showFloatingMessage(const QString message, const QIcon& icon)
 {
-    KoFloatingMessage *floatingMessage = new KoFloatingMessage(message, mainWindow()->centralWidget());
+    KisFloatingMessage *floatingMessage = new KisFloatingMessage(message, mainWindow()->centralWidget());
     floatingMessage->setShowOverParent(true);
     floatingMessage->setIcon(icon);
     floatingMessage->showMessage();

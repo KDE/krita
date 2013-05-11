@@ -49,7 +49,7 @@
 #include <kis_canvas2.h>
 #include <kis_view2.h>
 #include <KoZoomController.h>
-#include <KoFloatingMessage.h>
+#include <kis_floating_message.h>
 #include <kis_group_layer.h>
 
 KisToolCrop::KisToolCrop(KoCanvasBase * canvas)

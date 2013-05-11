@@ -1,5 +1,5 @@
 /*
- *  This file is part of KimageShop^WKrayon^WKrita
+ *  This file is part of the KDE project
  *
  *  Copyright (c) 2012 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2004 Christian Muehlhaeuser <chris@chris.de>
@@ -22,7 +22,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "kis_floating_message.h"
+#include "KoFloatingMessage.h"
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -35,7 +35,6 @@
 #include <kwindowsystem.h>
 
 #include <KoIcon.h>
-#include <kis_debug.h>
 
 /* Code copied from kshadowengine.cpp
  *
@@ -122,12 +121,29 @@ namespace ShadowEngine
 
 #define OSD_WINDOW_OPACITY 0.74
 
-KisFloatingMessage::KisFloatingMessage(const QString &message, QWidget *parent, bool showOverParent)
-    : QWidget(parent)
-    , m_message(message)
-    , m_showOverParent(showOverParent)
+class KoFloatingMessage::Private
 {
-    m_icon = koIcon("calligrakrita").pixmap(256, 256).toImage();
+public:
+    Private(const QString &message, bool showOverParent)
+        :   message(message)
+        ,   showOverParent(showOverParent)
+    {
+    }
+
+    QString message;
+    QImage icon;
+    QPixmap scaledIcon;
+    QTimer timer;
+    int m;
+    QTimeLine fadeTimeLine;
+    bool showOverParent;
+};
+
+KoFloatingMessage::KoFloatingMessage(const QString &message, QWidget *parent, bool showOverParent)
+    : QWidget(parent)
+    , d(new Private(message, showOverParent))
+{
+    d->icon = koIcon("dialog-information").pixmap(256, 256).toImage();
 
     setWindowFlags(Qt::FramelessWindowHint | Qt::Tool);
     setFocusPolicy(Qt::NoFocus);
@@ -139,60 +155,65 @@ KisFloatingMessage::KisFloatingMessage(const QString &message, QWidget *parent, 
     KWindowSystem::setType( winId(), NET::Notification );
     #endif
 
-    m_timer.setSingleShot( true );
-    connect(&m_timer, SIGNAL(timeout()), SLOT(startFade()));
+    d->timer.setSingleShot( true );
+    connect(&d->timer, SIGNAL(timeout()), SLOT(startFade()));
 }
 
-void KisFloatingMessage::showMessage()
+KoFloatingMessage::~KoFloatingMessage()
+{
+    delete d;
+}
+
+void KoFloatingMessage::showMessage()
 {
     setGeometry(determineMetrics(fontMetrics().width('x')));
     setWindowOpacity(OSD_WINDOW_OPACITY);
 
     QWidget::setVisible(true);
-    m_timer.start(4500);
+    d->timer.start(4500);
 }
 
-void KisFloatingMessage::setShowOverParent(bool show)
+void KoFloatingMessage::setShowOverParent(bool show)
 {
-    m_showOverParent = show;
+    d->showOverParent = show;
 }
 
-void KisFloatingMessage::setIcon(const QIcon& icon)
+void KoFloatingMessage::setIcon(const QIcon& icon)
 {
-    m_icon = icon.pixmap(256, 256).toImage();
+    d->icon = icon.pixmap(256, 256).toImage();
 }
 
 const int MARGIN = 20;
 
-QRect KisFloatingMessage::determineMetrics( const int M )
+QRect KoFloatingMessage::determineMetrics( const int M )
 {
-    m_m = M;
+    d->m = M;
 
-    const QSize minImageSize = m_icon.size().boundedTo(QSize(100, 100));
+    const QSize minImageSize = d->icon.size().boundedTo(QSize(100, 100));
 
     // determine a sensible maximum size, don't cover the whole desktop or cross the screen
     const QSize margin( (M + MARGIN) * 2, (M + MARGIN) * 2); //margins
-    const QSize image = m_icon.isNull() ? QSize(0, 0) : minImageSize;
+    const QSize image = d->icon.isNull() ? QSize(0, 0) : minImageSize;
     const QSize max = QApplication::desktop()->availableGeometry(parentWidget()).size() - margin;
 
     // If we don't do that, the boundingRect() might not be suitable for drawText() (Qt issue N67674)
-    m_message.replace(QRegExp( " +\n"), "\n");
+    d->message.replace(QRegExp( " +\n"), "\n");
     // remove consecutive line breaks
-    m_message.replace(QRegExp( "\n+"), "\n");
+    d->message.replace(QRegExp( "\n+"), "\n");
 
     // The osd cannot be larger than the screen
     QRect rect = fontMetrics().boundingRect(0, 0, max.width() - image.width(), max.height(),
-            Qt::AlignCenter | Qt::TextWordWrap, m_message);
+            Qt::AlignCenter | Qt::TextWordWrap, d->message);
     rect.setHeight(rect.height() + M + M);
 
-    if (!m_icon.isNull()) {
+    if (!d->icon.isNull()) {
         const int availableWidth = max.width() - rect.width() - M; //WILL be >= (minImageSize.width() - M)
 
-        m_scaledIcon = QPixmap::fromImage(m_icon.scaled(qMin(availableWidth, m_icon.width()),
-                                                        qMin( rect.height(), m_icon.height()),
+        d->scaledIcon = QPixmap::fromImage(d->icon.scaled(qMin(availableWidth, d->icon.width()),
+                                                        qMin( rect.height(), d->icon.height()),
                                                         Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
-        const int widthIncludingImage = rect.width() + m_scaledIcon.width() + M; //margin between text + image
+        const int widthIncludingImage = rect.width() + d->scaledIcon.width() + M; //margin between text + image
         rect.setWidth( widthIncludingImage );
     }
 
@@ -201,7 +222,7 @@ QRect KisFloatingMessage::determineMetrics( const int M )
 
     const QSize newSize = rect.size();
     QRect screen = QApplication::desktop()->screenGeometry(parentWidget());
-    if (parentWidget() && m_showOverParent) {
+    if (parentWidget() && d->showOverParent) {
         screen = parentWidget()->geometry();
         screen.setTopLeft(parentWidget()->mapToGlobal(QPoint(0, 0)));
     }
@@ -227,9 +248,9 @@ QRect KisFloatingMessage::determineMetrics( const int M )
     return rc;
 }
 
-void KisFloatingMessage::paintEvent( QPaintEvent *e )
+void KoFloatingMessage::paintEvent( QPaintEvent *e )
 {
-    const int& M = m_m;
+    const int& M = d->m;
 
     QPoint point;
     QRect rect(point, size());
@@ -247,12 +268,12 @@ void KisFloatingMessage::paintEvent( QPaintEvent *e )
     p.setPen(Qt::white);
     rect.adjust(M, M, -M, -M);
 
-    if (!m_icon.isNull()) {
+    if (!d->icon.isNull()) {
         QRect r(rect);
-        r.setTop((size().height() - m_scaledIcon.height() ) / 2);
-        r.setSize(m_scaledIcon.size());
-        p.drawPixmap(r.topLeft(), m_scaledIcon);
-        rect.setLeft(rect.left() + m_scaledIcon.width() + M);
+        r.setTop((size().height() - d->scaledIcon.height() ) / 2);
+        r.setSize(d->scaledIcon.size());
+        p.drawPixmap(r.topLeft(), d->scaledIcon);
+        rect.setLeft(rect.left() + d->scaledIcon.width() + M);
     }
 
     int graphicsHeight = 0;
@@ -267,7 +288,7 @@ void KisFloatingMessage::paintEvent( QPaintEvent *e )
     p2.setFont(font());
     p2.setPen(Qt::white);
     p2.setBrush(Qt::white);
-    p2.drawText(QRect( QPoint( 5, 5 ), rect.size() ), align, m_message);
+    p2.drawText(QRect( QPoint( 5, 5 ), rect.size() ), align, d->message);
     p2.end();
 
     QColor shadowColor;
@@ -279,28 +300,29 @@ void KisFloatingMessage::paintEvent( QPaintEvent *e )
     p.drawImage(rect.topLeft() - QPoint(5, 5), ShadowEngine::makeShadow(pixmap, shadowColor));
 
     p.setPen( palette().color(QPalette::Active, QPalette::WindowText ));
-    p.drawText(rect, align, m_message);
+    p.drawText(rect, align, d->message);
 }
 
-void KisFloatingMessage::startFade()
+void KoFloatingMessage::startFade()
 {
-    m_fadeTimeLine.setDuration(250);
-    m_fadeTimeLine.setCurveShape(QTimeLine::EaseInCurve);
-    m_fadeTimeLine.setLoopCount(1);
-    m_fadeTimeLine.setFrameRange(OSD_WINDOW_OPACITY, 0);
-    m_fadeTimeLine.setFrameRange(0, 10);
-    connect(&m_fadeTimeLine, SIGNAL(finished()), SLOT(removeMessage()));
-    connect(&m_fadeTimeLine, SIGNAL(frameChanged(int)), SLOT(updateOpacity(int)));
-    m_fadeTimeLine.start();
+    d->fadeTimeLine.setDuration(250);
+    d->fadeTimeLine.setCurveShape(QTimeLine::EaseInCurve);
+    d->fadeTimeLine.setLoopCount(1);
+    d->fadeTimeLine.setFrameRange(OSD_WINDOW_OPACITY, 0);
+    d->fadeTimeLine.setFrameRange(0, 10);
+    connect(&d->fadeTimeLine, SIGNAL(finished()), SLOT(removeMessage()));
+    connect(&d->fadeTimeLine, SIGNAL(frameChanged(int)), SLOT(updateOpacity(int)));
+    d->fadeTimeLine.start();
 }
 
-void KisFloatingMessage::removeMessage()
+void KoFloatingMessage::removeMessage()
 {
     hide();
     deleteLater();
 }
 
-void KisFloatingMessage::updateOpacity(int value)
+void KoFloatingMessage::updateOpacity(int value)
 {
+    Q_UNUSED(value);
     setWindowOpacity(OSD_WINDOW_OPACITY - 0.1);
 }

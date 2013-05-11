@@ -1,5 +1,5 @@
 /*
- *  This file is part of KimageShop^WKrayon^WKrita
+ *  This file is part of the KDE project
  *
  *  Copyright (c) 2012 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2004 Christian Muehlhaeuser <chris@chris.de>
@@ -22,8 +22,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_FLOATING_MESSAGE_H
-#define KIS_FLOATING_MESSAGE_H
+#ifndef KOFLOATINGMESSAGE_H
+#define KOFLOATINGMESSAGE_H
 
 #include <QWidget>
 #include <QString>
@@ -31,27 +31,31 @@
 #include <QTimer>
 #include <QTimeLine>
 
-#include <krita_export.h>
+#include "kowidgets_export.h"
 
 /**
- * @brief The KisFloatingMessage class shows the given message in a semi-transparent
+ * @brief The KoFloatingMessage class shows the given message in a semi-transparent
  * bubble that doesn' take focus and slowly fades away.
  *
  * Heavily based on Amarok's Osd.cpp
  */
-class KRITAUI_EXPORT KisFloatingMessage : public QWidget
+class KOWIDGETS_EXPORT KoFloatingMessage : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    explicit KisFloatingMessage(const QString &message, QWidget *parent, bool showOverParent = false);
+    explicit KoFloatingMessage(const QString &message, QWidget *parent, bool showOverParent = false);
+    ~KoFloatingMessage();
     void showMessage();
 
     /// Show message above parent widget instead of screen
     void setShowOverParent(bool show);
 
     void setIcon(const QIcon& icon);
+private:
+    QRect determineMetrics( const int M );
+
 protected:
 
     void paintEvent(QPaintEvent *e);
@@ -63,15 +67,8 @@ private slots:
     void updateOpacity(int value);
 private:
 
-    QRect determineMetrics(const int M);
-
-    QString m_message;
-    QImage m_icon;
-    QPixmap m_scaledIcon;
-    QTimer m_timer;
-    int m_m;
-    QTimeLine m_fadeTimeLine;
-    bool m_showOverParent;
+    class Private;
+    Private *const d;
 };
 
-#endif // KIS_FLOATING_MESSAGE_H
+#endif // KOFLOATINGMESSAGE_H

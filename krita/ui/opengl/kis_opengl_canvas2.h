@@ -90,7 +90,6 @@ protected:
 
     void resizeGL(int width, int height);
     void initializeGL();
-//    void paintGL();
 
 public: // KisAbstractCanvasWidget
 
@@ -105,7 +104,7 @@ private:
     struct Private;
     Private * const m_d;
 
-    void loadQTransform(QTransform transform);
+//    void loadQTransform(QTransform transform);
 
     void drawImage();
     void drawCheckers();

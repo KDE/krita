@@ -161,21 +161,6 @@ void KisOpenGLCanvas2::resizeGL(int width, int height)
     coordinatesConverter()->setCanvasWidgetSize(QSize(width, height));
 }
 
-//void KisOpenGLCanvas2::paintGL()
-//{
-//    QColor widgetBackgroundColor = borderColor();
-//    glClearColor(widgetBackgroundColor.redF(), widgetBackgroundColor.greenF(), widgetBackgroundColor.blueF(), 1.0);
-//    glClear(GL_COLOR_BUFFER_BIT);
-//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-//    Q_ASSERT(canvas()->image());
-
-//    if (canvas()->image()) {
-//        drawCheckers();
-//        drawImage();
-//    }
-//}
-
 void KisOpenGLCanvas2::paintEvent(QPaintEvent *)
 {
     // Draw the border (that is, clear the whole widget to the border color)
@@ -226,13 +211,26 @@ void KisOpenGLCanvas2::paintEvent(QPaintEvent *)
 
 void KisOpenGLCanvas2::drawCheckers()
 {
+    KisCoordinatesConverter *converter = coordinatesConverter();
+
+    QTransform textureTransform;
+    QTransform modelTransform;
+    QRectF textureRect;
+    QRectF modelRect;
+    converter->getOpenGLCheckersInfo(&textureTransform, &modelTransform, &textureRect, &modelRect);
+
+    qDebug() << "textureTransform" << textureTransform
+             << "modelTransform" << modelTransform
+             << "textureRect" << textureRect
+             << "modelRect" << modelRect;
+
     m_d->displayShader->bind();
 
-    QMatrix4x4 model;
+    QMatrix4x4 model;//(modelTransform);
     m_d->displayShader->setUniformValue("modelMatrix", model);
 
     //Set view/projection matrices
-    QMatrix4x4 view;
+    QMatrix4x4 view;//(textureTransform);
     m_d->displayShader->setUniformValue("viewMatrix", view);
 
     QMatrix4x4 proj;

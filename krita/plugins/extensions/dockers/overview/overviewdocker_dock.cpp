@@ -71,9 +71,10 @@ void OverviewDockerDock::kickTimer()
 void OverviewDockerDock::startUpdateCanvasProjection()
 {
     if (!m_canvas) return;
-    QImage img = m_canvas->image()->projection()->createThumbnail(m_preview->width() -5, m_preview->height() -5);
-    img = img.scaled(m_preview->width() - 5, m_preview->height() -5, Qt::KeepAspectRatio);
 
+    QSize sz(m_canvas->image()->bounds().size());
+    sz.scale(m_preview->width() -5, m_preview->height() -5, Qt::KeepAspectRatio);
+    QImage img = m_canvas->image()->projection()->createThumbnail(sz.width(), sz.height());
     m_preview->setPixmap(QPixmap::fromImage(img));
 }
 

@@ -172,8 +172,6 @@ KisDoc2::~KisDoc2()
     m_d->image.clear();
 
     delete m_d;
-
-    documentPart()->deleteLater();
 }
 
 QByteArray KisDoc2::mimeType() const

@@ -445,7 +445,6 @@ KoMainWindow::~KoMainWindow()
     if (d->rootPart && d->rootPart->viewCount() == 0) {
         //kDebug(30003) <<"Destructor. No more views, deleting old doc" << d->rootDoc;
         delete d->rootDocument;
-        delete d->rootPart;
     }
 
     delete d->manager;

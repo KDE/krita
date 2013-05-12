@@ -101,6 +101,7 @@ calligra_define_product(SHEETS_PART "Sheets engine"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(SHEETS_APP "Sheets executable (for Desktop)"  NEEDS SHEETS_PART)
 calligra_define_product(AUTHOR_APP "Full Author (for Desktop)"  NEEDS WORDS_PART)
 calligra_define_product(KARBON_APP "Full Karbon (for Desktop)"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(KRITA_APP "Full Krita (for Desktop)"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(KEXI_APP "Full Kexi (for Desktop)"  NEEDS CALLIGRA_LIBS LIB_KOREPORT LIB_CALLIGRADB)
 calligra_define_product(FLOW_APP "Full Flow (for Desktop)"  NEEDS CALLIGRA_LIBS LIB_KOPAGEAPP)
 calligra_define_product(PLAN_APP "Full Plan (for Desktop)"  NEEDS CALLIGRA_LIBS LIB_KOREPORT LIB_KDCHART LIB_KDGANTT)
@@ -205,7 +206,7 @@ calligra_define_product(STAGE "Full Stage (for Desktop)"  NEEDS STAGE_APP  WANTS
 calligra_define_product(SHEETS "Full Sheets (for Desktop)"  NEEDS SHEETS_APP  WANTS FILTER_SHEETS)
 calligra_define_product(AUTHOR "Full Author (for Desktop)"  NEEDS AUTHOR_APP  WANTS FILTER_WORDS)
 calligra_define_product(KARBON "Full Karbon (for Desktop)"  NEEDS KARBON_APP  WANTS FILTER_KARBON)
-calligra_define_product(KRITA "Full Krita (for Desktop)"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(KRITA "Full Krita (for Desktop)"  NEEDS KRITA_APP)
 calligra_define_product(KEXI "Full Kexi (for Desktop)"  NEEDS KEXI_APP  WANTS PLUGIN_KEXI_SPREADSHEETMIGRATION PLUGIN_REPORTING)
 calligra_define_product(FLOW "Full Flow (for Desktop)"  NEEDS FLOW_APP  WANTS FILTER_FLOW)
 calligra_define_product(PLAN "Full Plan (for Desktop)"  NEEDS PLAN_APP  WANTS FILTER_PLAN)
@@ -803,7 +804,7 @@ endif(NOT EIGEN2_FOUND)
 
 ### Krita: pigment, eigen2, exiv2, sharedmimeinfo
 if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
-   set(SHOULD_BUILD_KRITA FALSE)
+   set(SHOULD_BUILD_KRITA_APP FALSE)
 endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
 
 
@@ -909,9 +910,9 @@ endif(SHOULD_BUILD_PLAN_APP)
 
 add_subdirectory(sheets)
 
-if(SHOULD_BUILD_KRITA)
+if(SHOULD_BUILD_KRITA_APP)
   add_subdirectory(krita)
-endif(SHOULD_BUILD_KRITA)
+endif(SHOULD_BUILD_KRITA_APP)
 
 if(SHOULD_BUILD_KARBON_APP)
   add_subdirectory(karbon)

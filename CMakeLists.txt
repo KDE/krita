@@ -206,7 +206,7 @@ calligra_define_product(SHEETS "Full Sheets (for Desktop)"  NEEDS SHEETS_APP  WA
 calligra_define_product(AUTHOR "Full Author (for Desktop)"  NEEDS AUTHOR_APP  WANTS FILTER_WORDS)
 calligra_define_product(KARBON "Full Karbon (for Desktop)"  NEEDS KARBON_APP  WANTS FILTER_KARBON)
 calligra_define_product(KRITA "Full Krita (for Desktop)"  NEEDS CALLIGRA_LIBS)
-calligra_define_product(KEXI "Full Kexi (for Desktop)"  NEEDS KEXI_APP  WANTS PLUGIN_KEXI_SPREADSHEETMIGRATION)
+calligra_define_product(KEXI "Full Kexi (for Desktop)"  NEEDS KEXI_APP  WANTS PLUGIN_KEXI_SPREADSHEETMIGRATION PLUGIN_REPORTING)
 calligra_define_product(FLOW "Full Flow (for Desktop)"  NEEDS FLOW_APP  WANTS FILTER_FLOW)
 calligra_define_product(PLAN "Full Plan (for Desktop)"  NEEDS PLAN_APP  WANTS FILTER_PLAN)
 calligra_define_product(BRAINDUMP "Full Braindump (for Desktop)"  NEEDS BRAINDUMP_APP)
@@ -821,7 +821,7 @@ endif(NOT QT_QTDECLARATIVE_FOUND OR NOT KDECLARATIVE_FOUND)
 #endif(NOT QIMAGEBLITZ_FOUND)
 
 if (NOT QT3SUPPORT)
-    set (SHOULD_BUILD_KEXI FALSE)
+    set (SHOULD_BUILD_KEXI_APP FALSE)
 endif (NOT QT3SUPPORT)
 
 if(NOT OKULAR_FOUND)

@@ -871,6 +871,22 @@ if(WIN32)
 endif()
 
 #############################################
+####  Backward compatibility BUILD_x=off ####
+#############################################
+
+# workaround: disable directly all products which might be activated by internal
+# dependencies, but belong to scope of old flag
+calligra_drop_products_on_old_flag(braindump BRAINDUMP_APP)
+calligra_drop_products_on_old_flag(flow FLOW_APP)
+calligra_drop_products_on_old_flag(karbon KARBON_APP)
+calligra_drop_products_on_old_flag(kexi KEXI_APP)
+calligra_drop_products_on_old_flag(krita KRITA_APP)
+calligra_drop_products_on_old_flag(plan  PLAN_APP)
+calligra_drop_products_on_old_flag(sheets SHEETS_PART SHEETS_APP)
+calligra_drop_products_on_old_flag(stage  STAGE_PART STAGE_APP)
+calligra_drop_products_on_old_flag(words  WORDS_PART WORDS_APP)
+
+#############################################
 ####      Temporarily broken products    ####
 #############################################
 

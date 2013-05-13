@@ -76,7 +76,7 @@ KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texture
                  m_texturesInfo->format,
                  m_texturesInfo->width,
                  m_texturesInfo->height, 0,
-                 GL_BGRA, GL_UNSIGNED_BYTE, fillData);
+                 GL_BGRA, m_texturesInfo->type, fillData);
 }
 
 KisTextureTile::~KisTextureTile() {

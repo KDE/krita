@@ -173,7 +173,7 @@ void KisOpenGLCanvas2::paintEvent(QPaintEvent *)
 
     if (canvas()->image()) {
         drawCheckers();
-        //drawImage();
+        drawImage();
         restoreGLState();
 
         QRect boundingRect = coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect();
@@ -219,11 +219,12 @@ void KisOpenGLCanvas2::drawCheckers()
     QRectF modelRect;
     converter->getOpenGLCheckersInfo(&textureTransform, &modelTransform, &textureRect, &modelRect);
 
-    qDebug() << "textureTransform" << textureTransform
-             << "modelTransform" << modelTransform
-             << "textureRect" << textureRect
-             << "modelRect" << modelRect;
+//    qDebug() << "textureTransform" << textureTransform
+//             << "modelTransform" << modelTransform
+//             << "textureRect" << textureRect
+//             << "modelRect" << modelRect;
 
+    // Should be shader without color correction
     m_d->displayShader->bind();
 
     QMatrix4x4 model;//(modelTransform);
@@ -275,6 +276,33 @@ void KisOpenGLCanvas2::drawImage()
     QRect wr = widgetRectInImagePixels.toAlignedRect() &
             m_d->openGLImageTextures->storedImageBounds();
 
+
+    // should be a shader with color correction
+    m_d->displayShader->bind();
+
+    QVector3D imageSize(m_d->openGLImageTextures->storedImageBounds().width(),
+                        m_d->openGLImageTextures->storedImageBounds().height(),
+                        0.f);
+
+    QMatrix4x4 model;//(modelTransform);
+    m_d->displayShader->setUniformValue("modelMatrix", model);
+    model.scale(imageSize * scaleX);
+
+    //Set view/projection matrices
+    QMatrix4x4 view;//(textureTransform);
+    m_d->displayShader->setUniformValue("viewMatrix", view);
+
+
+    //Setup the geometry for rendering
+    m_d->vertexBuffer->bind();
+    m_d->indexBuffer->bind();
+
+    m_d->displayShader->setAttributeBuffer("vertex", GL_FLOAT, 0, 3);
+    m_d->displayShader->enableAttributeArray("vertex");
+    m_d->displayShader->setAttributeBuffer("uv0", GL_FLOAT, 12 * sizeof(float), 2);
+    m_d->displayShader->enableAttributeArray("uv0");
+    m_d->displayShader->setUniformValue("texture0", 0);
+
 //    m_d->openGLImageTextures->activateHDRExposureProgram();
 
     makeCurrent();
@@ -284,11 +312,16 @@ void KisOpenGLCanvas2::drawImage()
     int firstRow = m_d->openGLImageTextures->yToRow(wr.top());
     int lastRow = m_d->openGLImageTextures->yToRow(wr.bottom());
 
+    QMatrix4x4 proj;
+    proj.ortho(0, width(), 0, height(), -10, 10);
+    m_d->displayShader->setUniformValue("projectionMatrix", proj);
+
     for (int col = firstColumn; col <= lastColumn; col++) {
         for (int row = firstRow; row <= lastRow; row++) {
 
             KisTextureTile *tile =
                     m_d->openGLImageTextures->getTextureTileCR(col, row);
+
 
             glBindTexture(GL_TEXTURE_2D, tile->textureId());
 
@@ -298,6 +331,7 @@ void KisOpenGLCanvas2::drawImage()
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             }
 
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         }
     }

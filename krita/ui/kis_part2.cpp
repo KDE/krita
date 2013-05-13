@@ -145,7 +145,7 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
                                                qobject_cast<KisDoc2*>(document()), w, h, cfg.defImageResolution(), cfg.defColorModel(), cfg.defColorDepth(), cfg.defColorProfile(),
                                                i18n("unnamed"));
 
-        item.title = "New image from clipboard";
+        item.title = i18n("Create from Clipboard");
         item.icon = "klipper";
 
         widgetList << item;

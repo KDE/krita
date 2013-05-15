@@ -603,8 +603,8 @@ QWidget* KisTool::createOptionWidget()
 void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
 {
     //KisToolSelectMagnetic uses custom painting, so don't forget to update that as well
-    if (m_outlinePaintMode==XOR_MODE) {
-        painter->setCompositionMode(QPainter::RasterOp_SourceXorDestination);
+    if (m_outlinePaintMode == XOR_MODE) {
+        painter->setCompositionMode(QPainter::CompositionMode_Xor);//QPainter::RasterOp_SourceXorDestination);
         painter->setPen(QColor(128, 255, 128));
         painter->drawPath(path);
     }

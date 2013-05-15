@@ -41,12 +41,6 @@
 #include <KoSelection.h>
 #include <KoAbstractGradient.h>
 
-#include <opengl/kis_opengl.h>
-
-#ifdef HAVE_OPENGL
-#include <opengl/kis_opengl_canvas2.h>
-#endif
-
 #include <kis_view2.h>
 #include <kis_selection.h>
 #include <kis_image.h>
@@ -609,38 +603,7 @@ QWidget* KisTool::createOptionWidget()
 void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
 {
     //KisToolSelectMagnetic uses custom painting, so don't forget to update that as well
-    KisConfig cfg;
-    bool useWorkaround = cfg.useOpenGLToolOutlineWorkaround();
-#if defined(HAVE_OPENGL)
-
-    if (m_outlinePaintMode==XOR_MODE && isCanvasOpenGL() && !useWorkaround) {
-        beginOpenGL();
-
-        glEnable(GL_LINE_SMOOTH);
-        glEnable(GL_COLOR_LOGIC_OP);
-        glLogicOp(GL_XOR);
-        glColor3f(0.501961f, 1.0f, 0.501961f);
-
-        QList<QPolygonF> subPathPolygons = path.toSubpathPolygons();
-        for(int i=0; i<subPathPolygons.size(); i++) {
-            const QPolygonF& polygon = subPathPolygons.at(i);
-
-            glBegin(GL_LINE_STRIP);
-            for(int j=0; j<polygon.count(); j++) {
-                QPointF p = polygon.at(j);
-                glVertex2f(p.x(), p.y());
-            }
-            glEnd();
-        }
-
-        glDisable(GL_COLOR_LOGIC_OP);
-        glDisable(GL_LINE_SMOOTH);
-
-        endOpenGL();
-    }
-    else
-#endif
-    if (m_outlinePaintMode==XOR_MODE && !(isCanvasOpenGL() && useWorkaround)) {
+    if (m_outlinePaintMode==XOR_MODE) {
         painter->setCompositionMode(QPainter::RasterOp_SourceXorDestination);
         painter->setPen(QColor(128, 255, 128));
         painter->drawPath(path);
@@ -701,35 +664,6 @@ void KisTool::slotResetFgBg()
     resourceManager->setBackgroundColor(KoColor(Qt::white, KoColorSpaceRegistry::instance()->rgb8()));
 }
 
-bool KisTool::isCanvasOpenGL() const
-{
-    return canvas()->canvasIsOpenGL();
-}
-
-void KisTool::beginOpenGL()
-{
-#if defined(HAVE_OPENGL)
-    KisOpenGLCanvas2 *canvasWidget = dynamic_cast<KisOpenGLCanvas2 *>(canvas()->canvasWidget());
-    Q_ASSERT(canvasWidget);
-
-    if (canvasWidget) {
-        canvasWidget->beginOpenGL();
-        //canvasWidget->setupFlakeToWidgetTransformation();
-    }
-#endif
-}
-
-void KisTool::endOpenGL()
-{
-#if defined(HAVE_OPENGL)
-    KisOpenGLCanvas2 *canvasWidget = dynamic_cast<KisOpenGLCanvas2 *>(canvas()->canvasWidget());
-    Q_ASSERT(canvasWidget);
-
-    if (canvasWidget) {
-        canvasWidget->endOpenGL();
-    }
-#endif
-}
 
 void KisTool::setCurrentNodeLocked(bool locked)
 {

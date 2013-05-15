@@ -50,7 +50,6 @@
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 
-#include <opengl/kis_opengl.h>
 #include <kis_types.h>
 #include <kis_global.h>
 #include <kis_image.h>

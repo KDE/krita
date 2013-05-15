@@ -35,10 +35,6 @@
 #include <flake/kis_node_shape.h>
 #include <KoIcon.h>
 
-#include <opengl/kis_opengl.h>
-
-class KisOpenGLGradientProgram;
-
 class KDoubleNumInput;
 
 
@@ -72,11 +68,6 @@ public slots:
     void slotSetReverse(bool);
     void slotSetAntiAliasThreshold(qreal);
 
-#if defined(HAVE_OPENGL)
-    void slotSetPreviewOpacity(qreal value);
-    void slotConfigChanged();
-#endif
-
 private slots:
 
     void areaDone(const QRect & rc) {
@@ -107,12 +98,6 @@ private:
     QLabel *m_lbAntiAliasThreshold;
     KisDoubleSliderSpinBox *m_slAntiAliasThreshold;
 
-#if defined(HAVE_OPENGL)
-    KisOpenGLGradientProgram *m_gradientProgram;
-    int m_previewOpacityPercent;
-    QLabel *m_lbPreviewOpacity;
-    KisDoubleSliderSpinBox *m_slPreviewOpacity;
-#endif
 };
 
 class KisToolGradientFactory : public KoToolFactoryBase

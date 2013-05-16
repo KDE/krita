@@ -84,16 +84,16 @@ public:
     KisDisplayFilter *displayFilter() const;
 
     /**
-     * The background texture.
+     * The background checkers texture.
      */
+    static const int BACKGROUND_TEXTURE_CHECK_SIZE = 32;
+    static const int BACKGROUND_TEXTURE_SIZE = BACKGROUND_TEXTURE_CHECK_SIZE * 2;
     /**
      * Generate a background texture from the given QImage. This is used for the checker
      * pattern on which the image is rendered.
      */
     void generateCheckerTexture(const QImage & checkImage);
-
     GLuint checkerTexture() const;
-    qreal checkerTextureSize() const;
 
 public:
     inline QRect storedImageBounds() {
@@ -151,7 +151,6 @@ private:
     KoColorConversionTransformation::Intent m_renderingIntent;
     KoColorConversionTransformation::ConversionFlags m_conversionFlags;
     GLuint m_checkerTexture;
-    qreal m_checkerSize;
 
     KisGLTexturesInfo m_texturesInfo;
     int m_numCols;

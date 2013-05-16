@@ -104,8 +104,6 @@ private:
     struct Private;
     Private * const m_d;
 
-//    void loadQTransform(QTransform transform);
-
     void drawImage();
     void drawCheckers();
 

@@ -76,6 +76,7 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
 
     getTextureSize(&m_texturesInfo);
 
+    glGenTextures(1, &m_checkerTexture);
     createImageTextureTiles();
 
     KisOpenGLUpdateInfoSP info = updateCache(m_image->bounds());
@@ -274,27 +275,26 @@ void KisOpenGLImageTextures::generateCheckerTexture(const QImage &checkImage)
 {
     KisOpenGL::makeContextCurrent();
 
-    if(m_checkerTexture != 0) {
-        glDeleteTextures(1, &m_checkerTexture);
-    }
+    glBindTexture(GL_TEXTURE_2D, m_checkerTexture);
 
-    m_checkerTexture = KisOpenGL::sharedContext()->bindTexture(checkImage);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glBindTexture(GL_TEXTURE_2D, 0);
 
-    m_checkerSize = checkImage.width();
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+    Q_ASSERT(checkImage.width() == BACKGROUND_TEXTURE_SIZE);
+    Q_ASSERT(checkImage.height() == BACKGROUND_TEXTURE_SIZE);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, BACKGROUND_TEXTURE_SIZE, BACKGROUND_TEXTURE_SIZE,
+                 0, GL_BGRA, GL_UNSIGNED_BYTE, checkImage.bits());
 
 }
 
 GLuint KisOpenGLImageTextures::checkerTexture() const
 {
     return m_checkerTexture;
-}
-
-qreal KisOpenGLImageTextures::checkerTextureSize() const
-{
-    return m_checkerSize;
 }
 
 void KisOpenGLImageTextures::slotImageSizeChanged(qint32 /*w*/, qint32 /*h*/)
@@ -318,7 +318,7 @@ void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProf
 void KisOpenGLImageTextures::getTextureSize(KisGLTexturesInfo *texturesInfo)
 {
     // TODO: make configurable
-    const GLint preferredTextureSize = 256;
+    const GLint preferredTextureSize = 1024;
 
     GLint maxTextureSize;
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
@@ -331,6 +331,7 @@ void KisOpenGLImageTextures::getTextureSize(KisGLTexturesInfo *texturesInfo)
     texturesInfo->effectiveWidth = texturesInfo->width - 2 * texturesInfo->border;
     texturesInfo->effectiveHeight = texturesInfo->height - 2 * texturesInfo->border;
 }
+
 void KisOpenGLImageTextures::updateTextureFormat()
 {
     m_texturesInfo.format = GL_RGBA8;
@@ -341,7 +342,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
 
     const char *extensionString = reinterpret_cast<const char *>(glGetString(GL_EXTENSIONS));
     QStringList extensions(QString::fromAscii(extensionString).split(" "));
-    qDebug() << extensions;
+    //qDebug() << extensions;
 
     bool ARB_texture_float = extensions.contains("GL_ARB_texture_float");
     bool ATI_texture_float =  extensions.contains("GL_ATI_texture_float");

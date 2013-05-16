@@ -56,22 +56,6 @@ public:
 
     virtual ~KisOpenGLCanvas2();
 
-    /**
-     * Prepare the canvas for rendering using native OpenGL
-     * commands. This sets the projection and model view matrices so
-     * that primitives can be rendered using coordinates returned
-     * from pixelToView().
-     */
-    void beginOpenGL();
-
-    /**
-     * Notify the canvas that rendering using native OpenGL commands
-     * has finished. This restores the state so that the canvas can
-     * be painted on using a QPainter.
-     */
-    void endOpenGL();
-
-
 public: // QWidget
 
     /// reimplemented method from superclass
@@ -108,9 +92,6 @@ private:
     void drawCheckers();
 
     void initializeShaders();
-
-    void saveGLState();
-    void restoreGLState();
 };
 
 #endif // HAVE_OPENGL

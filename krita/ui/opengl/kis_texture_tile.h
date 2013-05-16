@@ -74,6 +74,10 @@ public:
         return m_textureRectInImagePixels;
     }
 
+    inline QRectF tileRectInTexturePixels() {
+        return m_tileRectInTexturePixels;
+    }
+
 private:
     void repeatStripes(const KisTextureTileUpdateInfo &updateInfo);
 

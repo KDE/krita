@@ -93,7 +93,7 @@ public:
 };
 
 KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget *parent, KisOpenGLImageTexturesSP imageTextures)
-    : QGLWidget(QGLFormat(QGL::SampleBuffers), parent, KisOpenGL::sharedContextWidget())
+    : QGLWidget(KisOpenGL::sharedContextWidget()->format(), parent, KisOpenGL::sharedContextWidget())
     , KisCanvasWidgetBase(canvas, coordinatesConverter)
     , m_d(new Private())
 {
@@ -325,9 +325,10 @@ void KisOpenGLCanvas2::drawImage()
 
             glBindTexture(GL_TEXTURE_2D, tile->textureId());
 
-            if(scaleX > 2.0) {
+            if (scaleX > 2.0) {
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            } else {
+            }
+            else {
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             }
 
@@ -354,6 +355,7 @@ void KisOpenGLCanvas2::initializeShaders()
         qDebug() << "OpenGL error" << glGetError();
         qFatal("Failed linking checker shader");
     }
+    Q_ASSERT(m_d->checkerShader->isLinked());
 
     m_d->displayShader = new QGLShaderProgram();
     m_d->displayShader->addShaderFromSourceFile(QGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/gl2.vert"));
@@ -365,6 +367,8 @@ void KisOpenGLCanvas2::initializeShaders()
         qDebug() << "OpenGL error" << glGetError();
         qFatal("Failed linking display shader");
     }
+
+    Q_ASSERT(m_d->displayShader->isLinked());
 }
 
 void KisOpenGLCanvas2::slotConfigChanged()

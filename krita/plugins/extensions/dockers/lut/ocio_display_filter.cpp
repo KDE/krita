@@ -104,7 +104,9 @@ OcioDisplayFilter::OcioDisplayFilter(QObject *parent)
     #endif
 {
 #ifdef HAVE_OPENGL
-    QGLFunctions::initializeGLFunctions(KisOpenGL::sharedContextWidget()->context());
+    if (KisOpenGL::sharedContextWidget()) {
+        QGLFunctions::initializeGLFunctions(KisOpenGL::sharedContextWidget()->context());
+    }
 #endif
 }
 

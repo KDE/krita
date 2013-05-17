@@ -342,7 +342,7 @@ void KisCanvas2::createCanvas(bool useOpenGL)
 
     if (useOpenGL) {
 #ifdef HAVE_OPENGL
-        if (QGLFormat::hasOpenGL()) {
+        if (QGLFormat::hasOpenGL() && KisOpenGL::sharedContextWidget()) {
             createOpenGLCanvas();
         } else {
             warnKrita << "Tried to create OpenGL widget when system doesn't have OpenGL\n";

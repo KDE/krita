@@ -144,8 +144,8 @@ bool KisDlgLayerProperties::haveChanges() const
     return m_layer->name() !=  getName()
         || m_layer->opacity() !=  getOpacity()
         || m_layer->channelFlags() !=  getChannelFlags()
-        || (d->compositeOp &&
-            m_layer->compositeOp()->id() !=  getCompositeOp());
+        || (d->compositeOp && m_layer->compositeOp() &&
+            m_layer->compositeOp()->id()!= getCompositeOp());
 
 }
 

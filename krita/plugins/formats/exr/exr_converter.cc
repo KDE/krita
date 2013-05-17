@@ -733,9 +733,9 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisPaintLayerSP 
 
     ExrPaintLayerSaveInfo info;
     info.layer = layer;
-    info.channels.push_back("B");
-    info.channels.push_back("G");
     info.channels.push_back("R");
+    info.channels.push_back("G");
+    info.channels.push_back("B");
     info.channels.push_back("A");
     info.pixelType = pixelType;
 
@@ -778,9 +778,9 @@ void recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveInfo>& informationObjects
             info.name = name + paintLayer->name() + '.';
             info.layer = paintLayer;
             if (paintLayer->colorSpace()->colorModelId() == RGBAColorModelID) {
-                info.channels.push_back(info.name + remap(current2original, "B"));
-                info.channels.push_back(info.name + remap(current2original, "G"));
                 info.channels.push_back(info.name + remap(current2original, "R"));
+                info.channels.push_back(info.name + remap(current2original, "G"));
+                info.channels.push_back(info.name + remap(current2original, "B"));
                 info.channels.push_back(info.name + remap(current2original, "A"));
             } else if (paintLayer->colorSpace()->colorModelId() == GrayAColorModelID) {
                 info.channels.push_back(info.name + remap(current2original, "G"));

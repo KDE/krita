@@ -32,10 +32,12 @@ set(kritaui_LIB_SRCS
     canvas/kis_update_info.cpp
     canvas/kis_image_patch.cpp
     canvas/kis_image_pyramid.cpp
+    canvas/kis_infinity_manager.cpp
     dialogs/kis_dlg_adj_layer_props.cc
     dialogs/kis_dlg_adjustment_layer.cc
     dialogs/kis_dlg_filter.cpp
     dialogs/kis_dlg_generator_layer.cpp
+    dialogs/kis_dlg_file_layer.cpp
     dialogs/kis_dlg_image_properties.cc
     dialogs/kis_dlg_layer_properties.cc
     dialogs/kis_dlg_preferences.cc
@@ -70,6 +72,7 @@ set(kritaui_LIB_SRCS
     kis_doc2.cc
     kis_part2.cpp
     kis_factory2.cc
+    kis_file_layer.cpp
     kis_filter_handler.cc
     kis_filter_manager.cc
     kis_filters_model.cc
@@ -162,6 +165,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_color_space_selector.cc
     widgets/kis_curve_widget.cpp
     widgets/kis_custom_image_widget.cc
+    widgets/kis_image_from_clipboard_widget.cpp
     widgets/kis_double_widget.cc
     widgets/kis_filter_selector_widget.cc
     widgets/kis_gradient_chooser.cc
@@ -270,6 +274,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgpaintoppresets.ui
     forms/wdgpaintopsettings.ui
     forms/wdgdlggeneratorlayer.ui
+    forms/wdgdlgfilelayer.ui
     forms/wdgfilterselector.ui
     forms/wdgfilternodecreation.ui
     forms/wdgpaintactioneditor.ui

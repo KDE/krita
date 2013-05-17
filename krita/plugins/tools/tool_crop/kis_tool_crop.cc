@@ -464,7 +464,6 @@ void KisToolCrop::crop()
     m_rectCrop = QRect(0, 0, 0, 0);
 
     updateWidgetValues();
-    dynamic_cast<KisCanvas2*>(canvas())->view()->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 0);
 }
 
 void KisToolCrop::setCropX(int x)

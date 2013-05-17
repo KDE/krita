@@ -36,12 +36,6 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="minimumSize">
-        <size>
-         <width>56</width>
-         <height>0</height>
-        </size>
-       </property>
        <property name="text">
         <string>Diameter:</string>
        </property>
@@ -83,12 +77,6 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="minimumSize">
-        <size>
-         <width>56</width>
-         <height>0</height>
-        </size>
-       </property>
        <property name="text">
         <string>Aspect ratio:</string>
        </property>
@@ -129,12 +117,6 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>56</width>
-         <height>0</height>
-        </size>
        </property>
        <property name="text">
         <string>Angle:</string>
@@ -180,12 +162,6 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="minimumSize">
-        <size>
-         <width>48</width>
-         <height>0</height>
-        </size>
-       </property>
        <property name="text">
         <string>Scale:</string>
        </property>
@@ -201,12 +177,6 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>0</height>
-        </size>
        </property>
        <property name="value">
         <double>1.000000000000000</double>
@@ -245,12 +215,6 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>0</height>
-        </size>
        </property>
        <property name="value">
         <double>0.500000000000000</double>

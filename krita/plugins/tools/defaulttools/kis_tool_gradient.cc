@@ -176,8 +176,8 @@ void KisToolGradient::paint(QPainter &painter, const KoViewConverter &converter)
 
 void KisToolGradient::mousePressEvent(KoPointerEvent *event)
 {
-    if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
-                       Qt::LeftButton, Qt::NoModifier)) {
+    if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
+                          Qt::LeftButton, Qt::ShiftModifier)) {
 
         if (!nodeEditable()) {
             return;

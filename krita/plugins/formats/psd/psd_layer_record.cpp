@@ -647,6 +647,8 @@ bool PSDLayerRecord::writePixelData(QIODevice *io)
         }
     }
 
+    // now planes are holding pointers to quint8 arrays
+    tmp.clear();
 
     // here's where we save the total size of the channel data
     for (int channelInfoIndex = 0; channelInfoIndex  < nChannels; ++channelInfoIndex) {
@@ -738,6 +740,9 @@ bool PSDLayerRecord::writePixelData(QIODevice *io)
         psdwrite(io, (quint32)(currentPos - startChannelBlockPos));
         io->seek(currentPos);
     }
+
+    qDeleteAll(planes);
+    planes.clear();
 
     return true;
 

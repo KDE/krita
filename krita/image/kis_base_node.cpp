@@ -200,11 +200,13 @@ bool KisBaseNode::visible(bool recursive) const
         parentNode->visible() : isVisible;
 }
 
-void KisBaseNode::setVisible(bool visible)
+void KisBaseNode::setVisible(bool visible, bool loading)
 {
     m_d->properties.setProperty("visible", visible);
-    emit visibilityChanged(visible);
-    baseNodeChangedCallback();
+    if (!loading) {
+        emit visibilityChanged(visible);
+        baseNodeChangedCallback();
+    }
 }
 
 bool KisBaseNode::userLocked() const

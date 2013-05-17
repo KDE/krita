@@ -276,6 +276,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     //Needed to connect canvas to favorite resource manager
     m_view->canvasBase()->createFavoriteResourceManager(this);
     connect(m_view->resourceProvider(), SIGNAL(sigOpacityChanged(qreal)), SLOT(slotOpacityChanged(qreal)));
+    connect(m_view->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), SLOT(slotUnsetEraseMode()));
 }
 
 KisPaintopBox::~KisPaintopBox()
@@ -362,11 +363,13 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
         m_paintopOptionWidgets[paintop] = KisPaintOpRegistry::instance()->get(paintop.id())->createSettingsWidget(this);
 
     m_optionWidget = m_paintopOptionWidgets[paintop];
-    m_optionWidget->setImage(m_view->image());
-    m_optionWidget->setConfiguration(preset->settings());
 
+    // the node should be initialized before the configuration (see KisFilterOp)
     preset->settings()->setOptionsWidget(m_optionWidget);
     preset->settings()->setNode(m_resourceProvider->currentNode());
+
+    m_optionWidget->setImage(m_view->image());
+    m_optionWidget->setConfiguration(preset->settings());
 
     m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);
     m_presetsChooserPopup->setPresetFilter(paintop);
@@ -435,10 +438,12 @@ void KisPaintopBox::updateCompositeOp(QString compositeOpID)
         m_cmbCompositeOp->setCurrentIndex(index);
         m_cmbCompositeOp->blockSignals(false);
         
+        m_eraseModeButton->defaultAction()->blockSignals(true);
         m_eraseModeButton->blockSignals(true);
         m_eraseModeButton->setChecked(compositeOpID == COMPOSITE_ERASE);
         m_eraseModeButton->blockSignals(false);
-        
+        m_eraseModeButton->defaultAction()->blockSignals(false);
+
         if(compositeOpID != m_currCompositeOpID) {
             m_activePreset->settings()->setProperty("CompositeOp", compositeOpID);
             m_optionWidget->setConfiguration(m_activePreset->settings().data());
@@ -794,5 +799,12 @@ void KisPaintopBox::slotSwitchToPreviousPreset()
 {
     if (m_previousPreset) {
         setCurrentPaintop(m_previousPreset->paintOp(), m_previousPreset);
+    }
+}
+
+void KisPaintopBox::slotUnsetEraseMode()
+{
+    if (m_currCompositeOpID == COMPOSITE_ERASE) {
+        updateCompositeOp(m_prevCompositeOpID);
     }
 }

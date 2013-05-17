@@ -20,8 +20,10 @@
 #include "kis_action_manager_test.h"
 #include <kdebug.h>
 
+#include <KoPart.h>
 #include <KoMainWindow.h>
 #include <kis_doc2.h>
+#include <kis_part2.h>
 #include <kis_view2.h>
 #include <util.h>
 #include <kis_action.h>

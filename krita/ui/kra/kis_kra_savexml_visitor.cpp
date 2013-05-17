@@ -40,7 +40,7 @@
 #include <kis_selection_mask.h>
 #include <kis_shape_layer.h>
 #include <kis_transparency_mask.h>
-
+#include <kis_file_layer.h>
 
 using namespace KRA;
 
@@ -64,6 +64,17 @@ bool KisSaveXmlVisitor::visit(KisExternalLayer * layer)
     if (layer->inherits("KisShapeLayer")) {
         QDomElement layerElement = m_doc.createElement(LAYER);
         saveLayer(layerElement, SHAPE_LAYER, layer);
+        m_elem.appendChild(layerElement);
+        m_count++;
+        return saveMasks(layer, layerElement);
+    }
+    else if (layer->inherits("KisFileLayer")) {
+        QDomElement layerElement = m_doc.createElement(LAYER);
+        saveLayer(layerElement, FILE_LAYER, layer);
+        layerElement.setAttribute("source", dynamic_cast<KisFileLayer*>(layer)->fileName());
+        layerElement.setAttribute("scale", dynamic_cast<KisFileLayer*>(layer)->scaleToImageResolution() ?  "true" : "false");
+        layerElement.setAttribute(COLORSPACE_NAME, layer->original()->colorSpace()->id());
+
         m_elem.appendChild(layerElement);
         m_count++;
         return saveMasks(layer, layerElement);

@@ -47,7 +47,6 @@ KisToolMeasureOptionsWidget::KisToolMeasureOptionsWidget(QWidget* parent, double
     QGridLayout* optionLayout = new QGridLayout(this);
     Q_CHECK_PTR(optionLayout);
     optionLayout->setMargin(0);
-    optionLayout->setSpacing(6);
 
     optionLayout->addWidget(new QLabel(i18n("Distance: "), this), 0, 0);
     optionLayout->addWidget(new QLabel(i18n("Angle: "), this), 1, 0);
@@ -139,8 +138,8 @@ void KisToolMeasure::paint(QPainter& gc, const KoViewConverter &converter)
 
 void KisToolMeasure::mousePressEvent(KoPointerEvent *event)
 {
-    if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
-                       Qt::LeftButton, Qt::NoModifier)) {
+    if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
+                          Qt::LeftButton, Qt::AltModifier)) {
 
         setMode(KisTool::PAINT_MODE);
 

@@ -28,6 +28,7 @@ class KisDoc2;
 class QGraphicsItem;
 class KoView;
 class KisFlipbook;
+class KisDocument2;
 
 class KRITAUI_EXPORT KisPart2 : public KoPart
 {

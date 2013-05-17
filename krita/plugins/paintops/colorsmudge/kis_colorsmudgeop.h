@@ -48,15 +48,18 @@ public:
     virtual ~KisColorSmudgeOp();
 
     qreal paintAt(const KisPaintInformation& info);
-    
+
 private:
     void updateMask(const KisPaintInformation& info, double scale, double rotation);
+    inline void getTopLeftAligned(const QPointF &pos, const QPointF &hotSpot, qint32 *x, qint32 *y);
 
 private:
     bool                      m_firstRun;
     KisImageWSP               m_image;
     KisPaintDeviceSP          m_tempDev;
-    KisPainter*               m_tempPainter;
+    KisPainter*               m_backgroundPainter;
+    KisPainter*               m_smudgePainter;
+    KisPainter*               m_colorRatePainter;
     const KoAbstractGradient* m_gradient;
     KisPressureSizeOption     m_sizeOption;
     KisPressureOpacityOption  m_opacityOption;
@@ -70,6 +73,7 @@ private:
     QRect                     m_maskBounds;
     KisFixedPaintDeviceSP     m_maskDab;
     KisCrossDeviceColorPickerInt m_colorPicker;
+    QPointF                   m_lastPaintPos;
 };
 
 #endif // _KIS_COLORSMUDGEOP_H_

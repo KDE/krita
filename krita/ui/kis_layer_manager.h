@@ -23,7 +23,6 @@
 
 #include "kis_types.h"
 
-
 class KAction;
 class QAction;
 class KToggleAction;
@@ -122,6 +121,9 @@ private slots:
     void addGeneratorLayer(KisNodeSP parent, KisNodeSP above);
     void addGeneratorLayer(KisNodeSP parent, KisNodeSP above, const QString & name, KisFilterConfiguration * filter, KisSelectionSP selection);
 
+    void addFileLayer();
+    void addFileLayer(KisNodeSP parent, KisNodeSP above);
+    void addFileLayer(KisNodeSP parent, KisNodeSP above, const QString & name, const QString &fileName, bool scaleToImageResolution);
 
 private:
 

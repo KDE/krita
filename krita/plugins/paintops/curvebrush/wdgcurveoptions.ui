@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>367</width>
-    <height>343</height>
+    <width>452</width>
+    <height>385</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,79 +22,72 @@
     <height>0</height>
    </size>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
+  <layout class="QGridLayout" name="gridLayout" columnstretch="0,1">
    <item row="0" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1">
-     <item>
-      <widget class="QLabel" name="lineWidthLbl">
-       <property name="text">
-        <string>Line width:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="KisDoubleSliderSpinBox" name="lineWidthSlider" native="true"/>
-     </item>
-    </layout>
+    <widget class="QLabel" name="lineWidthLbl">
+     <property name="text">
+      <string>Line width:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="KisDoubleSliderSpinBox" name="lineWidthSlider" native="true">
+    </widget>
    </item>
    <item row="1" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>History size:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="KisDoubleSliderSpinBox" name="historySizeSlider" native="true"/>
-     </item>
-    </layout>
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>History size:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="KisDoubleSliderSpinBox" name="historySizeSlider" native="true">
+    </widget>
    </item>
    <item row="2" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,1">
-     <item>
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Curves opacity:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="KisDoubleSliderSpinBox" name="curvesOpacitySlider" native="true"/>
-     </item>
-    </layout>
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Curves opacity:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="KisDoubleSliderSpinBox" name="curvesOpacitySlider" native="true">
+    </widget>
    </item>
    <item row="3" column="0" colspan="2">
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item>
-      <widget class="QCheckBox" name="connectionCHBox">
-       <property name="text">
-        <string>Paint connection line</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="smoothingCHBox">
-       <property name="text">
-        <string>Smoothing</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <widget class="QCheckBox" name="connectionCHBox">
+     <property name="text">
+      <string>Paint connection line</string>
+     </property>
+    </widget>
    </item>
-   <item row="4" column="0">
+   <item row="4" column="0" colspan="2">
+    <widget class="QCheckBox" name="smoothingCHBox">
+     <property name="text">
+      <string>Smoothing</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="2">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>20</width>
-       <height>259</height>
+       <width>352</width>
+       <height>267</height>
       </size>
      </property>
     </spacer>

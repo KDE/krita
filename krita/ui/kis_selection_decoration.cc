@@ -120,12 +120,12 @@ void KisSelectionDecoration::selectionTimerEvent()
             m_offset++;
             if (m_offset > 7) m_offset = 0;
 
-            QRect bound = selection->selectedRect();
-            double xRes = view()->image()->xRes();
-            double yRes = view()->image()->yRes();
-            QRectF rect(int(bound.left()) / xRes, int(bound.top()) / yRes,
-                        int(1 + bound.right()) / xRes, int(1 + bound.bottom()) / yRes);
-            view()->canvasBase()->updateCanvas(rect);
+            QRect bounds = selection->selectedRect();
+            QRectF documentBounds =
+                view()->canvasBase()->
+                coordinatesConverter()->imageToDocument(bounds);
+
+            view()->canvasBase()->updateCanvas(documentBounds.adjusted(-1,-1,1,1));
         }
     }
 }
@@ -178,27 +178,26 @@ void KisSelectionDecoration::drawDecoration(QPainter& gc, const QRectF& updateRe
 
     if (m_mode == Ants) {
 
-        QTransform transform = converter->imageToWidgetTransform();
-
         qreal scaleX, scaleY;
         converter->imageScale(&scaleX, &scaleY);
 
         gc.save();
-        gc.setTransform(transform);
+        gc.setTransform(QTransform(), false);
         gc.setRenderHints(0);
 
         QPen pen(m_brushes[m_offset], 0);
+        QTransform transform = converter->imageToWidgetTransform();
 
         int i = 0;
         gc.setPen(pen);
         if (0.5 * (scaleX + scaleY) < 3) {
             foreach(const QPolygon & polygon, m_simpleOutline) {
-                gc.drawPolygon(polygon);
+                gc.drawPolygon(transform.map(polygon));
                 i++;
             }
         } else {
             foreach(const QPolygon & polygon, m_outline) {
-                gc.drawPolygon(polygon);
+                gc.drawPolygon(transform.map(polygon));
                 i++;
             }
         }

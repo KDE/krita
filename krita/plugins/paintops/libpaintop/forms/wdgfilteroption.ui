@@ -11,6 +11,9 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
    <item row="0" column="0">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
@@ -35,9 +38,9 @@
       </layout>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBoxIgnoreAlpha">
+      <widget class="QCheckBox" name="checkBoxSmudgeMode">
        <property name="text">
-        <string>Ignore Alpha</string>
+        <string>Smudge Mode</string>
        </property>
       </widget>
      </item>

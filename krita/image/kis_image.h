@@ -529,7 +529,24 @@ signals:
      */
     void sigImageModified();
 
-    void sigSizeChanged(qint32 w, qint32 h);
+    /**
+     * The signal is emitted when the size of the image is changed.
+     * \p oldStillPoint and \p newStillPoint give the reciever the
+     * hint about how the new and old rect of the image correspond to
+     * each other. They specify the point of the image around which
+     * the conversion was done. This point will stay still on the
+     * user's screen. That is the \p newStillPoint of the new image
+     * will be painted at the same screen position, where \p
+     * oldStillPoint of the old image was painted.
+     *
+     * \param oldStillPoint is a still point represented in *old*
+     *                      image coordinates
+     *
+     * \param newStillPoint is a still point represented in *new*
+     *                      image coordinates
+     */
+    void sigSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
+
     void sigProfileChanged(const KoColorProfile *  profile);
     void sigColorSpaceChanged(const KoColorSpace*  cs);
     void sigResolutionChanged(double xRes, double yRes);

@@ -55,6 +55,7 @@ public:
         : QWidget(parent)
     {
         QFormLayout *formLayout = new QFormLayout(this);
+        formLayout->setMargin(0);
 
         chooser = new KisPatternChooser(this);
         chooser->setGrayscalePreview(true);

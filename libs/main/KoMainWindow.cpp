@@ -344,7 +344,6 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     d->toggleDockers->setChecked(true);
     actionCollection()->addAction("view_toggledockers", d->toggleDockers);
 
-    d->toggleDockers->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_H));
     connect(d->toggleDockers, SIGNAL(toggled(bool)), SLOT(toggleDockersVisibility(bool)));
 
     d->dockWidgetMenu  = new KActionMenu(i18n("Dockers"), this);
@@ -446,7 +445,6 @@ KoMainWindow::~KoMainWindow()
     if (d->rootPart && d->rootPart->viewCount() == 0) {
         //kDebug(30003) <<"Destructor. No more views, deleting old doc" << d->rootDoc;
         delete d->rootDocument;
-        delete d->rootPart;
     }
 
     delete d->manager;
@@ -773,6 +771,7 @@ void KoMainWindow::slotLoadCompleted()
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     disconnect(newpart, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
     disconnect(newpart, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
+    emit loadCompleted();
 }
 
 void KoMainWindow::slotLoadCanceled(const QString & errMsg)

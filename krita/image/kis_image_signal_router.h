@@ -29,13 +29,72 @@
 class KoColorSpace;
 class KoColorProfile;
 
-enum KisImageSignalType {
+enum KisImageSignalTypeEnum {
     LayersChangedSignal,
     ModifiedSignal,
     SizeChangedSignal,
     ProfileChangedSignal,
     ColorSpaceChangedSignal,
     ResolutionChangedSignal
+};
+
+/**
+ * A special signal which handles stillPoint capabilities of the image
+ *
+ * \see KisImage::sigSizeChanged()
+ */
+struct ComplexSizeChangedSignal {
+    ComplexSizeChangedSignal() {}
+    ComplexSizeChangedSignal(QPointF _oldStillPoint, QPointF _newStillPoint)
+        : oldStillPoint(_oldStillPoint),
+          newStillPoint(_newStillPoint)
+    {
+    }
+
+    /**
+     * A helper method calculating the still points from image areas
+     * we process. It works as if the source image was "cropped" by \p
+     * portionOfOldImage, and this portion formed the new image of size
+     * \p transformedIntoImageOfSize.
+     *
+     * Note, that \p portionOfTheImage may be equal to the image bounds().
+     */
+    ComplexSizeChangedSignal(const QRect &portionOfOldImage, const QSize &transformedIntoImageOfSize)
+    {
+        oldStillPoint = QRectF(portionOfOldImage).center();
+        newStillPoint = QRectF(QPointF(), QSizeF(transformedIntoImageOfSize)).center();
+    }
+
+    ComplexSizeChangedSignal inverted() const {
+        return ComplexSizeChangedSignal(newStillPoint, oldStillPoint);
+    }
+
+    QPointF oldStillPoint;
+    QPointF newStillPoint;
+};
+
+struct KisImageSignalType {
+    KisImageSignalType() {}
+    KisImageSignalType(KisImageSignalTypeEnum _id)
+    : id(_id)
+    {
+    }
+
+    KisImageSignalType(ComplexSizeChangedSignal signal)
+        : id(SizeChangedSignal),
+          sizeChangedSignal(signal)
+    {
+    }
+
+    KisImageSignalType inverted() const {
+        KisImageSignalType t;
+        t.id = id;
+        t.sizeChangedSignal = sizeChangedSignal.inverted();
+        return t;
+    }
+
+    KisImageSignalTypeEnum id;
+    ComplexSizeChangedSignal sizeChangedSignal;
 };
 
 typedef QVector<KisImageSignalType> KisImageSignalVector;
@@ -65,7 +124,7 @@ signals:
     // Notifications
     void sigImageModified();
 
-    void sigSizeChanged(qint32 w, qint32 h);
+    void sigSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
     void sigProfileChanged(const KoColorProfile *  profile);
     void sigColorSpaceChanged(const KoColorSpace*  cs);
     void sigResolutionChanged(double xRes, double yRes);

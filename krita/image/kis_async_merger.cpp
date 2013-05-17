@@ -83,12 +83,6 @@ public:
             return true;
         }
 
-        KisSafeFilterConfigurationSP filterConfig = layer->filter();
-        if (!filterConfig) return true;
-
-        KisFilterSP filter = KisFilterRegistry::instance()->value(filterConfig->name());
-        if (!filter) return false;
-
         KisPaintDeviceSP originalDevice = layer->original();
         originalDevice->clear(m_updateRect);
 
@@ -97,6 +91,22 @@ public:
         // If the intersection of the updaterect and the projection extent is
         //      null, we are finish here.
         if(applyRect.isNull()) return true;
+
+        KisSafeFilterConfigurationSP filterConfig = layer->filter();
+        if (!filterConfig) {
+            /**
+             * When an adjustment layer is just created, it may have no
+             * filter inside. Then the layer has work as a pass-through
+             * node. Just copy the merged data to the layer's original.
+             */
+            KisPainter gc(originalDevice);
+            gc.setCompositeOp(COMPOSITE_COPY);
+            gc.bitBlt(applyRect.topLeft(), m_projection, applyRect);
+            return true;
+        }
+
+        KisFilterSP filter = KisFilterRegistry::instance()->value(filterConfig->name());
+        if (!filter) return false;
 
         Q_ASSERT(layer->nodeProgressProxy());
 

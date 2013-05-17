@@ -124,7 +124,9 @@ public:
             memcpy(dst, src, nPixels * 2);
         } else {
             const KoColorSpace* dstCs = KoColorSpaceRegistry::instance()->lab16();
-            convertPixelsTo(src, dst, dstCs, nPixels, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+            convertPixelsTo(src, dst, dstCs, nPixels,
+                            KoColorConversionTransformation::InternalRenderingIntent,
+                            KoColorConversionTransformation::InternalConversionFlags);
         }
     }
 
@@ -133,7 +135,9 @@ public:
             memcpy(dst, src, nPixels * 2);
         } else {
             const KoColorSpace* srcCs = KoColorSpaceRegistry::instance()->lab16();
-            srcCs->convertPixelsTo(src, dst, this, nPixels, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+            srcCs->convertPixelsTo(src, dst, this, nPixels,
+                                   KoColorConversionTransformation::InternalRenderingIntent,
+                                   KoColorConversionTransformation::InternalConversionFlags);
         }
     }
 
@@ -142,7 +146,9 @@ public:
             memcpy(dst, src, nPixels * 2);
         } else {
             const KoColorSpace* dstCs = KoColorSpaceRegistry::instance()->rgb16();
-            convertPixelsTo(src, dst, dstCs, nPixels, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+            convertPixelsTo(src, dst, dstCs, nPixels,
+                            KoColorConversionTransformation::InternalRenderingIntent,
+                            KoColorConversionTransformation::InternalConversionFlags);
         }
     }
 
@@ -151,7 +157,9 @@ public:
             memcpy(dst, src, nPixels * 2);
         } else {
             const KoColorSpace* srcCs = KoColorSpaceRegistry::instance()->rgb16();
-            srcCs->convertPixelsTo(src, dst, this, nPixels, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+            srcCs->convertPixelsTo(src, dst, this, nPixels,
+                                   KoColorConversionTransformation::InternalRenderingIntent,
+                                   KoColorConversionTransformation::InternalConversionFlags);
         }
     }
 

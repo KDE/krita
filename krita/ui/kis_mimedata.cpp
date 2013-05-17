@@ -23,8 +23,12 @@
 #include "kis_paint_device.h"
 #include "kis_shared_ptr.h"
 #include "kis_image.h"
+#include "kis_layer.h"
+#include "kis_shape_layer.h"
+#include "kis_paint_layer.h"
 #include "kis_doc2.h"
-#include "kis_part2.h"
+#include "kis_shape_controller.h"
+
 
 #include <KoStore.h>
 #include <KoColorProfile.h>
@@ -69,7 +73,9 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
     Q_ASSERT(m_node);
     if (mimetype == "application/x-qt-image") {
         KisConfig cfg;
-        return m_node->projection()->convertToQImage(cfg.displayProfile(), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+        return m_node->projection()->convertToQImage(cfg.displayProfile(),
+                                                     KoColorConversionTransformation::InternalRenderingIntent,
+                                                     KoColorConversionTransformation::InternalConversionFlags);
     }
     else if (mimetype == "application/x-krita-node"
              || mimetype == "application/zip") {
@@ -82,9 +88,7 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
         Q_ASSERT(!store->bad());
         store->disallowNameExpansion();
 
-        KisPart2 part;
-        KisDoc2 doc(&part);
-        part.setDocument(&doc);
+        KisDoc2 doc;
 
         QRect rc = node->exactBounds();
 
@@ -108,4 +112,91 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
     else {
         return QMimeData::retrieveData(mimetype, preferredType);
     }
+}
+
+void KisMimeData::initializeExternalNode(KisNodeSP &node,
+                                         KisImageWSP image,
+                                         KisShapeController *shapeController)
+{
+    // layers store a link to the image, so update it
+    KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
+    if (layer) {
+        layer->setImage(image);
+    }
+    KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node.data());
+    if (shapeLayer) {
+        KoShapeContainer * parentContainer =
+            dynamic_cast<KoShapeContainer*>(shapeController->shapeForNode(image->root()));
+
+        KisShapeLayer *shapeLayer2 = new KisShapeLayer(parentContainer, shapeController, image, node->name(), node->opacity());
+        QList<KoShape *> shapes = shapeLayer->shapes();
+        shapeLayer->removeAllShapes();
+        foreach(KoShape *shape, shapes) {
+            shapeLayer2->addShape(shape);
+        }
+        node = shapeLayer2;
+    }
+}
+
+KisNodeSP KisMimeData::tryLoadInternalNode(const QMimeData *data,
+                                           KisImageWSP image,
+                                           KisShapeController *shapeController,
+                                           bool /* IN-OUT */ &copyNode)
+{
+    const KisMimeData *mimedata = qobject_cast<const KisMimeData*>(data);
+    KisNodeSP node = mimedata ? mimedata->node() : 0;
+
+    if (node && (copyNode || node->graphListener() != image.data())) {
+        node = node->clone();
+        initializeExternalNode(node, image, shapeController);
+        copyNode = true;
+    }
+
+    return node;
+}
+
+KisNodeSP KisMimeData::loadNode(const QMimeData *data,
+                                const QRect &imageBounds,
+                                const QPoint &preferredCenter,
+                                bool forceRecenter, KisImageWSP image,
+                                KisShapeController *shapeController)
+{
+    bool alwaysRecenter = false;
+    KisNodeSP node;
+
+    if (data->hasFormat("application/x-krita-node")) {
+        QByteArray ba = data->data("application/x-krita-node");
+
+        KisDoc2 tempDoc;
+        tempDoc.loadNativeFormatFromStore(ba);
+
+        KisImageWSP tempImage = tempDoc.image();
+        node = tempImage->root()->firstChild();
+        tempImage->removeNode(node);
+
+        initializeExternalNode(node, image, shapeController);
+    }
+    else if (data->hasImage()) {
+        QImage qimage = qvariant_cast<QImage>(data->imageData());
+
+        KisPaintDeviceSP device = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+        device->convertFromQImage(qimage, 0);
+        node = new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, device);
+
+        alwaysRecenter = true;
+    }
+
+    if (node) {
+        QRect bounds = node->projection()->exactBounds();
+        if (alwaysRecenter || forceRecenter ||
+            (!imageBounds.contains(bounds) &&
+             !imageBounds.intersects(bounds))) {
+
+            QPoint pt = preferredCenter - bounds.center();
+            node->setX(pt.x());
+            node->setY(pt.y());
+        }
+    }
+
+    return node;
 }

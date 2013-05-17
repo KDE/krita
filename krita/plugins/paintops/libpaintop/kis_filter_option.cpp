@@ -75,7 +75,7 @@ KisFilterOption::KisFilterOption()
         setCurrentFilter(l2.first());
     }
 
-
+    connect(m_options->checkBoxSmudgeMode, SIGNAL(stateChanged(int)), this, SIGNAL(sigSettingChanged()));
 }
 
 const KisFilterSP KisFilterOption::filter() const
@@ -89,12 +89,10 @@ KisFilterConfiguration* KisFilterOption::filterConfig() const
     return static_cast<KisFilterConfiguration*>(m_currentFilterConfigWidget->configuration());
 }
 
-
-bool KisFilterOption::ignoreAlpha() const
+bool KisFilterOption::smudgeMode() const
 {
-    return m_options->checkBoxIgnoreAlpha->isChecked();
+    return m_options->checkBoxSmudgeMode->isChecked();
 }
-
 
 void KisFilterOption::setNode(KisNodeSP node)
 {
@@ -171,7 +169,7 @@ void KisFilterOption::writeOptionSetting(KisPropertiesConfiguration* setting) co
     if (!m_currentFilter) return;
 
     setting->setProperty(FILTER_ID, m_currentFilter->id());
-    setting->setProperty(FILTER_IGNORE_ALPHA, ignoreAlpha());
+    setting->setProperty(FILTER_SMUDGE_MODE, smudgeMode());
     if(filterConfig()) {
         setting->setProperty(FILTER_CONFIGURATION, filterConfig()->toXML());
     }
@@ -181,7 +179,7 @@ void KisFilterOption::readOptionSetting(const KisPropertiesConfiguration* settin
 {
     KoID id(setting->getString(FILTER_ID), "");
     setCurrentFilter(id);
-    m_options->checkBoxIgnoreAlpha->setChecked(setting->getBool(FILTER_IGNORE_ALPHA));
+    m_options->checkBoxSmudgeMode->setChecked(setting->getBool(FILTER_SMUDGE_MODE));
     KisFilterConfiguration* configuration = filterConfig();
     if(configuration) {
         configuration->fromXML(setting->getString(FILTER_CONFIGURATION));

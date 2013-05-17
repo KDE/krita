@@ -441,7 +441,15 @@ public slots:
 
     KoInlineCite *insertCitation();
 
-    void insertText(const QString &text);
+    /**
+     * Inserts the supplied text at the current cursor position. If the second argument is
+     * supplied, a link is inserted at the current cursor position with the hRef as given
+     * by the user. To test whether the supplied link destination is a web url or a bookmark,
+     * a regular expression ( \\S+://\\S+ ) is used. 
+     * @param text is the text to be inserted
+     * @param hRef if supplied is the Hypertext reference
+     */
+    void insertText(const QString &text, const QString &hRef = QString());
 
     void insertHtml(const QString &html);
 

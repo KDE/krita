@@ -136,19 +136,19 @@ void KisControlFrame::createPatternsChooser(KisView2 * view)
     m_patternChooserPopup->setObjectName("pattern_chooser_popup");
     QHBoxLayout * l2 = new QHBoxLayout(m_patternChooserPopup);
     l2->setObjectName("patternpopuplayout");
-    l2->setMargin(2);
-    l2->setSpacing(2);
 
     m_patternsTab = new QTabWidget(m_patternChooserPopup);
     m_patternsTab->setObjectName("patternstab");
     m_patternsTab->setFocusPolicy(Qt::NoFocus);
     m_patternsTab->setFont(m_font);
-    m_patternsTab->setContentsMargins(1, 1, 1, 1);
     l2->addWidget(m_patternsTab);
 
     m_patternChooser = new KisPatternChooser(m_patternChooserPopup);
     m_patternChooser->setFont(m_font);
-    m_patternsTab->addTab(m_patternChooser, i18n("Patterns"));
+    QWidget *patternChooserPage = new QWidget(m_patternChooserPopup);
+    QHBoxLayout *patternChooserPageLayout  = new QHBoxLayout(patternChooserPage);
+    patternChooserPageLayout->addWidget(m_patternChooser);
+    m_patternsTab->addTab(patternChooserPage, i18n("Patterns"));
 
     KisCustomPattern* customPatterns = new KisCustomPattern(0, "custompatterns",
             i18n("Custom Pattern"), m_view);
@@ -176,14 +176,11 @@ void KisControlFrame::createGradientsChooser(KisView2 * view)
     m_gradientChooserPopup->setObjectName("gradient_chooser_popup");
     QHBoxLayout * l2 = new QHBoxLayout(m_gradientChooserPopup);
     l2->setObjectName("gradientpopuplayout");
-    l2->setMargin(2);
-    l2->setSpacing(2);
 
     m_gradientTab = new QTabWidget(m_gradientChooserPopup);
     m_gradientTab->setObjectName("gradientstab");
     m_gradientTab->setFocusPolicy(Qt::NoFocus);
     m_gradientTab->setFont(m_font);
-    m_gradientTab->setContentsMargins(1, 1, 1, 1);
     l2->addWidget(m_gradientTab);
 
     m_gradientChooser = new KisGradientChooser(m_view, m_gradientChooserPopup);

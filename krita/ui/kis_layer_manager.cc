@@ -17,6 +17,7 @@
  */
 
 #include "kis_layer_manager.h"
+
 #include <QRect>
 #include <QApplication>
 #include <QCursor>
@@ -31,6 +32,7 @@
 #include <kstandardaction.h>
 #include <kmessagebox.h>
 #include <kfiledialog.h>
+#include <kstandarddirs.h>
 #include <kfilewidget.h>
 #include <kurl.h>
 #include <kdiroperator.h>
@@ -47,11 +49,14 @@
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoProgressUpdater.h>
+#include <KoDocument.h>
+#include <KoPart.h>
 
 #include <filter/kis_filter_configuration.h>
 #include <filter/kis_filter.h>
 #include <kis_filter_strategy.h>
 #include <generator/kis_generator_layer.h>
+#include <kis_file_layer.h>
 #include <kis_adjustment_layer.h>
 #include <kis_mask.h>
 #include <kis_clone_layer.h>
@@ -65,14 +70,15 @@
 #include <kis_painter.h>
 #include <metadata/kis_meta_data_store.h>
 #include <metadata/kis_meta_data_merge_strategy_registry.h>
+#include <kis_file_layer.h>
 
-#include "kis_part2.h"
 #include "kis_config.h"
 #include "kis_cursor.h"
 #include "dialogs/kis_dlg_adj_layer_props.h"
 #include "dialogs/kis_dlg_adjustment_layer.h"
 #include "dialogs/kis_dlg_layer_properties.h"
 #include "dialogs/kis_dlg_generator_layer.h"
+#include "dialogs/kis_dlg_file_layer.h"
 #include "kis_doc2.h"
 #include "kis_filter_manager.h"
 #include "commands/kis_image_commands.h"
@@ -175,9 +181,7 @@ public:
 
             QRect r = m_image->bounds();
 
-            KisPart2 part;
-            KisDoc2 d(&part);
-            part.setDocument(&d);
+            KisDoc2 d;
 
             d.prepareForImport();
 
@@ -567,12 +571,17 @@ void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above)
 
     KisLayerSP l = activeLayer();
 
-    KisPaintDeviceSP dev = l->projection();
     KisSelectionSP selection = l->selection();
     KisAdjustmentLayerSP adjl = addAdjustmentLayer(parent, above, QString(), 0, selection);
 
-    KisDlgAdjustmentLayer dlg(adjl, adjl.data(), dev, image->nextLayerName(), i18n("New Filter Layer"), m_view);
+    KisPaintDeviceSP previewDevice = new KisPaintDevice(*adjl->original());
+
+    KisDlgAdjustmentLayer dlg(adjl, adjl.data(), previewDevice, image->nextLayerName(), i18n("New Filter Layer"), m_view);
     dlg.resize(dlg.minimumSizeHint());
+
+    // ensure that the device may be free'd by the dialog
+    // when it is not needed anymore
+    previewDevice = 0;
 
     if (dlg.exec() != QDialog::Accepted) {
         m_commandsAdapter->undoLastCommand();
@@ -592,6 +601,7 @@ KisAdjustmentLayerSP KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNo
     KisAdjustmentLayerSP l = new KisAdjustmentLayer(image, name, filter, selection);
     m_commandsAdapter->addNode(l.data(), parent, above);
     l->setDirty(image->bounds());
+    image->waitForDone();
     return l;
 }
 
@@ -903,6 +913,51 @@ void KisLayerManager::saveGroupLayers()
 bool KisLayerManager::activeLayerHasSelection()
 {
     return (activeLayer()->selection() != 0);
+}
+
+
+void KisLayerManager::addFileLayer()
+{
+    addFileLayer(activeLayer()->parent(), activeLayer());
+}
+
+void KisLayerManager::addFileLayer(KisNodeSP parent, KisNodeSP above)
+{
+    Q_ASSERT(parent);
+
+    KisImageWSP image = m_view->image();
+    if (!image) return;
+
+    KisDlgFileLayer dlg(image->nextLayerName(), m_view);
+    dlg.resize(dlg.minimumSizeHint());
+
+    if (dlg.exec() == QDialog::Accepted) {
+        QString name = dlg.layerName();
+        QString fileName = dlg.fileName();
+        bool scaleToImageResolution = dlg.scaleToImageResolution();
+
+        addFileLayer(parent, above, name, fileName, scaleToImageResolution);
+    }
+
+}
+
+void KisLayerManager::addFileLayer(KisNodeSP parent, KisNodeSP above, const QString &name, const QString &fileName, bool scaleToImageResolution)
+{
+    Q_ASSERT(parent);
+    Q_ASSERT(!fileName.isEmpty());
+
+    KisImageWSP image = m_view->image();
+    if (!image) return;
+
+    KisLayerSP layer = new KisFileLayer(image, fileName, scaleToImageResolution, name, OPACITY_OPAQUE_U8);
+    if (layer) {
+        layer->setCompositeOp(COMPOSITE_OVER);
+        m_commandsAdapter->addNode(layer.data(), parent, above.data());
+    } else {
+        KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));
+    }
+
+
 }
 
 

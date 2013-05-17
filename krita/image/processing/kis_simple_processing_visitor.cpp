@@ -69,7 +69,7 @@ void KisSimpleProcessingVisitor::visit(KisAdjustmentLayer *layer, KisUndoAdapter
 void KisSimpleProcessingVisitor::visit(KisGeneratorLayer *layer, KisUndoAdapter *undoAdapter)
 {
     visitNodeWithPaintDevice(layer, undoAdapter);
-    layer->resetCache();
+    layer->update();
 }
 
 void KisSimpleProcessingVisitor::visit(KisFilterMask *mask, KisUndoAdapter *undoAdapter)

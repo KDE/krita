@@ -204,7 +204,7 @@ bool KisLayer::alphaChannelDisabled() const
 
 void KisLayer::setChannelFlags(const QBitArray & channelFlags)
 {
-    Q_ASSERT(((quint32)channelFlags.count() == colorSpace()->channelCount() || channelFlags.isEmpty()));
+    Q_ASSERT(channelFlags.isEmpty() ||((quint32)channelFlags.count() == colorSpace()->channelCount()));
     m_d->channelFlags = channelFlags;
 }
 
@@ -519,7 +519,9 @@ QImage KisLayer::createThumbnail(qint32 w, qint32 h)
     KisPaintDeviceSP originalDevice = original();
 
     return originalDevice ?
-           originalDevice->createThumbnail(w, h, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation) : QImage();
+           originalDevice->createThumbnail(w, h,
+                                           KoColorConversionTransformation::InternalRenderingIntent,
+                                           KoColorConversionTransformation::InternalConversionFlags) : QImage();
 }
 
 qint32 KisLayer::x() const

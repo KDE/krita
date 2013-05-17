@@ -297,9 +297,9 @@ bool KisShapeLayer::visible(bool recursive) const
     return KisExternalLayer::visible(recursive);
 }
 
-void KisShapeLayer::setVisible(bool visible)
+void KisShapeLayer::setVisible(bool visible, bool isLoading)
 {
-    KisExternalLayer::setVisible(visible);
+    KisExternalLayer::setVisible(visible, isLoading);
 }
 
 bool KisShapeLayer::saveLayer(KoStore * store) const

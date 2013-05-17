@@ -75,6 +75,9 @@ set(calligradb_LIB_SRCS
    admin.cpp 
    lookupfieldschema.cpp 
    simplecommandlineapp.cpp
+   tableviewdata.cpp
+   tableviewcolumn.cpp
+   validator.cpp
 )
 
 kde4_add_library(calligradb SHARED ${calligradb_LIB_SRCS})

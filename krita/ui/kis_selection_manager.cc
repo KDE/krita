@@ -55,7 +55,6 @@
 #include "kis_convolution_kernel.h"
 #include "kis_debug.h"
 #include "kis_doc2.h"
-#include "kis_part2.h"
 #include "kis_fill_painter.h"
 #include "kis_group_layer.h"
 #include "kis_image.h"

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2013 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -37,12 +37,33 @@ MessageTitle::~MessageTitle()
 
 MessageHandler::MessageHandler(QWidget *parent)
         : m_messageHandlerParentWidget(parent)
+        , m_messageHandlerProxy(0)
         , m_enableMessages(true)
 {
 }
 
 MessageHandler::~MessageHandler()
 {
+}
+
+void MessageHandler::showErrorMessage(const QString &msg, const QString &details)
+{
+    if (m_messageHandlerProxy) {
+        m_messageHandlerProxy->showErrorMessage(msg, details);
+    }
+    else {
+        showErrorMessageInternal(msg, details);
+    }
+}
+
+void MessageHandler::showErrorMessage(KexiDB::Object *obj, const QString& msg)
+{
+    if (m_messageHandlerProxy) {
+        m_messageHandlerProxy->showErrorMessage(obj, msg);
+    }
+    else {
+        showErrorMessageInternal(obj, msg);
+    }
 }
 
 int MessageHandler::askQuestion(const QString& message,
@@ -52,6 +73,23 @@ int MessageHandler::askQuestion(const QString& message,
                                 const QString &dontShowAskAgainName,
                                 KMessageBox::Options options)
 {
+    if (m_messageHandlerProxy) {
+        return m_messageHandlerProxy->askQuestion(message, dlgType, defaultResult, buttonYes,
+                                                  buttonNo, dontShowAskAgainName, options);
+    }
+    else {
+        return askQuestion(message, dlgType, defaultResult, buttonYes,
+                           buttonNo, dontShowAskAgainName, options);
+    }
+}
+
+int MessageHandler::askQuestionInternal(const QString& message,
+                                        KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
+                                        const KGuiItem &buttonYes,
+                                        const KGuiItem &buttonNo,
+                                        const QString &dontShowAskAgainName,
+                                        KMessageBox::Options options)
+{
     Q_UNUSED(message);
     Q_UNUSED(dlgType);
     Q_UNUSED(buttonYes);
@@ -59,4 +97,9 @@ int MessageHandler::askQuestion(const QString& message,
     Q_UNUSED(dontShowAskAgainName);
     Q_UNUSED(options);
     return defaultResult;
+}
+
+void MessageHandler::redirectMessagesTo(MessageHandler *otherHandler)
+{
+    m_messageHandlerProxy = otherHandler;
 }

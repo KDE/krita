@@ -177,6 +177,21 @@ void KisCurveWidget::setPixmap(const QPixmap & pix)
     d->setCurveRepaint();
 }
 
+QPixmap KisCurveWidget::getPixmap()
+{
+    return d->m_pix;
+}
+
+void KisCurveWidget::setBasePixmap(const QPixmap &pix)
+{
+    d->m_pixmapBase = pix;
+}
+
+QPixmap KisCurveWidget::getBasePixmap()
+{
+    return d->m_pixmapBase;
+}
+
 void KisCurveWidget::keyPressEvent(QKeyEvent *e)
 {
     if (e->key() == Qt::Key_Delete || e->key() == Qt::Key_Backspace) {

@@ -456,7 +456,7 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
     // upstream to complain to the user
     if (!node) return 0;
 
-    node->setVisible(visible);
+    node->setVisible(visible, true);
     node->setUserLocked(locked);
     node->setCollapsed(collapsed);
     node->setX(x);

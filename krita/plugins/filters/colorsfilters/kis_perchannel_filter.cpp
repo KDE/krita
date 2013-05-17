@@ -64,11 +64,11 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     m_activeCh = 0;
 
     KisPerChannelFilterConfiguration::initDefaultCurves(m_curves,
-            m_dev->colorSpace()->colorChannelCount());
+            m_dev->colorSpace()->channelCount());
 
     QList<KoChannelInfo *> colorChannels;
     foreach(KoChannelInfo *channel, dev->colorSpace()->channels()) {
-        if (channel->channelType() == KoChannelInfo::COLOR) {
+        if (channel->channelType() == KoChannelInfo::COLOR || channel->channelType() == KoChannelInfo::ALPHA) {
             colorChannels.append(channel);
         }
     }
@@ -219,7 +219,7 @@ void KisPerChannelConfigWidget::setActiveChannel(int ch)
 
 KisPropertiesConfiguration * KisPerChannelConfigWidget::configuration() const
 {
-    int nCh = m_dev->colorSpace()->colorChannelCount();
+    int nCh = m_dev->colorSpace()->channelCount();
     KisPerChannelFilterConfiguration * cfg = new KisPerChannelFilterConfiguration(nCh);
 
     // updating current state
@@ -245,8 +245,8 @@ void KisPerChannelConfigWidget::setConfiguration(const KisPropertiesConfiguratio
          */
 
         KisPerChannelFilterConfiguration::initDefaultCurves(m_curves,
-                m_dev->colorSpace()->colorChannelCount());
-    } else if (cfg->curves().size() != int(m_dev->colorSpace()->colorChannelCount())) {
+                m_dev->colorSpace()->channelCount());
+    } else if (cfg->curves().size() != int(m_dev->colorSpace()->channelCount())) {
         return;
     } else {
         for (int ch = 0; ch < cfg->curves().size(); ch++)
@@ -271,7 +271,7 @@ KisPerChannelFilterConfiguration::~KisPerChannelFilterConfiguration()
 
 bool KisPerChannelFilterConfiguration::isCompatible(const KisPaintDeviceSP dev) const
 {
-    return (int)dev->colorSpace()->colorChannelCount() == m_curves.size();
+    return (int)dev->colorSpace()->channelCount() == m_curves.size();
 }
 
 void KisPerChannelFilterConfiguration::setCurves(QList<KisCubicCurve> &curves)
@@ -425,7 +425,7 @@ KoColorTransformation* KisPerChannelFilter::createTransformation(const KoColorSp
     const QVector<QVector<quint16> > &originalTransfers =
         configBC->transfers();
 
-    if (originalTransfers.size() != int(cs->colorChannelCount())) {
+    if (originalTransfers.size() != int(cs->channelCount())) {
         // We got an illegal number of colorchannels.KisFilter
         return 0;
     }

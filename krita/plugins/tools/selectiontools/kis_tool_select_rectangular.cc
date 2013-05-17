@@ -62,9 +62,8 @@ void KisToolSelectRectangular::keyPressEvent(QKeyEvent *event)
 
 void KisToolSelectRectangular::finishRect(const QRectF& rect)
 {
-    QRect rc(rect.toRect());
+    QRect rc(rect.normalized().toRect());
     rc = rc.intersected(currentImage()->bounds());
-    rc = rc.normalized();
 
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     if (!kisCanvas)

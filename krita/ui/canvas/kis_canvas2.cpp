@@ -55,6 +55,7 @@
 #include "kis_selection_component.h"
 #include "flake/kis_shape_selection.h"
 #include "kis_image_config.h"
+#include "kis_infinity_manager.h"
 
 #include "opengl/kis_opengl_canvas2.h"
 #include "opengl/kis_opengl_image_textures.h"
@@ -168,6 +169,11 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
     if(m_d->canvasWidget!=0)
         tmp->setDecorations(m_d->canvasWidget->decorations());
     m_d->canvasWidget = tmp;
+
+    if (!m_d->canvasWidget->decoration(INFINITY_DECORATION_ID)) {
+        KisInfinityManager *manager = new KisInfinityManager(m_d->view, this);
+        m_d->canvasWidget->addDecoration(manager);
+    }
 
     widget->setAutoFillBackground(false);
     widget->setAttribute(Qt::WA_OpaquePaintEvent);
@@ -650,6 +656,8 @@ void KisCanvas2::documentOffsetMoved(const QPoint &documentOffset)
 
     if (!m_d->currentCanvasIsOpenGL)
         m_d->prescaledProjection->viewportMoved(moveOffset);
+
+    emit documentOffsetUpdateFinished();
 
     updateCanvas();
 }

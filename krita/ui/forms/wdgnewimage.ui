@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>472</width>
-    <height>503</height>
+    <width>499</width>
+    <height>584</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -36,12 +36,28 @@
     </layout>
    </item>
    <item>
+    <widget class="QGroupBox" name="grpClipboard">
+     <property name="title">
+      <string>Clipboard</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QGraphicsView" name="clipPreview">
+        <property name="interactive">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <widget class="QGroupBox" name="grpImage">
      <property name="title">
       <string>Image Size</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
+      <item row="1" column="0">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <widget class="QLabel" name="label_2">
@@ -65,7 +81,7 @@
         </item>
        </layout>
       </item>
-      <item row="1" column="0">
+      <item row="2" column="0">
        <layout class="QHBoxLayout">
         <item>
          <layout class="QVBoxLayout">
@@ -247,7 +263,7 @@
         </item>
        </layout>
       </item>
-      <item row="2" column="0">
+      <item row="3" column="0">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
          <widget class="QPushButton" name="bnScreenSize">
@@ -411,13 +427,6 @@
       <item row="2" column="1">
        <widget class="QTextEdit" name="txtDescription"/>
       </item>
-      <item row="3" column="0" colspan="2">
-       <widget class="QCheckBox" name="chkFromClipboard">
-        <property name="text">
-         <string>&amp;First layer from clipboard</string>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="1">
        <widget class="KColorButton" name="cmbColor">
         <property name="color">
@@ -502,7 +511,6 @@
   <tabstop>cmbColor</tabstop>
   <tabstop>sliderOpacity</tabstop>
   <tabstop>txtDescription</tabstop>
-  <tabstop>chkFromClipboard</tabstop>
   <tabstop>createButton</tabstop>
  </tabstops>
  <resources/>

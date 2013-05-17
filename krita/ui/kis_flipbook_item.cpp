@@ -64,21 +64,17 @@ KisFlipbookItem::KisFlipbookItem(const QString &filename)
 
 KisFlipbookItem::~KisFlipbookItem()
 {
-    delete m_part;
     delete m_document;
 }
 
 KisDoc2 *KisFlipbookItem::document()
 {
     if (!m_document) {
-        KisPart2 *part = new KisPart2(0);
-        m_document = new KisDoc2(part);
-        part->setDocument(m_document);
+        m_document = new KisDoc2();
         m_document->openUrl(KUrl(m_filename));
 
         if (!m_document->image().isValid()) {
             delete m_document;
-            delete part;
             m_document = 0;
             return 0;
         }

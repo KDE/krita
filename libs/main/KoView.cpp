@@ -90,7 +90,7 @@ public:
     }
 
     QPointer<KoDocument> document; // our KoDocument
-    KoPart *part; // our part
+    QPointer<KoPart> part; // our part
     QPointer<KParts::PartManager> manager;
     QWidget *tempActiveWidget;
     bool registered;  // are we registered at the part manager?

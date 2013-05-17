@@ -61,7 +61,6 @@ public slots:
     void reloadImage();
 
 private:
-    KisPart2 *m_part;
     KisDoc2 *m_doc;
 
     QString m_filename;

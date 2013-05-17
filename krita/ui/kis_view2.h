@@ -47,7 +47,6 @@ class KisImageManager;
 class KisNodeManager;
 class KisPaintingAssistantsManager;
 class KisPaintopBox;
-class KisPart2;
 class KisPerspectiveGridManager;
 class KisSelectionManager;
 class KisStatusBar;
@@ -73,7 +72,7 @@ public:
      * @param document   the document we show.
      * @param parent   a parent widget we show ourselves in.
      */
-    KisView2(KisPart2 *part, KisDoc2 *document, QWidget *parent);
+    KisView2(KoPart *part, KisDoc2 *document, QWidget *parent);
     virtual ~KisView2();
 
 public:

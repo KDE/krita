@@ -71,9 +71,7 @@ void KisDropButton::dropEvent(QDropEvent *event)
 
         QByteArray ba = event->mimeData()->data("application/x-krita-node");
 
-        KisPart2 part;
-        KisDoc2 tmpDoc(&part);
-        part.setDocument(&tmpDoc);
+        KisDoc2 tmpDoc;
 
         tmpDoc.loadNativeFormatFromStore(ba);
 

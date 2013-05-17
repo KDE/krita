@@ -116,7 +116,6 @@ void KisPaintingAssistantsManager::setup(KActionCollection * collection)
 void KisPaintingAssistantsManager::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas)
 {
     foreach(KisPaintingAssistant* assistant, d->assistants) {
-        qDebug() << " Canvas: " <<canvas;
         assistant->drawAssistant(gc, updateRect, converter,canvas);
     }
 }

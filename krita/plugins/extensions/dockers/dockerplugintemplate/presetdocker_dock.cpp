@@ -39,12 +39,8 @@ void PresetDockerDock::setCanvas(KoCanvasBase * canvas)
 
     m_canvas = canvas;
     
-    connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
-            this, SLOT(resourceChanged(int, const QVariant&)));
 }
 
-void PresetDockerDock::resourceChanged(int key, const QVariant& v)
-{
-}
+
 
 #include "presetdocker_dock.moc"

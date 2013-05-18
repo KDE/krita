@@ -29,11 +29,11 @@ KoResourceModel::KoResourceModel( KoAbstractResourceServerAdapter * resourceAdap
 {
     Q_ASSERT( m_resourceAdapter );
     m_resourceAdapter->connectToResourceServer();
-    connect(m_resourceAdapter, SIGNAL(resourceAdded(KoResource*)), 
+    connect(m_resourceAdapter, SIGNAL(resourceAdded(KoResource*)),
             this, SLOT(resourceAdded(KoResource*)));
-    connect(m_resourceAdapter, SIGNAL(removingResource(KoResource*)), 
+    connect(m_resourceAdapter, SIGNAL(removingResource(KoResource*)),
             this, SLOT(resourceRemoved(KoResource*)));
-    connect(m_resourceAdapter, SIGNAL(resourceChanged(KoResource*)), 
+    connect(m_resourceAdapter, SIGNAL(resourceChanged(KoResource*)),
             this, SLOT(resourceChanged(KoResource*)));
 }
 
@@ -63,8 +63,15 @@ QVariant KoResourceModel::data( const QModelIndex &index, int role ) const
             KoResource * resource = static_cast<KoResource*>(index.internalPointer());
             if( ! resource )
                 return QVariant();
-
-            return QVariant( i18n( resource->name().toUtf8().data() ) );
+            QString resName = i18n( resource->name().toUtf8().data());
+            
+           
+            if (m_resourceAdapter->getAssignedTagsList(resource).count()) {
+                QString taglist = m_resourceAdapter->getAssignedTagsList(resource).join("] , [");
+                QString tagListToolTip = QString(" - %1: [%2]").arg(i18n("Tags"), taglist);
+                return QVariant( resName + tagListToolTip );
+            }
+            return QVariant( resName );
         }
         case Qt::DecorationRole:
         {
@@ -144,7 +151,7 @@ void KoResourceModel::resourceChanged(KoResource* resource)
     if (!modelIndex.isValid()) {
         return;
     }
-    
+
     emit dataChanged(modelIndex, modelIndex);
 }
 
@@ -153,7 +160,7 @@ QModelIndex KoResourceModel::indexFromResource(KoResource* resource)
     int resourceIndex = m_resourceAdapter->resources().indexOf(resource);
     int row = resourceIndex / columnCount();
     int column = resourceIndex % columnCount();
-    return index(row, column);    
+    return index(row, column);
 }
 
 QString KoResourceModel::extensions()
@@ -206,9 +213,14 @@ QStringList KoResourceModel::searchTag(const QString& lineEditText)
     return m_resourceAdapter->searchTag(lineEditText);
 }
 
-void KoResourceModel::setTagSearch(bool tagSearch)
+void KoResourceModel::searchTextChanged(const QString& searchString)
 {
-    m_resourceAdapter->setTagSearch(tagSearch);
+    m_resourceAdapter->searchTextChanged(searchString);
+}
+
+void KoResourceModel::enableResourceFiltering(bool enable)
+{
+    m_resourceAdapter->enableResourceFiltering(enable);
 }
 
 void KoResourceModel::setTaggedResourceFileNames(const QStringList& resourceFileNames)
@@ -221,10 +233,13 @@ void KoResourceModel::updateServer()
     m_resourceAdapter->updateServer();
 }
 
-
 int KoResourceModel::resourcesCount() const
 {
     return m_resourceAdapter->resources().count();
 }
 
+QList<KoResource *> KoResourceModel::currentlyVisibleResources()
+{
+  return m_resourceAdapter->resources();
+}
 #include <KoResourceModel.moc>

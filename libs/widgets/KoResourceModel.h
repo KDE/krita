@@ -64,10 +64,12 @@ public:
     void deleteTag( KoResource* resource, const QString& tag);
     QStringList getTagNamesList();
     QStringList searchTag(const QString& lineEditText);
-    void setTagSearch(bool tagSearch);
+    void enableResourceFiltering(bool enable);
     void setTaggedResourceFileNames(const QStringList& resourceFileNames);
+    void searchTextChanged(const QString& searchString);
     void updateServer();
     int resourcesCount() const;
+    QList<KoResource *> currentlyVisibleResources();
 
 private slots:
     void resourceAdded(KoResource *resource);

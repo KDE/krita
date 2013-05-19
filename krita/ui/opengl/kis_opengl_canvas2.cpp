@@ -323,6 +323,7 @@ void KisOpenGLCanvas2::drawImage()
             m_d->displayShader->enableAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE);
             m_d->displayShader->setAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE, texCoords.constData());
 
+            glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, tile->textureId());
 
             if (scaleX > 2.0) {

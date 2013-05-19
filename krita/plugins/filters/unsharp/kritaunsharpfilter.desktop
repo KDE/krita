@@ -46,4 +46,4 @@ Name[zh_TW]=增強過濾器（延伸）
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaunsharpfilter
-X-Krita-Version=27
+X-Krita-Version=28

@@ -964,7 +964,7 @@ void KisView2::loadPlugins()
     // Load all plugins
     KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/ViewPlugin"),
                                                               QString::fromLatin1("(Type == 'Service') and "
-                                                                                  "([X-Krita-Version] == 27)"));
+                                                                                  "([X-Krita-Version] == 28)"));
     KService::List::ConstIterator iter;
     for (iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
         KService::Ptr service = *iter;

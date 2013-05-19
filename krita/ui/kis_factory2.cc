@@ -115,14 +115,14 @@ const KComponentData &KisFactory2::componentData()
 
         // Load the krita-specific tools
         KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),
-                                         QString::fromLatin1("[X-Krita-Version] == 27"));
+                                         QString::fromLatin1("[X-Krita-Version] == 28"));
 
         // Load dockers
         KoPluginLoader::PluginsConfig config;
         config.blacklist = "DockerPluginsDisabled";
         config.group = "krita";
         KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Dock"),
-                                         QString::fromLatin1("[X-Krita-Version] == 27"));
+                                         QString::fromLatin1("[X-Krita-Version] == 28"));
 
         s_instance->dirs()->addResourceType("krita_template", "data", "krita/templates");
 

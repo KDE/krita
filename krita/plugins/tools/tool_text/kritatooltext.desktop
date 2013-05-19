@@ -36,4 +36,4 @@ Name[zh_TW]=文字工具
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatooltext
-X-Krita-Version=27
+X-Krita-Version=28

@@ -32,5 +32,5 @@ X-KDE-ServiceTypes=Calligra/ColorSpace
 Type=Service
 X-KDE-PluginInfo-Name=kolcmsengine
 X-KDE-Library=kolcmsengine
-X-Pigment-MinVersion=27
-X-Pigment-PluginVersion=27
+X-Pigment-MinVersion=28
+X-Pigment-PluginVersion=28

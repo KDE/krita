@@ -62,7 +62,7 @@ KisBrushRegistry* KisBrushRegistry::instance()
         s_instance->add(new KisTextBrushFactory());
         s_instance->add(new KisPngBrushFactory());
         s_instance->add(new KisSvgBrushFactory());
-        KoPluginLoader::instance()->load("Krita/Brush", "Type == 'Service' and ([X-Krita-Version] == 27)");
+        KoPluginLoader::instance()->load("Krita/Brush", "Type == 'Service' and ([X-Krita-Version] == 28)");
     }
     return s_instance;
 }

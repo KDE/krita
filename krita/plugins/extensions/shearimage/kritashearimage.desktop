@@ -41,4 +41,4 @@ Name[zh_TW]=修剪圖片外掛程式
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritashearimage
-X-Krita-Version=27
+X-Krita-Version=28

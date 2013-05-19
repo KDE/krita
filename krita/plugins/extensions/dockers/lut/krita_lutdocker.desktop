@@ -42,4 +42,4 @@ Comment[x-test]=xxDocker for selecting lutsxx
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritalutdocker
-X-Krita-Version=27
+X-Krita-Version=28

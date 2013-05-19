@@ -33,4 +33,4 @@ Name[zh_TW]=尺規小助手工具
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritarulerassistanttool
-X-Krita-Version=27
+X-Krita-Version=28

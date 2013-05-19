@@ -45,12 +45,12 @@ void KoToolRegistry::init()
     config.blacklist = "FlakePluginsDisabled";
     config.group = "calligra";
     KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Flake"),
-                                     QString::fromLatin1("[X-Flake-PluginVersion] == 27"),
+                                     QString::fromLatin1("[X-Flake-PluginVersion] == 28"),
                                      config);
     config.whiteList = "ToolPlugins";
     config.blacklist = "ToolPluginsDisabled";
     KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Tool"),
-                                     QString::fromLatin1("[X-Flake-PluginVersion] == 27"),
+                                     QString::fromLatin1("[X-Flake-PluginVersion] == 28"),
                                      config);
 
     // register generic tools

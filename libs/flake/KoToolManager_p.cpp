@@ -25,13 +25,13 @@
 #include <QToolButton>
 #include <kicon.h>
 
-#include <stdlib.h> // for random()
+#include <QtGlobal> // for qrand()
 
 //   ************ ToolHelper **********
 ToolHelper::ToolHelper(KoToolFactoryBase *tool)
 {
     m_toolFactory = tool;
-    m_uniqueId = (int) random();
+    m_uniqueId = (int) qrand();
 }
 
 QToolButton* ToolHelper::createButton()

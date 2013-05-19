@@ -46,6 +46,11 @@
 #define BEZIER_FLATNESS_THRESHOLD 0.5
 #include <kis_distance_information.h>
 
+#ifdef Q_OS_WIN
+#include <float.h>
+#define isnan _isnan
+#endif
+
 struct KisPaintOp::Private {
     Private()
             : dab(0),currentScale(1.0),currentRotation(0) {

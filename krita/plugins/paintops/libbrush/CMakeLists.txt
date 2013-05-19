@@ -34,7 +34,11 @@ if(HAVE_VC)
 #  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
 endif(HAVE_VC)
 
+if (WIN32)
+target_link_libraries(kritalibbrush LINK_INTERFACE_LIBRARIES kritaui ${WIN32_PLATFORM_NET_LIBS})
+else (WIN32)
 target_link_libraries(kritalibbrush LINK_INTERFACE_LIBRARIES kritaui)
+endif (WIN32)
 
 set_target_properties(kritalibbrush PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

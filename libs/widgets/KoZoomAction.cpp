@@ -69,7 +69,7 @@ QList<qreal> KoZoomAction::Private::generateSliderZoomLevels() const
 {
     QList<qreal> zoomLevels;
 
-    qreal defaultZoomStep = sqrt(2);
+    qreal defaultZoomStep = sqrt(2.0);
 
     zoomLevels << 0.25 / 2.0;
     zoomLevels << 0.25 / 1.5;

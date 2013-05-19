@@ -1,5 +1,13 @@
 project(pigmentcms)
 
+# we have to repeat platform specifics from top-level
+if (WIN32)
+include_directories(${CMAKE_SOURCE_DIR}/winquirks)
+add_definitions(-D_USE_MATH_DEFINES)
+add_definitions(-DNOMINMAX)
+set(WIN32_PLATFORM_NET_LIBS ws2_32.lib netapi32.lib)
+endif (WIN32)
+
 include_directories( ${PIGMENT_INCLUDES} ${QT_INCLUDES} ${Boost_INCLUDE_DIR})
 
 set(FILE_OPENEXR_SOURCES)
@@ -120,6 +128,7 @@ target_link_libraries(
     ${EXTRA_LIBRARIES}
     ${QT_QTGUI_LIBRARY}
     ${QT_QTXML_LIBRARY}
+    ${WIN32_PLATFORM_NET_LIBS}
     )
 
 target_link_libraries(

@@ -29,7 +29,9 @@
 #include <cfloat>
 #include <cmath>
 #include <climits>
+#ifndef Q_OS_WIN
 #include <strings.h>
+#endif
 
 #include <QImage>
 #include <QRect>
@@ -68,6 +70,10 @@
 // Maximum distance from a Bezier control point to the line through the start
 // and end points for the curve to be considered flat.
 #define BEZIER_FLATNESS_THRESHOLD 0.5
+#define trunc(x) ((int)(x))
+#ifndef Q_OS_WIN
+
+#endif
 
 struct KisPainter::Private {
     KisPaintDeviceSP            device;

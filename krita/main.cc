@@ -31,6 +31,7 @@
 #include <kglobal.h>
 #include <kcmdlineargs.h>
 #include <ksplashscreen.h>
+#include <ksycoca.h>
 
 #include <KoApplication.h>
 
@@ -38,10 +39,27 @@
 
 #include "data/splash/splash_screen.xpm"
 #include "ui/kis_aboutdata.h"
+#include "image/brushengine/kis_paintop_registry.h>
+
+#include <Vc/global.h>
+#include <Vc/support.h>
 
 #ifdef Q_OS_WIN
 #include "stdlib.h"
 #endif
+
+static void fatalError(const QString &message) {
+    qCritical() << "Fatal Error:" << message;
+
+    if (QMessageBox::critical(0, "Configuration Issue",
+                QString("Configuration for Krita has issues.\n"
+                "(Details: %1)\n"
+                "Shall we continue anyways?").arg(message),
+                QMessageBox::Yes|QMessageBox::No)
+            == QMessageBox::No) {
+        qFatal("aborting due to configuration issues");
+    }
+}
 
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
@@ -56,14 +74,63 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 
     KCmdLineOptions options;
     options.add("+[file(s)]", ki18n("File(s) or URL(s) to open"));
+    options.add( "hwinfo", ki18n( "Show some information about the hardware" ));
     KCmdLineArgs::addCmdLineOptions(options);
 
     // first create the application so we can create a  pixmap
     KoApplication app;
 
+    if (args->isSet("hwinfo")) {
+        QString hwinfo;
+        QTextStream stst(&hwinfo);
+        if (Vc::isImplementationSupported(Vc::SSE2Impl)) {
+            stst << "Vc::SSE2Impl: " << Vc::CpuId::hasSse2() << "\n";
+        }
+        if (Vc::isImplementationSupported(Vc::SSE3Impl)) {
+            stst << "Vc::SSE3Impl: " << Vc::CpuId::hasSse3() << "\n";
+        }
+        if (Vc::isImplementationSupported(Vc::SSSE3Impl)) {
+            stst << "Vc::SSSE3Impl: " << Vc::CpuId::hasSsse3() << "\n";
+        }
+        if (Vc::isImplementationSupported(Vc::SSE41Impl)) {
+            stst << "Vc::SSE41Impl: " << Vc::CpuId::hasSse41() << "\n";
+        }
+        if (Vc::isImplementationSupported(Vc::SSE42Impl)) {
+            stst << "Vc::SSE42Impl: " << Vc::CpuId::hasSse42() << "\n";
+        }
+        if (Vc::isImplementationSupported(Vc::AVXImpl)) {
+            stst << "Vc::AVXImpl: " << (Vc::CpuId::hasOsxsave()
+                                    && Vc::CpuId::hasAvx()) << "\n";
+        }
+        if (Vc::isImplementationSupported(Vc::AVX2Impl)) {
+            stst << "Vc::AVX2Impl: " << false << "\n";
+        }
+        QMessageBox::information(0, "hwinfo", hwinfo);
+        qApp->quit();
+        // quit() is not good enough to terminate here.
+        qFatal("hwinfo");
+    }
+
+
 #ifdef Q_WS_X11
     app.setAttribute(Qt::AA_X11InitThreads, true);
 #endif
+
+    // assert krita.rc
+    QString krita_rc_check = KStandardDirs::locate("data", "krita/krita.rc");
+    qDebug() << "KStandardDirs::locate(data, krita.rc):" << krita_rc_check;
+    if (krita_rc_check.isNull() || krita_rc_check.isEmpty()) {
+        fatalError("rc missing");
+    }
+
+    KisPaintOpRegistry *reg = KisPaintOpRegistry::instance();
+    if (!reg) bark("KisPaintOpRegistry missing");
+
+    // we should have some paintops by now; if not - terminate gracefully
+    // (instead of crashing later inside kritasketch)
+    if (reg->listKeys().empty()) {
+        fatalError("paintops missing");
+    }
 
     // then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,

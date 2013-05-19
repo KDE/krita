@@ -16,7 +16,11 @@ kde4_add_plugin(kritaxcfimport ${kritaxcfimport_PART_SRCS})
 
 target_link_libraries(kritaxcfimport kritaui )
 
-install(TARGETS kritaxcfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+if (WIN32)
+    target_link_libraries(kritaxcfimport kritaui ${WIN32_PLATFORM_NET_LIBS})
+else (WIN32)
+    install(TARGETS kritaxcfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+endif (WIN32)
 
 ########### install files ###############
 

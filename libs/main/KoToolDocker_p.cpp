@@ -46,10 +46,10 @@
 class KoToolDocker::Private {
 public:
     Private(KoToolDocker *dock)
-            : q(dock)
-            , tabbed(false)
-            , tabIcon(koIconName("tab-new"))
-            , unTabIcon(koIconName("tab-close"))
+        : q(dock)
+        , tabbed(false)
+        , tabIcon(koIconName("tab-new"))
+        , unTabIcon(koIconName("tab-close"))
     {
     }
 
@@ -90,7 +90,7 @@ public:
         if (tabbed && currentWidgetList.size() > 1) {
             QTabWidget *t;
             housekeeperLayout->addWidget(t = new QTabWidget(), 0, 0);
-	    t->setDocumentMode(true);
+            t->setDocumentMode(true);
             currentAuxWidgets.insert(t);
             foreach(QWidget *widget, currentWidgetList) {
                 if (widget->objectName().isEmpty()) {
@@ -191,7 +191,7 @@ public:
 
 KoToolDocker::KoToolDocker(QWidget *parent)
     : QDockWidget(i18n("Tool Options"), parent),
-    d(new Private(this))
+      d(new Private(this))
 {
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::TopDockWidgetArea);
 

@@ -42,7 +42,9 @@
 #endif
 
 // for memalign()
+#if !defined(__APPLE__)
 #include <malloc.h>
+#endif
 
 const int alpha_pos = 3;
 
@@ -152,10 +154,15 @@ QVector<Tile> generateTiles(int size,
 #endif
 
     for (int i = 0; i < size; i++) {
+#if !defined(__APPLE__) // In OSX it's automatically aligned by 16 bytes
         tiles[i].src = (quint8*)memalign(vecSize * 4, numPixels * 4 + srcAlignmentShift) + srcAlignmentShift;
         tiles[i].dst = (quint8*)memalign(vecSize * 4, numPixels * 4 + dstAlignmentShift) + dstAlignmentShift;
         tiles[i].mask = (quint8*)memalign(vecSize, numPixels);
-
+#else
+        tiles[i].src = (quint8*)malloc(numPixels * 4 + srcAlignmentShift) + srcAlignmentShift;
+        tiles[i].dst = (quint8*)malloc(numPixels * 4 + dstAlignmentShift) + dstAlignmentShift;
+        tiles[i].mask = (quint8*)malloc(numPixels);
+#endif
         generateDataLine(1, numPixels, tiles[i].src, tiles[i].dst, tiles[i].mask, srcAlphaRange, dstAlphaRange);
     }
 

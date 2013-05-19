@@ -57,8 +57,6 @@ public:
 
         m_doc->setCurrentImage(m_image);
 
-        m_part->setDocument(m_doc);
-
         m_shell = new KoMainWindow(m_part->componentData());
         m_view = new KisView2(m_part, m_doc, m_shell);
 
@@ -72,7 +70,6 @@ public:
         QApplication::processEvents();
 
         delete m_shell;
-        delete m_part;
         delete m_doc;
 
         /**

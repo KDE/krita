@@ -40,7 +40,6 @@ protected:
 
 private:
     KisDoc2 *m_doc;
-    KisPart2 *m_part;
     KisNameServer *m_nameServer;
 };
 

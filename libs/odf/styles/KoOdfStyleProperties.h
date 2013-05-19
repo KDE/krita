@@ -36,14 +36,18 @@ class KOODF_EXPORT KoOdfStyleProperties
     KoOdfStyleProperties();
     virtual ~KoOdfStyleProperties();
 
-    QString value(QString &property) const;
-    void    setValue(QString &property, QString &value);
+    QString attribute(QString &property) const;
+    void    setAttribute(QString &property, QString &value);
 
     void clear();
 
     virtual bool readOdf(KoXmlStreamReader &reader);
-    bool readAttributes(KoXmlStreamReader &reader);
     virtual bool saveOdf(const QString &propertySet, KoXmlWriter *writer);
+
+ protected:
+    /// Read all attributes from the XML element.
+    /// This function is normally called from readOdf().
+    bool readAttributes(KoXmlStreamReader &reader);
 
  private:
     class Private;

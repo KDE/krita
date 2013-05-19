@@ -57,6 +57,19 @@ macro(calligra_drop_unbuildable_products)
   endforeach(_product_id)
 endmacro()
 
+# backward compatibility: BUILD_app as option or passed as cmake parameter can overwrite product set
+# and disable a product if set to FALSE (TRUE was ignored)
+macro(calligra_drop_products_on_old_flag _build_id)
+  string(TOLOWER "${_build_id}" lowercase_build_id)
+  if (DEFINED BUILD_${lowercase_build_id} AND NOT BUILD_${lowercase_build_id})
+    foreach(_product_id ${ARGN})
+      if (NOT DEFINED SHOULD_BUILD_${_product_id})
+        message(FATAL_ERROR "Unknown product: ${_product_id}")
+      endif (NOT DEFINED SHOULD_BUILD_${_product_id})
+      set(SHOULD_BUILD_${_product_id} FALSE)
+    endforeach(_product_id)
+  endif (DEFINED BUILD_${lowercase_build_id} AND NOT BUILD_${lowercase_build_id})
+endmacro()
 
 macro(calligra_set_productset _productset_id)
   # be gracefull and compare the productset id case insensitive, by lowercasing

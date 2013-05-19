@@ -24,6 +24,7 @@
 
 #include "KoResourceServer.h"
 #include <KoResource.h>
+#include <KoResourceFiltering.h>
 
 #include "kowidgets_export.h"
 
@@ -43,12 +44,13 @@ public:
     virtual void importResourceFile(const QString & filename, bool fileCreation=true) = 0;
     virtual QString extensions() = 0;
     virtual void setTaggedResourceFileNames(const QStringList& resourceFileNames)=0;
-    virtual void setTagSearch(bool tagSearch)=0;
+    virtual void enableResourceFiltering(bool tagSearch)=0;
     virtual void updateServer()=0;
     virtual QStringList getAssignedTagsList( KoResource* resource )=0;
     virtual QStringList getTagNamesList()=0;
     virtual void addTag( KoResource* resource,const QString& tag)=0;
     virtual void deleteTag( KoResource* resource,const QString& tag)=0;
+    virtual void searchTextChanged(const QString& searchString)=0;
     virtual QStringList searchTag(const QString& lineEditText)=0;
 
 signals:
@@ -73,7 +75,9 @@ public:
         : KoAbstractResourceServerAdapter(parent)
         , m_resourceServer(resourceServer)
     {
-        m_tagSearch=false;
+        m_changeCounter = 0;
+        m_oldChangeCounter = 0;
+        m_enableFiltering=false;
     }
 
     virtual ~KoResourceServerAdapter()
@@ -88,28 +92,22 @@ public:
             m_resourceServer->addObserver(this);
     }
 
-    virtual QList<KoResource*> resources() 
+    virtual QList<KoResource*> resources()
     {
         if( ! m_resourceServer )
             return QList<KoResource*>();
 
-        QList<T*> serverResources = m_resourceServer->resources();
-
-        QList<KoResource*> resources;
-
-        foreach( T* resource, serverResources ) {
-            resources.append( resource );
+        bool cacheDirty = serverResourceCacheInvalid();
+        if(cacheDirty) {
+            cacheServerResources(m_resourceServer->resources());
         }
-
-        if(m_tagSearch) {
-            foreach(KoResource* resource, resources) {
-                if(!m_resourceFileNames.contains(resource->filename())) {
-                    resources.removeAll(resource);
-                }
+        if ( m_enableFiltering) {
+            if (m_presetFilter.filtersHaveChanged() || cacheDirty) {
+                m_filteredResources = m_presetFilter.filterResources( m_serverResources );
             }
+            return m_filteredResources;
         }
-
-        return resources;
+        return m_serverResources;
     }
 
     bool addResource(KoResource* resource)
@@ -150,21 +148,23 @@ public:
         }
 
         m_resourceServer->removeResourceFile(filename);
-
     }
 
     void resourceAdded(T* resource)
     {
+        serverResourceCacheInvalid(true);
         emitResourceAdded(resource);
     }
 
     void removingResource(T* resource)
     {
+        serverResourceCacheInvalid(true);
         emitRemovingResource(resource);
     }
-    
+
     void resourceChanged(T* resource)
     {
+        serverResourceCacheInvalid(true);
         emitResourceChanged(resource);
     }
 
@@ -175,15 +175,16 @@ public:
 
         return m_resourceServer->extensions();
     }
-    
+
     void setTaggedResourceFileNames(const QStringList& resourceFileNames)
     {
-        m_resourceFileNames = resourceFileNames;
+        serverResourceCacheInvalid(true);
+        m_presetFilter.setRootResourceFilenames(resourceFileNames);
     }
 
-    void setTagSearch(bool tagSearch )
+    void enableResourceFiltering(bool enable )
     {
-        m_tagSearch = tagSearch;
+        m_enableFiltering = enable;
     }
 
     void updateServer()
@@ -211,6 +212,12 @@ public:
         m_resourceServer->delTag(resource,tag);
     }
 
+    void searchTextChanged(const QString& searchString)
+    {
+        m_presetFilter.setFilters(searchString, resourceServer()->tagObject());
+        serverResourceCacheInvalid(true);
+    }
+
     QStringList searchTag(const QString& lineEditText)
     {
         return m_resourceServer->searchTag(lineEditText);
@@ -221,11 +228,40 @@ protected:
     {
         return m_resourceServer;
     }
-
+protected:
+    KoResourceFiltering m_presetFilter;
 private:
+    bool serverResourceCacheInvalid()
+    {
+        return m_changeCounter != m_oldChangeCounter;
+    }
+
+    void serverResourceCacheInvalid(bool yes)
+    {
+        if (yes) {
+            ++m_changeCounter;
+        }
+        else {
+            m_oldChangeCounter = m_changeCounter;
+        }
+    }
+
+    void cacheServerResources(QList< T* > serverResources)
+    {
+        m_serverResources.clear();
+
+        foreach( T* resource, serverResources ) {
+            m_serverResources.append( resource );
+        }
+        serverResourceCacheInvalid (false);
+    }
+
     KoResourceServer<T>* m_resourceServer;
-    QStringList m_resourceFileNames;
-    bool m_tagSearch;
+    unsigned int m_changeCounter;
+    unsigned int m_oldChangeCounter;
+    QList<KoResource*> m_serverResources;
+    QList<KoResource*> m_filteredResources;
+    bool m_enableFiltering;
 };
 
 #endif // KO_RESOURCESERVER_ADAPTER_H_

@@ -28,6 +28,8 @@
 class KisDoc2;
 class KoID;
 
+enum CustomImageWidgetType { CUSTOM_DOCUMENT, NEW_IMG_FROM_CB };
+
 class WdgNewImage : public QWidget, public Ui::WdgNewImage
 {
     Q_OBJECT
@@ -52,10 +54,10 @@ public:
      * @param parent the parent widget
      * @param doc the document that wants to be altered
      */
-    KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32 defWidth, qint32 defHeight, bool clipAvailable, double resolution, const QString & defColorModel, const QString & defColorDepth, const QString & defColorProfile, const QString & imageName);
+    KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32 defWidth, qint32 defHeight, double resolution, const QString & defColorModel, const QString & defColorDepth, const QString & defColorProfile, const QString & imageName);
     virtual ~KisCustomImageWidget();
+    
 private slots:
-    void createImage();
     void widthUnitChanged(int index);
     void widthChanged(double value);
     void heightUnitChanged(int index);
@@ -66,18 +68,24 @@ private slots:
     void predefinedClicked(int index);
     void saveAsPredefined();
     void switchWidthHeight();
-    void setClipImage();
+    void createImage();
 signals:
     /// this signal is emitted (as defined by KoDocument) the moment the document is 'ready'
     void documentSelected();
 
+protected:
+    KisDoc2 *m_doc;
+    
+    void createNewImage();
+    
 private:
+    
+    double m_width, m_height;
     quint8 backgroundOpacity() const;
+    
     void fillPredefined();
     void showEvent(QShowEvent *);
-
-    KisDoc2 *m_doc;
-    double m_width, m_height;
+    
     KoUnit m_widthUnit, m_heightUnit;
     QList<KisPropertiesConfiguration*> m_predefined;
 };

@@ -35,4 +35,4 @@ Name[zh_TW]=編寫佈局外掛程式
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritalayercompose
-X-Krita-Version=27
+X-Krita-Version=28

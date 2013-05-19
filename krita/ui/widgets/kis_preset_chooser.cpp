@@ -38,6 +38,8 @@
 #include <KoResourceModel.h>
 #include <KoResourceServerAdapter.h>
 
+#include <KoResourceFiltering.h>
+
 #include "kis_paintop_settings.h"
 #include "kis_paintop_preset.h"
 #include "kis_resource_server_provider.h"
@@ -109,100 +111,6 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     painter->restore();
 }
 
-class KisPresetProxyAdapter : public KoResourceServerAdapter<KisPaintOpPreset>
-{
-    static bool compareKoResources(const KoResource* a, const KoResource* b)
-    {
-        return a->name() < b->name();
-    }
-
-public:
-    KisPresetProxyAdapter(KoResourceServer< KisPaintOpPreset >* resourceServer)
-        : KoResourceServerAdapter<KisPaintOpPreset>(resourceServer), m_filterNames(false)
-    {
-        m_showAll = KisConfig().presetShowAllMode();
-    }
-    virtual ~KisPresetProxyAdapter() {}
-
-    virtual QList< KoResource* > resources() {
-        if( ! resourceServer() )
-            return QList<KoResource*>();
-
-        QList<KisPaintOpPreset*> serverResources = resourceServer()->resources();
-
-        QList<KoResource*> resources;
-        foreach( KisPaintOpPreset* resource, serverResources ) {
-            if(filterAcceptsPreset(resource) || (m_filterNames && m_filteredNames.contains(resource->filename())) ) {
-                resources.append( resource );
-            }
-        }
-
-        qSort(resources.begin(), resources.end(), KisPresetProxyAdapter::compareKoResources);
-        return resources;
-    }
-
-    bool filterAcceptsPreset(KisPaintOpPreset* preset) const
-    {
-        if(m_paintopID.id().isEmpty())
-            return true;
-
-        return ((preset->paintOp() == m_paintopID || m_showAll) &&
-                preset->name().contains(m_nameFilter, Qt::CaseInsensitive) &&
-                (!m_filterNames || m_filteredNames.contains(preset->name())));
-    }
-
-    ///Set id for paintop to be accept by the proxy model, if not filter is set all
-    ///presets will be shown.
-    void setPresetFilter(const KoID &paintopID)
-    {
-        m_paintopID = paintopID;
-    }
-
-    KoID presetFilter()
-    {
-        return m_paintopID;
-    }
-
-    /// Set a filter for preset name, only presets with name containing the string will be shown
-    void setPresetNameFilter(const QString &nameFilter)
-    {
-        m_nameFilter = nameFilter;
-    }
-
-    void setFilteredNames(const QStringList filteredNames)
-    {
-        m_filteredNames = filteredNames;
-    }
-
-    void setFilterNames(bool filterNames)
-    {
-        m_filterNames = filterNames;
-    }
-
-    void setShowAll(bool show)
-    {
-        m_showAll = show;
-    }
-
-    bool showAll()
-    {
-        return m_showAll;
-    }
-
-
-    ///Resets the model connected to the adapter
-    void invalidate() {
-        emitRemovingResource(0);
-    }
-
-private:
-    KoID m_paintopID;
-    QString m_nameFilter;
-    bool m_showAll;
-    bool m_filterNames;
-    QStringList m_filteredNames;
-};
-
 KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     : QWidget(parent)
 {
@@ -210,8 +118,10 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     QVBoxLayout * layout = new QVBoxLayout(this);
     layout->setMargin(0);
     KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-    m_presetProxy = new KisPresetProxyAdapter(rserver);
-    m_chooser = new KoResourceItemChooser(m_presetProxy, this);
+
+    m_adapter = new KoResourceServerAdapter<KisPaintOpPreset>(rserver);
+
+    m_chooser = new KoResourceItemChooser(m_adapter, this);
     QString knsrcFile = "kritapresets.knsrc";
     m_chooser->setKnsrcFile(knsrcFile);
     m_chooser->showGetHotNewStuff(true, true);
@@ -232,52 +142,18 @@ KisPresetChooser::~KisPresetChooser()
 {
 }
 
-void KisPresetChooser::setPresetFilter(const KoID& paintopID)
-{
-    KoID oldFilter = m_presetProxy->presetFilter();
-    m_presetProxy->setPresetFilter(paintopID);
-    if(oldFilter.id() != paintopID.id() && !m_presetProxy->showAll()) {
-        m_presetProxy->invalidate();
-        updateViewSettings();
-    }
-}
-
 void KisPresetChooser::setFilteredNames(const QStringList filteredNames)
 {
-    m_presetProxy->setFilterNames(true);
-    m_presetProxy->setFilteredNames(filteredNames);
-    m_presetProxy->invalidate();
-    updateViewSettings();
-}
+    m_adapter->setTaggedResourceFileNames(filteredNames);
+    m_adapter->enableResourceFiltering(true);
+    m_adapter->updateServer();
 
-void KisPresetChooser::searchTextChanged(const QString& searchString)
-{
-    if(searchString.isEmpty()) {
-        m_presetProxy->setFilterNames(false);
-    }
-    m_presetProxy->setPresetNameFilter(searchString);
-    m_presetProxy->invalidate();
-    updateViewSettings();
-}
-
-void KisPresetChooser::returnKeyPressed(QString lineEditText)
-{
-    m_presetProxy->setFilterNames(true);
-    m_presetProxy->setFilteredNames(m_chooser->getTaggedResourceFileNames(lineEditText));
-    m_presetProxy->invalidate();
     updateViewSettings();
 }
 
 QStringList KisPresetChooser::getTagNamesList(const QString& searchString)
 {
     return m_chooser->getTagNamesList(searchString);
-}
-
-void KisPresetChooser::setShowAll(bool show)
-{
-    m_presetProxy->setShowAll(show);
-    m_presetProxy->invalidate();
-    updateViewSettings();
 }
 
 void KisPresetChooser::showButtons(bool show)
@@ -300,7 +176,7 @@ void KisPresetChooser::resizeEvent(QResizeEvent* event)
 void KisPresetChooser::updateViewSettings()
 {
     if (m_mode == THUMBNAIL) {
-        int resourceCount = m_presetProxy->resources().count();
+        int resourceCount = m_adapter->resources().count();
         int width = m_chooser->viewSize().width();
         int maxColums = width/50;
         int cols = width/100 + 1;
@@ -324,7 +200,6 @@ void KisPresetChooser::updateViewSettings()
         m_chooser->setColumnWidth(m_chooser->viewSize().height() - 7);
         m_delegate->setShowText(false);
     }
-
 }
 
 KoResource* KisPresetChooser::currentResource()
@@ -341,6 +216,12 @@ KoResourceItemChooser *KisPresetChooser::itemChooser()
 {
     return m_chooser;
 }
+
+void KisPresetChooser::enableContextMenu(bool enable)
+{
+    m_chooser->enableContextMenu(enable);
+}
+
 
 #include "kis_preset_chooser.moc"
 

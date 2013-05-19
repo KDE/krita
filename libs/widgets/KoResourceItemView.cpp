@@ -32,6 +32,7 @@ KoResourceItemView::KoResourceItemView( QWidget * parent )
     verticalHeader()->hide();
     horizontalHeader()->hide();
     verticalHeader()->setDefaultSectionSize( 20 );
+    setContextMenuPolicy(Qt::DefaultContextMenu);
     m_viewMode = FIXED_COLUMS;
 }
 
@@ -45,14 +46,14 @@ void KoResourceItemView::resizeEvent( QResizeEvent * event )
 
     if (m_viewMode == FIXED_COLUMS) {
         columnWidth = viewport()->size().width() / columnCount;
-        
+
         for( int i = 0; i < columnCount; ++i ) {
             setColumnWidth( i, columnWidth );
         }
     } else if (m_viewMode == FIXED_ROWS) {
         if (rowCount == 0) return;  // Don't divide by zero
         rowHeight = viewport()->size().height() / rowCount;
-        
+
         for( int i = 0; i < rowCount; ++i ) {
             setRowHeight( i, rowHeight );
         }
@@ -85,6 +86,12 @@ void KoResourceItemView::setViewMode(KoResourceItemView::ViewMode mode)
 void KoResourceItemView::selectionChanged(const QItemSelection &selected, const QItemSelection &/*deselected*/)
 {
     emit currentResourceChanged(selected.indexes().first());
+}
+
+void KoResourceItemView::contextMenuEvent( QContextMenuEvent * event)
+{
+    QTableView::contextMenuEvent(event);
+    emit contextMenuRequested(event->globalPos());
 }
 
 #include "KoResourceItemView.moc"

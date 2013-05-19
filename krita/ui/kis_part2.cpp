@@ -24,6 +24,7 @@
 #include "kis_config.h"
 #include "kis_clipboard.h"
 #include "kis_custom_image_widget.h"
+#include "kis_image_from_clipboard_widget.h"
 #include "kis_shape_controller.h"
 #include "KisFlipbookSelector.h"
 #include "kis_flipbook.h"
@@ -121,24 +122,35 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
 
     int w = cfg.defImageWidth();
     int h = cfg.defImageHeight();
-    bool clipAvailable = false;
-
-    QSize sz = KisClipboard::instance()->clipSize();
-    if (sz.isValid() && sz.width() != 0 && sz.height() != 0) {
-        w = sz.width();
-        h = sz.height();
-        clipAvailable = true;
-    }
 
     QList<KoPart::CustomDocumentWidgetItem> widgetList;
     {
         KoPart::CustomDocumentWidgetItem item;
         item.widget = new KisCustomImageWidget(parent,
-                                               qobject_cast<KisDoc2*>(document()), w, h, clipAvailable, cfg.defImageResolution(), cfg.defColorModel(), cfg.defColorDepth(), cfg.defColorProfile(),
+                                               qobject_cast<KisDoc2*>(document()), w, h, cfg.defImageResolution(), cfg.defColorModel(), cfg.defColorDepth(), cfg.defColorProfile(),
                                                i18n("unnamed"));
 
         item.icon = "application-x-krita";
         widgetList << item;
+    }
+    {
+        QSize sz = KisClipboard::instance()->clipSize();
+        if (sz.isValid() && sz.width() != 0 && sz.height() != 0) {
+            w = sz.width();
+            h = sz.height();
+        }
+
+        KoPart::CustomDocumentWidgetItem item;
+        item.widget = new KisImageFromClipboard(parent,
+                                               qobject_cast<KisDoc2*>(document()), w, h, cfg.defImageResolution(), cfg.defColorModel(), cfg.defColorDepth(), cfg.defColorProfile(),
+                                               i18n("unnamed"));
+
+        item.title = i18n("Create from Clipboard");
+        item.icon = "klipper";
+
+        widgetList << item;
+
+
     }
 #if 0
     {

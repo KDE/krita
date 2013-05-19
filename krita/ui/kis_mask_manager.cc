@@ -33,6 +33,7 @@
 #include "kis_doc2.h"
 #include "kis_view2.h"
 #include <kis_layer.h>
+#include <kis_clone_layer.h>
 #include <kis_filter_mask.h>
 #include <kis_transparency_mask.h>
 #include <kis_selection_mask.h>
@@ -276,7 +277,20 @@ void KisMaskManager::maskProperties()
         if (! layer)
             return;
 
+
         KisPaintDeviceSP dev = layer->paintDevice();
+
+        if (!dev) {
+            // Check whether this is a clone layer
+            KisCloneLayer *cloneLayer = dynamic_cast<KisCloneLayer*>(layer.data());
+            if (cloneLayer) {
+                dev = cloneLayer->original();
+            }
+        }
+
+
+        qDebug() << "Dev:" << dev << "Layer" << layer->name();
+
         KisDlgAdjLayerProps dlg(layer, mask, dev, m_view, mask->filter().data(), mask->name(), i18n("Effect Mask Properties"), m_view, "dlgeffectmaskprops");
 
         KisSafeFilterConfigurationSP configBefore(mask->filter());

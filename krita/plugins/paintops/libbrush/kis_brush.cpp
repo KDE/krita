@@ -538,7 +538,7 @@ KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
 
     if (angle != 0.0)
     {
-        outputImage = outputImage.transformed(QTransform().rotate(-angle * 180 / M_PI));
+        outputImage = outputImage.transformed(QTransform().rotate(-angle * 180 / M_PI), Qt::SmoothTransformation);
     }
 
     int outputWidth = outputImage.width();

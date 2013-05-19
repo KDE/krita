@@ -726,17 +726,6 @@ void KisConfig::setPresetChooserViewMode(const int mode)
     m_cfg.writeEntry("presetChooserViewMode", mode);
 }
 
-
-bool KisConfig::presetShowAllMode() const
-{
-    return m_cfg.readEntry("presetChooserShowAllPresets", true);
-}
-
-void KisConfig::setPresetShowAllMode(bool showAll)
-{
-    m_cfg.writeEntry("presetChooserShowAllPresets", showAll);
-}
-
 bool KisConfig::firstRun() const
 {
     return m_cfg.readEntry("firstRun", true);

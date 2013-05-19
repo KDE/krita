@@ -45,4 +45,4 @@ Name[zh_TW]=Dropshadow
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritadropshadow
-X-Krita-Version=27
+X-Krita-Version=28

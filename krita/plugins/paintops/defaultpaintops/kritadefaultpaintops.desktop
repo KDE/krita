@@ -102,4 +102,4 @@ Comment[zh_TW]=預設繪圖操作
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritadefaultpaintops
-X-Krita-Version=27
+X-Krita-Version=28

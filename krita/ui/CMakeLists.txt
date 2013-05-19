@@ -165,6 +165,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_color_space_selector.cc
     widgets/kis_curve_widget.cpp
     widgets/kis_custom_image_widget.cc
+    widgets/kis_image_from_clipboard_widget.cpp
     widgets/kis_double_widget.cc
     widgets/kis_filter_selector_widget.cc
     widgets/kis_gradient_chooser.cc

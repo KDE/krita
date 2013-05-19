@@ -60,4 +60,4 @@ Comment[zh_TW]=過濾器使用之 Shiva 核心語言支援
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritashivafilters
-X-Krita-Version=27
+X-Krita-Version=28

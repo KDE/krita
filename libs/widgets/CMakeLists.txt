@@ -66,6 +66,7 @@ set(kowidgets_LIB_SRCS
     KoDockWidgetTitleBarButton.cpp
     KoViewItemContextBar.cpp
     KoContextBarButton.cpp
+    KoResourceFiltering.cpp
 
 )
 

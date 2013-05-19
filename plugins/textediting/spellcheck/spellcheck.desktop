@@ -46,5 +46,5 @@ X-KDE-ServiceTypes=Calligra/Text-EditingPlugin
 Type=Service
 X-KDE-PluginInfo-Name=spellcheck
 X-KDE-Library=spellcheck
-X-KoText-MinVersion=27
-X-KoText-PluginVersion=27
+X-KoText-MinVersion=28
+X-KoText-PluginVersion=28

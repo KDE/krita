@@ -62,12 +62,12 @@ KoOdfStyleProperties::~KoOdfStyleProperties()
 }
 
 
-QString KoOdfStyleProperties::value(QString &property) const
+QString KoOdfStyleProperties::attribute(QString &property) const
 {
     return d->attributes.value(property, QString());
 }
 
-void KoOdfStyleProperties::setValue(QString &property, QString &value)
+void KoOdfStyleProperties::setAttribute(QString &property, QString &value)
 {
     d->attributes[property] = value;
 }
@@ -89,19 +89,6 @@ bool KoOdfStyleProperties::readOdf(KoXmlStreamReader &reader)
     return retval;
 }
 
-
-bool KoOdfStyleProperties::readAttributes(KoXmlStreamReader &reader)
-{
-    KoXmlStreamAttributes attrs = reader.attributes();
-    foreach (const KoXmlStreamAttribute &attr, attrs) {
-        d->attributes.insert(attr.qualifiedName().toString(), attr.value().toString());
-    }
-
-    kDebug() << "read attributes: " << d->attributes;
-
-    return true;
-}
-
 bool KoOdfStyleProperties::saveOdf(const QString &propertySet, KoXmlWriter *writer)
 {
     writer->startElement(propertySet.toLatin1()); // e.g. text-properties
@@ -112,3 +99,21 @@ bool KoOdfStyleProperties::saveOdf(const QString &propertySet, KoXmlWriter *writ
 
     return true;
 }
+
+
+// ----------------------------------------------------------------
+//                         protected functions
+
+
+bool KoOdfStyleProperties::readAttributes(KoXmlStreamReader &reader)
+{
+    KoXmlStreamAttributes attrs = reader.attributes();
+    foreach (const KoXmlStreamAttribute &attr, attrs) {
+        d->attributes.insert(attr.qualifiedName().toString(), attr.value().toString());
+    }
+
+    //kDebug() << "read attributes: " << d->attributes;
+
+    return true;
+}
+

@@ -43,4 +43,4 @@ Name[zh_TW]=皺褶過濾器（延伸）
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritablurfilter
-X-Krita-Version=27
+X-Krita-Version=28

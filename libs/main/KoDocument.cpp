@@ -225,6 +225,8 @@ KoDocument::~KoDocument()
 {
     d->autoSaveTimer.disconnect(this);
     d->autoSaveTimer.stop();
+    d->parentPart->deleteLater();
+
     delete d->filterManager;
     delete d;
 }

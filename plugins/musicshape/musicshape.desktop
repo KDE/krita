@@ -45,5 +45,5 @@ X-KDE-ServiceTypes=Calligra/Shape
 Type=Service
 X-KDE-PluginInfo-Name=musicshape
 X-KDE-Library=musicshape
-X-Flake-MinVersion=27
-X-Flake-PluginVersion=27
+X-Flake-MinVersion=28
+X-Flake-PluginVersion=28

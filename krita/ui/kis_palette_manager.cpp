@@ -67,14 +67,12 @@ KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPain
     m_allPresetsView = new KisPresetChooser(this);
     m_allPresetsView->showButtons(false);
     m_allPresetsView->showTaggingBar(false,false);
-    m_allPresetsView->setPresetFilter(KoID("dummy",""));
-    m_allPresetsView->setShowAll(true);
+    m_allPresetsView->enableContextMenu(false);
 
     m_palettePresetsView = new KisPresetChooser(this);
     m_palettePresetsView->showButtons(false);
     m_palettePresetsView->showTaggingBar(false,false);
-    m_palettePresetsView->setPresetFilter(KoID("dummy",""));
-    m_palettePresetsView->setShowAll(true);
+    m_palettePresetsView->enableContextMenu(false);
 
     /*LEFT COMPONENTS*/
     QFrame *HSeparator = new QFrame();
@@ -211,7 +209,13 @@ void KisPaletteManager::showEvent(QShowEvent* e)
 
 void KisPaletteManager::updatePaletteView()
 {
-    m_palettePresetsView->setFilteredNames(m_resourceManager->favoritePresetList());
+    QStringList faves = m_resourceManager->favoritePresetList();
+    // this filters all the resources, making the view empty
+    // the palette view is a special case that basically uses all presets
+    // by virtue of using kis_preset_chooser even though it's only interested
+    // in up to ten of them. not sure if that warrants an 'empty' mode somewhere.
+    if (faves.isEmpty())faves.push_back("!!!!!!");
+    m_palettePresetsView->setFilteredNames(faves);
 }
 
 void KisPaletteManager::slotThumbnailMode()

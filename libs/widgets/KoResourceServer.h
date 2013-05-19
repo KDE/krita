@@ -434,6 +434,11 @@ public:
     {
         return m_tagObject->searchTag(lineEditText);
     }
+    
+    KoResourceTagging * tagObject() 
+    {
+        return m_tagObject;
+    }
 
 
 #ifdef NEPOMUK

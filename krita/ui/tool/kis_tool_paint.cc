@@ -307,7 +307,10 @@ QWidget * KisToolPaint::createOptionWidget()
     m_optionWidgetLayout->setSpacing(1);
     m_optionWidgetLayout->setMargin(0);
 
-    verticalLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Expanding));
+    QWidget *w = new QWidget();
+    w->setObjectName("SpecialSpacer");
+
+    verticalLayout->addWidget(w);
 
     if (!quickHelp().isEmpty()) {
         QPushButton* push = new QPushButton(koIcon("help-contents"), QString(), optionWidget);

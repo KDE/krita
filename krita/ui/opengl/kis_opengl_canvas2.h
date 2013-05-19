@@ -117,10 +117,6 @@ private:
 
     void loadQTransform(QTransform transform);
 
-    void drawBorder();
-    void drawImage();
-    void drawBackground();
-
     void saveGLState();
     void restoreGLState();
 };

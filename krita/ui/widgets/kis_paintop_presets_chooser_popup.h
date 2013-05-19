@@ -34,10 +34,6 @@ public:
     KisPaintOpPresetsChooserPopup(QWidget * parent = 0);
     virtual ~KisPaintOpPresetsChooserPopup();
     
-    ///Set id for paintop to be accept by the proxy model
-    ///@param paintopID id of the paintop for which the presets will be shown
-    void setPresetFilter(const KoID & paintopID);
-
     void showButtons(bool show);
 signals:
     void resourceSelected( KoResource * resource );
@@ -45,10 +41,6 @@ signals:
 private slots:
     void slotThumbnailMode();
     void slotDetailMode();
-    /// Passes the lineEdit text to the preset Chooser when a returnPressed signal is generated
-    void returnKeyPressed(QString lineEditText);
-    /// Sets the lineEdit so that it can search for multiple tags like "round, circle, "
-    void setLineEditCompleter(const QString& searchString);
     virtual void paintEvent(QPaintEvent* );
    
 private:

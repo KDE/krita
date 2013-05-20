@@ -14,6 +14,12 @@ if(HAVE_OPENGL)
     target_link_libraries(kritalutdocker ${_LIBRARIES})
 endif(HAVE_OPENGL)
 
+if(HAVE_OPENGL)
+    if(HAVE_GLEW)
+        target_link_libraries(kritalutdocker ${GLEW_LIBRARIES})
+    endif(HAVE_GLEW)
+endif(HAVE_OPENGL)
+
 
 install(TARGETS kritalutdocker  DESTINATION ${PLUGIN_INSTALL_DIR})
 

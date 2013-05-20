@@ -19,13 +19,8 @@
 #define KIS_OPENGL_IMAGE_TEXTURES_H_
 
 #include <opengl/kis_opengl.h>
-#include "canvas/kis_update_info.h"
-#include "opengl/kis_texture_tile_update_info.h"
-#include "opengl/kis_texture_tile.h"
 
 #ifdef HAVE_OPENGL
-
-#include <QGLFunctions>
 
 #include <QObject>
 #include <QVector>
@@ -34,6 +29,10 @@
 #include "krita_export.h"
 
 #include "kis_shared.h"
+
+#include "canvas/kis_update_info.h"
+#include "opengl/kis_texture_tile_update_info.h"
+#include "opengl/kis_texture_tile.h"
 
 class KisOpenGLImageTextures;
 typedef KisSharedPtr<KisOpenGLImageTextures> KisOpenGLImageTexturesSP;
@@ -45,7 +44,7 @@ class KisDisplayFilter;
 /**
  * A set of OpenGL textures that contains the projection of a KisImage.
  */
-class KRITAUI_EXPORT KisOpenGLImageTextures : public QObject, public KisShared, protected QGLFunctions
+class KRITAUI_EXPORT KisOpenGLImageTextures : public QObject, public KisShared
 {
     Q_OBJECT
 

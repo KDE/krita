@@ -22,10 +22,6 @@
 #include <OpenColorIO/OpenColorIO.h>
 #include <OpenColorIO/OpenColorTransforms.h>
 
-#ifdef HAVE_OPENGL
-#include <QGLFunctions>
-#endif
-
 #include <opengl/kis_opengl.h>
 
 namespace OCIO = OCIO_NAMESPACE;
@@ -39,11 +35,7 @@ enum OCIO_CHANNEL_SWIZZLE {
     A
 };
 
-#ifdef HAVE_OPENGL
-class OcioDisplayFilter : public KisDisplayFilter, protected QGLFunctions
-#else
 class OcioDisplayFilter : public KisDisplayFilter
-#endif
 {
     Q_OBJECT
 public:

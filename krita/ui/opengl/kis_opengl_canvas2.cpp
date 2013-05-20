@@ -17,6 +17,7 @@
  */
 
 #include "opengl/kis_opengl_canvas2.h"
+#include "opengl/kis_opengl.h"
 
 #ifdef HAVE_OPENGL
 
@@ -126,8 +127,6 @@ KisOpenGLCanvas2::~KisOpenGLCanvas2()
 void KisOpenGLCanvas2::initializeGL()
 {
     glEnable(GL_MULTISAMPLE);
-
-    initializeGLFunctions(KisOpenGL::sharedContextWidget()->context());
 
     if (!VSyncWorkaround::tryDisableVSync(this)) {
         qWarning();

@@ -24,10 +24,16 @@
 
 #ifdef HAVE_OPENGL
 
+#include <config-glew.h>
 
 #if defined(_WIN32) || defined(_WIN64)
 #include <windows.h>
 #endif
+
+#ifdef HAVE_GLEW
+#include <GL/glew.h>
+#endif
+
 
 #include <QtGlobal>
 #ifdef Q_WS_MAC

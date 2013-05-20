@@ -19,8 +19,18 @@ if(MSVC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
 endif(MSVC)
 
-
 include(CheckFunctionExists)
+
+macro_optional_find_package(GLEW)
+macro_bool_to_01(GLEW_FOUND HAVE_GLEW)
+configure_file(config-glew.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-glew.h )
+macro_log_feature(HAVE_GLEW "GLEW" "The OpenGL Extension Wrangler Library" "http://glew.sourceforge.net" FALSE "" "Required by the Krita shader filter plugin")
+
+if(HAVE_GLEW)
+    message(STATUS "GLEW found!")
+else(HAVE_GLEW)
+    message(STATUS "GLEW NOT found - krita will not be able to use OpenGL.")
+endif(HAVE_GLEW)
 
 if(HAVE_OPENGL)
     message(STATUS "OpenGL found -- krita will be able  to use OpenGL for hardware accelerated rendering.")
@@ -89,6 +99,9 @@ include_directories(${KRITA_INCLUDES})
 
 if(HAVE_OPENGL)
     include_directories(${OPENGL_INCLUDE_DIR})
+    if(HAVE_GLEW)
+        include_directories(${GLEW_INCLUDE_DIR})
+    endif(HAVE_GLEW)
 endif(HAVE_OPENGL)
 
 add_subdirectory( image )

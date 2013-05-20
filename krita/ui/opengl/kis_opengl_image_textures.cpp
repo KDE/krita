@@ -49,7 +49,6 @@ KisOpenGLImageTextures::KisOpenGLImageTextures()
     , m_checkerTexture(0)
     , m_displayFilter(0)
 {
-    initializeGLFunctions(KisOpenGL::sharedContext());
     KisConfig cfg;
     m_renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();
 
@@ -70,7 +69,6 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
     , m_displayFilter(0)
 {
     Q_ASSERT(renderingIntent < 4);
-    initializeGLFunctions(KisOpenGL::sharedContext());
 
     KisOpenGL::makeContextCurrent();
 
@@ -337,23 +335,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
     m_texturesInfo.format = GL_RGBA8;
     m_texturesInfo.type = GL_UNSIGNED_BYTE;
 
-    //    const char *versionString = reinterpret_cast<const char *>(glGetString(GL_VERSION));
-    //    qDebug() << "OpenGL Version:" << versionString;
-
-    const char *extensionString = reinterpret_cast<const char *>(glGetString(GL_EXTENSIONS));
-    QStringList extensions(QString::fromAscii(extensionString).split(" "));
-    //qDebug() << extensions;
-
-    bool ARB_texture_float = extensions.contains("GL_ARB_texture_float");
-    bool ATI_texture_float =  extensions.contains("GL_ATI_texture_float");
-    bool ARB_half_float_pixel = extensions.contains("GL_ARB_half_float_pixel");
-
-    //    bool hasHalfOES = extensions.contains("GL_OES_texture_half_float");;
-    //    bool hasFloatOES = extensions.contains("GL_OES_texture_float");;
-
-    dbgUI << "ARB_texture_float:" << ARB_texture_float;
-    dbgUI << "ATI_texture_float:" << ATI_texture_float;
-    dbgUI << "ARB_half_float_pixel:" << ARB_half_float_pixel;
+#ifdef HAVE_GLEW
 
     KoID colorModelId = m_image->colorSpace()->colorModelId();
     KoID colorDepthId = m_image->colorSpace()->colorDepthId();
@@ -361,61 +343,52 @@ void KisOpenGLImageTextures::updateTextureFormat()
     dbgUI << "Choosing texture format:";
 
     if (colorModelId == RGBAColorModelID) {
-        dbgUI <<"We have rgb";
         if (colorDepthId == Float16BitsColorDepthID) {
-            dbgUI <<"\t 16f";
-            if (ARB_texture_float) {
+
+            if (GLEW_ARB_texture_float) {
                 m_texturesInfo.format = GL_RGBA16F_ARB;
-                m_texturesInfo.type = GL_FLOAT;
-                dbgUI << "16 bit float ";
+                dbgUI << "Using ARB half";
             }
-            else if (ATI_texture_float) {
+            else if (GLEW_ATI_texture_float){
                 m_texturesInfo.format = GL_RGBA_FLOAT16_ATI;
-                m_texturesInfo.type = GL_FLOAT;
-                dbgUI << "16 bit float using ATI extensions";
+                dbgUI << "Using ATI half";
             }
-
-            if (ARB_half_float_pixel) {
+            else if (GLEW_ARB_half_float_pixel) {
+                dbgUI << "Pixel type half";
                 m_texturesInfo.type = GL_HALF_FLOAT_ARB;
-                dbgUI << "16 bit float with half type";
+            } else {
+                dbgUI << "Pixel type float";
+                m_texturesInfo.type = GL_FLOAT;
             }
-//            else if (hasHalfOES) {
-//                m_texturesInfo.format = GL_HALF_FLOAT_OES;
-//                m_texturesInfo.type = GL_HALF_FLOAT_ARB;
-//            }
-
         }
         else if (colorDepthId == Float32BitsColorDepthID) {
-            dbgUI <<"\t 132f";
-            if (ARB_texture_float) {
+
+            if (GLEW_ARB_texture_float) {
                 m_texturesInfo.format = GL_RGBA32F_ARB;
+                dbgUI << "Using ARB float";
                 m_texturesInfo.type = GL_FLOAT;
-                dbgUI << "32 bit arb";
             }
-            else if (ATI_texture_float) {
+            else if (GLEW_ATI_texture_float) {
                 m_texturesInfo.format = GL_RGBA_FLOAT32_ATI;
+                dbgUI << "Using ATI float";
                 m_texturesInfo.type = GL_FLOAT;
-                dbgUI << "32 bit ati";
             }
-//            else if (hasFloatOES) {
-//                m_texturesInfo.format = GL_FLOAT_OES;
-//                m_texturesInfo.type = GL_FLOAT;
-//            }
         }
         else if (colorDepthId == Integer16BitsColorDepthID) {
+            dbgUI << "Using 16 bits rgba";
             m_texturesInfo.format = GL_RGBA16;
             m_texturesInfo.type = GL_UNSIGNED_SHORT;
-            dbgUI << "16 bit integer";
         }
     }
     else {
         // We will convert the colorspace to 16 bits rgba, instead of 8 bits
         if (colorDepthId == Integer16BitsColorDepthID) {
+            dbgUI << "Using conversion to 16 bits rgba";
             m_texturesInfo.format = GL_RGBA16;
             m_texturesInfo.type = GL_UNSIGNED_SHORT;
         }
     }
-
+#endif
 }
 
 void KisOpenGLImageTextures::setDisplayFilter(KisDisplayFilter *displayFilter)

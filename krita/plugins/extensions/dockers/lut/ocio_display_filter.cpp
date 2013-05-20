@@ -98,16 +98,11 @@ OcioDisplayFilter::OcioDisplayFilter(QObject *parent)
     , displayDevice(0)
     , view(0)
     , swizzle(RGBA)
-    #ifdef HAVE_OPENGL
+#ifdef HAVE_OPENGL
     , m_fragShader(0)
     , m_program(0)
-    #endif
-{
-#ifdef HAVE_OPENGL
-    if (KisOpenGL::sharedContextWidget()) {
-        QGLFunctions::initializeGLFunctions(KisOpenGL::sharedContextWidget()->context());
-    }
 #endif
+{
 }
 
 

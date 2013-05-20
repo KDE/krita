@@ -97,6 +97,15 @@ void KisOpenGL::createContext()
 
     SharedContextWidget = new QGLWidget(format);
     SharedContextWidget->makeCurrent();
+
+#ifdef HAVE_GLEW
+    GLenum err = glewInit();
+    if (GLEW_OK != err) {
+        dbgUI << "glewInit error:" << (const char *)glewGetErrorString(err);
+    } else {
+        dbgUI << "Status: Using GLEW" << (const char *)glewGetString(GLEW_VERSION);
+    }
+#endif
 }
 
 void KisOpenGL::makeContextCurrent()

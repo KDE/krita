@@ -2,11 +2,11 @@ include_directories( ${KOTEXT_INCLUDES}
     ${TEXTLAYOUT_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/pigment/colorprofiles
     ${CMAKE_CURRENT_SOURCE_DIR}/flake
-	${CMAKE_CURRENT_SOURCE_DIR}/pigment/resources
-	${CMAKE_CURRENT_SOURCE_DIR}/widgets/resources
-	${CMAKE_CURRENT_SOURCE_DIR}/openrastertk
-	${CMAKE_SOURCE_DIR}/krita/image/metadata
-	${EXIV2_INCLUDE_DIR} )
+    ${CMAKE_CURRENT_SOURCE_DIR}/pigment/resources
+    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/resources
+    ${CMAKE_CURRENT_SOURCE_DIR}/openrastertk
+    ${CMAKE_SOURCE_DIR}/krita/image/metadata
+    ${EXIV2_INCLUDE_DIR} )
 
 add_subdirectory( tests )
 
@@ -286,6 +286,10 @@ if(HAVE_OPENGL)
     endif(NOT WIN32)
 
     set (GL_INTERFACE_LIBRARIES ";${OPENGL_LIBRARIES};${QT_QTOPENGL_LIBRARY}")
+    if(HAVE_GLEW)
+        target_link_libraries(kritaui ${GLEW_LIBRARIES})
+    endif(HAVE_GLEW)
+
 endif(HAVE_OPENGL)
 
 target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage komain ${GL_INTERFACE_LIBRARIES} )

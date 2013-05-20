@@ -23,7 +23,6 @@
 #include <QPainterPath>
 #include <QCursor>
 
-class KisCanvas2;
 
 static const QString INFINITY_DECORATION_ID = "infinity-decorations";
 
@@ -35,7 +34,7 @@ public:
 KisInfinityManager(KisView2 *view, KisCanvas2 *canvas);
 
 protected:
-    void drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter *converter);
+    void drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter *converter, KisCanvas2 *canvas);
     bool eventFilter(QObject *obj, QEvent *event);
 
 public slots:

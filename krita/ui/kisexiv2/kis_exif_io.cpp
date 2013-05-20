@@ -511,7 +511,18 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
     exifData.load((const Exiv2::byte*)arr.data(), arr.size());
     byteOrder = exifData.byteOrder();
 #else
-    byteOrder = Exiv2::ExifParser::decode(exifData, (const Exiv2::byte*)arr.data(), arr.size());
+    try {
+        byteOrder = Exiv2::ExifParser::decode(exifData, (const Exiv2::byte*)arr.data(), arr.size());
+    }
+    catch (const std::exception& ex) {
+        qWarning() << "Received exception trying to parse exiv data" << ex.what();
+        return false;
+    }
+    catch (...) {
+        qDebug() << "Received unknown exception trying to parse exiv data";
+        return false;
+    }
+
 #endif
     dbgFile << "Byte order = " << byteOrder << ppVar(Exiv2::bigEndian) << ppVar(Exiv2::littleEndian);
     dbgFile << "There are" << exifData.count() << " entries in the exif section";

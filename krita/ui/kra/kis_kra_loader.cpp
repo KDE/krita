@@ -265,7 +265,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
         store->read(data.data(), store->size());
         store->close();
         const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(image->colorSpace()->colorModelId().id(), image->colorSpace()->colorDepthId().id(), data);
-        if (profile->valid()) {
+        if (profile && profile->valid()) {
             image->assignImageProfile(profile);
         }
         else {

@@ -164,9 +164,10 @@ void KisOpenGLCanvas2::resizeGL(int width, int height)
 
 }
 
-void KisOpenGLCanvas2::paintEvent(QPaintEvent *)
+void KisOpenGLCanvas2::paintGL()
 {
-    makeCurrent();
+    QPainter gc(this);
+    gc.beginNativePainting();
 
     // Draw the border (that is, clear the whole widget to the border color)
     QColor widgetBackgroundColor = borderColor();
@@ -176,9 +177,9 @@ void KisOpenGLCanvas2::paintEvent(QPaintEvent *)
     drawCheckers();
     drawImage();
 
+    gc.endNativePainting();
     QRect boundingRect = coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect();
 
-    QPainter gc(this);
     drawDecorations(gc, boundingRect);
     gc.end();
 

@@ -59,9 +59,6 @@ public:
 public: // QWidget
 
     /// reimplemented method from superclass
-    void paintEvent(QPaintEvent * ev);
-
-    /// reimplemented method from superclass
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
 
     /// reimplemented method from superclass
@@ -74,6 +71,7 @@ protected:
 
     void resizeGL(int width, int height);
     void initializeGL();
+    void paintGL();
 
 public: // KisAbstractCanvasWidget
 

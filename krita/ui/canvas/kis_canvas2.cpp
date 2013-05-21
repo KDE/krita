@@ -22,6 +22,7 @@
 #include "kis_canvas2.h"
 
 #include <QWidget>
+#include <QVBoxLayout>
 #include <QTime>
 #include <QLabel>
 #include <QMouseEvent>
@@ -320,8 +321,12 @@ void KisCanvas2::createOpenGLCanvas()
 
     // XXX: The image isn't done loading here!
     m_d->openGLImageTextures = KisOpenGLImageTextures::getImageTextures(m_d->view->image(), m_d->monitorProfile, m_d->renderingIntent, m_d->conversionFlags);
-    KisOpenGLCanvas2 *canvasWidget = new KisOpenGLCanvas2(this, m_d->coordinatesConverter, m_d->view, m_d->openGLImageTextures);
-    setCanvasWidget(canvasWidget);
+    // The extra widget is to make sure we never have to reparent the QGLWidget, which breaks on Windows
+    QWidget *parentWidget = new QWidget();
+    QVBoxLayout *layout = new QVBoxLayout(parentWidget);
+    KisOpenGLCanvas2 *canvasWidget = new KisOpenGLCanvas2(this, m_d->coordinatesConverter, parentWidget, m_d->openGLImageTextures);
+    layout->addWidget(canvasWidget);
+    setCanvasWidget(parentWidget);
 #else
     qFatal("Bad use of createOpenGLCanvas(). It shouldn't have happened =(");
 #endif

@@ -125,7 +125,6 @@ public:
 
     /**
      * Returns the original pixels before masks have been applied.
-     * This is the same as the paintDevice() OVER driedPaintDevice();
      */
     KisPaintDeviceSP original() const;
 

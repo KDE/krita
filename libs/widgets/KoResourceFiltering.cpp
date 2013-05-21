@@ -29,10 +29,10 @@ public:
     , m_searchTokenizer("\\s*,+\\s*")
     , m_hasNewFilters(false)
     {}
-    bool m_hasNewFilters;
     QRegExp m_isTag;
     QRegExp m_isExactMatch;
     QRegExp m_searchTokenizer;
+    bool m_hasNewFilters;
     QStringList m_rootTagList;
     QStringList m_includedNames;
     QStringList m_excludedNames;

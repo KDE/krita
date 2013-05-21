@@ -777,6 +777,8 @@ set(KDGANTT_INCLUDES
 set(KDCHART_INCLUDES
     ${CMAKE_SOURCE_DIR}/3rdparty/kdchart/include
 )
+set(KDCHART_LIBS calligrakdchart)
+
 
 set(WRITERPERFECT_INCLUDES
     ${CMAKE_SOURCE_DIR}/filters/writerperfect

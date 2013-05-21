@@ -32,6 +32,7 @@
 
 struct KisPaintingAssistantHandle::Private {
     QList<KisPaintingAssistant*> assistants;
+    char handle_type;
 };
 
 KisPaintingAssistantHandle::KisPaintingAssistantHandle(double x, double y) : QPointF(x, y), d(new Private)
@@ -54,6 +55,17 @@ KisPaintingAssistantHandle& KisPaintingAssistantHandle::operator=(const QPointF 
     setY(pt.y());
     return *this;
 }
+
+void KisPaintingAssistantHandle::setType(char type)
+{
+    d->handle_type = type;
+}
+
+char KisPaintingAssistantHandle::handleType()
+{
+    return d->handle_type;
+}
+
 
 KisPaintingAssistantHandle::~KisPaintingAssistantHandle()
 {
@@ -80,6 +92,8 @@ bool KisPaintingAssistantHandle::containsAssistant(KisPaintingAssistant* assista
 
 void KisPaintingAssistantHandle::mergeWith(KisPaintingAssistantHandleSP handle)
 {
+    if(this->handleType()=='S' || handle.data()->handleType()== 'S')
+        return;
     foreach(KisPaintingAssistant* assistant, handle->d->assistants) {
         if (!assistant->handles().contains(this)) {
             assistant->replaceHandle(handle, this);
@@ -189,6 +203,7 @@ void KisPaintingAssistant::addHandle(KisPaintingAssistantHandleSP handle)
     Q_ASSERT(!d->handles.contains(handle));
     d->handles.append(handle);
     handle->registerAssistant(this);
+    handle.data()->setType('H');
 }
 
 void KisPaintingAssistant::addSideHandle(KisPaintingAssistantHandleSP handle)
@@ -196,6 +211,7 @@ void KisPaintingAssistant::addSideHandle(KisPaintingAssistantHandleSP handle)
     Q_ASSERT(!d->sideHandles.contains(handle));
     d->sideHandles.append(handle);
     handle->registerAssistant(this);
+    handle.data()->setType('S');
 }
 
 void KisPaintingAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool useCache,KisCanvas2* canvas)

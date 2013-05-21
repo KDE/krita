@@ -58,4 +58,4 @@ Name[zh_TW]=選取區工具
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritaselectiontools
-X-Krita-Version=27
+X-Krita-Version=28

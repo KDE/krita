@@ -49,4 +49,4 @@ Name[zh_TW]=直方圖外掛程式
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritahistogram
-X-Krita-Version=27
+X-Krita-Version=28

@@ -5,4 +5,4 @@ Comment=Docker for showing an image overview
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritaoverviewdocker
-X-Krita-Version=27
+X-Krita-Version=28

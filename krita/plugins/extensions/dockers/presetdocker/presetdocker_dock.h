@@ -32,7 +32,6 @@ public:
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas() { m_canvas = 0; }
 public slots:
-    void resourceChanged(int, const QVariant&);
 private slots:
 private:
     KisCanvas2* m_canvas;

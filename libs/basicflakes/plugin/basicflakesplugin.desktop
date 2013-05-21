@@ -15,5 +15,5 @@ X-KDE-ServiceTypes=Calligra/Tool
 Type=Service
 X-KDE-PluginInfo-Name=basicflakesplugin
 X-KDE-Library=basicflakesplugin
-X-Flake-MinVersion=27
-X-Flake-PluginVersion=27
+X-Flake-MinVersion=28
+X-Flake-PluginVersion=28

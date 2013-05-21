@@ -125,4 +125,4 @@ X-KDE-NativeMimeType=application/x-krita
 StartupNotify=true
 X-DBUS-StartupType=Multi
 X-DBUS-ServiceName=org.krita.krita
-X-Krita-Version=27
+X-Krita-Version=28

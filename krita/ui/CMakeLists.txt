@@ -1,3 +1,5 @@
+add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+
 include_directories( ${KOTEXT_INCLUDES}
     ${TEXTLAYOUT_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/pigment/colorprofiles

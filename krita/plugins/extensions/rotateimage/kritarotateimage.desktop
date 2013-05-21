@@ -48,4 +48,4 @@ Name[zh_TW]=旋轉圖片外掛程式
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritarotateimage
-X-Krita-Version=27
+X-Krita-Version=28

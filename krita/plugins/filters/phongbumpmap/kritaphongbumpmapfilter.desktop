@@ -62,4 +62,4 @@ Comment[zh_TW]=Phong Bumpmap 的過濾器
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaphongbumpmap
-X-Krita-Version=27
+X-Krita-Version=28

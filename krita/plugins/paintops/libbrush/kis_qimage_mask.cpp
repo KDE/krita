@@ -140,7 +140,7 @@ void KisQImagemask::rotation(double angle)
     m_data.setColorTable(table);
     
     QImage tmp = m_data.convertToFormat(QImage::Format_RGB32);
-    tmp = tmp.transformed(QTransform().rotate(-angle * 180 / M_PI));
+    tmp = tmp.transformed(QTransform().rotate(-angle * 180 / M_PI), Qt::SmoothTransformation);
     
     init(tmp.width(), tmp.height());
 

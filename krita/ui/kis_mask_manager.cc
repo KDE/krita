@@ -33,6 +33,8 @@
 #include "kis_doc2.h"
 #include "kis_view2.h"
 #include <kis_layer.h>
+#include <kis_clone_layer.h>
+#include <kis_group_layer.h>
 #include <kis_filter_mask.h>
 #include <kis_transparency_mask.h>
 #include <kis_selection_mask.h>
@@ -276,13 +278,17 @@ void KisMaskManager::maskProperties()
         if (! layer)
             return;
 
-        KisPaintDeviceSP dev = layer->paintDevice();
+
+        KisPaintDeviceSP dev = layer->original();
+        if (!dev) {
+            return;
+        }
+
         KisDlgAdjLayerProps dlg(layer, mask, dev, m_view, mask->filter().data(), mask->name(), i18n("Effect Mask Properties"), m_view, "dlgeffectmaskprops");
 
         KisSafeFilterConfigurationSP configBefore(mask->filter());
         Q_ASSERT(configBefore);
         QString xmlBefore = configBefore->toXML();
-
 
         if (dlg.exec() == QDialog::Accepted) {
 

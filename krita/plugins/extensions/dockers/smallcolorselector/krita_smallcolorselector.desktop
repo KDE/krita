@@ -70,4 +70,4 @@ Comment[zh_TW]=小型顏色選擇器
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritasmallcolorselector
-X-Krita-Version=27
+X-Krita-Version=28

@@ -204,7 +204,7 @@ calligra_define_product(FILTER_KARBON "All Karbon filter"  WANTS FILTER_KARBON_I
 # meta apps
 calligra_define_product(WORDS "Full Words (for Desktop)"  NEEDS WORDS_APP  WANTS FILTER_WORDS)
 calligra_define_product(STAGE "Full Stage (for Desktop)"  NEEDS STAGE_APP  WANTS FILTER_STAGE)
-calligra_define_product(SHEETS "Full Sheets (for Desktop)"  NEEDS SHEETS_APP  WANTS FILTER_SHEETS)
+calligra_define_product(SHEETS "Full Sheets (for Desktop)"  NEEDS SHEETS_APP  WANTS FILTER_SHEETS PLUGIN_SHEETS_PIVOTTABLES)
 calligra_define_product(AUTHOR "Full Author (for Desktop)"  NEEDS AUTHOR_APP  WANTS FILTER_WORDS)
 calligra_define_product(KARBON "Full Karbon (for Desktop)"  NEEDS KARBON_APP  WANTS FILTER_KARBON)
 calligra_define_product(KRITA "Full Krita (for Desktop)"  NEEDS KRITA_APP)

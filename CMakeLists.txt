@@ -799,9 +799,9 @@ set(KOODF2_INCLUDES
 #########################################
 
 #
-# WARNING: when adding a dependency if there is already a line
-# containing SHOULD_BUILD_app, don't add a new one, just add
-# the test to the if construct
+# WARNING: when adding a dependency for product x if there is already a line
+# containing calligra_disable_product(product_x, don't add a new one, just add
+# the test to the if construct and the reasoning
 #
 
 if(NOT SHARED_MIME_INFO_FOUND)
@@ -812,9 +812,8 @@ if(NOT EIGEN2_FOUND)
     calligra_disable_product(SHEETS_PART "Eigen devel not found")
 endif(NOT EIGEN2_FOUND)
 
-### Krita: pigment, eigen2, exiv2, sharedmimeinfo
 if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
-    calligra_disable_product(FILTER_WPG_TO_SVG "SharedMimeInfo|libeigen2|libexiv2|lcms devel not found ")
+    calligra_disable_product(KRITA_APP "SharedMimeInfo|libeigen2|libexiv2|lcms devel not found ")
 endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
 
 if (NOT ${QTVERSION} VERSION_GREATER 4.7.0)

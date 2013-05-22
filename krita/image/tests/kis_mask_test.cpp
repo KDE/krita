@@ -53,7 +53,7 @@ void KisMaskTest::testCreation()
 {
     TestUtil::MaskParent p;
     TestMask mask;
-    mask.initSelection(0, p.layer);
+    mask.initSelection(p.layer);
 
     QCOMPARE(mask.extent(), QRect(0,0,512,512));
     QCOMPARE(mask.exactBounds(), QRect(0,0,512,512));
@@ -113,7 +113,7 @@ void KisMaskTest::testSelectionParent()
         KisImageSP image = new KisImage(0, 100, 100, cs, "stest");
 
         KisMaskSP mask = new TestMask;
-        mask->initSelection(0, image->rootLayer());
+        mask->initSelection(image->rootLayer());
         KisSelectionSP selection = mask->selection();
         QCOMPARE(selection->parentNode(), KisNodeWSP(mask));
     }

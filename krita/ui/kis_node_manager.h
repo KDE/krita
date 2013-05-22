@@ -139,7 +139,8 @@ public slots:
     void moveNodeDirect(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
 
     void moveNodeAt(KisNodeSP node, KisNodeSP parent, int index);
-    void createNode(const QString & node);
+    void createNode(const QString &node);
+    void convertNode(const QString &nodeType);
     void nodesUpdated();
     void nodeProperties(KisNodeSP node);
     void nodeOpacityChanged(qreal opacity, bool finalChange);

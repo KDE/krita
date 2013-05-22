@@ -103,7 +103,8 @@ private slots:
     void saveGroupLayers();
     bool activeLayerHasSelection();
 
-    void layerAdd();
+    void convertNodeToPaintLayer(KisNodeSP source);
+
     void addLayer(KisNodeSP parent, KisNodeSP above);
     void addGroupLayer(KisNodeSP parent, KisNodeSP above);
 
@@ -137,7 +138,6 @@ private:
     KisAction *m_imageResizeToLayer;
     KAction *m_flattenLayer;
     KisAction *m_rasterizeLayer;
-    KAction *m_addPaintLayer;
     KisLayerSP m_activeLayer;
     KisNodeCommandsAdapter* m_commandsAdapter;
 };

@@ -241,7 +241,6 @@ KisLayerManager::KisLayerManager(KisView2 * view, KisDoc2 * doc)
     , m_imageResizeToLayer(0)
     , m_flattenLayer(0)
     , m_rasterizeLayer(0)
-    , m_addPaintLayer(0)
     , m_activeLayer(0)
     , m_commandsAdapter(new KisNodeCommandsAdapter(m_view))
 {
@@ -306,11 +305,6 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     m_imageResizeToLayer->setActivationFlags(KisAction::ACTIVE_LAYER);
     m_view->actionManager()->addAction("resizeimagetolayer", m_imageResizeToLayer, actionCollection);
     connect(m_imageResizeToLayer, SIGNAL(triggered()), this, SLOT(imageResizeToActiveLayer()));
-
-    m_addPaintLayer = new KAction(i18n("Add new paint layer"), this);
-    m_addPaintLayer->setShortcut(KShortcut(Qt::Key_Insert));
-    actionCollection->addAction("add_new_paint_layer", m_addPaintLayer);
-    connect(m_addPaintLayer, SIGNAL(triggered()), this, SLOT(layerAdd()));
 }
 
 void KisLayerManager::updateGUI()
@@ -445,21 +439,57 @@ void KisLayerManager::layerProperties()
     }
 }
 
-void KisLayerManager::layerAdd()
+void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
 {
     KisImageWSP image = m_view->image();
-    if (image && activeLayer()) {
-        addLayer(activeLayer()->parent(), activeLayer());
-    } else if (image)
-        addLayer(image->rootLayer(), KisLayerSP(0));
+    if (!image) return;
+
+    KisPaintDeviceSP srcDevice =
+        source->paintDevice() ? source->paintDevice() : source->original();
+
+    if (!srcDevice) return;
+
+    KisPaintDeviceSP clone;
+
+    if (!(*srcDevice->colorSpace() ==
+          *srcDevice->compositionSourceColorSpace())) {
+
+        clone = new KisPaintDevice(srcDevice->compositionSourceColorSpace());
+        KisPainter gc(clone);
+        gc.setCompositeOp(COMPOSITE_COPY);
+        QRect rc(srcDevice->extent());
+        gc.bitBlt(rc.topLeft(), srcDevice, rc);
+
+        qDebug() << "Doing complex copying";
+    } else {
+        clone = new KisPaintDevice(*srcDevice);
+    }
+
+    KisLayerSP layer = new KisPaintLayer(image,
+                                         image->nextLayerName(),
+                                         source->opacity(),
+                                         clone);
+    layer->setCompositeOp(source->compositeOpId());
+
+    KisNodeSP parent = source->parent();
+    KisNodeSP above = source;
+
+    while (parent && !parent->allowAsChild(layer)) {
+        above = above->parent();
+        parent = above ? above->parent() : 0;
+    }
+
+    m_commandsAdapter->beginMacro(i18n("Convert to a Paint Layer"));
+    m_commandsAdapter->addNode(layer, parent, above);
+    m_commandsAdapter->removeNode(source);
+    m_commandsAdapter->endMacro();
+
 }
 
 void KisLayerManager::addLayer(KisNodeSP parent, KisNodeSP above)
 {
     KisImageWSP image = m_view->image();
     if (image) {
-        KisConfig cfg;
-        QString profilename;
         KisLayerSP layer = new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, image->colorSpace());
         if (layer) {
             layer->setCompositeOp(COMPOSITE_OVER);

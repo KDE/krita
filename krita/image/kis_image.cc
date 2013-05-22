@@ -222,7 +222,7 @@ void KisImage::setGlobalSelection(KisSelectionSP globalSelection)
     else {
         if (!selectionMask) {
             selectionMask = new KisSelectionMask(this);
-            selectionMask->initSelection(0, m_d->rootLayer);
+            selectionMask->initSelection(m_d->rootLayer);
             addNode(selectionMask);
             selectionMask->setActive(true);
         }

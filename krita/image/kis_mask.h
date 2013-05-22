@@ -90,6 +90,20 @@ public:
      */
     void initSelection(KisSelectionSP copyFrom, KisLayerSP parentLayer);
 
+    /**
+     * @brief initSelection initializes the selection for the mask from
+     *   the given paint device.
+     * @param copyFromDevice the paint device we base the mask on
+     * @param parentLayer the parent of this mask; it determines the default bounds of the mask.
+     */
+    void initSelection(KisPaintDeviceSP copyFromDevice, KisLayerSP parentLayer);
+
+    /**
+     * @brief initSelection initializes an empty selection
+     * @param parentLayer the parent of this mask; it determines the default bounds of the mask.
+     */
+    void initSelection(KisLayerSP parentLayer);
+
     const KoColorSpace * colorSpace() const;
     const KoCompositeOp * compositeOp() const;
 

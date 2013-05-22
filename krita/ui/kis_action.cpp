@@ -28,20 +28,24 @@ public:
 
     ActivationFlags flags;
     ActivationConditions conditions;
+    QStringList excludedNodeTypes;
     QString operationID;
     KisActionManager* actionManager;
 };
 
 KisAction::KisAction(QObject* parent): KAction(parent), d(new Private)
 {
+    connect(this, SIGNAL(changed()), SLOT(slotChanged()));
 }
 
 KisAction::KisAction(const QString& text, QObject* parent): KAction(text, parent), d(new KisAction::Private)
 {
+    connect(this, SIGNAL(changed()), SLOT(slotChanged()));
 }
 
 KisAction::KisAction(const KIcon& icon, const QString& text, QObject* parent): KAction(icon, text, parent), d(new Private)
 {
+    connect(this, SIGNAL(changed()), SLOT(slotChanged()));
 }
 
 KisAction::~KisAction()
@@ -69,6 +73,16 @@ KisAction::ActivationConditions KisAction::activationConditions()
     return d->conditions;
 }
 
+void KisAction::setExcludedNodeTypes(const QStringList &nodeTypes)
+{
+    d->excludedNodeTypes = nodeTypes;
+}
+
+const QStringList& KisAction::excludedNodeTypes() const
+{
+    return d->excludedNodeTypes;
+}
+
 void KisAction::setActionEnabled(bool enabled)
 {
     setEnabled(enabled);
@@ -92,3 +106,7 @@ void KisAction::slotTriggered()
     }
 }
 
+void KisAction::slotChanged()
+{
+    emit sigEnableSlaves(isEnabled());
+}

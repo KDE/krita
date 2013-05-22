@@ -183,22 +183,4 @@
      <Action name="workspaces"/>
 </ToolBar>
 
-<Menu name="image_popup">
- <Action name="select_all"/>
- <Action name="deselect"/>
- <Action name="invert"/>
- <Separator/>
- <Action name="duplicate_layer"/>
- <Separator/>
- <Action name="edit_undo"/>
- <Action name="edit_redo"/>
- <Separator/>
- <Action name="edit_cut"/>
- <Action name="edit_copy"/>
- <Action name="edit_paste"/>
- <Action name="paste_at"/>
- <Separator/>
- <ActionList name="flake_tool_actions"/>
-</Menu>
-
 </kpartgui>

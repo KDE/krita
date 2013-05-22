@@ -135,10 +135,9 @@ calligra_define_product(PLUGIN_VIDEOSHAPE "Plugin for handling videos in Calligr
 calligra_define_product(PLUGIN_VECTORSHAPE "" NEEDS CALLIGRA_LIBS LIB_VECTORIMAGE)
 calligra_define_product(PLUGIN_REPORTING ""  NEEDS LIB_KOREPORT LIB_KDCHART)
 # staging plugins
-calligra_define_product(PLUGIN_GOOGLEDOCS ""  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_THREEDSHAPE ""  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_SHEETS_PIVOTTABLES ""  NEEDS SHEETS_PART)
-calligra_define_product(PLUGIN_STAGING "All plugins in staging status"  NEEDS PLUGIN_GOOGLEDOCS PLUGIN_THREEDSHAPE PLUGIN_SHEETS_PIVOTTABLES)
+calligra_define_product(PLUGIN_GOOGLEDOCS "" STAGING  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_THREEDSHAPE ""  STAGING  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_SHEETS_PIVOTTABLES ""  STAGING  NEEDS SHEETS_PART)
 # Sheets filters
 calligra_define_product(FILTER_XLSX_TO_ODS "XLSX to ODS filter" NEEDS LIB_MSOOXML SHEETS_PART)
 calligra_define_product(FILTER_XLS_TO_SHEETS "Sheets XLS import filter" NEEDS LIB_MSO LIB_MSOOXML SHEETS_PART)

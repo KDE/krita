@@ -7,6 +7,7 @@
 # CALLIGRA_SHOULD_BUILD_PRODUCTS - list of requested products by the user
 # CALLIGRA_NEEDED_PRODUCTS - list of internal needed products
 # CALLIGRA_WANTED_PRODUCTS - list of internal wanted products
+# CALLIGRA_STAGING_PRODUCTS - list of products only in staging mode
 # SHOULD_BUILD_${product_id} - boolean if product should be build
 
 
@@ -41,6 +42,13 @@ endmacro()
 
 
 macro(calligra_drop_unbuildable_products)
+  # first drop all staging products if not in debug build
+  if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug" AND NOT CMAKE_BUILD_TYPE STREQUAL "DebugFull")
+    foreach(_product_id ${CALLIGRA_STAGING_PRODUCTS})
+      set(SHOULD_BUILD_${_product_id} FALSE)
+    endforeach(_product_id)
+  endif(NOT CMAKE_BUILD_TYPE STREQUAL "Debug" AND NOT CMAKE_BUILD_TYPE STREQUAL "DebugFull")
+
   # can assume calligra_all_products has products in down-up order
   # 1. check all wanted products and see if they will be built,
   #    if not then drop their required products
@@ -130,6 +138,7 @@ endmacro()
 # Usage:
 #   calligra_define_product(<product_id>
 #         [NAME] <product_name>
+#         [STAGING]
 #         [NEEDS <product_id1> [<product_id2> ...]]
 #         [WANTS <product_id1> [<product_id2> ...]]
 #       )
@@ -150,7 +159,11 @@ macro(calligra_define_product _product_id)
       set(_current_arg_type "wants")
     else(${_arg} STREQUAL "NAME")
       if(${_current_arg_type} STREQUAL "name")
-        set(_product_name "${_arg}")
+        if(${_arg} STREQUAL "STAGING")
+          list(APPEND CALLIGRA_STAGING_PRODUCTS ${_product_id})
+        else(${_arg} STREQUAL "STAGING")
+          set(_product_name "${_arg}")
+        endif(${_arg} STREQUAL "STAGING")
       elseif(${_current_arg_type} STREQUAL "needs")
         # check that the dependency is actually existing
         if(NOT DEFINED SHOULD_BUILD_${_arg})

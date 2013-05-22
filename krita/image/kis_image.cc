@@ -954,6 +954,7 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
     Q_CHECK_PTR(mergedLayer);
     mergedLayer->setCompositeOp(COMPOSITE_OVER);
     mergedLayer->setChannelFlags(layer->channelFlags());
+    mergedLayer->disableAlphaChannel(prevLayer->alphaChannelDisabled());
 
     // Merge meta data
     QList<const KisMetaData::Store*> srcs;

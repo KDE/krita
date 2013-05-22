@@ -451,16 +451,6 @@ public:
     /// use if the layers have changed _completely_ (eg. when flattening)
     void notifyLayersChanged();
 
-    /**
-     * Called whenever a layer has changed. The layer is added to a
-     * list of dirty layers and as soon as the document stores the
-     * command that is now in progress, the image will be notified.
-     * Then the image will notify the dirty layers, the dirty layers
-     * will notify their parents & emit a signal that will be caught
-     * by the layer box, which will request a new thumbnail.
-    */
-    void notifyLayerUpdated(KisLayerSP layer);
-
     void setRootLayer(KisGroupLayerSP rootLayer);
 
     /**

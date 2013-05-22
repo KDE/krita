@@ -401,18 +401,6 @@ void KisImage::unblockUpdates()
     m_d->scheduler->unblockUpdates();
 }
 
-void KisImage::notifyLayerUpdated(KisLayerSP layer)
-{
-    // Add the layer to the list of layers that need to be
-    // rescanned for the thumbnails in the layerbox
-    KisLayer *l = layer.data();
-    while (l) {
-        if (!m_d->dirtyLayers.contains(l))
-            m_d->dirtyLayers.append(l);
-        l = dynamic_cast<KisLayer*>(l->parent().data());
-    }
-}
-
 void KisImage::setSize(const QSize& size)
 {
     m_d->width = size.width();

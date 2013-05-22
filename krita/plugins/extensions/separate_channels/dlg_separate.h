@@ -61,7 +61,7 @@ public:
 
 private slots:
 
-    void slotSetColorSpaceLabel(int buttonid);
+    void slotSetColorSpaceLabel();
     void okClicked();
 
 private:

@@ -70,7 +70,21 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
     KisImageWSP image = m_view->image();
     if (!image) return;
 
-    KisPaintDeviceSP src = m_view->activeDevice();
+    KisPaintDeviceSP src;
+
+    // Use the flattened image, if required
+    switch (sourceOps) {
+    case ALL_LAYERS:
+        // the content will be locked later
+        src = image->projection();
+        break;
+    case CURRENT_LAYER:
+        src = m_view->activeDevice();
+        break;
+    default:
+        break;
+    }
+
     if (!src) return;
 
     progressUpdater->setProgress(1);
@@ -80,14 +94,6 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
     quint32 numberOfChannels = src->channelCount();
     const KoColorSpace * srcCs  = src->colorSpace();
     QList<KoChannelInfo *> channels = srcCs->channels();
-    // Use the flattened image, if required
-    switch (sourceOps) {
-    case(ALL_LAYERS):
-        src = image->mergedImage();
-        break;
-    default:
-        break;
-    }
     vKisPaintDeviceSP layers;
 
     QList<KoChannelInfo *>::const_iterator begin = channels.constBegin();

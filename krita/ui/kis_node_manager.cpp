@@ -307,73 +307,6 @@ const KoColorSpace* KisNodeManager::activeColorSpace()
     }
 }
 
-bool allowAsChild(const QString & parentType, const QString & childType)
-{
-    // XXX_NODE: do we want to allow masks to apply on masks etc? Selections on masks?
-    if (parentType == "KisPaintLayer" || parentType == "KisAdjustmentLayer" || parentType == "KisShapeLayer" || parentType == "KisGeneratorLayer" || parentType == "KisCloneLayer") {
-        if (childType == "KisFilterMask" || childType == "KisTransparencyMask" || childType == "KisSelectionMask") {
-            return true;
-        }
-        return false;
-    } else if (parentType == "KisGroupLayer") {
-        return true;
-    } else if (parentType == "KisFilterMask" || parentType == "KisTransparencyMask" || parentType == "KisSelectionMask") {
-        return false;
-    }
-
-    return true;
-}
-
-void KisNodeManager::getNewNodeLocation(KisNodeSP node, KisNodeSP& parent, KisNodeSP& above, KisNodeSP _activeNode)
-{
-    KisNodeSP root = m_d->view->image()->root();
-    if (!_activeNode)
-        _activeNode = root->firstChild();
-    KisNodeSP active = _activeNode;
-    // Find the first node above the current node that can have the desired
-    // layer type as child. XXX_NODE: disable the menu entries for node types
-    // that are not compatible with the active node type.
-    while (active) {
-        if (active->allowAsChild(node)) {
-            parent = active;
-            if (_activeNode->parent() == parent) {
-                above = _activeNode;
-            } else {
-                above = parent->firstChild();
-            }
-            return;
-        }
-        active = active->parent();
-    }
-    parent = root;
-    above = parent->firstChild();
-}
-
-void KisNodeManager::getNewNodeLocation(const QString & nodeType, KisNodeSP &parent, KisNodeSP &above, KisNodeSP _activeNode)
-{
-    KisNodeSP root = m_d->view->image()->root();
-    if (!_activeNode)
-        _activeNode = root->firstChild();
-    KisNodeSP active = _activeNode;
-    // Find the first node above the current node that can have the desired
-    // layer type as child. XXX_NODE: disable the menu entries for node types
-    // that are not compatible with the active node type.
-    while (active) {
-        if (allowAsChild(active->metaObject()->className(), nodeType)) {
-            parent = active;
-            if (_activeNode->parent() == parent) {
-                above = _activeNode;
-            } else {
-                above = parent->firstChild();
-            }
-            return;
-        }
-        active = active->parent();
-    }
-    parent = root;
-    above = parent->firstChild();
-}
-
 void KisNodeManager::moveNodeAt(KisNodeSP node, KisNodeSP parent, int index)
 {
     if (parent->allowAsChild(node)) {
@@ -402,35 +335,34 @@ void KisNodeManager::moveNodeDirect(KisNodeSP node, KisNodeSP parent, KisNodeSP 
 
 void KisNodeManager::createNode(const QString & nodeType)
 {
-
-    KisNodeSP parent;
-    KisNodeSP above;
-
-    getNewNodeLocation(nodeType, parent, above, activeNode());
+    KisNodeSP activeNode = this->activeNode();
+    if (!activeNode) {
+        activeNode = m_d->view->image()->root();
+    }
 
     // XXX: make factories for this kind of stuff,
     //      with a registry
 
     if (nodeType == "KisPaintLayer") {
-        m_d->layerManager->addLayer(parent, above);
+        m_d->layerManager->addLayer(activeNode);
     } else if (nodeType == "KisGroupLayer") {
-        m_d->layerManager->addGroupLayer(parent, above);
+        m_d->layerManager->addGroupLayer(activeNode);
     } else if (nodeType == "KisAdjustmentLayer") {
-        m_d->layerManager->addAdjustmentLayer(parent, above);
+        m_d->layerManager->addAdjustmentLayer(activeNode);
     } else if (nodeType == "KisGeneratorLayer") {
-        m_d->layerManager->addGeneratorLayer(parent, above);
+        m_d->layerManager->addGeneratorLayer(activeNode);
     } else if (nodeType == "KisShapeLayer") {
-        m_d->layerManager->addShapeLayer(parent, above);
+        m_d->layerManager->addShapeLayer(activeNode);
     } else if (nodeType == "KisCloneLayer") {
-        m_d->layerManager->addCloneLayer(parent, above);
+        m_d->layerManager->addCloneLayer(activeNode);
     } else if (nodeType == "KisTransparencyMask") {
-        m_d->maskManager->createTransparencyMask(activeNode(), 0);
+        m_d->maskManager->createTransparencyMask(activeNode, 0);
     } else if (nodeType == "KisFilterMask") {
-        m_d->maskManager->createFilterMask(activeNode(), 0);
+        m_d->maskManager->createFilterMask(activeNode, 0);
     } else if (nodeType == "KisSelectionMask") {
-        m_d->maskManager->createSelectionMask(activeNode(), 0);
+        m_d->maskManager->createSelectionMask(activeNode, 0);
     } else if (nodeType == "KisFileLayer") {
-        m_d->layerManager->addFileLayer(parent, above);
+        m_d->layerManager->addFileLayer(activeNode);
     }
 
 }

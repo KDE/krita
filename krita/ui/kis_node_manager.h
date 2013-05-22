@@ -193,11 +193,6 @@ public:
     void scale(double sx, double sy, KisFilterStrategy *filterStrategy);
     
 private:
-    
-    void getNewNodeLocation(const QString & nodeType, KisNodeSP &parent, KisNodeSP &above, KisNodeSP active);
-    void getNewNodeLocation(KisNodeSP node, KisNodeSP &parent, KisNodeSP &above, KisNodeSP _activeNode);
-
-
     /**
      * Scales opacity from the range 0...1
      * to the integer range 0...255

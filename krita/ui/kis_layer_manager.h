@@ -77,7 +77,7 @@ private:
     void scaleLayer(double sx, double sy, KisFilterStrategy *filterStrategy);
     void rotateLayer(double radians);
     void shearLayer(double angleX, double angleY);
-    
+
 private slots:
 
     void mergeLayer();
@@ -105,26 +105,23 @@ private slots:
 
     void convertNodeToPaintLayer(KisNodeSP source);
 
-    void addLayer(KisNodeSP parent, KisNodeSP above);
-    void addGroupLayer(KisNodeSP parent, KisNodeSP above);
+    void addLayer(KisNodeSP activeNode);
+    void addGroupLayer(KisNodeSP activeNode);
 
-    void addCloneLayer();
-    void addCloneLayer(KisNodeSP parent, KisNodeSP above);
+    void addCloneLayer(KisNodeSP activeNode);
 
-    void addShapeLayer();
-    void addShapeLayer(KisNodeSP parent, KisNodeSP above);
+    void addShapeLayer(KisNodeSP activeNode);
 
-    void addAdjustmentLayer();
-    void addAdjustmentLayer(KisNodeSP parent, KisNodeSP above);
-    KisAdjustmentLayerSP addAdjustmentLayer(KisNodeSP parent, KisNodeSP above, const QString & name, KisFilterConfiguration * filter, KisSelectionSP selection);
+    void addAdjustmentLayer(KisNodeSP activeNode);
+    KisAdjustmentLayerSP addAdjustmentLayer(KisNodeSP activeNode, const QString & name, KisFilterConfiguration * filter, KisSelectionSP selection);
 
-    void addGeneratorLayer();
-    void addGeneratorLayer(KisNodeSP parent, KisNodeSP above);
-    void addGeneratorLayer(KisNodeSP parent, KisNodeSP above, const QString & name, KisFilterConfiguration * filter, KisSelectionSP selection);
+    void addGeneratorLayer(KisNodeSP activeNode);
 
-    void addFileLayer();
-    void addFileLayer(KisNodeSP parent, KisNodeSP above);
-    void addFileLayer(KisNodeSP parent, KisNodeSP above, const QString & name, const QString &fileName, bool scaleToImageResolution);
+    void addFileLayer(KisNodeSP activeNode);
+
+private:
+    void adjustLayerPosition(KisNodeSP node, KisNodeSP activeNode, KisNodeSP &parent, KisNodeSP &above);
+    void addLayerCommon(KisNodeSP activeNode, KisLayerSP layer);
 
 private:
 

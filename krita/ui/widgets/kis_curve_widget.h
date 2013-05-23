@@ -83,6 +83,10 @@ public:
      * itself?
      */
     void setPixmap(const QPixmap & pix);
+    QPixmap getPixmap();
+    
+    void setBasePixmap(const QPixmap & pix);
+    QPixmap getBasePixmap();
 
 signals:
 

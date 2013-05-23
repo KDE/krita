@@ -76,4 +76,4 @@ Comment[zh_TW]=bigbrother
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritabigbrother
-X-Krita-Version=27
+X-Krita-Version=28

@@ -55,7 +55,6 @@
 #include "kis_convolution_kernel.h"
 #include "kis_debug.h"
 #include "kis_doc2.h"
-#include "kis_part2.h"
 #include "kis_fill_painter.h"
 #include "kis_group_layer.h"
 #include "kis_image.h"
@@ -178,7 +177,7 @@ void KisSelectionManager::setup(KActionCollection * collection, KisActionManager
     connect(m_copyToNewLayer, SIGNAL(triggered()), this, SLOT(copySelectionToNewLayer()));
 
     m_cutToNewLayer  = new KisAction(i18n("Cut Selection to New Layer"), this);
-    m_copyToNewLayer->setActivationFlags(KisAction::PIXELS_SELECTED);
+    m_cutToNewLayer->setActivationFlags(KisAction::PIXELS_SELECTED);
     m_cutToNewLayer->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     actionManager->addAction("cut_selection_to_new_layer", m_cutToNewLayer, collection);
     m_cutToNewLayer->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_J));

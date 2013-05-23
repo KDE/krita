@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>197</width>
-    <height>101</height>
+    <width>210</width>
+    <height>230</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -179,7 +179,7 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="KDoubleNumInput" name="doubleRatio" native="true">
+        <widget class="KDoubleNumInput" name="doubleRatio">
          <property name="toolTip">
           <string>Ratio</string>
          </property>
@@ -227,33 +227,19 @@
     </layout>
    </item>
    <item>
-    <spacer name="spacer2">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Expanding</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>0</height>
-      </size>
-     </property>
-    </spacer>
+    <widget class="QWidget" name="SpecialSpacer" native="true"/>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KIntSpinBox</class>
-   <extends>QSpinBox</extends>
+   <class>KDoubleNumInput</class>
+   <extends>QWidget</extends>
    <header>knuminput.h</header>
-   <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KDoubleNumInput</class>
-   <extends></extends>
+   <class>KIntSpinBox</class>
+   <extends>QSpinBox</extends>
    <header>knuminput.h</header>
    <container>1</container>
   </customwidget>

@@ -58,6 +58,7 @@ public:
     virtual int flags() const;
 
 protected:
+    bool isGestureSupported() const;
     void gesture(const QPointF &offsetInDocPixels,
                  const QPointF &initialDocPoint);
 

@@ -104,4 +104,4 @@ Comment[zh_TW]=色彩過濾器
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritacolorsfilters
-X-Krita-Version=27
+X-Krita-Version=28

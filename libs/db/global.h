@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2013 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -157,6 +157,10 @@ enum ObjectType {
     //!< may be or'd with TableObjectType)
     IndexObjectType = 256 //!< special
 };
+
+//! @return reusable i18n'd message
+//!         "You can correct data in this record or use 'Cancel record changes' function."
+CALLIGRADB_EXPORT QString msgYouCanImproveData();
 
 }
 

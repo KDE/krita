@@ -829,7 +829,6 @@ void KoToolManager::switchToolTemporaryRequested(const QString &id)
 
 void KoToolManager::switchBackRequested()
 {
-    Q_ASSERT(d->canvasData);
     if (!d->canvasData) return;
 
     if (d->canvasData->stack.isEmpty()) {

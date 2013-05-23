@@ -33,6 +33,7 @@
 #include <kio/job.h>
 #include <kfiledialog.h>
 #include <KoStore.h>
+#include <kis_canvas2.h>
 
 class QPainter;
 class QRect;
@@ -64,6 +65,8 @@ public:
     QList<KisPaintingAssistantHandleSP> split();
     void uncache();
     KisPaintingAssistantHandle& operator=(const QPointF&);
+    void setType(char type);
+    char handleType();
 private:
     void registerAssistant(KisPaintingAssistant*);
     void unregisterAssistant(KisPaintingAssistant*);
@@ -95,13 +98,38 @@ public:
     virtual int numHandles() const = 0;
     void replaceHandle(KisPaintingAssistantHandleSP _handle, KisPaintingAssistantHandleSP _with);
     void addHandle(KisPaintingAssistantHandleSP handle);
-    virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, bool cached = true);
+    void addSideHandle(KisPaintingAssistantHandleSP handle);
+    virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, bool cached = true,KisCanvas2 *canvas=0);
     void uncache();
     const QList<KisPaintingAssistantHandleSP>& handles() const;
     QList<KisPaintingAssistantHandleSP> handles();
+    const QList<KisPaintingAssistantHandleSP>& sideHandles() const;
+    QList<KisPaintingAssistantHandleSP> sideHandles();
     QByteArray saveXml( QMap<KisPaintingAssistantHandleSP, int> &handleMap);
     void loadXml(KoStore *store, QMap<int, KisPaintingAssistantHandleSP> &handleMap, QString path);
     void saveXmlList(QDomDocument& doc, QDomElement& ssistantsElement, int count);
+    void findHandleLocation();
+    KisPaintingAssistantHandleSP oppHandleOne();
+
+    /**
+      * Get the topLeft, bottomLeft, topRight and BottomRight corners of the assistant
+      */
+    const KisPaintingAssistantHandleSP topLeft() const;
+    KisPaintingAssistantHandleSP topLeft();
+    const KisPaintingAssistantHandleSP topRight() const;
+    KisPaintingAssistantHandleSP topRight();
+    const KisPaintingAssistantHandleSP bottomLeft() const;
+    KisPaintingAssistantHandleSP bottomLeft();
+    const KisPaintingAssistantHandleSP bottomRight() const;
+    KisPaintingAssistantHandleSP bottomRight();
+    const KisPaintingAssistantHandleSP topMiddle() const;
+    KisPaintingAssistantHandleSP topMiddle();
+    const KisPaintingAssistantHandleSP rightMiddle() const;
+    KisPaintingAssistantHandleSP rightMiddle();
+    const KisPaintingAssistantHandleSP leftMiddle() const;
+    KisPaintingAssistantHandleSP leftMiddle();
+    const KisPaintingAssistantHandleSP bottomMiddle() const;
+    KisPaintingAssistantHandleSP bottomMiddle();
 
 public:
     /**

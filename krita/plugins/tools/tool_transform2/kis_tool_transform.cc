@@ -852,7 +852,7 @@ void KisToolTransform::setTransformFunction(QPointF mousePos, Qt::KeyboardModifi
 
 void KisToolTransform::mousePressEvent(KoPointerEvent *event)
 {
-    if (!PRESS_CONDITION_OM(event, KisTool::HOVER_MODE, Qt::LeftButton, Qt::ControlModifier)) {
+    if (!PRESS_CONDITION_OM(event, KisTool::HOVER_MODE, Qt::LeftButton, Qt::ControlModifier | Qt::ShiftModifier)) {
 
         KisTool::mousePressEvent(event);
         return;

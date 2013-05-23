@@ -18,13 +18,14 @@
 
 #include "opengl/kis_opengl_canvas2.h"
 
+#include "opengl/kis_opengl.h"
+
 #ifdef HAVE_OPENGL
 
 #include <QMenu>
 #include <QWidget>
 #include <QGLWidget>
 #include <QGLContext>
-#include <QImage>
 #include <QBrush>
 #include <QPainter>
 #include <QPaintEvent>
@@ -44,7 +45,6 @@
 #include "canvas/kis_canvas2.h"
 #include "kis_coordinates_converter.h"
 #include "kis_image.h"
-#include "opengl/kis_opengl.h"
 #include "opengl/kis_opengl_image_textures.h"
 #include "kis_view2.h"
 #include "kis_canvas_resource_provider.h"
@@ -65,15 +65,15 @@
 
 namespace
 {
-    const GLuint NO_PROGRAM = 0;
+const GLuint NO_PROGRAM = 0;
 }
 
 struct KisOpenGLCanvas2::Private
 {
 public:
     Private()
-            : savedCurrentProgram(NO_PROGRAM)
-            , GLStateSaved(false)
+        : savedCurrentProgram(NO_PROGRAM)
+        , GLStateSaved(false)
     {
     }
 
@@ -84,8 +84,8 @@ public:
 
 KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 * canvas, KisCoordinatesConverter *coordinatesConverter, QWidget * parent, KisOpenGLImageTexturesSP imageTextures)
     : QGLWidget(QGLFormat(QGL::SampleBuffers), parent, KisOpenGL::sharedContextWidget())
-        , KisCanvasWidgetBase(canvas, coordinatesConverter)
-        , m_d(new Private())
+    , KisCanvasWidgetBase(canvas, coordinatesConverter)
+    , m_d(new Private())
 {
     m_d->openGLImageTextures = imageTextures;
 
@@ -145,28 +145,176 @@ void KisOpenGLCanvas2::resizeGL(int width, int height)
 
 void KisOpenGLCanvas2::paintEvent(QPaintEvent *)
 {
-    QPainter gc(this);
+    QColor widgetBackgroundColor = borderColor();
+
+    makeCurrent();
 
     saveGLState();
 
-    drawBorder();
+    glClearColor(widgetBackgroundColor.redF(),widgetBackgroundColor.greenF(),widgetBackgroundColor.blueF(),1.0);
+    glClear(GL_COLOR_BUFFER_BIT);
 
     Q_ASSERT(canvas()->image());
 
     if (canvas()->image()) {
-        drawBackground();
-        drawImage();
+
+        KisCoordinatesConverter *converter = coordinatesConverter();
+
+        QTransform textureTransform;
+        QTransform modelTransform;
+        QRectF textureRect;
+        QRectF modelRect;
+        converter->getOpenGLCheckersInfo(&textureTransform, &modelTransform, &textureRect, &modelRect);
+
+        KisConfig cfg;
+        GLfloat checkSizeScale = KisOpenGLImageTextures::BACKGROUND_TEXTURE_CHECK_SIZE / static_cast<GLfloat>(cfg.checkSize());
+
+        textureTransform *= QTransform::fromScale(checkSizeScale / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE,
+                                                  checkSizeScale / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE);
+
+
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glViewport(0, 0, width(), height());
+        glOrtho(0, width(), height(), 0, NEAR_VAL, FAR_VAL);
+
+        glMatrixMode(GL_TEXTURE);
+        glLoadIdentity();
+        loadQTransform(textureTransform);
+
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        loadQTransform(modelTransform);
+
+        glBindTexture(GL_TEXTURE_2D, m_d->openGLImageTextures->backgroundTexture());
+        glEnable(GL_TEXTURE_2D);
+
+        glBegin(GL_TRIANGLES);
+
+        glTexCoord2f(textureRect.left(), textureRect.bottom());
+        glVertex2f(modelRect.left(), modelRect.bottom());
+
+        glTexCoord2f(textureRect.left(), textureRect.top());
+        glVertex2f(modelRect.left(), modelRect.top());
+
+        glTexCoord2f(textureRect.right(), textureRect.bottom());
+        glVertex2f(modelRect.right(), modelRect.bottom());
+
+        glTexCoord2f(textureRect.left(), textureRect.top());
+        glVertex2f(modelRect.left(), modelRect.top());
+
+        glTexCoord2f(textureRect.right(), textureRect.top());
+        glVertex2f(modelRect.right(), modelRect.top());
+
+        glTexCoord2f(textureRect.right(), textureRect.bottom());
+        glVertex2f(modelRect.right(), modelRect.bottom());
+
+        glEnd();
+
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glDisable(GL_TEXTURE_2D);
+
+        /**
+         * Set the projection and model view matrices so that primitives can be
+         * rendered using image pixel coordinates. This handles zooming and
+         * scrolling of the canvas.
+         */
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glViewport(0, 0, width(), height());
+        glOrtho(0, width(), height(), 0, NEAR_VAL, FAR_VAL);
+
+        glMatrixMode(GL_TEXTURE);
+        glLoadIdentity();
+
+        glMatrixMode(GL_MODELVIEW);
+        QTransform transform = coordinatesConverter()->imageToWidgetTransform();
+        loadQTransform(transform);
+
+        glEnable(GL_TEXTURE_2D);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        QRectF widgetRect(0,0, width(), height());
+        QRectF widgetRectInImagePixels = converter->documentToImage(converter->widgetToDocument(widgetRect));
+
+        qreal scaleX, scaleY;
+        converter->imageScale(&scaleX, &scaleY);
+
+        QRect wr = widgetRectInImagePixels.toAlignedRect() & m_d->openGLImageTextures->storedImageBounds();
+
+        m_d->openGLImageTextures->activateHDRExposureProgram();
+
+        int firstColumn = m_d->openGLImageTextures->xToCol(wr.left());
+        int lastColumn = m_d->openGLImageTextures->xToCol(wr.right());
+        int firstRow = m_d->openGLImageTextures->yToRow(wr.top());
+        int lastRow = m_d->openGLImageTextures->yToRow(wr.bottom());
+
+        for (int col = firstColumn; col <= lastColumn; col++) {
+            for (int row = firstRow; row <= lastRow; row++) {
+
+                KisTextureTile *tile =
+                        m_d->openGLImageTextures->getTextureTileCR(col, row);
+
+                glBindTexture(GL_TEXTURE_2D, tile->textureId());
+
+                if(SCALE_MORE_OR_EQUAL_TO(scaleX, scaleY, 2.0)) {
+                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                } else {
+                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                }
+
+                /*
+                 * We create a float rect here to workaround Qt's
+                 * "history reasons" in calculation of right()
+                 * and bottom() coordinates of integer rects.
+                 */
+                QRectF textureRect(tile->tileRectInTexturePixels());
+                QRectF modelRect(tile->tileRectInImagePixels());
+
+                glBegin(GL_TRIANGLES);
+
+                glTexCoord2f(textureRect.left(), textureRect.bottom());
+                glVertex2f(modelRect.left(), modelRect.bottom());
+
+                glTexCoord2f(textureRect.left(), textureRect.top());
+                glVertex2f(modelRect.left(), modelRect.top());
+
+                glTexCoord2f(textureRect.right(), textureRect.bottom());
+                glVertex2f(modelRect.right(), modelRect.bottom());
+
+                glTexCoord2f(textureRect.left(), textureRect.top());
+                glVertex2f(modelRect.left(), modelRect.top());
+
+                glTexCoord2f(textureRect.right(), textureRect.top());
+                glVertex2f(modelRect.right(), modelRect.top());
+
+                glTexCoord2f(textureRect.right(), textureRect.bottom());
+                glVertex2f(modelRect.right(), modelRect.bottom());
+
+                glEnd();
+            }
+        }
+
+        m_d->openGLImageTextures->deactivateHDRExposureProgram();
+
+        glDisable(GL_TEXTURE_2D);
+        glDisable(GL_BLEND);
+
+        // Unbind the texture otherwise the ATI driver crashes when the canvas context is
+        // made current after the textures are deleted following an image resize.
+        glBindTexture(GL_TEXTURE_2D, 0);
+
         restoreGLState();
 
-
+        QPainter gc(this);
         QRect boundingRect = coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect();
         drawDecorations(gc, boundingRect);
-    } else {
-        restoreGLState();
-    }
+        gc.end();
 
-    gc.end();
+    }
 }
+
 
 void KisOpenGLCanvas2::loadQTransform(QTransform transform)
 {
@@ -188,126 +336,6 @@ void KisOpenGLCanvas2::loadQTransform(QTransform transform)
     matrix[15] = transform.m33();
 
     glLoadMatrixf(matrix);
-}
-
-void KisOpenGLCanvas2::drawBorder()
-{
-    QColor widgetBackgroundColor = borderColor();
-
-    glClearColor(widgetBackgroundColor.redF(),widgetBackgroundColor.greenF(),widgetBackgroundColor.blueF(),1.0);
-    glClear(GL_COLOR_BUFFER_BIT);
-}
-
-void KisOpenGLCanvas2::drawBackground()
-{
-    KisCoordinatesConverter *converter = coordinatesConverter();
-
-    QTransform textureTransform;
-    QTransform modelTransform;
-    QRectF textureRect;
-    QRectF modelRect;
-    converter->getOpenGLCheckersInfo(&textureTransform, &modelTransform, &textureRect, &modelRect);
-
-    KisConfig cfg;
-    GLfloat checkSizeScale = KisOpenGLImageTextures::BACKGROUND_TEXTURE_CHECK_SIZE / static_cast<GLfloat>(cfg.checkSize());
-
-    textureTransform *= QTransform::fromScale(checkSizeScale / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE,
-                                               checkSizeScale / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE);
-
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glViewport(0, 0, width(), height());
-    glOrtho(0, width(), height(), 0, NEAR_VAL, FAR_VAL);
-
-    glMatrixMode(GL_TEXTURE);
-    glLoadIdentity();
-    loadQTransform(textureTransform);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    loadQTransform(modelTransform);
-
-    glBindTexture(GL_TEXTURE_2D, m_d->openGLImageTextures->backgroundTexture());
-    glEnable(GL_TEXTURE_2D);
-    glShadeModel(GL_FLAT);
-
-    glBegin(GL_QUADS);
-    glColor3f(1.0, 1.0, 1.0);
-
-    glTexCoord2f(textureRect.left(), textureRect.top());
-    glVertex2f(modelRect.left(), modelRect.top());
-
-    glTexCoord2f(textureRect.right(), textureRect.top());
-    glVertex2f(modelRect.right(), modelRect.top());
-
-    glTexCoord2f(textureRect.right(), textureRect.bottom());
-    glVertex2f(modelRect.right(), modelRect.bottom());
-
-    glTexCoord2f(textureRect.left(), textureRect.bottom());
-    glVertex2f(modelRect.left(), modelRect.bottom());
-
-    glEnd();
-
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glDisable(GL_TEXTURE_2D);
-}
-
-void KisOpenGLCanvas2::drawImage()
-{
-    setupImageToWidgetTransformation();
-
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    KisCoordinatesConverter *converter = coordinatesConverter();
-
-    QRectF widgetRect(0,0, width(), height());
-    QRectF widgetRectInImagePixels = converter->
-        documentToImage(converter->widgetToDocument(widgetRect));
-
-    qreal scaleX, scaleY;
-    converter->imageScale(&scaleX, &scaleY);
-
-    QRect wr = widgetRectInImagePixels.toAlignedRect() &
-        m_d->openGLImageTextures->storedImageBounds();
-
-    m_d->openGLImageTextures->activateHDRExposureProgram();
-
-    makeCurrent();
-
-    int firstColumn = m_d->openGLImageTextures->xToCol(wr.left());
-    int lastColumn = m_d->openGLImageTextures->xToCol(wr.right());
-    int firstRow = m_d->openGLImageTextures->yToRow(wr.top());
-    int lastRow = m_d->openGLImageTextures->yToRow(wr.bottom());
-
-    for (int col = firstColumn; col <= lastColumn; col++) {
-        for (int row = firstRow; row <= lastRow; row++) {
-
-            KisTextureTile *tile =
-                m_d->openGLImageTextures->getTextureTileCR(col, row);
-
-            glBindTexture(GL_TEXTURE_2D, tile->textureId());
-
-            if(scaleX > 2.0) {
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            } else {
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            }
-
-            tile->drawPoints();
-        }
-    }
-
-    m_d->openGLImageTextures->deactivateHDRExposureProgram();
-
-    glDisable(GL_TEXTURE_2D);
-    glDisable(GL_BLEND);
-
-    // Unbind the texture otherwise the ATI driver crashes when the canvas context is
-    // made current after the textures are deleted following an image resize.
-    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void KisOpenGLCanvas2::saveGLState()

@@ -37,4 +37,4 @@ Name[zh_TW]=噴霧
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritaspraypaintop
-X-Krita-Version=27
+X-Krita-Version=28

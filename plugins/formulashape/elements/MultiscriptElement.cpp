@@ -152,7 +152,7 @@ void MultiscriptElement::layout( const AttributeManager* am )
                 lastSuperScriptWidth = m_preScripts[i]->width();
                 qreal offset = 0.0;
                 if(m_preScripts[i-1]) //the subscript directly below us.
-                    offset = qMax(qreal(0.0), (m_preScripts[i-1]->width() - lastSuperScriptWidth)/2.0);
+                    offset = qMax(qreal(0.0), (m_preScripts[i-1]->width() - lastSuperScriptWidth)/qreal(2.0));
                 m_preScripts[i]->setOrigin( QPointF(
                             offset + xOffset,
                             maxSuperScriptBaseLine - m_preScripts[i]->baseLine()));
@@ -182,7 +182,7 @@ void MultiscriptElement::layout( const AttributeManager* am )
                 // For a given vertical line, this is processed after the superscript
                 qreal offset = 0.0;
                 if(m_postScripts.size() > i+1 && m_postScripts[i+1] != NULL) //the subscript directly below us.
-                    offset = qMax(qreal(0.0), (m_postScripts[i+1]->width() - lastSubScriptWidth)/2.0);
+                    offset = qMax(qreal(0.0), (m_postScripts[i+1]->width() - lastSubScriptWidth)/qreal(2.0));
                 m_postScripts[i]->setOrigin( QPointF(
                             offset + xOffset,
                             yOffsetSub - m_postScripts[i]->baseLine() ) );
@@ -192,7 +192,7 @@ void MultiscriptElement::layout( const AttributeManager* am )
            if( !m_postScripts[i] )
                 xOffset += lastSubScriptWidth;
            else {
-               qreal offset = qMax(qreal(0.0), (lastSubScriptWidth - m_postScripts[i]->width())/2.0);
+               qreal offset = qMax(qreal(0.0), (lastSubScriptWidth - m_postScripts[i]->width())/qreal(2.0));
                m_postScripts[i]->setOrigin( QPointF(
                             offset + xOffset,
                             maxSuperScriptBaseLine - m_postScripts[i]->baseLine()));

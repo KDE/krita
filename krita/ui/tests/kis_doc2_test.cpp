@@ -41,9 +41,7 @@ void KisDoc2Test::testOpenImageTwiceInSameDoc()
     Q_ASSERT(!fname.isEmpty());
     Q_ASSERT(!fname2.isEmpty());
 
-    KisPart2 part;
-    KisDoc2 doc(&part);
-    part.setDocument(&doc);
+    KisDoc2 doc;
 
     doc.loadNativeFormat(fname);
     doc.loadNativeFormat(fname2);

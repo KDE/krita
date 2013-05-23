@@ -6,6 +6,10 @@ Basic_erase_soft.kpp
 Basic_ink_05.kpp
 Basic_ink_10.kpp
 Basic_ink_ballpen.kpp
+Basic_ink_brush_25.kpp
+Basic_ink_gpen_10.kpp
+Basic_ink_gpen_25.kpp
+Basic_ink_pen_03.kpp
 Basic_ink_tilt_10.kpp
 Basic_ink_tilt_20.kpp
 Basic_mix.kpp

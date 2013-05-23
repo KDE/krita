@@ -57,6 +57,7 @@ public:
     KisCubicCurve m_curve;
 
     QPixmap m_pix;
+    QPixmap m_pixmapBase;
     bool m_pixmapDirty;
     QPixmap *m_pixmapCache;
 

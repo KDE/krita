@@ -280,8 +280,11 @@ public:
      *
      * Toggling the visibility of a node will not automatically lead
      * to recomposition.
+     *
+     * @param visible the new visibility state
+     * @param isLoading if true, the property is set during loading.
      */
-    virtual void setVisible(bool v);
+    virtual void setVisible(bool visibile, bool loading = false);
 
     /**
      * Return the locked status of this node. Locked nodes cannot be

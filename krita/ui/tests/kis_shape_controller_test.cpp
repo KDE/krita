@@ -21,7 +21,6 @@
 #include <qtest_kde.h>
 
 #include "kis_doc2.h"
-#include "kis_part2.h"
 #include "kis_name_server.h"
 #include "flake/kis_shape_controller.h"
 
@@ -33,9 +32,7 @@ KisShapeControllerTest::~KisShapeControllerTest()
 KisDummiesFacadeBase* KisShapeControllerTest::dummiesFacadeFactory()
 {
 
-    m_part = new KisPart2();
-    m_doc = new KisDoc2(m_part);
-    m_part->setDocument(m_doc);
+    m_doc = new KisDoc2();
 
     m_nameServer = new KisNameServer();
     return new KisShapeController(m_doc, m_nameServer);
@@ -46,7 +43,6 @@ void KisShapeControllerTest::destroyDummiesFacade(KisDummiesFacadeBase *dummiesF
     delete dummiesFacade;
     delete m_nameServer;
     delete m_doc;
-    delete m_part;
 }
 
 QTEST_KDEMAIN(KisShapeControllerTest, GUI)

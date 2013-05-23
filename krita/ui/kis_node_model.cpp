@@ -50,12 +50,14 @@
 struct KisNodeModel::Private
 {
 public:
-    Private() : indexConverter(0),
+    Private() : shapeController(0),
+                indexConverter(0),
                 dummiesFacade(0),
                 needFinishRemoveRows(false),
                 needFinishInsertRows(false) {}
 
     KisImageWSP image;
+    KisShapeController *shapeController;
     bool showRootLayer;
     QList<KisNodeDummy*> updateQueue;
     QTimer* updateTimer;
@@ -97,6 +99,26 @@ QModelIndex KisNodeModel::indexFromNode(KisNodeSP node) const
     return m_d->indexConverter->indexFromDummy(dummy);
 }
 
+bool KisNodeModel::belongsToIsolatedGroup(KisNodeSP node) const
+{
+    KisNodeSP isolatedRoot = m_d->image->isolatedModeRoot();
+    if (!isolatedRoot) return true;
+
+    KisNodeDummy *isolatedRootDummy =
+        m_d->dummiesFacade->dummyForNode(isolatedRoot);
+    KisNodeDummy *dummy =
+        m_d->dummiesFacade->dummyForNode(node);
+
+    while (dummy) {
+        if (dummy == isolatedRootDummy) {
+            return true;
+        }
+        dummy = dummy->parent();
+    }
+
+    return false;
+}
+
 void KisNodeModel::resetIndexConverter()
 {
     delete m_d->indexConverter;
@@ -112,6 +134,23 @@ void KisNodeModel::resetIndexConverter()
                 new KisModelIndexConverter(m_d->dummiesFacade, this);
         }
     }
+}
+
+void KisNodeModel::regenerateItems(KisNodeDummy *dummy)
+{
+    const QModelIndex &index = m_d->indexConverter->indexFromDummy(dummy);
+    emit dataChanged(index, index);
+
+    dummy = dummy->firstChild();
+    while (dummy) {
+        regenerateItems(dummy);
+        dummy = dummy->nextSibling();
+    }
+}
+
+void KisNodeModel::slotIsolatedModeChanged()
+{
+    regenerateItems(m_d->dummiesFacade->rootDummy());
 }
 
 void KisNodeModel::updateSettings()
@@ -159,15 +198,18 @@ void KisNodeModel::connectDummies(KisNodeDummy *dummy, bool needConnect)
     }
 }
 
-void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageWSP image)
+void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageWSP image, KisShapeController *shapeController)
 {
-    m_d->image = image;
+
+    m_d->shapeController = shapeController;
 
     if(m_d->dummiesFacade) {
+        m_d->image->disconnect(this);
         m_d->dummiesFacade->disconnect(this);
         connectDummies(m_d->dummiesFacade->rootDummy(), false);
     }
 
+    m_d->image = image;
     m_d->dummiesFacade = dummiesFacade;
     resetIndexConverter();
 
@@ -188,6 +230,8 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImag
 
         connect(m_d->dummiesFacade, SIGNAL(sigDummyChanged(KisNodeDummy*)),
                 SLOT(slotDummyChanged(KisNodeDummy*)));
+
+        connect(m_d->image, SIGNAL(sigIsolatedModeChanged()), SLOT(slotIsolatedModeChanged()));
     }
 
     reset();
@@ -317,6 +361,8 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
     case Qt::DecorationRole: return node->icon();
     case Qt::EditRole: return node->name();
     case Qt::SizeHintRole: return m_d->image->size(); // FIXME
+    case Qt::TextColorRole:
+        return belongsToIsolatedGroup(node) ? QVariant() : Qt::gray;
     case PropertiesRole: return QVariant::fromValue(node->sectionModelProperties());
     case AspectRatioRole: return double(m_d->image->width()) / m_d->image->height();
     case ProgressRole: {
@@ -324,7 +370,7 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
         return proxy ? proxy->percentage() : -1;
     }
     default:
-        if (role >= int(BeginThumbnailRole))
+        if (role >= int(BeginThumbnailRole) && belongsToIsolatedGroup(node))
             return node->createThumbnail(role - int(BeginThumbnailRole), role - int(BeginThumbnailRole));
         else
             return QVariant();
@@ -422,6 +468,7 @@ QStringList KisNodeModel::mimeTypes() const
 {
     QStringList types;
     types << QLatin1String("application/x-krita-node");
+    types << QLatin1String("application/x-qt-image");
     return types;
 }
 
@@ -457,10 +504,31 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
 {
     Q_UNUSED(column);
 
-    const KisMimeData *mimedata = qobject_cast<const KisMimeData*>(data);
-    KisNodeSP node = mimedata ? mimedata->node() : 0;
+    bool copyNode = action == Qt::CopyAction;
+    KisNodeSP node =
+        KisMimeData::tryLoadInternalNode(data,
+                                         m_d->image,
+                                         m_d->shapeController,
+                                         copyNode /* IN-OUT */);
+
+    if (!node) {
+        QRect imageBounds = m_d->image->bounds();
+        node = KisMimeData::loadNode(data,
+                                     imageBounds, imageBounds.center(),
+                                     false,
+                                     m_d->image, m_d->shapeController);
+        copyNode = true;
+    }
 
     if (!node) return false;
+
+    if (copyNode) {
+        /**
+         * Don't try to move a node originating from another image,
+         * just copy it.
+         */
+        action = Qt::CopyAction;
+    }
 
     KisNodeDummy *parentDummy = 0;
     KisNodeDummy *aboveThisDummy = 0;
@@ -487,9 +555,10 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
     bool result = true;
 
     if (action == Qt::CopyAction) {
-        emit requestAddNode(node->clone(), parentDummy->node(), aboveThisNode);
+        emit requestAddNode(node, parentDummy->node(), aboveThisNode);
     }
     else if (action == Qt::MoveAction) {
+        Q_ASSERT(node->graphListener() == m_d->image.data());
         emit requestMoveNode(node, parentDummy->node(), aboveThisNode);
     }
     else {

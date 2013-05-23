@@ -44,5 +44,5 @@ X-KDE-ServiceTypes=Calligra/Flake
 Type=Service
 X-KDE-PluginInfo-Name=formulashape
 X-KDE-Library=formulashape
-X-Flake-MinVersion=27
-X-Flake-PluginVersion=27
+X-Flake-MinVersion=28
+X-Flake-PluginVersion=28

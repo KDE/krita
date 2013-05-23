@@ -186,40 +186,6 @@ inline void KisTextureTile::repeatStripes(const KisTextureTileUpdateInfo &update
 
 }
 
-void KisTextureTile::drawPoints() {
-    /**
-     * We create a float rect here to workaround Qt's
-     * "history reasons" in calculation of right()
-     * and bottom() coordinates of integer rects.
-     */
-    QRectF imageRect(m_tileRectInImagePixels);
-    QPointF ipt;
-    QPointF tpt;
-
-    glBegin(GL_QUADS);
-
-    ipt = imageRect.topLeft();
-    tpt = m_tileRectInTexturePixels.topLeft();
-    glTexCoord2f(tpt.x(), tpt.y());
-    glVertex2f(ipt.x(), ipt.y());
-
-    ipt = imageRect.topRight();
-    tpt = m_tileRectInTexturePixels.topRight();
-    glTexCoord2f(tpt.x(), tpt.y());
-    glVertex2f(ipt.x(), ipt.y());
-
-    ipt = imageRect.bottomRight();
-    tpt = m_tileRectInTexturePixels.bottomRight();
-    glTexCoord2f(tpt.x(), tpt.y());
-    glVertex2f(ipt.x(), ipt.y());
-
-    ipt = imageRect.bottomLeft();
-    tpt = m_tileRectInTexturePixels.bottomLeft();
-    glTexCoord2f(tpt.x(), tpt.y());
-    glVertex2f(ipt.x(), ipt.y());
-
-    glEnd();
-}
 
 
 #endif /* HAVE_OPENGL */

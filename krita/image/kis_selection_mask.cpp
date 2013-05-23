@@ -114,13 +114,15 @@ void KisSelectionMask::setSectionModelProperties(const KoDocumentSectionModel::P
     setActive(properties.at(2).state.toBool());
 }
 
-void KisSelectionMask::setVisible(bool visible)
+void KisSelectionMask::setVisible(bool visible, bool isLoading)
 {
     nodeProperties().setProperty("visible", visible);
 
-    if (selection())
-        selection()->setVisible(visible);
-    emit(visibilityChanged(visible));
+    if (!isLoading) {
+        if (selection())
+            selection()->setVisible(visible);
+        emit(visibilityChanged(visible));
+    }
 }
 
 bool KisSelectionMask::active() const

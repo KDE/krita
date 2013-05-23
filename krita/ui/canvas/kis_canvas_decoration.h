@@ -21,6 +21,7 @@
 
 #include <QObject>
 #include <krita_export.h>
+#include <kis_canvas2.h>
 
 class QPoint;
 class QRect;
@@ -52,7 +53,7 @@ public:
      *
      * @param updateRect dirty rect in document pixels
      */
-    void paint(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter);
+    void paint(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas);
 
 public slots:
     /**
@@ -64,7 +65,7 @@ public slots:
      */
     void toggleVisibility();
 protected:
-    virtual void drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter *converter) = 0;
+    virtual void drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter *converter,KisCanvas2* canvas) = 0;
 
     /**
      * @return the parent KisView

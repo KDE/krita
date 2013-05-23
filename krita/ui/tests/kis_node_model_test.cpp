@@ -33,9 +33,7 @@
 
 void KisNodeModelTest::init()
 {
-    m_part = new KisPart2();
-    m_doc = new KisDoc2(m_part);
-    m_part->setDocument(m_doc);
+    m_doc = new KisDoc2();
 
     m_nameServer = new KisNameServer();
     m_shapeController = new KisShapeController(m_doc, m_nameServer);
@@ -52,21 +50,20 @@ void KisNodeModelTest::cleanup()
     delete m_shapeController;
     delete m_nameServer;
     delete m_doc;
-    delete m_part;
 }
 
 void KisNodeModelTest::testSetImage()
 {
     constructImage();
     m_shapeController->setImage(m_image);
-    m_nodeModel->setDummiesFacade(m_shapeController, m_image);
+    m_nodeModel->setDummiesFacade(m_shapeController, m_image, 0);
     new ModelTest(m_nodeModel, this);
 }
 
 void KisNodeModelTest::testAddNode()
 {
     m_shapeController->setImage(m_image);
-    m_nodeModel->setDummiesFacade(m_shapeController, m_image);
+    m_nodeModel->setDummiesFacade(m_shapeController, m_image, 0);
     new ModelTest(m_nodeModel, this);
 
     constructImage();
@@ -77,7 +74,7 @@ void KisNodeModelTest::testRemoveAllNodes()
 {
     constructImage();
     m_shapeController->setImage(m_image);
-    m_nodeModel->setDummiesFacade(m_shapeController, m_image);
+    m_nodeModel->setDummiesFacade(m_shapeController, m_image, 0);
     new ModelTest(m_nodeModel, this);
 
     m_image->removeNode(m_layer4);
@@ -90,7 +87,7 @@ void KisNodeModelTest::testRemoveIncludingRoot()
 {
     constructImage();
     m_shapeController->setImage(m_image);
-    m_nodeModel->setDummiesFacade(m_shapeController, m_image);
+    m_nodeModel->setDummiesFacade(m_shapeController, m_image, 0);
     new ModelTest(m_nodeModel, this);
 
     m_image->removeNode(m_layer4);
@@ -106,7 +103,7 @@ void KisNodeModelTest::testSubstituteRootNode()
 {
     constructImage();
     m_shapeController->setImage(m_image);
-    m_nodeModel->setDummiesFacade(m_shapeController, m_image);
+    m_nodeModel->setDummiesFacade(m_shapeController, m_image, 0);
     new ModelTest(m_nodeModel, this);
 
     m_image->flatten();

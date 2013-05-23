@@ -38,27 +38,28 @@ public:
         FIXED_COLUMS,  /// The number of columns is fixed
         FIXED_ROWS     /// The number of rows is fixed
     };
-    
+
     explicit KoResourceItemView(QWidget *parent = 0);
     virtual ~KoResourceItemView() {}
-    
+
     /** reimplemented
     * This will draw a number of rows based on the number of columns if m_viewMode is FIXED_COLUMS
     * And it will draw a number of columns based on the number of rows if m_viewMode is FIXED_ROWS
     */
     virtual void resizeEvent ( QResizeEvent * event );
-    
+
     /// reimplemented
     virtual bool viewportEvent( QEvent * event );
-    
+
     void setViewMode(ViewMode mode);
-    
+
 signals:
 
     void currentResourceChanged(const QModelIndex &);
+    void contextMenuRequested(const QPoint &);
 
 protected:
-
+    virtual void contextMenuEvent( QContextMenuEvent * event);
     void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
 
 private:

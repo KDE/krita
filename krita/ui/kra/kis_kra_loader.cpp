@@ -265,7 +265,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
         store->read(data.data(), store->size());
         store->close();
         const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(image->colorSpace()->colorModelId().id(), image->colorSpace()->colorDepthId().id(), data);
-        if (profile->valid()) {
+        if (profile && profile->valid()) {
             image->assignImageProfile(profile);
         }
         else {
@@ -456,7 +456,7 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
     // upstream to complain to the user
     if (!node) return 0;
 
-    node->setVisible(visible);
+    node->setVisible(visible, true);
     node->setUserLocked(locked);
     node->setCollapsed(collapsed);
     node->setX(x);

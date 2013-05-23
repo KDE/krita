@@ -64,6 +64,7 @@ KoPAConfigureDialog::KoPAConfigureDialog(KoPAView* parent)
     connect( this, SIGNAL( okClicked() ), this, SLOT( slotApply() ) );
     connect( this, SIGNAL( defaultClicked() ), this, SLOT( slotDefault() ) );
     connect( this, SIGNAL( applyClicked() ), this, SLOT( slotApply() ) );
+    connect(this, SIGNAL(changed()), parent, SLOT(slotUpdateAuthorProfileActions()));
 }
 
 void KoPAConfigureDialog::slotApply()
@@ -72,6 +73,8 @@ void KoPAConfigureDialog::slotApply()
     m_gridPage->apply();
     m_miscPage->apply();
     m_authorPage->apply();
+
+    emit changed();
 }
 
 void KoPAConfigureDialog::slotDefault()

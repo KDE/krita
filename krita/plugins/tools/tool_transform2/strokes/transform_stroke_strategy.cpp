@@ -66,12 +66,12 @@ KisPaintDeviceSP TransformStrokeStrategy::createDeviceCache(KisPaintDeviceSP dev
     if (m_selection) {
         QRect srcRect = m_selection->selectedExactRect();
 
-        cache = new KisPaintDevice(dev->colorSpace());
+        cache = dev->createCompositionSourceDevice();
         KisPainter gc(cache);
         gc.setSelection(m_selection);
         gc.bitBlt(srcRect.topLeft(), dev, srcRect);
     } else {
-        cache = new KisPaintDevice(*dev);
+        cache = dev->createCompositionSourceDevice(dev);
     }
 
     return cache;

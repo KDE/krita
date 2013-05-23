@@ -258,7 +258,7 @@ void KisOpenGLCanvas2::paintEvent(QPaintEvent *)
 
                 glBindTexture(GL_TEXTURE_2D, tile->textureId());
 
-                if(scaleX > 2.0) {
+                if (scaleX >= 2.0) {
                     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                 } else {
                     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

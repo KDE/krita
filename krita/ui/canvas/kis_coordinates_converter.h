@@ -26,6 +26,13 @@
 #include "krita_export.h"
 #include "kis_types.h"
 
+#define EPSILON 1e-6
+
+#define SCALE_LESS_THAN(scX, scY, value)                        \
+    (scX < (value) - EPSILON && scY < (value) - EPSILON)
+#define SCALE_MORE_OR_EQUAL_TO(scX, scY, value)                 \
+    (scX > (value) - EPSILON && scY > (value) - EPSILON)
+
 namespace _Private
 {
     template<class T> struct Traits

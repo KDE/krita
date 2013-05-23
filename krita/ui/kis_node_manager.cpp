@@ -270,6 +270,16 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     connect(&m_d->nodeConversionSignalMapper, SIGNAL(mapped(const QString &)),
             this, SLOT(convertNode(const QString &)));
 
+    action = new KisAction(koIcon("view-filter"), i18n("&Isolate Layer"), this);
+    action->setCheckable(true);
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
+    actionManager->addAction("isolate_layer", action, actionCollection);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(toggleIsolateMode(bool)));
+
+    connect(m_d->view->image(), SIGNAL(sigIsolatedModeChanged()),
+            this, SLOT(slotUpdateIsolateModeAction()));
+    connect(this, SIGNAL(sigNodeActivated(KisNodeSP)), SLOT(slotUpdateIsolateModeAction()));
+    connect(this, SIGNAL(sigNodeActivated(KisNodeSP)), SLOT(slotTryFinishIsolatedMode()));
 }
 
 void KisNodeManager::updateGUI()
@@ -331,6 +341,52 @@ void KisNodeManager::moveNodeDirect(KisNodeSP node, KisNodeSP parent, KisNodeSP 
 {
     Q_ASSERT(parent->allowAsChild(node));
     m_d->commandsAdapter->moveNode(node, parent, aboveThis);
+}
+
+void KisNodeManager::toggleIsolateMode(bool checked)
+{
+    KisImageWSP image = m_d->view->image();
+
+    if (checked) {
+        KisNodeSP activeNode = this->activeNode();
+        Q_ASSERT(activeNode);
+
+        image->startIsolatedMode(activeNode);
+    } else {
+        image->stopIsolatedMode();
+    }
+}
+
+void KisNodeManager::slotUpdateIsolateModeAction()
+{
+    KisAction *action = m_d->view->actionManager()->actionByName("isolate_layer");
+    Q_ASSERT(action);
+
+    KisNodeSP activeNode = this->activeNode();
+    KisNodeSP isolatedRootNode = m_d->view->image()->isolatedModeRoot();
+
+    action->setChecked(isolatedRootNode && isolatedRootNode == activeNode);
+}
+
+void KisNodeManager::slotTryFinishIsolatedMode()
+{
+    KisNodeSP isolatedRootNode = m_d->view->image()->isolatedModeRoot();
+    if (!isolatedRootNode) return;
+
+    bool belongsToIsolatedGroup = false;
+
+    KisNodeSP node = this->activeNode();
+    while(node) {
+        if (node == isolatedRootNode) {
+            belongsToIsolatedGroup = true;
+            break;
+        }
+        node = node->parent();
+    }
+
+    if (!belongsToIsolatedGroup) {
+        m_d->view->image()->stopIsolatedMode();
+    }
 }
 
 void KisNodeManager::createNode(const QString & nodeType)

@@ -454,13 +454,15 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
         QAction* mergeLayerDown = menu.addAction(i18n("&Merge with Layer Below"), this, SLOT(slotMergeLayer()));
         if (!index.sibling(index.row() + 1, 0).isValid()) mergeLayerDown->setEnabled(false);
         menu.addSeparator();
+
+        QMenu *convertToMenu = menu.addMenu(i18n("&Convert"));
+        addActionToMenu(convertToMenu, "convert_to_paint_layer");
+        addActionToMenu(convertToMenu, "convert_to_transparency_mask");
+        addActionToMenu(convertToMenu, "convert_to_filter_mask");
+        addActionToMenu(convertToMenu, "convert_to_selection_mask");
+
+        addActionToMenu(&menu, "isolate_layer");
     }
-    menu.addSeparator();
-    QMenu *convertToMenu = menu.addMenu(i18n("&Convert"));
-    addActionToMenu(convertToMenu, "convert_to_paint_layer");
-    addActionToMenu(convertToMenu, "convert_to_transparency_mask");
-    addActionToMenu(convertToMenu, "convert_to_filter_mask");
-    addActionToMenu(convertToMenu, "convert_to_selection_mask");
     menu.addSeparator();
     addActionToMenu(&menu, "add_new_transparency_mask");
     addActionToMenu(&menu, "add_new_filter_mask");

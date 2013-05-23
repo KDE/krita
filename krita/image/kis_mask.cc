@@ -179,6 +179,16 @@ KisPaintDeviceSP KisMask::paintDevice() const
     return selection()->getOrCreatePixelSelection();
 }
 
+KisPaintDeviceSP KisMask::original() const
+{
+    return paintDevice();
+}
+
+KisPaintDeviceSP KisMask::projection() const
+{
+    return paintDevice();
+}
+
 void KisMask::setSelection(KisSelectionSP selection)
 {
     m_d->selection = selection;

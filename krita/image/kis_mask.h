@@ -119,6 +119,16 @@ public:
     KisPaintDeviceSP paintDevice() const;
 
     /**
+     * @return the same as paintDevice()
+     */
+    KisPaintDeviceSP original() const;
+
+    /**
+     * @return the same as paintDevice()
+     */
+    KisPaintDeviceSP projection() const;
+
+    /**
      * Change the selection to the specified selection object. The
      * selection is deep copied.
      */

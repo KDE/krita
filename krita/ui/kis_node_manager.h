@@ -138,6 +138,10 @@ public slots:
      */
     void moveNodeDirect(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
 
+    void toggleIsolateMode(bool checked);
+    void slotUpdateIsolateModeAction();
+    void slotTryFinishIsolatedMode();
+
     void moveNodeAt(KisNodeSP node, KisNodeSP parent, int index);
     void createNode(const QString &node);
     void convertNode(const QString &nodeType);

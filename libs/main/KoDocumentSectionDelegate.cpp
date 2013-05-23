@@ -264,9 +264,9 @@ bool KoDocumentSectionDelegate::eventFilter(QObject *object, QEvent *event)
 // PRIVATE
 
 
-QStyleOptionViewItem KoDocumentSectionDelegate::getOptions(const QStyleOptionViewItem &o, const QModelIndex &index)
+QStyleOptionViewItemV4 KoDocumentSectionDelegate::getOptions(const QStyleOptionViewItem &o, const QModelIndex &index)
 {
-    QStyleOptionViewItem option = o;
+    QStyleOptionViewItemV4 option = o;
     QVariant v = index.data(Qt::FontRole);
     if (v.isValid()) {
         option.font = v.value<QFont>();

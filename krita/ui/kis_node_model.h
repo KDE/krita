@@ -79,6 +79,8 @@ private slots:
     void slotEndRemoveDummy();
     void slotDummyChanged(KisNodeDummy *dummy);
 
+    void slotIsolatedModeChanged();
+
     void updateSettings();
     void processUpdateQueue();
     void progressPercentageChanged(int, const KisNodeSP);
@@ -95,6 +97,10 @@ private:
     bool correctNewNodeLocation(KisNodeSP node,
                                 KisNodeDummy* &parentDummy,
                                 KisNodeDummy* &aboveThisDummy);
+
+    void regenerateItems(KisNodeDummy *dummy);
+    bool belongsToIsolatedGroup(KisNodeSP node) const;
+
 private:
 
     struct Private;

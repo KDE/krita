@@ -884,6 +884,12 @@ void KisLayerManager::addFileLayer(KisNodeSP activeNode)
     if (dlg.exec() == QDialog::Accepted) {
         QString name = dlg.layerName();
         QString fileName = dlg.fileName();
+
+        if(fileName.isEmpty()){
+            KMessageBox::error(m_view, i18n("No file name specified."), i18n("No file specified"));
+            return;
+        }
+
         bool scaleToImageResolution = dlg.scaleToImageResolution();
 
         addLayerCommon(activeNode,

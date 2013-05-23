@@ -1058,6 +1058,15 @@ KisPaintDeviceSP KisPaintDevice::createCompositionSourceDevice() const
     return new KisPaintDevice(compositionSourceColorSpace());
 }
 
+KisPaintDeviceSP KisPaintDevice::createCompositionSourceDevice(KisPaintDeviceSP cloneSource) const
+{
+    KisPaintDeviceSP clone = new KisPaintDevice(*cloneSource);
+    clone->convertTo(compositionSourceColorSpace(),
+                     KoColorConversionTransformation::InternalRenderingIntent,
+                     KoColorConversionTransformation::InternalConversionFlags);
+    return clone;
+}
+
 KisFixedPaintDeviceSP KisPaintDevice::createCompositionSourceDeviceFixed() const
 {
     return new KisFixedPaintDevice(compositionSourceColorSpace());

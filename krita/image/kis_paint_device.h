@@ -576,6 +576,14 @@ public:
     KisPaintDeviceSP createCompositionSourceDevice() const;
 
     /**
+     * The same as createCompositionSourceDevice(), but initializes the
+     * newly created device with the content of \p cloneSource
+     *
+     * \see createCompositionSourceDevice()
+     */
+    KisPaintDeviceSP createCompositionSourceDevice(KisPaintDeviceSP cloneSource) const;
+
+    /**
      * This is a convenience method for createCompositionSourceDevice()
      *
      * \see createCompositionSourceDevice()

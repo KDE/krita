@@ -23,7 +23,6 @@
 
 #include "kis_types.h"
 
-
 class KAction;
 class QAction;
 class KToggleAction;
@@ -78,7 +77,7 @@ private:
     void scaleLayer(double sx, double sy, KisFilterStrategy *filterStrategy);
     void rotateLayer(double radians);
     void shearLayer(double angleX, double angleY);
-    
+
 private slots:
 
     void mergeLayer();
@@ -104,24 +103,25 @@ private slots:
     void saveGroupLayers();
     bool activeLayerHasSelection();
 
-    void layerAdd();
-    void addLayer(KisNodeSP parent, KisNodeSP above);
-    void addGroupLayer(KisNodeSP parent, KisNodeSP above);
+    void convertNodeToPaintLayer(KisNodeSP source);
 
-    void addCloneLayer();
-    void addCloneLayer(KisNodeSP parent, KisNodeSP above);
+    void addLayer(KisNodeSP activeNode);
+    void addGroupLayer(KisNodeSP activeNode);
 
-    void addShapeLayer();
-    void addShapeLayer(KisNodeSP parent, KisNodeSP above);
+    void addCloneLayer(KisNodeSP activeNode);
 
-    void addAdjustmentLayer();
-    void addAdjustmentLayer(KisNodeSP parent, KisNodeSP above);
-    KisAdjustmentLayerSP addAdjustmentLayer(KisNodeSP parent, KisNodeSP above, const QString & name, KisFilterConfiguration * filter, KisSelectionSP selection);
+    void addShapeLayer(KisNodeSP activeNode);
 
-    void addGeneratorLayer();
-    void addGeneratorLayer(KisNodeSP parent, KisNodeSP above);
-    void addGeneratorLayer(KisNodeSP parent, KisNodeSP above, const QString & name, KisFilterConfiguration * filter, KisSelectionSP selection);
+    void addAdjustmentLayer(KisNodeSP activeNode);
+    KisAdjustmentLayerSP addAdjustmentLayer(KisNodeSP activeNode, const QString & name, KisFilterConfiguration * filter, KisSelectionSP selection);
 
+    void addGeneratorLayer(KisNodeSP activeNode);
+
+    void addFileLayer(KisNodeSP activeNode);
+
+private:
+    void adjustLayerPosition(KisNodeSP node, KisNodeSP activeNode, KisNodeSP &parent, KisNodeSP &above);
+    void addLayerCommon(KisNodeSP activeNode, KisLayerSP layer);
 
 private:
 
@@ -135,7 +135,6 @@ private:
     KisAction *m_imageResizeToLayer;
     KAction *m_flattenLayer;
     KisAction *m_rasterizeLayer;
-    KAction *m_addPaintLayer;
     KisLayerSP m_activeLayer;
     KisNodeCommandsAdapter* m_commandsAdapter;
 };

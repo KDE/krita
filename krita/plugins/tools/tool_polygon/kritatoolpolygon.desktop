@@ -56,4 +56,4 @@ Name[zh_TW]=多邊形工具
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolpolygon
-X-Krita-Version=27
+X-Krita-Version=28

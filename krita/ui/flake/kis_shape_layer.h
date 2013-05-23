@@ -99,7 +99,7 @@ public:
     KUndo2Command* transform(const QTransform &transform);
 
     bool visible(bool recursive = false) const;
-    void setVisible(bool visible);
+    void setVisible(bool visible, bool isLoading = false);
 
 protected:
     using KoShape::isVisible;

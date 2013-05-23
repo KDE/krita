@@ -160,19 +160,16 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
 
 }
 
-KisPaintDeviceSP KisClipboard::clip(const QPoint& topLeftHint)
+KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds)
 {
-    bool customTopLeft = false; // will be true if pasting from a krita clip
-    QPoint topLeft = topLeftHint;
-    QClipboard *cb = QApplication::clipboard();
     QByteArray mimeType("application/x-krita-selection");
+
+    QClipboard *cb = QApplication::clipboard();
     const QMimeData *cbData = cb->mimeData();
+
     KisPaintDeviceSP clip;
 
-    bool asKrita = false;
     if (cbData && cbData->hasFormat(mimeType)) {
-        asKrita = true;
-        dbgUI << "Use clip as x-krita-selection";
         QByteArray encodedData = cbData->data(mimeType);
         QBuffer buffer(&encodedData);
         KoStore* store = KoStore::createStore(&buffer, KoStore::Read, mimeType);
@@ -180,20 +177,6 @@ KisPaintDeviceSP KisClipboard::clip(const QPoint& topLeftHint)
         const KoColorProfile *profile = 0;
 
         QString csDepth, csModel;
-
-        // topLeft
-        if (store->hasFile("topLeft")) {
-            store->open("topLeft");
-            QString str = store->read(store->size());
-            store->close();
-            QStringList list = str.split(' ');
-            if (list.size() == 2) {
-                topLeft.setX(list[0].toInt());
-                topLeft.setY(list[1].toInt());
-                customTopLeft = true;
-            }
-            dbgUI << str << topLeft;
-        }
 
         // ColorSpace id of layer data
         if (store->hasFile("colormodel")) {
@@ -218,24 +201,48 @@ KisPaintDeviceSP KisClipboard::clip(const QPoint& topLeftHint)
         }
 
         const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(csModel, csDepth, profile);
-        if (!cs) {
-            // we failed to create a colorspace, so let's try later on with the qimage part of the clip
-            asKrita = false;
-        }
-        if (asKrita) {
+        if (cs) {
             clip = new KisPaintDevice(cs);
 
             if (store->hasFile("layerdata")) {
                 store->open("layerdata");
-                asKrita = clip->read(store->device());
+                if (!clip->read(store->device())) {
+                    clip = 0;
+                }
                 store->close();
             }
+
+            if (clip && !imageBounds.isEmpty()) {
+
+                // load topLeft
+                if (store->hasFile("topLeft")) {
+                    store->open("topLeft");
+                    QString str = store->read(store->size());
+                    store->close();
+                    QStringList list = str.split(' ');
+                    if (list.size() == 2) {
+                        QPoint topLeft(list[0].toInt(), list[1].toInt());
+                        clip->setX(topLeft.x());
+                        clip->setY(topLeft.y());
+                    }
+                }
+
+                QRect clipBounds = clip->exactBounds();
+
+                if (!imageBounds.contains(clipBounds) &&
+                    !imageBounds.intersects(clipBounds)) {
+
+                    QPoint diff = imageBounds.center() - clipBounds.center();
+                    clip->setX(clip->x() + diff.x());
+                    clip->setY(clip->y() + diff.y());
+                }
+            }
         }
+
         delete store;
     }
 
-    if (!asKrita) {
-        dbgUI << "Use clip as QImage";
+    if (!clip) {
         QImage qimage = cb->image();
 
         if (qimage.isNull())
@@ -264,13 +271,13 @@ KisPaintDeviceSP KisClipboard::clip(const QPoint& topLeftHint)
         clip = new KisPaintDevice(cs);
         Q_CHECK_PTR(clip);
         clip->convertFromQImage(qimage, profile);
+
+        QRect clipBounds = clip->exactBounds();
+        QPoint diff = imageBounds.center() - clipBounds.center();
+        clip->setX(diff.x());
+        clip->setY(diff.y());
     }
-    if (!customTopLeft) {
-        QRect exactBounds = clip->exactBounds();
-        topLeft -= exactBounds.topLeft() / 2;
-    }
-    clip->setX(topLeft.x());
-    clip->setY(topLeft.y());
+
     return clip;
 }
 

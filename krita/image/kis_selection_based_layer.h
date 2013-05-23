@@ -34,7 +34,7 @@ class KisFilterConfiguration;
 /**
  * @class KisSelectionBasedLayer describes base behaviour for
  * selection base classes like KisAdjustmentLayer and KisGeneratorLayer.
- * These clesses should have a persistent selection that controls
+ * These classes should have a persistent selection that controls
  * the area where filter/generators are applied. The area outside
  * this selection is not affected by the layer
  */

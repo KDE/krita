@@ -309,7 +309,7 @@ void KisLayerTest::testMoveLayerWithMaskThreaded()
     paintLayer->paintDevice()->fill(image->bounds(), KoColor(Qt::black, colorSpace));
 
     KisTransparencyMaskSP transpMask = new KisTransparencyMask();
-    transpMask->initSelection(0, paintLayer);
+    transpMask->initSelection(paintLayer);
     image->addNode(transpMask, paintLayer);
 
     for(int i = 0; i < 100; i++) {

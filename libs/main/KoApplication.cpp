@@ -94,9 +94,7 @@ KoApplication::KoApplication()
 #endif
 
     m_starting = true;
-#ifdef Q_OS_WIN32
-    setStyle("Plastique");
-#elif defined Q_OS_MAC
+#ifdef Q_OS_MAC
     QString styleSheetPath = KGlobal::dirs()->findResource("data", "calligra/osx.stylesheet");
     if (styleSheetPath.isEmpty()) {
         kError(30003) << KGlobal::mainComponent().componentName() << "Cannot find OS X UI stylesheet." << endl;
@@ -111,7 +109,7 @@ KoApplication::KoApplication()
 #endif
 
     if (applicationName() == "krita" && qgetenv("KDE_FULL_SESSION").isEmpty()) {
-        // There are two themes that work for Krita, oxygen and plastique. Try plastique first, then oxygen
+        // There are two themes that work for Krita, oxygen and plastique. Try to set plastique first, then oxygen
         setStyle("Plastique");
         setStyle("Oxygen");
     }

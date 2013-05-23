@@ -61,10 +61,7 @@ void Imagesplit::saveAsImage(QRect imgSize,QString mimeType,KUrl url)
 {
     KisImageWSP image = m_view->image();
 
-    KisPart2 part;
-    KisDoc2 d(&part);
-    part.setDocument(&d);
-
+    KisDoc2 d;
     d.prepareForImport();
 
     KisImageWSP dst = new KisImage(d.createUndoStore(), imgSize.width(),imgSize.height(), image->colorSpace(), image->objectName());

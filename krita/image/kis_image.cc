@@ -112,6 +112,7 @@ public:
     KisGroupLayerSP rootLayer; // The layers are contained in here
     QList<KisLayer*> dirtyLayers; // for thumbnails
     QList<KisLayerComposition*> compositions;
+    KisNodeSP isolatedRootNode;
 
     KisNameServer *nserver;
 
@@ -177,6 +178,13 @@ KisImage::~KisImage()
     disconnect(); // in case Qt gets confused
 }
 
+void KisImage::aboutToAddANode(KisNode *parent, int index)
+{
+    KisNodeGraphListener::aboutToAddANode(parent, index);
+    SANITY_CHECK_LOCKED("aboutToAddANode");
+    stopIsolatedMode();
+}
+
 void KisImage::nodeHasBeenAdded(KisNode *parent, int index)
 {
     KisNodeGraphListener::nodeHasBeenAdded(parent, index);
@@ -187,6 +195,7 @@ void KisImage::nodeHasBeenAdded(KisNode *parent, int index)
 
 void KisImage::aboutToRemoveANode(KisNode *parent, int index)
 {
+    stopIsolatedMode();
     KisNodeGraphListener::aboutToRemoveANode(parent, index);
 
     SANITY_CHECK_LOCKED("aboutToRemoveANode");
@@ -222,7 +231,7 @@ void KisImage::setGlobalSelection(KisSelectionSP globalSelection)
     else {
         if (!selectionMask) {
             selectionMask = new KisSelectionMask(this);
-            selectionMask->initSelection(0, m_d->rootLayer);
+            selectionMask->initSelection(m_d->rootLayer);
             addNode(selectionMask);
             selectionMask->setActive(true);
         }
@@ -399,18 +408,6 @@ void KisImage::blockUpdates()
 void KisImage::unblockUpdates()
 {
     m_d->scheduler->unblockUpdates();
-}
-
-void KisImage::notifyLayerUpdated(KisLayerSP layer)
-{
-    // Add the layer to the list of layers that need to be
-    // rescanned for the thumbnails in the layerbox
-    KisLayer *l = layer.data();
-    while (l) {
-        if (!m_d->dirtyLayers.contains(l))
-            m_d->dirtyLayers.append(l);
-        l = dynamic_cast<KisLayer*>(l->parent().data());
-    }
 }
 
 void KisImage::setSize(const QSize& size)
@@ -683,6 +680,7 @@ void KisImage::convertImageColorSpace(const KoColorSpace *dstColorSpace,
                                       KoColorConversionTransformation::Intent renderingIntent,
                                       KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
+    if (!dstColorSpace) return;
     if (*m_d->colorSpace == *dstColorSpace) return;
 
     const KoColorSpace *srcColorSpace = m_d->colorSpace;
@@ -818,6 +816,11 @@ KisGroupLayerSP KisImage::rootLayer() const
 
 KisPaintDeviceSP KisImage::projection()
 {
+    if (m_d->isolatedRootNode) {
+        return m_d->isolatedRootNode->projection();
+    }
+
+
     Q_ASSERT(m_d->rootLayer);
     KisPaintDeviceSP projection = m_d->rootLayer->projection();
     Q_ASSERT(projection);
@@ -953,6 +956,7 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
     Q_CHECK_PTR(mergedLayer);
     mergedLayer->setCompositeOp(COMPOSITE_OVER);
     mergedLayer->setChannelFlags(layer->channelFlags());
+    mergedLayer->disableAlphaChannel(prevLayer->alphaChannelDisabled());
 
     // Merge meta data
     QList<const KisMetaData::Store*> srcs;
@@ -1069,7 +1073,7 @@ QImage KisImage::convertToQImage(qint32 x,
                                  qint32 h,
                                  const KoColorProfile * profile)
 {
-    KisPaintDeviceSP dev = m_d->rootLayer->projection();
+    KisPaintDeviceSP dev = projection();
     if (!dev) return QImage();
     QImage image = dev->convertToQImage(const_cast<KoColorProfile*>(profile), x, y, w, h,
                                         KoColorConversionTransformation::InternalRenderingIntent,
@@ -1124,7 +1128,7 @@ QImage KisImage::convertToQImage(const QRect& scaledRect, const QSize& scaledIma
     srcRect.setTop(static_cast<int>(scaledRect.top() * yScale));
     srcRect.setBottom(static_cast<int>(ceil((scaledRect.bottom() + 1) * yScale)) - 1);
 
-    KisPaintDeviceSP mergedImage = m_d->rootLayer->projection();
+    KisPaintDeviceSP mergedImage = projection();
     quint8 *scaledImageData = new quint8[scaledRect.width() * scaledRect.height() * pixelSize];
 
     quint8 *imageRow = new quint8[srcRect.width() * pixelSize];
@@ -1183,13 +1187,6 @@ QImage KisImage::convertToQImage(const QRect& scaledRect, const QSize& scaledIma
     return image;
 }
 
-
-KisPaintDeviceSP KisImage::mergedImage()
-{
-    refreshGraph();
-    return m_d->rootLayer->projection();
-}
-
 void KisImage::notifyLayersChanged()
 {
     m_d->signalRouter->emitNotification(LayersChangedSignal);
@@ -1231,6 +1228,8 @@ KisActionRecorder* KisImage::actionRecorder() const
 
 void KisImage::setRootLayer(KisGroupLayerSP rootLayer)
 {
+    stopIsolatedMode();
+
     if (m_d->rootLayer) {
         m_d->rootLayer->setGraphListener(0);
         m_d->rootLayer->disconnect();
@@ -1356,6 +1355,40 @@ KisStrokeId KisImage::startStroke(KisStrokeStrategy *strokeStrategy)
     }
 
     return id;
+}
+
+void KisImage::startIsolatedMode(KisNodeSP node)
+{
+    barrierLock();
+    unlock();
+
+    m_d->isolatedRootNode = node;
+    emit sigIsolatedModeChanged();
+
+    notifyProjectionUpdated(bounds());
+}
+
+void KisImage::stopIsolatedMode()
+{
+    if (!m_d->isolatedRootNode)  return;
+
+    KisNodeSP oldRootNode = m_d->isolatedRootNode;
+    m_d->isolatedRootNode = 0;
+
+    emit sigIsolatedModeChanged();
+
+    notifyProjectionUpdated(bounds());
+
+    // TODO: Substitute notifyProjectionUpdated() with this code
+    // when update optimization is implemented
+    // 
+    // QRect updateRect = bounds() | oldRootNode->extent();
+    // oldRootNode->setDirty(updateRect);
+}
+
+KisNodeSP KisImage::isolatedModeRoot() const
+{
+    return m_d->isolatedRootNode;
 }
 
 void KisImage::addJob(KisStrokeId id, KisStrokeJobData *data)

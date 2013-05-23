@@ -56,11 +56,11 @@ K_EXPORT_PLUGIN(ColorSpaceConversionFactory("krita"))
 ColorSpaceConversion::ColorSpaceConversion(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent, "kritaplugins/colorspaceconversion.rc")
 {
-    KisAction *action  = new KisAction(i18n("&Convert Image Type..."), this);
+    KisAction *action  = new KisAction(i18n("&Convert Image Color Space..."), this);
     addAction("imagecolorspaceconversion", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageColorSpaceConversion()));
 
-    action  = new KisAction(i18n("&Convert Layer Type..."), this);
+    action  = new KisAction(i18n("&Convert Layer Color Space..."), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     addAction("layercolorspaceconversion", action);
@@ -88,13 +88,14 @@ void ColorSpaceConversion::slotImageColorSpaceConversion()
     if (dlgColorSpaceConversion->exec() == QDialog::Accepted) {
 
         const KoColorSpace * cs = dlgColorSpaceConversion->m_page->colorSpaceSelector->currentColorSpace();
-
-        QApplication::setOverrideCursor(KisCursor::waitCursor());
-        KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::HighQuality;
-        if (dlgColorSpaceConversion->m_page->chkBlackpointCompensation->isChecked()) conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
-        if (!dlgColorSpaceConversion->m_page->chkAllowLCMSOptimization->isChecked()) conversionFlags |= KoColorConversionTransformation::NoOptimization;
-        image->convertImageColorSpace(cs, (KoColorConversionTransformation::Intent)dlgColorSpaceConversion->m_intentButtonGroup.checkedId(), conversionFlags);
-        QApplication::restoreOverrideCursor();
+        if (cs) {
+            QApplication::setOverrideCursor(KisCursor::waitCursor());
+            KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::HighQuality;
+            if (dlgColorSpaceConversion->m_page->chkBlackpointCompensation->isChecked()) conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
+            if (!dlgColorSpaceConversion->m_page->chkAllowLCMSOptimization->isChecked()) conversionFlags |= KoColorConversionTransformation::NoOptimization;
+            image->convertImageColorSpace(cs, (KoColorConversionTransformation::Intent)dlgColorSpaceConversion->m_intentButtonGroup.checkedId(), conversionFlags);
+            QApplication::restoreOverrideCursor();
+        }
     }
     delete dlgColorSpaceConversion;
 }
@@ -114,23 +115,24 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
     dlgColorSpaceConversion->setCaption(i18n("Convert Current Layer From") + layer->colorSpace()->name());
 
     if (dlgColorSpaceConversion->exec() == QDialog::Accepted) {
-
-        QApplication::setOverrideCursor(KisCursor::waitCursor());
-
         const KoColorSpace * cs = dlgColorSpaceConversion->m_page->colorSpaceSelector->currentColorSpace();
+        if (cs) {
 
-        image->undoAdapter()->beginMacro(i18n("Convert Layer Type"));
+            QApplication::setOverrideCursor(KisCursor::waitCursor());
 
-        KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::HighQuality;
-        if (dlgColorSpaceConversion->m_page->chkBlackpointCompensation->isChecked()) conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
-        if (!dlgColorSpaceConversion->m_page->chkAllowLCMSOptimization->isChecked()) conversionFlags |= KoColorConversionTransformation::NoOptimization;
-        KisColorSpaceConvertVisitor visitor(image, layer->colorSpace(), cs, (KoColorConversionTransformation::Intent)dlgColorSpaceConversion->m_intentButtonGroup.checkedId(), conversionFlags);
-        layer->accept(visitor);
+            image->undoAdapter()->beginMacro(i18n("Convert Layer Type"));
 
-        image->undoAdapter()->endMacro();
+            KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::HighQuality;
+            if (dlgColorSpaceConversion->m_page->chkBlackpointCompensation->isChecked()) conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
+            if (!dlgColorSpaceConversion->m_page->chkAllowLCMSOptimization->isChecked()) conversionFlags |= KoColorConversionTransformation::NoOptimization;
+            KisColorSpaceConvertVisitor visitor(image, layer->colorSpace(), cs, (KoColorConversionTransformation::Intent)dlgColorSpaceConversion->m_intentButtonGroup.checkedId(), conversionFlags);
+            layer->accept(visitor);
 
-        QApplication::restoreOverrideCursor();
-        m_view->nodeManager()->nodesUpdated();
+            image->undoAdapter()->endMacro();
+
+            QApplication::restoreOverrideCursor();
+            m_view->nodeManager()->nodesUpdated();
+        }
     }
     delete dlgColorSpaceConversion;
 }

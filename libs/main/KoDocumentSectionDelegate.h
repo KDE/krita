@@ -57,7 +57,7 @@ private:
     class Private;
     Private* const d;
 
-    static QStyleOptionViewItem getOptions(const QStyleOptionViewItem &option, const QModelIndex &index);
+    static QStyleOptionViewItemV4 getOptions(const QStyleOptionViewItem &option, const QModelIndex &index);
     int thumbnailHeight(const QStyleOptionViewItem &option, const QModelIndex &index) const;
     int availableWidth() const;
     int textBoxHeight(const QStyleOptionViewItem &option) const;

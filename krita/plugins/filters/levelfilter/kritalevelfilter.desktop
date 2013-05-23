@@ -85,4 +85,4 @@ Comment[zh_TW]=等級
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritalevelfilter
-X-Krita-Version=27
+X-Krita-Version=28

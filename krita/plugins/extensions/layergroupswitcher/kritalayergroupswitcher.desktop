@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Quick Layergroup Switcher
 Name[el]=Quick Layergroup Switcher
+Name[es]=Selector rápido de grupos de capas
 Name[it]=Scambiatore rapido di gruppi di livelli
 Name[nl]=Snelle Layergroup-schakelaar
 Name[pt]=Selector Rápido de Grupos de Camadas
@@ -12,4 +13,4 @@ Name[x-test]=xxQuick Layergroup Switcherxx
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritalayergroupswitcher
-X-Krita-Version=27
+X-Krita-Version=28

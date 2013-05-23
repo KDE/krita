@@ -141,18 +141,15 @@ public:
 
     QList<KisPaintingAssistant*> assistants;
 
-    KisPart2 *part; // XXX: we shouldn't know about the part here!
-
     QString flipbook;
 };
 
 
-KisDoc2::KisDoc2(KoPart *parent)
-    : KoDocument(parent, new UndoStack(this))
+KisDoc2::KisDoc2()
+    : KoDocument(new KisPart2, new UndoStack(this))
     , m_d(new KisDocPrivate())
 {
-    m_d->part = qobject_cast<KisPart2*>(parent);
-
+    qobject_cast<KisPart2*>(documentPart())->setDocument(this);
     // preload the krita resources
     KisResourceServerProvider::instance();
 
@@ -429,7 +426,7 @@ KoShapeLayer* KisDoc2::shapeForNode(KisNodeSP layer) const
 vKisNodeSP KisDoc2::activeNodes() const
 {
     vKisNodeSP nodes;
-    foreach(KoView *v, m_d->part->views()) {
+    foreach(KoView *v, documentPart()->views()) {
         KisView2 *view = qobject_cast<KisView2*>(v);
         if (view) {
             KisNodeSP activeNode = view->activeNode();
@@ -447,7 +444,7 @@ vKisNodeSP KisDoc2::activeNodes() const
 QList<KisPaintingAssistant*> KisDoc2::assistants()
 {
     QList<KisPaintingAssistant*> assistants;
-    foreach(KoView *v, m_d->part->views()) {
+    foreach(KoView *v, documentPart()->views()) {
         KisView2 *view = qobject_cast<KisView2*>(v);
         if (view) {
             KisPaintingAssistantsManager* assistantsmanager = view->paintingAssistantManager();

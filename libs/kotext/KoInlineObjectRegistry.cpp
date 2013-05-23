@@ -45,7 +45,7 @@ void KoInlineObjectRegistry::Private::init(KoInlineObjectRegistry *q)
     config.blacklist = "TextInlinePluginsDisabled";
     config.group = "calligra";
     KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Text-InlineObject"),
-                                     QString::fromLatin1("[X-KoText-PluginVersion] == 27"), config);
+                                     QString::fromLatin1("[X-KoText-PluginVersion] == 28"), config);
 
     foreach (KoInlineObjectFactoryBase *factory, q->values()) {
         QString nameSpace = factory->odfNameSpace();

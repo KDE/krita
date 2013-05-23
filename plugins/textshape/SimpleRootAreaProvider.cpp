@@ -74,7 +74,7 @@ void SimpleRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool i
     }
     if (m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
         ||m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowWidth) {
-        qreal width = rootArea->bottom() - rootArea->top();
+        qreal width = rootArea->right() - rootArea->left();
         if (width > newSize.width()) {
             newSize.setWidth(rootArea->right() - rootArea->left());
         }

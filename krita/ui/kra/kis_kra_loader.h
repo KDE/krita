@@ -85,6 +85,8 @@ private:
 
     KisNodeSP loadSelectionMask(KisImageWSP image, const KoXmlElement& elem, KisNodeSP parent);
 
+    KisNodeSP loadFileLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, quint32 opacity);
+
     void loadCompositions(const KoXmlElement& elem, KisImageWSP image);
 
     void loadAssistantsList(const KoXmlElement& elem);

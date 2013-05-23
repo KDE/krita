@@ -24,6 +24,7 @@
 
 class KisDummiesFacadeBase;
 class KisNodeDummy;
+class KisShapeController;
 
 /**
  * KisNodeModel offers a Qt model-view compatible view on the node
@@ -45,7 +46,7 @@ public: // from QAbstractItemModel
     KisNodeModel(QObject * parent);
     ~KisNodeModel();
 
-    void setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageWSP image);
+    void setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageWSP image, KisShapeController *shapeController);
     KisNodeSP nodeFromIndex(const QModelIndex &index) const;
     QModelIndex indexFromNode(KisNodeSP node) const;
 
@@ -78,6 +79,8 @@ private slots:
     void slotEndRemoveDummy();
     void slotDummyChanged(KisNodeDummy *dummy);
 
+    void slotIsolatedModeChanged();
+
     void updateSettings();
     void processUpdateQueue();
     void progressPercentageChanged(int, const KisNodeSP);
@@ -94,6 +97,10 @@ private:
     bool correctNewNodeLocation(KisNodeSP node,
                                 KisNodeDummy* &parentDummy,
                                 KisNodeDummy* &aboveThisDummy);
+
+    void regenerateItems(KisNodeDummy *dummy);
+    bool belongsToIsolatedGroup(KisNodeSP node) const;
+
 private:
 
     struct Private;

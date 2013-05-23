@@ -57,7 +57,7 @@ void testRotateNode(bool useShapeLayer, const QString &name)
     t.nodeManager->rotate(M_PI / 6.0);
     QTest::qWait(1000);
     t.image->waitForDone();
-    QVERIFY(t.checkLayers(name));
+    QVERIFY(t.checkLayersFuzzy(name));
 
     t.checkUndoWait();
     t.startConcurrentTask();
@@ -69,7 +69,7 @@ void testRotateNode(bool useShapeLayer, const QString &name)
     if (!useShapeLayer) {
         QEXPECT_FAIL("", "The user may run Rotate Layer concurrently. It will cause wrong image/selection size fetched for the crop. There is some barrier needed. At least it doesn't crash.", Continue);
     }
-    QVERIFY(t.checkLayers(name));
+    QVERIFY(t.checkLayersFuzzy(name));
 }
 
 void testShearNode(bool useShapeLayer, const QString &name)
@@ -82,7 +82,7 @@ void testShearNode(bool useShapeLayer, const QString &name)
     t.nodeManager->shear(30, 0);
     QTest::qWait(1000);
     t.image->waitForDone();
-    QVERIFY(t.checkLayers(name));
+    QVERIFY(t.checkLayersFuzzy(name));
 
     t.checkUndoWait();
     t.startConcurrentTask();
@@ -92,7 +92,7 @@ void testShearNode(bool useShapeLayer, const QString &name)
     t.image->waitForDone();
 
     QEXPECT_FAIL("", "The user may run Shear Layer concurrently. It will cause wrong image/selection size fetched for the crop. There is some barrier needed. At least it doesn't crash.", Continue);
-    QVERIFY(t.checkLayers(name));
+    QVERIFY(t.checkLayersFuzzy(name));
 }
 
 void testScaleNode(bool useShapeLayer, const QString &name)
@@ -107,7 +107,7 @@ void testScaleNode(bool useShapeLayer, const QString &name)
     t.nodeManager->scale(0.5, 0.5, strategy);
     QTest::qWait(1000);
     t.image->waitForDone();
-    QVERIFY(t.checkLayers(name));
+    QVERIFY(t.checkLayersFuzzy(name));
 
     t.checkUndoWait();
     t.startConcurrentTask();
@@ -116,7 +116,7 @@ void testScaleNode(bool useShapeLayer, const QString &name)
     QTest::qWait(1000);
     t.image->waitForDone();
 
-    QVERIFY(t.checkLayers(name));
+    QVERIFY(t.checkLayersFuzzy(name));
 
     delete strategy;
 }
@@ -135,7 +135,7 @@ void testMirrorNode(bool useShapeLayer, const QString &name, bool mirrorX)
     }
     QTest::qWait(1000);
     t.image->waitForDone();
-    QVERIFY(t.checkLayers(name));
+    QVERIFY(t.checkLayersFuzzy(name));
 
     t.checkUndoWait();
     t.startConcurrentTask();
@@ -151,7 +151,7 @@ void testMirrorNode(bool useShapeLayer, const QString &name, bool mirrorX)
     if (mirrorX && !useShapeLayer) {
         QEXPECT_FAIL("", "The user may run Mirror Layer concurrently, but it is not ported to strokes yet. At least it doesn't crash.", Continue);
     }
-    QVERIFY(t.checkLayers(name));
+    QVERIFY(t.checkLayersFuzzy(name));
 }
 
 void KisNodeManagerTest::testRotatePaintNode()

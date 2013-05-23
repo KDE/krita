@@ -15,4 +15,4 @@ Name[x-test]=xxOffset Image Pluginxx
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaoffsetimage
-X-Krita-Version=27
+X-Krita-Version=28

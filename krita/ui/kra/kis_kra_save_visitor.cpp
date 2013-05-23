@@ -38,6 +38,7 @@
 #include <kis_paint_layer.h>
 #include <kis_selection.h>
 #include <kis_shape_layer.h>
+#include <kis_file_layer.h>
 #include <kis_clone_layer.h>
 #include <kis_mask.h>
 #include <kis_filter_mask.h>

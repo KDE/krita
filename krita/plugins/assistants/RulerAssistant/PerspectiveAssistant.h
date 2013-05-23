@@ -34,7 +34,7 @@ public:
     virtual void endStroke();
     virtual QPointF buttonPosition() const;
     virtual int numHandles() const { return 4; }
-    virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached = true);
+    virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached = true,KisCanvas2* canvas=0);
 
     virtual bool contains(const QPointF& point) const;
     virtual qreal distance(const QPointF& point) const;

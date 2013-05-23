@@ -1,7 +1,5 @@
 ########### install files ###############
 install(FILES
-    lcmslabi.icm
-    lcmsxyzi.icm
     README
     scRGB.icm
     sRGB.icm

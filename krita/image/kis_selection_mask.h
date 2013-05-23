@@ -62,7 +62,7 @@ public:
     virtual KoDocumentSectionModel::PropertyList sectionModelProperties() const;
     virtual void setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties);
 
-    void setVisible(bool visible);
+    void setVisible(bool visible, bool isLoading = false);
     bool active() const;
     void setActive(bool active);
 

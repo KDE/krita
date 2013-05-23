@@ -27,7 +27,6 @@
 #include <KoDocument.h>
 
 #include "kis_types.h"
-#include "kis_part2.h"
 #include <krita_export.h>
 #include <kis_painting_assistant.h>
 
@@ -35,7 +34,6 @@ class QString;
 
 class KoColor;
 class KoColorSpace;
-class KoPart2;
 class KoShapeBasedDocumentBase;
 class KoShapeLayer;
 
@@ -64,7 +62,7 @@ class KRITAUI_EXPORT KisDoc2 : public KoDocument
     Q_OBJECT
 
 public:
-    KisDoc2(KoPart* parent);
+    KisDoc2();
     virtual ~KisDoc2();
 
 public:

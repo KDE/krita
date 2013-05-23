@@ -318,6 +318,8 @@ QWidget * KisToolDyna::createOptionWidget()
     //KisToolFreehand::addOptionWidgetOption(m_widthRangeSPBox,widthRangeLbl);
 #endif
 
+    QWidget *w = new QWidget(optionWidget);
+    w->setObjectName("SpecialSpacer");
     return optionWidget;
 }
 

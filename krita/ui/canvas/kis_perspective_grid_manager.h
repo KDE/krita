@@ -56,7 +56,7 @@ public slots:
      */
     void clearPerspectiveGrid();
 protected:
-    void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter);
+    void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas = 0);
 
 private:
     class LineWrapper;

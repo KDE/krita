@@ -47,7 +47,6 @@
 #include "kis_fill_painter.h"
 #include "kis_shape_selection.h"
 #include "util.h"
-#include "kis_part2.h"
 
 void KisKraSaverTest::testRoundTrip()
 {
@@ -57,11 +56,7 @@ void KisKraSaverTest::testRoundTrip()
     KisCountVisitor cv1(list, KoProperties());
     doc->image()->rootLayer()->accept(cv1);
 
-    //delete doc;
-
-    KisPart2 part;
-    KisDoc2 doc2(&part);
-    part.setDocument(&doc2);
+    KisDoc2 doc2;
 
     doc2.loadNativeFormat("roundtriptest.kra");
 
@@ -78,12 +73,7 @@ void KisKraSaverTest::testSaveEmpty()
     KisCountVisitor cv1(list, KoProperties());
     doc->image()->rootLayer()->accept(cv1);
 
-    //delete doc;
-
-    KisPart2 part;
-    KisDoc2 doc2(&part);
-    part.setDocument(&doc2);
-
+    KisDoc2 doc2;
     doc2.loadNativeFormat("emptytest.kra");
 
     KisCountVisitor cv2(list, KoProperties());

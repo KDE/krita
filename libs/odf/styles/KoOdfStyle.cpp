@@ -160,7 +160,7 @@ QString KoOdfStyle::property(QString &propertySet, QString &property) const
 {
     KoOdfStyleProperties *props = d->properties.value(propertySet, 0);
     if (props)
-        return props->value(property);
+        return props->attribute(property);
     else
         return QString();
 }
@@ -170,7 +170,7 @@ void KoOdfStyle::setProperty(QString &propertySet, QString &property, QString &v
     KoOdfStyleProperties *props = d->properties.value(propertySet);
     if (!props)
         props = new KoOdfStyleProperties();
-    props->setValue(property, value);
+    props->setAttribute(property, value);
 }
 
 

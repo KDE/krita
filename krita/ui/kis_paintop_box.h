@@ -126,7 +126,7 @@ private slots:
     void slotPreviousFavoritePreset();
     void slotNextFavoritePreset();
     void slotSwitchToPreviousPreset();
-    
+    void slotUnsetEraseMode();
 private:
     KisCanvasResourceProvider*           m_resourceProvider;
     QHBoxLayout*                         m_layout;
@@ -150,7 +150,7 @@ private:
     QString             m_prevCompositeOpID;
     QString             m_currCompositeOpID;
     KisNodeSP           m_previousNode;
-    
+
     struct TabletToolID
     {
         TabletToolID(const KoInputDevice& dev) {

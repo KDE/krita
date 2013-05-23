@@ -172,7 +172,7 @@ inline QPainterPath drawX(const QPointF& pt)
     return path;
 }
 
-void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached)
+void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2 *canvas)
 {
     gc.save();
     gc.resetTransform();
@@ -190,7 +190,7 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
         }
     }
     gc.restore();
-    KisPaintingAssistant::drawAssistant(gc, updateRect, converter, cached);
+    KisPaintingAssistant::drawAssistant(gc, updateRect, converter, cached,canvas);
 }
 
 void PerspectiveAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter)

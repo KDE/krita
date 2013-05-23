@@ -43,7 +43,6 @@ public:
 public slots:
 
     void slotImportLayerFromFile();
-    void slotImportMaskFromFile();
 
     /**
      * Import an image as a layer. If there is more than

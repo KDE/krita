@@ -84,6 +84,7 @@ public:
 
 public: // KisNodeGraphListener implementation
 
+    void aboutToAddANode(KisNode *parent, int index);
     void nodeHasBeenAdded(KisNode *parent, int index);
     void aboutToRemoveANode(KisNode *parent, int index);
     void nodeChanged(KisNode * node);
@@ -387,22 +388,6 @@ public:
     }
 
     /**
-     * Starting form 2.3 mergedImage() is declared deprecated.
-     * If you want to get a projection of the image, please use
-     * something like:
-     *
-     * image->lock();
-     * read_something_from_the_image(image->projection());
-     * image->unlock();
-     *
-     * or if you want to get a full refresh of the image graph
-     * performed beforehand (do you really want it?) (sure?) then
-     * you can add a call to image->refreshGraph() before locking
-     * the image.
-     */
-    KDE_DEPRECATED KisPaintDeviceSP mergedImage();
-
-    /**
      * @return the root node of the image node graph
      */
     KisGroupLayerSP rootLayer() const;
@@ -450,16 +435,6 @@ public:
 
     /// use if the layers have changed _completely_ (eg. when flattening)
     void notifyLayersChanged();
-
-    /**
-     * Called whenever a layer has changed. The layer is added to a
-     * list of dirty layers and as soon as the document stores the
-     * command that is now in progress, the image will be notified.
-     * Then the image will notify the dirty layers, the dirty layers
-     * will notify their parents & emit a signal that will be caught
-     * by the layer box, which will request a new thumbnail.
-    */
-    void notifyLayerUpdated(KisLayerSP layer);
 
     void setRootLayer(KisGroupLayerSP rootLayer);
 
@@ -512,6 +487,11 @@ public:
      * Remove the layer compostion
      */
     void removeComposition(KisLayerComposition* composition);
+
+public:
+    void startIsolatedMode(KisNodeSP node);
+    void stopIsolatedMode();
+    KisNodeSP isolatedModeRoot() const;
 
 signals:
 
@@ -631,6 +611,15 @@ signals:
      * end the stroke when it comes.
      */
     void sigStrokeEndRequested();
+
+    /**
+     * Emitted when the isolated mode status has changed.
+     *
+     * Can be used by the recievers to catch a fact of forcefully
+     * stopping the isolated mode by the image when some complex
+     * action was requested
+     */
+    void sigIsolatedModeChanged();
 
 public slots:
     KisCompositeProgressProxy* compositeProgressProxy();

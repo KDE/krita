@@ -1,6 +1,6 @@
-if (NOT WIN32)
+if (NOT WIN32 AND NOT APPLE)
     add_subdirectory(tests)
-endif (NOT WIN32)
+endif (NOT WIN32 AND NOT APPLE)
 
 set(kritadefaulttools_PART_SRCS
     default_tools.cc

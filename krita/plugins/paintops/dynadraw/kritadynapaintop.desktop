@@ -36,4 +36,4 @@ Name[zh_TW]=動態
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritadynapaintop
-X-Krita-Version=27
+X-Krita-Version=28

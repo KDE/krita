@@ -75,6 +75,8 @@ public:
 
     virtual void dropEvent(QDropEvent *ev);
 
+    virtual void dragEnterEvent(QDragEnterEvent *e);
+
     virtual void dragMoveEvent(QDragMoveEvent *ev);
 
     virtual void dragLeaveEvent(QDragLeaveEvent *e);

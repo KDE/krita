@@ -232,7 +232,7 @@ void KisKraLoadVisitor::initSelectionForMask(KisMask *mask)
     KisLayer *parentLayer = dynamic_cast<KisLayer*>(mask->parent().data());
     // the KisKraLoader must have already set the parent for us
     Q_ASSERT(parentLayer);
-    mask->initSelection(0, parentLayer);
+    mask->initSelection(parentLayer);
 }
 
 bool KisKraLoadVisitor::visit(KisFilterMask *mask)

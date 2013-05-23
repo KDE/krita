@@ -53,4 +53,4 @@ Name[zh_TW]=任意線工具
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolpolyline
-X-Krita-Version=27
+X-Krita-Version=28

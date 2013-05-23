@@ -52,12 +52,10 @@ public:
         m_image->initialRefreshGraph();
         QVERIFY(checkLayersInitial(m_image));
 
-        m_part = new KisPart2(0);
+        m_doc = new KisDoc2();
+        m_part = m_doc->documentPart();
 
-        m_doc = new KisDoc2(m_part);
         m_doc->setCurrentImage(m_image);
-
-        m_part->setDocument(m_doc);
 
         m_shell = new KoMainWindow(m_part->componentData());
         m_view = new KisView2(m_part, m_doc, m_shell);
@@ -72,7 +70,6 @@ public:
         QApplication::processEvents();
 
         delete m_shell;
-        delete m_part;
         delete m_doc;
 
         /**
@@ -119,7 +116,7 @@ public:
 private:
     KisSurrogateUndoStore *m_undoStore;
     KisImageSP m_image;
-    KisPart2 *m_part;
+    KoPart *m_part;
     KisDoc2 *m_doc;
     KisView2 *m_view;
     KoMainWindow *m_shell;

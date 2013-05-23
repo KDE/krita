@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2013 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -242,6 +242,11 @@ public:
      If KexiDBConnShortcutFile was used to create this KexiProjectData object,
      the version information is be retrieved from the file. */
     uint formatVersion;
+
+    /*!
+     \return true if password is needed for performing connection.
+     The password has to be provided by the user. */
+    bool passwordNeeded() const;
 
 protected:
     class Private;

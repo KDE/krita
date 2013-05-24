@@ -85,7 +85,6 @@ void KisClipboardBrushWidget::slotUseBrushClicked(){
         QRect rc = pd->exactBounds();
 
         m_brush = new KisGbrBrush(pd, rc.x(), rc.y(), rc.width(), rc.height());
-        static_cast<KisGbrBrush*>(m_brush.data())->makeMaskImage();
 
         m_brush->setSpacing(spacingSlider->value());
         m_brush->setFilename(TEMPORARY_CLIPBOARD_BRUSH_FILENAME);

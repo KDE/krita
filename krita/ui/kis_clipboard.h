@@ -68,6 +68,8 @@ public:
 
     QSize clipSize();
 
+    void assumePasteFromWeb(bool pasteFromWeb);
+
 private slots:
 
     void clipboardDataChanged();
@@ -80,6 +82,11 @@ private:
     bool m_hasClip;
 
     bool m_pushedClipboard;
+
+    bool m_pasteFromWeb;
+
+signals:
+    void clipChanged();
 };
 
 #endif // __KIS_CLIPBOARD_H_

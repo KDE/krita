@@ -29,6 +29,7 @@ class KisAutoBrushWidget;
 class KisBrushChooser;
 class KisTextBrushChooser;
 class KisCustomBrushWidget;
+class KisClipboardBrushWidget;
 class KisBrush;
 
 class KisView2;
@@ -50,6 +51,7 @@ public:
     void setAutoBrush(bool on);
     void setPredefinedBrushes(bool on);
     void setCustomBrush(bool on);
+    void setClipboardBrush(bool on);
     void setTextBrush(bool on);
 
     void setImage(KisImageWSP image);
@@ -83,7 +85,8 @@ private:
       AUTOBRUSH,
       PREDEFINEDBRUSH,
       CUSTOMBRUSH,
-      TEXTBRUSH
+      TEXTBRUSH,
+      CLIPBOARDBRUSH
     };
 
     bool m_presetIsValid;
@@ -99,6 +102,7 @@ private:
     KisBrushChooser * m_brushChooser;
     KisTextBrushChooser * m_textBrushWidget;
     KisCustomBrushWidget * m_customBrushWidget;
+    KisClipboardBrushWidget* m_clipboardBrushWidget;
 
     KisPrecisionOption m_precisionOption;
 };

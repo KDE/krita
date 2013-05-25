@@ -23,6 +23,17 @@
 
 class KisImageBrushesPipe : public KisBrushesPipe<KisGbrBrush>
 {
+
+/*
+   pre and post are split because:
+
+21:12:20 < dmitryK> boud: i guess it was somehow related to the fact that the maskWidth/maskHeight should
+                    correspond to the size of the mask returned by paintDevice()
+21:13:33 < dmitryK> boud: the random stuff is called once per brush->paintDevice() call, after the device is
+                    returned to the paint op, that is "preparing the randomness for the next call"
+21:14:16 < dmitryK> boud: and brushesPipe->currentBrush() always returning the same brush for any particular
+                    paintInfo.
+*/
 protected:
     static int selectPre(KisParasite::SelectionMode mode,
                          int index, int rank,
@@ -48,6 +59,12 @@ protected:
                 angle -= 2.0 * M_PI;
             index = static_cast<int>(angle / (2.0 * M_PI) * rank);
             break;
+        case KisParasite::TiltX:
+            index = qRound(info.xTilt() / 2.0 * rank) + rank / 2;
+            break;
+        case KisParasite::TiltY:
+            index = qRound(info.yTilt() / 2.0 * rank) + rank / 2;
+            break;
         default:
             warnImage << "Parasite" << mode << "is not implemented";
             index = 0;
@@ -69,6 +86,9 @@ protected:
             break;
         case KisParasite::Pressure:
         case KisParasite::Angular:
+            break;
+        case KisParasite::TiltX:
+        case KisParasite::TiltY:
             break;
         default:
             warnImage << "Parasite" << mode << "is not implemented";

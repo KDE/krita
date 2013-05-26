@@ -16,25 +16,18 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KRITA_UTILS_H
-#define __KRITA_UTILS_H
+#ifndef __FILTER_STROKE_TEST_H
+#define __FILTER_STROKE_TEST_H
 
-class QRect;
-class QSize;
-class QPointF;
-class QPainterPath;
-#include <QVector>
-#include "krita_export.h"
+#include <QtTest>
 
-namespace KritaUtils
+
+class FilterStrokeTest : public QObject
 {
-    QSize KRITAIMAGE_EXPORT optimalPatchSize();
+    Q_OBJECT
 
-    QVector<QRect> KRITAIMAGE_EXPORT splitRectIntoPatches(const QRect &rc, const QSize &patchSize);
+private slots:
+    void testBlurFilter();
+};
 
-    QRegion KRITAIMAGE_EXPORT splitTriangles(const QPointF &center,
-                                             const QVector<QPointF> &points);
-    QRegion KRITAIMAGE_EXPORT splitPath(const QPainterPath &path);
-}
-
-#endif /* __KRITA_UTILS_H */
+#endif /* __FILTER_STROKE_TEST_H */

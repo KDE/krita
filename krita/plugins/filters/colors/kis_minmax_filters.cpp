@@ -73,11 +73,11 @@ KisFilterMax::KisFilterMax() : KisFilter(id(), categoryColors(), i18n("M&aximize
     setShowConfigurationWidget(false);
 }
 
-void KisFilterMax::process(KisPaintDeviceSP device,
-                           const QRect& rect,
-                           const KisFilterConfiguration* config,
-                           KoUpdater* progressUpdater
-                          ) const
+void KisFilterMax::processImpl(KisPaintDeviceSP device,
+                               const QRect& rect,
+                               const KisFilterConfiguration* config,
+                               KoUpdater* progressUpdater
+                               ) const
 {
     Q_UNUSED(config);
     Q_ASSERT(device != 0);
@@ -116,11 +116,11 @@ KisFilterMin::KisFilterMin() : KisFilter(id(), categoryColors(), i18n("M&inimize
     setShowConfigurationWidget(false);
 }
 
-void KisFilterMin::process(KisPaintDeviceSP device,
-                           const QRect& rect,
-                           const KisFilterConfiguration* config,
-                           KoUpdater* progressUpdater
-                          ) const
+void KisFilterMin::processImpl(KisPaintDeviceSP device,
+                               const QRect& rect,
+                               const KisFilterConfiguration* config,
+                               KoUpdater* progressUpdater
+                               ) const
 {
     Q_UNUSED(config);
     Q_ASSERT(device != 0);

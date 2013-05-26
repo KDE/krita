@@ -70,11 +70,11 @@ inline int ABS(int v)
     return v;
 }
 
-void KisSimpleNoiseReducer::process(KisPaintDeviceSP device,
-                                    const QRect& applyRect,
-                                    const KisFilterConfiguration* config,
-                                    KoUpdater* progressUpdater
-                                   ) const
+void KisSimpleNoiseReducer::processImpl(KisPaintDeviceSP device,
+                                        const QRect& applyRect,
+                                        const KisFilterConfiguration* config,
+                                        KoUpdater* progressUpdater
+                                        ) const
 {
     QPoint srcTopLeft = applyRect.topLeft();
     Q_ASSERT(device);

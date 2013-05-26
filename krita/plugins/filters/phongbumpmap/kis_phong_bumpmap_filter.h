@@ -37,11 +37,11 @@ public:
 public:
     using KisFilter::process;
 
-    void process(KisPaintDeviceSP device,
-                const QRect& applyRect,
-                const KisFilterConfiguration *config,
-                KoUpdater *progressUpdater
-                ) const;
+    void processImpl(KisPaintDeviceSP device,
+                     const QRect& applyRect,
+                     const KisFilterConfiguration *config,
+                     KoUpdater *progressUpdater
+                     ) const;
 
     QRect neededRect(const QRect &rect, const KisFilterConfiguration *config) const;
     QRect changedRect(const QRect &rect, const KisFilterConfiguration *config) const;

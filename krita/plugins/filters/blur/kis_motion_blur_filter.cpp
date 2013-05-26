@@ -64,11 +64,11 @@ KisFilterConfiguration* KisMotionBlurFilter::factoryConfiguration(const KisPaint
     return config;
 }
 
-void KisMotionBlurFilter::process(KisPaintDeviceSP device,
-                            const QRect& rect,
-                            const KisFilterConfiguration* config,
-                            KoUpdater* progressUpdater
-                           ) const
+void KisMotionBlurFilter::processImpl(KisPaintDeviceSP device,
+                                      const QRect& rect,
+                                      const KisFilterConfiguration* config,
+                                      KoUpdater* progressUpdater
+                                      ) const
 {
     QPoint srcTopLeft = rect.topLeft();
 

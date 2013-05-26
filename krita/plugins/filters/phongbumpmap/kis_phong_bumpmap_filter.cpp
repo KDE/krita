@@ -39,11 +39,11 @@ KisFilterPhongBumpmap::KisFilterPhongBumpmap()
     setSupportsIncrementalPainting(true);
 }
 
-void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
-                                    const QRect& applyRect,
-                                    const KisFilterConfiguration *config,
-                                    KoUpdater *progressUpdater
-                                    ) const
+void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
+                                        const QRect& applyRect,
+                                        const KisFilterConfiguration *config,
+                                        KoUpdater *progressUpdater
+                                        ) const
 {
     if (!config) return;
 

@@ -60,11 +60,11 @@ KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), KisFilter::category
     setSupportsThreading(false);
 }
 
-void KisSmallTilesFilter::process(KisPaintDeviceSP device,
-                                  const QRect& /*applyRect*/,
-                                  const KisFilterConfiguration* config,
-                                  KoUpdater* progressUpdater
-                                 ) const
+void KisSmallTilesFilter::processImpl(KisPaintDeviceSP device,
+                                      const QRect& /*applyRect*/,
+                                      const KisFilterConfiguration* config,
+                                      KoUpdater* progressUpdater
+                                      ) const
 {
     Q_ASSERT(!device.isNull());
 

@@ -63,11 +63,11 @@ KisFilterConfiguration* KisGaussianBlurFilter::factoryConfiguration(const KisPai
     return config;
 }
 
-void KisGaussianBlurFilter::process(KisPaintDeviceSP device,
-                            const QRect& rect,
-                            const KisFilterConfiguration* config,
-                            KoUpdater* progressUpdater
-                           ) const
+void KisGaussianBlurFilter::processImpl(KisPaintDeviceSP device,
+                                        const QRect& rect,
+                                        const KisFilterConfiguration* config,
+                                        KoUpdater* progressUpdater
+                                        ) const
 {
     QPoint srcTopLeft = rect.topLeft();
 

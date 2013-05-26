@@ -28,7 +28,7 @@
 #include <kmessagebox.h>
 #include <kio/job.h>
 #include <kio/netaccess.h>
-#include <kio/jobuidelegate.h>
+//#include <kio/jobuidelegate.h>
 
 #include <KoIcon.h>
 
@@ -347,7 +347,7 @@ void KisRulerAssistantTool::openFinish(KJob* job)
 {
     job->deleteLater();
     if (job->error()) {
-        dynamic_cast<KIO::Job*>(job)->ui()->showErrorMessage();
+//        dynamic_cast<KIO::Job*>(job)->ui()->showErrorMessage();
         return;
     }
     QByteArray data = dynamic_cast<KIO::StoredTransferJob*>(job)->data();
@@ -434,7 +434,7 @@ void KisRulerAssistantTool::openFinish(KJob* job)
 void KisRulerAssistantTool::saveFinish(KJob* job)
 {
     if (job->error()) {
-        dynamic_cast<KIO::Job*>(job)->ui()->showErrorMessage();
+//        dynamic_cast<KIO::Job*>(job)->ui()->showErrorMessage();
     }
     job->deleteLater();
 }

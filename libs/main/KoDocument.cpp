@@ -58,7 +58,6 @@
 #include <kdesktopfile.h>
 #include <kconfiggroup.h>
 #include <kio/job.h>
-#include <kio/jobuidelegate.h>
 #include <kfileitem.h>
 #include <kio/netaccess.h>
 
@@ -2039,7 +2038,6 @@ bool KoDocument::hasExternURL() const
             && d->parentPart->url().protocol() != STORE_PROTOCOL
             && d->parentPart->url().protocol() != INTERNAL_PROTOCOL;
 }
-
 
 static const struct {
     const char *localName;

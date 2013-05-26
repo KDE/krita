@@ -26,7 +26,12 @@ set(kritalibbrush_LIB_SRCS
 
 kde4_add_library(kritalibbrush SHARED ${kritalibbrush_LIB_SRCS} )
 
-target_link_libraries(kritalibbrush kritaui)
+if (WIN32)
+    target_link_libraries(kritalibbrush kritaui ${WIN32_PLATFORM_NET_LIBS})
+else (WIN32)
+    target_link_libraries(kritalibbrush kritaui)
+endif (WIN32)
+
 
 if(HAVE_VC)
   include_directories(${Vc_INCLUDE_DIR})
@@ -34,11 +39,7 @@ if(HAVE_VC)
 #  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
 endif(HAVE_VC)
 
-if (WIN32)
-target_link_libraries(kritalibbrush LINK_INTERFACE_LIBRARIES kritaui ${WIN32_PLATFORM_NET_LIBS})
-else (WIN32)
 target_link_libraries(kritalibbrush LINK_INTERFACE_LIBRARIES kritaui)
-endif (WIN32)
 
 set_target_properties(kritalibbrush PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

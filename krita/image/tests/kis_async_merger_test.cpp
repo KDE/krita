@@ -190,7 +190,7 @@ void KisAsyncMergerTest::testFullRefreshWithClones()
 
     KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, device1);
     KisFilterMaskSP invertMask1 = new KisFilterMask();
-    invertMask1->initSelection(0, paintLayer1);
+    invertMask1->initSelection(paintLayer1);
     invertMask1->setFilter(configuration);
 
     KisLayerSP cloneLayer1 = new KisCloneLayer(paintLayer1, image, "clone_of_1", OPACITY_OPAQUE_U8);

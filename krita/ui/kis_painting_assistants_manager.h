@@ -45,7 +45,7 @@ public:
     QList<KisPaintingAssistantHandleSP> handles();
     QList<KisPaintingAssistant*> assistants();
 protected:
-    void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter);
+    void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas);
 
 private:
     struct Private;

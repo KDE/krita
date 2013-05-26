@@ -235,7 +235,7 @@ void KisPerspectiveGridManager::drawSubdivisions(QPainter& gc, const Subdivision
 
 #define SMALLEST_LINE 1e-10
 
-void KisPerspectiveGridManager::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter)
+void KisPerspectiveGridManager::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, KisCanvas2 *canvas)
 {
     Q_UNUSED(updateRect);
 
@@ -299,7 +299,7 @@ void KisPerspectiveGridManager::drawDecoration(QPainter& gc, const QRectF& updat
             SubdivisionLinesInfo info;
             info = getSubdivisionsInfo(lineTop, lineBottom, vertIntersection,
                                        grid->subdivisions());
-            drawSubdivisions(gc, info);
+             drawSubdivisions(gc, info);
 
             info = getSubdivisionsInfo(lineLeft, lineRight, horizIntersection,
                                        grid->subdivisions());

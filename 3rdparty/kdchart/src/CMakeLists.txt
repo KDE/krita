@@ -112,14 +112,14 @@ qt4_wrap_ui(kdchart_LIB_SRCS
     KDChartDatasetSelector.ui
 )
 
-qt_wrap_cpp(kdchart kdchart_LIB_SRCS KDChartEnums.h)
+qt_wrap_cpp(calligrakdchart kdchart_LIB_SRCS KDChartEnums.h)
 
-kde4_add_library(kdchart SHARED ${kdchart_LIB_SRCS})
+kde4_add_library(calligrakdchart SHARED ${kdchart_LIB_SRCS})
 
-target_link_libraries(kdchart  ${QT_QTSVG_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTCORE_LIBRARY} ${ZLIB_LIBRARY} )
+target_link_libraries(calligrakdchart  ${QT_QTSVG_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTCORE_LIBRARY} ${ZLIB_LIBRARY} )
 
-set_target_properties(kdchart PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
-install(TARGETS kdchart  ${INSTALL_TARGETS_DEFAULT_ARGS})
+set_target_properties(calligrakdchart PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+install(TARGETS calligrakdchart  ${INSTALL_TARGETS_DEFAULT_ARGS})
 #add_subdirectory( kdchart )
 
 

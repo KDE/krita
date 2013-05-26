@@ -7,8 +7,16 @@
 # CALLIGRA_SHOULD_BUILD_PRODUCTS - list of requested products by the user
 # CALLIGRA_NEEDED_PRODUCTS - list of internal needed products
 # CALLIGRA_WANTED_PRODUCTS - list of internal wanted products
+# CALLIGRA_STAGING_PRODUCTS - list of products only in staging mode
 # SHOULD_BUILD_${product_id} - boolean if product should be build
 
+
+macro(calligra_disable_product _product_id _reason)
+  set(SHOULD_BUILD_${_product_id} FALSE)
+  if (NOT BUILD_${_product_id}_DISABLE_REASON)
+    set(BUILD_${_product_id}_DISABLE_REASON "${_reason}")
+  endif (NOT BUILD_${_product_id}_DISABLE_REASON)
+endmacro()
 
 macro(calligra_set_shouldbuild_dependentproduct _product_id _dep_product_id)
   # if not already enabled, enable
@@ -41,6 +49,13 @@ endmacro()
 
 
 macro(calligra_drop_unbuildable_products)
+  # first drop all staging products if not in debug build
+  if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug" AND NOT CMAKE_BUILD_TYPE STREQUAL "DebugFull")
+    foreach(_product_id ${CALLIGRA_STAGING_PRODUCTS})
+      calligra_disable_product(${_product_id} "Not ready for release")
+    endforeach(_product_id)
+  endif(NOT CMAKE_BUILD_TYPE STREQUAL "Debug" AND NOT CMAKE_BUILD_TYPE STREQUAL "DebugFull")
+
   # can assume calligra_all_products has products in down-up order
   # 1. check all wanted products and see if they will be built,
   #    if not then drop their required products
@@ -50,7 +65,7 @@ macro(calligra_drop_unbuildable_products)
     if(NOT SHOULD_BUILD_${_product_id})
       if(DEFINED CALLIGRA_PRODUCT_${_product_id}_dependents)
         foreach(_dependent_product_id ${CALLIGRA_PRODUCT_${_product_id}_dependents})
-          set(SHOULD_BUILD_${_dependent_product_id} FALSE)
+          calligra_disable_product(${_dependent_product_id} "Required internal dependency missing: ${_product_id}")
         endforeach(_dependent_product_id ${CALLIGRA_PRODUCT_${_dep_product_id}_dependents})
       endif(DEFINED CALLIGRA_PRODUCT_${_product_id}_dependents)
     endif(NOT SHOULD_BUILD_${_product_id})
@@ -66,7 +81,7 @@ macro(calligra_drop_products_on_old_flag _build_id)
       if (NOT DEFINED SHOULD_BUILD_${_product_id})
         message(FATAL_ERROR "Unknown product: ${_product_id}")
       endif (NOT DEFINED SHOULD_BUILD_${_product_id})
-      set(SHOULD_BUILD_${_product_id} FALSE)
+      calligra_disable_product(${_product_id} "Disabled by cmake parameter")
     endforeach(_product_id)
   endif (DEFINED BUILD_${lowercase_build_id} AND NOT BUILD_${lowercase_build_id})
 endmacro()
@@ -130,6 +145,7 @@ endmacro()
 # Usage:
 #   calligra_define_product(<product_id>
 #         [NAME] <product_name>
+#         [STAGING]
 #         [NEEDS <product_id1> [<product_id2> ...]]
 #         [WANTS <product_id1> [<product_id2> ...]]
 #       )
@@ -150,7 +166,11 @@ macro(calligra_define_product _product_id)
       set(_current_arg_type "wants")
     else(${_arg} STREQUAL "NAME")
       if(${_current_arg_type} STREQUAL "name")
-        set(_product_name "${_arg}")
+        if(${_arg} STREQUAL "STAGING")
+          list(APPEND CALLIGRA_STAGING_PRODUCTS ${_product_id})
+        else(${_arg} STREQUAL "STAGING")
+          set(_product_name "${_arg}")
+        endif(${_arg} STREQUAL "STAGING")
       elseif(${_current_arg_type} STREQUAL "needs")
         # check that the dependency is actually existing
         if(NOT DEFINED SHOULD_BUILD_${_arg})
@@ -225,7 +245,7 @@ macro(calligra_log_should_build)
         set(dependents "")
       endif (DEFINED CALLIGRA_PRODUCT_${_product_id}_dependents)
 
-      message(STATUS "${_product_id}:  ${CALLIGRA_PRODUCT_${_product_id}_name}${dependents}" )
+      message(STATUS "${_product_id}:  ${CALLIGRA_PRODUCT_${_product_id}_name}${dependents}  |  ${BUILD_${_product_id}_DISABLE_REASON}" )
     endforeach(_product_id)
     message(STATUS "")
   endif(NOT _not_built_dependency_product_ids STREQUAL "")
@@ -236,7 +256,7 @@ macro(calligra_log_should_build)
   if(NOT _not_built_product_ids STREQUAL "")
     message(STATUS "\n---------------- The following products can NOT be built ------------" )
     foreach(_product_id ${_not_built_product_ids})
-        message(STATUS "${_product_id}:  ${CALLIGRA_PRODUCT_${_product_id}_name}" )
+        message(STATUS "${_product_id}:  ${CALLIGRA_PRODUCT_${_product_id}_name}  |  ${BUILD_${_product_id}_DISABLE_REASON}" )
     endforeach(_product_id)
   endif(NOT _not_built_product_ids STREQUAL "")
   message(STATUS "--------------------------------------------------------------------------" )

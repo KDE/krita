@@ -43,13 +43,7 @@
 #include "kis_image_pyramid.h"
 
 
-#define EPSILON 1e-10
-
 #define ceiledSize(sz) QSize(ceil((sz).width()), ceil((sz).height()))
-#define SCALE_LESS_THAN(scX, scY, value) \
-    (scX < (value) - EPSILON && scY < (value) - EPSILON)
-#define SCALE_MORE_OR_EQUAL_TO(scX, scY, value) \
-    (scX > (value) - EPSILON && scY > (value) - EPSILON)
 
 inline void copyQImageBuffer(uchar* dst, const uchar* src , qint32 deltaX, qint32 width)
 {

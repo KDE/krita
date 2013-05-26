@@ -55,6 +55,7 @@
 #include "kis_config_notifier.h"
 #include "kis_debug.h"
 #include "opengl/kis_opengl_canvas2_p.h"
+#include "kis_coordinates_converter.h"
 
 #define NEAR_VAL -1000.0
 #define FAR_VAL 1000.0
@@ -182,6 +183,7 @@ void KisOpenGLCanvas2::paintGL()//Event(QPaintEvent *event)
 void KisOpenGLCanvas2::drawCheckers()
 {
     KisCoordinatesConverter *converter = coordinatesConverter();
+
 
     QTransform textureTransform;
     QTransform modelTransform;
@@ -320,10 +322,9 @@ void KisOpenGLCanvas2::drawImage()
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, tile->textureId());
 
-            if (scaleX > 2.0) {
+            if (SCALE_MORE_OR_EQUAL_TO(scaleX, scaleY, 2.0)) {
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            }
-            else {
+            } else {
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             }
 

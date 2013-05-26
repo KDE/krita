@@ -1,3 +1,5 @@
+add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+
 include_directories( ${KOTEXT_INCLUDES}
     ${TEXTLAYOUT_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/pigment/colorprofiles
@@ -270,6 +272,8 @@ kde4_add_ui_files(kritaui_LIB_SRCS
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
 
 target_link_libraries(kritaui ${X11_X11_LIB})
+
+target_link_libraries(kritaui ${GLEW_LIBRARIES})
 
 if(GHNS)
     target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KFILE_LIBRARY} ${KDE4_THREADWEAVER_LIBRARIES} kritaimage komain kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})

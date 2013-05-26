@@ -59,8 +59,8 @@ kde4_add_ui_files(chartshape_LIB_SRCS
 )
 
 kde4_add_library(chartshapelib SHARED ${chartshape_LIB_SRCS})
-target_link_libraries(chartshapelib kdchart komain textlayout)
-target_link_libraries(chartshapelib LINK_INTERFACE_LIBRARIES kdchart)
+target_link_libraries(chartshapelib ${KDCHART_LIBS} komain textlayout)
+target_link_libraries(chartshapelib LINK_INTERFACE_LIBRARIES ${KDCHART_LIBS})
 set_target_properties(chartshapelib PROPERTIES
     VERSION   ${GENERIC_CALLIGRA_LIB_VERSION}
     SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
@@ -69,7 +69,7 @@ set_target_properties(chartshapelib PROPERTIES
 install(TARGETS chartshapelib ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 kde4_add_plugin(chartshape ChartShapeFactory.cpp )
-target_link_libraries(chartshape chartshapelib kdchart flake)
+target_link_libraries(chartshape chartshapelib ${KDCHART_LIBS} flake)
 install(TARGETS chartshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

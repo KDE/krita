@@ -327,7 +327,7 @@ void KisWalkersTest::testVisitingWithTopmostMask()
 
 
     KisFilterMaskSP filterMask1 = new KisFilterMask();
-    filterMask1->initSelection(0, groupLayer);
+    filterMask1->initSelection(groupLayer);
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
     KisFilterConfiguration *configuration1 = filter->defaultConfiguration(0);

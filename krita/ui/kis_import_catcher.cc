@@ -90,6 +90,7 @@ void KisImportCatcher::Private::importAsPaintLayer(KisPaintDeviceSP device)
     adapter.addNode(newLayer, parent, currentActiveLayer);
 }
 
+// NOTE: Unused currently
 void KisImportCatcher::Private::importAsTransparencyMask(KisPaintDeviceSP device)
 {
     KisLayerSP currentActiveLayer = view->activeLayer();

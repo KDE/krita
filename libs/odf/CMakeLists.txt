@@ -50,19 +50,6 @@ set(koodf_LIB_SRCS
     KoOdfBibliographyConfiguration.cpp
     KoOdfNumberDefinition.cpp
     KoOdfLineNumberingConfiguration.cpp
-    KoCell.cpp
-    KoCellChild.cpp
-    KoCellValue.cpp
-    KoDummyCellValue.cpp
-    KoCellStyle.cpp
-    KoColumn.cpp
-    KoRawCellChild.cpp
-    KoRow.cpp
-    KoStyle.cpp
-    KoTable.cpp
-    KoColumnStyle.cpp
-    KoRowStyle.cpp
-    KoTblStyle.cpp
     KoElementReference.cpp
 
     styles/KoOdfStyle.cpp

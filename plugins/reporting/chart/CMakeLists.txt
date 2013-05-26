@@ -14,7 +14,7 @@ set(koreport_chartplugin_LIB_SRCS
 
 kde4_add_plugin(koreport_chartplugin ${koreport_chartplugin_LIB_SRCS})
 
-target_link_libraries(koreport_chartplugin ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} ${KOREPORT_LIBS} kdchart ${KOPROPERTY_LIBS})
+target_link_libraries(koreport_chartplugin ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} ${KOREPORT_LIBS} ${KDCHART_LIBS} ${KOPROPERTY_LIBS})
 
 install(TARGETS koreport_chartplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 

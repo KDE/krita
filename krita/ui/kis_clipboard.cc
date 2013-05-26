@@ -50,6 +50,7 @@ KisClipboard::KisClipboard()
 {
     m_pushedClipboard = false;
     m_hasClip = false;
+    m_pasteFromWeb = false;
 
     // Check that we don't already have a clip ready
     clipboardDataChanged();
@@ -252,6 +253,10 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds)
 
         quint32 behaviour = cfg.pasteBehaviour();
 
+        if(m_pasteFromWeb){
+            behaviour = PASTE_ASSUME_WEB;
+        }
+
         if (behaviour == PASTE_ASK) {
             // Ask user each time.
             behaviour = QMessageBox::question(0, i18n("Pasting data from simple source"), i18n("The image data you are trying to paste has no color profile information.\n\nOn the web and in simple applications the data are supposed to be in sRGB color format.\nImporting as web will show it as it is supposed to look.\nMost monitors are not perfect though so if you made the image yourself\nyou might want to import it as it looked on you monitor.\n\nHow do you want to interpret these data?"), i18n("As &Web"), i18n("As on &Monitor"));
@@ -298,6 +303,7 @@ void KisClipboard::clipboardDataChanged()
     }
 
     m_pushedClipboard = false;
+    emit clipChanged();
 }
 
 
@@ -362,4 +368,7 @@ QSize KisClipboard::clipSize()
     }
 }
 
+void KisClipboard::assumePasteFromWeb(bool pasteFromWeb){
+    m_pasteFromWeb = pasteFromWeb;
+}
 #include "kis_clipboard.moc"

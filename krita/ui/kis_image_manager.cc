@@ -51,10 +51,6 @@ void KisImageManager::setup(KActionCollection * actionCollection)
     actionCollection->addAction("import_layer_from_file", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerFromFile()));
 
-    action  = new KAction(i18n("Import &Transparency Mask..."), this);
-    actionCollection->addAction("import_mask_from_file", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(slotImportMaskFromFile()));
-
     action  = new KAction(koIcon("document-properties"), i18n("Properties..."), this);
     actionCollection->addAction("image_properties", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageProperties()));
@@ -63,11 +59,6 @@ void KisImageManager::setup(KActionCollection * actionCollection)
 void KisImageManager::slotImportLayerFromFile()
 {
     importImage(KUrl(), true);
-}
-
-void KisImageManager::slotImportMaskFromFile()
-{
-    importImage(KUrl(), false);
 }
 
 qint32 KisImageManager::importImage(const KUrl& urlArg, bool importAsLayer)

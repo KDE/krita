@@ -320,6 +320,11 @@ public slots:
      */
     void slotClearStatusText();
 
+    /**
+     * Updates the author profile actions from configuration.
+     */
+    void slotUpdateAuthorProfileActions();
+
 protected:
     /**
      * This method handles three events: KParts::PartActivateEvent, KParts::PartSelectEvent

@@ -113,6 +113,10 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     slotConfigChanged();
+
+    KisConfig cfg;
+    m_d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
+
 }
 
 KisOpenGLCanvas2::~KisOpenGLCanvas2()
@@ -123,8 +127,6 @@ KisOpenGLCanvas2::~KisOpenGLCanvas2()
 void KisOpenGLCanvas2::initializeGL()
 {
     glEnable(GL_MULTISAMPLE);
-    KisConfig cfg;
-    m_d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
 
 #ifndef Q_WS_WIN
     if (!VSyncWorkaround::tryDisableVSync(this)) {

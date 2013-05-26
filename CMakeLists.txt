@@ -869,6 +869,10 @@ if(WIN32 OR QT_MAC_USE_COCOA)
     calligra_disable_product(FILTER_KSPREAD_TO_LATEX "not supported on platform")
 endif(WIN32 OR QT_MAC_USE_COCOA)
 
+if(NOT SHARED_MIME_INFO_FOUND)
+    calligra_disable_product(FILTER_MPXJ_IMPORT "SharedMimeInfo not found (needed to install mimetypes)")
+endif(NOT SHARED_MIME_INFO_FOUND)
+
 if(WIN32)
     calligra_disable_product(BRAINDUMP_APP "unmaintained on Windows")
 endif()

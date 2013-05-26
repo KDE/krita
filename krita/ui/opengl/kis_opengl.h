@@ -60,13 +60,6 @@ public:
      * QGLWidget constructor.
      */
     static QGLWidget *sharedContextWidget();
-
-    /**
-     * @brief sharedContext the shared context
-     * @return the context associated with the shared context widget
-     */
-    static QGLContext *sharedContext();
-
     /**
      * Make the shared OpenGL context the current context. You should
      * make the context current before creating textures, display lists,

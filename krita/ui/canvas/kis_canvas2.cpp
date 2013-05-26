@@ -132,7 +132,6 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view,
 
     connect(view->canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SLOT(documentOffsetMoved(QPoint)));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
-    connect(this, SIGNAL(canvasDestroyed(QWidget*)), this, SLOT(slotCanvasDestroyed(QWidget*)));
 
     /**
      * We switch the shape manager every time vector layer or
@@ -165,7 +164,9 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
 {
     KisAbstractCanvasWidget *tmp = dynamic_cast<KisAbstractCanvasWidget*>(widget);
     Q_ASSERT_X(tmp, "setCanvasWidget", "Cannot cast the widget to a KisAbstractCanvasWidget");
-    emit canvasDestroyed(widget);
+    if (m_d->favoriteResourceManager != 0) {
+        m_d->favoriteResourceManager->resetPopupPaletteParent(widget);
+    }
 
     if(m_d->canvasWidget!=0)
         tmp->setDecorations(m_d->canvasWidget->decorations());
@@ -319,14 +320,10 @@ void KisCanvas2::createOpenGLCanvas()
     m_d->useTrilinearFiltering = cfg.useOpenGLTrilinearFiltering();
     m_d->currentCanvasIsOpenGL = true;
 
-    // XXX: The image isn't done loading here!
     m_d->openGLImageTextures = KisOpenGLImageTextures::getImageTextures(m_d->view->image(), m_d->monitorProfile, m_d->renderingIntent, m_d->conversionFlags);
-    // The extra widget is to make sure we never have to reparent the QGLWidget, which breaks on Windows
-    QWidget *parentWidget = new QWidget();
-    QVBoxLayout *layout = new QVBoxLayout(parentWidget);
-    KisOpenGLCanvas2 *canvasWidget = new KisOpenGLCanvas2(this, m_d->coordinatesConverter, parentWidget, m_d->openGLImageTextures);
-    layout->addWidget(canvasWidget);
-    setCanvasWidget(parentWidget);
+    KisOpenGLCanvas2 *canvasWidget = new KisOpenGLCanvas2(this, m_d->coordinatesConverter, 0, m_d->openGLImageTextures);
+    setCanvasWidget(canvasWidget);
+
 #else
     qFatal("Bad use of createOpenGLCanvas(). It shouldn't have happened =(");
 #endif
@@ -475,7 +472,6 @@ void KisCanvas2::setMonitorProfile(KoColorProfile* monitorProfile,
 #ifdef HAVE_OPENGL
         Q_ASSERT(m_d->openGLImageTextures);
         m_d->openGLImageTextures->setMonitorProfile(monitorProfile, renderingIntent, conversionFlags);
-
 #else
         Q_ASSERT_X(0, "KisCanvas2::setMonitorProfile", "Bad use of setMonitorProfile(). It shouldn't have happened =(");
 #endif
@@ -529,7 +525,6 @@ void KisCanvas2::finishResizingImage(qint32 w, qint32 h)
 #ifdef HAVE_OPENGL
         Q_ASSERT(m_d->openGLImageTextures);
         m_d->openGLImageTextures->slotImageSizeChanged(w, h);
-
 #else
         Q_ASSERT_X(0, "finishResizingImage()", "Bad use of finishResizingImage(). It shouldn't have happened =(");
 #endif
@@ -732,19 +727,10 @@ void KisCanvas2::createFavoriteResourceManager(KisPaintopBox* paintopbox)
     connect(favoriteResourceManager(), SIGNAL(sigEnableChangeColor(bool)), view()->resourceProvider(), SLOT(slotResetEnableFGChange(bool)));
 }
 
-void KisCanvas2::slotCanvasDestroyed(QWidget* w)
-{
-    if (m_d->favoriteResourceManager != 0)
-    {
-        m_d->favoriteResourceManager->resetPopupPaletteParent(w);
-    }
-}
-
 KoFavoriteResourceManager* KisCanvas2::favoriteResourceManager()
 {
     return m_d->favoriteResourceManager;
 }
-
 
 bool KisCanvas2::handlePopupPaletteIsVisible()
 {

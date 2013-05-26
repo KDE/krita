@@ -54,8 +54,6 @@
 #include "kis_config.h"
 #include "kis_config_notifier.h"
 #include "kis_debug.h"
-
-
 #include "opengl/kis_opengl_canvas2_p.h"
 
 #define NEAR_VAL -1000.0
@@ -105,8 +103,6 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
     setAttribute(Qt::WA_NoSystemBackground);
     setAutoFillBackground(false);
 
-    KisConfig cfg;
-    imageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
     setAttribute(Qt::WA_InputMethodEnabled, true);
 
     if (isSharing()) {
@@ -127,7 +123,10 @@ KisOpenGLCanvas2::~KisOpenGLCanvas2()
 void KisOpenGLCanvas2::initializeGL()
 {
     glEnable(GL_MULTISAMPLE);
+    KisConfig cfg;
+    m_d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
 
+#ifndef Q_WS_WIN
     if (!VSyncWorkaround::tryDisableVSync(this)) {
         qWarning();
         qWarning() << "WARNING: We didn't manage to switch off VSync on your graphics adapter.";
@@ -139,18 +138,16 @@ void KisOpenGLCanvas2::initializeGL()
         qWarning() << "WARNING: You may see some flickering when painting with some tools. It doesn't";
         qWarning() << "WARNING: affect the quality of the final image, though.";
         qWarning();
-
-        QGLFormat format = this->format();
-        format.setDoubleBuffer(false);
-        setFormat(format);
-
+#endif
         if (doubleBuffer()) {
             qCritical() << "CRITICAL: Failed to disable Double Buffering. Lines may look \"bended\" on your image.";
             qCritical() << "CRITICAL: Your graphics card or driver does not fully support Krita's OpenGL canvas.";
             qCritical() << "CRITICAL: For an optimal experience, please disable OpenGL";
             qCritical();
         }
+#ifndef Q_WS_WIN
     }
+#endif
 
     initializeShaders();
 
@@ -160,13 +157,11 @@ void KisOpenGLCanvas2::resizeGL(int width, int height)
 {
     glViewport(0, 0, (GLint)width, (GLint)height);
     coordinatesConverter()->setCanvasWidgetSize(QSize(width, height));
-
 }
 
-void KisOpenGLCanvas2::paintGL()
+void KisOpenGLCanvas2::paintGL()//Event(QPaintEvent *event)
 {
-    QPainter gc(this);
-    gc.beginNativePainting();
+    makeCurrent();
 
     // Draw the border (that is, clear the whole widget to the border color)
     QColor widgetBackgroundColor = borderColor();
@@ -176,12 +171,10 @@ void KisOpenGLCanvas2::paintGL()
     drawCheckers();
     drawImage();
 
-    gc.endNativePainting();
     QRect boundingRect = coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect();
-
+    QPainter gc(this);
     drawDecorations(gc, boundingRect);
     gc.end();
-
 }
 
 void KisOpenGLCanvas2::drawCheckers()
@@ -291,7 +284,6 @@ void KisOpenGLCanvas2::drawImage()
 
             KisTextureTile *tile =
                     m_d->openGLImageTextures->getTextureTileCR(col, row);
-
             /*
              * We create a float rect here to workaround Qt's
              * "history reasons" in calculation of right()
@@ -345,7 +337,6 @@ void KisOpenGLCanvas2::drawImage()
 
 void KisOpenGLCanvas2::initializeShaders()
 {
-
     m_d->checkerShader = new QGLShaderProgram();
     m_d->checkerShader->addShaderFromSourceFile(QGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/gl2.vert"));
     m_d->checkerShader->addShaderFromSourceFile(QGLShader::Fragment, KGlobal::dirs()->findResource("data", "krita/shaders/checker.frag"));

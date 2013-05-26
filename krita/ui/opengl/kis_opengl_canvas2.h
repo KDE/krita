@@ -70,7 +70,7 @@ protected:
 
     void resizeGL(int width, int height);
     void initializeGL();
-    void paintGL();
+    void paintGL();//Event(QPaintEvent *);
 
 public: // KisAbstractCanvasWidget
 

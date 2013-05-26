@@ -78,7 +78,6 @@ void KisOpenGL::createContext()
     if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_ES_Version_2_0)
         qDebug() << "OpenGL ES version 2.0 or higher is present.";
 
-
     if (!((QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_2_0) ||
           (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_ES_Version_2_0))) {
         qWarning() << "Cannot use OpenGL: we need at least OpenGL 2.0 or ES 2.0.";
@@ -94,7 +93,7 @@ void KisOpenGL::createContext()
         qDebug() << "Using the core profile";
     if (format.profile() == 2)
         qDebug() << "Using the compatibility profile";
-
+    format.setDoubleBuffer(false);
     SharedContextWidget = new QGLWidget(format);
     SharedContextWidget->makeCurrent();
 
@@ -119,11 +118,6 @@ QGLWidget *KisOpenGL::sharedContextWidget()
         createContext();
     }
     return SharedContextWidget;
-}
-
-QGLContext *KisOpenGL::sharedContext()
-{
-    return const_cast<QGLContext*>(KisOpenGL::sharedContextWidget()->context());
 }
 
 void KisOpenGL::printError(const char *file, int line)

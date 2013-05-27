@@ -77,6 +77,7 @@ KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texture
                  m_texturesInfo->width,
                  m_texturesInfo->height, 0,
                  GL_BGRA, m_texturesInfo->type, fillData);
+    glGenerateMipmap(GL_TEXTURE_2D);
 }
 
 KisTextureTile::~KisTextureTile() {
@@ -95,6 +96,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo) {
                      m_texturesInfo->height, 0,
                      GL_BGRA, m_texturesInfo->type,
                      updateInfo.data());
+        glGenerateMipmap(GL_TEXTURE_2D);
     } else {
         QPoint patchOffset = updateInfo.patchOffset();
         QSize patchSize = updateInfo.patchSize();
@@ -104,6 +106,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo) {
                         patchSize.width(), patchSize.height(),
                         GL_BGRA, m_texturesInfo->type,
                         updateInfo.data());
+        glGenerateMipmap(GL_TEXTURE_2D);
     }
 
     /**
@@ -133,6 +136,7 @@ inline void KisTextureTile::repeatStripes(const KisTextureTileUpdateInfo &update
                         patchSize.width(), 1,
                         GL_BGRA, m_texturesInfo->type,
                         updateInfo.data());
+        glGenerateMipmap(GL_TEXTURE_2D);
 
     }
 
@@ -145,6 +149,7 @@ inline void KisTextureTile::repeatStripes(const KisTextureTileUpdateInfo &update
                         patchSize.width(), 1,
                         GL_BGRA, m_texturesInfo->type,
                         updateInfo.data() + shift);
+        glGenerateMipmap(GL_TEXTURE_2D);
 
     }
 
@@ -165,6 +170,7 @@ inline void KisTextureTile::repeatStripes(const KisTextureTileUpdateInfo &update
                         1, patchSize.height(),
                         GL_BGRA, m_texturesInfo->type,
                         columnBuffer.constData());
+        glGenerateMipmap(GL_TEXTURE_2D);
     }
 
     if(imageRect.right() == patchRect.right()) {
@@ -184,6 +190,7 @@ inline void KisTextureTile::repeatStripes(const KisTextureTileUpdateInfo &update
                         1, patchSize.height(),
                         GL_BGRA, m_texturesInfo->type,
                         columnBuffer.constData());
+        glGenerateMipmap(GL_TEXTURE_2D);
     }
 
 }

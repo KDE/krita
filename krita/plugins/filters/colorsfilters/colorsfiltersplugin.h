@@ -17,8 +17,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA. */
 
-#ifndef COLORSFILTERS_H
-#define COLORSFILTERS_H
+#ifndef COLORSFILTERSPLUGIN_H
+#define COLORSFILTERSPLUGIN_H
 
 #include <QObject>
 #include <QVariant>
@@ -28,37 +28,12 @@
 class KoColorSpace;
 class KoColorTransformation;
 
-class KisAutoContrast : public KisFilter
+class ColorsFilters : public QObject
 {
+    Q_OBJECT
 public:
-    KisAutoContrast();
-public:
-    using KisFilter::process;
-    void process(KisPaintDeviceSP device,
-                         const QRect& applyRect,
-                         const KisFilterConfiguration* config,
-                         KoUpdater* progressUpdater
-                ) const;
-    static inline KoID id() {
-        return KoID("autocontrast", i18n("Auto Contrast"));
-    }
-    virtual bool workWith(const KoColorSpace* cs) const;
-
-};
-
-
-class KisDesaturateFilter : public KisColorTransformationFilter
-{
-public:
-    KisDesaturateFilter();
-    ~KisDesaturateFilter();
-public:
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
-    static inline KoID id() {
-        return KoID("desaturate", i18n("Desaturate"));
-    }
-    virtual bool workWith(const KoColorSpace* cs) const;
-
+    ColorsFilters(QObject *parent, const QVariantList &);
+    virtual ~ColorsFilters();
 };
 
 #endif

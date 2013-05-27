@@ -53,19 +53,6 @@
 #include <kis_iterator_ng.h>
 #include <kis_random_accessor_ng.h>
 
-K_PLUGIN_FACTORY(KritaRandomPickFilterFactory, registerPlugin<KritaRandomPickFilter>();)
-K_EXPORT_PLUGIN(KritaRandomPickFilterFactory("krita"))
-
-KritaRandomPickFilter::KritaRandomPickFilter(QObject *parent, const QVariantList &)
-        : QObject(parent)
-{
-    KisFilterRegistry::instance()->add(new KisFilterRandomPick());
-}
-
-KritaRandomPickFilter::~KritaRandomPickFilter()
-{
-}
-
 KisFilterRandomPick::KisFilterRandomPick() : KisFilter(id(), categoryOther(), i18n("&Random Pick..."))
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);

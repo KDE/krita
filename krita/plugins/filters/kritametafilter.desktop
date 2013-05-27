@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Meta Plugin: collection of all Krita filters
+X-KDE-ServiceTypes=Krita/Filter
+Type=Service
+X-KDE-Library=kritametafilter
+X-Krita-Version=28

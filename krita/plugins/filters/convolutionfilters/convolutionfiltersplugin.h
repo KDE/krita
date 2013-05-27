@@ -18,35 +18,19 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef EXAMPLE_H
-#define EXAMPLE_H
+#ifndef CONVOLUTIONFILTERSPLUGIN_H
+#define CONVOLUTIONFILTERSPLUGIN_H
 
 #include <QObject>
 #include <QVariant>
-#include "filter/kis_color_transformation_filter.h"
+#include "kis_convolution_filter.h"
 
-#ifndef METAPLUGIN
-class KritaExample : public QObject
+class KritaConvolutionFilters : public QObject
 {
     Q_OBJECT
 public:
-    KritaExample(QObject *parent, const QVariantList &);
-    virtual ~KritaExample();
-};
-#endif
-
-class KisFilterInvert : public KisColorTransformationFilter
-{
-public:
-    KisFilterInvert();
-public:
-
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
-
-    static inline KoID id() {
-        return KoID("invert", i18n("Invert"));
-    }
-
+    KritaConvolutionFilters(QObject *parent, const QVariantList &);
+    virtual ~KritaConvolutionFilters();
 };
 
 #endif

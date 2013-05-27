@@ -50,6 +50,7 @@
 #include "ui_wdgnoiseoptions.h"
 #include <kis_iterator_ng.h>
 
+#ifndef METAPLUGIN
 K_PLUGIN_FACTORY(KritaNoiseFilterFactory, registerPlugin<KritaNoiseFilter>();)
 K_EXPORT_PLUGIN(KritaNoiseFilterFactory("krita"))
 
@@ -63,6 +64,7 @@ KritaNoiseFilter::KritaNoiseFilter(QObject *parent, const QVariantList &)
 KritaNoiseFilter::~KritaNoiseFilter()
 {
 }
+#endif
 
 KisFilterNoise::KisFilterNoise() : KisFilter(id(), categoryOther(), i18n("&Random Noise..."))
 {

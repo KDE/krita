@@ -25,6 +25,7 @@
 #include <QVariant>
 #include <filter/kis_filter.h>
 
+#ifndef METAPLUGIN
 class FastColorTransferPlugin : public QObject
 {
     Q_OBJECT
@@ -32,6 +33,7 @@ public:
     FastColorTransferPlugin(QObject *parent, const QVariantList &);
     virtual ~FastColorTransferPlugin();
 };
+#endif
 
 class KisFilterFastColorTransfer : public KisFilter
 {

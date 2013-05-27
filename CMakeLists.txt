@@ -54,6 +54,7 @@ option(NEPOMUK "support NEPOMUK Tagging" ON)
 # option(TINY "compile a tiny Calligra" OFF)
 option(QT3SUPPORT "Build the parts of Calligra that still depend on Qt3" ON)
 option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binary. Should be used by packagers only." ON)
+option(METAPLUGINS "Collect similar plugins in one meta plugin" ON)
 
 # TODO: remove option and migration code below before 3.0 release
 option(CREATIVEONLY "compile only Karbon and Krita" OFF)

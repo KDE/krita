@@ -27,6 +27,7 @@
 
 class KisConfigWidget;
 
+#ifndef METAFILTERS
 class KritaWaveFilter : public QObject
 {
     Q_OBJECT
@@ -34,6 +35,7 @@ public:
     KritaWaveFilter(QObject *parent, const QVariantList &);
     virtual ~KritaWaveFilter();
 };
+#endif
 
 class KisFilterWave : public KisFilter
 {

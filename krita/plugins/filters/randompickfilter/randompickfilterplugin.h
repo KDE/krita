@@ -18,8 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef RANDOMPICKFILTER_H
-#define RANDOMPICKFILTER_H
+#ifndef RANDOMPICKFILTERPLUGIN_H
+#define RANDOMPICKFILTERPLUGIN_H
 
 #include <QObject>
 #include <QVariant>
@@ -27,26 +27,12 @@
 
 class KisConfigWidget;
 
-class KisFilterRandomPick : public KisFilter
+class KritaRandomPickFilter : public QObject
 {
+    Q_OBJECT
 public:
-    KisFilterRandomPick();
-public:
-    using KisFilter::process;
-    void process(KisPaintDeviceSP device,
-                const QRect& applyRect,
-                const KisFilterConfiguration* config,
-                KoUpdater* progressUpdater
-                ) const;
-    static inline KoID id() {
-        return KoID("randompick", i18n("Random Pick"));
-    }
-
-    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
-public:
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
-
-    virtual QRect neededRect(const QRect& rect, const KisFilterConfiguration* config = 0) const;
+    KritaRandomPickFilter(QObject *parent, const QVariantList &);
+    virtual ~KritaRandomPickFilter();
 };
 
 #endif

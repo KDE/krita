@@ -2,6 +2,7 @@
 
 set(kritarandompickfilter_PART_SRCS
     randompickfilter.cpp
+    randompickfilterplugin.cpp
     kis_wdg_random_pick.cpp
     )
 

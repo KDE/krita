@@ -31,13 +31,11 @@ public:
     ShivaFilter(OpenShiva::Source* source);
     virtual ~ShivaFilter();
 
-    using KisFilter::process;
-
-    virtual void process(KisPaintDeviceSP dev,
-                         const QRect& size,
-                         const KisFilterConfiguration* config,
-                         KoUpdater* progressUpdater
-                        ) const;
+    virtual void processImpl(KisPaintDeviceSP dev,
+                             const QRect& size,
+                             const KisFilterConfiguration* config,
+                             KoUpdater* progressUpdater
+                             ) const;
 
     KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 private:

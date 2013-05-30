@@ -1,0 +1,245 @@
+/* This file is part of the KDE project
+ * Copyright (C) 2013 Elvis Stansvik <elvstone@gmail.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
+#include "TestStyleManager.h"
+
+#include "KoTextDocument.h"
+#include "styles/KoCharacterStyle.h"
+#include "styles/KoListStyle.h"
+#include "styles/KoParagraphStyle.h"
+#include "styles/KoSectionStyle.h"
+#include "styles/KoStyleManager.h"
+#include "styles/KoTableCellStyle.h"
+#include "styles/KoTableColumnStyle.h"
+#include "styles/KoTableRowStyle.h"
+#include "styles/KoTableStyle.h"
+
+#include <QSignalSpy>
+#include <QTextCursor>
+#include <QTextDocument>
+#include <QVariant>
+
+void TestStyleManager::initTestCase()
+{
+    // Needed to use them in QVariant (for QSignalSpy).
+    qRegisterMetaType<KoCharacterStyle *>("KoCharacterStyle *");
+    qRegisterMetaType<KoParagraphStyle *>("KoParagraphStyle *");
+    qRegisterMetaType<KoParagraphStyle *>("KoListStyle *");
+    qRegisterMetaType<KoTableStyle *>("KoTableStyle *");
+    qRegisterMetaType<KoTableColumnStyle *>("KoTableColumnStyle *");
+    qRegisterMetaType<KoTableRowStyle *>("KoTableRowStyle *");
+    qRegisterMetaType<KoTableCellStyle *>("KoTableCellStyle *");
+    qRegisterMetaType<KoSectionStyle *>("KoSectionStyle *");
+}
+
+void TestStyleManager::init()
+{
+    // Each test case starts with a document containing
+    // "foo\nbar" and an empty style manager.
+    m_doc = new QTextDocument();
+    m_koDoc = new KoTextDocument(m_doc);
+    QTextCursor(m_doc).insertText("foo\nbar");
+    m_styleManager = new KoStyleManager(0);
+    m_koDoc->setStyleManager(m_styleManager);
+}
+
+void TestStyleManager::testAddRemoveCharacterStyle()
+{
+    // Add character style.
+    KoCharacterStyle *characterStyle = new KoCharacterStyle();
+    QSignalSpy addSignalSpy(m_styleManager, SIGNAL(styleAdded(KoCharacterStyle*)));
+    m_styleManager->beginEdit();
+    m_styleManager->add(characterStyle);
+    m_styleManager->endEdit();
+    QCOMPARE(m_styleManager->characterStyles().count(characterStyle), 1);
+    QCOMPARE(addSignalSpy.count(), 1);
+    QCOMPARE(addSignalSpy.at(0).at(0).value<KoCharacterStyle *>(), characterStyle);
+
+    // Remove character style.
+    QSignalSpy removeSignalSpy(m_styleManager, SIGNAL(styleRemoved(KoCharacterStyle*)));
+    m_styleManager->beginEdit();
+    m_styleManager->remove(characterStyle);
+    m_styleManager->endEdit();
+    QVERIFY(!m_styleManager->characterStyles().contains(characterStyle));
+    QCOMPARE(removeSignalSpy.count(), 1);
+    QCOMPARE(removeSignalSpy.at(0).at(0).value<KoCharacterStyle *>(), characterStyle);
+}
+
+void TestStyleManager::testAddRemoveParagraphStyle()
+{
+    // Add paragraph style.
+    KoParagraphStyle *paragraphStyle = new KoParagraphStyle();
+    QSignalSpy addSignalSpy(m_styleManager, SIGNAL(styleAdded(KoParagraphStyle*)));
+    m_styleManager->beginEdit();
+    m_styleManager->add(paragraphStyle);
+    m_styleManager->endEdit();
+    QCOMPARE(m_styleManager->paragraphStyles().count(paragraphStyle), 1);
+    QCOMPARE(addSignalSpy.count(), 1);
+    QCOMPARE(addSignalSpy.at(0).at(0).value<KoParagraphStyle *>(), paragraphStyle);
+
+    // Remove paragraph style.
+    QSignalSpy removeSignalSpy(m_styleManager, SIGNAL(styleRemoved(KoParagraphStyle*)));
+    m_styleManager->beginEdit();
+    m_styleManager->remove(paragraphStyle);
+    m_styleManager->endEdit();
+    QVERIFY(!m_styleManager->paragraphStyles().contains(paragraphStyle));
+    QCOMPARE(removeSignalSpy.count(), 1);
+    QCOMPARE(removeSignalSpy.at(0).at(0).value<KoParagraphStyle *>(), paragraphStyle);
+}
+
+void TestStyleManager::testAddRemoveListStyle()
+{
+    // Add list style.
+    KoListStyle *listStyle = new KoListStyle();
+    QSignalSpy addSignalSpy(m_styleManager, SIGNAL(styleAdded(KoListStyle*)));
+    m_styleManager->beginEdit();
+    m_styleManager->add(listStyle);
+    m_styleManager->endEdit();
+    QCOMPARE(m_styleManager->listStyles().count(listStyle), 1);
+    QCOMPARE(addSignalSpy.count(), 1);
+    QCOMPARE(addSignalSpy.at(0).at(0).value<KoListStyle *>(), listStyle);
+
+    // Remove list style.
+    QSignalSpy removeSignalSpy(m_styleManager, SIGNAL(styleRemoved(KoListStyle*)));
+    m_styleManager->beginEdit();
+    m_styleManager->remove(listStyle);
+    m_styleManager->endEdit();
+    QVERIFY(!m_styleManager->listStyles().contains(listStyle));
+    QCOMPARE(removeSignalSpy.count(), 1);
+    QCOMPARE(removeSignalSpy.at(0).at(0).value<KoListStyle *>(), listStyle);
+}
+
+void TestStyleManager::testAddRemoveTableStyle()
+{
+    // Add table style.
+    KoTableStyle *tableStyle = new KoTableStyle();
+    QSignalSpy addSignalSpy(m_styleManager, SIGNAL(styleAdded(KoTableStyle*)));
+    m_styleManager->beginEdit();
+    m_styleManager->add(tableStyle);
+    m_styleManager->endEdit();
+    QCOMPARE(m_styleManager->tableStyles().count(tableStyle), 1);
+    QCOMPARE(addSignalSpy.count(), 1);
+    QCOMPARE(addSignalSpy.at(0).at(0).value<KoTableStyle *>(), tableStyle);
+
+    // Remove table style.
+    QSignalSpy removeSignalSpy(m_styleManager, SIGNAL(styleRemoved(KoTableStyle*)));
+    m_styleManager->beginEdit();
+    m_styleManager->remove(tableStyle);
+    m_styleManager->endEdit();
+    QVERIFY(!m_styleManager->tableStyles().contains(tableStyle));
+    QCOMPARE(removeSignalSpy.count(), 1);
+    QCOMPARE(removeSignalSpy.at(0).at(0).value<KoTableStyle *>(), tableStyle);
+}
+
+void TestStyleManager::testAddRemoveTableColumnStyle()
+{
+    // Add table column style.
+    KoTableColumnStyle *tableColumnStyle = new KoTableColumnStyle();
+    QSignalSpy addSignalSpy(m_styleManager, SIGNAL(styleAdded(KoTableColumnStyle*)));
+    m_styleManager->beginEdit();
+    m_styleManager->add(tableColumnStyle);
+    m_styleManager->endEdit();
+    QCOMPARE(m_styleManager->tableColumnStyles().count(tableColumnStyle), 1);
+    QCOMPARE(addSignalSpy.count(), 1);
+    QCOMPARE(addSignalSpy.at(0).at(0).value<KoTableColumnStyle *>(), tableColumnStyle);
+
+    // Remove table column style.
+    QSignalSpy removeSignalSpy(m_styleManager, SIGNAL(styleRemoved(KoTableColumnStyle*)));
+    m_styleManager->beginEdit();
+    m_styleManager->remove(tableColumnStyle);
+    m_styleManager->endEdit();
+    QVERIFY(!m_styleManager->tableColumnStyles().contains(tableColumnStyle));
+    QCOMPARE(removeSignalSpy.count(), 1);
+    QCOMPARE(removeSignalSpy.at(0).at(0).value<KoTableColumnStyle *>(), tableColumnStyle);
+}
+
+void TestStyleManager::testAddRemoveTableRowStyle()
+{
+    // Add table row style.
+    KoTableRowStyle *tableRowStyle = new KoTableRowStyle();
+    QSignalSpy addSignalSpy(m_styleManager, SIGNAL(styleAdded(KoTableRowStyle*)));
+    m_styleManager->beginEdit();
+    m_styleManager->add(tableRowStyle);
+    m_styleManager->endEdit();
+    QCOMPARE(m_styleManager->tableRowStyles().count(tableRowStyle), 1);
+    QCOMPARE(addSignalSpy.count(), 1);
+    QCOMPARE(addSignalSpy.at(0).at(0).value<KoTableRowStyle *>(), tableRowStyle);
+
+    // Remove table row style.
+    QSignalSpy removeSignalSpy(m_styleManager, SIGNAL(styleRemoved(KoTableRowStyle*)));
+    m_styleManager->beginEdit();
+    m_styleManager->remove(tableRowStyle);
+    m_styleManager->endEdit();
+    QVERIFY(!m_styleManager->tableRowStyles().contains(tableRowStyle));
+    QCOMPARE(removeSignalSpy.count(), 1);
+    QCOMPARE(removeSignalSpy.at(0).at(0).value<KoTableRowStyle *>(), tableRowStyle);
+}
+
+void TestStyleManager::testAddRemoveTableCellStyle()
+{
+    // Add table cell style.
+    KoTableCellStyle *tableCellStyle = new KoTableCellStyle();
+    QSignalSpy addSignalSpy(m_styleManager, SIGNAL(styleAdded(KoTableCellStyle*)));
+    m_styleManager->beginEdit();
+    m_styleManager->add(tableCellStyle);
+    m_styleManager->endEdit();
+    QCOMPARE(m_styleManager->tableCellStyles().count(tableCellStyle), 1);
+    QCOMPARE(addSignalSpy.count(), 1);
+    QCOMPARE(addSignalSpy.at(0).at(0).value<KoTableCellStyle *>(), tableCellStyle);
+
+    // Remove table cell style.
+    QSignalSpy removeSignalSpy(m_styleManager, SIGNAL(styleRemoved(KoTableCellStyle*)));
+    m_styleManager->beginEdit();
+    m_styleManager->remove(tableCellStyle);
+    m_styleManager->endEdit();
+    QVERIFY(!m_styleManager->tableCellStyles().contains(tableCellStyle));
+    QCOMPARE(removeSignalSpy.count(), 1);
+    QCOMPARE(removeSignalSpy.at(0).at(0).value<KoTableCellStyle *>(), tableCellStyle);
+}
+
+void TestStyleManager::testAddRemoveSectionStyle()
+{
+    // Add section style.
+    KoSectionStyle *sectionStyle = new KoSectionStyle();
+    QSignalSpy addSignalSpy(m_styleManager, SIGNAL(styleAdded(KoSectionStyle*)));
+    m_styleManager->beginEdit();
+    m_styleManager->add(sectionStyle);
+    m_styleManager->endEdit();
+    QCOMPARE(m_styleManager->sectionStyles().count(sectionStyle), 1);
+    QCOMPARE(addSignalSpy.count(), 1);
+    QCOMPARE(addSignalSpy.at(0).at(0).value<KoSectionStyle *>(), sectionStyle);
+
+    // Remove section style.
+    QSignalSpy removeSignalSpy(m_styleManager, SIGNAL(styleRemoved(KoSectionStyle*)));
+    m_styleManager->beginEdit();
+    m_styleManager->remove(sectionStyle);
+    m_styleManager->endEdit();
+    QVERIFY(!m_styleManager->sectionStyles().contains(sectionStyle));
+    QCOMPARE(removeSignalSpy.count(), 1);
+    QCOMPARE(removeSignalSpy.at(0).at(0).value<KoSectionStyle *>(), sectionStyle);
+}
+
+void TestStyleManager::cleanup()
+{
+    delete m_styleManager;
+    delete m_koDoc;
+    delete m_doc;
+}
+
+QTEST_MAIN(TestStyleManager)
+#include <TestStyleManager.moc>

@@ -68,6 +68,7 @@ void TestStyleManager::testAddRemoveCharacterStyle()
     m_styleManager->add(&characterStyle);
     m_styleManager->endEdit();
     QVERIFY(characterStyle.styleId() > 0);
+    QVERIFY(!m_styleManager->usedCharacterStyles().contains(characterStyle.styleId()));
     QCOMPARE(m_styleManager->characterStyles().count(&characterStyle), 1);
     QCOMPARE(m_styleManager->characterStyle(characterStyle.styleId()), &characterStyle);
     QCOMPARE(m_styleManager->characterStyle("Test Character Style"), &characterStyle);
@@ -96,6 +97,7 @@ void TestStyleManager::testAddRemoveParagraphStyle()
     m_styleManager->add(&paragraphStyle);
     m_styleManager->endEdit();
     QVERIFY(paragraphStyle.styleId() > 0);
+    QVERIFY(!m_styleManager->usedParagraphStyles().contains(paragraphStyle.styleId()));
     QCOMPARE(m_styleManager->paragraphStyles().count(&paragraphStyle), 1);
     QCOMPARE(m_styleManager->paragraphStyle(paragraphStyle.styleId()), &paragraphStyle);
     QCOMPARE(m_styleManager->paragraphStyle("Test Paragraph Style"), &paragraphStyle);

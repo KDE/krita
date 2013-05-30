@@ -316,7 +316,7 @@ void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProf
 void KisOpenGLImageTextures::getTextureSize(KisGLTexturesInfo *texturesInfo)
 {
     // TODO: make configurable
-    const GLint preferredTextureSize = 1024;
+    const GLint preferredTextureSize = 256;
 
     GLint maxTextureSize;
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);

@@ -22,13 +22,11 @@
 
 #include <QObject>
 #include <krita_export.h>
+#include <kis_types.h>
 
-class KAction;
 class KisView2;
 class KisDoc2;
-class KisFilter;
 class KActionCollection;
-class KisFilterHandler;
 
 /**
  * Create all the filter actions for the specified view and implement re-apply filter
@@ -45,11 +43,17 @@ public:
 
     void setup(KActionCollection * ac);
     void updateGUI();
-    void setLastFilterHandler(KisFilterHandler* handler);
+
+    void apply(KisSafeFilterConfigurationSP filterConfig);
+    void finish();
+    void cancel();
+    bool isStrokeRunning() const;
 
 private slots:
 
-    void insertFilter(const QString & name);
+    void insertFilter(const QString &name);
+    void showFilterDialog(const QString &filterId);
+    void reapplyLastFilter();
 
 private:
     struct Private;

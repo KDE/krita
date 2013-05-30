@@ -38,37 +38,6 @@
      </widget>
      <widget class="QWidget" name="layoutWidget">
       <layout class="QGridLayout">
-       <item row="0" column="0" colspan="3">
-        <widget class="QLabel" name="m_previewLabel">
-         <property name="text">
-          <string/>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0" colspan="3">
-        <widget class="QLabel" name="m_titleLabel">
-         <property name="font">
-          <font>
-           <family>Sans Serif</family>
-           <pointsize>9</pointsize>
-           <weight>75</weight>
-           <italic>false</italic>
-           <bold>true</bold>
-           <underline>false</underline>
-           <strikeout>false</strikeout>
-          </font>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="0">
         <spacer>
          <property name="orientation">
@@ -134,37 +103,36 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="2">
-        <widget class="KPushButton" name="m_openButton">
-         <property name="enabled">
-          <bool>false</bool>
+       <item row="0" column="0" colspan="3">
+        <widget class="QLabel" name="m_previewLabel">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="3">
+        <widget class="QLabel" name="m_titleLabel">
+         <property name="font">
+          <font>
+           <family>Sans Serif</family>
+           <pointsize>9</pointsize>
+           <weight>75</weight>
+           <italic>false</italic>
+           <bold>true</bold>
+           <underline>false</underline>
+           <strikeout>false</strikeout>
+          </font>
          </property>
          <property name="text">
           <string/>
          </property>
-         <property name="autoDefault">
-          <bool>true</bool>
-         </property>
-         <property name="default">
-          <bool>true</bool>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
          </property>
         </widget>
-       </item>
-       <item row="6" column="1">
-        <spacer>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Expanding</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>461</width>
-           <height>26</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </widget>
@@ -173,11 +141,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>KPushButton</class>
-   <extends>QPushButton</extends>
-   <header>kpushbutton.h</header>
-  </customwidget>
   <customwidget>
    <class>KTextBrowser</class>
    <extends>QTextBrowser</extends>

@@ -18,7 +18,7 @@
 */
 
 #include "KoFileDialog.h"
-
+#include <QDebug>
 #include <kmimetype.h>
 
 const QString KoFileDialog::getNameFilters(const QStringList &mimeFilter)
@@ -28,7 +28,7 @@ const QString KoFileDialog::getNameFilters(const QStringList &mimeFilter)
         KMimeType::Ptr type = KMimeType::mimeType( *it );
         if(!type)
             continue;
-        filter.append(type->comment() + " ( ");
+        filter.append(type->comment() + " (");
         QStringList patterns = type->patterns();
         QStringList::ConstIterator jt;
         for (jt = patterns.begin(); jt != patterns.end(); ++jt)
@@ -37,6 +37,7 @@ const QString KoFileDialog::getNameFilters(const QStringList &mimeFilter)
     }
     filter.chop(2);
 
+    qDebug() << "nameFilters: " + filter;
     return filter;
 }
 

@@ -930,8 +930,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
         KUrl newURL(saveDialog.getSaveFileName(this,
                                                isExporting() && !d->lastExportUrl.isEmpty() ?
                                                    d->lastExportUrl.url() : suggestedURL.url(),
-                                               isExporting() ?
-                                                   i18n("Export Document As") : i18n("Save Document As"),
+                                               i18n("untitled"),
                                                KoFileDialog::getNameFilters(mimeFilter)));
 
         KMimeType::Ptr mime = KMimeType::findByUrl(newURL);
@@ -1252,17 +1251,18 @@ void KoMainWindow::slotFileOpen()
                                                                KoFilterManager::Import,
                                                                KoServiceProvider::readExtraNativeMimeTypes());
     QString url;
+    QString nameFilters = KoFileDialog::getNameFilters(mimeFilter);
     if (!isImporting()) {
         url = QFileDialog::getOpenFileName(this,
                                            i18n("Open Document"),
                                            "",
-                                           KoFileDialog::getNameFilters(mimeFilter));
+                                           nameFilters);
     } else {
         KoFileDialog importDialog;
         url = importDialog.getOpenFileName(this,
                                            i18n("Import Document"),
                                            "",
-                                           KoFileDialog::getNameFilters(mimeFilter));
+                                           nameFilters);
     }
 
     if (url.isEmpty())

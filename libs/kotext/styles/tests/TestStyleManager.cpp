@@ -62,11 +62,14 @@ void TestStyleManager::testAddRemoveCharacterStyle()
 {
     // Add character style.
     KoCharacterStyle *characterStyle = new KoCharacterStyle();
+    characterStyle->setName("Test Character Style");
     QSignalSpy addSignalSpy(m_styleManager, SIGNAL(styleAdded(KoCharacterStyle*)));
     m_styleManager->beginEdit();
     m_styleManager->add(characterStyle);
     m_styleManager->endEdit();
     QCOMPARE(m_styleManager->characterStyles().count(characterStyle), 1);
+    QCOMPARE(m_styleManager->characterStyle(characterStyle->styleId()), characterStyle);
+    QCOMPARE(m_styleManager->characterStyle("Test Character Style"), characterStyle);
     QCOMPARE(addSignalSpy.count(), 1);
     QCOMPARE(addSignalSpy.at(0).at(0).value<KoCharacterStyle *>(), characterStyle);
 
@@ -76,6 +79,8 @@ void TestStyleManager::testAddRemoveCharacterStyle()
     m_styleManager->remove(characterStyle);
     m_styleManager->endEdit();
     QVERIFY(!m_styleManager->characterStyles().contains(characterStyle));
+    QVERIFY(!m_styleManager->characterStyle(characterStyle->styleId()));
+    QVERIFY(!m_styleManager->characterStyle("Test Character Style"));
     QCOMPARE(removeSignalSpy.count(), 1);
     QCOMPARE(removeSignalSpy.at(0).at(0).value<KoCharacterStyle *>(), characterStyle);
 }
@@ -84,11 +89,14 @@ void TestStyleManager::testAddRemoveParagraphStyle()
 {
     // Add paragraph style.
     KoParagraphStyle *paragraphStyle = new KoParagraphStyle();
+    paragraphStyle->setName("Test Paragraph Style");
     QSignalSpy addSignalSpy(m_styleManager, SIGNAL(styleAdded(KoParagraphStyle*)));
     m_styleManager->beginEdit();
     m_styleManager->add(paragraphStyle);
     m_styleManager->endEdit();
     QCOMPARE(m_styleManager->paragraphStyles().count(paragraphStyle), 1);
+    QCOMPARE(m_styleManager->paragraphStyle(paragraphStyle->styleId()), paragraphStyle);
+    QCOMPARE(m_styleManager->paragraphStyle("Test Paragraph Style"), paragraphStyle);
     QCOMPARE(addSignalSpy.count(), 1);
     QCOMPARE(addSignalSpy.at(0).at(0).value<KoParagraphStyle *>(), paragraphStyle);
 
@@ -98,6 +106,8 @@ void TestStyleManager::testAddRemoveParagraphStyle()
     m_styleManager->remove(paragraphStyle);
     m_styleManager->endEdit();
     QVERIFY(!m_styleManager->paragraphStyles().contains(paragraphStyle));
+    QVERIFY(!m_styleManager->paragraphStyle(paragraphStyle->styleId()));
+    QVERIFY(!m_styleManager->paragraphStyle("Test Paragraph Style"));
     QCOMPARE(removeSignalSpy.count(), 1);
     QCOMPARE(removeSignalSpy.at(0).at(0).value<KoParagraphStyle *>(), paragraphStyle);
 }
@@ -106,11 +116,14 @@ void TestStyleManager::testAddRemoveListStyle()
 {
     // Add list style.
     KoListStyle *listStyle = new KoListStyle();
+    listStyle->setName("Test List Style");
     QSignalSpy addSignalSpy(m_styleManager, SIGNAL(styleAdded(KoListStyle*)));
     m_styleManager->beginEdit();
     m_styleManager->add(listStyle);
     m_styleManager->endEdit();
     QCOMPARE(m_styleManager->listStyles().count(listStyle), 1);
+    QCOMPARE(m_styleManager->listStyle(listStyle->styleId()), listStyle);
+    QCOMPARE(m_styleManager->listStyle("Test List Style"), listStyle);
     QCOMPARE(addSignalSpy.count(), 1);
     QCOMPARE(addSignalSpy.at(0).at(0).value<KoListStyle *>(), listStyle);
 
@@ -120,6 +133,8 @@ void TestStyleManager::testAddRemoveListStyle()
     m_styleManager->remove(listStyle);
     m_styleManager->endEdit();
     QVERIFY(!m_styleManager->listStyles().contains(listStyle));
+    QVERIFY(!m_styleManager->listStyle(listStyle->styleId()));
+    QVERIFY(!m_styleManager->listStyle("Test List Style"));
     QCOMPARE(removeSignalSpy.count(), 1);
     QCOMPARE(removeSignalSpy.at(0).at(0).value<KoListStyle *>(), listStyle);
 }
@@ -128,11 +143,14 @@ void TestStyleManager::testAddRemoveTableStyle()
 {
     // Add table style.
     KoTableStyle *tableStyle = new KoTableStyle();
+    tableStyle->setName("Test Table Style");
     QSignalSpy addSignalSpy(m_styleManager, SIGNAL(styleAdded(KoTableStyle*)));
     m_styleManager->beginEdit();
     m_styleManager->add(tableStyle);
     m_styleManager->endEdit();
     QCOMPARE(m_styleManager->tableStyles().count(tableStyle), 1);
+    QCOMPARE(m_styleManager->tableStyle(tableStyle->styleId()), tableStyle);
+    QCOMPARE(m_styleManager->tableStyle("Test Table Style"), tableStyle);
     QCOMPARE(addSignalSpy.count(), 1);
     QCOMPARE(addSignalSpy.at(0).at(0).value<KoTableStyle *>(), tableStyle);
 
@@ -142,6 +160,8 @@ void TestStyleManager::testAddRemoveTableStyle()
     m_styleManager->remove(tableStyle);
     m_styleManager->endEdit();
     QVERIFY(!m_styleManager->tableStyles().contains(tableStyle));
+    QVERIFY(!m_styleManager->tableStyle(tableStyle->styleId()));
+    QVERIFY(!m_styleManager->tableStyle("Test Table Style"));
     QCOMPARE(removeSignalSpy.count(), 1);
     QCOMPARE(removeSignalSpy.at(0).at(0).value<KoTableStyle *>(), tableStyle);
 }
@@ -150,11 +170,14 @@ void TestStyleManager::testAddRemoveTableColumnStyle()
 {
     // Add table column style.
     KoTableColumnStyle *tableColumnStyle = new KoTableColumnStyle();
+    tableColumnStyle->setName("Test Table Column Style");
     QSignalSpy addSignalSpy(m_styleManager, SIGNAL(styleAdded(KoTableColumnStyle*)));
     m_styleManager->beginEdit();
     m_styleManager->add(tableColumnStyle);
     m_styleManager->endEdit();
     QCOMPARE(m_styleManager->tableColumnStyles().count(tableColumnStyle), 1);
+    QCOMPARE(m_styleManager->tableColumnStyle(tableColumnStyle->styleId()), tableColumnStyle);
+    QCOMPARE(m_styleManager->tableColumnStyle("Test Table Column Style"), tableColumnStyle);
     QCOMPARE(addSignalSpy.count(), 1);
     QCOMPARE(addSignalSpy.at(0).at(0).value<KoTableColumnStyle *>(), tableColumnStyle);
 
@@ -164,6 +187,8 @@ void TestStyleManager::testAddRemoveTableColumnStyle()
     m_styleManager->remove(tableColumnStyle);
     m_styleManager->endEdit();
     QVERIFY(!m_styleManager->tableColumnStyles().contains(tableColumnStyle));
+    QVERIFY(!m_styleManager->tableColumnStyle(tableColumnStyle->styleId()));
+    QVERIFY(!m_styleManager->tableColumnStyle("Test Table Column Style"));
     QCOMPARE(removeSignalSpy.count(), 1);
     QCOMPARE(removeSignalSpy.at(0).at(0).value<KoTableColumnStyle *>(), tableColumnStyle);
 }
@@ -172,11 +197,14 @@ void TestStyleManager::testAddRemoveTableRowStyle()
 {
     // Add table row style.
     KoTableRowStyle *tableRowStyle = new KoTableRowStyle();
+    tableRowStyle->setName("Test Table Row Style");
     QSignalSpy addSignalSpy(m_styleManager, SIGNAL(styleAdded(KoTableRowStyle*)));
     m_styleManager->beginEdit();
     m_styleManager->add(tableRowStyle);
     m_styleManager->endEdit();
     QCOMPARE(m_styleManager->tableRowStyles().count(tableRowStyle), 1);
+    QCOMPARE(m_styleManager->tableRowStyle(tableRowStyle->styleId()), tableRowStyle);
+    QCOMPARE(m_styleManager->tableRowStyle("Test Table Row Style"), tableRowStyle);
     QCOMPARE(addSignalSpy.count(), 1);
     QCOMPARE(addSignalSpy.at(0).at(0).value<KoTableRowStyle *>(), tableRowStyle);
 
@@ -186,6 +214,8 @@ void TestStyleManager::testAddRemoveTableRowStyle()
     m_styleManager->remove(tableRowStyle);
     m_styleManager->endEdit();
     QVERIFY(!m_styleManager->tableRowStyles().contains(tableRowStyle));
+    QVERIFY(!m_styleManager->tableRowStyle(tableRowStyle->styleId()));
+    QVERIFY(!m_styleManager->tableRowStyle("Test Table Row Style"));
     QCOMPARE(removeSignalSpy.count(), 1);
     QCOMPARE(removeSignalSpy.at(0).at(0).value<KoTableRowStyle *>(), tableRowStyle);
 }
@@ -194,11 +224,14 @@ void TestStyleManager::testAddRemoveTableCellStyle()
 {
     // Add table cell style.
     KoTableCellStyle *tableCellStyle = new KoTableCellStyle();
+    tableCellStyle->setName("Test Table Cell Style");
     QSignalSpy addSignalSpy(m_styleManager, SIGNAL(styleAdded(KoTableCellStyle*)));
     m_styleManager->beginEdit();
     m_styleManager->add(tableCellStyle);
     m_styleManager->endEdit();
     QCOMPARE(m_styleManager->tableCellStyles().count(tableCellStyle), 1);
+    QCOMPARE(m_styleManager->tableCellStyle(tableCellStyle->styleId()), tableCellStyle);
+    QCOMPARE(m_styleManager->tableCellStyle("Test Table Cell Style"), tableCellStyle);
     QCOMPARE(addSignalSpy.count(), 1);
     QCOMPARE(addSignalSpy.at(0).at(0).value<KoTableCellStyle *>(), tableCellStyle);
 
@@ -208,6 +241,8 @@ void TestStyleManager::testAddRemoveTableCellStyle()
     m_styleManager->remove(tableCellStyle);
     m_styleManager->endEdit();
     QVERIFY(!m_styleManager->tableCellStyles().contains(tableCellStyle));
+    QVERIFY(!m_styleManager->tableCellStyle(tableCellStyle->styleId()));
+    QVERIFY(!m_styleManager->tableCellStyle("Test Table Cell Style"));
     QCOMPARE(removeSignalSpy.count(), 1);
     QCOMPARE(removeSignalSpy.at(0).at(0).value<KoTableCellStyle *>(), tableCellStyle);
 }
@@ -216,11 +251,14 @@ void TestStyleManager::testAddRemoveSectionStyle()
 {
     // Add section style.
     KoSectionStyle *sectionStyle = new KoSectionStyle();
+    sectionStyle->setName("Test Section Style");
     QSignalSpy addSignalSpy(m_styleManager, SIGNAL(styleAdded(KoSectionStyle*)));
     m_styleManager->beginEdit();
     m_styleManager->add(sectionStyle);
     m_styleManager->endEdit();
     QCOMPARE(m_styleManager->sectionStyles().count(sectionStyle), 1);
+    QCOMPARE(m_styleManager->sectionStyle(sectionStyle->styleId()), sectionStyle);
+    QCOMPARE(m_styleManager->sectionStyle("Test Section Style"), sectionStyle);
     QCOMPARE(addSignalSpy.count(), 1);
     QCOMPARE(addSignalSpy.at(0).at(0).value<KoSectionStyle *>(), sectionStyle);
 
@@ -230,6 +268,8 @@ void TestStyleManager::testAddRemoveSectionStyle()
     m_styleManager->remove(sectionStyle);
     m_styleManager->endEdit();
     QVERIFY(!m_styleManager->sectionStyles().contains(sectionStyle));
+    QVERIFY(!m_styleManager->sectionStyle(sectionStyle->styleId()));
+    QVERIFY(!m_styleManager->sectionStyle("Test Section Style"));
     QCOMPARE(removeSignalSpy.count(), 1);
     QCOMPARE(removeSignalSpy.at(0).at(0).value<KoSectionStyle *>(), sectionStyle);
 }

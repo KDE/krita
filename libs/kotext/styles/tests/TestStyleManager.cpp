@@ -67,6 +67,7 @@ void TestStyleManager::testAddRemoveCharacterStyle()
     m_styleManager->beginEdit();
     m_styleManager->add(characterStyle);
     m_styleManager->endEdit();
+    QVERIFY(characterStyle->styleId() > 0);
     QCOMPARE(m_styleManager->characterStyles().count(characterStyle), 1);
     QCOMPARE(m_styleManager->characterStyle(characterStyle->styleId()), characterStyle);
     QCOMPARE(m_styleManager->characterStyle("Test Character Style"), characterStyle);
@@ -94,6 +95,7 @@ void TestStyleManager::testAddRemoveParagraphStyle()
     m_styleManager->beginEdit();
     m_styleManager->add(paragraphStyle);
     m_styleManager->endEdit();
+    QVERIFY(paragraphStyle->styleId() > 0);
     QCOMPARE(m_styleManager->paragraphStyles().count(paragraphStyle), 1);
     QCOMPARE(m_styleManager->paragraphStyle(paragraphStyle->styleId()), paragraphStyle);
     QCOMPARE(m_styleManager->paragraphStyle("Test Paragraph Style"), paragraphStyle);
@@ -121,6 +123,7 @@ void TestStyleManager::testAddRemoveListStyle()
     m_styleManager->beginEdit();
     m_styleManager->add(listStyle);
     m_styleManager->endEdit();
+    QVERIFY(listStyle->styleId() > 0);
     QCOMPARE(m_styleManager->listStyles().count(listStyle), 1);
     QCOMPARE(m_styleManager->listStyle(listStyle->styleId()), listStyle);
     QCOMPARE(m_styleManager->listStyle("Test List Style"), listStyle);
@@ -148,6 +151,7 @@ void TestStyleManager::testAddRemoveTableStyle()
     m_styleManager->beginEdit();
     m_styleManager->add(tableStyle);
     m_styleManager->endEdit();
+    QVERIFY(tableStyle->styleId() > 0);
     QCOMPARE(m_styleManager->tableStyles().count(tableStyle), 1);
     QCOMPARE(m_styleManager->tableStyle(tableStyle->styleId()), tableStyle);
     QCOMPARE(m_styleManager->tableStyle("Test Table Style"), tableStyle);
@@ -175,6 +179,7 @@ void TestStyleManager::testAddRemoveTableColumnStyle()
     m_styleManager->beginEdit();
     m_styleManager->add(tableColumnStyle);
     m_styleManager->endEdit();
+    QVERIFY(tableColumnStyle->styleId() > 0);
     QCOMPARE(m_styleManager->tableColumnStyles().count(tableColumnStyle), 1);
     QCOMPARE(m_styleManager->tableColumnStyle(tableColumnStyle->styleId()), tableColumnStyle);
     QCOMPARE(m_styleManager->tableColumnStyle("Test Table Column Style"), tableColumnStyle);
@@ -202,6 +207,7 @@ void TestStyleManager::testAddRemoveTableRowStyle()
     m_styleManager->beginEdit();
     m_styleManager->add(tableRowStyle);
     m_styleManager->endEdit();
+    QVERIFY(tableRowStyle->styleId() > 0);
     QCOMPARE(m_styleManager->tableRowStyles().count(tableRowStyle), 1);
     QCOMPARE(m_styleManager->tableRowStyle(tableRowStyle->styleId()), tableRowStyle);
     QCOMPARE(m_styleManager->tableRowStyle("Test Table Row Style"), tableRowStyle);
@@ -229,6 +235,7 @@ void TestStyleManager::testAddRemoveTableCellStyle()
     m_styleManager->beginEdit();
     m_styleManager->add(tableCellStyle);
     m_styleManager->endEdit();
+    QVERIFY(tableCellStyle->styleId() > 0);
     QCOMPARE(m_styleManager->tableCellStyles().count(tableCellStyle), 1);
     QCOMPARE(m_styleManager->tableCellStyle(tableCellStyle->styleId()), tableCellStyle);
     QCOMPARE(m_styleManager->tableCellStyle("Test Table Cell Style"), tableCellStyle);
@@ -256,6 +263,7 @@ void TestStyleManager::testAddRemoveSectionStyle()
     m_styleManager->beginEdit();
     m_styleManager->add(sectionStyle);
     m_styleManager->endEdit();
+    QVERIFY(sectionStyle->styleId() > 0);
     QCOMPARE(m_styleManager->sectionStyles().count(sectionStyle), 1);
     QCOMPARE(m_styleManager->sectionStyle(sectionStyle->styleId()), sectionStyle);
     QCOMPARE(m_styleManager->sectionStyle("Test Section Style"), sectionStyle);

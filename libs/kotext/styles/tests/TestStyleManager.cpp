@@ -30,6 +30,7 @@
 #include "styles/KoTableStyle.h"
 
 #include <QSignalSpy>
+#include <QTextBlock>
 #include <QTextCursor>
 #include <QTextDocument>
 #include <QVariant>
@@ -38,7 +39,9 @@ void TestStyleManager::initTestCase()
 {
     // Needed to use them in QVariant (for QSignalSpy).
     qRegisterMetaType<KoCharacterStyle *>("KoCharacterStyle *");
+    qRegisterMetaType<const KoCharacterStyle *>("const KoCharacterStyle *");
     qRegisterMetaType<KoParagraphStyle *>("KoParagraphStyle *");
+    qRegisterMetaType<const KoParagraphStyle *>("const KoParagraphStyle *");
     qRegisterMetaType<KoParagraphStyle *>("KoListStyle *");
     qRegisterMetaType<KoTableStyle *>("KoTableStyle *");
     qRegisterMetaType<KoTableColumnStyle *>("KoTableColumnStyle *");
@@ -282,6 +285,76 @@ void TestStyleManager::testAddRemoveSectionStyle()
     QVERIFY(!m_styleManager->sectionStyle("Test Section Style"));
     QCOMPARE(removeSignalSpy.count(), 1);
     QCOMPARE(removeSignalSpy.at(0).at(0).value<KoSectionStyle *>(), &sectionStyle);
+}
+
+void TestStyleManager::testAddAppliedCharacterStyle()
+{
+    // Create style, apply it, then add it to the manager.
+    KoCharacterStyle characterStyle;
+    QTextBlock block = m_doc->begin();
+    characterStyle.applyStyle(block);
+
+    m_styleManager->beginEdit();
+    m_styleManager->add(&characterStyle);
+    m_styleManager->endEdit();
+
+    // Check that style is marked as used.
+    QVERIFY(m_styleManager->usedCharacterStyles().contains(characterStyle.styleId()));
+}
+
+void TestStyleManager::testApplyAddedCharacterStyle()
+{
+    QSignalSpy appliedSignalSpy(m_styleManager, SIGNAL(styleApplied(const KoCharacterStyle*)));
+
+    // Create style, add it to the manager, then apply it.
+    KoCharacterStyle characterStyle;
+
+    m_styleManager->beginEdit();
+    m_styleManager->add(&characterStyle);
+    m_styleManager->endEdit();
+
+    QTextBlock block = m_doc->begin();
+    characterStyle.applyStyle(block);
+
+    // Check that style is marked as used and that the correct signal was emitted.
+    QVERIFY(m_styleManager->usedCharacterStyles().contains(characterStyle.styleId()));
+    QCOMPARE(appliedSignalSpy.count(), 1);
+    QCOMPARE(appliedSignalSpy.at(0).at(0).value<const KoCharacterStyle *>(), &characterStyle);
+}
+
+void TestStyleManager::testAddAppliedParagraphStyle()
+{
+    // Create style, apply it, then add it to the manager.
+    KoParagraphStyle paragraphStyle;
+    QTextBlock block = m_doc->begin();
+    paragraphStyle.applyStyle(block);
+
+    m_styleManager->beginEdit();
+    m_styleManager->add(&paragraphStyle);
+    m_styleManager->endEdit();
+
+    // Check that style is marked as used.
+    QVERIFY(m_styleManager->usedParagraphStyles().contains(paragraphStyle.styleId()));
+}
+
+void TestStyleManager::testApplyAddedParagraphStyle()
+{
+    QSignalSpy appliedSignalSpy(m_styleManager, SIGNAL(styleApplied(const KoParagraphStyle*)));
+
+    // Create style, add it to the manager, then apply it.
+    KoParagraphStyle paragraphStyle;
+
+    m_styleManager->beginEdit();
+    m_styleManager->add(&paragraphStyle);
+    m_styleManager->endEdit();
+
+    QTextBlock block = m_doc->begin();
+    paragraphStyle.applyStyle(block);
+
+    // Check that style is marked as used and that the correct signal was emitted.
+    QVERIFY(m_styleManager->usedParagraphStyles().contains(paragraphStyle.styleId()));
+    QCOMPARE(appliedSignalSpy.count(), 1);
+    QCOMPARE(appliedSignalSpy.at(0).at(0).value<const KoParagraphStyle *>(), &paragraphStyle);
 }
 
 void TestStyleManager::cleanup()

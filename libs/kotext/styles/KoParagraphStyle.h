@@ -747,6 +747,7 @@ private:
     Private * const d;
 };
 Q_DECLARE_METATYPE(KoParagraphStyle *)
+Q_DECLARE_METATYPE(const KoParagraphStyle *)
 Q_DECLARE_METATYPE(KoListStyle *)
 Q_DECLARE_METATYPE(QSharedPointer<KoParagraphStyle>)
 #endif

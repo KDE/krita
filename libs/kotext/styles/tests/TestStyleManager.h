@@ -42,6 +42,10 @@ private slots:
     void testAddRemoveTableRowStyle();
     void testAddRemoveTableCellStyle();
     void testAddRemoveSectionStyle();
+    void testAddAppliedCharacterStyle();
+    void testApplyAddedCharacterStyle();
+    void testAddAppliedParagraphStyle();
+    void testApplyAddedParagraphStyle();
     void cleanup();
 
 private:

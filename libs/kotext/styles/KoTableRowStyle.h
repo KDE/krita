@@ -185,4 +185,6 @@ private:
     QSharedDataPointer<Private> d;
 };
 
+Q_DECLARE_METATYPE(KoTableRowStyle *)
+
 #endif

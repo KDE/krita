@@ -97,7 +97,7 @@ void KisImageFromClipboard::createImage()
     if (image && image->root() && image->root()->firstChild()) {
         KisLayer * layer = dynamic_cast<KisLayer*>(image->root()->firstChild().data());
 
-        KisPaintDeviceSP clip = KisClipboard::instance()->clip(QRect());
+        KisPaintDeviceSP clip = KisClipboard::instance()->clip(QRect(), true);
         if (clip) {
             QRect r = clip->exactBounds();
             KisPainter painter;

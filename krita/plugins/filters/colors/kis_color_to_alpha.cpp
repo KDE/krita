@@ -102,11 +102,11 @@ void applyToIterator(const int numChannels, const int *channelIndex,
     } while(it->nextPixel());
 }
 
-void KisFilterColorToAlpha::process(KisPaintDeviceSP device,
-                                    const QRect& rect,
-                                    const KisFilterConfiguration* config,
-                                    KoUpdater* progressUpdater
-                                   ) const
+void KisFilterColorToAlpha::processImpl(KisPaintDeviceSP device,
+                                        const QRect& rect,
+                                        const KisFilterConfiguration* config,
+                                        KoUpdater* progressUpdater
+                                        ) const
 {
     Q_ASSERT(device != 0);
 

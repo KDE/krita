@@ -34,10 +34,10 @@ public:
 public:
     using KisFilter::process;
 
-    void process(KisPaintDeviceSP device,
-                 const QRect& applyRect,
-                 const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater) const;
+    void processImpl(KisPaintDeviceSP device,
+                     const QRect& applyRect,
+                     const KisFilterConfiguration* config,
+                     KoUpdater* progressUpdater) const;
     virtual int overlapMarginNeeded(const KisFilterConfiguration* c) const;
 protected:
     void setIgnoreAlpha(bool v);

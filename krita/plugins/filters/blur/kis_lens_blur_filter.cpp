@@ -65,11 +65,11 @@ KisFilterConfiguration* KisLensBlurFilter::factoryConfiguration(const KisPaintDe
     return config;
 }
 
-void KisLensBlurFilter::process(KisPaintDeviceSP device,
-                            const QRect& rect,
-                            const KisFilterConfiguration* config,
-                            KoUpdater* progressUpdater
-                           ) const
+void KisLensBlurFilter::processImpl(KisPaintDeviceSP device,
+                                    const QRect& rect,
+                                    const KisFilterConfiguration* config,
+                                    KoUpdater* progressUpdater
+                                    ) const
 {
     QPoint srcTopLeft = rect.topLeft();
 

@@ -104,6 +104,7 @@ private slots:
     void setStackCurrentIndex(const QModelIndex &index);
 
 private:
+    bool m_blockOutgoingHistoryChange;
     KUndo2QStack *m_stack;
     QItemSelectionModel *m_sel_model;
     QString m_empty_label;

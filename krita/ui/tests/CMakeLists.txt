@@ -106,6 +106,12 @@ target_link_libraries(FreehandStrokeTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage
 
 ########### next target ###############
 
+set(filter_stroke_test_SRCS filter_stroke_test.cpp ../../sdk/tests/stroke_testing_utils.cpp)
+kde4_add_unit_test(FilterStrokeTest TESTNAME krita-ui-FilterStrokeTest  ${filter_stroke_test_SRCS})
+target_link_libraries(FilterStrokeTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
 set(kis_selection_manager_test_SRCS kis_selection_manager_test.cpp)
 kde4_add_unit_test(KisSelectionManagerTest TESTNAME krita-ui-KisSelectionManagerTest  ${kis_selection_manager_test_SRCS})
 target_link_libraries(KisSelectionManagerTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
@@ -165,18 +171,4 @@ target_link_libraries(KisFlipbookTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${
 set(kis_action_manager_test_SRCS kis_action_manager_test.cpp )
 kde4_add_unit_test(KisActionManagerTest TESTNAME krita-ui-KisActionManagerTest  ${kis_action_manager_test_SRCS})
 target_link_libraries(KisActionManagerTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
-set(kis_filter_job_test_SRCS kis_filter_job_test.cpp )
-kde4_add_unit_test(KisFilterJobTest TESTNAME krita-ui-KisFilterJobTest ${kis_filter_job_test_SRCS})
-target_link_libraries(KisFilterJobTest  ${KDE4_KDEUI_LIBS} kritaui ${QT_QTTEST_LIBRARY})
-
-
-########### next target ###############
-
-set(kis_threaded_applicator_test_SRCS kis_threaded_applicator_test.cpp )
-kde4_add_unit_test(KisThreadedApplicatorTest TESTNAME krita-ui-KisThreadedApplicatorTest ${kis_threaded_applicator_test_SRCS})
-target_link_libraries(KisThreadedApplicatorTest  ${KDE4_KDEUI_LIBS} ${KDE4_THREADWEAVER_LIBRARY} kritaui ${QT_QTTEST_LIBRARY})
-
 

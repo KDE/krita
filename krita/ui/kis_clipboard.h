@@ -62,13 +62,12 @@ public:
     /**
      * Get the contents of the clipboard in the form of a paint device.
      */
-    KisPaintDeviceSP clip(const QRect &imageBounds);
+    KisPaintDeviceSP clip(const QRect &imageBounds, bool showPopup);
 
     bool hasClip();
 
     QSize clipSize();
 
-    void assumePasteFromWeb(bool pasteFromWeb);
 
 private slots:
 
@@ -82,8 +81,6 @@ private:
     bool m_hasClip;
 
     bool m_pushedClipboard;
-
-    bool m_pasteFromWeb;
 
 signals:
     void clipChanged();

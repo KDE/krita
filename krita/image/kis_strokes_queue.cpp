@@ -157,7 +157,17 @@ bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning)
     KisStrokeSP stroke = m_d->strokesQueue.head();
     bool result = false;
 
-    if(!stroke->isInitialized()) {
+    /**
+     * The stroke may be cancelled very fast. In this case it will
+     * end up in the state:
+     *
+     * !stroke->isInitialized() && stroke->isEnded() && !stroke->hasJobs()
+     *
+     * This means that !isInitialised() doesn't imply there are any
+     * jobs present.
+     */
+
+    if(!stroke->isInitialized() && stroke->hasJobs()) {
         m_d->needsExclusiveAccess = stroke->isExclusive();
         result = true;
     }

@@ -28,6 +28,14 @@
 class KoColorSpace;
 class KoColorTransformation;
 
+class ColorsFilters : public QObject
+{
+    Q_OBJECT
+public:
+    ColorsFilters(QObject *parent, const QVariantList &);
+    virtual ~ColorsFilters();
+};
+
 class KisAutoContrast : public KisFilter
 {
 public:

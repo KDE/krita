@@ -61,6 +61,28 @@
 #include <KoCompositeOp.h>
 #include <kis_iterator_ng.h>
 
+K_PLUGIN_FACTORY(ColorsFiltersFactory, registerPlugin<ColorsFilters>();)
+K_EXPORT_PLUGIN(ColorsFiltersFactory("krita"))
+
+ColorsFilters::ColorsFilters(QObject *parent, const QVariantList &)
+        : QObject(parent)
+{
+    KisFilterRegistry * manager = KisFilterRegistry::instance();
+    manager->add(new KisBrightnessContrastFilter());
+    manager->add(new KisAutoContrast());
+    manager->add(new KisPerChannelFilter());
+    manager->add(new KisDesaturateFilter());
+    manager->add(new KisHSVAdjustmentFilter());
+
+}
+
+ColorsFilters::~ColorsFilters()
+{
+}
+
+
+//==================================================================
+
 
 KisAutoContrast::KisAutoContrast() : KisFilter(id(), categoryAdjust(), i18n("&Auto Contrast"))
 {

@@ -38,7 +38,6 @@
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
 
-#ifndef METAPLUGIN
 K_PLUGIN_FACTORY(KritaExampleFactory, registerPlugin<KritaExample>();)
 K_EXPORT_PLUGIN(KritaExampleFactory("krita"))
 
@@ -51,7 +50,6 @@ KritaExample::KritaExample(QObject *parent, const QVariantList &)
 KritaExample::~KritaExample()
 {
 }
-#endif
 
 KisFilterInvert::KisFilterInvert() : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Invert"))
 {

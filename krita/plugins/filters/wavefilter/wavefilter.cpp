@@ -50,20 +50,8 @@
 #include "ui_wdgwaveoptions.h"
 #include <kis_iterator_ng.h>
 
-#ifndef METAFILTERS
 K_PLUGIN_FACTORY(KritaWaveFilterFactory, registerPlugin<KritaWaveFilter>();)
 K_EXPORT_PLUGIN(KritaWaveFilterFactory("krita"))
-
-KritaWaveFilter::KritaWaveFilter(QObject *parent, const QVariantList &)
-        : QObject(parent)
-{
-    KisFilterRegistry::instance()->add(new KisFilterWave());
-}
-
-KritaWaveFilter::~KritaWaveFilter()
-{
-}
-#endif
 
 class KisWaveCurve
 {
@@ -71,8 +59,6 @@ public:
     virtual ~KisWaveCurve() {}
     virtual double valueAt(int x, int y) = 0;
 };
-
-
 
 class KisSinusoidalWaveCurve : public KisWaveCurve
 {
@@ -104,7 +90,15 @@ public:
     }
 private:
     int m_amplitude, m_wavelength, m_shift;
-};
+}; KritaWaveFilter::KritaWaveFilter(QObject *parent, const QVariantList &)
+        : QObject(parent)
+{
+    KisFilterRegistry::instance()->add(new KisFilterWave());
+}
+
+KritaWaveFilter::~KritaWaveFilter()
+{
+}
 
 KisFilterWave::KisFilterWave() : KisFilter(id(), categoryOther(), i18n("&Wave..."))
 {
@@ -166,7 +160,7 @@ void KisFilterWave::processImpl(KisPaintDeviceSP device,
         horizontalcurve = new KisTriangleWaveCurve(horizontalamplitude, horizontalwavelength, horizontalshift);
     else
         horizontalcurve = new KisSinusoidalWaveCurve(horizontalamplitude, horizontalwavelength, horizontalshift);
-
+    
     KisRandomSubAccessorSP srcRSA = device->createRandomSubAccessor();
     do {
         double xv = horizontalcurve->valueAt(dstIt->y(), dstIt->x());

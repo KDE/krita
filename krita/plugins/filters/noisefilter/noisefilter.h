@@ -27,7 +27,6 @@
 
 class KisConfigWidget;
 
-#ifndef METAPLUGIN
 class KritaNoiseFilter : public QObject
 {
     Q_OBJECT
@@ -35,7 +34,6 @@ public:
     KritaNoiseFilter(QObject *parent, const QVariantList &);
     virtual ~KritaNoiseFilter();
 };
-#endif
 
 class KisFilterNoise : public KisFilter
 {

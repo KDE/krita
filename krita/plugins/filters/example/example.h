@@ -25,7 +25,6 @@
 #include <QVariant>
 #include "filter/kis_color_transformation_filter.h"
 
-#ifndef METAPLUGIN
 class KritaExample : public QObject
 {
     Q_OBJECT
@@ -33,7 +32,6 @@ public:
     KritaExample(QObject *parent, const QVariantList &);
     virtual ~KritaExample();
 };
-#endif
 
 class KisFilterInvert : public KisColorTransformationFilter
 {

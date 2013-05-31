@@ -41,7 +41,6 @@
 #include "ui_wdgfastcolortransfer.h"
 #include <kis_iterator_ng.h>
 
-#ifndef METAPLUGIN
 K_PLUGIN_FACTORY(KritaFastColorTransferFactory, registerPlugin<FastColorTransferPlugin>();)
 K_EXPORT_PLUGIN(KritaFastColorTransferFactory("krita"))
 
@@ -56,7 +55,6 @@ FastColorTransferPlugin::FastColorTransferPlugin(QObject *parent, const QVariant
 FastColorTransferPlugin::~FastColorTransferPlugin()
 {
 }
-#endif
 
 KisFilterFastColorTransfer::KisFilterFastColorTransfer() : KisFilter(id(), categoryColors(), i18n("&Color Transfer..."))
 {
@@ -98,7 +96,7 @@ void KisFilterFastColorTransfer::processImpl(KisPaintDeviceSP device,
         dbgPlugins << "The LAB colorspace is not available.";
         return;
     }
-
+    
     dbgPlugins << "convert a copy of src to lab";
     const KoColorSpace* oldCS = device->colorSpace();
     KisPaintDeviceSP srcLAB = new KisPaintDevice(*device.data());
@@ -115,9 +113,9 @@ void KisFilterFastColorTransfer::processImpl(KisPaintDeviceSP device,
     dbgPlugins << "Compute the means and sigmas of src";
     double meanL_src = 0., meanA_src = 0., meanB_src = 0.;
     double sigmaL_src = 0., sigmaA_src = 0., sigmaB_src = 0.;
-
+    
     KisRectConstIteratorSP srcLABIt = srcLAB->createRectConstIteratorNG(applyRect);
-
+    
     do {
         const quint16* data = reinterpret_cast<const quint16*>(srcLABIt->oldRawData());
         quint32 L = data[0];
@@ -131,7 +129,7 @@ void KisFilterFastColorTransfer::processImpl(KisPaintDeviceSP device,
         sigmaB_src += B * B;
         if (progressUpdater) progressUpdater->setValue(++count);
     } while (srcLABIt->nextPixel() && !(progressUpdater && progressUpdater->interrupted()));
-
+    
     double totalSize = 1. / (applyRect.width() * applyRect.height());
     meanL_src *= totalSize;
     meanA_src *= totalSize;
@@ -139,17 +137,17 @@ void KisFilterFastColorTransfer::processImpl(KisPaintDeviceSP device,
     sigmaL_src *= totalSize;
     sigmaA_src *= totalSize;
     sigmaB_src *= totalSize;
-
+    
     dbgPlugins << totalSize << "" << meanL_src << "" << meanA_src << "" << meanB_src << "" << sigmaL_src << "" << sigmaA_src << "" << sigmaB_src;
-
+    
     double meanL_ref = config->getDouble("meanL");
     double meanA_ref = config->getDouble("meanA");
     double meanB_ref = config->getDouble("meanB");
     double sigmaL_ref = config->getDouble("sigmaL");
     double sigmaA_ref = config->getDouble("sigmaA");
     double sigmaB_ref = config->getDouble("sigmaB");
-
-
+    
+    
     // Transfer colors
     dbgPlugins << "Transfer colors";
     {

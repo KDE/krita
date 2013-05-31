@@ -39,6 +39,31 @@
 
 using namespace Eigen;
 
+K_PLUGIN_FACTORY(KritaConvolutionFiltersFactory, registerPlugin<KritaConvolutionFilters>();)
+K_EXPORT_PLUGIN(KritaConvolutionFiltersFactory("krita"))
+
+KritaConvolutionFilters::KritaConvolutionFilters(QObject *parent, const QVariantList &)
+        : QObject(parent)
+{
+    KisFilterRegistry * manager = KisFilterRegistry::instance();
+    manager->add(new KisSharpenFilter());
+    manager->add(new KisMeanRemovalFilter());
+    manager->add(new KisEmbossLaplascianFilter());
+    manager->add(new KisEmbossInAllDirectionsFilter());
+    manager->add(new KisEmbossHorizontalVerticalFilter());
+    manager->add(new KisEmbossVerticalFilter());
+    manager->add(new KisEmbossHorizontalFilter());
+    manager->add(new KisTopEdgeDetectionFilter());
+    manager->add(new KisRightEdgeDetectionFilter());
+    manager->add(new KisBottomEdgeDetectionFilter());
+    manager->add(new KisLeftEdgeDetectionFilter());
+
+}
+
+KritaConvolutionFilters::~KritaConvolutionFilters()
+{
+}
+
 KisSharpenFilter::KisSharpenFilter()
         : KisConvolutionFilter(id(), categoryEnhance(), i18n("&Sharpen"))
 {

@@ -1,7 +1,6 @@
 
 set(kritaconvolutionfilters_PART_SRCS
    convolutionfilters.cpp
-   convolutionfiltersplugin.cpp
    kis_convolution_filter.cpp )
 
 

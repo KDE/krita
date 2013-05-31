@@ -386,9 +386,7 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
 
     // 25 px is a distance that works well for Tablet and Mouse events
     qApp->setStartDragDistance(25);
-    show();
-
-
+  
     loadPlugins();
 
     // Wait for the async image to have loaded
@@ -406,8 +404,7 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
         collection->setConfigGroup("krita/shortcuts");
         collection->readSettings(&group);
     }
-
-
+	
 #if 0
     //check for colliding shortcuts
     QSet<QKeySequence> existingShortcuts;

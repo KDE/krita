@@ -958,7 +958,6 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
                 outputFormat = outputFormatString.toLatin1();
 
                 specialOutputFlag = dialog->specialEntrySelected();
-                kDebug(30003) << "KoMainWindow::saveDocument outputFormat =" << outputFormat;
 
                 if (!isExporting())
                     justChangingFilterOptions = (newURL == d->rootPart->url()) &&
@@ -1689,7 +1688,6 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
         return;
     }
 
-
     KXMLGUIFactory *factory = guiFactory();
 
 // ###  setUpdatesEnabled( false );
@@ -1720,9 +1718,14 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
 
         factory->addClient(d->activeView);
 
-        // Position and show toolbars according to user's preference
+        // Position and show toolbars according to user's preference. On Windows,
+		// setting force to true causes the window to hop around on first creation
+		// of the view
+#ifdef Q_OS_WINDOWS
         setAutoSaveSettings(newPart->componentData().componentName(), false);
-
+#else
+		setAutoSaveSettings(newPart->componentData().componentName(), true);
+#endif
         foreach (QDockWidget *wdg, d->dockWidgets) {
             if ((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {
                 wdg->setVisible(true);

@@ -97,7 +97,7 @@ void KisRecordedFilterAction::play(KisNodeSP node, const KisPlayInfo& _info, KoU
         r1 = r1.intersected(layer->selection()->selectedExactRect());
     }
 
-    d->filter->process(dev, r1, kfc, _updater);
+    d->filter->process(dev, dev, layer->selection(), r1, kfc, _updater);
     node->setDirty(r1);
 
     transaction.commit(_info.undoAdapter());

@@ -22,7 +22,9 @@
 #include "kis_filter_manager.moc"
 
 #include <QHash>
+#include <QSignalMapper>
 
+#include <kmessagebox.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 
@@ -31,15 +33,19 @@
 // krita/image
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_registry.h>
-#include <kis_layer.h>
-#include <kis_paint_layer.h>
+#include <filter/kis_filter_configuration.h>
 #include <kis_paint_device.h>
 
 // krita/ui
-#include "kis_filter_handler.h"
 #include "kis_view2.h"
+#include "kis_canvas2.h"
+#include <kis_bookmarked_configuration_manager.h>
 #include <KoColorSpaceRegistry.h>
-#include <KoColorSpaceRegistry.h>
+
+#include "dialogs/kis_dlg_filter.h"
+#include "strokes/kis_filter_stroke_strategy.h"
+#include "krita_utils.h"
+
 
 struct KisFilterManager::Private {
     Private() : reapplyAction(0), actionCollection(0) {
@@ -47,16 +53,24 @@ struct KisFilterManager::Private {
     }
     KAction* reapplyAction;
     QHash<QString, KActionMenu*> filterActionMenus;
-    QHash<QString, KisFilterHandler*> filterHandlers;
     QHash<KisFilter*, KAction*> filters2Action;
-    KActionCollection * actionCollection;
-    KisView2* view;
+    KActionCollection *actionCollection;
+    KisView2 *view;
+
+
+
+
+    KisSafeFilterConfigurationSP lastConfiguration;
+    KisSafeFilterConfigurationSP currentlyAppliedCofiguration;
+    KisStrokeId currentStrokeId;
+
+    QSignalMapper actionsMapper;
 };
 
-KisFilterManager::KisFilterManager(KisView2 * parent, KisDoc2 * doc) : d(new Private)
+KisFilterManager::KisFilterManager(KisView2 * view, KisDoc2 * doc) : d(new Private)
 {
     Q_UNUSED(doc);
-    d->view = parent;
+    d->view = view;
 }
 
 KisFilterManager::~KisFilterManager()
@@ -71,26 +85,33 @@ void KisFilterManager::setup(KActionCollection * ac)
     // Setup reapply action
     d->reapplyAction = new KAction(i18n("Apply Filter Again"), this);
     d->actionCollection->addAction("filter_apply_again", d->reapplyAction);
+
     d->reapplyAction->setEnabled(false);
+    connect(d->reapplyAction, SIGNAL(triggered()), SLOT(reapplyLastFilter()));
+
+    connect(&d->actionsMapper, SIGNAL(mapped(const QString&)), SLOT(showFilterDialog(const QString&)));
 
     // Setup list of filters
-    QList<QString> filterList = KisFilterRegistry::instance()->keys();
-    for (QList<QString>::Iterator it = filterList.begin(); it != filterList.end(); ++it) {
-        insertFilter(*it);
+    foreach (const QString &filterName, KisFilterRegistry::instance()->keys()) {
+        insertFilter(filterName);
     }
+
     connect(KisFilterRegistry::instance(), SIGNAL(filterAdded(QString)), SLOT(insertFilter(const QString &)));
 }
 
-void KisFilterManager::insertFilter(const QString & name)
+void KisFilterManager::insertFilter(const QString & filterName)
 {
     Q_ASSERT(d->actionCollection);
-    KisFilterSP f = KisFilterRegistry::instance()->value(name);
-    Q_ASSERT(f);
-    if (d->filters2Action.keys().contains(f.data())) {
-        warnKrita << "Filter" << name << " has already been inserted";
+
+    KisFilterSP filter = KisFilterRegistry::instance()->value(filterName);
+    Q_ASSERT(filter);
+
+    if (d->filters2Action.keys().contains(filter.data())) {
+        warnKrita << "Filter" << filterName << " has already been inserted";
         return;
     }
-    KoID category = f->menuCategory();
+
+    KoID category = filter->menuCategory();
     KActionMenu* actionMenu = d->filterActionMenus[ category.id()];
     if (!actionMenu) {
         actionMenu = new KActionMenu(category.name(), this);
@@ -98,14 +119,15 @@ void KisFilterManager::insertFilter(const QString & name)
         d->filterActionMenus[category.id()] = actionMenu;
     }
 
-    KisFilterHandler* handler = new KisFilterHandler(this, f, d->view);
+    KAction *action = new KAction(filter->menuEntry(), this);
+    action->setShortcut(filter->shortcut(), KAction::DefaultShortcut);
+    d->actionCollection->addAction(QString("krita_filter_%1").arg(filterName), action);
+    d->filters2Action[filter.data()] = action;
 
-    KAction * a = new KAction(f->menuEntry(), this);
-    a->setShortcut(f->shortcut(), KAction::DefaultShortcut);
-    d->actionCollection->addAction(QString("krita_filter_%1").arg(name), a);
-    d->filters2Action[f.data()] = a;
-    connect(a, SIGNAL(triggered()), handler, SLOT(showDialog()));
-    actionMenu->addAction(a); 
+    actionMenu->addAction(action);
+
+    d->actionsMapper.setMapping(action, filterName);
+    connect(action, SIGNAL(triggered()), &d->actionsMapper, SLOT(map()));
 }
 
 void KisFilterManager::updateGUI()
@@ -113,31 +135,150 @@ void KisFilterManager::updateGUI()
     if (!d->view) return;
 
     bool enable = false;
-    KisPaintLayerSP player = 0;
-    if (d->view->activeLayer()) {
-        KisNodeSP layer = d->view->activeNode();
-        player = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(layer.data()));
-        if (player && !(*player->colorSpace() == *KoColorSpaceRegistry::instance()->alpha8())) {
-            enable = (!layer->userLocked()) && layer->visible() && (!layer->systemLocked());
-        }
-    }
+
+    KisNodeSP activeNode = d->view->activeNode();
+    enable = activeNode && activeNode->paintDevice() && activeNode->isEditable();
 
     d->reapplyAction->setEnabled(enable);
+
     for (QHash<KisFilter*, KAction*>::iterator it = d->filters2Action.begin();
             it != d->filters2Action.end(); ++it) {
-        if (enable && player && it.key()->workWith(player->paintDevice()->colorSpace())) {
-            it.value()->setEnabled(enable);
-        } else {
-            it.value()->setEnabled(false);
-        }
+
+        bool localEnable = enable &&
+            it.key()->workWith(activeNode->paintDevice()->compositionSourceColorSpace());
+
+        it.value()->setEnabled(localEnable);
     }
 }
 
-void KisFilterManager::setLastFilterHandler(KisFilterHandler* handler)
+void KisFilterManager::reapplyLastFilter()
 {
-    disconnect(d->reapplyAction, SIGNAL(triggered()), 0 , 0);
-    connect(d->reapplyAction, SIGNAL(triggered()), handler, SLOT(reapply()));
-    d->reapplyAction->setEnabled(true);
-    d->reapplyAction->setText(i18n("Apply Filter Again: %1", handler->filter()->name()));
+    if (!d->lastConfiguration) return;
+
+    apply(d->lastConfiguration);
+    finish();
 }
 
+void KisFilterManager::showFilterDialog(const QString &filterId)
+{
+    /**
+     * The UI should show only after every running stroke is finished,
+     * so the barrier is added here.
+     */
+    d->view->image()->barrierLock();
+    d->view->image()->unlock();
+
+    KisPaintDeviceSP dev = d->view->activeNode()->paintDevice();
+    if (!dev) {
+        qWarning() << "KisFilterManager::showFilterDialog(): Filtering was requested for illegal active layer!" << d->view->activeNode();
+        return;
+    }
+
+    KisFilterSP filter = KisFilterRegistry::instance()->value(filterId);
+
+    if (dev->colorSpace()->willDegrade(filter->colorSpaceIndependence())) {
+        // Warning bells!
+        if (filter->colorSpaceIndependence() == TO_LAB16) {
+            if (KMessageBox::warningContinueCancel(d->view,
+                                                   i18n("The %1 filter will convert your %2 data to 16-bit L*a*b* and vice versa. ",
+                                                        filter->name(),
+                                                        dev->colorSpace()->name()),
+                                                   i18n("Filter Will Convert Your Layer Data"),
+                                                   KStandardGuiItem::cont(), KStandardGuiItem::cancel(),
+                                                   "lab16degradation") != KMessageBox::Continue) return;
+
+        } else if (filter->colorSpaceIndependence() == TO_RGBA16) {
+            if (KMessageBox::warningContinueCancel(d->view,
+                                                   i18n("The %1 filter will convert your %2 data to 16-bit RGBA and vice versa. ",
+                                                        filter->name() , dev->colorSpace()->name()),
+                                                   i18n("Filter Will Convert Your Layer Data"),
+                                                   KStandardGuiItem::cont(), KStandardGuiItem::cancel(),
+                                                   "rgba16degradation") != KMessageBox::Continue) return;
+        }
+    }
+
+    if (filter->showConfigurationWidget()) {
+        KisFilterDialog* dialog = new KisFilterDialog(d->view , d->view->activeNode(), this);
+        dialog->setFilter(filter);
+        dialog->setVisible(true);
+        dialog->setAttribute(Qt::WA_DeleteOnClose);
+    } else {
+        apply(KisSafeFilterConfigurationSP(filter->defaultConfiguration(d->view->activeNode()->original())));
+        finish();
+    }
+}
+
+void KisFilterManager::apply(KisSafeFilterConfigurationSP filterConfig)
+{
+    KisFilterSP filter = KisFilterRegistry::instance()->value(filterConfig->name());
+    KisImageWSP image = d->view->image();
+
+    if (d->currentStrokeId) {
+        image->cancelStroke(d->currentStrokeId);
+    }
+
+    KisPostExecutionUndoAdapter *undoAdapter =
+        image->postExecutionUndoAdapter();
+    KoCanvasResourceManager *resourceManager =
+        d->view->canvasBase()->resourceManager();
+
+    KisResourcesSnapshotSP resources =
+        new KisResourcesSnapshot(image,
+                                 undoAdapter,
+                                 resourceManager);
+
+    d->currentStrokeId =
+        image->startStroke(new KisFilterStrokeStrategy(filter,
+                                                       KisSafeFilterConfigurationSP(filterConfig),
+                                                       resources));
+
+    if (filter->supportsThreading()) {
+        QSize size = KritaUtils::optimalPatchSize();
+        QVector<QRect> rects = KritaUtils::splitRectIntoPatches(image->bounds(), size);
+
+        foreach(const QRect &rc, rects) {
+            image->addJob(d->currentStrokeId,
+                          new KisFilterStrokeStrategy::Data(rc, true));
+        }
+    } else {
+        image->addJob(d->currentStrokeId,
+                      new KisFilterStrokeStrategy::Data(image->bounds(), false));
+    }
+
+    d->currentlyAppliedCofiguration = filterConfig;
+}
+
+void KisFilterManager::finish()
+{
+    Q_ASSERT(d->currentStrokeId);
+
+    d->view->image()->endStroke(d->currentStrokeId);
+
+    KisFilterSP filter = KisFilterRegistry::instance()->value(d->currentlyAppliedCofiguration->name());
+    if (filter->bookmarkManager()) {
+        filter->bookmarkManager()->save(KisBookmarkedConfigurationManager::ConfigLastUsed.id(),
+                                       d->currentlyAppliedCofiguration.data());
+    }
+
+    d->lastConfiguration = d->currentlyAppliedCofiguration;
+    d->reapplyAction->setEnabled(true);
+    d->reapplyAction->setText(i18n("Apply Filter Again: %1", filter->name()));
+
+    d->currentStrokeId.clear();
+    d->currentlyAppliedCofiguration.clear();
+}
+
+void KisFilterManager::cancel()
+{
+    Q_ASSERT(d->currentStrokeId);
+
+    d->view->image()->cancelStroke(d->currentStrokeId);
+
+    d->currentStrokeId.clear();
+    d->currentlyAppliedCofiguration.clear();
+}
+
+bool KisFilterManager::isStrokeRunning() const
+{
+    return d->currentStrokeId;
+}

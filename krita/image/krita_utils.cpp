@@ -23,10 +23,20 @@
 #include <QPainterPath>
 #include <QPolygonF>
 
+#include "kis_image_config.h"
+
+
 namespace KritaUtils
 {
 
-    QVector<QRect> KRITAIMAGE_EXPORT splitRectIntoPatches(const QRect &rc, const QSize &patchSize)
+    QSize optimalPatchSize()
+    {
+        KisImageConfig cfg;
+        return QSize(cfg.updatePatchWidth(),
+                     cfg.updatePatchHeight());
+    }
+
+    QVector<QRect> splitRectIntoPatches(const QRect &rc, const QSize &patchSize)
     {
         QVector<QRect> patches;
 
@@ -42,7 +52,9 @@ namespace KritaUtils
                                    patchSize.width(), patchSize.height());
                 QRect patchRect = rc & maxPatchRect;
 
-                patches.append(patchRect);
+                if (!patchRect.isEmpty()) {
+                    patches.append(patchRect);
+                }
             }
         }
 

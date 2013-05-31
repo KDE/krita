@@ -47,8 +47,7 @@ if(NOT WIN32)
 endif(NOT WIN32)
 configure_file(config_convolution.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_convolution.h)
 
-include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
-                     ${CMAKE_SOURCE_DIR}/krita/image/metadata
+include_directories( ${CMAKE_SOURCE_DIR}/krita/image/metadata
                      ${KOMAIN_INCLUDES}
 )
 

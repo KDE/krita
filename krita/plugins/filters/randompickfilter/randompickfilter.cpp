@@ -61,11 +61,11 @@ KisFilterRandomPick::KisFilterRandomPick() : KisFilter(id(), categoryOther(), i1
 }
 
 
-void KisFilterRandomPick::process(KisPaintDeviceSP device,
-                         const QRect& applyRect,
-                         const KisFilterConfiguration* config,
-                         KoUpdater* progressUpdater
-                                 ) const
+void KisFilterRandomPick::processImpl(KisPaintDeviceSP device,
+                                      const QRect& applyRect,
+                                      const KisFilterConfiguration* config,
+                                      KoUpdater* progressUpdater
+                                      ) const
 {
     Q_UNUSED(config);
     Q_ASSERT(!device.isNull());

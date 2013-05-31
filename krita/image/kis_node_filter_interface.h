@@ -20,10 +20,8 @@
 #define _KIS_NODE_FILTER_INTERFACE_H_
 
 #include <krita_export.h>
+#include <kis_types.h>
 
-#include <QSharedPointer>
-class KisFilterConfiguration;
-typedef QSharedPointer<KisFilterConfiguration> KisSafeFilterConfigurationSP;
 
 /**
  * Define an interface for nodes that are associated with a filter.

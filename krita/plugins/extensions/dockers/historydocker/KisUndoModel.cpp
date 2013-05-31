@@ -61,6 +61,7 @@
 KisUndoModel::KisUndoModel(QObject *parent)
     : QAbstractItemModel(parent)
 {
+    m_blockOutgoingHistoryChange = false;
     m_stack = 0;
     m_canvas = 0;
     m_sel_model = new QItemSelectionModel(this, this);
@@ -114,11 +115,17 @@ void KisUndoModel::stackDestroyed(QObject *obj)
 void KisUndoModel::stackChanged()
 {
     reset();
+
+    m_blockOutgoingHistoryChange = true;
     m_sel_model->setCurrentIndex(selectedIndex(), QItemSelectionModel::ClearAndSelect);
+    m_blockOutgoingHistoryChange = false;
 }
 
 void KisUndoModel::setStackCurrentIndex(const QModelIndex &index)
 {
+    if (m_blockOutgoingHistoryChange)
+        return;
+
     if (m_stack == 0)
         return;
 

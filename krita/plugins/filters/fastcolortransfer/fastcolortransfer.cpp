@@ -83,10 +83,10 @@ KisFilterConfiguration* KisFilterFastColorTransfer::factoryConfiguration(const K
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
-void KisFilterFastColorTransfer::process(KisPaintDeviceSP device,
-                         const QRect& applyRect,
-                         const KisFilterConfiguration* config,
-                         KoUpdater* progressUpdater) const
+void KisFilterFastColorTransfer::processImpl(KisPaintDeviceSP device,
+                                             const QRect& applyRect,
+                                             const KisFilterConfiguration* config,
+                                             KoUpdater* progressUpdater) const
 {
     Q_ASSERT(device != 0);
 

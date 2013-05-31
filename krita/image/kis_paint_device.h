@@ -584,6 +584,19 @@ public:
     KisPaintDeviceSP createCompositionSourceDevice(KisPaintDeviceSP cloneSource) const;
 
     /**
+     * The same as createCompositionSourceDevice(), but initializes
+     * the newly created device with the *rough* \p roughRect of
+     * \p cloneSource.
+     *
+     * "Rough rect" means that it may copy a bit more than
+     * requested. It is expected that the caller will not use the area
+     * outside \p roughRect.
+     *
+     * \see createCompositionSourceDevice()
+     */
+    KisPaintDeviceSP createCompositionSourceDevice(KisPaintDeviceSP cloneSource, const QRect roughRect) const;
+
+    /**
      * This is a convenience method for createCompositionSourceDevice()
      *
      * \see createCompositionSourceDevice()

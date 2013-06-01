@@ -178,17 +178,20 @@ void ImageSize::slotSelectionScale()
     QPointer<KoUpdater> u = pu->startSubtask();
 
     if (dlgSize->exec() == QDialog::Accepted) {
-        KisSelectionTransaction transaction(i18n("Scale Selection"), image->undoAdapter(), selection);
+        KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection().data();
+        KisSelectionTransaction transaction(i18n("Scale Selection"), pixelSelection);
 
         qint32 w = dlgSize->width();
         qint32 h = dlgSize->height();
-        KisTransformWorker worker(selection->getOrCreatePixelSelection(),
+        KisTransformWorker worker(pixelSelection,
                                   (double)w / ((double)(rc.width())),
                                   (double)h / ((double)(rc.height())),
                                   0, 0, 0.0, 0.0, 0.0, 0, 0, u,
                                   dlgSize->filterType()
                                  );
         worker.run();
+        worker.transformPixelSelectionOutline(pixelSelection);
+
         transaction.commit(image->undoAdapter());
         layer->setDirty();
         pu->deleteLater();

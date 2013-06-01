@@ -129,7 +129,9 @@ bool KisMirrorVisitor::mirrorMask(KisMask* mask)
         } else {
             name = i18n("Mirror Mask Y");
         }
-        KisSelectionTransaction transaction(name, m_image->undoAdapter(), selection);
+
+        // TODO: use a selection transaction to cache the outline
+        KisTransaction transaction(name, dev);
 
         QRect dirty;
         if (m_orientation == Qt::Horizontal) {

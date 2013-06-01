@@ -91,7 +91,9 @@ public:
     bool hasPixelSelection() const;
     bool hasShapeSelection() const;
 
-    QVector<QPolygon> outline() const;
+    bool outlineCacheValid() const;
+    QPainterPath outlineCache() const;
+    void recalculateOutlineCache();
 
     /**
      * return the pixel selection component of this selection or zero

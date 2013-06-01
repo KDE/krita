@@ -92,12 +92,15 @@ void KisSelectionDecoration::selectionChanged()
         m_outline.clear();
 
         if (selection) {
-            if (selection->hasPixelSelection() || selection->hasShapeSelection()) {
-                if (!m_timer->isActive())
+            if (selection->outlineCacheValid()) {
+                if (!m_timer->isActive()) {
                     m_timer->start(300);
+                }
+
+                m_outlinePath = selection->outlineCache();
+            } else {
+                m_outlinePath = QPainterPath();
             }
-            m_outline = selection->outline();
-            updateSimpleOutline();
         } else {
             m_timer->stop();
         }
@@ -130,6 +133,7 @@ void KisSelectionDecoration::selectionTimerEvent()
     }
 }
 
+// Let it stay here for now
 void KisSelectionDecoration::updateSimpleOutline()
 {
     m_simpleOutline.clear();
@@ -190,7 +194,10 @@ void KisSelectionDecoration::drawDecoration(QPainter& gc, const QRectF& updateRe
 
         int i = 0;
         gc.setPen(pen);
-        if (0.5 * (scaleX + scaleY) < 3) {
+
+        if (!m_outlinePath.isEmpty()) {
+            gc.drawPath(transform.map(m_outlinePath));
+        } else if (0.5 * (scaleX + scaleY) < 3) {
             foreach(const QPolygon & polygon, m_simpleOutline) {
                 gc.drawPolygon(transform.map(polygon));
                 i++;

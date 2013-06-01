@@ -81,6 +81,11 @@ void KisToolSelectRectangular::finishRect(const QRectF& rect)
         if (rc.isValid()) {
             KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
             tmpSel->select(rc);
+
+            QPainterPath cache;
+            cache.addRect(rc);
+            tmpSel->setOutlineCache(cache);
+
             helper.selectPixelSelection(tmpSel, m_widgetHelper.selectionAction());
         }
     } else {

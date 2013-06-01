@@ -145,9 +145,36 @@ bool KisSelection::hasShapeSelection() const
     return m_d->shapeSelection;
 }
 
-QVector<QPolygon> KisSelection::outline() const
+bool KisSelection::outlineCacheValid() const
 {
-    return m_d->getProjection()->outline();
+    return !m_d->pixelSelection ||
+        m_d->pixelSelection->outlineCacheValid();
+}
+
+QPainterPath KisSelection::outlineCache() const
+{
+    QPainterPath outline;
+
+    if (m_d->pixelSelection && m_d->pixelSelection->outlineCacheValid()) {
+        outline += m_d->pixelSelection->outlineCache();
+    }
+
+    if (m_d->shapeSelection && m_d->shapeSelection->outlineCacheValid()) {
+        outline += m_d->shapeSelection->outlineCache();
+    }
+
+    return outline;
+}
+
+void KisSelection::recalculateOutlineCache()
+{
+    if (m_d->pixelSelection && !m_d->pixelSelection->outlineCacheValid()) {
+        m_d->pixelSelection->recalculateOutlineCache();
+    }
+
+    if (m_d->shapeSelection && !m_d->shapeSelection->outlineCacheValid()) {
+        m_d->shapeSelection->recalculateOutlineCache();
+    }
 }
 
 KisPixelSelectionSP KisSelection::pixelSelection() const

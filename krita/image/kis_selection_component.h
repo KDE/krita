@@ -47,6 +47,10 @@ public:
         Q_UNUSED(transform);
         return 0;
     }
+
+    virtual QPainterPath outlineCache() const = 0;
+    virtual bool outlineCacheValid() const = 0;
+    virtual void recalculateOutlineCache() = 0;
 };
 
 #endif

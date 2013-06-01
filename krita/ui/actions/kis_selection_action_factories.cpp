@@ -108,7 +108,7 @@ void KisSelectAllActionFactory::run(KisView2 *view)
         KisImageSP m_image;
         KUndo2Command* paint() {
             KisSelectionSP selection = m_image->globalSelection();
-            KisSelectionTransaction transaction(QString(), m_image->undoAdapter(), selection);
+            KisSelectionTransaction transaction(QString(), selection->getOrCreatePixelSelection());
             selection->getOrCreatePixelSelection()->select(m_image->bounds());
             return transaction.endAndTake();
         }

@@ -34,6 +34,7 @@
 #include "testutil.h"
 #include "kis_fill_painter.h"
 #include "kis_transaction.h"
+#include "kis_surrogate_undo_adapter.h"
 #include "commands/kis_selection_commands.h"
 
 
@@ -278,6 +279,103 @@ void KisPixelSelectionTest::testCrossColorSpacePainting()
 
     painter.fill(r3.x(), r3.y(), r3.width(), r3.height(), KoColor(Qt::white, cs));
     QCOMPARE(psel1->selectedExactRect(), r0 | r3);
+}
+
+void KisPixelSelectionTest::testOutlineCache()
+{
+    KisPixelSelectionSP psel1 = new KisPixelSelection();
+    KisPixelSelectionSP psel2 = new KisPixelSelection();
+
+    QVERIFY(psel1->outlineCacheValid());
+    QVERIFY(psel2->outlineCacheValid());
+
+    psel1->select(QRect(10,10,90,90), 100);
+    QVERIFY(psel1->outlineCacheValid());
+    QCOMPARE(psel1->outlineCache().boundingRect(), QRectF(10,10,90,90));
+
+    psel2->select(QRect(20,20,100,100), 200);
+    QVERIFY(psel2->outlineCacheValid());
+    QCOMPARE(psel2->outlineCache().boundingRect(), QRectF(20,20,100,100));
+
+    psel1->applySelection(psel2, SELECTION_ADD);
+    QVERIFY(psel1->outlineCacheValid());
+    QCOMPARE(psel1->outlineCache().boundingRect(), QRectF(10,10,110,110));
+
+    psel1->applySelection(psel2, SELECTION_INTERSECT);
+    QVERIFY(psel1->outlineCacheValid());
+    QCOMPARE(psel1->outlineCache().boundingRect(), QRectF(20,20,100,100));
+
+    psel2->invalidateOutlineCache();
+    QVERIFY(!psel2->outlineCacheValid());
+
+    psel1->applySelection(psel2, SELECTION_SUBTRACT);
+    QVERIFY(!psel1->outlineCacheValid());
+
+    psel1->clear();
+    QVERIFY(psel1->outlineCacheValid());
+}
+
+void KisPixelSelectionTest::testOutlineCacheTransactions()
+{
+    KisSurrogateUndoAdapter undoAdapter;
+    KisPixelSelectionSP psel1 = new KisPixelSelection();
+
+    QVERIFY(psel1->outlineCacheValid());
+
+    psel1->clear();
+    psel1->select(QRect(10,10,90,90), 100);
+    QVERIFY(psel1->outlineCacheValid());
+    QCOMPARE(psel1->outlineCache().boundingRect(), QRectF(10,10,90,90));
+
+    {
+        KisTransaction t("", psel1);
+        t.end();
+        QVERIFY(!psel1->outlineCacheValid());
+    }
+
+    psel1->clear();
+    psel1->select(QRect(10,10,90,90), 100);
+    QVERIFY(psel1->outlineCacheValid());
+    QCOMPARE(psel1->outlineCache().boundingRect(), QRectF(10,10,90,90));
+
+    {
+        KisTransaction t("", psel1);
+        t.revert();
+        QVERIFY(psel1->outlineCacheValid());
+        QCOMPARE(psel1->outlineCache().boundingRect(), QRectF(10,10,90,90));
+    }
+
+    psel1->clear();
+    psel1->select(QRect(10,10,90,90), 100);
+    QVERIFY(psel1->outlineCacheValid());
+    QCOMPARE(psel1->outlineCache().boundingRect(), QRectF(10,10,90,90));
+
+    {
+        KisSelectionTransaction t("", psel1);
+
+        QVERIFY(psel1->outlineCacheValid());
+        QCOMPARE(psel1->outlineCache().boundingRect(), QRectF(10,10,90,90));
+
+        psel1->select(QRect(10,10,200,200));
+
+        QVERIFY(psel1->outlineCacheValid());
+        QCOMPARE(psel1->outlineCache().boundingRect(), QRectF(10,10,200,200));
+
+        t.commit(&undoAdapter);
+
+        QVERIFY(psel1->outlineCacheValid());
+        QCOMPARE(psel1->outlineCache().boundingRect(), QRectF(10,10,200,200));
+
+        undoAdapter.undo();
+
+        QVERIFY(psel1->outlineCacheValid());
+        QCOMPARE(psel1->outlineCache().boundingRect(), QRectF(10,10,90,90));
+
+        undoAdapter.redo();
+
+        QVERIFY(psel1->outlineCacheValid());
+        QCOMPARE(psel1->outlineCache().boundingRect(), QRectF(10,10,200,200));
+    }
 }
 
 QTEST_KDEMAIN(KisPixelSelectionTest, NoGUI)

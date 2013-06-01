@@ -109,6 +109,11 @@ public:
      */
     QTransform transform() const;
 
+    /**
+     * Transforms the outline of the pixel selection (if it is valid)
+     */
+    void transformPixelSelectionOutline(KisPixelSelectionSP pixelSelection) const;
+
 private:
     // XXX (BSAR): Why didn't we use the shared-pointer versions of the paint device classes?
     // CBR: because the template functions used within don't work if it's not true pointers

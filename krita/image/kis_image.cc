@@ -1500,6 +1500,13 @@ void KisImage::notifyProjectionUpdated(const QRect &rc)
     }
 }
 
+void KisImage::notifySelectionChanged()
+{
+    if (!m_d->disableUIUpdateSignals) {
+        m_d->legacyUndoAdapter->emitSelectionChanged();
+    }
+}
+
 void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
 {
     if (m_d->disableDirtyRequests) return;

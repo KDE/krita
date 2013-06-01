@@ -79,6 +79,14 @@ public:
     virtual void nodeChanged(KisNode * node);
 
     /**
+     * Inform the model that one of the selections in the graph is
+     * changed. The sender is not passed to the function (at least for
+     * now) because the UI should decide itself whether it needs to
+     * fetch new selection of not.
+     */
+    virtual void notifySelectionChanged();
+
+    /**
      * Inform the model that a node has been changed (setDirty)
      */
     virtual void requestProjectionUpdate(KisNode * node, const QRect& rect);

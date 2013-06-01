@@ -82,6 +82,11 @@ void KisToolSelectPolygonal::finishPolyline(const QVector<QPointF> &points)
 
         painter.paintPolygon(points);
 
+        QPainterPath cache;
+        cache.addPolygon(points);
+        cache.closeSubpath();
+        tmpSel->setOutlineCache(cache);
+
         helper.selectPixelSelection(tmpSel, m_widgetHelper.selectionAction());
     } else {
         KoPathShape* path = new KoPathShape();

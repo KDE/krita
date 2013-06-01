@@ -49,6 +49,7 @@ private:
 private:
     QVector<QPolygon> m_outline;
     QVector<QPolygon> m_simpleOutline;
+    QPainterPath m_outlinePath;
     QTimer* m_timer;
     int m_offset;
     QList<QBrush> m_brushes;

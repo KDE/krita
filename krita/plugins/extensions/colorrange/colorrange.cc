@@ -107,6 +107,7 @@ void ColorRange::selectOpaque()
         selIter->nextRow();
     }
 
+    tmpSel->invalidateOutlineCache();
     helper.selectPixelSelection(tmpSel, SELECTION_ADD);
 }
 

@@ -1927,23 +1927,19 @@ void KisToolTransform::updateSelectionPath()
 {
     m_selectionPath = QPainterPath();
 
-    QVector<QPolygon> selectionOutline;
+    QPainterPath selectionOutline;
     KisSelectionSP selection = currentSelection();
 
-    if (selection) {
-        selectionOutline = selection->outline();
+    if (selection && selection->outlineCacheValid()) {
+        selectionOutline = selection->outlineCache();
     } else {
-        selectionOutline << m_selectedPortionCache->exactBounds();
+        selectionOutline.addRect(m_selectedPortionCache->exactBounds());
     }
 
     const KisCoordinatesConverter *converter = m_canvas->coordinatesConverter();
     QTransform i2f = converter->imageToDocumentTransform() * converter->documentToFlakeTransform();
 
-    foreach(const QPolygon &polygon, selectionOutline) {
-        QPolygon p = i2f.map(polygon);
-
-        m_selectionPath.addPolygon(p);
-    }
+    m_selectionPath = i2f.map(selectionOutline);
 }
 
 void KisToolTransform::initThumbnailImage(KisPaintDeviceSP previewDevice)
@@ -2053,7 +2049,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
             !currentNode->paintDevice();
     }
 
-    TransformStrokeStrategy *strategy = new TransformStrokeStrategy(currentNode, currentSelection(), image()->postExecutionUndoAdapter(), image()->undoAdapter());
+    TransformStrokeStrategy *strategy = new TransformStrokeStrategy(currentNode, currentSelection(), image()->postExecutionUndoAdapter());
     KisPaintDeviceSP previewDevice = strategy->previewDevice();
 
     KisSelectionSP selection = currentSelection();

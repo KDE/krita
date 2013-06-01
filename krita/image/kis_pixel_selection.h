@@ -103,6 +103,16 @@ public:
      */
     QVector<QPolygon> outline() const;
 
+
+    QPainterPath outlineCache() const;
+    bool outlineCacheValid() const;
+    void recalculateOutlineCache();
+
+    void setOutlineCache(const QPainterPath &cache);
+    void invalidateOutlineCache();
+
+    void notifySelectionChanged();
+
     virtual void renderToProjection(KisPaintDeviceSP projection);
     virtual void renderToProjection(KisPaintDeviceSP projection, const QRect& r);
 

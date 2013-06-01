@@ -184,7 +184,6 @@ set(kritaimage_LIB_SRCS
    kis_random_sub_accessor.cpp
    kis_selection.cc
    kis_selection_mask.cpp
-   kis_selection_transaction_data.cpp
    kis_serializable_configuration.cc
    kis_shared.cc
    kis_transaction_data.cpp

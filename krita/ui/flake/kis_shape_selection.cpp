@@ -292,20 +292,35 @@ bool KisShapeSelection::loadSelection(KoStore* store)
 
 }
 
-QPainterPath KisShapeSelection::selectionOutline()
+QPainterPath KisShapeSelection::outlineCache() const
 {
+    // TODO: remove this lazyness and do it more efficiently
     if (m_dirty) {
-        QList<KoShape*> shapesList = shapes();
-
-        QPainterPath outline;
-        foreach(KoShape * shape, shapesList) {
-            QTransform shapeMatrix = shape->absoluteTransformation(0);
-            outline = outline.united(shapeMatrix.map(shape->outline()));
-        }
-        m_outline = outline;
-        m_dirty = false;
+        const_cast<KisShapeSelection*>(this)->recalculateOutlineCache();
     }
+
     return m_outline;
+}
+
+bool KisShapeSelection::outlineCacheValid() const
+{
+    // TODO: remove the lazyness
+    return true;
+}
+
+void KisShapeSelection::recalculateOutlineCache()
+{
+    if (!m_dirty) return;
+
+    QList<KoShape*> shapesList = shapes();
+
+    QPainterPath outline;
+    foreach(KoShape * shape, shapesList) {
+        QTransform shapeMatrix = shape->absoluteTransformation(0);
+        outline = outline.united(shapeMatrix.map(shape->outline()));
+    }
+    m_outline = outline;
+    m_dirty = false;
 }
 
 void KisShapeSelection::paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &)
@@ -321,7 +336,7 @@ void KisShapeSelection::renderToProjection(KisPaintDeviceSP projection)
     QTransform resolutionMatrix;
     resolutionMatrix.scale(m_image->xRes(), m_image->yRes());
 
-    QRectF boundingRect = resolutionMatrix.mapRect(selectionOutline().boundingRect());
+    QRectF boundingRect = resolutionMatrix.mapRect(outlineCache().boundingRect());
     renderSelection(projection, boundingRect.toAlignedRect());
 }
 
@@ -355,7 +370,7 @@ void KisShapeSelection::renderSelection(KisPaintDeviceSP projection, const QRect
 
             maskPainter.fillRect(polygonMaskImage.rect(), QColor(OPACITY_TRANSPARENT_U8, OPACITY_TRANSPARENT_U8, OPACITY_TRANSPARENT_U8, 255));
             maskPainter.translate(-x, -y);
-            maskPainter.fillPath(resolutionMatrix.map(selectionOutline()), QColor(OPACITY_OPAQUE_U8, OPACITY_OPAQUE_U8, OPACITY_OPAQUE_U8, 255));
+            maskPainter.fillPath(resolutionMatrix.map(outlineCache()), QColor(OPACITY_OPAQUE_U8, OPACITY_OPAQUE_U8, OPACITY_OPAQUE_U8, 255));
             maskPainter.translate(x, y);
 
             qint32 rectWidth = qMin(r.x() + r.width() - x, MASK_IMAGE_WIDTH);

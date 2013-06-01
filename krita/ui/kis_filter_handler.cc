@@ -18,19 +18,41 @@
  */
 
 #include "kis_filter_handler.h"
+#include <QApplication>
+#include <QRect>
 #include <kmessagebox.h>
+#include <kguiitem.h>
 
-#include "kis_view2.h"
-#include "kis_canvas2.h"
-#include "kis_filter_manager.h"
-#include "dialogs/kis_dlg_filter.h"
+#include <KoColorSpace.h>
+#include <KoProgressUpdater.h>
+#include <KoUpdater.h>
 
-#include "strokes/kis_filter_stroke_strategy.h"
-#include "krita_utils.h"
-
+#include <recorder/kis_action_recorder.h>
 #include <kis_bookmarked_configuration_manager.h>
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
+#include <kis_processing_information.h>
+#include <kis_layer.h>
+#include <recorder/kis_recorded_filter_action.h>
+#include <recorder/kis_node_query_path.h>
+#include <kis_selection.h>
+#include <kis_image.h>
+
+#include "kis_statusbar.h"
+#include "kis_doc2.h"
+#include "dialogs/kis_dlg_filter.h"
+#include "kis_filter_manager.h"
+#include "kis_transaction.h"
+#include "kis_view2.h"
+#include "kis_painter.h"
+#include "kis_threaded_applicator.h"
+#include "kis_filter_job.h"
+#include "filter/kis_filter_registry.h"
+#include "kis_system_locker.h"
+#include "kis_progress_widget.h"
+
+#include "strokes/kis_filter_stroke_strategy.h"
+#include "krita_utils.h"
 
 
 struct KisFilterHandler::Private {

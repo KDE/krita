@@ -24,6 +24,7 @@
 #include "kis_selection.h"
 #include "kis_processing_information.h"
 #include "filter/kis_filter.h"
+#include "kis_threaded_applicator.h"
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
 #include <KoColorSpaceRegistry.h>

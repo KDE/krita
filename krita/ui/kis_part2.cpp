@@ -28,6 +28,8 @@
 #include "kis_shape_controller.h"
 #include "KisFlipbookSelector.h"
 #include "kis_flipbook.h"
+#include "kis_animation_selector.h"
+#include "kis_animation.h"
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceEngine.h>
@@ -48,6 +50,7 @@
 KisPart2::KisPart2(QObject *parent)
     : KoPart(parent)
     , m_flipbook(0)
+    ,m_animation(0)
     , m_dieOnError(false)
     , m_document(0)
 {
@@ -58,6 +61,7 @@ KisPart2::KisPart2(QObject *parent)
 KisPart2::~KisPart2()
 {
     delete m_flipbook;
+    delete m_animation;
 }
 
 void KisPart2::setDocument(KisDoc2 *document)
@@ -161,12 +165,25 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
         widgetList << item;
     }
 #endif
+    {
+        KoPart::CustomDocumentWidgetItem item;
+        item.widget = new KisAnimationSelector(parent,
+                                               qobject_cast<KisDoc2*>(document()), w, h, cfg.defImageResolution(), cfg.defColorModel(), cfg.defColorDepth(), cfg.defColorProfile(),
+                                               i18n("untitled-animation"));
+        item.title = i18n("Animation");
+        item.icon = "tool-animator";
+        widgetList << item;
+    }
     return widgetList;
 }
 
 void KisPart2::setFlipbook(KisFlipbook *flipbook)
 {
     m_flipbook = flipbook;
+}
+
+void KisPart2::setAnimation(KisAnimation *animation){
+    m_animation = animation;
 }
 
 void KisPart2::showErrorAndDie()

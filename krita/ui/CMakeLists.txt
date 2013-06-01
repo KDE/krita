@@ -79,6 +79,7 @@ set(kritaui_LIB_SRCS
     kis_filters_model.cc
     kis_flipbook.cpp
     kis_flipbook_item.cpp
+    kis_animation.cpp
     kis_histogram_view.cc
     kis_image_manager.cc
     kis_image_view_converter.cpp
@@ -160,6 +161,7 @@ set(kritaui_LIB_SRCS
     tool/strokes/kis_painter_based_stroke_strategy.cpp
     tool/strokes/kis_filter_stroke_strategy.cpp
     widgets/KisFlipbookSelector.cpp
+    widgets/kis_animation_selector.cpp
     widgets/kis_channelflags_widget.cpp
     widgets/kis_cmb_composite.cc
     widgets/kis_paintop_list_widget.cpp
@@ -283,6 +285,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgpresetselectorstrip.ui
     forms/wdgdlgblacklistcleanup.ui
     forms/wdgflipbookselector.ui
+    forms/wdganimationselector.ui
 )
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )

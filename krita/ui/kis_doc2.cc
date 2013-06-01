@@ -142,6 +142,7 @@ public:
     QList<KisPaintingAssistant*> assistants;
 
     QString flipbook;
+    QString animation;
 };
 
 

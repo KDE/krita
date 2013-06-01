@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,27 +16,21 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_SIMPLE_UPDATE_QUEUE_TEST_H
-#define KIS_SIMPLE_UPDATE_QUEUE_TEST_H
+#ifndef __KIS_SPONTANEOUS_JOB_H
+#define __KIS_SPONTANEOUS_JOB_H
 
-#include <QtTest>
+#include "kis_runnable.h"
 
-
-class KisSimpleUpdateQueueTest : public QObject
+/**
+ * This class represents a simple update just that should be
+ * executed by the updates system from time to time, without
+ * any recording or undo support. Just some useful update that
+ * can be run concurrently with other types updates.
+ */
+class KRITAIMAGE_EXPORT KisSpontaneousJob : public KisRunnable
 {
-    Q_OBJECT
-
-private:
-    void testSplit(bool useFullRefresh);
-
-private slots:
-    void testJobProcessing();
-    void testSplitUpdate();
-    void testSplitFullRefresh();
-    void testChecksum();
-    void testMixingTypes();
-    void testSpontaneousJobsCompression();
+public:
+    virtual bool overrides(const KisSpontaneousJob *otherJob) = 0;
 };
 
-#endif /* KIS_SIMPLE_UPDATE_QUEUE_TEST_H */
-
+#endif /* __KIS_SPONTANEOUS_JOB_H */

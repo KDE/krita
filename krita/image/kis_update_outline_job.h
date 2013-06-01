@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,27 +16,22 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_SIMPLE_UPDATE_QUEUE_TEST_H
-#define KIS_SIMPLE_UPDATE_QUEUE_TEST_H
+#ifndef __KIS_UPDATE_OUTLINE_JOB_H
+#define __KIS_UPDATE_OUTLINE_JOB_H
 
-#include <QtTest>
+#include "kis_spontaneous_job.h"
+#include "kis_selection.h"
 
-
-class KisSimpleUpdateQueueTest : public QObject
+class KRITAIMAGE_EXPORT KisUpdateOutlineJob : public KisSpontaneousJob
 {
-    Q_OBJECT
+public:
+    KisUpdateOutlineJob(KisSelectionSP selection);
+
+    bool overrides(const KisSpontaneousJob *otherJob);
+    void run();
 
 private:
-    void testSplit(bool useFullRefresh);
-
-private slots:
-    void testJobProcessing();
-    void testSplitUpdate();
-    void testSplitFullRefresh();
-    void testChecksum();
-    void testMixingTypes();
-    void testSpontaneousJobsCompression();
+    KisSelectionSP m_selection;
 };
 
-#endif /* KIS_SIMPLE_UPDATE_QUEUE_TEST_H */
-
+#endif /* __KIS_UPDATE_OUTLINE_JOB_H */

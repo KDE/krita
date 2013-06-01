@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,27 +16,30 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_SIMPLE_UPDATE_QUEUE_TEST_H
-#define KIS_SIMPLE_UPDATE_QUEUE_TEST_H
+#ifndef __KIS_SIGNAL_COMPRESSOR_H
+#define __KIS_SIGNAL_COMPRESSOR_H
 
-#include <QtTest>
+#include <QObject>
+#include "krita_export.h"
 
+class QTimer;
 
-class KisSimpleUpdateQueueTest : public QObject
+class KRITAIMAGE_EXPORT KisSignalCompressor : public QObject
 {
     Q_OBJECT
 
-private:
-    void testSplit(bool useFullRefresh);
+public:
+    KisSignalCompressor(int delay, QObject *parent = 0);
 
-private slots:
-    void testJobProcessing();
-    void testSplitUpdate();
-    void testSplitFullRefresh();
-    void testChecksum();
-    void testMixingTypes();
-    void testSpontaneousJobsCompression();
+public slots:
+    void start();
+    void stop();
+
+signals:
+    void timeout();
+
+private:
+    QTimer *m_timer;
 };
 
-#endif /* KIS_SIMPLE_UPDATE_QUEUE_TEST_H */
-
+#endif /* __KIS_SIGNAL_COMPRESSOR_H */

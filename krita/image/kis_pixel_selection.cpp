@@ -23,6 +23,7 @@
 #include <QImage>
 #include <QVector>
 
+#include <QMutex>
 #include <QPoint>
 #include <QPolygon>
 
@@ -43,6 +44,7 @@
 struct KisPixelSelection::Private {
     QPainterPath outlineCache;
     bool outlineCacheValid;
+    QMutex outlineCacheMutex;
 };
 
 KisPixelSelection::KisPixelSelection(KisDefaultBoundsBaseSP defaultBounds)
@@ -287,31 +289,40 @@ QVector<QPolygon> KisPixelSelection::outline() const
 
 QPainterPath KisPixelSelection::outlineCache() const
 {
+    QMutexLocker locker(&m_d->outlineCacheMutex);
     return m_d->outlineCache;
 }
 
 void KisPixelSelection::setOutlineCache(const QPainterPath &cache)
 {
+    QMutexLocker locker(&m_d->outlineCacheMutex);
     m_d->outlineCache = cache;
     m_d->outlineCacheValid = true;
 }
 
 bool KisPixelSelection::outlineCacheValid() const
 {
+    QMutexLocker locker(&m_d->outlineCacheMutex);
     return m_d->outlineCacheValid;
 }
 
 void KisPixelSelection::invalidateOutlineCache()
 {
+    QMutexLocker locker(&m_d->outlineCacheMutex);
     m_d->outlineCacheValid = false;
 }
 
 void KisPixelSelection::recalculateOutlineCache()
 {
+    QMutexLocker locker(&m_d->outlineCacheMutex);
+
+    m_d->outlineCache = QPainterPath();
+
     foreach (const QPolygon &polygon, outline()) {
         m_d->outlineCache.addPolygon(polygon);
-        m_d->outlineCacheValid = true;
     }
+
+    m_d->outlineCacheValid = true;
 }
 
 void KisPixelSelection::renderToProjection(KisPaintDeviceSP projection)

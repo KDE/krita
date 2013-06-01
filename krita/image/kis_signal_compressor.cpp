@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,27 +16,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_SIMPLE_UPDATE_QUEUE_TEST_H
-#define KIS_SIMPLE_UPDATE_QUEUE_TEST_H
+#include "kis_signal_compressor.h"
 
-#include <QtTest>
+#include <QTimer>
 
-
-class KisSimpleUpdateQueueTest : public QObject
+KisSignalCompressor::KisSignalCompressor(int delay, QObject *parent)
+    : QObject(parent),
+      m_timer(new QTimer(this))
 {
-    Q_OBJECT
+    m_timer->setSingleShot(true);
+    m_timer->setInterval(delay);
 
-private:
-    void testSplit(bool useFullRefresh);
+    connect(m_timer, SIGNAL(timeout()), SIGNAL(timeout()));
+}
 
-private slots:
-    void testJobProcessing();
-    void testSplitUpdate();
-    void testSplitFullRefresh();
-    void testChecksum();
-    void testMixingTypes();
-    void testSpontaneousJobsCompression();
-};
+void KisSignalCompressor::start()
+{
+    if (!m_timer->isActive()) {
+        m_timer->start();
+    }
+}
 
-#endif /* KIS_SIMPLE_UPDATE_QUEUE_TEST_H */
-
+void KisSignalCompressor::stop()
+{
+    m_timer->stop();
+}

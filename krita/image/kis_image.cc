@@ -1473,6 +1473,13 @@ void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &c
     }
 }
 
+void KisImage::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
+{
+    if (m_d->scheduler) {
+        m_d->scheduler->addSpontaneousJob(spontaneousJob);
+    }
+}
+
 void KisImage::disableDirtyRequests()
 {
     m_d->disableDirtyRequests.ref();

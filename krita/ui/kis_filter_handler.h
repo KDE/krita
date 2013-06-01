@@ -1,5 +1,4 @@
 /*
- *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,43 +16,42 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_FILTER_MANAGER_
-#define _KIS_FILTER_MANAGER_
+#ifndef _KIS_FILTER_HANDLER_H_
+#define _KIS_FILTER_HANDLER_H_
 
 #include <QObject>
-#include <krita_export.h>
 
-class KAction;
+#include <kis_types.h>
+
+class KisFilterConfiguration;
+class KisFilterManager;
+class KisLayer;
 class KisView2;
-class KisDoc2;
-class KisFilter;
-class KActionCollection;
-class KisFilterHandler;
+class QRect;
 
 /**
- * Create all the filter actions for the specified view and implement re-apply filter
+ * XXX: this class is way too confusing.
  */
-class KRITAUI_EXPORT KisFilterManager : public QObject
+class KisFilterHandler : public QObject
 {
 
     Q_OBJECT
 
 public:
 
-    KisFilterManager(KisView2 * parent, KisDoc2 * doc);
-    ~KisFilterManager();
+    KisFilterHandler(KisFilterManager* parent, KisFilterSP f, KisView2* view);
+    ~KisFilterHandler();
 
-    void setup(KActionCollection * ac);
-    void updateGUI();
-    void setLastFilterHandler(KisFilterHandler* handler);
+    const QString filterName() const;
 
-private slots:
-
-    void insertFilter(const QString & name);
+public slots:
+    void showDialog();
+    void reapply();
+    void apply(KisSafeFilterConfigurationSP filterConfig);
 
 private:
     struct Private;
-    Private * const d;
+    Private* const m_d;
 };
 
 #endif

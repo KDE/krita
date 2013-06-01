@@ -38,6 +38,7 @@
 #include "kis_painter.h"
 #include "kis_mask.h"
 #include "kis_effect_mask.h"
+#include "kis_transparency_mask.h"
 #include "kis_selection_mask.h"
 #include "kis_meta_data_store.h"
 #include "kis_selection.h"
@@ -111,6 +112,7 @@ public:
 
     KisImageWSP image;
     QBitArray channelFlags;
+    KisEffectMaskSP previewMask;
     KisMetaData::Store* metaDataStore;
     KisSafeProjection safeProjection;
     KisCloneLayersList clonesList;
@@ -297,6 +299,10 @@ QList<KisEffectMaskSP> KisLayer::effectMasks() const
 {
     QList<KisEffectMaskSP> masks;
 
+    if (m_d->previewMask && m_d->previewMask->visible()) {
+        masks.append(m_d->previewMask);
+    }
+
     if (childCount() > 0) {
         KoProperties properties;
         properties.setProperty("visible", true);
@@ -313,6 +319,7 @@ QList<KisEffectMaskSP> KisLayer::effectMasks() const
 
 bool KisLayer::hasEffectMasks() const
 {
+    if (m_d->previewMask && m_d->previewMask->visible()) return true;
     if (childCount() == 0) return false;
 
     KoProperties properties;
@@ -550,6 +557,25 @@ QRect KisLayer::exactBounds() const
 {
     KisPaintDeviceSP originalDevice = original();
     return originalDevice ? originalDevice->exactBounds() : QRect();
+}
+
+
+void KisLayer::setPreviewMask(KisEffectMaskSP mask)
+{
+    if (m_d->previewMask) {
+        m_d->previewMask->setParent(0);
+        m_d->previewMask = 0;
+    }
+
+    if (mask) {
+        m_d->previewMask = mask;
+        m_d->previewMask->setParent(this);
+    }
+}
+
+KisEffectMaskSP KisLayer::previewMask() const
+{
+    return m_d->previewMask;
 }
 
 KisLayerSP KisLayer::parentLayer() const

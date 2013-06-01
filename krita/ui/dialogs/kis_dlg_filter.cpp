@@ -25,32 +25,32 @@
 #include <kis_filter_mask.h>
 #include <kis_node.h>
 #include <kis_layer.h>
+#include <kis_selection.h>
 #include <kis_view2.h>
 #include <kis_config.h>
 
-#include "kis_selection.h"
 #include "kis_node_commands_adapter.h"
-#include "kis_filter_manager.h"
 #include "ui_wdgfilterdialog.h"
 
 
 struct KisFilterDialog::Private {
     Private()
             : currentFilter(0)
+            , mask(0)
             , resizeCount(0)
-            , view(0)
-    {
+            , view(0) {
     }
 
     KisFilterSP currentFilter;
     Ui_FilterDialog uiFilterDialog;
+    KisFilterMaskSP mask;
     KisNodeSP node;
+    KisImageWSP image;
     int resizeCount;
     KisView2 *view;
-    KisFilterManager *filterManager;
 };
 
-KisFilterDialog::KisFilterDialog(KisView2 *view, KisNodeSP node, KisFilterManager *filterManager) :
+KisFilterDialog::KisFilterDialog(KisView2 *view, KisNodeSP node, KisImageWSP image, KisSelectionSP selection) :
         QDialog(view),
         d(new Private)
 {
@@ -58,14 +58,26 @@ KisFilterDialog::KisFilterDialog(KisView2 *view, KisNodeSP node, KisFilterManage
 
     d->uiFilterDialog.setupUi(this);
     d->node = node;
+    d->image = image;
     d->view = view;
-    d->filterManager = filterManager;
 
     d->uiFilterDialog.filterSelection->setView(view);
     d->uiFilterDialog.filterSelection->showFilterGallery(KisConfig().showFilterGallery());
 
-    d->uiFilterDialog.pushButtonCreateMaskEffect->show();
-    connect(d->uiFilterDialog.pushButtonCreateMaskEffect, SIGNAL(pressed()), SLOT(createMask()));
+    if (d->node->inherits("KisLayer")) {
+        KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
+        d->mask = new KisFilterMask();
+        d->mask->initSelection(selection, layer);
+        layer->setPreviewMask(d->mask);
+
+        d->uiFilterDialog.checkBoxPreview->show();
+        d->uiFilterDialog.pushButtonCreateMaskEffect->show();
+        d->uiFilterDialog.pushButtonCreateMaskEffect->setEnabled(true);
+        connect(d->uiFilterDialog.pushButtonCreateMaskEffect, SIGNAL(pressed()), SLOT(createMask()));
+    } else {
+        d->uiFilterDialog.checkBoxPreview->hide();
+        d->uiFilterDialog.pushButtonCreateMaskEffect->hide();
+    }
 
     d->uiFilterDialog.filterSelection->setPaintDevice(d->node->original());
     d->uiFilterDialog.pushButtonOk->setGuiItem(KStandardGuiItem::ok());
@@ -92,48 +104,41 @@ void KisFilterDialog::setFilter(KisFilterSP f)
 {
     Q_ASSERT(f);
     setWindowTitle(f->name());
+    d->currentFilter = f;
     d->uiFilterDialog.filterSelection->setFilter(f);
     updatePreview();
 }
 
-void KisFilterDialog::startApplyingFilter(KisSafeFilterConfigurationSP config)
-{
-    if (!d->uiFilterDialog.filterSelection->configuration()) return;
-
-    if (d->node->inherits("KisLayer")) {
-        config->setChannelFlags(qobject_cast<KisLayer*>(d->node.data())->channelFlags());
-    }
-
-    d->filterManager->apply(config);
-}
-
 void KisFilterDialog::updatePreview()
 {
-    if (!d->uiFilterDialog.filterSelection->configuration()) return;
+    if (!d->currentFilter) return;
 
-    if (d->uiFilterDialog.checkBoxPreview->isChecked()) {
-        KisSafeFilterConfigurationSP config(d->uiFilterDialog.filterSelection->configuration());
-        startApplyingFilter(config);
+    if(d->mask && d->uiFilterDialog.checkBoxPreview->isChecked()) {
+        d->mask->setFilter(d->uiFilterDialog.filterSelection->configuration());
     }
+
+    d->node->setDirty();
 
     d->uiFilterDialog.pushButtonOk->setEnabled(true);
 }
 
 void KisFilterDialog::apply()
 {
-    if (!d->filterManager->isStrokeRunning()) {
-        KisSafeFilterConfigurationSP config(d->uiFilterDialog.filterSelection->configuration());
-        startApplyingFilter(config);
-    }
-    d->filterManager->finish();
+    if (!d->currentFilter) return;
 
+    KisSafeFilterConfigurationSP config(d->uiFilterDialog.filterSelection->configuration());
+    if (d->node->inherits("KisLayer")) {
+        config->setChannelFlags(qobject_cast<KisLayer*>(d->node.data())->channelFlags());
+    }
+    emit(sigPleaseApplyFilter(config));
     d->uiFilterDialog.pushButtonOk->setEnabled(false);
 }
 
 void KisFilterDialog::close()
 {
-    if (d->filterManager->isStrokeRunning()) {
-        d->filterManager->cancel();
+    if (d->mask) {
+        qobject_cast<KisLayer*>(d->node.data())->setPreviewMask(0);;
+        d->node->setDirty();
     }
 
     KisConfig().setShowFilterGallery(d->uiFilterDialog.filterSelection->isFilterGalleryVisible());
@@ -141,29 +146,28 @@ void KisFilterDialog::close()
 
 void KisFilterDialog::createMask()
 {
-    if (d->filterManager->isStrokeRunning()) {
-        d->filterManager->cancel();
-    }
+    if (!d->mask) return;
 
     KisLayer *layer = dynamic_cast<KisLayer*>(d->node.data());
-    KisFilterMaskSP mask = new KisFilterMask();
-    mask->initSelection(d->view->selection(), layer);
-    mask->setFilter(d->uiFilterDialog.filterSelection->configuration());
+    layer->setPreviewMask(0);
 
-    Q_ASSERT(layer->allowAsChild(mask));
+    Q_ASSERT(layer->allowAsChild(d->mask));
+    Q_ASSERT(d->mask->parent() == 0);
 
     KisNodeCommandsAdapter adapter(d->view);
-    adapter.addNode(mask, layer, layer->lastChild());
+    adapter.addNode(d->mask, layer, layer->lastChild());
+
+
+    d->mask = 0;
     accept();
 }
 
 void KisFilterDialog::previewCheckBoxChange(int state)
 {
-    if (state) {
-        updatePreview();
-    } else if (d->filterManager->isStrokeRunning()) {
-        d->filterManager->cancel();
-    }
+    if (!d->mask) return;
+
+    d->mask->setVisible(state == Qt::Checked);
+    updatePreview();
 
     KConfigGroup group(KGlobal::config(), "filterdialog");
     group.writeEntry("showPreview", d->uiFilterDialog.checkBoxPreview->isChecked());
@@ -186,3 +190,7 @@ void KisFilterDialog::resizeEvent(QResizeEvent* event)
         d->resizeCount++;
     }
 }
+
+
+
+#include "kis_dlg_filter.moc"

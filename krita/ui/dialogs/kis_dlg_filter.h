@@ -59,7 +59,7 @@ protected slots:
 
 signals:
 
-    void sigPleaseApplyFilter(KisSafeFilterConfigurationSP);
+    void sigPleaseApplyFilter(KisNodeSP, KisFilterConfiguration*);
 
 private:
     struct Private;

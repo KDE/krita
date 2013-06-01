@@ -61,11 +61,11 @@ KisOilPaintFilter::KisOilPaintFilter() : KisFilter(id(), KisFilter::categoryArti
     setSupportsThreading(false);
 }
 
-void KisOilPaintFilter::processImpl(KisPaintDeviceSP device,
-                                    const QRect& applyRect,
-                                    const KisFilterConfiguration* config,
-                                    KoUpdater* progressUpdater
-                                    ) const
+void KisOilPaintFilter::process(KisPaintDeviceSP device,
+                         const QRect& applyRect,
+                         const KisFilterConfiguration* config,
+                         KoUpdater* progressUpdater
+                               ) const
 {
     QPoint srcTopLeft = applyRect.topLeft();
     Q_ASSERT(!device.isNull());

@@ -60,11 +60,11 @@ KisPixelizeFilter::KisPixelizeFilter() : KisFilter(id(), KisFilter::categoryArti
     setSupportsPainting(true);
 }
 
-void KisPixelizeFilter::processImpl(KisPaintDeviceSP device,
-                                    const QRect& applyRect,
-                                    const KisFilterConfiguration* configuration,
-                                    KoUpdater* progressUpdater
-                                    ) const
+void KisPixelizeFilter::process(KisPaintDeviceSP device,
+                         const QRect& applyRect,
+                         const KisFilterConfiguration* configuration,
+                         KoUpdater* progressUpdater
+                               ) const
 {
     QPoint srcTopLeft = applyRect.topLeft();
     Q_ASSERT(device);

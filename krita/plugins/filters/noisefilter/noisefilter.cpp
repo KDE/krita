@@ -89,11 +89,11 @@ KisConfigWidget * KisFilterNoise::createConfigurationWidget(QWidget* parent, con
     return new KisWdgNoise((KisFilter*)this, (QWidget*)parent);
 }
 
-void KisFilterNoise::processImpl(KisPaintDeviceSP device,
-                                 const QRect& applyRect,
-                                 const KisFilterConfiguration* config,
-                                 KoUpdater* progressUpdater
-                                 ) const
+void KisFilterNoise::process(KisPaintDeviceSP device,
+                            const QRect& applyRect,
+                            const KisFilterConfiguration* config,
+                            KoUpdater* progressUpdater
+                            ) const
 {
     Q_ASSERT(!device.isNull());
 

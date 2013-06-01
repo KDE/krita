@@ -42,11 +42,11 @@ public:
     KisAutoContrast();
 public:
     using KisFilter::process;
-    void processImpl(KisPaintDeviceSP device,
-                     const QRect& applyRect,
-                     const KisFilterConfiguration* config,
-                     KoUpdater* progressUpdater
-                     ) const;
+    void process(KisPaintDeviceSP device,
+                         const QRect& applyRect,
+                         const KisFilterConfiguration* config,
+                         KoUpdater* progressUpdater
+                ) const;
     static inline KoID id() {
         return KoID("autocontrast", i18n("Auto Contrast"));
     }

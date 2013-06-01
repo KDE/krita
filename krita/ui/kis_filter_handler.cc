@@ -51,52 +51,48 @@
 #include "kis_system_locker.h"
 #include "kis_progress_widget.h"
 
-#include "strokes/kis_filter_stroke_strategy.h"
-#include "krita_utils.h"
-
-
 struct KisFilterHandler::Private {
 
-    Private(KisFilterHandler *_q)
+    Private()
             : view(0)
             , manager(0)
-            , q(_q)
-    {
+            , lastConfiguration(0)
+            , updater(0) {
     }
 
     ~Private() {
     }
 
     KisFilterSP filter;
+    KisFilterSP currentFilter;
 
     KisView2* view;
     KisFilterManager* manager;
 
-    KisSafeFilterConfigurationSP lastConfiguration;
-    KisFilterHandler *q;
+    KisFilterConfiguration* lastConfiguration;
+    KisFilterConfiguration* currentConfiguration;
 
-    void saveConfiguration(KisFilterSP filter, KisSafeFilterConfigurationSP filterConfig);
+    KisNodeSP node;
+    KisPaintDeviceSP dev;
+    KoProgressUpdater* updater;
+    KisThreadedApplicator* applicator;
+    KisTransaction* transaction;
+    KisSystemLocker* locker;
 };
-
-void KisFilterHandler::Private::saveConfiguration(KisFilterSP filter, KisSafeFilterConfigurationSP filterConfig)
-{
-    if (filter->bookmarkManager()) {
-        filter->bookmarkManager()->save(KisBookmarkedConfigurationManager::ConfigLastUsed.id(),
-                                        filterConfig.data());
-    }
-
-    lastConfiguration = filterConfig;
-    manager->setLastFilterHandler(q);
-}
-
 
 KisFilterHandler::KisFilterHandler(KisFilterManager* parent, KisFilterSP f, KisView2* view)
         : QObject(parent)
-        , m_d(new Private(this))
+        , m_d(new Private)
 {
     m_d->filter = f;
     m_d->view = view;
     m_d->manager = parent;
+
+    m_d->lastConfiguration = 0;
+    m_d->updater = 0;
+    m_d->applicator = 0;
+    m_d->transaction = 0;
+    m_d->locker = 0;
 }
 
 KisFilterHandler::~KisFilterHandler()
@@ -114,12 +110,10 @@ void KisFilterHandler::showDialog()
     m_d->view->image()->barrierLock();
     m_d->view->image()->unlock();
 
-    KisPaintDeviceSP dev = m_d->view->activeNode()->paintDevice();
+    KisPaintDeviceSP dev = m_d->view->activeDevice();
     if (!dev) {
-        qWarning() << "KisFilterHandler::showDialog(): Filtering was requested for illegal active layer!" << m_d->view->activeNode();
         return;
     }
-
     if (dev->colorSpace()->willDegrade(m_d->filter->colorSpaceIndependence())) {
         // Warning bells!
         if (m_d->filter->colorSpaceIndependence() == TO_LAB16) {
@@ -144,60 +138,108 @@ void KisFilterHandler::showDialog()
     if (m_d->filter->showConfigurationWidget()) {
         KisFilterDialog* dialog = new KisFilterDialog(m_d->view , m_d->view->activeNode(), m_d->view->image(), m_d->view->selection());
         dialog->setFilter(m_d->filter);
-        connect(dialog, SIGNAL(sigPleaseApplyFilter(KisSafeFilterConfigurationSP)),
-                SLOT(apply(KisSafeFilterConfigurationSP)));
+        connect(dialog, SIGNAL(sigPleaseApplyFilter(KisNodeSP, KisFilterConfiguration*)),
+                SLOT(apply(KisNodeSP, KisFilterConfiguration*)));
         dialog->setVisible(true);
         dialog->setAttribute(Qt::WA_DeleteOnClose);
     } else {
-        apply(KisSafeFilterConfigurationSP(m_d->filter->defaultConfiguration(m_d->view->activeNode()->original())));
+        apply(m_d->view->activeNode(), m_d->filter->defaultConfiguration(m_d->view->activeNode()->original()));
     }
 }
 
 void KisFilterHandler::reapply()
 {
-    apply(m_d->lastConfiguration);
+    apply(m_d->view->activeLayer(), m_d->lastConfiguration);
 }
 
-void KisFilterHandler::apply(KisSafeFilterConfigurationSP config)
+void KisFilterHandler::apply(KisNodeSP layer, KisFilterConfiguration* config)
 {
-    KisSafeFilterConfigurationSP filterConfig(config);
+    // XXX: if the layer only had a preview mask and is a paint layer, then use flatten instead of applying the filter again
+    if (!layer) return;
+    while (layer->systemLocked()) {
+        qApp->processEvents();
+    }
+    m_d->node = layer;
+    m_d->currentConfiguration = config;
+    m_d->locker = new KisSystemLocker(layer);
+    m_d->currentFilter = KisFilterRegistry::instance()->value(config->name());
+    m_d->dev = layer->paintDevice();
 
-    KisImageWSP image = m_d->view->image();
-    KisPostExecutionUndoAdapter *undoAdapter =
-        image->postExecutionUndoAdapter();
-    KoCanvasResourceManager *resourceManager =
-        m_d->view->canvasBase()->resourceManager();
+    QRect rect = m_d->dev->extent();
 
-    KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(image,
-                                 undoAdapter,
-                                 resourceManager);
+    KisSelectionSP selection = m_d->view->selection();
 
-    KisStrokeId strokeId =
-        image->startStroke(new KisFilterStrokeStrategy(m_d->filter,
-                                                       KisSafeFilterConfigurationSP(filterConfig),
-                                                       resources));
-
-    if (m_d->filter->supportsThreading()) {
-        QSize size = KritaUtils::optimalPatchSize();
-        QVector<QRect> rects = KritaUtils::splitRectIntoPatches(image->bounds(), size);
-
-        foreach(const QRect &rc, rects) {
-            image->addJob(strokeId,
-                          new KisFilterStrokeStrategy::Data(rc, true));
-        }
-    } else {
-        image->addJob(strokeId,
-                      new KisFilterStrokeStrategy::Data(image->bounds(), false));
+    if (selection) {
+        QRect r1 = selection->selectedExactRect();
+        rect = rect.intersect(r1);
     }
 
-    image->endStroke(strokeId);
+    m_d->updater = m_d->view->createProgressUpdater();
 
-    m_d->saveConfiguration(m_d->filter, filterConfig);
+    // also deletes all old updaters
+    m_d->updater->start(100, m_d->currentFilter->name());
+
+    m_d->transaction = new KisTransaction(m_d->currentFilter->name(), m_d->dev);
+
+    KisProcessingInformation src(m_d->dev, rect.topLeft(), selection);
+    KisProcessingInformation dst(m_d->dev, rect.topLeft(), selection);
+
+    KisFilterJobFactory factory(m_d->currentFilter, config, selection);
+
+    if (m_d->currentFilter->supportsThreading()) {
+        // Chop up in rects.
+        m_d->applicator = new KisThreadedApplicator(m_d->dev, rect, &factory, m_d->updater, KisThreadedApplicator::TILED);
+    } else {
+        // Untiled, but still handle in one thread.
+        m_d->applicator = new KisThreadedApplicator(m_d->dev, rect, &factory, m_d->updater, KisThreadedApplicator::UNTILED);
+    }
+
+    connect(m_d->applicator, SIGNAL(areaDone(const QRect&)), this, SLOT(areaDone(const QRect &)));
+    connect(m_d->applicator, SIGNAL(finished(bool)), this, SLOT(filterDone(bool)));
+
+    m_d->applicator->start();
 }
 
-const QString KisFilterHandler::filterName() const
+const KisFilterSP KisFilterHandler::filter() const
 {
-    return m_d->filter->name();
+    return m_d->filter;
 }
 
+void KisFilterHandler::areaDone(const QRect & rc)
+{
+    m_d->node->setDirty(rc); // Starts computing the projection for the area we've done.
+
+}
+
+void KisFilterHandler::filterDone(bool interrupted)
+{
+    if (interrupted) {
+        m_d->transaction->revert();
+        delete m_d->transaction;
+    } else  {
+        KisUndoAdapter *undoAdapter = m_d->view->image()->undoAdapter();
+        m_d->transaction->commit(undoAdapter);
+        delete m_d->transaction;
+
+        if (m_d->filter->bookmarkManager()) {
+            m_d->filter->bookmarkManager()->save(KisBookmarkedConfigurationManager::ConfigLastUsed.id(),
+                                                 m_d->currentConfiguration);
+        }
+        if (m_d->lastConfiguration != m_d->currentConfiguration) {
+            delete m_d->lastConfiguration;
+        }
+        m_d->lastConfiguration = m_d->currentConfiguration;
+        m_d->manager->setLastFilterHandler(this);
+        m_d->view->image()->actionRecorder()->addAction(KisRecordedFilterAction(m_d->currentFilter->name(),
+                KisNodeQueryPath::absolutePath(m_d->node),
+                m_d->currentFilter, m_d->currentConfiguration));
+    }
+    delete m_d->locker;
+    delete m_d->applicator;
+    m_d->updater->deleteLater();
+    m_d->locker = 0;
+    m_d->view->document()->setModified(true);
+    QApplication::restoreOverrideCursor();
+
+}
+#include "kis_filter_handler.moc"

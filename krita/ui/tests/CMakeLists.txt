@@ -106,12 +106,6 @@ target_link_libraries(FreehandStrokeTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage
 
 ########### next target ###############
 
-set(filter_stroke_test_SRCS filter_stroke_test.cpp ../../sdk/tests/stroke_testing_utils.cpp)
-kde4_add_unit_test(FilterStrokeTest TESTNAME krita-ui-FilterStrokeTest  ${filter_stroke_test_SRCS})
-target_link_libraries(FilterStrokeTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(kis_selection_manager_test_SRCS kis_selection_manager_test.cpp)
 kde4_add_unit_test(KisSelectionManagerTest TESTNAME krita-ui-KisSelectionManagerTest  ${kis_selection_manager_test_SRCS})
 target_link_libraries(KisSelectionManagerTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})

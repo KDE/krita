@@ -32,11 +32,11 @@ public:
 
     using KisFilter::process;
 
-    void processImpl(KisPaintDeviceSP device,
-                     const QRect& rect,
-                     const KisFilterConfiguration* config,
-                     KoUpdater* progressUpdater
-                     ) const;
+    void process(KisPaintDeviceSP device,
+                 const QRect& rect,
+                 const KisFilterConfiguration* config,
+                 KoUpdater* progressUpdater
+                ) const;
 
     static inline KoID id() {
         return KoID("colortoalpha", i18n("Color to Alpha"));

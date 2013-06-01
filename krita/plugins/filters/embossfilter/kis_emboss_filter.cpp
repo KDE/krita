@@ -81,11 +81,11 @@ KisFilterConfiguration* KisEmbossFilter::factoryConfiguration(const KisPaintDevi
  *                     understand. You get the diference between the colors and
  *                     increase it. After this, get the gray tone
  */
-void KisEmbossFilter::processImpl(KisPaintDeviceSP device,
-                                  const QRect& applyRect,
-                                  const KisFilterConfiguration* config,
-                                  KoUpdater* progressUpdater
-                                  ) const
+void KisEmbossFilter::process(KisPaintDeviceSP device,
+                              const QRect& applyRect,
+                              const KisFilterConfiguration* config,
+                              KoUpdater* progressUpdater
+                             ) const
 {
     QPoint srcTopLeft = applyRect.topLeft();
     Q_ASSERT(device);

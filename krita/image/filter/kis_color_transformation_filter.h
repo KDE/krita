@@ -33,11 +33,11 @@ public:
     KisColorTransformationFilter(const KoID& id, const KoID & category, const QString & entry);
     virtual ~KisColorTransformationFilter();
     using KisFilter::process;
-    virtual void processImpl(KisPaintDeviceSP device, 
-                             const QRect& applyRect,
-                             const KisFilterConfiguration* config,
-                             KoUpdater* progressUpdater
-                             ) const;
+    virtual void process(KisPaintDeviceSP device, 
+                         const QRect& applyRect,
+                         const KisFilterConfiguration* config,
+                         KoUpdater* progressUpdater
+                        ) const;
     /**
      * Create the color transformation that will be applied on the device.
      */

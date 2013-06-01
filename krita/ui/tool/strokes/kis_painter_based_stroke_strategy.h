@@ -21,7 +21,6 @@
 
 #include "kis_simple_stroke_strategy.h"
 #include "kis_resources_snapshot.h"
-#include "kis_selection.h"
 
 class KisPainter;
 struct KisDistanceInformation;
@@ -60,10 +59,6 @@ public:
     void finishStrokeCallback();
     void cancelStrokeCallback();
 
-protected:
-    KisPaintDeviceSP targetDevice();
-    KisSelectionSP activeSelection();
-
 private:
     void init();
     void initPainters(KisPaintDeviceSP targetDevice,
@@ -75,9 +70,6 @@ private:
     KisResourcesSnapshotSP m_resources;
     QVector<PainterInfo*> m_painterInfos;
     KisTransaction *m_transaction;
-
-    KisPaintDeviceSP m_targetDevice;
-    KisSelectionSP m_activeSelection;
 };
 
 #endif /* __KIS_PAINTER_BASED_STROKE_STRATEGY_H */

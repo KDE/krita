@@ -98,11 +98,11 @@ void KisSobelFilter::prepareRow(KisPaintDeviceSP src, quint8* data, quint32 x, q
 #define RMS(a, b) (sqrt ((qreal)(a) * (a) + (b) * (b)))
 #define ROUND(x) ((int) ((x) + 0.5))
 
-void KisSobelFilter::processImpl(KisPaintDeviceSP device,
-                                 const QRect& applyRect,
-                                 const KisFilterConfiguration* configuration,
-                                 KoUpdater* progressUpdater
-                                 ) const
+void KisSobelFilter::process(KisPaintDeviceSP device,
+                            const QRect& applyRect,
+                            const KisFilterConfiguration* configuration,
+                            KoUpdater* progressUpdater
+                            ) const
 {
     QPoint srcTopLeft = applyRect.topLeft();
     Q_ASSERT(!device.isNull());

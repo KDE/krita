@@ -55,11 +55,11 @@ KisRoundCornersFilter::KisRoundCornersFilter() : KisFilter(id(), KisFilter::cate
 
 }
 
-void KisRoundCornersFilter::processImpl(KisPaintDeviceSP device,
-                                        const QRect& applyRect,
-                                        const KisFilterConfiguration* config,
-                                        KoUpdater* progressUpdater
-                                        ) const
+void KisRoundCornersFilter::process(KisPaintDeviceSP device,
+                                    const QRect& applyRect,
+                                    const KisFilterConfiguration* config,
+                                    KoUpdater* progressUpdater
+                                   ) const
 {
     Q_UNUSED(config);
     Q_ASSERT(!device.isNull());

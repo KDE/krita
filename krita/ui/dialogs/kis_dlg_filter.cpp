@@ -128,11 +128,11 @@ void KisFilterDialog::apply()
 {
     if (!d->currentFilter) return;
 
-    KisSafeFilterConfigurationSP config(d->uiFilterDialog.filterSelection->configuration());
+    KisFilterConfiguration* config = d->uiFilterDialog.filterSelection->configuration();
     if (d->node->inherits("KisLayer")) {
         config->setChannelFlags(qobject_cast<KisLayer*>(d->node.data())->channelFlags());
     }
-    emit(sigPleaseApplyFilter(config));
+    emit(sigPleaseApplyFilter(d->node, config));
     d->uiFilterDialog.pushButtonOk->setEnabled(false);
 }
 

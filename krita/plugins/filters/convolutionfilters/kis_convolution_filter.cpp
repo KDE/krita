@@ -41,10 +41,10 @@ KisConvolutionFilter::KisConvolutionFilter(const KoID& id, const KoID & category
 }
 
 
-void KisConvolutionFilter::processImpl(KisPaintDeviceSP device,
-                                       const QRect& applyRect,
-                                       const KisFilterConfiguration* config,
-                                       KoUpdater* progressUpdater) const
+void KisConvolutionFilter::process(KisPaintDeviceSP device,
+                                  const QRect& applyRect,
+                                  const KisFilterConfiguration* config,
+                                  KoUpdater* progressUpdater) const
 {
     Q_UNUSED(config);
 

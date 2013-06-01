@@ -71,16 +71,6 @@ void KisPainterBasedStrokeStrategy::init()
     enableJob(KisSimpleStrokeStrategy::JOB_CANCEL);
 }
 
-KisPaintDeviceSP KisPainterBasedStrokeStrategy::targetDevice()
-{
-    return m_targetDevice;
-}
-
-KisSelectionSP KisPainterBasedStrokeStrategy::activeSelection()
-{
-    return m_activeSelection;
-}
-
 void KisPainterBasedStrokeStrategy::initPainters(KisPaintDeviceSP targetDevice,
                                                  KisSelectionSP selection,
                                                  bool hasIndirectPainting)
@@ -147,9 +137,6 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
     m_transaction = new KisTransaction(name(), targetDevice);
 
     initPainters(targetDevice, selection, hasIndirectPainting);
-
-    m_targetDevice = targetDevice;
-    m_activeSelection = selection;
 }
 
 void KisPainterBasedStrokeStrategy::finishStrokeCallback()

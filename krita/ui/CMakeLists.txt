@@ -159,7 +159,6 @@ set(kritaui_LIB_SRCS
     tool/kis_smoothing_options.cpp
     tool/strokes/freehand_stroke.cpp
     tool/strokes/kis_painter_based_stroke_strategy.cpp
-    tool/strokes/kis_filter_stroke_strategy.cpp
     widgets/KisFlipbookSelector.cpp
     widgets/kis_channelflags_widget.cpp
     widgets/kis_cmb_composite.cc

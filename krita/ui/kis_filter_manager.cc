@@ -113,19 +113,23 @@ void KisFilterManager::updateGUI()
     if (!d->view) return;
 
     bool enable = false;
-
-    KisNodeSP activeNode = d->view->activeNode();
-    enable = activeNode && activeNode->paintDevice() && activeNode->isEditable();
+    KisPaintLayerSP player = 0;
+    if (d->view->activeLayer()) {
+        KisNodeSP layer = d->view->activeNode();
+        player = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(layer.data()));
+        if (player && !(*player->colorSpace() == *KoColorSpaceRegistry::instance()->alpha8())) {
+            enable = (!layer->userLocked()) && layer->visible() && (!layer->systemLocked());
+        }
+    }
 
     d->reapplyAction->setEnabled(enable);
-
     for (QHash<KisFilter*, KAction*>::iterator it = d->filters2Action.begin();
             it != d->filters2Action.end(); ++it) {
-
-        bool localEnable = enable &&
-            it.key()->workWith(activeNode->paintDevice()->compositionSourceColorSpace());
-
-        it.value()->setEnabled(localEnable);
+        if (enable && player && it.key()->workWith(player->paintDevice()->colorSpace())) {
+            it.value()->setEnabled(enable);
+        } else {
+            it.value()->setEnabled(false);
+        }
     }
 }
 
@@ -134,6 +138,6 @@ void KisFilterManager::setLastFilterHandler(KisFilterHandler* handler)
     disconnect(d->reapplyAction, SIGNAL(triggered()), 0 , 0);
     connect(d->reapplyAction, SIGNAL(triggered()), handler, SLOT(reapply()));
     d->reapplyAction->setEnabled(true);
-    d->reapplyAction->setText(i18n("Apply Filter Again: %1", handler->filterName()));
+    d->reapplyAction->setText(i18n("Apply Filter Again: %1", handler->filter()->name()));
 }
 

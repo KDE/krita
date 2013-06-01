@@ -250,6 +250,11 @@ public:
     KisLayerSP parentLayer() const;
 
     /**
+     * Remove the temporary effect mask.
+     */
+    void removePreviewMask();
+
+    /**
      * @return the metadata object associated with this object.
      */
     KisMetaData::Store* metaData();

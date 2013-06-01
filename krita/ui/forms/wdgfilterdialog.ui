@@ -17,7 +17,7 @@
    <property name="margin">
     <number>0</number>
    </property>
-   <item row="0" column="1" colspan="7">
+   <item row="0" column="0" colspan="5">
     <widget class="KisFilterSelectorWidget" name="filterSelection" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
@@ -27,22 +27,8 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="7">
-    <widget class="KPushButton" name="pushButtonCancel">
-     <property name="autoDefault">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="6">
-    <widget class="KPushButton" name="pushButtonOk">
-     <property name="default">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="5">
-    <spacer name="horizontalSpacer">
+   <item row="1" column="1">
+    <spacer>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -60,14 +46,28 @@
       <bool>true</bool>
      </property>
      <property name="text">
-      <string>Create Filter Mask</string>
+      <string>Create Mask Effect</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QCheckBox" name="checkBoxPreview">
+     <property name="text">
+      <string>Preview</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="KPushButton" name="pushButtonOk">
+     <property name="default">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
    <item row="1" column="4">
-    <widget class="QCheckBox" name="checkBoxPreview">
-     <property name="text">
-      <string>Preview</string>
+    <widget class="KPushButton" name="pushButtonCancel">
+     <property name="autoDefault">
+      <bool>false</bool>
      </property>
     </widget>
    </item>

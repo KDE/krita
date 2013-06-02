@@ -47,14 +47,18 @@ public:
 
     bool savedOutlineCacheValid;
     QPainterPath savedOutlineCache;
+    KUndo2Command *flattenUndoCommand;
+    bool resetSelectionOutlineCache;
 };
 
 KisTransactionData::KisTransactionData(const QString& name, KisPaintDeviceSP device, bool resetSelectionOutlineCache, KUndo2Command* parent)
     : KUndo2Command(name, parent)
     , m_d(new Private())
 {
+    m_d->resetSelectionOutlineCache = resetSelectionOutlineCache;
+
     init(device);
-    saveSelectionOutlineCache(resetSelectionOutlineCache);
+    saveSelectionOutlineCache();
 }
 
 void KisTransactionData::init(KisPaintDeviceSP device)
@@ -65,6 +69,7 @@ void KisTransactionData::init(KisPaintDeviceSP device)
     m_d->oldOffset = QPoint(device->x(), device->y());
     m_d->firstRedo = true;
     m_d->transactionFinished = false;
+    m_d->flattenUndoCommand = 0;
 }
 
 KisTransactionData::~KisTransactionData()
@@ -110,7 +115,20 @@ void KisTransactionData::possiblyNotifySelectionChanged()
 
     KisSelectionSP selection;
     if (pixelSelection && (selection = pixelSelection->parentSelection())) {
+        qDebug() << ppVar(pixelSelection) << ppVar(selection);
         selection->notifySelectionChanged();
+    }
+}
+
+void KisTransactionData::possiblyResetOutlineCache()
+{
+    KisPixelSelectionSP pixelSelection;
+
+    if (m_d->resetSelectionOutlineCache &&
+        (pixelSelection =
+         dynamic_cast<KisPixelSelection*>(m_d->device.data()))) {
+
+        pixelSelection->invalidateOutlineCache();
     }
 }
 
@@ -119,11 +137,13 @@ void KisTransactionData::redo()
     //KUndo2QStack calls redo(), so the first call needs to be blocked
     if (m_d->firstRedo) {
         m_d->firstRedo = false;
+
+        possiblyResetOutlineCache();
         possiblyNotifySelectionChanged();
         return;
     }
 
-    restoreSelectionOutlineCache();
+    restoreSelectionOutlineCache(false);
 
     DEBUG_ACTION("Redo()");
 
@@ -149,13 +169,13 @@ void KisTransactionData::undo()
         m_d->device->move(m_d->oldOffset);
     }
 
-    restoreSelectionOutlineCache();
+    restoreSelectionOutlineCache(true);
 
     startUpdates();
     possiblyNotifySelectionChanged();
 }
 
-void KisTransactionData::saveSelectionOutlineCache(bool invalidateCache)
+void KisTransactionData::saveSelectionOutlineCache()
 {
     m_d->savedOutlineCacheValid = false;
 
@@ -167,14 +187,22 @@ void KisTransactionData::saveSelectionOutlineCache(bool invalidateCache)
         if (m_d->savedOutlineCacheValid) {
             m_d->savedOutlineCache = pixelSelection->outlineCache();
 
-            if (invalidateCache) {
-                pixelSelection->invalidateOutlineCache();
+            possiblyResetOutlineCache();
+        }
+
+        KisSelectionSP selection = pixelSelection->parentSelection();
+        if (selection) {
+            m_d->flattenUndoCommand = selection->flatten();
+            if (m_d->flattenUndoCommand) {
+                qDebug() << "before" << pixelSelection->outlineCacheValid();
+                m_d->flattenUndoCommand->redo();
+                qDebug() << "after" << pixelSelection->outlineCacheValid();
             }
         }
     }
 }
 
-void KisTransactionData::restoreSelectionOutlineCache()
+void KisTransactionData::restoreSelectionOutlineCache(bool undo)
 {
     KisPixelSelectionSP pixelSelection =
         dynamic_cast<KisPixelSelection*>(m_d->device.data());
@@ -197,6 +225,14 @@ void KisTransactionData::restoreSelectionOutlineCache()
         m_d->savedOutlineCacheValid = savedOutlineCacheValid;
         if (m_d->savedOutlineCacheValid) {
             m_d->savedOutlineCache = savedOutlineCache;
+        }
+
+        if (m_d->flattenUndoCommand) {
+            if (undo) {
+                m_d->flattenUndoCommand->undo();
+            } else {
+                m_d->flattenUndoCommand->redo();
+            }
         }
     }
 }

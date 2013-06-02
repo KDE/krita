@@ -33,6 +33,7 @@ KisShapeSelectionModel::KisShapeSelectionModel(KisImageWSP image, KisSelectionWS
     , m_parentSelection(selection)
     , m_shapeSelection(shapeSelection)
     , m_updateSignalCompressor(300, false)
+    , m_updatesEnabled(true)
 {
     connect(&m_updateSignalCompressor, SIGNAL(timeout()), SLOT(startUpdateJob()));
 }
@@ -41,6 +42,16 @@ KisShapeSelectionModel::~KisShapeSelectionModel()
 {
     m_image = 0;
     m_parentSelection = 0;
+}
+
+void KisShapeSelectionModel::requestUpdate(const QRect &updateRect)
+{
+    m_shapeSelection->recalculateOutlineCache();
+
+    if (m_updatesEnabled) {
+        m_updateRect = !updateRect.isEmpty() ? m_updateRect | updateRect : QRect();
+        m_updateSignalCompressor.start();
+    }
 }
 
 void KisShapeSelectionModel::startUpdateJob()
@@ -66,16 +77,13 @@ void KisShapeSelectionModel::add(KoShape *child)
     matrix.scale(m_image->xRes(), m_image->yRes());
     updateRect = matrix.mapRect(updateRect);
 
-    m_shapeSelection->recalculateOutlineCache();
     if (m_shapeMap.count() == 1) {
         // The shape is the first one, so the shape selection just got created
         // Pixel selection provides no longer the datamanager of the selection
         // so update the whole selection
-        m_updateRect = QRect();
-        m_updateSignalCompressor.start();
+        requestUpdate(QRect());
     } else {
-        m_updateRect |= updateRect;
-        m_updateSignalCompressor.start();
+        requestUpdate(updateRect);
     }
 }
 
@@ -94,10 +102,18 @@ void KisShapeSelectionModel::remove(KoShape *child)
     matrix.scale(m_image->xRes(), m_image->yRes());
     updateRect = matrix.mapRect(updateRect);
     if (m_shapeSelection) { // No m_shapeSelection indicates the selection is being deleted
-        m_shapeSelection->recalculateOutlineCache();
-        m_updateRect |= updateRect;
-        m_updateSignalCompressor.start();
+        requestUpdate(updateRect);
     }
+}
+
+void KisShapeSelectionModel::setUpdatesEnabled(bool enabled)
+{
+    m_updatesEnabled = enabled;
+}
+
+bool KisShapeSelectionModel::updatesEnabled() const
+{
+    return m_updatesEnabled;
 }
 
 void KisShapeSelectionModel::setClipped(const KoShape *child, bool clipping)
@@ -150,10 +166,7 @@ void KisShapeSelectionModel::childChanged(KoShape * child, KoShape::ChangeType t
     matrix.scale(m_image->xRes(), m_image->yRes());
     changedRect = matrix.mapRect(changedRect);
 
-    m_shapeSelection->recalculateOutlineCache();
-
-    m_updateRect |= changedRect.toAlignedRect();
-    m_updateSignalCompressor.start();
+    requestUpdate(changedRect.toAlignedRect());
 }
 
 bool KisShapeSelectionModel::isChildLocked(const KoShape *child) const

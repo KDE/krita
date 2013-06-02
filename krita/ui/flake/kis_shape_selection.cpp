@@ -60,6 +60,7 @@
 #include "kis_shape_selection_model.h"
 #include "kis_shape_selection_canvas.h"
 #include "kis_shape_layer_paste.h"
+#include "kis_take_all_shapes_command.h"
 #include "kis_image_view_converter.h"
 
 
@@ -290,6 +291,11 @@ bool KisShapeSelection::loadSelection(KoStore* store)
 
 }
 
+KUndo2Command* KisShapeSelection::resetToEmpty()
+{
+    return new KisTakeAllShapesCommand(this);
+}
+
 bool KisShapeSelection::isEmpty() const
 {
     return !m_model->count();
@@ -356,7 +362,6 @@ void KisShapeSelection::renderSelection(KisPaintDeviceSP projection, const QRect
     maskPainter.setRenderHint(QPainter::Antialiasing, true);
 
     // Break the mask up into chunks so we don't have to allocate a potentially very large QImage.
-
     for (qint32 x = r.x(); x < r.x() + r.width(); x += MASK_IMAGE_WIDTH) {
         for (qint32 y = r.y(); y < r.y() + r.height(); y += MASK_IMAGE_HEIGHT) {
 

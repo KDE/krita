@@ -52,6 +52,8 @@ public:
     virtual QPainterPath outlineCache() const = 0;
     virtual bool outlineCacheValid() const = 0;
     virtual void recalculateOutlineCache() = 0;
+
+    virtual KUndo2Command* resetToEmpty() { return 0; }
 };
 
 #endif

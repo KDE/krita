@@ -39,6 +39,9 @@ public:
     void add(KoShape *child);
     void remove(KoShape *child);
 
+    void setUpdatesEnabled(bool enabled);
+    bool updatesEnabled() const;
+
     void setClipped(const KoShape *child, bool clipping);
     bool isClipped(const KoShape *child) const;
     virtual void setInheritsTransform(const KoShape *shape, bool inherit);
@@ -53,6 +56,7 @@ public:
     void setShapeSelection(KisShapeSelection* selection);
 
 private slots:
+    void requestUpdate(const QRect &updateRect);
     void startUpdateJob();
 
 private:
@@ -63,6 +67,7 @@ private:
 
     KisSignalCompressor m_updateSignalCompressor;
     QRect m_updateRect;
+    bool m_updatesEnabled;
 };
 
 #endif

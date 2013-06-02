@@ -69,6 +69,7 @@ public:
     virtual void renderToProjection(KisPaintDeviceSP projection);
     virtual void renderToProjection(KisPaintDeviceSP projection, const QRect& r);
 
+    KUndo2Command* resetToEmpty();
     bool isEmpty() const;
 
     QPainterPath outlineCache() const;

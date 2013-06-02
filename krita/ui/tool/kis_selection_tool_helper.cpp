@@ -106,8 +106,7 @@ void KisSelectionToolHelper::addSelectionShape(KoShape* shape)
     pixelSelection->clear();
     transaction.commit(undoAdapter);
 
-    KUndo2Command *cmd = m_canvas->shapeController()->addShape(shape);
-    undoAdapter->addCommand(cmd);
+    undoAdapter->addCommand(m_canvas->shapeController()->addShape(shape));
     undoAdapter->endMacro();
 }
 

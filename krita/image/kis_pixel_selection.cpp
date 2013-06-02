@@ -295,7 +295,7 @@ QVector<QPolygon> KisPixelSelection::outline() const
 
 bool KisPixelSelection::isEmpty() const
 {
-    return selectedRect().isEmpty();
+    return *defaultPixel() == MIN_SELECTED && selectedRect().isEmpty();
 }
 
 QPainterPath KisPixelSelection::outlineCache() const

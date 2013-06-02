@@ -86,7 +86,7 @@ public:
      * should set the parent manually if he wants to get the
      * signals
      */
-    void setParentNode(KisNodeWSP node);
+    void setParentNode(KisNodeSP node);
 
     bool hasPixelSelection() const;
     bool hasShapeSelection() const;
@@ -167,18 +167,17 @@ public:
      * and throws away the shape selection. This has no effect if there is no
      * shape selection.
      */
-    void flatten();
+    KUndo2Command* flatten();
 
     void notifySelectionChanged();
 
     KDE_DEPRECATED quint8 selected(qint32 x, qint32 y) const;
-    KDE_DEPRECATED void setDirty(const QRect &rc = QRect());
 
 private:
     friend class KisSelectionTest;
     friend class KisMaskTest;
     friend class KisAdjustmentLayerTest;
-    KisNodeWSP parentNode() const;
+    KisNodeSP parentNode() const;
 
     void copyFrom(const KisSelection &rhs);
 

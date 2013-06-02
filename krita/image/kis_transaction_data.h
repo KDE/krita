@@ -46,13 +46,14 @@ public:
     virtual void endTransaction();
 
 protected:
-    virtual void saveSelectionOutlineCache(bool invalidateCache);
-    virtual void restoreSelectionOutlineCache();
+    virtual void saveSelectionOutlineCache();
+    virtual void restoreSelectionOutlineCache(bool undo);
 
 private:
     void init(KisPaintDeviceSP device);
     void startUpdates();
     void possiblyNotifySelectionChanged();
+    void possiblyResetOutlineCache();
 
 private:
     class Private;

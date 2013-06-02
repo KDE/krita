@@ -169,6 +169,8 @@ public:
      */
     void flatten();
 
+    void notifySelectionChanged();
+
     KDE_DEPRECATED quint8 selected(qint32 x, qint32 y) const;
     KDE_DEPRECATED void setDirty(const QRect &rc = QRect());
 

@@ -19,16 +19,19 @@
 #ifndef KIS_SHAPE_SELECTION_MODEL_H
 #define KIS_SHAPE_SELECTION_MODEL_H
 
+#include <QObject>
 #include "KoShapeContainerModel.h"
 #include "kis_types.h"
+#include "kis_signal_compressor.h"
 
 class KisShapeSelection;
 
 /**
  *
  */
-class KisShapeSelectionModel: public KoShapeContainerModel
+class KisShapeSelectionModel: public QObject, public KoShapeContainerModel
 {
+    Q_OBJECT
 public:
     KisShapeSelectionModel(KisImageWSP image, KisSelectionWSP selection, KisShapeSelection* shapeSelection);
     ~KisShapeSelectionModel();
@@ -48,11 +51,18 @@ public:
     void childChanged(KoShape * child, KoShape::ChangeType type);
     bool isChildLocked(const KoShape *child) const;
     void setShapeSelection(KisShapeSelection* selection);
+
+private slots:
+    void startUpdateJob();
+
 private:
     QMap<KoShape*, QRectF> m_shapeMap;
     KisImageWSP m_image;
     KisSelectionWSP m_parentSelection;
     KisShapeSelection* m_shapeSelection;
+
+    KisSignalCompressor m_updateSignalCompressor;
+    QRect m_updateRect;
 };
 
 #endif

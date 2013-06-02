@@ -186,6 +186,7 @@ set(kritaimage_LIB_SRCS
    kis_selection.cc
    kis_selection_mask.cpp
    kis_update_outline_job.cpp
+   kis_update_selection_job.cpp
    kis_serializable_configuration.cc
    kis_shared.cc
    kis_transaction_data.cpp

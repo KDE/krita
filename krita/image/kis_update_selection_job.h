@@ -16,31 +16,23 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_SIGNAL_COMPRESSOR_H
-#define __KIS_SIGNAL_COMPRESSOR_H
+#ifndef __KIS_UPDATE_SELECTION_JOB_H
+#define __KIS_UPDATE_SELECTION_JOB_H
 
-#include <QObject>
-#include "krita_export.h"
+#include "kis_spontaneous_job.h"
+#include "kis_selection.h"
 
-class QTimer;
-
-class KRITAIMAGE_EXPORT KisSignalCompressor : public QObject
+class KRITAIMAGE_EXPORT KisUpdateSelectionJob : public KisSpontaneousJob
 {
-    Q_OBJECT
-
 public:
-    KisSignalCompressor(int delay, bool deadline = true, QObject *parent = 0);
+    KisUpdateSelectionJob(KisSelectionSP selection, const QRect &updateRect = QRect());
 
-public slots:
-    void start();
-    void stop();
-
-signals:
-    void timeout();
+    bool overrides(const KisSpontaneousJob *otherJob);
+    void run();
 
 private:
-    QTimer *m_timer;
-    bool m_deadline;
+    KisSelectionSP m_selection;
+    QRect m_updateRect;
 };
 
-#endif /* __KIS_SIGNAL_COMPRESSOR_H */
+#endif /* __KIS_UPDATE_SELECTION_JOB_H */

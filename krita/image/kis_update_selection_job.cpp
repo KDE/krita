@@ -16,21 +16,39 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_update_outline_job.h"
+#include "kis_update_selection_job.h"
 
 
-KisUpdateOutlineJob::KisUpdateOutlineJob(KisSelectionSP selection)
-    : m_selection(selection)
+KisUpdateSelectionJob::KisUpdateSelectionJob(KisSelectionSP selection, const QRect &updateRect)
+    : m_selection(selection),
+      m_updateRect(updateRect)
 {
 }
 
-bool KisUpdateOutlineJob::overrides(const KisSpontaneousJob *otherJob)
+bool KisUpdateSelectionJob::overrides(const KisSpontaneousJob *_otherJob)
 {
-    return dynamic_cast<const KisUpdateOutlineJob*>(otherJob);
+    const KisUpdateSelectionJob *otherJob =
+        dynamic_cast<const KisUpdateSelectionJob*>(_otherJob);
+
+    bool retval = false;
+
+    if (otherJob && otherJob->m_selection == m_selection) {
+        if (!m_updateRect.isEmpty()) {
+            m_updateRect |= otherJob->m_updateRect;
+        }
+        retval = true;
+    }
+
+    return retval;
 }
 
-void KisUpdateOutlineJob::run()
+void KisUpdateSelectionJob::run()
 {
-    m_selection->recalculateOutlineCache();
+    if (!m_updateRect.isEmpty()) {
+        m_selection->updateProjection(m_updateRect);
+    } else {
+        m_selection->updateProjection();
+    }
+
     m_selection->notifySelectionChanged();
 }

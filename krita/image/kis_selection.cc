@@ -96,6 +96,8 @@ void KisSelection::copyFrom(const KisSelection &rhs)
     if(rhs.m_d->pixelSelection) {
         m_d->pixelSelection = new KisPixelSelection(*rhs.m_d->pixelSelection);
         Q_ASSERT(m_d->pixelSelection);
+
+        m_d->pixelSelection->setParentSelection(this);
     }
 
     if (rhs.m_d->shapeSelection) {
@@ -135,16 +137,6 @@ KisNodeWSP KisSelection::parentNode() const
     return m_d->parentNode;
 }
 
-bool KisSelection::hasPixelSelection() const
-{
-    return m_d->pixelSelection;
-}
-
-bool KisSelection::hasShapeSelection() const
-{
-    return m_d->shapeSelection;
-}
-
 bool KisSelection::outlineCacheValid() const
 {
     return !m_d->pixelSelection ||
@@ -177,6 +169,16 @@ void KisSelection::recalculateOutlineCache()
     }
 }
 
+bool KisSelection::hasPixelSelection() const
+{
+    return m_d->pixelSelection;
+}
+
+bool KisSelection::hasShapeSelection() const
+{
+    return m_d->shapeSelection;
+}
+
 KisPixelSelectionSP KisSelection::pixelSelection() const
 {
     return m_d->pixelSelection;
@@ -195,7 +197,7 @@ void KisSelection::setShapeSelection(KisSelectionComponent* shapeSelection)
 KisPixelSelectionSP KisSelection::getOrCreatePixelSelection()
 {
     if (!m_d->pixelSelection) {
-        m_d->pixelSelection = new KisPixelSelection(m_d->defaultBounds);
+        m_d->pixelSelection = new KisPixelSelection(m_d->defaultBounds, this);
         m_d->pixelSelection->setParentNode(m_d->parentNode);
     }
 
@@ -353,6 +355,17 @@ void KisSelection::flatten()
         delete m_d->shapeSelection;
         m_d->shapeSelection = 0;
     }
+}
+
+void KisSelection::notifySelectionChanged()
+{
+    KisNodeSP parentNode;
+    if (!(parentNode = this->parentNode())) return;
+
+    KisNodeGraphListener *listener;
+    if (!(listener = parentNode->graphListener())) return;
+
+    listener->notifySelectionChanged();
 }
 
 quint8 KisSelection::selected(qint32 x, qint32 y) const

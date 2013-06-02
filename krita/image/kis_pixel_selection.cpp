@@ -42,16 +42,19 @@
 #include <kis_iterator_ng.h>
 
 struct KisPixelSelection::Private {
+    KisSelectionWSP parentSelection;
+
     QPainterPath outlineCache;
     bool outlineCacheValid;
     QMutex outlineCacheMutex;
 };
 
-KisPixelSelection::KisPixelSelection(KisDefaultBoundsBaseSP defaultBounds)
+KisPixelSelection::KisPixelSelection(KisDefaultBoundsBaseSP defaultBounds, KisSelectionWSP parentSelection)
         : KisPaintDevice(0, KoColorSpaceRegistry::instance()->alpha8(), defaultBounds)
         , m_d(new Private)
 {
     m_d->outlineCacheValid = true;
+    m_d->parentSelection = parentSelection;
 }
 
 KisPixelSelection::KisPixelSelection(const KisPixelSelection& rhs)
@@ -59,6 +62,9 @@ KisPixelSelection::KisPixelSelection(const KisPixelSelection& rhs)
         , KisSelectionComponent(rhs)
         , m_d(new Private)
 {
+    // parent selection is not supposed to be shared
+    m_d->outlineCache = rhs.m_d->outlineCache;
+    m_d->outlineCacheValid = rhs.m_d->outlineCacheValid;
 }
 
 KisSelectionComponent* KisPixelSelection::clone(KisSelection*)
@@ -175,7 +181,7 @@ void KisPixelSelection::subtractSelection(KisPixelSelectionSP selection)
 }
 
 void KisPixelSelection::intersectSelection(KisPixelSelectionSP selection)
-{    
+{
     QRect r = selection->selectedRect().united(selectedRect());
     if (r.isEmpty()) return;
 
@@ -287,6 +293,11 @@ QVector<QPolygon> KisPixelSelection::outline() const
     return generator.outline(this, xOffset, yOffset, width, height);
 }
 
+bool KisPixelSelection::isEmpty() const
+{
+    return selectedRect().isEmpty();
+}
+
 QPainterPath KisPixelSelection::outlineCache() const
 {
     QMutexLocker locker(&m_d->outlineCacheMutex);
@@ -325,20 +336,19 @@ void KisPixelSelection::recalculateOutlineCache()
     m_d->outlineCacheValid = true;
 }
 
+void KisPixelSelection::setParentSelection(KisSelectionSP selection)
+{
+    m_d->parentSelection = selection;
+}
+
+KisSelectionSP KisPixelSelection::parentSelection() const
+{
+    return m_d->parentSelection;
+}
+
 void KisPixelSelection::renderToProjection(KisPaintDeviceSP projection)
 {
     renderToProjection(projection, selectedExactRect());
-}
-
-void KisPixelSelection::notifySelectionChanged()
-{
-    KisNodeSP parentNode;
-    if (!(parentNode = this->parentNode())) return;
-
-    KisNodeGraphListener *listener;
-    if (!(listener = parentNode->graphListener())) return;
-
-    listener->notifySelectionChanged();
 }
 
 void KisPixelSelection::renderToProjection(KisPaintDeviceSP projection, const QRect& rc)

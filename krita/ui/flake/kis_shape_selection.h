@@ -69,7 +69,7 @@ public:
     virtual void renderToProjection(KisPaintDeviceSP projection);
     virtual void renderToProjection(KisPaintDeviceSP projection, const QRect& r);
 
-    virtual void setDirty();
+    bool isEmpty() const;
 
     QPainterPath outlineCache() const;
     bool outlineCacheValid() const;
@@ -90,8 +90,7 @@ private:
     void renderSelection(KisPaintDeviceSP projection, const QRect& r);
 
     KisImageWSP m_image;
-    mutable QPainterPath m_outline;
-    mutable bool m_dirty;
+    QPainterPath m_outline;
     KisImageViewConverter* m_converter;
     KisShapeSelectionCanvas* m_canvas;
     KisShapeSelectionModel* m_model;

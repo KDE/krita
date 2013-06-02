@@ -82,7 +82,6 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
     undoAdapter->endMacro();
 
     pixelSelection->setDirty(dirtyRect);
-    m_canvas->view()->selectionManager()->selectionChanged();
 }
 
 void KisSelectionToolHelper::addSelectionShape(KoShape* shape)

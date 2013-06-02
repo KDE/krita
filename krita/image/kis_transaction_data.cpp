@@ -108,8 +108,9 @@ void KisTransactionData::possiblyNotifySelectionChanged()
     KisPixelSelectionSP pixelSelection =
         dynamic_cast<KisPixelSelection*>(m_d->device.data());
 
-    if (pixelSelection) {
-        pixelSelection->notifySelectionChanged();
+    KisSelectionSP selection;
+    if (pixelSelection && (selection = pixelSelection->parentSelection())) {
+        selection->notifySelectionChanged();
     }
 }
 

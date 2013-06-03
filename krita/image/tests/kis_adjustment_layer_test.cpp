@@ -93,7 +93,7 @@ void KisAdjustmentLayerTest::testSelectionParent()
         KisAdjustmentLayerSP adjLayer =
             new KisAdjustmentLayer(image, "bla", f->defaultConfiguration(0), 0);
 
-        QCOMPARE(adjLayer->internalSelection()->parentNode(), KisNodeWSP(adjLayer));
+        QCOMPARE(adjLayer->internalSelection()->parentNode(), KisNodeSP(adjLayer));
     }
 
     {
@@ -101,7 +101,7 @@ void KisAdjustmentLayerTest::testSelectionParent()
         KisAdjustmentLayerSP adjLayer =
             new KisAdjustmentLayer(image, "bla", f->defaultConfiguration(0), selection);
 
-        QCOMPARE(adjLayer->internalSelection()->parentNode(), KisNodeWSP(adjLayer));
+        QCOMPARE(adjLayer->internalSelection()->parentNode(), KisNodeSP(adjLayer));
     }
 
     {
@@ -111,7 +111,7 @@ void KisAdjustmentLayerTest::testSelectionParent()
         KisSelectionSP selection = new KisSelection();
         adjLayer->setInternalSelection(selection);
 
-        QCOMPARE(adjLayer->internalSelection()->parentNode(), KisNodeWSP(adjLayer));
+        QCOMPARE(adjLayer->internalSelection()->parentNode(), KisNodeSP(adjLayer));
     }
 }
 

@@ -42,14 +42,14 @@
 #include <kis_iterator_ng.h>
 
 struct KisPixelSelection::Private {
-    KisSelectionWSP parentSelection;
+    KisSelectionSP parentSelection;
 
     QPainterPath outlineCache;
     bool outlineCacheValid;
     QMutex outlineCacheMutex;
 };
 
-KisPixelSelection::KisPixelSelection(KisDefaultBoundsBaseSP defaultBounds, KisSelectionWSP parentSelection)
+KisPixelSelection::KisPixelSelection(KisDefaultBoundsBaseSP defaultBounds, KisSelectionSP parentSelection)
         : KisPaintDevice(0, KoColorSpaceRegistry::instance()->alpha8(), defaultBounds)
         , m_d(new Private)
 {

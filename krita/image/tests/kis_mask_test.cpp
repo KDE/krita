@@ -115,14 +115,14 @@ void KisMaskTest::testSelectionParent()
         KisMaskSP mask = new TestMask;
         mask->initSelection(image->rootLayer());
         KisSelectionSP selection = mask->selection();
-        QCOMPARE(selection->parentNode(), KisNodeWSP(mask));
+        QCOMPARE(selection->parentNode(), KisNodeSP(mask));
     }
 
     {
         KisMaskSP mask = new TestMask;
         mask->setSelection(new KisSelection());
         KisSelectionSP selection = mask->selection();
-        QCOMPARE(selection->parentNode(), KisNodeWSP(mask));
+        QCOMPARE(selection->parentNode(), KisNodeSP(mask));
     }
 }
 

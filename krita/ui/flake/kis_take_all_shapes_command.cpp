@@ -22,9 +22,10 @@
 #include "kis_shape_selection.h"
 
 
-KisTakeAllShapesCommand::KisTakeAllShapesCommand(KisShapeSelection *shapeSelection)
+KisTakeAllShapesCommand::KisTakeAllShapesCommand(KisShapeSelection *shapeSelection, bool takeSilently)
     : KUndo2Command(i18nc("(qtundo-format)", "Clear Vector Selection")),
-      m_shapeSelection(shapeSelection)
+      m_shapeSelection(shapeSelection),
+      m_takeSilently(takeSilently)
 {
 }
 
@@ -37,19 +38,35 @@ KisTakeAllShapesCommand::~KisTakeAllShapesCommand()
 
 void KisTakeAllShapesCommand::redo()
 {
+    if (m_takeSilently) {
+        m_shapeSelection->setUpdatesEnabled(false);
+    }
+
     m_shapes = m_shapeSelection->shapes();
 
     foreach (KoShape *shape, m_shapes) {
         m_shapeSelection->removeShape(shape);
     }
+
+    if (m_takeSilently) {
+        m_shapeSelection->setUpdatesEnabled(true);
+    }
 }
 
 void KisTakeAllShapesCommand::undo()
 {
+    if (m_takeSilently) {
+        m_shapeSelection->setUpdatesEnabled(false);
+    }
+
     foreach (KoShape *shape, m_shapes) {
         m_shapeSelection->addShape(shape);
     }
 
     m_shapes.clear();
+
+    if (m_takeSilently) {
+        m_shapeSelection->setUpdatesEnabled(true);
+    }
 }
 

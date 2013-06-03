@@ -291,9 +291,19 @@ bool KisShapeSelection::loadSelection(KoStore* store)
 
 }
 
+void KisShapeSelection::setUpdatesEnabled(bool enabled)
+{
+    m_model->setUpdatesEnabled(enabled);
+}
+
+bool KisShapeSelection::updatesEnabled() const
+{
+    return m_model->updatesEnabled();
+}
+
 KUndo2Command* KisShapeSelection::resetToEmpty()
 {
-    return new KisTakeAllShapesCommand(this);
+    return new KisTakeAllShapesCommand(this, true);
 }
 
 bool KisShapeSelection::isEmpty() const

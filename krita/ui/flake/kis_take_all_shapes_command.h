@@ -33,7 +33,7 @@ class KisShapeSelection;
 class KisTakeAllShapesCommand : public KUndo2Command
 {
 public:
-    KisTakeAllShapesCommand(KisShapeSelection *shapeSelection);
+    KisTakeAllShapesCommand(KisShapeSelection *shapeSelection, bool takeSilently);
     ~KisTakeAllShapesCommand();
 
     void redo();
@@ -42,6 +42,7 @@ public:
 private:
     KisShapeSelection *m_shapeSelection;
     QList<KoShape*> m_shapes;
+    bool m_takeSilently;
 };
 
 #endif /* __KIS_TAKE_ALL_SHAPES_COMMAND_H */

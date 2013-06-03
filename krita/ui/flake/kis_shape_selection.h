@@ -87,6 +87,11 @@ protected:
     virtual void paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext);
 
 private:
+    friend class KisTakeAllShapesCommand;
+    void setUpdatesEnabled(bool enabled);
+    bool updatesEnabled() const;
+
+private:
 
     void renderSelection(KisPaintDeviceSP projection, const QRect& r);
 

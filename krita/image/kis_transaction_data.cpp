@@ -115,7 +115,6 @@ void KisTransactionData::possiblyNotifySelectionChanged()
 
     KisSelectionSP selection;
     if (pixelSelection && (selection = pixelSelection->parentSelection())) {
-        qDebug() << ppVar(pixelSelection) << ppVar(selection);
         selection->notifySelectionChanged();
     }
 }
@@ -194,9 +193,7 @@ void KisTransactionData::saveSelectionOutlineCache()
         if (selection) {
             m_d->flattenUndoCommand = selection->flatten();
             if (m_d->flattenUndoCommand) {
-                qDebug() << "before" << pixelSelection->outlineCacheValid();
                 m_d->flattenUndoCommand->redo();
-                qDebug() << "after" << pixelSelection->outlineCacheValid();
             }
         }
     }

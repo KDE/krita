@@ -81,7 +81,7 @@ void KisClipboardBrushWidget::slotUseBrushClicked(){
             }
         }
 
-        pd = m_clipboard->clip(QRect(0,0,0,0));        //Weird! Don't know how this works!
+        pd = m_clipboard->clip(QRect(0,0,0,0), false);        //Weird! Don't know how this works!
         QRect rc = pd->exactBounds();
 
         m_brush = new KisGbrBrush(pd, rc.x(), rc.y(), rc.width(), rc.height());
@@ -111,7 +111,6 @@ void KisClipboardBrushWidget::slotUpdateSpacing(qreal val){
 }
 
 void KisClipboardBrushWidget::showEvent(QShowEvent *){
-    m_clipboard->assumePasteFromWeb(true);
     if(!m_brushCreated){
         this->slotUseBrushClicked();
         m_brushCreated = true;

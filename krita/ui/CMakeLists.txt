@@ -75,7 +75,6 @@ set(kritaui_LIB_SRCS
     kis_part2.cpp
     kis_factory2.cc
     kis_file_layer.cpp
-    kis_filter_handler.cc
     kis_filter_manager.cc
     kis_filters_model.cc
     kis_flipbook.cpp

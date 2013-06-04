@@ -32,6 +32,7 @@ private slots:
     void testExclusiveStrokes();
     void testBarrierStrokeJobs();
     void testStrokesOverlapping();
+    void testImmediateCancel();
 };
 
 #endif /* __KIS_STROKES_QUEUE_TEST_H */

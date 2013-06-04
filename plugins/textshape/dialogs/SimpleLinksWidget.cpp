@@ -70,19 +70,6 @@ void SimpleLinksWidget::manageBookmarks()
     }
     delete dia;
     KoBookmark *bookmark = manager->bookmark(name);
-#if 0
-    KoShape *shape = bookmark->shape();
-    KoSelection *selection = canvasBase()->shapeManager()->selection();
-    selection->deselectAll();
-    selection->select(shape);
-
-    QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
-    KoToolManager::instance()->switchToolRequested(tool);
-#else
-#ifdef __GNUC__
-    #warning FIXME: port to textlayout-rework
-#endif
-#endif
 
     KoCanvasResourceManager *rm = m_referenceTool->canvas()->resourceManager();
     if ((bookmark->positionOnlyMode() == false) && bookmark->hasRange()) {

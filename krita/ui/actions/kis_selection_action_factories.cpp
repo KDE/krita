@@ -301,7 +301,7 @@ void KisCopyMergedActionFactory::run(KisView2 *view)
 void KisPasteActionFactory::run(KisView2 *view)
 {
     KisImageWSP image = view->image();
-    KisPaintDeviceSP clip = KisClipboard::instance()->clip(image->bounds());
+    KisPaintDeviceSP clip = KisClipboard::instance()->clip(image->bounds(), true);
 
     if (clip) {
         KisPaintLayer *newLayer = new KisPaintLayer(image.data(), image->nextLayerName() + i18n("(pasted)"), OPACITY_OPAQUE_U8, clip);
@@ -325,7 +325,7 @@ void KisPasteNewActionFactory::run(KisView2 *view)
 {
     Q_UNUSED(view);
 
-    KisPaintDeviceSP clip = KisClipboard::instance()->clip(QRect());
+    KisPaintDeviceSP clip = KisClipboard::instance()->clip(QRect(), true);
     if (!clip) return;
 
     QRect rect = clip->exactBounds();

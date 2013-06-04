@@ -27,6 +27,7 @@
 class KisFilter;
 class KisFilterConfiguration;
 class KisView2;
+class KisFilterManager;
 
 class KisFilterDialog : public QDialog
 {
@@ -35,7 +36,7 @@ class KisFilterDialog : public QDialog
 
 public:
 
-    KisFilterDialog(KisView2 *view, KisNodeSP node, KisImageWSP image, KisSelectionSP selection = 0);
+    KisFilterDialog(KisView2 *view, KisNodeSP node, KisFilterManager *filterManager);
 
     ~KisFilterDialog();
 
@@ -57,9 +58,8 @@ protected slots:
 
     virtual void resizeEvent(QResizeEvent* );
 
-signals:
-
-    void sigPleaseApplyFilter(KisSafeFilterConfigurationSP);
+private:
+    void startApplyingFilter(KisSafeFilterConfigurationSP config);
 
 private:
     struct Private;

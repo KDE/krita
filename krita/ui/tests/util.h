@@ -54,7 +54,7 @@ KisSelectionSP createPixelSelection(KisPaintDeviceSP paintDevice)
 {
     KisSelectionSP pixelSelection = new KisSelection(new KisSelectionDefaultBounds(paintDevice));
 
-    KisFillPainter gc(pixelSelection->getOrCreatePixelSelection());
+    KisFillPainter gc(pixelSelection->pixelSelection());
     gc.fillRect(10, 10, 200, 200, KoColor(gc.device()->colorSpace()));
     gc.fillRect(150, 150, 200, 200, KoColor(QColor(100, 100, 100, 100), gc.device()->colorSpace()));
     gc.end();

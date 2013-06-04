@@ -55,6 +55,7 @@ set(kritaui_LIB_SRCS
     flake/kis_shape_selection.cpp
     flake/kis_shape_selection_canvas.cpp
     flake/kis_shape_selection_model.cpp
+    flake/kis_take_all_shapes_command.cpp
     kis_autogradient.cc
     kis_autogradient_resource.cc
     kis_bookmarked_configurations_editor.cc

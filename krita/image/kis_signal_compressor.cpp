@@ -20,9 +20,10 @@
 
 #include <QTimer>
 
-KisSignalCompressor::KisSignalCompressor(int delay, QObject *parent)
+KisSignalCompressor::KisSignalCompressor(int delay, bool deadline, QObject *parent)
     : QObject(parent),
-      m_timer(new QTimer(this))
+      m_timer(new QTimer(this)),
+      m_deadline(deadline)
 {
     m_timer->setSingleShot(true);
     m_timer->setInterval(delay);
@@ -32,7 +33,7 @@ KisSignalCompressor::KisSignalCompressor(int delay, QObject *parent)
 
 void KisSignalCompressor::start()
 {
-    if (!m_timer->isActive()) {
+    if (!m_deadline || !m_timer->isActive()) {
         m_timer->start();
     }
 }

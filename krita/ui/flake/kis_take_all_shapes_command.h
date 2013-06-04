@@ -16,31 +16,33 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_SIGNAL_COMPRESSOR_H
-#define __KIS_SIGNAL_COMPRESSOR_H
+#ifndef __KIS_TAKE_ALL_SHAPES_COMMAND_H
+#define __KIS_TAKE_ALL_SHAPES_COMMAND_H
 
-#include <QObject>
+#include <QList>
+
+#include "kundo2command.h"
+
 #include "krita_export.h"
+#include "kis_types.h"
 
-class QTimer;
+class KoShape;
+class KisShapeSelection;
 
-class KRITAIMAGE_EXPORT KisSignalCompressor : public QObject
+
+class KisTakeAllShapesCommand : public KUndo2Command
 {
-    Q_OBJECT
-
 public:
-    KisSignalCompressor(int delay, bool deadline = true, QObject *parent = 0);
+    KisTakeAllShapesCommand(KisShapeSelection *shapeSelection, bool takeSilently);
+    ~KisTakeAllShapesCommand();
 
-public slots:
-    void start();
-    void stop();
-
-signals:
-    void timeout();
+    void redo();
+    void undo();
 
 private:
-    QTimer *m_timer;
-    bool m_deadline;
+    KisShapeSelection *m_shapeSelection;
+    QList<KoShape*> m_shapes;
+    bool m_takeSilently;
 };
 
-#endif /* __KIS_SIGNAL_COMPRESSOR_H */
+#endif /* __KIS_TAKE_ALL_SHAPES_COMMAND_H */

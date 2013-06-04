@@ -132,9 +132,6 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                 td->node->setDirty(oldExtent | td->node->extent());
             }
         } else if (m_selection) {
-            // FIXME: do it undoable
-            m_selection->flatten();
-            Q_ASSERT(m_selection->pixelSelection());
 
             /**
              * We use usual transaction here, because we cannot calsulate

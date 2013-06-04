@@ -82,7 +82,7 @@ protected:
 
         KisAdjustmentLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration, 0);
         blur1->internalSelection()->clear();
-        blur1->internalSelection()->getOrCreatePixelSelection()->select(blurRect);
+        blur1->internalSelection()->pixelSelection()->select(blurRect);
         blur1->setX(blurShift.x());
         blur1->setY(blurShift.y());
 
@@ -110,7 +110,7 @@ protected:
         QRect selectionRect(40,40,300,300);
 
         KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(0, image));
-        KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
+        KisPixelSelectionSP pixelSelection = selection->pixelSelection();
         pixelSelection->select(selectionRect);
 
         KUndo2Command *cmd = new KisSetGlobalSelectionCommand(image, selection);
@@ -257,23 +257,23 @@ private:
                          QVector<QString> &names) {
 
         while (node) {
-            if(node->original()) {
+            if(node->paintDevice()) {
+                names.append(node->name() + "_paintDevice");
+                images.append(node->paintDevice()->
+                              convertToQImage(0, rc.x(), rc.y(),
+                                              rc.width(), rc.height()));
+            }
+
+            if(node->original() && node->original() != node->paintDevice()) {
                 names.append(node->name() + "_original");
                 images.append(node->original()->
                               convertToQImage(0, rc.x(), rc.y(),
                                               rc.width(), rc.height()));
             }
 
-            if(node->projection()) {
+            if(node->projection() && node->projection() != node->paintDevice()) {
                 names.append(node->name() + "_projection");
                 images.append(node->projection()->
-                              convertToQImage(0, rc.x(), rc.y(),
-                                              rc.width(), rc.height()));
-            }
-
-            if(node->paintDevice()) {
-                names.append(node->name() + "_paintDevice");
-                images.append(node->paintDevice()->
                               convertToQImage(0, rc.x(), rc.y(),
                                               rc.width(), rc.height()));
             }

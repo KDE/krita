@@ -143,12 +143,12 @@ void KisMask::Private::initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP par
         selection = new KisSelection(*copyFrom);
         selection->setDefaultBounds(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
         if (copyFrom->hasShapeSelection()) {
-            selection->flatten();
+            delete selection->flatten();
         }
     } else if (copyFromDevice) {
         selection = new KisSelection(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
 
-        KisPainter gc(selection->getOrCreatePixelSelection());
+        KisPainter gc(selection->pixelSelection());
         gc.setCompositeOp(COMPOSITE_COPY);
         QRect rc(copyFromDevice->extent());
         gc.bitBlt(rc.topLeft(), copyFromDevice, rc);
@@ -157,7 +157,7 @@ void KisMask::Private::initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP par
         selection = new KisSelection(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
 
         quint8 newDefaultPixel = MAX_SELECTED;
-        selection->getOrCreatePixelSelection()->setDefaultPixel(&newDefaultPixel);
+        selection->pixelSelection()->setDefaultPixel(&newDefaultPixel);
     }
     selection->setParentNode(q);
     selection->updateProjection();
@@ -176,7 +176,7 @@ KisSelectionSP KisMask::selection() const
 
 KisPaintDeviceSP KisMask::paintDevice() const
 {
-    return selection()->getOrCreatePixelSelection();
+    return selection()->pixelSelection();
 }
 
 KisPaintDeviceSP KisMask::original() const
@@ -202,7 +202,7 @@ void KisMask::setSelection(KisSelectionSP selection)
 void KisMask::select(const QRect & rc, quint8 selectedness)
 {
     KisSelectionSP sel = selection();
-    KisPixelSelectionSP psel = sel->getOrCreatePixelSelection();
+    KisPixelSelectionSP psel = sel->pixelSelection();
     psel->select(rc, selectedness);
     sel->updateProjection(rc);
 }
@@ -321,7 +321,7 @@ QImage KisMask::createThumbnail(qint32 w, qint32 h)
 void KisMask::testingInitSelection(const QRect &rect)
 {
     m_d->selection = new KisSelection();
-    m_d->selection->getOrCreatePixelSelection()->select(rect, OPACITY_OPAQUE_U8);
+    m_d->selection->pixelSelection()->select(rect, OPACITY_OPAQUE_U8);
     m_d->selection->updateProjection(rect);
     m_d->selection->setParentNode(this);
 }

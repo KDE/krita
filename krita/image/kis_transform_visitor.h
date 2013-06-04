@@ -167,7 +167,7 @@ private:
     void transformMask(KisMask* mask) {
         KisSelectionSP selection = mask->selection();
         if(selection->hasPixelSelection() && !m_scaleOnlyShapes) {
-            KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection().data();
+            KisPixelSelectionSP pixelSelection = selection->pixelSelection().data();
 
             KisSelectionTransaction transaction(QString(), pixelSelection);
             KisTransformWorker tw(pixelSelection, m_sx, m_sy, 0.0, 0.0, 0.0, 0.0, m_angle, m_tx, m_ty, m_progress, m_filter);

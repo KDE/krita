@@ -60,6 +60,7 @@
 #include "kis_shape_selection_model.h"
 #include "kis_shape_selection_canvas.h"
 #include "kis_shape_layer_paste.h"
+#include "kis_take_all_shapes_command.h"
 #include "kis_image_view_converter.h"
 
 
@@ -72,7 +73,6 @@ KisShapeSelection::KisShapeSelection(KisImageWSP image, KisSelectionWSP selectio
     Q_ASSERT(m_image);
     setShapeId("KisShapeSelection");
     setSelectable(false);
-    m_dirty = false;
     m_converter = new KisImageViewConverter(image);
     m_canvas = new KisShapeSelectionCanvas();
     m_canvas->shapeManager()->addShape(this);
@@ -89,7 +89,6 @@ KisShapeSelection::~KisShapeSelection()
 KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs, KisSelection* selection)
         : KoShapeLayer(m_model = new KisShapeSelectionModel(rhs.m_image, selection, this))
 {
-    m_dirty = rhs.m_dirty;
     m_image = rhs.m_image;
     m_converter = new KisImageViewConverter(m_image);
     m_canvas = new KisShapeSelectionCanvas();
@@ -292,26 +291,38 @@ bool KisShapeSelection::loadSelection(KoStore* store)
 
 }
 
+void KisShapeSelection::setUpdatesEnabled(bool enabled)
+{
+    m_model->setUpdatesEnabled(enabled);
+}
+
+bool KisShapeSelection::updatesEnabled() const
+{
+    return m_model->updatesEnabled();
+}
+
+KUndo2Command* KisShapeSelection::resetToEmpty()
+{
+    return new KisTakeAllShapesCommand(this, true);
+}
+
+bool KisShapeSelection::isEmpty() const
+{
+    return !m_model->count();
+}
+
 QPainterPath KisShapeSelection::outlineCache() const
 {
-    // TODO: remove this lazyness and do it more efficiently
-    if (m_dirty) {
-        const_cast<KisShapeSelection*>(this)->recalculateOutlineCache();
-    }
-
     return m_outline;
 }
 
 bool KisShapeSelection::outlineCacheValid() const
 {
-    // TODO: remove the lazyness
     return true;
 }
 
 void KisShapeSelection::recalculateOutlineCache()
 {
-    if (!m_dirty) return;
-
     QList<KoShape*> shapesList = shapes();
 
     QPainterPath outline;
@@ -320,7 +331,6 @@ void KisShapeSelection::recalculateOutlineCache()
         outline = outline.united(shapeMatrix.map(shape->outline()));
     }
     m_outline = outline;
-    m_dirty = false;
 }
 
 void KisShapeSelection::paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &)
@@ -354,8 +364,6 @@ void KisShapeSelection::renderSelection(KisPaintDeviceSP projection, const QRect
     QTransform resolutionMatrix;
     resolutionMatrix.scale(m_image->xRes(), m_image->yRes());
 
-    KisPaintDeviceSP tmpMask = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
-
     const qint32 MASK_IMAGE_WIDTH = 256;
     const qint32 MASK_IMAGE_HEIGHT = 256;
 
@@ -364,33 +372,24 @@ void KisShapeSelection::renderSelection(KisPaintDeviceSP projection, const QRect
     maskPainter.setRenderHint(QPainter::Antialiasing, true);
 
     // Break the mask up into chunks so we don't have to allocate a potentially very large QImage.
-
     for (qint32 x = r.x(); x < r.x() + r.width(); x += MASK_IMAGE_WIDTH) {
         for (qint32 y = r.y(); y < r.y() + r.height(); y += MASK_IMAGE_HEIGHT) {
 
-            maskPainter.fillRect(polygonMaskImage.rect(), QColor(OPACITY_TRANSPARENT_U8, OPACITY_TRANSPARENT_U8, OPACITY_TRANSPARENT_U8, 255));
+            maskPainter.fillRect(polygonMaskImage.rect(), Qt::black);
             maskPainter.translate(-x, -y);
-            maskPainter.fillPath(resolutionMatrix.map(outlineCache()), QColor(OPACITY_OPAQUE_U8, OPACITY_OPAQUE_U8, OPACITY_OPAQUE_U8, 255));
+            maskPainter.fillPath(resolutionMatrix.map(outlineCache()), Qt::white);
             maskPainter.translate(x, y);
 
             qint32 rectWidth = qMin(r.x() + r.width() - x, MASK_IMAGE_WIDTH);
             qint32 rectHeight = qMin(r.y() + r.height() - y, MASK_IMAGE_HEIGHT);
 
-            KisRectIteratorSP rectIt = tmpMask->createRectIteratorNG(x, y, rectWidth, rectHeight);
+            KisRectIteratorSP rectIt = projection->createRectIteratorNG(x, y, rectWidth, rectHeight);
 
             do {
                 (*rectIt->rawData()) = qRed(polygonMaskImage.pixel(rectIt->x() - x, rectIt->y() - y));
             } while (rectIt->nextPixel());
         }
     }
-    KisPainter painter(projection);
-    painter.bitBlt(r.x(), r.y(), tmpMask, r.x(), r.y(), r.width(), r.height());
-    painter.end();
-}
-
-void KisShapeSelection::setDirty()
-{
-    m_dirty = true;
 }
 
 KoShapeManager* KisShapeSelection::shapeManager() const

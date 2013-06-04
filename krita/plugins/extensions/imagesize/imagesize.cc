@@ -178,7 +178,7 @@ void ImageSize::slotSelectionScale()
     QPointer<KoUpdater> u = pu->startSubtask();
 
     if (dlgSize->exec() == QDialog::Accepted) {
-        KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection().data();
+        KisPixelSelectionSP pixelSelection = selection->pixelSelection().data();
         KisSelectionTransaction transaction(i18n("Scale Selection"), pixelSelection);
 
         qint32 w = dlgSize->width();

@@ -81,7 +81,9 @@ bool KisSelectionDecoration::selectionIsActive()
     Q_ASSERT(image);
 
     KisSelectionSP selection = view()->selection();
-    return visible() && selection && (selection->hasPixelSelection() || selection->hasShapeSelection());
+    return visible() && selection &&
+        (selection->hasPixelSelection() || selection->hasShapeSelection()) &&
+        selection->isVisible();
 }
 
 void KisSelectionDecoration::selectionChanged()

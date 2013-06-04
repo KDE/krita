@@ -78,7 +78,7 @@ void KisSelectionMask::setSelection(KisSelectionSP selection)
         KisMask::setSelection(new KisSelection());
 
         const KoColorSpace * cs = KoColorSpaceRegistry::instance()->alpha8();
-        KisFillPainter gc(KisPaintDeviceSP(this->selection()->getOrCreatePixelSelection().data()));
+        KisFillPainter gc(KisPaintDeviceSP(this->selection()->pixelSelection().data()));
         gc.fillRect(image()->bounds(), KoColor(Qt::white, cs), MAX_SELECTED);
         gc.end();
     }

@@ -89,7 +89,7 @@ void KisToolSelectRectangular::finishRect(const QRectF& rect)
             helper.selectPixelSelection(tmpSel, m_widgetHelper.selectionAction());
         }
     } else {
-        QRectF documentRect = convertToPt(rect);
+        QRectF documentRect = convertToPt(rc);
         helper.addSelectionShape(KisShapeToolHelper::createRectangleShape(documentRect));
     }
 }

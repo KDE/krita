@@ -121,7 +121,7 @@ bool KisMirrorVisitor::mirrorMask(KisMask* mask)
     KoProperties properties;
     KisSelectionSP selection = mask->selection();
     if (selection->hasPixelSelection()) {
-        KisPaintDeviceSP dev = selection->getOrCreatePixelSelection();
+        KisPaintDeviceSP dev = selection->pixelSelection();
 
         QString name;
         if (m_orientation == Qt::Horizontal) {

@@ -85,7 +85,7 @@ void KisPixelSelectionTest::testInvertWithImage()
     KisImageSP image = new KisImage(0, 200, 200, cs, "merge test");
 
     KisSetEmptyGlobalSelectionCommand(image).redo();
-    KisPixelSelectionSP selection =  image->globalSelection()->getOrCreatePixelSelection();
+    KisPixelSelectionSP selection =  image->globalSelection()->pixelSelection();
     selection->select(QRect(5, 5, 10, 10));
     selection->invert();
     QCOMPARE(selection->selectedExactRect(), QRect(0, 0, 200, 200));
@@ -198,7 +198,7 @@ void KisPixelSelectionTest::testExactRectWithImage()
     KisImageSP image = new KisImage(0, 200, 200, cs, "merge test");
 
     KisSetEmptyGlobalSelectionCommand(image).redo();
-    KisPixelSelectionSP selection = image->globalSelection()->getOrCreatePixelSelection();
+    KisPixelSelectionSP selection = image->globalSelection()->pixelSelection();
     selection->select(QRect(100, 50, 200, 100));
     QCOMPARE(selection->selectedExactRect(), QRect(100, 50, 200, 100));
 }

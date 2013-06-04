@@ -32,10 +32,10 @@ KisShapeSelectionModel::KisShapeSelectionModel(KisImageWSP image, KisSelectionWS
     : m_image(image)
     , m_parentSelection(selection)
     , m_shapeSelection(shapeSelection)
-    , m_updateSignalCompressor(300, false)
+    , m_updateSignalCompressor(new KisSignalCompressor(300, false, this))
     , m_updatesEnabled(true)
 {
-    connect(&m_updateSignalCompressor, SIGNAL(timeout()), SLOT(startUpdateJob()));
+    connect(m_updateSignalCompressor, SIGNAL(timeout()), SLOT(startUpdateJob()));
 }
 
 KisShapeSelectionModel::~KisShapeSelectionModel()
@@ -50,7 +50,7 @@ void KisShapeSelectionModel::requestUpdate(const QRect &updateRect)
 
     if (m_updatesEnabled) {
         m_updateRect = !updateRect.isEmpty() ? m_updateRect | updateRect : QRect();
-        m_updateSignalCompressor.start();
+        m_updateSignalCompressor->start();
     }
 }
 

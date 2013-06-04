@@ -65,7 +65,7 @@ private:
     KisSelectionWSP m_parentSelection;
     KisShapeSelection* m_shapeSelection;
 
-    KisSignalCompressor m_updateSignalCompressor;
+    KisSignalCompressor *m_updateSignalCompressor;
     QRect m_updateRect;
     bool m_updatesEnabled;
 };

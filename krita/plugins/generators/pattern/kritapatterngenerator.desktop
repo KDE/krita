@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Solid Pattern Layer
+Comment=generates a pattern layer
+X-KDE-ServiceTypes=Krita/Generator
+Type=Service
+X-KDE-Library=kritapatterngenerator
+X-Krita-Version=28

@@ -357,7 +357,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
 
     createShellGUI();
     d->mainWindowGuiIsBuilt = true;
-
+#ifndef Q_OS_WIN
     // if the user didn's specify the geometry on the command line (does anyone do that still?),
     // we first figure out some good default size and restore the x,y position. See bug 285804Z.
     if (!initialGeometrySet()) {
@@ -393,6 +393,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
         y = cfg.readEntry("ko_y", y);
         setGeometry(x, y, w, h);
     }
+#endif
 
     // Now ask kde to restore the size of the window; this could probably be replaced by
     // QWidget::saveGeometry and QWidget::restoreGeometry, but let's stay with the KDE

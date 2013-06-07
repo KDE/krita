@@ -287,4 +287,10 @@ void KoFavoriteResourceManager::setBlockUpdates(bool block)
     m_blockUpdates = block;
 }
 
+void KoFavoriteResourceManager::syncTaggedResourceView(){}
+
+void KoFavoriteResourceManager::syncTagAddition(const QString& tag){}
+
+void KoFavoriteResourceManager::syncTagRemoval(const QString& tag){}
+
 #include "ko_favorite_resource_manager.moc"

@@ -142,9 +142,9 @@ KisPresetChooser::~KisPresetChooser()
 {
 }
 
-void KisPresetChooser::setFilteredNames(const QStringList filteredNames)
+void KisPresetChooser::filterPaletteFavorites(const QStringList& filteredNames)
 {
-    m_adapter->setTaggedResourceFileNames(filteredNames);
+    m_adapter->setFilterIncludes(filteredNames);
     m_adapter->enableResourceFiltering(true);
     m_adapter->updateServer();
 

@@ -61,9 +61,7 @@ KoResourceTagging::KoResourceTagging(const QString& extensions)
 
 KoResourceTagging::~KoResourceTagging()
 {
-    if(!m_nepomukOn) {
-        writeXMLFile();
-     }
+    serializeTags();
 }
 
 QStringList KoResourceTagging::getAssignedTagsList( KoResource* resource )
@@ -482,4 +480,11 @@ void KoResourceTagging::updateNepomukXML(bool nepomukOn)
 void KoResourceTagging::setNepomukBool(bool nepomukOn)
 {
     m_nepomukOn = nepomukOn;
+}
+
+void KoResourceTagging::serializeTags()
+{
+    if(!m_nepomukOn) {
+        writeXMLFile();
+     }
 }

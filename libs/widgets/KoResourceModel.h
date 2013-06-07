@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (c) 2013 Sascha Suelzer <s_suelzer@lavabit.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -50,7 +51,7 @@ public:
         /// A larger thumbnail for displaying in a tooltip. 200x200 or so.
         LargeThumbnailRole = 33
     };
-    
+
     QModelIndex indexFromResource(KoResource* resource);
 
     /// facade for KoAbstractResourceServerAdapter
@@ -65,16 +66,28 @@ public:
     QStringList getTagNamesList();
     QStringList searchTag(const QString& lineEditText);
     void enableResourceFiltering(bool enable);
-    void setTaggedResourceFileNames(const QStringList& resourceFileNames);
+    void setCurrentTag(const QString& currentTag);
     void searchTextChanged(const QString& searchString);
     void updateServer();
     int resourcesCount() const;
     QList<KoResource *> currentlyVisibleResources();
+    void tagCategoryMembersChanged();
+    void tagCategoryAdded(const QString& tag);
+    void tagCategoryRemoved(const QString& tag);
+
+signals:
+    /// XXX: not sure if this is the best place for these
+    void tagBoxEntryModified();
+    void tagBoxEntryAdded(const QString& tag);
+    void tagBoxEntryRemoved(const QString& tag);
 
 private slots:
     void resourceAdded(KoResource *resource);
     void resourceRemoved(KoResource *resource);
     void resourceChanged(KoResource *resource);
+    void tagBoxEntryWasModified();
+    void tagBoxEntryWasAdded(const QString& tag);
+    void tagBoxEntryWasRemoved(const QString& tag);
 
 private:
     KoAbstractResourceServerAdapter *m_resourceAdapter;

@@ -58,6 +58,8 @@ public:
 
     QStringList searchTag(const QString& tag);
 
+    void serializeTags();
+
 
     void setNepomukBool(bool nepomukOn);
 #ifdef NEPOMUK

@@ -71,7 +71,7 @@ public:
 
     /// Gets the currently selected resource
     /// @returns the selected resource, 0 is no resource is selected
-    KoResource *currentResource();
+    KoResource *currentResource() const;
 
     /// Sets the item representing the resource as selected
     void setCurrentResource(KoResource* resource);
@@ -105,11 +105,11 @@ public:
     void setProxyModel( QAbstractProxyModel* proxyModel );
 
     void setKnsrcFile(const QString& knsrcFileArg);
-    QSize viewSize();
+    QSize viewSize() const;
     /// Gets the tag Names from tag Object for setting the Completer Object
-    QStringList tagNamesList(const QString &lineEditText);
+    QStringList tagNamesList(const QString &lineEditText) const;
 
-    KoResourceItemView *itemView();
+    KoResourceItemView *itemView() const;
 
 signals:
     /// Emitted when a resource was selected
@@ -143,14 +143,14 @@ private:
     void updateButtonState();
     void updatePreview(KoResource *resource);
     void updateTaggedResourceView();
-    QString renameTag(QString oldName, QString newName);
+    QString renameTag(const QString &oldName, const QString &newName);
     void removeTagFromComboBox();
     void addResourceTag(KoResource* resource, const QString& tagName);
     void removeResourceTag(KoResource* resource, const QString& tagName);
 
     /// Resource for a given model index
     /// @returns the resource pointer, 0 is index not valid
-    KoResource* resourceFromModelIndex(const QModelIndex & index );
+    KoResource* resourceFromModelIndex(const QModelIndex & index ) const;
 
     class Private;
     Private * const d;

@@ -428,7 +428,7 @@ void KoResourceItemChooser::setItemDelegate( QAbstractItemDelegate * delegate )
     d->view->setItemDelegate(delegate);
 }
 
-KoResource *  KoResourceItemChooser::currentResource()
+KoResource *  KoResourceItemChooser::currentResource() const
 {
     QModelIndex index = d->view->currentIndex();
     if (index.isValid()) {
@@ -568,7 +568,7 @@ void KoResourceItemChooser::updatePreview(KoResource *resource)
 
 }
 
-KoResource* KoResourceItemChooser::resourceFromModelIndex(const QModelIndex& index)
+KoResource* KoResourceItemChooser::resourceFromModelIndex(const QModelIndex& index) const
 {
     if(!index.isValid())
         return 0;
@@ -588,12 +588,12 @@ void KoResourceItemChooser::setKnsrcFile(const QString& knsrcFileArg)
     d->knsrcFile = knsrcFileArg;
 }
 
-QSize KoResourceItemChooser::viewSize()
+QSize KoResourceItemChooser::viewSize() const
 {
     return d->view->size();
 }
 
-QStringList KoResourceItemChooser::tagNamesList(const QString &lineEditText)
+QStringList KoResourceItemChooser::tagNamesList(const QString &lineEditText) const
 {
     QStringList tagNamesList = d->model->tagNamesList();
 
@@ -625,7 +625,7 @@ QStringList KoResourceItemChooser::tagNamesList(const QString &lineEditText)
     return tagNamesList;
 }
 
-KoResourceItemView *KoResourceItemChooser::itemView()
+KoResourceItemView *KoResourceItemChooser::itemView() const
 {
     return d->view;
 }
@@ -695,7 +695,7 @@ void KoResourceItemChooser::updateTaggedResourceView()
 
 
 // TODO: put the newName.compare check in the add index function
-QString KoResourceItemChooser::renameTag(QString oldName, QString newName)
+QString KoResourceItemChooser::renameTag(const QString &oldName, const QString &newName)
 {
 
     if (!newName.compare(oldName)) {

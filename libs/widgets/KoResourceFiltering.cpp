@@ -162,13 +162,13 @@ bool KoResourceFiltering::presetMatchesSearch(KoResource * resource) const
     return false;
 }
 
-void KoResourceFiltering::setInclusions(QStringList inclusions)
+void KoResourceFiltering::setInclusions(const QStringList &inclusions)
 {
     d->includedNames = inclusions;
     setChanged();
 }
 
-void KoResourceFiltering::setExclusions(QStringList exclusions)
+void KoResourceFiltering::setExclusions(const QStringList &exclusions)
 {
     d->excludedNames = exclusions;
     setChanged();

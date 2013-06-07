@@ -51,7 +51,7 @@ public:
     ~ContextMenuNewTagAction();
 
     signals:
-    void triggered(KoResource * resource, QString tag);
+    void triggered(KoResource * resource, const QString &tag);
 
 protected slots:
     void onTriggered(const QString& tagName);

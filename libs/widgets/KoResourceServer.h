@@ -71,18 +71,18 @@ public:
     virtual ~KoResourceServerBase() {}
 
     virtual void loadResources(QStringList filenames) = 0;
-    virtual QStringList blackListedFiles() = 0;
-    QString type() { return m_type; }
+    virtual QStringList blackListedFiles() const = 0;
+    QString type() const { return m_type; }
 
     /**
     * File extensions for resources of the server
     * @returns the file extensions separated by ':', e.g. "*.kgr:*.svg:*.ggr"
     */
-    QString extensions() { return m_extensions; }
+    QString extensions() const { return m_extensions; }
 
     void cancel() { m_cancelled = true; }
 
-    QStringList fileNames()
+    QStringList fileNames() const
     {
         QStringList extensionList = m_extensions.split(':');
         QStringList fileNames;
@@ -365,7 +365,7 @@ public:
         m_observers.removeAt( index );
     }
 
-    T* resourceByFilename( const QString& filename )
+    T* resourceByFilename( const QString& filename ) const
     {
         if ( !m_resourcesByFilename.contains( filename ) ) {
             return 0;
@@ -375,7 +375,7 @@ public:
     }
 
 
-    T* resourceByName( const QString& name )
+    T* resourceByName( const QString& name ) const
     {
         if ( !m_resourcesByName.contains( name ) ) {
             return 0;
@@ -393,7 +393,7 @@ public:
         notifyResourceChanged(resource);
     }
 
-    QStringList blackListedFiles()
+    QStringList blackListedFiles() const
     {
         return m_blackListFileNames;
     }
@@ -411,12 +411,12 @@ public:
     }
 
     /// the below functions helps to access tagObject functions
-    QStringList assignedTagsList( KoResource* resource )
+    QStringList assignedTagsList( KoResource* resource ) const
     {
         return m_tagObject->assignedTagsList(resource);
     }
 
-    QStringList tagNamesList()
+    QStringList tagNamesList() const
     {
         return m_tagObject->tagNamesList();
     }
@@ -460,7 +460,7 @@ public:
         }
     }
 
-    KoResourceTagging * tagObject()
+    KoResourceTagging * tagObject() const
     {
         return m_tagObject;
     }

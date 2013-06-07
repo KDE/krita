@@ -107,7 +107,7 @@ KoResourcePopupAction::~KoResourcePopupAction()
     delete d;
 }
 
-KoShapeBackground *KoResourcePopupAction::currentBackground()
+KoShapeBackground *KoResourcePopupAction::currentBackground() const
 {
     return d->background;
 }
@@ -120,7 +120,7 @@ void KoResourcePopupAction::setCurrentBackground(KoShapeBackground* background)
 }
 
 
-void KoResourcePopupAction::indexChanged(QModelIndex modelIndex)
+void KoResourcePopupAction::indexChanged(const QModelIndex &modelIndex)
 {
     if (! modelIndex.isValid()) {
         return;

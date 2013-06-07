@@ -43,7 +43,7 @@ public:
     virtual bool removeResource(KoResource* resource) = 0;
     virtual void removeResourceFile(const QString & filename) = 0;
     virtual void importResourceFile(const QString & filename, bool fileCreation=true) = 0;
-    virtual QString extensions() = 0;
+    virtual QString extensions() const = 0;
     virtual void setCurrentTag(const QString& currentTag)=0;
     virtual void enableResourceFiltering(bool tagSearch)=0;
     virtual void updateServer()=0;
@@ -199,7 +199,7 @@ public:
         emitTagCategoryWasRemoved(tag);
     }
 
-    QString extensions()
+    QString extensions() const
     {
         if( ! m_resourceServer )
             return QString();
@@ -276,14 +276,14 @@ public:
 
 
 protected:
-    KoResourceServer<T>* resourceServer()
+    KoResourceServer<T>* resourceServer() const
     {
         return m_resourceServer;
     }
 protected:
     KoResourceFiltering m_resourceFilter;
 private:
-    bool serverResourceCacheInvalid()
+    bool serverResourceCacheInvalid() const
     {
         return m_changeCounter != m_oldChangeCounter;
     }
@@ -298,7 +298,7 @@ private:
         }
     }
 
-    void cacheServerResources(QList< T* > serverResources)
+    void cacheServerResources(const QList< T* > &serverResources)
     {
         m_serverResources.clear();
 

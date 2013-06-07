@@ -177,7 +177,7 @@ void KoResourceModel::tagBoxEntryWasRemoved(const QString& tag)
     emit tagBoxEntryRemoved(tag);
 }
 
-QModelIndex KoResourceModel::indexFromResource(KoResource* resource)
+QModelIndex KoResourceModel::indexFromResource(KoResource* resource) const
 {
     int resourceIndex = m_resourceAdapter->resources().indexOf(resource);
     int row = resourceIndex / columnCount();
@@ -185,7 +185,7 @@ QModelIndex KoResourceModel::indexFromResource(KoResource* resource)
     return index(row, column);
 }
 
-QString KoResourceModel::extensions()
+QString KoResourceModel::extensions() const
 {
     return m_resourceAdapter->extensions();
 }
@@ -210,7 +210,7 @@ void KoResourceModel::removeResourceFile(const QString &filename)
     m_resourceAdapter->removeResourceFile(filename);
 }
 
-QStringList KoResourceModel::assignedTagsList(KoResource *resource)
+QStringList KoResourceModel::assignedTagsList(KoResource *resource) const
 {
     return m_resourceAdapter->assignedTagsList(resource);
 }
@@ -225,7 +225,7 @@ void KoResourceModel::deleteTag(KoResource *resource, const QString &tag)
     m_resourceAdapter->deleteTag(resource, tag);
 }
 
-QStringList KoResourceModel::tagNamesList()
+QStringList KoResourceModel::tagNamesList() const
 {
     return m_resourceAdapter->tagNamesList();
 }
@@ -260,7 +260,7 @@ int KoResourceModel::resourcesCount() const
     return m_resourceAdapter->resources().count();
 }
 
-QList<KoResource *> KoResourceModel::currentlyVisibleResources()
+QList<KoResource *> KoResourceModel::currentlyVisibleResources() const
 {
   return m_resourceAdapter->resources();
 }

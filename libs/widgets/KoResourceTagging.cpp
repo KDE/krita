@@ -64,12 +64,12 @@ KoResourceTagging::~KoResourceTagging()
     serializeTags();
 }
 
-QStringList KoResourceTagging::assignedTagsList( KoResource* resource )
+QStringList KoResourceTagging::assignedTagsList( KoResource* resource ) const
 {
     return m_tagRepo.values(adjustedFileName(resource->filename()));
 }
 
-QStringList KoResourceTagging::tagNamesList()
+QStringList KoResourceTagging::tagNamesList() const
 {
     return m_tagList.uniqueKeys();
 }
@@ -295,7 +295,7 @@ void KoResourceTagging::readXMLFile(bool serverIdentity)
 
 }
 
-bool KoResourceTagging::isServerResource(QString resourceName)
+bool KoResourceTagging::isServerResource(const QString &resourceName) const
 {
     bool removeChild = false;
     QStringList extensionsList = m_serverExtensions.split(':');
@@ -308,7 +308,7 @@ bool KoResourceTagging::isServerResource(QString resourceName)
     return removeChild;
 }
 
-QString KoResourceTagging::adjustedFileName(const QString &fileName)
+QString KoResourceTagging::adjustedFileName(const QString &fileName) const
 {
     if(!isServerResource(fileName)) {
         return fileName + "-krita" + m_serverExtensions.split(':').takeFirst().remove('*');
@@ -441,7 +441,7 @@ void KoResourceTagging::delNepomukTag(const QString &fileName, const QString &ta
     }
 }
 
-QString KoResourceTagging::adjustedNepomukFileName(QString fileName)
+QString KoResourceTagging::adjustedNepomukFileName(QString fileName) const
 {
     if(fileName.contains(" ")) {
         fileName.replace(" ","_k_");
@@ -449,7 +449,7 @@ QString KoResourceTagging::adjustedNepomukFileName(QString fileName)
     return fileName;
 }
 
-QString KoResourceTagging::correctedNepomukFileName(QString fileName)
+QString KoResourceTagging::correctedNepomukFileName(QString fileName) const
 {
     if(fileName.contains("_k_")) {
         fileName.replace("_k_"," ");

@@ -52,25 +52,25 @@ public:
         LargeThumbnailRole = 33
     };
 
-    QModelIndex indexFromResource(KoResource* resource);
+    QModelIndex indexFromResource(KoResource* resource) const;
 
     /// facade for KoAbstractResourceServerAdapter
-    QString extensions();
+    QString extensions() const;
     void importResourceFile(const QString &filename);
     void importResourceFile(const QString &filename, bool fileCreation);
     bool removeResource(KoResource* resource);
     void removeResourceFile(const QString & filename);
-    QStringList assignedTagsList(KoResource *resource);
+    QStringList assignedTagsList(KoResource *resource) const;
     void addTag(KoResource* resource, const QString& tag);
     void deleteTag( KoResource* resource, const QString& tag);
-    QStringList tagNamesList();
+    QStringList tagNamesList() const;
     QStringList searchTag(const QString& lineEditText);
     void enableResourceFiltering(bool enable);
     void setCurrentTag(const QString& currentTag);
     void searchTextChanged(const QString& searchString);
     void updateServer();
     int resourcesCount() const;
-    QList<KoResource *> currentlyVisibleResources();
+    QList<KoResource *> currentlyVisibleResources() const;
     void tagCategoryMembersChanged();
     void tagCategoryAdded(const QString& tag);
     void tagCategoryRemoved(const QString& tag);

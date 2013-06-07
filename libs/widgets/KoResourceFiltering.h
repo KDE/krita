@@ -44,8 +44,8 @@ public:
     void setTagObject(KoResourceTagging* tagObject);
     void setFilters(const QString& searchString);
     QList<KoResource*> filterResources(QList< KoResource* > resources);
-    void setInclusions(QStringList inclusions);
-    void setExclusions(QStringList exclusions);
+    void setInclusions(const QStringList &inclusions);
+    void setExclusions(const QStringList &exclusions);
 private:
 
     void setDoneFiltering();

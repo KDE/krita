@@ -60,16 +60,20 @@ AnimatorDock::AnimatorDock() : QDockWidget(i18n("Animator")), m_canvas(0), m_ani
     lblTimeInput->setText("Duration:");
     lblTimeInput->setGeometry(800, 30, 50, 20);
 
+    QPushButton* addFrameButton = new QPushButton(koIcon("list-add"), "", mainWidget);
+    addFrameButton->setGeometry(10, 100, 30, 30);
+    addFrameButton->setShortcut(tr("F4"));
+
     QPushButton* addKeyFrameButton = new QPushButton(koIcon("list-add"), "", mainWidget);
-    addKeyFrameButton->setGeometry(10,100, 30,30);
+    addKeyFrameButton->setGeometry(40,100, 30,30);
     addKeyFrameButton->setShortcut(tr("F5"));
 
     QPushButton* addBlankFrameButton = new QPushButton(koIcon("list-add"),"",mainWidget);
-    addBlankFrameButton->setGeometry(40,100,30,30);
+    addBlankFrameButton->setGeometry(70,100,30,30);
     addBlankFrameButton->setShortcut(tr("F6"));
 
     QPushButton* removeFrameButton = new QPushButton(koIcon("list-remove"),"", mainWidget);
-    removeFrameButton->setGeometry(70, 100, 30, 30);
+    removeFrameButton->setGeometry(100, 100, 30, 30);
     removeFrameButton->setShortcut(tr("F7"));
 
     m_timelineView = new KisTimelineView(timelineWidget);
@@ -77,6 +81,7 @@ AnimatorDock::AnimatorDock() : QDockWidget(i18n("Animator")), m_canvas(0), m_ani
 
     connect(m_fpsInput, SIGNAL(valueChanged(int)), this, SLOT(updateNumberOfFrames()));
     connect(m_timeInput, SIGNAL(valueChanged(int)), this, SLOT(updateNumberOfFrames()));
+    connect(addFrameButton, SIGNAL(clicked()), m_timelineView, SLOT(addFrame()));
     connect(addKeyFrameButton, SIGNAL(clicked()), m_timelineView, SLOT(addKeyFrame()));
     connect(addBlankFrameButton, SIGNAL(clicked()), m_timelineView, SLOT(addBlankFrame()));
 

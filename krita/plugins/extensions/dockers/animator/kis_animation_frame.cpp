@@ -48,6 +48,8 @@ void KisAnimationFrame::paint(QPainter *painter, const QStyleOptionGraphicsItem 
 
     if(this->getFrameType() == KEYFRAME){
         painter->fillRect(boundingRect(), QBrush(Qt::gray));
+        painter->setPen(QPen(Qt::black));
+        painter->drawRect(boundingRect());
         QBrush brush(Qt::red);
         painter->setBrush(brush);
         painter->drawEllipse(this->getX()+2,this->getY()+7,5,5);
@@ -55,12 +57,10 @@ void KisAnimationFrame::paint(QPainter *painter, const QStyleOptionGraphicsItem 
 
     if(this->getFrameType() == BLANKFRAME){
         painter->fillRect(boundingRect(), QBrush(Qt::gray));
+        painter->setPen(QPen(Qt::black));
+        painter->drawRect(boundingRect());
         painter->setPen(QPen(Qt::red));
         painter->drawEllipse(this->getX()+2,this->getY()+7,5,5);
-    }
-
-    if(this->getFrameType() == CONTINUEFRAME){
-        painter->fillRect(boundingRect(), QBrush(Qt::gray));
     }
 }
 

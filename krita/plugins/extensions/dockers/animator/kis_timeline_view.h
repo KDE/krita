@@ -43,7 +43,11 @@ public:
 
 private:
     void removePreviousSelection();
+    KisAnimationFrame* getPreviousFrameFrom(int x, int y);
+    KisAnimationFrame* getNextFrameFrom(int x, int y);
     KisAnimationFrame* m_selectedFrame;
+    QList<KisAnimationFrame*>* layerHeads;
+    QList<KisAnimationFrame*>* layerTails;
 
 public:
     int m_numberOfFrames;
@@ -52,6 +56,7 @@ public slots:
     void setNumberOfFrames(int val);
     void addKeyFrame();
     void addBlankFrame();
+    void addFrame();
 
 protected:
     void mousePressEvent(QMouseEvent *event);

@@ -49,7 +49,6 @@ public:
     const static int BLANKFRAME = 1;
     const static int KEYFRAME = 2;
     const static int SELECTEDFRAME = 0;
-    const static int CONTINUEFRAME = 3;
 };
 
 #endif // KIS_ANIMATION_FRAME_H

@@ -165,7 +165,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     d->tagOpComboBox->hide();
 
     d->tagOpComboBox->clear();
-    QStringList tagNames = d->model->getTagNamesList();
+    QStringList tagNames = d->model->tagNamesList();
     tagNames.sort();
     tagNames.prepend(d->unfilteredView);
     d->tagOpComboBox->addItems(tagNames);
@@ -281,7 +281,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     connect( d->model, SIGNAL(tagBoxEntryAdded(QString)), this, SLOT(syncTagBoxEntryAddition(QString)));
     connect( d->model, SIGNAL(tagBoxEntryRemoved(QString)), this, SLOT(syncTagBoxEntryRemoval(QString)));
 
-    d->tagCompleter = new QCompleter(getTagNamesList(QString()),this);
+    d->tagCompleter = new QCompleter(tagNamesList(QString()),this);
     d->tagSearchLineEdit->setCompleter(d->tagCompleter);
 
     enableContextMenu(false);
@@ -593,9 +593,9 @@ QSize KoResourceItemChooser::viewSize()
     return d->view->size();
 }
 
-QStringList KoResourceItemChooser::getTagNamesList(QString lineEditText)
+QStringList KoResourceItemChooser::tagNamesList(const QString &lineEditText)
 {
-    QStringList tagNamesList = d->model->getTagNamesList();
+    QStringList tagNamesList = d->model->tagNamesList();
 
     if(lineEditText.contains(", ")) {
         QStringList tagsList = lineEditText.split(", ");
@@ -655,7 +655,7 @@ void KoResourceItemChooser::tagSearchLineEditTextChanged(const QString& lineEdit
     d->model->updateServer();
 
     d->tagSearchSaveButton->setEnabled(!lineEditText.isEmpty());
-    d->tagCompleter = new QCompleter(getTagNamesList(lineEditText),this);
+    d->tagCompleter = new QCompleter(tagNamesList(lineEditText),this);
     d->tagSearchLineEdit->setCompleter(d->tagCompleter);
     if (d->currentTag.isEmpty()) {
         d->model->enableResourceFiltering(!lineEditText.isEmpty());
@@ -705,7 +705,7 @@ QString KoResourceItemChooser::renameTag(QString oldName, QString newName)
 
     QList<KoResource*> resources = d->model->currentlyVisibleResources();
     foreach(KoResource * resource, resources) {
-        QStringList tagsList = d->model->getAssignedTagsList(resource);
+        QStringList tagsList = d->model->assignedTagsList(resource);
 
         foreach(const QString &tagname, tagsList) {
             if(!tagname.compare(oldName)) {
@@ -726,7 +726,7 @@ void KoResourceItemChooser::tagChooserReturnPressed(const QString& lineEditText)
     QString newTagName = renameTag(oldTagname, lineEditText);
     d->tagOpComboBox->setItemText(index, newTagName);
     d->currentTag = newTagName;
-    d->tagCompleter = new QCompleter(getTagNamesList(lineEditText),this);
+    d->tagCompleter = new QCompleter(tagNamesList(lineEditText),this);
     d->tagOpComboBox->setCompleter(d->tagCompleter);
 
 }
@@ -769,7 +769,7 @@ void KoResourceItemChooser::slotTagButtonClicked( int button )
 
 void KoResourceItemChooser::addResourceTag(KoResource * resource, const QString& tagName)
 {
-    QStringList tagsList = d->model->getAssignedTagsList(resource);
+    QStringList tagsList = d->model->assignedTagsList(resource);
     if (tagsList.isEmpty()) {
         d->model->addTag(resource, tagName);
     }
@@ -784,7 +784,7 @@ void KoResourceItemChooser::addResourceTag(KoResource * resource, const QString&
 
 void KoResourceItemChooser::removeResourceTag(KoResource * resource, const QString& tagName)
 {
-    QStringList tagsList = d->model->getAssignedTagsList(resource);
+    QStringList tagsList = d->model->assignedTagsList(resource);
 
     foreach(const QString &oldName, tagsList) {
         if(!oldName.compare(tagName)) {
@@ -810,7 +810,7 @@ void KoResourceItemChooser::contextMenuRequested ( const QPoint& pos )
     QMenu * removableTagsMenu;
     QMenu * assignableTagsMenu;
 
-    QStringList removables = d->model->getAssignedTagsList(resource);
+    QStringList removables = d->model->assignedTagsList(resource);
 
     QStringList assignables;
         for (int i = 1; i < d->tagOpComboBox->count(); ++i) {

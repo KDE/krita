@@ -131,7 +131,7 @@ void KisPaletteDocker::loadFromWorkspace(KisWorkspaceResource* workspace)
 {
     if (workspace->hasProperty("palette")) {
         KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
-        KoColorSet* colorSet = rServer->getResourceByName(workspace->getString("palette"));
+        KoColorSet* colorSet = rServer->resourceByName(workspace->getString("palette"));
         if (colorSet) {
             m_chooser->setColorSet(colorSet);
         }

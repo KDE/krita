@@ -151,9 +151,9 @@ void KisPresetChooser::filterPaletteFavorites(const QStringList& filteredNames)
     updateViewSettings();
 }
 
-QStringList KisPresetChooser::getTagNamesList(const QString& searchString)
+QStringList KisPresetChooser::tagNamesList(const QString& searchString)
 {
-    return m_chooser->getTagNamesList(searchString);
+    return m_chooser->tagNamesList(searchString);
 }
 
 void KisPresetChooser::showButtons(bool show)

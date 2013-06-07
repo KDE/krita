@@ -60,10 +60,10 @@ public:
     void importResourceFile(const QString &filename, bool fileCreation);
     bool removeResource(KoResource* resource);
     void removeResourceFile(const QString & filename);
-    QStringList getAssignedTagsList(KoResource *resource);
+    QStringList assignedTagsList(KoResource *resource);
     void addTag(KoResource* resource, const QString& tag);
     void deleteTag( KoResource* resource, const QString& tag);
-    QStringList getTagNamesList();
+    QStringList tagNamesList();
     QStringList searchTag(const QString& lineEditText);
     void enableResourceFiltering(bool enable);
     void setCurrentTag(const QString& currentTag);

@@ -104,7 +104,7 @@ void KisPatternGenerator::generate(KisProcessingInformation dstInfo,
     if (!config) return;
     QString patternName = config->getString("pattern", "Grid01.pat");
     KoResourceServer<KisPattern> *rserver = KisResourceServerProvider::instance()->patternServer();
-    KisPattern *pattern = rserver->getResourceByName(patternName);
+    KisPattern *pattern = rserver->resourceByName(patternName);
 
 //    KoColor c = config->getColor("color");
 

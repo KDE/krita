@@ -33,7 +33,7 @@ void KoResourceTagging_test::testIntialization()
     m_tagObject = new KoResourceTagging("*.test");
     addData();
     /// Checking whether the readXMLFile works properly. Initially it should return NULL
-    QCOMPARE(m_tagObject->getTagNamesList(), QStringList());
+    QCOMPARE(m_tagObject->tagNamesList(), QStringList());
 }
 
 void KoResourceTagging_test::addData()
@@ -59,22 +59,22 @@ void KoResourceTagging_test::testAddingDeletingTag()
     resource = new KoPattern(m_resourceNames.at(1));
     m_tagObject->addTag(resource,m_tags.at(1));
 
-    QStringList tagsExp = m_tagObject->getTagNamesList();
+    QStringList tagsExp = m_tagObject->tagNamesList();
     tagsExp.sort();
-    /// checking whether m_tagList contains correct values using getTagNamesList()
+    /// checking whether m_tagList contains correct values using tagNamesList()
     QCOMPARE( tagsExp, m_tags);
 
     for (int i =0 ; i< m_resourceNames.count() ; i++ ) {
         resource = new KoPattern(m_resourceNames.at(i));
         /// checks whether m_tagsRepo stores correctly by using getAssignedTagNamesList()
-        QCOMPARE(m_tagObject->getAssignedTagsList(resource) , QStringList(m_tags.at(i)));
+        QCOMPARE(m_tagObject->assignedTagsList(resource) , QStringList(m_tags.at(i)));
     }
 
     /// Checks whether already inserted tag again inserts into tagRepo or not
     resource = new KoPattern(m_resourceNames.at(0));
     m_tagObject->addTag(resource,m_tags.at(0));
     /// To check the above condition, we need to get the same values before and after insertion.
-    QCOMPARE(m_tagObject->getAssignedTagsList(resource) , QStringList(m_tags.at(0)));
+    QCOMPARE(m_tagObject->assignedTagsList(resource) , QStringList(m_tags.at(0)));
 
     /*
      * Deleting Tags testing
@@ -83,16 +83,16 @@ void KoResourceTagging_test::testAddingDeletingTag()
     resource = new KoPattern(m_resourceNames.at(0));
     m_tagObject->delTag(resource,m_tags.at(0));
     /// Checking whether deleting tag works or not
-    QCOMPARE(m_tagObject->getAssignedTagsList(resource) , QStringList());
+    QCOMPARE(m_tagObject->assignedTagsList(resource) , QStringList());
     /// After deleting, m_tagsList should also remove the assigned tag
-    QCOMPARE(m_tagObject->getTagNamesList() , QStringList(m_tags.at(1)));
+    QCOMPARE(m_tagObject->tagNamesList() , QStringList(m_tags.at(1)));
 
     resource = new KoPattern(m_resourceNames.at(1));
     /// This pair is not exists, so there is no need to delete tag
     m_tagObject->delTag(resource,m_tags.at(0));
-    QCOMPARE(m_tagObject->getAssignedTagsList(resource) , QStringList(m_tags.at(1)));
+    QCOMPARE(m_tagObject->assignedTagsList(resource) , QStringList(m_tags.at(1)));
     /// After deleting, m_tagsList should also contains previous values
-    QCOMPARE(m_tagObject->getTagNamesList() , QStringList(m_tags.at(1)));
+    QCOMPARE(m_tagObject->tagNamesList() , QStringList(m_tags.at(1)));
 }
 
 void KoResourceTagging_test::testSearchingTag()
@@ -128,14 +128,14 @@ void KoResourceTagging_test::testReadWriteXML()
 
     m_tagObject = new KoResourceTagging("*.test");
 
-    /// Checking whether the readXMLFile works properly. getTagNamesList() should return m_tags
-    QStringList tags = m_tagObject->getTagNamesList();
+    /// Checking whether the readXMLFile works properly. tagNamesList() should return m_tags
+    QStringList tags = m_tagObject->tagNamesList();
     tags.sort();
     QCOMPARE(tags, m_tags);
 
     KoResource* resource = new KoPattern(m_resourceNames.at(0));
     /// Checking whether the getAssingedTagsList() works properly after restart
-    QCOMPARE(m_tagObject->getAssignedTagsList(resource), QStringList(m_tags.at(1)));
+    QCOMPARE(m_tagObject->assignedTagsList(resource), QStringList(m_tags.at(1)));
 
     m_tagObject->delTag(resource,m_tags.at(1));
 
@@ -170,11 +170,11 @@ void KoResourceTagging_test::testNepomukBackend()
     /// At the start-up, the read functionality from the nepomuk is tested here.
     tagObjectForNepo = new KoResourceTagging("*.test");
 
-    QCOMPARE(m_tagObject->getTagNamesList(),tagObjectForNepo->getTagNamesList());
+    QCOMPARE(m_tagObject->tagNamesList(),tagObjectForNepo->tagNamesList());
     resource = new KoPattern(m_resourceNames.at(0));
-    QCOMPARE(m_tagObject->getAssignedTagsList(resource),tagObjectForNepo->getAssignedTagsList(resource));
+    QCOMPARE(m_tagObject->assignedTagsList(resource),tagObjectForNepo->assignedTagsList(resource));
     resource = new KoPattern(m_resourceNames.at(1));
-    QCOMPARE(m_tagObject->getAssignedTagsList(resource),tagObjectForNepo->getAssignedTagsList(resource));
+    QCOMPARE(m_tagObject->assignedTagsList(resource),tagObjectForNepo->assignedTagsList(resource));
 
     /// Reset the m_tagObject values - helps in running the test twice
     m_tagObject->updateNepomukXML(false);

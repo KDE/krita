@@ -47,8 +47,8 @@ public:
     virtual void setCurrentTag(const QString& currentTag)=0;
     virtual void enableResourceFiltering(bool tagSearch)=0;
     virtual void updateServer()=0;
-    virtual QStringList getAssignedTagsList( KoResource* resource )=0;
-    virtual QStringList getTagNamesList()=0;
+    virtual QStringList assignedTagsList( KoResource* resource )=0;
+    virtual QStringList tagNamesList()=0;
     virtual void addTag( KoResource* resource,const QString& tag)=0;
     virtual void deleteTag( KoResource* resource,const QString& tag)=0;
     virtual void searchTextChanged(const QString& searchString)=0;
@@ -223,14 +223,14 @@ public:
         emitRemovingResource(0);
     }
 
-    QStringList getAssignedTagsList( KoResource* resource )
+    QStringList assignedTagsList( KoResource* resource )
     {
-        return m_resourceServer->getAssignedTagsList(resource);
+        return m_resourceServer->assignedTagsList(resource);
     }
 
-    QStringList getTagNamesList()
+    QStringList tagNamesList()
     {
-        return m_resourceServer->getTagNamesList();
+        return m_resourceServer->tagNamesList();
     }
 
     void addTag( KoResource* resource,const QString& tag)

@@ -51,7 +51,7 @@ KisWdgPattern::~KisWdgPattern()
 void KisWdgPattern::setConfiguration(const KisPropertiesConfiguration* config)
 {
     KoResourceServer<KisPattern> *rserver = KisResourceServerProvider::instance()->patternServer();
-    KisPattern *pattern = rserver->getResourceByName(config->getString("pattern", "Grid01.pat"));
+    KisPattern *pattern = rserver->resourceByName(config->getString("pattern", "Grid01.pat"));
     if (pattern) {
        widget()->patternChooser->setCurrentPattern(pattern);
     }

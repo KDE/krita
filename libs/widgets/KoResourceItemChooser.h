@@ -107,7 +107,7 @@ public:
     void setKnsrcFile(const QString& knsrcFileArg);
     QSize viewSize();
     /// Gets the tag Names from tag Object for setting the Completer Object
-    QStringList getTagNamesList(QString lineEditText);
+    QStringList tagNamesList(const QString &lineEditText);
 
     KoResourceItemView *itemView();
 

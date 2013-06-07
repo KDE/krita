@@ -64,19 +64,19 @@ KoResourceTagging::~KoResourceTagging()
     serializeTags();
 }
 
-QStringList KoResourceTagging::getAssignedTagsList( KoResource* resource )
+QStringList KoResourceTagging::assignedTagsList( KoResource* resource )
 {
-    return m_tagRepo.values(getAdjustedFileName(resource->filename()));
+    return m_tagRepo.values(adjustedFileName(resource->filename()));
 }
 
-QStringList KoResourceTagging::getTagNamesList()
+QStringList KoResourceTagging::tagNamesList()
 {
     return m_tagList.uniqueKeys();
 }
 
 void KoResourceTagging::addTag( KoResource* resource,const QString& tag)
 {
-    QString fileName = getAdjustedFileName (resource->filename());
+    QString fileName = adjustedFileName (resource->filename());
 
     addTag( fileName, tag );
 }
@@ -108,7 +108,7 @@ void KoResourceTagging::addTag(const QString& fileName,const QString& tag)
 
 void KoResourceTagging::delTag( KoResource* resource,const QString& tag)
 {
-    QString fileName = getAdjustedFileName(resource->filename());
+    QString fileName = adjustedFileName(resource->filename());
 
     if( ! m_tagRepo.contains ( fileName, tag ) ) {
         return;
@@ -308,7 +308,7 @@ bool KoResourceTagging::isServerResource(QString resourceName)
     return removeChild;
 }
 
-QString KoResourceTagging::getAdjustedFileName(QString fileName)
+QString KoResourceTagging::adjustedFileName(const QString &fileName)
 {
     if(!isServerResource(fileName)) {
         return fileName + "-krita" + m_serverExtensions.split(':').takeFirst().remove('*');

@@ -54,7 +54,7 @@ public:
     ///@param filteredNames list of names of presets that will be shown
     void filterPaletteFavorites(const QStringList& filteredNames);
     /// get tag names and used to set Completer object in paintop_presets_popup class
-    QStringList getTagNamesList(const QString& searchString);
+    QStringList tagNamesList(const QString& searchString);
     /// Sets a list of resources in the paintop list, when ever user press enter in the linedit of paintop_presets_popup Class
     void setViewMode(ViewMode mode);
     void showButtons(bool show);

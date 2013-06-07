@@ -82,7 +82,7 @@ public:
 
     void cancel() { m_cancelled = true; }
 
-    QStringList getFileNames()
+    QStringList fileNames()
     {
         QStringList extensionList = m_extensions.split(':');
         QStringList fileNames;
@@ -321,7 +321,7 @@ public:
     {
         QFileInfo fi(filename);
 
-        T* resource = getResourceByFilename(fi.fileName());
+        T* resource = resourceByFilename(fi.fileName());
         if (!resource) {
             kWarning(30009) << "Resource file do not exist ";
             return;
@@ -365,7 +365,7 @@ public:
         m_observers.removeAt( index );
     }
 
-    T* getResourceByFilename( const QString& filename )
+    T* resourceByFilename( const QString& filename )
     {
         if ( !m_resourcesByFilename.contains( filename ) ) {
             return 0;
@@ -375,7 +375,7 @@ public:
     }
 
 
-    T* getResourceByName( const QString& name )
+    T* resourceByName( const QString& name )
     {
         if ( !m_resourcesByName.contains( name ) ) {
             return 0;
@@ -411,14 +411,14 @@ public:
     }
 
     /// the below functions helps to access tagObject functions
-    QStringList getAssignedTagsList( KoResource* resource )
+    QStringList assignedTagsList( KoResource* resource )
     {
-        return m_tagObject->getAssignedTagsList(resource);
+        return m_tagObject->assignedTagsList(resource);
     }
 
-    QStringList getTagNamesList()
+    QStringList tagNamesList()
     {
-        return m_tagObject->getTagNamesList();
+        return m_tagObject->tagNamesList();
     }
 
     void addTag( KoResource* resource,const QString& tag)

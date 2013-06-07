@@ -48,13 +48,13 @@ public:
     explicit KoResourceTagging(const QString &extensions);
     ~KoResourceTagging();
 
-    QStringList getAssignedTagsList(KoResource* resource);
+    QStringList assignedTagsList(KoResource* resource);
 
     void addTag(KoResource* resource,const QString& tag);
 
     void delTag(KoResource* resource,const QString& tag);
 
-    QStringList getTagNamesList();
+    QStringList tagNamesList();
 
     QStringList searchTag(const QString& tag);
 
@@ -74,7 +74,7 @@ private:
     bool isServerResource(QString resourceName);
     void addTag(const QString& fileName,const QString& tag);
     /// If resource filenames have no extensions, then we add "-krita.extension".
-    QString getAdjustedFileName(QString fileName);
+    QString adjustedFileName(const QString &fileName);
     /// Removes the adjustements before going to the server
     QStringList removeAdjustedFileNames(QStringList fileNamesList);
 

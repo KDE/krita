@@ -72,8 +72,8 @@ QVariant KoResourceModel::data( const QModelIndex &index, int role ) const
                 return QVariant();
             QString resName = i18n( resource->name().toUtf8().data());
 
-            if (m_resourceAdapter->getAssignedTagsList(resource).count()) {
-                QString taglist = m_resourceAdapter->getAssignedTagsList(resource).join("] , [");
+            if (m_resourceAdapter->assignedTagsList(resource).count()) {
+                QString taglist = m_resourceAdapter->assignedTagsList(resource).join("] , [");
                 QString tagListToolTip = QString(" - %1: [%2]").arg(i18n("Tags"), taglist);
                 return QVariant( resName + tagListToolTip );
             }
@@ -210,9 +210,9 @@ void KoResourceModel::removeResourceFile(const QString &filename)
     m_resourceAdapter->removeResourceFile(filename);
 }
 
-QStringList KoResourceModel::getAssignedTagsList(KoResource *resource)
+QStringList KoResourceModel::assignedTagsList(KoResource *resource)
 {
-    return m_resourceAdapter->getAssignedTagsList(resource);
+    return m_resourceAdapter->assignedTagsList(resource);
 }
 
 void KoResourceModel::addTag(KoResource* resource,const QString& tag)
@@ -225,9 +225,9 @@ void KoResourceModel::deleteTag(KoResource *resource, const QString &tag)
     m_resourceAdapter->deleteTag(resource, tag);
 }
 
-QStringList KoResourceModel::getTagNamesList()
+QStringList KoResourceModel::tagNamesList()
 {
-    return m_resourceAdapter->getTagNamesList();
+    return m_resourceAdapter->tagNamesList();
 }
 
 QStringList KoResourceModel::searchTag(const QString& lineEditText)

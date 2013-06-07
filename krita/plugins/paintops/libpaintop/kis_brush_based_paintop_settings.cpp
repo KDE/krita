@@ -75,7 +75,7 @@ bool KisBrushBasedPaintOpSettings::isValid()
 {
     QString filename = getString("requiredBrushFile","");
     if (!filename.isEmpty()) {
-        KisBrushSP brush = KisBrushServer::instance()->brushServer()->getResourceByFilename(filename);
+        KisBrushSP brush = KisBrushServer::instance()->brushServer()->resourceByFilename(filename);
         if (!brush) {
             return false;
         }

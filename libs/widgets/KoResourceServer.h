@@ -367,21 +367,13 @@ public:
 
     T* resourceByFilename( const QString& filename ) const
     {
-        if ( !m_resourcesByFilename.contains( filename ) ) {
-            return 0;
-        }
-
-        return m_resourcesByFilename[filename];
+        return m_resourcesByFilename.value(filename);
     }
 
 
     T* resourceByName( const QString& name ) const
     {
-        if ( !m_resourcesByName.contains( name ) ) {
-            return 0;
-        }
-
-        return m_resourcesByName[name];
+        return m_resourcesByName.value(name);
     }
 
     /**

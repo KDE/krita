@@ -45,7 +45,7 @@ QStringList Parameter::getValues(const QString& typeDefinition)
     QString currentType = PARAMETER_NAMES[m_type];
     Q_ASSERT(typeDefinition.startsWith(currentType));
 
-    qDebug() << currentType << currentType.size();
+    //qDebug() << currentType << currentType.size();
 
     // get rid of '(', '{' and '['
     QString onlyValues = typeDefinition;
@@ -67,7 +67,7 @@ void FloatParameter::parseValues(const QString& typeDefinition)
 {
     QStringList values = getValues(typeDefinition);
     bool isOk = true;
-    qDebug() << values;
+    //qDebug() << values;
     m_defaultValue = values.at(0).toFloat(&isOk);
     Q_ASSERT(isOk);
     m_minValue = values.at(1).toFloat(&isOk);
@@ -96,7 +96,7 @@ void IntParameter::parseValues(const QString& typeDefinition)
 {
     QStringList values = getValues(typeDefinition);
     bool isOk = true;
-    qDebug() << values;
+    //qDebug() << values;
     m_defaultValue = values.at(0).toInt(&isOk);
     Q_ASSERT(isOk);
     m_minValue = values.at(1).toInt(&isOk);

@@ -21,9 +21,25 @@
 
 #include <QVector>
 
+#include <iostream>
+#include "Parameter.h"
+
+#include <QString>
+#include <QRegExp>
+
+class Component;
+class Category;
+class Command;
 class Parameter;
-class QString;
-class Folder;
+
+const QString GIMP_COMMENT = "#@gimp";
+
+// category match example : #@gimp _<b>Lights &amp; Shadows</b>
+const QRegExp CATEGORY_NAME_RX("#@gimp\\s+[^:]+$");
+// command match example: #@gimp Poster edges : gimp_poster_edges, gimp_poster_edges_preview(0)
+const QRegExp COMMAND_NAME_RX("#@gimp\\s+\\w+[^:]+:\\s*\\w+,\\s*\\w+\\(?[0-2]?\\)?");
+// parameter match example:  #@gimp : Fast approximation = bool(0)
+const QRegExp PARAMETER_RX("#@gimp\\s+:\\s*[\\w\\s]*=\\s*[\\w]*");
 
 class KisGmicParser
 {
@@ -34,14 +50,16 @@ public:
      * */
     KisGmicParser(const QString& filePath);
     ~KisGmicParser();
-    void start();
+    Component * createFilterTree();
 
     enum ParsingStatus {PARSE_START, PARSE_FOLDER, PARSE_PARAM, PARSE_COMMAND};
 
 private:
-    bool isFolderName(const QString &line);
+    bool isCategory(const QString &line);
+    bool isCommand(const QString &line);
     bool isParameter(const QString &line);
-
+    bool matchesRegExp(const QRegExp &regExp, const QString& line);
+    QString parseCategoryName(const QString &line);
 
 
 private:
@@ -52,21 +70,5 @@ private:
 
 
 
-class Folder
-{
-public:
-    QString m_commandName;
-    QString m_command;
-    QString m_commandPreview;
-    QList<Parameter*> m_parameters;
-
-    void debug();
-    bool isValid();
-
-    void processFolderName(const QString &line);
-    void processParameter(const QString &line);
-private:
-    QStringList breakIntoTokens(const QString &line);
-};
 
 #endif

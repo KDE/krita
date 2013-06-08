@@ -1,5 +1,5 @@
 set(kritagmic_PART_SRCS kis_gmic.cpp dlg_gmic.cpp kis_gmic_plugin.cpp gmic.cpp)
-set(gmicparser_PART_SRCS kis_gmic_parser.cpp Parameter.cpp)
+set(gmicparser_PART_SRCS kis_gmic_parser.cpp Component.h Category.cpp Command.cpp Filters.cpp Parameter.cpp kis_gmic_filter_model.cpp)
 
 kde4_add_ui_files(kritagmic_PART_SRCS wdg_gmic.ui )
 
@@ -15,7 +15,7 @@ add_definitions(-fexceptions )
 target_link_libraries(kritagmic kritaui ${FFTW3_LIBRARIES})
 
 kde4_add_executable(gmicparser ${gmicparser_PART_SRCS})
-target_link_libraries(gmicparser ${QT_QTCORE_LIBRARY})
+target_link_libraries(gmicparser ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
 
 install(TARGETS kritagmic  DESTINATION ${PLUGIN_INSTALL_DIR})
 install(TARGETS gmicparser  ${INSTALL_TARGETS_DEFAULT_ARGS})

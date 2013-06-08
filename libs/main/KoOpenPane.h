@@ -69,6 +69,7 @@ protected slots:
     void saveSplitterSizes(KoDetailsPane* sender, const QList<int>& sizes);
 
 private slots:
+    /// when clicked "Open Existing Document" button
     void openFileDialog();
 
 signals:

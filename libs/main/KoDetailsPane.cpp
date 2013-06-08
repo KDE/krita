@@ -43,7 +43,6 @@ public:
 
     KComponentData m_componentData;
     QStandardItemModel* m_model;
-    QString m_openBtnStr;
 };
 
 KoDetailsPane::KoDetailsPane(QWidget* parent, const KComponentData &_componentData, const QString& header)
@@ -69,7 +68,7 @@ KoDetailsPane::KoDetailsPane(QWidget* parent, const KComponentData &_componentDa
             this, SLOT(selectionChanged(const QModelIndex&)));
     connect(m_documentList, SIGNAL(doubleClicked(const QModelIndex&)),
             this, SLOT(openFile(const QModelIndex&)));
-    connect(parent, SIGNAL(open()), this, SLOT(openFile()));
+    connect(m_openButton, SIGNAL(clicked()), this, SLOT(openFile()));
 }
 
 KoDetailsPane::~KoDetailsPane()
@@ -132,16 +131,6 @@ void KoDetailsPane::changePalette()
 QStandardItemModel* KoDetailsPane::model() const
 {
     return d->m_model;
-}
-
-void KoDetailsPane::setOpenButtonString(const QString& str)
-{
-    d->m_openBtnStr = str;
-}
-
-QString KoDetailsPane::openButtonString()
-{
-    return d->m_openBtnStr;
 }
 
 #include <KoDetailsPane.moc>

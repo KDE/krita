@@ -132,11 +132,9 @@ KoOpenPane::KoOpenPane(QWidget *parent, const KComponentData &componentData, con
     d->setupUi(this);
 
     m_nameFiletrs = KoFileDialog::getNameFilters(mimeFilter);
-    d->m_openButton->setText(i18n("Open Existing Document"));
-    d->m_cancelButton->setText(i18n("Cancel"));
-    d->m_createButton->setText(i18n("Create"));
+    d->m_openExistingButton->setText(i18n("Open Existing Document"));
 
-    connect(d->m_openButton, SIGNAL(clicked()),
+    connect(d->m_openExistingButton, SIGNAL(clicked()),
             this, SLOT(openFileDialog()));
 
     KoSectionListDelegate* delegate = new KoSectionListDelegate(d->m_sectionList);

@@ -43,8 +43,6 @@ public:
     /// @return the model used in the document list
     QStandardItemModel* model() const;
 
-    QString openButtonString() const;
-
 signals:
     /// Emitted when a file is requested to be opened
     void openUrl(const KUrl&);
@@ -69,8 +67,6 @@ protected:
         IconExtent = 64,
         PreviewExtent = 128
     };
-
-    void setOpenButtonString(const QString& str);
 
 private:
     KoDetailsPanePrivate * const d;

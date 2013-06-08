@@ -28,6 +28,8 @@ class QPainterPath;
 
 namespace KritaUtils
 {
+    QSize KRITAIMAGE_EXPORT optimalPatchSize();
+
     QVector<QRect> KRITAIMAGE_EXPORT splitRectIntoPatches(const QRect &rc, const QSize &patchSize);
 
     QRegion KRITAIMAGE_EXPORT splitTriangles(const QPointF &center,

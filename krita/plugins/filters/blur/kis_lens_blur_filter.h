@@ -36,11 +36,11 @@ public:
 public:
     using KisFilter::process;
 
-    void process(KisPaintDeviceSP src,
-                 const QRect& size,
-                 const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater
-                ) const;
+    void processImpl(KisPaintDeviceSP src,
+                     const QRect& size,
+                     const KisFilterConfiguration* config,
+                     KoUpdater* progressUpdater
+                     ) const;
     static inline KoID id() {
         return KoID("lens blur", i18n("Lens Blur"));
     }

@@ -112,6 +112,7 @@ void KisToolSelectSimilar::mousePressEvent(KoPointerEvent *event)
         KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
         selectByColor(dev, tmpSel, c.data(), m_fuzziness);
 
+        tmpSel->invalidateOutlineCache();
         KisSelectionToolHelper helper(kisCanvas, i18n("Similar Selection"));
         helper.selectPixelSelection(tmpSel, selectionAction());
 

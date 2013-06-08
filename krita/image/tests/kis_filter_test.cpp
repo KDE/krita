@@ -25,7 +25,6 @@
 #include "kis_processing_information.h"
 #include "filter/kis_filter.h"
 #include "testutil.h"
-#include "kis_threaded_applicator.h"
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
 
@@ -39,12 +38,10 @@ public:
             : KisFilter(KoID("test", "test"), KoID("test", "test"), "TestFilter") {
     }
 
-    using KisFilter::process;
-
-    void process(KisPaintDeviceSP src,
-                 const QRect& size,
-                 const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater) const {
+    void processImpl(KisPaintDeviceSP src,
+                     const QRect& size,
+                     const KisFilterConfiguration* config,
+                     KoUpdater* progressUpdater) const {
         Q_UNUSED(src);
         Q_UNUSED(size);
         Q_UNUSED(config);
@@ -121,7 +118,7 @@ void KisFilterTest::testDifferentSrcAndDst()
     KisPaintDeviceSP src = new KisPaintDevice(cs);
     KisPaintDeviceSP dst = new KisPaintDevice(cs);
     KisSelectionSP sel = new KisSelection(new KisSelectionDefaultBounds(src));
-    sel->getOrCreatePixelSelection()->invert(); // select everything
+    sel->pixelSelection()->invert(); // select everything
     sel->updateProjection();
 
     src->convertFromQImage(qimage, 0, 0, 0);

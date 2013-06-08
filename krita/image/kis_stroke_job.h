@@ -19,9 +19,10 @@
 #ifndef __KIS_STROKE_JOB_H
 #define __KIS_STROKE_JOB_H
 
+#include "kis_runnable.h"
 #include "kis_stroke_job_strategy.h"
 
-class KisStrokeJob
+class KisStrokeJob : public KisRunnable
 {
 public:
     KisStrokeJob(KisStrokeJobStrategy *strategy,

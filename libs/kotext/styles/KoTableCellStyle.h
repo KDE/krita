@@ -372,4 +372,6 @@ private:
 
 };
 
+Q_DECLARE_METATYPE(KoTableCellStyle *)
+
 #endif

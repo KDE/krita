@@ -167,6 +167,12 @@ void KisUpdateScheduler::fullRefresh(KisNodeSP root, const QRect& rc, const QRec
     if(needLock) unlock();
 }
 
+void KisUpdateScheduler::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
+{
+    m_d->updatesQueue->addSpontaneousJob(spontaneousJob);
+    processQueues();
+}
+
 KisStrokeId KisUpdateScheduler::startStroke(KisStrokeStrategy *strokeStrategy)
 {
     KisStrokeId id  = m_d->strokesQueue->startStroke(strokeStrategy);

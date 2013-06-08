@@ -235,24 +235,9 @@ public:
     QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
 
     /**
-     * Set a temporary effect mask on this layer for filter previews.
-     */
-    void setPreviewMask(KisEffectMaskSP mask);
-
-    /**
-     * Retrieve the current preview effect mask
-     */
-    KisEffectMaskSP previewMask() const;
-
-    /**
      * Get the group layer that contains this layer.
      */
     KisLayerSP parentLayer() const;
-
-    /**
-     * Remove the temporary effect mask.
-     */
-    void removePreviewMask();
 
     /**
      * @return the metadata object associated with this object.

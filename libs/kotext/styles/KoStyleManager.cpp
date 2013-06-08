@@ -413,7 +413,7 @@ void KoStyleManager::add(KoCharacterStyle *style)
     }
     style->setParent(this);
     style->setStyleId(d->s_stylesNumber);
-    d->charStyles.insert(d->s_stylesNumber++, style);
+    d->charStyles.insert(d->s_stylesNumber, style);
 
     if (style != defaultCharacterStyle()) { //defaultStyle should not be user visible
         if (style->isApplied() && !d->m_usedCharacterStyles.contains(d->s_stylesNumber)) {
@@ -422,6 +422,7 @@ void KoStyleManager::add(KoCharacterStyle *style)
         connect(style, SIGNAL(styleApplied(const KoCharacterStyle*)), this, SLOT(slotAppliedStyle(const KoCharacterStyle*)));
     }
 
+    ++d->s_stylesNumber;
     emit styleAdded(style);
 }
 
@@ -435,7 +436,7 @@ void KoStyleManager::add(KoParagraphStyle *style)
     }
     style->setParent(this);
     style->setStyleId(d->s_stylesNumber);
-    d->paragStyles.insert(d->s_stylesNumber++, style);
+    d->paragStyles.insert(d->s_stylesNumber, style);
 
     if (style->listStyle() && style->listStyle()->styleId() == 0)
         add(style->listStyle());
@@ -452,6 +453,8 @@ void KoStyleManager::add(KoParagraphStyle *style)
         }
         connect(style, SIGNAL(styleApplied(const KoParagraphStyle*)), this, SLOT(slotAppliedStyle(const KoParagraphStyle*)));
     }
+
+    ++d->s_stylesNumber;
     emit styleAdded(style);
 }
 
@@ -461,7 +464,9 @@ void KoStyleManager::add(KoListStyle *style)
         return;
     style->setParent(this);
     style->setStyleId(d->s_stylesNumber);
-    d->listStyles.insert(d->s_stylesNumber++, style);
+    d->listStyles.insert(d->s_stylesNumber, style);
+
+    ++d->s_stylesNumber;
     emit styleAdded(style);
 }
 
@@ -470,7 +475,8 @@ void KoStyleManager::addAutomaticListStyle(KoListStyle *style)
     if (d->automaticListStyles.key(style, -1) != -1)
         return;
     style->setStyleId(d->s_stylesNumber);
-    d->automaticListStyles.insert(d->s_stylesNumber++, style);
+    d->automaticListStyles.insert(d->s_stylesNumber, style);
+    ++d->s_stylesNumber;
 }
 
 void KoStyleManager::add(KoTableStyle *style)
@@ -479,7 +485,8 @@ void KoStyleManager::add(KoTableStyle *style)
         return;
     style->setParent(this);
     style->setStyleId(d->s_stylesNumber);
-    d->tableStyles.insert(d->s_stylesNumber++, style);
+    d->tableStyles.insert(d->s_stylesNumber, style);
+    ++d->s_stylesNumber;
     emit styleAdded(style);
 }
 
@@ -488,7 +495,8 @@ void KoStyleManager::add(KoTableColumnStyle *style)
     if (d->tableColumnStyles.key(style, -1) != -1)
         return;
     style->setStyleId(d->s_stylesNumber);
-    d->tableColumnStyles.insert(d->s_stylesNumber++, style);
+    d->tableColumnStyles.insert(d->s_stylesNumber, style);
+    ++d->s_stylesNumber;
     emit styleAdded(style);
 }
 
@@ -497,7 +505,8 @@ void KoStyleManager::add(KoTableRowStyle *style)
     if (d->tableRowStyles.key(style, -1) != -1)
         return;
     style->setStyleId(d->s_stylesNumber);
-    d->tableRowStyles.insert(d->s_stylesNumber++, style);
+    d->tableRowStyles.insert(d->s_stylesNumber, style);
+    ++d->s_stylesNumber;
     emit styleAdded(style);
 }
 
@@ -507,7 +516,8 @@ void KoStyleManager::add(KoTableCellStyle *style)
         return;
     style->setParent(this);
     style->setStyleId(d->s_stylesNumber);
-    d->tableCellStyles.insert(d->s_stylesNumber++, style);
+    d->tableCellStyles.insert(d->s_stylesNumber, style);
+    ++d->s_stylesNumber;
     emit styleAdded(style);
 }
 
@@ -517,7 +527,8 @@ void KoStyleManager::add(KoSectionStyle *style)
         return;
     style->setParent(this);
     style->setStyleId(d->s_stylesNumber);
-    d->sectionStyles.insert(d->s_stylesNumber++, style);
+    d->sectionStyles.insert(d->s_stylesNumber, style);
+    ++d->s_stylesNumber;
     emit styleAdded(style);
 }
 
@@ -530,7 +541,8 @@ void KoStyleManager::add(KoTextTableTemplate *tableTemplate)
     tableTemplate->setParent(this);
     tableTemplate->setStyleId(d->s_stylesNumber);
 
-    d->tableTemplates.insert(d->s_stylesNumber++, tableTemplate);
+    d->tableTemplates.insert(d->s_stylesNumber, tableTemplate);
+    ++d->s_stylesNumber;
 }
 
 void KoStyleManager::slotAppliedStyle(const KoParagraphStyle *style)
@@ -1012,7 +1024,8 @@ KoListStyle *KoStyleManager::defaultOutlineStyle() const
             llp.setTextIndent(0);
             d->defaultOutlineStyle->setLevelProperties(llp);
         }
-        d->defaultOutlineStyle->setStyleId(d->s_stylesNumber++);
+        d->defaultOutlineStyle->setStyleId(d->s_stylesNumber);
+        ++d->s_stylesNumber;
     }
 
     return d->defaultOutlineStyle;
@@ -1103,7 +1116,7 @@ void KoStyleManager::addUnusedStyle(KoParagraphStyle *style)
         return;
     style->setParent(this);
     style->setStyleId(d->s_stylesNumber);
-    d->unusedParagraphStyles.insert(d->s_stylesNumber++, style);
+    d->unusedParagraphStyles.insert(d->s_stylesNumber, style);
 
     KoParagraphStyle *root = style;
     while (root->parentStyle()) {
@@ -1113,6 +1126,7 @@ void KoStyleManager::addUnusedStyle(KoParagraphStyle *style)
     }
     if (root != d->defaultParagraphStyle && root->parentStyle() == 0)
         root->setParentStyle(d->defaultParagraphStyle);
+    ++d->s_stylesNumber;
 }
 
 void KoStyleManager::moveToUsedStyles(int id)

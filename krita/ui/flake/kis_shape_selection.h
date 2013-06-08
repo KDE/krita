@@ -69,9 +69,12 @@ public:
     virtual void renderToProjection(KisPaintDeviceSP projection);
     virtual void renderToProjection(KisPaintDeviceSP projection, const QRect& r);
 
-    virtual void setDirty();
+    KUndo2Command* resetToEmpty();
+    bool isEmpty() const;
 
-    virtual QPainterPath selectionOutline();
+    QPainterPath outlineCache() const;
+    bool outlineCacheValid() const;
+    void recalculateOutlineCache();
 
     KoShapeManager *shapeManager() const;
 
@@ -79,11 +82,14 @@ public:
     void moveY(qint32 y);
 
     KUndo2Command* transform(const QTransform &transform);
-
-
 protected:
 
     virtual void paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext);
+
+private:
+    friend class KisTakeAllShapesCommand;
+    void setUpdatesEnabled(bool enabled);
+    bool updatesEnabled() const;
 
 private:
 
@@ -91,7 +97,6 @@ private:
 
     KisImageWSP m_image;
     QPainterPath m_outline;
-    bool m_dirty;
     KisImageViewConverter* m_converter;
     KisShapeSelectionCanvas* m_canvas;
     KisShapeSelectionModel* m_model;

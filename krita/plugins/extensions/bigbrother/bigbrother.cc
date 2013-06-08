@@ -65,11 +65,11 @@ class RecordedActionLoadContext : public KisRecordedActionLoadContext {
     public:
         virtual KoAbstractGradient* gradient(const QString& name) const
         {
-            return KoResourceServerProvider::instance()->gradientServer()->getResourceByName(name);
+            return KoResourceServerProvider::instance()->gradientServer()->resourceByName(name);
         }
         virtual KisPattern* pattern(const QString& name) const
         {
-            return KisResourceServerProvider::instance()->patternServer()->getResourceByName(name);
+            return KisResourceServerProvider::instance()->patternServer()->resourceByName(name);
         }
 };
 

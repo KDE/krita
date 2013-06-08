@@ -116,10 +116,11 @@ void KisInfinityManager::imagePositionChanged()
     }
 }
 
-void KisInfinityManager::drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter *converter)
+void KisInfinityManager::drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter *converter, KisCanvas2 *canvas)
 {
     Q_UNUSED(updateArea);
     Q_UNUSED(converter);
+    Q_UNUSED(canvas);
 
     gc.save();
     gc.setTransform(QTransform(), false);

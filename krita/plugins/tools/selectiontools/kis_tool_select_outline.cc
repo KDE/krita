@@ -128,6 +128,11 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
 
                 painter.paintPolygon(m_points);
 
+                QPainterPath cache;
+                cache.addPolygon(m_points);
+                cache.closeSubpath();
+                tmpSel->setOutlineCache(cache);
+
                 helper.selectPixelSelection(tmpSel, selectionAction());
             } else {
 

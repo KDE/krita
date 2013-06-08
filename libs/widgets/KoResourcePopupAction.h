@@ -44,7 +44,7 @@ public:
      */
     virtual ~KoResourcePopupAction();
 
-    KoShapeBackground *currentBackground();
+    KoShapeBackground *currentBackground() const;
     void setCurrentBackground(KoShapeBackground *background);
 
 signals:
@@ -55,7 +55,7 @@ public slots:
     void updateIcon();
 
 private slots:
-    void indexChanged(QModelIndex modelIndex);
+    void indexChanged(const QModelIndex &modelIndex);
 
 private:
     class Private;

@@ -530,9 +530,9 @@ void KisPaintopBox::slotSaveActivePreset()
     QString name = m_presetsPopup->getPresetName();
 
     QStringList tags;
-    KisPaintOpPreset* resource = rServer->getResourceByName(name);
+    KisPaintOpPreset* resource = rServer->resourceByName(name);
     if (resource) {
-        tags = rServer->getAssignedTagsList(resource);
+        tags = rServer->assignedTagsList(resource);
         rServer->removeResource(resource);
     }
 
@@ -653,7 +653,7 @@ void KisPaintopBox::slotSaveToFavouriteBrushes()
 void KisPaintopBox::slotWatchPresetNameLineEdit(const QString& text)
 {
     KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-    m_presetsPopup->changeSavePresetButtonText(rServer->getResourceByName(text) != 0);
+    m_presetsPopup->changeSavePresetButtonText(rServer->resourceByName(text) != 0);
 }
 
 void KisPaintopBox::slotHorizontalMirrorChanged(bool value)

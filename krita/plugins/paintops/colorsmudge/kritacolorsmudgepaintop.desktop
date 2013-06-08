@@ -28,4 +28,4 @@ Name[zh_TW]=彩色煙燻筆刷
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritacolorsmudgepaintop
-X-Krita-Version=27
+X-Krita-Version=28

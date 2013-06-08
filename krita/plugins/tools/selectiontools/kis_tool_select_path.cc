@@ -104,7 +104,10 @@ void KisToolSelectPath::LocalTool::addPathShape(KoPathShape* pathShape)
         QTransform matrix;
         matrix.scale(image->xRes(), image->yRes());
         matrix.translate(pathShape->position().x(), pathShape->position().y());
-        painter.fillPainterPath(matrix.map(pathShape->outline()));
+
+        QPainterPath path = matrix.map(pathShape->outline());
+        painter.fillPainterPath(path);
+        tmpSel->setOutlineCache(path);
 
         helper.selectPixelSelection(tmpSel, m_selectionTool->selectionAction());
 

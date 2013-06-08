@@ -189,7 +189,7 @@ void KisCustomBrushWidget::createBrush()
         KisSelectionSP selection = m_image->globalSelection();
         // create copy of the data
         m_image->lock();
-        KisPaintDeviceSP dev = new KisPaintDevice(*m_image->mergedImage());
+        KisPaintDeviceSP dev = new KisPaintDevice(*m_image->projection());
         m_image->unlock();
 
         if (!selection){

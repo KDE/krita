@@ -177,7 +177,7 @@ void KisSelectionManager::setup(KActionCollection * collection, KisActionManager
     connect(m_copyToNewLayer, SIGNAL(triggered()), this, SLOT(copySelectionToNewLayer()));
 
     m_cutToNewLayer  = new KisAction(i18n("Cut Selection to New Layer"), this);
-    m_copyToNewLayer->setActivationFlags(KisAction::PIXELS_SELECTED);
+    m_cutToNewLayer->setActivationFlags(KisAction::PIXELS_SELECTED);
     m_cutToNewLayer->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     actionManager->addAction("cut_selection_to_new_layer", m_cutToNewLayer, collection);
     m_cutToNewLayer->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_J));
@@ -219,6 +219,11 @@ void KisSelectionManager::setup(KActionCollection * collection, KisActionManager
     m_imageResizeToSelection->setActivationFlags(KisAction::PIXELS_SELECTED);
     actionManager->addAction("resizeimagetoselection", m_imageResizeToSelection, collection);
     connect(m_imageResizeToSelection, SIGNAL(triggered()), this, SLOT(imageResizeToSelection()));
+
+    KisAction *action = new KisAction(i18n("Convert to Vector Selection"), this);
+    action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
+    actionManager->addAction("convert_to_vector_selection", action, collection);
+    connect(action, SIGNAL(triggered()), SLOT(convertToVectorSelection()));
 
 //     m_load
 //         = new KAction(i18n("Load..."),
@@ -390,6 +395,11 @@ void KisSelectionManager::reselect()
     factory.run(m_view);
 }
 
+void KisSelectionManager::convertToVectorSelection()
+{
+    KisSelectionToVectorActionFactory factory;
+    factory.run(m_view);
+}
 
 void KisSelectionManager::clear()
 {

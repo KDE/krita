@@ -128,6 +128,7 @@ KoTableCellStyle& KoTableCellStyle::operator=(const KoTableCellStyle &other)
 
 KoTableCellStyle::~KoTableCellStyle()
 {
+    delete d_ptr;
 }
 
 KoTableCellStyle *KoTableCellStyle::fromTableCell(const QTextTableCell &tableCell, QObject *parent)

@@ -138,8 +138,7 @@ void KisToolPerspectiveGrid::mousePressEvent(KoPointerEvent *event)
                 KisSubPerspectiveGrid* grid = *it;
                 QPointF gridCenter = grid->center();
                 dbgKrita << "click at " << event->point << " top left at " << *grid->topLeft();
-
-                if ((m_selectedNode1 = nodeNearPoint(grid, mousep))) {
+                if (m_selectedNode1 = nodeNearPoint(grid, mousep)) {
                     m_internalMode = MODE_DRAGGING_NODE;
                     break;
                 } else if (mouseNear(mousep, ((pixelToView(*grid->topLeft()) + pixelToView(*grid->bottomLeft()))*0.5))) {

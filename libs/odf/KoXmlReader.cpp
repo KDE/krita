@@ -1050,7 +1050,7 @@ namespace {
         doc.clear();
         ParseError error;
         xml.readNext();
-        while (!xml.atEnd() && xml.tokenType() != QXmlStreamReader::EndDocument) {
+        while (!xml.atEnd() && xml.tokenType() != QXmlStreamReader::EndDocument && !xml.hasError()) {
             switch (xml.tokenType()) {
             case QXmlStreamReader::StartElement:
                 parseElement(xml, doc, stripSpaces);

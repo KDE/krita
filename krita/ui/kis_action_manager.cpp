@@ -130,6 +130,16 @@ void KisActionManager::updateGUI()
             enable = action->activationFlags() & flags;
         }
         enable = enable && (int)(action->activationConditions() & conditions) == (int)action->activationConditions();
+
+        if (node && enable) {
+            foreach (const QString &type, action->excludedNodeTypes()) {
+                if (node->inherits(type.toAscii())) {
+                    enable = false;
+                    break;
+                }
+            }
+        }
+
         action->setActionEnabled(enable);
     }
 }

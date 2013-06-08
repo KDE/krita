@@ -128,11 +128,11 @@ KisConfigWidget * KisFilterWave::createConfigurationWidget(QWidget* parent, cons
     return new KisWdgWave((KisFilter*)this, (QWidget*)parent);
 }
 
-void KisFilterWave::process(KisPaintDeviceSP device,
-                            const QRect& applyRect,
-                            const KisFilterConfiguration* config,
-                            KoUpdater* progressUpdater
-                           ) const
+void KisFilterWave::processImpl(KisPaintDeviceSP device,
+                                const QRect& applyRect,
+                                const KisFilterConfiguration* config,
+                                KoUpdater* progressUpdater
+                                ) const
 {
     Q_ASSERT(device.data() != 0);
 

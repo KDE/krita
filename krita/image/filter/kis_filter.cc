@@ -90,41 +90,47 @@ KisFilter::~KisFilter()
 {
 }
 
-void KisFilter::process(const KisPaintDeviceSP src,
-                KisPaintDeviceSP dst,
-                KisSelectionSP sel,
-                const QRect& applyRect,
-                const KisFilterConfiguration* config,
-                KoUpdater* progressUpdater ) const
+void KisFilter::process(KisPaintDeviceSP device,
+                        const QRect& applyRect,
+                        const KisFilterConfiguration* config,
+                        KoUpdater* progressUpdater) const
 {
-    // we're not filtering anything, so return.
-    if (applyRect.isEmpty()) {
-        return;
-    }
-    QRect nR = neededRect(applyRect, config);
-    // Create a temporary device that will be filtered, sharing the source data
+    process(device, device, 0, applyRect, config, progressUpdater);
+}
+
+void KisFilter::process(const KisPaintDeviceSP src,
+                        KisPaintDeviceSP dst,
+                        KisSelectionSP selection,
+                        const QRect& applyRect,
+                        const KisFilterConfiguration* config,
+                        KoUpdater* progressUpdater ) const
+{
+    if (applyRect.isEmpty()) return;
+    QRect needRect = neededRect(applyRect, config);
+
     KisPaintDeviceSP temporary;
     KisTransaction *transaction = 0;
 
-    if(src == dst && sel == 0)
-    {
+    bool weirdDstColorSpace =
+        dst->colorSpace() != dst->compositionSourceColorSpace() &&
+        !(*dst->colorSpace() == *dst->compositionSourceColorSpace());
+
+    if(src == dst && !selection && !weirdDstColorSpace) {
         temporary = src;
     }
     else {
-        temporary = new KisPaintDevice(src->colorSpace());
-        temporary->makeCloneFromRough(src, nR);
+        temporary = dst->createCompositionSourceDevice(src, needRect);
         transaction = new KisTransaction("", temporary);
     }
-    // Filter
-    process(temporary, applyRect, config, progressUpdater);
 
-    // Copy on destination, respecting the selection
-    if(temporary != src)
-    {
+    processImpl(temporary, applyRect, config, progressUpdater);
+
+
+    if(transaction) {
         delete transaction;
         KisPainter p(dst);
         p.setCompositeOp(COMPOSITE_COPY);
-        p.setSelection(sel);
+        p.setSelection(selection);
         p.bitBlt(applyRect.topLeft(), temporary, applyRect);
     }
 }

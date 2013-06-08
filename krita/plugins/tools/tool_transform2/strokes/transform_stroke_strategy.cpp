@@ -34,11 +34,9 @@
 
 TransformStrokeStrategy::TransformStrokeStrategy(KisNodeSP rootNode,
                                                  KisSelectionSP selection,
-                                                 KisPostExecutionUndoAdapter *undoAdapter,
-                                                 KisUndoAdapter *legacyUndoAdapter)
+                                                 KisPostExecutionUndoAdapter *undoAdapter)
     : KisStrokeStrategyUndoCommandBased(i18n("Transform Stroke"), false, undoAdapter),
-      m_selection(selection),
-      m_legacyUndoAdapter(legacyUndoAdapter)
+      m_selection(selection)
 {
     if (rootNode->childCount() || !rootNode->paintDevice()) {
         m_previewDevice = createDeviceCache(rootNode->projection());
@@ -66,12 +64,12 @@ KisPaintDeviceSP TransformStrokeStrategy::createDeviceCache(KisPaintDeviceSP dev
     if (m_selection) {
         QRect srcRect = m_selection->selectedExactRect();
 
-        cache = new KisPaintDevice(dev->colorSpace());
+        cache = dev->createCompositionSourceDevice();
         KisPainter gc(cache);
         gc.setSelection(m_selection);
         gc.bitBlt(srcRect.topLeft(), dev, srcRect);
     } else {
-        cache = new KisPaintDevice(*dev);
+        cache = dev->createCompositionSourceDevice(dev);
     }
 
     return cache;
@@ -134,11 +132,12 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                 td->node->setDirty(oldExtent | td->node->extent());
             }
         } else if (m_selection) {
-            // FIXME: do it undoable
-            m_selection->flatten();
-            Q_ASSERT(m_selection->pixelSelection());
 
-            KisSelectionTransaction transaction("Transform Selection", m_legacyUndoAdapter, m_selection);
+            /**
+             * We use usual transaction here, because we cannot calsulate
+             * transformation for perspective and warp workers.
+             */
+            KisTransaction transaction("Transform Selection", m_selection->pixelSelection());
 
             KisProcessingVisitor::ProgressHelper helper(td->node);
             transformDevice(td->config,
@@ -148,8 +147,6 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
             runAndSaveCommand(KUndo2CommandSP(transaction.endAndTake()),
                               KisStrokeJobData::CONCURRENT,
                               KisStrokeJobData::NORMAL);
-
-            m_legacyUndoAdapter->emitSelectionChanged();
         }
     } else if (csd) {
         KisPaintDeviceSP device = csd->node->paintDevice();

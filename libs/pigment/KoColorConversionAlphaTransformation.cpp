@@ -52,9 +52,9 @@ void KoColorConversionFromAlphaTransformation::transform(const quint8 *src, quin
     quint16 data[4];
     qint32 size = dstColorSpace()->pixelSize();
 
-    data[1] = 0;          // a
-    data[2] = 0;          // b
-    data[3] = UINT16_MAX; // A
+    data[1] = UINT16_MAX / 2;   // a
+    data[2] = UINT16_MAX / 2;   // b
+    data[3] = UINT16_MAX;       // A
 
     while (nPixels > 0) {
 

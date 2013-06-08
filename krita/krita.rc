@@ -85,14 +85,19 @@
 
 <Menu name="Layer"><text>&amp;Layer</text>
   <Menu name="LayerNew"><text>New</text>
-    <Action name="duplicate_layer"/>
+    <Action name="add_new_paint_layer"/>
+    <Action name="duplicatelayer"/>
+    <Separator/>
     <Action name="import_layer_from_file"/>
-    <Action name="import_mask_from_file"/>
+    <Separator/>
     <Action name="cut_selection_to_new_layer"/>
     <Action name="copy_selection_to_new_layer"/>
-    <Action name="create_layer_from_mask"/>
-    <Action name="duplicatelayer"/>
-    <Action name="add_new_paint_layer"/>
+  </Menu>
+  <Menu name="LayerConvert"><text>Convert</text>
+    <Action name="convert_to_paint_layer"/>
+    <Action name="convert_to_transparency_mask"/>
+    <Action name="convert_to_filter_mask"/>
+    <Action name="convert_to_selection_mask"/>
   </Menu>
   <Action name="resizelayertoowner"/>
   <Separator/>
@@ -118,8 +123,7 @@
     <Action name="deselect"/>
     <Action name="reselect"/>
     <Action name="invert"/>
-    <Action name="create_selection_from_mask"/>
-
+    <Action name="convert_to_vector_selection"/>
     <Separator/>
     <Action name="feather"/>
     <Action name = "similar"/>
@@ -178,23 +182,5 @@
      <Separator/>
      <Action name="workspaces"/>
 </ToolBar>
-
-<Menu name="image_popup">
- <Action name="select_all"/>
- <Action name="deselect"/>
- <Action name="invert"/>
- <Separator/>
- <Action name="duplicate_layer"/>
- <Separator/>
- <Action name="edit_undo"/>
- <Action name="edit_redo"/>
- <Separator/>
- <Action name="edit_cut"/>
- <Action name="edit_copy"/>
- <Action name="edit_paste"/>
- <Action name="paste_at"/>
- <Separator/>
- <ActionList name="flake_tool_actions"/>
-</Menu>
 
 </kpartgui>

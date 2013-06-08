@@ -241,7 +241,6 @@ KisLayerManager::KisLayerManager(KisView2 * view, KisDoc2 * doc)
     , m_imageResizeToLayer(0)
     , m_flattenLayer(0)
     , m_rasterizeLayer(0)
-    , m_addPaintLayer(0)
     , m_activeLayer(0)
     , m_commandsAdapter(new KisNodeCommandsAdapter(m_view))
 {
@@ -306,11 +305,6 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     m_imageResizeToLayer->setActivationFlags(KisAction::ACTIVE_LAYER);
     m_view->actionManager()->addAction("resizeimagetolayer", m_imageResizeToLayer, actionCollection);
     connect(m_imageResizeToLayer, SIGNAL(triggered()), this, SLOT(imageResizeToActiveLayer()));
-
-    m_addPaintLayer = new KAction(i18n("Add new paint layer"), this);
-    m_addPaintLayer->setShortcut(KShortcut(Qt::Key_Insert));
-    actionCollection->addAction("add_new_paint_layer", m_addPaintLayer);
-    connect(m_addPaintLayer, SIGNAL(triggered()), this, SLOT(layerAdd()));
 }
 
 void KisLayerManager::updateGUI()
@@ -445,134 +439,122 @@ void KisLayerManager::layerProperties()
     }
 }
 
-void KisLayerManager::layerAdd()
+void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
 {
-    KisImageWSP image = m_view->image();
-    if (image && activeLayer()) {
-        addLayer(activeLayer()->parent(), activeLayer());
-    } else if (image)
-        addLayer(image->rootLayer(), KisLayerSP(0));
-}
-
-void KisLayerManager::addLayer(KisNodeSP parent, KisNodeSP above)
-{
-    KisImageWSP image = m_view->image();
-    if (image) {
-        KisConfig cfg;
-        QString profilename;
-        KisLayerSP layer = new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, image->colorSpace());
-        if (layer) {
-            layer->setCompositeOp(COMPOSITE_OVER);
-            m_commandsAdapter->addNode(layer.data(), parent.data(), above.data());
-        } else {
-            KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));
-        }
-    }
-}
-
-void KisLayerManager::addGroupLayer(KisNodeSP parent, KisNodeSP above)
-{
-    KisImageWSP image = m_view->image();
-    if (image) {
-        KisLayerSP layer = KisLayerSP(new KisGroupLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8));
-        if (layer) {
-            layer->setCompositeOp(COMPOSITE_OVER);
-            m_commandsAdapter->addNode(layer.data(), parent.data(), above.data());
-        } else {
-            KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));
-        }
-    }
-}
-
-
-void KisLayerManager::addCloneLayer()
-{
-    KisImageWSP image = m_view->image();
-    if (image && activeLayer()) {
-        addCloneLayer(activeLayer()->parent(), activeLayer());
-    } else if (image)
-        addCloneLayer(image->rootLayer(), KisLayerSP(0));
-}
-
-void KisLayerManager::addCloneLayer(KisNodeSP parent, KisNodeSP above)
-{
-    KisImageWSP image = m_view->image();
-    if (image) {
-        // Check whether we are not cloning a parent layer
-        if (KisGroupLayer * from = dynamic_cast<KisGroupLayer*>(m_activeLayer.data())) {
-            KisNodeSP parent1 = parent;
-            while (parent1 && parent1 != image->root()) {
-                if (parent1.data() == from) {
-                    // The chosen layer is one of our own parents -- this will
-                    // lead to cyclic behaviour when updating. So we need to change parent
-                    parent = parent1->parent();
-                    above = parent1;
-                }
-                parent1 = parent1->parent();
-            }
-        }
-
-        KisLayerSP layer = new KisCloneLayer(m_activeLayer, image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8);
-
-        if (layer) {
-
-            layer->setCompositeOp(COMPOSITE_OVER);
-            m_commandsAdapter->addNode(layer.data(), parent.data(), above.data());
-
-        } else {
-            KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));
-        }
-    }
-}
-
-
-void KisLayerManager::addShapeLayer()
-{
-    KisImageWSP image = m_view->image();
-    if (image && activeLayer()) {
-        addShapeLayer(activeLayer()->parent(), activeLayer());
-    } else if (image)
-        addShapeLayer(image->rootLayer(), KisLayerSP(0));
-}
-
-
-void KisLayerManager::addShapeLayer(KisNodeSP parent, KisNodeSP above)
-{
-    KisImageWSP image = m_view->image();
-    if (image) {
-        // XXX: Make work with nodes!
-        KisLayer * parentLayer = dynamic_cast<KisLayer*>(parent.data());
-        KoShapeContainer * parentContainer =
-                dynamic_cast<KoShapeContainer*>(m_doc->shapeForNode(parentLayer));
-        if (!parentContainer) return;
-
-        KisLayerSP layer = new KisShapeLayer(parentContainer, m_doc->shapeController(), image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8);
-        if (layer) {
-            layer->setCompositeOp(COMPOSITE_OVER);
-            m_commandsAdapter->addNode(layer.data(), parent, above.data());
-        } else {
-            KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));
-        }
-    }
-}
-
-
-void KisLayerManager::addAdjustmentLayer()
-{
-    addAdjustmentLayer(activeLayer()->parent(), activeLayer());
-}
-
-void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above)
-{
-    Q_ASSERT(parent);
-
     KisImageWSP image = m_view->image();
     if (!image) return;
 
-    KisLayerSP l = activeLayer();
+    KisPaintDeviceSP srcDevice =
+        source->paintDevice() ? source->paintDevice() : source->original();
 
-    KisSelectionSP selection = l->selection();
-    KisAdjustmentLayerSP adjl = addAdjustmentLayer(parent, above, QString(), 0, selection);
+    if (!srcDevice) return;
+
+    KisPaintDeviceSP clone;
+
+    if (!(*srcDevice->colorSpace() ==
+          *srcDevice->compositionSourceColorSpace())) {
+
+        clone = new KisPaintDevice(srcDevice->compositionSourceColorSpace());
+        KisPainter gc(clone);
+        gc.setCompositeOp(COMPOSITE_COPY);
+        QRect rc(srcDevice->extent());
+        gc.bitBlt(rc.topLeft(), srcDevice, rc);
+
+        qDebug() << "Doing complex copying";
+    } else {
+        clone = new KisPaintDevice(*srcDevice);
+    }
+
+    KisLayerSP layer = new KisPaintLayer(image,
+                                         image->nextLayerName(),
+                                         source->opacity(),
+                                         clone);
+    layer->setCompositeOp(source->compositeOpId());
+
+    KisNodeSP parent = source->parent();
+    KisNodeSP above = source;
+
+    while (parent && !parent->allowAsChild(layer)) {
+        above = above->parent();
+        parent = above ? above->parent() : 0;
+    }
+
+    m_commandsAdapter->beginMacro(i18n("Convert to a Paint Layer"));
+    m_commandsAdapter->addNode(layer, parent, above);
+    m_commandsAdapter->removeNode(source);
+    m_commandsAdapter->endMacro();
+
+}
+
+void KisLayerManager::adjustLayerPosition(KisNodeSP node, KisNodeSP activeNode, KisNodeSP &parent, KisNodeSP &above)
+{
+    Q_ASSERT(activeNode);
+
+    parent = activeNode;
+    above = parent->lastChild();
+
+    while (parent && !parent->allowAsChild(node)) {
+        above = parent;
+        parent = parent->parent();
+    }
+
+    if (!parent) {
+        qWarning() << "KisLayerManager::adjustLayerPosition:"
+                   << "No node accepted newly created node";
+
+        parent = m_view->image()->root();
+        above = parent->lastChild();
+    }
+}
+
+void KisLayerManager::addLayerCommon(KisNodeSP activeNode, KisLayerSP layer)
+{
+    KisNodeSP parent;
+    KisNodeSP above;
+    adjustLayerPosition(layer, activeNode, parent, above);
+
+    m_commandsAdapter->addNode(layer, parent, above);
+}
+
+void KisLayerManager::addLayer(KisNodeSP activeNode)
+{
+    KisImageWSP image = m_view->image();
+    addLayerCommon(activeNode,
+                   new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, image->colorSpace()));
+}
+
+void KisLayerManager::addGroupLayer(KisNodeSP activeNode)
+{
+    KisImageWSP image = m_view->image();
+    addLayerCommon(activeNode,
+                   new KisGroupLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8));
+}
+
+void KisLayerManager::addCloneLayer(KisNodeSP activeNode)
+{
+    KisImageWSP image = m_view->image();
+    addLayerCommon(activeNode,
+                   new KisCloneLayer(m_activeLayer, image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8));
+}
+
+void KisLayerManager::addShapeLayer(KisNodeSP activeNode)
+{
+    KisImageWSP image = m_view->image();
+    KisShapeLayerSP layer = new KisShapeLayer(0, m_doc->shapeController(), image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8);
+
+    addLayerCommon(activeNode, layer);
+
+    KoShapeContainer *parentContainer =
+        dynamic_cast<KoShapeContainer*>(m_doc->shapeForNode(static_cast<KisNode*>(layer.data())->parent()));
+    static_cast<KoShapeContainer*>(layer.data())->setParent(parentContainer);
+}
+
+void KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode)
+{
+    KisImageWSP image = m_view->image();
+
+    KisSelectionSP selection = m_view->selection();
+    KisAdjustmentLayerSP adjl = addAdjustmentLayer(activeNode, QString(), 0, selection);
 
     KisPaintDeviceSP previewDevice = new KisPaintDevice(*adjl->original());
 
@@ -590,32 +572,19 @@ void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above)
     }
 }
 
-KisAdjustmentLayerSP KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above, const QString & name,
+KisAdjustmentLayerSP KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode, const QString & name,
                                                          KisFilterConfiguration * filter, KisSelectionSP selection)
 {
-    Q_ASSERT(parent);
-
     KisImageWSP image = m_view->image();
-    if (!image) return 0;
+    KisAdjustmentLayerSP layer = new KisAdjustmentLayer(image, name, filter, selection);
+    addLayerCommon(activeNode, layer);
 
-    KisAdjustmentLayerSP l = new KisAdjustmentLayer(image, name, filter, selection);
-    m_commandsAdapter->addNode(l.data(), parent, above);
-    l->setDirty(image->bounds());
-    image->waitForDone();
-    return l;
+    return layer;
 }
 
-void KisLayerManager::addGeneratorLayer()
+void KisLayerManager::addGeneratorLayer(KisNodeSP activeNode)
 {
-    addGeneratorLayer(activeLayer()->parent(), activeLayer());
-}
-
-void KisLayerManager::addGeneratorLayer(KisNodeSP parent, KisNodeSP above)
-{
-    Q_ASSERT(parent);
-
     KisImageWSP image = m_view->image();
-    if (!image) return;
 
     KisDlgGeneratorLayer dlg(image->nextLayerName(), m_view);
     dlg.resize(dlg.minimumSizeHint());
@@ -624,21 +593,11 @@ void KisLayerManager::addGeneratorLayer(KisNodeSP parent, KisNodeSP above)
         KisSelectionSP selection = m_view->selection();
         KisFilterConfiguration * generator = dlg.configuration();
         QString name = dlg.layerName();
-        addGeneratorLayer(parent, above, name, generator, selection);
+
+        addLayerCommon(activeNode,
+            new KisGeneratorLayer(image, name, generator, selection));
     }
 
-}
-
-void KisLayerManager::addGeneratorLayer(KisNodeSP parent, KisNodeSP above, const QString & name, KisFilterConfiguration * generator, KisSelectionSP selection)
-{
-    Q_ASSERT(parent);
-    Q_ASSERT(generator);
-
-    KisImageWSP image = m_view->image();
-    if (!image) return;
-
-    KisGeneratorLayerSP l = new KisGeneratorLayer(image, name, generator, selection);
-    m_commandsAdapter->addNode(l.data(), parent, above.data());
 }
 
 void KisLayerManager::layerDuplicate()
@@ -915,18 +874,9 @@ bool KisLayerManager::activeLayerHasSelection()
     return (activeLayer()->selection() != 0);
 }
 
-
-void KisLayerManager::addFileLayer()
+void KisLayerManager::addFileLayer(KisNodeSP activeNode)
 {
-    addFileLayer(activeLayer()->parent(), activeLayer());
-}
-
-void KisLayerManager::addFileLayer(KisNodeSP parent, KisNodeSP above)
-{
-    Q_ASSERT(parent);
-
     KisImageWSP image = m_view->image();
-    if (!image) return;
 
     KisDlgFileLayer dlg(image->nextLayerName(), m_view);
     dlg.resize(dlg.minimumSizeHint());
@@ -934,32 +884,19 @@ void KisLayerManager::addFileLayer(KisNodeSP parent, KisNodeSP above)
     if (dlg.exec() == QDialog::Accepted) {
         QString name = dlg.layerName();
         QString fileName = dlg.fileName();
+
+        if(fileName.isEmpty()){
+            KMessageBox::error(m_view, i18n("No file name specified."), i18n("No file specified"));
+            return;
+        }
+
         bool scaleToImageResolution = dlg.scaleToImageResolution();
 
-        addFileLayer(parent, above, name, fileName, scaleToImageResolution);
+        addLayerCommon(activeNode,
+                       new KisFileLayer(image, fileName, scaleToImageResolution, name, OPACITY_OPAQUE_U8));
     }
 
 }
-
-void KisLayerManager::addFileLayer(KisNodeSP parent, KisNodeSP above, const QString &name, const QString &fileName, bool scaleToImageResolution)
-{
-    Q_ASSERT(parent);
-    Q_ASSERT(!fileName.isEmpty());
-
-    KisImageWSP image = m_view->image();
-    if (!image) return;
-
-    KisLayerSP layer = new KisFileLayer(image, fileName, scaleToImageResolution, name, OPACITY_OPAQUE_U8);
-    if (layer) {
-        layer->setCompositeOp(COMPOSITE_OVER);
-        m_commandsAdapter->addNode(layer.data(), parent, above.data());
-    } else {
-        KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));
-    }
-
-
-}
-
 
 #include "kis_layer_manager.moc"
 

@@ -74,6 +74,10 @@ void KisNodeGraphListener::nodeChanged(KisNode * /*node*/)
 {
 }
 
+void KisNodeGraphListener::notifySelectionChanged()
+{
+}
+
 void KisNodeGraphListener::requestProjectionUpdate(KisNode * /*node*/, const QRect& /*rect*/)
 {
 }

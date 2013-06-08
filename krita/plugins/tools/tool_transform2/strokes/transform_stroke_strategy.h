@@ -69,8 +69,7 @@ public:
 public:
     TransformStrokeStrategy(KisNodeSP rootNode,
                             KisSelectionSP selection,
-                            KisPostExecutionUndoAdapter *undoAdapter,
-                            KisUndoAdapter *legacyUndoAdapter);
+                            KisPostExecutionUndoAdapter *undoAdapter);
 
     ~TransformStrokeStrategy();
 
@@ -102,7 +101,6 @@ private:
 
 private:
     KisSelectionSP m_selection;
-    KisUndoAdapter *m_legacyUndoAdapter;
 
     QMutex m_devicesCacheMutex;
     QHash<KisPaintDevice*, KisPaintDeviceSP> m_devicesCacheHash;

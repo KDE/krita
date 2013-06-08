@@ -23,6 +23,7 @@
 #include <QReadWriteLock>
 
 #include "kis_stroke_job.h"
+#include "kis_spontaneous_job.h"
 #include "kis_base_rects_walker.h"
 #include "kis_async_merger.h"
 
@@ -34,7 +35,8 @@ public:
     enum Type {
         EMPTY,
         MERGE,
-        STROKE
+        STROKE,
+        SPONTANEOUS
     };
 
 public:
@@ -55,9 +57,9 @@ public:
         if(m_type == MERGE) {
             runMergeJob();
         } else {
-            Q_ASSERT(m_type == STROKE);
-            m_strokeJob->run();
-            delete m_strokeJob;
+            Q_ASSERT(m_type == STROKE || m_type == SPONTANEOUS);
+            m_runnableJob->run();
+            delete m_runnableJob;
         }
 
         setDone();
@@ -85,21 +87,30 @@ public:
         m_walker = walker;
 
         m_exclusive = false;
-        m_strokeJob = 0;
+        m_runnableJob = 0;
     }
 
     inline void setStrokeJob(KisStrokeJob *strokeJob) {
         m_type = STROKE;
-        m_strokeJob = strokeJob;
+        m_runnableJob = strokeJob;
 
-        m_exclusive = m_strokeJob->isExclusive();
+        m_exclusive = strokeJob->isExclusive();
+        m_walker = 0;
+        m_accessRect = m_changeRect = QRect();
+    }
+
+    inline void setSpontaneousJob(KisSpontaneousJob *spontaneousJob) {
+        m_type = SPONTANEOUS;
+        m_runnableJob = spontaneousJob;
+
+        m_exclusive = false;
         m_walker = 0;
         m_accessRect = m_changeRect = QRect();
     }
 
     inline void setDone() {
         m_walker = 0;
-        m_strokeJob = 0;
+        m_runnableJob = 0;
         m_type = EMPTY;
     }
 
@@ -139,12 +150,15 @@ private:
     }
 
     inline KisStrokeJob* strokeJob() const {
-        return m_strokeJob;
+        KisStrokeJob *job = dynamic_cast<KisStrokeJob*>(m_runnableJob);
+        Q_ASSERT(job);
+
+        return job;
     }
 
     inline void testingSetDone() {
         if(m_type == STROKE) {
-            delete m_strokeJob;
+            delete m_runnableJob;
         }
         setDone();
     }
@@ -160,10 +174,10 @@ private:
     volatile Type m_type;
 
     /**
-     * Stroke jobs part
+     * Runnable jobs part
      * The job is owned by the context and deleted after completion
      */
-    KisStrokeJob *m_strokeJob;
+    KisRunnable *m_runnableJob;
 
     /**
      * Merge jobs part

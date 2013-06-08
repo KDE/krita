@@ -74,12 +74,14 @@ public:
     /***********************************Recent Colors************************************/
     inline int recentColorsTotal() { return m_colorList->size(); } ;
     inline const KoColor& recentColorAt(int pos) { return m_colorList->guiColor(pos); };
-    
+
     // Reimplemented from KoResourceServerObserver
     virtual void removingResource(KisPaintOpPreset* resource);
     virtual void resourceAdded(KisPaintOpPreset* resource);
     virtual void resourceChanged(KisPaintOpPreset* resource);
-
+    virtual void syncTaggedResourceView();
+    virtual void syncTagAddition(const QString& tag);
+    virtual void syncTagRemoval(const QString& tag);
     /**
      Set palette to block updates, paintops won't be deleted when they are deleted from server
      Used when overwriting a resource

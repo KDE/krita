@@ -138,8 +138,13 @@ public slots:
      */
     void moveNodeDirect(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
 
+    void toggleIsolateMode(bool checked);
+    void slotUpdateIsolateModeAction();
+    void slotTryFinishIsolatedMode();
+
     void moveNodeAt(KisNodeSP node, KisNodeSP parent, int index);
-    void createNode(const QString & node);
+    void createNode(const QString &node);
+    void convertNode(const QString &nodeType);
     void nodesUpdated();
     void nodeProperties(KisNodeSP node);
     void nodeOpacityChanged(qreal opacity, bool finalChange);
@@ -192,11 +197,6 @@ public:
     void scale(double sx, double sy, KisFilterStrategy *filterStrategy);
     
 private:
-    
-    void getNewNodeLocation(const QString & nodeType, KisNodeSP &parent, KisNodeSP &above, KisNodeSP active);
-    void getNewNodeLocation(KisNodeSP node, KisNodeSP &parent, KisNodeSP &above, KisNodeSP _activeNode);
-
-
     /**
      * Scales opacity from the range 0...1
      * to the integer range 0...255

@@ -39,6 +39,7 @@
 #include "kis_brush_chooser.h"
 #include "kis_auto_brush_widget.h"
 #include "kis_custom_brush_widget.h"
+#include "kis_clipboard_brush_widget.h"
 #include "kis_text_brush_chooser.h"
 
 KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
@@ -62,6 +63,10 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
     m_customBrushWidget = new KisCustomBrushWidget(0, i18n("Custom Brush"), 0);
     connect(m_customBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
     addChooser(i18n("Custom Brush"), m_customBrushWidget, CUSTOMBRUSH, KoGroupButton::GroupCenter);
+
+    m_clipboardBrushWidget = new KisClipboardBrushWidget(0, i18n("Clipboard Brush"), 0);
+    connect(m_clipboardBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
+    addChooser(i18n("Clipboard Brush"), m_clipboardBrushWidget, CLIPBOARDBRUSH, KoGroupButton::GroupCenter);
 
     m_textBrushWidget = new KisTextBrushChooser(this, "textbrush", i18n("Text Brush"));
     connect(m_textBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
@@ -103,6 +108,9 @@ KisBrushSP KisBrushSelectionWidget::brush()
     case CUSTOMBRUSH:
        theBrush = m_customBrushWidget->brush();
        break;
+    case CLIPBOARDBRUSH:
+        theBrush = m_clipboardBrushWidget->brush();
+        break;
     case TEXTBRUSH:
         theBrush = m_textBrushWidget->brush();
         break;
@@ -132,6 +140,10 @@ void KisBrushSelectionWidget::setPredefinedBrushes(bool on)
 void KisBrushSelectionWidget::setCustomBrush(bool on)
 {
     m_buttonGroup->button(CUSTOMBRUSH)->setVisible(on);
+}
+
+void KisBrushSelectionWidget::setClipboardBrush(bool on){
+    m_buttonGroup->button(CLIPBOARDBRUSH)->setVisible(on);
 }
 
 void KisBrushSelectionWidget::setTextBrush(bool on)

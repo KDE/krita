@@ -75,6 +75,12 @@ public:
         Q_UNUSED(resource);
     }
 
+    virtual void syncTaggedResourceView(){}
+
+    virtual void syncTagAddition(const QString& tag){}
+
+    virtual void syncTagRemoval(const QString& tag){}
+
     ///Reimplemented
     virtual void importResourceFile(const QString& filename, bool fileCreation = true)
     {

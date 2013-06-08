@@ -140,7 +140,7 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
 
     // ask the decorations to paint themselves
     foreach(KisCanvasDecoration* deco, m_d->decorations) {
-        deco->paint(gc, m_d->coordinatesConverter->widgetToDocument(updateWidgetRect), m_d->coordinatesConverter);
+        deco->paint(gc, m_d->coordinatesConverter->widgetToDocument(updateWidgetRect), m_d->coordinatesConverter,m_d->canvas);
     }
 
     gc.restore();

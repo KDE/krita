@@ -42,7 +42,7 @@ public:
 
     KisPresetChooser(QWidget *parent = 0, const char *name = 0);
     virtual ~KisPresetChooser();
-    
+
     enum ViewMode{
         THUMBNAIL, /// Shows thumbnails
         DETAIL,  /// Shows thumbsnails with text next to it
@@ -52,13 +52,13 @@ public:
     /// Set a list of preset names for resources that should be show, others will be hidden
     /// Turns on name filter mode
     ///@param filteredNames list of names of presets that will be shown
-    void setFilteredNames(const QStringList filteredNames);
+    void filterPaletteFavorites(const QStringList& filteredNames);
     /// get tag names and used to set Completer object in paintop_presets_popup class
-    QStringList getTagNamesList(const QString& searchString);
+    QStringList tagNamesList(const QString& searchString);
     /// Sets a list of resources in the paintop list, when ever user press enter in the linedit of paintop_presets_popup Class
     void setViewMode(ViewMode mode);
     void showButtons(bool show);
-    
+
     KoResource* currentResource();
     /// Sets the visibility of tagging klineEdits
     void showTaggingBar( bool showSearchBar, bool showOpBar );
@@ -69,13 +69,13 @@ public:
 
 signals:
     void resourceSelected(KoResource * resource);
-    
+
 public slots:
     void updateViewSettings();
-    
+
 protected:
     virtual void resizeEvent(QResizeEvent* event);
-    
+
 private:
     KoResourceItemChooser *m_chooser;
     KisPresetDelegate* m_delegate;

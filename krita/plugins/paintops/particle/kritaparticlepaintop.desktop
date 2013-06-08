@@ -34,4 +34,4 @@ Name[zh_TW]=粒子筆刷
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritaparticlepaintop
-X-Krita-Version=27
+X-Krita-Version=28

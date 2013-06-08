@@ -70,7 +70,7 @@ void KisTransparencyMaskTest::testApply()
 
     // Everything is selected
     initImage(image, layer, dev, mask);
-    mask->initSelection(0, layer);
+    mask->initSelection(layer);
     mask->apply(dev, QRect(0, 0, 200, 100));
     QImage qimage = dev->convertToQImage(0, 0, 0, 200, 100);
 
@@ -82,8 +82,8 @@ void KisTransparencyMaskTest::testApply()
 
     // Invert the mask, so that nothing will be selected, then select a rect
     initImage(image, layer, dev, mask);
-    mask->initSelection(0, layer);
-    mask->selection()->getOrCreatePixelSelection()->invert();
+    mask->initSelection(layer);
+    mask->selection()->pixelSelection()->invert();
     mask->apply(dev, QRect(0, 0, 200, 100));
     qimage = dev->convertToQImage(0, 0, 0, 200, 100);
 
@@ -94,8 +94,8 @@ void KisTransparencyMaskTest::testApply()
     }
 
     initImage(image, layer, dev, mask);
-    mask->initSelection(0, layer);
-    mask->selection()->getOrCreatePixelSelection()->invert();
+    mask->initSelection(layer);
+    mask->selection()->pixelSelection()->invert();
     mask->select(QRect(50, 0, 100, 100));
     mask->apply(dev, QRect(0, 0, 200, 100));
     qimage = dev->convertToQImage(0, 0, 0, 200, 100);
@@ -120,8 +120,8 @@ void KisTransparencyMaskTest::testMoveParentLayer()
     KisTransparencyMaskSP mask;
 
     initImage(image, layer, dev, mask);
-    mask->initSelection(0, layer);
-    mask->selection()->getOrCreatePixelSelection()->invert();
+    mask->initSelection(layer);
+    mask->selection()->pixelSelection()->invert();
     mask->select(QRect(50, 50, 100, 100));
 
     KisFullRefreshWalker walker(image->bounds());

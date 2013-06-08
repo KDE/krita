@@ -343,7 +343,8 @@ void KisToolPaint::addOptionWidgetOption(QWidget *control, QWidget *label)
         }
         m_optionWidgetLayout->addWidget(label, m_optionWidgetLayout->rowCount(), 0);
         m_optionWidgetLayout->addWidget(control, m_optionWidgetLayout->rowCount() - 1, 1);
-    } else {
+    }
+    else {
         m_optionWidgetLayout->addWidget(control, m_optionWidgetLayout->rowCount(), 0, 1, 2);
     }
 }

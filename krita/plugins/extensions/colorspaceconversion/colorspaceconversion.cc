@@ -56,11 +56,11 @@ K_EXPORT_PLUGIN(ColorSpaceConversionFactory("krita"))
 ColorSpaceConversion::ColorSpaceConversion(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent, "kritaplugins/colorspaceconversion.rc")
 {
-    KisAction *action  = new KisAction(i18n("&Convert Image Type..."), this);
+    KisAction *action  = new KisAction(i18n("&Convert Image Color Space..."), this);
     addAction("imagecolorspaceconversion", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageColorSpaceConversion()));
 
-    action  = new KisAction(i18n("&Convert Layer Type..."), this);
+    action  = new KisAction(i18n("&Convert Layer Color Space..."), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     addAction("layercolorspaceconversion", action);

@@ -1058,6 +1058,25 @@ KisPaintDeviceSP KisPaintDevice::createCompositionSourceDevice() const
     return new KisPaintDevice(compositionSourceColorSpace());
 }
 
+KisPaintDeviceSP KisPaintDevice::createCompositionSourceDevice(KisPaintDeviceSP cloneSource) const
+{
+    KisPaintDeviceSP clone = new KisPaintDevice(*cloneSource);
+    clone->convertTo(compositionSourceColorSpace(),
+                     KoColorConversionTransformation::InternalRenderingIntent,
+                     KoColorConversionTransformation::InternalConversionFlags);
+    return clone;
+}
+
+KisPaintDeviceSP KisPaintDevice::createCompositionSourceDevice(KisPaintDeviceSP cloneSource, const QRect roughRect) const
+{
+    KisPaintDeviceSP clone = new KisPaintDevice(colorSpace());
+    clone->makeCloneFromRough(cloneSource, roughRect);
+    clone->convertTo(compositionSourceColorSpace(),
+                     KoColorConversionTransformation::InternalRenderingIntent,
+                     KoColorConversionTransformation::InternalConversionFlags);
+    return clone;
+}
+
 KisFixedPaintDeviceSP KisPaintDevice::createCompositionSourceDeviceFixed() const
 {
     return new KisFixedPaintDevice(compositionSourceColorSpace());

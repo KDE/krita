@@ -85,4 +85,4 @@ Name[zh_TW]=Wave 過濾器
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritawavefilter
-X-Krita-Version=27
+X-Krita-Version=28

@@ -22,6 +22,7 @@
 
 #include <KoColorSpace.h>
 #include <KoAbstractGradient.h>
+#include <KoCachedGradient.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
@@ -469,6 +470,8 @@ KisGradientPainter::KisGradientPainter(KisPaintDeviceSP device, KisSelectionSP s
 {
 }
 
+#include <QTime>
+
 bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                                        const QPointF& gradientVectorEnd,
                                        enumGradientShape shape,
@@ -547,11 +550,10 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
     KisHLineIteratorSP hit = dev->createHLineIteratorNG(startx, starty, width);
 
     KisProgressUpdateHelper progressHelper(progressUpdater(), 100, height);
-
+    KoCachedGradient cachedGradient(gradient(), qMax(endy-starty, endx - startx), colorSpace);
     for (int y = starty; y <= endy; y++) {
 
         for (int x = startx; x <= endx; x++) {
-
             double t = shapeStrategy->valueAt(x, y);
             t = repeatStrategy->valueAt(t);
 
@@ -559,8 +561,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                 t = 1 - t;
             }
 
-            gradient()->colorAt(color, t);
-            memcpy(hit->rawData(), color.data(), pixelSize);
+            memcpy(hit->rawData(), cachedGradient.cachedAt(t), pixelSize);
 
             hit->nextPixel();
         }
@@ -571,6 +572,5 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
 
     bitBlt(startx, starty, dev, startx, starty, width, height);
     delete shapeStrategy;
-
     return true;
 }

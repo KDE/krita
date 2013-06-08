@@ -85,6 +85,7 @@ public:
         registered = false;
         documentDeleted = false;
         viewBar = 0;
+        actionAuthor = 0;
     }
     ~KoViewPrivate() {
     }
@@ -162,6 +163,7 @@ public:
     QList<StatusBarItem> statusBarItems; // Our statusbar items
     bool inOperation; //in the middle of an operation (no screen refreshing)?
     QToolBar* viewBar;
+    KSelectAction *actionAuthor; // Select action for author profile.
 };
 
 KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
@@ -242,7 +244,12 @@ void KoView::dropEvent(QDropEvent *event)
     QList<QImage> images;
 
     if (event->mimeData()->hasImage()) {
-        images << event->mimeData()->imageData().value<QImage>();
+        QImage image = event->mimeData()->imageData().value<QImage>();
+        if (!image.isNull()) {
+            // apparently hasImage() && imageData().value<QImage>().isNull()
+            // can hold sometimes (Qt bug?).
+            images << image;
+        }
     }
     else if (event->mimeData()->hasUrls()) {
         QList<QUrl> urls = event->mimeData()->urls();
@@ -536,29 +543,11 @@ void KoView::setupGlobalActions()
     actionCollection()->addAction("edit_undo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::UNDO));
     actionCollection()->addAction("edit_redo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::RED0));
 
-    KSelectAction *actionAuthor  = new KSelectAction(koIcon("user-identity"), i18n("Active Author Profile"), this);
-    actionAuthor->addAction(i18n("Default Author Profile"));
-    actionAuthor->addAction(i18nc("choice for author profile", "Anonymous"));
-    KConfig *config = KoGlobal::calligraConfig();
-    KConfigGroup authorGroup(config, "Author");
-    QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
+    d->actionAuthor  = new KSelectAction(koIcon("user-identity"), i18n("Active Author Profile"), this);
+    connect(d->actionAuthor, SIGNAL(triggered(const QString &)), this, SLOT(changeAuthorProfile(const QString &)));
+    actionCollection()->addAction("settings_active_author", d->actionAuthor);
 
-    foreach (const QString &profile , profiles) {
-        actionAuthor->addAction(profile);
-    }
-    actionCollection()->addAction("settings_active_author", actionAuthor);
-
-    KConfigGroup appAuthorGroup(KGlobal::config(), "Author");
-    QString profileName = appAuthorGroup.readEntry("active-profile", "");
-    if (profileName == "anonymous") {
-        actionAuthor->setCurrentItem(1);
-    } else if (profiles.contains(profileName)) {
-        actionAuthor->setCurrentAction(profileName);
-    } else {
-        actionAuthor->setCurrentItem(0);
-    }
-
-    connect(actionAuthor, SIGNAL(triggered(const QString &)), this, SLOT(changeAuthorProfile(const QString &)));
+    slotUpdateAuthorProfileActions();
 }
 
 void KoView::newView()
@@ -613,6 +602,33 @@ void KoView::slotClearStatusText()
     KStatusBar *sb = statusBar();
     if (sb)
         sb->clearMessage();
+}
+
+void KoView::slotUpdateAuthorProfileActions()
+{
+    Q_ASSERT(d->actionAuthor);
+    if (!d->actionAuthor) {
+        return;
+    }
+    d->actionAuthor->clear();
+    d->actionAuthor->addAction(i18n("Default Author Profile"));
+    d->actionAuthor->addAction(i18nc("choice for author profile", "Anonymous"));
+
+    KConfigGroup authorGroup(KoGlobal::calligraConfig(), "Author");
+    QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
+    foreach (const QString &profile , profiles) {
+        d->actionAuthor->addAction(profile);
+    }
+
+    KConfigGroup appAuthorGroup(KGlobal::config(), "Author");
+    QString profileName = appAuthorGroup.readEntry("active-profile", "");
+    if (profileName == "anonymous") {
+        d->actionAuthor->setCurrentItem(1);
+    } else if (profiles.contains(profileName)) {
+        d->actionAuthor->setCurrentAction(profileName);
+    } else {
+        d->actionAuthor->setCurrentItem(0);
+    }
 }
 
 QToolBar* KoView::viewBar()

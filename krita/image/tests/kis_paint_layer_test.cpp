@@ -51,8 +51,8 @@ void KisPaintLayerTest::testProjection()
     QVERIFY(layer->paintDevice().data() == layer->projection().data());
 
     KisTransparencyMaskSP transparencyMask = new KisTransparencyMask();
-    transparencyMask->initSelection(0, layer);
-    transparencyMask->selection()->getOrCreatePixelSelection()->invert();
+    transparencyMask->initSelection(layer);
+    transparencyMask->selection()->pixelSelection()->invert();
     image->addNode(transparencyMask.data(), layer.data());
 
     // Now there are masks. Verify that

@@ -225,18 +225,6 @@ void KisLayerTest::testMoveLayer()
 
 }
 
-void KisLayerTest::testHasEffectMasks()
-{
-    KisLayerSP layer = new TestLayer(0, "layer1", OPACITY_OPAQUE_U8);
-    QVERIFY(layer->hasEffectMasks() == false);
-    KisFilterMaskSP mask = new KisFilterMask();
-    layer->setPreviewMask(mask);
-    QVERIFY(layer->hasEffectMasks());
-    layer->removePreviewMask();
-    QVERIFY(layer->hasEffectMasks() == false);
-}
-
-
     /*
       +----------+
       |root      |
@@ -268,6 +256,8 @@ void KisLayerTest::testMasksChangeRect()
 
     image->addNode(filterMask1, paintLayer1);
     image->addNode(filterMask2, paintLayer1);
+
+    QVERIFY(paintLayer1->hasEffectMasks());
 
     QRect testRect(10, 10, 100, 100);
     QRect resultRect;
@@ -309,7 +299,7 @@ void KisLayerTest::testMoveLayerWithMaskThreaded()
     paintLayer->paintDevice()->fill(image->bounds(), KoColor(Qt::black, colorSpace));
 
     KisTransparencyMaskSP transpMask = new KisTransparencyMask();
-    transpMask->initSelection(0, paintLayer);
+    transpMask->initSelection(paintLayer);
     image->addNode(transpMask, paintLayer);
 
     for(int i = 0; i < 100; i++) {

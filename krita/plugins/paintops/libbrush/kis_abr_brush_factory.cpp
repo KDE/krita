@@ -34,7 +34,7 @@ KisBrushSP KisAbrBrushFactory::getOrCreateBrush(const QDomElement& brushDefiniti
     KoResourceServer<KisBrush>* rServer = KisBrushServer::instance()->brushServer();
     QString brushName = brushDefinition.attribute("name", "test_1");
     
-    KisBrushSP brush = rServer->getResourceByName(brushName);
+    KisBrushSP brush = rServer->resourceByName(brushName);
     if (!brush){
         return 0;
     }

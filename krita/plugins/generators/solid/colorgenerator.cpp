@@ -93,19 +93,17 @@ void KisColorGenerator::generate(KisProcessingInformation dstInfo,
     Q_ASSERT(!dst.isNull());
     Q_ASSERT(config);
 
-    QVariant value;
     KoColor c;
-    if(config)
-    {
+    if (config) {
         c = config->getColor("color");
+
+
+        KisFillPainter gc(dst);
+        gc.setProgress(progressUpdater);
+        gc.setChannelFlags(config->channelFlags());
+        gc.setOpacity(100);
+        gc.setSelection(dstInfo.selection());
+        gc.fillRect(QRect(dstInfo.topLeft(), size), c);
+        gc.end();
     }
-
-    KisFillPainter gc(dst);
-    gc.setProgress(progressUpdater);
-    gc.setChannelFlags(config->channelFlags());
-    gc.setOpacity(100);
-    gc.setSelection(dstInfo.selection());
-    gc.fillRect(QRect(dstInfo.topLeft(), size), c);
-    gc.end();
-
 }

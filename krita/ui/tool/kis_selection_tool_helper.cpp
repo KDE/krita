@@ -63,9 +63,8 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
         undoAdapter->addCommand(new KisSetEmptyGlobalSelectionCommand(m_image));
     }
 
-    KisSelectionTransaction transaction(m_name, m_image->undoAdapter(), view->selection());
-
-    KisPixelSelectionSP pixelSelection = view->selection()->getOrCreatePixelSelection();
+    KisPixelSelectionSP pixelSelection = view->selection()->pixelSelection();
+    KisSelectionTransaction transaction(m_name, pixelSelection);
 
     if (!hasSelection && action == SELECTION_SUBTRACT) {
         pixelSelection->invert();
@@ -83,7 +82,6 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
     undoAdapter->endMacro();
 
     pixelSelection->setDirty(dirtyRect);
-    m_canvas->view()->selectionManager()->selectionChanged();
 }
 
 void KisSelectionToolHelper::addSelectionShape(KoShape* shape)
@@ -103,13 +101,12 @@ void KisSelectionToolHelper::addSelectionShape(KoShape* shape)
         undoAdapter->addCommand(new KisSetEmptyGlobalSelectionCommand(m_image));
     }
 
-    KisSelectionSP selection = view->selection();
-    KisSelectionTransaction transaction(m_name, m_image->undoAdapter(), selection);
-
+    KisPixelSelectionSP pixelSelection = view->selection()->pixelSelection();
+    KisSelectionTransaction transaction(m_name, pixelSelection);
+    pixelSelection->clear();
     transaction.commit(undoAdapter);
 
-    KUndo2Command *cmd = m_canvas->shapeController()->addShape(shape);
-    undoAdapter->addCommand(cmd);
+    undoAdapter->addCommand(m_canvas->shapeController()->addShape(shape));
     undoAdapter->endMacro();
 }
 

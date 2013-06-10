@@ -25,8 +25,8 @@
 #include <krita_export.h>
 
 #include "kis_transaction_data.h"
-#include "kis_selection_transaction_data.h"
 #include "kis_paint_device.h"
+#include "kis_pixel_selection.h"
 
 #include "kis_undo_adapter.h"
 #include "kis_post_execution_undo_adapter.h"
@@ -35,7 +35,7 @@ class KisTransaction
 {
 public:
     KisTransaction(const QString& name, KisPaintDeviceSP device, KUndo2Command* parent = 0) {
-        m_transactionData = new KisTransactionData(name, device, parent);
+        m_transactionData = new KisTransactionData(name, device, true, parent);
     }
 
     virtual ~KisTransaction() {
@@ -117,9 +117,9 @@ protected:
 class KisSelectionTransaction : public KisTransaction
 {
 public:
-    KisSelectionTransaction(const QString& name, KisUndoAdapter *undoAdapter, KisSelectionSP selection, KUndo2Command* parent = 0)
+    KisSelectionTransaction(const QString& name, KisPixelSelectionSP pixelSelection, KUndo2Command* parent = 0)
     {
-        m_transactionData = new KisSelectionTransactionData(name, undoAdapter, selection, parent);
+        m_transactionData = new KisTransactionData(name, pixelSelection, false, parent);
     }
 };
 

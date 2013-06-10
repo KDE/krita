@@ -210,6 +210,43 @@ void KisSimpleUpdateQueueTest::testMixingTypes()
     QCOMPARE(walkersList[1]->type(), KisBaseRectsWalker::FULL_REFRESH);
 }
 
+void KisSimpleUpdateQueueTest::testSpontaneousJobsCompression()
+{
+    KisTestableSimpleUpdateQueue queue;
+    KisSpontaneousJobsList &jobsList = queue.getSpontaneousJobsList();
+
+    QVERIFY(queue.isEmpty());
+    QCOMPARE(queue.sizeMetric(), 0);
+    QVERIFY(jobsList.isEmpty());
+
+
+    KisSpontaneousJob *job1 = new KisNoopSpontaneousJob(false);
+    KisSpontaneousJob *job2 = new KisNoopSpontaneousJob(false);
+    KisSpontaneousJob *job3 = new KisNoopSpontaneousJob(true);
+
+    queue.addSpontaneousJob(job1);
+
+    QVERIFY(!queue.isEmpty());
+    QCOMPARE(queue.sizeMetric(), 1);
+    QCOMPARE(jobsList.size(), 1);
+    QCOMPARE(jobsList[0], job1);
+
+    queue.addSpontaneousJob(job2);
+
+    QVERIFY(!queue.isEmpty());
+    QCOMPARE(queue.sizeMetric(), 2);
+    QCOMPARE(jobsList.size(), 2);
+    QCOMPARE(jobsList[0], job1);
+    QCOMPARE(jobsList[1], job2);
+
+    queue.addSpontaneousJob(job3);
+
+    QVERIFY(!queue.isEmpty());
+    QCOMPARE(queue.sizeMetric(), 1);
+    QCOMPARE(jobsList.size(), 1);
+    QCOMPARE(jobsList[0], job3);
+}
+
 QTEST_KDEMAIN(KisSimpleUpdateQueueTest, NoGUI)
 #include "kis_simple_update_queue_test.moc"
 

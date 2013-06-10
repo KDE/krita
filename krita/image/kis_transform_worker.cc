@@ -81,6 +81,14 @@ QTransform KisTransformWorker::transform() const
     return TS.inverted() * S * TS * SC * R * T;
 }
 
+void KisTransformWorker::transformPixelSelectionOutline(KisPixelSelectionSP pixelSelection) const
+{
+    if (pixelSelection->outlineCacheValid()) {
+        QPainterPath outlineCache = pixelSelection->outlineCache();
+        pixelSelection->setOutlineCache(transform().map(outlineCache));
+    }
+}
+
 QRect rotateWithTf(int rotation, KisPaintDeviceSP dev,
                    QRect boundRect,
                    KoUpdaterPtr progressUpdater,

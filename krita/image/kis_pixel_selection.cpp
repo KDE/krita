@@ -23,6 +23,7 @@
 #include <QImage>
 #include <QVector>
 
+#include <QMutex>
 #include <QPoint>
 #include <QPolygon>
 
@@ -41,12 +42,19 @@
 #include <kis_iterator_ng.h>
 
 struct KisPixelSelection::Private {
+    KisSelectionSP parentSelection;
+
+    QPainterPath outlineCache;
+    bool outlineCacheValid;
+    QMutex outlineCacheMutex;
 };
 
-KisPixelSelection::KisPixelSelection(KisDefaultBoundsBaseSP defaultBounds)
+KisPixelSelection::KisPixelSelection(KisDefaultBoundsBaseSP defaultBounds, KisSelectionSP parentSelection)
         : KisPaintDevice(0, KoColorSpaceRegistry::instance()->alpha8(), defaultBounds)
         , m_d(new Private)
 {
+    m_d->outlineCacheValid = true;
+    m_d->parentSelection = parentSelection;
 }
 
 KisPixelSelection::KisPixelSelection(const KisPixelSelection& rhs)
@@ -54,6 +62,9 @@ KisPixelSelection::KisPixelSelection(const KisPixelSelection& rhs)
         , KisSelectionComponent(rhs)
         , m_d(new Private)
 {
+    // parent selection is not supposed to be shared
+    m_d->outlineCache = rhs.m_d->outlineCache;
+    m_d->outlineCacheValid = rhs.m_d->outlineCacheValid;
 }
 
 KisSelectionComponent* KisPixelSelection::clone(KisSelection*)
@@ -77,10 +88,21 @@ const KoColorSpace *KisPixelSelection::compositionSourceColorSpace() const
 void KisPixelSelection::select(const QRect & rc, quint8 selectedness)
 {
     QRect r = rc.normalized();
-    if (r.width() > 0 && r.height() > 0) {
-        KisFillPainter painter(KisPaintDeviceSP(this));
-        const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-        painter.fillRect(r, KoColor(Qt::white, cs), selectedness);
+    if (r.isEmpty()) return;
+
+    KisFillPainter painter(KisPaintDeviceSP(this));
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    painter.fillRect(r, KoColor(Qt::white, cs), selectedness);
+
+    if (m_d->outlineCacheValid) {
+        QPainterPath path;
+        path.addRect(r);
+
+        if (selectedness != MIN_SELECTED) {
+            m_d->outlineCache += path;
+        } else {
+            m_d->outlineCache -= path;
+        }
     }
 }
 
@@ -123,6 +145,12 @@ void KisPixelSelection::addSelection(KisPixelSelectionSP selection)
         dst->nextRow();
         src->nextRow();
     }
+
+    m_d->outlineCacheValid &= selection->outlineCacheValid();
+
+    if (m_d->outlineCacheValid) {
+        m_d->outlineCache += selection->outlineCache();
+    }
 }
 
 void KisPixelSelection::subtractSelection(KisPixelSelectionSP selection)
@@ -144,10 +172,16 @@ void KisPixelSelection::subtractSelection(KisPixelSelectionSP selection)
         dst->nextRow();
         src->nextRow();
     }
+
+    m_d->outlineCacheValid &= selection->outlineCacheValid();
+
+    if (m_d->outlineCacheValid) {
+        m_d->outlineCache -= selection->outlineCache();
+    }
 }
 
 void KisPixelSelection::intersectSelection(KisPixelSelectionSP selection)
-{    
+{
     QRect r = selection->selectedRect().united(selectedRect());
     if (r.isEmpty()) return;
 
@@ -160,6 +194,12 @@ void KisPixelSelection::intersectSelection(KisPixelSelectionSP selection)
         dst->nextRow();
         src->nextRow();
     }
+
+    m_d->outlineCacheValid &= selection->outlineCacheValid();
+
+    if (m_d->outlineCacheValid) {
+        m_d->outlineCache &= selection->outlineCache();
+    }
 }
 
 void KisPixelSelection::clear(const QRect & r)
@@ -171,6 +211,13 @@ void KisPixelSelection::clear(const QRect & r)
     } else {
         KisPaintDevice::clear(r);
     }
+
+    if (m_d->outlineCacheValid) {
+        QPainterPath path;
+        path.addRect(r);
+
+        m_d->outlineCache -= path;
+    }
 }
 
 void KisPixelSelection::clear()
@@ -178,6 +225,9 @@ void KisPixelSelection::clear()
     quint8 defPixel = MIN_SELECTED;
     setDefaultPixel(&defPixel);
     KisPaintDevice::clear();
+
+    m_d->outlineCacheValid = true;
+    m_d->outlineCache = QPainterPath();
 }
 
 void KisPixelSelection::invert()
@@ -194,6 +244,13 @@ void KisPixelSelection::invert()
     }
     quint8 defPixel = MAX_SELECTED - *defaultPixel();
     setDefaultPixel(&defPixel);
+
+    if (m_d->outlineCacheValid) {
+        QPainterPath path;
+        path.addRect(defaultBounds()->bounds());
+
+        m_d->outlineCache = path - m_d->outlineCache;
+    }
 }
 
 bool KisPixelSelection::isTotallyUnselected(const QRect & r) const
@@ -234,6 +291,59 @@ QVector<QPolygon> KisPixelSelection::outline() const
         return paths;
     }
     return generator.outline(this, xOffset, yOffset, width, height);
+}
+
+bool KisPixelSelection::isEmpty() const
+{
+    return *defaultPixel() == MIN_SELECTED && selectedRect().isEmpty();
+}
+
+QPainterPath KisPixelSelection::outlineCache() const
+{
+    QMutexLocker locker(&m_d->outlineCacheMutex);
+    return m_d->outlineCache;
+}
+
+void KisPixelSelection::setOutlineCache(const QPainterPath &cache)
+{
+    QMutexLocker locker(&m_d->outlineCacheMutex);
+    m_d->outlineCache = cache;
+    m_d->outlineCacheValid = true;
+}
+
+bool KisPixelSelection::outlineCacheValid() const
+{
+    QMutexLocker locker(&m_d->outlineCacheMutex);
+    return m_d->outlineCacheValid;
+}
+
+void KisPixelSelection::invalidateOutlineCache()
+{
+    QMutexLocker locker(&m_d->outlineCacheMutex);
+    m_d->outlineCacheValid = false;
+}
+
+void KisPixelSelection::recalculateOutlineCache()
+{
+    QMutexLocker locker(&m_d->outlineCacheMutex);
+
+    m_d->outlineCache = QPainterPath();
+
+    foreach (const QPolygon &polygon, outline()) {
+        m_d->outlineCache.addPolygon(polygon);
+    }
+
+    m_d->outlineCacheValid = true;
+}
+
+void KisPixelSelection::setParentSelection(KisSelectionSP selection)
+{
+    m_d->parentSelection = selection;
+}
+
+KisSelectionSP KisPixelSelection::parentSelection() const
+{
+    return m_d->parentSelection;
 }
 
 void KisPixelSelection::renderToProjection(KisPaintDeviceSP projection)

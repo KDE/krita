@@ -212,7 +212,7 @@ bool testFilterWithSelections(KisFilterSP f)
     qDebug() << f->id();// << "\n"; << kfc->toXML() << "\n";
 
     KisSelectionSP sel1 = new KisSelection(new KisSelectionDefaultBounds(dev));
-    sel1->getOrCreatePixelSelection()->select(qimage.rect());
+    sel1->pixelSelection()->select(qimage.rect());
 
     f->process(dev, dev, sel1, QRect(QPoint(0,0), qimage.size()), kfc);
 

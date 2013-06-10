@@ -60,7 +60,8 @@ void KisUpdaterContext::getJobsSnapshot(qint32 &numMergeJobs,
     numStrokeJobs = 0;
 
     foreach(const KisUpdateJobItem *item, m_jobs) {
-        if(item->type() == KisUpdateJobItem::MERGE) {
+        if(item->type() == KisUpdateJobItem::MERGE ||
+           item->type() == KisUpdateJobItem::SPONTANEOUS) {
             numMergeJobs++;
         }
         else if(item->type() == KisUpdateJobItem::STROKE) {
@@ -143,6 +144,27 @@ void KisTestableUpdaterContext::addStrokeJob(KisStrokeJob *strokeJob)
     Q_ASSERT(jobIndex >= 0);
 
     m_jobs[jobIndex]->setStrokeJob(strokeJob);
+    // HINT: Not calling start() here
+}
+
+void KisUpdaterContext::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
+{
+    qint32 jobIndex = findSpareThread();
+    Q_ASSERT(jobIndex >= 0);
+
+    m_jobs[jobIndex]->setSpontaneousJob(spontaneousJob);
+    m_threadPool.start(m_jobs[jobIndex]);
+}
+
+/**
+ * This variant is for use in a testing suite only
+ */
+void KisTestableUpdaterContext::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
+{
+    qint32 jobIndex = findSpareThread();
+    Q_ASSERT(jobIndex >= 0);
+
+    m_jobs[jobIndex]->setSpontaneousJob(spontaneousJob);
     // HINT: Not calling start() here
 }
 

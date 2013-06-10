@@ -82,6 +82,10 @@ void KisToolSelectElliptical::finishEllipse(const QRectF &rect)
 
         painter.paintEllipse(rect);
 
+        QPainterPath cache;
+        cache.addEllipse(rect);
+        tmpSel->setOutlineCache(cache);
+
         helper.selectPixelSelection(tmpSel, m_widgetHelper.selectionAction());
     } else {
         QRectF ptRect = convertToPt(rect);

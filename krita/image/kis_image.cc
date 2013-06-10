@@ -1473,6 +1473,13 @@ void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &c
     }
 }
 
+void KisImage::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
+{
+    if (m_d->scheduler) {
+        m_d->scheduler->addSpontaneousJob(spontaneousJob);
+    }
+}
+
 void KisImage::disableDirtyRequests()
 {
     m_d->disableDirtyRequests.ref();
@@ -1497,6 +1504,13 @@ void KisImage::notifyProjectionUpdated(const QRect &rc)
 {
     if (!m_d->disableUIUpdateSignals) {
         emit sigImageUpdated(rc);
+    }
+}
+
+void KisImage::notifySelectionChanged()
+{
+    if (!m_d->disableUIUpdateSignals) {
+        m_d->legacyUndoAdapter->emitSelectionChanged();
     }
 }
 

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WdgPatternOptions</class>
+ <widget class="QWidget" name="WdgPatternOptions">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>158</width>
+    <height>78</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="lblPattern">
+       <property name="text">
+        <string>&amp;Pattern:</string>
+       </property>
+       <property name="buddy">
+        <cstring>patternChooser</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="KisPatternChooser" name="patternChooser" native="true"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="lblColor">
+       <property name="text">
+        <string>&amp;Color:</string>
+       </property>
+       <property name="buddy">
+        <cstring>bnColor</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="KColorButton" name="bnColor"/>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0">
+    <spacer>
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>21</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kcolorbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisPatternChooser</class>
+   <extends>QWidget</extends>
+   <header location="global">kis_pattern_chooser.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

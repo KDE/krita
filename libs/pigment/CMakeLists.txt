@@ -73,6 +73,7 @@ set(pigmentcms_SRCS
     resources/KoResource.cpp
     resources/KoStopGradient.cpp
     resources/KoSegmentGradient.cpp
+    resources/KoCachedGradient.cpp
 )
 
 set(PIGMENT_INSTALL_FILES 

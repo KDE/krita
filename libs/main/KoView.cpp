@@ -244,7 +244,12 @@ void KoView::dropEvent(QDropEvent *event)
     QList<QImage> images;
 
     if (event->mimeData()->hasImage()) {
-        images << event->mimeData()->imageData().value<QImage>();
+        QImage image = event->mimeData()->imageData().value<QImage>();
+        if (!image.isNull()) {
+            // apparently hasImage() && imageData().value<QImage>().isNull()
+            // can hold sometimes (Qt bug?).
+            images << image;
+        }
     }
     else if (event->mimeData()->hasUrls()) {
         QList<QUrl> urls = event->mimeData()->urls();

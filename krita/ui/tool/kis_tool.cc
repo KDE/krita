@@ -656,7 +656,6 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
         modelMatrix = projectionMatrix * modelMatrix;
         d->cursorShader->setUniformValue("modelViewProjection", modelMatrix);
 
-
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
         // XXX: not in ES 2.0 -- in that case, we should not go here. it seems to be in 3.1 core profile, but my book is very unclear
         glEnable(GL_COLOR_LOGIC_OP);
@@ -667,14 +666,15 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
         QList<QPolygonF> subPathPolygons = path.toSubpathPolygons();
         for (int i=0; i<subPathPolygons.size(); i++) {
             const QPolygonF& polygon = subPathPolygons.at(i);
-            for (int j=0; j<polygon.count(); j++) {
+            for (int j=0; j < polygon.count(); j++) {
                 QPointF p = polygon.at(j);
                 vertices << QVector3D(p.x(), p.y(), 0.f);
-                d->cursorShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
-                d->cursorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, vertices.constData());
-
-                glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
             }
+            d->cursorShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
+            d->cursorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, vertices.constData());
+
+            glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
+
             vertices.clear();
         }
 

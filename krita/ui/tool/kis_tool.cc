@@ -626,8 +626,6 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
 
         painter->beginNativePainting();
 
-        KisOpenGL::makeContextCurrent();
-
         if (d->cursorShader == 0) {
             d->cursorShader = new QGLShaderProgram();
             d->cursorShader->addShaderFromSourceFile(QGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/cursor.vert"));
@@ -653,10 +651,16 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
         projectionMatrix.ortho(0, canvasWidget->width(), canvasWidget->height(), 0, NEAR_VAL, FAR_VAL);
 
         // Set view/projection matrices
-        QMatrix4x4 modelMatrix(converter->imageToWidgetTransform());
+        QMatrix4x4 modelMatrix(converter->flakeToWidgetTransform());
         modelMatrix.optimize();
         modelMatrix = projectionMatrix * modelMatrix;
         d->cursorShader->setUniformValue("modelViewProjection", modelMatrix);
+
+
+        glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+        // XXX: not in ES 2.0 -- in that case, we should not go here. it seems to be in 3.1 core profile, but my book is very unclear
+        glEnable(GL_COLOR_LOGIC_OP);
+        glLogicOp(GL_XOR);
 
         // setup the array of vertices
         QVector<QVector3D> vertices;
@@ -666,21 +670,15 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
             for (int j=0; j<polygon.count(); j++) {
                 QPointF p = polygon.at(j);
                 vertices << QVector3D(p.x(), p.y(), 0.f);
+                d->cursorShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
+                d->cursorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, vertices.constData());
+
+                glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
             }
+            vertices.clear();
         }
 
-        glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-        // XXX: not in ES 2.0 -- in that case, we should not go here. it seems to be in 3.1 core profile, but my book is very unclear
-        glEnable(GL_COLOR_LOGIC_OP);
-        glLogicOp(GL_XOR);
-
-        d->cursorShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
-        d->cursorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, vertices.constData());
-
-        glDrawArrays(GL_LINE_STRIP, 0, vertices.size() / 4);
-
         glDisable(GL_COLOR_LOGIC_OP);
-        glDisable(GL_LINE_SMOOTH);
 
         d->cursorShader->release();
 

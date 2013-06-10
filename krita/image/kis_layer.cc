@@ -562,18 +562,20 @@ QRect KisLayer::exactBounds() const
 
 void KisLayer::setPreviewMask(KisEffectMaskSP mask)
 {
-    m_d->previewMask = mask;
-    m_d->previewMask->setParent(this);
+    if (m_d->previewMask) {
+        m_d->previewMask->setParent(0);
+        m_d->previewMask = 0;
+    }
+
+    if (mask) {
+        m_d->previewMask = mask;
+        m_d->previewMask->setParent(this);
+    }
 }
 
 KisEffectMaskSP KisLayer::previewMask() const
 {
     return m_d->previewMask;
-}
-
-void KisLayer::removePreviewMask()
-{
-    m_d->previewMask = 0;
 }
 
 KisLayerSP KisLayer::parentLayer() const

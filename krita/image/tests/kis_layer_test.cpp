@@ -232,7 +232,7 @@ void KisLayerTest::testHasEffectMasks()
     KisFilterMaskSP mask = new KisFilterMask();
     layer->setPreviewMask(mask);
     QVERIFY(layer->hasEffectMasks());
-    layer->removePreviewMask();
+    layer->setPreviewMask(0);
     QVERIFY(layer->hasEffectMasks() == false);
 }
 

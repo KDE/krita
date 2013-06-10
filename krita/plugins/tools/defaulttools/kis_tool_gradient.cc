@@ -47,7 +47,6 @@
 #include <kis_canvas_resource_provider.h>
 #include <kis_layer.h>
 #include <kis_selection.h>
-#include <kis_threaded_applicator.h>
 #include <kis_paint_layer.h>
 #include <kis_system_locker.h>
 

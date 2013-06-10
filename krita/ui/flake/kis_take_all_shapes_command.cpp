@@ -20,6 +20,7 @@
 
 #include <klocale.h>
 #include "kis_shape_selection.h"
+#include <kis_image.h>
 
 
 KisTakeAllShapesCommand::KisTakeAllShapesCommand(KisShapeSelection *shapeSelection, bool takeSilently)

@@ -385,6 +385,17 @@ void KisConfig::setUseOpenGLTrilinearFiltering(bool useTrilinearFiltering)
     m_cfg.writeEntry("useOpenGLTrilinearFiltering", useTrilinearFiltering);
 }
 
+
+bool KisConfig::useOpenGLDoubleBuffering() const
+{
+    return m_cfg.readEntry("useOpenGLDoubleBuffering", false);
+}
+
+void KisConfig::setOpenGLDoubleBuffering(bool doubleBuffering)
+{
+    m_cfg.writeEntry("useOpenGLDoubleBuffering", doubleBuffering);
+}
+
 qint32 KisConfig::maxNumberOfThreads()
 {
     return m_cfg.readEntry("maxthreads", QThread::idealThreadCount());

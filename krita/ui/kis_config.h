@@ -129,6 +129,9 @@ public:
     bool useOpenGLTrilinearFiltering() const;
     void setUseOpenGLTrilinearFiltering(bool useTrilinearFiltering);
 
+    bool useOpenGLDoubleBuffering() const;
+    void setOpenGLDoubleBuffering(bool doubleBuffering);
+
     qint32 maxNumberOfThreads();
     void setMaxNumberOfThreads(qint32 numberOfThreads);
 

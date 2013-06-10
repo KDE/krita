@@ -245,6 +245,16 @@ then you can try to enable this.</string>
         </property>
        </widget>
       </item>
+      <item row="5" column="0">
+       <widget class="QCheckBox" name="cbUseDoubleBuffering">
+        <property name="toolTip">
+         <string>Depending on your graphics card and drivers, using double buffering might cause tearing or fix it.</string>
+        </property>
+        <property name="text">
+         <string>Use double buffering</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>

@@ -129,7 +129,7 @@ KisOpenGLCanvas2::~KisOpenGLCanvas2()
 void KisOpenGLCanvas2::initializeGL()
 {
     glEnable(GL_MULTISAMPLE);
-
+    KisConfig cfg;
 #ifndef Q_WS_WIN
     if (!VSyncWorkaround::tryDisableVSync(this)) {
         qWarning();
@@ -143,7 +143,7 @@ void KisOpenGLCanvas2::initializeGL()
         qWarning() << "WARNING: affect the quality of the final image, though.";
         qWarning();
 #endif
-        if (doubleBuffer()) {
+        if (doubleBuffer() && !cfg.useOpenGLDoubleBuffering()) {
             qCritical() << "CRITICAL: Failed to disable Double Buffering. Lines may look \"bended\" on your image.";
             qCritical() << "CRITICAL: Your graphics card or driver does not fully support Krita's OpenGL canvas.";
             qCritical() << "CRITICAL: For an optimal experience, please disable OpenGL";

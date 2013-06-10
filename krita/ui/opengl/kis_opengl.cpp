@@ -24,6 +24,7 @@
 #include <QGLWidget>
 
 #include <kis_debug.h>
+#include <kis_config.h>
 
 namespace
 {
@@ -93,7 +94,10 @@ void KisOpenGL::createContext()
         qDebug() << "Using the core profile";
     if (format.profile() == 2)
         qDebug() << "Using the compatibility profile";
-    format.setDoubleBuffer(false);
+
+    KisConfig cfg;
+    format.setDoubleBuffer(cfg.useOpenGLDoubleBuffering());
+
     SharedContextWidget = new QGLWidget(format);
     SharedContextWidget->makeCurrent();
 

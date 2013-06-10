@@ -214,6 +214,7 @@ void KisFilterManager::apply(KisSafeFilterConfigurationSP filterConfig)
     KisImageWSP image = d->view->image();
 
     if (d->currentStrokeId) {
+        image->addJob(d->currentStrokeId, new KisFilterStrokeStrategy::CancelSilentlyMarker);
         image->cancelStroke(d->currentStrokeId);
     }
 

@@ -34,6 +34,13 @@ public:
         QRect processRect;
     };
 
+    class CancelSilentlyMarker : public KisStrokeJobData {
+    public:
+        CancelSilentlyMarker()
+            : KisStrokeJobData(SEQUENTIAL)
+        {}
+    };
+
 public:
     KisFilterStrokeStrategy(KisFilterSP filter,
                             KisSafeFilterConfigurationSP filterConfig,

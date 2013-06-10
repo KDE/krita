@@ -33,10 +33,10 @@ public:
 
     using KisFilter::process;
 
-    void process(KisPaintDeviceSP device,
-                const QRect& applyRect,
-                const KisFilterConfiguration* config,
-                KoUpdater* progressUpdater) const;
+    void processImpl(KisPaintDeviceSP device,
+                     const QRect& applyRect,
+                     const KisFilterConfiguration* config,
+                     KoUpdater* progressUpdater) const;
     static inline KoID id() {
         return KoID("raindrops", i18n("Raindrops"));
     }

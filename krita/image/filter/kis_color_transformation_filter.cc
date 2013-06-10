@@ -41,11 +41,11 @@ KisColorTransformationFilter::~KisColorTransformationFilter()
 {
 }
 
-void KisColorTransformationFilter::process(KisPaintDeviceSP device, 
-                                           const QRect& applyRect,
-                                           const KisFilterConfiguration* config,
-                                           KoUpdater* progressUpdater
-                                           ) const
+void KisColorTransformationFilter::processImpl(KisPaintDeviceSP device, 
+                                               const QRect& applyRect,
+                                               const KisFilterConfiguration* config,
+                                               KoUpdater* progressUpdater
+                                               ) const
 {
     Q_ASSERT(!device.isNull());
 

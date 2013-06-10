@@ -42,18 +42,12 @@ public:
     KisFilterHandler(KisFilterManager* parent, KisFilterSP f, KisView2* view);
     ~KisFilterHandler();
 
-    const KisFilterSP filter() const;
+    const QString filterName() const;
 
 public slots:
-
     void showDialog();
     void reapply();
-    void apply(KisNodeSP, KisFilterConfiguration*);
-
-private slots:
-
-    void areaDone(const QRect & rc);
-    void filterDone(bool interrupted);
+    void apply(KisSafeFilterConfigurationSP filterConfig);
 
 private:
     struct Private;

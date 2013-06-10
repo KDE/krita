@@ -39,12 +39,10 @@ public:
             : KisFilter(KoID("test", "test"), KoID("test", "test"), "TestFilter") {
     }
 
-    using KisFilter::process;
-
-    void process(KisPaintDeviceSP src,
-                 const QRect& size,
-                 const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater) const {
+    void processImpl(KisPaintDeviceSP src,
+                     const QRect& size,
+                     const KisFilterConfiguration* config,
+                     KoUpdater* progressUpdater) const {
         Q_UNUSED(src);
         Q_UNUSED(size);
         Q_UNUSED(config);

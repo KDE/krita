@@ -60,11 +60,11 @@ KisFilterConfiguration* KisWaveletNoiseReduction::factoryConfiguration(const Kis
     return config;
 }
 
-void KisWaveletNoiseReduction::process(KisPaintDeviceSP device,
-                                      const QRect& applyRect,
-                                      const KisFilterConfiguration* config,
-                                      KoUpdater* progressUpdater
-                                      ) const
+void KisWaveletNoiseReduction::processImpl(KisPaintDeviceSP device,
+                                           const QRect& applyRect,
+                                           const KisFilterConfiguration* config,
+                                           KoUpdater* progressUpdater
+                                           ) const
 {
     Q_ASSERT(device);
     // TODO take selections into account

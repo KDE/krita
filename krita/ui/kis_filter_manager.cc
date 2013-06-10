@@ -57,11 +57,8 @@ struct KisFilterManager::Private {
     KActionCollection *actionCollection;
     KisView2 *view;
 
-
-
-
     KisSafeFilterConfigurationSP lastConfiguration;
-    KisSafeFilterConfigurationSP currentlyAppliedCofiguration;
+    KisSafeFilterConfigurationSP currentlyAppliedConfiguration;
     KisStrokeId currentStrokeId;
 
     QSignalMapper actionsMapper;
@@ -246,7 +243,7 @@ void KisFilterManager::apply(KisSafeFilterConfigurationSP filterConfig)
                       new KisFilterStrokeStrategy::Data(image->bounds(), false));
     }
 
-    d->currentlyAppliedCofiguration = filterConfig;
+    d->currentlyAppliedConfiguration = filterConfig;
 }
 
 void KisFilterManager::finish()
@@ -255,18 +252,18 @@ void KisFilterManager::finish()
 
     d->view->image()->endStroke(d->currentStrokeId);
 
-    KisFilterSP filter = KisFilterRegistry::instance()->value(d->currentlyAppliedCofiguration->name());
+    KisFilterSP filter = KisFilterRegistry::instance()->value(d->currentlyAppliedConfiguration->name());
     if (filter->bookmarkManager()) {
         filter->bookmarkManager()->save(KisBookmarkedConfigurationManager::ConfigLastUsed.id(),
-                                       d->currentlyAppliedCofiguration.data());
+                                       d->currentlyAppliedConfiguration.data());
     }
 
-    d->lastConfiguration = d->currentlyAppliedCofiguration;
+    d->lastConfiguration = d->currentlyAppliedConfiguration;
     d->reapplyAction->setEnabled(true);
     d->reapplyAction->setText(i18n("Apply Filter Again: %1", filter->name()));
 
     d->currentStrokeId.clear();
-    d->currentlyAppliedCofiguration.clear();
+    d->currentlyAppliedConfiguration.clear();
 }
 
 void KisFilterManager::cancel()
@@ -276,7 +273,7 @@ void KisFilterManager::cancel()
     d->view->image()->cancelStroke(d->currentStrokeId);
 
     d->currentStrokeId.clear();
-    d->currentlyAppliedCofiguration.clear();
+    d->currentlyAppliedConfiguration.clear();
 }
 
 bool KisFilterManager::isStrokeRunning() const

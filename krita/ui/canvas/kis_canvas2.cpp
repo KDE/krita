@@ -351,7 +351,7 @@ void KisCanvas2::createCanvas(bool useOpenGL)
             createQPainterCanvas();
         }
 #else
-        warnKrita << "OpenGL requested while its not available, starting qpainter canvas";
+        warnKrita << "OpenGL requested while it's not available, starting qpainter canvas";
         createQPainterCanvas();
 #endif
     } else {
@@ -377,6 +377,7 @@ void KisCanvas2::connectCurrentImage()
     connect(image, SIGNAL(sigImageUpdated(QRect)),
             SLOT(startUpdateCanvasProjection(QRect)),
             Qt::DirectConnection);
+
     connect(this, SIGNAL(sigCanvasCacheUpdated(KisUpdateInfoSP)),
             this, SLOT(updateCanvasProjection(KisUpdateInfoSP)));
 

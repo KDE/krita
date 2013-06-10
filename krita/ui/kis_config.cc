@@ -367,7 +367,7 @@ void KisConfig::setUseOpenGL(bool useOpenGL)
 
 bool KisConfig::useOpenGLToolOutlineWorkaround() const
 {
-    return m_cfg.readEntry("useOpenGLToolOutlineWorkaround", false);
+    return m_cfg.readEntry("useOpenGLToolOutlineWorkaround", true);
 }
 
 void KisConfig::setUseOpenGLToolOutlineWorkaround(bool useWorkaround)

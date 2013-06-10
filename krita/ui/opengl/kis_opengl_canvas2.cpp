@@ -30,6 +30,7 @@
 #include <QPainter>
 #include <QMatrix>
 #include <QDebug>
+#include <QThread>
 
 #include <QGLShaderProgram>
 #include <QGLBuffer>

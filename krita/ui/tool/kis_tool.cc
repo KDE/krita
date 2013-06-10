@@ -107,6 +107,9 @@ struct KisTool::Private {
     QPointF delayedGesturePoint;
 
     QGLShaderProgram *cursorShader; // Make static instead of creating for all tools?
+
+    bool useGLToolOutlineWorkaround;
+
 };
 
 KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
@@ -141,7 +144,8 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
 
     setMode(HOVER_MODE);
 
-
+    KisConfig cfg;
+    d->useGLToolOutlineWorkaround = cfg.useOpenGLToolOutlineWorkaround();
 }
 
 KisTool::~KisTool()
@@ -622,7 +626,8 @@ QWidget* KisTool::createOptionWidget()
 void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
 {
     KisOpenGLCanvas2 *canvasWidget = dynamic_cast<KisOpenGLCanvas2 *>(canvas()->canvasWidget());
-    if (canvasWidget)  {
+    // the workaround option is enabled for Qt 4.6 < 4.6.3... Only relevant on CentOS.
+    if (canvasWidget && !d->useGLToolOutlineWorkaround)  {
 
         painter->beginNativePainting();
 
@@ -708,6 +713,8 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
 void KisTool::resetCursorStyle()
 {
     KisConfig cfg;
+    d->useGLToolOutlineWorkaround = cfg.useOpenGLToolOutlineWorkaround();
+
     switch (cfg.cursorStyle()) {
     case CURSOR_STYLE_TOOLICON:
         useCursor(d->cursor);

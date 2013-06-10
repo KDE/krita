@@ -820,9 +820,9 @@ if (NOT QT_QTDECLARATIVE_FOUND OR NOT KDECLARATIVE_FOUND)
 endif(NOT QT_QTDECLARATIVE_FOUND OR NOT KDECLARATIVE_FOUND)
 
 # TODO: remove when Predicate lib arrives
-if (NOT HAVE_ICU AND NOT HAVE_SQLITE)
+if (NOT HAVE_ICU OR NOT HAVE_SQLITE)
     calligra_disable_product(LIB_CALLIGRADB "ICU|sqlite devel not found")
-endif (NOT HAVE_ICU AND NOT HAVE_SQLITE)
+endif (NOT HAVE_ICU OR NOT HAVE_SQLITE)
 
 if (NOT QT3SUPPORT)
     calligra_disable_product(KEXI_APP "Qt3Support not found")

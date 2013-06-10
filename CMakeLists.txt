@@ -756,14 +756,9 @@ set(KOREPORT_INCLUDES
 set(KOREPORT_LIBS koreport)
 
 # calligradb
-# TODO: remove when Predicate lib arrives
-if (HAVE_ICU AND HAVE_SQLITE) # These are hard deps for calligradb
-   set(CALLIGRADB_LIBS calligradb)                    # TODO remove when Predicate lib arrives
-   set(CALLIGRADB_INCLUDES ${CMAKE_SOURCE_DIR}/libs   # TODO remove when Predicate lib arrives
-                           ${CMAKE_BINARY_DIR}/libs/db)
-else (HAVE_ICU AND HAVE_SQLITE)
-   set(SHOULD_BUILD_LIB_CALLIGRADB FALSE)
-endif (HAVE_ICU AND HAVE_SQLITE)
+set(CALLIGRADB_LIBS calligradb)                    # TODO remove when Predicate lib arrives
+set(CALLIGRADB_INCLUDES ${CMAKE_SOURCE_DIR}/libs   # TODO remove when Predicate lib arrives
+                        ${CMAKE_BINARY_DIR}/libs/db)
 
 #############################################
 ####          3rd party libraries        ####
@@ -823,6 +818,11 @@ endif (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
 if (NOT QT_QTDECLARATIVE_FOUND OR NOT KDECLARATIVE_FOUND)
     calligra_disable_product(ACTIVE "QtDeclarative|KDeclarative not found")
 endif(NOT QT_QTDECLARATIVE_FOUND OR NOT KDECLARATIVE_FOUND)
+
+# TODO: remove when Predicate lib arrives
+if (NOT HAVE_ICU AND NOT HAVE_SQLITE)
+    calligra_disable_product(LIB_CALLIGRADB "ICU|sqlite devel not found")
+endif (NOT HAVE_ICU AND NOT HAVE_SQLITE)
 
 if (NOT QT3SUPPORT)
     calligra_disable_product(KEXI_APP "Qt3Support not found")

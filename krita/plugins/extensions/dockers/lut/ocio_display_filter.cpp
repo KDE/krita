@@ -32,62 +32,16 @@
 
 static const int LUT3D_EDGE_SIZE = 32;
 
-GLuint OcioDisplayFilter::compileShaderText(GLenum shaderType, const char *text)
-{
-    GLuint shader;
-    GLint stat;
-
-    shader = glCreateShader(shaderType);
-    glShaderSource(shader, 1, (const GLchar **) &text, NULL);
-    glCompileShader(shader);
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &stat);
-
-    if (!stat) {
-        GLchar log[1000];
-        GLsizei len;
-        glGetShaderInfoLog(shader, 1000, &len, log);
-        qWarning() << "Failed to compile shader:" << log;
-        return 0;
-    }
-
-    return shader;
-}
-
-GLuint OcioDisplayFilter::linkShaders(GLuint fragShader)
-{
-    if (!fragShader) return 0;
-
-    GLuint program = glCreateProgram();
-
-    if (fragShader)
-        glAttachShader(program, fragShader);
-
-    glLinkProgram(program);
-
-    /* check link */
-    {
-        GLint stat;
-        glGetProgramiv(program, GL_LINK_STATUS, &stat);
-        if (!stat) {
-            GLchar log[1000];
-            GLsizei len;
-            glGetProgramInfoLog(program, 1000, &len, log);
-            return 0;
-        }
-    }
-
-    return program;
-}
-
 const char * m_fragShaderText = ""
         "\n"
-        "uniform sampler2D tex1;\n"
-        "uniform sampler3D tex2;\n"
+        "uniform sampler2D texture_0;\n"
+        "uniform sampler3D texture_1;\n"
+        "varying mediump vec4 v_textureCoordinate;\n"
         "\n"
         "void main()\n"
         "{\n"
-        "    vec4 col = texture2D(tex1, gl_TexCoord[0].st);\n"
-        "    gl_FragColor = OCIODisplay(col, tex2);\n"
+        "    vec4 col = texture2D(texture0, v_textureCoordinate.st);\n"
+        "    gl_FragColor = OCIODisplay(col, texture_1);\n"
         "}\n";
 
 #endif
@@ -99,8 +53,7 @@ OcioDisplayFilter::OcioDisplayFilter(QObject *parent)
     , view(0)
     , swizzle(RGBA)
 #ifdef HAVE_OPENGL
-    , m_fragShader(0)
-    , m_program(0)
+    , m_lut3dTexID(0)
 #endif
 {
 }
@@ -116,9 +69,14 @@ void OcioDisplayFilter::filter(quint8 *src, quint8 */*dst*/, quint32 numPixels)
 }
 
 #ifdef HAVE_OPENGL
-GLuint OcioDisplayFilter::program()
+QString OcioDisplayFilter::program() const
 {
     return m_program;
+}
+
+GLuint OcioDisplayFilter::lutTexture() const
+{
+    return m_lut3dTexID;
 }
 #endif
 
@@ -254,6 +212,7 @@ void OcioDisplayFilter::updateProcessor()
     shaderDesc.setFunctionName("OCIODisplay");
     shaderDesc.setLut3DEdgeLen(LUT3D_EDGE_SIZE);
 
+
     // Step 2: Compute the 3D LUT
     QString lut3dCacheID = QString::fromLatin1(m_processor->getGpuLut3DCacheID(shaderDesc));
     if(lut3dCacheID != m_lut3dcacheid)
@@ -269,7 +228,8 @@ void OcioDisplayFilter::updateProcessor()
                         GL_RGB, GL_FLOAT, &m_lut3d[0]);
     }
 
-    // Step 3: Compute the Shader
+
+    // Step 3: Generate the shader text
     QString shaderCacheID = QString::fromLatin1(m_processor->getGpuShaderTextCacheID(shaderDesc));
     if (m_program == 0 || shaderCacheID != m_shadercacheid) {
         //qDebug() << "Computing Shader " << m_shadercacheid;
@@ -279,16 +239,8 @@ void OcioDisplayFilter::updateProcessor()
         std::ostringstream os;
         os << m_processor->getGpuShaderText(shaderDesc) << "\n";
         os << m_fragShaderText;
-        //qDebug() << "shader" << os.str().c_str();
 
-        if (m_fragShader) {
-            glDeleteShader(m_fragShader);
-        }
-        m_fragShader = compileShaderText(GL_FRAGMENT_SHADER, os.str().c_str());
-        if (m_program) {
-            glDeleteProgram(m_program);
-        }
-        m_program = linkShaders(m_fragShader);
+        m_program = QString::fromLatin1(os.str().c_str());
     }
 
 

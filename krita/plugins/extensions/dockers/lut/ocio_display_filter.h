@@ -44,7 +44,8 @@ public:
     void filter(quint8 *src, quint8 *dst, quint32 numPixels);
 
 #ifdef HAVE_OPENGL
-    virtual GLuint program();
+    virtual QString program() const;
+    GLuint lutTexture() const;
 #endif
 
     void updateProcessor();
@@ -60,16 +61,11 @@ private:
 
     OCIO::ConstProcessorRcPtr m_processor;
 #ifdef HAVE_OPENGL
-    GLuint m_fragShader;
-    GLuint m_program;
+    QString m_program;
     GLuint m_lut3dTexID;
     QVector<float> m_lut3d;
     QString m_lut3dcacheid;
     QString m_shadercacheid;
-
-    GLuint compileShaderText(GLenum shaderType, const char *text);
-    GLuint linkShaders(GLuint fragShader);
-
 #endif
 
 

@@ -377,7 +377,7 @@ void KisConfig::setUseOpenGLToolOutlineWorkaround(bool useWorkaround)
 
 int KisConfig::openGLFilteringMode() const
 {
-    return m_cfg.readEntry("OpenGLFilterMode", 2);
+    return m_cfg.readEntry("OpenGLFilterMode", 1);
 }
 
 void KisConfig::setOpenGLFilteringMode(int filteringMode)

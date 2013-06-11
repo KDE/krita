@@ -155,7 +155,9 @@ void KisOpenGLImageTextures::createImageTextureTiles()
     QByteArray emptyTileData((m_texturesInfo.width) * (m_texturesInfo.height) * pixelSize, 0);
 
     KisConfig config;
-    KisTextureTile::FilterMode mode = config.useOpenGLTrilinearFiltering() ? KisTextureTile::TrilinearFilterMode : KisTextureTile::BilinearFilterMode;
+    KisTextureTile::FilterMode mode = (KisTextureTile::FilterMode)config.openGLFilteringMode();
+
+    qDebug() << "Filter mode" << mode;
 
     for (int row = 0; row <= lastRow; row++) {
         for (int col = 0; col <= lastCol; col++) {

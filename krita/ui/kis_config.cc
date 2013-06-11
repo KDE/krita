@@ -375,14 +375,14 @@ void KisConfig::setUseOpenGLToolOutlineWorkaround(bool useWorkaround)
     m_cfg.writeEntry("useOpenGLToolOutlineWorkaround", useWorkaround);
 }
 
-bool KisConfig::useOpenGLTrilinearFiltering() const
+int KisConfig::openGLFilteringMode() const
 {
-    return m_cfg.readEntry("useOpenGLTrilinearFiltering", true);
+    return m_cfg.readEntry("OpenGLFilterMode", 2);
 }
 
-void KisConfig::setUseOpenGLTrilinearFiltering(bool useTrilinearFiltering)
+void KisConfig::setOpenGLFilteringMode(int filteringMode)
 {
-    m_cfg.writeEntry("useOpenGLTrilinearFiltering", useTrilinearFiltering);
+    m_cfg.writeEntry("OpenGLFilterMode", filteringMode);
 }
 
 

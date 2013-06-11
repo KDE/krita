@@ -126,8 +126,8 @@ public:
     bool useOpenGLToolOutlineWorkaround() const;
     void setUseOpenGLToolOutlineWorkaround(bool useWorkaround);
 
-    bool useOpenGLTrilinearFiltering() const;
-    void setUseOpenGLTrilinearFiltering(bool useTrilinearFiltering);
+    int openGLFilteringMode() const;
+    void setOpenGLFilteringMode(int filteringMode);
 
     bool useOpenGLDoubleBuffering() const;
     void setOpenGLDoubleBuffering(bool doubleBuffering);

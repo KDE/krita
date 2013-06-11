@@ -177,6 +177,20 @@ qreal KisCoordinatesConverter::rotationAngle() const
 
 void KisCoordinatesConverter::setZoom(qreal zoom)
 {
+//    qDebug() << QString("%1").arg(zoom, 0, 'g', 200);
+//    qDebug() << (qFuzzyCompare(zoom, 0.1))
+//                << (qFuzzyCompare(zoom, 0.25))
+//                << (qFuzzyCompare(zoom, 0.33))
+//                << (qFuzzyCompare(zoom, 0.5))
+//                << (qFuzzyCompare(zoom, 0.66))
+//                << (qFuzzyCompare(zoom, 0.67))
+//                << (qFuzzyCompare(zoom, 1.0));
+
+//    if (qFuzzyCompare(zoom, 0.1)) zoom = 0.1;
+//    if (qFuzzyCompare(zoom, 0.25)) zoom = 0.25;
+//    if (qFuzzyCompare(zoom, 0.5)) zoom = 0.5;
+//    if (qFuzzyCompare(zoom, 0.66)) zoom = 0.66;
+
     KoZoomHandler::setZoom(zoom);
     recalculateTransformations();
 }

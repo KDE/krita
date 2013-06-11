@@ -321,6 +321,8 @@ void KisOpenGLImageTextures::getTextureSize(KisGLTexturesInfo *texturesInfo)
     GLint maxTextureSize;
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
 
+    qDebug() << "preferred" << preferredTextureSize << "max" << maxTextureSize;
+
     texturesInfo->width = qMin(preferredTextureSize, maxTextureSize);
     texturesInfo->height = qMin(preferredTextureSize, maxTextureSize);
 

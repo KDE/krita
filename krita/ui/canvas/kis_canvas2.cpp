@@ -102,7 +102,7 @@ public:
     KoColorConversionTransformation::ConversionFlags conversionFlags;
     bool currentCanvasIsOpenGL;
 #ifdef HAVE_OPENGL
-    bool useTrilinearFiltering;
+    int openGLFilterMode;
 #endif
     KoToolProxy *toolProxy;
     KoFavoriteResourceManager *favoriteResourceManager;
@@ -317,7 +317,7 @@ void KisCanvas2::createOpenGLCanvas()
 {
 #ifdef HAVE_OPENGL
     KisConfig cfg;
-    m_d->useTrilinearFiltering = cfg.openGLFilteringMode();
+    m_d->openGLFilterMode = cfg.openGLFilteringMode();
     m_d->currentCanvasIsOpenGL = true;
 
     m_d->openGLImageTextures = KisOpenGLImageTextures::getImageTextures(m_d->view->image(), m_d->monitorProfile, m_d->renderingIntent, m_d->conversionFlags);
@@ -423,7 +423,7 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
     KisConfig cfg;
     bool needReset = (m_d->currentCanvasIsOpenGL != useOpenGL) ||
         (m_d->currentCanvasIsOpenGL &&
-         m_d->useTrilinearFiltering != cfg.openGLFilteringMode());
+         m_d->openGLFilterMode != cfg.openGLFilteringMode());
 
     if (needReset) {
         disconnectCurrentImage();

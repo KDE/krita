@@ -200,8 +200,6 @@ set(kritaui_LIB_SRCS
     widgets/kis_widget_chooser.cpp
     widgets/kis_tool_button.cpp
     widgets/kis_floating_message.cpp
-#    widgets/kis_light_source.cpp
-#    widgets/kis_light_stage.cpp
     input/kis_input_manager.cpp
     input/kis_abstract_input_action.cpp
     input/kis_tool_invocation_action.cpp

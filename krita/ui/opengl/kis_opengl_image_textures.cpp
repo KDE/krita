@@ -157,8 +157,6 @@ void KisOpenGLImageTextures::createImageTextureTiles()
     KisConfig config;
     KisTextureTile::FilterMode mode = (KisTextureTile::FilterMode)config.openGLFilteringMode();
 
-    qDebug() << "Filter mode" << mode;
-
     for (int row = 0; row <= lastRow; row++) {
         for (int col = 0; col <= lastCol; col++) {
             QRect tileRect = calculateTileRect(col, row);

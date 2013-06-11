@@ -79,15 +79,12 @@ public:
     }
 
 private:
-    void repeatStripes(const KisTextureTileUpdateInfo &updateInfo);
-
-private:
     GLuint m_textureId;
 
     QRect m_tileRectInImagePixels;
     QRectF m_tileRectInTexturePixels;
     QRect m_textureRectInImagePixels;
-
+    FilterMode m_filter;
     const KisGLTexturesInfo *m_texturesInfo;
 
     Q_DISABLE_COPY(KisTextureTile)

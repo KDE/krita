@@ -51,9 +51,12 @@ class KisTextureTile
 {
 public:
     enum FilterMode {
-        NearestFilterMode,
-        BilinearFilterMode,
-        TrilinearFilterMode
+        NearestFilterMode,  // nearest
+        BilinearFilterMode, // linear, no mipmap
+        TrilinearFilterMode, // LINEAR_MIPMAP_LINEAR
+        nearest_mipmap_nearest,
+        nearest_mipmap_linear,
+        linear_mipmap_nearest
     };
 
     KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texturesInfo,

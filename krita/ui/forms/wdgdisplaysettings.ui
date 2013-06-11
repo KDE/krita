@@ -187,7 +187,7 @@
       <item row="5" column="0">
        <widget class="QComboBox" name="cmbFilterMode">
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <item>
          <property name="text">
@@ -202,6 +202,21 @@
         <item>
          <property name="text">
           <string>Trilinear Filtering</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>nearest_mipmap_nearest</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>nearest_mipmap_linear</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>linear_mipmap_nearest</string>
          </property>
         </item>
        </widget>

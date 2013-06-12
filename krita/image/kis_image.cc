@@ -33,7 +33,6 @@
 
 #include <klocale.h>
 
-#include "KoUnit.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoColor.h"
 #include "KoColorConversionTransformation.h"
@@ -103,8 +102,6 @@ public:
 
     double xres;
     double yres;
-
-    KoUnit unit;
 
     const KoColorSpace * colorSpace;
 
@@ -319,7 +316,6 @@ void KisImage::init(KisUndoStore *undoStore, qint32 width, qint32 height, const 
 
     m_d->xres = 1.0;
     m_d->yres = 1.0;
-    m_d->unit = KoUnit::Point;
     m_d->width = width;
     m_d->height = height;
 

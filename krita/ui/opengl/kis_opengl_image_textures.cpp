@@ -26,7 +26,6 @@
 
 #include "kis_image.h"
 #include "kis_config.h"
-#include "kis_display_filter.h"
 
 #ifdef HAVE_OPENEXR
 #include <half.h>
@@ -47,7 +46,6 @@ KisOpenGLImageTextures::KisOpenGLImageTextures()
     : m_image(0)
     , m_monitorProfile(0)
     , m_checkerTexture(0)
-    , m_displayFilter(0)
 {
     KisConfig cfg;
     m_renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();
@@ -66,7 +64,6 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
     , m_renderingIntent(renderingIntent)
     , m_conversionFlags(conversionFlags)
     , m_checkerTexture(0)
-    , m_displayFilter(0)
 {
     Q_ASSERT(renderingIntent < 4);
 
@@ -389,17 +386,6 @@ void KisOpenGLImageTextures::updateTextureFormat()
         }
     }
 #endif
-}
-
-void KisOpenGLImageTextures::setDisplayFilter(KisDisplayFilter *displayFilter)
-{
-    m_displayFilter = displayFilter;
-}
-
-
-KisDisplayFilter *KisOpenGLImageTextures::displayFilter() const
-{
-    return m_displayFilter;
 }
 
 #include "kis_opengl_image_textures.moc"

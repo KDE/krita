@@ -216,6 +216,10 @@ KoToolProxy *KisCanvasWidgetBase::toolProxy()
     return m_d->toolProxy;
 }
 
+void KisCanvasWidgetBase::setDisplayFilter(KisDisplayFilter */*displayFilter*/)
+{
+}
+
 QVariant KisCanvasWidgetBase::processInputMethodQuery(Qt::InputMethodQuery query) const
 {
     if (query == Qt::ImMicroFocus) {

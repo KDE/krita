@@ -493,8 +493,7 @@ void KisCanvas2::setDisplayFilter(KisDisplayFilter *displayFilter)
 
     if (m_d->currentCanvasIsOpenGL) {
 #ifdef HAVE_OPENGL
-        Q_ASSERT(m_d->openGLImageTextures);
-        m_d->openGLImageTextures->setDisplayFilter(displayFilter);
+        m_d->canvasWidget->setDisplayFilter(displayFilter);
 #endif
     }
     else {

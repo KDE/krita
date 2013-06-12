@@ -35,7 +35,7 @@
 class QWidget;
 class QPaintEvent;
 class KisCanvas2;
-
+class KisDisplayFilter;
 
 /**
  * KisOpenGLCanvas is the widget that shows the actual image using OpenGL
@@ -55,6 +55,8 @@ public:
 
     virtual ~KisOpenGLCanvas2();
 
+    void setDisplayFilter(KisDisplayFilter *displayFilter);
+
 public: // QWidget
 
     /// reimplemented method from superclass
@@ -62,6 +64,7 @@ public: // QWidget
 
     /// reimplemented method from superclass
     virtual void inputMethodEvent(QInputMethodEvent *event);
+
 
 private slots:
     void slotConfigChanged();
@@ -83,12 +86,13 @@ protected: // KisCanvasWidgetBase
 
 private:
     struct Private;
-    Private * const m_d;
+    Private * const d;
 
     void drawImage();
     void drawCheckers();
 
-    void initializeShaders();
+    void initializeCheckerShader();
+    void initializeDisplayShader();
 };
 
 #endif // HAVE_OPENGL

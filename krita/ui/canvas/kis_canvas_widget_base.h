@@ -38,6 +38,7 @@ class QVariant;
 
 class KoViewConverter;
 class KisCoordinatesConverter;
+class KisDisplayFilter;
 
 class KisCanvasWidgetBase : public KisAbstractCanvasWidget
 {
@@ -49,6 +50,10 @@ public:
 public: // KisAbstractCanvasWidget
 
     virtual KoToolProxy * toolProxy();
+
+
+    /// set the specified display filter on the canvas
+    virtual void setDisplayFilter(KisDisplayFilter *displayFilter);
 
     /**
      * Draw the specified decorations on the view.

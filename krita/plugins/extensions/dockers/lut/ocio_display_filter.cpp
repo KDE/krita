@@ -34,14 +34,14 @@ static const int LUT3D_EDGE_SIZE = 32;
 
 const char * m_fragShaderText = ""
         "\n"
-        "uniform sampler2D texture_0;\n"
-        "uniform sampler3D texture_1;\n"
+        "uniform sampler2D texture0;\n"
+        "uniform sampler3D texture1;\n"
         "varying mediump vec4 v_textureCoordinate;\n"
         "\n"
         "void main()\n"
         "{\n"
         "    vec4 col = texture2D(texture0, v_textureCoordinate.st);\n"
-        "    gl_FragColor = OCIODisplay(col, texture_1);\n"
+        "    gl_FragColor = OCIODisplay(col, texture1);\n"
         "}\n";
 
 #endif

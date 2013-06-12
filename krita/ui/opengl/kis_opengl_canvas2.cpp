@@ -57,6 +57,7 @@
 #include "kis_debug.h"
 #include "opengl/kis_opengl_canvas2_p.h"
 #include "kis_coordinates_converter.h"
+#include "canvas/kis_display_filter.h"
 
 #define NEAR_VAL -1000.0
 #define FAR_VAL 1000.0
@@ -79,6 +80,7 @@ public:
     Private()
         : displayShader(0)
         , checkerShader(0)
+        , displayFilter(0)
     {
     }
 
@@ -91,14 +93,16 @@ public:
 
     QGLShaderProgram *displayShader;
     QGLShaderProgram *checkerShader;
+
+    KisDisplayFilter *displayFilter;
 };
 
 KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget *parent, KisOpenGLImageTexturesSP imageTextures)
     : QGLWidget(KisOpenGL::sharedContextWidget()->format(), parent, KisOpenGL::sharedContextWidget())
     , KisCanvasWidgetBase(canvas, coordinatesConverter)
-    , m_d(new Private())
+    , d(new Private())
 {
-    m_d->openGLImageTextures = imageTextures;
+    d->openGLImageTextures = imageTextures;
 
     setAcceptDrops(true);
     setFocusPolicy(Qt::StrongFocus);
@@ -117,13 +121,19 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
     slotConfigChanged();
 
     KisConfig cfg;
-    m_d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
+    d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
 
 }
 
 KisOpenGLCanvas2::~KisOpenGLCanvas2()
 {
-    delete m_d;
+    delete d;
+}
+
+void KisOpenGLCanvas2::setDisplayFilter(KisDisplayFilter *displayFilter)
+{
+    d->displayFilter = displayFilter;
+    initializeDisplayShader();
 }
 
 void KisOpenGLCanvas2::initializeGL()
@@ -153,8 +163,8 @@ void KisOpenGLCanvas2::initializeGL()
     }
 #endif
 
-    initializeShaders();
-
+    initializeCheckerShader();
+    initializeDisplayShader();
 }
 
 void KisOpenGLCanvas2::resizeGL(int width, int height)
@@ -199,7 +209,7 @@ void KisOpenGLCanvas2::drawCheckers()
     textureTransform *= QTransform::fromScale(checkSizeScale / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE,
                                               checkSizeScale / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE);
 
-    m_d->checkerShader->bind();
+    d->checkerShader->bind();
 
     QMatrix4x4 projectionMatrix;
     projectionMatrix.setToIdentity();
@@ -209,10 +219,10 @@ void KisOpenGLCanvas2::drawCheckers()
     QMatrix4x4 modelMatrix(modelTransform);
     modelMatrix.optimize();
     modelMatrix = projectionMatrix * modelMatrix;
-    m_d->checkerShader->setUniformValue("modelViewProjection", modelMatrix);
+    d->checkerShader->setUniformValue("modelViewProjection", modelMatrix);
 
     QMatrix4x4 textureMatrix(textureTransform);
-    m_d->checkerShader->setUniformValue("textureMatrix", textureMatrix);
+    d->checkerShader->setUniformValue("textureMatrix", textureMatrix);
 
     //Setup the geometry for rendering
     QVector<QVector3D> vertices;
@@ -223,8 +233,8 @@ void KisOpenGLCanvas2::drawCheckers()
              << QVector3D(modelRect.right(), modelRect.top(), 0.f)
              << QVector3D(modelRect.right(), modelRect.bottom(),    0.f);
 
-    m_d->checkerShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
-    m_d->checkerShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, vertices.constData());
+    d->checkerShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
+    d->checkerShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, vertices.constData());
 
     QVector<QVector2D> texCoords;
     texCoords << QVector2D(textureRect.left(), textureRect.bottom())
@@ -234,17 +244,17 @@ void KisOpenGLCanvas2::drawCheckers()
               << QVector2D(textureRect.right(), textureRect.top())
               << QVector2D(textureRect.right(), textureRect.bottom());
 
-    m_d->checkerShader->enableAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE);
-    m_d->checkerShader->setAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE, texCoords.constData());
+    d->checkerShader->enableAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE);
+    d->checkerShader->setAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE, texCoords.constData());
 
      // render checkers
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, m_d->openGLImageTextures->checkerTexture());
+    glBindTexture(GL_TEXTURE_2D, d->openGLImageTextures->checkerTexture());
 
     glDrawArrays(GL_TRIANGLES, 0, 6);
 
     glBindTexture(GL_TEXTURE_2D, 0);
-    m_d->checkerShader->release();
+    d->checkerShader->release();
 }
 
 void KisOpenGLCanvas2::drawImage()
@@ -254,7 +264,11 @@ void KisOpenGLCanvas2::drawImage()
 
     KisCoordinatesConverter *converter = coordinatesConverter();
 
-    m_d->displayShader->bind();
+    d->displayShader->bind();
+    if (d->displayFilter) {
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_3D, d->displayFilter->lutTexture());
+    }
 
     QMatrix4x4 projectionMatrix;
     projectionMatrix.setToIdentity();
@@ -264,11 +278,11 @@ void KisOpenGLCanvas2::drawImage()
     QMatrix4x4 modelMatrix(coordinatesConverter()->imageToWidgetTransform());
     modelMatrix.optimize();
     modelMatrix = projectionMatrix * modelMatrix;
-    m_d->displayShader->setUniformValue("modelViewProjection", modelMatrix);
+    d->displayShader->setUniformValue("modelViewProjection", modelMatrix);
 
     QMatrix4x4 textureMatrix;
     textureMatrix.setToIdentity();
-    m_d->displayShader->setUniformValue("textureMatrix", textureMatrix);
+    d->displayShader->setUniformValue("textureMatrix", textureMatrix);
 
     QRectF widgetRect(0,0, width(), height());
     QRectF widgetRectInImagePixels = converter->documentToImage(converter->widgetToDocument(widgetRect));
@@ -276,18 +290,18 @@ void KisOpenGLCanvas2::drawImage()
     qreal scaleX, scaleY;
     converter->imageScale(&scaleX, &scaleY);
 
-    QRect wr = widgetRectInImagePixels.toAlignedRect() & m_d->openGLImageTextures->storedImageBounds();
+    QRect wr = widgetRectInImagePixels.toAlignedRect() & d->openGLImageTextures->storedImageBounds();
 
-    int firstColumn = m_d->openGLImageTextures->xToCol(wr.left());
-    int lastColumn = m_d->openGLImageTextures->xToCol(wr.right());
-    int firstRow = m_d->openGLImageTextures->yToRow(wr.top());
-    int lastRow = m_d->openGLImageTextures->yToRow(wr.bottom());
+    int firstColumn = d->openGLImageTextures->xToCol(wr.left());
+    int lastColumn = d->openGLImageTextures->xToCol(wr.right());
+    int firstRow = d->openGLImageTextures->yToRow(wr.top());
+    int lastRow = d->openGLImageTextures->yToRow(wr.bottom());
 
     for (int col = firstColumn; col <= lastColumn; col++) {
         for (int row = firstRow; row <= lastRow; row++) {
 
             KisTextureTile *tile =
-                    m_d->openGLImageTextures->getTextureTileCR(col, row);
+                    d->openGLImageTextures->getTextureTileCR(col, row);
             /*
              * We create a float rect here to workaround Qt's
              * "history reasons" in calculation of right()
@@ -305,8 +319,8 @@ void KisOpenGLCanvas2::drawImage()
                      << QVector3D(modelRect.right(), modelRect.top(), 0.f)
                      << QVector3D(modelRect.right(), modelRect.bottom(),    0.f);
 
-            m_d->displayShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
-            m_d->displayShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, vertices.constData());
+            d->displayShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
+            d->displayShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, vertices.constData());
 
             QVector<QVector2D> texCoords;
             texCoords << QVector2D(textureRect.left(), textureRect.bottom())
@@ -316,8 +330,8 @@ void KisOpenGLCanvas2::drawImage()
                       << QVector2D(textureRect.right(), textureRect.top())
                       << QVector2D(textureRect.right(), textureRect.bottom());
 
-            m_d->displayShader->enableAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE);
-            m_d->displayShader->setAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE, texCoords.constData());
+            d->displayShader->enableAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE);
+            d->displayShader->setAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE, texCoords.constData());
 
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, tile->textureId());
@@ -333,37 +347,47 @@ void KisOpenGLCanvas2::drawImage()
         }
     }
 
-    //    m_d->openGLImageTextures->deactivateHDRExposureProgram();
     glBindTexture(GL_TEXTURE_2D, 0);
-    m_d->displayShader->release();
+    d->displayShader->release();
 }
 
-void KisOpenGLCanvas2::initializeShaders()
+void KisOpenGLCanvas2::initializeCheckerShader()
 {
-    m_d->checkerShader = new QGLShaderProgram();
-    m_d->checkerShader->addShaderFromSourceFile(QGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/gl2.vert"));
-    m_d->checkerShader->addShaderFromSourceFile(QGLShader::Fragment, KGlobal::dirs()->findResource("data", "krita/shaders/checker.frag"));
-    m_d->checkerShader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
-    m_d->checkerShader->bindAttributeLocation("a_texturePosition", PROGRAM_TEXCOORD_ATTRIBUTE);
+    delete d->checkerShader;
+    d->checkerShader = new QGLShaderProgram();
+    d->checkerShader->addShaderFromSourceFile(QGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/gl2.vert"));
+    d->checkerShader->addShaderFromSourceFile(QGLShader::Fragment, KGlobal::dirs()->findResource("data", "krita/shaders/checker.frag"));
+    d->checkerShader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
+    d->checkerShader->bindAttributeLocation("a_textureCoordinate", PROGRAM_TEXCOORD_ATTRIBUTE);
 
-    if (! m_d->checkerShader->link()) {
+    if (! d->checkerShader->link()) {
         qDebug() << "OpenGL error" << glGetError();
         qFatal("Failed linking checker shader");
     }
-    Q_ASSERT(m_d->checkerShader->isLinked());
+    Q_ASSERT(d->checkerShader->isLinked());
+}
 
-    m_d->displayShader = new QGLShaderProgram();
-    m_d->displayShader->addShaderFromSourceFile(QGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/gl2.vert"));
-    m_d->displayShader->addShaderFromSourceFile(QGLShader::Fragment, KGlobal::dirs()->findResource("data", "krita/shaders/display.frag"));
-    m_d->displayShader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
-    m_d->displayShader->bindAttributeLocation("a_texturePosition", PROGRAM_TEXCOORD_ATTRIBUTE);
+void KisOpenGLCanvas2::initializeDisplayShader()
+{
+    delete d->displayShader;
+    d->displayShader = new QGLShaderProgram();
 
-    if (! m_d->displayShader->link()) {
+    d->displayShader->addShaderFromSourceFile(QGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/gl2.vert"));
+    if (d->displayFilter) {
+        d->displayShader->addShaderFromSourceCode(QGLShader::Fragment, d->displayFilter->program().toLatin1());
+    }
+    else {
+        d->displayShader->addShaderFromSourceFile(QGLShader::Fragment, KGlobal::dirs()->findResource("data", "krita/shaders/display.frag"));
+    }
+    d->displayShader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
+    d->displayShader->bindAttributeLocation("a_textureCoordinate", PROGRAM_TEXCOORD_ATTRIBUTE);
+
+    if (! d->displayShader->link()) {
         qDebug() << "OpenGL error" << glGetError();
         qFatal("Failed linking display shader");
     }
 
-    Q_ASSERT(m_d->displayShader->isLinked());
+    Q_ASSERT(d->displayShader->isLinked());
 }
 
 void KisOpenGLCanvas2::slotConfigChanged()

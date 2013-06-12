@@ -39,7 +39,6 @@ typedef KisSharedPtr<KisOpenGLImageTextures> KisOpenGLImageTexturesSP;
 
 class KoColorSpace;
 class KoColorProfile;
-class KisDisplayFilter;
 
 /**
  * A set of OpenGL textures that contains the projection of a KisImage.
@@ -75,12 +74,6 @@ public:
     void setMonitorProfile(const KoColorProfile *monitorProfile,
                            KoColorConversionTransformation::Intent renderingIntent,
                            KoColorConversionTransformation::ConversionFlags conversionFlags);
-
-    /**
-     * set the (ocio) display filter.
-     */
-    void setDisplayFilter(KisDisplayFilter *displayFilter);
-    KisDisplayFilter *displayFilter() const;
 
     /**
      * The background checkers texture.
@@ -154,8 +147,6 @@ private:
     KisGLTexturesInfo m_texturesInfo;
     int m_numCols;
     QVector<KisTextureTile*> m_textureTiles;
-
-    KisDisplayFilter *m_displayFilter;
 
 private:
     typedef QMap<KisImageWSP, KisOpenGLImageTextures*> ImageTexturesMap;

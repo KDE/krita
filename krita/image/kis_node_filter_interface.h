@@ -21,7 +21,7 @@
 
 #include <krita_export.h>
 #include <kis_types.h>
-
+#include "kis_filter_configuration.h"
 
 /**
  * Define an interface for nodes that are associated with a filter.

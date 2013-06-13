@@ -27,7 +27,6 @@
 #include <QProcessEnvironment>
 #include <QDesktopServices>
 #include <QDir>
-#include <QMessageBox>
 
 #include <kglobal.h>
 #include <kcmdlineargs.h>
@@ -41,27 +40,10 @@
 
 #include "data/splash/splash_screen.xpm"
 #include "ui/kis_aboutdata.h"
-#include "image/brushengine/kis_paintop_registry.h"
-
-#include <Vc/global.h>
-#include <Vc/support.h>
 
 #ifdef Q_OS_WIN
 #include "stdlib.h"
 #endif
-
-static void fatalError(const QString &message) {
-    qCritical() << "Fatal Error:" << message;
-
-    if (QMessageBox::critical(0, "Configuration Issue",
-                QString("Configuration for Krita has issues.\n"
-                "(Details: %1)\n"
-                "Shall we continue anyways?").arg(message),
-                QMessageBox::Yes|QMessageBox::No)
-            == QMessageBox::No) {
-        qFatal("aborting due to configuration issues");
-    }
-}
 
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {

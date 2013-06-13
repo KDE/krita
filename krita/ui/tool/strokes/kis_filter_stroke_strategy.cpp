@@ -47,6 +47,7 @@ KisFilterStrokeStrategy::KisFilterStrokeStrategy(KisFilterSP filter,
     m_d->node = resources->currentNode();
     m_d->updatesFacade = resources->image().data();
     m_d->cancelSilently = false;
+    m_d->secondaryTransaction = 0;
 
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
 }

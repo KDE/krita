@@ -233,7 +233,6 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
     KisOpenGL::makeContextCurrent();
     KIS_OPENGL_CLEAR_ERROR();
 
-
     KisTextureTileUpdateInfo tileInfo;
     foreach(tileInfo, glInfo->tileList) {
         const KoColorSpace *dstCS = 0;

@@ -111,13 +111,6 @@ KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texture
     memcpy(vid, fd, fillData.size());
     m_glBuffer->unmap();
 
-    glTexImage2D(GL_TEXTURE_2D, 0,
-                 m_texturesInfo->format,
-                 m_texturesInfo->width,
-                 m_texturesInfo->height, 0,
-                 GL_BGRA, m_texturesInfo->type, 0);
-
-
     // we set fill data to 0 so the next glTexImage2D call uses our buffer
     fd = 0;
 
@@ -166,13 +159,6 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
     memcpy(vid, fd, updateInfo.patchPixelsLength());
     m_glBuffer->unmap();
 
-    glTexImage2D(GL_TEXTURE_2D, 0,
-                 m_texturesInfo->format,
-                 m_texturesInfo->width,
-                 m_texturesInfo->height, 0,
-                 GL_BGRA, m_texturesInfo->type, 0);
-
-
     // we set fill data to 0 so the next glTexImage2D call uses our buffer
     fd = 0;
 
@@ -184,6 +170,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
                      m_texturesInfo->height, 0,
                      GL_BGRA, m_texturesInfo->type,
                      fd);
+
 #ifdef USE_PIXEL_BUFFERS
     m_glBuffer->release();
 #endif
@@ -193,13 +180,33 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         QPoint patchOffset = updateInfo.patchOffset();
         QSize patchSize = updateInfo.patchSize();
 
+#ifdef USE_PIXEL_BUFFERS
+
+    m_glBuffer->bind();
+    quint32 size = patchSize.width() * patchSize.height() * updateInfo.pixelSize();
+    m_glBuffer->allocate(size);
+
+    void *vid = m_glBuffer->map(QGLBuffer::WriteOnly);
+    memcpy(vid, fd, size);
+    m_glBuffer->unmap();
+
+    // we set fill data to 0 so the next glTexImage2D call uses our buffer
+    fd = 0;
+
+#endif
+
         glTexSubImage2D(GL_TEXTURE_2D, 0,
                         patchOffset.x(), patchOffset.y(),
                         patchSize.width(), patchSize.height(),
                         GL_BGRA, m_texturesInfo->type,
                         fd);
+
+#ifdef USE_PIXEL_BUFFERS
+    m_glBuffer->release();
+#endif
+
     }
-# if 0
+
     /**
      * On the boundaries of KisImage, there is a border-effect as well.
      * So we just repeat the bounding pixels of the image to make
@@ -278,7 +285,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
                         GL_BGRA, m_texturesInfo->type,
                         columnBuffer.constData());
     }
-#endif
+
 #ifdef Q_OS_WIN
         glGenerateMipmap(GL_TEXTURE_2D);
 #endif

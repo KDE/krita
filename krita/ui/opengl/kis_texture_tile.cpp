@@ -19,7 +19,6 @@
 
 #include "kis_texture_tile.h"
 
-
 #ifdef HAVE_OPENGL
 
 #ifndef GL_BGRA
@@ -77,13 +76,15 @@ void setTextureParameters(KisTextureTile::FilterMode filter)
 }
 
 KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texturesInfo,
-                               const GLvoid *fillData, FilterMode filter)
+                               const QByteArray &fillData, FilterMode filter)
 
     : m_textureId(0)
     , m_tileRectInImagePixels(imageRect)
     , m_filter(filter)
     , m_texturesInfo(texturesInfo)
 {
+    const GLvoid *fd = fillData.constData();
+
     m_textureRectInImagePixels =
             stretchRect(m_tileRectInImagePixels, texturesInfo->border);
 
@@ -96,11 +97,42 @@ KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texture
 
     setTextureParameters(m_filter);
 
+#ifdef USE_PIXEL_BUFFERS
+
+    m_glBuffer = new QGLBuffer(QGLBuffer::PixelUnpackBuffer);
+    m_glBuffer->setUsagePattern(QGLBuffer::DynamicDraw);
+    m_glBuffer->create();
+
+    m_glBuffer->bind();
+
+    m_glBuffer->allocate(fillData.size());
+
+    void *vid = m_glBuffer->map(QGLBuffer::WriteOnly);
+    memcpy(vid, fd, fillData.size());
+    m_glBuffer->unmap();
+
     glTexImage2D(GL_TEXTURE_2D, 0,
                  m_texturesInfo->format,
                  m_texturesInfo->width,
                  m_texturesInfo->height, 0,
-                 GL_BGRA, m_texturesInfo->type, fillData);
+                 GL_BGRA, m_texturesInfo->type, 0);
+
+
+    // we set fill data to 0 so the next glTexImage2D call uses our buffer
+    fd = 0;
+
+#endif
+
+    glTexImage2D(GL_TEXTURE_2D, 0,
+                 m_texturesInfo->format,
+                 m_texturesInfo->width,
+                 m_texturesInfo->height, 0,
+                 GL_BGRA, m_texturesInfo->type, fd);
+
+#ifdef USE_PIXEL_BUFFERS
+    m_glBuffer->release();
+#endif
+
 #ifdef Q_OS_WIN
     glGenerateMipmap(GL_TEXTURE_2D);
 #endif
@@ -108,6 +140,9 @@ KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texture
 
 KisTextureTile::~KisTextureTile()
 {
+#ifdef USE_PIXEL_BUFFERS
+    delete m_glBuffer;
+#endif
     glDeleteTextures(1, &m_textureId);
 }
 
@@ -117,15 +152,42 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
 
     setTextureParameters(m_filter);
 
+    const GLvoid *fd = updateInfo.data();
 
     if (updateInfo.isEntireTileUpdated()) {
+
+#ifdef USE_PIXEL_BUFFERS
+
+    m_glBuffer->bind();
+
+    m_glBuffer->allocate(updateInfo.patchPixelsLength());
+
+    void *vid = m_glBuffer->map(QGLBuffer::WriteOnly);
+    memcpy(vid, fd, updateInfo.patchPixelsLength());
+    m_glBuffer->unmap();
+
+    glTexImage2D(GL_TEXTURE_2D, 0,
+                 m_texturesInfo->format,
+                 m_texturesInfo->width,
+                 m_texturesInfo->height, 0,
+                 GL_BGRA, m_texturesInfo->type, 0);
+
+
+    // we set fill data to 0 so the next glTexImage2D call uses our buffer
+    fd = 0;
+
+#endif
 
         glTexImage2D(GL_TEXTURE_2D, 0,
                      m_texturesInfo->format,
                      m_texturesInfo->width,
                      m_texturesInfo->height, 0,
                      GL_BGRA, m_texturesInfo->type,
-                     updateInfo.data());
+                     fd);
+#ifdef USE_PIXEL_BUFFERS
+    m_glBuffer->release();
+#endif
+
     }
     else {
         QPoint patchOffset = updateInfo.patchOffset();
@@ -135,9 +197,9 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
                         patchOffset.x(), patchOffset.y(),
                         patchSize.width(), patchSize.height(),
                         GL_BGRA, m_texturesInfo->type,
-                        updateInfo.data());
+                        fd);
     }
-
+# if 0
     /**
      * On the boundaries of KisImage, there is a border-effect as well.
      * So we just repeat the bounding pixels of the image to make
@@ -216,7 +278,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
                         GL_BGRA, m_texturesInfo->type,
                         columnBuffer.constData());
     }
-
+#endif
 #ifdef Q_OS_WIN
         glGenerateMipmap(GL_TEXTURE_2D);
 #endif

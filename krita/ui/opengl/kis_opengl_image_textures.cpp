@@ -160,7 +160,7 @@ void KisOpenGLImageTextures::createImageTextureTiles()
 
             KisTextureTile *tile = new KisTextureTile(tileRect,
                                                       &m_texturesInfo,
-                                                      emptyTileData.constData(),
+                                                      emptyTileData,
                                                       mode);
             m_textureTiles.append(tile);
         }
@@ -313,7 +313,7 @@ void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProf
 void KisOpenGLImageTextures::getTextureSize(KisGLTexturesInfo *texturesInfo)
 {
     // TODO: make configurable
-    const GLint preferredTextureSize = 256;
+    const GLint preferredTextureSize = 1024;
 
     GLint maxTextureSize;
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);

@@ -83,6 +83,7 @@ public:
 
         m_patchColorSpace = dstCS;
         m_patchPixels = dstBuffer;
+        m_patchPixelsLength = numPixels * dstCS->pixelSize();
     }
 
     inline quint8* data() const {
@@ -122,6 +123,10 @@ public:
         return m_patchColorSpace->pixelSize();
     }
 
+    inline quint32 patchPixelsLength() const {
+        return m_patchPixelsLength;
+    }
+
 private:
     qint32 m_tileCol;
     qint32 m_tileRow;
@@ -130,6 +135,7 @@ private:
     QRect m_patchRect;
     const KoColorSpace* m_patchColorSpace;
     quint8 *m_patchPixels;
+    quint32 m_patchPixelsLength;
 };
 
 

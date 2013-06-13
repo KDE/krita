@@ -177,14 +177,14 @@
       <string>OpenGL</string>
      </property>
      <layout class="QGridLayout">
-      <item row="4" column="0">
+      <item row="3" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
          <string>Scaling Mode:</string>
         </property>
        </widget>
       </item>
-      <item row="5" column="0">
+      <item row="4" column="0">
        <widget class="QComboBox" name="cmbFilterMode">
         <property name="currentIndex">
          <number>0</number>
@@ -241,16 +241,6 @@ then you can try to enable this.</string>
         </property>
         <property name="text">
          <string>Use workaround for tool outlines</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QCheckBox" name="cbUseDoubleBuffering">
-        <property name="toolTip">
-         <string>Depending on your graphics card and drivers, using double buffering might cause tearing or fix it.</string>
-        </property>
-        <property name="text">
-         <string>Use double buffering</string>
         </property>
        </widget>
       </item>

@@ -95,8 +95,7 @@ void KisOpenGL::createContext()
     if (format.profile() == 2)
         qDebug() << "Using the compatibility profile";
 
-    KisConfig cfg;
-    format.setDoubleBuffer(cfg.useOpenGLDoubleBuffering());
+    format.setDoubleBuffer(false);
 
     SharedContextWidget = new QGLWidget(format);
     SharedContextWidget->makeCurrent();

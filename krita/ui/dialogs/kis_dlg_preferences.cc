@@ -402,15 +402,12 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         cbUseOpenGL->setEnabled(false);
         cbUseOpenGLToolOutlineWorkaround->setEnabled(false);
         cmbFilterMode->setEnabled(false);
-        cbUseDoubleBuffering->setEnabled(false);
     } else {
         cbUseOpenGL->setChecked(cfg.useOpenGL());
         cbUseOpenGLToolOutlineWorkaround->setEnabled(cfg.useOpenGL());
         cbUseOpenGLToolOutlineWorkaround->setChecked(cfg.useOpenGLToolOutlineWorkaround());
         cmbFilterMode->setEnabled(cfg.useOpenGL());
         cmbFilterMode->setCurrentIndex(cfg.openGLFilteringMode());
-        cbUseDoubleBuffering->setEnabled(cfg.useOpenGL());
-        cbUseDoubleBuffering->setChecked(cfg.useOpenGLDoubleBuffering());
     }
 #else
     grpOpenGL->setEnabled(false);
@@ -439,8 +436,6 @@ void DisplaySettingsTab::setDefault()
     cbUseOpenGLToolOutlineWorkaround->setEnabled(true);
     cmbFilterMode->setEnabled(true);
     cmbFilterMode->setCurrentIndex(1);
-    cbUseDoubleBuffering->setEnabled(true);
-    cbUseDoubleBuffering->setChecked(true);
     chkMoving->setChecked(true);
     intCheckSize->setValue(32);
     colorChecks->setColor(QColor(220, 220, 220));
@@ -452,7 +447,6 @@ void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
 #ifdef HAVE_OPENGL
     cbUseOpenGLToolOutlineWorkaround->setEnabled(isChecked);
     cmbFilterMode->setEnabled(isChecked);
-    cbUseDoubleBuffering->setEnabled(isChecked);
 #else
     Q_UNUSED(isChecked);
 #endif
@@ -764,7 +758,6 @@ bool KisDlgPreferences::editPreferences()
         cfg.setUseOpenGL(dialog->m_displaySettings->cbUseOpenGL->isChecked());
         cfg.setUseOpenGLToolOutlineWorkaround(dialog->m_displaySettings->cbUseOpenGLToolOutlineWorkaround->isChecked());
         cfg.setOpenGLFilteringMode(dialog->m_displaySettings->cmbFilterMode->currentIndex());
-        cfg.setOpenGLDoubleBuffering(dialog->m_displaySettings->cbUseDoubleBuffering->isChecked());
 #else
         cfg.setUseOpenGLToolOutlineWorkaround(false);
 #endif

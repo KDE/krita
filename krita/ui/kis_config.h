@@ -129,9 +129,6 @@ public:
     int openGLFilteringMode() const;
     void setOpenGLFilteringMode(int filteringMode);
 
-    bool useOpenGLDoubleBuffering() const;
-    void setOpenGLDoubleBuffering(bool doubleBuffering);
-
     qint32 maxNumberOfThreads();
     void setMaxNumberOfThreads(qint32 numberOfThreads);
 

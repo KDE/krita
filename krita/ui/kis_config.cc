@@ -385,17 +385,6 @@ void KisConfig::setOpenGLFilteringMode(int filteringMode)
     m_cfg.writeEntry("OpenGLFilterMode", filteringMode);
 }
 
-
-bool KisConfig::useOpenGLDoubleBuffering() const
-{
-    return m_cfg.readEntry("useOpenGLDoubleBuffering", false);
-}
-
-void KisConfig::setOpenGLDoubleBuffering(bool doubleBuffering)
-{
-    m_cfg.writeEntry("useOpenGLDoubleBuffering", doubleBuffering);
-}
-
 qint32 KisConfig::maxNumberOfThreads()
 {
     return m_cfg.readEntry("maxthreads", QThread::idealThreadCount());

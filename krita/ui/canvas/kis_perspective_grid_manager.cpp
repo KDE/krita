@@ -238,6 +238,7 @@ void KisPerspectiveGridManager::drawSubdivisions(QPainter& gc, const Subdivision
 void KisPerspectiveGridManager::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, KisCanvas2 *canvas)
 {
     Q_UNUSED(updateRect);
+    Q_UNUSED(canvas);
 
     KisImageWSP image = m_view->resourceProvider()->currentImage();
     Q_ASSERT(image);

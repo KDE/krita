@@ -1,64 +1,130 @@
-/*
- *  Copyright (c) 2013 Somsubhra Bairi <somsubhra.bairi@gmail.com>
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
-
 #include "kis_timeline.h"
+#include "kis_timeline_cells.h"
+#include "kis_animation_layerbox.h"
+#include <QToolButton>
+#include <QToolBar>
+#include <QLabel>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QGridLayout>
+#include <QSplitter>
+#include <KoIcon.h>
 
-KisTimeline::KisTimeline(qreal height, QGraphicsItem *parent, QGraphicsScene *scene, qreal zoom, qreal linePer, qreal step, qreal stepPer) : QGraphicsItem() {
-    m_currentScene = scene;
-    m_height = height;
-    m_zoom = zoom;
-    m_linePer = linePer;
-    m_step = step;
-    m_stepPer = stepPer;
-    setAcceptHoverEvents(true);
+KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
+{
+    m_list = new KisAnimationLayerBox(this);
+    m_cells = new KisTimelineCells(this);
+
+    this->m_numberOfLayers = 0;
+
+    m_hScrollBar = new QScrollBar(Qt::Horizontal);
+    m_vScrollBar = new QScrollBar(Qt::Vertical);
+
+    m_vScrollBar->setMinimum(0);
+    m_vScrollBar->setMaximum(1);
+    m_vScrollBar->setPageStep(1);
+
+    QWidget* leftWidget = new QWidget();
+    leftWidget->setMinimumWidth(120);
+    QWidget* rightWidget = new QWidget();
+
+    QWidget* leftToolBar = new QWidget();
+    leftToolBar->setFixedHeight(31);
+    QWidget* rightToolBar = new QWidget();
+    rightToolBar->setFixedHeight(31);
+
+    QToolBar* layerButtons = new QToolBar(this);
+    m_addLayerButton = new QToolButton(this);
+    m_addLayerButton->setIcon(koIcon("list-add"));
+    m_addLayerButton->setFixedSize(10,10);
+    m_addLayerButton->setToolTip("Add Layer");
+
+    QToolButton* removeLayerButton = new QToolButton(this);
+    removeLayerButton->setIcon(koIcon("list-remove"));
+    removeLayerButton->setToolTip("Remove Layer");
+    removeLayerButton->setFixedSize(10, 10);
+
+    layerButtons->addWidget(m_addLayerButton);
+    layerButtons->addWidget(removeLayerButton);
+
+    QHBoxLayout* leftToolBarLayout = new QHBoxLayout();
+    leftToolBarLayout->setAlignment(Qt::AlignLeft);
+    leftToolBarLayout->setMargin(0);
+    leftToolBarLayout->addWidget(layerButtons);
+    leftToolBar->setLayout(leftToolBarLayout);
+
+    QGridLayout* leftLayout = new QGridLayout();
+    leftLayout->addWidget(leftToolBar, 1, 0);
+    leftLayout->addWidget(m_list, 0, 0);
+    leftLayout->setMargin(0);
+    leftLayout->setSpacing(0);
+    leftWidget->setLayout(leftLayout);
+
+    QToolBar* frameButtons = new QToolBar(this);
+
+    QToolButton* addFrameButton = new QToolButton(this);
+    addFrameButton->setIcon(koIcon("list-add"));
+    addFrameButton->setToolTip("Insert Frame");
+    addFrameButton->setFixedSize(10, 10);
+
+    QToolButton* addKeyFrameButton = new QToolButton(this);
+    addKeyFrameButton->setIcon(koIcon("list-add"));
+    addKeyFrameButton->setToolTip("Insert key frame");
+    addKeyFrameButton->setFixedSize(10, 10);
+
+    QToolButton* addBlankFrameButton = new QToolButton(this);
+    addBlankFrameButton->setIcon(koIcon("list-add"));
+    addBlankFrameButton->setToolTip("Insert blank frame");
+    addBlankFrameButton->setFixedSize(10, 10);
+
+    QToolButton* removeFrameButton = new QToolButton(this);
+    removeFrameButton->setIcon(koIcon("list-remove"));
+    removeFrameButton->setToolTip("Remove frame");
+    removeFrameButton->setFixedSize(10, 10);
+
+    frameButtons->addWidget(addFrameButton);
+    frameButtons->addWidget(addKeyFrameButton);
+    frameButtons->addWidget(addBlankFrameButton);
+    frameButtons->addWidget(removeFrameButton);
+
+    QHBoxLayout* rightToolBarLayout = new QHBoxLayout();
+    rightToolBarLayout->addWidget(frameButtons);
+    rightToolBar->setLayout(rightToolBarLayout);
+
+    QGridLayout* rightLayout = new QGridLayout();
+    rightLayout->addWidget(rightToolBar, 1, 0);
+    rightLayout->addWidget(m_cells, 0, 0);
+    rightLayout->setMargin(0);
+    rightLayout->setSpacing(0);
+    rightWidget->setLayout(rightLayout);
+
+    QSplitter* splitter = new QSplitter(parent);
+    splitter->addWidget(leftWidget);
+    splitter->addWidget(rightWidget);
+    splitter->setSizes(QList<int>() << 100 << 600);
+
+    QGridLayout* lay = new QGridLayout();
+
+    lay->addWidget(splitter, 0, 0);
+    lay->addWidget(m_vScrollBar, 0,1);
+    lay->addWidget(m_hScrollBar, 1, 0);
+    lay->setMargin(0);
+    lay->setSpacing(0);
+    this->setLayout(lay);
 }
 
-KisTimeline::~KisTimeline(){
+void KisTimeline::resizeEvent(QResizeEvent *event){
 
 }
 
-QRectF KisTimeline::boundingRect() const{
-    return QRectF(0, 0, m_currentScene->width(), m_height);
+void KisTimeline::setCanvas(KisCanvas2 *canvas){
+    m_canvas = canvas;
 }
 
-QPainterPath KisTimeline::shape() const{
-    QPainterPath path;
-    path.addRect(0, 0, m_currentScene->width(), m_height);
-    return path;
+KisCanvas2* KisTimeline::getCanvas(){
+    return m_canvas;
 }
 
-void KisTimeline::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget){
-    painter->setFont(QFont("", 7));
-
-    for(qreal x = m_currentScene->sceneRect().left(); x < m_currentScene->sceneRect().width(); x+=m_step){
-        qreal z = x*m_zoom;
-
-        if(qreal(x/(m_stepPer*100)) == int(x/(m_stepPer*100))){
-            painter->setPen(Qt::red);
-            painter->drawLine(z, 1, z, 3);
-            painter->drawLine(z, m_height -4, z, m_currentScene->sceneRect().height());
-        }
-        else{
-            painter->setPen(Qt::gray);
-            painter->drawLine(z,0,z,m_currentScene->sceneRect().height());
-        }
-    }
-
-    for(qreal x = m_currentScene->sceneRect().left(); x < m_currentScene->sceneRect().width(); x+=m_stepPer){
-        painter->drawText((x*100*m_zoom-19 > 1 ? x*100*m_zoom-19 : x*100*m_zoom-16), 0, 38, m_height, Qt::AlignCenter, QString("%1").arg(x*m_linePer/m_stepPer));
-    }
+KisAnimationLayerBox* KisTimeline::getLayerBox(){
+    return m_list;
 }

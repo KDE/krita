@@ -31,61 +31,18 @@
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QWidget>
-#include "kis_timeline_view.h"
 #include <QAction>
 #include <KoIcon.h>
 #include <QActionGroup>
 #include <QPushButton>
+#include "kis_timeline.h"
+#include "kis_animation_layerbox.h"
 
 AnimatorDock::AnimatorDock() : QDockWidget(i18n("Animator")), m_canvas(0), m_animation(0)
 {
     this->setMinimumHeight(120);
-    QWidget *mainWidget = new QWidget(this);
-    QWidget* timelineWidget = new QWidget(mainWidget);
-    QSize size(700, 220);
-
-    size = size.expandedTo(minimumSizeHint());
-    resize(size);
-
-    m_fpsInput = new QSpinBox(mainWidget);
-    m_fpsInput->setGeometry(850, 0, 50, 20);
-    m_fpsInput->setRange(0,99);
-    m_timeInput = new QSpinBox(mainWidget);
-    m_timeInput->setGeometry(850, 30, 50, 20);
-    m_timeInput->setRange(0,999999);
-    QLabel* lblFpsInput = new QLabel(mainWidget);
-    lblFpsInput->setGeometry(800, 0, 50, 20);
-    lblFpsInput->setText("FPS:");
-    QLabel* lblTimeInput = new QLabel(mainWidget);
-    lblTimeInput->setText("Duration:");
-    lblTimeInput->setGeometry(800, 30, 50, 20);
-
-    QPushButton* addFrameButton = new QPushButton(koIcon("list-add"), "", mainWidget);
-    addFrameButton->setGeometry(10, 100, 30, 30);
-    addFrameButton->setShortcut(tr("F4"));
-
-    QPushButton* addKeyFrameButton = new QPushButton(koIcon("list-add"), "", mainWidget);
-    addKeyFrameButton->setGeometry(40,100, 30,30);
-    addKeyFrameButton->setShortcut(tr("F5"));
-
-    QPushButton* addBlankFrameButton = new QPushButton(koIcon("list-add"),"",mainWidget);
-    addBlankFrameButton->setGeometry(70,100,30,30);
-    addBlankFrameButton->setShortcut(tr("F6"));
-
-    QPushButton* removeFrameButton = new QPushButton(koIcon("list-remove"),"", mainWidget);
-    removeFrameButton->setGeometry(100, 100, 30, 30);
-    removeFrameButton->setShortcut(tr("F7"));
-
-    m_timelineView = new KisTimelineView(timelineWidget);
-    m_timelineView->setGeometry(QRect(0, 0, 800, 100));
-
-    connect(m_fpsInput, SIGNAL(valueChanged(int)), this, SLOT(updateNumberOfFrames()));
-    connect(m_timeInput, SIGNAL(valueChanged(int)), this, SLOT(updateNumberOfFrames()));
-    connect(addFrameButton, SIGNAL(clicked()), m_timelineView, SLOT(addFrame()));
-    connect(addKeyFrameButton, SIGNAL(clicked()), m_timelineView, SLOT(addKeyFrame()));
-    connect(addBlankFrameButton, SIGNAL(clicked()), m_timelineView, SLOT(addBlankFrame()));
-
-    this->setWidget(mainWidget);
+    m_mainWidget = new KisTimeline(this);
+    this->setWidget(m_mainWidget);
 }
 
 void AnimatorDock::setCanvas(KoCanvasBase *canvas){
@@ -93,15 +50,13 @@ void AnimatorDock::setCanvas(KoCanvasBase *canvas){
     if(m_canvas && m_canvas->view() && m_canvas->view()->document() && m_canvas->view()->document()->documentPart()){
         m_animation = dynamic_cast<KisPart2*>(m_canvas->view()->document()->documentPart())->animation();
         if(m_animation){
-            m_fpsInput->setValue(m_animation->fps());
-            m_timeInput->setValue(m_animation->time());
-            m_timelineView->setNumberOfFrames(m_animation->fps() * m_animation->time());
-            m_timelineView->init();
+            m_mainWidget->setCanvas(m_canvas);
+            m_mainWidget->getLayerBox()->makeConnections();
         }
     }
 }
 
 void AnimatorDock::updateNumberOfFrames(){
-    m_timelineView->setNumberOfFrames(m_fpsInput->value()*m_timeInput->value());
+
 }
 #include "animator_dock.moc"

@@ -18,12 +18,17 @@
 */
 
 #include "KoDocumentRdfBase.h"
+
 #include <KoDocumentResourceManager.h>
 #include <KoCanvasBase.h>
 #include <KoText.h>
 #include <KoXmlWriter.h>
 #include <KoStoreDevice.h>
 #include <KoShapeController.h>
+
+#ifdef SHOULD_BUILD_RDF
+#include <Soprano/Soprano>
+#endif
 
 #include <kdebug.h>
 

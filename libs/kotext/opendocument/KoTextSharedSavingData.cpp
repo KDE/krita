@@ -22,6 +22,10 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include "KoGenChanges.h"
 #include "KoDocumentRdfBase.h"
 
+#ifdef SHOULD_BUILD_RDF
+#include <Soprano/Soprano>
+#endif
+
 #include <QMap>
 
 class KoTextSharedSavingData::Private

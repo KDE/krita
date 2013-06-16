@@ -108,7 +108,7 @@ public:
     QSize viewSize() const;
     /// Gets the tag Names from tag Object for setting the Completer Object
     QStringList tagNamesList(const QString &lineEditText) const;
-
+    QStringList availableTags() const;
     KoResourceItemView *itemView() const;
 
 signals:

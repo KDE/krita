@@ -1,7 +1,9 @@
 
 set(KRITA_ANIMATOR_PART_SRCS animator.cpp
     animator_dock.cpp
-    kis_timeline_cells.cpp
+    kis_layer_contents.cpp
+    kis_frame_box.cpp
+    kis_animation_frame.cpp
     kis_animation_layerbox.cpp
     kis_animation_layer.cpp
     kis_timeline.cpp

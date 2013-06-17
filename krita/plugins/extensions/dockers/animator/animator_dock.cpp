@@ -37,6 +37,7 @@
 #include <QPushButton>
 #include "kis_timeline.h"
 #include "kis_animation_layerbox.h"
+#include "kis_frame_box.h"
 
 AnimatorDock::AnimatorDock() : QDockWidget(i18n("Animator")), m_canvas(0), m_animation(0)
 {
@@ -51,7 +52,8 @@ void AnimatorDock::setCanvas(KoCanvasBase *canvas){
         m_animation = dynamic_cast<KisPart2*>(m_canvas->view()->document()->documentPart())->animation();
         if(m_animation){
             m_mainWidget->setCanvas(m_canvas);
-            m_mainWidget->getLayerBox()->makeConnections();
+            m_mainWidget->getLayerBox()->onCanvasReady();
+            m_mainWidget->getFrameBox()->onCanvasReady();
         }
     }
 }

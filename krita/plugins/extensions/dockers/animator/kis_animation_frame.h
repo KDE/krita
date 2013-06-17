@@ -15,44 +15,26 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_ANIMATION_LAYERBOX_H
-#define KIS_ANIMATION_LAYERBOX_H
+#ifndef KIS_ANIMATION_FRAME_H
+#define KIS_ANIMATION_FRAME_H
 
 #include <QWidget>
-#include <QPointer>
-#include <kis_types.h>
-#include <QToolButton>
-#include <QList>
-#include <QListWidget>
+#include <kis_layer_contents.h>
 
-class KisNodeModel;
-class KisNodeManager;
-class KisTimeline;
-class KisAnimationLayer;
-
-class KisAnimationLayerBox : public QListWidget
+class KisAnimationFrame : public QWidget
 {
     Q_OBJECT
+
 public:
-    KisAnimationLayerBox(KisTimeline* parent = 0);
-    void onCanvasReady();
-    QList<KisAnimationLayer*> getLayers();
+    KisAnimationFrame(KisLayerContents* parent = 0, int type = 0);
 
 protected:
     void paintEvent(QPaintEvent *event);
-    void resizeEvent(QResizeEvent *event);
 
-private:
-    KisTimeline* m_dock;
-    QPointer<KisNodeModel> m_nodeModel;
-    QPointer<KisNodeManager> m_nodeManager;
-    QList<KisAnimationLayer*> m_layers;
-
-private slots:
-    void updateUI();
-
-private:
-    inline void connectActionToButton(QAction *button, const QString &id);
+public:
+    static const int SELECTION = 0;
+    static const int KEYFRAME = 1;
+    static const int BLANKFRAME = 2;
 };
 
-#endif // KIS_ANIMATION_LAYERBOX_H
+#endif // KIS_ANIMATION_FRAME_H

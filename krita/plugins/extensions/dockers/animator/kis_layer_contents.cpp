@@ -15,34 +15,30 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_ANIMATION_LAYER_H
-#define KIS_ANIMATION_LAYER_H
+#include "kis_layer_contents.h"
+#include <QPainter>
 
-#include "kis_animation_layerbox.h"
-#include <QWidget>
-#include <QLineEdit>
-#include <QLabel>
-#include <QHBoxLayout>
-
-class KisAnimationLayer : public QWidget
+KisLayerContents::KisLayerContents(KisFrameBox *parent)
 {
-    Q_OBJECT
+    this->setFixedHeight(20);
+    this->setFixedWidth(2000);
+    this->setParent(parent);
+}
 
-public:
-    KisAnimationLayer(KisAnimationLayerBox* parent = 0);
+void KisLayerContents::paintEvent(QPaintEvent *event){
+    QPainter painter(this);
 
-protected:
-    void paintEvent(QPaintEvent *event);
-    void mouseDoubleClickEvent(QMouseEvent *event);
+    painter.setPen(Qt::lightGray);
 
-private slots:
-    void onLayerNameEdited();
+    for(int i = 0; i < 200; i++){
+        if(i%10 == 0){
+            painter.setPen(Qt::red);
+            painter.drawRect(QRectF(10*i,0,9,height()-1));
+        }
+        else{
+            painter.setPen(Qt::lightGray);
+            painter.drawRect(QRectF(10*i,0,10,height()-1));
+        }
 
-private:
-    KisAnimationLayerBox *m_layerBox;
-    QLabel* m_lblLayerName;
-    QLineEdit* m_inputLayerName;
-    QHBoxLayout* lay;
-};
-
-#endif // KIS_ANIMATION_LAYER_H
+    }
+}

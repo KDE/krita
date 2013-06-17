@@ -1,5 +1,22 @@
+/*
+ *  Copyright (c) 2013 Somsubhra Bairi <somsubhra.bairi@gmail.com>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation; version 2 of the License.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
 #include "kis_timeline.h"
-#include "kis_timeline_cells.h"
+#include "kis_frame_box.h"
 #include "kis_animation_layerbox.h"
 #include <QToolButton>
 #include <QToolBar>
@@ -9,20 +26,16 @@
 #include <QGridLayout>
 #include <QSplitter>
 #include <KoIcon.h>
+#include <QScrollArea>
+#include <QMenu>
+#include <QScrollBar>
 
 KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
 {
     m_list = new KisAnimationLayerBox(this);
-    m_cells = new KisTimelineCells(this);
+    m_cells = new KisFrameBox(this);
 
     this->m_numberOfLayers = 0;
-
-    m_hScrollBar = new QScrollBar(Qt::Horizontal);
-    m_vScrollBar = new QScrollBar(Qt::Vertical);
-
-    m_vScrollBar->setMinimum(0);
-    m_vScrollBar->setMaximum(1);
-    m_vScrollBar->setPageStep(1);
 
     QWidget* leftWidget = new QWidget();
     leftWidget->setMinimumWidth(120);
@@ -34,10 +47,19 @@ KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
     rightToolBar->setFixedHeight(31);
 
     QToolBar* layerButtons = new QToolBar(this);
-    m_addLayerButton = new QToolButton(this);
+
+    QToolButton* m_addLayerButton = new QToolButton(this);
     m_addLayerButton->setIcon(koIcon("list-add"));
     m_addLayerButton->setFixedSize(10,10);
     m_addLayerButton->setToolTip("Add Layer");
+
+    m_addPaintLayerAction = new QAction(koIcon("list-add"), "Add Paint Layer", this);
+    m_addVectorLayerAction = new QAction(koIcon("list-add"), "Add Vector Layer", this);
+    QMenu* layerMenu = new QMenu("Add Layer", this);
+    layerMenu->addAction(m_addPaintLayerAction);
+    layerMenu->addAction(m_addVectorLayerAction);
+    m_addLayerButton->setMenu(layerMenu);
+    m_addLayerButton->setPopupMode(QToolButton::InstantPopup);
 
     QToolButton* removeLayerButton = new QToolButton(this);
     removeLayerButton->setIcon(koIcon("list-remove"));
@@ -53,9 +75,18 @@ KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
     leftToolBarLayout->addWidget(layerButtons);
     leftToolBar->setLayout(leftToolBarLayout);
 
+    QScrollArea* leftScrollArea = new QScrollArea(this);
+    leftScrollArea->setBackgroundRole(QPalette::Dark);
+    leftScrollArea->setWidget(m_list);
+    m_list->setFixedHeight(45);
+    leftScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    leftScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    connect(m_addPaintLayerAction, SIGNAL(triggered()), this, SLOT(updateHeight()));
+    connect(m_addVectorLayerAction, SIGNAL(triggered()), this, SLOT(updateHeight()));
+
     QGridLayout* leftLayout = new QGridLayout();
     leftLayout->addWidget(leftToolBar, 1, 0);
-    leftLayout->addWidget(m_list, 0, 0);
+    leftLayout->addWidget(leftScrollArea, 0, 0);
     leftLayout->setMargin(0);
     leftLayout->setSpacing(0);
     leftWidget->setLayout(leftLayout);
@@ -91,9 +122,19 @@ KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
     rightToolBarLayout->addWidget(frameButtons);
     rightToolBar->setLayout(rightToolBarLayout);
 
+    QScrollArea* rightScrollArea = new QScrollArea(this);
+    rightScrollArea->setBackgroundRole(QPalette::Dark);
+    rightScrollArea->setWidget(m_cells);
+    m_cells->setFixedWidth(1000);
+    m_cells->setFixedHeight(45);
+    //rightScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    rightScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+
+    connect(rightScrollArea->verticalScrollBar(), SIGNAL(sliderMoved(int)), leftScrollArea->verticalScrollBar(), SLOT(setValue(int)));
+
     QGridLayout* rightLayout = new QGridLayout();
     rightLayout->addWidget(rightToolBar, 1, 0);
-    rightLayout->addWidget(m_cells, 0, 0);
+    rightLayout->addWidget(rightScrollArea, 0, 0);
     rightLayout->setMargin(0);
     rightLayout->setSpacing(0);
     rightWidget->setLayout(rightLayout);
@@ -106,8 +147,6 @@ KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
     QGridLayout* lay = new QGridLayout();
 
     lay->addWidget(splitter, 0, 0);
-    lay->addWidget(m_vScrollBar, 0,1);
-    lay->addWidget(m_hScrollBar, 1, 0);
     lay->setMargin(0);
     lay->setSpacing(0);
     this->setLayout(lay);
@@ -127,4 +166,12 @@ KisCanvas2* KisTimeline::getCanvas(){
 
 KisAnimationLayerBox* KisTimeline::getLayerBox(){
     return m_list;
+}
+
+KisFrameBox* KisTimeline::getFrameBox(){
+    return m_cells;
+}
+void KisTimeline::updateHeight(){
+    m_list->setFixedHeight(m_list->height()+20);
+    m_cells->setFixedHeight(m_cells->height()+20);
 }

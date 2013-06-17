@@ -15,44 +15,21 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_ANIMATION_LAYERBOX_H
-#define KIS_ANIMATION_LAYERBOX_H
+#ifndef KIS_LAYER_CONTENTS_H
+#define KIS_LAYER_CONTENTS_H
 
 #include <QWidget>
-#include <QPointer>
-#include <kis_types.h>
-#include <QToolButton>
-#include <QList>
-#include <QListWidget>
+#include <kis_frame_box.h>
 
-class KisNodeModel;
-class KisNodeManager;
-class KisTimeline;
-class KisAnimationLayer;
-
-class KisAnimationLayerBox : public QListWidget
+class KisLayerContents : public QWidget
 {
     Q_OBJECT
+
 public:
-    KisAnimationLayerBox(KisTimeline* parent = 0);
-    void onCanvasReady();
-    QList<KisAnimationLayer*> getLayers();
+    KisLayerContents(KisFrameBox* parent = 0);
 
 protected:
     void paintEvent(QPaintEvent *event);
-    void resizeEvent(QResizeEvent *event);
-
-private:
-    KisTimeline* m_dock;
-    QPointer<KisNodeModel> m_nodeModel;
-    QPointer<KisNodeManager> m_nodeManager;
-    QList<KisAnimationLayer*> m_layers;
-
-private slots:
-    void updateUI();
-
-private:
-    inline void connectActionToButton(QAction *button, const QString &id);
 };
 
-#endif // KIS_ANIMATION_LAYERBOX_H
+#endif // KIS_LAYER_CONTENTS_H

@@ -92,7 +92,8 @@ calligra_define_product(LIB_ODF2 "libodf2"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(LIB_ODFREADER "libodfreader"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(LIB_MSO "libmso"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(LIB_MSOOXML "libmsooxml"  NEEDS LIB_ODF2 CALLIGRA_LIBS)
-calligra_define_product(SCRIPTING "") # TODO
+calligra_define_product(SCRIPTING "Scripting feature") # TODO
+calligra_define_product(RDF "RDF feature")
 # plugins
 calligra_define_product(PLUGIN_TEXTSHAPE ""  NEEDS CALLIGRA_LIBS)
 # apps
@@ -394,10 +395,8 @@ macro_log_feature(EXIV2_FOUND "Exiv2" "Image metadata library and tools" "http:/
 macro_optional_find_package(Soprano)
 macro_log_feature(Soprano_FOUND "Soprano" "KDE4 RDF handling library" "http://soprano.sourceforge.net/" FALSE "" "Required to handle RDF metadata in ODF")
 if(NOT Soprano_FOUND)
-    set(SHOULD_BUILD_RDF FALSE)
     set(SOPRANO_INCLUDE_DIR "")
 else(NOT Soprano_FOUND)
-    set(SHOULD_BUILD_RDF TRUE)
    add_definitions( -DSHOULD_BUILD_RDF )
 endif(NOT Soprano_FOUND)
 
@@ -803,6 +802,10 @@ set(KOODF2_INCLUDES
 if(NOT SHARED_MIME_INFO_FOUND)
     calligra_disable_product(LIB_MSOOXML "SharedMimeInfo not found (needed to install mimetypes)")
 endif(NOT SHARED_MIME_INFO_FOUND)
+
+if(NOT Soprano_FOUND)
+    calligra_disable_product(RDF "Soprano not found")
+endif(NOT Soprano_FOUND)
 
 if(NOT EIGEN2_FOUND)
     calligra_disable_product(SHEETS_PART "Eigen devel not found")

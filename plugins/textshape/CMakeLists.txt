@@ -164,9 +164,9 @@ kde4_add_ui_files(textshape_SRCS
 kde4_add_plugin(textshape ${textshape_SRCS})
 
 target_link_libraries(textshape kotext textlayout komain ${EXTRA_LIBS})
-if( Soprano_FOUND )
+if( SHOULD_BUILD_RDF )
     target_link_libraries(textshape ${SOPRANO_LIBRARIES})
-endif( Soprano_FOUND )
+endif( SHOULD_BUILD_RDF )
 
 
 install(TARGETS textshape DESTINATION ${PLUGIN_INSTALL_DIR})

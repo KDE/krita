@@ -335,6 +335,14 @@ void KisOpenGLCanvas2::drawImage()
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, tile->textureId());
 
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+            if (SCALE_LESS_THAN(scaleX, scaleY, 0.35)) {
+                glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+                glGenerateMipmap(GL_TEXTURE_2D);
+            }
+
             if (SCALE_MORE_OR_EQUAL_TO(scaleX, scaleY, 2.0)) {
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             } else {

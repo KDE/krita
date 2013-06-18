@@ -498,20 +498,20 @@ void KoChangeTracker::setFormatChangeBgColor(const QColor& bgColor)
     d->formatChangeBgColor = bgColor;
 }
 
-//A convenience function to get a ListIdType from a format
-static KoListStyle::ListIdType ListId(const QTextListFormat &format)
-{
-    KoListStyle::ListIdType listId;
+////A convenience function to get a ListIdType from a format
+//static KoListStyle::ListIdType ListId(const QTextListFormat &format)
+//{
+//    KoListStyle::ListIdType listId;
 
-    if (sizeof(KoListStyle::ListIdType) == sizeof(uint)) {
-        listId = format.property(KoListStyle::ListId).toUInt();
-    }
-    else {
-        listId = format.property(KoListStyle::ListId).toULongLong();
-    }
+//    if (sizeof(KoListStyle::ListIdType) == sizeof(uint)) {
+//        listId = format.property(KoListStyle::ListId).toUInt();
+//    }
+//    else {
+//        listId = format.property(KoListStyle::ListId).toULongLong();
+//    }
 
-    return listId;
-}
+//    return listId;
+//}
 
 QTextDocumentFragment KoChangeTracker::generateDeleteFragment(const QTextCursor &cursor)
 {

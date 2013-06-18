@@ -162,6 +162,8 @@ void KisGridManager::fastConfig40x40()
 
 void KisGridManager::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, KisCanvas2 *canvas)
 {
+    Q_UNUSED(canvas);
+
     KisConfig cfg;
 
     quint32 offsetx = cfg.getGridOffsetX();

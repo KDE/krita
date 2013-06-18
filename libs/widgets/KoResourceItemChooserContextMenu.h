@@ -44,7 +44,8 @@ private:
     QString m_tag;
 };
 
-class ContextMenuNewTagAction : public QWidgetAction {
+class ContextMenuNewTagAction : public QWidgetAction
+{
     Q_OBJECT
 public:
     explicit ContextMenuNewTagAction (KoResource* resource, QObject* parent);
@@ -62,9 +63,27 @@ private:
     KLineEdit * m_editBox;
 };
 
-class KoResourceItemChooserContextMenu :  QMenu
+class KoResourceItemChooserContextMenu :  public QMenu
 {
-    explicit KoResourceItemChooserContextMenu(QWidget* parent = 0);
+    Q_OBJECT
+public:
+    explicit KoResourceItemChooserContextMenu
+    (
+        KoResource* resource,
+        const QStringList& resourceTags,
+        const QString& currentlySelectedTag,
+        const QStringList& allTags
+    );
+    virtual ~KoResourceItemChooserContextMenu();
+
+signals:
+    /// Emitted when a resource should be added to an existing tag.
+    void resourceTagAdditionRequested(KoResource* resource, const QString& tag);
+    /// Emitted when a resource should be removed from an existing tag.
+    void resourceTagRemovalRequested(KoResource* resource, const QString& tag);
+    /// Emitted when a resource should be added to a new tag, which will need to be created.
+    void resourceAssignmentToNewTagRequested(KoResource* resource, const QString& tag);
+
 };
 
 #endif // KORESOURCEITEMCHOOSERCONTEXTMENU_H

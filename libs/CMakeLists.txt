@@ -37,6 +37,6 @@ if (SHOULD_BUILD_LIB_KOREPORT)
     add_subdirectory( koreport )
 endif (SHOULD_BUILD_LIB_KOREPORT)
 
-if (Soprano_FOUND)
+if (SHOULD_BUILD_RDF)
     add_subdirectory( rdf )
-endif (Soprano_FOUND)
+endif (SHOULD_BUILD_RDF)

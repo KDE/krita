@@ -396,8 +396,6 @@ macro_optional_find_package(Soprano)
 macro_log_feature(Soprano_FOUND "Soprano" "KDE4 RDF handling library" "http://soprano.sourceforge.net/" FALSE "" "Required to handle RDF metadata in ODF")
 if(NOT Soprano_FOUND)
     set(SOPRANO_INCLUDE_DIR "")
-else(NOT Soprano_FOUND)
-   add_definitions( -DSHOULD_BUILD_RDF )
 endif(NOT Soprano_FOUND)
 
 
@@ -910,6 +908,15 @@ calligra_drop_products_on_old_flag(words  WORDS_PART WORDS_APP)
 #############################################
 
 calligra_drop_unbuildable_products()
+
+
+#############################################
+####     Setup product-depending vars    ####
+#############################################
+
+if(SHOULD_BUILD_RDF)
+   add_definitions( -DSHOULD_BUILD_RDF )
+endif(SHOULD_BUILD_RDF)
 
 
  ###################

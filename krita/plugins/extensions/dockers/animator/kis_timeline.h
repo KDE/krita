@@ -54,6 +54,9 @@ private:
 
 private slots:
     void updateHeight();
+    void blankFramePressed();
+    void keyFramePressed();
+    void addframePressed();
 };
 
 #endif // KIS_TIMELINE_H

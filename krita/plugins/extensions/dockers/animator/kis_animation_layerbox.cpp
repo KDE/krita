@@ -44,14 +44,6 @@ KisAnimationLayerBox::KisAnimationLayerBox(KisTimeline *parent)
     firstLayer->setGeometry(QRect(0,this->m_layers.length()*20,width(),20));
 }
 
-void KisAnimationLayerBox::paintEvent(QPaintEvent *event){
-    QPainter painter(this);
-
-    painter.setPen(Qt::NoPen);
-    painter.setBrush(Qt::darkGray);
-    painter.drawRect(QRect(0,0,width(), height()));
-}
-
 inline void KisAnimationLayerBox::connectActionToButton(QAction *button, const QString &id){
     Q_ASSERT(m_dock->getCanvas());
 

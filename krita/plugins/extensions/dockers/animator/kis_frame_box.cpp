@@ -36,13 +36,6 @@ void KisFrameBox::onCanvasReady(){
     connect(m_dock->m_addVectorLayerAction, SIGNAL(triggered()), this, SLOT(updateUI()));
 }
 
-void KisFrameBox::paintEvent(QPaintEvent *event){
-    QPainter painter(this);
-    painter.setPen(Qt::NoPen);
-    painter.setBrush(Qt::darkGray);
-    painter.drawRect(QRect(0,0,width(), height()));
-}
-
 void KisFrameBox::updateUI(){
     KisLayerContents* newContents = new KisLayerContents(this);
     m_layerContents << newContents;

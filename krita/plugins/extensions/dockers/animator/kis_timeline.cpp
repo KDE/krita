@@ -29,6 +29,7 @@
 #include <QScrollArea>
 #include <QMenu>
 #include <QScrollBar>
+#include "kis_animation_frame.h"
 
 KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
 {
@@ -119,6 +120,10 @@ KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
     frameButtons->addWidget(addBlankFrameButton);
     frameButtons->addWidget(removeFrameButton);
 
+    connect(addFrameButton, SIGNAL(pressed()), this, SLOT(addframePressed()));
+    connect(addKeyFrameButton, SIGNAL(pressed()), this, SLOT(keyFramePressed()));
+    connect(addBlankFrameButton, SIGNAL(pressed()), this, SLOT(blankFramePressed()));
+
     QHBoxLayout* rightToolBarLayout = new QHBoxLayout();
     rightToolBarLayout->addWidget(frameButtons);
     rightToolBar->setLayout(rightToolBarLayout);
@@ -174,4 +179,22 @@ KisFrameBox* KisTimeline::getFrameBox(){
 void KisTimeline::updateHeight(){
     m_list->setFixedHeight(m_list->height()+20);
     m_cells->setFixedHeight(m_cells->height()+20);
+}
+
+void KisTimeline::blankFramePressed(){
+    if(m_cells->getSelectedFrame()){
+        this->m_cells->getSelectedFrame()->convertSelectionToFrame(KisAnimationFrame::BLANKFRAME);
+        this->m_cells->setSelectedFrame(0);
+    }
+}
+
+void KisTimeline::keyFramePressed(){
+    if(m_cells->getSelectedFrame()){
+        this->m_cells->getSelectedFrame()->convertSelectionToFrame(KisAnimationFrame::KEYFRAME);
+        this->m_cells->setSelectedFrame(0);
+    }
+}
+
+void KisTimeline::addframePressed(){
+
 }

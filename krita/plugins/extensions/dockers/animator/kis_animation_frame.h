@@ -30,6 +30,9 @@ public:
     void setWidth(int width);
     int getWidth();
     KisLayerContents* getParent();
+    void convertSelectionToFrame(int type);
+    int getType();
+    void setType(int type);
 
 protected:
     void paintEvent(QPaintEvent *event);

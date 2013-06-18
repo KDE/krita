@@ -61,3 +61,18 @@ void KisAnimationFrame::setWidth(int width){
 KisLayerContents* KisAnimationFrame::getParent(){
     return this->m_parent;
 }
+
+int KisAnimationFrame::getType(){
+    return this->m_type;
+}
+
+void KisAnimationFrame::setType(int type){
+    this->m_type = type;
+}
+
+void KisAnimationFrame::convertSelectionToFrame(int type){
+    if(this->getType() == KisAnimationFrame::SELECTION){
+        this->setType(type);
+        this->repaint();
+    }
+}

@@ -34,9 +34,6 @@ public:
     void setSelectedFrame(KisAnimationFrame* selectedFrame);
     KisAnimationFrame* getSelectedFrame();
 
-protected:
-    void paintEvent(QPaintEvent *event);
-
 public slots:
     void updateUI();
 

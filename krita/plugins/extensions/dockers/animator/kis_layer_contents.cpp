@@ -30,7 +30,8 @@ KisLayerContents::KisLayerContents(KisFrameBox *parent)
 }
 
 void KisLayerContents::paintEvent(QPaintEvent *event){
-    QPainter painter(this);
+
+   QPainter painter(this);
 
     for(int i = 0; i < 1000; i++){
         if(i%10 == 0){

@@ -39,7 +39,6 @@ public:
     QList<KisAnimationLayer*> getLayers();
 
 protected:
-    void paintEvent(QPaintEvent *event);
     void resizeEvent(QResizeEvent *event);
 
 private:

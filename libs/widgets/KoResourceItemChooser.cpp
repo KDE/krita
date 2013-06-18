@@ -380,6 +380,9 @@ void KoResourceItemChooser::showGetHotNewStuff( bool showDownload, bool showUplo
 
     button = d->buttonGroup->button(Button_GhnsUpload);
     showUpload ? button->show() : button->hide();
+#else
+    Q_UNUSED(showDownload);
+    Q_UNUSED(showUpload);
 #endif
 }
 
@@ -630,7 +633,7 @@ KoResourceItemView *KoResourceItemChooser::itemView() const
     return d->view;
 }
 
-void KoResourceItemChooser::tagSearchLineEditActivated(const QString& lineEditText)
+void KoResourceItemChooser::tagSearchLineEditActivated(const QString& /*lineEditText*/)
 {
     if (!d->currentTag.isEmpty()) {
     QList<KoResource*> newResources = d->model->currentlyVisibleResources();

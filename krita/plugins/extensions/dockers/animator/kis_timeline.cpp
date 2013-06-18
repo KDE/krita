@@ -79,6 +79,7 @@ KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
     leftScrollArea->setBackgroundRole(QPalette::Dark);
     leftScrollArea->setWidget(m_list);
     m_list->setFixedHeight(45);
+    m_list->setFixedWidth(2000);
     leftScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     leftScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     connect(m_addPaintLayerAction, SIGNAL(triggered()), this, SLOT(updateHeight()));
@@ -125,9 +126,8 @@ KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
     QScrollArea* rightScrollArea = new QScrollArea(this);
     rightScrollArea->setBackgroundRole(QPalette::Dark);
     rightScrollArea->setWidget(m_cells);
-    m_cells->setFixedWidth(1000);
+    m_cells->setFixedWidth(4000);       //Needs to be varied
     m_cells->setFixedHeight(45);
-    //rightScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     rightScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
     connect(rightScrollArea->verticalScrollBar(), SIGNAL(sliderMoved(int)), leftScrollArea->verticalScrollBar(), SLOT(setValue(int)));

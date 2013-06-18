@@ -30,6 +30,10 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+
+private:
+    KisFrameBox* m_parent;
 };
 
 #endif // KIS_LAYER_CONTENTS_H

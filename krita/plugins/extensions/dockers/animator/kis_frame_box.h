@@ -23,6 +23,7 @@
 #include <QList>
 #include "kis_animation_layer.h"
 class KisLayerContents;
+class KisAnimationFrame;
 
 class KisFrameBox : public QListWidget
 {
@@ -30,6 +31,9 @@ class KisFrameBox : public QListWidget
 public:
     KisFrameBox(KisTimeline* parent = 0);
     void onCanvasReady();
+    void setSelectedFrame(KisAnimationFrame* selectedFrame);
+    KisAnimationFrame* getSelectedFrame();
+
 protected:
     void paintEvent(QPaintEvent *event);
 
@@ -40,6 +44,8 @@ private:
     KisTimeline* m_dock;
     QList<KisAnimationLayer*> m_layers;
     QList<KisLayerContents*> m_layerContents;
+    KisAnimationFrame* m_selectedFrame;
+
 };
 
 #endif // KIS_FRAME_BOX_H

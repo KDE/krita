@@ -16,11 +16,48 @@
  */
 
 #include "kis_animation_frame.h"
+#include <QPainter>
 
-KisAnimationFrame::KisAnimationFrame(KisLayerContents *parent, int type)
+KisAnimationFrame::KisAnimationFrame(KisLayerContents *parent, int type, int width)
 {
+    this->m_type = type;
+    this->m_width = width;
+    this->setParent(parent);
+    this->m_parent = parent;
 }
 
 void KisAnimationFrame::paintEvent(QPaintEvent *event){
 
+    QPainter painter(this);
+
+    if(this->m_type == KisAnimationFrame::BLANKFRAME){
+        painter.setPen(Qt::green);
+        painter.drawRect(0,0, this->m_width-1, 19);
+        painter.drawEllipse(QPointF(5,10),3,3);
+    }
+
+    if(this->m_type == KisAnimationFrame::KEYFRAME){
+        painter.setPen(Qt::green);
+        painter.drawRect(0,0,this->m_width-1, 19);
+        painter.setBrush(Qt::green);
+        painter.drawEllipse(QPointF(5,10),3,3);
+    }
+
+    if(this->m_type == KisAnimationFrame::SELECTION){
+        painter.setPen(Qt::blue);
+        painter.setBrush(Qt::blue);
+        painter.drawRect(0,0,this->m_width-1, 19);
+    }
+}
+
+int KisAnimationFrame::getWidth(){
+    return m_width;
+}
+
+void KisAnimationFrame::setWidth(int width){
+    this->m_width = width;
+}
+
+KisLayerContents* KisAnimationFrame::getParent(){
+    return this->m_parent;
 }

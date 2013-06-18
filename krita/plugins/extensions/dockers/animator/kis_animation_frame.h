@@ -26,7 +26,10 @@ class KisAnimationFrame : public QWidget
     Q_OBJECT
 
 public:
-    KisAnimationFrame(KisLayerContents* parent = 0, int type = 0);
+    KisAnimationFrame(KisLayerContents* parent = 0, int type = 0, int width = 10);
+    void setWidth(int width);
+    int getWidth();
+    KisLayerContents* getParent();
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -35,6 +38,11 @@ public:
     static const int SELECTION = 0;
     static const int KEYFRAME = 1;
     static const int BLANKFRAME = 2;
+
+private:
+    int m_type;
+    int m_width;
+    KisLayerContents* m_parent;
 };
 
 #endif // KIS_ANIMATION_FRAME_H

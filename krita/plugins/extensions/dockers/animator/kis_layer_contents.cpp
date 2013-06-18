@@ -17,20 +17,22 @@
 
 #include "kis_layer_contents.h"
 #include <QPainter>
+#include "kis_animation_frame.h"
+#include <QMouseEvent>
 
 KisLayerContents::KisLayerContents(KisFrameBox *parent)
 {
     this->setFixedHeight(20);
-    this->setFixedWidth(2000);
+    this->setFixedWidth(10000);
+
+    this->m_parent = parent;
     this->setParent(parent);
 }
 
 void KisLayerContents::paintEvent(QPaintEvent *event){
     QPainter painter(this);
 
-    painter.setPen(Qt::lightGray);
-
-    for(int i = 0; i < 200; i++){
+    for(int i = 0; i < 1000; i++){
         if(i%10 == 0){
             painter.setPen(Qt::red);
             painter.drawRect(QRectF(10*i,0,9,height()-1));
@@ -41,4 +43,21 @@ void KisLayerContents::paintEvent(QPaintEvent *event){
         }
 
     }
+}
+
+void KisLayerContents::mousePressEvent(QMouseEvent *event){
+    int x = event->x();
+    x = x - (x%10);
+    KisAnimationFrame* selectedFrame = new KisAnimationFrame(this, KisAnimationFrame::SELECTION, 10);
+    selectedFrame->setGeometry(x, 0, 10, 20);
+
+    KisAnimationFrame* previousSelection = this->m_parent->getSelectedFrame();
+
+    if(previousSelection){
+        previousSelection->hide();
+        delete(previousSelection);
+    }
+
+    this->m_parent->setSelectedFrame(selectedFrame);
+    selectedFrame->show();
 }

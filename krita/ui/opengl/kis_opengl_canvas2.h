@@ -1,4 +1,4 @@
-/*
+    /*
  * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2006
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -65,6 +65,8 @@ public: // QWidget
     /// reimplemented method from superclass
     virtual void inputMethodEvent(QInputMethodEvent *event);
 
+    void renderCanvasGL();
+    void renderDecorations(QPainter *painter);
 
 private slots:
     void slotConfigChanged();

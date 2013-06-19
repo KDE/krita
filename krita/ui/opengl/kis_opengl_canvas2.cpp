@@ -81,12 +81,16 @@ public:
         : displayShader(0)
         , checkerShader(0)
         , displayFilter(0)
+        , checkerVertexBuffer(0)
+        , tileVertexBuffer(0)
     {
     }
 
     ~Private() {
         delete displayShader;
         delete checkerShader;
+        delete checkerVertexBuffer;
+        delete tileVertexBuffer;
     }
 
     KisOpenGLImageTexturesSP openGLImageTextures;
@@ -95,6 +99,9 @@ public:
     QGLShaderProgram *checkerShader;
 
     KisDisplayFilter *displayFilter;
+
+    QGLBuffer *checkerVertexBuffer;
+    QGLBuffer *tileVertexBuffer;
 };
 
 KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget *parent, KisOpenGLImageTexturesSP imageTextures)
@@ -172,22 +179,11 @@ void KisOpenGLCanvas2::resizeGL(int width, int height)
     coordinatesConverter()->setCanvasWidgetSize(QSize(width, height));
 }
 
-void KisOpenGLCanvas2::paintGL()//Event(QPaintEvent *event)
+void KisOpenGLCanvas2::paintGL()
 {
     makeCurrent();
-
-    // Draw the border (that is, clear the whole widget to the border color)
-    QColor widgetBackgroundColor = borderColor();
-    glClearColor(widgetBackgroundColor.redF(), widgetBackgroundColor.greenF(), widgetBackgroundColor.blueF(), 1.0);
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    drawCheckers();
-    drawImage();
-
-    QRect boundingRect = coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect();
-    QPainter gc(this);
-    drawDecorations(gc, boundingRect);
-    gc.end();
+    renderCanvasGL();
+    renderDecorations();
 }
 
 void KisOpenGLCanvas2::drawCheckers()
@@ -402,6 +398,25 @@ QVariant KisOpenGLCanvas2::inputMethodQuery(Qt::InputMethodQuery query) const
 void KisOpenGLCanvas2::inputMethodEvent(QInputMethodEvent *event)
 {
     processInputMethodEvent(event);
+}
+
+void KisOpenGLCanvas2::renderCanvasGL()
+{
+    // Draw the border (that is, clear the whole widget to the border color)
+    QColor widgetBackgroundColor = borderColor();
+    glClearColor(widgetBackgroundColor.redF(), widgetBackgroundColor.greenF(), widgetBackgroundColor.blueF(), 1.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    drawCheckers();
+    drawImage();
+}
+
+void KisOpenGLCanvas2::renderDecorations()
+{
+    QPainter gc(this);
+    QRect boundingRect = coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect();
+    drawDecorations(gc, boundingRect);
+    gc.end();
 }
 
 bool KisOpenGLCanvas2::callFocusNextPrevChild(bool next)

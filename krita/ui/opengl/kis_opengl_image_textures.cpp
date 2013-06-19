@@ -312,7 +312,7 @@ void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProf
 void KisOpenGLImageTextures::getTextureSize(KisGLTexturesInfo *texturesInfo)
 {
     // TODO: make configurable
-    const GLint preferredTextureSize = 256;
+    const GLint preferredTextureSize = 1024;
 
     GLint maxTextureSize;
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
@@ -331,60 +331,59 @@ void KisOpenGLImageTextures::updateTextureFormat()
     m_texturesInfo.format = GL_RGBA8;
     m_texturesInfo.type = GL_UNSIGNED_BYTE;
 
-
 #ifdef HAVE_GLEW
 
-KoID colorModelId = m_image->colorSpace()->colorModelId();
-KoID colorDepthId = m_image->colorSpace()->colorDepthId();
+    KoID colorModelId = m_image->colorSpace()->colorModelId();
+    KoID colorDepthId = m_image->colorSpace()->colorDepthId();
 
-dbgUI << "Choosing texture format:";
+    dbgUI << "Choosing texture format:";
 
-if (colorModelId == RGBAColorModelID) {
-    if (colorDepthId == Float16BitsColorDepthID) {
+    if (colorModelId == RGBAColorModelID) {
+        if (colorDepthId == Float16BitsColorDepthID) {
 
-        if (GLEW_ARB_texture_float) {
-            m_texturesInfo.format = GL_RGBA16F_ARB;
-            dbgUI << "Using ARB half";
+            if (GLEW_ARB_texture_float) {
+                m_texturesInfo.format = GL_RGBA16F_ARB;
+                dbgUI << "Using ARB half";
+            }
+            else if (GLEW_ATI_texture_float){
+                m_texturesInfo.format = GL_RGBA_FLOAT16_ATI;
+                dbgUI << "Using ATI half";
+            }
+            else if (GLEW_ARB_half_float_pixel) {
+                dbgUI << "Pixel type half";
+                m_texturesInfo.type = GL_HALF_FLOAT_ARB;
+            } else {
+                dbgUI << "Pixel type float";
+                m_texturesInfo.type = GL_FLOAT;
+            }
         }
-        else if (GLEW_ATI_texture_float){
-            m_texturesInfo.format = GL_RGBA_FLOAT16_ATI;
-            dbgUI << "Using ATI half";
+        else if (colorDepthId == Float32BitsColorDepthID) {
+
+            if (GLEW_ARB_texture_float) {
+                m_texturesInfo.format = GL_RGBA32F_ARB;
+                dbgUI << "Using ARB float";
+                m_texturesInfo.type = GL_FLOAT;
+            }
+            else if (GLEW_ATI_texture_float) {
+                m_texturesInfo.format = GL_RGBA_FLOAT32_ATI;
+                dbgUI << "Using ATI float";
+                m_texturesInfo.type = GL_FLOAT;
+            }
         }
-        else if (GLEW_ARB_half_float_pixel) {
-            dbgUI << "Pixel type half";
-            m_texturesInfo.type = GL_HALF_FLOAT_ARB;
-        } else {
-            dbgUI << "Pixel type float";
-            m_texturesInfo.type = GL_FLOAT;
+        else if (colorDepthId == Integer16BitsColorDepthID) {
+            dbgUI << "Using 16 bits rgba";
+            m_texturesInfo.format = GL_RGBA16;
+            m_texturesInfo.type = GL_UNSIGNED_SHORT;
         }
     }
-    else if (colorDepthId == Float32BitsColorDepthID) {
-
-        if (GLEW_ARB_texture_float) {
-            m_texturesInfo.format = GL_RGBA32F_ARB;
-            dbgUI << "Using ARB float";
-            m_texturesInfo.type = GL_FLOAT;
-        }
-        else if (GLEW_ATI_texture_float) {
-            m_texturesInfo.format = GL_RGBA_FLOAT32_ATI;
-            dbgUI << "Using ATI float";
-            m_texturesInfo.type = GL_FLOAT;
+    else {
+        // We will convert the colorspace to 16 bits rgba, instead of 8 bits
+        if (colorDepthId == Integer16BitsColorDepthID) {
+            dbgUI << "Using conversion to 16 bits rgba";
+            m_texturesInfo.format = GL_RGBA16;
+            m_texturesInfo.type = GL_UNSIGNED_SHORT;
         }
     }
-    else if (colorDepthId == Integer16BitsColorDepthID) {
-        dbgUI << "Using 16 bits rgba";
-        m_texturesInfo.format = GL_RGBA16;
-        m_texturesInfo.type = GL_UNSIGNED_SHORT;
-    }
-}
-else {
-    // We will convert the colorspace to 16 bits rgba, instead of 8 bits
-    if (colorDepthId == Integer16BitsColorDepthID) {
-        dbgUI << "Using conversion to 16 bits rgba";
-        m_texturesInfo.format = GL_RGBA16;
-        m_texturesInfo.type = GL_UNSIGNED_SHORT;
-    }
-}
 #endif
 }
 

@@ -98,6 +98,7 @@ void KisOpenGL::createContext()
     format.setDoubleBuffer(false);
 
     SharedContextWidget = new QGLWidget(format);
+    SharedContextWidget->setObjectName("Krita OpenGL Shared Context Widget");
     SharedContextWidget->makeCurrent();
 
 #ifdef HAVE_GLEW

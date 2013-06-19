@@ -47,6 +47,7 @@ struct KisGLTexturesInfo {
     // size of the border padding
     int border;
 
+    GLint internalFormat;
     GLint format;
     GLint type;
 };

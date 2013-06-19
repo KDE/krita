@@ -117,10 +117,11 @@ KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texture
 #endif
 
     glTexImage2D(GL_TEXTURE_2D, 0,
-                 m_texturesInfo->format,
+                 m_texturesInfo->internalFormat,
                  m_texturesInfo->width,
                  m_texturesInfo->height, 0,
-                 GL_BGRA, m_texturesInfo->type, fd);
+                 m_texturesInfo->format,
+                 m_texturesInfo->type, fd);
 
 #ifdef USE_PIXEL_BUFFERS
     m_glBuffer->release();
@@ -165,10 +166,11 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
 #endif
 
         glTexImage2D(GL_TEXTURE_2D, 0,
-                     m_texturesInfo->format,
+                     m_texturesInfo->internalFormat,
                      m_texturesInfo->width,
                      m_texturesInfo->height, 0,
-                     GL_BGRA, m_texturesInfo->type,
+                     m_texturesInfo->format,
+                     m_texturesInfo->type,
                      fd);
 
 #ifdef USE_PIXEL_BUFFERS
@@ -198,7 +200,8 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         glTexSubImage2D(GL_TEXTURE_2D, 0,
                         patchOffset.x(), patchOffset.y(),
                         patchSize.width(), patchSize.height(),
-                        GL_BGRA, m_texturesInfo->type,
+                        m_texturesInfo->format,
+                        m_texturesInfo->type,
                         fd);
 
 #ifdef USE_PIXEL_BUFFERS
@@ -229,7 +232,8 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         glTexSubImage2D(GL_TEXTURE_2D, 0,
                         patchOffset.x(), patchOffset.y() - 1,
                         patchSize.width(), 1,
-                        GL_BGRA, m_texturesInfo->type,
+                        m_texturesInfo->format,
+                        m_texturesInfo->type,
                         updateInfo.data());
     }
 
@@ -240,7 +244,8 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         glTexSubImage2D(GL_TEXTURE_2D, 0,
                         patchOffset.x(), patchOffset.y() + patchSize.height(),
                         patchSize.width(), 1,
-                        GL_BGRA, m_texturesInfo->type,
+                        m_texturesInfo->format,
+                        m_texturesInfo->type,
                         updateInfo.data() + shift);
 
     }
@@ -261,7 +266,8 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         glTexSubImage2D(GL_TEXTURE_2D, 0,
                         patchOffset.x() - 1, patchOffset.y(),
                         1, patchSize.height(),
-                        GL_BGRA, m_texturesInfo->type,
+                        m_texturesInfo->format,
+                        m_texturesInfo->type,
                         columnBuffer.constData());
 
     }
@@ -282,7 +288,8 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         glTexSubImage2D(GL_TEXTURE_2D, 0,
                         patchOffset.x() + patchSize.width(), patchOffset.y(),
                         1, patchSize.height(),
-                        GL_BGRA, m_texturesInfo->type,
+                        m_texturesInfo->format,
+                        m_texturesInfo->type,
                         columnBuffer.constData());
     }
 

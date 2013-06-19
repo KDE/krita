@@ -20,6 +20,9 @@
 
 #include <QWidget>
 #include <kis_frame_box.h>
+#include <QHash>
+
+class KisAnimationFrame;
 
 class KisLayerContents : public QWidget
 {
@@ -27,13 +30,25 @@ class KisLayerContents : public QWidget
 
 public:
     KisLayerContents(KisFrameBox* parent = 0);
+    void mapFrame(int frameNumber, KisAnimationFrame* frame);
+    int getLastFrameIndex();
+    int getPreviousFrameIndexFrom(int index);
+    int getNextFrameIndexFrom(int index);
+    int getIndex(KisAnimationFrame* frame);
+    KisAnimationFrame* getNextFrameFrom(KisAnimationFrame* frame);
+    KisAnimationFrame* getPreviousFrameFrom(KisAnimationFrame* frame);
+    int getContentLength();
 
 protected:
     void paintEvent(QPaintEvent *event);
     void mousePressEvent(QMouseEvent *event);
 
 private:
+    void initialize();
+
+private:
     KisFrameBox* m_parent;
+    QHash<int, KisAnimationFrame*> m_frames;
 };
 
 #endif // KIS_LAYER_CONTENTS_H

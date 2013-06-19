@@ -57,3 +57,7 @@ void KisFrameBox::setSelectedFrame(KisAnimationFrame *selectedFrame){
 KisAnimationFrame* KisFrameBox::getSelectedFrame(){
     return m_selectedFrame;
 }
+
+KisLayerContents* KisFrameBox::getFirstLayer(){
+    return m_layerContents.at(0);
+}

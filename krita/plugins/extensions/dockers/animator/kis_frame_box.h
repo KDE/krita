@@ -33,6 +33,7 @@ public:
     void onCanvasReady();
     void setSelectedFrame(KisAnimationFrame* selectedFrame);
     KisAnimationFrame* getSelectedFrame();
+    KisLayerContents* getFirstLayer();
 
 public slots:
     void updateUI();

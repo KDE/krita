@@ -19,6 +19,7 @@
 #include <QPainter>
 #include "kis_animation_frame.h"
 #include <QMouseEvent>
+#include <kis_debug.h>
 
 KisLayerContents::KisLayerContents(KisFrameBox *parent)
 {
@@ -27,6 +28,25 @@ KisLayerContents::KisLayerContents(KisFrameBox *parent)
 
     this->m_parent = parent;
     this->setParent(parent);
+
+    this->initialize();
+}
+
+
+void KisLayerContents::initialize(){
+
+    int length;
+
+    if(this->m_parent->getFirstLayer()){
+        length = this->m_parent->getFirstLayer()->getContentLength()+1;
+    }
+    else{
+        length = 1;
+    }
+
+    KisAnimationFrame* firstFrame = new KisAnimationFrame(this, KisAnimationFrame::BLANKFRAME, length*10);
+    firstFrame->setGeometry(0,0,length*10,20);
+    this->m_frames[0] = firstFrame;
 }
 
 void KisLayerContents::paintEvent(QPaintEvent *event){
@@ -61,4 +81,65 @@ void KisLayerContents::mousePressEvent(QMouseEvent *event){
 
     this->m_parent->setSelectedFrame(selectedFrame);
     selectedFrame->show();
+}
+
+void KisLayerContents::mapFrame(int frameNumber, KisAnimationFrame *frame){
+    if(this->m_frames.contains(frameNumber)){
+        this->m_frames.remove(frameNumber);
+    }
+
+    this->m_frames[frameNumber] = frame;
+}
+
+int KisLayerContents::getLastFrameIndex(){
+    QList<int> keys = m_frames.keys();
+    int maximum = keys.at(0);
+    for(int i = 1; i < keys.length(); i++){
+        if(maximum < keys.at(i)){
+            maximum = keys.at(i);
+        }
+    }
+    return maximum;
+}
+
+int KisLayerContents::getPreviousFrameIndexFrom(int index){
+    QList<int> keys = m_frames.keys();
+    int previous = 0;
+    for(int i = 0; i < keys.length(); i++){
+        if(keys.at(i) < index){
+            if(keys.at(i) > previous){
+                previous = keys.at(i);
+            }
+        }
+    }
+    return previous;
+}
+
+int KisLayerContents::getNextFrameIndexFrom(int index){
+    QList<int> keys = m_frames.keys();
+    int next = this->getLastFrameIndex();
+    for(int i = 0; i < keys.length(); i++){
+        if(keys.at(i) > index){
+            if(keys.at(i) < next){
+                next = keys.at(i);
+            }
+        }
+    }
+    return next;
+}
+
+int KisLayerContents::getContentLength(){
+    return this->getLastFrameIndex();
+}
+
+int KisLayerContents::getIndex(KisAnimationFrame *frame){
+    return this->m_frames.key(frame);
+}
+
+KisAnimationFrame* KisLayerContents::getNextFrameFrom(KisAnimationFrame *frame){
+    return this->m_frames.value(this->getNextFrameIndexFrom(this->getIndex(frame)));
+}
+
+KisAnimationFrame* KisLayerContents::getPreviousFrameFrom(KisAnimationFrame *frame){
+    return this->m_frames.value(this->getPreviousFrameIndexFrom(this->getIndex(frame)));
 }

@@ -197,11 +197,13 @@ void KisScratchPad::beginStroke(KoPointerEvent *event)
 {
     KoCanvasResourceManager *resourceManager = m_resourceProvider->resourceManager();
 
-    m_helper->initPaint(event, resourceManager,
+    m_helper->initPaint(event,
+                        resourceManager,
                         0,
                         m_updateScheduler,
                         m_undoAdapter,
-                        m_paintLayer);
+                        m_paintLayer,
+                        m_paintLayer->paintDevice()->defaultBounds());
 }
 
 void KisScratchPad::doStroke(KoPointerEvent *event)
@@ -344,7 +346,6 @@ void KisScratchPad::setupScratchPad(KisCanvasResourceProvider* resourceProvider,
     m_paintLayer = new KisPaintLayer(0, "ScratchPad", OPACITY_OPAQUE_U8, paintDevice);
     m_paintLayer->setGraphListener(m_nodeListener);
     m_paintLayer->paintDevice()->setDefaultBounds(new KisScratchPadDefaultBounds(this));
-    paintDevice->setDefaultBounds(new KisScratchPadDefaultBounds(this));
 
     fillDefault();
 }

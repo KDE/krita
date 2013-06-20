@@ -93,7 +93,8 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
                                       KisImageWSP image,
                                       KisStrokesFacade *strokesFacade,
                                       KisPostExecutionUndoAdapter *undoAdapter,
-                                      KisNodeSP overrideNode)
+                                      KisNodeSP overrideNode,
+                                      KisDefaultBoundsBaseSP bounds)
 {
     Q_UNUSED(overrideNode);
 
@@ -109,7 +110,8 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
     createPainters(m_d->painterInfos);
     m_d->resources = new KisResourcesSnapshot(image,
                                               undoAdapter,
-                                              resourceManager);
+                                              resourceManager,
+                                              bounds);
 
     if(overrideNode) {
         m_d->resources->setCurrentNode(overrideNode);

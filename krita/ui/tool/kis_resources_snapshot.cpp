@@ -38,7 +38,7 @@ struct KisResourcesSnapshot::Private {
     }
 
     KisImageWSP image;
-    KisDefaultBoundsSP bounds;
+    KisDefaultBoundsBaseSP bounds;
     KisPostExecutionUndoAdapter *undoAdapter;
     KoColor currentFgColor;
     KoColor currentBgColor;
@@ -61,11 +61,14 @@ struct KisResourcesSnapshot::Private {
     KisPainter::FillStyle fillStyle;
 };
 
-KisResourcesSnapshot::KisResourcesSnapshot(KisImageWSP image, KisPostExecutionUndoAdapter *undoAdapter, KoCanvasResourceManager *resourceManager)
+KisResourcesSnapshot::KisResourcesSnapshot(KisImageWSP image, KisPostExecutionUndoAdapter *undoAdapter, KoCanvasResourceManager *resourceManager, KisDefaultBoundsBaseSP bounds)
     : m_d(new Private())
 {
     m_d->image = image;
-    m_d->bounds = new KisDefaultBounds(image);
+    if (!bounds) {
+        bounds = new KisDefaultBounds(m_d->image);
+    }
+    m_d->bounds = bounds;
     m_d->undoAdapter = undoAdapter;
     m_d->currentFgColor = resourceManager->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
     m_d->currentBgColor = resourceManager->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>();

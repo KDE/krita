@@ -38,11 +38,16 @@
 #include "kis_config.h"
 
 class ThumbnailBounds : public KisDefaultBounds {
+public:
+    ThumbnailBounds() : KisDefaultBounds() {}
+    virtual ~ThumbnailBounds() {}
 
     QRect bounds() const
     {
         return QRect(0, 0, 100, 100);
     }
+private:
+    Q_DISABLE_COPY(ThumbnailBounds)
 };
 
 

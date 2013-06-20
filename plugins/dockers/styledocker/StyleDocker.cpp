@@ -110,8 +110,8 @@ void StyleDocker::setCanvas(KoCanvasBase *canvas)
             this, SLOT(selectionChanged()));
     connect(m_canvas->shapeManager(), SIGNAL(selectionContentChanged()),
             this, SLOT(selectionContentChanged()));
-    connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
-            this, SLOT(resourceChanged(int, const QVariant&)));
+    connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
+            this, SLOT(canvasResourceChanged(int, const QVariant&)));
 
     // Select what to work on. If a selection is made, work on that.
     // Otherwise work on the current page (if in a KoPageApp).
@@ -145,7 +145,7 @@ void StyleDocker::selectionContentChanged()
     updateWidget();
 }
 
-void StyleDocker::resourceChanged(int key, const QVariant&)
+void StyleDocker::canvasResourceChanged(int key, const QVariant&)
 {
     switch (key) {
         case KoCanvasResourceManager::ForegroundColor:

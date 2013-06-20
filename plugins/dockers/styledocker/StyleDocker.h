@@ -59,7 +59,7 @@ private slots:
     // Slots connected to the canvas
     void selectionChanged();
     void selectionContentChanged();
-    void resourceChanged(int key, const QVariant&);
+    void canvasResourceChanged(int key, const QVariant&);
 
     // Slots connected from the widget.
     void aspectSelected(int aspect);

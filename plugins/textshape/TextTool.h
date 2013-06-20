@@ -159,7 +159,7 @@ public slots:
     /// start the textedit-plugin.
     void startTextEditingPlugin(const QString &pluginId);
     /// reimplemented from KoToolBase
-    virtual void resourceChanged(int key, const QVariant &res);
+    virtual void canvasResourceChanged(int key, const QVariant &res);
 
 signals:
     /// emitted every time a different styleManager is set.

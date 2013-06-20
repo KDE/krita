@@ -96,7 +96,7 @@ public:
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
-    virtual void resourceChanged(int key, const QVariant & res);
+    virtual void canvasResourceChanged(int key, const QVariant & res);
 
 protected:
     virtual void mousePressEvent(KoPointerEvent *event);

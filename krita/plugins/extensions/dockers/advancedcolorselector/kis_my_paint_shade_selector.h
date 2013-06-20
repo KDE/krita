@@ -41,7 +41,7 @@ public slots:
     void setColor(const QColor& c);
 
 protected slots:
-    void resourceChanged(int key, const QVariant& v);
+    void canvasResourceChanged(int key, const QVariant& v);
 
 protected:
     void paintEvent(QPaintEvent *);

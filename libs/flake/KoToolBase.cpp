@@ -58,7 +58,7 @@ void KoToolBase::updateShapeController(KoShapeBasedDocumentBase *shapeController
     if (shapeController) {
         KoDocumentResourceManager *scrm = shapeController->resourceManager();
         if (scrm) {
-            connect(scrm, SIGNAL(resourceChanged(int, const QVariant &)),
+            connect(scrm, SIGNAL(canvasResourceChanged(int, const QVariant &)),
                     this, SLOT(documentResourceChanged(int, const QVariant &)));
         }
     }
@@ -68,7 +68,7 @@ void KoToolBase::deactivate()
 {
 }
 
-void KoToolBase::resourceChanged(int key, const QVariant & res)
+void KoToolBase::canvasResourceChanged(int key, const QVariant & res)
 {
     Q_UNUSED(key);
     Q_UNUSED(res);

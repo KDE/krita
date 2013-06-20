@@ -76,8 +76,8 @@ void ShapePropertiesDocker::setCanvas( KoCanvasBase *canvas )
             this, SLOT( selectionChanged() ) );
         connect( d->canvas->shapeManager(), SIGNAL( selectionContentChanged() ),
             this, SLOT( selectionChanged() ) );
-        connect( d->canvas->resourceManager(), SIGNAL( resourceChanged( int, const QVariant& ) ),
-            this, SLOT( resourceChanged( int, const QVariant& ) ) );
+        connect( d->canvas->resourceManager(), SIGNAL( canvasResourceChanged( int, const QVariant& ) ),
+            this, SLOT( canvasResourceChanged( int, const QVariant& ) ) );
     }
 }
 
@@ -167,7 +167,7 @@ void ShapePropertiesDocker::shapePropertyChanged()
     }
 }
 
-void ShapePropertiesDocker::resourceChanged(int key, const QVariant &variant)
+void ShapePropertiesDocker::canvasResourceChanged(int key, const QVariant &variant)
 {
     if (key == KoCanvasResourceManager::Unit && d->currentPanel)
         d->currentPanel->setUnit(variant.value<KoUnit>());

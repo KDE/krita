@@ -74,7 +74,7 @@ DefaultToolWidget::DefaultToolWidget( KoInteractionTool* tool,
     connect( manager, SIGNAL( selectionContentChanged() ), this, SLOT( updatePosition() ) );
     connect( manager, SIGNAL( selectionContentChanged() ), this, SLOT( updateSize() ) );
 
-    connect( m_tool->canvas()->resourceManager(), SIGNAL( resourceChanged( int, const QVariant& ) ),
+    connect( m_tool->canvas()->resourceManager(), SIGNAL( canvasResourceChanged( int, const QVariant& ) ),
         this, SLOT( resourceChanged( int, const QVariant& ) ) );
 
     connect (aspectButton, SIGNAL(keepAspectRatioChanged(bool)),

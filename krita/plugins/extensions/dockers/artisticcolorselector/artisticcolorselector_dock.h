@@ -39,7 +39,7 @@ public:
     virtual void unsetCanvas() { m_canvas = 0; }
     
 private slots:
-    void slotResourceChanged(int key, const QVariant& value);
+    void slotCanvasResourceChanged(int key, const QVariant& value);
     void slotFgColorChanged(const KisColor& color);
     void slotBgColorChanged(const KisColor& color);
     void slotColorSpaceSelected(int type);

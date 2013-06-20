@@ -2514,7 +2514,7 @@ void TextTool::startTextEditingPlugin(const QString &pluginId)
     }
 }
 
-void TextTool::resourceChanged(int key, const QVariant &var)
+void TextTool::canvasResourceChanged(int key, const QVariant &var)
 {
     if (m_textEditor.isNull())
         return;

@@ -38,7 +38,7 @@ public slots:
     void mouseReleaseEvent(QMouseEvent *);
 
 protected slots:
-    void resourceChanged(int key, const QVariant& v);
+    void canvasResourceChanged(int key, const QVariant& v);
 
 protected:
     void paintEvent(QPaintEvent *);

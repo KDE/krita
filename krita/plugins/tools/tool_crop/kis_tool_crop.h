@@ -74,7 +74,7 @@ public:
     virtual void mouseReleaseEvent(KoPointerEvent *e);
     virtual void mouseDoubleClickEvent(KoPointerEvent *e);
     virtual void keyReleaseEvent(QKeyEvent* event);
-    virtual void resourceChanged(int key, const QVariant &res);
+    virtual void canvasResourceChanged(int key, const QVariant &res);
 
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
 

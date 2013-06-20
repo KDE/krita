@@ -69,7 +69,7 @@ private slots:
     /// end marker has changed
     void endMarkerChanged();
 
-    void resourceChanged(int key, const QVariant &value);
+    void canvasResourceChanged(int key, const QVariant &value);
 
     /// selection has changed
     void selectionChanged();

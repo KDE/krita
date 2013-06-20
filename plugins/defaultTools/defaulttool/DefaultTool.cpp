@@ -1149,7 +1149,7 @@ QList<QWidget *> DefaultTool::createOptionWidgets()
     return widgets;
 }
 
-void DefaultTool::resourceChanged(int key, const QVariant & res)
+void DefaultTool::canvasResourceChanged(int key, const QVariant & res)
 {
     if (key == HotPosition) {
         m_hotPosition = static_cast<KoFlake::Position>(res.toInt());

@@ -461,8 +461,8 @@ void KoStrokeConfigWidget::setCanvas( KoCanvasBase *canvas )
     if (canvas) {
         connect(canvas->shapeManager()->selection(), SIGNAL(selectionChanged()),
                 this, SLOT(selectionChanged()));
-        connect(canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
-                this, SLOT(resourceChanged(int, const QVariant &)));
+        connect(canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
+                this, SLOT(canvasResourceChanged(int, const QVariant &)));
         setUnit(canvas->unit());
     }
 
@@ -476,7 +476,7 @@ void KoStrokeConfigWidget::setCanvas( KoCanvasBase *canvas )
     }
 }
 
-void KoStrokeConfigWidget::resourceChanged(int key, const QVariant &value)
+void KoStrokeConfigWidget::canvasResourceChanged(int key, const QVariant &value)
 {
     switch (key) {
     case KoCanvasResourceManager::Unit:

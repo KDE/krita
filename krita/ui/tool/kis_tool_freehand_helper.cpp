@@ -134,6 +134,7 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
     m_d->history.append(m_d->previousPaintInformation);
     m_d->velocityHistory.clear();
     m_d->velocityHistory.append(std::numeric_limits<qreal>::signaling_NaN());
+
     if(m_d->resources->needsAirbrushing()) {
         m_d->airbrushingTimer.setInterval(m_d->resources->airbrushingRate());
         m_d->airbrushingTimer.start();

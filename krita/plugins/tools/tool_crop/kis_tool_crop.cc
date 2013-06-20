@@ -145,9 +145,9 @@ void KisToolCrop::deactivate()
     KisTool::deactivate();
 }
 
-void KisToolCrop::resourceChanged(int key, const QVariant &res)
+void KisToolCrop::canvasResourceChanged(int key, const QVariant &res)
 {
-    KisTool::resourceChanged(key, res);
+    KisTool::canvasResourceChanged(key, res);
 
     if(m_optWidget==0 || m_optWidget->cmbType==0) return;
     //pixel layer

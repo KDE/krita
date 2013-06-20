@@ -372,7 +372,7 @@ GuidesTool::GuideLine GuidesTool::guideLineAtPosition(const QPointF &position)
     return QPair<Qt::Orientation,int>(orientation, index);
 }
 
-void GuidesTool::resourceChanged(int key, const QVariant &res)
+void GuidesTool::canvasResourceChanged(int key, const QVariant &res)
 {
     if (key == KoCanvasResourceManager::Unit) {
         if (m_options)

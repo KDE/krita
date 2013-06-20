@@ -105,8 +105,8 @@ void DigitalMixerDock::setCanvas(KoCanvasBase * canvas)
     }
 
     m_canvas = canvas;
-    connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
-            this, SLOT(resourceChanged(int, const QVariant&)));
+    connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
+            this, SLOT(canvasResourceChanged(int, const QVariant&)));
 
     m_tellCanvas=false;
     setCurrentColor(m_canvas->resourceManager()->foregroundColor());
@@ -146,7 +146,7 @@ void DigitalMixerDock::setCurrentColor(const KoColor& color)
     }
 }
 
-void DigitalMixerDock::resourceChanged(int key, const QVariant& v)
+void DigitalMixerDock::canvasResourceChanged(int key, const QVariant& v)
 {
     m_tellCanvas = false;
     if (key == KoCanvasResourceManager::ForegroundColor)

@@ -364,7 +364,7 @@ public slots:
      * provider associated with the canvas this tool belongs to
      * changes. An example is currently selected foreground color.
      */
-    virtual void resourceChanged(int key, const QVariant &res);
+    virtual void canvasResourceChanged(int key, const QVariant &res);
 
     /**
      * This method is called whenever a property in the resource

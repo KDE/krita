@@ -47,14 +47,13 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
         : KisLayer(image, name, opacity)
         , m_d(new Private())
 {
-
     Q_ASSERT(dev);
     m_d->paintDevice = dev;
     m_d->paintDevice->setParentNode(this);
 
     // fixme: overwriting the default bounds is unexpected behaviour.
-    // maybe something like if(dynamic_cast<KisDefaultBounds*>(dev.defaultBounds())) {..} is better.
-    m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(image));
+    // maybe something like  {..} is better.
+    //m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(image));
 }
 
 

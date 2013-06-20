@@ -136,7 +136,6 @@ public:
     /**
      * Remove the resource with @p key from the provider.
      * @param key the key that will be used to remove the resource
-     * There will be a signal emitted with a variable that will return true on QVariable::isNull();
      * @see KoCanvasResourceManager::CanvasResource KoDocumentResourceManager::DocumentResource
      */
     void clearResource(int key);

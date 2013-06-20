@@ -67,6 +67,10 @@ KisFilterDialog::KisFilterDialog(KisView2 *view, KisNodeSP node, KisFilterManage
     d->uiFilterDialog.pushButtonCreateMaskEffect->show();
     connect(d->uiFilterDialog.pushButtonCreateMaskEffect, SIGNAL(pressed()), SLOT(createMask()));
 
+    if (node->inherits("KisMask")) {
+        d->uiFilterDialog.pushButtonCreateMaskEffect->setVisible(false);
+    }
+
     d->uiFilterDialog.filterSelection->setPaintDevice(d->node->original());
     d->uiFilterDialog.pushButtonOk->setGuiItem(KStandardGuiItem::ok());
     d->uiFilterDialog.pushButtonCancel->setGuiItem(KStandardGuiItem::cancel());
@@ -141,6 +145,8 @@ void KisFilterDialog::close()
 
 void KisFilterDialog::createMask()
 {
+    if (d->node->inherits("KisMask")) return;
+
     if (d->filterManager->isStrokeRunning()) {
         d->filterManager->cancel();
     }

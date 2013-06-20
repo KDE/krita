@@ -22,6 +22,9 @@
 
 #include <kis_debug.h>
 
+// to prevent incomplete class types on "delete selection->flatten();"
+#include <kundo2command.h>
+
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoCompositeOp.h>

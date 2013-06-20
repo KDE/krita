@@ -212,7 +212,7 @@ void KisTool::requestStrokeEnd()
 {
 }
 
-void KisTool::resourceChanged(int key, const QVariant & v)
+void KisTool::canvasResourceChanged(int key, const QVariant & v)
 {
 
     switch (key) {

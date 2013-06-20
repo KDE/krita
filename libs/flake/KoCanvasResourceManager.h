@@ -249,7 +249,7 @@ signals:
      * @param value the variants new value.
      * @see KoCanvasResourceManager::CanvasResource
      */
-    void resourceChanged(int key, const QVariant &value);
+    void canvasResourceChanged(int key, const QVariant &value);
 
 private:
     KoCanvasResourceManager(const KoCanvasResourceManager&);

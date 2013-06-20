@@ -52,6 +52,52 @@
 #include <kis_floating_message.h>
 #include <kis_group_layer.h>
 
+struct DecorationLine
+{
+    QPointF start;
+    QPointF end;
+    enum Relation
+    {
+        Width,
+        Height,
+        Smallest,
+        Largest
+    };
+    Relation startXRelation;
+    Relation startYRelation;
+    Relation endXRelation;
+    Relation endYRelation;
+};
+
+DecorationLine decors[18] =
+{
+    //thirds
+    {QPointF(0.0, 0.3333),QPointF(1.0, 0.3333), DecorationLine::Width, DecorationLine::Height, DecorationLine::Width, DecorationLine::Height},
+    {QPointF(0.0, 0.6666),QPointF(1.0, 0.6666), DecorationLine::Width, DecorationLine::Height, DecorationLine::Width, DecorationLine::Height},
+    {QPointF(0.3333, 0.0),QPointF(0.3333, 1.0), DecorationLine::Width, DecorationLine::Height, DecorationLine::Width, DecorationLine::Height},
+    {QPointF(0.6666, 0.0),QPointF(0.6666, 1.0), DecorationLine::Width, DecorationLine::Height, DecorationLine::Width, DecorationLine::Height},
+
+    //fifths
+    {QPointF(0.0, 0.2),QPointF(1.0, 0.2), DecorationLine::Width, DecorationLine::Height, DecorationLine::Width, DecorationLine::Height},
+    {QPointF(0.0, 0.4),QPointF(1.0, 0.4), DecorationLine::Width, DecorationLine::Height, DecorationLine::Width, DecorationLine::Height},
+    {QPointF(0.0, 0.6),QPointF(1.0, 0.6), DecorationLine::Width, DecorationLine::Height, DecorationLine::Width, DecorationLine::Height},
+    {QPointF(0.0, 0.8),QPointF(1.0, 0.8), DecorationLine::Width, DecorationLine::Height, DecorationLine::Width, DecorationLine::Height},
+    {QPointF(0.2, 0.0),QPointF(0.2, 1.0), DecorationLine::Width, DecorationLine::Height, DecorationLine::Width, DecorationLine::Height},
+    {QPointF(0.4, 0.0),QPointF(0.4, 1.0), DecorationLine::Width, DecorationLine::Height, DecorationLine::Width, DecorationLine::Height},
+    {QPointF(0.6, 0.0),QPointF(0.6, 1.0), DecorationLine::Width, DecorationLine::Height, DecorationLine::Width, DecorationLine::Height},
+    {QPointF(0.8, 0.0),QPointF(0.8, 1.0), DecorationLine::Width, DecorationLine::Height, DecorationLine::Width, DecorationLine::Height},
+
+    // Passport photo
+    {QPointF(0.0, 0.45/0.35),QPointF(1.0, 0.45/0.35), DecorationLine::Width, DecorationLine::Width, DecorationLine::Width, DecorationLine::Width},
+    {QPointF(0.2, 0.05/0.35),QPointF(0.8, 0.05/0.35), DecorationLine::Width, DecorationLine::Width, DecorationLine::Width, DecorationLine::Width},
+    {QPointF(0.2, 0.40/0.35),QPointF(0.8, 0.40/0.35), DecorationLine::Width, DecorationLine::Width, DecorationLine::Width, DecorationLine::Width},
+    {QPointF(0.25, 0.07/0.35),QPointF(0.75, 0.07/0.35), DecorationLine::Width, DecorationLine::Width, DecorationLine::Width, DecorationLine::Width},
+    {QPointF(0.25, 0.38/0.35),QPointF(0.75, 0.38/0.35), DecorationLine::Width, DecorationLine::Width, DecorationLine::Width, DecorationLine::Width},
+    {QPointF(0.35/0.45, 0.0),QPointF(0.35/0.45, 1.0), DecorationLine::Height, DecorationLine::Height, DecorationLine::Height, DecorationLine::Height}
+};
+
+int decorsIndex[4] = {0,4,12,18};
+
 KisToolCrop::KisToolCrop(KoCanvasBase * canvas)
         : KisTool(canvas, KisCursor::load("tool_crop_cursor.png", 6, 6))
 {
@@ -99,9 +145,9 @@ void KisToolCrop::deactivate()
     KisTool::deactivate();
 }
 
-void KisToolCrop::resourceChanged(int key, const QVariant &res)
+void KisToolCrop::canvasResourceChanged(int key, const QVariant &res)
 {
-    KisTool::resourceChanged(key, res);
+    KisTool::canvasResourceChanged(key, res);
 
     if(m_optWidget==0 || m_optWidget->cmbType==0) return;
     //pixel layer
@@ -158,46 +204,16 @@ void KisToolCrop::mouseMoveEvent(KoPointerEvent *event)
     }
 
     if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
-
+        QRectF updateRect = boundingRect();
         if (!m_haveCropSelection) { //if the cropSelection is not yet set
-            QRectF updateRect = boundingRect();
             m_rectCrop.setBottomRight(pos.toPoint());
-
-            m_rectCrop.setRight(qBound(0, m_rectCrop.right(), image()->width() - 1));
-            m_rectCrop.setBottom(qBound(0, m_rectCrop.bottom(), image()->height() - 1));
-
-            updateRect |= boundingRect();
-            updateCanvasViewRect(updateRect);
-
-            QRect r = m_rectCrop.normalized();
-            setOptionWidgetRatio((double)r.width() / (double)r.height());
-
         } else { //if the crop selection is set
             QPoint dragStop = pos.toPoint();
             QPoint drag = dragStop - m_dragStart;
 
             if (m_mouseOnHandleType != None && m_dragStart != dragStop) {
-
-                qint32 imageWidth = currentImage()->width();
-                qint32 imageHeight = currentImage()->height();
-
-                QRectF updateRect = boundingRect();
-
                 if (m_mouseOnHandleType == Inside) {
                     m_rectCrop.translate(drag);
-
-                    if (m_rectCrop.left() < 0) {
-                        m_rectCrop.moveLeft(0);
-                    }
-                    if (m_rectCrop.right() > imageWidth - 1) {
-                        m_rectCrop.moveRight(imageWidth - 1);
-                    }
-                    if (m_rectCrop.top() < 0) {
-                        m_rectCrop.moveTop(0);
-                    }
-                    if (m_rectCrop.bottom() > imageHeight - 1) {
-                        m_rectCrop.moveBottom(imageHeight - 1);
-                    }
                 } else if (m_optWidget->boolRatio->isChecked()) {
                     if (! m_optWidget->boolWidth->isChecked() && !m_optWidget->boolHeight->isChecked()) {
                         QRect newRect = m_rectCrop;
@@ -245,8 +261,7 @@ void KisToolCrop::mouseMoveEvent(KoPointerEvent *event)
                         case(Inside):  // never happen
                             break;
                         }
-                        if (newRect.intersected(QRect(0,0,imageWidth,imageHeight))==newRect)
-                            m_rectCrop=newRect;
+                        m_rectCrop = newRect;
                     }
                 } else {
                     if (m_optWidget->boolWidth->isChecked()) {
@@ -287,18 +302,12 @@ void KisToolCrop::mouseMoveEvent(KoPointerEvent *event)
                     }
                 }
 
-                m_rectCrop.setLeft(qBound(0, m_rectCrop.left(), image()->width() - 1));
-                m_rectCrop.setRight(qBound(0, m_rectCrop.right(), image()->width() - 1));
-                m_rectCrop.setTop(qBound(0, m_rectCrop.top(), image()->height() - 1));
-                m_rectCrop.setBottom(qBound(0, m_rectCrop.bottom(), image()->height() - 1));
-
                 m_dragStart = dragStop;
-
-                updateRect |= boundingRect();
-                updateCanvasViewRect(updateRect);
             }
         }
-        updateWidgetValues();
+        validateSelection(false);
+        updateRect |= boundingRect();
+        updateCanvasViewRect(updateRect);
     }
     else {
         KisTool::mouseMoveEvent(event);
@@ -355,10 +364,10 @@ void KisToolCrop::keyReleaseEvent(QKeyEvent* event)
 void KisToolCrop::validateSelection(bool updateratio)
 {
     if (canvas() && image()) {
-        m_rectCrop.setLeft(qBound(0, m_rectCrop.left(), image()->width() - 1));
-        m_rectCrop.setRight(qBound(0, m_rectCrop.right(), image()->width() - 1));
-        m_rectCrop.setTop(qBound(0, m_rectCrop.top(), image()->height() - 1));
-        m_rectCrop.setBottom(qBound(0, m_rectCrop.bottom(), image()->height() - 1));
+       // m_rectCrop.setLeft(qBound(0, m_rectCrop.left(), image()->width() - 1));
+       // m_rectCrop.setRight(qBound(0, m_rectCrop.right(), image()->width() - 1));
+       // m_rectCrop.setTop(qBound(0, m_rectCrop.top(), image()->height() - 1));
+       // m_rectCrop.setBottom(qBound(0, m_rectCrop.bottom(), image()->height() - 1));
 
         updateWidgetValues(updateratio);
     }
@@ -413,6 +422,16 @@ void KisToolCrop::paintOutlineWithHandles(QPainter& gc)
         gc.setPen(pen);
         gc.setBrush(Qt::yellow);
         gc.drawPath(handlesPath());
+
+        gc.setClipRect(borderRect, Qt::IntersectClip);
+
+        int d = m_optWidget->cmbDecor->currentIndex();
+        if (d > 0) {
+            for (int i = decorsIndex[d-1]; i<decorsIndex[d]; i++) {
+                drawDecorationLine(&gc, &(decors[i]), borderRect);
+            }
+        }
+
 #else
         QPen pen(Qt::SolidLine);
         pen.setWidth(BORDER_LINE_WIDTH);
@@ -464,6 +483,11 @@ void KisToolCrop::crop()
     m_rectCrop = QRect(0, 0, 0, 0);
 
     updateWidgetValues();
+}
+
+void KisToolCrop::setDecoration(int i)
+{
+    updateCanvasViewRect(boundingRect());
 }
 
 void KisToolCrop::setCropX(int x)
@@ -638,6 +662,7 @@ QWidget* KisToolCrop::createOptionWidget()
     connect(m_optWidget->intWidth, SIGNAL(valueChanged(int)), this, SLOT(setCropWidth(int)));
     connect(m_optWidget->intHeight, SIGNAL(valueChanged(int)), this, SLOT(setCropHeight(int)));
     connect(m_optWidget->doubleRatio, SIGNAL(valueChanged(double)), this, SLOT(setRatio(double)));
+    connect(m_optWidget->cmbDecor, SIGNAL(currentIndexChanged(int)), this, SLOT(setDecoration(int)));
 
     m_optWidget->setFixedHeight(m_optWidget->sizeHint().height());
 
@@ -767,4 +792,73 @@ QRectF KisToolCrop::boundingRect()
     return rect;
 }
 
+void KisToolCrop::drawDecorationLine(QPainter *p, DecorationLine *decorLine, const QRectF rect)
+{
+    QPointF start = rect.topLeft();
+    QPointF end = rect.topLeft();
+    qreal small = qMin(rect.width(), rect.height());
+    qreal large = qMax(rect.width(), rect.height());
+
+    switch (decorLine->startXRelation) {
+    case DecorationLine::Width:
+        start.setX(start.x() + decorLine->start.x() * rect.width());
+        break;
+    case DecorationLine::Height:
+        start.setX(start.x() + decorLine->start.x() * rect.height());
+        break;
+    case DecorationLine::Smallest:
+        start.setX(start.x() + decorLine->start.x() * small);
+        break;
+    case DecorationLine::Largest:
+        start.setX(start.x() + decorLine->start.x() * large);
+        break;
+    }
+
+    switch (decorLine->startYRelation) {
+    case DecorationLine::Width:
+        start.setY(start.y() + decorLine->start.y() * rect.width());
+        break;
+    case DecorationLine::Height:
+        start.setY(start.y() + decorLine->start.y() * rect.height());
+        break;
+    case DecorationLine::Smallest:
+        start.setY(start.y() + decorLine->start.y() * small);
+        break;
+    case DecorationLine::Largest:
+        start.setY(start.y() + decorLine->start.y() * large);
+        break;
+    }
+
+    switch (decorLine->endXRelation) {
+    case DecorationLine::Width:
+        end.setX(end.x() + decorLine->end.x() * rect.width());
+        break;
+    case DecorationLine::Height:
+        end.setX(end.x() + decorLine->end.x() * rect.height());
+        break;
+    case DecorationLine::Smallest:
+        end.setX(end.x() + decorLine->end.x() * small);
+        break;
+    case DecorationLine::Largest:
+        end.setX(end.x() + decorLine->end.x() * large);
+        break;
+    }
+
+    switch (decorLine->endYRelation) {
+    case DecorationLine::Width:
+        end.setY(end.y() + decorLine->end.y() * rect.width());
+        break;
+    case DecorationLine::Height:
+        end.setY(end.y() + decorLine->end.y() * rect.height());
+        break;
+    case DecorationLine::Smallest:
+        end.setY(end.y() + decorLine->end.y() * small);
+        break;
+    case DecorationLine::Largest:
+        end.setY(end.y() + decorLine->end.y() * large);
+        break;
+    }
+
+    p->drawLine(start, end);
+}
 #include "kis_tool_crop.moc"

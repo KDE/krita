@@ -50,9 +50,9 @@ public:
     KisPaintDeviceSP getDeviceLazy(KisPaintDeviceSP prototype) {
         QMutexLocker locker(&m_lock);
 
-        if(!m_reusablePaintDevice)
+        if (!m_reusablePaintDevice) {
             m_reusablePaintDevice = new KisPaintDevice(*prototype);
-
+        }
         if(!m_projection ||
            !(*m_projection->colorSpace() == *prototype->colorSpace())) {
             m_projection = m_reusablePaintDevice;
@@ -452,7 +452,6 @@ QRect KisLayer::updateProjection(const QRect& rect)
 {
     QRect updatedRect = rect;
     KisPaintDeviceSP originalDevice = original();
-
     if (!rect.isValid() ||
             !visible() ||
             !originalDevice) return QRect();
@@ -460,6 +459,7 @@ QRect KisLayer::updateProjection(const QRect& rect)
     if (!needProjection() && !hasEffectMasks()) {
         m_d->safeProjection.freeDevice();
     } else {
+
         if (!updatedRect.isEmpty()) {
             KisPaintDeviceSP projection =
                 m_d->safeProjection.getDeviceLazy(originalDevice);

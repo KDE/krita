@@ -31,13 +31,17 @@
 #include <kdirselectdialog.h>
 
 #include <KoIcon.h>
-
 #include <KoCanvasBase.h>
+
 #include <kis_view2.h>
 #include <kis_canvas2.h>
 #include <kis_doc2.h>
-#include "compositionmodel.h"
 #include <kis_group_layer.h>
+#include <kis_painter.h>
+#include <kis_paint_layer.h>
+
+#include "compositionmodel.h"
+
 
 CompositionDockerDock::CompositionDockerDock( ) : QDockWidget(i18n("Compositions")), m_canvas(0)
 {
@@ -151,7 +155,31 @@ void CompositionDockerDock::exportClicked()
         composition->apply();
         image->refreshGraph();
         image->lock();
-        image->rootLayer()->projection()->convertToQImage(0).save(path + composition->name() + ".png");
+#if 0
+        image->rootLayer()->projection()->convertToQImage(0, 0, 0, image->width(), image->height()).save(path + composition->name() + ".png");
+#else
+        QRect r = image->bounds();
+
+        KisDoc2 d;
+
+        d.prepareForImport();
+
+        KisImageWSP dst = new KisImage(d.createUndoStore(), r.width(), r.height(), image->colorSpace(), composition->name());
+        dst->setResolution(image->xRes(), image->yRes());
+        d.setCurrentImage(dst);
+        KisPaintLayer* paintLayer = new KisPaintLayer(dst, "projection", OPACITY_OPAQUE_U8);
+        KisPainter gc(paintLayer->paintDevice());
+        gc.bitBlt(QPoint(0, 0), image->rootLayer()->projection(), r);
+        dst->addNode(paintLayer, dst->rootLayer(), KisLayerSP(0));
+
+        dst->refreshGraph();
+
+        d.setOutputMimeType("image/png");
+        d.setSaveInBatchMode(true);
+
+        d.exportDocument(path + composition->name() + ".png");
+
+#endif
         image->unlock();
     }
 }

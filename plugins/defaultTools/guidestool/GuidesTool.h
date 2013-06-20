@@ -74,7 +74,7 @@ private slots:
     void guideLineSelected(Qt::Orientation orientation, int index);
     void guideLinesChanged(Qt::Orientation orientation);
     /// reimplemented from KoToolBase
-    virtual void resourceChanged(int key, const QVariant &res);
+    virtual void canvasResourceChanged(int key, const QVariant &res);
 
     void insertorCreateGuidesSlot(GuidesTransaction* result);
 

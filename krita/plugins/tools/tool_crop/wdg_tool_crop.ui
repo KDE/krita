@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>210</width>
+    <width>214</width>
     <height>230</height>
    </rect>
   </property>
@@ -168,16 +168,6 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QCheckBox" name="boolRatio">
-         <property name="toolTip">
-          <string>Will keep the ratio constant</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="1">
         <widget class="KDoubleNumInput" name="doubleRatio">
          <property name="toolTip">
@@ -188,19 +178,26 @@
          </property>
         </widget>
        </item>
+       <item row="2" column="0">
+        <widget class="QCheckBox" name="boolRatio">
+         <property name="toolTip">
+          <string>Will keep the ratio constant</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout">
-     <property name="spacing">
-      <number>0</number>
-     </property>
+    <layout class="QGridLayout" name="gridLayout_3">
      <property name="margin">
       <number>0</number>
      </property>
-     <item>
+     <item row="0" column="1">
       <widget class="QComboBox" name="cmbType">
        <property name="currentIndex">
         <number>1</number>
@@ -217,11 +214,49 @@
        </item>
       </widget>
      </item>
-     <item>
+     <item row="2" column="1">
       <widget class="QPushButton" name="bnCrop">
        <property name="text">
         <string>&amp;Crop</string>
        </property>
+      </widget>
+     </item>
+     <item row="0" column="0" alignment="Qt::AlignRight">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Applies to:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" alignment="Qt::AlignRight">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Decoration:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QComboBox" name="cmbDecor">
+       <item>
+        <property name="text">
+         <string>None</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Thirds</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Fifths</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Passport photo</string>
+        </property>
+       </item>
       </widget>
      </item>
     </layout>
@@ -250,7 +285,6 @@
   <tabstop>intWidth</tabstop>
   <tabstop>intHeight</tabstop>
   <tabstop>cmbType</tabstop>
-  <tabstop>bnCrop</tabstop>
  </tabstops>
  <resources/>
  <connections/>

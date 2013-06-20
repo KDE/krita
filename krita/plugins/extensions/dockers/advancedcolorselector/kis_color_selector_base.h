@@ -71,7 +71,7 @@ protected slots:
     void hidePopup();
 
     /// if you overwrite this, keep in mind, that you should set the colour only, if m_colorUpdateAllowed is true
-    virtual void resourceChanged(int key, const QVariant& v);
+    virtual void canvasResourceChanged(int key, const QVariant& v);
 
 private:
     void privateCreatePopup();

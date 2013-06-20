@@ -132,9 +132,9 @@ int KisToolPaint::flags() const
     return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP;
 }
 
-void KisToolPaint::resourceChanged(int key, const QVariant& v)
+void KisToolPaint::canvasResourceChanged(int key, const QVariant& v)
 {
-    KisTool::resourceChanged(key, v);
+    KisTool::canvasResourceChanged(key, v);
 
     switch(key){
     case(KisCanvasResourceProvider::Opacity):

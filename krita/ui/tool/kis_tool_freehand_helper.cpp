@@ -93,7 +93,8 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
                                       KisImageWSP image,
                                       KisStrokesFacade *strokesFacade,
                                       KisPostExecutionUndoAdapter *undoAdapter,
-                                      KisNodeSP overrideNode)
+                                      KisNodeSP overrideNode,
+                                      KisDefaultBoundsBaseSP bounds)
 {
     Q_UNUSED(overrideNode);
 
@@ -109,7 +110,8 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
     createPainters(m_d->painterInfos);
     m_d->resources = new KisResourcesSnapshot(image,
                                               undoAdapter,
-                                              resourceManager);
+                                              resourceManager,
+                                              bounds);
 
     if(overrideNode) {
         m_d->resources->setCurrentNode(overrideNode);
@@ -134,6 +136,7 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
     m_d->history.append(m_d->previousPaintInformation);
     m_d->velocityHistory.clear();
     m_d->velocityHistory.append(std::numeric_limits<qreal>::signaling_NaN());
+
     if(m_d->resources->needsAirbrushing()) {
         m_d->airbrushingTimer.setInterval(m_d->resources->airbrushingRate());
         m_d->airbrushingTimer.start();

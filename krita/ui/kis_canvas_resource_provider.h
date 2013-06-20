@@ -157,7 +157,7 @@ public slots:
 
 private slots:
 
-    void slotResourceChanged(int key, const QVariant & res);
+    void slotCanvasResourceChanged(int key, const QVariant & res);
 
 signals:
 

@@ -36,7 +36,7 @@ public:
     virtual void unsetCanvas() { m_canvas = 0; }
 public slots:
     void setCurrentColor(const KoColor& );
-    void resourceChanged(int, const QVariant&);
+    void canvasResourceChanged(int, const QVariant&);
 private slots:
     void popupColorChanged(int i);
     void colorSliderChanged(int i);

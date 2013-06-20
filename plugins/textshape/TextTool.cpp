@@ -1042,7 +1042,7 @@ QMimeData *TextTool::generateMimeData() const
     if (canvas()->shapeController()) {
         rm = canvas()->shapeController()->resourceManager();
     }
-#if SHOULD_BUILD_RDF
+#ifdef SHOULD_BUILD_RDF
     if (rm && rm->hasResource(KoText::DocumentRdf)) {
         KoDocumentRdfBase *rdf = qobject_cast<KoDocumentRdfBase*>(rm->resource(KoText::DocumentRdf).value<QObject*>());
         if (rdf) {

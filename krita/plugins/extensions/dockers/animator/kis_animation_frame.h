@@ -33,6 +33,7 @@ public:
     void convertSelectionToFrame(int type);
     int getType();
     void setType(int type);
+    void expandWidth();
 
 protected:
     void paintEvent(QPaintEvent *event);

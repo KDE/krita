@@ -89,6 +89,14 @@ void KisLayerContents::mapFrame(int frameNumber, KisAnimationFrame *frame){
     }
 
     this->m_frames[frameNumber] = frame;
+    kWarning() << this->m_frames.values();
+}
+
+void KisLayerContents::unmapFrame(int frameNumber){
+    if(this->m_frames.contains(frameNumber)){
+        this->m_frames.remove(frameNumber);
+    }
+    kWarning() << this->m_frames.values();
 }
 
 int KisLayerContents::getLastFrameIndex(){

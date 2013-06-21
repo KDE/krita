@@ -196,5 +196,12 @@ void KisTimeline::keyFramePressed(){
 }
 
 void KisTimeline::addframePressed(){
+    if(m_cells->getSelectedFrame()){
+        this->m_cells->getSelectedFrame()->expandWidth();
+        this->m_cells->setSelectedFrame(0);
+    }
+}
 
+void KisTimeline::documentModified(){
+    emit canvasModified();
 }

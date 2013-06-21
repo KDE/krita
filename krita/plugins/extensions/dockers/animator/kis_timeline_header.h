@@ -15,37 +15,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_FRAME_BOX_H
-#define KIS_FRAME_BOX_H
+#ifndef KIS_TIMELINE_HEADER_H
+#define KIS_TIMELINE_HEADER_H
 
-#include <QListWidget>
-#include "kis_timeline.h"
-#include <QList>
-#include "kis_animation_layer.h"
-class KisLayerContents;
-class KisAnimationFrame;
-class KisTimelineHeader;
+#include <QWidget>
+#include <kis_frame_box.h>
 
-class KisFrameBox : public QListWidget
+class KisTimelineHeader : public QWidget
 {
     Q_OBJECT
 public:
-    KisFrameBox(KisTimeline* parent = 0);
-    void onCanvasReady();
-    void setSelectedFrame(KisAnimationFrame* selectedFrame);
-    KisAnimationFrame* getSelectedFrame();
-    KisLayerContents* getFirstLayer();
+    KisTimelineHeader(KisFrameBox* parent = 0);
 
-public slots:
-    void updateUI();
-
-private:
-    KisTimeline* m_dock;
-    QList<KisAnimationLayer*> m_layers;
-    QList<KisLayerContents*> m_layerContents;
-    KisAnimationFrame* m_selectedFrame;
-    KisTimelineHeader* m_timelineHeader;
-
+protected:
+    void paintEvent(QPaintEvent *event);
 };
 
-#endif // KIS_FRAME_BOX_H
+#endif // KIS_TIMELINE_HEADER_H

@@ -46,6 +46,9 @@ public:
     QAction* m_addPaintLayerAction;
     QAction* m_addVectorLayerAction;
 
+public slots:
+    void documentModified();
+
 private:
     KisFrameBox* m_cells;
     int m_numberOfLayers;
@@ -57,6 +60,9 @@ private slots:
     void blankFramePressed();
     void keyFramePressed();
     void addframePressed();
+
+signals:
+    void canvasModified();
 };
 
 #endif // KIS_TIMELINE_H

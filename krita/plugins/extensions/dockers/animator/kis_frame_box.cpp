@@ -20,11 +20,15 @@
 #include "kis_animation_layerbox.h"
 #include "kis_layer_contents.h"
 #include <kis_debug.h>
+#include "kis_timeline_header.h"
 
 KisFrameBox::KisFrameBox(KisTimeline *parent)
 {
     this->m_dock = parent;
     m_layers = this->m_dock->getLayerBox()->getLayers();
+
+    m_timelineHeader = new KisTimelineHeader(this);
+    m_timelineHeader->setGeometry(QRect(0, 0, 10000, 20));
 
     KisLayerContents* firstContents = new KisLayerContents(this);
     m_layerContents << firstContents;

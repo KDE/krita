@@ -32,22 +32,27 @@ void KisAnimationFrame::paintEvent(QPaintEvent *event){
     QPainter painter(this);
 
     if(this->m_type == KisAnimationFrame::BLANKFRAME){
-        painter.setPen(Qt::lightGray);
-        painter.setBrush(Qt::lightGray);
-        painter.drawRect(0,0, this->m_width-1, 19);
         painter.setPen(Qt::black);
-        painter.drawRect(0,0,this->m_width,20);
+        painter.setBrush(Qt::white);
+        painter.drawRect(0,0, this->m_width, 20);
         painter.drawEllipse(QPointF(5,10),3,3);
+
+        if(this->m_width > 10){
+            painter.drawRect(this->m_width-8, 3, 6, 14);
+        }
     }
 
     if(this->m_type == KisAnimationFrame::KEYFRAME){
-        painter.setPen(Qt::lightGray);
-        painter.setBrush(Qt::lightGray);
-        painter.drawRect(0,0,this->m_width-1, 19);
         painter.setPen(Qt::black);
-        painter.drawRect(0,0,this->m_width,20);
+        painter.setBrush(Qt::lightGray);
+        painter.drawRect(0,0,this->m_width, 20);
         painter.setBrush(Qt::black);
         painter.drawEllipse(QPointF(5,10),3,3);
+
+        if(this->m_width > 10){
+            painter.setBrush(Qt::white);
+            painter.drawRect(this->m_width-8, 3, 6, 14);
+        }
     }
 
     if(this->m_type == KisAnimationFrame::SELECTION){
@@ -88,7 +93,7 @@ void KisAnimationFrame::convertSelectionToFrame(int type){
 
             int oldPrevFrameWidth = this->getParent()->getPreviousFrameFrom(this)->getWidth();
             int previousFrameWidth = this->geometry().x()-this->getParent()->getPreviousFrameFrom(this)->geometry().x();
-            kWarning() << previousFrameWidth;
+            //kWarning() << previousFrameWidth;
             KisAnimationFrame* newPreviousFrame = new KisAnimationFrame(this->getParent(), KisAnimationFrame::BLANKFRAME, previousFrameWidth);
             newPreviousFrame->setGeometry(this->getParent()->getPreviousFrameFrom(this)->geometry().x(), 0, previousFrameWidth, 20);
             newPreviousFrame->show();
@@ -108,7 +113,7 @@ void KisAnimationFrame::convertSelectionToFrame(int type){
                     newFrameWidth=10;
                 }
             }
-            kWarning() << newFrameWidth;
+            //kWarning() << newFrameWidth;
             KisAnimationFrame* newFrame = new KisAnimationFrame(this->getParent(), KisAnimationFrame::BLANKFRAME, newFrameWidth);
             newFrame->setGeometry(this->geometry().x(), 0, newFrameWidth, 20);
             newFrame->show();
@@ -118,4 +123,23 @@ void KisAnimationFrame::convertSelectionToFrame(int type){
 
         }
     }
+}
+
+void KisAnimationFrame::expandWidth(){
+    this->getParent()->mapFrame(this->geometry().x()/10, this);
+
+    KisAnimationFrame* previousFrame = this->getParent()->getPreviousFrameFrom(this);
+
+    if(previousFrame->geometry().x()+previousFrame->getWidth()-10 < this->geometry().x()){
+        int newWidth = this->geometry().x() - previousFrame->geometry().x()+10;
+        kWarning() << newWidth;
+        KisAnimationFrame* newPreviousFrame = new KisAnimationFrame(previousFrame->getParent(), previousFrame->getType(), newWidth);
+        newPreviousFrame->setGeometry(previousFrame->x(), 0, newWidth,20);
+        newPreviousFrame->show();
+        this->getParent()->mapFrame(previousFrame->x()/10, newPreviousFrame);
+    }
+
+    this->getParent()->getParent()->getSelectedFrame()->hide();
+    this->getParent()->getParent()->setSelectedFrame(0);
+    this->getParent()->unmapFrame(this->geometry().x()/10);
 }

@@ -485,7 +485,7 @@ void KisToolCrop::crop()
     updateWidgetValues();
 }
 
-void KisToolCrop::setDecoration(int i)
+void KisToolCrop::setDecoration(int /*i*/)
 {
     updateCanvasViewRect(boundingRect());
 }

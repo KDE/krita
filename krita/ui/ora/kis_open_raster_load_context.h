@@ -28,7 +28,7 @@ class KisOpenRasterLoadContext
 {
 public:
     virtual ~KisOpenRasterLoadContext() {}
-    virtual KisPaintDeviceSP loadDeviceData(const QString & fileName) = 0;
+    virtual KisImageWSP loadDeviceData(const QString & fileName) = 0;
     virtual QDomDocument loadStack() = 0;
 };
 

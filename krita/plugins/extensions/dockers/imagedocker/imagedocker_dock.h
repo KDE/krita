@@ -73,6 +73,7 @@ private slots:
     void slotTopLevelChanged(bool topLevel);
     void slotViewModeChanged(int viewMode, qreal scale);
     void slotCloseZoomPopup();
+    void slotChangeRoot(const QString& path);
     
 private:
     void addCurrentPathToHistory();

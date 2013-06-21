@@ -193,8 +193,14 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
                     if (!result) {
                         opacity = c.toDouble(subelem.attribute("radius"));
                     }
-                    KisPaintDeviceSP device = d->loadContext->loadDeviceData(filename);
-                    if (device) {
+                    KisImageWSP pngImage = d->loadContext->loadDeviceData(filename);
+                    if (pngImage) {
+                        // ORA doesn't save resolution info, except in the png images
+                        d->image->setResolution(pngImage->xRes(), pngImage->yRes());
+                        // now get the device
+                        KisPaintDeviceSP device = pngImage->projection();
+                        delete pngImage.data();
+
                         KisPaintLayerSP layer = new KisPaintLayer(gL->image() , "", opacity * 255, device);
                         d->image->addNode(layer.data(), gL.data(), 0);
                         loadPaintLayer(subelem, layer);

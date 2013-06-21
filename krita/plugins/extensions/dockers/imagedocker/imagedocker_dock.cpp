@@ -35,6 +35,7 @@
 #include <QLabel>
 #include <QAbstractListModel>
 #include <QButtonGroup>
+#include <QDesktopServices>
 
 #include "ui_wdgimagedocker.h"
 #include "ui_wdgImageViewPopup.h"
@@ -194,9 +195,20 @@ ImageDockerDock::ImageDockerDock():
     m_zoomButtons->addButton(m_popupUi->bnZoom75    , 75);
     m_zoomButtons->addButton(m_popupUi->bnZoom100   , 100);
 
-    m_model->setRootPath(QDir::rootPath());
-    m_ui->treeView->setRootIndex(m_proxyModel->mapFromSource(m_model->index(QDir::homePath())));
-    updatePath(QDir::homePath());
+
+    m_ui->cmbPath->addItem(koIcon("folder-image"), QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    m_ui->cmbPath->addItem(koIcon("folder-documents"), QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
+    m_ui->cmbPath->addItem(koIcon("user-home"), QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+
+    foreach(const QFileInfo &info, QDir::drives()) {
+        m_ui->cmbPath->addItem(koIcon("drive-harddisk"), info.absolutePath());
+    }
+
+    connect(m_ui->cmbPath, SIGNAL(activated(const QString&)), SLOT(slotChangeRoot(const QString&)));
+
+    m_model->setRootPath(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    m_ui->treeView->setRootIndex(m_proxyModel->mapFromSource(m_model->index(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation))));
+    updatePath(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
 
     connect(m_ui->treeView           , SIGNAL(doubleClicked(const QModelIndex&))      , SLOT(slotItemDoubleClicked(const QModelIndex&)));
     connect(m_ui->bnBack             , SIGNAL(clicked(bool))                          , SLOT(slotBackButtonClicked()));
@@ -243,7 +255,6 @@ void ImageDockerDock::addCurrentPathToHistory()
 
 void ImageDockerDock::updatePath(const QString& path)
 {
-    m_ui->cmbPath->lineEdit()->setText(path);
     m_ui->bnBack->setDisabled(m_history.empty());
     m_thumbModel->setCurrentDirectory(path);
 }
@@ -483,4 +494,11 @@ void ImageDockerDock::slotViewModeChanged(int viewMode, qreal scale)
 void ImageDockerDock::slotCloseZoomPopup()
 {
     m_ui->bnPopup->hidePopupWidget();
+}
+
+void ImageDockerDock::slotChangeRoot(const QString &path)
+{
+    m_model->setRootPath(path);
+    m_ui->treeView->setRootIndex(m_proxyModel->mapFromSource(m_model->index(path)));
+    updatePath(path);
 }

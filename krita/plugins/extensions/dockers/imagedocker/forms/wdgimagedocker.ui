@@ -60,7 +60,7 @@
              <item>
               <widget class="QComboBox" name="cmbPath">
                <property name="editable">
-                <bool>true</bool>
+                <bool>false</bool>
                </property>
               </widget>
              </item>

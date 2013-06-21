@@ -407,9 +407,19 @@ void KisCanvasResourceProvider::setOpacity(qreal opacity)
     m_resourceManager->setResource(Opacity, opacity);
 }
 
-qreal KisCanvasResourceProvider::opacity()
+qreal KisCanvasResourceProvider::opacity() const
 {
     return m_resourceManager->resource(Opacity).toDouble();
+}
+
+void KisCanvasResourceProvider::setGlobalAlphaLock(bool lock)
+{
+    m_resourceManager->setResource(GlobalAlphaLock, lock);
+}
+
+bool KisCanvasResourceProvider::globalAlphaLock() const
+{
+    return m_resourceManager->resource(GlobalAlphaLock).toBool();
 }
 
 void KisCanvasResourceProvider::notifyLoadingWorkspace(KisWorkspaceResource* workspace)

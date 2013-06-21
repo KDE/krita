@@ -115,6 +115,15 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_eraseModeButton->setDefaultAction(eraseAction);
     m_view->actionCollection()->addAction("erase_action", eraseAction);
 
+    m_alphaLockButton = new QToolButton(this);
+    m_alphaLockButton->setFixedSize(32, 32);
+    m_alphaLockButton->setCheckable(true);
+    KAction* alphaLockAction = new KAction(i18n("Preserve Alpha"), m_alphaLockButton);
+    alphaLockAction->setIcon(koIcon("transparency-unlocked"));
+    alphaLockAction->setCheckable(true);
+    m_alphaLockButton->setDefaultAction(alphaLockAction);
+    m_view->actionCollection()->addAction("preserve_alpha", alphaLockAction);
+
     QToolButton* hMirrorButton = new QToolButton(this);
     hMirrorButton->setFixedSize(32, 32);
     hMirrorButton->setCheckable(true);
@@ -191,6 +200,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     compositeLayout->addWidget(labelMode);
     compositeLayout->addWidget(m_cmbCompositeOp);
     compositeLayout->addWidget(m_eraseModeButton);
+    compositeLayout->addWidget(m_alphaLockButton);
     compositeLayout->setContentsMargins(0, 0, 0, 0);
     action = new KAction(i18n("Brush composite"), this);
     view->actionCollection()->addAction("composite_actions", action);
@@ -263,6 +273,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     connect(m_paletteButton      , SIGNAL(clicked())                          , SLOT(slotSaveToFavouriteBrushes()));
     connect(m_cmbCompositeOp     , SIGNAL(activated(int))                     , SLOT(slotSetCompositeMode(int)));
     connect(eraseAction          , SIGNAL(triggered(bool))                    , SLOT(slotToggleEraseMode(bool)));
+    connect(alphaLockAction      , SIGNAL(triggered(bool))                    , SLOT(slotToggleAlphaLockMode(bool)));
     connect(hMirrorAction        , SIGNAL(triggered(bool))                    , SLOT(slotHorizontalMirrorChanged(bool)));
     connect(vMirrorAction        , SIGNAL(triggered(bool))                    , SLOT(slotVerticalMirrorChanged(bool)));
     
@@ -806,4 +817,15 @@ void KisPaintopBox::slotUnsetEraseMode()
     if (m_currCompositeOpID == COMPOSITE_ERASE) {
         updateCompositeOp(m_prevCompositeOpID);
     }
+}
+
+void KisPaintopBox::slotToggleAlphaLockMode(bool checked)
+{
+    if (checked) {
+        m_alphaLockButton->actions()[0]->setIcon(koIcon("transparency-locked"));
+    }
+    else {
+        m_alphaLockButton->actions()[0]->setIcon(koIcon("transparency-unlocked"));
+    }
+    m_resourceProvider->setGlobalAlphaLock(checked);
 }

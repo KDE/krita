@@ -724,14 +724,6 @@ public:
     void setMaskImageSize(qint32 width, qint32 height);
 
     /**
-     * If the alpha channel is locked, the alpha values of the paint device we are painting on
-     * will not change.
-     */
-    void setLockAlpha(bool protect);
-    bool alphaLocked() const;
-
-
-    /**
      * set the rendering intent in case pixels need to be converted before painting
      */
     void setRenderingIntent(KoColorConversionTransformation::Intent intent);

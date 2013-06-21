@@ -32,8 +32,11 @@
 #include "kis_default_bounds.h"
 
 struct KisResourcesSnapshot::Private {
-    Private() : currentPattern(0), currentGradient(0),
-                currentGenerator(0), compositeOp(0)
+    Private()
+        : currentPattern(0)
+        , currentGradient(0)
+        , currentGenerator(0)
+        , compositeOp(0)
     {
     }
 
@@ -59,6 +62,8 @@ struct KisResourcesSnapshot::Private {
 
     KisPainter::StrokeStyle strokeStyle;
     KisPainter::FillStyle fillStyle;
+
+    bool globalAlphaLock;
 };
 
 KisResourcesSnapshot::KisResourcesSnapshot(KisImageWSP image, KisPostExecutionUndoAdapter *undoAdapter, KoCanvasResourceManager *resourceManager, KisDefaultBoundsBaseSP bounds)
@@ -70,6 +75,7 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageWSP image, KisPostExecutionUn
     }
     m_d->bounds = bounds;
     m_d->undoAdapter = undoAdapter;
+
     m_d->currentFgColor = resourceManager->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
     m_d->currentBgColor = resourceManager->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>();
     m_d->currentPattern = static_cast<KisPattern*>(resourceManager->resource(KisCanvasResourceProvider::CurrentPattern).value<void*>());
@@ -102,6 +108,8 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageWSP image, KisPostExecutionUn
      */
     m_d->strokeStyle = KisPainter::StrokeStyleBrush;
     m_d->fillStyle = KisPainter::FillStyleNone;
+
+    m_d->globalAlphaLock = resourceManager->resource(KisCanvasResourceProvider::GlobalAlphaLock).toBool();
 }
 
 KisResourcesSnapshot::~KisResourcesSnapshot()
@@ -118,9 +126,9 @@ void KisResourcesSnapshot::setupPainter(KisPainter* painter)
     painter->setPattern(m_d->currentPattern);
     painter->setGradient(m_d->currentGradient);
 
-    KisPaintLayer *paintLayer;
-    if ((paintLayer = dynamic_cast<KisPaintLayer*>(m_d->currentNode.data()))) {
-        painter->setChannelFlags(paintLayer->channelLockFlags());
+    QBitArray lockflags = channelLockFlags();
+    if (lockflags.size() > 0) {
+        painter->setChannelFlags(lockflags);
     }
 
     painter->setOpacity(m_d->opacity);
@@ -232,3 +240,24 @@ KoColor KisResourcesSnapshot::currentBgColor() const
 {
     return m_d->currentBgColor;
 }
+
+QBitArray KisResourcesSnapshot::channelLockFlags() const
+{
+    QBitArray channelFlags;
+    KisPaintLayer *paintLayer;
+    if ((paintLayer = dynamic_cast<KisPaintLayer*>(m_d->currentNode.data()))) {
+
+        channelFlags = paintLayer->channelLockFlags();
+        if (channelFlags.isEmpty()) {
+            channelFlags = paintLayer->colorSpace()->channelFlags(true, true);
+        }
+        if (m_d->globalAlphaLock) {
+            channelFlags &= paintLayer->colorSpace()->channelFlags(true, false);
+        }
+        else {
+            channelFlags |= paintLayer->colorSpace()->channelFlags(false, true);
+        }
+    }
+    return channelFlags;
+}
+

@@ -64,7 +64,8 @@ public:
         MirrorVertical,
         MirrorAxisCenter,
         Opacity,
-        HdrGamma
+        HdrGamma,
+        GlobalAlphaLock
     };
 
 
@@ -118,7 +119,10 @@ public:
     bool mirrorVertical() const;
 
     void setOpacity(qreal opacity);
-    qreal opacity();
+    qreal opacity() const;
+
+    void setGlobalAlphaLock(bool lock);
+    bool globalAlphaLock() const;
 
     void setPaintOpPreset(const KisPaintOpPresetSP preset);
 

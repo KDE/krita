@@ -62,6 +62,9 @@ public:
     KoColor currentFgColor() const;
     KoColor currentBgColor() const;
 
+    /// @return the channel lock flags of the current node with the global override applied
+    QBitArray channelLockFlags() const;
+
 private:
     struct Private;
     Private * const m_d;

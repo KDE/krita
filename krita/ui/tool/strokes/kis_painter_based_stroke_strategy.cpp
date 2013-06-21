@@ -126,9 +126,9 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
             indirect->setTemporaryCompositeOp(m_resources->compositeOp());
             indirect->setTemporaryOpacity(m_resources->opacity());
 
-            KisPaintLayer *paintLayer = dynamic_cast<KisPaintLayer*>(node.data());
-            if(paintLayer) {
-                indirect->setTemporaryChannelFlags(paintLayer->channelLockFlags());
+            QBitArray channelLockFlags = m_resources->channelLockFlags();
+            if (channelLockFlags.size() > 0) {
+                indirect->setTemporaryChannelFlags(channelLockFlags);
             }
         }
         else {

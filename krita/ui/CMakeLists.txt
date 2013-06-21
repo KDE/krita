@@ -6,7 +6,7 @@ include_directories( ${KOTEXT_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIR}/flake
 	${CMAKE_CURRENT_SOURCE_DIR}/pigment/resources
 	${CMAKE_CURRENT_SOURCE_DIR}/widgets/resources
-	${CMAKE_CURRENT_SOURCE_DIR}/openrastertk
+	${CMAKE_CURRENT_SOURCE_DIR}/ora
 	${CMAKE_SOURCE_DIR}/krita/image/metadata
 	${EXIV2_INCLUDE_DIR} )
 
@@ -127,8 +127,8 @@ set(kritaui_LIB_SRCS
     opengl/kis_opengl_canvas2.cpp
     opengl/kis_opengl_image_textures.cpp
     opengl/kis_texture_tile.cpp
-    openrastertk/kis_open_raster_stack_load_visitor.cpp
-    openrastertk/kis_open_raster_stack_save_visitor.cpp
+    ora/kis_open_raster_stack_load_visitor.cpp
+    ora/kis_open_raster_stack_save_visitor.cpp
     recorder/kis_node_query_path_editor.cc
     recorder/kis_recorded_action_creator.cc
     recorder/kis_recorded_action_creator_factory.cc

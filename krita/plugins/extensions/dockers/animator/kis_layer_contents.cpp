@@ -38,7 +38,7 @@ void KisLayerContents::initialize(){
     int length;
 
     if(this->m_parent->getFirstLayer()){
-        length = this->m_parent->getFirstLayer()->getContentLength()+1;
+        length = this->m_parent->getFirstLayer()->getContentLength();
     }
     else{
         length = 1;
@@ -129,7 +129,8 @@ int KisLayerContents::getNextFrameIndexFrom(int index){
 }
 
 int KisLayerContents::getContentLength(){
-    return this->getLastFrameIndex();
+    int lastFrameLength = this->m_frames.value(this->getLastFrameIndex())->getWidth()/10;
+    return this->getLastFrameIndex() + lastFrameLength;
 }
 
 int KisLayerContents::getIndex(KisAnimationFrame *frame){
@@ -142,4 +143,8 @@ KisAnimationFrame* KisLayerContents::getNextFrameFrom(KisAnimationFrame *frame){
 
 KisAnimationFrame* KisLayerContents::getPreviousFrameFrom(KisAnimationFrame *frame){
     return this->m_frames.value(this->getPreviousFrameIndexFrom(this->getIndex(frame)));
+}
+
+KisFrameBox* KisLayerContents::getParent(){
+    return m_parent;
 }

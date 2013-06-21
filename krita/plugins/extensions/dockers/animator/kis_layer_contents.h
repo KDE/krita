@@ -38,6 +38,7 @@ public:
     KisAnimationFrame* getNextFrameFrom(KisAnimationFrame* frame);
     KisAnimationFrame* getPreviousFrameFrom(KisAnimationFrame* frame);
     int getContentLength();
+    KisFrameBox* getParent();
 
 protected:
     void paintEvent(QPaintEvent *event);

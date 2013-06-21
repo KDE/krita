@@ -81,18 +81,41 @@ void KisAnimationFrame::setType(int type){
 
 void KisAnimationFrame::convertSelectionToFrame(int type){
     if(this->getType() == KisAnimationFrame::SELECTION){
-        this->setType(type);
-
-        this->getParent()->mapFrame(this->geometry().x()/10, this);
 
         if(this->getParent()->getPreviousFrameFrom(this)->getType() == KisAnimationFrame::BLANKFRAME){
-            this->setType(KisAnimationFrame::BLANKFRAME);
+
+            this->getParent()->mapFrame(this->geometry().x()/10, this);
+
+            int oldPrevFrameWidth = this->getParent()->getPreviousFrameFrom(this)->getWidth();
             int previousFrameWidth = this->geometry().x()-this->getParent()->getPreviousFrameFrom(this)->geometry().x();
+            kWarning() << previousFrameWidth;
             KisAnimationFrame* newPreviousFrame = new KisAnimationFrame(this->getParent(), KisAnimationFrame::BLANKFRAME, previousFrameWidth);
             newPreviousFrame->setGeometry(this->getParent()->getPreviousFrameFrom(this)->geometry().x(), 0, previousFrameWidth, 20);
             newPreviousFrame->show();
             int previousFrameIndex = this->getParent()->getPreviousFrameFrom(this)->geometry().x()/10;
             this->getParent()->mapFrame(previousFrameIndex, newPreviousFrame);
+
+            int newFrameWidth;
+
+            int nextFrameIndex = this->getParent()->getNextFrameIndexFrom(this->getParent()->getIndex(this));
+            newFrameWidth = nextFrameIndex*10 - this->geometry().x();
+
+            if(newFrameWidth==0){
+                if(this->geometry().x() < this->getParent()->getPreviousFrameFrom(this)->geometry().x()+oldPrevFrameWidth){
+                    newFrameWidth = this->getParent()->getPreviousFrameFrom(this)->geometry().x() + oldPrevFrameWidth - this->geometry().x();
+                }
+                else{
+                    newFrameWidth=10;
+                }
+            }
+            kWarning() << newFrameWidth;
+            KisAnimationFrame* newFrame = new KisAnimationFrame(this->getParent(), KisAnimationFrame::BLANKFRAME, newFrameWidth);
+            newFrame->setGeometry(this->geometry().x(), 0, newFrameWidth, 20);
+            newFrame->show();
+            this->getParent()->mapFrame(this->geometry().x()/10, newFrame);
+            this->getParent()->getParent()->getSelectedFrame()->hide();
+            this->getParent()->getParent()->setSelectedFrame(0);
+
         }
     }
 }

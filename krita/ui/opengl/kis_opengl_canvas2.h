@@ -65,8 +65,8 @@ public: // QWidget
     /// reimplemented method from superclass
     virtual void inputMethodEvent(QInputMethodEvent *event);
 
-    void renderCanvasGL();
-    void renderDecorations(QPainter *painter);
+    void renderCanvasGL() const;
+    void renderDecorations();
 
 private slots:
     void slotConfigChanged();
@@ -75,11 +75,11 @@ protected:
 
     void resizeGL(int width, int height);
     void initializeGL();
-    void paintGL();//Event(QPaintEvent *);
+    void paintGL();
 
 public: // KisAbstractCanvasWidget
 
-    QWidget * widget() {
+    QWidget *widget() {
         return this;
     }
 
@@ -90,8 +90,8 @@ private:
     struct Private;
     Private * const d;
 
-    void drawImage();
-    void drawCheckers();
+    void drawImage() const;
+    void drawCheckers() const;
 
     void initializeCheckerShader();
     void initializeDisplayShader();

@@ -49,7 +49,7 @@ public:
 
 public: // KisAbstractCanvasWidget
 
-    virtual KoToolProxy * toolProxy();
+    virtual KoToolProxy *toolProxy() const;
 
 
     /// set the specified display filter on the canvas
@@ -58,13 +58,13 @@ public: // KisAbstractCanvasWidget
     /**
      * Draw the specified decorations on the view.
      */
-    virtual void drawDecorations(QPainter & gc, const QRect &updateWidgetRect);
+    virtual void drawDecorations(QPainter & gc, const QRect &updateWidgetRect) const;
 
     virtual void addDecoration(KisCanvasDecoration* deco);
-    virtual KisCanvasDecoration* decoration(const QString& id);
+    virtual KisCanvasDecoration* decoration(const QString& id) const;
 
     virtual void setDecorations(const QList<KisCanvasDecoration*> &);
-    virtual QList<KisCanvasDecoration*> decorations();
+    virtual QList<KisCanvasDecoration*> decorations() const;
 
     /**
      * Returns the color of the border, i.e. the part of the canvas
@@ -81,7 +81,7 @@ public: // KisAbstractCanvasWidget
 protected:
     KisCanvas2 *canvas() const;
 
-    KisCoordinatesConverter* coordinatesConverter();
+    KisCoordinatesConverter* coordinatesConverter() const;
 
     /**
      * Event handlers to be called by derived canvas event handlers.

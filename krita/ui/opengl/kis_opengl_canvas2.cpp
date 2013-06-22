@@ -186,7 +186,7 @@ void KisOpenGLCanvas2::paintGL()
     renderDecorations();
 }
 
-void KisOpenGLCanvas2::drawCheckers()
+void KisOpenGLCanvas2::drawCheckers() const
 {
     KisCoordinatesConverter *converter = coordinatesConverter();
 
@@ -252,7 +252,7 @@ void KisOpenGLCanvas2::drawCheckers()
     d->checkerShader->release();
 }
 
-void KisOpenGLCanvas2::drawImage()
+void KisOpenGLCanvas2::drawImage() const
 {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -400,7 +400,7 @@ void KisOpenGLCanvas2::inputMethodEvent(QInputMethodEvent *event)
     processInputMethodEvent(event);
 }
 
-void KisOpenGLCanvas2::renderCanvasGL()
+void KisOpenGLCanvas2::renderCanvasGL() const
 {
     // Draw the border (that is, clear the whole widget to the border color)
     QColor widgetBackgroundColor = borderColor();

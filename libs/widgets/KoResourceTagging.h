@@ -45,7 +45,7 @@ public:
     * Constructs a KoResourceTagging object
     *
     */
-    explicit KoResourceTagging(const QString &extensions);
+    explicit KoResourceTagging(const QString& resourceType, const QString& extensions);
     ~KoResourceTagging();
 
     QStringList assignedTagsList(KoResource* resource) const;
@@ -67,7 +67,7 @@ public:
 #endif
 
 private:
-    void readXMLFile(bool serverIdentity=true);
+    void readXMLFile(const QString& filename, bool serverIdentity=true);
     void writeXMLFile(bool serverIdentity=true);
 
     /// To check whether the resource belongs to the present server or not

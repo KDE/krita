@@ -119,7 +119,7 @@ public:
         {
             m_blackListFile = KStandardDirs::locateLocal("data", "krita/" + type + ".blacklist");
             m_blackListFileNames = readBlackListFile();
-            m_tagObject = new KoResourceTagging(extensions);
+            m_tagObject = new KoResourceTagging(type, extensions);
         }
 
     virtual ~KoResourceServer()
@@ -461,7 +461,7 @@ public:
 #ifdef NEPOMUK
     void updateNepomukXML(bool nepomukOn)
     {
-        KoResourceTagging* tagObject = new KoResourceTagging(extensions());
+        KoResourceTagging* tagObject = new KoResourceTagging(type(),extensions());
         tagObject->setNepomukBool(nepomukOn);
         tagObject->updateNepomukXML(nepomukOn);
         delete tagObject;

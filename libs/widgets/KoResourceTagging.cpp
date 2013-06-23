@@ -38,10 +38,10 @@
 #include <kurl.h>
 #endif
 
-KoResourceTagging::KoResourceTagging(const QString& extensions)
+KoResourceTagging::KoResourceTagging(const QString& resourceType, const QString& extensions)
 {
     m_serverExtensions = extensions;
-    m_tagsXMLFile = KStandardDirs::locateLocal("data", "krita/tags.xml");
+    m_tagsXMLFile =  KStandardDirs::locateLocal("data", "krita/tags/" + resourceType + "_tags.xml");
     m_config = KConfigGroup( KGlobal::config(), "resource tagging" );
     m_nepomukOn = m_config.readEntry("nepomuk_usage_for_resource_tagging", false);
 
@@ -55,7 +55,16 @@ KoResourceTagging::KoResourceTagging(const QString& extensions)
 #endif
     }
     else {
-        readXMLFile();
+        QString fileToLoad;
+
+        if (QFile::exists(m_tagsXMLFile)) {
+            fileToLoad = m_tagsXMLFile;
+        }
+        else {
+            fileToLoad = KStandardDirs::locateLocal("data", "krita/tags.xml");
+        }
+
+        readXMLFile(fileToLoad);
     }
 }
 
@@ -256,9 +265,9 @@ void KoResourceTagging::writeXMLFile(bool serverIdentity)
 
 }
 
-void KoResourceTagging::readXMLFile(bool serverIdentity)
+void KoResourceTagging::readXMLFile(const QString& filename, bool serverIdentity)
 {
-    QFile f(m_tagsXMLFile);
+    QFile f(filename);
     if (!f.open(QIODevice::ReadOnly)) {
         return;
     }

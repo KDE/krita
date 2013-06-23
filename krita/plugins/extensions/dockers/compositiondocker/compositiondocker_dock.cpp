@@ -25,6 +25,8 @@
 #include <QInputDialog>
 #include <QThread>
 #include <QAction>
+#include <QDesktopServices>
+#include <QFileDialog>
 
 #include <klocale.h>
 #include <kactioncollection.h>
@@ -139,12 +141,21 @@ void CompositionDockerDock::updateModel()
 
 void CompositionDockerDock::exportClicked()
 {
+	QString path;
+#ifdef Q_OS_WIN
+	path = QFileDialog::getExistingDirectory(this,
+										     i18n("Select a Directory"),
+											 QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+	if (!path.endsWith('/')) {
+		path.append('/');
+	}
+#else
     KDirSelectDialog dialog(KUrl(), true);
     if(dialog.exec() != KDialog::Accepted) {
         return;
     }
-    QString path = dialog.url().path(KUrl::AddTrailingSlash);
-
+    path = dialog.url().path(KUrl::AddTrailingSlash);
+#endif
     KisImageWSP image = m_canvas->view()->image();
     QString filename = m_canvas->view()->document()->localFilePath();
     if (!filename.isEmpty()) {

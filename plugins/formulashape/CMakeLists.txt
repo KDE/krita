@@ -83,7 +83,7 @@ set( formulashape_PART_SRCS
    FormulaPart.cpp
 )
 
-if (NOT MSVC)
+if (NOT MSVC AND NOT (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
 set (formulashape_PART_SRCS
    ${formulashape_PART_SRCS}
    KoM2MMLForumulaTool.cpp
@@ -91,7 +91,7 @@ set (formulashape_PART_SRCS
    itexToMML/lex.yy.c
    itexToMML/y.tab.c
 )
-endif (NOT MSVC)
+endif (NOT MSVC AND NOT (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
 
 kde4_add_ui_files( formulashape_PART_SRCS
     FormulaToolWidget.ui

@@ -1,7 +1,5 @@
 add_subdirectory(tests)
 
-include_directories( ${KRITA_INCLUDES} )
-
 macro_optional_find_package(ZLIB)
 macro_bool_to_01(ZLIB_FOUND HAVE_ZLIB)
 configure_file(config_psd.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_psd.h)

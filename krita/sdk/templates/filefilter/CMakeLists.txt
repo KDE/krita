@@ -1,6 +1,4 @@
 
-include_directories( ${KRITA_INCLUDES} )
-
 set(libkritaconverter_LIB_SRCS
     %{APPNAMELC}_converter.cc
     )

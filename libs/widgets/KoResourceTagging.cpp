@@ -55,16 +55,7 @@ KoResourceTagging::KoResourceTagging(const QString& resourceType, const QString&
 #endif
     }
     else {
-        QString fileToLoad;
-
-        if (QFile::exists(m_tagsXMLFile)) {
-            fileToLoad = m_tagsXMLFile;
-        }
-        else {
-            fileToLoad = KStandardDirs::locateLocal("data", "krita/tags.xml");
-        }
-
-        readXMLFile(fileToLoad);
+        readXMLFile();
     }
 }
 
@@ -265,9 +256,19 @@ void KoResourceTagging::writeXMLFile(bool serverIdentity)
 
 }
 
-void KoResourceTagging::readXMLFile(const QString& filename, bool serverIdentity)
+void KoResourceTagging::readXMLFile(bool serverIdentity)
 {
-    QFile f(filename);
+
+    QString inputFile;
+
+    if (QFile::exists(m_tagsXMLFile)) {
+        inputFile = m_tagsXMLFile;
+    }
+    else {
+        inputFile = KStandardDirs::locateLocal("data", "krita/tags.xml");
+    }
+
+    QFile f(inputFile);
     if (!f.open(QIODevice::ReadOnly)) {
         return;
     }
@@ -468,6 +469,7 @@ QString KoResourceTagging::correctedNepomukFileName(QString fileName) const
 
 void KoResourceTagging::updateNepomukXML(bool nepomukOn)
 {
+
     if(nepomukOn) {
         m_tagRepo.clear();
         m_tagList.clear();

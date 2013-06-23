@@ -67,7 +67,7 @@ public:
 #endif
 
 private:
-    void readXMLFile(const QString& filename, bool serverIdentity=true);
+    void readXMLFile(bool serverIdentity=true);
     void writeXMLFile(bool serverIdentity=true);
 
     /// To check whether the resource belongs to the present server or not

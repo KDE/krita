@@ -58,6 +58,7 @@ void KisAnimationFrame::paintEvent(QPaintEvent *event){
     if(this->m_type == KisAnimationFrame::SELECTION){
         painter.setPen(Qt::blue);
         painter.setBrush(Qt::blue);
+        painter.setOpacity(0.5);
         painter.drawRect(0,0,this->m_width-1, 19);
     }
 }
@@ -84,12 +85,16 @@ void KisAnimationFrame::setType(int type){
     this->repaint();
 }
 
+int KisAnimationFrame::getIndex(){
+    int index = (int)this->geometry().x()/10;
+    return index;
+}
+
 void KisAnimationFrame::convertSelectionToFrame(int type){
     if(this->getType() == KisAnimationFrame::SELECTION){
 
+        this->getParent()->mapFrame(this->geometry().x()/10, this);
         if(this->getParent()->getPreviousFrameFrom(this)->getType() == KisAnimationFrame::BLANKFRAME){
-
-            this->getParent()->mapFrame(this->geometry().x()/10, this);
 
             int oldPrevFrameWidth = this->getParent()->getPreviousFrameFrom(this)->getWidth();
             int previousFrameWidth = this->geometry().x()-this->getParent()->getPreviousFrameFrom(this)->geometry().x();
@@ -120,7 +125,6 @@ void KisAnimationFrame::convertSelectionToFrame(int type){
             this->getParent()->mapFrame(this->geometry().x()/10, newFrame);
             this->getParent()->getParent()->getSelectedFrame()->hide();
             this->getParent()->getParent()->setSelectedFrame(0);
-
         }
     }
 }

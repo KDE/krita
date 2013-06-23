@@ -21,6 +21,7 @@
 #include "kis_layer_contents.h"
 #include <kis_debug.h>
 #include "kis_timeline_header.h"
+#include "kis_animation_frame.h"
 
 KisFrameBox::KisFrameBox(KisTimeline *parent)
 {
@@ -56,6 +57,9 @@ void KisFrameBox::updateUI(){
 
 void KisFrameBox::setSelectedFrame(KisAnimationFrame *selectedFrame){
     this->m_selectedFrame = selectedFrame;
+    if(this->m_selectedFrame){
+        emit frameSelectionChanged(this->m_selectedFrame->geometry());
+    }
 }
 
 KisAnimationFrame* KisFrameBox::getSelectedFrame(){

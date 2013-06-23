@@ -20,6 +20,7 @@
 #include "kis_animation_frame.h"
 #include <QMouseEvent>
 #include <kis_debug.h>
+#include <QMenu>
 
 KisLayerContents::KisLayerContents(KisFrameBox *parent)
 {
@@ -69,6 +70,7 @@ void KisLayerContents::paintEvent(QPaintEvent *event){
 void KisLayerContents::mousePressEvent(QMouseEvent *event){
     int x = event->x();
     x = x - (x%10);
+
     KisAnimationFrame* selectedFrame = new KisAnimationFrame(this, KisAnimationFrame::SELECTION, 10);
     selectedFrame->setGeometry(x, 0, 10, 20);
 
@@ -89,14 +91,14 @@ void KisLayerContents::mapFrame(int frameNumber, KisAnimationFrame *frame){
     }
 
     this->m_frames[frameNumber] = frame;
-    kWarning() << this->m_frames.values();
+    //kWarning() << this->m_frames.values();
 }
 
 void KisLayerContents::unmapFrame(int frameNumber){
     if(this->m_frames.contains(frameNumber)){
         this->m_frames.remove(frameNumber);
     }
-    kWarning() << this->m_frames.values();
+    //kWarning() << this->m_frames.values();
 }
 
 int KisLayerContents::getLastFrameIndex(){
@@ -149,8 +151,16 @@ KisAnimationFrame* KisLayerContents::getNextFrameFrom(KisAnimationFrame *frame){
     return this->m_frames.value(this->getNextFrameIndexFrom(this->getIndex(frame)));
 }
 
+KisAnimationFrame* KisLayerContents::getNextFrameFrom(int index){
+    return this->m_frames.value(this->getNextFrameIndexFrom(index));
+}
+
 KisAnimationFrame* KisLayerContents::getPreviousFrameFrom(KisAnimationFrame *frame){
     return this->m_frames.value(this->getPreviousFrameIndexFrom(this->getIndex(frame)));
+}
+
+KisAnimationFrame* KisLayerContents::getPreviousFrameFrom(int index){
+    return this->m_frames.value(this->getNextFrameIndexFrom(index));
 }
 
 KisFrameBox* KisLayerContents::getParent(){

@@ -34,6 +34,7 @@ public:
     int getType();
     void setType(int type);
     void expandWidth();
+    int getIndex();
 
 protected:
     void paintEvent(QPaintEvent *event);

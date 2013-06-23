@@ -37,7 +37,9 @@ public:
     int getNextFrameIndexFrom(int index);
     int getIndex(KisAnimationFrame* frame);
     KisAnimationFrame* getNextFrameFrom(KisAnimationFrame* frame);
+    KisAnimationFrame* getNextFrameFrom(int index);
     KisAnimationFrame* getPreviousFrameFrom(KisAnimationFrame* frame);
+    KisAnimationFrame*getPreviousFrameFrom(int index);
     int getContentLength();
     KisFrameBox* getParent();
 

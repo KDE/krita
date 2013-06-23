@@ -183,22 +183,34 @@ void KisTimeline::updateHeight(){
 
 void KisTimeline::blankFramePressed(){
     if(m_cells->getSelectedFrame()){
+        KisAnimationFrame* oldSelection = this->m_cells->getSelectedFrame();
         this->m_cells->getSelectedFrame()->convertSelectionToFrame(KisAnimationFrame::BLANKFRAME);
-        this->m_cells->setSelectedFrame(0);
+        KisAnimationFrame* newSelection = new KisAnimationFrame(oldSelection->getParent(), KisAnimationFrame::SELECTION, 10);
+        newSelection->setGeometry(oldSelection->geometry());
+        this->m_cells->setSelectedFrame(newSelection);
+        newSelection->show();
     }
 }
 
 void KisTimeline::keyFramePressed(){
     if(m_cells->getSelectedFrame()){
+        KisAnimationFrame* oldSelection = this->m_cells->getSelectedFrame();
         this->m_cells->getSelectedFrame()->convertSelectionToFrame(KisAnimationFrame::KEYFRAME);
-        this->m_cells->setSelectedFrame(0);
+        KisAnimationFrame* newSelection = new KisAnimationFrame(oldSelection->getParent(), KisAnimationFrame::SELECTION, 10);
+        newSelection->setGeometry(oldSelection->geometry());
+        this->m_cells->setSelectedFrame(newSelection);
+        newSelection->show();
     }
 }
 
 void KisTimeline::addframePressed(){
     if(m_cells->getSelectedFrame()){
+        KisAnimationFrame* oldSelection = this->m_cells->getSelectedFrame();
         this->m_cells->getSelectedFrame()->expandWidth();
-        this->m_cells->setSelectedFrame(0);
+        KisAnimationFrame* newSelection = new KisAnimationFrame(oldSelection->getParent(), KisAnimationFrame::SELECTION, 10);
+        newSelection->setGeometry(oldSelection->geometry());
+        this->m_cells->setSelectedFrame(newSelection);
+        newSelection->show();
     }
 }
 

@@ -46,6 +46,9 @@ private:
     KisAnimationFrame* m_selectedFrame;
     KisTimelineHeader* m_timelineHeader;
 
+signals:
+    void frameSelectionChanged(QRect geometry);
+
 };
 
 #endif // KIS_FRAME_BOX_H

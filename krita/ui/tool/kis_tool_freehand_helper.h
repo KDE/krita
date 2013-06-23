@@ -95,6 +95,10 @@ protected:
                           const QPointF &control2,
                           const KisPaintInformation &pi2);
 
+private:
+    void paintBezierSegment(KisPaintInformation pi1, KisPaintInformation pi2,
+                                                   QPointF tangent1, QPointF tangent2);
+
 private slots:
 
     void finishStroke();

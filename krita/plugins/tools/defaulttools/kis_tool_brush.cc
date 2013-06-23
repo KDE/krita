@@ -28,8 +28,7 @@
 #include "kis_cursor.h"
 #include "kis_slider_spin_box.h"
 
-#define MAXIMUM_SMOOTHNESS_QUALITY 100 // 0..100
-#define MAXIMUM_SMOOTHNESS_FACTOR 1000.0 // 0..1000.0 == weight in gui
+#define MAXIMUM_SMOOTHNESS_DISTANCE 1000.0 // 0..1000.0 == weight in gui
 #define MAXIMUM_MAGNETISM 1000
 
 
@@ -50,32 +49,31 @@ void KisToolBrush::slotSetSmoothingType(int index)
     switch (index) {
     case 0:
         m_smoothingOptions.smoothingType = KisSmoothingOptions::NO_SMOOTHING;
-        m_sliderSmoothnessFactor->setEnabled(false);
-        m_sliderSmoothnessQuality->setEnabled(false);
+        m_sliderSmoothnessDistance->setEnabled(false);
+        m_sliderTailAggressiveness->setEnabled(false);
         break;
     case 1:
         m_smoothingOptions.smoothingType = KisSmoothingOptions::SIMPLE_SMOOTHING;
-        m_sliderSmoothnessFactor->setEnabled(false);
-        m_sliderSmoothnessQuality->setEnabled(false);
+        m_sliderSmoothnessDistance->setEnabled(false);
+        m_sliderTailAggressiveness->setEnabled(false);
         break;
     case 2:
     default:
         m_smoothingOptions.smoothingType = KisSmoothingOptions::WEIGHTED_SMOOTHING;
-        m_sliderSmoothnessFactor->setEnabled(true);
-        m_sliderSmoothnessQuality->setEnabled(true);
+        m_sliderSmoothnessDistance->setEnabled(true);
+        m_sliderTailAggressiveness->setEnabled(true);
     }
 }
 
-void KisToolBrush::slotSetSmoothnessQuality(int quality)
+void KisToolBrush::slotSetSmoothnessDistance(qreal distance)
 {
-    m_smoothingOptions.smoothnessQuality = quality;
+    m_smoothingOptions.smoothnessDistance = distance;
 }
 
-void KisToolBrush::slotSetSmoothnessFactor(qreal factor)
+void KisToolBrush::slotSetTailAgressiveness(qreal argh_rhhrr)
 {
-    m_smoothingOptions.smoothnessFactor = factor;
+    m_smoothingOptions.tailAggressiveness = argh_rhhrr;
 }
-
 void KisToolBrush::slotSetMagnetism(int magnetism)
 {
     m_magnetism = expf(magnetism / (double)MAXIMUM_MAGNETISM) / expf(1.0);
@@ -93,20 +91,19 @@ QWidget * KisToolBrush::createOptionWidget()
     connect(m_cmbSmoothingType, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSetSmoothingType(int)));
     addOptionWidgetOption(m_cmbSmoothingType);
 
-    m_sliderSmoothnessQuality = new KisSliderSpinBox(optionWidget);
-    m_sliderSmoothnessQuality->setRange(1, MAXIMUM_SMOOTHNESS_QUALITY);
-    m_sliderSmoothnessQuality->setEnabled(true);
-    connect(m_sliderSmoothnessQuality, SIGNAL(valueChanged(int)), SLOT(slotSetSmoothnessQuality(int)));
-    m_sliderSmoothnessQuality->setValue(m_smoothingOptions.smoothnessQuality);
-    addOptionWidgetOption(m_sliderSmoothnessQuality, new QLabel(i18n("Quality:")));
+    m_sliderSmoothnessDistance = new KisDoubleSliderSpinBox(optionWidget);
+    m_sliderSmoothnessDistance->setRange(3.0, MAXIMUM_SMOOTHNESS_DISTANCE, 1);
+    m_sliderSmoothnessDistance->setEnabled(true);
+    connect(m_sliderSmoothnessDistance, SIGNAL(valueChanged(qreal)), SLOT(slotSetSmoothnessDistance(qreal)));
+    m_sliderSmoothnessDistance->setValue(m_smoothingOptions.smoothnessDistance);
+    addOptionWidgetOption(m_sliderSmoothnessDistance, new QLabel(i18n("Weight:")));
 
-    m_sliderSmoothnessFactor = new KisDoubleSliderSpinBox(optionWidget);
-    m_sliderSmoothnessFactor->setRange(3.0, MAXIMUM_SMOOTHNESS_FACTOR, 1);
-    m_sliderSmoothnessFactor->setEnabled(true);
-    connect(m_sliderSmoothnessFactor, SIGNAL(valueChanged(qreal)), SLOT(slotSetSmoothnessFactor(qreal)));
-    m_sliderSmoothnessFactor->setValue(m_smoothingOptions.smoothnessFactor);
-
-    addOptionWidgetOption(m_sliderSmoothnessFactor, new QLabel(i18n("Weight:")));
+    m_sliderTailAggressiveness = new KisDoubleSliderSpinBox(optionWidget);
+    m_sliderTailAggressiveness->setRange(0.0, 1.0, 2);
+    m_sliderTailAggressiveness->setEnabled(true);
+    connect(m_sliderTailAggressiveness, SIGNAL(valueChanged(qreal)), SLOT(slotSetTailAgressiveness(qreal)));
+    m_sliderTailAggressiveness->setValue(m_smoothingOptions.tailAggressiveness);
+    addOptionWidgetOption(m_sliderTailAggressiveness, new QLabel(i18n("Tail Aggressiveness:")));
 
     slotSetSmoothingType(1);
 

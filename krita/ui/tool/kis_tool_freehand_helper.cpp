@@ -245,8 +245,7 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
     // https://bugs.kde.org/show_bug.cgi?id=281267 and http://www24.atwiki.jp/sigetch_2007/pages/17.html.
     // This is also implemented in gimp, which is where I cribbed the code from.
     if (m_d->smoothingOptions.smoothingType == KisSmoothingOptions::WEIGHTED_SMOOTHING
-            && m_d->smoothingOptions.smoothnessQuality > 1
-            && m_d->smoothingOptions.smoothnessFactor > 3.0) {
+        && m_d->smoothingOptions.smoothnessDistance > 0.0) {
 
         m_d->history.append(info);
         m_d->velocityHistory.append(std::numeric_limits<qreal>::signaling_NaN()); // Fake velocity!
@@ -255,22 +254,18 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
         qreal y = 0.0;
 
         if (m_d->history.size() > 3) {
+            const qreal avg_events_rate = 8; // ms
+            const qreal sigma = m_d->smoothingOptions.smoothnessDistance / (3.0 * avg_events_rate); // '3.0' for (3 * sigma) range
 
-            int length = qMin(m_d->smoothingOptions.smoothnessQuality, m_d->history.size());
-            int minIndex = m_d->history.size() - length;
-
-            qreal gaussianWeight = 0.0;
-            qreal gaussianWeight2 = m_d->smoothingOptions.smoothnessFactor * m_d->smoothingOptions.smoothnessFactor;
+            qreal gaussianWeight = 1 / (sqrt(2 * M_PI) * sigma);
+            qreal gaussianWeight2 = sigma * sigma;
             qreal velocitySum = 0.0;
             qreal scaleSum = 0.0;
-
-            if (gaussianWeight2 != 0.0) {
-                gaussianWeight = 1 / (sqrt(2 * M_PI) * m_d->smoothingOptions.smoothnessFactor);
-            }
+            qreal baseRate = 0.0;
 
             Q_ASSERT(m_d->history.size() == m_d->velocityHistory.size());
 
-            for (int i = m_d->history.size() - 1; i >= minIndex; i--) {
+            for (int i = m_d->history.size() - 1; i >= 0; i--) {
                 qreal rate = 0.0;
 
                 const KisPaintInformation nextInfo = m_d->history.at(i);
@@ -288,10 +283,29 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
                     m_d->velocityHistory[i] = velocity;
                 }
 
+                qreal pressureGrad = 0.0;
+                if (i < m_d->history.size() - 1) {
+                    pressureGrad = nextInfo.pressure() - m_d->history.at(i + 1).pressure();
+
+                    const qreal tailAgressiveness = 40.0 * m_d->smoothingOptions.tailAggressiveness;
+
+                    if (pressureGrad > 0.0 ) {
+                        pressureGrad *= tailAgressiveness * (1.0 - nextInfo.pressure());
+                        velocity += pressureGrad * 3.0 * sigma; // (3 * sigma) --- holds > 90% of the region
+                    }
+                }
+
                 if (gaussianWeight2 != 0.0) {
-                    velocitySum += velocity * 100;
+                    velocitySum += velocity;
                     rate = gaussianWeight * exp(-velocitySum * velocitySum / (2 * gaussianWeight2));
                 }
+
+                if (m_d->history.size() - i == 1) {
+                    baseRate = rate;
+                } else if (baseRate / rate > 100) {
+                    break;
+                }
+
                 scaleSum += rate;
                 x += rate * nextInfo.pos().x();
                 y += rate * nextInfo.pos().y();
@@ -301,9 +315,11 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
                 x /= scaleSum;
                 y /= scaleSum;
             }
+
             if ((x != 0.0 && y != 0.0) || (x == info.pos().x() && y == info.pos().y())) {
-                m_d->history.last().setPos(QPointF(x, y));
+                info.setMovement(toKisVector2D(info.pos() - QPointF(x, y)));
                 info.setPos(QPointF(x, y));
+                m_d->history.last() = info;
             }
         }
     }

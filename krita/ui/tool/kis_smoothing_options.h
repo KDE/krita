@@ -32,9 +32,8 @@ struct KisSmoothingOptions
     KisSmoothingOptions();
 
     SmoothingType smoothingType;
-    qreal smoothnessFactor;
-    int smoothnessQuality;
-
+    qreal smoothnessDistance;
+    qreal tailAggressiveness;
 };
 
 #endif // KIS_SMOOTHING_OPTIONS_H

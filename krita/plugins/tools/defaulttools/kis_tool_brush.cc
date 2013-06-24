@@ -112,7 +112,7 @@ QWidget * KisToolBrush::createOptionWidget()
     m_sliderTailAggressiveness->setEnabled(true);
     connect(m_sliderTailAggressiveness, SIGNAL(valueChanged(qreal)), SLOT(slotSetTailAgressiveness(qreal)));
     m_sliderTailAggressiveness->setValue(m_smoothingOptions.tailAggressiveness);
-    addOptionWidgetOption(m_sliderTailAggressiveness, new QLabel(i18n("Tail Aggressiveness:")));
+    addOptionWidgetOption(m_sliderTailAggressiveness, new QLabel(i18n("Stroke Ending:")));
 
     m_chkSmoothPressure = new QCheckBox("", optionWidget);
     m_chkSmoothPressure->setChecked(m_smoothingOptions.smoothPressure);

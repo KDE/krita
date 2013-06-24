@@ -22,7 +22,6 @@
 #include "kis_kra_utils.h"
 
 #include <QTextStream>
-#include <QDir>
 
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
@@ -45,11 +44,11 @@
 
 using namespace KRA;
 
-KisSaveXmlVisitor::KisSaveXmlVisitor(QDomDocument doc, const QDomElement & element, quint32 &count, const QString &url)
-    : KisNodeVisitor()
-    , m_doc(doc)
-    , m_count(count)
-    , m_url(url)
+KisSaveXmlVisitor::KisSaveXmlVisitor(QDomDocument doc, const QDomElement & element, quint32 &count, bool root) :
+        KisNodeVisitor(),
+        m_doc(doc),
+        m_count(count),
+        m_root(root)
 {
     Q_ASSERT(!element.isNull());
     m_elem = element;
@@ -72,12 +71,7 @@ bool KisSaveXmlVisitor::visit(KisExternalLayer * layer)
     else if (layer->inherits("KisFileLayer")) {
         QDomElement layerElement = m_doc.createElement(LAYER);
         saveLayer(layerElement, FILE_LAYER, layer);
-
-        QString path = dynamic_cast<KisFileLayer*>(layer)->path();
-
-        QDir d(QFileInfo(m_url).absolutePath());
-
-        layerElement.setAttribute("source", d.relativeFilePath(path));
+        layerElement.setAttribute("source", dynamic_cast<KisFileLayer*>(layer)->fileName());
         layerElement.setAttribute("scale", dynamic_cast<KisFileLayer*>(layer)->scaleToImageResolution() ?  "true" : "false");
         layerElement.setAttribute(COLORSPACE_NAME, layer->original()->colorSpace()->id());
 
@@ -113,12 +107,18 @@ bool KisSaveXmlVisitor::visit(KisGroupLayer *layer)
 {
     QDomElement layerElement;
 
-    layerElement = m_elem;
+    if (m_root) // if this is the root we fake so not to save it
+        layerElement = m_elem;
+    else {
+        layerElement = m_doc.createElement(LAYER);
+        saveLayer(layerElement, GROUP_LAYER, layer);
+        m_elem.appendChild(layerElement);
+    }
 
     QDomElement elem = m_doc.createElement(LAYERS);
     Q_ASSERT(!layerElement.isNull());
     layerElement.appendChild(elem);
-    KisSaveXmlVisitor visitor(m_doc, elem, m_count, m_url);
+    KisSaveXmlVisitor visitor(m_doc, elem, m_count);
     visitor.setSelectedNodes(m_selectedNodes);
     m_count++;
     bool success = visitor.visitAllInverse(layer);
@@ -270,7 +270,7 @@ bool KisSaveXmlVisitor::saveMasks(KisNode * node, QDomElement & layerElement)
         QDomElement elem = m_doc.createElement(MASKS);
         Q_ASSERT(!layerElement.isNull());
         layerElement.appendChild(elem);
-        KisSaveXmlVisitor visitor(m_doc, elem, m_count, m_url);
+        KisSaveXmlVisitor visitor(m_doc, elem, m_count);
         visitor.setSelectedNodes(m_selectedNodes);
         bool success =  visitor.visitAllInverse(node);
 

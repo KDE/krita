@@ -32,7 +32,7 @@ class KisFileLayer : public KisExternalLayer
 {
     Q_OBJECT
 public:
-    explicit KisFileLayer(KisImageWSP image, const QString& basePath, const QString &filename, bool scaleToImageResolution, const QString &name, quint8 opacity);
+    explicit KisFileLayer(KisImageWSP image, const QString &filename, bool scaleToImageResolution, const QString &name, quint8 opacity);
     ~KisFileLayer();
     KisFileLayer(const KisFileLayer& rhs);
 
@@ -44,9 +44,9 @@ public:
     KisPaintDeviceSP paintDevice() const;
     KoDocumentSectionModel::PropertyList sectionModelProperties() const;
 
-    void setFileName(const QString &basePath, const QString &filename);
+    void setFileName(const QString &filename);
     QString fileName() const;
-    QString path() const;
+
     void setScaleToImageResolution(bool scale);
     bool scaleToImageResolution() const;
     
@@ -63,7 +63,6 @@ public slots:
 private:
     KisDoc2 *m_doc;
 
-    QString m_basePath;
     QString m_filename;
     bool m_scaleToImageResolution;
 

@@ -25,7 +25,6 @@
 #include <QDialog>
 #include <QVBoxLayout>
 #include <QFileInfo>
-#include <QDesktopServices>
 
 #include <kactioncollection.h>
 #include <ktoggleaction.h>
@@ -877,16 +876,9 @@ bool KisLayerManager::activeLayerHasSelection()
 
 void KisLayerManager::addFileLayer(KisNodeSP activeNode)
 {
-
-    QString basePath;
-    KUrl url = m_view->document()->url();
-    qDebug() << "url" << url << url.isEmpty();
-    if (url.isLocalFile()) {
-        basePath = QFileInfo(url.toLocalFile()).absolutePath();
-    }
     KisImageWSP image = m_view->image();
 
-    KisDlgFileLayer dlg(basePath, image->nextLayerName(), m_view);
+    KisDlgFileLayer dlg(image->nextLayerName(), m_view);
     dlg.resize(dlg.minimumSizeHint());
 
     if (dlg.exec() == QDialog::Accepted) {
@@ -901,7 +893,7 @@ void KisLayerManager::addFileLayer(KisNodeSP activeNode)
         bool scaleToImageResolution = dlg.scaleToImageResolution();
 
         addLayerCommon(activeNode,
-                       new KisFileLayer(image, basePath, fileName, scaleToImageResolution, name, OPACITY_OPAQUE_U8));
+                       new KisFileLayer(image, fileName, scaleToImageResolution, name, OPACITY_OPAQUE_U8));
     }
 
 }

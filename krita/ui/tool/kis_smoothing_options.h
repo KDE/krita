@@ -34,6 +34,7 @@ struct KisSmoothingOptions
     SmoothingType smoothingType;
     qreal smoothnessDistance;
     qreal tailAggressiveness;
+    bool smoothPressure;
 };
 
 #endif // KIS_SMOOTHING_OPTIONS_H

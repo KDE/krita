@@ -49,6 +49,7 @@ private slots:
     void slotSetMagnetism(int magnetism);
     void slotSetSmoothingType(int index);
     void slotSetTailAgressiveness(qreal argh_rhhrr);
+    void setSmoothPressure(bool value);
 
 private:
     QGridLayout *m_optionLayout;
@@ -58,6 +59,7 @@ private:
     KisSliderSpinBox *m_sliderMagnetism;
     KisDoubleSliderSpinBox *m_sliderSmoothnessDistance;
     KisDoubleSliderSpinBox *m_sliderTailAggressiveness;
+    QCheckBox *m_chkSmoothPressure;
 };
 
 

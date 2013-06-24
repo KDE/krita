@@ -261,6 +261,7 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
             qreal gaussianWeight2 = sigma * sigma;
             qreal velocitySum = 0.0;
             qreal scaleSum = 0.0;
+            qreal pressure = 0.0;
             qreal baseRate = 0.0;
 
             Q_ASSERT(m_d->history.size() == m_d->velocityHistory.size());
@@ -309,16 +310,27 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
                 scaleSum += rate;
                 x += rate * nextInfo.pos().x();
                 y += rate * nextInfo.pos().y();
+
+                if (m_d->smoothingOptions.smoothPressure) {
+                    pressure += rate * nextInfo.pressure();
+                }
             }
 
             if (scaleSum != 0.0) {
                 x /= scaleSum;
                 y /= scaleSum;
+
+                if (m_d->smoothingOptions.smoothPressure) {
+                    pressure /= scaleSum;
+                }
             }
 
             if ((x != 0.0 && y != 0.0) || (x == info.pos().x() && y == info.pos().y())) {
                 info.setMovement(toKisVector2D(info.pos() - QPointF(x, y)));
                 info.setPos(QPointF(x, y));
+                if (m_d->smoothingOptions.smoothPressure) {
+                    info.setPressure(pressure);
+                }
                 m_d->history.last() = info;
             }
         }

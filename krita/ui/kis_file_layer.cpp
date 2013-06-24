@@ -28,15 +28,15 @@
 #include <KoProgressUpdater.h>
 #include <KoProgressProxy.h>
 
-KisFileLayer::KisFileLayer(KisImageWSP image, const QString &filename, bool scaleToImageResolution, const QString &name, quint8 opacity)
+KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QString &filename, bool scaleToImageResolution, const QString &name, quint8 opacity)
     : KisExternalLayer(image, name, opacity)
     , m_doc(new KisDoc2())
+    , m_basePath(basePath)
     , m_filename(filename)
     , m_scaleToImageResolution(scaleToImageResolution)
 {
-    Q_ASSERT(QFile::exists(filename));
-    if (QFile::exists(filename)) {
-        m_fileWatcher.addPath(filename);
+    if (QFile::exists(path())) {
+        m_fileWatcher.addPath(path());
     }
     connect(&m_fileWatcher, SIGNAL(fileChanged(QString)), SLOT(reloadImage()));
     reloadImage();
@@ -51,12 +51,12 @@ KisFileLayer::KisFileLayer(const KisFileLayer &rhs)
     : KisExternalLayer(rhs)
     , m_doc(new KisDoc2())
 {
-    Q_ASSERT(QFile::exists(rhs.m_filename));
-
     connect(&m_fileWatcher, SIGNAL(fileChanged(QString)), SLOT(reloadImage()));
+    m_basePath = rhs.m_basePath;
     m_filename = rhs.m_filename;
-    if (QFile::exists(m_filename)) {
-        m_fileWatcher.addPath(m_filename);
+    Q_ASSERT(QFile::exists(rhs.path()));
+    if (QFile::exists(path())) {
+        m_fileWatcher.addPath(path());
     }
 
     m_scaleToImageResolution = rhs.m_scaleToImageResolution;
@@ -90,17 +90,28 @@ KoDocumentSectionModel::PropertyList KisFileLayer::sectionModelProperties() cons
     return l;
 }
 
-void KisFileLayer::setFileName(const QString &filename)
+void KisFileLayer::setFileName(const QString &basePath, const QString &filename)
 {
-    m_fileWatcher.removePath(m_filename);
+    m_fileWatcher.removePath(m_basePath + "/" + m_filename);
+    m_basePath = basePath;
     m_filename = filename;
-    m_fileWatcher.addPath(m_filename);
+    m_fileWatcher.addPath(m_basePath + "/" + m_filename);
     reloadImage();
 }
 
 QString KisFileLayer::fileName() const
 {
     return m_filename;
+}
+
+QString KisFileLayer::path() const
+{
+    if (m_basePath.isEmpty()) {
+        return m_filename;
+    }
+    else {
+        return m_basePath + "/" + m_filename;
+    }
 }
 
 void KisFileLayer::setScaleToImageResolution(bool scale)
@@ -117,7 +128,7 @@ bool KisFileLayer::scaleToImageResolution() const
 
 void KisFileLayer::reloadImage()
 {
-    m_doc->openUrl(m_filename);
+    m_doc->openUrl(path());
     KisImageWSP importedImage = m_doc->image();
     m_image = importedImage->projection();
 

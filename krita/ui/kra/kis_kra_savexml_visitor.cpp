@@ -113,6 +113,7 @@ bool KisSaveXmlVisitor::visit(KisPaintLayer *layer)
 bool KisSaveXmlVisitor::visit(KisGroupLayer *layer)
 {
     QDomElement layerElement;
+
     if (m_root) // if this is the root we fake so not to save it
         layerElement = m_elem;
     else {
@@ -120,13 +121,10 @@ bool KisSaveXmlVisitor::visit(KisGroupLayer *layer)
         saveLayer(layerElement, GROUP_LAYER, layer);
         m_elem.appendChild(layerElement);
     }
-
-    layerElement = m_elem;
-
     QDomElement elem = m_doc.createElement(LAYERS);
     Q_ASSERT(!layerElement.isNull());
     layerElement.appendChild(elem);
-    KisSaveXmlVisitor visitor(m_doc, elem, m_count, m_url);
+    KisSaveXmlVisitor visitor(m_doc, elem, m_count, m_url, false);
     visitor.setSelectedNodes(m_selectedNodes);
     m_count++;
     bool success = visitor.visitAllInverse(layer);
@@ -244,9 +242,9 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
     m_nodeFileNames[layer] = LAYER + QString::number(m_count);
 
     dbgFile << "Saved layer "
-    << layer->name()
-    << " of type " << layerType
-    << " with filename " << LAYER + QString::number(m_count);
+            << layer->name()
+            << " of type " << layerType
+            << " with filename " << LAYER + QString::number(m_count);
 }
 
 void KisSaveXmlVisitor::saveMask(QDomElement & el, const QString & maskType, const KisMask * mask)
@@ -267,9 +265,9 @@ void KisSaveXmlVisitor::saveMask(QDomElement & el, const QString & maskType, con
     m_nodeFileNames[mask] = MASK + QString::number(m_count);
 
     dbgFile << "Saved mask "
-    << mask->name()
-    << " of type " << maskType
-    << " with filename " << MASK + QString::number(m_count);
+            << mask->name()
+            << " of type " << maskType
+            << " with filename " << MASK + QString::number(m_count);
 }
 
 bool KisSaveXmlVisitor::saveMasks(KisNode * node, QDomElement & layerElement)
@@ -278,7 +276,7 @@ bool KisSaveXmlVisitor::saveMasks(KisNode * node, QDomElement & layerElement)
         QDomElement elem = m_doc.createElement(MASKS);
         Q_ASSERT(!layerElement.isNull());
         layerElement.appendChild(elem);
-        KisSaveXmlVisitor visitor(m_doc, elem, m_count, m_url);
+        KisSaveXmlVisitor visitor(m_doc, elem, m_count, m_url, false);
         visitor.setSelectedNodes(m_selectedNodes);
         bool success =  visitor.visitAllInverse(node);
 

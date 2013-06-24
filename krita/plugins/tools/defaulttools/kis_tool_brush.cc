@@ -105,7 +105,7 @@ QWidget * KisToolBrush::createOptionWidget()
     m_sliderSmoothnessDistance->setEnabled(true);
     connect(m_sliderSmoothnessDistance, SIGNAL(valueChanged(qreal)), SLOT(slotSetSmoothnessDistance(qreal)));
     m_sliderSmoothnessDistance->setValue(m_smoothingOptions.smoothnessDistance);
-    addOptionWidgetOption(m_sliderSmoothnessDistance, new QLabel(i18n("Smooth Distance:")));
+    addOptionWidgetOption(m_sliderSmoothnessDistance, new QLabel(i18n("Distance:")));
 
     m_sliderTailAggressiveness = new KisDoubleSliderSpinBox(optionWidget);
     m_sliderTailAggressiveness->setRange(0.0, 1.0, 2);

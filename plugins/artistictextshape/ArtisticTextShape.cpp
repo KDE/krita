@@ -847,10 +847,14 @@ QRectF ArtisticTextShape::charExtentsAt(int charIndex) const
     else if(charPos.first < 0)
         charPos = CharIndex(m_ranges.count()-1, m_ranges.last().text().length()-1);
 
-    const ArtisticTextRange &range = m_ranges.at(charPos.first);
-    QFontMetrics metrics(range.font());
-    int w = metrics.charWidth(range.text(), charPos.second);
-    return QRectF( 0, 0, w, metrics.height() );
+    if (charPos.first < m_ranges.size()) {
+        const ArtisticTextRange &range = m_ranges.at(charPos.first);
+        QFontMetrics metrics(range.font());
+        int w = metrics.charWidth(range.text(), charPos.second);
+        return QRectF( 0, 0, w, metrics.height() );
+    }
+
+    return QRectF();
 }
 
 void ArtisticTextShape::updateSizeAndPosition( bool global )

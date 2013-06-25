@@ -35,6 +35,9 @@
 #include <math.h>
 #include <qnumeric.h> // for qIsNaN
 
+//#define DEBUG_BEZIER_CURVES
+
+
 struct KisToolFreehandHelper::Private
 {
     KisPaintingInformationBuilder *infoBuilder;
@@ -143,6 +146,94 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
     }
 }
 
+void KisToolFreehandHelper::paintBezierSegment(KisPaintInformation pi1, KisPaintInformation pi2,
+                                               QPointF tangent1, QPointF tangent2)
+{
+    if (tangent1.isNull() || tangent2.isNull()) return;
+
+    const qreal maxSanePoint = 1e6;
+
+    QPointF controlTarget1;
+    QPointF controlTarget2;
+
+    // Shows the direction in which control points go
+    QPointF controlDirection1 = pi1.pos() + tangent1;
+    QPointF controlDirection2 = pi2.pos() - tangent2;
+
+    // Lines in the direction of the control points
+    QLineF line1(pi1.pos(), controlDirection1);
+    QLineF line2(pi2.pos(), controlDirection2);
+
+    // Lines to check whether the control points lay on the opposite
+    // side of the line
+    QLineF line3(controlDirection1, controlDirection2);
+    QLineF line4(pi1.pos(), pi2.pos());
+
+    QPointF intersection;
+    if (line3.intersect(line4, &intersection) == QLineF::BoundedIntersection) {
+        qreal controlLength = line4.length() / 2;
+
+        line1.setLength(controlLength);
+        line2.setLength(controlLength);
+
+        controlTarget1 = line1.p2();
+        controlTarget2 = line2.p2();
+    } else {
+        QLineF::IntersectType type = line1.intersect(line2, &intersection);
+
+        if (type == QLineF::NoIntersection ||
+            intersection.manhattanLength() > maxSanePoint) {
+
+            intersection = 0.5 * (pi1.pos() + pi2.pos());
+            qDebug() << "WARINING: there is no intersection point "
+                     << "in the basic smoothing algoriths";
+        }
+
+        controlTarget1 = intersection;
+        controlTarget2 = intersection;
+    }
+
+    // shows how near to the controlTarget the value raises
+    qreal coeff = 0.8;
+
+    qreal velocity1 = QLineF(QPointF(), tangent1).length();
+    qreal velocity2 = QLineF(QPointF(), tangent2).length();
+
+    Q_ASSERT(velocity1 > 0);
+    Q_ASSERT(velocity2 > 0);
+
+    qreal similarity = qMin(velocity1/velocity2, velocity2/velocity1);
+
+    // the controls should not differ more than 50%
+    similarity = qMax(similarity, 0.5);
+
+    // when the controls are symmetric, their size should be smaller
+    // to avoid corner-like curves
+    coeff *= 1 - qMax(0.0, similarity - 0.8);
+
+    Q_ASSERT(coeff > 0);
+
+
+    QPointF control1;
+    QPointF control2;
+
+    if (velocity1 > velocity2) {
+        control1 = pi1.pos() * (1.0 - coeff) + coeff * controlTarget1;
+        coeff *= similarity;
+        control2 = pi2.pos() * (1.0 - coeff) + coeff * controlTarget2;
+    } else {
+        control2 = pi2.pos() * (1.0 - coeff) + coeff * controlTarget2;
+        coeff *= similarity;
+        control1 = pi1.pos() * (1.0 - coeff) + coeff * controlTarget1;
+    }
+
+    paintBezierCurve(m_d->painterInfos,
+                     pi1,
+                     control1,
+                     control2,
+                     pi2);
+}
+
 void KisToolFreehandHelper::paint(KoPointerEvent *event)
 {
     KisPaintInformation info =
@@ -154,8 +245,7 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
     // https://bugs.kde.org/show_bug.cgi?id=281267 and http://www24.atwiki.jp/sigetch_2007/pages/17.html.
     // This is also implemented in gimp, which is where I cribbed the code from.
     if (m_d->smoothingOptions.smoothingType == KisSmoothingOptions::WEIGHTED_SMOOTHING
-            && m_d->smoothingOptions.smoothnessQuality > 1
-            && m_d->smoothingOptions.smoothnessFactor > 3.0) {
+        && m_d->smoothingOptions.smoothnessDistance > 0.0) {
 
         m_d->history.append(info);
         m_d->velocityHistory.append(std::numeric_limits<qreal>::signaling_NaN()); // Fake velocity!
@@ -164,22 +254,19 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
         qreal y = 0.0;
 
         if (m_d->history.size() > 3) {
+            const qreal avg_events_rate = 8; // ms
+            const qreal sigma = m_d->smoothingOptions.smoothnessDistance / (3.0 * avg_events_rate); // '3.0' for (3 * sigma) range
 
-            int length = qMin(m_d->smoothingOptions.smoothnessQuality, m_d->history.size());
-            int minIndex = m_d->history.size() - length;
-
-            qreal gaussianWeight = 0.0;
-            qreal gaussianWeight2 = m_d->smoothingOptions.smoothnessFactor * m_d->smoothingOptions.smoothnessFactor;
+            qreal gaussianWeight = 1 / (sqrt(2 * M_PI) * sigma);
+            qreal gaussianWeight2 = sigma * sigma;
             qreal velocitySum = 0.0;
             qreal scaleSum = 0.0;
-
-            if (gaussianWeight2 != 0.0) {
-                gaussianWeight = 1 / (sqrt(2 * M_PI) * m_d->smoothingOptions.smoothnessFactor);
-            }
+            qreal pressure = 0.0;
+            qreal baseRate = 0.0;
 
             Q_ASSERT(m_d->history.size() == m_d->velocityHistory.size());
 
-            for (int i = m_d->history.size() - 1; i >= minIndex; i--) {
+            for (int i = m_d->history.size() - 1; i >= 0; i--) {
                 qreal rate = 0.0;
 
                 const KisPaintInformation nextInfo = m_d->history.at(i);
@@ -197,50 +284,74 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
                     m_d->velocityHistory[i] = velocity;
                 }
 
+                qreal pressureGrad = 0.0;
+                if (i < m_d->history.size() - 1) {
+                    pressureGrad = nextInfo.pressure() - m_d->history.at(i + 1).pressure();
+
+                    const qreal tailAgressiveness = 40.0 * m_d->smoothingOptions.tailAggressiveness;
+
+                    if (pressureGrad > 0.0 ) {
+                        pressureGrad *= tailAgressiveness * (1.0 - nextInfo.pressure());
+                        velocity += pressureGrad * 3.0 * sigma; // (3 * sigma) --- holds > 90% of the region
+                    }
+                }
+
                 if (gaussianWeight2 != 0.0) {
-                    velocitySum += velocity * 100;
+                    velocitySum += velocity;
                     rate = gaussianWeight * exp(-velocitySum * velocitySum / (2 * gaussianWeight2));
                 }
+
+                if (m_d->history.size() - i == 1) {
+                    baseRate = rate;
+                } else if (baseRate / rate > 100) {
+                    break;
+                }
+
                 scaleSum += rate;
                 x += rate * nextInfo.pos().x();
                 y += rate * nextInfo.pos().y();
+
+                if (m_d->smoothingOptions.smoothPressure) {
+                    pressure += rate * nextInfo.pressure();
+                }
             }
 
             if (scaleSum != 0.0) {
                 x /= scaleSum;
                 y /= scaleSum;
+
+                if (m_d->smoothingOptions.smoothPressure) {
+                    pressure /= scaleSum;
+                }
             }
+
             if ((x != 0.0 && y != 0.0) || (x == info.pos().x() && y == info.pos().y())) {
-                m_d->history.last().setPos(QPointF(x, y));
+                info.setMovement(toKisVector2D(info.pos() - QPointF(x, y)));
                 info.setPos(QPointF(x, y));
+                if (m_d->smoothingOptions.smoothPressure) {
+                    info.setPressure(pressure);
+                }
+                m_d->history.last() = info;
             }
         }
     }
 
     if (m_d->smoothingOptions.smoothingType == KisSmoothingOptions::SIMPLE_SMOOTHING
-            || m_d->smoothingOptions.smoothingType == KisSmoothingOptions::WEIGHTED_SMOOTHING)
+        || m_d->smoothingOptions.smoothingType == KisSmoothingOptions::WEIGHTED_SMOOTHING)
     {
         // Now paint between the coordinates, using the bezier curve interpolation
         if (!m_d->haveTangent) {
             m_d->haveTangent = true;
-
-            // XXX: 3.0 is a magic number I don't know anything about
-            //      1.0 was the old default value for smoothness, and anything lower than that
-            //      gave horrible results, so remove that setting.
             m_d->previousTangent =
                     (info.pos() - m_d->previousPaintInformation.pos()) /
-                    (3.0 * (info.currentTime() - m_d->previousPaintInformation.currentTime()));
+                    (info.currentTime() - m_d->previousPaintInformation.currentTime());
         } else {
             QPointF newTangent = (info.pos() - m_d->olderPaintInformation.pos()) /
-                    (3.0 * (info.currentTime() - m_d->olderPaintInformation.currentTime()));
-            qreal scaleFactor = (m_d->previousPaintInformation.currentTime() - m_d->olderPaintInformation.currentTime());
-            QPointF control1 = m_d->olderPaintInformation.pos() + m_d->previousTangent * scaleFactor;
-            QPointF control2 = m_d->previousPaintInformation.pos() - newTangent * scaleFactor;
-            paintBezierCurve(m_d->painterInfos,
-                             m_d->olderPaintInformation,
-                             control1,
-                             control2,
-                             m_d->previousPaintInformation);
+                    (info.currentTime() - m_d->olderPaintInformation.currentTime());
+
+            paintBezierSegment(m_d->olderPaintInformation, m_d->previousPaintInformation,
+                               m_d->previousTangent, newTangent);
+
             m_d->previousTangent = newTangent;
         }
         m_d->olderPaintInformation = m_d->previousPaintInformation;
@@ -296,15 +407,13 @@ void KisToolFreehandHelper::finishStroke()
     if (m_d->haveTangent) {
         m_d->haveTangent = false;
 
-        QPointF newTangent = (m_d->previousPaintInformation.pos() - m_d->olderPaintInformation.pos()) / 3.0;
-        qreal scaleFactor = (m_d->previousPaintInformation.currentTime() - m_d->olderPaintInformation.currentTime());
-        QPointF control1 = m_d->olderPaintInformation.pos() + m_d->previousTangent * scaleFactor;
-        QPointF control2 = m_d->previousPaintInformation.pos() - newTangent;
-        paintBezierCurve(m_d->painterInfos,
-                         m_d->olderPaintInformation,
-                         control1,
-                         control2,
-                         m_d->previousPaintInformation);
+        QPointF newTangent = (m_d->previousPaintInformation.pos() - m_d->olderPaintInformation.pos()) /
+            (m_d->previousPaintInformation.currentTime() - m_d->olderPaintInformation.currentTime());
+
+        paintBezierSegment(m_d->olderPaintInformation,
+                           m_d->previousPaintInformation,
+                           m_d->previousTangent,
+                           newTangent);
     }
 }
 
@@ -348,6 +457,30 @@ void KisToolFreehandHelper::paintBezierCurve(PainterInfo *painterInfo,
                                              const QPointF &control2,
                                              const KisPaintInformation &pi2)
 {
+#ifdef DEBUG_BEZIER_CURVES
+    KisPaintInformation tpi1;
+    KisPaintInformation tpi2;
+
+    tpi1 = pi1;
+    tpi2 = pi2;
+
+    tpi1.setPressure(0.3);
+    tpi2.setPressure(0.3);
+
+    paintLine(m_d->painterInfos, tpi1, tpi2);
+
+    tpi1.setPressure(0.6);
+    tpi2.setPressure(0.3);
+
+    tpi1.setPos(pi1.pos());
+    tpi2.setPos(control1);
+    paintLine(m_d->painterInfos, tpi1, tpi2);
+
+    tpi1.setPos(pi2.pos());
+    tpi2.setPos(control2);
+    paintLine(m_d->painterInfos, tpi1, tpi2);
+#endif
+
     m_d->hasPaintAtLeastOnce = true;
     m_d->strokesFacade->addJob(m_d->strokeId,
                                new FreehandStrokeStrategy::Data(m_d->resources->currentNode(),

@@ -526,7 +526,10 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageWSP i
     QString filename = element.attribute("source", QString());
     if (filename.isNull()) return 0;
     bool scale = (element.attribute("scale", "true")  == "true");
-    KisLayer *layer = new KisFileLayer(image, filename, scale, name, opacity);
+
+    QString documentPath = m_d->document->url().toLocalFile();
+    QFileInfo info(documentPath);
+    KisLayer *layer = new KisFileLayer(image, info.absolutePath(), filename, scale, name, opacity);
     Q_CHECK_PTR(layer);
 
     return layer;

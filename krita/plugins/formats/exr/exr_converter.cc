@@ -197,7 +197,7 @@ void decodeData4(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP 
     for (int y = 0; y < height; ++y) {
         Imf::FrameBuffer frameBuffer;
         Rgba* frameBufferData = (pixels.data()) - xstart - (ystart + y) * width;
-        frameBuffer.insert(info.channelMap["R"].toLatin1().constData(),
+        frameBuffer.insert(info.channelMap["B"].toLatin1().constData(),
                            Imf::Slice(ptype, (char *) &frameBufferData->r,
                                       sizeof(Rgba) * 1,
                                       sizeof(Rgba) * width));
@@ -205,7 +205,7 @@ void decodeData4(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP 
                            Imf::Slice(ptype, (char *) &frameBufferData->g,
                                       sizeof(Rgba) * 1,
                                       sizeof(Rgba) * width));
-        frameBuffer.insert(info.channelMap["B"].toLatin1().constData(),
+        frameBuffer.insert(info.channelMap["R"].toLatin1().constData(),
                            Imf::Slice(ptype, (char *) &frameBufferData->b,
                                       sizeof(Rgba) * 1,
                                       sizeof(Rgba) * width));
@@ -778,9 +778,9 @@ void recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveInfo>& informationObjects
             info.name = name + paintLayer->name() + '.';
             info.layer = paintLayer;
             if (paintLayer->colorSpace()->colorModelId() == RGBAColorModelID) {
-                info.channels.push_back(info.name + remap(current2original, "R"));
-                info.channels.push_back(info.name + remap(current2original, "G"));
                 info.channels.push_back(info.name + remap(current2original, "B"));
+                info.channels.push_back(info.name + remap(current2original, "G"));
+                info.channels.push_back(info.name + remap(current2original, "R"));
                 info.channels.push_back(info.name + remap(current2original, "A"));
             } else if (paintLayer->colorSpace()->colorModelId() == GrayAColorModelID) {
                 info.channels.push_back(info.name + remap(current2original, "G"));

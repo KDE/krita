@@ -70,7 +70,7 @@ bool KoResourceFiltering::matchesResource(QString &resourceName, QString &resour
                 return true;
         }
         else {
-            filter = filter.replace("\"","");
+            filter.remove('"');
             if (!resourceName.compare(filter)) {
                 return true;
             }

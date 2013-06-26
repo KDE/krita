@@ -114,17 +114,17 @@ public:
     QString transform() const;
 
     // setters
-    void setVrp(QVector3D vrp);
-    void setVpn(QVector3D vpn);
-    void setVup(QVector3D vup);
+    void setVrp(const QVector3D &vrp);
+    void setVpn(const QVector3D &vpn);
+    void setVup(const QVector3D &vup);
     void setProjection(Projection projection);
-    void setDistance(QString distance);
-    void setFocalLength(QString focalLength);
-    void setShadowSlant(QString shadowSlant);
+    void setDistance(const QString &distance);
+    void setFocalLength(const QString &focalLength);
+    void setShadowSlant(const QString &shadowSlant);
     void setShadeMode(Shademode shadeMode);
-    void setAmbientColor(QColor ambientColor);
+    void setAmbientColor(const QColor &ambientColor);
     void setLightingMode(bool lightingMode);
-    void setTransform(QString transform);
+    void setTransform(const QString &transform);
 
 private:
     class Private;

@@ -647,7 +647,7 @@ signals:
     */
     void modified(bool);
 
-    void titleModified(QString caption, bool isModified);
+    void titleModified(const QString &caption, bool isModified);
 
 protected:
 

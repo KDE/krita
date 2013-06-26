@@ -50,7 +50,7 @@ public:
 //#endif
     
 public slots:
-    void mouseMoveGeoPosition(QString);
+    void mouseMoveGeoPosition(const QString&);
 
 };
 

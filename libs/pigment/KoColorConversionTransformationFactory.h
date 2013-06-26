@@ -44,7 +44,7 @@ public:
      * @param _srcProfile name of the source profile, or empty if any profile
      * @param _dstProfile name of the destination profile, or empty if any profile
      */
-    KoColorConversionTransformationFactory(QString _srcModelId, QString _srcDepthId, QString _srcProfile, QString _dstModelId, QString _dstDepthId, QString _dstProfile);
+    KoColorConversionTransformationFactory(const QString &_srcModelId, const QString &_srcDepthId, const QString &_srcProfile, const QString &_dstModelId, const QString &_dstDepthId, const QString &_dstProfile);
     virtual ~KoColorConversionTransformationFactory();
     /**
      * @return true if this factory creates a color conversion transformation which

@@ -58,7 +58,7 @@ KoRdfLocationEditWidget::~KoRdfLocationEditWidget()
     delete d;
 }
 
-void KoRdfLocationEditWidget::mouseMoveGeoPosition(QString s)
+void KoRdfLocationEditWidget::mouseMoveGeoPosition(const QString &s)
 {
     kDebug(30015) << "KoRdfLocationEditWidget::mouseMoveGeoPosition() str:" << s;
 #ifdef CAN_USE_MARBLE

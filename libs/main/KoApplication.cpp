@@ -276,7 +276,7 @@ bool KoApplication::start()
         // all running instances of our application -- bit hackish, but we cannot get at the dbus name here, for some reason
         QDBusReply<QStringList> reply = QDBusConnection::sessionBus().interface()->registeredServiceNames();
 
-        foreach (QString name, reply.value()) {
+        foreach (const QString &name, reply.value()) {
             if (name.contains(part->componentData().componentName())) {
                 // we got another instance of ourselves running, let's get the pid
                 QString pid = name.split("-").last();

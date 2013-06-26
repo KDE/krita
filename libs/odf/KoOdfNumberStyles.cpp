@@ -232,7 +232,7 @@ QString formatScientific(qreal value, const QString &format, int precision)
     QString v(QString::number(value, 'E', precision));
     int pos = v.indexOf('.');
     if (pos != -1) {
-        v = v.replace(pos, 1, KGlobal::locale()->decimalSymbol());
+        v.replace(pos, 1, KGlobal::locale()->decimalSymbol());
     }
     return v;
 }
@@ -664,7 +664,7 @@ void parseOdfTimeKlocale(KoXmlWriter &elementWriter, QString &format, QString &t
     do {
         if (!saveOdfKlocaleTimeFormat(elementWriter, format, text)) {
             text += format[0];
-            format = format.remove(0, 1);
+            format.remove(0, 1);
         }
     } while (format.length() > 0);
     addTextNumber(text, elementWriter);
@@ -680,7 +680,7 @@ bool saveOdfKlocaleTimeFormat(KoXmlWriter &elementWriter, QString &format, QStri
         elementWriter.startElement("number:hours");
         elementWriter.addAttribute("number:style", "long");
         elementWriter.endElement();
-        format = format.remove(0, 2);
+        format.remove(0, 2);
         changed = true;
     } else if (format.startsWith("%k")) { //h
         addTextNumber(text, elementWriter);
@@ -688,7 +688,7 @@ bool saveOdfKlocaleTimeFormat(KoXmlWriter &elementWriter, QString &format, QStri
         elementWriter.startElement("number:hours");
         elementWriter.addAttribute("number:style", "short");
         elementWriter.endElement();
-        format = format.remove(0, 2);
+        format.remove(0, 2);
         changed = true;
     } else if (format.startsWith("%I")) { // ?????
         //TODO hour in 12h
@@ -702,7 +702,7 @@ bool saveOdfKlocaleTimeFormat(KoXmlWriter &elementWriter, QString &format, QStri
         elementWriter.startElement("number:minutes");
         elementWriter.addAttribute("number:style", "long");
         elementWriter.endElement();
-        format = format.remove(0, 2);
+        format.remove(0, 2);
         changed = true;
 
     } else if (format.startsWith("%S")) {  //ss
@@ -711,7 +711,7 @@ bool saveOdfKlocaleTimeFormat(KoXmlWriter &elementWriter, QString &format, QStri
         elementWriter.startElement("number:seconds");
         elementWriter.addAttribute("number:style", "long");
         elementWriter.endElement();
-        format = format.remove(0, 2);
+        format.remove(0, 2);
         changed = true;
     } else if (format.startsWith("%p")) {
         //TODO am or pm
@@ -719,7 +719,7 @@ bool saveOdfKlocaleTimeFormat(KoXmlWriter &elementWriter, QString &format, QStri
 
         elementWriter.startElement("number:am-pm");
         elementWriter.endElement();
-        format = format.remove(0, 2);
+        format.remove(0, 2);
         changed = true;
     }
     return changed;
@@ -732,7 +732,7 @@ bool saveOdfTimeFormat(KoXmlWriter &elementWriter, QString &format, QString &tex
     //we can also add time to date.
     if (antislash) {
         text += format[0];
-        format = format.remove(0, 1);
+        format.remove(0, 1);
         antislash = false;
         changed = true;
     } else if (format.startsWith("hh")) {
@@ -741,7 +741,7 @@ bool saveOdfTimeFormat(KoXmlWriter &elementWriter, QString &format, QString &tex
         elementWriter.startElement("number:hours");
         elementWriter.addAttribute("number:style", "long");
         elementWriter.endElement();
-        format = format.remove(0, 2);
+        format.remove(0, 2);
         changed = true;
     } else if (format.startsWith('h')) {
         addTextNumber(text, elementWriter);
@@ -749,7 +749,7 @@ bool saveOdfTimeFormat(KoXmlWriter &elementWriter, QString &format, QString &tex
         elementWriter.startElement("number:hours");
         elementWriter.addAttribute("number:style", "short");
         elementWriter.endElement();
-        format = format.remove(0, 1);
+        format.remove(0, 1);
         changed = true;
     } else if (format.startsWith("mm")) {
         addTextNumber(text, elementWriter);
@@ -757,7 +757,7 @@ bool saveOdfTimeFormat(KoXmlWriter &elementWriter, QString &format, QString &tex
         elementWriter.startElement("number:minutes");
         elementWriter.addAttribute("number:style", "long");
         elementWriter.endElement();
-        format = format.remove(0, 2);
+        format.remove(0, 2);
         changed = true;
     } else if (format.startsWith('m')) {
         addTextNumber(text, elementWriter);
@@ -765,7 +765,7 @@ bool saveOdfTimeFormat(KoXmlWriter &elementWriter, QString &format, QString &tex
         elementWriter.startElement("number:minutes");
         elementWriter.addAttribute("number:style", "short");
         elementWriter.endElement();
-        format = format.remove(0, 1);
+        format.remove(0, 1);
         changed = true;
     } else if (format.startsWith("ss")) {
         addTextNumber(text, elementWriter);
@@ -773,7 +773,7 @@ bool saveOdfTimeFormat(KoXmlWriter &elementWriter, QString &format, QString &tex
         elementWriter.startElement("number:seconds");
         elementWriter.addAttribute("number:style", "long");
         elementWriter.endElement();
-        format = format.remove(0, 2);
+        format.remove(0, 2);
         changed = true;
     } else if (format.startsWith('s')) {
         addTextNumber(text, elementWriter);
@@ -781,14 +781,14 @@ bool saveOdfTimeFormat(KoXmlWriter &elementWriter, QString &format, QString &tex
         elementWriter.startElement("number:seconds");
         elementWriter.addAttribute("number:style", "short");
         elementWriter.endElement();
-        format = format.remove(0, 1);
+        format.remove(0, 1);
         changed = true;
     } else if (format.startsWith("ap")) {
         addTextNumber(text, elementWriter);
 
         elementWriter.startElement("number:am-pm");
         elementWriter.endElement();
-        format = format.remove(0, 2);
+        format.remove(0, 2);
         changed = true;
     }
     return changed;
@@ -813,7 +813,7 @@ QString saveOdfTimeStyle(KoGenStyles &mainStyles, const QString &_format, bool k
         do {
             if (!saveOdfTimeFormat(elementWriter, format, text, antislash)) {
                 QString elem(format[0]);
-                format = format.remove(0, 1);
+                format.remove(0, 1);
                 if (elem == "\\") {
                     antislash = true;
                 } else {
@@ -839,7 +839,7 @@ void parseOdfDateKlocale(KoXmlWriter &elementWriter, QString &format, QString &t
             elementWriter.startElement("number:year");
             elementWriter.addAttribute("number:style", "long");
             elementWriter.endElement();
-            format = format.remove(0, 2);
+            format.remove(0, 2);
         } else if (format.startsWith("%y")) {
 
             addTextNumber(text, elementWriter);
@@ -847,66 +847,66 @@ void parseOdfDateKlocale(KoXmlWriter &elementWriter, QString &format, QString &t
             elementWriter.startElement("number:year");
             elementWriter.addAttribute("number:style", "short");
             elementWriter.endElement();
-            format = format.remove(0, 2);
+            format.remove(0, 2);
         } else if (format.startsWith("%n")) {
             addTextNumber(text, elementWriter);
             elementWriter.startElement("number:month");
             elementWriter.addAttribute("number:style", "short");
             elementWriter.addAttribute("number:textual", "false");
             elementWriter.endElement();
-            format = format.remove(0, 2);
+            format.remove(0, 2);
         } else if (format.startsWith("%m")) {
             addTextNumber(text, elementWriter);
             elementWriter.startElement("number:month");
             elementWriter.addAttribute("number:style", "long");
             elementWriter.addAttribute("number:textual", "false");  //not necessary remove it
             elementWriter.endElement();
-            format = format.remove(0, 2);
+            format.remove(0, 2);
         } else if (format.startsWith("%e")) {
             addTextNumber(text, elementWriter);
 
             elementWriter.startElement("number:day");
             elementWriter.addAttribute("number:style", "short");
             elementWriter.endElement();
-            format = format.remove(0, 2);
+            format.remove(0, 2);
         } else if (format.startsWith("%d")) {
             addTextNumber(text, elementWriter);
 
             elementWriter.startElement("number:day");
             elementWriter.addAttribute("number:style", "long");
             elementWriter.endElement();
-            format = format.remove(0, 2);
+            format.remove(0, 2);
         } else if (format.startsWith("%b")) {
             addTextNumber(text, elementWriter);
             elementWriter.startElement("number:month");
             elementWriter.addAttribute("number:style", "short");
             elementWriter.addAttribute("number:textual", "true");
             elementWriter.endElement();
-            format = format.remove(0, 2);
+            format.remove(0, 2);
         } else if (format.startsWith("%B")) {
             addTextNumber(text, elementWriter);
             elementWriter.startElement("number:month");
             elementWriter.addAttribute("number:style", "long");
             elementWriter.addAttribute("number:textual", "true");
             elementWriter.endElement();
-            format = format.remove(0, 2);
+            format.remove(0, 2);
         } else if (format.startsWith("%a")) {
             addTextNumber(text, elementWriter);
             elementWriter.startElement("number:day-of-week");
             elementWriter.addAttribute("number:style", "short");
             elementWriter.endElement();
 
-            format = format.remove(0, 2);
+            format.remove(0, 2);
         } else if (format.startsWith("%A")) {
             addTextNumber(text, elementWriter);
             elementWriter.startElement("number:day-of-week");
             elementWriter.addAttribute("number:style", "long");
             elementWriter.endElement();
-            format = format.remove(0, 2);
+            format.remove(0, 2);
         } else {
             if (!saveOdfKlocaleTimeFormat(elementWriter, format, text)) {
                 text += format[0];
-                format = format.remove(0, 1);
+                format.remove(0, 1);
             }
         }
     } while (format.length() > 0);
@@ -935,7 +935,7 @@ QString saveOdfDateStyle(KoGenStyles &mainStyles, const QString &_format, bool k
         do {
             if (antislash) {
                 text += format[0];
-                format = format.remove(0, 1);
+                format.remove(0, 1);
             }
             //TODO implement loading ! What is it ?
             else if (format.startsWith("MMMMM")) {        // MMMMM is extra-short month name (only 1st character)
@@ -944,35 +944,35 @@ QString saveOdfDateStyle(KoGenStyles &mainStyles, const QString &_format, bool k
                 elementWriter.addAttribute("number:textual", "true");
                 elementWriter.addAttribute("calligra:number-length", "extra-short");
                 elementWriter.endElement();
-                format = format.remove(0, 5);
+                format.remove(0, 5);
             } else if (format.startsWith("MMMM")) {
                 addTextNumber(text, elementWriter);
                 elementWriter.startElement("number:month");
                 elementWriter.addAttribute("number:style", "long");
                 elementWriter.addAttribute("number:textual", "true");
                 elementWriter.endElement();
-                format = format.remove(0, 4);
+                format.remove(0, 4);
             } else if (format.startsWith("MMM")) {
                 addTextNumber(text, elementWriter);
                 elementWriter.startElement("number:month");
                 elementWriter.addAttribute("number:style", "short");
                 elementWriter.addAttribute("number:textual", "true");
                 elementWriter.endElement();
-                format = format.remove(0, 3);
+                format.remove(0, 3);
             } else if (format.startsWith("MM")) {
                 addTextNumber(text, elementWriter);
                 elementWriter.startElement("number:month");
                 elementWriter.addAttribute("number:style", "long");
                 elementWriter.addAttribute("number:textual", "false");  //not necessary remove it
                 elementWriter.endElement();
-                format = format.remove(0, 2);
+                format.remove(0, 2);
             } else if (format.startsWith('M')) {
                 addTextNumber(text, elementWriter);
                 elementWriter.startElement("number:month");
                 elementWriter.addAttribute("number:style", "short");
                 elementWriter.addAttribute("number:textual", "false");
                 elementWriter.endElement();
-                format = format.remove(0, 1);
+                format.remove(0, 1);
             } else if (format.startsWith("PPPP")) {
                 addTextNumber(text, elementWriter);
                 //<number:month number:possessive-form="true" number:textual="true" number:style="long"/>
@@ -981,7 +981,7 @@ QString saveOdfDateStyle(KoGenStyles &mainStyles, const QString &_format, bool k
                 elementWriter.addAttribute("number:textual", "false");
                 elementWriter.addAttribute("number:possessive-form", "true");
                 elementWriter.endElement();
-                format = format.remove(0, 4);
+                format.remove(0, 4);
             } else if (format.startsWith("PPP")) {
                 addTextNumber(text, elementWriter);
                 //<number:month number:possessive-form="true" number:textual="true" number:style="short"/>
@@ -991,53 +991,53 @@ QString saveOdfDateStyle(KoGenStyles &mainStyles, const QString &_format, bool k
                 elementWriter.addAttribute("number:style", "short");
                 elementWriter.addAttribute("number:textual", "false");
                 elementWriter.endElement();
-                format = format.remove(0, 3);
+                format.remove(0, 3);
             } else if (format.startsWith("dddd")) {
                 addTextNumber(text, elementWriter);
 
                 elementWriter.startElement("number:day-of-week");
                 elementWriter.addAttribute("number:style", "long");
                 elementWriter.endElement();
-                format = format.remove(0, 4);
+                format.remove(0, 4);
             } else if (format.startsWith("ddd")) {
                 addTextNumber(text, elementWriter);
 
                 elementWriter.startElement("number:day-of-week");
                 elementWriter.addAttribute("number:style", "short");
                 elementWriter.endElement();
-                format = format.remove(0, 3);
+                format.remove(0, 3);
             } else if (format.startsWith("dd")) {
                 addTextNumber(text, elementWriter);
 
                 elementWriter.startElement("number:day");
                 elementWriter.addAttribute("number:style", "long");
                 elementWriter.endElement();
-                format = format.remove(0, 2);
+                format.remove(0, 2);
             } else if (format.startsWith('d')) {
                 addTextNumber(text, elementWriter);
 
                 elementWriter.startElement("number:day");
                 elementWriter.addAttribute("number:style", "short");
                 elementWriter.endElement();
-                format = format.remove(0, 1);
+                format.remove(0, 1);
             } else if (format.startsWith("yyyy")) {
                 addTextNumber(text, elementWriter);
 
                 elementWriter.startElement("number:year");
                 elementWriter.addAttribute("number:style", "long");
                 elementWriter.endElement();
-                format = format.remove(0, 4);
+                format.remove(0, 4);
             } else if (format.startsWith("yy")) {
                 addTextNumber(text, elementWriter);
 
                 elementWriter.startElement("number:year");
                 elementWriter.addAttribute("number:style", "short");
                 elementWriter.endElement();
-                format = format.remove(0, 2);
+                format.remove(0, 2);
             } else {
                 if (!saveOdfTimeFormat(elementWriter, format, text, antislash)) {
                     QString elem(format[0]);
-                    format = format.remove(0, 1);
+                    format.remove(0, 1);
                     if (elem == "\\") {
                         antislash = true;
                     } else {

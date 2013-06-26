@@ -667,9 +667,9 @@ void Thesaurus::findTermWordnet(const QString &term)
                 continue;
             }
             // Escape XML:
-            l = l.replace('&', "&amp;");
-            l = l.replace('<', "&lt;");
-            l = l.replace('>', "&gt;");
+            l.replace('&', "&amp;");
+            l.replace('<', "&lt;");
+            l.replace('>', "&gt;");
             // TODO?:
             // move "=>" in own column?
             l = formatLine(l);
@@ -741,7 +741,7 @@ QString Thesaurus::formatLine(const QString &line) const
                 l += ", ";
             }
             link = link.trimmed();
-            link = link.remove(QRegExp("#\\d+"));
+            link.remove(QRegExp("#\\d+"));
             l += "<a href=\"" + link + "\">" + link + "</a>";
         }
         l.prepend (' ');        // indent in table

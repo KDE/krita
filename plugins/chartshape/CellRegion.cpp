@@ -377,7 +377,7 @@ CellRegion::CellRegion(TableSource *source, const QString& regions)
     d->table = source->get(parser.tableName());
 //     QStringList regionsList = regions.split(' ', QString::SkipEmptyParts);
 //     Q_FOREACH(const QString& region, regionsList) {
-//       QString searchStr = QString(region).remove("$");
+//       QString searchStr = QString(region).remove('$');
 //       QRegExp regEx;
 // 
 //       QStringList regionList = searchStr.split(';');

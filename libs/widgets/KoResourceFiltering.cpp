@@ -101,7 +101,7 @@ void KoResourceFiltering::populateIncludeExcludeFilters(const QStringList& filte
         QStringList* target;
 
         if(name.startsWith('!')) {
-            name.remove("!");
+            name.remove('!');
             target = &d->excludedNames;
         } else {
             target = &d->includedNames;

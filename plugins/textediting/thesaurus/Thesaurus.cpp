@@ -455,7 +455,7 @@ void Thesaurus::findTermThesaurus(const QString &searchTerm)
             continue;
         }
 
-        int sep_pos = line.indexOf("#");
+        int sep_pos = line.indexOf('#');
         QString synPart = line.left(sep_pos);
         QString hyperPart = line.right(line.length() - sep_pos - 1);
         QStringList synTmp = synPart.split(QChar(';'));

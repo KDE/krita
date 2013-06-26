@@ -36,7 +36,7 @@ void GoogleDocument::setId (const QString & id)
 {
     m_id = id;
 
-    setDocumentType(id.left(id.indexOf(":")));
+    setDocumentType(id.left(id.indexOf(':')));
 }
 
 QString GoogleDocument::id () const

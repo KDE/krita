@@ -261,7 +261,7 @@ QBrush Surface::loadOdfPatternStyle(const KoStyleStack &styleStack,
         return QBrush();
 
     QString strExtension;
-    const int result = href.lastIndexOf(".");
+    const int result = href.lastIndexOf('.');
     if (result >= 0) {
         strExtension = href.mid(result + 1); // As we are using KoPicture, the extension should be without the dot.
     }

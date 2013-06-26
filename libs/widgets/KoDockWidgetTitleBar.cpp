@@ -144,8 +144,8 @@ void KoDockWidgetTitleBar::paintEvent(QPaintEvent*)
     if (d->collapseButton->isVisible()) {
         collapseButtonSize = d->collapseButton->size();
     }
-    titleOpt.rect = QRect(QPoint(fw + mw + collapseButtonSize.width(), fw),
-                        QSize(geometry().width() - (fw * 2) -  mw - collapseButtonSize.width(), geometry().height() - (fw * 2)));
+    titleOpt.rect = QRect(QPoint(fw + mw + collapseButtonSize.width(), 0),
+                          QSize(geometry().width() - (fw * 2) -  mw - collapseButtonSize.width(), geometry().height()));
     titleOpt.title = q->windowTitle();
     titleOpt.closable = hasFeature(q, QDockWidget::DockWidgetClosable);
     titleOpt.floatable = hasFeature(q, QDockWidget::DockWidgetFloatable);

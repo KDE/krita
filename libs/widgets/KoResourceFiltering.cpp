@@ -65,7 +65,7 @@ bool KoResourceFiltering::matchesResource(QString &resourceName, QString &resour
 {
     Qt::CaseSensitivity sensitivity = Qt::CaseInsensitive;
     foreach (QString filter, filterList) {
-        if (!filter.startsWith("\"")) {
+        if (!filter.startsWith('"')) {
             if (resourceName.contains(filter,sensitivity) || resourceFileName.contains(filter,sensitivity))
                 return true;
         }
@@ -100,7 +100,7 @@ void KoResourceFiltering::populateIncludeExcludeFilters(const QStringList& filte
     foreach (QString name, filteredNames) {
         QStringList* target;
 
-        if(name.startsWith("!")) {
+        if(name.startsWith('!')) {
             name.remove("!");
             target = &d->excludedNames;
         } else {
@@ -108,13 +108,13 @@ void KoResourceFiltering::populateIncludeExcludeFilters(const QStringList& filte
         }
 
         if(!name.isEmpty()) {
-            if (name.startsWith("[")) {
+            if (name.startsWith('[')) {
                 if (d->isTag.exactMatch(name) && d->tagObject) {
                     name = d->isTag.cap(1);
                     (*target) += d->tagObject->searchTag(name);
                 }
             }
-            else if (name.startsWith("\"")) {
+            else if (name.startsWith('"')) {
                 if (d->isExactMatch.exactMatch(name)) {
                     target->push_back(name);
                 }

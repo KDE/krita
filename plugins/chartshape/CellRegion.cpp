@@ -375,12 +375,12 @@ CellRegion::CellRegion(TableSource *source, const QString& regions)
         kDebug() << "Parsing cell region failed";
     d->rects = parser.getResult().toVector();
     d->table = source->get(parser.tableName());
-//     QStringList regionsList = regions.split(" ", QString::SkipEmptyParts);
+//     QStringList regionsList = regions.split(' ', QString::SkipEmptyParts);
 //     Q_FOREACH(const QString& region, regionsList) {
 //       QString searchStr = QString(region).remove("$");
 //       QRegExp regEx;
 // 
-//       QStringList regionList = searchStr.split(";");
+//       QStringList regionList = searchStr.split(';');
 //       Q_FOREACH(const QString &region, regionList) {
 //           const bool isPoint = !region.contains(':');
 //           if (isPoint)

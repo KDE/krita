@@ -279,7 +279,7 @@ bool KoApplication::start()
         foreach (const QString &name, reply.value()) {
             if (name.contains(part->componentData().componentName())) {
                 // we got another instance of ourselves running, let's get the pid
-                QString pid = name.split("-").last();
+                QString pid = name.split('-').last();
                 if (pid != ourPid) {
                     pids << pid;
                 }
@@ -293,7 +293,7 @@ bool KoApplication::start()
                 autoSaveFiles.removeAll(autoSaveFileName);
                 continue;
             }
-            QStringList split = autoSaveFileName.split("-");
+            QStringList split = autoSaveFileName.split('-');
             if (split.size() == 4) {
                 if (pids.contains(split[1])) {
                     // We've got an active, owned autosave file. Remove.

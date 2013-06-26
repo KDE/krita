@@ -313,7 +313,7 @@ public:
 
             //dbgKrita << parts;
 
-            parts = parts[0].trimmed().split(" ", QString::SkipEmptyParts);
+            parts = parts[0].trimmed().split(' ', QString::SkipEmptyParts);
 
             //dbgKrita << "parts" << parts;
 

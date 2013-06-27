@@ -1,0 +1,201 @@
+/*
+ *  Copyright (c) 2013 Sven Langkamp <sven.langkamp@gmail.com>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+
+#include "palettedocker_dock.h"
+
+#include <QPainter>
+#include <QGridLayout>
+#include <QTableView>
+#include <QHeaderView>
+#include <klocale.h>
+#include <kcolordialog.h>
+
+#include <KoIcon.h>
+#include <KoCanvasBase.h>
+#include <KoResourceServerProvider.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoCanvasResourceManager.h>
+
+#include <kis_view2.h>
+#include <kis_canvas2.h>
+#include <kis_layer.h>
+#include <kis_node_manager.h>
+#include <kis_config.h>
+
+#include "palettemodel.h"
+#include "colorsetlistmodel.h"
+#include "ui_wdgpalettedock.h"
+
+/// The resource item delegate for rendering the resource preview
+class PaletteDelegate : public QAbstractItemDelegate
+{
+public:
+    PaletteDelegate(QObject * parent = 0) : QAbstractItemDelegate(parent), m_showText(false) {}
+    virtual ~PaletteDelegate() {}
+    /// reimplemented
+    virtual void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const;
+    /// reimplemented
+    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const {
+        return option.decorationSize;
+    }
+
+    void setShowText(bool showText) {
+        m_showText = showText;
+    }
+
+private:
+    bool m_showText;
+};
+
+void PaletteDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
+{
+    painter->save();
+
+    if (! index.isValid())
+        return;
+
+    if (option.state & QStyle::State_Selected) {
+        painter->setPen(QPen(option.palette.highlightedText(), 2.0));
+        painter->fillRect(option.rect, option.palette.highlight());
+    } else {
+        painter->setPen(QPen(option.palette.text(), 2.0));
+
+    }
+    QRect paintRect = option.rect.adjusted(1, 1, -1, -1);
+    QBrush brush = qVariantValue<QBrush>(index.data(Qt::BackgroundRole));
+    painter->fillRect(paintRect, brush);
+    painter->restore();
+}
+
+
+PaletteDockerDock::PaletteDockerDock( ) : QDockWidget(i18n("Palette 2"))
+    , m_canvas(0)
+    , m_wdgPaletteDock(new Ui_WdgPaletteDock())
+    , m_currentColorSet(0)
+{
+    QWidget* mainWidget = new QWidget(this);
+    setWidget(mainWidget);
+    m_wdgPaletteDock->setupUi(mainWidget);
+    m_wdgPaletteDock->bnAdd->setIcon(koIcon("list-add"));
+    m_wdgPaletteDock->bnAdd->setIconSize(QSize(16, 16));
+    m_wdgPaletteDock->bnRemove->setIcon(koIcon("list-remove"));
+    m_wdgPaletteDock->bnRemove->setIconSize(QSize(16, 16));
+
+    connect(m_wdgPaletteDock->bnAdd, SIGNAL(clicked(bool)), this, SLOT(addColor()));
+    connect(m_wdgPaletteDock->bnRemove, SIGNAL(clicked(bool)), this, SLOT(removeColor()));
+
+    m_model = new PaletteModel(this);
+    m_wdgPaletteDock->paletteView->setModel(m_model);
+    m_wdgPaletteDock->paletteView->setShowGrid(false);
+    m_wdgPaletteDock->paletteView->horizontalHeader()->setVisible(false);
+    m_wdgPaletteDock->paletteView->verticalHeader()->setVisible(false);
+    m_wdgPaletteDock->paletteView->setItemDelegate(new PaletteDelegate());
+    m_wdgPaletteDock->paletteView->horizontalHeader()->setDefaultSectionSize(12);
+    m_wdgPaletteDock->paletteView->verticalHeader()->setDefaultSectionSize(12);
+
+    QPalette pal(palette());
+    pal.setColor(QPalette::Base, pal.dark().color());
+    m_wdgPaletteDock->paletteView->setAutoFillBackground(true);
+    m_wdgPaletteDock->paletteView->setPalette(pal);
+ 
+    connect(m_wdgPaletteDock->paletteView, SIGNAL(activated(QModelIndex)), this, SLOT(entrySelected(QModelIndex)));
+    
+    KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
+    m_serverAdapter = new KoResourceServerAdapter<KoColorSet>(rServer, this);
+    m_serverAdapter->connectToResourceServer();
+
+    m_wdgPaletteDock->cmbColorSets->setModel(new ColorSetListModel(m_serverAdapter));
+    connect(m_wdgPaletteDock->cmbColorSets, SIGNAL(activated(int)), this, SLOT(activatedColorSet(int)));
+}
+
+void PaletteDockerDock::setCanvas(KoCanvasBase * canvas)
+{
+    if (m_canvas && m_canvas->view()) {
+        m_canvas->view()->nodeManager()->disconnect(m_model);
+    }
+    m_canvas = dynamic_cast<KisCanvas2*>(canvas);
+}
+
+void PaletteDockerDock::setColorSet(KoColorSet* colorSet)
+{
+    m_model->setColorSet(colorSet);
+    if (colorSet->removable()) {
+        m_wdgPaletteDock->bnAdd->setEnabled(true);
+        m_wdgPaletteDock->bnRemove->setEnabled(false);
+    } else {
+        m_wdgPaletteDock->bnAdd->setEnabled(false);
+        m_wdgPaletteDock->bnRemove->setEnabled(false);
+    }
+    m_currentColorSet = colorSet;
+}
+
+void PaletteDockerDock::addColor()
+{
+    if (m_currentColorSet) {
+        QColor color;
+        int result = KColorDialog::getColor(color);
+        if (result == KColorDialog::Accepted) {
+            KoColorSetEntry newEntry;
+            newEntry.color = KoColor(color, KoColorSpaceRegistry::instance()->rgb8());
+            m_currentColorSet->add(newEntry);
+            m_currentColorSet->save();
+            setColorSet(m_currentColorSet); // update model
+        }
+    }
+}
+
+void PaletteDockerDock::removeColor()
+{
+    QModelIndex index = m_wdgPaletteDock->paletteView->currentIndex();
+    if (!index.isValid()) {
+        return;
+    }
+    int i = index.row()*m_model->columnCount()+index.column();
+    KoColorSetEntry entry = m_currentColorSet->getColor(i);
+    m_currentColorSet->remove(entry);
+    m_currentColorSet->save();
+    setColorSet(m_currentColorSet); // update model
+}
+
+void PaletteDockerDock::entrySelected(QModelIndex index)
+{
+    if (!index.isValid()) {
+        return;
+    }
+    int i = index.row()*m_model->columnCount()+index.column();
+    KoColorSetEntry entry = m_currentColorSet->getColor(i);
+    if (m_canvas) {
+        m_canvas->resourceManager()->setForegroundColor(entry.color);
+    }
+    if (m_currentColorSet->removable()) {
+        m_wdgPaletteDock->bnRemove->setEnabled(true);
+    }
+}
+
+void PaletteDockerDock::activatedColorSet(int index)
+{
+    if (index < m_serverAdapter->resources().count()) {
+        KoColorSet* colorSet = static_cast<KoColorSet*>(m_serverAdapter->resources().at(index));
+        setColorSet(colorSet);
+    }
+}
+
+
+
+#include "palettedocker_dock.moc"

@@ -212,3 +212,9 @@ KoColorSetEntry KoColorSet::getColor(quint32 index)
 {
     return m_colors[index];
 }
+
+int KoColorSet::columnCount()
+{
+    return m_columns;
+}
+

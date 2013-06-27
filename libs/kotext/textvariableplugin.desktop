@@ -83,3 +83,5 @@ Comment[zh_TW]=包含文字變數外掛程式
 Type=int
 [PropertyDef::X-KoText-PluginVersion]
 Type=int
+[PropertyDef::X-KDE-PluginInfo-Name]
+Type=QString

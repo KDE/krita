@@ -69,3 +69,5 @@ Comment[zh_TW]=包含展示事件動作的外掛程式
 Type=int
 [PropertyDef::X-PresentationEventAction-PluginVersion]
 Type=int
+[PropertyDef::X-KDE-PluginInfo-Name]
+Type=QString

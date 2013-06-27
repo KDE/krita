@@ -362,21 +362,6 @@ signals:
 
     void invalidated();
 
-// KDE invents public signals :)
-#undef signals
-#define signals public
-signals:
-
-    /**
-      * Make it possible for plugins to request
-      * the embedding of an image into the current
-      * document. Used e.g. by the scan-plugin
-    */
-    void embedImage(const QString &filename);
-
-#undef signals
-#define signals protected
-
 protected slots:
     virtual void slotAutoScroll();
     virtual void changeAuthorProfile(const QString &profileName);

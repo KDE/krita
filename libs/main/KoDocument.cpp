@@ -1903,7 +1903,7 @@ QDomDocument KoDocument::saveXML()
 KService::Ptr KoDocument::nativeService()
 {
     if (!d->nativeService)
-        d->nativeService = KoServiceProvider::readNativeService(d->parentPart->componentData());
+        d->nativeService = KoServiceProvider::readNativeService();
 
     return d->nativeService;
 }

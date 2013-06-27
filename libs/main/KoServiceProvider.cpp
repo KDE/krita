@@ -25,9 +25,9 @@
 #include <kservicetype.h>
 #include <kdebug.h>
 
-QByteArray KoServiceProvider::readNativeFormatMimeType(const KComponentData &componentData)   //static
+QByteArray KoServiceProvider::readNativeFormatMimeType()   //static
 {
-    KService::Ptr service = readNativeService(componentData);
+    KService::Ptr service = readNativeService();
     if (!service)
         return QByteArray();
 
@@ -45,17 +45,17 @@ QByteArray KoServiceProvider::readNativeFormatMimeType(const KComponentData &com
 }
 
 
-QStringList KoServiceProvider::readExtraNativeMimeTypes(const KComponentData &componentData)   //static
+QStringList KoServiceProvider::readExtraNativeMimeTypes()   //static
 {
-    KService::Ptr service = readNativeService(componentData);
+    KService::Ptr service = readNativeService();
     if (!service)
         return QStringList();
     return service->property("X-KDE-ExtraNativeMimeTypes").toStringList();
 }
 
-KService::Ptr KoServiceProvider::readNativeService(const KComponentData &componentData)
+KService::Ptr KoServiceProvider::readNativeService()
 {
-    QString instname = componentData.isValid() ? componentData.componentName() : KGlobal::mainComponent().componentName();
+    QString instname = KGlobal::mainComponent().componentName();
 
     // The new way is: we look for a foopart.desktop in the kde_services dir.
     QString servicepartname = instname + "part.desktop";

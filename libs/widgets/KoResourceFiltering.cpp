@@ -61,7 +61,7 @@ void KoResourceFiltering::setTagSetFilenames(const QStringList& filenames)
     setChanged();
 }
 
-bool KoResourceFiltering::matchesResource(QString &resourceName, QString &resourceFileName,const QStringList &filterList) const
+bool KoResourceFiltering::matchesResource(const QString &resourceName, const QString &resourceFileName,const QStringList &filterList) const
 {
     Qt::CaseSensitivity sensitivity = Qt::CaseInsensitive;
     foreach (QString filter, filterList) {

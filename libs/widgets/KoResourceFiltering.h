@@ -52,7 +52,7 @@ private:
     bool presetMatchesSearch(KoResource * resource) const;
     void setChanged();
     bool excludeFilterIsValid(const QString &exclusion);
-    bool matchesResource(QString &resourceName, QString &resourceFileName,const QStringList &filterList) const;
+    bool matchesResource(const QString &resourceName, const QString &resourceFileName,const QStringList &filterList) const;
     void populateIncludeExcludeFilters(const QStringList& filteredNames);
     void sanitizeExclusionList();
     QStringList tokenizeSearchString(const QString& searchString) const;

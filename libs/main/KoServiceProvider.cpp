@@ -55,7 +55,14 @@ QStringList KoServiceProvider::readExtraNativeMimeTypes()   //static
 
 KService::Ptr KoServiceProvider::readNativeService()
 {
-    QString instname = KGlobal::mainComponent().componentName();
+    QString instname = QCoreApplication::applicationName();
+
+    if (instname.isEmpty() && QCoreApplication::instance()) {
+        instname = qAppName();
+    }
+    if (instname.isEmpty()) {
+        instname = QString::fromLatin1("kde");
+    }
 
     // The new way is: we look for a foopart.desktop in the kde_services dir.
     QString servicepartname = instname + "part.desktop";

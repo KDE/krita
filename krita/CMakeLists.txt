@@ -113,6 +113,7 @@ add_subdirectory( pics )
 if (NOT WIN32)
     add_subdirectory( benchmarks )
 endif (NOT WIN32)
+add_subdirectory( animator )
 
 set(kritapart_PART_SRCS krita_part_init.cc)
 kde4_add_plugin(kritapart ${kritapart_PART_SRCS})

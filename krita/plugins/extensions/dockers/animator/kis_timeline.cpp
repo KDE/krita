@@ -30,6 +30,14 @@
 #include <QMenu>
 #include <QScrollBar>
 #include "kis_animation_frame.h"
+#include <kis_canvas2.h>
+#include <kis_view2.h>
+#include <kis_doc2.h>
+#include <kis_image.h>
+#include <kis_debug.h>
+#include <KoPart.h>
+#include <kis_animation.h>
+#include <KFileDialog>
 
 KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
 {
@@ -155,6 +163,20 @@ KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
     lay->setMargin(0);
     lay->setSpacing(0);
     this->setLayout(lay);
+
+    connect(this->m_cells, SIGNAL(frameSelectionChanged(QRect)), this, SLOT(changeCanvas()));
+}
+
+void KisTimeline::changeCanvas(){
+    KisDoc2* doc = new KisDoc2();
+    //doc->setUrl(KUrl("/tmp/test.png"));
+    //doc->image();
+    //if(doc->image().isValid()){
+    //this->getCanvas()->view()->;
+    kWarning() << "Change canvas";
+    //}
+
+    //this->getCanvas()->view()->document()->newImage("v",600,400,m_animation->colorSpace());
 }
 
 void KisTimeline::resizeEvent(QResizeEvent *event){
@@ -163,6 +185,10 @@ void KisTimeline::resizeEvent(QResizeEvent *event){
 
 void KisTimeline::setCanvas(KisCanvas2 *canvas){
     m_canvas = canvas;
+}
+
+void KisTimeline::setModel(KisAnimation *animation){
+    this->m_animation = animation;
 }
 
 KisCanvas2* KisTimeline::getCanvas(){

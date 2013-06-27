@@ -130,6 +130,7 @@ void KisAnimationSelector::createAnimation(){
     animation->setDescription(txtDescription->text());
     animation->setFps(inputFps->value());
     animation->setTime(inputTime->value());
+    animation->setColorSpace(colorSpaceSelector->currentColorSpace());
     static_cast<KisPart2*>(m_document->documentPart())->setAnimation(animation);
 
     m_document->newImage(txtAnimationName->text(), width, height, cs, bgColor, txtDescription->text(), resolution);

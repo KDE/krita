@@ -26,6 +26,7 @@
 class KisFrameBox;
 class KisAnimationLayerBox;
 class KisCanvas2;
+class KisAnimation;
 
 class KisTimeline : public QWidget
 {
@@ -36,6 +37,7 @@ public:
     KisCanvas2* getCanvas();
     KisAnimationLayerBox* getLayerBox();
     KisFrameBox* getFrameBox();
+    void setModel(KisAnimation* animation);
     bool scrubbing;
 
 protected:
@@ -54,12 +56,14 @@ private:
     int m_numberOfLayers;
     KisCanvas2* m_canvas;
     KisAnimationLayerBox *m_list;
+    KisAnimation* m_animation;
 
 private slots:
     void updateHeight();
     void blankFramePressed();
     void keyFramePressed();
     void addframePressed();
+    void changeCanvas();
 
 signals:
     void canvasModified();

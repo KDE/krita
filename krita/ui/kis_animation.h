@@ -20,6 +20,7 @@
 
 #include <QStandardItemModel>
 #include <krita_export.h>
+#include <KoColorSpace.h>
 
 class QString;
 
@@ -33,9 +34,11 @@ public:
     void setDescription(const QString &description);
     void setFps(int fps);
     void setTime(int time);
+    void setColorSpace(const KoColorSpace *colorSpace);
     QString name() const;
     QString author() const;
     QString description() const;
+    const KoColorSpace* colorSpace();
     int fps() const;
     int time() const;
     void load(const QString &url);
@@ -47,6 +50,7 @@ private:
     QString m_description;
     int m_fps;
     int m_time;
+    const KoColorSpace* m_colorSpace;
 };
 
 #endif // KIS_ANIMATION_H

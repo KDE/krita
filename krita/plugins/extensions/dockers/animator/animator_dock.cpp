@@ -54,6 +54,7 @@ void AnimatorDock::setCanvas(KoCanvasBase *canvas){
             m_mainWidget->setCanvas(m_canvas);
             m_mainWidget->getLayerBox()->onCanvasReady();
             m_mainWidget->getFrameBox()->onCanvasReady();
+            m_mainWidget->setModel(m_animation);
             connect(m_canvas->view()->document(), SIGNAL(modified(bool)), m_mainWidget, SLOT(documentModified()));
         }
     }

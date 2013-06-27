@@ -68,6 +68,14 @@ int KisAnimation::time() const{
     return m_time;
 }
 
+void KisAnimation::setColorSpace(const KoColorSpace *colorSpace){
+    this->m_colorSpace = colorSpace;
+}
+
+const KoColorSpace *KisAnimation::colorSpace(){
+    return m_colorSpace;
+}
+
 void KisAnimation::load(const QString &url){
 
 }

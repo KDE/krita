@@ -47,10 +47,11 @@ QByteArray KoServiceProvider::readNativeFormatMimeType()   //static
 
 QStringList KoServiceProvider::readExtraNativeMimeTypes()   //static
 {
+    QStringList mimetypes;
     KService::Ptr service = readNativeService();
-    if (!service)
-        return QStringList();
-    return service->property("X-KDE-ExtraNativeMimeTypes").toStringList();
+    if (service)
+        mimetypes = service->property("X-KDE-ExtraNativeMimeTypes").toStringList();
+    return mimetypes;
 }
 
 KService::Ptr KoServiceProvider::readNativeService()
@@ -67,18 +68,8 @@ KService::Ptr KoServiceProvider::readNativeService()
     // The new way is: we look for a foopart.desktop in the kde_services dir.
     QString servicepartname = instname + "part.desktop";
     KService::Ptr service = KService::serviceByDesktopPath(servicepartname);
-    if (service)
-        kDebug(30003) << servicepartname << " found.";
-    if (!service) {
-        // The old way is kept as fallback for compatibility, but in theory this is really never used anymore.
 
-        // Try by path first, so that we find the global one (which has the native mimetype)
-        // even if the user created a words.desktop in ~/.kde/share/applnk or any subdir of it.
-        // If he created it under ~/.kde/share/applnk/Office/ then no problem anyway.
-        service = KService::serviceByDesktopPath(QString::fromLatin1("Office/%1.desktop").arg(instname));
-    }
-    if (!service)
-        service = KService::serviceByDesktopName(instname);
+    Q_ASSERT(service);
 
     return service;
 }

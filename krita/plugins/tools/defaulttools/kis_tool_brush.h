@@ -45,10 +45,11 @@ public:
     QWidget * createOptionWidget();
 
 private slots:
-    void slotSetSmoothnessQuality(int quality);
-    void slotSetSmoothnessFactor(qreal factor);
+    void slotSetSmoothnessDistance(qreal distance);
     void slotSetMagnetism(int magnetism);
     void slotSetSmoothingType(int index);
+    void slotSetTailAgressiveness(qreal argh_rhhrr);
+    void setSmoothPressure(bool value);
 
 private:
     QGridLayout *m_optionLayout;
@@ -56,8 +57,9 @@ private:
 
     QCheckBox *m_chkAssistant;
     KisSliderSpinBox *m_sliderMagnetism;
-    KisDoubleSliderSpinBox *m_sliderSmoothnessFactor;
-    KisSliderSpinBox *m_sliderSmoothnessQuality;
+    KisDoubleSliderSpinBox *m_sliderSmoothnessDistance;
+    KisDoubleSliderSpinBox *m_sliderTailAggressiveness;
+    QCheckBox *m_chkSmoothPressure;
 };
 
 

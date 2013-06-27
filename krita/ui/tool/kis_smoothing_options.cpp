@@ -19,7 +19,8 @@
 
 KisSmoothingOptions::KisSmoothingOptions()
     : smoothingType(WEIGHTED_SMOOTHING)
-    , smoothnessFactor(50.0)
-    , smoothnessQuality(20)
+    , smoothnessDistance(50.0)
+    , tailAggressiveness(0.15)
+    , smoothPressure(false)
 {
 }

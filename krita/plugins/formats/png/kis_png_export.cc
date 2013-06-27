@@ -153,7 +153,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
         wdg->chkSRGB->setVisible(sRGB);
         wdg->chkSRGB->setChecked(cfg.getBool("saveSRGBProfile", true));
 
-        QStringList rgb = cfg.getString("transparencyFillcolor", "0,0,0").split(",");
+        QStringList rgb = cfg.getString("transparencyFillcolor", "0,0,0").split(',');
         wdg->bnTransparencyFillColor->setDefaultColor(Qt::white);
         wdg->bnTransparencyFillColor->setColor(QColor(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt()));
 

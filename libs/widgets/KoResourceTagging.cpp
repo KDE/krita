@@ -451,20 +451,14 @@ void KoResourceTagging::delNepomukTag(const QString &fileName, const QString &ta
     }
 }
 
-QString KoResourceTagging::adjustedNepomukFileName(QString fileName) const
+QString KoResourceTagging::adjustedNepomukFileName(const QString &fileName) const
 {
-    if(fileName.contains(" ")) {
-        fileName.replace(" ","_k_");
-    }
-    return fileName;
+    return QString(fileName).replace(' ', "_k_");
 }
 
-QString KoResourceTagging::correctedNepomukFileName(QString fileName) const
+QString KoResourceTagging::correctedNepomukFileName(const QString &fileName) const
 {
-    if(fileName.contains("_k_")) {
-        fileName.replace("_k_"," ");
-    }
-    return fileName;
+    return QString(fileName).replace("_k_", " ");
 }
 
 void KoResourceTagging::updateNepomukXML(bool nepomukOn)

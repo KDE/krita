@@ -292,7 +292,7 @@ void KoXmlStreamReader::clear()
 }
 
 
-void KoXmlStreamReader::addExpectedNamespace(QString prefix, QString namespaceUri)
+void KoXmlStreamReader::addExpectedNamespace(const QString &prefix, const QString &namespaceUri)
 {
     d->expectedNamespaces.insert(namespaceUri, prefix);
 
@@ -300,7 +300,7 @@ void KoXmlStreamReader::addExpectedNamespace(QString prefix, QString namespaceUr
     d->isSound = false;
 }
 
-void KoXmlStreamReader::addExtraNamespace(QString prefix, QString namespaceUri)
+void KoXmlStreamReader::addExtraNamespace(const QString &prefix, const QString &namespaceUri)
 {
     d->extraNamespaces.insert(namespaceUri, prefix);
 

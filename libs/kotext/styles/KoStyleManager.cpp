@@ -1095,7 +1095,7 @@ KoParagraphStyle *KoStyleManager::defaultTableOfcontentsTitleStyle()
     return defaultParagraphStyle();
 }
 
-KoParagraphStyle *KoStyleManager::defaultBibliographyEntryStyle(QString bibType)
+KoParagraphStyle *KoStyleManager::defaultBibliographyEntryStyle(const QString &bibType)
 {
     KoParagraphStyle *style = paragraphStyle(d->defaultBibEntriesStyleId
                                              .at(KoOdfBibliographyConfiguration::bibTypes.indexOf(bibType)));

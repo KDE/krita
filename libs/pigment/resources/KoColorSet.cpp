@@ -150,7 +150,7 @@ bool KoColorSet::init()
             if (lines[i].startsWith('#')) {
                 m_comment += lines[i].mid(1).trimmed() + ' ';
             } else if (!lines[i].isEmpty()) {
-                QStringList a = lines[i].replace(QChar('\t'), " ").split(' ', QString::SkipEmptyParts);
+                QStringList a = lines[i].replace('\t', ' ').split(' ', QString::SkipEmptyParts);
 
                 if (a.count() < 3) {
                     break;

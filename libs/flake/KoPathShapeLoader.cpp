@@ -54,7 +54,7 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
 {
     if (!s.isEmpty()) {
         QString d = s;
-        d = d.replace(',', ' ');
+        d.replace(',', ' ');
         d = d.simplified();
 
         const QByteArray buffer = d.toLatin1();

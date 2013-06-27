@@ -24,7 +24,7 @@ struct KoColorTransformationFactory::Private {
     QString name;
 };
 
-KoColorTransformationFactory::KoColorTransformationFactory(QString id, QString name) : d(new Private)
+KoColorTransformationFactory::KoColorTransformationFactory(const QString &id, const QString &name) : d(new Private)
 {
     d->id = id;
     d->name = name;

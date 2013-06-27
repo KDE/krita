@@ -110,7 +110,7 @@ void GoogleDocumentService::handleNetworkData(QNetworkReply *networkReply)
         if (!loggedin) {
             QString text(networkReply->readAll());
             text = text.right(text.length() - text.indexOf("Auth=") - 5);
-            authToken = QString("GoogleLogin auth=") + text.left(text.indexOf("\n"));
+            authToken = QString("GoogleLogin auth=") + text.left(text.indexOf('\n'));
             if(authToken.length() > 20) {
                 if(!haveDocAuthToken) {
                     docAuthToken = authToken;

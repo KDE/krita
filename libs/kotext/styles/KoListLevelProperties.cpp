@@ -575,7 +575,7 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
         }
         QString size = style.attributeNS(KoXmlNS::text, "bullet-relative-size", QString());
         if (!size.isEmpty()) {
-            setRelativeBulletSize(size.replace('%', "").toInt());
+            setRelativeBulletSize(size.remove('%').toInt());
         }
 
     } else if (style.localName() == "list-level-style-number" || style.localName() == "outline-level-style") { // it's a numbered list

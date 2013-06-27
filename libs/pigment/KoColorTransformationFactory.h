@@ -37,7 +37,7 @@ class KoID;
 class PIGMENTCMS_EXPORT KoColorTransformationFactory
 {
 public:
-    KoColorTransformationFactory(QString id, QString name);
+    KoColorTransformationFactory(const QString &id, const QString &name);
     virtual ~KoColorTransformationFactory();
 public:
     QString id() const;

@@ -84,8 +84,8 @@ private:
     void updateTagRepoFromNepomuk(bool serverIdentity=true);
     void addNepomukTag(const QString& fileName,const QString& tag);
     void delNepomukTag(const QString& fileName,const QString& tag);
-    QString adjustedNepomukFileName(QString fileName) const;
-    QString correctedNepomukFileName(QString fileName) const;
+    QString adjustedNepomukFileName(const QString &fileName) const;
+    QString correctedNepomukFileName(const QString &fileName) const;
 #endif
 
     QMultiHash<QString, QString> m_tagRepo;

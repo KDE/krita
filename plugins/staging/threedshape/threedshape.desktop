@@ -22,6 +22,6 @@ Name[x-test]=xx3D Scene Shapexx
 X-KDE-ServiceTypes=Calligra/Shape
 Type=Service
 X-KDE-PluginInfo-Name=threedshape
-X-KDE-Library=threedshape
+X-KDE-Library=calligra_shape_threed
 X-Flake-MinVersion=28
 X-Flake-PluginVersion=28

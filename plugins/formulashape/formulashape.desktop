@@ -43,6 +43,6 @@ Name[zh_TW]=公式元件
 X-KDE-ServiceTypes=Calligra/Flake
 Type=Service
 X-KDE-PluginInfo-Name=formulashape
-X-KDE-Library=formulashape
+X-KDE-Library=calligra_shape_formular
 X-Flake-MinVersion=28
 X-Flake-PluginVersion=28

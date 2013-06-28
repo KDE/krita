@@ -13,11 +13,11 @@ SET( commentshape_LIB_SRCS
      Plugin.cpp
    )
 
-kde4_add_plugin(commentshape ${commentshape_LIB_SRCS})
+kde4_add_plugin(calligra_shape_comment ${commentshape_LIB_SRCS})
 
-target_link_libraries(commentshape komain textlayout)
+target_link_libraries(calligra_shape_comment komain textlayout)
 
-install(TARGETS commentshape DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_shape_comment DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES commentshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
 # kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )

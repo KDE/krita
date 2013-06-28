@@ -6,7 +6,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/plugins/formulashape
 
 ########### KFormula Library ###############
 
-set( kformulalib_PART_SRCS
+set( kformula_LIB_SRCS
    AttributeManager.cpp
    FormulaRenderer.cpp
    FormulaData.cpp
@@ -48,14 +48,14 @@ set( kformulalib_PART_SRCS
    elements/UnknownElement.cpp
 )
 
-kde4_add_library(kformulalib SHARED ${kformulalib_PART_SRCS})
+kde4_add_library(kformula SHARED ${kformula_LIB_SRCS})
 
-target_link_libraries(kformulalib komain)
-target_link_libraries(kformulalib LINK_INTERFACE_LIBRARIES komain)
+target_link_libraries(kformula komain)
+target_link_libraries(kformula LINK_INTERFACE_LIBRARIES komain)
 
-set_target_properties(kformulalib PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+set_target_properties(kformula PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
-install(TARGETS kformulalib ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kformula ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### FormulaShape Plugin ###############
 
@@ -97,13 +97,13 @@ kde4_add_ui_files( formulashape_PART_SRCS
     FormulaToolWidget.ui
 )
 
-kde4_add_plugin(formulashape ${formulashape_PART_SRCS})
+kde4_add_plugin(calligra_shape_formular ${formulashape_PART_SRCS})
 
-target_link_libraries(formulashape kformulalib ${M2MML_TOOL_LIBRARIES})
+target_link_libraries(calligra_shape_formular kformula ${M2MML_TOOL_LIBRARIES})
 
 
-#set_target_properties(kformulalib PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
-install(TARGETS formulashape  DESTINATION ${PLUGIN_INSTALL_DIR})
+#set_target_properties(kformula PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+install(TARGETS calligra_shape_formular  DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES formulashape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
 add_subdirectory( pics ) 

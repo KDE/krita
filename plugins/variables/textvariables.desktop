@@ -46,6 +46,6 @@ Name[zh_TW]=文字變數
 X-KDE-PluginInfo-Name=textvariables
 X-KDE-ServiceTypes=Calligra/Text-InlineObject
 Type=Service
-X-KDE-Library=textvariables
+X-KDE-Library=calligra_textinlineobject_variables
 X-KoText-MinVersion=28
 X-KoText-PluginVersion=28

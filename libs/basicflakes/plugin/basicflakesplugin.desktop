@@ -14,6 +14,6 @@ Name[x-test]=xxBasic Flakesxx
 X-KDE-ServiceTypes=Calligra/Tool
 Type=Service
 X-KDE-PluginInfo-Name=basicflakesplugin
-X-KDE-Library=basicflakesplugin
+X-KDE-Library=calligra_tool_basicflakes
 X-Flake-MinVersion=28
 X-Flake-PluginVersion=28

@@ -162,15 +162,15 @@ kde4_add_ui_files(textshape_SRCS
 
 )
 
-kde4_add_plugin(textshape ${textshape_SRCS})
+kde4_add_plugin(calligra_shape_text ${textshape_SRCS})
 
-target_link_libraries(textshape kotext textlayout komain ${EXTRA_LIBS})
+target_link_libraries(calligra_shape_text kotext textlayout komain ${EXTRA_LIBS})
 if( SHOULD_BUILD_RDF )
-    target_link_libraries(textshape ${SOPRANO_LIBRARIES})
+    target_link_libraries(calligra_shape_text ${SOPRANO_LIBRARIES})
 endif( SHOULD_BUILD_RDF )
 
 
-install(TARGETS textshape DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_shape_text DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

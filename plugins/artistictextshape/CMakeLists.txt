@@ -31,11 +31,11 @@ kde4_add_ui_files( ArtisticTextShape_SRCS
     ArtisticTextShapeOnPathWidget.ui
 )
 
-kde4_add_plugin( artistictextshape ${ArtisticTextShape_SRCS} )
+kde4_add_plugin( calligra_shape_artistictext ${ArtisticTextShape_SRCS} )
 
-target_link_libraries(artistictextshape flake)
+target_link_libraries(calligra_shape_artistictext flake)
 
-install( TARGETS artistictextshape DESTINATION ${PLUGIN_INSTALL_DIR} )
+install( TARGETS calligra_shape_artistictext DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 

@@ -17,11 +17,11 @@ SET ( VectorShape_SRCS
 #kde4_add_ui_files(VectorShape_SRCS
 #)
 
-kde4_add_plugin(vectorshape ${VectorShape_SRCS})
+kde4_add_plugin(calligra_shape_vector ${VectorShape_SRCS})
 
-target_link_libraries(vectorshape flake vectorimage ${KDE4_KFILE_LIBRARY})
+target_link_libraries(calligra_shape_vector flake vectorimage ${KDE4_KFILE_LIBRARY})
 
-install(TARGETS vectorshape DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_shape_vector DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

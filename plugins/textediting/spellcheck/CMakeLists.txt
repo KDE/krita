@@ -11,10 +11,10 @@ set(spellcheck_SRCS
     SpellCheckMenu.cpp
 )
 
-kde4_add_plugin(spellcheck ${spellcheck_SRCS})
+kde4_add_plugin(calligra_textediting_spellcheck ${spellcheck_SRCS})
 
-target_link_libraries(spellcheck kotext textlayout)
+target_link_libraries(calligra_textediting_spellcheck kotext textlayout)
 
-install(TARGETS spellcheck DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_textediting_spellcheck DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES spellcheck.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

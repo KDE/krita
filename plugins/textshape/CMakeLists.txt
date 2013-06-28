@@ -1,11 +1,12 @@
 project( textPlugin)
 
-# only build the textdocument inspector in debug builds
-set(BUILD_TEXTDOCUMENT_INSPECTOR (CMAKE_BUILD_TYPE STREQUAL "Debug"))
-
-if(BUILD_TEXTDOCUMENT_INSPECTOR)
+# only build the textdocument inspector in non-release builds
+if(NOT RELEASE_BUILD)
+    set(BUILD_TEXTDOCUMENT_INSPECTOR TRUE)
     add_definitions(-DCREATE_TEXTDOCUMENT_INSPECTOR)
-endif(BUILD_TEXTDOCUMENT_INSPECTOR)
+else(NOT RELEASE_BUILD)
+    set(BUILD_TEXTDOCUMENT_INSPECTOR FALSE)
+endif(NOT RELEASE_BUILD)
 
 
 add_subdirectory( pics )

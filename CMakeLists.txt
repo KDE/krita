@@ -48,6 +48,26 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
 include(CalligraProductSetMacros)
 
+if(NOT DEFINED RELEASE_BUILD)
+    # estimate mode by CMAKE_BUILD_TYPE content if not set on cmdline
+    string(TOLOWER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE_TOLOWER)
+    set(RELEASE_BUILD_TYPES "release" "relwithdebinfo" "minsizerel")
+    list(FIND RELEASE_BUILD_TYPES ${CMAKE_BUILD_TYPE_TOLOWER} INDEX)
+    if (INDEX EQUAL -1)
+        set(RELEASE_BUILD FALSE)
+    else(INDEX EQUAL -1)
+        set(RELEASE_BUILD TRUE)
+    endif(INDEX EQUAL -1)
+endif(NOT DEFINED RELEASE_BUILD)
+message(STATUS "Release build: ${RELEASE_BUILD}")
+
+if (RELEASE_BUILD)
+    set(CALLIGRA_SHOULD_BUILD_STAGING FALSE)
+else (RELEASE_BUILD)
+    set(CALLIGRA_SHOULD_BUILD_STAGING TRUE)
+endif (RELEASE_BUILD)
+
+
 option(GHNS "support Get Hot New Stuff" OFF)
 option(NEPOMUK "support NEPOMUK Tagging" ON)
 # TODO: orthogonal setting, results in minimal features, yet needs to be defined

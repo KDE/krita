@@ -23,8 +23,6 @@
 
 #include <QStringList>
 
-#include <kparts/plugin.h>
-
 #include <kpluginfactory.h>
 
 #include <krita_export.h>

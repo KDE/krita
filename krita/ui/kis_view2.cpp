@@ -51,9 +51,6 @@
 #include <kactionmenu.h>
 #include <klocale.h>
 #include <kmenu.h>
-#include <kparts/componentfactory.h>
-#include <kparts/event.h>
-#include <kparts/plugin.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kstandardaction.h>

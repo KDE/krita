@@ -50,9 +50,9 @@ include(CalligraProductSetMacros)
 
 if(NOT DEFINED RELEASE_BUILD)
     # estimate mode by CMAKE_BUILD_TYPE content if not set on cmdline
-    string(TOLOWER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE_TOLOWER)
+    string(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_TOLOWER)
     set(RELEASE_BUILD_TYPES "release" "relwithdebinfo" "minsizerel")
-    list(FIND RELEASE_BUILD_TYPES ${CMAKE_BUILD_TYPE_TOLOWER} INDEX)
+    list(FIND RELEASE_BUILD_TYPES "${CMAKE_BUILD_TYPE_TOLOWER}" INDEX)
     if (INDEX EQUAL -1)
         set(RELEASE_BUILD FALSE)
     else(INDEX EQUAL -1)

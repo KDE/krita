@@ -32,8 +32,6 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
-#include <kparts/plugin.h>
-#include <kparts/componentfactory.h>
 #include <kconfiggroup.h>
 
 #include <KoPluginLoader.h>

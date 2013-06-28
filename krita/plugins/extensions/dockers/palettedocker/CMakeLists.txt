@@ -1,5 +1,5 @@
 
-set(KRITA_PALETTEDOCKER_PART_SRCS colorsetlistmodel.cpp palettemodel.cpp palettedocker.cpp palettedocker_dock.cpp )
+set(KRITA_PALETTEDOCKER_PART_SRCS colorsetchooser.cpp palettemodel.cpp palettedocker.cpp palettedocker_dock.cpp )
 
 kde4_add_ui_files(KRITA_PALETTEDOCKER_PART_SRCS
     wdgpalettedock.ui

@@ -26,6 +26,7 @@
 #include <KoResourceServerAdapter.h>
 #include <KoColorSet.h>
 
+class ColorSetChooser;
 class PaletteModel;
 class KisCanvas2;
 class Ui_WdgPaletteDock;
@@ -41,17 +42,16 @@ private slots:
     void addColor();
     void removeColor();
     void entrySelected(QModelIndex index);
-    void activatedColorSet(int index);
-
-private:
     void setColorSet(KoColorSet* colorSet);
-    
+
+private:    
     KisCanvas2 *m_canvas;
     Ui_WdgPaletteDock* m_wdgPaletteDock;
     PaletteModel *m_model;
     KoResourceServerAdapter<KoColorSet>* m_serverAdapter;
     QString m_defaultPalette;
     KoColorSet* m_currentColorSet;
+    ColorSetChooser* m_colorSetChooser;
 };
 
 

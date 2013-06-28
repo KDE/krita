@@ -39,7 +39,7 @@
 #include <kis_config.h>
 
 #include "palettemodel.h"
-#include "colorsetlistmodel.h"
+#include "colorsetchooser.h"
 #include "ui_wdgpalettedock.h"
 
 /// The resource item delegate for rendering the resource preview
@@ -84,7 +84,7 @@ void PaletteDelegate::paint(QPainter * painter, const QStyleOptionViewItem & opt
 }
 
 
-PaletteDockerDock::PaletteDockerDock( ) : QDockWidget(i18n("Palette 2"))
+PaletteDockerDock::PaletteDockerDock( ) : QDockWidget(i18n("Palette"))
     , m_canvas(0)
     , m_wdgPaletteDock(new Ui_WdgPaletteDock())
     , m_currentColorSet(0)
@@ -115,13 +115,17 @@ PaletteDockerDock::PaletteDockerDock( ) : QDockWidget(i18n("Palette 2"))
     m_wdgPaletteDock->paletteView->setPalette(pal);
  
     connect(m_wdgPaletteDock->paletteView, SIGNAL(activated(QModelIndex)), this, SLOT(entrySelected(QModelIndex)));
-    
+
     KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
     m_serverAdapter = new KoResourceServerAdapter<KoColorSet>(rServer, this);
     m_serverAdapter->connectToResourceServer();
 
-    m_wdgPaletteDock->cmbColorSets->setModel(new ColorSetListModel(m_serverAdapter));
-    connect(m_wdgPaletteDock->cmbColorSets, SIGNAL(activated(int)), this, SLOT(activatedColorSet(int)));
+    m_colorSetChooser = new ColorSetChooser();
+    connect(m_colorSetChooser, SIGNAL(paletteSelected(KoColorSet*)), this, SLOT(setColorSet(KoColorSet*)));
+
+    m_wdgPaletteDock->bnColorSets->setIcon(koIcon("document-multiple"));
+    m_wdgPaletteDock->bnColorSets->setToolTip(i18n("Choose palette"));
+    m_wdgPaletteDock->bnColorSets->setPopupWidget(m_colorSetChooser);
 }
 
 void PaletteDockerDock::setCanvas(KoCanvasBase * canvas)
@@ -187,15 +191,5 @@ void PaletteDockerDock::entrySelected(QModelIndex index)
         m_wdgPaletteDock->bnRemove->setEnabled(true);
     }
 }
-
-void PaletteDockerDock::activatedColorSet(int index)
-{
-    if (index < m_serverAdapter->resources().count()) {
-        KoColorSet* colorSet = static_cast<KoColorSet*>(m_serverAdapter->resources().at(index));
-        setColorSet(colorSet);
-    }
-}
-
-
 
 #include "palettedocker_dock.moc"

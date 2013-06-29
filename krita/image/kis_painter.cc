@@ -149,8 +149,7 @@ void KisPainter::init()
     d->maskImageHeight = 255;
     d->mirrorHorizontaly = false;
     d->mirrorVerticaly = false;
-    d->paramInfo.opacity = 1.0f;
-    d->paramInfo.flow = 1.0f;
+    d->paramInfo = KoCompositeOp::ParameterInfo();
     d->renderingIntent = KoColorConversionTransformation::InternalRenderingIntent;
     d->conversionFlags = KoColorConversionTransformation::InternalConversionFlags;
 }
@@ -2343,6 +2342,11 @@ void KisPainter::setFlow(quint8 flow)
 quint8 KisPainter::flow() const
 {
     return quint8(d->paramInfo.flow * 255.0f);
+}
+
+void KisPainter::setOpacityUpdateAverage(quint8 opacity)
+{
+    d->paramInfo.updateOpacityAndAverage(float(opacity) / 255.0f);
 }
 
 void KisPainter::setOpacity(quint8 opacity)

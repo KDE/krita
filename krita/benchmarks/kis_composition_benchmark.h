@@ -25,7 +25,12 @@ class KisCompositionBenchmark : public QObject
 {
     Q_OBJECT
 private slots:
-    void checkRoundingAlphaDarken();
+    void checkRoundingAlphaDarken_05_03();
+    void checkRoundingAlphaDarken_05_05();
+    void checkRoundingAlphaDarken_05_07();
+    void checkRoundingAlphaDarken_05_10();
+    void checkRoundingAlphaDarken_05_10_08();
+
     void checkRoundingOver();
 
     void compareAlphaDarkenOps();

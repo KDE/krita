@@ -26,6 +26,8 @@
 #include <kurl.h>
 #include <kpluginfactory.h>
 #include <kmessagebox.h>
+#include <kstandarddirs.h>
+#include <kaction.h>
 
 #include <sheets/part/Canvas.h>
 #include <sheets/part/View.h>
@@ -39,10 +41,9 @@ K_PLUGIN_FACTORY(PivotPluginFactory, registerPlugin<PivotPlugin>();)
 K_EXPORT_PLUGIN(PivotPluginFactory("sheetspivottables_plugin"))
 
 PivotPlugin::PivotPlugin(QObject *parent, const QVariantList &)
-    : KParts::Plugin(parent)
 {
     setComponentData(PivotPluginFactory::componentData());
-
+    setXMLFile(KStandardDirs::locate("data", "sheets/viewplugins/pivottables.rc"), true);
     KAction *action = new KAction(i18n("&Pivot..."), this);
     action->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_P));
     actionCollection()->addAction("pivot", action );

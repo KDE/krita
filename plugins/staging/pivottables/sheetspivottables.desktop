@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Sheets Pivot Plugin
+X-KDE-ServiceTypes=Sheets/ViewPlugin
+Type=Service
+X-KDE-Library=sheetssolver
+X-Sheets-Version=28

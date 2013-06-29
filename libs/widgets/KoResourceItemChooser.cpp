@@ -184,7 +184,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     QPushButton *tagButton = new QPushButton(this);
 
     tagButton->setIcon(koIcon("list-add"));
-    tagButton->setToolTip("Add tag");
+    tagButton->setToolTip(i18nc("@info:tooltip", "Add tag"));
     tagButton->setEnabled(true);
     d->tagButtonGroup->addButton( tagButton, Private::Button_AddTag);
     tagButton->hide();
@@ -192,7 +192,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
 
     tagButton = new QPushButton(this);
     tagButton->setIcon(koIcon("list-remove"));
-    tagButton->setToolTip("Remove tag");
+    tagButton->setToolTip(i18nc("@info:tooltip", "Remove tag"));
     tagButton->setEnabled(true);
     tagButton->hide();
     d->tagButtonGroup->addButton( tagButton, Private::Button_RemoveTag);
@@ -211,21 +211,21 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
 
     QPushButton *button = new QPushButton(this);
     button->setIcon(koIcon("document-open"));
-    button->setToolTip(i18n("Import Resource"));
+    button->setToolTip(i18nc("@info:tooltip", "Import resource"));
     button->setEnabled(true);
     d->buttonGroup->addButton(button, Button_Import);
     buttonLayout->addWidget(button, 0, 0);
 
     button = new QPushButton(this);
     button->setIcon(koIcon("trash-empty"));
-    button->setToolTip(i18n("Delete Resource"));
+    button->setToolTip(i18nc("@info:tooltip", "Delete resource"));
     button->setEnabled(false);
     d->buttonGroup->addButton(button, Button_Remove);
     buttonLayout->addWidget(button, 0, 1);
 
     button = new QPushButton(this);
     button->setIcon(koIcon("download"));
-    button->setToolTip(i18n("Download Resource"));
+    button->setToolTip(i18nc("@info:tooltip", "Download resource"));
     button->setEnabled(true);
     button->hide();
     d->buttonGroup->addButton(button, Button_GhnsDownload);
@@ -299,7 +299,7 @@ void KoResourceItemChooser::slotButtonClicked( int button )
     if( button == Button_Import ) {
         QString extensions = d->model->extensions();
         QString filter = extensions.replace(QString(":"), QString(" "));
-        QString filename = KFileDialog::getOpenFileName( KUrl(), filter, 0, i18n( "Choose File to Add" ) );
+        QString filename = KFileDialog::getOpenFileName( KUrl(), filter, 0, i18nc("@title:window", "Choose File to Add"));
 
         d->model->importResourceFile(filename);
     }
@@ -739,7 +739,7 @@ void KoResourceItemChooser::removeTagFromComboBox()
     int index = d->tagOpComboBox->currentIndex();
     if (index > 0) {
         QString tag = d->currentTag;
-        if (QMessageBox::Yes == QMessageBox::question(this, i18n("tag deletion"),
+        if (QMessageBox::Yes == QMessageBox::question(this, i18nc("@title:window","Tag Deletion"),
                     i18n("Really delete this tag?"), QMessageBox::Yes|QMessageBox::No)) {
 
             QList<KoResource*> resources = d->model->currentlyVisibleResources();
@@ -757,8 +757,8 @@ void KoResourceItemChooser::slotTagButtonClicked(int button)
     if( button == Private::Button_AddTag ) {
         bool ok;
 
-        const QString tagName = QInputDialog::getText(this, i18n("Enter name for new tag"),
-                i18n("tag name:"), QLineEdit::Normal, QString(), &ok);
+        const QString tagName = QInputDialog::getText(this, i18nc("@title:window","Enter Name for new Tag"),
+                i18n("Tag name:"), QLineEdit::Normal, QString(), &ok);
 
         if (ok && !tagName.isEmpty()) {
             d->model->tagCategoryAdded(tagName);

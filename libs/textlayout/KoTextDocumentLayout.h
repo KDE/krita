@@ -257,7 +257,7 @@ public:
      *
      * It searches for anchor text ranges in the given span
      */
-    void positionAnchorTextRanges(int pos, int length);
+    void positionAnchorTextRanges(int pos, int length, const QTextDocument *effectiveDocument);
 
 signals:
     /**

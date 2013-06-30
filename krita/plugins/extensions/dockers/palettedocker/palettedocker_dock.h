@@ -36,6 +36,7 @@ class PaletteDockerDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
     PaletteDockerDock();
+    virtual ~PaletteDockerDock();
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas() { m_canvas = 0; }
 
@@ -53,7 +54,6 @@ private:
     Ui_WdgPaletteDock* m_wdgPaletteDock;
     PaletteModel *m_model;
     KoResourceServerAdapter<KoColorSet>* m_serverAdapter;
-    QString m_defaultPalette;
     KoColorSet* m_currentColorSet;
     ColorSetChooser* m_colorSetChooser;
 };

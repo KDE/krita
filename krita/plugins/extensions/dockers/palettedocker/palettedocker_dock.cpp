@@ -133,6 +133,21 @@ PaletteDockerDock::PaletteDockerDock( ) : QDockWidget(i18n("Palette"))
     m_wdgPaletteDock->bnColorSets->setIcon(koIcon("document-multiple"));
     m_wdgPaletteDock->bnColorSets->setToolTip(i18n("Choose palette"));
     m_wdgPaletteDock->bnColorSets->setPopupWidget(m_colorSetChooser);
+
+    KisConfig cfg;
+    QString defaultPalette = cfg.defaultPalette();
+    KoColorSet* defaultColorSet = rServer->resourceByName(defaultPalette);
+    if (defaultColorSet) {
+        setColorSet(defaultColorSet);
+    }
+}
+
+PaletteDockerDock::~PaletteDockerDock()
+{
+    if (m_currentColorSet) {
+        KisConfig cfg;
+        cfg.setDefaultPalette(m_currentColorSet->name());
+    }
 }
 
 void PaletteDockerDock::setCanvas(KoCanvasBase * canvas)

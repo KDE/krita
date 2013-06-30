@@ -94,12 +94,15 @@ PaletteDockerDock::PaletteDockerDock( ) : QDockWidget(i18n("Palette"))
     m_wdgPaletteDock->setupUi(mainWidget);
     m_wdgPaletteDock->bnAdd->setIcon(koIcon("list-add"));
     m_wdgPaletteDock->bnAdd->setIconSize(QSize(16, 16));
+    m_wdgPaletteDock->bnAddDialog->setIcon(koIcon("color"));
+    m_wdgPaletteDock->bnAddDialog->setIconSize(QSize(16, 16));
     m_wdgPaletteDock->bnRemove->setIcon(koIcon("list-remove"));
     m_wdgPaletteDock->bnRemove->setIconSize(QSize(16, 16));
     m_wdgPaletteDock->bnAdd->setEnabled(false);
     m_wdgPaletteDock->bnRemove->setEnabled(false);
 
-    connect(m_wdgPaletteDock->bnAdd, SIGNAL(clicked(bool)), this, SLOT(addColor()));
+    connect(m_wdgPaletteDock->bnAdd, SIGNAL(clicked(bool)), this, SLOT(addColorForeground()));
+    connect(m_wdgPaletteDock->bnAddDialog, SIGNAL(clicked(bool)), this, SLOT(addColor()));
     connect(m_wdgPaletteDock->bnRemove, SIGNAL(clicked(bool)), this, SLOT(removeColor()));
 
     m_model = new PaletteModel(this);
@@ -149,6 +152,15 @@ void PaletteDockerDock::setColorSet(KoColorSet* colorSet)
         m_wdgPaletteDock->bnRemove->setEnabled(false);
     }
     m_currentColorSet = colorSet;
+}
+
+void PaletteDockerDock::addColorForeground()
+{
+    KoColorSetEntry newEntry;
+    newEntry.color = m_canvas->resourceManager()->foregroundColor();
+    m_currentColorSet->add(newEntry);
+    m_currentColorSet->save();
+    setColorSet(m_currentColorSet); // update model
 }
 
 void PaletteDockerDock::addColor()

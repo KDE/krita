@@ -39,6 +39,7 @@ public:
     virtual void unsetCanvas() { m_canvas = 0; }
 
 private slots:
+    void addColorForeground();
     void addColor();
     void removeColor();
     void entrySelected(QModelIndex index);

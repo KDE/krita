@@ -15,7 +15,7 @@ SET( commentshape_LIB_SRCS
 
 kde4_add_plugin(calligra_shape_comment ${commentshape_LIB_SRCS})
 
-target_link_libraries(calligra_shape_comment komain textlayout)
+target_link_libraries(calligra_shape_comment komain kotextlayout)
 
 install(TARGETS calligra_shape_comment DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES commentshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})

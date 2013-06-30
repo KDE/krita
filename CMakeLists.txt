@@ -101,17 +101,17 @@ calligra_define_product(LIB_KDGANTT "libkdgantt")
 calligra_define_product(LIB_KDCHART "libkdchart")
 calligra_define_product(LIB_WRITERPERFECT "libwriterperfect")
 # Calligra-independent utility libs
-calligra_define_product(LIB_VECTORIMAGE "libvectorimage")
+calligra_define_product(LIB_VECTORIMAGE "libkovectorimage")
 calligra_define_product(LIB_KOPROPERTY "libkoproperty")
 calligra_define_product(LIB_KOREPORT "libkoreport" NEEDS LIB_KOPROPERTY)
 calligra_define_product(LIB_CALLIGRADB "libcalligradb")
 # calligra libs
 calligra_define_product(CALLIGRA_LIBS "Calligra core libs")
 calligra_define_product(LIB_KOPAGEAPP "Lib for paged documents"  NEEDS CALLIGRA_LIBS)
-calligra_define_product(LIB_ODF2 "libodf2"  NEEDS CALLIGRA_LIBS)
-calligra_define_product(LIB_ODFREADER "libodfreader"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(LIB_ODF2 "libkoodf2"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(LIB_ODFREADER "libkoodfreader"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(LIB_MSO "libmso"  NEEDS CALLIGRA_LIBS)
-calligra_define_product(LIB_MSOOXML "libmsooxml"  NEEDS LIB_ODF2 CALLIGRA_LIBS)
+calligra_define_product(LIB_MSOOXML "libkomsooxml"  NEEDS LIB_ODF2 CALLIGRA_LIBS)
 calligra_define_product(SCRIPTING "Scripting feature") # TODO
 calligra_define_product(RDF "RDF feature")
 # plugins

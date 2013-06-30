@@ -59,7 +59,7 @@ kde4_add_ui_files(chartshape_LIB_SRCS
 )
 
 kde4_add_library(calligrachartshape SHARED ${chartshape_LIB_SRCS})
-target_link_libraries(calligrachartshape ${KDCHART_LIBS} komain textlayout)
+target_link_libraries(calligrachartshape ${KDCHART_LIBS} komain kotextlayout)
 target_link_libraries(calligrachartshape LINK_INTERFACE_LIBRARIES ${KDCHART_LIBS})
 set_target_properties(calligrachartshape PROPERTIES
     VERSION   ${GENERIC_CALLIGRA_LIB_VERSION}

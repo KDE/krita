@@ -31,15 +31,15 @@ set(textlayout_LIB_SRCS
 )
 
 
-kde4_add_library(textlayout SHARED ${textlayout_LIB_SRCS})
+kde4_add_library(kotextlayout SHARED ${textlayout_LIB_SRCS})
 
-target_link_libraries(textlayout kotext)
-target_link_libraries(textlayout LINK_INTERFACE_LIBRARIES kotext)
+target_link_libraries(kotextlayout kotext)
+target_link_libraries(kotextlayout LINK_INTERFACE_LIBRARIES kotext)
 
-set_target_properties(textlayout PROPERTIES
+set_target_properties(kotextlayout PROPERTIES
    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
-install(TARGETS textlayout  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kotextlayout  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 

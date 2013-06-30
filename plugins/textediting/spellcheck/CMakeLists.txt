@@ -13,7 +13,7 @@ set(spellcheck_SRCS
 
 kde4_add_plugin(calligra_textediting_spellcheck ${spellcheck_SRCS})
 
-target_link_libraries(calligra_textediting_spellcheck kotext textlayout)
+target_link_libraries(calligra_textediting_spellcheck kotext kotextlayout)
 
 install(TARGETS calligra_textediting_spellcheck DESTINATION ${PLUGIN_INSTALL_DIR})
 

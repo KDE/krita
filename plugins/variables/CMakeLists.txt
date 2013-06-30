@@ -30,7 +30,7 @@ kde4_add_ui_files( textvariables_SRCS
 
 kde4_add_plugin(calligra_textinlineobject_variables ${textvariables_SRCS})
 
-target_link_libraries(calligra_textinlineobject_variables kotext textlayout)
+target_link_libraries(calligra_textinlineobject_variables kotext kotextlayout)
 
 install(TARGETS calligra_textinlineobject_variables DESTINATION ${PLUGIN_INSTALL_DIR})
 

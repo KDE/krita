@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kis_dodgehighlights_adjustment.h"
+#include "kis_burnhighlights_adjustment.h"
 #include <KoConfig.h>
 
 #include <kis_debug.h>
@@ -31,24 +31,24 @@
 #include <KoID.h>
 
 template<typename _channel_type_>
-class KisDodgeHighlightsAdjustment : public KoColorTransformation
+class KisBurnHighlightsAdjustment : public KoColorTransformation
 {
     typedef KoBgrTraits<_channel_type_> RGBTrait;
     typedef typename RGBTrait::Pixel RGBPixel;
 
 public:
- 	KisDodgeHighlightsAdjustment(){};
+ 	KisBurnHighlightsAdjustment(){};
 
  	void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
  	{
- 		const RGBPixel* src = reinterpret_cast<const RGBPixel*>(srcU8);
+        const RGBPixel* src = reinterpret_cast<const RGBPixel*>(srcU8);
         RGBPixel* dst = reinterpret_cast<RGBPixel*>(dstU8);
         float value_red, value_green, value_blue;
         while(nPixels > 0) {
 
-            value_red = (1.0 + exposure * (0.33333)) * KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->red);
-            value_green = (1.0 + exposure * (0.33333)) * KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->green);
-            value_blue = (1.0 + exposure * (0.33333)) * KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->blue);
+            value_red = (1.0 - exposure * (0.33333)) * KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->red);
+            value_green = (1.0 - exposure * (0.33333)) * KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->green);
+            value_blue = (1.0 - exposure * (0.33333)) * KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->blue);
             
             dst->red = KoColorSpaceMaths< float, _channel_type_>::scaleToA(value_red);
             dst->green = KoColorSpaceMaths< float, _channel_type_ >::scaleToA(value_green);
@@ -57,9 +57,8 @@ public:
             
             --nPixels;
             ++src;
-            ++dst;
+            ++dst;	
         }
-
     }
 
 	virtual QList<QString> parameters() const
@@ -92,12 +91,12 @@ private:
 	float exposure;
  };
 
- KisDodgeHighlightsAdjustmentFactory::KisDodgeHighlightsAdjustmentFactory()
-    : KoColorTransformationFactory("DodgeHighlights", i18n("DODGE Adjustment"))
+ KisBurnHighlightsAdjustmentFactory::KisBurnHighlightsAdjustmentFactory()
+    : KoColorTransformationFactory("BurnHighlights", i18n("BurnHighlights Adjustment"))
 {
 }
 
-QList< QPair< KoID, KoID > > KisDodgeHighlightsAdjustmentFactory::supportedModels() const
+QList< QPair< KoID, KoID > > KisBurnHighlightsAdjustmentFactory::supportedModels() const
 {
     QList< QPair< KoID, KoID > > l;
     l.append(QPair< KoID, KoID >(RGBAColorModelID , Integer8BitsColorDepthID));
@@ -106,21 +105,21 @@ QList< QPair< KoID, KoID > > KisDodgeHighlightsAdjustmentFactory::supportedModel
     return l;
 }
 
-KoColorTransformation* KisDodgeHighlightsAdjustmentFactory::createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const
+KoColorTransformation* KisBurnHighlightsAdjustmentFactory::createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const
 {
     KoColorTransformation * adj;
     if (colorSpace->colorModelId() != RGBAColorModelID) {
-        kError() << "Unsupported color space " << colorSpace->id() << " in KisDodgeHighlightsAdjustment::createTransformation";
+        kError() << "Unsupported color space " << colorSpace->id() << " in KisBurnHighlightsAdjustment::createTransformation";
         return 0;
     }
-    if (colorSpace->colorDepthId() == Float32BitsColorDepthID) {
-        adj = new KisDodgeHighlightsAdjustment< float >();
+    if (colorSpace->colorDepthId() == Integer8BitsColorDepthID) {
+        adj = new KisBurnHighlightsAdjustment< quint8 >();
     } else if (colorSpace->colorDepthId() == Integer16BitsColorDepthID) {
-        adj = new KisDodgeHighlightsAdjustment< quint16 >();
-    } else if (colorSpace->colorDepthId() == Integer8BitsColorDepthID) {
-        adj = new KisDodgeHighlightsAdjustment< quint8 >();
+        adj = new KisBurnHighlightsAdjustment< quint16 >();
+    } else if (colorSpace->colorDepthId() == Float32BitsColorDepthID) {
+        adj = new KisBurnHighlightsAdjustment< float >();
     } else {
-        kError() << "Unsupported color space " << colorSpace->id() << " in KisDodgeHighlightsAdjustment::createTransformation";
+        kError() << "Unsupported color space " << colorSpace->id() << " in KisBurnHighlightsAdjustment::createTransformation";
         return 0;
     }
     adj->setParameters(parameters);

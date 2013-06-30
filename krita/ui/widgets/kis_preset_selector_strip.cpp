@@ -41,11 +41,6 @@ KisPresetSelectorStrip::KisPresetSelectorStrip(QWidget* parent)
     /* This is an heuristic to fill smallPresetChooser with only the presets
      * for the paintop that comes selected by default: Pixel Brush. */
     const QString PIXEL_BRUSH_ID = "paintbrush";
-
-    connect(smallPresetChooser, SIGNAL(resourceSelected(KoResource*)),
-            this, SLOT(prepareDeleteButton()));
-    connect(smallPresetChooser, SIGNAL(resourceSelected(KoResource*)),
-            this, SLOT(startRefreshingTimer()));
 }
 
 KisPresetSelectorStrip::~KisPresetSelectorStrip()
@@ -57,8 +52,6 @@ void KisPresetSelectorStrip::on_leftScrollBtn_pressed()
     // Deciding how far beyond the left margin (10 pixels) was an arbitrary decision
     QPoint beyondLeftMargin(-10, 0);
     m_resourceItemView->scrollTo(m_resourceItemView->indexAt(beyondLeftMargin), QAbstractItemView::EnsureVisible);
-    
-    deletePresetBtn->setVisible(false);
 }
 
 void KisPresetSelectorStrip::on_rightScrollBtn_pressed()
@@ -66,8 +59,6 @@ void KisPresetSelectorStrip::on_rightScrollBtn_pressed()
     // Deciding how far beyond the right margin to put the point (10 pixels) was an arbitrary decision
     QPoint beyondRightMargin(10 + m_resourceItemView->viewport()->width(), 0);
     m_resourceItemView->scrollTo(m_resourceItemView->indexAt(beyondRightMargin), QAbstractItemView::EnsureVisible);
-    
-    deletePresetBtn->setVisible(false);
 }
 
 #include "kis_preset_selector_strip.moc"

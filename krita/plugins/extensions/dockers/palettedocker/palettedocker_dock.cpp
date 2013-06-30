@@ -96,6 +96,8 @@ PaletteDockerDock::PaletteDockerDock( ) : QDockWidget(i18n("Palette"))
     m_wdgPaletteDock->bnAdd->setIconSize(QSize(16, 16));
     m_wdgPaletteDock->bnRemove->setIcon(koIcon("list-remove"));
     m_wdgPaletteDock->bnRemove->setIconSize(QSize(16, 16));
+    m_wdgPaletteDock->bnAdd->setEnabled(false);
+    m_wdgPaletteDock->bnRemove->setEnabled(false);
 
     connect(m_wdgPaletteDock->bnAdd, SIGNAL(clicked(bool)), this, SLOT(addColor()));
     connect(m_wdgPaletteDock->bnRemove, SIGNAL(clicked(bool)), this, SLOT(removeColor()));

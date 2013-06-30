@@ -153,7 +153,7 @@ void PaletteDockerDock::addColor()
 {
     if (m_currentColorSet) {
         QColor color;
-        int result = KColorDialog::getColor(color);
+        int result = KColorDialog::getColor(color, m_canvas->resourceManager()->foregroundColor().toQColor());
         if (result == KColorDialog::Accepted) {
             KoColorSetEntry newEntry;
             newEntry.color = KoColor(color, KoColorSpaceRegistry::instance()->rgb8());

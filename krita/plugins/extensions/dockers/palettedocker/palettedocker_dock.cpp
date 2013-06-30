@@ -37,6 +37,8 @@
 #include <kis_layer.h>
 #include <kis_node_manager.h>
 #include <kis_config.h>
+#include <kis_workspace_resource.h>
+#include <kis_canvas_resource_provider.h>
 
 #include "palettemodel.h"
 #include "colorsetchooser.h"
@@ -139,6 +141,9 @@ void PaletteDockerDock::setCanvas(KoCanvasBase * canvas)
         m_canvas->view()->nodeManager()->disconnect(m_model);
     }
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
+    KisView2* view = m_canvas->view();
+    connect(view->resourceProvider(), SIGNAL(sigSavingWorkspace(KisWorkspaceResource*)), SLOT(saveToWorkspace(KisWorkspaceResource*)));
+    connect(view->resourceProvider(), SIGNAL(sigLoadingWorkspace(KisWorkspaceResource*)), SLOT(loadFromWorkspace(KisWorkspaceResource*)));
 }
 
 void PaletteDockerDock::setColorSet(KoColorSet* colorSet)
@@ -205,5 +210,24 @@ void PaletteDockerDock::entrySelected(QModelIndex index)
         m_wdgPaletteDock->bnRemove->setEnabled(true);
     }
 }
+
+void PaletteDockerDock::saveToWorkspace(KisWorkspaceResource* workspace)
+{
+    if (m_currentColorSet) {
+        workspace->setProperty("palette", m_currentColorSet->name());
+    }
+}
+
+void PaletteDockerDock::loadFromWorkspace(KisWorkspaceResource* workspace)
+{
+    if (workspace->hasProperty("palette")) {
+        KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
+        KoColorSet* colorSet = rServer->resourceByName(workspace->getString("palette"));
+        if (colorSet) {
+            setColorSet(colorSet);
+        }
+    }
+}
+
 
 #include "palettedocker_dock.moc"

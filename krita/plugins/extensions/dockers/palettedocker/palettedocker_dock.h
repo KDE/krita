@@ -26,6 +26,7 @@
 #include <KoResourceServerAdapter.h>
 #include <KoColorSet.h>
 
+class KisWorkspaceResource;
 class ColorSetChooser;
 class PaletteModel;
 class KisCanvas2;
@@ -45,6 +46,8 @@ private slots:
     void entrySelected(QModelIndex index);
     void setColorSet(KoColorSet* colorSet);
 
+    void saveToWorkspace(KisWorkspaceResource* workspace);
+    void loadFromWorkspace(KisWorkspaceResource* workspace);
 private:    
     KisCanvas2 *m_canvas;
     Ui_WdgPaletteDock* m_wdgPaletteDock;

@@ -53,7 +53,7 @@ install(
     KoTextShapeData.h
     KoPointedAt.h
     KoStyleThumbnailer.h
-    textlayout_export.h
+    kotextlayout_export.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel
 )

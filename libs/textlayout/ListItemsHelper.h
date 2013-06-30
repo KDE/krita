@@ -20,7 +20,7 @@
 #ifndef LISTITEMSHELPER_H
 #define LISTITEMSHELPER_H
 
-#include "textlayout_export.h"
+#include "kotextlayout_export.h"
 
 #include <KoListStyle.h>
 
@@ -41,16 +41,16 @@ struct ListStyleItem {
     QString name;
 };
 
-TEXTLAYOUT_EXPORT QString intToRoman(int n);
-TEXTLAYOUT_EXPORT QString intToAlpha(int n, Capitalisation caps, bool letterSynchronization);
-TEXTLAYOUT_EXPORT QString intToScript(int n, KoListStyle::Style type);
-TEXTLAYOUT_EXPORT QString intToScriptList(int n, KoListStyle::Style type);
-TEXTLAYOUT_EXPORT QString intToNumberingStyle(int index, KoListStyle::Style listStyle, bool letterSynchronizations);
+KOTEXTLAYOUT_EXPORT QString intToRoman(int n);
+KOTEXTLAYOUT_EXPORT QString intToAlpha(int n, Capitalisation caps, bool letterSynchronization);
+KOTEXTLAYOUT_EXPORT QString intToScript(int n, KoListStyle::Style type);
+KOTEXTLAYOUT_EXPORT QString intToScriptList(int n, KoListStyle::Style type);
+KOTEXTLAYOUT_EXPORT QString intToNumberingStyle(int index, KoListStyle::Style listStyle, bool letterSynchronizations);
 
 /// return international list items (bullets/arabic/roman)
-TEXTLAYOUT_EXPORT QList<ListStyleItem> genericListStyleItems();
+KOTEXTLAYOUT_EXPORT QList<ListStyleItem> genericListStyleItems();
 /// return non-latin list items (bullets/arabic/roman)
-TEXTLAYOUT_EXPORT QList<ListStyleItem> otherListStyleItems(); // we may want to split this method up into different world regions.
+KOTEXTLAYOUT_EXPORT QList<ListStyleItem> otherListStyleItems(); // we may want to split this method up into different world regions.
 }
 
 /// \internal helper class for calculating text-lists prefixes and indents

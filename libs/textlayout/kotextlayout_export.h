@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef TEXTLAYOUT_EXPORT_H
-#define TEXTLAYOUT_EXPORT_H
+#ifndef KOTEXTLAYOUT_EXPORT_H
+#define KOTEXTLAYOUT_EXPORT_H
 
 /* needed for KDE_EXPORT and KDE_IMPORT macros */
 #include <kdemacros.h>
@@ -26,36 +26,36 @@
 /* We use _WIN32/_WIN64 instead of Q_OS_WIN so that this header can be used from C files too */
 #if defined _WIN32 || defined _WIN64
 
-#ifndef TEXTLAYOUT_EXPORT
-# if defined(MAKE_TEXTLAYOUT_LIB)
+#ifndef KOTEXTLAYOUT_EXPORT
+# if defined(MAKE_KOTEXTLAYOUT_LIB)
 /* We are building this library */
-#  define TEXTLAYOUT_EXPORT KDE_EXPORT
+#  define KOTEXTLAYOUT_EXPORT KDE_EXPORT
 # else
 /* We are using this library */
-#  define TEXTLAYOUT_EXPORT KDE_IMPORT
+#  define KOTEXTLAYOUT_EXPORT KDE_IMPORT
 # endif
 #endif
 
 #else /* UNIX */
 
-#define TEXTLAYOUT_EXPORT KDE_EXPORT
+#define KOTEXTLAYOUT_EXPORT KDE_EXPORT
 
 #endif
 
-/* Now the same for TEXTLAYOUT_TEST_EXPORT, if compiling with unit tests enabled */
+/* Now the same for KOTEXTLAYOUT_TEST_EXPORT, if compiling with unit tests enabled */
 
 #ifdef COMPILING_TESTS
 #if defined _WIN32 || defined _WIN64
-# if defined(MAKE_TEXTLAYOUT_LIB)
-#       define TEXTLAYOUT_TEST_EXPORT KDE_EXPORT
+# if defined(MAKE_KOTEXTLAYOUT_LIB)
+#       define KOTEXTLAYOUT_TEST_EXPORT KDE_EXPORT
 #   else
-#       define TEXTLAYOUT_TEST_EXPORT KDE_IMPORT
+#       define KOTEXTLAYOUT_TEST_EXPORT KDE_IMPORT
 #   endif
 # else /* not windows */
-#   define TEXTLAYOUT_TEST_EXPORT KDE_EXPORT
+#   define KOTEXTLAYOUT_TEST_EXPORT KDE_EXPORT
 # endif
 #else /* not compiling tests */
-#   define TEXTLAYOUT_TEST_EXPORT
+#   define KOTEXTLAYOUT_TEST_EXPORT
 #endif
 
 #endif

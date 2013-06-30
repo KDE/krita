@@ -20,7 +20,7 @@
 #ifndef KOTEXTLAYOUTAREA_H
 #define KOTEXTLAYOUTAREA_H
 
-#include "textlayout_export.h"
+#include "kotextlayout_export.h"
 
 #include "KoPointedAt.h"
 
@@ -59,7 +59,7 @@ class FrameIterator;
  * the RootArea, but it may also be set by, for example, a row in a table with
  * fixed height.
  */
-class TEXTLAYOUT_EXPORT KoTextLayoutArea
+class KOTEXTLAYOUT_EXPORT KoTextLayoutArea
 {
 public:
     /// constructor

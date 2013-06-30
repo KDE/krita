@@ -30,7 +30,7 @@ DESCRIPTION
 #ifndef KWMF_H
 #define KWMF_H
 
-#include <vectorimage_export.h>
+#include <kovectorimage_export.h>
 
 #include <QLinkedList>
 #include <QList>
@@ -40,7 +40,7 @@ DESCRIPTION
 class QDataStream;
 class QPolygon;
 
-class VECTORIMAGE_EXPORT KWmf
+class KOVECTORIMAGE_EXPORT KWmf
 {
 public:
 
@@ -58,7 +58,7 @@ public:
         QDataStream &stream,
         unsigned size);
 
-    class VECTORIMAGE_EXPORT DrawContext
+    class KOVECTORIMAGE_EXPORT DrawContext
     {
     public:
         DrawContext();

@@ -19,27 +19,27 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#ifndef VECTORIMAGE_EXPORT_H
-#define VECTORIMAGE_EXPORT_H
+#ifndef KOVECTORIMAGE_EXPORT_H
+#define KOVECTORIMAGE_EXPORT_H
 
 #include <kdemacros.h>
 
 /* We use _WIN32/_WIN64 instead of Q_OS_WIN so that this header can be used from C files too */
 #if defined _WIN32 || defined _WIN64
 
-# ifndef VECTORIMAGE_EXPORT
+# ifndef KOVECTORIMAGE_EXPORT
 #  if defined(KDELIBS_STATIC_LIBS)
    /* No export/import for static libraries */
-#   define VECTORIMAGE_EXPORT
-#  elif defined(MAKE_VECTORIMAGE_LIB)
-#   define VECTORIMAGE_EXPORT KDE_EXPORT
+#   define KOVECTORIMAGE_EXPORT
+#  elif defined(MAKE_KOVECTORIMAGE_LIB)
+#   define KOVECTORIMAGE_EXPORT KDE_EXPORT
 #  else
-#   define VECTORIMAGE_EXPORT KDE_IMPORT
+#   define KOVECTORIMAGE_EXPORT KDE_IMPORT
 #  endif
 # endif
 #else /* UNIX */
 
-#define VECTORIMAGE_EXPORT KDE_EXPORT
+#define KOVECTORIMAGE_EXPORT KDE_EXPORT
 
 #endif
 

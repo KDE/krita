@@ -19,7 +19,7 @@
 #ifndef EMFPARSER_H
 #define EMFPARSER_H
 
-#include "vectorimage_export.h"
+#include "kovectorimage_export.h"
 
 #include "EmfOutput.h"
 
@@ -41,7 +41,7 @@ namespace Libemf
 /**
     %Parser for an EMF format file
  */
-class VECTORIMAGE_EXPORT Parser
+class KOVECTORIMAGE_EXPORT Parser
 {
 public:
     Parser();

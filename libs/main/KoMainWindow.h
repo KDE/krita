@@ -237,7 +237,7 @@ public slots:
     void slotFilePrint();
     void slotFilePrintPreview();
 
-    KoPrintJob* exportToPdf(QString pdfFileName = QString());
+    KoPrintJob* exportToPdf(const QString &pdfFileName = QString());
     KoPrintJob* exportToPdf(KoPageLayout pageLayout, QString pdfFileName = QString());
 
     /**

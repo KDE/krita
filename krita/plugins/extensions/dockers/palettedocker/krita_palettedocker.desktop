@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Palette Docker
+X-KDE-ServiceTypes=Krita/Dock
+Type=Service
+X-KDE-Library=kritapalettedocker
+X-Krita-Version=28

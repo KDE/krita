@@ -25,13 +25,12 @@ set(vectorimage_LIB_SRCS
 
 )
 
-kde4_add_library(vectorimage SHARED ${vectorimage_LIB_SRCS})
+kde4_add_library(kovectorimage SHARED ${vectorimage_LIB_SRCS})
 
-target_link_libraries(vectorimage ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY})
-target_link_libraries(vectorimage LINK_INTERFACE_LIBRARIES ${KDE4_KDECORE_LIBS})
+target_link_libraries(kovectorimage ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY})
+target_link_libraries(kovectorimage LINK_INTERFACE_LIBRARIES ${KDE4_KDECORE_LIBS})
 
-set_target_properties(vectorimage PROPERTIES
+set_target_properties(kovectorimage PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
-install(TARGETS vectorimage ${INSTALL_TARGETS_DEFAULT_ARGS} )
-
+install(TARGETS kovectorimage ${INSTALL_TARGETS_DEFAULT_ARGS} )

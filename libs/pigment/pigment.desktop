@@ -37,3 +37,5 @@ Comment[zh_TW]=實作完整色彩空間以使用 Pigment 色彩處理系統的�
 Type=int
 [PropertyDef::X-Pigment-PluginVersion]
 Type=int
+[PropertyDef::X-KDE-PluginInfo-Name]
+Type=QString

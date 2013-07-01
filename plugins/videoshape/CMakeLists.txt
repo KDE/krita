@@ -36,14 +36,14 @@ if(SHOULD_BUILD_THUMBNAIL)
 endif(SHOULD_BUILD_THUMBNAIL)
 
 kde4_add_ui_files(videoshape_LIB_SRCS forms/VideoToolWidget.ui)
-kde4_add_plugin(videoshape ${videoshape_LIB_SRCS})
+kde4_add_plugin(calligra_shape_video ${videoshape_LIB_SRCS})
 
-target_link_libraries(videoshape komain
+target_link_libraries(calligra_shape_video komain
     ${KDE4_KFILE_LIBRARY}
     ${PHONON_LIBS}
 )
 
-install(TARGETS videoshape DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_shape_video DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

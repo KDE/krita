@@ -61,16 +61,16 @@ void KoResourceFiltering::setTagSetFilenames(const QStringList& filenames)
     setChanged();
 }
 
-bool KoResourceFiltering::matchesResource(QString &resourceName, QString &resourceFileName,const QStringList &filterList) const
+bool KoResourceFiltering::matchesResource(const QString &resourceName, const QString &resourceFileName,const QStringList &filterList) const
 {
     Qt::CaseSensitivity sensitivity = Qt::CaseInsensitive;
     foreach (QString filter, filterList) {
-        if (!filter.startsWith("\"")) {
+        if (!filter.startsWith('"')) {
             if (resourceName.contains(filter,sensitivity) || resourceFileName.contains(filter,sensitivity))
                 return true;
         }
         else {
-            filter = filter.replace("\"","");
+            filter.remove('"');
             if (!resourceName.compare(filter)) {
                 return true;
             }
@@ -100,21 +100,21 @@ void KoResourceFiltering::populateIncludeExcludeFilters(const QStringList& filte
     foreach (QString name, filteredNames) {
         QStringList* target;
 
-        if(name.startsWith("!")) {
-            name.remove("!");
+        if(name.startsWith('!')) {
+            name.remove('!');
             target = &d->excludedNames;
         } else {
             target = &d->includedNames;
         }
 
         if(!name.isEmpty()) {
-            if (name.startsWith("[")) {
+            if (name.startsWith('[')) {
                 if (d->isTag.exactMatch(name) && d->tagObject) {
                     name = d->isTag.cap(1);
                     (*target) += d->tagObject->searchTag(name);
                 }
             }
-            else if (name.startsWith("\"")) {
+            else if (name.startsWith('"')) {
                 if (d->isExactMatch.exactMatch(name)) {
                     target->push_back(name);
                 }

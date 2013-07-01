@@ -36,10 +36,10 @@ set(calligradockers_SRCS ${calligradockers_SRCS}
 set(EXTRA_LIBS pigmentcms kowidgets)
 
 
-kde4_add_plugin(calligradockers ${calligradockers_SRCS})
+kde4_add_plugin(calligra_docker_defaults ${calligradockers_SRCS})
 
-target_link_libraries(calligradockers komain ${EXTRA_LIBS})
+target_link_libraries(calligra_docker_defaults komain ${EXTRA_LIBS})
 
-install(TARGETS calligradockers DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_docker_defaults DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES calligradockers.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

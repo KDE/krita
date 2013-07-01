@@ -35,13 +35,16 @@
 #include "kis_selection_tool_helper.h"
 #include "kis_slider_spin_box.h"
 #include "kis_iterator_ng.h"
+#include "kis_image.h"
 
-void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const quint8 * c, int fuzziness)
+void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const quint8 * c, int fuzziness, const QRect & rc)
 {
+    if (rc.isEmpty()) {
+        return;
+    }
+
     // XXX: Multithread this!
     qint32 x, y, w, h;
-    QRect rc;
-    rc = dev->exactBounds();
     x = rc.x();
     y = rc.y();
     w = rc.width();
@@ -110,7 +113,14 @@ void KisToolSelectSimilar::mousePressEvent(KoPointerEvent *event)
         // XXX we should make this configurable: "allow to select transparent"
         // if (opacity > OPACITY_TRANSPARENT)
         KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
-        selectByColor(dev, tmpSel, c.data(), m_fuzziness);
+
+        QRect rc;
+        if (dev->colorSpace()->difference(c.data(), dev->defaultPixel()) <= m_fuzziness) {
+            rc = image()->bounds();
+        } else {
+            rc = dev->exactBounds();
+        }
+        selectByColor(dev, tmpSel, c.data(), m_fuzziness, rc);
 
         tmpSel->invalidateOutlineCache();
         KisSelectionToolHelper helper(kisCanvas, i18n("Similar Selection"));

@@ -29,13 +29,13 @@ SET (templateshape_LIB_SRCS
     #ChangeSomethingCommand.cpp
 )
 
-kde4_add_plugin(templateshape ${templateshape_LIB_SRCS})
+kde4_add_plugin(calligra_shape_template ${templateshape_LIB_SRCS})
 
-target_link_libraries(templateshape flake    ${KDE4_KFILE_LIBRARY})
+target_link_libraries(calligra_shape_template flake    ${KDE4_KFILE_LIBRARY})
 #Template: Possibly you need to link with komain too.
 #target_link_libraries(templateshape komain flake    ${KDE4_KFILE_LIBRARY})
 
-install(TARGETS templateshape DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_shape_template DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

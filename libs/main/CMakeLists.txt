@@ -115,7 +115,7 @@ target_link_libraries(komain ${extra_libs}
     ${KDE4_KPARTS_LIBS}
     ${KDE4_KFILE_LIBRARY}
     kowidgets
-    textlayout
+    kotextlayout
 )
 
 if( KActivities_FOUND )

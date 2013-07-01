@@ -15,10 +15,10 @@ kde4_add_ui_files( autocorrect_SRCS
     AutocorrectConfig.ui
 )
 
-kde4_add_plugin(autocorrect ${autocorrect_SRCS})
+kde4_add_plugin(calligra_textediting_autocorrect ${autocorrect_SRCS})
 
-target_link_libraries(autocorrect komain)
+target_link_libraries(calligra_textediting_autocorrect komain)
 
-install(TARGETS autocorrect DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_textediting_autocorrect DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES autocorrect.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

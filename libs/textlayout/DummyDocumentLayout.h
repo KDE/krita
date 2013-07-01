@@ -20,7 +20,7 @@
 #ifndef DUMMYDOCUMENTLAYOUT_H
 #define DUMMYDOCUMENTLAYOUT_H
 
-#include "textlayout_export.h"
+#include "kotextlayout_export.h"
 
 #include <QAbstractTextDocumentLayout>
 
@@ -34,7 +34,7 @@
  * You really shouldn't add anything to this class
  */
 
-class TEXTLAYOUT_EXPORT DummyDocumentLayout : public QAbstractTextDocumentLayout
+class KOTEXTLAYOUT_EXPORT DummyDocumentLayout : public QAbstractTextDocumentLayout
 {
     Q_OBJECT
 public:

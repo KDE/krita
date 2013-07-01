@@ -87,3 +87,8 @@ How to add another product?
    if (SHOULD_BUILD_MYPRODUCT)
      add_subdirectory(myproduct)
    endif (SHOULD_BUILD_MYPRODUCT)
+
+5. Tag the product as STAGING, if it is not yet ready for release, but already
+   integrated in the master branch, e.g.
+
+   calligra_define_product(MYPRODUCT "title of product" STAGING NEEDS P1)

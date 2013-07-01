@@ -22,7 +22,7 @@
 
 #include "SvmGraphicsContext.h"
 #include "SvmAbstractBackend.h"
-#include "vectorimage_export.h"
+#include "kovectorimage_export.h"
 
 class QByteArray;
 class QDataStream;
@@ -32,7 +32,7 @@ namespace Libsvm
 {
 
 
-class VECTORIMAGE_EXPORT SvmParser
+class KOVECTORIMAGE_EXPORT SvmParser
 {
  public:
     SvmParser();

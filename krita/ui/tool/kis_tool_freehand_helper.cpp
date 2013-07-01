@@ -199,8 +199,11 @@ void KisToolFreehandHelper::paintBezierSegment(KisPaintInformation pi1, KisPaint
     qreal velocity1 = QLineF(QPointF(), tangent1).length();
     qreal velocity2 = QLineF(QPointF(), tangent2).length();
 
-    Q_ASSERT(velocity1 > 0);
-    Q_ASSERT(velocity2 > 0);
+    if (velocity1 == 0.0 || velocity2 == 0.0) {
+        velocity1 = 1e-6;
+        velocity2 = 1e-6;
+        qWarning() << "WARNING: Basic Smoothing: Velocity is Zero! Please report a bug:" << ppVar(velocity1) << ppVar(velocity2);
+    }
 
     qreal similarity = qMin(velocity1/velocity2, velocity2/velocity1);
 

@@ -20,7 +20,7 @@
 #ifndef KOTEXTLAYOUTROOTAREA_H
 #define KOTEXTLAYOUTROOTAREA_H
 
-#include "textlayout_export.h"
+#include "kotextlayout_export.h"
 
 #include "KoTextLayoutArea.h"
 
@@ -32,7 +32,7 @@ class KoTextPage;
 /**
  * When laying out text it happens in areas that can occupy space of various size.
  */
-class TEXTLAYOUT_EXPORT KoTextLayoutRootArea : public KoTextLayoutArea
+class KOTEXTLAYOUT_EXPORT KoTextLayoutRootArea : public KoTextLayoutArea
 {
 public:
     /// constructor

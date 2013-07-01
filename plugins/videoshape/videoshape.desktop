@@ -37,6 +37,6 @@ Name[zh_TW]=影像元件
 X-KDE-PluginInfo-Name=videoshape
 X-KDE-ServiceTypes=Calligra/Shape
 Type=Service
-X-KDE-Library=videoshape
+X-KDE-Library=calligra_shape_video
 X-Flake-MinVersion=28
 X-Flake-PluginVersion=28

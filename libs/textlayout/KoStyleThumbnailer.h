@@ -26,7 +26,7 @@
 #ifndef KOSTYLETHUMBNAILER_H
 #define KOSTYLETHUMBNAILER_H
 
-#include "textlayout_export.h"
+#include "kotextlayout_export.h"
 
 #include <QSize>
 
@@ -39,7 +39,7 @@ class QTextDocument;
 /**
  * Helper class to create (and cache) thumbnails of styles
  */
-class TEXTLAYOUT_EXPORT KoStyleThumbnailer
+class KOTEXTLAYOUT_EXPORT KoStyleThumbnailer
 {
 public:
     enum KoStyleThumbnailerFlag {

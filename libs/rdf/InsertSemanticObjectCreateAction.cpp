@@ -55,7 +55,7 @@ void InsertSemanticObjectCreateAction::activated()
     QWidget *w = semItem->createEditor(widget);
     lay->addWidget(w);
     KPageDialog dialog(m_canvas->canvasWidget());
-    dialog.setCaption(i18n("%1 Options", text().replace('&', ""))); // TODO add comment using i18nc
+    dialog.setCaption(i18n("%1 Options", text().remove('&'))); // TODO add comment using i18nc
     dialog.addPage(widget, QString());
     if (dialog.exec() == KPageDialog::Accepted) {
         kDebug(30015) << "activated...";

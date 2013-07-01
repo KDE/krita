@@ -48,6 +48,26 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
 include(CalligraProductSetMacros)
 
+if(NOT DEFINED RELEASE_BUILD)
+    # estimate mode by CMAKE_BUILD_TYPE content if not set on cmdline
+    string(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_TOLOWER)
+    set(RELEASE_BUILD_TYPES "release" "relwithdebinfo" "minsizerel")
+    list(FIND RELEASE_BUILD_TYPES "${CMAKE_BUILD_TYPE_TOLOWER}" INDEX)
+    if (INDEX EQUAL -1)
+        set(RELEASE_BUILD FALSE)
+    else(INDEX EQUAL -1)
+        set(RELEASE_BUILD TRUE)
+    endif(INDEX EQUAL -1)
+endif(NOT DEFINED RELEASE_BUILD)
+message(STATUS "Release build: ${RELEASE_BUILD}")
+
+if (RELEASE_BUILD)
+    set(CALLIGRA_SHOULD_BUILD_STAGING FALSE)
+else (RELEASE_BUILD)
+    set(CALLIGRA_SHOULD_BUILD_STAGING TRUE)
+endif (RELEASE_BUILD)
+
+
 option(GHNS "support Get Hot New Stuff" OFF)
 option(NEPOMUK "support NEPOMUK Tagging" ON)
 # TODO: orthogonal setting, results in minimal features, yet needs to be defined
@@ -81,17 +101,17 @@ calligra_define_product(LIB_KDGANTT "libkdgantt")
 calligra_define_product(LIB_KDCHART "libkdchart")
 calligra_define_product(LIB_WRITERPERFECT "libwriterperfect")
 # Calligra-independent utility libs
-calligra_define_product(LIB_VECTORIMAGE "libvectorimage")
+calligra_define_product(LIB_VECTORIMAGE "libkovectorimage")
 calligra_define_product(LIB_KOPROPERTY "libkoproperty")
 calligra_define_product(LIB_KOREPORT "libkoreport" NEEDS LIB_KOPROPERTY)
 calligra_define_product(LIB_CALLIGRADB "libcalligradb")
 # calligra libs
 calligra_define_product(CALLIGRA_LIBS "Calligra core libs")
 calligra_define_product(LIB_KOPAGEAPP "Lib for paged documents"  NEEDS CALLIGRA_LIBS)
-calligra_define_product(LIB_ODF2 "libodf2"  NEEDS CALLIGRA_LIBS)
-calligra_define_product(LIB_ODFREADER "libodfreader"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(LIB_ODF2 "libkoodf2"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(LIB_ODFREADER "libkoodfreader"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(LIB_MSO "libmso"  NEEDS CALLIGRA_LIBS)
-calligra_define_product(LIB_MSOOXML "libmsooxml"  NEEDS LIB_ODF2 CALLIGRA_LIBS)
+calligra_define_product(LIB_MSOOXML "libkomsooxml"  NEEDS LIB_ODF2 CALLIGRA_LIBS)
 calligra_define_product(SCRIPTING "Scripting feature") # TODO
 calligra_define_product(RDF "RDF feature")
 # plugins

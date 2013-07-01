@@ -30,7 +30,7 @@
 #include <KoXmlWriter.h>
 
 
-static QVector3D odfToVector3D(QString &string);
+static QVector3D odfToVector3D(const QString &string);
 
 
 
@@ -165,17 +165,17 @@ bool Ko3dScene::lightingMode() const { return d->lightingMode; }
 QString Ko3dScene::transform() const { return d->transform; }
 
     // setters
-void Ko3dScene::setVrp(QVector3D vrp) { d->vrp = vrp; }
-void Ko3dScene::setVpn(QVector3D vpn) { d->vpn = vpn; }
-void Ko3dScene::setVup(QVector3D vup) { d->vup = vup; }
+void Ko3dScene::setVrp(const QVector3D &vrp) { d->vrp = vrp; }
+void Ko3dScene::setVpn(const QVector3D &vpn) { d->vpn = vpn; }
+void Ko3dScene::setVup(const QVector3D &vup) { d->vup = vup; }
 void Ko3dScene::setProjection(Projection projection) { d->projection = projection; }
-void Ko3dScene::setDistance(QString distance) { d->distance = distance; }
-void Ko3dScene::setFocalLength(QString focalLength) { d->focalLength = focalLength; }
-void Ko3dScene::setShadowSlant(QString shadowSlant) { d->shadowSlant = shadowSlant; }
+void Ko3dScene::setDistance(const QString &distance) { d->distance = distance; }
+void Ko3dScene::setFocalLength(const QString &focalLength) { d->focalLength = focalLength; }
+void Ko3dScene::setShadowSlant(const QString &shadowSlant) { d->shadowSlant = shadowSlant; }
 void Ko3dScene::setShadeMode(Shademode shadeMode) { d->shadeMode = shadeMode; }
-void Ko3dScene::setAmbientColor(QColor ambientColor) { d->ambientColor = ambientColor; }
+void Ko3dScene::setAmbientColor(const QColor &ambientColor) { d->ambientColor = ambientColor; }
 void Ko3dScene::setLightingMode(bool lightingMode) { d->lightingMode = lightingMode; }
-void Ko3dScene::setTransform(QString transform) { d->transform = transform; }
+void Ko3dScene::setTransform(const QString &transform) { d->transform = transform; }
 
 
 bool Ko3dScene::loadOdf(const KoXmlElement &sceneElement)
@@ -325,7 +325,7 @@ KOODF_EXPORT Ko3dScene *load3dScene(const KoXmlElement &element)
 //                         Static functions
 
 
-QVector3D odfToVector3D(QString &string)
+QVector3D odfToVector3D(const QString &string)
 {
     // The string comes into this function in the form "(0 3.5 0.3)".
     QStringList elements = string.mid(1, string.size() - 2).split(' ', QString::SkipEmptyParts);

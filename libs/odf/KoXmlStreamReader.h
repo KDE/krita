@@ -94,8 +94,8 @@ public:
 
     void clear();
 
-    void addExpectedNamespace(QString prefix, QString namespaceUri);
-    void addExtraNamespace(QString prefix, QString namespaceUri);
+    void addExpectedNamespace(const QString &prefix, const QString &namespaceUri);
+    void addExtraNamespace(const QString &prefix, const QString &namespaceUri);
 
     // --------------------------------
     // Reimplemented from QXmlStreamReader

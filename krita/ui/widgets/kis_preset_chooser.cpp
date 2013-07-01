@@ -38,8 +38,6 @@
 #include <KoResourceModel.h>
 #include <KoResourceServerAdapter.h>
 
-#include <KoResourceFiltering.h>
-
 #include "kis_paintop_settings.h"
 #include "kis_paintop_preset.h"
 #include "kis_resource_server_provider.h"
@@ -149,11 +147,6 @@ void KisPresetChooser::filterPaletteFavorites(const QStringList& filteredNames)
     m_adapter->updateServer();
 
     updateViewSettings();
-}
-
-QStringList KisPresetChooser::tagNamesList(const QString& searchString)
-{
-    return m_chooser->tagNamesList(searchString);
 }
 
 void KisPresetChooser::showButtons(bool show)

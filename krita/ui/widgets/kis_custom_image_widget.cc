@@ -327,7 +327,7 @@ void KisCustomImageWidget::saveAsPredefined()
     QDir d;
     d.mkpath(saveLocation + appName + "/predefined_image_sizes/");
 
-    QFile f(saveLocation + appName + "/predefined_image_sizes/" + fileName.replace(" ", "_").replace("(", "_").replace(")", "_") + ".predefinedimage");
+    QFile f(saveLocation + appName + "/predefined_image_sizes/" + fileName.replace(' ', '_').replace('(', '_').replace(')', '_') + ".predefinedimage");
 
     f.open(QIODevice::WriteOnly | QIODevice::Truncate);
     KisPropertiesConfiguration *predefined = new KisPropertiesConfiguration();

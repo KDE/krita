@@ -45,6 +45,6 @@ Name[zh_TW]=拼字檢查外掛程式
 X-KDE-ServiceTypes=Calligra/Text-EditingPlugin
 Type=Service
 X-KDE-PluginInfo-Name=spellcheck
-X-KDE-Library=spellcheck
+X-KDE-Library=calligra_textediting_spellcheck
 X-KoText-MinVersion=28
 X-KoText-PluginVersion=28

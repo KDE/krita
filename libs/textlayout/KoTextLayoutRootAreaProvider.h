@@ -20,7 +20,7 @@
 #ifndef KOTEXTLAYOUTROOTAREAPROVIDER_H
 #define KOTEXTLAYOUTROOTAREAPROVIDER_H
 
-#include "textlayout_export.h"
+#include "kotextlayout_export.h"
 
 #include <QSizeF>
 #include <QRectF>
@@ -34,7 +34,7 @@ class KoTextLayoutObstruction;
  * When laying out text we need an area where upon the text will be placed.
  * A KoTextLayoutRootAreaProvider provides the layout process with such areas
  */
-class TEXTLAYOUT_EXPORT KoTextLayoutRootAreaProvider
+class KOTEXTLAYOUT_EXPORT KoTextLayoutRootAreaProvider
 {
 public:
     /// constructor

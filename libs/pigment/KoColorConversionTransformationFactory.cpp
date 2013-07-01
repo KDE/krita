@@ -35,7 +35,7 @@ struct KoColorConversionTransformationFactory::Private {
     QString dstProfile;
 };
 
-KoColorConversionTransformationFactory::KoColorConversionTransformationFactory(QString _srcModelId, QString _srcDepthId, QString _srcProfile, QString _dstModelId, QString _dstDepthId, QString _dstProfile) : d(new Private)
+KoColorConversionTransformationFactory::KoColorConversionTransformationFactory(const QString &_srcModelId, const QString &_srcDepthId, const QString &_srcProfile, const QString &_dstModelId, const QString &_dstDepthId, const QString &_dstProfile) : d(new Private)
 {
     d->srcModelId = _srcModelId;
     d->srcDepthId = _srcDepthId;

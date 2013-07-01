@@ -58,19 +58,19 @@ kde4_add_ui_files(chartshape_LIB_SRCS
     dialogs/FormatErrorBarDialog.ui
 )
 
-kde4_add_library(chartshapelib SHARED ${chartshape_LIB_SRCS})
-target_link_libraries(chartshapelib ${KDCHART_LIBS} komain textlayout)
-target_link_libraries(chartshapelib LINK_INTERFACE_LIBRARIES ${KDCHART_LIBS})
-set_target_properties(chartshapelib PROPERTIES
+kde4_add_library(calligrachartshape SHARED ${chartshape_LIB_SRCS})
+target_link_libraries(calligrachartshape ${KDCHART_LIBS} komain kotextlayout)
+target_link_libraries(calligrachartshape LINK_INTERFACE_LIBRARIES ${KDCHART_LIBS})
+set_target_properties(calligrachartshape PROPERTIES
     VERSION   ${GENERIC_CALLIGRA_LIB_VERSION}
     SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 
-install(TARGETS chartshapelib ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS calligrachartshape ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-kde4_add_plugin(chartshape ChartShapeFactory.cpp )
-target_link_libraries(chartshape chartshapelib ${KDCHART_LIBS} flake)
-install(TARGETS chartshape DESTINATION ${PLUGIN_INSTALL_DIR})
+kde4_add_plugin(calligra_shape_chart ChartShapeFactory.cpp )
+target_link_libraries(calligra_shape_chart calligrachartshape ${KDCHART_LIBS} flake)
+install(TARGETS calligra_shape_chart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

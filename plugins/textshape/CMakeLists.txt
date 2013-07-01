@@ -1,11 +1,12 @@
 project( textPlugin)
 
-# only build the textdocument inspector in debug builds
-set(BUILD_TEXTDOCUMENT_INSPECTOR (CMAKE_BUILD_TYPE STREQUAL "Debug"))
-
-if(BUILD_TEXTDOCUMENT_INSPECTOR)
+# only build the textdocument inspector in non-release builds
+if(NOT RELEASE_BUILD)
+    set(BUILD_TEXTDOCUMENT_INSPECTOR TRUE)
     add_definitions(-DCREATE_TEXTDOCUMENT_INSPECTOR)
-endif(BUILD_TEXTDOCUMENT_INSPECTOR)
+else(NOT RELEASE_BUILD)
+    set(BUILD_TEXTDOCUMENT_INSPECTOR FALSE)
+endif(NOT RELEASE_BUILD)
 
 
 add_subdirectory( pics )
@@ -161,15 +162,15 @@ kde4_add_ui_files(textshape_SRCS
 
 )
 
-kde4_add_plugin(textshape ${textshape_SRCS})
+kde4_add_plugin(calligra_shape_text ${textshape_SRCS})
 
-target_link_libraries(textshape kotext textlayout komain ${EXTRA_LIBS})
+target_link_libraries(calligra_shape_text kotext kotextlayout komain ${EXTRA_LIBS})
 if( SHOULD_BUILD_RDF )
-    target_link_libraries(textshape ${SOPRANO_LIBRARIES})
+    target_link_libraries(calligra_shape_text ${SOPRANO_LIBRARIES})
 endif( SHOULD_BUILD_RDF )
 
 
-install(TARGETS textshape DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_shape_text DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

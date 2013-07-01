@@ -248,14 +248,12 @@ QBitArray KisResourcesSnapshot::channelLockFlags() const
     if ((paintLayer = dynamic_cast<KisPaintLayer*>(m_d->currentNode.data()))) {
 
         channelFlags = paintLayer->channelLockFlags();
-        if (channelFlags.isEmpty()) {
-            channelFlags = paintLayer->colorSpace()->channelFlags(true, true);
-        }
         if (m_d->globalAlphaLock) {
+            if (channelFlags.isEmpty()) {
+                channelFlags = paintLayer->colorSpace()->channelFlags(true, true);
+            }
+
             channelFlags &= paintLayer->colorSpace()->channelFlags(true, false);
-        }
-        else {
-            channelFlags |= paintLayer->colorSpace()->channelFlags(false, true);
         }
     }
     return channelFlags;

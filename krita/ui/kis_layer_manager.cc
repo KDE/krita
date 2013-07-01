@@ -203,7 +203,7 @@ public:
             KUrl url = m_url;
             url.adjustPath(KUrl::AddTrailingSlash);
 
-            url.setFileName(m_baseName + "_" + layer->name().replace(" ", "_") + "." + m_extension);
+            url.setFileName(m_baseName + '_' + layer->name().replace(' ', '_') + '.' + m_extension);
 
             d.exportDocument(url);
 

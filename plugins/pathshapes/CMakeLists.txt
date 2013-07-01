@@ -34,10 +34,10 @@ kde4_add_ui_files(pathshapes_PART_SRCS
     ellipse/EllipseShapeConfigWidget.ui
     spiral/SpiralShapeConfigWidget.ui
 )
-kde4_add_plugin(pathshapes ${pathshapes_PART_SRCS})
+kde4_add_plugin(calligra_shape_paths ${pathshapes_PART_SRCS})
 
-target_link_libraries(pathshapes flake kowidgets)
+target_link_libraries(calligra_shape_paths flake kowidgets)
 
-install(TARGETS pathshapes  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_shape_paths  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES pathshapes.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

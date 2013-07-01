@@ -68,3 +68,5 @@ Comment[zh_TW]=包含文稿事件動作的外掛程式
 Type=int
 [PropertyDef::X-ScriptEventAction-PluginVersion]
 Type=int
+[PropertyDef::X-KDE-PluginInfo-Name]
+Type=QString

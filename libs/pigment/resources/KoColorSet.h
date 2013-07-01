@@ -64,6 +64,8 @@ public:
     virtual bool load();
     virtual bool save();
 
+    int columnCount();
+
 public:
 
     void add(const KoColorSetEntry &);

@@ -20,7 +20,7 @@
 #ifndef KOTEXTLAYOUTENDNOTESAREA_H
 #define KOTEXTLAYOUTENDNOTESAREA_H
 
-#include "textlayout_export.h"
+#include "kotextlayout_export.h"
 
 #include "KoTextLayoutArea.h"
 
@@ -30,7 +30,7 @@
 /**
  * When laying out text it happens in areas that can occupy space of various size.
  */
-class TEXTLAYOUT_EXPORT KoTextLayoutEndNotesArea : public KoTextLayoutArea
+class KOTEXTLAYOUT_EXPORT KoTextLayoutEndNotesArea : public KoTextLayoutArea
 {
 public:
     /// constructor

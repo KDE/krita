@@ -19,7 +19,7 @@
 #ifndef EMFOUTPUT_H
 #define EMFOUTPUT_H
 
-#include "vectorimage_export.h"
+#include "kovectorimage_export.h"
 
 #include <QList>
 #include <QPainter>
@@ -46,7 +46,7 @@ namespace Libemf
 /**
     Abstract output strategy for EMF Parser
 */
-class VECTORIMAGE_EXPORT AbstractOutput
+class KOVECTORIMAGE_EXPORT AbstractOutput
 {
 public:
     AbstractOutput() {};

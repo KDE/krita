@@ -79,3 +79,5 @@ Comment[zh_TW]=定義文字物件
 Type=int
 [PropertyDef::X-KoText-PluginVersion]
 Type=int
+[PropertyDef::X-KDE-PluginInfo-Name]
+Type=QString

@@ -259,7 +259,7 @@ static QString valueToSQLInternal(const KexiDB::Driver *driver, uint ftype, cons
         if (v.type() == QVariant::String) {
             //workaround for values stored as string that should be casted to floating-point
             QString s(v.toString());
-            return s.replace(',', ".");
+            return s.replace(',', '.');
         }
         return v.toString();
     }

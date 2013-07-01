@@ -75,6 +75,16 @@ Qt::ItemFlags PaletteModel::flags(const QModelIndex& /*index*/) const
     return flags;
 }
 
+QModelIndex PaletteModel::index(int row, int column, const QModelIndex& parent) const
+{
+    int index = row*columnCount()+column;
+    if (index >= m_colorSet->nColors()) {
+        return QModelIndex();
+    }
+    return QAbstractTableModel::index(row, column, parent);
+}
+
+
 void PaletteModel::setColorSet(KoColorSet* colorSet)
 {
     m_colorSet = colorSet;

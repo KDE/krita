@@ -37,6 +37,7 @@ public:
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
     virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
+    virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
 
     void setColorSet(KoColorSet* colorSet);
     

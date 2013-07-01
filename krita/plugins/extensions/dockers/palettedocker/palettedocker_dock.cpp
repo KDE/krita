@@ -216,13 +216,16 @@ void PaletteDockerDock::entrySelected(QModelIndex index)
     if (!index.isValid()) {
         return;
     }
+
     int i = index.row()*m_model->columnCount()+index.column();
-    KoColorSetEntry entry = m_currentColorSet->getColor(i);
-    if (m_canvas) {
-        m_canvas->resourceManager()->setForegroundColor(entry.color);
-    }
-    if (m_currentColorSet->removable()) {
-        m_wdgPaletteDock->bnRemove->setEnabled(true);
+    if (i < m_currentColorSet->nColors()) {
+        KoColorSetEntry entry = m_currentColorSet->getColor(i);
+        if (m_canvas) {
+            m_canvas->resourceManager()->setForegroundColor(entry.color);
+        }
+        if (m_currentColorSet->removable()) {
+            m_wdgPaletteDock->bnRemove->setEnabled(true);
+        }
     }
 }
 

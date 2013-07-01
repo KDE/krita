@@ -183,7 +183,10 @@ void KisOpenGLCanvas2::paintGL()
 {
     makeCurrent();
     renderCanvasGL();
-    renderDecorations();
+    QPainter gc(this);
+    renderDecorations(&gc);
+    gc.end();
+
 }
 
 void KisOpenGLCanvas2::drawCheckers() const
@@ -411,12 +414,10 @@ void KisOpenGLCanvas2::renderCanvasGL() const
     drawImage();
 }
 
-void KisOpenGLCanvas2::renderDecorations()
+void KisOpenGLCanvas2::renderDecorations(QPainter *painter)
 {
-    QPainter gc(this);
     QRect boundingRect = coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect();
-    drawDecorations(gc, boundingRect);
-    gc.end();
+    drawDecorations(*painter, boundingRect);
 }
 
 bool KisOpenGLCanvas2::callFocusNextPrevChild(bool next)

@@ -66,7 +66,7 @@ public: // QWidget
     virtual void inputMethodEvent(QInputMethodEvent *event);
 
     void renderCanvasGL() const;
-    void renderDecorations();
+    void renderDecorations(QPainter *painter);
 
 private slots:
     void slotConfigChanged();

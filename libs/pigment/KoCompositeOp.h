@@ -54,8 +54,15 @@ public:
     static QString categoryMix();
     static QString categoryMisc();
 
-    struct ParameterInfo
+    struct PIGMENTCMS_EXPORT ParameterInfo
     {
+        ParameterInfo()
+            : opacity(1.0f),
+              flow(1.0f),
+              lastOpacity(&opacity)
+        {
+        }
+
         quint8*       dstRowStart;
         qint32        dstRowStride;
         const quint8* srcRowStart;
@@ -66,7 +73,11 @@ public:
         qint32        cols;
         float         opacity;
         float         flow;
+        float         _lastOpacityData;
+        float*        lastOpacity;
         QBitArray     channelFlags;
+
+        void updateOpacityAndAverage(float value);
     };
 
 public:

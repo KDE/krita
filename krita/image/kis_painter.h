@@ -676,6 +676,13 @@ public:
 
     quint8 flow() const;
 
+    /**
+     * Sets the opacity of the painting and recalculates the
+     * mean opacity of the stroke. This mean value is used to
+     * make ALPHA_DARKEN painting look correct
+     */
+    void setOpacityUpdateAverage(quint8 opacity);
+
     /// Set the opacity which is used in painting (like filling polygons)
     void setOpacity(quint8 opacity);
 

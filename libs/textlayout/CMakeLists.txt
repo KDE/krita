@@ -41,10 +41,6 @@ set_target_properties(kotextlayout PROPERTIES
 )
 install(TARGETS kotextlayout  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-########### install files ###############
-
-#install( FILES ttt.tt DESTINATION ${SERVICETYPES_INSTALL_DIR})
-
 install(
     FILES
     KoTextDocumentLayout.h
@@ -55,5 +51,5 @@ install(
     KoStyleThumbnailer.h
     kotextlayout_export.h
     DESTINATION
-    ${INCLUDE_INSTALL_DIR} COMPONENT Devel
+    ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel
 )

@@ -68,6 +68,7 @@ set(pigmentcms_SRCS
     resources/KoCachedGradient.cpp
 )
 
+
 set(PIGMENT_INSTALL_FILES 
         pigment_export.h
         DebugPigment.h
@@ -133,7 +134,7 @@ set_target_properties(pigmentcms PROPERTIES
 
 install(TARGETS pigmentcms  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-install( FILES ${PIGMENT_INSTALL_FILES}
-         DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
-
 install( FILES pigment.desktop pigmentextension.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
+
+install( FILES ${PIGMENT_INSTALL_FILES}
+         DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)

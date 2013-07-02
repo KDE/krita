@@ -81,5 +81,5 @@ install(FILES
     KoPAViewMode.h
     KoPAViewModeNormal.h
     DESTINATION
-    ${INCLUDE_INSTALL_DIR} COMPONENT Devel
+    ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel
 )

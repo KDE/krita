@@ -64,6 +64,8 @@ public:
     virtual bool load();
     virtual bool save();
 
+    virtual QString defaultFileExtension() const;
+
     int columnCount();
 
 public:

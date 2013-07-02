@@ -63,7 +63,7 @@ quint8 KisPressureOpacityOption::apply(KisPainter * painter, const KisPaintInfor
     qreal opacity = (qreal)(origOpacity * computeValue(info));
     quint8 opacity2 = (quint8)qRound(qBound<qreal>(OPACITY_TRANSPARENT_U8, opacity, OPACITY_OPAQUE_U8));
 
-    painter->setOpacityUpdateAverage(opacity2);
+    painter->setOpacity(opacity2);
     return origOpacity;
 }
 

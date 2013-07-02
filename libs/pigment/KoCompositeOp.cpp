@@ -42,19 +42,6 @@ QString KoCompositeOp::categoryHSV()        { return i18n("HSV");        }
 QString KoCompositeOp::categoryMix()        { return i18n("Mix");        }
 QString KoCompositeOp::categoryMisc()       { return i18n("Misc");       }
 
-void KoCompositeOp::ParameterInfo::updateOpacityAndAverage(float value) {
-    const float exponent = 0.1;
-
-    opacity = value;
-
-    if (*lastOpacity < opacity) {
-        lastOpacity = &opacity;
-    } else {
-        _lastOpacityData = exponent * opacity + (1.0 - exponent) * (*lastOpacity);
-        lastOpacity = &_lastOpacityData;
-    }
-}
-
 struct KoCompositeOp::Private {
     const KoColorSpace * colorSpace;
     QString id;

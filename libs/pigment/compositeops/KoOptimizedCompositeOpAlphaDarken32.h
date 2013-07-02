@@ -27,18 +27,6 @@
 
 template<typename channels_type, typename pixel_type>
 struct AlphaDarkenCompositor32 {
-    struct OptionalParams {
-        OptionalParams(const KoCompositeOp::ParameterInfo& params)
-            : flow(params.flow),
-              averageOpacity(*params.lastOpacity * params.flow),
-              premultipliedOpacity(params.opacity * params.flow)
-        {
-        }
-        float flow;
-        float averageOpacity;
-        float premultipliedOpacity;
-    };
-
     /**
      * This is a vector equivalent of compositeOnePixelScalar(). It is considered
      * to process Vc::float_v::Size pixels in a single pass.
@@ -52,15 +40,16 @@ struct AlphaDarkenCompositor32 {
      *   of a streaming vector. Unaligned writes are really expensive.
      * o This function is *never* used if HAVE_VC is not present
      */
+
+
     template<bool haveMask, bool src_aligned, Vc::Implementation _impl>
-    static ALWAYS_INLINE void compositeVector(const quint8 *src, quint8 *dst, const quint8 *mask, float opacity, const OptionalParams &oparams)
+    static ALWAYS_INLINE void compositeVector(const quint8 *src, quint8 *dst, const quint8 *mask, float opacity, float flow)
     {
         Vc::float_v src_alpha;
         Vc::float_v dst_alpha;
 
-        Vc::float_v opacity_vec(255.0 * oparams.premultipliedOpacity);
-        Vc::float_v average_opacity_vec(255.0 * oparams.averageOpacity);
-        Vc::float_v flow_norm_vec(oparams.flow);
+        Vc::float_v opacity_vec(255.0 * opacity * flow);
+        Vc::float_v flow_norm_vec(flow);
 
 
         Vc::float_v uint8MaxRec2((float)1.0 / (255.0 * 255.0));
@@ -135,38 +124,15 @@ struct AlphaDarkenCompositor32 {
             dst_c3(not_empty_dst_pixels_mask) = dst_blend * (src_c3 - dst_c3) + dst_c3;
         }
 
-        Vc::float_v fullFlowAlpha;
+        Vc::float_v alpha1 = src_alpha + dst_alpha -
+            dst_blend * dst_alpha;
 
-        if (oparams.averageOpacity > opacity) {
-            Vc::float_m fullFlowAlpha_mask = average_opacity_vec > dst_alpha;
-
-            if (fullFlowAlpha_mask.isEmpty()) {
-                fullFlowAlpha = dst_alpha;
-            } else {
-                Vc::float_v reverse_blend = dst_alpha / average_opacity_vec;
-                Vc::float_v opt1 = (average_opacity_vec - src_alpha) * reverse_blend + src_alpha;
-                fullFlowAlpha(!fullFlowAlpha_mask) = dst_alpha;
-                fullFlowAlpha(fullFlowAlpha_mask) = opt1;
-            }
-        } else {
-            Vc::float_m fullFlowAlpha_mask = opacity_vec > dst_alpha;
-
-            if (fullFlowAlpha_mask.isEmpty()) {
-                fullFlowAlpha = dst_alpha;
-            } else {
-                Vc::float_v opt1 = (opacity_vec - dst_alpha) * msk_norm_alpha + dst_alpha;
-                fullFlowAlpha(!fullFlowAlpha_mask) = dst_alpha;
-                fullFlowAlpha(fullFlowAlpha_mask) = opt1;
-            }
-        }
-
-        if (oparams.flow == 1.0) {
-            dst_alpha = fullFlowAlpha;
-        } else {
-            Vc::float_v zeroFlowAlpha = src_alpha + dst_alpha -
-                dst_blend * dst_alpha;
-            dst_alpha = (fullFlowAlpha - zeroFlowAlpha) * flow_norm_vec + zeroFlowAlpha;
-        }
+        Vc::float_m alpha2_mask = opacity_vec > dst_alpha;
+        Vc::float_v opt1 = (opacity_vec - dst_alpha) * msk_norm_alpha + dst_alpha;
+        Vc::float_v alpha2;
+        alpha2(!alpha2_mask) = dst_alpha;
+        alpha2(alpha2_mask) = opt1;
+        dst_alpha = (alpha2 - alpha1) * flow_norm_vec + alpha1;
 
         KoStreamedMath<_impl>::write_channels_32(dst, dst_alpha, dst_c1, dst_c2, dst_c3);
     }
@@ -175,8 +141,10 @@ struct AlphaDarkenCompositor32 {
      * Composes one pixel of the source into the destination
      */
     template <bool haveMask, Vc::Implementation _impl>
-    static ALWAYS_INLINE void compositeOnePixelScalar(const channels_type *src, channels_type *dst, const quint8 *mask, float opacity, const OptionalParams &oparams)
+    static ALWAYS_INLINE void compositeOnePixelScalar(const channels_type *src, channels_type *dst, const quint8 *mask, float opacity, float flow, const QBitArray &channelFlags)
     {
+        Q_UNUSED(channelFlags);
+
         using namespace Arithmetic;
         const qint32 alpha_pos = 3;
 
@@ -189,7 +157,11 @@ struct AlphaDarkenCompositor32 {
         float srcAlphaNorm;
         float mskAlphaNorm;
 
-        opacity = oparams.premultipliedOpacity;
+        /**
+         * FIXME: precalculate this value on a higher level for
+         * not doing it on every cycle
+         */
+        opacity *= flow;
 
         if (haveMask) {
             mskAlphaNorm = float(*mask) * uint8Rec2 * src[alpha_pos];
@@ -209,28 +181,9 @@ struct AlphaDarkenCompositor32 {
             *d = *s;
         }
 
-
-        float flow = oparams.flow;
-        float averageOpacity = oparams.averageOpacity;
-
-        float fullFlowAlpha;
-
-        if (averageOpacity > opacity) {
-            fullFlowAlpha = averageOpacity > dstAlphaNorm ? lerp(srcAlphaNorm, averageOpacity, dstAlphaNorm / averageOpacity) : dstAlphaNorm;
-        } else {
-            fullFlowAlpha = opacity > dstAlphaNorm ? lerp(dstAlphaNorm, opacity, mskAlphaNorm) : dstAlphaNorm;
-        }
-
-        float dstAlpha;
-
-        if (flow == 1.0) {
-            dstAlpha = fullFlowAlpha * uint8Max;
-        } else {
-            float zeroFlowAlpha = unionShapeOpacity(srcAlphaNorm, dstAlphaNorm);
-            dstAlpha = lerp(zeroFlowAlpha, fullFlowAlpha, flow) * uint8Max;
-        }
-
-        dst[alpha_pos] = quint8(dstAlpha);
+        float alpha1 = unionShapeOpacity(srcAlphaNorm, dstAlphaNorm);                               // alpha with 0% flow
+        float alpha2 = (opacity > dstAlphaNorm) ? lerp(dstAlphaNorm, opacity, mskAlphaNorm) : dstAlphaNorm; // alpha with 100% flow
+        dst[alpha_pos] = quint8(lerp(alpha1, alpha2, flow) * uint8Max);
     }
 };
 

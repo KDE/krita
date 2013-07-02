@@ -16,9 +16,9 @@ if (SHOULD_BUILD_SCRIPTING)
     add_subdirectory( kokross )
 endif (SHOULD_BUILD_SCRIPTING)
 
-if (SHOULD_BUILD_LIB_VECTORIMAGE)
+if (SHOULD_BUILD_LIB_KOVECTORIMAGE)
     add_subdirectory( vectorimage )
-endif (SHOULD_BUILD_LIB_VECTORIMAGE)
+endif (SHOULD_BUILD_LIB_KOVECTORIMAGE)
 
 if (SHOULD_BUILD_LIB_KOPAGEAPP)
     add_subdirectory( kopageapp )

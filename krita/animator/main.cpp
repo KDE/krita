@@ -37,7 +37,7 @@
 #include <krita_export.h>
 
 #include "../data/splash/splash_screen.xpm"
-#include "../ui/kis_aboutdata.h"
+#include "../ui/kis_animator_aboutdata.h"
 
 #ifdef Q_OS_WIN
 #include "stdlib.h"
@@ -50,7 +50,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 #endif
 
     int state;
-    KAboutData *aboutData = newKritaAboutData();
+    KAboutData *aboutData = newKritaAnimatorAboutData();
 
     KCmdLineArgs::init(argc, argv, aboutData);
 

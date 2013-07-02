@@ -174,6 +174,7 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
         item.icon = "tool-animator";
         widgetList << item;
     }
+
     return widgetList;
 }
 

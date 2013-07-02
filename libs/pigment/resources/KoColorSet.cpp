@@ -163,11 +163,9 @@ bool KoColorSet::init()
                 b = a[0].toInt();
                 a.pop_front();
 
-                if (r < 0 || r > 255 ||
-                        g < 0 || g > 255 ||
-                        b < 0 || b > 255) {
-                    break;
-                }
+                r = qBound(0, r, 255);
+                g = qBound(0, g, 255);
+                b = qBound(0, b, 255);
 
                 e.color = KoColor(KoColorSpaceRegistry::instance()->rgb8());
                 e.color.fromQColor(QColor(r, g, b));
@@ -218,3 +216,7 @@ int KoColorSet::columnCount()
     return m_columns;
 }
 
+QString KoColorSet::defaultFileExtension() const
+{
+    return QString(".gpl");
+}

@@ -288,7 +288,7 @@ void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
         //we are updating the combo's selected item to what is the current format. we do not want this to apply the style as it would mess up the undo stack, the change tracking,...
         disconnect(widget.paragraphStyleCombo, SIGNAL(selected(QModelIndex&)), this, SLOT(styleSelected(QModelIndex&)));
         m_sortedStylesModel->styleApplied(style);
-        widget.paragraphStyleCombo->setCurrentIndex(m_sortedStylesModel->indexForParagraphStyle(*style).row());
+        widget.paragraphStyleCombo->setCurrentIndex(m_sortedStylesModel->indexOf(*style).row());
         widget.paragraphStyleCombo->setStyleIsOriginal(unchanged);
         m_stylesModel->setCurrentParagraphStyle(id);
         widget.paragraphStyleCombo->slotUpdatePreview();

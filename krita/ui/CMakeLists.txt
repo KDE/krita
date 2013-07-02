@@ -339,4 +339,4 @@ install( FILES
 #    kis_tool_types.h
 #    KoInputDevice.h
 #    canvas/kis_perspective_grid_manager.h
-   DESTINATION ${INCLUDE_INSTALL_DIR})
+   DESTINATION ${INCLUDE_INSTALL_DIR}/krita)

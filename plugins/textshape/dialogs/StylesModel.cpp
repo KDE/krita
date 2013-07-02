@@ -177,18 +177,7 @@ void StylesModel::setProvideStyleNone(bool provide)
     }
 }
 
-QModelIndex StylesModel::indexForParagraphStyle(const KoParagraphStyle &style) const
-{
-    if (&style) {
-        QModelIndex index = createIndex(m_styleList.indexOf(style.styleId()), 0, style.styleId());
-        return index;
-    }
-    else {
-        return QModelIndex();
-    }
-}
-
-QModelIndex StylesModel::indexForCharacterStyle(const KoCharacterStyle &style) const
+QModelIndex StylesModel::indexOf(const KoCharacterStyle &style) const
 {
     if (&style) {
         return createIndex(m_styleList.indexOf(style.styleId()), 0, style.styleId());

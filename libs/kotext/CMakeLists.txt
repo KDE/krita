@@ -187,7 +187,7 @@ install(
     KoTextTableTemplate.h
 
     DESTINATION
-    ${INCLUDE_INSTALL_DIR} COMPONENT Devel
+    ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel
 )
 
 install(
@@ -203,7 +203,7 @@ install(
     styles/KoStyleManager.h
     styles/KoTableStyle.h
     DESTINATION
-    ${INCLUDE_INSTALL_DIR}/styles COMPONENT Devel
+    ${INCLUDE_INSTALL_DIR}/calligra/styles COMPONENT Devel
 )
 
 install(
@@ -215,5 +215,5 @@ install(
     changetracker/KoDeletedColumnData.cpp
     changetracker/KoDeletedCellData.cpp
     DESTINATION
-    ${INCLUDE_INSTALL_DIR}/changetracker COMPONENT Devel
+    ${INCLUDE_INSTALL_DIR}/calligra/changetracker COMPONENT Devel
 )

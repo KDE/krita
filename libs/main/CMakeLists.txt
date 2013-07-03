@@ -177,12 +177,11 @@ install( FILES
     calligraversion.h
     KoStandardAction.h
     komain_export.h
-DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
 
 if( QT_QTDBUS_FOUND )
     install( FILES
         KoApplicationAdaptor.h
         KoViewAdaptor.h
-    DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+    DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
 endif( QT_QTDBUS_FOUND )
-

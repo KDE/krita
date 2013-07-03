@@ -18,12 +18,11 @@ install(TARGETS kundo2 ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES
     kundo2_export.h
-	kundo2stack.h
-	kundo2qstack.h
-	kundo2group.h
-	kundo2view.h
-	kundo2model.h
-	kundo2command.h
-	DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel
+    kundo2stack.h
+    kundo2qstack.h
+    kundo2group.h
+    kundo2view.h
+    kundo2model.h
+    kundo2command.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel
 )
-

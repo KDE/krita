@@ -137,5 +137,5 @@ install( FILES
     KoDockWidgetTitleBarButton.h
 
     DESTINATION
-    ${INCLUDE_INSTALL_DIR}
+    ${INCLUDE_INSTALL_DIR}/calligra
 COMPONENT Devel)

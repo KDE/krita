@@ -165,15 +165,6 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
         widgetList << item;
     }
 #endif
-    {
-        KoPart::CustomDocumentWidgetItem item;
-        item.widget = new KisAnimationSelector(parent,
-                                               qobject_cast<KisDoc2*>(document()), w, h, cfg.defImageResolution(), cfg.defColorModel(), cfg.defColorDepth(), cfg.defColorProfile(),
-                                               i18n("untitled-animation"));
-        item.title = i18n("Animation");
-        item.icon = "tool-animator";
-        widgetList << item;
-    }
 
     return widgetList;
 }

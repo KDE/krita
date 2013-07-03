@@ -19,6 +19,7 @@ install( FILES
     krita_tool.desktop
     krita_generator.desktop
     krita_dock.desktop
+    krita_animationdock.desktop
     DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
 install( FILES

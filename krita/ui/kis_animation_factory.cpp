@@ -106,6 +106,9 @@ const KComponentData &KisAnimationFactory::componentData(){
         KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Dock"),
                                          QString::fromLatin1("[X-Krita-Version] == 28"));
 
+        KoPluginLoader::instance()->load(QString::fromLatin1("Krita/AnimationDock"),
+                                         QString::fromLatin1("[X-Krita-Version] == 28"));
+
         s_instance->dirs()->addResourceType("krita_template", "data", "krita/templates");
 
         s_instance->dirs()->addResourceType("kis_pics", "data", "krita/pics/");

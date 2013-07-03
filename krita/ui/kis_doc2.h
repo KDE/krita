@@ -41,6 +41,7 @@ class KisChildDoc;
 class KisUndoStore;
 class KisPaintingAssistant;
 class KisView2;
+class KisPart2;
 
 /**
  * The class that represents a Krita document containing content and
@@ -63,6 +64,7 @@ class KRITAUI_EXPORT KisDoc2 : public KoDocument
 
 public:
     KisDoc2();
+    KisDoc2(KisPart2* part);
     virtual ~KisDoc2();
 
 public:

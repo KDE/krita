@@ -21,6 +21,7 @@
 
 #include <krita_export.h>
 #include "kis_doc2.h"
+#include "kis_animation_part.h"
 
 class KRITAUI_EXPORT KisAnimationDoc : public KisDoc2
 {

@@ -161,6 +161,21 @@ KisDoc2::KisDoc2()
 
 }
 
+KisDoc2::KisDoc2(KisPart2* part)
+    : KoDocument(part, new UndoStack(this))
+    , m_d(new KisDocPrivate())
+{
+    qobject_cast<KisPart2*>(documentPart())->setDocument(this);
+    // preload the krita resources
+    KisResourceServerProvider::instance();
+
+    init();
+    connect(this, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
+    undoStack()->setUndoLimit(KisConfig().undoStackLimit());
+    setBackupFile(KisConfig().backupFile());
+
+}
+
 KisDoc2::~KisDoc2()
 {
     // Despite being QObject they needs to be deleted before the image

@@ -19,7 +19,7 @@
 #include "kis_animation_doc.h"
 #include "kis_animation_part.h"
 
-KisAnimationDoc::KisAnimationDoc() : KisDoc2()
+KisAnimationDoc::KisAnimationDoc() : KisDoc2(new KisAnimationPart)
 {
 
 }

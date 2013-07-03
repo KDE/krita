@@ -65,5 +65,5 @@ X-Calligra-DefaultMimeTypes=application/x-kritaanimation
 X-KDE-NativeMimeType=application/x-kritaanimation
 StartupNotify=true
 X-DBUS-StartupType=Multi
-X-DBUS-ServiceName=org.krita.krita
+X-DBUS-ServiceName=org.krita.kritaanimation
 X-Krita-Version=28

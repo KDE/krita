@@ -117,7 +117,6 @@ signals:
     void splitterMoved();
 public slots:
     void slotButtonClicked( int button );
-    void slotTagButtonClicked( int button );
 
 private slots:
     void activated ( const QModelIndex & index );
@@ -132,19 +131,25 @@ private slots:
 
     void contextRemoveTagFromResource(KoResource* resource, const QString& tag);
     void contextAddTagToResource(KoResource* resource, const QString& tag);
-    void contextCreateNewResourceTag(KoResource* resource, const QString& tag);
+    void contextCreateNewTag(KoResource* resource, const QString& tag);
+    void contextCreateNewTag(const QString& tag);
 
     void syncTagBoxEntryRemoval(const QString& tag);
     void syncTagBoxEntryAddition(const QString& tag);
 
     void tagSaveButtonPressed();
+    void tagBoxEntryDeletionRequested();
+    void renameCurrentlySelectedTag(const QString &newName);
+
+    void tagOptionsContextMenuAboutToShow();
+    void undeleteLastDeletedTag();
+    void purgeTagUndeleteList();
 
 private:
+    void removeTagFromComboBox();
     void updateButtonState();
     void updatePreview(KoResource *resource);
     void updateTaggedResourceView();
-    QString renameTag(const QString &oldName, const QString &newName);
-    void removeTagFromComboBox();
     void addResourceTag(KoResource* resource, const QString& tagName);
     void removeResourceTag(KoResource* resource, const QString& tagName);
 

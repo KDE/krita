@@ -39,6 +39,7 @@ public:
 
     virtual void connectToResourceServer() = 0;
     virtual QList<KoResource*> resources() = 0;
+    virtual QList<KoResource*> serverResources() = 0;
     virtual bool addResource(KoResource* resource) = 0;
     virtual bool removeResource(KoResource* resource) = 0;
     virtual void removeResourceFile(const QString & filename) = 0;
@@ -269,11 +270,16 @@ public:
     {
         m_resourceServer->tagCategoryAdded(tag);
     }
+
     void tagCategoryRemoved(const QString& tag)
     {
         m_resourceServer->tagCategoryRemoved(tag);
     }
 
+    virtual QList<KoResource*> serverResources()
+    {
+        return m_serverResources;
+    }
 
 protected:
     KoResourceServer<T>* resourceServer() const

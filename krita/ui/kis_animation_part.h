@@ -20,6 +20,7 @@
 
 #include "kis_part2.h"
 #include "kis_animation_doc.h"
+#include "kis_animation.h"
 
 class KRITAUI_EXPORT KisAnimationPart : public KisPart2
 {
@@ -30,8 +31,15 @@ public:
 
     virtual ~KisAnimationPart();
 
+    KisAnimation* animation() const { return m_animation; }
+    void setAnimation(KisAnimation *animation);
+
 protected:
+    //Reimplemented
     QList<KoPart::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
+
+private:
+    KisAnimation* m_animation;
 };
 
 #endif // KIS_ANIMATION_PART_H

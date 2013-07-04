@@ -50,7 +50,6 @@
 KisPart2::KisPart2(QObject *parent)
     : KoPart(parent)
     , m_flipbook(0)
-    ,m_animation(0)
     , m_dieOnError(false)
     , m_document(0)
 {
@@ -61,7 +60,6 @@ KisPart2::KisPart2(QObject *parent)
 KisPart2::~KisPart2()
 {
     delete m_flipbook;
-    delete m_animation;
 }
 
 void KisPart2::setDocument(KisDoc2 *document)
@@ -172,10 +170,6 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
 void KisPart2::setFlipbook(KisFlipbook *flipbook)
 {
     m_flipbook = flipbook;
-}
-
-void KisPart2::setAnimation(KisAnimation *animation){
-    m_animation = animation;
 }
 
 void KisPart2::showErrorAndDie()

@@ -61,8 +61,6 @@ public:
     KisFlipbook *flipbook() const { return m_flipbook; }
     void setFlipbook(KisFlipbook *flipbook);
 
-    KisAnimation *animation() const { return m_animation;}
-    void setAnimation(KisAnimation *animation);
 protected slots:
 
     /// Quits Krita with error message from m_errorMessage.
@@ -70,7 +68,6 @@ protected slots:
 
 protected:
     KisFlipbook *m_flipbook;
-    KisAnimation *m_animation;
     QString m_errorMessage;
     bool m_dieOnError;
     KisDoc2 *m_document;

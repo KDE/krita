@@ -21,8 +21,8 @@
 #include <klocale.h>
 #include <kis_animation.h>
 #include <kis_canvas2.h>
-#include <kis_doc2.h>
-#include <kis_part2.h>
+#include <kis_animation_doc.h>
+#include <kis_animation_part.h>
 #include <QHBoxLayout>
 #include <QGridLayout>
 #include <QLabel>
@@ -74,7 +74,7 @@ OnionSkinDock::OnionSkinDock() : QDockWidget(i18n("Onion Skin")), m_canvas(0), m
 void OnionSkinDock::setCanvas(KoCanvasBase *canvas){
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     if(m_canvas && m_canvas->view() && m_canvas->view()->document() && m_canvas->view()->document()->documentPart()){
-        m_animation = dynamic_cast<KisPart2*>(m_canvas->view()->document()->documentPart())->animation();
+        m_animation = dynamic_cast<KisAnimationPart*>(m_canvas->view()->document()->documentPart())->animation();
         if(m_animation){
 
         }

@@ -58,14 +58,14 @@
 #include <kis_painter.h>
 
 #include "kis_clipboard.h"
-#include "kis_doc2.h"
-#include "kis_part2.h"
+#include "kis_animation_doc.h"
+#include "kis_animation_part.h"
 #include "widgets/kis_cmb_idlist.h"
 #include "widgets/squeezedcombobox.h"
 #include "kis_animation.h"
 #include <stdlib.h>
 
-KisAnimationSelector::KisAnimationSelector(QWidget *parent, KisDoc2 *document, qint32 defWidth, qint32 defHeight, double resolution, const QString &defColorModel, const QString &defColorDepth, const QString &defColorProfile, const QString &animationName) : WdgAnimationSelector(parent){
+KisAnimationSelector::KisAnimationSelector(QWidget *parent, KisAnimationDoc *document, qint32 defWidth, qint32 defHeight, double resolution, const QString &defColorModel, const QString &defColorDepth, const QString &defColorProfile, const QString &animationName) : WdgAnimationSelector(parent){
     setObjectName("KisAnimationSelector");
     m_document = document;
     txtAnimationName->setText(animationName);
@@ -131,7 +131,7 @@ void KisAnimationSelector::createAnimation(){
     animation->setFps(inputFps->value());
     animation->setTime(inputTime->value());
     animation->setColorSpace(colorSpaceSelector->currentColorSpace());
-    static_cast<KisPart2*>(m_document->documentPart())->setAnimation(animation);
+    static_cast<KisAnimationPart*>(m_document->documentPart())->setAnimation(animation);
 
     m_document->newImage(txtAnimationName->text(), width, height, cs, bgColor, txtDescription->text(), resolution);
     KisImageWSP image = m_document->image();

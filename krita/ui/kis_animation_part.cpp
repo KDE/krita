@@ -23,13 +23,13 @@
 #include "kis_animation_doc.h"
 
 KisAnimationPart::KisAnimationPart(QObject* parent)
-    :KisPart2(parent)
+    :KisPart2(parent), m_animation(0)
 {
 
 }
 
 KisAnimationPart::~KisAnimationPart(){
-
+    delete m_animation;
 }
 
 QList<KoPart::CustomDocumentWidgetItem> KisAnimationPart::createCustomDocumentWidgets(QWidget *parent){
@@ -40,7 +40,7 @@ QList<KoPart::CustomDocumentWidgetItem> KisAnimationPart::createCustomDocumentWi
     QList<KoPart::CustomDocumentWidgetItem> widgetlist;
 
     KoPart::CustomDocumentWidgetItem item;
-    item.widget = new KisAnimationSelector(parent, qobject_cast<KisDoc2*>(document()), w, h, cfg.defImageResolution(),cfg.defColorModel(), cfg.defColorDepth(), cfg.defColorProfile(),
+    item.widget = new KisAnimationSelector(parent, qobject_cast<KisAnimationDoc*>(document()), w, h, cfg.defImageResolution(),cfg.defColorModel(), cfg.defColorDepth(), cfg.defColorProfile(),
                                            i18n("untitled-animation"));
 
     item.title = i18n("Animation");
@@ -49,3 +49,6 @@ QList<KoPart::CustomDocumentWidgetItem> KisAnimationPart::createCustomDocumentWi
     return widgetlist;
 }
 
+void KisAnimationPart::setAnimation(KisAnimation *animation){
+    m_animation = animation;
+}

@@ -24,8 +24,8 @@
 #include <klocale.h>
 #include <kis_animation.h>
 #include <kis_canvas2.h>
-#include <kis_doc2.h>
-#include <kis_part2.h>
+#include <kis_animation_doc.h>
+#include <kis_animation_part.h>
 #include <QListView>
 #include <QScrollArea>
 #include <QVBoxLayout>
@@ -49,7 +49,7 @@ AnimatorDock::AnimatorDock() : QDockWidget(i18n("Animator")), m_canvas(0), m_ani
 void AnimatorDock::setCanvas(KoCanvasBase *canvas){
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     if(m_canvas && m_canvas->view() && m_canvas->view()->document() && m_canvas->view()->document()->documentPart()){
-        m_animation = dynamic_cast<KisPart2*>(m_canvas->view()->document()->documentPart())->animation();
+        m_animation = dynamic_cast<KisAnimationPart*>(m_canvas->view()->document()->documentPart())->animation();
         if(m_animation){
             m_mainWidget->setCanvas(m_canvas);
             m_mainWidget->getLayerBox()->onCanvasReady();

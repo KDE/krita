@@ -25,10 +25,10 @@
 
 #include "kis_input_manager.h"
 
-KisShowPaletteAction::KisShowPaletteAction(KisInputManager* manager)
-    : KisAbstractInputAction(manager)
+KisShowPaletteAction::KisShowPaletteAction()
 {
     setName(i18n("Show Popup Palette"));
+    setDescription(i18n("The <i>Show Popup Palette</i> displays the popup palette."));
 }
 
 KisShowPaletteAction::~KisShowPaletteAction()

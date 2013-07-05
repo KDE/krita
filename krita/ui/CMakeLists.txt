@@ -222,6 +222,21 @@ set(kritaui_LIB_SRCS
     actions/kis_selection_action_factories.cpp
     kis_document_undo_store.cpp
     kis_transaction_based_command.cpp
+    input/kis_input_profile_manager.cpp
+    input/kis_input_profile.cpp
+    input/kis_shortcut_configuration.cpp
+    input/config/kis_input_configuration_page.cpp
+    input/config/kis_edit_profiles_dialog.cpp
+    input/config/kis_input_profile_model.cpp
+    input/config/kis_input_configuration_page_item.cpp
+    input/config/kis_action_shortcuts_model.cpp
+    input/config/kis_input_type_delegate.cpp
+    input/config/kis_input_mode_delegate.cpp
+    input/config/kis_input_button.cpp
+    input/config/kis_input_editor_delegate.cpp
+    input/config/kis_mouse_input_editor.cpp
+    input/config/kis_wheel_input_editor.cpp
+    input/config/kis_key_input_editor.cpp
 )
 
 if(HAVE_OPENGL)
@@ -282,6 +297,12 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgpresetselectorstrip.ui
     forms/wdgdlgblacklistcleanup.ui
     forms/wdgflipbookselector.ui
+    input/config/kis_input_configuration_page.ui
+    input/config/kis_edit_profiles_dialog.ui
+    input/config/kis_input_configuration_page_item.ui
+    input/config/kis_mouse_input_editor.ui
+    input/config/kis_wheel_input_editor.ui
+    input/config/kis_key_input_editor.ui
 )
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )

@@ -128,6 +128,7 @@
 #include <kis_paintop_preset.h>
 #include "ko_favorite_resource_manager.h"
 #include "kis_action_manager.h"
+#include "input/kis_input_profile_manager.h"
 #include "kis_paintop_box.h"
 
 
@@ -406,6 +407,8 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
         collection->setConfigGroup("krita/shortcuts");
         collection->readSettings(&group);
     }
+
+    KisInputProfileManager::instance()->loadProfiles();
 
 
 #if 0

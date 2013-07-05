@@ -35,7 +35,7 @@ public:
         ConfirmShortcut,
         CancelShortcut
     };
-    explicit KisToolInvocationAction(KisInputManager *manager);
+    explicit KisToolInvocationAction();
     virtual ~KisToolInvocationAction();
 
     void begin(int shortcut, QEvent *event);

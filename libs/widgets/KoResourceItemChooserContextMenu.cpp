@@ -27,6 +27,67 @@
 #include "KoResourceItemChooserContextMenu.h"
 #include "KoResource.h"
 
+KoLineEditAction::KoLineEditAction(QObject* parent)
+: QWidgetAction(parent)
+, m_closeParentOnTrigger(false)
+{
+    QWidget* pWidget = new QWidget (NULL);
+    QHBoxLayout* pLayout = new QHBoxLayout();
+    m_label = new QLabel(NULL);
+    m_editBox = new KLineEdit(NULL);
+    pLayout->addWidget(m_label);
+    pLayout->addWidget(m_editBox);
+    pWidget->setLayout(pLayout);
+    setDefaultWidget(pWidget);
+
+  connect (m_editBox, SIGNAL(returnPressed(QString)),
+           this, SLOT(onTriggered(QString)));
+}
+
+KoLineEditAction::~KoLineEditAction()
+{
+
+}
+
+void KoLineEditAction::setIcon(QIcon icon)
+{
+    QPixmap pixmap = QPixmap(icon.pixmap(16,16));
+    m_label->setPixmap(pixmap);
+}
+
+void KoLineEditAction::closeParentOnTrigger(bool closeParent)
+{
+    m_closeParentOnTrigger = closeParent;
+}
+
+bool KoLineEditAction::closeParentOnTrigger()
+{
+    return m_closeParentOnTrigger;
+}
+
+void KoLineEditAction::onTriggered(const QString& text)
+{
+    if (!text.isEmpty()) {
+        emit triggered(text);
+        m_editBox->clear();
+
+        if (m_closeParentOnTrigger) {
+            this->parentWidget()->close();
+            m_editBox->clearFocus();
+        }
+    }
+}
+
+void KoLineEditAction::setClickMessage(const QString& clickMessage)
+{
+    m_editBox->setClickMessage(clickMessage);
+}
+
+void KoLineEditAction::setText(const QString& text)
+{
+    m_editBox->setText(text);
+}
+
 ContextMenuExistingTagAction::ContextMenuExistingTagAction(KoResource* resource, QString tag, QObject* parent)
 : QAction(parent)
 , m_resource(resource)
@@ -45,39 +106,25 @@ void ContextMenuExistingTagAction::onTriggered()
 {
     emit triggered(m_resource,m_tag);
 }
-ContextMenuNewTagAction::~ContextMenuNewTagAction()
+NewTagAction::~NewTagAction()
 {
 }
 
-ContextMenuNewTagAction::ContextMenuNewTagAction(KoResource* resource, QObject* parent)
-    :QWidgetAction (parent)
+NewTagAction::NewTagAction(KoResource* resource, QMenu* parent)
+    :KoLineEditAction (parent)
 {
-
-    QWidget* pWidget = new QWidget (NULL);
-    QHBoxLayout* pLayout = new QHBoxLayout();
-    QLabel * label = new QLabel(NULL);
-    QIcon icon = koIcon("document-new");
-    QPixmap pixmap = QPixmap(icon.pixmap(16,16));
-    label->setPixmap(pixmap);
-    m_editBox = new KLineEdit(NULL);
-    pLayout->addWidget(label);
-    pLayout->addWidget(m_editBox);
-    pWidget->setLayout(pLayout);
     m_resource = resource;
+    setIcon(koIcon("document-new"));
+    setClickMessage(i18n("New tag"));
+    closeParentOnTrigger(true);
 
-    setDefaultWidget(pWidget);
-    m_editBox->setClickMessage(i18n("New tag"));
-    connect (m_editBox, SIGNAL(returnPressed(QString)),
+    connect (this, SIGNAL(triggered(QString)),
              this, SLOT(onTriggered(QString)));
 }
 
-void ContextMenuNewTagAction::onTriggered(const QString & tagName)
+void NewTagAction::onTriggered(const QString & tagName)
 {
-    if (!tagName.isEmpty()) {
-        m_tag = tagName;
-        emit triggered(m_resource,m_tag);
-        this->parentWidget()->close();
-    }
+    emit triggered(m_resource,tagName);
 }
 
 KoResourceItemChooserContextMenu::KoResourceItemChooserContextMenu
@@ -142,7 +189,7 @@ KoResourceItemChooserContextMenu::KoResourceItemChooserContextMenu
     }
     assignableTagsMenu->addSeparator();
 
-    ContextMenuNewTagAction * addTagAction = new ContextMenuNewTagAction(resource, this);
+    NewTagAction * addTagAction = new NewTagAction(resource, this);
     connect(addTagAction, SIGNAL(triggered(KoResource*,QString)),
             this, SIGNAL(resourceAssignmentToNewTagRequested(KoResource*,QString)));
     assignableTagsMenu->addAction(addTagAction);
@@ -152,3 +199,4 @@ KoResourceItemChooserContextMenu::~KoResourceItemChooserContextMenu()
 {
 
 }
+#include "KoResourceItemChooserContextMenu.moc"

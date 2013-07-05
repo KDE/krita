@@ -71,6 +71,7 @@ public:
     void updateServer();
     int resourcesCount() const;
     QList<KoResource *> currentlyVisibleResources() const;
+    QList<KoResource *> serverResources() const;
     void tagCategoryMembersChanged();
     void tagCategoryAdded(const QString& tag);
     void tagCategoryRemoved(const QString& tag);

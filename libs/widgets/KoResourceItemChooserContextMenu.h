@@ -24,6 +24,7 @@
 #include <QMenu>
 #include <QWidgetAction>
 #include <KLineEdit>
+#include <QLabel>
 class KoResource;
 
 class ContextMenuExistingTagAction : public QAction
@@ -44,12 +45,39 @@ private:
     QString m_tag;
 };
 
-class ContextMenuNewTagAction : public QWidgetAction
+/*!
+ *  A line edit QWidgetAction.
+ *  Default behavior: Closes its parent upon triggering.
+ */
+class KoLineEditAction : public QWidgetAction
 {
     Q_OBJECT
 public:
-    explicit ContextMenuNewTagAction (KoResource* resource, QObject* parent);
-    ~ContextMenuNewTagAction();
+    explicit KoLineEditAction(QObject* parent);
+    virtual ~KoLineEditAction();
+    void setIcon(QIcon icon);
+    void closeParentOnTrigger(bool closeParent);
+    bool closeParentOnTrigger();
+    void setClickMessage(const QString& clickMessage);
+    void setText(const QString& text);
+
+    signals:
+    void triggered(const QString &tag);
+
+protected slots:
+    void onTriggered(const QString& text);
+
+private:
+    bool m_closeParentOnTrigger;
+    QLabel * m_label;
+    KLineEdit * m_editBox;
+};
+class NewTagAction : public KoLineEditAction
+{
+    Q_OBJECT
+public:
+    explicit NewTagAction (KoResource* resource, QMenu* parent);
+    ~NewTagAction();
 
     signals:
     void triggered(KoResource * resource, const QString &tag);
@@ -59,10 +87,7 @@ protected slots:
 
 private:
     KoResource * m_resource;
-    QString m_tag;
-    KLineEdit * m_editBox;
 };
-
 class KoResourceItemChooserContextMenu :  public QMenu
 {
     Q_OBJECT

@@ -46,9 +46,9 @@ public:
         float value_red, value_green, value_blue;
         while(nPixels > 0) {
 
-            value_red = pow(KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->red), (1.0 + exposure * (0.333333)));
-            value_green = pow(KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->green), (1.0 + exposure * (0.333333)));
-            value_blue = pow(KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->blue), (1.0 + exposure * (0.333333)));
+            value_red = pow((float)KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->red), (float)(1.0 + exposure * (0.333333)));
+            value_green = pow((float)KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->green), (float)(1.0 + exposure * (0.333333)));
+            value_blue = pow((float)KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->blue), (float)(1.0 + exposure * (0.333333)));
             
             dst->red = KoColorSpaceMaths< float, _channel_type_ >::scaleToA(value_red);
             dst->green = KoColorSpaceMaths< float, _channel_type_ >::scaleToA(value_green);

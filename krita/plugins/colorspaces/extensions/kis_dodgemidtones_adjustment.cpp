@@ -49,9 +49,9 @@ public:
         while(nPixels > 0) {
 
             factor = 1.0/(1.0 + exposure);
-            value_red = pow(KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->red), factor);
-            value_green = pow(KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->green), factor);
-            value_blue = pow(KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->blue), factor);
+            value_red = pow((float)KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->red), factor);
+            value_green = pow((float)KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->green), factor);
+            value_blue = pow((float)KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->blue), factor);
             
             dst->red = KoColorSpaceMaths< float, _channel_type_ >::scaleToA(value_red);
             dst->green = KoColorSpaceMaths< float, _channel_type_ >::scaleToA(value_green);

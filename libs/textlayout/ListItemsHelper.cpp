@@ -132,20 +132,20 @@ QString Lists::intToScriptList(int n, KoListStyle::Style type)
 {
     // 1 time Sequences
     // note; the leading X is to make these 1 based.
-    static const char* Abjad[] = { "أ", "ب", "ج", "د", "ﻫ", "و", "ز", "ح", "ط", "ي", "ك", "ل", "م",
+    static const char* const Abjad[] = { "أ", "ب", "ج", "د", "ﻫ", "و", "ز", "ح", "ط", "ي", "ك", "ل", "م",
                                    "ن", "س", "ع", "ف", "ص", "ق", "ر", "ش", "ت", "ث", "خ", "ذ", "ض", "ظ", "غ"
                                  };
-    static const char* Abjad2[] = { "ﺃ", "ﺏ", "ﺝ", "ﺩ", "ﻫ", "ﻭ", "ﺯ", "ﺡ", "ﻁ", "ﻱ", "ﻙ", "ﻝ", "ﻡ",
+    static const char* const Abjad2[] = { "ﺃ", "ﺏ", "ﺝ", "ﺩ", "ﻫ", "ﻭ", "ﺯ", "ﺡ", "ﻁ", "ﻱ", "ﻙ", "ﻝ", "ﻡ",
                                     "ﻥ", "ﺹ", "ﻉ", "ﻑ", "ﺽ", "ﻕ", "ﺭ", "ﺱ", "ﺕ", "ﺙ", "ﺥ", "ﺫ", "ﻅ", "ﻍ", "ﺵ"
                                   };
-    static const char* ArabicAlphabet[] = {"ا", "ب", "ت", "ث", "ج", "ح", "خ", "د", "ذ", "ر", "ز",
+    static const char* const ArabicAlphabet[] = {"ا", "ب", "ت", "ث", "ج", "ح", "خ", "د", "ذ", "ر", "ز",
                                            "س", "ش", "ص", "ض", "ط", "ظ", "ع", "غ", "ف", "ق", "ك", "ل", "م", "ن", "ه", "و", "ي"
                                           };
 
     /*
     // see this page for the 10, 100, 1000 etc http://en.wikipedia.org/wiki/Chinese_numerals
-    static const char* chinese1[] = { '零','壹','貳','叄','肆','伍','陸','柒','捌','玖' };
-    static const char* chinese2[] = { '〇','一','二','三','四','五','六','七','八','九' };
+    static const char* const chinese1[] = { '零','壹','貳','叄','肆','伍','陸','柒','捌','玖' };
+    static const char* const chinese2[] = { '〇','一','二','三','四','五','六','七','八','九' };
 
     TODO: http://en.wikipedia.org/wiki/Korean_numerals
     http://en.wikipedia.org/wiki/Japanese_numerals

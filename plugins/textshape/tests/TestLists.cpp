@@ -318,7 +318,7 @@ void TestDocumentLayout::testNestedLists()
     block = m_doc->begin();
     QVERIFY(block.userData() == 0);
     block = block.next();
-    static const char* texts[] = { "1", "1.1.", "1.1.1", "1.1.2", "1.2.", "2", "2.1.", "2.2.", "3", "3.1.1", "1.1" };
+    static const char* const texts[] = { "1", "1.1.", "1.1.1", "1.1.2", "1.2.", "2", "2.1.", "2.2.", "3", "3.1.1", "1.1" };
     int i = 0;
     qreal indent = 0.0;
     while (block.isValid()) {
@@ -388,7 +388,7 @@ void TestDocumentLayout::testNestedPrefixedLists()
     block = m_doc->begin();
     QVERIFY(block.userData() == 0);
     block = block.next();
-    static const char* texts[] = { "Main1:", "Sub1.1*"};
+    static const char* const texts[] = { "Main1:", "Sub1.1*"};
     int i = 0;
     while (block.isValid()) {
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
@@ -513,7 +513,7 @@ void TestDocumentLayout::testRestartNumbering()
 
     m_layout->layout();
 
-    static const char *values[] = { "1", "2", "1", "2", "3" };
+    static const char * const values[] = { "1", "2", "1", "2", "3" };
     block = m_doc->begin();
     int i = 0;
     while (block.isValid()) {
@@ -585,7 +585,7 @@ void TestDocumentLayout::testLetterSynchronization()
 
     m_layout->layout();
 
-    static const char *values[] = { "y", "z", "aa", "bb", "cc" };
+    static const char * const values[] = { "y", "z", "aa", "bb", "cc" };
     block = m_doc->begin();
     int i = 0;
     while (block.isValid()) {

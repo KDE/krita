@@ -119,7 +119,7 @@ namespace KChart {
 /// @see ChartShape::setEnableUserInteraction()
 static bool ENABLE_USER_INTERACTION = true;
 
-static const char *ODF_CHARTTYPES[NUM_CHARTTYPES] = {
+static const char * const ODF_CHARTTYPES[NUM_CHARTTYPES] = {
     "chart:bar",
     "chart:line",
     "chart:area",
@@ -222,7 +222,7 @@ const char * odfCharttype(int charttype)
 
 static const int NUM_DEFAULT_DATASET_COLORS = 12;
 
-static const char *defaultDataSetColors[NUM_DEFAULT_DATASET_COLORS] =
+static const char * const defaultDataSetColors[NUM_DEFAULT_DATASET_COLORS] =
 {
     "#004586",
     "#ff420e",

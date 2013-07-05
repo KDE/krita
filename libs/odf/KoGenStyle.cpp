@@ -128,7 +128,7 @@ static KoGenStyle::PropertyType s_propertyTypes[] = {
     KoGenStyle::TextType,
 };
 
-static const char* s_propertyNames[] = {
+static const char* const s_propertyNames[] = {
     0,
     "style:section-properties",
     "style:ruby-properties",

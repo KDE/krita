@@ -364,7 +364,7 @@ int SQLiteConnection::serverResult()
     return d->res == 0 ? Connection::serverResult() : d->res;
 }
 
-static const char* serverResultNames[] = {
+static const char* const serverResultNames[] = {
     "SQLITE_OK", // 0
     "SQLITE_ERROR",
     "SQLITE_INTERNAL",

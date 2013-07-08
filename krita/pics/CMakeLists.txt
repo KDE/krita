@@ -36,6 +36,8 @@ install(FILES
     portrait.png
     landscape.png
     broken-preset.png
+    hi16-add_dialog.png
+    hi16-palette_library.png
     DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 
 add_subdirectory(app)

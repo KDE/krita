@@ -33,6 +33,7 @@
 #include <kis_canvas2.h>
 #include <kis_view2.h>
 #include <kis_doc2.h>
+#include <kis_animation_doc.h>
 #include <kis_image.h>
 #include <kis_debug.h>
 #include <KoPart.h>
@@ -168,15 +169,7 @@ KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
 }
 
 void KisTimeline::changeCanvas(){
-    KisDoc2* doc = new KisDoc2();
-    //doc->setUrl(KUrl("/tmp/test.png"));
-    //doc->image();
-    //if(doc->image().isValid()){
-    //this->getCanvas()->view()->;
-    kWarning() << "Change canvas";
-    //}
-
-    //this->getCanvas()->view()->document()->newImage("v",600,400,m_animation->colorSpace());
+    dynamic_cast<KisAnimationDoc*>(this->getCanvas()->view()->document())->addFrame();
 }
 
 void KisTimeline::resizeEvent(QResizeEvent *event){

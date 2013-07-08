@@ -18,6 +18,10 @@
 
 #include "kis_animation_doc.h"
 #include "kis_animation_part.h"
+#include "kis_animation.h"
+#include <kis_paint_layer.h>
+#include <kis_image.h>
+#include <kis_group_layer.h>
 
 KisAnimationDoc::KisAnimationDoc() : KisDoc2(new KisAnimationPart)
 {
@@ -28,5 +32,19 @@ KisAnimationDoc::~KisAnimationDoc(){
 
 }
 
+void KisAnimationDoc::addFrame(){
+
+    KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
+    KisImage* image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());
+    connect(image, SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
+    image->setResolution(animation->resolution(), animation->resolution());
+
+    KisPaintLayer* layer = new KisPaintLayer(image, animation->name(), animation->bgColor().opacityU8(), animation->colorSpace());
+
+    layer->paintDevice()->setDefaultPixel(animation->bgColor().data());
+    image->addNode(layer, image->rootLayer().data());
+
+    setCurrentImage(image);
+}
 
 #include "kis_animation_doc.moc"

@@ -29,6 +29,8 @@ class KRITAUI_EXPORT KisAnimationDoc : public KisDoc2
 public:
     KisAnimationDoc();
     virtual ~KisAnimationDoc();
+
+    void addFrame();
 };
 
 #endif // KIS_ANIMATION_DOC_H

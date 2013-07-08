@@ -76,6 +76,38 @@ const KoColorSpace *KisAnimation::colorSpace(){
     return m_colorSpace;
 }
 
+void KisAnimation::setWidth(qint32 w){
+    this->m_width = w;
+}
+
+qint32 KisAnimation::width() const{
+    return this->m_width;
+}
+
+void KisAnimation::setHeight(qint32 h){
+    this->m_height = h;
+}
+
+qint32 KisAnimation::height() const{
+    return this->m_height;
+}
+
+void KisAnimation::setResolution(double res){
+    this->m_resolution = res;
+}
+
+double KisAnimation::resolution() const{
+    return this->m_resolution;
+}
+
+void KisAnimation::setBgColor(KoColor bgColor){
+    this->m_bgColor = bgColor;
+}
+
+KoColor KisAnimation::bgColor() const{
+    return this->m_bgColor;
+}
+
 void KisAnimation::load(const QString &url){
 
 }

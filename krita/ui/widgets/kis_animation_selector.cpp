@@ -125,12 +125,18 @@ void KisAnimationSelector::createAnimation(){
     KoColor bgColor(qc, cs);
 
     KisAnimation* animation = new KisAnimation();
+
     animation->setName(txtAnimationName->text());
     animation->setAuthor(txtAuthor->text());
     animation->setDescription(txtDescription->text());
     animation->setFps(inputFps->value());
     animation->setTime(inputTime->value());
     animation->setColorSpace(colorSpaceSelector->currentColorSpace());
+    animation->setWidth(width);
+    animation->setHeight(height);
+    animation->setResolution(resolution);
+    animation->setBgColor(bgColor);
+
     static_cast<KisAnimationPart*>(m_document->documentPart())->setAnimation(animation);
 
     m_document->newImage(txtAnimationName->text(), width, height, cs, bgColor, txtDescription->text(), resolution);

@@ -21,6 +21,7 @@
 #include <QStandardItemModel>
 #include <krita_export.h>
 #include <KoColorSpace.h>
+#include <KoColor.h>
 
 class QString;
 
@@ -29,18 +30,29 @@ class KRITAUI_EXPORT KisAnimation : public QStandardItemModel
     Q_OBJECT
 public:
     explicit KisAnimation(QObject *parent = 0);
+
     void setName(const QString &name);
     void setAuthor(const QString &author);
     void setDescription(const QString &description);
     void setFps(int fps);
     void setTime(int time);
     void setColorSpace(const KoColorSpace *colorSpace);
+    void setHeight(qint32 h);
+    void setWidth(qint32 w);
+    void setResolution(double res);
+    void setBgColor(KoColor bgColor);
+
     QString name() const;
     QString author() const;
     QString description() const;
     const KoColorSpace* colorSpace();
     int fps() const;
     int time() const;
+    qint32 width() const;
+    qint32 height() const;
+    double resolution() const;
+    KoColor bgColor() const;
+
     void load(const QString &url);
     void save(const QString &url);
 
@@ -51,6 +63,9 @@ private:
     int m_fps;
     int m_time;
     const KoColorSpace* m_colorSpace;
+    qint32 m_width, m_height;
+    double m_resolution;
+    KoColor m_bgColor;
 };
 
 #endif // KIS_ANIMATION_H

@@ -32,7 +32,9 @@ class KRITAUI_EXPORT KisSingleActionShortcut : public KisAbstractShortcut
 public:
     enum WheelAction {
         WheelUp, ///< Mouse wheel moves up.
-        WheelDown ///< Mouse wheel moves down.
+        WheelDown, ///< Mouse wheel moves down.
+        WheelLeft, ///< Mouse wheel moves left.
+        WheelRight, ///< Mouse wheel moves right.
     };
 
     KisSingleActionShortcut(KisAbstractInputAction *action, int index);

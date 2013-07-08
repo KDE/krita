@@ -102,7 +102,7 @@
 #include "kis_node_manager.h"
 #include "kis_part2.h"
 
-static const char *CURRENT_DTD_VERSION = "2.0";
+static const char CURRENT_DTD_VERSION[] = "2.0";
 
 /**
  * Mime type for this app - not same as file type, but file types

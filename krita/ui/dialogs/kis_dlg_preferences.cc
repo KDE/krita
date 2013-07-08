@@ -87,6 +87,8 @@
 #include <kis_cubic_curve.h>
 #include <config-ocio.h>
 
+#include "input/config/kis_input_configuration_page.h"
+
 
 GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     : WdgGeneralSettings(_parent, _name)
@@ -653,6 +655,14 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setHeader(i18n("Author"));
     page->setIcon(koIcon("user-identity"));
 
+    m_inputConfiguration = new KisInputConfigurationPage();
+    page = addPage(m_inputConfiguration, i18n("Canvas Input Settings"));
+    page->setHeader(i18n("Canvas Input"));
+    page->setIcon(koIcon("input-tablet"));
+    connect(this, SIGNAL(okClicked()), m_inputConfiguration, SLOT(saveChanges()));
+    connect(this, SIGNAL(applyClicked()), m_inputConfiguration, SLOT(saveChanges()));
+    connect(this, SIGNAL(cancelClicked()), m_inputConfiguration, SLOT(revertChanges()));
+    connect(this, SIGNAL(defaultClicked()), m_inputConfiguration, SLOT(setDefaults()));
 
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
     foreach (KisAbstractPreferenceSetFactory *preferenceSetFactory, preferenceSetRegistry->values()) {

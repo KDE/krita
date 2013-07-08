@@ -284,6 +284,9 @@ public:
     QString toolbarSlider(int sliderNumber);
     void setToolbarSlider(int sliderNumber, const QString &slider);
 
+    QString currentInputProfile() const;
+    void setCurrentInputProfile(const QString& name);
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

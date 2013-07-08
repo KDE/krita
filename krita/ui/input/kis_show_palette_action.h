@@ -29,7 +29,7 @@
 class KisShowPaletteAction : public KisAbstractInputAction
 {
 public:
-    explicit KisShowPaletteAction(KisInputManager* manager);
+    explicit KisShowPaletteAction();
     virtual ~KisShowPaletteAction();
 
     virtual void begin(int, QEvent *);

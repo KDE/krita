@@ -41,7 +41,7 @@ public:
         RotateRightShortcut, ///< Rotate right by a fixed amount.
         RotateResetShortcut ///< Reset the rotation to 0.
     };
-    explicit KisRotateCanvasAction(KisInputManager* manager);
+    explicit KisRotateCanvasAction();
     virtual ~KisRotateCanvasAction();
 
     void activate();

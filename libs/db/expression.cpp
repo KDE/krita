@@ -840,13 +840,13 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
 
 //=========================================
 
-static const char* FunctionExpr_builtIns_[] = {"SUM", "MIN", "MAX", "AVG", "COUNT", "STD", "STDDEV", "VARIANCE", 0 };
+static const char* const FunctionExpr_builtIns_[] = {"SUM", "MIN", "MAX", "AVG", "COUNT", "STD", "STDDEV", "VARIANCE", 0 };
 
 class BuiltInAggregates : public QSet<QByteArray>
 {
 public:
     BuiltInAggregates() : QSet<QByteArray>() {
-        for (const char **p = FunctionExpr_builtIns_; *p; p++)
+        for (const char * const *p = FunctionExpr_builtIns_; *p; p++)
             insert(QByteArray::fromRawData(*p, qstrlen(*p)));
     }
 };

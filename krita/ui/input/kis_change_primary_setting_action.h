@@ -30,7 +30,7 @@
 class KisChangePrimarySettingAction : public KisAbstractInputAction
 {
 public:
-    explicit KisChangePrimarySettingAction(KisInputManager* manager);
+    explicit KisChangePrimarySettingAction();
     virtual ~KisChangePrimarySettingAction();
 
     void begin(int shortcut, QEvent *event);

@@ -59,7 +59,7 @@ public:
      *
      * \param manager The InputManager this action belongs to.
      */
-    explicit KisAbstractInputAction(KisInputManager *manager);
+    explicit KisAbstractInputAction();
     /**
      * Destructor.
      */
@@ -160,6 +160,9 @@ protected:
     virtual void mouseMoved(const QPointF &lastPos, const QPointF &pos);
 
 private:
+    friend class KisInputManager;
+    static void setInputManager(KisInputManager *manager);
+
     class Private;
     Private * const d;
 };

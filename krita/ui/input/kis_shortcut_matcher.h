@@ -183,6 +183,11 @@ public:
      */
     void suppressAllActions(bool value);
 
+    /**
+     * Remove all shortcuts that have been registered.
+     */
+    void clearShortcuts();
+
 private:
     friend class KisInputManagerTest;
 

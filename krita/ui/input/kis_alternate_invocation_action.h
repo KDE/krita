@@ -39,7 +39,7 @@ public:
         SecondaryAlternateToggleShortcut, ///< Toggle Secondary mode.
     };
 
-    explicit KisAlternateInvocationAction(KisInputManager *manager);
+    explicit KisAlternateInvocationAction();
     virtual ~KisAlternateInvocationAction();
 
     void begin(int shortcut, QEvent *event);

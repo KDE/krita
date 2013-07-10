@@ -67,5 +67,10 @@ KisAnimationFrame* KisFrameBox::getSelectedFrame(){
 }
 
 KisLayerContents* KisFrameBox::getFirstLayer(){
+
+    if(m_layerContents.isEmpty()){
+        return 0;
+    }
+
     return m_layerContents.at(0);
 }

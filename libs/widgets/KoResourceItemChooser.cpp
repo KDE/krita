@@ -119,7 +119,8 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
 {
     Q_ASSERT(resourceAdapter);
 
-    d->tagSearchBarTooltip_disabled = i18n (
+    d->tagSearchBarTooltip_disabled = i18nc (
+            "@info:tooltip",
             "<qt>Entering search terms here will add to, or remove resources from the current tag view."
             "<para>To filter based on the partial, case insensitive name of a resource:<br>"
             "<icode>partialname</icode> or <icode>!partialname</icode>.</para>"
@@ -132,7 +133,8 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
             "Create and/or switch to a different tag if you want to save filtered resources into named sets.</qt>"
             );
 
-    d->tagSearchBarTooltip_enabled = i18n (
+    d->tagSearchBarTooltip_enabled = i18nc (
+            "@info:tooltip",
             "<qt>Entering search terms here will add to, or remove resources from the current tag view."
             "<para>To filter based on the partial, case insensitive name of a resource:<br>"
             "<icode>partialname</icode> or <icode>!partialname</icode>.</para>"
@@ -197,7 +199,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
 
     d->tagToolButton = new QToolButton(this);
     d->tagToolButton->setIcon(koIcon("list-add"));
-    d->tagToolButton->setToolTip(i18n("<qt>Show the tag box options.</qt>"));
+    d->tagToolButton->setToolTip(i18nc("@info:tooltip", "<qt>Show the tag box options.</qt>"));
     d->tagToolButton->setPopupMode(QToolButton::InstantPopup);
     d->tagToolButton->setEnabled(true);
     d->tagToolButton->hide();
@@ -287,7 +289,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
 
     button = new QPushButton(this);
     button->setIcon(koIcon("go-up"));
-    button->setToolTip(i18n("Share Resource"));
+    button->setToolTip(i18nc("@info:tooltip", "Share Resource"));
     button->setEnabled(false);
     button->hide();
     d->buttonGroup->addButton( button, Button_GhnsUpload);
@@ -315,7 +317,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
 
     d->tagSearchSaveButton = new QPushButton(this);
     d->tagSearchSaveButton->setIcon(koIcon("media-floppy"));
-    d->tagSearchSaveButton->setToolTip(i18n("<qt>Save the currently filtered set as the new members of the current tag.</qt>"));
+    d->tagSearchSaveButton->setToolTip(i18nc("@info:tooltip", "<qt>Save the currently filtered set as the new members of the current tag.</qt>"));
     d->tagSearchSaveButton->setEnabled(false);
     d->tagSearchSaveButton->hide();
 

@@ -96,7 +96,7 @@ PaletteDockerDock::PaletteDockerDock( ) : QDockWidget(i18n("Palette"))
     m_wdgPaletteDock->setupUi(mainWidget);
     m_wdgPaletteDock->bnAdd->setIcon(koIcon("list-add"));
     m_wdgPaletteDock->bnAdd->setIconSize(QSize(16, 16));
-    m_wdgPaletteDock->bnAddDialog->setIcon(koIcon("color"));
+    m_wdgPaletteDock->bnAddDialog->setIcon(koIcon("hi16-add_dialog"));
     m_wdgPaletteDock->bnAddDialog->setIconSize(QSize(16, 16));
     m_wdgPaletteDock->bnRemove->setIcon(koIcon("list-remove"));
     m_wdgPaletteDock->bnRemove->setIconSize(QSize(16, 16));
@@ -121,7 +121,7 @@ PaletteDockerDock::PaletteDockerDock( ) : QDockWidget(i18n("Palette"))
     m_wdgPaletteDock->paletteView->setAutoFillBackground(true);
     m_wdgPaletteDock->paletteView->setPalette(pal);
  
-    connect(m_wdgPaletteDock->paletteView, SIGNAL(activated(QModelIndex)), this, SLOT(entrySelected(QModelIndex)));
+    connect(m_wdgPaletteDock->paletteView, SIGNAL(clicked(QModelIndex)), this, SLOT(entrySelected(QModelIndex)));
 
     KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
     m_serverAdapter = new KoResourceServerAdapter<KoColorSet>(rServer, this);
@@ -130,7 +130,7 @@ PaletteDockerDock::PaletteDockerDock( ) : QDockWidget(i18n("Palette"))
     m_colorSetChooser = new ColorSetChooser();
     connect(m_colorSetChooser, SIGNAL(paletteSelected(KoColorSet*)), this, SLOT(setColorSet(KoColorSet*)));
 
-    m_wdgPaletteDock->bnColorSets->setIcon(koIcon("document-multiple"));
+    m_wdgPaletteDock->bnColorSets->setIcon(koIcon("hi16-palette_library"));
     m_wdgPaletteDock->bnColorSets->setToolTip(i18n("Choose palette"));
     m_wdgPaletteDock->bnColorSets->setPopupWidget(m_colorSetChooser);
 

@@ -45,18 +45,20 @@ public:
     * Constructs a KoResourceTagging object
     *
     */
-    explicit KoResourceTagging(const QString &extensions);
+    explicit KoResourceTagging(const QString& resourceType, const QString& extensions);
     ~KoResourceTagging();
 
-    QStringList getAssignedTagsList(KoResource* resource);
+    QStringList assignedTagsList(KoResource* resource) const;
 
     void addTag(KoResource* resource,const QString& tag);
 
     void delTag(KoResource* resource,const QString& tag);
 
-    QStringList getTagNamesList();
+    QStringList tagNamesList() const;
 
     QStringList searchTag(const QString& tag);
+
+    void serializeTags();
 
 
     void setNepomukBool(bool nepomukOn);
@@ -69,10 +71,10 @@ private:
     void writeXMLFile(bool serverIdentity=true);
 
     /// To check whether the resource belongs to the present server or not
-    bool isServerResource(QString resourceName);
+    bool isServerResource(const QString &resourceName) const;
     void addTag(const QString& fileName,const QString& tag);
     /// If resource filenames have no extensions, then we add "-krita.extension".
-    QString getAdjustedFileName(QString fileName);
+    QString adjustedFileName(const QString &fileName) const;
     /// Removes the adjustements before going to the server
     QStringList removeAdjustedFileNames(QStringList fileNamesList);
 
@@ -82,8 +84,8 @@ private:
     void updateTagRepoFromNepomuk(bool serverIdentity=true);
     void addNepomukTag(const QString& fileName,const QString& tag);
     void delNepomukTag(const QString& fileName,const QString& tag);
-    QString adjustedNepomukFileName(QString fileName);
-    QString correctedNepomukFileName(QString fileName);
+    QString adjustedNepomukFileName(const QString &fileName) const;
+    QString correctedNepomukFileName(const QString &fileName) const;
 #endif
 
     QMultiHash<QString, QString> m_tagRepo;

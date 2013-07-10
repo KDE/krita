@@ -20,7 +20,7 @@
 #ifndef KOTEXTLAYOUTAREA_H
 #define KOTEXTLAYOUTAREA_H
 
-#include "textlayout_export.h"
+#include "kotextlayout_export.h"
 
 #include "KoPointedAt.h"
 
@@ -59,7 +59,7 @@ class FrameIterator;
  * the RootArea, but it may also be set by, for example, a row in a table with
  * fixed height.
  */
-class TEXTLAYOUT_EXPORT KoTextLayoutArea
+class KOTEXTLAYOUT_EXPORT KoTextLayoutArea
 {
 public:
     /// constructor
@@ -69,6 +69,12 @@ public:
     /// Returns true if the area starts at the cursor position
     bool isStartingAt(FrameIterator *cursor) const;
 
+    /**
+     * These methods are deprecated since they lead to wrong assumptions.
+     * Only use these methods after discussing with boemann. The problem
+     * is related to tables (and paragraphs) split over more than one page,
+     * in which case these methods just don't give correct or enough information.
+     */
     KDE_DEPRECATED QTextFrame::iterator startTextFrameIterator() const;
     KDE_DEPRECATED QTextFrame::iterator endTextFrameIterator() const;
 

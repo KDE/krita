@@ -478,7 +478,7 @@ void KisToolSelectMagnetic::LocalTool::addPathShape(KoPathShape* pathShape)
     KisSelectionToolHelper helper(kisCanvas, i18n("Path Selection"));
 
 
-    KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
+    KisPixelSelectionSP tmpSel = new KisPixelSelection();
 
     KisPainter painter(tmpSel);
     painter.setBounds(m_selectingTool->currentImage()->bounds());
@@ -488,7 +488,13 @@ void KisToolSelectMagnetic::LocalTool::addPathShape(KoPathShape* pathShape)
     painter.setOpacity(OPACITY_OPAQUE_U8);
     painter.setCompositeOp(tmpSel->colorSpace()->compositeOp(COMPOSITE_OVER));
 
-    painter.paintPolygon(QPolygonF(m_detectedBorder));
+    QPolygonF path = QPolygonF(m_detectedBorder);
+    painter.paintPolygon(path);
+
+    QPainterPath cache;
+    cache.addPolygon(path);
+    cache.closeSubpath();
+    tmpSel.setOutlineCache(cache);
 
     helper.selectPixelSelection(tmpSel, m_selectingTool->m_selectAction);
 

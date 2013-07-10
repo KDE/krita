@@ -39,11 +39,17 @@ public:
     bool active;
 };
 
-KisToolInvocationAction::KisToolInvocationAction(KisInputManager *manager)
-    : KisAbstractInputAction(manager), d(new Private(this))
+KisToolInvocationAction::KisToolInvocationAction()
+    : d(new Private(this))
 {
     setName(i18n("Tool Invocation"));
-    setDescription(i18n("Tool Invocation invokes the current tool, for example, using the brush tool, it will start painting."));
+    setDescription(i18n("The <i>Tool Invocation</i> action invokes the current tool, for example, using the brush tool, it will start painting."));
+
+    QHash<QString, int> indexes;
+    indexes.insert(i18n("Activate"), ActivateShortcut);
+    indexes.insert(i18n("Confirm"), ConfirmShortcut);
+    indexes.insert(i18n("Cancel"), CancelShortcut);
+    setShortcutIndexes(indexes);
 }
 
 KisToolInvocationAction::~KisToolInvocationAction()
@@ -95,7 +101,7 @@ void KisToolInvocationAction::end(QEvent *event)
 
         if (tabletEvent) {
             inputManager()->toolProxy()->tabletEvent(tabletEvent, d->tabletToPixel(tabletEvent->hiResGlobalPos()));
-        } else {
+        } else if (mouseEvent) {
             inputManager()->toolProxy()->mouseReleaseEvent(mouseEvent, inputManager()->widgetToPixel(mouseEvent->posF()));
         }
 

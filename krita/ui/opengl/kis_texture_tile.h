@@ -38,6 +38,7 @@ struct KisGLTexturesInfo {
 
     int border;
 
+    GLint internalFormat;
     GLint format;
     GLint type;
 };

@@ -2455,31 +2455,6 @@ void KisPainter::setMaskImageSize(qint32 width, qint32 height)
     d->polygonMaskImage = QImage();
 }
 
-void KisPainter::setLockAlpha(bool protect)
-{
-    if(d->paramInfo.channelFlags.isEmpty()) {
-        d->paramInfo.channelFlags = d->colorSpace->channelFlags(true, true);
-    }
-
-    QBitArray switcher =
-        d->colorSpace->channelFlags(protect, !protect);
-
-    if(protect) {
-        d->paramInfo.channelFlags &= switcher;
-    }
-    else {
-        d->paramInfo.channelFlags |= switcher;
-    }
-
-    Q_ASSERT(quint32(d->paramInfo.channelFlags.size()) == d->colorSpace->channelCount());
-}
-
-bool KisPainter::alphaLocked() const
-{
-    QBitArray switcher = d->colorSpace->channelFlags(false, true);
-    return !(d->paramInfo.channelFlags & switcher).count(true);
-}
-
 void KisPainter::setRenderingIntent(KoColorConversionTransformation::Intent intent)
 {
     d->renderingIntent = intent;

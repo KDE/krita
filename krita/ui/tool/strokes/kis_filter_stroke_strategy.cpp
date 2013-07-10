@@ -27,7 +27,9 @@ struct KisFilterStrokeStrategy::Private {
     KisFilterSP filter;
     KisSafeFilterConfigurationSP filterConfig;
     KisNodeSP node;
+    KisUpdatesFacade *updatesFacade;
 
+    bool cancelSilently;
     KisPaintDeviceSP filterDevice;
     KisTransaction *secondaryTransaction;
 };
@@ -43,6 +45,9 @@ KisFilterStrokeStrategy::KisFilterStrokeStrategy(KisFilterSP filter,
     m_d->filter = filter;
     m_d->filterConfig = filterConfig;
     m_d->node = resources->currentNode();
+    m_d->updatesFacade = resources->image().data();
+    m_d->cancelSilently = false;
+    m_d->secondaryTransaction = 0;
 
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
 }
@@ -72,25 +77,33 @@ void KisFilterStrokeStrategy::initStrokeCallback()
 void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
     Data *d = dynamic_cast<Data*>(data);
-    QRect rc = d->processRect;
+    CancelSilentlyMarker *cancelJob =
+        dynamic_cast<CancelSilentlyMarker*>(data);
 
+    if (d) {
+        QRect rc = d->processRect;
 
-    KisProcessingVisitor::ProgressHelper helper(m_d->node);
+        KisProcessingVisitor::ProgressHelper helper(m_d->node);
 
-    m_d->filter->processImpl(m_d->filterDevice, rc,
-                             m_d->filterConfig.data(), helper.updater());
+        m_d->filter->processImpl(m_d->filterDevice, rc,
+                                 m_d->filterConfig.data(), helper.updater());
 
-    if (m_d->secondaryTransaction) {
-        KisPainter p(targetDevice());
-        p.setCompositeOp(COMPOSITE_COPY);
-        p.setSelection(activeSelection());
-        p.bitBlt(rc.topLeft(), m_d->filterDevice, rc);
+        if (m_d->secondaryTransaction) {
+            KisPainter p(targetDevice());
+            p.setCompositeOp(COMPOSITE_COPY);
+            p.setSelection(activeSelection());
+            p.bitBlt(rc.topLeft(), m_d->filterDevice, rc);
 
-        // Free memory
-        m_d->filterDevice->clear(rc);
+            // Free memory
+            m_d->filterDevice->clear(rc);
+        }
+
+        m_d->node->setDirty(rc);
+    } else if (cancelJob) {
+        m_d->cancelSilently = true;
+    } else {
+        qFatal("KisFilterStrokeStrategy: job type is not known");
     }
-
-    m_d->node->setDirty(rc);
 }
 
 void KisFilterStrokeStrategy::cancelStrokeCallback()
@@ -98,7 +111,15 @@ void KisFilterStrokeStrategy::cancelStrokeCallback()
     delete m_d->secondaryTransaction;
     m_d->filterDevice = 0;
 
+    if (m_d->cancelSilently) {
+        m_d->updatesFacade->disableDirtyRequests();
+    }
+
     KisPainterBasedStrokeStrategy::cancelStrokeCallback();
+
+    if (m_d->cancelSilently) {
+        m_d->updatesFacade->enableDirtyRequests();
+    }
 }
 
 void KisFilterStrokeStrategy::finishStrokeCallback()

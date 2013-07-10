@@ -39,6 +39,6 @@ Name[zh_TW]=藝術文字元件
 X-KDE-ServiceTypes=Calligra/Shape
 Type=Service
 X-KDE-PluginInfo-Name=artistictextshape
-X-KDE-Library=artistictextshape
+X-KDE-Library=calligra_shape_artistictext
 X-Flake-MinVersion=28
 X-Flake-PluginVersion=28

@@ -71,10 +71,12 @@ KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texture
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glTexImage2D(GL_TEXTURE_2D, 0,
-                 m_texturesInfo->format,
+                 m_texturesInfo->internalFormat,
                  m_texturesInfo->width,
                  m_texturesInfo->height, 0,
-                 GL_BGRA, GL_UNSIGNED_BYTE, fillData);
+                 m_texturesInfo->format,
+                 GL_UNSIGNED_BYTE, fillData);
+
 }
 
 KisTextureTile::~KisTextureTile() {
@@ -88,20 +90,24 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo) {
     if (updateInfo.isEntireTileUpdated()) {
 
         glTexImage2D(GL_TEXTURE_2D, 0,
-                     m_texturesInfo->format,
+                     m_texturesInfo->internalFormat,
                      m_texturesInfo->width,
                      m_texturesInfo->height, 0,
-                     GL_BGRA, m_texturesInfo->type,
+                     m_texturesInfo->format,
+                     m_texturesInfo->type,
                      updateInfo.data());
-    } else {
+    }
+    else {
         QPoint patchOffset = updateInfo.patchOffset();
         QSize patchSize = updateInfo.patchSize();
 
         glTexSubImage2D(GL_TEXTURE_2D, 0,
                         patchOffset.x(), patchOffset.y(),
                         patchSize.width(), patchSize.height(),
-                        GL_BGRA, m_texturesInfo->type,
+                        m_texturesInfo->format,
+                        m_texturesInfo->type,
                         updateInfo.data());
+
     }
 
     /**
@@ -129,7 +135,8 @@ inline void KisTextureTile::repeatStripes(const KisTextureTileUpdateInfo &update
         glTexSubImage2D(GL_TEXTURE_2D, 0,
                         patchOffset.x(), patchOffset.y() - 1,
                         patchSize.width(), 1,
-                        GL_BGRA, m_texturesInfo->type,
+                        m_texturesInfo->format,
+                        m_texturesInfo->type,
                         updateInfo.data());
 
     }
@@ -141,7 +148,8 @@ inline void KisTextureTile::repeatStripes(const KisTextureTileUpdateInfo &update
         glTexSubImage2D(GL_TEXTURE_2D, 0,
                         patchOffset.x(), patchOffset.y() + patchSize.height(),
                         patchSize.width(), 1,
-                        GL_BGRA, m_texturesInfo->type,
+                        m_texturesInfo->format,
+                        m_texturesInfo->type,
                         updateInfo.data() + shift);
 
     }
@@ -161,7 +169,8 @@ inline void KisTextureTile::repeatStripes(const KisTextureTileUpdateInfo &update
         glTexSubImage2D(GL_TEXTURE_2D, 0,
                         patchOffset.x() - 1, patchOffset.y(),
                         1, patchSize.height(),
-                        GL_BGRA, m_texturesInfo->type,
+                        m_texturesInfo->format,
+                        m_texturesInfo->type,
                         columnBuffer.constData());
     }
 
@@ -180,7 +189,8 @@ inline void KisTextureTile::repeatStripes(const KisTextureTileUpdateInfo &update
         glTexSubImage2D(GL_TEXTURE_2D, 0,
                         patchOffset.x() + patchSize.width(), patchOffset.y(),
                         1, patchSize.height(),
-                        GL_BGRA, m_texturesInfo->type,
+                        m_texturesInfo->format,
+                        m_texturesInfo->type,
                         columnBuffer.constData());
     }
 

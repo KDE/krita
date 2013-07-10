@@ -19,5 +19,5 @@ install(TARGETS kochart  ${INSTALL_TARGETS_DEFAULT_ARGS})
 ########### install files ###############
 
 install(FILES KoGenericRegistry.h KoID.h koChart.h KoChartInterface.h KoChartModel.h
-        DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+        DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
 

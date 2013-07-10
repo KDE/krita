@@ -132,7 +132,7 @@ void ParagraphGeneral::setStyle(KoParagraphStyle *style, int level)
         CharacterGeneral::updateNextStyleCombo(m_styleManager->paragraphStyle(style->nextStyle()));
         KoParagraphStyle *parentStyle = style->parentStyle();
         if (parentStyle) {
-            widget.inheritStyle->setCurrentIndex(m_paragraphInheritedStyleModel->indexForParagraphStyle(*parentStyle).row());
+            widget.inheritStyle->setCurrentIndex(m_paragraphInheritedStyleModel->indexOf(*parentStyle).row());
             //m_paragraphInheritedStyleModel->setCurrentParagraphStyle(parentStyle->styleId());
         }
     }

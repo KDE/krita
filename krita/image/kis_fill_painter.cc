@@ -285,7 +285,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
     m_size = m_width * m_height;
 
     KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(device()));
-    KisPixelSelectionSP pSel = selection->getOrCreatePixelSelection();
+    KisPixelSelectionSP pSel = selection->pixelSelection();
 
     const KoColorSpace * devColorSpace = sourceDevice->colorSpace();
 

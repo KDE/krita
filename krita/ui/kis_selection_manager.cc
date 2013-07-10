@@ -220,6 +220,11 @@ void KisSelectionManager::setup(KActionCollection * collection, KisActionManager
     actionManager->addAction("resizeimagetoselection", m_imageResizeToSelection, collection);
     connect(m_imageResizeToSelection, SIGNAL(triggered()), this, SLOT(imageResizeToSelection()));
 
+    KisAction *action = new KisAction(i18n("Convert to Vector Selection"), this);
+    action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
+    actionManager->addAction("convert_to_vector_selection", action, collection);
+    connect(action, SIGNAL(triggered()), SLOT(convertToVectorSelection()));
+
 //     m_load
 //         = new KAction(i18n("Load..."),
 //                   0, 0,
@@ -390,6 +395,11 @@ void KisSelectionManager::reselect()
     factory.run(m_view);
 }
 
+void KisSelectionManager::convertToVectorSelection()
+{
+    KisSelectionToVectorActionFactory factory;
+    factory.run(m_view);
+}
 
 void KisSelectionManager::clear()
 {

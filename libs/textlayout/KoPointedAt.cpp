@@ -67,7 +67,7 @@ void KoPointedAt::fillInLinks(const QTextCursor &cursor, KoInlineTextObjectManag
     if (cursor.charFormat().isAnchor()) {
         QString href = cursor.charFormat().anchorHref();
         // local href starts with #
-        if (href.startsWith("#")) {
+        if (href.startsWith('#')) {
             // however bookmark does not contain it, so strip it
             href = href.right(href.size() - 1);
 

@@ -29,6 +29,7 @@
 #include "kis_async_merger.h"
 
 class KisUpdateJobItem;
+class KisSpontaneousJob;
 
 class KRITAIMAGE_EXPORT KisUpdaterContext : public QObject
 {
@@ -81,6 +82,14 @@ public:
      * \see addMergeJob()
      */
     virtual void addStrokeJob(KisStrokeJob *strokeJob);
+
+
+    /**
+     * Adds a spontaneous job to the context. The prerequisites are
+     * the same as for addMergeJob()
+     * \see addMergeJob()
+     */
+    virtual void addSpontaneousJob(KisSpontaneousJob *spontaneousJob);
 
     /**
      * Block execution of the caller until all the jobs are finished
@@ -142,6 +151,7 @@ public:
      */
     void addMergeJob(KisBaseRectsWalkerSP walker);
     void addStrokeJob(KisStrokeJob *strokeJob);
+    void addSpontaneousJob(KisSpontaneousJob *spontaneousJob);
 
     const QVector<KisUpdateJobItem*> getJobs();
     void clear();

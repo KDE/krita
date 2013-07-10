@@ -78,7 +78,7 @@ typedef QTime KisTimeCounter;
 void KisFilterSelectionsBenchmark::initSelection()
 {
     m_selection = new KisSelection();
-    KisPixelSelectionSP pixelSelection = m_selection->getOrCreatePixelSelection();
+    KisPixelSelectionSP pixelSelection = m_selection->pixelSelection();
 
 
 //67.2% deselected

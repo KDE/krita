@@ -48,34 +48,36 @@ public:
 
 };
 
+typedef KisSharedPtr<TestMask> TestMaskSP;
+
 
 void KisMaskTest::testCreation()
 {
     TestUtil::MaskParent p;
-    TestMask mask;
-    mask.initSelection(p.layer);
+    TestMaskSP mask = new TestMask;
+    mask->initSelection(p.layer);
 
-    QCOMPARE(mask.extent(), QRect(0,0,512,512));
-    QCOMPARE(mask.exactBounds(), QRect(0,0,512,512));
+    QCOMPARE(mask->extent(), QRect(0,0,512,512));
+    QCOMPARE(mask->exactBounds(), QRect(0,0,512,512));
 }
 
 void KisMaskTest::testSelection()
 {
     TestUtil::MaskParent p;
-    TestMask mask;
+    TestMaskSP mask = new TestMask;
 
     KisSelectionSP sel = new KisSelection();
-    sel->getOrCreatePixelSelection()->select(QRect(0,0,100,100), MAX_SELECTED);
+    sel->pixelSelection()->select(QRect(0,0,100,100), MAX_SELECTED);
 
-    mask.initSelection(sel, p.layer);
+    mask->initSelection(sel, p.layer);
 
-    QCOMPARE(mask.extent(), QRect(0,0,128,128));
-    QCOMPARE(mask.exactBounds(), QRect(0,0,100,100));
+    QCOMPARE(mask->extent(), QRect(0,0,128,128));
+    QCOMPARE(mask->exactBounds(), QRect(0,0,100,100));
 
-    mask.select(QRect(0,0,500,500), MAX_SELECTED);;
+    mask->select(QRect(0,0,500,500), MAX_SELECTED);;
 
-    QCOMPARE(mask.extent(), QRect(0,0,512,512));
-    QCOMPARE(mask.exactBounds(), QRect(0,0,500,500));
+    QCOMPARE(mask->extent(), QRect(0,0,512,512));
+    QCOMPARE(mask->exactBounds(), QRect(0,0,500,500));
 }
 
 void KisMaskTest::testCropUpdateBySelection()
@@ -89,14 +91,14 @@ void KisMaskTest::testCropUpdateBySelection()
     QRect selectionRect(10, 10, 20, 20);
     QRect updateRect(64, 64, 20, 20);
 
-    TestMask mask;
+    TestMaskSP mask = new TestMask;
 
     KisSelectionSP sel = new KisSelection();
-    sel->getOrCreatePixelSelection()->select(selectionRect, MAX_SELECTED);
+    sel->pixelSelection()->select(selectionRect, MAX_SELECTED);
 
-    mask.initSelection(sel, p.layer);
+    mask->initSelection(sel, p.layer);
 
-    mask.apply(p.layer->projection(), updateRect);
+    mask->apply(p.layer->projection(), updateRect);
     // Here we crash! :)
 
     /**
@@ -115,14 +117,14 @@ void KisMaskTest::testSelectionParent()
         KisMaskSP mask = new TestMask;
         mask->initSelection(image->rootLayer());
         KisSelectionSP selection = mask->selection();
-        QCOMPARE(selection->parentNode(), KisNodeWSP(mask));
+        QCOMPARE(selection->parentNode(), KisNodeSP(mask));
     }
 
     {
         KisMaskSP mask = new TestMask;
         mask->setSelection(new KisSelection());
         KisSelectionSP selection = mask->selection();
-        QCOMPARE(selection->parentNode(), KisNodeWSP(mask));
+        QCOMPARE(selection->parentNode(), KisNodeSP(mask));
     }
 }
 

@@ -30,7 +30,7 @@
 
 
 /// the base command for commands altering a KisImage
-class KisImageCommand : public KUndo2Command
+class KRITAIMAGE_EXPORT KisImageCommand : public KUndo2Command
 {
 
 public:

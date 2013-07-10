@@ -75,6 +75,7 @@ DlgColorSpaceConversion::~DlgColorSpaceConversion()
 
 void DlgColorSpaceConversion::selectionChanged(bool valid)
 {
+    Q_UNUSED(valid);
     enableButtonOk(m_page->colorSpaceSelector->currentColorSpace());
 }
 

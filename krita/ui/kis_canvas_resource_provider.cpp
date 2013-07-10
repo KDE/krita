@@ -80,8 +80,8 @@ void KisCanvasResourceProvider::setResourceManager(KoCanvasResourceManager *reso
     m_resourceManager->setResource(HdrExposure, 0.0);
     m_resourceManager->setResource(HdrGamma, 1.0);
 
-    connect(m_resourceManager, SIGNAL(resourceChanged(int,QVariant)),
-            this, SLOT(slotResourceChanged(int,QVariant)));
+    connect(m_resourceManager, SIGNAL(canvasResourceChanged(int,QVariant)),
+            this, SLOT(slotCanvasResourceChanged(int,QVariant)));
 
     m_resourceManager->setResource(KoCanvasResourceManager::ApplicationSpeciality, KoCanvasResourceManager::NoAdvancedText);
 }
@@ -281,7 +281,7 @@ void KisCanvasResourceProvider::slotOnScreenResolutionChanged()
     emit sigOnScreenResolutionChanged(scaleX, scaleY);
 }
 
-void KisCanvasResourceProvider::slotResourceChanged(int key, const QVariant & res)
+void KisCanvasResourceProvider::slotCanvasResourceChanged(int key, const QVariant & res)
 {
     if(key == KoCanvasResourceManager::ForegroundColor || key == KoCanvasResourceManager::BackgroundColor) {
         KoAbstractGradient* resource = KoResourceServerProvider::instance()->gradientServer()->resources()[0];
@@ -407,9 +407,19 @@ void KisCanvasResourceProvider::setOpacity(qreal opacity)
     m_resourceManager->setResource(Opacity, opacity);
 }
 
-qreal KisCanvasResourceProvider::opacity()
+qreal KisCanvasResourceProvider::opacity() const
 {
     return m_resourceManager->resource(Opacity).toDouble();
+}
+
+void KisCanvasResourceProvider::setGlobalAlphaLock(bool lock)
+{
+    m_resourceManager->setResource(GlobalAlphaLock, lock);
+}
+
+bool KisCanvasResourceProvider::globalAlphaLock() const
+{
+    return m_resourceManager->resource(GlobalAlphaLock).toBool();
 }
 
 void KisCanvasResourceProvider::notifyLoadingWorkspace(KisWorkspaceResource* workspace)

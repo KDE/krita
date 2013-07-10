@@ -103,4 +103,9 @@ struct KisInvertSelectionOperaton : public KisFilterSelectionOperation {
     void runFromXML(KisView2 *view, const KisOperationConfiguration &config);
 };
 
+struct KRITAUI_EXPORT KisSelectionToVectorActionFactory : public KisNoParameterActionFactory {
+    KisSelectionToVectorActionFactory() : KisNoParameterActionFactory("paste-new-ui-action") {}
+    void run(KisView2 *view);
+};
+
 #endif /* __KIS_SELECTION_ACTION_FACTORIES_H */

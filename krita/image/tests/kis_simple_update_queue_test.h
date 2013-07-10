@@ -35,6 +35,7 @@ private slots:
     void testSplitFullRefresh();
     void testChecksum();
     void testMixingTypes();
+    void testSpontaneousJobsCompression();
 };
 
 #endif /* KIS_SIMPLE_UPDATE_QUEUE_TEST_H */

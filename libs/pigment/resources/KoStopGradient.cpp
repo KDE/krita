@@ -591,17 +591,17 @@ void KoStopGradient::parseSvgColor(QColor &color, const QString &s)
         QString g = colors[1];
         QString b = colors[2].left((colors[2].length() - 1));
 
-        if (r.contains("%")) {
+        if (r.contains('%')) {
             r = r.left(r.length() - 1);
             r = QString::number(int((qreal(255 * r.toDouble()) / 100.0)));
         }
 
-        if (g.contains("%")) {
+        if (g.contains('%')) {
             g = g.left(g.length() - 1);
             g = QString::number(int((qreal(255 * g.toDouble()) / 100.0)));
         }
 
-        if (b.contains("%")) {
+        if (b.contains('%')) {
             b = b.left(b.length() - 1);
             b = QString::number(int((qreal(255 * b.toDouble()) / 100.0)));
         }

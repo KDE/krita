@@ -40,7 +40,7 @@ public:
         PanDownShortcut ///< Pan down by a fixed amount.
     };
 
-    explicit KisPanAction(KisInputManager *manager);
+    explicit KisPanAction();
     virtual ~KisPanAction();
 
     void activate();

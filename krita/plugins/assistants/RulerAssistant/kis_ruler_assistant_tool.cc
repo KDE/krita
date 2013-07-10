@@ -138,25 +138,25 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
             if(m_handleDrag && assistant->id() == "perspective") {
                 // Look for the handle which was pressed
 
-                if (m_handleDrag ==assistant->topLeft()) {
+                if (m_handleDrag == assistant->topLeft()) {
                     double dist = norm2(mousePos - m_canvas->viewConverter()->documentToView(*m_handleDrag));
                     if (dist < minDist) {
                         minDist = dist;
                     }
                     m_internalMode = MODE_DRAGGING_NODE;
-                } else if (m_handleDrag ==assistant->topRight()) {
+                } else if (m_handleDrag == assistant->topRight()) {
                     double dist = norm2(mousePos - m_canvas->viewConverter()->documentToView(*m_handleDrag));
                     if (dist < minDist) {
                         minDist = dist;
                     }
                     m_internalMode = MODE_DRAGGING_NODE;
-                } else if (m_handleDrag ==assistant->bottomLeft()) {
+                } else if (m_handleDrag == assistant->bottomLeft()) {
                     double dist = norm2(mousePos - m_canvas->viewConverter()->documentToView(*m_handleDrag));
                     if (dist < minDist) {
                         minDist = dist;
                     }
                     m_internalMode = MODE_DRAGGING_NODE;
-                } else if (m_handleDrag ==assistant->bottomRight()) {
+                } else if (m_handleDrag == assistant->bottomRight()) {
                     double dist = norm2(mousePos - m_canvas->viewConverter()->documentToView(*m_handleDrag));
                     if (dist < minDist) {
                         minDist = dist;
@@ -373,7 +373,7 @@ void KisRulerAssistantTool::mouseReleaseEvent(KoPointerEvent *event)
             m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
         } else if(m_internalMode == MODE_DRAGGING_TRANSLATING_TWONODES) {
             addAssistant();
-            m_internalMode==MODE_CREATION;
+            m_internalMode = MODE_CREATION;
             m_canvas->updateCanvas();
         }
         else {

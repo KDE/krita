@@ -1,6 +1,6 @@
 add_subdirectory(tests)
 
-include_directories( ${KRITA_INCLUDES} ${CMAKE_CURRENT_fSOURCE_DIR} )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
 
 set(kritaxcfimport_PART_SRCS
     kis_xcf_import.cpp

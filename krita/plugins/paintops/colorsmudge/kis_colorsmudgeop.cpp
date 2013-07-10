@@ -119,7 +119,7 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     qreal rotation = m_rotationOption.apply(info);
     qreal diagonal = std::sqrt((qreal)brush->width()*brush->width() + brush->height()*brush->height());
 
-    // don't paint anything if the brush is too samll
+    // don't paint anything if the brush is too small
     if((scale*brush->width()) <= 0.01 || (scale*brush->height()) <= 0.01)
         return 1.0;
 

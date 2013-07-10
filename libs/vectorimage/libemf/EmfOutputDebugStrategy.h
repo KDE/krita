@@ -19,7 +19,7 @@
 #ifndef EMFOUTPUTDEBUGSTRATEGY_H
 #define EMFOUTPUTDEBUGSTRATEGY_H
 
-#include "vectorimage_export.h"
+#include "kovectorimage_export.h"
 
 #include <QList>
 #include <QPainter>
@@ -48,7 +48,7 @@ namespace Libemf
 /**
     Debug (text dump) output strategy for EMF Parser
 */
-class VECTORIMAGE_EXPORT OutputDebugStrategy : public AbstractOutput
+class KOVECTORIMAGE_EXPORT OutputDebugStrategy : public AbstractOutput
 {
 public:
     OutputDebugStrategy();

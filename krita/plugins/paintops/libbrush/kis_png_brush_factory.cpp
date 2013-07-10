@@ -34,7 +34,7 @@ KisBrushSP KisPngBrushFactory::getOrCreateBrush(const QDomElement& brushDefiniti
 {
     KoResourceServer<KisBrush>* rServer = KisBrushServer::instance()->brushServer();
     QString brushFileName = brushDefinition.attribute("filename", "");
-    KisBrushSP brush = rServer->getResourceByFilename(brushFileName);
+    KisBrushSP brush = rServer->resourceByFilename(brushFileName);
     if(!brush)
         return 0;
     

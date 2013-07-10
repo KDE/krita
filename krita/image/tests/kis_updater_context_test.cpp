@@ -29,6 +29,8 @@
 #include "kis_updater_context.h"
 #include "kis_image.h"
 
+#include "scheduler_utils.h"
+
 void KisUpdaterContextTest::testJobInterference()
 {
     KisTestableUpdaterContext context(3);
@@ -55,6 +57,49 @@ void KisUpdaterContextTest::testJobInterference()
     context.addMergeJob(walker1);
 
     QVERIFY(!context.isJobAllowed(walker2));
+
+    context.unlock();
+}
+
+void KisUpdaterContextTest::testSnapshot()
+{
+    KisTestableUpdaterContext context(3);
+
+    QRect imageRect(0,0,100,100);
+
+    KisBaseRectsWalkerSP walker1 = new KisMergeWalker(imageRect);
+
+    qint32 numMergeJobs = -777;
+    qint32 numStrokeJobs = -777;
+
+    context.lock();
+
+    context.getJobsSnapshot(numMergeJobs, numStrokeJobs);
+    QCOMPARE(numMergeJobs, 0);
+    QCOMPARE(numStrokeJobs, 0);
+
+    context.addMergeJob(walker1);
+    context.getJobsSnapshot(numMergeJobs, numStrokeJobs);
+    QCOMPARE(numMergeJobs, 1);
+    QCOMPARE(numStrokeJobs, 0);
+
+
+    KisStrokeJobData *data =
+        new KisStrokeJobData(KisStrokeJobData::SEQUENTIAL,
+                             KisStrokeJobData::NORMAL);
+
+    KisStrokeJobStrategy *strategy = new KisNoopDabStrategy("test");
+
+    context.addStrokeJob(new KisStrokeJob(strategy, data));
+    context.getJobsSnapshot(numMergeJobs, numStrokeJobs);
+    QCOMPARE(numMergeJobs, 1);
+    QCOMPARE(numStrokeJobs, 1);
+
+
+    context.addSpontaneousJob(new KisNoopSpontaneousJob());
+    context.getJobsSnapshot(numMergeJobs, numStrokeJobs);
+    QCOMPARE(numMergeJobs, 2);
+    QCOMPARE(numStrokeJobs, 1);
 
     context.unlock();
 }

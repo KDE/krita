@@ -160,9 +160,6 @@ void KisAutoContrast::processImpl(KisPaintDeviceSP device,
         for (int i = maxvalue; i < 256; i++)
             transfer[i] = 0xFFFF;
     }
-
-    KisSelectionSP dstSel;
-
     // apply
     KoColorTransformation *adj = device->colorSpace()->createBrightnessContrastAdjustment(transfer);
 

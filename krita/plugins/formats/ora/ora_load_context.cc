@@ -36,7 +36,7 @@ OraLoadContext::~OraLoadContext()
 {
 }
 
-KisPaintDeviceSP OraLoadContext::loadDeviceData(const QString & filename)
+KisImageWSP OraLoadContext::loadDeviceData(const QString & filename)
 {
     if (m_store->open(filename)) {
         KoStoreDevice io(m_store);
@@ -48,9 +48,8 @@ KisPaintDeviceSP OraLoadContext::loadDeviceData(const QString & filename)
         pngConv.buildImage(&io);
         io.close();
         m_store->close();
-        KisPaintDeviceSP dev = pngConv.image()->projection();
-        delete pngConv.image().data();
-        return dev;
+
+        return pngConv.image();
 
     }
     return 0;

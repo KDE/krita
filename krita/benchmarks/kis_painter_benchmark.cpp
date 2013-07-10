@@ -122,7 +122,7 @@ void KisPainterBenchmark::benchmarkBitBltSelection()
     dst->fill(0,0,TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT, m_color.data());
 
     KisSelectionSP selection = new KisSelection();
-    selection->getOrCreatePixelSelection()->select(QRect(0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT));
+    selection->pixelSelection()->select(QRect(0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT));
     selection->updateProjection();
 
     
@@ -174,7 +174,7 @@ void KisPainterBenchmark::benchmarkFixedBitBltSelection()
     KisPaintDeviceSP dst = new KisPaintDevice(m_colorSpace);
 
     KisSelectionSP selection = new KisSelection();
-    selection->getOrCreatePixelSelection()->select(QRect(0, 0, TEST_IMAGE_WIDTH , TEST_IMAGE_HEIGHT));
+    selection->pixelSelection()->select(QRect(0, 0, TEST_IMAGE_WIDTH , TEST_IMAGE_HEIGHT));
     selection->updateProjection();
 
     KisPainter gc(dst);

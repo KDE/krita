@@ -93,7 +93,7 @@ QList<QImage> KoFavoriteResourceManager::favoritePresetImages()
     QList<QImage> images;
     KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     foreach(const QString& name, m_favoritePresetsList) {
-        KoResource* resource = rServer->getResourceByName(name);
+        KoResource* resource = rServer->resourceByName(name);
         if(!resource) {
             removeFavoritePreset(name);
         }
@@ -109,7 +109,7 @@ void KoFavoriteResourceManager::slotChangeActivePaintop(int pos)
     if (pos < 0 || pos >= m_favoritePresetsList.size()) return;
 
     KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-    KoResource* resource = rServer->getResourceByName(m_favoritePresetsList.at(pos));
+    KoResource* resource = rServer->resourceByName(m_favoritePresetsList.at(pos));
     m_paintopBox->resourceSelected(resource);
 
     if (m_popupPalette) {
@@ -286,5 +286,11 @@ void KoFavoriteResourceManager::setBlockUpdates(bool block)
 {
     m_blockUpdates = block;
 }
+
+void KoFavoriteResourceManager::syncTaggedResourceView(){}
+
+void KoFavoriteResourceManager::syncTagAddition(const QString& /*tag*/){}
+
+void KoFavoriteResourceManager::syncTagRemoval(const QString& /*tag*/){}
 
 #include "ko_favorite_resource_manager.moc"

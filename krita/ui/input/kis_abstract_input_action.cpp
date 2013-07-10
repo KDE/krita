@@ -25,18 +25,19 @@
 class KisAbstractInputAction::Private
 {
 public:
-    KisInputManager* inputManager;
-
     QString name;
     QString description;
     QHash<QString, int> indexes;
 
     QPointF lastMousePosition;
+
+    static KisInputManager* inputManager;
 };
 
-KisAbstractInputAction::KisAbstractInputAction(KisInputManager* manager) : d(new Private)
+KisInputManager *KisAbstractInputAction::Private::inputManager = 0;
+
+KisAbstractInputAction::KisAbstractInputAction() : d(new Private)
 {
-    d->inputManager = manager;
     d->indexes.insert(i18n("Activate"), 0);
 }
 
@@ -92,7 +93,7 @@ bool KisAbstractInputAction::supportsHiResInputEvents() const
 
 KisInputManager* KisAbstractInputAction::inputManager() const
 {
-    return d->inputManager;
+    return Private::inputManager;
 }
 
 QString KisAbstractInputAction::name() const
@@ -123,4 +124,9 @@ void KisAbstractInputAction::setDescription(const QString& description)
 void KisAbstractInputAction::setShortcutIndexes(const QHash< QString, int >& indexes)
 {
     d->indexes = indexes;
+}
+
+void KisAbstractInputAction::setInputManager(KisInputManager *manager)
+{
+    Private::inputManager = manager;
 }

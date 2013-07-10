@@ -271,7 +271,7 @@ void DlgColorRange::slotSelectClicked()
     KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(m_view->activeDevice(), m_view->image()));
 
     KisHLineConstIteratorSP hiter = m_view->activeDevice()->createHLineConstIteratorNG(x, y, w);
-    KisHLineIteratorSP selIter = selection->getOrCreatePixelSelection()->createHLineIteratorNG(x, y, w);
+    KisHLineIteratorSP selIter = selection->pixelSelection()->createHLineIteratorNG(x, y, w);
     QColor c;
     for (int row = y; row < h - y; ++row) {
         do {
@@ -311,6 +311,7 @@ void DlgColorRange::slotSelectClicked()
         selIter->nextRow();
     }
 
+    selection->pixelSelection()->invalidateOutlineCache();
     KisSelectionToolHelper helper(m_view->canvasBase(), i18n("Color Range Selection"));
     helper.selectPixelSelection(selection->pixelSelection(), m_mode);
 

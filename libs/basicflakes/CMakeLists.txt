@@ -27,5 +27,5 @@ install( FILES
     basicflakes_export.h
 
     DESTINATION
-    ${INCLUDE_INSTALL_DIR}
+    ${INCLUDE_INSTALL_DIR}/calligra
 COMPONENT Devel)

@@ -73,7 +73,7 @@ protected:
 
     void setMode(ToolMode mode);
 
-    virtual void resourceChanged(int key, const QVariant & v);
+    virtual void canvasResourceChanged(int key, const QVariant & v);
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 

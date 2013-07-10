@@ -752,7 +752,7 @@ private:
      */
     QVector<qint32> channelSizes();
 
-private:
+protected:
     friend class KisSelectionTest;
     KisNodeWSP parentNode() const;
 

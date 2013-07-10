@@ -151,6 +151,7 @@ set(kritaimage_LIB_SRCS
    kis_image.cc
    kis_image_signal_router.cpp
    kis_image_config.cpp
+   kis_signal_compressor.cpp
    kis_layer.cc
    kis_indirect_painting_support.cpp
    kis_mask.cc
@@ -184,7 +185,8 @@ set(kritaimage_LIB_SRCS
    kis_random_sub_accessor.cpp
    kis_selection.cc
    kis_selection_mask.cpp
-   kis_selection_transaction_data.cpp
+   kis_update_outline_job.cpp
+   kis_update_selection_job.cpp
    kis_serializable_configuration.cc
    kis_shared.cc
    kis_transaction_data.cpp
@@ -312,4 +314,4 @@ install( FILES
     filter/kis_filter_configuration.h
     generator/kis_generator.h
     generator/kis_generator_registry.h
-    DESTINATION ${INCLUDE_INSTALL_DIR})
+    DESTINATION ${INCLUDE_INSTALL_DIR}/krita)

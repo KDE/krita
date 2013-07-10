@@ -115,7 +115,7 @@ target_link_libraries(komain ${extra_libs}
     ${KDE4_KPARTS_LIBS}
     ${KDE4_KFILE_LIBRARY}
     kowidgets
-    textlayout
+    kotextlayout
 )
 
 if( KActivities_FOUND )
@@ -177,12 +177,11 @@ install( FILES
     calligraversion.h
     KoStandardAction.h
     komain_export.h
-DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
 
 if( QT_QTDBUS_FOUND )
     install( FILES
         KoApplicationAdaptor.h
         KoViewAdaptor.h
-    DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+    DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
 endif( QT_QTDBUS_FOUND )
-

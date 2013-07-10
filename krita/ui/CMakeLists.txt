@@ -6,7 +6,7 @@ include_directories( ${KOTEXT_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIR}/flake
 	${CMAKE_CURRENT_SOURCE_DIR}/pigment/resources
 	${CMAKE_CURRENT_SOURCE_DIR}/widgets/resources
-	${CMAKE_CURRENT_SOURCE_DIR}/openrastertk
+	${CMAKE_CURRENT_SOURCE_DIR}/ora
 	${CMAKE_SOURCE_DIR}/krita/image/metadata
 	${EXIV2_INCLUDE_DIR} )
 
@@ -55,6 +55,7 @@ set(kritaui_LIB_SRCS
     flake/kis_shape_selection.cpp
     flake/kis_shape_selection_canvas.cpp
     flake/kis_shape_selection_model.cpp
+    flake/kis_take_all_shapes_command.cpp
     kis_autogradient.cc
     kis_autogradient_resource.cc
     kis_bookmarked_configurations_editor.cc
@@ -130,8 +131,8 @@ set(kritaui_LIB_SRCS
     opengl/kis_opengl_canvas2.cpp
     opengl/kis_opengl_image_textures.cpp
     opengl/kis_texture_tile.cpp
-    openrastertk/kis_open_raster_stack_load_visitor.cpp
-    openrastertk/kis_open_raster_stack_save_visitor.cpp
+    ora/kis_open_raster_stack_load_visitor.cpp
+    ora/kis_open_raster_stack_save_visitor.cpp
     recorder/kis_node_query_path_editor.cc
     recorder/kis_recorded_action_creator.cc
     recorder/kis_recorded_action_creator_factory.cc
@@ -204,8 +205,6 @@ set(kritaui_LIB_SRCS
     widgets/kis_widget_chooser.cpp
     widgets/kis_tool_button.cpp
     widgets/kis_floating_message.cpp
-#    widgets/kis_light_source.cpp
-#    widgets/kis_light_stage.cpp
     input/kis_input_manager.cpp
     input/kis_abstract_input_action.cpp
     input/kis_tool_invocation_action.cpp
@@ -228,6 +227,21 @@ set(kritaui_LIB_SRCS
     actions/kis_selection_action_factories.cpp
     kis_document_undo_store.cpp
     kis_transaction_based_command.cpp
+    input/kis_input_profile_manager.cpp
+    input/kis_input_profile.cpp
+    input/kis_shortcut_configuration.cpp
+    input/config/kis_input_configuration_page.cpp
+    input/config/kis_edit_profiles_dialog.cpp
+    input/config/kis_input_profile_model.cpp
+    input/config/kis_input_configuration_page_item.cpp
+    input/config/kis_action_shortcuts_model.cpp
+    input/config/kis_input_type_delegate.cpp
+    input/config/kis_input_mode_delegate.cpp
+    input/config/kis_input_button.cpp
+    input/config/kis_input_editor_delegate.cpp
+    input/config/kis_mouse_input_editor.cpp
+    input/config/kis_wheel_input_editor.cpp
+    input/config/kis_key_input_editor.cpp
 )
 
 if(HAVE_OPENGL)
@@ -289,6 +303,12 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgdlgblacklistcleanup.ui
     forms/wdgflipbookselector.ui
     forms/wdganimationselector.ui
+    input/config/kis_input_configuration_page.ui
+    input/config/kis_edit_profiles_dialog.ui
+    input/config/kis_input_configuration_page_item.ui
+    input/config/kis_mouse_input_editor.ui
+    input/config/kis_wheel_input_editor.ui
+    input/config/kis_key_input_editor.ui
 )
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
@@ -364,4 +384,4 @@ install( FILES
 #    kis_tool_types.h
 #    KoInputDevice.h
 #    canvas/kis_perspective_grid_manager.h
-   DESTINATION ${INCLUDE_INSTALL_DIR})
+   DESTINATION ${INCLUDE_INSTALL_DIR}/krita)

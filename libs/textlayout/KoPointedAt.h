@@ -20,7 +20,7 @@
 #ifndef KOPOINTEDAT_H
 #define KOPOINTEDAT_H
 
-#include "textlayout_export.h"
+#include "kotextlayout_export.h"
 
 #include <QString>
 #include <QTextCursor>
@@ -33,7 +33,7 @@ class KoInlineTextObjectManager;
 class KoTextRangeManager;
 class KoInlineNote;
 
-class TEXTLAYOUT_EXPORT KoPointedAt
+class KOTEXTLAYOUT_EXPORT KoPointedAt
 {
 public:
     KoPointedAt();

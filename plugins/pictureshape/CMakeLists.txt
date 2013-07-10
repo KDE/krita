@@ -20,10 +20,10 @@ SET (pictureshape_LIB_SRCS
 )
 
 kde4_add_ui_files(pictureshape_LIB_SRCS forms/wdgPictureTool.ui)
-kde4_add_plugin(pictureshape ${pictureshape_LIB_SRCS})
+kde4_add_plugin(calligra_shape_picture ${pictureshape_LIB_SRCS})
 
-target_link_libraries(pictureshape komain flake ${KDE4_KFILE_LIBRARY})
-install(TARGETS pictureshape DESTINATION ${PLUGIN_INSTALL_DIR})
+target_link_libraries(calligra_shape_picture komain flake ${KDE4_KFILE_LIBRARY})
+install(TARGETS calligra_shape_picture DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

@@ -1,7 +1,7 @@
 
 /*  This file is part of the KDE project
 
-    Copyright (C) 2013 Sascha Suelzer <s.suelzer@lavabit.com>
+    Copyright (c) 2013 Sascha Suelzer <s_suelzer@lavabit.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -36,23 +36,26 @@ class KOWIDGETS_EXPORT KoResourceFiltering
 public:
     KoResourceFiltering();
     virtual ~KoResourceFiltering();
-    bool hasFilters();
-    bool filtersHaveChanged();
-    void setRootResourceFilenames(QStringList tag);
-    void setFilters(const QString& searchString, KoResourceTagging* tagObject);
-    QList<KoResource*> filterResources(QList<KoResource*> resources);
-
+    bool hasFilters() const;
+    bool filtersHaveChanged() const;
+    void setTagSetFilenames(const QStringList& filenames);
+    void setCurrentTag(const QString& tagSet);
+    void rebuildCurrentTagFilenames();
+    void setTagObject(KoResourceTagging* tagObject);
+    void setFilters(const QString& searchString);
+    QList<KoResource*> filterResources(QList< KoResource* > resources);
+    void setInclusions(const QStringList &inclusions);
+    void setExclusions(const QStringList &exclusions);
 private:
-    void setInclusions(QStringList inclusions);
-    void setExclusions(QStringList exclusions);
+
     void setDoneFiltering();
     bool presetMatchesSearch(KoResource * resource) const;
     void setChanged();
     bool excludeFilterIsValid(const QString &exclusion);
-    bool matchesResource(QString &resourceName, QString &resourceFileName,const QStringList &filterList) const;
-    void populateIncludeExcludeFilters(const QStringList& filteredNames, KoResourceTagging* tagObject);
+    bool matchesResource(const QString &resourceName, const QString &resourceFileName,const QStringList &filterList) const;
+    void populateIncludeExcludeFilters(const QStringList& filteredNames);
     void sanitizeExclusionList();
-    QStringList tokenizeSearchString(const QString searchString);
+    QStringList tokenizeSearchString(const QString& searchString) const;
     class Private;
     Private * const d;
 

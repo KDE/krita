@@ -4,6 +4,7 @@
    Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
    Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
    Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
+   Copyright (c) 2013 Sascha Suelzer <s_suelzer@lavabit.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -53,37 +54,29 @@
 
 #include <KoIcon.h>
 
+#include "KoResourceItemChooserContextMenu.h"
 #include "KoResourceServerAdapter.h"
 #include "KoResourceItemView.h"
 #include "KoResourceItemDelegate.h"
 #include "KoResourceModel.h"
 #include "KoResource.h"
 
-ContextMenuTagAction::ContextMenuTagAction(KoResource* resource, QString tag, QObject* parent)
-: QAction(parent)
-, m_resource(resource)
-, m_tag(tag)
+class TaggedResourceSet
 {
-    setText(tag);
-    connect (this, SIGNAL(triggered()),
-             this, SLOT(onTriggered()));
-}
+public:
+    TaggedResourceSet()
+    {}
 
-ContextMenuTagAction::~ContextMenuTagAction()
-{
-}
-
-void ContextMenuTagAction::onTriggered()
-{
-    emit triggered(m_resource,m_tag);
-}
-
-
+    TaggedResourceSet(const QString& tagName, const QList<KoResource*>& resources)
+    : tagName(tagName), resources(resources)
+    {}
+    QString tagName;
+    QList<KoResource*> resources;
+};
 
 class KoResourceItemChooser::Private
 {
 public:
-    enum TagButtons { Button_AddTag, Button_RemoveTag };
     Private()
         : model(0)
         , view(0)
@@ -97,6 +90,8 @@ public:
     QButtonGroup* buttonGroup;
     QButtonGroup* tagButtonGroup;
     KLineEdit *tagSearchLineEdit;
+    QPushButton *tagSearchSaveButton;
+    QToolButton *tagToolButton;
     KComboBox *tagOpComboBox;
     QString knsrcFile;
     QCompleter *tagCompleter;
@@ -107,7 +102,15 @@ public:
     bool grayscalePreview;
     bool showContextMenu;
     QString currentTag;
+    QString tagSearchBarTooltip_disabled;
+    QString tagSearchBarTooltip_enabled;
+    QString unfilteredView;
     QList<KoResource*> originalResources;
+    TaggedResourceSet lastDeletedTag;
+    QAction* action_undeleteTag;
+    QAction* action_deleteTag;
+    KoLineEditAction* action_renameTag;
+    QAction* action_purgeTagUndeleteList;
 
 };
 
@@ -115,6 +118,33 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     : QWidget( parent ), d( new Private() )
 {
     Q_ASSERT(resourceAdapter);
+
+    d->tagSearchBarTooltip_disabled = i18n (
+            "<qt>Entering search terms here will add to, or remove resources from the current tag view."
+            "<para>To filter based on the partial, case insensitive name of a resource:<br>"
+            "<icode>partialname</icode> or <icode>!partialname</icode>.</para>"
+            "<para>In-/exclusion of other tag sets:<br>"
+            "<icode>[Tagname]</icode> or <icode>![Tagname]</icode>.</para>"
+            "<para>Case sensitive and full name matching in-/exclusion:<br>"
+            "<icode>\"ExactMatch\"</icode> or <icode>!\"ExactMatch\"</icode>.</para>"
+            "Filter results cannot be saved for the <interface>All Presets</interface> view.<br>"
+            "In this view, pressing <interface>Enter</interface> or clearing the filter box will restore all items.<br>"
+            "Create and/or switch to a different tag if you want to save filtered resources into named sets.</qt>"
+            );
+
+    d->tagSearchBarTooltip_enabled = i18n (
+            "<qt>Entering search terms here will add to, or remove resources from the current tag view."
+            "<para>To filter based on the partial, case insensitive name of a resource:<br>"
+            "<icode>partialname</icode> or <icode>!partialname</icode>.</para>"
+            "<para>In-/exclusion of other tag sets:<br>"
+            "<icode>[Tagname]</icode> or <icode>![Tagname]</icode>.</para>"
+            "<para>Case sensitive and full name matching in-/exclusion:<br>"
+            "<icode>\"ExactMatch\"</icode> or <icode>!\"ExactMatch\"</icode>.</para>"
+            "Pressing <interface>Enter</interface> or clicking the <interface>Save</interface> button will save the changes.</qt>"
+            );
+
+    d->unfilteredView = i18n("All Presets");
+
     d->splitter = new QSplitter(this);
 
     d->model = new KoResourceModel(resourceAdapter, this);
@@ -123,10 +153,10 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     d->view->setItemDelegate( new KoResourceItemDelegate( this ) );
     d->view->setSelectionMode( QAbstractItemView::SingleSelection );
 
-    connect(d->view, SIGNAL(currentResourceChanged( const QModelIndex &)),
-            this, SLOT(activated(const QModelIndex &)));
-    connect (d->view, SIGNAL(contextMenuRequested(const QPoint &)),
-             this, SLOT(contextMenuRequested(const QPoint &)));
+    connect(d->view, SIGNAL(currentResourceChanged(QModelIndex)),
+            this, SLOT(activated(QModelIndex)));
+    connect (d->view, SIGNAL(contextMenuRequested(QPoint)),
+            this, SLOT(contextMenuRequested(QPoint)));
 
     d->previewScroller = new QScrollArea(this);
     d->previewScroller->setWidgetResizable(true);
@@ -140,115 +170,172 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     d->splitter->addWidget(d->previewScroller);
     connect(d->splitter, SIGNAL(splitterMoved(int,int)), SIGNAL(splitterMoved()));
 
-    d->buttonGroup = new QButtonGroup( this );
-    d->buttonGroup->setExclusive( false );
+    d->buttonGroup = new QButtonGroup(this);
+    d->buttonGroup->setExclusive(false);
 
-    d->tagButtonGroup = new QButtonGroup( this );
-    d->tagButtonGroup->setExclusive( false );
-
-    d->tagOpComboBox = new KComboBox( this );
-    d->tagOpComboBox->setInsertPolicy(KComboBox::NoInsert);
-    d->tagOpComboBox->setEnabled( true );
+    d->tagOpComboBox = new KComboBox(this);
+    d->tagOpComboBox->setInsertPolicy(KComboBox::InsertAlphabetically);
+    d->tagOpComboBox->setEnabled(true);
     d->tagOpComboBox->hide();
 
-    addTagToComboBox(i18n("Unfiltered View"),false);
+    d->tagOpComboBox->clear();
+    QStringList tagNames = d->model->tagNamesList();
+    tagNames.sort();
+    tagNames.prepend(d->unfilteredView);
+    d->tagOpComboBox->addItems(tagNames);
 
-    QStringList tagNames = d->model->getTagNamesList();
-    foreach (QString tagName, tagNames) {
-        addTagToComboBox(tagName,false);
-    }
 
     connect(d->tagOpComboBox, SIGNAL(returnPressed(QString)), this, SLOT(tagChooserReturnPressed(QString)));
     connect(d->tagOpComboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(tagChooserIndexChanged(QString)));
 
-    QVBoxLayout* layout = new QVBoxLayout( this );
+    QVBoxLayout* layout = new QVBoxLayout(this);
     QGridLayout* comboLayout = new QGridLayout;
+    QGridLayout* filterBarLayout = new QGridLayout;
 
     layout->setMargin(0);
-    comboLayout->addWidget( d->tagOpComboBox, 0, 0 );
+    comboLayout->addWidget(d->tagOpComboBox, 0, 0);
 
-    QPushButton *tagButton = new QPushButton( this );
+    d->tagToolButton = new QToolButton(this);
+    d->tagToolButton->setIcon(koIcon("list-add"));
+    d->tagToolButton->setToolTip(i18n("<qt>Show the tag box options.</qt>"));
+    d->tagToolButton->setPopupMode(QToolButton::InstantPopup);
+    d->tagToolButton->setEnabled(true);
+    d->tagToolButton->hide();
 
-    tagButton->setText("+");
-    tagButton->setToolTip( "Add Tag" );
-    tagButton->setEnabled( true );
-    d->tagButtonGroup->addButton( tagButton, Private::Button_AddTag );
-    tagButton->hide();
-    comboLayout->addWidget( tagButton, 0, 1 );
+    QMenu *popup = new QMenu(this);
 
-    tagButton = new QPushButton( this );
-    tagButton->setText("-");
-    tagButton->setToolTip( "Remove Tag" );
-    tagButton->setEnabled( true );
-    tagButton->hide();
-    d->tagButtonGroup->addButton( tagButton, Private::Button_RemoveTag );
-    comboLayout->addWidget( tagButton, 0, 2 );
+    KoLineEditAction * addTagAction = new KoLineEditAction(popup);
+    addTagAction->setClickMessage(i18n("New tag"));
+    addTagAction->setIcon(koIcon("document-new"));
+    addTagAction->closeParentOnTrigger(true);
+    popup->addAction(addTagAction);
 
-    connect( d->tagButtonGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotTagButtonClicked( int ) ));
+    connect(addTagAction, SIGNAL(triggered(QString)),
+            this, SLOT(contextCreateNewTag(QString)));
 
-    comboLayout->setSpacing( 0 );
-    comboLayout->setMargin( 0 );
-    comboLayout->setColumnStretch(0,3);
+    d->action_renameTag = new KoLineEditAction(popup);
+    d->action_renameTag->setClickMessage(i18n("Rename tag"));
+    d->action_renameTag->setIcon(koIcon("edit-rename"));
+    d->action_renameTag->closeParentOnTrigger(true);
+    popup->addAction(d->action_renameTag);
+
+    connect(d->action_renameTag, SIGNAL(triggered(QString)), this, SLOT(renameCurrentlySelectedTag(QString)));
+
+    popup->addSeparator();
+
+    d->action_deleteTag = new QAction(popup);
+    d->action_deleteTag->setText(i18n("Delete this tag"));
+    d->action_deleteTag->setIcon(koIcon("edit-delete"));
+    popup->addAction(d->action_deleteTag);
+
+    connect(d->action_deleteTag, SIGNAL(triggered()),
+            this, SLOT(tagBoxEntryDeletionRequested()));
+
+    popup->addSeparator();
+
+    d->action_undeleteTag = new QAction(popup);
+    d->action_undeleteTag->setIcon(koIcon("edit-redo"));
+    d->action_undeleteTag->setVisible(false);
+    popup->addAction(d->action_undeleteTag);
+
+    connect(d->action_undeleteTag, SIGNAL(triggered()), this, SLOT(undeleteLastDeletedTag()));
+
+    d->action_purgeTagUndeleteList = new QAction(popup);
+    d->action_purgeTagUndeleteList->setText(i18n("Clear undelete list"));
+    d->action_purgeTagUndeleteList->setIcon(koIcon("edit-clear"));
+    d->action_purgeTagUndeleteList->setVisible(false);
+    popup->addAction(d->action_purgeTagUndeleteList);
+
+    connect(d->action_purgeTagUndeleteList, SIGNAL(triggered()), this, SLOT(purgeTagUndeleteList()));
+
+    connect(popup, SIGNAL(aboutToShow()), this, SLOT(tagOptionsContextMenuAboutToShow()));
+
+    d->tagToolButton->setMenu(popup);
+
+    comboLayout->addWidget(d->tagToolButton, 0, 1);
+
+    comboLayout->setSpacing(0);
+    comboLayout->setMargin(0);
+    comboLayout->setColumnStretch(0, 3);
 
     layout->addLayout(comboLayout);
-    layout->addWidget( d->splitter );
+    layout->addWidget(d->splitter);
 
     QGridLayout* buttonLayout = new QGridLayout;
 
-    QPushButton *button = new QPushButton( this );
+    QPushButton *button = new QPushButton(this);
     button->setIcon(koIcon("document-open"));
-    button->setToolTip( i18n("Import Resource") );
-    button->setEnabled( true );
-    d->buttonGroup->addButton( button, Button_Import );
-    buttonLayout->addWidget( button, 0, 0 );
+    button->setToolTip(i18nc("@info:tooltip", "Import resource"));
+    button->setEnabled(true);
+    d->buttonGroup->addButton(button, Button_Import);
+    buttonLayout->addWidget(button, 0, 0);
 
-    button = new QPushButton( this );
+    button = new QPushButton(this);
     button->setIcon(koIcon("trash-empty"));
-    button->setToolTip( i18n("Delete Resource") );
-    button->setEnabled( false );
-    d->buttonGroup->addButton( button, Button_Remove );
-    buttonLayout->addWidget( button, 0, 1 );
+    button->setToolTip(i18nc("@info:tooltip", "Delete resource"));
+    button->setEnabled(false);
+    d->buttonGroup->addButton(button, Button_Remove);
+    buttonLayout->addWidget(button, 0, 1);
 
-    button = new QPushButton( this );
+    button = new QPushButton(this);
     button->setIcon(koIcon("download"));
-    button->setToolTip( i18n("Download Resource") );
-    button->setEnabled( true );
+    button->setToolTip(i18nc("@info:tooltip", "Download resource"));
+    button->setEnabled(true);
     button->hide();
-    d->buttonGroup->addButton( button, Button_GhnsDownload );
-    buttonLayout->addWidget( button, 0, 3 );
+    d->buttonGroup->addButton(button, Button_GhnsDownload);
+    buttonLayout->addWidget(button, 0, 3);
 
-    button = new QPushButton( this );
+    button = new QPushButton(this);
     button->setIcon(koIcon("go-up"));
-    button->setToolTip( i18n("Share Resource") );
-    button->setEnabled( false );
+    button->setToolTip(i18n("Share Resource"));
+    button->setEnabled(false);
     button->hide();
     d->buttonGroup->addButton( button, Button_GhnsUpload);
-    buttonLayout->addWidget( button, 0, 4 );
+    buttonLayout->addWidget(button, 0, 4);
 
-    connect( d->buttonGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotButtonClicked( int ) ));
+    connect( d->buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotButtonClicked(int)));
 
-    buttonLayout->setColumnStretch( 0, 1 );
-    buttonLayout->setColumnStretch( 1, 1 );
-    buttonLayout->setColumnStretch( 2, 2 );
-    buttonLayout->setSpacing( 0 );
-    buttonLayout->setMargin( 0 );
-
+    buttonLayout->setColumnStretch(0, 1);
+    buttonLayout->setColumnStretch(1, 1);
+    buttonLayout->setColumnStretch(2, 2);
+    buttonLayout->setSpacing(0);
+    buttonLayout->setMargin(0);
 
     d->tagSearchLineEdit = new KLineEdit(this);
     d->tagSearchLineEdit->setClearButtonShown(true);
-    d->tagSearchLineEdit->setClickMessage(i18n("Switch to/create a Tag to filter"));
-    d->tagSearchLineEdit->setEnabled( false );
+    d->tagSearchLineEdit->setClickMessage(i18n("Enter resource filters here"));
+    d->tagSearchLineEdit->setToolTip(d->tagSearchBarTooltip_disabled);
+    d->tagSearchLineEdit->setEnabled(true);
     d->tagSearchLineEdit->hide();
+
+    filterBarLayout->setSpacing(0);
+    filterBarLayout->setMargin(0);
+    filterBarLayout->setColumnStretch(0, 1);
+    filterBarLayout->addWidget(d->tagSearchLineEdit, 0, 0);
+
+    d->tagSearchSaveButton = new QPushButton(this);
+    d->tagSearchSaveButton->setIcon(koIcon("media-floppy"));
+    d->tagSearchSaveButton->setToolTip(i18n("<qt>Save the currently filtered set as the new members of the current tag.</qt>"));
+    d->tagSearchSaveButton->setEnabled(false);
+    d->tagSearchSaveButton->hide();
+
+    filterBarLayout->addWidget(d->tagSearchSaveButton, 0, 1);
+
+    connect( d->tagSearchSaveButton, SIGNAL(pressed()), this, SLOT(tagSaveButtonPressed()));
 
     connect( d->tagSearchLineEdit, SIGNAL(returnPressed(QString)), this, SLOT(tagSearchLineEditActivated(QString)));
     connect( d->tagSearchLineEdit, SIGNAL(textChanged(QString)), this, SLOT(tagSearchLineEditTextChanged(QString)));
 
-    layout->addWidget( d->tagSearchLineEdit );
-    layout->addLayout( buttonLayout );
+    layout->addLayout(filterBarLayout);
+    layout->addLayout(buttonLayout);
 
-    d->tagCompleter = new QCompleter(getTagNamesList(""),this);
+    connect( d->model, SIGNAL(tagBoxEntryAdded(QString)), this, SLOT(syncTagBoxEntryAddition(QString)));
+    connect( d->model, SIGNAL(tagBoxEntryRemoved(QString)), this, SLOT(syncTagBoxEntryRemoval(QString)));
+
+    d->tagCompleter = new QCompleter(tagNamesList(QString()),this);
     d->tagSearchLineEdit->setCompleter(d->tagCompleter);
 
+    enableContextMenu(false);
     updateButtonState();
     activated(d->model->index(0, 0));
 }
@@ -263,7 +350,7 @@ void KoResourceItemChooser::slotButtonClicked( int button )
     if( button == Button_Import ) {
         QString extensions = d->model->extensions();
         QString filter = extensions.replace(QString(":"), QString(" "));
-        QString filename = KFileDialog::getOpenFileName( KUrl(), filter, 0, i18n( "Choose File to Add" ) );
+        QString filename = KFileDialog::getOpenFileName( KUrl(), filter, 0, i18nc("@title:window", "Choose File to Add"));
 
         d->model->importResourceFile(filename);
     }
@@ -344,6 +431,9 @@ void KoResourceItemChooser::showGetHotNewStuff( bool showDownload, bool showUplo
 
     button = d->buttonGroup->button(Button_GhnsUpload);
     showUpload ? button->show() : button->hide();
+#else
+    Q_UNUSED(showDownload);
+    Q_UNUSED(showUpload);
 #endif
 }
 
@@ -351,9 +441,9 @@ void KoResourceItemChooser::showTaggingBar(bool showSearchBar, bool showOpBar)
 {
     showSearchBar ? d->tagSearchLineEdit->show() : d->tagSearchLineEdit->hide();
     showOpBar ? d->tagOpComboBox->show() : d->tagOpComboBox->hide();
+    enableContextMenu(showOpBar);
 
-    foreach( QAbstractButton * button, d->tagButtonGroup->buttons() )
-        showOpBar ? button->show() : button->hide();
+    showOpBar ? d->tagToolButton->show() : d->tagToolButton->hide();
 }
 
 void KoResourceItemChooser::setRowCount( int rowCount )
@@ -391,7 +481,7 @@ void KoResourceItemChooser::setItemDelegate( QAbstractItemDelegate * delegate )
     d->view->setItemDelegate(delegate);
 }
 
-KoResource *  KoResourceItemChooser::currentResource()
+KoResource *  KoResourceItemChooser::currentResource() const
 {
     QModelIndex index = d->view->currentIndex();
     if (index.isValid()) {
@@ -531,7 +621,7 @@ void KoResourceItemChooser::updatePreview(KoResource *resource)
 
 }
 
-KoResource* KoResourceItemChooser::resourceFromModelIndex(const QModelIndex& index)
+KoResource* KoResourceItemChooser::resourceFromModelIndex(const QModelIndex& index) const
 {
     if(!index.isValid())
         return 0;
@@ -551,14 +641,14 @@ void KoResourceItemChooser::setKnsrcFile(const QString& knsrcFileArg)
     d->knsrcFile = knsrcFileArg;
 }
 
-QSize KoResourceItemChooser::viewSize()
+QSize KoResourceItemChooser::viewSize() const
 {
     return d->view->size();
 }
 
-QStringList KoResourceItemChooser::getTagNamesList(QString lineEditText)
+QStringList KoResourceItemChooser::tagNamesList(const QString &lineEditText) const
 {
-    QStringList tagNamesList = d->model->getTagNamesList();
+    QStringList tagNamesList = d->model->tagNamesList();
 
     if(lineEditText.contains(", ")) {
         QStringList tagsList = lineEditText.split(", ");
@@ -588,156 +678,125 @@ QStringList KoResourceItemChooser::getTagNamesList(QString lineEditText)
     return tagNamesList;
 }
 
-KoResourceItemView *KoResourceItemChooser::itemView()
+KoResourceItemView *KoResourceItemChooser::itemView() const
 {
     return d->view;
 }
 
-QStringList KoResourceItemChooser::getTaggedResourceFileNames(QString lineEditText)
+void KoResourceItemChooser::tagSearchLineEditActivated(const QString& /*lineEditText*/)
 {
-    return QStringList();
-}
-
-void KoResourceItemChooser::tagSearchLineEditActivated(QString lineEditText)
-{
+    if (!d->currentTag.isEmpty()) {
     QList<KoResource*> newResources = d->model->currentlyVisibleResources();
     foreach(KoResource * oldRes, d->originalResources) {
         if (!newResources.contains(oldRes))
-            removeResourceTag(oldRes,d->currentTag);
+            removeResourceTag(oldRes, d->currentTag);
     }
     foreach(KoResource * newRes, newResources) {
         if (!d->originalResources.contains(newRes))
-            addResourceTag(newRes,d->currentTag);
+            addResourceTag(newRes, d->currentTag);
+    }
+    d->model->tagCategoryMembersChanged();
     }
     updateTaggedResourceView();
     d->tagSearchLineEdit->clear();
+    d->tagSearchSaveButton->setEnabled(false);
 }
 
-void KoResourceItemChooser::tagSearchLineEditTextChanged(QString lineEditText)
+void KoResourceItemChooser::tagSearchLineEditTextChanged(const QString& lineEditText)
 {
     d->model->searchTextChanged(lineEditText);
     d->model->updateServer();
 
-    d->tagCompleter = new QCompleter(getTagNamesList(lineEditText),this);
+    d->tagSearchSaveButton->setEnabled(!lineEditText.isEmpty());
+    d->tagCompleter = new QCompleter(tagNamesList(lineEditText),this);
     d->tagSearchLineEdit->setCompleter(d->tagCompleter);
+    if (d->currentTag.isEmpty()) {
+        d->model->enableResourceFiltering(!lineEditText.isEmpty());
+    }
+    else {
+        d->model->enableResourceFiltering(true);
+    }
 }
 
-void KoResourceItemChooser::tagChooserIndexChanged(QString lineEditText)
+void KoResourceItemChooser::tagChooserIndexChanged(const QString& lineEditText)
 {
     int index = d->tagOpComboBox->currentIndex();
 
     if ( index > 0) {
         d->currentTag = lineEditText;
+        d->tagSearchSaveButton->show();
         d->model->enableResourceFiltering(true);
-        d->tagSearchLineEdit->setClickMessage(i18n("Enter resources or [Tags] to in-/!exclude."));
-        d->tagSearchLineEdit->setEnabled(true);
+        d->tagSearchLineEdit->setToolTip(d->tagSearchBarTooltip_enabled);
     }
     else {
         d->model->enableResourceFiltering(false);
-        d->tagSearchLineEdit->setClickMessage(i18n("Create a Tag to enable filtering."));
-        d->tagSearchLineEdit->setEnabled(false);
+        d->tagSearchSaveButton->hide();
+        d->tagSearchLineEdit->setToolTip(d->tagSearchBarTooltip_disabled);
         d->currentTag.clear();
     }
 
-     d->tagSearchLineEdit->clear();
-     updateTaggedResourceView();
+    d->tagSearchLineEdit->clear();
+    updateTaggedResourceView();
 }
 
 void KoResourceItemChooser::updateTaggedResourceView()
 {
-    d->model->setTaggedResourceFileNames(d->model->searchTag(d->currentTag));
+    d->model->setCurrentTag(d->currentTag);
     d->model->updateServer();
     d->originalResources = d->model->currentlyVisibleResources();
 }
 
-
-// TODO: put the newName.compare check in the add index function
-QString KoResourceItemChooser::renameTag(QString oldName, QString newName)
+void KoResourceItemChooser::renameCurrentlySelectedTag(const QString& newName)
 {
+    if (newName.isEmpty()) return;
 
-    if (!newName.compare(oldName)) {
-        d->tagOpComboBox->setEditText(oldName);
-        return oldName;
-    }
-
-    QList<KoResource*> resources = d->model->currentlyVisibleResources();
-    foreach(KoResource * resource, resources) {
-        QStringList tagsList = d->model->getAssignedTagsList(resource);
-
-        foreach(QString tagname, tagsList) {
-            if(!tagname.compare(oldName)) {
-                d->model->deleteTag(resource, oldName);
+    int index = d->tagOpComboBox->currentIndex();
+    if (!d->model->tagNamesList().contains(newName) && index > 0) {
+        QString oldName = d->currentTag;
+        QList<KoResource*> resources = d->model->currentlyVisibleResources();
+            foreach(KoResource * resource, resources) {
+                removeResourceTag(resource, oldName);
+                addResourceTag(resource,newName);
             }
-            if(tagname.compare(newName)) {
-                d->model->addTag(resource, newName);
-            }
-        }
+            contextCreateNewTag(newName);
+            d->model->tagCategoryRemoved(oldName);
+            d->model->tagCategoryAdded(newName);
     }
-    return oldName;
 }
 
-void KoResourceItemChooser::tagChooserReturnPressed(QString lineEditText)
+void KoResourceItemChooser::tagChooserReturnPressed(const QString& lineEditText)
 {
     int index = d->tagOpComboBox->currentIndex();
     QString oldTagname = d->tagOpComboBox->itemText(index);
-    QString newTagName = renameTag(oldTagname, lineEditText);
-    d->tagOpComboBox->setItemText(index,newTagName);
-    d->currentTag = newTagName;
-
-    d->tagCompleter = new QCompleter(getTagNamesList(lineEditText),this);
+    renameCurrentlySelectedTag(lineEditText);
+    d->tagCompleter = new QCompleter(tagNamesList(lineEditText),this);
     d->tagOpComboBox->setCompleter(d->tagCompleter);
 
-}
-
-void KoResourceItemChooser::addTagToComboBox(QString tagName, bool followEntry)
-{
-    int pos = d->tagOpComboBox->findText(tagName);
-    if (pos == -1) {
-        d->tagOpComboBox->addItem(tagName);
-        if (followEntry)
-        d->tagOpComboBox->setCurrentIndex(d->tagOpComboBox->findText(tagName));
-    }
 }
 
 void KoResourceItemChooser::removeTagFromComboBox()
 {
     int index = d->tagOpComboBox->currentIndex();
     if (index > 0) {
-        if (QMessageBox::Yes == QMessageBox::question(this, i18n("Tag deletion"),
-                    i18n("Really delete this Tag?"), QMessageBox::Yes|QMessageBox::No)) {
+        QString tag = d->currentTag;
 
             QList<KoResource*> resources = d->model->currentlyVisibleResources();
             foreach(KoResource * resource, resources) {
-                removeResourceTag(resource,d->currentTag);
+                removeResourceTag(resource, tag);
             }
-            d->tagOpComboBox->removeItem(index);
-        }
+            d->model->tagCategoryRemoved(tag);
+            d->lastDeletedTag = TaggedResourceSet(tag,resources);
     }
 }
 
-void KoResourceItemChooser::slotTagButtonClicked( int button )
+void KoResourceItemChooser::addResourceTag(KoResource * resource, const QString& tagName)
 {
-    if( button == Private::Button_AddTag ) {
-        bool ok;
-        QString tagName = QInputDialog::getText(this,i18n("Enter name for new Tag"),i18n("Tag name:"),QLineEdit::Normal,"",&ok);
-        if (ok) {
-            addTagToComboBox(tagName,true);
-        }
-    }
-    else if( button == Private::Button_RemoveTag ) {
-
-        removeTagFromComboBox();
-    }
-}
-
-void KoResourceItemChooser::addResourceTag(KoResource * resource, QString tagName)
-{
-    QStringList tagsList = d->model->getAssignedTagsList(resource);
+    QStringList tagsList = d->model->assignedTagsList(resource);
     if (tagsList.isEmpty()) {
         d->model->addTag(resource, tagName);
     }
     else {
-        foreach(QString tag, tagsList) {
+        foreach(const QString &tag, tagsList) {
             if(tag.compare(tagName)) {
                 d->model->addTag(resource, tagName);
             }
@@ -745,100 +804,176 @@ void KoResourceItemChooser::addResourceTag(KoResource * resource, QString tagNam
     }
 }
 
-void KoResourceItemChooser::removeResourceTag(KoResource * resource, QString tagName)
+void KoResourceItemChooser::removeResourceTag(KoResource * resource, const QString& tagName)
 {
-    QStringList tagsList = d->model->getAssignedTagsList(resource);
+    QStringList tagsList = d->model->assignedTagsList(resource);
 
-    foreach(QString oldName, tagsList) {
+    foreach(const QString &oldName, tagsList) {
         if(!oldName.compare(tagName)) {
             d->model->deleteTag(resource, oldName);
         }
     }
 }
 
-void KoResourceItemChooser::contextMenuRequested ( const QPoint& pos )
+void KoResourceItemChooser::contextMenuRequested (const QPoint& pos)
 {
-
-
     KoResource * resource = currentResource();
     if (!resource || !d->showContextMenu)
         return;
 
-    QMenu menu;
-    QImage image = resource->image();
-    QIcon icon(QPixmap::fromImage(image));
-    QAction * label = new QAction(resource->name(),this);
-    label->setIcon(icon);
+    KoResourceItemChooserContextMenu menu(
+        resource,
+        d->model->assignedTagsList(resource),
+        d->currentTag,
+        availableTags());
 
-    menu.addAction(label);
+    connect(&menu, SIGNAL(resourceTagAdditionRequested(KoResource*,QString)),
+            this, SLOT(contextAddTagToResource(KoResource*,QString)));
 
-    QMenu * removableTagsMenu;
-    QMenu * assignableTagsMenu;
+    connect(&menu, SIGNAL(resourceTagRemovalRequested(KoResource*,QString)),
+            this, SLOT(contextRemoveTagFromResource(KoResource*,QString)));
 
-    QStringList removables = d->model->getAssignedTagsList(resource);
-    QStringList assignables = d->model->getTagNamesList();
+    connect(&menu, SIGNAL(resourceAssignmentToNewTagRequested(KoResource*,QString)),
+            this, SLOT(contextCreateNewTag(KoResource*,QString)));
 
-    assignableTagsMenu = menu.addMenu(koIcon("list-add"),i18n("Assign to Tag:"));
-
-    if (!removables.isEmpty()) {
-        menu.addSeparator();
-        removableTagsMenu = menu.addMenu(koIcon("list-remove"),i18n("Remove from Tag:"));
-    }
-
-    foreach (QString tag, removables) {
-        assignables.removeAll(tag);
-        ContextMenuTagAction * removeTagAction = new ContextMenuTagAction(resource,tag,this);
-
-        connect(removeTagAction, SIGNAL(triggered(KoResource *,QString)),
-                this, SLOT(contextRemoveTagFromResource(KoResource *, QString)));
-        removableTagsMenu->addAction(removeTagAction);
-    }
-
-    foreach (QString tag, assignables) {
-        ContextMenuTagAction * addTagAction = new ContextMenuTagAction(resource,tag,this);
-
-        connect(addTagAction, SIGNAL(triggered(KoResource *,QString)),
-                this, SLOT(contextAddTagToResource(KoResource*,QString)));
-        assignableTagsMenu->addAction(addTagAction);
-    }
-    assignableTagsMenu->addSeparator();
-
-    ContextMenuTagAction * addTagAction = new ContextMenuTagAction(resource,i18n("New Tag."),this);
-    addTagAction->setIcon(koIcon("document-new"));
-    connect(addTagAction, SIGNAL(triggered(KoResource *,QString)),
-                this, SLOT(contextCreateNewResourceTag(KoResource*,QString)));
-    assignableTagsMenu->addAction(addTagAction);
-
-    if (!menu.isEmpty()) {
-        menu.exec(pos);
-    }
+    menu.exec(pos);
 }
 
-void KoResourceItemChooser::contextAddTagToResource(KoResource* resource, QString tag )
+void KoResourceItemChooser::contextAddTagToResource(KoResource* resource, const QString& tag)
 {
-    addResourceTag(resource,tag);
+    addResourceTag(resource, tag);
+    d->model->tagCategoryMembersChanged();
     updateTaggedResourceView();
 }
 
-void KoResourceItemChooser::contextRemoveTagFromResource(KoResource* resource, QString tag )
+void KoResourceItemChooser::contextRemoveTagFromResource(KoResource* resource, const QString& tag)
 {
     removeResourceTag(resource, tag);
+    d->model->tagCategoryMembersChanged();
     updateTaggedResourceView();
 }
 
-void KoResourceItemChooser::contextCreateNewResourceTag(KoResource* resource , QString tag)
+void KoResourceItemChooser::contextCreateNewTag(const QString& tag)
 {
-     bool ok;
-        QString tagName = QInputDialog::getText(this,i18n("Enter name for new Tag"),i18n("Tag name:"),QLineEdit::Normal,"",&ok);
-        if (ok) {
-            addTagToComboBox(tagName,false);
-            addResourceTag(resource,tagName);
+        if (!tag.isEmpty()) {
+        d->model->tagCategoryAdded(tag);
+        d->tagOpComboBox->setCurrentIndex(d->tagOpComboBox->findText(tag));
+    }
+}
+
+void KoResourceItemChooser::contextCreateNewTag(KoResource* resource , const QString& tag)
+{
+    if (!tag.isEmpty()) {
+        d->model->tagCategoryAdded(tag);
+        if (resource) {
+        addResourceTag(resource, tag);
         }
+    }
 }
 
 void KoResourceItemChooser::enableContextMenu(bool enable)
 {
     d->showContextMenu = enable;
 }
+
+void KoResourceItemChooser::syncTagBoxEntryRemoval(const QString& tag)
+{
+    int pos = d->tagOpComboBox->findText(tag);
+    if (pos >= 0) {
+        d->tagOpComboBox->removeItem(pos);
+    }
+}
+
+void KoResourceItemChooser::syncTagBoxEntryAddition(const QString& tag)
+{
+    QStringList tags = availableTags();
+    tags.append(tag);
+    tags.sort();
+    tags.prepend(d->unfilteredView);
+    int index = tags.indexOf(tag);
+    if (d->tagOpComboBox->findText(tag) == -1) {
+        d->tagOpComboBox->insertItem(index, tag);
+    }
+}
+
+void KoResourceItemChooser::tagSaveButtonPressed()
+{
+    tagSearchLineEditActivated(QString());
+}
+
+QStringList KoResourceItemChooser::availableTags() const
+{
+    const int count = d->tagOpComboBox->count();
+    QStringList out;
+//      Skip the first item of the combo box since it is the `All Presets' view
+//      and thus is not a real tag.
+    for (int i = 1; i < count; ++i) {
+        out.append(d->tagOpComboBox->itemText(i));
+    }
+
+    return out;
+}
+
+void KoResourceItemChooser::tagBoxEntryDeletionRequested()
+{
+    removeTagFromComboBox();
+}
+
+void KoResourceItemChooser::tagOptionsContextMenuAboutToShow()
+{
+    int index = d->tagOpComboBox->currentIndex();
+
+    if (index > 0) {
+        d->action_renameTag->setVisible(true);
+        d->action_deleteTag->setVisible(true);
+    }
+    else {
+        d->action_renameTag->setVisible(false);
+        d->action_deleteTag->setVisible(false);
+    }
+
+    QString deletedTagName = d->lastDeletedTag.tagName;
+    d->action_undeleteTag->setText(i18n("Undelete") +" "+ deletedTagName);
+    d->action_undeleteTag->setVisible(!deletedTagName.isEmpty());
+    d->action_purgeTagUndeleteList->setVisible(!deletedTagName.isEmpty());
+}
+
+void KoResourceItemChooser::undeleteLastDeletedTag()
+{
+    QString tagName = d->lastDeletedTag.tagName;
+    QStringList allTags = availableTags();
+
+    if (allTags.contains(tagName)) {
+        bool ok;
+        tagName = QInputDialog::getText(this, i18n("Unable to undelete tag"),
+                i18n("<qt>The tag you are trying to undelete already exists in tag list.<br>Please enter a new, unique name for it.</qt>"), QLineEdit::Normal,
+                tagName, &ok);
+
+        if (!ok || allTags.contains(tagName) || tagName.isEmpty()) {
+            QMessageBox msgBox;
+            msgBox.setIcon(QMessageBox::Warning);
+            msgBox.setText(i18n("Tag was not undeleted."));
+            msgBox.exec();
+            return;
+        }
+    }
+
+    QList<KoResource *> serverResources = d->model->serverResources();
+
+    foreach(KoResource * resource, d->lastDeletedTag.resources) {
+        if (serverResources.contains(resource)) {
+            addResourceTag(resource,tagName);
+        }
+    }
+    d->model->tagCategoryAdded(tagName);
+    d->tagOpComboBox->setCurrentIndex(d->tagOpComboBox->findText(tagName));
+    d->lastDeletedTag = TaggedResourceSet();
+}
+
+void KoResourceItemChooser::purgeTagUndeleteList()
+{
+    d->lastDeletedTag = TaggedResourceSet();
+}
+
 
 #include <KoResourceItemChooser.moc>

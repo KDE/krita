@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>KisEditProfilesDialog</class>
+ <widget class="QWidget" name="KisEditProfilesDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>667</width>
+    <height>682</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="1">
+    <widget class="KPushButton" name="removeButton">
+     <property name="text">
+      <string>Remove</string>
+     </property>
+     <property name="icon">
+      <iconset theme="list-remove">
+       <normaloff/>
+      </iconset>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3">
+    <widget class="KPushButton" name="renameButton">
+     <property name="text">
+      <string>Rename</string>
+     </property>
+     <property name="icon">
+      <iconset theme="edit-rename">
+       <normaloff/>
+      </iconset>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="KPushButton" name="addButton">
+     <property name="text">
+      <string>Add</string>
+     </property>
+     <property name="icon">
+      <iconset theme="list-add">
+       <normaloff/>
+      </iconset>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="KPushButton" name="duplicateButton">
+     <property name="text">
+      <string>Duplicate</string>
+     </property>
+     <property name="icon">
+      <iconset theme="edit-copy">
+       <normaloff/>
+      </iconset>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="4">
+    <widget class="QListView" name="profileList"/>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KPushButton</class>
+   <extends>QPushButton</extends>
+   <header>kpushbutton.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

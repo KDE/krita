@@ -26,7 +26,7 @@
 
 using namespace KoProperty;
 
-static const char *POINTEDIT_MASK = "%1, %2";
+static const char POINTEDIT_MASK[] = "%1, %2";
 
 QString PointDelegate::displayText( const QVariant& value ) const
 {

@@ -72,3 +72,5 @@ Comment[zh_TW]=文字編輯外掛程式定義
 Type=int
 [PropertyDef::X-KoText-PluginVersion]
 Type=int
+[PropertyDef::X-KDE-PluginInfo-Name]
+Type=QString

@@ -38,8 +38,6 @@
 #include <KoResourceModel.h>
 #include <KoResourceServerAdapter.h>
 
-#include <KoResourceFiltering.h>
-
 #include "kis_paintop_settings.h"
 #include "kis_paintop_preset.h"
 #include "kis_resource_server_provider.h"
@@ -142,18 +140,13 @@ KisPresetChooser::~KisPresetChooser()
 {
 }
 
-void KisPresetChooser::setFilteredNames(const QStringList filteredNames)
+void KisPresetChooser::filterPaletteFavorites(const QStringList& filteredNames)
 {
-    m_adapter->setTaggedResourceFileNames(filteredNames);
+    m_adapter->setFilterIncludes(filteredNames);
     m_adapter->enableResourceFiltering(true);
     m_adapter->updateServer();
 
     updateViewSettings();
-}
-
-QStringList KisPresetChooser::getTagNamesList(const QString& searchString)
-{
-    return m_chooser->getTagNamesList(searchString);
 }
 
 void KisPresetChooser::showButtons(bool show)

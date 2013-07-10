@@ -81,7 +81,7 @@ KisSelectionBasedLayer::~KisSelectionBasedLayer()
 void KisSelectionBasedLayer::initSelection()
 {
     m_d->selection = new KisSelection();
-    m_d->selection->getOrCreatePixelSelection()->select(image()->bounds());
+    m_d->selection->pixelSelection()->select(image()->bounds());
     m_d->selection->setParentNode(this);
     m_d->selection->updateProjection();
 }
@@ -104,7 +104,7 @@ KisPaintDeviceSP KisSelectionBasedLayer::original() const
 }
 KisPaintDeviceSP KisSelectionBasedLayer::paintDevice() const
 {
-    return m_d->selection->getOrCreatePixelSelection();
+    return m_d->selection->pixelSelection();
 }
 
 
@@ -131,7 +131,7 @@ void KisSelectionBasedLayer::copyOriginalToProjection(const KisPaintDeviceSP ori
              */
             tempSelection = new KisSelection(*tempSelection);
 
-            KisPainter gc2(tempSelection->getOrCreatePixelSelection());
+            KisPainter gc2(tempSelection->pixelSelection());
             gc2.setOpacity(temporaryOpacity());
             gc2.setCompositeOp(temporaryCompositeOp());
             gc2.bitBlt(rect.topLeft(), temporaryTarget(), rect);

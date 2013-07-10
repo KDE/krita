@@ -9,6 +9,7 @@ add_subdirectory( cursors )
 add_subdirectory( workspaces )
 add_subdirectory( themes )
 add_subdirectory( predefined_image_sizes )
+add_subdirectory( input )
 ########### install files ###############
 
 install( FILES  

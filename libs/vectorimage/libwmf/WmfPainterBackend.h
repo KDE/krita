@@ -20,7 +20,7 @@
 #ifndef _WMFPAINTERBACKEND_H_
 #define _WMFPAINTERPACKEND_H_
 
-#include "vectorimage_export.h"
+#include "kovectorimage_export.h"
 #include "WmfAbstractBackend.h"
 
 #include <QPainter>
@@ -55,7 +55,7 @@ class WmfDeviceContext;
  *
  */
 
-class VECTORIMAGE_EXPORT WmfPainterBackend : public WmfAbstractBackend
+class KOVECTORIMAGE_EXPORT WmfPainterBackend : public WmfAbstractBackend
 {
 public:
     WmfPainterBackend(QPainter *painter, const QSizeF &outputSize);

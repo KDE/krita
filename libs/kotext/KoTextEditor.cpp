@@ -696,10 +696,10 @@ void KoTextEditor::deleteChar(bool previous, KUndo2Command *parent)
 
     // Find out if we should track changes or not
     KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
-    bool trackChanges = false;
-    if (changeTracker && changeTracker->recordChanges()) {
-        trackChanges = true;
-    }
+//    bool trackChanges = false;
+//    if (changeTracker && changeTracker->recordChanges()) {
+//        trackChanges = true;
+//    }
 
     if (previous) {
         if (d->caret.block().blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {

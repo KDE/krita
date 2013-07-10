@@ -1,6 +1,6 @@
 #add_subdirectory(tests)
 
-include_directories( ${OPENEXR_INCLUDE_DIR} ${KRITA_INCLUDES} )
+include_directories( ${OPENEXR_INCLUDE_DIR} )
 
 add_definitions(${OPENEXR_DEFINITIONS})
 

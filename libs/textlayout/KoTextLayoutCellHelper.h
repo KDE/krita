@@ -25,7 +25,7 @@
 #ifndef KOTEXTLAYOUTCELLHELPER_H
 #define KOTEXTLAYOUTCELLHELPER_H
 
-#include "textlayout_export.h"
+#include "kotextlayout_export.h"
 
 #include <KoBorder.h>
 #include <KoTableCellStyle.h>
@@ -34,7 +34,7 @@
 
 class QPainter;
 
-class TEXTLAYOUT_EXPORT KoTextLayoutCellHelper : public QObject
+class KOTEXTLAYOUT_EXPORT KoTextLayoutCellHelper : public QObject
 {
     Q_OBJECT
 public:

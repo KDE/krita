@@ -111,7 +111,7 @@ KoResourceLoaderThread::KoResourceLoaderThread(KoResourceServerBase * server)
     : QThread()
     , m_server(server)
 {
-    m_fileNames = m_server->getFileNames();
+    m_fileNames = m_server->fileNames();
     QStringList fileNames = m_server->blackListedFiles();
 
     if (!fileNames.isEmpty()) {

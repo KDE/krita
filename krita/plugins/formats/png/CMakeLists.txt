@@ -1,6 +1,6 @@
 add_subdirectory(tests)
 
-include_directories( ${KRITA_INCLUDES} ${CMAKE_SOURCE_DIR}/krita/image/metadata )
+include_directories( ${CMAKE_SOURCE_DIR}/krita/image/metadata )
 
 set(kritapngimport_PART_SRCS
     kis_png_import.cc

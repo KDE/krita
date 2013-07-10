@@ -132,7 +132,7 @@ public:
         KisFixedPoint dst_c = l_to_c(dst_l);
         KisFixedPoint dst_c_in_src = dstToSrc(dst_c.toFloat(), line);
 
-        KisFixedPoint next_c_in_src = (dst_c_in_src - 0.5).toIntCeil() + 0.5;
+        KisFixedPoint next_c_in_src = (dst_c_in_src - qreal(0.5)).toIntCeil() + qreal(0.5);
 
         BlendSpan span;
         span.offset = (next_c_in_src - dst_c_in_src) * buffer->weightsPositionScale();
@@ -298,11 +298,11 @@ private:
     }
 
     inline KisFixedPoint l_to_c(KisFixedPoint pixel_l) const {
-        return pixel_l + 0.5;
+        return pixel_l + qreal(0.5);
     }
 
     inline KisFixedPoint c_to_l(KisFixedPoint pixel_c) const {
-        return pixel_c - 0.5;
+        return pixel_c - qreal(0.5);
     }
 
     inline qreal srcToDst(qreal src, int line) const {

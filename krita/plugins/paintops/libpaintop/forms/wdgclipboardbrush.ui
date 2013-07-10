@@ -105,9 +105,6 @@
      </item>
      <item>
       <widget class="QLineEdit" name="nameEdit">
-       <property name="placeholderText">
-        <string>Enter name of brush</string>
-       </property>
       </widget>
      </item>
      <item>

@@ -90,6 +90,7 @@ public:
 private Q_SLOTS:
     void setMirrorAxis();
     void slotToolChanged();
+    void profileChanged();
 
 private:
     class Private;

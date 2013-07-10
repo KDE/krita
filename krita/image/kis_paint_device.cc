@@ -380,6 +380,7 @@ QRect KisPaintDevice::extent() const
     extent = QRect(x, y, w, h);
 
     quint8 defaultOpacity = colorSpace()->opacityU8(defaultPixel());
+
     if (defaultOpacity != OPACITY_TRANSPARENT_U8)
         extent |= m_d->defaultBounds->bounds();
 

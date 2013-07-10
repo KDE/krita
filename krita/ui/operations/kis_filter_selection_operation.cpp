@@ -43,11 +43,10 @@ void KisFilterSelectionOperation::runFilter(KisSelectionFilter* filter, KisView2
         KisSelectionFilter *m_filter;
 
         KUndo2Command* paint() {
-            KisSelectionTransaction transaction("", m_image->undoAdapter(), m_sel);
-            KisPixelSelectionSP mergedSelection = m_sel->getOrCreatePixelSelection();
+            KisPixelSelectionSP mergedSelection = m_sel->pixelSelection();
+            KisTransaction transaction("", mergedSelection);
             QRect processingRect = m_filter->changeRect(mergedSelection->selectedExactRect());
             m_filter->process(mergedSelection, processingRect);
-            m_sel->setDirty(processingRect); // check if really needed
             return transaction.endAndTake();
         }
     };

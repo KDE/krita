@@ -62,8 +62,4 @@ void KisNodeMoveCommand2::moveTo(const QPoint& pos)
      */
     m_node->setX(pos.x());
     m_node->setY(pos.y());
-
-    if(m_undoAdapter && m_node->inherits("KisSelectionMask")) {
-        m_undoAdapter->emitSelectionChanged();
-    }
 }

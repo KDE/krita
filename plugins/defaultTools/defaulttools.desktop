@@ -41,6 +41,6 @@ Name[zh_TW]=預設 Flake 工具
 X-KDE-ServiceTypes=Calligra/Tool
 Type=Service
 X-KDE-PluginInfo-Name=defaulttools
-X-KDE-Library=defaulttools
+X-KDE-Library=calligra_tool_defaults
 X-Flake-MinVersion=28
 X-Flake-PluginVersion=28

@@ -28,10 +28,10 @@ kde4_add_ui_files( textvariables_SRCS
     FixedDateFormat.ui
 )
 
-kde4_add_plugin(textvariables ${textvariables_SRCS})
+kde4_add_plugin(calligra_textinlineobject_variables ${textvariables_SRCS})
 
-target_link_libraries(textvariables kotext textlayout)
+target_link_libraries(calligra_textinlineobject_variables kotext kotextlayout)
 
-install(TARGETS textvariables DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_textinlineobject_variables DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES textvariables.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

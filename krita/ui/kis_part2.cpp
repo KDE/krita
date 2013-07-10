@@ -104,18 +104,6 @@ void KisPart2::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
     }
 
     KoPart::showStartUpWidget(parent, alwaysShow);
-
-    KisConfig cfg;
-    if (cfg.firstRun()) {
-        QStringList qtversion = QString(qVersion()).split('.');
-        if (qtversion[0] == "4" && qtversion[1] <= "6" && qtversion[2].toInt() < 3) {
-            m_errorMessage = i18n("Krita needs at least Qt 4.6.3 to work correctly. Your Qt version is %1. If you have a graphics tablet it will not work correctly!", qVersion());
-            m_dieOnError = false;
-            QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
-        }
-
-        cfg.setFirstRun(false);
-    }
 }
 
 QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QWidget *parent)

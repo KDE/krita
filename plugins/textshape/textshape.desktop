@@ -45,6 +45,6 @@ Name[zh_TW]=文字元件
 X-KDE-PluginInfo-Name=textshape
 X-KDE-ServiceTypes=Calligra/Flake
 Type=Service
-X-KDE-Library=textshape
+X-KDE-Library=calligra_shape_text
 X-Flake-MinVersion=28
 X-Flake-PluginVersion=28

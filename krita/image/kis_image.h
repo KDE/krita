@@ -54,6 +54,7 @@ class KoColorProfile;
 class KoUpdater;
 class KisPerspectiveGrid;
 class KisLayerComposition;
+class KisSpontaneousJob;
 
 namespace KisMetaData
 {
@@ -88,6 +89,7 @@ public: // KisNodeGraphListener implementation
     void nodeHasBeenAdded(KisNode *parent, int index);
     void aboutToRemoveANode(KisNode *parent, int index);
     void nodeChanged(KisNode * node);
+    void notifySelectionChanged();
     void requestProjectionUpdate(KisNode *node, const QRect& rect);
 
 public: // KisProjectionUpdateListener implementation
@@ -678,6 +680,15 @@ public slots:
     void refreshGraph(KisNodeSP root = 0);
     void refreshGraph(KisNodeSP root, const QRect& rc, const QRect &cropRect);
     void initialRefreshGraph();
+
+    /**
+     * Adds a spontaneous job to the updates queue.
+     *
+     * A spontaneous job may do some trivial tasks in the background,
+     * like updating the outline of selection or purging unused tiles
+     * from the existing paint devices.
+     */
+    void addSpontaneousJob(KisSpontaneousJob *spontaneousJob);
 
     /**
      * This method is called by the UI (*not* by the creator of the

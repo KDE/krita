@@ -85,7 +85,7 @@ KisPaintDeviceSP KisMaskManager::activeDevice()
 
     KisSelectionSP selection;
     return m_activeMask && (selection = m_activeMask->selection()) ?
-           selection->getOrCreatePixelSelection() : 0;
+           selection->pixelSelection() : 0;
 }
 
 void KisMaskManager::activateMask(KisMaskSP mask)

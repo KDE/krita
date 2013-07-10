@@ -146,12 +146,12 @@ void KoSemanticStylesheet::format(hKoRdfSemanticItem obj, KoTextEditor *editor, 
     for (QMap<QString, QString>::iterator mi = m.begin(); mi != m.end(); ++mi) {
         QString k = mi.key();
         QString v = mi.value();
-        data = data.replace(k, v);
+        data.replace(k, v);
     }
     // make sure there is something in the replacement other than commas and spaces
     QString tmpstring = data;
-    tmpstring = tmpstring.remove(' ');
-    tmpstring = tmpstring.remove(',');
+    tmpstring.remove(' ');
+    tmpstring.remove(',');
     if (!tmpstring.size()) {
         kDebug(30015) << "stylesheet results in empty data, using name() instead";
         data = name();

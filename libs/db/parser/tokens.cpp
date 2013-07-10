@@ -1,5 +1,5 @@
 /* WARNING! All changes made in this file will be lost! Run 'generate_parser_code.sh' instead. */
-static const char* _tokens[] = {
+static const char* const _tokens[] = {
     "AND",
     "AS",
     "ASC",

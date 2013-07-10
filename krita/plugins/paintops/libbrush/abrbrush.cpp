@@ -113,7 +113,7 @@ static qint32 rle_decode(QDataStream & abr, char *buffer, qint32 height)
 static QString abr_v1_brush_name (const QString filename, qint32 id)
 {
     QString result = filename;
-    int pos = filename.lastIndexOf(".");
+    int pos = filename.lastIndexOf('.');
     result.remove(pos,4);
     QTextStream(&result) << "_" << id;
     return result;

@@ -116,10 +116,10 @@ void ArtisticColorSelectorDock::setCanvas(KoCanvasBase* canvas)
     m_canvas = canvas;
     m_selectorUI->colorSelector->setFgColor(m_canvas->resourceManager()->foregroundColor().toQColor());
     m_selectorUI->colorSelector->setBgColor(m_canvas->resourceManager()->backgroundColor().toQColor());
-    connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)), SLOT(slotResourceChanged(int, const QVariant&)));
+    connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)), SLOT(slotCanvasResourceChanged(int, const QVariant&)));
 }
 
-void ArtisticColorSelectorDock::slotResourceChanged(int key, const QVariant& value)
+void ArtisticColorSelectorDock::slotCanvasResourceChanged(int key, const QVariant& value)
 {
     if(key == KoCanvasResourceManager::ForegroundColor)
         m_selectorUI->colorSelector->setFgColor(value.value<KoColor>().toQColor());

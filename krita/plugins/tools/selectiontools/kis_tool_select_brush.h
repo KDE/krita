@@ -51,7 +51,7 @@ public slots:
     void slotSetBrushSize(int size);
 
 protected:
-    void applyToSelection(const QPainterPath& selection);
+    void applyToSelection(QPainterPath selection);
     void resetSelection();
     void addPoint(const QPointF& point);
     void addGap(const QPointF& start, const QPointF& end);

@@ -19,7 +19,7 @@
 #define SVMPAINTERBACKEND_H
 
 #include "SvmAbstractBackend.h"
-#include "vectorimage_export.h"
+#include "kovectorimage_export.h"
 
 #include <QSize>
 #include <QTransform>
@@ -48,7 +48,7 @@ namespace Libsvm
 /**
     Painter output strategy for SVM Parser
 */
-class VECTORIMAGE_EXPORT SvmPainterBackend : public SvmAbstractBackend
+class KOVECTORIMAGE_EXPORT SvmPainterBackend : public SvmAbstractBackend
 {
 public:
     SvmPainterBackend(QPainter *painter, const QSize &outputSize);

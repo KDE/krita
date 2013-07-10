@@ -213,6 +213,14 @@ void KisShortcutMatcher::suppressAllActions(bool value)
     m_d->suppressAllActions = value;
 }
 
+void KisShortcutMatcher::clearShortcuts()
+{
+    qDeleteAll(m_d->singleActionShortcuts);
+    m_d->singleActionShortcuts.clear();
+    qDeleteAll(m_d->strokeShortcuts);
+    m_d->strokeShortcuts.clear();
+}
+
 bool KisShortcutMatcher::tryRunWheelShortcut(KisSingleActionShortcut::WheelAction wheelAction, QWheelEvent *event)
 {
     return tryRunSingleActionShortcutImpl(wheelAction, event, m_d->keys);

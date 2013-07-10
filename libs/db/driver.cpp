@@ -37,7 +37,7 @@ using namespace KexiDB;
 
 /*! @internal Used in Driver::defaultSQLTypeName(int)
  when we do not have Driver instance yet, or when we cannot get one */
-static const char* KexiDB_defaultSQLTypeNames[] = {
+static const char* const KexiDB_defaultSQLTypeNames[] = {
     "InvalidType",
     "Byte",
     "ShortInteger",
@@ -259,7 +259,7 @@ static QString valueToSQLInternal(const KexiDB::Driver *driver, uint ftype, cons
         if (v.type() == QVariant::String) {
             //workaround for values stored as string that should be casted to floating-point
             QString s(v.toString());
-            return s.replace(',', ".");
+            return s.replace(',', '.');
         }
         return v.toString();
     }

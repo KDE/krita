@@ -43,7 +43,7 @@ private slots:
     void selectionChanged();
     void addWidgetForShape( KoShape * shape );
     void shapePropertyChanged();
-    virtual void resourceChanged( int key, const QVariant & res );
+    virtual void canvasResourceChanged( int key, const QVariant & res );
 private:
     class Private;
     Private * const d;

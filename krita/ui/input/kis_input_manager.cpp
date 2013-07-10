@@ -451,14 +451,14 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         break;
     }
     case QEvent::Enter:
+        //Make sure the input actions know we are active.
+        KisAbstractInputAction::setInputManager(this);
         //Ensure we have focus so we get key events.
         d->canvas->canvasWidget()->setFocus();
         break;
     case QEvent::FocusIn:
         //Clear all state so we don't have half-matched shortcuts dangling around.
         d->matcher.reset();
-        //Make sure the input actions know we are active.
-        KisAbstractInputAction::setInputManager(this);
         break;
     case QEvent::TabletPress:
     case QEvent::TabletMove:

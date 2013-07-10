@@ -121,7 +121,7 @@ PaletteDockerDock::PaletteDockerDock( ) : QDockWidget(i18n("Palette"))
     m_wdgPaletteDock->paletteView->setAutoFillBackground(true);
     m_wdgPaletteDock->paletteView->setPalette(pal);
  
-    connect(m_wdgPaletteDock->paletteView, SIGNAL(activated(QModelIndex)), this, SLOT(entrySelected(QModelIndex)));
+    connect(m_wdgPaletteDock->paletteView, SIGNAL(clicked(QModelIndex)), this, SLOT(entrySelected(QModelIndex)));
 
     KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
     m_serverAdapter = new KoResourceServerAdapter<KoColorSet>(rServer, this);

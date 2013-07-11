@@ -9,6 +9,7 @@ kis_burnmidtones_adjustment.cpp
 kis_burnshadows_adjustment.cpp
 kis_color_balance_midtones_adjustment.cpp
 kis_color_balance_shadows_adjustment.cpp
+kis_color_balance_highlights_adjustment.cpp
 )
 
 kde4_add_plugin( krita_colorspaces_extensions ${extensions_plugin_PART_SRCS} )

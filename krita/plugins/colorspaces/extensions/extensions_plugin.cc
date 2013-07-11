@@ -30,6 +30,8 @@
 #include "kis_burnmidtones_adjustment.h"
 #include "kis_burnhighlights_adjustment.h"
 #include "kis_burnshadows_adjustment.h"
+#include "kis_color_balance_midtones_adjustment.h"
+#include "kis_color_balance_shadows_adjustment.h"
 
 
 K_PLUGIN_FACTORY(ExtensionsPluginFactory, registerPlugin<ExtensionsPlugin>();)
@@ -47,6 +49,9 @@ ExtensionsPlugin::ExtensionsPlugin(QObject *parent, const QVariantList &)
     KoColorTransformationFactoryRegistry::addColorTransformationFactory(new KisBurnMidtonesAdjustmentFactory);
     KoColorTransformationFactoryRegistry::addColorTransformationFactory(new KisBurnHighlightsAdjustmentFactory);
     KoColorTransformationFactoryRegistry::addColorTransformationFactory(new KisBurnShadowsAdjustmentFactory);
+
+    KoColorTransformationFactoryRegistry::addColorTransformationFactory(new KisColorBalanceMidtonesAdjustmentFactory);
+    KoColorTransformationFactoryRegistry::addColorTransformationFactory(new KisColorBalanceShadowsAdjustmentFactory);
 }
 
 ExtensionsPlugin::~ExtensionsPlugin()

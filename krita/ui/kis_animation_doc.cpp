@@ -35,15 +35,14 @@ KisAnimationDoc::~KisAnimationDoc(){
 void KisAnimationDoc::addFrame(){
 
     KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
-    KisImage* image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());
-    connect(image, SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
+    KisImageWSP image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());
+    connect(image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
     image->setResolution(animation->resolution(), animation->resolution());
 
-    KisPaintLayer* layer = new KisPaintLayer(image, animation->name(), animation->bgColor().opacityU8(), animation->colorSpace());
+    KisPaintLayerSP layer = new KisPaintLayer(image.data(), animation->name(), animation->bgColor().opacityU8(), animation->colorSpace());
 
     layer->paintDevice()->setDefaultPixel(animation->bgColor().data());
-    image->addNode(layer, image->rootLayer().data());
-
+    image->addNode(layer.data(), image->rootLayer().data());
     setCurrentImage(image);
 }
 

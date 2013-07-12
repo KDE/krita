@@ -501,18 +501,42 @@ void KisDoc2::setCurrentImage(KisImageWSP image)
 {
     //if (!image.isValid()) return;
 
+    //qDebug() << "setCurrentImage()" << this->documentPart()->shellCount();
+    //qDebug() << "setCurrentImage()" << this->documentPart()->shells().at(0);
+    QList<KoCanvasObserverBase*> canvasObservers;
+    KoCanvasBase* tmpCanvas;
+
+    if(this->documentPart()->shells().at(0)->canvasObservers().count() > 0){
+            //qDebug() << "Unsetting canvas" << this->documentPart()->shells().at(0)->canvasObservers();
+            canvasObservers = this->documentPart()->shells().at(0)->canvasObservers();
+            tmpCanvas = canvasObservers.at(0)->observedCanvas();
+            foreach(KoCanvasObserverBase* canvasObserver, canvasObservers){
+                canvasObserver->unsetObservedCanvas();
+            }
+
+    }
+
     if (m_d->image) {
         // Disconnect existing sig/slot connections
         m_d->image->disconnect(this);
         m_d->shapeController->setImage(0);
     }
     m_d->image = image;
+
     m_d->shapeController->setImage(image);
 
     setModified(false);
 
     connect(m_d->image, SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
 
+    if(this->documentPart()->shells().at(0)->canvasObservers().count() > 0){
+            //qDebug() << "Setting back" << this->documentPart()->shells().at(0)->canvasObservers();
+            canvasObservers = this->documentPart()->shells().at(0)->canvasObservers();
+            foreach(KoCanvasObserverBase* canvasObserver, canvasObservers){
+                canvasObserver->setObservedCanvas(tmpCanvas);
+            }
+
+    }
     emit sigLoadingFinished();
 }
 

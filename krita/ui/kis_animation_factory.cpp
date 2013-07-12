@@ -69,6 +69,7 @@ QObject* KisAnimationFactory::create(const char *iface, QWidget *parentWidget, Q
     Q_UNUSED( keyword);
 
     KisAnimationDoc* doc = new KisAnimationDoc();
+
     return doc->documentPart();
 }
 

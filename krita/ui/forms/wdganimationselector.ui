@@ -313,7 +313,7 @@
     <item>
      <widget class="QPushButton" name="bnCreateAnimation">
       <property name="text">
-       <string>CreateAnimation</string>
+       <string>Create Animation</string>
       </property>
      </widget>
     </item>

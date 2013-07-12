@@ -137,9 +137,10 @@ void KisAnimationSelector::createAnimation(){
     animation->setResolution(resolution);
     animation->setBgColor(bgColor);
 
-    static_cast<KisAnimationPart*>(m_document->documentPart())->setAnimation(animation);
+    static_cast<KisAnimationPart*>(m_document->documentPart())->setAnimation(animation); 
 
     m_document->newImage(txtAnimationName->text(), width, height, cs, bgColor, txtDescription->text(), resolution);
+
     KisImageWSP image = m_document->image();
     if (image && image->root() && image->root()->firstChild()) {
         KisLayer * layer = dynamic_cast<KisLayer*>(image->root()->firstChild().data());

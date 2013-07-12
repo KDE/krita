@@ -43,9 +43,9 @@ KoColorTransformation * KisColorBalanceFilter::createTransformation(const KoColo
 	QHash<QString, QVariant> params;
 	QString suffix = "Midtones";
 	if (config) {
-        params["cyan_red"] = config->getInt("cyan_red", 0);
-        params["magenta_green"] = config->getInt("magenta_green", 0);
-        params["yellow_blue"] = config->getInt("yellow_blue", 0);
+        params["cyan_red"] = config->getInt("cyan_red", 0) * 0.01;
+        params["magenta_green"] = config->getInt("magenta_green", 0) * 0.01;
+        params["yellow_blue"] = config->getInt("yellow_blue", 0) * 0.01;
         params["preserve_luminosity"] = config->getBool("preserve_luminosity", true);
         int type = config->getInt("type", KisColorBalanceFilter::MIDTONES);
         switch(type)
@@ -116,9 +116,9 @@ KisPropertiesConfiguration * KisColorBalanceConfigWidget::configuration() const
         type = KisColorBalanceFilter::MIDTONES;
     }
     c->setProperty("type", type);
-    c->setProperty("cyan_red", m_page->cyanRedSlider->value() / 100.0);
-    c->setProperty("magenta_green", m_page->magentaGreenSlider->value() / 100.0);
-    c->setProperty("yellow_blue", m_page->yellowBlueSlider->value() / 100.0);
+    c->setProperty("cyan_red", m_page->cyanRedSlider->value());
+    c->setProperty("magenta_green", m_page->magentaGreenSlider->value());
+    c->setProperty("yellow_blue", m_page->yellowBlueSlider->value());
     c->setProperty("preserve_luminosity", m_page->chkPreserve->isChecked());
     return c;
 }

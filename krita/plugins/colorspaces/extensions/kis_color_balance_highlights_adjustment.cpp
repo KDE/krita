@@ -42,7 +42,7 @@ class KisColorBalanceHighlightsAdjustment : public KoColorTransformation
     typedef typename RGBTrait::Pixel RGBPixel;
 
 public:
-    KisColorBalanceHighlightsAdjustment(){};
+    KisColorBalanceHighlightsAdjustment(){}
 
 void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
 {
@@ -80,10 +80,7 @@ void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
             RGBToHSL(value_red, value_green, value_blue, &h2, &s2, &l2);
             l2 = l1;
 
-            HSLToRGB(h2, s2, l2, &r, &g, &bl);
-            value_red = r;
-            value_green = g;
-            value_blue = bl;
+            HSLToRGB(h2, s2, l2, &value_red, &value_green, &value_blue);
         }
         dst->red = SCALE_FROM_FLOAT(value_red);
         dst->green = SCALE_FROM_FLOAT(value_green);

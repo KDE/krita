@@ -28,6 +28,8 @@
 #include <QDir>
 #include <KStandardDirs>
 
+#include "KoIcon.h"
+
 KisInputConfigurationPage::KisInputConfigurationPage(QWidget *parent, Qt::WindowFlags f)
     : QWidget(parent, f)
 {
@@ -37,6 +39,8 @@ KisInputConfigurationPage::KisInputConfigurationPage(QWidget *parent, Qt::Window
     ui->profileComboBox->setModel(new KisInputProfileModel(ui->profileComboBox));
     updateSelectedProfile();
     connect(ui->profileComboBox, SIGNAL(currentIndexChanged(QString)), SLOT(changeCurrentProfile(QString)));
+
+    ui->editProfilesButton->setIcon(koIcon("document-edit"));
 
     connect(ui->editProfilesButton, SIGNAL(clicked(bool)), SLOT(editProfilesButtonClicked()));
     connect(KisInputProfileManager::instance(), SIGNAL(profilesChanged()), SLOT(updateSelectedProfile()));

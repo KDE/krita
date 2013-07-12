@@ -16,11 +16,6 @@
      <property name="text">
       <string>Remove</string>
      </property>
-     <property name="icon">
-      <iconset theme="list-remove">
-       <normaloff/>
-      </iconset>
-     </property>
      <property name="flat">
       <bool>true</bool>
      </property>
@@ -30,11 +25,6 @@
     <widget class="KPushButton" name="renameButton">
      <property name="text">
       <string>Rename</string>
-     </property>
-     <property name="icon">
-      <iconset theme="edit-rename">
-       <normaloff/>
-      </iconset>
      </property>
      <property name="flat">
       <bool>true</bool>
@@ -46,11 +36,6 @@
      <property name="text">
       <string>Add</string>
      </property>
-     <property name="icon">
-      <iconset theme="list-add">
-       <normaloff/>
-      </iconset>
-     </property>
      <property name="flat">
       <bool>true</bool>
      </property>
@@ -60,11 +45,6 @@
     <widget class="KPushButton" name="duplicateButton">
      <property name="text">
       <string>Duplicate</string>
-     </property>
-     <property name="icon">
-      <iconset theme="edit-copy">
-       <normaloff/>
-      </iconset>
      </property>
      <property name="flat">
       <bool>true</bool>

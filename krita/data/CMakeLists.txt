@@ -34,5 +34,6 @@ install( FILES
 
 install( FILES
     krita.xml
-    DESTINATION ${DATA_INSTALL_DIR}/mime/packages
+    kritaanimation.xml
+    DESTINATION ${XDG_MIME_INSTALL_DIR}
 )

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+    <mime-type type="application/x-krita-animation">
+        <comment xml:lang="en">Krita Animation</comment>
+        <magic priority="50">
+            <match type="string" value="!DOCTYPE krita-animation" offset="1"/>
+        </magic>
+        <glob pattern="*.kranim"/>
+    </mime-type>
+</mime-info>

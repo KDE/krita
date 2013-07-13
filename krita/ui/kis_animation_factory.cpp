@@ -1,7 +1,8 @@
 /*
- *  kis_factory.cc - part of Krayon
+ *  kis_animation_factory.cpp - part of Krayon
  *
  *  Copyright (c) 1999 Matthias Elter <elter@kde.org>
+ *  Copyright (c) 2013 Somsubhra Bairi <somsubhra.bairi@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

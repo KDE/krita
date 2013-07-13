@@ -2,7 +2,7 @@
 #define KIS_ANIMATOR_ABOUTDATA_H
 
 /*
-*  kis_animation_aboutdata.h - part of Krayon
+*  kis_animator_aboutdata.h - part of Krayon
 *
 *  Copyright (c) 1999-2000 Matthias Elter  <me@kde.org>
 *  Copyright (c) 2003-2007 Boudewijn Rempt <boud@valdyas.org>

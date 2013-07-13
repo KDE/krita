@@ -1,8 +1,9 @@
 /*
- *  main.cc - part of KImageShop
+ *  main.cc - part of Krita Animation
  *
  *  Copyright (c) 1999 Matthias Elter <me@kde.org>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2013 Somsubhra Bairi <somsubhra.bairi@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

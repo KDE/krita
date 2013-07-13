@@ -75,12 +75,10 @@ void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
 
         if(m_preserve)
         {
-            float h1, s1, l1, h2, s2, l2, r, g, bl;
+            float h1, s1, l1, h2, s2, l2;
             RGBToHSL(SCALE_TO_FLOAT(src->red), SCALE_TO_FLOAT(src->green), SCALE_TO_FLOAT(src->blue), &h1, &s1, &l1);
             RGBToHSL(value_red, value_green, value_blue, &h2, &s2, &l2);
-            l2 = l1;
-
-            HSLToRGB(h2, s2, l2, &value_red, &value_green, &value_blue);
+            HSLToRGB(h2, s2, l1, &value_red, &value_green, &value_blue);
         }
         dst->red = SCALE_FROM_FLOAT(value_red);
         dst->green = SCALE_FROM_FLOAT(value_green);
@@ -114,26 +112,26 @@ virtual int parameterId(const QString& name) const
     return -1;
 }
 
-    virtual void setParameter(int id, const QVariant& parameter)
+virtual void setParameter(int id, const QVariant& parameter)
+{
+    switch(id)
     {
-        switch(id)
-        {
-        case 0:
-            m_cyan_red = parameter.toDouble();
-            break;
-        case 1:
-            m_magenta_green = parameter.toDouble();
-            break;
-        case 2:
-            m_yellow_blue = parameter.toDouble();
-            break;
-        case 3:
-            m_preserve = parameter.toBool();
-            break;
-        default:
-            ;
-        }
+    case 0:
+        m_cyan_red = parameter.toDouble();
+        break;
+    case 1:
+        m_magenta_green = parameter.toDouble();
+        break;
+    case 2:
+        m_yellow_blue = parameter.toDouble();
+        break;
+    case 3:
+        m_preserve = parameter.toBool();
+        break;
+    default:
+        ;
     }
+}
 private:
 
     double m_cyan_red, m_magenta_green, m_yellow_blue;

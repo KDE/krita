@@ -71,9 +71,7 @@ void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
             float h1, s1, l1, h2, s2, l2;
             RGBToHSL(SCALE_TO_FLOAT(src->red), SCALE_TO_FLOAT(src->green), SCALE_TO_FLOAT(src->blue), &h1, &s1, &l1);
             RGBToHSL(value_red, value_green, value_blue, &h2, &s2, &l2);
-            l2 = l1;
-
-            HSLToRGB(h2, s2, l2, &value_red, &value_green, &value_blue);
+            HSLToRGB(h2, s2, l1, &value_red, &value_green, &value_blue);
         }
 
         dst->red = SCALE_FROM_FLOAT (value_red);

@@ -252,74 +252,74 @@ bool KoApplication::start()
         // we want to offer a restore for every one. Including a nice thumbnail!
         QStringList autoSaveFiles;
 
-//        // get all possible autosave files in the home dir, this is for unsaved document autosave files
-//        // Using the extension allows to avoid relying on the mime magic when opening
-//        KMimeType::Ptr mime = KMimeType::mimeType(doc->nativeFormatMimeType());
-//        if (!mime) {
-//            qFatal("It seems your installation is broken/incomplete because we failed to load the native mimetype \"%s\".", doc->nativeFormatMimeType().constData());
-//        }
-//        QString extension = mime->property("X-KDE-NativeExtension").toString();
-//        if (extension.isEmpty()) extension = mime->mainExtension();
+        // get all possible autosave files in the home dir, this is for unsaved document autosave files
+        // Using the extension allows to avoid relying on the mime magic when opening
+        KMimeType::Ptr mime = KMimeType::mimeType(doc->nativeFormatMimeType());
+        if (!mime) {
+            qFatal("It seems your installation is broken/incomplete because we failed to load the native mimetype \"%s\".", doc->nativeFormatMimeType().constData());
+        }
+        QString extension = mime->property("X-KDE-NativeExtension").toString();
+        if (extension.isEmpty()) extension = mime->mainExtension();
 
-//        QStringList filters;
-//        filters << QString(".%1-%2-%3-autosave%4").arg(part->componentData().componentName()).arg("*").arg("*").arg(extension);
-//        QDir dir = QDir::home();
+        QStringList filters;
+        filters << QString(".%1-%2-%3-autosave%4").arg(part->componentData().componentName()).arg("*").arg("*").arg(extension);
+        QDir dir = QDir::home();
 
-//        // all autosave files for our application
-//        autoSaveFiles = dir.entryList(filters, QDir::Files | QDir::Hidden);
+        // all autosave files for our application
+        autoSaveFiles = dir.entryList(filters, QDir::Files | QDir::Hidden);
 
-//        QStringList pids;
-//        QString ourPid;
-//        ourPid.setNum(kapp->applicationPid());
+        QStringList pids;
+        QString ourPid;
+        ourPid.setNum(kapp->applicationPid());
 
-//#ifndef QT_NO_DBUS
-//        // all running instances of our application -- bit hackish, but we cannot get at the dbus name here, for some reason
-//        QDBusReply<QStringList> reply = QDBusConnection::sessionBus().interface()->registeredServiceNames();
+#ifndef QT_NO_DBUS
+        // all running instances of our application -- bit hackish, but we cannot get at the dbus name here, for some reason
+        QDBusReply<QStringList> reply = QDBusConnection::sessionBus().interface()->registeredServiceNames();
 
-//        foreach (const QString &name, reply.value()) {
-//            if (name.contains(part->componentData().componentName())) {
-//                // we got another instance of ourselves running, let's get the pid
-//                QString pid = name.split('-').last();
-//                if (pid != ourPid) {
-//                    pids << pid;
-//                }
-//            }
-//        }
-//#endif
+        foreach (const QString &name, reply.value()) {
+            if (name.contains(part->componentData().componentName())) {
+                // we got another instance of ourselves running, let's get the pid
+                QString pid = name.split('-').last();
+                if (pid != ourPid) {
+                    pids << pid;
+                }
+            }
+        }
+#endif
 
-//        // remove the autosave files that are saved for other, open instances of ourselves
-//        foreach(const QString &autoSaveFileName, autoSaveFiles) {
-//            if (!QFile::exists(QDir::homePath() + "/" + autoSaveFileName)) {
-//                autoSaveFiles.removeAll(autoSaveFileName);
-//                continue;
-//            }
-//            QStringList split = autoSaveFileName.split('-');
-//            if (split.size() == 4) {
-//                if (pids.contains(split[1])) {
-//                    // We've got an active, owned autosave file. Remove.
-//                    autoSaveFiles.removeAll(autoSaveFileName);
-//                }
-//            }
-//        }
+        // remove the autosave files that are saved for other, open instances of ourselves
+        foreach(const QString &autoSaveFileName, autoSaveFiles) {
+            if (!QFile::exists(QDir::homePath() + "/" + autoSaveFileName)) {
+                autoSaveFiles.removeAll(autoSaveFileName);
+                continue;
+            }
+            QStringList split = autoSaveFileName.split('-');
+            if (split.size() == 4) {
+                if (pids.contains(split[1])) {
+                    // We've got an active, owned autosave file. Remove.
+                    autoSaveFiles.removeAll(autoSaveFileName);
+                }
+            }
+        }
 
-//        // Allow the user to make their selection
-//        if (autoSaveFiles.size() > 0) {
-//            KoAutoSaveRecoveryDialog dlg(autoSaveFiles);
-//            if (dlg.exec() == QDialog::Accepted) {
-//                QStringList filesToRecover = dlg.recoverableFiles();
-//                foreach (const QString &autosaveFile, autoSaveFiles) {
-//                    if (!filesToRecover.contains(autosaveFile)) {
-//                        // remove the files the user didn't want to recover
-//                        QFile::remove(QDir::homePath() + "/" + autosaveFile);
-//                    }
-//                }
-//                autoSaveFiles = filesToRecover;
-//            }
-//            else {
-//                // don't recover any of the files, but don't delete them either
-//                autoSaveFiles.clear();
-//            }
-//        }
+        // Allow the user to make their selection
+        if (autoSaveFiles.size() > 0) {
+            KoAutoSaveRecoveryDialog dlg(autoSaveFiles);
+            if (dlg.exec() == QDialog::Accepted) {
+                QStringList filesToRecover = dlg.recoverableFiles();
+                foreach (const QString &autosaveFile, autoSaveFiles) {
+                    if (!filesToRecover.contains(autosaveFile)) {
+                        // remove the files the user didn't want to recover
+                        QFile::remove(QDir::homePath() + "/" + autosaveFile);
+                    }
+                }
+                autoSaveFiles = filesToRecover;
+            }
+            else {
+                // don't recover any of the files, but don't delete them either
+                autoSaveFiles.clear();
+            }
+        }
 
         if (autoSaveFiles.size() > 0) {
             short int numberOfOpenDocuments = 0; // number of documents open

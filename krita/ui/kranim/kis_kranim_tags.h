@@ -15,22 +15,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#ifndef KIS_KRANIM_TAGS_H
+#define KIS_KRANIM_TAGS_H
 
-#ifndef KIS_ANIMATION_DOC_H
-#define KIS_ANIMATION_DOC_H
+#include <QString>
 
-#include <krita_export.h>
-#include "kis_doc2.h"
-#include "kis_animation_part.h"
-
-class KRITAUI_EXPORT KisAnimationDoc : public KisDoc2
+namespace KRANIM
 {
-    Q_OBJECT
-public:
-    KisAnimationDoc();
-    virtual ~KisAnimationDoc();
-    virtual QByteArray mimeType() const;
-    void addFrame();
-};
-
-#endif // KIS_ANIMATION_DOC_H
+const QString NATIVE_MIMETYPE = "applicaation/x-kranim";
+const QString NAME = "name";
+const QString MIME = "mime";
+}
+#endif // KIS_KRANIM_TAGS_H

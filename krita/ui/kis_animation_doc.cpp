@@ -23,6 +23,8 @@
 #include <kis_image.h>
 #include <kis_group_layer.h>
 
+#define APP_MIMETYPE "application/x-kritaanimation"
+
 KisAnimationDoc::KisAnimationDoc() : KisDoc2(new KisAnimationPart)
 {
 
@@ -32,6 +34,10 @@ KisAnimationDoc::~KisAnimationDoc(){
 
 }
 
+QByteArray KisAnimationDoc::mimeType() const{
+    return APP_MIMETYPE;
+}
+
 void KisAnimationDoc::addFrame(){
 
     KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
@@ -39,7 +45,7 @@ void KisAnimationDoc::addFrame(){
     connect(image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
     image->setResolution(animation->resolution(), animation->resolution());
 
-    KisPaintLayerSP layer = new KisPaintLayer(image.data(), animation->name(), animation->bgColor().opacityU8(), animation->colorSpace());
+    KisPaintLayerSP layer = new KisPaintLayer(image.data(), image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
 
     layer->paintDevice()->setDefaultPixel(animation->bgColor().data());
     image->addNode(layer.data(), image->rootLayer().data());

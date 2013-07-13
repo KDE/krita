@@ -15,6 +15,6 @@
         <magic priority="50">
             <match type="string" value="!DOCTYPE krita-animation" offset="1"/>
         </magic>
-        <glob pattern="*.animation"/>
+        <glob pattern="*.kranim"/>
     </mime-type>
 </mime-info>

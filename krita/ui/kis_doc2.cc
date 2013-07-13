@@ -501,6 +501,7 @@ void KisDoc2::setCurrentImage(KisImageWSP image)
 {
     //if (!image.isValid()) return;
 
+    ///XXX: causes crash in New image. Move to KisAnimationDoc
     //qDebug() << "setCurrentImage()" << this->documentPart()->shellCount();
     //qDebug() << "setCurrentImage()" << this->documentPart()->shells().at(0);
     QList<KoCanvasObserverBase*> canvasObservers;

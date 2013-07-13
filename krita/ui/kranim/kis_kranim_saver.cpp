@@ -41,7 +41,7 @@ KisKranimSaver::~KisKranimSaver(){
 QDomElement KisKranimSaver::saveXML(QDomDocument &doc, KisImageWSP image){
     QDomElement imageElement = doc.createElement("ANIMATION");
 
-    Q_ASSERT(image);
+    //Q_ASSERT(image);
     imageElement.setAttribute(NAME, m_d->animationName);
     imageElement.setAttribute(MIME, NATIVE_MIMETYPE);
 
@@ -49,5 +49,6 @@ QDomElement KisKranimSaver::saveXML(QDomDocument &doc, KisImageWSP image){
 }
 
 bool KisKranimSaver::saveBinaryData(KoStore *store, KisImageWSP image, const QString &uri, bool external){
+    kWarning() << "Saving binary data";
     return true;
 }

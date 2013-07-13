@@ -15,32 +15,30 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#ifndef KIS_KRANIM_LOADER_H
+#define KIS_KRANIM_LOADER_H
 
-#ifndef KIS_ANIMATION_DOC_H
-#define KIS_ANIMATION_DOC_H
 
-#include <krita_export.h>
-#include "kis_doc2.h"
-#include "kis_animation_part.h"
+class QString;
+class KoStore;
 
-class KRITAUI_EXPORT KisAnimationDoc : public KisDoc2
+#include <kis_animation_doc.h>
+#include <kis_types.h>
+
+class KisKranimLoader
 {
-    Q_OBJECT
 public:
-    KisAnimationDoc();
-    virtual ~KisAnimationDoc();
-    void addFrame();
+    KisKranimLoader(KisAnimationDoc* doc);
 
-    virtual bool completeLoading(KoStore *store);
-    virtual bool completeSaving(KoStore*store);
+    ~KisKranimLoader();
 
-    virtual QDomDocument saveXML();
-    virtual bool loadXML(const KoXmlDocument& doc, KoStore* store);
+    KisImageWSP loadXML(const KoXmlElement &elem);
+
+    void loadBinaryData(KoStore* store, KisImageWSP image, const QString &uri, bool external);
 
 private:
-    class KisAnimationDocPrivate;
-    KisAnimationDocPrivate* const m_d_anim;
-
+    struct Private;
+    Private* const m_d;
 };
 
-#endif // KIS_ANIMATION_DOC_H
+#endif // KIS_KRANIM_LOADER_H

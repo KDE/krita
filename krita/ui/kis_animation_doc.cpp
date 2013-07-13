@@ -22,13 +22,37 @@
 #include <kis_paint_layer.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
+#include <kranim/kis_kranim_saver.h>
+#include <kranim/kis_kranim_loader.h>
 
 #define APP_MIMETYPE "application/x-krita-animation"
+static const char CURRENT_DTD_VERSION[] = "2.0";
+
+
+class KisAnimationDoc::KisAnimationDocPrivate{
+public:
+    KisAnimationDocPrivate()
+        :kranimSaver(0),
+          kranimLoader(0)
+    {
+    }
+
+    ~KisAnimationDocPrivate(){
+
+    }
+
+    KisKranimSaver* kranimSaver;
+    KisKranimLoader* kranimLoader;
+};
 
 KisAnimationDoc::KisAnimationDoc()
-    : KisDoc2(new KisAnimationPart)
+    : KisDoc2(new KisAnimationPart),
+      m_d_anim(new KisAnimationDocPrivate())
 {
     setMimeType(APP_MIMETYPE);
+
+    m_d_anim->kranimSaver = 0;
+    m_d_anim->kranimLoader = 0;
 }
 
 KisAnimationDoc::~KisAnimationDoc(){
@@ -50,23 +74,39 @@ void KisAnimationDoc::addFrame()
     setCurrentImage(image);
 }
 
-bool KisAnimationDoc::completeLoading(KoStore *store)
-{
-    qDebug() << "completeLoading called";
-    return true;
-}
-
-bool KisAnimationDoc::completeSaving(KoStore *)
+bool KisAnimationDoc::completeSaving(KoStore *store)
 {
     qDebug() << "completeSaving called";
+
+    QString uri = url().url();
+
+    m_d_anim->kranimSaver->saveBinaryData(store, this->image(), uri, isStoredExtern());
+    delete m_d_anim->kranimSaver;
+    m_d_anim->kranimSaver = 0;
+
     return true;
 }
 
 QDomDocument KisAnimationDoc::saveXML()
 {
     qDebug() << "saveXML called";
-    return QDomDocument();
 
+    QDomDocument doc = createDomDocument("DOC", CURRENT_DTD_VERSION);
+
+    QDomElement root = doc.documentElement();
+
+    root.setAttribute("editor","Krita Animation");
+
+    root.setAttribute("syntaxVersion", "2");
+
+    if(!m_d_anim->kranimSaver){
+        m_d_anim->kranimSaver = 0;
+    }
+
+    m_d_anim->kranimSaver = new KisKranimSaver(this);
+    root.appendChild(m_d_anim->kranimSaver->saveXML(doc, this->image()));
+
+    return doc;
 }
 
 bool KisAnimationDoc::loadXML(const KoXmlDocument &doc, KoStore *store)
@@ -76,4 +116,10 @@ bool KisAnimationDoc::loadXML(const KoXmlDocument &doc, KoStore *store)
 
 }
 
+bool KisAnimationDoc::completeLoading(KoStore *store)
+{
+    qDebug() << "completeLoading called";
+    m_d_anim->kranimLoader = new KisKranimLoader(this);
+    return true;
+}
 #include "kis_animation_doc.moc"

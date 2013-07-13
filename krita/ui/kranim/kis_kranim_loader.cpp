@@ -15,32 +15,31 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_kranim_loader.h"
+#include <kis_image.h>
 
-#ifndef KIS_ANIMATION_DOC_H
-#define KIS_ANIMATION_DOC_H
-
-#include <krita_export.h>
-#include "kis_doc2.h"
-#include "kis_animation_part.h"
-
-class KRITAUI_EXPORT KisAnimationDoc : public KisDoc2
-{
-    Q_OBJECT
+struct KisKranimLoader::Private{
 public:
-    KisAnimationDoc();
-    virtual ~KisAnimationDoc();
-    void addFrame();
-
-    virtual bool completeLoading(KoStore *store);
-    virtual bool completeSaving(KoStore*store);
-
-    virtual QDomDocument saveXML();
-    virtual bool loadXML(const KoXmlDocument& doc, KoStore* store);
-
-private:
-    class KisAnimationDocPrivate;
-    KisAnimationDocPrivate* const m_d_anim;
-
+    KisAnimationDoc* document;
+    QString animationName;
 };
 
-#endif // KIS_ANIMATION_DOC_H
+KisKranimLoader::KisKranimLoader(KisAnimationDoc *doc)
+    :m_d(new Private())
+{
+    m_d->document = doc;
+}
+
+KisKranimLoader::~KisKranimLoader(){
+    delete m_d;
+}
+
+void KisKranimLoader::loadBinaryData(KoStore *store, KisImageWSP image, const QString &uri, bool external){
+    kWarning() << "Load binary data";
+}
+
+KisImageWSP KisKranimLoader::loadXML(const KoXmlElement &elem){
+    kWarning() << "Load XML";
+    KisImageWSP image = 0;
+    return image;
+}

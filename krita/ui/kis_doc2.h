@@ -80,8 +80,6 @@ public:
     virtual QDomDocument saveXML();
     virtual bool loadXML(const KoXmlDocument& doc, KoStore* store);
 
-    virtual QByteArray mimeType() const;
-
     /**
      * Draw the image embedded in another Calligra document
      */

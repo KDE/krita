@@ -29,7 +29,6 @@ class KRITAUI_EXPORT KisAnimationDoc : public KisDoc2
 public:
     KisAnimationDoc();
     virtual ~KisAnimationDoc();
-    virtual QByteArray mimeType() const;
     void addFrame();
 
     virtual bool completeLoading(KoStore *store);

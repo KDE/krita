@@ -150,6 +150,7 @@ KisDoc2::KisDoc2()
     : KoDocument(new KisPart2, new UndoStack(this))
     , m_d(new KisDocPrivate())
 {
+    setMimeType(APP_MIMETYPE);
     qobject_cast<KisPart2*>(documentPart())->setDocument(this);
     // preload the krita resources
     KisResourceServerProvider::instance();
@@ -165,6 +166,7 @@ KisDoc2::KisDoc2(KisPart2* part)
     : KoDocument(part, new UndoStack(this))
     , m_d(new KisDocPrivate())
 {
+    setMimeType(APP_MIMETYPE);
     qobject_cast<KisPart2*>(documentPart())->setDocument(this);
     // preload the krita resources
     KisResourceServerProvider::instance();
@@ -188,11 +190,6 @@ KisDoc2::~KisDoc2()
     m_d->image.clear();
 
     delete m_d;
-}
-
-QByteArray KisDoc2::mimeType() const
-{
-    return APP_MIMETYPE;
 }
 
 void KisDoc2::slotLoadingFinished() {

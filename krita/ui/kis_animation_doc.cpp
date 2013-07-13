@@ -25,20 +25,18 @@
 
 #define APP_MIMETYPE "application/x-krita-animation"
 
-KisAnimationDoc::KisAnimationDoc() : KisDoc2(new KisAnimationPart)
+KisAnimationDoc::KisAnimationDoc()
+    : KisDoc2(new KisAnimationPart)
 {
-
+    setMimeType(APP_MIMETYPE);
 }
 
 KisAnimationDoc::~KisAnimationDoc(){
 
 }
 
-QByteArray KisAnimationDoc::mimeType() const{
-    return APP_MIMETYPE;
-}
-
-void KisAnimationDoc::addFrame(){
+void KisAnimationDoc::addFrame()
+{
 
     KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
     KisImageWSP image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());

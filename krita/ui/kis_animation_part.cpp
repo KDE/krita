@@ -20,11 +20,13 @@
 #include "kis_part2.h"
 #include "kis_config.h"
 #include "kis_animation_selector.h"
+#include "kis_animation_factory.h"
 #include "kis_animation_doc.h"
 
 KisAnimationPart::KisAnimationPart(QObject* parent)
-    :KisPart2(parent), m_animation(0)
+    : KisPart2(parent), m_animation(0)
 {
+    setComponentData(KisAnimationFactory::componentData(), false);
 
 }
 

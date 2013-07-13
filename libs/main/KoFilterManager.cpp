@@ -80,8 +80,13 @@ QString KoFilterManager::importDocument(const QString& url,
                                         const QString& documentMimeType,
                                         KoFilter::ConversionStatus& status)
 {
+    qDebug() << url << documentMimeType << status;
+
     // Find the mime type for the file to be imported.
     QString  typeName(documentMimeType);
+
+    qDebug() << typeName;
+
     KUrl u(url);
     KMimeType::Ptr t;
     if (documentMimeType.isEmpty()) {

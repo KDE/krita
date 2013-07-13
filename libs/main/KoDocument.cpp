@@ -755,7 +755,7 @@ QString KoDocument::checkImageMimeTypes(const QString &mimeType, const KUrl &url
     if (!url.isLocalFile()) return mimeType;
 
     if (url.toLocalFile().endsWith(".flipbook")) return "application/x-krita-flipbook";
-    if (url.toLocalFile().endsWith(".kranim")) return "application/x-krita-animation";
+    //if (url.toLocalFile().endsWith(".kranim")) return "application/x-krita-animation";
 
     QStringList imageMimeTypes;
     imageMimeTypes << "image/jpeg"
@@ -897,7 +897,8 @@ QString KoDocument::autoSaveFile(const QString & path) const
     // Using the extension allows to avoid relying on the mime magic when opening
     KMimeType::Ptr mime = KMimeType::mimeType(nativeFormatMimeType());
     if (! mime) {
-        qFatal("It seems your installation is broken/incomplete because we failed to load the native mimetype \"%s\".", nativeFormatMimeType().constData());
+        return retval;
+        //qFatal("It seems your installation is broken/incomplete because we failed to load the native mimetype \"%s\".", nativeFormatMimeType().constData());
     }
     QString extension = mime->property("X-KDE-NativeExtension").toString();
     if (extension.isEmpty()) extension = mime->mainExtension();
@@ -1094,6 +1095,8 @@ bool KoDocument::openFile()
 
     d->specialOutputFlag = 0;
     QByteArray _native_format = nativeFormatMimeType();
+
+    qDebug() << "native format" << _native_format;
 
     KUrl u(d->parentPart->localFilePath());
     QString typeName = d->parentPart->arguments().mimeType();
@@ -1917,7 +1920,7 @@ QByteArray KoDocument::nativeFormatMimeType() const
         return QByteArray();
     }
     QByteArray nativeMimeType = service->property("X-KDE-NativeMimeType").toString().toLatin1();
-#ifndef NDEBUG
+//#ifndef NDEBUG
     if (nativeMimeType.isEmpty()) {
         // shouldn't happen, let's find out why it happened
         if (!service->serviceTypes().contains("Calligra/Part"))
@@ -1927,7 +1930,8 @@ QByteArray KoDocument::nativeFormatMimeType() const
         else
             kWarning(30003) << "Failed to read NativeMimeType from desktop file!";
     }
-#endif
+//#endif
+    qDebug() << "nativeFormatMimeType()" << nativeMimeType;
     return nativeMimeType;
 }
 
@@ -1944,6 +1948,7 @@ QByteArray KoDocument::nativeOasisMimeType() const
 
 bool KoDocument::isNativeFormat(const QByteArray& mimetype, ImportExportType importExportType) const
 {
+    qDebug() << mimeType() << importExportType << nativeFormatMimeType();
     if (mimetype == nativeFormatMimeType())
         return true;
     return extraNativeMimeTypes(importExportType).contains(mimetype);

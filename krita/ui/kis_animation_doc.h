@@ -31,6 +31,15 @@ public:
     virtual ~KisAnimationDoc();
     virtual QByteArray mimeType() const;
     void addFrame();
+
+    virtual bool completeLoading(KoStore *store);
+    virtual bool completeSaving(KoStore*);
+
+    virtual QDomDocument saveXML();
+    virtual bool loadXML(const KoXmlDocument& doc, KoStore* store);
+
+
+
 };
 
 #endif // KIS_ANIMATION_DOC_H

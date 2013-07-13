@@ -23,7 +23,7 @@
 #include <kis_image.h>
 #include <kis_group_layer.h>
 
-#define APP_MIMETYPE "application/x-kritaanimation"
+#define APP_MIMETYPE "application/x-krita-animation"
 
 KisAnimationDoc::KisAnimationDoc() : KisDoc2(new KisAnimationPart)
 {
@@ -50,6 +50,32 @@ void KisAnimationDoc::addFrame(){
     layer->paintDevice()->setDefaultPixel(animation->bgColor().data());
     image->addNode(layer.data(), image->rootLayer().data());
     setCurrentImage(image);
+}
+
+bool KisAnimationDoc::completeLoading(KoStore *store)
+{
+    qDebug() << "completeLoading called";
+    return true;
+}
+
+bool KisAnimationDoc::completeSaving(KoStore *)
+{
+    qDebug() << "completeSaving called";
+    return true;
+}
+
+QDomDocument KisAnimationDoc::saveXML()
+{
+    qDebug() << "saveXML called";
+    return QDomDocument();
+
+}
+
+bool KisAnimationDoc::loadXML(const KoXmlDocument &doc, KoStore *store)
+{
+    qDebug() << "loadXML called";
+    return true;
+
 }
 
 #include "kis_animation_doc.moc"

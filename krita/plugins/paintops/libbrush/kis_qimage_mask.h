@@ -117,10 +117,6 @@ public:
      */
     void rotation(double angle);
 
-    /**
-     *Create a new mask by interpolating between mask1 and mask2 as t goes from 0 to 1.
-     */
-    static KisQImagemaskSP interpolate(KisQImagemaskSP mask1, KisQImagemaskSP mask2, double t);
 
 private:
     /// init the internal storage (QImage)

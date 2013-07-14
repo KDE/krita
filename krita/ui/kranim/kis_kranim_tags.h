@@ -23,8 +23,15 @@
 
 namespace KRANIM
 {
-const QString NATIVE_MIMETYPE = "applicaation/x-kranim";
+const QString NATIVE_MIMETYPE = "application/x-kranim";
 const QString NAME = "name";
 const QString MIME = "mime";
+const QString AUTHOR = "author";
+const QString FPS = "fps";
+const QString TIME = "time";
+const QString HEIGHT = "height";
+const QString WIDTH = "width";
+const QString RESOLUTION = "res";
+const QString DESCRIPTION = "des";
 }
 #endif // KIS_KRANIM_TAGS_H

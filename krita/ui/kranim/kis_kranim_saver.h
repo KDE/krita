@@ -36,6 +36,8 @@ public:
 
     QDomElement saveXML(QDomDocument& doc, KisImageWSP image);
 
+    QDomElement saveMetaData(QDomDocument& doc);
+
     bool saveBinaryData(KoStore* store, KisImageWSP image, const QString &uri, bool external);
 
 private:

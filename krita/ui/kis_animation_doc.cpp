@@ -27,7 +27,7 @@
 #include <kranim/kis_kranim_loader.h>
 
 #define APP_MIMETYPE "application/x-krita-animation"
-static const char CURRENT_DTD_VERSION[] = "2.0";
+static const char CURRENT_DTD_VERSION[] = "1.0";
 
 
 class KisAnimationDoc::KisAnimationDocPrivate{
@@ -92,19 +92,20 @@ QDomDocument KisAnimationDoc::saveXML()
 {
     qDebug() << "saveXML called";
 
-    QDomDocument doc = createDomDocument("DOC", CURRENT_DTD_VERSION);
+    QDomDocument doc = createDomDocument("animation", CURRENT_DTD_VERSION);
 
     QDomElement root = doc.documentElement();
 
     root.setAttribute("editor","Krita Animation");
 
-    root.setAttribute("syntaxVersion", "2");
+    root.setAttribute("syntaxVersion", "1");
 
     if(!m_d_anim->kranimSaver){
         m_d_anim->kranimSaver = 0;
     }
 
     m_d_anim->kranimSaver = new KisKranimSaver(this);
+    root.appendChild(m_d_anim->kranimSaver->saveMetaData(doc));
     root.appendChild(m_d_anim->kranimSaver->saveXML(doc, this->image()));
 
     return doc;
@@ -112,9 +113,10 @@ QDomDocument KisAnimationDoc::saveXML()
 
 bool KisAnimationDoc::loadXML(const KoXmlDocument &doc, KoStore *store)
 {
-    qDebug() << "loadXML called";
+    KoXmlElement root;
+    QString attr;
+    KoXmlNode node;
     return true;
-
 }
 
 bool KisAnimationDoc::completeLoading(KoStore *store)

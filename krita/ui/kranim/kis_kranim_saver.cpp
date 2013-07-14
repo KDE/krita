@@ -18,21 +18,22 @@
 
 #include "kis_kranim_saver.h"
 #include "kis_kranim_tags.h"
-#include "kis_animation_doc.h"
-#include "kis_animation_part.h"
+#include <kis_animation_doc.h>
+#include <kis_animation_part.h>
+#include <kis_animation.h>
 
 using namespace KRANIM;
 
 struct KisKranimSaver::Private{
 public:
+    KisAnimation* animation;
     KisAnimationDoc* doc;
-    QString animationName;
 };
 
 KisKranimSaver::KisKranimSaver(KisAnimationDoc *document) : m_d(new Private)
 {
     m_d->doc = document;
-    m_d->animationName = "Untitled-animation";
+    m_d->animation = dynamic_cast<KisAnimationPart*>(document->documentPart())->animation();
 }
 
 KisKranimSaver::~KisKranimSaver(){
@@ -40,13 +41,27 @@ KisKranimSaver::~KisKranimSaver(){
 }
 
 QDomElement KisKranimSaver::saveXML(QDomDocument &doc, KisImageWSP image){
-    QDomElement imageElement = doc.createElement("ANIMATION");
 
-    //Q_ASSERT(image);
-    imageElement.setAttribute(NAME, m_d->animationName);
-    imageElement.setAttribute(MIME, NATIVE_MIMETYPE);
+    QDomElement layersElement = doc.createElement("layers");
 
-    return imageElement;
+    QDomElement layer = doc.createElement("layer");
+    layersElement.appendChild(layer);
+    return layersElement;
+}
+
+QDomElement KisKranimSaver::saveMetaData(QDomDocument &doc){
+    QDomElement metaDataElement = doc.createElement("metadata");
+    metaDataElement.setAttribute(MIME, NATIVE_MIMETYPE);
+    metaDataElement.setAttribute(NAME, m_d->animation->name());
+    metaDataElement.setAttribute(AUTHOR, m_d->animation->author());
+    metaDataElement.setAttribute(FPS, m_d->animation->fps());
+    metaDataElement.setAttribute(TIME, m_d->animation->time());
+    metaDataElement.setAttribute(HEIGHT, m_d->animation->height());
+    metaDataElement.setAttribute(WIDTH, m_d->animation->width());
+    metaDataElement.setAttribute(RESOLUTION, m_d->animation->resolution());
+    metaDataElement.setAttribute(DESCRIPTION, m_d->animation->description());
+    doc.appendChild(metaDataElement);
+    return metaDataElement;
 }
 
 bool KisKranimSaver::saveBinaryData(KoStore *store, KisImageWSP image, const QString &uri, bool external){

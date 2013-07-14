@@ -34,4 +34,13 @@ public:
 
 };
 
+class KisColorBalanceMath
+{
+public:
+
+    KisColorBalanceMath();
+
+    float colorBalanceTransform(float value, float lightness, float shadows, float midtones, float highlights);
+};
+
 #endif

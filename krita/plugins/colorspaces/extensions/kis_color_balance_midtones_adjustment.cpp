@@ -35,6 +35,7 @@
 #define SCALE_TO_FLOAT( v ) KoColorSpaceMaths< _channel_type_, float>::scaleToA( v )
 #define SCALE_FROM_FLOAT( v  ) KoColorSpaceMaths< float, _channel_type_>::scaleToA( v )
 
+class KisColorBalanceMath;
 template<typename _channel_type_>
 class KisColorBalanceMidtonesAdjustment : public KoColorTransformation
 {
@@ -46,9 +47,10 @@ public:
 
 void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
 {
+    KisColorBalanceMath *bal = new KisColorBalanceMath();
     const RGBPixel* src = reinterpret_cast<const RGBPixel*>(srcU8);
     RGBPixel* dst = reinterpret_cast<RGBPixel*>(dstU8);
-    float value_red, value_green, value_blue, hue, saturation, lightness, a = 0.25, b = 0.333, scale = 0.7;
+    float value_red, value_green, value_blue, hue, saturation, lightness;
 
     while(nPixels > 0) {
 
@@ -57,22 +59,9 @@ void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
         float blue = SCALE_TO_FLOAT(src->blue);
         RGBToHSL(red, green, blue, &hue, &saturation, &lightness);
 
-        float midtones_red = m_cyan_red;
-        midtones_red *=CLAMP ((lightness - b) /  a + 0.5, 0.0, 1.0) * CLAMP ((lightness + b - 1) /-a + 0.5, 0.0, 1.0) * scale;
-
-        float midtones_green = m_magenta_green;
-        midtones_green *=CLAMP ((lightness - b) /  a + 0.5, 0.0, 1.0) * CLAMP ((lightness + b - 1) /-a + 0.5, 0.0, 1.0) * scale;
-
-        float midtones_blue = m_yellow_blue;
-        midtones_blue *=CLAMP ((lightness - b) /  a + 0.5, 0.0, 1.0) * CLAMP ((lightness + b - 1) /-a + 0.5, 0.0, 1.0) * scale;
-\
-        midtones_red += red;
-        midtones_green += green;
-        midtones_blue += blue;
-        value_red = CLAMP(midtones_red, 0.0, 1.0);
-        value_green = CLAMP(midtones_green, 0.0, 1.0);
-        value_blue = CLAMP(midtones_blue, 0.0, 1.0);
-
+        value_red = bal->colorBalanceTransform(SCALE_TO_FLOAT(src->red), lightness, m_cyan_red_shadows, m_cyan_red, m_cyan_red_highlights);
+        value_green = bal->colorBalanceTransform(SCALE_TO_FLOAT(src->green), lightness, m_magenta_green_shadows, m_magenta_green, m_magenta_green_highlights);
+        value_blue = bal->colorBalanceTransform(SCALE_TO_FLOAT(src->blue), lightness, m_yellow_blue_shadows, m_yellow_blue, m_yellow_blue_highlights);
         if(m_preserve)
         {
             float h1, s1, l1, h2, s2, l2;
@@ -95,7 +84,8 @@ void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
 virtual QList<QString> parameters() const
 {
     QList<QString> list;
-    list << "cyan_red" << "magenta_green" << "yellow_blue" << "preserve_luminosity";
+    list << "cyan_red" << "magenta_green" << "yellow_blue" << "cyan_red_shadows" << "magenta_green_shadows" << "yellow_blue_shadows"
+         << "cyan_red_highlights" << "magenta_green_highlights" << "yellow_blue_highlights" << "preserve_luminosity";
     return list;
 }
 
@@ -107,39 +97,70 @@ virtual int parameterId(const QString& name) const
         return 1;
     else if(name == "yellow_blue")
         return 2;
-    else if(name == "preserve_luminosity")
+    else if (name == "cyan_red_shadows")
         return 3;
+    else if(name == "magenta_green_shadows")
+        return 4;
+    else if(name == "yellow_blue_shadows")
+        return 5;
+    else if (name == "cyan_red_highlights")
+        return 6;
+    else if(name == "magenta_green_highlights")
+        return 7;
+    else if(name == "yellow_blue_highlights")
+        return 8;
+    else if(name == "preserve_luminosity")
+        return 9;
     return -1;
 }
 
-    virtual void setParameter(int id, const QVariant& parameter)
+virtual void setParameter(int id, const QVariant& parameter)
+{
+    switch(id)
     {
-        switch(id)
-        {
-        case 0:
-            m_cyan_red = parameter.toDouble();
-            break;
-        case 1:
-            m_magenta_green = parameter.toDouble();
-            break;
-        case 2:
-            m_yellow_blue = parameter.toDouble();
-            break;
-        case 3:
-            m_preserve = parameter.toBool();
-            break;
-        default:
-            ;
-        }
+    case 0:
+        m_cyan_red = parameter.toDouble();
+        break;
+    case 1:
+        m_magenta_green = parameter.toDouble();
+        break;
+    case 2:
+        m_yellow_blue = parameter.toDouble();
+        break;
+    case 3:
+        m_cyan_red_shadows = parameter.toDouble();
+        break;
+    case 4:
+        m_magenta_green_shadows = parameter.toDouble();
+        break;
+    case 5:
+        m_yellow_blue_shadows = parameter.toDouble();
+        break;
+    case 6:
+        m_cyan_red_highlights = parameter.toDouble();
+        break;
+    case 7:
+        m_magenta_green_highlights = parameter.toDouble();
+        break;
+    case 8:
+        m_yellow_blue_highlights = parameter.toDouble();
+        break;
+    case 9:
+        m_preserve = parameter.toBool();
+        break;
+    default:
+        ;
     }
+}
 private:
 
-    double m_cyan_red, m_magenta_green, m_yellow_blue;
+    double m_cyan_red, m_magenta_green, m_yellow_blue,  m_cyan_red_shadows, m_magenta_green_shadows, m_yellow_blue_shadows,
+           m_cyan_red_highlights, m_magenta_green_highlights, m_yellow_blue_highlights;
     bool m_preserve;
 };
 
  KisColorBalanceMidtonesAdjustmentFactory::KisColorBalanceMidtonesAdjustmentFactory()
-    : KoColorTransformationFactory("BalanceMidtones", i18n("ColorBalanceMidtones Adjustment"))
+    : KoColorTransformationFactory("ColorBalance", i18n("ColorBalanceMidtones Adjustment"))
 {
 }
 
@@ -173,3 +194,23 @@ KoColorTransformation* KisColorBalanceMidtonesAdjustmentFactory::createTransform
     return adj;
 
 }
+
+KisColorBalanceMath::KisColorBalanceMath(){}
+
+
+float KisColorBalanceMath::colorBalanceTransform(float value, float lightness, float shadows, float midtones, float highlights)
+{
+      static const float a = 0.25, b = 0.333, scale = 0.7;
+
+      shadows *= CLAMP ((lightness - b) / -a + 0.5, 0, 1) * scale;
+      midtones *= CLAMP ((lightness - b) /  a + 0.5, 0, 1) * CLAMP ((lightness + b - 1) / -a + 0.5, 0, 1) * scale;
+      highlights *= CLAMP ((lightness + b - 1) /  a + 0.5, 0, 1) * scale;
+
+      value += shadows;
+      value += midtones;
+      value += highlights;
+      value = CLAMP (value, 0.0, 1.0);
+
+      return value;
+}
+

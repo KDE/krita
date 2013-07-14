@@ -72,6 +72,7 @@ public:
 	virtual void setConfiguration(const KisPropertiesConfiguration* config);
     Ui_Form * m_page;
     QString m_id;
+
 };
 
 #endif

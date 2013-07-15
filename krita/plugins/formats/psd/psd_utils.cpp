@@ -32,21 +32,21 @@ bool psdwrite(QIODevice* io, quint8 v)
 
 bool psdwrite(QIODevice* io, quint16 v)
 {
-    quint16 val = ntohs(v);
+    quint16 val = htons(v);
     int written = io->write((char*)&val, 2);
     return written == 2;
 }
 
 bool psdwrite(QIODevice* io, qint16 v)
 {
-    qint16 val = ntohs(v);
+    qint16 val = htons(v);
     int written = io->write((char*)&val, 2);
     return written == 2;
 }
 
 bool psdwrite(QIODevice* io, quint32 v)
 {
-    quint32 val = ntohl(v);
+    quint32 val = htonl(v);
     int written = io->write((char*)&val, 4);
     return written == 4;
 }

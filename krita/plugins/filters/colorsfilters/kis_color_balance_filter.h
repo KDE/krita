@@ -52,7 +52,7 @@ public:
     virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
 
 	static inline KoID id() {
-        return KoID("colorbalance", i18n("Color Balance.."));
+        return KoID("colorbalance", i18n("Color Balance"));
 	}
 
     virtual KisFilterConfiguration * factoryConfiguration(const KisPaintDeviceSP) const;
@@ -73,6 +73,10 @@ public:
     Ui_Form * m_page;
     QString m_id;
 
+public slots:
+    void slotShadowsClear();
+    void slotMidtonesClear();
+    void slotHighlightsClear();
 };
 
 #endif

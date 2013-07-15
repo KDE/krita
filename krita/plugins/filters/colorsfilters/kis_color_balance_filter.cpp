@@ -41,32 +41,22 @@ KisConfigWidget * KisColorBalanceFilter::createConfigurationWidget(QWidget* pare
 KoColorTransformation * KisColorBalanceFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
 {
 	QHash<QString, QVariant> params;
-	QString suffix = "Midtones";
-	if (config) {
-        params["cyan_red"] = config->getInt("cyan_red", 0) * 0.01;
-        params["magenta_green"] = config->getInt("magenta_green", 0) * 0.01;
-        params["yellow_blue"] = config->getInt("yellow_blue", 0) * 0.01;
+    if (config) {
+        params["cyan_red_midtones"] = config->getInt("cyan_red_midtones", 0) * 0.01;
+        params["magenta_green_midtones"] = config->getInt("magenta_green_midtones", 0) * 0.01;
+        params["yellow_blue_midtones"] = config->getInt("yellow_blue_midtones", 0) * 0.01;
+        params["preserve_midtones"] = config->getBool("preserve_midtones", true);
 
-        params["cyan_red_shadows"] = config->getInt("cyan_red", 0) * 0.01;
-        params["magenta_green_shadows"] = config->getInt("magenta_green", 0) * 0.01;
-        params["yellow_blue_shadows"] = config->getInt("yellow_blue", 0) * 0.01;
+        params["cyan_red_shadows"] = config->getInt("cyan_red_shadows", 0) * 0.01;
+        params["magenta_green_shadows"] = config->getInt("magenta_green_shadows", 0) * 0.01;
+        params["yellow_blue_shadows"] = config->getInt("yellow_blue_shadows", 0) * 0.01;
+        params["preserve_shadows"] = config->getBool("preserve_shadows", true);
 
-        params["cyan_red_highlights"] = config->getInt("cyan_red", 0) * 0.01;
-        params["magenta_green_highlights"] = config->getInt("magenta_green", 0) * 0.01;
-        params["yellow_blue_highlights"] = config->getInt("yellow_blue", 0) * 0.01;
+        params["cyan_red_highlights"] = config->getInt("cyan_red_highlights", 0) * 0.01;
+        params["magenta_green_highlights"] = config->getInt("magenta_green_highlights", 0) * 0.01;
+        params["yellow_blue_highlights"] = config->getInt("yellow_blue_highlights", 0) * 0.01;
+        params["preserve_highlights"] = config->getBool("preserve_highlights", true);
 
-        params["preserve_luminosity"] = config->getBool("preserve_luminosity", true);
-        int type = config->getInt("type", KisColorBalanceFilter::MIDTONES);
-        switch(type)
-        {
-            case KisColorBalanceFilter::HIGHLIGHTS:
-                suffix = "Highlights";
-                break;
-            case KisColorBalanceFilter::SHADOWS:
-                suffix = "Shadows";
-                break;
-            default: break;
-        }
     }
     return cs->createColorTransformation("ColorBalance" , params);
 }
@@ -74,19 +64,21 @@ KoColorTransformation * KisColorBalanceFilter::createTransformation(const KoColo
 KisFilterConfiguration* KisColorBalanceFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 0);
-    config->setProperty("cyan_red", 0);
-    config->setProperty("yellow_green", 0);
-    config->setProperty("magenta_blue", 0);
+    config->setProperty("cyan_red_midtones", 0);
+    config->setProperty("yellow_green_midtones", 0);
+    config->setProperty("magenta_blue_midtones", 0);
+    config->setProperty("preserve_midtones", true);
 
     config->setProperty("cyan_red_shadows", 0);
     config->setProperty("yellow_green_shadows", 0);
     config->setProperty("magenta_blue_shadows", 0);
+    config->setProperty("preserve_shadows", true);
 
     config->setProperty("cyan_red_highlights", 0);
     config->setProperty("yellow_green_highlights", 0);
     config->setProperty("magenta_blue_highlights", 0);
+    config->setProperty("preserve_highlights", true);
 
-    config->setProperty("preserve_luminosity", true);
     return config;
 }
 
@@ -94,29 +86,67 @@ KisColorBalanceConfigWidget::KisColorBalanceConfigWidget(QWidget* parent) : KisC
 {
     m_page = new Ui_Form();
     m_page->setupUi(this);
-    m_page->cyanRedSlider->setMaximum(100);
-    m_page->cyanRedSlider->setMinimum(-100);
-    m_page->cyanRedSpinbox->setMaximum(100);
-    m_page->cyanRedSpinbox->setMinimum(-100);
 
-    m_page->yellowBlueSlider->setMaximum(100);
-    m_page->yellowBlueSlider->setMinimum(-100);
-    m_page->yellowBlueSpinbox->setMaximum(100);
-    m_page->yellowBlueSpinbox->setMinimum(-100);
+    m_page->cyanRedShadowsSlider->setMaximum(100);
+    m_page->cyanRedShadowsSlider->setMinimum(-100);
+    m_page->yellowBlueShadowsSlider->setMaximum(100);
+    m_page->yellowBlueShadowsSlider->setMinimum(-100);
+    m_page->magentaGreenShadowsSlider->setMaximum(100);
+    m_page->magentaGreenShadowsSlider->setMinimum(-100);
 
-    m_page->magentaGreenSlider->setMaximum(100);
-    m_page->magentaGreenSlider->setMinimum(-100);
-    m_page->magentaGreenSpinbox->setMaximum(100);
-    m_page->magentaGreenSpinbox->setMinimum(-100);
+    m_page->cyanRedMidtonesSlider->setMaximum(100);
+    m_page->cyanRedMidtonesSlider->setMinimum(-100);
+    m_page->yellowBlueMidtonesSlider->setMaximum(100);
+    m_page->yellowBlueMidtonesSlider->setMinimum(-100);
+    m_page->magentaGreenMidtonesSlider->setMaximum(100);
+    m_page->magentaGreenMidtonesSlider->setMinimum(-100);
 
-    connect(m_page->radioButtonMidtones, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
-    connect(m_page->radioButtonHighlights, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
-    connect(m_page->radioButtonShadows, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
+    m_page->cyanRedHighlightsSlider->setMaximum(100);
+    m_page->cyanRedHighlightsSlider->setMinimum(-100);
+    m_page->yellowBlueHighlightsSlider->setMaximum(100);
+    m_page->yellowBlueHighlightsSlider->setMinimum(-100);
+    m_page->magentaGreenHighlightsSlider->setMaximum(100);
+    m_page->magentaGreenHighlightsSlider->setMinimum(-100);
 
-    connect(m_page->cyanRedSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
-    connect(m_page->magentaGreenSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
-    connect(m_page->yellowBlueSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
-    connect(m_page->chkPreserve, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->cyanRedShadowsSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->magentaGreenShadowsSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->yellowBlueShadowsSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->chkPreserveShadows, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
+
+    connect(m_page->cyanRedMidtonesSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->magentaGreenMidtonesSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->yellowBlueMidtonesSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->chkPreserveMidtones, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
+
+    connect(m_page->cyanRedHighlightsSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->magentaGreenHighlightsSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->yellowBlueHighlightsSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->chkPreserveHighlights, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
+
+    connect(m_page->pushResetShadows, SIGNAL(clicked()), SLOT(slotShadowsClear()));
+    connect(m_page->pushResetMidtones, SIGNAL(clicked()), SLOT(slotMidtonesClear()));
+    connect(m_page->pushResetHighlights, SIGNAL(clicked()), SLOT(slotHighlightsClear()));
+
+    m_page->cyanRedShadowsSpinbox->setMaximum(100);
+    m_page->cyanRedShadowsSpinbox->setMinimum(-100);
+    m_page->yellowBlueShadowsSpinbox->setMaximum(100);
+    m_page->yellowBlueShadowsSpinbox->setMinimum(-100);
+    m_page->magentaGreenShadowsSpinbox->setMaximum(100);
+    m_page->magentaGreenShadowsSpinbox->setMinimum(-100);
+
+    m_page->cyanRedMidtonesSpinbox->setMaximum(100);
+    m_page->cyanRedMidtonesSpinbox->setMinimum(-100);
+    m_page->yellowBlueMidtonesSpinbox->setMaximum(100);
+    m_page->yellowBlueMidtonesSpinbox->setMinimum(-100);
+    m_page->magentaGreenMidtonesSpinbox->setMaximum(100);
+    m_page->magentaGreenMidtonesSpinbox->setMinimum(-100);
+
+    m_page->cyanRedHighlightsSpinbox->setMaximum(100);
+    m_page->cyanRedHighlightsSpinbox->setMinimum(-100);
+    m_page->yellowBlueHighlightsSpinbox->setMaximum(100);
+    m_page->yellowBlueHighlightsSpinbox->setMinimum(-100);
+    m_page->magentaGreenHighlightsSpinbox->setMaximum(100);
+    m_page->magentaGreenHighlightsSpinbox->setMinimum(-100);
 
 }
 
@@ -128,62 +158,60 @@ KisColorBalanceConfigWidget::~KisColorBalanceConfigWidget()
 KisPropertiesConfiguration * KisColorBalanceConfigWidget::configuration() const
 {
     KisFilterConfiguration* c = new KisFilterConfiguration(KisColorBalanceFilter::id().id(), 0);
-    int type = 0;
-    if(m_page->radioButtonHighlights->isChecked()) {
-        type = KisColorBalanceFilter::HIGHLIGHTS;
-    } else if(m_page->radioButtonShadows->isChecked()) {
-        type = KisColorBalanceFilter::SHADOWS;
-    } else {
-        type = KisColorBalanceFilter::MIDTONES;
-    }
-    c->setProperty("type", type);
 
-    if(type == KisColorBalanceFilter::MIDTONES) {
-        c->setProperty("cyan_red", m_page->cyanRedSlider->value());
-        c->setProperty("magenta_green", m_page->magentaGreenSlider->value());
-        c->setProperty("yellow_blue", m_page->yellowBlueSlider->value());
-    } else if(type == KisColorBalanceFilter::SHADOWS) {
-        c->setProperty("cyan_red_shadows", m_page->cyanRedSlider->value());
-        c->setProperty("magenta_green_shadows", m_page->magentaGreenSlider->value());
-        c->setProperty("yellow_blue_shadows", m_page->yellowBlueSlider->value());
-    } else {
-        c->setProperty("cyan_red_highlights", m_page->cyanRedSlider->value());
-        c->setProperty("magenta_green_highlights", m_page->magentaGreenSlider->value());
-        c->setProperty("yellow_blue_highlights", m_page->yellowBlueSlider->value());
-    }
-    c->setProperty("preserve_luminosity", m_page->chkPreserve->isChecked());
+    c->setProperty("cyan_red_shadows", m_page->cyanRedShadowsSlider->value());
+    c->setProperty("magenta_green_shadows", m_page->magentaGreenShadowsSlider->value());
+    c->setProperty("yellow_blue_shadows", m_page->yellowBlueShadowsSlider->value());
+    c->setProperty("preserve_shadows", m_page->chkPreserveShadows->isChecked());
+
+    c->setProperty("cyan_red_midtones", m_page->cyanRedMidtonesSlider->value());
+    c->setProperty("magenta_green_midtones", m_page->magentaGreenMidtonesSlider->value());
+    c->setProperty("yellow_blue_midtones", m_page->yellowBlueMidtonesSlider->value());
+    c->setProperty("preserve_midtones", m_page->chkPreserveMidtones->isChecked());
+
+    c->setProperty("cyan_red_highlights", m_page->cyanRedHighlightsSlider->value());
+    c->setProperty("magenta_green_highlights", m_page->magentaGreenHighlightsSlider->value());
+    c->setProperty("yellow_blue_highlights", m_page->yellowBlueHighlightsSlider->value());
+    c->setProperty("preserve_highlights", m_page->chkPreserveHighlights->isChecked());
+
     return c;
 }
 
 void KisColorBalanceConfigWidget::setConfiguration(const KisPropertiesConfiguration * config)
 {
-    int type = config->getInt("type", KisColorBalanceFilter::MIDTONES);
-    switch(type)
-    {
-        case KisColorBalanceFilter::HIGHLIGHTS:
-            m_page->radioButtonHighlights->setChecked(true);
-            break;
-        case KisColorBalanceFilter::SHADOWS:
-            m_page->radioButtonShadows->setChecked(true);
-            break;
-        default:
-        case KisColorBalanceFilter::MIDTONES:
-            m_page->radioButtonMidtones->setChecked(true);
-            break;
-    }
+    m_page->cyanRedMidtonesSlider->setValue( config->getDouble("cyan_red_midtones", 0));
+    m_page->magentaGreenMidtonesSlider->setValue( config->getDouble("magenta_green_midtones", 0));
+    m_page->yellowBlueMidtonesSlider->setValue( config->getDouble("yellow_blue_midtones", 0));
+    m_page->chkPreserveMidtones->setChecked(config->getBool("preserve_midtones", true));
 
-    if(type == KisColorBalanceFilter::MIDTONES) {
-        m_page->cyanRedSlider->setValue( config->getDouble("cyan_red", 0));
-        m_page->magentaGreenSlider->setValue( config->getDouble("magenta_green", 0));
-        m_page->yellowBlueSlider->setValue( config->getDouble("yellow_blue", 0));
-    } else if(type == KisColorBalanceFilter::SHADOWS) {
-        m_page->cyanRedSlider->setValue( config->getDouble("cyan_red_shadows", 0));
-        m_page->magentaGreenSlider->setValue( config->getDouble("magenta_green_shadows", 0));
-        m_page->yellowBlueSlider->setValue( config->getDouble("yellow_blue_shadows", 0));
-    } else {
-        m_page->cyanRedSlider->setValue( config->getDouble("cyan_red_highlights", 0));
-        m_page->magentaGreenSlider->setValue( config->getDouble("magenta_green_highlights", 0));
-        m_page->yellowBlueSlider->setValue( config->getDouble("yellow_blue_highlights", 0));
-    }
-    m_page->chkPreserve->setChecked(config->getBool("preserve_luminosity", true));
+    m_page->cyanRedShadowsSlider->setValue( config->getDouble("cyan_red_shadows", 0));
+    m_page->magentaGreenShadowsSlider->setValue( config->getDouble("magenta_green_shadows", 0));
+    m_page->yellowBlueShadowsSlider->setValue( config->getDouble("yellow_blue_shadows", 0));
+    m_page->chkPreserveShadows->setChecked(config->getBool("preserve_shadows", true));
+
+    m_page->cyanRedHighlightsSlider->setValue( config->getDouble("cyan_red_highlights", 0));
+    m_page->magentaGreenHighlightsSlider->setValue( config->getDouble("magenta_green_highlights", 0));
+    m_page->yellowBlueHighlightsSlider->setValue( config->getDouble("yellow_blue_highlights", 0));
+    m_page->chkPreserveHighlights->setChecked(config->getBool("preserve_highlights", true));
+}
+
+void KisColorBalanceConfigWidget::slotMidtonesClear()
+{
+    m_page->cyanRedMidtonesSlider->setValue(0);
+    m_page->magentaGreenMidtonesSlider->setValue(0);
+    m_page->yellowBlueMidtonesSlider->setValue(0);
+}
+
+void KisColorBalanceConfigWidget::slotHighlightsClear()
+{
+    m_page->cyanRedHighlightsSlider->setValue(0);
+    m_page->magentaGreenHighlightsSlider->setValue(0);
+    m_page->yellowBlueHighlightsSlider->setValue(0);
+}
+
+void KisColorBalanceConfigWidget::slotShadowsClear()
+{
+    m_page->cyanRedShadowsSlider->setValue(0);
+    m_page->magentaGreenShadowsSlider->setValue(0);
+    m_page->yellowBlueShadowsSlider->setValue(0);
 }

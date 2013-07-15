@@ -59,10 +59,11 @@ void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
         float blue = SCALE_TO_FLOAT(src->blue);
         RGBToHSL(red, green, blue, &hue, &saturation, &lightness);
 
-        value_red = bal->colorBalanceTransform(SCALE_TO_FLOAT(src->red), lightness, m_cyan_red_shadows, m_cyan_red, m_cyan_red_highlights);
-        value_green = bal->colorBalanceTransform(SCALE_TO_FLOAT(src->green), lightness, m_magenta_green_shadows, m_magenta_green, m_magenta_green_highlights);
-        value_blue = bal->colorBalanceTransform(SCALE_TO_FLOAT(src->blue), lightness, m_yellow_blue_shadows, m_yellow_blue, m_yellow_blue_highlights);
-        if(m_preserve)
+        value_red = bal->colorBalanceTransform(red, lightness, m_cyan_shadows, m_cyan_midtones, m_cyan_highlights);
+        value_green = bal->colorBalanceTransform(green, lightness, m_magenta_shadows, m_magenta_midtones, m_magenta_highlights);
+        value_blue = bal->colorBalanceTransform(blue, lightness, m_yellow_shadows, m_yellow_midtones, m_yellow_highlights);
+
+        if(m_preserve_midtones)
         {
             float h1, s1, l1, h2, s2, l2;
             RGBToHSL(SCALE_TO_FLOAT(src->red), SCALE_TO_FLOAT(src->green), SCALE_TO_FLOAT(src->blue), &h1, &s1, &l1);
@@ -84,33 +85,38 @@ void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
 virtual QList<QString> parameters() const
 {
     QList<QString> list;
-    list << "cyan_red" << "magenta_green" << "yellow_blue" << "cyan_red_shadows" << "magenta_green_shadows" << "yellow_blue_shadows"
-         << "cyan_red_highlights" << "magenta_green_highlights" << "yellow_blue_highlights" << "preserve_luminosity";
+    list << "cyan_red_midtones"   << "magenta_green_midtones"   << "yellow_blue_midtones"   << "preserve_midtones"
+         << "cyan_red_shadows"    << "magenta_green_shadows"    << "yellow_blue_shadows"    << "preserve_shadows"
+         << "cyan_red_highlights" << "magenta_green_highlights" << "yellow_blue_highlights" << "preserve_highlights";
     return list;
 }
 
 virtual int parameterId(const QString& name) const
 {
-    if (name == "cyan_red")
+    if (name == "cyan_red_midtones")
         return 0;
-    else if(name == "magenta_green")
+    else if(name == "magenta_green_midtones")
         return 1;
-    else if(name == "yellow_blue")
+    else if(name == "yellow_blue_midtones")
         return 2;
-    else if (name == "cyan_red_shadows")
+    else if(name == "preserve_midtones")
         return 3;
-    else if(name == "magenta_green_shadows")
+    else if (name == "cyan_red_shadows")
         return 4;
-    else if(name == "yellow_blue_shadows")
+    else if(name == "magenta_green_shadows")
         return 5;
-    else if (name == "cyan_red_highlights")
+    else if(name == "yellow_blue_shadows")
         return 6;
-    else if(name == "magenta_green_highlights")
+    else if(name == "preserve_shadows")
         return 7;
-    else if(name == "yellow_blue_highlights")
+    else if (name == "cyan_red_highlights")
         return 8;
-    else if(name == "preserve_luminosity")
+    else if(name == "magenta_green_highlights")
         return 9;
+    else if(name == "yellow_blue_highlights")
+        return 10;
+    else if(name == "preserve_highlights")
+        return 11;
     return -1;
 }
 
@@ -119,34 +125,40 @@ virtual void setParameter(int id, const QVariant& parameter)
     switch(id)
     {
     case 0:
-        m_cyan_red = parameter.toDouble();
+        m_cyan_midtones = parameter.toDouble();
         break;
     case 1:
-        m_magenta_green = parameter.toDouble();
+        m_magenta_midtones = parameter.toDouble();
         break;
     case 2:
-        m_yellow_blue = parameter.toDouble();
+        m_yellow_midtones = parameter.toDouble();
         break;
     case 3:
-        m_cyan_red_shadows = parameter.toDouble();
+        m_preserve_midtones = parameter.toBool();
         break;
     case 4:
-        m_magenta_green_shadows = parameter.toDouble();
+        m_cyan_shadows = parameter.toDouble();
         break;
     case 5:
-        m_yellow_blue_shadows = parameter.toDouble();
+        m_magenta_shadows = parameter.toDouble();
         break;
     case 6:
-        m_cyan_red_highlights = parameter.toDouble();
+        m_yellow_shadows = parameter.toDouble();
         break;
     case 7:
-        m_magenta_green_highlights = parameter.toDouble();
+        m_preserve_shadows = parameter.toBool();
         break;
     case 8:
-        m_yellow_blue_highlights = parameter.toDouble();
+        m_cyan_highlights = parameter.toDouble();
         break;
     case 9:
-        m_preserve = parameter.toBool();
+        m_magenta_highlights = parameter.toDouble();
+        break;
+    case 10:
+        m_yellow_highlights = parameter.toDouble();
+        break;
+    case 11:
+        m_preserve_highlights = parameter.toBool();
         break;
     default:
         ;
@@ -154,9 +166,9 @@ virtual void setParameter(int id, const QVariant& parameter)
 }
 private:
 
-    double m_cyan_red, m_magenta_green, m_yellow_blue,  m_cyan_red_shadows, m_magenta_green_shadows, m_yellow_blue_shadows,
-           m_cyan_red_highlights, m_magenta_green_highlights, m_yellow_blue_highlights;
-    bool m_preserve;
+    double m_cyan_midtones, m_magenta_midtones, m_yellow_midtones,  m_cyan_shadows, m_magenta_shadows, m_yellow_shadows,
+           m_cyan_highlights, m_magenta_highlights, m_yellow_highlights;
+    bool m_preserve_midtones, m_preserve_shadows, m_preserve_highlights;
 };
 
  KisColorBalanceMidtonesAdjustmentFactory::KisColorBalanceMidtonesAdjustmentFactory()

@@ -212,7 +212,7 @@ bool PSDLayerSection::read(QIODevice* io)
     }
 
     quint32 globalMaskBlockLength;
-    if (!psdread(io, &globalMaskBlockLength) || globalMaskBlockLength > (quint64)io->bytesAvailable()) {
+    if (!psdread(io, &globalMaskBlockLength)) {
         error = "Could not read global mask info block";
         return false;
     }

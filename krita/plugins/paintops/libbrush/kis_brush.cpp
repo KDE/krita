@@ -428,7 +428,7 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
     bool hasColor = this->hasColor();
 
     for (int y = 0; y < maskHeight; y++) {
-        quint8* maskPointer = outputImage.scanLine(y);
+        const quint8* maskPointer = outputImage.constScanLine(y);
         if (coloringInformation) {
             for (int x = 0; x < maskWidth; x++) {
                 if (color) {
@@ -442,20 +442,20 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
         }
 
         if (hasColor) {
-            quint8 *src = maskPointer;
+            const quint8 *src = maskPointer;
             quint8 *dst = alphaArray;
             for (int x = 0; x < maskWidth; x++) {
-                QRgb *c = reinterpret_cast<QRgb*>(src);
+                const QRgb *c = reinterpret_cast<const QRgb*>(src);
 
                 *dst = KoColorSpaceMaths<quint8>::multiply(255 - qGray(*c), qAlpha(*c));
                 src += 4;
                 dst++;
             }
         } else {
-            quint8 *src = maskPointer;
+            const quint8 *src = maskPointer;
             quint8 *dst = alphaArray;
             for (int x = 0; x < maskWidth; x++) {
-                QRgb *c = reinterpret_cast<QRgb*>(src);
+                const QRgb *c = reinterpret_cast<const QRgb*>(src);
 
                 *dst = KoColorSpaceMaths<quint8>::multiply(255 - *src, qAlpha(*c));
                 src += 4;

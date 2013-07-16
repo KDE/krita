@@ -178,8 +178,10 @@ QImage KisQImagePyramid::createImage(qreal scale, qreal rotation,
                     baseScale, srcImage.size(),
                     &transform, &dstSize);
 
-    if (transform.isIdentity()) {
-        //return srcImage;
+    if (transform.isIdentity() &&
+        srcImage.format() == QImage::Format_ARGB32) {
+
+        return srcImage;
     }
 
     QImage dstImage(dstSize, QImage::Format_ARGB32);

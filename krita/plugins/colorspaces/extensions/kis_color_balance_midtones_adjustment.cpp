@@ -63,7 +63,7 @@ void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
         value_green = bal->colorBalanceTransform(green, lightness, m_magenta_shadows, m_magenta_midtones, m_magenta_highlights);
         value_blue = bal->colorBalanceTransform(blue, lightness, m_yellow_shadows, m_yellow_midtones, m_yellow_highlights);
 
-        if(m_preserve_midtones)
+        if(m_preserve_midtones == true || m_preserve_highlights == true || m_preserve_shadows == true)
         {
             float h1, s1, l1, h2, s2, l2;
             RGBToHSL(SCALE_TO_FLOAT(src->red), SCALE_TO_FLOAT(src->green), SCALE_TO_FLOAT(src->blue), &h1, &s1, &l1);

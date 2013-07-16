@@ -293,7 +293,7 @@ qint32 KisBrush::maskWidth(double scale, double angle, const KisPaintInformation
     scale *= d->scale;
 
     return KisQImagePyramid::imageSize(QSize(width(), height()),
-                                       scale, angle, 0.0, 0.0).width();
+                                       scale, angle, 0.5, 0.5).width();
 }
 
 qint32 KisBrush::maskHeight(double scale, double angle, const KisPaintInformation& info) const
@@ -308,7 +308,7 @@ qint32 KisBrush::maskHeight(double scale, double angle, const KisPaintInformatio
     scale *= d->scale;
 
     return KisQImagePyramid::imageSize(QSize(width(), height()),
-                                       scale, angle, 0.0, 0.0).height();
+                                       scale, angle, 0.5, 0.5).height();
 }
 
 double KisBrush::maskAngle(double angle) const

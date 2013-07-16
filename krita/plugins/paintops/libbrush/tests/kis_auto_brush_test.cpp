@@ -98,24 +98,24 @@ void KisAutoBrushTest::testSizeRotation()
         KisBrushSP a = new KisAutoBrush(circle, 0.0, 0.0);
         QCOMPARE(a->width(), 10);
         QCOMPARE(a->height(), 5);
-        QCOMPARE(a->maskWidth(1.0,0.0, KisPaintInformation()), 11);
-        QCOMPARE(a->maskHeight(1.0,0.0, KisPaintInformation()), 6);
-        QCOMPARE(a->maskWidth(2.0,0.0, KisPaintInformation()), 21);
-        QCOMPARE(a->maskHeight(2.0,0.0, KisPaintInformation()), 11);
-        QCOMPARE(a->maskWidth(0.5,0.0, KisPaintInformation()), 6);
-        QCOMPARE(a->maskHeight(0.5,0.0, KisPaintInformation()), 4);
-        QCOMPARE(a->maskWidth(1.0,M_PI, KisPaintInformation()), 11);
-        QCOMPARE(a->maskHeight(1.0,M_PI, KisPaintInformation()), 6);
-        QCOMPARE(a->maskWidth(1.0,M_PI_2, KisPaintInformation()), 6);
-        QCOMPARE(a->maskHeight(1.0,M_PI_2, KisPaintInformation()), 11);
-        QCOMPARE(a->maskWidth(1.0,-M_PI_2, KisPaintInformation()), 6);
-        QCOMPARE(a->maskHeight(1.0,-M_PI_2, KisPaintInformation()), 11);
-        QCOMPARE(a->maskWidth(1.0,0.25*M_PI, KisPaintInformation()), 12);
-        QCOMPARE(a->maskHeight(1.0,0.25*M_PI, KisPaintInformation()), 12);
-        QCOMPARE(a->maskWidth(2.0,0.25*M_PI, KisPaintInformation()), 23);
-        QCOMPARE(a->maskHeight(2.0,0.25*M_PI, KisPaintInformation()), 23);
-        QCOMPARE(a->maskWidth(0.5,0.25*M_PI, KisPaintInformation()), 7);
-        QCOMPARE(a->maskHeight(0.5,0.25*M_PI, KisPaintInformation()), 7);
+        QCOMPARE(a->maskWidth(1.0,0.0, KisPaintInformation()), 10);
+        QCOMPARE(a->maskHeight(1.0,0.0, KisPaintInformation()), 5);
+        QCOMPARE(a->maskWidth(2.0,0.0, KisPaintInformation()), 20);
+        QCOMPARE(a->maskHeight(2.0,0.0, KisPaintInformation()), 10);
+        QCOMPARE(a->maskWidth(0.5,0.0, KisPaintInformation()), 5);
+        QCOMPARE(a->maskHeight(0.5,0.0, KisPaintInformation()), 3);
+        QCOMPARE(a->maskWidth(1.0,M_PI, KisPaintInformation()), 10);
+        QCOMPARE(a->maskHeight(1.0,M_PI, KisPaintInformation()), 5);
+        QCOMPARE(a->maskWidth(1.0,M_PI_2, KisPaintInformation()), 5);
+        QCOMPARE(a->maskHeight(1.0,M_PI_2, KisPaintInformation()), 10);
+        QCOMPARE(a->maskWidth(1.0,-M_PI_2, KisPaintInformation()), 5);
+        QCOMPARE(a->maskHeight(1.0,-M_PI_2, KisPaintInformation()), 10);
+        QCOMPARE(a->maskWidth(1.0,0.25*M_PI, KisPaintInformation()), 11);
+        QCOMPARE(a->maskHeight(1.0,0.25*M_PI, KisPaintInformation()), 11);
+        QCOMPARE(a->maskWidth(2.0,0.25*M_PI, KisPaintInformation()), 21);
+        QCOMPARE(a->maskHeight(2.0,0.25*M_PI, KisPaintInformation()), 21);
+        QCOMPARE(a->maskWidth(0.5,0.25*M_PI, KisPaintInformation()), 5);
+        QCOMPARE(a->maskHeight(0.5,0.25*M_PI, KisPaintInformation()), 5);
     }
 }
 
@@ -124,9 +124,10 @@ void KisAutoBrushTest::testCopyMasking()
 {
     int w = 64;
     int h = 64;
-
     int x = 0;
     int y = 0;
+    QRect rc(x,y,w,h);
+
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
     KoColor black(Qt::black, cs);
@@ -134,7 +135,7 @@ void KisAutoBrushTest::testCopyMasking()
 
 
     KisPaintDeviceSP tempDev = new KisPaintDevice(cs);
-    tempDev->fill(0, 0, w+1, h+1, red.data()); // see the TODO
+    tempDev->fill(0, 0, w, h, red.data());
 #ifdef SAVE_OUTPUT_IMAGES
     tempDev->convertToQImage(0).save("tempDev.png");
 #endif
@@ -143,20 +144,15 @@ void KisAutoBrushTest::testCopyMasking()
     KisAutoBrush brush(mask,0,0);
 
     KisFixedPaintDeviceSP maskDab = new KisFixedPaintDevice(cs);
-    brush.mask(maskDab,black,1,1,0,KisPaintInformation()); // grows to w+1, h+1
+    brush.mask(maskDab,black,1,1,0,KisPaintInformation());
     maskDab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
 
 #ifdef SAVE_OUTPUT_IMAGES
     maskDab->convertToQImage(0,0,0,64,64).save("maskDab.png");
 #endif
 
-    QRect rc = tempDev->exactBounds();
-    //QRect maskRc = maskDab->bounds();
-
-    //TODO: if rc != maskRc, bitBltWithFixedSelection works wrong
-    //qDebug() << rc;
-    //qDebug() << maskRc;
-
+    QCOMPARE(tempDev->exactBounds(), rc);
+    QCOMPARE(maskDab->bounds(), rc);
 
     KisFixedPaintDeviceSP dev2fixed = new KisFixedPaintDevice(cs);
     dev2fixed->setRect(rc);

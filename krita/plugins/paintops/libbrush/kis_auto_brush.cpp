@@ -307,7 +307,7 @@ qreal KisAutoBrush::randomness() const
 void KisAutoBrush::setImage(const QImage& image)
 {
     m_image = image;
-    clearScaledBrushes();
+    clearBrushPyramid();
 }
 
 QPainterPath KisAutoBrush::outline() const

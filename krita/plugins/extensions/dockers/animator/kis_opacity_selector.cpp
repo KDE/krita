@@ -40,16 +40,30 @@ KisOpacitySelector::~KisOpacitySelector(){
 }
 
 void KisOpacitySelector::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget){
-
     int step = m_width / m_frames;
     int j = 0;
+    int opacityVal = 0;
+    int nextOpacityVal = 0;
     for(int i = 0; i < m_width; i+=step){
         painter->setPen(Qt::gray);
         painter->drawLine(i,0,i,m_height);
         painter->setPen(Qt::green);
-        painter->drawEllipse(i+(step/2),m_height - (m_opacityValues->at(j)*(m_height))/100, 2,2);
+        //To fix assertion
+        if(j < m_opacityValues->length()){
+            opacityVal = m_opacityValues->at(j);
+        }else{
+            opacityVal = 0;
+        }
+
+        if(j < m_opacityValues->length()-1){
+            nextOpacityVal = m_opacityValues->at(j+1);
+        }else{
+            nextOpacityVal = 0;
+        }
+
+        painter->drawEllipse(i+(step/2),m_height - (opacityVal*(m_height))/100, 2,2);
         if(j<m_opacityValues->length()-1)
-            painter->drawLine(i+(step/2),m_height-(m_opacityValues->at(j)*(m_height))/100,i+(3*step/2), m_height-(m_opacityValues->at(j+1)*(m_height))/100);
+            painter->drawLine(i+(step/2),m_height-(opacityVal*(m_height))/100,i+(3*step/2), m_height-(nextOpacityVal*(m_height))/100);
         j++;
     }
 }

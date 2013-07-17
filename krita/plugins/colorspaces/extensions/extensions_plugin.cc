@@ -30,9 +30,7 @@
 #include "kis_burnmidtones_adjustment.h"
 #include "kis_burnhighlights_adjustment.h"
 #include "kis_burnshadows_adjustment.h"
-#include "kis_color_balance_midtones_adjustment.h"
-//#include "kis_color_balance_shadows_adjustment.h"
-//#include "kis_color_balance_highlights_adjustment.h"
+#include "kis_color_balance_adjustment.h"
 
 K_PLUGIN_FACTORY(ExtensionsPluginFactory, registerPlugin<ExtensionsPlugin>();)
 K_EXPORT_PLUGIN(ExtensionsPluginFactory("krita"))
@@ -50,9 +48,7 @@ ExtensionsPlugin::ExtensionsPlugin(QObject *parent, const QVariantList &)
     KoColorTransformationFactoryRegistry::addColorTransformationFactory(new KisBurnHighlightsAdjustmentFactory);
     KoColorTransformationFactoryRegistry::addColorTransformationFactory(new KisBurnShadowsAdjustmentFactory);
 
-    KoColorTransformationFactoryRegistry::addColorTransformationFactory(new KisColorBalanceMidtonesAdjustmentFactory);
-    //KoColorTransformationFactoryRegistry::addColorTransformationFactory(new KisColorBalanceShadowsAdjustmentFactory);
-    //KoColorTransformationFactoryRegistry::addColorTransformationFactory(new KisColorBalanceHighlightsAdjustmentFactory);
+    KoColorTransformationFactoryRegistry::addColorTransformationFactory(new KisColorBalanceAdjustmentFactory);
 }
 
 ExtensionsPlugin::~ExtensionsPlugin()

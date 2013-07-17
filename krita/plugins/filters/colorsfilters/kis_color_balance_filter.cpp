@@ -45,17 +45,15 @@ KoColorTransformation * KisColorBalanceFilter::createTransformation(const KoColo
         params["cyan_red_midtones"] = config->getInt("cyan_red_midtones", 0) * 0.01;
         params["magenta_green_midtones"] = config->getInt("magenta_green_midtones", 0) * 0.01;
         params["yellow_blue_midtones"] = config->getInt("yellow_blue_midtones", 0) * 0.01;
-        params["preserve_midtones"] = config->getBool("preserve_midtones", true);
 
         params["cyan_red_shadows"] = config->getInt("cyan_red_shadows", 0) * 0.01;
         params["magenta_green_shadows"] = config->getInt("magenta_green_shadows", 0) * 0.01;
         params["yellow_blue_shadows"] = config->getInt("yellow_blue_shadows", 0) * 0.01;
-        params["preserve_shadows"] = config->getBool("preserve_shadows", true);
 
         params["cyan_red_highlights"] = config->getInt("cyan_red_highlights", 0) * 0.01;
         params["magenta_green_highlights"] = config->getInt("magenta_green_highlights", 0) * 0.01;
         params["yellow_blue_highlights"] = config->getInt("yellow_blue_highlights", 0) * 0.01;
-        params["preserve_highlights"] = config->getBool("preserve_highlights", true);
+        params["preserve_luminosity"] = config->getBool("preserve_luminosity", true);
 
     }
     return cs->createColorTransformation("ColorBalance" , params);
@@ -67,17 +65,15 @@ KisFilterConfiguration* KisColorBalanceFilter::factoryConfiguration(const KisPai
     config->setProperty("cyan_red_midtones", 0);
     config->setProperty("yellow_green_midtones", 0);
     config->setProperty("magenta_blue_midtones", 0);
-    config->setProperty("preserve_midtones", true);
 
     config->setProperty("cyan_red_shadows", 0);
     config->setProperty("yellow_green_shadows", 0);
     config->setProperty("magenta_blue_shadows", 0);
-    config->setProperty("preserve_shadows", true);
 
     config->setProperty("cyan_red_highlights", 0);
     config->setProperty("yellow_green_highlights", 0);
     config->setProperty("magenta_blue_highlights", 0);
-    config->setProperty("preserve_highlights", true);
+    config->setProperty("preserve_luminosity", true);
 
     return config;
 }
@@ -111,17 +107,15 @@ KisColorBalanceConfigWidget::KisColorBalanceConfigWidget(QWidget* parent) : KisC
     connect(m_page->cyanRedShadowsSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_page->magentaGreenShadowsSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_page->yellowBlueShadowsSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
-    connect(m_page->chkPreserveShadows, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
 
     connect(m_page->cyanRedMidtonesSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_page->magentaGreenMidtonesSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_page->yellowBlueMidtonesSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
-    connect(m_page->chkPreserveMidtones, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
 
     connect(m_page->cyanRedHighlightsSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_page->magentaGreenHighlightsSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_page->yellowBlueHighlightsSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
-    connect(m_page->chkPreserveHighlights, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->chkPreserveLuminosity, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
 
     connect(m_page->pushResetShadows, SIGNAL(clicked()), SLOT(slotShadowsClear()));
     connect(m_page->pushResetMidtones, SIGNAL(clicked()), SLOT(slotMidtonesClear()));
@@ -162,18 +156,16 @@ KisPropertiesConfiguration * KisColorBalanceConfigWidget::configuration() const
     c->setProperty("cyan_red_shadows", m_page->cyanRedShadowsSlider->value());
     c->setProperty("magenta_green_shadows", m_page->magentaGreenShadowsSlider->value());
     c->setProperty("yellow_blue_shadows", m_page->yellowBlueShadowsSlider->value());
-    c->setProperty("preserve_shadows", m_page->chkPreserveShadows->isChecked());
 
     c->setProperty("cyan_red_midtones", m_page->cyanRedMidtonesSlider->value());
     c->setProperty("magenta_green_midtones", m_page->magentaGreenMidtonesSlider->value());
     c->setProperty("yellow_blue_midtones", m_page->yellowBlueMidtonesSlider->value());
-    c->setProperty("preserve_midtones", m_page->chkPreserveMidtones->isChecked());
 
     c->setProperty("cyan_red_highlights", m_page->cyanRedHighlightsSlider->value());
     c->setProperty("magenta_green_highlights", m_page->magentaGreenHighlightsSlider->value());
     c->setProperty("yellow_blue_highlights", m_page->yellowBlueHighlightsSlider->value());
-    c->setProperty("preserve_highlights", m_page->chkPreserveHighlights->isChecked());
 
+    c->setProperty("preserve_luminosity", m_page->chkPreserveLuminosity->isChecked());
     return c;
 }
 
@@ -182,17 +174,15 @@ void KisColorBalanceConfigWidget::setConfiguration(const KisPropertiesConfigurat
     m_page->cyanRedMidtonesSlider->setValue( config->getDouble("cyan_red_midtones", 0));
     m_page->magentaGreenMidtonesSlider->setValue( config->getDouble("magenta_green_midtones", 0));
     m_page->yellowBlueMidtonesSlider->setValue( config->getDouble("yellow_blue_midtones", 0));
-    m_page->chkPreserveMidtones->setChecked(config->getBool("preserve_midtones", true));
 
     m_page->cyanRedShadowsSlider->setValue( config->getDouble("cyan_red_shadows", 0));
     m_page->magentaGreenShadowsSlider->setValue( config->getDouble("magenta_green_shadows", 0));
     m_page->yellowBlueShadowsSlider->setValue( config->getDouble("yellow_blue_shadows", 0));
-    m_page->chkPreserveShadows->setChecked(config->getBool("preserve_shadows", true));
 
     m_page->cyanRedHighlightsSlider->setValue( config->getDouble("cyan_red_highlights", 0));
     m_page->magentaGreenHighlightsSlider->setValue( config->getDouble("magenta_green_highlights", 0));
     m_page->yellowBlueHighlightsSlider->setValue( config->getDouble("yellow_blue_highlights", 0));
-    m_page->chkPreserveHighlights->setChecked(config->getBool("preserve_highlights", true));
+    m_page->chkPreserveLuminosity->setChecked(config->getBool("preserve_luminosity", true));
 }
 
 void KisColorBalanceConfigWidget::slotMidtonesClear()

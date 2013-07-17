@@ -89,16 +89,6 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0" colspan="2">
-      <widget class="QCheckBox" name="chkPreserveShadows">
-       <property name="layoutDirection">
-        <enum>Qt::LeftToRight</enum>
-       </property>
-       <property name="text">
-        <string>Preserve Luminosity</string>
-       </property>
-      </widget>
-     </item>
      <item row="3" column="3">
       <widget class="QPushButton" name="pushResetShadows">
        <property name="text">
@@ -222,13 +212,6 @@
      <item row="2" column="3" colspan="2">
       <widget class="QSpinBox" name="yellowBlueMidtonesSpinbox"/>
      </item>
-     <item row="3" column="0" colspan="2">
-      <widget class="QCheckBox" name="chkPreserveMidtones">
-       <property name="text">
-        <string>Preserve Luminosity</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="1">
       <widget class="QSlider" name="cyanRedMidtonesSlider">
        <property name="orientation">
@@ -351,7 +334,7 @@
       <widget class="QSpinBox" name="cyanRedHighlightsSpinbox"/>
      </item>
      <item row="3" column="0" colspan="2">
-      <widget class="QCheckBox" name="chkPreserveHighlights">
+      <widget class="QCheckBox" name="chkPreserveLuminosity">
        <property name="text">
         <string>Preserve Luminosity</string>
        </property>
@@ -367,9 +350,8 @@
   <tabstop>magentaGreenShadowsSpinbox</tabstop>
   <tabstop>yellowBlueShadowsSpinbox</tabstop>
   <tabstop>magentaGreenShadowsSlider</tabstop>
-  <tabstop>chkPreserveMidtones</tabstop>
   <tabstop>pushResetMidtones</tabstop>
-  <tabstop>chkPreserveHighlights</tabstop>
+  <tabstop>chkPreserveLuminosity</tabstop>
   <tabstop>magentaGreenHighlightsSlider</tabstop>
   <tabstop>cyanRedHighlightsSlider</tabstop>
   <tabstop>yellowBlueShadowsSlider</tabstop>

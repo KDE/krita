@@ -138,9 +138,6 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout_2">
-     <item row="0" column="3" colspan="2">
-      <widget class="QSpinBox" name="cyanRedMidtonesSpinbox"/>
-     </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_19">
        <property name="text">
@@ -167,9 +164,6 @@
         <string>Green</string>
        </property>
       </widget>
-     </item>
-     <item row="1" column="3" colspan="2">
-      <widget class="QSpinBox" name="magentaGreenMidtonesSpinbox"/>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="label_21">
@@ -209,9 +203,6 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="3" colspan="2">
-      <widget class="QSpinBox" name="yellowBlueMidtonesSpinbox"/>
-     </item>
      <item row="0" column="1">
       <widget class="QSlider" name="cyanRedMidtonesSlider">
        <property name="orientation">
@@ -225,6 +216,15 @@
         <enum>Qt::Horizontal</enum>
        </property>
       </widget>
+     </item>
+     <item row="2" column="4">
+      <widget class="QSpinBox" name="yellowBlueMidtonesSpinbox"/>
+     </item>
+     <item row="1" column="4">
+      <widget class="QSpinBox" name="magentaGreenMidtonesSpinbox"/>
+     </item>
+     <item row="0" column="4">
+      <widget class="QSpinBox" name="cyanRedMidtonesSpinbox"/>
      </item>
     </layout>
    </item>

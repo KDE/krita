@@ -40,6 +40,7 @@ private slots:
     void benchmarkRotation();
 
     void benchmarkMaskScaling();
+    void testPyramidLevelRounding();
 };
 
 #endif

@@ -21,9 +21,10 @@
 
 #include <QImage>
 #include <QVector>
+#include <krita_export.h>
 
 
-class KisQImagePyramid
+class BRUSH_EXPORT KisQImagePyramid
 {
 public:
     KisQImagePyramid(const QImage &baseImage);
@@ -37,6 +38,7 @@ public:
                        qreal subPixelX, qreal subPixelY);
 
 private:
+    friend class KisBrushTest;
     int findNearestLevel(qreal scale, qreal *baseScale);
     static void calculateParams(qreal scale, qreal rotation,
                                 qreal subPixelX, qreal subPixelY,

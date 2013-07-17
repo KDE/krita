@@ -29,8 +29,8 @@
 #include "kis_types.h"
 #include "kis_paint_device.h"
 #include "kis_paint_information.h"
-#include "kis_vec.h"
 #include <kis_fixed_paint_device.h>
+#include "kis_qimage_pyramid.h"
 
 void KisBrushTest::testMaskGenerationNoColor()
 {
@@ -262,6 +262,42 @@ void KisBrushTest::benchmarkMaskScaling()
         qreal scale = qreal(qrand()) / RAND_MAX * 2.0;
         brush->mask(dab, c, scale, scale, 0.0, info, 0.0, 0.0, 1.0);
     }
+}
+
+void KisBrushTest::testPyramidLevelRounding()
+{
+    QSize imageSize(41, 41);
+    QImage image(imageSize, QImage::Format_ARGB32);
+    image.fill(0);
+
+    KisQImagePyramid pyramid(image);
+
+    qreal baseScale;
+    int baseLevel;
+
+    baseLevel = pyramid.findNearestLevel(1.0, &baseScale);
+    QCOMPARE(baseScale, 1.0);
+    QCOMPARE(baseLevel, 3);
+
+    baseLevel = pyramid.findNearestLevel(2.0, &baseScale);
+    QCOMPARE(baseScale, 2.0);
+    QCOMPARE(baseLevel, 2);
+
+    baseLevel = pyramid.findNearestLevel(4.0, &baseScale);
+    QCOMPARE(baseScale, 4.0);
+    QCOMPARE(baseLevel, 1);
+
+    baseLevel = pyramid.findNearestLevel(0.5, &baseScale);
+    QCOMPARE(baseScale, 0.5);
+    QCOMPARE(baseLevel, 4);
+
+    baseLevel = pyramid.findNearestLevel(0.25, &baseScale);
+    QCOMPARE(baseScale, 0.25);
+    QCOMPARE(baseLevel, 5);
+
+    baseLevel = pyramid.findNearestLevel(0.25 + 1e-7, &baseScale);
+    QCOMPARE(baseScale, 0.25);
+    QCOMPARE(baseLevel, 5);
 }
 
 QTEST_KDEMAIN(KisBrushTest, GUI)

@@ -1,0 +1,660 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>364</width>
+    <height>456</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+       <weight>75</weight>
+       <italic>true</italic>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Shadows</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="2">
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>Red    </string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Magenta</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QSlider" name="yellowBlueShadowsSlider">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>Green</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="3">
+      <widget class="QSpinBox" name="magentaGreenShadowsSpinbox"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_9">
+       <property name="text">
+        <string>Yellow</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QLabel" name="label_8">
+       <property name="text">
+        <string>Blue  </string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QSlider" name="magentaGreenShadowsSlider">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="3">
+      <widget class="QPushButton" name="pushResetShadows">
+       <property name="text">
+        <string>Reset Shadows  </string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Cyan</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QSlider" name="cyanRedShadowsSlider">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="3">
+      <widget class="QSpinBox" name="yellowBlueShadowsSpinbox"/>
+     </item>
+     <item row="0" column="3">
+      <widget class="QSpinBox" name="cyanRedShadowsSpinbox"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_2">
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+       <weight>75</weight>
+       <italic>true</italic>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Midtones</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="0" column="3" colspan="2">
+      <widget class="QSpinBox" name="cyanRedMidtonesSpinbox"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_19">
+       <property name="text">
+        <string>Magenta</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_17">
+       <property name="text">
+        <string>Cyan</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLabel" name="label_20">
+       <property name="text">
+        <string>Green</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="3" colspan="2">
+      <widget class="QSpinBox" name="magentaGreenMidtonesSpinbox"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_21">
+       <property name="text">
+        <string>Yellow</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QSlider" name="yellowBlueMidtonesSlider">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QLabel" name="label_22">
+       <property name="text">
+        <string>Blue  </string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLabel" name="label_18">
+       <property name="text">
+        <string>Red    </string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="4">
+      <widget class="QPushButton" name="pushResetMidtones">
+       <property name="text">
+        <string>Reset Midtones  </string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="3" colspan="2">
+      <widget class="QSpinBox" name="yellowBlueMidtonesSpinbox"/>
+     </item>
+     <item row="0" column="1">
+      <widget class="QSlider" name="cyanRedMidtonesSlider">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QSlider" name="magentaGreenMidtonesSlider">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_16">
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+       <weight>75</weight>
+       <italic>true</italic>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Highlights</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QGridLayout" name="gridLayout_3">
+     <item row="1" column="3" colspan="2">
+      <widget class="QSpinBox" name="magentaGreenHighlightsSpinbox"/>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_10">
+       <property name="text">
+        <string>     Cyan</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="3" colspan="2">
+      <widget class="QPushButton" name="pushResetHighlights">
+       <property name="text">
+        <string>Reset Highlights</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_14">
+       <property name="text">
+        <string>    Yellow</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_12">
+       <property name="text">
+        <string>Magenta</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QLabel" name="label_15">
+       <property name="text">
+        <string>Blue  </string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QSlider" name="magentaGreenHighlightsSlider">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLabel" name="label_11">
+       <property name="text">
+        <string>Red    </string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLabel" name="label_13">
+       <property name="text">
+        <string>Green</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="3" colspan="2">
+      <widget class="QSpinBox" name="yellowBlueHighlightsSpinbox"/>
+     </item>
+     <item row="0" column="1">
+      <widget class="QSlider" name="cyanRedHighlightsSlider">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QSlider" name="yellowBlueHighlightsSlider">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3" colspan="2">
+      <widget class="QSpinBox" name="cyanRedHighlightsSpinbox"/>
+     </item>
+     <item row="3" column="0" colspan="2">
+      <widget class="QCheckBox" name="chkPreserveLuminosity">
+       <property name="text">
+        <string>Preserve Luminosity</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>pushResetHighlights</tabstop>
+  <tabstop>cyanRedShadowsSpinbox</tabstop>
+  <tabstop>magentaGreenShadowsSpinbox</tabstop>
+  <tabstop>yellowBlueShadowsSpinbox</tabstop>
+  <tabstop>magentaGreenShadowsSlider</tabstop>
+  <tabstop>pushResetMidtones</tabstop>
+  <tabstop>chkPreserveLuminosity</tabstop>
+  <tabstop>magentaGreenHighlightsSlider</tabstop>
+  <tabstop>cyanRedHighlightsSlider</tabstop>
+  <tabstop>yellowBlueShadowsSlider</tabstop>
+  <tabstop>magentaGreenHighlightsSpinbox</tabstop>
+  <tabstop>cyanRedShadowsSlider</tabstop>
+  <tabstop>yellowBlueHighlightsSlider</tabstop>
+  <tabstop>yellowBlueHighlightsSpinbox</tabstop>
+  <tabstop>cyanRedMidtonesSlider</tabstop>
+  <tabstop>cyanRedMidtonesSpinbox</tabstop>
+  <tabstop>magentaGreenMidtonesSlider</tabstop>
+  <tabstop>magentaGreenMidtonesSpinbox</tabstop>
+  <tabstop>yellowBlueMidtonesSlider</tabstop>
+  <tabstop>yellowBlueMidtonesSpinbox</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>cyanRedShadowsSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>cyanRedShadowsSpinbox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>173</x>
+     <y>47</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>351</x>
+     <y>39</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>magentaGreenShadowsSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>magentaGreenShadowsSpinbox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>173</x>
+     <y>76</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>351</x>
+     <y>68</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>yellowBlueShadowsSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>yellowBlueShadowsSpinbox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>175</x>
+     <y>105</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>351</x>
+     <y>97</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cyanRedMidtonesSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>cyanRedMidtonesSpinbox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>173</x>
+     <y>185</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>351</x>
+     <y>185</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>magentaGreenMidtonesSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>magentaGreenMidtonesSpinbox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>173</x>
+     <y>214</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>351</x>
+     <y>214</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>yellowBlueMidtonesSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>yellowBlueMidtonesSpinbox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>175</x>
+     <y>243</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>351</x>
+     <y>243</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cyanRedHighlightsSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>cyanRedHighlightsSpinbox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>173</x>
+     <y>323</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>351</x>
+     <y>323</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>magentaGreenHighlightsSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>magentaGreenHighlightsSpinbox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>173</x>
+     <y>352</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>351</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>yellowBlueHighlightsSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>yellowBlueHighlightsSpinbox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>175</x>
+     <y>381</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>351</x>
+     <y>381</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cyanRedMidtonesSpinbox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>cyanRedMidtonesSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>351</x>
+     <y>185</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>173</x>
+     <y>185</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>magentaGreenMidtonesSpinbox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>magentaGreenMidtonesSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>351</x>
+     <y>214</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>173</x>
+     <y>214</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>yellowBlueMidtonesSpinbox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>yellowBlueMidtonesSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>351</x>
+     <y>243</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>175</x>
+     <y>243</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>yellowBlueShadowsSpinbox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>yellowBlueShadowsSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>351</x>
+     <y>97</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>175</x>
+     <y>103</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>magentaGreenShadowsSpinbox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>magentaGreenShadowsSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>351</x>
+     <y>68</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>173</x>
+     <y>74</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cyanRedShadowsSpinbox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>cyanRedShadowsSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>351</x>
+     <y>39</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>173</x>
+     <y>46</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cyanRedHighlightsSpinbox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>cyanRedHighlightsSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>351</x>
+     <y>323</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>173</x>
+     <y>323</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>magentaGreenHighlightsSpinbox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>magentaGreenHighlightsSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>351</x>
+     <y>352</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>173</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>yellowBlueHighlightsSpinbox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>yellowBlueHighlightsSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>351</x>
+     <y>381</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>175</x>
+     <y>381</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

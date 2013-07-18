@@ -188,7 +188,7 @@ void CompositionDockerDock::exportClicked()
         d.setOutputMimeType("image/png");
         d.setSaveInBatchMode(true);
 
-        d.exportDocument(path + composition->name() + ".png");
+        d.exportDocument(KUrl(path + composition->name() + ".png"));
 
 #endif
         image->unlock();

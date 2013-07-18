@@ -228,7 +228,7 @@ bool compareNodes(KoXmlNode& valid, KoXmlNode& result, QString path)
 
     int idx = 0;
     for (KoXmlNode rChild = result.firstChild(), vChild = valid.firstChild(); !rChild.isNull() || !vChild.isNull(); rChild = rChild.nextSibling(), vChild = vChild.nextSibling()) {
-        if (!compareNodes(vChild, rChild, (path + "[%1]").arg(idx++))) return false;
+        if (!compareNodes(vChild, rChild, QString(path + "[%1]").arg(idx++))) return false;
     }
 
     return true;

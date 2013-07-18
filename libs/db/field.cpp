@@ -625,7 +625,7 @@ void Field::setIndexed(bool s)
 QString Field::debugString() const
 {
     KexiDB::Connection *conn = table() ? table()->connection() : 0;
-    QString dbg = (m_name.isEmpty() ? "<NONAME> " : m_name + " ");
+    QString dbg = (m_name.isEmpty() ? QString::fromLatin1("<NONAME> ") : m_name + ' ');
     if (m_options & Field::Unsigned)
         dbg += " UNSIGNED ";
     dbg += (conn && conn->driver()) ? conn->driver()->sqlTypeName(type()) : Driver::defaultSQLTypeName(type());

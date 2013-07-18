@@ -398,7 +398,7 @@ Qt::Alignment KoTableStyle::alignmentFromString(const QString &align)
 
 QString KoTableStyle::alignmentToString(Qt::Alignment alignment)
 {
-    QString align = "";
+    QString align;
     if (alignment == Qt::AlignLeft)
         align = "left";
     else if (alignment == Qt::AlignRight)

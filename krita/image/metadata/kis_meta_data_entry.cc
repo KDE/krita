@@ -36,7 +36,6 @@ struct Entry::Private {
 Entry::Entry() :
         d(new Private)
 {
-    d->name = "";
     d->schema = 0;
     d->valid = false;
 }

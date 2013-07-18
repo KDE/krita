@@ -209,7 +209,7 @@ QString KoOdfNumberDefinition::formattedNumber(int number, KoOdfNumberDefinition
             int loop = (number-1)/26;
             int rem = (number-1)%26;
             QChar letter = (char)(rem+97);
-            QString alpha = "";
+            QString alpha;
             for (int i=0; i<=loop; i++) {
                 alpha.append(letter);
             }
@@ -217,7 +217,7 @@ QString KoOdfNumberDefinition::formattedNumber(int number, KoOdfNumberDefinition
         } else {
             int loop = (number-1)/26;
             QChar letter;
-            QString alpha = "";
+            QString alpha;
             if (loop>0) {
                 letter = (char)(loop+96);
                 alpha.append(letter);
@@ -235,7 +235,7 @@ QString KoOdfNumberDefinition::formattedNumber(int number, KoOdfNumberDefinition
             int loop = (number-1)/26;
             int rem = (number-1)%26;
             QChar letter = (char)(rem+65);
-            QString alpha = "";
+            QString alpha;
             for (int i=0; i<=loop; i++) {
                 alpha.append(letter);
             }
@@ -243,7 +243,7 @@ QString KoOdfNumberDefinition::formattedNumber(int number, KoOdfNumberDefinition
         } else {
             int loop = (number-1)/26;
             QChar letter;
-            QString alpha = "";
+            QString alpha;
             if (loop>0) {
                 letter = (char)(loop+64);
                 alpha.append(letter);
@@ -257,7 +257,7 @@ QString KoOdfNumberDefinition::formattedNumber(int number, KoOdfNumberDefinition
     }
     case RomanLowerCase:
     {
-        QString roman = "";
+        QString roman;
         int loop = number/1000;
         for (int i=1; i<=loop && number/1000!=0; i++) {
              roman.append("m");
@@ -304,7 +304,7 @@ QString KoOdfNumberDefinition::formattedNumber(int number, KoOdfNumberDefinition
     }
     case RomanUpperCase:
     {
-        QString roman = "";
+        QString roman;
         int loop = number/1000;
         for (int i=1; i<=loop && number/1000!=0; i++) {
              roman.append("M");

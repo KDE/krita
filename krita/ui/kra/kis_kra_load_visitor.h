@@ -64,7 +64,7 @@ private:
     bool loadMetaData(KisNode* node);
     void initSelectionForMask(KisMask *mask);
     void loadSelection(const QString& location, KisSelectionSP dstSelection);
-    QString getLocation(KisNode* node, const QString& suffix = "");
+    QString getLocation(KisNode* node, const QString& suffix = QString());
 
 private:
     KisImageWSP m_image;

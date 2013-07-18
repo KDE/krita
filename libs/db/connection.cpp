@@ -652,7 +652,7 @@ bool Connection::useDatabase(const QString &dbName, bool kexiCompatible, bool *c
     if (!d->usedDatabase.isEmpty() && !closeDatabase()) //close db if already used
         return false;
 
-    d->usedDatabase = "";
+    d->usedDatabase.clear();
 
     if (!drv_useDatabase(my_dbName, cancelled, msgHandler)) {
         if (cancelled && *cancelled)
@@ -752,7 +752,7 @@ bool Connection::closeDatabase()
     if (!drv_closeDatabase())
         return false;
 
-    d->usedDatabase = "";
+    d->usedDatabase.clear();
 // KexiDBDbg << "Connection::closeDatabase(): " << ret;
     return ret;
 }

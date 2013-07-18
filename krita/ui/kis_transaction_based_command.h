@@ -25,7 +25,7 @@
 class KRITAUI_EXPORT KisTransactionBasedCommand : public KUndo2Command
 {
 public:
-    KisTransactionBasedCommand(const QString &text = "", KUndo2Command *parent = 0);
+    KisTransactionBasedCommand(const QString &text = QString(), KUndo2Command *parent = 0);
 
     ~KisTransactionBasedCommand();
 

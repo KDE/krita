@@ -118,7 +118,7 @@ Field* Field::copy() const
 void Field::init()
 {
     m_parent = 0;
-    m_name = "";
+    m_name.clear();
     m_type = InvalidType;
     m_precision = 0;
     m_visibleDecimalPlaces = -1;

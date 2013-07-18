@@ -108,7 +108,7 @@ public:
     void setProgress(KoUpdater * progressUpdater);
 
     /// Begin an undoable paint operation
-    void beginTransaction(const QString& transactionName = "");
+    void beginTransaction(const QString& transactionName = QString());
 
     /// Return the transaction's text message
     QString transactionText();

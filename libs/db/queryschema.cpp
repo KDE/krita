@@ -933,7 +933,7 @@ QString QuerySchema::debugString() const
     if (d->tableAliases.isEmpty())
         aliases = "<NONE>";
     else {
-        aliases = "";
+        aliases.clear();
         int i = -1;
         foreach(TableSchema* table, d->tables) {
             i++;

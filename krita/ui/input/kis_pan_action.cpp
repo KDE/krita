@@ -58,6 +58,11 @@ KisPanAction::~KisPanAction()
     delete d;
 }
 
+int KisPanAction::priority() const
+{
+    return 5;
+}
+
 void KisPanAction::activate()
 {
     QApplication::setOverrideCursor(Qt::OpenHandCursor);

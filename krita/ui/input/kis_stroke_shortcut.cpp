@@ -18,6 +18,7 @@
 
 #include "kis_stroke_shortcut.h"
 
+#include "kis_abstract_input_action.h"
 
 class KisStrokeShortcut::Private
 {
@@ -40,7 +41,7 @@ KisStrokeShortcut::~KisStrokeShortcut()
 
 int KisStrokeShortcut::priority() const
 {
-    return m_d->modifiers.size() * 2 + m_d->buttons.size();
+    return m_d->modifiers.size() * 2 + m_d->buttons.size() + action()->priority();
 }
 
 void KisStrokeShortcut::setButtons(const QList<Qt::Key> &modifiers,

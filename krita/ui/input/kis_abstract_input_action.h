@@ -129,6 +129,14 @@ public:
      */
     virtual QString description() const;
 
+    /**
+     * The priority for this action.
+     *
+     * Priority determines how "important" the action is and is used
+     * to resolve conflicts when multiple actions can be activated.
+     */
+    virtual int priority() const;
+
 protected:
     /**
      * The input manager this action belongs to.

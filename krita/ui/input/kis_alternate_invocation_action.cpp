@@ -40,6 +40,11 @@ KisAlternateInvocationAction::~KisAlternateInvocationAction()
 {
 }
 
+int KisAlternateInvocationAction::priority() const
+{
+    return 9;
+}
+
 void KisAlternateInvocationAction::begin(int shortcut, QEvent *event)
 {
     KisAbstractInputAction::begin(shortcut, event);

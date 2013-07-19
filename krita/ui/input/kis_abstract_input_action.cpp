@@ -106,6 +106,11 @@ QString KisAbstractInputAction::description() const
     return d->description;
 }
 
+int KisAbstractInputAction::priority() const
+{
+    return 0;
+}
+
 QHash< QString, int > KisAbstractInputAction::shortcutIndexes() const
 {
     return d->indexes;

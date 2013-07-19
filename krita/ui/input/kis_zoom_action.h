@@ -44,6 +44,8 @@ public:
     explicit KisZoomAction();
     virtual ~KisZoomAction();
 
+    virtual int priority() const;
+
     void activate();
     void deactivate();
 

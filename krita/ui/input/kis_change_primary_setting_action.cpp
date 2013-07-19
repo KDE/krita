@@ -34,6 +34,11 @@ KisChangePrimarySettingAction::~KisChangePrimarySettingAction()
 
 }
 
+int KisChangePrimarySettingAction::priority() const
+{
+    return 8;
+}
+
 void KisChangePrimarySettingAction::begin(int shortcut, QEvent *event)
 {
     KisAbstractInputAction::begin(shortcut, event);

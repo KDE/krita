@@ -57,6 +57,11 @@ KisToolInvocationAction::~KisToolInvocationAction()
     delete d;
 }
 
+int KisToolInvocationAction::priority() const
+{
+    return 10;
+}
+
 void KisToolInvocationAction::begin(int shortcut, QEvent *event)
 {
     if (shortcut == ActivateShortcut) {

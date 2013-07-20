@@ -102,7 +102,7 @@ void printPixel(QString prefix, int pixelSize, quint8 *data) {
     QString str = prefix;
 
     for(int i = 0; i < pixelSize; i++) {
-        str += " ";
+        str += ' ';
         str += QString::number(data[i]);
     }
 

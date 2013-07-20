@@ -27,7 +27,6 @@
 #include "kis_gbr_brush.h"
 
 #include "kis_brush.h"
-#include "kis_qimage_mask.h"
 
 #include <QDomElement>
 #include <QFile>
@@ -464,7 +463,7 @@ void KisGbrBrush::makeMaskImage()
     setHasColor(false);
     setUseColorAsMask(false);
     resetBoundary();
-    clearScaledBrushes();
+    clearBrushPyramid();
 }
 
 KisGbrBrush* KisGbrBrush::clone() const
@@ -487,7 +486,7 @@ void KisGbrBrush::setUseColorAsMask(bool useColorAsMask)
 {
     d->useColorAsMask = useColorAsMask;
     resetBoundary();
-    clearScaledBrushes();
+    clearBrushPyramid();
 }
 bool KisGbrBrush::useColorAsMask() const
 {

@@ -30,11 +30,17 @@ class KisBrushTest : public QObject
     void testMaskGenerationSingleColor();
     void testMaskGenerationDevColor();
     void testMaskGenerationDefaultColor();
-    void testImageGeneration();
 
 private slots:
 
-    void testCreation();
+    void testImageGeneration();
+
+    void benchmarkPyramidCreation();
+    void benchmarkScaling();
+    void benchmarkRotation();
+
+    void benchmarkMaskScaling();
+    void testPyramidLevelRounding();
 };
 
 #endif

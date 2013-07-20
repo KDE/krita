@@ -45,7 +45,7 @@ void KisAbrTranslator::addEntry(const QString& attributeName, const QString& typ
         attributeName == ABR_USE_SCATTER) {
         
         if (m_currentObjectName == ABR_DUAL_BRUSH && attributeName == OBJECT_NAME_BRUSH) {
-            m_currentObjectName = ABR_DUAL_BRUSH + "_" + attributeName; 
+            m_currentObjectName = ABR_DUAL_BRUSH + '_' + attributeName; 
         } else {
             m_currentObjectName = attributeName; 
         }

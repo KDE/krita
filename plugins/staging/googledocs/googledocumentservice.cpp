@@ -120,7 +120,7 @@ void GoogleDocumentService::handleNetworkData(QNetworkReply *networkReply)
                     return;
                 }
                 spreadAuthToken = authToken;
-                authToken = "";
+                authToken.clear();
                 loggedin = true;
                 qDebug() << "Received Spreadsheet token = " << spreadAuthToken;
                 listDocuments();
@@ -185,7 +185,7 @@ void GoogleDocumentService::downloadDocument(const QString & _url, const QString
     QString url = _url;
     QString type = _type;
     url.replace("docId", "docID", Qt::CaseInsensitive);
-    QString exportFormat = "";
+    QString exportFormat;
 
     if(QString::compare(type, "spreadsheet", Qt::CaseInsensitive) == 0) {
         exportFormat = "&exportFormat=ods&format=ods";

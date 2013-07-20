@@ -33,5 +33,5 @@ install( FILES
 
 install( FILES
     krita.xml
-    DESTINATION ${DATA_INSTALL_DIR}/mime/packages
-)
+    DESTINATION ${XDG_MIME_INSTALL_DIR})
+update_xdg_mimetypes(${XDG_MIME_INSTALL_DIR})

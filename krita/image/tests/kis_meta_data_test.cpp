@@ -171,7 +171,7 @@ void KisMetaDataTest::testValueCopy()
         QCOMPARE(schema, SchemaRegistry::instance()->schemaFromPrefix(schema->prefix()) ); \
         QVERIFY( !SchemaRegistry::instance()->create("http://tartampion.com", schema->prefix())); \
         QCOMPARE(schema, SchemaRegistry::instance()->create(KisMetaData::Schema::uriStr, "tartampion")); \
-        QCOMPARE(schema->prefix() + ":hello", schema->generateQualifiedName("hello")); \
+        QCOMPARE(QString(schema->prefix() + ":hello"), schema->generateQualifiedName("hello")); \
     }
 
 

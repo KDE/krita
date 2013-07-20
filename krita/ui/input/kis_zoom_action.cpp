@@ -98,6 +98,11 @@ KisZoomAction::~KisZoomAction()
     delete d;
 }
 
+int KisZoomAction::priority() const
+{
+    return 4;
+}
+
 void KisZoomAction::activate()
 {
     QApplication::setOverrideCursor(KisCursor::zoomCursor());

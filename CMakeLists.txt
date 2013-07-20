@@ -305,11 +305,16 @@ endif(KDE4_BUILD_TESTS)
 
 # overcome some platform incompatibilities
 if(WIN32)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/winquirks)
-add_definitions(-D_USE_MATH_DEFINES)
-add_definitions(-DNOMINMAX)
-set(WIN32_PLATFORM_NET_LIBS ws2_32.lib netapi32.lib)
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/winquirks)
+    add_definitions(-D_USE_MATH_DEFINES)
+    add_definitions(-DNOMINMAX)
+    set(WIN32_PLATFORM_NET_LIBS ws2_32.lib netapi32.lib)
 endif(WIN32)
+
+add_definitions(
+    -DQT_USE_FAST_CONCATENATION
+    -DQT_USE_FAST_OPERATOR_PLUS
+)
 
 
  ###########################

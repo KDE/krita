@@ -181,7 +181,7 @@ void KisWalkersTest::verifyResult(KisBaseRectsWalker &walker, struct UpdateTestJ
 {
     QStringList list;
     if(!job.referenceString.isEmpty()) {
-        list = job.referenceString.split(",");
+        list = job.referenceString.split(',');
     }
 
     verifyResult(walker, list, job.accessRect,
@@ -279,7 +279,7 @@ void KisWalkersTest::testUsualVisiting()
         QString order("adj,paint3,paint4,group,paint5,root,"
                       "root_TF,paint5_TA,group_NF,paint1_BB,"
                       "paint4_TA,paint3_NA,adj_NF,paint2_BB");
-        QStringList orderList = order.split(",");
+        QStringList orderList = order.split(',');
 
         reportStartWith("adj");
         walker.startTrip(adjustmentLayer);
@@ -289,7 +289,7 @@ void KisWalkersTest::testUsualVisiting()
     {
         QString order("group,paint5,root,"
                       "root_TF,paint5_TA,group_NF,paint1_BB");
-        QStringList orderList = order.split(",");
+        QStringList orderList = order.split(',');
 
         reportStartWith("group");
         walker.startTrip(groupLayer);
@@ -355,7 +355,7 @@ void KisWalkersTest::testVisitingWithTopmostMask()
         QString order("paint3,paint4,group,paint5,root,"
                       "root_TF,paint5_TA,group_NF,paint1_BB,"
                       "paint4_TA,paint3_NF,adj_NB,paint2_BB");
-        QStringList orderList = order.split(",");
+        QStringList orderList = order.split(',');
 
         reportStartWith("paint3");
         walker.startTrip(paintLayer3);
@@ -366,7 +366,7 @@ void KisWalkersTest::testVisitingWithTopmostMask()
         QString order("adj,paint3,paint4,group,paint5,root,"
                       "root_TF,paint5_TA,group_NF,paint1_BB,"
                       "paint4_TA,paint3_NA,adj_NF,paint2_BB");
-        QStringList orderList = order.split(",");
+        QStringList orderList = order.split(',');
 
         reportStartWith("adj");
         walker.startTrip(adjustmentLayer);
@@ -376,7 +376,7 @@ void KisWalkersTest::testVisitingWithTopmostMask()
     {
         QString order("group,paint5,root,"
                       "root_TF,paint5_TA,group_NF,paint1_BB");
-        QStringList orderList = order.split(",");
+        QStringList orderList = order.split(',');
 
         reportStartWith("group");
         walker.startTrip(groupLayer);
@@ -432,7 +432,7 @@ void KisWalkersTest::testMergeVisiting()
     {
         QString order("root,paint5,cplx2,group,paint1,"
                       "paint4,paint3,cplx1,paint2");
-        QStringList orderList = order.split(",");
+        QStringList orderList = order.split(',');
         QRect accessRect(-7,-7,44,44);
 
         reportStartWith("paint3");
@@ -443,7 +443,7 @@ void KisWalkersTest::testMergeVisiting()
     {
         QString order("root,paint5,cplx2,group,paint1,"
                       "paint4,paint3,cplx1,paint2");
-        QStringList orderList = order.split(",");
+        QStringList orderList = order.split(',');
         QRect accessRect(-10,-10,50,50);
 
         reportStartWith("paint2");
@@ -453,7 +453,7 @@ void KisWalkersTest::testMergeVisiting()
 
     {
         QString order("root,paint5,cplx2,group,paint1");
-        QStringList orderList = order.split(",");
+        QStringList orderList = order.split(',');
         QRect accessRect(3,3,24,24);
 
         reportStartWith("paint5");
@@ -467,7 +467,7 @@ void KisWalkersTest::testMergeVisiting()
          */
         QString order("root,paint5,cplx2,group,paint1,"
                       "paint4,paint3,cplx1,paint2");
-        QStringList orderList = order.split(",");
+        QStringList orderList = order.split(',');
         QRect accessRect(0,0,40,40);
 
         reportStartWith("paint2 (with cropping)");
@@ -483,7 +483,7 @@ void KisWalkersTest::testMergeVisiting()
          */
         QString order("root,paint5,cplx2,group,paint1,"
                       "paint4,paint3,cplx1,paint2");
-        QStringList orderList = order.split(",");
+        QStringList orderList = order.split(',');
         QRect cropRect(9,9,12,12);
         QRect accessRect(cropRect);
 
@@ -549,7 +549,7 @@ void KisWalkersTest::testComplexAccessVisiting()
     {
         QString order("root,paint5,cplx2,group,paint1,"
                       "paint4,cplxacc1,paint3,cplx1,paint2");
-        QStringList orderList = order.split(",");
+        QStringList orderList = order.split(',');
         QRect accessRect = QRect(-7,-7,44,44) | QRect(0,0,30,30).translated(70,0);
 
         reportStartWith("paint3");
@@ -615,7 +615,7 @@ void KisWalkersTest::testCloneNotificationsVisiting()
     {
         QString order("root,paint3,cplx2,group,clone2,clone1,paint1,"
                       "cplx1,paint2");
-        QStringList orderList = order.split(",");
+        QStringList orderList = order.split(',');
         QRect accessRect = QRect(5,5,35,35);
 
         reportStartWith("paint2");
@@ -685,7 +685,7 @@ void KisWalkersTest::testRefreshSubtreeVisiting()
     {
         QString order("root,paint5,cplx2,group,paint1,"
                       "paint4,paint3,cplx1,paint2");
-        QStringList orderList = order.split(",");
+        QStringList orderList = order.split(',');
         QRect accessRect(-10,-10,50,50);
 
         reportStartWith("root");
@@ -742,7 +742,7 @@ void KisWalkersTest::testFullRefreshVisiting()
     {
         QString order("root,paint5,cplx2,group,paint1,"
                       "group,paint4,paint3,cplx1,paint2");
-        QStringList orderList = order.split(",");
+        QStringList orderList = order.split(',');
         QRect accessRect(-10,-10,50,50);
 
         reportStartWith("root");
@@ -796,7 +796,7 @@ void KisWalkersTest::testCachedVisiting()
     {
         QString order("root,paint5,cache1,group,paint1,"
                       "paint4,paint3,paint2");
-        QStringList orderList = order.split(",");
+        QStringList orderList = order.split(',');
         QRect accessRect(0,0,30,30);
 
         reportStartWith("paint3");
@@ -806,7 +806,7 @@ void KisWalkersTest::testCachedVisiting()
 
     {
         QString order("root,paint5,cache1");
-        QStringList orderList = order.split(",");
+        QStringList orderList = order.split(',');
         QRect accessRect(10,10,10,10);
 
         reportStartWith("paint5");
@@ -869,7 +869,7 @@ void KisWalkersTest::testMasksVisiting()
     KisMergeWalker walker(cropRect);
     {
         QString order("root,paint2,paint1");
-        QStringList orderList = order.split(",");
+        QStringList orderList = order.split(',');
         QRect accessRect(0,0,40,40);
 
         reportStartWith("tmask");
@@ -881,7 +881,7 @@ void KisWalkersTest::testMasksVisiting()
     {
         QString order("paint2,root,"
                       "root_TF,paint2_TA,paint1_BP");
-        QStringList orderList = order.split(",");
+        QStringList orderList = order.split(',');
 
         reportStartWith("tmask");
         twalker.startTrip(transparencyMask);

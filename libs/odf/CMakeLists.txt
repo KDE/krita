@@ -51,10 +51,6 @@ set(koodf_LIB_SRCS
     KoOdfNumberDefinition.cpp
     KoOdfLineNumberingConfiguration.cpp
     KoElementReference.cpp
-
-    styles/KoOdfStyle.cpp
-    styles/KoOdfStyleProperties.cpp
-    styles/KoOdfStyleManager.cpp
 )
 
 kde4_add_library(koodf SHARED ${koodf_LIB_SRCS})

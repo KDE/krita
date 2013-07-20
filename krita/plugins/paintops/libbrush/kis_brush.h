@@ -173,12 +173,12 @@ public:
     /**
      * @return the width of the mask for the given scale and angle
      */
-    virtual qint32 maskWidth(double scale, double angle, const KisPaintInformation& info) const;
+    virtual qint32 maskWidth(double scale, double angle, qreal subPixelX, qreal subPixelY, const KisPaintInformation& info) const;
 
     /**
      * @return the height of the mask for the given scale and angle
      */
-    virtual qint32 maskHeight(double scale, double angle, const KisPaintInformation& info) const;
+    virtual qint32 maskHeight(double scale, double angle, qreal subPixelX, qreal subPixelY, const KisPaintInformation& info) const;
 
     /**
      * @return the angle of the mask adding the given angle
@@ -313,9 +313,9 @@ protected:
      */
     virtual void setBrushType(enumBrushType type);
 
-    void clearScaledBrushes();
-
-    void createScaledBrushes() const;
+    friend class KisBrushTest;
+    void prepareBrushPyramid() const;
+    void clearBrushPyramid();
 
     virtual void setHasColor(bool hasColor);
 
@@ -327,29 +327,6 @@ protected:
 
 private:
     friend class KisImagePipeBrushTest;
-
-    KisQImagemaskSP createMask(double scale, double subPixelX, double subPixelY) const;
-
-    KisQImagemaskSP scaleMask(const KisScaledBrush *srcBrush,
-                              double scale, double subPixelX, double subPixelY) const;
-
-    QImage scaleImage(const KisScaledBrush *srcBrush,
-                      double scale, double subPixelX, double subPixelY) const;
-
-    static QImage scaleImage(const QImage& srcImage, int width, int height);
-
-    static QImage interpolate(const QImage& image1, const QImage& image2, double t);
-
-    static KisQImagemaskSP scaleSinglePixelMask(double scale, quint8 maskValue,
-                                                double subPixelX, double subPixelY);
-
-    static QImage scaleSinglePixelImage(double scale, QRgb pixel,
-                                        double subPixelX, double subPixelY);
-
-    // Find the scaled brush(es) nearest to the given scale.
-    void findScaledBrushes(double scale,
-                           const KisScaledBrush **aboveBrush,
-                           const KisScaledBrush **belowBrush) const;
 
     // Initialize our boundary
     void generateBoundary() const;

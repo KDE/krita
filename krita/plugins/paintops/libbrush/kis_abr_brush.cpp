@@ -19,7 +19,6 @@
  */
 #include "kis_abr_brush.h"
 #include "kis_brush.h"
-#include "kis_qimage_mask.h"
 
 #include <QDomElement>
 #include <QFile>

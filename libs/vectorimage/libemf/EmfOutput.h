@@ -331,7 +331,7 @@ public:
     virtual void extCreateFontIndirectW( const ExtCreateFontIndirectWRecord &extCreateFontIndirectW ) = 0;
 
     /**
-       Handler for text rendering, as described in the the
+       Handler for text rendering, as described in the
        EMR_EXTTEXTOUTW and EMR_EXTTEXTOUTA record types.
 
        \param bounds the bounds used for e.g. clipping 

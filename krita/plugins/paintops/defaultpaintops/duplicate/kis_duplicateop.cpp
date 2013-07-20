@@ -156,8 +156,8 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
                           static_cast<qint32>(settings->position().y() - hotSpot.y()));
     }
 
-    qint32 sw = brush->maskWidth(scale, 0.0, info);
-    qint32 sh = brush->maskHeight(scale, 0.0, info);
+    qint32 sw = brush->maskWidth(scale, 0.0, xFraction, yFraction, info);
+    qint32 sh = brush->maskHeight(scale, 0.0, xFraction, yFraction, info);
 
     if (srcPoint.x() < 0)
         srcPoint.setX(0);

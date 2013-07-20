@@ -53,6 +53,7 @@
 #include "kis_hsv_adjustment_filter.h"
 #include "kis_brightness_contrast_filter.h"
 #include "kis_perchannel_filter.h"
+#include "kis_color_balance_filter.h"
 #include "filter/kis_filter_registry.h"
 #include <kis_painter.h>
 #include <KoProgressUpdater.h>
@@ -73,6 +74,7 @@ ColorsFilters::ColorsFilters(QObject *parent, const QVariantList &)
     manager->add(new KisPerChannelFilter());
     manager->add(new KisDesaturateFilter());
     manager->add(new KisHSVAdjustmentFilter());
+    manager->add(new KisColorBalanceFilter());
 
 }
 

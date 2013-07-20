@@ -423,7 +423,7 @@ QString KoColorConversionSystem::bestPathToDot(const QString& srcKey, const QStr
     dot += QString("  \"%1\" [color=red]\n").arg(srcNode->id());
     dot += QString("  \"%1\" [color=red]\n").arg(dstNode->id());
     foreach(Vertex* oV, d->vertexes) {
-        QString options = "";
+        QString options;
         if (p->vertexes.contains(oV)) {
             options = "[color=red]";
         }

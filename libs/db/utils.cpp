@@ -1357,7 +1357,7 @@ QList<int> KexiDB::stringListToIntList(const QStringList &list, bool *ok)
 // Based on KConfigGroupPrivate::serializeList() from kconfiggroup.cpp (kdelibs 4)
 QString KexiDB::serializeList(const QStringList &list)
 {
-    QString value = "";
+    QString value;
 
     if (!list.isEmpty()) {
         QStringList::ConstIterator it = list.constBegin();

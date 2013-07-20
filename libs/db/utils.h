@@ -40,28 +40,28 @@ inline CALLIGRADB_EXPORT bool deleteRow(Connection &conn, TableSchema *table,
                                      const QString &keyname, const QString &keyval)
 {
     return table != 0 && conn.executeSQL("DELETE FROM " + table->name() + " WHERE "
-                                         + keyname + "=" + conn.driver()->valueToSQL(Field::Text, QVariant(keyval)));
+                                         + keyname + '=' + conn.driver()->valueToSQL(Field::Text, QVariant(keyval)));
 }
 
 inline CALLIGRADB_EXPORT bool deleteRow(Connection &conn, const QString &tableName,
                                      const QString &keyname, const QString &keyval)
 {
     return conn.executeSQL("DELETE FROM " + tableName + " WHERE "
-                           + keyname + "=" + conn.driver()->valueToSQL(Field::Text, QVariant(keyval)));
+                           + keyname + '=' + conn.driver()->valueToSQL(Field::Text, QVariant(keyval)));
 }
 
 inline CALLIGRADB_EXPORT bool deleteRow(Connection &conn, TableSchema *table,
                                      const QString &keyname, int keyval)
 {
     return table != 0 && conn.executeSQL("DELETE FROM " + table->name() + " WHERE "
-                                         + keyname + "=" + conn.driver()->valueToSQL(Field::Integer, QVariant(keyval)));
+                                         + keyname + '=' + conn.driver()->valueToSQL(Field::Integer, QVariant(keyval)));
 }
 
 inline CALLIGRADB_EXPORT bool deleteRow(Connection &conn, const QString &tableName,
                                      const QString &keyname, int keyval)
 {
     return conn.executeSQL("DELETE FROM " + tableName + " WHERE "
-                           + keyname + "=" + conn.driver()->valueToSQL(Field::Integer, QVariant(keyval)));
+                           + keyname + '=' + conn.driver()->valueToSQL(Field::Integer, QVariant(keyval)));
 }
 
 /*! Delete record with two generic criterias. */
@@ -70,8 +70,8 @@ inline CALLIGRADB_EXPORT bool deleteRow(Connection &conn, const QString &tableNa
                                      const QString &keyname2, Field::Type keytype2, const QVariant& keyval2)
 {
     return conn.executeSQL("DELETE FROM " + tableName + " WHERE "
-                           + keyname1 + "=" + conn.driver()->valueToSQL(keytype1, keyval1)
-                           + " AND " + keyname2 + "=" + conn.driver()->valueToSQL(keytype2, keyval2));
+                           + keyname1 + '=' + conn.driver()->valueToSQL(keytype1, keyval1)
+                           + " AND " + keyname2 + '=' + conn.driver()->valueToSQL(keytype2, keyval2));
 }
 
 /*! Delete record with three generic criterias. */
@@ -81,9 +81,9 @@ inline CALLIGRADB_EXPORT bool deleteRow(Connection &conn, const QString &tableNa
                                      const QString &keyname3, Field::Type keytype3, const QVariant& keyval3)
 {
     return conn.executeSQL("DELETE FROM " + tableName + " WHERE "
-                           + keyname1 + "=" + conn.driver()->valueToSQL(keytype1, keyval1)
-                           + " AND " + keyname2 + "=" + conn.driver()->valueToSQL(keytype2, keyval2)
-                           + " AND " + keyname3 + "=" + conn.driver()->valueToSQL(keytype3, keyval3));
+                           + keyname1 + '=' + conn.driver()->valueToSQL(keytype1, keyval1)
+                           + " AND " + keyname2 + '=' + conn.driver()->valueToSQL(keytype2, keyval2)
+                           + " AND " + keyname3 + '=' + conn.driver()->valueToSQL(keytype3, keyval3));
 }
 
 inline CALLIGRADB_EXPORT bool replaceRow(Connection &conn, TableSchema *table,
@@ -92,9 +92,9 @@ inline CALLIGRADB_EXPORT bool replaceRow(Connection &conn, TableSchema *table,
     if (!table || !KexiDB::deleteRow(conn, table, keyname, keyval))
         return false;
     return conn.executeSQL("INSERT INTO " + table->name()
-                           + " (" + keyname + "," + valname + ") VALUES ("
-                           + conn.driver()->valueToSQL(Field::Text, QVariant(keyval)) + ","
-                           + conn.driver()->valueToSQL(ftype, val) + ")");
+                           + " (" + keyname + ',' + valname + ") VALUES ("
+                           + conn.driver()->valueToSQL(Field::Text, QVariant(keyval)) + ','
+                           + conn.driver()->valueToSQL(ftype, val) + ')');
 }
 
 typedef QList<uint> TypeGroupList;
@@ -154,7 +154,7 @@ inline CALLIGRADB_EXPORT QString sqlWhere(Driver *drv, Field::Type t,
 {
     if (value.isNull())
         return fieldName + " is NULL";
-    return fieldName + "=" + drv->valueToSQL(t, value);
+    return fieldName + '=' + drv->valueToSQL(t, value);
 }
 
 /*! \return identifier for object \a objName of type \a objType

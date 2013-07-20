@@ -172,7 +172,7 @@ QString NArgExpr::debugString()
         s += ", ";
         s += expr->debugString();
     }
-    s += ")";
+    s += ')';
     return s;
 }
 
@@ -268,7 +268,7 @@ QString UnaryExpr::debugString()
 QString UnaryExpr::toString(QuerySchemaParameterValueListIterator* params)
 {
     if (m_token == '(') //parentheses (special case)
-        return "(" + (m_arg ? m_arg->toString(params) : "<NULL>") + ")";
+        return '(' + (m_arg ? m_arg->toString(params) : "<NULL>") + ')';
     if (m_token < 255 && isprint(m_token))
         return tokenToDebugString() + (m_arg ? m_arg->toString(params) : "<NULL>");
     if (m_token == NOT)
@@ -428,12 +428,12 @@ Field::Type BinaryExpr::type()
 
 QString BinaryExpr::debugString()
 {
-    return QString("BinaryExpr(")
+    return QLatin1String("BinaryExpr(")
            + "class=" + exprClassName(m_cl)
-           + "," + (m_larg ? m_larg->debugString() : QString("<NONE>"))
+           + ',' + (m_larg ? m_larg->debugString() : QString::fromLatin1("<NONE>"))
            + ",'" + tokenToDebugString() + "',"
-           + (m_rarg ? m_rarg->debugString() : QString("<NONE>"))
-           + QString(",type=%1)").arg(Driver::defaultSQLTypeName(type()));
+           + (m_rarg ? m_rarg->debugString() : QString::fromLatin1("<NONE>"))
+           + QString::fromLatin1(",type=%1)").arg(Driver::defaultSQLTypeName(type()));
 }
 
 QString BinaryExpr::tokenToString()
@@ -469,7 +469,7 @@ QString BinaryExpr::tokenToString()
 QString BinaryExpr::toString(QuerySchemaParameterValueListIterator* params)
 {
 #define INFIX(a) \
-    (m_larg ? m_larg->toString(params) : "<NULL>") + " " + a + " " + (m_rarg ? m_rarg->toString(params) : "<NULL>")
+    (m_larg ? m_larg->toString(params) : "<NULL>") + ' ' + a + ' ' + (m_rarg ? m_rarg->toString(params) : "<NULL>")
     return INFIX(tokenToString());
 }
 
@@ -554,16 +554,16 @@ QString ConstExpr::toString(QuerySchemaParameterValueListIterator* params)
         return "NULL";
     else if (m_token == CHARACTER_STRING_LITERAL)
 //TODO: better escaping!
-        return "'" + value.toString() + "'";
+        return QLatin1Char('\'') + value.toString() + QLatin1Char('\'');
     else if (m_token == REAL_CONST)
-        return QString::number(value.toPoint().x()) + "." + QString::number(value.toPoint().y());
+        return QString::number(value.toPoint().x()) + QLatin1Char('.') + QString::number(value.toPoint().y());
     else if (m_token == DATE_CONST)
-        return "'" + value.toDate().toString(Qt::ISODate) + "'";
+        return QLatin1Char('\'') + value.toDate().toString(Qt::ISODate) + QLatin1Char('\'');
     else if (m_token == DATETIME_CONST)
-        return "'" + value.toDateTime().date().toString(Qt::ISODate)
-               + " " + value.toDateTime().time().toString(Qt::ISODate) + "'";
+        return QLatin1Char('\'') + value.toDateTime().date().toString(Qt::ISODate)
+               + QLatin1Char(' ') + value.toDateTime().time().toString(Qt::ISODate) + QLatin1Char('\'');
     else if (m_token == TIME_CONST)
-        return "'" + value.toTime().toString(Qt::ISODate) + "'";
+        return QLatin1Char('\'') + value.toTime().toString(Qt::ISODate) + QLatin1Char('\'');
 
     return value.toString();
 }
@@ -899,7 +899,7 @@ QString FunctionExpr::debugString()
 
 QString FunctionExpr::toString(QuerySchemaParameterValueListIterator* params)
 {
-    return name + "(" + (args ? args->toString(params) : QString()) + ")";
+    return name + '(' + (args ? args->toString(params) : QString()) + ')';
 }
 
 void FunctionExpr::getQueryParameters(QuerySchemaParameterList& params)

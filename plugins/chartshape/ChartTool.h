@@ -97,7 +97,7 @@ private slots:
     void setPieExplodeFactor(DataSet *dataSet, int percent);
     
     // Axes
-    void addAxis(AxisDimension, const QString& title = "");
+    void addAxis(AxisDimension, const QString& title = QString());
     void removeAxis(Axis *axis);
     void setAxisShowTitle(Axis *axis, bool show);
     void setAxisTitle(Axis *axis, const QString& title);

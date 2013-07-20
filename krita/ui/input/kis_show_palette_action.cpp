@@ -36,6 +36,11 @@ KisShowPaletteAction::~KisShowPaletteAction()
 
 }
 
+int KisShowPaletteAction::priority() const
+{
+    return 1;
+}
+
 void KisShowPaletteAction::begin(int, QEvent *event)
 {
     QPoint pos;

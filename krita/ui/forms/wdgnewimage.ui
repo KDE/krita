@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>499</width>
-    <height>584</height>
+    <width>558</width>
+    <height>445</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -36,93 +36,177 @@
     </layout>
    </item>
    <item>
-    <widget class="QGroupBox" name="grpClipboard">
-     <property name="title">
-      <string>Clipboard</string>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <item>
-       <widget class="QGraphicsView" name="clipPreview">
-        <property name="interactive">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="grpImage">
-     <property name="title">
-      <string>Image Size</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="1" column="0">
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string>&amp;Predefined:</string>
-          </property>
-          <property name="buddy">
-           <cstring>cmbPredefined</cstring>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="cmbPredefined">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="2" column="0">
-       <layout class="QHBoxLayout">
-        <item>
-         <layout class="QVBoxLayout">
-          <property name="margin">
-           <number>0</number>
-          </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QGroupBox" name="grpImage">
+       <property name="title">
+        <string>Image Size</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="1" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
-           <widget class="QLabel" name="lblWidth">
+           <widget class="QLabel" name="label_2">
             <property name="text">
-             <string>&amp;Width:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             <string>&amp;Predefined:</string>
             </property>
             <property name="buddy">
-             <cstring>doubleWidth</cstring>
+             <cstring>cmbPredefined</cstring>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="lblHeight">
-            <property name="text">
-             <string>&amp;Height:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="buddy">
-             <cstring>doubleHeight</cstring>
+           <widget class="QComboBox" name="cmbPredefined">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
             </property>
            </widget>
           </item>
          </layout>
         </item>
-        <item>
-         <layout class="QVBoxLayout">
-          <property name="margin">
-           <number>0</number>
-          </property>
+        <item row="2" column="0">
+         <layout class="QHBoxLayout">
           <item>
-           <widget class="QDoubleSpinBox" name="doubleWidth">
+           <layout class="QVBoxLayout">
+            <property name="margin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="lblWidth">
+              <property name="text">
+               <string>&amp;Width:</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="buddy">
+               <cstring>doubleWidth</cstring>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="lblHeight">
+              <property name="text">
+               <string>&amp;Height:</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="buddy">
+               <cstring>doubleHeight</cstring>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout">
+            <property name="margin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QDoubleSpinBox" name="doubleWidth">
+              <property name="minimumSize">
+               <size>
+                <width>80</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="decimals">
+               <number>2</number>
+              </property>
+              <property name="minimum">
+               <double>1.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>100000000.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDoubleSpinBox" name="doubleHeight">
+              <property name="minimumSize">
+               <size>
+                <width>80</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="minimum">
+               <double>1.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>100000000.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout">
+            <property name="margin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QComboBox" name="cmbWidthUnit"/>
+            </item>
+            <item>
+             <widget class="QComboBox" name="cmbHeightUnit"/>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QToolButton" name="bnPortrait">
+            <property name="toolTip">
+             <string>Portrait</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+            <property name="autoExclusive">
+             <bool>true</bool>
+            </property>
+            <property name="autoRaise">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="bnLandscape">
+            <property name="toolTip">
+             <string>Landscape</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="autoExclusive">
+             <bool>true</bool>
+            </property>
+            <property name="autoRaise">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblResolution">
+            <property name="text">
+             <string>Resolution:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="doubleResolution">
             <property name="minimumSize">
              <size>
               <width>80</width>
@@ -130,188 +214,108 @@
              </size>
             </property>
             <property name="decimals">
-             <number>2</number>
-            </property>
-            <property name="minimum">
-             <double>1.000000000000000</double>
+             <number>0</number>
             </property>
             <property name="maximum">
-             <double>100000000.000000000000000</double>
+             <double>99999.000000000000000</double>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QDoubleSpinBox" name="doubleHeight">
-            <property name="minimumSize">
+           <widget class="QLabel" name="label">
+            <property name="toolTip">
+             <string>pixels-per-inch</string>
+            </property>
+            <property name="text">
+             <string>ppi</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Expanding</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
              <size>
-              <width>80</width>
-              <height>0</height>
+              <width>191</width>
+              <height>61</height>
              </size>
             </property>
-            <property name="minimum">
-             <double>1.000000000000000</double>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item row="3" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QPushButton" name="bnScreenSize">
+            <property name="toolTip">
+             <string>Set Width and Height to screen resolution.</string>
             </property>
-            <property name="maximum">
-             <double>100000000.000000000000000</double>
+            <property name="text">
+             <string>&amp;Screen size</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="txtPredefinedName">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="bnSaveAsPredefined">
+            <property name="toolTip">
+             <string>Save the current dimensions</string>
+            </property>
+            <property name="text">
+             <string>&amp;Save</string>
             </property>
            </widget>
           </item>
          </layout>
         </item>
-        <item>
-         <layout class="QVBoxLayout">
-          <property name="margin">
-           <number>0</number>
-          </property>
-          <item>
-           <widget class="QComboBox" name="cmbWidthUnit"/>
-          </item>
-          <item>
-           <widget class="QComboBox" name="cmbHeightUnit"/>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <widget class="QToolButton" name="bnPortrait">
-          <property name="toolTip">
-           <string>Portrait</string>
-          </property>
-          <property name="text">
-           <string>...</string>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-          <property name="autoExclusive">
-           <bool>true</bool>
-          </property>
-          <property name="autoRaise">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QToolButton" name="bnLandscape">
-          <property name="toolTip">
-           <string>Landscape</string>
-          </property>
-          <property name="text">
-           <string>...</string>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-          <property name="autoExclusive">
-           <bool>true</bool>
-          </property>
-          <property name="autoRaise">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="lblResolution">
-          <property name="text">
-           <string>Resolution:</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QDoubleSpinBox" name="doubleResolution">
-          <property name="minimumSize">
-           <size>
-            <width>80</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="decimals">
-           <number>0</number>
-          </property>
-          <property name="maximum">
-           <double>99999.000000000000000</double>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="label">
-          <property name="toolTip">
-           <string>pixels-per-inch</string>
-          </property>
-          <property name="text">
-           <string>ppi</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Expanding</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>191</width>
-            <height>61</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
        </layout>
-      </item>
-      <item row="3" column="0">
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="grpClipboard">
+       <property name="title">
+        <string>Clipboard</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QPushButton" name="bnScreenSize">
-          <property name="toolTip">
-           <string>Set Width and Height to screen resolution.</string>
-          </property>
-          <property name="text">
-           <string>&amp;Screen size</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="txtPredefinedName">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="bnSaveAsPredefined">
-          <property name="toolTip">
-           <string>Save the current dimensions</string>
-          </property>
-          <property name="text">
-           <string>&amp;Save</string>
+         <widget class="QGraphicsView" name="clipPreview">
+          <property name="interactive">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
        </layout>
-      </item>
-     </layout>
-    </widget>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <widget class="QGroupBox" name="grpMode">

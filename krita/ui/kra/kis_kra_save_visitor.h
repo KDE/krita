@@ -67,7 +67,7 @@ private:
     bool saveSelection(KisNode* node);
     bool saveFilterConfiguration(KisNode* node);
     bool saveMetaData(KisNode* node);
-    QString getLocation(KisNode* node, const QString& suffix = "");
+    QString getLocation(KisNode* node, const QString& suffix = QString());
 
 private:
 

@@ -97,7 +97,7 @@ QString ConnectionData::serverInfoString(bool addUser) const
     const QString& i18nFile = i18n("file");
 
     if (!m_dbFileName.isEmpty())
-        return i18nFile + ": " + (m_dbPath.isEmpty() ? "" : m_dbPath
+        return i18nFile + ": " + (m_dbPath.isEmpty() ? QString() : m_dbPath
                                   + QDir::separator()) + m_dbFileName;
 
     DriverManager man;

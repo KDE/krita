@@ -48,7 +48,7 @@ class KOPAGEAPP_EXPORT KoPAViewMode : public QObject
 
     Q_OBJECT
 public:
-    KoPAViewMode(KoPAViewBase * view, KoPACanvasBase * canvas, QString name = "");
+    KoPAViewMode(KoPAViewBase * view, KoPACanvasBase * canvas, const QString& name = QString());
     virtual ~KoPAViewMode();
 
     virtual void paint(KoPACanvasBase* canvas, QPainter& painter, const QRectF &paintRect) = 0;

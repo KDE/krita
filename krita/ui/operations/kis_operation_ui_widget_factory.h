@@ -45,7 +45,7 @@ public:
     }
 
     /**
-    *  Reimplemted. Show a dialog the the widget specify as T
+    *  Reimplemted. Show a dialog the widget specify as T
     *  @param view the view
     *  @param configuration the configuration to the operation
     *  @returns true if the configuration could be constructed (not canceled)

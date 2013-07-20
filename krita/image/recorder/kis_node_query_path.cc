@@ -143,7 +143,7 @@ QList<KisNodeSP> KisNodeQueryPath::queryNodes(KisImageWSP image, KisNodeSP curre
 
 QString KisNodeQueryPath::toString() const
 {
-    QString str = "";
+    QString str;
     if (!d->relative) {
         str = '/';
     } else if (d->elements.count() == 0) {

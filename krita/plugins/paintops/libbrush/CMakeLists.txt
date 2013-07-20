@@ -15,8 +15,7 @@ set(kritalibbrush_LIB_SRCS
     kis_png_brush_factory.cpp
     kis_svg_brush.cpp
     kis_svg_brush_factory.cpp
-    kis_qimage_mask.cpp
-    kis_scaled_brush.cpp
+    kis_qimage_pyramid.cpp
     kis_text_brush.cpp
     kis_auto_brush_factory.cpp
     kis_text_brush_factory.cpp

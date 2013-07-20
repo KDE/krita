@@ -66,7 +66,7 @@ QString DocumentListWindow::currentDocument()
     int selectedRow = m_docListDialog->listView->currentIndex().row();
     QString name  = m_docListDialog->listView->model()->index(selectedRow, 0).data().toString();
     QString type = m_docListDialog->listView->model()->index(selectedRow, 2).data().toString();
-    QString ext = "";
+    QString ext;
 
     if (QString::compare(type, "document", Qt::CaseInsensitive) == 0 ) {
             ext = ".odt";

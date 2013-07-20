@@ -23,6 +23,8 @@
 #include <QMenu>
 #include <QTimer>
 
+#include "KoIcon.h"
+
 #include "ui_kis_mouse_input_editor.h"
 
 class KisMouseInputEditor::Private
@@ -41,6 +43,9 @@ KisMouseInputEditor::KisMouseInputEditor(QWidget *parent)
     d->ui = new Ui::KisMouseInputEditor;
     d->ui->setupUi(popup);
     d->ui->mouseButton->setType(KisInputButton::MouseType);
+
+    d->ui->clearModifiersButton->setIcon(koIcon("edit-clear-locationbar-rtl"));
+    d->ui->clearMouseButton->setIcon(koIcon("edit-clear-locationbar-rtl"));
 
     QWidgetAction *action = new QWidgetAction(this);
     action->setDefaultWidget(popup);

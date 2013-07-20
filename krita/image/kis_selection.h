@@ -102,7 +102,7 @@ public:
      * the pixelated version of it.
      *
      * NOTE: use pixelSelection() for changing the selection only. For
-     * reading the selection and passing the data to bitBlt fuction use
+     * reading the selection and passing the data to bitBlt function use
      * projection(). Although projection() and pixelSelection() currently
      * point ot the same paint device, this behavior may change in the
      * future.

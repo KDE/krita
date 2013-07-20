@@ -332,7 +332,11 @@ void KisShapeSelection::recalculateOutlineCache()
         QTransform shapeMatrix = shape->absoluteTransformation(0);
         outline = outline.united(shapeMatrix.map(shape->outline()));
     }
-    m_outline = outline;
+
+    QTransform resolutionMatrix;
+    resolutionMatrix.scale(m_image->xRes(), m_image->yRes());
+
+    m_outline = resolutionMatrix.map(outline);
 }
 
 void KisShapeSelection::paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &)
@@ -345,10 +349,8 @@ void KisShapeSelection::renderToProjection(KisPaintDeviceSP projection)
 {
     Q_ASSERT(projection);
     Q_ASSERT(m_image);
-    QTransform resolutionMatrix;
-    resolutionMatrix.scale(m_image->xRes(), m_image->yRes());
 
-    QRectF boundingRect = resolutionMatrix.mapRect(outlineCache().boundingRect());
+    QRectF boundingRect = outlineCache().boundingRect();
     renderSelection(projection, boundingRect.toAlignedRect());
 }
 
@@ -363,9 +365,6 @@ void KisShapeSelection::renderSelection(KisPaintDeviceSP projection, const QRect
     Q_ASSERT(projection);
     Q_ASSERT(m_image);
 
-    QTransform resolutionMatrix;
-    resolutionMatrix.scale(m_image->xRes(), m_image->yRes());
-
     const qint32 MASK_IMAGE_WIDTH = 256;
     const qint32 MASK_IMAGE_HEIGHT = 256;
 
@@ -379,7 +378,7 @@ void KisShapeSelection::renderSelection(KisPaintDeviceSP projection, const QRect
 
             maskPainter.fillRect(polygonMaskImage.rect(), Qt::black);
             maskPainter.translate(-x, -y);
-            maskPainter.fillPath(resolutionMatrix.map(outlineCache()), Qt::white);
+            maskPainter.fillPath(outlineCache(), Qt::white);
             maskPainter.translate(x, y);
 
             qint32 rectWidth = qMin(r.x() + r.width() - x, MASK_IMAGE_WIDTH);

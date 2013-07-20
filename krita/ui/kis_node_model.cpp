@@ -264,6 +264,8 @@ void KisNodeModel::slotEndInsertDummy(KisNodeDummy *dummy)
 
 void KisNodeModel::slotBeginRemoveDummy(KisNodeDummy *dummy)
 {
+    if (!dummy) return;
+
     // FIXME: is it really what we want?
     m_d->updateTimer->stop();
     m_d->updateQueue.clear();

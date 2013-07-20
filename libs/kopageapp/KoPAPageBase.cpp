@@ -135,7 +135,7 @@ QString KoPAPageBase::saveOdfPageStyle( KoPASavingContext &paContext ) const
 
 void KoPAPageBase::saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const
 {
-    KoShapeBackground * bg = background();
+    QPointer<KoShapeBackground>  bg = background();
     if( bg )
         bg->fillStyle( style, paContext );
 }

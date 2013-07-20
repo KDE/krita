@@ -135,9 +135,9 @@ void KisToolShape::addShape(KoShape* shape)
             break;
         case KisPainter::FillStylePattern:
             if (imageCollection) {
-                KoPatternBackground* fill = new KoPatternBackground(imageCollection);
+                QPointer<KoPatternBackground> fill = new KoPatternBackground(imageCollection);
                 fill->setPattern(currentPattern()->image());
-                shape->setBackground(fill);
+                shape->setBackground(fill.data());
             } else {
                 shape->setBackground(0);
             }
@@ -147,8 +147,8 @@ void KisToolShape::addShape(KoShape* shape)
                 QLinearGradient *gradient = new QLinearGradient(QPointF(0, 0), QPointF(1, 1));
                 gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
                 gradient->setStops(currentGradient()->toQGradient()->stops());
-                KoGradientBackground* gradientFill = new KoGradientBackground(gradient);
-                shape->setBackground(gradientFill);
+                QPointer<KoGradientBackground>  gradientFill = new KoGradientBackground(gradient);
+                shape->setBackground(gradientFill.data());
             }
             break;
         case KisPainter::FillStyleNone:

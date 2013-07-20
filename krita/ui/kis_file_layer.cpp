@@ -92,10 +92,10 @@ KoDocumentSectionModel::PropertyList KisFileLayer::sectionModelProperties() cons
 
 void KisFileLayer::setFileName(const QString &basePath, const QString &filename)
 {
-    m_fileWatcher.removePath(m_basePath + "/" + m_filename);
+    m_fileWatcher.removePath(m_basePath + '/' + m_filename);
     m_basePath = basePath;
     m_filename = filename;
-    m_fileWatcher.addPath(m_basePath + "/" + m_filename);
+    m_fileWatcher.addPath(m_basePath + '/' + m_filename);
     reloadImage();
 }
 
@@ -110,7 +110,7 @@ QString KisFileLayer::path() const
         return m_filename;
     }
     else {
-        return m_basePath + "/" + m_filename;
+        return m_basePath + '/' + m_filename;
     }
 }
 

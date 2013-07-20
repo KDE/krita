@@ -83,7 +83,7 @@ void KisEditProfilesDialog::removeButtonClicked()
 void KisEditProfilesDialog::duplicateButtonClicked()
 {
     QString currentName = d->profileModel->profileName(d->ui->profileList->currentIndex());
-    QString newName = i18n("Copy of %1").arg(currentName);
+    QString newName = i18n("Copy of %1", currentName);
     KisInputProfileManager::instance()->duplicateProfile(currentName, newName);
 }
 

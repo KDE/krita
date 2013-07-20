@@ -149,7 +149,7 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     options.filters = frm.enabledFilters();
     QString enabledFilters;
     foreach(const KisMetaData::Filter* filter, options.filters) {
-        enabledFilters = enabledFilters + filter->id() + ",";
+        enabledFilters = enabledFilters + filter->id() + ',';
     }
 
     cfg.setProperty("filters", enabledFilters);

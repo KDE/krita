@@ -1113,7 +1113,7 @@ void KisView2::slotSaveIncremental()
                 ++letterCh;
                 letter = QString(QChar(letterCh));
             } else {
-                letter = "a";
+                letter = 'a';
             }
         }
     } while (fileAlreadyExists && letter != "{");  // x, y, z, {...
@@ -1180,7 +1180,7 @@ void KisView2::slotSaveIncrementalBackup()
                     ++letterCh;
                     letter = QString(QChar(letterCh));
                 } else {
-                    letter = "a";
+                    letter = 'a';
                 }
             }
         } while (fileAlreadyExists && letter != "{");  // x, y, z, {...

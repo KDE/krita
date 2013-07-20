@@ -283,5 +283,5 @@ void KisInputProfileManager::Private::createActions()
 
 QString KisInputProfileManager::Private::profileFileName(const QString &profileName)
 {
-    return profileName.toLower().replace(QRegExp("[^a-z0-9]"), "").append(".profile");
+    return profileName.toLower().remove(QRegExp("[^a-z0-9]")).append(".profile");
 }

@@ -513,7 +513,7 @@ signals:
 
     /**
      * The signal is emitted when the size of the image is changed.
-     * \p oldStillPoint and \p newStillPoint give the reciever the
+     * \p oldStillPoint and \p newStillPoint give the receiver the
      * hint about how the new and old rect of the image correspond to
      * each other. They specify the point of the image around which
      * the conversion was done. This point will stay still on the
@@ -617,7 +617,7 @@ signals:
     /**
      * Emitted when the isolated mode status has changed.
      *
-     * Can be used by the recievers to catch a fact of forcefully
+     * Can be used by the receivers to catch a fact of forcefully
      * stopping the isolated mode by the image when some complex
      * action was requested
      */

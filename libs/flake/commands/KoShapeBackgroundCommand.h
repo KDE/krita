@@ -26,6 +26,7 @@
 #include <kundo2command.h>
 #include <QList>
 #include <QBrush>
+#include <QPointer>
 
 class KoShape;
 class KoShapeBackground;
@@ -40,7 +41,7 @@ public:
      * @param fill the new shape background
      * @param parent the parent command used for macro commands
      */
-    KoShapeBackgroundCommand(const QList<KoShape*> &shapes, KoShapeBackground *fill, KUndo2Command *parent = 0);
+    KoShapeBackgroundCommand(const QList<KoShape*> &shapes, QPointer<KoShapeBackground> fill, KUndo2Command *parent = 0);
 
     /**
     * Command to set a new shape background.
@@ -48,7 +49,7 @@ public:
     * @param fill the new shape background
     * @param parent the parent command used for macro commands
     */
-    KoShapeBackgroundCommand(KoShape *shape, KoShapeBackground *fill, KUndo2Command *parent = 0);
+    KoShapeBackgroundCommand(KoShape *shape, QPointer<KoShapeBackground> fill, KUndo2Command *parent = 0);
 
     /**
      * Command to set new shape backgrounds.
@@ -56,7 +57,7 @@ public:
      * @param fills the new backgrounds, one for each shape
      * @param parent the parent command used for macro commands
      */
-    KoShapeBackgroundCommand(const QList<KoShape*> &shapes, const QList<KoShapeBackground*> &fills, KUndo2Command *parent = 0);
+    KoShapeBackgroundCommand(const QList<KoShape*> &shapes, const QList<QPointer<KoShapeBackground> > &fills, KUndo2Command *parent = 0);
 
     virtual ~KoShapeBackgroundCommand();
     /// redo the command

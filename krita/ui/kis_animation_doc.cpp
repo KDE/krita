@@ -25,6 +25,7 @@
 #include <kis_group_layer.h>
 #include <kranim/kis_kranim_saver.h>
 #include <kranim/kis_kranim_loader.h>
+#include <KoFilterManager.h>
 
 #define APP_MIMETYPE "application/x-krita-animation"
 static const char CURRENT_DTD_VERSION[] = "1.0";
@@ -44,6 +45,7 @@ public:
 
     KisKranimSaver* kranimSaver;
     KisKranimLoader* kranimLoader;
+    bool saved;
 };
 
 KisAnimationDoc::KisAnimationDoc()
@@ -54,6 +56,7 @@ KisAnimationDoc::KisAnimationDoc()
 
     m_d_anim->kranimSaver = 0;
     m_d_anim->kranimLoader = 0;
+    m_d_anim->saved = false;
 }
 
 KisAnimationDoc::~KisAnimationDoc(){
@@ -62,6 +65,10 @@ KisAnimationDoc::~KisAnimationDoc(){
 
 void KisAnimationDoc::addFrame()
 {
+    if(!m_d_anim->saved){
+        kWarning() << this->documentPart()->url();
+        this->preSaveAnimation();
+    }
 
     KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
     KisImageWSP image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());
@@ -125,4 +132,18 @@ bool KisAnimationDoc::completeLoading(KoStore *store)
     m_d_anim->kranimLoader = new KisKranimLoader(this);
     return true;
 }
+
+void KisAnimationDoc::preSaveAnimation(){
+    KUrl url = this->documentPart()->url();
+    QByteArray nativeFormat = this->nativeFormatMimeType();
+    QStringList mimeFilter = KoFilterManager::mimeFilter(nativeFormat, KoFilterManager::Export,
+                                                         this->extraNativeMimeTypes(KoDocument::ForExport));
+    kWarning() << nativeFormat;
+    if(!mimeFilter.contains(nativeFormat)){
+        kWarning() << "No output filter";
+    }
+    this->setOutputMimeType(nativeFormat, 0);
+    m_d_anim->saved = this->documentPart()->saveAs(url);
+}
+
 #include "kis_animation_doc.moc"

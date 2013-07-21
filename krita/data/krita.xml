@@ -8,7 +8,6 @@
          <glob pattern="*.flipbook"/>
   </mime-type>
 </mime-info>
-
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
     <mime-type type="application/x-krita-animation">
         <comment xml:lang="en">Krita Animation</comment>

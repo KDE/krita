@@ -39,6 +39,9 @@ public:
     virtual bool loadXML(const KoXmlDocument& doc, KoStore* store);
 
 private:
+    void preSaveAnimation();
+
+private:
     class KisAnimationDocPrivate;
     KisAnimationDocPrivate* const m_d_anim;
 

@@ -38,9 +38,9 @@
 #include <KoParagraphStyle.h>
 #include <KoPostscriptPaintDevice.h>
 #include <KoSelection.h>
-#include <KoShapeBackground.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeManager.h>
+#include <KoShapeBackground.h>
 #include <KoShapePaintingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoText.h>

@@ -208,11 +208,11 @@ void KisToolFreehandHelper::paintBezierSegment(KisPaintInformation pi1, KisPaint
     qreal similarity = qMin(velocity1/velocity2, velocity2/velocity1);
 
     // the controls should not differ more than 50%
-    similarity = qMax(similarity, 0.5);
+    similarity = qMax(similarity, qreal(0.5));
 
     // when the controls are symmetric, their size should be smaller
     // to avoid corner-like curves
-    coeff *= 1 - qMax(0.0, similarity - 0.8);
+    coeff *= 1 - qMax(qreal(0.0), similarity - qreal(0.8));
 
     Q_ASSERT(coeff > 0);
 

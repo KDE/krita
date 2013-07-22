@@ -60,7 +60,6 @@
 #include <kis_meta_data_io_backend.h>
 #include <kis_meta_data_store.h>
 #include <KoColorModelStandardIds.h>
-#include "kis_iterator_ng.h"
 
 namespace
 {

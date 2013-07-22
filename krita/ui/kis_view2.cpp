@@ -123,13 +123,11 @@
 
 #include <QDebug>
 #include <QPoint>
-#include "kis_paintop_box.h"
 #include "kis_node_commands_adapter.h"
 #include <kis_paintop_preset.h>
 #include "ko_favorite_resource_manager.h"
 #include "kis_action_manager.h"
 #include "input/kis_input_profile_manager.h"
-#include "kis_paintop_box.h"
 
 
 class BlockingUserInputEventFilter : public QObject

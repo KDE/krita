@@ -67,7 +67,6 @@ extern "C" {
 #include <kis_jpeg_destination.h>
 #include "kis_iterator_ng.h"
 
-#include <KoColorProfile.h>
 #include <KoColorModelStandardIds.h>
 
 #define ICC_MARKER  (JPEG_APP0 + 2) /* JPEG marker code for ICC */

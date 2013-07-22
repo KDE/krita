@@ -27,9 +27,7 @@
 
 #include "mypaint_paintop_factory.h"
 #include "mypaint_brush_resource.h"
-#include "mypaint_paintop_settings.h"
 #include "mypaint_surface.h"
-#include <kis_paint_information.h>
 
 MyPaint::MyPaint(const MyPaintSettings *settings, KisPainter * painter, KisImageWSP image)
     : KisPaintOp(painter)

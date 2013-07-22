@@ -268,7 +268,7 @@ void KisWalkersTest::testUsualVisiting()
         QString order("paint3,paint4,group,paint5,root,"
                       "root_TF,paint5_TA,group_NF,paint1_BB,"
                       "paint4_TA,paint3_NF,adj_NB,paint2_BB");
-        QStringList orderList = order.split(",");
+        QStringList orderList = order.split(',');
 
         reportStartWith("paint3");
         walker.startTrip(paintLayer3);

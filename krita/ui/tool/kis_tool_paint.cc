@@ -69,7 +69,6 @@
 #include <recorder/kis_recorded_paint_action.h>
 #include "kis_color_picker_utils.h"
 #include <kis_paintop.h>
-#include "kis_canvas_resource_provider.h"
 
 const int STEP = 25;
 

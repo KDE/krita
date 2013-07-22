@@ -50,7 +50,6 @@
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoProgressUpdater.h>
-#include <KoDocument.h>
 #include <KoPart.h>
 
 #include <filter/kis_filter_configuration.h>
@@ -71,7 +70,6 @@
 #include <kis_painter.h>
 #include <metadata/kis_meta_data_store.h>
 #include <metadata/kis_meta_data_merge_strategy_registry.h>
-#include <kis_file_layer.h>
 
 #include "kis_config.h"
 #include "kis_cursor.h"

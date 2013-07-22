@@ -34,7 +34,6 @@
 #include "kis_cursor.h"
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_config.h"
 
 #include "lutdocker_dock.h"
 #include <KoDockRegistry.h>

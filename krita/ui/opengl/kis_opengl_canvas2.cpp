@@ -30,7 +30,6 @@
 #include <QPainter>
 #include <QPaintEvent>
 #include <QPoint>
-#include <QPainter>
 #include <QTransform>
 
 #include <kxmlguifactory.h>

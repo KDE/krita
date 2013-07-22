@@ -134,7 +134,10 @@ bool KisAnimationDoc::completeLoading(KoStore *store)
 }
 
 void KisAnimationDoc::preSaveAnimation(){
+    KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
+
     KUrl url = this->documentPart()->url();
+    kWarning() << "Directory"<< url.directory();
     QByteArray nativeFormat = this->nativeFormatMimeType();
     QStringList mimeFilter = KoFilterManager::mimeFilter(nativeFormat, KoFilterManager::Export,
                                                          this->extraNativeMimeTypes(KoDocument::ForExport));
@@ -143,7 +146,12 @@ void KisAnimationDoc::preSaveAnimation(){
         kWarning() << "No output filter";
     }
     this->setOutputMimeType(nativeFormat, 0);
-    m_d_anim->saved = this->documentPart()->saveAs(url);
+
+    KUrl newUrl(url.directory()+"/"+animation->name()+".kranim");
+
+    kWarning() << newUrl;
+
+    m_d_anim->saved = this->documentPart()->saveAs(newUrl);
 }
 
 #include "kis_animation_doc.moc"

@@ -132,12 +132,12 @@ QString KoReportHTMLCSSRenderer::renderCSS(ORODocument *document)
                 if (prim->type() == OROTextBox::TextBox) {
                     OROTextBox * tb = (OROTextBox*) prim;
 
-                    style = "position: absolute; ";
-                    style += "background-color: " + (tb->textStyle().backgroundOpacity == 0 ? "transparent" : tb->textStyle().backgroundColor.name()) + "; ";
-                    style += "top: " + QString::number(tb->position().y()) + "pt; ";
-                    style += "left: " + QString::number(tb->position().x()) + "pt; ";
-                    style += "font-size: " + QString::number(tb->textStyle().font.pointSize()) + "pt; ";
-                    style += "color: " + tb->textStyle().foregroundColor.name() + "; ";
+                    style = "position: absolute; "
+                            "background-color: " + (tb->textStyle().backgroundOpacity == 0 ? "transparent" : tb->textStyle().backgroundColor.name()) + "; "
+                            "top: " + QString::number(tb->position().y()) + "pt; "
+                            "left: " + QString::number(tb->position().x()) + "pt; "
+                            "font-size: " + QString::number(tb->textStyle().font.pointSize()) + "pt; "
+                            "color: " + tb->textStyle().foregroundColor.name() + "; ";
                     //TODO opaque text + translucent background
                     //it looks a pain to implement
                     //http://developer.mozilla.org/en/docs/Useful_CSS_tips:Color_and_Background
@@ -149,40 +149,40 @@ QString KoReportHTMLCSSRenderer::renderCSS(ORODocument *document)
                     }
                     styleindex = styles.indexOf(style);
 
-                    body += "<div class=\"style" + QString::number(styleindex) + "\">";
-                    body += tb->text();
-                    body += "</div>\n";
+                    body += "<div class=\"style" + QString::number(styleindex) + "\">" +
+                            tb->text() +
+                            "</div>\n";
                 } else if (prim->type() == OROImage::Image) {
                     kDebug() << "Saving an image";
                     OROImage * im = (OROImage*) prim;
-                    style = "position: absolute; ";
-                    style += "top: " + QString::number(im->position().y()) + "pt; ";
-                    style += "left: " + QString::number(im->position().x()) + "pt; ";
+                    style = "position: absolute; "
+                            "top: " + QString::number(im->position().y()) + "pt; "
+                            "left: " + QString::number(im->position().x()) + "pt; ";
                     if (!styles.contains(style)) {
                         styles << style;
                     }
                     styleindex = styles.indexOf(style);
 
-                    body += "<div class=\"style" + QString::number(styleindex) + "\">";
-                    body += "<img width=\"" + QString::number(im->size().width()) + "px" + "\" height=\"" + QString::number(im->size().height()) + "px" + "\" src=\"./" + m_actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
-                    body += "</div>\n";
+                    body += "<div class=\"style" + QString::number(styleindex) + "\">"
+                            "<img width=\"" + QString::number(im->size().width()) + "px" + "\" height=\"" + QString::number(im->size().height()) + "px" + "\" src=\"./" + m_actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>"
+                            "</div>\n";
 
 
                     im->image().save(m_tempDirName + "/object" + QString::number(s) + QString::number(i) + ".png");
                 } else if (prim->type() == OROPicture::Picture) {
                     kDebug() << "Saving a picture";
                     OROPicture * im = (OROPicture*) prim;
-                    style = "position: absolute; ";
-                    style += "top: " + QString::number(im->position().y()) + "pt; ";
-                    style += "left: " + QString::number(im->position().x()) + "pt; ";
+                    style = "position: absolute; "
+                            "top: " + QString::number(im->position().y()) + "pt; "
+                            "left: " + QString::number(im->position().x()) + "pt; ";
                     if (!styles.contains(style)) {
                         styles << style;
                     }
                     styleindex = styles.indexOf(style);
 
-                    body += "<div class=\"style" + QString::number(styleindex) + "\">";
-                    body += "<img width=\"" + QString::number(im->size().width()) + "px" + "\" height=\"" + QString::number(im->size().height()) + "px" + "\" src=\"./" + m_actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
-                    body += "</div>\n";
+                    body += "<div class=\"style" + QString::number(styleindex) + "\">"
+                            "<img width=\"" + QString::number(im->size().width()) + "px" + "\" height=\"" + QString::number(im->size().height()) + "px" + "\" src=\"./" + m_actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>"
+                            "</div>\n";
 
                     QImage image(im->size().toSize(), QImage::Format_RGB32);
                     QPainter painter(&image);

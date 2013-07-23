@@ -367,13 +367,11 @@ bool QWinMetaFile::paint(QPaintDevice* aTarget, bool absolute)
             if (metaFuncTab[ idx ].method == &QWinMetaFile::noop) {
                 str += "UNIMPLEMENTED ";
             }
-            str += metaFuncTab[ idx ].name;
-            str += " : ";
+            str += metaFuncTab[ idx ].name + " : ";
 
             for (i = 0 ; i < cmd->numParm ; i++) {
                 param.setNum(cmd->parm[ i ]);
-                str += param;
-                str += ' ';
+                str += param + ' ';
             }
             kDebug() << str;
         }

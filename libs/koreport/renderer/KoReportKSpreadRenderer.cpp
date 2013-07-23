@@ -79,9 +79,9 @@ bool KoReportKSpreadRenderer::render(const KoReportRendererContext& context, ORO
                 {
                  kDebug() << "Saving an image";
                  OROImage * im = ( OROImage* ) prim;
-                 tr += "<td>";
-                 tr += "<img src=\"./" + fi.fileName() + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
-                 tr += "</td>\n";
+                 tr += "<td>"
+                       "<img src=\"./" + fi.fileName() + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>"
+                       "</td>\n";
                  im->image().save(saveDir + "/object" + QString::number(s) + QString::number(i) + ".png");
                 }
                 else if (prim->type() == OROPicture::Picture)
@@ -89,9 +89,9 @@ bool KoReportKSpreadRenderer::render(const KoReportRendererContext& context, ORO
                  kDebug() << "Saving a picture";
                  OROPicture * im = ( OROPicture* ) prim;
 
-                 tr += "<td>";
-                 tr += "<img src=\"./" + fi.fileName() + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
-                 tr += "</td>\n";
+                 tr += "<td>"
+                       "<img src=\"./" + fi.fileName() + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>"
+                       "</td>\n";
                  QImage image(im->size().toSize(), QImage::Format_RGB32);
                  QPainter painter(&image);
                  im->picture()->play(&painter);

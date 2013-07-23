@@ -900,8 +900,8 @@ QString QuerySchema::debugString() const
         }
     }
     if (!dbg2.isEmpty()) {
-        dbg += "\n-BINDINGS:\n";
-        dbg += dbg2;
+        dbg += "\n-BINDINGS:\n" +
+               dbg2;
     }
 
     //tables

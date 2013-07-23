@@ -27,7 +27,6 @@
 #include <QtGui>
 #include <QDebug>
 #include <QQueue>
-#include <QtGui>
 #include <math.h>
 
 #define maxPresetCount 10

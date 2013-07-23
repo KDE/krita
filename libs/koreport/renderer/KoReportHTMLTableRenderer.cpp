@@ -125,23 +125,23 @@ QString KoReportHTMLTableRenderer::renderTable(ORODocument *document)
                 if (prim->type() == OROTextBox::TextBox) {
                     OROTextBox * tb = (OROTextBox*) prim;
 
-                    tr += "<td>";
-                    tr += tb->text();
-                    tr += "</td>\n";
+                    tr += "<td>" +
+                          tb->text() +
+                          "</td>\n";
                 } else if (prim->type() == OROImage::Image) {
                     kDebug() << "Saving an image";
                     OROImage * im = (OROImage*) prim;
-                    tr += "<td>";
-                    tr += "<img src=\"./" + m_actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
-                    tr += "</td>\n";
+                    tr += "<td>"
+                          "<img src=\"./" + m_actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>"
+                          "</td>\n";
                     im->image().save(m_tempDirName + "/object" + QString::number(s) + QString::number(i) + ".png");
                 } else if (prim->type() == OROPicture::Picture) {
                     kDebug() << "Saving a picture";
                     OROPicture * im = (OROPicture*) prim;
 
-                    tr += "<td>";
-                    tr += "<img src=\"./" + m_actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
-                    tr += "</td>\n";
+                    tr += "<td>"
+                          "<img src=\"./" + m_actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>"
+                          "</td>\n";
                     QImage image(im->size().toSize(), QImage::Format_RGB32);
                     QPainter painter(&image);
                     im->picture()->play(&painter);

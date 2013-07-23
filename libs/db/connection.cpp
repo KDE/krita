@@ -1439,9 +1439,9 @@ QString KexiDB::selectStatement(const KexiDB::Driver *driver,
         foreach(QuerySchema* subQuery, subqueries_for_lookup_data) {
             if (!s_from.isEmpty())
                 s_from += QLatin1String(", ");
-            s_from += QLatin1String("(");
-            s_from += selectStatement(driver, *subQuery, params, options);
-            s_from += QString::fromLatin1(") AS %1%2")
+            s_from += QLatin1Char('(') +
+                      selectStatement(driver, *subQuery, params, options) +
+                      QString::fromLatin1(") AS %1%2")
                       .arg(kexidb_subquery_prefix).arg(subqueries_for_lookup_data_counter++);
         }
         sql += s_from;
@@ -1477,8 +1477,7 @@ QString KexiDB::selectStatement(const KexiDB::Driver *driver,
                                escapeIdentifier(pair.second->name(), options.identifierEscaping));
         }
         if (rel->fieldPairs()->count() > 1) {
-            s_where_sub.prepend(QLatin1Char('('));
-            s_where_sub += QLatin1Char(')');
+            s_where_sub = QLatin1Char('(') + s_where_sub + QLatin1Char(')');
         }
         s_where += s_where_sub;
     }

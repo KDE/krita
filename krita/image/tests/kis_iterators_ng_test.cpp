@@ -24,7 +24,6 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
-#include <KoColorSpace.h>
 #include <KoColorProfile.h>
 
 #include "kis_random_accessor_ng.h"
@@ -32,7 +31,6 @@
 
 #include "kis_paint_device.h"
 #include <kis_iterator_ng.h>
-#include <kis_random_accessor_ng.h>
 
 void KisIteratorTest::allCsApplicator(void (KisIteratorTest::* funcPtr)(const KoColorSpace*cs))
 {

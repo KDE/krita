@@ -89,7 +89,6 @@
 #include "kis_factory2.h"
 #include "kis_view2.h"
 #include "kis_clipboard.h"
-#include "kis_config.h"
 #include "widgets/kis_custom_image_widget.h"
 #include "canvas/kis_canvas2.h"
 #include "flake/kis_shape_controller.h"

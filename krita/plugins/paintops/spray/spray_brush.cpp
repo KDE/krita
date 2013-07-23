@@ -30,7 +30,6 @@
 #include <QHash>
 #include <QTransform>
 #include <QImage>
-#include <QTransform>
 
 #include <kis_random_accessor_ng.h>
 #include <kis_random_sub_accessor.h>

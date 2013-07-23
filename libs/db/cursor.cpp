@@ -486,13 +486,13 @@ QString Cursor::debugString() const
 {
     QString dbg = "CURSOR( ";
     if (!m_query) {
-        dbg += "RAW STATEMENT: '";
-        dbg += m_rawStatement;
-        dbg += "'\n";
+        dbg += "RAW STATEMENT: '" +
+               m_rawStatement +
+               "'\n";
     } else {
-        dbg += "QuerySchema: '";
-        dbg += m_conn->selectStatement(*m_query);
-        dbg += "'\n";
+        dbg += "QuerySchema: '" +
+               m_conn->selectStatement(*m_query) +
+               "'\n";
     }
     if (isOpened())
         dbg += " OPENED";
@@ -502,9 +502,9 @@ QString Cursor::debugString() const
         dbg += " BUFFERED";
     else
         dbg += " NOT_BUFFERED";
-    dbg += " AT=";
-    dbg += QString::number((unsigned long)at());
-    dbg += " )";
+    dbg += " AT=" +
+           QString::number((unsigned long)at()) +
+           " )";
     return dbg;
 }
 

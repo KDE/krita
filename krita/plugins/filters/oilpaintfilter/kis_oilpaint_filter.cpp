@@ -51,7 +51,6 @@
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 #include <kis_paint_device.h>
-#include <kis_iterator_ng.h>
 #include "widgets/kis_multi_integer_filter_widget.h"
 
 

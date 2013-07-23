@@ -31,7 +31,7 @@
 
 //#define DEBUG_PYRAMID
 
-#include "config-ocio.h"
+#include <config-ocio.h>
 #ifdef HAVE_OCIO
 #include <OpenColorIO/OpenColorIO.h>
 #include <OpenColorIO/OpenColorTransforms.h>

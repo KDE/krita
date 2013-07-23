@@ -81,8 +81,6 @@
 #include "kis_factory2.h"
 #include "KoID.h"
 
-#include "KoColorProfile.h"
-
 // for the performance update
 #include <kis_cubic_curve.h>
 #include <config-ocio.h>

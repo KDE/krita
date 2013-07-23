@@ -169,8 +169,8 @@ QString NArgExpr::debugString()
     QString s = QString("NArgExpr(")
                 + "class=" + exprClassName(m_cl);
     foreach(BaseExpr *expr, list) {
-        s += ", ";
-        s += expr->debugString();
+        s += ", " +
+             expr->debugString();
     }
     s += ')';
     return s;

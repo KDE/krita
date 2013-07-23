@@ -32,7 +32,6 @@
 #include <generator/kis_generator_layer.h>
 #include "kis_open_raster_save_context.h"
 #include <kis_clone_layer.h>
-#include <generator/kis_generator_layer.h>
 #include <kis_external_layer_iface.h>
 
 struct KisOpenRasterStackSaveVisitor::Private {

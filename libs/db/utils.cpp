@@ -1370,8 +1370,7 @@ QString KexiDB::serializeList(const QStringList &list)
             // Doing it repeatedly is a pretty cheap operation.
             value.reserve(4096);
 
-            value += ',';
-            value += QString(*it).replace('\\', "\\\\").replace(',', "\\,");
+            value += ',' + QString(*it).replace('\\', "\\\\").replace(',', "\\,");
         }
 
         // To be able to distinguish an empty list from a list with one empty element.

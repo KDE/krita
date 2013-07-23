@@ -99,7 +99,7 @@ QByteArray PreparedStatement::generateStatementString()
         }
         s.append(")");
         s.prepend(QByteArray("INSERT INTO ") + table->name().toLatin1()
-                  + (allTableFieldsUsed ? "" : (" (" + namesList + ")"))
+                  + (allTableFieldsUsed ? "" : (" (" + namesList + ')'))
                   + " VALUES (");
     }
     return s;

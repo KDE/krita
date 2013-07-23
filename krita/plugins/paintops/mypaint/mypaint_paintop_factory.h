@@ -27,8 +27,6 @@
 
 #include <kis_paintop_factory.h>
 #include <kis_types.h>
-#include <KoResourceServer.h>
-#include <KoResourceServerProvider.h>
 
 class KisPaintOp;
 class KisPainter;

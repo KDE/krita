@@ -36,6 +36,7 @@
 #include <QGLBuffer>
 #include <QGLFramebufferObject>
 #include <QGLContext>
+#include <QTransform>
 
 #include <kstandarddirs.h>
 

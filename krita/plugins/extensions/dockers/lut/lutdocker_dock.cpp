@@ -28,7 +28,6 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QToolButton>
-#include <QCheckBox>
 
 #include <klocale.h>
 #include <kcombobox.h>

@@ -48,7 +48,7 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_global.h"
 
-#include "config-ocio.h"
+#include <config-ocio.h>
 
 
 namespace

@@ -18,7 +18,7 @@
 
 #include <qtest_kde.h>
 
-#include "config-vc.h"
+#include <config-vc.h>
 #ifdef HAVE_VC
 #include <Vc/Vc>
 #include <Vc/IO>

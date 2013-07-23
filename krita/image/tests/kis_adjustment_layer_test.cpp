@@ -31,7 +31,6 @@
 #include "kis_image.h"
 #include "kis_selection.h"
 #include "kis_types.h"
-#include "kis_selection.h"
 #include "kis_datamanager.h"
 #include "kis_pixel_selection.h"
 #include "testutil.h"

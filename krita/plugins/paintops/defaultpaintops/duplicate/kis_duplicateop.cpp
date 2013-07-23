@@ -64,7 +64,6 @@
 #include "kis_duplicateop_settings.h"
 #include "kis_duplicateop_settings_widget.h"
 #include "kis_duplicateop_option.h"
-#include <kis_fixed_paint_device.h>
 
 KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings *settings, KisPainter *painter)
         : KisBrushBasedPaintOp(settings, painter)

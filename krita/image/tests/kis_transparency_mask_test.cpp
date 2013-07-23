@@ -26,7 +26,6 @@
 #include "testutil.h"
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
-#include "kis_image.h"
 #define IMAGE_WIDTH 1000
 #define IMAGE_HEIGHT 1000
 

@@ -536,7 +536,7 @@ void KoTextLayoutTableArea::layoutColumns()
 
         QTextTableCell rightCell = d->table->cellAt(row, d->table->columns() - 1);
         KoTableCellStyle rightCellStyle = d->effectiveCellStyle(rightCell);
-        rightBorder = qMax(rightBorder, leftCellStyle.rightOuterBorderWidth());
+        rightBorder = qMax(rightBorder, rightCellStyle.rightOuterBorderWidth());
     }
 
     expandBoundingLeft(d->columnPositions[0] - leftBorder);

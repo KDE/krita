@@ -67,7 +67,7 @@ bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
 
         }
 
-    switch (m_header->colormode) {
+        switch (m_header->colormode) {
         case Bitmap:
             break;
         case Grayscale:
@@ -523,15 +523,14 @@ bool PSDImageData::readLAB(QIODevice *io, KisPaintDeviceSP dev) {
 
             if (m_channelSize == 1) {
 
-                quint8 L = ntohs(reinterpret_cast<const quint8 *>(channelBytes[0].constData())[col]);
-                KoLabTraits<quint16>::setL(it->rawData(),KoColorSpaceMaths<quint8, quint16 >::scaleToA(L));
+                quint8 L = channelBytes[0].constData()[col];
+                KoLabTraits<quint8>::setL(it->rawData(), L);
 
-                quint8 A = ntohs(reinterpret_cast<const quint8 *>(channelBytes[1].constData())[col]);
-                KoLabTraits<quint16>::setA(it->rawData(),KoColorSpaceMaths<quint8, quint16 >::scaleToA(A));
+                quint8 A = channelBytes[1].constData()[col];
+                KoLabTraits<quint8>::setA(it->rawData(), A);
 
-                quint8 B = ntohs(reinterpret_cast<const quint8 *>(channelBytes[2].constData())[col]);
-                KoLabTraits<quint16>::setB(it->rawData(),KoColorSpaceMaths<quint8, quint16 >::scaleToA(B));
-
+                quint8 B = channelBytes[2].constData()[col];
+                KoLabTraits<quint8>::setB(it->rawData(), B);
             }
 
             else if (m_channelSize == 2) {

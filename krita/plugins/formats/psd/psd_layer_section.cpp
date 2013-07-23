@@ -63,6 +63,9 @@ bool PSDLayerSection::read(QIODevice* io)
             return false;
         }
     }
+
+    quint64 start = io->pos();
+
     dbgFile << "layer + mask section size" << layerMaskBlockSize;
 
     if (layerMaskBlockSize == 0) {
@@ -241,6 +244,9 @@ bool PSDLayerSection::read(QIODevice* io)
             return false;
         }
     }
+
+    /* put us after this section so reading the next section will work even if we mess up */
+    io->seek(start + layerMaskBlockSize);
 
     return valid();
 }

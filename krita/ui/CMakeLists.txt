@@ -129,6 +129,8 @@ set(kritaui_LIB_SRCS
     kra/kis_kra_savexml_visitor.cpp
     kranim/kis_kranim_saver.cpp
     kranim/kis_kranim_loader.cpp
+    kranim/kis_kranim_frame_saver.cpp
+    kranim/kis_kranim_frame_loader.cpp
     opengl/kis_opengl.cpp
     opengl/kis_opengl_canvas2.cpp
     opengl/kis_opengl_image_textures.cpp

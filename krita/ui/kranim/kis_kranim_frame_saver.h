@@ -4,7 +4,7 @@
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation; version 2 of the License, or(at you option)
- *  any later version..
+ *  any later version.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,39 +16,34 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_ANIMATION_FRAME_H
-#define KIS_ANIMATION_FRAME_H
+#ifndef KIS_KRANIM_FRAME_SAVER_H
+#define KIS_KRANIM_FRAME_SAVER_H
 
-#include <QWidget>
-#include <kis_layer_contents.h>
+#include <KoStore.h>
+#include <kis_node_visitor.h>
+#include <kis_types.h>
+#include <kis_store_paintdevice_writer.h>
 
-class KisAnimationFrame : public QWidget
+class KisKranimFrameSaver : public KisNodeVisitor
 {
-    Q_OBJECT
+public:
+    KisKranimFrameSaver(KoStore* store, KisNode* node, QString name, QRect index);
+    virtual ~KisKranimFrameSaver();
+    using KisNodeVisitor::visit;
 
 public:
-    KisAnimationFrame(KisLayerContents* parent = 0, int type = 0, int width = 10);
-    void setWidth(int width);
-    int getWidth();
-    KisLayerContents* getParent();
-    QRect convertSelectionToFrame(int type);
-    int getType();
-    void setType(int type);
-    void expandWidth();
-    int getIndex();
 
-protected:
-    void paintEvent(QPaintEvent *event);
+    bool visit(KisPaintLayer *layer);
 
-public:
-    static const int SELECTION = 0;
-    static const int KEYFRAME = 1;
-    static const int BLANKFRAME = 2;
+    bool visit(KisNode*){
+        return true;
+    }
 
 private:
-    int m_type;
-    int m_width;
-    KisLayerContents* m_parent;
+    KoStore* m_store;
+    QString m_name;
+    QRect m_index;
+    KisStorePaintDeviceWriter* m_writer;
 };
 
-#endif // KIS_ANIMATION_FRAME_H
+#endif // KIS_KRANIM_FRAME_SAVER_H

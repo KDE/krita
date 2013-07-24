@@ -166,11 +166,11 @@ KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
     lay->setSpacing(0);
     this->setLayout(lay);
 
-    connect(this->m_cells, SIGNAL(frameSelectionChanged(QRect)), this, SLOT(changeCanvas()));
+    connect(this->m_cells, SIGNAL(frameSelectionChanged(QRect)), this, SLOT(frameSelectionChanged(QRect)));
 }
 
-void KisTimeline::changeCanvas(){
-    dynamic_cast<KisAnimationDoc*>(this->getCanvas()->view()->document())->addFrame();
+void KisTimeline::frameSelectionChanged(QRect frame){
+    dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->frameSelectionChanged(frame);
 }
 
 void KisTimeline::resizeEvent(QResizeEvent *event){
@@ -204,22 +204,24 @@ void KisTimeline::updateHeight(){
 void KisTimeline::blankFramePressed(){
     if(m_cells->getSelectedFrame()){
         KisAnimationFrame* oldSelection = this->m_cells->getSelectedFrame();
-        this->m_cells->getSelectedFrame()->convertSelectionToFrame(KisAnimationFrame::BLANKFRAME);
+        QRect globalGeometry = this->m_cells->getSelectedFrame()->convertSelectionToFrame(KisAnimationFrame::BLANKFRAME);
         KisAnimationFrame* newSelection = new KisAnimationFrame(oldSelection->getParent(), KisAnimationFrame::SELECTION, 10);
         newSelection->setGeometry(oldSelection->geometry());
         this->m_cells->setSelectedFrame(newSelection);
         newSelection->show();
+        dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->addBlankFrame(globalGeometry);
     }
 }
 
 void KisTimeline::keyFramePressed(){
     if(m_cells->getSelectedFrame()){
         KisAnimationFrame* oldSelection = this->m_cells->getSelectedFrame();
-        this->m_cells->getSelectedFrame()->convertSelectionToFrame(KisAnimationFrame::KEYFRAME);
+        QRect globalGeometry = this->m_cells->getSelectedFrame()->convertSelectionToFrame(KisAnimationFrame::KEYFRAME);
         KisAnimationFrame* newSelection = new KisAnimationFrame(oldSelection->getParent(), KisAnimationFrame::SELECTION, 10);
         newSelection->setGeometry(oldSelection->geometry());
         this->m_cells->setSelectedFrame(newSelection);
         newSelection->show();
+        dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->addBlankFrame(globalGeometry);
     }
 }
 

@@ -25,6 +25,8 @@
 #include <kis_group_layer.h>
 #include <kranim/kis_kranim_saver.h>
 #include <kranim/kis_kranim_loader.h>
+#include <kranim/kis_kranim_frame_loader.h>
+#include <kranim/kis_kranim_frame_saver.h>
 #include <KoFilterManager.h>
 
 #define APP_MIMETYPE "application/x-krita-animation"
@@ -43,8 +45,12 @@ public:
 
     }
 
+    QDomDocument doc;
+    QDomElement root;
     KisKranimSaver* kranimSaver;
     KisKranimLoader* kranimLoader;
+    KisKranimFrameLoader* frameLoader;
+    KisKranimFrameSaver* frameSaver;
     bool saved;
 };
 
@@ -63,23 +69,37 @@ KisAnimationDoc::~KisAnimationDoc(){
 
 }
 
-void KisAnimationDoc::addFrame()
+void KisAnimationDoc::frameSelectionChanged(QRect frame)
 {
+    kWarning() << frame;
     if(!m_d_anim->saved){
         kWarning() << this->documentPart()->url();
         this->preSaveAnimation();
     }
+}
+
+void KisAnimationDoc::addBlankFrame(QRect frame){
+    kWarning() << frame;
+    kWarning() << "Adding blank frame";
+    //Save the previous frame over here
 
     KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
+
     KisImageWSP image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());
     connect(image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
     image->setResolution(animation->resolution(), animation->resolution());
 
+    //Load all the layers here
     KisPaintLayerSP layer = new KisPaintLayer(image.data(), image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
 
     layer->paintDevice()->setDefaultPixel(animation->bgColor().data());
     image->addNode(layer.data(), image->rootLayer().data());
+
     setCurrentImage(image);
+}
+
+void KisAnimationDoc::addKeyFrame(QRect frame){
+    kWarning() << "Adding keyframe";
 }
 
 bool KisAnimationDoc::completeSaving(KoStore *store)
@@ -99,23 +119,23 @@ QDomDocument KisAnimationDoc::saveXML()
 {
     qDebug() << "saveXML called";
 
-    QDomDocument doc = createDomDocument("animation", CURRENT_DTD_VERSION);
+    m_d_anim->doc = createDomDocument("animation", CURRENT_DTD_VERSION);
 
-    QDomElement root = doc.documentElement();
+    m_d_anim->root = m_d_anim->doc.documentElement();
 
-    root.setAttribute("editor","Krita Animation");
+    m_d_anim->root.setAttribute("editor","Krita Animation");
 
-    root.setAttribute("syntaxVersion", "1");
+    m_d_anim->root.setAttribute("syntaxVersion", "1");
 
     if(!m_d_anim->kranimSaver){
         m_d_anim->kranimSaver = 0;
     }
 
     m_d_anim->kranimSaver = new KisKranimSaver(this);
-    root.appendChild(m_d_anim->kranimSaver->saveMetaData(doc));
-    root.appendChild(m_d_anim->kranimSaver->saveXML(doc, this->image()));
+    m_d_anim->root.appendChild(m_d_anim->kranimSaver->saveMetaData(m_d_anim->doc));
+    m_d_anim->root.appendChild(m_d_anim->kranimSaver->saveXML(m_d_anim->doc, this->image()));
 
-    return doc;
+    return m_d_anim->doc;
 }
 
 bool KisAnimationDoc::loadXML(const KoXmlDocument &doc, KoStore *store)
@@ -137,7 +157,7 @@ void KisAnimationDoc::preSaveAnimation(){
     KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
 
     KUrl url = this->documentPart()->url();
-    kWarning() << "Directory"<< url.directory();
+
     QByteArray nativeFormat = this->nativeFormatMimeType();
     QStringList mimeFilter = KoFilterManager::mimeFilter(nativeFormat, KoFilterManager::Export,
                                                          this->extraNativeMimeTypes(KoDocument::ForExport));
@@ -148,8 +168,6 @@ void KisAnimationDoc::preSaveAnimation(){
     this->setOutputMimeType(nativeFormat, 0);
 
     KUrl newUrl(url.directory()+"/"+animation->name()+".kranim");
-
-    kWarning() << newUrl;
 
     m_d_anim->saved = this->documentPart()->saveAs(newUrl);
 }

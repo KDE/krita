@@ -167,3 +167,7 @@ KisAnimationFrame* KisLayerContents::getPreviousFrameFrom(int index){
 KisFrameBox* KisLayerContents::getParent(){
     return m_parent;
 }
+
+int KisLayerContents::getLayerIndex(){
+    return this->getParent()->getLayerContents().indexOf(this);
+}

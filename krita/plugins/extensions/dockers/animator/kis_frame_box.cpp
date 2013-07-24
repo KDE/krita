@@ -59,7 +59,10 @@ void KisFrameBox::updateUI(){
 void KisFrameBox::setSelectedFrame(KisAnimationFrame *selectedFrame){
     this->m_selectedFrame = selectedFrame;
     if(this->m_selectedFrame){
-        emit frameSelectionChanged(this->m_selectedFrame->geometry());
+        int layerIndex = this->m_selectedFrame->getParent()->getLayerIndex();
+        QRect globalPosition(this->m_selectedFrame->x(),
+                             layerIndex, this->m_selectedFrame->width(), this->m_selectedFrame->height());
+        emit frameSelectionChanged(globalPosition);
     }
 }
 
@@ -74,4 +77,8 @@ KisLayerContents* KisFrameBox::getFirstLayer(){
     }
 
     return m_layerContents.at(0);
+}
+
+QList<KisLayerContents*> KisFrameBox::getLayerContents(){
+    return this->m_layerContents;
 }

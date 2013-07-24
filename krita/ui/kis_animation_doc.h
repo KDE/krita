@@ -30,7 +30,9 @@ class KRITAUI_EXPORT KisAnimationDoc : public KisDoc2
 public:
     KisAnimationDoc();
     virtual ~KisAnimationDoc();
-    void addFrame();
+    void frameSelectionChanged(QRect frame);
+    void addKeyFrame(QRect frame);
+    void addBlankFrame(QRect frame);
 
     virtual bool completeLoading(KoStore *store);
     virtual bool completeSaving(KoStore*store);

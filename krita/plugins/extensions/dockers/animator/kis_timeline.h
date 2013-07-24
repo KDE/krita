@@ -64,7 +64,7 @@ private slots:
     void blankFramePressed();
     void keyFramePressed();
     void addframePressed();
-    void changeCanvas();
+    void frameSelectionChanged(QRect frame);
 
 signals:
     void canvasModified();

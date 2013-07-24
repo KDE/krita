@@ -36,6 +36,7 @@ public:
     void setSelectedFrame(KisAnimationFrame* selectedFrame);
     KisAnimationFrame* getSelectedFrame();
     KisLayerContents* getFirstLayer();
+    QList<KisLayerContents*> getLayerContents();
 
 public slots:
     void updateUI();

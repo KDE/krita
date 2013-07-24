@@ -243,6 +243,22 @@ bool PSDImageData::write(QIODevice *io, KisPaintDeviceSP dev)
         for (qint32 row = 0; row < rc.height(); ++row) {
 
             QByteArray uncompressed = QByteArray::fromRawData((const char*)plane + row * stride, stride);
+            if (channelInfo->size() == 1) {
+            } else if (channelInfo->size() == 2) {
+                quint16 *dataPtr = reinterpret_cast<quint16 *>(uncompressed.data());
+                for (int i = 0; i < rc.width(); i++) {
+                    quint16 val = htons(*dataPtr);
+                    *dataPtr = val;
+                    ++dataPtr;
+                }
+            } else if (channelInfo->size() == 4) {
+                quint32 *dataPtr = reinterpret_cast<quint32 *>(uncompressed.data());
+                for (int i = 0; i < rc.width(); i++) {
+                    quint32 val = htonl(*dataPtr);
+                    *dataPtr = val;
+                    ++dataPtr;
+                }
+            }
             QByteArray compressed = Compression::compress(uncompressed, Compression::RLE);
 
             io->seek(channelLengthPos);

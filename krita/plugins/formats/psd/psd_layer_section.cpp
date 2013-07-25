@@ -63,6 +63,9 @@ bool PSDLayerSection::read(QIODevice* io)
             return false;
         }
     }
+
+    quint64 start = io->pos();
+
     dbgFile << "layer + mask section size" << layerMaskBlockSize;
 
     if (layerMaskBlockSize == 0) {
@@ -212,7 +215,7 @@ bool PSDLayerSection::read(QIODevice* io)
     }
 
     quint32 globalMaskBlockLength;
-    if (!psdread(io, &globalMaskBlockLength) || globalMaskBlockLength > (quint64)io->bytesAvailable()) {
+    if (!psdread(io, &globalMaskBlockLength)) {
         error = "Could not read global mask info block";
         return false;
     }
@@ -241,6 +244,9 @@ bool PSDLayerSection::read(QIODevice* io)
             return false;
         }
     }
+
+    /* put us after this section so reading the next section will work even if we mess up */
+    io->seek(start + layerMaskBlockSize);
 
     return valid();
 }
@@ -291,15 +297,10 @@ bool PSDLayerSection::write(QIODevice* io, KisNodeSP rootLayer)
         layers.append(layerRecord);
 
         QRect rc = node->projection()->extent();
-        // empty layers
-        if (rc.width() == 0 || rc.height() == 0) {
-            rc = QRect(0, 0, 64, 64);
-        }
-
         rc = rc.normalized();
+        Q_ASSERT(rc.width() >= 0);
+        Q_ASSERT(rc.height() >= 0);
 
-        Q_ASSERT(rc.top() <= rc.bottom());
-        Q_ASSERT(rc.left() <= rc.right());
         // keep to the max of photoshop's capabilities
         if (rc.width() > 30000) rc.setWidth(30000);
         if (rc.height() > 30000) rc.setHeight(30000);

@@ -39,7 +39,8 @@ public:
     float gamma;
 
 #ifdef HAVE_OPENGL
-    virtual GLuint program() = 0;
+    virtual GLuint program() const = 0;
+    virtual GLuint lut3dTexID() const = 0;
 #endif
     virtual void filter(quint8 *src, quint8 *dst, quint32 numPixels) = 0;
 

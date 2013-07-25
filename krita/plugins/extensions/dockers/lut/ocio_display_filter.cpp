@@ -115,7 +115,7 @@ void OcioDisplayFilter::filter(quint8 *src, quint8 */*dst*/, quint32 numPixels)
 }
 
 #ifdef HAVE_OPENGL
-GLuint OcioDisplayFilter::program()
+GLuint OcioDisplayFilter::program() const
 {
     return m_program;
 }
@@ -244,7 +244,7 @@ void OcioDisplayFilter::updateProcessor()
         glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
         glTexImage3D(GL_TEXTURE_3D, 0, GL_RGB16F_ARB,
                      LUT3D_EDGE_SIZE, LUT3D_EDGE_SIZE, LUT3D_EDGE_SIZE,
-                     0, GL_RGB, GL_FLOAT, &m_lut3d.data()[0]);
+                     0, GL_RGB, GL_FLOAT, &m_lut3d.constData()[0]);
     }
 
 

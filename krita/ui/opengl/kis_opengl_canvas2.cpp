@@ -242,8 +242,6 @@ void KisOpenGLCanvas2::paintEvent(QPaintEvent *)
 
         QRect wr = widgetRectInImagePixels.toAlignedRect() & m_d->openGLImageTextures->storedImageBounds();
 
-        m_d->openGLImageTextures->activateHDRExposureProgram();
-
         int firstColumn = m_d->openGLImageTextures->xToCol(wr.left());
         int lastColumn = m_d->openGLImageTextures->xToCol(wr.right());
         int firstRow = m_d->openGLImageTextures->yToRow(wr.top());
@@ -255,6 +253,9 @@ void KisOpenGLCanvas2::paintEvent(QPaintEvent *)
                 KisTextureTile *tile =
                         m_d->openGLImageTextures->getTextureTileCR(col, row);
 
+                m_d->openGLImageTextures->activateHDRExposureProgram();
+
+                glActiveTexture(GL_TEXTURE1);
                 glBindTexture(GL_TEXTURE_2D, tile->textureId());
 
                 if(SCALE_MORE_OR_EQUAL_TO(scaleX, scaleY, 2.0)) {

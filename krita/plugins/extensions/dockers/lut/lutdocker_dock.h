@@ -92,6 +92,8 @@ private slots:
 
 private:
 
+    QWidget *m_page;
+
     KisCanvas2 *m_canvas;
     OCIO::ConstConfigRcPtr m_ocioConfig;
     OcioDisplayFilter *m_displayFilter;

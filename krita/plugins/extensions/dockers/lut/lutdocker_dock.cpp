@@ -59,9 +59,9 @@ LutDockerDock::LutDockerDock()
 {
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
-    QWidget * w = new QWidget(this);
-    setupUi(w);
-    setWidget(w);
+    m_page = new QWidget(this);
+    setupUi(m_page);
+    setWidget(m_page);
 
     KisConfig cfg;
     m_chkUseOcio->setChecked(cfg.useOcio());
@@ -216,8 +216,10 @@ void LutDockerDock::gammaSliderReleased()
 
 void LutDockerDock::updateDisplaySettings()
 {
+    m_page->setEnabled(m_canvas->canvasIsOpenGL() && m_canvas->view()->image()->colorSpace()->colorDepthId().id().startsWith("F"));
+
     //qDebug() << "updateDisplaySettings();" << m_chkUseOcio->isChecked() << m_ocioConfig;
-    if (m_chkUseOcio->isChecked() && m_ocioConfig) {
+    if (m_chkUseOcio->isChecked() && m_ocioConfig && m_canvas->canvasIsOpenGL()) {
         m_displayFilter->config = m_ocioConfig;
         m_displayFilter->inputColorSpaceName = m_ocioConfig->getColorSpaceNameByIndex(m_cmbInputColorSpace->currentIndex());
         m_displayFilter->displayDevice = m_ocioConfig->getDisplay(m_cmbDisplayDevice->currentIndex());

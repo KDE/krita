@@ -374,7 +374,8 @@ void KisOpenGLImageTextures::updateTextureFormat()
                 m_texturesInfo.internalFormat = GL_RGBA_FLOAT16_ATI;
                 dbgUI << "Using ATI half";
             }
-            else if (GLEW_ARB_half_float_pixel) {
+
+            if (GLEW_ARB_half_float_pixel) {
                 dbgUI << "Pixel type half";
                 m_texturesInfo.type = GL_HALF_FLOAT_ARB;
             } else {

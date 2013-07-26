@@ -688,7 +688,7 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
         painter->endNativePainting();
     }
     else if (m_outlinePaintMode == XOR_MODE) {
-        painter->setCompositionMode(QPainter::CompositionMode_Xor);//QPainter::RasterOp_SourceXorDestination);
+        painter->setCompositionMode(QPainter::RasterOp_SourceXorDestination);
         painter->setPen(QColor(128, 255, 128));
         painter->drawPath(path);
     }

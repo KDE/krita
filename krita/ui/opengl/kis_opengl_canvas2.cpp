@@ -187,7 +187,6 @@ void KisOpenGLCanvas2::paintGL()
     QPainter gc(this);
     renderDecorations(&gc);
     gc.end();
-
 }
 
 void KisOpenGLCanvas2::drawCheckers() const
@@ -264,10 +263,6 @@ void KisOpenGLCanvas2::drawImage() const
     KisCoordinatesConverter *converter = coordinatesConverter();
 
     d->displayShader->bind();
-    if (d->displayFilter) {
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_3D, d->displayFilter->lutTexture());
-    }
 
     QMatrix4x4 projectionMatrix;
     projectionMatrix.setToIdentity();
@@ -332,8 +327,13 @@ void KisOpenGLCanvas2::drawImage() const
             d->displayShader->enableAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE);
             d->displayShader->setAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE, texCoords.constData());
 
-            glActiveTexture(GL_TEXTURE0);
+            glActiveTexture(GL_TEXTURE1);
             glBindTexture(GL_TEXTURE_2D, tile->textureId());
+
+            if (d->displayFilter) {
+                glActiveTexture(GL_TEXTURE2);
+                glBindTexture(GL_TEXTURE_3D, d->displayFilter->lutTexture());
+            }
 
             if (SCALE_MORE_OR_EQUAL_TO(scaleX, scaleY, 2.0)) {
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);

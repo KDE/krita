@@ -31,8 +31,8 @@ set( kdgantt_LIB_SRCS
 
 kde4_add_library(calligrakdgantt SHARED ${kdgantt_LIB_SRCS})
 
-target_link_libraries(calligrakdgantt ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY})
-target_link_libraries(calligrakdgantt LINK_INTERFACE_LIBRARIES ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY})
+target_link_libraries(calligrakdgantt ${QT_QTGUI_LIBRARY} ${QT_QTCORE_LIBRARY})
+target_link_libraries(calligrakdgantt LINK_INTERFACE_LIBRARIES ${QT_QTGUI_LIBRARY} ${QT_QTCORE_LIBRARY})
 
 set_target_properties(calligrakdgantt PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION}

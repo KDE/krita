@@ -42,6 +42,7 @@ private slots:
     void testAsymmSkipAlpha();
 
     void benchmarkConvolution();
+    void testGaussian();
 };
 
 #endif

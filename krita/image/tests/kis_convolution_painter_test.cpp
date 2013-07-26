@@ -133,7 +133,7 @@ void KisConvolutionPainterTest::testIdentityConvolution()
     QImage resultImage = dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height());
 
     QPoint errpoint;
-    if (!TestUtil::compareQImages(errpoint, qimage, resultImage)) {
+    if (TestUtil::compareQImages(errpoint, qimage, resultImage)) {
         resultImage.save("identity_convolution.png");
         QFAIL(QString("Identity kernel did change image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
@@ -304,6 +304,85 @@ void KisConvolutionPainterTest::benchmarkConvolution()
         }
     }
 }
+
+
+
+void KisConvolutionPainterTest::testGaussian()
+{
+
+   QImage referenceImage(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
+
+   KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+   dev->convertFromQImage(referenceImage, 0, 0, 0);
+
+   QBitArray channelFlags =
+       KoColorSpaceRegistry::instance()->rgb8()->channelFlags(true, true);
+
+   KisConvolutionPainter gc(dev);
+
+
+   uint horizontalRadius = 1, verticalRadius = 1;
+   
+   for(int i = 0; i < 10 ; i++, horizontalRadius++, verticalRadius++)
+   {
+       gc.beginTransaction(0);
+       uint horizKernelSize = horizontalRadius * 2 + 1;
+       Matrix<qreal, Dynamic, Dynamic> horizGaussian(1, horizKernelSize);
+    
+       qreal horizSigma = horizontalRadius;
+       const qreal horizMultiplicand = 1 / (2 * M_PI * horizSigma * horizSigma);
+       const qreal horizExponentMultiplicand = 1 / (2 * horizSigma * horizSigma);
+    
+       for (uint x = 0; x < horizKernelSize; x++)
+       {
+           uint xDistance = qAbs((int)horizontalRadius - (int)x);
+           horizGaussian(0, x) = horizMultiplicand * exp( -(qreal)((xDistance * xDistance) + (horizontalRadius * horizontalRadius)) * horizExponentMultiplicand );
+       }
+       uint verticalKernelSize = verticalRadius * 2 + 1;
+       Matrix<qreal, Dynamic, Dynamic> verticalGaussian(verticalKernelSize, 1);
+    
+       qreal verticalSigma = verticalRadius;
+       const qreal verticalMultiplicand = 1 / (2 * M_PI * verticalSigma * verticalSigma);
+       const qreal verticalExponentMultiplicand = 1 / (2 * verticalSigma * verticalSigma);
+    
+       for (uint y = 0; y < verticalKernelSize; y++)
+       {
+           uint yDistance = ((int)verticalRadius - (int)y);
+           verticalGaussian(y, 0) = verticalMultiplicand * exp( -(qreal)((yDistance * yDistance) + (verticalRadius * verticalRadius)) * verticalExponentMultiplicand );
+       }
+    
+       if (( horizontalRadius > 0 ) && ( verticalRadius > 0 )) {
+           KisPaintDeviceSP interm = new KisPaintDevice(dev->colorSpace());
+    
+           KisConvolutionKernelSP kernelHoriz = KisConvolutionKernel::fromMatrix(horizGaussian, 0, horizGaussian.sum());
+           KisConvolutionKernelSP kernelVertical = KisConvolutionKernel::fromMatrix(verticalGaussian, 0, verticalGaussian.sum());
+    
+           KisConvolutionPainter horizPainter(interm);
+           horizPainter.setChannelFlags(channelFlags);
+           horizPainter.applyMatrix(kernelHoriz, dev,
+                                    -QPoint(0, verticalRadius),
+                                    -QPoint(0, verticalRadius),
+                                    QSize(0, 2 * verticalRadius), BORDER_REPEAT);
+    
+    
+
+           gc.setChannelFlags(channelFlags);
+           gc.applyMatrix(kernelVertical, interm, QPoint(0,0), QPoint(0,0), QSize(0,0), BORDER_REPEAT);
+
+           QImage result = dev->convertToQImage(0, 0, 0, referenceImage.width(), referenceImage.height());
+           QPoint errpoint;
+
+           if (!TestUtil::compareQImages(errpoint, referenceImage, result)) {
+               referenceImage.save("lena.png");
+               result.save("lena_gaussian_blur_filter.png" + QString::number(i) );
+               QFAIL(QString("Failed, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
+              }
+
+           gc.deleteTransaction();
+       }
+    }
+}
+
 
 QTEST_KDEMAIN(KisConvolutionPainterTest, GUI)
 #include "kis_convolution_painter_test.moc"

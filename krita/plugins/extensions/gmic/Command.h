@@ -21,8 +21,11 @@
 #define COMMAND_H
 
 #include <Component.h>
+#include "kis_gmic_filter_settings.h"
 
 #include <QList>
+
+class QWidget;
 class QString;
 class QStringList;
 
@@ -50,9 +53,15 @@ public:
 
     void processCommandName(const QString &line);
     void processParameter(const QString &line);
+
+    QWidget * createSettingsWidget();
+    void writeConfiguration(KisGmicFilterSetting * setting);
+
 private:
     Component * m_parent;
     QStringList breakIntoTokens(const QString &line);
 };
+
+Q_DECLARE_METATYPE(Command*)
 
 #endif

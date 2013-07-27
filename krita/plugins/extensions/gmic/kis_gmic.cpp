@@ -323,7 +323,9 @@ void KisGmic::processGmic(KoUpdater * progressUpdater, const QString &gmicString
         // Here you can call any G'MIC command you want !
         // (here, create a deformed average of the input images, and save it as a BMP file).
         //gmic("-+ -n 0,255 -flower 8 -sharpen 100 -o foo.bmp",images,images_names);
-        gmic("-+ -n 0,255 -poster_edges 40,5,0.5,10,12,0",images,images_names);
+        QString gmicCmd = "-+ -n 0,255 ";
+        gmicCmd.append(gmicString);
+        gmic(gmicCmd.toLocal8Bit().constData(),images,images_names);
         //gmic("-+ -n 0,255 -o foo.bmp",images,images_names);
 
     ;

@@ -20,7 +20,7 @@
 #include <QFile>
 #include <qregexp.h>
 #include <QStringList>
-#include <QApplication>
+
 #include <QTreeView>
 
 #include "kis_gmic_parser.h"
@@ -30,6 +30,7 @@
 #include <Filters.h>
 #include <Category.h>
 #include "kis_gmic_filter_model.h"
+#include "kis_gmic_widget.h"
 
 
 KisGmicParser::KisGmicParser(const QString& filePath):m_fileName(filePath)
@@ -142,7 +143,7 @@ Component* KisGmicParser::createFilterTree()
                     qDebug() << "No command for given parameter, invalid gmic definition file";
                 }
             }else{
-                // qDebug() << "IGNORING:" << line;
+                qDebug() << "IGNORING:" << line;
             }
         }
     }
@@ -153,22 +154,3 @@ Component* KisGmicParser::createFilterTree()
 
     return rootCategory;
 }
-
-
-
-int main(int argc, char *argv[])
-{
-    QApplication app(argc, argv);
-
-    KisGmicParser parser("gmic_def.gmic");
-    Component * root = parser.createFilterTree();
-
-    KisGmicFilterModel model(root);
-
-    QTreeView view;
-    view.setModel(&model);
-    view.setWindowTitle(QObject::tr("Simple Tree Model"));
-    view.show();
-
-    return app.exec();
- }

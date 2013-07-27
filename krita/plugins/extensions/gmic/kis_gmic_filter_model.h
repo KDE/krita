@@ -25,6 +25,16 @@
 
 class Component;
 
+// introduce "rolespace", let's not collide with some other Qt::UserRole + 1 roles e.g. in ui/kis_categorized_list_model.h
+static const int GmicRolespace = 100;
+
+enum
+{
+    WidgetRole = Qt::UserRole + GmicRolespace + 1,
+    FilterSettingsRole = Qt::UserRole + GmicRolespace + 2
+};
+
+
 class KisGmicFilterModel : public QAbstractItemModel
 {
      Q_OBJECT
@@ -34,6 +44,7 @@ public:
     ~KisGmicFilterModel();
 
     QVariant data(const QModelIndex &index, int role) const;
+//    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
 

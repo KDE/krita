@@ -18,9 +18,13 @@
 
 #include <kis_gmic_filter_model.h>
 #include "Component.h"
-
 #include <Filters.h>
+#include "Command.h"
 
+#include "kis_gmic_filter_settings.h"
+#include "kis_gmic_settings_widget.h"
+
+// debug
 #include <typeinfo>
 #include <iostream>
 
@@ -113,23 +117,84 @@ QVariant KisGmicFilterModel::data(const QModelIndex& index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    if (role != Qt::DisplayRole)
-        return QVariant();
+    if (role == Qt::DisplayRole)
+    {
+        Component *item = static_cast<Component*>(index.internalPointer());
+        return item->data(index.column());
+    }
 
-    Component *item = static_cast<Component*>(index.internalPointer());
-    return item->data(index.column());
+    if (role == WidgetRole)
+    {
+        Component *item = static_cast<Component*>(index.internalPointer());
+        Command * commandItem = dynamic_cast<Command *>(item);
+        if (commandItem)
+        {
+            //KisGmicSettingsWidget * filterSettingsWidget = new  KisGmicSettingsWidget(commandItem);
+            /*if (filterSettingsWidget)
+            {
+                std::cout << "Sending QWidget" << std::endl;
+                return QVariant::fromValue(filterSettingsWidget);
+            }*/
+            return QVariant::fromValue(commandItem);
+        }
+    }
+
+    if (role == FilterSettingsRole)
+    {
+        Component *item = static_cast<Component*>(index.internalPointer());
+        Command * commandItem = dynamic_cast<Command *>(item);
+        if (commandItem)
+        {
+            KisGmicFilterSetting * settings = new KisGmicFilterSetting;
+            commandItem->writeConfiguration(settings);
+            return QVariant::fromValue<KisGmicFilterSetting *>(settings);
+        }
+
+    }
+
+
+    return QVariant();
 }
 
 
 Qt::ItemFlags KisGmicFilterModel::flags(const QModelIndex& index) const
 {
-     if (!index.isValid())
+    if (!index.isValid())
+    {
          return 0;
+    }
 
-     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+
+    Component *item = static_cast<Component*>(index.internalPointer());
+    Command * commandItem = dynamic_cast<Command *>(item);
+    if (commandItem)
+    {
+        return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
+    }
+    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;;
 }
 
 QVariant KisGmicFilterModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
+    Q_UNUSED(section);
+    Q_UNUSED(orientation);
+    Q_UNUSED(role);
     return m_rootComponent->name();
 }
+
+
+/*bool KisGmicFilterModel::setData(const QModelIndex& index, const QVariant& value, int role)
+{
+    if (role == Qt::EditRole)
+    {
+        Component *item = static_cast<Component*>(index.internalPointer());
+        Command * commandItem = dynamic_cast<Command *>(item);
+        if (commandItem)
+        {
+            //TODO
+        }
+
+
+    }
+}
+*/

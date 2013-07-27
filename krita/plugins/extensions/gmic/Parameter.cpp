@@ -68,12 +68,18 @@ void FloatParameter::parseValues(const QString& typeDefinition)
     QStringList values = getValues(typeDefinition);
     bool isOk = true;
     //qDebug() << values;
-    m_defaultValue = values.at(0).toFloat(&isOk);
+    m_value = m_defaultValue = values.at(0).toFloat(&isOk);
     Q_ASSERT(isOk);
     m_minValue = values.at(1).toFloat(&isOk);
     Q_ASSERT(isOk);
     m_maxValue = values.at(2).toFloat(&isOk);
     Q_ASSERT(isOk);
+}
+
+
+QString FloatParameter::value() const
+{
+    return QString::number(m_value);
 }
 
 QString FloatParameter::toString()
@@ -97,13 +103,20 @@ void IntParameter::parseValues(const QString& typeDefinition)
     QStringList values = getValues(typeDefinition);
     bool isOk = true;
     //qDebug() << values;
-    m_defaultValue = values.at(0).toInt(&isOk);
+    m_value = m_defaultValue = values.at(0).toInt(&isOk);
     Q_ASSERT(isOk);
     m_minValue = values.at(1).toInt(&isOk);
     Q_ASSERT(isOk);
     m_maxValue = values.at(2).toInt(&isOk);
     Q_ASSERT(isOk);
 }
+
+
+QString IntParameter::value() const
+{
+    return QString::number(m_value);
+}
+
 
 QString IntParameter::toString()
 {
@@ -142,23 +155,55 @@ ChoiceParameter::ChoiceParameter(const QString& name, bool updatePreview): Param
 
 void ChoiceParameter::parseValues(const QString& typeDefinition)
 {
-    m_choices = getValues(typeDefinition);
+    QStringList values = getValues(typeDefinition);
+    if (values.isEmpty())
+    {
+        qDebug() << "Wrong gmic_def" << typeDefinition << " not parsed correctly";
+        return;
+    }
+
+    // choice(4,"Dots","Wireframe","Flat","Flat shaded","Gouraud","Phong")
+    QString firstItem = values.at(0);
+    bool isInteger = false;
+    m_value = m_defaultValue = firstItem.toInt(&isInteger);
+    if (isInteger)
+    {
+        // throw number out of choices
+        values.takeFirst();
+    }
+    else
+    {
+        m_value = m_defaultValue = 0;
+    }
+
+
+    m_choices = values;
+
+    for (int i = 0; i < values.size(); i++)
+    {
+        m_choices[i] = m_choices[i].trimmed();
+        if (m_choices.at(i).startsWith("\"") && m_choices.at(i).endsWith("\""))
+        {
+            m_choices[i] = m_choices.at(i).mid(1, m_choices.at(i).size() - 2);
+        }
+    }
 }
+
+QString ChoiceParameter::value() const
+{
+    return QString::number(m_value);
+}
+
 
 QString ChoiceParameter::toString()
 {
     QString result;
-    result.append(m_name+";");
+    result.append(m_name+";"+QString::number(m_defaultValue));
     foreach (QString choice, m_choices)
     {
         result.append(choice+";");
     }
     return result;
-}
-
-QString ChoiceParameter::defaultChoice() const
-{
-    return m_choices.at(0);
 }
 
 

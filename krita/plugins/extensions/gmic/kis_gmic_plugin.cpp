@@ -49,6 +49,10 @@ K_PLUGIN_FACTORY(KisGmicPluginFactory, registerPlugin<KisGmicPlugin>();)
 K_EXPORT_PLUGIN(KisGmicPluginFactory("krita"))
 
 #include "gmic.h"
+#include "kis_gmic_parser.h"
+#include "Component.h"
+#include "kis_gmic_filter_model.h"
+#include "kis_gmic_widget.h"
 
 KisGmicPlugin::KisGmicPlugin(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent, "kritaplugins/gmic.rc")
@@ -71,27 +75,27 @@ void KisGmicPlugin::slotGmic()
     KisLayerSP layer = m_view->activeLayer();
     if (!layer) return;
 
-    DlgGmic *dlgGmic = new DlgGmic(layer->colorSpace()->name(),
-            image->colorSpace()->name(),
-            m_view, "Gmic");
-    Q_CHECK_PTR(dlgGmic);
+    KisGmicParser parser("gmic_def.gmic");
+    Component * root = parser.createFilterTree();
+    KisGmicFilterModel * model = new KisGmicFilterModel(root);
+    KisGmicWidget * gmicWidget = new KisGmicWidget(model);
 
-    dlgGmic->setCaption(i18n("Apply G'Mic Action"));
-
-    if (dlgGmic->exec() == QDialog::Accepted) {
-
-        KisGmic gmic(m_view);
-
-        KoProgressUpdater* updater = m_view->createProgressUpdater();
-        updater->start();
-
-        QPointer<KoUpdater> u = updater->startSubtask();
-        gmic.processGmic(u, dlgGmic->gmicScript());
-
-        updater->deleteLater();
-    }
-    delete dlgGmic;
-
+    connect(gmicWidget, SIGNAL(sigApplyCommand(KisGmicFilterSetting*)),this, SLOT(slotApplyGmicCommand(KisGmicFilterSetting*)));
+    gmicWidget->show();
 }
+
+
+void KisGmicPlugin::slotApplyGmicCommand(KisGmicFilterSetting* setting)
+{
+    KisGmic gmic(m_view);
+
+    KoProgressUpdater* updater = m_view->createProgressUpdater();
+    updater->start();
+
+    QPointer<KoUpdater> u = updater->startSubtask();
+    gmic.processGmic(u, setting->gmicCommand());
+    updater->deleteLater();
+}
+
 
 #include "kis_gmic_plugin.moc"

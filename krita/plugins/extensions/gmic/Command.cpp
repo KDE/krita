@@ -21,10 +21,18 @@
 #include <QStringList>
 #include <QChar>
 #include <QList>
+#include <QDebug>
 
 #include <kis_gmic_parser.h>
 
 #include <iostream>
+#include <QWidget>
+#include <QGridLayout>
+#include <QLabel>
+#include <qslider.h>
+#include <QSpinBox>
+#include <QComboBox>
+#include <QStringListModel>
 
 #include <Parameter.h>
 
@@ -269,4 +277,124 @@ int Command::childCount() const
 int Command::columnCount() const
 {
     return 1;
+}
+
+QWidget* Command::createSettingsWidget()
+{
+    if (m_parameters.size() == 0)
+    {
+            return 0;
+    }
+    QWidget * result = new QWidget;
+    QGridLayout * gridLayout = new QGridLayout;
+
+    for (int i = 0; i < m_parameters.size();i++)
+    {
+        Parameter * p = m_parameters.at(i);
+        std::cout << "Processing: " << qPrintable(PARAMETER_NAMES[p->m_type]) << " " << std::endl;
+        switch (p->m_type)
+        {
+
+            case Parameter::INT_P:
+            {
+                IntParameter * intParam = static_cast<IntParameter *>(p);
+
+                QSlider * slider = new QSlider(Qt::Horizontal);
+                slider->setMinimum(intParam->m_minValue);
+                slider->setMaximum(intParam->m_maxValue);
+                slider->setValue(intParam->m_defaultValue);
+
+                QSpinBox * spinBox = new QSpinBox;
+                spinBox->setMinimum(intParam->m_minValue);
+                spinBox->setMaximum(intParam->m_maxValue);
+                spinBox->setValue(intParam->m_defaultValue);
+
+                QObject::connect(slider, SIGNAL(valueChanged(int)), spinBox, SLOT(setValue(int)));
+                QObject::connect(spinBox, SIGNAL(valueChanged(int)), slider, SLOT(setValue(int)));
+
+                gridLayout->addWidget(new QLabel(intParam->name()), i, 0);
+                gridLayout->addWidget(slider, i, 1);
+                gridLayout->addWidget(spinBox, i, 2);
+                break;
+            }
+            case Parameter::FLOAT_P:
+            {
+                FloatParameter * floatParam = static_cast<FloatParameter *>(p);
+
+                QSlider * slider = new QSlider(Qt::Horizontal);
+                slider->setMinimum(floatParam->m_minValue);
+                slider->setMaximum(floatParam->m_maxValue);
+                slider->setValue(floatParam->m_defaultValue);
+
+                QDoubleSpinBox * spinBox = new QDoubleSpinBox;
+                spinBox->setMinimum(floatParam->m_minValue);
+                spinBox->setMaximum(floatParam->m_maxValue);
+                spinBox->setValue(floatParam->m_defaultValue);
+
+                //TODO
+                //QObject::connect(slider, SIGNAL(valueChanged(int)), spinBox, SLOT(setValue(int)));
+                //QObject::connect(spinBox, SIGNAL(valueChanged(int)), slider, SLOT(setValue(int)));
+
+
+                gridLayout->addWidget(new QLabel(floatParam->name()), i, 0);
+                gridLayout->addWidget(slider, i, 1);
+                gridLayout->addWidget(spinBox, i, 2);
+                break;
+            }
+            case Parameter::CHOICE_P:
+            {
+                ChoiceParameter * choiceParam = static_cast<ChoiceParameter *>(p);
+
+
+                QComboBox * combo = new QComboBox;
+                QStringListModel *model = new QStringListModel();
+                model->setStringList(choiceParam->m_choices);
+                combo->setModel(model);
+                gridLayout->addWidget(combo, i,0,1,2);
+                break;
+            }
+            case Parameter::NOTE_P:
+            {
+                NoteParameter * noteParam = static_cast<NoteParameter *>(p);
+                QLabel * label = new QLabel;
+                label->setText(noteParam->m_label);
+                gridLayout->addWidget(label, i, 0, 1,3);
+                break;
+            }
+
+
+            default:{
+                std::cout << "Ignoring : " << qPrintable(PARAMETER_NAMES[p->m_type]) << std::endl;
+                break;
+            }
+
+        }
+
+    }
+    result->setLayout(gridLayout);
+    return result;
+}
+
+void Command::writeConfiguration(KisGmicFilterSetting* setting)
+{
+    // -gimp_poster_edges 20,60,5,0,10,0,0
+    QString command = "-" + m_command + " ";
+    foreach(Parameter * p, m_parameters)
+    {
+        if (!p->value().isNull())
+        {
+            command.append(p->value() +",");
+        }
+        else
+        {
+            qDebug() << "Skipping parameter " << p->toString();
+        }
+    }
+
+    if (command.endsWith(","))
+    {
+        command.chop(1);
+    }
+
+    setting->setGmicCommand(command);
 }

@@ -16,42 +16,36 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
-#ifndef COMPONENT_H
-#define COMPONENT_H
-
 #include <QString>
-#include <QVariant>
+#include <kis_gmic_filter_settings.h>
 
-class Component
+
+KisGmicFilterSetting::KisGmicFilterSetting():m_gmicCommand(),m_inputLayerMode(NONE)
 {
-public:
-    Component(){};
-    virtual ~Component(){};
-    virtual void add(Component *c) = 0;
-    virtual Component * child(int index) = 0;
-    virtual Component * parent() = 0;
-    virtual int row() const = 0;
 
-    virtual int childCount() const = 0;
-    virtual int columnCount() const = 0;
+}
 
-    virtual int indexOf(Component *c) const { Q_UNUSED(c); return 0; }
+KisGmicFilterSetting::~KisGmicFilterSetting()
+{
 
-    virtual void setName(const QString &name) {  m_name = name; }
-    virtual QString name() const { return m_name; }
+}
 
-    virtual void print(int level = 0) { Q_UNUSED(level); }
+const QString& KisGmicFilterSetting::gmicCommand() const
+{
+    return m_gmicCommand;
+}
 
-    virtual QVariant data(int column)
-    {
-        Q_UNUSED(column);
-        return QVariant();
-    }
+void KisGmicFilterSetting::setGmicCommand(QString cmd)
+{
+    m_gmicCommand = cmd;
+}
 
-private:
-    QString m_name;
+InputLayerMode KisGmicFilterSetting::inputLayerMode()
+{
+     return m_inputLayerMode;
+}
 
-};
-
-#endif
+void KisGmicFilterSetting::setInputLayerMode(InputLayerMode mode)
+{
+    m_inputLayerMode = mode;
+}

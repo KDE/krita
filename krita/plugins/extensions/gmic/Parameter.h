@@ -49,7 +49,15 @@ public:
     bool m_updatePreview;
 
     virtual QString toString();
+    // if the parameter is only GUI option, return null string
+    virtual QString value() const
+    {
+        return QString();
+    }
     virtual void parseValues(const QString& typeDefinition);
+
+    QString name() const { return m_name; }
+
 protected:
     QStringList getValues(const QString& typeDefinition);
 
@@ -82,9 +90,11 @@ public:
     FloatParameter(const QString& name, bool updatePreview = true);
 
     float m_defaultValue;
+    float m_value;
     float m_minValue;
     float m_maxValue;
 
+    virtual QString value() const;
     virtual void parseValues(const QString& typeDefinition);
     virtual QString toString();
 };
@@ -93,11 +103,14 @@ class IntParameter : public Parameter
 {
 public:
     IntParameter(const QString& name, bool updatePreview = true);
+    virtual ~IntParameter(){}
 
     int m_defaultValue;
+    int m_value;
     int m_minValue;
     int m_maxValue;
 
+    virtual QString value() const;
     virtual void parseValues(const QString& typeDefinition);
     virtual QString toString();
 };
@@ -115,12 +128,17 @@ class ChoiceParameter : public Parameter
 public:
     ChoiceParameter(const QString& name, bool updatePreview = true);
     virtual void parseValues(const QString& typeDefinition);
-    virtual QString toString();
+
+
+    // default index
+    int m_defaultValue;
+    // current index
+    int m_value;
 
     QStringList m_choices;
 
-    QString defaultChoice() const;
-
+    virtual QString value() const;
+    virtual QString toString();
 };
 
 class NoteParameter : public Parameter
@@ -133,7 +151,5 @@ public:
     QString m_label;
 
 };
-
-
 
 #endif

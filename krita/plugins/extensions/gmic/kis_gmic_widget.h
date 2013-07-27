@@ -15,24 +15,43 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA. */
 
-#ifndef _KIS_GMIC_PLUGIN_H_
-#define _KIS_GMIC_PLUGIN_H_
+#ifndef _KIS_GMIC_WIDGET_H_
+#define _KIS_GMIC_WIDGET_H_
 
-#include <QVariant>
+#include <QTreeView>
+#include <QGridLayout>
+#include "kis_gmic_filter_model.h"
+#include "kis_gmic_filter_settings.h"
 
-#include <kis_view_plugin.h>
-#include <kis_gmic_filter_settings.h>
-
-class KisGmicPlugin : public KisViewPlugin
+class QPushButton;
+class KisGmicWidget : public QWidget
 {
     Q_OBJECT
+
 public:
-    KisGmicPlugin(QObject *parent, const QVariantList &);
-    virtual ~KisGmicPlugin();
+    KisGmicWidget(KisGmicFilterModel * filters);
+    ~KisGmicWidget();
+
+    void createMainLayout();
+
+signals:
+    void sigApplyCommand(KisGmicFilterSetting * setting);
 
 private slots:
-    void slotGmic();
-    void slotApplyGmicCommand(KisGmicFilterSetting* setting);
+    void selectionChangedSlot(const QItemSelection & newSelection, const QItemSelection & oldSelection);
+    void applyFilterSlot();
+    void resetFilterSlot();
+    void okFilterSlot();
+    void maximizeSlot();
+    void cancelFilterSlot();
+
+private:
+    QTreeView * m_filterTree;
+    QWidget * m_filterOptions;
+    QGridLayout * m_filterConfigLayout;
+
+    KisGmicFilterModel * m_filterModel;
+
 
 };
 

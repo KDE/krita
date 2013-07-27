@@ -165,7 +165,7 @@ StrokeFillWidget::~StrokeFillWidget()
 // ----------------------------------------------------------------
 
 
-void StrokeFillWidget::updateWidget(KoShapeStrokeModel *stroke, QPointer<KoShapeBackground> fill,
+void StrokeFillWidget::updateWidget(KoShapeStrokeModel *stroke, KoShapeBackground *fill,
                                     int opacity, QColor &currentColor, int activeStyle)
 {
     m_preview->update(stroke, fill);
@@ -258,14 +258,14 @@ void StrokeFillWidget::setStretchPolicy(StrokeFillWidget::StretchPolicy policy)
 }
 
 
-QPointer<KoShapeBackground> StrokeFillWidget::applyFillGradientStops(KoShape *shape,
+KoShapeBackground *StrokeFillWidget::applyFillGradientStops(KoShape *shape,
                                                             const QGradientStops &stops)
 {
     if (! shape || ! stops.count())
         return 0;
 
-    QPointer<KoGradientBackground> newGradient = 0;
-    QPointer<KoGradientBackground> oldGradient = dynamic_cast<KoGradientBackground*>(shape->background().data());
+    KoGradientBackground *newGradient = 0;
+    KoGradientBackground *oldGradient = dynamic_cast<KoGradientBackground*>(shape->background());
     if (oldGradient) {
         // just copy the gradient and set the new stops
         QGradient *g = KoFlake::cloneGradient(oldGradient->gradient());
@@ -280,7 +280,7 @@ QPointer<KoShapeBackground> StrokeFillWidget::applyFillGradientStops(KoShape *sh
         g->setStops(stops);
         newGradient = new KoGradientBackground(g);
     }
-    return newGradient.data();
+    return newGradient;
 }
 
 QBrush StrokeFillWidget::applyStrokeGradientStops(KoShape *shape, const QGradientStops &stops)

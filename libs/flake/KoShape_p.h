@@ -69,7 +69,7 @@ public:
     KoShapeUserData *userData;
     KoShapeApplicationData *appData;
     KoShapeStrokeModel *stroke; ///< points to a stroke, or 0 if there is no stroke
-    QPointer<KoShapeBackground> fill; ///< Stands for the background color / fill etc.
+    KoShapeBackground * fill; ///< Stands for the background color / fill etc.
     QList<KoShape*> dependees; ///< list of shape dependent on this shape
     KoShapeShadow * shadow; ///< the current shape shadow
     KoClipPath * clipPath; ///< the current clip path

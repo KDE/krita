@@ -20,7 +20,6 @@
 #include "EnhancedPathParameter.h"
 #include "EnhancedPathFormula.h"
 #include "EnhancedPathShape.h"
-#include <KoShapeBackground.h>
 #include <KoUnit.h>
 #include <math.h>
 

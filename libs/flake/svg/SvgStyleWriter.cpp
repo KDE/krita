@@ -74,18 +74,18 @@ void SvgStyleWriter::saveSvgFill(KoShape *shape, SvgSavingContext &context)
     }
 
     QBrush fill(Qt::NoBrush);
-    QPointer<KoColorBackground>  cbg = dynamic_cast<KoColorBackground*>(shape->background().data());
+    KoColorBackground * cbg = dynamic_cast<KoColorBackground*>(shape->background());
     if (cbg) {
         context.shapeWriter().addAttribute("fill", cbg->color().name());
         if (cbg->color().alphaF() < 1.0)
             context.shapeWriter().addAttribute("fill-opacity", cbg->color().alphaF());
     }
-    QPointer<KoGradientBackground>  gbg = dynamic_cast<KoGradientBackground*>(shape->background().data());
+    KoGradientBackground * gbg = dynamic_cast<KoGradientBackground*>(shape->background());
     if (gbg) {
         QString gradientId = saveSvgGradient(gbg->gradient(), gbg->transform(), context);
         context.shapeWriter().addAttribute("fill", "url(#" + gradientId + ")");
     }
-    QPointer<KoPatternBackground>  pbg = dynamic_cast<KoPatternBackground*>(shape->background().data());
+    KoPatternBackground * pbg = dynamic_cast<KoPatternBackground*>(shape->background());
     if (pbg) {
         const QString patternId = saveSvgPattern(pbg, shape, context);
         context.shapeWriter().addAttribute("fill", "url(#" + patternId + ")");
@@ -284,7 +284,7 @@ QString SvgStyleWriter::saveSvgGradient(const QGradient *gradient, const QTransf
     return uid;
 }
 
-QString SvgStyleWriter::saveSvgPattern(QPointer<KoPatternBackground> pattern, KoShape *shape, SvgSavingContext &context)
+QString SvgStyleWriter::saveSvgPattern(KoPatternBackground *pattern, KoShape *shape, SvgSavingContext &context)
 {
     const QString uid = context.createUID("pattern");
 

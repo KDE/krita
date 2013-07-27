@@ -541,7 +541,7 @@ void SvgParser::applyFillStyle(KoShape *shape)
         SvgGradientHelper *gradient = findGradient(gc->fillId);
         if (gradient) {
             // great, we have a gradient fill
-            QPointer<KoGradientBackground> bg = 0;
+            KoGradientBackground *bg = 0;
             if (gradient->gradientUnits() == SvgGradientHelper::ObjectBoundingBox) {
                 bg = new KoGradientBackground(*gradient->gradient());
                 bg->setTransform(gradient->transform());
@@ -552,7 +552,7 @@ void SvgParser::applyFillStyle(KoShape *shape)
                 QTransform invShapematrix = shape->transformation().inverted();
                 bg->setTransform(gradient->transform() * gc->matrix * invShapematrix);
             }
-            shape->setBackground(bg.data());
+            shape->setBackground(bg);
         } else {
             // try to find referenced pattern
             SvgPatternHelper *pattern = findPattern(gc->fillId);
@@ -592,7 +592,7 @@ void SvgParser::applyFillStyle(KoShape *shape)
                 qDeleteAll(patternContent);
 
                 if (!image.isNull()) {
-                    QPointer<KoPatternBackground> bg = new KoPatternBackground(imageCollection);
+                    KoPatternBackground *bg = new KoPatternBackground(imageCollection);
                     bg->setPattern(image);
 
                     QPointF refPoint = shape->documentToShape(pattern->position(objectBound));
@@ -624,7 +624,7 @@ void SvgParser::applyFillStyle(KoShape *shape)
                     qreal offsetY = 100.0 * (refPoint.y() - fy * tileSize.height()) / tileSize.height();
                     bg->setReferencePointOffset(QPointF(offsetX, offsetY));
 
-                    shape->setBackground(bg.data());
+                    shape->setBackground(bg);
                 }
             } else {
                 // no referenced fill found, use fallback color
@@ -1267,7 +1267,7 @@ KoShape * SvgParser::createShapeFromElement(const KoXmlElement &element, SvgLoad
         delete oldStroke;
 
         // reset fill
-        QPointer<KoShapeBackground> oldFill = shape->background();
+        KoShapeBackground *oldFill = shape->background();
         shape->setBackground(0);
         delete oldFill;
 
@@ -1312,7 +1312,7 @@ KoShape * SvgParser::createShape(const QString &shapeID)
     delete oldStroke;
 
     // reset fill
-    QPointer<KoShapeBackground> oldFill = shape->background();
+    KoShapeBackground *oldFill = shape->background();
     shape->setBackground(0);
     delete oldFill;
 

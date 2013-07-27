@@ -203,7 +203,7 @@ void StyleDocker::updateWidget()
 }
 
 // Update the widget with the current values.
-void StyleDocker::updateWidget(KoShapeStrokeModel *stroke, QPointer<KoShapeBackground> fill, int opacity)
+void StyleDocker::updateWidget(KoShapeStrokeModel *stroke, KoShapeBackground *fill, int opacity)
 {
     if (! m_canvas)
         return;
@@ -220,7 +220,7 @@ void StyleDocker::updateWidget(KoShapeStrokeModel *stroke, QPointer<KoShapeBackg
             qColor = m_canvas->resourceManager()->foregroundColor().toQColor();
     }
     else {
-        QPointer<KoColorBackground> background = dynamic_cast<KoColorBackground*>(fill.data());
+        KoColorBackground * background = dynamic_cast<KoColorBackground*>(fill);
         if (background)
             qColor = background->color();
         else
@@ -366,7 +366,7 @@ void StyleDocker::updateGradient(KoResource * item)
     if (activeStyle == KoFlake::Background) {
         KUndo2Command * firstCommand = 0;
         foreach (KoShape * shape, selectedShapes) {
-            QPointer<KoShapeBackground>  fill = applyFillGradientStops(shape, newStops);
+            KoShapeBackground * fill = applyFillGradientStops(shape, newStops);
             if (! fill)
                 continue;
             if (! firstCommand)
@@ -421,9 +421,9 @@ void StyleDocker::updatePattern(KoResource * item)
 
     KoImageCollection *imageCollection = m_canvas->shapeController()->resourceManager()->imageCollection();
     if (imageCollection) {
-        QPointer<KoPatternBackground>  fill = new KoPatternBackground(imageCollection);
+        KoPatternBackground * fill = new KoPatternBackground(imageCollection);
         fill->setPattern(pattern->image());
-        m_canvas->addCommand(new KoShapeBackgroundCommand(selectedShapes, fill.data()));
+        m_canvas->addCommand(new KoShapeBackgroundCommand(selectedShapes, fill ));
         updateWidget();
     }
 }
@@ -502,13 +502,13 @@ void StyleDocker::locationChanged(Qt::DockWidgetArea area)
     }
 }
 
-QPointer<KoShapeBackground> StyleDocker::applyFillGradientStops(KoShape *shape, const QGradientStops &stops)
+KoShapeBackground *StyleDocker::applyFillGradientStops(KoShape *shape, const QGradientStops &stops)
 {
     if (! shape || ! stops.count())
         return 0;
 
-    QPointer<KoGradientBackground> newGradient;
-    QPointer<KoGradientBackground> oldGradient = dynamic_cast<KoGradientBackground*>(shape->background().data());
+    KoGradientBackground *newGradient = 0;
+    KoGradientBackground *oldGradient = dynamic_cast<KoGradientBackground*>(shape->background());
     if (oldGradient) {
         // just copy the gradient and set the new stops
         QGradient *g = KoFlake::cloneGradient(oldGradient->gradient());
@@ -523,7 +523,7 @@ QPointer<KoShapeBackground> StyleDocker::applyFillGradientStops(KoShape *shape, 
         g->setStops(stops);
         newGradient = new KoGradientBackground(g);
     }
-    return newGradient.data();
+    return newGradient;
 }
 
 QBrush StyleDocker::applyStrokeGradientStops(KoShape *shape, const QGradientStops &stops)

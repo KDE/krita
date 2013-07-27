@@ -25,7 +25,6 @@
 
 #include <KoCheckerBoardPainter.h>
 #include <QFrame>
-#include <QPointer>
 
 class QEvent;
 class QPaintEvent;
@@ -54,7 +53,7 @@ public:
      * @param stroke the stroke to preview
      * @param fill the fill to preview
      */
-    void update(KoShapeStrokeModel * stroke, QPointer<KoShapeBackground> fill);
+    void update(KoShapeStrokeModel * stroke, KoShapeBackground * fill);
 
     virtual bool eventFilter(QObject* object, QEvent* event);
 
@@ -77,7 +76,7 @@ protected:
     virtual void paintEvent(QPaintEvent* event);
 
 private:
-    void drawFill(QPainter & painter, QPointer<KoShapeBackground> fill);
+    void drawFill(QPainter & painter, const KoShapeBackground * fill);
     void drawStroke(QPainter & painter, const KoShapeStrokeModel*);
 
     bool m_strokeSelected; ///< true if stroke is selected, false if fill is selected

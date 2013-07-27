@@ -18,10 +18,10 @@
  */
 
 #include "KoShapeBackground.h"
-
 #include "KoShapeBackground_p.h"
 
 KoShapeBackgroundPrivate::KoShapeBackgroundPrivate()
+    : refCount(0)
 {
 }
 
@@ -33,8 +33,6 @@ KoShapeBackground::KoShapeBackground(KoShapeBackgroundPrivate &dd)
     :d_ptr(&dd)
 {
 }
-
-
 
 KoShapeBackground::KoShapeBackground()
     : d_ptr(new KoShapeBackgroundPrivate())
@@ -49,4 +47,22 @@ KoShapeBackground::~KoShapeBackground()
 bool KoShapeBackground::hasTransparency() const
 {
     return false;
+}
+
+bool KoShapeBackground::ref()
+{
+    Q_D(KoShapeBackground);
+    return d->refCount.ref();
+}
+
+bool KoShapeBackground::deref()
+{
+    Q_D(KoShapeBackground);
+    return d->refCount.deref();
+}
+
+int KoShapeBackground::useCount() const
+{
+    Q_D(const KoShapeBackground);
+    return d->refCount;
 }

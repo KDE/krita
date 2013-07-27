@@ -19,9 +19,8 @@
 #include "kis_shape_selection_model.h"
 #include "kis_debug.h"
 
-#include <KoShapeContainer.h>
-#include <KoShapeBackground.h>
-#include <KoShapeManager.h>
+#include "KoShapeContainer.h"
+#include "KoShapeManager.h"
 
 #include "kis_shape_selection.h"
 #include "kis_selection.h"

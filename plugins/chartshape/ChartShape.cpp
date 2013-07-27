@@ -555,8 +555,8 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
 //FIXME        doc.setResizeMethod(KoTextDocument::AutoResize);
     }
 
-    QPointer<KoColorBackground> background = new KoColorBackground(Qt::white);
-    setBackground(background.data());
+    KoColorBackground *background = new KoColorBackground(Qt::white);
+    setBackground(background);
 
     KoShapeStroke *stroke = new KoShapeStroke(0, Qt::black);
     setStroke(stroke);

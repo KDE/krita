@@ -128,6 +128,8 @@ KoShapePrivate::~KoShapePrivate()
         delete stroke;
     if (shadow && !shadow->deref())
         delete shadow;
+    if (fill && !fill->deref())
+        delete fill;
     if (filterEffectStack && !filterEffectStack->deref())
         delete filterEffectStack;
     delete clipPath;
@@ -1004,15 +1006,19 @@ KoShapeAnchor *KoShape::anchor() const
     return d->anchor;
 }
 
-void KoShape::setBackground(QPointer<KoShapeBackground> fill)
+void KoShape::setBackground(KoShapeBackground *fill)
 {
     Q_D(KoShape);
+    if (d->fill)
+        d->fill->deref();
     d->fill = fill;
+    if (d->fill)
+        d->fill->ref();
     d->shapeChanged(BackgroundChanged);
     notifyChanged();
 }
 
-QPointer<KoShapeBackground> KoShape::background() const
+KoShapeBackground *KoShape::background() const
 {
     Q_D(const KoShape);
     return d->fill;
@@ -1272,7 +1278,7 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
     if (s)
         s->fillStyle(style, context);
 
-    QPointer<KoShapeBackground> bg = background();
+    KoShapeBackground *bg = background();
     if (bg) {
         bg->fillStyle(style, context);
     }
@@ -1379,7 +1385,10 @@ void KoShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &cont
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.setTypeProperties("graphic");
 
-    d->fill = 0;
+    if (d->fill && !d->fill->deref()) {
+        delete d->fill;
+        d->fill = 0;
+    }
     if (d->stroke && !d->stroke->deref()) {
         delete d->stroke;
         d->stroke = 0;
@@ -1562,10 +1571,10 @@ bool KoShape::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingConte
     return true;
 }
 
-QPointer<KoShapeBackground> KoShape::loadOdfFill(KoShapeLoadingContext &context) const
+KoShapeBackground *KoShape::loadOdfFill(KoShapeLoadingContext &context) const
 {
     QString fill = KoShapePrivate::getStyleProperty("fill", context);
-    QPointer<KoShapeBackground> bg = 0;
+    KoShapeBackground *bg = 0;
     if (fill == "solid") {
         bg = new KoColorBackground();
     }

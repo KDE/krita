@@ -22,9 +22,6 @@
 
 #include "flake_export.h"
 
-#include <QObject>
-#include <QPointer>
-
 class QSizeF;
 class QPainter;
 class QPainterPath;
@@ -40,9 +37,8 @@ class KoViewConverter;
  * Derived classes are used to paint the background of
  * a shape within a given painter path.
  */
-class FLAKE_EXPORT KoShapeBackground : public QObject // For use with QPointer
+class FLAKE_EXPORT KoShapeBackground
 {
-    Q_OBJECT
 public:
     KoShapeBackground();
     virtual ~KoShapeBackground();
@@ -63,13 +59,25 @@ public:
     /// load background from odf styles
     virtual bool loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize) = 0;
 
+    /**
+     * Increments the use-value.
+     * Returns true if the new value is non-zero, false otherwise.
+     */
+    bool ref();
+    /**
+     * Decrements the use-value.
+     * Returns true if the new value is non-zero, false otherwise.
+     */
+    bool deref();
+    /// Return the usage count
+    int useCount() const;
+
 protected:
     KoShapeBackground(KoShapeBackgroundPrivate &);
     KoShapeBackgroundPrivate *d_ptr;
+
 private:
     Q_DECLARE_PRIVATE(KoShapeBackground)
-
-
 };
 
 #endif // KOSHAPEBACKGROUND_H

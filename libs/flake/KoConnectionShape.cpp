@@ -727,8 +727,10 @@ void KoConnectionShape::shapeChanged(ChangeType type, KoShape *shape)
     case BackgroundChanged:
     {
         // connection shape should not have a background
-        QPointer<KoShapeBackground> fill = background();
+        KoShapeBackground *fill = background();
         if (fill) {
+            if (fill->deref())
+                delete fill;
             setBackground(0);
         }
         return;

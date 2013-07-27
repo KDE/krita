@@ -1,0 +1,11 @@
+* fix parser, there are still crazy cases where we do not parse notes and separators correctly (multi-line notes)
+* add support for missing parameters (int, float, choice, note supported)
+* add support for layer modes: so far current layer is filtered
+    * modes like current layer+above, all visible, etc.
+* implement preview and it's modes
+* figure out on-line updates for filter defintions
+* separate included gmic code to stand-alone library and link dynamically 
+
+
+
+

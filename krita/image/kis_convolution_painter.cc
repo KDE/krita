@@ -63,17 +63,18 @@
 
 
 template<class factory>
-KisConvolutionWorker<factory>* createWorker(const KisConvolutionKernelSP kernel,
-                                           KisPainter *painter,
-                                           KoUpdater *progress)
+KisConvolutionWorker<factory>* KisConvolutionPainter::createWorker(const KisConvolutionKernelSP kernel,
+                                                                   KisPainter *painter,
+                                                                   KoUpdater *progress)
 {
     KisConvolutionWorker<factory> *worker;
 
 #ifdef HAVE_FFTW3
     #define THRESHOLD_SIZE 5
 
-    if(kernel->width() <= THRESHOLD_SIZE &&
-       kernel->height() <= THRESHOLD_SIZE) {
+    if(m_enginePreference == SPATIAL ||
+       (kernel->width() <= THRESHOLD_SIZE &&
+        kernel->height() <= THRESHOLD_SIZE)) {
 
         worker = new KisConvolutionWorkerSpatial<factory>(painter, progress);
     }
@@ -90,17 +91,26 @@ KisConvolutionWorker<factory>* createWorker(const KisConvolutionKernelSP kernel,
 
 
 KisConvolutionPainter::KisConvolutionPainter()
-        : KisPainter()
+    : KisPainter(),
+      m_enginePreference(NONE)
 {
 }
 
 KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device)
-        : KisPainter(device)
+    : KisPainter(device),
+      m_enginePreference(NONE)
 {
 }
 
 KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device, KisSelectionSP selection)
-        : KisPainter(device, selection)
+    : KisPainter(device, selection),
+      m_enginePreference(NONE)
+{
+}
+
+KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device, TestingEnginePreference enginePreference)
+    : KisPainter(device),
+      m_enginePreference(enginePreference)
 {
 }
 

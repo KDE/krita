@@ -305,12 +305,10 @@ void KisConvolutionPainterTest::benchmarkConvolution()
     }
 }
 
-
-
-void KisConvolutionPainterTest::testGaussian()
+void KisConvolutionPainterTest::testGaussian(bool useFftw)
 {
 
-   QImage referenceImage(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
+    QImage referenceImage(TestUtil::fetchDataFileLazy("lena.png"));
 
    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
    dev->convertFromQImage(referenceImage, 0, 0, 0);
@@ -318,14 +316,14 @@ void KisConvolutionPainterTest::testGaussian()
    QBitArray channelFlags =
        KoColorSpaceRegistry::instance()->rgb8()->channelFlags(true, true);
 
-   KisConvolutionPainter gc(dev);
+   KisPainter gc(dev);
 
 
    uint horizontalRadius = 1, verticalRadius = 1;
    
    for(int i = 0; i < 10 ; i++, horizontalRadius++, verticalRadius++)
    {
-       gc.beginTransaction(0);
+       gc.beginTransaction("");
        uint horizKernelSize = horizontalRadius * 2 + 1;
        Matrix<qreal, Dynamic, Dynamic> horizGaussian(1, horizKernelSize);
     
@@ -356,33 +354,53 @@ void KisConvolutionPainterTest::testGaussian()
     
            KisConvolutionKernelSP kernelHoriz = KisConvolutionKernel::fromMatrix(horizGaussian, 0, horizGaussian.sum());
            KisConvolutionKernelSP kernelVertical = KisConvolutionKernel::fromMatrix(verticalGaussian, 0, verticalGaussian.sum());
-    
-           KisConvolutionPainter horizPainter(interm);
+
+           const QRect applyRect = dev->exactBounds();
+
+           KisConvolutionPainter::TestingEnginePreference enginePreference =
+               useFftw ?
+               KisConvolutionPainter::FFTW :
+               KisConvolutionPainter::SPATIAL;
+
+           KisConvolutionPainter horizPainter(interm, enginePreference);
            horizPainter.setChannelFlags(channelFlags);
            horizPainter.applyMatrix(kernelHoriz, dev,
-                                    -QPoint(0, verticalRadius),
-                                    -QPoint(0, verticalRadius),
-                                    QSize(0, 2 * verticalRadius), BORDER_REPEAT);
-    
-    
+                                    applyRect.topLeft() - QPoint(0, verticalRadius),
+                                    applyRect.topLeft() - QPoint(0, verticalRadius),
+                                    applyRect.size() + QSize(0, 2 * verticalRadius),
+                                    BORDER_REPEAT);
 
-           gc.setChannelFlags(channelFlags);
-           gc.applyMatrix(kernelVertical, interm, QPoint(0,0), QPoint(0,0), QSize(0,0), BORDER_REPEAT);
+           KisConvolutionPainter verticalPainter(dev, enginePreference);
+           verticalPainter.setChannelFlags(channelFlags);
+           verticalPainter.applyMatrix(kernelVertical, interm,
+                                       applyRect.topLeft(),
+                                       applyRect.topLeft(),
+                                       applyRect.size(), BORDER_REPEAT);
 
            QImage result = dev->convertToQImage(0, 0, 0, referenceImage.width(), referenceImage.height());
-           QPoint errpoint;
 
-           if (!TestUtil::compareQImages(errpoint, referenceImage, result)) {
-               referenceImage.save("lena.png");
-               result.save("lena_gaussian_blur_filter.png" + QString::number(i) );
-               QFAIL(QString("Failed, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
-              }
+           QString engine = useFftw ? "fftw" : "spatial";
+           QString testCaseName = QString("test_gaussian_%1_%2_%3.png").arg(horizontalRadius).arg(verticalRadius).arg(engine);
+
+           TestUtil::checkQImage(result,
+                                 "convolution_painter_test",
+                                 "gaussian",
+                                 testCaseName);
 
            gc.deleteTransaction();
        }
     }
 }
 
+void KisConvolutionPainterTest::testGaussianSpatial()
+{
+    testGaussian(false);
+}
+
+void KisConvolutionPainterTest::testGaussianFFTW()
+{
+    testGaussian(true);
+}
 
 QTEST_KDEMAIN(KisConvolutionPainterTest, GUI)
 #include "kis_convolution_painter_test.moc"

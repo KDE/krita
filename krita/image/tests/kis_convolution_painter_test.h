@@ -29,6 +29,7 @@ class KisConvolutionPainterTest : public QObject
 
 private:
     void testAsymmConvolutionImp(QBitArray channelFlags);
+    void testGaussian(bool useFftw);
 
 private slots:
 
@@ -42,7 +43,8 @@ private slots:
     void testAsymmSkipAlpha();
 
     void benchmarkConvolution();
-    void testGaussian();
+    void testGaussianSpatial();
+    void testGaussianFFTW();
 };
 
 #endif

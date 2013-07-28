@@ -26,6 +26,8 @@
 #include "krita_export.h"
 
 class QImage;
+template<class factory> class KisConvolutionWorker;
+
 
 enum KisConvolutionBorderOp {
     BORDER_DEFAULT_FILL = 0, // Use the default pixel to make up for the missing pixels on the border or the pixel that lies beyond
@@ -70,5 +72,26 @@ public:
      */
     void applyMatrix(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, QPoint srcPos, QPoint dstPos, QSize areaSize,
                      KisConvolutionBorderOp borderOp = BORDER_AVOID);
+
+protected:
+    friend class KisConvolutionPainterTest;
+    enum TestingEnginePreference {
+        NONE,
+        SPATIAL,
+        FFTW
+    };
+
+
+    KisConvolutionPainter(KisPaintDeviceSP device, TestingEnginePreference enginePreference);
+
+
+private:
+    template<class factory>
+        KisConvolutionWorker<factory>* createWorker(const KisConvolutionKernelSP kernel,
+                                                    KisPainter *painter,
+                                                    KoUpdater *progress);
+
+private:
+    TestingEnginePreference m_enginePreference;
 };
 #endif //KIS_CONVOLUTION_PAINTER_H_

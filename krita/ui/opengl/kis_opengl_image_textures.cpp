@@ -220,9 +220,14 @@ KisOpenGLImageTextures::updateCache(const QRect& rect)
                                               tileTextureRect,
                                               updateRect,
                                               m_image->bounds());
-
-            tileInfo.retrieveData(m_image);
-            info->tileList.append(tileInfo);
+            // Don't update empty tiles
+            if (tileInfo.valid()) {
+                tileInfo.retrieveData(m_image);
+                info->tileList.append(tileInfo);
+            }
+            else {
+                kWarning() << "Trying to create an empty tileinfo record" << col << row << tileTextureRect << updateRect << m_image->bounds();
+            }
         }
     }
     return info;

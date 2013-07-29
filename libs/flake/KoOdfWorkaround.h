@@ -26,6 +26,8 @@
 #include "KoTextShapeDataBase.h"
 #include <qnamespace.h>
 
+#include <QSharedPointer>
+
 class KoXmlElement;
 class KoShape;
 class KoShapeLoadingContext;
@@ -71,7 +73,7 @@ namespace KoOdfWorkaround
     FLAKE_EXPORT QColor fixMissingFillColor(const KoXmlElement &element, KoShapeLoadingContext &context);
     FLAKE_EXPORT bool   fixMissingStyle_DisplayLabel(const KoXmlElement &element, KoShapeLoadingContext &context);
 
-    FLAKE_EXPORT KoColorBackground *fixBackgroundColor(const KoShape *shape, KoShapeLoadingContext &context);
+    FLAKE_EXPORT QSharedPointer<KoColorBackground> fixBackgroundColor(const KoShape *shape, KoShapeLoadingContext &context);
 
     /**
      * Old versions of ooimpress does not set the placeholder for shapes that should have it set

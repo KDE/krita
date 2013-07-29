@@ -533,21 +533,21 @@ void SvgParser::applyFillStyle(KoShape *shape)
         return;
 
     if (gc->fillType == SvgGraphicsContext::None) {
-        shape->setBackground(0);
+        shape->setBackground(QSharedPointer<KoShapeBackground>(0));
     } else if (gc->fillType == SvgGraphicsContext::Solid) {
-        shape->setBackground(new KoColorBackground(gc->fillColor));
+        shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(gc->fillColor)));
     } else if (gc->fillType == SvgGraphicsContext::Complex) {
         // try to find referenced gradient
         SvgGradientHelper *gradient = findGradient(gc->fillId);
         if (gradient) {
             // great, we have a gradient fill
-            KoGradientBackground *bg = 0;
+            QSharedPointer<KoGradientBackground> bg;
             if (gradient->gradientUnits() == SvgGradientHelper::ObjectBoundingBox) {
-                bg = new KoGradientBackground(*gradient->gradient());
+                bg = QSharedPointer<KoGradientBackground>(new KoGradientBackground(*gradient->gradient()));
                 bg->setTransform(gradient->transform());
             } else {
                 QGradient *convertedGradient = SvgGradientHelper::convertGradient(gradient->gradient(), shape->size());
-                bg = new KoGradientBackground(*convertedGradient);
+                bg = QSharedPointer<KoGradientBackground>(new KoGradientBackground(convertedGradient));
                 delete convertedGradient;
                 QTransform invShapematrix = shape->transformation().inverted();
                 bg->setTransform(gradient->transform() * gc->matrix * invShapematrix);
@@ -592,7 +592,7 @@ void SvgParser::applyFillStyle(KoShape *shape)
                 qDeleteAll(patternContent);
 
                 if (!image.isNull()) {
-                    KoPatternBackground *bg = new KoPatternBackground(imageCollection);
+                    QSharedPointer<KoPatternBackground> bg(new KoPatternBackground(imageCollection));
                     bg->setPattern(image);
 
                     QPointF refPoint = shape->documentToShape(pattern->position(objectBound));
@@ -628,7 +628,7 @@ void SvgParser::applyFillStyle(KoShape *shape)
                 }
             } else {
                 // no referenced fill found, use fallback color
-                shape->setBackground(new KoColorBackground(gc->fillColor));
+                shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(gc->fillColor)));
             }
         }
     }
@@ -1267,9 +1267,7 @@ KoShape * SvgParser::createShapeFromElement(const KoXmlElement &element, SvgLoad
         delete oldStroke;
 
         // reset fill
-        KoShapeBackground *oldFill = shape->background();
-        shape->setBackground(0);
-        delete oldFill;
+        shape->setBackground(QSharedPointer<KoShapeBackground>(0));
 
         if (!svgShape->loadSvg(element, context)) {
             delete shape;
@@ -1312,9 +1310,7 @@ KoShape * SvgParser::createShape(const QString &shapeID)
     delete oldStroke;
 
     // reset fill
-    KoShapeBackground *oldFill = shape->background();
-    shape->setBackground(0);
-    delete oldFill;
+    shape->setBackground(QSharedPointer<KoShapeBackground>(0));
 
     return shape;
 }

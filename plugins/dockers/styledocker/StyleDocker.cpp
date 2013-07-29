@@ -124,7 +124,7 @@ void StyleDocker::setCanvas(KoCanvasBase *canvas)
             updateWidget(page->stroke(), page->background(), 100);
         }
         else {
-            updateWidget(0, 0, 100);
+            updateWidget(0, QSharedPointer<KoShapeBackground>(0), 100);
         }
     }
 }
@@ -181,7 +181,7 @@ void StyleDocker::noColorSelected()
 
     KoCanvasResourceManager *provider = m_canvas->resourceManager();
     if (provider->resource(KoCanvasResourceManager::ActiveStyleType).toInt() == KoFlake::Background)
-        m_canvas->addCommand(new KoShapeBackgroundCommand(selection->selectedShapes(), 0));
+        m_canvas->addCommand(new KoShapeBackgroundCommand(selection->selectedShapes(), QSharedPointer<KoShapeBackground>(0)));
     else
         m_canvas->addCommand(new KoShapeStrokeCommand(selection->selectedShapes(), 0));
 
@@ -198,12 +198,12 @@ void StyleDocker::updateWidget()
         updateWidget(shape->stroke(), shape->background(), 100 - shape->transparency() * 100);
     }
     else {
-        updateWidget(0, 0, 100);
+        updateWidget(0, QSharedPointer<KoShapeBackground>(0), 100);
     }
 }
 
 // Update the widget with the current values.
-void StyleDocker::updateWidget(KoShapeStrokeModel *stroke, KoShapeBackground *fill, int opacity)
+void StyleDocker::updateWidget(KoShapeStrokeModel *stroke, QSharedPointer<KoShapeBackground> fill, int opacity)
 {
     if (! m_canvas)
         return;
@@ -220,7 +220,7 @@ void StyleDocker::updateWidget(KoShapeStrokeModel *stroke, KoShapeBackground *fi
             qColor = m_canvas->resourceManager()->foregroundColor().toQColor();
     }
     else {
-        KoColorBackground * background = dynamic_cast<KoColorBackground*>(fill);
+        QSharedPointer<KoColorBackground> background = qSharedPointerDynamicCast<KoColorBackground>(fill);
         if (background)
             qColor = background->color();
         else
@@ -313,7 +313,7 @@ void StyleDocker::updateColor(const QColor &c, const QList<KoShape*> & selectedS
     }
     else {
         if (m_lastColorChange.msecsTo(QTime::currentTime()) > MsecsThresholdForMergingCommands) {
-            m_lastColorFill = 0;
+            m_lastColorFill.clear();
             m_lastFillCommand = 0;
         }
         if (m_lastColorFill && m_lastFillCommand) {
@@ -321,7 +321,7 @@ void StyleDocker::updateColor(const QColor &c, const QList<KoShape*> & selectedS
             m_lastFillCommand->redo();
         }
         else {
-            m_lastColorFill = new KoColorBackground(c);
+            m_lastColorFill = QSharedPointer<KoColorBackground>(new KoColorBackground(c));
             m_lastFillCommand = new KoShapeBackgroundCommand(selectedShapes, m_lastColorFill);
             m_canvas->addCommand(m_lastFillCommand);
         }
@@ -366,7 +366,7 @@ void StyleDocker::updateGradient(KoResource * item)
     if (activeStyle == KoFlake::Background) {
         KUndo2Command * firstCommand = 0;
         foreach (KoShape * shape, selectedShapes) {
-            KoShapeBackground * fill = applyFillGradientStops(shape, newStops);
+            QSharedPointer<KoShapeBackground>  fill = applyFillGradientStops(shape, newStops);
             if (! fill)
                 continue;
             if (! firstCommand)
@@ -421,9 +421,8 @@ void StyleDocker::updatePattern(KoResource * item)
 
     KoImageCollection *imageCollection = m_canvas->shapeController()->resourceManager()->imageCollection();
     if (imageCollection) {
-        KoPatternBackground * fill = new KoPatternBackground(imageCollection);
-        fill->setPattern(pattern->image());
-        m_canvas->addCommand(new KoShapeBackgroundCommand(selectedShapes, fill ));
+        QSharedPointer<KoPatternBackground> fill(new KoPatternBackground(imageCollection)); fill->setPattern(pattern->image());
+        m_canvas->addCommand(new KoShapeBackgroundCommand(selectedShapes, fill));
         updateWidget();
     }
 }
@@ -502,18 +501,18 @@ void StyleDocker::locationChanged(Qt::DockWidgetArea area)
     }
 }
 
-KoShapeBackground *StyleDocker::applyFillGradientStops(KoShape *shape, const QGradientStops &stops)
+QSharedPointer<KoShapeBackground> StyleDocker::applyFillGradientStops(KoShape *shape, const QGradientStops &stops)
 {
     if (! shape || ! stops.count())
-        return 0;
+        return QSharedPointer<KoShapeBackground>(0);
 
-    KoGradientBackground *newGradient = 0;
-    KoGradientBackground *oldGradient = dynamic_cast<KoGradientBackground*>(shape->background());
+    QSharedPointer<KoGradientBackground> newGradient;
+    QSharedPointer<KoGradientBackground> oldGradient = qSharedPointerDynamicCast<KoGradientBackground>(shape->background());
     if (oldGradient) {
         // just copy the gradient and set the new stops
         QGradient *g = KoFlake::cloneGradient(oldGradient->gradient());
         g->setStops(stops);
-        newGradient = new KoGradientBackground(g);
+        newGradient = QSharedPointer<KoGradientBackground>(new KoGradientBackground(g));
         newGradient->setTransform(oldGradient->transform());
     }
     else {
@@ -521,7 +520,7 @@ KoShapeBackground *StyleDocker::applyFillGradientStops(KoShape *shape, const QGr
         QLinearGradient *g = new QLinearGradient(QPointF(0, 0), QPointF(1, 1));
         g->setCoordinateMode(QGradient::ObjectBoundingMode);
         g->setStops(stops);
-        newGradient = new KoGradientBackground(g);
+        newGradient = QSharedPointer<KoGradientBackground>(new KoGradientBackground(g));
     }
     return newGradient;
 }
@@ -562,7 +561,7 @@ void StyleDocker::resetColorCommands()
 {
     m_lastFillCommand = 0;
     m_lastStrokeCommand = 0;
-    m_lastColorFill = 0;
+    m_lastColorFill .clear();
     m_lastColorStrokes.clear();
 }
 

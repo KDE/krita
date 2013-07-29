@@ -210,9 +210,9 @@ void KoOdfWorkaround::fixPresentationPlaceholder(KoShape *shape)
     }
 }
 
-KoColorBackground *KoOdfWorkaround::fixBackgroundColor(const KoShape *shape, KoShapeLoadingContext &context)
+QSharedPointer<KoColorBackground> KoOdfWorkaround::fixBackgroundColor(const KoShape *shape, KoShapeLoadingContext &context)
 {
-    KoColorBackground *colorBackground = 0;
+    QSharedPointer<KoColorBackground> colorBackground;
     KoOdfLoadingContext &odfContext = context.odfLoadingContext();
     if (odfContext.generatorType() == KoOdfLoadingContext::OpenOffice) {
         const KoPathShape *pathShape = dynamic_cast<const KoPathShape*>(shape);
@@ -221,9 +221,9 @@ KoColorBackground *KoOdfWorkaround::fixBackgroundColor(const KoShape *shape, KoS
             KoStyleStack &styleStack = odfContext.styleStack();
             const QString color(styleStack.property(KoXmlNS::draw, "fill-color"));
             if (color.isEmpty()) {
-                colorBackground = new KoColorBackground(QColor(153, 204, 255));
+                colorBackground = QSharedPointer<KoColorBackground>(new KoColorBackground(QColor(153, 204, 255)));
             } else {
-                colorBackground = new KoColorBackground(color);
+                colorBackground = QSharedPointer<KoColorBackground>(new KoColorBackground(color));
             }
         }
     }

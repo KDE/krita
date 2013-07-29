@@ -882,7 +882,7 @@ void KoPAView::insertPage()
     KoPAPageBase * page = 0;
     if ( viewMode()->masterMode() ) {
         KoPAMasterPage * masterPage = d->doc->newMasterPage();
-        masterPage->setBackground( new KoColorBackground( Qt::white ) );
+        masterPage->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(Qt::white)));
         // use the layout of the current active page for the new page
         KoPageLayout & layout = masterPage->pageLayout();
         KoPAMasterPage * activeMasterPage = dynamic_cast<KoPAMasterPage *>( d->activePage );

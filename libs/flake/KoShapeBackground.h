@@ -22,6 +22,9 @@
 
 #include "flake_export.h"
 
+#include <QObject>
+#include <QSharedPointer>
+
 class QSizeF;
 class QPainter;
 class QPainterPath;
@@ -59,25 +62,13 @@ public:
     /// load background from odf styles
     virtual bool loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize) = 0;
 
-    /**
-     * Increments the use-value.
-     * Returns true if the new value is non-zero, false otherwise.
-     */
-    bool ref();
-    /**
-     * Decrements the use-value.
-     * Returns true if the new value is non-zero, false otherwise.
-     */
-    bool deref();
-    /// Return the usage count
-    int useCount() const;
-
 protected:
     KoShapeBackground(KoShapeBackgroundPrivate &);
     KoShapeBackgroundPrivate *d_ptr;
-
 private:
     Q_DECLARE_PRIVATE(KoShapeBackground)
+
+
 };
 
 #endif // KOSHAPEBACKGROUND_H

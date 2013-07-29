@@ -165,7 +165,7 @@ StrokeFillWidget::~StrokeFillWidget()
 // ----------------------------------------------------------------
 
 
-void StrokeFillWidget::updateWidget(KoShapeStrokeModel *stroke, KoShapeBackground *fill,
+void StrokeFillWidget::updateWidget(KoShapeStrokeModel *stroke, QSharedPointer<KoShapeBackground> fill,
                                     int opacity, QColor &currentColor, int activeStyle)
 {
     m_preview->update(stroke, fill);
@@ -258,19 +258,19 @@ void StrokeFillWidget::setStretchPolicy(StrokeFillWidget::StretchPolicy policy)
 }
 
 
-KoShapeBackground *StrokeFillWidget::applyFillGradientStops(KoShape *shape,
+QSharedPointer<KoShapeBackground> StrokeFillWidget::applyFillGradientStops(KoShape *shape,
                                                             const QGradientStops &stops)
 {
     if (! shape || ! stops.count())
-        return 0;
+        return QSharedPointer<KoShapeBackground>(0);
 
-    KoGradientBackground *newGradient = 0;
-    KoGradientBackground *oldGradient = dynamic_cast<KoGradientBackground*>(shape->background());
+    QSharedPointer<KoGradientBackground> newGradient(0);
+    QSharedPointer<KoGradientBackground> oldGradient = qSharedPointerDynamicCast<KoGradientBackground>(shape->background());
     if (oldGradient) {
         // just copy the gradient and set the new stops
         QGradient *g = KoFlake::cloneGradient(oldGradient->gradient());
         g->setStops(stops);
-        newGradient = new KoGradientBackground(g);
+        newGradient = QSharedPointer<KoGradientBackground>(new KoGradientBackground(g));
         newGradient->setTransform(oldGradient->transform());
     }
     else {
@@ -278,7 +278,7 @@ KoShapeBackground *StrokeFillWidget::applyFillGradientStops(KoShape *shape,
         QLinearGradient *g = new QLinearGradient(QPointF(0, 0), QPointF(1, 1));
         g->setCoordinateMode(QGradient::ObjectBoundingMode);
         g->setStops(stops);
-        newGradient = new KoGradientBackground(g);
+        newGradient = QSharedPointer<KoGradientBackground>(new KoGradientBackground(g));
     }
     return newGradient;
 }

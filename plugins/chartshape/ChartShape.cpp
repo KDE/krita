@@ -555,7 +555,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
 //FIXME        doc.setResizeMethod(KoTextDocument::AutoResize);
     }
 
-    KoColorBackground *background = new KoColorBackground(Qt::white);
+    QSharedPointer<KoColorBackground> background(new KoColorBackground(Qt::white));
     setBackground(background);
 
     KoShapeStroke *stroke = new KoShapeStroke(0, Qt::black);
@@ -1022,7 +1022,7 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement,
     if (!background()) {
         const QColor color = KoOdfWorkaround::fixMissingFillColor(chartElement, context);
         if (color.isValid()) // invalid color means do not set KoColorBackground but be transparent instead
-            setBackground(new KoColorBackground(color));
+            setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(color)));
     }
 #endif
 

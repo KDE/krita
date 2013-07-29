@@ -20,14 +20,11 @@
 #ifndef KoShapeBackgroundPrivate_H
 #define KoShapeBackgroundPrivate_H
 
-#include <QAtomicInt>
-
 class KoShapeBackgroundPrivate
 {
 public:
     KoShapeBackgroundPrivate();
     virtual ~KoShapeBackgroundPrivate();
-    QAtomicInt refCount;
 };
 
 #endif

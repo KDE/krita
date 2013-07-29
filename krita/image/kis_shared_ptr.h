@@ -409,8 +409,10 @@ public:
     inline bool isValid() const {
         Q_ASSERT(!d || weakReference);
 
-        return d && weakReference && isOdd((int)*weakReference);
+        int i = weakReference->load();
+        return d && i && isOdd(i);
     }
+
 private:
     static const qint32 WEAK_REF = 2;
     static inline bool isOdd(const qint32 &x) {
@@ -420,7 +422,7 @@ private:
     inline bool isConsistent() const {
         Q_ASSERT(!d || weakReference);
 
-        return !d || (weakReference && isOdd((int)*weakReference));
+        return !d || (weakReference && isOdd(weakReference->load()));
     }
 
     void load(T* newValue) {
@@ -460,7 +462,7 @@ private:
             weakReference->fetchAndAddOrdered(-WEAK_REF) <= WEAK_REF) {
 
             // sanity check:
-            Q_ASSERT((int)*weakReference == 0);
+            Q_ASSERT((int)*weakReference->load() == 0);
 
             delete weakReference;
             weakReference = 0;

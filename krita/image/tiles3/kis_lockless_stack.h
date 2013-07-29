@@ -58,7 +58,7 @@ public:
         Node *top;
 
         do {
-            top = m_top;
+            top = m_top.load();
             newNode->next = top;
         } while (!m_top.testAndSetOrdered(top, newNode));
 
@@ -71,7 +71,7 @@ public:
         m_deleteBlockers.ref();
 
         while(1) {
-            Node *top = (Node*) m_top;
+            Node *top = (Node*) m_top.load();
             if(!top) break;
 
             // This is safe as we ref'ed m_deleteBlockers
@@ -89,7 +89,7 @@ public:
                  * If there is someone else in "delete-blocked section",
                  * then just add the struct to the list of free nodes.
                  */
-                if (m_deleteBlockers == 1) {
+                if (m_deleteBlockers.load() == 1) {
                     cleanUpNodes();
                     delete top;
                 }
@@ -125,7 +125,7 @@ public:
         while(top) {
             Node *next = top->next;
 
-            if (m_deleteBlockers == 1) {
+            if (m_deleteBlockers.load() == 1) {
                 /**
                  * We  are the only owner of top contents.
                  * So we can delete it freely.
@@ -150,11 +150,11 @@ public:
      * value! Do not rely on this value much!
      */
     qint32 size() {
-        return m_numNodes;
+        return m_numNodes.load();
     }
 
     bool isEmpty() {
-        return !m_numNodes;
+        return (m_numNodes.load() == 0);
     }
 
 private:
@@ -162,7 +162,7 @@ private:
     inline void releaseNode(Node *node) {
         Node *top;
         do {
-            top = m_freeNodes;
+            top = m_freeNodes.load();
             node->next = top;
         } while (!m_freeNodes.testAndSetOrdered(top, node));
     }

@@ -63,6 +63,8 @@
  * the pool writes it to the first free slot.
  */
 
+#include <QAtomicInt>
+
 template<class T, int SIZE>
 class KisMemoryPool
 {
@@ -73,13 +75,13 @@ public:
 
     ~KisMemoryPool() {
         for(qint32 i = 0; i < SIZE; i++) {
-            free(m_array[i]);
+            free(m_array[i].load());
         }
         REPORT_STATUS();
     }
 
     inline void push(void *ptr) {
-        if(m_allocated < SIZE) {
+        if(m_allocated.load() < SIZE) {
             for(qint32 i = 0; i < SIZE; i++) {
                 if(m_array[i].testAndSetOrdered(0, ptr)) {
                     m_allocated.ref();
@@ -91,7 +93,7 @@ public:
     }
 
     inline void* pop() {
-        if(m_allocated > 0) {
+        if(m_allocated.load() > 0) {
             void *ptr;
             for(qint32 i = 0; i < SIZE; i++) {
                 ptr = m_array[i].fetchAndStoreOrdered(0);

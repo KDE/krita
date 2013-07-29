@@ -51,8 +51,8 @@ KisShared::~KisShared()
     /**
      * Check no-one references us
      */
-    Q_ASSERT(_ref == 0);
+    Q_ASSERT(_ref.loadAcquire() == 0);
 
-    if(_sharedWeakReference && !_sharedWeakReference->deref())
+    if(_sharedWeakReference->loadAcquire() && !_sharedWeakReference->deref())
         delete _sharedWeakReference;
 }

@@ -122,7 +122,7 @@ void KisTileDataPooler::terminatePooler()
 qint32 KisTileDataPooler::numClonesNeeded(KisTileData *td) const
 {
     RUNTIME_SANITY_CHECK(td);
-    qint32 numUsers = td->m_usersCount;
+    qint32 numUsers = td->m_usersCount.load();
     qint32 numPresentClones = td->m_clonesStack.size();
     qint32 totalClones = qMin(numUsers - 1, MAX_NUM_CLONES);
 
@@ -183,7 +183,7 @@ void KisTileDataPooler::run()
 
         waitForWork();
 
-        if (m_shouldExitFlag)
+        if (m_shouldExitFlag.load())
             break;
 
         QThread::msleep(0);

@@ -284,7 +284,7 @@ void KisTileDataStore::debugPrintList()
     foreach(item, m_tileDataList) {
         dbgTiles << "-------------------------\n"
                  << "TileData:\t\t\t" << item
-                 << "\n  refCount:\t" << item->m_refCount;
+                 << "\n  refCount:\t" << item->m_refCount.load();
     }
 }
 

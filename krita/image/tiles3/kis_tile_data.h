@@ -52,7 +52,7 @@ inline bool KisTileData::acquire() {
      * started stinking.
      * So just clean it up.
      */
-    if(m_usersCount == 1) {
+    if(m_usersCount.load() == 1) {
         KisTileData *clone = 0;
         while(m_clonesStack.pop(clone)) {
             delete clone;
@@ -126,7 +126,7 @@ inline void KisTileData::markOld() {
 }
 
 inline qint32 KisTileData::numUsers() const {
-    return m_usersCount;
+    return m_usersCount.load();
 }
 
 #endif /* KIS_TILE_DATA_H_ */

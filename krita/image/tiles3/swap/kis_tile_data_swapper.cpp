@@ -91,7 +91,7 @@ void KisTileDataSwapper::run()
     while (1) {
         waitForWork();
 
-        if (m_d->shouldExitFlag)
+        if (m_d->shouldExitFlag.load())
             return;
 
         QThread::msleep(DELAY);

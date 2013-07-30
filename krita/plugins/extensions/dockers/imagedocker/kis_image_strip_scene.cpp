@@ -38,7 +38,7 @@ void KisImageLoader::run()
 
 #ifdef Q_OS_WIN
     for(Iterator data=m_data.begin(); data!=m_data.end() && m_run; ++data) {
-        data->image = QImage(data->path).scaled(m_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        data->image = QImage(data->path).scaled(m_size, m_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         data->isLoaded = true;
         emit sigItemContentChanged(data.key());
     }

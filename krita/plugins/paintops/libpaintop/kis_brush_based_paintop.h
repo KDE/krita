@@ -41,7 +41,8 @@ public:
 
     KisBrushBasedPaintOp(const KisPropertiesConfiguration* settings, KisPainter* painter);
     ~KisBrushBasedPaintOp();
-    double spacing(double scale) const;
+
+    bool checkSizeTooSmall(qreal scale);
 
     KisSpacingInformation effectiveSpacing(int dabWidth, int dabHeight) const;
     KisSpacingInformation effectiveSpacing(int dabWidth, int dabHeight, const KisPressureSpacingOption &spacingOption, const KisPaintInformation &pi) const;

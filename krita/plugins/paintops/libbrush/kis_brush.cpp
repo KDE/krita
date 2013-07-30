@@ -330,16 +330,6 @@ quint32 KisBrush::brushIndex(const KisPaintInformation& info) const
     return 0;
 }
 
-double KisBrush::xSpacing(double scale) const
-{
-    return width() * scale * d->spacing * d->scale;
-}
-
-double KisBrush::ySpacing(double scale) const
-{
-    return height() * scale * d->spacing * d->scale;
-}
-
 void KisBrush::setSpacing(double s)
 {
     if (s < 0.02) s = 0.02;

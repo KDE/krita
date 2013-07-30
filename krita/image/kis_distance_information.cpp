@@ -43,11 +43,7 @@ qreal KisDistanceInformation::getNextPointPositionIsotropic(const QPointF &start
                                                             const QPointF &end)
 {
     qreal distance = m_distance.x();
-    qreal spacing = m_spacing.spacing().x();
-
-    if (distance >= spacing) {
-        return 0.0;
-    }
+    qreal spacing = qMax(0.5, m_spacing.spacing().x());
 
     if (start == end) {
         return -1;
@@ -72,10 +68,6 @@ qreal KisDistanceInformation::getNextPointPositionIsotropic(const QPointF &start
 qreal KisDistanceInformation::getNextPointPositionAnisotropic(const QPointF &start,
                                                               const QPointF &end)
 {
-    if (m_spacing.spacing().isNull()) {
-        return 0.0;
-    }
-
     if (start == end) {
         return -1;
     }

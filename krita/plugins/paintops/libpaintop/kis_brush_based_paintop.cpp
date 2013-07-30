@@ -46,6 +46,12 @@ KisBrushBasedPaintOp::~KisBrushBasedPaintOp()
     delete m_dabCache;
 }
 
+bool KisBrushBasedPaintOp::checkSizeTooSmall(qreal scale)
+{
+    return scale * m_brush->width() < 0.01 ||
+    scale * m_brush->height() < 0.01;
+}
+
 KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(int dabWidth, int dabHeight) const
 {
     return effectiveSpacing(dabWidth, dabHeight, 1.0, false);
@@ -75,27 +81,6 @@ KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(int dabWidth, int d
     spacing *= extraScale * m_brush->spacing();
 
     return spacing;
-}
-
-double KisBrushBasedPaintOp::spacing(double scale) const
-{
-    // XXX: The spacing should vary as the pressure changes along the line.
-    // This is a quick simplification.
-    double xSpacing = m_brush->xSpacing(scale);
-    double ySpacing = m_brush->ySpacing(scale);
-
-    if (xSpacing < 0.5) {
-        xSpacing = 0.5;
-    }
-    if (ySpacing < 0.5) {
-        ySpacing = 0.5;
-    }
-
-    if (xSpacing > ySpacing) {
-        return xSpacing;
-    } else {
-        return ySpacing;
-    }
 }
 
 bool KisBrushBasedPaintOp::canPaint() const

@@ -53,8 +53,6 @@ inline void KisImagePipeBrushTest::checkConsistency(KisImagePipeBrush *brush)
      */
     QCOMPARE(brush->width(), firstBrush->width());
     QCOMPARE(brush->height(), firstBrush->height());
-    QCOMPARE(brush->xSpacing(scale), firstBrush->xSpacing(scale));
-    QCOMPARE(brush->ySpacing(scale), firstBrush->ySpacing(scale));
     QCOMPARE(brush->boundary(), firstBrush->boundary());
 
     /**

@@ -156,40 +156,25 @@ KisDistanceInformation KisPaintOp::paintLine(const KisPaintInformation &pi1,
                              const KisPaintInformation &pi2,
                              const KisDistanceInformation& savedDist)
 {
-    KisVector2D end = toKisVector2D(pi2.pos());
-    KisVector2D start = toKisVector2D(pi1.pos());
+    KisDistanceInformation currentDistance = savedDist;
+    QPointF start = pi1.pos();
+    QPointF end = pi2.pos();
+    QVector2D dragVecNorm = QVector2D(end - start).normalized();
 
-    KisVector2D dragVec = end - start;
+    KisPaintInformation pi = pi1;
+    QPointF pt = start;
+    qreal t = 0.0;
 
-    Q_ASSERT(savedDist.distance >= 0);
+    while ((t = currentDistance.getNextPointPosition(pt, end)) >= 0.0) {
+        qreal spacingApproximation = currentDistance.spacing().scalarApprox();
+        KisVector2D movement = toKisVector2D((dragVecNorm * spacingApproximation).toPointF());
+        pt = pt + t * (end - pt);
+        pi = KisPaintInformation::mix(pt, t, pi, pi2, movement);
 
-    qreal endDist = dragVec.norm();
-    qreal currentDist = savedDist.distance;
-
-    dragVec.normalize();
-    KisVector2D step(0, 0);
-
-    qreal sp = savedDist.spacing;
-    while (currentDist < endDist) {
-
-        QPointF p = toQPointF(start +  currentDist * dragVec);
-
-        qreal t = currentDist / endDist;
-
-        KisVector2D movement;
-        if(sp > 0.01) {
-          movement = sp * dragVec;
-        } else {
-          movement = 0.01 * dragVec;
-        }
-        sp = paintAt(KisPaintInformation::mix(p, t, pi1, pi2, movement));
-        currentDist += sp;
+        currentDistance.setSpacing(paintAt(pi));
     }
 
-    QRect r(pi1.pos().toPoint(), pi2.pos().toPoint());
-    d->painter->addDirtyRect(r.normalized());
-
-    return KisDistanceInformation(currentDist - endDist, sp);
+    return currentDistance;
 }
 
 KisPainter* KisPaintOp::painter() const

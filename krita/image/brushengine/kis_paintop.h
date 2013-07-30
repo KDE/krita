@@ -57,7 +57,7 @@ public:
      * The distance between two calls of the paintAt is always specified by spacing;
      * xSpacing and ySpacing is 1.0 by default, negative values causes infinite loops (it is checked by Q_ASSERT)
      */
-    virtual qreal paintAt(const KisPaintInformation& info) = 0;
+    virtual KisSpacingInformation paintAt(const KisPaintInformation& info) = 0;
 
     /**
      * Draw a line between pos1 and pos2 using the currently set brush and color.

@@ -99,14 +99,10 @@ KisDistanceInformation KisDynaPaintOp::paintLine(const KisPaintInformation &pi1,
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
     painter()->renderMirrorMask(rc,m_dab);
 
-    KisVector2D end = toKisVector2D(pi2.pos());
-    KisVector2D start = toKisVector2D(pi1.pos());
-    KisVector2D dragVec = end - start;
-    return KisDistanceInformation(0, dragVec.norm());
+    return KisDistanceInformation();
 }
 
-qreal KisDynaPaintOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisDynaPaintOp::paintAt(const KisPaintInformation& info)
 {
-    KisDistanceInformation di(0.0,1.0);
-    return paintLine(info, info, di).spacing;
+    return paintLine(info, info, KisDistanceInformation()).spacing();
 }

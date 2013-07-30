@@ -42,9 +42,10 @@ class KisSketchPaintOp : public KisPaintOp
 public:
 
     KisSketchPaintOp(const KisSketchPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
-    virtual ~KisSketchPaintOp();
-    virtual KisDistanceInformation paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist = KisDistanceInformation());
-    qreal paintAt(const KisPaintInformation& info);
+    ~KisSketchPaintOp();
+
+    KisDistanceInformation paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist = KisDistanceInformation());
+    KisSpacingInformation paintAt(const KisPaintInformation& info);
 
 private:
     // pixel buffer

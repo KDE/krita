@@ -36,9 +36,9 @@ class KisDynaPaintOp : public KisPaintOp
 public:
 
     KisDynaPaintOp(const KisDynaPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
-    virtual ~KisDynaPaintOp();
+    ~KisDynaPaintOp();
 
-    qreal paintAt(const KisPaintInformation& info);
+    KisSpacingInformation paintAt(const KisPaintInformation& info);
     KisDistanceInformation paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, const KisDistanceInformation& savedDist);
 
     virtual bool incremental() const {

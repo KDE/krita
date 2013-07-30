@@ -106,7 +106,7 @@ void KisHairyPaintOp::loadSettings(const KisBrushBasedPaintOpSettings* settings)
 }
 
 
-qreal KisHairyPaintOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisHairyPaintOp::paintAt(const KisPaintInformation& info)
 {
     Q_UNUSED(info);
     return 0.5;
@@ -143,9 +143,5 @@ KisDistanceInformation KisHairyPaintOp::paintLine(const KisPaintInformation &pi1
     painter()->renderMirrorMask(rc, m_dab);
     painter()->setOpacity(origOpacity);
 
-    KisVector2D end = toKisVector2D(pi2.pos());
-    KisVector2D start = toKisVector2D(pi1.pos());
-    KisVector2D dragVec = end - start;
-
-    return KisDistanceInformation(0, dragVec.norm());
+    return KisDistanceInformation();
 }

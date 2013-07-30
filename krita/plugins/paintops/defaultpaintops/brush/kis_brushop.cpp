@@ -97,7 +97,7 @@ KisBrushOp::~KisBrushOp()
     delete m_hsvTransformation;
 }
 
-qreal KisBrushOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()->device()) return 1.0;
 
@@ -110,7 +110,8 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
         return 1.0;
 
     qreal scale = m_sizeOption.apply(info);
-    if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return spacing(scale);
+    if (checkSizeTooSmall(scale)) return KisSpacingInformation();
+
 
     KisPaintDeviceSP device = painter()->device();
 
@@ -164,10 +165,9 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
     painter()->setOpacity(origOpacity);
     painter()->setFlow(origFlow);
 
-    if (m_spacingOption.isChecked())
-        return spacing(m_spacingOption.apply(info));
-
-    return spacing(scale);
+    return effectiveSpacing(dab->bounds().width(),
+                            dab->bounds().height(),
+                            m_spacingOption, info);
 }
 
 KisDistanceInformation KisBrushOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist)
@@ -187,7 +187,7 @@ KisDistanceInformation KisBrushOp::paintLine(const KisPaintInformation& pi1, con
         QRect rc = m_lineCacheDevice->extent();
         painter()->bitBlt(rc.x(), rc.y(), m_lineCacheDevice, rc.x(), rc.y(), rc.width(), rc.height());
 
-        return KisDistanceInformation(0.0, 0.0);
+        return KisDistanceInformation();
     }
     return KisPaintOp::paintLine(pi1, pi2, savedDist);
 }

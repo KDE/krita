@@ -50,8 +50,8 @@ public:
      *  Paint a hatched dab around the mouse cursor according to
      *  sensor settings and user preferences.
      */
-    qreal paintAt(const KisPaintInformation& info);
-    
+    KisSpacingInformation paintAt(const KisPaintInformation& info);
+
     /**
      *  Returns a number between -90 and 90, and corresponds to the
      *  angle that results from adding angle 'spin' to 'm_settings->angle',

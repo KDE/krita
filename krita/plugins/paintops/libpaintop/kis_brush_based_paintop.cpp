@@ -19,6 +19,8 @@
 #include "kis_brush.h"
 #include "kis_properties_configuration.h"
 #include "kis_brush_option.h"
+#include <kis_pressure_spacing_option.h>
+
 
 #include <QImage>
 #include <QPainter>
@@ -44,25 +46,41 @@ KisBrushBasedPaintOp::~KisBrushBasedPaintOp()
     delete m_dabCache;
 }
 
-double KisBrushBasedPaintOp::spacing(double scale) const
+bool KisBrushBasedPaintOp::checkSizeTooSmall(qreal scale)
 {
-    // XXX: The spacing should vary as the pressure changes along the line.
-    // This is a quick simplification.
-    double xSpacing = m_brush->xSpacing(scale);
-    double ySpacing = m_brush->ySpacing(scale);
+    return scale * m_brush->width() < 0.01 ||
+    scale * m_brush->height() < 0.01;
+}
 
-    if (xSpacing < 0.5) {
-        xSpacing = 0.5;
-    }
-    if (ySpacing < 0.5) {
-        ySpacing = 0.5;
+KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(int dabWidth, int dabHeight) const
+{
+    return effectiveSpacing(dabWidth, dabHeight, 1.0, false);
+}
+
+KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(int dabWidth, int dabHeight, const KisPressureSpacingOption &spacingOption, const KisPaintInformation &pi) const
+{
+    qreal extraSpacingScale = 1.0;
+    if (spacingOption.isChecked()) {
+        extraSpacingScale = spacingOption.apply(pi);
     }
 
-    if (xSpacing > ySpacing) {
-        return xSpacing;
+    return effectiveSpacing(dabWidth, dabHeight, extraSpacingScale, spacingOption.isotropicSpacing());
+}
+
+KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(int dabWidth, int dabHeight, qreal extraScale, bool isotropicSpacing) const
+{
+    QPointF spacing;
+
+    if (!isotropicSpacing) {
+        spacing = QPointF(dabWidth, dabHeight);
     } else {
-        return ySpacing;
+        qreal significantDimension = qMax(dabWidth, dabHeight);
+        spacing = QPointF(significantDimension, significantDimension);
     }
+
+    spacing *= extraScale * m_brush->spacing();
+
+    return spacing;
 }
 
 bool KisBrushBasedPaintOp::canPaint() const

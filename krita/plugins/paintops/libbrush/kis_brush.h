@@ -134,16 +134,6 @@ public:
     }
 
     /**
-     * @return the horizontal spacing
-     */
-    double xSpacing(double scale = 1.0) const;
-
-    /**
-     * @return the vertical spacing
-     */
-    double ySpacing(double scale = 1.0) const;
-
-    /**
      * @return a preview of the brush
      */
     virtual QImage image() const;

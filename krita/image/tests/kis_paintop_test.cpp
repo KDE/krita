@@ -31,7 +31,7 @@ public:
             : KisPaintOp(gc) {
     }
 
-    qreal paintAt(const KisPaintInformation&) {
+    KisSpacingInformation paintAt(const KisPaintInformation&) {
         return 0.0;
     }
     qreal spacing(qreal&, qreal&, qreal, qreal) const {

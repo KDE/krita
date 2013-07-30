@@ -67,7 +67,7 @@ KisFilterOp::~KisFilterOp()
 {
 }
 
-qreal KisFilterOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()) {
         return 1.0;
@@ -88,7 +88,7 @@ qreal KisFilterOp::paintAt(const KisPaintInformation& info)
         return 1.0;
 
     qreal scale = m_sizeOption.apply(info);
-    if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return spacing(scale);
+    if (checkSizeTooSmall(scale)) return KisSpacingInformation();
 
     setCurrentScale(scale);
 
@@ -148,5 +148,5 @@ qreal KisFilterOp::paintAt(const KisPaintInformation& info)
                                  0,0,
                                  maskWidth, maskHeight);
 
-    return spacing(scale);
+    return effectiveSpacing(maskWidth, maskHeight);
 }

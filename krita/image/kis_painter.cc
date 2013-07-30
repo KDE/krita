@@ -1043,7 +1043,7 @@ void KisPainter::paintEllipse(const qreal x,
     paintEllipse(QRectF(x, y, w, h));
 }
 
-qreal KisPainter::paintAt(const KisPaintInformation& pi)
+KisSpacingInformation KisPainter::paintAt(const KisPaintInformation& pi)
 {
     if (!d->paintOp || !d->paintOp->canPaint()) return 0.0;
     return d->paintOp->paintAt(pi);

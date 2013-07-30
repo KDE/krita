@@ -98,24 +98,24 @@ void KisAutoBrushTest::testSizeRotation()
         KisBrushSP a = new KisAutoBrush(circle, 0.0, 0.0);
         QCOMPARE(a->width(), 10);
         QCOMPARE(a->height(), 5);
-        QCOMPARE(a->maskWidth(1.0,0.0,0.0,0.0, KisPaintInformation()), 10);
-        QCOMPARE(a->maskHeight(1.0,0.0,0.0,0.0, KisPaintInformation()), 5);
-        QCOMPARE(a->maskWidth(2.0,0.0,0.0,0.0, KisPaintInformation()), 20);
-        QCOMPARE(a->maskHeight(2.0,0.0,0.0,0.0, KisPaintInformation()), 10);
-        QCOMPARE(a->maskWidth(0.5,0.0,0.0,0.0, KisPaintInformation()), 5);
-        QCOMPARE(a->maskHeight(0.5,0.0,0.0,0.0, KisPaintInformation()), 3);
-        QCOMPARE(a->maskWidth(1.0,M_PI,0.0,0.0, KisPaintInformation()), 10);
-        QCOMPARE(a->maskHeight(1.0,M_PI,0.0,0.0, KisPaintInformation()), 5);
-        QCOMPARE(a->maskWidth(1.0,M_PI_2,0.0,0.0, KisPaintInformation()), 5);
-        QCOMPARE(a->maskHeight(1.0,M_PI_2,0.0,0.0, KisPaintInformation()), 10);
-        QCOMPARE(a->maskWidth(1.0,-M_PI_2,0.0,0.0, KisPaintInformation()), 5);
-        QCOMPARE(a->maskHeight(1.0,-M_PI_2,0.0,0.0, KisPaintInformation()), 10);
-        QCOMPARE(a->maskWidth(1.0,0.25*M_PI,0.0,0.0, KisPaintInformation()), 11);
-        QCOMPARE(a->maskHeight(1.0,0.25*M_PI,0.0,0.0, KisPaintInformation()), 11);
-        QCOMPARE(a->maskWidth(2.0,0.25*M_PI,0.0,0.0, KisPaintInformation()), 21);
-        QCOMPARE(a->maskHeight(2.0,0.25*M_PI,0.0,0.0, KisPaintInformation()), 21);
-        QCOMPARE(a->maskWidth(0.5,0.25*M_PI,0.0,0.0, KisPaintInformation()), 5);
-        QCOMPARE(a->maskHeight(0.5,0.25*M_PI,0.0,0.0, KisPaintInformation()), 5);
+        QCOMPARE(a->maskWidth(1.0,0.0, KisPaintInformation()), 10);
+        QCOMPARE(a->maskHeight(1.0,0.0, KisPaintInformation()), 5);
+        QCOMPARE(a->maskWidth(2.0,0.0, KisPaintInformation()), 20);
+        QCOMPARE(a->maskHeight(2.0,0.0, KisPaintInformation()), 10);
+        QCOMPARE(a->maskWidth(0.5,0.0, KisPaintInformation()), 5);
+        QCOMPARE(a->maskHeight(0.5,0.0, KisPaintInformation()), 3);
+        QCOMPARE(a->maskWidth(1.0,M_PI, KisPaintInformation()), 10);
+        QCOMPARE(a->maskHeight(1.0,M_PI, KisPaintInformation()), 5);
+        QCOMPARE(a->maskWidth(1.0,M_PI_2, KisPaintInformation()), 5);
+        QCOMPARE(a->maskHeight(1.0,M_PI_2, KisPaintInformation()), 10);
+        QCOMPARE(a->maskWidth(1.0,-M_PI_2, KisPaintInformation()), 5);
+        QCOMPARE(a->maskHeight(1.0,-M_PI_2, KisPaintInformation()), 10);
+        QCOMPARE(a->maskWidth(1.0,0.25*M_PI, KisPaintInformation()), 11);
+        QCOMPARE(a->maskHeight(1.0,0.25*M_PI, KisPaintInformation()), 11);
+        QCOMPARE(a->maskWidth(2.0,0.25*M_PI, KisPaintInformation()), 21);
+        QCOMPARE(a->maskHeight(2.0,0.25*M_PI, KisPaintInformation()), 21);
+        QCOMPARE(a->maskWidth(0.5,0.25*M_PI, KisPaintInformation()), 5);
+        QCOMPARE(a->maskHeight(0.5,0.25*M_PI, KisPaintInformation()), 5);
     }
 }
 

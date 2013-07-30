@@ -395,14 +395,14 @@ quint32 KisImagePipeBrush::brushIndex(const KisPaintInformation& info) const
     return m_d->brushesPipe.brushIndex(info);
 }
 
-qint32 KisImagePipeBrush::maskWidth(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation& info) const
+qint32 KisImagePipeBrush::maskWidth(double scale, double angle, const KisPaintInformation& info) const
 {
-    return m_d->brushesPipe.maskWidth(scale, angle, subPixelX, subPixelY, info);
+    return m_d->brushesPipe.maskWidth(scale, angle, info);
 }
 
-qint32 KisImagePipeBrush::maskHeight(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation& info) const
+qint32 KisImagePipeBrush::maskHeight(double scale, double angle, const KisPaintInformation& info) const
 {
-    return m_d->brushesPipe.maskHeight(scale, angle, subPixelX, subPixelY, info);
+    return m_d->brushesPipe.maskHeight(scale, angle, info);
 }
 
 void KisImagePipeBrush::setAngle(qreal _angle)

@@ -208,8 +208,8 @@ QPointF KisBrush::hotSpot(double scaleX, double scaleY, double rotation, const K
 {
     Q_UNUSED(scaleY);
 
-    double w = maskWidth(scaleX, rotation, 0.0, 0.0, info);
-    double h = maskHeight(scaleX, rotation, 0.0, 0.0, info);
+    double w = maskWidth(scaleX, rotation, info);
+    double h = maskHeight(scaleX, rotation, info);
 
     // The smallest brush we can produce is a single pixel.
     if (w < 1) {
@@ -281,7 +281,7 @@ KisBrushSP KisBrush::fromXML(const QDomElement& element)
     return brush;
 }
 
-qint32 KisBrush::maskWidth(double scale, double angle, qreal subPixelX, qreal subPixelY, const KisPaintInformation& info) const
+qint32 KisBrush::maskWidth(double scale, double angle, const KisPaintInformation& info) const
 {
     Q_UNUSED(info);
 
@@ -293,11 +293,10 @@ qint32 KisBrush::maskWidth(double scale, double angle, qreal subPixelX, qreal su
     scale *= d->scale;
 
     return KisQImagePyramid::imageSize(QSize(width(), height()),
-                                       scale, angle,
-                                       subPixelX, subPixelY).width();
+                                       scale, angle, 0.5, 0.5).width();
 }
 
-qint32 KisBrush::maskHeight(double scale, double angle, qreal subPixelX, qreal subPixelY, const KisPaintInformation& info) const
+qint32 KisBrush::maskHeight(double scale, double angle, const KisPaintInformation& info) const
 {
     Q_UNUSED(info);
 
@@ -309,8 +308,7 @@ qint32 KisBrush::maskHeight(double scale, double angle, qreal subPixelX, qreal s
     scale *= d->scale;
 
     return KisQImagePyramid::imageSize(QSize(width(), height()),
-                                       scale, angle,
-                                       subPixelX, subPixelY).height();
+                                       scale, angle, 0.5, 0.5).height();
 }
 
 double KisBrush::maskAngle(double angle) const
@@ -370,7 +368,7 @@ void KisBrush::mask(KisFixedPaintDeviceSP dst, const KoColor& color, double scal
 
 void KisBrush::mask(KisFixedPaintDeviceSP dst, const KisPaintDeviceSP src, double scaleX, double scaleY, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY, qreal softnessFactor) const
 {
-    PaintDeviceColoringInformation pdci(src, maskWidth(scaleX, angle, subPixelX, subPixelY, info));
+    PaintDeviceColoringInformation pdci(src, maskWidth(scaleX, angle, info));
     generateMaskAndApplyMaskOrCreateDab(dst, &pdci, scaleX, scaleY, angle, info, subPixelX, subPixelY, softnessFactor);
 }
 

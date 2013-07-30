@@ -21,6 +21,8 @@
 
 #ifdef HAVE_OPENGL
 
+#include <kis_config.h>
+
 #ifndef GL_BGRA
 #define GL_BGRA 0x814F
 #endif
@@ -79,6 +81,9 @@ KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texture
                                const QByteArray &fillData, FilterMode filter)
 
     : m_textureId(0)
+#ifdef USE_PIXEL_BUFFERS
+    , m_glBuffer(0)
+#endif
     , m_tileRectInImagePixels(imageRect)
     , m_filter(filter)
     , m_texturesInfo(texturesInfo)
@@ -98,22 +103,9 @@ KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texture
     setTextureParameters(m_filter);
 
 #ifdef USE_PIXEL_BUFFERS
-
-    m_glBuffer = new QGLBuffer(QGLBuffer::PixelUnpackBuffer);
-    m_glBuffer->setUsagePattern(QGLBuffer::DynamicDraw);
-    m_glBuffer->create();
-
-    m_glBuffer->bind();
-
-    m_glBuffer->allocate(fillData.size());
-
-    void *vid = m_glBuffer->map(QGLBuffer::WriteOnly);
-    memcpy(vid, fd, fillData.size());
-    m_glBuffer->unmap();
-
+    createTextureBuffer(fillData);
     // we set fill data to 0 so the next glTexImage2D call uses our buffer
     fd = 0;
-
 #endif
 
     glTexImage2D(GL_TEXTURE_2D, 0,
@@ -124,7 +116,10 @@ KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texture
                  m_texturesInfo->type, fd);
 
 #ifdef USE_PIXEL_BUFFERS
-    m_glBuffer->release();
+    KisConfig cfg;
+    if (cfg.useOpenGLTextureBuffer()) {
+        m_glBuffer->release();
+    }
 #endif
 
 #ifdef Q_OS_WIN
@@ -135,7 +130,10 @@ KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texture
 KisTextureTile::~KisTextureTile()
 {
 #ifdef USE_PIXEL_BUFFERS
-    delete m_glBuffer;
+    KisConfig cfg;
+    if (cfg.useOpenGLTextureBuffer()) {
+        delete m_glBuffer;
+    }
 #endif
     glDeleteTextures(1, &m_textureId);
 }
@@ -147,22 +145,31 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
     setTextureParameters(m_filter);
 
     const GLvoid *fd = updateInfo.data();
+#ifdef USE_PIXEL_BUFFERS
+    KisConfig cfg;
+    if (!m_glBuffer) {
+        QByteArray ba;
+        ba.fromRawData((const char*)updateInfo.data(), updateInfo.patchPixelsLength());
+        createTextureBuffer(ba);
+    }
+#endif
 
     if (updateInfo.isEntireTileUpdated()) {
 
 #ifdef USE_PIXEL_BUFFERS
 
-    m_glBuffer->bind();
+        if (cfg.useOpenGLTextureBuffer()) {
 
-    m_glBuffer->allocate(updateInfo.patchPixelsLength());
+            m_glBuffer->bind();
+            m_glBuffer->allocate(updateInfo.patchPixelsLength());
 
-    void *vid = m_glBuffer->map(QGLBuffer::WriteOnly);
-    memcpy(vid, fd, updateInfo.patchPixelsLength());
-    m_glBuffer->unmap();
+            void *vid = m_glBuffer->map(QGLBuffer::WriteOnly);
+            memcpy(vid, fd, updateInfo.patchPixelsLength());
+            m_glBuffer->unmap();
 
-    // we set fill data to 0 so the next glTexImage2D call uses our buffer
-    fd = 0;
-
+            // we set fill data to 0 so the next glTexImage2D call uses our buffer
+            fd = 0;
+        }
 #endif
 
         glTexImage2D(GL_TEXTURE_2D, 0,
@@ -174,7 +181,9 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
                      fd);
 
 #ifdef USE_PIXEL_BUFFERS
-    m_glBuffer->release();
+        if (cfg.useOpenGLTextureBuffer()) {
+            m_glBuffer->release();
+        }
 #endif
 
     }
@@ -183,18 +192,18 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         QSize patchSize = updateInfo.patchSize();
 
 #ifdef USE_PIXEL_BUFFERS
+        if (cfg.useOpenGLTextureBuffer()) {
+            m_glBuffer->bind();
+            quint32 size = patchSize.width() * patchSize.height() * updateInfo.pixelSize();
+            m_glBuffer->allocate(size);
 
-    m_glBuffer->bind();
-    quint32 size = patchSize.width() * patchSize.height() * updateInfo.pixelSize();
-    m_glBuffer->allocate(size);
+            void *vid = m_glBuffer->map(QGLBuffer::WriteOnly);
+            memcpy(vid, fd, size);
+            m_glBuffer->unmap();
 
-    void *vid = m_glBuffer->map(QGLBuffer::WriteOnly);
-    memcpy(vid, fd, size);
-    m_glBuffer->unmap();
-
-    // we set fill data to 0 so the next glTexImage2D call uses our buffer
-    fd = 0;
-
+            // we set fill data to 0 so the next glTexImage2D call uses our buffer
+            fd = 0;
+        }
 #endif
 
         glTexSubImage2D(GL_TEXTURE_2D, 0,
@@ -205,7 +214,9 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
                         fd);
 
 #ifdef USE_PIXEL_BUFFERS
-    m_glBuffer->release();
+        if (cfg.useOpenGLTextureBuffer()) {
+            m_glBuffer->release();
+        }
 #endif
 
     }
@@ -297,6 +308,30 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         glGenerateMipmap(GL_TEXTURE_2D);
 #endif
 }
+
+#ifdef USE_PIXEL_BUFFERS
+void KisTextureTile::createTextureBuffer(const QByteArray &fillData)
+{
+    KisConfig cfg;
+    if (cfg.useOpenGLTextureBuffer()) {
+        m_glBuffer = new QGLBuffer(QGLBuffer::PixelUnpackBuffer);
+        m_glBuffer->setUsagePattern(QGLBuffer::DynamicDraw);
+        m_glBuffer->create();
+
+        m_glBuffer->bind();
+
+        m_glBuffer->allocate(fillData.size());
+
+        void *vid = m_glBuffer->map(QGLBuffer::WriteOnly);
+        memcpy(vid, fillData.constData(), fillData.size());
+        m_glBuffer->unmap();
+
+    }
+    else {
+        m_glBuffer = 0;
+    }
+}
+#endif
 
 #endif /* HAVE_OPENGL */
 

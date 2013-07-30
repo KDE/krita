@@ -129,6 +129,9 @@ public:
     int openGLFilteringMode() const;
     void setOpenGLFilteringMode(int filteringMode);
 
+    bool useOpenGLTextureBuffer() const;
+    void setUseOpenGLTextureBuffer(bool useBuffer);
+
     qint32 maxNumberOfThreads();
     void setMaxNumberOfThreads(qint32 numberOfThreads);
 

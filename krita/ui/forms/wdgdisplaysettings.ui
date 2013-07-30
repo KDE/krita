@@ -177,14 +177,14 @@
       <string>OpenGL</string>
      </property>
      <layout class="QGridLayout">
-      <item row="3" column="0">
+      <item row="4" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
          <string>Scaling Mode:</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="0">
+      <item row="5" column="0">
        <widget class="QComboBox" name="cmbFilterMode">
         <property name="currentIndex">
          <number>0</number>
@@ -226,6 +226,16 @@ then you can try to enable this.</string>
         </property>
         <property name="text">
          <string>Use workaround for tool outlines</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QCheckBox" name="chkUseTextureBuffer">
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use Texture Buffering. This can be faster on some GPU/Driver combinations (like Intel) or broken on some others (like AMD/Radeon).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string>Use Texture Buffer</string>
         </property>
        </widget>
       </item>

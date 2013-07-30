@@ -91,8 +91,11 @@ public:
     }
 
 private:
+
     GLuint m_textureId;
+
 #ifdef USE_PIXEL_BUFFERS
+    void createTextureBuffer(const QByteArray &fillData);
     QGLBuffer *m_glBuffer;
 #endif
 

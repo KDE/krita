@@ -78,9 +78,5 @@ KisDistanceInformation MyPaint::paintLine(const KisPaintInformation &pi1, const 
                        pi2.xTilt() / 60.0, pi2.yTilt() / 60.0,
                        qreal(pi2.currentTime() - pi1.currentTime()) / 1000);
 
-    // not sure what to do with these...
-    KisVector2D end = toKisVector2D(pi2.pos());
-    KisVector2D start = toKisVector2D(pi1.pos());
-    KisVector2D dragVec = end - start;
-    return KisDistanceInformation(0, dragVec.norm());
+    return KisDistanceInformation();
 }

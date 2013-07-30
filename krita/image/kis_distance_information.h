@@ -73,18 +73,6 @@ struct KisDistanceInformation {
     {
     }
 
-/*    KisDistanceInformation(const QPointF &distance, const KisSpacingInformation &spacing)
-        : m_distance(distance)
-        , m_spacing(spacing)
-    {
-    }*/
-
-    KisDistanceInformation(qreal isotropicDistance, qreal isotropicSpacing)
-        : m_distance(isotropicDistance, isotropicDistance)
-        , m_spacing(isotropicSpacing)
-    {
-    }
-
     qreal getNextPointPosition(const QPointF &start,
                                const QPointF &end);
 

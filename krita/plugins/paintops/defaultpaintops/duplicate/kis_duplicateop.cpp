@@ -110,7 +110,7 @@ qreal KisDuplicateOp::minimizeEnergy(const qreal* m, qreal* sol, int w, int h)
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
 
-qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()) return 1.0;
 
@@ -295,5 +295,5 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
     painter()->renderMirrorMaskSafe(dstRect, m_srcdev, 0, 0, dab,
                                     !m_dabCache->needSeparateOriginal());
 
-    return spacing(scale);
+    return effectiveSpacing(dstRect.width(), dstRect.height());
 }

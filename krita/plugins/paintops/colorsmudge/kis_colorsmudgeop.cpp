@@ -106,7 +106,7 @@ inline void KisColorSmudgeOp::getTopLeftAligned(const QPointF &pos, const QPoint
     splitCoordinate(topLeft.y(), y, &yFraction);
 }
 
-qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
 {
     KisBrushSP brush = m_brush;
 
@@ -138,12 +138,13 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     // Save the hot spot point for the next iteration
     m_lastPaintPos = scatteredPos;
 
-    qreal coveredDistance = m_spacingOption.isChecked() ?
-        spacing(m_spacingOption.apply(info)) : spacing(scale);
+    KisSpacingInformation spacingInfo =
+        effectiveSpacing(m_maskBounds.width(), m_maskBounds.height(),
+                         m_spacingOption, info);
 
     if (m_firstRun) {
         m_firstRun = false;
-        return coveredDistance;
+        return spacingInfo;
     }
 
 
@@ -224,5 +225,5 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     painter()->setOpacity(oldOpacity);
     painter()->setCompositeOp(oldModeId);
 
-    return coveredDistance;
+    return spacingInfo;
 }

@@ -492,7 +492,7 @@ public:
     void paintPolygon(const vQPointF& points);
 
     /** Draw a spot at pos using the currently set paint op, brush and color */
-    qreal paintAt(const KisPaintInformation &pos);
+    KisSpacingInformation paintAt(const KisPaintInformation &pos);
 
     /**
      * Stroke the given QPainterPath.

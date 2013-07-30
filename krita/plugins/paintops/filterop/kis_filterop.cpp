@@ -67,7 +67,7 @@ KisFilterOp::~KisFilterOp()
 {
 }
 
-qreal KisFilterOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()) {
         return 1.0;
@@ -148,5 +148,5 @@ qreal KisFilterOp::paintAt(const KisPaintInformation& info)
                                  0,0,
                                  maskWidth, maskHeight);
 
-    return spacing(scale);
+    return effectiveSpacing(maskWidth, maskHeight);
 }

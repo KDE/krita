@@ -41,7 +41,7 @@ class KisHairyPaintOp : public KisPaintOp
 public:
     KisHairyPaintOp(const KisBrushBasedPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
 
-    qreal paintAt(const KisPaintInformation& info);
+    KisSpacingInformation paintAt(const KisPaintInformation& info);
     KisDistanceInformation paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, const KisDistanceInformation& savedDist);
 
 private:

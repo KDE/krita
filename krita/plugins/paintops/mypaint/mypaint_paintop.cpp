@@ -52,7 +52,7 @@ MyPaint::~MyPaint()
     delete m_surface;
 }
 
-qreal MyPaint::paintAt(const KisPaintInformation& info)
+KisSpacingInformation MyPaint::paintAt(const KisPaintInformation& info)
 {
     Q_UNUSED(info);
     return 1.0;

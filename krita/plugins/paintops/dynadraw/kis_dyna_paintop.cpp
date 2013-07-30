@@ -105,8 +105,7 @@ KisDistanceInformation KisDynaPaintOp::paintLine(const KisPaintInformation &pi1,
     return KisDistanceInformation(0, dragVec.norm());
 }
 
-qreal KisDynaPaintOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisDynaPaintOp::paintAt(const KisPaintInformation& info)
 {
-    KisDistanceInformation di(0.0,1.0);
-    return paintLine(info, info, di).spacing;
+    return paintLine(info, info, KisDistanceInformation()).spacing();
 }

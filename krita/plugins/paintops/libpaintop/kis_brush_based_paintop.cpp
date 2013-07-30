@@ -19,6 +19,8 @@
 #include "kis_brush.h"
 #include "kis_properties_configuration.h"
 #include "kis_brush_option.h"
+#include <kis_pressure_spacing_option.h>
+
 
 #include <QImage>
 #include <QPainter>
@@ -42,6 +44,37 @@ KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPropertiesConfiguration* set
 KisBrushBasedPaintOp::~KisBrushBasedPaintOp()
 {
     delete m_dabCache;
+}
+
+KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(int dabWidth, int dabHeight) const
+{
+    return effectiveSpacing(dabWidth, dabHeight, 1.0, false);
+}
+
+KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(int dabWidth, int dabHeight, const KisPressureSpacingOption &spacingOption, const KisPaintInformation &pi) const
+{
+    qreal extraSpacingScale = 1.0;
+    if (spacingOption.isChecked()) {
+        extraSpacingScale = spacingOption.apply(pi);
+    }
+
+    return effectiveSpacing(dabWidth, dabHeight, extraSpacingScale, false);
+}
+
+KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(int dabWidth, int dabHeight, qreal extraScale, bool isotropicSpacing) const
+{
+    QPointF spacing;
+
+    if (!isotropicSpacing) {
+        spacing = QPointF(dabWidth, dabHeight);
+    } else {
+        qreal significantDimension = qMax(dabWidth, dabHeight);
+        spacing = QPointF(significantDimension, significantDimension);
+    }
+
+    spacing *= extraScale * m_brush->spacing();
+
+    return spacing;
 }
 
 double KisBrushBasedPaintOp::spacing(double scale) const

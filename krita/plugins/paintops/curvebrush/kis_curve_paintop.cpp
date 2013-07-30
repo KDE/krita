@@ -46,7 +46,7 @@ KisCurvePaintOp::~KisCurvePaintOp()
     delete m_painter;
 }
 
-qreal KisCurvePaintOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisCurvePaintOp::paintAt(const KisPaintInformation& info)
 {
     Q_UNUSED(info);
     return 1.0;

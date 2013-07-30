@@ -58,7 +58,7 @@ void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
     switch(d->type) {
     case Data::POINT:
-        *info->dragDistance = KisDistanceInformation(0,0);
+        *info->dragDistance = KisDistanceInformation();
         info->painter->paintAt(d->pi1);
         break;
     case Data::LINE:

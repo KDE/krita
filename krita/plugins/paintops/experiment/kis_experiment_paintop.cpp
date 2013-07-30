@@ -229,7 +229,7 @@ KisDistanceInformation KisExperimentPaintOp::paintLine(const KisPaintInformation
 }
 
 
-qreal KisExperimentPaintOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisExperimentPaintOp::paintAt(const KisPaintInformation& info)
 {
     Q_UNUSED(info);
     return 1.0;

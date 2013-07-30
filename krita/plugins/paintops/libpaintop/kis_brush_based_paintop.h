@@ -27,6 +27,7 @@
 
 
 class KisPropertiesConfiguration;
+class KisPressureSpacingOption;
 
 /**
  * This is a base class for paintops that use a KisBrush or derived
@@ -41,6 +42,10 @@ public:
     KisBrushBasedPaintOp(const KisPropertiesConfiguration* settings, KisPainter* painter);
     ~KisBrushBasedPaintOp();
     double spacing(double scale) const;
+
+    KisSpacingInformation effectiveSpacing(int dabWidth, int dabHeight) const;
+    KisSpacingInformation effectiveSpacing(int dabWidth, int dabHeight, const KisPressureSpacingOption &spacingOption, const KisPaintInformation &pi) const;
+    KisSpacingInformation effectiveSpacing(int dabWidth, int dabHeight, qreal extraScale, bool isotropicSpacing) const;
 
     ///Reimplemented, false if brush is 0
     virtual bool canPaint() const;

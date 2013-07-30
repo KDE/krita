@@ -36,10 +36,10 @@ class KisExperimentPaintOp : public KisPaintOp
 public:
 
     KisExperimentPaintOp(const KisExperimentPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
-    virtual ~KisExperimentPaintOp();
+    ~KisExperimentPaintOp();
 
-    virtual KisDistanceInformation paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist = KisDistanceInformation());
-    virtual qreal paintAt(const KisPaintInformation& info);
+    KisDistanceInformation paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist = KisDistanceInformation());
+    KisSpacingInformation paintAt(const KisPaintInformation& info);
 
 private:
     void paintRegion(const QRegion &changedRegion);

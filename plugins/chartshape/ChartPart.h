@@ -22,11 +22,9 @@
 
 #include <KoPart.h>
 
-#include "kchart_export.h"
-
 class KoView;
 
-class CHARTSHAPELIB_EXPORT ChartPart : public KoPart
+class ChartPart : public KoPart
 {
     Q_OBJECT
 

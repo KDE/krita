@@ -44,7 +44,7 @@ namespace KChart {
 /**
  * @brief The ChartTableModel class is used to store a data table inside a chart document.  It's main difference to a normal table model is that it can load and store to ODF.
  */
-class CHARTSHAPELIB_EXPORT ChartTableModel : public QStandardItemModel, public KoChart::ChartModel
+class ChartTableModel : public QStandardItemModel, public KoChart::ChartModel
 {
     Q_OBJECT
     Q_INTERFACES(KoChart::ChartModel)

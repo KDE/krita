@@ -24,7 +24,7 @@
 #include "kowidgets_export.h"
 
 #include <QWidget>
-#include <QPointer>
+#include <QSharedPointer>
 
 class KoCanvasBase;
 class KoColor;
@@ -57,10 +57,10 @@ private slots:
     void colorChanged();
 
     /// the gradient of the fill changed, apply the changes
-    void gradientChanged(QPointer<KoShapeBackground> background);
+    void gradientChanged(QSharedPointer<KoShapeBackground> background);
 
     /// the pattern of the fill changed, apply the changes
-    void patternChanged(QPointer<KoShapeBackground> background);
+    void patternChanged(QSharedPointer<KoShapeBackground> background);
 
     void shapeChanged();
 
@@ -68,7 +68,7 @@ private:
     /// update the widget
     void updateWidget(KoShape *shape);
 
-    static QPointer<KoShapeBackground> applyFillGradientStops(KoShape *shape, const QGradientStops &stops);
+    static QSharedPointer<KoShapeBackground> applyFillGradientStops(KoShape *shape, const QGradientStops &stops);
 
     void blockChildSignals(bool block);
 

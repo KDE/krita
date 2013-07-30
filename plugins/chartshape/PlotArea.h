@@ -58,7 +58,7 @@ namespace KChart {
  * in the <chart:plotarea> element.
  */
 
-class CHARTSHAPELIB_EXPORT PlotArea : public QObject, public KoShape
+class PlotArea : public QObject, public KoShape
 {
     friend class Surface;
     friend class Axis;

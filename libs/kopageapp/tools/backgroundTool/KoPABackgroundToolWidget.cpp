@@ -114,7 +114,7 @@ void KoPABackgroundToolWidget::setBackgroundImage()
                     i18nc( "(qtundo-format)", "Change slide background image") :
                     i18nc( "(qtundo-format)", "Change page background image");
                 KUndo2Command * cmd = new KUndo2Command(commandTitle);
-                QPointer<KoPatternBackground>  bg = new KoPatternBackground( collection );
+                QSharedPointer<KoPatternBackground> bg(new KoPatternBackground( collection ));
                 bg->setPattern( image );
                 QSizeF imageSize = bg->patternOriginalSize();
                 QSizeF pageSize = m_tool->view()->activePage()->size();
@@ -134,7 +134,7 @@ void KoPABackgroundToolWidget::setBackgroundImage()
                 }
                 bg->setRepeat( repeat );
 
-                new KoShapeBackgroundCommand( page, bg.data(), cmd );
+                new KoShapeBackgroundCommand( page, bg, cmd );
                 m_tool->canvas()->addCommand( cmd );
             }
         }

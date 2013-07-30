@@ -192,7 +192,6 @@ void KisOpenGLCanvas2::paintGL()
 void KisOpenGLCanvas2::drawCheckers() const
 {
     KisCoordinatesConverter *converter = coordinatesConverter();
-
     QTransform textureTransform;
     QTransform modelTransform;
     QRectF textureRect;

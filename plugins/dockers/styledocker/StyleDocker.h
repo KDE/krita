@@ -28,7 +28,7 @@
 // Qt
 #include <QTime>
 #include <QList>
-#include <QPointer>
+#include <QSharedPointer>
 
 class StrokeFillWidget;
 class KoShapeStrokeModel;
@@ -77,12 +77,12 @@ private slots:
     void updateColor(const QColor &c, const QList<KoShape*> & selectedShapes);
     /// Sets the shape stroke and fill to display
     void updateWidget();
-    void updateWidget(KoShapeStrokeModel * stroke, QPointer<KoShapeBackground> fill, int opacity);
+    void updateWidget(KoShapeStrokeModel * stroke, QSharedPointer<KoShapeBackground> fill, int opacity);
 
     /// Resets color related commands which are used to combine multiple color changes
     void resetColorCommands();
 
-    static QPointer<KoShapeBackground> applyFillGradientStops(KoShape *shape, const QGradientStops &stops);
+    static QSharedPointer<KoShapeBackground> applyFillGradientStops(KoShape *shape, const QGradientStops &stops);
     static QBrush applyStrokeGradientStops(KoShape *shape, const QGradientStops &stops);
 
     /// Returns list of selected path shapes
@@ -96,7 +96,7 @@ private slots:
     QTime                      m_lastColorChange;
     KoShapeBackgroundCommand  *m_lastFillCommand;
     KoShapeStrokeCommand      *m_lastStrokeCommand;
-    KoColorBackground         *m_lastColorFill;
+    QSharedPointer<KoColorBackground> m_lastColorFill;
     QList<KoShapeStrokeModel*> m_lastColorStrokes;
 };
 

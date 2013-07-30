@@ -49,7 +49,7 @@ class ChartShape;
 /**
  * Chart type configuration widget.
  */
-class CHARTSHAPELIB_EXPORT ChartConfigWidget : public KoShapeConfigWidgetBase
+class ChartConfigWidget : public KoShapeConfigWidgetBase
 {
     Q_OBJECT
 

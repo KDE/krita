@@ -21,14 +21,12 @@
 #ifndef CHARTTOOLFACTORY_H
 #define CHARTTOOLFACTORY_H
 
-#include "kchart_export.h"
-
 #include <KoToolFactoryBase.h>
 
 namespace KChart
 {
 
-class CHARTSHAPELIB_EXPORT ChartToolFactory : public KoToolFactoryBase
+class ChartToolFactory : public KoToolFactoryBase
 {
 public:
     ChartToolFactory();

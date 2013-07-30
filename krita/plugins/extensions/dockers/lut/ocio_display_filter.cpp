@@ -193,6 +193,7 @@ void OcioDisplayFilter::updateProcessor()
         int num3Dentries = 3 * LUT3D_EDGE_SIZE * LUT3D_EDGE_SIZE * LUT3D_EDGE_SIZE;
         m_lut3d.fill(0.0, num3Dentries);
 
+        glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_3D, m_lut3dTexID);
 
         glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

@@ -300,7 +300,7 @@ void KisFloatingMessage::removeMessage()
     deleteLater();
 }
 
-void KisFloatingMessage::updateOpacity(int value)
+void KisFloatingMessage::updateOpacity(int /*value*/)
 {
     setWindowOpacity(OSD_WINDOW_OPACITY - 0.1);
 }

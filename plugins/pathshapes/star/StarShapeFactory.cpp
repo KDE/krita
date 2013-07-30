@@ -134,7 +134,7 @@ KoShape *StarShapeFactory::createShape(const KoProperties *params, KoDocumentRes
     star->setShapeId(KoPathShapeId);
     QVariant v;
     if (params->property("background", v))
-        star->setBackground(new KoColorBackground(v.value<QColor>()));
+        star->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(v.value<QColor>())));
 
     return star;
 }

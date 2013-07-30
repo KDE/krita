@@ -49,6 +49,7 @@ public:
         m_tileRect = tileRect;
         m_patchRect = m_tileRect & updateRect;
         m_currentImageRect = currentImageRect;
+        m_numPixels = m_patchRect.width() * m_patchRect.height();
     }
 
     ~KisTextureTileUpdateInfo() {
@@ -56,6 +57,7 @@ public:
 
     void destroy() {
         delete[] m_patchPixels;
+        m_patchPixels = 0;
     }
 
     void retrieveData(KisImageWSP image)
@@ -72,18 +74,20 @@ public:
                    KoColorConversionTransformation::ConversionFlags conversionFlags)
     {
 
-        const qint32 numPixels = m_patchRect.width() * m_patchRect.height();
-        quint8* dstBuffer = dstCS->allocPixelBuffer(numPixels);
+        if (m_numPixels > 0) {
+            const qint32 numPixels = m_patchRect.width() * m_patchRect.height();
+            quint8* dstBuffer = dstCS->allocPixelBuffer(numPixels);
 
-        // FIXME: rendering intent
-        Q_ASSERT(dstBuffer && m_patchPixels);
-        m_patchColorSpace->convertPixelsTo(m_patchPixels, dstBuffer, dstCS, numPixels, renderingIntent, conversionFlags);
+            // FIXME: rendering intent
+            Q_ASSERT(dstBuffer && m_patchPixels);
+            m_patchColorSpace->convertPixelsTo(m_patchPixels, dstBuffer, dstCS, numPixels, renderingIntent, conversionFlags);
 
-        delete[] m_patchPixels;
+            delete[] m_patchPixels;
 
-        m_patchColorSpace = dstCS;
-        m_patchPixels = dstBuffer;
-        m_patchPixelsLength = numPixels * dstCS->pixelSize();
+            m_patchColorSpace = dstCS;
+            m_patchPixels = dstBuffer;
+            m_patchPixelsLength = numPixels * dstCS->pixelSize();
+        }
     }
 
     inline quint8* data() const {
@@ -127,6 +131,10 @@ public:
         return m_patchPixelsLength;
     }
 
+    inline bool valid() const {
+        return m_numPixels > 0;
+    }
+
 private:
     qint32 m_tileCol;
     qint32 m_tileRow;
@@ -136,6 +144,7 @@ private:
     const KoColorSpace* m_patchColorSpace;
     quint8 *m_patchPixels;
     quint32 m_patchPixelsLength;
+    quint32 m_numPixels;
 };
 
 

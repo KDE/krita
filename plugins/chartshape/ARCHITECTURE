@@ -36,8 +36,6 @@ ChartDocument           This class inherits KoDocument. The chart and
                         ODF. This also means that they can be saved in
                         a subdirectory or inline inside the XML tree.
 
-kchart_export.h         Defines import and export for exported classes.
-
 
 Chart classes
 -------------

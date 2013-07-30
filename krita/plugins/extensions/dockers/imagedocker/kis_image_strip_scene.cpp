@@ -41,7 +41,8 @@ void KisImageLoader::run()
         qreal w = m_size;
         qreal h = m_size;
         
-        if(reader.supportsOption(QImageIOHandler::Size)) {
+#ifndef Q_OS_WIN
+        if (reader.supportsOption(QImageIOHandler::Size)) {
             QSizeF imgSize = reader.size();
             
             if(imgSize.width() > imgSize.height()) {
@@ -53,6 +54,7 @@ void KisImageLoader::run()
                 w = imgSize.width() * div;
             }
         }
+#endif
         
         reader.setScaledSize(QSize(w,h));
         data->image    = reader.read();

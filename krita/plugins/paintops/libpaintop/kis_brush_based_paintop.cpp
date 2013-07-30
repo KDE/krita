@@ -64,7 +64,7 @@ KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(int dabWidth, int d
         extraSpacingScale = spacingOption.apply(pi);
     }
 
-    return effectiveSpacing(dabWidth, dabHeight, extraSpacingScale, false);
+    return effectiveSpacing(dabWidth, dabHeight, extraSpacingScale, spacingOption.isotropicSpacing());
 }
 
 KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(int dabWidth, int dabHeight, qreal extraScale, bool isotropicSpacing) const

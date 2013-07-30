@@ -35,13 +35,20 @@ void KisImageLoader::run()
     typedef QHash<KisImageItem*,Data>::iterator Iterator;
     
     QImageReader reader;
-    
+
+#ifdef Q_OS_WIN
+    for(Iterator data=m_data.begin(); data!=m_data.end() && m_run; ++data) {
+        data->image = QImage(data->path).scaled(m_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        data->isLoaded = true;
+        emit sigItemContentChanged(data.key());
+    }
+#else
     for(Iterator data=m_data.begin(); data!=m_data.end() && m_run; ++data) {
         reader.setFileName(data->path);
         qreal w = m_size;
         qreal h = m_size;
         
-#ifndef Q_OS_WIN
+
         if (reader.supportsOption(QImageIOHandler::Size)) {
             QSizeF imgSize = reader.size();
             
@@ -54,13 +61,14 @@ void KisImageLoader::run()
                 w = imgSize.width() * div;
             }
         }
-#endif
+
         
         reader.setScaledSize(QSize(w,h));
         data->image    = reader.read();
         data->isLoaded = true;
         emit sigItemContentChanged(data.key());
     }
+#endif
 }
 
 
